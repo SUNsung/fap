@@ -1,322 +1,284 @@
-  /// Retrieve the array of replacement types, which line up with the
-  /// generic parameters.
-  ///
-  /// Note that the types may be null, for cases where the generic parameter
-  /// is concrete but hasn't been queried yet.
-  ArrayRef<Type> getReplacementTypes() const {
-    return llvm::makeArrayRef(getTrailingObjects<Type>(),
-                              getNumReplacementTypes());
-  }
+
+        
+        void AutoUpdater::OnError(const std::string& message,
+                          const int code,
+                          const std::string& domain) {
+  v8::Locker locker(isolate());
+  v8::HandleScope handle_scope(isolate());
+  auto error = v8::Exception::Error(mate::StringToV8(isolate(), message));
+  auto errorObject =
+      error->ToObject(isolate()->GetCurrentContext()).ToLocalChecked();
+    }
     
-      IAMResult(DeclName declName, IAMAccessorKind kind, unsigned selfIdx,
-            EffectiveClangContext dc)
-      : name(declName), accessorKind(kind), selfIndex(selfIdx),
-        effectiveDC(dc) {}
+    namespace api {
+    }
     
-    static void printNode(DemanglerPrinter &Out, const Node *node, unsigned depth) {
-  // Indent two spaces per depth.
-  for (unsigned i = 0; i < depth * 2; ++i) {
-    Out << ' ';
-  }
-  if (!node) {
-    Out << '<<NULL>>';
-    return;
-  }
-  Out << 'kind=' << getNodeKindString(node->getKind());
-  if (node->hasText()) {
-    Out << ', text=\'' << node->getText() << '\'';
-  }
-  if (node->hasIndex()) {
-    Out << ', index=' << node->getIndex();
-  }
-  Out << '\n';
-  for (auto &child : *node) {
-    printNode(Out, child, depth + 1);
-  }
+      // TransactionObserver:
+  void OnTransactionsUpdated(
+      const std::vector<in_app_purchase::Transaction>& transactions) override;
+    
+    #ifndef ATOM_BROWSER_API_ATOM_API_SCREEN_H_
+#define ATOM_BROWSER_API_ATOM_API_SCREEN_H_
+    
+    namespace content {
+class WebContents;
 }
     
-    #include 'swift/Demangling/Punycode.h'
-#include 'swift/Demangling/ManglingUtils.h'
-#include <vector>
-#include <cstdint>
+    #ifndef ATOM_BROWSER_ATOM_JAVASCRIPT_DIALOG_MANAGER_H_
+#define ATOM_BROWSER_ATOM_JAVASCRIPT_DIALOG_MANAGER_H_
     
-      // Rounds the input up to a multiple of the given factor.
-  static int Roundup(int input, int factor) {
-    return (input + factor - 1) / factor * factor;
-  }
+     private:
+  ~AtomQuotaPermissionContext() override;
     
-      /**
-   * Moves the iterator to the beginning of the text line.
-   * This class implements this functionality by moving it to the zero indexed
-   * blob of the first (leftmost) word of the row.
-   */
-  virtual void RestartRow();
+    #include <QDialog>
     
-    #endif  // GRAPHICS_DISABLED
-#endif  // TESSERACT_CCMAIN_PARAMSD_H_
+    Q_SIGNALS:
+    void valueChanged();
+    
+    #endif // BITCOIN_QT_TRAFFICGRAPHWIDGET_H
 
     
-      // How many alt choices from each should we try to get?
-  const int kAltsPerPiece = 2;
-  // When do we start throwing away extra alt choices?
-  const int kTooManyAltChoices = 100;
-    
-    #ifndef TESSERACT_CSTRUCT_BOXWORD_H_
-#define TESSERACT_CSTRUCT_BOXWORD_H_
-    
-    UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RemoveTransliterator)
-    
-    #include 'uelement.h'
-    
-    U_NAMESPACE_BEGIN
-    
-    #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
+    #endif // BITCOIN_QT_TRANSACTIONDESCDIALOG_H
 
     
-    #if !UCONFIG_NO_FORMATTING
+        UniValue obj2(UniValue::VOBJ);
+    BOOST_CHECK(obj2.pushKV('cat1', 9000));
+    BOOST_CHECK(obj2.pushKV('cat2', 12345));
     
-    #endif   // #if !UCONFIG_NO_FORMATTING
-#endif   // SMPDTFST_H
-
+    #define CLASS_INFO(m_type)                                    \
+	(GetTypeInfo<m_type *>::VARIANT_TYPE != Variant::NIL ?    \
+					GetTypeInfo<m_type *>::get_class_info() : \
+					GetTypeInfo<m_type>::get_class_info())
     
-    U_NAMESPACE_BEGIN
+    	void set_param(PhysicsServer::HingeJointParam p_param, real_t p_value);
+	real_t get_param(PhysicsServer::HingeJointParam p_param) const;
     
-        /** Called every frame with it's delta time, dt in seconds. DON'T override unless you know what you are doing. 
-     *
-     * @param dt In seconds.
-     */
-    virtual void step(float dt);
+    class RigidBodyBullet;
+class btTypedConstraint;
     
-    CatmullRomTo* CatmullRomTo::clone() const
-{
-    // no copy constructor
-    auto a = new (std::nothrow) CatmullRomTo();
-    a->initWithDuration(this->_duration, this->_points->clone());
-    a->autorelease();
-    return a;
+    public:
+	PinJointBullet(RigidBodyBullet *p_body_a, const Vector3 &p_pos_a, RigidBodyBullet *p_body_b, const Vector3 &p_pos_b);
+	~PinJointBullet();
+    
+    /**
+	@author AndreaCatania
+*/
+    
+    #include 'register_types.h'
+    
+    
+    {	if (get_thread_id_func)
+		return get_thread_id_func();
+	return 0;
 }
     
-    FlipX* FlipX::reverse() const
-{
-    return FlipX::create(!_flipX);
+    template <class F, class S>
+bool operator!=(const Pair<F, S> &pair, const Pair<F, S> &other) {
+	return (pair.first != other.first) || (pair.second != other.second);
 }
     
     
-    {private:
-    CC_DISALLOW_COPY_AND_ASSIGN(RemoveSelf);
+    {	AudioDriverDummy(){};
+	~AudioDriverDummy(){};
 };
     
-            // elt, at this moment, is still valid
-        // so it is safe to ask this here (issue #490)
-        elt = (tHashElement*)(elt->hh.next);
+      void SnappyCompress(ThreadState* thread) {
+    RandomGenerator gen;
+    Slice input = gen.Generate(Options().block_size);
+    int64_t bytes = 0;
+    int64_t produced = 0;
+    bool ok = true;
+    std::string compressed;
+    while (ok && bytes < 1024 * 1048576) {  // Compress 1G
+      ok = port::Snappy_Compress(input.data(), input.size(), &compressed);
+      produced += compressed.size();
+      bytes += input.size();
+      thread->stats.FinishedSingleOp();
+    }
+    }
+    
+      IterState* cleanup = new IterState(&mutex_, mem_, imm_, versions_->current());
+  internal_iter->RegisterCleanup(CleanupIteratorState, cleanup, nullptr);
+    
+      // Have we encountered a background error in paranoid mode?
+  Status bg_error_ GUARDED_BY(mutex_);
+    
+    #include 'db/dbformat.h'
+#include 'db/filename.h'
+#include 'db/log_reader.h'
+#include 'db/version_edit.h'
+#include 'db/write_batch_internal.h'
+#include 'leveldb/env.h'
+#include 'leveldb/iterator.h'
+#include 'leveldb/options.h'
+#include 'leveldb/status.h'
+#include 'leveldb/table.h'
+#include 'leveldb/write_batch.h'
+#include 'util/logging.h'
+    
+    int main(int argc, char** argv) {
+  leveldb::Env* env = leveldb::Env::Default();
+  bool ok = true;
+  if (argc < 2) {
+    Usage();
+    ok = false;
+  } else {
+    std::string command = argv[1];
+    if (command == 'dump') {
+      ok = leveldb::HandleDumpCommand(env, argv+2, argc-2);
+    } else {
+      Usage();
+      ok = false;
+    }
+  }
+  return (ok ? 0 : 1);
+}
+
+    
+    bool MemTable::Get(const LookupKey& key, std::string* value, Status* s) {
+  Slice memkey = key.memtable_key();
+  Table::Iterator iter(&table_);
+  iter.Seek(memkey.data());
+  if (iter.Valid()) {
+    // entry format is:
+    //    klength  varint32
+    //    userkey  char[klength]
+    //    tag      uint64
+    //    vlength  varint32
+    //    value    char[vlength]
+    // Check that it belongs to same user key.  We do not check the
+    // sequence number since the Seek() call above should have skipped
+    // all entries with overly large sequence numbers.
+    const char* entry = iter.key();
+    uint32_t key_length;
+    const char* key_ptr = GetVarint32Ptr(entry, entry+5, &key_length);
+    if (comparator_.comparator.user_comparator()->Compare(
+            Slice(key_ptr, key_length - 8),
+            key.user_key()) == 0) {
+      // Correct user key
+      const uint64_t tag = DecodeFixed64(key_ptr + key_length - 8);
+      switch (static_cast<ValueType>(tag & 0xff)) {
+        case kTypeValue: {
+          Slice v = GetLengthPrefixedSlice(key_ptr + key_length);
+          value->assign(v.data(), v.size());
+          return true;
+        }
+        case kTypeDeletion:
+          *s = Status::NotFound(Slice());
+          return true;
+      }
+    }
+  }
+  return false;
+}
+    
+      void Open(Options* options = nullptr) {
+    ASSERT_OK(OpenWithStatus(options));
+    ASSERT_EQ(1, NumLogs());
+  }
+    
+    #endif /* #if !UCONFIG_NO_FORMATTING */
+    
+    #ifndef __SHARED_BREAKITERATOR_H__
+#define __SHARED_BREAKITERATOR_H__
+    
+    #include 'unicode/utypes.h'
+#include 'sharedobject.h'
     
     
 /**
- * AutoPolygon is a helper Object
- * AutoPolygon's purpose is to process an image into 2d polygon mesh in runtime
- * It has functions for each step in the process, from tracing all the points, to triangulation
- * the result can be then passed to Sprite::create() to create a Polygon Sprite
+ * A formatter for small, positive integers.
  */
-class CC_DLL AutoPolygon
-{
+class U_I18N_API SmallIntFormatter : public UMemory {
 public:
     /**
-     * create an AutoPolygon and initialize it with an image file
-     * the image must be a 32bit PNG for current version 3.7
-     * @param   filename    a path to image file, e.g., 'scene1/monster.png'.
-     * @return  an AutoPolygon object;
+     * Estimates the actual digit count needed to format positiveValue
+     * using the given range of digit counts.
+     * Returns a value that is at least the actual digit count needed.
+     *
+     * @param positiveValue the value to format
+     * @param range the acceptable range of digit counts.
      */
-    AutoPolygon(const std::string &filename);
-    
-    /**
-     * Destructor of AutoPolygon.
-     */
-    ~AutoPolygon();
-    
-    /**
-     * trace all the points along the outline of the image, 
-     * @warning must create AutoPolygon with filename to use this function
-     * @param   rect    a texture rect for specify an area of the image
-     * @param   threshold   the value when alpha is greater than this value will be counted as opaque, default to 0.0
-     * @return  a vector of vec2 of all the points found in clockwise order
-     * @code
-     * auto ap = AutoPolygon('grossini.png');
-     * auto rect = Rect(100, 100, 200, 200);
-     * std::vector<Vec2> points = ap.trace(rect);//default threshold is 0.0
-     * @endcode
-     */
-     std::vector<Vec2> trace(const cocos2d::Rect& rect, float threshold = 0.0f);
-    
-    /**
-     * reduce the amount of points so its faster for GPU to process and draw
-     * based on Ramer-Douglas-Peucker algorithm
-     * @param   points  a vector of Vec2 points as input
-     * @param   rect    a texture rect for specify an area of the image to avoid over reduction
-     * @param   epsilon the perpendicular distance where points smaller than this value will be discarded
-     * @return  a vector of Vec2 of the remaining points in clockwise order
-     * @code
-     * auto ap = AutoPolygon();
-     * std::vector<Vec2> reduced = ap.reduce(inputPoints, rect);//default epsilon is 2
-     * @endcode
-     */
-    std::vector<Vec2> reduce(const std::vector<Vec2>& points, const Rect& rect, float epsilon = 2.0f);
-    
-    /**
-     * expand the points along their edge, useful after you reduce the points that cuts into the sprite
-     * using ClipperLib
-     * @param   points  a vector of Vec2 points as input
-     * @param   rect    a texture rect for specify an area of the image, the expanded points will be clamped in this rect, ultimately resulting in a quad if the expansion is too great
-     * @param   epsilon the distance which the edges will expand
-     * @return  a vector of Vec2 as the result of the expansion
-     * @code
-     * auto ap = AutoPolygon();
-     * std::vector<Vec2> expanded = ap.expand(inputPoints, rect, 2.0);
-     * @endcode
-     */
-    std::vector<Vec2> expand(const std::vector<Vec2>& points, const Rect& rect, float epsilon);
-    
-    /**
-     * Triangulate the input points into triangles for rendering
-     * using poly2tri
-     * @warning points must be closed loop, cannot have 2 points sharing the same position and cannot intersect itself
-     * @param   points  a vector of vec2 points as input
-     * @return  a Triangles object with points and indices
-     * @code
-     * auto ap = AutoPolygon();
-     * TrianglesCommand::Triangles myPolygons = ap.triangulate(myPoints);
-     * @endcode
-     */
-    TrianglesCommand::Triangles triangulate(const std::vector<Vec2>& points);
-    
-    /**
-     * calculate the UV coordinates for each points based on a texture rect
-     * @warning This method requires the AutoPolygon object to know the texture file dimension
-     * @param   rect    a texture rect to specify where to map the UV
-     * @param   verts   a pointer to the verts array, served both as input and output verts
-     * @param   count   the count for the verts array
-     * @code
-     * auto ap = AutoPolygon('grossini.png');
-     * TrianglesCommand::Triangles myPolygons = ap.triangulate(myPoints);
-     * ap.calculateUV(rect, myPolygons.verts, 20);
-     * @endcode
-     */
-    void calculateUV(const Rect& rect, V3F_C4B_T2F* verts, ssize_t count);
-    
-    /**
-     * a helper function, packing trace, reduce, expand, triangulate and calculate uv in one function
-     * @param   rect    texture rect, use Rect::ZERO for the size of the texture, default is Rect::ZERO
-     * @param   epsilon the value used to reduce and expand, default to 2.0
-     * @param   threshold   the value where bigger than the threshold will be counted as opaque, used in trace
-     * @return  a PolygonInfo, to use with sprite
-     * @code
-     * auto ap = AutoPolygon('grossini.png');
-     * PolygonInfo myInfo = ap.generateTriangles();//use all default values
-     * auto sp1 = Sprite::create(myInfo);
-     * polygonInfo myInfo2 = ap.generateTriangles(Rect::ZERO, 5.0, 0.1);//ap can be reused to generate another set of PolygonInfo with different settings
-     * auto sp2 = Sprite::create(myInfo2);
-     * @endcode
-     */
-    PolygonInfo generateTriangles(const Rect& rect = Rect::ZERO, float epsilon = 2.0f, float threshold = 0.05f);
-    
-    /**
-     * a helper function, packing autoPolygon creation, trace, reduce, expand, triangulate and calculate uv in one function
-     * @warning if you want to repetitively generate polygons, consider create an AutoPolygon object, and use generateTriangles function, as it only reads the file once
-     * @param   filename     A path to image file, e.g., 'scene1/monster.png'.
-     * @param   rect    texture rect, use Rect::ZERO for the size of the texture, default is Rect::ZERO
-     * @param   epsilon the value used to reduce and expand, default to 2.0
-     * @param   threshold   the value where bigger than the threshold will be counted as opaque, used in trace
-     * @return  a PolygonInfo, to use with sprite
-     * @code
-     * auto sp = Sprite::create(AutoPolygon::generatePolygon('grossini.png'));
-     * @endcode
-     */
-    static PolygonInfo generatePolygon(const std::string& filename, const Rect& rect = Rect::ZERO, float epsilon = 2.0f, float threshold = 0.05f);
-protected:
-    Vec2 findFirstNoneTransparentPixel(const Rect& rect, float threshold);
-    std::vector<cocos2d::Vec2> marchSquare(const Rect& rect, const Vec2& first, float threshold);
-    unsigned int getSquareValue(unsigned int x, unsigned int y, const Rect& rect, float threshold);
+    static int32_t estimateDigitCount(
+            int32_t positiveValue, const IntDigitCountRange &range);
     }
     
-    Status WriteBatchBase::Delete(const SliceParts& key) {
-  std::string key_buf;
-  Slice key_slice(key, &key_buf);
-  return Delete(key_slice);
+    /**
+ * UnicodeFunctor API.  Cast 'this' to a UnicodeReplacer* pointer
+ * and return the pointer.
+ */
+UnicodeReplacer* StringMatcher::toReplacer() const {
+  StringMatcher  *nonconst_this = const_cast<StringMatcher *>(this);
+  UnicodeReplacer *nonconst_base = static_cast<UnicodeReplacer *>(nonconst_this);
+  
+  return nonconst_base;
 }
     
-    class WriteCallback {
+        /**
+     * Implement UnicodeMatcher
+     * @param result            Output param to receive the pattern.
+     * @param escapeUnprintable if True then escape the unprintable characters.
+     * @return                  A reference to 'result'.
+     */
+    virtual UnicodeString& toPattern(UnicodeString& result,
+                                     UBool escapeUnprintable = FALSE) const;
+    
+      /// Allow parsers to perform some setup before the configuration is loaded.
+  Status setUp() override;
+    
+      discovery_queries_.clear();
+  if (obj.HasMember('discovery') && obj['discovery'].IsArray()) {
+    for (const auto& item : obj['discovery'].GetArray()) {
+      discovery_queries_.push_back(item.GetString());
+    }
+  }
+    
+    /// Remove these ATC tables from the registry and database
+Status ATCConfigParserPlugin::removeATCTables(
+    const std::set<std::string>& detach_tables) {
+  auto registry_table = RegistryFactory::get().registry('table');
+  std::set<std::string> failed_tables;
+  for (const auto& table : detach_tables) {
+    if (registry_table->exists(table)) {
+      std::string value;
+      if (getDatabaseValue(
+              kPersistentSettings, kDatabaseKeyPrefix + table, value)
+              .ok()) {
+        registry_table->remove(table);
+        PluginResponse resp;
+        Registry::call(
+            'sql', 'sql', {{'action', 'detatch'}, {'table', table}}, resp);
+        LOG(INFO) << 'Removed ATC table: ' << table;
+      } else {
+        failed_tables.insert(table);
+      }
+    }
+    deleteDatabaseValue(kPersistentSettings, kDatabaseKeyPrefix + table);
+  }
+  if (failed_tables.empty()) {
+    return Status();
+  }
+  return Status(
+      1, 'Attempted to remove non ATC tables: ' + join(failed_tables, ', '));
+}
+    
+    void clearDecorations(const std::string& source) {
+  WriteLock lock(DecoratorsConfigParserPlugin::kDecorationsMutex);
+  DecoratorsConfigParserPlugin::kDecorations[source].clear();
+}
+    
+    Status ViewsConfigParserPlugin::update(const std::string& source,
+                                       const ParserConfig& config) {
+  auto cv = config.find('views');
+  if (cv == config.end()) {
+    return Status(1);
+  }
+    }
+    
+    class FilesystemConfigPlugin : public ConfigPlugin {
  public:
-  virtual ~WriteCallback() {}
-    }
-    
-      // reopen the db using the loaded options.
-  std::vector<ColumnFamilyHandle*> handles;
-  s = DB::Open(loaded_db_opt, kDBPath, loaded_cf_descs, &handles, &db);
-  assert(s.ok());
-    
-    // Delete files in multiple ranges at once
-// Delete files in a lot of ranges one at a time can be slow, use this API for
-// better performance in that case.
-Status DeleteFilesInRanges(DB* db, ColumnFamilyHandle* column_family,
-                           const RangePtr* ranges, size_t n,
-                           bool include_end = true);
-    
-    // Move all L0 files to target_level skipping compaction.
-// This operation succeeds only if the files in L0 have disjoint ranges; this
-// is guaranteed to happen, for instance, if keys are inserted in sorted
-// order. Furthermore, all levels between 1 and target_level must be empty.
-// If any of the above condition is violated, InvalidArgument will be
-// returned.
-Status PromoteL0(DB* db, ColumnFamilyHandle* column_family,
-                 int target_level = 1);
-    
-    
-    {  virtual ~FlushBlockPolicy() { }
+  Status genConfig(std::map<std::string, std::string>& config);
+  Status genPack(const std::string& name,
+                 const std::string& value,
+                 std::string& pack);
 };
-    
-    using apollo::common::ErrorCode;
-    
-    // System gflags
-DEFINE_string(sensor_node_name, '', 'Sensor node name.');
-
-    
-    
-    {
-    {
-    {}  // namespace msf
-}  // namespace localization
-}  // namespace apollo
-
-    
-    TEST(IndexedQueue, QueueSize2) {
-  StringIndexedQueue object(2);
-  ASSERT_TRUE(object.Add(1, std::make_unique<std::string>('one')));
-  ASSERT_TRUE(object.Find(1) != nullptr);
-  ASSERT_TRUE(object.Find(2) == nullptr);
-  ASSERT_FALSE(object.Add(1, std::make_unique<std::string>('one')));
-  ASSERT_EQ('one', *object.Latest());
-  ASSERT_TRUE(object.Add(2, std::make_unique<std::string>('two')));
-  ASSERT_TRUE(object.Find(1) != nullptr);
-  ASSERT_TRUE(object.Find(2) != nullptr);
-  ASSERT_EQ('two', *object.Latest());
-  ASSERT_TRUE(object.Add(3, std::make_unique<std::string>('three')));
-  ASSERT_TRUE(object.Find(1) == nullptr);
-  ASSERT_TRUE(object.Find(2) != nullptr);
-  ASSERT_TRUE(object.Find(3) != nullptr);
-  ASSERT_TRUE(object.Find(4) == nullptr);
-  ASSERT_EQ('three', *object.Latest());
-}
-    
-      std::vector<std::shared_ptr<Curve1d>> lat_trajectories;
-  ptr_trajectory1d_generator_->GenerateLateralTrajectoryBundle(
-      &lat_trajectories);
-    
-    
-    {  MatrixXd bd_golden(20, 1);
-  bd_golden << -100, 1, -100, 1, -100, 1, -100, 1, -100, 1, -100, 1, -100, 1,
-      -100, 1, -100, 1, -100, 1;
-  EXPECT_EQ(bd, bd_golden);
-}
-    
-    void Spline1dSeg::SetParams(const std::vector<double>& params) {
-  SetSplineFunc(PolynomialXd(params));
-}
