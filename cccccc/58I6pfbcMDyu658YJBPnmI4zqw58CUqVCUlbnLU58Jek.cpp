@@ -1,899 +1,315 @@
 
         
-        VERB(abbreviate)
-VERB(accept)
-VERB(activate)
-VERB(add)
-VERB(adjust)
-VERB(admire)
-VERB(admit)
-VERB(advise)
-VERB(afford)
-VERB(agree)
-VERB(alert)
-VERB(allow)
-VERB(alter)
-VERB(amuse)
-VERB(analyse)
-VERB(analyze)
-VERB(animate)
-VERB(announce)
-VERB(annoy)
-VERB(answer)
-VERB(apologise)
-VERB(appear)
-VERB(append)
-VERB(applaud)
-VERB(apply)
-VERB(apportion)
-VERB(appreciate)
-VERB(approve)
-VERB(argue)
-VERB(arrange)
-VERB(arrest)
-VERB(arrive)
-VERB(ask)
-VERB(assign)
-VERB(attach)
-VERB(attack)
-VERB(attempt)
-VERB(attend)
-VERB(attract)
-VERB(avoid)
-VERB(awake)
-VERB(back)
-VERB(bake)
-VERB(balance)
-VERB(ban)
-VERB(bang)
-VERB(bare)
-VERB(bat)
-VERB(bathe)
-VERB(battle)
-VERB(be)
-VERB(beat)
-VERB(become)
-VERB(beg)
-VERB(begin)
-VERB(behave)
-VERB(belong)
-VERB(bend)
-VERB(bet)
-VERB(bid)
-VERB(bite)
-VERB(bleach)
-VERB(bless)
-VERB(blind)
-VERB(blink)
-VERB(blot)
-VERB(blow)
-VERB(blush)
-VERB(boast)
-VERB(boil)
-VERB(bolt)
-VERB(bomb)
-VERB(book)
-VERB(bore)
-VERB(borrow)
-VERB(bounce)
-VERB(bow)
-VERB(box)
-VERB(brake)
-VERB(branch)
-VERB(break)
-VERB(breathe)
-VERB(bring)
-VERB(broadcast)
-VERB(bruise)
-VERB(brush)
-VERB(bubble)
-VERB(build)
-VERB(bump)
-VERB(burn)
-VERB(bury)
-VERB(buy)
-VERB(buzz)
-VERB(calculate)
-VERB(call)
-VERB(camp)
-VERB(cancel)
-VERB(capture)
-VERB(care)
-VERB(carry)
-VERB(carve)
-VERB(cast)
-VERB(catch)
-VERB(cause)
-VERB(center)
-VERB(challenge)
-VERB(change)
-VERB(charge)
-VERB(chase)
-VERB(cheat)
-VERB(check)
-VERB(cheer)
-VERB(chew)
-VERB(choke)
-VERB(choose)
-VERB(chop)
-VERB(claim)
-VERB(clap)
-VERB(clean)
-VERB(clear)
-VERB(click)
-VERB(close)
-VERB(coach)
-VERB(coil)
-VERB(collect)
-VERB(collapse)
-VERB(colour)
-VERB(comb)
-VERB(come)
-VERB(command)
-VERB(commit)
-VERB(communicate)
-VERB(compare)
-VERB(compete)
-VERB(complain)
-VERB(complete)
-VERB(concentrate)
-VERB(concern)
-VERB(confess)
-VERB(confuse)
-VERB(connect)
-VERB(consider)
-VERB(consist)
-VERB(contain)
-VERB(contains)
-VERB(continue)
-VERB(convert)
-VERB(copy)
-VERB(correct)
-VERB(cough)
-VERB(cost)
-VERB(count)
-VERB(cover)
-VERB(crack)
-VERB(crash)
-VERB(crawl)
-VERB(cross)
-VERB(crush)
-VERB(cry)
-VERB(cure)
-VERB(curl)
-VERB(curve)
-VERB(customize)
-VERB(cut)
-VERB(cycle)
-VERB(dam)
-VERB(damage)
-VERB(dance)
-VERB(dare)
-VERB(decay)
-VERB(deceive)
-VERB(decide)
-VERB(decode)
-VERB(decorate)
-VERB(defer)
-VERB(define)
-VERB(delay)
-VERB(delete)
-VERB(delight)
-VERB(deliver)
-VERB(depend)
-VERB(describe)
-VERB(deselect)
-VERB(desert)
-VERB(deserve)
-VERB(destroy)
-VERB(detach)
-VERB(detect)
-VERB(develop)
-VERB(dig)
-VERB(dim)
-VERB(disagree)
-VERB(disappear)
-VERB(disapprove)
-VERB(disarm)
-VERB(discover)
-VERB(dislike)
-VERB(dismiss)
-VERB(display)
-VERB(divide)
-VERB(do)
-VERB(double)
-VERB(doubt)
-VERB(drag)
-VERB(drain)
-VERB(draw)
-VERB(dream)
-VERB(dress)
-VERB(drink)
-VERB(drip)
-VERB(drive)
-VERB(drop)
-VERB(drown)
-VERB(drum)
-VERB(dry)
-VERB(duplicate)
-VERB(dust)
-VERB(earn)
-VERB(eat)
-VERB(echo)
-VERB(edit)
-VERB(educate)
-VERB(embarrass)
-VERB(employ)
-VERB(empty)
-VERB(enable)
-VERB(encode)
-VERB(encourage)
-VERB(end)
-VERB(enjoy)
-VERB(enter)
-VERB(entertain)
-VERB(enumerate)
-VERB(enqueue)
-VERB(escape)
-VERB(examine)
-VERB(excite)
-VERB(excuse)
-VERB(execute)
-VERB(exercise)
-VERB(exist)
-VERB(expand)
-VERB(expect)
-VERB(explain)
-VERB(explode)
-VERB(export)
-VERB(extend)
-VERB(face)
-VERB(fade)
-VERB(fail)
-VERB(fancy)
-VERB(fasten)
-VERB(fax)
-VERB(fear)
-VERB(feel)
-VERB(fence)
-VERB(fetch)
-VERB(fight)
-VERB(fill)
-VERB(film)
-VERB(find)
-VERB(finish)
-VERB(fire)
-VERB(fit)
-VERB(fix)
-VERB(flap)
-VERB(flash)
-VERB(flatten)
-VERB(flip)
-VERB(float)
-VERB(flood)
-VERB(flow)
-VERB(flower)
-VERB(fly)
-VERB(focus)
-VERB(fold)
-VERB(follow)
-VERB(fool)
-VERB(force)
-VERB(forget)
-VERB(forgive)
-VERB(form)
-VERB(found)
-VERB(freeze)
-VERB(frighten)
-VERB(fry)
-VERB(gain)
-VERB(gather)
-VERB(gaze)
-VERB(generate)
-VERB(get)
-VERB(give)
-VERB(glow)
-VERB(glue)
-VERB(go)
-VERB(grab)
-VERB(grate)
-VERB(grease)
-VERB(greet)
-VERB(grin)
-VERB(grip)
-VERB(groan)
-VERB(grow)
-VERB(guarantee)
-VERB(guard)
-VERB(guess)
-VERB(guide)
-VERB(hammer)
-VERB(hand)
-VERB(handle)
-VERB(hang)
-VERB(happen)
-VERB(harass)
-VERB(harm)
-VERB(hate)
-VERB(haunt)
-VERB(head)
-VERB(heal)
-VERB(heap)
-VERB(hear)
-VERB(heat)
-VERB(help)
-VERB(hide)
-VERB(highlight)
-VERB(hit)
-VERB(hold)
-VERB(hook)
-VERB(hop)
-VERB(hope)
-VERB(hover)
-VERB(hug)
-VERB(hum)
-VERB(hunt)
-VERB(hurry)
-VERB(hurt)
-VERB(identify)
-VERB(ignore)
-VERB(imagine)
-VERB(import)
-VERB(impress)
-VERB(improve)
-VERB(include)
-VERB(increase)
-VERB(influence)
-VERB(inform)
-VERB(inject)
-VERB(injure)
-VERB(insert)
-VERB(instruct)
-VERB(intend)
-VERB(interest)
-VERB(interfere)
-VERB(interrupt)
-VERB(intersect)
-VERB(intersects)
-VERB(introduce)
-VERB(invent)
-VERB(invite)
-VERB(irritate)
-VERB(itch)
-VERB(jail)
-VERB(jam)
-VERB(jog)
-VERB(join)
-VERB(joke)
-VERB(judge)
-VERB(juggle)
-VERB(jump)
-VERB(keep)
-VERB(kick)
-VERB(kill)
-VERB(kiss)
-VERB(kneel)
-VERB(knit)
-VERB(knock)
-VERB(knot)
-VERB(know)
-VERB(label)
-VERB(land)
-VERB(last)
-VERB(laugh)
-VERB(launch)
-VERB(lay)
-VERB(lead)
-VERB(learn)
-VERB(leave)
-VERB(lend)
-VERB(let)
-VERB(level)
-VERB(license)
-VERB(lick)
-VERB(lie)
-VERB(lighten)
-VERB(like)
-VERB(listen)
-VERB(live)
-VERB(load)
-VERB(localize)
-VERB(lock)
-VERB(long)
-VERB(look)
-VERB(lose)
-VERB(love)
-VERB(maintain)
-VERB(make)
-VERB(man)
-VERB(manage)
-VERB(march)
-VERB(mark)
-VERB(marry)
-VERB(match)
-VERB(mate)
-VERB(matter)
-VERB(mean)
-VERB(measure)
-VERB(meddle)
-VERB(meet)
-VERB(melt)
-VERB(memorise)
-VERB(mend)
-VERB(merge)
-VERB(mess)
-VERB(milk)
-VERB(mine)
-VERB(miss)
-VERB(minus)
-VERB(mix)
-VERB(moan)
-VERB(moor)
-VERB(mourn)
-VERB(move)
-VERB(muddle)
-VERB(mug)
-VERB(multiply)
-VERB(murder)
-VERB(nail)
-VERB(nest)
-VERB(nod)
-VERB(normalize)
-VERB(note)
-VERB(notice)
-VERB(notify)
-VERB(number)
-VERB(obey)
-VERB(observe)
-VERB(obtain)
-VERB(occur)
-VERB(offend)
-VERB(offer)
-VERB(open)
-VERB(order)
-VERB(overflow)
-VERB(owe)
-VERB(own)
-VERB(pack)
-VERB(paddle)
-VERB(paint)
-VERB(park)
-VERB(part)
-VERB(pass)
-VERB(paste)
-VERB(pat)
-VERB(pause)
-VERB(pay)
-VERB(peck)
-VERB(pedal)
-VERB(peel)
-VERB(peep)
-VERB(perform)
-VERB(permit)
-VERB(phone)
-VERB(pick)
-VERB(pinch)
-VERB(pine)
-VERB(place)
-VERB(plan)
-VERB(plant)
-VERB(play)
-VERB(please)
-VERB(plug)
-VERB(poke)
-VERB(polish)
-VERB(pop)
-VERB(possess)
-VERB(post)
-VERB(pour)
-VERB(practice)
-VERB(practise)
-VERB(pray)
-VERB(preach)
-VERB(precede)
-VERB(prefer)
-VERB(preload)
-VERB(prepare)
-VERB(prepend)
-VERB(present)
-VERB(preserve)
-VERB(press)
-VERB(pretend)
-VERB(prevent)
-VERB(prick)
-VERB(print)
-VERB(produce)
-VERB(program)
-VERB(promise)
-VERB(protect)
-VERB(provide)
-VERB(pull)
-VERB(pump)
-VERB(punch)
-VERB(puncture)
-VERB(punish)
-VERB(push)
-VERB(put)
-VERB(question)
-VERB(queue)
-VERB(race)
-VERB(radiate)
-VERB(rain)
-VERB(raise)
-VERB(reach)
-VERB(read)
-VERB(realise)
-VERB(receive)
-VERB(recognise)
-VERB(record)
-VERB(reduce)
-VERB(reflect)
-VERB(refuse)
-VERB(register)
-VERB(regret)
-VERB(reign)
-VERB(reject)
-VERB(rejoice)
-VERB(relax)
-VERB(release)
-VERB(rely)
-VERB(remain)
-VERB(remember)
-VERB(remind)
-VERB(remove)
-VERB(repair)
-VERB(repeat)
-VERB(replace)
-VERB(reply)
-VERB(report)
-VERB(request)
-VERB(require)
-VERB(resize)
-VERB(rescue)
-VERB(resolve)
-VERB(retain)
-VERB(retire)
-VERB(return)
-VERB(reverse)
-VERB(review)
-VERB(rhyme)
-VERB(ride)
-VERB(ring)
-VERB(rinse)
-VERB(rise)
-VERB(risk)
-VERB(rob)
-VERB(rock)
-VERB(roll)
-VERB(rot)
-VERB(rub)
-VERB(ruin)
-VERB(rule)
-VERB(run)
-VERB(rush)
-VERB(sack)
-VERB(sail)
-VERB(satisfy)
-VERB(save)
-VERB(saw)
-VERB(say)
-VERB(scale)
-VERB(scare)
-VERB(scatter)
-VERB(scold)
-VERB(scorch)
-VERB(scrape)
-VERB(scratch)
-VERB(scream)
-VERB(screw)
-VERB(scribble)
-VERB(scroll)
-VERB(scrub)
-VERB(seal)
-VERB(search)
-VERB(see)
-VERB(select)
-VERB(sell)
-VERB(send)
-VERB(separate)
-VERB(serve)
-VERB(settle)
-VERB(shade)
-VERB(share)
-VERB(shave)
-VERB(shelter)
-VERB(shiver)
-VERB(shock)
-VERB(shop)
-VERB(show)
-VERB(shrug)
-VERB(shut)
-VERB(sigh)
-VERB(sign)
-VERB(signal)
-VERB(sin)
-VERB(sing)
-VERB(sip)
-VERB(sit)
-VERB(ski)
-VERB(skip)
-VERB(slap)
-VERB(sleep)
-VERB(slip)
-VERB(slow)
-VERB(smash)
-VERB(smell)
-VERB(smile)
-VERB(smoke)
-VERB(snatch)
-VERB(sneeze)
-VERB(sniff)
-VERB(snore)
-VERB(snow)
-VERB(soak)
-VERB(soothe)
-VERB(sound)
-VERB(spare)
-VERB(spark)
-VERB(sparkle)
-VERB(speak)
-VERB(spell)
-VERB(spend)
-VERB(spill)
-VERB(spoil)
-VERB(spot)
-VERB(spray)
-VERB(sprout)
-VERB(squash)
-VERB(squeak)
-VERB(squeal)
-VERB(squeeze)
-VERB(stain)
-VERB(stamp)
-VERB(stand)
-VERB(standardise)
-VERB(standardize)
-VERB(stare)
-VERB(start)
-VERB(stay)
-VERB(steer)
-VERB(step)
-VERB(stir)
-VERB(stitch)
-VERB(stop)
-VERB(store)
-VERB(strap)
-VERB(strengthen)
-VERB(stretch)
-VERB(strip)
-VERB(stroke)
-VERB(stuff)
-VERB(subtract)
-VERB(succeed)
-VERB(suck)
-VERB(suffer)
-VERB(suggest)
-VERB(suit)
-VERB(supply)
-VERB(support)
-VERB(suppose)
-VERB(suppress)
-VERB(surprise)
-VERB(surround)
-VERB(suspect)
-VERB(suspend)
-VERB(swim)
-VERB(switch)
-VERB(take)
-VERB(talk)
-VERB(tame)
-VERB(tap)
-VERB(taste)
-VERB(teach)
-VERB(tear)
-VERB(tease)
-VERB(telephone)
-VERB(tell)
-VERB(tempt)
-VERB(terrify)
-VERB(test)
-VERB(thank)
-VERB(thaw)
-VERB(think)
-VERB(throw)
-VERB(tick)
-VERB(tickle)
-VERB(tie)
-VERB(time)
-VERB(tip)
-VERB(tire)
-VERB(toggle)
-VERB(touch)
-VERB(tour)
-VERB(tow)
-VERB(trace)
-VERB(trade)
-VERB(train)
-VERB(translate)
-VERB(transform)
-VERB(transport)
-VERB(trap)
-VERB(travel)
-VERB(traverse)
-VERB(treat)
-VERB(tremble)
-VERB(trick)
-VERB(trip)
-VERB(trot)
-VERB(trouble)
-VERB(truncate)
-VERB(trust)
-VERB(try)
-VERB(tug)
-VERB(tumble)
-VERB(turn)
-VERB(twist)
-VERB(understand)
-VERB(undress)
-VERB(unfasten)
-VERB(union)
-VERB(unite)
-VERB(unload)
-VERB(unlock)
-VERB(unpack)
-VERB(untidy)
-VERB(up)
-VERB(update)
-VERB(use)
-VERB(validate)
-VERB(vanish)
-VERB(visit)
-VERB(wail)
-VERB(wait)
-VERB(wake)
-VERB(walk)
-VERB(wander)
-VERB(want)
-VERB(warm)
-VERB(warn)
-VERB(wash)
-VERB(waste)
-VERB(watch)
-VERB(water)
-VERB(wave)
-VERB(wear)
-VERB(weigh)
-VERB(welcome)
-VERB(whine)
-VERB(whip)
-VERB(whirl)
-VERB(whisper)
-VERB(whistle)
-VERB(win)
-VERB(wink)
-VERB(wipe)
-VERB(wish)
-VERB(wobble)
-VERB(wonder)
-VERB(work)
-VERB(worry)
-VERB(wrap)
-VERB(wreck)
-VERB(wrestle)
-VERB(wriggle)
-VERB(write)
-VERB(yawn)
-VERB(yell)
-VERB(zip)
-VERB(zoom)
+        #define DEBUG_TYPE 'Protocol conformance checking'
     
-    class TreePrinter {
-  llvm::raw_ostream &Out;
-  void (&PrintNodeData)(llvm::raw_ostream &out, void *node);
-  SmallString<40> Indent;
-public:
-  TreePrinter(llvm::raw_ostream &out,
-              void (&printNodeData)(llvm::raw_ostream &out, void *node))
-    : Out(out), PrintNodeData(printNodeData) {}
+    #include <QIcon>
+#include <QPixmap>
+#include <QString>
+    
+    static const char* kModuleName = '_api_implementation';
+static const char kModuleDocstring[] =
+'_api_implementation is a module that exposes compile-time constants that\n'
+'determine the default API implementation to use for Python proto2.\n'
+'\n'
+'It complements api_implementation.py by setting defaults using compile-time\n'
+'constants defined in C, such that one can set defaults at compilation\n'
+'(e.g. with blaze flag --copt=-DPYTHON_PROTO2_CPP_IMPL_V2).';
+    
+    // Owns a python object and decrements the reference count on destruction.
+// This class is not threadsafe.
+template <typename PyObjectStruct>
+class ScopedPythonPtr {
+ public:
+  // Takes the ownership of the specified object to ScopedPythonPtr.
+  // The reference count of the specified py_object is not incremented.
+  explicit ScopedPythonPtr(PyObjectStruct* py_object = NULL)
+      : ptr_(py_object) {}
     }
     
-    unsigned swift::measureNewline(const char *BufferPtr, const char *BufferEnd) {
-  if (BufferPtr == BufferEnd)
-    return 0;
-    }
-    
-        // Finish the first scheduled task.
-    PidTaskPair P = std::move(ExecutingTasks.front());
-    ExecutingTasks.pop();
-    
-    #include 'swift/Basic/Unicode.h'
-    
-    
-    {  bool isTypedef() const {
-    assert(isValid());
-    return !Decl.isNull() && Decl.is<const clang::TypedefNameDecl *>();
-  }
-  const clang::TypedefNameDecl *getTypedef() const {
-    assert(isTypedef());
-    return Decl.get<const clang::TypedefNameDecl *>();
-  }
-};
-    
-    namespace {
-  class ClangDiagRenderer final : public clang::DiagnosticNoteRenderer {
-    const llvm::function_ref<void(clang::FullSourceLoc,
-                                  clang::DiagnosticsEngine::Level,
-                                  StringRef)> callback;
-    }
-    }
-    
-    
-bool Mangle::isNonAscii(StringRef str) {
-  for (unsigned char c : str) {
-    if (c >= 0x80)
-      return true;
-  }
-  return false;
+    void WriteMethodDocComment(io::Printer* printer, const MethodDescriptor* method) {
+    WriteDocCommentBody(printer, method);
 }
     
-    bool FakeCanClient::Init(const CANCardParameter &param) { return true; }
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/plugin.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/stubs/strutil.h>
     
-    #include 'modules/common/log.h'
-#include 'modules/common/time/time.h'
-#include 'modules/drivers/canbus/common/byte.h'
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
     
-    #include 'modules/drivers/canbus/can_client/hermes_can/hermes_can_client.h'
-    
-      while (IsRunning()) {
-    std::vector<CanFrame> buf;
-    int32_t frame_num = MAX_CAN_RECV_FRAME_LEN;
-    if (can_client_->Receive(&buf, &frame_num) !=
-        ::apollo::common::ErrorCode::OK) {
-      LOG_IF_EVERY_N(ERROR, receive_error_count++ > ERROR_COUNT_MAX,
-                     ERROR_COUNT_MAX)
-          << 'Received ' << receive_error_count << ' error messages.';
-      std::this_thread::sleep_for(default_period);
-      continue;
-    }
-    receive_error_count = 0;
-    }
-    
-      ProtocolData<::apollo::canbus::ChassisDetail> mpd;
-  SenderMessage<::apollo::canbus::ChassisDetail> msg(1, &mpd);
-  EXPECT_FALSE(sender.NeedSend(msg, 1));
-  EXPECT_EQ(msg.message_id(), 1);
-  int32_t period = msg.curr_period();
-  msg.UpdateCurrPeriod(-50);
-  EXPECT_EQ(msg.curr_period(), period + 50);
-  EXPECT_EQ(msg.CanFrame().id, 1);
-    
-    
-    {  std::condition_variable cvar_;
-};
-    
-    #include <memory>
-#include <set>
-    
-    TEST(ProtocolDataTest, CheckSum) {
-  const uint8_t INPUT[] = {0x00, 0x12, 0x00, 0x13, 0x00, 0xF3, 0x00, 0x00};
-  const uint8_t result =
-      ProtocolData<apollo::canbus::ChassisDetail>::CalculateCheckSum(INPUT, 8);
-  EXPECT_EQ(0xE7, result);
+    int ImmutableMapFieldGenerator::GetNumBitsForMessage() const {
+  return 0;
 }
     
-    TEST(ByteTest, SetBit) {
-  unsigned char byte_value = 0xFF;
-  Byte value(&byte_value);
-  value.set_bit_0(1);
-  EXPECT_EQ(0xFD, value.get_byte());
-  value.set_bit_0(7);
-  EXPECT_EQ(0x7D, value.get_byte());
-  value.set_bit_1(7);
-  EXPECT_EQ(0xFD, value.get_byte());
-  value.set_value(0x77);
-  value.set_bit_1(0);
-  EXPECT_EQ(0x77, value.get_byte());
+    // Get the name of a service's Java class without package name prefix.
+string ClassNameWithoutPackage(const ServiceDescriptor* descriptor,
+                               bool immutable) {
+  string full_name = StripPackageName(descriptor->full_name(),
+                                      descriptor->file());
+  // We don't allow nested service definitions.
+  GOOGLE_CHECK(full_name.find('.') == string::npos);
+  return full_name;
+}
+    
+      printer->Print(
+    'com.google.protobuf.Descriptors.FileDescriptor.'
+    'InternalDescriptorAssigner assigner =\n'
+    '    new com.google.protobuf.Descriptors.FileDescriptor.'
+    '    InternalDescriptorAssigner() {\n'
+    '      public com.google.protobuf.ExtensionRegistry assignDescriptors(\n'
+    '          com.google.protobuf.Descriptors.FileDescriptor root) {\n'
+    '        descriptor = root;\n'
+    // Custom options will be handled when immutable messages' outer class is
+    // loaded. Here we just return null and let custom options be unknown
+    // fields.
+    '        return null;\n'
+    '      }\n'
+    '    };\n');
+    
+    // Helper to print the import of the runtime support at the top of generated
+// files. This currently only supports the runtime coming from a framework
+// as defined by the official CocoaPod.
+void FileGenerator::PrintFileRuntimePreamble(
+    io::Printer* printer, const std::set<string>& headers_to_import) const {
+  printer->Print(
+      '// Generated by the protocol buffer compiler.  DO NOT EDIT!\n'
+      '// source: $filename$\n'
+      '\n',
+      'filename', file_->name());
     }
     
-    // System gflags
-DEFINE_string(sensor_node_name, '', 'Sensor node name.');
+    void OneofGenerator::GenerateClearFunctionImplementation(io::Printer* printer) {
+  printer->Print(
+      variables_,
+      'void $owning_message_class$_Clear$capitalized_name$OneOfCase($owning_message_class$ *message) {\n'
+      '  GPBDescriptor *descriptor = [message descriptor];\n'
+      '  GPBOneofDescriptor *oneof = [descriptor.oneofs objectAtIndex:$raw_index$];\n'
+      '  GPBMaybeClearOneof(message, oneof, $index$, 0);\n'
+      '}\n');
+}
+    
+                v_srclo = vget_low_s16(v_src1);
+            v_srchi = vget_high_s16(v_src1);
+            v_dst1 = vcombine_s16(vqmovn_s32(vaddw_s16(vshrq_n_s32(vmull_s16(v_srclo, v_srclo), shift), vget_low_s16(v_dst1))),
+                                  vqmovn_s32(vaddw_s16(vshrq_n_s32(vmull_s16(v_srchi, v_srchi), shift), vget_high_s16(v_dst1))));
+    
+    #define SPLIT64(sgn,n) void split##n(const Size2D &_size,                                               \
+                                     const sgn##64 * srcBase, ptrdiff_t srcStride                       \
+                                     FILL_LINES##n(FARG, sgn##64) )                                     \
+{                                                                                                       \
+    internal::assertSupportedConfiguration();                                                           \
+    Size2D size(_size);                                                                                 \
+    if (CONTDST##n                                                                                      \
+        dst0Stride == (ptrdiff_t)(size.width))                                                          \
+    {                                                                                                   \
+        size.width *= size.height;                                                                      \
+        size.height = 1;                                                                                \
+    }                                                                                                   \
+    typedef internal::VecTraits<sgn##64, n>::vec64 vec64;                                               \
+                                                                                                        \
+    for (size_t i = 0u; i < size.height; ++i)                                                           \
+    {                                                                                                   \
+        const sgn##64 * src = internal::getRowPtr(srcBase, srcStride, i);                               \
+        FILL_LINES##n(VROW, sgn##64)                                                                    \
+        size_t sj = 0u, dj = 0u;                                                                        \
+                                                                                                        \
+        for (; dj < size.width; sj += n, ++dj)                                                          \
+        {                                                                                               \
+            vec64 v_src = vld##n##_##sgn##64(src + sj);                                                 \
+            FILL_LINES##n(VST1, sgn##64)                                                                \
+        }                                                                                               \
+    }                                                                                                   \
+}
+    
+    namespace CAROTENE_NS {
+    }
+    
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
+CVTS_FUNC(u8, s32, 16,
+    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
+    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 16)
+    {
+        internal::prefetch(_src + i);
+        __asm__ (
+            'vld1.8 {d4-d5}, [%[src]]                              \n\t'
+            'vmovl.u8 q3, d4                                       \n\t'
+            'vmovl.u8 q4, d5                                       \n\t'
+            'vmovl.u16 q5, d6                                      \n\t'
+            'vmovl.u16 q6, d7                                      \n\t'
+            'vmovl.u16 q7, d8                                      \n\t'
+            'vmovl.u16 q8, d9                                      \n\t'
+            'vcvt.f32.u32 q9, q5                                   \n\t'
+            'vcvt.f32.u32 q10, q6                                  \n\t'
+            'vcvt.f32.u32 q11, q7                                  \n\t'
+            'vcvt.f32.u32 q12, q8                                  \n\t'
+            'vmul.f32 q13, q9, q0                                  \n\t'
+            'vmul.f32 q14, q10, q0                                 \n\t'
+            'vmul.f32 q15, q11, q0                                 \n\t'
+            'vmul.f32 q2, q12, q0                                  \n\t'
+            'vadd.f32 q3, q13, q1                                  \n\t'
+            'vadd.f32 q4, q14, q1                                  \n\t'
+            'vadd.f32 q5, q15, q1                                  \n\t'
+            'vadd.f32 q6, q2, q1                                   \n\t'
+            'vcvt.s32.f32 q7, q3                                   \n\t'
+            'vcvt.s32.f32 q8, q4                                   \n\t'
+            'vcvt.s32.f32 q9, q5                                   \n\t'
+            'vcvt.s32.f32 q10, q6                                  \n\t'
+            'vst1.32 {d14-d15}, [%[dst1]]                          \n\t'
+            'vst1.32 {d16-d17}, [%[dst2]]                          \n\t'
+            'vst1.32 {d18-d19}, [%[dst3]]                          \n\t'
+            'vst1.32 {d20-d21}, [%[dst4]]                          \n\t'
+            : /*no output*/
+            : [src] 'r' (_src + i),
+              [dst1] 'r' (_dst + i + 0),
+              [dst2] 'r' (_dst + i + 4),
+              [dst3] 'r' (_dst + i + 8),
+              [dst4] 'r' (_dst + i + 12),
+              'w'  (vscale), 'w' (vshift)
+            : 'd4','d5','d6','d7','d8','d9','d10',
+            'd11','d12','d13','d14','d15','d16','d17',
+            'd18','d19','d20','d21','d22','d23','d24',
+            'd25','d26','d27','d28','d29','d30','d31'
+        );
+    }
+})
+#else
+CVTS_FUNC(u8, s32, 16,
+    float32x4_t vscale = vdupq_n_f32((f32)alpha);
+    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 16)
+    {
+        internal::prefetch(_src + i);
+        uint8x16_t vline = vld1q_u8(_src + i);
+        uint16x8_t vline1_u16 = vmovl_u8(vget_low_u8 (vline));
+        uint16x8_t vline2_u16 = vmovl_u8(vget_high_u8(vline));
+        uint32x4_t vline1_u32 = vmovl_u16(vget_low_u16 (vline1_u16));
+        uint32x4_t vline2_u32 = vmovl_u16(vget_high_u16(vline1_u16));
+        uint32x4_t vline3_u32 = vmovl_u16(vget_low_u16 (vline2_u16));
+        uint32x4_t vline4_u32 = vmovl_u16(vget_high_u16(vline2_u16));
+        float32x4_t vline1_f32 = vcvtq_f32_u32(vline1_u32);
+        float32x4_t vline2_f32 = vcvtq_f32_u32(vline2_u32);
+        float32x4_t vline3_f32 = vcvtq_f32_u32(vline3_u32);
+        float32x4_t vline4_f32 = vcvtq_f32_u32(vline4_u32);
+        vline1_f32 = vmulq_f32(vline1_f32, vscale);
+        vline2_f32 = vmulq_f32(vline2_f32, vscale);
+        vline3_f32 = vmulq_f32(vline3_f32, vscale);
+        vline4_f32 = vmulq_f32(vline4_f32, vscale);
+        vline1_f32 = vaddq_f32(vline1_f32, vshift);
+        vline2_f32 = vaddq_f32(vline2_f32, vshift);
+        vline3_f32 = vaddq_f32(vline3_f32, vshift);
+        vline4_f32 = vaddq_f32(vline4_f32, vshift);
+        int32x4_t vline1_s32 = vcvtq_s32_f32(vline1_f32);
+        int32x4_t vline2_s32 = vcvtq_s32_f32(vline2_f32);
+        int32x4_t vline3_s32 = vcvtq_s32_f32(vline3_f32);
+        int32x4_t vline4_s32 = vcvtq_s32_f32(vline4_f32);
+        vst1q_s32(_dst + i + 0,  vline1_s32);
+        vst1q_s32(_dst + i + 4,  vline2_s32);
+        vst1q_s32(_dst + i + 8,  vline3_s32);
+        vst1q_s32(_dst + i + 12, vline4_s32);
+    }
+})
+#endif
+    
+                // calculate values for plain CPU part below if needed
+            if (x + 8 >= bwidth)
+            {
+                ptrdiff_t x3 = x == width ? width - 1 : x;
+                ptrdiff_t x4 = border == BORDER_MODE_CONSTANT ? x3 - 1 : std::max<ptrdiff_t>(x3 - 1, 0);
+    }
+    
+            for (; j < roiw_tail; j += step_tail, js += step_tail3, jd -= step_tail3)
+        {
+            vec64 v_src = vld3(src + js), v_dst;
+            v_dst.val[0] = vrev64(v_src.val[0]);
+            v_dst.val[1] = vrev64(v_src.val[1]);
+            v_dst.val[2] = vrev64(v_src.val[2]);
+    }
+    
+    #define INRANGEFUNC(T)                                       \
+void inRange(const Size2D &_size,                            \
+             const T * srcBase, ptrdiff_t srcStride,         \
+             const T * rng1Base, ptrdiff_t rng1Stride,       \
+             const T * rng2Base, ptrdiff_t rng2Stride,       \
+             u8 * dstBase, ptrdiff_t dstStride)              \
+{                                                            \
+    internal::assertSupportedConfiguration();                \
+    inRangeCheck(_size, srcBase, srcStride,                  \
+                 rng1Base, rng1Stride, rng2Base, rng2Stride, \
+                 dstBase, dstStride);                        \
+}
+#else
+#define INRANGEFUNC(T)                                       \
+void inRange(const Size2D &,                                 \
+             const T *, ptrdiff_t,                           \
+             const T *, ptrdiff_t,                           \
+             const T *, ptrdiff_t,                           \
+             u8 *, ptrdiff_t)                                \
+{                                                            \
+    internal::assertSupportedConfiguration();                \
+}
+#endif
+    
+    inline float32x2_t vrsqrt_f32(float32x2_t val)
+{
+    float32x2_t e = vrsqrte_f32(val);
+    e = vmul_f32(vrsqrts_f32(vmul_f32(e, e), val), e);
+    e = vmul_f32(vrsqrts_f32(vmul_f32(e, e), val), e);
+    return e;
+}
+    
+    template<class T>
+void fillCollection(T* coll, const APCArray* ar) {
+  for (auto i = uint32_t{0}; i < ar->size(); ++i) {
+    coll->add(*ar->getValue(i)->toLocal().asTypedValue());
+  }
+}
+    
+      // The HHIRLICM runtime option is all capitals, so separation
+  // cannot be determined. Special case it.
+  boost::replace_first(out, 'hhirlicm', 'hhir_licm');
+  // The HHVM ini option becomes the standard PHP option.
+  boost::replace_first(out,
+                       'hhvm.server.upload.max_file_uploads',
+                       'max_file_uploads');
+  // Make sure IPv6 or IPv4 are handled correctly
+  boost::replace_first(out, '_i_pv', '_ipv');
+  boost::replace_first(out, '.i_pv', '.ipv');
+  // urls are special too. Let's not have 'ur_ls'
+  boost::replace_first(out, '_ur_ls', '_urls');
+  boost::replace_first(out, '.ur_ls', '.urls');
+  // No use of Eval in our ini strings
+  boost::replace_first(out, '.eval.', '.');
+  boost::replace_first(out, '.my_sql.', '.mysql.');
+  boost::replace_first(out, '.enable_hip_hop_syntax', '.force_hh');
+    
+    req::ptr<Directory> GlobStreamWrapper::opendir(const String& path) {
+  const char* prefix = 'glob://';
+  const char* path_str = path.data();
+  int path_len = path.length();
+    }
+    
+    void record_perf_mem_event(PerfEvent kind, const perf_event_sample* sample);
+    
+    template<typename F>
+void logPerfWarning(folly::StringPiece event, F fillCols) {
+  logPerfWarningImpl(event, 1, kDefaultPerfWarningRate, fillCols);
+}
+template<typename F>
+void logPerfWarning(folly::StringPiece event, int64_t rate, F fillCols) {
+  logPerfWarningImpl(event, 1, rate, fillCols);
+}
