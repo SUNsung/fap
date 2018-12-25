@@ -1,130 +1,100 @@
 
         
-            Category.transaction do
-      staff.group_names = ['staff']
-      unless staff.save
-        puts staff.errors.full_messages
-        raise 'Failed to set permissions on the Staff category!'
-      end
-    
-        def class_ref_for_action(named: nil)
-      class_ref = Actions.action_class_ref(named)
-      unless class_ref
-        if Fastlane::Actions.formerly_bundled_actions.include?(action)
-          # This was a formerly bundled action which is now a plugin.
-          UI.verbose(caller.join('\n'))
-          UI.user_error!('The action '#{action}' is no longer bundled with fastlane. You can install it using `fastlane add_plugin #{action}`')
-        else
-          Fastlane::ActionsList.print_suggestions(action)
-          UI.user_error!('Action '#{action}' not available, run `fastlane actions` to get a full list')
-        end
-      end
-    
-        def show_message
-      UI.message('Sending anonymous analytics information')
-      UI.message('Learn more at https://docs.fastlane.tools/#metrics')
-      UI.message('No personal or sensitive data is sent.')
-      UI.message('You can disable this by adding `opt_out_usage` at the top of your Fastfile')
+            if resource.errors.empty?
+      set_flash_message!(:notice, :confirmed)
+      respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
+    else
+      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
     end
-    
-          def self.available_options
-        [
-          FastlaneCore::ConfigItem.new(key: :tag,
-                                       env_name: 'FL_GIT_TAG_TAG',
-                                       description: 'Define your own tag text. This will replace all other parameters',
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :grouping,
-                                       env_name: 'FL_GIT_TAG_GROUPING',
-                                       description: 'Is used to keep your tags organised under one 'folder'',
-                                       default_value: 'builds'),
-          FastlaneCore::ConfigItem.new(key: :prefix,
-                                       env_name: 'FL_GIT_TAG_PREFIX',
-                                       description: 'Anything you want to put in front of the version number (e.g. 'v')',
-                                       default_value: ''),
-          FastlaneCore::ConfigItem.new(key: :postfix,
-                                       env_name: 'FL_GIT_TAG_POSTFIX',
-                                       description: 'Anything you want to put at the end of the version number (e.g. '-RC1')',
-                                       default_value: ''),
-          FastlaneCore::ConfigItem.new(key: :build_number,
-                                       env_name: 'FL_GIT_TAG_BUILD_NUMBER',
-                                       description: 'The build number. Defaults to the result of increment_build_number if you\'re using it',
-                                       default_value: Actions.lane_context[Actions::SharedValues::BUILD_NUMBER],
-                                       default_value_dynamic: true,
-                                       is_string: false),
-          FastlaneCore::ConfigItem.new(key: :message,
-                                       env_name: 'FL_GIT_TAG_MESSAGE',
-                                       description: 'The tag message. Defaults to the tag's name',
-                                       default_value_dynamic: true,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :commit,
-                                       env_name: 'FL_GIT_TAG_COMMIT',
-                                       description: 'The commit or object where the tag will be set. Defaults to the current HEAD',
-                                       default_value_dynamic: true,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :force,
-                                       env_name: 'FL_GIT_TAG_FORCE',
-                                       description: 'Force adding the tag',
-                                       optional: true,
-                                       is_string: false,
-                                       default_value: false),
-          FastlaneCore::ConfigItem.new(key: :sign,
-                                       env_name: 'FL_GIT_TAG_SIGN',
-                                       description: 'Make a GPG-signed tag, using the default e-mail address's key',
-                                       optional: true,
-                                       is_string: false,
-                                       default_value: false)
-        ]
-      end
-    
-            result = Fastlane::FastFile.new.parse('lane :test do
-          add_git_tag ({
-            tag: '#{tag}',
-          })
-        end').runner.execute(:test)
-    
-            expect(result).to eq('carthage bootstrap --configuration Release')
-      end
-    
-            context 'with given path to oclint' do
-          let(:result) do
-            Fastlane::FastFile.new.parse('lane :test do
-              oclint(
-                compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
-                oclint_path: 'test/bin/oclint'
-              )
-            end').runner.execute(:test)
-          end
-          let(:command) { 'cd #{File.expand_path('.').shellescape} && test/bin/oclint -report-type=html -o=oclint_report.html' }
-    
-        cmd = HOMEBREW_INTERNAL_COMMAND_ALIASES.fetch(ARGV.first, ARGV.first)
-    
-      it 'accepts a Float' do
-    sleep(0.1).should be_close(0, 2)
   end
     
-      it 'can throw an object' do
-    lambda {
-      obj = Object.new
-      catch obj do
-        throw obj
-      end
-    }.should_not raise_error(NameError)
+    class Devise::SessionsController < DeviseController
+  prepend_before_action :require_no_authentication, only: [:new, :create]
+  prepend_before_action :allow_params_authentication!, only: :create
+  prepend_before_action :verify_signed_out_user, only: :destroy
+  prepend_before_action(only: [:create, :destroy]) { request.env['devise.skip_timeout'] = true }
+    
+      # Get the mailer class from the mailer reference object.
+  def self.mailer
+    @@mailer_ref.get
+  end
+    
+        unless env['devise.skip_trackable']
+      warden.session(scope)['last_request_at'] = Time.now.utc.to_i
+    end
   end
 end
+
     
-        # @return [String] the ruby version string bundler uses to craft its gem path
-    def gem_ruby_version
-      RbConfig::CONFIG['ruby_version']
+            context 'the exponent is greater than or equal to the precision (6 by default)' do
+          it 'converts a floating point number using exponential form' do
+            format('%#{f}', 1234567).should == '1.23457#{exp}+06'
+            format('%#{f}', 1234567890123).should == '1.23457#{exp}+12'
+            format('%#{f}', -1234567).should == '-1.23457#{exp}+06'
+          end
+        end
+    
+      aspect_id = @me.aspects.length == 1 ? @me.aspects.first.id : @me.aspects.where(:name => 'Besties').first.id
+  contacts.each do |contact|
+    aspect_memberships << AspectMembership.new(:contact_id => contact.id, :aspect_id => aspect_id)
+  end
+  AspectMembership.import(aspect_memberships)
+end
+    
+        it 'does redirect when invitations are closed now' do
+      code = InvitationCode.create(user: bob)
+      AppConfig.settings.invitations.open = false
+    
+              def set_local_#{name}(name, value)
+            @#{name}s ||= {}
+            @#{name}s[name.tr('_', '-')] = value
+          end
+    
+        # Tells optparse how to parse the arguments
+    # available for all executables.
+    #
+    # This is meant to be overridden by subclasses
+    # so they can add their own options.
+    #
+    # @param opts [OptionParser]
+    def set_opts(opts)
+      Sass::Util.abstract(this)
     end
     
-      class RenderPartialTag < Liquid::Tag
-    include OctopressFilters
-    def initialize(tag_name, markup, tokens)
-      @file = nil
-      @raw = false
-      if markup =~ /^(\S+)\s?(\w+)?/
-        @file = $1.strip
-        @raw = $2 == 'raw'
+      namespace :release do
+    GEMS_AND_ROOT_DIRECTORIES.each do |gem, directory|
+      desc 'Release #{gem} as a package'
+      task gem => 'package:#{gem}' do
+        sh <<-SH
+          gem install #{package(gem, '.gem')} --local &&
+          gem push #{package(gem, '.gem')}
+        SH
       end
-      super
     end
+    
+          def call(env)
+        status, headers, body = super
+        response = Rack::Response.new(body, status, headers)
+        request = Rack::Request.new(env)
+        remove_bad_cookies(request, response)
+        response.finish
+      end
+    
+          def has_vector?(request, headers)
+        return false if request.xhr?
+        return false if options[:allow_if] && options[:allow_if].call(request.env)
+        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
+        origin(request.env).nil? and referrer(request.env) != request.host
+      end
+    
+          rtn = ''
+      (context.environments.first['site'][@array_name] || []).each do |file|
+        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
+          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
+        end
+    
+      class VideoTag < Liquid::Tag
+    @video = nil
+    @poster = ''
+    @height = ''
+    @width = ''
