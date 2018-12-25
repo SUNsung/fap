@@ -1,207 +1,160 @@
 
         
-            # ensure the instance folder exists
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
+            def __init__(self, cards):
+        self.cards = cards
+        self.deal_index = 0
+    
+        def message_group(self, group_id, message):
         pass
     
+        def get(self, key):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                return item.value
+        raise KeyError('Key not found')
     
-@bp.route('/login', methods=('GET', 'POST'))
-def login():
-    '''Log in a registered user by adding the user id to the session.'''
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        db = get_db()
-        error = None
-        user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)
-        ).fetchone()
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
     
-    
-@click.command('init-db')
-@with_appcontext
-def init_db_command():
-    '''Clear existing data and create new tables.'''
-    init_db()
-    click.echo('Initialized the database.')
-    
-    
-@pytest.fixture
-def runner(app):
-    '''A test runner for the app's Click commands.'''
-    return app.test_cli_runner()
-    
-    
-def with_metaclass(meta, *bases):
-    '''Create a base class with a metaclass.'''
-    # This requires a bit of explanation: the basic idea is to make a
-    # dummy metaclass for one level of class instantiation that replaces
-    # itself with the actual metaclass.
-    class metaclass(type):
-        def __new__(cls, name, this_bases, d):
-            return meta(name, bases, d)
-    return type.__new__(metaclass, 'temporary_class', (), {})
-    
-        def route(self, rule, **options):
-        '''Like :meth:`Flask.route` but for a blueprint.  The endpoint for the
-        :func:`url_for` function is prefixed with the name of the blueprint.
-        '''
-        def decorator(f):
-            endpoint = options.pop('endpoint', f.__name__)
-            self.add_url_rule(rule, endpoint, f, **options)
-            return f
-        return decorator
-    
-                app.config['IMAGE_STORE_TYPE'] = 'fs'
-            app.config['IMAGE_STORE_PATH'] = '/var/app/images'
-            app.config['IMAGE_STORE_BASE_URL'] = 'http://img.website.com'
-            image_store_config = app.config.get_namespace('IMAGE_STORE_')
-    
-        def __init__(self, request):
-        exc = request.routing_exception
-        buf = ['A request was sent to this URL (%s) but a redirect was '
-               'issued automatically by the routing system to '%s'.'
-               % (request.url, exc.new_url)]
-    
-    import os
-import sys
-import glob
-import re
-import markdown
-import argparse
-    
-        '''
-    prob = np.array(prob)
-    outcome = np.array(outcome)
-    
-    
-def load_data_and_labels():
+        Args:
+      batch_size: The size of the batch, i.e. 0th dim in 2D tensor of samples.
+      z_size: The dimension of the distribution, i.e. 1st dim in 2D tensor.
+      mean: The N-D mean of the distribution.
+      logvar: The N-D log variance of the diagonal distribution.
     '''
-    Loads MR polarity data from files, splits the data into words and generates labels.
-    Returns split sentences and labels.
-    '''
-    # Load data from files
-    positive_examples = list(open('./data/rt-polarity.pos', encoding='ISO-8859-1').readlines())
-    positive_examples = [s.strip() for s in positive_examples]
-    negative_examples = list(open('./data/rt-polarity.neg', encoding='ISO-8859-1').readlines())
-    negative_examples = [s.strip() for s in negative_examples]
-    # Split by words
-    x_text = positive_examples + negative_examples
-    x_text = [clean_str(sent) for sent in x_text]
-    x_text = [s.split(' ') for s in x_text]
-    # Generate labels
-    positive_labels = [[0, 1] for _ in positive_examples]
-    negative_labels = [[1, 0] for _ in negative_examples]
-    y = np.concatenate([positive_labels, negative_labels], 0)
-    return [x_text, y]
+    size__xz = [None, z_size]
+    self.mean = mean            # bxn already
+    self.logvar = logvar        # bxn already
+    self.noise = noise = tf.random_normal(tf.shape(logvar))
+    self.sample = mean + tf.exp(0.5 * logvar) * noise
+    mean.set_shape(size__xz)
+    logvar.set_shape(size__xz)
+    self.sample.set_shape(size__xz)
+    
+      Args:
+    hps: The hyper parameters for the model.
+    kind: (optional) The kind of model to build.  Training vs inference require
+      different graphs.
+    datasets: The datasets structure (see top of lfads.py).
+    
+    rates_train, rates_valid = split_list_by_inds(rates, train_inds, valid_inds)
+spikes_train, spikes_valid = split_list_by_inds(spikes, train_inds, valid_inds)
+condition_labels_train, condition_labels_valid = split_list_by_inds(
+    condition_labels, train_inds, valid_inds)
+ext_input_train, ext_input_valid = split_list_by_inds(
+    ext_input, train_inds, valid_inds)
     
     
-print 'Single GPU computation time: ' + str(t2_1-t1_1)
-print 'Multi GPU computation time: ' + str(t2_2-t1_2)
+def linear(x, out_size, do_bias=True, alpha=1.0, identity_if_possible=False,
+           normalized=False, name=None, collections=None):
+  '''Linear (affine) transformation, y = x W + b, for a variety of
+  configurations.
     
-    polynomial = components[-1]
-calculate_polynomial = theano.function(inputs=[coefficients, x],
-                                       outputs=polynomial,
-                                       updates=updates)
+    tf.app.flags.DEFINE_string(
+    'data_dir', 'reproduce', 
+    'Path to directory containing data and model checkpoints.')
     
-    rng = T.shared_randomstreams.RandomStreams(1234)
+      # If there are no real or fake entries in the batch, we assign an average
+  # value of zero.
+  real_avg = tf.where(tf.equal(real_count, 0), zero_tensor, real_avg)
+  fake_avg = tf.where(tf.equal(fake_count, 0), zero_tensor, fake_avg)
     
-        # Encode the intermediate records using repr() instead of JSON, so the
-    # record doesn't get Unicode-encoded
-    INTERNAL_PROTOCOL = ReprProtocol
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
     
-        if supervised:
-        patches += [Rectangle((0.3, 2.4), 1.5, 0.5, zorder=1, fc=box_bg),
-                    Rectangle((0.5, 2.6), 1.5, 0.5, zorder=2, fc=box_bg),
-                    Rectangle((0.7, 2.8), 1.5, 0.5, zorder=3, fc=box_bg),
-                    FancyArrow(2.3, 2.9, 2.0, 0, fc=arrow1,
-                               width=0.25, head_width=0.5, head_length=0.2),
-                    Rectangle((7.3, 0.85), 1.5, 0.5, fc=box_bg)]
+      Args:
+    hparams:  Hyperparameters for the MaskGAN.
+    sequence:  tf.int32 Tensor sequence of shape [batch_size, sequence_length]
+    is_training:  Whether the model is training.
+    reuse (Optional):  Whether to reuse the model.
+    
+    '''Model loss construction.'''
+    
+      Args:
+    hparams:  MaskGAN hyperparameters.
+    learning_rate:  tf.Variable scalar learning rate.
+    final_gen_objective:  Scalar final REINFORCE objective for the sequence.
+    averages_op:  ExponentialMovingAverage apply average op to
+      maintain the baseline.
+    global_step:  global_step tf.Variable.
+    
+      ## Load Generator weights from MaskGAN checkpoint.
+  if FLAGS.maskgan_ckpt:
+    gen_vars = [
+        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
+    ]
+    init_saver = tf.train.Saver(var_list=gen_vars)
+    init_savers['init_saver'] = init_saver
+    
+        x = inputs
+    if conv_first:
+        x = conv(x)
+        if batch_normalization:
+            x = BatchNormalization()(x)
+        if activation is not None:
+            x = Activation(activation)(x)
     else:
-        patches += [Rectangle((7.3, 0.2), 1.5, 1.8, fc=box_bg)]
+        if batch_normalization:
+            x = BatchNormalization()(x)
+        if activation is not None:
+            x = Activation(activation)(x)
+        x = conv(x)
+    return x
     
-    for p in patches:
-        ax.add_patch(p)
-        
-    pl.text(1.45, 4.9, 'Training\nText,\nDocuments,\nImages,\netc.',
-            ha='center', va='center', fontsize=14)
+    batch_size = 128
+num_classes = 10
+epochs = 12
+log_dir = './logs'
     
-    pl.text(3.6, 4.9, 'Feature\nVectors', 
-            ha='left', va='center', fontsize=14)
-    
-    pl.text(5.5, 3.5, 'Machine\nLearning\nAlgorithm',
-            ha='center', va='center', fontsize=14)
-    
-    pl.text(1.05, 1.1, 'New Text,\nDocument,\nImage,\netc.',
-            ha='center', va='center', fontsize=14)
-    
-    pl.text(3.3, 1.7, 'Feature\nVector', 
-            ha='left', va='center', fontsize=14)
-    
-    pl.text(5.5, 1.1, 'Predictive\nModel', 
-            ha='center', va='center', fontsize=12)
-    
-        return (t, y, dy)
+        with gzip.open(paths[0], 'rb') as lbpath:
+        y_train = np.frombuffer(lbpath.read(), np.uint8, offset=8)
     
     
-        args = docopt(doc_string, options_first=True)
+def l1(l=0.01):
+    return L1L2(l1=l)
     
     
-@app.route('/lambda/<functionName>/code', methods=['POST'])
-def get_lambda_code(functionName):
-    ''' Get source code for Lambda function.
-        ---
-        operationId: 'getLambdaCode'
-        parameters:
-            - name: functionName
-              in: path
-            - name: request
-              in: body
-    '''
-    data = get_payload(request)
-    env = Environment.from_string(data.get('awsEnvironment'))
-    result = infra.get_lambda_code(func_name=functionName, env=env)
-    return jsonify(result)
-    
-        return MACHINE_ID
-    
-        setup(
-        name='localstack',
-        version=version,
-        description='An easy-to-use test/mocking framework for developing Cloud applications',
-        author='Waldemar Hummer (Atlassian)',
-        author_email='waldemar.hummer@gmail.com',
-        url='https://github.com/localstack/localstack',
-        scripts=['bin/localstack'],
-        packages=find_packages(exclude=('tests', 'tests.*')),
-        package_data=package_data,
-        install_requires=install_requires,
-        dependency_links=dependency_links,
-        test_suite='tests',
-        license='Apache License 2.0',
-        zip_safe=False,
-        classifiers=[
-            'Programming Language :: Python :: 2',
-            'Programming Language :: Python :: 2.6',
-            'Programming Language :: Python :: 2.7',
-            'Programming Language :: Python :: 3',
-            'Programming Language :: Python :: 3.3',
-            'Programming Language :: Python :: 3.4',
-            'Programming Language :: Python :: 3.6',
-            'License :: OSI Approved :: Apache Software License',
-            'Topic :: Software Development :: Testing',
-        ]
-    )
-
+def get_source_inputs(tensor, layer=None, node_index=None):
+    '''Returns the list of input tensors necessary to compute `tensor`.
     
     
-def delete_document(id):
-    article_path = '{}/{}/employee/{}?pretty'.format(ES_URL, TEST_INDEX, id)
-    resp = requests.delete(article_path, headers=COMMON_HEADERS)
-    # Pause to allow the document to be indexed
-    time.sleep(1)
-    return resp
+def test_preprocess_input():
+    # Test image batch with float and int image input
+    x = np.random.uniform(0, 255, (2, 10, 10, 3))
+    xint = x.astype('int32')
+    assert utils.preprocess_input(x).shape == x.shape
+    assert utils.preprocess_input(xint).shape == xint.shape
     
-            key1, url1 = multipart_content.find_multipart_redirect_url(data1, headers)
+        # Returns
+        A binary matrix representation of the input. The classes axis
+        is placed last.
+    
+        for epoch in range(initial_epoch, epochs):
+        # Reset stateful metrics
+        for m in model.stateful_metric_functions:
+            m.reset_states()
+        callbacks.on_epoch_begin(epoch)
+        epoch_logs = {}
+        if steps_per_epoch is not None:
+            for step_index in range(steps_per_epoch):
+                batch_logs = {}
+                batch_logs['batch'] = step_index
+                batch_logs['size'] = 1
+                callbacks.on_batch_begin(step_index, batch_logs)
+                outs = fit_function(fit_inputs)
+    
+    
+class TestCaseBase(unittest.TestCase):
+    def check_events(self, callable, expected):
+        events = capture_events(callable, self.new_watcher())
+        if events != expected:
+            self.fail('Expected events:\n%s\nReceived events:\n%s'
+                      % (pprint.pformat(expected), pprint.pformat(events)))
+    
+    # Now add the related image to the html part.
+with open('roasted-asparagus.jpg', 'rb') as img:
+    msg.get_payload()[1].add_related(img.read(), 'image', 'jpeg',
+                                     cid=asparagus_cid)
