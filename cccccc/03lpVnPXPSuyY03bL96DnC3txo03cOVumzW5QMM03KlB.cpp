@@ -1,269 +1,270 @@
 
         
-        #undef VERB
-#undef DIRECTIONAL_PREPOSITION
-#undef PREPOSITION
-
-    
-      // There were no lowercase letters, so this is an acronym. Keep
-  // skipping uppercase letters.
-  while (i > 0 && clang::isUppercase(String[i-1]))
-    --i;
-    
-      while ((!QueuedTasks.empty() && !SubtaskFailed) ||
-         !ExecutingTasks.empty()) {
-    // Enqueue additional tasks if we have additional tasks, we aren't already
-    // at the parallel limit, and no earlier subtasks have failed.
-    while (!SubtaskFailed && !QueuedTasks.empty() &&
-           ExecutingTasks.size() < MaxNumberOfParallelTasks) {
-      std::unique_ptr<DummyTask> T(QueuedTasks.front().release());
-      QueuedTasks.pop();
-    }
-    }
-    
-        /** Colorize an icon (given object) with the text color */
-    QIcon TextColorIcon(const QIcon& icon) const;
-    
-    #ifndef BITCOIN_RPC_MINING_H
-#define BITCOIN_RPC_MINING_H
-    
-    const int CURVE_B = 4;
-#  elif EXHAUSTIVE_TEST_ORDER == 13
-const secp256k1_ge secp256k1_ge_const_g = SECP256K1_GE_CONST(
-    0xedc60018, 0xa51a786b, 0x2ea91f4d, 0x4c9416c0,
-    0x9de54c3b, 0xa1316554, 0x6cf4345c, 0x7277ef15,
-    0x54cb1b6b, 0xdc8c1273, 0x087844ea, 0x43f4603e,
-    0x0eaf9a43, 0xf6effe55, 0x939f806d, 0x37adf8ac
-);
-const int CURVE_B = 2;
-#  else
-#    error No known generator for the specified exhaustive test group order.
-#  endif
-#else
-/** Generator for secp256k1, value 'g' defined in
- *  'Standards for Efficient Cryptography' (SEC2) 2.7.1.
- */
-static const secp256k1_ge secp256k1_ge_const_g = SECP256K1_GE_CONST(
-    0x79BE667EUL, 0xF9DCBBACUL, 0x55A06295UL, 0xCE870B07UL,
-    0x029BFCDBUL, 0x2DCE28D9UL, 0x59F2815BUL, 0x16F81798UL,
-    0x483ADA77UL, 0x26A3C465UL, 0x5DA4FBFCUL, 0x0E1108A8UL,
-    0xFD17B448UL, 0xA6855419UL, 0x9C47D08FUL, 0xFB10D4B8UL
-);
-    
-    static bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
-{
-    if (s1.size() != s2.size()) return false;
-    for (size_t i = 0; i < s1.size(); ++i) {
-        char c1 = s1[i];
-        if (c1 >= 'A' && c1 <= 'Z') c1 -= ('A' - 'a');
-        char c2 = s2[i];
-        if (c2 >= 'A' && c2 <= 'Z') c2 -= ('A' - 'a');
-        if (c1 != c2) return false;
-    }
-    return true;
+        StringRef swift::prettyPlatformString(PlatformKind platform) {
+  switch (platform) {
+  case PlatformKind::none:
+    return '*';
+#define AVAILABILITY_PLATFORM(X, PrettyName)                                   \
+  case PlatformKind::X:                                                        \
+    return PrettyName;
+#include 'swift/AST/PlatformKinds.def'
+  }
+  llvm_unreachable('bad PlatformKind');
 }
     
-    #define TINYFORMAT_ARGTYPES(n) TINYFORMAT_ARGTYPES_ ## n
-#define TINYFORMAT_VARARGS(n) TINYFORMAT_VARARGS_ ## n
-#define TINYFORMAT_PASSARGS(n) TINYFORMAT_PASSARGS_ ## n
-#define TINYFORMAT_PASSARGS_TAIL(n) TINYFORMAT_PASSARGS_TAIL_ ## n
-    
-    void read_image(std::ifstream* image_file, std::ifstream* label_file,
-        uint32_t index, uint32_t rows, uint32_t cols,
-        char* pixels, char* label) {
-  image_file->seekg(index * rows * cols + 16);
-  image_file->read(pixels, rows * cols);
-  label_file->seekg(index + 8);
-  label_file->read(label, 1);
+    void swift::printOpaquePrefixMap(raw_ostream &out, void *_root,
+                         void (*printNodeData)(raw_ostream &out, void *node)) {
+  auto root = reinterpret_cast<Node*>(_root);
+  if (!root) {
+    out << '(empty)\n';
+    return;
+  }
+  TreePrinter(out, *printNodeData).print(root, ChildKind::Root);
 }
     
-    #include 'caffe/common.hpp'
-    
-    #include 'caffe/common.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
+    #include 'CFTypeInfo.h'
+#include 'ImporterImpl.h'
     
     
-    {}  // namespace caffe
-    
-    
-    {  Blob<Dtype> transformed_data_;
-};
-    
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of ReLULayer.
- */
-template <typename Dtype>
-class CuDNNReLULayer : public ReLULayer<Dtype> {
- public:
-  explicit CuDNNReLULayer(const LayerParameter& param)
-      : ReLULayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNReLULayer();
+    {  // let h = b = the number of basic code points in the input
+  // copy them to the output in order...
+  size_t h = 0;
+  for (auto C : InputCodePoints) {
+    if (C < 0x80) {
+      ++h;
+      OutPunycode.push_back(C);
     }
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #ifndef RID_BULLET_H
-#define RID_BULLET_H
-    
-    /**
-	@author AndreaCatania
-*/
-    
-      std::vector<std::string> DumpModel(const FeatureMap& fmap, bool with_stats,
-                                     std::string format) const {
-    std::vector<std::string> dump;
-    for (const auto & tree : trees) {
-      dump.push_back(tree->DumpModel(fmap, with_stats, format));
-    }
-    return dump;
-  }
-  void CommitModel(std::vector<std::unique_ptr<RegTree> >&& new_trees,
-                   int bst_group) {
-    for (auto & new_tree : new_trees) {
-      trees.push_back(std::move(new_tree));
-      tree_info.push_back(bst_group);
-    }
-    param.num_trees += static_cast<int>(new_trees.size());
-  }
-    
-      virtual ~SplitEvaluator() = default;
-    
-    Benchmark* Benchmark::Unit(TimeUnit unit) {
-  time_unit_ = unit;
-  return this;
-}
-    
-    namespace benchmark {
-    }
-    
-    bool SameNames(UserCounters const& l, UserCounters const& r) {
-  if (&l == &r) return true;
-  if (l.size() != r.size()) {
-    return false;
-  }
-  for (auto const& c : l) {
-    if (r.find(c.first) == r.end()) {
+    if (!isValidUnicodeScalar(C)) {
+      OutPunycode.clear();
       return false;
     }
+  }
+  size_t b = h;
+  // ...followed by a delimiter if b > 0
+  if (b > 0)
+    OutPunycode.push_back(delimiter);
+  
+  while (h < InputCodePoints.size()) {
+    // let m = the minimum code point >= n in the input
+    uint32_t m = 0x10FFFF;
+    for (auto codePoint : InputCodePoints) {
+      if (codePoint >= n && codePoint < m)
+        m = codePoint;
+    }
+    
+    delta = delta + (m - n) * (h + 1);
+    n = m;
+    for (auto c : InputCodePoints) {
+      if (c < n) ++delta;
+      if (c == n) {
+        int q = delta;
+        for (int k = base; ; k += base) {
+          int t = k <= bias ? tmin
+                : k >= bias + tmax ? tmax
+                : k - bias;
+          
+          if (q < t) break;
+          OutPunycode.push_back(digit_value(t + ((q - t) % (base - t))));
+          q = (q - t) / (base - t);
+        }
+        OutPunycode.push_back(digit_value(q));
+        bias = adapt(delta, h + 1, h == b);
+        delta = 0;
+        ++h;
+      }
+    }
+    ++delta; ++n;
   }
   return true;
 }
     
-    double BenchmarkReporter::Run::GetAdjustedCPUTime() const {
-  double new_time = cpu_accumulated_time * GetTimeUnitMultiplier(time_unit);
-  if (iterations != 0) new_time /= static_cast<double>(iterations);
-  return new_time;
-}
     
-      void ComputeBlockErrorAdjustmentWeights(
-      int direction, int max_block_dist, double target_mul, int factor_x,
-      int factor_y, const std::vector<float>& distmap,
-      std::vector<float>* block_weight) override;
+    {
+    {
+    {}  // namespace python
+}  // namespace protobuf
+}  // namespace google
+#endif  // GOOGLE_PROTOBUF_PYTHON_CPP_SCOPED_PYOBJECT_PTR_H__
+
     
-    
-    {}  // namespace guetzli
-    
-      int opt_idx = 1;
-  for(;opt_idx < argc;opt_idx++) {
-    if (strnlen(argv[opt_idx], 2) < 2 || argv[opt_idx][0] != '-' || argv[opt_idx][1] != '-')
+    bool CodeGenerator::GenerateAll(
+    const std::vector<const FileDescriptor*>& files,
+    const string& parameter,
+    GeneratorContext* generator_context,
+    string* error) const {
+  // Default implemenation is just to call the per file method, and prefix any
+  // error string with the file to provide context.
+  bool succeeded = true;
+  for (int i = 0; i < files.size(); i++) {
+    const FileDescriptor* file = files[i];
+    succeeded = Generate(file, parameter, generator_context, error);
+    if (!succeeded && error && error->empty()) {
+      *error = 'Code generator returned false but provided no error '
+               'description.';
+    }
+    if (error && !error->empty()) {
+      *error = file->name() + ': ' + *error;
       break;
-    if (!strcmp(argv[opt_idx], '--verbose')) {
-      verbose = 1;
-    } else if (!strcmp(argv[opt_idx], '--quality')) {
-      opt_idx++;
-      if (opt_idx >= argc)
-        Usage();
-      quality = atoi(argv[opt_idx]);
-    } else if (!strcmp(argv[opt_idx], '--memlimit')) {
-      opt_idx++;
-      if (opt_idx >= argc)
-        Usage();
-      memlimit_mb = atoi(argv[opt_idx]);
-    } else if (!strcmp(argv[opt_idx], '--nomemlimit')) {
-      memlimit_mb = -1;
-    } else if (!strcmp(argv[opt_idx], '--')) {
-      opt_idx++;
+    }
+    if (!succeeded) {
       break;
-    } else {
-      fprintf(stderr, 'Unknown commandline flag: %s\n', argv[opt_idx]);
-      Usage();
     }
   }
-    
-    void ComputeBlockIDCT(const coeff_t* block, uint8_t* out) {
-  coeff_t colidcts[kDCTBlockSize];
-  const int kColScale = 11;
-  const int kColRound = 1 << (kColScale - 1);
-  for (int x = 0; x < 8; ++x) {
-    int colbuf[8] = { 0 };
-    Compute1dIDCT(&block[x], 8, colbuf);
-    for (int y = 0; y < 8; ++y) {
-      colidcts[8 * y + x] = (colbuf[y] + kColRound) >> kColScale;
-    }
-  }
-  const int kRowScale = 18;
-  const int kRowRound = 257 << (kRowScale - 1);  // includes offset by 128
-  for (int y = 0; y < 8; ++y) {
-    const int rowidx = 8 * y;
-    int rowbuf[8] = { 0 };
-    Compute1dIDCT(&colidcts[rowidx], 1, rowbuf);
-    for (int x = 0; x < 8; ++x) {
-      out[rowidx + x] =
-          std::max(0, std::min(255, (rowbuf[x] + kRowRound) >> kRowScale));
-    }
-  }
+  return succeeded;
 }
     
-    void SaveQuantTables(const int q[3][kDCTBlockSize], JPEGData* jpg) {
-  const size_t kTableSize = kDCTBlockSize * sizeof(q[0][0]);
-  jpg->quant.clear();
-  int num_tables = 0;
-  for (size_t i = 0; i < jpg->components.size(); ++i) {
-    JPEGComponent* comp = &jpg->components[i];
-    // Check if we have this quant table already.
-    bool found = false;
-    for (int j = 0; j < num_tables; ++j) {
-      if (memcmp(&q[i][0], &jpg->quant[j].values[0], kTableSize) == 0) {
-        comp->quant_idx = j;
-        found = true;
-        break;
-      }
+    void ReflectionClassGenerator::WriteIntroduction(io::Printer* printer) {
+  printer->Print(
+    '// <auto-generated>\n'
+    '//     Generated by the protocol buffer compiler.  DO NOT EDIT!\n'
+    '//     source: $file_name$\n'
+    '// </auto-generated>\n'
+    '#pragma warning disable 1591, 0612, 3021\n'
+    '#region Designer generated code\n'
+    '\n'
+    'using pb = global::Google.Protobuf;\n'
+    'using pbc = global::Google.Protobuf.Collections;\n'
+    'using pbr = global::Google.Protobuf.Reflection;\n'
+    'using scg = global::System.Collections.Generic;\n',
+    'file_name', file_->name());
     }
-    if (!found) {
-      JPEGQuantTable table;
-      memcpy(&table.values[0], &q[i][0], kTableSize);
-      table.precision = 0;
-      for (int k = 0; k < kDCTBlockSize; ++k) {
-        assert(table.values[k] >= 0);
-        assert(table.values[k] < (1 << 16));
-        if (table.values[k] > 0xff) {
-          table.precision = 1;
-        }
-      }
-      table.index = num_tables;
-      comp->quant_idx = num_tables;
-      jpg->quant.push_back(table);
-      ++num_tables;
+    
+    #include <google/protobuf/compiler/csharp/csharp_source_generator_base.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/compiler/csharp/csharp_names.h>
+#include <google/protobuf/compiler/csharp/csharp_options.h>
+    
+    #include <google/protobuf/compiler/java/java_shared_code_generator.h>
+    
+    OneofGenerator::OneofGenerator(const OneofDescriptor* descriptor)
+    : descriptor_(descriptor) {
+  variables_['enum_name'] = OneofEnumName(descriptor_);
+  variables_['name'] = OneofName(descriptor_);
+  variables_['capitalized_name'] = OneofNameCapitalized(descriptor_);
+  variables_['raw_index'] = SimpleItoa(descriptor_->index());
+  const Descriptor* msg_descriptor = descriptor_->containing_type();
+  variables_['owning_message_class'] = ClassName(msg_descriptor);
+    }
+    
+    #include <iostream>
+#include <set>
+    
+    class PAGE_RES_IT;
+class ROW;
+class WERD_RES;
+    
+    struct OSResults {
+  OSResults() : unicharset(nullptr) {
+    for (int i = 0; i < 4; ++i) {
+      for (int j = 0; j < kMaxNumberOfScripts; ++j)
+        scripts_na[i][j] = 0;
+      orientations[i] = 0;
     }
   }
+  void update_best_orientation();
+  // Set the estimate of the orientation to the given id.
+  void set_best_orientation(int orientation_id);
+  // Update/Compute the best estimate of the script assuming the given
+  // orientation id.
+  void update_best_script(int orientation_id);
+  // Return the index of the script with the highest score for this orientation.
+  TESS_API int get_best_script(int orientation_id) const;
+  // Accumulate scores with given OSResults instance and update the best script.
+  void accumulate(const OSResults& osr);
+    }
+    
+      /**
+   * Returns true if the iterator is at the start of an object at the given
+   * level.
+   *
+   * For instance, suppose an iterator it is pointed to the first symbol of the
+   * first word of the third line of the second paragraph of the first block in
+   * a page, then:
+   *   it.IsAtBeginningOf(RIL_BLOCK) = false
+   *   it.IsAtBeginningOf(RIL_PARA) = false
+   *   it.IsAtBeginningOf(RIL_TEXTLINE) = true
+   *   it.IsAtBeginningOf(RIL_WORD) = true
+   *   it.IsAtBeginningOf(RIL_SYMBOL) = true
+   */
+  virtual bool IsAtBeginningOf(PageIteratorLevel level) const;
+    
+    
+    {  for (std::map<int, ParamContent*>::iterator iter = vcMap.begin();
+                                          iter != vcMap.end();
+                                          ++iter) {
+    ParamContent* cur = iter->second;
+    if (!changes_only || cur->HasChanged()) {
+      fprintf(fp, '%-25s   %-12s   # %s\n',
+              cur->GetName(), cur->GetValue().string(), cur->GetDescription());
+    }
+  }
+  fclose(fp);
+}
+#endif // GRAPHICS_DISABLED
+
+    
+     private:
+  // Gets the up to the first 3 prefixes from s (split by _).
+  // For example, tesseract_foo_bar will be split into tesseract,foo and bar.
+  void GetPrefixes(const char* s, STRING* level_one,
+                   STRING* level_two, STRING* level_three);
+    
+      WERD_RES *word2 = new WERD_RES(*word);
+    
+    /// Base class for all tesseract image thresholding classes.
+/// Specific classes can add new thresholding methods by
+/// overriding ThresholdToPix.
+/// Each instance deals with a single image, but the design is intended to
+/// be useful for multiple calls to SetRectangle and ThresholdTo* if
+/// desired.
+class TESS_API ImageThresholder {
+ public:
+  ImageThresholder();
+  virtual ~ImageThresholder();
+    }
+    
+    TEST(Expected, CoroutineException) {
+  EXPECT_THROW(
+      ([]() -> Expected<int, Err> {
+        auto x = co_await throws();
+        ADD_FAILURE();
+        co_return x;
+      }()),
+      Exn);
 }
     
-      int iquant[3 * kDCTBlockSize];
-  int idx = 0;
-  for (int i = 0; i < 3; ++i) {
-    for (int j = 0; j < kDCTBlockSize; ++j) {
-      int v = quant[idx];
-      jpg->quant[i].values[j] = v;
-      iquant[idx++] = ((1 << kIQuantBits) + 1) / v;
+    vector<detail::BenchmarkResult> resultsFromFile(const std::string& filename) {
+  string content;
+  readFile(filename.c_str(), content);
+  vector<detail::BenchmarkResult> ret;
+  benchmarkResultsFromDynamic(parseJson(content), ret);
+  return ret;
+}
+    
+    // Some utility routines relating to unicode.
+    
+    namespace uri_detail {
+    }
+    
+      /**
+   * windowSize is the base two logarithm of the window size (the size of the
+   * history buffer). It should be in the range 9..15. Larger values of this
+   * parameter result in better compression at the expense of memory usage.
+   *
+   * The default value is 15.
+   *
+   * NB: when inflating/uncompressing data, the windowSize must be greater than
+   * or equal to the size used when deflating/compressing.
+   */
+  int windowSize;
+    
+      void reset(const std::shared_ptr<T>& p = nullptr) {
+    // Allocate each Holder in a different CoreRawAllocator stripe to
+    // prevent false sharing. Their control blocks will be adjacent
+    // thanks to allocate_shared().
+    for (auto slot : folly::enumerate(slots_)) {
+      auto alloc = getCoreAllocator<Holder, kNumSlots>(slot.index);
+      auto holder = std::allocate_shared<Holder>(alloc, p);
+      *slot = std::shared_ptr<T>(holder, p.get());
     }
   }
