@@ -1,424 +1,312 @@
-  const OpRegistrationData* op_reg_data;
-  TF_RETURN_IF_ERROR(OpRegistry::Global()->LookUp(node.op(), &op_reg_data));
-    
-    class GenPythonOp {
- public:
-  GenPythonOp(const OpDef& op_def, const ApiDef& api_def,
-              const string& function_name);
-  virtual ~GenPythonOp();
-    }
-    
-    #include 'tensorflow/core/framework/numeric_types.h'
-#include 'tensorflow/core/lib/strings/strcat.h'
-#include 'tensorflow/core/platform/logging.h'
-#include 'tensorflow/python/lib/core/numpy.h'
-#include 'tensorflow/python/lib/core/safe_ptr.h'
-    
-    namespace tensorflow {
-    }
-    
-    // Global registry mapping C API error codes to the corresponding custom Python
-// exception type. This is used to expose the exception types to C extension
-// code (i.e. so we can raise custom exceptions via SWIG).
-//
-// Init() must be called exactly once at the beginning of the process before
-// Lookup() can be used.
-//
-// Example usage:
-//   TF_Status* status = TF_NewStatus();
-//   TF_Foo(..., status);
-//
-//   if (TF_GetCode(status) != TF_OK) {
-//     PyObject* exc_type = PyExceptionRegistry::Lookup(TF_GetCode(status));
-//     // Arguments to OpError base class. Set `node_def` and `op` to None.
-//     PyObject* args =
-//       Py_BuildValue('sss', nullptr, nullptr, TF_Message(status));
-//     PyErr_SetObject(exc_type, args);
-//     Py_DECREF(args);
-//     TF_DeleteStatus(status);
-//     return NULL;
-//   }
-class PyExceptionRegistry {
- public:
-  // Initializes the process-wide registry. Should be called exactly once near
-  // the beginning of the process. The arguments are the various Python
-  // exception types (e.g. `cancelled_exc` corresponds to
-  // errors.CancelledError).
-  static void Init(PyObject* code_to_exc_type_map);
-    }
-    
-    namespace tensorflow {
-    }
-    
-    namespace tensorflow {
-namespace swig {
-    }
-    }
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    Optional<PlatformKind> swift::platformFromString(StringRef Name) {
-  if (Name == '*')
-    return PlatformKind::none;
-  return llvm::StringSwitch<Optional<PlatformKind>>(Name)
-#define AVAILABILITY_PLATFORM(X, PrettyName) .Case(#X, PlatformKind::X)
-#include 'swift/AST/PlatformKinds.def'
-      .Case('macOS', PlatformKind::OSX)
-      .Case('macOSApplicationExtension', PlatformKind::OSXApplicationExtension)
-      .Default(Optional<PlatformKind>());
-}
-    
-    bool CacheImpl::remove(const void *Key) {
-  int Ret = cache_remove(static_cast<cache_t*>(Impl), const_cast<void*>(Key));
-  return Ret == 0;
-}
-    
-    
-    {  return Begin + oldSize;
-}  
 
-    
-      struct IndentScope {
-    TreePrinter *Printer;
-    size_t OldLength;
-    IndentScope(TreePrinter *printer, StringRef indent)
-        : Printer(printer), OldLength(printer->Indent.size()) {
-      Printer->Indent += indent;
-    }
-    ~IndentScope() { Printer->Indent.resize(OldLength); }
-  };
+        
+        #include 'base/values.h'
+#include 'base/strings/utf_string_conversions.h'
+#include 'base/strings/string16.h'
+#include 'content/nw/src/api/dispatcher_host.h'
+#include 'ui/base/clipboard/clipboard.h'
     
     
-    {    RawText = RawText.drop_front(Pos);
-    unsigned NewlineBytes = measureNewline(RawText);
-    RawText = RawText.drop_front(NewlineBytes);
-  }
-    
-      if (auto subTypedef = type->getAs<clang::TypedefType>()) {
-    if (classifyTypedef(subTypedef->getDecl()))
-      return forTypedef(subTypedef->getDecl());
-    return forInvalid();
-  }
-    
-      bool isRecord() const {
-    assert(isValid());
-    return !Decl.isNull() && Decl.is<const clang::RecordDecl *>();
-  }
-  const clang::RecordDecl *getRecord() const {
-    assert(isRecord());
-    return Decl.get<const clang::RecordDecl *>();
-  }
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(Base);
+    {  DISALLOW_COPY_AND_ASSIGN(Clipboard);
 };
     
-    // Call method of an object in browser.
-// function CallObjectMethod(id, type, method, args);
-v8::Handle<v8::Value> CallObjectMethod(int routing_id,
-                                       int object_id,
-                                       const std::string& type,
-                                       const std::string& method,
-                                       v8::Handle<v8::Value> args);
     
-    class Clipboard : public Base {
- public:
-  Clipboard(int id,
-            const base::WeakPtr<DispatcherHost>& dispatcher_host,
-            const base::DictionaryValue& option);
-  ~Clipboard() override;
-    }
-    
-    bool MenuDelegate::GetIconForCommandId(int command_id,
-                                       gfx::Image* icon) const {
+bool MenuDelegate::GetAcceleratorForCommandId(
+      int command_id,
+      ui::Accelerator* accelerator) const {
   MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
   if (!item)
     return false;
-  if (item->icon_.IsEmpty())
-    return false;
     }
     
-    void Menu::Append(MenuItem* menu_item) {
-  menu_items.push_back(menu_item);
-  if (GTK_IS_ACCEL_GROUP(gtk_accel_group)){
-    menu_item->UpdateKeys(gtk_accel_group);
-  }
-  gtk_menu_shell_append(GTK_MENU_SHELL(menu_), menu_item->menu_item_);
-}
-    
-    bool NwAppSetProxyConfigFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  net::ProxyConfigWithAnnotation config;
-  std::unique_ptr<nwapi::nw__app::SetProxyConfig::Params> params(
-      nwapi::nw__app::SetProxyConfig::Params::Create(*args_));
-  EXTENSION_FUNCTION_VALIDATE(params.get());
-    }
-    
-     protected:
-  ~NwAppClearAppCacheFunction() override;
-    
-    ExtensionFunction::ResponseAction
-NwObjCallObjectMethodAsyncFunction::Run() {
-  EXTENSION_FUNCTION_VALIDATE(args_);
-  base::ListValue* arguments = nullptr;
-  int id = 0;
-  std::string type, method;
-  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(2, &method));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetList(3, &arguments));
-    }
-    
-    template <typename T1, typename T2, typename T3, typename T4>
-void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4>& t, ::std::ostream* os) {
-  PrintTupleTo(t, os);
-}
-    
-      // Gets the summary of the failure message by omitting the stack
-  // trace in it.
-  static std::string ExtractSummary(const char* message);
-    
-      // STL-style container methods.
-  size_t size() const { return size_; }
-  const_iterator begin() const { return array_; }
-  const_iterator end() const { return array_ + size_; }
-  bool operator==(const NativeArray& rhs) const {
-    return size() == rhs.size() &&
-        ArrayEq(begin(), size(), rhs.begin());
-  }
-    
-        // Select graphics queue family
-    {
-        uint32_t count;
-        vkGetPhysicalDeviceQueueFamilyProperties(g_PhysicalDevice, &count, NULL);
-        VkQueueFamilyProperties* queues = (VkQueueFamilyProperties*)malloc(sizeof(VkQueueFamilyProperties) * count);
-        vkGetPhysicalDeviceQueueFamilyProperties(g_PhysicalDevice, &count, queues);
-        for (uint32_t i = 0; i < count; i++)
-            if (queues[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
-            {
-                g_QueueFamily = i;
-                break;
-            }
-        free(queues);
-        IM_ASSERT(g_QueueFamily != -1);
-    }
-    
-            ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
-        ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
-        ImGui::Checkbox('Another Window', &show_another_window);
-    
-            // Get the function pointer (required for any extensions)
-        auto vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(g_Instance, 'vkCreateDebugReportCallbackEXT');
-        IM_ASSERT(vkCreateDebugReportCallbackEXT != NULL);
-    
-    
-    {    return 0;
-}
-
-    
-        // Initialize Direct3D
-    LPDIRECT3D9 pD3D;
-    if ((pD3D = Direct3DCreate9(D3D_SDK_VERSION)) == NULL)
-    {
-        UnregisterClass(_T('ImGui Example'), wc.hInstance);
-        return 0;
-    }
-    ZeroMemory(&g_d3dpp, sizeof(g_d3dpp));
-    g_d3dpp.Windowed = TRUE;
-    g_d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
-    g_d3dpp.BackBufferFormat = D3DFMT_UNKNOWN;
-    g_d3dpp.EnableAutoDepthStencil = TRUE;
-    g_d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
-    g_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_ONE; // Present with vsync
-    //g_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE; // Present without vsync, maximum unthrottled framerate
-    
-      void IncInitialized() {
-    num_initialized_++;
-  }
-    
-      // Cannot be called while another thread is calling Seek().
-  // REQUIRES: use this function of DBImpl::column_family_memtables_ should be
-  //           under a DB mutex OR from a write thread
-  virtual ColumnFamilyData* current() override { return current_; }
-    
-    Status WriteBatchBase::DeleteRange(const SliceParts& begin_key,
-                                   const SliceParts& end_key) {
-  std::string begin_key_buf, end_key_buf;
-  Slice begin_key_slice(begin_key, &begin_key_buf);
-  Slice end_key_slice(end_key, &end_key_buf);
-  return DeleteRange(begin_key_slice, end_key_slice);
-}
-    
-    
-    {  char* rid = id;
-  rid = EncodeVarint64(rid, buf.st_dev);
-  rid = EncodeVarint64(rid, buf.st_ino);
-  rid = EncodeVarint64(rid, buf.st_gen);
-  assert(rid >= id);
-  return static_cast<size_t>(rid - id);
-}
-#endif
-/*
- * PosixRandomAccessFile
- *
- * pread() based random-access
- */
-PosixRandomAccessFile::PosixRandomAccessFile(const std::string& fname, int fd,
-                                             const EnvOptions& options)
-    : filename_(fname),
-      fd_(fd),
-      use_direct_io_(options.use_direct_reads),
-      logical_sector_size_(GetLogicalBufferSize(fd_)) {
-  assert(!options.use_direct_reads || !options.use_mmap_reads);
-  assert(!options.use_mmap_reads || sizeof(void*) < 8);
-}
-    
-    
-    {}  // namespace rocksdb
-
-    
-      // open DB
-  Status s = DB::Open(options, kDBPath, &db);
-  assert(s.ok());
-    
-      // Attempt to read a key using the snapshot.  This will fail since
-  // the previous write outside this txn conflicts with this read.
-  read_options.snapshot = snapshot;
-  s = txn->GetForUpdate(read_options, 'abc', &value);
-  assert(s.IsBusy());
-    
-    // Supported only for Leveled compaction
-Status SuggestCompactRange(DB* db, ColumnFamilyHandle* column_family,
-                           const Slice* begin, const Slice* end);
-Status SuggestCompactRange(DB* db, const Slice* begin, const Slice* end);
-    
-    
-    {}  // rocksdb
-
-    
-      // Lookup page cache by page identifier
-  //
-  // page_key   Page identifier
-  // buf        Buffer where the data should be copied
-  // size       Size of the page
-  virtual Status Lookup(const Slice& key, std::unique_ptr<char[]>* data,
-                        size_t* size) = 0;
-    
-      // Deprecated. New RateLimiter derived classes should override
-  // Request(const int64_t, const Env::IOPriority, Statistics*) or
-  // Request(const int64_t, const Env::IOPriority, Statistics*, OpType)
-  // instead.
-  //
-  // Request for token for bytes. If this request can not be satisfied, the call
-  // is blocked. Caller is responsible to make sure
-  // bytes <= GetSingleBurstBytes()
-  virtual void Request(const int64_t /*bytes*/, const Env::IOPriority /*pri*/) {
-    assert(false);
-  }
-    
-    
-    { private:
-  DB* db_;
-  const Snapshot* snapshot_;
+    static KeyMap keymap = {
+  {'`'    , 'Backquote'},
+  {'\\'   , 'Backslash'},
+  {'['    , 'BracketLeft'},
+  {']'    , 'BracketRight'},
+  {','    , 'Comma'},
+  {'='    , 'Equal'},
+  {'-'    , 'Minus'},
+  {'.'    , 'Period'},
+  {'''    , 'Quote'},
+  {';'    , 'Semicolon'},
+  {'/'    , 'Slash'},
+  {'\n'   , 'Enter'},
+  {'\t'   , 'Tab'},
+  {'UP'   , 'ArrowUp'},
+  {'DOWN' , 'ArrowDown'},
+  {'LEFT' , 'ArrowLeft'},
+  {'RIGHT', 'ArrowRight'},
+  {'ESC'  , 'Escape'},
+  {'MEDIANEXTTRACK', 'MediaTrackNext'},
+  {'MEDIAPREVTRACK', 'MediaTrackPrevious'}
 };
     
-    #include <vector>
+    void MenuItem::SetSubmenu(Menu* sub_menu) {
+  submenu_ = sub_menu;
+  if (GTK_IS_ACCEL_GROUP(gtk_accel_group)){
+    sub_menu->UpdateKeys(gtk_accel_group);
+  }
+  if (sub_menu == NULL)
+    gtk_menu_item_remove_submenu(GTK_MENU_ITEM(menu_item_));
+  else
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_item_), sub_menu->menu_);
+}
     
-    TEST(MessageManagerTest, GetMutableProtocolDataById) {
-  uint8_t mock_data = 1;
-  MockMessageManager manager;
-  manager.Parse(MockProtocolData::ID, &mock_data, 8);
-  manager.ResetSendMessages();
-  EXPECT_TRUE(manager.GetMutableProtocolDataById(MockProtocolData::ID) !=
-              nullptr);
-    }
+          std::string encoded_image_base64;
+      std::string encoded_image_str(encoded_image.data(), encoded_image.data() + encoded_image.size());
+      base::Base64Encode(encoded_image_str, &encoded_image_base64);
     
-    namespace apollo {
-namespace drivers {
-namespace canbus {
-    }
-    }
-    }
-    
-    // Canbus gflags
-DEFINE_double(sensor_freq, 100,
-              'Sensor feedback timer frequency -- 0 means event trigger.');
-    
-    namespace apollo {
-namespace drivers {
-namespace conti_radar {
-    }
-    }
-    }
-    
-    BaseMapMatrix::~BaseMapMatrix() {}
-    
-    
-    {
-    {
-    {}  // namespace adapter
-}  // namespace hdmap
-}  // namespace apollo
+    bool GodotCollisionDispatcher::needsResponse(const btCollisionObject *body0, const btCollisionObject *body1) {
+	if (body0->getUserIndex() == CASTED_TYPE_AREA || body1->getUserIndex() == CASTED_TYPE_AREA) {
+		// Avoide area narrow phase
+		return false;
+	}
+	return btCollisionDispatcher::needsResponse(body0, body1);
+}
 
     
-        auto it_lower = std::lower_bound(
-        speed_limit_.speed_limit_points().begin(),
-        speed_limit_.speed_limit_points().end(), s,
-        [](const std::pair<double, double>& point, const double curr_s) {
-          return point.first < curr_s;
-        });
+    
+    {		virtual btCollisionAlgorithm *CreateCollisionAlgorithm(btCollisionAlgorithmConstructionInfo &ci, const btCollisionObjectWrapper *body0Wrap, const btCollisionObjectWrapper *body1Wrap) {
+			void *mem = ci.m_dispatcher1->allocateCollisionAlgorithm(sizeof(GodotRayWorldAlgorithm));
+			return new (mem) GodotRayWorldAlgorithm(m_world, ci.m_manifold, ci, body0Wrap, body1Wrap, false);
+		}
+	};
+    
+    class RigidBodyBullet;
     
     
+    {	PCKPacker();
+	~PCKPacker();
+};
+    
+    Shell *Shell::get_singleton() {
+    }
+    
+    const StaticString s_slash('/');
+    
+    #include 'hphp/runtime/base/perf-warning-inl.h'
+    
+    namespace 
+{
+    // Glyph metrics:
+    // --------------
+    //
+    //                       xmin                     xmax
+    //                        |                         |
+    //                        |<-------- width -------->|
+    //                        |                         |
+    //              |         +-------------------------+----------------- ymax
+    //              |         |    ggggggggg   ggggg    |     ^        ^
+    //              |         |   g:::::::::ggg::::g    |     |        |
+    //              |         |  g:::::::::::::::::g    |     |        |
+    //              |         | g::::::ggggg::::::gg    |     |        |
+    //              |         | g:::::g     g:::::g     |     |        |
+    //    offsetX  -|-------->| g:::::g     g:::::g     |  offsetY     |
+    //              |         | g:::::g     g:::::g     |     |        |
+    //              |         | g::::::g    g:::::g     |     |        |
+    //              |         | g:::::::ggggg:::::g     |     |        |
+    //              |         |  g::::::::::::::::g     |     |      height
+    //              |         |   gg::::::::::::::g     |     |        |
+    //  baseline ---*---------|---- gggggggg::::::g-----*--------      |
+    //            / |         |             g:::::g     |              |
+    //     origin   |         | gggggg      g:::::g     |              |
+    //              |         | g:::::gg   gg:::::g     |              |
+    //              |         |  g::::::ggg:::::::g     |              |
+    //              |         |   gg:::::::::::::g      |              |
+    //              |         |     ggg::::::ggg        |              |
+    //              |         |         gggggg          |              v
+    //              |         +-------------------------+----------------- ymin
+    //              |                                   |
+    //              |------------- advanceX ----------->|
+    }
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        // Copy and convert all vertices into a single contiguous buffer
+    ImDrawVert* vtx_dst = NULL;
+    ImDrawIdx* idx_dst = NULL;
+    g_pVB->Map(D3D10_MAP_WRITE_DISCARD, 0, (void**)&vtx_dst);
+    g_pIB->Map(D3D10_MAP_WRITE_DISCARD, 0, (void**)&idx_dst);
+    for (int n = 0; n < draw_data->CmdListsCount; n++)
     {
-    {    prev_trajectory_point = trajectory_point.path_point();
-  }
-  return combined_trajectory;
-}
+        const ImDrawList* cmd_list = draw_data->CmdLists[n];
+        memcpy(vtx_dst, cmd_list->VtxBuffer.Data, cmd_list->VtxBuffer.Size * sizeof(ImDrawVert));
+        memcpy(idx_dst, cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx));
+        vtx_dst += cmd_list->VtxBuffer.Size;
+        idx_dst += cmd_list->IdxBuffer.Size;
+    }
+    g_pVB->Unmap();
+    g_pIB->Unmap();
     
-      const auto mat = kernel.kernel_matrix();
-  const auto offset = kernel.offset_matrix();
+        // Create texture
+    int flags = al_get_new_bitmap_flags();
+    int fmt = al_get_new_bitmap_format();
+    al_set_new_bitmap_flags(ALLEGRO_MEMORY_BITMAP|ALLEGRO_MIN_LINEAR|ALLEGRO_MAG_LINEAR);
+    al_set_new_bitmap_format(ALLEGRO_PIXEL_FORMAT_ABGR_8888_LE);
+    ALLEGRO_BITMAP* img = al_create_bitmap(width, height);
+    al_set_new_bitmap_flags(flags);
+    al_set_new_bitmap_format(fmt);
+    if (!img)
+        return false;
     
-    Spline1dSeg::Spline1dSeg(const std::vector<double>& params) {
-  SetSplineFunc(PolynomialXd(params));
-}
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
     
-    SplineSegKernel::SplineSegKernel() {
-  const int reserved_num_params = reserved_order_ + 1;
-  CalculateFx(reserved_num_params);
-  CalculateDerivative(reserved_num_params);
-  CalculateSecondOrderDerivative(reserved_num_params);
-  CalculateThirdOrderDerivative(reserved_num_params);
-}
-    
-        // variant 3
-    int operator()(int x, int) {
-      return 100 + 3 * x;
+        // Create the Upload Buffer:
+    {
+        VkBufferCreateInfo buffer_info = {};
+        buffer_info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        buffer_info.size = upload_size;
+        buffer_info.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+        buffer_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+        err = vkCreateBuffer(g_Device, &buffer_info, g_Allocator, &g_UploadBuffer);
+        check_vk_result(err);
+        VkMemoryRequirements req;
+        vkGetBufferMemoryRequirements(g_Device, g_UploadBuffer, &req);
+        g_BufferMemoryAlignment = (g_BufferMemoryAlignment > req.alignment) ? g_BufferMemoryAlignment : req.alignment;
+        VkMemoryAllocateInfo alloc_info = {};
+        alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+        alloc_info.allocationSize = req.size;
+        alloc_info.memoryTypeIndex = ImGui_ImplVulkan_MemoryType(VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, req.memoryTypeBits);
+        err = vkAllocateMemory(g_Device, &alloc_info, g_Allocator, &g_UploadBufferMemory);
+        check_vk_result(err);
+        err = vkBindBufferMemory(g_Device, g_UploadBuffer, g_UploadBufferMemory, 0);
+        check_vk_result(err);
     }
     
-    #include <boost/regex/pending/unicode_iterator.hpp>
+            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+        ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
     
-    /*
- * Encode a single unicode code point into a UTF-8 byte sequence.
+    int main(int, char**)
+{
+    // Setup window
+    glfwSetErrorCallback(glfw_error_callback);
+    if (!glfwInit())
+        return 1;
+    GLFWwindow* window = glfwCreateWindow(1280, 720, 'Dear ImGui GLFW+OpenGL2 example', NULL, NULL);
+    if (window == NULL)
+        return 1;
+    glfwMakeContextCurrent(window);
+    glfwSwapInterval(1); // Enable vsync
+    }
+    
+    bool Follow::initWithTargetAndOffset(Node *followedNode, float xOffset,float yOffset,const Rect& rect)
+{
+    CCASSERT(followedNode != nullptr, 'FollowedNode can't be NULL');
+    if(followedNode == nullptr)
+    {
+        log('Follow::initWithTarget error: followedNode is nullptr!');
+        return false;
+    }
+ 
+    followedNode->retain();
+    _followedNode = followedNode;
+    _worldRect = rect;
+    _boundarySet = !rect.equals(Rect::ZERO);
+    _boundaryFullyCovered = false;
+    }
+    
+    /** @class OrbitCamera
  *
- * Return value is undefined if `cp' is an invalid code point.
+ * @brief OrbitCamera action.
+ * Orbits the camera around the center of the screen using spherical coordinates.
+ * @ingroup Actions
  */
-std::string codePointToUtf8(char32_t cp);
+class CC_DLL OrbitCamera : public ActionCamera
+{
+public:
+    /** Creates a OrbitCamera action with radius, delta-radius,  z, deltaZ, x, deltaX. 
+     *
+     * @param t Duration in seconds.
+     * @param radius The start radius.
+     * @param deltaRadius The delta radius.
+     * @param angleZ The start angle in Z.
+     * @param deltaAngleZ The delta angle in Z.
+     * @param angleX The start angle in X.
+     * @param deltaAngleX The delta angle in X.
+     * @return An OrbitCamera.
+     */
+    static OrbitCamera* create(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX);
     
-    namespace folly {
+    /** Positions the camera according to spherical coordinates. 
+     *
+     * @param r The spherical radius.
+     * @param zenith The spherical zenith.
+     * @param azimuth The spherical azimuth.
+     */
+    void sphericalRadius(float *r, float *zenith, float *azimuth);
     }
     
-    #include <zlib.h>
+        // Overrides
+    virtual CardinalSplineTo *clone() const override;
+    virtual CardinalSplineTo* reverse() const override;
+    virtual void startWithTarget(Node *target) override;
     
-    ////////////// Getcpu
+    /**
+     * @param time In seconds.
+     */
+    virtual void update(float time) override;
     
-    TEST_F(SparseByteSetTest, each) {
-  for (auto c = lims::min(); c < lims::max(); ++c) {
-    EXPECT_TRUE(s.add(c));
-    EXPECT_TRUE(s.contains(c));
-  }
-  for (auto c = lims::min(); c < lims::max(); ++c) {
-    EXPECT_FALSE(s.add(c));
-    EXPECT_TRUE(s.contains(c));
-  }
+    //
+// NOTE: Converting these macros into Templates is desirable, but please see
+// issue #16159 [https://github.com/cocos2d/cocos2d-x/pull/16159] for further info
+//
+#define EASEELASTIC_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC, REVERSE_CLASSNAME) \
+CLASSNAME* CLASSNAME::create(cocos2d::ActionInterval *action, float period /* = 0.3f*/) \
+{ \
+    CLASSNAME *ease = new (std::nothrow) CLASSNAME(); \
+    if (ease) \
+    { \
+        if (ease->initWithAction(action, period)) \
+            ease->autorelease(); \
+        else \
+            CC_SAFE_RELEASE_NULL(ease); \
+    } \
+    return ease; \
+} \
+CLASSNAME* CLASSNAME::clone() const \
+{ \
+    if(_inner) return CLASSNAME::create(_inner->clone(), _period); \
+    return nullptr; \
+} \
+void CLASSNAME::update(float time) { \
+    _inner->update(TWEEN_FUNC(time, _period)); \
+} \
+EaseElastic* CLASSNAME::reverse() const { \
+    return REVERSE_CLASSNAME::create(_inner->reverse(), _period); \
 }
+    
+        /**
+    @brief Calculate the percentage a tile should be shown.
+    @param pos The position index of the tile.
+    @param time The current percentage of the action.
+    @return Return the percentage the tile should be shown.
+    */
+    virtual float testFunc(const Size& pos, float time);
+    
+    TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& points)
+{
+    // if there are less than 3 points, then we can't triangulate
+    if(points.size()<3)
+    {
+        log('AUTOPOLYGON: cannot triangulate %s with less than 3 points', _filename.c_str());
+        return TrianglesCommand::Triangles();
+    }
+    std::vector<p2t::Point*> p2points;
+    for(const auto& pt : points)
+    {
+        p2t::Point * p = new (std::nothrow) p2t::Point(pt.x, pt.y);
+        p2points.push_back(p);
+    }
+    p2t::CDT cdt(p2points);
+    cdt.Triangulate();
+    std::vector<p2t::Triangle*> tris = cdt.GetTriangles();
+    
+    // we won't know the size of verts and indices until we process all of the triangles!
+    std::vector<V3F_C4B_T2F> verts;
+    std::vector<unsigned short> indices;
+    }
