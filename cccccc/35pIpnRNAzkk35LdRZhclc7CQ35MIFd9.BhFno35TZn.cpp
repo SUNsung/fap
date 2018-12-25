@@ -1,578 +1,355 @@
 
         
-        #include <univalue.h>
-    
-    BOOST_AUTO_TEST_CASE(bip173_testvectors_valid)
+        /* Coin network-specific GUI style information */
+class NetworkStyle
 {
-    static const std::string CASES[] = {
-        'A12UEL5L',
-        'a12uel5l',
-        'an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1tt5tgs',
-        'abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw',
-        '11qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqc8247j',
-        'split1checkupstagehandshakeupstreamerranterredcaperred2y9e3w',
-        '?1ezyfcl',
-    };
-    for (const std::string& str : CASES) {
-        auto ret = bech32::Decode(str);
-        BOOST_CHECK(!ret.first.empty());
-        std::string recode = bech32::Encode(ret.first, ret.second);
-        BOOST_CHECK(!recode.empty());
-        BOOST_CHECK(CaseInsensitiveEqual(str, recode));
+public:
+    /** Get style associated with provided BIP70 network id, or 0 if not known */
+    static const NetworkStyle *instantiate(const QString &networkId);
     }
-}
     
-    BOOST_FIXTURE_TEST_SUITE(blockchain_tests, BasicTestingSetup)
+    /** Perform one SHA-256 transformation, processing 16 big endian 32-bit words. */
+static void secp256k1_sha256_transform(uint32_t* s, const uint32_t* chunk) {
+    uint32_t a = s[0], b = s[1], c = s[2], d = s[3], e = s[4], f = s[5], g = s[6], h = s[7];
+    uint32_t w0, w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w11, w12, w13, w14, w15;
+    }
     
-    // Error handling; calls assert() by default.
-#define TINYFORMAT_ERROR(reasonString) throw tinyformat::format_error(reasonString)
+        secp256k1_pubkey_load(ctx, &pt, point);
+    secp256k1_scalar_set_b32(&s, scalar, &overflow);
+    if (overflow || secp256k1_scalar_is_zero(&s)) {
+        ret = 0;
+    } else {
+        unsigned char x[32];
+        unsigned char y[1];
+        secp256k1_sha256_t sha;
+    }
     
+        for (recid = 0; recid < 4; recid++) {
+        int i;
+        int recid2;
+        /* (4,4) encoded in DER. */
+        unsigned char sigbder[8] = {0x30, 0x06, 0x02, 0x01, 0x04, 0x02, 0x01, 0x04};
+        unsigned char sigcder_zr[7] = {0x30, 0x05, 0x02, 0x00, 0x02, 0x01, 0x01};
+        unsigned char sigcder_zs[7] = {0x30, 0x05, 0x02, 0x01, 0x01, 0x02, 0x00};
+        unsigned char sigbderalt1[39] = {
+            0x30, 0x25, 0x02, 0x20, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x04, 0x02, 0x01, 0x04,
+        };
+        unsigned char sigbderalt2[39] = {
+            0x30, 0x25, 0x02, 0x01, 0x04, 0x02, 0x20, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04,
+        };
+        unsigned char sigbderalt3[40] = {
+            0x30, 0x26, 0x02, 0x21, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x04, 0x02, 0x01, 0x04,
+        };
+        unsigned char sigbderalt4[40] = {
+            0x30, 0x26, 0x02, 0x01, 0x04, 0x02, 0x21, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04,
+        };
+        /* (order + r,4) encoded in DER. */
+        unsigned char sigbderlong[40] = {
+            0x30, 0x26, 0x02, 0x21, 0x00, 0xFF, 0xFF, 0xFF,
+            0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+            0xFF, 0xFF, 0xFF, 0xFF, 0xFE, 0xBA, 0xAE, 0xDC,
+            0xE6, 0xAF, 0x48, 0xA0, 0x3B, 0xBF, 0xD2, 0x5E,
+            0x8C, 0xD0, 0x36, 0x41, 0x45, 0x02, 0x01, 0x04
+        };
+        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigb64, recid) == 1);
+        CHECK(secp256k1_ecdsa_recover(ctx, &pubkeyb, &rsig, msg32) == 1);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbder, sizeof(sigbder)) == 1);
+        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 1);
+        for (recid2 = 0; recid2 < 4; recid2++) {
+            secp256k1_pubkey pubkey2b;
+            CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigb64, recid2) == 1);
+            CHECK(secp256k1_ecdsa_recover(ctx, &pubkey2b, &rsig, msg32) == 1);
+            /* Verifying with (order + r,4) should always fail. */
+            CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderlong, sizeof(sigbderlong)) == 1);
+            CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 0);
+        }
+        /* DER parsing tests. */
+        /* Zero length r/s. */
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder_zr, sizeof(sigcder_zr)) == 0);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder_zs, sizeof(sigcder_zs)) == 0);
+        /* Leading zeros. */
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt1, sizeof(sigbderalt1)) == 0);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt2, sizeof(sigbderalt2)) == 0);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt3, sizeof(sigbderalt3)) == 0);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt4, sizeof(sigbderalt4)) == 0);
+        sigbderalt3[4] = 1;
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt3, sizeof(sigbderalt3)) == 1);
+        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 0);
+        sigbderalt4[7] = 1;
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt4, sizeof(sigbderalt4)) == 1);
+        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 0);
+        /* Damage signature. */
+        sigbder[7]++;
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbder, sizeof(sigbder)) == 1);
+        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 0);
+        sigbder[7]--;
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbder, 6) == 0);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbder, sizeof(sigbder) - 1) == 0);
+        for(i = 0; i < 8; i++) {
+            int c;
+            unsigned char orig = sigbder[i];
+            /*Try every single-byte change.*/
+            for (c = 0; c < 256; c++) {
+                if (c == orig ) {
+                    continue;
+                }
+                sigbder[i] = c;
+                CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbder, sizeof(sigbder)) == 0 || secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 0);
+            }
+            sigbder[i] = orig;
+        }
+    }
     
-    {bool ParseDouble(const std::string& str, double *out)
+    namespace bech32
 {
-    if (!ParsePrechecks(str))
-        return false;
-    if (str.size() >= 2 && str[0] == '0' && str[1] == 'x') // No hexadecimal floats allowed
-        return false;
-    std::istringstream text(str);
-    text.imbue(std::locale::classic());
-    double result;
-    text >> result;
-    if(out) *out = result;
-    return text.eof() && !text.fail();
-}
-}
-    
-    
-    {    void operator() (const T * src0, const T * src1, T * dst) const
-    {
-        dst[0] = internal::saturate_cast<T>(src0[0] >= src1[0] ? (s64)src0[0] - src1[0] : (s64)src1[0] - src0[0]);
     }
+    
+    OPERATOR_SCHEMA(EnforceFinite)
+    .NumInputs(1)
+    .NumOutputs(0)
+    .SetDoc(R'DOC(
+Raise if there is NaN or Inf values in the input tensor.
+)DOC')
+    .Input(0, 'input', 'Input tensor');
+    
+    class GetFloatToHalfGradient : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+  vector<OperatorDef> GetGradientDefs() override {
+    return SingleGradientDef(
+        'HalfToFloat', '', vector<string>{GO(0)}, vector<string>{GI(0)});
+  }
+};
+REGISTER_GRADIENT(FloatToHalf, GetFloatToHalfGradient);
+    
+    namespace xgboost {
+/*!
+ * \brief interface of linear updater
+ */
+class LinearUpdater {
+ public:
+  /*! \brief virtual destructor */
+  virtual ~LinearUpdater() = default;
+  /*!
+   * \brief Initialize the updater with given arguments.
+   * \param args arguments to the objective function.
+   */
+  virtual void Init(
+      const std::vector<std::pair<std::string, std::string> >& args) = 0;
+    }
+    }
+    
+    /*!
+ * \brief Registry entry for predictor.
+ */
+struct PredictorReg
+    : public dmlc::FunctionRegEntryBase<PredictorReg,
+                                        std::function<Predictor*()>> {};
+    
+     private:
+  StreamBufferReader reader_;
+  int tmp_ch;
+  int num_prev;
+  unsigned char buf_prev[2];
+  // whether we need to do strict check
+  static const bool kStrictCheck = false;
+};
+/*! \brief the stream that write to base64, note we take from file pointers */
+class Base64OutStream: public dmlc::Stream {
+ public:
+  explicit Base64OutStream(dmlc::Stream *fp) : fp(fp) {
+    buf_top = 0;
+  }
+  virtual void Write(const void *ptr, size_t size) {
+    using base64::EncodeTable;
+    size_t tlen = size;
+    const unsigned char *cptr = static_cast<const unsigned char*>(ptr);
+    while (tlen) {
+      while (buf_top < 3  && tlen != 0) {
+        buf[++buf_top] = *cptr++; --tlen;
+      }
+      if (buf_top == 3) {
+        // flush 4 bytes out
+        PutChar(EncodeTable[buf[1] >> 2]);
+        PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
+        PutChar(EncodeTable[((buf[2] << 2) | (buf[3] >> 6)) & 0x3F]);
+        PutChar(EncodeTable[buf[3] & 0x3F]);
+        buf_top = 0;
+      }
+    }
+  }
+  virtual size_t Read(void *ptr, size_t size) {
+    LOG(FATAL) << 'Base64OutStream do not support read';
+    return 0;
+  }
+  /*!
+   * \brief finish writing of all current base64 stream, do some post processing
+   * \param endch character to put to end of stream, if it is EOF, then nothing will be done
+   */
+  inline void Finish(char endch = EOF) {
+    using base64::EncodeTable;
+    if (buf_top == 1) {
+      PutChar(EncodeTable[buf[1] >> 2]);
+      PutChar(EncodeTable[(buf[1] << 4) & 0x3F]);
+      PutChar('=');
+      PutChar('=');
+    }
+    if (buf_top == 2) {
+      PutChar(EncodeTable[buf[1] >> 2]);
+      PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
+      PutChar(EncodeTable[(buf[2] << 2) & 0x3F]);
+      PutChar('=');
+    }
+    buf_top = 0;
+    if (endch != EOF) PutChar(endch);
+    this->Flush();
+  }
+    
+        if (row_indices_.empty()) {  // edge case: empty instance set
+      // assign arbitrary address here, to bypass nullptr check
+      // (nullptr usually indicates a nonexistent rowset, but we want to
+      //  indicate a valid rowset that happens to have zero length and occupies
+      //  the whole instance set)
+      // this is okay, as BuildHist will compute (end-begin) as the set size
+      const size_t* begin = reinterpret_cast<size_t*>(20);
+      const size_t* end = begin;
+      elem_of_each_node_.emplace_back(Elem(begin, end, 0));
+      return;
+    }
+    
+    SEXP XGBoosterSetAttr_R(SEXP handle, SEXP name, SEXP val) {
+  R_API_BEGIN();
+  const char *v = isNull(val) ? nullptr : CHAR(asChar(val));
+  CHECK_CALL(XGBoosterSetAttr(R_ExternalPtrAddr(handle),
+                              CHAR(asChar(name)), v));
+  R_API_END();
+  return R_NilValue;
+}
+    
+    
+    {  virtual void AddSplit(bst_uint nodeid,
+                        bst_uint leftid,
+                        bst_uint rightid,
+                        bst_uint featureid,
+                        bst_float leftweight,
+                        bst_float rightweight);
 };
     
-        for (size_t i = 0; i < size.height; ++i)
-    {
-        const u8* src = internal::getRowPtr(srcBase, srcStride, i);
-        s16* dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t j = 0;
+    /// Prefix used for posix tar archive.
+const std::string kTestCarveNamePrefix = 'carve_';
+    
+    /**
+ * The schedule is an iterable collection of Packs. When you iterate through
+ * a schedule, you only get the packs that should be running on the host that
+ * you're currently operating on.
+ */
+class Schedule : private boost::noncopyable {
+ public:
+  /// Under the hood, the schedule is just a list of the Pack objects
+  using container = std::vector<PackRef>;
     }
     
-    struct BitwiseOr
-{
-    typedef u8 type;
-    }
-    
-        if (borderType == BORDER_MODE_CONSTANT)
-        for (s32 k = 0; k < cn; ++k)
-        {
-            lanea[-cn+k] = borderValue;
-            lanea[colsn+k] = borderValue;
-            laneA[-cn+k] = borderValue;
-            laneA[colsn+k] = borderValue;
-            laneb[-cn+k] = borderValue;
-            laneb[colsn+k] = borderValue;
-            laneB[-cn+k] = borderValue;
-            laneB[colsn+k] = borderValue;
-        }
-    
-    #ifdef CAROTENE_NEON
-    if (shift >= 16)
-    {
-        if (cpolicy == CONVERT_POLICY_WRAP)
-        {
-            size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
-            size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
-            int16x8_t v_zero = vdupq_n_s16(0);
-    }
-    }
-    
-                    uint8x16_t v0 = vld1q_u8(ptr);
-                int8x16_t v1 = vreinterpretq_s8_u8(veorq_u8(vqsubq_u8(v0, t), delta));
-                int8x16_t v2 = vreinterpretq_s8_u8(veorq_u8(vqaddq_u8(v0, t), delta));
-    
-    #define INRANGEFUNC(T)                                       \
-void inRange(const Size2D &_size,                            \
-             const T * srcBase, ptrdiff_t srcStride,         \
-             const T * rng1Base, ptrdiff_t rng1Stride,       \
-             const T * rng2Base, ptrdiff_t rng2Stride,       \
-             u8 * dstBase, ptrdiff_t dstStride)              \
-{                                                            \
-    internal::assertSupportedConfiguration();                \
-    inRangeCheck(_size, srcBase, srcStride,                  \
-                 rng1Base, rng1Stride, rng2Base, rng2Stride, \
-                 dstBase, dstStride);                        \
+    const std::map<std::string, ScheduledQuery>& Pack::getSchedule() const {
+  return schedule_;
 }
-#else
-#define INRANGEFUNC(T)                                       \
-void inRange(const Size2D &,                                 \
-             const T *, ptrdiff_t,                           \
-             const T *, ptrdiff_t,                           \
-             const T *, ptrdiff_t,                           \
-             u8 *, ptrdiff_t)                                \
-{                                                            \
-    internal::assertSupportedConfiguration();                \
+    
+    
+    {  auto obj = data_.getObject();
+  data_.copyFrom(fv->second.doc(), obj);
+  data_.add(kFeatureVectorsRootKey, obj);
+  return Status();
+}
+    
+    
+    {  return Status();
+}
+    
+        pt::ptree multi_pack;
+    for (const auto& path : paths) {
+      std::string content;
+      if (!readFile(path, content)) {
+        LOG(WARNING) << 'Cannot read multi-pack file: ' << path;
+        continue;
+      }
+    }
+    
+    #ifdef ROCKSDB_RANGESYNC_PRESENT
+Status PosixWritableFile::RangeSync(uint64_t offset, uint64_t nbytes) {
+  assert(offset <= std::numeric_limits<off_t>::max());
+  assert(nbytes <= std::numeric_limits<off_t>::max());
+  if (sync_file_range(fd_, static_cast<off_t>(offset),
+      static_cast<off_t>(nbytes), SYNC_FILE_RANGE_WRITE) == 0) {
+    return Status::OK();
+  } else {
+    return IOError('While sync_file_range offset ' + ToString(offset) +
+                       ' bytes ' + ToString(nbytes),
+                   filename_, errno);
+  }
 }
 #endif
     
-    template <typename T, size_t N>
-internal::ParamGenerator<T> ValuesIn(const T (&array)[N]) {
-  return ValuesIn(array, array + N);
-}
+      ////////////////////////////////////////////////////////
+  //
+  // 'Read Committed' (Monotonic Atomic Views) Example
+  //   --Using multiple Snapshots
+  //
+  ////////////////////////////////////////////////////////
     
-      // This field is mutable and needs to be reset before running the
-  // test for the second time.
-  TestResult result_;
+      // Time spent on file fsync.
+  uint64_t file_fsync_nanos;
     
-    // Traps C++ exceptions escaping statement and reports them as test
-// failures. Note that trapping SEH exceptions is not implemented here.
-# if GTEST_HAS_EXCEPTIONS
-#  define GTEST_EXECUTE_DEATH_TEST_STATEMENT_(statement, death_test) \
-  try { \
-    GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
-  } catch (const ::std::exception& gtest_exception) { \
-    fprintf(\
-        stderr, \
-        '\n%s: Caught std::exception-derived exception escaping the ' \
-        'death test statement. Exception message: %s\n', \
-        ::testing::internal::FormatFileLocation(__FILE__, __LINE__).c_str(), \
-        gtest_exception.what()); \
-    fflush(stderr); \
-    death_test->Abort(::testing::internal::DeathTest::TEST_THREW_EXCEPTION); \
-  } catch (...) { \
-    death_test->Abort(::testing::internal::DeathTest::TEST_THREW_EXCEPTION); \
-  }
+    Status GetStringFromColumnFamilyOptions(std::string* opts_str,
+                                        const ColumnFamilyOptions& cf_options,
+                                        const std::string& delimiter = ';  ');
     
-      // Join an existing circle.
-  void join(linked_ptr_internal const* ptr)
-      GTEST_LOCK_EXCLUDED_(g_linked_ptr_mutex) {
-    MutexLock lock(&g_linked_ptr_mutex);
-    }
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15>
-class ValueArray15 {
- public:
-  ValueArray15(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
-      T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15) : v1_(v1), v2_(v2),
-      v3_(v3), v4_(v4), v5_(v5), v6_(v6), v7_(v7), v8_(v8), v9_(v9), v10_(v10),
-      v11_(v11), v12_(v12), v13_(v13), v14_(v14), v15_(v15) {}
-    }
-    
-    //-------------------------------------------------------------------------------
-//
-//  ScriptSet - A bit set representing a set of scripts.
-//
-//              This class was originally used exclusively with script sets appearing
-//              as part of the spoof check whole script confusable binary data. Its
-//              use has since become more general, but the continued use to wrap
-//              prebuilt binary data does constrain the design.
-//
-//-------------------------------------------------------------------------------
-class U_I18N_API ScriptSet: public UMemory {
-  public:
-    ScriptSet();
-    ScriptSet(const ScriptSet &other);
-    ~ScriptSet();
-    }
-    
-    #define LOW_A             ((UChar)0x0061)
-#define LOW_B             ((UChar)0x0062)
-#define LOW_C             ((UChar)0x0063)
-#define LOW_D             ((UChar)0x0064)
-#define LOW_E             ((UChar)0x0065)
-#define LOW_F             ((UChar)0x0066)
-#define LOW_G             ((UChar)0x0067)
-#define LOW_H             ((UChar)0x0068)
-#define LOW_I             ((UChar)0x0069)
-#define LOW_J             ((UChar)0x006a)
-#define LOW_K             ((UChar)0x006B)
-#define LOW_L             ((UChar)0x006C)
-#define LOW_M             ((UChar)0x006D)
-#define LOW_N             ((UChar)0x006E)
-#define LOW_O             ((UChar)0x006F)
-#define LOW_P             ((UChar)0x0070)
-#define LOW_Q             ((UChar)0x0071)
-#define LOW_R             ((UChar)0x0072)
-#define LOW_S             ((UChar)0x0073)
-#define LOW_T             ((UChar)0x0074)
-#define LOW_U             ((UChar)0x0075)
-#define LOW_V             ((UChar)0x0076)
-#define LOW_W             ((UChar)0x0077)
-#define LOW_X             ((UChar)0x0078)
-#define LOW_Y             ((UChar)0x0079)
-#define LOW_Z             ((UChar)0x007A)
-    
-    U_NAMESPACE_END
-    
-    #include 'unicode/utypes.h'
-#include 'sharedobject.h'
-    
-    U_NAMESPACE_END
-    
-    class PluralRules;
-    
-    int32_t StandardPlural::indexOrNegativeFromString(const char *keyword) {
-    switch (*keyword++) {
-    case 'f':
-        if (uprv_strcmp(keyword, 'ew') == 0) {
-            return FEW;
-        }
-        break;
-    case 'm':
-        if (uprv_strcmp(keyword, 'any') == 0) {
-            return MANY;
-        }
-        break;
-    case 'o':
-        if (uprv_strcmp(keyword, 'ther') == 0) {
-            return OTHER;
-        } else if (uprv_strcmp(keyword, 'ne') == 0) {
-            return ONE;
-        }
-        break;
-    case 't':
-        if (uprv_strcmp(keyword, 'wo') == 0) {
-            return TWO;
-        }
-        break;
-    case 'z':
-        if (uprv_strcmp(keyword, 'ero') == 0) {
-            return ZERO;
-        }
-        break;
-    default:
-        break;
-    }
-    return -1;
-}
-    
-        /**
-     * Sets U_ILLEGAL_ARGUMENT_ERROR if the keyword is not a plural form.
-     *
-     * @param keyword for example 'few' or 'other'
-     * @return the index of the plural form corresponding to the keyword
-     */
-    static int32_t indexFromString(const char *keyword, UErrorCode &errorCode);
-    
-    #include 'strmatch.h'
-#include 'rbt_data.h'
-#include 'util.h'
-#include 'unicode/uniset.h'
-#include 'unicode/utf16.h'
-    
-    /**
- * Construct a StringReplacer that sets the emits the given output
- * text and does not modify the cursor.
- * @param theOutput text that will replace input text when the
- * replace() method is called.  May contain stand-in characters
- * that represent nested replacers.
- * @param theData transliterator context object that translates
- * stand-in characters to UnicodeReplacer objects
- */
-StringReplacer::StringReplacer(const UnicodeString& theOutput,
-                               const TransliterationRuleData* theData) {
-    output = theOutput;
-    cursorPos = 0;
-    hasCursor = FALSE;
-    data = theData;
-    isComplex = TRUE;
-}
-    
-    #endif // D_DHT_RESPONSE_MESSAGE_H
-
-    
-      void moveBucketTail(const std::shared_ptr<DHTNode>& node);
-    
-      uint32_t temp32;
-  uint64_t temp64;
-  // time
-  if (version == 2) {
-    READ_CHECK(fp, &temp32, sizeof(temp32));
-    serializedTime_.setTimeFromEpoch(ntohl(temp32));
-    // 4bytes reserved
-    readBytes(fp, buf, buf.size(), 4);
-  }
-  else {
-    READ_CHECK(fp, &temp64, sizeof(temp64));
-    serializedTime_.setTimeFromEpoch(ntoh64(temp64));
-  }
-    
-    class DHTTaskQueueImpl : public DHTTaskQueue {
-private:
-  DHTTaskExecutor periodicTaskQueue1_;
-    }
-    
-      virtual void preProcess() CXX11_OVERRIDE;
-    
-    #pragma once
-    
-    #include 'rocksdb/status.h'
-    
-    
-    {}  // namespace rocksdb
-    
-      Status MapNewRegion();
-  Status UnmapCurrentRegion();
-  Status Msync();
-    
-      delete txn;
-  // Clear snapshot from read options since it is no longer valid
-  read_options.snapshot = nullptr;
-  snapshot = nullptr;
-    
-    // Take a default ColumnFamilyOptions 'base_options' in addition to a
-// map 'opts_map' of option name to option value to construct the new
-// ColumnFamilyOptions 'new_options'.
-//
-// Below are the instructions of how to config some non-primitive-typed
-// options in ColumnFOptions:
-//
-// * table_factory:
-//   table_factory can be configured using our custom nested-option syntax.
-//
-//   {option_a=value_a; option_b=value_b; option_c=value_c; ... }
-//
-//   A nested option is enclosed by two curly braces, within which there are
-//   multiple option assignments.  Each assignment is of the form
-//   'variable_name=value;'.
-//
-//   Currently we support the following types of TableFactory:
-//   - BlockBasedTableFactory:
-//     Use name 'block_based_table_factory' to initialize table_factory with
-//     BlockBasedTableFactory.  Its BlockBasedTableFactoryOptions can be
-//     configured using the nested-option syntax.
-//     [Example]:
-//     * {'block_based_table_factory', '{block_cache=1M;block_size=4k;}'}
-//       is equivalent to assigning table_factory with a BlockBasedTableFactory
-//       that has 1M LRU block-cache with block size equals to 4k:
-//         ColumnFamilyOptions cf_opt;
-//         BlockBasedTableOptions blk_opt;
-//         blk_opt.block_cache = NewLRUCache(1 * 1024 * 1024);
-//         blk_opt.block_size = 4 * 1024;
-//         cf_opt.table_factory.reset(NewBlockBasedTableFactory(blk_opt));
-//   - PlainTableFactory:
-//     Use name 'plain_table_factory' to initialize table_factory with
-//     PlainTableFactory.  Its PlainTableFactoryOptions can be configured using
-//     the nested-option syntax.
-//     [Example]:
-//     * {'plain_table_factory', '{user_key_len=66;bloom_bits_per_key=20;}'}
-//
-// * memtable_factory:
-//   Use 'memtable' to config memtable_factory.  Here are the supported
-//   memtable factories:
-//   - SkipList:
-//     Pass 'skip_list:<lookahead>' to config memtable to use SkipList,
-//     or simply 'skip_list' to use the default SkipList.
-//     [Example]:
-//     * {'memtable', 'skip_list:5'} is equivalent to setting
-//       memtable to SkipListFactory(5).
-//   - PrefixHash:
-//     Pass 'prfix_hash:<hash_bucket_count>' to config memtable
-//     to use PrefixHash, or simply 'prefix_hash' to use the default
-//     PrefixHash.
-//     [Example]:
-//     * {'memtable', 'prefix_hash:1000'} is equivalent to setting
-//       memtable to NewHashSkipListRepFactory(hash_bucket_count).
-//   - HashLinkedList:
-//     Pass 'hash_linkedlist:<hash_bucket_count>' to config memtable
-//     to use HashLinkedList, or simply 'hash_linkedlist' to use the default
-//     HashLinkedList.
-//     [Example]:
-//     * {'memtable', 'hash_linkedlist:1000'} is equivalent to
-//       setting memtable to NewHashLinkListRepFactory(1000).
-//   - VectorRepFactory:
-//     Pass 'vector:<count>' to config memtable to use VectorRepFactory,
-//     or simply 'vector' to use the default Vector memtable.
-//     [Example]:
-//     * {'memtable', 'vector:1024'} is equivalent to setting memtable
-//       to VectorRepFactory(1024).
-//   - HashCuckooRepFactory:
-//     Pass 'cuckoo:<write_buffer_size>' to use HashCuckooRepFactory with the
-//     specified write buffer size, or simply 'cuckoo' to use the default
-//     HashCuckooRepFactory.
-//     [Example]:
-//     * {'memtable', 'cuckoo:1024'} is equivalent to setting memtable
-//       to NewHashCuckooRepFactory(1024).
-//
-//  * compression_opts:
-//    Use 'compression_opts' to config compression_opts.  The value format
-//    is of the form '<window_bits>:<level>:<strategy>:<max_dict_bytes>'.
-//    [Example]:
-//    * {'compression_opts', '4:5:6:7'} is equivalent to setting:
-//        ColumnFamilyOptions cf_opt;
-//        cf_opt.compression_opts.window_bits = 4;
-//        cf_opt.compression_opts.level = 5;
-//        cf_opt.compression_opts.strategy = 6;
-//        cf_opt.compression_opts.max_dict_bytes = 7;
-//
-// @param base_options the default options of the output 'new_options'.
-// @param opts_map an option name to value map for specifying how 'new_options'
-//     should be set.
-// @param new_options the resulting options based on 'base_options' with the
-//     change specified in 'opts_map'.
-// @param input_strings_escaped when set to true, each escaped characters
-//     prefixed by '\' in the values of the opts_map will be further converted
-//     back to the raw string before assigning to the associated options.
-// @param ignore_unknown_options when set to true, unknown options are ignored
-//     instead of resulting in an unknown-option error.
-// @return Status::OK() on success.  Otherwise, a non-ok status indicating
-//     error will be returned, and 'new_options' will be set to 'base_options'.
-Status GetColumnFamilyOptionsFromMap(
-    const ColumnFamilyOptions& base_options,
-    const std::unordered_map<std::string, std::string>& opts_map,
-    ColumnFamilyOptions* new_options, bool input_strings_escaped = false,
-    bool ignore_unknown_options = false);
-    
-    struct UndumpOptions {
-  // Database that we will load the dumped file into
+    struct DumpOptions {
+  // Database that will be dumped
   std::string db_path;
-  // File location of the dumped file that will be loaded
+  // File location that will contain dump output
   std::string dump_location;
-  // Compact the db after loading the dumped file
-  bool compact_db = false;
+  // Don't include db information header in the dump
+  bool anonymous = false;
 };
     
-    // Move all L0 files to target_level skipping compaction.
-// This operation succeeds only if the files in L0 have disjoint ranges; this
-// is guaranteed to happen, for instance, if keys are inserted in sorted
-// order. Furthermore, all levels between 1 and target_level must be empty.
-// If any of the above condition is violated, InvalidArgument will be
-// returned.
-Status PromoteL0(DB* db, ColumnFamilyHandle* column_family,
-                 int target_level = 1);
-    
-      std::string ToString(bool exclude_zero_counters = false) const;
-    
-      /**
-   * @brief Initialize the CAN client by specified CAN card parameters.
-   * @param parameter CAN card parameters to initialize the CAN client.
-   * @return If the initialization is successful.
-   */
-  virtual bool Init(const CANCardParameter &parameter) = 0;
-    
-    
-    {  return 0;
-}
-
-    
-      for (int32_t i = 0; i < *frame_num && i < MAX_CAN_RECV_FRAME_LEN; ++i) {
-    CanFrame cf;
-    cf.id = recv_frames_[i].id;
-    cf.len = recv_frames_[i].len;
-    std::memcpy(cf.data, recv_frames_[i].data, recv_frames_[i].len);
-    frames->push_back(cf);
-  }
-    
-      /**
-   * @brief Stop the fake CAN client.
-   */
-  void Stop() override;
-    
-    
-    {  int64_t send_time_ = 0;
-  int64_t recv_time_ = 0;
-  int32_t send_succ_count_ = 0;
-  int32_t recv_succ_count_ = 0;
-  int32_t send_err_count_ = 0;
-  int32_t recv_err_count_ = 0;
-  std::stringstream recv_ss_;
-  CANCardParameter param_;
-};
-    
-    
-    {  frames.push_back(frame);
-  num = 1;
-  EXPECT_EQ(hermes_can.Start(), ErrorCode::OK);
-  EXPECT_EQ(hermes_can.Send(frames, &num), ErrorCode::OK);
-  frames.clear();
-}
-    
-    
-    {
-    {    if (ret < 0) {
-      AERROR << 'receive message failed, error code: ' << ret;
-      return ErrorCode::CAN_CLIENT_ERROR_BASE;
-    }
-    if (recv_frames_[i].can_dlc != CANBUS_MESSAGE_LENGTH) {
-      AERROR << 'recv_frames_[' << i
-             << '].can_dlc = ' << recv_frames_[i].can_dlc
-             << ', which is not equal to can message data length ('
-             << CANBUS_MESSAGE_LENGTH << ').';
-      return ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED;
-    }
-    cf.id = recv_frames_[i].can_id;
-    cf.len = recv_frames_[i].can_dlc;
-    std::memcpy(cf.data, recv_frames_[i].data, recv_frames_[i].can_dlc);
-    frames->push_back(cf);
-  }
-  return ErrorCode::OK;
-}
-    
-    /**
- * @class SocketCanClientRaw
- * @brief The class which defines a ESD CAN client which inherites CanClient.
- */
-class SocketCanClientRaw : public CanClient {
- public:
-  /**
-   * @brief Initialize the ESD CAN client by specified CAN card parameters.
-   * @param parameter CAN card parameters to initialize the CAN client.
-   * @return If the initialization is successful.
-   */
-  bool Init(const CANCardParameter &parameter) override;
-    }
-    
-    namespace apollo {
-namespace drivers {
-namespace canbus {
-namespace can {
-    }
-    }
-    }
-    }
-    
-      sender.AddMessage(1, &mpd);
-  EXPECT_EQ(sender.Start(), common::ErrorCode::OK);
-  EXPECT_TRUE(sender.IsRunning());
-  EXPECT_TRUE(sender.enable_log());
-    
-    /**
- * @file message_manager.h
- * @brief The class of MessageManager
- */
-#ifndef MODULES_DRIVERS_CANBUS_CAN_COMM_MESSAGE_MANAGER_H_
-#define MODULES_DRIVERS_CANBUS_CAN_COMM_MESSAGE_MANAGER_H_
-    
-    void Byte::set_value(const uint8_t value, const int32_t start_pos,
-                     const int32_t length) {
-  if (start_pos > BYTE_LENGTH - 1 || start_pos < 0 || length < 1) {
-    return;
-  }
-  int32_t end_pos = std::min(start_pos + length - 1, BYTE_LENGTH - 1);
-  int32_t real_len = end_pos + 1 - start_pos;
-  uint8_t current_value_low = 0x00;
-  if (start_pos > 0) {
-    current_value_low = *value_ & RANG_MASK_1_L[start_pos - 1];
-  }
-  uint8_t current_value_high = *value_ & RANG_MASK_0_L[end_pos];
-  uint8_t middle_value = value & RANG_MASK_1_L[real_len - 1];
-  middle_value = middle_value << start_pos;
-  *value_ = current_value_high + middle_value + current_value_low;
-}
-    
-    using apollo::common::adapter::AdapterConfig;
-using apollo::common::adapter::AdapterManager;
-using apollo::common::monitor::MonitorMessageItem;
-using apollo::common::Status;
-using apollo::common::ErrorCode;
-using apollo::common::time::Clock;
-using apollo::drivers::canbus::CanClientFactory;
-using apollo::drivers::canbus::CanClient;
-using apollo::drivers::canbus::CanReceiver;
-using apollo::drivers::canbus::SensorCanbusConf;
-    
-    // DCT vertical pass
-    
-      bool Is420() const;
-  bool Is444() const;
+    // Create a RateLimiter object, which can be shared among RocksDB instances to
+// control write rate of flush and compaction.
+// @rate_bytes_per_sec: this is the only parameter you want to set most of the
+// time. It controls the total write rate of compaction and flush in bytes per
+// second. Currently, RocksDB does not enforce rate limit for anything other
+// than flush and compaction, e.g. write to WAL.
+// @refill_period_us: this controls how often tokens are refilled. For example,
+// when rate_bytes_per_sec is set to 10MB/s and refill_period_us is set to
+// 100ms, then 1MB is refilled every 100ms internally. Larger value can lead to
+// burstier writes while smaller value introduces more CPU overhead.
+// The default should work for most cases.
+// @fairness: RateLimiter accepts high-pri requests and low-pri requests.
+// A low-pri request is usually blocked in favor of hi-pri request. Currently,
+// RocksDB assigns low-pri to request from compaction and high-pri to request
+// from flush. Low-pri requests can get blocked if flush requests come in
+// continuously. This fairness parameter grants low-pri requests permission by
+// 1/fairness chance even though high-pri requests exist to avoid starvation.
+// You should be good by leaving it at default 10.
+// @mode: Mode indicates which types of operations count against the limit.
+// @auto_tuned: Enables dynamic adjustment of rate limit within the range
+//              `[rate_bytes_per_sec / 20, rate_bytes_per_sec]`, according to
+//              the recent demand for background I/O.
+extern RateLimiter* NewGenericRateLimiter(
+    int64_t rate_bytes_per_sec, int64_t refill_period_us = 100 * 1000,
+    int32_t fairness = 10,
+    RateLimiter::Mode mode = RateLimiter::Mode::kWritesOnly,
+    bool auto_tuned = false);
