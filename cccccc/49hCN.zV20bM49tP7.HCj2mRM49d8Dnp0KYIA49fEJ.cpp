@@ -1,134 +1,148 @@
 
         
-        // Constructs a new PyBfloat16.
-PyObject* PyBfloat16_New(PyTypeObject* type, PyObject* args, PyObject* kwds) {
-  if (kwds && PyDict_Size(kwds)) {
-    PyErr_SetString(PyExc_TypeError, 'constructor takes no keyword arguments');
-    return nullptr;
-  }
-  Py_ssize_t size = PyTuple_Size(args);
-  if (size != 1) {
-    PyErr_SetString(PyExc_TypeError,
-                    'expected number as argument to bfloat16 constructor');
-    return nullptr;
-  }
-  PyObject* arg = PyTuple_GetItem(args, 0);
+          auto axis = helper.GetSingleArgument<int32_t>('axis', 1);
+  const auto canonical_axis = canonical_axis_index_(axis, in[0].dims().size());
+  auto axis_w = helper.GetSingleArgument<int32_t>('axis_w', 1);
+  const int canonical_axis_w =
+      canonical_axis_index_(axis_w, in[1].dims().size());
+  const int N = pretransposed_weight
+      ? size_from_dim_(canonical_axis_w, GetDimsVector(in[1]))
+      : size_to_dim_(canonical_axis_w, GetDimsVector(in[1]));
+    
+        for (int inputIdx = 0; inputIdx < def_.input_size() / kNumTensorsPerInput;
+         ++inputIdx) {
+      input_blob_names.push_back(I(inputIdx * kNumTensorsPerInput));
+      input_blob_names.push_back(I(inputIdx * kNumTensorsPerInput + 2));
+      output_blob_names.push_back(GI(inputIdx * kNumTensorsPerInput + 4));
     }
+    input_blob_names.push_back(GO(4));
     
-      // Attempt to get the next record at 'current_offset()'. Populates status
-  // with OK on success, OUT_OF_RANGE for end of file, DATA_LOSS for some
-  // kinds of truncated reads, or another code for other errors
-  // (e.g., filesystem errors).
-  void GetNext(TF_Status* status);
+    #include 'caffe2/core/context.h'
+#include 'caffe2/core/operator.h'
     
-                    // If there were no matching characters, skip over the loop altogether.
-                //   The loop doesn't run at all, a * op always succeeds.
-                if (ix == fp->fInputIdx) {
-                    fp->fPatIdx++;   // skip the URX_LOOP_C op.
-                    break;
-                }
+    static internal::GrpcLibraryInitializer g_gli_initializer;
+ChannelCredentials::ChannelCredentials() { g_gli_initializer.summon(); }
     
-    ScientificNumberFormatter *ScientificNumberFormatter::createSuperscriptInstance(
-            const Locale &locale, UErrorCode &status) {
-    return createInstance(
-            static_cast<DecimalFormat *>(
-                    DecimalFormat::createScientificInstance(locale, status)),
-            new SuperscriptStyle(),
-            status);
+    grpc::string ChannelArguments::GetSslTargetNameOverride() const {
+  for (unsigned int i = 0; i < args_.size(); i++) {
+    if (grpc::string(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG) == args_[i].key) {
+      return args_[i].value.string;
+    }
+  }
+  return '';
 }
     
-    #endif
+    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CLIENT_FILTER_H */
 
     
+    // Serializes the outgoing stats context.  Field IDs are 1 byte followed by
+// field data. A 1 byte version ID is always encoded first. Tags are directly
+// serialized into the given grpc_slice.
+size_t StatsContextSerialize(size_t max_tags_len, grpc_slice* tags);
     
-IntDigitCountRange::IntDigitCountRange(int32_t min, int32_t max) {
-    fMin = min < 0 ? 0 : min;
-    fMax = max < fMin ? fMin : max;
-}
+    // These measure definitions should be kept in sync across opencensus
+// implementations--see
+// https://github.com/census-instrumentation/opencensus-java/blob/master/contrib/grpc_metrics/src/main/java/io/opencensus/contrib/grpc/metrics/RpcMeasureConstants.java.
     
-    #endif  // __SMALLINTFORMATTER_H__
-
+    ::opencensus::stats::MeasureInt64 RpcClientSentMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientSentBytesPerRpc();
+::opencensus::stats::MeasureInt64 RpcClientReceivedMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientReceivedBytesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientRoundtripLatency();
+::opencensus::stats::MeasureDouble RpcClientServerLatency();
+::opencensus::stats::MeasureInt64 RpcClientCompletedRpcs();
     
-    int32_t
-CollationKey::hashCode() const
-{
-    // (Cribbed from UnicodeString)
-    // We cache the hashCode; when it becomes invalid, due to any change to the
-    // string, we note this by setting it to kInvalidHashCode. [LIU]
+    namespace grpc {
     }
     
-    int32_t StandardPlural::indexFromString(const UnicodeString &keyword, UErrorCode &errorCode) {
-    if (U_FAILURE(errorCode)) { return OTHER; }
-    int32_t i = indexOrNegativeFromString(keyword);
-    if (i >= 0) {
-        return i;
-    } else {
-        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return OTHER;
+    void RegisterOpenCensusViewsForExport() {
+  ClientSentMessagesPerRpcCumulative().RegisterForExport();
+  ClientSentBytesPerRpcCumulative().RegisterForExport();
+  ClientReceivedMessagesPerRpcCumulative().RegisterForExport();
+  ClientReceivedBytesPerRpcCumulative().RegisterForExport();
+  ClientRoundtripLatencyCumulative().RegisterForExport();
+  ClientServerLatencyCumulative().RegisterForExport();
     }
+    
+        struct stat sbuf;
+    if (stat(fname.c_str(), &sbuf) != 0) {
+      const char* msg = strerror(errno);
+      ASSERT_TRUE(false) << fname << ': ' << msg;
+    }
+    
+    // Return a new iterator that converts internal keys (yielded by
+// '*internal_iter') that were live at the specified 'sequence' number
+// into appropriate user keys.
+Iterator* NewDBIterator(DBImpl* db,
+                        const Comparator* user_key_comparator,
+                        Iterator* internal_iter,
+                        SequenceNumber sequence,
+                        uint32_t seed);
+    
+    void AppendInternalKey(std::string* result, const ParsedInternalKey& key) {
+  result->append(key.user_key.data(), key.user_key.size());
+  PutFixed64(result, PackSequenceAndType(key.sequence, key.type));
 }
     
     
-    {    /**
-     * Sets U_ILLEGAL_ARGUMENT_ERROR if the keyword is not a plural form.
-     *
-     * @param keyword for example 'few' or 'other'
-     * @return the index of the plural form corresponding to the keyword
-     */
-    static int32_t indexFromString(const UnicodeString &keyword, UErrorCode &errorCode);
-};
-    
-    #include 'strmatch.h'
-#include 'rbt_data.h'
-#include 'util.h'
-#include 'unicode/uniset.h'
-#include 'unicode/utf16.h'
-    
-    
-    {#define XGBOOST_REGISTER_PREDICTOR(UniqueId, Name)      \
-  static DMLC_ATTRIBUTE_UNUSED ::xgboost::PredictorReg& \
-      __make_##PredictorReg##_##UniqueId##__ =          \
-          ::dmlc::Registry<::xgboost::PredictorReg>::Get()->__REGISTER__(Name)
-}  // namespace xgboost
+    {}  // namespace leveldb
 
     
-    SparsePageWriter::~SparsePageWriter() {
-  for (auto& queue : qworkers_) {
-    // use nullptr to signal termination.
-    std::shared_ptr<SparsePage> sig(nullptr);
-    queue.Push(std::move(sig));
-  }
-  for (auto& thread : workers_) {
-    thread->join();
+    void Reader::ReportDrop(uint64_t bytes, const Status& reason) {
+  if (reporter_ != nullptr &&
+      end_of_buffer_offset_ - buffer_.size() - bytes >= initial_offset_) {
+    reporter_->Corruption(static_cast<size_t>(bytes), reason);
   }
 }
     
-    // logistic loss for binary classification task
-struct LogisticClassification : public LogisticRegression {
-  static const char* DefaultEvalMetric() { return 'error'; }
-};
-    
-    
-    {
-    {
-    {      // Test write Symbol
-      std::vector<unsigned char> buffer2(
-        CompressedBufferWriter::CalculateBufferSize(input.size(),
-          alphabet_size));
-      for (int i = 0; i < input.size(); i++) {
-        cbw.WriteSymbol(buffer2.data(), input[i], i);
+      // Fragment the record if necessary and emit it.  Note that if slice
+  // is empty, we still want to iterate once to emit a single
+  // zero-length record
+  Status s;
+  bool begin = true;
+  do {
+    const int leftover = kBlockSize - block_offset_;
+    assert(leftover >= 0);
+    if (leftover < kHeaderSize) {
+      // Switch to a new block
+      if (leftover > 0) {
+        // Fill the trailer (literal below relies on kHeaderSize being 7)
+        assert(kHeaderSize == 7);
+        dest_->Append(Slice('\x00\x00\x00\x00\x00\x00', leftover));
       }
-      CompressedIterator<int> ci2(buffer.data(), alphabet_size);
-      std::vector<int> output2(input.size());
-      for (int i = 0; i < input.size(); i++) {
-        output2[i] = ci2[i];
-      }
-      ASSERT_TRUE(input == output2);
+      block_offset_ = 0;
     }
-  }
+    }
+    
+      // Create a writer that will append data to '*dest'.
+  // '*dest' must have initial length 'dest_length'.
+  // '*dest' must remain live while this Writer is in use.
+  Writer(WritableFile* dest, uint64_t dest_length);
+    
+    int MemTable::KeyComparator::operator()(const char* aptr, const char* bptr)
+    const {
+  // Internal keys are encoded as length-prefixed strings.
+  Slice a = GetLengthPrefixedSlice(aptr);
+  Slice b = GetLengthPrefixedSlice(bptr);
+  return comparator.Compare(a, b);
 }
     
-      virtual bst_float ComputeSplitScore(bst_uint nodeid,
-                                      bst_uint featureid,
-                                      const GradStats& left_stats,
-                                      const GradStats& right_stats) const;
+    
+    {}  // namespace leveldb
+
+    
+    namespace HPHP { struct UnitEmitter; }
+namespace HPHP { namespace HHBBC {
+    }
+    }
+    
+    String ArrayDirectory::path() {
+  if (!m_it) {
+    return empty_string();
+  }
+    }
+    
+    #ifndef incl_HPHP_FILE_UTIL_DEFS_H_
+#define incl_HPHP_FILE_UTIL_DEFS_H_
+    
+    void record_perf_mem_event(PerfEvent kind, const perf_event_sample* sample);
