@@ -1,70 +1,44 @@
 
         
-            def password_change(record, opts={})
-      devise_mail(record, :password_change, opts)
+            it 'is turned off for existing instances of Huginn' do
+      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { nil }
+      DefaultScenarioImporter.import(user)
     end
-  end
-end
-
     
-      def index
-    render plain: 'Home'
-  end
-end
-    
-          # Remembers the given resource by setting up a cookie
-      def remember_me(resource)
-        return if request.env['devise.skip_storage']
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.remember_me!
-        cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
+          # users should be able to set price when importing orders via api
+      def permitted_line_item_attributes
+        if @current_user_roles.include?('admin')
+          super + [:price, :variant_id, :sku]
+        else
+          super
+        end
       end
     
-          def template_paths
-        template_path = _prefixes.dup
-        template_path.unshift '#{@devise_mapping.scoped_path}/mailer' if self.class.scoped_views?
-        template_path
-      end
-    
-        post('/', {'csrf_param' => token}, 'rack.session' => {:csrf => token})
-    expect(last_response).to be_ok
-  end
-    
-            def void
-          perform_payment_action(:void_transaction)
+            def show
+          authorize! :read, @order, order_token
+          @address = find_address
+          respond_with(@address)
         end
     
-            def destroy
-          if @property
-            authorize! :destroy, @property
-            @property.destroy
-            respond_with(@property, status: 204)
+            def cancel
+          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
+          if @return_authorization.cancel
+            respond_with @return_authorization, default_template: :show
           else
-            invalid_resource!(@property)
+            invalid_resource!(@return_authorization)
           end
         end
     
-            def order
-          @order ||= Spree::Order.find_by!(number: order_id)
-          authorize! :read, @order
-        end
+            def update
+          @stock_item = StockItem.accessible_by(current_ability, :update).find(params[:id])
     
-              if error
-            unprocessable_entity('#{Spree.t(:shipment_transfer_errors_occured, scope: 'api')} \n#{error}')
+            def update
+          authorize! :update, @store
+          if @store.update_attributes(store_params)
+            respond_with(@store, status: 200, default_template: :show)
           else
-            @original_shipment.transfer_to_shipment(@variant, @quantity, @target_shipment)
-            render json: { success: true, message: Spree.t(:shipment_transfer_success) }, status: 201
-          end
-        end
-    
-            def destroy
-          authorize! :destroy, taxonomy
-          taxonomy.destroy
-          respond_with(taxonomy, status: 204)
-        end
-    
-            def taxonomy
-          if params[:taxonomy_id].present?
-            @taxonomy ||= Spree::Taxonomy.accessible_by(current_ability, :read).find(params[:taxonomy_id])
+            invalid_resource!(@store)
           end
         end
