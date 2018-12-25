@@ -1,83 +1,108 @@
 
         
-        def global_require
-  JSON.pretty_generate(DATA)
-end
+                  add_default_name_and_id_for_value(tag_value, name_and_id)
+          options.delete('index')
+          options.delete('namespace')
+          options['for'] = name_and_id['id'] unless options.key?('for')
     
-      p.action do |args, _|
-    if args.empty?
-      Jekyll.logger.error 'A subcommand is required.'
-      puts p
-      abort
-    else
-      subcommand = args.first
-      unless p.has_command? subcommand
-        Jekyll.logger.abort_with 'fatal: 'jekyll #{args.first}' could not' \
-          ' be found. You may need to install the jekyll-#{args.first} gem' \
-          ' or a related gem to be able to use this subcommand.'
+              def field_type
+            self.class.field_type
+          end
       end
     end
   end
 end
 
     
-        if status == 'post'
-      parsed_date = Time.xmlschema(input_hash['date']) rescue Time.parse(input_hash['date'])
-      input_hash['date'] = parsed_date
-      filename = '#{parsed_date.strftime('%Y-%m-%d')}-#{title}.#{ext}'
-    end
+        private
     
-          def after_tags(tags); end
+    UserEmail.seed do |ue|
+  ue.id = -1
+  ue.email = 'no_email'
+  ue.primary = true
+  ue.user_id = -1
+end
     
-    #
+          if staff.topic_id.nil?
+        creator = PostCreator.new(Discourse.system_user,
+          raw: I18n.t('staff_category_description'),
+          title: I18n.t('category.topic_prefix', category: staff.name),
+          category: staff.name,
+          archetype: Archetype.default
+        )
+        post = creator.create
     
-      # Objects will be converted to strings using the :inspect method.
-  Logging.format_as :inspect
-    
-        execute 'INSERT INTO share_visibilities (user_id, shareable_id, shareable_type) ' \
-            'SELECT post_visibility.user_id, photos.id, 'Photo' FROM photos ' \
-            'INNER JOIN posts ON posts.guid = photos.status_message_guid AND posts.type = 'StatusMessage' ' \
-            'LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = photos.id ' \
-            'INNER JOIN share_visibilities AS post_visibility ON post_visibility.shareable_id = posts.id ' \
-            'WHERE photos.public = false AND share_visibilities.shareable_id IS NULL ' \
-            'AND post_visibility.shareable_type = 'Post''
-  end
-    
-    class PolymorphicMentions < ActiveRecord::Migration[4.2]
-  def change
-    remove_index :mentions, column: %i(post_id)
-    remove_index :mentions, column: %i(person_id post_id), unique: true
-    rename_column :mentions, :post_id, :mentions_container_id
-    add_column :mentions, :mentions_container_type, :string
-    add_index :mentions,
-              %i(mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_mc_id_and_mc_type',
-              length: {mentions_container_type: 191}
-    add_index :mentions,
-              %i(person_id mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_person_and_mc_id_and_mc_type',
-              length: {mentions_container_type: 191},
-              unique: true
-    
-      def confirm_on_page(page_name)
-    if page_name == 'my profile page'
-      expect(page).to have_path_in([person_path(@me.person), user_profile_path(@me.username)])
-    else
-      expect(page).to have_path(path_to(page_name))
+            def preload_stages_warnings
+          # This preloads the number of warnings for every stage, ensuring
+          # that Ci::Stage#has_warnings? doesn't execute any additional
+          # queries.
+          @pipeline.stages.each { |stage| stage.number_of_warnings }
+        end
+      end
     end
   end
 end
+
     
-    describe StatusMessagesController, :type => :controller do
-  describe '#bookmarklet' do
-    before do
-      sign_in bob, scope: :user
+          # Associates the given database ID with the current object.
+      #
+      # database_id - The ID of the corresponding database row.
+      def cache_database_id(database_id)
+        Caching.write(cache_key, database_id)
+      end
+    
+            attr_reader :attributes
+    
+            # Builds a new PR using a Hash that was built from a JSON payload.
+        def self.from_json_hash(raw_hash)
+          hash = Representation.symbolize_hash(raw_hash)
+    
+              @bar2 = Agents::DotBar.new(name: 'bar2').tap { |agent|
+            agent.user = users(:bob)
+            agent.sources << @foo
+            agent.propagate_immediately = true
+            agent.disabled = true
+            agent.save!
+          },
+    
+    describe JobsHelper do
+  let(:job) { Delayed::Job.new }
+    
+                expect(weather_agent_diff.name.current).to eq(agents(:bob_weather_agent).name)
+            expect(weather_agent_diff.name.incoming).to eq('a weather agent')
+            expect(weather_agent_diff.name.updated).to eq('a new name')
+            expect(weather_agent_diff.keep_events_for.current).to eq(45.days.to_i)
+            expect(weather_agent_diff.keep_events_for.incoming).to eq(5.days.to_i)
+            expect(weather_agent_diff.keep_events_for.updated).to eq(2.days.to_i.to_s)
+          end
+        end
+    
+      it 'is droppable' do
+    {
+      '{{location.lat}}' => '2.0',
+      '{{location.latitude}}' => '2.0',
+      '{{location.lng}}' => '3.0',
+      '{{location.longitude}}' => '3.0',
+      '{{location.latlng}}' => '2.0,3.0',
+    }.each { |template, result|
+      expect(Liquid::Template.parse(template).render('location' => location.to_liquid)).to eq(result),
+        'expected #{template.inspect} to expand to #{result.inspect}'
+    }
+  end
+end
+
+    
+      let :new_extract do
+    {
+      'url' => { 'css' => '#comic img', 'value' => '@src' },
+      'title' => { 'css' => '#comic img', 'value' => '@alt' },
+      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
+    }
+  end
+    
+      describe '#log_length' do
+    it 'defaults to 200' do
+      expect(AgentLog.log_length).to eq(200)
     end
-    
-      describe '#destroy' do
-    let(:post) { FactoryGirl.create(:status_message) }
-    
-        it 'does redirect if there is an invalid invite token' do
-      get :new, params: {invite: {token: 'fssdfsd'}}
-      expect(response).to redirect_to new_user_session_path
-    end
+  end
+end
