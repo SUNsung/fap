@@ -1,154 +1,146 @@
 
         
-        #endif  // ATOM_APP_COMMAND_LINE_ARGS_H_
-
+        bool CheckCommandLineArguments(int argc, base::CommandLine::CharType** argv);
     
-    // static
-v8::Local<v8::Value> Net::Create(v8::Isolate* isolate) {
-  return mate::CreateHandle(isolate, new Net(isolate)).ToV8();
+    #include <map>
+    
+    void AutoUpdater::OnWindowAllClosed() {
+  QuitAndInstall();
 }
     
-    #ifndef ATOM_BROWSER_API_ATOM_API_POWER_MONITOR_H_
-#define ATOM_BROWSER_API_ATOM_API_POWER_MONITOR_H_
-    
-    namespace mate {
-class Arguments;
-class Dictionary;
-}  // namespace mate
-    
-    // static
-void Event::BuildPrototype(v8::Isolate* isolate,
-                           v8::Local<v8::FunctionTemplate> prototype) {
-  prototype->SetClassName(mate::StringToV8(isolate, 'Event'));
-  mate::ObjectTemplateBuilder(isolate, prototype->PrototypeTemplate())
-      .SetMethod('preventDefault', &Event::PreventDefault)
-      .SetMethod('sendReply', &Event::SendReply);
-}
-    
-      // Returns all objects in this class's weak map.
-  static std::vector<v8::Local<v8::Object>> GetAll(v8::Isolate* isolate) {
-    if (weak_map_)
-      return weak_map_->Values(isolate);
-    else
-      return std::vector<v8::Local<v8::Object>>();
-  }
-    
-      if (!BrowserThread::PostTask(BrowserThread::UI, FROM_HERE, task)) {
-    // Without a UI thread to post the exit task to, there aren't many
-    // options.  Raise the signal again.  The default handler will pick it up
-    // and cause an ungraceful exit.
-    RAW_LOG(WARNING, 'No UI thread, exiting ungracefully.');
-    kill(getpid(), signal);
+    class Tray : public mate::TrackableObject<Tray>, public TrayIconObserver {
+ public:
+  static mate::WrappableBase* New(mate::Handle<NativeImage> image,
+                                  mate::Arguments* args);
     }
     
      private:
-  void OnMessageBoxCallback(DialogClosedCallback callback,
-                            const std::string& origin,
-                            int code,
-                            bool checkbox_checked);
+  scoped_refptr<AtomBrowserContext> browser_context_;
     
-    #include 'base/macros.h'
+      // content::JavaScriptDialogManager implementations.
+  void RunJavaScriptDialog(content::WebContents* web_contents,
+                           content::RenderFrameHost* rfh,
+                           content::JavaScriptDialogType dialog_type,
+                           const base::string16& message_text,
+                           const base::string16& default_prompt_text,
+                           DialogClosedCallback callback,
+                           bool* did_suppress_message) override;
+  void RunBeforeUnloadDialog(content::WebContents* web_contents,
+                             content::RenderFrameHost* rfh,
+                             bool is_reload,
+                             DialogClosedCallback callback) override;
+  void CancelDialogs(content::WebContents* web_contents,
+                     bool reset_state) override;
     
-    #include <cstdint>      // for int32_t
     
-    #endif  // TESSERACT_CCMAIN_PAGEITERATOR_H_
+    {}  // namespace auto_updater
 
     
-    namespace tesseract {
+            for (; j < roiw16; j += 16)
+        {
+            internal::prefetch(src + j);
+            internal::prefetch(dst + j);
+            uint8x16_t v_src = vld1q_u8(src + j);
+            int16x8_t v_dst0 = vld1q_s16(dst + j), v_dst1 = vld1q_s16(dst + j + 8);
+            int16x8_t v_src0 = vreinterpretq_s16_u16(vmovl_u8(vget_low_u8(v_src)));
+            int16x8_t v_src1 = vreinterpretq_s16_u16(vmovl_u8(vget_high_u8(v_src)));
     }
     
-    
-    {  // Do sanity checks and minor fixes on best_choice.
-  if (word->best_choice->length() > word_length) {
-    word->best_choice->make_bad();  // should never happen
-    tprintf('recog_word: Discarded long string \'%s\''
-            ' (%d characters vs %d blobs)\n',
-            word->best_choice->unichar_string().string(),
-            word->best_choice->length(), word_length);
-    tprintf('Word is at:');
-    word->word->bounding_box().print();
-  }
-  if (word->best_choice->length() < word_length) {
-    UNICHAR_ID space_id = unicharset.unichar_to_id(' ');
-    while (word->best_choice->length() < word_length) {
-      word->best_choice->append_unichar_id(space_id, 1, 0.0,
-                                           word->best_choice->certainty());
+        void operator() (const uint8x8_t & v_src0, const uint8x8_t & v_src1,
+                     uint8x8_t & v_dst) const
+    {
+        v_dst = vorr_u8(v_src0, v_src1);
     }
-  }
+    
+                for (; i <= lim; i+= 16)
+            {
+                internal::prefetch(src + i);
+                uint8x16_t vln = vld1q_u8(src + i);
+                uint8x16_t vnz = vminq_u8(vln, vc1);
+                vs = vaddq_u8(vs, vnz);
+            }
+    
+    
+    {    minLocCount >>= 1;
+    maxLocCount >>= 1;
+#else
+    (void)size;
+    (void)srcBase;
+    (void)srcStride;
+    (void)minVal;
+    (void)minLocPtr;
+    (void)minLocCount;
+    (void)minLocCapacity;
+    (void)maxVal;
+    (void)maxLocPtr;
+    (void)maxLocCount;
+    (void)maxLocCapacity;
+#endif
 }
     
-      // Changes the box at the given index to the new box.
-  // Recomputes the bounding box.
-  void ChangeBox(int index, const TBOX& box);
+    #include <arm_neon.h>
     
-    #endif /* !UCONFIG_NO_FORMATTING */
-
+    #include 'constraint_bullet.h'
+#include 'servers/physics_server.h'
+    
+    #include 'joint_bullet.h'
+    
+    	jclass activityThread = env->FindClass('android/app/ActivityThread');
+	jmethodID currentActivityThread = env->GetStaticMethodID(activityThread, 'currentActivityThread', '()Landroid/app/ActivityThread;');
+	jobject at = env->CallStaticObjectMethod(activityThread, currentActivityThread);
+	jmethodID getApplication = env->GetMethodID(activityThread, 'getApplication', '()Landroid/app/Application;');
+	jobject context = env->CallObjectMethod(at, getApplication);
+    
+    	ClassDB::bind_method(D_METHOD('set_transfer_mode', 'mode'), &NetworkedMultiplayerPeer::set_transfer_mode);
+	ClassDB::bind_method(D_METHOD('get_transfer_mode'), &NetworkedMultiplayerPeer::get_transfer_mode);
+	ClassDB::bind_method(D_METHOD('set_target_peer', 'id'), &NetworkedMultiplayerPeer::set_target_peer);
+    
+    	struct File {
+    }
     
     
-    {    BreakIterator *get() const { return ptr; }
-    BreakIterator *operator->() const { return ptr; }
-    BreakIterator &operator*() const { return *ptr; }
-private:
-    BreakIterator *ptr;
-    SharedBreakIterator(const SharedBreakIterator &);
-    SharedBreakIterator &operator=(const SharedBreakIterator &);
+    {protected:
+    /** Array of control points */
+    PointArray *_points;
+    float _deltaT;
+    float _tension;
+    Vec2 _previousPosition;
+    Vec2 _accumulatedDiff;
 };
     
-        /**
-     * Get maximum significant digits. INT32_MAX means no maximum.
+    StopGrid* StopGrid::clone() const
+{
+    return StopGrid::create();
+}
+    
+    /**
+ @brief This action simulates a page turn from the bottom right hand corner of the screen.
+ 
+ @details It's not much use by itself but is used by the PageTurnTransition.
+         Based on an original paper by L Hong et al.
+         http://www.parc.com/publication/1638/turning-pages-of-3d-electronic-books.html
+  
+ @since v0.8.2
+ */
+class CC_DLL PageTurn3D : public Grid3DAction
+{
+public:
+    /**
+     * @js NA 
      */
-    int32_t getMax() const {
-        return fMax;
+    virtual GridBase* getGrid() override;
     }
     
-        if (hasCursor) {
-        // Adjust the cursor for positions outside the key.  These
-        // refer to code points rather than code units.  If cursorPos
-        // is within the output string, then use newStart, which has
-        // already been set above.
-        if (cursorPos < 0) {
-            newStart = start;
-            int32_t n = cursorPos;
-            // Outside the output string, cursorPos counts code points
-            while (n < 0 && newStart > 0) {
-                newStart -= U16_LENGTH(text.char32At(newStart-1));
-                ++n;
-            }
-            newStart += n;
-        } else if (cursorPos > output.length()) {
-            newStart = start + outLen;
-            int32_t n = cursorPos - output.length();
-            // Outside the output string, cursorPos counts code points
-            while (n > 0 && newStart < text.length()) {
-                newStart += U16_LENGTH(text.char32At(newStart));
-                --n;
-            }
-            newStart += n;
-        } else {
-            // Cursor is within output string.  It has been set up above
-            // to be relative to start.
-            newStart += start;
-        }
+    void ShuffleTiles::placeTile(const Vec2& pos, Tile *t)
+{
+    Quad3 coords = getOriginalTile(pos);
     }
     
-    #include 'benchmark/benchmark.h'
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
     
-      // Gets the current text color.
-  CONSOLE_SCREEN_BUFFER_INFO buffer_info;
-  GetConsoleScreenBufferInfo(stdout_handle, &buffer_info);
-  const WORD old_color_attrs = buffer_info.wAttributes;
-    
-    #include <cstdarg>
-#include <iostream>
-#include <string>
-    
-    std::string FormatKV(std::string const& key, int64_t value) {
-  std::stringstream ss;
-  ss << ''' << key << '\': ' << value;
-  return ss.str();
-}
-    
-    
-    {  init_ = true;
-  return true;
-}
+    USING_NS_CC;
