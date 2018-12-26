@@ -1,119 +1,91 @@
 
         
-              it 'activates an existing user' do
-        users(:bob).deactivate!
-        visit admin_users_path
-        find(:css, 'a[href='/admin/users/#{users(:bob).id}/activate']').click
-        expect(page).to have_no_text('inactive')
-        users(:bob).reload
-        expect(users(:bob)).to be_active
+              it 'adds docset_copyright param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            docset_copyright: 'DocSet copyright'
+          )
+        end').runner.execute(:test)
+    
+              it 'raises an exception' do
+            expect do
+              Fastlane::FastFile.new.parse('lane :test do
+                  carthage(command: '#{command}', frameworks: ['myframework', 'myframework2'])
+                end').runner.execute(:test)
+            end.to raise_error('Frameworks option is available only for 'archive' command.')
+          end
+        end
+      end
+    
+          it 'works with name and password that contain spaces or `\'`' do
+        password = '\'test password\''
+        result = Fastlane::FastFile.new.parse('lane :test do
+          create_keychain ({
+            name: 'test.keychain',
+            password: '#{password}',
+          })
+        end').runner.execute(:test)
+    
+        os = 'windows'
+    shellescape_testcases.each do |testcase|
+      it testcase['it'] + ': ' + testcase['it_result'][os] do
+        str = testcase['str'].to_s
+        expect_correct_implementation_to_be_called(str, :shellescape, os)
+        escaped = str.shellescape
+        expect(escaped).to eq(testcase['expect'][os])
+      end
+    end
+  end
+    
+      protected
+    
+          if options[:skip_helpers] == true
+        @used_helpers = @used_routes
+      elsif skip = options[:skip_helpers]
+        @used_helpers = self.routes - Array(skip).map(&singularizer)
+      else
+        @used_helpers = self.routes
       end
     end
   end
 end
 
     
-        it 'returns a correct icon tag for other services' do
-      icon = omniauth_provider_icon(:'37signals')
-      expect(icon).to be_html_safe
-      elem = Nokogiri(icon).at('i.fa.fa-lock')
-      expect(elem).to be_a Nokogiri::XML::Element
-    end
-  end
+      def gistify_logs(f)
+    files = load_logs(f.logs)
+    build_time = f.logs.ctime
+    timestamp = build_time.strftime('%Y-%m-%d_%H-%M-%S')
     
-          it 'generates a richer DOT script' do
-        expect(agents_dot(@agents, rich: true)).to match(%r{
-          \A
-          digraph \x20 'Agent \x20 Event \x20 Flow' \{
-            (graph \[ [^\]]+ \];)?
-            node \[ [^\]]+ \];
-            edge \[ [^\]]+ \];
-            (?<foo>\w+) \[label=foo,tooltip='Dot \x20 Foo',URL='#{Regexp.quote(agent_path(@foo))}'\];
-            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
-            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
-            \k<bar1> \[label=bar1,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar1))}'\];
-            \k<bar2> \[label=bar2,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar2))}',style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
-            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
-            \k<bar3> \[label=bar3,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar3))}'\];
-          \}
-          \z
-        }x)
+    ENV['GEM_HOME'] = ENV['GEM_PATH'] = LogStash::Environment.logstash_gem_home
+Gem.use_paths(LogStash::Environment.logstash_gem_home)
+    
+    class LogStash::PluginManager::Pack < LogStash::PluginManager::PackCommand
+  option '--tgz', :flag, 'compress package as a tar.gz file', :default => !LogStash::Environment.windows?
+  option '--zip', :flag, 'compress package as a zip file', :default => LogStash::Environment.windows?
+  option '--[no-]clean', :flag, 'clean up the generated dump of plugins', :default => true
+  option '--overwrite', :flag, 'Overwrite a previously generated package file', :default => false
+    
+        context 'with a specific plugin' do
+      let(:plugin_name) { 'logstash-input-stdin' }
+      it 'list the plugin and display the plugin name' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list #{plugin_name}')
+        expect(result).to run_successfully_and_output(/^#{plugin_name}$/)
       end
-    end
-  end
     
-      def guid_order(agent_list, agent_name)
-    agent_list.map{|a|a.guid}.sort.find_index(agents(agent_name).guid)
-  end
-end
-
-    
-      let :new_extract do
-    {
-      'url' => { 'css' => '#comic img', 'value' => '@src' },
-      'title' => { 'css' => '#comic img', 'value' => '@alt' },
-      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
-    }
-  end
-    
+          # Chacks whether the `if` node has nested `if` nodes in any of its
+      # branches.
       #
-  # More advanced [] that does downcase comparison.
-  #
-  def [](key)
-    begin
-      rv = self.fetch(key)
-    rescue IndexError
-      rv = nil
-    end
-    if (rv == nil)
-      begin
-        rv = self.dcase_hash[key.downcase]
-      rescue IndexError
-        rv = nil
-      end
-    end
-    
-        # inject some junk params at the end of the param list, just to be sure :P
-    if self.junk_params
-      rand(10)+5.times {
-        params.push(Rex::Text.rand_text_alpha(rand(32) + 5) + '=' + Rex::Text.rand_text_alpha(rand(64) + 5))
-      }
-    end
-    params.join('&')
-  end
-    
-      ##
-  #
-  # Builtin response class wrappers.
-  #
-  ##
-    
+      # @note This performs a shallow search.
       #
-  # Move these into an IPMI stack or mixin at some point
-  #
-    
-              res = nil
-          case protocol
-          when 'tcp'
-            res = recv_response_tcp
-          when 'udp'
-            res = recv_response_udp
-          else
-            raise ::RuntimeError, 'Kerberos Client: unknown transport protocol'
+      # @return [Boolean] whether the `if` node contains nested conditionals
+      def nested_conditional?
+        node_parts[1..2].compact.each do |branch|
+          branch.each_node(:if) do |nested|
+            return true unless nested.elsif?
           end
+        end
     
-              # Encodes the renew_time field
-          #
-          # @return [String]
-          def encode_renew_time
-            [renew_till].pack('N')
-          end
-    
-                seq_asn1.to_der
-          end
-    
-                self
-          end
-    
-                decode_asn1(asn1)
-          end
+          DOUBLE_SPLAT = '**'.freeze
