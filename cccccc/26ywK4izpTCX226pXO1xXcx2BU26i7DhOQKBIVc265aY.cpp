@@ -1,376 +1,353 @@
 
         
-        #endif  // TESSERACT_ARCH_INTSIMDMATRIX_H_
+        SILLayout::SILLayout(CanGenericSignature Sig,
+                     ArrayRef<SILField> Fields)
+  : GenericSigAndFlags(Sig, getFlagsValue(anyMutable(Fields))),
+    NumFields(Fields.size())
+{
+#ifndef NDEBUG
+  verifyFields(Sig, Fields);
+#endif
+  auto FieldsMem = getTrailingObjects<SILField>();
+  for (unsigned i : indices(Fields)) {
+    new (FieldsMem + i) SILField(Fields[i]);
+  }
+}
+    
+    
+    {    buf = buf.substr(info.bytes);
+  }
+    
+    
+    {  DefaultCacheKey CKey(const_cast<void*>(Key), &DCache.CBs);
+  auto Entry = DCache.Entries.find(CKey);
+  if (Entry != DCache.Entries.end()) {
+    // FIXME: Not thread-safe! It should avoid deleting the value until
+    // 'releaseValue is called on it.
+    *Value_out = Entry->second;
+    return true;
+  }
+  return false;
+}
+    
+      Begin = new char[capacity];
+  EndOfAllocation = Begin + capacity;
+  End = Begin + oldSize + needed;
+  std::memcpy(Begin, oldBegin, oldSize);
+    
+    DIRECTIONAL_PREPOSITION(above)
+DIRECTIONAL_PREPOSITION(after)
+DIRECTIONAL_PREPOSITION(along)
+DIRECTIONAL_PREPOSITION(alongside)
+DIRECTIONAL_PREPOSITION(as)
+DIRECTIONAL_PREPOSITION(at)
+DIRECTIONAL_PREPOSITION(before)
+DIRECTIONAL_PREPOSITION(below)
+DIRECTIONAL_PREPOSITION(by)
+DIRECTIONAL_PREPOSITION(following)
+DIRECTIONAL_PREPOSITION(for)
+DIRECTIONAL_PREPOSITION(from)
+DIRECTIONAL_PREPOSITION(given)
+DIRECTIONAL_PREPOSITION(in)
+DIRECTIONAL_PREPOSITION(including)
+DIRECTIONAL_PREPOSITION(inside)
+DIRECTIONAL_PREPOSITION(into)
+DIRECTIONAL_PREPOSITION(matching)
+DIRECTIONAL_PREPOSITION(of)
+DIRECTIONAL_PREPOSITION(on)
+DIRECTIONAL_PREPOSITION(passing)
+DIRECTIONAL_PREPOSITION(preceding)
+DIRECTIONAL_PREPOSITION(since)
+DIRECTIONAL_PREPOSITION(to)
+DIRECTIONAL_PREPOSITION(until)
+DIRECTIONAL_PREPOSITION(using)
+DIRECTIONAL_PREPOSITION(via)
+DIRECTIONAL_PREPOSITION(when)
+PREPOSITION(with)
+DIRECTIONAL_PREPOSITION(within)
+    
+    
+    {  OutLines.append(Lines.begin(), Lines.end());
+}
 
     
-    #endif
+    
+    {  return '';
+}
 
+    
+    bool Punycode::decodePunycode(StringRef InputPunycode,
+                              std::vector<uint32_t> &OutCodePoints) {
+  OutCodePoints.clear();
+  OutCodePoints.reserve(InputPunycode.size());
+    }
+    
+    NodePointer Demangle::stripGenericArgsFromContextNode(NodePointer node,
+                                                      NodeFactory &factory) {
+  switch (node->getKind()) {
+  case Demangle::Node::Kind::BoundGenericClass:
+  case Demangle::Node::Kind::BoundGenericEnum:
+  case Demangle::Node::Kind::BoundGenericStructure:
+  case Demangle::Node::Kind::BoundGenericOtherNominalType:
+    // Bound generic types have a 'Type' node under them, whose child is
+    // the non-generic reference. If we don't see that structure, do nothing.
+    if (node->getNumChildren() < 2 ||
+        node->getChild(0)->getKind() != Demangle::Node::Kind::Type ||
+        node->getChild(0)->getNumChildren() < 1)
+      return node;
+    }
+    }
+    
+    namespace tesseract {
+double DotProductAVX(const double* u, const double* v, int n) {
+  fprintf(stderr, 'DotProductAVX can't be used on Android\n');
+  abort();
+}
+}  // namespace tesseract
     
       /**
-   * Returns information about the current paragraph, if available.
-   *
-   *   justification -
-   *     LEFT if ragged right, or fully justified and script is left-to-right.
-   *     RIGHT if ragged left, or fully justified and script is right-to-left.
-   *     unknown if it looks like source code or we have very few lines.
-   *   is_list_item -
-   *     true if we believe this is a member of an ordered or unordered list.
-   *   is_crown -
-   *     true if the first line of the paragraph is aligned with the other
-   *     lines of the paragraph even though subsequent paragraphs have first
-   *     line indents.  This typically indicates that this is the continuation
-   *     of a previous paragraph or that it is the very first paragraph in
-   *     the chapter.
-   *   first_line_indent -
-   *     For LEFT aligned paragraphs, the first text line of paragraphs of
-   *     this kind are indented this many pixels from the left edge of the
-   *     rest of the paragraph.
-   *     for RIGHT aligned paragraphs, the first text line of paragraphs of
-   *     this kind are indented this many pixels from the right edge of the
-   *     rest of the paragraph.
-   *     NOTE 1: This value may be negative.
-   *     NOTE 2: if *is_crown == true, the first line of this paragraph is
-   *             actually flush, and first_line_indent is set to the 'common'
-   *             first_line_indent for subsequent paragraphs in this block
-   *             of text.
+   * Returns the bounding rectangle of the current object at the given level.
+   * See comment on coordinate system above.
+   * Returns false if there is no such object at the current position.
+   * The returned bounding box is guaranteed to match the size and position
+   * of the image returned by GetBinaryImage, but may clip foreground pixels
+   * from a grey image. The padding argument to GetImage can be used to expand
+   * the image to include more foreground pixels. See GetImage below.
    */
-  void ParagraphInfo(tesseract::ParagraphJustification *justification,
-                     bool *is_list_item,
-                     bool *is_crown,
-                     int *first_line_indent) const;
+  bool BoundingBox(PageIteratorLevel level,
+                   int* left, int* top, int* right, int* bottom) const;
+  bool BoundingBox(PageIteratorLevel level, const int padding,
+                   int* left, int* top, int* right, int* bottom) const;
+  /**
+   * Returns the bounding rectangle of the object in a coordinate system of the
+   * working image rectangle having its origin at (rect_left_, rect_top_) with
+   * respect to the original image and is scaled by a factor scale_.
+   */
+  bool BoundingBoxInternal(PageIteratorLevel level,
+                           int* left, int* top, int* right, int* bottom) const;
     
-    #include 'blread.h'
-#include <cstdio>       // for fclose, fopen, FILE
-#include 'host.h'       // for TRUE
-#include 'ocrblock.h'   // for BLOCK_IT, BLOCK, BLOCK_LIST (ptr only)
-#include 'scanutils.h'  // for tfscanf
+      /// Returns true if the source image is binary.
+  bool IsBinary() const {
+    return pix_channels_ == 0;
+  }
     
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37, typename T38, typename T39, typename T40,
-    typename T41, typename T42, typename T43, typename T44, typename T45,
-    typename T46, typename T47>
-internal::ValueArray47<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-    T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43,
-    T44, T45, T46, T47> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7,
-    T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15,
-    T16 v16, T17 v17, T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23,
-    T24 v24, T25 v25, T26 v26, T27 v27, T28 v28, T29 v29, T30 v30, T31 v31,
-    T32 v32, T33 v33, T34 v34, T35 v35, T36 v36, T37 v37, T38 v38, T39 v39,
-    T40 v40, T41 v41, T42 v42, T43 v43, T44 v44, T45 v45, T46 v46, T47 v47) {
-  return internal::ValueArray47<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
-      T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39,
-      T40, T41, T42, T43, T44, T45, T46, T47>(v1, v2, v3, v4, v5, v6, v7, v8,
-      v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23,
-      v24, v25, v26, v27, v28, v29, v30, v31, v32, v33, v34, v35, v36, v37,
-      v38, v39, v40, v41, v42, v43, v44, v45, v46, v47);
-}
+    /**********************************************************************
+ * read_unlv_file
+ *
+ * Read a whole unlv zone file to make a list of blocks.
+ **********************************************************************/
     
-    class FooTest : public ::testing::TestWithParam<const char*> {
-  // You can implement all the usual class fixture members here.
-};
+      // Inserts a new box before the given index.
+  // Recomputes the bounding box.
+  void InsertBox(int index, const TBOX& box);
     
+    #include 'gtest/internal/gtest-death-test-internal.h'
     
-    {}  // namespace testing_internal
-    
-      // Often a user mis-spells SetUp() as Setup() and spends a long time
-  // wondering why it is never called by Google Test.  The declaration of
-  // the following method is solely for catching such an error at
-  // compile time:
-  //
-  //   - The return type is deliberately chosen to be not void, so it
-  //   will be a conflict if a user declares void Setup() in his test
-  //   fixture.
-  //
-  //   - This method is private, so it will be another compiler error
-  //   if a user calls it from his test fixture.
-  //
-  // DO NOT OVERRIDE THIS FUNCTION.
-  //
-  // If you see an error about overriding the following function or
-  // about it being private, you have mis-spelled SetUp() as Setup().
-  struct Setup_should_be_spelled_SetUp {};
-  virtual Setup_should_be_spelled_SetUp* Setup() { return NULL; }
-    
-    // Helper function for implementing {EXPECT|ASSERT}_PRED3.  Don't use
-// this in your code.
-template <typename Pred,
-          typename T1,
-          typename T2,
-          typename T3>
-AssertionResult AssertPred3Helper(const char* pred_text,
-                                  const char* e1,
-                                  const char* e2,
-                                  const char* e3,
-                                  Pred pred,
-                                  const T1& v1,
-                                  const T2& v2,
-                                  const T3& v3) {
-  if (pred(v1, v2, v3)) return AssertionSuccess();
+    // This helper class can be used to mock out Google Test failure reporting
+// so that we can test Google Test or code that builds on Google Test.
+//
+// An object of this class appends a TestPartResult object to the
+// TestPartResultArray object given in the constructor whenever a Google Test
+// failure is reported. It can either intercept only failures that are
+// generated in the same thread that created this object or it can intercept
+// all generated failures. The scope of this mock object can be controlled with
+// the second argument to the two arguments constructor.
+class GTEST_API_ ScopedFakeTestPartResultReporter
+    : public TestPartResultReporterInterface {
+ public:
+  // The two possible mocking modes of this object.
+  enum InterceptMode {
+    INTERCEPT_ONLY_CURRENT_THREAD,  // Intercepts only thread local failures.
+    INTERCEPT_ALL_THREADS           // Intercepts all failures.
+  };
     }
     
-    // This macro is used for implementing macros such as
-// EXPECT_DEATH_IF_SUPPORTED and ASSERT_DEATH_IF_SUPPORTED on systems where
-// death tests are not supported. Those macros must compile on such systems
-// iff EXPECT_DEATH and ASSERT_DEATH compile with the same parameters on
-// systems that support death tests. This allows one to write such a macro
-// on a system that does not support death tests and be sure that it will
-// compile on a death-test supporting system.
+    // Internal macro for implementing {EXPECT|ASSERT}_PRED5.  Don't use
+// this in your code.
+#define GTEST_PRED5_(pred, v1, v2, v3, v4, v5, on_failure)\
+  GTEST_ASSERT_(::testing::AssertPred5Helper(#pred, \
+                                             #v1, \
+                                             #v2, \
+                                             #v3, \
+                                             #v4, \
+                                             #v5, \
+                                             pred, \
+                                             v1, \
+                                             v2, \
+                                             v3, \
+                                             v4, \
+                                             v5), on_failure)
+    
+      FilePath& operator=(const FilePath& rhs) {
+    Set(rhs);
+    return *this;
+  }
+    
+      // Returns true iff this is NAN (not a number).
+  bool is_nan() const {
+    // It's a NAN if the exponent bits are all ones and the fraction
+    // bits are not entirely zeros.
+    return (exponent_bits() == kExponentBitMask) && (fraction_bits() != 0);
+  }
+    
+    
+    {    linked_ptr_internal const* p = ptr;
+    while (p->next_ != ptr) p = p->next_;
+    p->next_ = this;
+    next_ = ptr;
+  }
+    
+    // Type utilities needed for implementing typed and type-parameterized
+// tests.  This file is generated by a SCRIPT.  DO NOT EDIT BY HAND!
 //
-// Parameters:
-//   statement -  A statement that a macro such as EXPECT_DEATH would test
-//                for program termination. This macro has to make sure this
-//                statement is compiled but not executed, to ensure that
-//                EXPECT_DEATH_IF_SUPPORTED compiles with a certain
-//                parameter iff EXPECT_DEATH compiles with it.
-//   regex     -  A regex that a macro such as EXPECT_DEATH would use to test
-//                the output of statement.  This parameter has to be
-//                compiled but not evaluated by this macro, to ensure that
-//                this macro only accepts expressions that a macro such as
-//                EXPECT_DEATH would accept.
-//   terminator - Must be an empty statement for EXPECT_DEATH_IF_SUPPORTED
-//                and a return statement for ASSERT_DEATH_IF_SUPPORTED.
-//                This ensures that ASSERT_DEATH_IF_SUPPORTED will not
-//                compile inside functions where ASSERT_DEATH doesn't
-//                compile.
+// Currently we support at most 50 types in a list, and at most 50
+// type-parameterized tests in one type-parameterized test case.
+// Please contact googletestframework@googlegroups.com if you need
+// more.
+    
+    // The template 'selector' struct TemplateSel<Tmpl> is used to
+// represent Tmpl, which must be a class template with one type
+// parameter, as a type.  TemplateSel<Tmpl>::Bind<T>::type is defined
+// as the type Tmpl<T>.  This allows us to actually instantiate the
+// template 'selected' by TemplateSel<Tmpl>.
 //
-//  The branch that has an always false condition is used to ensure that
-//  statement and regex are compiled (and thus syntactically correct) but
-//  never executed. The unreachable code macro protects the terminator
-//  statement from generating an 'unreachable code' warning in case
-//  statement unconditionally returns or throws. The Message constructor at
-//  the end allows the syntax of streaming additional messages into the
-//  macro, for compilational compatibility with EXPECT_DEATH/ASSERT_DEATH.
-# define GTEST_UNSUPPORTED_DEATH_TEST_(statement, regex, terminator) \
-    GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
-    if (::testing::internal::AlwaysTrue()) { \
-      GTEST_LOG_(WARNING) \
-          << 'Death tests are not supported on this platform.\n' \
-          << 'Statement '' #statement '' cannot be verified.'; \
-    } else if (::testing::internal::AlwaysFalse()) { \
-      ::testing::internal::RE::PartialMatch('.*', (regex)); \
-      GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
-      terminator; \
-    } else \
-      ::testing::Message()
-    
-    
-    {
-    {}  // namespace internal
-}  // namespace testing
-    
-    
-    {  const T1 v1_;
-  const T2 v2_;
-  const T3 v3_;
-  const T4 v4_;
-  const T5 v5_;
-  const T6 v6_;
-  const T7 v7_;
-  const T8 v8_;
-  const T9 v9_;
-  const T10 v10_;
-  const T11 v11_;
-  const T12 v12_;
-  const T13 v13_;
-  const T14 v14_;
-  const T15 v15_;
-  const T16 v16_;
-  const T17 v17_;
-  const T18 v18_;
-  const T19 v19_;
-  const T20 v20_;
-  const T21 v21_;
-  const T22 v22_;
-  const T23 v23_;
-  const T24 v24_;
-  const T25 v25_;
-  const T26 v26_;
-  const T27 v27_;
-  const T28 v28_;
-  const T29 v29_;
-  const T30 v30_;
-  const T31 v31_;
-  const T32 v32_;
-  const T33 v33_;
-  const T34 v34_;
-  const T35 v35_;
-  const T36 v36_;
-  const T37 v37_;
-  const T38 v38_;
-  const T39 v39_;
-  const T40 v40_;
-  const T41 v41_;
-  const T42 v42_;
-  const T43 v43_;
-  const T44 v44_;
-  const T45 v45_;
-  const T46 v46_;
-  const T47 v47_;
-  const T48 v48_;
-  const T49 v49_;
+// This trick is necessary for simulating typedef for class templates,
+// which C++ doesn't support directly.
+template <GTEST_TEMPLATE_ Tmpl>
+struct TemplateSel {
+  template <typename T>
+  struct Bind {
+    typedef Tmpl<T> type;
+  };
 };
     
-    // Tests positive input.
-TEST(IsPrimeTest, Positive) {
-  EXPECT_FALSE(IsPrime(4));
-  EXPECT_TRUE(IsPrime(5));
-  EXPECT_FALSE(IsPrime(6));
-  EXPECT_TRUE(IsPrime(23));
+      virtual int GetNextPrime(int p) const {
+    for (int n = p + 1; n > 0; n++) {
+      if (IsPrime(n)) return n;
+    }
+    }
+    
+    #ifndef BULLET_TYPES_CONVERTER_H
+#define BULLET_TYPES_CONVERTER_H
+    
+    #include 'collision_object_bullet.h'
+#include 'space_bullet.h'
+    
+    bool GodotCollisionDispatcher::needsCollision(const btCollisionObject *body0, const btCollisionObject *body1) {
+	if (body0->getUserIndex() == CASTED_TYPE_AREA || body1->getUserIndex() == CASTED_TYPE_AREA) {
+		// Avoide area narrow phase
+		return false;
+	}
+	return btCollisionDispatcher::needsCollision(body0, body1);
 }
     
-    // Tests the c'tor that accepts a C string.
-TEST(MyString, ConstructorFromCString) {
-  const MyString s(kHelloString);
-  EXPECT_EQ(0, strcmp(s.c_string(), kHelloString));
-  EXPECT_EQ(sizeof(kHelloString)/sizeof(kHelloString[0]) - 1,
-            s.Length());
-}
+    public:
+	HingeJointBullet(RigidBodyBullet *rbA, RigidBodyBullet *rbB, const Transform &frameA, const Transform &frameB);
+	HingeJointBullet(RigidBodyBullet *rbA, RigidBodyBullet *rbB, const Vector3 &pivotInA, const Vector3 &pivotInB, const Vector3 &axisInA, const Vector3 &axisInB);
     
-    // A sample program demonstrating using Google C++ testing framework.
-//
-// Author: wan@google.com (Zhanyong Wan)
+    	ClassDB::bind_method(D_METHOD('set_refuse_new_connections', 'enable'), &NetworkedMultiplayerPeer::set_refuse_new_connections);
+	ClassDB::bind_method(D_METHOD('is_refusing_new_connections'), &NetworkedMultiplayerPeer::is_refusing_new_connections);
     
-    #pragma once
-    
-    
-    {  // Sleep just until `num_bytes` is allowed.
-  uint64_t sleep_amount =
-      static_cast<uint64_t>(num_bytes /
-                            static_cast<long double>(delayed_write_rate_) *
-                            kMicrosPerSecond) +
-      sleep_debt;
-  last_refill_time_ = time_now + sleep_amount;
-  return sleep_amount;
-}
-    
-    int main(int argc, char** argv) {
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
+    Thread::~Thread() {
 }
 
     
-    
-    {
-    {  // Reading queue/logical_block_size does not require special permissions.
-  const int kBufferSize = 100;
-  char path[kBufferSize];
-  char real_path[PATH_MAX + 1];
-  snprintf(path, kBufferSize, '/sys/dev/block/%u:%u', major(buf.st_dev),
-           minor(buf.st_dev));
-  if (realpath(path, real_path) == nullptr) {
-    return kDefaultPageSize;
-  }
-  std::string device_dir(real_path);
-  if (!device_dir.empty() && device_dir.back() == '/') {
-    device_dir.pop_back();
-  }
-  // NOTE: sda3 does not have a `queue/` subdir, only the parent sda has it.
-  // $ ls -al '/sys/dev/block/8:3'
-  // lrwxrwxrwx. 1 root root 0 Jun 26 01:38 /sys/dev/block/8:3 ->
-  // ../../block/sda/sda3
-  size_t parent_end = device_dir.rfind('/', device_dir.length() - 1);
-  if (parent_end == std::string::npos) {
-    return kDefaultPageSize;
-  }
-  size_t parent_begin = device_dir.rfind('/', parent_end - 1);
-  if (parent_begin == std::string::npos) {
-    return kDefaultPageSize;
-  }
-  if (device_dir.substr(parent_begin + 1, parent_end - parent_begin - 1) !=
-      'block') {
-    device_dir = device_dir.substr(0, parent_end);
-  }
-  std::string fname = device_dir + '/queue/logical_block_size';
-  FILE* fp;
-  size_t size = 0;
-  fp = fopen(fname.c_str(), 'r');
-  if (fp != nullptr) {
-    char* line = nullptr;
-    size_t len = 0;
-    if (getline(&line, &len, fp) != -1) {
-      sscanf(line, '%zu', &size);
-    }
-    free(line);
-    fclose(fp);
-  }
-  if (size != 0 && (size & (size - 1)) == 0) {
-    return size;
-  }
-#endif
-  return kDefaultPageSize;
+    void Assembler::extsw(const Reg64& ra, const Reg64& rs, bool rc) {
+  EmitXForm(31, rn(rs), rn(ra), rn(0), 986, rc);
 }
-} //  namespace
     
-      // open DB with two column families
-  std::vector<ColumnFamilyDescriptor> column_families;
-  // have to open default column family
-  column_families.push_back(ColumnFamilyDescriptor(
-      kDefaultColumnFamilyName, ColumnFamilyOptions()));
-  // open the new one, too
-  column_families.push_back(ColumnFamilyDescriptor(
-      'new_cf', ColumnFamilyOptions()));
-  std::vector<ColumnFamilyHandle*> handles;
-  s = DB::Open(DBOptions(), kDBPath, column_families, &handles, &db);
-  assert(s.ok());
+    #include 'hphp/runtime/base/file.h'
+#include 'hphp/runtime/base/stream-wrapper.h'
+#include 'hphp/runtime/base/stream-wrapper-registry.h'
     
-    // Example structure that describes a compaction task.
-struct CompactionTask {
-  CompactionTask(
-      DB* _db, Compactor* _compactor,
-      const std::string& _column_family_name,
-      const std::vector<std::string>& _input_file_names,
-      const int _output_level,
-      const CompactionOptions& _compact_options,
-      bool _retry_on_fail)
-          : db(_db),
-            compactor(_compactor),
-            column_family_name(_column_family_name),
-            input_file_names(_input_file_names),
-            output_level(_output_level),
-            compact_options(_compact_options),
-            retry_on_fail(_retry_on_fail) {}
-  DB* db;
-  Compactor* compactor;
-  const std::string& column_family_name;
-  std::vector<std::string> input_file_names;
-  int output_level;
-  CompactionOptions compact_options;
-  bool retry_on_fail;
+    #include 'hphp/runtime/base/file.h'
+#include 'hphp/runtime/base/mem-file.h'
+#include 'hphp/runtime/base/stream-wrapper.h'
+#include <folly/String.h>
+#include <folly/portability/SysStat.h>
+#include <folly/portability/Unistd.h>
+    
+    
+    {///////////////////////////////////////////////////////////////////////////////
+}
+
+    
+    #include 'hphp/util/perf-event.h'
+    
+    
+    {}
+
+    
+    void logAHMSubMapWarning(folly::StringPiece mapName) {
+  StackTrace st;
+  logPerfWarning(
+    'AtomicHashMap overflow',
+    [&](StructuredLogEntry& cols) {
+      cols.setStr('map_name', mapName);
+      cols.setStackTrace('stack', st);
+    }
+  );
+}
+    
+    public:
+  static const Data& getData() { return data_; }
+    
+    DHTResponseMessage::DHTResponseMessage(
+    const std::shared_ptr<DHTNode>& localNode,
+    const std::shared_ptr<DHTNode>& remoteNode,
+    const std::string& transactionID)
+    : DHTAbstractMessage(localNode, remoteNode, transactionID)
+{
+}
+    
+      virtual const std::string& getType() const CXX11_OVERRIDE;
+    
+      // number of nodes
+  uint32_t numNodes = htonl(nodes_.size());
+  WRITE_CHECK(fp, &numNodes, sizeof(uint32_t));
+  // 4bytes reserved
+  WRITE_CHECK(fp, zero, 4);
+    
+        receiver->setMessageFactory(factory.get());
+    receiver->setRoutingTable(routingTable.get());
+    
+    
+    {  // Returns two vector of Commands.  First one contains regular
+  // commands.  Secod one contains so called routine commands, which
+  // executed once per event poll returns.
+  std::pair<std::vector<std::unique_ptr<Command>>,
+            std::vector<std::unique_ptr<Command>>>
+  setup(DownloadEngine* e, int family);
 };
     
-      // Commit transaction
-  s = txn->Commit();
-  assert(s.ok());
-  delete txn;
+    void DHTTaskFactoryImpl::setTaskQueue(DHTTaskQueue* taskQueue)
+{
+  taskQueue_ = taskQueue;
+}
     
-      // the size of the compaction input in bytes.
-  uint64_t total_input_bytes;
-  // the size of the compaction output in bytes.
-  uint64_t total_output_bytes;
     
-    // Move all L0 files to target_level skipping compaction.
-// This operation succeeds only if the files in L0 have disjoint ranges; this
-// is guaranteed to happen, for instance, if keys are inserted in sorted
-// order. Furthermore, all levels between 1 and target_level must be empty.
-// If any of the above condition is violated, InvalidArgument will be
-// returned.
-Status PromoteL0(DB* db, ColumnFamilyHandle* column_family,
-                 int target_level = 1);
+    {} // namespace aria2
     
-    class FlushBlockBySizePolicyFactory : public FlushBlockPolicyFactory {
- public:
-  FlushBlockBySizePolicyFactory() {}
-    }
+    #include 'util.h'
+#include 'bittorrent_helper.h'
+#include 'DlAbortEx.h'
+#include 'DHTConstants.h'
+#include 'MessageDigest.h'
+#include 'message_digest_helper.h'
+#include 'fmt.h'
     
-    #include 'rocksdb/env.h'
-#include 'rocksdb/slice.h'
-#include 'rocksdb/statistics.h'
-#include 'rocksdb/status.h'
+      // TODO handle exception thrown by this function.
+  std::string generateToken(const unsigned char* infoHash,
+                            const std::string& ipaddr, uint16_t port) const;
+    
+    #include 'DHTMessage.h'
+    
+    DNSCache::CacheEntry& DNSCache::CacheEntry::operator=(const CacheEntry& c)
+{
+  if (this != &c) {
+    hostname_ = c.hostname_;
+    port_ = c.port_;
+    addrEntries_ = c.addrEntries_;
+  }
+  return *this;
+}
