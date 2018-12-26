@@ -1,362 +1,382 @@
 
         
-        #undef cv_hal_cvtBGRtoBGR
-#define cv_hal_cvtBGRtoBGR TEGRA_CVTBGRTOBGR
-#undef cv_hal_cvtBGRtoBGR5x5
-#define cv_hal_cvtBGRtoBGR5x5 TEGRA_CVTBGRTOBGR565
-#undef cv_hal_cvtBGRtoGray
-#define cv_hal_cvtBGRtoGray TEGRA_CVTBGRTOGRAY
-#undef cv_hal_cvtGraytoBGR
-#define cv_hal_cvtGraytoBGR TEGRA_CVTGRAYTOBGR
-#undef cv_hal_cvtBGRtoYUV
-#define cv_hal_cvtBGRtoYUV TEGRA_CVTBGRTOYUV
-#undef cv_hal_cvtBGRtoHSV
-#define cv_hal_cvtBGRtoHSV TEGRA_CVTBGRTOHSV
-#undef cv_hal_cvtTwoPlaneYUVtoBGR
-#define cv_hal_cvtTwoPlaneYUVtoBGR TEGRA_CVT2PYUVTOBGR
-    
-    
-    {    struct KeypointStore {
-        virtual void push(f32 kpX, f32 kpY, f32 kpSize, f32 kpAngle=-1, f32 kpResponse=0, s32 kpOctave=0, s32 kpClass_id=-1) = 0;
-        virtual ~KeypointStore() {};
-    };
+        Net::Net(v8::Isolate* isolate) {
+  Init(isolate);
 }
     
-            for (; j < roiw16; j += 16)
-        {
-            internal::prefetch(src + j);
-            internal::prefetch(dst + j);
-            uint8x16_t v_src = vld1q_u8(src + j);
-            int16x8_t v_dst0 = vld1q_s16(dst + j);
-            int16x8_t v_dst1 = vld1q_s16(dst + j + 8);
-            int16x8_t v_src0 = vreinterpretq_s16_u16(vmovl_u8(vget_low_u8(v_src)));
-            int16x8_t v_src1 = vreinterpretq_s16_u16(vmovl_u8(vget_high_u8(v_src)));
-            v_dst0 = vqaddq_s16(v_dst0, v_src0);
-            v_dst1 = vqaddq_s16(v_dst1, v_src1);
-            vst1q_s16(dst + j, v_dst0);
-            vst1q_s16(dst + j + 8, v_dst1);
-        }
-        for (; j < roiw8; j += 8)
-        {
-            uint8x8_t v_src = vld1_u8(src + j);
-            int16x8_t v_src16 = vreinterpretq_s16_u16(vmovl_u8(v_src));
-            int16x8_t v_dst = vld1q_s16(dst + j);
-            v_dst = vqaddq_s16(v_dst, v_src16);
-            vst1q_s16(dst + j, v_dst);
-        }
-    
-    void assertSupportedConfiguration(bool parametersSupported)
-{
-    if (!isSupportedConfiguration()) {
-        std::cerr << 'internal error: attempted to use an unavailable function' << std::endl;
-        std::abort();
-    }
-    }
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVTS_FUNC1(f32, 8,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.32 {d4-d5}, [%[src1]]                              \n\t'
-            'vld1.32 {d6-d7}, [%[src2]]                              \n\t'
-            'vmul.f32 q4, q2, q0                                     \n\t'
-            'vmul.f32 q5, q3, q0                                     \n\t'
-            'vadd.f32 q6, q4, q1                                     \n\t'
-            'vadd.f32 q7, q5, q1                                     \n\t'
-            'vst1.32 {d12-d13}, [%[dst1]]                            \n\t'
-            'vst1.32 {d14-d15}, [%[dst2]]                            \n\t'
-            : /*no output*/
-            : [src1] 'r' (_src + i + 0),
-              [src2] 'r' (_src + i + 4),
-              [dst1] 'r' (_dst + i + 0),
-              [dst2] 'r' (_dst + i + 4),
-              'w' (vscale), 'w' (vshift)
-            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19'
-        );
-    }
-})
-#else
-CVTS_FUNC1(f32, 8,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        float32x4_t vline1_f32 = vld1q_f32(_src + i + 0);
-        float32x4_t vline2_f32 = vld1q_f32(_src + i + 4);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        vst1q_f32(_dst + i + 0, vline1_f32);
-        vst1q_f32(_dst + i + 4, vline2_f32);
-    }
-})
-#endif
-    
-        q0 = vmaxq_s16(q0, vminq_s16(ak8, d8_15));
-    q1 = vminq_s16(q1, vmaxq_s16(bk8, d8_15));
-    
-            const u16* ln0 = idx_rm2 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rm2) : tmp;
-        const u16* ln1 = idx_rm1 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rm1) : tmp;
-        const u16* ln2 = internal::getRowPtr(srcBase, srcStride, i);
-        const u16* ln3 = idx_rp1 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rp1) : tmp;
-        const u16* ln4 = idx_rp2 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rp2) : tmp;
-    
-    template <typename T, int elsize> struct vtail
-{
-    static inline void inRange(const T *, const T *, const T *,
-                               u8 *, size_t &, size_t)
-    {
-        //do nothing since there couldn't be enough data
-    }
-};
-template <typename T> struct vtail<T, 2>
-{
-    static inline void inRange(const T * src, const T * rng1, const T * rng2,
-                               u8 * dst, size_t &x, size_t width)
-    {
-        typedef typename internal::VecTraits<T>::vec128 vec128;
-        typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
-        //There no more than 15 elements in the tail, so we could handle 8 element vector only once
-        if( x + 8 < width)
-        {
-             vec128  vs = internal::vld1q( src + x);
-             vec128 vr1 = internal::vld1q(rng1 + x);
-             vec128 vr2 = internal::vld1q(rng2 + x);
-            uvec128  vd = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
-            internal::vst1(dst + x, internal::vmovn(vd));
-            x+=8;
-        }
-    }
-};
-template <typename T> struct vtail<T, 1>
-{
-    static inline void inRange(const T * src, const T * rng1, const T * rng2,
-                               u8 * dst, size_t &x, size_t width)
-    {
-        typedef typename internal::VecTraits<T>::vec128 vec128;
-        typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
-        typedef typename internal::VecTraits<T>::vec64 vec64;
-        typedef typename internal::VecTraits<T>::unsign::vec64 uvec64;
-        //There no more than 31 elements in the tail, so we could handle once 16+8 or 16 or 8 elements
-        if( x + 16 < width)
-        {
-             vec128  vs = internal::vld1q( src + x);
-             vec128 vr1 = internal::vld1q(rng1 + x);
-             vec128 vr2 = internal::vld1q(rng2 + x);
-            uvec128  vd = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
-            internal::vst1q(dst + x, vd);
-            x+=16;
-        }
-        if( x + 8 < width)
-        {
-             vec64  vs = internal::vld1( src + x);
-             vec64 vr1 = internal::vld1(rng1 + x);
-             vec64 vr2 = internal::vld1(rng2 + x);
-            uvec64  vd = internal::vand(internal::vcge(vs, vr1), internal::vcge(vr2, vs));
-            internal::vst1(dst + x, vd);
-            x+=8;
-        }
-    }
-};
-    
-    inline float32x2_t vrecp_f32(float32x2_t val)
-{
-    float32x2_t reciprocal = vrecpe_f32(val);
-    reciprocal = vmul_f32(vrecps_f32(val, reciprocal), reciprocal);
-    reciprocal = vmul_f32(vrecps_f32(val, reciprocal), reciprocal);
-    return reciprocal;
-}
-    
-    bool isLaplacian3x3Supported(const Size2D &size, BORDER_MODE border)
-{
-    return isSupportedConfiguration() && size.width >= 8 &&
-        (border == BORDER_MODE_CONSTANT ||
-            border == BORDER_MODE_REPLICATE);
-}
-    
-    namespace {
-    }
-    
-    ::opencensus::stats::MeasureInt64 RpcClientSentMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientSentBytesPerRpc();
-::opencensus::stats::MeasureInt64 RpcClientReceivedMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientReceivedBytesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientRoundtripLatency();
-::opencensus::stats::MeasureDouble RpcClientServerLatency();
-::opencensus::stats::MeasureInt64 RpcClientCompletedRpcs();
-    
-    #include 'src/cpp/ext/filters/census/rpc_encoding.h'
-    
-    class ProtoServerReflection final
-    : public reflection::v1alpha::ServerReflection::Service {
+    class Net : public mate::EventEmitter<Net> {
  public:
-  ProtoServerReflection();
+  static v8::Local<v8::Value> Create(v8::Isolate* isolate);
     }
     
-    namespace osquery {
+    namespace mate {
+template <>
+struct Converter<ui::IdleState> {
+  static v8::Local<v8::Value> ToV8(v8::Isolate* isolate,
+                                   const ui::IdleState& in) {
+    switch (in) {
+      case ui::IDLE_STATE_ACTIVE:
+        return mate::StringToV8(isolate, 'active');
+      case ui::IDLE_STATE_IDLE:
+        return mate::StringToV8(isolate, 'idle');
+      case ui::IDLE_STATE_LOCKED:
+        return mate::StringToV8(isolate, 'locked');
+      case ui::IDLE_STATE_UNKNOWN:
+      default:
+        return mate::StringToV8(isolate, 'unknown');
     }
-    
-    #include <osquery/config.h>
-    
-    namespace osquery {
-    }
-    
-    #include <osquery/config.h>
-#include <osquery/database.h>
-#include <osquery/registry.h>
-    
-      if (!::GetExitCodeProcess(process.nativeHandle(), &code)) {
-    return false;
-  }
-    
-     private:
-  /// Set and access the worker process.
-  mutable Mutex worker_mutex_;
-    
-      std::set<std::string> queries_to_run;
-  // Check for and run discovery queries first
-  if (doc.doc().HasMember('discovery')) {
-    const auto& queries = doc.doc()['discovery'];
-    assert(queries.IsObject());
-    }
-    
-    using namespace osquery;
-    
-    template <>
-struct hash<folly::Uri> {
-  std::size_t operator()(const folly::Uri& k) const {
-    return std::hash<folly::uri_detail::UriTuple>{}(
-        folly::uri_detail::as_tuple(k));
   }
 };
+}  // namespace mate
+    
+      // Finds out the TrackableObject from the class it wraps.
+  static T* FromWrappedClass(v8::Isolate* isolate,
+                             base::SupportsUserData* wrapped) {
+    int32_t id = GetIDFromWrappedClass(wrapped);
+    if (!id)
+      return nullptr;
+    return FromWeakMapID(isolate, id);
+  }
+    
+    // See comment in |PreEarlyInitialization()|, where sigaction is called.
+void SIGCHLDHandler(int signal) {}
+    
+    void AtomQuotaPermissionContext::RequestQuotaPermission(
+    const content::StorageQuotaParams& params,
+    int render_process_id,
+    const PermissionCallback& callback) {
+  callback.Run(response::QUOTA_PERMISSION_RESPONSE_ALLOW);
+}
+    
+      AtomQuotaPermissionContext();
+    
+    void AutoUpdater::CheckForUpdates() {}
+    
+      if (LangOpts.Target.isWatchOS()) {
+    return (LangOpts.EnableAppExtensionRestrictions
+            ? PlatformKind::watchOSApplicationExtension
+            : PlatformKind::watchOS);
+  }
     
     
-    {      if (equiv == cpu) {
-        // we only want to count the equiv classes once, so we do it when
-        // we first encounter them
-        while (numCachesByLevel.size() <= level) {
-          numCachesByLevel.push_back(0);
-        }
-        numCachesByLevel[level]++;
+    {
+    {        // Register the memory buffer.
+        SML->registerMemoryBuffer(info.name, std::move(bitstream));
+        foundModules.push_back(info.name);
       }
+    } else {
+      llvm::dbgs() << 'Unable to load module';
+      if (!info.name.empty())
+        llvm::dbgs() << ' '' << info.name << '\'';
+      llvm::dbgs() << '.\n';
     }
     
-    namespace {
-using ::butteraugli::ImageF;
-using ::butteraugli::CreatePlanes;
-using ::butteraugli::PlanesFromPacked;
-using ::butteraugli::PackedFromPlanes;
+    bool CacheImpl::getAndRetain(const void *Key, void **Value_out) {
+  int Ret = cache_get_and_retain(static_cast<cache_t*>(Impl),
+                                 const_cast<void*>(Key), Value_out);
+  return Ret == 0;
+}
+    
+    #include 'swift/Basic/PrimitiveParsing.h'
+#include 'llvm/ADT/SmallVector.h'
+    
+    
+    {  return *--WordIterator(string, string.size());
+}
+    
+    
+    {    auto newNode = factory.createNode(node->getKind());
+    newNode->addChild(newContext, factory);
+    for (unsigned i = 1, n = node->getNumChildren(); i != n; ++i)
+      newNode->addChild(node->getChild(i), factory);
+    return newNode;
+  }
+      
+  case Demangle::Node::Kind::Extension: {
+    // Strip generic arguments from the extended type.
+    if (node->getNumChildren() < 2)
+      return node;
+    
+    auto newExtended = stripGenericArgsFromContextNode(node->getChild(1),
+                                                       factory);
+    if (newExtended == node->getChild(1)) return node;
+    
+    auto newNode = factory.createNode(Node::Kind::Extension);
+    newNode->addChild(node->getChild(0), factory);
+    newNode->addChild(newExtended, factory);
+    if (node->getNumChildren() == 3)
+      newNode->addChild(node->getChild(2), factory);
+    return newNode;
+  }
+    
+            secp256k1_ecmult_const(&res, &pt, &s);
+        secp256k1_ge_set_gej(&pt, &res);
+        /* Compute a hash of the point in compressed form
+         * Note we cannot use secp256k1_eckey_pubkey_serialize here since it does not
+         * expect its output to be secret and has a timing sidechannel. */
+        secp256k1_fe_normalize(&pt.x);
+        secp256k1_fe_normalize(&pt.y);
+        secp256k1_fe_get_b32(x, &pt.x);
+        y[0] = 0x02 | secp256k1_fe_is_odd(&pt.y);
+    
+        s_one[31] = 1;
+    /* Check against pubkey creation when the basepoint is the generator */
+    for (i = 0; i < 100; ++i) {
+        secp256k1_sha256_t sha;
+        unsigned char s_b32[32];
+        unsigned char output_ecdh[32];
+        unsigned char output_ser[32];
+        unsigned char point_ser[33];
+        size_t point_ser_len = sizeof(point_ser);
+        secp256k1_scalar s;
     }
     
-    
-    {}  // namespace guetzli
-    
-    #endif  // GUETZLI_DCT_DOUBLE_H_
+    // Generate param traits log methods.
+#include 'ipc/param_traits_log_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
 
     
-    #include 'guetzli/stats.h'
+    #ifndef CONTENT_NW_SRC_API_APP_APP_H_
+#define CONTENT_NW_SRC_API_APP_APP_H_
     
-    inline int Log2FloorNonZero(uint32_t n) {
-#ifdef __GNUC__
-  return 31 ^ __builtin_clz(n);
-#else
-  unsigned int result = 0;
-  while (n >>= 1) result++;
-  return result;
-#endif
-}
+    #include 'base/strings/string_piece.h'
+#include 'v8/include/v8.h'
     
-      tmp0 = in[3 * stride];
-  tmp1 = kIDCTMatrix[ 3] * tmp0;
-  tmp2 = kIDCTMatrix[11] * tmp0;
-  tmp3 = kIDCTMatrix[19] * tmp0;
-  tmp4 = kIDCTMatrix[27] * tmp0;
-  out[0] += tmp1;
-  out[1] += tmp2;
-  out[2] += tmp3;
-  out[3] += tmp4;
-  out[4] -= tmp4;
-  out[5] -= tmp3;
-  out[6] -= tmp2;
-  out[7] -= tmp1;
+       void Call(const std::string& method,
+                    const base::ListValue& arguments) override;
+   void CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result) override;
     
-    // Mimic libjpeg's heuristics to guess jpeg color space.
-// Requires that the jpg has 3 components.
-bool HasYCbCrColorSpace(const JPEGData& jpg) {
-  bool has_Adobe_marker = false;
-  uint8_t Adobe_transform = 0;
-  for (const std::string& app : jpg.app_data) {
-    if (static_cast<uint8_t>(app[0]) == 0xe0) {
-      return true;
-    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
-      has_Adobe_marker = true;
-      Adobe_transform = app[14];
+    #include 'base/values.h'
+#include 'components/zoom/zoom_controller.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/common/page_zoom.h'
+#include 'ui/views/controls/menu/menu_runner.h'
+    
+    namespace nwapi {
     }
-  }
-  if (has_Adobe_marker) {
-    return (Adobe_transform != 0);
-  }
-  const int cid0 = jpg.components[0].id;
-  const int cid1 = jpg.components[1].id;
-  const int cid2 = jpg.components[2].id;
-  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
+    
+    
+    {  if (menu_)
+    menu_->UpdateStates();
 }
     
-    #include 'guetzli/jpeg_data.h'
+    NwAppQuitFunction::~NwAppQuitFunction() {
+}
     
-    size_t ClusterHistograms(JpegHistogram* histo, size_t* num,
-                         int* histo_indexes, uint8_t* depth) {
-  memset(depth, 0, *num * JpegHistogram::kSize);
-  size_t costs[kMaxComponents];
-  for (size_t i = 0; i < *num; ++i) {
-    histo_indexes[i] = i;
-    std::vector<HuffmanTree> tree(2 * JpegHistogram::kSize + 1);
-    CreateHuffmanTree(histo[i].counts, JpegHistogram::kSize,
-                      kJpegHuffmanMaxBitLength, &tree[0],
-                      &depth[i * JpegHistogram::kSize]);
-    costs[i] = (HistogramHeaderCost(histo[i]) +
-                HistogramEntropyCost(histo[i],
-                                     &depth[i * JpegHistogram::kSize]));
-  }
-  const size_t orig_num = *num;
-  while (*num > 1) {
-    size_t last = *num - 1;
-    size_t second_last = *num - 2;
-    JpegHistogram combined(histo[last]);
-    combined.AddHistogram(histo[second_last]);
-    std::vector<HuffmanTree> tree(2 * JpegHistogram::kSize + 1);
-    uint8_t depth_combined[JpegHistogram::kSize] = { 0 };
-    CreateHuffmanTree(combined.counts, JpegHistogram::kSize,
-                      kJpegHuffmanMaxBitLength, &tree[0], depth_combined);
-    size_t cost_combined = (HistogramHeaderCost(combined) +
-                            HistogramEntropyCost(combined, depth_combined));
-    if (cost_combined < costs[last] + costs[second_last]) {
-      histo[second_last] = combined;
-      histo[last] = JpegHistogram();
-      costs[second_last] = cost_combined;
-      memcpy(&depth[second_last * JpegHistogram::kSize], depth_combined,
-             sizeof(depth_combined));
-      for (size_t i = 0; i < orig_num; ++i) {
-        if (histo_indexes[i] == last) {
-          histo_indexes[i] = second_last;
+    
+    {  DECLARE_EXTENSION_FUNCTION('nw.App.clearAppCache', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwAppClearAppCacheFunction);
+};
+    
+    
+    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.clearSync', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwClipboardClearSyncFunction);
+};
+    
+    
+    {            vx = vxnext;
+            vy = vynext;
         }
-      }
-      --(*num);
-    } else {
-      break;
+        int32x4_t norml = vmull_s16(vget_low_s16(vx), vget_low_s16(vx));
+        int32x4_t normh = vmull_s16(vget_high_s16(vy), vget_high_s16(vy));
+    
+    
+    {
+    {         vst1_u16(_dst + i + 4, vline_u16);
+     }
+})
+#endif
+    
+                    int16x8_t t0_16s = vreinterpretq_s16_u16(vmovl_u8(t0));
+                int16x8_t t1_16s = vreinterpretq_s16_u16(vmovl_u8(t1));
+                int16x8_t t2_16s = vreinterpretq_s16_u16(vmovl_u8(t2));
+    
+            if(i + 2 <= size.width)
+        {
+            float32x2_t vres = vmul_f32(vld1_f32(src0 + i), vld1_f32(src1 + i));
+            result += vget_lane_f32(vres, 0) + vget_lane_f32(vres, 1);
+            i += 2;
+        }
+    
+            const u8* ln0 = idx_rm2 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rm2) : tmp;
+        const u8* ln1 = idx_rm1 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rm1) : tmp;
+        const u8* ln2 = internal::getRowPtr(srcBase, srcStride, i);
+        const u8* ln3 = idx_rp1 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rp1) : tmp;
+        const u8* ln4 = idx_rp2 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rp2) : tmp;
+    
+        protected:
+        virtual void Update(const Parameter& parameter, const NDArrayViewPtr& gradientValue, const NDArrayViewPtr& smoothedGradientValue, size_t trainingSampleCount) override;
+    
+                if (accumulatedMetric && m_samples.second > 0)
+            {
+                m_metric.second = accumulatedMetric->AsScalar<double>();
+            }
+    
+        inline size_t GetVersion(const Dictionary& dict)
+    {
+        if (!dict.Contains(versionKey))
+             LogicError('Required key '%ls' is not found in the dictionary.', versionKey.c_str());
     }
+    
+            if (checkpoint.Contains(versionPropertyName))
+            version = checkpoint[versionPropertyName].Value<size_t>();
+        
+        auto learnerState = checkpoint[learnersPropertyName].Value<std::vector<DictionaryValue>>();
+        auto externalState = checkpoint[externalStatePropertyName].Value<Dictionary>();
+    
+        // Acquires the mutex. If 'wait' is true and mutex is acquired by someone else then
+    // function waits until mutex is released
+    // Returns false if !wait and lock cannot be acquired, or in case of a system error that prevents us from acquiring the lock.
+    bool Acquire(bool wait)
+    {
+        assert(m_handle == NULL);
+        m_handle = ::CreateMutexA(NULL /*security attr*/, FALSE /*bInitialOwner*/, m_name.c_str());
+        if (m_handle == NULL)
+        {
+            if (!wait)
+                return false;   // can't lock due to access permissions: lock already exists, consider not available
+            else
+                RuntimeError('Acquire: Failed to create named mutex %s: %d.', m_name.c_str(), GetLastError());
+        }
+    }
+    
+    
+    {            // Set the sorted rk order to each url and 
+            // the urls are still in the original order
+            int rk = 0;
+            for (it = its0; it != its; it++)
+            {
+                urls[it->m_rank0].m_rank = rk++;
+            }
+        }
+    
+    
+    {
+    {}  // end namespace internal
+}  // end namespace benchmark
+    
+    namespace benchmark {
+namespace {
+#ifdef BENCHMARK_OS_WINDOWS
+typedef WORD PlatformColorCode;
+#else
+typedef const char* PlatformColorCode;
+#endif
+    }
+    }
+    
+    
+    {}  // end namespace benchmark
+    
+      if (result.error_occurred) {
+    printer(Out, COLOR_RED, 'ERROR OCCURRED: \'%s\'',
+            result.error_message.c_str());
+    printer(Out, COLOR_DEFAULT, '\n');
+    return;
   }
-  size_t total_cost = 0;
-  for (size_t i = 0; i < *num; ++i) {
-    total_cost += costs[i];
+  // Format bytes per second
+  std::string rate;
+  if (result.bytes_per_second > 0) {
+    rate = StrCat(' ', HumanReadableNumber(result.bytes_per_second), 'B/s');
   }
-  return (total_cost + 7) / 8;
+    
+    double Finish(Counter const& c, double cpu_time, double num_threads) {
+  double v = c.value;
+  if (c.flags & Counter::kIsRate) {
+    v /= cpu_time;
+  }
+  if (c.flags & Counter::kAvgThreads) {
+    v /= num_threads;
+  }
+  return v;
+}
+    
+    namespace benchmark {
+// NOTE: only i386 and x86_64 have been well tested.
+// PPC, sparc, alpha, and ia64 are based on
+//    http://peter.kuscsik.com/wordpress/?p=14
+// with modifications by m3b.  See also
+//    https://setisvn.ssl.berkeley.edu/svn/lib/fftw-3.0.1/kernel/cycle.h
+namespace cycleclock {
+// This should return the number of cycles since power-on.  Thread-safe.
+inline BENCHMARK_ALWAYS_INLINE int64_t Now() {
+#if defined(BENCHMARK_OS_MACOSX)
+  // this goes at the top because we need ALL Macs, regardless of
+  // architecture, to return the number of 'mach time units' that
+  // have passed since startup.  See sysinfo.cc where
+  // InitializeSystemInfo() sets the supposed cpu clock frequency of
+  // macs to the number of mach time units per second, not actual
+  // CPU clock frequency (which can change in the face of CPU
+  // frequency scaling).  Also note that when the Mac sleeps, this
+  // counter pauses; it does not continue counting, nor does it
+  // reset to zero.
+  return mach_absolute_time();
+#elif defined(BENCHMARK_OS_EMSCRIPTEN)
+  // this goes above x86-specific code because old versions of Emscripten
+  // define __x86_64__, although they have nothing to do with it.
+  return static_cast<int64_t>(emscripten_get_now() * 1e+6);
+#elif defined(__i386__)
+  int64_t ret;
+  __asm__ volatile('rdtsc' : '=A'(ret));
+  return ret;
+#elif defined(__x86_64__) || defined(__amd64__)
+  uint64_t low, high;
+  __asm__ volatile('rdtsc' : '=a'(low), '=d'(high));
+  return (high << 32) | low;
+#elif defined(__powerpc__) || defined(__ppc__)
+  // This returns a time-base, which is not always precisely a cycle-count.
+  int64_t tbl, tbu0, tbu1;
+  asm('mftbu %0' : '=r'(tbu0));
+  asm('mftb  %0' : '=r'(tbl));
+  asm('mftbu %0' : '=r'(tbu1));
+  tbl &= -static_cast<int64_t>(tbu0 == tbu1);
+  // high 32 bits in tbu1; low 32 bits in tbl  (tbu0 is garbage)
+  return (tbu1 << 32) | tbl;
+#elif defined(__sparc__)
+  int64_t tick;
+  asm('.byte 0x83, 0x41, 0x00, 0x00');
+  asm('mov   %%g1, %0' : '=r'(tick));
+  return tick;
+#elif defined(__ia64__)
+  int64_t itc;
+  asm('mov %0 = ar.itc' : '=r'(itc));
+  return itc;
+#elif defined(COMPILER_MSVC) && defined(_M_IX86)
+  // Older MSVC compilers (like 7.x) don't seem to support the
+  // __rdtsc intrinsic properly, so I prefer to use _asm instead
+  // when I know it will work.  Otherwise, I'll use __rdtsc and hope
+  // the code is being compiled with a non-ancient compiler.
+  _asm rdtsc
+#elif defined(COMPILER_MSVC)
+  return __rdtsc();
+#elif defined(BENCHMARK_OS_NACL)
+  // Native Client validator on x86/x86-64 allows RDTSC instructions,
+  // and this case is handled above. Native Client validator on ARM
+  // rejects MRC instructions (used in the ARM-specific sequence below),
+  // so we handle it here. Portable Native Client compiles to
+  // architecture-agnostic bytecode, which doesn't provide any
+  // cycle counter access mnemonics.
+    }
+    }
+    }
+    
+    inline LogType& GetLogInstanceForLevel(int level) {
+  if (level <= LogLevel()) {
+    return GetErrorLogInstance();
+  }
+  return GetNullLogInstance();
+}
+    
+    double BenchmarkReporter::Run::GetAdjustedRealTime() const {
+  double new_time = real_accumulated_time * GetTimeUnitMultiplier(time_unit);
+  if (iterations != 0) new_time /= static_cast<double>(iterations);
+  return new_time;
 }
