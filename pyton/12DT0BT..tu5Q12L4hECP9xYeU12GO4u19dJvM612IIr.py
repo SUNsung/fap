@@ -1,165 +1,164 @@
 
         
-                if user is None:
-            error = 'Incorrect username.'
-        elif not check_password_hash(user['password'], password):
-            error = 'Incorrect password.'
-    
-    
-def with_metaclass(meta, *bases):
-    '''Create a base class with a metaclass.'''
-    # This requires a bit of explanation: the basic idea is to make a
-    # dummy metaclass for one level of class instantiation that replaces
-    # itself with the actual metaclass.
-    class metaclass(type):
-        def __new__(cls, name, this_bases, d):
-            return meta(name, bases, d)
-    return type.__new__(metaclass, 'temporary_class', (), {})
-    
-        Blueprints are the recommended way to implement larger or more
-    pluggable applications in Flask 0.7 and later.
-    
-    This typically means that you attempted to use functionality that needed
-to interface with the current application object in some way. To solve
-this, set up an application context with app.app_context().  See the
-documentation for more information.\
-'''
-    
-            if ip:
-            warnings.warn(
-                'The session cookie domain is an IP address. This may not work'
-                ' as intended in some browsers. Add an entry to your hosts'
-                ' file, for example 'localhost.localdomain', and use that'
-                ' instead.'
-            )
-    
-    
-class HTTPRequest(HTTPMessage):
-    '''A :class:`requests.models.Request` wrapper.'''
-    
-    
-def is_valid_mime(mime):
-    return mime and MIME_RE.match(mime)
-    
-        # By default the `-a` argument is parsed for `username:password`.
-    # Set this to `False` to disable the parsing and error handling.
-    auth_parse = True
-    
-        def load_installed_plugins(self):
-        for entry_point_name in ENTRY_POINT_NAMES:
-            for entry_point in iter_entry_points(entry_point_name):
-                plugin = entry_point.load()
-                plugin.package_name = entry_point.dist.key
-                self.register(entry_point.load())
-    
-    
-class TestAutoContentTypeAndAcceptHeaders:
-    '''
-    Test that Accept and Content-Type correctly defaults to JSON,
-    but can still be overridden. The same with Content-Type when --form
-    -f is used.
-    
-    
-def test_follow_all_output_options_used_for_redirects(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 3
-    assert HTTP_OK not in r
-    
-    
-def linkcode_resolve(domain, info):
-    '''Determine the URL corresponding to Python object.'''
-    if domain != 'py':
-        return None
-    modname = info['module']
-    fullname = info['fullname']
-    submod = sys.modules.get(modname)
-    if submod is None:
-        return None
-    obj = submod
-    for part in fullname.split('.'):
-        try:
-            obj = getattr(obj, part)
-        except:
-            return None
-    try:
-        fn = inspect.getsourcefile(obj)
-    except:
-        fn = None
-    if not fn:
-        return None
-    try:
-        source, lineno = inspect.findsource(obj)
-    except:
-        lineno = None
-    if lineno:
-        linespec = '#L%d' % (lineno + 1)
-    else:
-        linespec = ''
-    index = fn.find('/homeassistant/')
-    if index == -1:
-        index = 0
-    
-    from .const import (
-    ATTR_MAIN_TEXT, ATTR_REDIRECTION_URL, ATTR_STREAM_URL, ATTR_TITLE_TEXT,
-    ATTR_UID, ATTR_UPDATE_DATE, CONF_AUDIO, CONF_DISPLAY_URL, CONF_TEXT,
-    CONF_TITLE, CONF_UID, DATE_FORMAT)
-    
-    CONF_RATE = 'rate'
-DEFAULT_HOST = 'localhost'
-DEFAULT_PORT = 8125
-DEFAULT_PREFIX = 'hass'
-DEFAULT_RATE = 1
-DOMAIN = 'datadog'
-    
-                last_results.append(Device(mac.upper(), name))
-    
-        def _make_request(self):
-        # Weirdly enough, this doesn't seem to require authentication
-        data = [{
-            'request': {
-                'sinceRevision': 0
-            },
-            'action': 'http://linksys.com/jnap/devicelist/GetDevices'
-        }]
-        headers = {'X-JNAP-Action': 'http://linksys.com/jnap/core/Transaction'}
-        return requests.post('http://{}/JNAP/'.format(self.host),
-                             timeout=DEFAULT_TIMEOUT,
-                             headers=headers,
-                             json=data)
+        
+if __name__ == '__main__':
+    main()
 
     
-        async def async_get_device_name(self, device):
-        '''Return the name of the given device or None if we don't know.'''
-        filter_named = [result.name for result in self.last_results
-                        if result.mac == device]
+    versions_info = json.load(open('update/versions.json'))
+if 'signature' in versions_info:
+    del versions_info['signature']
     
-                    _LOGGER.error('UPNP Responder socket exception occurred: %s',
-                              ex.__str__)
-                # without the following continue, a second exception occurs
-                # because the data object has not been initialized
+    entry_template = textwrap.dedent('''
+    <entry>
+        <id>https://yt-dl.org/feed/youtube-dl-updates-feed/youtube-dl-@VERSION@</id>
+        <title>New version @VERSION@</title>
+        <link href='http://rg3.github.io/youtube-dl' />
+        <content type='xhtml'>
+            <div xmlns='http://www.w3.org/1999/xhtml'>
+                Downloads available at <a href='https://yt-dl.org/downloads/@VERSION@/'>https://yt-dl.org/downloads/@VERSION@/</a>
+            </div>
+        </content>
+        <author>
+            <name>The youtube-dl maintainers</name>
+        </author>
+        <updated>@TIMESTAMP@</updated>
+    </entry>
+    ''')
+    
+        with io.open(outfile, 'w', encoding='utf-8') as outf:
+        outf.write(out)
+    
+    README_FILE = 'README.md'
+helptext = sys.stdin.read()
+    
+        for release in releases:
+        compat_print(release['name'])
+        for asset in release['assets']:
+            asset_name = asset['name']
+            total_bytes += asset['download_count'] * asset['size']
+            if all(not re.match(p, asset_name) for p in (
+                    r'^youtube-dl$',
+                    r'^youtube-dl-\d{4}\.\d{2}\.\d{2}(?:\.\d+)?\.tar\.gz$',
+                    r'^youtube-dl\.exe$')):
                 continue
+            compat_print(
+                ' %s size: %s downloads: %d'
+                % (asset_name, format_size(asset['size']), asset['download_count']))
     
-            def process(self, event):
-            '''On Watcher event, fire HA event.'''
-            _LOGGER.debug('process(%s)', event)
-            if not event.is_directory:
-                folder, file_name = os.path.split(event.src_path)
-                self.hass.bus.fire(
-                    DOMAIN, {
-                        'event_type': event.event_type,
-                        'path': event.src_path,
-                        'file': file_name,
-                        'folder': folder,
-                        })
+            info_dict = _make_result(list(formats_order), extractor='youtube')
+        ydl = YDL({'format': 'bestvideo[height>=999999]+bestaudio/best'})
+        yie = YoutubeIE(ydl)
+        yie._sort_formats(info_dict['formats'])
+        ydl.process_ie_result(info_dict)
+        downloaded = ydl.downloaded_info_dicts[0]
+        self.assertEqual(downloaded['format_id'], '38')
     
-    CONFIG_SCHEMA = vol.Schema({
-    DOMAIN: vol.Schema({
-        vol.Required(CONF_PASSWORD): cv.string,
-        vol.Required(CONF_USERNAME): cv.string,
-        vol.Optional(CONF_SCAN_INTERVAL, default=2): cv.positive_int,
-    })
-}, extra=vol.ALLOW_EXTRA)
+        def test_cbc_decrypt(self):
+        data = bytes_to_intlist(
+            b'\x97\x92+\xe5\x0b\xc3\x18\x91ky9m&\xb3\xb5@\xe6'\xc2\x96.\xc8u\x88\xab9-[\x9e|\xf1\xcd'
+        )
+        decrypted = intlist_to_bytes(aes_cbc_decrypt(data, self.key, self.iv))
+        self.assertEqual(decrypted.rstrip(b'\x08'), self.secret_msg)
+    
+            def get_tc_filename(tc):
+            return ydl.prepare_filename(tc.get('info_dict', {}))
+    
+    from sentry.utils.query import RangeQuerySetWrapperWithProgressBar
+    
+        complete_apps = ['sentry']
+
+    
+        def backwards(self, orm):
+    
+    from sentry.utils.query import RangeQuerySetWrapperWithProgressBar
+    
+        complete_apps = ['sentry']
+
+    
+            # Adding field 'ApiToken.scope_list'
+        db.add_column(
+            'sentry_apitoken',
+            'scope_list',
+            self.gf('sentry.db.models.fields.array.ArrayField')(
+                of=('django.db.models.fields.TextField', [], {})
+            ),
+            keep_default=False
+        )
+    
+            # Adding unique constraint on 'DSymApp', fields ['project', 'platform', 'app_id']
+        db.create_unique('sentry_dsymapp', ['project_id', 'platform', 'app_id'])
+    
+            # Adding unique constraint on 'ReleaseHeadCommit', fields ['repository_id', 'release']
+        db.create_unique('sentry_releaseheadcommit', ['repository_id', 'release_id'])
+    
+    
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding model 'Distribution'
+        db.create_table(
+            'sentry_distribution', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'organization_id',
+                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(
+                        db_index=True
+                    )
+                ), (
+                    'release', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.Release']
+                    )
+                ), ('name', self.gf('django.db.models.fields.CharField')(max_length=64)), (
+                    'date_added',
+                    self.gf('django.db.models.fields.DateTimeField')()
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['Distribution'])
+    
+    
+  def Start( self ):
+    request_data = BuildRequestData()
+    request_data.update( { 'filetypes': self.filetypes } )
+    self._response = self.PostDataToHandler( request_data,
+                                             'semantic_completion_available' )
+    
+        poll_again = _HandlePollResponse( response, diagnostics_handler )
+    if poll_again:
+      self._SendRequest()
+      return True
+    
+    
+# This class can be used to keep the ycmd server alive for the duration of the
+# life of the client. By default, ycmd shuts down if it doesn't see a request in
+# a while.
+class YcmdKeepalive( object ):
+  def __init__( self, ping_interval_seconds = 60 * 10 ):
+    self._keepalive_thread = Thread( target = self._ThreadMain )
+    self._keepalive_thread.daemon = True
+    self._ping_interval_seconds = ping_interval_seconds
+    
+      # Ignore 'syntax match' lines (see ':h syn-match').
+  if line.startswith( 'match ' ):
+    return []
+    
+      _assert_rejects( f, 'This is a Taco' )
+  _assert_accepts( f, 'This is a Burrito' )
+
+    
+            Args:
+            max_workers: The maximum number of threads that can be used to
+                execute the given calls.
+        '''
+        self._max_workers = max_workers
+        self._work_queue = queue.Queue()
+        self._threads = set()
+        self._shutdown = False
+        self._shutdown_lock = threading.Lock()
+    
+    # The language for content autogenerated by Sphinx. Refer to documentation
+# for a list of supported languages.
+#language = None
