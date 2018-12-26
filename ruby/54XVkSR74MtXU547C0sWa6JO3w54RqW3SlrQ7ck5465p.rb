@@ -1,121 +1,201 @@
 
         
-        module ActionView
-  module Helpers
-    module Tags # :nodoc:
-      class DateSelect < Base # :nodoc:
-        def initialize(object_name, method_name, template_object, options, html_options)
-          @html_options = html_options
-    
-        def initialize(paths = [])
-      @paths = typecast paths
+            it 'returns a FontAwesome icon element' do
+      icon = icon_tag('fa-copy')
+      expect(icon).to be_html_safe
+      expect(Nokogiri(icon).at('i.fa.fa-copy')).to be_a Nokogiri::XML::Element
     end
     
-        config.eager_load_namespaces << ActionView
+    describe AgentRunner do
+  context 'without traps' do
+    before do
+      stub.instance_of(Rufus::Scheduler).every
+      stub.instance_of(AgentRunner).set_traps
+      @agent_runner = AgentRunner.new
+    end
     
-    # Returns whether or not the repository, or specific files,
-# has/have changed since a given revision.
-#
-# @param rev [String] The revision to check against
-# @param files [Array<String>] The files to check.
-#   If this is empty, checks the entire repository
-def changed_since?(rev, *files)
-  IO.popen('git diff --exit-code #{rev} #{files.join(' ')}') {}
-  return !$?.success?
-end
-    
-    module Sass
-  # The abstract base class for lexical environments for SassScript.
-  class BaseEnvironment
-    class << self
-      # Note: when updating this,
-      # update sass/yard/inherited_hash.rb as well.
-      def inherited_hash_accessor(name)
-        inherited_hash_reader(name)
-        inherited_hash_writer(name)
-      end
-    
-          # Returns the time the given Sass file was last modified.
-      #
-      # If the given file has been deleted or the time can't be accessed
-      # for some other reason, this should return nil.
-      #
-      # @param uri [String] The URI of the file to check.
-      #   Comes from a `:filename` option set on an engine returned by this importer.
-      # @param options [{Symbol => Object}] Options for the Sass file
-      #   containing the `@import` currently being checked.
-      # @return [Time, nil]
-      def mtime(uri, options)
-        Sass::Util.abstract(self)
-      end
-    
-          def _find(dir, name, options)
-        full_filename, syntax = Sass::Util.destructure(find_real_file(dir, name, options))
-        return unless full_filename && File.readable?(full_filename)
-    
-            def run
-          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
-          if @pod_name.nil? # Print all
-            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
-              print_pod_cache_infos(pod_name, cache_descriptors)
-            end
-          else # Print only for the requested pod
-            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
-            if cache_descriptors.nil?
-              UI.notice('No cache for pod named #{@pod_name} found')
-            else
-              print_pod_cache_infos(@pod_name, cache_descriptors)
-            end
-          end
-        end
-    
-          * Redistributions of source code must retain the above copyright
-        notice, this list of conditions and the following disclaimer.
-      * Redistributions in binary form must reproduce the above
-        copyright notice, this list of conditions and the following
-        disclaimer in the documentation and/or other materials provided
-        with the distribution.
-      * Neither the name of Google Inc. nor the names of its
-        contributors may be used to endorse or promote products derived
-        from this software without specific prior written permission.
-    
-          def line_class(line)
-        if line =~ /^@@/
-          'gc'
-        elsif line =~ /^\+/
-          'gi'
-        elsif line =~ /^\-/
-          'gd'
-        else
-          ''
-        end
-      end
-    
-          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
-      def left_shift int, shift
-        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
-        # 1>>31, 2**32
-        (r & 2147483648) == 0 ? r : r - 4294967296
-      end
-    
-    module Gollum
-end
-Gollum::GIT_ADAPTER = ENV['GIT_ADAPTER'] if ENV['GIT_ADAPTER']
-    
-        assert_match /Edit/, last_response.body, ''Edit' link is blocked in history template'
-    
-    context 'Precious::Helpers' do
-  include Precious::Helpers
-    
-      teardown do
-    FileUtils.rm_rf(@path)
+        @agent1 = Agents::SchedulerAgent.new(name: 'Scheduler 1', options: { action: 'run', schedule: '*/1 * * * * *' }).tap { |a|
+      a.user = users(:bob)
+      a.save!
+    }
+    @agent2 = Agents::SchedulerAgent.new(name: 'Scheduler 2', options: { action: 'run', schedule: '*/1 * * * * *' }).tap { |a|
+      a.user = users(:bob)
+      a.save!
+    }
   end
     
-        # Extract the path string that Gollum::Wiki expects
-    def extract_path(file_path)
-      return nil if file_path.nil?
-      last_slash = file_path.rindex('/')
-      if last_slash
-        file_path[0, last_slash]
+      describe '#recursively_interpolate_jsonpaths' do
+    it 'interpolates all string values in a structure' do
+      struct = {
+        :int => 5,
+        :string => 'this <escape $.works>',
+        :array => ['<works>', 'now', '<$.there.world>'],
+        :deep => {
+          :string => 'hello <there.world>',
+          :hello => :world
+        }
+      }
+      data = { :there => { :world => 'WORLD' }, :works => 'should work' }
+      expect(Utils.recursively_interpolate_jsonpaths(struct, data)).to eq({
+        :int => 5,
+        :string => 'this should+work',
+        :array => ['should work', 'now', 'WORLD'],
+        :deep => {
+          :string => 'hello WORLD',
+          :hello => :world
+        }
+      })
+    end
+  end
+    
+        def blank?
+      body.blank?
+    end
+    
+            css('p > code:first-child:last-child', 'td > code:first-child:last-child').each do |node|
+          next if node.previous.try(:content).present? || node.next.try(:content).present?
+          node.inner_html = node.inner_html.squish.gsub(/<br(\ \/)?>\s*/, '\n')
+          node.content = node.content.strip
+          node.name = 'pre' if node.content =~ /\s/
+          node.parent.before(node.parent.children).remove if node.parent.name == 'p'
+        end
+    
+    module Admin
+  class ChangeEmailsController < BaseController
+    before_action :set_account
+    before_action :require_local_account!
+    
+          @email_domain_block = EmailDomainBlock.new(resource_params)
+    
+            if params[:create_and_unresolve]
+          @report.unresolve!
+          log_action :reopen, @report
+        end
+    
+    class Api::OEmbedController < Api::BaseController
+  respond_to :json
+    
+      def body
+    @_body ||= request.body.read
+  end
+    
+        each_pair { |var, val|
+      if self.fold
+        str << '#{var}:\r\n\t#{val}\r\n'
+      else
+        str << '#{var}: #{val}\r\n'
+      end
+    }
+    
+              # Decodes the Rex::Proto::Kerberos::Model::EncKdcResponse from an input
+          #
+          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::ASN1Data
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode EncKdcResponse, invalid input'
+            end
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of a Kerberos KDC-REQ (request) data
+        # definition
+        class KdcRequest < Element
+          # @!attribute pvno
+          #   @return [Integer] The protocol version number
+          attr_accessor :pvno
+          # @!attribute msg_type
+          #   @return [Integer] The type of a protocol message
+          attr_accessor :msg_type
+          # @!attribute pa_data
+          #   @return [Array<Rex::Proto::Kerberos::Model::PreAuthData>] Authentication information which may
+          #   be needed before credentials can be issued or decrypted
+          attr_accessor :pa_data
+          # @!attribute req_body
+          #   @return [Rex::Proto::Kerberos::Model:::KdcRequestBody] The request body
+          attr_accessor :req_body
+    
+              # Decodes a Rex::Proto::Kerberos::Model::KrbError
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode_asn1(input)
+            input.value[0].value.each do |val|
+              case val.tag
+              when 0
+                self.pvno = decode_pvno(val)
+              when 1
+                self.msg_type = decode_msg_type(val)
+              when 2
+                self.ctime = decode_ctime(val)
+              when 3
+                self.cusec = decode_cusec(val)
+              when 4
+                self.stime = decode_stime(val)
+              when 5
+                self.susec = decode_susec(val)
+              when 6
+                self.error_code = decode_error_code(val)
+              when 7
+                self.crealm = decode_crealm(val)
+              when 8
+                self.cname = decode_cname(val)
+              when 9
+                self.realm = decode_realm(val)
+              when 10
+                self.sname = decode_sname(val)
+              when 12
+                self.e_data = decode_e_data(val)
+              else
+                raise ::RuntimeError, 'Failed to decode KRB-ERROR SEQUENCE'
+              end
+            end
+          end
+    
+      def test_font_helper_with_suffix_question
+    assert_match %r(url\(['']?/assets/.*eot\?.*['']?\)), @css
+  end
+    
+    # The module that contains everything Sass-related:
+#
+# * {Sass::Engine} is the class used to render Sass/SCSS within Ruby code.
+# * {Sass::Plugin} is interfaces with web frameworks (Rails and Merb in particular).
+# * {Sass::SyntaxError} is raised when Sass encounters an error.
+# * {Sass::CSS} handles conversion of CSS to Sass.
+#
+# Also see the {file:SASS_REFERENCE.md full Sass reference}.
+module Sass
+  class << self
+    # @private
+    attr_accessor :tests_running
+  end
+    
+        # Return the first {Sass::Selector::Sequence} in a {Sass::Tree::RuleNode}.
+    #
+    # @param rule [Sass::Tree::RuleNode]
+    # @return [Sass::Selector::Sequence]
+    def first_seq(rule)
+      rule.parsed_rules.members.first
+    end
+    
+        # Helper for \{#dependencies}.
+    #
+    # @private
+    def _dependencies(seen, engines)
+      key = [@options[:filename], @options[:importer]]
+      return if seen.include?(key)
+      seen << key
+      engines << self
+      to_tree.grep(Tree::ImportNode) do |n|
+        next if n.css_import?
+        n.imported_file._dependencies(seen, engines)
       end
     end
