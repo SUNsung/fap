@@ -1,42 +1,155 @@
 
         
-                  add_default_name_and_id_for_value(tag_value, name_and_id)
-          options.delete('index')
-          options.delete('namespace')
-          options['for'] = name_and_id['id'] unless options.key?('for')
+                default_connectors = {
+          words_connector: ', ',
+          two_words_connector: ' and ',
+          last_word_connector: ', and '
+        }
+        if defined?(I18n)
+          i18n_connectors = I18n.translate(:'support.array', locale: options[:locale], default: {})
+          default_connectors.merge!(i18n_connectors)
+        end
+        options = default_connectors.merge!(options)
     
-              def field_type
-            self.class.field_type
+                if html_options['multiple'] && options.fetch(:include_hidden, true)
+              tag('input', disabled: html_options['disabled'], name: html_options['name'], type: 'hidden', value: '') + select
+            else
+              select
+            end
           end
+    
+                  [:year, :month, :day, :hour, :min, :sec].each do |key|
+                default[key] ||= time.send(key)
+              end
+    
+        def compact
+      PathSet.new paths.compact
+    end
+    
+        # Main render entry point shared by Action View and Action Controller.
+    def render(context, options)
+      if options.key?(:partial)
+        render_partial(context, options)
+      else
+        render_template(context, options)
       end
+    end
+    
+        # This returns whether the guest is ready to work. If this returns
+    # `false`, then {#detect!} should be called in order to detect the
+    # guest OS.
+    #
+    # @return [Boolean]
+    def ready?
+      !!capability_host_chain
     end
   end
 end
 
     
-        private
+    module Vagrant
+  # MachineIndex is able to manage the index of created Vagrant environments
+  # in a central location.
+  #
+  # The MachineIndex stores a mapping of UUIDs to basic information about
+  # a machine. The UUIDs are stored with the Vagrant environment and are
+  # looked up in the machine index.
+  #
+  # The MachineIndex stores information such as the name of a machine,
+  # the directory it was last seen at, its last known state, etc. Using
+  # this information, we can load the entire {Machine} object for a machine,
+  # or we can just display metadata if needed.
+  #
+  # The internal format of the data file is currently JSON in the following
+  # structure:
+  #
+  #   {
+  #     'version': 1,
+  #     'machines': {
+  #       'uuid': {
+  #         'name': 'foo',
+  #         'provider': 'vmware_fusion',
+  #         'data_path': '/path/to/data/dir',
+  #         'vagrantfile_path': '/path/to/Vagrantfile',
+  #         'state': 'running',
+  #         'updated_at': '2014-03-02 11:11:44 +0100'
+  #       }
+  #     }
+  #   }
+  #
+  class MachineIndex
+    include Enumerable
     
-    UserEmail.seed do |ue|
-  ue.id = -1
-  ue.email = 'no_email'
-  ue.primary = true
-  ue.user_id = -1
-end
+            # This is called as a last-minute hook that allows the configuration
+        # object to finalize itself before it will be put into use. This is
+        # a useful place to do some defaults in the case the user didn't
+        # configure something or so on.
+        #
+        # An example of where this sort of thing is used or has been used:
+        # the 'vm' configuration key uses this to make sure that at least
+        # one sub-VM has been defined: the default VM.
+        #
+        # The configuration object is expected to mutate itself.
+        def finalize!
+          # Default implementation is to do nothing.
+        end
     
-          if staff.topic_id.nil?
-        creator = PostCreator.new(Discourse.system_user,
-          raw: I18n.t('staff_category_description'),
-          title: I18n.t('category.topic_prefix', category: staff.name),
-          category: staff.name,
-          archetype: Archetype.default
-        )
-        post = creator.create
+              result
+        end
     
-            def preload_stages_warnings
-          # This preloads the number of warnings for every stage, ensuring
-          # that Ci::Stage#has_warnings? doesn't execute any additional
-          # queries.
-          @pipeline.stages.each { |stage| stage.number_of_warnings }
+              # Return the dummy object so that anything else works
+          ::Vagrant::Config::V2::DummyConfig.new
+        end
+    
+            # This should return the state of the machine within this provider.
+        # The state must be an instance of {MachineState}. Please read the
+        # documentation of that class for more information.
+        #
+        # @return [MachineState]
+        def state
+          nil
+        end
+    
+            directives.compact.sort.join('; ')
+      end
+    
+          def handle(hash)
+        was = hash.dup
+        hash.replace escape(hash)
+        was
+      end
+    
+      teardown do
+    FileUtils.rm_r(File.join(File.dirname(__FILE__), *%w[examples test.git]))
+  end
+    
+        post '/edit/' + CGI.escape('한글'), :page => 'k', :content => '바뀐 text',
+         :format                            => 'markdown', :message => 'ghi'
+    follow_redirect!
+    assert last_response.ok?
+    
+      # replace name version and date
+  replace_header(head, :name)
+  replace_header(head, :version)
+  replace_header(head, :date)
+  #comment this out if your rubyforge_project has a different name
+  replace_header(head, :rubyforge_project)
+    
+      if cfg = options[:config]
+    # If the path begins with a '/' it will be considered an absolute path,
+    # otherwise it will be relative to the CWD
+    cfg = File.join(Dir.getwd, cfg) unless cfg.slice(0) == File::SEPARATOR
+    require cfg
+  end
+    
+        EMOJI_PATHNAME = Pathname.new(Gemojione.images_path).freeze
+    
+          def requires_authentication?
+        Spree::Api::Config[:requires_authentication]
+      end
+    
+            def option_type_params
+          params.require(:option_type).permit(permitted_option_type_attributes)
         end
       end
     end
@@ -44,65 +157,21 @@ end
 end
 
     
-          # Associates the given database ID with the current object.
-      #
-      # database_id - The ID of the corresponding database row.
-      def cache_database_id(database_id)
-        Caching.write(cache_key, database_id)
-      end
-    
-            attr_reader :attributes
-    
-            # Builds a new PR using a Hash that was built from a JSON payload.
-        def self.from_json_hash(raw_hash)
-          hash = Representation.symbolize_hash(raw_hash)
-    
-              @bar2 = Agents::DotBar.new(name: 'bar2').tap { |agent|
-            agent.user = users(:bob)
-            agent.sources << @foo
-            agent.propagate_immediately = true
-            agent.disabled = true
-            agent.save!
-          },
-    
-    describe JobsHelper do
-  let(:job) { Delayed::Job.new }
-    
-                expect(weather_agent_diff.name.current).to eq(agents(:bob_weather_agent).name)
-            expect(weather_agent_diff.name.incoming).to eq('a weather agent')
-            expect(weather_agent_diff.name.updated).to eq('a new name')
-            expect(weather_agent_diff.keep_events_for.current).to eq(45.days.to_i)
-            expect(weather_agent_diff.keep_events_for.incoming).to eq(5.days.to_i)
-            expect(weather_agent_diff.keep_events_for.updated).to eq(2.days.to_i.to_s)
-          end
+            def index
+          @payments = @order.payments.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          respond_with(@payments)
         end
     
-      it 'is droppable' do
-    {
-      '{{location.lat}}' => '2.0',
-      '{{location.latitude}}' => '2.0',
-      '{{location.lng}}' => '3.0',
-      '{{location.longitude}}' => '3.0',
-      '{{location.latlng}}' => '2.0,3.0',
-    }.each { |template, result|
-      expect(Liquid::Template.parse(template).render('location' => location.to_liquid)).to eq(result),
-        'expected #{template.inspect} to expand to #{result.inspect}'
-    }
-  end
-end
-
+            def stock_location
+          render 'spree/api/v1/shared/stock_location_required', status: 422 and return unless params[:stock_location_id]
+          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:stock_location_id])
+        end
     
-      let :new_extract do
-    {
-      'url' => { 'css' => '#comic img', 'value' => '@src' },
-      'title' => { 'css' => '#comic img', 'value' => '@alt' },
-      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
-    }
-  end
-    
-      describe '#log_length' do
-    it 'defaults to 200' do
-      expect(AgentLog.log_length).to eq(200)
-    end
-  end
-end
+            def update
+          authorize! :update, stock_location
+          if stock_location.update_attributes(stock_location_params)
+            respond_with(stock_location, status: 200, default_template: :show)
+          else
+            invalid_resource!(stock_location)
+          end
+        end
