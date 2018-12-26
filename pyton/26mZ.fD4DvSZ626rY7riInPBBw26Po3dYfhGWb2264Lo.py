@@ -1,239 +1,202 @@
 
         
-            z_logvar_1xn = \
-        tf.get_variable(name=(name+'/logvar'), shape=size_1xn,
-                        initializer=tf.constant_initializer(log_var_init),
-                        trainable=var_is_trainable)
-    
-      if ext_input_bxtxi is not None:
-    input_title += ' External Input'
-    plot_time_series(ext_input_bxtxi, n_to_plot=n_to_plot, color='b',
-                     scale=scale, title=col_title + input_title)
-    
-      Returns:
-    dictionary of hyper parameters (ignoring other flag types).
-  '''
-  d = {}
-  # Data
-  d['output_dist'] = flags.output_dist
-  d['data_dir'] = flags.data_dir
-  d['lfads_save_dir'] = flags.lfads_save_dir
-  d['checkpoint_pb_load_name'] = flags.checkpoint_pb_load_name
-  d['checkpoint_name'] = flags.checkpoint_name
-  d['output_filename_stem'] = flags.output_filename_stem
-  d['max_ckpt_to_keep'] = flags.max_ckpt_to_keep
-  d['max_ckpt_to_keep_lve'] = flags.max_ckpt_to_keep_lve
-  d['ps_nexamples_to_process'] = flags.ps_nexamples_to_process
-  d['ext_input_dim'] = flags.ext_input_dim
-  d['data_filename_stem'] = flags.data_filename_stem
-  d['device'] = flags.device
-  d['csv_log'] = flags.csv_log
-  d['num_steps_for_gen_ic'] = flags.num_steps_for_gen_ic
-  d['inject_ext_input_to_gen'] = flags.inject_ext_input_to_gen
-  # Cell
-  d['cell_weight_scale'] = flags.cell_weight_scale
-  # Generation
-  d['ic_dim'] = flags.ic_dim
-  d['factors_dim'] = flags.factors_dim
-  d['ic_enc_dim'] = flags.ic_enc_dim
-  d['gen_dim'] = flags.gen_dim
-  d['gen_cell_input_weight_scale'] = flags.gen_cell_input_weight_scale
-  d['gen_cell_rec_weight_scale'] = flags.gen_cell_rec_weight_scale
-  # KL distributions
-  d['ic_prior_var_min'] = flags.ic_prior_var_min
-  d['ic_prior_var_scale'] = flags.ic_prior_var_scale
-  d['ic_prior_var_max'] = flags.ic_prior_var_max
-  d['ic_post_var_min'] = flags.ic_post_var_min
-  d['co_prior_var_scale'] = flags.co_prior_var_scale
-  d['prior_ar_atau'] = flags.prior_ar_atau
-  d['prior_ar_nvar'] =  flags.prior_ar_nvar
-  d['do_train_prior_ar_atau'] = flags.do_train_prior_ar_atau
-  d['do_train_prior_ar_nvar'] = flags.do_train_prior_ar_nvar
-  # Controller
-  d['do_causal_controller'] = flags.do_causal_controller
-  d['controller_input_lag'] = flags.controller_input_lag
-  d['do_feed_factors_to_controller'] = flags.do_feed_factors_to_controller
-  d['feedback_factors_or_rates'] = flags.feedback_factors_or_rates
-  d['co_dim'] = flags.co_dim
-  d['ci_enc_dim'] = flags.ci_enc_dim
-  d['con_dim'] = flags.con_dim
-  d['co_mean_corr_scale'] = flags.co_mean_corr_scale
-  # Optimization
-  d['batch_size'] = flags.batch_size
-  d['learning_rate_init'] = flags.learning_rate_init
-  d['learning_rate_decay_factor'] = flags.learning_rate_decay_factor
-  d['learning_rate_stop'] = flags.learning_rate_stop
-  d['learning_rate_n_to_compare'] = flags.learning_rate_n_to_compare
-  d['max_grad_norm'] = flags.max_grad_norm
-  d['cell_clip_value'] = flags.cell_clip_value
-  d['do_train_io_only'] = flags.do_train_io_only
-  d['do_train_encoder_only'] = flags.do_train_encoder_only
-  d['do_reset_learning_rate'] = flags.do_reset_learning_rate
-  d['do_train_readin'] = flags.do_train_readin
+        from utils import write_datasets
+from synthetic_data_utils import add_alignment_projections, generate_data
+from synthetic_data_utils import generate_rnn, get_train_n_valid_inds
+from synthetic_data_utils import nparray_and_transpose
+from synthetic_data_utils import spikify_data, gaussify_data, split_list_by_inds
+import matplotlib
+import matplotlib.pyplot as plt
+import scipy.signal
     
     
-def split_list_by_inds(data, inds1, inds2):
-  '''Take the data, a list, and split it up based on the indices in inds1 and
-  inds2.
-  Args:
-    data: the list of data to split
-    inds1, the first list of indices
-    inds2, the second list of indices
-  Returns: a 2-tuple of two lists.
-  '''
-  if data is None or len(data) == 0:
-    return [], []
-  else:
-    dout1 = [data[i] for i in inds1]
-    dout2 = [data[i] for i in inds2]
-    return dout1, dout2
+def read_data(data_fname):
+  ''' Read saved data in HDF5 format.
+    
+        probs_cache = os.path.join(self.log_dir, '{}.probs'.format(test_data_name))
+    if os.path.exists(probs_cache):
+      print('Reading cached result from {}'.format(probs_cache))
+      with tf.gfile.Open(probs_cache, 'r') as f:
+        probs = pkl.load(f)
+    else:
+      tf.reset_default_graph()
+      self.sess = tf.Session()
+      # Build the graph.
+      saver = tf.train.import_meta_graph(
+          os.path.join(self.log_dir, 'ckpt-best.meta'))
+      saver.restore(self.sess, os.path.join(self.log_dir, 'ckpt-best'))
+      print('Restored from {}'.format(self.log_dir))
+      graph = tf.get_default_graph()
+      self.tensors = dict(
+          inputs_in=graph.get_tensor_by_name('test_inputs_in:0'),
+          char_inputs_in=graph.get_tensor_by_name('test_char_inputs_in:0'),
+          softmax_out=graph.get_tensor_by_name('SotaRNN_1/softmax_out:0'),
+          states_init=graph.get_operation_by_name('SotaRNN_1/states_init'))
+      self.shape = self.tensors['inputs_in'].shape.as_list()
+    
+      # Extract properties of the indices.
+  num_batches = len(indices)
+  shape = list(indices.shape)
+  shape.append(vocab_size)
     
     
-def flatten(list_of_lists):
-  '''Takes a list of lists and returns a list of the elements.
-    
-    
-def get_batch(generator, batch_size, num_steps, max_word_length, pad=False):
-  '''Read batches of input.'''
-  cur_stream = [None] * batch_size
-    
-      prefix = [vocab.word_to_id(w) for w in prefix_words.split()]
-  prefix_char_ids = [vocab.word_to_char_ids(w) for w in prefix_words.split()]
-  for _ in xrange(FLAGS.num_samples):
-    inputs = np.zeros([BATCH_SIZE, NUM_TIMESTEPS], np.int32)
-    char_ids_inputs = np.zeros(
-        [BATCH_SIZE, NUM_TIMESTEPS, vocab.max_word_length], np.int32)
-    samples = prefix[:]
-    char_ids_samples = prefix_char_ids[:]
-    sent = ''
-    while True:
-      inputs[0, 0] = samples[0]
-      char_ids_inputs[0, 0, :] = char_ids_samples[0]
-      samples = samples[1:]
-      char_ids_samples = char_ids_samples[1:]
-    
-    
-def _read_words(filename):
-  with tf.gfile.GFile(filename, 'r') as f:
-    return f.read().decode('utf-8').replace('\n', '<eos>').split()
-    
-      Returns:
-    loss_matrix:  Loss matrix of shape [batch_size, sequence_length].
-  '''
-  cross_entropy_loss = tf.nn.sparse_softmax_cross_entropy_with_logits(
-      labels=gen_labels, logits=gen_logits)
-  return cross_entropy_loss
-    
-    
-def zip_seq_pred_crossent(id_to_word, sequences, predictions, cross_entropy):
-  '''Zip together the sequences, predictions, cross entropy.'''
-  indices = convert_to_indices(sequences)
-    
-      # Only calculate log-perplexity on missing tokens.
-  weights = tf.cast(present, tf.float32)
-  weights = 1. - weights
-  weights = tf.reshape(weights, [-1])
-  num_missing = tf.reduce_sum(weights)
-    
-        # Maximize reward.
-    gen_grads = tf.gradients(-final_gen_reward, gen_vars)
-    gen_grads_clipped, _ = tf.clip_by_global_norm(gen_grads,
+def create_dis_pretrain_op(hparams, dis_loss, global_step):
+  '''Create a train op for pretraining.'''
+  with tf.name_scope('pretrain_generator'):
+    optimizer = tf.train.AdamOptimizer(hparams.dis_pretrain_learning_rate)
+    dis_vars = [
+        v for v in tf.trainable_variables() if v.op.name.startswith('dis')
+    ]
+    if FLAGS.dis_update_share_embedding and FLAGS.dis_share_embedding:
+      shared_embedding = [
+          v for v in tf.trainable_variables()
+          if v.op.name == 'gen/decoder/rnn/embedding'
+      ][0]
+      dis_vars.append(shared_embedding)
+    dis_grads = tf.gradients(dis_loss, dis_vars)
+    dis_grads_clipped, _ = tf.clip_by_global_norm(dis_grads,
                                                   FLAGS.grad_clipping)
-    maximize_op = gen_optimizer.apply_gradients(
-        zip(gen_grads_clipped, gen_vars), global_step=global_step)
+    dis_pretrain_op = optimizer.apply_gradients(
+        zip(dis_grads_clipped, dis_vars), global_step=global_step)
+    return dis_pretrain_op
     
-          # if time > maxlen, return all true vector
-      done = tf.cond(
-          tf.greater(time, maximum_length),
-          lambda: tf.ones([
-              batch_size,], dtype=tf.bool), lambda: done)
-      return (done, cell_state, next_input, cell_output, context_state)
+        def __enter__(self):
+        from scrapy.utils.test import get_testenv
+        pargs = [sys.executable, '-u', '-m', 'scrapy.utils.benchserver']
+        self.proc = subprocess.Popen(pargs, stdout=subprocess.PIPE,
+                                     env=get_testenv())
+        self.proc.stdout.readline()
     
-    
-if __name__ == '__main__':
-    main()
+            if self.crawler_process.bootstrap_failed:
+            self.exitcode = 1
 
     
-        def get(self):
-        if len(self.config.GAE_APPIDS):
-            if len(self.working_appid_list) == 0:
-                time_to_reset = 600 - (time.time() - self.last_reset_time)
-                if time_to_reset > 0:
-                    self.logger.warn('all appid out of quota, wait %d seconds to reset', time_to_reset)
-                    time.sleep(time_to_reset)
-                    return None
-                else:
-                    self.logger.warn('reset appid')
-                    self.reset_appid()
+        @property
+    def templates_dir(self):
+        _templates_base_dir = self.settings['TEMPLATES_DIR'] or \
+            join(scrapy.__path__[0], 'templates')
+        return join(_templates_base_dir, 'spiders')
+
     
     
-try:
-    from Crypto.Cipher.ARC4 import new as _Crypto_Cipher_ARC4_new
-except ImportError:
-    logging.warn('Load Crypto.Cipher.ARC4 Failed, Use Pure Python Instead.')
-    class _Crypto_Cipher_ARC4_new(object):
-        def __init__(self, key):
-            x = 0
-            box = range(256)
-            for i, y in enumerate(box):
-                x = (x + y + ord(key[i % len(key)])) & 0xff
-                box[i], box[x] = box[x], y
-            self.__box = box
-            self.__x = 0
-            self.__y = 0
-        def encrypt(self, data):
-            out = []
-            out_append = out.append
-            x = self.__x
-            y = self.__y
-            box = self.__box
-            for char in data:
-                x = (x + 1) & 0xff
-                y = (y + box[x]) & 0xff
-                box[x], box[y] = box[y], box[x]
-                out_append(chr(ord(char) ^ box[(box[x] + box[y]) & 0xff]))
-            self.__x = x
-            self.__y = y
-            return ''.join(out)
+    @implementer(IPolicyForHTTPS)
+    class ScrapyClientContextFactory(BrowserLikePolicyForHTTPS):
+        '''
+        Non-peer-certificate verifying HTTPS context factory
     
-        Note that as of Java 1.4, you can access the stack trace, which means
-    that you can compute the complete trace of rules from the start symbol.
-    This gives you considerable context information with which to generate
-    useful error messages.
+        def _get_handler(self, scheme):
+        '''Lazy-load the downloadhandler for a scheme
+        only on the first request for that scheme.
+        '''
+        if scheme in self._handlers:
+            return self._handlers[scheme]
+        if scheme in self._notconfigured:
+            return None
+        if scheme not in self._schemes:
+            self._notconfigured[scheme] = 'no handler available for that scheme'
+            return None
+    
+        assert line_length(args.sourcefile) == line_length(args.targetfile)
+    
+    Loosely based on https://github.com/astropy/astropy/pull/347
+'''
     
     
-class ParserRuleReturnScope(RuleReturnScope):
-    '''
-    Rules that return more than a single value must return an object
-    containing all the values.  Besides the properties defined in
-    RuleLabelScope.predefinedRulePropertiesScope there may be user-defined
-    return values.  This class simply defines the minimum properties that
-    are always defined and methods to access the others that might be
-    available depending on output option such as template and tree.
+def start_scanning(config, add_entities, client):
+    '''Start a new flic client for scanning and connecting to new buttons.'''
+    import pyflic
     
-            if first > last or first < 0 or last < 0 or last >= len(self.tokens):
-            raise ValueError(
-                'replace: range invalid: '+first+'..'+last+
-                '(size='+len(self.tokens)+')')
+                    _LOGGER.debug(
+                    'Sent metric %s: %s (tags: %s)', attribute, value, tags)
     
-    def get_mod_deps(mod_name):
-    '''Get known module dependencies.
     
-    from certbot.tests import util as certbot_util
+Device = namedtuple('Device', ['mac', 'ip', 'last_update'])
     
-        def tearDown(self):
-        shutil.rmtree(self.temp_dir)
-        shutil.rmtree(self.config_dir)
-        shutil.rmtree(self.work_dir)
     
-            if file and allowed_file(file.filename):
-            # The image file seems valid! Detect faces and return the result.
-            return detect_faces_in_image(file)
+def _get_token(host, username, password):
+    '''Get authentication token for the given host+username+password.'''
+    url = 'http://{}/cgi-bin/luci/api/xqsystem/login'.format(host)
+    data = {'username': username, 'password': password}
+    try:
+        res = requests.post(url, data=data, timeout=5)
+    except requests.exceptions.Timeout:
+        _LOGGER.exception('Connection to the router timed out')
+        return
+    if res.status_code == 200:
+        try:
+            result = res.json()
+        except ValueError:
+            # If JSON decoder could not parse the response
+            _LOGGER.exception('Failed to parse response from mi router')
+            return
+        try:
+            return result['token']
+        except KeyError:
+            error_message = 'Xiaomi token cannot be refreshed, response from '\
+                            + 'url: [%s] \nwith parameter: [%s] \nwas: [%s]'
+            _LOGGER.exception(error_message, url, data, result)
+            return
+    else:
+        _LOGGER.error('Invalid response: [%s] at url: [%s] with data [%s]',
+                      res, url, data)
+
     
-    # Loop through each face found in the unknown image
-for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
-    # See if the face is a match for the known face(s)
-    matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+    REQUIREMENTS = ['pizzapi==0.0.3']
     
-    import face_recognition
-from flask import Flask, jsonify, request, redirect
+    
+def setup(hass, config):
+    '''Set up the Dweet.io component.'''
+    conf = config[DOMAIN]
+    name = conf.get(CONF_NAME)
+    whitelist = conf.get(CONF_WHITELIST)
+    json_body = {}
+    
+    CONFIG_SCHEMA = vol.Schema({
+    DOMAIN: vol.Schema({
+        vol.Required(CONF_API_KEY): cv.string,
+        vol.Required(CONF_URL): cv.string,
+        vol.Required(CONF_INPUTNODE): cv.positive_int,
+        vol.Required(CONF_WHITELIST): cv.entity_ids,
+        vol.Optional(CONF_SCAN_INTERVAL, default=30): cv.positive_int,
+    }),
+}, extra=vol.ALLOW_EXTRA)
+    
+        @core.callback
+    def get(self, request):
+        '''Handle a GET request.'''
+        xml_template = '''<?xml version='1.0' encoding='UTF-8' ?>
+<root xmlns='urn:schemas-upnp-org:device-1-0'>
+<specVersion>
+<major>1</major>
+<minor>0</minor>
+</specVersion>
+<URLBase>http://{0}:{1}/</URLBase>
+<device>
+<deviceType>urn:schemas-upnp-org:device:Basic:1</deviceType>
+<friendlyName>HASS Bridge ({0})</friendlyName>
+<manufacturer>Royal Philips Electronics</manufacturer>
+<manufacturerURL>http://www.philips.com</manufacturerURL>
+<modelDescription>Philips hue Personal Wireless Lighting</modelDescription>
+<modelName>Philips hue bridge 2015</modelName>
+<modelNumber>BSB002</modelNumber>
+<modelURL>http://www.meethue.com</modelURL>
+<serialNumber>1234</serialNumber>
+<UDN>uuid:2f402f80-da50-11e1-9b23-001788255acc</UDN>
+</device>
+</root>
+'''
+    
+            def process(self, event):
+            '''On Watcher event, fire HA event.'''
+            _LOGGER.debug('process(%s)', event)
+            if not event.is_directory:
+                folder, file_name = os.path.split(event.src_path)
+                self.hass.bus.fire(
+                    DOMAIN, {
+                        'event_type': event.event_type,
+                        'path': event.src_path,
+                        'file': file_name,
+                        'folder': folder,
+                        })
+    
+        await component.async_add_entities(graphs)
