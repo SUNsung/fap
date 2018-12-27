@@ -1,174 +1,241 @@
-print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
-    try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
-    
-    import datetime
-import io
-import json
-import textwrap
-    
-    import youtube_dl
-    
-        def __init__(self, **kwargs):
-        '''
-        Use keyword arguments to overwrite
-        any of the class attributes for this instance.
-    
-        @property
-    def headers(self):
-        '''Return a `str` with the message's headers.'''
-        raise NotImplementedError()
-    
-    
-def test_basic_auth(httpbin_both):
-    r = http('--auth=user:password',
-             'GET', httpbin_both + '/basic-auth/user/password')
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
-    
-        plugin_manager.register(Plugin)
-    try:
-        r = http(
-            httpbin + BASIC_AUTH_URL,
-            '--auth-type',
-            Plugin.auth_type,
-        )
-        assert HTTP_OK in r
-        assert r.json == AUTH_OK
-    finally:
-        plugin_manager.unregister(Plugin)
-    
-    from httpie.compat import urlopen
-from httpie.downloads import (
-    parse_content_range, filename_from_content_disposition, filename_from_url,
-    get_unique_filename, ContentRangeError, Downloader,
-)
-from utils import http, MockEnvironment
-    
-    
-@pytest.mark.parametrize('follow_flag', ['--follow', '-F'])
-def test_follow_without_all_redirects_hidden(httpbin, follow_flag):
-    r = http(follow_flag, httpbin.url + '/redirect/2')
-    assert r.count('HTTP/1.1') == 1
-    assert HTTP_OK in r
-    
-        def _get_path(self):
-        return os.path.join(self.directory, self.name + '.json')
-    
-            if now - self.lastmark >= 3:
-            self.lastmark = now
-            qps = len(self.tail) / sum(self.tail)
-            print('samplesize={0} concurrent={1} qps={2:0.2f}'.format(len(self.tail), self.concurrent, qps))
-    
-        def _genspider(self, module, name, domain, template_name, template_file):
-        '''Generate the spider module, based on the given template'''
-        tvars = {
-            'project_name': self.settings.get('BOT_NAME'),
-            'ProjectName': string_camelcase(self.settings.get('BOT_NAME')),
-            'module': module,
-            'name': name,
-            'domain': domain,
-            'classname': '%sSpider' % ''.join(s.capitalize() \
-                for s in module.split('_'))
-        }
-        if self.settings.get('NEWSPIDER_MODULE'):
-            spiders_module = import_module(self.settings['NEWSPIDER_MODULE'])
-            spiders_dir = abspath(dirname(spiders_module.__file__))
-        else:
-            spiders_module = None
-            spiders_dir = '.'
-        spider_file = '%s.py' % join(spiders_dir, module)
-        shutil.copyfile(template_file, spider_file)
-        render_templatefile(spider_file, **tvars)
-        print('Created spider %r using template %r ' % (name, \
-            template_name), end=('' if spiders_module else '\n'))
-        if spiders_module:
-            print('in module:\n  %s.%s' % (spiders_module.__name__, module))
-    
-        def run(self, args, opts):
-        if len(args) != 1:
-            raise UsageError()
-        filename = args[0]
-        if not os.path.exists(filename):
-            raise UsageError('File not found: %s\n' % filename)
-        try:
-            module = _import_file(filename)
-        except (ImportError, ValueError) as e:
-            raise UsageError('Unable to load %r: %s\n' % (filename, e))
-        spclasses = list(iter_spider_classes(module))
-        if not spclasses:
-            raise UsageError('No spider found in file: %s\n' % filename)
-        spidercls = spclasses.pop()
-    
-            spidercls = DefaultSpider
-        if opts.spider:
-            spidercls = spider_loader.load(opts.spider)
-        elif url:
-            spidercls = spidercls_for_request(spider_loader, Request(url),
-                                              spidercls, log_multiple=True)
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('--verbose', '-v', dest='verbose', action='store_true',
-            help='also display twisted/python/platform info (useful for bug reports)')
-    
-                elif opt in ('-l', '--playlist', '--playlists'):
-                # Download playlist whenever possible.
-                conf['playlist'] = True
-    
-        @classmethod
-    def dec_playinfo(cls, info, coeff):
-        res = None
-        clear = cls.funshion_decrypt_str(info['infohash'], coeff)
-        if cls.checksum(clear):
-            res = dict(hashid=clear[:40], token=cls.funshion_decrypt_str(info['token'], coeff))
-        else:
-            clear = cls.funshion_decrypt_str(info['infohash_prev'], coeff)
-            if cls.checksum(clear):
-                res = dict(hashid=clear[:40], token=cls.funshion_decrypt_str(info['token_prev'], coeff))
-        return res
-    
-        def __solveDP(self, x, y):
-        if (x==-1):
-            return y+1
-        elif (y==-1):
-            return x+1
-        elif (self.dp[x][y]>-1):
-            return self.dp[x][y]
-        else:
-            if (self.A[x]==self.B[y]):
-                self.dp[x][y] = self.__solveDP(x-1,y-1)
+
+        
+                if any([s_line.startswith(s) for s in ['* [', '- [']]):
+            if indent == last_indent:
+                blocks[-1].append(line)
             else:
-                self.dp[x][y] = 1+min(self.__solveDP(x,y-1), self.__solveDP(x-1,y), self.__solveDP(x-1,y-1))
+                blocks.append([line])
+            last_indent = indent
+        else:
+            blocks.append([line])
+            last_indent = None
     
-    def longestSub(ARRAY): 			#This function is recursive
-	
-	ARRAY_LENGTH = len(ARRAY)
-	if(ARRAY_LENGTH <= 1):  	#If the array contains only one element, we return it (it's the stop condition of recursion)
-		return ARRAY
-								#Else
-	PIVOT=ARRAY[0]
-	isFound=False
-	i=1
-	LONGEST_SUB=[]
-	while(not isFound and i<ARRAY_LENGTH):
-		if (ARRAY[i] < PIVOT):
-			isFound=True
-			TEMPORARY_ARRAY = [ element for element in ARRAY[i:] if element >= ARRAY[i] ]
-			TEMPORARY_ARRAY = longestSub(TEMPORARY_ARRAY)
-			if ( len(TEMPORARY_ARRAY) > len(LONGEST_SUB) ):
-				LONGEST_SUB = TEMPORARY_ARRAY
-		else:
-			i+=1
+    # Containers for storing data across data.
+datasets = {}
+for n in range(ndatasets):
+  print(n+1, ' of ', ndatasets)
     
-    * @author chinmoy159
-* @version 1.0 dated 10/08/2017
-'''
+      prefix = [vocab.word_to_id(w) for w in prefix_words.split()]
+  prefix_char_ids = [vocab.word_to_char_ids(w) for w in prefix_words.split()]
+  for _ in xrange(FLAGS.num_samples):
+    inputs = np.zeros([BATCH_SIZE, NUM_TIMESTEPS], np.int32)
+    char_ids_inputs = np.zeros(
+        [BATCH_SIZE, NUM_TIMESTEPS, vocab.max_word_length], np.int32)
+    samples = prefix[:]
+    char_ids_samples = prefix_char_ids[:]
+    sent = ''
+    while True:
+      inputs[0, 0] = samples[0]
+      char_ids_inputs[0, 0, :] = char_ids_samples[0]
+      samples = samples[1:]
+      char_ids_samples = char_ids_samples[1:]
+    
+      tf.gfile.MakeDirs(FLAGS.output_path)
+  output_file = tf.gfile.GFile(
+      os.path.join(FLAGS.output_path, 'reviews.txt'), mode='w')
+    
+      # Split the batch into half.  Use half for MC estimates for REINFORCE.
+  # Use the other half to establish a baseline.
+  elif FLAGS.baseline_method == 'dis_batch':
+    # TODO(liamfedus):  Recheck.
+    [rewards_half, baseline_half] = tf.split(
+        rewards, num_or_size_splits=2, axis=0)
+    [log_probs_half, _] = tf.split(log_probs, num_or_size_splits=2, axis=0)
+    [reward_present_half, baseline_present_half] = tf.split(
+        present, num_or_size_splits=2, axis=0)
+    
+    
+def create_dis_pretrain_op(hparams, dis_loss, global_step):
+  '''Create a train op for pretraining.'''
+  with tf.name_scope('pretrain_generator'):
+    optimizer = tf.train.AdamOptimizer(hparams.dis_pretrain_learning_rate)
+    dis_vars = [
+        v for v in tf.trainable_variables() if v.op.name.startswith('dis')
+    ]
+    if FLAGS.dis_update_share_embedding and FLAGS.dis_share_embedding:
+      shared_embedding = [
+          v for v in tf.trainable_variables()
+          if v.op.name == 'gen/decoder/rnn/embedding'
+      ][0]
+      dis_vars.append(shared_embedding)
+    dis_grads = tf.gradients(dis_loss, dis_vars)
+    dis_grads_clipped, _ = tf.clip_by_global_norm(dis_grads,
+                                                  FLAGS.grad_clipping)
+    dis_pretrain_op = optimizer.apply_gradients(
+        zip(dis_grads_clipped, dis_vars), global_step=global_step)
+    return dis_pretrain_op
+    
+    
+def test_when_successfully_configured(usage_tracker_io, shell_pid,
+                                      shell, shell_config, logs):
+    shell.get_history.return_value = ['fuck']
+    shell_pid.return_value = 12
+    _change_tracker(usage_tracker_io, 12)
+    shell_config.read.return_value = ''
+    main()
+    shell_config.write.assert_any_call('eval $(thefuck --alias)')
+    logs.configured_successfully.assert_called_once()
+
+    
+    containers = (('thefuck/python3-tcsh',
+               u'''FROM python:3
+                   RUN apt-get update
+                   RUN apt-get install -yy tcsh''',
+               u'tcsh'),
+              ('thefuck/python2-tcsh',
+               u'''FROM python:2
+                   RUN apt-get update
+                   RUN apt-get install -yy tcsh''',
+               u'tcsh'))
+    
+    
+@pytest.fixture(params=[(python_3, False),
+                        (python_3, True),
+                        (python_2, False)])
+def proc(request, spawnu, TIMEOUT):
+    container, instant_mode = request.param
+    proc = spawnu(*container)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(init_zshrc.format(
+        u'--enable-experimental-instant-mode' if instant_mode else ''))
+    proc.sendline(u'zsh')
+    if instant_mode:
+        assert proc.expect([TIMEOUT, u'instant mode ready: True'])
+    return proc
+    
+    
+def to_native_string(string, encoding='ascii'):
+    '''Given a string object, regardless of type, returns a representation of
+    that string in the native string type, encoding and decoding where
+    necessary. This assumes ASCII unless told otherwise.
+    '''
+    if isinstance(string, builtin_str):
+        out = string
+    else:
+        if is_py2:
+            out = string.encode(encoding)
+        else:
+            out = string.decode(encoding)
+    
+    
+class RequestException(IOError):
+    '''There was an ambiguous exception that occurred while handling your
+    request.
+    '''
+    
+    
+class VersionedPackage(object):
+    def __init__(self, version):
+        self.__version__ = version
+    
+    # One entry per manual page. List of tuples
+# (source start file, name, description, authors, manual section).
+man_pages = [
+    (master_doc, 'requests', u'Requests Documentation',
+     [author], 1)
+]
+    
+        if args.plot is not None:
+        print('Displaying plot', file=sys.stderr)
+        title = ('Multilabel metrics with %s' %
+                 ', '.join('{0}={1}'.format(field, getattr(args, field))
+                           for field in ['samples', 'classes', 'density']
+                           if args.plot != field))
+        _plot(results, args.metrics, args.formats, title, steps, args.plot)
+
+    
+            # plot the actual surface
+        ax.plot_surface(X, Y, Z.T, cstride=1, rstride=1, color=c, alpha=0.8)
+    
+    
+# Make some random data with uniformly located non zero entries with
+# Gaussian distributed values
+def make_sparse_random_data(n_samples, n_features, n_nonzeros,
+                            random_state=None):
+    rng = np.random.RandomState(random_state)
+    data_coo = sp.coo_matrix(
+        (rng.randn(n_nonzeros),
+        (rng.randint(n_samples, size=n_nonzeros),
+         rng.randint(n_features, size=n_nonzeros))),
+        shape=(n_samples, n_features))
+    return data_coo.toarray(), data_coo.tocsr()
+    
+    
+if not os.path.exists(DATA_FOLDER):
+    
+        def render(self, request):
+        now = time()
+        delta = now - self.lasttime
+    
+        # Max concurrency is limited by global CONCURRENT_REQUESTS setting
+    max_concurrent_requests = 8
+    # Requests per second goal
+    qps = None # same as: 1 / download_delay
+    download_delay = None
+    # time in seconds to delay server responses
+    latency = None
+    # number of slots to create
+    slots = 1
+    
+    
+class _BenchSpider(scrapy.Spider):
+    '''A spider that follows all links'''
+    name = 'follow'
+    total = 10000
+    show = 20
+    baseurl = 'http://localhost:8998'
+    link_extractor = LinkExtractor()
+    
+        requires_project = True
+    default_settings = {'LOG_ENABLED': False}
+    
+        def handleStatus(self, version, status, message):
+        self.factory.gotStatus(version, status, message)
+    
+    
+def capture_events(callable, p=None):
+    if p is None:
+        p = HookWatcher()
+    # Disable the garbage collector. This prevents __del__s from showing up in
+    # traces.
+    old_gc = gc.isenabled()
+    gc.disable()
+    try:
+        sys.setprofile(p.callback)
+        protect(callable, p)
+        sys.setprofile(None)
+    finally:
+        if old_gc:
+            gc.enable()
+    return p.get_events()[1:-1]
+    
+    
+# Split a path in root and extension.
+# The extension is everything starting at the last dot in the last
+# pathname component; the root is everything before that.
+# It is always true that root + ext == p.
+    
+        If the resulting string contains path separators, an exception is raised.
+    '''
+    parent, file_name = os.path.split(path)
+    if parent:
+        raise ValueError('{!r} must be only a file name'.format(path))
+    else:
+        return file_name
+    
+    # Send the message via local SMTP server.
+with smtplib.SMTP('localhost') as s:
+    s.send_message(msg)
+
+    
+    import os
+import email
+import mimetypes
+    
+    def getText(nodelist):
+    rc = []
+    for node in nodelist:
+        if node.nodeType == node.TEXT_NODE:
+            rc.append(node.data)
+    return ''.join(rc)
