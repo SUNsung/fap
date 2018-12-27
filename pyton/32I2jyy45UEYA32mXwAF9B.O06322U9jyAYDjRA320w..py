@@ -1,29 +1,32 @@
 
         
-        # write out the dataset
-write_datasets(FLAGS.save_dir, FLAGS.datafile_name, datasets)
-print ('Saved to ', os.path.join(FLAGS.save_dir,
-                                 FLAGS.datafile_name + '_' + dataset_name))
-
+            # Initialize and populate our database.
+    conn = sqlite3.connect(':memory:')
+    cursor = conn.cursor()
+    cursor.execute('CREATE TABLE memos(key INTEGER PRIMARY KEY, task TEXT)')
+    tasks = (
+        'give food to fish',
+        'prepare group meeting',
+        'fight with a zebra',
+        )
+    for task in tasks:
+        cursor.execute('INSERT INTO memos VALUES(NULL, ?)', (task,))
     
-    rnn_a = generate_rnn(rnn_rngs[0], N, FLAGS.g, FLAGS.tau, FLAGS.dt,
-                     FLAGS.max_firing_rate)
-rnn_b = generate_rnn(rnn_rngs[1], N, FLAGS.g, FLAGS.tau, FLAGS.dt,
-                     FLAGS.max_firing_rate)
-rnns = [rnn_a, rnn_b]
+    def test():
+    PROCESSES = 4
+    print('Creating pool with %d processes\n' % PROCESSES)
     
-      def __init__(self, filename):
-    '''Initialize vocabulary.
+    def convert_point(s):
+    x, y = list(map(float, s.split(b';')))
+    return Point(x, y)
     
-        # TODO: decoder/encoder should accept cls? Otherwise, subclassing
-    # JSONObjectWithFields is tricky...
-    header_cls = Header
-    header = jose.Field(
-        'header', omitempty=True, default=header_cls(),
-        decoder=header_cls.from_json)
+    def generateLargePrime(keysize = 1024):
+    while True:
+        num = random.randrange(2 ** (keysize - 1), 2 ** (keysize))
+        if isPrime(num):
+            return num
     
-    
-def get_file_path(vhost_path):
-    '''Get file path from augeas_vhost_path.
-    
-    logger = logging.getLogger(__name__)
+    The problem is  :
+Given an array, to find the longest and continuous sub array and get the max sum of the sub array in the given array.
+'''
+from __future__ import print_function
