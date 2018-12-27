@@ -1,208 +1,205 @@
-    new_release = releaser.create_release(
-        version, name='youtube-dl %s' % version, body=body)
-    release_id = new_release['id']
-    
-    
-def openssl_encode(algo, key, iv):
-    cmd = ['openssl', 'enc', '-e', '-' + algo, '-K', hex_str(key), '-iv', hex_str(iv)]
-    prog = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-    out, _ = prog.communicate(secret_msg)
-    return out
-    
-        with io.open(README_FILE, encoding='utf-8') as f:
-        readme = f.read()
-    
-    for page in itertools.count(1):
-    releases = json.loads(compat_urllib_request.urlopen(
-        'https://api.github.com/repos/rg3/youtube-dl/releases?page=%s' % page
-    ).read().decode('utf-8'))
-    
-        def test_format_note(self):
-        ydl = YoutubeDL()
-        self.assertEqual(ydl._format_note({}), '')
-        assertRegexpMatches(self, ydl._format_note({
-            'vbr': 10,
-        }), r'^\s*10k$')
-        assertRegexpMatches(self, ydl._format_note({
-            'fps': 30,
-        }), r'^30fps$')
-    
-    
-class TestAgeRestriction(unittest.TestCase):
-    def _assert_restricted(self, url, filename, age, old_age=None):
-        self.assertTrue(_download_restricted(url, filename, old_age))
-        self.assertFalse(_download_restricted(url, filename, age))
-    
-            params = get_params(test_case.get('params', {}))
-        params['outtmpl'] = tname + '_' + params['outtmpl']
-        if is_playlist and 'playlist' not in test_case:
-            params.setdefault('extract_flat', 'in_playlist')
-            params.setdefault('skip_download', True)
-    
-        def test_cmdline_umlauts(self):
-        p = subprocess.Popen(
-            [sys.executable, 'youtube_dl/__main__.py', encodeArgument('ä'), '--version'],
-            cwd=rootDir, stdout=_DEV_NULL, stderr=subprocess.PIPE)
-        _, stderr = p.communicate()
-        self.assertFalse(stderr)
-    
-        def get_converter(self, mime):
-        if is_valid_mime(mime):
-            for converter_class in plugin_manager.get_converters():
-                if converter_class.supports(mime):
-                    return converter_class(mime)
-    
-        def get_headers(self):
-        '''Return the headers' bytes.'''
-        return self.msg.headers.encode('utf8')
-    
-        # If both `auth_parse` and `prompt_password` are set to `True`,
-    # and the value of `-a` lacks the password part,
-    # then the user will be prompted to type the password in.
-    prompt_password = True
-    
-        def test_print_only_body_when_stdout_redirected_by_default(self, httpbin):
-        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
-        r = http('GET', httpbin.url + '/get', env=env)
-        assert 'HTTP/' not in r
-    
-        exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR
-    assert error_msg == (
-        'ConnectionError: '
-        'Connection aborted while doing GET request to URL: '
-        'http://www.google.com')
-    
-    
-def test_unicode_form_item(httpbin):
-    r = http('--form', 'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
-    assert HTTP_OK in r
-    assert r.json['form'] == {'test': UNICODE}
-    
-        def __call__(self, value):
-        keys = set(value)
-        missing_keys = self.keys - keys
-        if missing_keys:
-            raise ValidationError(
-                self.messages['missing_keys'],
-                code='missing_keys',
-                params={'keys': ', '.join(missing_keys)},
-            )
-        if self.strict:
-            extra_keys = keys - self.keys
-            if extra_keys:
-                raise ValidationError(
-                    self.messages['extra_keys'],
-                    code='extra_keys',
-                    params={'keys': ', '.join(extra_keys)},
-                )
-    
-        def load(self):
-        try:
-            data = self._cache.get(self.cache_key)
-        except Exception:
-            # Some backends (e.g. memcache) raise an exception on invalid
-            # cache keys. If this happens, reset the session. See #17810.
-            data = None
-    
-        def create_model_instance(self, data):
-        '''
-        Return a new instance of the session model object, which represents the
-        current session state. Intended to be used for saving the session data
-        to the database.
-        '''
-        return self.model(
-            session_key=self._get_or_create_session_key(),
-            session_data=self.encode(data),
-            expire_date=self.get_expiry_date(),
-        )
-    
-    
-class ConnectionHandler:
-    def __init__(self, databases=None):
-        '''
-        databases is an optional dictionary of database definitions (structured
-        like settings.DATABASES).
-        '''
-        self._databases = databases
-        self._connections = local()
-    
-        def parse(self, response):
-        for link in self.link_extractor.extract_links(response):
-            yield scrapy.Request(link.url, callback=self.parse)
+
+        
+            return app
 
     
-            writeln(self.separator2)
-        writeln('Ran %d contract%s in %.3fs' % (run, plural, stop - start))
-        writeln()
     
-            editor = self.settings['EDITOR']
-        try:
-            spidercls = self.crawler_process.spider_loader.load(args[0])
-        except KeyError:
-            return self._err('Spider not found: %s' % args[0])
+@pytest.mark.parametrize(('username', 'password', 'message'), (
+    ('', '', b'Username is required.'),
+    ('a', '', b'Password is required.'),
+    ('test', 'test', b'already registered'),
+))
+def test_register_validate_input(client, username, password, message):
+    response = client.post(
+        '/auth/register',
+        data={'username': username, 'password': password}
+    )
+    assert message in response.data
     
-        def process_request_meta(self, opts):
     
-        def run(self, args, opts):
-        settings = self.crawler_process.settings
-        if opts.get:
-            s = settings.get(opts.get)
-            if isinstance(s, BaseSettings):
-                print(json.dumps(s.copy_to_dict()))
+def test_author_required(app, client, auth):
+    # change the post author to another user
+    with app.app_context():
+        db = get_db()
+        db.execute('UPDATE post SET author_id = 2 WHERE id = 1')
+        db.commit()
+    
+        monkeypatch.setattr('flaskr.db.init_db', fake_init_db)
+    result = runner.invoke(args=['init-db'])
+    assert 'Initialized' in result.output
+    assert Recorder.called
+
+    
+        def app_url_value_preprocessor(self, f):
+        '''Same as :meth:`url_value_preprocessor` but application wide.
+        '''
+        self.record_once(lambda s: s.app.url_value_preprocessors
+            .setdefault(None, []).append(f))
+        return f
+    
+            info.append('% 5d: trying loader of %s' % (
+            idx + 1, src_info))
+    
+    
+def _lookup_req_object(name):
+    top = _request_ctx_stack.top
+    if top is None:
+        raise RuntimeError(_request_ctx_err_msg)
+    return getattr(top, name)
+    
+        :param directory: the directory where all the files are stored.
+    :param filename: the filename relative to that directory to
+                     download.
+    :param options: optional keyword arguments that are directly
+                    forwarded to :func:`send_file`.
+    '''
+    filename = safe_join(directory, filename)
+    if not os.path.isabs(filename):
+        filename = os.path.join(current_app.root_path, filename)
+    try:
+        if not os.path.isfile(filename):
+            raise NotFound()
+    except (TypeError, ValueError):
+        raise BadRequest()
+    options.setdefault('conditional', True)
+    return send_file(filename, **options)
+    
+    
+# Core signals.  For usage examples grep the source code or consult
+# the API documentation in docs/api.rst as well as docs/signals.rst
+template_rendered = _signals.signal('template-rendered')
+before_render_template = _signals.signal('before-render-template')
+request_started = _signals.signal('request-started')
+request_finished = _signals.signal('request-finished')
+request_tearing_down = _signals.signal('request-tearing-down')
+got_request_exception = _signals.signal('got-request-exception')
+appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
+appcontext_pushed = _signals.signal('appcontext-pushed')
+appcontext_popped = _signals.signal('appcontext-popped')
+message_flashed = _signals.signal('message-flashed')
+
+    
+        def dispatch_request(self, *args, **kwargs):
+        meth = getattr(self, request.method.lower(), None)
+    
+        request.addfinalizer(_reset_settings)
+    conf.settings.user_dir = Path('~/.thefuck')
+    return conf.settings
+    
+    
+@pytest.mark.parametrize('command, packages', [
+    (Command('vim', 'vim: command not found'),
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('sudo vim', 'vim: command not found'),
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('vim', 'The program 'vim' is currently not installed. You can install it by typing: sudo apt install vim'),
+     [('vim', 'main'), ('vim-tiny', 'main')])])
+def test_match(mocker, command, packages):
+    mocker.patch('thefuck.rules.apt_get.which', return_value=None)
+    mocker.patch('thefuck.rules.apt_get._get_packages',
+                 create=True, return_value=packages)
+    
+    
+@pytest.mark.skipif(_is_not_okay_to_test(),
+                    reason='No need to run if there\'s no formula')
+def test_get_new_command(brew_no_available_formula):
+    assert get_new_command(Command('brew install elsticsearch',
+                                   brew_no_available_formula))\
+        == 'brew install elasticsearch'
+    
+    # Subtracting pixel mean improves accuracy
+subtract_pixel_mean = True
+    
+    
+def load_data():
+    '''Loads CIFAR10 dataset.
+    
+        # Returns
+        List of input tensors.
+    '''
+    if not hasattr(tensor, '_keras_history'):
+        return tensor
+    
+    
+allobj = [losses.mean_squared_error,
+          losses.mean_absolute_error,
+          losses.mean_absolute_percentage_error,
+          losses.mean_squared_logarithmic_error,
+          losses.squared_hinge,
+          losses.hinge,
+          losses.categorical_crossentropy,
+          losses.binary_crossentropy,
+          losses.kullback_leibler_divergence,
+          losses.poisson,
+          losses.cosine_proximity,
+          losses.logcosh,
+          losses.categorical_hinge]
+    
+        if steps is not None:
+        for step in range(steps):
+            batch_outs = f(ins)
+            if isinstance(batch_outs, list):
+                if step == 0:
+                    for _ in enumerate(batch_outs):
+                        outs.append(0.)
+                for i, batch_out in enumerate(batch_outs):
+                    if i in stateful_metric_indices:
+                        outs[i] = float(batch_out)
+                    else:
+                        outs[i] += batch_out
             else:
-                print(s)
-        elif opts.getbool:
-            print(settings.getbool(opts.getbool))
-        elif opts.getint:
-            print(settings.getint(opts.getint))
-        elif opts.getfloat:
-            print(settings.getfloat(opts.getfloat))
-        elif opts.getlist:
-            print(settings.getlist(opts.getlist))
-
+                if step == 0:
+                    outs.append(0.)
+                outs[0] += batch_outs
+            if verbose == 1:
+                progbar.update(step + 1)
+        for i in range(len(outs)):
+            if i not in stateful_metric_indices:
+                outs[i] /= steps
+    else:
+        batches = make_batches(num_samples, batch_size)
+        index_array = np.arange(num_samples)
+        for batch_index, (batch_start, batch_end) in enumerate(batches):
+            batch_ids = index_array[batch_start:batch_end]
+            if isinstance(ins[-1], float):
+                # Do not slice the training phase flag.
+                ins_batch = slice_arrays(ins[:-1], batch_ids) + [ins[-1]]
+            else:
+                ins_batch = slice_arrays(ins, batch_ids)
+            for i in indices_for_conversion_to_dense:
+                ins_batch[i] = ins_batch[i].toarray()
     
-            spidercls = DefaultSpider
-        if opts.spider:
-            spidercls = spider_loader.load(opts.spider)
-        elif url:
-            spidercls = spidercls_for_request(spider_loader, Request(url),
-                                              spidercls, log_multiple=True)
+            # Arguments
+            layer: layer instance.
     
-    from scrapy import twisted_version
+    Gets to 0.89 test accuracy after 2 epochs.
+90s/epoch on Intel i5 2.4Ghz CPU.
+10s/epoch on Tesla K40 GPU.
+'''
+from __future__ import print_function
     
+    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
+    host = r1(r'host=([^&]*)', html)
+    assert host
+    type = r1(r'videofiletype=([^&]*)', html)
+    assert type
+    vid = r1(r'&stream_name=([^&]*)', html)
+    assert vid
+    dir_str = r1(r'&dir=([^&]*)', html).strip()
+    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
+    _, ext, size = url_info(url)
+    print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir, merge = merge)
     
-class DownloadHandlers(object):
+    from .theplatform import theplatform_download_by_pid
     
-    # Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named 'default.css' will overwrite the builtin 'default.css'.
-html_static_path = ['_static']
+    __all__ = ['ehow_download']
     
-        def __init__(self, hass, flash_briefings):
-        '''Initialize Alexa view.'''
-        super().__init__()
-        self.flash_briefings = copy.deepcopy(flash_briefings)
-        template.attach(hass, self.flash_briefings)
-    
-            # Without a home_id, we fetched an URL where the mobile devices can be
-        # found under the mobileDevices key.
-        if 'mobileDevices' in tado_json:
-            tado_json = tado_json['mobileDevices']
-    
-    _DEVICES_REGEX = re.compile(
-    r'(?P<mac>(([0-9a-f]{2}[:-]){5}([0-9a-f]{2})))\s'
-    r'(?P<ip>([0-9]{1,3}[\.]){3}[0-9]{1,3})\s+'
-    r'(?P<status>([^\s]+))\s+'
-    r'(?P<type>([^\s]+))\s+'
-    r'(?P<intf>([^\s]+))\s+'
-    r'(?P<hwintf>([^\s]+))\s+'
-    r'(?P<host>([^\s]+))')
-    
-    
-CONFIG_SCHEMA = vol.Schema({
-    DOMAIN: vol.Schema({cv.slug: GRAPH_SCHEMA})
-}, extra=vol.ALLOW_EXTRA)
+    pattern_url_photoset = r'https?://www\.flickr\.com/photos/.+/(?:(?:sets)|(?:albums))?/([^/]+)'
+pattern_url_photostream = r'https?://www\.flickr\.com/photos/([^/]+)(?:/|(?:/page))?$'
+pattern_url_single_photo = r'https?://www\.flickr\.com/photos/[^/]+/(\d+)'
+pattern_url_gallery = r'https?://www\.flickr\.com/photos/[^/]+/galleries/(\d+)'
+pattern_url_group = r'https?://www\.flickr\.com/groups/([^/]+)'
+pattern_url_favorite = r'https?://www\.flickr\.com/photos/([^/]+)/favorites'
