@@ -1,337 +1,175 @@
-public:
-  /// Form storage for the given generic signature and its replacement
-  /// types and conformances.
-  static Storage *get(GenericSignature *genericSig,
+
+        
+        
+    {        if (specialized)
+          return ProtocolConformanceRef(specialized);
+      }
+    
+    
+    {  /// Profile the substitution map storage, for use with LLVM's FoldingSet.
+  static void Profile(llvm::FoldingSetNodeID &id,
+                      GenericSignature *genericSig,
                       ArrayRef<Type> replacementTypes,
                       ArrayRef<ProtocolConformanceRef> conformances);
-    
-      DCache.CBs.valueRetainCB(Value, nullptr);
-  DCache.Entries[CKey] = Value;
-    
-    void CacheImpl::destroy() {
-  cache_destroy(static_cast<cache_t*>(Impl));
-}
-
-    
-        if (node->Left) {
-      IndentScope ms(this, (childKind == ChildKind::Left ||
-                            childKind == ChildKind::Root) ? '  ' : '| ');
-      print(node->Left, ChildKind::Left);
-    }
-    
-          case PartOfSpeech::Verb:
-      case PartOfSpeech::Gerund:
-        // Don't prune redundant type information from the base name if
-        // there is a corresponding property (either singular or plural).
-        if (role == NameRole::BaseName &&
-            textMatchesPropertyName(
-              name.substr(nameWordRevIter.base().getPosition()),
-              allPropertyNames))
-          return name;
-    
-    /// The list of known CF types.  We use 'constexpr' to verify that this is
-/// emitted as a constant.  Note that this is expected to be sorted in
-/// quasi-lexicographic order.
-static constexpr const llvm::StringLiteral KnownCFTypes[] = {
-#define CF_TYPE(NAME) #NAME,
-#define NON_CF_TYPE(NAME)
-#include 'SortedCFDatabase.def'
-};
-const size_t NumKnownCFTypes = sizeof(KnownCFTypes) / sizeof(*KnownCFTypes);
-    
-      static CFPointeeInfo forRecord(bool isConst, const clang::RecordDecl *decl) {
-    assert(decl);
-    CFPointeeInfo info;
-    info.IsValid = true;
-    info.IsConst = isConst;
-    info.Decl = decl;
-    return info;
-  }
-    
-      public:
-    ClangDiagRenderer(const clang::LangOptions &langOpts,
-                      clang::DiagnosticOptions *diagOpts,
-                      decltype(callback) fn)
-       : DiagnosticNoteRenderer(langOpts, diagOpts),
-         callback(fn) {}
-    
-    char Mangle::getStandardTypeSubst(StringRef TypeName) {
-#define STANDARD_TYPE(KIND, MANGLING, TYPENAME)      \
-  if (TypeName == #TYPENAME) {                       \
-    return #MANGLING[0];                             \
-  }
-    }
-    
-      virtual void Call(const std::string& method,
-                    const base::ListValue& arguments,
-                    content::RenderFrameHost* rvh = nullptr);
-  virtual void CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result);
-    
-    
-    {  RenderThread::Get()->Send(new ShellViewHostMsg_Allocate_Object(
-      routing_id,
-      object_id,
-      type,
-      *static_cast<base::DictionaryValue*>(value_option.get())));
-  return v8::Undefined(isolate);
-}
-    
-    v8::Handle<v8::Value> AllocateId(int routing_id);
-    
-    void Clipboard::Call(const std::string& method,
-                     const base::ListValue& arguments) {
-  if (method == 'Set') {
-    std::string text, type;
-    arguments.GetString(0, &text);
-    arguments.GetString(1, &type);
-    SetText(text);
-  } else if (method == 'Clear') {
-    Clear();
-  } else {
-    NOTREACHED() << 'Invalid call to Clipboard method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(MenuDelegate);
 };
     
-    void Menu::UpdateKeys(GtkAccelGroup *gtk_accel_group){
-  this->gtk_accel_group = gtk_accel_group;
-  if (!GTK_IS_ACCEL_GROUP(gtk_accel_group)){
-    return ;
-  } else {
-    std::vector<MenuItem*>::iterator menu_item_iterator = menu_items.begin();
-    std::vector<MenuItem*>::iterator menu_item_end = menu_items.end();
-    while (menu_item_iterator != menu_item_end){
-      MenuItem *menu_item = *menu_item_iterator;
-      if (menu_item!=NULL && GTK_IS_MENU_ITEM(menu_item->menu_item_)){
-        menu_item->UpdateKeys(gtk_accel_group);
-      }
-      ++menu_item_iterator;
-    }
-  }
-}
+    using namespace swift;
     
-    aura::Window* Menu::GetActiveNativeView(content::RenderFrameHost* rfh) {
-  content::WebContents* web_contents =
-    content::WebContents::FromRenderFrameHost(rfh);
-  if (!web_contents) {
-    LOG(ERROR) << 'Menu: couldn't find WebContents';
-    return NULL;
-  }
-  return web_contents->GetFullscreenRenderWidgetHostView()
-             ? web_contents->GetFullscreenRenderWidgetHostView()
-                   ->GetNativeView()
-             : web_contents->GetNativeView();
-}
-    
-    MenuItem::MenuItem(int id,
-                   const base::WeakPtr<ObjectManager>& object_manager,
-                   const base::DictionaryValue& option,
-                   const std::string& extension_id)
-  : Base(id, object_manager, option, extension_id) {
-  Create(option);
-}
-    
-      private:
-    bool WriteText(ClipboardData& data) {
-      DCHECK(data.type == TYPE_TEXT);
-      scw_->WriteText(base::UTF8ToUTF16(*(data.data)));
-      return true;
-    }
-    
-    
-    {
-} // namespace extensions
+    #undef VERB
+#undef DIRECTIONAL_PREPOSITION
+#undef PREPOSITION
 
     
-          gfx::Rect rect = gfx_display.bounds();
-      DisplayGeometry& bounds = displayResult->bounds;
-      bounds.x = rect.x();
-      bounds.y = rect.y();
-      bounds.width = rect.width();
-      bounds.height = rect.height();
+        StringRef Line = RawText.substr(0, Pos);
+    Lines.push_back(Line);
+    if (!IsFirstLine) {
+      size_t NonWhitespacePos = RawText.find_first_not_of(' ');
+      if (NonWhitespacePos != StringRef::npos)
+        WhitespaceToTrim =
+            std::min(WhitespaceToTrim,
+                     static_cast<unsigned>(NonWhitespacePos));
+    }
+    IsFirstLine = false;
     
-    extern 'C' {
-  PyMODINIT_FUNC INITFUNC() {
-#if PY_MAJOR_VERSION >= 3
-    PyObject *module = PyModule_Create(&_module);
-#else
-    PyObject *module = Py_InitModule3(
-        const_cast<char*>(kModuleName),
-        NULL,
-        const_cast<char*>(kModuleDocstring));
-#endif
-    if (module == NULL) {
-      return INITFUNC_ERRORVAL;
-    }
-    }
+    /// Determine whether the preposition in a split is 'vacuous', and
+/// should be removed.
+static bool isVacuousPreposition(StringRef beforePreposition,
+                                 StringRef preposition,
+                                 StringRef afterPreposition,
+                                 const OmissionTypeName &paramType) {
+  // Only consider 'with' or 'using' to be potentially vacuous.
+  if (!camel_case::sameWordIgnoreFirstCase(preposition, 'with') &&
+      !camel_case::sameWordIgnoreFirstCase(preposition, 'using'))
+    return false;
     }
     
-    EnumGenerator::~EnumGenerator() {
+    static bool isValidUnicodeScalar(uint32_t S) {
+  // Also accept the range of 0xD800 - 0xD880, which is used for non-symbol
+  // ASCII characters.
+  return (S < 0xD880) || (S >= 0xE000 && S <= 0x1FFFFF);
 }
     
-      // write children: Messages
-  if (file_->message_type_count() > 0) {
-    printer->Print('#region Messages\n');
-    for (int i = 0; i < file_->message_type_count(); i++) {
-      MessageGenerator messageGenerator(file_->message_type(i), this->options());
-      messageGenerator.Generate(printer);
-    }
-    printer->Print('#endregion\n');
-    printer->Print('\n');
+    
+    {    auto newNode = factory.createNode(node->getKind());
+    newNode->addChild(newContext, factory);
+    for (unsigned i = 1, n = node->getNumChildren(); i != n; ++i)
+      newNode->addChild(node->getChild(i), factory);
+    return newNode;
+  }
+      
+  case Demangle::Node::Kind::Extension: {
+    // Strip generic arguments from the extended type.
+    if (node->getNumChildren() < 2)
+      return node;
+    
+    auto newExtended = stripGenericArgsFromContextNode(node->getChild(1),
+                                                       factory);
+    if (newExtended == node->getChild(1)) return node;
+    
+    auto newNode = factory.createNode(Node::Kind::Extension);
+    newNode->addChild(node->getChild(0), factory);
+    newNode->addChild(newExtended, factory);
+    if (node->getNumChildren() == 3)
+      newNode->addChild(node->getChild(2), factory);
+    return newNode;
   }
     
-    // ===================================================================
+        caffe::TBlob2CaffeBlob<xpu, Dtype>(caffe::Data,
+                                      bot_.begin(),
+                                      in_data.begin(),
+                                      param_.num_data);
+    caffe::TBlob2CaffeBlob<xpu, Dtype>(caffe::Data,
+                                      top_.begin(),
+                                      out_data.begin(),
+                                      param_.num_out);
+    CaffeOpSetup();
+    if (ctx.is_train)
+      MXCAFFELAYER(caffeOp_, Dtype)->SetPhase(::caffe::TRAIN);
+    else
+      MXCAFFELAYER(caffeOp_, Dtype)->SetPhase(::caffe::TEST);
+    caffeOp_->Forward(bot_, top_);
     
-    void ImmutableMapFieldGenerator::
-GenerateBuildingCode(io::Printer* printer) const {
-  printer->Print(
-      variables_,
-      'result.$name$_ = internalGet$capitalized_name$();\n'
-      'result.$name$_.makeImmutable();\n');
+    /*!
+ * Copyright (c) 2015 by Contributors
+ */
+#ifndef MXNET_ENGINE_THREAD_POOL_H_
+#define MXNET_ENGINE_THREAD_POOL_H_
+    
+    #if MXNET_USE_OPENCV
+#include <opencv2/opencv.hpp>
+#include <vector>  // NOLINT(*)
+#include <utility> // NOLINT(*)
+#include <string> // NOLINT(*)
+    
+    TEST_F(CarverTests, test_compression) {
+  auto s = osquery::compress(getTestConfigDirectory() / 'test.config',
+                             fs::temp_directory_path() / fs::path('test.zst'));
+  EXPECT_TRUE(s.ok());
 }
     
-      desired_output_for_decode = 'ABCD__EfghI_j';
-  expected = string('\x64\x80\xC5\xA1\x0', 5);
-  result = TextFormatDecodeData::DecodeDataForString(input_for_decode,
-                                                     desired_output_for_decode);
-  EXPECT_EQ(expected, result);
+      /// A set of performance stats for each query in the schedule.
+  std::map<std::string, QueryPerformance> performance_;
     
-      CodeGeneratorRequest request;
-  if (!request.ParseFromFileDescriptor(STDIN_FILENO)) {
-    std::cerr << argv[0] << ': protoc sent unparseable request to plugin.'
-              << std::endl;
-    return 1;
+    
+    {  // If the splayed interval was not restored from the database.
+  auto splay = splayValue(interval, FLAGS_schedule_splay_percent);
+  content = std::to_string(interval) + ':' + std::to_string(splay);
+  setDatabaseValue(kPersistentSettings, 'interval.' + name, content);
+  return splay;
+}
+    
+    Status FeatureVectorsConfigParserPlugin::update(const std::string& source,
+                                                const ParserConfig& config) {
+  auto fv = config.find(kFeatureVectorsRootKey);
+  if (fv == config.end()) {
+    return Status();
   }
-    
-    #define TEGRA_ADDWEIGHTED(src1, sz1, src2, sz2, dst, sz, w, h, scales) \
-( \
-    CAROTENE_NS::isSupportedConfiguration() ? \
-    CAROTENE_NS::addWeighted(CAROTENE_NS::Size2D(w, h), \
-                             src1, sz1, \
-                             src2, sz2, \
-                             dst, sz, \
-                             ((double *)scales)[0], ((double *)scales)[1], ((double *)scales)[2]), \
-    CV_HAL_ERROR_OK \
-    : CV_HAL_ERROR_NOT_IMPLEMENTED \
-)
-    
-    void extract2(const Size2D &size,
-              const u8 * srcBase, ptrdiff_t srcStride,
-              u8 * dstBase, ptrdiff_t dstStride,
-              u32 coi)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-#ifndef __ANDROID__
-    size_t roiw32 = size.width >= 31 ? size.width - 31 : 0;
-#endif
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
     }
     
-    #define  FARG_LINE(type, n) , const type * src##n##Base, ptrdiff_t src##n##Stride
+      Status update(const std::string& source, const ParserConfig& config) override;
     
-    namespace CAROTENE_NS { namespace internal {
-    }
-    }
-    
-             int32x4_t vline1_s32 = vcvtq_s32_f32(vline1_f32);
-         int32x4_t vline2_s32 = vcvtq_s32_f32(vline2_f32);
-         int16x4_t vline1_s16 = vqmovn_s32(vline1_s32);
-         int16x4_t vline2_s16 = vqmovn_s32(vline2_s32);
-    
-                for (; i <= lim; i+= 8)
-            {
-                internal::prefetch(src + i);
-                uint16x8_t vln = vld1q_u16(src + i);
-                uint16x8_t vnz = vminq_u16(vln, vc1);
-                vs = vaddq_u16(vs, vnz);
-            }
-    
-    
-    {    minLocCount >>= 1;
-    maxLocCount >>= 1;
-#else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)minVal;
-    (void)minLocPtr;
-    (void)minLocCount;
-    (void)minLocCapacity;
-    (void)maxVal;
-    (void)maxLocPtr;
-    (void)maxLocCount;
-    (void)maxLocCapacity;
-#endif
-}
-    
-    template <typename T>
-void flip3(const Size2D & size,
-           const void * srcBase, ptrdiff_t srcStride,
-           void * dstBase, ptrdiff_t dstStride,
-           FLIP_MODE flipMode)
-{
-    using namespace internal;
+        if (value.empty() || name.empty()) {
+      continue;
     }
     
-    SHOULD_NOT_DO_GRADIENT(EnforceFinite);
+    BENCHMARK_PARAM(BENCHFUN(insertFront), 16)
+BENCHMARK_PARAM(BENCHFUN(insertFront), 128)
+BENCHMARK_PARAM(BENCHFUN(insertFront), 1024)
+BENCHMARK_PARAM(BENCHFUN(insertFront), 10240)
+BENCHMARK_PARAM(BENCHFUN(insertFront), 102400)
+BENCHMARK_PARAM(BENCHFUN(insertFront), 1024000)
     
-    ```
-    
-    
-    {} // namespace caffe2
-    
-    **Result**
-    
-    namespace grpc {
+        KeepAlive(ExecutorT* executor, bool dummy)
+        : executorAndDummyFlag_(
+              reinterpret_cast<intptr_t>(executor) | (dummy ? kDummyFlag : 0)) {
+      assert(executor);
+      assert(
+          (reinterpret_cast<intptr_t>(executor) & kExecutorMask) ==
+          reinterpret_cast<intptr_t>(executor));
     }
     
-    void CensusClientCallData::OnDoneRecvMessageCb(void* user_data,
-                                               grpc_error* error) {
-  grpc_call_element* elem = reinterpret_cast<grpc_call_element*>(user_data);
-  CensusClientCallData* calld =
-      reinterpret_cast<CensusClientCallData*>(elem->call_data);
-  CensusChannelData* channeld =
-      reinterpret_cast<CensusChannelData*>(elem->channel_data);
-  GPR_ASSERT(calld != nullptr);
-  GPR_ASSERT(channeld != nullptr);
-  // Stream messages are no longer valid after receiving trailing metadata.
-  if ((*calld->recv_message_) != nullptr) {
-    calld->recv_message_count_++;
-  }
-  GRPC_CLOSURE_RUN(calld->initial_on_done_recv_message_, GRPC_ERROR_REF(error));
-}
-    
-    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CLIENT_FILTER_H */
-
-    
-    MeasureInt64 RpcClientReceivedMessagesPerRpc() {
-  static const auto measure =
-      MeasureInt64::Register(kRpcClientReceivedMessagesPerRpcMeasureName,
-                             'Number of messages received per RPC', kCount);
-  return measure;
-}
-    
-    constexpr size_t TraceContextEncoding::kGrpcTraceContextSize;
-constexpr size_t TraceContextEncoding::kEncodeDecodeFailure;
-constexpr size_t TraceContextEncoding::kVersionIdSize;
-constexpr size_t TraceContextEncoding::kFieldIdSize;
-constexpr size_t TraceContextEncoding::kVersionIdOffset;
-constexpr size_t TraceContextEncoding::kVersionId;
-    
-    #include <grpcpp/grpcpp.h>
-#include 'src/proto/grpc/reflection/v1alpha/reflection.grpc.pb.h'
-    
-    class DynamicThreadPool final : public ThreadPoolInterface {
- public:
-  explicit DynamicThreadPool(int reserve_threads);
-  ~DynamicThreadPool();
+      template <class T>
+  class SecureRNG {
+   public:
+    using result_type = typename std::enable_if<
+        std::is_integral<T>::value && !std::is_same<T, bool>::value,
+        T>::type;
     }
     
-    #endif  // GPR_LINUX
+    #include <string>
+    
+    enum class CompressionCounterKey {
+  BYTES_BEFORE_COMPRESSION = 0,
+  BYTES_AFTER_COMPRESSION = 1,
+  BYTES_BEFORE_DECOMPRESSION = 2,
+  BYTES_AFTER_DECOMPRESSION = 3,
+  COMPRESSIONS = 4,
+  DECOMPRESSIONS = 5,
+  COMPRESSION_MILLISECONDS = 6,
+  DECOMPRESSION_MILLISECONDS = 7,
+};
+    
+        if (old.get()) {
+      old_ptr = get_shared_ptr(old);
+      release_external(old);
+    }
