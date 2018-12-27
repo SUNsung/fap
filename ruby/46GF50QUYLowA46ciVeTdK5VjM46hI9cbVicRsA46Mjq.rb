@@ -1,184 +1,126 @@
 
         
-                [
-          'This will automatically tag your build with the following format: `<grouping>/<lane>/<prefix><build_number>`, where:'.markdown_preserve_newlines,
-          list,
-          'For example, for build 1234 in the 'appstore' lane, it will tag the commit with `builds/appstore/1234`.'
-        ].join('\n')
-      end
-    
-          it 'allows you to force the tag creation' do
-        tag = '2.0.0'
-        message = 'message'
-    
-            expect(result).to eq('appledoc --project-name \'Project Name\' --project-company \'Company\' --verbose \'1\' --exit-threshold \'2\' input/dir')
-      end
-    end
-  end
-end
-
-    
-            inner_command = 'git describe --tags `git rev-list --tags --max-count=1`'
-        pseudocommand = 'git log --pretty=\'%B\' #{inner_command.shellescape}...HEAD --no-merges'
-        expect(result).to eq(pseudocommand)
-      end
-    
-          it 'treats a keychain name it cannot find in ~/Library/Keychains as the full keychain path' do
-        tmp_path = Dir.mktmpdir
-        keychain = '#{tmp_path}/my/special.keychain'
-        expected_command = 'security import item.path -k '#{keychain}' -P #{''.shellescape} -T /usr/bin/codesign -T /usr/bin/security &> /dev/null'
-    
-          it 'deactivates an existing user' do
-        visit admin_users_path
-        expect(page).to have_no_text('inactive')
-        find(:css, 'a[href='/admin/users/#{users(:bob).id}/deactivate']').click
-        expect(page).to have_text('inactive')
-        users(:bob).reload
-        expect(users(:bob)).not_to be_active
-      end
-    
-              @bar3 = Agents::DotBar.new(name: 'bar3').tap { |agent|
-            agent.user = users(:bob)
-            agent.sources << @bar2
-            agent.save!
-          },
-        ]
-        @foo.reload
-        @bar2.reload
-    
-        it 'is turned off for existing instances of Huginn' do
-      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { nil }
-      DefaultScenarioImporter.import(user)
-    end
-    
-        it 'should work with nested hashes' do
-      @agent.options['very'] = {'nested' => '$.value'}
-      LiquidMigrator.convert_all_agent_options(@agent)
-      expect(@agent.reload.options).to eq({'auth_token' => 'token', 'color' => 'yellow', 'very' => {'nested' => '{{value}}'}, 'notify' => false, 'room_name' => 'test', 'username' => '{{username}}', 'message' => '{{message}}'})
-    end
-    
-      let :new_template do
-    {
-      'description' => '{{ hovertext }}',
-      'comment' => '{{ comment }}'
-    }
-  end
-    
-        def javascripts_path
-      File.join assets_path, 'javascripts'
-    end
-    
-    class Converter
-  extend Forwardable
-  include Network
-  include LessConversion
-  include JsConversion
-  include FontsConversion
-    
-        def initialize(*args)
-      @s = StringScanner.new(*args)
-    end
-    
-        def silence_log
-      @silence = true
-      yield
-    ensure
-      @silence = false
-    end
-  end
-end
-
-    
-    class PolymorphicMentions < ActiveRecord::Migration[4.2]
-  def change
-    remove_index :mentions, column: %i(post_id)
-    remove_index :mentions, column: %i(person_id post_id), unique: true
-    rename_column :mentions, :post_id, :mentions_container_id
-    add_column :mentions, :mentions_container_type, :string
-    add_index :mentions,
-              %i(mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_mc_id_and_mc_type',
-              length: {mentions_container_type: 191}
-    add_index :mentions,
-              %i(person_id mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_person_and_mc_id_and_mc_type',
-              length: {mentions_container_type: 191},
-              unique: true
-    
-    When /^I try to sign in manually$/ do
-  manual_login
-end
-    
-      aspect_id = @me.aspects.length == 1 ? @me.aspects.first.id : @me.aspects.where(:name => 'Besties').first.id
-  contacts.each do |contact|
-    aspect_memberships << AspectMembership.new(:contact_id => contact.id, :aspect_id => aspect_id)
-  end
-  AspectMembership.import(aspect_memberships)
-end
-    
-      def post_path_by_content(text)
-    p = Post.find_by_text(text)
-    post_path(p)
-  end
-    
-      end
-    
-        it 'returns likes for a public post without login' do
-      post = alice.post(:status_message, text: 'hey', public: true)
-      bob.like!(post)
-      sign_out :user
-      get :index, params: {post_id: post.id}, format: :json
-      expect(JSON.parse(response.body).map {|h| h['id'] }).to match_array(post.likes.map(&:id))
-    end
-    
-          it 'should not create the participation' do
-        post :create, params: {post_id: @post.id}
-        expect(alice.participations.where(:target_id => @post.id)).not_to exist
-        expect(response.code).to eq('403')
-      end
-    end
-  end
-    
-      it 'ignores implicit hashes' do
-    expect_no_offenses(<<-RUBY.strip_indent)
-      foo(a: 1,
-      b: 2)
-    RUBY
-  end
-    
-          # The body of the method definition.
-      #
-      # @note this can be either a `begin` node, if the method body contains
-      #       multiple expressions, or any other node, if it contains a single
-      #       expression.
-      #
-      # @return [Node] the body of the method definition
-      def body
-        node_parts[0]
-      end
-    
-          # Returns an array of all the keys in the `hash` literal.
-      #
-      # @return [Array<Node>] an array of keys in the `hash` literal
-      def keys
-        each_key.to_a
-      end
-    
-      def migration_class_name
-    migration_name.camelize
-  end
-    
-        def add_active_record_callbacks
-      name = @name
-      @klass.send(:after_save) { send(name).send(:save) }
-      @klass.send(:before_destroy) { send(name).send(:queue_all_for_delete) }
-      if @klass.respond_to?(:after_commit)
-        @klass.send(:after_commit, on: :destroy) do
-          send(name).send(:flush_deletes)
-        end
+                display_user_error!(e, error_info)
       else
-        @klass.send(:after_destroy) { send(name).send(:flush_deletes) }
+        # Pass the error instead of a message so that the inspector can do extra work to simplify the query
+        show_github_issues(e) if should_show_github_issues
+    
+          it 'sets the project directory to other and the toolchain to Swift_2_3' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          carthage(toolchain: 'com.apple.dt.toolchain.Swift_2_3', project_directory: 'other')
+        end').runner.execute(:test)
+    
+            def importer_class
+          DiffNoteImporter
+        end
+    
+                rows << {
+              label_id: label_id,
+              target_id: target_id,
+              target_type: issue.issuable_type,
+              created_at: time,
+              updated_at: time
+            }
+          end
+    
+          # Returns true if the given object has already been imported, false
+      # otherwise.
+      #
+      # object - The object to check.
+      def already_imported?(object)
+        id = id_for_already_imported_cache(object)
+    
+            # Builds an issue from a GitHub API response.
+        #
+        # issue - An instance of `Sawyer::Resource` containing the issue
+        #         details.
+        def self.from_api_response(issue)
+          user =
+            if issue.user
+              Representation::User.from_api_response(issue.user)
+            end
+    
+            attr_reader :attributes
+    
+    describe 'Kernel#test' do
+  before :all do
+    @file = File.dirname(__FILE__) + '/fixtures/classes.rb'
+    @dir = File.dirname(__FILE__) + '/fixtures'
+  end
+    
+    describe 'Kernel.throw' do
+  it 'transfers control to the end of the active catch block waiting for symbol' do
+    catch(:blah) do
+      :value
+      throw :blah
+      fail('throw didn't transfer the control')
+    end.should be_nil
+  end
+    
+      it 'hooks assignments to a global variable' do
+    captured = nil
+    
+      desc 'Run sass-spec tests against the local code.'
+  task :spec do
+    require 'yaml'
+    sass_spec_options = YAML.load_file(scope('test/sass-spec.yml'))
+    enabled = sass_spec_options.delete(:enabled)
+    unless enabled
+      puts 'SassSpec tests are disabled.'
+      next
+    end
+    if ruby_version_at_least?('1.9.2')
+      old_load_path = $:.dup
+      begin
+        $:.unshift(File.join(File.dirname(__FILE__), 'lib'))
+        begin
+          require 'sass_spec'
+        rescue LoadError
+          puts 'You probably forgot to run: bundle exec rake'
+          raise
+        end
+        default_options = {
+          :spec_directory => SassSpec::SPEC_DIR,
+          :engine_adapter => SassEngineAdapter.new,
+          :generate => false,
+          :tap => false,
+          :skip => false,
+          :verbose => false,
+          :filter => '',
+          :limit => -1,
+          :unexpected_pass => false,
+          :nuke => false,
+        }
+        SassSpec::Runner.new(default_options.merge(sass_spec_options)).run || exit(1)
+      ensure
+        $:.replace(old_load_path)
+      end
+    else
+      'Skipping sass-spec on ruby versions less than 1.9.2'
+    end
+  end
+end
+    
+          # Returns the path to a file for the given key.
+      #
+      # @param key [String]
+      # @return [String] The path to the cache file.
+      def path_to(key)
+        key = key.gsub(/[<>:\\|?*%]/) {|c| '%%%03d' % c.ord}
+        File.join(cache_location, key)
       end
     end
+  end
+end
+
+    
+          # A string representation of the importer.
+      # Should be overridden by subclasses.
+      #
+      # This is used to help debugging,
+      # and should usually just show the load path encapsulated by this importer.
+      #
+      # @return [String]
+      def to_s
+        Sass::Util.abstract(self)
+      end
