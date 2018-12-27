@@ -1,465 +1,349 @@
-class Base {
- public:
-  Base(int id,
-       const base::WeakPtr<ObjectManager>& manager,
-       const base::DictionaryValue& option,
-       const std::string& extension_id);
-  virtual ~Base();
+
+        
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+      virtual string Code();
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+      void Compute(OpKernelContext* context) override {
+    // Output a scalar string.
+    Tensor* output_tensor = nullptr;
+    OP_REQUIRES_OK(context,
+                   context->allocate_output(0, TensorShape(), &output_tensor));
+    auto output = output_tensor->scalar<string>();
     }
     
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    {  RenderThread::Get()->Send(new ShellViewHostMsg_Call_Object_Method(
-      routing_id,
-      object_id,
-      type,
-      method,
-      *static_cast<base::ListValue*>(value_args.get())));
-  return v8::Undefined(isolate);
+    REGISTER_OP('Invalid')
+    .Attr('invalid attr: int32')  // invalid since the name has a space.
+    .Doc(R'doc(
+An op to test that invalid ops do not successfully generate invalid python code.
+)doc');
+    
+    bool TfPyInt_Check(PyObject* object) { return PyInt_Check(object); }
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    
+    {  DCHECK(PyDict_Check(code_to_exc_type_map));
+  PyObject* key;
+  PyObject* value;
+  Py_ssize_t pos = 0;
+  while (PyDict_Next(code_to_exc_type_map, &pos, &key, &value)) {
+    TF_Code code = static_cast<TF_Code>(PyLong_AsLong(key));
+    singleton_->exc_types_[code] = value;
+    // The exception classes should also have the lifetime of the process, but
+    // incref just in case.
+    Py_INCREF(value);
+  }
 }
     
-    // Call method of an object in browser.
-// function CallObjectMethod(id, type, method, args);
-v8::Handle<v8::Value> CallObjectMethod(int routing_id,
-                                       int object_id,
-                                       const std::string& type,
-                                       const std::string& method,
-                                       v8::Handle<v8::Value> args);
-    
-    Clipboard::Clipboard(int id,
-           const base::WeakPtr<DispatcherHost>& dispatcher_host,
-           const base::DictionaryValue& option)
-    : Base(id, dispatcher_host, option) {
-}
-    
-       bool HasIcon(int command_id) override;
-    
-        if (!found) {
-      KeyMap::iterator it = keymap.find(upperText);
-      if (it != keymap.end()) {
-        keyName = it->second;
-        found = true;
-      }
-    }
+      // Returns the Python exception type corresponding to `code`. Init() must be
+  // called before using this function. `code` should not be TF_OK.
+  static PyObject* Lookup(TF_Code code);
     
     
     {
-    {    std::string error_;
-    std::unique_ptr<ui::ScopedClipboardWriter> scw_;
-  };
-}
-    
-    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
- public:
-  NwMenuGetNSStringWithFixupFunction(){}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    
- protected:
-  ~NwMenuGetNSStringWithFixupFunction() override {}
-    
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
-};
-    
-    bool NwObjAllocateIdFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  response->AppendInteger(nw::ObjectManager::AllocateId());
-  return true;
-}
-    
-      auto axis = helper.GetSingleArgument<int32_t>('axis', 1);
-  const auto canonical_axis = canonical_axis_index_(axis, in[0].dims().size());
-  auto axis_w = helper.GetSingleArgument<int32_t>('axis_w', 1);
-  const int canonical_axis_w =
-      canonical_axis_index_(axis_w, in[1].dims().size());
-  const int N = pretransposed_weight
-      ? size_from_dim_(canonical_axis_w, GetDimsVector(in[1]))
-      : size_to_dim_(canonical_axis_w, GetDimsVector(in[1]));
-    
-    
-    {  bool RunOnDevice() override;
-};
-    
-    NO_GRADIENT(GivenTensorFill);
-NO_GRADIENT(GivenTensorDoubleFill);
-NO_GRADIENT(GivenTensorBoolFill);
-NO_GRADIENT(GivenTensorIntFill);
-NO_GRADIENT(GivenTensorInt64Fill);
-NO_GRADIENT(GivenTensorStringFill);
-    
-              vector<TensorShape> out(1);
-          switch (order) {
-            case StorageOrder::NCHW:
-              out[0] = CreateTensorShape(
-                  vector<int>{N, C * kernel_h * kernel_w, out_h, out_w},
-                  TensorProto::FLOAT);
-              break;
-            case StorageOrder::NHWC:
-              out[0] = CreateTensorShape(
-                  vector<int>{N, out_h, out_w, kernel_h * kernel_w * C},
-                  TensorProto::FLOAT);
-              break;
-            default:
-              CAFFE_THROW('Unknown storage order: ', order);
-          }
-    
-    #include <ostream>  // NOLINT
-#include <sstream>
-#include <string>
-#include <utility>
-#include <vector>
-#include 'gtest/internal/gtest-port.h'
-#include 'gtest/internal/gtest-internal.h'
-    
-      // Same as above, but you can choose the interception scope of this object.
-  ScopedFakeTestPartResultReporter(InterceptMode intercept_mode,
-                                   TestPartResultArray* result);
-    
-    // Now the tricky part: you need to register all test patterns before
-// you can instantiate them.  The first argument of the macro is the
-// test case name; the rest are the names of the tests in this test
-// case.
-REGISTER_TYPED_TEST_CASE_P(FooTest,
-                           DoesBlah, HasPropertyA);
-    
-    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT3.
-// Don't use this in your code.
-#define GTEST_PRED_FORMAT3_(pred_format, v1, v2, v3, on_failure)\
-  GTEST_ASSERT_(pred_format(#v1, #v2, #v3, v1, v2, v3), \
-                on_failure)
-    
-    // This provides interface PrimeTable that determines whether a number is a
-// prime and determines a next prime number. This interface is used
-// in Google Test samples demonstrating use of parameterized tests.
-    
-    
-    {  return clone;
-}
-    
-    
-// A simple string class.
-class MyString {
- private:
-  const char* c_string_;
-  const MyString& operator=(const MyString& rhs);
-    }
-    
-    #include 'joint_bullet.h'
-    
-    
-    {	ERR_EXPLAINC('There are still MemoryPool allocs in use at exit!');
-	ERR_FAIL_COND(allocs_used > 0);
-}
+    {}  // namespace swig
+}  // namespace tensorflow
 
     
-    class FileAccess;
-    
-    	virtual Error init() { return OK; }
-	virtual void start(){};
-	virtual int get_mix_rate() const { return DEFAULT_MIX_RATE; };
-	virtual SpeakerMode get_speaker_mode() const { return SPEAKER_MODE_STEREO; };
-	virtual void lock(){};
-	virtual void unlock(){};
-	virtual void finish(){};
-    
-    UnicodeString &ScriptSet::displayScripts(UnicodeString &dest) const {
-    UBool firstTime = TRUE;
-    for (int32_t i = nextSetBit(0); i >= 0; i = nextSetBit(i + 1)) {
-        if (!firstTime) {
-            dest.append((UChar)0x20);
-        }
-        firstTime = FALSE;
-        const char *scriptName = uscript_getShortName((UScriptCode(i)));
-        dest.append(UnicodeString(scriptName, -1, US_INV));
+    namespace cuda {
     }
-    return dest;
+    
+    #include 'tensorflow/stream_executor/cuda/cuda_driver.h'
+#include 'tensorflow/stream_executor/cuda/cuda_stream.h'
+#include 'tensorflow/stream_executor/event.h'
+#include 'tensorflow/stream_executor/lib/status.h'
+    
+    StringRef swift::platformString(PlatformKind platform) {
+  switch (platform) {
+  case PlatformKind::none:
+    return '*';
+#define AVAILABILITY_PLATFORM(X, PrettyName)                                   \
+  case PlatformKind::X:                                                        \
+    return #X;
+#include 'swift/AST/PlatformKinds.def'
+  }
+  llvm_unreachable('bad PlatformKind');
 }
     
-    #endif // __SCRIPTSET_H__
-
-    
-    int32_t SearchIterator::previous(UErrorCode &status)
+    SILLayout::SILLayout(CanGenericSignature Sig,
+                     ArrayRef<SILField> Fields)
+  : GenericSigAndFlags(Sig, getFlagsValue(anyMutable(Fields))),
+    NumFields(Fields.size())
 {
-    if (U_SUCCESS(status)) {
-        int32_t offset;
-        if (m_search_->reset) {
-            offset                       = m_search_->textLength;
-            m_search_->isForwardSearching = FALSE;
-            m_search_->reset              = FALSE;
-            setOffset(offset, status);
-        }
-        else {
-            offset = getOffset();
-        }
-        
-        int32_t matchindex = m_search_->matchedIndex;
-        if (m_search_->isForwardSearching == TRUE) {
-            // switching direction. 
-            // if matchedIndex == USEARCH_DONE, it means that either a 
-            // setOffset has been called or that next ran off the text
-            // string. the iterator would have been set to offset textLength if 
-            // a match is not found.
-            m_search_->isForwardSearching = FALSE;
-            if (matchindex != USEARCH_DONE) {
-                return matchindex;
-            }
-        }
-        else {
-            if (offset == 0 || matchindex == 0) {
-                // not enough characters to match
-                setMatchNotFound();
-                return USEARCH_DONE; 
-            }
-        }
+#ifndef NDEBUG
+  verifyFields(Sig, Fields);
+#endif
+  auto FieldsMem = getTrailingObjects<SILField>();
+  for (unsigned i : indices(Fields)) {
+    new (FieldsMem + i) SILField(Fields[i]);
+  }
+}
+    
+      // If we have a preposition, we can chop off type information at the
+  // beginning of the name.
+  if (getPartOfSpeech(firstWord) == PartOfSpeech::Preposition &&
+      newName.size() > firstWord.size()) {
+    // If the preposition was 'by' and is followed by a gerund, also remove
+    // 'by'.
+    if (firstWord == 'By') {
+      StringRef nextWord = camel_case::getFirstWord(
+                             newName.substr(firstWord.size()));
+      if (nextWord.endswith('ing')) {
+        return toLowercaseWord(newName.substr(firstWord.size()), scratch);
+      }
     }
     }
     
-    
-SimpleDateFormatStaticSets::~SimpleDateFormatStaticSets() {
-    delete fDateIgnorables;  fDateIgnorables = NULL;
-    delete fTimeIgnorables;  fTimeIgnorables = NULL;
-    delete fOtherIgnorables; fOtherIgnorables = NULL;
+    void Demangler::dump() {
+  for (unsigned Idx = 0; Idx < NodeStack.size(); ++Idx) {
+    fprintf(stderr, 'NodeStack[%u]:\n', Idx);
+    NodeStack[Idx]->dump();
+    fprintf(stderr, '\n');
+  }
+  fprintf(stderr, 'Position = %zd:\n%.*s\n%*s\n', Pos,
+          (int)Text.size(), Text.data(), (int)Pos + 1, '^');
 }
     
-    static const UChar gZero[] = { 0x7A, 0x65, 0x72, 0x6F };
-static const UChar gOne[] = { 0x6F, 0x6E, 0x65 };
-static const UChar gTwo[] = { 0x74, 0x77, 0x6F };
-static const UChar gFew[] = { 0x66, 0x65, 0x77 };
-static const UChar gMany[] = { 0x6D, 0x61, 0x6E, 0x79 };
-static const UChar gOther[] = { 0x6F, 0x74, 0x68, 0x65, 0x72 };
     
-        /**
-     * Implement UnicodeMatcher
-     * @param text the text to be matched
-     * @param offset on input, the index into text at which to begin
-     * matching.  On output, the limit of the matched text.  The
-     * number of matched characters is the output value of offset
-     * minus the input value.  Offset should always point to the
-     * HIGH SURROGATE (leading code unit) of a pair of surrogates,
-     * both on entry and upon return.
-     * @param limit the limit index of text to be matched.  Greater
-     * than offset for a forward direction match, less than offset for
-     * a backward direction match.  The last character to be
-     * considered for matching will be text.charAt(limit-1) in the
-     * forward direction or text.charAt(limit+1) in the backward
-     * direction.
-     * @param incremental  if TRUE, then assume further characters may
-     * be inserted at limit and check for partial matching.  Otherwise
-     * assume the text as given is complete.
-     * @return a match degree value indicating a full match, a partial
-     * match, or a mismatch.  If incremental is FALSE then
-     * U_PARTIAL_MATCH should never be returned.
-     */
-    virtual UMatchDegree matches(const Replaceable& text,
-                                 int32_t& offset,
-                                 int32_t limit,
-                                 UBool incremental);
+    {    auto newNode = factory.createNode(node->getKind());
+    newNode->addChild(newContext, factory);
+    for (unsigned i = 1, n = node->getNumChildren(); i != n; ++i)
+      newNode->addChild(node->getChild(i), factory);
+    return newNode;
+  }
+      
+  case Demangle::Node::Kind::Extension: {
+    // Strip generic arguments from the extended type.
+    if (node->getNumChildren() < 2)
+      return node;
+    
+    auto newExtended = stripGenericArgsFromContextNode(node->getChild(1),
+                                                       factory);
+    if (newExtended == node->getChild(1)) return node;
+    
+    auto newNode = factory.createNode(Node::Kind::Extension);
+    newNode->addChild(node->getChild(0), factory);
+    newNode->addChild(newExtended, factory);
+    if (node->getNumChildren() == 3)
+      newNode->addChild(node->getChild(2), factory);
+    return newNode;
+  }
+    
+    // Generate destructors.
+#include 'ipc/struct_destructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
     
     
-    {  // Update the DB to reflect that the carve is pending.
-  updateCarveValue(carveGuid_, 'status', 'PENDING');
-};
-    
-    void Schedule::removeAll(const std::string& source) {
-  auto new_end =
-      std::remove_if(packs_.begin(), packs_.end(), [source](const PackRef& p) {
-        if (p->getSource() == source) {
-          Config::get().removeFiles(source + FLAGS_pack_delimiter +
-                                    p->getName());
-          return true;
-        }
-        return false;
-      });
-  packs_.erase(new_end, packs_.end());
+void Base::Call(const std::string& method, const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  NOTREACHED() << 'Uncatched call in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
 }
     
-     public:
-  ATCPlugin(const std::string& path,
-            const TableColumns& tc_columns,
-            const std::string& sqlite_query)
-      : tc_columns_(tc_columns), sqlite_query_(sqlite_query), path_(path) {}
     
-    Status FeatureVectorsConfigParserPlugin::update(const std::string& source,
-                                                const ParserConfig& config) {
-  auto fv = config.find(kFeatureVectorsRootKey);
-  if (fv == config.end()) {
+namespace nwapi {
+    }
+    
+    
+bool MenuDelegate::GetAcceleratorForCommandId(
+      int command_id,
+      ui::Accelerator* accelerator) const {
+  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
+    }
+    
+    #include 'content/nw/src/api/menuitem/menuitem.h'
+    
+      std::string pac_url = params->pac_url.get() ? *params->pac_url : '';
+  if (!pac_url.empty()) {
+    if (pac_url == '<direct>')
+      config = net::ProxyConfigWithAnnotation::CreateDirect();
+    else if (pac_url == '<auto>')
+      config = net::ProxyConfigWithAnnotation(net::ProxyConfig::CreateAutoDetect(), TRAFFIC_ANNOTATION_FOR_TESTS);
+    else
+      config = net::ProxyConfigWithAnnotation(net::ProxyConfig::CreateFromCustomPacURL(GURL(pac_url)), TRAFFIC_ANNOTATION_FOR_TESTS);
+  } else {
+    std::string proxy_config;
+    net::ProxyConfig pc;
+    EXTENSION_FUNCTION_VALIDATE(args_->GetString(0, &proxy_config));
+    pc.proxy_rules().ParseFromString(proxy_config);
+    config = net::ProxyConfigWithAnnotation(pc, TRAFFIC_ANNOTATION_FOR_TESTS);
+  }
+    
+      protected:
+    ~NwScreenStopMonitorFunction() override {}
+    DECLARE_EXTENSION_FUNCTION('nw.Screen.stopMonitor', UNKNOWN)
+    
+    // Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel AVX intrinsics to access the SIMD instruction set.
+double DotProductAVX(const double* u, const double* v, int n) {
+  int max_offset = n - 4;
+  int offset = 0;
+  // Accumulate a set of 4 sums in sum, by loading pairs of 4 values from u and
+  // v, and multiplying them together in parallel.
+  __m256d sum = _mm256_setzero_pd();
+  if (offset <= max_offset) {
+    offset = 4;
+    // Aligned load is reputedly faster but requires 32 byte aligned input.
+    if ((reinterpret_cast<uintptr_t>(u) & 31) == 0 &&
+        (reinterpret_cast<uintptr_t>(v) & 31) == 0) {
+      // Use aligned load.
+      __m256d floats1 = _mm256_load_pd(u);
+      __m256d floats2 = _mm256_load_pd(v);
+      // Multiply.
+      sum = _mm256_mul_pd(floats1, floats2);
+      while (offset <= max_offset) {
+        floats1 = _mm256_load_pd(u + offset);
+        floats2 = _mm256_load_pd(v + offset);
+        offset += 4;
+        __m256d product = _mm256_mul_pd(floats1, floats2);
+        sum = _mm256_add_pd(sum, product);
+      }
+    } else {
+      // Use unaligned load.
+      __m256d floats1 = _mm256_loadu_pd(u);
+      __m256d floats2 = _mm256_loadu_pd(v);
+      // Multiply.
+      sum = _mm256_mul_pd(floats1, floats2);
+      while (offset <= max_offset) {
+        floats1 = _mm256_loadu_pd(u + offset);
+        floats2 = _mm256_loadu_pd(v + offset);
+        offset += 4;
+        __m256d product = _mm256_mul_pd(floats1, floats2);
+        sum = _mm256_add_pd(sum, product);
+      }
+    }
+  }
+  // Add the 4 product sums together horizontally. Not so easy as with sse, as
+  // there is no add across the upper/lower 128 bit boundary, so permute to
+  // move the upper 128 bits to lower in another register.
+  __m256d sum2 = _mm256_permute2f128_pd(sum, sum, 1);
+  sum = _mm256_hadd_pd(sum, sum2);
+  sum = _mm256_hadd_pd(sum, sum);
+  double result;
+  // _mm256_extract_f64 doesn't exist, but resist the temptation to use an sse
+  // instruction, as that introduces a 70 cycle delay. All this casting is to
+  // fool the intrinsics into thinking we are extracting the bottom int64.
+  auto cast_sum = _mm256_castpd_si256(sum);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored '-Wstrict-aliasing'
+  *(reinterpret_cast<int64_t*>(&result)) =
+#if defined(_WIN32) || defined(__i386__)
+      // This is a very simple workaround that is activated
+      // for all platforms that do not have _mm256_extract_epi64.
+      // _mm256_extract_epi64(X, Y) == ((uint64_t*)&X)[Y]
+      ((uint64_t*)&cast_sum)[0]
+#else
+      _mm256_extract_epi64(cast_sum, 0)
+#endif
+      ;
+#pragma GCC diagnostic pop
+  while (offset < n) {
+    result += u[offset] * v[offset];
+    ++offset;
+  }
+  return result;
+}
+    
+    namespace tesseract {
+double DotProductSSE(const double* u, const double* v, int n) {
+  fprintf(stderr, 'DotProductSSE can't be used on Android\n');
+  abort();
+}
+int32_t IntDotProductSSE(const int8_t* u, const int8_t* v, int n) {
+  fprintf(stderr, 'IntDotProductSSE can't be used on Android\n');
+  abort();
+}
+}  // namespace tesseract
+    
+    
+    {}  // namespace
+    
+    namespace tesseract {
+    }
+    
+    #ifndef PIN_JOINT_BULLET_H
+#define PIN_JOINT_BULLET_H
+    
+    	ADD_PROPERTY(PropertyInfo(Variant::BOOL, 'refuse_new_connections'), 'set_refuse_new_connections', 'is_refusing_new_connections');
+	ADD_PROPERTY(PropertyInfo(Variant::INT, 'transfer_mode', PROPERTY_HINT_ENUM, 'Unreliable,Unreliable Ordered,Reliable'), 'set_transfer_mode', 'get_transfer_mode');
+    
+    void Carver::start() {
+  // If status_ is not Ok, the creation of our tmp FS failed
+  if (!status_.ok()) {
+    LOG(WARNING) << 'Carver has not been properly constructed';
+    return;
+  }
+  for (const auto& p : carvePaths_) {
+    // Ensure the file is a flat file on disk before carving
+    PlatformFile pFile(p, PF_OPEN_EXISTING | PF_READ);
+    if (!pFile.isValid() || isDirectory(p)) {
+      VLOG(1) << 'File does not exist on disk or is subdirectory: ' << p;
+      continue;
+    }
+    Status s = carve(p);
+    if (!s.ok()) {
+      VLOG(1) << 'Failed to carve file ' << p << ' ' << s.getMessage();
+    }
+  }
+    }
+    
+      /**
+   * @brief Get the performance stats for a specific query, by name
+   *
+   * @param name is the name of the query which you'd like to retrieve
+   * @param predicate is a function which accepts a const reference to a
+   * QueryPerformance struct. predicate will be called on name's related
+   * QueryPerformance struct, if it exists.
+   *
+   * @code{.cpp}
+   *   Config::get().getPerformanceStats(
+   *     'my_awesome_query',
+   *     [](const QueryPerformance& query) {
+   *       // use 'query' here
+   *     });
+   * @endcode
+   */
+  void getPerformanceStats(
+      const std::string& name,
+      std::function<void(const QueryPerformance& query)> predicate) const;
+    
+    Status OptionsConfigParserPlugin::update(const std::string& source,
+                                         const ParserConfig& config) {
+  auto co = config.find('options');
+  if (co == config.end()) {
     return Status();
   }
     }
     
-      if (config.count('file_paths_query') > 0) {
-    // We know this top-level is an Object.
-    const auto& path_query_node = config.at('file_paths_query').doc();
-    if (path_query_node.IsObject()) {
-      for (const auto& category : path_query_node.GetObject()) {
-        if (category.value.IsArray()) {
-          std::string name = category.name.GetString();
-          for (const auto& query : category.value.GetArray()) {
-            auto sql = SQL(query.GetString());
-            if (!sql.ok()) {
-              LOG(ERROR) << 'Could not add file_paths using file_paths_query ''
-                         << query.GetString()
-                         << '': ' << sql.getMessageString();
-            } else {
-              for (const auto& row : sql.rows()) {
-                auto pathIt = row.find('path');
-                if (pathIt == row.end()) {
-                  LOG(ERROR) << 'Cold not find non-empty 'path' column in the '
-                                'results of file_paths_query ''
-                             << query.GetString();
-                } else {
-                  std::string path = pathIt->second;
-                  replaceGlobWildcards(path);
-                  Config::get().addFile(source, name, path);
-                }
-              }
-            }
-          }
-        }
-      }
+    TEST_F(OptionsConfigParserPluginTests, test_unknown_option) {
+  Config c;
+  std::map<std::string, std::string> update;
     }
-  }
-    
-    Status KafkaTopicsConfigParserPlugin::update(const std::string& source,
-                                             const ParserConfig& config) {
-  auto topics = config.find(kKafkaTopicParserRootKey);
-  if (topics != config.end()) {
-    auto obj = data_.getObject();
-    data_.copyFrom(topics->second.doc(), obj);
-    data_.add(kKafkaTopicParserRootKey, obj);
-  }
-  return Status();
-}
-    
-    namespace osquery {
-    }
-    
-    
-    {} // namespace osquery
-
-    
-    #include <set>
-    
-    Status PrometheusMetricsConfigParserPlugin::update(const std::string& source,
-                                                   const ParserConfig& config) {
-  auto prometheus_targets = config.find(kPrometheusParserRootKey);
-  if (prometheus_targets != config.end()) {
-    auto obj = data_.getObject();
-    data_.copyFrom(prometheus_targets->second.doc(), obj);
-    data_.add(kPrometheusParserRootKey, obj);
-  }
-    }
-    
-    DECLARE_bool(disable_database);
-    
-        // We should have a property tree of pack content mimicking embedded
-    // configuration packs, ready to parse as a string.
-    std::ostringstream output;
-    pt::write_json(output, multi_pack, false);
-    pack = output.str();
-    if (pack.empty()) {
-      return Status(1, 'Multi-pack content empty');
-    }
-    
-    
-#if (!defined(__GNUC__) && !defined(__clang__)) || defined(__pnacl__) || \
-    defined(EMSCRIPTN)
-# define BENCHMARK_HAS_NO_INLINE_ASSEMBLY
-#endif
-    
-    #include 'internal_macros.h'
-    
-    bool IsZero(double n);
-    
-    #define CHECK_EQ(a, b) CHECK((a) == (b))
-#define CHECK_NE(a, b) CHECK((a) != (b))
-#define CHECK_GE(a, b) CHECK((a) >= (b))
-#define CHECK_LE(a, b) CHECK((a) <= (b))
-#define CHECK_GT(a, b) CHECK((a) > (b))
-#define CHECK_LT(a, b) CHECK((a) < (b))
-    
-    #ifndef COMPLEXITY_H_
-#define COMPLEXITY_H_
-    
-      // Format items per second
-  std::string items;
-  if (result.items_per_second > 0) {
-    items =
-        StrCat(' ', HumanReadableNumber(result.items_per_second), ' items/s');
-  }
-    
-          // regerror returns the number of bytes necessary to null terminate
-      // the string, so we move that when assigning to error.
-      CHECK_NE(needed, 0);
-      error->assign(errbuf, needed - 1);
-    
-    
-    {  EsdCanClient esd_can_client;
-  EXPECT_TRUE(esd_can_client.Init(param));
-  EXPECT_EQ(esd_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
-  std::vector<CanFrame> frames;
-  int32_t num = 0;
-  EXPECT_EQ(esd_can_client.Send(frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  EXPECT_EQ(esd_can_client.Receive(&frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
-  CanFrame can_frame;
-  frames.push_back(can_frame);
-  EXPECT_EQ(esd_can_client.SendSingleFrame(frames),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  esd_can_client.Stop();
-}
-    
-    TEST(ProtocolDataTest, CheckSum) {
-  const uint8_t INPUT[] = {0x00, 0x12, 0x00, 0x13, 0x00, 0xF3, 0x00, 0x00};
-  const uint8_t result =
-      ProtocolData<apollo::canbus::ChassisDetail>::CalculateCheckSum(INPUT, 8);
-  EXPECT_EQ(0xE7, result);
-}
-    
-      x <<= 3;
-  x |= t;
-    
-    int ObjectQualityInfo60C::object_id(const std::uint8_t* bytes,
-                                    int32_t length) const {
-  Byte t0(bytes);
-  int32_t x = t0.get_byte(0, 8);
-    }
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-      pnc_map_->adc_waypoint_.s = 100;
-  pnc_map_->UpdateNextRoutingWaypointIndex(14);
-  EXPECT_EQ(3, pnc_map_->next_routing_waypoint_index_);
-    
-    void BackupTrajectoryGenerator::GenerateTrajectory1dPairs(
-    const State& init_s, const State& init_d) {
-  std::vector<std::shared_ptr<Curve1d>> lon_trajectories;
-  std::array<double, 5> dds_condidates = {-0.1, -1.0, -2.0, -3.0, -4.0};
-  for (const auto dds : dds_condidates) {
-    lon_trajectories.emplace_back(
-        new ConstantDecelerationTrajectory1d(init_s[0], init_s[1], dds));
-  }
-    }
-    
-        TrajectoryPoint trajectory_point;
-    trajectory_point.mutable_path_point()->set_x(x);
-    trajectory_point.mutable_path_point()->set_y(y);
-    trajectory_point.mutable_path_point()->set_s(accumulated_trajectory_s);
-    trajectory_point.mutable_path_point()->set_theta(theta);
-    trajectory_point.mutable_path_point()->set_kappa(kappa);
-    trajectory_point.set_v(v);
-    trajectory_point.set_a(a);
-    trajectory_point.set_relative_time(t_param + init_relative_time);
-    
-    
-    {  EXPECT_EQ(bd, bd_golden);
-}
-    
-    void Spline1dSeg::SetSplineFunc(const PolynomialXd& spline_func) {
-  spline_func_ = spline_func;
-  derivative_ = PolynomialXd::DerivedFrom(spline_func_);
-  second_order_derivative_ = PolynomialXd::DerivedFrom(derivative_);
-  third_order_derivative_ = PolynomialXd::DerivedFrom(second_order_derivative_);
-}
