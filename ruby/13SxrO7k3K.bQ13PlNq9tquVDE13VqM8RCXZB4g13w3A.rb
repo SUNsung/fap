@@ -1,160 +1,202 @@
 
         
-          it 'correctly sets notification level' do
-    moderator = Fabricate(:moderator)
+        # -------------------------------------------------------------------
+# Benchmarking changes in https://github.com/jekyll/jekyll/pull/6767
+# -------------------------------------------------------------------
     
-      UserOption.where(user_id: smoke_user.id).update_all(
-    email_direct: false,
-    email_digests: false,
-    email_private_messages: false,
-  )
+    $LOAD_PATH.unshift File.expand_path('../lib', __dir__)
     
-        def initialize(analytics_ingester_client: AnalyticsIngesterClient.new(GA_TRACKING))
-      require 'securerandom'
-      @session_id = SecureRandom.uuid
-      @client = analytics_ingester_client
-      @threads = []
-      @launch_event_sent = false
+      def self.source_dir; SOURCE_DIR; end
+end
+    
+        def defaults_deprecate_type(old, current)
+      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
+      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
+                        'type: #{current}'.'
     end
+  end
+end
+
     
-    require 'commander'
+            lounge.topic_id = post.topic.id
+        unless lounge.save
+          puts lounge.errors.full_messages
+          puts 'Failed to set the lounge description topic!'
+        end
     
-            expect(result[2]).to start_with('security set-keychain-settings')
-        expect(result[2]).to include('-t 300')
-        expect(result[2]).to_not(include('-l'))
-        expect(result[2]).to_not(include('-u'))
-        expect(result[2]).to include('~/Library/Keychains/test.keychain')
+          @launch_event_sent = true
+      builder = AnalyticsEventBuilder.new(
+        p_hash: launch_context.p_hash,
+        session_id: session_id,
+        action_name: nil,
+        fastlane_client_language: launch_context.fastlane_client_language
+      )
+    
+          context 'without parameters' do
+        it 'executes the correct git command' do
+          allow(Fastlane::Actions).to receive(:sh).with('git add .', anything).and_return('')
+          result = Fastlane::FastFile.new.parse('lane :test do
+            git_add
+          end').runner.execute(:test)
+        end
       end
     
-          it 'generates the correct git command with a shell-escaped message' do
-        message = 'message with 'quotes' (and parens)'
+          it 'works with both select and exclude regex' do
         result = Fastlane::FastFile.new.parse('lane :test do
-          git_commit(path: './fastlane/README.md', message: \'#{message}\')
-        end').runner.execute(:test)
-        expect(result).to eq('git commit -m #{message.shellescape} ./fastlane/README.md')
-      end
+            oclint(
+              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
+              select_regex: /\.*m/,
+              exclude_regex: /Test/
+            )
+          end').runner.execute(:test)
+    
+    exec_arr = ['fastlane', tool_name] + ARGV
+    
+        # Description formatted to work well as page title when viewing gist
+    if f.core_formula?
+      descr = '#{f.name} on #{OS_VERSION} - Homebrew build logs'
+    else
+      descr = '#{f.name} (#{f.full_name}) on #{OS_VERSION} - Homebrew build logs'
     end
-  end
+    url = create_gist(files, descr)
+    
+        cmd_paths = PATH.new(ENV['PATH']).append(Tap.cmd_directories) unless path
+    path ||= which('brew-#{cmd}', cmd_paths)
+    path ||= which('brew-#{cmd}.rb', cmd_paths)
+    
+    When /^I (?:log|sign) out manually on the mobile website$/ do
+  manual_logout_mobile
 end
-
     
-            keychain_path = File.expand_path(File.join('~', 'Library', 'Keychains', keychain))
-        expected_security_import_command = 'security import #{cert_name.shellescape} -k '#{keychain_path.shellescape}' -P #{password.shellescape} -T /usr/bin/codesign -T /usr/bin/security &> /dev/null'
-    
-          it 'returns the return value of the block if present' do
-        expect_command('ls', '-la')
-        return_value = Fastlane::Actions.sh('ls', '-la') do |status, result|
-          42
-        end
-        expect(return_value).to eq(42)
-      end
-    end
-  end
-    
-    # test shellescape Windows implementation directly
-describe 'WindowsShellwords#shellescape' do
-  os = 'windows'
-  shellescape_testcases.each do |testcase|
-    it testcase['it'] + ': ' + testcase['it_result'][os] do
-      str = testcase['str']
-      escaped = WindowsShellwords.shellescape(str)
-    
-      caveats <<~EOS
-    Installation or Uninstallation may fail with Exit Code 19 (Conflicting Processes running) if Browsers, Safari Notification Service or SIMBL Services (e.g. Flashlight) are running or Adobe Creative Cloud or any other Adobe Products are already installed. See Logs in /Library/Logs/Adobe/Installers if Installation or Uninstallation fails, to identifify the conflicting processes.
-  EOS
+    When /^I (?:like|unlike) the post '([^']*)' in the stream$/ do |post_text|
+  like_stream_post(post_text)
 end
-
     
-        def pattern_path(path)
-      return ::File.join(LOGSTASH_HOME, 'patterns', path)
-    end
+    Given /^a user named '([^\']*)' with email '([^\']*)'$/ do |name, email|
+  first, last = name.split
+  user = create_user(:email => email, :username => '#{first}_#{last}')
+  user.profile.update_attributes!(:first_name => first, :last_name => last) if first
+end
     
-    ENV['GEM_HOME'] = ENV['GEM_PATH'] = LogStash::Environment.logstash_gem_home
-Gem.use_paths(LogStash::Environment.logstash_gem_home)
-    
-          validate_plugins!
-    end
-    
-            return nil
+        shared_examples 'on a visible post' do
+      it 'creates the participation' do
+        post :create, params: {post_id: @post.id}
+        expect(alice.participations.where(:target_id => @post.id)).to exist
+        expect(response.code).to eq('201')
       end
     end
-  end
-end end end
-
     
-        private
-    def uncompress(source)
-      temporary_directory = Stud::Temporary.pathname
-      LogStash::Util::Zip.extract(source, temporary_directory, LOGSTASH_PATTERN_RE)
-      temporary_directory
-    rescue Zip::Error => e
-      # OK Zip's handling of file is bit weird, if the file exist but is not a valid zip, it will raise
-      # a `Zip::Error` exception with a file not found message...
-      raise InvalidPackError, 'Cannot uncompress the zip: #{source}'
+      def exists?(type, path)
+    %Q{[ -#{type} '#{path}' ]}
+  end
+    
+        def install_plugin(plugin, load_hooks: true, load_immediately: false)
+      installer.install(plugin,
+                        load_hooks: load_hooks,
+                        load_immediately: load_immediately)
     end
     
-              it 'successfully install the plugin' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install #{gem_path_on_vagrant}')
-            expect(command).to install_successfully
-            expect(logstash).to have_installed?('logstash-filter-dns')
-          end
+          class Properties
+        def initialize
+          @properties = {}
         end
     
-        context 'update a specific plugin' do
-      it 'has executed successfully' do
-        cmd = logstash.run_command_in_path('bin/logstash-plugin update --no-verify #{plugin_name}')
-        expect(cmd.stdout).to match(/Updating #{plugin_name}/)
-        expect(logstash).not_to have_installed?(plugin_name, previous_version)
+          # Runs all validation rules registered for the given key against the
+      # user-supplied value for that variable. If no validator raises an
+      # exception, the value is assumed to be valid.
+      def assert_valid_now(key, value)
+        validators[key].each do |validator|
+          validator.call(key, value)
+        end
       end
+    
+          # Internal use only.
+      def peek(key, default=nil, &block)
+        value = fetch_for(key, default, &block)
+        while callable_without_parameters?(value)
+          value = (values[key] = value.call)
+        end
+        value
+      end
+    
+        # @return [String] the ruby version string bundler uses to craft its gem path
+    def gem_ruby_version
+      RbConfig::CONFIG['ruby_version']
     end
     
-          # Custom destructuring method. This can be used to normalize
-      # destructuring for different variations of the node.
-      #
-      # In this case, the `def` node destructures into:
-      #
-      #   `method_name, arguments, body`
-      #
-      # while the `defs` node destructures into:
-      #
-      #   `receiver, method_name, arguments, body`
-      #
-      # so we reverse the destructured array to get the optional receiver
-      # at the end, where it can be discarded.
-      #
-      # @return [Array] the different parts of the `def` or `defs` node
-      def node_parts
-        to_a.reverse
-      end
-    end
+    module LogStash
+  module PluginManager
   end
 end
-
     
-          # Checks whether this node body is a void context.
-      # Always `true` for `for`.
-      #
-      # @return [true] whether the `for` node body is a void context
-      def void_context?
-        true
-      end
-    
-            pairs.map(&:key).each do |key|
-          yield key
+      # We compare the before the update and after the update
+  def display_updated_plugins(previous_gem_specs_map)
+    update_count = 0
+    find_latest_gem_specs.values.each do |spec|
+      name = spec.name.downcase
+      if previous_gem_specs_map.has_key?(name)
+        if spec.version != previous_gem_specs_map[name].version
+          puts('Updated #{spec.name} #{previous_gem_specs_map[name].version.to_s} to #{spec.version.to_s}')
+          update_count += 1
         end
-    
-            klass.client_push(item)
+      else
+        puts('Installed #{spec.name} #{spec.version.to_s}')
+        update_count += 1
       end
-    
-        def halt(res)
-      throw :halt, res
     end
     
-      context 'called with one style' do
-    it 'applies same style to all sides' do
-      rule = 'border-style: solid'
-    
-    describe 'position' do
-  before(:all) do
-    ParserSupport.parse_file('library/position')
+    describe LogStash::Config::PipelineConfig do
+  let(:source) { LogStash::Config::Source::Local }
+  let(:pipeline_id) { :main }
+  let(:ordered_config_parts) do
+    [
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/1', 0, 0, 'input { generator1 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/2', 0, 0,  'input { generator2 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/3', 0, 0, 'input { generator3 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/4', 0, 0, 'input { generator4 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/5', 0, 0, 'input { generator5 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/6', 0, 0, 'input { generator6 }'),
+      org.logstash.common.SourceWithMetadata.new('string', 'config_string', 0, 0, 'input { generator1 }'),
+    ]
   end
+    
+    shared_examples 'logstash list' do |logstash|
+  describe 'logstash-plugin list on #{logstash.hostname}' do
+    before(:all) do
+      logstash.install({:version => LOGSTASH_VERSION})
+    end
+    
+          it 'detects closing brace on separate line from last element' do
+        inspect_source(source)
+    
+    module RuboCop
+  module AST
+    # A node extension for `def` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `def` nodes within RuboCop.
+    class DefNode < Node
+      include ParameterizedNode
+      include MethodIdentifierPredicates
+    
+            self
+      end
+    
+          # A helper class for comparing the positions of different parts of a
+      # `pair` node.
+      class HashElementDelta
+        def initialize(first, second)
+          @first = first
+          @second = second
+    
+    module RailsCommandHelpers
+  def framework_version?(version_string)
+    framework_version =~ /^#{version_string}/
+  end
+    
+        def each_definition
+      @attachments.each do |klass, attachments|
+        attachments.each do |name, options|
+          yield klass, name, options
+        end
+      end
+    end
