@@ -1,156 +1,76 @@
 
         
-        # Mimic how the proposed change would first execute a couple of checks and
-# proceed to process with Liquid if necessary
-def conditional_liquid(content)
-  return content if content.nil? || content.empty?
-  return content unless content.include?('{%') || content.include?('{{')
-  always_liquid(content)
-end
-    }
-    }
-    }
-    
-    CONTENT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
-    
-    Then(%r!^I should (not )?see '(.*)' in the build output$!) do |negative, text|
-  if negative.nil? || negative.empty?
-    expect(jekyll_run_output).to match Regexp.new(text)
-  else
-    expect(jekyll_run_output).not_to match Regexp.new(text)
+          def require_enabled_api!
+    head 404 unless Setting.activity_api_enabled
   end
 end
+
     
-          def comment_line(comment_line); end
+      def create
+    active_session = current_session
     
-      def self.status_file; test_dir.join('jekyll_status.txt'); end
+          ohai 'Migrating tap #{old_name} to #{new_name}...' if $stdout.tty?
     
-            def print_message(json_message)
-          msg = JSON.parse(json_message)
-          # Not sure what the 'url' command even does in LiveReload.  The spec is silent
-          # on its purpose.
-          Jekyll.logger.info 'LiveReload:', 'Browser URL: #{msg['url']}' if msg['command'] == 'url'
-        end
-    
-            # If our highlighter is CodeRay we go in to merge the CodeRay defaults
-        # with your 'coderay' key if it's there, deprecating it in the
-        # process of you using it.
-        def modernize_coderay_config
-          unless @config['coderay'].empty?
-            Jekyll::Deprecator.deprecation_message(
-              'You are using 'kramdown.coderay' in your configuration, ' \
-              'please use 'syntax_highlighter_opts' instead.'
-            )
-    
-        def arg_is_present?(args, deprecated_argument, message)
-      deprecation_message(message) if args.include?(deprecated_argument)
+    module NavigationHelpers
+  def path_to(page_name)
+    case page_name
+    when /^person_photos page$/
+      person_photos_path(@me.person)
+    when /^the home(?: )?page$/
+      stream_path
+    when /^the mobile path$/
+      force_mobile_path
+    when /^the user applications page$/
+      api_openid_connect_user_applications_path
+    when /^the tag page for '([^\']*)'$/
+      tag_path(Regexp.last_match(1))
+    when /^its ([\w ]+) page$/
+      send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', @it)
+    when /^the mobile ([\w ]+) page$/
+      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', format: 'mobile')
+    when /^the ([\w ]+) page$/
+      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path')
+    when /^my edit profile page$/
+      edit_profile_path
+    when /^my profile page$/
+      person_path(@me.person)
+    when /^my acceptance form page$/
+      invite_code_path(InvitationCode.first)
+    when /^the requestors profile$/
+      person_path(Request.where(recipient_id: @me.person.id).first.sender)
+    when /^'([^\']*)''s page$/
+      p = User.find_by_email(Regexp.last_match(1)).person
+      {path:         person_path(p),
+       # '#diaspora_handle' on desktop, '.description' on mobile
+       special_elem: {selector: '#diaspora_handle, .description', text: p.diaspora_handle}
+      }
+    when /^'([^\']*)''s photos page$/
+      p = User.find_by_email(Regexp.last_match(1)).person
+      person_photos_path p
+    when /^my account settings page$/
+      edit_user_path
+    when /^forgot password page$/
+      new_user_password_path
+    when %r{^'(/.*)'}
+      Regexp.last_match(1)
+    else
+      raise 'Can't find mapping from \'#{page_name}\' to a path.'
     end
-    
-        brew cask install mactex
-    EOS
-  when 'pip' then <<-EOS.undent
-    Homebrew provides pip via: `brew install python`. However you will then
-    have two Pythons installed on your Mac, so alternatively you can install
-    pip via the instructions at:
-    
-        # Remove directories opposite from traversal, so that a subtree with no
-    # actual files gets removed correctly.
-    dirs.reverse_each do |d|
-      if d.children.empty?
-        puts 'rmdir: #{d} (empty)' if ARGV.verbose?
-        d.rmdir
-      end
-    end
-    
-      def core_tap_origin
-    CoreTap.instance.remote || '(none)'
   end
     
-        dirs.each do |d|
-      files = []
-      d.find { |pn| files << pn unless pn.directory? }
-      print_remaining_files files, d
+        it 'generates the contacts_json fixture', :fixture => true do
+      json = bob.contacts.map { |c|
+               ContactPresenter.new(c, bob).full_hash_with_person
+             }.to_json
+      save_fixture(json, 'contacts_json')
     end
-    
-      private
-    
-        def initialize(analytics_ingester_client: AnalyticsIngesterClient.new(GA_TRACKING))
-      require 'securerandom'
-      @session_id = SecureRandom.uuid
-      @client = analytics_ingester_client
-      @threads = []
-      @launch_event_sent = false
-    end
-    
-            # Stub out calls related to the execution environment
-        client = double('ingester_client')
-        session = FastlaneCore::AnalyticsSession.new(analytics_ingester_client: client)
-        expect(client).to receive(:post_event).with({
-            client_id: p_hash,
-            category: 'fastlane Client Langauge - ruby',
-            action: :launch,
-            label: nil,
-            value: nil
-        })
-    
-            [
-          'This will automatically tag your build with the following format: `<grouping>/<lane>/<prefix><build_number>`, where:'.markdown_preserve_newlines,
-          list,
-          'For example, for build 1234 in the 'appstore' lane, it will tag the commit with `builds/appstore/1234`.'
-        ].join('\n')
-      end
-    
-          it 'specified tag overrides generate tag' do
-        tag = '2.0.0'
-    
-              it 'raises an exception' do
-            expect do
-              Fastlane::FastFile.new.parse('lane :test do
-                  carthage(command: '#{command}', output: 'bla.framework.zip')
-                end').runner.execute(:test)
-            end.to raise_error('Output option is available only for 'archive' command.')
-          end
-        end
-      end
-    
-          it 'Uses pattern matching for tag name if requested' do
-        tag_match_pattern = '*1.8*'
-        result = Fastlane::FastFile.new.parse('lane :test do
-          changelog_from_git_commits(tag_match_pattern: '#{tag_match_pattern}')
-        end').runner.execute(:test)
-    
-            expect(result).to eq('git commit -m message ./fastlane/README.md ./LICENSE')
-      end
-    
-    # remove (double and single) quote pairs
-# un-double-double quote resulting string
-def simulate_windows_shell_unwrapping(string)
-  regex = /^('|')(([^'])(\S*)([^']))('|')$/
-  unless string.to_s.match(regex).nil?
-    string = string.to_s.match(regex)[2] # get only part in quotes
-    string.to_s.gsub!('''', ''') # remove double double quotes
   end
-  return string
 end
+
     
-        # Returns the original encoding of the document.
-    #
-    # @return [Encoding, nil]
-    # @raise [Encoding::UndefinedConversionError] if the source encoding
-    #   cannot be converted to UTF-8
-    # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
-    def source_encoding
-      check_encoding!
-      @source_encoding
-    end
+        context 'with valid parameters' do
+      it 'creates a user' do
+        expect {
+          get :create, params: valid_params
+        }.to change(User, :count).by(1)
+      end
