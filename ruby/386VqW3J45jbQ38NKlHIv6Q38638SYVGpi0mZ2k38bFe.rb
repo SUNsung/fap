@@ -1,152 +1,133 @@
 
         
-          p.option 'source', '-s', '--source [DIR]', 'Source directory (defaults to ./)'
-  p.option 'destination', '-d', '--destination [DIR]',
-    'Destination directory (defaults to ./_site)'
-  p.option 'safe', '--safe', 'Safe mode (defaults to false)'
-  p.option 'plugins_dir', '-p', '--plugins PLUGINS_DIR1[,PLUGINS_DIR2[,...]]', Array,
-    'Plugins directory (defaults to ./_plugins)'
-  p.option 'layouts_dir', '--layouts DIR', String,
-    'Layouts directory (defaults to ./_layouts)'
-  p.option 'profile', '--profile', 'Generate a Liquid rendering profile'
-    
-    def run_bundle(args)
-  run_in_shell('bundle', *args.strip.split(' '))
-end
-    
-        def deprecation_message(message)
-      Jekyll.logger.warn 'Deprecation:', message
-    end
-    
-            include ::EachBatch
+              it 'creates a new user' do
+        visit new_admin_user_path
+        fill_in 'Email', with: 'test@test.com'
+        fill_in 'Username', with: 'usertest'
+        fill_in 'Password', with: '12345678'
+        fill_in 'Password confirmation', with: '12345678'
+        click_on 'Create User'
+        expect(page).to have_text('User 'usertest' was successfully created.')
+        expect(page).to have_text('test@test.com')
       end
     
-          # Sets multiple keys to a given value.
-      #
-      # mapping - A Hash mapping the cache keys to their values.
-      # timeout - The time after which the cache key should expire.
-      def self.write_multiple(mapping, timeout: TIMEOUT)
-        Redis::Cache.with do |redis|
-          redis.multi do |multi|
-            mapping.each do |raw_key, value|
-              multi.set(cache_key_for(raw_key), value, ex: timeout)
-            end
+        def inheritable_copy
+      self.class.new @filters
+    end
+    
+        def initial_paths
+      self.class.initial_paths
+    end
+    
+          base_dir = Pathname.new(normalized_path)
+      base_dir = base_dir.parent unless path.end_with? '/'
+    
+          def root
+        css('.nav-index-group').each do |node|
+          if heading = node.at_css('.nav-index-group-heading')
+            heading.name = 'h2'
           end
+          node.parent.before(node.children)
         end
-      end
     
-              lfs_objects.each do |object|
-            yield object
-          end
-        rescue StandardError => e
-          Rails.logger.error('The Lfs import process failed. #{e.message}')
+            css('p > code:first-child:last-child', 'td > code:first-child:last-child').each do |node|
+          next if node.previous.try(:content).present? || node.next.try(:content).present?
+          node.inner_html = node.inner_html.squish.gsub(/<br(\ \/)?>\s*/, '\n')
+          node.content = node.content.strip
+          node.name = 'pre' if node.content =~ /\s/
+          node.parent.before(node.parent.children).remove if node.parent.name == 'p'
         end
+    
+      def prefix_from_bin(bin_name)
+    unless (path = `which #{bin_name}`.strip).empty?
+      File.dirname(File.dirname(path))
+    end
+  end
+    
+    module LogStash
+  module PluginManager
+    class Error < StandardError; end
+    
+          explicit_path = ::File.join(temp_path, LOGSTASH_DIR)
+      dependencies_path = ::File.join(temp_path, DEPENDENCIES_DIR)
+    
+      def validate_target_file
+    if File.exist?(target_file)
+      if  delete_target_file?
+        File.delete(target_file)
+      else
+        signal_error('Package creation cancelled, a previously generated package exist at location: #{target_file}, move this file to safe place and run the command again')
       end
     end
   end
-end
-
     
-            # We inject the page number here to make sure that all importers always
-        # start where they left off. Simply starting over wouldn't work for
-        # repositories with a lot of data (e.g. tens of thousands of comments).
-        options = collection_options.merge(page: page_counter.current)
-    
-          def action_name(env)
-        if env[CONTROLLER_KEY]
-          action_for_rails(env)
-        elsif env[ENDPOINT_KEY]
-          action_for_grape(env)
-        end
-      end
-    
-      # POST /resource/sign_in
-  def create
-    self.resource = warden.authenticate!(auth_options)
-    set_flash_message!(:notice, :signed_in)
-    sign_in(resource_name, resource)
-    yield resource if block_given?
-    respond_with resource, location: after_sign_in_path_for(resource)
-  end
-    
-        def confirmation_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :confirmation_instructions, opts)
+          PluginManager.ui.info('Install successful')
+    rescue ::Bundler::BundlerError => e
+      raise PluginManager::InstallError.new(e), 'An error occurred went installing plugins'
+    ensure
+      FileUtils.rm_rf(uncompressed_path) if uncompressed_path && Dir.exist?(uncompressed_path)
     end
     
-      # Causes some terminals to display secure password entry indicators
-  def noecho_gets
-    system 'stty -echo'
-    result = $stdin.gets
-    system 'stty echo'
-    puts
-    result
-  end
+      parameter 'file', 'the package file name', :attribute_name => :package_file, :required => true
     
-          return unless old_path.directory?
+      def execute
+    # Turn off any jar dependencies lookup when running with `--local`
+    ENV['JARS_SKIP'] = 'true' if local?
     
-      class ShareVisibility < ApplicationRecord
-  end
-    
-    When /^(?:|I )click on '([^']*)' navbar title$/ do |title|
-  with_scope('.info-bar') do
-    find('h5', text: title).click
-  end
-end
-
-    
-        it 'generates the contacts_json fixture', :fixture => true do
-      json = bob.contacts.map { |c|
-               ContactPresenter.new(c, bob).full_hash_with_person
-             }.to_json
-      save_fixture(json, 'contacts_json')
+        platforms.types.each do |type|
+      desc 'Run acceptance test in #{type} machines'
+      task type do
+        ENV['LS_TEST_PLATFORM']=type
+        exit(RSpec::Core::Runner.run([Rake::FileList['acceptance/spec/lib/*_spec.rb']]))
+      end
     end
+    
+        context 'with a specific plugin' do
+      let(:plugin_name) { 'logstash-input-stdin' }
+      it 'list the plugin and display the plugin name' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list #{plugin_name}')
+        expect(result).to run_successfully_and_output(/^#{plugin_name}$/)
+      end
+    
+    iter.times do
+  arr = Array.new(count) do
+    []
   end
+  count.times do |idx|
+    arr[idx][0] = idx
+  end
+  Sidekiq::Client.push_bulk('class' => LoadWorker, 'args' => arr)
 end
-
+Sidekiq.logger.error 'Created #{count*iter} jobs'
     
-          it 'assigns @user' do
-        get :create, params: valid_params
-        expect(assigns(:user)).to be_truthy
+    module Sidekiq
+  module Generators # :nodoc:
+    class WorkerGenerator < ::Rails::Generators::NamedBase # :nodoc:
+      desc 'This generator creates a Sidekiq Worker in app/workers and a corresponding test'
+    
+          # Provide a call() method that returns the formatted message.
+      def call(severity, time, program_name, message)
+        '#{time.utc.iso8601(3)} #{::Process.pid} TID-#{Sidekiq::Logging.tid}#{context} #{severity}: #{message}\n'
       end
     
-      # Integration tests
-  gem 'diffy'
-  gem 'clintegracon'
+        def build_sessions
+      middlewares = self.middlewares
     
-    begin
+      def generate_migration
+    migration_template('paperclip_migration.rb.erb',
+                       'db/migrate/#{migration_file_name}',
+                       migration_version: migration_version)
+  end
     
-            def run
-          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
-          if @pod_name.nil? # Print all
-            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
-              print_pod_cache_infos(pod_name, cache_descriptors)
-            end
-          else # Print only for the requested pod
-            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
-            if cache_descriptors.nil?
-              UI.notice('No cache for pod named #{@pod_name} found')
-            else
-              print_pod_cache_infos(@pod_name, cache_descriptors)
-            end
-          end
+        def add_active_record_callbacks
+      name = @name
+      @klass.send(:after_save) { send(name).send(:save) }
+      @klass.send(:before_destroy) { send(name).send(:queue_all_for_delete) }
+      if @klass.respond_to?(:after_commit)
+        @klass.send(:after_commit, on: :destroy) do
+          send(name).send(:flush_deletes)
         end
-    
-          # Returns an array of all the when branches in the `case` statement.
-      #
-      # @return [Array<WhenNode>] an array of `when` nodes
-      def when_branches
-        node_parts[1...-1]
+      else
+        @klass.send(:after_destroy) { send(name).send(:flush_deletes) }
       end
-    
-          # Checks whether this node body is a void context.
-      # Always `true` for `for`.
-      #
-      # @return [true] whether the `for` node body is a void context
-      def void_context?
-        true
-      end
-    
-            pairs.map(&:key).each do |key|
-          yield key
-        end
+    end
