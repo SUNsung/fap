@@ -1,480 +1,295 @@
 
         
-        #include 'swift/ASTSectionImporter/ASTSectionImporter.h'
-#include 'swift/Basic/Dwarf.h'
-#include 'swift/Serialization/SerializedModuleLoader.h'
-#include 'swift/Serialization/Validation.h'
-#include 'llvm/Support/Debug.h'
-#include 'llvm/Support/raw_ostream.h'
+        
+    {}  // namespace tensorflow
+
     
-      assert(capacity % 16 == 0 && 'not allocating multiple of alignment');
-    
-    void
-swift::trimLeadingWhitespaceFromLines(StringRef RawText,
-                                      unsigned WhitespaceToTrim,
-                                      SmallVectorImpl<StringRef> &OutLines) {
-  SmallVector<StringRef, 8> Lines;
+    namespace tensorflow {
     }
     
-    void Demangler::dump() {
-  for (unsigned Idx = 0; Idx < NodeStack.size(); ++Idx) {
-    fprintf(stderr, 'NodeStack[%u]:\n', Idx);
-    NodeStack[Idx]->dump();
-    fprintf(stderr, '\n');
-  }
-  fprintf(stderr, 'Position = %zd:\n%.*s\n%*s\n', Pos,
-          (int)Text.size(), Text.data(), (int)Pos + 1, '^');
-}
+    #endif  // TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
+
     
-        /** Specify model role to use as ordinal value (defaults to Qt::UserRole) */
-    void setRole(int role);
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    public:
-    explicit SignVerifyMessageDialog(const PlatformStyle *platformStyle, QWidget *parent);
-    ~SignVerifyMessageDialog();
+    // Given an numpy ndarray object 'obj', creates a corresponding tf
+// Tensor in '*ret'.
+Status ConvertNdarrayToTensor(PyObject* obj, Tensor* ret);
     
-    #include <univalue.h>
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    #define Round(a,b,c,d,e,f,g,h,k,w) do { \
-    uint32_t t1 = (h) + Sigma1(e) + Ch((e), (f), (g)) + (k) + (w); \
-    uint32_t t2 = Sigma0(a) + Maj((a), (b), (c)); \
-    (d) += t1; \
-    (h) = t1 + t2; \
-} while(0)
+      // Attempt to get the next record at 'current_offset()'. Populates status
+  // with OK on success, OUT_OF_RANGE for end of file, DATA_LOSS for some
+  // kinds of truncated reads, or another code for other errors
+  // (e.g., filesystem errors).
+  void GetNext(TF_Status* status);
     
-    void test_bad_scalar(void) {
-    unsigned char s_zero[32] = { 0 };
-    unsigned char s_overflow[32] = {
-        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfe,
-        0xba, 0xae, 0xdc, 0xe6, 0xaf, 0x48, 0xa0, 0x3b,
-        0xbf, 0xd2, 0x5e, 0x8c, 0xd0, 0x36, 0x41, 0x41
-    };
-    unsigned char s_rand[32] = { 0 };
-    unsigned char output[32];
-    secp256k1_scalar rand;
-    secp256k1_pubkey point;
-    }
+    ScopedActivateExecutorContext::ScopedActivateExecutorContext(
+    StreamExecutor *stream_exec)
+    : ScopedActivateExecutorContext(ExtractCudaExecutor(stream_exec)) {}
     
-    static void RejectDifficultyMismatch(double difficulty, double expected_difficulty) {
-     BOOST_CHECK_MESSAGE(
-        DoubleEquals(difficulty, expected_difficulty, 0.00001),
-        'Difficulty was ' + std::to_string(difficulty)
-            + ' but was expected to be ' + std::to_string(expected_difficulty));
-}
-    
-    int64_t UniValue::get_int64() const
-{
-    if (typ != VNUM)
-        throw std::runtime_error('JSON value is not an integer as expected');
-    int64_t retval;
-    if (!ParseInt64(getValStr(), &retval))
-        throw std::runtime_error('JSON integer out of range');
-    return retval;
-}
-    
-    #undef cv_hal_addWeighted8u
-#define cv_hal_addWeighted8u(src1, sz1, src2, sz2, dst, sz, w, h, scales) TEGRA_BINARYOPSCALE(CAROTENE_NS::u8, addWeighted, src1, sz1, src2, sz2, dst, sz, w, h, scales)
-#undef cv_hal_addWeighted8s
-#define cv_hal_addWeighted8s(src1, sz1, src2, sz2, dst, sz, w, h, scales) TEGRA_BINARYOPSCALE(CAROTENE_NS::s8, addWeighted, src1, sz1, src2, sz2, dst, sz, w, h, scales)
-#undef cv_hal_addWeighted16u
-#define cv_hal_addWeighted16u(src1, sz1, src2, sz2, dst, sz, w, h, scales) TEGRA_BINARYOPSCALE(CAROTENE_NS::u16, addWeighted, src1, sz1, src2, sz2, dst, sz, w, h, scales)
-#undef cv_hal_addWeighted16s
-#define cv_hal_addWeighted16s(src1, sz1, src2, sz2, dst, sz, w, h, scales) TEGRA_BINARYOPSCALE(CAROTENE_NS::s16, addWeighted, src1, sz1, src2, sz2, dst, sz, w, h, scales)
-#undef cv_hal_addWeighted32s
-#define cv_hal_addWeighted32s(src1, sz1, src2, sz2, dst, sz, w, h, scales) TEGRA_BINARYOPSCALE(CAROTENE_NS::s32, addWeighted, src1, sz1, src2, sz2, dst, sz, w, h, scales)
-//#undef cv_hal_addWeighted32f
-//#define cv_hal_addWeighted32f(src1, sz1, src2, sz2, dst, sz, w, h, scales) TEGRA_BINARYOPSCALE(CAROTENE_NS::f32, addWeighted, src1, sz1, src2, sz2, dst, sz, w, h, scales)
-//#undef cv_hal_addWeighted64f
-//#define cv_hal_addWeighted64f(src1, sz1, src2, sz2, dst, sz, w, h, scales) TEGRA_BINARYOPSCALE(CAROTENE_NS::f64, addWeighted, src1, sz1, src2, sz2, dst, sz, w, h, scales)
-    
-        /*
-        For each point `p` within `size`, do:
-        dst[p] = src0[p] ^ src1[p]
-    */
-    void bitwiseXor(const Size2D &size,
-                    const u8 *src0Base, ptrdiff_t src0Stride,
-                    const u8 *src1Base, ptrdiff_t src1Stride,
-                    u8 *dstBase, ptrdiff_t dstStride);
-    
-    namespace CAROTENE_NS {
-    using std::size_t;
-    using std::ptrdiff_t;
-    }
-    
-        s32* laneb = internal::alignPtr(laneA + cn * (size.width + 2), 32);
-    s32* laneB = internal::alignPtr(laneb + cn * (size.width + 2), 32);
-    
-    void convolution(const Size2D &size,
-                 const u8 * srcBase, ptrdiff_t srcStride,
-                 u8 * dstBase, ptrdiff_t dstStride,
-                 BORDER_MODE border, u8 borderValue,
-                 const Size2D & ksize, s16 * kernelBase, u32 scale)
-{
-    internal::assertSupportedConfiguration(isConvolutionSupported(size, ksize, border));
-#ifdef CAROTENE_NEON
-    const uint8x8_t v_zero_u8 = vdup_n_u8(0);
-    const uint8x8_t v_border = vdup_n_u8(borderValue);
-    const int32x4_t v_zero_s32 = vdupq_n_s32(0);
-    }
-    
-                tnext3 = vreinterpretq_s16_u16(vaddq_u16(vaddl_u8(x3, x2),vaddl_u8(x2, x1)));
-            tnext3 = vshlq_n_s16(tnext3, 1);
-    
-      char label_i;
-  char label_j;
-  char* pixels = new char[2 * rows * cols];
-  std::string value;
-    
-      inline const shared_ptr<SyncedMemory>& diff() const {
-    CHECK(diff_);
-    return diff_;
-  }
+    #ifndef BITCOIN_QT_TRANSACTIONDESCDIALOG_H
+#define BITCOIN_QT_TRANSACTIONDESCDIALOG_H
     
     /**
- * @brief Get a specific filler from the specification given in FillerParameter.
- *
- * Ideally this would be replaced by a factory pattern, but we will leave it
- * this way for now.
+ * An RAII-style reverse lock. Unlocks on construction and locks on destruction.
  */
-template <typename Dtype>
-Filler<Dtype>* GetFiller(const FillerParameter& param) {
-  const std::string& type = param.type();
-  if (type == 'constant') {
-    return new ConstantFiller<Dtype>(param);
-  } else if (type == 'gaussian') {
-    return new GaussianFiller<Dtype>(param);
-  } else if (type == 'positive_unitball') {
-    return new PositiveUnitballFiller<Dtype>(param);
-  } else if (type == 'uniform') {
-    return new UniformFiller<Dtype>(param);
-  } else if (type == 'xavier') {
-    return new XavierFiller<Dtype>(param);
-  } else if (type == 'msra') {
-    return new MSRAFiller<Dtype>(param);
-  } else if (type == 'bilinear') {
-    return new BilinearFiller<Dtype>(param);
-  } else {
-    CHECK(false) << 'Unknown filler name: ' << param.type();
+template<typename Lock>
+class reverse_lock
+{
+public:
+    }
+    
+    /* These points can be generated in sage as follows:
+ *
+ * 0. Setup a worksheet with the following parameters.
+ *   b = 4  # whatever CURVE_B will be set to
+ *   F = FiniteField (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F)
+ *   C = EllipticCurve ([F (0), F (b)])
+ *
+ * 1. Determine all the small orders available to you. (If there are
+ *    no satisfactory ones, go back and change b.)
+ *   print C.order().factor(limit=1000)
+ *
+ * 2. Choose an order as one of the prime factors listed in the above step.
+ *    (You can also multiply some to get a composite order, though the
+ *    tests will crash trying to invert scalars during signing.) We take a
+ *    random point and scale it to drop its order to the desired value.
+ *    There is some probability this won't work; just try again.
+ *   order = 199
+ *   P = C.random_point()
+ *   P = (int(P.order()) / int(order)) * P
+ *   assert(P.order() == order)
+ *
+ * 3. Print the values. You'll need to use a vim macro or something to
+ *    split the hex output into 4-byte chunks.
+ *   print '%x %x' % P.xy()
+ */
+#if defined(EXHAUSTIVE_TEST_ORDER)
+#  if EXHAUSTIVE_TEST_ORDER == 199
+const secp256k1_ge secp256k1_ge_const_g = SECP256K1_GE_CONST(
+    0xFA7CC9A7, 0x0737F2DB, 0xA749DD39, 0x2B4FB069,
+    0x3B017A7D, 0xA808C2F1, 0xFB12940C, 0x9EA66C18,
+    0x78AC123A, 0x5ED8AEF3, 0x8732BC91, 0x1F3A2868,
+    0x48DF246C, 0x808DAE72, 0xCFE52572, 0x7F0501ED
+);
+    
+      const auto& X = in[0];
+  const auto& W = in[1];
+  const auto& b = in[2];
+  auto axis = helper.GetSingleArgument<int32_t>('axis', 1);
+  const auto canonical_axis = canonical_axis_index_(axis, in[0].dims().size());
+  const int M = size_to_dim_(canonical_axis, GetDimsVector(in[0]));
+  const int K = size_from_dim_(canonical_axis, GetDimsVector(in[0]));
+  auto axis_w = helper.GetSingleArgument<int32_t>('axis_w', 1);
+  const int canonical_axis_w =
+      canonical_axis_index_(axis_w, in[1].dims().size());
+  const int N = size_to_dim_(canonical_axis_w, GetDimsVector(in[1]));
+    
+    
+    {  bool RunOnDevice() override;
+};
+    
+    // FreeOp frees the content of the output blob. We allow it to take in input
+// blobs purely for the reason that it can 'wait' on the input blobs to be
+// produced by some of the earlier operators before a free is called.
+template <class Context>
+class FreeOp : public Operator<Context> {
+ public:
+  FreeOp(const OperatorDef& def, Workspace* ws) : Operator<Context>(def, ws) {}
+    }
+    
+    NO_GRADIENT(GivenTensorFill);
+NO_GRADIENT(GivenTensorDoubleFill);
+NO_GRADIENT(GivenTensorBoolFill);
+NO_GRADIENT(GivenTensorIntFill);
+NO_GRADIENT(GivenTensorInt64Fill);
+NO_GRADIENT(GivenTensorStringFill);
+    
+    OPERATOR_SCHEMA(HalfToFloat)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .TensorInferenceFunction(
+        [](const OperatorDef& def, const vector<TensorShape>& in) {
+          vector<TensorShape> out;
+          const TensorShape& X = in[0];
+          out.push_back(X);
+          out[0].set_data_type(TensorProto_DataType_FLOAT);
+    }
+    
+    class GetIm2ColGradient : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+  vector<OperatorDef> GetGradientDefs() override {
+    return SingleGradientDef(
+        'Col2Im',
+        '',
+        std::vector<string>{GO(0), I(0)},
+        std::vector<string>{GI(0)});
   }
-  return (Filler<Dtype>*)(NULL);
-}
-    
-    
-    {  /**
-   * @brief Computes the error gradient w.r.t. the absolute value inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x} =
-   *            \mathrm{sign}(x) \frac{\partial E}{\partial y}
-   *      @f$ if propagate_down[0]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
 };
+REGISTER_GRADIENT(Im2Col, GetIm2ColGradient);
     
-    /**
- * @brief Computes a sum of two input Blobs, with the shape of the latter Blob
- *        'broadcast' to match the shape of the former. Equivalent to tiling
- *        the latter Blob, then computing the elementwise sum.
- *
- * The second input may be omitted, in which case it's learned as a parameter
- * of the layer. Note: in case bias and scaling are desired, both operations can
- * be handled by `ScaleLayer` configured with `bias_term: true`.
- */
-template <typename Dtype>
-class BiasLayer : public Layer<Dtype> {
- public:
-  explicit BiasLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    
-    {  /**
-   * @brief Computes the error gradient w.r.t. the BNLL inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x}
-   *      @f$ if propagate_down[0]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-};
-    
-     protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of DeConvolutionLayer.
- *        Fallback to DeConvolutionLayer for CPU mode.
- *
- * cuDNN accelerates deconvolution through forward kernels for filtering and
- * bias plus backward kernels for the gradient w.r.t. the filters, biases, and
- * inputs. Caffe + cuDNN further speeds up the computation through forward
- * parallelism across groups and backward parallelism across gradients.
-*/
-template <typename Dtype>
-class CuDNNDeconvolutionLayer : public DeconvolutionLayer<Dtype> {
- public:
-  explicit CuDNNDeconvolutionLayer(const LayerParameter& param)
-    : DeconvolutionLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-                          const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-                       const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNDeconvolutionLayer();
-    }
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    // Build a Table file from the contents of *iter.  The generated file
+// will be named according to meta->number.  On success, the rest of
+// *meta will be filled with metadata about the generated table.
+// If no data is present in *iter, meta->file_size will be set to
+// zero, and no Table file will be produced.
+Status BuildTable(const std::string& dbname,
+                  Env* env,
+                  const Options& options,
+                  TableCache* table_cache,
+                  Iterator* iter,
+                  FileMetaData* meta);
     
     namespace leveldb {
     }
     
+    // Append the serialization of 'key' to *result.
+void AppendInternalKey(std::string* result, const ParsedInternalKey& key);
     
-    {     public:
-      DataFile(SpecialEnv* env, WritableFile* base)
-          : env_(env),
-            base_(base) {
-      }
-      ~DataFile() { delete base_; }
-      Status Append(const Slice& data) {
-        if (env_->no_space_.Acquire_Load() != nullptr) {
-          // Drop writes on the floor
-          return Status::OK();
-        } else {
-          return base_->Append(data);
+    unsigned int Reader::ReadPhysicalRecord(Slice* result) {
+  while (true) {
+    if (buffer_.size() < kHeaderSize) {
+      if (!eof_) {
+        // Last read was a full read, so this is a trailer to skip
+        buffer_.clear();
+        Status status = file_->Read(kBlockSize, &buffer_, backing_store_);
+        end_of_buffer_offset_ += buffer_.size();
+        if (!status.ok()) {
+          buffer_.clear();
+          ReportDrop(kBlockSize, status);
+          eof_ = true;
+          return kEof;
+        } else if (buffer_.size() < kBlockSize) {
+          eof_ = true;
         }
+        continue;
+      } else {
+        // Note that if buffer_ is non-empty, we have a truncated header at the
+        // end of the file, which can be caused by the writer crashing in the
+        // middle of writing the header. Instead of considering this an error,
+        // just report EOF.
+        buffer_.clear();
+        return kEof;
       }
-      Status Close() { return base_->Close(); }
-      Status Flush() { return base_->Flush(); }
-      Status Sync() {
-        if (env_->data_sync_error_.Acquire_Load() != nullptr) {
-          return Status::IOError('simulated data sync error');
-        }
-        while (env_->delay_data_sync_.Acquire_Load() != nullptr) {
-          DelayMilliseconds(100);
-        }
-        return base_->Sync();
-      }
-    };
-    class ManifestFile : public WritableFile {
-     private:
-      SpecialEnv* env_;
-      WritableFile* base_;
-     public:
-      ManifestFile(SpecialEnv* env, WritableFile* b) : env_(env), base_(b) { }
-      ~ManifestFile() { delete base_; }
-      Status Append(const Slice& data) {
-        if (env_->manifest_write_error_.Acquire_Load() != nullptr) {
-          return Status::IOError('simulated writer error');
-        } else {
-          return base_->Append(data);
-        }
-      }
-      Status Close() { return base_->Close(); }
-      Status Flush() { return base_->Flush(); }
-      Status Sync() {
-        if (env_->manifest_sync_error_.Acquire_Load() != nullptr) {
-          return Status::IOError('simulated sync error');
-        } else {
-          return base_->Sync();
-        }
-      }
-    };
+    }
+    }
+    }
     
-    std::string TableFileName(const std::string& dbname, uint64_t number) {
-  assert(number > 0);
-  return MakeFileName(dbname, number, 'ldb');
+    TEST(LogTest, Empty) {
+  ASSERT_EQ('EOF', Read());
 }
     
-    TEST(FileNameTest, Construction) {
-  uint64_t number;
-  FileType type;
-  std::string fname;
+    TEST(RecoveryTest, MultipleMemTables) {
+  // Make a large log.
+  const int kNum = 1000;
+  for (int i = 0; i < kNum; i++) {
+    char buf[100];
+    snprintf(buf, sizeof(buf), '%050d', i);
+    ASSERT_OK(Put(buf, buf));
+  }
+  ASSERT_EQ(0, NumTables());
+  Close();
+  ASSERT_EQ(0, NumTables());
+  ASSERT_EQ(1, NumLogs());
+  uint64_t old_log_file = FirstLogFile();
     }
     
-    bool HandleDumpCommand(Env* env, char** files, int num) {
-  StdoutPrinter printer;
-  bool ok = true;
-  for (int i = 0; i < num; i++) {
-    Status s = DumpFile(env, files[i], &printer);
-    if (!s.ok()) {
-      fprintf(stderr, '%s\n', s.ToString().c_str());
-      ok = false;
+    template<typename Key, class Comparator>
+class SkipList {
+ private:
+  struct Node;
     }
-  }
-  return ok;
-}
     
-          case kFirstType:
-        if (in_fragmented_record) {
-          // Handle bug in earlier versions of log::Writer where
-          // it could emit an empty kFirstType record at the tail end
-          // of a block followed by a kFullType or kFirstType record
-          // at the beginning of the next block.
-          if (!scratch->empty()) {
-            ReportCorruption(scratch->size(), 'partial record without end(2)');
-          }
-        }
-        prospective_record_offset = physical_record_offset;
-        scratch->assign(fragment.data(), fragment.size());
-        in_fragmented_record = true;
-        break;
-    
-    class SequentialFile;
-    
-      size_t WrittenBytes() const {
-    return dest_.contents_.size();
-  }
-    
-      // Drop reference count.  Delete if no more references exist.
-  void Unref() {
-    --refs_;
-    assert(refs_ >= 0);
-    if (refs_ <= 0) {
-      delete this;
-    }
-  }
-    
-      // Removes a SnapshotImpl from this list.
-  //
-  // The snapshot must have been created by calling New() on this list.
-  //
-  // The snapshot pointer should not be const, because its memory is
-  // deallocated. However, that would force us to change DB::ReleaseSnapshot(),
-  // which is in the API, and currently takes a const Snapshot.
-  void Delete(const SnapshotImpl* snapshot) {
-#if !defined(NDEBUG)
-    assert(snapshot->list_ == this);
-#endif  // !defined(NDEBUG)
-    snapshot->prev_->next_ = snapshot->next_;
-    snapshot->next_->prev_ = snapshot->prev_;
-    delete snapshot;
-  }
-    
-    
+        // Create the blending setup
     {
-    {
-    {}  // namespace conti_radar
-}  // namespace drivers
-}  // namespace apollo
-
-    
-    BaseMapMatrix::~BaseMapMatrix() {}
-    
-      // coordinate frame
-  std::string from_coordinate = geo_text->Value();
-  int eastZone = GetLongZone(east);
-  int westZone = GetLongZone(west);
-  if (eastZone != westZone) {
-    std::string err_msg = 'unsupport data in more than one zones';
-    return Status(apollo::common::ErrorCode::HDMAP_DATA_ERROR, err_msg);
-  }
-  int zone = westZone;
-  std::string to_coordinate = '+proj=utm +zone=' + std::to_string(zone) +
-                              ' +ellps=WGS84 +datum=WGS84 +units=m +no_defs';
-  CoordinateConvertTool::GetInstance()->SetConvertParam(from_coordinate,
-                                                        to_coordinate);
-    
-    void SplineSegKernel::CalculateFx(const uint32_t num_params) {
-  kernel_fx_ = Eigen::MatrixXd::Zero(num_params, num_params);
-  for (int r = 0; r < kernel_fx_.rows(); ++r) {
-    for (int c = 0; c < kernel_fx_.cols(); ++c) {
-      kernel_fx_(r, c) = 1.0 / (r + c + 1.0);
-    }
-  }
-}
-    
-      {
-    auto ka = getKeepAliveToken(exec);
-    EXPECT_TRUE(ka);
-    EXPECT_EQ(&exec, ka.get());
-    EXPECT_EQ(1, exec.refCount);
+        D3D10_BLEND_DESC desc;
+        ZeroMemory(&desc, sizeof(desc));
+        desc.AlphaToCoverageEnable = false;
+        desc.BlendEnable[0] = true;
+        desc.SrcBlend = D3D10_BLEND_SRC_ALPHA;
+        desc.DestBlend = D3D10_BLEND_INV_SRC_ALPHA;
+        desc.BlendOp = D3D10_BLEND_OP_ADD;
+        desc.SrcBlendAlpha = D3D10_BLEND_INV_SRC_ALPHA;
+        desc.DestBlendAlpha = D3D10_BLEND_ZERO;
+        desc.BlendOpAlpha = D3D10_BLEND_OP_ADD;
+        desc.RenderTargetWriteMask[0] = D3D10_COLOR_WRITE_ENABLE_ALL;
+        g_pd3dDevice->CreateBlendState(&desc, &g_pBlendState);
     }
     
-    vector<detail::BenchmarkResult> resultsFromFile(const std::string& filename) {
-  string content;
-  readFile(filename.c_str(), content);
-  vector<detail::BenchmarkResult> ret;
-  benchmarkResultsFromDynamic(parseJson(content), ret);
-  return ret;
+    void ImGui_ImplFreeGLUT_MouseFunc(int glut_button, int state, int x, int y)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    io.MousePos = ImVec2((float)x, (float)y);
+    int button = -1;
+    if (glut_button == GLUT_LEFT_BUTTON) button = 0;
+    if (glut_button == GLUT_RIGHT_BUTTON) button = 1;
+    if (glut_button == GLUT_MIDDLE_BUTTON) button = 2;
+    if (button != -1 && state == GLUT_DOWN)
+        io.MouseDown[button] = true;
+    if (button != -1 && state == GLUT_UP)
+        io.MouseDown[button] = false;
 }
     
-    /*
- * Return a good seed for a random number generator.
- * Note that this is a legacy function, as it returns a 32-bit value, which
- * is too small to be useful as a 'real' RNG seed. Use the functions in class
- * Random instead.
+    bool Follow::isDone() const
+{
+    return ( !_followedNode->isRunning() );
+}
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+    
+            animation->setRestoreOriginalFrame(restoreOriginalFrame);
+    
+    /**
+ * @addtogroup _2d
+ * @{
  */
-inline uint32_t randomNumberSeed() {
-  return Random::rand32();
+    }
+    
+    
+    {  std::atomic<int> refCount{0};
+};
+    
+    #include <folly/Benchmark.h>
+#include <folly/FileUtil.h>
+#include <folly/init/Init.h>
+#include <folly/json.h>
+    
+    /// Returns a keep-alive token which guarantees that Executor will keep
+/// processing tasks until the token is released (if supported by Executor).
+/// KeepAlive always contains a valid pointer to an Executor.
+template <typename ExecutorT>
+Executor::KeepAlive<ExecutorT> getKeepAliveToken(ExecutorT* executor) {
+  static_assert(
+      std::is_base_of<Executor, ExecutorT>::value,
+      'getKeepAliveToken only works for folly::Executor implementations.');
+  return Executor::getKeepAliveToken(executor);
 }
     
-      tv = to<struct timeval>(duration<uint32_t, std::nano>{3123});
-  EXPECT_EQ(0, tv.tv_sec);
-  EXPECT_EQ(3, tv.tv_usec);
-  tv = to<struct timeval>(duration<int32_t, std::nano>{-3123});
-  EXPECT_EQ(-1, tv.tv_sec);
-  EXPECT_EQ(999997, tv.tv_usec);
+    namespace folly {
+    }
     
-      void operator++(int) {
-    *this += 1.0;
+      /**
+   * Returns a random uint64_t
+   */
+  static uint64_t rand64() {
+    return rand64(ThreadLocalPRNG());
   }
     
-      explicit Options(
-      Format format_ = Format::ZLIB,
-      int windowSize_ = 15,
-      int memLevel_ = 8,
-      int strategy_ = Z_DEFAULT_STRATEGY)
-      : format(format_),
-        windowSize(windowSize_),
-        memLevel(memLevel_),
-        strategy(strategy_) {}
+      mutable AtomicStruct<PackedPtr, Atom> ptr_;
     
-    void* SimpleAllocator::allocateHard() {
-  // Allocate a new slab.
-  mem_ = static_cast<uint8_t*>(folly::aligned_malloc(allocSize_, allocSize_));
-  if (!mem_) {
-    throw_exception<std::bad_alloc>();
-  }
-  end_ = mem_ + allocSize_;
-  blocks_.push_back(mem_);
+    namespace {
     }
