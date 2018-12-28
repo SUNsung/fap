@@ -1,302 +1,292 @@
 
         
-        // Version constant.
-// This is either 0 for python, 1 for CPP V1, 2 for CPP V2.
-//
-// 0 is default and is equivalent to
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
-//
-// 1 is set with -DPYTHON_PROTO2_CPP_IMPL_V1 and is equivalent to
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
-// and
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=1
-//
-// 2 is set with -DPYTHON_PROTO2_CPP_IMPL_V2 and is equivalent to
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
-// and
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
-#ifdef PYTHON_PROTO2_CPP_IMPL_V1
-#error 'PYTHON_PROTO2_CPP_IMPL_V1 is no longer supported.'
-#else
-#ifdef PYTHON_PROTO2_CPP_IMPL_V2
-static int kImplVersion = 2;
-#else
-#ifdef PYTHON_PROTO2_PYTHON_IMPL
-static int kImplVersion = 0;
-#else
-    
-      auto* message2_on_arena =
-      Arena::CreateMessage<protobuf_unittest::TestAllTypes>(&arena2);
-    
-    #include <memory>
-    
-    ReflectionClassGenerator::ReflectionClassGenerator(const FileDescriptor* file,
-                                                   const Options* options)
-    : SourceGeneratorBase(file, options),
-      file_(file) {
-  namespace_ = GetFileNamespace(file);
-  reflectionClassname_ = GetReflectionClassUnqualifiedName(file);
-}
-    
-      string::size_type pos = result.find_first_of('\n');
-  if (pos != string::npos) {
-    result.erase(pos);
-  }
-    
-    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
-//   can only really compare the output against a golden value, which is a
-//   fairly tedious and fragile testing strategy.  If we want to go that route,
-//   it probably makes sense to bite the bullet and write a test that compares
-//   the whole generated output for unittest.proto against a golden value, with
-//   a very simple script that can be run to regenerate it with the latest code.
-//   This would mean that updates to the golden file would have to be included
-//   in any change to the code generator, which would actually be fairly useful
-//   as it allows the reviewer to see clearly how the generated code is
-//   changing.
-    
-    
+        
     {
     {
-    {
-    {
-}  // namespace java
-}  // namespace compiler
+    {}  // namespace internal
 }  // namespace protobuf
 }  // namespace google
 
     
-    string ClassNameResolver::GetClassName(const EnumDescriptor* descriptor,
-                                       bool immutable) {
-  return GetClassFullName(ClassNameWithoutPackage(descriptor, immutable),
-                          descriptor->file(), immutable,
-                          MultipleJavaFiles(descriptor->file(), immutable));
-}
-    
-    
-    {
-    {  printer->Print(
-    '    }, assigner);\n');
-}
-    
-    
-    {
-    {
-    {    printer->Print(
-        '$name$$deprecated_attribute$ = $value$,\n',
-        'name', EnumValueName(all_values_[i]),
-        'deprecated_attribute', GetOptionalDeprecatedAttribute(all_values_[i]),
-        'value', SimpleItoa(all_values_[i]->number()));
-  }
-  printer->Outdent();
+    void WriteEnumDocComment(io::Printer* printer, const EnumDescriptor* enum_) {
+  printer->Print('/**\n');
+  WriteDocCommentBody(printer, enum_);
   printer->Print(
-      '};\n'
-      '\n'
-      'GPBEnumDescriptor *$name$_EnumDescriptor(void);\n'
-      '\n'
-      '/**\n'
-      ' * Checks to see if the given value is defined by the enum or was not known at\n'
-      ' * the time this source was generated.\n'
-      ' **/\n'
-      'BOOL $name$_IsValidValue(int32_t value);\n'
-      '\n',
-      'name', name_);
+    ' * Protobuf enum {@code $fullname$}\n'
+    ' */\n',
+    'fullname', EscapeJavadoc(enum_->full_name()));
 }
     
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace objectivec {
-namespace {
-    }
-    }
-    }
-    }
-    }
-    
-    #include <iostream>
-#include <set>
-    
-    // Protocol Buffers - Google's data interchange format
-// Copyright 2008 Google Inc.  All rights reserved.
-// https://developers.google.com/protocol-buffers/
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are
-// met:
-//
-//     * Redistributions of source code must retain the above copyright
-// notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above
-// copyright notice, this list of conditions and the following disclaimer
-// in the documentation and/or other materials provided with the
-// distribution.
-//     * Neither the name of Google Inc. nor the names of its
-// contributors may be used to endorse or promote products derived from
-// this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// 'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-    
-    OpSchema::Cost CostInferenceForFC(
-    const OperatorDef& def,
-    const vector<TensorShape>& in) {
-  CAFFE_ENFORCE_EQ(in.size(), 3, 'FC requires three inputs');
-  struct OpSchema::Cost c;
-  ArgumentHelper helper(def);
+    OneofGenerator::OneofGenerator(const OneofDescriptor* descriptor)
+    : descriptor_(descriptor) {
+  variables_['enum_name'] = OneofEnumName(descriptor_);
+  variables_['name'] = OneofName(descriptor_);
+  variables_['capitalized_name'] = OneofNameCapitalized(descriptor_);
+  variables_['raw_index'] = SimpleItoa(descriptor_->index());
+  const Descriptor* msg_descriptor = descriptor_->containing_type();
+  variables_['owning_message_class'] = ClassName(msg_descriptor);
     }
     
-    )DOC')
-    .Arg(
-        'values',
-        '*(type depends on dtype, Required=True)* The value of the elements to go in the *output* tensor.',
-        true /* required */)
-    .Arg(
-        'dtype',
-        'The data type for the elements of the output tensor. Strictly must be one of the types from DataType enum in TensorProto.')
-    .Arg(
-        'shape',
-        '*(type: [int])* Desired shape of the *output* tensor.')
-    .Arg(
-        'extra_shape',
-        '*(type: [int])* The additional dimensions appended at the end of the *shape* indicated by the input blob. Cannot set the *extra_shape* argument when there is no input blob.')
-    .Arg(
-        'input_as_shape',
-        '*(type: bool; default: False)* set to *True* to use the *input* as shape. First, input must be in CPU context.')
-    .Input(
-        0,
-        'input',
-        '(Optional) 1D tensor specifying the shape of the output. Must be used with *input_as_shape=True*')
-    .Output(
-        0,
-        'output',
-        'Output tensor with desired dimension filled with specified data. If the shape argument is set, this is the shape specified, and if the *input* exists and *input_as_shape=True*, it is the shape specified by the *input* tensor.')
-    .TensorInferenceFunction(FillerTensorInference<>);
-    
-        XFX_form_t xfx_formater {{
-      rsv,
-      xo,
-      (static_cast<uint32_t>(spr) >> 5) & 0x1F,
-      static_cast<uint32_t>(spr) & 0x1F,
-      static_cast<uint32_t>(rs),
-      op
-    }};
-    
-      /**
-   * Use the Iterate method for iterating over options that are stored as
-   * objects in runtime options (e.g. FilesMatch). This function iterates over
-   * the settings passed as ini/hdf, calls back to, generally, the constructor
-   * of the object in question.
-   *
-   * Note: For now, we are not `ini_get()` enabling these type of options as
-   * it is not trivial to come up with a non-hacky and workable way to store
-   * the data correctly. Also, as usual, Hdf takes priority.
-   */
-  static void Iterate(std::function<void (const IniSettingMap&,
-                                          const Hdf&,
-                                          const std::string&)> cb,
-                      const IniSettingMap &ini, const Hdf& config,
-                      const std::string &name, const bool prepend_hhvm = true);
+    class GeneratorResponseContext : public GeneratorContext {
+ public:
+  GeneratorResponseContext(
+      const Version& compiler_version,
+      CodeGeneratorResponse* response,
+      const std::vector<const FileDescriptor*>& parsed_files)
+      : compiler_version_(compiler_version),
+        response_(response),
+        parsed_files_(parsed_files) {}
+  virtual ~GeneratorResponseContext() {}
+    }
     
     
-    { private:
-  int mkdir_recursive(const String& path, int mode);
+    {  if (!GetParam()) {
+    delete message;
+  }
+}
+    
+    
+    {  zcontext_.zalloc = Z_NULL;
+  zcontext_.zfree = Z_NULL;
+  zcontext_.opaque = Z_NULL;
+  zcontext_.next_out = NULL;
+  zcontext_.avail_out = 0;
+  zcontext_.total_out = 0;
+  zcontext_.next_in = NULL;
+  zcontext_.avail_in = 0;
+  zcontext_.total_in = 0;
+  zcontext_.msg = NULL;
+  // default to GZIP format
+  int windowBitsFormat = 16;
+  if (options.format == ZLIB) {
+    windowBitsFormat = 0;
+  }
+  zerror_ = deflateInit2(
+      &zcontext_,
+      options.compression_level,
+      Z_DEFLATED,
+      /* windowBits */15 | windowBitsFormat,
+      /* memLevel (default) */8,
+      options.compression_strategy);
+}
+    
+    /**
+ * @brief Fills a Blob with values @f$ x \sim N(0, \sigma^2) @f$ where
+ *        @f$ \sigma^2 @f$ is set inversely proportional to number of incoming
+ *        nodes, outgoing nodes, or their average.
+ *
+ * A Filler based on the paper [He, Zhang, Ren and Sun 2015]: Specifically
+ * accounts for ReLU nonlinearities.
+ *
+ * Aside: for another perspective on the scaling factor, see the derivation of
+ * [Saxe, McClelland, and Ganguli 2013 (v3)].
+ *
+ * It fills the incoming matrix by randomly sampling Gaussian data with std =
+ * sqrt(2 / n) where n is the fan_in, fan_out, or their average, depending on
+ * the variance_norm option. You should make sure the input blob has shape (num,
+ * a, b, c) where a * b * c = fan_in and num * b * c = fan_out. Note that this
+ * is currently not the case for inner product layers.
+ */
+template <typename Dtype>
+class MSRAFiller : public Filler<Dtype> {
+ public:
+  explicit MSRAFiller(const FillerParameter& param)
+      : Filler<Dtype>(param) {}
+  virtual void Fill(Blob<Dtype>* blob) {
+    CHECK(blob->count());
+    int fan_in = blob->count() / blob->shape(0);
+    // Compatibility with ND blobs
+    int fan_out = blob->num_axes() > 1 ?
+                  blob->count() / blob->shape(1) :
+                  blob->count();
+    Dtype n = fan_in;  // default to fan_in
+    if (this->filler_param_.variance_norm() ==
+        FillerParameter_VarianceNorm_AVERAGE) {
+      n = (fan_in + fan_out) / Dtype(2);
+    } else if (this->filler_param_.variance_norm() ==
+        FillerParameter_VarianceNorm_FAN_OUT) {
+      n = fan_out;
+    }
+    Dtype std = sqrt(Dtype(2) / n);
+    caffe_rng_gaussian<Dtype>(blob->count(), Dtype(0), std,
+        blob->mutable_cpu_data());
+    CHECK_EQ(this->filler_param_.sparse(), -1)
+         << 'Sparsity not supported by this Filler.';
+  }
 };
     
-    #endif
-
+    #define REGISTER_LAYER_CLASS(type)                                             \
+  template <typename Dtype>                                                    \
+  shared_ptr<Layer<Dtype> > Creator_##type##Layer(const LayerParameter& param) \
+  {                                                                            \
+    return shared_ptr<Layer<Dtype> >(new type##Layer<Dtype>(param));           \
+  }                                                                            \
+  REGISTER_LAYER_CREATOR(type, Creator_##type##Layer)
     
-    template<typename F>
-void logPerfWarningImpl(folly::StringPiece event, int64_t priority,
-                        int64_t rate, F fillCols) {
-  auto const effectiveRate = rate * RuntimeOption::EvalPerfWarningSampleRate;
-  if (effectiveRate > std::numeric_limits<uint32_t>::max()) return;
-  if (!StructuredLog::coinflip(effectiveRate)) return;
+    namespace caffe {
     }
     
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    {        ImGui::Render();
+    // Read through the first n keys repeatedly and check that they get
+// compacted (verified by checking the size of the key space).
+void AutoCompactTest::DoReads(int n) {
+  std::string value(kValueSize, 'x');
+  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
     }
     
-    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
-// You can also handle inputs yourself and use those as a reference.
-IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
-
+        TableBuilder* builder = new TableBuilder(options, file);
+    meta->smallest.DecodeFrom(iter->key());
+    for (; iter->Valid(); iter->Next()) {
+      Slice key = iter->key();
+      meta->largest.DecodeFrom(key);
+      builder->Add(key, iter->value());
+    }
     
-        // Copy and convert all vertices into a single contiguous buffer
-    ImDrawVert* vtx_dst = NULL;
-    ImDrawIdx* idx_dst = NULL;
-    g_pVB->Map(D3D10_MAP_WRITE_DISCARD, 0, (void**)&vtx_dst);
-    g_pIB->Map(D3D10_MAP_WRITE_DISCARD, 0, (void**)&idx_dst);
-    for (int n = 0; n < draw_data->CmdListsCount; n++)
+      int Property(const std::string& name) {
+    std::string property;
+    int result;
+    if (db_->GetProperty(name, &property) &&
+        sscanf(property.c_str(), '%d', &result) == 1) {
+      return result;
+    } else {
+      return -1;
+    }
+  }
+    
+      fname = LogFileName('foo', 192);
+  ASSERT_EQ('foo/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(192, number);
+  ASSERT_EQ(kLogFile, type);
+    
+    
     {
-        const ImDrawList* cmd_list = draw_data->CmdLists[n];
-        memcpy(vtx_dst, cmd_list->VtxBuffer.Data, cmd_list->VtxBuffer.Size * sizeof(ImDrawVert));
-        memcpy(idx_dst, cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx));
-        vtx_dst += cmd_list->VtxBuffer.Size;
-        idx_dst += cmd_list->IdxBuffer.Size;
+    {}  // namespace log
+}  // namespace leveldb
+
+    
+      // Reports dropped bytes to the reporter.
+  // buffer_ must be updated to remove the dropped bytes prior to invocation.
+  void ReportCorruption(uint64_t bytes, const char* reason);
+  void ReportDrop(uint64_t bytes, const Status& reason);
+    
+    
+    {  // Write the header and the payload
+  Status s = dest_->Append(Slice(buf, kHeaderSize));
+  if (s.ok()) {
+    s = dest_->Append(Slice(ptr, n));
+    if (s.ok()) {
+      s = dest_->Flush();
     }
-    g_pVB->Unmap();
-    g_pIB->Unmap();
-    
-    
-    {    // Restore modified DX state
-    ctx->RSSetScissorRects(old.ScissorRectsCount, old.ScissorRects);
-    ctx->RSSetViewports(old.ViewportsCount, old.Viewports);
-    ctx->RSSetState(old.RS); if (old.RS) old.RS->Release();
-    ctx->OMSetBlendState(old.BlendState, old.BlendFactor, old.SampleMask); if (old.BlendState) old.BlendState->Release();
-    ctx->OMSetDepthStencilState(old.DepthStencilState, old.StencilRef); if (old.DepthStencilState) old.DepthStencilState->Release();
-    ctx->PSSetShaderResources(0, 1, &old.PSShaderResource); if (old.PSShaderResource) old.PSShaderResource->Release();
-    ctx->PSSetSamplers(0, 1, &old.PSSampler); if (old.PSSampler) old.PSSampler->Release();
-    ctx->PSSetShader(old.PS, old.PSInstances, old.PSInstancesCount); if (old.PS) old.PS->Release();
-    for (UINT i = 0; i < old.PSInstancesCount; i++) if (old.PSInstances[i]) old.PSInstances[i]->Release();
-    ctx->VSSetShader(old.VS, old.VSInstances, old.VSInstancesCount); if (old.VS) old.VS->Release();
-    ctx->VSSetConstantBuffers(0, 1, &old.VSConstantBuffer); if (old.VSConstantBuffer) old.VSConstantBuffer->Release();
-    for (UINT i = 0; i < old.VSInstancesCount; i++) if (old.VSInstances[i]) old.VSInstances[i]->Release();
-    ctx->IASetPrimitiveTopology(old.PrimitiveTopology);
-    ctx->IASetIndexBuffer(old.IndexBuffer, old.IndexBufferFormat, old.IndexBufferOffset); if (old.IndexBuffer) old.IndexBuffer->Release();
-    ctx->IASetVertexBuffers(0, 1, &old.VertexBuffer, &old.VertexBufferStride, &old.VertexBufferOffset); if (old.VertexBuffer) old.VertexBuffer->Release();
-    ctx->IASetInputLayout(old.InputLayout); if (old.InputLayout) old.InputLayout->Release();
+  }
+  block_offset_ += kHeaderSize + n;
+  return s;
 }
     
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
-    
-        // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
-    
-    int main(int, char**)
-{
-    // Create application window
-    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
-    RegisterClassEx(&wc);
-    HWND hwnd = CreateWindow(_T('ImGui Example'), _T('Dear ImGui DirectX10 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
+    namespace leveldb {
     }
     
+      virtual bool Valid() const { return iter_.Valid(); }
+  virtual void Seek(const Slice& k) { iter_.Seek(EncodeKey(&tmp_, k)); }
+  virtual void SeekToFirst() { iter_.SeekToFirst(); }
+  virtual void SeekToLast() { iter_.SeekToLast(); }
+  virtual void Next() { iter_.Next(); }
+  virtual void Prev() { iter_.Prev(); }
+  virtual Slice key() const { return GetLengthPrefixedSlice(iter_.key()); }
+  virtual Slice value() const {
+    Slice key_slice = GetLengthPrefixedSlice(iter_.key());
+    return GetLengthPrefixedSlice(key_slice.data() + key_slice.size());
+  }
     
-    {}  // end namespace benchmark
+        // TODO: This could actually be strided?
+    const MaskKind* NDMask::DataBuffer() const
+    {
+        // First make sure that the underlying matrix is on the right device
+        auto matrix = GetMatrix();
+        matrix->TransferToDeviceIfNotThere(AsCNTKImplDeviceId(m_device), true);
+        return (const MaskKind*)(matrix->Data());
+    }
     
-    #ifndef BENCHMARK_CYCLECLOCK_H_
-#define BENCHMARK_CYCLECLOCK_H_
+            static bool IsUDF(const FunctionPtr& f);
     
-    #endif
-
+        public:
+        template <typename ElementType>
+        PackedValue(const NDShape& sampleShape, const std::vector<Axis>& sampleDynamicAxes, const std::shared_ptr<Microsoft::MSR::CNTK::Matrix<ElementType>>& packedDataMatrix, const std::shared_ptr<Microsoft::MSR::CNTK::MBLayout>& packedDataLayout, bool isReadOnly)
+            : Value(nullptr), m_isPacked(true), m_sampleShape(sampleShape), m_sampleDynamicAxes(sampleDynamicAxes), m_packedData(nullptr), m_packedDataLayout(packedDataLayout), m_isReadOnly(isReadOnly)
+        {
+            NDShape packedMatrixShape({ packedDataMatrix->GetNumRows(), packedDataMatrix->GetNumCols() });
+            auto tensorView = new Microsoft::MSR::CNTK::TensorView<ElementType>(packedDataMatrix, AsTensorViewShape(packedMatrixShape));
+            m_packedData = MakeSharedObject<NDArrayView>(AsDataType<ElementType>(), AsDeviceDescriptor(packedDataMatrix->GetDeviceId()), AsStorageFormat(packedDataMatrix->GetFormat()), packedMatrixShape, m_isReadOnly, tensorView);
+    }
+    
+                // Validate that each of the dynamic axes are unique
+            std::unordered_set<Axis> uniqueDynamicAxis;
+            for (auto& currentDynamicAxis : dynamicAxes)
+            {
+                auto retVal = uniqueDynamicAxis.insert(currentDynamicAxis);
+                if (!retVal.second)
+                    InvalidArgument('Dynamic axis named %S is specified more than once for Variable '%S'', currentDynamicAxis.Name().c_str(), AsString().c_str());
+            }
+    
+    namespace Microsoft { namespace MSR { namespace CNTK {
+    }
+    }
+    }
+    
+    #define BENCHMARK_TEMPLATE2_DEFINE_F(BaseClass, Method, a, b)    \
+  BENCHMARK_TEMPLATE2_PRIVATE_DECLARE_F(BaseClass, Method, a, b) \
+  void BaseClass##_##Method##_Benchmark::BenchmarkCase
+    
+    // This template function declaration is used in defining arraysize.
+// Note that the function doesn't need an implementation, as we only
+// use its type.
+template <typename T, size_t N>
+char (&ArraySizeHelper(T (&array)[N]))[N];
+    
+    DEFINE_bool(benchmark_report_aggregates_only, false,
+            'Report the result of each benchmark repetitions. When 'true' is '
+            'specified only the mean, standard deviation, and other statistics '
+            'are reported for repeated benchmarks.');
+    
+    // CheckHandler is the class constructed by failing CHECK macros. CheckHandler
+// will log information about the failures and abort when it is destructed.
+class CheckHandler {
+ public:
+  CheckHandler(const char* check, const char* file, const char* func, int line)
+      : log_(GetErrorLogInstance()) {
+    log_ << file << ':' << line << ': ' << func << ': Check `' << check
+         << '' failed. ';
+  }
+    }
+    
+    void ColorPrintf(std::ostream& out, LogColor color, const char* fmt,
+                 va_list args);
+void ColorPrintf(std::ostream& out, LogColor color, const char* fmt, ...);
+    
+    // Return a vector containing the bigO and RMS information for the specified
+// list of reports. If 'reports.size() < 2' an empty vector is returned.
+std::vector<BenchmarkReporter::Run> ComputeBigO(
+    const std::vector<BenchmarkReporter::Run>& reports);
+    
+        // print the header
+    for (auto B = elements.begin(); B != elements.end();) {
+      Out << *B++;
+      if (B != elements.end()) Out << ',';
+    }
+    for (auto B = user_counter_names_.begin(); B != user_counter_names_.end();) {
+      Out << ',\'' << *B++ << '\'';
+    }
+    Out << '\n';
+    
+      // Open context block and print context information.
+  out << inner_indent << '\'context\': {\n';
+  std::string indent(4, ' ');
+    }
     
     #else
 inline bool Regex::Init(const std::string& spec, std::string* error) {
@@ -309,3 +299,11 @@ inline bool Regex::Init(const std::string& spec, std::string* error) {
     }
     }
     }
+    
+    double BenchmarkReporter::Run::GetAdjustedCPUTime() const {
+  double new_time = cpu_accumulated_time * GetTimeUnitMultiplier(time_unit);
+  if (iterations != 0) new_time /= static_cast<double>(iterations);
+  return new_time;
+}
+    
+    #include 'internal_macros.h'
