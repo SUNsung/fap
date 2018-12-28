@@ -1,40 +1,48 @@
 
         
-            def approve_friend_request(self, friend_id):
-        pass
+            def __set__(self, obj, value):
+        obj.config[self.__name__] = value
     
-        @abstractmethod
-    def can_fit_in_spot(self, spot):
-        pass
+        Implements the bridge to Jinja2.
     
     
-class Conversion(object):
-    
-        package_name = '(builtin)'
-    
-        def get_auth_plugin_mapping(self):
-        return {plugin.auth_type: plugin for plugin in self.get_auth_plugins()}
+python_3 = (u'thefuck/python3-bash',
+            u'FROM python:3',
+            u'sh')
     
     
-with codecs.open(FILE_PATH, encoding='utf8') as f:
-    # Strip because we don't want new lines in the data so that we can
-    # easily count occurrences also when embedded in JSON (where the new
-    # line would be escaped).
-    FILE_CONTENT = f.read().strip()
+@pytest.mark.functional
+def test_select_command_with_arrows(proc, TIMEOUT):
+    select_command_with_arrows(proc, TIMEOUT)
     
-        config['implicit_content_type'] = 'form'
-    config.save()
-    config.load()
-    assert 'implicit_content_type' not in config
-    assert config['default_options'] == ['--form']
+        assert not match(command)
+    
+    apt_get_help = b'''apt 1.0.10.2ubuntu1 for amd64 compiled on Oct  5 2015 15:55:05
+Usage: apt-get [options] command
+       apt-get [options] install|remove pkg1 [pkg2 ...]
+       apt-get [options] source pkg1 [pkg2 ...]
+    
+      * put-item
+  * get-item
+'''
     
     
-def test_unicode_form_item_verbose(httpbin):
-    r = http('--verbose', '--form',
-             'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
-    assert HTTP_OK in r
-    assert UNICODE in r
+class TrigramSimilar(PostgresSimpleLookup):
+    lookup_name = 'trigram_similar'
+    operator = '%%'
     
-        def _get_path(self):
-        '''Return the config file path without side-effects.'''
-        raise NotImplementedError()
+        @classmethod
+    def get_session_store_class(cls):
+        from django.contrib.sessions.backends.db import SessionStore
+        return SessionStore
+    
+    try:
+    # compatible for python2
+    from urllib2 import urlopen
+    from urllib2 import HTTPError
+    from urllib2 import URLError
+except ImportError:
+    # compatible for python3
+    from urllib.request import urlopen
+    from urllib.error import HTTPError
+    from urllib.error import URLError
