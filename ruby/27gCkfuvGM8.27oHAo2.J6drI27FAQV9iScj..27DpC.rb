@@ -1,67 +1,146 @@
 
         
-          def after_omniauth_failure_path_for(scope)
-    new_session_path(scope)
+              expect(Notification.count).to eq(2)
+    end
   end
     
-                bypass_sign_in(user)
-          DEPRECATION
-          warden.session_serializer.store(resource, scope)
-        elsif warden.user(scope) == resource && !options.delete(:force)
-          # Do nothing. User already signed in and we are not forcing it.
-          true
-        else
-          warden.set_user(resource, options.merge!(scope: scope))
+    Group.user_trust_level_change!(-1, TrustLevel[4])
+    
+            unless post && post.id
+          puts post.errors.full_messages if post
+          puts creator.errors.inspect
+          raise 'Failed to create description for trust level 3 lounge!'
         end
-      end
     
-          protected
-    
-      def up_down(change)
-    change.up do
-      Mention.update_all(mentions_container_type: 'Post')
-      change_column :mentions, :mentions_container_type, :string, null: false
-      Notification.where(type: 'Notifications::Mentioned').update_all(type: 'Notifications::MentionedInPost')
-    end
-    
-    Given /^a user with email '([^']*)' is connected with '([^']*)'$/ do |arg1, arg2|
-  user1 = User.where(:email => arg1).first
-  user2 = User.where(:email => arg2).first
-  connect_users(user1, user1.aspects.where(:name => 'Besties').first, user2, user2.aspects.where(:name => 'Besties').first)
-end
-    
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have path in #{expected.inspect} but was #{actual.current_path.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have path in #{expected.inspect} but it had'
-  end
-end
-    
-        it 'generates the aspects_manage fixture', :fixture => true do
-      get :index, params: {a_id: @aspect.id}
-      save_fixture(html_for('body'), 'aspects_manage')
-    end
-    
-    Then(/^it will not recreate the file$/) do
-  #
-end
-    
-      def test_file_exists(path)
-    exists?('f', path)
-  end
-    
-        def capfile
-      File.expand_path(File.join(File.dirname(__FILE__), '..', 'Capfile'))
-    end
-    
-          def echo?
-        (options || {}).fetch(:echo, true)
+            # Reset topic count because we don't count the description topic
+        DB.exec 'UPDATE categories SET topic_count = 0 WHERE id = #{staff.id}'
       end
     end
   end
 end
 
+    
+              issue.label_names.each do |label_name|
+            # Although unlikely it's technically possible for an issue to be
+            # given a label that was created and assigned after we imported all
+            # the project's labels.
+            next unless (label_id = label_finder.id_for(label_name))
+    
+            # Builds a new note using a Hash that was built from a JSON payload.
+        def self.from_json_hash(raw_hash)
+          hash = Representation.symbolize_hash(raw_hash)
+          hash[:author] &&= Representation::User.from_json_hash(hash[:author])
+    
+    module Gitlab
+  module GithubImport
+    module Representation
+      class LfsObject
+        include ToHash
+        include ExposeAttribute
+    
+            # Builds a new PR using a Hash that was built from a JSON payload.
+        def self.from_json_hash(raw_hash)
+          hash = Representation.symbolize_hash(raw_hash)
+    
+        def initialize(*args)
+      if args.empty?
+        super(*Array.new(9))
+      elsif args.length == 1 && args.first.is_a?(Hash)
+        args.first.assert_valid_keys URI::Generic::COMPONENT
+        super(*args.first.values_at(*URI::Generic::COMPONENT))
+      else
+        super
+      end
+    end
+    
+            css('h1 + code').each do |node|
+          node.before('<p></p>')
+          while node.next_element.name == 'code'
+            node.previous_element << ' '
+            node.previous_element << node.next_element
+          end
+          node.previous_element.prepend_child(node)
+        end
+    
+            # Set the name of the plugin. The moment that this is called, the
+        # plugin will be registered and available. Before this is called, a
+        # plugin does not exist. The name must be unique among all installed
+        # plugins.
+        #
+        # @param [String] name Name of the plugin.
+        # @return [String] The name of the plugin.
+        def self.name(name=UNSET_VALUE)
+          # Get or set the value first, so we have a name for logging when
+          # we register.
+          result = get_or_set(:name, name)
+    
+            def initialize
+          # The action hooks hash defaults to []
+          @action_hooks = Hash.new { |h, k| h[k] = [] }
+    
+            # This returns all registered pushes.
+        #
+        # @return [Registry]
+        def pushes
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.pushes)
+            end
+          end
+        end
+    
+        self.normalize!(resource)
+    # Set the relative resource to the actual resource.
+    self.relative_resource = resource
+  end
+    
+    
+  # Returns a collection of found hidden inputs
+  #
+  # @return [Array<Hash>] An array, each element represents a form that contains a hash of found hidden inputs
+  #  * 'name' [String] The hidden input's original name. The value is the hidden input's original value.
+  # @example
+  #  res = send_request_cgi('uri'=>'/')
+  #  inputs = res.get_hidden_inputs
+  #  session_id = inputs[0]['sessionid'] # The first form's 'sessionid' hidden input
+  def get_hidden_inputs
+    forms = []
+    noko = get_html_document
+    noko.search('form').each_entry do |form|
+      found_inputs = {}
+      form.search('input').each_entry do |input|
+        input_type = input.attributes['type'] ? input.attributes['type'].value : ''
+        next if input_type !~ /hidden/i
+    
+      #
+  # Move these into an IPMI stack or mixin at some point
+  #
+    
+              # Rex::Proto::Kerberos::Model::Checksum decoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def decode(input)
+            raise ::NotImplementedError, 'Checksum decoding not supported'
+          end
+    
+              def self.decode(input)
+            elem = self.new
+            elem.decode(input)
+          end
+    
+              # Decodes the key_expiration field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_key_expiration(input)
+            input.value[0].value
+          end
+    
+              # Decodes a Rex::Proto::Kerberos::Model::EncryptedData from an String
+          #
+          # @param input [String] the input to decode from
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
     
     module Rack
   module Protection
@@ -102,13 +181,15 @@ end
                       img_src: ''self'', style_src: ''self'',
                       connect_src: ''self'', report_only: false
     
-          def escape_hash(hash)
-        hash = hash.dup
-        hash.each { |k,v| hash[k] = escape(v) }
-        hash
+          def close_body(body)
+        body.close if body.respond_to?(:close)
       end
+    end
+  end
+end
+
     
-      it 'accepts post requests with masked X-CSRF-Token header' do
-    post('/', {}, 'rack.session' => session, 'HTTP_X_CSRF_TOKEN' => masked_token)
+      it 'accepts post form requests with masked authenticity_token field' do
+    post('/', {'authenticity_token' => masked_token}, 'rack.session' => session)
     expect(last_response).to be_ok
   end
