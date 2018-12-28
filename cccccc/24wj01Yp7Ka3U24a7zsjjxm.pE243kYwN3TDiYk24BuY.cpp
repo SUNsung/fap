@@ -1,243 +1,262 @@
-void ModelAnalyzer::PrintNodeInfo(const NodeDef* node,
-                                  const GraphProperties& properties, bool debug,
-                                  std::ostream& os) const {
-  os << node->name() << ' [' << node->op() << ']' << std::endl;
-  if (properties.HasOutputProperties(node->name())) {
-    const std::vector<OpInfo::TensorProperties>& props =
-        properties.GetOutputProperties(node->name());
-    for (int i = 0; i < props.size(); ++i) {
-      const OpInfo::TensorProperties& prop = props[i];
-      os << '\t'
-         << 'output ' << i << ' (' << DataTypeString(prop.dtype())
-         << ') has shape ';
-      if (prop.shape().unknown_rank()) {
-        os << '?';
-      } else {
-        os << '[';
-        for (int i = 0; i < prop.shape().dim_size(); ++i) {
-          if (i > 0) {
-            os << ', ';
-          }
-          if (prop.shape().dim(i).size() >= 0) {
-            // Print the actual dimension.
-            os << prop.shape().dim(i).size();
-          } else if (prop.shape().dim(i).size() == -1) {
-            // We don't know anything about the dimension.
-            os << '?';
-          } else {
-            // Symbolic dimension.
-            os << 'x' << -prop.shape().dim(i).size();
-          }
-        }
-        os << ']';
-      }
-      os << std::endl;
-    }
-  }
-    }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    #endif  // TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_H_
 
+        
+          // base::SingleThreadTaskRunner:
+  bool PostDelayedTask(const base::Location& from_here,
+                       base::OnceClosure task,
+                       base::TimeDelta delay) override;
+  bool RunsTasksInCurrentSequence() const override;
+  bool PostNonNestableDelayedTask(const base::Location& from_here,
+                                  base::OnceClosure task,
+                                  base::TimeDelta delay) override;
     
-      // Sets the preferred cache configuration for the specified function.
-  // http://docs.nvidia.com/cuda/cuda-driver-api/group__CUDA__EXEC.html#group__CUDA__EXEC_1g40f8c11e81def95dc0072a375f965681
-  static bool FuncSetCacheConfig(CUfunction function,
-                                 CUfunc_cache cache_config);
+     private:
+  std::string GetFeedURL();
+  void SetFeedURL(mate::Arguments* args);
+  void QuitAndInstall();
     
-    // Generate constructors.
-#include 'ipc/struct_constructor_macros.h'
-#include 'content/nw/src/common/common_message_generator.h'
+    #include 'atom/browser/api/atom_api_browser_window.h'
     
-    #ifndef CONTENT_NW_SRC_API_APP_APP_H_
-#define CONTENT_NW_SRC_API_APP_APP_H_
+    namespace mate {
+    }
     
-    namespace content {
-class RenderView;
+      static void BuildPrototype(v8::Isolate* isolate,
+                             v8::Local<v8::FunctionTemplate> prototype);
+    
+    // static
+void Net::BuildPrototype(v8::Isolate* isolate,
+                         v8::Local<v8::FunctionTemplate> prototype) {
+  prototype->SetClassName(mate::StringToV8(isolate, 'Net'));
+  mate::ObjectTemplateBuilder(isolate, prototype->PrototypeTemplate())
+      .SetProperty('URLRequest', &Net::URLRequest);
 }
     
      private:
-  ObjectManager* object_manager_;
+  scoped_refptr<AtomBrowserContext> browser_context_;
     
-      GtkRequisition menu_req;
-  gtk_widget_size_request(GTK_WIDGET(menu), &menu_req);
-  GdkScreen* screen;
-  gdk_display_get_pointer(gdk_display_get_default(), &screen, NULL, NULL, NULL);
-  gint monitor = gdk_screen_get_monitor_at_point(screen, *x, *y);
+    namespace mate {
+    }
     
-    void Menu::OnMenuClosed() {
-  CHECK(!message_loop_quit_.is_null());
-  message_loop_quit_.Run();
-  
-#if !defined(OS_WIN)
-  // Ask PlatformEventSource to stop dispatching
-  // events in this message loop
-  // iteration. We want our menu's loop to return
-  // before the next event.
-  if (ui::PlatformEventSource::GetInstance())
-    ui::PlatformEventSource::GetInstance()->StopCurrentEventStream();
-#endif
+     private:
+  static int32_t next_id_;
+  static atom::KeyWeakMap<int32_t>* weak_map_;  // leaked on purpose
+    
+    #include <QIcon>
+#include <QPixmap>
+#include <QString>
+    
+    public Q_SLOTS:
+    void updateRates();
+    void setGraphRangeMins(int mins);
+    void clear();
+    
+    static void secp256k1_hmac_sha256_initialize(secp256k1_hmac_sha256_t *hash, const unsigned char *key, size_t keylen) {
+    int n;
+    unsigned char rkey[64];
+    if (keylen <= 64) {
+        memcpy(rkey, key, keylen);
+        memset(rkey + keylen, 0, 64 - keylen);
+    } else {
+        secp256k1_sha256_t sha256;
+        secp256k1_sha256_initialize(&sha256);
+        secp256k1_sha256_write(&sha256, key, keylen);
+        secp256k1_sha256_finalize(&sha256, rkey);
+        memset(rkey + 32, 0, 32);
+    }
+    }
+    
+    #define TINYFORMAT_MAKE_FORMAT_FUNCS(n)                                   \
+                                                                          \
+template<TINYFORMAT_ARGTYPES(n)>                                          \
+void format(std::ostream& out, const char* fmt, TINYFORMAT_VARARGS(n))    \
+{                                                                         \
+    vformat(out, fmt, makeFormatList(TINYFORMAT_PASSARGS(n)));            \
+}                                                                         \
+                                                                          \
+template<TINYFORMAT_ARGTYPES(n)>                                          \
+std::string format(const char* fmt, TINYFORMAT_VARARGS(n))                \
+{                                                                         \
+    std::ostringstream oss;                                               \
+    format(oss, fmt, TINYFORMAT_PASSARGS(n));                             \
+    return oss.str();                                                     \
+}                                                                         \
+                                                                          \
+template<TINYFORMAT_ARGTYPES(n)>                                          \
+void printf(const char* fmt, TINYFORMAT_VARARGS(n))                       \
+{                                                                         \
+    format(std::cout, fmt, TINYFORMAT_PASSARGS(n));                       \
+}                                                                         \
+                                                                          \
+template<TINYFORMAT_ARGTYPES(n)>                                          \
+void printfln(const char* fmt, TINYFORMAT_VARARGS(n))                     \
+{                                                                         \
+    format(std::cout, fmt, TINYFORMAT_PASSARGS(n));                       \
+    std::cout << '\n';                                                    \
 }
     
-    static KeyMap keymap = {
-  {'`'    , 'Backquote'},
-  {'\\'   , 'Backslash'},
-  {'['    , 'BracketLeft'},
-  {']'    , 'BracketRight'},
-  {','    , 'Comma'},
-  {'='    , 'Equal'},
-  {'-'    , 'Minus'},
-  {'.'    , 'Period'},
-  {'''    , 'Quote'},
-  {';'    , 'Semicolon'},
-  {'/'    , 'Slash'},
-  {'\n'   , 'Enter'},
-  {'\t'   , 'Tab'},
-  {'UP'   , 'ArrowUp'},
-  {'DOWN' , 'ArrowDown'},
-  {'LEFT' , 'ArrowLeft'},
-  {'RIGHT', 'ArrowRight'},
-  {'ESC'  , 'Escape'},
-  {'MEDIANEXTTRACK', 'MediaTrackNext'},
-  {'MEDIAPREVTRACK', 'MediaTrackPrevious'}
-};
+        BOOST_CHECK(obj['key1'].isStr());
+    std::string correctValue('str');
+    correctValue.push_back('\0');
+    BOOST_CHECK_EQUAL(obj['key1'].getValStr(), correctValue);
+    BOOST_CHECK(obj['key2'].isNum());
+    BOOST_CHECK_EQUAL(obj['key2'].getValStr(), '800');
+    BOOST_CHECK(obj['key3'].isObject());
     
-    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
+    // Values() allows generating tests from explicitly specified list of
+// parameters.
+//
+// Synopsis:
+// Values(T v1, T v2, ..., T vN)
+//   - returns a generator producing sequences with elements v1, v2, ..., vN.
+//
+// For example, this instantiates tests from test case BarTest each
+// with values 'one', 'two', and 'three':
+//
+// INSTANTIATE_TEST_CASE_P(NumSequence, BarTest, Values('one', 'two', 'three'));
+//
+// This instantiates tests from test case BazTest each with values 1, 2, 3.5.
+// The exact type of values will depend on the type of parameter in BazTest.
+//
+// INSTANTIATE_TEST_CASE_P(FloatingNumbers, BazTest, Values(1, 2, 3.5));
+//
+// Currently, Values() supports from 1 to $n parameters.
+//
+$range i 1..n
+$for i [[
+$range j 1..i
+    
+    // This macro is for implementing ASSERT_DEATH*, EXPECT_DEATH*,
+// ASSERT_EXIT*, and EXPECT_EXIT*.
+# define GTEST_DEATH_TEST_(statement, predicate, regex, fail) \
+  GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
+  if (::testing::internal::AlwaysTrue()) { \
+    const ::testing::internal::RE& gtest_regex = (regex); \
+    ::testing::internal::DeathTest* gtest_dt; \
+    if (!::testing::internal::DeathTest::Create(#statement, &gtest_regex, \
+        __FILE__, __LINE__, &gtest_dt)) { \
+      goto GTEST_CONCAT_TOKEN_(gtest_label_, __LINE__); \
+    } \
+    if (gtest_dt != NULL) { \
+      ::testing::internal::scoped_ptr< ::testing::internal::DeathTest> \
+          gtest_dt_ptr(gtest_dt); \
+      switch (gtest_dt->AssumeRole()) { \
+        case ::testing::internal::DeathTest::OVERSEE_TEST: \
+          if (!gtest_dt->Passed(predicate(gtest_dt->Wait()))) { \
+            goto GTEST_CONCAT_TOKEN_(gtest_label_, __LINE__); \
+          } \
+          break; \
+        case ::testing::internal::DeathTest::EXECUTE_TEST: { \
+          ::testing::internal::DeathTest::ReturnSentinel \
+              gtest_sentinel(gtest_dt); \
+          GTEST_EXECUTE_DEATH_TEST_STATEMENT_(statement, gtest_dt); \
+          gtest_dt->Abort(::testing::internal::DeathTest::TEST_DID_NOT_DIE); \
+          break; \
+        } \
+        default: \
+          break; \
+      } \
+    } \
+  } else \
+    GTEST_CONCAT_TOKEN_(gtest_label_, __LINE__): \
+      fail(::testing::internal::DeathTest::LastMessage())
+// The symbol 'fail' here expands to something into which a message
+// can be streamed.
+    
+      // If input name has a trailing separator character, removes it and returns
+  // the name, otherwise return the name string unmodified.
+  // On Windows platform, uses \ as the separator, other platforms use /.
+  FilePath RemoveTrailingPathSeparator() const;
+    
+    #include <stdlib.h>
+#include <assert.h>
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16>
+class ValueArray16 {
  public:
-  NwMenuGetNSStringWithFixupFunction(){}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
+  ValueArray16(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
+      T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16) : v1_(v1),
+      v2_(v2), v3_(v3), v4_(v4), v5_(v5), v6_(v6), v7_(v7), v8_(v8), v9_(v9),
+      v10_(v10), v11_(v11), v12_(v12), v13_(v13), v14_(v14), v15_(v15),
+      v16_(v16) {}
+    }
     
- protected:
-  ~NwMenuGetNSStringWithFixupFunction() override {}
+    #if GTEST_OS_WINDOWS_MOBILE
+  // Windows CE does not have the 'ANSI' versions of Win32 APIs. To be
+  // able to pass strings to Win32 APIs on CE we need to convert them
+  // to 'Unicode', UTF-16.
     
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
+    
+    {  T0 f0_;
+  T1 f1_;
+  T2 f2_;
+  T3 f3_;
+  T4 f4_;
+  T5 f5_;
+  T6 f6_;
+  T7 f7_;
 };
     
-    #define CONTDST2 srcStride == dst0Stride && \
-                 srcStride == dst1Stride &&
-#define CONTDST3 srcStride == dst0Stride && \
-                 srcStride == dst1Stride && \
-                 srcStride == dst2Stride &&
-#define CONTDST4 srcStride == dst0Stride && \
-                 srcStride == dst1Stride && \
-                 srcStride == dst2Stride && \
-                 srcStride == dst3Stride &&
+    #include <mxnet/op_attr_types.h>
+#include <mxnet/graph_attr_types.h>
+#include <mxnet/c_api.h>
+#include <nnvm/symbolic.h>
+#include <nnvm/op.h>
+#include <nnvm/graph.h>
+#include <vector>
+#include <atomic>
+#include <utility>
+#include <string>
+#include <unordered_map>
     
-        for (size_t i = 0u; i < size.height; i += 1)
-    {
-        const u8 * srcy = internal::getRowPtr(srcyBase, srcyStride, i);
-        const u8 * srcu = internal::getRowPtr(srcuBase, srcuStride, i);
-        const u8 * srcv = internal::getRowPtr(srcvBase, srcvStride, i);
-        u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t syj = 0u, sj = 0u, dj = 0u;
+      /*!
+   * \brief Constructor takes function to run.
+   * \param size size of the thread pool.
+   * \param func the function to run on the thread pool.
+   */
+  explicit ThreadPool(size_t size, std::function<void()> func)
+      : worker_threads_(size) {
+    CHECK_GT(size, 0);
+    for (auto& i : worker_threads_) {
+      i = std::thread(func);
     }
-    
-                    v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t0_16s), kernelBase[8]);
-                v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t1_16s), kernelBase[7]);
-                v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t2_16s), kernelBase[6]);
-    
-        func(size,
-         srcBase, srcStride,
-         dstBase, dstStride,
-         flipMode);
-    
-        for(size_t j = 0; j < size.height; ++j)
-    {
-        const T *  src = internal::getRowPtr( srcBase,  srcStride, j);
-        const T * rng1 = internal::getRowPtr(rng1Base, rng1Stride, j);
-        const T * rng2 = internal::getRowPtr(rng2Base, rng2Stride, j);
-             u8 *  dst = internal::getRowPtr( dstBase,  dstStride, j);
-        size_t i = 0;
-        for( ; i < width; i += 32/sizeof(T) )
-        {
-            internal::prefetch(src + i);
-            internal::prefetch(rng1 + i);
-            internal::prefetch(rng2 + i);
-    }
-    }
-    
-      grpc_error* Init(grpc_call_element* elem,
-                   const grpc_call_element_args* args) override;
-    
-    
-    {  std::vector<const protobuf::FieldDescriptor*> extensions;
-  descriptor_pool_->FindAllExtensions(desc, &extensions);
-  for (auto it = extensions.begin(); it != extensions.end(); it++) {
-    response->add_extension_number((*it)->number());
   }
-  response->set_base_type_name(type);
-  return Status::OK;
-}
+  explicit ThreadPool(size_t size,
+                      std::function<void(std::shared_ptr<dmlc::ManualEvent> ready)> func,
+                      const bool wait)
+      : worker_threads_(size) {
+    CHECK_GT(size, 0);
+    for (auto& i : worker_threads_) {
+      std::shared_ptr<dmlc::ManualEvent> ptr = std::make_shared<dmlc::ManualEvent>();
+      ready_events_.emplace_back(ptr);
+      i = std::thread(func, ptr);
+    }
+    if (wait) {
+      WaitForReady();
+    }
+  }
+  ~ThreadPool() noexcept(false) {
+    for (auto&& i : worker_threads_) {
+      i.join();
+    }
+  }
     
-    
-    {
-    {   private:
-    const grpc::string name_;
-    const grpc::string value_;
-  };
-  return std::unique_ptr<ServerBuilderOption>(new StringOption(name, value));
-}
-    
-      virtual void PredictBatch(DMatrix* dmat, HostDeviceVector<bst_float>* out_preds,
-                            const gbm::GBTreeModel& model, int tree_begin,
-                            unsigned ntree_limit = 0) = 0;
-    
-      for (auto alphabet_size : test_cases) {
-    for (int i = 0; i < repetitions; i++) {
-      std::vector<int> input(num_elements);
-      std::generate(input.begin(), input.end(),
-        [=]() { return rand() % alphabet_size; });
-      CompressedBufferWriter cbw(alphabet_size);
+    namespace mxnet {
+namespace exec {
     }
     }
     
-    SEXP XGDMatrixSliceDMatrix_R(SEXP handle, SEXP idxset) {
-  SEXP ret;
-  R_API_BEGIN();
-  int len = length(idxset);
-  std::vector<int> idxvec(len);
-  for (int i = 0; i < len; ++i) {
-    idxvec[i] = INTEGER(idxset)[i] - 1;
-  }
-  DMatrixHandle res;
-  CHECK_CALL(XGDMatrixSliceDMatrix(R_ExternalPtrAddr(handle),
-                                   BeginPtr(idxvec), len,
-                                   &res));
-  ret = PROTECT(R_MakeExternalPtr(res, R_NilValue, R_NilValue));
-  R_RegisterCFinalizerEx(ret, _DMatrixFinalizer, TRUE);
-  R_API_END();
-  UNPROTECT(1);
-  return ret;
-}
+    namespace mxnet {
+namespace io {
+/*! \return the parameter of default augmenter */
+std::vector<dmlc::ParamFieldInfo> ListDefaultAugParams();
+std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
+}  // namespace io
+}  // namespace mxnet
+#endif  // MXNET_IO_IMAGE_AUGMENTER_H_
+
     
-    
-    {    // Read 5 bytes - the maximum we will need
-    uint64_t tmp = static_cast<uint64_t>(buffer_[start_byte_idx - 4]) << 32 |
-                   static_cast<uint64_t>(buffer_[start_byte_idx - 3]) << 24 |
-                   static_cast<uint64_t>(buffer_[start_byte_idx - 2]) << 16 |
-                   static_cast<uint64_t>(buffer_[start_byte_idx - 1]) << 8 |
-                   buffer_[start_byte_idx];
-    int bit_shift =
-        (bits_per_byte - ((offset_ + 1) * symbol_bits_)) % bits_per_byte;
-    tmp >>= bit_shift;
-    // Mask off unneeded bits
-    uint64_t mask = (1 << symbol_bits_) - 1;
-    return static_cast<T>(tmp & mask);
-  }
+        // if overflow from previous round, directly return false, until before first is called
+    if (num_overflow_ != 0) return false;
+    index_t top = 0;
