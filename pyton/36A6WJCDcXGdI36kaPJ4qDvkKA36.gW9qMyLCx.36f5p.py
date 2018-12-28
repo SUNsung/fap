@@ -1,99 +1,106 @@
 
         
-        
-max_features = 20000
-# cut texts after this number of words
-# (among top max_features most common words)
-maxlen = 100
-batch_size = 32
-    
-    # Gather facts sorted by created_time from most recent to least recent
-- ec2_lc_facts:
-    sort: created_time
-    sort_order: descending
-'''
-    
-        def client(self, resource='lambda'):
-        return self.resource_client[resource]
-    
-            try:
-            function_app = self.web_client.web_apps.get(
-                self.resource_group,
-                self.name
+            def _get_session_from_db(self):
+        try:
+            return self.model.objects.get(
+                session_key=self.session_key,
+                expire_date__gt=timezone.now()
             )
-        except CloudError:
-            pass
+        except (self.model.DoesNotExist, SuspiciousOperation) as e:
+            if isinstance(e, SuspiciousOperation):
+                logger = logging.getLogger('django.security.%s' % e.__class__.__name__)
+                logger.warning(str(e))
+            self._session_key = None
     
-        def report_not_exist(self, appid, ip):
-        self.logger.debug('report_not_exist:%s %s', appid, ip)
-        th = threading.Thread(target=self.process_appid_not_exist, args=(appid, ip))
-        th.start()
-    
-        if netloc.startswith(('127.0.0.', '::1', 'localhost')):
-        start_response('400 Bad Request', [('Content-Type', 'text/html')])
-        html = ''.join('<a href='https://%s/'>%s</a><br/>' % (x, x) for x in ('google.com', 'mail.google.com'))
-        yield message_html('GoAgent %s is Running' % __version__, 'Now you can visit some websites', html)
-        raise StopIteration
-    
-    The runtime provides these Token implementations:
+        The Django sessions framework is entirely cookie-based. It does
+    not fall back to putting session IDs in URLs. This is an intentional
+    design decision. Not only does that behavior make URLs ugly, it makes
+    your site vulnerable to session-ID theft via the 'Referer' header.
     
     
-    def predict(self, input):
-        '''
-        From the input stream, predict what alternative will succeed
-	using this DFA (representing the covering regular approximation
-	to the underlying CFL).  Return an alternative number 1..n.  Throw
-	 an exception upon error.
-	'''
-        mark = input.mark()
-        s = 0 # we always start at s0
-        try:
-            for _ in xrange(50000):
-                #print '***Current state = %d' % s
-                
-                specialState = self.special[s]
-                if specialState >= 0:
-                    #print 'is special'
-                    s = self.specialStateTransition(specialState, input)
-                    if s == -1:
-                        self.noViableAlt(s, input)
-                        return 0
-                    input.consume()
+class ConnectionDoesNotExist(Exception):
+    pass
+    
+    
+class settingslist_node(nodes.General, nodes.Element):
+    pass
+    
+    
+root = Root()
+factory = Site(root)
+reactor.listenTCP(8880, factory)
+reactor.run()
+
+    
+        def syntax(self):
+        return '[options] <spider>'
+    
+            Default OpenSSL method is TLS_METHOD (also called SSLv23_METHOD)
+        which allows TLS protocol negotiation
+    
+    
+def setup(app):
+    app.add_config_value('edit_on_github_project', '', True)
+    app.add_config_value('edit_on_github_branch', 'master', True)
+    app.add_config_value('edit_on_github_src_path', '', True)  # 'eg' 'docs/'
+    app.connect('html-page-context', html_page_context)
+
+    
+    # There are two options for replacing |today|: either, you set today to some
+# non-false value, then it is used:
+#
+# today = ''
+#
+# Else, today_fmt is used as the format for a strftime call.
+#
+# today_fmt = '%B %d, %Y'
+    
+            if self.flash_briefings.get(briefing_id) is None:
+            err = 'No configured Alexa flash briefing was found for: %s'
+            _LOGGER.error(err, briefing_id)
+            return b'', 404
+    
+        def _make_request(self):
+        # Weirdly enough, this doesn't seem to require authentication
+        data = [{
+            'request': {
+                'sinceRevision': 0
+            },
+            'action': 'http://linksys.com/jnap/devicelist/GetDevices'
+        }]
+        headers = {'X-JNAP-Action': 'http://linksys.com/jnap/core/Transaction'}
+        return requests.post('http://{}/JNAP/'.format(self.host),
+                             timeout=DEFAULT_TIMEOUT,
+                             headers=headers,
+                             json=data)
+
+    
+        def __init__(self, config):
+        '''Initialize the scanner.'''
+        self.host = config[CONF_HOST]
+        self.username = config[CONF_USERNAME]
+        self.password = config[CONF_PASSWORD]
+    
+    SERVICE_DOWNLOAD_FILE_SCHEMA = vol.Schema({
+    vol.Required(ATTR_URL): cv.url,
+    vol.Optional(ATTR_SUBDIR): cv.string,
+    vol.Optional(ATTR_FILENAME): cv.string,
+    vol.Optional(ATTR_OVERWRITE, default=False): cv.boolean,
+})
+    
+                    if ssdp_socket in read:
+                    data, addr = ssdp_socket.recvfrom(1024)
+                else:
+                    # most likely the timeout, so check for interrupt
                     continue
+            except socket.error as ex:
+                if self._interrupted:
+                    clean_socket_close(ssdp_socket)
+                    return
     
-            elif isinstance(e, MismatchedTokenException):
-            tokenName = '<unknown>'
-            if e.expecting == EOF:
-                tokenName = 'EOF'
-            else:
-                tokenName = self.tokenNames[e.expecting]
+    from homeassistant.const import (CONF_PASSWORD, CONF_SCAN_INTERVAL,
+                                 CONF_USERNAME)
+import homeassistant.helpers.config_validation as cv
+from homeassistant.helpers.discovery import load_platform
     
-                elif opt in ('-l', '--playlist', '--playlists'):
-                # Download playlist whenever possible.
-                conf['playlist'] = True
-    
-    #----------------------------------------------------------------------
-def ckplayer_download(url, output_dir = '.', merge = False, info_only = False, is_xml = True, **kwargs):
-    if is_xml:  #URL is XML URL
-        try:
-            title = kwargs['title']
-        except:
-            title = ''
-        try:
-            headers = kwargs['headers']  #headers provided
-            ckinfo = get_content(url, headers = headers)
-        except NameError:
-            ckinfo = get_content(url)
-        
-        ckplayer_download_by_xml(ckinfo, output_dir, merge, 
-                                info_only, title = title)
-    
-        if int(html['status']) != 100000:
-        raise Exception('API error!')
-    
-    pattern_url_photoset = r'https?://www\.flickr\.com/photos/.+/(?:(?:sets)|(?:albums))?/([^/]+)'
-pattern_url_photostream = r'https?://www\.flickr\.com/photos/([^/]+)(?:/|(?:/page))?$'
-pattern_url_single_photo = r'https?://www\.flickr\.com/photos/[^/]+/(\d+)'
-pattern_url_gallery = r'https?://www\.flickr\.com/photos/[^/]+/galleries/(\d+)'
-pattern_url_group = r'https?://www\.flickr\.com/groups/([^/]+)'
-pattern_url_favorite = r'https?://www\.flickr\.com/photos/([^/]+)/favorites'
+    REQUIREMENTS = ['python-join-api==0.0.2']
