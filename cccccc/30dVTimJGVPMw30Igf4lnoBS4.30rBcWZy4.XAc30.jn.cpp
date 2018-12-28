@@ -1,119 +1,98 @@
 
         
-        REGISTER_OP('Add').Doc(R'doc(
-An op to test that duplicate registrations don't override previously
-registered ops.
-)doc');
+        ChannelCredentials::~ChannelCredentials() {}
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
-    
-    // Given an numpy ndarray object 'obj', creates a corresponding tf
-// Tensor in '*ret'.
-Status ConvertNdarrayToTensor(PyObject* obj, Tensor* ret);
-    
-    #include 'tensorflow/stream_executor/platform/port.h'
-    
-      // base::SingleThreadTaskRunner:
-  bool PostDelayedTask(const base::Location& from_here,
-                       base::OnceClosure task,
-                       base::TimeDelta delay) override;
-  bool RunsTasksInCurrentSequence() const override;
-  bool PostNonNestableDelayedTask(const base::Location& from_here,
-                                  base::OnceClosure task,
-                                  base::TimeDelta delay) override;
-    
-     protected:
-  explicit InAppPurchase(v8::Isolate* isolate);
-  ~InAppPurchase() override;
-    
-    
-    {  mate::Dictionary dict(isolate, exports);
-  dict.Set('net', Net::Create(isolate));
-  dict.Set('Net', Net::GetConstructor(isolate)->GetFunction());
+    AuthPropertyIterator AuthPropertyIterator::operator++(int) {
+  AuthPropertyIterator tmp(*this);
+  operator++();
+  return tmp;
 }
     
-    class Net : public mate::EventEmitter<Net> {
- public:
-  static v8::Local<v8::Value> Create(v8::Isolate* isolate);
-    }
     
-    NODE_BUILTIN_MODULE_CONTEXT_AWARE(atom_browser_power_monitor, Initialize)
+    {}  // namespace grpc
 
     
-    #if defined(OS_MACOSX) || defined(OS_WIN)
-  void InitPlatformSpecificMonitors();
-#endif
-    
-     protected:
-  WebRequest(v8::Isolate* isolate, AtomBrowserContext* browser_context);
-  ~WebRequest() override;
-    
-      // content::QuotaPermissionContext:
-  void RequestQuotaPermission(const content::StorageQuotaParams& params,
-                              int render_process_id,
-                              const PermissionCallback& callback) override;
-    
-    namespace caffe2 {
-    }
-    
-    ```
-    
-    #include 'bullet_utilities.h'
-#include 'rid_bullet.h'
-    
-    public:
-	HingeJointBullet(RigidBodyBullet *rbA, RigidBodyBullet *rbB, const Transform &frameA, const Transform &frameB);
-	HingeJointBullet(RigidBodyBullet *rbA, RigidBodyBullet *rbB, const Vector3 &pivotInA, const Vector3 &pivotInB, const Vector3 &axisInA, const Vector3 &axisInB);
-    
-    #include 'joint_bullet.h'
-    
-    	ClassDB::register_virtual_class<CSGShape>();
-	ClassDB::register_virtual_class<CSGPrimitive>();
-	ClassDB::register_class<CSGMesh>();
-	ClassDB::register_class<CSGSphere>();
-	ClassDB::register_class<CSGBox>();
-	ClassDB::register_class<CSGCylinder>();
-	ClassDB::register_class<CSGTorus>();
-	ClassDB::register_class<CSGPolygon>();
-	ClassDB::register_class<CSGCombiner>();
-    
-    void SearchIterator::reset()
-{
-    UErrorCode status = U_ZERO_ERROR;
-    setMatchNotFound();
-    setOffset(0, status);
-    m_search_->isOverlap          = FALSE;
-    m_search_->isCanonicalMatch   = FALSE;
-    m_search_->elementComparisonType = 0;
-    m_search_->isForwardSearching = TRUE;
-    m_search_->reset              = TRUE;
+    const ViewDescriptor& ServerReceivedBytesPerRpcHour() {
+  const static ViewDescriptor descriptor =
+      HourDescriptor()
+          .set_name('grpc.io/server/received_bytes_per_rpc/hour')
+          .set_measure(kRpcServerReceivedBytesPerRpcMeasureName)
+          .set_aggregation(BytesDistributionAggregation())
+          .add_column(ServerMethodTagKey());
+  return descriptor;
 }
     
-    #endif // SELFMTIMPL
-//eof
-
     
+    {  const protobuf::DescriptorPool* descriptor_pool_;
+  const std::vector<string>* services_;
+};
     
-/**
- * A formatter for small, positive integers.
- */
-class U_I18N_API SmallIntFormatter : public UMemory {
-public:
+    void ProtoServerReflectionPlugin::ChangeArguments(const grpc::string& name,
+                                                  void* value) {}
+    
+    #include 'src/cpp/server/load_reporter/get_cpu_stats.h'
+    
+    void ConstraintBullet::destroy_internal_constraint() {
+	space->remove_constraint(this);
+}
+    
     /**
-     * Estimates the actual digit count needed to format positiveValue
-     * using the given range of digit counts.
-     * Returns a value that is at least the actual digit count needed.
-     *
-     * @param positiveValue the value to format
-     * @param range the acceptable range of digit counts.
-     */
-    static int32_t estimateDigitCount(
-            int32_t positiveValue, const IntDigitCountRange &range);
+ * @brief Config plugin registry.
+ *
+ * This creates an osquery registry for 'config' which may implement
+ * ConfigPlugin. A ConfigPlugin's call API should make use of a genConfig
+ * after reading JSON data in the plugin implementation.
+ */
+CREATE_REGISTRY(ConfigPlugin, 'config');
+    
+      /**
+   * @brief Reset the configuration state, reserved for testing only.
+   */
+  void reset();
+    
+    /// Remove these ATC tables from the registry and database
+Status ATCConfigParserPlugin::removeATCTables(
+    const std::set<std::string>& detach_tables) {
+  auto registry_table = RegistryFactory::get().registry('table');
+  std::set<std::string> failed_tables;
+  for (const auto& table : detach_tables) {
+    if (registry_table->exists(table)) {
+      std::string value;
+      if (getDatabaseValue(
+              kPersistentSettings, kDatabaseKeyPrefix + table, value)
+              .ok()) {
+        registry_table->remove(table);
+        PluginResponse resp;
+        Registry::call(
+            'sql', 'sql', {{'action', 'detatch'}, {'table', table}}, resp);
+        LOG(INFO) << 'Removed ATC table: ' << table;
+      } else {
+        failed_tables.insert(table);
+      }
+    }
+    deleteDatabaseValue(kPersistentSettings, kDatabaseKeyPrefix + table);
+  }
+  if (failed_tables.empty()) {
+    return Status();
+  }
+  return Status(
+      1, 'Attempted to remove non ATC tables: ' + join(failed_tables, ', '));
+}
+    
+    Status LoggerConfigParserPlugin::update(const std::string& /* source */,
+                                        const ParserConfig& config) {
+  rj::Document& doc = data_.doc();
+    }
+    
+        bool is_custom = name.find('custom_') == 0;
+    if (!is_custom && Flag::getType(name).empty()) {
+      LOG(WARNING) << 'Cannot set unknown or invalid flag: ' << name;
+      continue;
+    }
+    
+    TEST_F(OptionsConfigParserPluginTests, test_get_option) {
+  Config c;
+  auto s = c.update(getTestConfigMap('test_parse_items.conf'));
+  EXPECT_TRUE(s.ok());
+  EXPECT_EQ(s.toString(), 'OK');
     }
