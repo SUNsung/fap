@@ -1,153 +1,134 @@
-  image_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2051) << 'Incorrect image file magic.';
-  label_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2049) << 'Incorrect label file magic.';
-  image_file.read(reinterpret_cast<char*>(&num_items), 4);
-  num_items = swap_endian(num_items);
-  label_file.read(reinterpret_cast<char*>(&num_labels), 4);
-  num_labels = swap_endian(num_labels);
-  CHECK_EQ(num_items, num_labels);
-  image_file.read(reinterpret_cast<char*>(&rows), 4);
-  rows = swap_endian(rows);
-  image_file.read(reinterpret_cast<char*>(&cols), 4);
-  cols = swap_endian(cols);
+
+        
+        size_t num_threads = 31;
+size_t work_chunk  = 120;
     
-     protected:
-  /**
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the predictions @f$ x @f$, a Blob with values in
-   *      @f$ [-\infty, +\infty] @f$ indicating the predicted score for each of
-   *      the @f$ K = CHW @f$ classes. Each @f$ x_n @f$ is mapped to a predicted
-   *      label @f$ \hat{l}_n @f$ given by its maximal index:
-   *      @f$ \hat{l}_n = \arg\max\limits_k x_{nk} @f$
-   *   -# @f$ (N \times 1 \times 1 \times 1) @f$
-   *      the labels @f$ l @f$, an integer-valued Blob with values
-   *      @f$ l_n \in [0, 1, 2, ..., K - 1] @f$
-   *      indicating the correct class label among the @f$ K @f$ classes
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
-   *      the computed accuracy: @f$
-   *        \frac{1}{N} \sum\limits_{n=1}^N \delta\{ \hat{l}_n = l_n \}
-   *      @f$, where @f$
-   *      \delta\{\mathrm{condition}\} = \left\{
-   *         \begin{array}{lr}
-   *            1 & \mbox{if condition} \\
-   *            0 & \mbox{otherwise}
-   *         \end{array} \right.
-   *      @f$
+    //////////////////////////////////////////////////////////////////////
+    
+        VX_form_t vx_formater {{
+      xo,
+      static_cast<uint32_t>(rb),
+      static_cast<uint32_t>(ra),
+      static_cast<uint32_t>(rt),
+      op
+    }};
+    
+    
+    {private:
+  APCHandle m_handle;
+  APCHandle* m_arrayHandle;
+  CollectionType m_colType;
+};
+    
+      /**
+   * Prefer the Bind() over the GetFoo() as it makes ini_get() work too.
+   * These Bind()s should be used for ini settings. Specifically, they
+   * should be used when the bound setting is needed before the main ini
+   * processing pass. Unlike IniSetting::Bind, these bindings will fetch the
+   * value in an ini setting if it is set otherwise it will use the defValue.
    */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
+  static void Bind(bool& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const bool defValue = false,
+                   const bool prepend_hhvm = true);
+  static void Bind(const char*& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const char *defValue = nullptr,
+                   const bool prepend_hhvm = true);
+  static void Bind(std::string& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const std::string defValue = '',
+                   const bool prepend_hhvm = true);
+  static void Bind(char& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const char defValue = 0, const bool prepend_hhvm = true);
+  static void Bind(unsigned char& loc,const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const unsigned char defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(int16_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const int16_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(uint16_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const uint16_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(int32_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const int32_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(uint32_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const uint32_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(int64_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const int64_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(uint64_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const uint64_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(double& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const double defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(HackStrictOption& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name,
+                   HackStrictOption def);
+  static void
+  Bind(std::vector<uint32_t>& loc, const IniSettingMap& ini,
+       const Hdf& config, const std::string& name = '',
+       const std::vector<uint32_t>& defValue = std::vector<uint32_t>(),
+       const bool prepend_hhvm = true);
+  static void
+  Bind(std::vector<std::string>& loc, const IniSettingMap& ini,
+       const Hdf& config, const std::string& name = '',
+       const std::vector<std::string>& defValue = std::vector<std::string>(),
+       const bool prepend_hhvm = true);
+  static void
+  Bind(std::unordered_map<std::string, int>& loc,
+       const IniSettingMap& ini, const Hdf& config,
+       const std::string& name = '',
+       const std::unordered_map<std::string, int>& defValue =
+         std::unordered_map<std::string, int>{},
+       const bool prepend_hhvm = true);
+  static void Bind(ConfigMap& loc, const IniSettingMap& ini, const Hdf& config,
+                   const std::string& name = '',
+                   const ConfigMap& defValue = ConfigMap(),
+                   const bool prepend_hhvm = true);
+  static void Bind(ConfigMapC& loc, const IniSettingMap& ini, const Hdf& config,
+                   const std::string& name = '',
+                   const ConfigMapC& defValue = ConfigMapC(),
+                   const bool prepend_hhvm = true);
+  static void Bind(ConfigSet& loc, const IniSettingMap& ini, const Hdf& config,
+                   const std::string& name = '',
+                   const ConfigSet& defValue = ConfigSet(),
+                   const bool prepend_hhvm = true);
+  static void Bind(ConfigSetC& loc, const IniSettingMap& ini, const Hdf& config,
+                   const std::string& name = '',
+                   const ConfigSetC& defValue = ConfigSetC(),
+                   const bool prepend_hhvm = true);
+  static void Bind(ConfigIMap& loc, const IniSettingMap& ini, const Hdf& config,
+                   const std::string& name = '',
+                   const ConfigIMap& defValue = ConfigIMap(),
+                   const bool prepend_hhvm = true);
+  static void Bind(ConfigFlatSet& loc, const IniSettingMap& ini,
+                   const Hdf& config, const std::string& name = '',
+                   const ConfigFlatSet& defValue = ConfigFlatSet(),
+                   const bool prepend_hhvm = true);
     
-    namespace caffe {
-    }
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    
-    {}  // namespace caffe
-    
-     protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
-  cudnnTensorDescriptor_t bias_desc_;
-  cudnnFilterDescriptor_t filter_desc_;
-  vector<cudnnConvolutionDescriptor_t> conv_descs_;
-  int bottom_offset_, top_offset_, bias_offset_;
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of PoolingLayer.
- *        Fallback to PoolingLayer for CPU mode.
-*/
-template <typename Dtype>
-class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
- public:
-  explicit CuDNNPoolingLayer(const LayerParameter& param)
-      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNPoolingLayer();
-  // Currently, cuDNN does not support the extra top blob.
-  virtual inline int MinTopBlobs() const { return -1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    }
-    
-    namespace apollo {
-namespace drivers {
-namespace canbus {
-    }
-    }
-    }
-    
-    #include 'gtest/gtest.h'
-    
-    
-    {  int ret = x;
-  return ret;
+    {  auto ret = m_it.second();
+  assertx(ret.isString());
+  ++m_it;
+  return Variant(HHVM_FN(basename)(ret.toString()));
 }
     
-    namespace apollo {
-namespace drivers {
-namespace conti_radar {
-    }
-    }
-    }
+    #ifndef HPHP_GLOB_STREAM_WRAPPER_H
+#define HPHP_GLOB_STREAM_WRAPPER_H
     
-    using apollo::drivers::canbus::Byte;
+    #include <folly/String.h>
     
-    
-    {  switch (x) {
-    case 0x0:
-      return RCS_THRESHOLD_STANDARD;
-    case 0x1:
-      return RCS_THRESHOLD_HIGH_SENSITIVITY;
-    default:
-      return RCS_THRESHOLD_ERROR;
-  }
-}
-    
-    #include 'modules/localization/msf/local_map/base_map/base_map_matrix.h'
-    
-        PbJunction junction;
-    junction.mutable_id()->set_id(junction_id);
-    PbPolygon* polygon = junction.mutable_polygon();
-    RETURN_IF_ERROR(UtilXmlParser::ParseOutline(*sub_node, polygon));
-    
-    /**
- * @file
- **/
-    
-        TrajectoryPoint trajectory_point;
-    trajectory_point.mutable_path_point()->set_x(x);
-    trajectory_point.mutable_path_point()->set_y(y);
-    trajectory_point.mutable_path_point()->set_s(accumulated_trajectory_s);
-    trajectory_point.mutable_path_point()->set_theta(theta);
-    trajectory_point.mutable_path_point()->set_kappa(kappa);
-    trajectory_point.set_v(v);
-    trajectory_point.set_a(a);
-    trajectory_point.set_relative_time(t_param + init_relative_time);
-    
-      constraint.AddDerivativeBoundary(index_list, lower_bound, upper_bound);
-  const auto mat = constraint.inequality_constraint_matrix();
-  const auto bd = constraint.inequality_constraint_boundary();
-    
-    #include 'modules/planning/math/smoothing_spline/spline_1d_seg.h'
+    #include 'hphp/util/struct-log.h'
