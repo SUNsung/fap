@@ -1,157 +1,340 @@
-    void reciprocal(const Size2D &size,
-                    const f32 * srcBase, ptrdiff_t srcStride,
-                    f32 * dstBase, ptrdiff_t dstStride,
-                    f32 scale);
+
+        
+        QT_BEGIN_NAMESPACE
+class QPaintEvent;
+class QTimer;
+QT_END_NAMESPACE
     
-             vline_f32 = vaddq_f32(vline_f32, vhalf);
-         uint32x4_t vline_u32 = vcvtq_u32_f32(vline_f32);
-         uint16x4_t vline_u16 = vqmovn_u32(vline_u32);
+    QT_BEGIN_NAMESPACE
+class QModelIndex;
+QT_END_NAMESPACE
     
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVTS_FUNC(f32, s16, 8,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.32 {d4-d5}, [%[src1]]                              \n\t'
-            'vld1.32 {d6-d7}, [%[src2]]                              \n\t'
-            'vmul.f32 q4, q2, q0                                     \n\t'
-            'vmul.f32 q5, q3, q0                                     \n\t'
-            'vadd.f32 q6, q4, q1                                     \n\t'
-            'vadd.f32 q7, q5, q1                                     \n\t'
-            'vcvt.s32.f32 q8, q6                                     \n\t'
-            'vcvt.s32.f32 q9, q7                                     \n\t'
-            'vqmovn.s32 d8, q8                                       \n\t'
-            'vqmovn.s32 d9, q9                                       \n\t'
-            'vst1.16 {d8-d9}, [%[dst]]                               \n\t'
-            : /*no output*/
-            : [src1] 'r' (_src + i + 0),
-              [src2] 'r' (_src + i + 4),
-              [dst] 'r' (_dst + i),
-              'w' (vscale), 'w' (vshift)
-            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19'
-        );
+    static void secp256k1_hmac_sha256_initialize(secp256k1_hmac_sha256_t *hash, const unsigned char *key, size_t keylen) {
+    int n;
+    unsigned char rkey[64];
+    if (keylen <= 64) {
+        memcpy(rkey, key, keylen);
+        memset(rkey + keylen, 0, 64 - keylen);
+    } else {
+        secp256k1_sha256_t sha256;
+        secp256k1_sha256_initialize(&sha256);
+        secp256k1_sha256_write(&sha256, key, keylen);
+        secp256k1_sha256_finalize(&sha256, rkey);
+        memset(rkey + 32, 0, 32);
     }
-})
-#else
-CVTS_FUNC(f32, s16, 8,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        float32x4_t vline1_f32 = vld1q_f32(_src + i + 0);
-        float32x4_t vline2_f32 = vld1q_f32(_src + i + 4);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        int32x4_t vline1_s32 = vcvtq_s32_f32(vline1_f32);
-        int32x4_t vline2_s32 = vcvtq_s32_f32(vline2_f32);
-        int16x4_t vRes1 = vqmovn_s32(vline1_s32);
-        int16x4_t vRes2 = vqmovn_s32(vline2_s32);
-        vst1q_s16(_dst + i, vcombine_s16(vRes1, vRes2));
     }
-})
+    
+    #ifndef SECP256K1_MODULE_ECDH_MAIN_H
+#define SECP256K1_MODULE_ECDH_MAIN_H
+    
+    
+    {
+    {        /* compute using ECDH function */
+        CHECK(secp256k1_ec_pubkey_create(ctx, &point[0], s_one) == 1);
+        CHECK(secp256k1_ecdh(ctx, output_ecdh, &point[0], s_b32) == 1);
+        /* compute 'explicitly' */
+        CHECK(secp256k1_ec_pubkey_create(ctx, &point[1], s_b32) == 1);
+        CHECK(secp256k1_ec_pubkey_serialize(ctx, point_ser, &point_ser_len, &point[1], SECP256K1_EC_COMPRESSED) == 1);
+        CHECK(point_ser_len == sizeof(point_ser));
+        secp256k1_sha256_initialize(&sha);
+        secp256k1_sha256_write(&sha, point_ser, point_ser_len);
+        secp256k1_sha256_finalize(&sha, output_ser);
+        /* compare */
+        CHECK(memcmp(output_ecdh, output_ser, sizeof(output_ser)) == 0);
+    }
+}
+    
+    /* Given a BlockIndex with the provided nbits,
+ * verify that the expected difficulty results.
+ */
+static void TestDifficulty(uint32_t nbits, double expected_difficulty)
+{
+    CBlockIndex* block_index = CreateBlockIndexWithNbits(nbits);
+    double difficulty = GetDifficulty(block_index);
+    delete block_index;
+    }
+    
+    
+// Overloaded version for char types to support printing as an integer
+#define TINYFORMAT_DEFINE_FORMATVALUE_CHAR(charType)                  \
+inline void formatValue(std::ostream& out, const char* /*fmtBegin*/,  \
+                        const char* fmtEnd, int /**/, charType value) \
+{                                                                     \
+    switch(*(fmtEnd-1))                                               \
+    {                                                                 \
+        case 'u': case 'd': case 'i': case 'o': case 'X': case 'x':   \
+            out << static_cast<int>(value); break;                    \
+        default:                                                      \
+            out << value;                   break;                    \
+    }                                                                 \
+}
+// per 3.9.1: char, signed char and unsigned char are all distinct types
+TINYFORMAT_DEFINE_FORMATVALUE_CHAR(char)
+TINYFORMAT_DEFINE_FORMATVALUE_CHAR(signed char)
+TINYFORMAT_DEFINE_FORMATVALUE_CHAR(unsigned char)
+#undef TINYFORMAT_DEFINE_FORMATVALUE_CHAR
+    
+    // Bech32 is a string encoding format used in newer address types.
+// The output consists of a human-readable part (alphanumeric), a
+// separator character (1), and a base32 data section, the last
+// 6 characters of which are a checksum.
+//
+// For more information, see BIP 173.
+    
+      // After identify the math blocks, we do one more scanning on all text
+  // partitions, and check if any of them is the satellite of:
+  // math blocks: here a p is the satellite of q if:
+  // 1. q is the nearest vertical neighbor of p, and
+  // 2. y_gap(p, q) is less than a threshold, and
+  // 3. x_overlap(p, q) is over a threshold.
+  // Note that p can be the satellites of two blocks: its top neighbor and
+  // bottom neighbor.
+  void ProcessMathBlockSatelliteParts();
+    
+      int num_words;
+  TBOX lword_box;     // in normalized (horiz text rows) space
+  TBOX rword_box;     // in normalized (horiz text rows) space
+    
+    
+    {  ScrollView* sv_window_;
+};
+    
+      WERD_RES *word2 = new WERD_RES(*word);
+    
+      // Gets a pix that contains an 8 bit threshold value at each pixel. The
+  // returned pix may be an integer reduction of the binary image such that
+  // the scale factor may be inferred from the ratio of the sizes, even down
+  // to the extreme of a 1x1 pixel thresholds image.
+  // Ideally the 8 bit threshold should be the exact threshold used to generate
+  // the binary image in ThresholdToPix, but this is not a hard constraint.
+  // Returns nullptr if the input is binary. PixDestroy after use.
+  virtual Pix* GetPixRectThresholds();
+    
+      // Adds the given pix to the set of pages in the PDF file, with the given
+  // caption added to the top.
+  void AddPix(const Pix* pix, const char* caption) {
+    int depth = pixGetDepth(const_cast<Pix*>(pix));
+    int color = depth < 8 ? 1 : (depth > 8 ? 0x00ff0000 : 0x80);
+    Pix* pix_debug = pixAddSingleTextblock(
+        const_cast<Pix*>(pix), fonts_, caption, color, L_ADD_BELOW, nullptr);
+    pixaAddPix(pixa_, pix_debug, L_INSERT);
+  }
+    
+      void wait(int n = 1) {
+    std::unique_lock<std::mutex> lock(m_);
+    while (n_ < n) {
+      cv_.wait(lock);
+    }
+    n_ -= n;
+  }
+    
+    
+    {} // namespace caffe2
+
+    
+    
+    {  vector<int> y_shape(in[0].dims().begin(), in[0].dims().end());
+  CAFFE_ENFORCE_LE(canonical_axis + 1, y_shape.size());
+  y_shape.resize(canonical_axis + 1);
+  y_shape[canonical_axis] = N;
+  out[0] = CreateTensorShape(y_shape, in[0].data_type());
+  return out;
+}
+    
+    OPERATOR_SCHEMA(Floor)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .AllowInplace({{0, 0}})
+    .SetDoc(R'DOC(
+Element-wise application of the floor function ($y=floor(x)$) to the input
+tensor `X`. Output tensor shape is the same as the input tensor. This
+operator can be used in an in-place fashion by using the same input blob as the
+output blob.
+    
+    Example 1:
+  DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
+  RANGES = [
+    [
+      [2, 4],
+      [0, 2],
+    ],
+    [
+      [0, 0],
+      [6, 2],
+    ]
+  ]
+  lengths = [4, 2]
+  OUTPUT[0] = [[3, 4, 5, 6], [0, 0, 0, 0]]
+  OUTPUT[1] = [[1, 2], [7, 8]]
+    
+    AuthPropertyIterator::AuthPropertyIterator()
+    : property_(nullptr), ctx_(nullptr), index_(0), name_(nullptr) {}
+    
+    // Serializes the outgoing trace context. Field IDs are 1 byte followed by
+// field data. A 1 byte version ID is always encoded first.
+size_t TraceContextSerialize(const ::opencensus::trace::SpanContext& context,
+                             char* tracing_buf, size_t tracing_buf_size);
+    
+    MeasureInt64 RpcClientReceivedMessagesPerRpc() {
+  static const auto measure =
+      MeasureInt64::Register(kRpcClientReceivedMessagesPerRpcMeasureName,
+                             'Number of messages received per RPC', kCount);
+  return measure;
+}
+    
+    constexpr size_t RpcServerStatsEncoding::kRpcServerStatsSize;
+constexpr size_t RpcServerStatsEncoding::kEncodeDecodeFailure;
+constexpr size_t RpcServerStatsEncoding::kVersionIdSize;
+constexpr size_t RpcServerStatsEncoding::kFieldIdSize;
+constexpr size_t RpcServerStatsEncoding::kVersionIdOffset;
+constexpr size_t RpcServerStatsEncoding::kVersionId;
+    
+    void RegisterOpenCensusViewsForExport() {
+  ClientSentMessagesPerRpcCumulative().RegisterForExport();
+  ClientSentBytesPerRpcCumulative().RegisterForExport();
+  ClientReceivedMessagesPerRpcCumulative().RegisterForExport();
+  ClientReceivedBytesPerRpcCumulative().RegisterForExport();
+  ClientRoundtripLatencyCumulative().RegisterForExport();
+  ClientServerLatencyCumulative().RegisterForExport();
+    }
+    
+    #include <condition_variable>
+#include <list>
+#include <memory>
+#include <mutex>
+#include <queue>
+    
+    namespace xgboost {
+/*!
+ * \brief interface of linear updater
+ */
+class LinearUpdater {
+ public:
+  /*! \brief virtual destructor */
+  virtual ~LinearUpdater() = default;
+  /*!
+   * \brief Initialize the updater with given arguments.
+   * \param args arguments to the objective function.
+   */
+  virtual void Init(
+      const std::vector<std::pair<std::string, std::string> >& args) = 0;
+    }
+    }
+    
+    
+    { private:
+  /*! \brief the underlying stream */
+  dmlc::Stream *stream_;
+  /*! \brief buffer to hold data */
+  std::string buffer_;
+  /*! \brief length of valid data in buffer */
+  size_t read_len_;
+  /*! \brief pointer in the buffer */
+  size_t read_ptr_;
+};
+    
+    #if DMLC_ENABLE_STD_THREAD
+/*!
+ * \brief A threaded writer to write sparse batch page to sharded files.
+ */
+class SparsePageWriter {
+ public:
+  /*!
+   * \brief constructor
+   * \param name_shards name of shard files.
+   * \param format_shards format of each shard.
+   * \param extra_buffer_capacity Extra buffer capacity before block.
+   */
+  explicit SparsePageWriter(
+      const std::vector<std::string>& name_shards,
+      const std::vector<std::string>& format_shards,
+      size_t extra_buffer_capacity);
+  /*! \brief destructor, will close the files automatically */
+  ~SparsePageWriter();
+  /*!
+   * \brief Push a write job to the writer.
+   * This function won't block,
+   * writing is done by another thread inside writer.
+   * \param page The page to be written
+   */
+  void PushWrite(std::shared_ptr<SparsePage>&& page);
+  /*!
+   * \brief Allocate a page to store results.
+   *  This function can block when the writer is too slow and buffer pages
+   *  have not yet been recycled.
+   * \param out_page Used to store the allocated pages.
+   */
+  void Alloc(std::shared_ptr<SparsePage>* out_page);
+    }
+    
+    SEXP XGDMatrixNumRow_R(SEXP handle) {
+  bst_ulong nrow;
+  R_API_BEGIN();
+  CHECK_CALL(XGDMatrixNumRow(R_ExternalPtrAddr(handle), &nrow));
+  R_API_END();
+  return ScalarInteger(static_cast<int>(nrow));
+}
+    
+        // Build atlas
+    unsigned char* tex_pixels = NULL;
+    int tex_w, tex_h;
+    io.Fonts->GetTexDataAsRGBA32(&tex_pixels, &tex_w, &tex_h);
+    
+    // Set default OpenGL loader to be gl3w
+#if !defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)     \
+ && !defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)     \
+ && !defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)     \
+ && !defined(IMGUI_IMPL_OPENGL_LOADER_CUSTOM)
+#define IMGUI_IMPL_OPENGL_LOADER_GL3W
 #endif
     
-    #ifndef TESSERACT_ARCH_DOTPRODUCTSSE_H_
-#define TESSERACT_ARCH_DOTPRODUCTSSE_H_
+    void    ImGui_ImplVulkan_InvalidateDeviceObjects()
+{
+    ImGui_ImplVulkan_InvalidateFontUploadObjects();
+    }
     
-    // Computes a reshaped copy of the weight matrix w. If there are no
-// partial_funcs_, it does nothing.
-void IntSimdMatrix::Init(const GENERIC_2D_ARRAY<int8_t>& w) {
-  if (partial_funcs_.empty()) return;
-  int num_out = w.dim1();
-  int num_in = w.dim2() - 1;
-  // The rounded-up sizes of the reshaped weight matrix, excluding biases.
-  int rounded_num_in = Roundup(num_in, num_inputs_per_group_);
-  int rounded_num_out = RoundOutputs(num_out);
-  // Add the bias and compute the required size.
-  shaped_w_.resize((rounded_num_in + 1) * rounded_num_out, 0);
-  int shaped_index = 0;
-  int output = 0;
-  // Each number of registers needs a different format! Iterates over the
-  // different numbers of registers (each a power of 2).
-  for (int num_registers = max_output_registers_; num_registers >= 1;
-       num_registers /= 2) {
-    // The number of outputs that we will generate with this many registers.
-    int num_outputs_per_register_set =
-        num_registers * num_outputs_per_register_;
-    // Use the max number of registers until we have to go fewer.
-    while (output + num_outputs_per_register_set <= rounded_num_out) {
-      // Accumulating outputs in registers saves iterating over the inputs, so
-      // we only have to do it once per output register set.
-      for (int input = 0; input < num_in; input += num_inputs_per_group_) {
-        // Iterate over the number of outputs in a register set.
-        for (int j = 0; j < num_outputs_per_register_set; ++j) {
-          // Inner-most loop corresponds to the number of inputs in an input
-          // group.
-          for (int i = 0; i < num_inputs_per_group_; ++i) {
-            int8_t weight = 0;
-            if (output + j < num_out && input + i < num_in)
-              weight = w(output + j, input + i);
-            shaped_w_[shaped_index++] = weight;
-          }
-        }
-      }
-      // Append the bias weights for the register set.
-      for (int j = 0; j < num_outputs_per_register_set; ++j) {
-        int8_t weight = 0;
-        if (output + j < num_out) weight = w(output + j, num_in);
-        shaped_w_[shaped_index++] = weight;
-      }
-      output += num_outputs_per_register_set;
+      void dropNode(const std::shared_ptr<DHTNode>& node);
+    
+    namespace aria2 {
+    }
+    
+    void DHTTaskExecutor::update()
+{
+  execTasks_.erase(std::remove_if(execTasks_.begin(), execTasks_.end(),
+                                  std::mem_fn(&DHTTask::finished)),
+                   execTasks_.end());
+  int r;
+  if (static_cast<size_t>(numConcurrent_) > execTasks_.size()) {
+    r = numConcurrent_ - execTasks_.size();
+  }
+  else {
+    r = 0;
+  }
+  while (r && !queue_.empty()) {
+    std::shared_ptr<DHTTask> task = queue_.front();
+    queue_.pop_front();
+    task->startup();
+    if (!task->finished()) {
+      execTasks_.push_back(task);
+      --r;
     }
   }
+  A2_LOG_DEBUG(fmt('Executing %u Task(s). Queue has %u task(s).',
+                   static_cast<unsigned int>(getExecutingTaskSize()),
+                   static_cast<unsigned int>(getQueueSize())));
 }
     
-    
-    {}  // namespace tesseract
-    
-    namespace tesseract {
-    }
-    
-      // Search the nearest neighbor of part in one vertical direction as defined in
-  // search_bottom. It returns the neighbor found that major x overlap with it,
-  // or nullptr when not found.
-  ColPartition* SearchNNVertical(const bool search_bottom,
-                                 const ColPartition* part);
-    
-    template <typename T> class GenericVector;
-    
-    #include <cmath>
-    
-    #include <LinearMath/btMatrix3x3.h>
-#include <LinearMath/btTransform.h>
-#include <LinearMath/btVector3.h>
-    
-    #include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
-    
-    class SliderJointBullet : public JointBullet {
-	class btSliderConstraint *sliderConstraint;
-    }
-    
-    Mutex *dvector_lock = NULL;
-    
-    
-    {	return obj->call(function, p_args, p_argcount, r_error);
+    std::shared_ptr<DHTTask>
+DHTTaskFactoryImpl::createNodeLookupTask(const unsigned char* targetID)
+{
+  auto task = std::make_shared<DHTNodeLookupTask>(targetID);
+  setCommonProperty(task);
+  return task;
 }
     
-        static BOOST_FORCEINLINE void store(storage_type volatile& storage, storage_type v, memory_order order) BOOST_NOEXCEPT
-    {
-        if (order != memory_order_seq_cst)
-        {
-            fence_before(order);
-            storage = v;
-            fence_after(order);
-        }
-        else
-        {
-            Derived::exchange(storage, v, order);
-        }
+      std::string generateToken(const unsigned char* infoHash,
+                            const std::string& ipaddr, uint16_t port,
+                            const unsigned char* secret) const;
+    
+    namespace aria2 {
     }
