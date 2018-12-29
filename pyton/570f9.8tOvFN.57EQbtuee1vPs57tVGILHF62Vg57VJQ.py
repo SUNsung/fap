@@ -1,334 +1,178 @@
 
         
-            # By default the `-a` argument is parsed for `username:password`.
-    # Set this to `False` to disable the parsing and error handling.
-    auth_parse = True
-    
-    import requests.auth
-    
-        plugin_manager.register(Plugin)
-    try:
-        r = http(
-            httpbin + BASIC_AUTH_URL,
-            '--auth-type',
-            Plugin.auth_type,
-            '--auth',
-            BASIC_AUTH_HEADER_VALUE,
-        )
-        assert HTTP_OK in r
-        assert r.json == AUTH_OK
-    finally:
-        plugin_manager.unregister(Plugin)
-    
-    
-@mock.patch('httpie.core.get_response')
-def test_error_traceback(get_response):
-    exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    with raises(ConnectionError):
-        main(['--ignore-stdin', '--traceback', 'www.google.com'])
-    
-        def __init__(self, directory=DEFAULT_CONFIG_DIR):
-        super(Config, self).__init__()
-        self.update(self.DEFAULTS)
-        self.directory = directory
-    
-    RETURN = '''
-gateway.customer_gateways:
-    description: details about the gateway that was created.
-    returned: success
-    type: complex
-    contains:
-        bgp_asn:
-            description: The Border Gateway Autonomous System Number.
-            returned: when exists and gateway is available.
-            sample: 65123
-            type: string
-        customer_gateway_id:
-            description: gateway id assigned by amazon.
-            returned: when exists and gateway is available.
-            sample: cgw-cb6386a2
-            type: string
-        ip_address:
-            description: ip address of your gateway device.
-            returned: when exists and gateway is available.
-            sample: 1.2.3.4
-            type: string
-        state:
-            description: state of gateway.
-            returned: when gateway exists and is available.
-            state: available
-            type: string
-        tags:
-            description: any tags on the gateway.
-            returned: when gateway exists and is available, and when tags exist.
-            state: available
-            type: string
-        type:
-            description: encryption type.
-            returned: when gateway exists and is available.
-            sample: ipsec.1
-            type: string
-'''
-    
-    RETURN = '''
-block_device_mapping:
-    description: Block device mapping for the instances of launch configuration
-    type: list
-    returned: always
-    sample: '[{
-        'device_name': '/dev/xvda':,
-        'ebs': {
-            'delete_on_termination': true,
-            'volume_size': 8,
-            'volume_type': 'gp2'
-    }]'
-classic_link_vpc_security_groups:
-    description: IDs of one or more security groups for the VPC specified in classic_link_vpc_id
-    type: string
-    returned: always
-    sample:
-created_time:
-    description: The creation date and time for the launch configuration
-    type: string
-    returned: always
-    sample: '2016-05-27T13:47:44.216000+00:00'
-ebs_optimized:
-    description: EBS I/O optimized (true ) or not (false )
-    type: bool
-    returned: always
-    sample: true,
-image_id:
-    description: ID of the Amazon Machine Image (AMI)
-    type: string
-    returned: always
-    sample: 'ami-12345678'
-instance_monitoring:
-    description: Launched with detailed monitoring or not
-    type: dict
-    returned: always
-    sample: '{
-        'enabled': true
-    }'
-instance_type:
-    description: Instance type
-    type: string
-    returned: always
-    sample: 't2.micro'
-kernel_id:
-    description: ID of the kernel associated with the AMI
-    type: string
-    returned: always
-    sample:
-key_name:
-    description: Name of the key pair
-    type: string
-    returned: always
-    sample: 'user_app'
-launch_configuration_arn:
-    description: Amazon Resource Name (ARN) of the launch configuration
-    type: string
-    returned: always
-    sample: 'arn:aws:autoscaling:us-east-1:666612345678:launchConfiguration:ba785e3a-dd42-6f02-4585-ea1a2b458b3d:launchConfigurationName/lc-app'
-launch_configuration_name:
-    description: Name of the launch configuration
-    type: string
-    returned: always
-    sample: 'lc-app'
-ramdisk_id:
-    description: ID of the RAM disk associated with the AMI
-    type: string
-    returned: always
-    sample:
-security_groups:
-    description: Security groups to associated
-    type: list
-    returned: always
-    sample: '[
-        'web'
-    ]'
-user_data:
-    description: User data available
-    type: string
-    returned: always
-    sample:
-'''
-    }
-    
-    
-DOCUMENTATION = '''
----
-module: ec2_snapshot
-short_description: creates a snapshot from an existing volume
-description:
-    - creates an EC2 snapshot from an existing EBS volume
-version_added: '1.5'
-options:
-  volume_id:
-    description:
-      - volume from which to take the snapshot
-    required: false
-  description:
-    description:
-      - description to be applied to the snapshot
-    required: false
-  instance_id:
-    description:
-    - instance that has the required volume to snapshot mounted
-    required: false
-  device_name:
-    description:
-    - device name of a mounted volume to be snapshotted
-    required: false
-  snapshot_tags:
-    description:
-      - a hash/dictionary of tags to add to the snapshot
-    required: false
-    version_added: '1.6'
-  wait:
-    description:
-      - wait for the snapshot to be ready
-    type: bool
-    required: false
-    default: yes
-    version_added: '1.5.1'
-  wait_timeout:
-    description:
-      - how long before wait gives up, in seconds
-      - specify 0 to wait forever
-    required: false
-    default: 0
-    version_added: '1.5.1'
-  state:
-    description:
-      - whether to add or create a snapshot
-    required: false
-    default: present
-    choices: ['absent', 'present']
-    version_added: '1.9'
-  snapshot_id:
-    description:
-      - snapshot id to remove
-    required: false
-    version_added: '1.9'
-  last_snapshot_min_age:
-    description:
-      - If the volume's most recent snapshot has started less than `last_snapshot_min_age' minutes ago, a new snapshot will not be created.
-    required: false
-    default: 0
-    version_added: '2.0'
-    
-    
-try:
-    import botocore
-except ImportError:
-    pass  # handled by AnsibleAWSModule
-    
-    
-def main():
-    argument_spec = ec2_argument_spec()
-    argument_spec.update(
-        dict(
-            name=dict(required=True, type='str'),
-            state=dict(required=True, type='str', choices=['present', 'absent', 'copy']),
-            replication_id=dict(type='str'),
-            cluster_id=dict(type='str'),
-            target=dict(type='str'),
-            bucket=dict(type='str'),
-        )
-    )
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-            for server_cert in server_certs:
-            if not name:
-                server_cert = iam.get_server_certificate(ServerCertificateName=server_cert['ServerCertificateName'])['ServerCertificate']
-            cert_md = server_cert['ServerCertificateMetadata']
-            results[cert_md['ServerCertificateName']] = {
-                'certificate_body': server_cert['CertificateBody'],
-                'server_certificate_id': cert_md['ServerCertificateId'],
-                'server_certificate_name': cert_md['ServerCertificateName'],
-                'arn': cert_md['Arn'],
-                'path': cert_md['Path'],
-                'expiration': cert_md['Expiration'].isoformat(),
-                'upload_date': cert_md['UploadDate'].isoformat(),
-            }
-    
-        function_name = module.params.get('function_name')
-    if function_name:
-        try:
-            # get_policy returns a JSON string so must convert to dict before reassigning to its key
-            lambda_facts.update(policy=json.loads(client.get_policy(FunctionName=function_name)['Policy']))
-        except ClientError as e:
-            if e.response['Error']['Code'] == 'ResourceNotFoundException':
-                lambda_facts.update(policy={})
+        
+def check_format(filename):
+    '''
+    validates that each line is formatted correctly,
+    appending to error list as needed
+    '''
+    with open(filename) as fp:
+        lines = list(line.rstrip() for line in fp)
+    check_alphabetical(lines)
+    # START Check Entries
+    num_in_category = min_entries_per_section + 1
+    category = ''
+    category_line = 0
+    for line_num, line in enumerate(lines):
+        if section_title_re.match(line):
+            title_links.append(section_title_re.match(line).group(1))
+        # check each section for the minimum number of entries
+        if line.startswith(anchor):
+            match = anchor_re.match(line)
+            if match:
+                if match.group(1) not in title_links:
+                    add_error(line_num, 'section header ({}) not added as a title link'.format(match.group(1)))
             else:
-                module.fail_json_aws(e, msg='Trying to get {0} policy'.format(function_name))
-    else:
-        module.fail_json(msg='Parameter function_name required for query=policy.')
+                add_error(line_num, 'section header is not formatted correctly')
+            if num_in_category < min_entries_per_section:
+                add_error(category_line, '{} section does not have the minimum {} entries (only has {})'.format(
+                    category, min_entries_per_section, num_in_category))
+            category = line.split(' ')[1]
+            category_line = line_num
+            num_in_category = 0
+            continue
+        # skips lines that we do not care about
+        if not line.startswith('|') or line.startswith('|---'):
+            continue
+        num_in_category += 1
+        segments = line.split('|')[1:-1]
+        if len(segments) < num_segments:
+            add_error(line_num, 'entry does not have all the required sections (have {}, need {})'.format(
+                len(segments), num_segments))
+            continue
+        # START Global
+        for segment in segments:
+            # every line segment should start and end with exactly 1 space
+            if len(segment) - len(segment.lstrip()) != 1 or len(segment) - len(segment.rstrip()) != 1:
+                add_error(line_num, 'each segment must start and end with exactly 1 space')
+        # END Global
+        segments = [seg.strip() for seg in segments]
+        check_entry(line_num, segments)
+    # END Check Entries
     
-        creds, params = get_google_cloud_credentials(module)
-    pubsub_client = pubsub.Client(project=params['project_id'], credentials=creds, use_gax=False)
-    pubsub_client.user_agent = 'ansible-pubsub-0.1'
+    (c) 2016, Aaron Christianson
+http://github.com/ninjaaron/fast-entry_points
+'''
+from setuptools.command import easy_install
+import re
+TEMPLATE = '''\
+# -*- coding: utf-8 -*-
+# EASY-INSTALL-ENTRY-SCRIPT: '{3}','{4}','{5}'
+__requires__ = '{3}'
+import re
+import sys
     
-    from __future__ import absolute_import, division, print_function
-__metaclass__ = type
     
-                # Perform any configuration updates
-            self._config()
+init_bashrc = u'''echo '
+export SHELL=/bin/bash
+export PS1='$ '
+echo > $HISTFILE
+eval $(thefuck --alias {})
+echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
+' > ~/.bashrc'''
     
     
-def commit_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
-    ref = 'https://github.com/scrapy/scrapy/commit/' + text
-    set_classes(options)
-    node = nodes.reference(rawtext, 'commit ' + text, refuri=ref, **options)
-    return [node], []
+@pytest.mark.functional
+def test_with_confirmation(proc, TIMEOUT):
+    with_confirmation(proc, TIMEOUT)
     
-        inproject = inside_project()
-    cmds = _get_commands_dict(settings, inproject)
-    cmdname = _pop_command_name(argv)
-    parser = optparse.OptionParser(formatter=optparse.TitledHelpFormatter(), \
-        conflict_handler='resolve')
-    if not cmdname:
-        _print_commands(settings, inproject)
-        sys.exit(0)
-    elif cmdname not in cmds:
-        _print_unknown_command(settings, cmdname, inproject)
-        sys.exit(2)
     
-        def help(self):
-        '''An extensive help for the command. It will be shown when using the
-        'help' command. It can contain newlines, since not post-formatting will
-        be applied to its contents.
-        '''
-        return self.long_desc()
+init_zshrc = u'''echo '
+export SHELL=/usr/bin/zsh
+export HISTFILE=~/.zsh_history
+echo > $HISTFILE
+export SAVEHIST=100
+export HISTSIZE=100
+eval $(thefuck --alias {})
+setopt INC_APPEND_HISTORY
+echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
+' > ~/.zshrc'''
     
-    from scrapy.commands import ScrapyCommand
-from scrapy.http import Request
-from scrapy.exceptions import UsageError
-from scrapy.utils.datatypes import SequenceExclude
-from scrapy.utils.spider import spidercls_for_request, DefaultSpider
+        def __init__(self, *a, **kw):
+        super(QPSSpider, self).__init__(*a, **kw)
+        if self.qps is not None:
+            self.qps = float(self.qps)
+            self.download_delay = 1 / self.qps
+        elif self.download_delay is not None:
+            self.download_delay = float(self.download_delay)
     
-            # Request requires callback argument as callable or None, not string
-        request = Request(url, None)
-        _start_requests = lambda s: [self.prepare_request(s, request, opts)]
-        self.spidercls.start_requests = _start_requests
+    import scrapy
+from scrapy.commands import ScrapyCommand
+from scrapy.linkextractors import LinkExtractor
     
-        requires_project = False
-    default_settings = {'SPIDER_LOADER_WARN_ONLY': True}
+            # start checks
+        if opts.list:
+            for spider, methods in sorted(contract_reqs.items()):
+                if not methods and not opts.verbose:
+                    continue
+                print(spider)
+                for method in sorted(methods):
+                    print('  * %s' % method)
+        else:
+            start = time.time()
+            self.crawler_process.start()
+            stop = time.time()
     
-        def _get_handler(self, scheme):
-        '''Lazy-load the downloadhandler for a scheme
-        only on the first request for that scheme.
-        '''
-        if scheme in self._handlers:
-            return self._handlers[scheme]
-        if scheme in self._notconfigured:
-            return None
-        if scheme not in self._schemes:
-            self._notconfigured[scheme] = 'no handler available for that scheme'
-            return None
+        def process_options(self, args, opts):
+        ScrapyCommand.process_options(self, args, opts)
+        try:
+            opts.spargs = arglist_to_dict(opts.spargs)
+        except ValueError:
+            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
+        if opts.output:
+            if opts.output == '-':
+                self.settings.set('FEED_URI', 'stdout:', priority='cmdline')
+            else:
+                self.settings.set('FEED_URI', opts.output, priority='cmdline')
+            feed_exporters = without_none_values(
+                self.settings.getwithbase('FEED_EXPORTERS'))
+            valid_output_formats = feed_exporters.keys()
+            if not opts.output_format:
+                opts.output_format = os.path.splitext(opts.output)[1].replace('.', '')
+            if opts.output_format not in valid_output_formats:
+                raise UsageError('Unrecognized output format '%s', set one'
+                                 ' using the '-t' switch or as a file extension'
+                                 ' from the supported list %s' % (opts.output_format,
+                                                                  tuple(valid_output_formats)))
+            self.settings.set('FEED_FORMAT', opts.output_format, priority='cmdline')
+    
+    class Command(ScrapyCommand):
+    
+        def _find_template(self, template):
+        template_file = join(self.templates_dir, '%s.tmpl' % template)
+        if exists(template_file):
+            return template_file
+        print('Unable to find template: %s\n' % template)
+        print('Use 'scrapy genspider --list' to see all available templates.')
+    
+        class _v20_S3Connection(S3Connection):
+        '''A dummy S3Connection wrapper that doesn't do any synchronous download'''
+        def _mexe(self, http_request, *args, **kwargs):
+            http_request.authorize(connection=self)
+            return http_request.headers
+    
+            slot = self.slot
+        if slot.closing:
+            return slot.closing
+        logger.info('Closing spider (%(reason)s)',
+                    {'reason': reason},
+                    extra={'spider': spider})
+    
+            _LOGGER.info('Scanner initialized')
+    
+            # Without a home_id, we fetched an URL where the mobile devices can be
+        # found under the mobileDevices key.
+        if 'mobileDevices' in tado_json:
+            tado_json = tado_json['mobileDevices']
+    
+        def __init__(self, name, cfg):
+        '''Initialize the graph.'''
+        self._name = name
+        self._hours = cfg[CONF_HOURS_TO_SHOW]
+        self._refresh = cfg[CONF_REFRESH]
+        self._entities = cfg[CONF_ENTITIES]
+    
+        def __init__(self, schema, allow_empty=False):
+        '''Initialize the decorator.'''
+        self._schema = schema
+        self._allow_empty = allow_empty
