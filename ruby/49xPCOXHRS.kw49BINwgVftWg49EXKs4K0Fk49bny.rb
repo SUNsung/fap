@@ -1,119 +1,250 @@
 
         
-            # Tells optparse how to parse the arguments
-    # available for all executables.
-    #
-    # This is meant to be overridden by subclasses
-    # so they can add their own options.
-    #
-    # @param opts [OptionParser]
-    def set_opts(opts)
-      Sass::Util.abstract(this)
-    end
-    
-          raise <<MSG if @args.empty?
-What files should I watch? Did you mean something like:
-    #{@default_syntax} --watch input.#{@default_syntax}:output.css
-    #{@default_syntax} --watch input-dir:output-dir
-MSG
-    
-    Given(/^file '(.*?)' exists in shared path$/) do |file|
-  file_shared_path = TestApp.shared_path.join(file)
-  run_vagrant_command('mkdir -p #{file_shared_path.dirname}')
-  run_vagrant_command('touch #{file_shared_path}')
+        def global_require
+  JSON.pretty_generate(DATA)
 end
     
-      def symlinked?(symlink_path, target_path)
-    '[ #{symlink_path} -ef #{target_path} ]'
+    def location(folder, direction)
+  if folder
+    before = folder if direction == 'in'
+    after  = folder if direction == 'under'
   end
     
-          def print_deprecation_warnings_if_applicable
-        if using_default_scm?
-          warn_add_git_to_capfile unless scm_plugin_installed?
-        elsif built_in_scm_name?
-          warn_set_scm_is_deprecated
-        elsif third_party_scm_name?
-          warn_third_party_scm_must_be_upgraded
+                  Jekyll.logger.info 'LiveReload address:',
+                                 'http://#{opts['host']}:#{opts['livereload_port']}'
+            end
+          end
+          @thread.abort_on_exception = true
+        end
+    
+        brew cask install mactex
+    EOS
+  when 'pip' then <<-EOS.undent
+    Homebrew provides pip via: `brew install python`. However you will then
+    have two Pythons installed on your Mac, so alternatively you can install
+    pip via the instructions at:
+    
+          # Find commands in the path
+      unless (exts = external_commands).empty?
+        puts
+        puts 'External commands'
+        puts_columns exts
+      end
+    end
+  end
+    
+      def gcc_42
+    @gcc_42 ||= MacOS.gcc_42_build_version if MacOS.has_apple_developer_tools?
+  end
+    
+    class PrettyListing
+  def initialize(path)
+    Pathname.new(path).children.sort_by { |p| p.to_s.downcase }.each do |pn|
+      case pn.basename.to_s
+      when 'bin', 'sbin'
+        pn.find { |pnn| puts pnn unless pnn.directory? }
+      when 'lib'
+        print_dir pn do |pnn|
+          # dylibs have multiple symlinks and we don't care about them
+          (pnn.extname == '.dylib' || pnn.extname == '.pc') && !pnn.symlink?
+        end
+      else
+        if pn.directory?
+          if pn.symlink?
+            puts '#{pn} -> #{pn.readlink}'
+          else
+            print_dir pn
+          end
+        elsif Metafiles.list?(pn.basename.to_s)
+          puts pn
         end
       end
-    
-          def assert_value_or_block_not_both(value, block)
-        return if value.nil? || block.nil?
-        raise Capistrano::ValidationError,
-              'Value and block both passed to Configuration#set'
-      end
-    
-      namespace :install do
-    GEMS_AND_ROOT_DIRECTORIES.each do |gem, directory|
-      desc 'Build and install #{gem} as local gem'
-      task gem => package(gem, '.gem') do
-        sh 'gem install #{package(gem, '.gem')}'
-      end
     end
+  end
     
-          [
-        500,
-        {
-          'Content-Type' => content_type,
-          'Content-Length' => body.bytesize.to_s
-        },
-        [body]
-      ]
-    end
+              pipelines.each do |pipeline|
+            self.new(pipeline).tap do |preloader|
+              preloader.preload_commit_authors
+              preloader.preload_pipeline_warnings
+              preloader.preload_stages_warnings
+            end
+          end
+        end
     
-          def escape_string(str)
-        str = @escaper.escape_url(str)        if @url
-        str = @escaper.escape_html(str)       if @html
-        str = @escaper.escape_javascript(str) if @javascript
-        str
+          # Sets a cache key to the given value.
+      #
+      # key - The cache key to write.
+      # value - The value to set.
+      # timeout - The time after which the cache key should expire.
+      def self.write(raw_key, value, timeout: TIMEOUT)
+        key = cache_key_for(raw_key)
+    
+          def request_count_counter
+        @request_counter ||= Gitlab::Metrics.counter(
+          :github_importer_request_count,
+          'The number of GitHub API calls performed when importing projects'
+        )
       end
     end
   end
 end
 
     
-      it 'should not set the Content Security Policy for other content types' do
-    headers = get('/', {}, 'wants' => 'text/foo').headers
-    expect(headers['Content-Security-Policy']).to be_nil
-    expect(headers['Content-Security-Policy-Report-Only']).to be_nil
-  end
+            def representation_class
+          Representation::Note
+        end
     
-    require 'clamp'
-require 'pluginmanager/util'
-require 'pluginmanager/gemfile'
-require 'pluginmanager/install'
-require 'pluginmanager/remove'
-require 'pluginmanager/list'
-require 'pluginmanager/update'
-require 'pluginmanager/pack'
-require 'pluginmanager/unpack'
-require 'pluginmanager/generate'
-require 'pluginmanager/prepare_offline_pack'
-require 'pluginmanager/proxy_support'
-configure_proxy
-    
-      after(:each) do
-    logstash.uninstall
-  end
-    
-          Dir.chdir(code_path) do
-        code = file.read
-        @filetype = file.extname.sub('.','') if @filetype.nil?
-        title = @title ? '#{@title} (#{file.basename})' : file.basename
-        url = '/#{code_dir}/#{@file}'
-        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
-        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
-        TemplateWrapper::safe_wrap(source)
+            # attributes - A Hash containing the raw lfs_object details. The keys of this
+        #              Hash must be Symbols.
+        def initialize(attributes)
+          @attributes = attributes
+        end
       end
     end
   end
-    
-    Liquid::Template.register_tag('render_partial', Jekyll::RenderPartialTag)
+end
 
     
-        def initialize(tag_name, markup, tokens)
-      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
-      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
-      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
-      super
+            # attributes - A Hash containing the user details. The keys of this
+        #              Hash (and any nested hashes) must be symbols.
+        def initialize(attributes)
+          @attributes = attributes
+        end
+      end
     end
+  end
+end
+
+    
+          def call(env)
+        transaction, retval = Transaction.run do
+          @app.call(env)
+        end
+    
+        def action_from_button
+      if params[:nsfw_on]
+        'nsfw_on'
+      elsif params[:nsfw_off]
+        'nsfw_off'
+      elsif params[:delete]
+        'delete'
+      end
+    end
+    
+          weeks << {
+        week: week.to_time.to_i.to_s,
+        statuses: Redis.current.get('activity:statuses:local:#{week_id}') || '0',
+        logins: Redis.current.pfcount('activity:logins:#{week_id}').to_s,
+        registrations: Redis.current.get('activity:accounts:local:#{week_id}') || '0',
+      }
+    end
+    
+        define_method provider do
+      @user = User.find_for_oauth(request.env['omniauth.auth'], current_user)
+    
+      directory 'pkg/'
+  CLOBBER.include('pkg')
+    
+    get '/stream', :provides => 'text/event-stream' do
+  stream :keep_open do |out|
+    connections << out
+    out.callback { connections.delete(out) }
+  end
+end
+    
+        <% unless bad_request?(exception) %>
+      <div id='get'>
+        <h3 id='get-info'>GET</h3>
+        <% if req.GET and not req.GET.empty? %>
+          <table class='req'>
+            <tr>
+              <th>Variable</th>
+              <th>Value</th>
+            </tr>
+             <% req.GET.sort_by { |k, v| k.to_s }.each { |key, val| %>
+            <tr>
+              <td><%=h key %></td>
+              <td class='code'><div><%=h val.inspect %></div></td>
+            </tr>
+            <% } %>
+          </table>
+        <% else %>
+          <p class='no-data'>No GET data.</p>
+        <% end %>
+        <div class='clear'></div>
+      </div> <!-- /GET -->
+    
+            # Set these key values to boolean 'true' to include in policy
+        NO_ARG_DIRECTIVES.each do |d|
+          if options.key?(d) && options[d].is_a?(TrueClass)
+            directives << d.to_s.sub(/_/, '-')
+          end
+        end
+    
+      it 'returns the sorted config parts' do
+    expect(subject.config_parts).to eq(ordered_config_parts)
+  end
+    
+            def new; end
+    
+            def mine_includes
+          {
+            order: {
+              bill_address: {
+                state: {},
+                country: {}
+              },
+              ship_address: {
+                state: {},
+                country: {}
+              },
+              adjustments: {},
+              payments: {
+                order: {},
+                payment_method: {}
+              }
+            },
+            inventory_units: {
+              line_item: {
+                product: {},
+                variant: {}
+              },
+              variant: {
+                product: {},
+                default_price: {},
+                option_values: {
+                  option_type: {}
+                }
+              }
+            }
+          }
+        end
+      end
+    end
+  end
+end
+
+    
+            def scope
+          if params[:country_id]
+            @country = Country.accessible_by(current_ability, :read).find(params[:country_id])
+            @country.states.accessible_by(current_ability, :read).order('name ASC')
+          else
+            State.accessible_by(current_ability, :read).order('name ASC')
+          end
+        end
+      end
+    end
+  end
+end
+
+    
+            def create
+          authorize! :create, Taxonomy
+          @taxonomy = Taxonomy.new(taxonomy_params)
+          if @taxonomy.save
+            respond_with(@taxonomy, status: 201, default_template: :show)
+          else
+            invalid_resource!(@taxonomy)
+          end
+        end
