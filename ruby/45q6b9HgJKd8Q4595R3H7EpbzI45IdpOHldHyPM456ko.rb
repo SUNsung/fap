@@ -1,119 +1,75 @@
 
         
-        describe GroupUser do
-    
-          it 'adds output param to command' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          appledoc(
-            project_name: 'Project Name',
-            project_company: 'Company',
-            input: 'input/dir',
-            output: '~/Desktop'
-          )
-        end').runner.execute(:test)
-    
-            expect(result).to eq('git commit -m message #{'./fastlane/*.md'.shellescape} ./LICENSE')
-      end
-    
-          it 'yields any error result' do
-        expect_command('ls', '-la', exitstatus: 1)
-        Fastlane::Actions.sh('ls', '-la') do |status, result|
-          expect(status.exitstatus).to eq(1)
-          expect(result).to be_empty
-        end
-      end
-    
-      # https://stackoverflow.com/a/18623297/252627, last variant
-  require 'open3'
-  Open3.popen3(compare_command) do |stdin, stdout, stderr, thread|
-    error = stderr.read.chomp
-    # expect(error).to eq(expected_compare_error)
-    expect(error).to eq(expected_compare_error) # match(/#{expected_compare_error}/)
-  end
-end
-    
-    if git.modified_files.include?('snapshot/lib/assets/SnapshotHelper.swift')
-  warn('You modified `SnapshotHelper.swift`, make sure to update the version number at the bottom of the file to notify users about the new helper file.')
-end
-    
-    # The * turns the array into a parameter list
-# This is using the form of exec which takes a variable parameter list, e.g. `exec(command, param1, param2, ...)`
-# We need to use that, because otherwise invocations like
-# `spaceauth -u user@fastlane.tools` would recognize '-u user@fastlane.tools' as a single parameter and throw errors
-exec(*exec_arr)
-
-    
-          # Returns the details of a GitHub user.
+              # This method returns an HTML safe string similar to what <tt>Array#join</tt>
+      # would return. The array is flattened, and all items, including
+      # the supplied separator, are HTML escaped unless they are HTML
+      # safe, and the returned string is marked as HTML safe.
       #
-      # username - The username of the user.
-      def user(username)
-        with_rate_limit { octokit.user(username) }
+      #   safe_join([raw('<p>foo</p>'), '<p>bar</p>'], '<br />')
+      #   # => '<p>foo</p>&lt;br /&gt;&lt;p&gt;bar&lt;/p&gt;'
+      #
+      #   safe_join([raw('<p>foo</p>'), raw('<p>bar</p>')], raw('<br />'))
+      #   # => '<p>foo</p><br /><p>bar</p>'
+      #
+      def safe_join(array, sep = $,)
+        sep = ERB::Util.unwrapped_html_escape(sep)
+    
+              def datetime_selector(options, html_options)
+            datetime = options.fetch(:selected) { value || default_datetime(options) }
+            @auto_index ||= nil
+    
+    module ActionView
+  module Helpers
+    module Tags # :nodoc:
+      class TextField < Base # :nodoc:
+        include Placeholderable
+    
+        # This will be overwritten by _write_layout_method
+    def _layout(*); end
+    
+        initializer 'action_view.set_configs' do |app|
+      ActiveSupport.on_load(:action_view) do
+        app.config.action_view.each do |k, v|
+          send '#{k}=', v
+        end
       end
-    
-          # project - An instance of `Project`.
-      # client - An instance of `Gitlab::GithubImport::Client`.
-      # parallel - When set to true the objects will be imported in parallel.
-      def initialize(project, client, parallel: true)
-        @project = project
-        @client = client
-        @parallel = parallel
-        @page_counter = PageCounter.new(project, collection_method)
-        @already_imported_cache_key = ALREADY_IMPORTED_CACHE_KEY %
-          { project: project.id, collection: collection_method }
-      end
-    
-              user = Representation::User.from_api_response(note.user) if note.user
-          hash = {
-            noteable_type: 'MergeRequest',
-            noteable_id: matches[:iid].to_i,
-            file_path: note.path,
-            commit_id: note.commit_id,
-            diff_hunk: note.diff_hunk,
-            author: user,
-            note: note.body,
-            created_at: note.created_at,
-            updated_at: note.updated_at,
-            github_id: note.id
-          }
-    
-            # Builds an issue from a GitHub API response.
-        #
-        # issue - An instance of `Sawyer::Resource` containing the issue
-        #         details.
-        def self.from_api_response(issue)
-          user =
-            if issue.user
-              Representation::User.from_api_response(issue.user)
-            end
-    
-            expose_attribute :iid, :title, :description, :source_branch,
-                         :source_branch_sha, :target_branch, :target_branch_sha,
-                         :milestone_number, :author, :assignee, :created_at,
-                         :updated_at, :merged_at, :source_repository_id,
-                         :target_repository_id, :source_repository_owner
-    
-        def translation_scope
-      'devise.confirmations'
     end
+    
+    module ActionView
+  # This is the main entry point for rendering. It basically delegates
+  # to other objects like TemplateRenderer and PartialRenderer which
+  # actually renders the template.
+  #
+  # The Renderer will parse the options from the +render+ or +render_body+
+  # method and render a partial or a template based on the options. The
+  # +TemplateRenderer+ and +PartialRenderer+ objects are wrappers which do all
+  # the setup and logic necessary to render a view and a new object is created
+  # each time +render+ is called.
+  class Renderer
+    attr_accessor :lookup_context
+    
+      def setup
+    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
+    success = Dir.chdir DUMMY_PATH do
+      silence_stdout_if !ENV['VERBOSE'] do
+        system 'node', 'manifest.js', tmp_dir
+      end
+    end
+    assert success, 'Node.js Mincer compilation failed'
+    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
+    css_name = manifest['assets']['application.css']
+    @css = File.read('#{tmp_dir}/#{css_name}')
+  end
 end
 
     
-      # Controllers inheriting DeviseController are advised to override this
-  # method so that other controllers inheriting from them would use
-  # existing translations.
-  def translation_scope
-    'devise.#{controller_name}'
-  end
-    
-          def self.generate_helpers!(routes=nil)
-        routes ||= begin
-          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
-          Devise::URL_HELPERS.slice(*mappings)
-        end
-    
-            # Called to change the hostname of the virtual machine.
-        def change_host_name(name)
-          raise BaseError, _key: :unsupported_host_name
+          def next_link
+        label = 'Next &raquo;'
+        if @versions.size == Gollum::Page.per_page
+          link = '/history/#{@page.name}?page=#{@page_num+1}'
+          %(<a href='#{link}' hotkey='l'>#{label}</a>)
+        else
+          %(<span class='disabled'>#{label}</span>)
         end
       end
     end
@@ -121,4 +77,69 @@ end
 end
 
     
-      it_behaves_like 'any rack application'
+          attr_reader :name, :path
+    
+      test 'creating page is blocked' do
+    Precious::App.set(:wiki_options, { allow_editing: false})
+    post '/create', :content => 'abc', :page => 'D',
+         :format             => 'markdown', :message => 'def'
+    assert !last_response.ok?
+    
+        get page
+    # good html:
+    # <pre><code>one\ntwo\nthree\nfour\n</code></pre>\n
+    # broken html:
+    # <pre>\n  <code>one\ntwo\nthree\nfour\n</code>\n</pre>
+    assert_match /<pre><code>one\ntwo\nthree\nfour\n<\/code><\/pre>\n/m, last_response.body
+  end
+    
+      s.require_paths = %w[lib]
+    
+        for_each_gem do |gem_path|
+      sh 'gem push '#{gem_path}''
+    end
+  end
+end
+    
+            def find_address
+          if @order.bill_address_id == params[:id].to_i
+            @order.bill_address
+          elsif @order.ship_address_id == params[:id].to_i
+            @order.ship_address
+          else
+            raise CanCan::AccessDenied
+          end
+        end
+      end
+    end
+  end
+end
+
+    
+            def stock_location
+          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:id])
+        end
+    
+            def get_store
+          @store = Store.find(params[:id])
+        end
+    
+        def initialize(tag_name, markup, tokens)
+      @by = nil
+      @source = nil
+      @title = nil
+      if markup =~ FullCiteWithTitle
+        @by = $1
+        @source = $2 + $3
+        @title = $4.titlecase.strip
+      elsif markup =~ FullCite
+        @by = $1
+        @source = $2 + $3
+      elsif markup =~ AuthorTitle
+        @by = $1
+        @title = $2.titlecase.strip
+      elsif markup =~ Author
+        @by = $1
+      end
+      super
+    end
