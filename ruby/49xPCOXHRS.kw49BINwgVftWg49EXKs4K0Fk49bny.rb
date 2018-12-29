@@ -1,222 +1,288 @@
 
         
-            def run(action_named: nil, action_class_ref: nil, parameter_map: nil)
-      action_return = runner.execute_action(action_named, action_class_ref, [parameter_map], custom_dir: '.')
-      return action_return
+        module BuildEnvironmentDSL
+  def env(*settings)
+    @env ||= BuildEnvironment.new
+    @env.merge(settings)
+  end
+end
+    
+      # @private
+  def used_options
+    @options & @args
+  end
+    
+      def llvm
+    @llvm ||= MacOS.llvm_build_version if MacOS.has_apple_developer_tools?
+  end
+    
+      def filtered_list
+    names = if ARGV.named.empty?
+      Formula.racks
+    else
+      ARGV.named.map { |n| HOMEBREW_CELLAR+n }.select(&:exist?)
     end
-    
-          it 'adds verbose param to command' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          appledoc(
-            project_name: 'Project Name',
-            project_company: 'Company',
-            input: 'input/dir',
-            verbose: '1'
-          )
-        end').runner.execute(:test)
-    
-            inner_command = 'git describe --tags `git rev-list --tags --max-count=1`'
-        pseudocommand = 'git log --pretty=\'%B\' #{inner_command.shellescape}...HEAD'
-        expect(result).to eq(pseudocommand)
+    if ARGV.include? '--pinned'
+      pinned_versions = {}
+      names.each do |d|
+        keg_pin = (HOMEBREW_LIBRARY/'PinnedKegs'/d.basename.to_s)
+        if keg_pin.exist? || keg_pin.symlink?
+          pinned_versions[d] = keg_pin.readlink.basename.to_s
+        end
       end
-    
-          it 'handles the exclude_dirs parameter with multiple  elements correctly' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          ensure_no_debug_code(text: 'pry', path: '.', exclude_dirs: ['.bundle', 'Packages/'])
-        end').runner.execute(:test)
-        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --exclude-dir .bundle --exclude-dir Packages/')
+      pinned_versions.each do |d, version|
+        puts '#{d.basename}'.concat(ARGV.include?('--versions') ? ' #{version}' : '')
+      end
+    else # --versions without --pinned
+      names.each do |d|
+        versions = d.subdirs.map { |pn| pn.basename.to_s }
+        next if ARGV.include?('--multiple') && versions.length < 2
+        puts '#{d.basename} #{versions*' '}'
       end
     end
   end
 end
+    
+        def value_for(user_id, date)
+      GivenDailyLike.find_for(user_id, date).pluck(:likes_given)[0] || 0
+    end
+    
+            unless post && post.id
+          puts post.errors.full_messages if post
+          puts creator.errors.inspect
+          raise 'Failed to create description for trust level 3 lounge!'
+        end
+    
+    # ECMA-262, section 15.1.3
+    def Encode(uri, unescape)
+      uriLength = uri.length;
+      # We are going to pass result to %StringFromCharCodeArray
+      # which does not expect any getters/setters installed
+      # on the incoming array.
+      result    = Array.new(uriLength);
+      index = 0;
+      k = -1;
+      while ((k+=1) < uriLength) do
+        cc1 = uri.charCodeAt(k);
+        next if cc1.nil?
+        if (self.send(unescape, cc1))
+          result[index] = cc1;
+          index += 1
+        else
+          if (cc1 >= 0xDC00 && cc1 <= 0xDFFF);
+            throw('URI malformed')
+          end
+          if (cc1 < 0xD800 || cc1 > 0xDBFF)
+            index = URIEncodeSingle(cc1, result, index);
+          else
+            k+=1;
+            if (k == uriLength);
+              throw('URI malformed')
+            end
+            cc2 = uri.charCodeAt(k);
+            if (cc2 < 0xDC00 || cc2 > 0xDFFF);
+              throw('URI malformed')
+            end
+            index = URIEncodePair(cc1, cc2, result, index);
+          end
+        end
+      end
+      # use .compact to get rid of nils from charCodeAt
+      # return %StringFromCharCodeArray(result);
+      # 'c' = 8 bit signed char
+      # http://www.ruby-doc.org/core-1.9.3/Array.html#method-i-pack
+      return result.compact.pack 'c*'
+    end
+  end # class << self
+end # module
 
     
-          it 'allows override of argv[0]' do
-        expect_command(['/usr/local/bin/git', 'git'], 'commit', '-m', 'A message')
-        Fastlane::Actions.sh(['/usr/local/bin/git', 'git'], 'commit', '-m', 'A message')
+          def title
+        '#{@page.title}'
       end
     
-          if data_type == Array
-        return value.split(',') if value.kind_of?(String)
-      elsif data_type == Integer
-        return value.to_i if value.to_i.to_s == value.to_s
-      elsif data_type == Float
-        return value.to_f if value.to_f.to_s == value.to_s
-      elsif allow_shell_conversion
-        return value.shelljoin if value.kind_of?(Array)
-        return value.map { |k, v| '#{k.to_s.shellescape}=#{v.shellescape}' }.join(' ') if value.kind_of?(Hash)
-      elsif data_type != String
-        # Special treatment if the user specified true, false or YES, NO
-        # There is no boolean type, so we just do it here
-        if %w(YES yes true TRUE).include?(value)
-          return true
-        elsif %w(NO no false FALSE).include?(value)
-          return false
+          def extract_renamed_path_destination(file)
+        return file.gsub(/{.* => (.*)}/, '\1').gsub(/.* => (.*)/, '\1')
+      end
+    
+          def base_url
+        @base_url
+      end
+    
+          # Finds header node inside Nokogiri::HTML document.
+      #
+      def find_header_node(doc)
+        case @page.format
+          when :asciidoc
+            doc.css('div#gollum-root > h1:first-child')
+          when :org
+            doc.css('div#gollum-root > p.title:first-child')
+          when :pod
+            doc.css('div#gollum-root > a.dummyTopAnchor:first-child + h1')
+          when :rest
+            doc.css('div#gollum-root > div > div > h1:first-child')
+          else
+            doc.css('div#gollum-root > h1:first-child')
         end
       end
     
-        # An empty argument will be skipped, so return empty quotes.
-    # https://github.com/ruby/ruby/blob/a6413848153e6c37f6b0fea64e3e871460732e34/lib/shellwords.rb#L142-L143
-    return ''''.dup if str.empty?
+    def cloned_testpath(path)
+  repo   = File.expand_path(testpath(path))
+  path   = File.dirname(repo)
+  cloned = File.join(path, self.class.name)
+  FileUtils.rm_rf(cloned)
+  Dir.chdir(path) do
+    %x{git clone #{File.basename(repo)} #{self.class.name} 2>/dev/null}
+  end
+  cloned
+end
     
-            it 'auto converts Hash values to Strings if allowed' do
-          config_item = FastlaneCore::ConfigItem.new(key: :xcargs,
-                                                     description: 'xcargs',
-                                                     type: :shell_string)
+      test 'redirects to create on non-existant page' do
+    name = 'E'
+    get '/#{name}'
+    follow_redirect!
+    assert_equal '/create/#{name}', last_request.fullpath
+    assert last_response.ok?
+  end
     
-        it 'does not send previously configured receivers when the current agent does not support them' do
-      select_agent_type('Website Agent scrapes')
-      sleep 0.5
-      select2('ZKCD', from: 'Receivers')
-      select_agent_type('Email Agent')
-      fill_in(:agent_name, with: 'No receivers')
-      click_on 'Save'
-      expect(page).to have_content('No receivers')
-      agent = Agent.find_by(name: 'No receivers')
-      expect(agent.receivers).to eq([])
+        @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+    @view.instance_variable_set :@content, page.formatted_data
+    @view.instance_variable_set :@h1_title, false
+    
+      s.summary     = 'A simple, Git-powered wiki.'
+  s.description = 'A simple, Git-powered wiki with a sweet API and local frontend.'
+    
+        def initialize(dir, existing, attempted, message = nil)
+      @dir            = dir
+      @existing_path  = existing
+      @attempted_path = attempted
+      super(message || 'Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.')
     end
   end
 end
-
     
-      describe 'DotHelper::DotDrawer' do
-    describe '#id' do
-      it 'properly escapes double quotaion and backslash' do
-        expect(DotHelper::DotDrawer.draw(foo: '') {
-          id('hello\\'')
-        }).to eq(''hello\\\\\\''')
+    shared_examples_for 'multiline literal brace layout method argument' do
+  include MultilineLiteralBraceHelper
+    
+    module RuboCop
+  module AST
+    # A node extension for `for` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `for` nodes within RuboCop.
+    class ForNode < Node
+      # Returns the keyword of the `for` statement as a string.
+      #
+      # @return [String] the keyword of the `until` statement
+      def keyword
+        'for'
+      end
+    
+          # Custom destructuring method. This is used to normalize the branches
+      # for `pair` and `kwsplat` nodes, to add duck typing to `hash` elements.
+      #
+      # @return [Array<KeywordSplatNode>] the different parts of the `kwsplat`
+      def node_parts
+        [self, self]
       end
     end
   end
 end
 
     
-    describe JobsHelper do
-  let(:job) { Delayed::Job.new }
+          # A shorthand for getting the last argument of the node.
+      # Equivalent to `arguments.last`.
+      #
+      # @return [Node, nil] the last argument of the node,
+      #                     or `nil` if there are no arguments
+      def last_argument
+        arguments[-1]
+      end
     
-      describe '#style_colors' do
-    it 'returns a css style-formated version of the scenario foreground and background colors' do
-      expect(style_colors(scenario)).to eq('color:#AAAAAA;background-color:#000000')
+    desc 'Runs all tests in all Spree engines'
+task test: :test_app do
+  SPREE_GEMS.each do |gem_name|
+    Dir.chdir('#{File.dirname(__FILE__)}/#{gem_name}') do
+      sh 'rspec'
     end
+  end
+end
     
-      context '#set_traps' do
-    it 'sets traps for INT TERM and QUIT' do
-      agent_runner = AgentRunner.new
-      mock(Signal).trap('INT')
-      mock(Signal).trap('TERM')
-      mock(Signal).trap('QUIT')
-      agent_runner.set_traps
+            private
     
-      def guid_order(agent_list, agent_name)
-    agent_list.map{|a|a.guid}.sort.find_index(agents(agent_name).guid)
+            def destroy
+          @option_type = Spree::OptionType.accessible_by(current_ability, :destroy).find(params[:id])
+          @option_type.destroy
+          render plain: nil, status: 204
+        end
+    
+            def destroy
+          @option_value = scope.accessible_by(current_ability, :destroy).find(params[:id])
+          @option_value.destroy
+          render plain: nil, status: 204
+        end
+    
+            def cancel
+          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
+          if @return_authorization.cancel
+            respond_with @return_authorization, default_template: :show
+          else
+            invalid_resource!(@return_authorization)
+          end
+        end
+    
+            def update
+          @stock_item = StockItem.accessible_by(current_ability, :update).find(params[:id])
+    
+            def update
+          authorize! :update, taxon
+          if taxon.update_attributes(taxon_params)
+            respond_with(taxon, status: 200, default_template: :show)
+          else
+            invalid_resource!(taxon)
+          end
+        end
+    
+            def user_params
+          params.require(:user).permit(permitted_user_attributes |
+                                         [bill_address_attributes: permitted_address_attributes,
+                                          ship_address_attributes: permitted_address_attributes])
+        end
+      end
+    end
   end
 end
 
     
-        Thread.abort_on_exception = @taoe
-    $stdout, $stderr = @oso, @ose
-  end
+    public_dir      = 'public'    # compiled site directory
+source_dir      = 'source'    # source file directory
+blog_index_dir  = 'source'    # directory for your blog's index page (if you put your index in source/blog/index.html, set this to 'source/blog')
+deploy_dir      = '_deploy'   # deploy directory (for Github pages deployment)
+stash_dir       = '_stash'    # directory to stash posts for speedy generation
+posts_dir       = '_posts'    # directory for blog files
+themes_dir      = '.themes'   # directory for blog files
+new_post_ext    = 'markdown'  # default new post file extension when using the new_post task
+new_page_ext    = 'markdown'  # default new page file extension when using the new_page task
+server_port     = '4000'      # port for preview server eg. localhost:4000
     
-      describe 'converting escaped JSONPath strings' do
-    it 'should work' do
-      expect(LiquidMigrator.convert_string('Weather looks like <$.conditions> according to the forecast at <$.pretty_date.time>')).to eq(
-                                    'Weather looks like {{conditions}} according to the forecast at {{pretty_date.time}}'
-      )
-    end
-    
-      def failure
-    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
-    redirect_to after_omniauth_failure_path_for(resource_name)
-  end
-    
-        if resource.errors.empty?
-      set_flash_message! :notice, :unlocked
-      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
-    else
-      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
-    end
-  end
-    
-        def reset_password_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :reset_password_instructions, opts)
-    end
-    
-    module Devise
-  module Controllers
-    # A module that may be optionally included in a controller in order
-    # to provide remember me behavior. Useful when signing in is done
-    # through a callback, like in OmniAuth.
-    module Rememberable
-      # Return default cookie values retrieved from session options.
-      def self.cookie_values
-        Rails.configuration.session_options.slice(:path, :domain, :secure)
-      end
-    
-        def initialize(name, options) #:nodoc:
-      @scoped_path = options[:as] ? '#{options[:as]}/#{name}' : name.to_s
-      @singular = (options[:singular] || @scoped_path.tr('/', '_').singularize).to_sym
-    
-            # Find a user by its unlock token and try to unlock it.
-        # If no user is found, returns a new user with an error.
-        # If the user is not locked, creates an error for the user
-        # Options must have the unlock_token
-        def unlock_access_by_token(unlock_token)
-          original_token = unlock_token
-          unlock_token   = Devise.token_generator.digest(self, :unlock_token, unlock_token)
-    
-        if other.respond_to?(:to_str)
-      return true if to_str == other.to_str
-    end
-    
-    desc 'Initializes your working copy to run the specs'
-task :bootstrap, :use_bundle_dir? do |_, args|
-  title 'Environment bootstrap'
-    
-            self.arguments = [
-          CLAide::Argument.new('NAME', false),
-        ]
-    
-    ```
-#{plugins_string}
-```
-#{markdown_podfile}
-EOS
-      end
-    
-      it 'denies post requests with wrong X-CSRF-Token header' do
-    post('/', {}, 'rack.session' => session, 'HTTP_X_CSRF_TOKEN' => bad_token)
-    expect(last_response).not_to be_ok
-  end
-    
-      describe '#referrer' do
-    it 'Reads referrer from Referer header' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/valid'}
-      expect(subject.referrer(env)).to eq('bar.com')
-    end
-    
-      it 'should not override the header if already set' do
-    mock_app with_headers('Content-Security-Policy' => 'default-src: none')
-    expect(get('/', {}, 'wants' => 'text/html').headers['Content-Security-Policy']).to eq('default-src: none')
-  end
-end
-
-    
-        def render(context)
-      if @img
-        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
-      else
-        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
-      end
-    end
+    When /^I reset Bundler environment variable$/ do
+  BUNDLE_ENV_VARS.each do |key|
+    ENV[key] = nil
   end
 end
     
-        def render(context)
-      code_dir = (context.registers[:site].config['code_dir'].sub(/^\//,'') || 'downloads/code')
-      code_path = (Pathname.new(context.registers[:site].source) + code_dir).expand_path
-      file = code_path + @file
-    
-        def poster
-      'poster='#{@poster}'' if @poster
+        def empty_file?
+      File.exist?(@filepath) && File.size(@filepath) == 0
     end
+    
+        # Swaps the height and width if necessary
+    def auto_orient
+      if EXIF_ROTATED_ORIENTATION_VALUES.include?(@orientation)
+        @height, @width = @width, @height
+        @orientation -= 4
+      end
+    end
+    
+        def define_instance_getter
+      name = @name
+      options = @options
