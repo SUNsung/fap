@@ -1,278 +1,208 @@
 
         
-        class BaseTest : public ::testing::Test {
-  // You can inherit all the usual members for a non-parameterized test
-  // fixture here.
-};
+        struct DefaultCache {
+  llvm::sys::Mutex Mux;
+  CacheImpl::CallBacks CBs;
+  llvm::DenseMap<DefaultCacheKey, void *> Entries;
+    }
     
-      // Runs TearDownTestCase() for this TestCase.  This wrapper is
-  // needed for catching exceptions thrown from TearDownTestCase().
-  void RunTearDownTestCase() { (*tear_down_tc_)(); }
     
-    #ifndef GTEST_INCLUDE_GTEST_INTERNAL_GTEST_FILEPATH_H_
-#define GTEST_INCLUDE_GTEST_INTERNAL_GTEST_FILEPATH_H_
+    {} // end anonymous namespace
     
-    // This class provides implementation of TeastFactoryBase interface.
-// It is used in TEST and TEST_F macros.
-template <class TestClass>
-class TestFactoryImpl : public TestFactoryBase {
- public:
-  virtual Test* CreateTest() { return new TestClass; }
-};
+        case NameRole::BaseName:
+    case NameRole::FirstParameter:
+    case NameRole::Partial:
+    case NameRole::SubsequentParameter:
+      // Classify the part of speech of the word before the type
+      // information we would strip off.
+      switch (getPartOfSpeech(*nameWordRevIter)) {
+      case PartOfSpeech::Preposition:
+        if (role == NameRole::BaseName) {
+          // Strip off the part of the name that is redundant with
+          // type information, so long as there's something preceding the
+          // preposition.
+          if (std::next(nameWordRevIter) != nameWordRevIterEnd)
+            name = name.substr(0, nameWordRevIter.base().getPosition());
+          break;
+        }
+    }
     
-    // A function to convert T* into linked_ptr<T>
-// Doing e.g. make_linked_ptr(new FooBarBaz<type>(arg)) is a shorter notation
-// for linked_ptr<FooBarBaz<type> >(new FooBarBaz<type>(arg))
-template <typename T>
-linked_ptr<T> make_linked_ptr(T* ptr) {
-  return linked_ptr<T>(ptr);
-}
+      static CFPointeeInfo forVoid() {
+    CFPointeeInfo info;
+    info.IsValid = true;
+    info.IsConst = false;
+    info.Decl = nullptr;
+    return info;
+  }
     
-    // This should fail when the --check_for_leaks command line flag is
-// specified.
-TEST(ListenersTest, LeaksWater) {
-  Water* water = new Water;
-  EXPECT_TRUE(water != NULL);
-}
-    
-    // Sets the 0-terminated C string this MyString object
-// represents.
-void MyString::Set(const char* a_c_string) {
-  // Makes sure this works when c_string == c_string_
-  const char* const temp = MyString::CloneCString(a_c_string);
-  delete[] c_string_;
-  c_string_ = temp;
-}
+    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H */
 
     
-    // Tests the copy c'tor.
-TEST(MyString, CopyConstructor) {
-  const MyString s1(kHelloString);
-  const MyString s2 = s1;
-  EXPECT_EQ(0, strcmp(s2.c_string(), kHelloString));
+    constexpr size_t RpcServerStatsEncoding::kRpcServerStatsSize;
+constexpr size_t RpcServerStatsEncoding::kEncodeDecodeFailure;
+constexpr size_t RpcServerStatsEncoding::kVersionIdSize;
+constexpr size_t RpcServerStatsEncoding::kFieldIdSize;
+constexpr size_t RpcServerStatsEncoding::kVersionIdOffset;
+constexpr size_t RpcServerStatsEncoding::kVersionId;
+    
+    
+    {}  // namespace grpc
+    
+    void ProtoServerReflection::FillFileDescriptorResponse(
+    const protobuf::FileDescriptor* file_desc,
+    ServerReflectionResponse* response,
+    std::unordered_set<grpc::string>* seen_files) {
+  if (seen_files->find(file_desc->name()) != seen_files->end()) {
+    return;
+  }
+  seen_files->insert(file_desc->name());
+    }
+    
+      Status GetFileByName(ServerContext* context, const grpc::string& file_name,
+                       reflection::v1alpha::ServerReflectionResponse* response);
+    
+    static std::unique_ptr< ::grpc::ServerBuilderPlugin> CreateProtoReflection() {
+  return std::unique_ptr< ::grpc::ServerBuilderPlugin>(
+      new ProtoServerReflectionPlugin());
 }
     
-            for (const auto& key : requiredKeys)
-        {
-            if (!dict.Contains(key))
-            {
-                 LogicError('Required key '%ls' is not found in the dictionary (%s).',
-                            key.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
-            }
-        }
+    /*!
+ * \brief DataBatch of NDArray, returned by Iterator
+ */
+struct DataBatch {
+  /*! \brief content of dense data, if this DataBatch is dense */
+  std::vector<NDArray> data;
+  /*! \brief index of image data */
+  std::vector<uint64_t> index;
+  /*! \brief extra data to be fed to the network */
+  std::string extra_data;
+  /*! \brief num of example padded to batch */
+  int num_batch_padd;
+};  // struct DataBatch
     
-            static bool IsUDF(const Dictionary& dict);
     
-        const NDShape& Variable::Shape() const
     {
-        return m_dataFields->m_shape; 
+    {    std::vector<T> ret(ret_index.size());
+    for (size_t i = 0; i < ret_index.size(); ++i) {
+      ret[i] = all_data[ret_index[i]];
     }
-    
-    #pragma once
-    
-    bool DataReader::SetNetOutput(
-    const std::vector<std::vector<std::pair<wstring, size_t>>>& uttInfo,
-    const MatrixBase& outputs,
-    const MBLayoutPtr pMBLayout)
-{
-    bool ans = false;
-    for (size_t i = 0; i < m_ioNames.size(); i++)
-        ans = (m_dataReaders[m_ioNames[i]]->SetNetOutput(uttInfo, outputs, pMBLayout) || ans);
-    return ans;
-}
-    
-    
-    {    virtual void /*ComputationNode::*/ BackpropTo(const size_t /*inputIndex*/, const FrameRange&)
-    {
-        LogicError('%ls is a leaf node. BackpropTo() should never be called.', NodeDescription().c_str());
-    }
-};
-    
-    // logistic loss, but predict un-transformed margin
-struct LogisticRaw : public LogisticRegression {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    predt = common::Sigmoid(predt);
-    return predt - label;
+    return ret;
   }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    const float eps = 1e-16f;
-    predt = common::Sigmoid(predt);
-    return fmaxf(predt * (1.0f - predt), eps);
-  }
-  template <typename T>
-    static T PredTransform(T x) { return x; }
-  template <typename T>
-    static T FirstOrderGradient(T predt, T label) {
-    predt = common::Sigmoid(predt);
-    return predt - label;
-  }
-  template <typename T>
-    static T SecondOrderGradient(T predt, T label) {
-    const T eps = T(1e-16f);
-    predt = common::Sigmoid(predt);
-    return std::max(predt * (T(1.0f) - predt), eps);
-  }
-  static const char* DefaultEvalMetric() { return 'auc'; }
-};
-    
-          ASSERT_TRUE(input == output);
-    
-    SEXP XGBoosterUpdateOneIter_R(SEXP handle, SEXP iter, SEXP dtrain) {
-  R_API_BEGIN();
-  CHECK_CALL(XGBoosterUpdateOneIter(R_ExternalPtrAddr(handle),
-                                  asInteger(iter),
-                                  R_ExternalPtrAddr(dtrain)));
-  R_API_END();
-  return R_NilValue;
-}
-    
-    #include <xgboost/logging.h>
-#include 'src/common/random.h'
-#include './xgboost_R.h'
-    
-    void    ImGui_ImplOpenGL2_NewFrame()
-{
-    if (!g_FontTexture)
-        ImGui_ImplOpenGL2_CreateDeviceObjects();
-}
-    
-    
-    {    // Restore modified Allegro state
-    al_set_blender(last_blender_op, last_blender_src, last_blender_dst);
-    al_set_clipping_rectangle(last_clip_x, last_clip_y, last_clip_w, last_clip_h);
-    al_use_transform(&last_transform);
-    al_use_projection_transform(&last_projection_transform);
-}
-    
-    void ImGui_ImplFreeGLUT_ReshapeFunc(int w, int h)
-{
-    ImGuiIO& io = ImGui::GetIO();
-    io.DisplaySize = ImVec2((float)w, (float)h);
-}
-    
-    bool ImGui::InputTextMultiline(const char* label, std::string* str, const ImVec2& size, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
-{
-    IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
-    flags |= ImGuiInputTextFlags_CallbackResize;
-    }
-    
-    // Implemented features:
-//  [X] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'.
-//  [X] Platform: Clipboard support.
-//  [X] Platform: Keyboard arrays indexed using SDL_SCANCODE_* codes, e.g. ImGui::IsKeyPressed(SDL_SCANCODE_SPACE).
-// Missing features:
-//  [ ] Platform: SDL2 handling of IME under Windows appears to be broken and it explicitly disable the regular Windows IME. You can restore Windows IME by compiling SDL with SDL_DISABLE_WINDOWS_IME.
-//  [ ] Platform: Gamepad support (need to use SDL_GameController API to fill the io.NavInputs[] value when ImGuiConfigFlags_NavEnableGamepad is set).
-    
-            // Draw selection
-        if (edit_state.StbState.select_start != edit_state.StbState.select_end)
-        {
-            const ImWchar* text_selected_begin = text_begin + ImMin(edit_state.StbState.select_start, edit_state.StbState.select_end);
-            const ImWchar* text_selected_end = text_begin + ImMax(edit_state.StbState.select_start, edit_state.StbState.select_end);
-    }
-    
-    #pragma once
-    
-    // About OpenGL function loaders: 
-// About OpenGL function loaders: modern OpenGL doesn't have a standard header file and requires individual function pointers to be loaded manually. 
-// Helper libraries are often used for this purpose! Here we are supporting a few common ones: gl3w, glew, glad. 
-// You may use another loader/header of your choice (glext, glLoadGen, etc.), or chose to manually implement your own.
-    
-    
-    {  /**
-   * @brief CanFrame string including essential information about the message.
-   * @return The info string.
+  /*!
+   * \brief create OperatorProperty
+   * \param type_name the type string of the OperatorProperty
+   * \return a new constructed OperatorProperty
    */
-  std::string CanFrameString() const {
-    std::stringstream output_stream('');
-    output_stream << 'id:0x' << Byte::byte_to_hex(id)
-                  << ',len:' << static_cast<int>(len) << ',data:';
-    for (uint8_t i = 0; i < len; ++i) {
-      output_stream << Byte::byte_to_hex(data[i]);
-    }
-    output_stream << ',';
-    return output_stream.str();
+  static OperatorProperty *Create(const char* type_name);
+  /*! \return execution type of the operator */
+  virtual ExecType exec_type() const {
+    return ExecType::kSync;
   }
 };
     
-    ErrorCode FakeCanClient::Receive(std::vector<CanFrame> *const frames,
-                                 int32_t *const frame_num) {
-  if (frame_num == nullptr || frames == nullptr) {
-    AERROR << 'frames or frame_num pointer is null';
-    return ErrorCode::CAN_CLIENT_ERROR_BASE;
-  }
-  frames->resize(*frame_num);
-  const int MOCK_LEN = 8;
-  for (size_t i = 0; i < frames->size(); ++i) {
-    for (int j = 0; j < MOCK_LEN; ++j) {
-      (*frames)[i].data[j] = j;
-    }
-    (*frames)[i].id = i;
-    (*frames)[i].len = MOCK_LEN;
-    ADEBUG << (*frames)[i].CanFrameString() << 'frame_num[' << i << ']';
-  }
-  usleep(USLEEP_INTERVAL);
-  ++recv_counter_;
-  return ErrorCode::OK;
-}
     
-    
-    {  SocketCanClientRaw socket_can_client;
-  EXPECT_TRUE(socket_can_client.Init(param));
-  EXPECT_EQ(socket_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
-  std::vector<CanFrame> frames;
-  int32_t num = 0;
-  EXPECT_EQ(socket_can_client.Send(frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  EXPECT_EQ(socket_can_client.Receive(&frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
-  CanFrame can_frame;
-  frames.push_back(can_frame);
-  EXPECT_EQ(socket_can_client.SendSingleFrame(frames),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  socket_can_client.Stop();
-}
-    
-    template <typename SensorType>
-::apollo::common::ErrorCode CanReceiver<SensorType>::Init(
-    CanClient *can_client, MessageManager<SensorType> *pt_manager,
-    bool enable_log) {
-  can_client_ = can_client;
-  pt_manager_ = pt_manager;
-  enable_log_ = enable_log;
-  if (can_client_ == nullptr) {
-    AERROR << 'Invalid can client.';
-    return ::apollo::common::ErrorCode::CANBUS_ERROR;
-  }
-  if (pt_manager_ == nullptr) {
-    AERROR << 'Invalid protocol manager.';
-    return ::apollo::common::ErrorCode::CANBUS_ERROR;
-  }
-  is_init_ = true;
-  return ::apollo::common::ErrorCode::OK;
-}
-    
-    class MockProtocolData : public ProtocolData<::apollo::canbus::ChassisDetail> {
- public:
-  static const int32_t ID = 0x111;
-  MockProtocolData() {}
+    {
+    {   private:
+    friend class CudaModule;
+    /*!
+     * \brief constructor
+     * \param mod module of this kernel
+     * \param mangled_name mangled kernel name
+     * \param signature kernel argument signature
+     */
+    Kernel(const std::shared_ptr<Chunk>& mod,
+           const std::string& mangled_name,
+           const std::vector<ArgType>& signature);
+    /*! \brief mangled kernel name */
+    std::string mangled_name_;
+    /*! \brief kernel argument signature */
+    std::vector<ArgType> signature_;
+    /*! \brief module of this kernel */
+    std::shared_ptr<Chunk> mod_;
+    /*! \brief cached kernel function on each device */
+    std::unordered_map<int, CUfunction> func_;
+  };
+  /*!
+   * \brief CudaModule constructor
+   * \param source cuda source code.
+   * \param exports export symbols before mangling.
+   */
+  CudaModule(const char* source,
+             const std::vector<std::string>& options,
+             const std::vector<std::string>& exports)
+      : ptr_(std::make_shared<Chunk>(source, options, exports)) {}
+  /*!
+   * \brief Get cuda kernal from module by name
+   * \param name kernel name
+   * \param signature kernel signature
+   * \return shared pointer to cuda kernel
+   */
+  std::shared_ptr<Kernel> GetKernel(const std::string& name,
+                                    const std::vector<ArgType>& signature);
 };
     
-    
-    {  if (data_trigger_running_) {
-    data_trigger_running_ = false;
-    if (thread_ != nullptr && thread_->joinable()) {
-      sensor_message_manager_->GetMutableCVar()->notify_all();
-      thread_->join();
-    }
-    thread_.reset();
-  }
-  AINFO << 'Data trigger stopped [ok].';
+    TShape Vector2TShape(const std::vector<int> &vec_int) {
+  std::vector<mshadow::index_t> vec;
+  for (uint32_t i = 0; i < vec_int.size(); ++i)
+    vec.push_back(vec_int[i]);
+  // 0-dim represents scalar in caffe
+  if (vec_int.size() == 0)
+    vec.push_back(1);
+  return {vec.begin(), vec.end()};
 }
     
-    // System gflags
-DEFINE_string(node_name, 'chassis', 'The chassis module name in proto');
-DEFINE_string(canbus_driver_name, 'canbus', 'Driver name.');
+    #if defined(__CUDACC__)
+    Stream<xpu> *s = ctx.get_stream<xpu>();
+    // TODO(Haoran): when need cublas handle in stream?
+    CHECK_EQ(s->blas_handle_ownership_, Stream<xpu>::OwnHandle)
+          << 'Must init CuBLAS handle in stream';
+#endif  // __CUDACC__
+    
+    // DO_BIND_DISPATCH comes from static_operator_common.h
+Operator *CaffeOpProp::CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
+                                     std::vector<int> *in_type) const {
+  std::vector<int> out_type, aux_type;
+  std::vector<TShape> out_shape, aux_shape;
+  out_type.resize(this->ListOutputs().size());
+  out_shape.resize(this->ListOutputs().size());
+  aux_type.resize(this->ListAuxiliaryStates().size());
+  aux_shape.resize(this->ListAuxiliaryStates().size());
+  CHECK(InferType(in_type, &out_type, &aux_type));
+  CHECK(InferShape(in_shape, &out_shape, &aux_shape));
+  DO_BIND_DISPATCH(CreateOp, param_, (*in_type)[0]);
+}
+    
+    #include 'DHTNode.h'
+#include 'DHTBucket.h'
+#include 'DHTBucketTree.h'
+#include 'DHTTaskQueue.h'
+#include 'DHTTaskFactory.h'
+#include 'DHTTask.h'
+#include 'util.h'
+#include 'LogFactory.h'
+#include 'Logger.h'
+#include 'fmt.h'
+    
+    public:
+  DHTRoutingTableSerializer(int family);
+    
+      ~DHTTaskExecutor();
+    
+    std::shared_ptr<DHTTask>
+DHTTaskFactoryImpl::createNodeLookupTask(const unsigned char* targetID)
+{
+  auto task = std::make_shared<DHTNodeLookupTask>(targetID);
+  setCommonProperty(task);
+  return task;
+}
+    
+    class DHTTaskQueue {
+public:
+  virtual ~DHTTaskQueue() = default;
+    }
+    
+    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
+                                             std::chrono::seconds interval)
+    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
+{
+}
