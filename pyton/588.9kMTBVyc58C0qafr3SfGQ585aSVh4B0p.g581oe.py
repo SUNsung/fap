@@ -1,145 +1,63 @@
 
         
-        import numpy as np
-import gc
-from datetime import datetime
-from sklearn.isotonic import isotonic_regression
-from sklearn.utils.bench import total_seconds
-import matplotlib.pyplot as plt
-import argparse
+            if re.match(re_str, url):
+        html = get_content(url)
+        title = match1(html, r'<title>(.+)丨(.+)</title>')  #title
+        
+        # player loaded via internal iframe
+        frame_url = re.search(r'<iframe src=\'(.+?)\'', html).group(1)
+        logging.debug('dilidili_download: %s' % frame_url)
+        
+        #https://player.005.tv:60000/?vid=a8760f03fd:a04808d307&v=yun&sign=a68f8110cacd892bc5b094c8e5348432
+        html = get_content(frame_url, headers=headers, decoded=False).decode('utf-8')
+        
+        match = re.search(r'(.+?)var video =(.+?);', html)
+        vid = match1(html, r'var vid='(.+)'')
+        hd2 = match1(html, r'var hd2='(.+)'')
+        typ = match1(html, r'var typ='(.+)'')
+        sign = match1(html, r'var sign='(.+)'')
+        tmsign = match1(html, r'tmsign=([A-Za-z0-9]+)')
+        ulk =  match1(html, r'var ulk='(.+)'')
     
-                gc.collect()
-            print('benchmarking lasso_path (with Gram):', end='')
-            sys.stdout.flush()
-            tstart = time()
-            lasso_path(X, y, precompute=True)
-            delta = time() - tstart
-            print('%0.3fs' % delta)
-            results['lasso_path (with Gram)'].append(delta)
+        title = r1(r'<title id='pageTitle'>(.+)</title>', html)
     
-        # Print results
-    ###########################################################################
-    print('Script arguments')
-    print('===========================')
-    arguments = vars(opts)
-    print('%s \t | %s ' % ('Arguments'.ljust(16),
-                           'Value'.center(12),))
-    print(25 * '-' + ('|' + '-' * 14) * 1)
-    for key, value in arguments.items():
-        print('%s \t | %s ' % (str(key).ljust(16),
-                               str(value).strip().center(12)))
-    print('')
+    # looks that flickr won't return urls for all sizes
+# we required in 'extras field without a acceptable header
+dummy_header = {
+    'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0'
+}
+def get_content_headered(url):
+    return get_content(url, dummy_header)
     
-        Extension is everything from the last dot to the end, ignoring
-    leading dots.  Returns '(root, ext)'; ext may be empty.'''
-    # NOTE: This code must work for text and bytes strings.
+        @classmethod
+    def dec_playinfo(cls, info, coeff):
+        res = None
+        clear = cls.funshion_decrypt_str(info['infohash'], coeff)
+        if cls.checksum(clear):
+            res = dict(hashid=clear[:40], token=cls.funshion_decrypt_str(info['token'], coeff))
+        else:
+            clear = cls.funshion_decrypt_str(info['infohash_prev'], coeff)
+            if cls.checksum(clear):
+                res = dict(hashid=clear[:40], token=cls.funshion_decrypt_str(info['token_prev'], coeff))
+        return res
     
-        def testReadInto(self):
-        self.createTempFile()
-        with BZ2File(self.filename) as bz2f:
-            n = 128
-            b = bytearray(n)
-            self.assertEqual(bz2f.readinto(b), n)
-            self.assertEqual(b, self.TEXT[:n])
-            n = len(self.TEXT) - n
-            b = bytearray(len(self.TEXT))
-            self.assertEqual(bz2f.readinto(b), n)
-            self.assertEqual(b[:n], self.TEXT[-n:])
+            try:
+            url = 'https://plus.google.com/' + r1(r'(photos/\d+/albums/\d+/\d+)\?authkey', html)
+            html = get_html(url, faker=True)
+            temp = re.findall(r'\[(\d+),\d+,\d+,'([^']+)'\]', html)
+            temp = sorted(temp, key = lambda x : fmt_level[x[0]])
+            urls = [unicodize(i[1]) for i in temp if i[0] == temp[0][0]]
+            assert urls
+            real_urls = urls # Look ma, there's really a video!
     
-    # Simple class representing a record in our database.
-MemoRecord = namedtuple('MemoRecord', 'key, task')
+    	Arguments:
+		testString {[string]} -- [message]
+	'''
     
-    # Send the message via local SMTP server.
-with smtplib.SMTP('localhost') as s:
-    s.send_message(msg)
-
+    print('finding anagrams...')
+all_anagrams = {word: anagram(word)
+                for word in word_list if len(anagram(word)) > 1}
     
-    
-if __name__ == '__main__':
-    main()
-
-    
-    document = '''\
-<slideshow>
-<title>Demo slideshow</title>
-<slide><title>Slide title</title>
-<point>This is a demo</point>
-<point>Of a program for processing slides</point>
-</slide>
-    
-            print('Unordered results using pool.imap_unordered():')
-        for x in imap_unordered_it:
-            print('\t', x)
-        print()
-    
-    from ..common import *
-import json
-import random
-from urllib.parse import urlparse, parse_qs
-    
-    
-def funshion_download(url, **kwargs):
-    if re.match(r'http://www.fun.tv/vplay/v-(\w+)', url):
-        vid = re.search(r'http://www.fun.tv/vplay/v-(\w+)', url).group(1)
-        Funshion().download_by_vid(vid, single_video=True, **kwargs)
-    elif re.match(r'http://www.fun.tv/vplay/.*g-(\w+)', url):
-        epid = re.search(r'http://www.fun.tv/vplay/.*g-(\w+)', url).group(1)
-        url = 'http://pm.funshion.com/v5/media/episode?id={}&cl=mweb&uc=111'.format(epid)
-        meta = json.loads(get_content(url))
-        drama_name = meta['name']
-    
-    # The model was trained in a way that faces with a distance of 0.6 or less should be a match. But if you want to
-# be more strict, you can look for a smaller face distance. For example, using a 0.55 cutoff would reduce false
-# positive matches at the risk of more false negatives.
-    
-        if knn_clf is None and model_path is None:
-        raise Exception('Must supply knn classifier either thourgh knn_clf or model_path')
-    
-    for face_location in face_locations:
-    
-    
-    # Display the results
-    for (top, right, bottom, left), name in zip(face_locations, face_names):
-        # Scale back up face locations since the frame we detected in was scaled to 1/4 size
-        top *= 4
-        right *= 4
-        bottom *= 4
-        left *= 4
-    
-    # Display the resulting image
-pil_image.show()
-    
-    
-def print_result(filename, name, distance, show_distance=False):
-    if show_distance:
-        print('{},{},{}'.format(filename, name, distance))
-    else:
-        print('{},{}'.format(filename, name))
-    
-        # 将每一个人脸与已知样本图片比对
-    for face_encoding in face_encodings:
-        # 看是否属于奥巴马或者拜登
-        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
-        name = '<Unknown Person>'
-    
-        url = FLASH_BRIEFINGS_API_ENDPOINT
-    name = 'api:alexa:flash_briefings'
-    
-    
-def setup_button(hass, config, add_entities, client, address):
-    '''Set up a single button device.'''
-    timeout = config.get(CONF_TIMEOUT)
-    ignored_click_types = config.get(CONF_IGNORED_CLICK_TYPES)
-    button = FlicButton(hass, client, address, timeout, ignored_click_types)
-    _LOGGER.info('Connected to button %s', address)
-    
-            for key, value in states.items():
-            if isinstance(value, (float, int)):
-                attribute = '{}.{}'.format(metric, key.replace(' ', '_'))
-                statsd.gauge(
-                    attribute, value, sample_rate=sample_rate, tags=tags)
-    
-    CONF_HOURS_TO_SHOW = 'hours_to_show'
-CONF_REFRESH = 'refresh'
-ATTR_HOURS_TO_SHOW = CONF_HOURS_TO_SHOW
-ATTR_REFRESH = CONF_REFRESH
+    * @author chinmoy159
+* @version 1.0 dated 10/08/2017
+'''
