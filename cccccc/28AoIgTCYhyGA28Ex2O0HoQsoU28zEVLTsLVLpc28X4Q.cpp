@@ -1,559 +1,579 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+        #include 'content/nw/src/api/base/base.h'
     
-    REGISTER_KERNEL_BUILDER(Name('Ackermann').Device(DEVICE_CPU), AckermannOp);
     
-    namespace tensorflow {
+    {}
+    
+       bool HasIcon(int command_id) override;
+    
+    
+
+    
+    NwClipboardReadAvailableTypesFunction::NwClipboardReadAvailableTypesFunction() {
     }
     
-    #include <map>
+     protected:
+  ~NwClipboardClearSyncFunction() override;
     
-    #include 'tensorflow/core/framework/tensor.h'
-#include 'tensorflow/core/lib/core/status.h'
+    #include <Python.h>
+namespace google {
+namespace protobuf {
+namespace python {
+    }
+    }
+    }
     
-    #ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_SEQ_TENSOR_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_PY_SEQ_TENSOR_H_
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
+    EnumGenerator::~EnumGenerator() {
 }
     
-      bool delay_destruction() { return delay_destruction_; }
-  void set_delay_destruction(bool val) { delay_destruction_ = val; }
-  bool pending_destruction() { return pending_destruction_; }
-  void set_pending_destruction (bool val) { pending_destruction_ = val; }
- protected:
-  int id_;
-  bool delay_destruction_;
-  bool pending_destruction_;
-  base::WeakPtr<ObjectManager> object_manager_;
-    
-    
-    {}  // namespace nwapi
-    
-    class ObjectManager;
-    
-    int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
-	_In_opt_ HINSTANCE hPrevInstance,
-	_In_ LPTSTR    lpCmdLine,
-	_In_ int       nCmdShow)
-{
-	UNREFERENCED_PARAMETER(hPrevInstance);
-	UNREFERENCED_PARAMETER(lpCmdLine);
-	UNREFERENCED_PARAMETER(nCmdShow);
-    }
-    
-    #include <stdint.h>
-#include 'leveldb/db.h'
-#include 'db/dbformat.h'
-    
-    void InternalKeyComparator::FindShortestSeparator(
-      std::string* start,
-      const Slice& limit) const {
-  // Attempt to shorten the user portion of the key
-  Slice user_start = ExtractUserKey(*start);
-  Slice user_limit = ExtractUserKey(limit);
-  std::string tmp(user_start.data(), user_start.size());
-  user_comparator_->FindShortestSeparator(&tmp, user_limit);
-  if (tmp.size() < user_start.size() &&
-      user_comparator_->Compare(user_start, tmp) < 0) {
-    // User key has become shorter physically, but larger logically.
-    // Tack on the earliest possible number to the shortened user key.
-    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
-    assert(this->Compare(*start, tmp) < 0);
-    assert(this->Compare(tmp, limit) < 0);
-    start->swap(tmp);
-  }
+    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
+  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
+  // Identifiers can't start with digits
+  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
+  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
 }
     
-    #include <ctype.h>
-#include <stdio.h>
-#include 'db/filename.h'
-#include 'db/dbformat.h'
-#include 'leveldb/env.h'
-#include 'util/logging.h'
-    
-    // If filename is a leveldb file, store the type of the file in *type.
-// The number encoded in the filename is stored in *number.  If the
-// filename was successfully parsed, returns true.  Else return false.
-bool ParseFileName(const std::string& filename,
-                   uint64_t* number,
-                   FileType* type);
-    
-    namespace leveldb {
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
     }
     
-    
-    {
-    {}  // namespace log
-}  // namespace leveldb
-    
-      // If memtable contains a value for key, store it in *value and return true.
-  // If memtable contains a deletion for key, store a NotFound() error
-  // in *status and return true.
-  // Else, return false.
-  bool Get(const LookupKey& key, std::string* value, Status* s);
-    
-      std::string ManifestFileName() {
-    std::string current;
-    ASSERT_OK(ReadFileToString(env_, CurrentFileName(dbname_), &current));
-    size_t len = current.size();
-    if (len > 0 && current[len-1] == '\n') {
-      current.resize(len - 1);
+    namespace {
+// Whether two fields have conflicting accessors (assuming name1 and name2
+// are different). name1 and name2 are field1 and field2's camel-case name
+// respectively.
+bool IsConflicting(const FieldDescriptor* field1, const string& name1,
+                   const FieldDescriptor* field2, const string& name2,
+                   string* info) {
+  if (field1->is_repeated()) {
+    if (field2->is_repeated()) {
+      // Both fields are repeated.
+      return false;
+    } else {
+      // field1 is repeated, and field2 is not.
+      if (name1 + 'Count' == name2) {
+        *info = 'both repeated field \'' + field1->name() + '\' and singular ' +
+                'field \'' + field2->name() + '\' generate the method \'' +
+                'get' + name1 + 'Count()\'';
+        return true;
+      }
+      if (name1 + 'List' == name2) {
+        *info = 'both repeated field \'' + field1->name() + '\' and singular ' +
+                'field \'' + field2->name() + '\' generate the method \'' +
+                'get' + name1 + 'List()\'';
+        return true;
+      }
+      // Well, there are obviously many more conflicting cases, but it probably
+      // doesn't worth the effort to exhaust all of them because they rarely
+      // happen and as we are continuing adding new methods/changing existing
+      // methods the number of different conflicting cases will keep growing.
+      // We can just add more cases here when they are found in the real world.
+      return false;
     }
-    return dbname_ + '/' + current;
+  } else {
+    if (field2->is_repeated()) {
+      return IsConflicting(field2, name2, field1, name1, info);
+    } else {
+      // None of the two fields are repeated.
+      return false;
+    }
   }
+}
+}  // namespace
     
-    static void RunConcurrent(int run) {
-  const int seed = test::RandomSeed() + (run * 100);
-  Random rnd(seed);
-  const int N = 1000;
-  const int kSize = 1000;
-  for (int i = 0; i < N; i++) {
-    if ((i % 100) == 0) {
-      fprintf(stderr, 'Run %d of %d\n', i, N);
-    }
-    TestState state(seed + 1);
-    Env::Default()->Schedule(ConcurrentReader, &state);
-    state.Wait(TestState::RUNNING);
-    for (int i = 0; i < kSize; i++) {
-      state.t_.WriteStep(&rnd);
-    }
-    state.quit_flag_.Release_Store(&state);  // Any non-null arg will do
-    state.Wait(TestState::DONE);
+    MessageGenerator* ImmutableGeneratorFactory::NewMessageGenerator(
+    const Descriptor* descriptor) const {
+  if (HasDescriptorMethods(descriptor, context_->EnforceLite())) {
+    return new ImmutableMessageGenerator(descriptor, context_);
+  } else {
+    return new ImmutableMessageLiteGenerator(descriptor, context_);
   }
 }
     
-    #include <folly/portability/Fcntl.h>
-#include <folly/portability/Stdlib.h>
-#include <folly/portability/Unistd.h>
+    void ImmutableMapFieldGenerator::
+GenerateParsingCode(io::Printer* printer) const {
+  printer->Print(
+      variables_,
+      'if (!$get_mutable_bit_parser$) {\n'
+      '  $name$_ = com.google.protobuf.MapField.newMapField(\n'
+      '      $map_field_parameter$);\n'
+      '  $set_mutable_bit_parser$;\n'
+      '}\n');
+  if (!SupportUnknownEnumValue(descriptor_->file()) &&
+      GetJavaType(ValueField(descriptor_)) == JAVATYPE_ENUM) {
+    printer->Print(
+        variables_,
+        'com.google.protobuf.ByteString bytes = input.readBytes();\n'
+        'com.google.protobuf.MapEntry<$type_parameters$>\n'
+        '$name$__ = $default_entry$.getParserForType().parseFrom(bytes);\n');
+    printer->Print(
+        variables_,
+        'if ($value_enum_type$.forNumber($name$__.getValue()) == null) {\n'
+        '  unknownFields.mergeLengthDelimitedField($number$, bytes);\n'
+        '} else {\n'
+        '  $name$_.getMutableMap().put(\n'
+        '      $name$__.getKey(), $name$__.getValue());\n'
+        '}\n');
+  } else {
+    printer->Print(
+        variables_,
+        'com.google.protobuf.MapEntry<$type_parameters$>\n'
+        '$name$__ = input.readMessage(\n'
+        '    $default_entry$.getParserForType(), extensionRegistry);\n'
+        '$name$_.getMutableMap().put(\n'
+        '    $name$__.getKey(), $name$__.getValue());\n');
+  }
+}
     
-    template <typename F>
-void find(const std::string &root, const std::string& path, bool php,
-          const F& callback) {
-  auto spath = path.empty() || !isDirSeparator(path[0]) ?
-    path : path.substr(1);
+    string ClassNameResolver::GetFileImmutableClassName(
+    const FileDescriptor* file) {
+  string& class_name = file_immutable_outer_class_names_[file];
+  if (class_name.empty()) {
+    if (file->options().has_java_outer_classname()) {
+      class_name = file->options().java_outer_classname();
+    } else {
+      class_name = GetFileDefaultImmutableClassName(file);
+      if (HasConflictingClassName(file, class_name)) {
+        class_name += kOuterClassNameSuffix;
+      }
     }
+  }
+  return class_name;
+}
     
-      // only accept paths with the glob:// prefix
-  if (strncmp(path_str, prefix, strlen(prefix)) != 0) {
-    return nullptr;
+    
+    {  decode_data.AddString(1, 'abcdefghIJ', 'abcdefghIJ');
+  decode_data.AddString(3, 'abcdefghIJ', '_AbcdefghIJ');
+  decode_data.AddString(2, 'abcdefghIJ', 'Abcd_EfghIJ');
+  EXPECT_EXIT(decode_data.AddString(2, 'xyz', 'x_yz'),
+              ::testing::KilledBySignal(SIGABRT),
+              'error: duplicate key \\(2\\) making TextFormat data, input:');
+}
+#endif  // PROTOBUF_HAS_DEATH_TEST
+    
+      if (argc > 1) {
+    std::cerr << argv[0] << ': Unknown option: ' << argv[1] << std::endl;
+    return 1;
   }
     
-    namespace HPHP {
-    }
+      // write file header
+  io::CodedOutputStream output(raw_output_);
+  output.WriteLittleEndian32(0x04034b50);  // magic
+  WriteShort(&output, 10);  // version needed to extract
+  WriteShort(&output, 0);  // flags
+  WriteShort(&output, 0);  // compression method: stored
+  WriteShort(&output, 0);  // last modified time
+  WriteShort(&output, kDosEpoch);  // last modified date
+  output.WriteLittleEndian32(info.crc32);  // crc-32
+  output.WriteLittleEndian32(info.size);  // compressed size
+  output.WriteLittleEndian32(info.size);  // uncompressed size
+  WriteShort(&output, filename_size);  // file name length
+  WriteShort(&output, 0);   // extra field length
+  output.WriteString(filename);  // file name
+  output.WriteString(contents);  // file data
     
-    /*!
- * \brief Whether always log console message with time.
- *  It will display like, with timestamp appended to head of the message.
- *  '[21:47:50] 6513x126 matrix with 143286 entries loaded from
- * ../data/agaricus.txt.train'
- */
-#ifndef XGBOOST_LOG_WITH_TIME
-#define XGBOOST_LOG_WITH_TIME 1
-#endif
+      // Check default values.
+  const Descriptor* descriptor = message->GetDescriptor();
+  const Reflection* reflection = message->GetReflection();
+  EXPECT_EQ(0, reflection->GetInt32(
+      *message, descriptor->FindFieldByName('foo_int')));
+  EXPECT_EQ('', reflection->GetString(
+      *message, descriptor->FindFieldByName('foo_string')));
+  EXPECT_EQ('', reflection->GetString(
+      *message, descriptor->FindFieldByName('foo_cord')));
+  EXPECT_EQ('', reflection->GetString(
+      *message, descriptor->FindFieldByName('foo_string_piece')));
+  EXPECT_EQ('', reflection->GetString(
+      *message, descriptor->FindFieldByName('foo_bytes')));
+  EXPECT_EQ(unittest::TestOneof2::FOO, reflection->GetEnum(
+      *message, descriptor->FindFieldByName('foo_enum'))->number());
+  const Descriptor* nested_descriptor;
+  const Message* nested_prototype;
+  nested_descriptor =
+      pool_.FindMessageTypeByName('protobuf_unittest.TestOneof2.NestedMessage');
+  nested_prototype = factory_.GetPrototype(nested_descriptor);
+  EXPECT_EQ(nested_prototype,
+            &reflection->GetMessage(
+                *message, descriptor->FindFieldByName('foo_message')));
+  const Descriptor* foogroup_descriptor;
+  const Message* foogroup_prototype;
+  foogroup_descriptor =
+      pool_.FindMessageTypeByName('protobuf_unittest.TestOneof2.FooGroup');
+  foogroup_prototype = factory_.GetPrototype(foogroup_descriptor);
+  EXPECT_EQ(foogroup_prototype,
+            &reflection->GetMessage(
+                *message, descriptor->FindFieldByName('foogroup')));
+  EXPECT_NE(foogroup_prototype,
+            &reflection->GetMessage(
+                *message, descriptor->FindFieldByName('foo_lazy_message')));
+  EXPECT_EQ(5, reflection->GetInt32(
+      *message, descriptor->FindFieldByName('bar_int')));
+  EXPECT_EQ('STRING', reflection->GetString(
+      *message, descriptor->FindFieldByName('bar_string')));
+  EXPECT_EQ('CORD', reflection->GetString(
+      *message, descriptor->FindFieldByName('bar_cord')));
+  EXPECT_EQ('SPIECE', reflection->GetString(
+      *message, descriptor->FindFieldByName('bar_string_piece')));
+  EXPECT_EQ('BYTES', reflection->GetString(
+      *message, descriptor->FindFieldByName('bar_bytes')));
+  EXPECT_EQ(unittest::TestOneof2::BAR, reflection->GetEnum(
+      *message, descriptor->FindFieldByName('bar_enum'))->number());
     
-      /*!
-   * \brief determines whether updater has enough knowledge about a given dataset
-   *        to quickly update prediction cache its training data and performs the
-   *        update if possible.
-   * \param data: data matrix
-   * \param out_preds: prediction cache to be updated
-   * \return boolean indicating whether updater has capability to update
-   *         the prediction cache. If true, the prediction cache will have been
-   *         updated by the time this function returns.
-   */
-  virtual bool UpdatePredictionCache(const DMatrix* data,
-                                     HostDeviceVector<bst_float>* out_preds) {
-    return false;
-  }
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32>
+internal::ValueArray32<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
+    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+    T29, T30, T31, T32> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7,
+    T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15,
+    T16 v16, T17 v17, T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23,
+    T24 v24, T25 v25, T26 v26, T27 v27, T28 v28, T29 v29, T30 v30, T31 v31,
+    T32 v32) {
+  return internal::ValueArray32<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
+      T26, T27, T28, T29, T30, T31, T32>(v1, v2, v3, v4, v5, v6, v7, v8, v9,
+      v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23,
+      v24, v25, v26, v27, v28, v29, v30, v31, v32);
+}
     
-    namespace xgboost {
-namespace common {
-/*! \brief buffer reader of the stream that allows you to get */
-class StreamBufferReader {
+    // Then, use the TEST_P macro to define as many parameterized tests
+// for this fixture as you want. The _P suffix is for 'parameterized'
+// or 'pattern', whichever you prefer to think.
+    
+    template <typename T>
+class UniversalTersePrinter {
  public:
-  explicit StreamBufferReader(size_t buffer_size)
-      :stream_(NULL),
-       read_len_(1), read_ptr_(1) {
-    buffer_.resize(buffer_size);
+  static void Print(const T& value, ::std::ostream* os) {
+    UniversalPrint(value, os);
   }
-  /*!
-   * \brief set input stream
-   */
-  inline void set_stream(dmlc::Stream *stream) {
-    stream_ = stream;
-    read_len_ = read_ptr_ = 1;
+};
+template <typename T>
+class UniversalTersePrinter<T&> {
+ public:
+  static void Print(const T& value, ::std::ostream* os) {
+    UniversalPrint(value, os);
   }
-  /*!
-   * \brief allows quick read using get char
-   */
-  inline char GetChar(void) {
-    while (true) {
-      if (read_ptr_ < read_len_) {
-        return buffer_[read_ptr_++];
-      } else {
-        read_len_ = stream_->Read(&buffer_[0], buffer_.length());
-        if (read_len_ == 0) return EOF;
-        read_ptr_ = 0;
-      }
+};
+template <typename T, size_t N>
+class UniversalTersePrinter<T[N]> {
+ public:
+  static void Print(const T (&value)[N], ::std::ostream* os) {
+    UniversalPrinter<T[N]>::Print(value, os);
+  }
+};
+template <>
+class UniversalTersePrinter<const char*> {
+ public:
+  static void Print(const char* str, ::std::ostream* os) {
+    if (str == NULL) {
+      *os << 'NULL';
+    } else {
+      UniversalPrint(string(str), os);
     }
   }
-  /*! \brief whether we are reaching the end of file */
-  inline bool AtEnd(void) const {
-    return read_len_ == 0;
+};
+template <>
+class UniversalTersePrinter<char*> {
+ public:
+  static void Print(char* str, ::std::ostream* os) {
+    UniversalTersePrinter<const char*>::Print(str, os);
   }
-    }
-    }
+};
+    
+    #include 'gtest/internal/gtest-port.h'
+#include 'gtest/internal/gtest-type-util.h'
+    
+      // Creates the test object, runs it, records its result, and then
+  // deletes it.
+  void Run();
+    
+      // Create the directory so that path exists. Returns true if successful or
+  // if the directory already exists; returns false if unable to create the
+  // directory for any reason, including if the parent directory does not
+  // exist. Not named 'CreateDirectory' because that's a macro on Windows.
+  bool CreateFolder() const;
+    
+    
+    {  const T1 v1_;
+  const T2 v2_;
+  const T3 v3_;
+  const T4 v4_;
+  const T5 v5_;
+  const T6 v6_;
+  const T7 v7_;
+  const T8 v8_;
+  const T9 v9_;
+  const T10 v10_;
+  const T11 v11_;
+  const T12 v12_;
+  const T13 v13_;
+  const T14 v14_;
+  const T15 v15_;
+  const T16 v16_;
+  const T17 v17_;
+  const T18 v18_;
+  const T19 v19_;
+  const T20 v20_;
+  const T21 v21_;
+  const T22 v22_;
+  const T23 v23_;
+  const T24 v24_;
+  const T25 v25_;
+  const T26 v26_;
+  const T27 v27_;
+  const T28 v28_;
+  const T29 v29_;
+  const T30 v30_;
+  const T31 v31_;
+  const T32 v32_;
+  const T33 v33_;
+  const T34 v34_;
+  const T35 v35_;
+  const T36 v36_;
+  const T37 v37_;
+  const T38 v38_;
+};
+    
+    using ::testing::EmptyTestEventListener;
+using ::testing::InitGoogleTest;
+using ::testing::Test;
+using ::testing::TestCase;
+using ::testing::TestEventListeners;
+using ::testing::TestInfo;
+using ::testing::TestPartResult;
+using ::testing::UnitTest;
+    
+    // Sets the 0-terminated C string this MyString object
+// represents.
+void MyString::Set(const char* a_c_string) {
+  // Makes sure this works when c_string == c_string_
+  const char* const temp = MyString::CloneCString(a_c_string);
+  delete[] c_string_;
+  c_string_ = temp;
+}
+
+    
+    
+// A simple string class.
+class MyString {
+ private:
+  const char* c_string_;
+  const MyString& operator=(const MyString& rhs);
     }
     
-    SparsePageWriter::SparsePageWriter(
-    const std::vector<std::string>& name_shards,
-    const std::vector<std::string>& format_shards,
-    size_t extra_buffer_capacity)
-    : num_free_buffer_(extra_buffer_capacity + name_shards.size()),
-      clock_ptr_(0),
-      workers_(name_shards.size()),
-      qworkers_(name_shards.size()) {
-  CHECK_EQ(name_shards.size(), format_shards.size());
-  // start writer threads
-  for (size_t i = 0; i < name_shards.size(); ++i) {
-    std::string name_shard = name_shards[i];
-    std::string format_shard = format_shards[i];
-    auto* wqueue = &qworkers_[i];
-    workers_[i].reset(new std::thread(
-        [this, name_shard, format_shard, wqueue] () {
-          std::unique_ptr<dmlc::Stream> fo(
-              dmlc::Stream::Create(name_shard.c_str(), 'w'));
-          std::unique_ptr<SparsePageFormat> fmt(
-              SparsePageFormat::Create(format_shard));
-          fo->Write(format_shard);
-          std::shared_ptr<SparsePage> page;
-          while (wqueue->Pop(&page)) {
-            if (page == nullptr) break;
-            fmt->Write(*page, fo.get());
-            qrecycle_.Push(std::move(page));
-          }
-          fo.reset(nullptr);
-          LOG(CONSOLE) << 'SparsePage::Writer Finished writing to ' << name_shard;
-        }));
+    // Godot TO Bullet
+extern void G_TO_B(Vector3 const &inVal, btVector3 &outVal);
+extern void INVERT_G_TO_B(Vector3 const &inVal, btVector3 &outVal);
+extern void G_TO_B(Basis const &inVal, btMatrix3x3 &outVal);
+extern void INVERT_G_TO_B(Basis const &inVal, btMatrix3x3 &outVal);
+extern void G_TO_B(Transform const &inVal, btTransform &outVal);
+    
+    	real_t get_hinge_angle();
+    
+    #include 'modules/gdnative/gdnative.h'
+    
+    
+    {	singleton = this;
+}
+
+    
+    
+    {  RepairDB();
+  Reopen();
+  std::string v;
+  ASSERT_OK(db_->Get(ReadOptions(), 'foo', &v));
+  ASSERT_EQ('hello', v);
+}
+    
+      // When start user key is prefix of limit user key
+  ASSERT_EQ(IKey('foo', 100, kTypeValue),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('foobar', 200, kTypeValue)));
+    
+    namespace {
+    }
+    
+    std::string LogFileName(const std::string& dbname, uint64_t number) {
+  assert(number > 0);
+  return MakeFileName(dbname, number, 'log');
+}
+    
+        // Invariant: we never leave < kHeaderSize bytes in a block.
+    assert(kBlockSize - block_offset_ - kHeaderSize >= 0);
+    
+    
+    {    State() {
+      for (int k = 0; k < K; k++) {
+        Set(k, 0);
+      }
+    }
+  };
+    
+    
+    {        ImGui::Render();
+    }
+    
+    
+    {    InputTextCallback_UserData cb_user_data;
+    cb_user_data.Str = str;
+    cb_user_data.ChainCallback = callback;
+    cb_user_data.ChainCallbackUserData = user_data;
+    return InputText(label, (char*)str->c_str(), str->capacity() + 1, flags, InputTextCallback, &cb_user_data);
+}
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_IMPL_API void     ImGui_ImplDX9_InvalidateDeviceObjects();
+IMGUI_IMPL_API bool     ImGui_ImplDX9_CreateDeviceObjects();
+
+    
+    void ImGui_ImplFreeGLUT_MouseFunc(int glut_button, int state, int x, int y)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    io.MousePos = ImVec2((float)x, (float)y);
+    int button = -1;
+    if (glut_button == GLUT_LEFT_BUTTON) button = 0;
+    if (glut_button == GLUT_RIGHT_BUTTON) button = 1;
+    if (glut_button == GLUT_MIDDLE_BUTTON) button = 2;
+    if (button != -1 && state == GLUT_DOWN)
+        io.MouseDown[button] = true;
+    if (button != -1 && state == GLUT_UP)
+        io.MouseDown[button] = false;
+}
+    
+        // Clamp values (+ handle overflow/wrap-around for integer types)
+    if (*v != v_cur && has_min_max)
+    {
+        if (v_cur < v_min || (v_cur > *v && adjust_delta < 0.0f && !is_decimal))
+            v_cur = v_min;
+        if (v_cur > v_max || (v_cur < *v && adjust_delta > 0.0f && !is_decimal))
+            v_cur = v_max;
+    }
+    
+    static bool ImGui_ImplGlfw_Init(GLFWwindow* window, bool install_callbacks, GlfwClientApi client_api)
+{
+    g_Window = window;
+    g_Time = 0.0;
+    }
+    
+    
+    {  return 0 != isatty(fileno(stdout)) && term_supports_color;
+#endif  // BENCHMARK_OS_WINDOWS
+}
+    
+    #endif  // BENCHMARK_COLORPRINT_H_
+
+    
+    // Parses 'str' for a double.  If successful, writes the result to *value and
+// returns true; otherwise leaves *value unchanged and returns false.
+bool ParseDouble(const std::string& src_text, const char* str, double* value) {
+  // Parses the environment variable as a decimal integer.
+  char* end = nullptr;
+  const double double_value = strtod(str, &end);  // NOLINT
+    }
+    
+    template <class Tp>
+LogType& operator<<(LogType& log, Tp const& value) {
+  if (log.out_) {
+    *log.out_ << value;
+  }
+  return log;
+}
+    
+    #define REQUIRES(...) \
+  THREAD_ANNOTATION_ATTRIBUTE__(requires_capability(__VA_ARGS__))
+    
+    inline Regex::~Regex() {}
+    
+    TEST(ByteTest, SetGetHighLowBit) {
+  unsigned char byte_value = 0x37;
+  Byte value(&byte_value);
+  value.set_value_high_4_bits(0x0B);
+  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
+  EXPECT_EQ(0x07, value.get_byte_low_4_bits());
+  value.set_value_low_4_bits(0x0B);
+  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
+  EXPECT_EQ(0x0B, value.get_byte_low_4_bits());
+}
+    
+    DEFINE_string(adapter_config_filename, 'modules/canbus/conf/adapter.conf',
+              'The adapter config file');
+    
+    #include 'glog/logging.h'
+    
+    #include 'modules/drivers/radar/conti_radar/protocol/object_general_info_60b.h'
+    
+    using apollo::drivers::canbus::Byte;
+    
+    
+    {  switch (x) {
+    case 0x0:
+      return RCS_THRESHOLD_STANDARD;
+    case 0x1:
+      return RCS_THRESHOLD_HIGH_SENSITIVITY;
+    default:
+      return RCS_THRESHOLD_ERROR;
   }
 }
     
-      void Save(dmlc::Stream* fo) const {
-    CHECK_EQ(param.num_trees, static_cast<int>(trees.size()));
-    fo->Write(&param, sizeof(param));
-    for (const auto & tree : trees) {
-      tree->Save(fo);
-    }
-    if (tree_info.size() != 0) {
-      fo->Write(dmlc::BeginPtr(tree_info), sizeof(int) * tree_info.size());
-    }
-  }
-    
-    // common regressions
-// linear regression
-struct LinearSquareLoss {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
-  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return true; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    return predt - label;
-  }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    return 1.0f;
-  }
-  template <typename T>
-  static T PredTransform(T x) { return x; }
-  template <typename T>
-  static T FirstOrderGradient(T predt, T label) { return predt - label; }
-  template <typename T>
-  static T SecondOrderGradient(T predt, T label) { return T(1.0f); }
-  static bst_float ProbToMargin(bst_float base_score) { return base_score; }
-  static const char* LabelErrorMsg() { return ''; }
-  static const char* DefaultEvalMetric() { return 'rmse'; }
-};
-    
-    
-    {  inline void SetPrune(const WQSummary &src, size_t maxsize) {
-    if (src.size <= maxsize) {
-      this->CopyFrom(src); return;
-    }
-    const RType begin = src.data[0].rmax;
-    const RType range = src.data[src.size - 1].rmin - src.data[0].rmax;
-    const size_t n = maxsize - 1;
-    data[0] = src.data[0];
-    this->size = 1;
-    // lastidx is used to avoid duplicated records
-    size_t i = 1, lastidx = 0;
-    for (size_t k = 1; k < n; ++k) {
-      RType dx2 =  2 * ((k * range) / n + begin);
-      // find first i such that  d < (rmax[i+1] + rmin[i+1]) / 2
-      while (i < src.size - 1
-             && dx2 >= src.data[i + 1].rmax + src.data[i + 1].rmin) ++i;
-      CHECK(i != src.size - 1);
-      if (dx2 < src.data[i].RMinNext() + src.data[i + 1].RMaxPrev()) {
-        if (i != lastidx) {
-          data[size++] = src.data[i]; lastidx = i;
+        // overlap
+    sub_node = junction_node->FirstChildElement('objectOverlapGroup');
+    if (sub_node) {
+      sub_node = sub_node->FirstChildElement('objectReference');
+      while (sub_node) {
+        std::string object_id;
+        checker =
+            UtilXmlParser::QueryStringAttribute(*sub_node, 'id', &object_id);
+        if (checker != tinyxml2::XML_SUCCESS) {
+          std::string err_msg = 'Error parse junction overlap id';
+          return Status(apollo::common::ErrorCode::HDMAP_DATA_ERROR, err_msg);
         }
-      } else {
-        if (i + 1 != lastidx) {
-          data[size++] = src.data[i + 1]; lastidx = i + 1;
-        }
-      }
     }
-    if (lastidx != src.size - 1) {
-      data[size++] = src.data[src.size - 1];
-    }
-  }
-  /*!
-   * \brief set current summary to be merged summary of sa and sb
-   * \param sa first input summary to be merged
-   * \param sb second input summary to be merged
-   */
-  inline void SetCombine(const WQSummary &sa,
-                         const WQSummary &sb) {
-    if (sa.size == 0) {
-      this->CopyFrom(sb); return;
-    }
-    if (sb.size == 0) {
-      this->CopyFrom(sa); return;
-    }
-    CHECK(sa.size > 0 && sb.size > 0);
-    const Entry *a = sa.data, *a_end = sa.data + sa.size;
-    const Entry *b = sb.data, *b_end = sb.data + sb.size;
-    // extended rmin value
-    RType aprev_rmin = 0, bprev_rmin = 0;
-    Entry *dst = this->data;
-    while (a != a_end && b != b_end) {
-      // duplicated value entry
-      if (a->value == b->value) {
-        *dst = Entry(a->rmin + b->rmin,
-                     a->rmax + b->rmax,
-                     a->wmin + b->wmin, a->value);
-        aprev_rmin = a->RMinNext();
-        bprev_rmin = b->RMinNext();
-        ++dst; ++a; ++b;
-      } else if (a->value < b->value) {
-        *dst = Entry(a->rmin + bprev_rmin,
-                     a->rmax + b->RMaxPrev(),
-                     a->wmin, a->value);
-        aprev_rmin = a->RMinNext();
-        ++dst; ++a;
-      } else {
-        *dst = Entry(b->rmin + aprev_rmin,
-                     b->rmax + a->RMaxPrev(),
-                     b->wmin, b->value);
-        bprev_rmin = b->RMinNext();
-        ++dst; ++b;
-      }
-    }
-    if (a != a_end) {
-      RType brmax = (b_end - 1)->rmax;
-      do {
-        *dst = Entry(a->rmin + bprev_rmin, a->rmax + brmax, a->wmin, a->value);
-        ++dst; ++a;
-      } while (a != a_end);
-    }
-    if (b != b_end) {
-      RType armax = (a_end - 1)->rmax;
-      do {
-        *dst = Entry(b->rmin + aprev_rmin, b->rmax + armax, b->wmin, b->value);
-        ++dst; ++b;
-      } while (b != b_end);
-    }
-    this->size = dst - data;
-    const RType tol = 10;
-    RType err_mingap, err_maxgap, err_wgap;
-    this->FixError(&err_mingap, &err_maxgap, &err_wgap);
-    if (err_mingap > tol || err_maxgap > tol || err_wgap > tol) {
-      LOG(INFO) << 'mingap=' << err_mingap
-                << ', maxgap=' << err_maxgap
-                << ', wgap=' << err_wgap;
-    }
-    CHECK(size <= sa.size + sb.size) << 'bug in combine';
-  }
-  // helper function to print the current content of sketch
-  inline void Print() const {
-    for (size_t i = 0; i < this->size; ++i) {
-      LOG(CONSOLE) << '[' << i << '] rmin=' << data[i].rmin
-                   << ', rmax=' << data[i].rmax
-                   << ', wmin=' << data[i].wmin
-                   << ', v=' << data[i].value;
-    }
-  }
-  // try to fix rounding error
-  // and re-establish invariance
-  inline void FixError(RType *err_mingap,
-                       RType *err_maxgap,
-                       RType *err_wgap) const {
-    *err_mingap = 0;
-    *err_maxgap = 0;
-    *err_wgap = 0;
-    RType prev_rmin = 0, prev_rmax = 0;
-    for (size_t i = 0; i < this->size; ++i) {
-      if (data[i].rmin < prev_rmin) {
-        data[i].rmin = prev_rmin;
-        *err_mingap = std::max(*err_mingap, prev_rmin - data[i].rmin);
-      } else {
-        prev_rmin = data[i].rmin;
-      }
-      if (data[i].rmax < prev_rmax) {
-        data[i].rmax = prev_rmax;
-        *err_maxgap = std::max(*err_maxgap, prev_rmax - data[i].rmax);
-      }
-      RType rmin_next = data[i].RMinNext();
-      if (data[i].rmax < rmin_next) {
-        data[i].rmax = rmin_next;
-        *err_wgap = std::max(*err_wgap, data[i].rmax - rmin_next);
-      }
-      prev_rmax = data[i].rmax;
-    }
-  }
-  // check consistency of the summary
-  inline bool Check(const char *msg) const {
-    const float tol = 10.0f;
-    for (size_t i = 0; i < this->size; ++i) {
-      if (data[i].rmin + data[i].wmin > data[i].rmax + tol ||
-          data[i].rmin < -1e-6f || data[i].rmax < -1e-6f) {
-        LOG(INFO) << '---------- WQSummary::Check did not pass ----------';
-        this->Print();
-        return false;
-      }
-    }
-    return true;
-  }
-};
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-    
-        // Overrides
-    virtual void startWithTarget(Node *target) override;
-    virtual ActionCamera * reverse() const override;
-    virtual ActionCamera *clone() const override;
-    
-    /** An Array that contain control points.
- * Used by CardinalSplineTo and (By) and CatmullRomTo (and By) actions.
- * @ingroup Actions
- * @js NA
- */
-class CC_DLL PointArray : public Ref, public Clonable
-{
-public:
     }
     
-        //
-    // Overrides
-    //
+    namespace apollo {
+namespace hdmap {
+DEFINE_string(test_map_file,
+              'modules/map/data/sunnyvale_loop/base_map_test.bin',
+              'The test map file');
+DEFINE_string(
+    test_routing_file,
+    'modules/map/pnc_map/testdata/sample_sunnyvale_loop_routing.pb.txt',
+    'The test map file');
+    }
+    }
+    
     /**
-     * @param time In seconds.
-     */
-    virtual void update(float time) override;
-    virtual ActionInstant* reverse() const override;
-    virtual Show* clone() const override;
-    
-    /** @class MoveBy
- * @brief Moves a Node object x,y pixels by modifying it's position attribute.
- x and y are relative to the position of the object.
- Several MoveBy actions can be concurrently called, and the resulting
- movement will be the sum of individual movements.
- @since v2.1beta2-custom
- */
-class CC_DLL MoveBy : public ActionInterval
-{
-public:
-    /** 
-     * Creates the action.
-     *
-     * @param duration Duration time, in seconds.
-     * @param deltaPosition The delta distance in 2d, it's a Vec2 type.
-     * @return An autoreleased MoveBy object.
-     */
-    static MoveBy* create(float duration, const Vec2& deltaPosition);
-    /**
-     * Creates the action.
-     *
-     * @param duration Duration time, in seconds.
-     * @param deltaPosition The delta distance in 3d, it's a Vec3 type.
-     * @return An autoreleased MoveBy object.
-     */
-    static MoveBy* create(float duration, const Vec3& deltaPosition);
-    }
-    
-    // pause / resume
-    
-    USING_NS_CC;
-    
-    #include 'DHTNode.h'
-#include 'DHTBucket.h'
-#include 'DHTBucketTree.h'
-#include 'DHTTaskQueue.h'
-#include 'DHTTaskFactory.h'
-#include 'DHTTask.h'
-#include 'util.h'
-#include 'LogFactory.h'
-#include 'Logger.h'
-#include 'fmt.h'
-    
-      int getNumBucket() const;
-    
-    #include 'common.h'
+ * @file
+ **/
     
     
-    {  virtual bool finished() = 0;
-};
-    
-    std::shared_ptr<DHTTask>
-DHTTaskFactoryImpl::createNodeLookupTask(const unsigned char* targetID)
-{
-  auto task = std::make_shared<DHTNodeLookupTask>(targetID);
-  setCommonProperty(task);
-  return task;
+    {  MatrixXd bd_golden(10, 1);
+  bd_golden << 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
+  EXPECT_EQ(bd, bd_golden);
 }
     
-      virtual void addPeriodicTask1(const std::shared_ptr<DHTTask>& task) = 0;
-    
-    DHTTokenUpdateCommand::~DHTTokenUpdateCommand() = default;
-    
-      virtual void process() CXX11_OVERRIDE;
-    
-    double Finish(Counter const& c, double cpu_time, double num_threads) {
-  double v = c.value;
-  if (c.flags & Counter::kIsRate) {
-    v /= cpu_time;
-  }
-  if (c.flags & Counter::kAvgThreads) {
-    v /= num_threads;
-  }
-  return v;
-}
-    
-    
-    {      delete[] errbuf;
-    }
-    
-    #ifdef BENCHMARK_OS_WINDOWS
-#include <Windows.h>
-#endif
+    #include 'modules/planning/math/smoothing_spline/spline_2d.h'
