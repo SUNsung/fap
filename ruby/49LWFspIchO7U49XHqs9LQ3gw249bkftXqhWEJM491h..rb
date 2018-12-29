@@ -1,68 +1,93 @@
 
         
-            gu = GroupUser.find_by(user_id: moderator.id, group_id: group.id)
-    expect(gu.notification_level).to eq(NotificationLevels.all[:regular])
+          def ring_time
+    (self.ring_finish || Time.now).to_i - self.ring_start.to_i
   end
     
-    UserEmail.seed do |ue|
-  ue.id = -1
-  ue.email = 'no_email'
-  ue.primary = true
-  ue.user_id = -1
-end
+              case msg_type
+          when Rex::Proto::Kerberos::Model::KRB_ERROR
+            res = Rex::Proto::Kerberos::Model::KrbError.decode(asn1)
+          when Rex::Proto::Kerberos::Model::AS_REP
+            res = Rex::Proto::Kerberos::Model::KdcResponse.decode(asn1)
+          when Rex::Proto::Kerberos::Model::TGS_REP
+            res = Rex::Proto::Kerberos::Model::KdcResponse.decode(asn1)
+          else
+            raise ::RuntimeError, 'Kerberos Client: Unknown response'
+          end
     
-        self.client.send_regreq_chall_response(self, chall)
-    res = wait_for( IAX_SUBTYPE_REGACK, IAX_SUBTYPE_REGREJ )
-    return if not res
-    
-              # Encodes a Rex::Proto::Kerberos::Model::Checksum into an ASN.1 String
+              # Encodes the Rex::Proto::Kerberos::CredentialCache::Time into an String
           #
-          # @return [String]
+          # @return [String] encoded time
           def encode
-            elems = []
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_type], 0, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_checksum], 1, :CONTEXT_SPECIFIC)
+            encoded = ''
+            encoded << encode_auth_time
+            encoded << encode_start_time
+            encoded << encode_end_time
+            encoded << encode_renew_time
     
-    module Rex
-  module Proto
-    module Kerberos
-      module Model
-        # This class provides a representation of a principal, an asset (e.g., a
-        # workstation user or a network server) on a network.
-        class Element
+                decode_asn1(asn1)
+          end
     
-              # Decodes the cname field
+              # Decodes the enc_part
           #
           # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Rex::Proto::Kerberos::Model::PrincipalName]
-          def decode_cname(input)
-            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
-          end
-    
-    SPREE_GEMS = %w(core api cmd backend frontend sample).freeze
-    
-            def create
-          authorize! :create, Spree::OptionType
-          @option_type = Spree::OptionType.new(option_type_params)
-          if @option_type.save
-            render :show, status: 201
-          else
-            invalid_resource!(@option_type)
+          # @return [Rex::Proto::Kerberos::Model::EncryptedData]
+          def decode_enc_part(input)
+            Rex::Proto::Kerberos::Model::EncryptedData.decode(input.value[0])
           end
         end
+      end
+    end
+  end
+end
     
-            def destroy
-          authorize! :destroy, @product_property
-          @product_property.destroy
-          respond_with(@product_property, status: 204)
-        end
+          # Wraps page formatted data to Nokogiri::HTML document.
+      #
+      def build_document(content)
+        Nokogiri::HTML::fragment(%{<div id='gollum-root'>} + content.to_s + %{</div>}, 'UTF-8')
+      end
     
-            def create
-          authorize! :create, Property
-          @property = Spree::Property.new(property_params)
-          if @property.save
-            respond_with(@property, status: 201, default_template: :show)
-          else
-            invalid_resource!(@property)
-          end
-        end
+      test 'extracting paths from URLs' do
+    assert_nil extract_path('Eye-Of-Sauron')
+    assert_equal 'Mordor', extract_path('Mordor/Sauron')
+    assert_equal 'Mordor/Sauron', extract_path('Mordor/Sauron/Evil')
+  end
+    
+        @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+    @view.instance_variable_set :@content, page.formatted_data
+    @view.instance_variable_set :@h1_title, true
+    
+        page = @wiki.page('k')
+    assert_equal '한글 text', utf8(page.raw_data)
+    assert_equal 'def', page.version.message
+  end
+    
+          ws  = WorkSpace.new(binding)
+      irb = Irb.new(ws)
+    
+      s.require_paths = %w[lib]
+    
+      # for now
+  worker_count = 1
+    
+    class SinatraWorker
+  include Sidekiq::Worker
+    
+        UnitOfWork = Struct.new(:queue, :job) do
+      def acknowledge
+        # nothing to do
+      end
+    
+        def redis(&block)
+      Sidekiq.redis(&block)
+    end
+    
+          if file.kind_of?(String)
+        ERB.new(file).result(binding)
+      else
+        send(:'_erb_#{file}')
+      end
+    end
+  end
+end
