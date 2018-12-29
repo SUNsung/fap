@@ -1,101 +1,134 @@
 
         
-        # define charCodeAt on String
-class String
-  def charCodeAt(k)
-    # use scan, nil check, and unpack instead of ord for 1.8
-    # 1.9 can simply use self[k].ord
-    # http://stackoverflow.com/questions/7793177/split-utf8-string-regardless-of-ruby-version
-    c = self.scan(/./mu)[k]
-    return nil if c.nil?
-    c.unpack('U')[0]
-  end
+        User.seed do |u|
+  u.id = -1
+  u.name = 'system'
+  u.username = 'system'
+  u.username_lower = 'system'
+  u.password = SecureRandom.hex
+  u.active = true
+  u.admin = true
+  u.moderator = true
+  u.approved = true
+  u.trust_level = TrustLevel[4]
 end
     
-          # Wraps page formatted data to Nokogiri::HTML document.
+    group :development do
+  cp_gem 'claide',                'CLAide'
+  cp_gem 'cocoapods-core',        'Core'
+  cp_gem 'cocoapods-deintegrate', 'cocoapods-deintegrate'
+  cp_gem 'cocoapods-downloader',  'cocoapods-downloader'
+  cp_gem 'cocoapods-plugins',     'cocoapods-plugins'
+  cp_gem 'cocoapods-search',      'cocoapods-search'
+  cp_gem 'cocoapods-stats',       'cocoapods-stats'
+  cp_gem 'cocoapods-trunk',       'cocoapods-trunk'
+  cp_gem 'cocoapods-try',         'cocoapods-try'
+  cp_gem 'molinillo',             'Molinillo'
+  cp_gem 'nanaimo',               'Nanaimo'
+  cp_gem 'xcodeproj',             'Xcodeproj'
+    
+                  execute_command 'xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build #{test_flag} ONLY_ACTIVE_ARCH=NO -destination 'platform=iOS Simulator,name=iPhone 7''
+            else
+              raise 'Unknown platform #{platform}'
+            end
+          end
+        end
+      end
+    end
+  end
+    
+        if run? && ARGV.any?
+      require 'optparse'
+      OptionParser.new { |op|
+        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
+        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
+        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
+        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
+        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
+        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
+      }.parse!(ARGV.dup)
+    end
+  end
+    
+          def drop_session(env)
+        session(env).clear if session? env
+      end
+    
+          def escape_string(str)
+        str = @escaper.escape_url(str)        if @url
+        str = @escaper.escape_html(str)       if @html
+        str = @escaper.escape_javascript(str) if @javascript
+        str
+      end
+    end
+  end
+end
+
+    
+      describe '#referrer' do
+    it 'Reads referrer from Referer header' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/valid'}
+      expect(subject.referrer(env)).to eq('bar.com')
+    end
+    
+    module LogStash
+  module PluginManager
+    class Error < StandardError; end
+    
+            if specs.size > 0
+          specs
+        else
+          raise LogStash::PluginManager::PluginNotFoundError, 'Cannot find plugins matching: `#{plugin_pattern}`'
+        end
+      end.flatten
+    end
+    
+          # Install the gems to make them available locally when bundler does his local resolution
+      post_install_messages = []
+      pack.gems.each do |packed_gem|
+        PluginManager.ui.debug('Installing, #{packed_gem.name}, version: #{packed_gem.version} file: #{packed_gem.file}')
+        post_install_messages << LogStash::PluginManager::GemInstaller::install(packed_gem.file, packed_gem.plugin?)
+      end
+    
+      it 'returns the config_hash' do
+    expect(subject.config_hash).not_to be_nil
+  end
+    
+              it 'successfully install the plugin' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install #{gem_path_on_vagrant}')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-dns')
+          end
+        end
+    
+    module RuboCop
+  module AST
+    # A node extension for `for` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `for` nodes within RuboCop.
+    class ForNode < Node
+      # Returns the keyword of the `for` statement as a string.
       #
-      def build_document(content)
-        Nokogiri::HTML::fragment(%{<div id='gollum-root'>} + content.to_s + %{</div>}, 'UTF-8')
+      # @return [String] the keyword of the `until` statement
+      def keyword
+        'for'
       end
     
-    def normal(text)
-  text.gsub!(' ', '')
-  text.gsub!('\n', '')
-  text
-end
-    
-        assert_equal 'sidebar', side_2.raw_data
-    assert_equal 'def', side_2.version.message
-    assert_not_equal side_1.version.sha, side_2.version.sha
-    assert_equal commits+1, @wiki.repo.commits('master').size
+    class ConfigTag < Liquid::Tag
+  def initialize(tag_name, options, tokens)
+    super
+    options = options.split(' ').map {|i| i.strip }
+    @key = options.slice!(0)
+    @tag = nil
+    @classname = nil
+    options.each do |option|
+      @tag = $1 if option =~ /tag:(\S+)/ 
+      @classname = $1 if option =~ /classname:(\S+)/
+    end
   end
-    
-        post '/edit/' + CGI.escape('한글'), :page => 'k', :content => '바뀐 text',
-         :format                            => 'markdown', :message => 'ghi'
-    follow_redirect!
-    assert last_response.ok?
-    
-          def find_product(id)
-        @product = product_scope.friendly.distinct(false).find(id.to_s)
-      rescue ActiveRecord::RecordNotFound
-        @product = product_scope.find_by(id: id)
-        not_found unless @product
-      end
-    
-            def show
-          @inventory_unit = inventory_unit
-          respond_with(@inventory_unit)
-        end
-    
-            def update
-          if @property
-            authorize! :update, @property
-            @property.update_attributes(property_params)
-            respond_with(@property, status: 200, default_template: :show)
-          else
-            invalid_resource!(@property)
-          end
-        end
-    
-            def create
-          authorize! :create, StockLocation
-          @stock_location = StockLocation.new(stock_location_params)
-          if @stock_location.save
-            respond_with(@stock_location, status: 201, default_template: :show)
-          else
-            invalid_resource!(@stock_location)
-          end
-        end
-    
-    module Jekyll
     
           rtn = ''
       (context.environments.first['site'][@array_name] || []).each do |file|
         if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
           rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
         end
-    
-    desc 'Test the paperclip plugin under all supported Rails versions.'
-task :all do |t|
-  if ENV['BUNDLE_GEMFILE']
-    exec('rake spec && cucumber')
-  else
-    exec('rm -f gemfiles/*.lock')
-    Rake::Task['appraisal:gemfiles'].execute
-    Rake::Task['appraisal:install'].execute
-    exec('rake appraisal')
-  end
-end
-    
-    When /^(?:|I )choose '([^']*)'$/ do |field|
-  choose(field)
-end
-    
-    class PaperclipGenerator < ActiveRecord::Generators::Base
-  desc 'Create a migration to add paperclip-specific fields to your model. ' +
-       'The NAME argument is the name of your model, and the following ' +
-       'arguments are the name of the attachments'
-    
-        def self.definitions_for(klass)
-      instance.definitions_for(klass)
-    end
