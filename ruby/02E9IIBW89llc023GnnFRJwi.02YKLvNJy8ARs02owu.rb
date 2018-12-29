@@ -1,131 +1,85 @@
 
         
-            it 'shows the dry run pop up without previous events and selects the events tab when a event was created' do
-      open_dry_run_modal(agent)
-      click_on('Dry Run')
-      expect(page).to have_text('Biologists play reverse')
-      expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabEvents']')
+            it 'works for running jobs' do
+      job.locked_at = Time.now
+      job.locked_by = 'test'
+      expect(status(job)).to eq('<span class='label label-info'>running</span>')
     end
     
-              @bar2 = Agents::DotBar.new(name: 'bar2').tap { |agent|
-            agent.user = users(:bob)
-            agent.sources << @foo
-            agent.propagate_immediately = true
-            agent.disabled = true
-            agent.save!
-          },
+      describe '#scenario_label' do
+    it 'creates a scenario label with the scenario name' do
+      expect(scenario_label(scenario)).to eq(
+        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Scene</span>'
+      )
+    end
     
-          it 'runs until stop is called' do
-        mock.instance_of(Rufus::Scheduler).join
-        Thread.new { while @agent_runner.instance_variable_get(:@running) != false do sleep 0.1; @agent_runner.stop end }
-        @agent_runner.run
-      end
-    
-      it 'provides hash-style access to its properties with both symbol and string keys' do
-    expect(location[:lat]).to be_a Float
-    expect(location[:lat]).to eq 2.0
-    expect(location['lat']).to be_a Float
-    expect(location['lat']).to eq 2.0
+      it 'schould register the schedules with the rufus scheduler and run' do
+    mock(@rufus_scheduler).join
+    scheduler = HuginnScheduler.new
+    scheduler.setup!(@rufus_scheduler, Mutex.new)
+    scheduler.run
   end
     
-        it 'cleans up old logs when there are more than log_length' do
-      stub(AgentLog).log_length { 4 }
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 1')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 2')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 3')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 4')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 4')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 1')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 5')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 5')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 2')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 6')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 6')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 3')
-    end
-    
-          # Returns the path to a file for the given key.
-      #
-      # @param key [String]
-      # @return [String] The path to the cache file.
-      def path_to(key)
-        key = key.gsub(/[<>:\\|?*%]/) {|c| '%%%03d' % c.ord}
-        File.join(cache_location, key)
-      end
-    end
+      it 'replaces invalid byte sequences in a message' do
+    log = AgentLog.new(:agent => agents(:jane_website_agent), level: 3)
+    log.message = '\u{3042}\xffA\x95'
+    expect { log.save! }.not_to raise_error
+    expect(log.message).to eq('\u{3042}<ff>A\<95>')
   end
-end
-
     
-          def add_roles(roles)
-        Array(roles).each { |role| add_role(role) }
-        self
-      end
-      alias roles= add_roles
+            agent.memory = ''
+        expect(agent.memory['foo']).to be_nil
+        expect(agent.memory).to eq({})
     
-          def role_properties_for(rolenames)
-        roles = rolenames.to_set
-        rps = Set.new unless block_given?
-        roles_for(rolenames).each do |host|
-          host.roles.intersection(roles).each do |role|
-            [host.properties.fetch(role)].flatten(1).each do |props|
-              if block_given?
-                yield host, role, props
-              else
-                rps << (props || {}).merge(role: role, hostname: host.hostname)
+            # This is the method called to 'prepare' the provisioner. This is called
+        # before any actions are run by the action runner (see {Vagrant::Actions::Runner}).
+        # This can be used to setup shared folders, forward ports, etc. Whatever is
+        # necessary on a 'meta' level.
+        #
+        # No return value is expected.
+        def prepare
+        end
+    
+                  next env.machine(entry.name.to_sym, entry.provider.to_sym)
+            end
+    
+            # This contains all the registered guest capabilities.
+        #
+        # @return [Hash<Symbol, Registry>]
+        attr_reader :guest_capabilities
+    
+              # Set all of our instance variables on the new class
+          [self, other].each do |obj|
+            obj.instance_variables.each do |key|
+              # Ignore keys that start with a double underscore. This allows
+              # configuration classes to still hold around internal state
+              # that isn't propagated.
+              if !key.to_s.start_with?('@__')
+                # Don't set the value if it is the unset value, either.
+                value = obj.instance_variable_get(key)
+                result.instance_variable_set(key, value) if value != UNSET_VALUE
               end
             end
           end
+    
+    module Vagrant
+  module Plugin
+    module V2
+      # This class maintains a list of all the registered plugins as well
+      # as provides methods that allow querying all registered components of
+      # those plugins as a single unit.
+      class Manager
+        attr_reader :registered
+    
+            # This should return an action callable for the given name.
+        #
+        # @param [Symbol] name Name of the action.
+        # @return [Object] A callable action sequence object, whether it
+        #   is a proc, object, etc.
+        def action(name)
+          nil
         end
-        block_given? ? nil : rps
+    
+          def self.default_generator_root
+        File.dirname(__FILE__)
       end
-    
-        def URIEncodePair(cc1, cc2, result, index)
-      u = ((cc1 >> 6) & 0xF) + 1;
-      w = (cc1 >> 2) & 0xF;
-      x = cc1 & 3;
-      y = (cc2 >> 6) & 0xF;
-      z = cc2 & 63;
-      octets = Array.new(4);
-      octets[0] = (u >> 2) + 240;
-      octets[1] = (((u & 3) << 4) | w) + 128;
-      octets[2] = ((x << 4) | y) + 128;
-      octets[3] = z + 128;
-      return URIEncodeOctets(octets, result, index);
-    end
-    
-          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
-      def left_shift int, shift
-        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
-        # 1>>31, 2**32
-        (r & 2147483648) == 0 ? r : r - 4294967296
-      end
-    
-          def page_header
-        title
-      end
-    
-    def cloned_testpath(path)
-  repo   = File.expand_path(testpath(path))
-  path   = File.dirname(repo)
-  cloned = File.join(path, self.class.name)
-  FileUtils.rm_rf(cloned)
-  Dir.chdir(path) do
-    %x{git clone #{File.basename(repo)} #{self.class.name} 2>/dev/null}
-  end
-  cloned
-end
-    
-        assert_no_match /Edit/, last_response.body, ''Edit' link not blocked in history template'
-    
-    desc 'Update version number and gemspec'
-task :bump do
-  puts 'Updated version to #{bump_version}'
-  # Execute does not invoke dependencies.
-  # Manually invoke gemspec then validate.
-  Rake::Task[:gemspec].execute
-  Rake::Task[:validate].execute
-end
-    
-      s.summary     = 'A simple, Git-powered wiki.'
-  s.description = 'A simple, Git-powered wiki with a sweet API and local frontend.'
