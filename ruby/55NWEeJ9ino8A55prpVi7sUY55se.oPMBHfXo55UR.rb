@@ -1,107 +1,98 @@
 
         
-                  def add_default_name_and_id_for_value(tag_value, options)
-            if tag_value.nil?
-              add_default_name_and_id(options)
-            else
-              specified_id = options['id']
-              add_default_name_and_id(options)
-    
-            class RadioButtonBuilder < Builder # :nodoc:
-          def radio_button(extra_html_options = {})
-            html_options = extra_html_options.merge(@input_html_options)
-            html_options[:skip_default_ids] = false
-            @template_object.radio_button(@object_name, @method_name, @value, html_options)
-          end
-        end
-    
-          it 'requires the passwords to match' do
-        visit new_admin_user_path
-        fill_in 'Email', with: 'test@test.com'
-        fill_in 'Username', with: 'usertest'
-        fill_in 'Password', with: '12345678'
-        fill_in 'Password confirmation', with: 'no_match'
-        click_on 'Create User'
-        expect(page).to have_text('Password confirmation doesn't match')
+              def remember_cookie_values(resource)
+        options = { httponly: true }
+        options.merge!(forget_cookie_values(resource))
+        options.merge!(
+          value: resource.class.serialize_into_cookie(resource),
+          expires: resource.remember_expires_at
+        )
       end
-    end
     
-      it 'imports a scenario that does not exist yet' do
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
-    click_on 'Start Import'
-    expect(page).to have_text('This scenario has a few agents to get you started. Feel free to change them or delete them as you see fit!')
-    expect(page).not_to have_text('This Scenario already exists in your system.')
-    check('I confirm that I want to import these Agents.')
-    click_on 'Finish Import'
-    expect(page).to have_text('Import successful!')
+          def remove_domain_from_uri(uri)
+        [uri.path.sub(/\A\/+/, '/'), uri.query].compact.join('?')
+      end
+    
+            @email = headers[:to]
+        headers
+      end
+    
+          def remember_me!
+        self.remember_token ||= self.class.remember_token if respond_to?(:remember_token)
+        self.remember_created_at ||= Time.now.utc
+        save(validate: false) if self.changed?
+      end
+    
+        def resource_params
+      params.require(:user).permit(
+        :unconfirmed_email
+      )
+    end
+  end
+end
+
+    
+            redirect_to admin_report_path(@report), notice: I18n.t('admin.report_notes.created_msg')
+      else
+        @report_notes = @report.notes.latest
+        @report_history = @report.history
+        @form = Form::StatusBatch.new
+    
+      def verify_payload?
+    payload.present? && VerifySalmonService.new.call(payload)
   end
     
-          expect(@scheduler.scheduler_agent_jobs.map(&:scheduler_agent)).to eq([@agent2])
-    end
+        @web_subscription = ::Web::PushSubscription.create!(
+      endpoint: subscription_params[:endpoint],
+      key_p256dh: subscription_params[:keys][:p256dh],
+      key_auth: subscription_params[:keys][:auth],
+      data: data_params,
+      user_id: current_user.id,
+      access_token_id: doorkeeper_token.id
+    )
     
-        it 'should work with nested hashes' do
-      @agent.options['very'] = {'nested' => '$.value'}
-      LiquidMigrator.convert_all_agent_options(@agent)
-      expect(@agent.reload.options).to eq({'auth_token' => 'token', 'color' => 'yellow', 'very' => {'nested' => '{{value}}'}, 'notify' => false, 'room_name' => 'test', 'username' => '{{username}}', 'message' => '{{message}}'})
-    end
+      before_action :require_user!
     
-        it 'cleans up old logs when there are more than log_length' do
-      stub(AgentLog).log_length { 4 }
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 1')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 2')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 3')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 4')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 4')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 1')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 5')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 5')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 2')
-      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 6')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 6')
-      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 3')
-    end
+      Devise.omniauth_configs.each_key do |provider|
+    provides_callback_for provider
+  end
     
-            routes.each do |module_name, actions|
-          [:path, :url].each do |path_or_url|
-            actions.each do |action|
-              action = action ? '#{action}_' : ''
-              method = :'#{action}#{module_name}_#{path_or_url}'
+          # Given a callable that provides a value, wrap the callable with another
+      # object that responds to `call`. This new object will perform validation
+      # and then return the original callable's value.
+      #
+      # If the callable is a `Question`, the object returned by this method will
+      # also be a `Question` (a `ValidatedQuestion`, to be precise). This
+      # ensures that `is_a?(Question)` remains true even after the validation
+      # wrapper is applied. This is needed so that `Configuration#is_question?`
+      # works as expected.
+      #
+      def assert_valid_later(key, callable)
+        validation_callback = lambda do
+          value = callable.call
+          assert_valid_now(key, value)
+          value
+        end
     
-          # Set up a subject doing an I18n lookup. At first, it attempts to set a subject
-      # based on the current mapping:
-      #
-      #   en:
-      #     devise:
-      #       mailer:
-      #         confirmation_instructions:
-      #           user_subject: '...'
-      #
-      # If one does not exist, it fallbacks to ActionMailer default:
-      #
-      #   en:
-      #     devise:
-      #       mailer:
-      #         confirmation_instructions:
-      #           subject: '...'
-      #
-      def subject_for(key)
-        I18n.t(:'#{devise_mapping.name}_subject', scope: [:devise, :mailer, key],
-          default: [:subject, key.to_s.humanize])
+                it 'detects closing brace on separate line from last element' do
+              inspect_source(source)
+    
+            expect(new_source).to eq(['#{prefix}#{open}#{a},',
+                                  '#{b}#{close}',
+                                  suffix].join($RS))
       end
     end
   end
 end
 
     
-    load './tasks/bower.rake'
-    
-        def configure_sass
-      require 'sass'
-    
-    require 'open-uri'
-require 'json'
-require 'strscan'
-require 'forwardable'
-require 'term/ansicolor'
-require 'fileutils'
+          # Returns the delta between this pair's key and the argument pair's.
+      #
+      # @note Keys on the same line always return a delta of 0
+      # @note Keyword splats always return a delta of 0 for right alignment
+      #
+      # @param [Symbol] alignment whether to check the left or right side
+      # @return [Integer] the delta between the two keys
+      def key_delta(other, alignment = :left)
+        HashElementDelta.new(self, other).key_delta(alignment)
+      end
