@@ -1,103 +1,209 @@
 
         
-        public:
-    explicit TransactionDescDialog(const QModelIndex &idx, QWidget *parent = 0);
-    ~TransactionDescDialog();
+        #ifndef CAROTENE_TYPES_HPP
+#define CAROTENE_TYPES_HPP
     
-    static bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
+    void add(const Size2D &size,
+         const s32 * src0Base, ptrdiff_t src0Stride,
+         const s32 * src1Base, ptrdiff_t src1Stride,
+         s32 *dstBase, ptrdiff_t dstStride,
+         CONVERT_POLICY policy)
 {
-    if (s1.size() != s2.size()) return false;
-    for (size_t i = 0; i < s1.size(); ++i) {
-        char c1 = s1[i];
-        if (c1 >= 'A' && c1 <= 'Z') c1 -= ('A' - 'a');
-        char c2 = s2[i];
-        if (c2 >= 'A' && c2 <= 'Z') c2 -= ('A' - 'a');
-        if (c1 != c2) return false;
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+        if (policy == CONVERT_POLICY_SATURATE)
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddSaturate<s32, s64>());
     }
-    return true;
+    else
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddWrap<s32, s64>());
+    }
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)policy;
+#endif
 }
     
-        BOOST_CHECK(v.setBool(false));
-    BOOST_CHECK_EQUAL(v.isBool(), true);
-    BOOST_CHECK_EQUAL(v.isTrue(), false);
-    BOOST_CHECK_EQUAL(v.isFalse(), true);
-    BOOST_CHECK_EQUAL(v.getBool(), false);
+            const f32* ln0 = idx_rm1 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rm1) : tmp;
+        const f32* ln1 = internal::getRowPtr(srcBase, srcStride, i);
+        const f32* ln2 = idx_rp1 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rp1) : tmp;
     
-            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
+                int32x4_t normh = vmovl_s16(vget_high_s16(norm));
+            int32x4_t norml = vmovl_s16(vget_low_s16(norm));
     
-    static void FrameRender(ImGui_ImplVulkanH_WindowData* wd)
-{
-	VkResult err;
-    }
-    
-                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
-            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
-    
-        // Main loop
-    MSG msg;
-    ZeroMemory(&msg, sizeof(msg));
-    while (msg.message != WM_QUIT)
-    {
-        // Poll and handle messages (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
+    #ifndef __ANDROID__
+        for (; sj < roiw32; sj += 32, syj += 64, dj += 128)
         {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-            continue;
-        }
+            internal::prefetch(srcy + syj);
+            internal::prefetch(srcu + sj);
+            internal::prefetch(srcv + sj);
     }
     
-    int main(int, char**)
+    namespace CAROTENE_NS {
+    }
+    
+    
+    {
+    {}}
+    
+    s32 countNonZero(const Size2D &_size,
+                 const s32 * srcBase, ptrdiff_t srcStride)
 {
-    // Create application window
-    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
-    RegisterClassEx(&wc);
-    HWND hwnd = CreateWindow(_T('ImGui Example'), _T('Dear ImGui DirectX12 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    Size2D size(_size);
+    if (srcStride == (ptrdiff_t)(size.width))
+    {
+        size.width *= size.height;
+        size.height = 1;
+    }
+    size_t roiw4 = size.width & ~3u;
+    s32 result = 0;
+    for(size_t k = 0; k < size.height; ++k)
+    {
+        const u32* src = (const u32*)internal::getRowPtr( srcBase,  srcStride, k);
+        u32 i = 0;
+    }
     }
     
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
+                    int8x16_t x0 = vreinterpretq_s8_u8(vsubq_u8(vld1q_u8(ptr + pixel[0]), delta));
+                int8x16_t x1 = vreinterpretq_s8_u8(vsubq_u8(vld1q_u8(ptr + pixel[4]), delta));
+                int8x16_t x2 = vreinterpretq_s8_u8(vsubq_u8(vld1q_u8(ptr + pixel[8]), delta));
+                int8x16_t x3 = vreinterpretq_s8_u8(vsubq_u8(vld1q_u8(ptr + pixel[12]), delta));
     
-    Benchmark* Benchmark::ThreadRange(int min_threads, int max_threads) {
-  CHECK_GT(min_threads, 0);
-  CHECK_GE(max_threads, min_threads);
+                // make extrapolation for the first elements
+            if (!x)
+            {
+                // make border
+                if (border == BORDER_MODE_CONSTANT)
+                    tcurr = v_border_x4;
+                else if (border == BORDER_MODE_REPLICATE)
+                    tcurr = vdupq_n_u16(vgetq_lane_u16(tnext, 0));
     }
     
-      int32_t result = default_value;
-  if (!ParseInt32(std::string('Environment variable ') + env_var, string_value,
-                  &result)) {
-    std::cout << 'The default value ' << default_value << ' is used.\n';
-    return default_value;
+    // caclulate sqrt value
+    
+                t0 = vsubq_s16(vqaddq_s16(t0, t2), tc);
+            tc = tcnext;
+    
+      /// @brief Compute the sum of absolute values (L1 norm) of the data.
+  Dtype asum_data() const;
+  /// @brief Compute the sum of absolute values (L1 norm) of the diff.
+  Dtype asum_diff() const;
+  /// @brief Compute the sum of squares (L2 norm squared) of the data.
+  Dtype sumsq_data() const;
+  /// @brief Compute the sum of squares (L2 norm squared) of the diff.
+  Dtype sumsq_diff() const;
+    
+    
+    {}  // namespace caffe
+    
+    
+    {  Blob<Dtype> diff_;  // cached for backward pass
+  Blob<Dtype> dist_sq_;  // cached for backward pass
+  Blob<Dtype> diff_sq_;  // tmp storage for gpu forward pass
+  Blob<Dtype> summer_vec_;  // tmp storage for gpu forward pass
+};
+    
+      // algorithms for forward and backwards convolutions
+  cudnnConvolutionFwdAlgo_t *fwd_algo_;
+  cudnnConvolutionBwdFilterAlgo_t *bwd_filter_algo_;
+  cudnnConvolutionBwdDataAlgo_t *bwd_data_algo_;
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+      // Gets a VC object identified by its ID.
+  static ParamContent* GetParamContentById(int id);
+    
+    
+    {  // Do sanity checks and minor fixes on best_choice.
+  if (word->best_choice->length() > word_length) {
+    word->best_choice->make_bad();  // should never happen
+    tprintf('recog_word: Discarded long string \'%s\''
+            ' (%d characters vs %d blobs)\n',
+            word->best_choice->unichar_string().string(),
+            word->best_choice->length(), word_length);
+    tprintf('Word is at:');
+    word->word->bounding_box().print();
   }
+  if (word->best_choice->length() < word_length) {
+    UNICHAR_ID space_id = unicharset.unichar_to_id(' ');
+    while (word->best_choice->length() < word_length) {
+      word->best_choice->append_unichar_id(space_id, 1, 0.0,
+                                           word->best_choice->certainty());
+    }
+  }
+}
     
-    #endif  // COMPLEXITY_H_
-
+      /// Common initialization shared between SetImage methods.
+  virtual void Init();
     
-      const double real_time = result.GetAdjustedRealTime();
-  const double cpu_time = result.GetAdjustedCPUTime();
+    // Inserts a new box before the given index.
+// Recomputes the bounding box.
+void BoxWord::InsertBox(int index, const TBOX& box) {
+  if (index < length_)
+    boxes_.insert(box, index);
+  else
+    boxes_.push_back(box);
+  length_ = boxes_.size();
+  ComputeBoundingBox();
+}
     
-      // FIXME: Add locking to output.
-  template <class Tp>
-  friend LogType& operator<<(LogType&, Tp const&);
-  friend LogType& operator<<(LogType&, EndLType*);
+    // To write value-parameterized tests, first you should define a fixture
+// class. It is usually derived from testing::TestWithParam<T> (see below for
+// another inheritance scheme that's sometimes useful in more complicated
+// class hierarchies), where the type of your parameter values.
+// TestWithParam<T> is itself derived from testing::Test. T can be any
+// copyable type. If it's a raw pointer, you are responsible for managing the
+// lifespan of the pointed values.
     
-      Out << LocalDateTimeString() << '\n';
+    
+    {  // The name of the source file where the test part took place, or
+  // '' if the source file is unknown.
+  std::string file_name_;
+  // The line in the source file where the test part took place, or -1
+  // if the line number is unknown.
+  int line_number_;
+  std::string summary_;  // The test failure summary.
+  std::string message_;  // The test failure message.
+};
+    
+      // Returns a copy of the FilePath with the directory part removed.
+  // Example: FilePath('path/to/file').RemoveDirectoryName() returns
+  // FilePath('file'). If there is no directory part ('just_a_file'), it returns
+  // the FilePath unmodified. If there is no file part ('just_a_dir/') it
+  // returns an empty FilePath ('').
+  // On Windows platform, '\' is the path separator, otherwise it is '/'.
+  FilePath RemoveDirectoryName() const;
+    
+      CartesianProductGenerator5(const ParamGenerator<T1>& g1,
+      const ParamGenerator<T2>& g2, const ParamGenerator<T3>& g3,
+      const ParamGenerator<T4>& g4, const ParamGenerator<T5>& g5)
+      : g1_(g1), g2_(g2), g3_(g3), g4_(g4), g5_(g5) {}
+  virtual ~CartesianProductGenerator5() {}
+    
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5>
+struct Templates5 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates4<T2, T3, T4, T5> Tail;
+};
