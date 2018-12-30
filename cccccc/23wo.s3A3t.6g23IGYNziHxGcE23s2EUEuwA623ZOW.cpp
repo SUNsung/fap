@@ -1,307 +1,516 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    #include 'tensorflow/c/c_api.h'
-#include 'tensorflow/core/lib/core/stringpiece.h'
-#include 'tensorflow/core/platform/macros.h'
-#include 'tensorflow/core/platform/types.h'
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    ChannelArguments::~ChannelArguments() {
-  grpc_core::ExecCtx exec_ctx;
-  for (auto it = args_.begin(); it != args_.end(); ++it) {
-    if (it->type == GRPC_ARG_POINTER) {
-      it->value.pointer.vtable->destroy(it->value.pointer.p);
+            f32 alpha, beta, gamma;
+    float32x4_t valpha, vbeta, vgamma;
+    wAdd(f32 _alpha, f32 _beta, f32 _gamma):
+        alpha(_alpha), beta(_beta), gamma(_gamma)
+    {
+        valpha = vdupq_n_f32(_alpha);
+        vbeta = vdupq_n_f32(_beta);
+        vgamma = vdupq_n_f32(_gamma + 0.5);
     }
+    
+    #define CONTDST2 srcStride == dst0Stride && \
+                 srcStride == dst1Stride &&
+#define CONTDST3 srcStride == dst0Stride && \
+                 srcStride == dst1Stride && \
+                 srcStride == dst2Stride &&
+#define CONTDST4 srcStride == dst0Stride && \
+                 srcStride == dst1Stride && \
+                 srcStride == dst2Stride && \
+                 srcStride == dst3Stride &&
+    
+    void combineUYVY(const Size2D &size,
+                 const u8 * srcyBase, ptrdiff_t srcyStride,
+                 const u8 * srcuBase, ptrdiff_t srcuStride,
+                 const u8 * srcvBase, ptrdiff_t srcvStride,
+                 u8 * dstBase, ptrdiff_t dstStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+#ifndef __ANDROID__
+    size_t roiw32 = size.width >= 31 ? size.width - 31 : 0;
+#endif
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
+    }
+    
+             uint32x4_t vline_u32_lo = vmovl_u16(vget_low_u16(vline_u16));
+         uint32x4_t vline_u32_hi = vmovl_u16(vget_high_u16(vline_u16));
+    
+    
+    {                v_dst1 = vmlal_n_s16(v_dst1, vget_high_s16(t0_16s), kernelBase[8]);
+                v_dst1 = vmlal_n_s16(v_dst1, vget_high_s16(t1_16s), kernelBase[7]);
+                v_dst1 = vmlal_n_s16(v_dst1, vget_high_s16(t2_16s), kernelBase[6]);
+            }
+    
+                if(x) {
+                tcurr = tnext;
+            }
+            tnext = vsubq_s16(vreinterpretq_s16_u16(vaddl_u8(x0, x2)),
+                              vreinterpretq_s16_u16(vshll_n_u8(x1, 2)));
+    
+    bool AuthPropertyIterator::operator!=(const AuthPropertyIterator& rhs) const {
+  return !operator==(rhs);
+}
+    
+    void CensusClientCallData::OnDoneRecvMessageCb(void* user_data,
+                                               grpc_error* error) {
+  grpc_call_element* elem = reinterpret_cast<grpc_call_element*>(user_data);
+  CensusClientCallData* calld =
+      reinterpret_cast<CensusClientCallData*>(elem->call_data);
+  CensusChannelData* channeld =
+      reinterpret_cast<CensusChannelData*>(elem->channel_data);
+  GPR_ASSERT(calld != nullptr);
+  GPR_ASSERT(channeld != nullptr);
+  // Stream messages are no longer valid after receiving trailing metadata.
+  if ((*calld->recv_message_) != nullptr) {
+    calld->recv_message_count_++;
   }
+  GRPC_CLOSURE_RUN(calld->initial_on_done_recv_message_, GRPC_ERROR_REF(error));
 }
     
-    grpc_error* CensusClientCallData::Init(grpc_call_element* elem,
-                                       const grpc_call_element_args* args) {
-  path_ = grpc_slice_ref_internal(args->path);
-  start_time_ = absl::Now();
-  method_ = GetMethod(&path_);
-  qualified_method_ = absl::StrCat('Sent.', method_);
-  GRPC_CLOSURE_INIT(&on_done_recv_message_, OnDoneRecvMessageCb, elem,
-                    grpc_schedule_on_exec_ctx);
-  GRPC_CLOSURE_INIT(&on_done_recv_trailing_metadata_,
-                    OnDoneRecvTrailingMetadataCb, elem,
-                    grpc_schedule_on_exec_ctx);
-  return GRPC_ERROR_NONE;
-}
+    // Returns a string representation of the StatusCode enum.
+absl::string_view StatusCodeToString(grpc_status_code code);
     
-    MeasureDouble RpcServerServerLatency() {
+    // Server
+MeasureDouble RpcServerSentBytesPerRpc() {
   static const auto measure = MeasureDouble::Register(
-      kRpcServerServerLatencyMeasureName,
-      'Time between first byte of request received to last byte of response '
-      'sent, or terminal error',
-      kUnitMilliseconds);
+      kRpcServerSentBytesPerRpcMeasureName,
+      'Total bytes sent across all messages per RPC', kUnitBytes);
   return measure;
 }
     
     
-    {}  // namespace grpc
-    
-    #ifndef MXNET_RTC_H_
-#define MXNET_RTC_H_
-#include './base.h'
-#if MXNET_USE_CUDA && MXNET_ENABLE_CUDA_RTC
-#include <nvrtc.h>
-#include <cuda.h>
-    
-    template<>
-void SetDataGradToBlob<mshadow::gpu, double>(caffeMemoryTypes memType,
-                            std::vector<::caffe::Blob<double>*>::iterator blob,
-                            std::vector<TBlob>::const_iterator itr) {
-  double *data_ptr = reinterpret_cast<double*>((*itr).dptr_);
-  if (memType == Data)
-    (*blob)->set_gpu_data(data_ptr);
-  else
-    MXCAFFEBLOB(*blob, double)->set_gpu_diff(data_ptr);
-}
-    
-    MXNET_REGISTER_IO_ITER(CaffeDataIter)
-.describe('Create MxNet iterator for a Caffe data layer.')
-.add_arguments(CaffeDataParam::__FIELDS__())
-.add_arguments(PrefetcherParam::__FIELDS__())
-.set_body([]() {
-    return new CaffeDataIterWrapper();
-});
-    
-    // DO_BIND_DISPATCH comes from static_operator_common.h
-Operator *CaffeLossProp::CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
-                                     std::vector<int> *in_type) const {
-  std::vector<int> out_type, aux_type;
-  std::vector<TShape> out_shape, aux_shape;
-  out_type.resize(this->ListOutputs().size());
-  out_shape.resize(this->ListOutputs().size());
-  aux_type.resize(this->ListAuxiliaryStates().size());
-  aux_shape.resize(this->ListAuxiliaryStates().size());
-  CHECK(InferType(in_type, &out_type, &aux_type));
-  CHECK(InferShape(in_shape, &out_shape, &aux_shape));
-  DO_BIND_DISPATCH(CreateOp, param_, (*in_type)[0]);
-}
-    
-      virtual void Forward(const OpContext &ctx,
-                       const std::vector<TBlob> &in_data,
-                       const std::vector<OpReqType> &req,
-                       const std::vector<TBlob> &out_data,
-                       const std::vector<TBlob> &aux_args) {
-    // Set mode before forward
-    caffe::CaffeMode::SetMode<xpu>();
-    using ::caffe::Blob;
-    using std::vector;
-    using namespace mshadow;
-    using namespace mshadow::expr;
-    for (uint32_t i = 0; i < req.size(); ++i)
-      CHECK_EQ(req[i], kWriteTo);
-    int expected_num_data = param_.num_weight + param_.num_data;
-    CHECK_EQ(in_data.size(), expected_num_data);
-    CHECK_EQ(out_data.size(), param_.num_out);
+    {    size_t pos = kVersionIdSize;
+    while (pos < buf.size()) {
+      size_t bytes_read =
+          ParseField(absl::string_view(&buf[pos], buf.size() - pos), tc);
+      if (bytes_read == 0) {
+        break;
+      } else {
+        pos += bytes_read;
+      }
     }
-    
-    bool get_png_size(const unsigned char* data, mx_uint data_size, mx_uint *width, mx_uint *height) {
-  if (data[0] == 0x89 && data[1] == 0x50 && data[2] ==0x4E && data[3] == 0x47) {
-    unsigned char const* p = data + 16;
-    *width = ((p[0]*256 + p[1])*256 + p[2])*256 + p[3];
-    p += 4;
-    *height = ((p[0]*256 + p[1])*256 + p[2])*256 + p[3];
-    return true;
-  } else {
-    return false;
+    return pos;
   }
-}
     
-    Graph DetectInplaceAddTo(Graph g) {
-  nnvm::StorageVector storage_id =
-      g.MoveCopyAttr<nnvm::StorageVector>('storage_id');
-  std::vector<int> storage_inplace_index =
-      g.MoveCopyAttr<std::vector<int> >('storage_inplace_index');
-  static const Op* ewise_plus_op = Op::Get('_grad_add');
-  auto& idx = g.indexed_graph();
-  // reference cont.
-  std::vector<int> ref_count(idx.num_node_entries(), 0);
-  std::vector<int> addto_entry(idx.num_node_entries(), 0);
-  std::vector<int> skip_plus_node(idx.num_nodes(), 0);
-    }
+    
+    {}  // namespace
     
     
     {
-    {}  // namespace io
-}  // namespace mxnet
-
-    
-    
-    {}  // namespace detail
-    
-      /**
-   * \fn  static Predictor* Predictor::Create(std::string name);
-   *
-   * \brief Creates a new Predictor*.
-   *
-   */
-    
-    #include <xgboost/logging.h>
-#include <cctype>
-#include <cstdio>
-#include <string>
-#include './io.h'
-    
-    // logistic loss, but predict un-transformed margin
-struct LogisticRaw : public LogisticRegression {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    predt = common::Sigmoid(predt);
-    return predt - label;
+    {      if (top_size > DATA) {
+        if (param_.flat) {
+          batch_data_ = TBlob(nullptr, mshadow::Shape2(batch_size_,
+                                                       channels_ * width_ * height_),
+                              cpu::kDevCPU, type_flag_);
+        } else {
+          batch_data_ = TBlob(nullptr, mxnet::TShape(top_[DATA]->shape().begin(),
+                                                     top_[DATA]->shape().end()),
+                              cpu::kDevCPU, type_flag_);
+        }
+      }
+      out_.data.clear();
+      if (top_size > LABEL) {
+          batch_label_ = TBlob(nullptr, mxnet::TShape(top_[LABEL]->shape().begin(),
+                                                      top_[LABEL]->shape().end()),
+                               cpu::kDevCPU, type_flag_);
+      }
+      out_.batch_size = batch_size_;
+    }
   }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    const float eps = 1e-16f;
-    predt = common::Sigmoid(predt);
-    return fmaxf(predt * (1.0f - predt), eps);
-  }
-  template <typename T>
-    static T PredTransform(T x) { return x; }
-  template <typename T>
-    static T FirstOrderGradient(T predt, T label) {
-    predt = common::Sigmoid(predt);
-    return predt - label;
-  }
-  template <typename T>
-    static T SecondOrderGradient(T predt, T label) {
-    const T eps = T(1e-16f);
-    predt = common::Sigmoid(predt);
-    return std::max(predt * (T(1.0f) - predt), eps);
-  }
-  static const char* DefaultEvalMetric() { return 'auc'; }
-};
-    
-    SEXP XGBoosterUpdateOneIter_R(SEXP handle, SEXP iter, SEXP dtrain) {
-  R_API_BEGIN();
-  CHECK_CALL(XGBoosterUpdateOneIter(R_ExternalPtrAddr(handle),
-                                  asInteger(iter),
-                                  R_ExternalPtrAddr(dtrain)));
-  R_API_END();
-  return R_NilValue;
-}
-    
-      virtual bst_float ComputeSplitScore(bst_uint nodeid,
-                                      bst_uint featureid,
-                                      const GradStats& left_stats,
-                                      const GradStats& right_stats) const;
     
     /*!
- * \brief Quantile sketch use WQSummary
+ *  Copyright (c) 2016 by Contributors
+ * \file cv_api.h
+ * \brief C API for opencv
+ * \author Junyuan Xie
+ */
+#include <dmlc/base.h>
+#include <mxnet/base.h>
+#include <mxnet/ndarray.h>
+#include <opencv2/opencv.hpp>
+#include 'cv_api.h'
+#include '../../src/c_api/c_api_common.h'
+    
+    #include <mxnet/io.h>
+#include <mxnet/base.h>
+#include <mxnet/tensor_blob.h>
+#include <dmlc/base.h>
+#include <mshadow/tensor.h>
+#include <vector>
+#include <string>
+    
+      # Contents of libsvm file ``label.t``
+  1.0
+  -2.0 0:0.125
+  -3.0 2:1.2
+  4 1:1.0 2:-1.2
+    
+      /*!
+   * \brief determines whether updater has enough knowledge about a given dataset
+   *        to quickly update prediction cache its training data and performs the
+   *        update if possible.
+   * \param data: data matrix
+   * \param out_preds: prediction cache to be updated
+   * \return boolean indicating whether updater has capability to update
+   *         the prediction cache. If true, the prediction cache will have been
+   *         updated by the time this function returns.
+   */
+  virtual bool UpdatePredictionCache(const DMatrix* data,
+                                     HostDeviceVector<bst_float>* out_preds) {
+    return false;
+  }
+    
+    /*! \brief namespace of base64 decoding and encoding table */
+namespace base64 {
+const char DecodeTable[] = {
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  62,  // '+'
+  0, 0, 0,
+  63,  // '/'
+  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
+  0, 0, 0, 0, 0, 0, 0,
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
+  0, 0, 0, 0, 0, 0,
+  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
+  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
+};
+static const char EncodeTable[] =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+}  // namespace base64
+/*! \brief the stream that reads from base64, note we take from file pointers */
+class Base64InStream: public dmlc::Stream {
+ public:
+  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
+    reader_.set_stream(fs);
+    num_prev = 0; tmp_ch = 0;
+  }
+  /*!
+   * \brief initialize the stream position to beginning of next base64 stream
+   * call this function before actually start read
+   */
+  inline void InitPosition(void) {
+    // get a character
+    do {
+      tmp_ch = reader_.GetChar();
+    } while (isspace(tmp_ch));
+  }
+  /*! \brief whether current position is end of a base64 stream */
+  inline bool IsEOF(void) const {
+    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
+  }
+  virtual size_t Read(void *ptr, size_t size) {
+    using base64::DecodeTable;
+    if (size == 0) return 0;
+    // use tlen to record left size
+    size_t tlen = size;
+    unsigned char *cptr = static_cast<unsigned char*>(ptr);
+    // if anything left, load from previous buffered result
+    if (num_prev != 0) {
+      if (num_prev == 2) {
+        if (tlen >= 2) {
+          *cptr++ = buf_prev[0];
+          *cptr++ = buf_prev[1];
+          tlen -= 2;
+          num_prev = 0;
+        } else {
+          // assert tlen == 1
+          *cptr++ = buf_prev[0]; --tlen;
+          buf_prev[0] = buf_prev[1];
+          num_prev = 1;
+        }
+      } else {
+        // assert num_prev == 1
+        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
+      }
+    }
+    if (tlen == 0) return size;
+    int nvalue;
+    // note: everything goes with 4 bytes in Base64
+    // so we process 4 bytes a unit
+    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
+      // first byte
+      nvalue = DecodeTable[tmp_ch] << 18;
+      {
+        // second byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
+        nvalue |= DecodeTable[tmp_ch] << 12;
+        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
+        }
+      {
+        // third byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
+        // handle termination
+        if (tmp_ch == '=') {
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == '=') << 'invalid base64 format';
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == EOF || isspace(tmp_ch))
+              << 'invalid base64 format';
+          break;
+        }
+        nvalue |= DecodeTable[tmp_ch] << 6;
+        if (tlen) {
+          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
+        } else {
+          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
+        }
+      }
+      {
+        // fourth byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
+            << 'invalid base64 format';
+        if (tmp_ch == '=') {
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == EOF || isspace(tmp_ch))
+              << 'invalid base64 format';
+          break;
+        }
+        nvalue |= DecodeTable[tmp_ch];
+        if (tlen) {
+          *cptr++ = nvalue & 0xFF; --tlen;
+        } else {
+          buf_prev[num_prev ++] = nvalue & 0xFF;
+        }
+      }
+      // get next char
+      tmp_ch = reader_.GetChar();
+    }
+    if (kStrictCheck) {
+      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
+    }
+    return size - tlen;
+  }
+  virtual void Write(const void *ptr, size_t size) {
+    LOG(FATAL) << 'Base64InStream do not support write';
+  }
+    }
+    
+      // Compute the Score for a node with the given stats
+  virtual bst_float ComputeScore(bst_uint parentid,
+                                const GradStats &stats,
+                                bst_float weight) const = 0;
+    
+    namespace xgboost {
+namespace common {
+/*!
+ * \brief experimental wsummary
  * \tparam DType type of data content
  * \tparam RType type of rank
  */
-template<typename DType, typename RType = unsigned>
-class WQuantileSketch :
-      public QuantileSketchTemplate<DType, RType, WQSummary<DType, RType> > {
-};
-    
-      virtual void PredictInteractionContributions(DMatrix* dmat,
-                           std::vector<bst_float>* out_contribs,
-                           unsigned ntree_limit, bool approximate) = 0;
-    
-      MergeOutputIterator merge_out_iter_;
-  // PinnedIteratorsManager used to pin input_ Iterator blocks while reading
-  // merge operands and then releasing them after consuming them.
-  PinnedIteratorsManager pinned_iters_mgr_;
-  std::string compaction_filter_value_;
-  InternalKey compaction_filter_skip_until_;
-  // 'level_ptrs' holds indices that remember which file of an associated
-  // level we were last checking during the last call to compaction->
-  // KeyNotExistsBeyondOutputLevel(). This allows future calls to the function
-  // to pick off where it left off since each subcompaction's key range is
-  // increasing so a later call to the function must be looking for a key that
-  // is in or beyond the last file checked during the previous call
-  std::vector<size_t> level_ptrs_;
-  CompactionIterationStats iter_stats_;
-    
-      uint64_t sleep_debt = 0;
-  uint64_t time_since_last_refill = 0;
-  if (last_refill_time_ != 0) {
-    if (last_refill_time_ > time_now) {
-      sleep_debt = last_refill_time_ - time_now;
+template<typename DType, typename RType>
+struct WQSummary {
+  /*! \brief an entry in the sketch summary */
+  struct Entry {
+    /*! \brief minimum rank */
+    RType rmin;
+    /*! \brief maximum rank */
+    RType rmax;
+    /*! \brief maximum weight */
+    RType wmin;
+    /*! \brief the value of data */
+    DType value;
+    // constructor
+    XGBOOST_DEVICE Entry() {}  // NOLINT
+    // constructor
+    XGBOOST_DEVICE Entry(RType rmin, RType rmax, RType wmin, DType value)
+        : rmin(rmin), rmax(rmax), wmin(wmin), value(value) {}
+    /*!
+     * \brief debug function,  check Valid
+     * \param eps the tolerate level for violating the relation
+     */
+    inline void CheckValid(RType eps = 0) const {
+      CHECK(rmin >= 0 && rmax >= 0 && wmin >= 0) << 'nonneg constraint';
+      CHECK(rmax- rmin - wmin > -eps) <<  'relation constraint: min/max';
+    }
+    /*! \return rmin estimation for v strictly bigger than value */
+    XGBOOST_DEVICE inline RType RMinNext() const {
+      return rmin + wmin;
+    }
+    /*! \return rmax estimation for v strictly smaller than value */
+    XGBOOST_DEVICE inline RType RMaxPrev() const {
+      return rmax - wmin;
+    }
+  };
+  /*! \brief input data queue before entering the summary */
+  struct Queue {
+    // entry in the queue
+    struct QEntry {
+      // value of the instance
+      DType value;
+      // weight of instance
+      RType weight;
+      // default constructor
+      QEntry() = default;
+      // constructor
+      QEntry(DType value, RType weight)
+          : value(value), weight(weight) {}
+      // comparator on value
+      inline bool operator<(const QEntry &b) const {
+        return value < b.value;
+      }
+    };
+    // the input queue
+    std::vector<QEntry> queue;
+    // end of the queue
+    size_t qtail;
+    // push data to the queue
+    inline void Push(DType x, RType w) {
+      if (qtail == 0 || queue[qtail - 1].value != x) {
+        queue[qtail++] = QEntry(x, w);
+      } else {
+        queue[qtail - 1].weight += w;
+      }
+    }
+    inline void MakeSummary(WQSummary *out) {
+      std::sort(queue.begin(), queue.begin() + qtail);
+      out->size = 0;
+      // start update sketch
+      RType wsum = 0;
+      // construct data with unique weights
+      for (size_t i = 0; i < qtail;) {
+        size_t j = i + 1;
+        RType w = queue[i].weight;
+        while (j < qtail && queue[j].value == queue[i].value) {
+          w += queue[j].weight; ++j;
+        }
+        out->data[out->size++] = Entry(wsum, wsum + w, w, queue[i].value);
+        wsum += w; i = j;
+      }
+    }
+  };
+  /*! \brief data field */
+  Entry *data;
+  /*! \brief number of elements in the summary */
+  size_t size;
+  // constructor
+  WQSummary(Entry *data, size_t size)
+      : data(data), size(size) {}
+  /*!
+   * \return the maximum error of the Summary
+   */
+  inline RType MaxError() const {
+    RType res = data[0].rmax - data[0].rmin - data[0].wmin;
+    for (size_t i = 1; i < size; ++i) {
+      res = std::max(data[i].RMaxPrev() - data[i - 1].RMinNext(), res);
+      res = std::max(data[i].rmax - data[i].rmin - data[i].wmin, res);
+    }
+    return res;
+  }
+  /*!
+   * \brief query qvalue, start from istart
+   * \param qvalue the value we query for
+   * \param istart starting position
+   */
+  inline Entry Query(DType qvalue, size_t &istart) const { // NOLINT(*)
+    while (istart < size && qvalue > data[istart].value) {
+      ++istart;
+    }
+    if (istart == size) {
+      RType rmax = data[size - 1].rmax;
+      return Entry(rmax, rmax, 0.0f, qvalue);
+    }
+    if (qvalue == data[istart].value) {
+      return data[istart];
     } else {
-      time_since_last_refill = time_now - last_refill_time_;
-      bytes_left_ +=
-          static_cast<uint64_t>(static_cast<double>(time_since_last_refill) /
-                                kMicrosPerSecond * delayed_write_rate_);
-      if (time_since_last_refill >= kRefillInterval &&
-          bytes_left_ > num_bytes) {
-        // If refill interval already passed and we have enough bytes
-        // return without extra sleeping.
-        last_refill_time_ = time_now;
-        bytes_left_ -= num_bytes;
-        return 0;
+      if (istart == 0) {
+        return Entry(0.0f, 0.0f, 0.0f, qvalue);
+      } else {
+        return Entry(data[istart - 1].RMinNext(),
+                     data[istart].RMaxPrev(),
+                     0.0f, qvalue);
       }
     }
   }
-    
-    #include 'rocksdb/env.h'
-#include 'util/testharness.h'
-    
-    
-    { private:
-  const std::string filename_;
-  int fd_;
-};
-    
-      // close DB
-  delete cf;
-  delete db;
-    
-    using namespace rocksdb;
-    
-      ////////////////////////////////////////////////////////
-  //
-  // 'Read Committed' (Monotonic Atomic Views) Example
-  //   --Using multiple Snapshots
-  //
-  ////////////////////////////////////////////////////////
-    
-    struct DumpOptions {
-  // Database that will be dumped
-  std::string db_path;
-  // File location that will contain dump output
-  std::string dump_location;
-  // Don't include db information header in the dump
-  bool anonymous = false;
-};
-    
-      // number of bytes that has been written.
-  uint64_t bytes_written;
-  // number of bytes that has been read.
-  uint64_t bytes_read;
-    
-      // Is cache storing uncompressed data ?
-  //
-  // True if the cache is configured to store uncompressed data else false
-  virtual bool IsCompressed() = 0;
-    
-    // Simple RAII wrapper class for Snapshot.
-// Constructing this object will create a snapshot.  Destructing will
-// release the snapshot.
-class ManagedSnapshot {
- public:
-  explicit ManagedSnapshot(DB* db);
+  /*! \return maximum rank in the summary */
+  inline RType MaxRank() const {
+    return data[size - 1].rmax;
+  }
+  /*!
+   * \brief copy content from src
+   * \param src source sketch
+   */
+  inline void CopyFrom(const WQSummary &src) {
+    size = src.size;
+    std::memcpy(data, src.data, sizeof(Entry) * size);
+  }
+  inline void MakeFromSorted(const Entry* entries, size_t n) {
+    size = 0;
+    for (size_t i = 0; i < n;) {
+      size_t j = i + 1;
+      // ignore repeated values
+      for (; j < n && entries[j].value == entries[i].value; ++j) {}
+      data[size++] = Entry(entries[i].rmin, entries[i].rmax, entries[i].wmin,
+                           entries[i].value);
+      i = j;
     }
+  }
+  /*!
+   * \brief debug function, validate whether the summary
+   *  run consistency check to check if it is a valid summary
+   * \param eps the tolerate error level, used when RType is floating point and
+   *        some inconsistency could occur due to rounding error
+   */
+  inline void CheckValid(RType eps) const {
+    for (size_t i = 0; i < size; ++i) {
+      data[i].CheckValid(eps);
+      if (i != 0) {
+        CHECK(data[i].rmin >= data[i - 1].rmin + data[i - 1].wmin) << 'rmin range constraint';
+        CHECK(data[i].rmax >= data[i - 1].rmax + data[i].wmin) << 'rmax range constraint';
+      }
+    }
+  }
+  /*!
+   * \brief set current summary to be pruned summary of src
+   *        assume data field is already allocated to be at least maxsize
+   * \param src source summary
+   * \param maxsize size we can afford in the pruned sketch
+   */
+    }
+    }
+    }
+    
+    #ifndef SKIP_RESERVE
+void BENCHFUN(reserve)(int iters, int size) {
+  auto const obj = randomObject<VECTOR::value_type>();
+  FOR_EACH_RANGE (i, 0, iters) {
+    VECTOR v(random(0U, 1U), obj);
+    v.reserve(size);
+  }
+}
+BENCHMARK_PARAM(BENCHFUN(reserve), 16)
+BENCHMARK_PARAM(BENCHFUN(reserve), 128)
+BENCHMARK_PARAM(BENCHFUN(reserve), 1024)
+#endif
+    
+      FunctionRef<int(int)> const cfref = lambda;
+  EXPECT_EQ(1023, cfref(5));
+  EXPECT_EQ(1029, cfref(6));
+  EXPECT_EQ(1036, cfref(7));
+    
+        KeepAlive copy() const {
+      return getKeepAliveToken(get());
+    }
+    
+    
+    {    return newlocal;
+  }
+    
+    template <template <typename> class Atom = std::atomic>
+struct counted_ptr_base {
+ protected:
+  static intrusive_shared_count<Atom>* getRef(void* pt) {
+    char* p = (char*)pt;
+    p -= sizeof(intrusive_shared_count<Atom>);
+    return (intrusive_shared_count<Atom>*)p;
+  }
+};
+    
+    
+    {} // namespace
