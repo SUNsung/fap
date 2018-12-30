@@ -1,117 +1,225 @@
 
         
-              # Converts the array to a comma-separated sentence where the last element is
-      # joined by the connector word. This is the html_safe-aware version of
-      # ActiveSupport's {Array#to_sentence}[http://api.rubyonrails.org/classes/Array.html#method-i-to_sentence].
+              # The minimum number of requests we want to keep available.
       #
-      def to_sentence(array, options = {})
-        options.assert_valid_keys(:words_connector, :two_words_connector, :last_word_connector, :locale)
+      # We don't use a value of 0 as multiple threads may be using the same
+      # token in parallel. This could result in all of them hitting the GitHub
+      # rate limit at once. The threshold is put in place to not hit the limit
+      # in most cases.
+      RATE_LIMIT_THRESHOLD = 50
     
-              def initialize(template_object, object_name, method_name, object,
-                         sanitized_attribute_name, text, value, input_html_options)
-            @template_object = template_object
-            @object_name = object_name
-            @method_name = method_name
-            @object = object
-            @sanitized_attribute_name = sanitized_attribute_name
-            @text = text
-            @value = value
-            @input_html_options = input_html_options
+          # project - An instance of `Project`.
+      # object - The object to look up or set a database ID for.
+      def initialize(project, object)
+        @project = project
+        @object = object
+      end
+    
+            Caching.set_includes?(already_imported_cache_key, id)
+      end
+    
+              hash = {
+            iid: issue.number,
+            title: issue.title,
+            description: issue.body,
+            milestone_number: issue.milestone&.number,
+            state: issue.state == 'open' ? :opened : :closed,
+            assignees: issue.assignees.map do |u|
+              Representation::User.from_api_response(u)
+            end,
+            label_names: issue.labels.map(&:name),
+            author: user,
+            created_at: issue.created_at,
+            updated_at: issue.updated_at,
+            pull_request: issue.pull_request ? true : false
+          }
+    
+      # Provides the uri of the redirection location.
+  #
+  # @return [URI] the uri of the redirection location.
+  # @return [nil] if the response hasn't a Location header or it isn't a valid uri.
+  def redirection
+    begin
+      URI(headers['Location'])
+    rescue ::URI::InvalidURIError
+      nil
+    end
+  end
+    
+        when IAX_TYPE_CONTROL
+      case stype
+      when IAX_CTRL_HANGUP
+        dprint('HANGUP')
+        self.client.send_ack(self)
+        self.state = :hangup
+    
+      #
+  # Move these into an IPMI stack or mixin at some point
+  #
+    
+              # Encodes the options field
+          #
+          # @return [OpenSSL::ASN1::BitString]
+          def encode_options
+            OpenSSL::ASN1::BitString.new([options].pack('N'))
           end
     
-                case options[:default]
-            when nil
-              Time.current
-            when Date, Time
-              options[:default]
-            else
-              default = options[:default].dup
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of a Kerberos AuthorizationData data
+        # definition.
+        class AuthorizationData < Element
+          # @!attribute elements
+          #   @return [Hash{Symbol => <Integer, String>}] The type of the authorization data
+          #   @option [Integer] :type
+          #   @option [String] :data
+          attr_accessor :elements
     
-              content = if block_given?
-            @template_object.capture(builder, &block)
-          elsif @content.present?
-            @content.to_s
-          else
-            render_component(builder)
+              def self.decode(input)
+            elem = self.new
+            elem.decode(input)
           end
     
-            def importer_class
-          LfsObjectImporter
-        end
+              # Decodes a Rex::Proto::Kerberos::Model::EncryptionKey from an String
+          #
+          # @param input [String] the input to decode from
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
     
-          def cache_key_iid
-        if object.respond_to?(:noteable_id)
-          object.noteable_id
-        elsif object.respond_to?(:iid)
-          object.iid
-        else
-          raise(
-            TypeError,
-            'Instances of #{object.class} are not supported'
-          )
-        end
-      end
+              # Encodes the req_body field
+          #
+          # @return [String]
+          def encode_req_body
+            req_body.encode
+          end
+    
+              # Decodes the nonce field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_nonce(input)
+            input.value[0].value.to_i
+          end
+    
+              # Rex::Proto::Kerberos::Model::KdcResponse encoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def encode
+            raise ::NotImplementedError, 'KdcResponse encoding not supported'
+          end
+    
+              # Decodes the stime field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_stime(input)
+            input.value[0].value
+          end
+    
+              # Decodes the key_type from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_type(input)
+            input.value[0].value.to_i
+          end
+    
+        def str_to_byte_pos(pos)
+      @s.string.slice(0, pos).bytesize
     end
   end
 end
-
     
-              new(hash)
-        end
+      # Send deprecation notices to registered listeners.
+  config.active_support.deprecation = :notify
     
-        it 'works for queued jobs' do
-      expect(status(job)).to eq('<span class='label label-warning'>queued</span>')
+      # Show full error reports and disable caching.
+  config.consider_all_requests_local       = true
+  config.action_controller.perform_caching = false
+    
+    module NavigationHelpers
+  def path_to(page_name)
+    case page_name
+    when /^person_photos page$/
+      person_photos_path(@me.person)
+    when /^the home(?: )?page$/
+      stream_path
+    when /^the mobile path$/
+      force_mobile_path
+    when /^the user applications page$/
+      api_openid_connect_user_applications_path
+    when /^the tag page for '([^\']*)'$/
+      tag_path(Regexp.last_match(1))
+    when /^its ([\w ]+) page$/
+      send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', @it)
+    when /^the mobile ([\w ]+) page$/
+      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', format: 'mobile')
+    when /^the ([\w ]+) page$/
+      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path')
+    when /^my edit profile page$/
+      edit_profile_path
+    when /^my profile page$/
+      person_path(@me.person)
+    when /^my acceptance form page$/
+      invite_code_path(InvitationCode.first)
+    when /^the requestors profile$/
+      person_path(Request.where(recipient_id: @me.person.id).first.sender)
+    when /^'([^\']*)''s page$/
+      p = User.find_by_email(Regexp.last_match(1)).person
+      {path:         person_path(p),
+       # '#diaspora_handle' on desktop, '.description' on mobile
+       special_elem: {selector: '#diaspora_handle, .description', text: p.diaspora_handle}
+      }
+    when /^'([^\']*)''s photos page$/
+      p = User.find_by_email(Regexp.last_match(1)).person
+      person_photos_path p
+    when /^my account settings page$/
+      edit_user_path
+    when /^forgot password page$/
+      new_user_password_path
+    when %r{^'(/.*)'}
+      Regexp.last_match(1)
+    else
+      raise 'Can't find mapping from \'#{page_name}\' to a path.'
     end
   end
     
-        it 'defauls foreground and background colors' do
-      scenario.tag_fg_color = nil
-      scenario.tag_bg_color = nil
-      expect(style_colors(scenario)).to eq('color:#FFFFFF;background-color:#5BC0DE')
+          it_behaves_like 'on a visible post'
     end
-  end
     
-          expect(exporter.as_json[:control_links]).to eq([{ :controller => guid_order(agent_list, :jane_rain_notifier_agent), :control_target => guid_order(agent_list, :jane_weather_agent) }])
+        # The environment of the caller of this environment's mixin or function.
+    # @return {Environment?}
+    def caller
+      @caller || (@parent && @parent.caller)
     end
-  end
     
-            # This is what is called on the class to actually execute it. Any
-        # subclasses should implement this method and do any option parsing
-        # and validation here.
-        def execute
-        end
-    
-            # Called after the configuration is finalized and loaded to validate
-        # this object.
-        #
-        # @param [Environment] env Vagrant::Environment object of the
-        #   environment that this configuration has been loaded into. This
-        #   gives you convenient access to things like the the root path
-        #   and so on.
-        # @param [ErrorRecorder] errors
-        def validate(env, errors)
-        end
+        # Set an option for specifying `Encoding.default_external`.
+    #
+    # @param opts [OptionParser]
+    def encoding_option(opts)
+      encoding_desc = 'Specify the default encoding for input files.'
+      opts.on('-E', '--default-encoding ENCODING', encoding_desc) do |encoding|
+        Encoding.default_external = encoding
       end
     end
-  end
-end
-
     
-              return [main_args, sub_command, sub_args]
-        end
+        def initialize(options)
+      @strictly_ordered_queues = !!options[:strict]
+      @queues = options[:queues].map { |q| 'queue:#{q}' }
+      if @strictly_ordered_queues
+        @queues = @queues.uniq
+        @queues << TIMEOUT
       end
     end
-  end
-end
-
     
-            # This contains all the registered host capabilities.
-        #
-        # @return [Hash<Symbol, Registry>]
-        attr_reader :host_capabilities
+        def self.job_hash_context(job_hash)
+      # If we're using a wrapper class, like ActiveJob, use the 'wrapped'
+      # attribute to expose the underlying thing.
+      klass = job_hash['wrapped'] || job_hash['class']
+      bid = job_hash['bid']
+      '#{klass} JID-#{job_hash['jid']}#{' BID-#{bid}' if bid}'
+    end
     
-    describe 'Kernel#taint' do
-  it 'returns self' do
-    o = Object.new
-    o.taint.should equal(o)
-  end
+        NAMED_SEGMENTS_PATTERN = /\/([^\/]*):([^\.:$\/]+)/
