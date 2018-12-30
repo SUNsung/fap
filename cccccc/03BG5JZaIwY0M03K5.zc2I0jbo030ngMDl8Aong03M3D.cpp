@@ -1,193 +1,322 @@
 
         
-        
-  // Note that if file_size is zero, the file has been deleted and
-  // should not be added to the manifest.
-  int level = 0;
-  if (s.ok() && meta.file_size > 0) {
-    const Slice min_user_key = meta.smallest.user_key();
-    const Slice max_user_key = meta.largest.user_key();
-    if (base != nullptr) {
-      level = base->PickLevelForMemTableOutput(min_user_key, max_user_key);
-    }
-    edit->AddFile(level, meta.number, meta.file_size,
-                  meta.smallest, meta.largest);
-  }
+        #include <string>
     
-    TEST(DBTest, ComparatorCheck) {
-  class NewComparator : public Comparator {
-   public:
-    virtual const char* Name() const { return 'leveldb.NewComparator'; }
-    virtual int Compare(const Slice& a, const Slice& b) const {
-      return BytewiseComparator()->Compare(a, b);
+    namespace remote {
     }
-    virtual void FindShortestSeparator(std::string* s, const Slice& l) const {
-      BytewiseComparator()->FindShortestSeparator(s, l);
-    }
-    virtual void FindShortSuccessor(std::string* key) const {
-      BytewiseComparator()->FindShortSuccessor(key);
-    }
-  };
-  NewComparator cmp;
-  Options new_options = CurrentOptions();
-  new_options.comparator = &cmp;
-  Status s = TryReopen(&new_options);
-  ASSERT_TRUE(!s.ok());
-  ASSERT_TRUE(s.ToString().find('comparator') != std::string::npos)
-      << s.ToString();
+    
+    std::string Clipboard::GetText() {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  base::string16 text;
+  clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
+  return base::UTF16ToUTF8(text);
 }
     
-    enum FileType {
-  kLogFile,
-  kDBLockFile,
-  kTableFile,
-  kDescriptorFile,
-  kCurrentFile,
-  kTempFile,
-  kInfoLogFile  // Either the current one, or an old one
+    EventListener::~EventListener() {
+  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
+    delete i->second;
+  }
+}
+    
+    
+    {  template<typename T> bool RemoveListener() {
+    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
+    if (i!=listerners_.end()) {
+      delete i->second;
+      listerners_.erase(i);
+      return true;
+    }
+    return false;
+  }
+private:
+  DISALLOW_COPY_AND_ASSIGN(EventListener);
 };
     
-    TEST(LogTest, UnexpectedLastType) {
-  Write('foo');
-  SetByte(6, kLastType);
-  FixChecksum(0, 3);
-  ASSERT_EQ('EOF', Read());
-  ASSERT_EQ(3, DroppedBytes());
-  ASSERT_EQ('OK', MatchError('missing start'));
-}
     
+bool MenuDelegate::GetAcceleratorForCommandId(
+      int command_id,
+      ui::Accelerator* accelerator) const {
+  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
+    }
     
-    {  SkipList<Key, Comparator>::Iterator iter(&list);
-  ASSERT_TRUE(!iter.Valid());
-  iter.SeekToFirst();
-  ASSERT_TRUE(!iter.Valid());
-  iter.Seek(100);
-  ASSERT_TRUE(!iter.Valid());
-  iter.SeekToLast();
-  ASSERT_TRUE(!iter.Valid());
-}
-    
-      std::string uploadHash =
-      (uploadFile.size() > FLAGS_read_max)
-          ? '-1'
-          : hashFromFile(HashType::HASH_TYPE_SHA256, uploadPath.string());
-  if (uploadHash == '-1') {
-    VLOG(1)
-        << 'Archive file size exceeds read max, skipping integrity computation';
+    // Popup menus may get squished if they open up too close to the bottom of the
+// screen. This function takes the size of the screen, the size of the menu,
+// an optional widget, the Y position of the mouse click, and adjusts the popup
+// menu's Y position to make it fit if it's possible to do so.
+// Returns the new Y position of the popup menu.
+int CalculateMenuYPosition(const GdkRectangle* screen_rect,
+                           const GtkRequisition* menu_req,
+                           GtkWidget* widget, const int y) {
+  CHECK(screen_rect);
+  CHECK(menu_req);
+  // If the menu would run off the bottom of the screen, and there is enough
+  // screen space upwards to accommodate the menu, then pop upwards. If there
+  // is a widget, then also move the anchor point to the top of the widget
+  // rather than the bottom.
+  const int screen_top = screen_rect->y;
+  const int screen_bottom = screen_rect->y + screen_rect->height;
+  const int menu_bottom = y + menu_req->height;
+  int alternate_y = y - menu_req->height;
+  if (widget) {
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    alternate_y -= allocation.height;
   }
-  updateCarveValue(carveGuid_, 'sha256', uploadHash);
+  if (menu_bottom >= screen_bottom && alternate_y >= screen_top)
+    return alternate_y;
+  return y;
+}
     
-    class CarverTests : public testing::Test {
+    void MenuItem::Call(const std::string& method,
+                    const base::ListValue& arguments,
+                    content::RenderFrameHost* rvh) {
+  if (method == 'SetLabel') {
+    std::string label;
+    arguments.GetString(0, &label);
+    SetLabel(label);
+  } else if (method == 'SetIcon') {
+    std::string icon;
+    arguments.GetString(0, &icon);
+    SetIcon(icon);
+  } else if (method == 'SetIconIsTemplate') {
+    bool isTemplate;
+    arguments.GetBoolean(0, &isTemplate);
+    SetIconIsTemplate(isTemplate);
+  } else if (method == 'SetTooltip') {
+    std::string tooltip;
+    arguments.GetString(0, &tooltip);
+    SetTooltip(tooltip);
+  } else if (method == 'SetEnabled') {
+    bool enabled = true;
+    arguments.GetBoolean(0, &enabled);
+    SetEnabled(enabled);
+  } else if (method == 'SetChecked') {
+    bool checked = false;
+    arguments.GetBoolean(0, &checked);
+    SetChecked(checked);
+  } else if (method == 'SetSubmenu') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    SetSubmenu(object_manager()->GetApiObject<Menu>(object_id));
+#if defined(OS_MACOSX)
+  } else if (method == 'SetKey') {
+    std::string key;
+    arguments.GetString(0, &key);
+    SetKey(key);
+  } else if (method == 'SetModifiers') {
+    std::string mod;
+    arguments.GetString(0, &mod);
+    SetModifiers(mod);
+#endif
+  } else {
+    NOTREACHED() << 'Invalid call to MenuItem method:' << method
+                 << ' arguments:' << arguments;
+  }
+}
+    
+    
+    {} // namespace
+    
+    class NwClipboardReadAvailableTypesFunction : public NWSyncExtensionFunction {
  public:
-  CarverTests() {
-    fs::create_directories(fs::temp_directory_path() / 'files_to_carve/');
-    writeTextFile(fs::temp_directory_path() / 'files_to_carve/secrets.txt',
-                  'This is a message I'd rather no one saw.');
-    writeTextFile(fs::temp_directory_path() / 'files_to_carve/evil.exe',
-                  'MZP\x00\x02\x00\x00\x00\x04\x00\x0f\x00\xff\xff');
-    }
+  NwClipboardReadAvailableTypesFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
     }
     
-      /// Update the set of decorators for a given source.
-  void updateDecorations(const std::string& source, const JSON& doc);
+    #include <vector>
     
-    namespace osquery {
+    extern void UNSCALE_BT_BASIS(btTransform &scaledBasis);
+#endif
+
+    
+    class RigidBodyBullet;
+class SpaceBullet;
+class btTypedConstraint;
+    
+    	virtual void processCollision(const btCollisionObjectWrapper *body0Wrap, const btCollisionObjectWrapper *body1Wrap, const btDispatcherInfo &dispatchInfo, btManifoldResult *resultOut);
+	virtual btScalar calculateTimeOfImpact(btCollisionObject *body0, btCollisionObject *body1, const btDispatcherInfo &dispatchInfo, btManifoldResult *resultOut);
+    
+    #include 'csg_gizmos.h'
+#include 'csg_shape.h'
+    
+    
+  bool ReadProtoFromTextContent(const std::string& text,
+                                ::google::protobuf::Message* proto) const {
+    bool success = google::protobuf::TextFormat::ParseFromString(text, proto);
+    return success;
+  }
+    
+        for (int i = 0; i < param_.num_data; ++i) {
+      TShape tshape = (*in_shape)[i];
+      if (tshape.ndim() == 0) return false;
+      auto blob_ptr = new Blob<float>();
+      blob_ptr->Reshape(caffe::TShape2Vector(tshape));
+      bot_blobs.push_back(blob_ptr);
     }
     
-    /// Root key to retrieve Kafka topic configurations.
-const std::string kKafkaTopicParserRootKey('kafka_topics');
+      Operator* CreateOperator(Context ctx) const override {
+    LOG(FATAL) << 'Not Implemented.';
+    return NULL;
+  }
     
-    
-    {REGISTER_INTERNAL(OptionsConfigParserPlugin, 'config_parser', 'options');
+    // DO_BIND_DISPATCH comes from static_operator_common.h
+Operator *CaffeOpProp::CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
+                                     std::vector<int> *in_type) const {
+  std::vector<int> out_type, aux_type;
+  std::vector<TShape> out_shape, aux_shape;
+  out_type.resize(this->ListOutputs().size());
+  out_shape.resize(this->ListOutputs().size());
+  aux_type.resize(this->ListAuxiliaryStates().size());
+  aux_shape.resize(this->ListAuxiliaryStates().size());
+  CHECK(InferType(in_type, &out_type, &aux_type));
+  CHECK(InferShape(in_shape, &out_shape, &aux_shape));
+  DO_BIND_DISPATCH(CreateOp, param_, (*in_type)[0]);
 }
-
     
-    int main(int argc, char **argv) {
-  ::testing::InitGoogleTest(&argc, argv);
-  int ret = RUN_ALL_TESTS();
-  return ret;
-}
-
-    
-      Byte t1(bytes + 3);
-  int32_t t = t1.get_byte(4, 4);
-    
-    double ObjectExtendedInfo60D::object_length(const std::uint8_t* bytes,
-                                            int32_t length) const {
-  Byte t0(bytes + 6);
-  int32_t x = t0.get_byte(0, 8);
-    }
-    
-    
-    {
-    {
-    {}  // namespace conti_radar
-}  // namespace drivers
-}  // namespace apollo
-
-    
-    namespace apollo {
-namespace planning {
-    }
-    }
-    
-    TEST(TestPiecewiseLinearConstraint, add_derivative_boundary) {
-  PiecewiseLinearConstraint constraint(10, 0.1);
-  std::vector<uint32_t> index_list;
-  std::vector<double> lower_bound;
-  std::vector<double> upper_bound;
-  for (uint32_t i = 0; i < 10; ++i) {
-    index_list.push_back(i);
-    lower_bound.push_back(1.0);
-    upper_bound.push_back(100.0);
-  }
-    }
-    
-    
-    {    auto ka2 = std::move(ka);
-    EXPECT_FALSE(ka);
-    EXPECT_TRUE(ka2);
-    EXPECT_EQ(&exec, ka2.get());
-    EXPECT_EQ(1, exec.refCount);
-  }
-    
-    #include <stdexcept>
-    
-      virtual uint8_t getNumPriorities() const {
-    return 1;
-  }
-    
-    TEST(Conv, timespecToStdChrono) {
-  struct timespec ts;
-    }
-    
-    /// Wrapper around the makeCompressionCounterHandler() extension point.
-class CompressionCounter {
+    /*!
+ * \brief Thread pool.
+ */
+class ThreadPool {
  public:
-  CompressionCounter() {}
-  CompressionCounter(
-      folly::io::CodecType codecType,
-      folly::StringPiece codecName,
-      folly::Optional<int> level,
-      CompressionCounterKey key,
-      CompressionCounterType counterType) {
-    initialize_ = [=]() {
-      return makeCompressionCounterHandler(
-          codecType, codecName, level, key, counterType);
-    };
-    DCHECK(!initialize_.hasAllocatedMemory());
-  }
+  /*! \brief Signal event upon destruction, even for exceptions (RAII) */
+  struct SetReadyOnDestroy {
+    explicit inline SetReadyOnDestroy(const std::shared_ptr<dmlc::ManualEvent>& event)
+      : event_(event) {
     }
-    
-    #include <zlib.h>
-    
-    
-    {      if (equiv == cpu) {
-        // we only want to count the equiv classes once, so we do it when
-        // we first encounter them
-        while (numCachesByLevel.size() <= level) {
-          numCachesByLevel.push_back(0);
-        }
-        numCachesByLevel[level]++;
+    inline ~SetReadyOnDestroy() {
+      if (event_) {
+        event_->signal();
       }
     }
+    std::shared_ptr<dmlc::ManualEvent>  event_;
+  };
+    }
+    
+    When `num_parts` and `part_index` are provided, the data is split into `num_parts` partitions,
+and the iterator only reads the `part_index`-th partition. However, the partitions are not
+guaranteed to be even.
+    
+      static bool isInitialized6() { return data6_.initialized; }
+    
+      // If you change the code to read more than the size of buf, then
+  // expand the buf size here.
+  array_wrapper<unsigned char, 255> buf;
+    
+      void setLocalNode(const std::shared_ptr<DHTNode>& localNode);
+    
+    class DownloadEngine;
+class Command;
+    
+    #include <memory>
+    
+    
+    {} // namespace aria2
+    
+    class DHTTokenTracker {
+private:
+  static const size_t SECRET_SIZE = 4;
+    }
+    
+    static void ParseFile(benchmark::State& state, const char* filename)
+{
+    while (state.KeepRunning())
+    {
+        state.PauseTiming();
+        auto* f = new std::ifstream(filename);
+        auto* j = new json();
+        state.ResumeTiming();
+    }
+    }
+    
+      // Run this benchmark once with 'args' as the extra arguments passed
+  // to the function.
+  // REQUIRES: The function passed to the constructor must accept arg1, arg2 ...
+  Benchmark* Args(const std::vector<int>& args);
+    
+    // Parses a string for an Int32 flag, in the form of
+// '--flag=value'.
+//
+// On success, stores the value of the flag in *value, and returns
+// true.  On failure, returns false without changing *value.
+bool ParseInt32Flag(const char* str, const char* flag, int32_t* value);
+    
+    void Increment(UserCounters *l, UserCounters const& r) {
+  // add counters present in both or just in *l
+  for (auto &c : *l) {
+    auto it = r.find(c.first);
+    if (it != r.end()) {
+      c.second.value = c.second + it->second;
+    }
+  }
+  // add counters present in r, but not in *l
+  for (auto const &tc : r) {
+    auto it = l->find(tc.first);
+    if (it == l->end()) {
+      (*l)[tc.first] = tc.second;
+    }
+  }
+}
+    
+      // Field with embedded double-quote characters must be doubled and the field
+  // delimited with double-quotes.
+  std::string name = run.benchmark_name;
+  ReplaceAll(&name, '\'', '\'\'');
+  Out << ''' << name << '\',';
+  if (run.error_occurred) {
+    Out << std::string(elements.size() - 3, ',');
+    Out << 'true,';
+    std::string msg = run.error_message;
+    ReplaceAll(&msg, '\'', '\'\'');
+    Out << ''' << msg << '\'\n';
+    return;
+  }
+    
+    typedef std::basic_ostream<char>&(EndLType)(std::basic_ostream<char>&);
+    
+    // Enable thread safety attributes only with clang.
+// The attributes can be safely erased when compiling with other compilers.
+#if defined(HAVE_THREAD_SAFETY_ATTRIBUTES)
+#define THREAD_ANNOTATION_ATTRIBUTE__(x) __attribute__((x))
+#else
+#define THREAD_ANNOTATION_ATTRIBUTE__(x)  // no-op
+#endif
+    
+    namespace benchmark {
+#ifdef BENCHMARK_OS_WINDOWS
+// Window's Sleep takes milliseconds argument.
+void SleepForMilliseconds(int milliseconds) { Sleep(milliseconds); }
+void SleepForSeconds(double seconds) {
+  SleepForMilliseconds(static_cast<int>(kNumMillisPerSecond * seconds));
+}
+#else   // BENCHMARK_OS_WINDOWS
+void SleepForMicroseconds(int microseconds) {
+  struct timespec sleep_time;
+  sleep_time.tv_sec = microseconds / kNumMicrosPerSecond;
+  sleep_time.tv_nsec = (microseconds % kNumMicrosPerSecond) * kNumNanosPerMicro;
+  while (nanosleep(&sleep_time, &sleep_time) != 0 && errno == EINTR)
+    ;  // Ignore signals and wait for the full interval to elapse.
+}
+    }
+    
+      x <<= 8;
+  x |= t;
+    
+    #include <string>
+#include <vector>
+    
+        double x = 0.0;
+    double y = 0.0;
+    double theta = 0.0;
+    double kappa = 0.0;
+    double v = 0.0;
+    double a = 0.0;
+    
+      const auto mat = kernel.kernel_matrix();
+  const auto offset = kernel.offset_matrix();
+    
+    
+    {
+    {}  // namespace planning
+}  // namespace apollo
