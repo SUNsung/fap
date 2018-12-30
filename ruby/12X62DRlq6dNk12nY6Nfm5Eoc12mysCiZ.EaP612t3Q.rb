@@ -1,37 +1,76 @@
 
         
-          </body>
-</html>
-HTML
+            s = mock('seed')
+    s.should_receive(:to_int).and_return 0
+    srand(s)
+  end
     
-    module Jekyll
-  module Commands
-    class Serve
-      # The LiveReload protocol requires the server to serve livereload.js over HTTP
-      # despite the fact that the protocol itself uses WebSockets.  This custom connection
-      # class addresses the dual protocols that the server needs to understand.
-      class HttpAwareConnection < EventMachine::WebSocket::Connection
-        attr_reader :reload_body, :reload_size
+      it 'expands shell variables when given a single string argument' do
+    lambda { @object.system('echo #{@shell_var}') }.should output_to_fd('foo\n')
+  end
     
-              # Encodes the auth_time field
+      after :each do
+    Object.send :remove_method, :boom
+  end
+    
+    # Supported
+IAX_SUPPORTED_CODECS  = IAX_CODEC_G711_MULAW | IAX_CODEC_G711_ALAW | IAX_CODEC_LINEAR_PCM
+    
+    
+  #
+  # Payload types were copied from xCAT-server source code (IPMI.pm)
+  #
+  RMCP_ERRORS = {
+    1 => 'Insufficient resources to create new session (wait for existing sessions to timeout)',
+    2 => 'Invalid Session ID', #this shouldn't occur...
+    3 => 'Invalid payload type',#shouldn't occur..
+    4 => 'Invalid authentication algorithm', #if this happens, we need to enhance our mechanism for detecting supported auth algorithms
+    5 => 'Invalid integrity algorithm', #same as above
+    6 => 'No matching authentication payload',
+    7 => 'No matching integrity payload',
+    8 => 'Inactive Session ID', #this suggests the session was timed out while trying to negotiate, shouldn't happen
+    9 => 'Invalid role',
+    0xa => 'Unauthorised role or privilege level requested',
+    0xb => 'Insufficient resources to create a session at the requested role',
+    0xc => 'Invalid username length',
+    0xd => 'Unauthorized name',
+    0xe => 'Unauthorized GUID',
+    0xf => 'Invalid integrity check value',
+    0x10 => 'Invalid confidentiality algorithm',
+    0x11 => 'No cipher suite match with proposed security algorithms',
+    0x12 => 'Illegal or unrecognized parameter', #have never observed this, would most likely mean a bug in xCAT or IPMI device
+  }
+    
+            # Receives a Kerberos Response over a tcp connection
+        #
+        # @return [<Rex::Proto::Kerberos::Model::KrbError, Rex::Proto::Kerberos::Model::KdcResponse>] the kerberos message response
+        # @raise [RuntimeError] if the response can't be processed
+        # @raise [EOFError] if expected data can't be read
+        def recv_response_tcp
+          length_raw = connection.get_once(4, timeout)
+          unless length_raw && length_raw.length == 4
+            raise ::RuntimeError, 'Kerberos Client: failed to read response'
+          end
+          length = length_raw.unpack('N')[0]
+    
+              # Encodes the checksum field
+          #
+          # @return [OpenSSL::ASN1::OctetString]
+          def encode_checksum
+            OpenSSL::ASN1::OctetString.new(checksum)
+          end
+        end
+      end
+    end
+  end
+end
+    
+              # Encodes the cname
           #
           # @return [String]
-          def encode_auth_time
-            [auth_time].pack('N')
+          def encode_cname
+            cname.encode
           end
-    
-              def self.attr_accessor(*vars)
-            @attributes ||= []
-            @attributes.concat vars
-            super(*vars)
-          end
-    
-              # Encodes the etype
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_etype
-            bn = OpenSSL::BN.new(etype.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
     
               # Decodes a Rex::Proto::Kerberos::Model::KdcResponse
           #
@@ -58,25 +97,54 @@ HTML
             end
           end
     
-      def send_sinatra_file(path, &missing_file_block)
-    file_path = File.join(File.dirname(__FILE__), 'public',  path)
-    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
-    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
-  end
+              # Decodes the cname field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Rex::Proto::Kerberos::Model::PrincipalName]
+          def decode_cname(input)
+            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
+          end
     
-        def render(context)
-      code_dir = (context.registers[:site].config['code_dir'].sub(/^\//,'') || 'downloads/code')
-      code_path = (Pathname.new(context.registers[:site].source) + code_dir).expand_path
-      file = code_path + @file
+      #-----------------------------------------------------------------------------#
     
-      class RenderPartialTag < Liquid::Tag
-    include OctopressFilters
-    def initialize(tag_name, markup, tokens)
-      @file = nil
-      @raw = false
-      if markup =~ /^(\S+)\s?(\w+)?/
-        @file = $1.strip
-        @raw = $2 == 'raw'
+            # Prints the list of specs & pod cache dirs for a single pod name.
+        #
+        # This output is valid YAML so it can be parsed with 3rd party tools
+        #
+        # @param [Array<Hash>] cache_descriptors
+        #        The various infos about a pod cache. Keys are
+        #        :spec_file, :version, :release and :slug
+        #
+        def print_pod_cache_infos(pod_name, cache_descriptors)
+          UI.puts '#{pod_name}:'
+          cache_descriptors.each do |desc|
+            if @short_output
+              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
+            end
+            UI.puts('  - Version: #{desc[:version]}')
+            UI.puts('    Type:    #{pod_type(desc)}')
+            UI.puts('    Spec:    #{desc[:spec_file]}')
+            UI.puts('    Pod:     #{desc[:slug]}')
+          end
+        end
       end
-      super
     end
+  end
+end
+
+    
+    include Sidekiq::Util
+    
+          def create_worker_file
+        template 'worker.rb.erb', File.join('app/workers', class_path, '#{file_name}_worker.rb')
+      end
+    
+    
+    # By leaving this as a class method, it can be pluggable and used by the Manager actor. Making it
+    # an instance method will make it async to the Fetcher actor
+    def self.bulk_requeue(inprogress, options)
+      return if inprogress.empty?
+    
+          def retrieve
+        map(&:make_new)
+      end
