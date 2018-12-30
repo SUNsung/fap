@@ -1,93 +1,65 @@
 
         
-        def run_rubygem(args)
-  run_in_shell('gem', *args.strip.split(' '))
-end
+              it 'requires the passwords to match' do
+        visit new_admin_user_path
+        fill_in 'Email', with: 'test@test.com'
+        fill_in 'Username', with: 'usertest'
+        fill_in 'Password', with: '12345678'
+        fill_in 'Password confirmation', with: 'no_match'
+        click_on 'Create User'
+        expect(page).to have_text('Password confirmation doesn't match')
+      end
+    end
     
-            log_action :change_email, @user
+        it 'shows the dry run pop up with previous events and allows use previously received event' do
+      emitter.events << Event.new(payload: {url: 'http://xkcd.com/'})
+      agent.sources << emitter
+      agent.options.merge!('url' => '', 'url_from_event' => '{{url}}')
+      agent.save!
     
-    module Admin
-  class EmailDomainBlocksController < BaseController
-    before_action :set_email_domain_block, only: [:show, :destroy]
+      describe '#working' do
+    before do
+      @agent = agents(:jane_website_agent)
+    end
     
-            if params[:create_and_unresolve]
-          @report.unresolve!
-          log_action :reopen, @report
-        end
+              @bar2 = Agents::DotBar.new(name: 'bar2').tap { |agent|
+            agent.user = users(:bob)
+            agent.sources << @foo
+            agent.propagate_immediately = true
+            agent.disabled = true
+            agent.save!
+          },
     
-          @form         = Form::StatusBatch.new(form_status_batch_params.merge(current_account: current_account, action: action_from_button))
-      flash[:alert] = I18n.t('admin.statuses.failed_to_execute') unless @form.save
+        it 'should work with nested arrays' do
+      @agent.options['array'] = ['one', '$.two']
+      LiquidMigrator.convert_all_agent_options(@agent)
+      expect(@agent.reload.options).to eq({'auth_token' => 'token', 'color' => 'yellow', 'array' => ['one', '{{two}}'], 'notify' => false, 'room_name' => 'test', 'username' => '{{username}}', 'message' => '{{message}}'})
+    end
     
-      private
-    
-      def payload
-    @_payload ||= request.body.read
+      let :valid_options do
+    {
+      'name' => 'XKCD',
+      'expected_update_period_in_days' => '2',
+      'type' => 'html',
+      'url' => '{{ url | default: 'http://xkcd.com/' }}',
+      'mode' => 'on_change',
+      'extract' => old_extract,
+      'template' => old_template
+    }
   end
     
-      respond_to :json
+        set :run, Proc.new { File.expand_path($0) == File.expand_path(app_file) }
     
-            it 'does not use two's complement form for negative numbers for formats bBoxX' do
-          format('%+b', -10).should == '-1010'
-          format('%+B', -10).should == '-1010'
-          format('%+o', -87).should == '-127'
-          format('%+x', -196).should == '-c4'
-          format('%+X', -196).should == '-C4'
-        end
+          DIRECTIVES = %i(base_uri child_src connect_src default_src
+                      font_src form_action frame_ancestors frame_src
+                      img_src manifest_src media_src object_src
+                      plugin_types referrer reflected_xss report_to
+                      report_uri require_sri_for sandbox script_src
+                      style_src worker_src).freeze
+    
+          def cookie_paths(path)
+        path = '/' if path.to_s.empty?
+        paths = []
+        Pathname.new(path).descend { |p| paths << p.to_s }
+        paths
       end
-    end
-    
-      it 'transfers control to the innermost catch block waiting for the same sympol' do
-    one = two = three = 0
-    catch :duplicate do
-      catch :duplicate do
-        catch :duplicate do
-          one = 1
-          throw :duplicate
-        end
-        two = 2
-        throw :duplicate
-      end
-      three = 3
-      throw :duplicate
-    end
-    [one, two, three].should == [1, 2, 3]
-  end
-    
-      it 'accepts a proc argument instead of a block' do
-    captured = nil
-    
-        # The name of the mixin in which the error occurred.
-    # This could be `nil` if the error occurred outside a mixin.
-    #
-    # @return [String]
-    def sass_mixin
-      sass_backtrace.first[:mixin]
-    end
-    
-    require 'bundler/cli'
-require 'bundler/friendly_errors'
-    
-            return nil
-      end
-    end
-  end
-end end end
-
-    
-      def execute
-    signal_deprecation_warning_for_pack
-    
-        not_matching_pipeline = described_class.new(source, pipeline_id, [], settings)
-    expect(subject).not_to eq(not_matching_pipeline)
-    
-              it 'allow to install a specific version' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version 0.1.0 logstash-filter-qatest')
-            expect(command).to install_successfully
-            expect(logstash).to have_installed?('logstash-filter-qatest', '0.1.0')
-          end
-        end
-      end
-    
-        def self.clear
-      instance.clear
-    end
