@@ -1,282 +1,215 @@
 
         
-          @property
-  def output_size(self):
-    return self._num_units
+            def cycle_key(self):
+        '''
+        Keep the same data but with a new key. Call save() and it will
+        automatically save a cookie with a new key at the end of the request.
+        '''
+        self.save()
+    
+        plt.figure('scikit-learn LASSO benchmark results')
+    plt.subplot(211)
+    plt.plot(list_n_samples, lasso_results, 'b-',
+                            label='Lasso')
+    plt.plot(list_n_samples, lars_lasso_results, 'r-',
+                            label='LassoLars')
+    plt.title('precomputed Gram matrix, %d features, alpha=%s' % (n_features,
+                            alpha))
+    plt.legend(loc='upper left')
+    plt.xlabel('number of samples')
+    plt.ylabel('Time (s)')
+    plt.axis('tight')
+    
+        print('vectorizing data')
     
     
-def all_plot(d, full_name='', exclude='', nspaces=0):
-  '''Recursively plot all the LFADS model parameters in the nested
-  dictionary.'''
-  for k, v in d.iteritems():
-    this_name = full_name+'/'+k
-    if isinstance(v, dict):
-      all_plot(v, full_name=this_name, exclude=exclude, nspaces=nspaces+4)
-    else:
-      if exclude == '' or exclude not in this_name:
-        _plot_item(v, name=k, full_name=full_name+'/'+k, nspaces=nspaces+4)
+def plot_batch_times(all_times, n_features, all_batch_sizes, data):
+    plt.figure()
+    plot_results(all_batch_sizes, all_times['pca'], label='PCA')
+    plot_results(all_batch_sizes, all_times['ipca'], label='IncrementalPCA')
+    plt.legend(loc='lower left')
+    plt.suptitle('Algorithm runtime vs. batch_size for n_components %i\n \
+                 LFW, size %i x %i' % (
+                 n_features, data.shape[0], data.shape[1]))
+    plt.xlabel('Batch size')
+    plt.ylabel('Time (seconds)')
     
-    flags = tf.app.flags
-flags.DEFINE_string('save_dir', '/tmp/' + DATA_DIR + '/',
-                    'Directory for saving data.')
-flags.DEFINE_string('datafile_name', 'thits_data',
-                    'Name of data file for input case.')
-flags.DEFINE_string('noise_type', 'poisson', 'Noise type for data.')
-flags.DEFINE_integer('synth_data_seed', 5, 'Random seed for RNN generation.')
-flags.DEFINE_float('T', 1.0, 'Time in seconds to generate.')
-flags.DEFINE_integer('C', 100, 'Number of conditions')
-flags.DEFINE_integer('N', 50, 'Number of units for the RNN')
-flags.DEFINE_integer('S', 50, 'Number of sampled units from RNN')
-flags.DEFINE_integer('npcs', 10, 'Number of PCS for multi-session case.')
-flags.DEFINE_float('train_percentage', 4.0/5.0,
-                   'Percentage of train vs validation trials')
-flags.DEFINE_integer('nreplications', 40,
-                     'Number of noise replications of the same underlying rates.')
-flags.DEFINE_float('g', 1.5, 'Complexity of dynamics')
-flags.DEFINE_float('x0_std', 1.0,
-                   'Volume from which to pull initial conditions (affects diversity of dynamics.')
-flags.DEFINE_float('tau', 0.025, 'Time constant of RNN')
-flags.DEFINE_float('dt', 0.010, 'Time bin')
-flags.DEFINE_float('input_magnitude', 20.0,
-                   'For the input case, what is the value of the input?')
-flags.DEFINE_float('max_firing_rate', 30.0, 'Map 1.0 of RNN to a spikes per second')
-FLAGS = flags.FLAGS
+        X = get_data(N, DD, dataset)
     
-        for i in range(batch_size):
-      cur_pos = 0
+        print('Benchmarks')
+    print('===========================')
+    print('Generate dataset benchmarks... ', end='')
+    X_dense, X_sparse = make_sparse_random_data(opts.n_samples,
+                                                opts.n_features,
+                                                n_nonzeros,
+                                                random_state=opts.random_seed)
+    X = X_dense if opts.dense else X_sparse
+    print('done')
     
-    
-def imdb_iterator(raw_data, batch_size, num_steps, epoch_size_override=None):
-  '''Iterate on the raw IMDB data.
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+        n = 10
+    step = 10000
+    n_samples = 10000
+    dim = 10
+    n_classes = 10
+    for i in range(n):
+        print('============================================')
+        print('Entering iteration %s of %s' % (i, n))
+        print('============================================')
+        n_samples += step
+        X = np.random.randn(n_samples, dim)
+        Y = np.random.randint(0, n_classes, (n_samples,))
+        bench_scikit_tree_classifier(X, Y)
+        Y = np.random.randn(n_samples)
+        bench_scikit_tree_regressor(X, Y)
     
     
-def retrieve_init_savers(hparams):
-  '''Retrieve a dictionary of all the initial savers for the models.
+# The training data folder must be passed as first argument
+languages_data_folder = sys.argv[1]
+dataset = load_files(languages_data_folder)
+    
+    Tree objects are wrapper for Token objects.
     
     
-def find_all_ngrams(dataset, n):
-  '''Generate a list of all ngrams.'''
-  return zip(*[dataset[i:] for i in xrange(n)])
+    def predict(self, input):
+        '''
+        From the input stream, predict what alternative will succeed
+	using this DFA (representing the covering regular approximation
+	to the underlying CFL).  Return an alternative number 1..n.  Throw
+	 an exception upon error.
+	'''
+        mark = input.mark()
+        s = 0 # we always start at s0
+        try:
+            for _ in xrange(50000):
+                #print '***Current state = %d' % s
+                
+                specialState = self.special[s]
+                if specialState >= 0:
+                    #print 'is special'
+                    s = self.specialStateTransition(specialState, input)
+                    if s == -1:
+                        self.noViableAlt(s, input)
+                        return 0
+                    input.consume()
+                    continue
     
-        :param str u_string: unicode string to check. Must be unicode
-        and not Python 2 `str`.
-    :rtype: bool
+        def __str__(self):
+        return 'MismatchedTreeNodeException(%r!=%r)' % (
+            self.getUnexpectedType(), self.expecting
+            )
+    __repr__ = __str__
+
+    
+    
+    def getText(self):
+        '''
+        Return the text matched so far for the current token or any
+        text override.
+        '''
+        if self._state.text is not None:
+            return self._state.text
+        
+        return self.input.substring(
+            self._state.tokenStartCharIndex,
+            self.getCharIndex()-1
+            )
+    
+        __str__ = toString
+    __repr__ = toString
+    
+    site_info = 'baomihua.com'
+download = baomihua_download
+download_playlist = playlist_not_supported('baomihua')
+
+    
+    
+    def extract(self, **kwargs):
+        for i in self.streams:
+            s = self.streams[i]
+            _, s['container'], s['size'] = url_info(s['url'])
+            s['src'] = [s['url']]
+        if 'stream_id' in kwargs and kwargs['stream_id']:
+            # Extract the stream
+            stream_id = kwargs['stream_id']
+    
+    
+def write_loop_file(records_number, loop_file_path, file_name):
+    with open(loop_file_path, 'a') as file:
+        for i in range(records_number):
+            file.write('file '{}'\n'.format(file_name))
+    
+    site_info = 'Dailymotion.com'
+download = dailymotion_download
+download_playlist = playlist_not_supported('dailymotion')
+
+    
     '''
-    assert isinstance(u_string, str)
-    try:
-        u_string.encode('ascii')
-        return True
-    except UnicodeEncodeError:
-        return False
-
-    
-        @pytest.mark.parametrize(
-        'other, result', (
-            ({'AccePT': 'application/json'}, True),
-            ({}, False),
-            (None, False)
-        )
-    )
-    def test_instance_equality(self, other, result):
-        assert (self.case_insensitive_dict == other) is result
-    
-                if self.wait_to_close_event:
-                self.wait_to_close_event.wait(self.WAIT_EVENT_TIMEOUT)
-        finally:
-            self.ready_event.set() # just in case of exception
-            self._close_server_sock_ignore_errors()
-            self.stop_event.set()
-    
-        def request_url(self, request, proxies):
-        '''Obtain the url to use when making the final request.
-    
-    CONTENT_TYPE_FORM_URLENCODED = 'application/x-www-form-urlencoded'
-CONTENT_TYPE_MULTI_PART = 'multipart/form-data'
-    
-        def list_domains(self):
-        '''Utility method to list all the domains in the jar.'''
-        domains = []
-        for cookie in iter(self):
-            if cookie.domain not in domains:
-                domains.append(cookie.domain)
-        return domains
-    
-            # Verify the client didn't respond to second challenge.
-        request_content = consume_socket_content(sock, timeout=0.5)
-        assert request_content == b''
-    
-            def handler(sock):
-            text = sock.recv(1000)
-            assert text == question
-            sock.sendall(answer)
-    
-    
-RETURN = '''
-addresses:
-  description: Properties of all Elastic IP addresses matching the provided filters. Each element is a dict with all the information related to an EIP.
-  returned: on success
-  type: list
-  sample: [{
-        'allocation_id': 'eipalloc-64de1b01',
-        'association_id': 'eipassoc-0fe9ce90d6e983e97',
-        'domain': 'vpc',
-        'instance_id': 'i-01020cfeb25b0c84f',
-        'network_interface_id': 'eni-02fdeadfd4beef9323b',
-        'network_interface_owner_id': '0123456789',
-        'private_ip_address': '10.0.0.1',
-        'public_ip': '54.81.104.1',
-        'tags': {
-            'Name': 'test-vm-54.81.104.1'
-        }
-    }]
-    
-    EXAMPLES = '''
----
-# Simple example of listing all info for a function
-- name: List all for a specific function
-  lambda_facts:
-    query: all
-    function_name: myFunction
-  register: my_function_details
-# List all versions of a function
-- name: List function versions
-  lambda_facts:
-    query: versions
-    function_name: myFunction
-  register: my_function_versions
-# List all lambda function versions
-- name: List all function
-  lambda_facts:
-    query: all
-    max_items: 20
-- name: show Lambda facts
-  debug:
-    var: lambda_facts
+refer to http://open.youku.com/tools
 '''
+youku_embed_patterns = [ 'youku\.com/v_show/id_([a-zA-Z0-9=]+)',
+                         'player\.youku\.com/player\.php/sid/([a-zA-Z0-9=]+)/v\.swf',
+                         'loader\.swf\?VideoIDS=([a-zA-Z0-9=]+)',
+                         'player\.youku\.com/embed/([a-zA-Z0-9=]+)',
+                         'YKU.Player\(\'[a-zA-Z0-9]+\',{ client_id: \'[a-zA-Z0-9]+\', vid: \'([a-zA-Z0-9]+)\''
+                       ]
+    }
+    
+    __all__ = ['facebook_download']
     
     
-if __name__ == '__main__':
-    main()
-
+def fantasy_download_by_id_channelId(id = 0, channelId = 0, output_dir = '.', merge = True, info_only = False,
+                                     **kwargs):
+    api_url = 'http://www.fantasy.tv/tv/playDetails.action?' \
+              'myChannelId=1&id={id}&channelId={channelId}&t={t}'.format(id = id,
+                                                                         channelId = channelId,
+                                                                         t = str(random.random())
+                                                                         )
+    html = get_content(api_url)
+    html = json.loads(html)
     
-                # the cluster
-            if host.CLUSTER_ID != self.get_parameter('cluster_id'):
-                if one.cluster.addhost(self.get_parameter('cluster_id'), host.ID):
-                    result['changed'] = True
+    # If extensions (or modules to document with autodoc) are in another directory,
+# add these directories to sys.path here. If the directory is relative to the
+# documentation root, use os.path.abspath to make it absolute, like shown here.
+#
+import sys
+import os
+import inspect
+    
+                if item.get(CONF_AUDIO) is not None:
+                if isinstance(item.get(CONF_AUDIO), template.Template):
+                    output[ATTR_STREAM_URL] = item[CONF_AUDIO].async_render()
                 else:
-                    self.fail(msg='failed to update the host cluster')
+                    output[ATTR_STREAM_URL] = item.get(CONF_AUDIO)
     
-    from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.vca import VcaError, vca_argument_spec, vca_login
+    import homeassistant.helpers.config_validation as cv
+import homeassistant.util.dt as dt_util
+from homeassistant.components.device_tracker import (
+    DOMAIN, PLATFORM_SCHEMA, DeviceScanner)
+from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_USERNAME
     
-        def dnszone_find(self, zone_name):
-        return self._post_json(
-            method='dnszone_find',
-            name=zone_name,
-            item={'idnsname': zone_name}
-        )
+        def _update_info(self):
+        '''Get ARP from router.'''
+        _LOGGER.info('Fetching...')
     
-        if module.params['environment']:
-        params['deploy[environment]'] = module.params['environment']
+            # Check if the access point is accessible
+        response = self._make_request()
+        if not response.status_code == 200:
+            raise ConnectionError('Cannot connect to Linksys Access Point')
     
-    from __future__ import absolute_import, division, print_function
-__metaclass__ = type
+        def __init__(self, hass, config):
+        '''Initialize the scanner.'''
+        self.last_results = []
     
+                    if subdir:
+                    subdir = sanitize_filename(subdir)
     
-DOCUMENTATION = '''
----
-module: monit
-short_description: Manage the state of a program monitored via Monit
-description:
-     - Manage the state of a program monitored via I(Monit)
-version_added: '1.2'
-options:
-  name:
-    description:
-      - The name of the I(monit) program/process to manage
-    required: true
-  state:
-    description:
-      - The state of service
-    required: true
-    choices: [ 'present', 'started', 'stopped', 'restarted', 'monitored', 'unmonitored', 'reloaded' ]
-  timeout:
-    description:
-      - If there are pending actions for the service monitored by monit, then Ansible will check
-        for up to this many seconds to verify the requested action has been performed.
-        Ansible will sleep for five seconds between each check.
-    default: 300
-    version_added: '2.1'
-author: 'Darryl Stoflet (@dstoflet)'
-'''
+        def send_url_service(service):
+        '''Service to open url on devices.'''
+        send_url(api_key=api_key, device_id=device_id,
+                 device_ids=device_ids, device_names=device_names,
+                 url=service.data.get('url'))
     
-        def process_appid_not_exist(self, appid, ip):
-        ret = self.check_api(ip, 'xxnet-1')
-        if ret and ret.ok:
-            self.set_appid_not_exist(appid)
-        else:
-            self.logger.warn('process_appid_not_exist, remove ip:%s', ip)
-    
-    EOF = -1
-    
-            raise NotImplementedError
-    
-    def setCharPositionInLine(self, pos):
-        '''@brief Set the column of the tokens first character,
-    
-        def test_shall_toggle_from_fm_to_am(self):
-        self.radio.toggle_amfm()
-        state = self.radio.state.name
-        expected_state_name = 'AM'
-        self.assertEqual(state, expected_state_name)
-
-    
-    
-if __name__ == '__main__':
-    client1 = Client()
-    client2 = ClientCoroutine()
-    requests = [2, 5, 14, 22, 18, 3, 35, 27, 20]
-    
-    
-class Action(object):
-    def __init__(self, name):
-        self.name = name
-    
-    '''
-http://ginstrom.com/scribbles/2007/10/08/design-patterns-python-style/
-Implementation of the iterator pattern with a generator
-    
-    ### OUTPUT ###
-# Name: Jhon    Occupation: Coder
-# Before we access `relatives`:
-# {'call_count2': 0, 'name': 'Jhon', 'occupation': 'Coder'}
-# Jhon's relatives: Many relatives.
-# After we've accessed `relatives`:
-# {'relatives': 'Many relatives.', 'call_count2': 0, 'name': 'Jhon', 'occupation': 'Coder'}
-# Father and mother
-# {'_lazy__parents': 'Father and mother', 'relatives': 'Many relatives.', 'call_count2': 1, 'name': 'Jhon', 'occupation': 'Coder'}  # noqa flake8
-# Father and mother
-# 1
-
-    
-        def __init__(self):
-        self.time_provider = datetime.datetime
-    
-        def find_all_path(self, start, end, path=None):
-        path = path or []
-        path.append(start)
-        if start == end:
-            return [path]
-        paths = []
-        for node in self.graph.get(start, []):
-            if node not in path:
-                newpaths = self.find_all_path(node, end, path[:])
-                paths.extend(newpaths)
-        return paths
-    
-        def _send_diagnostics_request(self):
-        return 'send diagnostic request'
+    start_time = time.time()
+print('creating word list...')
+path = os.path.split(os.path.realpath(__file__))
+word_list = sorted(list(set([word.strip().lower() for word in open(path[0] + '/words')])))
