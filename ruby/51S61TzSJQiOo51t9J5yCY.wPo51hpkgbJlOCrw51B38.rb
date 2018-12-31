@@ -1,152 +1,115 @@
 
         
-                  def instantiate_builder(builder_class, item, value, text, html_options)
-            builder_class.new(@template_object, @object_name, @method_name, item,
-                              sanitize_attribute_name(value), text, value, html_options)
+        describe 'Kernel.throw' do
+  it 'transfers control to the end of the active catch block waiting for symbol' do
+    catch(:blah) do
+      :value
+      throw :blah
+      fail('throw didn't transfer the control')
+    end.should be_nil
+  end
+    
+        # Parse all the selectors in the document and assign them to
+    # {Sass::Tree::RuleNode#parsed_rules}.
+    #
+    # @param root [Tree::Node] The parent node
+    def parse_selectors(root)
+      root.children.each do |child|
+        next parse_selectors(child) if child.is_a?(Tree::DirectiveNode)
+        next unless child.is_a?(Tree::RuleNode)
+        parser = Sass::SCSS::CssParser.new(child.rule.first, child.filename, nil, child.line)
+        child.parsed_rules = parser.parse_selector
+      end
+    end
+    
+        # Adds an entry to the exception's Sass backtrace.
+    #
+    # @param attrs [{Symbol => Object}] The information in the backtrace entry.
+    #   See \{#sass\_backtrace}
+    def add_backtrace(attrs)
+      sass_backtrace << attrs.reject {|_k, v| v.nil?}
+    end
+    
+        # Parses the command-line arguments and runs the executable.
+    # Calls `Kernel#exit` at the end, so it never returns.
+    #
+    # @see #parse
+    def parse!
+      # rubocop:disable RescueException
+      begin
+        parse
+      rescue Exception => e
+        # Exit code 65 indicates invalid data per
+        # http://www.freebsd.org/cgi/man.cgi?query=sysexits. Setting it via
+        # at_exit is a bit of a hack, but it allows us to rethrow when --trace
+        # is active and get both the built-in exception formatting and the
+        # correct exit code.
+        at_exit {exit Sass::Util.windows? ? 13 : 65} if e.is_a?(Sass::SyntaxError)
+    
+          opts.on('--precision NUMBER_OF_DIGITS', Integer,
+              'How many digits of precision to use when outputting decimal numbers.',
+              'Defaults to #{Sass::Script::Value::Number.precision}.') do |precision|
+        Sass::Script::Value::Number.precision = precision
+      end
+    
+          # A string representation of the importer.
+      # Should be overridden by subclasses.
+      #
+      # This is used to help debugging,
+      # and should usually just show the load path encapsulated by this importer.
+      #
+      # @return [String]
+      def to_s
+        Sass::Util.abstract(self)
+      end
+    
+            def find_address
+          if @order.bill_address_id == params[:id].to_i
+            @order.bill_address
+          elsif @order.ship_address_id == params[:id].to_i
+            @order.ship_address
+          else
+            raise CanCan::AccessDenied
           end
-    
-            ActiveSupport::Notifications.instrument('render_#{name}.action_view', options) do |payload|
-          yield payload
         end
       end
-    
-            def importer_class
-          IssueAndLabelLinksImporter
-        end
-    
-            # Builds a new note using a Hash that was built from a JSON payload.
-        def self.from_json_hash(raw_hash)
-          hash = Representation.symbolize_hash(raw_hash)
-          hash[:author] &&= Representation::User.from_json_hash(hash[:author])
-    
-            # Builds a lfs_object
-        def self.from_api_response(lfs_object)
-          new({ oid: lfs_object[0], download_link: lfs_object[1] })
-        end
-    
-            retval
-      end
-    
-        def stylesheets_path
-      File.join assets_path, 'stylesheets'
-    end
-    
-        # Converts &-
-    def convert_less_ampersand(less)
-      regx = /^\.badge\s*\{[\s\/\w\(\)]+(&{1}-{1})\w.*?^}$/m
-    
-        def log_processed(name)
-      puts green '    #{name}'
-    end
-    
-    Given /^I am signed in( on the mobile website)?$/ do |mobile|
-  automatic_login
-  confirm_login mobile
-end
-    
-    Then /^'([^']*)' should be post (\d+)$/ do |post_text, position|
-  stream_element_numbers_content(position).should have_content(post_text)
-end
-    
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have path #{expected.inspect} but was #{actual.current_path.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have path #{expected.inspect} but it had'
-  end
-end
-    
-        it 'generates the contacts_json fixture', :fixture => true do
-      json = bob.contacts.map { |c|
-               ContactPresenter.new(c, bob).full_hash_with_person
-             }.to_json
-      save_fixture(json, 'contacts_json')
     end
   end
 end
 
     
-      end
+                if @order.completed? || @order.next
+              state_callback(:after)
+              respond_with(@order, default_template: 'spree/api/v1/orders/show')
+            else
+              respond_with(@order, default_template: 'spree/api/v1/orders/could_not_transition', status: 422)
+            end
+          else
+            invalid_resource!(@order)
+          end
+        end
     
-        it 'returns a 401 for a private post when logged out' do
-      bob.like!(@message)
-      sign_out :user
-      get :index, params: {post_id: @message.id}, format: :json
-      expect(response.status).to eq(401)
-    end
-  end
+              can_event = 'can_#{@event}?'
     
-        shared_examples 'on a visible post' do
-      it 'creates the participation' do
-        post :create, params: {post_id: @post.id}
-        expect(alice.participations.where(:target_id => @post.id)).to exist
-        expect(response.code).to eq('201')
-      end
-    end
-    
-        def URIEncodePair(cc1, cc2, result, index)
-      u = ((cc1 >> 6) & 0xF) + 1;
-      w = (cc1 >> 2) & 0xF;
-      x = cc1 & 3;
-      y = (cc2 >> 6) & 0xF;
-      z = cc2 & 63;
-      octets = Array.new(4);
-      octets[0] = (u >> 2) + 240;
-      octets[1] = (((u & 3) << 4) | w) + 128;
-      octets[2] = ((x << 4) | y) + 128;
-      octets[3] = z + 128;
-      return URIEncodeOctets(octets, result, index);
-    end
-    
-          def extract_renamed_path_destination(file)
-        return file.gsub(/{.* => (.*)}/, '\1').gsub(/.* => (.*)/, '\1')
-      end
-    
-      test 'extracting paths from URLs' do
-    assert_nil extract_path('Eye-Of-Sauron')
-    assert_equal 'Mordor', extract_path('Mordor/Sauron')
-    assert_equal 'Mordor/Sauron', extract_path('Mordor/Sauron/Evil')
-  end
-    
-      teardown do
-    FileUtils.rm_rf(@path)
-  end
-end
-
-    
-        def initialize(dir, existing, attempted, message = nil)
-      @dir            = dir
-      @existing_path  = existing
-      @attempted_path = attempted
-      super(message || 'Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.')
-    end
-  end
-end
+            def find_payment
+          @payment = @order.payments.find_by!(number: params[:id])
+        end
     
             def show
-          @image = Image.accessible_by(current_ability, :read).find(params[:id])
-          respond_with(@image)
+          @taxon = taxon
+          respond_with(@taxon)
         end
     
-            def update
-          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
-          if @return_authorization.update_attributes(return_authorization_params)
-            respond_with(@return_authorization, default_template: :show)
-          else
-            invalid_resource!(@return_authorization)
-          end
-        end
     
-            def scope
-          includes = { variant: [{ option_values: :option_type }, :product] }
-          @stock_location.stock_items.accessible_by(current_ability, :read).includes(includes)
-        end
+    # By leaving this as a class method, it can be pluggable and used by the Manager actor. Making it
+    # an instance method will make it async to the Fetcher actor
+    def self.bulk_requeue(inprogress, options)
+      return if inprogress.empty?
     
-            def update
-          authorize! :update, stock_location
-          if stock_location.update_attributes(stock_location_params)
-            respond_with(stock_location, status: 200, default_template: :show)
-          else
-            invalid_resource!(stock_location)
-          end
-        end
+        def self.logger
+      defined?(@logger) ? @logger : initialize_logger
+    end
+    
+          def exists?(klass)
+        any? { |entry| entry.klass == klass }
+      end
