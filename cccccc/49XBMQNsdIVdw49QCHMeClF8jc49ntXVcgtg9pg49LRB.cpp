@@ -1,283 +1,294 @@
 
         
-        
-namespace google {
-namespace protobuf {
-namespace internal {
-    }
-    }
-    }
-    
-    bool DecodeMetadata(const string& path, GeneratedCodeInfo* info) {
-  string data;
-  GOOGLE_CHECK_OK(File::GetContents(path, &data, true));
-  io::ArrayInputStream input(data.data(), data.size());
-  return info->ParseFromZeroCopyStream(&input);
-}
-    
-    TEST(MovableMessageTest, MoveDifferentArenas) {
-  Arena arena1, arena2;
-    }
-    
-    #include <google/protobuf/compiler/java/java_extension_lite.h>
-    
-    #include <google/protobuf/compiler/java/java_generator_factory.h>
-    
-      (*variables)['type'] =
-      name_resolver->GetImmutableClassName(descriptor->message_type());
-  const FieldDescriptor* key = KeyField(descriptor);
-  const FieldDescriptor* value = ValueField(descriptor);
-  const JavaType keyJavaType = GetJavaType(key);
-  const JavaType valueJavaType = GetJavaType(value);
-    
-      CodeGeneratorRequest request;
-  if (!request.ParseFromFileDescriptor(STDIN_FILENO)) {
-    std::cerr << argv[0] << ': protoc sent unparseable request to plugin.'
-              << std::endl;
-    return 1;
-  }
-    
-    // Protocol Buffers - Google's data interchange format
-// Copyright 2008 Google Inc.  All rights reserved.
-// https://developers.google.com/protocol-buffers/
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are
-// met:
-//
-//     * Redistributions of source code must retain the above copyright
-// notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above
-// copyright notice, this list of conditions and the following disclaimer
-// in the documentation and/or other materials provided with the
-// distribution.
-//     * Neither the name of Google Inc. nor the names of its
-// contributors may be used to endorse or promote products derived from
-// this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// 'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-    
-    #include <string>
-#include <vector>
-    
-    REGISTER_CPU_OPERATOR(
-    MergeMultiMapFeatureTensorsGradient,
-    MergeMultiListOrMapFeatureTensorsGradientOp<CPUContext>);
-OPERATOR_SCHEMA(MergeMultiMapFeatureTensorsGradient)
-    .SetDoc(
-        'Explode given multi-feature tensors with map features '
-        'into many.' +
-        doc)
-    .NumInputs([](int n) { return n >= 3 && n % 2 == 1; })
-    .NumOutputs([](int n) { return n >= 1; })
-    .Input(0, 'in1_lengths', '.lengths')
-    .Input(1, 'in1_values_lengths', '.values.lengths')
-    .Input(2, 'out_values_values_grad', '.values.values_grad')
-    .Output(0, 'in1_values_values_grad', '.values.values_grad');
-REGISTER_GRADIENT(
-    MergeMultiMapFeatureTensors,
-    GetMergeMultiMapFeatureTensorsGradient);
-    
-    workspace.ResetWorkspace()
-    
-    template <>
-void GluOp<float, CPUContext>::ComputeGlu(
-    const int M,
-    const int split_dim,
-    const int N,
-    const float* Xdata,
-    float* Ydata) {
-  const int xStride = 2 * split_dim * N;
-  const int yStride = split_dim * N;
-  for (int i = 0; i < M; ++i) {
-    const int idx = i * xStride;
-    const int idy = i * yStride;
-    for (int j = 0; j < split_dim; ++j) {
-      const int jN = j * N;
-      const int jdx1 = idx + jN;
-      const int jdx2 = idx + (j + split_dim) * N;
-      const int jdy = idy + jN;
-      for (int k = 0; k < N; ++k) {
-        const float x1 = Xdata[jdx1 + k];
-        const float x2 = Xdata[jdx2 + k];
-        Ydata[jdy + k] = x1 * sigmoid(x2);
-      }
-    }
+        void Clipboard::Call(const std::string& method,
+                     const base::ListValue& arguments) {
+  if (method == 'Set') {
+    std::string text, type;
+    arguments.GetString(0, &text);
+    arguments.GetString(1, &type);
+    SetText(text);
+  } else if (method == 'Clear') {
+    Clear();
+  } else {
+    NOTREACHED() << 'Invalid call to Clipboard method:' << method
+                 << ' arguments:' << arguments;
   }
 }
     
-    class GetFloatToHalfGradient : public GradientMakerBase {
-  using GradientMakerBase::GradientMakerBase;
-  vector<OperatorDef> GetGradientDefs() override {
-    return SingleGradientDef(
-        'HalfToFloat', '', vector<string>{GO(0)}, vector<string>{GI(0)});
+       void Call(const std::string& method,
+                    const base::ListValue& arguments) override;
+   void CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result) override;
+    
+    EventListener::~EventListener() {
+  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
+    delete i->second;
   }
-};
-REGISTER_GRADIENT(FloatToHalf, GetFloatToHalfGradient);
-    
-    
-    {} // namespace caffe2
-
-    
-      // Will be called while on the write thread before the write executes.  If
-  // this function returns a non-OK status, the write will be aborted and this
-  // status will be returned to the caller of DB::Write().
-  virtual Status Callback(DB* db) = 0;
-    
-    
-    { private:
-  // no copying allowed
-  WriteControllerToken(const WriteControllerToken&) = delete;
-  void operator=(const WriteControllerToken&) = delete;
-};
-    
-      env.now_micros_ += 100u;  // sleep credit 100
-  // 1000 used, 7240 left
-  ASSERT_EQ(static_cast<uint64_t>(0), controller.GetDelay(&env, 1000u));
-    
-    
-    {  if (close(fd_) < 0) {
-    s = IOError('While closing file after writing', filename_, errno);
-  }
-  fd_ = -1;
-  return s;
 }
     
-    using namespace rocksdb;
+    void Menu::Remove(MenuItem* menu_item, int pos) {
+  std::vector<MenuItem*>::iterator begin = menu_items.begin();
+  menu_items.erase(begin+pos);
+  gtk_container_remove(GTK_CONTAINER(menu_), menu_item->menu_item_);
+}
     
-    // Take a default BlockBasedTableOptions 'table_options' in addition to a
-// map 'opts_map' of option name to option value to construct the new
-// BlockBasedTableOptions 'new_table_options'.
-//
-// Below are the instructions of how to config some non-primitive-typed
-// options in BlockBasedTableOptions:
-//
-// * filter_policy:
-//   We currently only support the following FilterPolicy in the convenience
-//   functions:
-//   - BloomFilter: use 'bloomfilter:[bits_per_key]:[use_block_based_builder]'
-//     to specify BloomFilter.  The above string is equivalent to calling
-//     NewBloomFilterPolicy(bits_per_key, use_block_based_builder).
-//     [Example]:
-//     - Pass {'filter_policy', 'bloomfilter:4:true'} in
-//       GetBlockBasedTableOptionsFromMap to use a BloomFilter with 4-bits
-//       per key and use_block_based_builder enabled.
-//
-// * block_cache / block_cache_compressed:
-//   We currently only support LRU cache in the GetOptions API.  The LRU
-//   cache can be set by directly specifying its size.
-//   [Example]:
-//   - Passing {'block_cache', '1M'} in GetBlockBasedTableOptionsFromMap is
-//     equivalent to setting block_cache using NewLRUCache(1024 * 1024).
-//
-// @param table_options the default options of the output 'new_table_options'.
-// @param opts_map an option name to value map for specifying how
-//     'new_table_options' should be set.
-// @param new_table_options the resulting options based on 'table_options'
-//     with the change specified in 'opts_map'.
-// @param input_strings_escaped when set to true, each escaped characters
-//     prefixed by '\' in the values of the opts_map will be further converted
-//     back to the raw string before assigning to the associated options.
-// @param ignore_unknown_options when set to true, unknown options are ignored
-//     instead of resulting in an unknown-option error.
-// @return Status::OK() on success.  Otherwise, a non-ok status indicating
-//     error will be returned, and 'new_table_options' will be set to
-//     'table_options'.
-Status GetBlockBasedTableOptionsFromMap(
-    const BlockBasedTableOptions& table_options,
-    const std::unordered_map<std::string, std::string>& opts_map,
-    BlockBasedTableOptions* new_table_options,
-    bool input_strings_escaped = false, bool ignore_unknown_options = false);
+    void MenuItem::CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result) {
+  if (method == 'GetChecked') {
+    result->AppendBoolean(GetChecked());
+  } else {
+    NOTREACHED() << 'Invalid call to MenuItem method:' << method
+                 << ' arguments:' << arguments;
+  }
+}
     
-    struct UndumpOptions {
-  // Database that we will load the dumped file into
-  std::string db_path;
-  // File location of the dumped file that will be loaded
-  std::string dump_location;
-  // Compact the db after loading the dumped file
-  bool compact_db = false;
+    
+    {  submenu_ = menu;
+}
+    
+    namespace {
+void SetProxyConfigCallback(
+    base::WaitableEvent* done,
+    const scoped_refptr<net::URLRequestContextGetter>& url_request_context_getter,
+    const net::ProxyConfigWithAnnotation& proxy_config) {
+  net::ProxyResolutionService* proxy_service =
+      url_request_context_getter->GetURLRequestContext()->proxy_resolution_service();
+  proxy_service->ResetConfigService(base::WrapUnique(new net::ProxyConfigServiceFixed(proxy_config)));
+  done->Signal();
+}
+} // namespace
+    
+    NwClipboardClearSyncFunction::~NwClipboardClearSyncFunction() {
+    }
+    
+    class NwClipboardGetListSyncFunction : public NWSyncExtensionFunction {
+ public:
+  NwClipboardGetListSyncFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    
+    {    private:
+      DISALLOW_COPY_AND_ASSIGN(NwScreenGetScreensFunction);      
+  };
+    
+      // blow away the copied chopped_word, as we want to work with
+  // the blobs from the input chopped_word so seam_arrays can be merged.
+  TWERD *chopped = word->chopped_word;
+  TWERD *chopped2 = new TWERD;
+  chopped2->blobs.reserve(chopped->NumBlobs() - split_pt);
+  for (int i = split_pt; i < chopped->NumBlobs(); ++i) {
+    chopped2->blobs.push_back(chopped->blobs[i]);
+  }
+  chopped->blobs.truncate(split_pt);
+  word->chopped_word = nullptr;
+  delete word2->chopped_word;
+  word2->chopped_word = nullptr;
+    
+    #if GTEST_OS_SYMBIAN
+  // Streams a value (either a pointer or not) to this object.
+  template <typename T>
+  inline Message& operator <<(const T& value) {
+    StreamHelper(typename internal::is_pointer<T>::type(), value);
+    return *this;
+  }
+#else
+  // Streams a non-pointer value to this object.
+  template <typename T>
+  inline Message& operator <<(const T& val) {
+    // Some libraries overload << for STL containers.  These
+    // overloads are defined in the global namespace instead of ::std.
+    //
+    // C++'s symbol lookup rule (i.e. Koenig lookup) says that these
+    // overloads are visible in either the std namespace or the global
+    // namespace, but not other namespaces, including the testing
+    // namespace which Google Test's Message class is in.
+    //
+    // To allow STL containers (and other types that has a << operator
+    // defined in the global namespace) to be used in Google Test
+    // assertions, testing::Message must access the custom << operator
+    // from the global namespace.  With this using declaration,
+    // overloads of << defined in the global namespace and those
+    // visible via Koenig lookup are both exposed in this function.
+    using ::operator <<;
+    *ss_ << val;
+    return *this;
+  }
+    
+     private:
+  std::string file_;
+  int line_;
+  int index_;
+  int write_fd_;
+    
+    // FilePath - a class for file and directory pathname manipulation which
+// handles platform-specific conventions (like the pathname separator).
+// Used for helper functions for naming files in a directory for xml output.
+// Except for Set methods, all methods are const or static, which provides an
+// 'immutable value object' -- useful for peace of mind.
+// A FilePath with a value ending in a path separator ('like/this/') represents
+// a directory, otherwise it is assumed to represent a file. In either case,
+// it may or may not represent an actual file or directory in the file system.
+// Names are NOT checked for syntax correctness -- no checking for illegal
+// characters, malformed paths, etc.
+    
+      // Given two numbers in the sign-and-magnitude representation,
+  // returns the distance between them as an unsigned number.
+  static Bits DistanceBetweenSignAndMagnitudeNumbers(const Bits &sam1,
+                                                     const Bits &sam2) {
+    const Bits biased1 = SignAndMagnitudeToBiased(sam1);
+    const Bits biased2 = SignAndMagnitudeToBiased(sam2);
+    return (biased1 >= biased2) ? (biased1 - biased2) : (biased2 - biased1);
+  }
+    
+      void capture(T* ptr) {
+    value_ = ptr;
+    link_.join_new();
+  }
+    
+    
+    {  T0 f0_;
+  T1 f1_;
+  T2 f2_;
+  T3 f3_;
+  T4 f4_;
+  T5 f5_;
+  T6 f6_;
+  T7 f7_;
+  T8 f8_;
 };
     
     
-    {  virtual ~FlushBlockPolicy() { }
-};
+// Step 2. Use the TEST macro to define your tests.
+//
+// TEST has two parameters: the test case name and the test name.
+// After using the macro, you should define your test logic between a
+// pair of braces.  You can use a bunch of macros to indicate the
+// success or failure of a test.  EXPECT_TRUE and EXPECT_EQ are
+// examples of such macros.  For a complete list, see gtest.h.
+//
+// <TechnicalDetails>
+//
+// In Google Test, tests are grouped into test cases.  This is how we
+// keep test code organized.  You should put logically related tests
+// into the same test case.
+//
+// The test case name and the test name should both be valid C++
+// identifiers.  And you should not use underscore (_) in the names.
+//
+// Google Test guarantees that each test you define is run exactly
+// once, but it makes no guarantee on the order the tests are
+// executed.  Therefore, you should write your tests in such a way
+// that their results don't depend on their order.
+//
+// </TechnicalDetails>
     
-    #include <stdint.h>
-#include <memory>
-#include <string>
+            ID3D10Texture2D *pTexture = NULL;
+        D3D10_SUBRESOURCE_DATA subResource;
+        subResource.pSysMem = pixels;
+        subResource.SysMemPitch = desc.Width * 4;
+        subResource.SysMemSlicePitch = 0;
+        g_pd3dDevice->CreateTexture2D(&desc, &subResource, &pTexture);
     
-      x <<= 4;
-  x |= t;
+    // Implemented features:
+//  [X] Platform: Clipboard support.
+//  [X] Platform: Gamepad support. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
+//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
+//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).
     
-    BaseMapMatrix::BaseMapMatrix(const BaseMapMatrix& cells) {}
+        const GLchar* fragment_shader_glsl_300_es =
+        'precision mediump float;\n'
+        'uniform sampler2D Texture;\n'
+        'in vec2 Frag_UV;\n'
+        'in vec4 Frag_Color;\n'
+        'layout (location = 0) out vec4 Out_Color;\n'
+        'void main()\n'
+        '{\n'
+        '    Out_Color = Frag_Color * texture(Texture, Frag_UV.st);\n'
+        '}\n';
     
+    protected:
+    Node    *_originalTarget;
+    /** 
+     * The 'target'.
+     * The target will be set with the 'startWithTarget' method.
+     * When the 'stop' method is called, target will be set to nil.
+     * The target is 'assigned', it is not 'retained'.
+     */
+    Node    *_target;
+    /** The action tag. An identifier of the action. */
+    int     _tag;
+    /** The action flag field. To categorize action into certain groups.*/
+    unsigned int _flags;
     
+    /** @class FlipX
+* @brief Flips the sprite horizontally.
+* @since v0.99.0
+*/
+class CC_DLL FlipX : public ActionInstant
+{
+public:
+    /** Create the action.
+     *
+     * @param x Flips the sprite horizontally if true.
+     * @return  An autoreleased FlipX object.
+     */
+    static FlipX * create(bool x);
+    }
+    
+    protected:
+    Vec2           _startPosition;
+    Vec2           _delta;
+    float           _height;
+    int             _jumps;
+    Vec2           _previousPos;
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __CCACTIONTWEEN_H__
+#define __CCACTIONTWEEN_H__
+    
+    bool Animation::initWithAnimationFrames(const Vector<AnimationFrame*>& arrayOfAnimationFrames, float delayPerUnit, unsigned int loops)
+{
+    _delayPerUnit = delayPerUnit;
+    _loops = loops;
+    }
+    
+    std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const cocos2d::Rect &rect, float epsilon)
+{
+    auto size = points.size();
+    // if there are less than 3 points, then we have nothing
+    if(size<3)
     {
-    {        sub_node = sub_node->NextSiblingElement('objectReference');
-      }
+        log('AUTOPOLYGON: cannot expand points for %s with less than 3 points, e: %f', _filename.c_str(), epsilon);
+        return std::vector<Vec2>();
     }
-    
-    TEST_F(PncMapTest, GetRouteSegments_ChangeLane) {
-  auto lane = hdmap_.GetLaneById(hdmap::MakeMapId('9_1_-2'));
-  ASSERT_TRUE(lane);
-  common::VehicleState state;
-  auto point = lane->GetSmoothPoint(35);  // larger than kMinLaneKeepingDistance
-  state.set_x(point.x());
-  state.set_y(point.y());
-  state.set_z(point.y());
-  state.set_heading(M_PI);
-  std::list<RouteSegments> segments;
-  bool result = pnc_map_->GetRouteSegments(state, 10, 30, &segments);
-  ASSERT_TRUE(result);
-  ASSERT_EQ(2, segments.size());
-  const auto& first = segments.front();
-  const auto& second = segments.back();
-  EXPECT_NEAR(40, RouteLength(first), 1e-4);
-  EXPECT_EQ(routing::LEFT, first.NextAction());
-  EXPECT_TRUE(first.IsOnSegment());
-  EXPECT_NEAR(40, RouteLength(second), 1e-4);
-  EXPECT_EQ(routing::RIGHT, second.NextAction());
-  EXPECT_FALSE(second.IsOnSegment());
-}
-    
-    DiscretizedTrajectory BackupTrajectoryGenerator::GenerateTrajectory(
-    const std::vector<PathPoint>& discretized_ref_points) {
-  while (trajectory_pair_pqueue_.size() > 1) {
-    auto top_pair = trajectory_pair_pqueue_.top();
-    trajectory_pair_pqueue_.pop();
-    DiscretizedTrajectory trajectory = TrajectoryCombiner::Combine(
-        discretized_ref_points, *top_pair.first, *top_pair.second,
-        init_relative_time_);
-    if (!ptr_collision_checker_->InCollision(trajectory)) {
-      return trajectory;
+    ClipperLib::Path subj;
+    ClipperLib::PolyTree solution;
+    ClipperLib::PolyTree out;
+    for(const auto& pt : points)
+    {
+        subj << ClipperLib::IntPoint(pt.x* PRECISION, pt.y * PRECISION);
     }
-  }
-  auto top_pair = trajectory_pair_pqueue_.top();
-  return TrajectoryCombiner::Combine(
-      discretized_ref_points, *top_pair.first, *top_pair.second,
-      init_relative_time_);
-}
+    ClipperLib::ClipperOffset co;
+    co.AddPath(subj, ClipperLib::jtMiter, ClipperLib::etClosedPolygon);
+    co.Execute(solution, epsilon * PRECISION);
     
-        double s_param = s - s0;
-    // linear extrapolation is handled internally in LatticeTrajectory1d;
-    // no worry about s_param > lat_trajectory.ParamLength() situation
-    double d = lat_trajectory.Evaluate(0, s_param);
-    double d_prime = lat_trajectory.Evaluate(1, s_param);
-    double d_pprime = lat_trajectory.Evaluate(2, s_param);
-    
-    namespace apollo {
-namespace planning {
+    ClipperLib::PolyNode* p = solution.GetFirst();
+    if(!p)
+    {
+        log('AUTOPOLYGON: Clipper failed to expand the points');
+        return points;
+    }
+    while(p->IsHole()){
+        p = p->GetNext();
     }
     }
-    
-    #endif // defined(BOOST_ATOMIC_DETAIL_X86_HAS_CMPXCHG16B)
