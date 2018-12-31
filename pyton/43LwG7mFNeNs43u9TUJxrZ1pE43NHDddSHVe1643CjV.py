@@ -1,216 +1,215 @@
 
         
-        
-def test_on_first_run_from_current_shell(usage_tracker_io, shell_pid,
-                                         shell, logs):
-    shell.get_history.return_value = ['fuck']
-    shell_pid.return_value = 12
-    main()
-    _assert_tracker_updated(usage_tracker_io, 12)
-    logs.how_to_configure_alias.assert_called_once()
+            def remaining_cards(self):
+        return len(self.cards) - self.deal_index
     
-        proc.sendline(u'fuck')
-    assert proc.expect([TIMEOUT, u'echo test'])
-    assert proc.expect([TIMEOUT, u'enter'])
-    assert proc.expect_exact([TIMEOUT, u'ctrl+c'])
-    proc.send('\003')
+        def __init__(self, first_user, second_user):
+        super(PrivateChat, self).__init__()
+        self.users.append(first_user)
+        self.users.append(second_user)
     
-    
-@pytest.fixture(params=[(python_3, False),
-                        (python_3, True),
-                        (python_2, False)])
-def proc(request, spawnu, TIMEOUT):
-    container, instant_mode = request.param
-    proc = spawnu(*container)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(init_bashrc.format(
-        u'--enable-experimental-instant-mode' if instant_mode else ''))
-    proc.sendline(u'bash')
-    if instant_mode:
-        assert proc.expect([TIMEOUT, u'instant mode ready: True'])
-    return proc
-    
-    
-@pytest.fixture(params=containers)
-def proc(request, spawnu, TIMEOUT):
-    proc = spawnu(*request.param)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(u'tcsh')
-    proc.sendline(u'setenv PYTHONIOENCODING utf8')
-    proc.sendline(u'eval `thefuck --alias`')
-    return proc
-    
-    no_match_output = '''
-Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
-Get:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease [89.2 kB]
-Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
-Get:4 http://security.ubuntu.com/ubuntu zesty-security InRelease [89.2 kB]
-Hit:5 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
-Hit:6 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
-Hit:7 https://download.docker.com/linux/ubuntu zesty InRelease
-Get:8 http://us.archive.ubuntu.com/ubuntu zesty-updates/main i386 Packages [232 kB]
-Get:9 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 Packages [235 kB]
-Get:10 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 DEP-11 Metadata [55.2 kB]
-Get:11 http://us.archive.ubuntu.com/ubuntu zesty-updates/main DEP-11 64x64 Icons [32.3 kB]
-Get:12 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 Packages [156 kB]
-Get:13 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe i386 Packages [156 kB]
-Get:14 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 DEP-11 Metadata [175 kB]
-Get:15 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe DEP-11 64x64 Icons [253 kB]
-Get:16 http://us.archive.ubuntu.com/ubuntu zesty-updates/multiverse amd64 DEP-11 Metadata [5,840 B]
-Get:17 http://us.archive.ubuntu.com/ubuntu zesty-backports/universe amd64 DEP-11 Metadata [4,588 B]
-Get:18 http://security.ubuntu.com/ubuntu zesty-security/main amd64 DEP-11 Metadata [12.7 kB]
-Get:19 http://security.ubuntu.com/ubuntu zesty-security/main DEP-11 64x64 Icons [17.6 kB]
-Get:20 http://security.ubuntu.com/ubuntu zesty-security/universe amd64 DEP-11 Metadata [21.6 kB]
-Get:21 http://security.ubuntu.com/ubuntu zesty-security/universe DEP-11 64x64 Icons [47.7 kB]
-Get:22 http://security.ubuntu.com/ubuntu zesty-security/multiverse amd64 DEP-11 Metadata [208 B]
-Fetched 1,673 kB in 0s (1,716 kB/s)
-Reading package lists... Done
-Building dependency tree
-Reading state information... Done
-All packages are up to date.
-'''
-    
-    
-@pytest.mark.parametrize('command', [
-    Command('apt list --upgradable', no_match_output),
-    Command('sudo apt list --upgradable', no_match_output)
-])
-def test_not_match(command):
-    assert not match(command)
-    
-    
-def _is_not_okay_to_test():
-    return 'elasticsearch' not in _get_formulas()
-    
-    # convert class vectors to binary class matrices
-y_train = keras.utils.to_categorical(y_train, num_classes)
-y_test = keras.utils.to_categorical(y_test, num_classes)
-    
-    
-def test_cce_one_hot():
-    y_a = K.variable(np.random.randint(0, 7, (5, 6)))
-    y_b = K.variable(np.random.random((5, 6, 7)))
-    objective_output = losses.sparse_categorical_crossentropy(y_a, y_b)
-    assert K.eval(objective_output).shape == (5, 6)
-    
-            self.kernel_regularizer = regularizers.get(kernel_regularizer)
-        self.recurrent_regularizer = regularizers.get(recurrent_regularizer)
-        self.bias_regularizer = regularizers.get(bias_regularizer)
-        self.activity_regularizer = regularizers.get(activity_regularizer)
-    
-        @classmethod
-    def from_config(cls, config, custom_objects=None):
-        if 'name' in config:
-            name = config['name']
-            build_input_shape = config.get('build_input_shape')
-            layer_configs = config['layers']
-        else:  # legacy config file
-            name = build_input_shape = None
-            layer_configs = config
-        model = cls(name=name)
-        for conf in layer_configs:
-            layer = layer_module.deserialize(conf,
-                                             custom_objects=custom_objects)
-            model.add(layer)
-        if not model.inputs and build_input_shape:
-            model.build(build_input_shape)
-        return model
-
-    
-            transforms = []
-        identity = tf.constant([1, 0, 0, 0, 1, 0, 0, 0], dtype=tf.float32)
-    
-    This network is used to predict the next frame of an artificially
-generated movie which contains moving squares.
-'''
-from keras.models import Sequential
-from keras.layers.convolutional import Conv3D
-from keras.layers.convolutional_recurrent import ConvLSTM2D
-from keras.layers.normalization import BatchNormalization
-import numpy as np
-import pylab as plt
-    
-    print('Train...')
-model.fit(x_train, y_train,
-          batch_size=batch_size,
-          epochs=4,
-          validation_data=[x_test, y_test])
-
-    
-        # You can access the actual face itself like this:
-    face_image = image[top:bottom, left:right]
-    pil_image = Image.fromarray(face_image)
-    pil_image.show()
-
-    
-        face_found = False
-    is_obama = False
-    
-    
-@click.command()
-@click.argument('image_to_check')
-@click.option('--cpus', default=1, help='number of CPU cores to use in parallel. -1 means 'use all in system'')
-@click.option('--model', default='hog', help='Which face detection model to use. Options are 'hog' or 'cnn'.')
-def main(image_to_check, cpus, model):
-    # Multi-core processing only supported on Python 3.4 or greater
-    if (sys.version_info < (3, 4)) and cpus != 1:
-        click.echo('WARNING: Multi-processing support requires Python 3.4 or greater. Falling back to single-threaded processing!')
-        cpus = 1
-    
-    # To run this, you need a Raspberry Pi 2 (or greater) with face_recognition and
-# the picamera[array] module installed.
-# You can follow this installation instructions to get your RPi set up:
-# https://gist.github.com/ageitgey/1ac8dbe8572f3f533df6269dab35df65
-    
-    # Find all facial features in all the faces in the image
-face_landmarks_list = face_recognition.face_landmarks(image)
-    
-    setup(
-    name='face_recognition',
-    version='1.2.3',
-    description='Recognize faces from Python or from the command line',
-    long_description=readme + '\n\n' + history,
-    author='Adam Geitgey',
-    author_email='ageitgey@gmail.com',
-    url='https://github.com/ageitgey/face_recognition',
-    packages=[
-        'face_recognition',
-    ],
-    package_dir={'face_recognition': 'face_recognition'},
-    package_data={
-        'face_recognition': ['models/*.dat']
-    },
-    entry_points={
-        'console_scripts': [
-            'face_recognition=face_recognition.face_recognition_cli:main',
-            'face_detection=face_recognition.face_detection_cli:main'
+        def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer),
+            self.mr(mapper=self.mapper_sort,
+                    reducer=self.reducer_identity),
         ]
-    },
-    install_requires=requirements,
-    license='MIT license',
-    zip_safe=False,
-    keywords='face_recognition',
-    classifiers=[
-        'Development Status :: 4 - Beta',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
-        'Natural Language :: English',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-    ],
-    test_suite='tests',
-    tests_require=test_requirements
-)
+    
+    
+class PersonServer(object):
+    
+        def get(self, key):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                return item.value
+        raise KeyError('Key not found')
+    
+    
+class Page(object):
+    
+    
+def init_app(app):
+    '''Register database functions with the Flask app. This is called by
+    the application factory.
+    '''
+    app.teardown_appcontext(close_db)
+    app.cli.add_command(init_db_command)
 
     
-    # 初始化变量
-face_locations = []
-face_encodings = []
+    
+class JSONDecoder(_json.JSONDecoder):
+    '''The default JSON decoder.  This one does not change the behavior from
+    the default simplejson decoder.  Consult the :mod:`json` documentation
+    for more information.  This decoder is not only used for the load
+    functions of this module but also :attr:`~flask.Request`.
+    '''
+    
+            # on exit we want to clean up earlier.  Normally the request context
+        # stays preserved until the next request in the same thread comes
+        # in.  See RequestGlobals.push() for the general behavior.
+        top = _request_ctx_stack.top
+        if top is not None and top.preserved:
+            top.pop()
+    
+                c_bar = plt.bar(xvals, build_time[alg] - bottom,
+                            width, bottom, color='r')
+            q_bar = plt.bar(xvals, query_time[alg],
+                            width, build_time[alg], color='b')
+    
+        max_it = len(samples_range) * len(features_range)
+    for i_s, n_samples in enumerate(samples_range):
+        for i_f, n_features in enumerate(features_range):
+            it += 1
+            n_informative = n_features / 10
+            print('====================')
+            print('Iteration %03d of %03d' % (it, max_it))
+            print('====================')
+            # dataset_kwargs = {
+            #     'n_train_samples': n_samples,
+            #     'n_test_samples': 2,
+            #     'n_features': n_features,
+            #     'n_informative': n_informative,
+            #     'effective_rank': min(n_samples, n_features) / 10,
+            #     #'effective_rank': None,
+            #     'bias': 0.0,
+            # }
+            dataset_kwargs = {
+                'n_samples': 1,
+                'n_components': n_features,
+                'n_features': n_samples,
+                'n_nonzero_coefs': n_informative,
+                'random_state': 0
+            }
+            print('n_samples: %d' % n_samples)
+            print('n_features: %d' % n_features)
+            y, X, _ = make_sparse_coded_signal(**dataset_kwargs)
+            X = np.asfortranarray(X)
+    
+                gc.collect()
+            print('benchmarking scipy svd: ')
+            tstart = time()
+            svd(X, full_matrices=False)
+            results['scipy svd'].append(time() - tstart)
+    
+        print('Transformer performance:')
+    print('===========================')
+    print('Results are averaged over %s repetition(s).' % opts.n_times)
+    print('')
+    print('%s | %s | %s' % ('Transformer'.ljust(30),
+                            'fit'.center(12),
+                            'transform'.center(12)))
+    print(31 * '-' + ('|' + '-' * 14) * 2)
+    
+    Does two benchmarks
+    
+    
+# Symlinks should have same data as target
+for src, dst in symlinks.items():
+    if dst in dirs:
+        dirs[src] = dirs[dst]
+    
+        target = utils.unescape(target).strip()
+    title = utils.unescape(title).strip()
+    config = inliner.document.settings.env.app.config
+    if config.issues_user_uri:
+        ref = config.issues_user_uri.format(user=target)
+    else:
+        ref = 'https://github.com/{0}'.format(target)
+    if has_explicit_title:
+        text = title
+    else:
+        text = '@{0}'.format(target)
+    
+    
+if not os.path.exists(DATA_FOLDER):
+    
+        print('Generating e that is relatively prime to (p - 1) * (q - 1)...')
+    while True:
+        e = random.randrange(2 ** (keySize - 1), 2 ** (keySize))
+        if cryptoMath.gcd(e, (p - 1) * (q - 1)) == 1:
+            break
+    
+        def __hash_double_function(self, key, data, increment):
+        return (increment * self.__hash_function_2(key, data)) % self.size_table
+    
+        def __init__(self, arr):
+        # we need a list not a string, so do something to change the type
+        self.array = arr.split(',')
+        print(('the input array is:', self.array))
+    
+    	for m in getBlock(bs):
+		A = a0 
+		B = b0
+		C = c0
+		D = d0
+		for i in range(64):
+			if i <= 15:
+				#f = (B & C) | (not32(B) & D)
+				f = D ^ (B & (C ^ D))
+				g = i
+			elif i<= 31:
+				#f = (D & B) | (not32(D) & C)
+				f = C ^ (D & (B ^ C))
+				g = (5*i+1) % 16
+			elif i <= 47:
+				f = B ^ C ^ D
+				g = (3*i+5) % 16
+			else:
+				f = C ^ (B | not32(D))
+				g = (7*i) % 16
+			dtemp = D
+			D = C
+			C = B
+			B = sum32(B,leftrot32((A + f + tvals[i] + m[g]) % 2**32, s[i]))
+			A = dtemp
+		a0 = sum32(a0, A)
+		b0 = sum32(b0, B)
+		c0 = sum32(c0, C)
+		d0 = sum32(d0, D)
+    
+    
+        '''
+        loop over all possible splits for the decision tree. find the best split.
+        if no split exists that is less than 2 * error for the entire array
+        then the data set is not split and the average for the entire array is used as the predictor
+        '''
+        for i in range(len(X)):
+            if len(X[:i]) < self.min_leaf_size:
+                continue
+            elif len(X[i:]) < self.min_leaf_size:
+                continue
+            else:
+                error_left = self.mean_squared_error(X[:i], np.mean(y[:i]))
+                error_right = self.mean_squared_error(X[i:], np.mean(y[i:]))
+                error = error_left + error_right
+                if error < min_error:
+                    best_split = i
+                    min_error = error
+    
+      3. find centroids and clusters using kmeans function.
+  
+        centroids, cluster_assignment = kmeans(
+            X, 
+            k, 
+            initial_centroids, 
+            maxiter=400,
+            record_heterogeneity=heterogeneity, 
+            verbose=True # whether to print logs in console or not.(default=False)
+            )
+  
+  
+  4. Plot the loss function, hetrogeneity values for every iteration saved in hetrogeneity list.
+        plot_heterogeneity(
+            heterogeneity, 
+            k
+        )
+  
+  5. Have fun..
+  
+'''
+from __future__ import print_function
+from sklearn.metrics import pairwise_distances
+import numpy as np
