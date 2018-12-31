@@ -1,102 +1,124 @@
 
         
-        
-def get_cloudwatchevents_client(module):
-    '''Returns a boto3 client for accessing CloudWatch Events'''
-    region, ec2_url, aws_conn_kwargs = get_aws_connection_info(module, boto3=True)
-    return boto3_conn(module, conn_type='client',
-                      resource='events',
-                      region=region, endpoint=ec2_url,
-                      **aws_conn_kwargs)
+            state = module.params.get('state')
+    group_name = module.params.get('name').lower()
+    group_description = module.params.get('description')
+    group_subnets = module.params.get('subnets') or {}
     
-    from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.ec2 import (boto3_conn, AWSRetry, camel_dict_to_snake_dict,
-                                      ec2_argument_spec, get_aws_connection_info)
-    
-        launch_config_name = module.params.get('name')
-    sort = module.params.get('sort')
-    sort_order = module.params.get('sort_order')
-    sort_start = module.params.get('sort_start')
-    sort_end = module.params.get('sort_end')
-    
-    # Snapshot of volume mounted on device_name attached to instance_id
-- ec2_snapshot:
-    instance_id: i-12345678
-    device_name: /dev/sdb1
-    description: snapshot of /data from DB123 taken 2013/11/28 12:18:32
+        creds, params = get_google_cloud_credentials(module)
+    pubsub_client = pubsub.Client(project=params['project_id'], credentials=creds, use_gax=False)
+    pubsub_client.user_agent = 'ansible-pubsub-0.1'
     
     
-try:
-    import boto3
-    import botocore.exceptions
-    HAS_BOTO3 = True
-except ImportError:
-    HAS_BOTO3 = False
+def main():
+    argument_spec = vca_argument_spec()
+    argument_spec.update(
+        dict(
+            fw_rules=dict(required=True, type='list'),
+            gateway_name=dict(default='gateway'),
+            state=dict(default='present', choices=['present', 'absent'])
+        )
+    )
     
-            if module.params.get('next_marker'):
-            params['Marker'] = module.params.get('next_marker')
-        try:
-            lambda_facts.update(aliases=client.list_aliases(FunctionName=function_name, **params)['Aliases'])
-        except ClientError as e:
-            if e.response['Error']['Code'] == 'ResourceNotFoundException':
-                lambda_facts.update(aliases=[])
-            else:
-                module.fail_json_aws(e, msg='Trying to get aliases')
+        if not purge_rules and not nat_rules:
+        module.fail_json(msg='Must define purge_rules or nat_rules')
+    
+    
+DOCUMENTATION = '''
+---
+module: vertica_configuration
+version_added: '2.0'
+short_description: Updates Vertica configuration parameters.
+description:
+    - Updates Vertica configuration parameters.
+options:
+  name:
+    description:
+        - Name of the parameter to update.
+    required: true
+    aliases: [parameter]
+  value:
+    description:
+        - Value of the parameter to be set.
+    required: true
+  db:
+    description:
+        - Name of the Vertica database.
+  cluster:
+    description:
+        - Name of the Vertica cluster.
+    default: localhost
+  port:
+    description:
+        - Vertica cluster port to connect to.
+    default: 5433
+  login_user:
+    description:
+        - The username used to authenticate with.
+    default: dbadmin
+  login_password:
+    description:
+        - The password used to authenticate with.
+notes:
+  - The default authentication assumes that you are either logging in as or sudo'ing
+    to the C(dbadmin) account on the host.
+  - This module uses C(pyodbc), a Python ODBC database adapter. You must ensure
+    that C(unixODBC) and C(pyodbc) is installed on the host and properly configured.
+  - Configuring C(unixODBC) for Vertica requires C(Driver = /opt/vertica/lib64/libverticaodbc.so)
+    to be added to the C(Vertica) section of either C(/etc/odbcinst.ini) or C($HOME/.odbcinst.ini)
+    and both C(ErrorMessagesPath = /opt/vertica/lib64) and C(DriverManagerEncoding = UTF-16)
+    to be added to the C(Driver) section of either C(/etc/vertica.ini) or C($HOME/.vertica.ini).
+requirements: [ 'unixODBC', 'pyodbc' ]
+author: 'Dariusz Owczarek (@dareko)'
+'''
+    
+    
+def present(schema_facts, cursor, schema, usage_roles, create_roles, owner):
+    schema_key = schema.lower()
+    if schema_key not in schema_facts:
+        query_fragments = ['create schema {0}'.format(schema)]
+        if owner:
+            query_fragments.append('authorization {0}'.format(owner))
+        cursor.execute(' '.join(query_fragments))
+        update_roles(schema_facts, cursor, schema, [], usage_roles, [], create_roles)
+        schema_facts.update(get_schema_facts(cursor, schema))
+        return True
     else:
-        module.fail_json(msg='Parameter function_name required for query=aliases.')
+        changed = False
+        if owner and owner.lower() != schema_facts[schema_key]['owner'].lower():
+            raise NotSupportedError((
+                'Changing schema owner is not supported. '
+                'Current owner: {0}.'
+            ).format(schema_facts[schema_key]['owner']))
+        if sorted(usage_roles) != sorted(schema_facts[schema_key]['usage_roles']) or \
+           sorted(create_roles) != sorted(schema_facts[schema_key]['create_roles']):
     
-                while wait_timeout > time.time() and resource['ClusterStatus'] != 'available':
-                time.sleep(5)
-                if wait_timeout <= time.time():
-                    module.fail_json(msg='Timeout waiting for resource %s' % resource.id)
+        def run_command(command):
+        '''Runs a monit command, and returns the new status.'''
+        module.run_command('%s %s %s' % (MONIT, command, name), check_rc=True)
+        return get_status()
     
-    EXAMPLES = '''
-    - name: Get facts for one Azure Kubernetes Service
-      azure_rm_aks_facts:
-        name: Testing
-        resource_group: TestRG
-    
-    plt.xlim([-0.05, 1.05])
-plt.ylim([-0.05, 1.05])
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('Receiver operating characteristic')
-plt.legend(loc='lower right')
-plt.show()
+        return strings
 
     
-        clf = clone(transfomer)
+        def set_appid_not_exist(self, appid):
+        self.logger.warn('APPID_manager, set_appid_not_exist %s', appid)
+        with self.lock:
+            if appid not in self.not_exist_appids:
+                self.not_exist_appids.append(appid)
+            try:
+                self.config.GAE_APPIDS.remove(appid)
+            except:
+                pass
     
-                X_train = X[:n_train]
-            y_train = y[:n_train]
-            X_test = X[n_train:]
-            y_test = y[n_train:]
-    
-        # Make the eyebrows into a nightmare
-    d.polygon(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 128))
-    d.polygon(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 128))
-    d.line(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 150), width=5)
-    d.line(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 150), width=5)
-    
-        if len(unknown_face_encodings) > 0:
-        face_found = True
-        # See if the first face in the uploaded image matches the known face of Obama
-        match_results = face_recognition.compare_faces([known_face_encoding], unknown_face_encodings[0])
-        if match_results[0]:
-            is_obama = True
-    
-                # If a match was found in known_face_encodings, just use the first one.
-            if True in matches:
-                first_match_index = matches.index(True)
-                name = known_face_names[first_match_index]
-    
-            face_encoding_a1 = api.face_encodings(img_a1)[0]
-        face_encoding_a2 = api.face_encodings(img_a2)[0]
-        face_encoding_a3 = api.face_encodings(img_a3)[0]
-        face_encoding_b1 = api.face_encodings(img_b1)[0]
-    
-    # Load the jpg file into a numpy array
-image = face_recognition.load_image_file('two_people.jpg')
-    
-    with open('README.rst') as readme_file:
-    readme = readme_file.read()
+        def __init__(self):
+        ca_certs = os.path.join(current_path, 'cacert.pem')
+        openssl_context = SSLContext(
+            logger, ca_certs=ca_certs,
+            cipher_suites=['ALL', '!RC4-SHA', '!ECDHE-RSA-RC4-SHA', '!ECDHE-RSA-AES128-GCM-SHA256',
+                           '!AES128-GCM-SHA256', '!ECDHE-RSA-AES128-SHA', '!AES128-SHA']
+        )
+        host_manager = HostManagerBase()
+        connect_creator = ConnectCreator(logger, config, openssl_context, host_manager,
+                                         debug=True)
+        self.check_ip = CheckIp(logger, config, connect_creator)
