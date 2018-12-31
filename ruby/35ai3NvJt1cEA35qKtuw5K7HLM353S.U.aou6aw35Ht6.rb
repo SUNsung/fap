@@ -1,74 +1,57 @@
 
         
-        def content_for(file)
-  contents = File.read(file)
-  case file
-  when 'History.markdown'
-    converted_history(contents)
-  else
-    contents.gsub(%r!\A# .*\n\n?!, '')
+                sql = <<-SQL
+          UPDATE ci_stages SET status = (#{status_sql})
+            WHERE ci_stages.status IS NULL
+            AND ci_stages.id BETWEEN #{start_id.to_i} AND #{stop_id.to_i}
+        SQL
+    
+            def preload_stages_warnings
+          # This preloads the number of warnings for every stage, ensuring
+          # that Ci::Stage#has_warnings? doesn't execute any additional
+          # queries.
+          @pipeline.stages.each { |stage| stage.number_of_warnings }
+        end
+      end
+    end
   end
 end
-    
-    DOC_PATH = File.join(File.expand_path(__dir__), '_puppies', 'rover.md')
-COL_PATH = File.join(File.expand_path(__dir__), '_puppies')
-    
-              new_theme_name = args.join('_')
-          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
-          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
-    
-      # Clean a top-level (bin, sbin, lib) directory, recursively, by fixing file
-  # permissions and removing .la files, unless the files (or parent
-  # directories) are protected by skip_clean.
-  #
-  # bin and sbin should not have any subdirectories; if either do that is
-  # caught as an audit warning
-  #
-  # lib may have a large directory tree (see Erlang for instance), and
-  # clean_dir applies cleaning rules to the entire tree
-  def clean_dir(d)
-    d.find do |path|
-      path.extend(ObserverPathnameExtension)
-    
-        dump_formula_report :A, 'New Formulae'
-    dump_formula_report :M, 'Updated Formulae'
-    dump_formula_report :R, 'Renamed Formulae'
-    dump_formula_report :D, 'Deleted Formulae'
-  end
-    
-      def self.require_universal_deps
-    define_method(:require_universal_deps?) { true }
-  end
-    
-            MergeRequest
-          .where(id: start_id..stop_id)
-          .where(latest_merge_request_diff_id: nil)
-          .each_batch(of: BATCH_SIZE) do |relation|
-    
-            def preload_commit_authors
-          # This also preloads the author of every commit. We're using 'lazy_author'
-          # here since 'author' immediately loads the data on the first call.
-          @pipeline.commit.try(:lazy_author)
-        end
+
     
     module Gitlab
   module GithubImport
     module Importer
-      class NotesImporter
+      class IssuesImporter
         include ParallelScheduling
     
-            val.to_i if val.present?
+            def importer_class
+          LfsObjectImporter
+        end
+    
+            def id_for_already_imported_cache(note)
+          note.id
+        end
       end
+    end
+  end
+end
+
     
     module Gitlab
   module GithubImport
-    module Representation
-      class LfsObject
-        include ToHash
-        include ExposeAttribute
+    # IssuableFinder can be used for caching and retrieving database IDs for
+    # issuable objects such as issues and pull requests. By caching these IDs we
+    # remove the need for running a lot of database queries when importing
+    # GitHub projects.
+    class IssuableFinder
+      attr_reader :project, :object
     
-            # attributes - A Hash containing the user details. The keys of this
-        #              Hash (and any nested hashes) must be symbols.
+            def labels?
+          label_names && label_names.any?
+        end
+    
+            # attributes - A Hash containing the raw lfs_object details. The keys of this
+        #              Hash must be Symbols.
         def initialize(attributes)
           @attributes = attributes
         end
@@ -78,42 +61,130 @@ COL_PATH = File.join(File.expand_path(__dir__), '_puppies')
 end
 
     
-            format('%2$c', 1, 97).should == 'a'
-        format('%2$p', 'a', []).should == '[]'
-        format('%2$s', '-', 'abc').should == 'abc'
-      end
+    module Gitlab
+  module QueryLimiting
+    # Middleware for reporting (or raising) when a request performs more than a
+    # certain amount of database queries.
+    class Middleware
+      CONTROLLER_KEY = 'action_controller.instance'.freeze
+      ENDPOINT_KEY = 'api.endpoint'.freeze
     
-      it 'accepts and uses a seed of 0' do
-    srand(0)
-    srand.should == 0
+          @form         = Form::StatusBatch.new(form_status_batch_params.merge(current_account: current_account, action: action_from_button))
+      flash[:alert] = I18n.t('admin.statuses.failed_to_execute') unless @form.save
+    
+      def update
+    if verify_payload?
+      process_salmon
+      head 202
+    elsif payload.present?
+      render plain: signature_verification_failure_reason, status: 401
+    else
+      head 400
+    end
   end
     
-          it 'raises TypeError if passed not Integer' do
-        -> { warn '', uplevel: '' }.should raise_error(TypeError)
-        -> { warn '', uplevel: [] }.should raise_error(TypeError)
-        -> { warn '', uplevel: {} }.should raise_error(TypeError)
-        -> { warn '', uplevel: Object.new }.should raise_error(TypeError)
-      end
+      def show
+    if subscription.valid?(params['hub.topic'])
+      @account.update(subscription_expires_at: future_expires)
+      render plain: encoded_challenge, status: 200
+    else
+      head 404
+    end
+  end
+    
+        data.deep_merge!(data_params) if params[:data]
+    
+      # log-levels from the diaspora.yml for SQL and federation debug-logging
+  Logging.logger[ActionView::Base].level = Rails.env.development? ? :debug : :warn
+  Logging.logger[ActiveRecord::Base].level = AppConfig.environment.logging.debug.sql? ? :debug : :info
+  Logging.logger[DiasporaFederation::Salmon::MagicEnvelope].level =
+    AppConfig.environment.logging.debug.federation? ? :debug : :info
+    
+        change.down do
+      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
+      Mention.where(mentions_container_type: 'Comment').destroy_all
+      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
     end
   end
 end
 
     
-      it 'creates a public method in TOPLEVEL_BINDING' do
-    eval @code, TOPLEVEL_BINDING
-    Object.should have_method :boom
+    When /^I (?:like|unlike) the post '([^']*)' in the stream$/ do |post_text|
+  like_stream_post(post_text)
+end
+    
+      failure_message_for_should do |actual|
+    'expected #{actual.inspect} to have value #{expected.inspect} but was #{actual.value.inspect}'
+  end
+  failure_message_for_should_not do |actual|
+    'expected #{actual.inspect} to not have value #{expected.inspect} but it had'
+  end
+end
+    
+        it 'generates a jasmine fixture', :fixture => true do
+      contact = alice.contact_for(bob.person)
+      aspect = alice.aspects.create(:name => 'people')
+      contact.aspects << aspect
+      contact.save
+      get :new, params: {person_id: bob.person.id}
+      save_fixture(html_for('body'), 'status_message_new')
+    end
+  end
+end
+
+    
+        it 'returns a 401 for a private post when logged out' do
+      bob.like!(@message)
+      sign_out :user
+      get :index, params: {post_id: @message.id}, format: :json
+      expect(response.status).to eq(401)
+    end
   end
     
-          validate_plugins!
+      describe '#update' do
+    it 'marks a notification as read if it gets no other information' do
+      note = FactoryGirl.create(:notification)
+      expect(Notification).to receive(:where).and_return([note])
+      expect(note).to receive(:set_read_state).with(true)
+      get :update, params: {id: note.id}, format: :json
     end
     
-    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
-  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.windows?
-  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.windows?
+    def get_stdin(message)
+  print message
+  STDIN.gets.chomp
+end
     
-          options = {:debug => ENV['LS_QA_DEBUG']}
-      puts 'Destroying #{machines}'
-      LogStash::VagrantHelpers.destroy(machines, options)
-      puts 'Bootstrapping #{machines}'
-      LogStash::VagrantHelpers.bootstrap(machines, options)
+      class RenderPartialTag < Liquid::Tag
+    include OctopressFilters
+    def initialize(tag_name, markup, tokens)
+      @file = nil
+      @raw = false
+      if markup =~ /^(\S+)\s?(\w+)?/
+        @file = $1.strip
+        @raw = $2 == 'raw'
+      end
+      super
     end
+    
+        def render(context)
+      output = super
+      types = {
+        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
+        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
+        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
+      }
+      if @videos.size > 0
+        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
+        @videos.each do |v|
+          video << '<source src='#{v}' #{types[File.extname(v)]}>'
+        end
+        video += '</video>'
+      else
+        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
+      end
+    end
+    
+    class PaperclipGenerator < ActiveRecord::Generators::Base
+  desc 'Create a migration to add paperclip-specific fields to your model. ' +
+       'The NAME argument is the name of your model, and the following ' +
+       'arguments are the name of the attachments'
