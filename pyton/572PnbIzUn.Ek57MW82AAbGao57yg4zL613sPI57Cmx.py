@@ -1,180 +1,120 @@
 
         
-          Returns:
-    The word embeddings matrix
-  '''
-  embedding_file = os.path.join(word_embeddings_dir, word_embeddings_file)
-  vocab_file = os.path.join(
-      word_embeddings_dir, os.path.dirname(word_embeddings_file), 'vocab.txt')
+            def __str__(self):
+        defaults = dict(type(self).__dict__)
+        actual = dict(defaults)
+        actual.update(self.__dict__)
+        actual['config'] = self.config
+        return repr_dict_nice(dict(
+            (key, value)
+            for key, value in actual.items()
+            if not key.startswith('_'))
+        )
     
-          # self.path_embeddings is of shape
-      # [batch_size, max_path_per_instance, output_dim]
-      # We need to multiply it by path counts
-      # ([batch_size, max_path_per_instance]).
-      # Start by duplicating path_counts along the output_dim axis.
-      self.path_freq = tf.tile(tf.expand_dims(self.path_counts, -1),
-                               [1, 1, self.path_dim])
+    from httpie.plugins import plugin_manager
+from httpie.context import Environment
     
-    data_train_truth, data_valid_truth = split_list_by_inds(truth_data_e,
-                                                        train_inds,
-                                                        valid_inds)
-data_train_spiking, data_valid_spiking = split_list_by_inds(spiking_data_e,
-                                                            train_inds,
-                                                            valid_inds)
-    
-      # Visualize this in the morning.
-  all_data_nxtc = np.zeros([nchannels_all, ntime * nconditions_all])
-  for name, dataset in datasets.items():
-    cidx_s = channel_idxs[name][0]
-    cidx_f = channel_idxs[name][1]
-    for cname in conditions_all[name]:
-      cidxs = np.argwhere(all_conditions_list == cname)
-      if cidxs.shape[0] > 0:
-        cidx = cidxs[0][0]
-        all_tidxs = np.arange(0, ntime+1) + cidx*ntime
-        all_data_nxtc[cidx_s:cidx_f, all_tidxs[0]:all_tidxs[-1]] = \
-            avg_data_all[name][cname].T
-    
-        tf.logging.info('Loaded %d words.', current_idx)
-    tf.logging.info('Finished loading')
-    return zip(ids, chars_ids, global_word_ids)
-    
-      This generates batch_size pointers into the raw IMDB data, and allows
-  minibatch iteration along these pointers.
-    
-    import os
-import sys
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    
-    print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
-    try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
-    
-        out = issue_template_tmpl % {'version': locals()['__version__']}
-    
-    
-from youtube_dl import YoutubeDL
-    
-    # Allow direct execution
-import os
-import sys
-import unittest
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    
-        def test_cmdline_umlauts(self):
-        p = subprocess.Popen(
-            [sys.executable, 'youtube_dl/__main__.py', encodeArgument('ä'), '--version'],
-            cwd=rootDir, stdout=_DEV_NULL, stderr=subprocess.PIPE)
-        _, stderr = p.communicate()
-        self.assertFalse(stderr)
-    
-        def logout(self):
-        return self._client.get('/auth/logout')
-    
-        This function can return ``unicode`` strings or ascii-only bytestrings by
-    default which coerce into unicode strings automatically.  That behavior by
-    default is controlled by the ``JSON_AS_ASCII`` configuration variable
-    and can be overridden by the simplejson ``ensure_ascii`` parameter.
-    '''
-    _dump_arg_defaults(kwargs)
-    encoding = kwargs.pop('encoding', None)
-    rv = _json.dumps(obj, **kwargs)
-    if encoding is not None and isinstance(rv, text_type):
-        rv = rv.encode(encoding)
-    return rv
-    
-            # If the session is modified to be empty, remove the cookie.
-        # If the session is empty, return without setting the cookie.
-        if not session:
-            if session.modified:
-                response.delete_cookie(
-                    app.session_cookie_name,
-                    domain=domain,
-                    path=path
-                )
-    
-            for chunk in self.msg.iter_body(self.CHUNK_SIZE):
-            if not converter and b'\0' in chunk:
-                converter = self.conversion.get_converter(self.mime)
-                if not converter:
-                    raise BinarySuppressedError()
-            body.extend(chunk)
-    
-        if 'win32' in str(sys.platform).lower():
-        # Terminal colors for Windows
-        install_requires.append('colorama>=0.2.4')
-    
-    
-@mock.patch('httpie.input.AuthCredentials._getpass',
-            new=lambda self, prompt: 'password')
-def test_password_prompt(httpbin):
-    r = http('--auth', 'user',
-             'GET', httpbin.url + '/basic-auth/user/password')
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
-    
-        '''
-    
-    
-# Are two filenames really pointing to the same file?
-def samefile(f1, f2):
-    '''Test whether two pathnames reference the same actual file'''
-    s1 = os.stat(f1)
-    s2 = os.stat(f2)
-    return samestat(s1, s2)
-    
-    # Import the email modules we'll need
-from email import policy
-from email.parser import BytesParser
-    
-            TASKS = [(mul, (i, 7)) for i in range(10)] + \
-                [(plus, (i, 8)) for i in range(10)]
-    
-    def calculate(func, args):
-    result = func(*args)
-    return '%s says that %s%s = %s' % \
-        (current_process().name, func.__name__, args, result)
-    
-        def __getattr__(self, name):
-        attr = getattr(self.delegate, name)
-        
-        if not callable(attr):
-            return attr
+            Return a ``requests.auth.AuthBase`` subclass instance.
     
         @staticmethod
-    def _static_method_1():
-        print('executed method 1!')
+    def make_header(username, password):
+        credentials = u'%s:%s' % (username, password)
+        token = b64encode(credentials.encode('utf8')).strip().decode('latin1')
+        return 'Basic %s' % token
     
-        def rename(self, src, dest):
-        print(u'renaming %s to %s' % (src, dest))
-        os.rename(src, dest)
+        def load_installed_plugins(self):
+        for entry_point_name in ENTRY_POINT_NAMES:
+            for entry_point in iter_entry_points(entry_point_name):
+                plugin = entry_point.load()
+                plugin.package_name = entry_point.dist.key
+                self.register(entry_point.load())
+    
+    UNICODE = FILE_CONTENT
+
+    
+        def test_POST_with_data_auto_JSON_headers(self, httpbin):
+        r = http('POST', httpbin.url + '/post', 'a=b')
+        assert HTTP_OK in r
+        assert r.json['headers']['Accept'] == JSON_ACCEPT
+        assert r.json['headers']['Content-Type'] == 'application/json'
     
     
-class State(object):
+@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
+@pytest.mark.parametrize('filename', filenames)
+def test_rst_file_syntax(filename):
+    p = subprocess.Popen(
+        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE
+    )
+    err = p.communicate()[1]
+    assert p.returncode == 0, err.decode('utf8')
+
     
-    import types
     
-        def generic_visit(self, node, *args, **kwargs):
-        print('generic_visit ' + node.__class__.__name__)
+def test_unicode_digest_auth(httpbin):
+    # it doesn't really authenticate us because httpbin
+    # doesn't interpret the utf8-encoded auth
+    http('--auth-type=digest',
+         '--auth', u'test:%s' % UNICODE,
+         httpbin.url + u'/digest-auth/auth/test/' + UNICODE)
+
     
-    https://en.wikipedia.org/wiki/Lazy_evaluation
+    import pytest
+from requests.compat import urljoin
     
-        def __init__(self):
-        self.time_provider = datetime.datetime
+                return request_content
     
-            path.append(start)
-        if start == end:
-            return path
-        for node in self.graph.get(start, []):
-            if node not in path:
-                newpath = self.find_path(node, end, path[:])
-                if newpath:
-                    return newpath
+            :param connections: The number of urllib3 connection pools to cache.
+        :param maxsize: The maximum number of connections to save in the pool.
+        :param block: Block when no free connections are available.
+        :param pool_kwargs: Extra keyword arguments used to initialize the Pool Manager.
+        '''
+        # save these values for pickling
+        self._pool_connections = connections
+        self._pool_maxsize = maxsize
+        self._pool_block = block
+    
+    import sys
+    
+        def test_multiple_requests(self):
+        '''multiple requests can be served'''
+        requests_to_handle = 5
+    
+    site_info = 'baomihua.com'
+download = baomihua_download
+download_playlist = playlist_not_supported('baomihua')
+
+    
+    #----------------------------------------------------------------------
+#helper
+#https://stackoverflow.com/questions/2148119/how-to-convert-an-xml-string-to-a-dictionary-in-python
+def dictify(r,root=True):
+    if root:
+        return {r.tag : dictify(r, False)}
+    d=copy(r.attrib)
+    if r.text:
+        d['_text']=r.text
+    for x in r.findall('./*'):
+        if x.tag not in d:
+            d[x.tag]=[]
+        d[x.tag].append(dictify(x,False))
+    return d
+    
+        for quality in ['1080','720','480','380','240','144','auto']:
+        try:
+            real_url = info[quality][1]['url']
+            if real_url:
+                break
+        except KeyError:
+            pass
+    
+        def prepare(self, **kwargs):
+        if self.__class__.coeff is None:
+            magic_list = self.__class__.fetch_magic(self.__class__.a_mobile_url)
+            self.__class__.coeff = self.__class__.get_coeff(magic_list)
+    
+        url = list(set([
+        unicodize(str.replace(i, '\\/', '/'))
+        for i in re.findall(r'<meta property='og:video:secure_url' content='(.*?)'>', html)
+    ]))
