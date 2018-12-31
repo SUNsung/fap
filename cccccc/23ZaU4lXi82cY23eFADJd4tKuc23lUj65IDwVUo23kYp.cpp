@@ -1,150 +1,196 @@
 
         
-        bool swift::isPlatformActive(PlatformKind Platform, LangOptions &LangOpts) {
-  if (Platform == PlatformKind::none)
-    return true;
-  
-  if (Platform == PlatformKind::OSXApplicationExtension ||
-      Platform == PlatformKind::iOSApplicationExtension)
-    if (!LangOpts.EnableAppExtensionRestrictions)
-      return false;
-  
-  // FIXME: This is an awful way to get the current OS.
-  switch (Platform) {
-    case PlatformKind::OSX:
-    case PlatformKind::OSXApplicationExtension:
-      return LangOpts.Target.isMacOSX();
-    case PlatformKind::iOS:
-    case PlatformKind::iOSApplicationExtension:
-      return LangOpts.Target.isiOS() && !LangOpts.Target.isTvOS();
-    case PlatformKind::tvOS:
-    case PlatformKind::tvOSApplicationExtension:
-      return LangOpts.Target.isTvOS();
-    case PlatformKind::watchOS:
-    case PlatformKind::watchOSApplicationExtension:
-      return LangOpts.Target.isWatchOS();
-    case PlatformKind::none:
-      llvm_unreachable('handled above');
-  }
-  llvm_unreachable('bad PlatformKind');
+        namespace atom {
+    }
+    
+     private:
+  std::string GetFeedURL();
+  void SetFeedURL(mate::Arguments* args);
+  void QuitAndInstall();
+    
+      gfx::Point GetCursorScreenPoint();
+  display::Display GetPrimaryDisplay();
+  std::vector<display::Display> GetAllDisplays();
+  display::Display GetDisplayNearestPoint(const gfx::Point& point);
+  display::Display GetDisplayMatching(const gfx::Rect& match_rect);
+    
+    void SavePageHandler::OnDownloadCreated(content::DownloadManager* manager,
+                                        download::DownloadItem* item) {
+  // OnDownloadCreated is invoked during WebContents::SavePage, so the |item|
+  // here is the one stated by WebContents::SavePage.
+  item->AddObserver(this);
 }
     
-    bool swift::canBeArgumentLabel(StringRef identifier) {
-  return llvm::StringSwitch<bool>(identifier)
-    .Case('var', false)
-    .Case('let', false)
-    .Case('inout', false)
-    .Case('$', false)
-    .Default(true);
-}
     
-    #endif // SWIFT_IMPORTER_CFTYPEINFO_H
+    {}  // namespace auto_updater
 
     
-    static SourceLoc findEndOfLine(SourceManager &SM, SourceLoc loc,
-                               unsigned bufferID) {
-  CharSourceRange entireBuffer = SM.getRangeForBuffer(bufferID);
-  CharSourceRange rangeFromLoc{SM, loc, entireBuffer.getEnd()};
-  StringRef textFromLoc = SM.extractText(rangeFromLoc);
-  size_t newlineOffset = textFromLoc.find_first_of({'\r\n\0', 3});
-  if (newlineOffset == StringRef::npos)
-    return entireBuffer.getEnd();
-  return loc.getAdvancedLoc(newlineOffset);
-}
-    
-    vector<detail::BenchmarkResult> resultsFromFile(const std::string& filename) {
-  string content;
-  readFile(filename.c_str(), content);
-  vector<detail::BenchmarkResult> ret;
-  benchmarkResultsFromDynamic(parseJson(content), ret);
-  return ret;
-}
-    
-    exception_wrapper exception_wrapper::from_exception_ptr(
-    std::exception_ptr const& ptr) noexcept {
-  if (!ptr) {
-    return exception_wrapper();
-  }
-  try {
-    std::rethrow_exception(ptr);
-  } catch (std::exception& e) {
-    return exception_wrapper(std::current_exception(), e);
-  } catch (...) {
-    return exception_wrapper(std::current_exception());
-  }
-}
-    
-    #include <stdexcept>
-    
-        ExecutorT& operator*() const {
-      return *get();
+    Status BuildTable(const std::string& dbname,
+                  Env* env,
+                  const Options& options,
+                  TableCache* table_cache,
+                  Iterator* iter,
+                  FileMetaData* meta) {
+  Status s;
+  meta->file_size = 0;
+  iter->SeekToFirst();
     }
     
-    #ifndef FOLLY_RANDOM_H_
-#error This file may only be included from folly/Random.h
-#endif
+    // Build a Table file from the contents of *iter.  The generated file
+// will be named according to meta->number.  On success, the rest of
+// *meta will be filled with metadata about the generated table.
+// If no data is present in *iter, meta->file_size will be set to
+// zero, and no Table file will be produced.
+Status BuildTable(const std::string& dbname,
+                  Env* env,
+                  const Options& options,
+                  TableCache* table_cache,
+                  Iterator* iter,
+                  FileMetaData* meta);
     
-    /*
- * Decode a single unicode code point from UTF-8 byte sequence.
- */
-char32_t utf8ToCodePoint(
-    const unsigned char*& p,
-    const unsigned char* const e,
-    bool skipOnError);
     
-    #include <folly/DefaultKeepAliveExecutor.h>
+    {  // Force compactions by writing lots of values
+  Build(10000);
+  Check(10000, 10000);
+}
     
-        // Test the boundaries of conversion to int32_t seconds
-    using sec_i32 = std::chrono::duration<int32_t>;
-    ts.tv_sec = 2147483647;
-    ts.tv_nsec = 0;
-    EXPECT_EQ(std::numeric_limits<int32_t>::max(), to<sec_i32>(ts).count());
-    ts.tv_nsec = 1000000000;
-    EXPECT_THROW(to<sec_i32>(ts), std::range_error);
-    ts.tv_sec = -2147483648;
-    ts.tv_nsec = 0;
-    EXPECT_EQ(std::numeric_limits<int32_t>::min(), to<sec_i32>(ts).count());
-    ts.tv_sec = -2147483649;
-    ts.tv_nsec = 999999999;
-    EXPECT_THROW(to<sec_i32>(ts), std::range_error);
-    ts.tv_sec = -2147483649;
-    ts.tv_nsec = 0;
-    EXPECT_THROW(to<sec_i32>(ts), std::range_error);
-    ts.tv_sec = -2147483650;
-    ts.tv_nsec = 0;
-    EXPECT_THROW(to<sec_i32>(ts), std::range_error);
+      // State below is protected by mutex_
+  port::Mutex mutex_;
+  port::AtomicPointer shutting_down_;
+  port::CondVar background_work_finished_signal_ GUARDED_BY(mutex_);
+  MemTable* mem_;
+  MemTable* imm_ GUARDED_BY(mutex_);  // Memtable being compacted
+  port::AtomicPointer has_imm_;       // So bg thread can detect non-null imm_
+  WritableFile* logfile_;
+  uint64_t logfile_number_ GUARDED_BY(mutex_);
+  log::Writer* log_;
+  uint32_t seed_ GUARDED_BY(mutex_);  // For sampling.
     
-    enum class CompressionCounterKey {
-  BYTES_BEFORE_COMPRESSION = 0,
-  BYTES_AFTER_COMPRESSION = 1,
-  BYTES_BEFORE_DECOMPRESSION = 2,
-  BYTES_AFTER_DECOMPRESSION = 3,
-  COMPRESSIONS = 4,
-  DECOMPRESSIONS = 5,
-  COMPRESSION_MILLISECONDS = 6,
-  DECOMPRESSION_MILLISECONDS = 7,
+      // Write 8MB (80 values, each 100K)
+  ASSERT_EQ(NumTableFilesAtLevel(0), 0);
+  std::vector<std::string> values;
+  for (int i = 0; i < 80; i++) {
+    values.push_back(RandomString(&rnd, 100000));
+    ASSERT_OK(Put(Key(i), values[i]));
+  }
+    
+    class Env;
+    
+    
+    {
+    {}  // namespace log
+}  // namespace leveldb
+    
+          case kLastType:
+        if (!in_fragmented_record) {
+          ReportCorruption(fragment.size(),
+                           'missing start of fragmented record(2)');
+        } else {
+          scratch->append(fragment.data(), fragment.size());
+          *record = Slice(*scratch);
+          last_record_offset_ = prospective_record_offset;
+          return true;
+        }
+        break;
+    
+    TEST(LogTest, UnexpectedFullType) {
+  Write('foo');
+  Write('bar');
+  SetByte(6, kFirstType);
+  FixChecksum(0, 3);
+  ASSERT_EQ('bar', Read());
+  ASSERT_EQ('EOF', Read());
+  ASSERT_EQ(3, DroppedBytes());
+  ASSERT_EQ('OK', MatchError('partial record without end'));
+}
+    
+      // crc32c values for all supported record types.  These are
+  // pre-computed to reduce the overhead of computing the crc of the
+  // record type stored in the header.
+  uint32_t type_crc_[kMaxRecordType + 1];
+    
+    namespace leveldb {
+    }
+    
+        template <typename ElementType>
+    std::tuple<const ElementType *, const SparseIndexType*, const SparseIndexType*, size_t> NDArrayView::SparseCSCDataBuffers() const
+    {
+        return _SparseCSCDataBuffers<ElementType, ElementType>();
+    }
+    
+        template <typename T> 
+    inline std::string GetVersionsString(size_t currentVersion, size_t dictVersion)
+    {
+        std::stringstream info;
+        info << 'Current ' << Typename<T>() << ' version = ' << currentVersion 
+             << ', Dictionary version = ' << dictVersion;
+        return info.str();
+    }
+    
+    
+    { private:
+  RowBlock<IndexType> out_;
+  std::unique_ptr<Parser<IndexType> > parser_;
+  uint32_t num_col_;
+  std::vector<size_t> offset_;
+  std::vector<IndexType> dense_index_;
+  std::vector<xgboost::bst_float> dense_value_;
 };
     
-    #pragma once
-    
-      // Check pointer equality considering wrapped aliased pointers.
-  bool owners_eq(PackedPtr& p1, BasePtr* p2) {
-    bool aliased1 = p1.extra() & ALIASED_PTR;
-    if (aliased1) {
-      auto p1a = CountedDetail::template get_shared_ptr_from_counted_base<T>(
-          p1.get(), false);
-      return CountedDetail::get_counted_base(p1a) == p2;
-    }
-    return p1.get() == p2;
-  }
-    
-      void reset(const std::shared_ptr<T>& p = nullptr) {
-    // Allocate each Holder in a different CoreRawAllocator stripe to
-    // prevent false sharing. Their control blocks will be adjacent
-    // thanks to allocate_shared().
-    for (auto slot : folly::enumerate(slots_)) {
-      auto alloc = getCoreAllocator<Holder, kNumSlots>(slot.index);
-      auto holder = std::allocate_shared<Holder>(alloc, p);
-      *slot = std::shared_ptr<T>(holder, p.get());
+      static void CompactFiles(void* arg) {
+    std::unique_ptr<CompactionTask> task(
+        reinterpret_cast<CompactionTask*>(arg));
+    assert(task);
+    assert(task->db);
+    Status s = task->db->CompactFiles(
+        task->compact_options,
+        task->input_file_names,
+        task->output_level);
+    printf('CompactFiles() finished with status %s\n', s.ToString().c_str());
+    if (!s.ok() && !s.IsIOError() && task->retry_on_fail) {
+      // If a compaction task with its retry_on_fail=true failed,
+      // try to schedule another compaction in case the reason
+      // is not an IO error.
+      CompactionTask* new_task = task->compactor->PickCompaction(
+          task->db, task->column_family_name);
+      task->compactor->ScheduleCompaction(new_task);
     }
   }
+    
+    
+    {  rocksdb::WriteOptions wopts;
+  db->Merge(wopts, '0', 'bad');  // This is filtered out
+  db->Merge(wopts, '1', 'data1');
+  db->Merge(wopts, '1', 'bad');
+  db->Merge(wopts, '1', 'data2');
+  db->Merge(wopts, '1', 'bad');
+  db->Merge(wopts, '3', 'data3');
+  db->CompactRange(rocksdb::CompactRangeOptions(), nullptr, nullptr);
+  fprintf(stderr, 'filter.count_ = %d\n', filter.count_);
+  assert(filter.count_ == 0);
+  fprintf(stderr, 'filter.merge_count_ = %d\n', filter.merge_count_);
+  assert(filter.merge_count_ == 6);
+}
+
+    
+    
+    {  // Cleanup
+  delete txn_db;
+  DestroyDB(kDBPath, options);
+  return 0;
+}
+    
+    
+    {class DbUndumpTool {
+ public:
+  bool Run(const UndumpOptions& undump_options,
+           rocksdb::Options options = rocksdb::Options());
+};
+}  // namespace rocksdb
+#endif  // ROCKSDB_LITE
+
+    
+      // the thread pool id
+  uint64_t thread_pool_id;
+    
+      const Snapshot* snapshot();
