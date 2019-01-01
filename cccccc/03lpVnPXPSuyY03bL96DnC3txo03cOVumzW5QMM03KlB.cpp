@@ -1,270 +1,206 @@
 
         
-        StringRef swift::prettyPlatformString(PlatformKind platform) {
-  switch (platform) {
-  case PlatformKind::none:
-    return '*';
-#define AVAILABILITY_PLATFORM(X, PrettyName)                                   \
-  case PlatformKind::X:                                                        \
-    return PrettyName;
-#include 'swift/AST/PlatformKinds.def'
-  }
-  llvm_unreachable('bad PlatformKind');
-}
+            enum FLIP_MODE
+    {
+        FLIP_HORIZONTAL_MODE = 1,
+        FLIP_VERTICAL_MODE = 2,
+        FLIP_BOTH_MODE = FLIP_HORIZONTAL_MODE | FLIP_VERTICAL_MODE
+    };
     
-    void swift::printOpaquePrefixMap(raw_ostream &out, void *_root,
-                         void (*printNodeData)(raw_ostream &out, void *node)) {
-  auto root = reinterpret_cast<Node*>(_root);
-  if (!root) {
-    out << '(empty)\n';
-    return;
-  }
-  TreePrinter(out, *printNodeData).print(root, ChildKind::Root);
-}
-    
-    #include 'CFTypeInfo.h'
-#include 'ImporterImpl.h'
-    
-    
-    {  // let h = b = the number of basic code points in the input
-  // copy them to the output in order...
-  size_t h = 0;
-  for (auto C : InputCodePoints) {
-    if (C < 0x80) {
-      ++h;
-      OutPunycode.push_back(C);
-    }
-    if (!isValidUnicodeScalar(C)) {
-      OutPunycode.clear();
-      return false;
-    }
-  }
-  size_t b = h;
-  // ...followed by a delimiter if b > 0
-  if (b > 0)
-    OutPunycode.push_back(delimiter);
-  
-  while (h < InputCodePoints.size()) {
-    // let m = the minimum code point >= n in the input
-    uint32_t m = 0x10FFFF;
-    for (auto codePoint : InputCodePoints) {
-      if (codePoint >= n && codePoint < m)
-        m = codePoint;
+        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0,
+                     const typename internal::VecTraits<T>::vec64 & v_src1,
+                     typename internal::VecTraits<T>::vec64 & v_dst) const
+    {
+        typename internal::VecTraits<T>::vec64 v_min = internal::vmin(v_src0, v_src1);
+        typename internal::VecTraits<T>::vec64 v_max = internal::vmax(v_src0, v_src1);
+        v_dst = internal::vqsub(v_max, v_min);
     }
     
-    delta = delta + (m - n) * (h + 1);
-    n = m;
-    for (auto c : InputCodePoints) {
-      if (c < n) ++delta;
-      if (c == n) {
-        int q = delta;
-        for (int k = base; ; k += base) {
-          int t = k <= bias ? tmin
-                : k >= bias + tmax ? tmax
-                : k - bias;
-          
-          if (q < t) break;
-          OutPunycode.push_back(digit_value(t + ((q - t) % (base - t))));
-          q = (q - t) / (base - t);
+        void operator() (const typename VecTraits<s32>::vec64 & v_src0,
+                     const typename VecTraits<s32>::vec64 & v_src1,
+                     typename VecTraits<s32>::vec64 & v_dst) const
+    {
+        float32x2_t vs1 = vcvt_f32_s32(v_src0);
+        float32x2_t vs2 = vcvt_f32_s32(v_src1);
+    }
+    
+            mag_buf[1][0] = mag_buf[1][size.width+1] = 0;
+        if (borderyt == 0)
+        {
+            //sobelH row #-1
+            _src = internal::getRowPtr(srcBase, srcStride, -1);
+            sobelRow(_src, ((s16*)mag_buf[2]) + shxOffset, ((s16*)mag_buf[2]) + shyOffset, size.width);
+    }
+    
+    
+    {
+    {        for (; sj < size.width; ++sj, syj += 2, dj += 4)
+        {
+            dst[dj] = srcy[syj];
+            dst[dj + 1] = srcu[sj];
+            dst[dj + 2] = srcy[syj + 1];
+            dst[dj + 3] = srcv[sj];
         }
-        OutPunycode.push_back(digit_value(q));
-        bias = adapt(delta, h + 1, h == b);
-        delta = 0;
-        ++h;
-      }
     }
-    ++delta; ++n;
-  }
-  return true;
+#else
+    (void)size;
+    (void)srcyBase;
+    (void)srcyStride;
+    (void)srcuBase;
+    (void)srcuStride;
+    (void)srcvBase;
+    (void)srcvStride;
+    (void)dstBase;
+    (void)dstStride;
+#endif
 }
     
-    
-    {
-    {
-    {}  // namespace python
-}  // namespace protobuf
-}  // namespace google
-#endif  // GOOGLE_PROTOBUF_PYTHON_CPP_SCOPED_PYOBJECT_PTR_H__
+    #endif
 
     
-    bool CodeGenerator::GenerateAll(
-    const std::vector<const FileDescriptor*>& files,
-    const string& parameter,
-    GeneratorContext* generator_context,
-    string* error) const {
-  // Default implemenation is just to call the per file method, and prefix any
-  // error string with the file to provide context.
-  bool succeeded = true;
-  for (int i = 0; i < files.size(); i++) {
-    const FileDescriptor* file = files[i];
-    succeeded = Generate(file, parameter, generator_context, error);
-    if (!succeeded && error && error->empty()) {
-      *error = 'Code generator returned false but provided no error '
-               'description.';
+            if (cpolicy == CONVERT_POLICY_SATURATE)
+        {
+            for (; j < roiw16; j += 16)
+            {
+                internal::prefetch(src + j);
+                int16x8_t v_src0 = vshrq_n_s16(vld1q_s16(src + j), shift),
+                          v_src1 = vshrq_n_s16(vld1q_s16(src + j + 8), shift);
+                uint8x16_t v_dst = vcombine_u8(vqmovun_s16(v_src0),
+                                               vqmovun_s16(v_src1));
+                vst1q_u8(dst + j, v_dst);
+            }
+            for (; j < roiw8; j += 8)
+            {
+                int16x8_t v_src = vshrq_n_s16(vld1q_s16(src + j), shift);
+                vst1_u8(dst + j, vqmovun_s16(v_src));
+            }
     }
-    if (error && !error->empty()) {
-      *error = file->name() + ': ' + *error;
-      break;
+    
+                // calculate values for plain CPU part below if needed
+            if (x + 8 >= bwidth)
+            {
+                ptrdiff_t x3 = x == width ? width - 1 : x;
+                ptrdiff_t x4 = border == BORDER_MODE_CONSTANT ? x3 - 1 : std::max<ptrdiff_t>(x3 - 1, 0);
     }
-    if (!succeeded) {
-      break;
+    
+    s32 countNonZero(const Size2D &_size,
+                 const s32 * srcBase, ptrdiff_t srcStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    Size2D size(_size);
+    if (srcStride == (ptrdiff_t)(size.width))
+    {
+        size.width *= size.height;
+        size.height = 1;
     }
-  }
-  return succeeded;
+    size_t roiw4 = size.width & ~3u;
+    s32 result = 0;
+    for(size_t k = 0; k < size.height; ++k)
+    {
+        const u32* src = (const u32*)internal::getRowPtr( srcBase,  srcStride, k);
+        u32 i = 0;
+    }
+    }
+    
+                // make extrapolation for the first elements
+            if (!x)
+            {
+                // make border
+                if (border == BORDER_MODE_CONSTANT)
+                    tcurr = v_border_x3;
+                else if (border == BORDER_MODE_REPLICATE)
+                    tcurr = vdupq_n_u16(vgetq_lane_u16(tnext, 0));
+    }
+    
+    CardinalSplineBy* CardinalSplineBy::clone() const
+{
+    // no copy constructor
+    auto a = new (std::nothrow) CardinalSplineBy();
+    a->initWithDuration(this->_duration, this->_points->clone(), this->_tension);
+    a->autorelease();
+    return a;
 }
     
-    void ReflectionClassGenerator::WriteIntroduction(io::Printer* printer) {
-  printer->Print(
-    '// <auto-generated>\n'
-    '//     Generated by the protocol buffer compiler.  DO NOT EDIT!\n'
-    '//     source: $file_name$\n'
-    '// </auto-generated>\n'
-    '#pragma warning disable 1591, 0612, 3021\n'
-    '#region Designer generated code\n'
-    '\n'
-    'using pb = global::Google.Protobuf;\n'
-    'using pbc = global::Google.Protobuf.Collections;\n'
-    'using pbr = global::Google.Protobuf.Reflection;\n'
-    'using scg = global::System.Collections.Generic;\n',
-    'file_name', file_->name());
-    }
-    
-    #include <google/protobuf/compiler/csharp/csharp_source_generator_base.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/compiler/csharp/csharp_names.h>
-#include <google/protobuf/compiler/csharp/csharp_options.h>
-    
-    #include <google/protobuf/compiler/java/java_shared_code_generator.h>
-    
-    OneofGenerator::OneofGenerator(const OneofDescriptor* descriptor)
-    : descriptor_(descriptor) {
-  variables_['enum_name'] = OneofEnumName(descriptor_);
-  variables_['name'] = OneofName(descriptor_);
-  variables_['capitalized_name'] = OneofNameCapitalized(descriptor_);
-  variables_['raw_index'] = SimpleItoa(descriptor_->index());
-  const Descriptor* msg_descriptor = descriptor_->containing_type();
-  variables_['owning_message_class'] = ClassName(msg_descriptor);
-    }
-    
-    #include <iostream>
-#include <set>
-    
-    class PAGE_RES_IT;
-class ROW;
-class WERD_RES;
-    
-    struct OSResults {
-  OSResults() : unicharset(nullptr) {
-    for (int i = 0; i < 4; ++i) {
-      for (int j = 0; j < kMaxNumberOfScripts; ++j)
-        scripts_na[i][j] = 0;
-      orientations[i] = 0;
-    }
-  }
-  void update_best_orientation();
-  // Set the estimate of the orientation to the given id.
-  void set_best_orientation(int orientation_id);
-  // Update/Compute the best estimate of the script assuming the given
-  // orientation id.
-  void update_best_script(int orientation_id);
-  // Return the index of the script with the highest score for this orientation.
-  TESS_API int get_best_script(int orientation_id) const;
-  // Accumulate scores with given OSResults instance and update the best script.
-  void accumulate(const OSResults& osr);
-    }
-    
-      /**
-   * Returns true if the iterator is at the start of an object at the given
-   * level.
-   *
-   * For instance, suppose an iterator it is pointed to the first symbol of the
-   * first word of the third line of the second paragraph of the first block in
-   * a page, then:
-   *   it.IsAtBeginningOf(RIL_BLOCK) = false
-   *   it.IsAtBeginningOf(RIL_PARA) = false
-   *   it.IsAtBeginningOf(RIL_TEXTLINE) = true
-   *   it.IsAtBeginningOf(RIL_WORD) = true
-   *   it.IsAtBeginningOf(RIL_SYMBOL) = true
-   */
-  virtual bool IsAtBeginningOf(PageIteratorLevel level) const;
-    
-    
-    {  for (std::map<int, ParamContent*>::iterator iter = vcMap.begin();
-                                          iter != vcMap.end();
-                                          ++iter) {
-    ParamContent* cur = iter->second;
-    if (!changes_only || cur->HasChanged()) {
-      fprintf(fp, '%-25s   %-12s   # %s\n',
-              cur->GetName(), cur->GetValue().string(), cur->GetDescription());
-    }
-  }
-  fclose(fp);
-}
-#endif // GRAPHICS_DISABLED
-
-    
-     private:
-  // Gets the up to the first 3 prefixes from s (split by _).
-  // For example, tesseract_foo_bar will be split into tesseract,foo and bar.
-  void GetPrefixes(const char* s, STRING* level_one,
-                   STRING* level_two, STRING* level_three);
-    
-      WERD_RES *word2 = new WERD_RES(*word);
-    
-    /// Base class for all tesseract image thresholding classes.
-/// Specific classes can add new thresholding methods by
-/// overriding ThresholdToPix.
-/// Each instance deals with a single image, but the design is intended to
-/// be useful for multiple calls to SetRectangle and ThresholdTo* if
-/// desired.
-class TESS_API ImageThresholder {
- public:
-  ImageThresholder();
-  virtual ~ImageThresholder();
-    }
-    
-    TEST(Expected, CoroutineException) {
-  EXPECT_THROW(
-      ([]() -> Expected<int, Err> {
-        auto x = co_await throws();
-        ADD_FAILURE();
-        co_return x;
-      }()),
-      Exn);
+    Liquid* Liquid::clone() const
+{
+    // no copy constructor
+    auto a = new (std::nothrow) Liquid();
+    a->initWithDuration(_duration, _gridSize, _waves, _amplitude);
+    a->autorelease();
+    return a;
 }
     
-    vector<detail::BenchmarkResult> resultsFromFile(const std::string& filename) {
-  string content;
-  readFile(filename.c_str(), content);
-  vector<detail::BenchmarkResult> ret;
-  benchmarkResultsFromDynamic(parseJson(content), ret);
-  return ret;
+    #include '2d/CCActionInstant.h'
+#include '2d/CCNode.h'
+#include '2d/CCSprite.h'
+    
+    /*
+ * Update each tick
+ * Time is the percentage of the way through the duration
+ */
+void PageTurn3D::update(float time)
+{
+    float tt = MAX(0, time - 0.25f);
+    float deltaAy = (tt * tt * 500);
+    float ay = -100 - deltaAy;
+    
+    float deltaTheta = sqrtf(time);
+    float theta = deltaTheta > 0.5f ? (float)M_PI_2*deltaTheta : (float)M_PI_2*(1-deltaTheta);
+    
+    float rotateByYAxis = (2-time)* M_PI;
+    
+    float sinTheta = sinf(theta);
+    float cosTheta = cosf(theta);
+    
+    for (int i = 0; i <= _gridSize.width; ++i)
+    {
+        for (int j = 0; j <= _gridSize.height; ++j)
+        {
+            // Get original vertex
+            Vec3 p = getOriginalVertex(Vec2(i ,j));
+            
+            p.x -= getGridRect().origin.x;
+            float R = sqrtf((p.x * p.x) + ((p.y - ay) * (p.y - ay)));
+            float r = R * sinTheta;
+            float alpha = asinf( p.x / R );
+            float beta = alpha / sinTheta;
+            float cosBeta = cosf( beta );
+            
+            // If beta > PI then we've wrapped around the cone
+            // Reduce the radius to stop these points interfering with others
+            if (beta <= M_PI)
+            {
+                p.x = ( r * sinf(beta));
+            }
+            else
+            {
+                // Force X = 0 to stop wrapped
+                // points
+                p.x = 0;
+            }
+    }
+    }
+    }
+    
+    Animation* Animation::create(const Vector<AnimationFrame*>& arrayOfAnimationFrameNames, float delayPerUnit, unsigned int loops /* = 1 */)
+{
+    Animation *animation = new (std::nothrow) Animation();
+    animation->initWithAnimationFrames(arrayOfAnimationFrameNames, delayPerUnit, loops);
+    animation->autorelease();
+    return animation;
 }
     
-    // Some utility routines relating to unicode.
+    void AtlasNode::updateAtlasValues()
+{
+    CCASSERT(false, 'CCAtlasNode:Abstract updateAtlasValue not overridden');
+}
     
-    namespace uri_detail {
-    }
-    
-      /**
-   * windowSize is the base two logarithm of the window size (the size of the
-   * history buffer). It should be in the range 9..15. Larger values of this
-   * parameter result in better compression at the expense of memory usage.
-   *
-   * The default value is 15.
-   *
-   * NB: when inflating/uncompressing data, the windowSize must be greater than
-   * or equal to the size used when deflating/compressing.
-   */
-  int windowSize;
-    
-      void reset(const std::shared_ptr<T>& p = nullptr) {
-    // Allocate each Holder in a different CoreRawAllocator stripe to
-    // prevent false sharing. Their control blocks will be adjacent
-    // thanks to allocate_shared().
-    for (auto slot : folly::enumerate(slots_)) {
-      auto alloc = getCoreAllocator<Holder, kNumSlots>(slot.index);
-      auto holder = std::allocate_shared<Holder>(alloc, p);
-      *slot = std::shared_ptr<T>(holder, p.get());
-    }
-  }
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
