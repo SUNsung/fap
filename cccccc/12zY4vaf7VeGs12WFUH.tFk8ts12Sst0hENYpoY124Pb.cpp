@@ -1,257 +1,274 @@
 
         
-        #else  // !defined(__SSE4_1__)
-// Non-Android code here
+        
+    {    return GenericTypeParamType::get(genericParam->getDepth(),
+                                     genericParam->getIndex(), ctx);
+  };
+  auto conformanceToSyntheticConformanceFn =
+      MakeAbstractConformanceForGenericType();
     
-    // Computes a reshaped copy of the weight matrix w. If there are no
-// partial_funcs_, it does nothing.
-void IntSimdMatrix::Init(const GENERIC_2D_ARRAY<int8_t>& w) {
-  if (partial_funcs_.empty()) return;
-  int num_out = w.dim1();
-  int num_in = w.dim2() - 1;
-  // The rounded-up sizes of the reshaped weight matrix, excluding biases.
-  int rounded_num_in = Roundup(num_in, num_inputs_per_group_);
-  int rounded_num_out = RoundOutputs(num_out);
-  // Add the bias and compute the required size.
-  shaped_w_.resize((rounded_num_in + 1) * rounded_num_out, 0);
-  int shaped_index = 0;
-  int output = 0;
-  // Each number of registers needs a different format! Iterates over the
-  // different numbers of registers (each a power of 2).
-  for (int num_registers = max_output_registers_; num_registers >= 1;
-       num_registers /= 2) {
-    // The number of outputs that we will generate with this many registers.
-    int num_outputs_per_register_set =
-        num_registers * num_outputs_per_register_;
-    // Use the max number of registers until we have to go fewer.
-    while (output + num_outputs_per_register_set <= rounded_num_out) {
-      // Accumulating outputs in registers saves iterating over the inputs, so
-      // we only have to do it once per output register set.
-      for (int input = 0; input < num_in; input += num_inputs_per_group_) {
-        // Iterate over the number of outputs in a register set.
-        for (int j = 0; j < num_outputs_per_register_set; ++j) {
-          // Inner-most loop corresponds to the number of inputs in an input
-          // group.
-          for (int i = 0; i < num_inputs_per_group_; ++i) {
-            int8_t weight = 0;
-            if (output + j < num_out && input + i < num_in)
-              weight = w(output + j, input + i);
-            shaped_w_[shaped_index++] = weight;
-          }
-        }
-      }
-      // Append the bias weights for the register set.
-      for (int j = 0; j < num_outputs_per_register_set; ++j) {
-        int8_t weight = 0;
-        if (output + j < num_out) weight = w(output + j, num_in);
-        shaped_w_[shaped_index++] = weight;
-      }
-      output += num_outputs_per_register_set;
+        StringRef Line = RawText.substr(0, Pos);
+    Lines.push_back(Line);
+    if (!IsFirstLine) {
+      size_t NonWhitespacePos = RawText.find_first_not_of(' ');
+      if (NonWhitespacePos != StringRef::npos)
+        WhitespaceToTrim =
+            std::min(WhitespaceToTrim,
+                     static_cast<unsigned>(NonWhitespacePos));
     }
-  }
-}
+    IsFirstLine = false;
     
-    enum GARBAGE_LEVEL
-{
-  G_NEVER_CRUNCH,
-  G_OK,
-  G_DODGY,
-  G_TERRIBLE
+    SourceLoc ClangDiagnosticConsumer::resolveSourceLocation(
+    const clang::SourceManager &clangSrcMgr,
+    clang::SourceLocation clangLoc) {
+  SourceManager &swiftSrcMgr = ImporterImpl.SwiftContext.SourceMgr;
+  SourceLoc loc;
+    }
+    
+    private:
+    int role;
+    
+    
+    {    QTimer *timer;
+    float fMax;
+    int nMins;
+    QQueue<float> vSamplesIn;
+    QQueue<float> vSamplesOut;
+    quint64 nLastBytesIn;
+    quint64 nLastBytesOut;
+    ClientModel *clientModel;
 };
     
-    ELISTIZE(ParamContent)
-    
-      // Constructors for the various ParamTypes.
-  ParamContent() = default;
-  explicit ParamContent(tesseract::StringParam* it);
-  explicit ParamContent(tesseract::IntParam* it);
-  explicit ParamContent(tesseract::BoolParam* it);
-  explicit ParamContent(tesseract::DoubleParam* it);
-    
-      const UNICHARSET &unicharset = *word->uch_set;
-  word->ClearResults();
-  word2->ClearResults();
-  word->chopped_word = chopped;
-  word2->chopped_word = chopped2;
-  word->SetupBasicsFromChoppedWord(unicharset);
-  word2->SetupBasicsFromChoppedWord(unicharset);
-    
-    // Deserializing an array could give back a different ArrayKind than we need,
-// so we have to go with the slow case of calling a collection constructor.
-NEVER_INLINE
-Object createFromSerialized(CollectionType colType, APCHandle* handle) {
-  auto const col = Object::attach(collections::alloc(colType));
-  auto const arr = handle->toLocal();
-  switch (colType) {
-  case CollectionType::ImmVector:
-  case CollectionType::Vector:
-    static_cast<BaseVector*>(col.get())->init(arr);
-    break;
-  case CollectionType::ImmSet:
-  case CollectionType::Set:
-    static_cast<BaseSet*>(col.get())->init(arr);
-    break;
-  case CollectionType::ImmMap:
-  case CollectionType::Map:
-    static_cast<BaseMap*>(col.get())->init(arr);
-    break;
-  case CollectionType::Pair:
-    not_reached();
-    break;
-  }
-  return col;
-}
-    
-    #ifndef HPHP_DATA_STREAM_WRAPPER_H
-#define HPHP_DATA_STREAM_WRAPPER_H
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    
-    
-    {}
-    
-    
-    {  while (1) {
-    char buf[8192];
-    bool err = false;
-    ssize_t rbytes = read(srcFd, buf, sizeof(buf));
-    ssize_t wbytes;
-    if (rbytes == 0) break;
-    if (rbytes == -1) {
-      err = true;
-      Logger::Error('read failed: %s', folly::errnoStr(errno).c_str());
-    } else if ((wbytes = write(dstFd, buf, rbytes)) != rbytes) {
-      err = true;
-      Logger::Error('write failed: %zd, %s', wbytes,
-                    folly::errnoStr(errno).c_str());
+    /**
+ * @brief Fills a Blob with values @f$ x \sim N(0, \sigma^2) @f$ where
+ *        @f$ \sigma^2 @f$ is set inversely proportional to number of incoming
+ *        nodes, outgoing nodes, or their average.
+ *
+ * A Filler based on the paper [He, Zhang, Ren and Sun 2015]: Specifically
+ * accounts for ReLU nonlinearities.
+ *
+ * Aside: for another perspective on the scaling factor, see the derivation of
+ * [Saxe, McClelland, and Ganguli 2013 (v3)].
+ *
+ * It fills the incoming matrix by randomly sampling Gaussian data with std =
+ * sqrt(2 / n) where n is the fan_in, fan_out, or their average, depending on
+ * the variance_norm option. You should make sure the input blob has shape (num,
+ * a, b, c) where a * b * c = fan_in and num * b * c = fan_out. Note that this
+ * is currently not the case for inner product layers.
+ */
+template <typename Dtype>
+class MSRAFiller : public Filler<Dtype> {
+ public:
+  explicit MSRAFiller(const FillerParameter& param)
+      : Filler<Dtype>(param) {}
+  virtual void Fill(Blob<Dtype>* blob) {
+    CHECK(blob->count());
+    int fan_in = blob->count() / blob->shape(0);
+    // Compatibility with ND blobs
+    int fan_out = blob->num_axes() > 1 ?
+                  blob->count() / blob->shape(1) :
+                  blob->count();
+    Dtype n = fan_in;  // default to fan_in
+    if (this->filler_param_.variance_norm() ==
+        FillerParameter_VarianceNorm_AVERAGE) {
+      n = (fan_in + fan_out) / Dtype(2);
+    } else if (this->filler_param_.variance_norm() ==
+        FillerParameter_VarianceNorm_FAN_OUT) {
+      n = fan_out;
     }
-    if (err) {
-      close(srcFd);
-      close(dstFd);
-      return -1;
-    }
+    Dtype std = sqrt(Dtype(2) / n);
+    caffe_rng_gaussian<Dtype>(blob->count(), Dtype(0), std,
+        blob->mutable_cpu_data());
+    CHECK_EQ(this->filler_param_.sparse(), -1)
+         << 'Sparsity not supported by this Filler.';
   }
-  close(srcFd);
-  close(dstFd);
-  return 0;
-}
+};
     
-        private:
-        static Microsoft::MSR::CNTK::InputStreamDescription GetInputStreamDescription(const StreamInformation& s, const DeviceDescriptor& device)
-        {
-            assert(s.m_storageFormat == StorageFormat::Dense || s.m_storageFormat == StorageFormat::SparseCSC);
-            auto CNTKdeviceId = AsCNTKImplDeviceId(device);
-            auto CNTKMatrixType = s.m_storageFormat == StorageFormat::Dense ? Microsoft::MSR::CNTK::MatrixType::DENSE : Microsoft::MSR::CNTK::MatrixType::SPARSE;
-            auto CNTKMatrixFormat = AsCNTKImplMatrixFormat(s.m_storageFormat);
-            return Microsoft::MSR::CNTK::InputStreamDescription(s.m_name, CNTKdeviceId, CNTKMatrixType, CNTKMatrixFormat);
-        }
+     protected:
+  /// @copydoc BNLLLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    /**
+ * @brief Computes the contrastive loss @f$
+ *          E = \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
+ *              \left(1-y\right) \max \left(margin-d, 0\right)^2
+ *          @f$ where @f$
+ *          d = \left| \left| a_n - b_n \right| \right|_2 @f$. This can be
+ *          used to train siamese networks.
+ *
+ * @param bottom input Blob vector (length 3)
+ *   -# @f$ (N \times C \times 1 \times 1) @f$
+ *      the features @f$ a \in [-\infty, +\infty]@f$
+ *   -# @f$ (N \times C \times 1 \times 1) @f$
+ *      the features @f$ b \in [-\infty, +\infty]@f$
+ *   -# @f$ (N \times 1 \times 1 \times 1) @f$
+ *      the binary similarity @f$ s \in [0, 1]@f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
+ *      the computed contrastive loss: @f$ E =
+ *          \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
+ *          \left(1-y\right) \max \left(margin-d, 0\right)^2
+ *          @f$ where @f$
+ *          d = \left| \left| a_n - b_n \right| \right|_2 @f$.
+ * This can be used to train siamese networks.
+ */
+template <typename Dtype>
+class ContrastiveLossLayer : public LossLayer<Dtype> {
+ public:
+  explicit ContrastiveLossLayer(const LayerParameter& param)
+      : LossLayer<Dtype>(param), diff_() {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
+  cudnnTensorDescriptor_t    bias_desc_;
+  cudnnFilterDescriptor_t      filter_desc_;
+  vector<cudnnConvolutionDescriptor_t> conv_descs_;
+  int bottom_offset_, top_offset_, bias_offset_;
     
     
-    {
-    {    private:
-        // Disallow copy and move construction and assignment
-        VariableFields(const VariableFields&) = delete; VariableFields& operator=(const VariableFields& other) = delete; VariableFields(VariableFields&&) = delete; VariableFields& operator=(VariableFields&&) = delete;
-    };
-}
+    {}  // namespace caffe
+    
+    OPERATOR_SCHEMA(EnforceFinite)
+    .NumInputs(1)
+    .NumOutputs(0)
+    .SetDoc(R'DOC(
+Raise if there is NaN or Inf values in the input tensor.
+)DOC')
+    .Input(0, 'input', 'Input tensor');
+    
+    REGISTER_CPU_OPERATOR(
+    MergeSingleMapFeatureTensorsGradient,
+    MergeSingleListOrMapFeatureTensorsGradientOp<CPUContext>);
+OPERATOR_SCHEMA(MergeSingleMapFeatureTensorsGradient)
+    .SetDoc(
+        'Explode given multi-feature tensors with map features into '
+        'multiple single-feature tensor.' +
+        doc)
+    .NumInputs([](int n) { return n >= 3 && n % 2 == 1; })
+    .NumOutputs([](int n) { return n >= 1; })
+    .Input(0, 'in1_lengths', '.lengths')
+    .Input(1, 'in1_presence', '.presence')
+    .Input(2, 'out_values_values_grad', '.values.values_grad')
+    .Output(0, 'in1_values_grad', '.values_grad');
+REGISTER_GRADIENT(
+    MergeSingleMapFeatureTensors,
+    GetMergeSingleMapFeatureTensorsGradient);
+    
+    OPERATOR_SCHEMA(GatherRangesToDense)
+    .NumInputs(2, 3)
+    .NumOutputs(1, INT_MAX)
+    .SetDoc(R'DOC(
+Given DATA tensor of rank 1, and RANGES tensor of rank 3, gather values
+corresponding to each range into a separate output tensor. If the optional input
+KEY tensor is also given, the output will be sorted by KEY for each example.
+    
+    namespace caffe2 {
+OPERATOR_SCHEMA(FloatToHalf)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .TensorInferenceFunction(
+        [](const OperatorDef& def, const vector<TensorShape>& in) {
+          vector<TensorShape> out;
+          const TensorShape& X = in[0];
+          out.push_back(X);
+          out[0].set_data_type(TensorProto_DataType_FLOAT16);
+    }
+    }
+    
+      // Streams a pointer value to this object.
+  //
+  // This function is an overload of the previous one.  When you
+  // stream a pointer to a Message, this definition will be used as it
+  // is more specialized.  (The C++ Standard, section
+  // [temp.func.order].)  If you stream a non-pointer, then the
+  // previous definition will be used.
+  //
+  // The reason for this overload is that streaming a NULL pointer to
+  // ostream is undefined behavior.  Depending on the compiler, you
+  // may get '0', '(nil)', '(null)', or an access violation.  To
+  // ensure consistent result across compilers, we always treat NULL
+  // as '(null)'.
+  template <typename T>
+  inline Message& operator <<(T* const& pointer) {  // NOLINT
+    if (pointer == NULL) {
+      *ss_ << '(null)';
+    } else {
+      *ss_ << pointer;
+    }
+    return *this;
+  }
+#endif  // GTEST_OS_SYMBIAN
+    
+    // Implements type-parameterized tests.
+    
+    // This macro is used for implementing macros such as
+// EXPECT_DEATH_IF_SUPPORTED and ASSERT_DEATH_IF_SUPPORTED on systems where
+// death tests are not supported. Those macros must compile on such systems
+// iff EXPECT_DEATH and ASSERT_DEATH compile with the same parameters on
+// systems that support death tests. This allows one to write such a macro
+// on a system that does not support death tests and be sure that it will
+// compile on a death-test supporting system.
+//
+// Parameters:
+//   statement -  A statement that a macro such as EXPECT_DEATH would test
+//                for program termination. This macro has to make sure this
+//                statement is compiled but not executed, to ensure that
+//                EXPECT_DEATH_IF_SUPPORTED compiles with a certain
+//                parameter iff EXPECT_DEATH compiles with it.
+//   regex     -  A regex that a macro such as EXPECT_DEATH would use to test
+//                the output of statement.  This parameter has to be
+//                compiled but not evaluated by this macro, to ensure that
+//                this macro only accepts expressions that a macro such as
+//                EXPECT_DEATH would accept.
+//   terminator - Must be an empty statement for EXPECT_DEATH_IF_SUPPORTED
+//                and a return statement for ASSERT_DEATH_IF_SUPPORTED.
+//                This ensures that ASSERT_DEATH_IF_SUPPORTED will not
+//                compile inside functions where ASSERT_DEATH doesn't
+//                compile.
+//
+//  The branch that has an always false condition is used to ensure that
+//  statement and regex are compiled (and thus syntactically correct) but
+//  never executed. The unreachable code macro protects the terminator
+//  statement from generating an 'unreachable code' warning in case
+//  statement unconditionally returns or throws. The Message constructor at
+//  the end allows the syntax of streaming additional messages into the
+//  macro, for compilational compatibility with EXPECT_DEATH/ASSERT_DEATH.
+# define GTEST_UNSUPPORTED_DEATH_TEST_(statement, regex, terminator) \
+    GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
+    if (::testing::internal::AlwaysTrue()) { \
+      GTEST_LOG_(WARNING) \
+          << 'Death tests are not supported on this platform.\n' \
+          << 'Statement '' #statement '' cannot be verified.'; \
+    } else if (::testing::internal::AlwaysFalse()) { \
+      ::testing::internal::RE::PartialMatch('.*', (regex)); \
+      GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
+      terminator; \
+    } else \
+      ::testing::Message()
+    
+    // Step 3. Call RUN_ALL_TESTS() in main().
+//
+// We do this by linking in src/gtest_main.cc file, which consists of
+// a main() function which calls RUN_ALL_TESTS() for us.
+//
+// This runs all the tests you've defined, prints the result, and
+// returns 0 if successful, or 1 otherwise.
+//
+// Did you notice that we didn't register the tests?  The
+// RUN_ALL_TESTS() macro magically knows about all the tests we
+// defined.  Isn't this convenient?
 
     
-    #include 'stdafx.h'
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS // 'secure' CRT not available on all platforms  --add this at the top of all CPP files that give 'function or variable may be unsafe' warnings
-#endif
-    
-    class Timer
-{
-public:
-    Timer()
-        : m_start(0), m_end(0)
-    {
+    // Clones a 0-terminated C string, allocating memory using new.
+const char* MyString::CloneCString(const char* a_c_string) {
+  if (a_c_string == NULL) return NULL;
     }
-    }
-    
-    public:
-    DeclareConstructorFromConfigWithNumInputs(PerDimMeanVarNormalizationNode);
-    PerDimMeanVarNormalizationNode(DEVICEID_TYPE deviceId, const wstring& name)
-        : Base(deviceId, name)
-    {
-    }
-    
-    
-    {    /** Reverse the current control point array inline, without generating a new one.
-     * @js NA
-     */
-    void reverseInline();
-    /**
-     * @js NA
-     * @lua NA
-     */
-    virtual PointArray* clone() const;
-    /**
-     * @js NA
-     */
-    const std::vector<Vec2>& getControlPoints() const;
-    /**
-     * @js NA
-     */
-    void setControlPoints(std::vector<Vec2> controlPoints);
-private:
-    /** Array that contains the control points. */
-    std::vector<Vec2> _controlPoints;
-};
-    
-    // implementation of Waves
-    
-    /**
-@brief Progress from a percentage to another percentage.
-@since v0.99.1
-*/
-class CC_DLL ProgressFromTo : public ActionInterval
-{
-public:
-    /** 
-     * @brief Create and initializes the action with a duration, a 'from' percentage and a 'to' percentage.
-     * @param duration Specify the duration of the ProgressFromTo action. It's a value in seconds.
-     * @param fromPercentage Specify the source percentage.
-     * @param toPercentage Specify the destination percentage.
-     * @return If the creation success, return a pointer of ProgressFromTo action; otherwise, return nil.
-     */
-    static ProgressFromTo* create(float duration, float fromPercentage, float toPercentage);
-    }
-    
-            if ( frames.empty() )
-        {
-            CCLOG('cocos2d: AnimationCache: None of the frames for animation '%s' were found in the SpriteFrameCache. Animation is not being added to the Animation Cache.', anim.first.c_str());
-            continue;
-        }
-        else if ( frames.size() != frameNameSize )
-        {
-            CCLOG('cocos2d: AnimationCache: An animation in your dictionary refers to a frame which is not in the SpriteFrameCache. Some or all of the frames for the animation '%s' may be missing.', anim.first.c_str());
-        }
-    
-    public:
-  DHTReplaceNodeTask(const std::shared_ptr<DHTBucket>& bucket,
-                     const std::shared_ptr<DHTNode>& newNode);
-    
-      // number of nodes
-  READ_CHECK(fp, &temp32, sizeof(temp32));
-  uint32_t numNodes = ntohl(temp32);
-  // 4bytes reserved
-  readBytes(fp, buf, buf.size(), 4);
-    
-      size_t getExecutingTaskSize() const { return execTasks_.size(); }
-    
-    
-    {} // namespace aria2
-
-    
-    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
-                                             std::chrono::seconds interval)
-    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
-{
-}
-    
-    class DHTTokenTracker;
-    
-    
-    {  static const std::string UNKNOWN;
-};
