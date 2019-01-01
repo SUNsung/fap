@@ -1,172 +1,135 @@
 
         
-        import click
-from flask import current_app, g
-from flask.cli import with_appcontext
+            def __init__(self, operators, supervisors, directors):
+        self.operators = operators
+        self.supervisors = supervisors
+        self.directors = directors
+        self.queued_calls = deque()
     
-        auth.login()
-    response = client.get('/')
-    assert b'test title' in response.data
-    assert b'by test on 2018-01-01' in response.data
-    assert b'test\nbody' in response.data
-    assert b'href='/1/update'' in response.data
-    
-    import pytest
-from flaskr.db import get_db
-    
-            :param name: the optional name of the filter, otherwise the
-                     function name will be used.
-        '''
-        def decorator(f):
-            self.add_app_template_filter(f, name=name)
-            return f
-        return decorator
-    
-        seems_fishy = False
-    if total_found == 0:
-        info.append('Error: the template could not be found.')
-        seems_fishy = True
-    elif total_found > 1:
-        info.append('Warning: multiple loaders returned a match for the template.')
-        seems_fishy = True
+        def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer)
+        ]
     
     
-# context locals
-_request_ctx_stack = LocalStack()
-_app_ctx_stack = LocalStack()
-current_app = LocalProxy(_find_app)
-request = LocalProxy(partial(_lookup_req_object, 'request'))
-session = LocalProxy(partial(_lookup_req_object, 'session'))
-g = LocalProxy(partial(_lookup_app_object, 'g'))
+if __name__ == '__main__':
+    HitCounts.run()
 
     
-    
-def make_response(*args):
-    '''Sometimes it is necessary to set additional headers in a view.  Because
-    views do not have to return response objects but can return a value that
-    is converted into a response object by Flask itself, it becomes tricky to
-    add headers to it.  This function can be called instead of using a return
-    and you will get a response object which you can use to attach headers.
-    
-        # Arguments
-        tensor: The tensor to start from.
-        layer: Origin layer of the tensor. Will be
-            determined via tensor._keras_history if not provided.
-        node_index: Origin node index of the tensor.
-    
-        model = create_multi_input_model_from(dense_layer, dense_layer)
-    model.compile(loss='categorical_crossentropy', optimizer='sgd')
-    assert len(model.losses) == 6
-    
-        ```python
-    # Consider an array of 5 labels out of a set of 3 classes {0, 1, 2}:
-    > labels
-    array([0, 2, 1, 2, 0])
-    # `to_categorical` converts this into a matrix with as many
-    # columns as there are classes. The number of rows
-    # stays the same.
-    > to_categorical(labels)
-    array([[ 1.,  0.,  0.],
-           [ 0.,  0.,  1.],
-           [ 0.,  1.,  0.],
-           [ 0.,  0.,  1.],
-           [ 1.,  0.,  0.]], dtype=float32)
-    ```
-    '''
-    
-        Example 1 - Training models with weights merge on CPU
-    
-    Settings: horizontal_flip = True
-----------------------------------------------------------------------------
-Epoch     | ImageGenerator | ImageGenerator | AugmentLayer  | Augment Layer
-Number    | %Accuracy      | Performance    | %Accuracy     | Performance
-----------------------------------------------------------------------------
-1         | 44.84          | 15ms/step      | 45.54         | 358us/step
-2         | 52.34          |  8ms/step      | 50.55         | 285us/step
-8         | 65.45          |  8ms/step      | 65.59         | 281us/step
-25        | 76.74          |  8ms/step      | 76.17         | 280us/step
-100       | 78.81          |  8ms/step      | 78.70         | 285us/step
----------------------------------------------------------------------------
-    
-        def start_requests(self):
-        url = self.benchurl
-        if self.latency is not None:
-            url += '?latency={0}'.format(self.latency)
-    
-    def _run_print_help(parser, func, *a, **kw):
-    try:
-        func(*a, **kw)
-    except UsageError as e:
-        if str(e):
-            parser.error(str(e))
-        if e.print_help:
-            parser.print_help()
-        sys.exit(2)
-    
-        def run(self, args, opts):
-        # load contracts
-        contracts = build_component_list(self.settings.getwithbase('SPIDER_CONTRACTS'))
-        conman = ContractsManager(load_object(c) for c in contracts)
-        runner = TextTestRunner(verbosity=2 if opts.verbose else 1)
-        result = TextTestResult(runner.stream, runner.descriptions, runner.verbosity)
-    
-        requires_project = False
-    default_settings = {'LOG_ENABLED': False}
-    
-                # determine real callback
-            cb = response.meta['_callback']
-            if not cb:
-                if opts.callback:
-                    cb = opts.callback
-                elif opts.rules and self.first_response == response:
-                    cb = self.get_callback_from_rules(spider, response)
-    
-        protocol = ScrapyHTTPPageGetter
-    waiting = 1
-    noisy = False
-    followRedirect = False
-    afterFoundGet = False
+        def set(self, results, query):
+        '''Set the result for the given query key in the cache.
     
     
-def get_github_url(app, view, path):
-    github_fmt = 'https://github.com/{}/{}/{}/{}{}'
-    return (
-        github_fmt.format(app.config.edit_on_github_project, view,
-                          app.config.edit_on_github_branch,
-                          app.config.edit_on_github_src_path, path))
-    
-        def state_changed_listener(event):
-        '''Listen for new messages on the bus and sends them to Datadog.'''
-        state = event.data.get('new_state')
-    
-    For more details about this platform, please refer to the documentation
-https://home-assistant.io/components/demo/
-'''
-import random
-    
-        def get_extra_attributes(self, device):
-        '''Return the IP of the given device.'''
-        filter_ip = next((
-            result.ip for result in self.last_results
-            if result.mac == device), None)
-        return {'ip': filter_ip}
-    
-    DEFAULT_IP = '192.168.1.1'
-    
-            self.mac2name = None
-        self.success_init = self.token is not None
+def openssl_encode(algo, key, iv):
+    cmd = ['openssl', 'enc', '-e', '-' + algo, '-K', hex_str(key), '-iv', hex_str(iv)]
+    prog = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+    out, _ = prog.communicate(secret_msg)
+    return out
     
     
-def create_event_handler(patterns, hass):
-    '''Return the Watchdog EventHandler object.'''
-    from watchdog.events import PatternMatchingEventHandler
+def main():
+    with open('supportedsites.html.in', 'r', encoding='utf-8') as tmplf:
+        template = tmplf.read()
     
-    import homeassistant.helpers.config_validation as cv
-from homeassistant.const import CONF_ENTITIES, CONF_NAME, ATTR_ENTITY_ID
-from homeassistant.helpers.entity import Entity
-from homeassistant.helpers.entity_component import EntityComponent
+        out = issue_template_tmpl % {'version': locals()['__version__']}
     
-    For more details about this component, please refer to the documentation at
-https://home-assistant.io/components/join/
-'''
-import logging
+        return ret
+    
+    for page in itertools.count(1):
+    releases = json.loads(compat_urllib_request.urlopen(
+        'https://api.github.com/repos/rg3/youtube-dl/releases?page=%s' % page
+    ).read().decode('utf-8'))
+    
+    # General information about the project.
+project = u'youtube-dl'
+copyright = u'2014, Ricardo Garcia Gonzalez'
+    
+        def test_encrypt(self):
+        msg = b'message'
+        key = list(range(16))
+        encrypted = aes_encrypt(bytes_to_intlist(msg), key)
+        decrypted = intlist_to_bytes(aes_decrypt(encrypted, key))
+        self.assertEqual(decrypted, msg)
+    
+        def test_youtube_feeds(self):
+        self.assertMatch('https://www.youtube.com/feed/watch_later', ['youtube:watchlater'])
+        self.assertMatch('https://www.youtube.com/feed/subscriptions', ['youtube:subscriptions'])
+        self.assertMatch('https://www.youtube.com/feed/recommended', ['youtube:recommended'])
+        self.assertMatch('https://www.youtube.com/my_favorites', ['youtube:favorites'])
+    
+    
+class TestExecution(unittest.TestCase):
+    def test_import(self):
+        subprocess.check_call([sys.executable, '-c', 'import youtube_dl'], cwd=rootDir)
+    
+    
+if __name__ == '__main__':
+    from sklearn.linear_model import Lasso, LassoLars
+    import matplotlib.pyplot as plt
+    
+    import six
+    
+        op.add_option('--transformers',
+                  dest='selected_transformers',
+                  default='GaussianRandomProjection,SparseRandomProjection',
+                  type=str,
+                  help='Comma-separated list of transformer to benchmark. '
+                       'Default: %default. Available: '
+                       'GaussianRandomProjection,SparseRandomProjection')
+    
+            # split the paragraph into fake smaller paragraphs to make the
+        # problem harder e.g. more similar to tweets
+        if lang in ('zh', 'ja'):
+        # FIXME: whitespace tokenizing does not work on chinese and japanese
+            continue
+        words = content.split()
+        n_groups = len(words) / n_words_per_short_text
+        if n_groups < 1:
+            continue
+        groups = np.array_split(words, n_groups)
+    
+        if not os.path.exists(ARCHIVE_NAME):
+        print('Downloading dataset from %s (14 MB)' % URL)
+        opener = urlopen(URL)
+        with open(ARCHIVE_NAME, 'wb') as archive:
+            archive.write(opener.read())
+    
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licence]
+    
+    
+    def getRuleInvocationStack(self):
+        '''
+        Return List<String> of the rules in your parser instance
+        leading up to a call to this method.  You could override if
+        you want more details such as the file/line info of where
+        in the parser java code a rule is invoked.
