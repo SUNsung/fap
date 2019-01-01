@@ -1,139 +1,86 @@
 
         
-          it 'raises a TypeError when passed nil' do
-    lambda { srand(nil) }.should raise_error(TypeError)
+          describe '#status' do
+    it 'works for failed jobs' do
+      job.failed_at = Time.now
+      expect(status(job)).to eq('<span class='label label-danger'>failed</span>')
+    end
+    
+        it 'defauls foreground and background colors' do
+      scenario.tag_fg_color = nil
+      scenario.tag_bg_color = nil
+      expect(style_colors(scenario)).to eq('color:#FFFFFF;background-color:#5BC0DE')
+    end
   end
     
-    script_binding = binding
-    
-        # Send the response to the client like what
-    cli.send_response(resp)
+          a = '        Events will have the fields you specified.  Your options look like:\n\n            {\n      \'url\': {\n        \'css\': \'#comic img\',\n        \'value\': \'@src\'\n      },\n      \'title\': {\n        \'css\': \'#comic img\',\n        \'value\': \'@title\'\n      }\n    }\'\n'
+      expect(Utils.unindent(a)).to eq('Events will have the fields you specified.  Your options look like:\n\n    {\n      \'url\': {\n\'css\': \'#comic img\',\n\'value\': \'@src\'\n      },\n      \'title\': {\n\'css\': \'#comic img\',\n\'value\': \'@title\'\n      }\n    }\'')
+    end
   end
     
+        def initialize
+      @pages = {}
+    end
     
-  #
-  # Payload types were copied from xCAT-server source code (IPMI.pm)
-  #
-  RMCP_ERRORS = {
-    1 => 'Insufficient resources to create new session (wait for existing sessions to timeout)',
-    2 => 'Invalid Session ID', #this shouldn't occur...
-    3 => 'Invalid payload type',#shouldn't occur..
-    4 => 'Invalid authentication algorithm', #if this happens, we need to enhance our mechanism for detecting supported auth algorithms
-    5 => 'Invalid integrity algorithm', #same as above
-    6 => 'No matching authentication payload',
-    7 => 'No matching integrity payload',
-    8 => 'Inactive Session ID', #this suggests the session was timed out while trying to negotiate, shouldn't happen
-    9 => 'Invalid role',
-    0xa => 'Unauthorised role or privilege level requested',
-    0xb => 'Insufficient resources to create a session at the requested role',
-    0xc => 'Invalid username length',
-    0xd => 'Unauthorized name',
-    0xe => 'Unauthorized GUID',
-    0xf => 'Invalid integrity check value',
-    0x10 => 'Invalid confidentiality algorithm',
-    0x11 => 'No cipher suite match with proposed security algorithms',
-    0x12 => 'Illegal or unrecognized parameter', #have never observed this, would most likely mean a bug in xCAT or IPMI device
-  }
+        def base_url
+      @base_url ||= URL.parse self.class.base_url
+    end
     
-    module Rex
-  module Proto
-    module Kerberos
-      module CredentialCache
-        # This class provides a representation of credential times stored in the Kerberos Credential Cache.
-        class Time < Element
-          # @!attribute auth_time
-          #   @return [Integer]
-          attr_accessor :auth_time
-          # @!attribute start_time
-          #   @return [Integer]
-          attr_accessor :start_time
-          # @!attribute end_time
-          #   @return [Integer]
-          attr_accessor :end_time
-          # @!attribute renew_till
-          #   @return [Integer]
-          attr_accessor :renew_till
-    
-              # Encrypts the Rex::Proto::Kerberos::Model::AuthorizationData
-          #
-          # @param etype [Integer] the crypto schema to encrypt
-          # @param key [String] the key to encrypt
-          # @return [String] the encrypted result
-          # @raise [NotImplementedError] if encryption schema isn't supported
-          def encrypt(etype, key)
-            data = self.encode
-    
-                OpenSSL::ASN1::Sequence.new(elems)
-          end
-    
-            # Prints the list of specs & pod cache dirs for a single pod name.
-        #
-        # This output is valid YAML so it can be parsed with 3rd party tools
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        The various infos about a pod cache. Keys are
-        #        :spec_file, :version, :release and :slug
-        #
-        def print_pod_cache_infos(pod_name, cache_descriptors)
-          UI.puts '#{pod_name}:'
-          cache_descriptors.each do |desc|
-            if @short_output
-              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
-            end
-            UI.puts('  - Version: #{desc[:version]}')
-            UI.puts('    Type:    #{pod_type(desc)}')
-            UI.puts('    Spec:    #{desc[:spec_file]}')
-            UI.puts('    Pod:     #{desc[:slug]}')
-          end
+          def get_type
+        if slug.start_with?('guide/')
+          'Guide'
+        elsif slug.start_with?('cookbook/')
+          'Cookbook'
+        elsif slug == 'glossary'
+          'Guide'
+        else
+          type = at_css('.nav-title.is-selected').content.strip
+          type.remove! ' Reference'
+          type << ': #{mod}' if mod
+          type
         end
       end
-    end
-  end
-end
+    
+          def root
+        css('.nav-index-group').each do |node|
+          if heading = node.at_css('.nav-index-group-heading')
+            heading.name = 'h2'
+          end
+          node.parent.before(node.children)
+        end
+    
+    (allow file-write*
+  (literal
+    '/dev/dtracehelper'
+    '/dev/null'
+  )
+  (regex
+    #'^<%= Pod::Config.instance.project_root %>'
+    #'^<%= Pod::Config.instance.repos_dir %>'
+    #'^/Users/[^.]+/Library/Caches/CocoaPods/*'
+    #'^/dev/tty'
+    #'^/private/var'
+  )
+)
+    
+    ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
     
-    Then /^I should see the scope with label '([^']*)'$/ do |label|
-  expect(page).to have_link(label)
-end
+          def instrument(env)
+        return unless i = options[:instrumenter]
+        env['rack.protection.attack'] = self.class.name.split('::').last.downcase
+        i.instrument('rack.protection', env)
+      end
     
-        # A callback is triggered each time (before) Active Admin loads the configuration files.
-    # In development mode, this will happen whenever the user changes files. In production
-    # it only happens on boot.
-    #
-    # The block takes the current instance of [ActiveAdmin::Application]
-    #
-    # Example:
-    #
-    #     ActiveAdmin.before_load do |app|
-    #       # Do some stuff before AA loads
-    #     end
-    #
-    # @param [Block] block A block to call each time (before) AA loads resources
-    def before_load(&block)
-      ActiveSupport::Notifications.subscribe ActiveAdmin::Application::BeforeLoadEvent, &wrap_block_for_active_support_notifications(block)
-    end
-    
-        def javascripts
-      @javascripts ||= Set.new
-    end
-    
-        def get_object
-      raise(RailsAdmin::ObjectNotFound) unless (@object = @abstract_model.get(params[:id]))
-    end
-    
-        # Only consumes the token if it matches the type
-    # Returns the token's contents if it was consumed
-    # or false otherwise.
-    def consume?(type)
-      token = @tokens[@p]
-      return false unless token && token[0] == type
-      @p += 1
-      token[1]
-    end
-    
-        def col_first
-      @col == 1
-    end
-    
-        def parse(_tokens)
-    end
+          def accepts?(env)
+        cookie_header = env['HTTP_COOKIE']
+        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
+        cookies.each do |k, v|
+          if k == session_key && Array(v).size > 1
+            bad_cookies << k
+          elsif k != session_key && Rack::Utils.unescape(k) == session_key
+            bad_cookies << k
+          end
+        end
+        bad_cookies.empty?
+      end
