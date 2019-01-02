@@ -1,103 +1,140 @@
 
         
-            def __init__(self, groups, env=Environment(), **kwargs):
-        '''
-        :param groups: names of processor groups to be applied
-        :param env: Environment
-        :param kwargs: additional keyword arguments for processors
-    
-        def process_body(self, chunk):
-        if not isinstance(chunk, str):
-            # Text when a converter has been used,
-            # otherwise it will always be bytes.
-            chunk = chunk.decode(self.msg.encoding, 'replace')
-        chunk = self.formatting.format_body(content=chunk, mime=self.mime)
-        return chunk.encode(self.output_encoding, 'replace')
-    
-            :param mime: E.g., 'application/atom+xml'.
-        :param content: The body content as text
-    
-    
-def repr_dict_nice(d):
-    def prepare_dict(d):
-        for k, v in d.items():
-            if isinstance(v, dict):
-                v = dict(prepare_dict(v))
-            elif isinstance(v, bytes):
-                v = v.decode('utf8')
-            elif not isinstance(v, (int, str)):
-                v = repr(v)
-            yield k, v
-    return json.dumps(
-        dict(prepare_dict(d)),
-        indent=4, sort_keys=True,
-    )
-    
-        '''
-    return path.replace('\\', '\\\\\\')
-    
-            # invalid byte-range-resp-spec
-        pytest.raises(ContentRangeError, parse, 'bytes 100-100/*', 100)
-    
-        def test_upload_multiple_fields_with_the_same_name(self, httpbin):
-        r = http('--form', '--verbose', 'POST', httpbin.url + '/post',
-                 'test-file@%s' % FILE_PATH_ARG,
-                 'test-file@%s' % FILE_PATH_ARG)
-        assert HTTP_OK in r
-        assert r.count('Content-Disposition: form-data; name='test-file';'
-                       ' filename='%s'' % os.path.basename(FILE_PATH)) == 2
-        # Should be 4, but is 3 because httpbin
-        # doesn't seem to support filed field lists
-        assert r.count(FILE_CONTENT) in [3, 4]
-        assert r.count('Content-Type: text/plain') == 2
-    
-    import random
-import threading
-import time
-import os
-from front_base.random_get_slice import RandomGetSlice
-    
-        if 'Content-Encoding' in headers:
-        if headers['Content-Encoding'] == 'deflate':
-            payload = zlib.decompress(payload, -zlib.MAX_WBITS)
-            headers['Content-Length'] = str(len(payload))
-            del headers['Content-Encoding']
-    
-    
-    def getErrorHeader(self, e):
-        '''
-        What is the error header, normally line/character position information?
-        '''
         
-        return 'line %d:%d' % (e.line, e.charPositionInLine)
+class HasKey(PostgresSimpleLookup):
+    lookup_name = 'has_key'
+    operator = '?'
+    prepare_rhs = False
     
-      location = diag[ 'location' ]
-  location[ 'column_num' ] = ClampToOne( location[ 'column_num' ] )
-  location[ 'line_num' ] = ClampToOne( location[ 'line_num' ] )
-  return diag
+        def __eq__(self, other):
+        return (
+            isinstance(other, self.__class__) and
+            self.keys == other.keys and
+            self.messages == other.messages and
+            self.strict == other.strict
+        )
     
+        For complete documentation on using Sessions in your code, consult
+    the sessions documentation that is shipped with Django (also available
+    on the Django Web site).
+    '''
+    objects = SessionManager()
     
-def _GetAllDescendentats( root_group ):
-  descendants = []
-  for child in root_group.children:
-    descendants.append( child )
-    descendants.extend( _GetAllDescendentats( child ) )
-  return descendants
+        @cached_property
+    def routers(self):
+        if self._routers is None:
+            self._routers = settings.DATABASE_ROUTERS
+        routers = []
+        for r in self._routers:
+            if isinstance(r, str):
+                router = import_string(r)()
+            else:
+                router = r
+            routers.append(router)
+        return routers
     
+    from .compat import OrderedDict, Mapping, MutableMapping
     
-@YouCompleteMeInstance()
-def SendCompletionRequest_UnicodeWorkingDirectory_test( ycm ):
-  unicode_dir = PathToTestFile( 'uni¢𐍈d€' )
-  current_buffer = VimBuffer( PathToTestFile( 'uni¢𐍈d€', 'current_buffer' ) )
+    from .__version__ import __title__, __description__, __url__, __version__
+from .__version__ import __build__, __author__, __author_email__, __license__
+from .__version__ import __copyright__, __cake__
     
-      _assert_rejects( f, 'This is a Taco' )
-  _assert_accepts( f, 'This is a Burrito' )
+            assert r.status_code == 200
+        assert len(r.history) == 2
+        assert r.history[0].request.url == url
+    
+        By default this will get the strings from the blns.txt file
+    
+        # Fetch the records to be pickled.
+    cursor.execute('SELECT * FROM memos')
+    memos = [MemoRecord(key, task) for key, task in cursor]
+    # Save the records using our custom DBPickler.
+    file = io.BytesIO()
+    DBPickler(file).dump(memos)
+    
+    def handleSlideshowTitle(title):
+    print('<title>%s</title>' % getText(title.childNodes))
+    
+    con = sqlite3.connect(':memory:')
+con.isolation_level = None
+cur = con.cursor()
+    
+            devices = {}
+        for device in request.json()['status']:
+            try:
+                devices[device['Key']] = {
+                    'ip': device['IPAddress'],
+                    'mac': device['PhysAddress'],
+                    'host': device['Name'],
+                    'status': device['Active']
+                    }
+            except (KeyError, requests.exceptions.RequestException):
+                pass
+        return devices
 
     
+        def _forwards(self, orm):
+        'Write your forwards methods here.'
+        for release in RangeQuerySetWrapperWithProgressBar(
+            orm.Release.objects.exclude(new_groups=0)
+        ):
+            projects = list(release.projects.values_list('id', flat=True))
+            if len(projects) > 1:
+                # do something fancy where we look at Group.first_release
+                # to calculate ReleaseProject.new_group
+                for p_id in projects:
+                    new_groups = orm.Group.objects.filter(
+                        first_release=release, project_id=p_id
+                    ).count()
+                    if not new_groups:
+                        continue
+                    orm.ReleaseProject.objects.filter(
+                        release_id=release.id, project_id=p_id
+                    ).update(new_groups=new_groups)
+            elif len(projects) == 1:
+                # copy Release.new_groups to ReleaseProject.new_group
+                orm.ReleaseProject.objects.filter(
+                    release_id=release.id, project_id=projects[0]
+                ).update(new_groups=release.new_groups)
     
-def KeywordsFromSyntaxListOutput_Function_test():
-  assert_that( syntax_parse._KeywordsFromSyntaxListOutput( '''
-foogroup xxx foo bar
-             zoo goo
-             links to Function''' ),
-               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
+            # Adding unique constraint on 'EventProcessingIssue', fields ['raw_event',
+        # 'processing_issue']
+        db.create_unique('sentry_eventprocessingissue', ['raw_event_id', 'processing_issue_id'])
+    
+        def backwards(self, orm):
+        'Write your backwards methods here.'
+    
+            # Deleting field 'ApiToken.application'
+        db.delete_column('sentry_apitoken', 'application_id')
+    
+            # Adding model 'DSymApp'
+        db.create_table(
+            'sentry_dsymapp', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'project', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.Project']
+                    )
+                ), ('app_id', self.gf('django.db.models.fields.CharField')(max_length=64)),
+                ('sync_id', self.gf('django.db.models.fields.CharField')(max_length=64, null=True)),
+                ('data', self.gf('jsonfield.fields.JSONField')(default={})), (
+                    'platform',
+                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(
+                        default=0
+                    )
+                ), (
+                    'last_synced',
+                    self.gf('django.db.models.fields.DateTimeField')()
+                ), (
+                    'date_added',
+                    self.gf('django.db.models.fields.DateTimeField')()
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['DSymApp'])
+    
+            # Deleting field 'CommitAuthor.external_id'
+        db.delete_column('sentry_commitauthor', 'external_id')
