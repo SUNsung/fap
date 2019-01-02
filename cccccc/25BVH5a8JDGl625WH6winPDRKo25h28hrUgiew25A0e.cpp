@@ -1,128 +1,254 @@
 
         
-        namespace grpc {
+        #include <string>
+#include <vector>
+    
+    template <typename T, class Context>
+class FlexibleTopKOp : public Operator<Context> {
+ public:
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
     }
     
-    #include <grpc/status.h>
-#include 'absl/memory/memory.h'
-#include 'absl/strings/string_view.h'
-#include 'absl/strings/strip.h'
-#include 'opencensus/trace/span.h'
-#include 'opencensus/trace/span_context.h'
-#include 'opencensus/trace/trace_params.h'
-#include 'src/core/lib/slice/slice_internal.h'
-#include 'src/cpp/common/channel_filter.h'
-#include 'src/cpp/ext/filters/census/rpc_encoding.h'
-    
-    constexpr size_t RpcServerStatsEncoding::kRpcServerStatsSize;
-constexpr size_t RpcServerStatsEncoding::kEncodeDecodeFailure;
-constexpr size_t RpcServerStatsEncoding::kVersionIdSize;
-constexpr size_t RpcServerStatsEncoding::kFieldIdSize;
-constexpr size_t RpcServerStatsEncoding::kVersionIdOffset;
-constexpr size_t RpcServerStatsEncoding::kVersionId;
-    
-    #include <string.h>
-    
-    void ProtoServerReflectionPlugin::Finish(grpc::ServerInitializer* si) {
-  reflection_service_->SetServiceList(si->GetServiceList());
+    template <>
+void GluOp<float, CPUContext>::ComputeGlu(
+    const int M,
+    const int split_dim,
+    const int N,
+    const float* Xdata,
+    float* Ydata) {
+  const int xStride = 2 * split_dim * N;
+  const int yStride = split_dim * N;
+  for (int i = 0; i < M; ++i) {
+    const int idx = i * xStride;
+    const int idy = i * yStride;
+    for (int j = 0; j < split_dim; ++j) {
+      const int jN = j * N;
+      const int jdx1 = idx + jN;
+      const int jdx2 = idx + (j + split_dim) * N;
+      const int jdy = idy + jN;
+      for (int k = 0; k < N; ++k) {
+        const float x1 = Xdata[jdx1 + k];
+        const float x2 = Xdata[jdx2 + k];
+        Ydata[jdy + k] = x1 * sigmoid(x2);
+      }
+    }
+  }
 }
     
-        virtual void UpdateArguments(ChannelArguments* args) override {
-      args->SetInt(name_, value_);
-    }
-    virtual void UpdatePlugins(
-        std::vector<std::unique_ptr<ServerBuilderPlugin>>* plugins) override {}
+              const int dkernel_h = dilation_h * (kernel_h - 1) + 1;
+          const int dkernel_w = dilation_w * (kernel_w - 1) + 1;
+          CAFFE_ENFORCE(H >= dkernel_h);
+          CAFFE_ENFORCE(W >= dkernel_w);
+          const int out_h = (H + 2 * pad - dkernel_h) / stride_h + 1;
+          const int out_w = (W + 2 * pad - dkernel_w) / stride_w + 1;
     
-    // This template function declaration is used in defining arraysize.
-// Note that the function doesn't need an implementation, as we only
-// use its type.
-template <typename T, size_t N>
-char (&ArraySizeHelper(T (&array)[N]))[N];
+    #endif /* #if !UCONFIG_NO_TRANSLITERATION */
+
     
-    namespace benchmark {
-namespace internal {
+    UnicodeString &ScientificNumberFormatter::SuperscriptStyle::format(
+        const UnicodeString &original,
+        FieldPositionIterator &fpi,
+        const UnicodeString &preExponent,
+        const DecimalFormatStaticSets &staticSets,
+        UnicodeString &appendTo,
+        UErrorCode &status) const {
+    if (U_FAILURE(status)) {
+        return appendTo;
     }
+    FieldPosition fp;
+    int32_t copyFromOffset = 0;
+    while (fpi.next(fp)) {
+        switch (fp.getField()) {
+        case UNUM_EXPONENT_SYMBOL_FIELD:
+            appendTo.append(
+                    original,
+                    copyFromOffset,
+                    fp.getBeginIndex() - copyFromOffset);
+            copyFromOffset = fp.getEndIndex();
+            appendTo.append(preExponent);
+            break;
+        case UNUM_EXPONENT_SIGN_FIELD:
+            {
+                int32_t beginIndex = fp.getBeginIndex();
+                int32_t endIndex = fp.getEndIndex();
+                UChar32 aChar = original.char32At(beginIndex);
+                if (staticSets.fMinusSigns->contains(aChar)) {
+                    appendTo.append(
+                            original,
+                            copyFromOffset,
+                            beginIndex - copyFromOffset);
+                    appendTo.append(kSuperscriptMinusSign);
+                } else if (staticSets.fPlusSigns->contains(aChar)) {
+                    appendTo.append(
+                           original,
+                           copyFromOffset,
+                           beginIndex - copyFromOffset);
+                    appendTo.append(kSuperscriptPlusSign);
+                } else {
+                    status = U_INVALID_CHAR_FOUND;
+                    return appendTo;
+                }
+                copyFromOffset = endIndex;
+            }
+            break;
+        case UNUM_EXPONENT_FIELD:
+            appendTo.append(
+                    original,
+                    copyFromOffset,
+                    fp.getBeginIndex() - copyFromOffset);
+            if (!copyAsSuperscript(
+                    original,
+                    fp.getBeginIndex(),
+                    fp.getEndIndex(),
+                    appendTo,
+                    status)) {
+              return appendTo;
+            }
+            copyFromOffset = fp.getEndIndex();
+            break;
+        default:
+            break;
+        }
+    }
+    appendTo.append(
+            original, copyFromOffset, original.length() - copyFromOffset);
+    return appendTo;
+}
+    
+    UBool ScriptSet::test(UScriptCode script, UErrorCode &status) const {
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
+    if (script < 0 || script >= (int32_t)sizeof(bits) * 8) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return FALSE;
+    }
+    uint32_t index = script / 32;
+    uint32_t bit   = 1 << (script & 31);
+    return ((bits[index] & bit) != 0);
+}
+    
+    void
+SelectFormat::parseObject(const UnicodeString& /*source*/,
+                        Formattable& /*result*/,
+                        ParsePosition& pos) const
+{
+    // Parsing not supported.
+    pos.setErrorIndex(pos.getIndex());
+}
+    
+        /**
+     * No limits on significant digits.
+     */
+    SignificantDigitInterval()
+            : fMax(INT32_MAX), fMin(0) { }
+    
+    UnicodeString &
+SmallIntFormatter::format(
+        int32_t smallPositiveValue,
+        const IntDigitCountRange &range,
+        UnicodeString &appendTo) {
+    int32_t digits = range.pin(gDigitCount[smallPositiveValue]);
     }
     
-    std::string FormatString(const char* msg, va_list args) {
-  // we might need a second shot at this, so pre-emptivly make a copy
-  va_list args_cp;
-  va_copy(args_cp, args);
+        if (matchLenData == data.length() /* normal match */
+        || (data.charAt(data.length() - 1) == 0x2e
+            && matchLenData == data.length() - 1 /* match without trailing dot */)) {
+        return matchLenText;
     }
+    
+    UnicodeSet *SimpleDateFormatStaticSets::getIgnorables(UDateFormatField fieldIndex)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    umtx_initOnce(gSimpleDateFormatStaticSetsInitOnce, &smpdtfmt_initSets, status);
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    
+    switch (fieldIndex) {
+        case UDAT_YEAR_FIELD:
+        case UDAT_MONTH_FIELD:
+        case UDAT_DATE_FIELD:
+        case UDAT_STANDALONE_DAY_FIELD:
+        case UDAT_STANDALONE_MONTH_FIELD:
+            return gStaticSets->fDateIgnorables;
+            
+        case UDAT_HOUR_OF_DAY1_FIELD:
+        case UDAT_HOUR_OF_DAY0_FIELD:
+        case UDAT_MINUTE_FIELD:
+        case UDAT_SECOND_FIELD:
+        case UDAT_HOUR1_FIELD:
+        case UDAT_HOUR0_FIELD:
+            return gStaticSets->fTimeIgnorables;
+            
+        default:
+            return gStaticSets->fOtherIgnorables;
+    }
+}
+    
+    /**
+ * Implement UnicodeFunctor
+ */
+UnicodeFunctor* StringMatcher::clone() const {
+    return new StringMatcher(*this);
+}
+    
+        /**
+     * UnicodeFunctor API.  Cast 'this' to a UnicodeMatcher* pointer
+     * and return the pointer.
+     * @return the UnicodeMatcher point.
+     */
+    virtual UnicodeMatcher* toMatcher() const;
+    
+    
+    {  int ret = x;
+  return ret;
+}
+    
+    #include 'modules/drivers/radar/conti_radar/protocol/object_quality_info_60c.h'
+#include 'modules/drivers/radar/conti_radar/protocol/const_vars.h'
     
     
     {
-    {
-    {  // Native Client does not provide any API to access cycle counter.
-  // Use clock_gettime(CLOCK_MONOTONIC, ...) instead of gettimeofday
-  // because is provides nanosecond resolution (which is noticable at
-  // least for PNaCl modules running on x86 Mac & Linux).
-  // Initialize to always return 0 if clock_gettime fails.
-  struct timespec ts = { 0, 0 };
-  clock_gettime(CLOCK_MONOTONIC, &ts);
-  return static_cast<int64_t>(ts.tv_sec) * 1000000000 + ts.tv_nsec;
-#elif defined(__aarch64__)
-  // System timer of ARMv8 runs at a different frequency than the CPU's.
-  // The frequency is fixed, typically in the range 1-50MHz.  It can be
-  // read at CNTFRQ special register.  We assume the OS has set up
-  // the virtual timer properly.
-  int64_t virtual_timer_value;
-  asm volatile('mrs %0, cntvct_el0' : '=r'(virtual_timer_value));
-  return virtual_timer_value;
-#elif defined(__ARM_ARCH)
-  // V6 is the earliest arch that has a standard cyclecount
-  // Native Client validator doesn't allow MRC instructions.
-#if (__ARM_ARCH >= 6)
-  uint32_t pmccntr;
-  uint32_t pmuseren;
-  uint32_t pmcntenset;
-  // Read the user mode perf monitor counter access permissions.
-  asm volatile('mrc p15, 0, %0, c9, c14, 0' : '=r'(pmuseren));
-  if (pmuseren & 1) {  // Allows reading perfmon counters for user mode code.
-    asm volatile('mrc p15, 0, %0, c9, c12, 1' : '=r'(pmcntenset));
-    if (pmcntenset & 0x80000000ul) {  // Is it counting?
-      asm volatile('mrc p15, 0, %0, c9, c13, 0' : '=r'(pmccntr));
-      // The counter is set up to count every 64th cycle
-      return static_cast<int64_t>(pmccntr) * 64;  // Should optimize to << 6
+    {}  // namespace hdmap
+}  // namespace apollo
+
+    
+    namespace apollo {
+namespace planning {
+    }
+    }
+    
+    STPoint::STPoint(const double s, const double t) : Vec2d(t, s) {}
+    
+    namespace apollo {
+namespace planning {
+    }
+    }
+    
+      MatrixXd mat_golden(10, 10);
+  // clang-format off
+  mat_golden <<
+   1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+  -1,  1,  0,  0,  0,  0,  0,  0,  0,  0,
+   0, -1,  1,  0,  0,  0,  0,  0,  0,  0,
+   0,  0, -1,  1,  0,  0,  0,  0,  0,  0,
+   0,  0,  0, -1,  1,  0,  0,  0,  0,  0,
+   0,  0,  0,  0, -1,  1,  0,  0,  0,  0,
+   0,  0,  0,  0,  0, -1,  1,  0,  0,  0,
+   0,  0,  0,  0,  0,  0, -1,  1,  0,  0,
+   0,  0,  0,  0,  0,  0,  0, -1,  1,  0,
+   0,  0,  0,  0,  0,  0,  0,  0, -1,  1;
+  // clang-format on
+  EXPECT_EQ(mat, mat_golden);
+    
+      kernel.AddSecondOrderDerivativeMatrix(init_derivative, 1.0);
+    
+    Spline2d::Spline2d(const std::vector<double>& t_knots, const uint32_t order)
+    : t_knots_(t_knots), spline_order_(order) {
+  if (t_knots.size() > 1) {
+    for (uint32_t i = 1; i < t_knots_.size(); ++i) {
+      splines_.emplace_back(spline_order_);
     }
   }
-#endif
-  struct timeval tv;
-  gettimeofday(&tv, nullptr);
-  return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
-#elif defined(__mips__)
-  // mips apparently only allows rdtsc for superusers, so we fall
-  // back to gettimeofday.  It's possible clock_gettime would be better.
-  struct timeval tv;
-  gettimeofday(&tv, nullptr);
-  return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
-#else
-// The soft failover to a generic implementation is automatic only for ARM.
-// For other platforms the developer is expected to make an attempt to create
-// a fast implementation and use generic version if nothing better is available.
-#error You need to define CycleTimer for your OS and CPU
-#endif
 }
-}  // end namespace cycleclock
-}  // end namespace benchmark
-    
-      out << indent << '\'caches\': [\n';
-  indent = std::string(6, ' ');
-  std::string cache_indent(8, ' ');
-  for (size_t i = 0; i < info.caches.size(); ++i) {
-    auto& CI = info.caches[i];
-    out << indent << '{\n';
-    out << cache_indent << FormatKV('type', CI.type) << ',\n';
-    out << cache_indent << FormatKV('level', static_cast<int64_t>(CI.level))
-        << ',\n';
-    out << cache_indent
-        << FormatKV('size', static_cast<int64_t>(CI.size) * 1000u) << ',\n';
-    out << cache_indent
-        << FormatKV('num_sharing', static_cast<int64_t>(CI.num_sharing))
-        << '\n';
-    out << indent << '}';
-    if (i != info.caches.size() - 1) out << ',';
-    out << '\n';
-  }
-  indent = std::string(4, ' ');
-  out << indent << '],\n';
