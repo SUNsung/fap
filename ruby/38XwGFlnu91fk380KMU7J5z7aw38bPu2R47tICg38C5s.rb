@@ -1,169 +1,200 @@
 
         
-        Benchmark.ips do |x|
-  x.report('local-require') { local_require }
-  x.report('global-require') { global_require }
-  x.report('graceful-require') { graceful_require }
-  x.compare!
+            it 'does not send previously configured receivers when the current agent does not support them' do
+      select_agent_type('Website Agent scrapes')
+      sleep 0.5
+      select2('ZKCD', from: 'Receivers')
+      select_agent_type('Email Agent')
+      fill_in(:agent_name, with: 'No receivers')
+      click_on 'Save'
+      expect(page).to have_content('No receivers')
+      agent = Agent.find_by(name: 'No receivers')
+      expect(agent.receivers).to eq([])
+    end
+  end
 end
 
     
-    CONTENT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+        it 'works for queued jobs' do
+      expect(status(job)).to eq('<span class='label label-warning'>queued</span>')
+    end
+  end
     
-    require 'jekyll'
-require 'mercenary'
+        it 'creates a scenario label with the given text' do
+      expect(scenario_label(scenario, 'Other')).to eq(
+        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Other</span>'
+      )
+    end
+  end
     
-          def comment_line(comment_line); end
+        it 'can not be turned off' do
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'true' }
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
+    end
+  end
+end
+
     
-      matter = matter.join.chomp
-  content = \
-    if !input_hash['input'] || !input_hash['filter']
-      then input_hash['content']
-    else '{{ #{input_hash['input']} | ' \
-        '#{input_hash['filter']} }}'
+          it 'runs until stop is called' do
+        mock.instance_of(Rufus::Scheduler).join
+        Thread.new { while @agent_runner.instance_variable_get(:@running) != false do sleep 0.1; @agent_runner.stop end }
+        @agent_runner.run
+      end
+    
+        def update
+      authorize @user, :change_email?
+    
+            redirect_to admin_report_path(@report), notice: I18n.t('admin.report_notes.created_msg')
+      else
+        @report_notes = @report.notes.latest
+        @report_history = @report.history
+        @form = Form::StatusBatch.new
+    
+          weeks << {
+        week: week.to_time.to_i.to_s,
+        statuses: Redis.current.get('activity:statuses:local:#{week_id}') || '0',
+        logins: Redis.current.pfcount('activity:logins:#{week_id}').to_s,
+        registrations: Redis.current.get('activity:accounts:local:#{week_id}') || '0',
+      }
     end
     
-            # rubocop:disable Metrics/AbcSize
-        def process(args, opts)
-          if !args || args.empty?
-            raise Jekyll::Errors::InvalidThemeName, 'You must specify a theme name.'
+        # Mobile devices do not support regular notifications, so we enable push notifications by default
+    alerts_enabled = active_session.detection.device.mobile? || active_session.detection.device.tablet?
+    
+          root.children.each {|v| nest_seqs(v)}
+    end
+    
+            exit 1
+      end
+      exit 0
+      # rubocop:enable RescueException
+    end
+    
+          opts.on('--update', 'Compile files or directories to CSS.',
+                          'Locations are set like --watch.') do
+        @options[:update] = true
+      end
+    
+        # we assume that the first file that requires 'sinatra' is the
+    # app_file. all other path related options are calculated based
+    # on this path by default.
+    set :app_file, caller_files.first || $0
+    
+          def redirect(env)
+        request = Request.new(env)
+        warn env, 'attack prevented by #{self.class}'
+        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
+      end
+    
+          default_options :escape => :html,
+        :escaper => defined?(EscapeUtils) ? EscapeUtils : self
+    
+          explicit_plugins_specs = explicitly_declared_plugins_specs
+    
+        FileUtils.rm_rf(LogStash::Environment::CACHE_PATH)
+    validate_cache_location
+    archive_manager.extract(package_file, LogStash::Environment::CACHE_PATH)
+    puts('Unpacked at #{LogStash::Environment::CACHE_PATH}')
+    puts('The unpacked plugins can now be installed in local-only mode using bin/logstash-plugin install --local [plugin name]')
+  end
+    
+        not_same_pipeline_id = described_class.new(source, :another_pipeline, unordered_config_parts, settings)
+    expect(subject).not_to eq(not_same_pipeline_id)
+  end
+    
+                log_state_changes if params[:state]
+    
+            def create
+          authorize! :create, Spree::OptionType
+          @option_type = Spree::OptionType.new(option_type_params)
+          if @option_type.save
+            render :show, status: 201
+          else
+            invalid_resource!(@option_type)
           end
-    
-            def strip_coderay_prefix(hash)
-          hash.each_with_object({}) do |(key, val), hsh|
-            cleaned_key = key.to_s.gsub(%r!\Acoderay_!, '')
-    
-        def handle_tls_error!(e)
-      # Apple has upgraded its App Store Connect servers to require TLS 1.2, but
-      # system Ruby 2.0 does not support it. We want to suggest that users upgrade
-      # their Ruby version
-      suggest_ruby_reinstall(e)
-      display_user_error!(e, e.to_s)
-    end
-    
-            result = Fastlane::FastFile.new.parse('lane :test do
-          add_git_tag ({
-            tag: '#{tag}',
-            message: '#{message}',
-            sign: true
-          })
-        end').runner.execute(:test)
-    
-          it 'handles no extension or extensions parameters' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          ensure_no_debug_code(text: 'pry', path: '.')
-        end').runner.execute(:test)
-        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}'')
-      end
-    
-          it 'generates the correct git command with an array of paths and/or pathspecs' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          git_commit(path: ['./fastlane/*.md', './LICENSE'], message: 'message')
-        end').runner.execute(:test)
-    
-          it 'yields command output' do
-        expect_command('ls', '-la', exitstatus: 1, output: 'Heeeelp! Something went wrong.')
-        Fastlane::Actions.sh('ls', '-la') do |status, result|
-          expect(status.exitstatus).to eq(1)
-          expect(result).to eq('Heeeelp! Something went wrong.')
         end
+    
+            def cancel
+          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
+          if @return_authorization.cancel
+            respond_with @return_authorization, default_template: :show
+          else
+            invalid_resource!(@return_authorization)
+          end
+        end
+    
+            def destroy
+          authorize! :destroy, @store
+          @store.destroy
+          respond_with(@store, status: 204)
+        end
+    
+            private
+    
+            def update
+          authorize! :update, zone
+          if zone.update_attributes(zone_params)
+            respond_with(zone, status: 200, default_template: :show)
+          else
+            invalid_resource!(zone)
+          end
+        end
+    
+        # Initializes a new CategoryIndex.
+    #
+    #  +base+         is the String path to the <source>.
+    #  +category_dir+ is the String path between <source> and the category folder.
+    #  +category+     is the category currently being processed.
+    def initialize(site, base, category_dir, category)
+      @site = site
+      @base = base
+      @dir  = category_dir
+      @name = 'index.html'
+      self.process(@name)
+      # Read the YAML data from the layout page.
+      self.read_yaml(File.join(base, '_layouts'), 'category_index.html')
+      self.data['category']    = category
+      # Set the title for this page.
+      title_prefix             = site.config['category_title_prefix'] || 'Category: '
+      self.data['title']       = '#{title_prefix}#{category}'
+      # Set the meta-description for this page.
+      meta_description_prefix  = site.config['category_meta_description_prefix'] || 'Category: '
+      self.data['description'] = '#{meta_description_prefix}#{category}'
+    end
+    
+      class RenderPartialTag < Liquid::Tag
+    include OctopressFilters
+    def initialize(tag_name, markup, tokens)
+      @file = nil
+      @raw = false
+      if markup =~ /^(\S+)\s?(\w+)?/
+        @file = $1.strip
+        @raw = $2 == 'raw'
       end
-    
-        it 'returns an active nav link' do
-      stub(self).current_page?('/things') { true }
-      nav = nav_link('Things', '/things')
-      expect(nav).to be_html_safe
-      a = Nokogiri(nav).at('li.active > a[href='/things']')
-      expect(a).to be_a Nokogiri::XML::Element
-      expect(a.text.strip).to eq('Things')
+      super
     end
     
-      it 'converts values to Float' do
-    expect(location.lat).to be_a Float
-    expect(location.lat).to eq 2.0
-    expect(location.lng).to be_a Float
-    expect(location.lng).to eq 3.0
-    expect(location.radius).to be_a Float
-    expect(location.radius).to eq 300.0
-    expect(location.speed).to be_a Float
-    expect(location.speed).to eq 2.0
-    expect(location.course).to be_a Float
-    expect(location.course).to eq 30.0
-  end
+    When /^(?:|I )uncheck '([^']*)'$/ do |field|
+  uncheck(field)
+end
     
-      describe '#log_length' do
-    it 'defaults to 200' do
-      expect(AgentLog.log_length).to eq(200)
-    end
+      def framework_major_version
+    framework_version.split('.').first.to_i
   end
 end
+World(RailsCommandHelpers)
 
     
-      # Setup a color scheme called 'bright' than can be used to add color codes
-  # to the pattern layout. Color schemes should only be used with appenders
-  # that write to STDOUT or STDERR; inserting terminal color codes into a file
-  # is generally considered bad form.
-  Logging.color_scheme('bright',
-                       levels:  {
-                         info:  :green,
-                         warn:  :yellow,
-                         error: :red,
-                         fatal: %i(white on_red)
-                       },
-                       date:    :blue,
-                       logger:  :cyan,
-                       message: :magenta
-                      )
-    
-    class PolymorphicMentions < ActiveRecord::Migration[4.2]
-  def change
-    remove_index :mentions, column: %i(post_id)
-    remove_index :mentions, column: %i(person_id post_id), unique: true
-    rename_column :mentions, :post_id, :mentions_container_id
-    add_column :mentions, :mentions_container_type, :string
-    add_index :mentions,
-              %i(mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_mc_id_and_mc_type',
-              length: {mentions_container_type: 191}
-    add_index :mentions,
-              %i(person_id mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_person_and_mc_id_and_mc_type',
-              length: {mentions_container_type: 191},
-              unique: true
-    
-    Then /^I should see an image in the publisher$/ do
-  photo_in_publisher.should be_present
-end
-    
-          it 'should not be catched when it is unexpected' do
-        @target = alice.post :status_message, text: 'AWESOME', to: @alices_aspect.id
-        allow(alice).to receive(:like!).and_raise('something')
-        allow(@controller).to receive(:current_user).and_return(alice)
-        expect { post :create, params: like_hash, format: :json }.to raise_error('something')
-      end
+        def register(klass, attachment_name, attachment_options)
+      @attachments ||= {}
+      @attachments[klass] ||= {}
+      @attachments[klass][attachment_name] = attachment_options
     end
-  end
     
-        context 'on my own post' do
-      before do
-        aspect_to_post = alice.aspects.where(:name => 'generic').first
-        @post = alice.post :status_message, :text => 'something', :to => aspect_to_post
-      end
+        alias :empty? :empty_file?
     
-          # An array containing the arguments of the method definition.
-      #
-      # @return [Array<Node>] the arguments of the method definition
-      def arguments
-        node_parts[1]
-      end
+        def make
+      geometry = GeometryParser.new(geometry_string.strip).make
+      geometry || raise(Errors::NotIdentifiedByImageMagickError.new)
+    end
