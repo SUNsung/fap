@@ -1,153 +1,166 @@
 
         
-            Group.refresh_automatic_groups!(:moderators)
-    gu = GroupUser.find_by(user_id: moderator.id, group_id: Group::AUTO_GROUPS[:moderators])
+        class Devise::OmniauthCallbacksController < DeviseController
+  prepend_before_action { request.env['devise.skip_timeout'] = true }
     
-    Group.user_trust_level_change!(-1, TrustLevel[4])
+      # Checks whether it's a devise mapped resource or not.
+  def assert_is_devise_resource! #:nodoc:
+    unknown_action! <<-MESSAGE unless devise_mapping
+Could not find devise mapping for path #{request.fullpath.inspect}.
+This may happen for two reasons:
     
-            # Reset topic count because we don't count the description topic
-        DB.exec 'UPDATE categories SET topic_count = 0 WHERE id = #{staff.id}'
-      end
-    end
-  end
-end
-
+          private
     
-        open_dry_run_modal(agent)
-    click_on('Dry Run')
-    expect(page).to have_text('Dry Run started')
-    expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabLog']')
-  end
-end
-
-    
-      it 'imports a scenario that does not exist yet' do
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
-    click_on 'Start Import'
-    expect(page).to have_text('This scenario has a few agents to get you started. Feel free to change them or delete them as you see fit!')
-    expect(page).not_to have_text('This Scenario already exists in your system.')
-    check('I confirm that I want to import these Agents.')
-    click_on 'Finish Import'
-    expect(page).to have_text('Import successful!')
-  end
-    
-      describe '#nav_link' do
-    it 'returns a nav link' do
-      stub(self).current_page?('/things') { false }
-      nav = nav_link('Things', '/things')
-      a = Nokogiri(nav).at('li:not(.active) > a[href='/things']')
-      expect(a.text.strip).to eq('Things')
-    end
-    
-        it 'can not be turned off' do
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'true' }
-      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
-    end
-  end
-end
-
-    
-          context '#restart_dead_workers' do
-        before do
-          mock.instance_of(HuginnScheduler).run!
-          mock.instance_of(DelayedJobWorker).run!
-          @agent_runner.send(:run_workers)
-    
-    describe AgentsExporter do
-  describe '#as_json' do
-    let(:name) { 'My set of Agents' }
-    let(:description) { 'These Agents work together nicely!' }
-    let(:guid) { 'some-guid' }
-    let(:tag_fg_color) { '#ffffff' }
-    let(:tag_bg_color) { '#000000' }
-    let(:icon) { 'Camera' }
-    let(:source_url) { 'http://yourhuginn.com/scenarios/2/export.json' }
-    let(:agent_list) { [agents(:jane_weather_agent), agents(:jane_rain_notifier_agent)] }
-    let(:exporter) { AgentsExporter.new(
-      agents: agent_list, name: name, description: description,
-      source_url: source_url, guid: guid, tag_fg_color: tag_fg_color,
-      tag_bg_color: tag_bg_color, icon: icon) }
-    
-      it 'ignores invalid values' do
-    location2 = Location.new(
-      lat: 2,
-      lng: 3,
-      radius: -1,
-      speed: -1,
-      course: -1)
-    expect(location2.radius).to be_nil
-    expect(location2.speed).to be_nil
-    expect(location2.course).to be_nil
-  end
-    
-            # This is called as a last-minute hook that allows the configuration
-        # object to finalize itself before it will be put into use. This is
-        # a useful place to do some defaults in the case the user didn't
-        # configure something or so on.
-        #
-        # An example of where this sort of thing is used or has been used:
-        # the 'vm' configuration key uses this to make sure that at least
-        # one sub-VM has been defined: the default VM.
-        #
-        # The configuration object is expected to mutate itself.
-        def finalize!
-          # Default implementation is to do nothing.
+          # Update password saving the record and clearing token. Returns true if
+      # the passwords are valid and the record was saved, false otherwise.
+      def reset_password(new_password, new_password_confirmation)
+        if new_password.present?
+          self.password = new_password
+          self.password_confirmation = new_password_confirmation
+          save
+        else
+          errors.add(:password, :blank)
+          false
         end
+      end
     
-              # Determine if we require a local Vagrant environment. There are
-          # two cases that we require a local environment:
-          #
-          #   * We're asking for ANY/EVERY VM (no names given).
-          #
-          #   * We're asking for specific VMs, at least once of which
-          #     is NOT in the local machine index.
-          #
-          requires_local_env = false
-          requires_local_env = true if names.empty?
-          requires_local_env ||= names.any? { |n|
-            !@env.machine_index.include?(n)
-          }
-          raise Errors::NoEnvironmentError if requires_local_env && !@env.root_path
+      def insert(index, *paths)
+    @paths = parse(*@paths.insert(index, *paths))
+    self
+  end
     
-        # Merge one registry with another and return a completely new
-    # registry. Note that the result cache is completely busted, so
-    # any gets on the new registry will result in a cache miss.
-    def merge(other)
-      self.class.new.tap do |result|
-        result.merge!(self)
-        result.merge!(other)
+    module Homebrew
+  module_function
+    
+      ##
+  #
+  # Some individual request types.
+  #
+  ##
+    
+            # Receives a kerberos response through the connection
+        #
+        # @return [<Rex::Proto::Kerberos::Model::KrbError, Rex::Proto::Kerberos::Model::KdcResponse>] the kerberos
+        #   response message
+        # @raise [RuntimeError] if the connection isn't established, the transport protocol is unknown, not supported
+        #   or the response can't be parsed
+        # @raise [NotImplementedError] if the transport protocol isn't supported
+        def recv_response
+          if connection.nil?
+            raise ::RuntimeError, 'Kerberos Client: connection not established'
+          end
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module CredentialCache
+        # This class provides a representation of a Principal stored in the Kerberos Credential Cache.
+        class Principal < Element
+          # @!attribute name_type
+          #   @return [Integer]
+          attr_accessor :name_type
+          # @!attribute realm
+          #   @return [String]
+          attr_accessor :realm
+          # @!attribute components
+          #   @return [Array<String>]
+          attr_accessor :components
+    
+                res = ''
+            case etype
+            when RC4_HMAC
+              res = decrypt_rc4_hmac(cipher, key, msg_type)
+              raise ::RuntimeError, 'EncryptedData failed to decrypt' if res.length < 8
+              res = res[8, res.length - 1]
+            else
+              raise ::NotImplementedError, 'EncryptedData schema is not supported'
+            end
+    
+              # Decodes the Rex::Proto::Kerberos::Model::KdcRequest from an input
+          #
+          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::ASN1Data
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode KdcRequest, invalid input'
+            end
+    
+        alias log puts
+    
+      def setup
+    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
+    success = Dir.chdir DUMMY_PATH do
+      silence_stdout_if !ENV['VERBOSE'] do
+        system 'node', 'manifest.js', tmp_dir
       end
     end
-    
-    class ActivityPub::OutboxesController < Api::BaseController
-  LIMIT = 20
-    
-            log_action :change_email, @user
-    
-        def resource_params
-      params.require(:custom_emoji).permit(:shortcode, :image, :visible_in_picker)
-    end
-    
-          if @email_domain_block.save
-        log_action :create, @email_domain_block
-        redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.created_msg')
-      else
-        render :new
-      end
-    end
-    
-        def destroy
-      authorize @report_note, :destroy?
-      @report_note.destroy!
-      redirect_to admin_report_path(@report_note.report_id), notice: I18n.t('admin.report_notes.destroyed_msg')
-    end
-    
-      def set_account
-    @account = Account.find(params[:id])
+    assert success, 'Node.js Mincer compilation failed'
+    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
+    css_name = manifest['assets']['application.css']
+    @css = File.read('#{tmp_dir}/#{css_name}')
   end
 end
 
     
-      private
+    (allow file-read-metadata)
+(allow file-read*
+  ; This is currenly only added because using `xcodebuild` to build a resource
+  ; bundle target starts a FSEvents stream on `/`. No idea why that would be
+  ; needed, but for now it doesn’t seem like a real problem.
+  (literal '/')
+  (regex
+    ; TODO see if we can restrict this more, but it's going to be hard
+    #'^/Users/[^.]+/*'
+    ;#'^/Users/[^.]+/.netrc'
+    ;#'^/Users/[^.]+/.gemrc'
+    ;#'^/Users/[^.]+/.gem/*'
+    ;#'^/Users/[^.]+/Library/.*'
+    #'^/Library/*'
+    #'^/System/Library/*'
+    #'^/usr/lib/*'
+    #'^/usr/share/*'
+    #'^/private/*'
+    #'^/dev/*'
+    #'^<%= ruby_prefix %>'
+    #'^<%= pod_prefix %>'
+    #'^<%= xcode_app_path %>'
+    #'^<%= Pod::Config.instance.repos_dir %>'
+<% prefixes.each do |prefix| %>
+    #'^<%= prefix %>/*'
+<% end %>
+  )
+)
+    
+            # Prints the list of specs & pod cache dirs for a single pod name.
+        #
+        # This output is valid YAML so it can be parsed with 3rd party tools
+        #
+        # @param [Array<Hash>] cache_descriptors
+        #        The various infos about a pod cache. Keys are
+        #        :spec_file, :version, :release and :slug
+        #
+        def print_pod_cache_infos(pod_name, cache_descriptors)
+          UI.puts '#{pod_name}:'
+          cache_descriptors.each do |desc|
+            if @short_output
+              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
+            end
+            UI.puts('  - Version: #{desc[:version]}')
+            UI.puts('    Type:    #{pod_type(desc)}')
+            UI.puts('    Spec:    #{desc[:spec_file]}')
+            UI.puts('    Pod:     #{desc[:slug]}')
+          end
+        end
+      end
+    end
+  end
+end
+
+    
+          private
