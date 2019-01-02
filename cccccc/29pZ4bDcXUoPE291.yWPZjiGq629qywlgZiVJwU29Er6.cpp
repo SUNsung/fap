@@ -1,169 +1,103 @@
 
-    {}  // namespace nwapi
-    
-    
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
+        
+        
+    {
+    {    if (last_executed < getUnixTime() - 592200) {
+      // Query has not run in the last week, expire results and interval.
+      deleteDatabaseValue(kQueries, saved_query);
+      deleteDatabaseValue(kQueries, saved_query + 'epoch');
+      deleteDatabaseValue(kPersistentSettings, 'interval.' + saved_query);
+      deleteDatabaseValue(kPersistentSettings, 'timestamp.' + saved_query);
+      VLOG(1) << 'Expiring results for scheduled query: ' << saved_query;
+    }
+  }
 }
     
-       void Call(const std::string& method,
-                    const base::ListValue& arguments) override;
-   void CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) override;
+      TableColumns columns() const override {
+    return tc_columns_;
+  }
     
-    EventListener::EventListener(int id,
-  const base::WeakPtr<DispatcherHost>& dispatcher_host,
-  const base::DictionaryValue& option) : Base(id, dispatcher_host, option) {
+    void runDecorators(DecorationPoint point,
+                   size_t time,
+                   const std::string& source) {
+  if (FLAGS_disable_decorators) {
+    return;
+  }
     }
     
-    bool MenuDelegate::IsCommandIdEnabled(int command_id) const {
-  if (command_id < 0)
-    return false;
-    }
+    /**
+ * @brief Access the internal storage of the Decorator parser.
+ *
+ * The decoration set is a map of column name to value. It contains the opaque
+ * set of decoration point results.
+ *
+ * Decorations are applied to log items before they are sent to the downstream
+ * logging APIs: logString, logSnapshot, etc.
+ *
+ * @param results the output parameter to write decorations.
+ */
+void getDecorations(std::map<std::string, std::string>& results);
     
     
-    {}  // namespace nwapi
+    {  return Status();
+}
+    
+    #include <osquery/config/config.h>
+#include <osquery/config/tests/test_utils.h>
+#include <osquery/database.h>
+#include <osquery/registry.h>
+#include <osquery/system.h>
+    
+    #include <boost/filesystem/operations.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
+    
+    
+    {}  //  namespace rocksdb
 
     
-      nw::Package* package = nw::package();
-  base::CommandLine* command_line = base::CommandLine::ForCurrentProcess();
-  base::CommandLine::StringVector args = command_line->GetArgs();
-  base::CommandLine::StringVector argv = command_line->original_argv();
     
-    #include 'base/run_loop.h'
-#include 'content/public/browser/browsing_data_remover.h'
-#include 'extensions/browser/extension_function.h'
+    {}  // namespace rocksdb
     
+      // put and get from non-default column family
+  s = db->Put(WriteOptions(), handles[1], Slice('key'), Slice('value'));
+  assert(s.ok());
+  std::string value;
+  s = db->Get(ReadOptions(), handles[1], Slice('key'), &value);
+  assert(s.ok());
     
-    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.callObjectMethodSync', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwObjCallObjectMethodSyncFunction);
-};
-    
-    
-    {    std::unique_ptr<base::ListValue> args = nwapi::nw__screen::OnSourceThumbnailChanged::Create(
-      src.id.ToString(),
-      base64);
-    DispatchEvent(
-      events::HistogramValue::UNKNOWN, 
-      nwapi::nw__screen::OnSourceThumbnailChanged::kEventName,
-      std::move(args));
+    class MyMerge : public rocksdb::MergeOperator {
+ public:
+  virtual bool FullMergeV2(const MergeOperationInput& merge_in,
+                           MergeOperationOutput* merge_out) const override {
+    merge_out->new_value.clear();
+    if (merge_in.existing_value != nullptr) {
+      merge_out->new_value.assign(merge_in.existing_value->data(),
+                                  merge_in.existing_value->size());
+    }
+    for (const rocksdb::Slice& m : merge_in.operand_list) {
+      fprintf(stderr, 'Merge(%s)\n', m.ToString().c_str());
+      // the compaction filter filters out bad values
+      assert(m.ToString() != 'bad');
+      merge_out->new_value.assign(m.data(), m.size());
+    }
+    return true;
   }
-    
-    
-    {  private:
-    DISALLOW_COPY_AND_ASSIGN(NwScreenStopMonitorFunction);
-  };
-    
-    namespace HPHP { namespace HHBBC {
-    }
     }
     
+      // Do some reads and writes to key 'y'
+  s = txn->GetForUpdate(read_options, 'y', &value);
+  txn->Put('y', 'y');
     
-    {  if (immt != ImmType::TocOnly) li64(rt, imm64, immt != ImmType::AnyCompact);
-  else li64TOC (rt, imm64, immt, immMayChange);
-}
-    
-    
-    {  if (base64) {
-    decoded = string_base64_decode(data, data_len, true);
-    if (decoded.isNull()) {
-      raise_warning('unable to decode base64 data');
-      return nullptr;
-    }
-  } else {
-    decoded = url_decode(data, data_len);
-  }
-  return req::make<MemFile>(decoded.data(), decoded.size());
-}
-    
-    
-    {  req::ptr<File> open(const String& filename, const String& mode, int options,
-                      const req::ptr<StreamContext>& context) override;
-};
-    
-    
-    {///////////////////////////////////////////////////////////////////////////////
-}
-    
-    
-    {
-    {      write(ini_fd, line.c_str(), line.length());
-      write(ini_fd, '\n', 1);
-      cnt += 2;
-      continue;
-    }
-    if (argv[cnt][0] != '-') {
-      if (show) {
-        newargv.push_back('-w');
-      } else {
-        newargv.push_back(lint ? '-l' : '-f');
-      }
-      newargv.push_back(argv[cnt++]);
-      need_file = false;
-      break;
-    }
-    if (strcmp(argv[cnt], '--') == 0) {
-      break;
-    }
-    cnt++; // skip unknown options
-  }
-    
-    #ifndef HPHP_GLOB_STREAM_WRAPPER_H
-#define HPHP_GLOB_STREAM_WRAPPER_H
-    
-      bool valid() const { return !isClosed(); }
-    
-    template<typename F>
-void logPerfWarningImpl(folly::StringPiece event, int64_t priority,
-                        int64_t rate, F fillCols) {
-  auto const effectiveRate = rate * RuntimeOption::EvalPerfWarningSampleRate;
-  if (effectiveRate > std::numeric_limits<uint32_t>::max()) return;
-  if (!StructuredLog::coinflip(effectiveRate)) return;
+    int main() {
+  // open DB
+  Options options;
+  TransactionDBOptions txn_db_options;
+  options.create_if_missing = true;
+  TransactionDB* txn_db;
     }
     
-    #include 'hphp/util/stack-trace.h'
+      std::string ToString(bool exclude_zero_counters = false) const;
     
-        std::unique_ptr<DHTMessageDispatcher> messageDispatcher;
     
-    void DHTRoutingTable::dropNode(const std::shared_ptr<DHTNode>& node)
-{
-  getBucketFor(node)->dropNode(node);
-}
-/*
-  void DHTRoutingTable::moveBucketHead(const std::shared_ptr<DHTNode>& node)
-  {
-  getBucketFor(node)->moveToHead(node);
-  }
-*/
-void DHTRoutingTable::moveBucketTail(const std::shared_ptr<DHTNode>& node)
-{
-  getBucketFor(node)->moveToTail(node);
-}
-    
-    namespace aria2 {
-    }
-    
-      uint32_t temp32;
-  uint64_t temp64;
-  // time
-  if (version == 2) {
-    READ_CHECK(fp, &temp32, sizeof(temp32));
-    serializedTime_.setTimeFromEpoch(ntohl(temp32));
-    // 4bytes reserved
-    readBytes(fp, buf, buf.size(), 4);
-  }
-  else {
-    READ_CHECK(fp, &temp64, sizeof(temp64));
-    serializedTime_.setTimeFromEpoch(ntoh64(temp64));
-  }
-    
-    namespace aria2 {
-    }
-    
-      // show some sample bytes
-  virtual std::string toString() const CXX11_OVERRIDE;
+    {}  // namespace rocksdb
