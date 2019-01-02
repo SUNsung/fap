@@ -1,137 +1,114 @@
 
         
+            print('20 newsgroups')
+    print('=============')
+    print('X_train.shape = {0}'.format(X_train.shape))
+    print('X_train.format = {0}'.format(X_train.format))
+    print('X_train.dtype = {0}'.format(X_train.dtype))
+    print('X_train density = {0}'
+          ''.format(X_train.nnz / np.product(X_train.shape)))
+    print('y_train {0}'.format(y_train.shape))
+    print('X_test {0}'.format(X_test.shape))
+    print('X_test.format = {0}'.format(X_test.format))
+    print('X_test.dtype = {0}'.format(X_test.dtype))
+    print('y_test {0}'.format(y_test.shape))
+    print()
+    
+    
+def variable_batch_size_comparison(data):
+    batch_sizes = [i.astype(int) for i in np.linspace(data.shape[0] // 10,
+                                                      data.shape[0], num=10)]
+    
+        import matplotlib.pyplot as plt
+    fig = plt.figure('scikit-learn OMP vs. LARS benchmark results')
+    for i, (label, timings) in enumerate(sorted(six.iteritems(results))):
+        ax = fig.add_subplot(1, 2, i+1)
+        vmax = max(1 - timings.min(), -1 + timings.max())
+        plt.matshow(timings, fignum=False, vmin=1 - vmax, vmax=1 + vmax)
+        ax.set_xticklabels([''] + [str(each) for each in samples_range])
+        ax.set_yticklabels([''] + [str(each) for each in features_range])
+        plt.xlabel('n_samples')
+        plt.ylabel('n_features')
+        plt.title(label)
+    
+    n_samples = np.logspace(.5, 3, 9)
+n_features = np.logspace(1, 3.5, 7)
+N_samples, N_features = np.meshgrid(n_samples,
+                                    n_features)
+scikits_time = np.zeros(N_samples.shape)
+scipy_time = np.zeros(N_samples.shape)
+    
+    
+def bench_scikit_tree_regressor(X, Y):
+    '''Benchmark with scikit-learn decision tree regressor'''
+    
+    # A regex that matches standard linkcheck output lines
+line_re = re.compile(u'(.*)\:\d+\:\s\[(.*)\]\s(?:(.*)\sto\s(.*)|(.*))')
+    
+        def __init__(self, *a, **kw):
+        super(QPSSpider, self).__init__(*a, **kw)
+        if self.qps is not None:
+            self.qps = float(self.qps)
+            self.download_delay = 1 / self.qps
+        elif self.download_delay is not None:
+            self.download_delay = float(self.download_delay)
+    
+    from scrapy.utils.spider import iter_spider_classes
+from scrapy.commands import ScrapyCommand
+from scrapy.exceptions import UsageError
+from scrapy.utils.conf import arglist_to_dict
+from scrapy.utils.python import without_none_values
+    
+        def run(self, args, opts):
+        settings = self.crawler_process.settings
+        if opts.get:
+            s = settings.get(opts.get)
+            if isinstance(s, BaseSettings):
+                print(json.dumps(s.copy_to_dict()))
+            else:
+                print(s)
+        elif opts.getbool:
+            print(settings.getbool(opts.getbool))
+        elif opts.getint:
+            print(settings.getint(opts.getint))
+        elif opts.getfloat:
+            print(settings.getfloat(opts.getfloat))
+        elif opts.getlist:
+            print(settings.getlist(opts.getlist))
+
+    
+        default_settings = {'LOG_ENABLED': False,
+                        'SPIDER_LOADER_WARN_ONLY': True}
+    
+            general form:
+        @returns request(s)/item(s) [min=1 [max]]
+    
+        long_description = README,
+    
+        @staticmethod
+    def get_streams_by_id(account_number, video_id):
+        '''
+        int, int->list
         
-@classmethod
-def get_args(cls, dist, header=None):
-    '''
-    Yield write_script() argument tuples for a distribution's
-    console_scripts and gui_scripts entry points.
-    '''
-    if header is None:
-        header = cls.get_header()
-    spec = str(dist.as_requirement())
-    for type_ in 'console', 'gui':
-        group = type_ + '_scripts'
-        for name, ep in dist.get_entry_map(group).items():
-            # ensure_safe_name
-            if re.search(r'[\\/]', name):
-                raise ValueError('Path separators not allowed in script names')
-            script_text = TEMPLATE.format(
-                          ep.module_name, ep.attrs[0], '.'.join(ep.attrs),
-                          spec, group, name)
-            args = cls._get_script_args(type_, name, header, script_text)
-            for res in args:
-                yield res
-    
-    
-@pytest.mark.parametrize('app, help_text, operations', [
-    ('apt', apt_help, apt_operations),
-    ('apt-get', apt_get_help, apt_get_operations)
-])
-def test_get_operations(set_help, app, help_text, operations):
-    set_help(help_text)
-    assert _get_operations(app) == operations
-    
-    no_match_output = '''
-Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
-Get:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease [89.2 kB]
-Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
-Get:4 http://security.ubuntu.com/ubuntu zesty-security InRelease [89.2 kB]
-Hit:5 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
-Hit:6 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
-Hit:7 https://download.docker.com/linux/ubuntu zesty InRelease
-Get:8 http://us.archive.ubuntu.com/ubuntu zesty-updates/main i386 Packages [232 kB]
-Get:9 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 Packages [235 kB]
-Get:10 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 DEP-11 Metadata [55.2 kB]
-Get:11 http://us.archive.ubuntu.com/ubuntu zesty-updates/main DEP-11 64x64 Icons [32.3 kB]
-Get:12 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 Packages [156 kB]
-Get:13 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe i386 Packages [156 kB]
-Get:14 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 DEP-11 Metadata [175 kB]
-Get:15 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe DEP-11 64x64 Icons [253 kB]
-Get:16 http://us.archive.ubuntu.com/ubuntu zesty-updates/multiverse amd64 DEP-11 Metadata [5,840 B]
-Get:17 http://us.archive.ubuntu.com/ubuntu zesty-backports/universe amd64 DEP-11 Metadata [4,588 B]
-Get:18 http://security.ubuntu.com/ubuntu zesty-security/main amd64 DEP-11 Metadata [12.7 kB]
-Get:19 http://security.ubuntu.com/ubuntu zesty-security/main DEP-11 64x64 Icons [17.6 kB]
-Get:20 http://security.ubuntu.com/ubuntu zesty-security/universe amd64 DEP-11 Metadata [21.6 kB]
-Get:21 http://security.ubuntu.com/ubuntu zesty-security/universe DEP-11 64x64 Icons [47.7 kB]
-Get:22 http://security.ubuntu.com/ubuntu zesty-security/multiverse amd64 DEP-11 Metadata [208 B]
-Fetched 1,673 kB in 0s (1,716 kB/s)
-Reading package lists... Done
-Building dependency tree
-Reading state information... Done
-All packages are up to date.
-'''
-    
-    match_output = '''
-Listing... Done
-heroku/stable 6.15.2-1 amd64 [upgradable from: 6.14.43-1]
-resolvconf/zesty-updates,zesty-updates 1.79ubuntu4.1 all [upgradable from: 1.79ubuntu4]
-squashfs-tools/zesty-updates 1:4.3-3ubuntu2.17.04.1 amd64 [upgradable from: 1:4.3-3ubuntu2]
-unattended-upgrades/zesty-updates,zesty-updates 0.93.1ubuntu2.4 all [upgradable from: 0.93.1ubuntu2.3]
-'''
-    
-    
-class PostgresSimpleLookup(Lookup):
-    def as_sql(self, qn, connection):
-        lhs, lhs_params = self.process_lhs(qn, connection)
-        rhs, rhs_params = self.process_rhs(qn, connection)
-        params = lhs_params + rhs_params
-        return '%s %s %s' % (lhs, self.operator, rhs), params
-    
-    
-@functools.lru_cache()
-def get_citext_oids(connection_alias):
-    '''Return citext array OIDs.'''
-    with connections[connection_alias].cursor() as cursor:
-        cursor.execute('SELECT typarray FROM pg_type WHERE typname = 'citext'')
-        return tuple(row[0] for row in cursor)
-    
-            full_path = request.get_full_path()
-        current_site = get_current_site(request)
-    
-        def exists(self, session_key):
-        return bool(session_key) and (self.cache_key_prefix + session_key) in self._cache
-    
-        def _get_session_from_db(self):
-        try:
-            return self.model.objects.get(
-                session_key=self.session_key,
-                expire_date__gt=timezone.now()
-            )
-        except (self.model.DoesNotExist, SuspiciousOperation) as e:
-            if isinstance(e, SuspiciousOperation):
-                logger = logging.getLogger('django.security.%s' % e.__class__.__name__)
-                logger.warning(str(e))
-            self._session_key = None
-    
-        def _get_session_key(self):
+        Get the height of the videos.
+        
+        Since brightcove is using 3 kinds of links: rtmp, http and https,
+        we will be using the HTTPS one to make it secure.
+        
+        If somehow akamaihd.net is blocked by the Great Fucking Wall,
+        change the 'startswith https' to http.
         '''
-        Instead of generating a random string, generate a secure url-safe
-        base64-encoded string of data as our session key.
-        '''
-        return signing.dumps(
-            self._session, compress=True,
-            salt='django.contrib.sessions.backends.signed_cookies',
-            serializer=self.serializer,
-        )
+        endpoint = 'https://edge.api.brightcove.com/playback/v1/accounts/{account_number}/videos/{video_id}'.format(account_number = account_number, video_id = video_id)
+        fake_header_id = fake_headers
+        #is this somehow related to the time? Magic....
+        fake_header_id['Accept'] ='application/json;pk=BCpkADawqM1cc6wmJQC2tvoXZt4mrB7bFfi6zGt9QnOzprPZcGLE9OMGJwspQwKfuFYuCjAAJ53JdjI8zGFx1ll4rxhYJ255AXH1BQ10rnm34weknpfG-sippyQ'
     
-        The Django sessions framework is entirely cookie-based. It does
-    not fall back to putting session IDs in URLs. This is an intentional
-    design decision. Not only does that behavior make URLs ugly, it makes
-    your site vulnerable to session-ID theft via the 'Referer' header.
+        else:
+        titles = re.findall(r''name':'([^']*)'', html)
+        real_urls = [re.sub('\\\\/', '/', i) for i in re.findall(r''rawUrl':'([^']*)'', html)]
     
-        By default this will get the strings from the blns.txt file
+    __all__ = ['facebook_download']
     
-        hass.services.register(DOMAIN, SERVICE_BROWSE_URL,
-                           lambda service:
-                           webbrowser.open(service.data[ATTR_URL]),
-                           schema=SERVICE_BROWSE_URL_SCHEMA)
+    from ..common import *
     
-                    _LOGGER.debug(
-                    'Sent metric %s: %s (tags: %s)', attribute, value, tags)
-    
-        return scanner if scanner.success_init else None
-    
-            def on_deleted(self, event):
-            '''File deleted.'''
-            self.process(event)
+            docid = r1('/file/d/([^/]+)', url)
