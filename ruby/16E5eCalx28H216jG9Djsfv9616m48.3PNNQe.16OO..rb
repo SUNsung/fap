@@ -1,91 +1,184 @@
 
         
-        def custom_release_header_anchors(markdown)
-  header_regexp = %r!^(\d{1,2})\.(\d{1,2})\.(\d{1,2}) \/ \d{4}-\d{2}-\d{2}!
-  section_regexp = %r!^### \w+ \w+$!
-  markdown.split(%r!^##\s!).map do |release_notes|
-    _, major, minor, patch = *release_notes.match(header_regexp)
-    release_notes
-      .gsub(header_regexp, '\\0\n{: #v\\1-\\2-\\3}')
-      .gsub(section_regexp) { |section| '#{section}\n{: ##{slugify(section)}-v#{major}-#{minor}-#{patch}}' }
-  end.join('\n## ')
-end
+            def limit_reached_for(user_id, date)
+      GivenDailyLike.find_for(user_id, date).pluck(:limit_reached)[0] || false
+    end
     
-    # -------------------------------------------------------------------
-# Benchmarking changes in https://github.com/jekyll/jekyll/pull/6767
-# -------------------------------------------------------------------
+    describe GroupUser do
     
-    # For this pull request, which changes Page#dir
-# https://github.com/jekyll/jekyll/pull/4403
-    
-    def run_jekyll(args)
-  args = args.strip.split(' ') # Shellwords?
-  process = run_in_shell('ruby', Paths.jekyll_bin.to_s, *args, '--trace')
-  process.exitstatus.zero?
-end
-    
-              theme.create!
-          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
-                             ' is ready for you in #{theme.path.to_s.cyan}!'
-          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
+            def collection_method
+          :issues_comments
         end
-        # rubocop:enable Metrics/AbcSize
+    
+            retval
+      end
+    
+    
+    {            # These fields are not displayed for LegacyDiffNote notes, so it
+            # doesn't really matter what we set them to.
+            a_mode: '100644',
+            b_mode: '100644',
+            new_file: false
+          }
+        end
       end
     end
   end
 end
 
     
-                  # Notify blocked threads that EventMachine has started or shutdown
-              EM.schedule { @started_event.set }
-              EM.add_shutdown_hook { @stopped_event.set }
+    module Gitlab
+  module GithubImport
+    module Representation
+      class LfsObject
+        include ToHash
+        include ExposeAttribute
     
-      class Mention < ApplicationRecord
-  end
-    
-          delete :destroy, params: {post_id: @message.id, id: @like.id}, format: :json
-      expect(response.status).to eq(204)
-    end
-    
-        context 'on a post from a contact' do
-      before do
-        aspect_to_post = bob.aspects.where(:name => 'generic').first
-        @post = bob.post :status_message, :text => 'something', :to => aspect_to_post
-      end
-    
-          def create_test_file
-        if defined?(RSpec)
-          create_worker_spec
-        else
-          create_worker_test
-        end
-      end
-    
-        module PsychAutoload
-      def resolve_class(klass_name)
-        return nil if !klass_name || klass_name.empty?
-        # constantize
-        names = klass_name.split('::')
-        names.shift if names.empty? || names.first.empty?
-    
-          def deliver(msg)
-        if msg.respond_to?(:deliver_now)
-          # Rails 4.2/5.0
-          msg.deliver_now
-        else
-          # Rails 3.2/4.0/4.1
-          msg.deliver
-        end
-      end
-    end
-    
-        def self.with_job_hash_context(job_hash, &block)
-      with_context(job_hash_context(job_hash), &block)
-    end
-    
-            names.inject(Object) do |constant, name|
-          constant.const_defined?(name) ? constant.const_get(name) : constant.const_missing(name)
+            # attributes - A Hash containing the user details. The keys of this
+        #              Hash (and any nested hashes) must be symbols.
+        def initialize(attributes)
+          @attributes = attributes
         end
       end
     end
   end
+end
+
+    
+    describe 'Kernel.sleep' do
+  it 'needs to be reviewed for spec completeness'
+end
+
+    
+      platform_is_not :windows do
+    it 'returns true when passed ?l if the argument is a symlink' do
+      link = tmp('file_symlink.lnk')
+      File.symlink(@file, link)
+      begin
+        Kernel.test(?l, link).should be_true
+      ensure
+        rm_r link
+      end
+    end
+  end
+    
+      it 'raises ArgumentError if 3 or more arguments provided' do
+    lambda {
+      catch :blah do
+        throw :blah, :return_value, 2
+      end
+    }.should raise_error(ArgumentError)
+    
+      it 'raises ArgumentError if no block or proc is provided' do
+    lambda do
+      trace_var :$Kernel_trace_var_global
+    end.should raise_error(ArgumentError)
+  end
+end
+
+    
+      it 'ignores single-line arrays' do
+    expect_no_offenses('[a, b, c]')
+  end
+    
+                  expect(new_source).to eq(['#{prefix}#{open}#{a},',
+                                        '#{b}#{close}',
+                                        suffix].join($RS))
+            end
+          end
+        end
+      end
+    end
+    
+            expect(new_source).to eq(['#{prefix}#{open}#{a},',
+                                  '#{b}#{close}',
+                                  suffix].join($RS))
+      end
+    end
+  end
+end
+
+    
+          # Checks whether this case statement has an `else` branch.
+      #
+      # @return [Boolean] whether the `case` statement has an `else` branch
+      def else?
+        loc.else
+      end
+    end
+  end
+end
+
+    
+    module RuboCop
+  module AST
+    # A node extension for `if` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `if` nodes within RuboCop.
+    class IfNode < Node
+      include ConditionalNode
+      include ModifierNode
+    
+          # This is used for duck typing with `pair` nodes which also appear as
+      # `hash` elements.
+      #
+      # @return [false]
+      def hash_rocket?
+        false
+      end
+    
+          # Whether the last argument of the node is a block pass,
+      # i.e. `&block`.
+      #
+      # @return [Boolean] whether the last argument of the node is a block pass
+      def block_argument?
+        arguments? &&
+          (last_argument.block_pass_type? || last_argument.blockarg_type?)
+      end
+    end
+  end
+end
+
+    
+            def advance
+          authorize! :update, @order, order_token
+          while @order.next; end
+          respond_with(@order, default_template: 'spree/api/v1/orders/show', status: 200)
+        end
+    
+            def prepare_event
+          return unless @event = params[:fire]
+    
+            def new
+          @payment_methods = Spree::PaymentMethod.available
+          respond_with(@payment_methods)
+        end
+    
+            def stock_location
+          render 'spree/api/v1/shared/stock_location_required', status: 422 and return unless params[:stock_location_id]
+          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:stock_location_id])
+        end
+    
+            def update
+          authorize! :update, taxonomy
+          if taxonomy.update_attributes(taxonomy_params)
+            respond_with(taxonomy, status: 200, default_template: :show)
+          else
+            invalid_resource!(taxonomy)
+          end
+        end
+    
+            def index
+          @zones = Zone.accessible_by(current_ability, :read).order('name ASC').ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          respond_with(@zones)
+        end
+    
+      # The CategoryFeed class creates an Atom feed for the specified category.
+  class CategoryFeed < Page
+    
+    end
+Liquid::Template.register_filter OctopressLiquidFilters
+    
+          unless file.file?
+        return 'File #{file} could not be found'
+      end
