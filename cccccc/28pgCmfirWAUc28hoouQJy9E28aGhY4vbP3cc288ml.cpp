@@ -1,291 +1,308 @@
 
         
-        AnyMetadata::AnyMetadata(UrlType* type_url, ValueType* value)
-    : type_url_(type_url), value_(value) {
+        #endif  // CONTENT_NW_SRC_API_APP_APP_H_
+    
+    namespace nwapi {
+    }
+    
+    void MenuItem::CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result) {
+  if (method == 'GetChecked') {
+    result->AppendBoolean(GetChecked());
+  } else {
+    NOTREACHED() << 'Invalid call to MenuItem method:' << method
+                 << ' arguments:' << arguments;
+  }
 }
     
-      protobuf_unittest::TestAllTypes message2;
-    
-    TEST(JavaDocCommentTest, Escaping) {
-  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
-  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
-  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
-  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
-  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
-  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
+    NwClipboardSetListSyncFunction::NwClipboardSetListSyncFunction() {
 }
     
-    #include <google/protobuf/compiler/plugin.h>
-    
-      /**
-   * Caffe's thread local state will be initialized using the current
-   * thread values, e.g. device id, solver index etc. The random seed
-   * is initialized using caffe_rng_rand.
-   */
-  void StartInternalThread();
-    
-      /**
-   * @brief Does layer-specific setup: your layer should implement this function
-   *        as well as Reshape.
-   *
-   * @param bottom
-   *     the preshaped input blobs, whose data fields store the input data for
-   *     this layer
-   * @param top
-   *     the allocated but unshaped output blobs
-   *
-   * This method should do one-time layer specific setup. This includes reading
-   * and processing relevent parameters from the <code>layer_param_</code>.
-   * Setting up the shapes of top blobs and internal buffers should be done in
-   * <code>Reshape</code>, which will be called before the forward pass to
-   * adjust the top blob sizes.
-   */
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top) {}
-    
-    template <typename Dtype>
-class Batch {
- public:
-  Blob<Dtype> data_, label_;
-};
-    
-    
-    {  size_t tempDataSize;
-  void *tempData1, *tempData2;
-};
-#endif
-    
-    #include <vector>
-    
-    namespace {
+    namespace extensions {
     }
     
-      CensusContext(absl::string_view name,
-                const ::opencensus::trace::SpanContext& parent_ctxt)
-      : span_(::opencensus::trace::Span::StartSpanWithRemoteParent(
-            name, parent_ctxt)) {}
     
-    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H */
-
+    {    private:
+      DISALLOW_COPY_AND_ASSIGN(NwScreenGetScreensFunction);      
+  };
     
-      // implementation of ServerReflectionInfo(stream ServerReflectionRequest) rpc
-  // in ServerReflection service
-  Status ServerReflectionInfo(
-      ServerContext* context,
-      ServerReaderWriter<reflection::v1alpha::ServerReflectionResponse,
-                         reflection::v1alpha::ServerReflectionRequest>* stream)
-      override;
-    
-        virtual void UpdateArguments(ChannelArguments* args) override {
-      args->SetInt(name_, value_);
+    namespace google {
+namespace protobuf {
+namespace python {
     }
-    virtual void UpdatePlugins(
-        std::vector<std::unique_ptr<ServerBuilderPlugin>>* plugins) override {}
-    
-    namespace grpc {
-namespace load_reporter {
     }
     }
     
-    #include 'unicode/messagepattern.h'
-#include 'unicode/rbnf.h'
-#include 'unicode/selfmt.h'
-#include 'unicode/uchar.h'
-#include 'unicode/ucnv_err.h'
-#include 'unicode/umsg.h'
-#include 'unicode/ustring.h'
-#include 'unicode/utypes.h'
-#include 'cmemory.h'
-#include 'messageimpl.h'
-#include 'patternprops.h'
-#include 'selfmtimpl.h'
-#include 'uassert.h'
-#include 'ustrfmt.h'
-#include 'util.h'
-#include 'uvector.h'
+    #include <google/protobuf/compiler/csharp/csharp_doc_comment.h>
+#include <google/protobuf/compiler/csharp/csharp_enum.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/compiler/csharp/csharp_options.h>
     
-    #define LOW_A             ((UChar)0x0061)
-#define LOW_B             ((UChar)0x0062)
-#define LOW_C             ((UChar)0x0063)
-#define LOW_D             ((UChar)0x0064)
-#define LOW_E             ((UChar)0x0065)
-#define LOW_F             ((UChar)0x0066)
-#define LOW_G             ((UChar)0x0067)
-#define LOW_H             ((UChar)0x0068)
-#define LOW_I             ((UChar)0x0069)
-#define LOW_J             ((UChar)0x006a)
-#define LOW_K             ((UChar)0x006B)
-#define LOW_L             ((UChar)0x006C)
-#define LOW_M             ((UChar)0x006D)
-#define LOW_N             ((UChar)0x006E)
-#define LOW_O             ((UChar)0x006F)
-#define LOW_P             ((UChar)0x0070)
-#define LOW_Q             ((UChar)0x0071)
-#define LOW_R             ((UChar)0x0072)
-#define LOW_S             ((UChar)0x0073)
-#define LOW_T             ((UChar)0x0074)
-#define LOW_U             ((UChar)0x0075)
-#define LOW_V             ((UChar)0x0076)
-#define LOW_W             ((UChar)0x0077)
-#define LOW_X             ((UChar)0x0078)
-#define LOW_Y             ((UChar)0x0079)
-#define LOW_Z             ((UChar)0x007A)
-    
-    #include 'unicode/utypes.h'
-#include 'sharedobject.h'
-    
-        /**
-     * @param keyword for example 'few' or 'other'
-     * @return the plural form corresponding to the keyword, or OTHER
-     */
-    static Form orOtherFromString(const char *keyword) {
-        return static_cast<Form>(indexOrOtherIndexFromString(keyword));
-    }
-    
-        // Simple (no nested replacers) Processing Code :
-    if (!isComplex) {
-        text.handleReplaceBetween(start, limit, output);
-        outLen = output.length();
-    }
-    
-        static Follow* createWithOffset(Node* followedNode,float xOffset,float yOffset,const Rect& rect = Rect::ZERO);
-    
-    /** Return boundarySet.
-     *
-     * @return Return boundarySet.
-     */
-    bool isBoundarySet() const { return _boundarySet; }
-    /** Alter behavior - turn on/off boundary. 
-     *
-     * @param value Turn on/off boundary.
-     */
-    void setBoundarySet(bool value) { _boundarySet = value; }
-    
-    /** @deprecated Alter behavior - turn on/off boundary. 
-     *
-     * @param value Turn on/off boundary.
-     */
-    CC_DEPRECATED_ATTRIBUTE void setBoudarySet(bool value) { setBoundarySet(value); }
-    
-    CatmullRomTo* CatmullRomTo::reverse() const
-{
-    PointArray *reverse = _points->reverse();
-    return CatmullRomTo::create(_duration, reverse);
+    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
+  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
+  // Identifiers can't start with digits
+  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
+  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
 }
     
-    void ActionEase::stop(void)
-{
-    if (_inner)
-        _inner->stop();
+    #include <google/protobuf/compiler/java/java_context.h>
+#include <google/protobuf/compiler/java/java_doc_comment.h>
+#include <google/protobuf/compiler/java/java_helpers.h>
+#include <google/protobuf/compiler/java/java_name_resolver.h>
+#include <google/protobuf/io/printer.h>
     
-    ActionInterval::stop();
-}
-    
-    /** @class FlipY
-* @brief Flips the sprite vertically.
-* @since v0.99.0
-*/
-class CC_DLL FlipY : public ActionInstant
-{
-public:
-    /** Create the action.
-     *
-     * @param y Flips the sprite vertically if true.
-     * @return An autoreleased FlipY object.
-     */
-    static FlipY * create(bool y);
+      // Limit the number of bytes per line.
+  static const int kBytesPerLine = 40;
+  // Limit the number of lines per string part.
+  static const int kLinesPerPart = 400;
+  // Every block of bytes, start a new string literal, in order to avoid the
+  // 64k length limit. Note that this value needs to be <64k.
+  static const int kBytesPerPart = kBytesPerLine * kLinesPerPart;
+  for (int i = 0; i < file_data.size(); i += kBytesPerLine) {
+    if (i > 0) {
+      if (i % kBytesPerPart == 0) {
+        printer->Print(',\n');
+      } else {
+        printer->Print(' +\n');
+      }
     }
+    printer->Print('\'$data$\'',
+      'data', CEscape(file_data.substr(i, kBytesPerLine)));
+  }
     
-    
-    {    return count;
+    void OneofGenerator::GeneratePropertyImplementation(io::Printer* printer) {
+  printer->Print(
+      variables_,
+      '@dynamic $name$OneOfCase;\n');
 }
     
-        /** Gets an action given its tag an a target.
-     *
-     * @param tag       The action's tag.
-     * @param target    A certain target.
-     * @return  The Action the with the given tag.
-     */
-    virtual Action* getActionByTag(int tag, const Node *target) const;
     
-    bool JumpTiles3D::initWithDuration(float duration, const Size& gridSize, unsigned int numberOfJumps, float amplitude)
-{
-    if (TiledGrid3DAction::initWithDuration(duration, gridSize))
     {
-        _jumps = numberOfJumps;
-        _amplitude = amplitude;
-        _amplitudeRate = 1.0f;
-    }
-    }
-    
-    #include '2d/CCActionTween.h'
-    
-    
-    {    addAnimationsWithDictionary(dict,plist);
-}
-    
-    void DHTResponseMessage::fillMessage(Dict* msgDict)
-{
-  msgDict->put(R, getResponse());
-}
-    
-      int numBucket_;
-    
-    #include <cstring>
-#include <cstdio>
-    
-    #endif // D_DHT_TASK_H
+    {
+    {}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
 
     
-      size_t getExecutingTaskSize() const { return execTasks_.size(); }
+      // Since the basic IO manipulators are overloaded for both narrow
+  // and wide streams, we have to provide this specialized definition
+  // of operator <<, even though its body is the same as the
+  // templatized version above.  Without this definition, streaming
+  // endl or other basic IO manipulators to Message will confuse the
+  // compiler.
+  Message& operator <<(BasicNarrowIoManip val) {
+    *ss_ << val;
+    return *this;
+  }
     
-    DHTUnknownMessage::DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
-                                     const unsigned char* data, size_t length,
-                                     const std::string& ipaddr, uint16_t port)
-    : DHTMessage(localNode, std::shared_ptr<DHTNode>()),
-      length_(length),
-      ipaddr_(ipaddr),
-      port_(port)
-{
-  if (length_ == 0) {
-    data_ = nullptr;
-  }
-  else {
-    data_ = new unsigned char[length];
-    memcpy(data_, data, length);
-  }
+    template <typename Generator1, typename Generator2, typename Generator3,
+    typename Generator4, typename Generator5, typename Generator6,
+    typename Generator7, typename Generator8>
+internal::CartesianProductHolder8<Generator1, Generator2, Generator3,
+    Generator4, Generator5, Generator6, Generator7, Generator8> Combine(
+    const Generator1& g1, const Generator2& g2, const Generator3& g3,
+        const Generator4& g4, const Generator5& g5, const Generator6& g6,
+        const Generator7& g7, const Generator8& g8) {
+  return internal::CartesianProductHolder8<Generator1, Generator2, Generator3,
+      Generator4, Generator5, Generator6, Generator7, Generator8>(
+      g1, g2, g3, g4, g5, g6, g7, g8);
 }
     
-    DNSCache::AddrEntry& DNSCache::AddrEntry::operator=(const AddrEntry& c)
-{
-  if (this != &c) {
-    addr_ = c.addr_;
-    good_ = c.good_;
+      // Gets the line in the source file where the test part took place,
+  // or -1 if it's unknown.
+  int line_number() const { return line_number_; }
+    
+    // This specialization is used when the first argument to ASSERT_EQ()
+// is a null pointer literal, like NULL, false, or 0.
+template <>
+class EqHelper<true> {
+ public:
+  // We define two overloaded versions of Compare().  The first
+  // version will be picked when the second argument to ASSERT_EQ() is
+  // NOT a pointer, e.g. ASSERT_EQ(0, AnIntFunction()) or
+  // EXPECT_EQ(false, a_bool).
+  template <typename T1, typename T2>
+  static AssertionResult Compare(
+      const char* expected_expression,
+      const char* actual_expression,
+      const T1& expected,
+      const T2& actual,
+      // The following line prevents this overload from being considered if T2
+      // is not a pointer type.  We need this because ASSERT_EQ(NULL, my_ptr)
+      // expands to Compare('', '', NULL, my_ptr), which requires a conversion
+      // to match the Secret* in the other overload, which would otherwise make
+      // this template match better.
+      typename EnableIf<!is_pointer<T2>::value>::type* = 0) {
+    return CmpHelperEQ(expected_expression, actual_expression, expected,
+                       actual);
   }
-  return *this;
-}
+    }
     
-        bool operator<(const CacheEntry& e) const;
-    
-      FunctionRef<int(int)> const cfref = lambda;
-  EXPECT_EQ(1023, cfref(5));
-  EXPECT_EQ(1029, cfref(6));
-  EXPECT_EQ(1036, cfref(7));
-    
-      /**
-   * Returns a secure double in [0, 1)
-   */
-  static double secureRandDouble01() {
-    SecureRNG<uint64_t> srng;
-    return randDouble01(srng);
-  }
-    
-    template <template <typename> class Atom = std::atomic>
-struct counted_ptr_base {
- protected:
-  static intrusive_shared_count<Atom>* getRef(void* pt) {
-    char* p = (char*)pt;
-    p -= sizeof(intrusive_shared_count<Atom>);
-    return (intrusive_shared_count<Atom>*)p;
-  }
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32, typename T33, typename T34, typename T35,
+    typename T36, typename T37, typename T38, typename T39, typename T40,
+    typename T41, typename T42, typename T43, typename T44>
+struct Types44 {
+  typedef T1 Head;
+  typedef Types43<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
+      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
+      T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43,
+      T44> Tail;
 };
+    
+    // A sample program demonstrating using Google C++ testing framework.
+//
+// Author: wan@google.com (Zhanyong Wan)
+    
+    #include 'sample2.h'
+#include 'gtest/gtest.h'
+    
+    int	b3g_overlappingPairs = 0;
+int b3g_removePairs =0;
+int b3g_addedPairs =0;
+int b3g_findPairs =0;
+    
+    	float		m_erp2;//used in Split Impulse
+	float		m_globalCfm;//constraint force mixing
+	float		m_splitImpulsePenetrationThreshold;
+	float		m_splitImpulseTurnErp;
+    
+    
+b3Scalar b3TypedConstraint::getMotorFactor(b3Scalar pos, b3Scalar lowLim, b3Scalar uppLim, b3Scalar vel, b3Scalar timeFact)
+{
+	if(lowLim > uppLim)
+	{
+		return b3Scalar(1.0f);
+	}
+	else if(lowLim == uppLim)
+	{
+		return b3Scalar(0.0f);
+	}
+	b3Scalar lim_fact = b3Scalar(1.0f);
+	b3Scalar delta_max = vel / timeFact;
+	if(delta_max < b3Scalar(0.0f))
+	{
+		if((pos >= lowLim) && (pos < (lowLim - delta_max)))
+		{
+			lim_fact = (lowLim - pos) / delta_max;
+		}
+		else if(pos  < lowLim)
+		{
+			lim_fact = b3Scalar(0.0f);
+		}
+		else
+		{
+			lim_fact = b3Scalar(1.0f);
+		}
+	}
+	else if(delta_max > b3Scalar(0.0f))
+	{
+		if((pos <= uppLim) && (pos > (uppLim - delta_max)))
+		{
+			lim_fact = (uppLim - pos) / delta_max;
+		}
+		else if(pos  > uppLim)
+		{
+			lim_fact = b3Scalar(0.0f);
+		}
+		else
+		{
+			lim_fact = b3Scalar(1.0f);
+		}
+	}
+	else
+	{
+			lim_fact = b3Scalar(0.0f);
+	}
+	return lim_fact;
+}
+    
+    
+	///internal method used by the constraint solver, don't use them directly
+	virtual	void	setupSolverConstraint(b3ConstraintArray& ca, int solverBodyA,int solverBodyB, b3Scalar timeStep)
+	{
+        (void)ca;
+        (void)solverBodyA;
+        (void)solverBodyB;
+        (void)timeStep;
+	}
+	
+	///internal method used by the constraint solver, don't use them directly
+	virtual void getInfo1 (b3ConstraintInfo1* info,const b3RigidBodyData* bodies)=0;
+    
+    inline void b3IntegrateTransform( __global b3RigidBodyData_t* body, float timeStep, float angularDamping, b3Float4ConstArg gravityAcceleration)
+{
+	float BT_GPU_ANGULAR_MOTION_THRESHOLD = (0.25f * 3.14159254f);
+	
+	if( (body->m_invMass != 0.f))
+	{
+		//angular velocity
+		{
+			b3Float4 axis;
+			//add some hardcoded angular damping
+			body->m_angVel.x *= angularDamping;
+			body->m_angVel.y *= angularDamping;
+			body->m_angVel.z *= angularDamping;
+			
+			b3Float4 angvel = body->m_angVel;
+			float fAngle = b3Sqrt(b3Dot3F4(angvel, angvel));
+			//limit the angular motion
+			if(fAngle*timeStep > BT_GPU_ANGULAR_MOTION_THRESHOLD)
+			{
+				fAngle = BT_GPU_ANGULAR_MOTION_THRESHOLD / timeStep;
+			}
+			if(fAngle < 0.001f)
+			{
+				// use Taylor's expansions of sync function
+				axis = angvel * (0.5f*timeStep-(timeStep*timeStep*timeStep)*0.020833333333f * fAngle * fAngle);
+			}
+			else
+			{
+				// sync(fAngle) = sin(c*fAngle)/t
+				axis = angvel * ( b3Sin(0.5f * fAngle * timeStep) / fAngle);
+			}
+			b3Quat dorn;
+			dorn.x = axis.x;
+			dorn.y = axis.y;
+			dorn.z = axis.z;
+			dorn.w = b3Cos(fAngle * timeStep * 0.5f);
+			b3Quat orn0 = body->m_quat;
+    }
+    }
+    }
+    
+    void	b3GeometryUtil::getVerticesFromPlaneEquations(const b3AlignedObjectArray<b3Vector3>& planeEquations , b3AlignedObjectArray<b3Vector3>& verticesOut )
+{
+	const int numbrushes = planeEquations.size();
+	// brute force:
+	for (int i=0;i<numbrushes;i++)
+	{
+		const b3Vector3& N1 = planeEquations[i];
+		
+    }
+    }
+    
+            // Add arguments to instance name
+        size_t arg_i = 0;
+        for (auto const& arg : args) {
+          instance.name += '/';
+    }
+    
+    #endif  // COMPLEXITY_H_
