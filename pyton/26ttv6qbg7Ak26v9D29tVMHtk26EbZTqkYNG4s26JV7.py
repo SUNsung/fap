@@ -1,143 +1,107 @@
-  return embeddings
-    
-      return d
-    
-    rates_b, x0s_b, _ = generate_data(rnn_b, T=T, E=E, x0s=x0s, P_sxn=P_nxn,
-                                  input_magnitude=0.0, input_times=None)
-spikes_b = spikify_data(rates_b, rng, rnn_b['dt'], rnn_b['max_firing_rate'])
-    
-      dataset_dict = {}
-  fnames = os.listdir(data_path)
-    
-    '''A library for loading 1B word benchmark dataset.'''
-    
-      Raises:
-    ValueError: if batch_size or num_steps are too high.
-  '''
-  del epoch_size_override
-  data_len = len(raw_data)
-  num_batches = data_len // batch_size - 1
-    
-      Yields:
-    Pairs of the batched data, each a matrix of shape [batch_size, num_steps].
-    The second element of the tuple is the same data time-shifted to the
-    right by one.
+
+        
+            def message_user(self, friend_id, message):
+        pass
     
     
-@pytest.mark.functional
-def test_select_command_with_arrows(proc, TIMEOUT):
-    select_command_with_arrows(proc, TIMEOUT)
+class RemoveDuplicateUrls(MRJob):
+    
+        def append_to_front(self, node):
+        ...
     
     
-@pytest.mark.parametrize('command, packages', [
-    (Command('vim', 'vim: command not found'),
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('sudo vim', 'vim: command not found'),
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('vim', 'The program 'vim' is currently not installed. You can install it by typing: sudo apt install vim'),
-     [('vim', 'main'), ('vim-tiny', 'main')])])
-def test_match(mocker, command, packages):
-    mocker.patch('thefuck.rules.apt_get.which', return_value=None)
-    mocker.patch('thefuck.rules.apt_get._get_packages',
-                 create=True, return_value=packages)
+@pytest.mark.parametrize('path', (
+    '/create',
+    '/1/update',
+))
+def test_create_update_validate(client, auth, path):
+    auth.login()
+    response = client.post(path, data={'title': '', 'body': ''})
+    assert b'Title is required.' in response.data
+    
+        :copyright: © 2010 by the Pallets team.
+    :license: BSD, see LICENSE for more details.
+'''
+    
+            .. versionadded:: 0.10
     
     
-@pytest.mark.parametrize('script, output', [
-    ('apt', invalid_operation('saerch')),
-    ('apt-get', invalid_operation('isntall')),
-    ('apt-cache', invalid_operation('rumove'))])
-def test_match(script, output):
-    assert match(Command(script, output))
-    
-    
-@pytest.mark.parametrize('command', [
-    Command('apt list --upgradable', no_match_output),
-    Command('sudo apt list --upgradable', no_match_output)
-])
-def test_not_match(command):
-    assert not match(command)
-    
-        cert = None
-    if args.cert:
-        cert = args.cert
-        if args.cert_key:
-            cert = cert, args.cert_key
-    
-        def __init__(self, groups, env=Environment(), **kwargs):
-        '''
-        :param groups: names of processor groups to be applied
-        :param env: Environment
-        :param kwargs: additional keyword arguments for processors
-    
-        '''
-    color = b'\x1b['
-    encoding = outfile.encoding
-    for chunk in stream:
-        if color in chunk:
-            outfile.write(chunk.decode(encoding))
-        else:
-            outfile.buffer.write(chunk)
-        if flush:
-            outfile.flush()
-    
-    
-class FormatterPlugin(object):
-    
-        @staticmethod
-    def make_header(username, password):
-        credentials = u'%s:%s' % (username, password)
-        token = b64encode(credentials.encode('utf8')).strip().decode('latin1')
-        return 'Basic %s' % token
-    
-        config['implicit_content_type'] = 'json'
-    config.save()
-    config.load()
-    assert 'implicit_content_type' not in config
-    assert not config['default_options']
-    
-        def delete(self):
-        try:
-            os.unlink(self.path)
-        except OSError as e:
-            if e.errno != errno.ENOENT:
-                raise
-    
-        Code is a simple port of what is already in the /scripts directory
-    
-    
-# Split a path in root and extension.
-# The extension is everything starting at the last dot in the last
-# pathname component; the root is everything before that.
-# It is always true that root + ext == p.
-    
-            print('Testing ApplyResult.get() with timeout:', end=' ')
-        res = pool.apply_async(calculate, TASKS[0])
-        while 1:
-            sys.stdout.flush()
+def attach_enctype_error_multidict(request):
+    '''Since Flask 0.8 we're monkeypatching the files object in case a
+    request is detected that does not use multipart form data but the files
+    object is accessed.
+    '''
+    oldcls = request.files.__class__
+    class newcls(oldcls):
+        def __getitem__(self, key):
             try:
-                sys.stdout.write('\n\t%s' % res.get(0.02))
-                break
-            except multiprocessing.TimeoutError:
-                sys.stdout.write('.')
-        print()
-        print()
+                return oldcls.__getitem__(self, key)
+            except KeyError:
+                if key not in request.form:
+                    raise
+                raise DebugFilesKeyError(request, key)
+    newcls.__name__ = oldcls.__name__
+    newcls.__module__ = oldcls.__module__
+    request.files.__class__ = newcls
     
-    #
-# Functions referenced by tasks
-#
+    This typically means that you attempted to use functionality that needed
+an active HTTP request.  Consult the documentation on testing for
+information about how to avoid this problem.\
+'''
+_app_ctx_err_msg = '''\
+Working outside of application context.
     
-    p = Point(4.0, -3.2)
+        # If request specific information is available we have some extra
+    # features that support 'relative' URLs.
+    if reqctx is not None:
+        url_adapter = reqctx.url_adapter
+        blueprint_name = request.blueprint
+    
+            # chop off the port which is usually not supported by browsers
+        # remove any leading '.' since we'll add that later
+        rv = rv.rsplit(':', 1)[0].lstrip('.')
     
     
-def coub_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_content(url)
+class RetryError(RequestException):
+    '''Custom retries logic failed'''
     
-        if title is None:
-      title = url
+        def test_list(self):
+        assert list(self.case_insensitive_dict) == ['Accept']
     
-        q = parse_qs(urlparse(url).query)
+        while True:
+        more_to_read = select.select([sock], [], [], timeout)[0]
+        if not more_to_read:
+            break
     
-        if title is None:
-      title = url[0]
     
-            request.install_opener(request.build_opener(request.HTTPCookieProcessor()))
+def _check_cryptography(cryptography_version):
+    # cryptography < 1.3.4
+    try:
+        cryptography_version = list(map(int, cryptography_version.split('.')))
+    except ValueError:
+        return
+    
+            return response
+    
+    '''
+requests.auth
+~~~~~~~~~~~~~
+    
+    ``response``:
+    The response generated from a Request.
+'''
+HOOKS = ['response']
+    
+    
+class VersionedPackage(object):
+    def __init__(self, version):
+        self.__version__ = version
+    
+            with server as (host, port):
+            server_url = 'http://{}:{}'.format(host, port)
+            for _ in range(requests_to_handle):
+                r = requests.get(server_url)
+                assert r.status_code == 200
+    
+    
+# -- Options for HTML output ----------------------------------------------
