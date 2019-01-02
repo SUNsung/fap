@@ -1,72 +1,78 @@
 
         
-            def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer)
-        ]
+        
+from constants import *
+from dfa import *
+from exceptions import *
+from recognizers import *
+from streams import *
+from tokens import *
+
     
-        def get_person(self, person_id):
-        person_server = self.lookup[person_id]
-        return person_server.people[person_id]
+        def setTokenSource(self, tokenSource):
+        '''Reset this token stream by setting its token source.'''
+        
+        self.tokenSource = tokenSource
+        self.tokens = []
+        self.p = -1
+        self.channel = DEFAULT_CHANNEL
     
-        def remove_link_to_crawl(self, url):
-        '''Remove the given link from `links_to_crawl`.'''
-        pass
+        '''
+    
+    def __init__(self, type=None, channel=DEFAULT_CHANNEL, text=None,
+                 input=None, start=None, stop=None, oldToken=None):
+        Token.__init__(self)
+        
+        if oldToken is not None:
+            self.type = oldToken.type
+            self.line = oldToken.line
+            self.charPositionInLine = oldToken.charPositionInLine
+            self.channel = oldToken.channel
+            self.index = oldToken.index
+            self._text = oldToken._text
+            if isinstance(oldToken, CommonToken):
+                self.input = oldToken.input
+                self.start = oldToken.start
+                self.stop = oldToken.stop
+            
+        else:
+            self.type = type
+            self.input = input
+            self.charPositionInLine = -1 # set to invalid position
+            self.line = 0
+            self.channel = channel
+            
+	    #What token number is this from 0..n-1 tokens; < 0 implies invalid index
+            self.index = -1
+            
+            # We need to be able to change the text once in a while.  If
+            # this is non-null, then getText should return this.  Note that
+            # start/stop are not affected by changing this.
+            self._text = text
     
     
-class CNTV(VideoExtractor):
-    name = 'CNTV.com'
-    stream_types = [
-        {'id': '1', 'video_profile': '1280x720_2000kb/s', 'map_to': 'chapters4'},
-        {'id': '2', 'video_profile': '1280x720_1200kb/s', 'map_to': 'chapters3'},
-        {'id': '3', 'video_profile': '640x360_850kb/s', 'map_to': 'chapters2'},
-        {'id': '4', 'video_profile': '480x270_450kb/s', 'map_to': 'chapters'},
-        {'id': '5', 'video_profile': '320x180_200kb/s', 'map_to': 'lowChapters'},
-    ]
+class Migration(DataMigration):
+    def forwards(self, orm):
+        db.commit_transaction()
+        try:
+            self._forwards(orm)
+        except Exception:
+            # Explicitly resume the transaction because
+            # South is going to try and roll it back, but when
+            # it can't find one, it'll error itself, masking
+            # the actual exception being raised
+            #
+            # See https://github.com/getsentry/sentry/issues/5035
+            db.start_transaction()
+            raise
+        db.start_transaction()
     
-    
-def cleanup_files(files):
-    for file in files:
-        os.remove(file)
-    
-        html = get_content(rebuilt_url(url))
-    info = json.loads(match1(html, r'qualities':({.+?}),''))
-    title = match1(html, r''video_title'\s*:\s*'([^']+)'') or \
-            match1(html, r''title'\s*:\s*'([^']+)'')
-    title = unicodize(title)
-    
-                    mapping = KBaseMapping(base=int(base))
-                sym_to_name = {}
-                for no in range(int(size), 0, -1):
-                    no_in_base = mapping.mapping(no)
-                    val = names[no] if no < len(names) and names[no] else no_in_base
-                    sym_to_name[no_in_base] = val
-    
-    def rabinMiller(num):
-    s = num - 1
-    t = 0
-    
-    def makeKeyFiles(name, keySize):
-    if os.path.exists('%s_pubkey.txt' % (name)) or os.path.exists('%s_privkey.txt' % (name)):
-        print('\nWARNING:')
-        print(''%s_pubkey.txt' or '%s_privkey.txt' already exists. \nUse a different name or delete these files and re-run this program.' % (name, name))
-        sys.exit()
-    
-        def __init__(self, arr):
-        # we need a list not a string, so do something to change the type
-        self.array = arr.split(',')
-        print(('the input array is:', self.array))
-    
-        for i in range(1, s+1):
-        dp[0][i] = False
-    
-    def md5me(testString):
-	'''[summary]
-	Returns a 32-bit hash code of the string 'testString'
-    
-    def getEnglishCount(message):
-    message = message.upper()
-    message = removeNonLetters(message)
-    possibleWords = message.split()
+            # Adding field 'ApiToken.scope_list'
+        db.add_column(
+            'sentry_apitoken',
+            'scope_list',
+            self.gf('sentry.db.models.fields.array.ArrayField')(
+                of=('django.db.models.fields.TextField', [], {})
+            ),
+            keep_default=False
+        )
