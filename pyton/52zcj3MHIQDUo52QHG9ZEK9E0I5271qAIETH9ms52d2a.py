@@ -1,216 +1,82 @@
 
         
-            def create_release(self, tag_name, name=None, body='', draft=False, prerelease=False):
-        data = {
-            'tag_name': tag_name,
-            'target_commitish': 'master',
-            'name': name,
-            'body': body,
-            'draft': draft,
-            'prerelease': prerelease,
-        }
-        req = sanitized_Request(self._API_URL, json.dumps(data).encode('utf-8'))
-        return self._call(req)
+            dimensions = 500 * np.arange(1, n_iter + 1)
     
+        n_features = 10
+    list_n_samples = np.linspace(100, 1000000, 5).astype(np.int)
+    lasso_results, lars_lasso_results = compute_bench(alpha, list_n_samples,
+                                            [n_features], precompute=True)
     
-def hex_str(int_list):
-    return codecs.encode(intlist_to_bytes(int_list), 'hex')
-    
-    print('WARNING: Lazy loading extractors is an experimental feature that may not always work', file=sys.stderr)
-    
-    # the encrypted data can be generate with 'devscripts/generate_aes_testdata.py'
-    
-        def test_pbs(self):
-        # https://github.com/rg3/youtube-dl/issues/2350
-        self.assertMatch('http://video.pbs.org/viralplayer/2365173446/', ['pbs'])
-        self.assertMatch('http://video.pbs.org/widget/partnerplayer/980042464/', ['pbs'])
-    
-    shells.shell = shells.Generic()
-    
-    
-def test_when_successfully_configured(usage_tracker_io, shell_pid,
-                                      shell, shell_config, logs):
-    shell.get_history.return_value = ['fuck']
-    shell_pid.return_value = 12
-    _change_tracker(usage_tracker_io, 12)
-    shell_config.read.return_value = ''
-    main()
-    shell_config.write.assert_any_call('eval $(thefuck --alias)')
-    logs.configured_successfully.assert_called_once()
-
-    
-    
-@pytest.mark.functional
-def test_how_to_configure_alias(proc, TIMEOUT):
-    proc.sendline(u'unfunction fuck')
-    how_to_configure(proc, TIMEOUT)
-
-    
-    
-@pytest.mark.parametrize('command, result', [
-    (Command('aws dynamdb scan', misspelled_command),
-     ['aws dynamodb scan']),
-    (Command('aws dynamodb scn', misspelled_subcommand),
-     ['aws dynamodb scan']),
-    (Command('aws dynamodb t-item',
-             misspelled_subcommand_with_multiple_options),
-     ['aws dynamodb put-item', 'aws dynamodb get-item'])])
-def test_get_new_command(command, result):
-    assert get_new_command(command) == result
-
-    
-    from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import ExtraTreesClassifier
-from sklearn.ensemble import AdaBoostClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.naive_bayes import MultinomialNB
-    
-    
-def plot_feature_times(all_times, batch_size, all_components, data):
-    plt.figure()
-    plot_results(all_components, all_times['pca'], label='PCA')
-    plot_results(all_components, all_times['ipca'],
-                 label='IncrementalPCA, bsize=%i' % batch_size)
-    plt.legend(loc='upper left')
-    plt.suptitle('Algorithm runtime vs. n_components\n \
-                 LFW, size %i x %i' % data.shape)
-    plt.xlabel('Number of components (out of max %i)' % data.shape[1])
-    plt.ylabel('Time (seconds)')
-    
-    
-if __name__ == '__main__':
-    from mpl_toolkits.mplot3d import axes3d  # register the 3d projection
-    import matplotlib.pyplot as plt
-    
-        #------------------------------------------------------------
-    # varying N
-    N_results_build = dict([(alg, np.zeros(len(Nrange)))
-                            for alg in algorithms])
-    N_results_query = dict([(alg, np.zeros(len(Nrange)))
-                            for alg in algorithms])
-    
-    from sklearn.utils import check_random_state
-from sklearn.metrics.pairwise import pairwise_distances
-from sklearn.metrics.pairwise import pairwise_kernels
-    
-        max_it = len(samples_range) * len(features_range)
-    for n_samples in samples_range:
-        for n_features in features_range:
-            it += 1
-            print('====================')
-            print('Iteration %03d of %03d' % (it, max_it))
-            print('====================')
-            X = make_low_rank_matrix(n_samples, n_features,
-                                  effective_rank=rank,
-                                  tail_strength=0.2)
+            X, Y = np.meshgrid(samples_range, features_range)
+        Z = np.asarray(timings).reshape(samples_range.shape[0],
+                                        features_range.shape[0])
+        ax.plot_surface(X, Y, Z.T, cstride=1, rstride=1, color=c, alpha=0.5)
+        ax.set_xlabel('n_samples')
+        ax.set_ylabel('n_features')
     
                 gc.collect()
-            print('- benchmarking RidgeRegression')
-            clf = Ridge(alpha=alpha, fit_intercept=False)
+            print('benchmarking orthogonal_mp (without Gram):', end='')
+            sys.stdout.flush()
             tstart = time()
-            clf.fit(X_train, y_train)
-            ridge_results[i, j, 0] = mean_squared_error(clf.predict(X_test),
-                                                        y_test)
-            ridge_results[i, j, 1] = time() - tstart
+            orthogonal_mp(X, y, precompute=False,
+                          n_nonzero_coefs=n_informative)
+            delta = time() - tstart
+            print('%0.3fs' % delta)
+            omp[i_f, i_s] = delta
     
-    File: sparsity_benchmark.py
-Function: benchmark_dense_predict at line 51
-Total time: 0.532979 s
+                gc.collect()
+            print('benchmarking scipy svd: ')
+            tstart = time()
+            svd(X, full_matrices=False)
+            results['scipy svd'].append(time() - tstart)
     
-    from docutils import nodes, utils
-from sphinx.util.nodes import split_explicit_title
+    from sklearn import clone
+from sklearn.externals.six.moves import xrange
+from sklearn.random_projection import (SparseRandomProjection,
+                                       GaussianRandomProjection,
+                                       johnson_lindenstrauss_min_dim)
     
-        print('Decompressing %s' % ARCHIVE_NAME)
-    with closing(tarfile.open(ARCHIVE_NAME, 'r:gz')) as archive:
-        archive.extractall(path='.')
-    os.remove(ARCHIVE_NAME)
+    # Output in order: dev, stable, decreasing other version
+seen = set()
+for name in (NAMED_DIRS +
+             sorted((k for k in dirs if k[:1].isdigit()),
+                    key=LooseVersion, reverse=True)):
+    version_num, pdf_size = dirs[name]
+    if version_num in seen:
+        # symlink came first
+        continue
+    else:
+        seen.add(version_num)
+    name_display = '' if name[:1].isdigit() else ' (%s)' % name
+    path = 'http://scikit-learn.org/%s' % name
+    out = ('* `Scikit-learn %s%s documentation <%s/documentation.html>`_'
+           % (version_num, name_display, path))
+    if pdf_size is not None:
+        out += (' (`PDF %s <%s/_downloads/scikit-learn-docs.pdf>`_)'
+                % (pdf_size, path))
+    print(out)
 
     
+    # Print the classification report
+print(metrics.classification_report(y_test, y_predicted,
+                                    target_names=dataset.target_names))
     
-def setup(app):
-    app.add_config_value('edit_on_github_project', '', True)
-    app.add_config_value('edit_on_github_branch', 'master', True)
-    app.add_config_value('edit_on_github_src_path', '', True)  # 'eg' 'docs/'
-    app.connect('html-page-context', html_page_context)
-
+    IPv6 = CheckNetwork('IPv6')
+IPv6.urls = ['http://[2001:41d0:8:e8ad::1]',
+             'http://[2001:260:401:372::5f]',
+             'http://[2a02:188:3e00::32]',
+             'http://[2804:10:4068::202:82]'
+             ]
+IPv6.triger_check_network()
     
-                if item.get(CONF_TEXT) is not None:
-                if isinstance(item.get(CONF_TEXT), template.Template):
-                    output[ATTR_MAIN_TEXT] = item[CONF_TEXT].async_render()
-                else:
-                    output[ATTR_MAIN_TEXT] = item.get(CONF_TEXT)
+                # Is there a bitwise operation to do this?
+            if v == 0xFFFF:
+                v = -1
     
-            try:
-            data = [
-                ('user', self._username),
-                (self._type, self._password),
-            ]
-            res = requests.post(self._loginurl, data=data, timeout=10)
-        except requests.exceptions.Timeout:
-            _LOGGER.error(
-                'Connection to the router timed out at URL %s', self._url)
-            return False
-        if res.status_code != 200:
-            _LOGGER.error(
-                'Connection failed with http code %s', res.status_code)
-            return False
-        try:
-            self._userid = res.cookies['userid']
-            return True
-        except KeyError:
-            _LOGGER.error('Failed to log in to router')
-            return False
-    
-            if distances:
-            mindistance = min(distances)
-        else:
-            mindistance = None
-    
-        def get_device_name(self, device):
-        '''Return the name of the given device or None if we don't know.'''
-        if not self.last_results:
-            return None
-        for client in self.last_results:
-            if client['mac'] == device:
-                return client['host']
-        return None
-    
-        @Throttle(MIN_TIME_BETWEEN_SCANS)
-    async def _async_update_info(self):
-        '''
-        Query Tado for device marked as at home.
-    
-        Adapted from Luci scanner.
-    '''
-    
-    
-@Throttle(MIN_TIME_BETWEEN_UPDATES)
-def send_data(name, msg):
-    '''Send the collected data to Dweet.io.'''
-    import dweepy
-    try:
-        dweepy.dweet_for(name, msg)
-    except dweepy.DweepyError:
-        _LOGGER.error('Error saving data to Dweet.io: %s', msg)
-
-    
-        if model == 'small':
-        pose_predictor = pose_predictor_5_point
-    
-    while True:
-    # Grab a single frame of video
-    ret, frame = video_capture.read()
-    
-    while video_capture.isOpened():
-    # Grab a single frame of video
-    ret, frame = video_capture.read()
-    
-    # Show the picture
-pil_image.show()
-
-    
-        # 将每一个人脸与已知样本图片比对
-    for face_encoding in face_encodings:
-        # 看是否属于奥巴马或者拜登
-        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
-        name = '<Unknown Person>'
+            When you find a 'no viable alt exception', the input is not
+        consistent with any of the alternatives for rule r.  The best
+        thing to do is to consume tokens until you see something that
+        can legally follow a call to r *or* any rule that called r.
+        You don't want the exact set of viable next tokens because the
+        input might just be missing a token--you might consume the
+        rest of the input looking for one of the missing tokens.
