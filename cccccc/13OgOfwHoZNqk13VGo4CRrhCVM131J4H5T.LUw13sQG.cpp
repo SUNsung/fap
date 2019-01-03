@@ -1,107 +1,158 @@
 
         
-        struct BlobData {
-  BlobData() : blob(nullptr), choices(nullptr) {}
-  BlobData(int index, Tesseract* tess, const WERD_RES& word)
-    : blob(word.chopped_word->blobs[index]),
-      tesseract(tess),
-      choices(&(*word.ratings)(index, index)) {}
+          // WindowListObserver:
+  void OnWindowAllClosed() override;
+    
+    #include 'atom/browser/api/event_emitter.h'
+#include 'atom/browser/mac/in_app_purchase.h'
+#include 'atom/browser/mac/in_app_purchase_observer.h'
+#include 'atom/browser/mac/in_app_purchase_product.h'
+#include 'native_mate/handle.h'
+    
+    class Net : public mate::EventEmitter<Net> {
+ public:
+  static v8::Local<v8::Value> Create(v8::Isolate* isolate);
     }
     
+      // content::DownloadManager::Observer:
+  void OnDownloadCreated(content::DownloadManager* manager,
+                         download::DownloadItem* item) override;
     
-  // Getters and Setters.
-  void SetValue(const char* val);
-  STRING GetValue() const;
-  const char* GetName() const;
-  const char* GetDescription() const;
-    
-    
-    {  name += UNLV_EXT;              //add extension
-  if ((pdfp = fopen (name.string (), 'rb')) == nullptr) {
-    return false;                //didn't read one
-  } else {
-    while (tfscanf(pdfp, '%d %d %d %d %*s', &x, &y, &width, &height) >= 4) {
-                                 //make rect block
-      block = new BLOCK (name.string (), TRUE, 0, 0,
-                         (int16_t) x, (int16_t) (ysize - y - height),
-                         (int16_t) (x + width), (int16_t) (ysize - y));
-                                 //on end of list
-      block_it.add_to_end (block);
-    }
-    fclose(pdfp);
-  }
-  return true;
-}
-    
-    template <typename T> class GenericVector;
-template <typename T> class GenericVector;
-    
-      const TBOX& bounding_box() const {
-    return bbox_;
-  }
-  int length() const { return length_; }
-  const TBOX& BlobBox(int index) const {
-    return boxes_[index];
-  }
-    
-    namespace tesseract {
+    namespace atom {
     }
     
-    static internal::GrpcLibraryInitializer g_gli_initializer;
-ChannelCredentials::ChannelCredentials() { g_gli_initializer.summon(); }
+      virtual void OnError(const std::string& error,
+                       const int code,
+                       const std::string& domain) {}
     
-    namespace grpc {
+    
+    {}  // namespace atom
+    
+        UBool operator == (const ScriptSet &other) const;
+    ScriptSet & operator = (const ScriptSet &other);
+    
+    #define DOT               ((UChar)0x002E)
+#define SINGLE_QUOTE      ((UChar)0x0027)
+#define SLASH             ((UChar)0x002F)
+#define BACKSLASH         ((UChar)0x005C)
+#define SPACE             ((UChar)0x0020)
+#define TAB               ((UChar)0x0009)
+#define QUOTATION_MARK    ((UChar)0x0022)
+#define ASTERISK          ((UChar)0x002A)
+#define COMMA             ((UChar)0x002C)
+#define HYPHEN            ((UChar)0x002D)
+#define U_ZERO            ((UChar)0x0030)
+#define U_ONE             ((UChar)0x0031)
+#define U_TWO             ((UChar)0x0032)
+#define U_THREE           ((UChar)0x0033)
+#define U_FOUR            ((UChar)0x0034)
+#define U_FIVE            ((UChar)0x0035)
+#define U_SIX             ((UChar)0x0036)
+#define U_SEVEN           ((UChar)0x0037)
+#define U_EIGHT           ((UChar)0x0038)
+#define U_NINE            ((UChar)0x0039)
+#define COLON             ((UChar)0x003A)
+#define SEMI_COLON        ((UChar)0x003B)
+#define CAP_A             ((UChar)0x0041)
+#define CAP_B             ((UChar)0x0042)
+#define CAP_R             ((UChar)0x0052)
+#define CAP_Z             ((UChar)0x005A)
+#define LOWLINE           ((UChar)0x005F)
+#define LEFTBRACE         ((UChar)0x007B)
+#define RIGHTBRACE        ((UChar)0x007D)
+    
+    U_NAMESPACE_BEGIN
+    
+        // TimeZoneFormat in ICU4C only depends on a locale for now
+    if (fLocale != other.fLocale) {
+        delete fTimeZoneFormat;
+        fTimeZoneFormat = NULL; // forces lazy instantiation with the other locale
+        fLocale = other.fLocale;
     }
     
-    static std::unique_ptr< ::grpc::ServerBuilderPlugin> CreateProtoReflection() {
-  return std::unique_ptr< ::grpc::ServerBuilderPlugin>(
-      new ProtoServerReflectionPlugin());
-}
-    
-    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
-  uint64_t busy = 0, total = 0;
-  FILE* fp;
-  fp = fopen('/proc/stat', 'r');
-  uint64_t user, nice, system, idle;
-  fscanf(fp, 'cpu %lu %lu %lu %lu', &user, &nice, &system, &idle);
-  fclose(fp);
-  busy = user + nice + system;
-  total = busy + idle;
-  return std::make_pair(busy, total);
-}
-    
-      static void SetParsedIni(IniSettingMap &ini, const std::string confStr,
-                           const std::string &filename, bool constants_only,
-                           bool is_system);
-    
-      // @todo: check allow_url_include?
-    
-    
-    {///////////////////////////////////////////////////////////////////////////////
-}
-    
-    namespace HPHP {
-///////////////////////////////////////////////////////////////////////////////
-    }
-    
-        bool isPHP = false;
-    const char *p = strrchr(ename, '.');
-    if (p) {
-      isPHP = (strncmp(p + 1, 'php', 3) == 0);
-    } else {
-      try {
-        std::string line;
-        std::ifstream fin(fe.c_str());
-        if (std::getline(fin, line)) {
-          if (line[0] == '#' && line[1] == '!' &&
-              line.find('php') != std::string::npos) {
-            isPHP = true;
-          }
+    /**
+ * Implement UnicodeMatcher
+ */
+void StringMatcher::addMatchSetTo(UnicodeSet& toUnionTo) const {
+    UChar32 ch;
+    for (int32_t i=0; i<pattern.length(); i+=U16_LENGTH(ch)) {
+        ch = pattern.char32At(i);
+        const UnicodeMatcher* matcher = data->lookupMatcher(ch);
+        if (matcher == NULL) {
+            toUnionTo.add(ch);
+        } else {
+            matcher->addMatchSetTo(toUnionTo);
         }
-      } catch (...) {
-        Logger::Error('FileUtil::find(): unable to read %s', fe.c_str());
-      }
+    }
+}
+    
+    /**
+ * Construct a StringReplacer that sets the emits the given output
+ * text and sets the cursor to the given position.
+ * @param theOutput text that will replace input text when the
+ * replace() method is called.  May contain stand-in characters
+ * that represent nested replacers.
+ * @param theCursorPos cursor position that will be returned by
+ * the replace() method
+ * @param theData transliterator context object that translates
+ * stand-in characters to UnicodeReplacer objects
+ */
+StringReplacer::StringReplacer(const UnicodeString& theOutput,
+                               int32_t theCursorPos,
+                               const TransliterationRuleData* theData) {
+    output = theOutput;
+    cursorPos = theCursorPos;
+    hasCursor = TRUE;
+    data = theData;
+    isComplex = TRUE;
+}
+    
+    
+    {    Executor::KeepAlive<Executor> ka2 = std::move(ka); // conversion
+    EXPECT_FALSE(ka);
+    EXPECT_TRUE(ka2);
+    EXPECT_EQ(&exec, ka2.get());
+    EXPECT_EQ(1, exec.refCount);
+  }
+    
+    #include <glog/logging.h>
+    
+    vector<detail::BenchmarkResult> resultsFromFile(const std::string& filename) {
+  string content;
+  readFile(filename.c_str(), content);
+  vector<detail::BenchmarkResult> ret;
+  benchmarkResultsFromDynamic(parseJson(content), ret);
+  return ret;
+}
+    
+    bool Executor::keepAliveAcquire() {
+  return false;
+}
+    
+    namespace folly {
     }
     
-      explicit OutputFile(const String& filename);
-  virtual ~OutputFile();
+    #include <type_traits>
+    
+    TEST_F(SparseByteSetTest, each) {
+  for (auto c = lims::min(); c < lims::max(); ++c) {
+    EXPECT_TRUE(s.add(c));
+    EXPECT_TRUE(s.contains(c));
+  }
+  for (auto c = lims::min(); c < lims::max(); ++c) {
+    EXPECT_FALSE(s.add(c));
+    EXPECT_TRUE(s.contains(c));
+  }
+}
+    
+    #if BOOST_ATOMIC_THREAD_FENCE > 0
+BOOST_FORCEINLINE void atomic_thread_fence(memory_order order) BOOST_NOEXCEPT
+{
+    detail::thread_fence(order);
+}
+#else
+BOOST_FORCEINLINE void atomic_thread_fence(memory_order) BOOST_NOEXCEPT
+{
+    detail::lockpool::thread_fence();
+}
+#endif
