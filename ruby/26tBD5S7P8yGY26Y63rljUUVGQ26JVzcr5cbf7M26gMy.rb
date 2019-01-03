@@ -1,97 +1,128 @@
 
         
-              it 'can be set to multiple the platforms' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            carthage(
-              platform: 'iOS,Mac'
-            )
-          end').runner.execute(:test)
+                  def retrieve_autoindex(pre_match)
+            object = self.object || @template_object.instance_variable_get('@#{pre_match}')
+            if object && object.respond_to?(:to_param)
+              object.to_param
+            else
+              raise ArgumentError, 'object[] naming but object param and @object var don't exist or don't respond to to_param: #{object.inspect}'
+            end
+          end
     
-          it 'works with select regex' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            oclint(
-              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
-              select_regex: /AppDelegate/
-            )
-          end').runner.execute(:test)
+              def checked?(value)
+            case value
+            when TrueClass, FalseClass
+              value == !!@checked_value
+            when NilClass
+              false
+            when String
+              value == @checked_value
+            else
+              if value.respond_to?(:include?)
+                value.include?(@checked_value)
+              else
+                value.to_i == @checked_value.to_i
+              end
+            end
+          end
     
-          if @custom_emoji.save
-        log_action :create, @custom_emoji
-        redirect_to admin_custom_emojis_path, notice: I18n.t('admin.custom_emojis.created_msg')
-      else
-        render :new
+            def render(&block)
+          render_collection_for(RadioButtonBuilder, &block)
+        end
+    
+              content_is_options = content_or_options.is_a?(Hash)
+          if content_is_options
+            options.merge! content_or_options
+            @content = nil
+          else
+            @content = content_or_options
+          end
+    
+        def compact
+      PathSet.new paths.compact
+    end
+    
+        initializer 'action_view.setup_action_pack' do |app|
+      ActiveSupport.on_load(:action_controller) do
+        ActionView::RoutingUrlFor.include(ActionDispatch::Routing::UrlFor)
       end
     end
     
-    class Api::OEmbedController < Api::BaseController
-  respond_to :json
-    
-      def create
-    @web_subscription&.destroy!
-    
-        render json: web_subscription, serializer: REST::WebPushSubscriptionSerializer
+      def bash_completion_caveats
+    if keg && keg.completion_installed?(:bash) then <<-EOS.undent
+      Bash completion has been installed to:
+        #{HOMEBREW_PREFIX}/etc/bash_completion.d
+      EOS
+    end
   end
     
-        # use Feedbag as a backup to Google Feeds Api
-    if rss_url.nil?
-      rss_url = Feedbag.find(web_url).first
-      if rss_url.nil?
-        suggested_paths = ['/rss', '/feed', '/feeds', '/atom.xml', '/feed.xml', '/rss.xml', '.atom']
-        suggested_paths.each do |suggested_path|
-          rss_url = Feedbag.find('#{web_url.chomp('/')}#{suggested_path}').first
-          break if rss_url
+          # Find commands in the path
+      unless (exts = external_commands).empty?
+        puts
+        puts 'External commands'
+        puts_columns exts
+      end
+    end
+  end
+    
+      def xcode
+    if instance_variable_defined?(:@xcode)
+      @xcode
+    elsif MacOS::Xcode.installed?
+      @xcode = MacOS::Xcode.version
+      @xcode += ' => #{MacOS::Xcode.prefix}' unless MacOS::Xcode.default_prefix?
+      @xcode
+    end
+  end
+    
+      def patches
+    {}
+  end
+    
+    module Gitlab
+  module GithubImport
+    module Importer
+      class LabelLinksImporter
+        attr_reader :issue, :project, :client, :label_finder
+    
+            def index
+          authorize! :admin, ReturnAuthorization
+          @return_authorizations = order.return_authorizations.accessible_by(current_ability, :read).
+                                   ransack(params[:q]).result.
+                                   page(params[:page]).per(params[:per_page])
+          respond_with(@return_authorizations)
+        end
+    
+            def index
+          @states = scope.ransack(params[:q]).result.includes(:country)
+    
+            def store_params
+          params.require(:store).permit(permitted_store_attributes)
         end
       end
     end
   end
+end
+
     
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
+            def create
+          authorize! :create, Taxon
+          @taxon = Spree::Taxon.new(taxon_params)
+          @taxon.taxonomy_id = params[:taxonomy_id]
+          taxonomy = Spree::Taxonomy.find_by(id: params[:taxonomy_id])
     
-        # The name of the file in which the exception was raised.
-    # This could be `nil` if no filename is available.
-    #
-    # @return [String, nil]
-    def sass_filename
-      sass_backtrace.first[:filename]
+    When /^(?:|I )press '([^']*)'$/ do |button|
+  click_button(button)
+end
+    
+        def self.clear
+      instance.clear
     end
     
-          def lines
-        lines = []
-        @diff.diff.split('\n')[2..-1].each_with_index do |line, line_index|
-          lines << { :line  => line,
-                     :class => line_class(line),
-                     :ldln  => left_diff_line_number(0, line),
-                     :rdln  => right_diff_line_number(0, line) }
-        end if @diff
-        lines
+        module ClassMethods
+      def attachment_definitions
+        Paperclip::AttachmentRegistry.definitions_for(self)
       end
-    
-          def versions
-        i = @versions.size + 1
-        @versions.map do |v|
-          i -= 1
-          { :id        => v.id,
-            :id7       => v.id[0..6],
-            :num       => i,
-            :selected  => @page.version.id == v.id,
-            :author    => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
-            :message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
-            :date      => v.authored_date.strftime('%B %d, %Y'),
-            :gravatar  => Digest::MD5.hexdigest(v.author.email.strip.downcase),
-            :identicon => self._identicon_code(v.author.email),
-            :date_full => v.authored_date,
-          }
-        end
-      end
-    
-          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
-      def left_shift(int, shift)
-        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
-        # 1>>31, 2**32
-        (r & 2147483648) == 0 ? r : r - 4294967296
-      end
-    
-    module Gollum
-  VERSION = '4.1.4'
+    end
+  end
+end
