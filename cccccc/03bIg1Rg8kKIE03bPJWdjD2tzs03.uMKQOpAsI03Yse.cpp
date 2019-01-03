@@ -1,208 +1,185 @@
 
         
-        QT_BEGIN_NAMESPACE
-class QPaintEvent;
-class QTimer;
-QT_END_NAMESPACE
-    
-    QT_BEGIN_NAMESPACE
-class QModelIndex;
-QT_END_NAMESPACE
-    
-    static void secp256k1_hmac_sha256_initialize(secp256k1_hmac_sha256_t *hash, const unsigned char *key, size_t keylen) {
-    int n;
-    unsigned char rkey[64];
-    if (keylen <= 64) {
-        memcpy(rkey, key, keylen);
-        memset(rkey + keylen, 0, 64 - keylen);
-    } else {
-        secp256k1_sha256_t sha256;
-        secp256k1_sha256_initialize(&sha256);
-        secp256k1_sha256_write(&sha256, key, keylen);
-        secp256k1_sha256_finalize(&sha256, rkey);
-        memset(rkey + 32, 0, 32);
-    }
+            struct Margin {
+        Margin() : left(0), right(0), top(0), bottom(0) {}
+        Margin(size_t left_, size_t right_, size_t top_, size_t bottom_)
+            : left(left_), right(right_), top(top_), bottom(bottom_) {}
     }
     
-    #ifndef SECP256K1_MODULE_ECDH_MAIN_H
-#define SECP256K1_MODULE_ECDH_MAIN_H
+                if(!x) {
+                tcurr = tnext;
+    }
+    
+    template <bool L2gradient, bool externalSobel>
+struct _normEstimator
+{
+    ptrdiff_t magstep;
+    ptrdiff_t dxOffset;
+    ptrdiff_t dyOffset;
+    ptrdiff_t shxOffset;
+    ptrdiff_t shyOffset;
+    std::vector<u8> buffer;
+    const ptrdiff_t offsetk;
+    ptrdiff_t borderyt, borderyb;
+    RowFilter3x3Canny sobelRow;
+    }
+    
+    
+    {            v_src = vld4q_u8(src + sj + 64);
+            vst1q_u8(dst + dj + 16, v_src.val[coi]);
+        }
+#endif
+    
+    inline void prefetch(const void *ptr, size_t offset = 32*10)
+{
+#if defined __GNUC__
+    __builtin_prefetch(reinterpret_cast<const char*>(ptr) + offset);
+#elif defined _MSC_VER && defined CAROTENE_NEON
+    __prefetch(reinterpret_cast<const char*>(ptr) + offset);
+#else
+    (void)ptr;
+    (void)offset;
+#endif
+}
     
     
     {
-    {        /* compute using ECDH function */
-        CHECK(secp256k1_ec_pubkey_create(ctx, &point[0], s_one) == 1);
-        CHECK(secp256k1_ecdh(ctx, output_ecdh, &point[0], s_b32) == 1);
-        /* compute 'explicitly' */
-        CHECK(secp256k1_ec_pubkey_create(ctx, &point[1], s_b32) == 1);
-        CHECK(secp256k1_ec_pubkey_serialize(ctx, point_ser, &point_ser_len, &point[1], SECP256K1_EC_COMPRESSED) == 1);
-        CHECK(point_ser_len == sizeof(point_ser));
-        secp256k1_sha256_initialize(&sha);
-        secp256k1_sha256_write(&sha, point_ser, point_ser_len);
-        secp256k1_sha256_finalize(&sha, output_ser);
-        /* compare */
-        CHECK(memcmp(output_ecdh, output_ser, sizeof(output_ser)) == 0);
-    }
-}
+    {         vst1q_u16(_dst + i, vcombine_u16(vline1_u16, vline2_u16));
+     }
+})
+#endif
     
-    /* Given a BlockIndex with the provided nbits,
- * verify that the expected difficulty results.
- */
-static void TestDifficulty(uint32_t nbits, double expected_difficulty)
+    s32 countNonZero(const Size2D &_size,
+                 const u8 * srcBase, ptrdiff_t srcStride)
 {
-    CBlockIndex* block_index = CreateBlockIndexWithNbits(nbits);
-    double difficulty = GetDifficulty(block_index);
-    delete block_index;
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    Size2D size(_size);
+    if (srcStride == (ptrdiff_t)(size.width))
+    {
+        size.width *= size.height;
+        size.height = 1;
+    }
+    size_t roiw16 = size.width & ~15u;
+    s32 result = 0;
+    for(size_t k = 0; k < size.height; ++k)
+    {
+        const u8* src = internal::getRowPtr( srcBase,  srcStride, k);
+        size_t i = 0;
+    }
     }
     
+                    u64 mask[2];
+                vst1q_u64(mask, vreinterpretq_u64_u8(m0));
     
-// Overloaded version for char types to support printing as an integer
-#define TINYFORMAT_DEFINE_FORMATVALUE_CHAR(charType)                  \
-inline void formatValue(std::ostream& out, const char* /*fmtBegin*/,  \
-                        const char* fmtEnd, int /**/, charType value) \
-{                                                                     \
-    switch(*(fmtEnd-1))                                               \
-    {                                                                 \
-        case 'u': case 'd': case 'i': case 'o': case 'X': case 'x':   \
-            out << static_cast<int>(value); break;                    \
-        default:                                                      \
-            out << value;                   break;                    \
-    }                                                                 \
-}
-// per 3.9.1: char, signed char and unsigned char are all distinct types
-TINYFORMAT_DEFINE_FORMATVALUE_CHAR(char)
-TINYFORMAT_DEFINE_FORMATVALUE_CHAR(signed char)
-TINYFORMAT_DEFINE_FORMATVALUE_CHAR(unsigned char)
-#undef TINYFORMAT_DEFINE_FORMATVALUE_CHAR
+      /// @brief Deprecated; use <code>Blob(const vector<int>& shape)</code>.
+  explicit Blob(const int num, const int channels, const int height,
+      const int width);
+  explicit Blob(const vector<int>& shape);
     
-    // Bech32 is a string encoding format used in newer address types.
-// The output consists of a human-readable part (alphanumeric), a
-// separator character (1), and a base32 data section, the last
-// 6 characters of which are a checksum.
-//
-// For more information, see BIP 173.
+     protected:
+  /// @copydoc AbsValLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
-      // After identify the math blocks, we do one more scanning on all text
-  // partitions, and check if any of them is the satellite of:
-  // math blocks: here a p is the satellite of q if:
-  // 1. q is the nearest vertical neighbor of p, and
-  // 2. y_gap(p, q) is less than a threshold, and
-  // 3. x_overlap(p, q) is over a threshold.
-  // Note that p can be the satellites of two blocks: its top neighbor and
-  // bottom neighbor.
-  void ProcessMathBlockSatelliteParts();
-    
-      int num_words;
-  TBOX lword_box;     // in normalized (horiz text rows) space
-  TBOX rword_box;     // in normalized (horiz text rows) space
-    
-    
-    {  ScrollView* sv_window_;
-};
-    
-      WERD_RES *word2 = new WERD_RES(*word);
-    
-      // Gets a pix that contains an 8 bit threshold value at each pixel. The
-  // returned pix may be an integer reduction of the binary image such that
-  // the scale factor may be inferred from the ratio of the sizes, even down
-  // to the extreme of a 1x1 pixel thresholds image.
-  // Ideally the 8 bit threshold should be the exact threshold used to generate
-  // the binary image in ThresholdToPix, but this is not a hard constraint.
-  // Returns nullptr if the input is binary. PixDestroy after use.
-  virtual Pix* GetPixRectThresholds();
-    
-      // Adds the given pix to the set of pages in the PDF file, with the given
-  // caption added to the top.
-  void AddPix(const Pix* pix, const char* caption) {
-    int depth = pixGetDepth(const_cast<Pix*>(pix));
-    int color = depth < 8 ? 1 : (depth > 8 ? 0x00ff0000 : 0x80);
-    Pix* pix_debug = pixAddSingleTextblock(
-        const_cast<Pix*>(pix), fonts_, caption, color, L_ADD_BELOW, nullptr);
-    pixaAddPix(pixa_, pix_debug, L_INSERT);
-  }
-    
-      void wait(int n = 1) {
-    std::unique_lock<std::mutex> lock(m_);
-    while (n_ < n) {
-      cv_.wait(lock);
-    }
-    n_ -= n;
-  }
-    
-    
-    {} // namespace caffe2
-
-    
-    
-    {  vector<int> y_shape(in[0].dims().begin(), in[0].dims().end());
-  CAFFE_ENFORCE_LE(canonical_axis + 1, y_shape.size());
-  y_shape.resize(canonical_axis + 1);
-  y_shape[canonical_axis] = N;
-  out[0] = CreateTensorShape(y_shape, in[0].data_type());
-  return out;
-}
-    
-    OPERATOR_SCHEMA(Floor)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .AllowInplace({{0, 0}})
-    .SetDoc(R'DOC(
-Element-wise application of the floor function ($y=floor(x)$) to the input
-tensor `X`. Output tensor shape is the same as the input tensor. This
-operator can be used in an in-place fashion by using the same input blob as the
-output blob.
-    
-    Example 1:
-  DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
-  RANGES = [
-    [
-      [2, 4],
-      [0, 2],
-    ],
-    [
-      [0, 0],
-      [6, 2],
-    ]
-  ]
-  lengths = [4, 2]
-  OUTPUT[0] = [[3, 4, 5, 6], [0, 0, 0, 0]]
-  OUTPUT[1] = [[1, 2], [7, 8]]
-    
-    AuthPropertyIterator::AuthPropertyIterator()
-    : property_(nullptr), ctx_(nullptr), index_(0), name_(nullptr) {}
-    
-    // Serializes the outgoing trace context. Field IDs are 1 byte followed by
-// field data. A 1 byte version ID is always encoded first.
-size_t TraceContextSerialize(const ::opencensus::trace::SpanContext& context,
-                             char* tracing_buf, size_t tracing_buf_size);
-    
-    MeasureInt64 RpcClientReceivedMessagesPerRpc() {
-  static const auto measure =
-      MeasureInt64::Register(kRpcClientReceivedMessagesPerRpcMeasureName,
-                             'Number of messages received per RPC', kCount);
-  return measure;
-}
-    
-    constexpr size_t RpcServerStatsEncoding::kRpcServerStatsSize;
-constexpr size_t RpcServerStatsEncoding::kEncodeDecodeFailure;
-constexpr size_t RpcServerStatsEncoding::kVersionIdSize;
-constexpr size_t RpcServerStatsEncoding::kFieldIdSize;
-constexpr size_t RpcServerStatsEncoding::kVersionIdOffset;
-constexpr size_t RpcServerStatsEncoding::kVersionId;
-    
-    void RegisterOpenCensusViewsForExport() {
-  ClientSentMessagesPerRpcCumulative().RegisterForExport();
-  ClientSentBytesPerRpcCumulative().RegisterForExport();
-  ClientReceivedMessagesPerRpcCumulative().RegisterForExport();
-  ClientReceivedBytesPerRpcCumulative().RegisterForExport();
-  ClientRoundtripLatencyCumulative().RegisterForExport();
-  ClientServerLatencyCumulative().RegisterForExport();
+    /**
+ * @brief Compute the index of the @f$ K @f$ max values for each datum across
+ *        all dimensions @f$ (C \times H \times W) @f$.
+ *
+ * Intended for use after a classification layer to produce a prediction.
+ * If parameter out_max_val is set to true, output is a vector of pairs
+ * (max_ind, max_val) for each image. The axis parameter specifies an axis
+ * along which to maximise.
+ *
+ * NOTE: does not implement Backwards operation.
+ */
+template <typename Dtype>
+class ArgMaxLayer : public Layer<Dtype> {
+ public:
+  /**
+   * @param param provides ArgMaxParameter argmax_param,
+   *     with ArgMaxLayer options:
+   *   - top_k (\b optional uint, default 1).
+   *     the number @f$ K @f$ of maximal items to output.
+   *   - out_max_val (\b optional bool, default false).
+   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
+   *     output max_val along the specified axis.
+   *   - axis (\b optional int).
+   *     if set, maximise along the specified axis else maximise the flattened
+   *     trailing dimensions for each index of the first / num dimension.
+   */
+  explicit ArgMaxLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-    #include <condition_variable>
-#include <list>
-#include <memory>
-#include <mutex>
-#include <queue>
+    template <typename Dtype>
+class BasePrefetchingDataLayer :
+    public BaseDataLayer<Dtype>, public InternalThread {
+ public:
+  explicit BasePrefetchingDataLayer(const LayerParameter& param);
+  // LayerSetUp: implements common data layer setup functionality, and calls
+  // DataLayerSetUp to do special data layer setup for individual layer types.
+  // This method may not be overridden.
+  void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    /**
+ * @brief Index into the input blob along its first axis.
+ *
+ * This layer can be used to select, reorder, and even replicate examples in a
+ * batch.  The second blob is cast to int and treated as an index into the
+ * first axis of the first blob.
+ */
+template <typename Dtype>
+class BatchReindexLayer : public Layer<Dtype> {
+ public:
+  explicit BatchReindexLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    /**
+ * @brief Computes the contrastive loss @f$
+ *          E = \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
+ *              \left(1-y\right) \max \left(margin-d, 0\right)^2
+ *          @f$ where @f$
+ *          d = \left| \left| a_n - b_n \right| \right|_2 @f$. This can be
+ *          used to train siamese networks.
+ *
+ * @param bottom input Blob vector (length 3)
+ *   -# @f$ (N \times C \times 1 \times 1) @f$
+ *      the features @f$ a \in [-\infty, +\infty]@f$
+ *   -# @f$ (N \times C \times 1 \times 1) @f$
+ *      the features @f$ b \in [-\infty, +\infty]@f$
+ *   -# @f$ (N \times 1 \times 1 \times 1) @f$
+ *      the binary similarity @f$ s \in [0, 1]@f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
+ *      the computed contrastive loss: @f$ E =
+ *          \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
+ *          \left(1-y\right) \max \left(margin-d, 0\right)^2
+ *          @f$ where @f$
+ *          d = \left| \left| a_n - b_n \right| \right|_2 @f$.
+ * This can be used to train siamese networks.
+ */
+template <typename Dtype>
+class ContrastiveLossLayer : public LossLayer<Dtype> {
+ public:
+  explicit ContrastiveLossLayer(const LayerParameter& param)
+      : LossLayer<Dtype>(param), diff_() {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    #include <vector>
     
     namespace xgboost {
 /*!
@@ -221,120 +198,40 @@ class LinearUpdater {
     }
     }
     
+      /*!
+   * \brief determines whether updater has enough knowledge about a given dataset
+   *        to quickly update prediction cache its training data and performs the
+   *        update if possible.
+   * \param data: data matrix
+   * \param out_preds: prediction cache to be updated
+   * \return boolean indicating whether updater has capability to update
+   *         the prediction cache. If true, the prediction cache will have been
+   *         updated by the time this function returns.
+   */
+  virtual bool UpdatePredictionCache(const DMatrix* data,
+                                     HostDeviceVector<bst_float>* out_preds) {
+    return false;
+  }
     
-    { private:
-  /*! \brief the underlying stream */
-  dmlc::Stream *stream_;
-  /*! \brief buffer to hold data */
-  std::string buffer_;
-  /*! \brief length of valid data in buffer */
-  size_t read_len_;
-  /*! \brief pointer in the buffer */
-  size_t read_ptr_;
+      void InitTreesToUpdate() {
+    if (trees_to_update.size() == 0u) {
+      for (auto & tree : trees) {
+        trees_to_update.push_back(std::move(tree));
+      }
+      trees.clear();
+      param.num_trees = 0;
+      tree_info.clear();
+    }
+  }
+    
+    
+    {
+    {
+    {  XGBOOST_DEVICE reference operator[](size_t idx) const {
+    self_type offset = (*this);
+    offset.offset_ += idx;
+    return *offset;
+  }
 };
-    
-    #if DMLC_ENABLE_STD_THREAD
-/*!
- * \brief A threaded writer to write sparse batch page to sharded files.
- */
-class SparsePageWriter {
- public:
-  /*!
-   * \brief constructor
-   * \param name_shards name of shard files.
-   * \param format_shards format of each shard.
-   * \param extra_buffer_capacity Extra buffer capacity before block.
-   */
-  explicit SparsePageWriter(
-      const std::vector<std::string>& name_shards,
-      const std::vector<std::string>& format_shards,
-      size_t extra_buffer_capacity);
-  /*! \brief destructor, will close the files automatically */
-  ~SparsePageWriter();
-  /*!
-   * \brief Push a write job to the writer.
-   * This function won't block,
-   * writing is done by another thread inside writer.
-   * \param page The page to be written
-   */
-  void PushWrite(std::shared_ptr<SparsePage>&& page);
-  /*!
-   * \brief Allocate a page to store results.
-   *  This function can block when the writer is too slow and buffer pages
-   *  have not yet been recycled.
-   * \param out_page Used to store the allocated pages.
-   */
-  void Alloc(std::shared_ptr<SparsePage>* out_page);
-    }
-    
-    SEXP XGDMatrixNumRow_R(SEXP handle) {
-  bst_ulong nrow;
-  R_API_BEGIN();
-  CHECK_CALL(XGDMatrixNumRow(R_ExternalPtrAddr(handle), &nrow));
-  R_API_END();
-  return ScalarInteger(static_cast<int>(nrow));
-}
-    
-        // Build atlas
-    unsigned char* tex_pixels = NULL;
-    int tex_w, tex_h;
-    io.Fonts->GetTexDataAsRGBA32(&tex_pixels, &tex_w, &tex_h);
-    
-    // Set default OpenGL loader to be gl3w
-#if !defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)     \
- && !defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)     \
- && !defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)     \
- && !defined(IMGUI_IMPL_OPENGL_LOADER_CUSTOM)
-#define IMGUI_IMPL_OPENGL_LOADER_GL3W
-#endif
-    
-    void    ImGui_ImplVulkan_InvalidateDeviceObjects()
-{
-    ImGui_ImplVulkan_InvalidateFontUploadObjects();
-    }
-    
-      void dropNode(const std::shared_ptr<DHTNode>& node);
-    
-    namespace aria2 {
-    }
-    
-    void DHTTaskExecutor::update()
-{
-  execTasks_.erase(std::remove_if(execTasks_.begin(), execTasks_.end(),
-                                  std::mem_fn(&DHTTask::finished)),
-                   execTasks_.end());
-  int r;
-  if (static_cast<size_t>(numConcurrent_) > execTasks_.size()) {
-    r = numConcurrent_ - execTasks_.size();
-  }
-  else {
-    r = 0;
-  }
-  while (r && !queue_.empty()) {
-    std::shared_ptr<DHTTask> task = queue_.front();
-    queue_.pop_front();
-    task->startup();
-    if (!task->finished()) {
-      execTasks_.push_back(task);
-      --r;
-    }
-  }
-  A2_LOG_DEBUG(fmt('Executing %u Task(s). Queue has %u task(s).',
-                   static_cast<unsigned int>(getExecutingTaskSize()),
-                   static_cast<unsigned int>(getQueueSize())));
-}
-    
-    std::shared_ptr<DHTTask>
-DHTTaskFactoryImpl::createNodeLookupTask(const unsigned char* targetID)
-{
-  auto task = std::make_shared<DHTNodeLookupTask>(targetID);
-  setCommonProperty(task);
-  return task;
-}
-    
-      std::string generateToken(const unsigned char* infoHash,
-                            const std::string& ipaddr, uint16_t port,
-                            const unsigned char* secret) const;
-    
-    namespace aria2 {
-    }
+}  // namespace common
+}  // namespace xgboost
