@@ -1,199 +1,279 @@
 
         
-            enum FLIP_MODE
-    {
-        FLIP_HORIZONTAL_MODE = 1,
-        FLIP_VERTICAL_MODE = 2,
-        FLIP_BOTH_MODE = FLIP_HORIZONTAL_MODE | FLIP_VERTICAL_MODE
-    };
-    
-        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0,
-                     const typename internal::VecTraits<T>::vec64 & v_src1,
-                     typename internal::VecTraits<T>::vec64 & v_dst) const
-    {
-        typename internal::VecTraits<T>::vec64 v_min = internal::vmin(v_src0, v_src1);
-        typename internal::VecTraits<T>::vec64 v_max = internal::vmax(v_src0, v_src1);
-        v_dst = internal::vqsub(v_max, v_min);
-    }
-    
-        void operator() (const typename VecTraits<s32>::vec64 & v_src0,
-                     const typename VecTraits<s32>::vec64 & v_src1,
-                     typename VecTraits<s32>::vec64 & v_dst) const
-    {
-        float32x2_t vs1 = vcvt_f32_s32(v_src0);
-        float32x2_t vs2 = vcvt_f32_s32(v_src1);
-    }
-    
-            mag_buf[1][0] = mag_buf[1][size.width+1] = 0;
-        if (borderyt == 0)
-        {
-            //sobelH row #-1
-            _src = internal::getRowPtr(srcBase, srcStride, -1);
-            sobelRow(_src, ((s16*)mag_buf[2]) + shxOffset, ((s16*)mag_buf[2]) + shyOffset, size.width);
-    }
+          // From constructor arguments
+  const OpDef& op_def_;
+  const ApiDef& api_def_;
+  const string function_name_;
+  const int num_outs_;
     
     
-    {
-    {        for (; sj < size.width; ++sj, syj += 2, dj += 4)
-        {
-            dst[dj] = srcy[syj];
-            dst[dj + 1] = srcu[sj];
-            dst[dj + 2] = srcy[syj + 1];
-            dst[dj + 3] = srcv[sj];
-        }
-    }
-#else
-    (void)size;
-    (void)srcyBase;
-    (void)srcyStride;
-    (void)srcuBase;
-    (void)srcuStride;
-    (void)srcvBase;
-    (void)srcvStride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
-    
-    #endif
+    {}  // namespace tensorflow
 
     
-            if (cpolicy == CONVERT_POLICY_SATURATE)
-        {
-            for (; j < roiw16; j += 16)
-            {
-                internal::prefetch(src + j);
-                int16x8_t v_src0 = vshrq_n_s16(vld1q_s16(src + j), shift),
-                          v_src1 = vshrq_n_s16(vld1q_s16(src + j + 8), shift);
-                uint8x16_t v_dst = vcombine_u8(vqmovun_s16(v_src0),
-                                               vqmovun_s16(v_src1));
-                vst1q_u8(dst + j, v_dst);
-            }
-            for (; j < roiw8; j += 8)
-            {
-                int16x8_t v_src = vshrq_n_s16(vld1q_s16(src + j), shift);
-                vst1_u8(dst + j, vqmovun_s16(v_src));
-            }
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    static void TensorReleaser_dealloc(PyObject* pself) {
+  TensorReleaser* self = reinterpret_cast<TensorReleaser*>(pself);
+  (*self->destructor)();
+  delete self->destructor;
+  TensorReleaserType.tp_free(pself);
+}
+    
+    PyExceptionRegistry* PyExceptionRegistry::singleton_ = nullptr;
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    ScopedActivateExecutorContext::ScopedActivateExecutorContext(
+    CUDAExecutor *cuda_exec):
+      driver_scoped_activate_context_(
+          new ScopedActivateContext{ExtractCudaContext(cuda_exec)}) { }
+    
+      // A simple array of pointers to the best assigned column division at
+  // each grid y coordinate. This pointer is passed in from the caller, so do
+  // NOT destroy it in the class.
+  ColPartitionSet** best_columns_;
+    
+    // Helper method to convert an orientation index to its value in degrees.
+// The value represents the amount of clockwise rotation in degrees that must be
+// applied for the text to be upright (readable).
+TESS_API int OrientationIdToValue(const int& id);
+    
+    // Constructors for the various ParamTypes.
+ParamContent::ParamContent(tesseract::StringParam* it) {
+  my_id_ = nrParams;
+  nrParams++;
+  param_type_ = VT_STRING;
+  sIt = it;
+  vcMap[my_id_] = this;
+}
+// Constructors for the various ParamTypes.
+ParamContent::ParamContent(tesseract::IntParam* it) {
+  my_id_ = nrParams;
+  nrParams++;
+  param_type_ = VT_INTEGER;
+  iIt = it;
+  vcMap[my_id_] = this;
+}
+// Constructors for the various ParamTypes.
+ParamContent::ParamContent(tesseract::BoolParam* it) {
+  my_id_ = nrParams;
+  nrParams++;
+  param_type_ = VT_BOOLEAN;
+  bIt = it;
+  vcMap[my_id_] = this;
+}
+// Constructors for the various ParamTypes.
+ParamContent::ParamContent(tesseract::DoubleParam* it) {
+  my_id_ = nrParams;
+  nrParams++;
+  param_type_ = VT_DOUBLE;
+  dIt = it;
+  vcMap[my_id_] = this;
+}
+    
+    #include 'allheaders.h'
+    
+    class CensusChannelData : public ChannelData {
+ public:
+  grpc_error* Init(grpc_channel_element* elem,
+                   grpc_channel_element_args* args) override;
+};
+    
+    
+    {  if (op->send_message() != nullptr) {
+    ++sent_message_count_;
+  }
+  if (op->recv_message() != nullptr) {
+    recv_message_ = op->op()->payload->recv_message.recv_message;
+    initial_on_done_recv_message_ =
+        op->op()->payload->recv_message.recv_message_ready;
+    op->op()->payload->recv_message.recv_message_ready = &on_done_recv_message_;
+  }
+  if (op->recv_trailing_metadata() != nullptr) {
+    recv_trailing_metadata_ = op->recv_trailing_metadata()->batch();
+    initial_on_done_recv_trailing_metadata_ =
+        op->op()->payload->recv_trailing_metadata.recv_trailing_metadata_ready;
+    op->op()->payload->recv_trailing_metadata.recv_trailing_metadata_ready =
+        &on_done_recv_trailing_metadata_;
+  }
+  // Call next op.
+  grpc_call_next_op(elem, op->op());
+}
+    
+    
+    {}  // namespace grpc
+    
+    // Thread compatible.
+class CensusContext {
+ public:
+  CensusContext() : span_(::opencensus::trace::Span::BlankSpan()) {}
     }
     
-                // calculate values for plain CPU part below if needed
-            if (x + 8 >= bwidth)
-            {
-                ptrdiff_t x3 = x == width ? width - 1 : x;
-                ptrdiff_t x4 = border == BORDER_MODE_CONSTANT ? x3 - 1 : std::max<ptrdiff_t>(x3 - 1, 0);
+    using grpc::Status;
+using grpc::StatusCode;
+using grpc::reflection::v1alpha::ErrorResponse;
+using grpc::reflection::v1alpha::ExtensionNumberResponse;
+using grpc::reflection::v1alpha::ExtensionRequest;
+using grpc::reflection::v1alpha::FileDescriptorResponse;
+using grpc::reflection::v1alpha::ListServiceResponse;
+using grpc::reflection::v1alpha::ServerReflectionRequest;
+using grpc::reflection::v1alpha::ServerReflectionResponse;
+using grpc::reflection::v1alpha::ServiceResponse;
+    
+      Status GetFileContainingSymbol(
+      ServerContext* context, const grpc::string& symbol,
+      reflection::v1alpha::ServerReflectionResponse* response);
+    
+    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
+    const grpc::string& name, int value) {
+  class IntOption final : public ServerBuilderOption {
+   public:
+    IntOption(const grpc::string& name, int value)
+        : name_(name), value_(value) {}
+    }
     }
     
-    s32 countNonZero(const Size2D &_size,
-                 const s32 * srcBase, ptrdiff_t srcStride)
+    #include <grpc/support/cpu.h>
+    
+    DynamicThreadPool::DynamicThread::DynamicThread(DynamicThreadPool* pool)
+    : pool_(pool),
+      thd_('grpcpp_dynamic_pool',
+           [](void* th) {
+             static_cast<DynamicThreadPool::DynamicThread*>(th)->ThreadFunc();
+           },
+           this) {
+  thd_.Start();
+}
+DynamicThreadPool::DynamicThread::~DynamicThread() { thd_.Join(); }
+    
+    #include 'src/cpp/server/load_reporter/get_cpu_stats.h'
+    
+     public:
+  ATCPlugin(const std::string& path,
+            const TableColumns& tc_columns,
+            const std::string& sqlite_query)
+      : tc_columns_(tc_columns), sqlite_query_(sqlite_query), path_(path) {}
+    
+      auto cv = config.find(kLoggerKey);
+  if (cv != config.end()) {
+    auto obj = data_.getObject();
+    data_.copyFrom(cv->second.doc(), obj);
+    data_.add(kLoggerKey, obj);
+  }
+    
+    
+    { private:
+  static const std::string kLoggerKey;
+};
+    
+    namespace osquery {
+    }
+    
+    
+    {  // Any views left are views that don't exist in the new configuration file
+  // so we tear them down and remove them from the database.
+  for (const auto& old_view : erase_views) {
+    osquery::query('DROP VIEW ' + old_view, r);
+    deleteDatabaseValue(kQueries, kConfigViews + old_view);
+  }
+  return Status(0, 'OK');
+}
+    
+    void DHTResponseMessage::fillMessage(Dict* msgDict)
 {
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    Size2D size(_size);
-    if (srcStride == (ptrdiff_t)(size.width))
-    {
-        size.width *= size.height;
-        size.height = 1;
-    }
-    size_t roiw4 = size.width & ~3u;
-    s32 result = 0;
-    for(size_t k = 0; k < size.height; ++k)
-    {
-        const u32* src = (const u32*)internal::getRowPtr( srcBase,  srcStride, k);
-        u32 i = 0;
-    }
+  msgDict->put(R, getResponse());
+}
+    
+    class DHTResponseMessage : public DHTAbstractMessage {
+protected:
+  virtual std::string toStringOptional() const { return A2STR::NIL; }
     }
     
-                // make extrapolation for the first elements
-            if (!x)
-            {
-                // make border
-                if (border == BORDER_MODE_CONSTANT)
-                    tcurr = v_border_x3;
-                else if (border == BORDER_MODE_REPLICATE)
-                    tcurr = vdupq_n_u16(vgetq_lane_u16(tnext, 0));
+      void dropNode(const std::shared_ptr<DHTNode>& node);
+    
+      // If you change the code to read more than the size of buf, then
+  // expand the buf size here.
+  array_wrapper<unsigned char, 255> buf;
+    
+    
+    {} // namespace aria2
+    
+    namespace aria2 {
     }
     
-    CardinalSplineBy* CardinalSplineBy::clone() const
+    void DHTTokenUpdateCommand::process()
+{
+  try {
+    tokenTracker_->updateTokenSecret();
+  }
+  catch (RecoverableException& e) {
+    A2_LOG_ERROR_EX(EX_EXCEPTION_CAUGHT, e);
+  }
+}
+    
+    
+    {} // namespace aria2
+
+    
+    Lens3D* Lens3D::clone() const
 {
     // no copy constructor
-    auto a = new (std::nothrow) CardinalSplineBy();
-    a->initWithDuration(this->_duration, this->_points->clone(), this->_tension);
+    auto a = new (std::nothrow) Lens3D();
+    a->initWithDuration(_duration, _gridSize, _position, _radius);
     a->autorelease();
     return a;
 }
     
-    Liquid* Liquid::clone() const
+    /**
+@brief Twirl action.
+@details This action is used for take effect on the target node as twirl.
+        You can control the effect by these parameters:
+        duration, grid size, center position, twirls count, amplitude.
+*/
+class CC_DLL Twirl : public Grid3DAction
 {
-    // no copy constructor
-    auto a = new (std::nothrow) Liquid();
-    a->initWithDuration(_duration, _gridSize, _waves, _amplitude);
-    a->autorelease();
-    return a;
-}
+public:
+    /**
+    @brief Create the action with center position, number of twirls, amplitude, a grid size and duration.
+    @param duration Specify the duration of the Twirl action. It's a value in seconds.
+    @param gridSize Specify the size of the grid.
+    @param position Specify the center position of the twirl action.
+    @param twirls Specify the twirls count of the Twirl action.
+    @param amplitude Specify the amplitude of the Twirl action.
+    @return If the creation success, return a pointer of Twirl action; otherwise, return nil.
+    */
+    static Twirl* create(float duration, const Size& gridSize, const Vec2& position, unsigned int twirls, float amplitude);
+    }
     
-    #include '2d/CCActionInstant.h'
-#include '2d/CCNode.h'
-#include '2d/CCSprite.h'
+    protected:
+    SEL_CallFuncND _callFuncND;
+    void* _data;
     
-    /*
- * Update each tick
- * Time is the percentage of the way through the duration
- */
-void PageTurn3D::update(float time)
-{
-    float tt = MAX(0, time - 0.25f);
-    float deltaAy = (tt * tt * 500);
-    float ay = -100 - deltaAy;
-    
-    float deltaTheta = sqrtf(time);
-    float theta = deltaTheta > 0.5f ? (float)M_PI_2*deltaTheta : (float)M_PI_2*(1-deltaTheta);
-    
-    float rotateByYAxis = (2-time)* M_PI;
-    
-    float sinTheta = sinf(theta);
-    float cosTheta = cosf(theta);
-    
-    for (int i = 0; i <= _gridSize.width; ++i)
+        /** Sets the inner action.
+     *
+     * @param action The inner action.
+     */
+    void setInnerAction(FiniteTimeAction *action)
     {
-        for (int j = 0; j <= _gridSize.height; ++j)
+        if (_innerAction != action)
         {
-            // Get original vertex
-            Vec3 p = getOriginalVertex(Vec2(i ,j));
-            
-            p.x -= getGridRect().origin.x;
-            float R = sqrtf((p.x * p.x) + ((p.y - ay) * (p.y - ay)));
-            float r = R * sinTheta;
-            float alpha = asinf( p.x / R );
-            float beta = alpha / sinTheta;
-            float cosBeta = cosf( beta );
-            
-            // If beta > PI then we've wrapped around the cone
-            // Reduce the radius to stop these points interfering with others
-            if (beta <= M_PI)
-            {
-                p.x = ( r * sinf(beta));
-            }
-            else
-            {
-                // Force X = 0 to stop wrapped
-                // points
-                p.x = 0;
-            }
-    }
-    }
+            CC_SAFE_RETAIN(action);
+            CC_SAFE_RELEASE(_innerAction);
+            _innerAction = action;
+        }
     }
     
-    Animation* Animation::create(const Vector<AnimationFrame*>& arrayOfAnimationFrameNames, float delayPerUnit, unsigned int loops /* = 1 */)
-{
-    Animation *animation = new (std::nothrow) Animation();
-    animation->initWithAnimationFrames(arrayOfAnimationFrameNames, delayPerUnit, loops);
-    animation->autorelease();
-    return animation;
-}
+    http://www.cocos2d-x.org
     
-    void AtlasNode::updateAtlasValues()
+    
+    {        return true;
+    }
+    
+    ActionTween *ActionTween::clone() const
 {
-    CCASSERT(false, 'CCAtlasNode:Abstract updateAtlasValue not overridden');
+    return ActionTween::create(_duration, _key, _from, _to);
 }
     
     THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
