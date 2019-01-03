@@ -1,125 +1,140 @@
 
         
-            # Then we cluster the lines together as blocks
-    # Each block represents a collection of lines that should be sorted
-    # This was done by assuming only links ([...](...)) are meant to be sorted
-    # Clustering is done by indentation
-    blocks = []
-    last_indent = None
-    for line in read_me:
-        s_line = line.lstrip()
-        indent = len(line) - len(s_line)
-    
-        for asset in os.listdir(build_path):
-        compat_print('Uploading %s...' % asset)
-        releaser.create_asset(release_id, os.path.join(build_path, asset))
-    
-    versions_info = json.load(open('update/versions.json'))
-if 'signature' in versions_info:
-    del versions_info['signature']
-    
-    versions_info = json.load(open('update/versions.json'))
-if 'signature' in versions_info:
-    del versions_info['signature']
-    
-    
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
-    
-    lazy_extractors_filename = sys.argv[1]
-if os.path.exists(lazy_extractors_filename):
-    os.remove(lazy_extractors_filename)
+        
+if len(sys.argv) <= 1:
+    print('Specify the version number as parameter')
+    sys.exit()
+version = sys.argv[1]
     
     with io.open(README_FILE, encoding='utf-8') as f:
     oldreadme = f.read()
     
-        with io.open(outfile, 'w', encoding='utf-8') as outf:
-        outf.write(out)
+    
+def build_completion(opt_parser):
+    opts = [opt for group in opt_parser.option_groups
+            for opt in group.option_list]
+    opts_file = [opt for opt in opts if opt.metavar == 'FILE']
+    opts_dir = [opt for opt in opts if opt.metavar == 'DIR']
+    
+        def test_youtube_channel_matching(self):
+        assertChannel = lambda url: self.assertMatch(url, ['youtube:channel'])
+        assertChannel('https://www.youtube.com/channel/HCtnHdj3df7iM')
+        assertChannel('https://www.youtube.com/channel/HCtnHdj3df7iM?feature=gb_ch_rec')
+        assertChannel('https://www.youtube.com/channel/HCtnHdj3df7iM/videos')
     
     
-if __name__ == '__main__':
-    main()
-
-    
-    
-class TestFormatSelection(unittest.TestCase):
-    def test_prefer_free_formats(self):
-        # Same resolution => download webm
-        ydl = YDL()
-        ydl.params['prefer_free_formats'] = True
-        formats = [
-            {'ext': 'webm', 'height': 460, 'url': TEST_URL},
-            {'ext': 'mp4', 'height': 460, 'url': TEST_URL},
-        ]
-        info_dict = _make_result(formats)
-        yie = YoutubeIE(ydl)
-        yie._sort_formats(info_dict['formats'])
-        ydl.process_ie_result(info_dict)
-        downloaded = ydl.downloaded_info_dicts[0]
-        self.assertEqual(downloaded['ext'], 'webm')
-    
-                if fail or self.network_stat != 'OK':
-                # Fail or unknown
-                if time_now - self.last_check_time < 3:
-                    return
-            else:
-                if time_now - self.last_check_time < 10:
-                    return
-    
-    
-def best_server(probe_nat=False):
-    best_server = None
-    prober = new_pteredor(probe_nat=probe_nat)
-    prober.qualified = True
-    if not probe_nat:
-        prober.nat_type = 'unknown'
-        prober.rs_cone_flag = 0
-    
-    try:
-    from io import BytesIO
-except ImportError:
-    from cStringIO import StringIO as BytesIO
-try:
-    from google.appengine.api import urlfetch
-    from google.appengine.runtime import apiproxy_errors
-except ImportError:
-    urlfetch = None
-try:
-    import sae
-except ImportError:
-    sae = None
-try:
-    import bae.core.wsgi
-except ImportError:
-    bae = None
-try:
-    import socket
-    import select
-except ImportError:
-    socket = None
-try:
-    import OpenSSL
-except ImportError:
-    OpenSSL = None
-    
-            self._state.syntaxErrors += 1 # don't count spurious
-        self._state.errorRecovery = True
-    
-    	for video in tab.childNodes:
-		if re.search(contentid, video.attributes['link'].value):
-			url = video.attributes['flv'].value
-			break
-    
+def to_native_string(string, encoding='ascii'):
+    '''Given a string object, regardless of type, returns a representation of
+    that string in the native string type, encoding and decoding where
+    necessary. This assumes ASCII unless told otherwise.
     '''
-http://www.tudou.com/programs/view/html5embed.action?type=0&amp;code=3LS_URGvl54&amp;lcode=&amp;resourceId=0_06_05_99
-'''
-tudou_embed_patterns = [ 'tudou\.com[a-zA-Z0-9\/\?=\&\.\;]+code=([a-zA-Z0-9_-]+)\&',
-                         'www\.tudou\.com/v/([a-zA-Z0-9_-]+)/[^']*v\.swf'
-                       ]
+    if isinstance(string, builtin_str):
+        out = string
+    else:
+        if is_py2:
+            out = string.encode(encoding)
+        else:
+            out = string.decode(encoding)
     
-    site_info = 'Google.com'
-download = google_download
-download_playlist = playlist_not_supported('google')
+        return inner
+    
+        @pytest.fixture(autouse=True)
+    def setup(self):
+        '''LookupDict instance with 'bad_gateway' attribute.'''
+        self.lookup_dict = LookupDict('test')
+        self.lookup_dict.bad_gateway = 502
+    
+        @classmethod
+    def text_response_server(cls, text, request_timeout=0.5, **kwargs):
+        def text_response_handler(sock):
+            request_content = consume_socket_content(sock, timeout=request_timeout)
+            sock.send(text.encode('utf-8'))
+    
+                # Allow self-specified cert location.
+            if verify is not True:
+                cert_loc = verify
+    
+    
+class VersionedPackage(object):
+    def __init__(self, version):
+        self.__version__ = version
+    
+        def test_server_finishes_when_no_connections(self):
+        '''the server thread exits even if there are no connections'''
+        server = Server.basic_response_server()
+        with server:
+            pass
+    
+        def test_long_authinfo_in_url(self):
+        url = 'http://{}:{}@{}:9000/path?query#frag'.format(
+            'E8A3BE87-9E3F-4620-8858-95478E385B5B',
+            'EA770032-DA4D-4D84-8CE9-29C6D910BF1E',
+            'exactly-------------sixty-----------three------------characters',
+        )
+        r = requests.Request('GET', url).prepare()
+        assert r.url == url
+    
+    
+def get_encoding_from_headers(headers):
+    '''Returns encodings from given HTTP Header Dict.
+    
+    
+__licence__ = 'BSD (3 clause)'
+    
+        def get_actiontec_data(self):
+        '''Retrieve data from Actiontec MI424WR and return parsed result.'''
+        try:
+            telnet = telnetlib.Telnet(self.host)
+            telnet.read_until(b'Username: ')
+            telnet.write((self.username + '\n').encode('ascii'))
+            telnet.read_until(b'Password: ')
+            telnet.write((self.password + '\n').encode('ascii'))
+            prompt = telnet.read_until(
+                b'Wireless Broadband Router> ').split(b'\n')[-1]
+            telnet.write('firewall mac_cache_dump\n'.encode('ascii'))
+            telnet.write('\n'.encode('ascii'))
+            telnet.read_until(prompt)
+            leases_result = telnet.read_until(prompt).split(b'\n')[1:-1]
+            telnet.write('exit\n'.encode('ascii'))
+        except EOFError:
+            _LOGGER.exception('Unexpected response from router')
+            return
+        except ConnectionRefusedError:
+            _LOGGER.exception('Connection refused by router. Telnet enabled?')
+            return None
+    
+            _LOGGER.debug('Nmap last results %s', self.last_results)
+    
+    For more details about this platform, please refer to the documentation at
+https://home-assistant.io/components/device_tracker.swisscom/
+'''
+import logging
+    
+    import requests
+import voluptuous as vol
+    
+            # Note that the double newline at the end of
+        # this string is required per the SSDP spec
+        resp_template = '''HTTP/1.1 200 OK
+CACHE-CONTROL: max-age=60
+EXT:
+LOCATION: http://{0}:{1}/description.xml
+SERVER: FreeRTOS/6.0.5, UPnP/1.0, IpBridge/0.1
+hue-bridgeid: 1234
+ST: urn:schemas-upnp-org:device:basic:1
+USN: uuid:Socket-1_0-221438K0100073::urn:schemas-upnp-org:device:basic:1
+    
+        def __call__(self, method):
+        '''Decorate a function.'''
+        @wraps(method)
+        async def wrapper(view, request, *args, **kwargs):
+            '''Wrap a request handler with data validation.'''
+            data = None
+            try:
+                data = await request.json()
+            except ValueError:
+                if not self._allow_empty or \
+                   (await request.content.read()) != b'':
+                    _LOGGER.error('Invalid JSON received.')
+                    return view.json_message('Invalid JSON.', 400)
+                data = {}
