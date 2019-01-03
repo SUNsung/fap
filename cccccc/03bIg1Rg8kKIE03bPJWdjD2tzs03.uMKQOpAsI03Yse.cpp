@@ -1,237 +1,210 @@
 
         
-            struct Margin {
-        Margin() : left(0), right(0), top(0), bottom(0) {}
-        Margin(size_t left_, size_t right_, size_t top_, size_t bottom_)
-            : left(left_), right(right_), top(top_), bottom(bottom_) {}
-    }
-    
-                if(!x) {
-                tcurr = tnext;
-    }
-    
-    template <bool L2gradient, bool externalSobel>
-struct _normEstimator
-{
-    ptrdiff_t magstep;
-    ptrdiff_t dxOffset;
-    ptrdiff_t dyOffset;
-    ptrdiff_t shxOffset;
-    ptrdiff_t shyOffset;
-    std::vector<u8> buffer;
-    const ptrdiff_t offsetk;
-    ptrdiff_t borderyt, borderyb;
-    RowFilter3x3Canny sobelRow;
-    }
-    
-    
-    {            v_src = vld4q_u8(src + sj + 64);
-            vst1q_u8(dst + dj + 16, v_src.val[coi]);
-        }
-#endif
-    
-    inline void prefetch(const void *ptr, size_t offset = 32*10)
-{
-#if defined __GNUC__
-    __builtin_prefetch(reinterpret_cast<const char*>(ptr) + offset);
-#elif defined _MSC_VER && defined CAROTENE_NEON
-    __prefetch(reinterpret_cast<const char*>(ptr) + offset);
-#else
-    (void)ptr;
-    (void)offset;
-#endif
+        EnumGenerator::EnumGenerator(const EnumDescriptor* descriptor, const Options* options) :
+    SourceGeneratorBase(descriptor->file(), options),
+    descriptor_(descriptor) {
 }
     
     
     {
-    {         vst1q_u16(_dst + i, vcombine_u16(vline1_u16, vline2_u16));
-     }
-})
-#endif
-    
-    s32 countNonZero(const Size2D &_size,
-                 const u8 * srcBase, ptrdiff_t srcStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    Size2D size(_size);
-    if (srcStride == (ptrdiff_t)(size.width))
     {
-        size.width *= size.height;
-        size.height = 1;
-    }
-    size_t roiw16 = size.width & ~15u;
-    s32 result = 0;
-    for(size_t k = 0; k < size.height; ++k)
     {
-        const u8* src = internal::getRowPtr( srcBase,  srcStride, k);
-        size_t i = 0;
-    }
-    }
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
     
-                    u64 mask[2];
-                vst1q_u64(mask, vreinterpretq_u64_u8(m0));
-    
-      /// @brief Deprecated; use <code>Blob(const vector<int>& shape)</code>.
-  explicit Blob(const int num, const int channels, const int height,
-      const int width);
-  explicit Blob(const vector<int>& shape);
-    
-     protected:
-  /// @copydoc AbsValLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    /**
- * @brief Compute the index of the @f$ K @f$ max values for each datum across
- *        all dimensions @f$ (C \times H \times W) @f$.
- *
- * Intended for use after a classification layer to produce a prediction.
- * If parameter out_max_val is set to true, output is a vector of pairs
- * (max_ind, max_val) for each image. The axis parameter specifies an axis
- * along which to maximise.
- *
- * NOTE: does not implement Backwards operation.
- */
-template <typename Dtype>
-class ArgMaxLayer : public Layer<Dtype> {
- public:
-  /**
-   * @param param provides ArgMaxParameter argmax_param,
-   *     with ArgMaxLayer options:
-   *   - top_k (\b optional uint, default 1).
-   *     the number @f$ K @f$ of maximal items to output.
-   *   - out_max_val (\b optional bool, default false).
-   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
-   *     output max_val along the specified axis.
-   *   - axis (\b optional int).
-   *     if set, maximise along the specified axis else maximise the flattened
-   *     trailing dimensions for each index of the first / num dimension.
-   */
-  explicit ArgMaxLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    template <typename Dtype>
-class BasePrefetchingDataLayer :
-    public BaseDataLayer<Dtype>, public InternalThread {
- public:
-  explicit BasePrefetchingDataLayer(const LayerParameter& param);
-  // LayerSetUp: implements common data layer setup functionality, and calls
-  // DataLayerSetUp to do special data layer setup for individual layer types.
-  // This method may not be overridden.
-  void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    /**
- * @brief Index into the input blob along its first axis.
- *
- * This layer can be used to select, reorder, and even replicate examples in a
- * batch.  The second blob is cast to int and treated as an index into the
- * first axis of the first blob.
- */
-template <typename Dtype>
-class BatchReindexLayer : public Layer<Dtype> {
- public:
-  explicit BatchReindexLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    /**
- * @brief Computes the contrastive loss @f$
- *          E = \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
- *              \left(1-y\right) \max \left(margin-d, 0\right)^2
- *          @f$ where @f$
- *          d = \left| \left| a_n - b_n \right| \right|_2 @f$. This can be
- *          used to train siamese networks.
- *
- * @param bottom input Blob vector (length 3)
- *   -# @f$ (N \times C \times 1 \times 1) @f$
- *      the features @f$ a \in [-\infty, +\infty]@f$
- *   -# @f$ (N \times C \times 1 \times 1) @f$
- *      the features @f$ b \in [-\infty, +\infty]@f$
- *   -# @f$ (N \times 1 \times 1 \times 1) @f$
- *      the binary similarity @f$ s \in [0, 1]@f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
- *      the computed contrastive loss: @f$ E =
- *          \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
- *          \left(1-y\right) \max \left(margin-d, 0\right)^2
- *          @f$ where @f$
- *          d = \left| \left| a_n - b_n \right| \right|_2 @f$.
- * This can be used to train siamese networks.
- */
-template <typename Dtype>
-class ContrastiveLossLayer : public LossLayer<Dtype> {
- public:
-  explicit ContrastiveLossLayer(const LayerParameter& param)
-      : LossLayer<Dtype>(param), diff_() {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    #include <vector>
-    
-    namespace xgboost {
-/*!
- * \brief interface of linear updater
- */
-class LinearUpdater {
- public:
-  /*! \brief virtual destructor */
-  virtual ~LinearUpdater() = default;
-  /*!
-   * \brief Initialize the updater with given arguments.
-   * \param args arguments to the objective function.
-   */
-  virtual void Init(
-      const std::vector<std::pair<std::string, std::string> >& args) = 0;
-    }
-    }
-    
-      /*!
-   * \brief determines whether updater has enough knowledge about a given dataset
-   *        to quickly update prediction cache its training data and performs the
-   *        update if possible.
-   * \param data: data matrix
-   * \param out_preds: prediction cache to be updated
-   * \return boolean indicating whether updater has capability to update
-   *         the prediction cache. If true, the prediction cache will have been
-   *         updated by the time this function returns.
-   */
-  virtual bool UpdatePredictionCache(const DMatrix* data,
-                                     HostDeviceVector<bst_float>* out_preds) {
-    return false;
-  }
-    
-      void InitTreesToUpdate() {
-    if (trees_to_update.size() == 0u) {
-      for (auto & tree : trees) {
-        trees_to_update.push_back(std::move(tree));
-      }
-      trees.clear();
-      param.num_trees = 0;
-      tree_info.clear();
-    }
+      for (int i = 0; i < dependencies.size(); i++) {
+    const string& dependency = dependencies[i].second;
+    printer->Print(
+        '      $dependency$.getDescriptor(),\n',
+        'dependency', dependency);
   }
     
     
-    {
-    {
-    {  XGBOOST_DEVICE reference operator[](size_t idx) const {
-    self_type offset = (*this);
-    offset.offset_ += idx;
-    return *offset;
+    {    output.WriteLittleEndian32(0x02014b50);  // magic
+    WriteShort(&output, 10);  // version made by
+    WriteShort(&output, 10);  // version needed to extract
+    WriteShort(&output, 0);  // flags
+    WriteShort(&output, 0);  // compression method: stored
+    WriteShort(&output, 0);  // last modified time
+    WriteShort(&output, kDosEpoch);  // last modified date
+    output.WriteLittleEndian32(crc32);  // crc-32
+    output.WriteLittleEndian32(size);  // compressed size
+    output.WriteLittleEndian32(size);  // uncompressed size
+    WriteShort(&output, filename_size);  // file name length
+    WriteShort(&output, 0);   // extra field length
+    WriteShort(&output, 0);   // file comment length
+    WriteShort(&output, 0);   // starting disk number
+    WriteShort(&output, 0);   // internal file attributes
+    output.WriteLittleEndian32(0);  // external file attributes
+    output.WriteLittleEndian32(offset);  // local header offset
+    output.WriteString(filename);  // file name
   }
+  uint32 dir_len = output.ByteCount();
+    
+    class OrientationDetector {
+ public:
+  OrientationDetector(const GenericVector<int>* allowed_scripts,
+                      OSResults* results);
+  bool detect_blob(BLOB_CHOICE_LIST* scores);
+  int get_orientation();
+ private:
+  OSResults* osr_;
+  const GenericVector<int>* allowed_scripts_;
 };
-}  // namespace common
-}  // namespace xgboost
+    
+    void Tesseract::PrerecAllWordsPar(const GenericVector<WordData>& words) {
+  // Prepare all the blobs.
+  GenericVector<BlobData> blobs;
+  for (int w = 0; w < words.size(); ++w) {
+    if (words[w].word->ratings != nullptr &&
+        words[w].word->ratings->get(0, 0) == nullptr) {
+      for (int s = 0; s < words[w].lang_words.size(); ++s) {
+        Tesseract* sub = s < sub_langs_.size() ? sub_langs_[s] : this;
+        const WERD_RES& word = *words[w].lang_words[s];
+        for (int b = 0; b < word.chopped_word->NumBlobs(); ++b) {
+          blobs.push_back(BlobData(b, sub, word));
+        }
+      }
+    }
+  }
+  // Pre-classify all the blobs.
+  if (tessedit_parallelize > 1) {
+#ifdef _OPENMP
+#pragma omp parallel for num_threads(10)
+#endif  // _OPENMP
+    for (int b = 0; b < blobs.size(); ++b) {
+      *blobs[b].choices =
+          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
+    }
+  } else {
+    // TODO(AMD) parallelize this.
+    for (int b = 0; b < blobs.size(); ++b) {
+      *blobs[b].choices =
+          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
+    }
+  }
+}
+    
+      int num_words;
+  TBOX lword_box;     // in normalized (horiz text rows) space
+  TBOX rword_box;     // in normalized (horiz text rows) space
+    
+    
+    {}  // namespace tesseract
+    
+      // Backwards compatible constrained fit with a supplied gradient.
+  // Deprecated. Use ConstrainedFit(const FCOORD& direction) where possible
+  // to avoid potential difficulties with infinite gradients.
+  double ConstrainedFit(double m, float* c);
+    
+    #include 'dppoint.h'
+#include 'errcode.h'
+#include 'tprintf.h'
+    
+    #  define ASSERT_DEBUG_DEATH(statement, regex) \
+  ASSERT_DEATH(statement, regex)
+    
+    // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
+//
+// Expands to the namespace name that the type-parameterized tests for
+// the given type-parameterized test case are defined in.  The exact
+// name of the namespace is subject to change without notice.
+# define GTEST_CASE_NAMESPACE_(TestCaseName) \
+  gtest_case_##TestCaseName##_
+    
+    namespace testing {
+namespace internal {
+    }
+    }
+    
+    template <class Generator1, class Generator2, class Generator3,
+    class Generator4, class Generator5, class Generator6>
+class CartesianProductHolder6 {
+ public:
+CartesianProductHolder6(const Generator1& g1, const Generator2& g2,
+    const Generator3& g3, const Generator4& g4, const Generator5& g5,
+    const Generator6& g6)
+      : g1_(g1), g2_(g2), g3_(g3), g4_(g4), g5_(g5), g6_(g6) {}
+  template <typename T1, typename T2, typename T3, typename T4, typename T5,
+      typename T6>
+  operator ParamGenerator< ::std::tr1::tuple<T1, T2, T3, T4, T5, T6> >() const {
+    return ParamGenerator< ::std::tr1::tuple<T1, T2, T3, T4, T5, T6> >(
+        new CartesianProductGenerator6<T1, T2, T3, T4, T5, T6>(
+        static_cast<ParamGenerator<T1> >(g1_),
+        static_cast<ParamGenerator<T2> >(g2_),
+        static_cast<ParamGenerator<T3> >(g3_),
+        static_cast<ParamGenerator<T4> >(g4_),
+        static_cast<ParamGenerator<T5> >(g5_),
+        static_cast<ParamGenerator<T6> >(g6_)));
+  }
+    }
+    
+      // Compares two wide C strings.  Returns true iff they have the same
+  // content.
+  //
+  // Unlike wcscmp(), this function can handle NULL argument(s).  A
+  // NULL C string is considered different to any non-NULL C string,
+  // including the empty string.
+  static bool WideCStringEquals(const wchar_t* lhs, const wchar_t* rhs);
+    
+    // GetTypeName<T>() returns a human-readable name of type T.
+// NB: This function is also used in Google Mock, so don't move it inside of
+// the typed-test-only section below.
+template <typename T>
+std::string GetTypeName() {
+# if GTEST_HAS_RTTI
+    }
+    
+    // Tests the Set method.
+TEST(MyString, Set) {
+  MyString s;
+    }
+    
+    #pragma once
+    
+    #include <algorithm>
+#include <chrono>
+#include <functional>
+#include <map>
+#include <string>
+#include <vector>
+    
+    namespace rj = rapidjson;
+    
+    /**
+ * @brief A simple ConfigParserPlugin for an 'events' dictionary key.
+ */
+class EventsConfigParserPlugin : public ConfigParserPlugin {
+ public:
+  std::vector<std::string> keys() const override {
+    return {'events'};
+  }
+    }
+    
+    Status FilePathsConfigParserPlugin::setUp() {
+  auto paths_obj = data_.getObject();
+  data_.add('file_paths', paths_obj);
+  auto paths_query_obj = data_.getObject();
+  data_.add('file_paths_query', paths_query_obj);
+  auto accesses_arr = data_.getArray();
+  data_.add('file_accesses', accesses_arr);
+  auto exclude_obj = data_.getObject();
+  data_.add('exclude_paths', exclude_obj);
+  return Status();
+}
+    
+    
+    {/// KafkaTopicsConfigParserPlugin extracts, updates, and parses Kafka topic
+/// configurations from Osquery's configurations.
+class KafkaTopicsConfigParserPlugin : public ConfigParserPlugin {
+ public:
+  std::vector<std::string> keys() const override;
+  Status update(const std::string& source, const ParserConfig& config) override;
+};
+} // namespace osquery
+
+    
+    #include <osquery/config/config.h>
