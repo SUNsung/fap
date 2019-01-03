@@ -1,126 +1,194 @@
 
         
-        #ifndef DOCQUAL_H
-#define DOCQUAL_H
+        PlatformKind swift::targetPlatform(LangOptions &LangOpts) {
+  if (LangOpts.Target.isMacOSX()) {
+    return (LangOpts.EnableAppExtensionRestrictions
+                ? PlatformKind::OSXApplicationExtension
+                : PlatformKind::OSX);
+  }
+    }
     
-    class ScriptDetector {
+      reqToSyntheticEnvMap = SubstitutionMap::get(reqSig,
+    [selfType, substConcreteType, depth, covariantSelf, &ctx]
+    (SubstitutableType *type) -> Type {
+      // If the conforming type is a class, the protocol 'Self' maps to
+      // the class-constrained 'Self'. Otherwise, it maps to the concrete
+      // type.
+      if (type->isEqual(selfType)) {
+        if (covariantSelf)
+          return GenericTypeParamType::get(/*depth=*/0, /*index=*/0, ctx);
+        return substConcreteType;
+      }
+      // Other requirement generic parameters map 1:1 with their depth
+      // increased appropriately.
+      auto *genericParam = cast<GenericTypeParamType>(type);
+      // In a protocol requirement, the only generic parameter at depth 0
+      // should be 'Self', and all others at depth 1. Anything else is
+      // invalid code.
+      if (genericParam->getDepth() != 1)
+        return Type();
+      auto substGenericParam =
+        GenericTypeParamType::get(depth, genericParam->getIndex(), ctx);
+      return substGenericParam;
+    },
+    [selfType, substConcreteType, conformance, conformanceDC, &ctx](
+        CanType type, Type replacement, ProtocolDecl *proto)
+          -> Optional<ProtocolConformanceRef> {
+      // The protocol 'Self' conforms concretely to the conforming type.
+      if (type->isEqual(selfType)) {
+        ProtocolConformance *specialized = conformance;
+        if (conformance && conformance->getGenericSignature()) {
+          auto concreteSubs =
+            substConcreteType->getContextSubstitutionMap(
+              conformanceDC->getParentModule(), conformanceDC);
+          specialized =
+            ctx.getSpecializedConformance(substConcreteType, conformance,
+                                          concreteSubs);
+        }
+    }
+    }
+    
+    void
+swift::trimLeadingWhitespaceFromLines(StringRef RawText,
+                                      unsigned WhitespaceToTrim,
+                                      SmallVectorImpl<StringRef> &OutLines) {
+  SmallVector<StringRef, 8> Lines;
+    }
+    
+    static StringRef omitNeedlessWords(StringRef name,
+                                   OmissionTypeName typeName,
+                                   NameRole role,
+                                   const InheritedNameSet *allPropertyNames,
+                                   StringScratchSpace &scratch) {
+  // If we have no name or no type name, there is nothing to do.
+  if (name.empty() || typeName.empty()) return name;
+    }
+    
+    /// Maintain a set of known CF types.
+static bool isKnownCFTypeName(StringRef name) {
+  return std::binary_search(KnownCFTypes, KnownCFTypes + NumKnownCFTypes,
+                            name, SortByLengthComparator());
+}
+    
+      if (clangDiag.getID() == clang::diag::err_module_not_built &&
+      CurrentImport && clangDiag.getArgStdStr(0) == CurrentImport->getName()) {
+    SourceLoc loc = DiagLoc;
+    if (clangDiag.getLocation().isValid())
+      loc = resolveSourceLocation(clangDiag.getSourceManager(),
+                                  clangDiag.getLocation());
+    }
+    
+    // Import As Member -- attempt to import C global functions and variables as
+// members on types or instances.
+    
+    bool Mangle::needsPunycodeEncoding(StringRef str) {
+  for (unsigned char c : str) {
+    if (!isValidSymbolChar(c))
+      return true;
+  }
+  return false;
+}
+    
+    void swift::Demangle::Node::dump() {
+  std::string TreeStr = getNodeTreeAsString(this);
+  fputs(TreeStr.c_str(), stderr);
+}
+    
+    
+    {}  // namespace nwapi
+    
+    class Base {
  public:
-  ScriptDetector(const GenericVector<int>* allowed_scripts,
-                 OSResults* osr, tesseract::Tesseract* tess);
-  void detect_blob(BLOB_CHOICE_LIST* scores);
-  bool must_stop(int orientation);
- private:
-  OSResults* osr_;
-  static const char* korean_script_;
-  static const char* japanese_script_;
-  static const char* fraktur_script_;
-  int korean_id_;
-  int japanese_id_;
-  int katakana_id_;
-  int hiragana_id_;
-  int han_id_;
-  int hangul_id_;
-  int latin_id_;
-  int fraktur_id_;
-  tesseract::Tesseract* tess_;
-  const GenericVector<int>* allowed_scripts_;
-};
+  Base(int id,
+       const base::WeakPtr<ObjectManager>& manager,
+       const base::DictionaryValue& option,
+       const std::string& extension_id);
+  virtual ~Base();
+    }
     
-      /**
-   * Returns the type of the current block. See apitypes.h for
-   * PolyBlockType.
-   */
-  PolyBlockType BlockType() const;
-    
-    
-    {
-}  // namespace tesseract
+    #endif  // CONTENT_NW_SRC_API_BINDINGS_COMMON_H_
 
     
     
-    {  name += UNLV_EXT;              //add extension
-  if ((pdfp = fopen (name.string (), 'rb')) == nullptr) {
-    return false;                //didn't read one
-  } else {
-    while (tfscanf(pdfp, '%d %d %d %d %*s', &x, &y, &width, &height) >= 4) {
-                                 //make rect block
-      block = new BLOCK (name.string (), TRUE, 0, 0,
-                         (int16_t) x, (int16_t) (ysize - y - height),
-                         (int16_t) (x + width), (int16_t) (ysize - y));
-                                 //on end of list
-      block_it.add_to_end (block);
+bool MenuDelegate::GetAcceleratorForCommandId(
+      int command_id,
+      ui::Accelerator* accelerator) const {
+  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
     }
-    fclose(pdfp);
-  }
-  return true;
+    
+    NwAppSetProxyConfigFunction::NwAppSetProxyConfigFunction() {
 }
     
-    template <typename T>
-struct GetTypeInfo<const T *, typename EnableIf<TypeInherits<Object, T>::value>::type> {
-	static const Variant::Type VARIANT_TYPE = Variant::OBJECT;
-	static inline PropertyInfo get_class_info() {
-		return PropertyInfo(StringName(T::get_class_static()));
-	}
-};
     
-    void ConstraintBullet::destroy_internal_constraint() {
-	space->remove_constraint(this);
-}
+    {} // namespace extensions
+#endif
+
     
-    public:
-	HingeJointBullet(RigidBodyBullet *rbA, RigidBodyBullet *rbB, const Transform &frameA, const Transform &frameB);
-	HingeJointBullet(RigidBodyBullet *rbA, RigidBodyBullet *rbB, const Vector3 &pivotInA, const Vector3 &pivotInB, const Vector3 &axisInA, const Vector3 &axisInB);
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
     
-    class PinJointBullet : public JointBullet {
-	class btPoint2PointConstraint *p2pConstraint;
-    }
-    
-    	ClassDB::bind_method(D_METHOD('poll'), &NetworkedMultiplayerPeer::poll);
-    
-        // Count glyphs/ranges, initialize font
-    int total_glyphs_count = 0;
-    int total_ranges_count = 0;
-    for (int input_i = 0; input_i < atlas->ConfigData.Size; input_i++) 
-    {
-        ImFontConfig& cfg = atlas->ConfigData[input_i];
-        FreeTypeFont& font_face = fonts[input_i];
-        IM_ASSERT(cfg.DstFont && (!cfg.DstFont->IsLoaded() || cfg.DstFont->ContainerAtlas == atlas));
-    }
-    
-    // Render function
-// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
-void ImGui_ImplDX11_RenderDrawData(ImDrawData* draw_data)
+    AccelAmplitude* AccelAmplitude::create(Action *action, float duration)
 {
-    ID3D11DeviceContext* ctx = g_pd3dDeviceContext;
-    }
-    
-        // Create the root signature
+    AccelAmplitude *ret = new (std::nothrow) AccelAmplitude();
+    if (ret && ret->initWithAction(action, duration))
     {
-        D3D12_DESCRIPTOR_RANGE descRange = {};
-        descRange.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-        descRange.NumDescriptors = 1;
-        descRange.BaseShaderRegister = 0;
-        descRange.RegisterSpace = 0;
-        descRange.OffsetInDescriptorsFromTableStart = 0;
+        ret->autorelease();
+        return ret;
+    }
+    }
+    
+    // implementation of Ripple3D
+    
+        unsigned int idx = pos.width * _gridSize.height + pos.height;
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+    
+    void AutoPolygon::calculateUV(const Rect& rect, V3F_C4B_T2F* verts, ssize_t count)
+{
+    /*
+     whole texture UV coordination
+     0,0                  1,0
+     +---------------------+
+     |                     |0.1
+     |                     |0.2
+     |     +--------+      |0.3
+     |     |texRect |      |0.4
+     |     |        |      |0.5
+     |     |        |      |0.6
+     |     +--------+      |0.7
+     |                     |0.8
+     |                     |0.9
+     +---------------------+
+     0,1                  1,1
+     */
+    
+    CCASSERT(_width && _height, 'please specify width and height for this AutoPolygon instance');
+    float texWidth  = _width;
+    float texHeight = _height;
     }
     
     
-    {        // Rendering
-        ImGui::Render();
-        al_clear_to_color(al_map_rgba_f(clear_color.x, clear_color.y, clear_color.z, clear_color.w));
-        ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
-        al_flip_display();
-    }
+    {    //real rect is the size that is in scale with the texture file
+    Rect getRealRect(const Rect& rect);
     
-            // Start the Dear ImGui frame
-        ImGui_ImplOpenGL2_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-    
-                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
-            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
-    
-                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
-            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
+    Image* _image;
+    unsigned char * _data;
+    std::string _filename;
+    unsigned int _width;
+    unsigned int _height;
+    float _scaleFactor;
+    unsigned int _threshold;
+};
