@@ -1,146 +1,83 @@
 
         
-            @property
-    def encoding(self):
-        '''Return a `str` with the message's encoding, if known.'''
-        raise NotImplementedError()
+        data_train_truth, data_valid_truth = split_list_by_inds(truth_data_e,
+                                                        train_inds,
+                                                        valid_inds)
+data_train_spiking, data_valid_spiking = split_list_by_inds(spiking_data_e,
+                                                            train_inds,
+                                                            valid_inds)
     
-        try:
-        r = http(
-            httpbin + BASIC_AUTH_URL,
-            '--auth-type',
-            Plugin.auth_type,
-            '--auth',
-            USERNAME,
-        )
-        assert HTTP_OK in r
-        assert r.json == AUTH_OK
-    finally:
-        plugin_manager.unregister(Plugin)
+      Example sentence and their mask:
+    First sentence  = 'I like the cat        's color'
+                       0 0    0   1           0 0
+    Second sentence = 'I like the yellow dog 's color'
+                       0 0    0   1      1    0 0
+    
+      word_to_id = build_vocab(train_path)
+  train_data = _file_to_word_ids(train_path, word_to_id)
+  valid_data = _file_to_word_ids(valid_path, word_to_id)
+  test_data = _file_to_word_ids(test_path, word_to_id)
+  vocabulary = len(word_to_id)
+  return train_data, valid_data, test_data, vocabulary
+    
+    
+def history_not_changed(proc, TIMEOUT):
+    '''Ensures that history not changed.'''
+    proc.send('\033[A')
+    assert proc.expect([TIMEOUT, u'fuck'])
+    
+    
+@pytest.fixture
+def brew_already_installed():
+    return '''Warning: git-2.3.5 already installed'''
+    
+    
+class BasicAuthPlugin(BuiltinAuthPlugin):
+    
+    error_msg = None
+    
+        def main_method(self):
+        '''will execute either _static_method_1 or _static_method_2
+    
+    
+if __name__ == '__main__':
+    main()
+    
+        fftv.publish('cartoon')
+    fftv.publish('music')
+    fftv.publish('ads')
+    fftv.publish('movie')
+    fftv.publish('cartoon')
+    fftv.publish('cartoon')
+    fftv.publish('movie')
+    fftv.publish('blank')
+    
+    '''
+@author: Gordeev Andrey <gordeev.and.and@gmail.com>
+    
+    ### OUTPUT ###
+# Scanning... Station is 1380 AM
+# Scanning... Station is 1510 AM
+# Switching to FM
+# Scanning... Station is 89.1 FM
+# Scanning... Station is 103.9 FM
+# Scanning... Station is 81.3 FM
+# Scanning... Station is 89.1 FM
+# Switching to AM
+# Scanning... Station is 1250 AM
+# Scanning... Station is 1380 AM
 
     
-        def test_binary_file_form(self, httpbin):
-        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
-        r = http('--print=B', '--form', 'POST', httpbin.url + '/post',
-                 'test@' + BIN_FILE_PATH_ARG, env=env)
-        assert bytes(BIN_FILE_CONTENT) in bytes(r)
+        c = Controller(blackboard)
+    contributions = c.run_loop()
     
-        def test_print_overridable_when_stdout_redirected(self, httpbin):
-        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
-        r = http('--print=h', 'GET', httpbin.url + '/get', env=env)
-        assert HTTP_OK in r
-
+            path.append(start)
+        if start == end:
+            return path
+        for node in self.graph.get(start, []):
+            if node not in path:
+                newpath = self.find_path(node, end, path[:])
+                if newpath:
+                    return newpath
     
-    
-def rst_filenames():
-    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
-        if '.tox' not in root:
-            for filename in fnmatch.filter(filenames, '*.rst'):
-                yield os.path.join(root, filename)
-    
-    
-def test_help():
-    r = http('--help', error_exit_ok=True)
-    assert r.exit_status == httpie.ExitStatus.OK
-    assert 'https://github.com/jakubroztocil/httpie/issues' in r
-    
-        def __call__(self, x):
-        regularization = 0.
-        if self.l1:
-            regularization += K.sum(self.l1 * K.abs(x))
-        if self.l2:
-            regularization += K.sum(self.l2 * K.square(x))
-        return regularization
-    
-        def print_row(fields, positions):
-        line = ''
-        for i in range(len(fields)):
-            if i > 0:
-                line = line[:-1] + ' '
-            line += str(fields[i])
-            line = line[:positions[i]]
-            line += ' ' * (positions[i] - len(line))
-        print_fn(line)
-    
-    
-def test_fashion_mnist():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
-        assert len(x_train) == len(y_train) == 60000
-        assert len(x_test) == len(y_test) == 10000
-    
-            # Prepare gradient updates and state updates.
-        self.total_loss = total_loss
-        self.sample_weights = sample_weights
-        self._feed_sample_weights = []
-        for i in range(len(self.sample_weights)):
-            if i not in skip_target_weighing_indices:
-                self._feed_sample_weights.append(sample_weights[i])
-    
-        # Cut to a 40x40 window
-    noisy_movies = noisy_movies[::, ::, 20:60, 20:60, ::]
-    shifted_movies = shifted_movies[::, ::, 20:60, 20:60, ::]
-    noisy_movies[noisy_movies >= 1] = 1
-    shifted_movies[shifted_movies >= 1] = 1
-    return noisy_movies, shifted_movies
-    
-        for qualified, server, _, _ in server_list:
-        if qualified:
-            best_server = server[0]
-            break
-    log = Log()
-    if best_server:
-        log.write('best server is: %s.' % best_server)
-    else:
-        xlog.warning('no server detected, return default: teredo.remlab.net.')
-        log.write('no server detected, return default: teredo.remlab.net.')
-        best_server = 'teredo.remlab.net'
-    log.close()
-    return best_server
-    
-    noarch_lib = os.path.abspath( os.path.join(python_path, 'lib', 'noarch'))
-sys.path.append(noarch_lib)
-    
-            fn = os.path.join(current_path, 'sni_slice.txt')
-        self.slice = RandomGetSlice(fn, 20, '|')
-    
-    
-class RC4FileObject(object):
-    '''fileobj for rc4'''
-    def __init__(self, stream, key):
-        self.__stream = stream
-        self.__cipher = _Crypto_Cipher_ARC4_new(key) if key else lambda x:x
-    def __getattr__(self, attr):
-        if attr not in ('__stream', '__cipher'):
-            return getattr(self.__stream, attr)
-    def read(self, size=-1):
-        return self.__cipher.encrypt(self.__stream.read(size))
-    
-                # Is there a bitwise operation to do this?
-            if v == 0xFFFF:
-                v = -1
-    
-    TIMEOUT_SECONDS = 0.1
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    
-def MultipleFilterTypesTypeTest_test():
-    
-    
-@patch( 'ycm.vimsupport.GetVariableValue',
-        GetVariableValue_CompleteItemIs( 'Test', user_data='' ) )
-def GetCompletionsUserMayHaveCompleted_EmptyUserData_test( *args ):
-  # Identical completions but none is selected.
-  completions = [
-    BuildCompletionNamespace( 'namespace1' ),
-    BuildCompletionNamespace( 'namespace2' )
-  ]
+        data = Data()
