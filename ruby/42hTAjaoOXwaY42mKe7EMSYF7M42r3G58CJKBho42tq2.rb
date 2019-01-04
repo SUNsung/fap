@@ -1,202 +1,176 @@
 
         
-              if @actions_requiring_special_handling.include?(action_name)
-        command_return = run_action_requiring_special_handling(
-          command: command,
-          parameter_map: parameter_map,
-          action_return_type: action_class_ref.return_type
-        )
-        return command_return
-      end
+            You can read more about this change at:
+      https://www.playframework.com/documentation/2.3.x/Migration23
+      https://www.playframework.com/documentation/2.3.x/Highlights23
+    EOS
+  when 'haskell-platform' then <<-EOS.undent
+    We no longer package haskell-platform. Consider installing ghc
+    and cabal-install instead:
+      brew install ghc cabal-install
     
-        def handle_tls_error!(e)
-      # Apple has upgraded its App Store Connect servers to require TLS 1.2, but
-      # system Ruby 2.0 does not support it. We want to suggest that users upgrade
-      # their Ruby version
-      suggest_ruby_reinstall(e)
-      display_user_error!(e, e.to_s)
+    module Homebrew
+  def build_env_keys(env)
+    %w[
+      CC CXX LD OBJC OBJCXX
+      HOMEBREW_CC HOMEBREW_CXX
+      CFLAGS CXXFLAGS CPPFLAGS LDFLAGS SDKROOT MAKEFLAGS
+      CMAKE_PREFIX_PATH CMAKE_INCLUDE_PATH CMAKE_LIBRARY_PATH CMAKE_FRAMEWORK_PATH
+      MACOSX_DEPLOYMENT_TARGET PKG_CONFIG_PATH PKG_CONFIG_LIBDIR
+      HOMEBREW_DEBUG HOMEBREW_MAKE_JOBS HOMEBREW_VERBOSE
+      HOMEBREW_SVN HOMEBREW_GIT
+      HOMEBREW_SDKROOT HOMEBREW_BUILD_FROM_SOURCE
+      MAKE GIT CPP
+      ACLOCAL_PATH PATH CPATH].select { |key| env.key?(key) }
+  end
+    
+      def elisp_caveats
+    return if f.keg_only?
+    if keg && keg.elisp_installed?
+      <<-EOS.undent
+        Emacs Lisp files have been installed to:
+          #{HOMEBREW_PREFIX}/share/emacs/site-lisp/#{f.name}
+      EOS
+    end
+  end
+    
+      def describe_system_ruby
+    s = ''
+    case RUBY_VERSION
+    when /^1\.[89]/, /^2\.0/
+      s << '#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}'
+    else
+      s << RUBY_VERSION
     end
     
-          def self.available_options
-        [
-          FastlaneCore::ConfigItem.new(key: :tag,
-                                       env_name: 'FL_GIT_TAG_TAG',
-                                       description: 'Define your own tag text. This will replace all other parameters',
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :grouping,
-                                       env_name: 'FL_GIT_TAG_GROUPING',
-                                       description: 'Is used to keep your tags organised under one 'folder'',
-                                       default_value: 'builds'),
-          FastlaneCore::ConfigItem.new(key: :prefix,
-                                       env_name: 'FL_GIT_TAG_PREFIX',
-                                       description: 'Anything you want to put in front of the version number (e.g. 'v')',
-                                       default_value: ''),
-          FastlaneCore::ConfigItem.new(key: :postfix,
-                                       env_name: 'FL_GIT_TAG_POSTFIX',
-                                       description: 'Anything you want to put at the end of the version number (e.g. '-RC1')',
-                                       default_value: ''),
-          FastlaneCore::ConfigItem.new(key: :build_number,
-                                       env_name: 'FL_GIT_TAG_BUILD_NUMBER',
-                                       description: 'The build number. Defaults to the result of increment_build_number if you\'re using it',
-                                       default_value: Actions.lane_context[Actions::SharedValues::BUILD_NUMBER],
-                                       default_value_dynamic: true,
-                                       is_string: false),
-          FastlaneCore::ConfigItem.new(key: :message,
-                                       env_name: 'FL_GIT_TAG_MESSAGE',
-                                       description: 'The tag message. Defaults to the tag's name',
-                                       default_value_dynamic: true,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :commit,
-                                       env_name: 'FL_GIT_TAG_COMMIT',
-                                       description: 'The commit or object where the tag will be set. Defaults to the current HEAD',
-                                       default_value_dynamic: true,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :force,
-                                       env_name: 'FL_GIT_TAG_FORCE',
-                                       description: 'Force adding the tag',
-                                       optional: true,
-                                       is_string: false,
-                                       default_value: false),
-          FastlaneCore::ConfigItem.new(key: :sign,
-                                       env_name: 'FL_GIT_TAG_SIGN',
-                                       description: 'Make a GPG-signed tag, using the default e-mail address's key',
-                                       optional: true,
-                                       is_string: false,
-                                       default_value: false)
-        ]
+      def search
+    if ARGV.empty?
+      puts_columns Formula.full_names
+    elsif ARGV.include? '--macports'
+      exec_browser 'https://www.macports.org/ports.php?by=name&substr=#{ARGV.next}'
+    elsif ARGV.include? '--fink'
+      exec_browser 'http://pdb.finkproject.org/pdb/browse.php?summary=#{ARGV.next}'
+    elsif ARGV.include? '--debian'
+      exec_browser 'https://packages.debian.org/search?keywords=#{ARGV.next}&searchon=names&suite=all&section=all'
+    elsif ARGV.include? '--opensuse'
+      exec_browser 'https://software.opensuse.org/search?q=#{ARGV.next}'
+    elsif ARGV.include? '--fedora'
+      exec_browser 'https://admin.fedoraproject.org/pkgdb/packages/%2A#{ARGV.next}%2A/'
+    elsif ARGV.include? '--ubuntu'
+      exec_browser 'http://packages.ubuntu.com/search?keywords=#{ARGV.next}&searchon=names&suite=all&section=all'
+    elsif ARGV.include? '--desc'
+      query = ARGV.next
+      rx = query_regexp(query)
+      Descriptions.search(rx, :desc).print
+    elsif ARGV.first =~ HOMEBREW_TAP_FORMULA_REGEX
+      query = ARGV.first
+      user, repo, name = query.split('/', 3)
+    
+        @report
+  end
+    
+    module Gitlab
+  module Ci
+    module Pipeline
+      # Class for preloading data associated with pipelines such as commit
+      # authors.
+      class Preloader
+        def self.preload!(pipelines)
+          ##
+          # This preloads all commits at once, because `Ci::Pipeline#commit` is
+          # using a lazy batch loading, what results in only one batched Gitaly
+          # call.
+          #
+          pipelines.each(&:commit)
+    
+            def id_for_already_imported_cache(note)
+          note.id
+        end
       end
-    
-          it 'generates the correct git command with shell-escaped-paths' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          git_commit(path: ['./fastlane/README.md', './LICENSE', './fastlane/spec/fixtures/git_commit/A FILE WITH SPACE'], message: 'message')
-        end').runner.execute(:test)
-    
-          if new_email != @user.email
-        @user.update!(
-          unconfirmed_email: new_email,
-          # Regenerate the confirmation token:
-          confirmation_token: nil
-        )
-    
-        def resource_params
-      params.require(:email_domain_block).permit(:domain)
     end
   end
 end
 
     
-      def verified_domain
-    return signed_request_account.domain if signed_request_account
+            def execute
+          create_labels
+        end
+    
+            # Builds a new issue using a Hash that was built from a JSON payload.
+        def self.from_json_hash(raw_hash)
+          hash = Representation.symbolize_hash(raw_hash)
+    
+            def cross_project?
+          return true unless source_repository_id
+    
+      #
+  # Returns a hash of variables that contain information about the request,
+  # such as the remote host information.
+  #
+  # TODO
+  #
+  def meta_vars
   end
     
-      def subscription_params
-    params.require(:subscription).permit(:endpoint, keys: [:auth, :p256dh])
-  end
+    module Rex
+  module Proto
+    module Kerberos
+      module Crypto
+        module Rc4Hmac
+          # Decrypts the cipher using RC4-HMAC schema
+          #
+          # @param cipher [String] the data to decrypt
+          # @param key [String] the key to decrypt
+          # @param msg_type [Integer] the message type
+          # @return [String] the decrypted cipher
+          # @raise [RuntimeError] if decryption doesn't succeed
+          def decrypt_rc4_hmac(cipher, key, msg_type)
+            unless cipher && cipher.length > 16
+              raise ::RuntimeError, 'RC4-HMAC decryption failed'
+            end
     
-      private
-    
-        def servers
-      @servers ||= Servers.new
-    end
-    
-            @response = (gets || '').chomp
-      end
-    
-          # rubocop:disable Security/MarshalLoad
-      def add_role(role, hosts, options={})
-        options_deepcopy = Marshal.dump(options.merge(roles: role))
-        Array(hosts).each { |host| add_host(host, Marshal.load(options_deepcopy)) }
-      end
-      # rubocop:enable Security/MarshalLoad
-    
-    module Capistrano
-  class Configuration
-    # Holds the variables assigned at Capistrano runtime via `set` and retrieved
-    # with `fetch`. Does internal bookkeeping to help identify user mistakes
-    # like spelling errors or unused variables that may lead to unexpected
-    # behavior.
-    class Variables
-      CAPISTRANO_LOCATION = File.expand_path('../..', __FILE__).freeze
-      IGNORED_LOCATIONS = [
-        '#{CAPISTRANO_LOCATION}/configuration/variables.rb:',
-        '#{CAPISTRANO_LOCATION}/configuration.rb:',
-        '#{CAPISTRANO_LOCATION}/dsl/env.rb:',
-        '/dsl.rb:',
-        '/forwardable.rb:'
-      ].freeze
-      private_constant :CAPISTRANO_LOCATION, :IGNORED_LOCATIONS
-    
-    module LogStash module PluginManager module PackFetchStrategy
-  class Repository
-    DEFAULT_PACK_URL = 'https://artifacts.elastic.co/downloads/logstash-plugins'
-    PACK_EXTENSION = 'zip'
-    
-        private
-    def uncompress(source)
-      temporary_directory = Stud::Temporary.pathname
-      LogStash::Util::Zip.extract(source, temporary_directory, LOGSTASH_PATTERN_RE)
-      temporary_directory
-    rescue Zip::Error => e
-      # OK Zip's handling of file is bit weird, if the file exist but is not a valid zip, it will raise
-      # a `Zip::Error` exception with a file not found message...
-      raise InvalidPackError, 'Cannot uncompress the zip: #{source}'
-    end
-    
-        platforms.types.each do |type|
-      desc 'Run acceptance test in #{type} machines'
-      task type do
-        ENV['LS_TEST_PLATFORM']=type
-        exit(RSpec::Core::Runner.run([Rake::FileList['acceptance/spec/lib/*_spec.rb']]))
+              # Encodes the authenticator field
+          #
+          # @return [String]
+          def encode_authenticator
+            authenticator.encode
+          end
+        end
       end
     end
-    
-          it 'detects closing brace on different line from last element' do
-        src = construct(false, true)
-        inspect_source(src)
-    
-        context 'and a comment after the last element' do
-      let(:b_comment) { ' # comment b' }
-    
-          # Returns an array of all the when branches in the `case` statement.
-      #
-      # @return [Array<WhenNode>] an array of `when` nodes
-      def when_branches
-        node_parts[1...-1]
-      end
-    
-          # Checks whether the `for` node has a `do` keyword.
-      #
-      # @return [Boolean] whether the `for` node has a `do` keyword
-      def do?
-        loc.begin && loc.begin.is?('do')
-      end
-    
-          # Checks whether the `if` is an `elsif`. Parser handles these by nesting
-      # `if` nodes in the `else` branch.
-      #
-      # @return [Boolean] whether the node is an `elsif`
-      def elsif?
-        keyword == 'elsif'
-      end
-    
-    desc 'Test the paperclip plugin under all supported Rails versions.'
-task :all do |t|
-  if ENV['BUNDLE_GEMFILE']
-    exec('rake spec && cucumber')
-  else
-    exec('rm -f gemfiles/*.lock')
-    Rake::Task['appraisal:gemfiles'].execute
-    Rake::Task['appraisal:install'].execute
-    exec('rake appraisal')
   end
 end
     
-    Given /^I update my user view to include the attachment$/ do
-  steps %{
-    Given I overwrite 'app/views/users/show.html.erb' with:
-      '''
-      <p>Name: <%= @user.name %></p>
-      <p>Attachment: <%= image_tag @user.attachment.url %></p>
-      '''
-  }
+              # Encodes the data
+          #
+          # @return [OpenSSL::ASN1::OctetString]
+          def encode_data(data)
+            OpenSSL::ASN1::OctetString.new(data)
+          end
+        end
+      end
+    end
+  end
 end
+    
+              private
+    
+              # Encodes the value field
+          #
+          # @return [OpenSSL::ASN1::OctetString]
+          def encode_value
+            OpenSSL::ASN1::OctetString.new(value)
+          end
+        end
+      end
+    end
+  end
+end
+    
+              # Decodes the realm field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [String]
+          def decode_realm(input)
+            input.value[0].value
+          end
