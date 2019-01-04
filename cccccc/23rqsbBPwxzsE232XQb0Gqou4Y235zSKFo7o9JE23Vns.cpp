@@ -1,346 +1,161 @@
 
         
-        EnumGenerator::EnumGenerator(const EnumDescriptor* descriptor, const Options* options) :
-    SourceGeneratorBase(descriptor->file(), options),
-    descriptor_(descriptor) {
+        #include 'atom/browser/render_process_preferences.h'
+#include 'native_mate/handle.h'
+#include 'native_mate/wrappable.h'
+    
+      static void BuildPrototype(v8::Isolate* isolate,
+                             v8::Local<v8::FunctionTemplate> prototype);
+    
+      // download::DownloadItem::Observer:
+  void OnDownloadUpdated(download::DownloadItem* item) override;
+    
+    
+    {  // We need to handle SIGTERM, because that is how many POSIX-based distros ask
+  // processes to quit gracefully at shutdown time.
+  struct sigaction action;
+  memset(&action, 0, sizeof(action));
+  action.sa_handler = SIGTERMHandler;
+  CHECK_EQ(sigaction(SIGTERM, &action, nullptr), 0);
+  // Also handle SIGINT - when the user terminates the browser via Ctrl+C. If
+  // the browser process is being debugged, GDB will catch the SIGINT first.
+  action.sa_handler = SIGINTHandler;
+  CHECK_EQ(sigaction(SIGINT, &action, nullptr), 0);
+  // And SIGHUP, for when the terminal disappears. On shutdown, many Linux
+  // distros send SIGHUP, SIGTERM, and then SIGKILL.
+  action.sa_handler = SIGHUPHandler;
+  CHECK_EQ(sigaction(SIGHUP, &action, nullptr), 0);
 }
     
-      for (string::size_type i = 0; i < input.size(); i++) {
-    char c = input[i];
-    switch (c) {
-      case '*':
-        // Avoid '/*'.
-        if (prev == '/') {
-          result.append('&#42;');
-        } else {
-          result.push_back(c);
-        }
-        break;
-      case '/':
-        // Avoid '*/'.
-        if (prev == '*') {
-          result.append('&#47;');
-        } else {
-          result.push_back(c);
-        }
-        break;
-      case '@':
-        // '@' starts javadoc tags including the @deprecated tag, which will
-        // cause a compile-time error if inserted before a declaration that
-        // does not have a corresponding @Deprecated annotation.
-        result.append('&#64;');
-        break;
-      case '<':
-        // Avoid interpretation as HTML.
-        result.append('&lt;');
-        break;
-      case '>':
-        // Avoid interpretation as HTML.
-        result.append('&gt;');
-        break;
-      case '&':
-        // Avoid interpretation as HTML.
-        result.append('&amp;');
-        break;
-      case '\\':
-        // Java interprets Unicode escape sequences anywhere!
-        result.append('&#92;');
-        break;
-      default:
-        result.push_back(c);
-        break;
-    }
-    }
+    #ifndef ATOM_BROWSER_ATOM_JAVASCRIPT_DIALOG_MANAGER_H_
+#define ATOM_BROWSER_ATOM_JAVASCRIPT_DIALOG_MANAGER_H_
     
-    // Check whether a given message or its nested types has the given class name.
-bool MessageHasConflictingClassName(const Descriptor* message,
-                                    const string& classname) {
-  if (message->name() == classname) return true;
-  for (int i = 0; i < message->nested_type_count(); ++i) {
-    if (MessageHasConflictingClassName(message->nested_type(i), classname)) {
-      return true;
-    }
-  }
-  for (int i = 0; i < message->enum_type_count(); ++i) {
-    if (message->enum_type(i)->name() == classname) {
-      return true;
-    }
-  }
-  return false;
+    void ChannelArguments::SetSslTargetNameOverride(const grpc::string& name) {
+  SetString(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG, name);
 }
     
+    #include <grpc/support/port_platform.h>
     
-// Death tests do not work on Windows as of yet.
-#ifdef PROTOBUF_HAS_DEATH_TEST
-TEST(ObjCHelperDeathTest, TextFormatDecodeData_Failures) {
-  TextFormatDecodeData decode_data;
-    }
+    constexpr size_t TraceContextEncoding::kGrpcTraceContextSize;
+constexpr size_t TraceContextEncoding::kEncodeDecodeFailure;
+constexpr size_t TraceContextEncoding::kVersionIdSize;
+constexpr size_t TraceContextEncoding::kFieldIdSize;
+constexpr size_t TraceContextEncoding::kVersionIdOffset;
+constexpr size_t TraceContextEncoding::kVersionId;
     
-    static inline int internalInflateInit2(
-    z_stream* zcontext, GzipInputStream::Format format) {
-  int windowBitsFormat = 0;
-  switch (format) {
-    case GzipInputStream::GZIP: windowBitsFormat = 16; break;
-    case GzipInputStream::AUTO: windowBitsFormat = 32; break;
-    case GzipInputStream::ZLIB: windowBitsFormat = 0; break;
+      ::opencensus::trace::SpanContext ToSpanContext() const {
+    return ::opencensus::trace::SpanContext(
+        ::opencensus::trace::TraceId(trace_id),
+        ::opencensus::trace::SpanId(span_id),
+        ::opencensus::trace::TraceOptions(trace_options));
   }
-  return inflateInit2(zcontext, /* windowBits */15 | windowBitsFormat);
+    
+    const ViewDescriptor& ServerReceivedMessagesPerRpcCumulative() {
+  const static ViewDescriptor descriptor =
+      ViewDescriptor()
+          .set_name('grpc.io/server/sent_messages_per_rpc/cumulative')
+          .set_measure(kRpcServerReceivedMessagesPerRpcMeasureName)
+          .set_aggregation(CountDistributionAggregation())
+          .add_column(ServerMethodTagKey());
+  return descriptor;
 }
     
-    /*!
- * Copyright (c) 2016 by Contributors
- * \file caffe_blob.cc
- * \brief Implementations of SetDataGradToBlob given various device/dimension
- * \author Haoran Wang
-*/
-#include 'caffe_blob.h'
-namespace mxnet {
-namespace op {
-namespace caffe {
-    }
-    }
-    }
+    #include 'src/core/lib/gprpp/thd.h'
+#include 'src/cpp/server/thread_pool_interface.h'
     
-    template <typename Dtype>
-class LayerRegistry {
- public:
-  static ::caffe::Layer<Dtype> * CreateLayer(const ::caffe::LayerParameter& param) {
-    ::caffe::shared_ptr< ::caffe::Layer<Dtype> > ptr =
-      ::caffe::LayerRegistry<Dtype>::CreateLayer(param);
-    // avoid caffe::layer destructor, which deletes the weights layer owns
-    new ::caffe::shared_ptr< ::caffe::Layer<Dtype> >(ptr);
-    return ptr.get();
-  }
-};
-    
-      std::vector<std::string> ListOutputs() const override {
-    if (param_.num_out > 1) {
-      std::vector<std::string> ret;
-      for (int i = 0; i < param_.num_out; ++i)
-        ret.push_back('output' + std::to_string(i));
-      return ret;
-    } else {
-      return {'output'};
-    }
-  }
-    
-    
-MXNET_DLL int MXCVResize(NDArrayHandle src, const mx_uint w, const mx_uint h,
-                         const int interpolation, NDArrayHandle *out) {
-  API_BEGIN();
-  NDArray ndsrc = *static_cast<NDArray*>(src);
-  CHECK_EQ(ndsrc.shape().ndim(), 3);
-  CHECK_EQ(ndsrc.ctx(), Context::CPU());
-  CHECK_EQ(ndsrc.dtype(), mshadow::kUint8);
-    }
-    
-    /*!
- * Copyright (c) 2015 by Contributors
- * \file threaded_engine_pooled.cc
- * \brief Pooled threaded engine
- * \author Yutian Li
- */
-#include <dmlc/base.h>
-#include <dmlc/logging.h>
-#include <dmlc/concurrency.h>
-#include <cassert>
-#include <utility>
-#include './threaded_engine.h'
-#include './thread_pool.h'
-#include './stream_manager.h'
-    
-    /*!
- * Copyright (c) 2016 by Contributors
- * \file inplace_addto_detect_pass.cc
- * \brief Detect whether inplace addto operation is possible for certain op.
- */
-#include <mxnet/base.h>
-#include <mxnet/operator.h>
-#include <mxnet/op_attr_types.h>
-#include <nnvm/graph_attr_types.h>
-    
-     private:
-  void create() {
-    CHECK(tensor_container_ == nullptr);
-    CHECK_EQ(this->dev_mask(), mshadow::cpu::kDevMask);
-    MSHADOW_TYPE_SWITCH(this->type_flag_, DType, {
-        auto tensor_container = new mshadow::TensorContainer<mshadow::cpu, 1, DType>(false);
-        tensor_container->Resize(mshadow::Shape1(shape_.Size()));
-        dptr_ = tensor_container->dptr_;
-        tensor_container_ = tensor_container;
-    });
-  }
-  void resize() {
-    MSHADOW_TYPE_SWITCH(this->type_flag_, DType, {
-        auto tensor_container =
-          (mshadow::TensorContainer<mshadow::cpu, 1, DType>*) tensor_container_;
-        tensor_container->Resize(mshadow::Shape1(shape_.Size()));
-    });
-  }
-  void release() {
-    MSHADOW_TYPE_SWITCH(this->type_flag_, DType, {
-        auto tensor_container =
-          (mshadow::TensorContainer<mshadow::cpu, 1, DType>*) tensor_container_;
-        delete tensor_container;
-    });
-  }
-    
-    void SearchIterator::setText(const UnicodeString &text, UErrorCode &status)
-{
-    if (U_SUCCESS(status)) {
-        if (text.length() == 0) {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-        }
-        else {
-            m_text_        = text;
-            m_search_->text = m_text_.getBuffer();
-            m_search_->textLength = m_text_.length();
-        }
-    }
-}
-    
-    #if !UCONFIG_NO_FORMATTING
-    
-    class Calendar;
-    
-    #endif
+    #endif  // GRPC_SRC_CPP_SERVER_LOAD_REPORTER_GET_CPU_STATS_H
 
     
-    /**
- * An interval of allowed significant digit counts.
- */
-class U_I18N_API SignificantDigitInterval : public UMemory {
-public:
-    }
+    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
+  uint64_t busy = 0, total = 0;
+  FILE* fp;
+  fp = fopen('/proc/stat', 'r');
+  uint64_t user, nice, system, idle;
+  fscanf(fp, 'cpu %lu %lu %lu %lu', &user, &nice, &system, &idle);
+  fclose(fp);
+  busy = user + nice + system;
+  total = busy + idle;
+  return std::make_pair(busy, total);
+}
     
-    U_NAMESPACE_BEGIN
+    
+    {
+    {}}
     
     
-    {    /**
-     * Formats positiveValue using the given range of digit counts.
-     * Always uses standard digits '0' through '9'. Formatted value is
-     * left padded with '0' as necessary to achieve minimum digit count.
-     * Does not produce any grouping separators or trailing decimal point.
-     * Calling format to format a value with a particular digit count range
-     * when canFormat indicates that the same value and digit count range
-     * cannot be formatted results in undefined behavior.
-     *
-     * @param positiveValue the value to format
-     * @param range the acceptable range of digit counts.
-     */
-    static UnicodeString &format(
-            int32_t positiveValue,
-            const IntDigitCountRange &range,
-            UnicodeString &appendTo);
-    
+    {  req::ptr<File> open(const String& filename, const String& mode, int options,
+                      const req::ptr<StreamContext>& context) override;
 };
     
-    const char *StandardPlural::getKeyword(Form p) {
-    U_ASSERT(ZERO <= p && p < COUNT);
-    return gKeywords[p];
-}
-    
-    #if !UCONFIG_NO_TRANSLITERATION
-    
-    //
-// EaseRateAction
-//
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    __CCCallFuncO * __CCCallFuncO::clone() const
-{
-    // no copy constructor
-    auto a = new (std::nothrow) __CCCallFuncO();
-    
-    if( _selectorTarget)
-    {
-        a->initWithTarget(_selectorTarget, _callFuncO, _object);
-    }
-    
-    a->autorelease();
-    return a;
-}
-    
-    struct _hashElement;
-    
-    #endif // __ACTION_CCPAGETURN3D_ACTION_H__
-
-    
-    
-    {
-    {
-    {            setTile(Vec2(i, j), coords);
-        }
-    }
-}
-    
-    AnimationFrame* AnimationFrame::create(SpriteFrame* spriteFrame, float delayUnits, const ValueMap& userInfo)
-{
-    auto ret = new (std::nothrow) AnimationFrame();
-    if (ret && ret->initWithSpriteFrame(spriteFrame, delayUnits, userInfo))
-    {
-        ret->autorelease();
-    }
-    else
-    {
-        CC_SAFE_DELETE(ret);
-    }
-    return ret;
-}
-    
-    
-    {    /**  A AnimationFrameDisplayedNotification notification will be broadcast when the frame is displayed with this dictionary as UserInfo. If UserInfo is nil, then no notification will be broadcast. */
-    ValueMap _userInfo;
-    
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(AnimationFrame);
-};
-    
-    #include 'modules/canbus/proto/chassis_detail.pb.h'
-#include 'modules/drivers/canbus/can_comm/protocol_data.h'
-    
-    int ClusterQualityInfo702::lateral_dist_rms(const std::uint8_t* bytes,
-                                            int32_t length) const {
-  Byte t0(bytes + 1);
-  int32_t x = t0.get_byte(0, 3);
-    }
-    
-    int RadarState201::radar_power(const std::uint8_t* bytes,
-                               int32_t length) const {
-  Byte t0(bytes + 3);
-  uint32_t x = t0.get_byte(0, 2);
-    }
-    
-    TEST_F(PncMapTest, GetRouteSegments_NoChangeLane) {
-  auto lane = hdmap_.GetLaneById(hdmap::MakeMapId('9_1_-2'));
-  ASSERT_TRUE(lane);
-  auto point = lane->GetSmoothPoint(0);
-  common::VehicleState state;
-  state.set_x(point.x());
-  state.set_y(point.y());
-  state.set_z(point.y());
-  state.set_heading(M_PI);
-  std::list<RouteSegments> segments;
-  ASSERT_TRUE(pnc_map_->GetRouteSegments(state, 10, 30, &segments));
-  // first time on this passage, should not immediately change lane
-  ASSERT_EQ(2, segments.size());
-  EXPECT_NEAR(40, RouteLength(segments.front()), 1e-4);
-  EXPECT_NEAR(40, RouteLength(segments.back()), 1e-4);
-  EXPECT_EQ(routing::LEFT, segments.front().NextAction());
-  EXPECT_TRUE(segments.front().IsOnSegment());
-  EXPECT_EQ(routing::RIGHT, segments.back().NextAction());
-  EXPECT_FALSE(segments.back().IsOnSegment());
-}
-    
-    
-    {
-    {    prev_trajectory_point = trajectory_point.path_point();
+      // only accept paths with the glob:// prefix
+  if (strncmp(path_str, prefix, strlen(prefix)) != 0) {
+    return nullptr;
   }
-  return combined_trajectory;
-}
+    
+    
+    {protected:
+  bool closeImpl();
+};
+    
+    /*
+ * If the given AtomicHashMap has more than one submap allocated, log a perf
+ * warning with its name.
+ *
+ * A single unique done flag should exist for each map being checked, to avoid
+ * logging more than once (process, map) pair.
+ */
+template<typename AHM>
+void checkAHMSubMaps(const AHM& map, folly::StringPiece mapName,
+                     std::atomic<bool>& done);
+    
+        // Build atlas
+    unsigned char* tex_pixels = NULL;
+    int tex_w, tex_h;
+    io.Fonts->GetTexDataAsRGBA32(&tex_pixels, &tex_w, &tex_h);
+    
+    //---- Don't implement demo windows functionality (ShowDemoWindow()/ShowStyleEditor()/ShowUserGuide() methods will be empty)
+//---- It is very strongly recommended to NOT disable the demo windows during development. Please read the comments in imgui_demo.cpp.
+//#define IMGUI_DISABLE_DEMO_WINDOWS
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        // Create custom vertex declaration.
+    // Unfortunately Allegro doesn't support 32-bits packed colors so we have to convert them to 4 floats.
+    // We still use a custom declaration to use 'ALLEGRO_PRIM_TEX_COORD' instead of 'ALLEGRO_PRIM_TEX_COORD_PIXEL' else we can't do a reliable conversion.
+    ALLEGRO_VERTEX_ELEMENT elems[] =
+    {
+        { ALLEGRO_PRIM_POSITION, ALLEGRO_PRIM_FLOAT_2, IM_OFFSETOF(ImDrawVertAllegro, pos) },
+        { ALLEGRO_PRIM_TEX_COORD, ALLEGRO_PRIM_FLOAT_2, IM_OFFSETOF(ImDrawVertAllegro, uv) },
+        { ALLEGRO_PRIM_COLOR_ATTR, 0, IM_OFFSETOF(ImDrawVertAllegro, col) },
+        { 0, 0, 0 }
+    };
+    g_VertexDecl = al_create_vertex_decl(elems, sizeof(ImDrawVertAllegro));
+    
+    // Include OpenGL header (without an OpenGL loader) requires a bit of fiddling
+#if defined(_WIN32) && !defined(APIENTRY)
+#define APIENTRY __stdcall                  // It is customary to use APIENTRY for OpenGL function pointer declarations on all platforms.  Additionally, the Windows OpenGL header needs APIENTRY.
+#endif
+#if defined(_WIN32) && !defined(WINGDIAPI)
+#define WINGDIAPI __declspec(dllimport)     // Some Windows OpenGL headers need this
+#endif
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
+    
+            // 3. Show another simple window.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
+    
+        // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();
