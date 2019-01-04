@@ -1,50 +1,40 @@
 
         
-            if self._response_future is None:
-      # First poll
-      self._SendRequest()
-      return True
+            Requests that produced this error are safe to retry.
+    '''
+    
+    import pytest
+from requests.compat import urljoin
+    
+    import pytest
+    
+        Provide both the name and the version of the Python implementation
+    currently running. For example, on CPython 2.7.5 it will return
+    {'name': 'CPython', 'version': '2.7.5'}.
+    
+    # TODO: response is the only one
     
     
-def SendShutdownRequest():
-  request = ShutdownRequest()
-  # This is a blocking call.
-  request.Start()
-
+def test_system_ssl():
+    '''Verify we're actually setting system_ssl when it should be available.'''
+    assert info()['system_ssl']['version'] != ''
     
-        # build a new DiagnosticFilter merging all filters
-    #  for the provided filetypes
-    spec = []
-    for filetype in filetypes:
-      type_specific = self._all_filters.get( filetype, [] )
-      spec.extend( type_specific )
+            return request_content
+    
+    # If true, keep warnings as 'system message' paragraphs in the built documents.
+#keep_warnings = False
     
     
-def LastEnteredCharIsIdentifierChar_FiletypeHtml_test():
-  with MockCurrentFiletypes( [ 'html' ] ):
-    with MockCurrentColumnAndLineContents( 3, 'ab-' ):
-      ok_( base.LastEnteredCharIsIdentifierChar() )
+def prepend_scheme_if_needed(url, new_scheme):
+    '''Given a URL that may or may not have a scheme, prepend the given scheme.
+    Does not replace a present scheme with the one provided as an argument.
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+    # In a real program you'd get the filename from the arguments.
+with open('outgoing.msg', 'rb') as fp:
+    msg = BytesParser(policy=policy.default).parse(fp)
     
+    '''Unpack a MIME message into a directory of files.'''
     
-def MockAsyncServerResponseDone( response ):
-  '''Return a fake future object that is complete with the supplied response
-  message. Suitable for mocking a response future within a client request. For
-  example:
-    
-        open_filename.assert_has_exact_calls( [
-      call( ycm._server_stdout, { 'size': 12,
-                                  'watch': True,
-                                  'fix': True,
-                                  'focus': False,
-                                  'position': 'end' } )
-    ] )
-    close_buffers_for_filename.assert_has_exact_calls( [
-      call( ycm._client_logfile )
-    ] )
+    def convert_point(s):
+    x, y = list(map(float, s.split(b';')))
+    return Point(x, y)
