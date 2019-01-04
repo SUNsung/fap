@@ -1,119 +1,158 @@
 
         
-        '''
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-l', '--list', dest='list', action='store_true',
-                          help='only list contracts, without checking them')
-        parser.add_option('-v', '--verbose', dest='verbose', default=False, action='store_true',
-                          help='print contract tests for all spiders')
-    
-        def long_desc(self):
-        return ('Edit a spider using the editor defined in the EDITOR environment'
-                ' variable or else the EDITOR setting')
-    
-                # backward-compatible SSL/TLS method:
-            #
-            # * this will respect `method` attribute in often recommended
-            #   `ScrapyClientContextFactory` subclass
-            #   (https://github.com/scrapy/scrapy/issues/1429#issuecomment-131782133)
-            #
-            # * getattr() for `_ssl_method` attribute for context factories
-            #   not calling super(..., self).__init__
-            return CertificateOptions(verify=False,
-                        method=getattr(self, 'method',
-                                       getattr(self, '_ssl_method', None)),
-                        fixBrokenPeers=True,
-                        acceptableCiphers=DEFAULT_CIPHERS)
-    
-                    except ValueError as e:
-                    logger.warning(
-                        'Ignoring error while verifying certificate '
-                        'from host '{}' (exception: {})'.format(
-                            self._hostnameASCII, repr(e)))
-    
-    ### OUTPUT ###
-# dog σκύλος
-# parrot parrot
-# cat γάτα
-# bear bear
-
-    
-    '''
-Reference: https://en.wikipedia.org/wiki/Delegation_pattern
-Author: https://github.com/IuryAlves
-    
-    from __future__ import print_function
-import os
-from os.path import lexists
-    
-    print()
+            z_logvar_1xn = \
+        tf.get_variable(name=(name+'/logvar'), shape=size_1xn,
+                        initializer=tf.constant_initializer(log_var_init),
+                        trainable=var_is_trainable)
     
     
-### OUTPUT ###
-# <NumObj: -1>
-# <NumObj: 0>
-# <NumObj: 1>
-# <NumObj: 2>
-# -- committed
-# <NumObj: 3>
-# <NumObj: 4>
-# <NumObj: 5>
-# -- rolled back
-# <NumObj: 2>
-# -- now doing stuff ...
-# -> doing stuff failed!
-# Traceback (most recent call last):
-# File 'memento.py', line 97, in <module>
-#     num_obj.do_stuff()
-#   File 'memento.py', line 52, in transaction
-#     raise e
-#   File 'memento.py', line 49, in transaction
-#     return self.method(obj, *args, **kwargs)
-#   File 'memento.py', line 70, in do_stuff
-#     self.increment()     # <- will fail and rollback
-#   File 'memento.py', line 65, in increment
-#     self.value += 1
-# TypeError: Can't convert 'int' object to str implicitly
-# <NumObj: 2>
-
+# OPTIMIZATION
+flags.DEFINE_integer('batch_size', BATCH_SIZE,
+                     'Batch size to use during training.')
+flags.DEFINE_float('learning_rate_init', LEARNING_RATE_INIT,
+                   'Learning rate initial value')
+flags.DEFINE_float('learning_rate_decay_factor', LEARNING_RATE_DECAY_FACTOR,
+                   'Learning rate decay, decay by this fraction every so \
+                   often.')
+flags.DEFINE_float('learning_rate_stop', LEARNING_RATE_STOP,
+                   'The lr is adaptively reduced, stop training at this value.')
+# Rather put the learning rate on an exponentially decreasiong schedule,
+# the current algorithm pays attention to the learning rate, and if it
+# isn't regularly decreasing, it will decrease the learning rate.  So far,
+# it works fine, though it is not perfect.
+flags.DEFINE_integer('learning_rate_n_to_compare', LEARNING_RATE_N_TO_COMPARE,
+                     'Number of previous costs current cost has to be worse \
+                     than, to lower learning rate.')
+    
+      Returns:
+    The dataset structures, with the field alignment_matrix_cxf added.
+    This is # channels x npcs dimension
+'''
+  nchannels_all = 0
+  channel_idxs = {}
+  conditions_all = {}
+  nconditions_all = 0
+  for name, dataset in datasets.items():
+    cidxs = np.where(dataset['P_sxn'])[1] # non-zero entries in columns
+    channel_idxs[name] = [cidxs[0], cidxs[-1]+1]
+    nchannels_all += cidxs[-1]+1 - cidxs[0]
+    conditions_all[name] = np.unique(dataset['condition_labels_train'])
     
     
-class BaseRegisteredClass(object):
-    __metaclass__ = RegistryHolder
-    '''
-        Any class that will inherits from BaseRegisteredClass will be included
-        inside the dict RegistryHolder.REGISTRY, the key being the name of the
-        class and the associated value, the class itself.
-    '''
-    pass
+def get_iterator(data):
+  '''Return the data iterator.'''
+  if FLAGS.data_set == 'ptb':
+    iterator = ptb_loader.ptb_iterator(data, FLAGS.batch_size,
+                                       FLAGS.sequence_length,
+                                       FLAGS.epoch_size_override)
+  elif FLAGS.data_set == 'imdb':
+    iterator = imdb_loader.imdb_iterator(data, FLAGS.batch_size,
+                                         FLAGS.sequence_length)
+  return iterator
     
-    '''
-@author: Gordeev Andrey <gordeev.and.and@gmail.com>
+      ## Load Generator weights from MaskGAN checkpoint.
+  if FLAGS.maskgan_ckpt:
+    gen_vars = [
+        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
+    ]
+    init_saver = tf.train.Saver(var_list=gen_vars)
+    init_savers['init_saver'] = init_saver
+    
+      # *Total* number of n-grams produced by the generator.
+  total_ngrams_produced = 0
+    
+            # remove old cert first
+        xlog.info('Removing old cert in database $HOME/.pki/nssdb')
+        cmd_line = 'certutil -L -d sql:$HOME/.pki/nssdb |grep 'GoAgent' && certutil -d sql:$HOME/.pki/nssdb -D -n '%s' ' % ( common_name)
+        os.system(cmd_line)
+    
+        for qualified, server, _, _ in server_list:
+        if qualified:
+            best_server = server[0]
+            break
+    log = Log()
+    if best_server:
+        log.write('best server is: %s.' % best_server)
+    else:
+        xlog.warning('no server detected, return default: teredo.remlab.net.')
+        log.write('no server detected, return default: teredo.remlab.net.')
+        best_server = 'teredo.remlab.net'
+    log.close()
+    return best_server
+    
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licence]
     
     
-def execute_replacement2(self):
-    print(self.name + ' from execute 2')
+    def reset(self):
+        BaseRecognizer.reset(self) # reset all recognizer state variables
+        if self.input is not None:
+            self.input.seek(0) # rewind the input
     
-        def build_size(self):
-        self.size = 'Small'
+    image = face_recognition.load_image_file('{}')
+'''
     
-    '''
-Port of the Java example of 'Parameter Injection' in
-'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
-(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
-http://xunitpatterns.com/Dependency%20Injection.html.
+    for face_location in face_locations:
     
-        def now(self):
-        current_time_is_always_midnight = '24:01'
-        return current_time_is_always_midnight
-
+    for face_location in face_locations:
     
-    ### OUTPUT ###
-# ['A', 'B', 'C', 'D']
-# [['A', 'B', 'C', 'D'], ['A', 'B', 'D'], ['A', 'C', 'D']]
-# ['A', 'B', 'D']
-
+        raw_detections_batched = _raw_face_locations_batched(images, number_of_times_to_upsample, batch_size)
     
-        data = Data()
+    
+def test_image(image_to_check, model):
+    unknown_image = face_recognition.load_image_file(image_to_check)
+    face_locations = face_recognition.face_locations(unknown_image, number_of_times_to_upsample=0, model=model)
+    
+        face_names = []
+    for face_encoding in face_encodings:
+        # See if the face is a match for the known face(s)
+        match = face_recognition.compare_faces(known_faces, face_encoding, tolerance=0.50)
+    
+        # Loop over each face found in the frame to see if it's someone we know.
+    for face_encoding in face_encodings:
+        # See if the face is a match for the known face(s)
+        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
+        name = '<Unknown Person>'
+    
+    # Create arrays of known face encodings and their names
+known_face_encodings = [
+    obama_face_encoding,
+    biden_face_encoding
+]
+known_face_names = [
+    'Barack Obama',
+    'Joe Biden'
+]
+    
+        def test_command_line_interface(self):
+        target_string = 'obama.jpg,obama'
+        runner = CliRunner()
+        image_folder = os.path.join(os.path.dirname(__file__), 'test_images')
+        image_file = os.path.join(os.path.dirname(__file__), 'test_images', 'obama.jpg')
