@@ -1,12 +1,52 @@
 
         
-        // This is initialized with a default, stub implementation.
-// If python-google.protobuf.cc is loaded, the function pointer is overridden
-// with a full implementation.
-const Message* (*GetCProtoInsidePyProtoPtr)(PyObject* msg) =
-    GetCProtoInsidePyProtoStub;
-Message* (*MutableCProtoInsidePyProtoPtr)(PyObject* msg) =
-    MutableCProtoInsidePyProtoStub;
+        #include 'base/command_line.h'
+    
+    
+    {  DISALLOW_COPY_AND_ASSIGN(AutoUpdater);
+};
+    
+    namespace mate {
+    }
+    
+      void PurchaseProduct(const std::string& product_id, mate::Arguments* args);
+    
+    #include 'atom/browser/render_process_preferences.h'
+#include 'native_mate/handle.h'
+#include 'native_mate/wrappable.h'
+    
+    #endif  // ATOM_BROWSER_API_ATOM_API_TRAY_H_
+
+    
+    
+    {  RAW_CHECK(g_pipe_pid == getpid());
+  RAW_CHECK(g_shutdown_pipe_write_fd != -1);
+  RAW_CHECK(g_shutdown_pipe_read_fd != -1);
+  size_t bytes_written = 0;
+  do {
+    int rv = HANDLE_EINTR(
+        write(g_shutdown_pipe_write_fd,
+              reinterpret_cast<const char*>(&signal) + bytes_written,
+              sizeof(signal) - bytes_written));
+    RAW_CHECK(rv >= 0);
+    bytes_written += rv;
+  } while (bytes_written < sizeof(signal));
+}
+    
+    #if defined(OS_LINUX)
+#include 'atom/browser/lib/power_observer_linux.h'
+#else
+#include 'base/power_monitor/power_observer.h'
+#endif  // defined(OS_LINUX)
+    
+    static const char* kModuleName = '_api_implementation';
+static const char kModuleDocstring[] =
+'_api_implementation is a module that exposes compile-time constants that\n'
+'determine the default API implementation to use for Python proto2.\n'
+'\n'
+'It complements api_implementation.py by setting defaults using compile-time\n'
+'constants defined in C, such that one can set defaults at compilation\n'
+'(e.g. with blaze flag --copt=-DPYTHON_PROTO2_CPP_IMPL_V2).';
     
     void WriteEnumDocComment(io::Printer* printer, const EnumDescriptor* enumDescriptor) {
     WriteDocCommentBody(printer, enumDescriptor);
@@ -15,7 +55,17 @@ void WriteEnumValueDocComment(io::Printer* printer, const EnumValueDescriptor* v
     WriteDocCommentBody(printer, value);
 }
     
-    #include <sstream>
+    #include <google/protobuf/testing/googletest.h>
+#include <gtest/gtest.h>
+#include <google/protobuf/testing/file.h>
+    
+    
+#include <google/protobuf/compiler/csharp/csharp_enum.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/compiler/csharp/csharp_message.h>
+#include <google/protobuf/compiler/csharp/csharp_names.h>
+#include <google/protobuf/compiler/csharp/csharp_options.h>
+#include <google/protobuf/compiler/csharp/csharp_reflection_class.h>
     
     #include <google/protobuf/compiler/code_generator.h>
 #include <google/protobuf/compiler/plugin.h>
@@ -23,175 +73,27 @@ void WriteEnumValueDocComment(io::Printer* printer, const EnumValueDescriptor* v
 #include <google/protobuf/descriptor.pb.h>
 #include <google/protobuf/io/printer.h>
 #include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/stubs/strutil.h>
     
-    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
-//   can only really compare the output against a golden value, which is a
-//   fairly tedious and fragile testing strategy.  If we want to go that route,
-//   it probably makes sense to bite the bullet and write a test that compares
-//   the whole generated output for unittest.proto against a golden value, with
-//   a very simple script that can be run to regenerate it with the latest code.
-//   This would mean that updates to the golden file would have to be included
-//   in any change to the code generator, which would actually be fairly useful
-//   as it allows the reviewer to see clearly how the generated code is
-//   changing.
-    
-    ExtensionGenerator* ImmutableGeneratorFactory::NewExtensionGenerator(
-    const FieldDescriptor* descriptor) const {
-  if (HasDescriptorMethods(descriptor->file(), context_->EnforceLite())) {
-    return new ImmutableExtensionGenerator(descriptor, context_);
-  } else {
-    return new ImmutableExtensionLiteGenerator(descriptor, context_);
-  }
-}
-    
-    void ImmutableMapFieldGenerator::
-GenerateSerializationCode(io::Printer* printer) const {
-  printer->Print(
-      variables_,
-      'com.google.protobuf.GeneratedMessage$ver$\n'
-      '  .serialize$short_key_type$MapTo(\n'
-      '    output,\n'
-      '    internalGet$capitalized_name$(),\n'
-      '    $default_entry$,\n'
-      '    $number$);\n');
-}
-    
-    // Get the full name of a Java class by prepending the Java package name
-// or outer class name.
-string ClassNameResolver::GetClassFullName(const string& name_without_package,
-                                           const FileDescriptor* file,
-                                           bool immutable,
-                                           bool multiple_files) {
-  string result;
-  if (multiple_files) {
-    result = FileJavaPackage(file, immutable);
-  } else {
-    result = GetClassName(file, immutable);
-  }
-  if (!result.empty()) {
-    result += '.';
-  }
-  result += name_without_package;
-  return result;
-}
-    
-    void EnumGenerator::GenerateHeader(io::Printer* printer) {
-  string enum_comments;
-  SourceLocation location;
-  if (descriptor_->GetSourceLocation(&location)) {
-    enum_comments = BuildCommentsString(location, true);
-  } else {
-    enum_comments = '';
-  }
+    void WriteFieldDocComment(io::Printer* printer, const FieldDescriptor* field) {
+  // In theory we should have slightly different comments for setters, getters,
+  // etc., but in practice everyone already knows the difference between these
+  // so it's redundant information.
     }
     
-    ExtensionGenerator::ExtensionGenerator(const string& root_class_name,
-                                       const FieldDescriptor* descriptor)
-    : method_name_(ExtensionMethodName(descriptor)),
-      root_class_and_method_name_(root_class_name + '_' + method_name_),
-      descriptor_(descriptor) {
-  if (descriptor->is_map()) {
-    // NOTE: src/google/protobuf/compiler/plugin.cc makes use of cerr for some
-    // error cases, so it seems to be ok to use as a back door for errors.
-    std::cerr << 'error: Extension is a map<>!'
-         << ' That used to be blocked by the compiler.' << std::endl;
-    std::cerr.flush();
-    abort();
-  }
-}
+    #include <google/protobuf/compiler/java/java_doc_comment.h>
     
+    #define CHECK_FLOAT_EQ(a, b, eps) CHECK(std::fabs((a) - (b)) <  (eps))
+#define CHECK_FLOAT_NE(a, b, eps) CHECK(std::fabs((a) - (b)) >= (eps))
+#define CHECK_FLOAT_GE(a, b, eps) CHECK((a) - (b) > -(eps))
+#define CHECK_FLOAT_LE(a, b, eps) CHECK((b) - (a) > -(eps))
+#define CHECK_FLOAT_GT(a, b, eps) CHECK((a) - (b) >  (eps))
+#define CHECK_FLOAT_LT(a, b, eps) CHECK((b) - (a) >  (eps))
     
-    {    float _radZ;
-    float _radDeltaZ;
-    float _radX;
-    float _radDeltaX;
-};
-    
-    /** @class TintTo
- * @brief Tints a Node that implements the NodeRGB protocol from current tint to a custom one.
- @warning This action doesn't support 'reverse'
- @since v0.7.2
-*/
-class CC_DLL TintTo : public ActionInterval
-{
-public:
-    /** 
-     * Creates an action with duration and color.
-     * @param duration Duration time, in seconds.
-     * @param red Red Color, from 0 to 255.
-     * @param green Green Color, from 0 to 255.
-     * @param blue Blue Color, from 0 to 255.
-     * @return An autoreleased TintTo object.
-     */
-    static TintTo* create(float duration, GLubyte red, GLubyte green, GLubyte blue);
-    /**
-     * Creates an action with duration and color.
-     * @param duration Duration time, in seconds.
-     * @param color It's a Color3B type.
-     * @return An autoreleased TintTo object.
-     */
-    static TintTo* create(float duration, const Color3B& color);
+    std::string FormatString(const char* msg, va_list args) {
+  // we might need a second shot at this, so pre-emptivly make a copy
+  va_list args_cp;
+  va_copy(args_cp, args);
     }
     
-    void FadeOutUpTiles::transformTile(const Vec2& pos, float distance)
-{
-    Quad3 coords = getOriginalTile(pos);
-    Vec2 step = _gridNodeTarget->getGrid()->getStep();
-    }
-    
-        /** Gets the units of time the frame takes.
-     *
-     * @return The units of time the frame takes.
-     */
-    float getDelayUnits() const { return _delayUnits; };
-    
-    /** Sets the units of time the frame takes.
-     *
-     * @param delayUnits The units of time the frame takes.
-     */
-    void setDelayUnits(float delayUnits) { _delayUnits = delayUnits; };
-    
-    /** @brief Gets user information
-     * A AnimationFrameDisplayedNotification notification will be broadcast when the frame is displayed with this dictionary as UserInfo. 
-     * If UserInfo is nil, then no notification will be broadcast.
-     *
-     * @return A dictionary as UserInfo
-     */
-    const ValueMap& getUserInfo() const { return _userInfo; };
-    ValueMap& getUserInfo() { return _userInfo; };
-    
-    /** Sets user information.
-     * @param userInfo A dictionary as UserInfo.
-     */
-    void setUserInfo(const ValueMap& userInfo)
-    {
-        _userInfo = userInfo;
-    }
-    
-    // Overrides
-    virtual AnimationFrame *clone() const override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    AnimationFrame();
-    /**
-     * @js NA
-     * @lua NA
-     */
-    virtual ~AnimationFrame();
-    
-    /** initializes the animation frame with a spriteframe, number of delay units and a notification user info */
-    bool initWithSpriteFrame(SpriteFrame* spriteFrame, float delayUnits, const ValueMap& userInfo);
-    
-    
-    {                continue;
-            }
-    
-        /** Initializes an AtlasNode  with an Atlas file the width and height of each item and the quantity of items to render*/
-    bool initWithTileFile(const std::string& tile, int tileWidth, int tileHeight, int itemsToRender);
-    
-    /** Initializes an AtlasNode  with a texture the width and height of each item measured in points and the quantity of items to render*/
-    bool initWithTexture(Texture2D* texture, int tileWidth, int tileHeight, int itemsToRender);
+    #ifndef BENCHMARK_CYCLECLOCK_H_
+#define BENCHMARK_CYCLECLOCK_H_
