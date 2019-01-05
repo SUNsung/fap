@@ -1,81 +1,83 @@
 
         
-            def load(self):
-        try:
-            data = self._cache.get(self.cache_key)
-        except Exception:
-            # Some backends (e.g. memcache) raise an exception on invalid
-            # cache keys. If this happens, reset the session. See #17810.
-            data = None
+            # register the database commands
+    from flaskr import db
+    db.init_app(app)
     
+        if db is not None:
+        db.close()
     
-class BaseSessionManager(models.Manager):
-    def encode(self, session_dict):
-        '''
-        Return the given session dictionary serialized and encoded as a string.
-        '''
-        session_store_class = self.model.get_session_store_class()
-        return session_store_class().encode(session_dict)
+    import sys
     
-        def __setitem__(self, key, value):
-        setattr(self._connections, key, value)
+            :param filename: the filename of the config.  This can either be an
+                         absolute filename or a filename relative to the
+                         root path.
+        :param silent: set to ``True`` if you want silent failure for missing
+                       files.
     
-    ESTIMATORS = {
-    'dummy': DummyClassifier(),
-    'random_forest': RandomForestClassifier(n_estimators=100,
-                                            max_features='sqrt',
-                                            min_samples_split=10),
-    'extra_trees': ExtraTreesClassifier(n_estimators=100,
-                                        max_features='sqrt',
-                                        min_samples_split=10),
-    'logistic_regression': LogisticRegression(),
-    'naive_bayes': MultinomialNB(),
-    'adaboost': AdaBoostClassifier(n_estimators=10),
-}
+    import os
+from warnings import warn
     
-    
-def bench_isotonic_regression(Y):
+        .. versionchanged:: 0.10
+       This function's return value is now always safe for HTML usage, even
+       if outside of script tags or if used in XHTML.  This rule does not
+       hold true when using this function in HTML attributes that are double
+       quoted.  Always single quote attributes if you use the ``|tojson``
+       filter.  Alternatively use ``|tojson|forceescape``.
     '''
-    Runs a single iteration of isotonic regression on the input data,
-    and reports the total time taken (in seconds).
-    '''
-    gc.collect()
+    rv = dumps(obj, **kwargs) \
+        .replace(u'<', u'\\u003c') \
+        .replace(u'>', u'\\u003e') \
+        .replace(u'&', u'\\u0026') \
+        .replace(u''', u'\\u0027')
+    if not _slash_escape:
+        rv = rv.replace('\\/', '/')
+    return rv
     
-        n_features = 10
-    list_n_samples = np.linspace(100, 1000000, 5).astype(np.int)
-    lasso_results, lars_lasso_results = compute_bench(alpha, list_n_samples,
-                                            [n_features], precompute=True)
+            from .debughelpers import explain_template_loading_attempts
+        explain_template_loading_attempts(self.app, template, attempts)
     
-                results['kmeans_speed'].append(delta)
-            results['kmeans_quality'].append(kmeans.inertia_)
+    def get_extension(link):
+    extension = os.path.splitext(link)[1][1:]
+    if extension in ['pdf', 'html']:
+        return extension
+    if 'pdf' in extension:
+        return 'pdf'    
+    return 'pdf'    
     
-                gc.collect()
-            print('benchmarking lars_path (without Gram):', end='')
-            sys.stdout.flush()
-            tstart = time()
-            lars_path(X, y, method='lasso')
-            delta = time() - tstart
-            print('%0.3fs' % delta)
-            results['lars_path (without Gram)'].append(delta)
+                if item.get(CONF_DISPLAY_URL) is not None:
+                if isinstance(item.get(CONF_DISPLAY_URL),
+                              template.Template):
+                    output[ATTR_REDIRECTION_URL] = \
+                        item[CONF_DISPLAY_URL].async_render()
+                else:
+                    output[ATTR_REDIRECTION_URL] = item.get(CONF_DISPLAY_URL)
     
-            for step in xrange(opts.n_steps):
-            for it in xrange(opts.n_times):
-                time[name][step, it] = bench_sample(sampling_algorithm[name],
-                                                      opts.n_population,
-                                                      n_samples[step])
-    
-        # start time
-    tstart = datetime.now()
-    clf = DecisionTreeRegressor()
-    clf.fit(X, Y).predict(X)
-    delta = (datetime.now() - tstart)
-    # stop time
-    
-            text_filename = os.path.join(text_lang_folder,
-                                     '%s_%04d.txt' % (lang, i))
-        print('Writing %s' % text_filename)
-        open(text_filename, 'wb').write(content.encode('utf-8', 'ignore'))
-        i += 1
+        def __init__(self, config):
+        '''Initialize the scanner.'''
+        self.host = config[CONF_HOST]
+        self.username = config[CONF_USERNAME]
+        self.password = config[CONF_PASSWORD]
+        self.last_results = []
+        data = self.get_actiontec_data()
+        self.success_init = data is not None
+        _LOGGER.info('canner initialized')
     
     
-if not os.path.exists(DATA_FOLDER):
+def setup_scanner(hass, config, see, discovery_info=None):
+    '''Set up the demo tracker.'''
+    def offset():
+        '''Return random offset.'''
+        return (random.randrange(500, 2000)) / 2e5 * random.choice((-1, 1))
+    
+    REQUIREMENTS = ['pizzapi==0.0.3']
+    
+                except requests.exceptions.ConnectionError:
+                _LOGGER.exception('ConnectionError occurred for %s', url)
+                hass.bus.fire(
+                    '{}_{}'.format(DOMAIN, DOWNLOAD_FAILED_EVENT), {
+                        'url': url,
+                        'filename': filename
+                        })
+    
+    _LOGGER = logging.getLogger(__name__)
