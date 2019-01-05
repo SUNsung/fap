@@ -1,184 +1,156 @@
 
         
-            if check_author and post['author_id'] != g.user['id']:
-        abort(403)
+        
+@pytest.mark.parametrize('command, packages', [
+    (Command('vim', 'vim: command not found'),
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('sudo vim', 'vim: command not found'),
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('vim', 'The program 'vim' is currently not installed. You can install it by typing: sudo apt install vim'),
+     [('vim', 'main'), ('vim-tiny', 'main')])])
+def test_match(mocker, command, packages):
+    mocker.patch('thefuck.rules.apt_get.which', return_value=None)
+    mocker.patch('thefuck.rules.apt_get._get_packages',
+                 create=True, return_value=packages)
     
-        auth.login()
-    # current user can't modify other user's post
-    assert client.post('/1/update').status_code == 403
-    assert client.post('/1/delete').status_code == 403
-    # current user doesn't see edit link
-    assert b'href='/1/update'' not in client.get('/').data
     
-        monkeypatch.setattr('flaskr.db.init_db', fake_init_db)
-    result = runner.invoke(args=['init-db'])
-    assert 'Initialized' in result.output
-    assert Recorder.called
-
+def test_match():
+    assert match(Command('apt list --upgradable', match_output))
+    assert match(Command('sudo apt list --upgradable', match_output))
     
-        def implements_to_string(cls):
-        cls.__unicode__ = cls.__str__
-        cls.__str__ = lambda x: x.__unicode__().encode('utf-8')
-        return cls
     
-        def __init__(self, request, key):
-        form_matches = request.form.getlist(key)
-        buf = ['You tried to access the file '%s' in the request.files '
-               'dictionary but it does not exist.  The mimetype for the request '
-               'is '%s' instead of 'multipart/form-data' which means that no '
-               'file contents were transmitted.  To fix this error you should '
-               'provide enctype='multipart/form-data' in your form.' %
-               (key, request.mimetype)]
-        if form_matches:
-            buf.append('\n\nThe browser instead transmitted some file names. '
-                       'This was submitted: %s' % ', '.join(''%s'' % x
-                            for x in form_matches))
-        self.msg = ''.join(buf)
+def test_match():
+    command = Command('brew install sshfs', output)
+    assert match(command)
     
-            if head[1:] == b'\x00\x00\x00':
-            return 'utf-32-le'
     
-            :return: a :class:`~click.testing.Result` object.
+@pytest.mark.skipif(_is_not_okay_to_test(),
+                    reason='No need to run if there\'s no formula')
+def test_get_new_command(brew_no_available_formula):
+    assert get_new_command(Command('brew install elsticsearch',
+                                   brew_no_available_formula))\
+        == 'brew install elasticsearch'
+    
+    import keras
+from keras.callbacks import TensorBoard
+from keras.datasets import mnist
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Flatten
+from keras.layers import Conv2D, MaxPooling2D
+from keras import backend as K
+    
+        def process_appid_not_exist(self, appid, ip):
+        ret = self.check_api(ip, 'xxnet-1')
+        if ret and ret.ok:
+            self.set_appid_not_exist(appid)
+        else:
+            self.logger.warn('process_appid_not_exist, remove ip:%s', ip)
+    
+            import_command = 'security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain ../../../../data/gae_proxy/CA.crt'# % certfile.decode('utf-8')
+        if exist_ca_sha1:
+            delete_ca_command = 'security delete-certificate -Z %s' % exist_ca_sha1
+            exec_command = '%s;%s' % (delete_ca_command, import_command)
+        else:
+            exec_command = import_command
+    
+    
+    def skip(self):
         '''
-        if cli is None:
-            cli = self.app.cli
+        Instruct the lexer to skip creating a token for current lexer rule
+        and look for another token.  nextToken() knows to keep looking when
+        a lexer rule finishes with token set to SKIP_TOKEN.  Recall that
+        if token==null at end of any token rule, it creates one for you
+        and emits it.
+        '''
+        
+        self._state.token = SKIP_TOKEN
     
-        inputs = Input(shape=input_shape)
-    x = resnet_layer(inputs=inputs)
-    # Instantiate the stack of residual units
-    for stack in range(3):
-        for res_block in range(num_res_blocks):
-            strides = 1
-            if stack > 0 and res_block == 0:  # first layer but not first stack
-                strides = 2  # downsample
-            y = resnet_layer(inputs=x,
-                             num_filters=num_filters,
-                             strides=strides)
-            y = resnet_layer(inputs=y,
-                             num_filters=num_filters,
-                             activation=None)
-            if stack > 0 and res_block == 0:  # first layer but not first stack
-                # linear projection residual shortcut connection to match
-                # changed dims
-                x = resnet_layer(inputs=x,
-                                 num_filters=num_filters,
-                                 kernel_size=1,
-                                 strides=strides,
-                                 activation=None,
-                                 batch_normalization=False)
-            x = keras.layers.add([x, y])
-            x = Activation('relu')(x)
-        num_filters *= 2
-    
-        with gzip.open(paths[1], 'rb') as imgpath:
-        x_train = np.frombuffer(imgpath.read(), np.uint8,
-                                offset=16).reshape(len(y_train), 28, 28)
-    
-    
-def serialize(regularizer):
-    return serialize_keras_object(regularizer)
-    
-    
-def test_fashion_mnist():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
-        assert len(x_train) == len(y_train) == 60000
-        assert len(x_test) == len(y_test) == 10000
-    
-        y = np.array(y, dtype='int')
-    input_shape = y.shape
-    if input_shape and input_shape[-1] == 1 and len(input_shape) > 1:
-        input_shape = tuple(input_shape[:-1])
-    y = y.ravel()
-    if not num_classes:
-        num_classes = np.max(y) + 1
-    n = y.shape[0]
-    categorical = np.zeros((n, num_classes), dtype=dtype)
-    categorical[np.arange(n), y] = 1
-    output_shape = input_shape + (num_classes,)
-    categorical = np.reshape(categorical, output_shape)
-    return categorical
-    
-    Gets to 0.89 test accuracy after 2 epochs.
-90s/epoch on Intel i5 2.4Ghz CPU.
-10s/epoch on Tesla K40 GPU.
-'''
-from __future__ import print_function
-    
-    
-class AlexaFlashBriefingView(http.HomeAssistantView):
-    '''Handle Alexa Flash Briefing skill requests.'''
-    
-    
-class Dominos():
-    '''Main Dominos service.'''
-    
-            def __init__(self, patterns, hass):
-            '''Initialise the EventHandler.'''
-            super().__init__(patterns)
-            self.hass = hass
-    
+        If a name, the module is imported.  If the passed or imported module
+    object is not a package, raise an exception.
     '''
+    if hasattr(package, '__spec__'):
+        if package.__spec__.submodule_search_locations is None:
+            raise TypeError('{!r} is not a package'.format(
+                package.__spec__.name))
+        else:
+            return package
+    else:
+        module = import_module(package)
+        if module.__spec__.submodule_search_locations is None:
+            raise TypeError('{!r} is not a package'.format(package))
+        else:
+            return module
     
-        # You can access the actual face itself like this:
-    face_image = image[top:bottom, left:right]
-    pil_image = Image.fromarray(face_image)
-    pil_image.show()
-
+            proc = subprocess.run(args, stdout=subprocess.PIPE,
+                              universal_newlines=True, env=env)
+        self.assertEqual(proc.stdout.rstrip(), 'False')
+        self.assertEqual(proc.returncode, 0, proc)
     
+        counter = 1
+    for part in msg.walk():
+        # multipart/* are just containers
+        if part.get_content_maintype() == 'multipart':
+            continue
+        # Applications should really sanitize the given filename so that an
+        # email message can't be used to overwrite important files
+        filename = part.get_filename()
+        if not filename:
+            ext = mimetypes.guess_extension(part.get_content_type())
+            if not ext:
+                # Use a generic bag-of-bits extension
+                ext = '.bin'
+            filename = 'part-%03d%s' % (counter, ext)
+        counter += 1
+        with open(os.path.join(args.directory, filename), 'wb') as fp:
+            fp.write(part.get_payload(decode=True))
     
-def batch_face_locations(images, number_of_times_to_upsample=1, batch_size=128):
-    '''
-    Returns an 2d array of bounding boxes of human faces in a image using the cnn face detector
-    If you are using a GPU, this can give you much faster results since the GPU
-    can process batches of images at once. If you aren't using a GPU, you don't need this function.
+    def handlePoints(points):
+    print('<ul>')
+    for point in points:
+        handlePoint(point)
+    print('</ul>')
     
-    # This is a demo of running face recognition on a video file and saving the results to a new video file.
-#
-# PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
-# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
-# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
+    def test():
+    PROCESSES = 4
+    print('Creating pool with %d processes\n' % PROCESSES)
     
-            name = 'Unknown'
+            if self.flash_briefings.get(briefing_id) is None:
+            err = 'No configured Alexa flash briefing was found for: %s'
+            _LOGGER.error(err, briefing_id)
+            return b'', 404
     
-    # PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
-# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
-# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
+            Return boolean if scanning successful.
+        '''
+        if not self.success_init:
+            return False
     
-            # Clear the frames array to start the next batch
-        frames = []
-
+    CONFIG_SCHEMA = vol.Schema({
+    DOMAIN: vol.Schema({
+        vol.Required(CONF_DOWNLOAD_DIR): cv.string,
+    }),
+}, extra=vol.ALLOW_EXTRA)
     
-        # Print the location of each facial feature in this image
-    for facial_feature in face_landmarks.keys():
-        print('The {} in this face has the following points: {}'.format(facial_feature, face_landmarks[facial_feature]))
+        _interrupted = False
     
-    *References:
-http://ginstrom.com/scribbles/2007/10/08/design-patterns-python-style/
-https://fkromer.github.io/python-pattern-references/design/#factory-method
-https://sourcemaking.com/design_patterns/factory_method
+        entities = []
+    core = None
+    heating = None
+    hotwater = None
+    light = None
+    sensor = None
+    switch = None
+    weather = None
+    attributes = None
     
+    import voluptuous as vol
     
-class Subject(object):
-    def __init__(self):
-        self._observers = []
+    DEFAULT_HOST = '0.0.0.0'
+DEFAULT_PORT = 65432
     
-    Having the algorithms as an integral part of the client can cause the
-client to be larger and harder to maintain. This is more evident when
-supporting multiple algorithms. The separation of client and algorithm
-allows us to easily replace and vary the algorithm.
+        # Gloss the lips
+    d.polygon(face_landmarks['top_lip'], fill=(150, 0, 0, 128))
+    d.polygon(face_landmarks['bottom_lip'], fill=(150, 0, 0, 128))
+    d.line(face_landmarks['top_lip'], fill=(150, 0, 0, 64), width=8)
+    d.line(face_landmarks['bottom_lip'], fill=(150, 0, 0, 64), width=8)
     
-    *References:
-https://sourcemaking.com/design_patterns/abstract_factory
-http://ginstrom.com/scribbles/2007/10/08/design-patterns-python-style/
-    
-    *Where is the pattern used practically?
-    
-    
-class MidnightTimeProvider(object):
-    '''
-    Class implemented as hard-coded stub (in contrast to configurable stub).
-    '''
+    * This implementation uses a weighted vote, such that the votes of closer-neighbors are weighted more heavily.
