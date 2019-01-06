@@ -1,218 +1,185 @@
-void ProtoFromShapeHandle(tensorflow::shape_inference::ShapeHandle s,
-                          tensorflow::shape_inference::InferenceContext* c,
-                          TensorShapeProto* out) {
-  if (c->RankKnown(s)) {
-    const int32 rank = c->Rank(s);
-    for (int i = 0; i < rank; ++i) {
-      shape_inference::DimensionHandle d = c->Dim(s, i);
-      auto* out_dim = out->add_dim();
-      if (c->ValueKnown(d)) {
-        out_dim->set_size(c->Value(d));
-      } else {
-        out_dim->set_size(-1);
-      }
-    }
+
+        
+        namespace {
+string GetTypeUrl(const Descriptor* message,
+                  const string& type_url_prefix) {
+  if (!type_url_prefix.empty() &&
+      type_url_prefix[type_url_prefix.size() - 1] == '/') {
+    return type_url_prefix + message->full_name();
   } else {
-    out->set_unknown_rank(true);
+    return type_url_prefix + '/' + message->full_name();
   }
 }
+}  // namespace
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+    #include <memory>
+#include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/command_line_interface.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/io/zero_copy_stream_impl_lite.h>
+#include <google/protobuf/descriptor.pb.h>
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    int NPyBfloat16_Fill(void* buffer_raw, npy_intp length, void* ignored) {
-  bfloat16* const buffer = reinterpret_cast<bfloat16*>(buffer_raw);
-  const float start(buffer[0]);
-  const float delta = static_cast<float>(buffer[1]) - start;
-  for (npy_intp i = 2; i < length; ++i) {
-    buffer[i] = static_cast<bfloat16>(start + i * delta);
-  }
-  return 0;
+    void SourceGeneratorBase::WriteGeneratedCodeAttributes(io::Printer* printer) {
+  printer->Print('[global::System.Diagnostics.DebuggerNonUserCodeAttribute]\n');
 }
     
-    #ifndef TENSORFLOW_PYTHON_LIB_CORE_BFLOAT16_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_BFLOAT16_H_
-    
-    // Destructor passed to TF_NewTensor when it reuses a numpy buffer. Stores a
-// pointer to the pyobj in a buffer to be dereferenced later when we're actually
-// holding the GIL.
-void DelayedNumpyDecref(void* data, size_t len, void* obj) {
-  mutex_lock ml(*DelayedDecrefLock());
-  DecrefCache()->push_back(obj);
+    void WriteMessageDocComment(io::Printer* printer, const Descriptor* message) {
+  printer->Print('/**\n');
+  WriteDocCommentBody(printer, message);
+  printer->Print(
+    ' * Protobuf type {@code $fullname$}\n'
+    ' */\n',
+    'fullname', EscapeJavadoc(message->full_name()));
 }
     
-    namespace tensorflow {
-    }
+    #include <google/protobuf/compiler/java/java_doc_comment.h>
     
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    ScopedActivateExecutorContext::ScopedActivateExecutorContext(
-    StreamExecutor *stream_exec)
-    : ScopedActivateExecutorContext(ExtractCudaExecutor(stream_exec)) {}
-    
-      // Returns whether ECC is enabled for the given CUdevice via
-  // cuDeviceGetattribute with CU_DEVICE_ATTRIBUTE_ECC_ENABLED.
-  // http://docs.nvidia.com/cuda/cuda-driver-api/group__CUDA__DEVICE.html#group__CUDA__DEVICE_1g9c3e1414f0ad901d3278a4d6645fc266
-  static bool IsEccEnabled(CUdevice device, bool *result);
-    
-      TemporaryFile() {
-    path = tmppath();
-  }
-    
-      const auto& X = in[0];
-  const auto& W = in[1];
-  const auto& b = in[2];
-  auto axis = helper.GetSingleArgument<int32_t>('axis', 1);
-  const auto canonical_axis = canonical_axis_index_(axis, in[0].dims().size());
-  const int M = size_to_dim_(canonical_axis, GetDimsVector(in[0]));
-  const int K = size_from_dim_(canonical_axis, GetDimsVector(in[0]));
-  auto axis_w = helper.GetSingleArgument<int32_t>('axis_w', 1);
-  const int canonical_axis_w =
-      canonical_axis_index_(axis_w, in[1].dims().size());
-  const int N = size_to_dim_(canonical_axis_w, GetDimsVector(in[1]));
-    
-    #ifndef CAFFE2_OPERATORS_FLEXIBLE_TOP_K_H_
-#define CAFFE2_OPERATORS_FLEXIBLE_TOP_K_H_
-    
-    
-    {  bool RunOnDevice() override {
-    for (Blob* output : OperatorBase::Outputs()) {
-      output->Reset();
-    }
-    return true;
-  }
-};
-    
-    TEST_F(ViewsConfigParserPluginTests, test_add_view) {
-  Config c;
-  auto s = c.update(getTestConfigMap());
-  EXPECT_TRUE(s.ok());
-    }
-    
-    std::shared_ptr<PlatformProcess> PlatformProcess::launchWorker(
-    const std::string& exec_path, int argc /* unused */, char** argv) {
-  auto worker_pid = ::fork();
-  if (worker_pid < 0) {
-    return std::shared_ptr<PlatformProcess>();
-  } else if (worker_pid == 0) {
-    setEnvVar('OSQUERY_WORKER', std::to_string(::getpid()).c_str());
-    ::execve(exec_path.c_str(), argv, ::environ);
-    }
-    }
-    
-    void Initializer::platformTeardown() {
-  // Before we shutdown, we must insure to free the COM libs in windows
-  ::CoUninitialize();
+    // Get the name of a service's Java class without package name prefix.
+string ClassNameWithoutPackage(const ServiceDescriptor* descriptor,
+                               bool immutable) {
+  string full_name = StripPackageName(descriptor->full_name(),
+                                      descriptor->file());
+  // We don't allow nested service definitions.
+  GOOGLE_CHECK(full_name.find('.') == string::npos);
+  return full_name;
 }
     
-      /**
-   * @brief Scratch space for reading INotify responses.
-   *
-   * We place this here, and include a mutex to do heap/lazy allocation of the
-   * near-3k buffer when the publisher loads. This reduces the need to stack
-   * allocate a local buffer every 200mils and also improves the eventless-case.
-   *
-   * Allocated during setUp, removed in tearDown, protected by scratch_mutex_.
-   */
-  char* scratch_{nullptr};
+    void SharedCodeGenerator::Generate(GeneratorContext* context,
+                                   std::vector<string>* file_list,
+                                   std::vector<string>* annotation_file_list) {
+  string java_package = FileJavaPackage(file_);
+  string package_dir = JavaPackageToDir(java_package);
+    }
     
-      // Now there are two subscriptions (one sans callback).
-  pub->fire(ec, 0);
-  EXPECT_EQ(kBellHathTolled, 2);
+      virtual io::ZeroCopyOutputStream* OpenForInsert(
+      const string& filename, const string& insertion_point) {
+    CodeGeneratorResponse::File* file = response_->add_file();
+    file->set_name(filename);
+    file->set_insertion_point(insertion_point);
+    return new io::StringOutputStream(file->mutable_content());
+  }
     
-    #define stb__nc(b,d)  ((d) <= window && ((b) > 9 || stb_not_crap(b,d)))
     
-        // Decide GL+GLSL versions
-#if __APPLE__
-    // GL 3.2 + GLSL 150
-    const char* glsl_version = '#version 150';
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
+    {} // namespace CAROTENE_NS
+
+    
+    #include 'common.hpp'
+#include 'vtransform.hpp'
+    
+    #if !defined(__aarch64__) && defined(__GNUC__) && defined(__arm__)
+CVTS_FUNC(s8, s16, 16,
+    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
+    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 16)
+    {
+        internal::prefetch(_src + i);
+        __asm__ (
+            'vld1.8 {d4-d5}, [%[src]]                              \n\t'
+            'vmovl.s8 q3, d4                                       \n\t'
+            'vmovl.s8 q4, d5                                       \n\t'
+            'vmovl.s16 q5, d6                                      \n\t'
+            'vmovl.s16 q6, d7                                      \n\t'
+            'vmovl.s16 q7, d8                                      \n\t'
+            'vmovl.s16 q8, d9                                      \n\t'
+            'vcvt.f32.s32 q9, q5                                   \n\t'
+            'vcvt.f32.s32 q10, q6                                  \n\t'
+            'vcvt.f32.s32 q11, q7                                  \n\t'
+            'vcvt.f32.s32 q12, q8                                  \n\t'
+            'vmul.f32 q13, q9, q0                                  \n\t'
+            'vmul.f32 q14, q10, q0                                 \n\t'
+            'vmul.f32 q15, q11, q0                                 \n\t'
+            'vmul.f32 q2, q12, q0                                  \n\t'
+            'vadd.f32 q3, q13, q1                                  \n\t'
+            'vadd.f32 q4, q14, q1                                  \n\t'
+            'vadd.f32 q5, q15, q1                                  \n\t'
+            'vadd.f32 q6, q2, q1                                   \n\t'
+            'vcvt.s32.f32 q7, q3                                   \n\t'
+            'vcvt.s32.f32 q8, q4                                   \n\t'
+            'vcvt.s32.f32 q9, q5                                   \n\t'
+            'vcvt.s32.f32 q10, q6                                  \n\t'
+            'vqmovn.s32 d22, q7                                    \n\t'
+            'vqmovn.s32 d23, q8                                    \n\t'
+            'vqmovn.s32 d24, q9                                    \n\t'
+            'vqmovn.s32 d25, q10                                   \n\t'
+            'vst1.16 {d22-d23}, [%[dst1]]                          \n\t'
+            'vst1.16 {d24-d25}, [%[dst2]]                          \n\t'
+            : /*no output*/
+            : [src] 'r' (_src + i),
+              [dst1] 'r' (_dst + i + 0),
+              [dst2] 'r' (_dst + i + 8),
+              'w'  (vscale), 'w' (vshift)
+            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26','d27','d28','d29','d30','d31'
+        );
+    }
+})
 #else
-    // GL 3.0 + GLSL 130
-    const char* glsl_version = '#version 130';
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
+CVTS_FUNC(s8, s16, 16,
+    float32x4_t vscale = vdupq_n_f32((f32)alpha);
+    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 16)
+    {
+        internal::prefetch(_src + i);
+        int8x16_t vline = vld1q_s8(_src + i);
+        int16x8_t vline1_s16 = vmovl_s8(vget_low_s8 (vline));
+        int16x8_t vline2_s16 = vmovl_s8(vget_high_s8(vline));
+        int32x4_t vline1_s32 = vmovl_s16(vget_low_s16 (vline1_s16));
+        int32x4_t vline2_s32 = vmovl_s16(vget_high_s16(vline1_s16));
+        int32x4_t vline3_s32 = vmovl_s16(vget_low_s16 (vline2_s16));
+        int32x4_t vline4_s32 = vmovl_s16(vget_high_s16(vline2_s16));
+        float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
+        float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
+        float32x4_t vline3_f32 = vcvtq_f32_s32(vline3_s32);
+        float32x4_t vline4_f32 = vcvtq_f32_s32(vline4_s32);
+        vline1_f32 = vmulq_f32(vline1_f32, vscale);
+        vline2_f32 = vmulq_f32(vline2_f32, vscale);
+        vline3_f32 = vmulq_f32(vline3_f32, vscale);
+        vline4_f32 = vmulq_f32(vline4_f32, vscale);
+        vline1_f32 = vaddq_f32(vline1_f32, vshift);
+        vline2_f32 = vaddq_f32(vline2_f32, vshift);
+        vline3_f32 = vaddq_f32(vline3_f32, vshift);
+        vline4_f32 = vaddq_f32(vline4_f32, vshift);
+        vline1_s32 = vcvtq_s32_f32(vline1_f32);
+        vline2_s32 = vcvtq_s32_f32(vline2_f32);
+        vline3_s32 = vcvtq_s32_f32(vline3_f32);
+        vline4_s32 = vcvtq_s32_f32(vline4_f32);
+        int16x8_t vRes1_s16 = vcombine_s16(vqmovn_s32(vline1_s32), vqmovn_s32(vline2_s32));
+        int16x8_t vRes2_s16 = vcombine_s16(vqmovn_s32(vline3_s32), vqmovn_s32(vline4_s32));
+        vst1q_s16(_dst + i + 0, vRes1_s16);
+        vst1q_s16(_dst + i + 8, vRes2_s16);
+    }
+})
 #endif
     
-            // Rendering
-        ImGui::Render();
-        g_pd3dDevice->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
-        g_pd3dDevice->ClearRenderTargetView(g_mainRenderTargetView, (float*)&clear_color);
-        ImGui_ImplDX10_RenderDrawData(ImGui::GetDrawData());
-    
-        if (DX12_ENABLE_DEBUG_LAYER)
-    {
-        ID3D12Debug* dx12Debug = NULL;
-        if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&dx12Debug))))
+            // perform vertical convolution
+        for ( ; x <= bwidth; x += 8)
         {
-            dx12Debug->EnableDebugLayer();
-            dx12Debug->Release();
-        }
+            internal::prefetch(srow0 + x);
+            internal::prefetch(srow1 + x);
+            internal::prefetch(srow2 + x);
     }
     
-      /**
-   * @brief Start the ESD CAN client.
-   * @return The status of the start action which is defined by
-   *         apollo::common::ErrorCode.
-   */
-  apollo::common::ErrorCode Start() override;
+        std::vector<u8> _buf((size.width+16)*3*(sizeof(ptrdiff_t) + sizeof(u8)) + 128);
+    u8* buf[3];
+    buf[0] = &_buf[0]; buf[1] = buf[0] + size.width; buf[2] = buf[1] + size.width;
+    ptrdiff_t* cpbuf[3];
+    cpbuf[0] = (ptrdiff_t*)internal::alignPtr(buf[2] + size.width, sizeof(ptrdiff_t)) + 1;
+    cpbuf[1] = cpbuf[0] + size.width + 1;
+    cpbuf[2] = cpbuf[1] + size.width + 1;
+    memset(buf[0], 0, size.width*3);
     
-      virtual void SetUp() {
-    send_time_ = 0;
-    recv_time_ = 0;
-    send_succ_count_ = 0;
-    recv_succ_count_ = 0;
-    send_err_count_ = 0;
-    recv_err_count_ = 0;
-    param_.set_brand(CANCardParameter::ESD_CAN);
-    param_.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
-    send_client_ = std::unique_ptr<FakeCanClient>(new FakeCanClient());
-    send_client_->Init(param_);
-    send_client_->Start();
-    recv_client_ = std::unique_ptr<FakeCanClient>(new FakeCanClient());
-    recv_client_->Init(param_);
-    recv_client_->Start();
-  }
+            // perform vertical convolution
+        for ( ; x <= bwidth; x += 8)
+        {
+            internal::prefetch(srow0 + x);
+            internal::prefetch(srow1 + x);
+            internal::prefetch(srow2 + x);
+    }
     
-    #include 'modules/drivers/canbus/can_client/hermes_can/hermes_can_client.h'
-#include 'gtest/gtest.h'
-    
-    
-    {  is_started_ = true;
-  return ErrorCode::OK;
-}
-    
-      /**
-   * @brief Send messages
-   * @param frames The messages to send.
-   * @param frame_num The amount of messages to send.
-   * @return The status of the sending action which is defined by
-   *         apollo::common::ErrorCode.
-   */
-  apollo::common::ErrorCode Send(const std::vector<CanFrame> &frames,
-                                 int32_t *const frame_num) override;
-    
-    TEST(FunctionRef, Simple) {
-  int x = 1000;
-  auto lambda = [&x](int v) { return x += v; };
+    namespace caffe2 {
     }
     
     
-    {} // namespace folly
-    
-    
-    {  std::string arguments;
-  ASSERT_TRUE(getTracepointArguments(
-      'folly', 'test_static_tracepoint_empty', 0, arguments));
-  EXPECT_TRUE(arguments.empty());
-}
+    {} // namespace caffe2
