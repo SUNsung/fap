@@ -1,85 +1,143 @@
 
         
-            it 'works for running jobs' do
-      job.locked_at = Time.now
-      job.locked_by = 'test'
-      expect(status(job)).to eq('<span class='label label-info'>running</span>')
+              GivenDailyLike.decrement_for(user.id)
+      expect(value_for(user.id, dt)).to eq(0)
+      expect(limit_reached_for(user.id, dt)).to eq(false)
     end
     
-      describe '#scenario_label' do
-    it 'creates a scenario label with the scenario name' do
-      expect(scenario_label(scenario)).to eq(
-        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Scene</span>'
-      )
+        expect(gu.notification_level).to eq(NotificationLevels.all[:tracking])
+    
+      it 'asks to accept conflicts when the scenario was modified' do
+    DefaultScenarioImporter.seed(user)
+    agent = user.agents.where(name: 'Rain Notifier').first
+    agent.options['expected_receive_period_in_days'] = 9001
+    agent.save!
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
+    click_on 'Start Import'
+    expect(page).to have_text('This Scenario already exists in your system.')
+    expect(page).to have_text('9001')
+    check('I confirm that I want to import these Agents.')
+    click_on 'Finish Import'
+    expect(page).to have_text('Import successful!')
+  end
+    
+      describe 'migrating an actual agent' do
+    before do
+      valid_params = {
+                        'auth_token' => 'token',
+                        'room_name' => 'test',
+                        'room_name_path' => '',
+                        'username' => 'Huginn',
+                        'username_path' => '$.username',
+                        'message' => 'Hello from Huginn!',
+                        'message_path' => '$.message',
+                        'notify' => false,
+                        'notify_path' => '',
+                        'color' => 'yellow',
+                        'color_path' => '',
+                      }
+    
+      let :valid_options do
+    {
+      'name' => 'XKCD',
+      'expected_update_period_in_days' => '2',
+      'type' => 'html',
+      'url' => '{{ url | default: 'http://xkcd.com/' }}',
+      'mode' => 'on_change',
+      'extract' => old_extract,
+      'template' => old_template
+    }
+  end
+    
+          it 'should accept instances of an Agent' do
+        agents = Agent.of_type(agents(:bob_website_agent))
+        expect(agents).to include(agents(:bob_website_agent))
+        expect(agents).to include(agents(:jane_website_agent))
+        expect(agents).not_to include(agents(:bob_weather_agent))
+      end
     end
-    
-      it 'schould register the schedules with the rufus scheduler and run' do
-    mock(@rufus_scheduler).join
-    scheduler = HuginnScheduler.new
-    scheduler.setup!(@rufus_scheduler, Mutex.new)
-    scheduler.run
   end
     
-      it 'replaces invalid byte sequences in a message' do
-    log = AgentLog.new(:agent => agents(:jane_website_agent), level: 3)
-    log.message = '\u{3042}\xffA\x95'
-    expect { log.save! }.not_to raise_error
-    expect(log.message).to eq('\u{3042}<ff>A\<95>')
+      it 'accepts a Rational' do
+    sleep(Rational(1, 9)).should be_close(0, 2)
   end
     
-            agent.memory = ''
-        expect(agent.memory['foo']).to be_nil
-        expect(agent.memory).to eq({})
-    
-            # This is the method called to 'prepare' the provisioner. This is called
-        # before any actions are run by the action runner (see {Vagrant::Actions::Runner}).
-        # This can be used to setup shared folders, forward ports, etc. Whatever is
-        # necessary on a 'meta' level.
-        #
-        # No return value is expected.
-        def prepare
+          # @see Base#\_store
+      def _store(key, version, sha, contents)
+        compiled_filename = path_to(key)
+        FileUtils.mkdir_p(File.dirname(compiled_filename))
+        Sass::Util.atomic_create_and_write_file(compiled_filename) do |f|
+          f.puts(version)
+          f.puts(sha)
+          f.write(contents)
         end
+      rescue Errno::EACCES
+        # pass
+      end
     
-                  next env.machine(entry.name.to_sym, entry.provider.to_sym)
-            end
-    
-            # This contains all the registered guest capabilities.
-        #
-        # @return [Hash<Symbol, Registry>]
-        attr_reader :guest_capabilities
-    
-              # Set all of our instance variables on the new class
-          [self, other].each do |obj|
-            obj.instance_variables.each do |key|
-              # Ignore keys that start with a double underscore. This allows
-              # configuration classes to still hold around internal state
-              # that isn't propagated.
-              if !key.to_s.start_with?('@__')
-                # Don't set the value if it is the unset value, either.
-                value = obj.instance_variable_get(key)
-                result.instance_variable_set(key, value) if value != UNSET_VALUE
-              end
-            end
+          def inherited_hash_writer(name)
+        class_eval <<-RUBY, __FILE__, __LINE__ + 1
+          def set_#{name}(name, value)
+            name = name.tr('_', '-')
+            @#{name}s[name] = value unless try_set_#{name}(name, value)
           end
     
-    module Vagrant
-  module Plugin
-    module V2
-      # This class maintains a list of all the registered plugins as well
-      # as provides methods that allow querying all registered components of
-      # those plugins as a single unit.
-      class Manager
-        attr_reader :registered
+        # The name of the mixin in which the error occurred.
+    # This could be `nil` if the error occurred outside a mixin.
+    #
+    # @return [String]
+    def sass_mixin
+      sass_backtrace.first[:mixin]
+    end
     
-            # This should return an action callable for the given name.
-        #
-        # @param [Symbol] name Name of the action.
-        # @return [Object] A callable action sequence object, whether it
-        #   is a proc, object, etc.
-        def action(name)
-          nil
-        end
-    
-          def self.default_generator_root
-        File.dirname(__FILE__)
+        context 'opening brace on same line as first element' do
+      it 'allows closing brace on same line as last element' do
+        expect_no_offenses(construct(false, false))
       end
+    
+          # Custom destructuring method. This is used to normalize the branches
+      # for `pair` and `kwsplat` nodes, to add duck typing to `hash` elements.
+      #
+      # @return [Array<KeywordSplatNode>] the different parts of the `kwsplat`
+      def node_parts
+        [self, self]
+      end
+    end
+  end
+end
+
+    
+          # Calls the given block for each condition node in the `when` branch.
+      # If no block is given, an `Enumerator` is returned.
+      #
+      # @return [self] if a block is given
+      # @return [Enumerator] if no block is given
+      def each_condition
+        return conditions.to_enum(__method__) unless block_given?
+    
+          item['class'] = item['class'].to_s
+      item['queue'] = item['queue'].to_s
+      item['jid'] ||= SecureRandom.hex(12)
+      item['created_at'] ||= Time.now.to_f
+      item
+    end
+    
+            ActiveSupport.on_load(:active_record) do
+          include Sidekiq::Extensions::ActiveRecord
+        end
+        ActiveSupport.on_load(:action_mailer) do
+          extend Sidekiq::Extensions::ActionMailer
+        end
+      end
+    
+      end
+end
+
+    
+    module Sidekiq
+  module Logging
+    
+        def patch(path, &block)
+      route(PATCH, path, &block)
+    end
