@@ -1,91 +1,166 @@
 
         
-                # If a match was found in known_face_encodings, just use the first one.
-        if True in matches:
-            first_match_index = matches.index(True)
-            name = known_face_names[first_match_index]
+            @property
+    def headers(self):
+        url = urlsplit(self._orig.url)
     
-    # Get a reference to webcam #0 (the default one)
-video_capture = cv2.VideoCapture(0)
-    
-            self.assertEqual(
-            set(face_landmarks[0].keys()),
-            set(['chin', 'left_eyebrow', 'right_eyebrow', 'nose_bridge',
-                 'nose_tip', 'left_eye', 'right_eye', 'top_lip',
-                 'bottom_lip']))
-        self.assertEqual(
-            face_landmarks[0]['chin'],
-            [(369, 220), (372, 254), (378, 289), (384, 322), (395, 353),
-             (414, 382), (437, 407), (464, 424), (495, 428), (527, 420),
-             (552, 399), (576, 372), (594, 344), (604, 314), (610, 282),
-             (613, 250), (615, 219)])
-    
-    
-if __name__ == '__main__':
-    
-    *References:
-http://ginstrom.com/scribbles/2007/10/08/design-patterns-python-style/
-https://fkromer.github.io/python-pattern-references/design/#factory-method
-https://sourcemaking.com/design_patterns/factory_method
-    
-    
-if __name__ == '__main__':
-    template_function(get_text, to_save=True)
-    print('-' * 30)
-    template_function(get_pdf, converter=convert_to_text)
-    print('-' * 30)
-    template_function(get_csv, to_save=True)
-    
-    from __future__ import print_function
-    
-    *TL;DR80
-Traverses a container and accesses the container's elements.
-'''
-    
-        def update(self):
-        print('Updating the test results in Database')
-        time.sleep(0.1)
-    
-        print(u'Setting Data 1 = 10')
-    data1.data = 10
-    print(u'Setting Data 2 = 15')
-    data2.data = 15
-    print(u'Setting Data 1 = 3')
-    data1.data = 3
-    print(u'Setting Data 2 = 5')
-    data2.data = 5
-    print(u'Detach HexViewer from data1 and data2.')
-    data1.detach(view2)
-    data2.detach(view2)
-    print(u'Setting Data 1 = 10')
-    data1.data = 10
-    print(u'Setting Data 2 = 15')
-    data2.data = 15
-    
-        for action in actions:
-        action()
-    
-    '''
-*What is this pattern about?
-This pattern aims to encapsulate each algorithm and allow them to be
-interchangeable. Separating algorithms allows the client to scale
-with larger and more complex algorithms, since the client and the
-strategies are kept independent of each other.
-    
-    
-class Visitor(object):
-    def visit(self, node, *args, **kwargs):
-        meth = None
-        for cls in node.__class__.__mro__:
-            meth_name = 'visit_' + cls.__name__
-            meth = getattr(self, meth_name, None)
-            if meth:
-                break
-    
-        sample_queue.put('yam')
-    with ObjectPool(sample_queue) as obj:
-        print('Inside with: {}'.format(obj))
-    print('Outside with: {}'.format(sample_queue.get()))
+            Use `self.raw_auth` to access the raw value passed through
+        `--auth, -a`.
     
         def __init__(self):
-        self.time_provider = datetime.datetime
+        self._plugins = []
+    
+        def test_POST_form_auto_Content_Type(self, httpbin):
+        r = http('--form', 'POST', httpbin.url + '/post')
+        assert HTTP_OK in r
+        assert ''Content-Type': 'application/x-www-form-urlencoded' in r
+    
+    
+@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
+@pytest.mark.parametrize('filename', filenames)
+def test_rst_file_syntax(filename):
+    p = subprocess.Popen(
+        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE
+    )
+    err = p.communicate()[1]
+    assert p.returncode == 0, err.decode('utf8')
+
+    
+    
+def test_unicode_json_item_verbose(httpbin):
+    r = http('--verbose', '--json',
+             'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
+    assert HTTP_OK in r
+    assert UNICODE in r
+    
+                self.handler_results.append(handler_result)
+    
+    from .__version__ import __title__, __description__, __url__, __version__
+from .__version__ import __build__, __author__, __author_email__, __license__
+from .__version__ import __copyright__, __cake__
+    
+    Available hooks:
+    
+        # Informational.
+    100: ('continue',),
+    101: ('switching_protocols',),
+    102: ('processing',),
+    103: ('checkpoint',),
+    122: ('uri_too_long', 'request_uri_too_long'),
+    200: ('ok', 'okay', 'all_ok', 'all_okay', 'all_good', '\\o/', '✓'),
+    201: ('created',),
+    202: ('accepted',),
+    203: ('non_authoritative_info', 'non_authoritative_information'),
+    204: ('no_content',),
+    205: ('reset_content', 'reset'),
+    206: ('partial_content', 'partial'),
+    207: ('multi_status', 'multiple_status', 'multi_stati', 'multiple_stati'),
+    208: ('already_reported',),
+    226: ('im_used',),
+    
+            try:
+            username, password = get_auth_from_url(new_proxies[scheme])
+        except KeyError:
+            username, password = None, None
+    
+                s = requests.session()
+    
+        :ivar config: Configuration.
+    :type config: :class:`~certbot.interfaces.IConfig`
+    
+        def test_eq(self):
+        self.assertTrue(self.vhost1b == self.vhost1)
+        self.assertFalse(self.vhost1 == self.vhost2)
+        self.assertEqual(str(self.vhost1b), str(self.vhost1))
+        self.assertFalse(self.vhost1b == 1234)
+    
+    # We can extract the richest alternative in order to display it:
+richest = msg.get_body()
+partfiles = {}
+if richest['content-type'].maintype == 'text':
+    if richest['content-type'].subtype == 'plain':
+        for line in richest.get_content().splitlines():
+            print(line)
+        sys.exit()
+    elif richest['content-type'].subtype == 'html':
+        body = richest
+    else:
+        print('Don't know how to display {}'.format(richest.get_content_type()))
+        sys.exit()
+elif richest['content-type'].content_type == 'multipart/related':
+    body = richest.get_body(preferencelist=('html'))
+    for part in richest.iter_attachments():
+        fn = part.get_filename()
+        if fn:
+            extension = os.path.splitext(part.get_filename())[1]
+        else:
+            extension = mimetypes.guess_extension(part.get_content_type())
+        with tempfile.NamedTemporaryFile(suffix=extension, delete=False) as f:
+            f.write(part.get_content())
+            # again strip the <> to go from email form of cid to html form.
+            partfiles[part['content-id'][1:-1]] = f.name
+else:
+    print('Don't know how to display {}'.format(richest.get_content_type()))
+    sys.exit()
+with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
+    # The magic_html_parser has to rewrite the href='cid:....' attributes to
+    # point to the filenames in partfiles.  It also has to do a safety-sanitize
+    # of the html.  It could be written using html.parser.
+    f.write(magic_html_parser(body.get_content(), partfiles))
+webbrowser.open(f.name)
+os.remove(f.name)
+for fn in partfiles.values():
+    os.remove(fn)
+    
+    from email.policy import default
+    
+    def handleSlide(slide):
+    handleSlideTitle(slide.getElementsByTagName('title')[0])
+    handlePoints(slide.getElementsByTagName('point'))
+    
+    cur.close()
+con.close()
+
+    
+    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
+    host = r1(r'host=([^&]*)', html)
+    assert host
+    type = r1(r'videofiletype=([^&]*)', html)
+    assert type
+    vid = r1(r'&stream_name=([^&]*)', html)
+    assert vid
+    dir_str = r1(r'&dir=([^&]*)', html).strip()
+    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
+    _, ext, size = url_info(url)
+    print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir, merge = merge)
+    
+    #----------------------------------------------------------------------
+def ckplayer_download(url, output_dir = '.', merge = False, info_only = False, is_xml = True, **kwargs):
+    if is_xml:  #URL is XML URL
+        try:
+            title = kwargs['title']
+        except:
+            title = ''
+        try:
+            headers = kwargs['headers']  #headers provided
+            ckinfo = get_content(url, headers = headers)
+        except NameError:
+            ckinfo = get_content(url)
+        
+        ckplayer_download_by_xml(ckinfo, output_dir, merge, 
+                                info_only, title = title)
+    
+    from ..common import *
+from .ckplayer import ckplayer_download
+    
+    from ..common import *
+import json
+    
+                print_info(site_info, title_i, ext, size)
+            if not info_only:
+                download_urls([real_url], title_i, ext, size, output_dir, merge = merge)
