@@ -1,45 +1,108 @@
 
         
-        from .cifar import load_batch
-from ..utils.data_utils import get_file
-from .. import backend as K
-import numpy as np
-import os
+        
+@bp.route('/logout')
+def logout():
+    '''Clear the current session, including the stored user id.'''
+    session.clear()
+    return redirect(url_for('index'))
+
     
-    # This dictionary holds a mapping {graph: learning_phase}.
-# A learning phase is a bool tensor used to run Keras models in
-# either train mode (learning_phase == 1) or test mode (learning_phase == 0).
-_GRAPH_LEARNING_PHASES = {}
     
-        available_devices = _get_available_devices()
-    available_devices = [_normalize_device_name(name)
-                         for name in available_devices]
-    if not gpus:
-        # Using all visible GPUs when not specifying `gpus`
-        # e.g. CUDA_VISIBLE_DEVICES=0,2 python keras_mgpu.py
-        gpus = len([x for x in available_devices if 'gpu' in x])
+def init_app(app):
+    '''Register database functions with the Flask app. This is called by
+    the application factory.
+    '''
+    app.teardown_appcontext(close_db)
+    app.cli.add_command(init_db_command)
+
     
-    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
-    host = r1(r'host=([^&]*)', html)
-    assert host
-    type = r1(r'videofiletype=([^&]*)', html)
-    assert type
-    vid = r1(r'&stream_name=([^&]*)', html)
-    assert vid
-    dir_str = r1(r'&dir=([^&]*)', html).strip()
-    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
-    _, ext, size = url_info(url)
-    print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge = merge)
+        Defines all the global objects that are proxies to the current
+    active context.
     
-        if '_text' in dictified['video'][0]['file'][0]:  #link exist
-        video_dict['links'] = [i['file'][0]['_text'].strip() for i in dictified['video']]
+        @property
+    def blueprint(self):
+        '''The name of the current blueprint'''
+        if self.url_rule and '.' in self.url_rule.endpoint:
+            return self.url_rule.endpoint.rsplit('.', 1)[0]
     
-    def get_orig_video_source(api_key, pid, secret):
-    parsed = json.loads(get_content_headered(tmpl_api_call_video_info % (api_key, pid, secret)))
-    for stream in parsed['streams']['stream']:
-        if stream['type'] == 'orig':
-            return stream['_content'].replace('\\', '')
-    return None
+        with open(filename) as f:
+        contents = re.sub(
+            r'^(\s*%s\s*=\s*')(.+?)(')' % pattern,
+            inject_version, f.read(),
+            flags=re.DOTALL | re.MULTILINE
+        )
+    
+        assert not match(command)
+    
+    
+class RedirectFallbackMiddleware(MiddlewareMixin):
+    # Defined as class-level attributes to be subclassing-friendly.
+    response_gone_class = HttpResponseGone
+    response_redirect_class = HttpResponsePermanentRedirect
+    
+        if section is not None:
+        if section not in sitemaps:
+            raise Http404('No sitemap available for section: %r' % section)
+        maps = [sitemaps[section]]
+    else:
+        maps = sitemaps.values()
+    page = request.GET.get('p', 1)
+    
+        @cached_property
+    def routers(self):
+        if self._routers is None:
+            self._routers = settings.DATABASE_ROUTERS
+        routers = []
+        for r in self._routers:
+            if isinstance(r, str):
+                router = import_string(r)()
+            else:
+                router = r
+            routers.append(router)
+        return routers
+    
+        def get(self):
+        if len(self.config.GAE_APPIDS):
+            if len(self.working_appid_list) == 0:
+                time_to_reset = 600 - (time.time() - self.last_reset_time)
+                if time_to_reset > 0:
+                    self.logger.warn('all appid out of quota, wait %d seconds to reset', time_to_reset)
+                    time.sleep(time_to_reset)
+                    return None
+                else:
+                    self.logger.warn('reset appid')
+                    self.reset_appid()
+    
+    current_path = os.path.dirname(os.path.abspath(__file__))
+root_path = os.path.abspath(os.path.join(current_path, os.pardir, os.pardir, os.pardir))
+data_path = os.path.abspath(os.path.join(root_path, os.pardir, os.pardir, 'data', 'gae_proxy'))
+if not os.path.isdir(data_path):
+    data_path = current_path
+    
+    
+@section Exceptions
+    
+                        s = snext
+                    input.consume()
+                    continue
+    
+        def release(self, marker=None):
+        # no resources to release
+        pass
+    
+    
+        #Parsing the arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('dir_path', help = 'Path to tldr 'pages' directory')
+    parser.add_argument('-c', choices=['solarized-light', 'solarized-dark'], help='Color scheme of the PDF')
+    args = parser.parse_args()
+    
+    loc = args.dir_path
+    if args.c == 'solarized-light' or args.c == 'solarized-dark':
+        colorscheme = args.c
+        
+    main(loc, colorscheme)
+
+    
+        return result
