@@ -1,63 +1,93 @@
 
         
-            select_agent_type('Trigger Agent')
-    fill_in(:agent_name, with: 'Test Trigger Agent')
-    click_on 'Save'
+            it 'can be incremented and decremented' do
+      SiteSetting.max_likes_per_day = 2
     
-        it 'shows the dry run pop up without previous events and selects the events tab when a event was created' do
-      open_dry_run_modal(agent)
-      click_on('Dry Run')
-      expect(page).to have_text('Biologists play reverse')
-      expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabEvents']')
-    end
+            def preload_pipeline_warnings
+          # This preloads the number of warnings for every pipeline, ensuring
+          # that Ci::Pipeline#has_warnings? doesn't execute any additional
+          # queries.
+          @pipeline.number_of_warnings
+        end
     
-        it 'returns a label 'Missing Gems' if a given agent has dependencies missing' do
-      stub(@agent).dependencies_missing? { true }
-      label = working(@agent)
-      expect(label).to be_html_safe
-      expect(Nokogiri(label).text).to eq 'Missing Gems'
-    end
-    
-      context '#setup_worker' do
-    it 'should return an array with an instance of itself' do
-      workers = HuginnScheduler.setup_worker
-      expect(workers).to be_a(Array)
-      expect(workers.first).to be_a(HuginnScheduler)
-      expect(workers.first.id).to eq('HuginnScheduler')
-    end
-  end
-end
-    
-    describe Utils do
-  describe '#unindent' do
-    it 'unindents to the level of the greatest consistant indention' do
-      expect(Utils.unindent(<<-MD)).to eq('Hello World')
-        Hello World
-      MD
-    
-          AgentLog.log_for_agent(agents(:jane_website_agent), 'some message', :level => 4, :outbound_event => events(:jane_website_agent_event))
-      expect(agents(:jane_website_agent).reload.last_error_log_at.to_i).to be_within(2).of(Time.now.to_i)
-    end
-    
-    describe LogStash::Config::PipelineConfig do
-  let(:source) { LogStash::Config::Source::Local }
-  let(:pipeline_id) { :main }
-  let(:ordered_config_parts) do
-    [
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/1', 0, 0, 'input { generator1 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/2', 0, 0,  'input { generator2 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/3', 0, 0, 'input { generator3 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/4', 0, 0, 'input { generator4 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/5', 0, 0, 'input { generator5 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/6', 0, 0, 'input { generator6 }'),
-      org.logstash.common.SourceWithMetadata.new('string', 'config_string', 0, 0, 'input { generator1 }'),
-    ]
-  end
-    
-          it 'list the plugins with their versions' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose')
-        result.stdout.split('\n').each do |plugin|
-          expect(plugin).to match(/^logstash-\w+-\w+\s\(\d+\.\d+.\d+(.\w+)?\)/)
+            def find_target_id
+          GithubImport::IssuableFinder.new(project, issue).database_id
         end
       end
     end
+  end
+end
+
+    
+              lfs_objects.each do |object|
+            yield object
+          end
+        rescue StandardError => e
+          Rails.logger.error('The Lfs import process failed. #{e.message}')
+        end
+      end
+    end
+  end
+end
+
+    
+            def state
+          if merged_at
+            :merged
+          else
+            attributes[:state]
+          end
+        end
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of a KRB_AP_REQ definition, containing the Kerberos protocol version number,
+        # the message type KRB_AP_REQ, an options field to indicate any options in use, and the ticket and authenticator
+        # themselves
+        class ApReq < Element
+          # @!attribute pvno
+          #   @return [Integer] The protocol version number
+          attr_accessor :pvno
+          # @!attribute msg_type
+          #   @return [Integer] The type of the protocol message
+          attr_accessor :msg_type
+          # @!attribute options
+          #   @return [Integer] request options, affects processing
+          attr_accessor :options
+          # @!attribute ticket
+          #   @return [Rex::Proto::Kerberos::Model::Ticket] The ticket authenticating the client to the server
+          attr_accessor :ticket
+          # @!attribute authenticator
+          #   @return [Rex::Proto::Kerberos::Model::EncryptedData] This contains the authenticator, which includes the
+          #   client's choice of a subkey
+          attr_accessor :authenticator
+    
+              # Encodes the type field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_type
+            bn = OpenSSL::BN.new(type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+    describe ConversationsController, :type => :controller do
+  describe '#index' do
+    before do
+      @person = alice.contacts.first.person
+      hash = {
+        :author => @person,
+        :participant_ids => [alice.person.id, @person.id],
+        :subject => 'not spam',
+        :messages_attributes => [ {:author => @person, :text => 'cool stuff'} ]
+      }
+      @conv1 = Conversation.create(hash)
+      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv1.id)
+             .increase_unread(alice)
+      Message.create(:author => @person, :created_at => Time.now + 200, :text => 'another message', :conversation_id => @conv1.id)
+             .increase_unread(alice)
+    
+    # This is the version that ships with OS X 10.10, so be sure we test against it.
+# At the same time, the 1.7.7 version won't install cleanly on Ruby > 2.2,
+# so we use a fork that makes a trivial change to a macro invocation.
+gem 'json', :git => 'https://github.com/segiddins/json.git', :branch => 'seg-1.7.7-ruby-2.2'
