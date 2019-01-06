@@ -1,121 +1,127 @@
 
         
-              https://pip.readthedocs.org/en/stable/installing/#install-pip
-    EOS
-  when 'pil' then <<-EOS.undent
-    Instead of PIL, consider `pip install pillow` or `brew install Homebrew/python/pillow`.
-    EOS
-  when 'macruby' then <<-EOS.undent
-    MacRuby works better when you install their package:
-      http://www.macruby.org/
-    EOS
-  when /(lib)?lzma/
-    'lzma is now part of the xz formula.'
-  when 'xcode'
-    if MacOS.version >= :lion
-      <<-EOS.undent
-      Xcode can be installed from the App Store.
-      EOS
-    else
-      <<-EOS.undent
-      Xcode can be installed from https://developer.apple.com/xcode/downloads/
-      EOS
-    end
-  when 'gtest', 'googletest', 'google-test' then <<-EOS.undent
-    Installing gtest system-wide is not recommended; it should be vendored
-    in your projects that use it.
-    EOS
-  when 'gmock', 'googlemock', 'google-mock' then <<-EOS.undent
-    Installing gmock system-wide is not recommended; it should be vendored
-    in your projects that use it.
-    EOS
-  when 'sshpass' then <<-EOS.undent
-    We won't add sshpass because it makes it too easy for novice SSH users to
-    ruin SSH's security.
-    EOS
-  when 'gsutil' then <<-EOS.undent
-    Install gsutil with `pip install gsutil`
-    EOS
-  when 'clojure' then <<-EOS.undent
-    Clojure isn't really a program but a library managed as part of a
-    project and Leiningen is the user interface to that library.
-    
-        if f.keg_only?
-      keg_site_packages = f.opt_prefix/'lib/python2.7/site-packages'
-      unless Language::Python.in_sys_path?('python', keg_site_packages)
-        s = <<-EOS.undent
-          If you need Python to find bindings for this keg-only formula, run:
-            echo #{keg_site_packages} >> #{homebrew_site_packages/f.name}.pth
-        EOS
-        s += instructions unless Language::Python.reads_brewed_pth_files?('python')
-      end
-      return s
-    end
-    
-    class PrettyListing
-  def initialize(path)
-    Pathname.new(path).children.sort_by { |p| p.to_s.downcase }.each do |pn|
-      case pn.basename.to_s
-      when 'bin', 'sbin'
-        pn.find { |pnn| puts pnn unless pnn.directory? }
-      when 'lib'
-        print_dir pn do |pnn|
-          # dylibs have multiple symlinks and we don't care about them
-          (pnn.extname == '.dylib' || pnn.extname == '.pc') && !pnn.symlink?
-        end
-      else
-        if pn.directory?
-          if pn.symlink?
-            puts '#{pn} -> #{pn.readlink}'
-          else
-            print_dir pn
+                return return_val
+      rescue => ex
+        Dir.chdir(path_to_use) do
+          # Provide error block exception without color code
+          begin
+            error_blocks[current_platform].call(current_lane, ex, parameters) if current_platform && error_blocks[current_platform]
+            error_blocks[nil].call(current_lane, ex, parameters) if error_blocks[nil]
+          rescue => error_block_exception
+            UI.error('An error occurred while executing the `error` block:')
+            UI.error(error_block_exception.to_s)
+            raise ex # raise the original error message
           end
-        elsif Metafiles.list?(pn.basename.to_s)
-          puts pn
         end
+    
+          def self.description
+        'This will add an annotated git tag to the current branch'
+      end
+    
+            result = Fastlane::FastFile.new.parse('lane :test do
+          add_git_tag ({
+            prefix: '#{prefix}',
+          })
+        end').runner.execute(:test)
+    
+          it 'Uses the provided pretty format to collect log messages' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          changelog_from_git_commits(pretty: '%s%n%b')
+        end').runner.execute(:test)
+    
+          it 'logs the command if verbose' do
+        with_verbose(true) do
+          allow(Fastlane::Actions).to receive(:sh).with(anything, { log: true }).and_return('')
+          result = Fastlane::FastFile.new.parse('lane :test do
+            git_add(path: 'foo.bar')
+          end').runner.execute(:test)
+        end
+      end
+    
+    class Array
+  def shelljoin
+    CrossplatformShellwords.shelljoin(self)
+  end
+end
+    
+            FastlaneCore::CertChecker.installed_identies
+      end
+    
+        os = 'other'
+    shelljoin_testcases.each do |testcase|
+      it testcase['it'] + ': ' + testcase['it_result'][os] do
+        array = testcase['input']
+        expect_correct_implementation_to_be_called(array, :shelljoin, os)
+        joined = array.shelljoin
+        expect(joined).to eq(testcase['expect'][os])
       end
     end
   end
+end
     
-      find_files = ->(path) {
-    Find.find(Pathname.new(path).relative_path_from(Pathname.new Dir.pwd).to_s).map do |path|
-      path if File.file?(path)
-    end.compact
-  }
+    full_params = ARGV.shelljoin
     
-        # replace CSS rule blocks matching rule_prefix with yield(rule_block, rule_pos)
-    # will also include immediately preceding comments in rule_block
-    #
-    # option :comments -- include immediately preceding comments in rule_block
-    #
-    # replace_rules('.a{ \n .b{} }', '.b') { |rule, pos| '>#{rule}<'  } #=> '.a{ \n >.b{}< }'
-    def replace_rules(less, selector = SELECTOR_RE, options = {}, &block)
-      options       = {prefix: true, comments: true}.merge(options || {})
-      less          = less.dup
-      s             = CharStringScanner.new(less)
-      rule_re       = if options[:prefix]
-                        /(?:#{selector}[#{SELECTOR_CHAR})=(\s]*?#{RULE_OPEN_BRACE_RE})/
-                      else
-                        /#{selector}[\s]*#{RULE_OPEN_BRACE_RE}/
-                      end
-      rule_start_re = if options[:comments]
-                        /(?:#{COMMENT_RE}*)^#{rule_re}/
-                      else
-                        /^#{rule_re}/
-                      end
+            def preload_pipeline_warnings
+          # This preloads the number of warnings for every pipeline, ensuring
+          # that Ci::Pipeline#has_warnings? doesn't execute any additional
+          # queries.
+          @pipeline.number_of_warnings
+        end
     
+            def id_for_already_imported_cache(issue)
+          issue.number
+        end
     
-    def get_file(url)
-      uri = URI(url)
-      cache_path = './#@cache_path#{uri.path}#{uri.query.tr('?&=', '-') if uri.query}'
-      FileUtils.mkdir_p File.dirname(cache_path)
-      if File.exists?(cache_path)
-        log_http_get_file url, true
-        File.read(cache_path, mode: 'rb')
-      else
-        log_http_get_file url, false
-        content = open(url).read
-        File.open(cache_path, 'wb') { |f| f.write content }
-        content
+            # Builds a lfs_object
+        def self.from_api_response(lfs_object)
+          new({ oid: lfs_object[0], download_link: lfs_object[1] })
+        end
+    
+            '#{route.request_method} #{route.path}' if route
+      end
+    end
+  end
+end
+
+    
+      def serialize_options(resource)
+    methods = resource_class.authentication_keys.dup
+    methods = methods.keys if methods.is_a?(Hash)
+    methods << :password if resource.respond_to?(:password)
+    { methods: methods, only: [:password] }
+  end
+    
+            selected_modules.each do |m|
+          mod = Devise::Models.const_get(m.to_s.classify)
+    
+            if Devise.activerecord51?
+          def clear_reset_password_token?
+            encrypted_password_changed = respond_to?(:will_save_change_to_encrypted_password?) && will_save_change_to_encrypted_password?
+            authentication_keys_changed = self.class.authentication_keys.any? do |attribute|
+              respond_to?('will_save_change_to_#{attribute}?') && send('will_save_change_to_#{attribute}?')
+            end
+    
+          old_initial_revision_var = 'HOMEBREW_UPDATE_BEFORE#{repo_var}'
+      old_current_revision_var = 'HOMEBREW_UPDATE_AFTER#{repo_var}'
+    
+          [ scale_geometry, crop_geometry ]
+    end
+    
+        def geometry_string
+      begin
+        orientation = Paperclip.options[:use_exif_orientation] ?
+          '%[exif:orientation]' : '1'
+        Paperclip.run(
+          Paperclip.options[:is_windows] ? 'magick identify' : 'identify',
+          '-format '%wx%h,#{orientation}' :file', {
+            :file => '#{path}[0]'
+          }, {
+            :swallow_stderr => true
+          }
+        )
+      rescue Terrapin::ExitStatusError
+        ''
+      rescue Terrapin::CommandNotFoundError => e
+        raise_because_imagemagick_missing
       end
     end
