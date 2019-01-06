@@ -1,140 +1,112 @@
 
         
-                inner_command = 'git describe --tags `git rev-list --tags --max-count=1`'
-        # this is not really the command that would have been executed, but a 'fabricated' representation for tests (by Actions.sh) that includes both command that would have been run
-        pseudocommand = 'git log --pretty=\'%B\' #{inner_command.shellescape}...HEAD'
-        expect(result).to eq(pseudocommand)
+          p.action do |args, _|
+    if args.empty?
+      Jekyll.logger.error 'A subcommand is required.'
+      puts p
+      abort
+    else
+      subcommand = args.first
+      unless p.has_command? subcommand
+        Jekyll.logger.abort_with 'fatal: 'jekyll #{args.first}' could not' \
+          ' be found. You may need to install the jekyll-#{args.first} gem' \
+          ' or a related gem to be able to use this subcommand.'
       end
-    
-            expect(result[1]).to start_with('security set-keychain-settings')
-        expect(result[1]).to include('-t 300')
-        expect(result[1]).to_not(include('-l'))
-        expect(result[1]).to_not(include('-u'))
-        expect(result[1]).to include('~/Library/Keychains/test.keychain')
-        expect(result[2]).to start_with('security list-keychains -s')
-        expect(result[2]).to end_with(File.expand_path('~/Library/Keychains/test.keychain').to_s)
-      end
-    
-            Fastlane::FastFile.new.parse('lane :test do
-          import_certificate ({
-            keychain_name: '#{keychain}',
-            keychain_password: '#{password}',
-            certificate_path: '#{cert_name}',
-            certificate_password: '#{password}'
-          })
-        end').runner.execute(:test)
-      end
-    
-                result = Fastlane::FastFile.new.parse('lane :test do
-              swiftlint(ignore_exit_status: true)
-            end').runner.execute(:test)
-          end
-        end
-    
-      it 'returns true when passed ?d if the argument is a directory' do
-    Kernel.test(?d, @dir).should == true
-  end
-    
-        # we assume that the first file that requires 'sinatra' is the
-    # app_file. all other path related options are calculated based
-    # on this path by default.
-    set :app_file, caller_files.first || $0
-    
-      # set version
-  content.sub! /(s\.version.*=\s+).*/, '\\1\'#{Rack::Protection::VERSION}\''
-    
-          def handle(hash)
-        was = hash.dup
-        hash.replace escape(hash)
-        was
-      end
-    
-        headers = get('/', {}, 'wants' => 'text/html').headers
-    expect(headers['Content-Security-Policy']).to be_nil
-    expect(headers['Content-Security-Policy-Report-Only']).to eq('connect-src 'self'; default-src none; img-src 'self'; report-uri /my_amazing_csp_report_parser; script-src 'self'; style-src 'self'')
-  end
-    
-          def sidebar
-        if @sidebar.nil?
-          if page = @page.sidebar
-            @sidebar = page.text_data
-          else
-            @sidebar = false
-          end
-        end
-        @sidebar
-      end
-    
-          def use_identicon
-        @wiki.user_icons == 'identicon'
-      end
-    
-          def has_path
-        !@path.nil?
-      end
-    
-    $contexts = []
-    
-      test 'previews content on the first page of an empty wiki' do
-    @path = cloned_testpath('examples/empty.git')
-    @wiki = Gollum::Wiki.new(@path)
-    Precious::App.set(:gollum_path, @path)
-    Precious::App.set(:wiki_options, {})
-    post '/preview', :content => 'abc', :format => 'markdown'
-    assert last_response.ok?
-  end
-    
-    opts = OptionParser.new do |opts|
-  # define program name (although this defaults to the name of the file, just in case...)
-  opts.program_name = 'gollum'
-    
-  # set basic info for the '--help' command (options will be appended automatically from the below definitions)
-  opts.banner = '
-  Gollum is a multi-format Wiki Engine/API/Frontend.
-    
-  Usage:
-      gollum [options] [git-repo]
-    
-  Arguments:
-      [git-repo]                     Path to the git repository being served. If not specified, current working directory is used.
-  
-  Notes:
-      Paths for all options are relative to <git-repo> unless absolute.
-      This message is only a basic description. For more information, please visit:
-          https://github.com/gollum/gollum
-  
-  OPTIONS'
-  
-  # define gollum options  
-  opts.separator ''
-  opts.separator '  Major:'
-  
-  opts.on('-h', '--host [HOST]', 'Specify the hostname or IP address to listen on. Default: '0.0.0.0'.') do |host|
-    options[:bind] = host
-  end
-  opts.on('-p', '--port [PORT]', 'Specify the port to bind Gollum with. Default: '4567'.') do |port|
-    begin
-      # don't use 'port.to_i' here... it doesn't raise errors which might result in a nice confusion later on
-      options[:port] = Integer(port)
-    rescue ArgumentError
-      puts 'Error: '#{port}' is not a valid port number.'
-      exit 1
     end
   end
-  opts.on('-c', '--config [FILE]', 'Specify path to the Gollum's configuration file.') do |file|
-    options[:config] = file
+end
+
+    
+                @config['syntax_highlighter_opts'] = begin
+              strip_coderay_prefix(
+                @config['syntax_highlighter_opts'] \
+                  .merge(CODERAY_DEFAULTS) \
+                  .merge(@config['coderay'])
+              )
+            end
+          end
+        end
+      end
+    end
   end
-  opts.on('-r', '--ref [REF]', 'Specify the branch to serve. Default: 'master'.') do |ref|
-    wiki_options[:ref] = ref
+end
+
+    
+        def show_message
+      UI.message('Sending anonymous analytics information')
+      UI.message('Learn more at https://docs.fastlane.tools/#metrics')
+      UI.message('No personal or sensitive data is sent.')
+      UI.message('You can disable this by adding `opt_out_usage` at the top of your Fastfile')
+    end
+    
+          it 'adds docset_bundle_name param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            docset_bundle_name: 'Bundle name'
+          )
+        end').runner.execute(:test)
+    
+          it 'adds use-submodules flag to command if use_submodules is set to true' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            carthage(
+              use_submodules: true
+            )
+          end').runner.execute(:test)
+    
+          context 'as string with wildcards' do
+        it 'executes the correct git command' do
+          allow(Fastlane::Actions).to receive(:sh).with('git add *.txt', anything).and_return('')
+          result = Fastlane::FastFile.new.parse('lane :test do
+            git_add(path: '*.txt', shell_escape: false)
+          end').runner.execute(:test)
+        end
+      end
+    
+          it 'generates the correct git command with an array of paths' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          git_commit(path: ['./fastlane/README.md', './LICENSE'], message: 'message')
+        end').runner.execute(:test)
+    
+        # [Boolean] Set if the default value should never be used during code generation for Swift
+    #   We generate the Swift API at deployment time, and if there is a value that should never be
+    #   included in the Fastlane.swift or other autogenerated classes, we need to strip it out.
+    #   This includes things like API keys that could be read from ENV[]
+    attr_accessor :code_gen_sensitive
+    
+    # Contributors should always provide a changelog when submitting a PR
+if github.pr_body.length < 5
+  warn('Please provide a changelog summary in the Pull Request description @#{github.pr_author}')
+end
+    
+    tool_name = File.basename($0)
+    
+        def paragraphize(input)
+      '<p>#{input.lstrip.rstrip.gsub(/\n\n/, '</p><p>').gsub(/\n/, '<br/>')}</p>'
+    end
   end
-  opts.on('-a', '--adapter [ADAPTER]', 'Launch Gollum using a specific git adapter. Default: 'grit'.') do |adapter|
-    Gollum::GIT_ADAPTER = adapter
-  end
-  opts.on('--bare', 'Declare '<git-repo>' to be bare. This is only necessary when using the grit adapter.') do
-    wiki_options[:repo_is_bare] = true
-  end
-  opts.on('-b', '--base-path [PATH]', 'Specify the leading portion of all Gollum URLs (path info). Default: '/'.',
-    'Example: setting this to '/wiki' will make the wiki accessible under 'http://localhost:4567/wiki/'.') do |base_path|
-      
-    # first trim a leading slash, if any
-    base_path.sub!(/^\/+/, '')
+end
+    
+          cache(gist, file, data.body) unless @cache_disabled
+      data.body
+    end
+    
+        def render(context)
+      output = super
+      types = {
+        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
+        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
+        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
+      }
+      if @videos.size > 0
+        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
+        @videos.each do |v|
+          video << '<source src='#{v}' #{types[File.extname(v)]}>'
+        end
+        video += '</video>'
+      else
+        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
+      end
+    end
