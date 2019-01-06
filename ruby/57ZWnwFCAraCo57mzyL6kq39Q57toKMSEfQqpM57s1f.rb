@@ -1,92 +1,66 @@
 
         
-              it 'deactivates an existing user' do
-        visit admin_users_path
-        expect(page).to have_no_text('inactive')
-        find(:css, 'a[href='/admin/users/#{users(:bob).id}/deactivate']').click
-        expect(page).to have_text('inactive')
-        users(:bob).reload
-        expect(users(:bob)).not_to be_active
+                  action_name = from_action ? nil : class_ref.step_text
+          Actions.execute_action(action_name) do
+            # arguments is an array by default, containing an hash with the actual parameters
+            # Since we usually just need the passed hash, we'll just use the first object if there is only one
+            if arguments.count == 0
+              arguments = ConfigurationHelper.parse(class_ref, {}) # no parameters => empty hash
+            elsif arguments.count == 1 && arguments.first.kind_of?(Hash)
+              arguments = ConfigurationHelper.parse(class_ref, arguments.first) # Correct configuration passed
+            elsif !class_ref.available_options
+              # This action does not use the new action format
+              # Just passing the arguments to this method
+            else
+              UI.user_error!('You have to call the integration like `#{method_sym}(key: \'value\')`. Run `fastlane action #{method_sym}` for all available keys. Please check out the current documentation on GitHub.')
+            end
+    
+          inspector = GhInspector::Inspector.new('fastlane', 'fastlane', verbose: FastlaneCore::Globals.verbose?)
+      delegate = Fastlane::InspectorReporter.new
+      if message_or_error.kind_of?(String)
+        inspector.search_query(message_or_error, delegate)
+      else
+        inspector.search_exception(message_or_error, delegate)
       end
-    
-          it 'generates a richer DOT script' do
-        expect(agents_dot(@agents, rich: true)).to match(%r{
-          \A
-          digraph \x20 'Agent \x20 Event \x20 Flow' \{
-            (graph \[ [^\]]+ \];)?
-            node \[ [^\]]+ \];
-            edge \[ [^\]]+ \];
-            (?<foo>\w+) \[label=foo,tooltip='Dot \x20 Foo',URL='#{Regexp.quote(agent_path(@foo))}'\];
-            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
-            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
-            \k<bar1> \[label=bar1,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar1))}'\];
-            \k<bar2> \[label=bar2,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar2))}',style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
-            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
-            \k<bar3> \[label=bar3,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar3))}'\];
-          \}
-          \z
-        }x)
-      end
-    end
-  end
-    
-      describe '.seed' do
-    it 'imports a set of agents to get the user going when they are first created' do
-      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
-    end
-    
-                weather_agent_diff = scenario_import.agent_diffs[0]
-    
-          expect(data[:agents][guid_order(agent_list, :jane_weather_agent)]).not_to have_key(:propagate_immediately) # can't receive events
-      expect(data[:agents][guid_order(agent_list, :jane_rain_notifier_agent)]).not_to have_key(:schedule) # can't be scheduled
-    end
-    
-        it 'should work with the human task agent' do
-      valid_params = {
-        'expected_receive_period_in_days' => 2,
-        'trigger_on' => 'event',
-        'hit' =>
-          {
-            'assignments' => 1,
-            'title' => 'Sentiment evaluation',
-            'description' => 'Please rate the sentiment of this message: '<$.message>'',
-            'reward' => 0.05,
-            'lifetime_in_seconds' => 24 * 60 * 60,
-            'questions' =>
-              [
-                {
-                  'type' => 'selection',
-                  'key' => 'sentiment',
-                  'name' => 'Sentiment',
-                  'required' => 'true',
-                  'question' => 'Please select the best sentiment value:',
-                  'selections' =>
-                    [
-                      { 'key' => 'happy', 'text' => 'Happy' },
-                      { 'key' => 'sad', 'text' => 'Sad' },
-                      { 'key' => 'neutral', 'text' => 'Neutral' }
-                    ]
-                },
-                {
-                  'type' => 'free_text',
-                  'key' => 'feedback',
-                  'name' => 'Have any feedback for us?',
-                  'required' => 'false',
-                  'question' => 'Feedback',
-                  'default' => 'Type here...',
-                  'min_length' => '2',
-                  'max_length' => '2000'
-                }
-              ]
-          }
-      }
-      @agent = Agents::HumanTaskAgent.new(:name => 'somename', :options => valid_params)
-      @agent.user = users(:jane)
-      LiquidMigrator.convert_all_agent_options(@agent)
-      expect(@agent.reload.options['hit']['description']).to eq('Please rate the sentiment of this message: '{{message}}'')
+    rescue => ex
+      FastlaneCore::UI.error('Error finding relevant GitHub issues: #{ex}') if FastlaneCore::Globals.verbose?
     end
   end
 end
+
     
-      describe '#interpolate_jsonpaths' do
-    let(:payload) { { :there => { :world => 'WORLD' }, :works => 'should work' } }
+            expect(result).to eq('git commit -m message ./fastlane/README.md')
+      end
+    
+              it 'uses system wide oclint' do
+            expect(result).to include(command)
+          end
+        end
+    
+    # confirms that the escaped string that is generated actually
+# gets turned back into the source string by the actual shell.
+# abuses a `grep` (or `find`) error message because that should be cross platform
+def confirm_shell_unescapes_string_correctly(string, escaped)
+  compare_string = string.to_s.dup
+    
+    if git.modified_files.include?('snapshot/lib/assets/SnapshotHelper.swift')
+  warn('You modified `SnapshotHelper.swift`, make sure to update the version number at the bottom of the file to notify users about the new helper file.')
+end
+    
+          it 'allows closing brace on same line as last multiline element' do
+        expect_no_offenses(construct(true, a, make_multi(multi), false))
+      end
+    
+    module RuboCop
+  module AST
+    # Common functionality for nodes that can be used as hash elements:
+    # `pair`, `kwsplat`
+    module HashElementNode
+      # Returns the key of this `hash` element.
+      #
+      # @note For keyword splats, this returns the whole node
+      #
+      # @return [Node] the key of the hash element
+      def key
+        node_parts[0]
+      end
