@@ -1,247 +1,127 @@
 
         
-        module ActionView
-  module Helpers
-    module Tags # :nodoc:
-      class DateSelect < Base # :nodoc:
-        def initialize(object_name, method_name, template_object, options, html_options)
-          @html_options = html_options
+            checks.inject_dump_stats! if ARGV.switch? 'D'
     
-            def render
-          options = @options.stringify_keys
-          options['size'] = options['maxlength'] unless options.key?('size')
-          options['type'] ||= field_type
-          options['value'] = options.fetch('value') { value_before_type_cast } unless field_type == 'file'
-          add_default_name_and_id(options)
-          tag('input', options)
-        end
+      def search
+    if ARGV.empty?
+      puts_columns Formula.full_names
+    elsif ARGV.include? '--macports'
+      exec_browser 'https://www.macports.org/ports.php?by=name&substr=#{ARGV.next}'
+    elsif ARGV.include? '--fink'
+      exec_browser 'http://pdb.finkproject.org/pdb/browse.php?summary=#{ARGV.next}'
+    elsif ARGV.include? '--debian'
+      exec_browser 'https://packages.debian.org/search?keywords=#{ARGV.next}&searchon=names&suite=all&section=all'
+    elsif ARGV.include? '--opensuse'
+      exec_browser 'https://software.opensuse.org/search?q=#{ARGV.next}'
+    elsif ARGV.include? '--fedora'
+      exec_browser 'https://admin.fedoraproject.org/pkgdb/packages/%2A#{ARGV.next}%2A/'
+    elsif ARGV.include? '--ubuntu'
+      exec_browser 'http://packages.ubuntu.com/search?keywords=#{ARGV.next}&searchon=names&suite=all&section=all'
+    elsif ARGV.include? '--desc'
+      query = ARGV.next
+      rx = query_regexp(query)
+      Descriptions.search(rx, :desc).print
+    elsif ARGV.first =~ HOMEBREW_TAP_FORMULA_REGEX
+      query = ARGV.first
+      user, repo, name = query.split('/', 3)
     
-        # Controls whether an action should be rendered using a layout.
-    # If you want to disable any <tt>layout</tt> settings for the
-    # current action so that it is rendered without a layout then
-    # either override this method in your controller to return false
-    # for that action or set the <tt>action_has_layout</tt> attribute
-    # to false before rendering.
-    def action_has_layout?
-      @_action_has_layout
+      def self.path(name)
+    Formulary.core_path(name)
+  end
+    
     end
+
     
-        rake_tasks do |app|
-      unless app.config.api_only
-        load 'action_view/tasks/cache_digests.rake'
-      end
+        it 'does not output links to other agents outside of the incoming set' do
+      Link.create!(:source_id => agents(:jane_weather_agent).id, :receiver_id => agents(:jane_website_agent).id)
+      Link.create!(:source_id => agents(:jane_website_agent).id, :receiver_id => agents(:jane_rain_notifier_agent).id)
+    
+      describe 'migrating an actual agent' do
+    before do
+      valid_params = {
+                        'auth_token' => 'token',
+                        'room_name' => 'test',
+                        'room_name_path' => '',
+                        'username' => 'Huginn',
+                        'username_path' => '$.username',
+                        'message' => 'Hello from Huginn!',
+                        'message_path' => '$.message',
+                        'notify' => false,
+                        'notify_path' => '',
+                        'color' => 'yellow',
+                        'color_path' => '',
+                      }
+    
+          a = '        Events will have the fields you specified.  Your options look like:\n\n            {\n      \'url\': {\n        \'css\': \'#comic img\',\n        \'value\': \'@src\'\n      },\n      \'title\': {\n        \'css\': \'#comic img\',\n        \'value\': \'@title\'\n      }\n    }\'\n'
+      expect(Utils.unindent(a)).to eq('Events will have the fields you specified.  Your options look like:\n\n    {\n      \'url\': {\n\'css\': \'#comic img\',\n\'value\': \'@src\'\n      },\n      \'title\': {\n\'css\': \'#comic img\',\n\'value\': \'@title\'\n      }\n    }\'')
+    end
+  end
+    
+      describe '#log_length' do
+    it 'defaults to 200' do
+      expect(AgentLog.log_length).to eq(200)
     end
   end
 end
 
     
-        it 'returns a FontAwesome icon element' do
-      icon = icon_tag('fa-copy', class: 'text-info')
-      expect(icon).to be_html_safe
-      expect(Nokogiri(icon).at('i.fa.fa-copy.text-info')).to be_a Nokogiri::XML::Element
-    end
-  end
-    
-        it 'defauls foreground and background colors' do
-      scenario.tag_fg_color = nil
-      scenario.tag_bg_color = nil
-      expect(style_colors(scenario)).to eq('color:#FFFFFF;background-color:#5BC0DE')
-    end
-  end
-    
-            it 'adds errors on validation when updated options are unparsable' do
-          scenario_import.merges = {
-            '0' => {
-              'options' => '{'
-            }
-          }
-          expect(scenario_import).not_to be_valid
-          expect(scenario_import).to have(1).error_on(:base)
+          # @see Base#\_store
+      def _store(key, version, sha, contents)
+        compiled_filename = path_to(key)
+        FileUtils.mkdir_p(File.dirname(compiled_filename))
+        Sass::Util.atomic_create_and_write_file(compiled_filename) do |f|
+          f.puts(version)
+          f.puts(sha)
+          f.write(contents)
         end
-      end
-    end
-    }
-    
-      describe '#sort_tuples!' do
-    let(:tuples) {
-      time = Time.now
-      [
-        [2, 'a', time - 1],  # 0
-        [2, 'b', time - 1],  # 1
-        [1, 'b', time - 1],  # 2
-        [1, 'b', time],      # 3
-        [1, 'a', time],      # 4
-        [2, 'a', time + 1],  # 5
-        [2, 'a', time],      # 6
-      ]
-    }
-    
-            # Configures the given list of networks on the virtual machine.
-        #
-        # The networks parameter will be an array of hashes where the hashes
-        # represent the configuration of a network interface. The structure
-        # of the hash will be roughly the following:
-        #
-        # {
-        #   type:      :static,
-        #   ip:        '192.168.33.10',
-        #   netmask:   '255.255.255.0',
-        #   interface: 1
-        # }
-        #
-        def configure_networks(networks)
-          raise BaseError, _key: :unsupported_configure_networks
-        end
-    
-              result
-        end
-    
-            # This contains all the command plugins by name, and returns
-        # the command class and options. The command class is wrapped
-        # in a Proc so that it can be lazy loaded.
-        #
-        # @return [Registry<Symbol, Array<Proc, Hash>>]
-        attr_reader :commands
-    
-            # Capture all bad configuration calls and save them for an error
-        # message later during validation.
-        def method_missing(name, *args, &block)
-          return super if @__finalized
-    
-            # This is an internal initialize function that should never be
-        # overridden. It is used to initialize some common internal state
-        # that is used in a provider.
-        def _initialize(name, machine)
-          initialize_capabilities!(
-            name.to_sym,
-            { name.to_sym => [Class.new, nil] },
-            Vagrant.plugin('2').manager.provider_capabilities,
-            machine,
-          )
-        end
-      end
-    end
-  end
-end
-
-    
-        # Return the number of elements in this registry.
-    #
-    # @return [Integer]
-    def length
-      @items.keys.length
-    end
-    alias_method :size, :length
-    
-    Then(/^the default stage files are created$/) do
-  staging = TestApp.test_app_path.join('config/deploy/staging.rb')
-  production = TestApp.test_app_path.join('config/deploy/production.rb')
-  expect(File.exist?(staging)).to be true
-  expect(File.exist?(production)).to be true
-end
-    
-    Given(/config stage file has line '(.*?)'/) do |line|
-  TestApp.append_to_deploy_file(line)
-end
-    
-      def exists?(type, path)
-    %Q{[ -#{type} '#{path}' ]}
-  end
-    
-          def response
-        return @response if defined? @response
-    
-          private
-    
-          # Runs all validation rules registered for the given key against the
-      # user-supplied value for that variable. If no validator raises an
-      # exception, the value is assumed to be valid.
-      def assert_valid_now(key, value)
-        validators[key].each do |validator|
-          validator.call(key, value)
-        end
+      rescue Errno::EACCES
+        # pass
       end
     
-      it 'ignores single-line arrays' do
-    expect_no_offenses('[a, b, c]')
-  end
+            sseq = first_sseq(child)
+        next child unless sseq.is_a?(Sass::Selector::SimpleSequence)
     
-      include_examples 'multiline literal brace layout method argument' do
-    let(:open) { '{' }
-    let(:close) { '}' }
-    let(:a) { 'a: 1' }
-    let(:b) { 'b: 2' }
-    let(:multi_prefix) { 'b: ' }
-    let(:multi) { ['[', '1', ']'] }
-  end
+            if e.is_a?(Sass::SyntaxError)
+          $stderr.puts e.sass_backtrace_str('standard input')
+        else
+          $stderr.print '#{e.class}: ' unless e.class == RuntimeError
+          $stderr.puts e.message.to_s
+        end
+        $stderr.puts '  Use --trace for backtrace.'
     
-          it 'detects closing brace on different line from multiline element' do
-        src = construct(false, a, make_multi(multi), true)
-        inspect_source(src)
+          out =
+        Sass::Util.silence_sass_warnings do
+          if @options[:from] == :css
+            require 'sass/css'
+            Sass::CSS.new(read(input), @options[:for_tree]).render(@options[:to])
+          else
+            if input_path
+              Sass::Engine.for_file(input_path, @options[:for_engine])
+            else
+              Sass::Engine.new(read(input), @options[:for_engine])
+            end.to_tree.send('to_#{@options[:to]}', @options[:for_tree])
+          end
+        end
     
-          # Returns the collection the `for` loop is iterating over.
+          # Checks whether any of the key value pairs in the `hash` literal are on
+      # the same line.
       #
-      # @return [Node] The collection the `for` loop is iterating over
-      def collection
-        node_parts[1]
+      # @note A multiline `pair` is considered to be on the same line if it
+      #       shares any of its lines with another `pair`
+      #
+      # @return [Boolean] whether any `pair` nodes are on the same line
+      def pairs_on_same_line?
+        pairs.each_cons(2).any? { |first, second| first.same_line?(second) }
       end
     
-          # Whether the last argument of the node is a block pass,
-      # i.e. `&block`.
+          DOUBLE_SPLAT = '**'.freeze
+    
+          # Checks whether any argument of the node is a splat
+      # argument, i.e. `*splat`.
       #
-      # @return [Boolean] whether the last argument of the node is a block pass
-      def block_argument?
+      # @return [Boolean] whether the node is a splat argument
+      def splat_argument?
         arguments? &&
-          (last_argument.block_pass_type? || last_argument.blockarg_type?)
+          (arguments.any?(&:splat_type?) || arguments.any?(&:restarg_type?))
       end
-    end
-  end
-end
-
-    
-            def update
-          authorize! :update, @order, order_token
-    
-            def update
-          @option_value = scope.accessible_by(current_ability, :update).find(params[:id])
-          if @option_value.update_attributes(option_value_params)
-            render :show
-          else
-            invalid_resource!(@option_value)
-          end
-        end
-    
-            def create
-          @order.validate_payments_attributes([payment_params])
-          @payment = @order.payments.build(payment_params)
-          if @payment.save
-            respond_with(@payment, status: 201, default_template: :show)
-          else
-            invalid_resource!(@payment)
-          end
-        end
-    
-            def destroy
-          @stock_item = StockItem.accessible_by(current_ability, :destroy).find(params[:id])
-          @stock_item.destroy
-          respond_with(@stock_item, status: 204)
-        end
-    
-            def create
-          authorize! :create, StockMovement
-          @stock_movement = scope.new(stock_movement_params)
-          if @stock_movement.save
-            respond_with(@stock_movement, status: 201, default_template: :show)
-          else
-            invalid_resource!(@stock_movement)
-          end
-        end
-    
-            def update
-          authorize! :update, user
-          if user.update_attributes(user_params)
-            respond_with(user, status: 200, default_template: :show)
-          else
-            invalid_resource!(user)
-          end
-        end
+      alias rest_argument? splat_argument?
