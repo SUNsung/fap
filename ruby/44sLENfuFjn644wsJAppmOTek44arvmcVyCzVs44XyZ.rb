@@ -1,81 +1,131 @@
 
         
-              GivenDailyLike.increment_for(user.id)
-      expect(value_for(user.id, dt)).to eq(1)
-      expect(limit_reached_for(user.id, dt)).to eq(false)
+        # Just a slash
+Benchmark.ips do |x|
+  path = '/'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
+end
     
-    UserOption.where(user_id: -1).update_all(
-  email_private_messages: false,
-  email_direct: false
-)
+    def global_require
+  JSON.pretty_generate(DATA)
+end
     
-          if lounge.topic_id.nil?
-        creator = PostCreator.new(Discourse.system_user,
-          raw: I18n.t('vip_category_description'),
-          title: I18n.t('category.topic_prefix', category: lounge.name),
-          category: lounge.name,
-          archetype: Archetype.default,
-          skip_validations: true
-        )
-        post = creator.create
+          def step_name(_keyword, _step_match, status, _source_indent, _background, _file_colon_line)
+        @io.print CHARS[status]
+        @io.print ' '
+      end
+      # rubocop:enable Metrics/ParameterLists
     
-            unless post && post.id
-          puts post.errors.full_messages if post
-          puts creator.errors.inspect
-          raise 'Failed to create description for Staff category!'
+            # For a description of the protocol see
+        # http://feedback.livereload.com/knowledgebase/articles/86174-livereload-protocol
+        def reload(pages)
+          pages.each do |p|
+            json_message = JSON.dump(
+              :command => 'reload',
+              :path    => p.url,
+              :liveCSS => true
+            )
+    
+            def initialize(_opts)
+          # If EventMachine SSL support on Windows ever gets better, the code below will
+          # set up the reactor to handle SSL
+          #
+          # @ssl_enabled = opts['ssl_cert'] && opts['ssl_key']
+          # if @ssl_enabled
+          #   em_opts[:tls_options] = {
+          #   :private_key_file => Jekyll.sanitized_path(opts['source'], opts['ssl_key']),
+          #   :cert_chain_file  => Jekyll.sanitized_path(opts['source'], opts['ssl_cert'])
+          #   }
+          #   em_opts[:secure] = true
+          # end
+    
+    module Admin
+  class EmailDomainBlocksController < BaseController
+    before_action :set_email_domain_block, only: [:show, :destroy]
+    
+              redirect_to admin_reports_path, notice: I18n.t('admin.reports.resolved_msg')
+          return
         end
     
-          return unless old_path.directory?
+        def create
+      authorize :status, :update?
     
-      it 'no raises error on fixnum values' do
-    [1].each do |v|
-      lambda { v.taint }.should_not raise_error(RuntimeError)
-      v.tainted?.should == false
-    end
+      def setting
+    @_setting ||= ::Web::Setting.where(user: current_user).first_or_initialize(user: current_user)
   end
 end
 
     
-    describe 'main#define_method' do
-  before :each do
-    @code = 'define_method(:boom) { :bam }'
+        alias log puts
+    
+      # Compile a Sass or SCSS string to CSS.
+  # Defaults to SCSS.
+  #
+  # @param contents [String] The contents of the Sass file.
+  # @param options [{Symbol => Object}] An options hash;
+  #   see {file:SASS_REFERENCE.md#Options the Sass options documentation}
+  # @raise [Sass::SyntaxError] if there's an error in the document
+  # @raise [Encoding::UndefinedConversionError] if the source encoding
+  #   cannot be converted to UTF-8
+  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
+  def self.compile(contents, options = {})
+    options[:syntax] ||= :scss
+    Engine.new(contents, options).to_css
   end
     
-        def URIEncodeSingle(cc, result, index)
-      x = (cc >> 12) & 0xF;
-      y = (cc >> 6) & 63;
-      z = cc & 63;
-      octets = Array.new(3);
-      if (cc <= 0x007F)
-        octets[0] = cc;
-      elsif (cc <= 0x07FF)
-        octets[0] = y + 192;
-        octets[1] = z + 128;
-      else
-        octets[0] = x + 224;
-        octets[1] = y + 128;
-        octets[2] = z + 128;
+          files.map! do |from, to|
+        to ||= from.gsub(/\.[^.]*?$/, '.css')
+        sourcemap = Sass::Util.sourcemap_name(to) if @options[:sourcemap]
+        [from, to, sourcemap]
       end
-      return URIEncodeOctets(octets, result, index);
-    end
+      dirs.map! {|from, to| [from, to || from]}
+      Sass::Plugin.options[:template_location] = dirs
     
-          def line_class(line)
-        if line =~ /^@@/
-          'gc'
-        elsif line =~ /^\+/
-          'gi'
-        elsif line =~ /^\-/
-          'gd'
-        else
-          ''
-        end
+          # Returns the time the given Sass file was last modified.
+      #
+      # If the given file has been deleted or the time can't be accessed
+      # for some other reason, this should return nil.
+      #
+      # @param uri [String] The URI of the file to check.
+      #   Comes from a `:filename` option set on an engine returned by this importer.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` currently being checked.
+      # @return [Time, nil]
+      def mtime(uri, options)
+        Sass::Util.abstract(self)
       end
     
-    def testpath(path)
-  File.join(TEST_DIR, path)
-end
-    
-        # True if the dimensions represent a vertical rectangle
-    def vertical?
-      height > width
+      namespace :release do
+    GEMS_AND_ROOT_DIRECTORIES.each do |gem, directory|
+      desc 'Release #{gem} as a package'
+      task gem => 'package:#{gem}' do
+        sh <<-SH
+          gem install #{package(gem, '.gem')} --local &&
+          gem push #{package(gem, '.gem')}
+        SH
+      end
     end
+    
+          def set_token(session)
+        session[:csrf] ||= self.class.random_token
+      end
+    
+    # when launched as a script, not require'd, (currently from bin/logstash and bin/logstash-plugin) the first
+# argument is the path of a Ruby file to require and a LogStash::Runner class is expected to be
+# defined and exposing the LogStash::Runner#main instance method which will be called with the current ARGV
+# currently lib/logstash/runner.rb and lib/pluginmanager/main.rb are called using this.
+if $0 == __FILE__
+  LogStash::Bundler.setup!({:without => [:build, :development]})
+  require_relative 'patches/jar_dependencies'
+    
+          # Try to add the gems to the current gemfile and lock file, if successful
+      # both of them will be updated. This injector is similar to Bundler's own injector class
+      # minus the support for additionals source and doing local resolution only.
+      ::Bundler::LogstashInjector.inject!(pack)
+    
+      it 'does object equality on config_hash and pipeline_id' do
+    another_exact_pipeline = described_class.new(source, pipeline_id, ordered_config_parts, settings)
+    expect(subject).to eq(another_exact_pipeline)
