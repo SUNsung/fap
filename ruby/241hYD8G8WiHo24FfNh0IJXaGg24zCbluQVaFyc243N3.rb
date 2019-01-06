@@ -1,112 +1,174 @@
 
         
-              obj.should_receive(:to_int).and_return(10)
-      format('%b', obj).should == '1010'
+        # Windows implementation
+module WindowsShellwords
+  def shellescape(str)
+    str = str.to_s
+    
+          it 'should shell escape keychain names when checking for installation' do
+        expect(FastlaneCore::CertChecker).to receive(:wwdr_keychain).and_return(keychain_name)
+        expect(FastlaneCore::Helper).to receive(:backticks).with(name_regex, anything).and_return('')
+    
+    if git.modified_files.include?('snapshot/lib/assets/SnapshotHelperXcode8.swift')
+  warn('You modified `SnapshotHelperXcode8.swift`, make sure to update the version number at the bottom of the file to notify users about the new helper file.')
+end
+    
+        it 'defauls foreground and background colors' do
+      scenario.tag_fg_color = nil
+      scenario.tag_bg_color = nil
+      expect(style_colors(scenario)).to eq('color:#FFFFFF;background-color:#5BC0DE')
     end
-    
-        trace_var :$Kernel_trace_var_global do |value|
-      captured = value
-    end
-    
-    namespace :bower do
-    
-      # Configure static asset server for tests with Cache-Control for performance.
-  if config.respond_to?(:serve_static_files)
-    # rails >= 4.2
-    config.serve_static_files = true
-  elsif config.respond_to?(:serve_static_assets)
-    # rails < 4.2
-    config.serve_static_assets = true
   end
-  config.static_cache_control = 'public, max-age=3600'
     
-    group :debugging do
-  gem 'cocoapods_debug'
-    
-    Then(/^git wrapper permissions are 0700$/) do
-  permissions_test = %Q([ $(stat -c '%a' #{TestApp.git_wrapper_path.shellescape}) == '700' ])
-  _stdout, _stderr, status = vagrant_cli_command('ssh -c #{permissions_test.shellescape}')
-    
-          def call
-        ask_question
-        value_or_default
-      end
-    
-          def left_diff_line_number(id, line)
-        if line =~ /^@@/
-          m, li                  = *line.match(/\-(\d+)/)
-          @left_diff_line_number = li.to_i
-          @current_line_number   = @left_diff_line_number
-          ret                    = '...'
-        elsif line[0] == ?-
-          ret                    = @left_diff_line_number.to_s
-          @left_diff_line_number += 1
-          @current_line_number   = @left_diff_line_number - 1
-        elsif line[0] == ?+
-          ret = ' '
-        else
-          ret                    = @left_diff_line_number.to_s
-          @left_diff_line_number += 1
-          @current_line_number   = @left_diff_line_number - 1
+            it 'kills no long active workers' do
+          mock.instance_of(HuginnScheduler).run!
+          mock.instance_of(DelayedJobWorker).run!
+          @agent_runner.send(:run_workers)
+          AgentRunner.class_variable_set(:@@agents, [DelayedJobWorker])
+          mock.instance_of(HuginnScheduler).stop!
+          @agent_runner.send(:run_workers)
         end
-        ret
       end
     
-          def title
-        h1 = @h1_title ? page_header_from_content(@content) : false
-        h1 || @page.url_path_title
-      end
+            # This is what is called on the class to actually execute it. Any
+        # subclasses should implement this method and do any option parsing
+        # and validation here.
+        def execute
+        end
     
-    desc 'Validate lib files and version file'
-task :validate do
-  libfiles = Dir['lib/*'] - ['lib/#{name}.rb', 'lib/#{name}']
-  unless libfiles.empty?
-    puts 'Directory `lib` should only contain a `#{name}.rb` file and `#{name}` dir.'
-    exit!
-  end
-  unless Dir['VERSION*'].empty?
-    puts 'A `VERSION` file at root level violates Gem best practices.'
-    exit!
+            # This is called to upgrade this V1 config to V2. The parameter given
+        # is the full V2 configuration object, so you can do anything to it
+        # that you want.
+        #
+        # No return value is expected, modifications should be made directly
+        # to the new V2 object.
+        #
+        # @param [V2::Root] new
+        def upgrade(new)
+        end
+    
+            # Called to change the hostname of the virtual machine.
+        def change_host_name(name)
+          raise BaseError, _key: :unsupported_host_name
+        end
+      end
+    end
   end
 end
 
     
-          # Returns an array of all the when branches in the `case` statement.
+            # This is the method called to provision the system. This method
+        # is expected to do whatever necessary to provision the system (create files,
+        # SSH, etc.)
+        def provision!
+        end
+    
+            # This method will split the argv given into three parts: the
+        # flags to this command, the subcommand, and the flags to the
+        # subcommand. For example:
+        #
+        #     -v status -h -v
+        #
+        # The above would yield 3 parts:
+        #
+        #     ['-v']
+        #     'status'
+        #     ['-h', '-v']
+        #
+        # These parts are useful because the first is a list of arguments
+        # given to the current command, the second is a subcommand, and the
+        # third are the commands given to the subcommand.
+        #
+        # @return [Array] The three parts.
+        def split_main_and_subcommand(argv)
+          # Initialize return variables
+          main_args   = nil
+          sub_command = nil
+          sub_args    = []
+    
+            # This returns all registered providers.
+        #
+        # @return [Hash]
+        def providers
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.providers)
+            end
+          end
+        end
+    
+        # Merge one registry with another and return a completely new
+    # registry. Note that the result cache is completely busted, so
+    # any gets on the new registry will result in a cache miss.
+    def merge(other)
+      self.class.new.tap do |result|
+        result.merge!(self)
+        result.merge!(other)
+      end
+    end
+    
+          old_initial_revision_var = 'HOMEBREW_UPDATE_BEFORE#{repo_var}'
+      old_current_revision_var = 'HOMEBREW_UPDATE_AFTER#{repo_var}'
+    
+      it 'ignores empty arrays' do
+    expect_no_offenses('[]')
+  end
+    
+          # Checks whether any argument of the node is a splat
+      # argument, i.e. `*splat`.
       #
-      # @return [Array<WhenNode>] an array of `when` nodes
-      def when_branches
-        node_parts[1...-1]
+      # @return [Boolean] whether the node is a splat argument
+      def splat_argument?
+        arguments? &&
+          (arguments.any?(&:splat_type?) || arguments.any?(&:restarg_type?))
+      end
+      alias rest_argument? splat_argument?
+    
       end
     
-          # Returns the collection the `for` loop is iterating over.
-      #
-      # @return [Node] The collection the `for` loop is iterating over
-      def collection
-        node_parts[1]
-      end
-    
-            def scope
-          if params[:country_id]
-            @country = Country.accessible_by(current_ability, :read).find(params[:country_id])
-            @country.states.accessible_by(current_ability, :read).order('name ASC')
+            Dir.chdir(includes_dir) do
+          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
+          if choices.include?(file)
+            source = File.read(file)
+            partial = Liquid::Template.parse(source)
+            context.stack do
+              rtn = rtn + partial.render(context)
+            end
           else
-            State.accessible_by(current_ability, :read).order('name ASC')
+            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
+          end
+        end
+      end
+      rtn
+    end
+  end
+    
+      # Improved version of Liquid's truncate:
+  # - Doesn't cut in the middle of a word.
+  # - Uses typographically correct ellipsis (…) insted of '...'
+  def truncate(input, length)
+    if input.length > length && input[0..(length-1)] =~ /(.+)\b.+$/im
+      $1.strip + ' &hellip;'
+    else
+      input
+    end
+  end
+    
+          Dir.chdir(file_path) do
+        contents = file.read
+        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
+          contents = $1.lstrip
+        end
+        contents = pre_filter(contents)
+        if @raw
+          contents
+        else
+          partial = Liquid::Template.parse(contents)
+          context.stack do
+            partial.render(context)
           end
         end
       end
     end
   end
 end
-
-    
-            def taxonomies
-          @taxonomies = Taxonomy.accessible_by(current_ability, :read).order('name').includes(root: :children).
-                        ransack(params[:q]).result.
-                        page(params[:page]).per(params[:per_page])
-        end
-    
-              @users = if params[:ids]
-                     @users.ransack(id_in: params[:ids].split(','))
-                   else
-                     @users.ransack(params[:q])
-                   end
