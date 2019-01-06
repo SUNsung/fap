@@ -1,100 +1,106 @@
 
         
-                # Called after the configuration is finalized and loaded to validate
-        # this object.
-        #
-        # @param [Environment] env Vagrant::Environment object of the
-        #   environment that this configuration has been loaded into. This
-        #   gives you convenient access to things like the the root path
-        #   and so on.
-        # @param [ErrorRecorder] errors
-        def validate(env, errors)
-        end
-      end
+          private
+    
+      def search_tap(user, repo, rx)
+    if (HOMEBREW_LIBRARY/'Taps/#{user.downcase}/homebrew-#{repo.downcase}').directory? && \
+       user != 'Caskroom'
+      return []
+    end
+    
+      def std_cmake_parameters
+    '-DCMAKE_INSTALL_PREFIX='#{prefix}' -DCMAKE_BUILD_TYPE=None -DCMAKE_FIND_FRAMEWORK=LAST -Wno-dev'
+  end
+    
+        Thread.pass until running
+    Thread.pass while t.status and t.status != 'sleep'
+    
+      it 'defaults number to a random value' do
+    lambda { srand }.should_not raise_error
+    srand.should_not == 0
+  end
+    
+    describe :kernel_system, shared: true do
+  it 'executes the specified command in a subprocess' do
+    lambda { @object.system('echo a') }.should output_to_fd('a\n')
+    
+      it 'has no effect on immediate values' do
+    [nil, true, false].each do |v|
+      v.taint
+      v.tainted?.should == false
     end
   end
-end
-
     
-            # Initializes the system. Any subclasses MUST make sure this
-        # method is called on the parent. Therefore, if a subclass overrides
-        # `initialize`, then you must call `super`.
-        def initialize(vm)
-          @vm = vm
-        end
-    
-            # Allows setting options from a hash. By default this simply calls
-        # the `#{key}=` method on the config class with the value, which is
-        # the expected behavior most of the time.
-        #
-        # This is expected to mutate itself.
-        #
-        # @param [Hash] options A hash of options to set on this configuration
-        #   key.
-        def set_options(options)
-          options.each do |key, value|
-            send('#{key}=', value)
-          end
-        end
-    
-            # Sets a human-friendly description of the plugin.
-        #
-        # @param [String] value Description of the plugin.
-        # @return [String] Description of the plugin.
-        def self.description(value=UNSET_VALUE)
-          get_or_set(:description, value)
-        end
-    
-        # Converts this registry to a hash
-    def to_hash
-      result = {}
-      self.each do |key, value|
-        result[key] = value
-      end
-    
-        @statuses = @account.statuses.permitted_for(@account, signed_request_account)
-    @statuses = params[:min_id].present? ? @statuses.paginate_by_min_id(LIMIT, params[:min_id]).reverse : @statuses.paginate_by_max_id(LIMIT, params[:max_id])
-    @statuses = cache_collection(@statuses, Status)
+      it 'is a private method' do
+    Kernel.should have_private_instance_method(:warn)
   end
     
-        @web_subscription = ::Web::PushSubscription.create!(
-      endpoint: subscription_params[:endpoint],
-      key_p256dh: subscription_params[:keys][:p256dh],
-      key_auth: subscription_params[:keys][:auth],
-      data: data_params,
-      user_id: current_user.id,
-      access_token_id: doorkeeper_token.id
-    )
+          it 'detects closing brace on different line from last element' do
+        src = construct(true, true)
+        inspect_source(src)
+        expect(cop.offenses.size).to eq(1)
+        expect(cop.highlights).to eq([close])
+        expect(cop.messages).to eq([described_class::ALWAYS_SAME_LINE_MESSAGE])
+      end
     
-        web_subscription = ::Web::PushSubscription.create!(
-      endpoint: subscription_params[:endpoint],
-      key_p256dh: subscription_params[:keys][:p256dh],
-      key_auth: subscription_params[:keys][:auth],
-      data: data,
-      user_id: active_session.user_id,
-      access_token_id: active_session.access_token_id
-    )
+        context 'and a comment after the last element' do
+      let(:b_comment) { ' # comment b' }
     
-      before_action :require_user!
+    public_dir      = 'public'    # compiled site directory
+source_dir      = 'source'    # source file directory
+blog_index_dir  = 'source'    # directory for your blog's index page (if you put your index in source/blog/index.html, set this to 'source/blog')
+deploy_dir      = '_deploy'   # deploy directory (for Github pages deployment)
+stash_dir       = '_stash'    # directory to stash posts for speedy generation
+posts_dir       = '_posts'    # directory for blog files
+themes_dir      = '.themes'   # directory for blog files
+new_post_ext    = 'markdown'  # default new post file extension when using the new_post task
+new_page_ext    = 'markdown'  # default new page file extension when using the new_page task
+server_port     = '4000'      # port for preview server eg. localhost:4000
     
-      def self.provides_callback_for(provider)
-    provider_id = provider.to_s.chomp '_oauth2'
+        # Outputs a list of categories as comma-separated <a> links. This is used
+    # to output the category list for each post on a category page.
+    #
+    #  +categories+ is the list of categories to format.
+    #
+    # Returns string
+    #
+    def category_links(categories)
+      categories.sort.map { |c| category_link c }.join(', ')
+    end
     
-            def show
-          @inventory_unit = inventory_unit
-          respond_with(@inventory_unit)
-        end
-    
-            def taxonomies
-          @taxonomies = Taxonomy.accessible_by(current_ability, :read).order('name').includes(root: :children).
-                        ransack(params[:q]).result.
-                        page(params[:page]).per(params[:per_page])
-        end
-    
-            def zone_params
-          attrs = params.require(:zone).permit!
-          if attrs[:zone_members]
-            attrs[:zone_members_attributes] = attrs.delete(:zone_members)
+            Dir.chdir(includes_dir) do
+          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
+          if choices.include?(file)
+            source = File.read(file)
+            partial = Liquid::Template.parse(source)
+            context.stack do
+              rtn = rtn + partial.render(context)
+            end
+          else
+            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
           end
-          attrs
         end
+      end
+      rtn
+    end
+  end
+    
+        module PsychAutoload
+      def resolve_class(klass_name)
+        return nil if !klass_name || klass_name.empty?
+        # constantize
+        names = klass_name.split('::')
+        names.shift if names.empty? || names.first.empty?
+    
+    
+    # By leaving this as a class method, it can be pluggable and used by the Manager actor. Making it
+    # an instance method will make it async to the Fetcher actor
+    def self.bulk_requeue(inprogress, options)
+      return if inprogress.empty?
+    
+      # Default to fake testing to keep old behavior
+  Sidekiq::Testing.fake!
+    
+        def hostname
+      ENV['DYNO'] || Socket.gethostname
+    end
