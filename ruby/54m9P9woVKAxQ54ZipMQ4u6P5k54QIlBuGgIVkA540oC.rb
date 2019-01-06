@@ -1,77 +1,158 @@
 
         
-                      if accept
-                html_options[option] = true
-              elsif option == :checked
-                html_options[option] = false
+                  def checked?(value)
+            case value
+            when TrueClass, FalseClass
+              value == !!@checked_value
+            when NilClass
+              false
+            when String
+              value == @checked_value
+            else
+              if value.respond_to?(:include?)
+                value.include?(@checked_value)
+              else
+                value.to_i == @checked_value.to_i
               end
             end
+          end
     
-          private
+            class RadioButtonBuilder < Builder # :nodoc:
+          def radio_button(extra_html_options = {})
+            html_options = extra_html_options.merge(@input_html_options)
+            html_options[:skip_default_ids] = false
+            @template_object.radio_button(@object_name, @method_name, @value, html_options)
+          end
+        end
     
-        initializer 'action_view.default_enforce_utf8' do |app|
-      ActiveSupport.on_load(:action_view) do
-        default_enforce_utf8 = app.config.action_view.delete(:default_enforce_utf8)
-        unless default_enforce_utf8.nil?
-          ActionView::Helpers::FormTagHelper.default_enforce_utf8 = default_enforce_utf8
+                case options[:default]
+            when nil
+              Time.current
+            when Date, Time
+              options[:default]
+            else
+              default = options[:default].dup
+    
+              content = if block_given?
+            @template_object.capture(builder, &block)
+          elsif @content.present?
+            @content.to_s
+          else
+            render_component(builder)
+          end
+    
+              # Determines whether the current action has a layout definition by
+          # checking the action name against the :only and :except conditions
+          # set by the <tt>layout</tt> method.
+          #
+          # ==== Returns
+          # * <tt>Boolean</tt> - True if the action has a layout definition, false otherwise.
+          def _conditional_layout?
+            return unless super
+    
+                  # Break so we don't find the next non flag and shift our
+              # main args.
+              break
+            end
+          end
+    
+            # This is called to upgrade this V1 config to V2. The parameter given
+        # is the full V2 configuration object, so you can do anything to it
+        # that you want.
+        #
+        # No return value is expected, modifications should be made directly
+        # to the new V2 object.
+        #
+        # @param [V2::Root] new
+        def upgrade(new)
+        end
+    
+            # Set the root class up to be ourself, so that we can reference this
+        # from within methods which are probably in subclasses.
+        ROOT_CLASS = self
+    
+            # This is the method called to provision the system. This method
+        # is expected to do whatever necessary to provision the system (create files,
+        # SSH, etc.)
+        def provision!
+        end
+    
+            # This method will split the argv given into three parts: the
+        # flags to this command, the subcommand, and the flags to the
+        # subcommand. For example:
+        #
+        #     -v status -h -v
+        #
+        # The above would yield 3 parts:
+        #
+        #     ['-v']
+        #     'status'
+        #     ['-h', '-v']
+        #
+        # These parts are useful because the first is a list of arguments
+        # given to the current command, the second is a subcommand, and the
+        # third are the commands given to the subcommand.
+        #
+        # @return [Array] The three parts.
+        def split_main_and_subcommand(argv)
+          # Initialize return variables
+          main_args   = nil
+          sub_command = nil
+          sub_args    = []
+    
+            # Returns the instance variables as a hash of key-value pairs.
+        def instance_variables_hash
+          instance_variables.inject({}) do |acc, iv|
+            acc[iv.to_s[1..-1]] = instance_variable_get(iv)
+            acc
+          end
+        end
+    
+            # This is an internal initialize function that should never be
+        # overridden. It is used to initialize some common internal state
+        # that is used in a provider.
+        def _initialize(name, machine)
+          initialize_capabilities!(
+            name.to_sym,
+            { name.to_sym => [Class.new, nil] },
+            Vagrant.plugin('2').manager.provider_capabilities,
+            machine,
+          )
         end
       end
     end
-    
-          def prepend_formats(formats) # :doc:
-        formats = Array(formats)
-        return if formats.empty? || @lookup_context.html_fallback_for_js
-    
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have path in #{expected.inspect} but was #{actual.current_path.inspect}'
   end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have path in #{expected.inspect} but it had'
-  end
-end
-    
-    module Workers
-  class PublishToHub < Base
-    def perform(*_args)
-      # don't publish to pubsubhubbub in cucumber
-    end
-  end
-    
-    describe ContactsController, :type => :controller do
-  describe '#index' do
-    before do
-      AppConfig.chat.enabled = true
-      @aspect = bob.aspects.create(:name => 'another aspect')
-      bob.share_with alice.person, @aspect
-      bob.share_with eve.person, @aspect
-      sign_in bob, scope: :user
-    end
-    
-        it 'generates a jasmine fixture', :fixture => true do
-      get :bookmarklet
-      save_fixture(html_for('body'), 'bookmarklet')
-    end
-    
-        context 'when an the exception is raised' do
-      before do
-        @target = alice.post :status_message, text: 'AWESOME', to: @alices_aspect.id
-      end
-    
-        it 'marks a notification as unread if it is told to' do
-      note = FactoryGirl.create(:notification)
-      expect(Notification).to receive(:where).and_return([note])
-      expect(note).to receive(:set_read_state).with(false)
-      get :update, params: {id: note.id, set_unread: 'true'}, format: :json
-    end
-    
-      run_vagrant_command(symlinked?(TestApp.current_path, specific_release_path))
 end
 
     
-        (stdout + stderr).each_line { |line| puts '[vagrant] #{line}' }
+            private
     
-          def assert_value_or_block_not_both(value, block)
-        return if value.nil? || block.nil?
-        raise Capistrano::ValidationError,
-              'Value and block both passed to Configuration#set'
-      end
+            def destroy
+          @option_type = Spree::OptionType.accessible_by(current_ability, :destroy).find(params[:id])
+          @option_type.destroy
+          render plain: nil, status: 204
+        end
+    
+            def update
+          @option_value = scope.accessible_by(current_ability, :update).find(params[:id])
+          if @option_value.update_attributes(option_value_params)
+            render :show
+          else
+            invalid_resource!(@option_value)
+          end
+        end
+    
+              @properties = if params[:ids]
+                          @properties.where(id: params[:ids].split(',').flatten)
+                        else
+                          @properties.ransack(params[:q]).result
+                        end
+    
+            def products
+          # Returns the products sorted by their position with the classification
+          # Products#index does not do the sorting.
+          taxon = Spree::Taxon.find(params[:id])
+          @products = taxon.products.ransack(params[:q]).result
+          @products = @products.page(params[:page]).per(params[:per_page] || 500)
+          render 'spree/api/v1/products/index'
+        end
