@@ -1,105 +1,118 @@
 
         
-              it 'generates a richer DOT script' do
-        expect(agents_dot(@agents, rich: true)).to match(%r{
-          \A
-          digraph \x20 'Agent \x20 Event \x20 Flow' \{
-            (graph \[ [^\]]+ \];)?
-            node \[ [^\]]+ \];
-            edge \[ [^\]]+ \];
-            (?<foo>\w+) \[label=foo,tooltip='Dot \x20 Foo',URL='#{Regexp.quote(agent_path(@foo))}'\];
-            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
-            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
-            \k<bar1> \[label=bar1,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar1))}'\];
-            \k<bar2> \[label=bar2,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar2))}',style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
-            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
-            \k<bar3> \[label=bar3,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar3))}'\];
-          \}
-          \z
-        }x)
-      end
-    end
-  end
-    
-      describe '.seed' do
-    it 'imports a set of agents to get the user going when they are first created' do
-      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
-    end
-    
-        it 'outputs a structure containing name, description, the date, all agents & their links' do
-      data = exporter.as_json
-      expect(data[:name]).to eq(name)
-      expect(data[:description]).to eq(description)
-      expect(data[:source_url]).to eq(source_url)
-      expect(data[:guid]).to eq(guid)
-      expect(data[:schema_version]).to eq(1)
-      expect(data[:tag_fg_color]).to eq(tag_fg_color)
-      expect(data[:tag_bg_color]).to eq(tag_bg_color)
-      expect(data[:icon]).to eq(icon)
-      expect(Time.parse(data[:exported_at])).to be_within(2).of(Time.now.utc)
-      expect(data[:links]).to eq([{ :source => guid_order(agent_list, :jane_weather_agent), :receiver => guid_order(agent_list, :jane_rain_notifier_agent)}])
-      expect(data[:control_links]).to eq([])
-      expect(data[:agents]).to eq(agent_list.sort_by{|a| a.guid}.map { |agent| exporter.agent_as_json(agent) })
-      expect(data[:agents].all? { |agent_json| agent_json[:guid].present? && agent_json[:type].present? && agent_json[:name].present? }).to be_truthy
-    
-            a_split.each_with_index { |s, i| a_split[i] = s.to_i unless i == a_length - 1 }
-        b_split.each_with_index { |s, i| b_split[i] = s.to_i unless i == b_length - 1 }
-    
-        def initial_page?
-      root_page? || context[:initial_paths].include?(subpath)
-    end
-    
-        module MultipleBaseUrls
-      def self.included(base)
-        base.extend ClassMethods
-      end
-    
-          if base == dest
-        ''
-      elsif dest.start_with? File.join(base, '')
-        url.path[(path.length)..-1]
-      end
-    end
-    
-            css('tr[style]').each do |node|
-          node.remove_attribute 'style'
+                def id_for_already_imported_cache(note)
+          note.id
         end
-    
-    def attach_attachment(name, definition = nil)
-  snippet = 'has_attached_file :#{name}'
-  if definition
-    snippet += ', \n'
-    snippet += definition
-  end
-  snippet += '\ndo_not_validate_attachment_file_type :#{name}\n'
-  cd('.') do
-    transform_file('app/models/user.rb') do |content|
-      content.sub(/end\Z/, '#{snippet}\nend')
+      end
     end
   end
 end
+
     
-      def generate_migration
-    migration_template('paperclip_migration.rb.erb',
-                       'db/migrate/#{migration_file_name}',
-                       migration_version: migration_version)
-  end
-    
-        def initialize(filepath)
-      @filepath = filepath
-    end
-    
-        def cropping dst, ratio, scale
-      if ratio.horizontal? || ratio.square?
-        '%dx%d+%d+%d' % [ dst.width, dst.height, 0, (self.height * scale - dst.height) / 2 ]
-      else
-        '%dx%d+%d+%d' % [ dst.width, dst.height, (self.width * scale - dst.width) / 2, 0 ]
+            def collection_options
+          { state: 'all', sort: 'created', direction: 'asc' }
+        end
       end
     end
+  end
+end
+
     
-        def define_query
-      name = @name
-      @klass.send :define_method, '#{@name}?' do
-        send(name).file?
+            def execute
+          create_labels
+        end
+    
+          # Returns the ID to use for the cache used for checking if an object has
+      # already been imported or not.
+      #
+      # object - The object we may want to import.
+      def id_for_already_imported_cache(object)
+        raise NotImplementedError
+      end
+    
+            expose_attribute :iid, :title, :description, :source_branch,
+                         :source_branch_sha, :target_branch, :target_branch_sha,
+                         :milestone_number, :author, :assignee, :created_at,
+                         :updated_at, :merged_at, :source_repository_id,
+                         :target_repository_id, :source_repository_owner
+    
+    module Gitlab
+  module QueryLimiting
+    # Middleware for reporting (or raising) when a request performs more than a
+    # certain amount of database queries.
+    class Middleware
+      CONTROLLER_KEY = 'action_controller.instance'.freeze
+      ENDPOINT_KEY = 'api.endpoint'.freeze
+    
+        it 'generates a jasmine fixture', :fixture => true do
+      contact = alice.contact_for(bob.person)
+      aspect = alice.aspects.create(:name => 'people')
+      contact.aspects << aspect
+      contact.save
+      get :new, params: {person_id: bob.person.id}
+      save_fixture(html_for('body'), 'status_message_new')
+    end
+  end
+end
+
+    
+        context 'with invalid parameters' do
+      let(:invalid_params) { valid_params.deep_merge(user: {password_confirmation: 'baddword'}) }
+    
+          it 'federates' do
+        allow_any_instance_of(Participation::Generator).to receive(:create!)
+        expect(Diaspora::Federation::Dispatcher).to receive(:defer_dispatch)
+        post_request!
+      end
+    
+          explicit_path = ::File.join(temp_path, LOGSTASH_DIR)
+      dependencies_path = ::File.join(temp_path, DEPENDENCIES_DIR)
+    
+          PluginManager.ui.info('Install successful')
+    rescue ::Bundler::BundlerError => e
+      raise PluginManager::InstallError.new(e), 'An error occurred went installing plugins'
+    ensure
+      FileUtils.rm_rf(uncompressed_path) if uncompressed_path && Dir.exist?(uncompressed_path)
+    end
+    
+    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
+  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.windows?
+  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.windows?
+    
+        puts('Updating #{filtered_plugins.collect(&:name).join(', ')}') unless filtered_plugins.empty?
+    
+        desc 'Bootstrap all the VM's used for this tests'
+    task :setup, :platform do |t, args|
+      config   = PlatformConfig.new
+      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
+      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
+    
+        let(:plugin_name) { 'logstash-filter-qatest' }
+    let(:previous_version) { '0.1.0' }
+    
+        def get_cached_gist(gist, file)
+      return nil if @cache_disabled
+      cache_file = get_cache_file_for gist, file
+      File.read cache_file if File.exist? cache_file
+    end
+    
+      class ImageTag < Liquid::Tag
+    @img = nil
+    
+        def render(context)
+      output = super
+      types = {
+        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
+        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
+        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
+      }
+      if @videos.size > 0
+        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
+        @videos.each do |v|
+          video << '<source src='#{v}' #{types[File.extname(v)]}>'
+        end
+        video += '</video>'
+      else
+        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
       end
     end
