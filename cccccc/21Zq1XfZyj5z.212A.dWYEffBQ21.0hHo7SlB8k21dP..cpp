@@ -1,246 +1,192 @@
 
         
-        // Calls the registered C++ shape inference function for <node> (a serialized
-// NodeDef).
-// Should not be called for shape functions that access input tensors; constant
-// input tensor values are not made available, and so the inferred shapes will
-// be less precise than they could be.
-//
-// Returns an error, or OK, in <out_status> according to whether the shape
-// inference was successful.
-//
-// On success, returns a vector populated with the inferred output shapes (as
-// serialized CppShapeInferenceResult protos) followed by a serialized
-// CppShapeInferenceInputsNeeded proto.
-//
-// This is temporary code to be used during the migration
-// from python shape inference functions to C++ shape inference functions.
-std::vector<string> RunCppShapeInference(
-    int graph_def_version, const string& serialized_node_def,
-    const std::vector<string>& input_serialized_shapes,
-    PyObject* input_constant_tensor_values,
-    const std::vector<string>& input_constant_tensor_as_shape_values,
-    TF_Status* out_status);
+        CallCredentials::CallCredentials() { g_gli_initializer.summon(); }
     
-    #endif  // TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_INTERNAL_H_
+    
+    {}  // namespace grpc
 
     
-      CostGraphDef cost_graph_analytical;
-  PredictCosts(&analytical_estimator_, &cost_graph_analytical,
-               &total_time_analytical_);
-  VLOG(1) << 'cost_graph_analytical size: '
-          << cost_graph_analytical.node_size();
+      void Destroy(grpc_call_element* elem, const grpc_call_final_info* final_info,
+               grpc_closure* then_call_closure) override;
     
     
-    {
-    {}  // end namespace grappler
-}  // end namespace tensorflow
-
+    {    uint8_t version = buf[kVersionIdOffset];
+    uint32_t fieldID = buf[kServerElapsedTimeOffset];
+    if (version != kVersionId || fieldID != kServerElapsedTimeField) {
+      *time = 0;
+      return kEncodeDecodeFailure;
+    }
+    *time = absl::little_endian::Load64(
+        &buf[kServerElapsedTimeOffset + kFieldIdSize]);
+    return kRpcServerStatsSize;
+  }
     
-    REGISTER_OP('Invalid')
-    .Attr('invalid attr: int32')  // invalid since the name has a space.
-    .Doc(R'doc(
-An op to test that invalid ops do not successfully generate invalid python code.
-)doc');
+     private:
+  Status ListService(ServerContext* context,
+                     reflection::v1alpha::ListServiceResponse* response);
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    #include 'src/cpp/server/dynamic_thread_pool.h'
     
+    class DynamicThreadPool final : public ThreadPoolInterface {
+ public:
+  explicit DynamicThreadPool(int reserve_threads);
+  ~DynamicThreadPool();
+    }
     
-    {}  // namespace tensorflow
-
+    /*! \brief small eps gap for minimum split decision. */
+const bst_float kRtEps = 1e-6f;
     
+    template<typename IndexType>
+class DensifyParser : public dmlc::Parser<IndexType> {
+ public:
+  DensifyParser(dmlc::Parser<IndexType>* parser, uint32_t num_col)
+      : parser_(parser), num_col_(num_col) {
+  }
+    }
     
-    {
-    {}  // namespace swig
-}  // namespace tensorflow
-
+      // Used to initialise any regularisation hyperparameters provided by the user
+  virtual void Init(
+      const std::vector<std::pair<std::string, std::string> >& args);
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    void Carver::start() {
+  // If status_ is not Ok, the creation of our tmp FS failed
+  if (!status_.ok()) {
+    LOG(WARNING) << 'Carver has not been properly constructed';
+    return;
+  }
+  for (const auto& p : carvePaths_) {
+    // Ensure the file is a flat file on disk before carving
+    PlatformFile pFile(p, PF_OPEN_EXISTING | PF_READ);
+    if (!pFile.isValid() || isDirectory(p)) {
+      VLOG(1) << 'File does not exist on disk or is subdirectory: ' << p;
+      continue;
+    }
+    Status s = carve(p);
+    if (!s.ok()) {
+      VLOG(1) << 'Failed to carve file ' << p << ' ' << s.getMessage();
+    }
+  }
+    }
     
-    const CUevent& CUDAEvent::cuda_event() {
-  return cuda_event_;
+    std::vector<std::string> FeatureVectorsConfigParserPlugin::keys() const {
+  return {kFeatureVectorsRootKey};
 }
     
-    /*! \brief namespace of base64 decoding and encoding table */
-namespace base64 {
-const char DecodeTable[] = {
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  62,  // '+'
-  0, 0, 0,
-  63,  // '/'
-  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
-  0, 0, 0, 0, 0, 0, 0,
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
-  0, 0, 0, 0, 0, 0,
-  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
-  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
-};
-static const char EncodeTable[] =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-}  // namespace base64
-/*! \brief the stream that reads from base64, note we take from file pointers */
-class Base64InStream: public dmlc::Stream {
+    
+    {/// KafkaTopicsConfigParserPlugin extracts, updates, and parses Kafka topic
+/// configurations from Osquery's configurations.
+class KafkaTopicsConfigParserPlugin : public ConfigParserPlugin {
  public:
-  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
-    reader_.set_stream(fs);
-    num_prev = 0; tmp_ch = 0;
+  std::vector<std::string> keys() const override;
+  Status update(const std::string& source, const ParserConfig& config) override;
+};
+} // namespace osquery
+
+    
+    
+    {REGISTER_INTERNAL(PrometheusMetricsConfigParserPlugin,
+                  'config_parser',
+                  'prometheus_targets');
+}
+
+    
+      ASSERT_TRUE(data.doc().HasMember('events'));
+  ASSERT_TRUE(data.doc()['events'].HasMember('environment_variables'));
+  ASSERT_TRUE(data.doc()['events']['environment_variables'].IsArray());
+  for (const auto& var :
+       data.doc()['events']['environment_variables'].GetArray()) {
+    std::string value = var.GetString();
+    EXPECT_TRUE(value == 'foo' || value == 'bar');
   }
-  /*!
-   * \brief initialize the stream position to beginning of next base64 stream
-   * call this function before actually start read
-   */
-  inline void InitPosition(void) {
-    // get a character
-    do {
-      tmp_ch = reader_.GetChar();
-    } while (isspace(tmp_ch));
-  }
-  /*! \brief whether current position is end of a base64 stream */
-  inline bool IsEOF(void) const {
-    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
-  }
-  virtual size_t Read(void *ptr, size_t size) {
-    using base64::DecodeTable;
-    if (size == 0) return 0;
-    // use tlen to record left size
-    size_t tlen = size;
-    unsigned char *cptr = static_cast<unsigned char*>(ptr);
-    // if anything left, load from previous buffered result
-    if (num_prev != 0) {
-      if (num_prev == 2) {
-        if (tlen >= 2) {
-          *cptr++ = buf_prev[0];
-          *cptr++ = buf_prev[1];
-          tlen -= 2;
-          num_prev = 0;
-        } else {
-          // assert tlen == 1
-          *cptr++ = buf_prev[0]; --tlen;
-          buf_prev[0] = buf_prev[1];
-          num_prev = 1;
-        }
-      } else {
-        // assert num_prev == 1
-        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
-      }
+    
+      update['awesome'] = R'raw({
+    'options': {
+      'custom_nested_json':
+        {'foo':1,'bar':'baz'}
     }
-    if (tlen == 0) return size;
-    int nvalue;
-    // note: everything goes with 4 bytes in Base64
-    // so we process 4 bytes a unit
-    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
-      // first byte
-      nvalue = DecodeTable[tmp_ch] << 18;
+  })raw';
+  auto s = c.update(update);
+  EXPECT_TRUE(s.ok());
+  EXPECT_EQ(s.toString(), 'OK');
+    
+    struct GLFWwindow;
+    
+    // Implemented features:
+//  [X] Renderer: User texture binding. Use 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+    
+    
+    {        // Rendering
+        ImGui::Render();
+        al_clear_to_color(al_map_rgba_f(clear_color.x, clear_color.y, clear_color.z, clear_color.w));
+        ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
+        al_flip_display();
+    }
+    
+        // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
+    {
+        static float f = 0.0f;
+        static int counter = 0;
+    }
+    
+      auto delay_token_2 = controller.GetDelayToken(10000000u);
+  // Rate reset after changing the token.
+  ASSERT_EQ(static_cast<uint64_t>(2000000),
+            controller.GetDelay(&env, 20000000u));
+    
+    /*
+ * PosixMmapFile
+ *
+ * We preallocate up to an extra megabyte and use memcpy to append new
+ * data to the file.  This is safe since we either properly close the
+ * file before reading from it, or for log files, the reading code
+ * knows enough to skip zero suffixes.
+ */
+Status PosixMmapFile::UnmapCurrentRegion() {
+  TEST_KILL_RANDOM('PosixMmapFile::UnmapCurrentRegion:0', rocksdb_kill_odds);
+  if (base_ != nullptr) {
+    int munmap_status = munmap(base_, limit_ - base_);
+    if (munmap_status != 0) {
+      return IOError('While munmap', filename_, munmap_status);
+    }
+    file_offset_ += limit_ - base_;
+    base_ = nullptr;
+    limit_ = nullptr;
+    last_sync_ = nullptr;
+    dst_ = nullptr;
+    }
+    }
+    
+      virtual Status Flush() override;
+  virtual Status Sync() override;
+  virtual Status Fsync() override;
+  virtual Status Close() override;
+    
+    int main() {
+  rocksdb::DB* raw_db;
+  rocksdb::Status status;
+    }
+    
       {
-        // second byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        nvalue |= DecodeTable[tmp_ch] << 12;
-        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
-        }
-      {
-        // third byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        // handle termination
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == '=') << 'invalid base64 format';
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch] << 6;
-        if (tlen) {
-          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
-        }
-      }
-      {
-        // fourth byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
-            << 'invalid base64 format';
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch];
-        if (tlen) {
-          *cptr++ = nvalue & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev ++] = nvalue & 0xFF;
-        }
-      }
-      // get next char
-      tmp_ch = reader_.GetChar();
-    }
-    if (kStrictCheck) {
-      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
-    }
-    return size - tlen;
-  }
-  virtual void Write(const void *ptr, size_t size) {
-    LOG(FATAL) << 'Base64InStream do not support write';
-  }
-    }
-    
-        if (row_indices_.empty()) {  // edge case: empty instance set
-      // assign arbitrary address here, to bypass nullptr check
-      // (nullptr usually indicates a nonexistent rowset, but we want to
-      //  indicate a valid rowset that happens to have zero length and occupies
-      //  the whole instance set)
-      // this is okay, as BuildHist will compute (end-begin) as the set size
-      const size_t* begin = reinterpret_cast<size_t*>(20);
-      const size_t* end = begin;
-      elem_of_each_node_.emplace_back(Elem(begin, end, 0));
-      return;
-    }
-    
-    #if DMLC_ENABLE_STD_THREAD
-#include <dmlc/concurrency.h>
-#include <thread>
-#endif
-    
-      std::vector<std::string> DumpModel(const FeatureMap& fmap, bool with_stats,
-                                     std::string format) const {
-    std::vector<std::string> dump;
-    for (const auto & tree : trees) {
-      dump.push_back(tree->DumpModel(fmap, with_stats, format));
-    }
-    return dump;
-  }
-  void CommitModel(std::vector<std::unique_ptr<RegTree> >&& new_trees,
-                   int bst_group) {
-    for (auto & new_tree : new_trees) {
-      trees.push_back(std::move(new_tree));
-      tree_info.push_back(bst_group);
-    }
-    param.num_trees += static_cast<int>(new_trees.size());
+    PinnableSlice pinnable_val;
+    db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key2', &pinnable_val);
+    assert(pinnable_val == 'value');
   }
     
-    namespace dmlc {
-DMLC_REGISTRY_ENABLE(::xgboost::TreeUpdaterReg);
-}  // namespace dmlc
+    #include 'rocksdb/perf_level.h'
     
-      xgboost::tree::SplitEntry se2;
-  EXPECT_FALSE(se1.Update(se2));
-  EXPECT_FALSE(se2.Update(-1, 100, 0, true));
-  ASSERT_TRUE(se2.Update(1, 100, 0, true));
-  ASSERT_TRUE(se1.Update(se2));
+      ~ManagedSnapshot();
+    
+      // Wait for all threads to finish.
+  // Discard those threads that did not start
+  // executing
+  virtual void JoinAllThreads() = 0;
+    
+      // If sync == true, we can guarantee you'll get consistent backup even
+  // on a machine crash/reboot. Backup process is slower with sync enabled.
+  // If sync == false, we don't guarantee anything on machine reboot. However,
+  // chances are some of the backups are consistent.
+  // Default: true
+  bool sync;
+    
+    #include <string>
+#include 'rocksdb/status.h'
