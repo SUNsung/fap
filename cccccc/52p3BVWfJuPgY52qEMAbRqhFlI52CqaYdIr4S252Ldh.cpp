@@ -1,305 +1,391 @@
-bool CheckCommandLineArguments(int argc, base::CommandLine::CharType** argv) {
-  const base::CommandLine::StringType dashdash(2, '-');
-  bool block_args = false;
-  for (int i = 0; i < argc; ++i) {
-    if (argv[i] == dashdash)
-      break;
-    if (block_args) {
-      return false;
-    } else if (IsUrlArg(argv[i])) {
-      block_args = true;
-    }
-  }
-  return true;
-}
-    
-    namespace atom {
-    }
-    
-    namespace api {
-    }
-    
-    using atom::api::Net;
-using atom::api::URLRequest;
-    
-    namespace api {
-class WebContents;
-}
-    
-    public:
-    explicit OpenURIDialog(QWidget *parent);
-    ~OpenURIDialog();
-    
-    #endif // BITCOIN_QT_TRANSACTIONDESCDIALOG_H
 
+        
+            QVariant value() const;
+    void setValue(const QVariant &value);
+    
+    #ifndef BITCOIN_QT_TRANSACTIONDESCDIALOG_H
+#define BITCOIN_QT_TRANSACTIONDESCDIALOG_H
     
     #ifndef BITCOIN_REVERSELOCK_H
 #define BITCOIN_REVERSELOCK_H
     
-    static void secp256k1_ge_set_gej_var(secp256k1_ge *r, secp256k1_gej *a) {
-    secp256k1_fe z2, z3;
-    r->infinity = a->infinity;
-    if (a->infinity) {
-        return;
-    }
-    secp256k1_fe_inv_var(&a->z, &a->z);
-    secp256k1_fe_sqr(&z2, &a->z);
-    secp256k1_fe_mul(&z3, &a->z, &z2);
-    secp256k1_fe_mul(&a->x, &a->x, &z2);
-    secp256k1_fe_mul(&a->y, &a->y, &z3);
-    secp256k1_fe_set_int(&a->z, 1);
-    r->x = a->x;
-    r->y = a->y;
-}
+    /** Check bounds on a command line confirm target */
+unsigned int ParseConfirmTarget(const UniValue& value);
     
-    // Owns a python object and decrements the reference count on destruction.
-// This class is not threadsafe.
-template <typename PyObjectStruct>
-class ScopedPythonPtr {
- public:
-  // Takes the ownership of the specified object to ScopedPythonPtr.
-  // The reference count of the specified py_object is not incremented.
-  explicit ScopedPythonPtr(PyObjectStruct* py_object = NULL)
-      : ptr_(py_object) {}
+    SECP256K1_INLINE static void secp256k1_fe_sqr_inner(uint64_t *r, const uint64_t *a) {
+/**
+ * Registers: rdx:rax = multiplication accumulator
+ *            r9:r8   = c
+ *            rcx:rbx = d
+ *            r10-r14 = a0-a4
+ *            r15     = M (0xfffffffffffff)
+ *            rdi     = r
+ *            rsi     = a / t?
+ */
+  uint64_t tmp1, tmp2, tmp3;
+__asm__ __volatile__(
+    'movq 0(%%rsi),%%r10\n'
+    'movq 8(%%rsi),%%r11\n'
+    'movq 16(%%rsi),%%r12\n'
+    'movq 24(%%rsi),%%r13\n'
+    'movq 32(%%rsi),%%r14\n'
+    'movq $0xfffffffffffff,%%r15\n'
     }
     
-    namespace {
-string GetTypeUrl(const Descriptor* message,
-                  const string& type_url_prefix) {
-  if (!type_url_prefix.empty() &&
-      type_url_prefix[type_url_prefix.size() - 1] == '/') {
-    return type_url_prefix + message->full_name();
+        Round(a, b, c, d, e, f, g, h, 0x19a4c116, w0 += sigma1(w14) + w9 + sigma0(w1));
+    Round(h, a, b, c, d, e, f, g, 0x1e376c08, w1 += sigma1(w15) + w10 + sigma0(w2));
+    Round(g, h, a, b, c, d, e, f, 0x2748774c, w2 += sigma1(w0) + w11 + sigma0(w3));
+    Round(f, g, h, a, b, c, d, e, 0x34b0bcb5, w3 += sigma1(w1) + w12 + sigma0(w4));
+    Round(e, f, g, h, a, b, c, d, 0x391c0cb3, w4 += sigma1(w2) + w13 + sigma0(w5));
+    Round(d, e, f, g, h, a, b, c, 0x4ed8aa4a, w5 += sigma1(w3) + w14 + sigma0(w6));
+    Round(c, d, e, f, g, h, a, b, 0x5b9cca4f, w6 += sigma1(w4) + w15 + sigma0(w7));
+    Round(b, c, d, e, f, g, h, a, 0x682e6ff3, w7 += sigma1(w5) + w0 + sigma0(w8));
+    Round(a, b, c, d, e, f, g, h, 0x748f82ee, w8 += sigma1(w6) + w1 + sigma0(w9));
+    Round(h, a, b, c, d, e, f, g, 0x78a5636f, w9 += sigma1(w7) + w2 + sigma0(w10));
+    Round(g, h, a, b, c, d, e, f, 0x84c87814, w10 += sigma1(w8) + w3 + sigma0(w11));
+    Round(f, g, h, a, b, c, d, e, 0x8cc70208, w11 += sigma1(w9) + w4 + sigma0(w12));
+    Round(e, f, g, h, a, b, c, d, 0x90befffa, w12 += sigma1(w10) + w5 + sigma0(w13));
+    Round(d, e, f, g, h, a, b, c, 0xa4506ceb, w13 += sigma1(w11) + w6 + sigma0(w14));
+    Round(c, d, e, f, g, h, a, b, 0xbef9a3f7, w14 + sigma1(w12) + w7 + sigma0(w15));
+    Round(b, c, d, e, f, g, h, a, 0xc67178f2, w15 + sigma1(w13) + w8 + sigma0(w0));
+    
+        for (recid = 0; recid < 4; recid++) {
+        int i;
+        int recid2;
+        /* (4,4) encoded in DER. */
+        unsigned char sigbder[8] = {0x30, 0x06, 0x02, 0x01, 0x04, 0x02, 0x01, 0x04};
+        unsigned char sigcder_zr[7] = {0x30, 0x05, 0x02, 0x00, 0x02, 0x01, 0x01};
+        unsigned char sigcder_zs[7] = {0x30, 0x05, 0x02, 0x01, 0x01, 0x02, 0x00};
+        unsigned char sigbderalt1[39] = {
+            0x30, 0x25, 0x02, 0x20, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x04, 0x02, 0x01, 0x04,
+        };
+        unsigned char sigbderalt2[39] = {
+            0x30, 0x25, 0x02, 0x01, 0x04, 0x02, 0x20, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04,
+        };
+        unsigned char sigbderalt3[40] = {
+            0x30, 0x26, 0x02, 0x21, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x04, 0x02, 0x01, 0x04,
+        };
+        unsigned char sigbderalt4[40] = {
+            0x30, 0x26, 0x02, 0x01, 0x04, 0x02, 0x21, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04,
+        };
+        /* (order + r,4) encoded in DER. */
+        unsigned char sigbderlong[40] = {
+            0x30, 0x26, 0x02, 0x21, 0x00, 0xFF, 0xFF, 0xFF,
+            0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+            0xFF, 0xFF, 0xFF, 0xFF, 0xFE, 0xBA, 0xAE, 0xDC,
+            0xE6, 0xAF, 0x48, 0xA0, 0x3B, 0xBF, 0xD2, 0x5E,
+            0x8C, 0xD0, 0x36, 0x41, 0x45, 0x02, 0x01, 0x04
+        };
+        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigb64, recid) == 1);
+        CHECK(secp256k1_ecdsa_recover(ctx, &pubkeyb, &rsig, msg32) == 1);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbder, sizeof(sigbder)) == 1);
+        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 1);
+        for (recid2 = 0; recid2 < 4; recid2++) {
+            secp256k1_pubkey pubkey2b;
+            CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigb64, recid2) == 1);
+            CHECK(secp256k1_ecdsa_recover(ctx, &pubkey2b, &rsig, msg32) == 1);
+            /* Verifying with (order + r,4) should always fail. */
+            CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderlong, sizeof(sigbderlong)) == 1);
+            CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 0);
+        }
+        /* DER parsing tests. */
+        /* Zero length r/s. */
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder_zr, sizeof(sigcder_zr)) == 0);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder_zs, sizeof(sigcder_zs)) == 0);
+        /* Leading zeros. */
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt1, sizeof(sigbderalt1)) == 0);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt2, sizeof(sigbderalt2)) == 0);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt3, sizeof(sigbderalt3)) == 0);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt4, sizeof(sigbderalt4)) == 0);
+        sigbderalt3[4] = 1;
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt3, sizeof(sigbderalt3)) == 1);
+        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 0);
+        sigbderalt4[7] = 1;
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbderalt4, sizeof(sigbderalt4)) == 1);
+        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 0);
+        /* Damage signature. */
+        sigbder[7]++;
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbder, sizeof(sigbder)) == 1);
+        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 0);
+        sigbder[7]--;
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbder, 6) == 0);
+        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbder, sizeof(sigbder) - 1) == 0);
+        for(i = 0; i < 8; i++) {
+            int c;
+            unsigned char orig = sigbder[i];
+            /*Try every single-byte change.*/
+            for (c = 0; c < 256; c++) {
+                if (c == orig ) {
+                    continue;
+                }
+                sigbder[i] = c;
+                CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigbder, sizeof(sigbder)) == 0 || secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyb) == 0);
+            }
+            sigbder[i] = orig;
+        }
+    }
+    
+    
+std::pair<std::string, std::string> SplitTorReplyLine(const std::string& s);
+std::map<std::string, std::string> ParseTorReplyMapping(const std::string& s);
+    
+    #include 'content/nw/src/api/menu/menu.h'
+    
+    void MenuItem::CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result) {
+  if (method == 'GetChecked') {
+    result->AppendBoolean(GetChecked());
   } else {
-    return type_url_prefix + '/' + message->full_name();
+    NOTREACHED() << 'Invalid call to MenuItem method:' << method
+                 << ' arguments:' << arguments;
   }
 }
-}  // namespace
     
-    #include <google/protobuf/compiler/command_line_interface.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/io/printer.h>
+    void MenuItem::SetChecked(bool checked) {
+  is_checked_ = checked;
+  if (menu_)
+    menu_->UpdateStates();
+}
     
-      // Oneofs
-  if (descriptor->oneof_decl_count() > 0) {
-      std::vector<std::string> oneofs;
-      for (int i = 0; i < descriptor->oneof_decl_count(); i++) {
-          oneofs.push_back(UnderscoresToCamelCase(descriptor->oneof_decl(i)->name(), true));
-      }
-      printer->Print('new[]{ \'$oneofs$\' }, ', 'oneofs', JoinStrings(oneofs, '\', \''));
-  }
-  else {
-      printer->Print('null, ');
-  }
-    
-    #include <google/protobuf/compiler/java/java_extension_lite.h>
-    
-    // ===================================================================
-    
-      EXPECT_EXIT(TextFormatDecodeData::DecodeDataForString('', ''),
-              ::testing::KilledBySignal(SIGABRT),
-              'error: got empty string for making TextFormat data, input:');
-  EXPECT_EXIT(TextFormatDecodeData::DecodeDataForString('a', ''),
-              ::testing::KilledBySignal(SIGABRT),
-              'error: got empty string for making TextFormat data, input:');
-  EXPECT_EXIT(TextFormatDecodeData::DecodeDataForString('', 'a'),
-              ::testing::KilledBySignal(SIGABRT),
-              'error: got empty string for making TextFormat data, input:');
-    
-    
-    {}
-    
-    
-    {
-    {
-    {
-    {          std::transform(
-            begin(inputs) + start, begin(inputs) + stop,
-            retMem + start,
-            func
-          );
-        }
-      } catch (const std::runtime_error& e) {
-        std::fprintf(stderr,
-          'worker thread exited with exception: %s\n', e.what());
-        failed = true;
-      }
-    }));
-  }
-    
-    void Assembler::li32 (const Reg64& rt, int32_t imm32) {
+    bool NwClipboardGetListSyncFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  std::unique_ptr<GetListSync::Params> params(GetListSync::Params::Create(*args_));
+  EXTENSION_FUNCTION_VALIDATE(params.get());
+  std::unique_ptr<ClipboardReader> reader(new ClipboardReader());
     }
     
-       void EmitMForm(const uint8_t op,
-                  const RegNumber rs,
-                  const RegNumber ra,
-                  const RegNumber rb,
-                  const uint8_t mb,
-                  const uint8_t me,
-                  const bool rc = 0) {
+    // Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel SSE intrinsics to access the SIMD instruction set.
+double DotProductSSE(const double* u, const double* v, int n);
+// Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel SSE intrinsics to access the SIMD instruction set.
+int32_t IntDotProductSSE(const int8_t* u, const int8_t* v, int n);
+    
+    #endif  // TESSERACT_ARCH_INTSIMDMATRIX_H_
+
+    
+    #include <cstdint>  // for int16_t
+    
+    #include 'blread.h'
+#include <cstdio>       // for fclose, fopen, FILE
+#include 'host.h'       // for TRUE
+#include 'ocrblock.h'   // for BLOCK_IT, BLOCK, BLOCK_LIST (ptr only)
+#include 'scanutils.h'  // for tfscanf
+    
+      bool Next() override {
+    if (!parser_->Next()) return false;
+    const RowBlock<IndexType>& batch = parser_->Value();
+    LOG(INFO) << batch.size;
+    dense_index_.resize(num_col_ * batch.size);
+    dense_value_.resize(num_col_ * batch.size);
+    std::fill(dense_value_.begin(), dense_value_.end(), 0.0);
+    offset_.resize(batch.size + 1);
+    offset_[0] = 0;
     }
     
-    struct APCCollection {
-  static APCHandle::Pair Make(const ObjectData*,
-                              APCHandleLevel level,
-                              bool unserializeObj);
-  static void Delete(APCHandle*);
-    }
-    
-        if (!semi) {
-      // only media type (type/subtype,data)
-      ssize_t media_len = comma - data;
-      meta_len -= media_len;
-      data += media_len;
-    } else if (slash && slash < semi) {
-      // media type + param (type/subtype;param,data)
-      ssize_t media_len = semi - data;
-      meta_len -= media_len;
-      data += media_len;
-    } else {
-      // no media type (;base64,data)
-      if (semi != data // ex. foo;base64,data
-          || meta_len != sizeof(';base64') - 1 // ex. ;something,data
-          || memcmp(data, ';base64',
-                    sizeof(';base64') - 1)) { // ex. ;base65,data
-          raise_warning('rfc2397: invalid meta data');
-          return nullptr;
-        }
-    }
-    
-    
-    {  /**
-   * Execute a debugger action.
-   */
-  virtual String debuggerVerb(const std::string& /*verb*/,
-                              const std::vector<std::string>& /*args*/) {
-    return String();
-  }
+    /*! \brief namespace of base64 decoding and encoding table */
+namespace base64 {
+const char DecodeTable[] = {
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  62,  // '+'
+  0, 0, 0,
+  63,  // '/'
+  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
+  0, 0, 0, 0, 0, 0, 0,
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
+  0, 0, 0, 0, 0, 0,
+  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
+  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
 };
-    
-    Variant PlainDirectory::read() {
-  struct dirent entry;
-  struct dirent *result;
-  int ret = readdir_r(m_dir, &entry, &result);
-  if (ret != 0 || !result) {
-    return false;
+static const char EncodeTable[] =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+}  // namespace base64
+/*! \brief the stream that reads from base64, note we take from file pointers */
+class Base64InStream: public dmlc::Stream {
+ public:
+  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
+    reader_.set_stream(fs);
+    num_prev = 0; tmp_ch = 0;
   }
-  return String(entry.d_name, CopyString);
-}
-    
-      if (ignore_default_configs) {
-    // Appending empty file to -c options to avoid loading defaults
-    ini_fd = get_tempfile_if_not_exists(ini_fd, ini_path);
-  } else {
-    // Should only include this default if not explicitly ignored.
-#ifdef PHP_DEFAULT_HDF
-    newargv.push_back('-c');
-    newargv.push_back(PHP_DEFAULT_HDF);
-#endif
+  /*!
+   * \brief initialize the stream position to beginning of next base64 stream
+   * call this function before actually start read
+   */
+  inline void InitPosition(void) {
+    // get a character
+    do {
+      tmp_ch = reader_.GetChar();
+    } while (isspace(tmp_ch));
+  }
+  /*! \brief whether current position is end of a base64 stream */
+  inline bool IsEOF(void) const {
+    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
+  }
+  virtual size_t Read(void *ptr, size_t size) {
+    using base64::DecodeTable;
+    if (size == 0) return 0;
+    // use tlen to record left size
+    size_t tlen = size;
+    unsigned char *cptr = static_cast<unsigned char*>(ptr);
+    // if anything left, load from previous buffered result
+    if (num_prev != 0) {
+      if (num_prev == 2) {
+        if (tlen >= 2) {
+          *cptr++ = buf_prev[0];
+          *cptr++ = buf_prev[1];
+          tlen -= 2;
+          num_prev = 0;
+        } else {
+          // assert tlen == 1
+          *cptr++ = buf_prev[0]; --tlen;
+          buf_prev[0] = buf_prev[1];
+          num_prev = 1;
+        }
+      } else {
+        // assert num_prev == 1
+        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
+      }
+    }
+    if (tlen == 0) return size;
+    int nvalue;
+    // note: everything goes with 4 bytes in Base64
+    // so we process 4 bytes a unit
+    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
+      // first byte
+      nvalue = DecodeTable[tmp_ch] << 18;
+      {
+        // second byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
+        nvalue |= DecodeTable[tmp_ch] << 12;
+        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
+        }
+      {
+        // third byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
+        // handle termination
+        if (tmp_ch == '=') {
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == '=') << 'invalid base64 format';
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == EOF || isspace(tmp_ch))
+              << 'invalid base64 format';
+          break;
+        }
+        nvalue |= DecodeTable[tmp_ch] << 6;
+        if (tlen) {
+          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
+        } else {
+          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
+        }
+      }
+      {
+        // fourth byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
+            << 'invalid base64 format';
+        if (tmp_ch == '=') {
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == EOF || isspace(tmp_ch))
+              << 'invalid base64 format';
+          break;
+        }
+        nvalue |= DecodeTable[tmp_ch];
+        if (tlen) {
+          *cptr++ = nvalue & 0xFF; --tlen;
+        } else {
+          buf_prev[num_prev ++] = nvalue & 0xFF;
+        }
+      }
+      // get next char
+      tmp_ch = reader_.GetChar();
+    }
+    if (kStrictCheck) {
+      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
+    }
+    return size - tlen;
+  }
+  virtual void Write(const void *ptr, size_t size) {
+    LOG(FATAL) << 'Base64InStream do not support write';
+  }
     }
     
-    #include 'hphp/runtime/base/directory.h'
-#include 'hphp/runtime/ext/std/ext_std_file.h'
-    
-    void logAHMSubMapWarning(folly::StringPiece mapName) {
-  StackTrace st;
-  logPerfWarning(
-    'AtomicHashMap overflow',
-    [&](StructuredLogEntry& cols) {
-      cols.setStr('map_name', mapName);
-      cols.setStackTrace('stack', st);
+      void Save(dmlc::Stream* fo) const {
+    CHECK_EQ(param.num_trees, static_cast<int>(trees.size()));
+    fo->Write(&param, sizeof(param));
+    for (const auto & tree : trees) {
+      tree->Save(fo);
     }
-  );
-}
+    if (tree_info.size() != 0) {
+      fo->Write(dmlc::BeginPtr(tree_info), sizeof(int) * tree_info.size());
+    }
+  }
     
-            if (version >= 3)
-        {
-            ValidateDictionary<LearnerBase>(checkpoint, { sweepCountKey }, s_learnerTypeValue, CurrentVersion());
-            m_sweepCount = checkpoint[sweepCountKey].Value<size_t>();
-        }
-        else
-        {
-            //version 2 should have already set m_sweepCount however it was not implemented so  set to 0 for now.
-            m_sweepCount = 0; 
-        }
+      virtual void PredictInteractionContributions(DMatrix* dmat,
+                           std::vector<bst_float>* out_contribs,
+                           unsigned ntree_limit, bool approximate) = 0;
     
-                // Since scalar samples can be rank=1 with dim=1, we automatically pad the sequence data shape with a leading axis 
-            // of dim=1 if the sequence data shape's leading axis's dimensionality is not 1
-            if ((fullyDefinedSampleShape.Rank() == 1) && !fullyDefinedSampleShape.HasUnboundDimension() && (fullyDefinedSampleShape.TotalSize() == 1) && (currentSequenceDataShape.Rank() > 0) && (currentSequenceDataShape[0] != 1))
-                currentSequenceDataShape = NDShape(1, 1).AppendShape(currentSequenceDataShape);
+        std::unique_ptr<DHTMessageReceiver> messageReceiver;
     
-                if ((oldFilterRank != SentinelValueForInferParamInitRank) && (oldFilterRank != filterRank))
-                InvalidArgument('Filer rank of a non-uniform random initialier cannot be overridden if it has been already specified!');
+    class DHTBucket;
+class DHTPingReplyMessage;
     
-    // destructor - cleanup temp files, etc.
-DataReader::~DataReader()
+    public:
+  DHTResponseMessage(const std::shared_ptr<DHTNode>& localNode,
+                     const std::shared_ptr<DHTNode>& remoteNode,
+                     const std::string& transactionID);
+    
+    DHTRoutingTableDeserializer::DHTRoutingTableDeserializer(int family)
+    : family_(family)
 {
-    // free up resources
-    for (size_t i = 0; i < m_ioNames.size(); i++)
-        m_dataReaders[m_ioNames[i]]->Destroy();
 }
     
-    #include <functional>
-#include <stdexcept>
+    DHTSetup::~DHTSetup() = default;
     
-        virtual void /*ComputationNodeBase::*/ Validate(bool isFinalValidationPass) override
-    {
-        ReadOutVariable(); // read out the value once, with the purpose of validating the variableName
-        Base::Validate(isFinalValidationPass);
-        // this node does not hold mini-batch data
-        m_pMBLayout = nullptr;
-        // for now, anything this node returns is a scalar
-        SetDims(TensorShape(1), false);
+    #include 'DHTTask.h'
+#include 'Logger.h'
+#include 'LogFactory.h'
+#include 'a2functional.h'
+#include 'fmt.h'
+    
+    #include 'common.h'
+    
+    bool DHTTokenTracker::validateToken(const std::string& token,
+                                    const unsigned char* infoHash,
+                                    const std::string& ipaddr,
+                                    uint16_t port) const
+{
+  for (auto& elem : secret_) {
+    if (generateToken(infoHash, ipaddr, port, elem) == token) {
+      return true;
     }
-    
-    #ifdef BENCHMARK_HAS_CXX11
-#define BENCHMARK_TEMPLATE(n, ...)                       \
-  BENCHMARK_PRIVATE_DECLARE(n) =                         \
-      (::benchmark::internal::RegisterBenchmarkInternal( \
-          new ::benchmark::internal::FunctionBenchmark(  \
-              #n '<' #__VA_ARGS__ '>', n<__VA_ARGS__>)))
-#else
-#define BENCHMARK_TEMPLATE(n, a) BENCHMARK_TEMPLATE1(n, a)
-#endif
-    
-    DEFINE_string(benchmark_color, 'auto',
-              'Whether to use colors in the output.  Valid values: '
-              ''true'/'yes'/1, 'false'/'no'/0, and 'auto'. 'auto' means to use '
-              'colors if the output is being sent to a terminal and the TERM '
-              'environment variable is set to a terminal type that supports '
-              'colors.');
-    
-    void Benchmark::SetName(const char* name) { name_ = name; }
-    
-    // Parses a string for an Int32 flag, in the form of
-// '--flag=value'.
-//
-// On success, stores the value of the flag in *value, and returns
-// true.  On failure, returns false without changing *value.
-bool ParseInt32Flag(const char* str, const char* flag, int32_t* value);
-    
-    // Return a vector containing the bigO and RMS information for the specified
-// list of reports. If 'reports.size() < 2' an empty vector is returned.
-std::vector<BenchmarkReporter::Run> ComputeBigO(
-    const std::vector<BenchmarkReporter::Run>& reports);
-    
-    double Finish(Counter const& c, double cpu_time, double num_threads) {
-  double v = c.value;
-  if (c.flags & Counter::kIsRate) {
-    v /= cpu_time;
   }
-  if (c.flags & Counter::kAvgThreads) {
-    v /= num_threads;
-  }
-  return v;
+  return false;
 }
     
-      if (info.scaling_enabled) {
-    Out << '***WARNING*** CPU scaling is enabled, the benchmark '
-           'real time measurements may be noisy and will incur extra '
-           'overhead.\n';
-  }
+    bool DHTUnknownMessage::send() { return true; }
     
-    void SleepForMilliseconds(int milliseconds) {
-  SleepForMicroseconds(milliseconds * kNumMicrosPerMilli);
-}
+    template< >
+struct make_storage_type< 16u, true >
+{
+    typedef mars_boost::int128_type type;
+    }
