@@ -1,174 +1,316 @@
 
         
-          // base::SingleThreadTaskRunner:
-  bool PostDelayedTask(const base::Location& from_here,
-                       base::OnceClosure task,
-                       base::TimeDelta delay) override;
-  bool RunsTasksInCurrentSequence() const override;
-  bool PostNonNestableDelayedTask(const base::Location& from_here,
-                                  base::OnceClosure task,
-                                  base::TimeDelta delay) override;
-    
-    namespace mate {
-    }
-    
-    // static
-void InAppPurchase::BuildPrototype(v8::Isolate* isolate,
-                                   v8::Local<v8::FunctionTemplate> prototype) {
-  prototype->SetClassName(mate::StringToV8(isolate, 'InAppPurchase'));
-  mate::ObjectTemplateBuilder(isolate, prototype->PrototypeTemplate())
-      .SetMethod('canMakePayments', &in_app_purchase::CanMakePayments)
-      .SetMethod('getReceiptURL', &in_app_purchase::GetReceiptURL)
-      .SetMethod('purchaseProduct', &InAppPurchase::PurchaseProduct)
-      .SetMethod('finishAllTransactions',
-                 &in_app_purchase::FinishAllTransactions)
-      .SetMethod('finishTransactionByDate',
-                 &in_app_purchase::FinishTransactionByDate)
-      .SetMethod('getProducts', &in_app_purchase::GetProducts);
-}
-    
-      // TrayIconObserver:
-  void OnClicked(const gfx::Rect& bounds,
-                 const gfx::Point& location,
-                 int modifiers) override;
-  void OnDoubleClicked(const gfx::Rect& bounds, int modifiers) override;
-  void OnRightClicked(const gfx::Rect& bounds, int modifiers) override;
-  void OnBalloonShow() override;
-  void OnBalloonClicked() override;
-  void OnBalloonClosed() override;
-  void OnDrop() override;
-  void OnDropFiles(const std::vector<std::string>& files) override;
-  void OnDropText(const std::string& text) override;
-  void OnDragEntered() override;
-  void OnDragExited() override;
-  void OnDragEnded() override;
-  void OnMouseEntered(const gfx::Point& location, int modifiers) override;
-  void OnMouseExited(const gfx::Point& location, int modifiers) override;
-  void OnMouseMoved(const gfx::Point& location, int modifiers) override;
-    
-    
-    {}  // namespace atom
-    
-     protected:
-  TrackableObject() { weak_map_id_ = ++next_id_; }
-    
-    #include 'content/public/browser/quota_permission_context.h'
-#include 'content/public/common/storage_quota_params.h'
-    
-    
-    {  DISALLOW_IMPLICIT_CONSTRUCTORS(AutoUpdater);
-};
-    
-     protected:
-  /**
-   * \struct  PredictionCacheEntry
-   *
-   * \brief Contains pointer to input matrix and associated cached predictions.
-   */
-  struct PredictionCacheEntry {
-    std::shared_ptr<DMatrix> data;
-    HostDeviceVector<bst_float> predictions;
-  };
-    
-      void InitTreesToUpdate() {
-    if (trees_to_update.size() == 0u) {
-      for (auto & tree : trees) {
-        trees_to_update.push_back(std::move(tree));
-      }
-      trees.clear();
-      param.num_trees = 0;
-      tree_info.clear();
-    }
-  }
-    
-      // Computes the score (negative loss) resulting from performing this split
-  virtual bst_float ComputeSplitScore(bst_uint nodeid,
-                                      bst_uint featureid,
-                                      const GradStats& left_stats,
-                                      const GradStats& right_stats,
-                                      bst_float left_weight,
-                                      bst_float right_weight) const = 0;
-    
-    
-    {  EXPECT_ANY_THROW(s1.subspan<-1>());
-  EXPECT_ANY_THROW(s1.subspan<16>());
-}
-    
-      std::vector<char> inBuff(FLAGS_carver_block_size, 0);
-  for (size_t i = 0; i < blkCount; i++) {
-    inBuff.clear();
-    auto bytesRead = src.read(inBuff.data(), FLAGS_carver_block_size);
-    if (bytesRead > 0) {
-      auto bytesWritten = dst.write(inBuff.data(), bytesRead);
-      if (bytesWritten < 0) {
-        return Status(1, 'Error writing bytes to tmp fs');
-      }
-    }
-  }
-    
-    #include <osquery/config/config.h>
-#include <osquery/config/parsers/auto_constructed_tables.h>
-#include <osquery/database.h>
-#include <osquery/filesystem/filesystem.h>
-#include <osquery/logger.h>
-#include <osquery/registry_factory.h>
-#include <osquery/sql.h>
-#include <osquery/sql/sqlite_util.h>
-#include <osquery/system.h>
-#include <osquery/tables.h>
-#include <osquery/utils/conversions/join.h>
-    
-    
-    {REGISTER_INTERNAL(EventsConfigParserPlugin, 'config_parser', 'events');
-}
+        #endif // BITCOIN_QT_QVALUECOMBOBOX_H
 
     
-    #include <osquery/config/config.h>
-#include <osquery/config/parsers/feature_vectors.h>
-#include <osquery/registry_factory.h>
     
-    #include <osquery/config/config.h>
-#include <osquery/config/parsers/kafka_topics.h>
-#include <osquery/registry_factory.h>
+    {    /* d += a3 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'movq %%rax,%%rcx\n'
+    'movq %%rdx,%%r15\n'
+    /* d += a2 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d = a0 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c = a4 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += (c & M) * R */
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* t3 (tmp1) = d & M */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    'movq %%rsi,%q1\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* d += a4 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a0 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += c * R */
+    'movq %%r8,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* t4 = d & M (%%rsi) */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* tx = t4 >> 48 (tmp3) */
+    'movq %%rsi,%%rax\n'
+    'shrq $48,%%rax\n'
+    'movq %%rax,%q3\n'
+    /* t4 &= (M >> 4) (tmp2) */
+    'movq $0xffffffffffff,%%rax\n'
+    'andq %%rax,%%rsi\n'
+    'movq %%rsi,%q2\n'
+    /* c = a0 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += a4 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* u0 = d & M (%%rsi) */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* u0 = (u0 << 4) | tx (%%rsi) */
+    'shlq $4,%%rsi\n'
+    'movq %q3,%%rax\n'
+    'orq %%rax,%%rsi\n'
+    /* c += u0 * (R >> 4) */
+    'movq $0x1000003d1,%%rax\n'
+    'mulq %%rsi\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[0] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,0(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a1 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a0 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a4 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c += (d & M) * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* r[1] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,8(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a2 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a1 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a0 * b2 (last use of %%r10 = a0) */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* fetch t3 (%%r10, overwrites a0), t4 (%%rsi) */
+    'movq %q2,%%rsi\n'
+    'movq %q1,%%r10\n'
+    /* d += a4 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c += (d & M) * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 (%%rcx only) */
+    'shrdq $52,%%r15,%%rcx\n'
+    /* r[2] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,16(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += t3 */
+    'addq %%r10,%%r8\n'
+    /* c += d * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[3] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,24(%%rdi)\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* c += t4 (%%r8 only) */
+    'addq %%rsi,%%r8\n'
+    /* r[4] = c */
+    'movq %%r8,32(%%rdi)\n'
+: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
+: 'b'(b), 'D'(r)
+: '%rax', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
+);
+}
     
-    namespace osquery {
+    BOOST_AUTO_TEST_CASE(bip173_testvectors_valid)
+{
+    static const std::string CASES[] = {
+        'A12UEL5L',
+        'a12uel5l',
+        'an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1tt5tgs',
+        'abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw',
+        '11qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqc8247j',
+        'split1checkupstagehandshakeupstreamerranterredcaperred2y9e3w',
+        '?1ezyfcl',
+    };
+    for (const std::string& str : CASES) {
+        auto ret = bech32::Decode(str);
+        BOOST_CHECK(!ret.first.empty());
+        std::string recode = bech32::Encode(ret.first, ret.second);
+        BOOST_CHECK(!recode.empty());
+        BOOST_CHECK(CaseInsensitiveEqual(str, recode));
     }
+}
     
     /**
- * @brief Flag names that effect the verbosity of status logs.
+ * @brief Access the internal storage of the Decorator parser.
  *
- * If any of these options are present, then ask the logger to reconfigure
- * the verbosity.
+ * The decoration set is a map of column name to value. It contains the opaque
+ * set of decoration point results.
+ *
+ * Decorations are applied to log items before they are sent to the downstream
+ * logging APIs: logString, logSnapshot, etc.
+ *
+ * @param results the output parameter to write decorations.
  */
-const std::set<std::string> kVerboseOptions{
-    'verbose',
-    'minloglevel',
-    'logger_min_status',
-    'stderrthreshold',
-    'logger_min_stderr',
-    'logger_stderr',
-    'logtostderr',
-    'alsologtostderr',
-};
+void getDecorations(std::map<std::string, std::string>& results);
     
-    
-    {  EXPECT_EQ(categories, expected_categories);
-  EXPECT_EQ(values, expected_values);
+    std::vector<std::string> FeatureVectorsConfigParserPlugin::keys() const {
+  return {kFeatureVectorsRootKey};
 }
     
+    /**
+ * @brief A simple ConfigParserPlugin for feature vector dictionary keys.
+ */
+class FeatureVectorsConfigParserPlugin : public ConfigParserPlugin {
+ public:
+  std::vector<std::string> keys() const override;
+    }
     
-    {  // Any views left are views that don't exist in the new configuration file
-  // so we tear them down and remove them from the database.
-  for (const auto& old_view : erase_views) {
-    osquery::query('DROP VIEW ' + old_view, r);
-    deleteDatabaseValue(kQueries, kConfigViews + old_view);
-  }
-  return Status(0, 'OK');
-}
+    #include <iostream>
     
-    REGISTER(FilesystemConfigPlugin, 'config', 'filesystem');
+      // Now clear and run again.
+  clearDecorations('awesome');
+  runDecorators(DECORATE_INTERVAL, 60 * 60);
     
-    
-    {  uri_ = TLSRequestHelper::makeURI(FLAGS_config_tls_endpoint);
-  return Status(0, 'OK');
-}
+    #include <osquery/config/config.h>
+#include <osquery/config/tests/test_utils.h>
+#include <osquery/database.h>
+#include <osquery/filesystem/filesystem.h>
+#include <osquery/registry.h>
+#include <osquery/registry_interface.h>
+#include <osquery/system.h>
