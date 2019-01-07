@@ -1,264 +1,134 @@
 
         
-          // Returns true iff the test part failed.
-  bool failed() const { return type_ != kSuccess; }
+            // Compress
+    int maxlen = data_sz + 512 + (data_sz >> 2) + sizeof(int); // total guess
+    char* compressed = use_compression ? new char[maxlen] : data;
+    int compressed_sz = use_compression ? stb_compress((stb_uchar*)compressed, (stb_uchar*)data, data_sz) : data_sz;
+    if (use_compression)
+		memset(compressed + compressed_sz, 0, maxlen - compressed_sz);
     
-    // Helper function for implementing {EXPECT|ASSERT}_PRED4.  Don't use
-// this in your code.
-template <typename Pred,
-          typename T1,
-          typename T2,
-          typename T3,
-          typename T4>
-AssertionResult AssertPred4Helper(const char* pred_text,
-                                  const char* e1,
-                                  const char* e2,
-                                  const char* e3,
-                                  const char* e4,
-                                  Pred pred,
-                                  const T1& v1,
-                                  const T2& v2,
-                                  const T3& v3,
-                                  const T4& v4) {
-  if (pred(v1, v2, v3, v4)) return AssertionSuccess();
+    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
+
+    
+    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
+// **Prefer using the code in imgui_impl_opengl3.cpp**
+// This code is mostly provided as a reference to learn how ImGui integration works, because it is shorter to read.
+// If your code is using GL3+ context or any semi modern OpenGL calls, using this is likely to make everything more
+// complicated, will require your code to reset every single OpenGL attributes to their initial state, and might
+// confuse your GPU driver. 
+// The GL2 code is unable to reset attributes or even call e.g. 'glUseProgram(0)' because they don't exist in that API.
+    
+        // Setup render state
+    const float blend_factor[4] = { 0.f, 0.f, 0.f, 0.f };
+    ctx->OMSetBlendState(g_pBlendState, blend_factor, 0xffffffff);
+    ctx->OMSetDepthStencilState(g_pDepthStencilState, 0);
+    ctx->RSSetState(g_pRasterizerState);
+    
+    IMGUI_IMPL_API bool     ImGui_ImplGlfw_InitForOpenGL(GLFWwindow* window, bool install_callbacks);
+IMGUI_IMPL_API bool     ImGui_ImplGlfw_InitForVulkan(GLFWwindow* window, bool install_callbacks);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplGlfw_NewFrame();
+    
+    static int g_Time = 0;          // Current time, in milliseconds
+    
+    bool IsZero(double n);
+    
+    #endif  // BENCHMARK_COLORPRINT_H_
+
+    
+      int32_t result = default_value;
+  if (!ParseInt32(std::string('Environment variable ') + env_var, string_value,
+                  &result)) {
+    std::cout << 'The default value ' << default_value << ' is used.\n';
+    return default_value;
+  }
+    
+    void ConsoleReporter::ReportRuns(const std::vector<Run>& reports) {
+  for (const auto& run : reports) {
+    // print the header:
+    // --- if none was printed yet
+    bool print_header = !printed_header_;
+    // --- or if the format is tabular and this run
+    //     has different fields from the prev header
+    print_header |= (output_options_ & OO_Tabular) &&
+                    (!internal::SameNames(run.counters, prev_counters_));
+    if (print_header) {
+      printed_header_ = true;
+      prev_counters_ = run.counters;
+      PrintHeader(run);
     }
+    // As an alternative to printing the headers like this, we could sort
+    // the benchmarks by header and then print. But this would require
+    // waiting for the full results before printing, or printing twice.
+    PrintRunData(run);
+  }
+}
+    
+      // FIXME: Add locking to output.
+  template <class Tp>
+  friend LogType& operator<<(LogType&, Tp const&);
+  friend LogType& operator<<(LogType&, EndLType*);
+    
+    #define ACQUIRE_SHARED(...) \
+  THREAD_ANNOTATION_ATTRIBUTE__(acquire_shared_capability(__VA_ARGS__))
+    
+    namespace apollo {
+namespace drivers {
+namespace canbus {
+namespace can {
+    }
+    }
+    }
+    }
+    
+    #include 'modules/drivers/canbus/can_comm/message_manager.h'
+    
+    // Canbus gflags
+DEFINE_double(sensor_freq, 100,
+              'Sensor feedback timer frequency -- 0 means event trigger.');
+    
+    int ClusterQualityInfo702::ambig_state(const std::uint8_t* bytes,
+                                       int32_t length) const {
+  Byte t0(bytes + 4);
+  int32_t x = t0.get_byte(0, 3);
+    }
+    
+    unsigned int BaseMapMatrix::CreateBinary(unsigned char* buf,
+                                         unsigned int buf_size) const {
+  return 0;
+}
+    
+      header->set_version(version);
+  header->set_date(date);
+  header->mutable_projection()->set_proj(to_coordinate);
+  header->set_district(database_name);
+  header->set_rev_major(rev_major);
+  header->set_rev_minor(rev_minor);
+  header->set_left(west);
+  header->set_right(east);
+  header->set_top(north);
+  header->set_bottom(south);
+  header->set_vendor(vendor);
+    
+    
+    {  for (auto& lon : lon_trajectories) {
+    for (auto& lat : lat_trajectories) {
+      trajectory_pair_pqueue_.emplace(lon, lat);
+    }
+  }
+}
     
     
     {
-    {    // Next, recurses (at compile time) with the tail of the test list.
-    return TypeParameterizedTestCase<Fixture, typename Tests::Tail, Types>
-        ::Register(prefix, case_name, SkipComma(test_names));
-  }
-};
-    
-      T* value_;
-  linked_ptr_internal link_;
-    
-    
-// Tests IsPrime()
-    
-    // Clones a 0-terminated C string, allocating memory using new.
-const char* MyString::CloneCString(const char* a_c_string) {
-  if (a_c_string == NULL) return NULL;
-    }
-    
-      // Asserts that s.c_string() returns NULL.
-  //
-  // <TechnicalDetails>
-  //
-  // If we write NULL instead of
-  //
-  //   static_cast<const char *>(NULL)
-  //
-  // in this assertion, it will generate a warning on gcc 3.4.  The
-  // reason is that EXPECT_EQ needs to know the types of its
-  // arguments in order to print them when it fails.  Since NULL is
-  // #defined as 0, the compiler will use the formatter function for
-  // int to print it.  However, gcc thinks that NULL should be used as
-  // a pointer, not an int, and therefore complains.
-  //
-  // The root of the problem is C++'s lack of distinction between the
-  // integer number 0 and the null pointer constant.  Unfortunately,
-  // we have to live with this fact.
-  //
-  // </TechnicalDetails>
-  EXPECT_STREQ(NULL, s.c_string());
-    
-    // specialize define for Layer Parameter
-template<>
-class FieldEntry<caffe::LayerParameter>
-    : public FieldEntryBase<FieldEntry<caffe::LayerParameter>, caffe::LayerParameter> {
- public:
-  // parent class
-  typedef FieldEntryBase<FieldEntry<caffe::LayerParameter>, caffe::LayerParameter> Parent;
-    }
-    
-    namespace mxnet {
-namespace op {
-template<>
-Operator *CreateOp<cpu>(CaffeLossParam param, int dtype) {
-  Operator *op = NULL;
-  switch (dtype) {
-  case mshadow::kFloat32:
-    op = new CaffeLoss<cpu, float>(param);
-    break;
-  case mshadow::kFloat64:
-    op = new CaffeLoss<cpu, double>(param);
-    break;
-  case mshadow::kFloat16:
-    LOG(FATAL) << 'float16 layer is not supported by caffe';
-    break;
-  default:
-    LOG(FATAL) << 'Unsupported type ' << dtype;
-  }
-  return op;
-}
-    }
-    }
-    
-      std::map<std::string, std::string> GetParams() const override {
-    return param_.__DICT__();
-  }
-    
-      virtual void BeforeFirst(void) {
-    if (param_.round_batch == 0 || num_overflow_ == 0) {
-      // otherise, we already called before first
-      base_->BeforeFirst();
-    } else {
-      num_overflow_ = 0;
-    }
-    head_ = 1;
-  }
-    
-      // Get initial measurement of the space we will be reading.
-  const int64_t initial_size = Size(Key(0), Key(n));
-  const int64_t initial_other_size = Size(Key(n), Key(kCount));
-    
-    TEST(CorruptionTest, CorruptedDescriptor) {
-  ASSERT_OK(db_->Put(WriteOptions(), 'foo', 'hello'));
-  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
-  dbi->TEST_CompactMemTable();
-  dbi->TEST_CompactRange(0, nullptr, nullptr);
-    }
-    
-      // Compact the in-memory write buffer to disk.  Switches to a new
-  // log-file/memtable and writes a new descriptor iff successful.
-  // Errors are recorded in bg_error_.
-  void CompactMemTable() EXCLUSIVE_LOCKS_REQUIRED(mutex_);
-    
-    
-    {}  // namespace leveldb
-    
-    // Print contents of a log file. (*func)() is called on every record.
-Status PrintLogContents(Env* env, const std::string& fname,
-                        void (*func)(uint64_t, Slice, WritableFile*),
-                        WritableFile* dst) {
-  SequentialFile* file;
-  Status s = env->NewSequentialFile(fname, &file);
-  if (!s.ok()) {
-    return s;
-  }
-  CorruptionReporter reporter;
-  reporter.dst_ = dst;
-  log::Reader reader(file, &reporter, true, 0);
-  Slice record;
-  std::string scratch;
-  while (reader.ReadRecord(&record, &scratch)) {
-    (*func)(reader.LastRecordOffset(), record, dst);
-  }
-  delete file;
-  return Status::OK();
-}
-    
-    bool HandleDumpCommand(Env* env, char** files, int num) {
-  StdoutPrinter printer;
-  bool ok = true;
-  for (int i = 0; i < num; i++) {
-    Status s = DumpFile(env, files[i], &printer);
-    if (!s.ok()) {
-      fprintf(stderr, '%s\n', s.ToString().c_str());
-      ok = false;
-    }
-  }
-  return ok;
-}
-    
-      // Pad with zeroes to make manifest file very big.
-  {
-    uint64_t len = FileSize(old_manifest);
-    WritableFile* file;
-    ASSERT_OK(env()->NewAppendableFile(old_manifest, &file));
-    std::string zeroes(3*1048576 - static_cast<size_t>(len), 0);
-    ASSERT_OK(file->Append(zeroes));
-    ASSERT_OK(file->Flush());
-    delete file;
-  }
-    
-      Iterator* NewTableIterator(const FileMetaData& meta) {
-    // Same as compaction iterators: if paranoid_checks are on, turn
-    // on checksum verification.
-    ReadOptions r;
-    r.verify_checksums = options_.paranoid_checks;
-    return table_cache_->NewIterator(r, meta.number, meta.file_size);
-  }
-    
-    struct ID3D10Device;
-    
-    // Implemented features:
-//  [X] Renderer: User texture binding. Use 'LPDIRECT3DTEXTURE9' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
-    
-        g_AttribLocationTex = glGetUniformLocation(g_ShaderHandle, 'Texture');
-    g_AttribLocationProjMtx = glGetUniformLocation(g_ShaderHandle, 'ProjMtx');
-    g_AttribLocationPosition = glGetAttribLocation(g_ShaderHandle, 'Position');
-    g_AttribLocationUV = glGetAttribLocation(g_ShaderHandle, 'UV');
-    g_AttribLocationColor = glGetAttribLocation(g_ShaderHandle, 'Color');
-    
-    DHTResponseMessage::DHTResponseMessage(
-    const std::shared_ptr<DHTNode>& localNode,
-    const std::shared_ptr<DHTNode>& remoteNode,
-    const std::string& transactionID)
-    : DHTAbstractMessage(localNode, remoteNode, transactionID)
-{
-}
-    
-      virtual void accept(DHTMessageCallback* callback) = 0;
-    
-      bool addNode(const std::shared_ptr<DHTNode>& node);
-    
-    #include <vector>
-#include <string>
-#include <memory>
-    
-    #endif // D_DHT_SETUP_H
+    {
+    {}  // namespace gem
+}  // namespace canbus
+}  // namespace apollo
 
     
-      void setMessageDispatcher(DHTMessageDispatcher* dispatcher);
-    
-    void DHTTaskQueueImpl::executeTask()
-{
-  A2_LOG_DEBUG('Updating periodicTaskQueue1');
-  periodicTaskQueue1_.update();
-  A2_LOG_DEBUG('Updating periodicTaskQueue2');
-  periodicTaskQueue2_.update();
-  A2_LOG_DEBUG('Updating immediateTaskQueue');
-  immediateTaskQueue_.update();
-}
-    
-    int ClusterListStatus600::near(const std::uint8_t* bytes,
-                               int32_t length) const {
-  Byte t0(bytes);
-  int32_t x = t0.get_byte(0, 8);
+    namespace mars_boost {} namespace boost = mars_boost; namespace mars_boost {
     }
-    
-    
-    {  double ret = x * OBJECT_VREL_RES + OBJECT_VREL_LAT_MIN;
-  return ret;
-}
-    
-    int ObjectListStatus60A::num_of_objects(const std::uint8_t* bytes,
-                                        int32_t length) const {
-  Byte t0(bytes);
-  int32_t x = t0.get_byte(0, 8);
-    }
-    
-    void RadarState201::Parse(const std::uint8_t* bytes, int32_t length,
-                          ContiRadar* conti_radar) const {
-  auto state = conti_radar->mutable_radar_state();
-  state->set_max_distance(max_dist(bytes, length));
-  state->set_output_type(output_type(bytes, length));
-  state->set_rcs_threshold(rcs_threshold(bytes, length));
-  state->set_radar_power(radar_power(bytes, length));
-  state->set_send_quality(send_quality(bytes, length));
-  state->set_send_ext_info(send_ext_info(bytes, length));
-}
-    
-    namespace apollo {
-namespace localization {
-namespace msf {
-    }
-    }
-    }
-    
-    double Spline1dSeg::ThirdOrderDerivative(const double x) const {
-  return third_order_derivative_(x);
-}
