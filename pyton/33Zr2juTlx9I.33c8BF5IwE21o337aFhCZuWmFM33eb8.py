@@ -1,69 +1,122 @@
 
         
-        *What does this example do?
-The code shows a way to localize words in two languages: English and
-Greek. 'getLocalizer' is the factory method that constructs a
-localizer depending on the language chosen. The localizer object will
-be an instance from a different class according to the language
-localized. However, the main code does not have to worry about which
-localizer will be instantiated, since the method 'get' will be called
-in the same way independently of the language.
+        from sklearn.datasets import fetch_20newsgroups_vectorized
+from sklearn.metrics import accuracy_score
+from sklearn.utils.validation import check_array
     
-    ### OUTPUT ###
-# Jack move 5m then stop
-
+    The timings are then output to stdout, or visualized on a log-log scale
+with matplotlib.
     
+    A test of LocalOutlierFactor on classical anomaly detection datasets.
     
-class MoveFileCommand(object):
-    def __init__(self, src, dest):
-        self.src = src
-        self.dest = dest
+    import numpy as np
+import gc
+from time import time
+from collections import defaultdict
+import matplotlib.pyplot as plt
+from sklearn.datasets import fetch_lfw_people
+from sklearn.decomposition import IncrementalPCA, PCA
     
-    '''
-http://ginstrom.com/scribbles/2007/10/08/design-patterns-python-style/
-Implementation of the iterator pattern with a generator
-    
-        def increment(self):
-        self.value += 1
-    
-    ### OUTPUT ###
-# Setting Data 1 = 10
-# DecimalViewer: Subject Data 1 has data 10
-# HexViewer: Subject Data 1 has data 0xa
-# Setting Data 2 = 15
-# HexViewer: Subject Data 2 has data 0xf
-# DecimalViewer: Subject Data 2 has data 15
-# Setting Data 1 = 3
-# DecimalViewer: Subject Data 1 has data 3
-# HexViewer: Subject Data 1 has data 0x3
-# Setting Data 2 = 5
-# HexViewer: Subject Data 2 has data 0x5
-# DecimalViewer: Subject Data 2 has data 5
-# Detach HexViewer from data1 and data2.
-# Setting Data 1 = 10
-# DecimalViewer: Subject Data 1 has data 10
-# Setting Data 2 = 15
-# DecimalViewer: Subject Data 2 has data 15
-
-    
-        message_center.update()
+    from sklearn.linear_model import Ridge, SGDRegressor, ElasticNet
+from sklearn.metrics import mean_squared_error
+from sklearn.datasets.samples_generator import make_regression
     
     
-class RegistryHolder(type):
+# TASK: Build a vectorizer that splits strings into sequence of 1 to 3
+# characters instead of word tokens
     
-    '''
-@author: Gordeev Andrey <gordeev.and.and@gmail.com>
+            # reset stats on high iter-request times caused by client restarts
+        if delta > 3: # seconds
+            self._reset_stats()
+            return ''
     
-        return template
+        if settings is None:
+        settings = get_project_settings()
+        # set EDITOR from environment if available
+        try:
+            editor = os.environ['EDITOR']
+        except KeyError: pass
+        else:
+            settings['EDITOR'] = editor
+    check_deprecated_settings(settings)
+    
+                items, requests = self.run_callback(response, cb)
+            if opts.pipelines:
+                itemproc = self.pcrawler.engine.scraper.itemproc
+                for item in items:
+                    itemproc.process_item(item, spider)
+            self.add_items(depth, items)
+            self.add_requests(depth, requests)
+    
+        def run(self, args, opts):
+        if len(args) != 1:
+            raise UsageError()
+        filename = args[0]
+        if not os.path.exists(filename):
+            raise UsageError('File not found: %s\n' % filename)
+        try:
+            module = _import_file(filename)
+        except (ImportError, ValueError) as e:
+            raise UsageError('Unable to load %r: %s\n' % (filename, e))
+        spclasses = list(iter_spider_classes(module))
+        if not spclasses:
+            raise UsageError('No spider found in file: %s\n' % filename)
+        spidercls = spclasses.pop()
+    
+        name = 'returns'
+    objects = {
+        'request': Request,
+        'requests': Request,
+        'item': (BaseItem, dict),
+        'items': (BaseItem, dict),
+    }
+    
+            # If no credentials could be found anywhere,
+        # consider this an anonymous connection request by default;
+        # unless 'anon' was set explicitly (True/False).
+        anon = kw.get('anon')
+        if anon is None and not aws_access_key_id and not aws_secret_access_key:
+            kw['anon'] = True
+        self.anon = kw.get('anon')
+    
+            def log_failure(msg):
+            def errback(failure):
+                logger.error(
+                    msg,
+                    exc_info=failure_to_exc_info(failure),
+                    extra={'spider': spider}
+                )
+            return errback
     
     
-class Dog(object):
-    def speak(self):
-        return 'woof'
     
-    The first example achieves this by using an abstract base
-class for a building, where the initializer (__init__ method) specifies the
-steps needed, and the concrete subclasses implement these steps.
+        res = check_ip.check_ip(ip, host=top_domain, wait_time=wait_time)
+    if not res:
+        print('connect fail')
+    elif res.ok:
+        print('success, domain:%s handshake:%d' % (res.host, res.handshake_time))
+    else:
+        print('not support')
     
-        def __init__(self):
-        self.time_provider = datetime.datetime
+            Using setter/getter methods is deprecated. Use o.line instead.'''
+    
+        @classmethod
+    def dec_playinfo(cls, info, coeff):
+        res = None
+        clear = cls.funshion_decrypt_str(info['infohash'], coeff)
+        if cls.checksum(clear):
+            res = dict(hashid=clear[:40], token=cls.funshion_decrypt_str(info['token'], coeff))
+        else:
+            clear = cls.funshion_decrypt_str(info['infohash_prev'], coeff)
+            if cls.checksum(clear):
+                res = dict(hashid=clear[:40], token=cls.funshion_decrypt_str(info['token_prev'], coeff))
+        return res
+    
+    __all__ = ['giphy_download']
+    
+                if title is None:
+                response = request.urlopen(request.Request(real_url))
+                if response.headers['content-disposition']:
+                    filename = parse.unquote(r1(r'filename='?(.+)'?', response.headers['content-disposition'])).split('.')
+                    title = ''.join(filename[:-1])
+        except: pass
