@@ -1,174 +1,198 @@
 
         
-        
-@classmethod
-def get_args(cls, dist, header=None):
-    '''
-    Yield write_script() argument tuples for a distribution's
-    console_scripts and gui_scripts entry points.
-    '''
-    if header is None:
-        header = cls.get_header()
-    spec = str(dist.as_requirement())
-    for type_ in 'console', 'gui':
-        group = type_ + '_scripts'
-        for name, ep in dist.get_entry_map(group).items():
-            # ensure_safe_name
-            if re.search(r'[\\/]', name):
-                raise ValueError('Path separators not allowed in script names')
-            script_text = TEMPLATE.format(
-                          ep.module_name, ep.attrs[0], '.'.join(ep.attrs),
-                          spec, group, name)
-            args = cls._get_script_args(type_, name, header, script_text)
-            for res in args:
-                yield res
+        for test in gettestcases():
+    if METHOD == 'EURISTIC':
+        try:
+            webpage = compat_urllib_request.urlopen(test['url'], timeout=10).read()
+        except Exception:
+            print('\nFail: {0}'.format(test['name']))
+            continue
     
     
-@pytest.fixture(autouse=True)
-def usage_tracker(mocker):
-    return mocker.patch(
-        'thefuck.entrypoints.not_configured._get_not_configured_usage_tracker_path',
-        new_callable=MagicMock)
+    {    # Options that need a file parameter
+    'download-archive': ['--require-parameter'],
+    'cookies': ['--require-parameter'],
+    'load-info': ['--require-parameter'],
+    'batch-file': ['--require-parameter'],
+}
+    
+    versions_info = json.load(open('update/versions.json'))
+if 'signature' in versions_info:
+    del versions_info['signature']
+    
+        infile, outfile = args
+    
+        infile, outfile = args
     
     
-def history_changed(proc, TIMEOUT, to):
-    '''Ensures that history changed.'''
-    proc.send('\033[A')
-    assert proc.expect([TIMEOUT, to])
+class TestAgeRestriction(unittest.TestCase):
+    def _assert_restricted(self, url, filename, age, old_age=None):
+        self.assertTrue(_download_restricted(url, filename, old_age))
+        self.assertFalse(_download_restricted(url, filename, age))
+    
+        def test_facebook_matching(self):
+        self.assertTrue(FacebookIE.suitable('https://www.facebook.com/Shiniknoh#!/photo.php?v=10153317450565268'))
+        self.assertTrue(FacebookIE.suitable('https://www.facebook.com/cindyweather?fref=ts#!/photo.php?v=10152183998945793'))
+    
+            def _hook(status):
+            if status['status'] == 'finished':
+                finished_hook_called.add(status['filename'])
+        ydl.add_progress_hook(_hook)
+        expect_warnings(ydl, test_case.get('expected_warnings', []))
+    
+    import unittest
+    
+        def __init__(self):
+        self.name = 'hstore'
+    
+        def __call__(self, value):
+        keys = set(value)
+        missing_keys = self.keys - keys
+        if missing_keys:
+            raise ValidationError(
+                self.messages['missing_keys'],
+                code='missing_keys',
+                params={'keys': ', '.join(missing_keys)},
+            )
+        if self.strict:
+            extra_keys = keys - self.keys
+            if extra_keys:
+                raise ValidationError(
+                    self.messages['extra_keys'],
+                    code='extra_keys',
+                    params={'keys': ', '.join(extra_keys)},
+                )
+    
+        The Django sessions framework is entirely cookie-based. It does
+    not fall back to putting session IDs in URLs. This is an intentional
+    design decision. Not only does that behavior make URLs ugly, it makes
+    your site vulnerable to session-ID theft via the 'Referer' header.
+    
+        x_train = np.empty((num_train_samples, 3, 32, 32), dtype='uint8')
+    y_train = np.empty((num_train_samples,), dtype='uint8')
     
     
-@pytest.mark.functional
-def test_with_confirmation(proc, TIMEOUT):
-    with_confirmation(proc, TIMEOUT)
-    history_changed(proc, TIMEOUT, u'echo test')
+# Artificial data generation:
+# Generate movies with 3 to 7 moving squares inside.
+# The squares are of shape 1x1 or 2x2 pixels,
+# which move linearly over time.
+# For convenience we first create movies with bigger width and height (80x80)
+# and at the end we select a 40x40 window.
     
     
-@pytest.fixture(params=containers)
-def proc(request, spawnu, TIMEOUT):
-    proc = spawnu(*request.param)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(u'tcsh')
-    proc.sendline(u'setenv PYTHONIOENCODING utf8')
-    proc.sendline(u'eval `thefuck --alias`')
-    return proc
+def make_setting_element(setting_data, app, fromdocname):
+    refnode = make_refnode(app.builder, fromdocname,
+                           todocname=setting_data['docname'],
+                           targetid=setting_data['refid'],
+                           child=nodes.Text(setting_data['setting_name']))
+    p = nodes.paragraph()
+    p += refnode
     
-        assert match(command)
-    
-        new_command = get_new_command(Command('sudo apt list --upgradable', match_output))
-    assert new_command == 'sudo apt upgrade'
+        def parse(self, response):
+        for link in self.link_extractor.extract_links(response):
+            yield scrapy.Request(link.url, callback=self.parse)
 
     
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
+                          help='set spider argument (may be repeated)')
+        parser.add_option('-o', '--output', metavar='FILE',
+                          help='dump scraped items into FILE (use - for stdout)')
+        parser.add_option('-t', '--output-format', metavar='FORMAT',
+                          help='format to use for dumping items with -o')
     
-misspelled_subcommand_with_multiple_options = '''\
-usage: aws [options] <command> <subcommand> [<subcommand> ...] [parameters]
-To see help text, you can run:
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('--spider', dest='spider', default=None,
+            help='use this spider without looking for one')
+        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
+            help='set spider argument (may be repeated)')
+        parser.add_option('--pipelines', action='store_true',
+            help='process items through pipelines')
+        parser.add_option('--nolinks', dest='nolinks', action='store_true',
+            help='don't show links to follow (extracted requests)')
+        parser.add_option('--noitems', dest='noitems', action='store_true',
+            help='don't show scraped items')
+        parser.add_option('--nocolour', dest='nocolour', action='store_true',
+            help='avoid using pygments to colorize the output')
+        parser.add_option('-r', '--rules', dest='rules', action='store_true',
+            help='use CrawlSpider rules to discover the callback')
+        parser.add_option('-c', '--callback', dest='callback',
+            help='use this callback for parsing, instead looking for a callback')
+        parser.add_option('-m', '--meta', dest='meta',
+            help='inject extra meta into the Request, it must be a valid raw json string')
+        parser.add_option('-d', '--depth', dest='depth', type='int', default=1,
+            help='maximum depth for parsing requests [default: %default]')
+        parser.add_option('-v', '--verbose', dest='verbose', action='store_true',
+            help='print each depth level one by one')
     
-    
-@pytest.mark.parametrize('before, after', [
-    ('brew install sshfs',
-     'brew cask install osxfuse && brew install sshfs')])
-def test_get_new_command(before, after):
-    command = Command(before, output)
-    assert get_new_command(command) == after
+            if self.crawler_process.bootstrap_failed:
+            self.exitcode = 1
 
     
-        # Returns
-        x (tensor): tensor as input to the next layer
-    '''
-    conv = Conv2D(num_filters,
-                  kernel_size=kernel_size,
-                  strides=strides,
-                  padding='same',
-                  kernel_initializer='he_normal',
-                  kernel_regularizer=l2(1e-4))
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('--verbose', '-v', dest='verbose', action='store_true',
+            help='also display twisted/python/platform info (useful for bug reports)')
     
-    if not exists(log_dir):
-    makedirs(log_dir)
+        def _set_connection_attributes(self, request):
+        parsed = urlparse_cached(request)
+        self.scheme, self.netloc, self.host, self.port, self.path = _parsed_url_args(parsed)
+        proxy = request.meta.get('proxy')
+        if proxy:
+            self.scheme, _, self.host, self.port, _ = _parse(proxy)
+            self.path = self.url
     
-        return (x_train, y_train), (x_test, y_test)
+        Extension is everything from the last dot to the end, ignoring
+    leading dots.  Returns '(root, ext)'; ext may be empty.'''
+    # NOTE: This code must work for text and bytes strings.
+    
+    '''Send the contents of a directory as a MIME message.'''
+    
+    # A simple generator function
+def baz():
+    for i in range(10):
+        yield i*i
+    
+    def calculate(func, args):
+    result = func(*args)
+    return '%s says that %s%s = %s' % \
+        (current_process().name, func.__name__, args, result)
+    
+    DB_FILE = 'mydb'
+    
+    PROJ_METADATA = '%s.json' % PROJ_NAME
+    
+        def prepare(self, vid = '', title = None, **kwargs):
+        assert vid
+    
+    site_info = 'Dailymotion.com'
+download = dailymotion_download
+download_playlist = playlist_not_supported('dailymotion')
 
     
-        # Arguments
-        model: target model for the conversion.
-    '''
-    # Note: SeparableConvolution not included
-    # since only supported by TF.
-    conv_classes = {
-        'Conv1D',
-        'Conv2D',
-        'Conv3D',
-        'Conv2DTranspose',
-    }
-    to_assign = []
-    for layer in model.layers:
-        if layer.__class__.__name__ in conv_classes:
-            original_kernel = K.get_value(layer.kernel)
-            converted_kernel = convert_kernel(original_kernel)
-            to_assign.append((layer.kernel, converted_kernel))
-    K.batch_set_value(to_assign)
+    	for video in tab.childNodes:
+		if re.search(contentid, video.attributes['link'].value):
+			url = video.attributes['flv'].value
+			break
     
+        # Try harder, check all iframes
+    if 'recur_lv' not in kwargs or kwargs['recur_lv'] < recur_limit:
+        r = kwargs.get('recur_lv')
+        if r is None:
+            r = 1
+        else:
+            r += 1
+        iframes = matchall(content, [r'<iframe.+?src=(?:\'|\')(.+?)(?:\'|\')'])
+        for iframe in iframes:
+            if not iframe.startswith('http'):
+                src = urllib.parse.urljoin(url, iframe)
+            else:
+                src = iframe
+            found = embed_download(src, output_dir=output_dir, merge=merge, info_only=info_only, recur_lv=r, **kwargs)
+            if found:
+                return True
     
-def test_sparse_categorical_crossentropy():
-    y_pred = K.variable(np.array([[0.3, 0.6, 0.1],
-                                  [0.1, 0.2, 0.7]]))
-    y_true = K.variable(np.array([1, 2]))
-    expected_loss = - (np.log(0.6) + np.log(0.7)) / 2
-    loss = K.eval(losses.sparse_categorical_crossentropy(y_true, y_pred))
-    assert np.isclose(expected_loss, np.mean(loss))
-    
-        y = np.array(y, dtype='int')
-    input_shape = y.shape
-    if input_shape and input_shape[-1] == 1 and len(input_shape) > 1:
-        input_shape = tuple(input_shape[:-1])
-    y = y.ravel()
-    if not num_classes:
-        num_classes = np.max(y) + 1
-    n = y.shape[0]
-    categorical = np.zeros((n, num_classes), dtype=dtype)
-    categorical[np.arange(n), y] = 1
-    output_shape = input_shape + (num_classes,)
-    categorical = np.reshape(categorical, output_shape)
-    return categorical
-    
-        # Output shape
-        - if `return_sequences`
-             - if data_format='channels_first'
-                5D tensor with shape:
-                `(samples, time, filters, output_row, output_col)`
-             - if data_format='channels_last'
-                5D tensor with shape:
-                `(samples, time, output_row, output_col, filters)`
-        - else
-            - if data_format='channels_first'
-                4D tensor with shape:
-                `(samples, filters, output_row, output_col)`
-            - if data_format='channels_last'
-                4D tensor with shape:
-                `(samples, output_row, output_col, filters)`
-            where o_row and o_col depend on the shape of the filter and
-            the padding
-    
-    
-def makeKeyFiles(name, keySize):
-    if os.path.exists('%s_pubkey.txt' % name) or os.path.exists('%s_privkey.txt' % name):
-        print('\nWARNING:')
-        print(''%s_pubkey.txt' or '%s_privkey.txt' already exists. \n'
-              'Use a different name or delete these files and re-run this program.' %
-              (name, name))
-        sys.exit()
-    
-        def __hash_function_2(self, value, data):
-    
-    word_bysig = collections.defaultdict(list)
-for word in word_list:
-    word_bysig[signature(word)].append(word)
-    
-        return res
-    
-    
-def b_expo_mod(a, b, c):
-    res = 0
-    while b > 0:
-        if b&1:
-            res = ((res%c) + (a%c)) % c
+        video_url = match1(html, r'filepath=(.+)&sec')
+    video_url = video_url.replace('&mid', '?mid')
