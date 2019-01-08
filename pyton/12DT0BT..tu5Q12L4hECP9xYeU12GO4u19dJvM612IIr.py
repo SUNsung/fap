@@ -1,164 +1,123 @@
 
         
-        
-if __name__ == '__main__':
-    main()
-
+            def dispatch_call(self, call):
+        if call.rank not in (Rank.OPERATOR, Rank.SUPERVISOR, Rank.DIRECTOR):
+            raise ValueError('Invalid call rank: {}'.format(call.rank))
+        employee = None
+        if call.rank == Rank.OPERATOR:
+            employee = self._dispatch_call(call, self.operators)
+        if call.rank == Rank.SUPERVISOR or employee is None:
+            employee = self._dispatch_call(call, self.supervisors)
+        if call.rank == Rank.DIRECTOR or employee is None:
+            employee = self._dispatch_call(call, self.directors)
+        if employee is None:
+            self.queued_calls.append(call)
     
-    versions_info = json.load(open('update/versions.json'))
-if 'signature' in versions_info:
-    del versions_info['signature']
+        def score(self):
+        min_over = sys.MAXSIZE
+        max_under = -sys.MAXSIZE
+        for score in self.possible_scores():
+            if self.BLACKJACK < score < min_over:
+                min_over = score
+            elif max_under < score <= self.BLACKJACK:
+                max_under = score
+        return max_under if max_under != -sys.MAXSIZE else min_over
     
-    entry_template = textwrap.dedent('''
-    <entry>
-        <id>https://yt-dl.org/feed/youtube-dl-updates-feed/youtube-dl-@VERSION@</id>
-        <title>New version @VERSION@</title>
-        <link href='http://rg3.github.io/youtube-dl' />
-        <content type='xhtml'>
-            <div xmlns='http://www.w3.org/1999/xhtml'>
-                Downloads available at <a href='https://yt-dl.org/downloads/@VERSION@/'>https://yt-dl.org/downloads/@VERSION@/</a>
-            </div>
-        </content>
-        <author>
-            <name>The youtube-dl maintainers</name>
-        </author>
-        <updated>@TIMESTAMP@</updated>
-    </entry>
-    ''')
+        def extract_year_month(self, line):
+        '''Return the year and month portions of the timestamp.'''
+        pass
     
-        with io.open(outfile, 'w', encoding='utf-8') as outf:
-        outf.write(out)
-    
-    README_FILE = 'README.md'
-helptext = sys.stdin.read()
-    
-        for release in releases:
-        compat_print(release['name'])
-        for asset in release['assets']:
-            asset_name = asset['name']
-            total_bytes += asset['download_count'] * asset['size']
-            if all(not re.match(p, asset_name) for p in (
-                    r'^youtube-dl$',
-                    r'^youtube-dl-\d{4}\.\d{2}\.\d{2}(?:\.\d+)?\.tar\.gz$',
-                    r'^youtube-dl\.exe$')):
-                continue
-            compat_print(
-                ' %s size: %s downloads: %d'
-                % (asset_name, format_size(asset['size']), asset['download_count']))
-    
-            info_dict = _make_result(list(formats_order), extractor='youtube')
-        ydl = YDL({'format': 'bestvideo[height>=999999]+bestaudio/best'})
-        yie = YoutubeIE(ydl)
-        yie._sort_formats(info_dict['formats'])
-        ydl.process_ie_result(info_dict)
-        downloaded = ydl.downloaded_info_dicts[0]
-        self.assertEqual(downloaded['format_id'], '38')
-    
-        def test_cbc_decrypt(self):
-        data = bytes_to_intlist(
-            b'\x97\x92+\xe5\x0b\xc3\x18\x91ky9m&\xb3\xb5@\xe6'\xc2\x96.\xc8u\x88\xab9-[\x9e|\xf1\xcd'
-        )
-        decrypted = intlist_to_bytes(aes_cbc_decrypt(data, self.key, self.iv))
-        self.assertEqual(decrypted.rstrip(b'\x08'), self.secret_msg)
-    
-            def get_tc_filename(tc):
-            return ydl.prepare_filename(tc.get('info_dict', {}))
-    
-    from sentry.utils.query import RangeQuerySetWrapperWithProgressBar
-    
-        complete_apps = ['sentry']
-
-    
-        def backwards(self, orm):
-    
-    from sentry.utils.query import RangeQuerySetWrapperWithProgressBar
-    
-        complete_apps = ['sentry']
-
-    
-            # Adding field 'ApiToken.scope_list'
-        db.add_column(
-            'sentry_apitoken',
-            'scope_list',
-            self.gf('sentry.db.models.fields.array.ArrayField')(
-                of=('django.db.models.fields.TextField', [], {})
-            ),
-            keep_default=False
-        )
-    
-            # Adding unique constraint on 'DSymApp', fields ['project', 'platform', 'app_id']
-        db.create_unique('sentry_dsymapp', ['project_id', 'platform', 'app_id'])
-    
-            # Adding unique constraint on 'ReleaseHeadCommit', fields ['repository_id', 'release']
-        db.create_unique('sentry_releaseheadcommit', ['repository_id', 'release_id'])
+        return render_template('auth/register.html')
     
     
-class Migration(SchemaMigration):
-    def forwards(self, orm):
-        # Adding model 'Distribution'
-        db.create_table(
-            'sentry_distribution', (
-                (
-                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
-                        primary_key=True
-                    )
-                ), (
-                    'organization_id',
-                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(
-                        db_index=True
-                    )
-                ), (
-                    'release', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.Release']
-                    )
-                ), ('name', self.gf('django.db.models.fields.CharField')(max_length=64)), (
-                    'date_added',
-                    self.gf('django.db.models.fields.DateTimeField')()
-                ),
-            )
-        )
-        db.send_create_signal('sentry', ['Distribution'])
+@pytest.mark.parametrize(('username', 'password', 'message'), (
+    ('a', 'test', b'Incorrect username.'),
+    ('test', 'a', b'Incorrect password.'),
+))
+def test_login_validate_input(auth, username, password, message):
+    response = auth.login(username, password)
+    assert message in response.data
     
     
-  def Start( self ):
-    request_data = BuildRequestData()
-    request_data.update( { 'filetypes': self.filetypes } )
-    self._response = self.PostDataToHandler( request_data,
-                                             'semantic_completion_available' )
+def test_author_required(app, client, auth):
+    # change the post author to another user
+    with app.app_context():
+        db = get_db()
+        db.execute('UPDATE post SET author_id = 2 WHERE id = 1')
+        db.commit()
     
-        poll_again = _HandlePollResponse( response, diagnostics_handler )
-    if poll_again:
-      self._SendRequest()
-      return True
-    
-    
-# This class can be used to keep the ycmd server alive for the duration of the
-# life of the client. By default, ycmd shuts down if it doesn't see a request in
-# a while.
-class YcmdKeepalive( object ):
-  def __init__( self, ping_interval_seconds = 60 * 10 ):
-    self._keepalive_thread = Thread( target = self._ThreadMain )
-    self._keepalive_thread.daemon = True
-    self._ping_interval_seconds = ping_interval_seconds
-    
-      # Ignore 'syntax match' lines (see ':h syn-match').
-  if line.startswith( 'match ' ):
-    return []
-    
-      _assert_rejects( f, 'This is a Taco' )
-  _assert_accepts( f, 'This is a Burrito' )
-
-    
-            Args:
-            max_workers: The maximum number of threads that can be used to
-                execute the given calls.
+        def add_url_rule(self, rule, endpoint=None, view_func=None, **options):
+        '''A helper method to register a rule (and optionally a view function)
+        to the application.  The endpoint is automatically prefixed with the
+        blueprint's name.
         '''
-        self._max_workers = max_workers
-        self._work_queue = queue.Queue()
-        self._threads = set()
-        self._shutdown = False
-        self._shutdown_lock = threading.Lock()
+        if self.url_prefix is not None:
+            if rule:
+                rule = '/'.join((
+                    self.url_prefix.rstrip('/'), rule.lstrip('/')))
+            else:
+                rule = self.url_prefix
+        options.setdefault('subdomain', self.subdomain)
+        if endpoint is None:
+            endpoint = _endpoint_from_view_func(view_func)
+        defaults = self.url_defaults
+        if 'defaults' in options:
+            defaults = dict(defaults, **options.pop('defaults'))
+        self.app.add_url_rule(rule, '%s.%s' % (self.blueprint.name, endpoint),
+                              view_func, defaults=defaults, **options)
     
-    # The language for content autogenerated by Sphinx. Refer to documentation
-# for a list of supported languages.
-#language = None
+    
+def htmlsafe_dumps(obj, **kwargs):
+    '''Works exactly like :func:`dumps` but is safe for use in ``<script>``
+    tags.  It accepts the same arguments and returns a JSON string.  Note that
+    this is available in templates through the ``|tojson`` filter which will
+    also mark the result as safe.  Due to how this function escapes certain
+    characters this is safe even if used outside of ``<script>`` tags.
+    
+                environ['flask._preserve_context'] = self.preserve_context
+        else:
+            kwargs.setdefault('environ_overrides', {}) \
+                ['flask._preserve_context'] = self.preserve_context
+            kwargs.setdefault('environ_base', self.environ_base)
+            builder = make_test_environ_builder(
+                self.application, *args, **kwargs
+            )
+    
+    
+def test_basic_url_generation(app):
+    app.config['SERVER_NAME'] = 'localhost'
+    app.config['PREFERRED_URL_SCHEME'] = 'https'
+    
+        def test_stop_iteration(self):
+        def f():
+            for i in range(2):
+                yield i
+        def g(p):
+            for i in f():
+                pass
+        f_ident = ident(f)
+        g_ident = ident(g)
+        self.check_events(g, [(1, 'call', g_ident),
+                              # call the iterator twice to generate values
+                              (2, 'call', f_ident),
+                              (2, 'return', f_ident),
+                              (2, 'call', f_ident),
+                              (2, 'return', f_ident),
+                              # once more to hit the raise:
+                              (2, 'call', f_ident),
+                              (2, 'return', f_ident),
+                              (1, 'return', g_ident),
+                              ])
+    
+        def test_version(self):
+        version = ('Python %d.%d' % sys.version_info[:2]).encode('ascii')
+        for switch in '-V', '--version', '-VV':
+            rc, out, err = assert_python_ok(switch)
+            self.assertFalse(err.startswith(version))
+            self.assertTrue(out.startswith(version))
+    
+    ans = input('View full message?')
+if ans.lower()[0] == 'n':
+    sys.exit()
+    
+    from email.policy import default
