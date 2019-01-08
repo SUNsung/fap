@@ -1,195 +1,300 @@
 
         
-        
+          PyObjectStruct* get() const { return ptr_; }
+    
+    
+    {  // Moving messages on two different arenas should lead to a copy.
+  *message2_on_arena = std::move(*message1_on_arena);
+  EXPECT_NE(nested, &message2_on_arena->optional_nested_message());
+  TestUtil::ExpectAllFieldsSet(*message1_on_arena);
+  TestUtil::ExpectAllFieldsSet(*message2_on_arena);
+}
+    
+    ImmutableGeneratorFactory::ImmutableGeneratorFactory(
+    Context* context) : context_(context) {
+}
+ImmutableGeneratorFactory::~ImmutableGeneratorFactory() {}
+    
+      (*variables)['type'] =
+      name_resolver->GetImmutableClassName(descriptor->message_type());
+  const FieldDescriptor* key = KeyField(descriptor);
+  const FieldDescriptor* value = ValueField(descriptor);
+  const JavaType keyJavaType = GetJavaType(key);
+  const JavaType valueJavaType = GetJavaType(value);
+    
+    // Helper for CollectMinimalFileDepsContainingExtensionsWorker that marks all
+// deps as visited and prunes them from the needed files list.
+void PruneFileAndDepsMarkingAsVisited(
+    const FileDescriptor* file,
+    std::vector<const FileDescriptor*>* files,
+    std::set<const FileDescriptor*>* files_visited) {
+  std::vector<const FileDescriptor*>::iterator iter =
+      std::find(files->begin(), files->end(), file);
+  if (iter != files->end()) {
+    files->erase(iter);
+  }
+  files_visited->insert(file);
+  for (int i = 0; i < file->dependency_count(); i++) {
+    PruneFileAndDepsMarkingAsVisited(file->dependency(i), files, files_visited);
+  }
+}
+    
+      // write file header
+  io::CodedOutputStream output(raw_output_);
+  output.WriteLittleEndian32(0x04034b50);  // magic
+  WriteShort(&output, 10);  // version needed to extract
+  WriteShort(&output, 0);  // flags
+  WriteShort(&output, 0);  // compression method: stored
+  WriteShort(&output, 0);  // last modified time
+  WriteShort(&output, kDosEpoch);  // last modified date
+  output.WriteLittleEndian32(info.crc32);  // crc-32
+  output.WriteLittleEndian32(info.size);  // compressed size
+  output.WriteLittleEndian32(info.size);  // uncompressed size
+  WriteShort(&output, filename_size);  // file name length
+  WriteShort(&output, 0);   // extra field length
+  output.WriteString(filename);  // file name
+  output.WriteString(contents);  // file data
+    
+    #include <google/protobuf/test_util.h>
+#include <google/protobuf/unittest.pb.h>
+#include <google/protobuf/unittest_no_field_presence.pb.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/dynamic_message.h>
+    
+    void add(const Size2D &size,
+         const u16 * src0Base, ptrdiff_t src0Stride,
+         const u16 * src1Base, ptrdiff_t src1Stride,
+         u16 * dstBase, ptrdiff_t dstStride,
+         CONVERT_POLICY policy)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+        if (policy == CONVERT_POLICY_SATURATE)
     {
-    {}  // namespace python_op_gen_internal
-}  // namespace tensorflow
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddSaturate<u16, u32>());
+    }
+    else
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddWrap<u16, u32>());
+    }
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)policy;
+#endif
+}
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // We define the PY_ARRAY_UNIQUE_SYMBOL in this .cc file and provide an
-// ImportNumpy function to populate it.
-#define TF_IMPORT_NUMPY
-    
-    void PyExceptionRegistry::Init(PyObject* code_to_exc_type_map) {
-  DCHECK(singleton_ == nullptr) << 'PyExceptionRegistry::Init() already called';
-  singleton_ = new PyExceptionRegistry;
+        inline _normEstimator(const Size2D &size, s32, Margin borderMargin,
+                          ptrdiff_t &mapstep, s32** mag_buf, u8* &map):
+                          offsetk(1),
+                          sobelRow(std::max<ptrdiff_t>(0, offsetk - (ptrdiff_t)borderMargin.left),
+                                   std::max<ptrdiff_t>(0, offsetk - (ptrdiff_t)borderMargin.right))
+    {
+        mapstep = size.width + 2;
+        magstep = size.width + 2 + size.width * (4 * sizeof(s16)/sizeof(s32));
+        dxOffset = mapstep * sizeof(s32)/sizeof(s16);
+        dyOffset = dxOffset + size.width * 1;
+        shxOffset = dxOffset + size.width * 2;
+        shyOffset = dxOffset + size.width * 3;
+        buffer.resize( (size.width+2)*(size.height+2) + magstep*3*sizeof(s32) );
+        mag_buf[0] = (s32*)&buffer[0];
+        mag_buf[1] = mag_buf[0] + magstep;
+        mag_buf[2] = mag_buf[1] + magstep;
+        memset(mag_buf[0], 0, mapstep * sizeof(s32));
     }
     
+    #define CONTSRC2 dstStride == src0Stride && \
+                 dstStride == src1Stride &&
+#define CONTSRC3 dstStride == src0Stride && \
+                 dstStride == src1Stride && \
+                 dstStride == src2Stride &&
+#define CONTSRC4 dstStride == src0Stride && \
+                 dstStride == src1Stride && \
+                 dstStride == src2Stride && \
+                 dstStride == src3Stride &&
     
-    {}  // namespace tensorflow
-    
-    // Given an numpy ndarray object 'obj', creates a corresponding tf
-// Tensor in '*ret'.
-Status ConvertNdarrayToTensor(PyObject* obj, Tensor* ret);
+    #include 'common.hpp'
     
     
-    {}  // namespace tensorflow
+    {    return 0;
+#endif
+}
+    
+    #ifdef CAROTENE_NEON
+    
+            for ( ; x < width; ++x)
+        {
+            // make extrapolation for the last elements
+            if (x + 1 >= width)
+            {
+                if (border == BORDER_MODE_CONSTANT)
+                    nextx = borderValue << 2;
+                else if (border == BORDER_MODE_REPLICATE)
+                    nextx = srow2[x] + (srow1[x] << 1) + srow0[x];
+            }
+            else
+                nextx = (srow2 ? srow2[x + 1] : borderValue) +
+                                (srow1[x + 1] << 1) +
+                        (srow0 ? srow0[x + 1] : borderValue);
+    }
+    
+    #endif  // CAFFE_DATA_TRANSFORMER_HPP_
 
     
-    // Safe container for an owned PyObject. On destruction, the reference count of
-// the contained object will be decremented.
-using Safe_PyObjectPtr = std::unique_ptr<PyObject, detail::PyDecrefDeleter>;
-Safe_PyObjectPtr make_safe(PyObject* o);
+      bool is_started() const;
     
-    // Returns the kernel class name required to execute <node_def> on the device
-// type of <node_def.device>, or an empty string if the kernel class is not
-// found or the device name is invalid.
-string TryFindKernelClass(const string& serialized_node_def);
+      /**
+   * @brief Returns the layer type.
+   */
+  virtual inline const char* type() const { return ''; }
     
-        http://www.apache.org/licenses/LICENSE-2.0
+    #include <map>
+#include <string>
+#include <vector>
     
-      // Given the driver version file contents, finds the kernel module version and
-  // returns it as a string.
-  //
-  // This is solely used for more informative log messages when the user is
-  // running on a machine that happens to have a libcuda/kernel driver mismatch.
-  static port::StatusOr<DriverVersion> FindKernelModuleVersion(
-      const string &driver_version_file_contents);
+     protected:
+  /// @copydoc AbsValLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
-    port::Status CUDAEvent::Record(CUDAStream* stream) {
-  return CUDADriver::RecordEvent(parent_->cuda_context(), cuda_event_,
-                                 stream->cuda_stream());
-}
     
-    // The 'Types' template argument below must have spaces around it
-// since some compilers may choke on '>>' when passing a template
-// instance (e.g. Types<int>)
-# define INSTANTIATE_TYPED_TEST_CASE_P(Prefix, CaseName, Types) \
-  bool gtest_##Prefix##_##CaseName GTEST_ATTRIBUTE_UNUSED_ = \
-      ::testing::internal::TypeParameterizedTestCase<CaseName, \
-          GTEST_CASE_NAMESPACE_(CaseName)::gtest_AllTests_, \
-          ::testing::internal::TypeList< Types >::type>::Register(\
-              #Prefix, #CaseName, GTEST_REGISTERED_TEST_NAMES_(CaseName))
-    
-      // Sets a new value, overriding the one supplied in the constructor.
-  void SetValue(const std::string& new_value) {
-    value_ = new_value;
+  /// @brief Not implemented -- AccuracyLayer cannot be used as a loss.
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
+    for (int i = 0; i < propagate_down.size(); ++i) {
+      if (propagate_down[i]) { NOT_IMPLEMENTED; }
+    }
   }
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-      // Formats an int value as '%X'.
-  static std::string FormatHexInt(int value);
-    
-      // Constructs a MyString by cloning a 0-terminated C string.
-  explicit MyString(const char* a_c_string) : c_string_(NULL) {
-    Set(a_c_string);
-  }
-    
-    // Tests the copy c'tor.
-TEST(MyString, CopyConstructor) {
-  const MyString s1(kHelloString);
-  const MyString s2 = s1;
-  EXPECT_EQ(0, strcmp(s2.c_string(), kHelloString));
-}
-    
-    namespace grpc {
+    /**
+ * @brief Normalizes the input to have 0-mean and/or unit (1) variance across
+ *        the batch.
+ *
+ * This layer computes Batch Normalization as described in [1]. For each channel
+ * in the data (i.e. axis 1), it subtracts the mean and divides by the variance,
+ * where both statistics are computed across both spatial dimensions and across
+ * the different examples in the batch.
+ *
+ * By default, during training time, the network is computing global
+ * mean/variance statistics via a running average, which is then used at test
+ * time to allow deterministic outputs for each input. You can manually toggle
+ * whether the network is accumulating or using the statistics via the
+ * use_global_stats option. For reference, these statistics are kept in the
+ * layer's three blobs: (0) mean, (1) variance, and (2) moving average factor.
+ *
+ * Note that the original paper also included a per-channel learned bias and
+ * scaling factor. To implement this in Caffe, define a `ScaleLayer` configured
+ * with `bias_term: true` after each `BatchNormLayer` to handle both the bias
+ * and scaling factor.
+ *
+ * [1] S. Ioffe and C. Szegedy, 'Batch Normalization: Accelerating Deep Network
+ *     Training by Reducing Internal Covariate Shift.' arXiv preprint
+ *     arXiv:1502.03167 (2015).
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+template <typename Dtype>
+class BatchNormLayer : public Layer<Dtype> {
+ public:
+  explicit BatchNormLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-    #include <grpc/status.h>
-#include 'absl/memory/memory.h'
-#include 'absl/strings/string_view.h'
-#include 'absl/strings/strip.h'
-#include 'opencensus/trace/span.h'
-#include 'opencensus/trace/span_context.h'
-#include 'opencensus/trace/trace_params.h'
-#include 'src/core/lib/slice/slice_internal.h'
-#include 'src/cpp/common/channel_filter.h'
-#include 'src/cpp/ext/filters/census/rpc_encoding.h'
+     protected:
+  /**
+   * @param bottom input Blob vector (length 2+)
+   *   -# @f$ (N \times ...) @f$
+   *      the inputs @f$ x_1 @f$
+   *   -# @f$ (M) @f$
+   *      the inputs @f$ x_2 @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (M \times ...) @f$:
+   *      the reindexed array @f$
+   *        y = x_1[x_2]
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
-    
-    {}  // namespace grpc
-    
-      void Add(const std::function<void()>& callback) override;
-    
-    
-    {    // bottom-left
-    v = getOriginalVertex(a);
-    v.x = diff.x;
-    v.z += diff.z;
-    setVertex(a, v);
-    
-    // upper-left
-    v = getOriginalVertex(b);
-    v.x = diff.x;
-    v.z += diff.z;
-    setVertex(b, v);
-    
-    // bottom-right
-    v = getOriginalVertex(c);
-    v.x -= diff.x;
-    v.z -= diff.z;
-    setVertex(c, v);
-    
-    // upper-right
-    v = getOriginalVertex(d);
-    v.x -= diff.x;
-    v.z -= diff.z;
-    setVertex(d, v);
-}
-    
-    ToggleVisibility * ToggleVisibility::clone() const
-{
-    // no copy constructor
-    return ToggleVisibility::create();
-}
-    
-    
-    {    delete action;
-    return nullptr;
-}
-    
-    #include <folly/Benchmark.h>
-    
-    exception_wrapper::VTable const exception_wrapper::uninit_{
-    &noop_<void, exception_wrapper const*, exception_wrapper*>,
-    &noop_<void, exception_wrapper*, exception_wrapper*>,
-    &noop_<void, exception_wrapper*>,
-    &noop_<void, exception_wrapper const*>,
-    &uninit_type_,
-    &noop_<std::exception const*, exception_wrapper const*>,
-    &noop_<exception_wrapper, exception_wrapper const*>};
-    
-        KeepAlive(ExecutorT* executor, bool dummy)
-        : executorAndDummyFlag_(
-              reinterpret_cast<intptr_t>(executor) | (dummy ? kDummyFlag : 0)) {
-      assert(executor);
-      assert(
-          (reinterpret_cast<intptr_t>(executor) & kExecutorMask) ==
-          reinterpret_cast<intptr_t>(executor));
+    namespace caffe {
     }
     
-      tv.tv_sec = 1;
-  tv.tv_usec = 10;
-  EXPECT_EQ(1000010000ns, to<nanoseconds>(tv));
-  EXPECT_EQ(1000010us, to<microseconds>(tv));
-  EXPECT_EQ(1000ms, to<milliseconds>(tv));
-  EXPECT_EQ(1s, to<seconds>(tv));
-  EXPECT_EQ(
-      createTimePoint<system_clock>(1000010000ns),
-      to<system_clock::time_point>(tv));
-  EXPECT_EQ(
-      createTimePoint<steady_clock>(1000010000ns),
-      to<steady_clock::time_point>(tv));
+    // These measure definitions should be kept in sync across opencensus
+// implementations--see
+// https://github.com/census-instrumentation/opencensus-java/blob/master/contrib/grpc_metrics/src/main/java/io/opencensus/contrib/grpc/metrics/RpcMeasureConstants.java.
     
-    #if FOLLY_HAVE_LIBZ
+    const ViewDescriptor& ClientServerLatencyHour() {
+  const static ViewDescriptor descriptor =
+      HourDescriptor()
+          .set_name('grpc.io/client/server_latency/hour')
+          .set_measure(kRpcClientServerLatencyMeasureName)
+          .set_aggregation(MillisDistributionAggregation())
+          .add_column(ClientMethodTagKey());
+  return descriptor;
+}
     
-    #endif // BOOST_ATOMIC_FENCES_HPP_INCLUDED_
+      // implementation of ServerReflectionInfo(stream ServerReflectionRequest) rpc
+  // in ServerReflection service
+  Status ServerReflectionInfo(
+      ServerContext* context,
+      ServerReaderWriter<reflection::v1alpha::ServerReflectionResponse,
+                         reflection::v1alpha::ServerReflectionRequest>* stream)
+      override;
+    
+    ProtoServerReflectionPlugin::ProtoServerReflectionPlugin()
+    : reflection_service_(new grpc::ProtoServerReflection()) {}
+    
+    #include <grpc/support/port_platform.h>
+    
+    #include 'b2Glue.h'
+    
+       - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+    
+       - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+    
+      virtual const std::string& getType() const CXX11_OVERRIDE;
+    
+    #endif // D_DHT_ROUTING_TABLE_DESERIALIZER_H
+
+    
+        taskFactory->setLocalNode(localNode);
+    taskFactory->setRoutingTable(routingTable.get());
+    taskFactory->setMessageDispatcher(dispatcher.get());
+    taskFactory->setMessageFactory(factory.get());
+    taskFactory->setTaskQueue(taskQueue.get());
+    taskFactory->setTimeout(std::chrono::seconds(messageTimeout));
+    
+    
+    {} // namespace aria2
+
+    
+      virtual std::shared_ptr<DHTTask>
+  createPeerAnnounceTask(const unsigned char* infoHash) = 0;
