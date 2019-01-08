@@ -1,102 +1,77 @@
 
         
-        # -------------------------------------------------------------------
-# Benchmarking changes in https://github.com/jekyll/jekyll/pull/6767
-# -------------------------------------------------------------------
+        def custom_release_header_anchors(markdown)
+  header_regexp = %r!^(\d{1,2})\.(\d{1,2})\.(\d{1,2}) \/ \d{4}-\d{2}-\d{2}!
+  section_regexp = %r!^### \w+ \w+$!
+  markdown.split(%r!^##\s!).map do |release_notes|
+    _, major, minor, patch = *release_notes.match(header_regexp)
+    release_notes
+      .gsub(header_regexp, '\\0\n{: #v\\1-\\2-\\3}')
+      .gsub(section_regexp) { |section| '#{section}\n{: ##{slugify(section)}-v#{major}-#{minor}-#{patch}}' }
+  end.join('\n## ')
+end
     
-    CONTENT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+    STDOUT.sync = true
     
-    require 'erb'
-    
-        def add(entry)
-      if entry.is_a? Array
-        entry.each(&method(:add))
-      else
-        add_entry(entry) unless entry.root?
-      end
-    end
-    
-        delegate :empty?, :blank?, to: :pages
-    
-        def parse_as_fragment
-      Nokogiri::HTML.fragment @content, 'UTF-8'
+        def defaults_deprecate_type(old, current)
+      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
+      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
+                        'type: #{current}'.'
     end
   end
 end
 
     
-        def initialize(*args)
-      if args.empty?
-        super(*Array.new(9))
-      elsif args.length == 1 && args.first.is_a?(Hash)
-        args.first.assert_valid_keys URI::Generic::COMPONENT
-        super(*args.first.values_at(*URI::Generic::COMPONENT))
-      else
-        super
+          it 'increases total_unread_notifications' do
+        expect { Fabricate(:notification, user: user); user.reload }.to change(user, :total_unread_notifications)
       end
+    
+        def resource_params
+      params.require(:user).permit(
+        :unconfirmed_email
+      )
     end
+  end
+end
+
     
-            css('a.is-button > h3').each do |node|
-          node.parent.content = node.content
+    class Api::Web::SettingsController < Api::Web::BaseController
+  respond_to :json
+    
+            if e.is_a?(Sass::SyntaxError)
+          $stderr.puts e.sass_backtrace_str('standard input')
+        else
+          $stderr.print '#{e.class}: ' unless e.class == RuntimeError
+          $stderr.puts e.message.to_s
         end
+        $stderr.puts '  Use --trace for backtrace.'
     
-            css('code').each do |node|
-          node.inner_html = node.inner_html.squish
-        end
-    
-          @conv2 = Conversation.create(hash)
-      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv2.id)
-             .increase_unread(alice)
-    
-        context 'with valid parameters' do
-      it 'creates a user' do
-        expect {
-          get :create, params: valid_params
-        }.to change(User, :count).by(1)
+          # @see Base#watched_file?
+      def watched_file?(filename)
+        # Check against the root with symlinks resolved, since Listen
+        # returns fully-resolved paths.
+        filename =~ /\.s[ac]ss$/ && filename.start_with?(@real_root + File::SEPARATOR)
       end
     
-    Then(/^the repo is cloned$/) do
-  run_vagrant_command(test_dir_exists(TestApp.repo_path))
+    Given /^I run a migration$/ do
+  step %[I successfully run `rake db:migrate --trace`]
 end
     
-      def symlinked?(symlink_path, target_path)
-    '[ #{symlink_path} -ef #{target_path} ]'
+      def migration_class_name
+    migration_name.camelize
   end
     
-        def load_imports
-      if options.show_tasks && Rake::Task.task_defined?('load:defaults')
-        invoke 'load:defaults'
-        set(:stage, '')
-        Dir[deploy_config_path].each { |f| add_import f }
-      end
+    begin
+  # Use mime/types/columnar if available, for reduced memory usage
+  require 'mime/types/columnar'
+rescue LoadError
+  require 'mime/types'
+end
     
-        def role_properties_for(names, &block)
-      servers.role_properties_for(names, &block)
+        private
+    
+        # Returns the pluralized form of the attachment name. e.g.
+    # 'avatars' for an attachment of :avatar
+    def attachment attachment, style_name
+      plural_cache.pluralize_symbol(attachment.name)
     end
-    
-          def add_host(host, properties={})
-        new_host = Server[host]
-        new_host.port = properties[:port] if properties.key?(:port)
-        # This matching logic must stay in sync with `Server#matches?`.
-        key = ServerKey.new(new_host.hostname, new_host.port)
-        existing = servers_by_key[key]
-        if existing
-          existing.user = new_host.user if new_host.user
-          existing.with(properties)
-        else
-          servers_by_key[key] = new_host.with(properties)
-        end
-      end
-    
-            value_to_evaluate = block || value
