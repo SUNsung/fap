@@ -1,254 +1,78 @@
 
         
-            def score(self):
-        min_over = sys.MAXSIZE
-        max_under = -sys.MAXSIZE
-        for score in self.possible_scores():
-            if self.BLACKJACK < score < min_over:
-                min_over = score
-            elif max_under < score <= self.BLACKJACK:
-                max_under = score
-        return max_under if max_under != -sys.MAXSIZE else min_over
-    
-        def __init__(self, chat_id):
-        self.chat_id = chat_id
-        self.users = []
-        self.messages = []
-    
-            The shuffle/sort step of MapReduce will then do a
-        distributed sort on the keys, resulting in:
-    
-        out1 = utils.preprocess_input(x, 'channels_last')
-    out1int = utils.preprocess_input(xint, 'channels_last')
-    out2 = utils.preprocess_input(np.transpose(x, (2, 0, 1)),
-                                  'channels_first')
-    out2int = utils.preprocess_input(np.transpose(xint, (2, 0, 1)),
-                                     'channels_first')
-    assert_allclose(out1, out2.transpose(1, 2, 0))
-    assert_allclose(out1int, out2int.transpose(1, 2, 0))
-    
-    from keras.models import Sequential, Model
-from keras.layers import Dense, Input, Average
-from keras.utils import np_utils
-from keras.utils import test_utils
-from keras import regularizers
-from keras import backend as K
-    
-        def pop(self):
-        '''Removes the last layer in the model.
-    
-    Gets to 0.89 test accuracy after 2 epochs.
-90s/epoch on Intel i5 2.4Ghz CPU.
-10s/epoch on Tesla K40 GPU.
-'''
-from __future__ import print_function
-    
-        def _targets_request(self, targets):
-        '''Formats each target for the request'''
-        targets_request = []
-        for target in targets:
-            target_request = {
-                'Id': target['id'],
-                'Arn': target['arn']
-            }
-            if 'input' in target:
-                target_request['Input'] = target['input']
-            if 'input_path' in target:
-                target_request['InputPath'] = target['input_path']
-            if 'role_arn' in target:
-                target_request['RoleArn'] = target['role_arn']
-            if 'ecs_parameters' in target:
-                target_request['EcsParameters'] = {}
-                ecs_parameters = target['ecs_parameters']
-                if 'task_definition_arn' in target['ecs_parameters']:
-                    target_request['EcsParameters']['TaskDefinitionArn'] = ecs_parameters['task_definition_arn']
-                if 'task_count' in target['ecs_parameters']:
-                    target_request['EcsParameters']['TaskCount'] = ecs_parameters['task_count']
-            targets_request.append(target_request)
-        return targets_request
+                webpage = webpage.decode('utf8', 'replace')
     
     
-DOCUMENTATION = '''
----
-module: ec2_eip_facts
-short_description: List EC2 EIP details
-description:
-    - List details of EC2 Elastic IP addresses.
-version_added: '2.6'
-author: 'Brad Macpherson (@iiibrad)'
-options:
-  filters:
-    description:
-      - A set of filters to use. Each filter is a name:value pair. The value
-        may be a list or a single element.
-    required: false
-    default: {}
-extends_documentation_fragment:
-    - aws
-    - ec2
-'''
+def openssl_encode(algo, key, iv):
+    cmd = ['openssl', 'enc', '-e', '-' + algo, '-K', hex_str(key), '-iv', hex_str(iv)]
+    prog = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+    out, _ = prog.communicate(secret_msg)
+    return out
     
-    ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
+        infile, outfile = args
     
     
-def validate_fw_rules(fw_rules):
-    for rule in fw_rules:
-        for k in rule.keys():
-            if k not in VALID_RULE_KEYS:
-                raise VcaError('%s is not a valid key in fw rules, please '
-                               'check above..' % k, valid_keys=VALID_RULE_KEYS)
-    
-        def role_remove_hostgroup(self, name, item):
-        return self.role_remove_member(name=name, item={'hostgroup': item})
-    
-    
-DOCUMENTATION = '''
----
-module: group_by
-short_description: Create Ansible groups based on facts
-description:
-  - Use facts to create ad-hoc groups that can be used later in a playbook.
-  - This module is also supported for Windows targets.
-version_added: '0.9'
-options:
-  key:
-    description:
-    - The variables whose values will be used as groups
-    required: true
-  parents:
-    description:
-    - The list of the parent groups
-    required: false
-    default: 'all'
-    version_added: '2.4'
-author: 'Jeroen Hoekx (@jhoekx)'
-notes:
-  - Spaces in group names are converted to dashes '-'.
-  - This module is also supported for Windows targets.
-'''
-    
-    
-DOCUMENTATION = '''
----
-module: logentries
-author: 'Ivan Vanderbyl (@ivanvanderbyl)'
-short_description: Module for tracking logs via logentries.com
-description:
-    - Sends logs to LogEntries in realtime
-version_added: '1.6'
-options:
-    path:
-        description:
-            - path to a log file
-        required: true
-    state:
-        description:
-            - following state of the log
-        choices: [ 'present', 'absent' ]
-        required: false
-        default: present
-    name:
-        description:
-            - name of the log
-        required: false
-    logtype:
-        description:
-            - type of the log
-        required: false
-    
-        classifiers = proj_info['classifiers'],
-    
-    
-class CNTV(VideoExtractor):
-    name = 'CNTV.com'
-    stream_types = [
-        {'id': '1', 'video_profile': '1280x720_2000kb/s', 'map_to': 'chapters4'},
-        {'id': '2', 'video_profile': '1280x720_1200kb/s', 'map_to': 'chapters3'},
-        {'id': '3', 'video_profile': '640x360_850kb/s', 'map_to': 'chapters2'},
-        {'id': '4', 'video_profile': '480x270_450kb/s', 'map_to': 'chapters'},
-        {'id': '5', 'video_profile': '320x180_200kb/s', 'map_to': 'lowChapters'},
-    ]
-    
-    #----------------------------------------------------------------------
-def dilidili_download(url, output_dir = '.', merge = False, info_only = False, **kwargs):
-    global headers
-    re_str = r'http://www.dilidili.com/watch\S+'
-    if re.match(r'http://www.dilidili.wang', url):
-        re_str = r'http://www.dilidili.wang/watch\S+'
-        headers['Referer'] = 'http://www.dilidili.wang/'
-    elif re.match(r'http://www.dilidili.mobi', url):
-        re_str = r'http://www.dilidili.mobi/watch\S+'
-        headers['Referer'] = 'http://www.dilidili.mobi/'
-    
-                if not info_only:
-                try:
-                    download_urls([real_url], title, ext, size, output_dir, merge = merge)
-                except:
-                    pass
-    
-        video_url = html['data']['tv']['videoPath']
-    headers = fake_headers.copy()
-    headers['Referer'] = api_url
-    type, ext, size = url_info(video_url, headers=headers)
-    
-            # Adding model 'ApiApplication'
-        db.create_table(
-            'sentry_apiapplication', (
-                (
-                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
-                        primary_key=True
-                    )
-                ), (
-                    'client_id',
-                    self.gf('django.db.models.fields.CharField')(unique=True, max_length=64)
-                ), (
-                    'client_secret',
-                    self.gf('sentry.db.models.fields.encrypted.EncryptedTextField')()
-                ), (
-                    'owner', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.User']
-                    )
-                ),
-                ('name', self.gf('django.db.models.fields.CharField')(max_length=64, blank=True)), (
-                    'status',
-                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(
-                        default=0, db_index=True
-                    )
-                ), (
-                    'allowed_origins',
-                    self.gf('django.db.models.fields.TextField')(null=True, blank=True)
-                ), ('redirect_uris', self.gf('django.db.models.fields.TextField')()), (
-                    'homepage_url',
-                    self.gf('django.db.models.fields.URLField')(max_length=200, null=True)
-                ), (
-                    'privacy_url',
-                    self.gf('django.db.models.fields.URLField')(max_length=200, null=True)
-                ), (
-                    'terms_url',
-                    self.gf('django.db.models.fields.URLField')(max_length=200, null=True)
-                ), (
-                    'date_added',
-                    self.gf('django.db.models.fields.DateTimeField')()
-                ),
-            )
-        )
-        db.send_create_signal('sentry', ['ApiApplication'])
-    
-    
-def make_handler(value):
-    return BitHandler(
-        keys=(
-            'project:read', 'project:write', 'project:admin', 'project:releases', 'team:read',
-            'team:write', 'team:admin', 'event:read', 'event:write', 'event:admin', 'org:read',
-            'org:write', 'org:admin', 'member:read', 'member:write', 'member:admin',
-        ),
-        value=value,
-    )
-    
-        complete_apps = ['sentry']
+parser = youtube_dl.parseOpts()[0]
+build_completion(parser)
 
+    
+    from youtube_dl.aes import aes_decrypt, aes_encrypt, aes_cbc_decrypt, aes_cbc_encrypt, aes_decrypt_text
+from youtube_dl.utils import bytes_to_intlist, intlist_to_bytes
+import base64
+    
+        def test_youporn(self):
+        self._assert_restricted(
+            'http://www.youporn.com/watch/505835/sex-ed-is-it-safe-to-masturbate-daily/',
+            '505835.mp4', 2, old_age=25)
+    
+    
+class TestExecution(unittest.TestCase):
+    def test_import(self):
+        subprocess.check_call([sys.executable, '-c', 'import youtube_dl'], cwd=rootDir)
+    
+    '''
+requests._internal_utils
+~~~~~~~~~~~~~~
+    
+    elif is_py3:
+    from urllib.parse import urlparse, urlunparse, urljoin, urlsplit, urlencode, quote, unquote, quote_plus, unquote_plus, urldefrag
+    from urllib.request import parse_http_list, getproxies, proxy_bypass, proxy_bypass_environment, getproxies_environment
+    from http import cookiejar as cookielib
+    from http.cookies import Morsel
+    from io import StringIO
+    from collections import OrderedDict
+    from collections.abc import Callable, Mapping, MutableMapping
+    
+    
+def test_system_ssl():
+    '''Verify we're actually setting system_ssl when it should be available.'''
+    assert info()['system_ssl']['version'] != ''
+    
+            # Second, if a POST is responded to with a 301, turn it into a GET.
+        # This bizarre behaviour is explained in Issue 1704.
+        if response.status_code == codes.moved and method == 'POST':
+            method = 'GET'
+    
+        def test_urlencoded_get_query_multivalued_param(self, httpbin):
+    
+            # Deleting model 'RawEvent'
+        db.delete_table('sentry_rawevent')
+    
+                from_env_ids = [e.id for e in from_envs]
+            try:
+                with transaction.atomic():
+                    orm.ReleaseEnvironment.objects.filter(
+                        environment_id__in=from_env_ids,
+                    ).update(environment_id=to_env.id)
+            except IntegrityError:
+                for re in orm.ReleaseEnvironment.objects.filter(environment_id__in=from_env_ids):
+                    try:
+                        with transaction.atomic():
+                            orm.ReleaseEnvironment.objects.filter(
+                                id=re.id,
+                            ).update(environment_id=to_env.id)
+                    except IntegrityError:
+                        re.delete()
     
         models = {
         'sentry.activity': {
@@ -301,14 +125,14 @@ def make_handler(value):
             }),
             'client_id': (
                 'django.db.models.fields.CharField', [], {
-                    'default': ''224ad6adff31470a9e43e87388cb3332adc0f38b62224fbd9d2c5827625885d2'',
+                    'default': ''6949fb4996184c5abf84d6e2206deb2028847544b25745dcb59f9788f860cd4b'',
                     'unique': 'True',
                     'max_length': '64'
                 }
             ),
             'client_secret': (
                 'sentry.db.models.fields.encrypted.EncryptedTextField', [], {
-                    'default': ''8958c588f498407288eb88a09d633c1ed7a93edf651846b4a7657dd7545ffb3e''
+                    'default': ''120099c387964b1c826925621112bec1d8dbb441c0f24233b2487fa1350c03d7''
                 }
             ),
             'date_added':
@@ -326,7 +150,7 @@ def make_handler(value):
             }),
             'name': (
                 'django.db.models.fields.CharField', [], {
-                    'default': ''Granulose Denyse'',
+                    'default': ''Transitive Clemente'',
                     'max_length': '64',
                     'blank': 'True'
                 }
@@ -398,14 +222,14 @@ def make_handler(value):
             ),
             'code': (
                 'django.db.models.fields.CharField', [], {
-                    'default': ''04511aab0b6545fd862d97b0e0b392fe'',
+                    'default': ''c52f5a5dc7dd41448dc017bd251144dc'',
                     'max_length': '64',
                     'db_index': 'True'
                 }
             ),
             'expires_at': (
                 'django.db.models.fields.DateTimeField', [], {
-                    'default': 'datetime.datetime(2017, 4, 5, 0, 0)',
+                    'default': 'datetime.datetime(2017, 3, 23, 0, 0)',
                     'db_index': 'True'
                 }
             ),
@@ -496,7 +320,7 @@ def make_handler(value):
             }),
             'expires_at': (
                 'django.db.models.fields.DateTimeField', [], {
-                    'default': 'datetime.datetime(2017, 5, 5, 0, 0)',
+                    'default': 'datetime.datetime(2017, 4, 22, 0, 0)',
                     'null': 'True'
                 }
             ),
@@ -506,7 +330,7 @@ def make_handler(value):
             }),
             'refresh_token': (
                 'django.db.models.fields.CharField', [], {
-                    'default': ''a0bcb70d00954a2a8b671d27fd8406fed2c9b6641f6646be8d433b203aed97d0'',
+                    'default': ''4f556f8dc184403fa0cd07e85a1a388204ca73f817294a0a9652081c86929bca'',
                     'max_length': '64',
                     'unique': 'True',
                     'null': 'True'
@@ -522,7 +346,7 @@ def make_handler(value):
             }),
             'token': (
                 'django.db.models.fields.CharField', [], {
-                    'default': ''46b15f4812734479b5978e2b78119dcc66e3a0b7e5c945e88a415e12a90adfb2'',
+                    'default': ''da4ff55914c148c1b652ef734ac727adc0fc7dc596a2445199009467c7d51337'',
                     'unique': 'True',
                     'max_length': '64'
                 }
@@ -716,7 +540,7 @@ def make_handler(value):
             }),
             'date_expires': (
                 'django.db.models.fields.DateTimeField', [], {
-                    'default': 'datetime.datetime(2017, 4, 12, 0, 0)',
+                    'default': 'datetime.datetime(2017, 3, 30, 0, 0)',
                     'null': 'True',
                     'blank': 'True'
                 }
@@ -2679,33 +2503,6 @@ def make_handler(value):
                 }
             )
         },
-        'sentry.releaseheadcommit': {
-            'Meta': {
-                'unique_together': '(('repository_id', 'release'),)',
-                'object_name': 'ReleaseHeadCommit'
-            },
-            'commit': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.Commit']'
-                }
-            ),
-            'id':
-            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
-                'primary_key': 'True'
-            }),
-            'organization_id': (
-                'sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {
-                    'db_index': 'True'
-                }
-            ),
-            'release': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.Release']'
-                }
-            ),
-            'repository_id':
-            ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {})
-        },
         'sentry.releaseproject': {
             'Meta': {
                 'unique_together': '(('project', 'release'),)',
@@ -2851,12 +2648,6 @@ def make_handler(value):
             'name': ('django.db.models.fields.CharField', [], {
                 'max_length': '128'
             }),
-            'owner': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.User']',
-                    'null': 'True'
-                }
-            ),
             'project': (
                 'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
                     'to': 'orm['sentry.Project']'
@@ -3123,7 +2914,7 @@ def make_handler(value):
             ),
             'validation_hash': (
                 'django.db.models.fields.CharField', [], {
-                    'default': 'u'niTW4OgDa3WpF4EtCz2kBurkK7XVfn4Y'',
+                    'default': 'u'MJgpqztt1JFwT0a7mqP7bJys66oGvuWt'',
                     'max_length': '32'
                 }
             )
@@ -3223,3 +3014,7 @@ def make_handler(value):
             })
         }
     }
+    
+        def backwards(self, orm):
+        # Removing unique constraint on 'Distribution', fields ['release', 'name']
+        db.delete_unique('sentry_distribution', ['release_id', 'name'])
