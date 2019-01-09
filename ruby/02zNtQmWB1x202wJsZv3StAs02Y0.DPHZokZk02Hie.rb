@@ -1,32 +1,26 @@
 
         
-                # This is what is called on the class to actually execute it. Any
-        # subclasses should implement this method and do any option parsing
-        # and validation here.
-        def execute
-        end
+              expect(value_for(user.id, dt)).to eq(0)
+      expect(limit_reached_for(user.id, dt)).to eq(false)
     
-            # Returns the instance variables as a hash of key-value pairs.
-        def instance_variables_hash
-          instance_variables.inject({}) do |acc, iv|
-            acc[iv.to_s[1..-1]] = instance_variable_get(iv)
-            acc
-          end
-        end
+      include_examples 'multiline literal brace layout trailing comma' do
+    let(:open) { '[' }
+    let(:close) { ']' }
+  end
+end
+
     
-            # Returns the internal data associated with this plugin. This
-        # should NOT be called by the general public.
-        #
-        # @return [Hash]
-        def self.data
-          @data ||= {}
-        end
+          it 'does not autocorrect the closing brace' do
+        new_source = autocorrect_source(source)
+        expect(new_source).to eq([source].join($RS))
+      end
+    end
     
-    module Vagrant
-  module Plugin
-    module V2
-      # This is the base class for a provider for the V2 API. A provider
-      # is responsible for creating compute resources to match the needs
-      # of a Vagrant-configured system.
-      class Provider
-        include CapabilityHost
+          # A shorthand for getting the last argument of the node.
+      # Equivalent to `arguments.last`.
+      #
+      # @return [Node, nil] the last argument of the node,
+      #                     or `nil` if there are no arguments
+      def last_argument
+        arguments[-1]
+      end
