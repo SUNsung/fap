@@ -1,151 +1,148 @@
 
         
-        PlatformKind swift::targetPlatform(LangOptions &LangOpts) {
-  if (LangOpts.Target.isMacOSX()) {
-    return (LangOpts.EnableAppExtensionRestrictions
-                ? PlatformKind::OSXApplicationExtension
-                : PlatformKind::OSX);
-  }
-    }
-    
-      reqToSyntheticEnvMap = SubstitutionMap::get(reqSig,
-    [selfType, substConcreteType, depth, covariantSelf, &ctx]
-    (SubstitutableType *type) -> Type {
-      // If the conforming type is a class, the protocol 'Self' maps to
-      // the class-constrained 'Self'. Otherwise, it maps to the concrete
-      // type.
-      if (type->isEqual(selfType)) {
-        if (covariantSelf)
-          return GenericTypeParamType::get(/*depth=*/0, /*index=*/0, ctx);
-        return substConcreteType;
-      }
-      // Other requirement generic parameters map 1:1 with their depth
-      // increased appropriately.
-      auto *genericParam = cast<GenericTypeParamType>(type);
-      // In a protocol requirement, the only generic parameter at depth 0
-      // should be 'Self', and all others at depth 1. Anything else is
-      // invalid code.
-      if (genericParam->getDepth() != 1)
-        return Type();
-      auto substGenericParam =
-        GenericTypeParamType::get(depth, genericParam->getIndex(), ctx);
-      return substGenericParam;
-    },
-    [selfType, substConcreteType, conformance, conformanceDC, &ctx](
-        CanType type, Type replacement, ProtocolDecl *proto)
-          -> Optional<ProtocolConformanceRef> {
-      // The protocol 'Self' conforms concretely to the conforming type.
-      if (type->isEqual(selfType)) {
-        ProtocolConformance *specialized = conformance;
-        if (conformance && conformance->getGenericSignature()) {
-          auto concreteSubs =
-            substConcreteType->getContextSubstitutionMap(
-              conformanceDC->getParentModule(), conformanceDC);
-          specialized =
-            ctx.getSpecializedConformance(substConcreteType, conformance,
-                                          concreteSubs);
-        }
-    }
-    }
-    
-    void
-swift::trimLeadingWhitespaceFromLines(StringRef RawText,
-                                      unsigned WhitespaceToTrim,
-                                      SmallVectorImpl<StringRef> &OutLines) {
-  SmallVector<StringRef, 8> Lines;
-    }
-    
-    static StringRef omitNeedlessWords(StringRef name,
-                                   OmissionTypeName typeName,
-                                   NameRole role,
-                                   const InheritedNameSet *allPropertyNames,
-                                   StringScratchSpace &scratch) {
-  // If we have no name or no type name, there is nothing to do.
-  if (name.empty() || typeName.empty()) return name;
-    }
-    
-    /// Maintain a set of known CF types.
-static bool isKnownCFTypeName(StringRef name) {
-  return std::binary_search(KnownCFTypes, KnownCFTypes + NumKnownCFTypes,
-                            name, SortByLengthComparator());
-}
-    
-      if (clangDiag.getID() == clang::diag::err_module_not_built &&
-      CurrentImport && clangDiag.getArgStdStr(0) == CurrentImport->getName()) {
-    SourceLoc loc = DiagLoc;
-    if (clangDiag.getLocation().isValid())
-      loc = resolveSourceLocation(clangDiag.getSourceManager(),
-                                  clangDiag.getLocation());
-    }
-    
-    // Import As Member -- attempt to import C global functions and variables as
-// members on types or instances.
-    
-    bool Mangle::needsPunycodeEncoding(StringRef str) {
-  for (unsigned char c : str) {
-    if (!isValidSymbolChar(c))
-      return true;
-  }
-  return false;
-}
-    
-    void swift::Demangle::Node::dump() {
-  std::string TreeStr = getNodeTreeAsString(this);
-  fputs(TreeStr.c_str(), stderr);
-}
-    
-    
-    {}  // namespace nwapi
-    
-    class Base {
- public:
-  Base(int id,
-       const base::WeakPtr<ObjectManager>& manager,
-       const base::DictionaryValue& option,
-       const std::string& extension_id);
-  virtual ~Base();
-    }
-    
-    #endif  // CONTENT_NW_SRC_API_BINDINGS_COMMON_H_
-
-    
-    
-bool MenuDelegate::GetAcceleratorForCommandId(
-      int command_id,
-      ui::Accelerator* accelerator) const {
-  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-    }
-    
-    NwAppSetProxyConfigFunction::NwAppSetProxyConfigFunction() {
-}
-    
-    
-    {} // namespace extensions
-#endif
-
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    AccelAmplitude* AccelAmplitude::create(Action *action, float duration)
-{
-    AccelAmplitude *ret = new (std::nothrow) AccelAmplitude();
-    if (ret && ret->initWithAction(action, duration))
+            void NDMask::MarkSectionAs(const std::vector<size_t>& sectionOffset, const NDShape& sectionShape, MaskKind maskKind)
     {
-        ret->autorelease();
-        return ret;
+        // TODO: Implement batching of masking operation for masks residing on GPUs to avoid making
+        // GPU invocations for each MaskSection call.
+    }
+    
+        ProgressWriter::~ProgressWriter()
+    {
+    }
+    
+            // before version 1, there was no distributed state per se. Instead, the external state
+        // contained a dictionary of worker-specific external states.
+        if (version == 0)
+        {
+            auto key = externalState.Contains(localWorkerId) ? localWorkerId : mainWorkerId;
+            return externalState[key].Value<Dictionary>();
+        }
+    
+            static FunctionPtr Deserialize(const Dictionary& dictionary,
+            const std::unordered_map<std::wstring, Variable>& uidToVariableMap,
+            const CNTK::DeviceDescriptor& device);
+    
+        ParameterInitializer RandomInitializerWithRank(const ParameterInitializer& initializer, int outputRank, int filterRank)
+    {
+        ParameterInitializer newInitializerWithRanks = initializer;
+    }
+    
+            NDShape m_shape;
+        VariableKind m_varKind;
+        ::CNTK::DataType m_dataType;
+        std::weak_ptr<Function> m_ownerFunction;
+        std::unique_ptr<std::once_flag> m_initValueFlag;
+        NDArrayViewPtr m_value;
+        std::unique_ptr<ParameterInitializer> m_valueInitializer;
+        std::unique_ptr<DeviceDescriptor> m_valueInitializationDevice;
+        bool m_needsGradient;
+        std::wstring m_name;
+        std::vector<Axis> m_dynamicAxes;
+        bool m_isSparse;
+        std::wstring m_uid;
+        std::atomic<size_t> m_valueTimeStamp;
+        Variable m_blockFunctionVariableMapping;
+    
+    
+    {        for (int t = iNumPos - 1; t > 0; t--)
+        {
+            lastlbl = (size_t) backtrace(lastlbl, t);
+            decodedpath(lastlbl, t - 1) = 1;
+        }
+    };
+    
+    template <class ElemType>
+class EyeLikeNode : public ComputationNode<ElemType>, public NumInputs<1>
+{
+    typedef ComputationNode<ElemType> Base; UsingComputationNodeMembersBoilerplate;
+    static const std::wstring TypeName() { return L'EyeLikeOp'; }
+public:
+    DeclareConstructorFromConfigWithNumInputs(EyeLikeNode);
+    EyeLikeNode(DEVICEID_TYPE deviceId, const wstring& name)
+        : EyeLikeNode(deviceId, name, false)
+    {
     }
     }
     
-    // implementation of Ripple3D
+      static Data& getMutableData6() { return data6_; }
     
-        unsigned int idx = pos.width * _gridSize.height + pos.height;
+    namespace aria2 {
+    }
+    
+    
+    {  void serialize(const std::string& filename);
+};
+    
+      virtual void
+  addPeriodicTask1(const std::shared_ptr<DHTTask>& task) CXX11_OVERRIDE;
+    
+    DHTTokenTracker::DHTTokenTracker()
+{
+  util::generateRandomData(secret_[0], SECRET_SIZE);
+  memcpy(secret_[1], secret_[0], SECRET_SIZE);
+}
+    
+    #include 'DHTNode.h'
+#include 'util.h'
+#include 'a2functional.h'
+    
+    Action::Action()
+:_originalTarget(nullptr)
+,_target(nullptr)
+,_tag(Action::INVALID_TAG)
+,_flags(0)
+{
+#if CC_ENABLE_SCRIPT_BINDING
+    ScriptEngineProtocol* engine = ScriptEngineManager::getInstance()->getScriptEngine();
+    _scriptType = engine != nullptr ? engine->getScriptType() : kScriptTypeNone;
+#endif
+}
+    
+    /** @class FiniteTimeAction
+ * @brief
+ * Base class actions that do have a finite time duration.
+ * Possible actions:
+ * - An action with a duration of 0 seconds.
+ * - An action with a duration of 35.5 seconds.
+ * Infinite time actions are valid.
+ */
+class CC_DLL FiniteTimeAction : public Action
+{
+public:
+    /** Get duration in seconds of the action. 
+     *
+     * @return The duration in seconds of the action.
+     */
+    float getDuration() const { return _duration; }
+    /** Set duration in seconds of the action. 
+     *
+     * @param duration In seconds of the action.
+     */
+    void setDuration(float duration) { _duration = duration; }
+    }
+    
+    
+    {    /** Reverse the current control point array inline, without generating a new one.
+     * @js NA
+     */
+    void reverseInline();
+    /**
+     * @js NA
+     * @lua NA
+     */
+    virtual PointArray* clone() const;
+    /**
+     * @js NA
+     */
+    const std::vector<Vec2>& getControlPoints() const;
+    /**
+     * @js NA
+     */
+    void setControlPoints(std::vector<Vec2> controlPoints);
+private:
+    /** Array that contains the control points. */
+    std::vector<Vec2> _controlPoints;
+};
     
     THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -156,39 +153,162 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
     
-    void AutoPolygon::calculateUV(const Rect& rect, V3F_C4B_T2F* verts, ssize_t count)
+    /**
+ * @class ActionFloat
+ * @brief Action used to animate any value in range [from,to] over specified time interval
+ */
+class CC_DLL ActionFloat : public ActionInterval
 {
-    /*
-     whole texture UV coordination
-     0,0                  1,0
-     +---------------------+
-     |                     |0.1
-     |                     |0.2
-     |     +--------+      |0.3
-     |     |texRect |      |0.4
-     |     |        |      |0.5
-     |     |        |      |0.6
-     |     +--------+      |0.7
-     |                     |0.8
-     |                     |0.9
-     +---------------------+
-     0,1                  1,1
+public:
+    /**
+     *  Callback function used to report back result
      */
-    
-    CCASSERT(_width && _height, 'please specify width and height for this AutoPolygon instance');
-    float texWidth  = _width;
-    float texHeight = _height;
+    typedef std::function<void(float value)> ActionFloatCallback;
     }
     
     
-    {    //real rect is the size that is in scale with the texture file
-    Rect getRealRect(const Rect& rect);
+    {                    Action *action = _currentTarget->currentAction;
+                    // Make currentAction nil to prevent removeAction from salvaging it.
+                    _currentTarget->currentAction = nullptr;
+                    removeAction(action);
+                }
     
-    Image* _image;
-    unsigned char * _data;
-    std::string _filename;
-    unsigned int _width;
-    unsigned int _height;
-    float _scaleFactor;
-    unsigned int _threshold;
-};
+    // implementation of FadeOutUpTiles
+    
+    The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+    
+    /**
+ * @addtogroup actions
+ * @{
+ */
+    }
+    
+    http://www.cocos2d-x.org
+    
+    
+/**
+ * AutoPolygon is a helper Object
+ * AutoPolygon's purpose is to process an image into 2d polygon mesh in runtime
+ * It has functions for each step in the process, from tracing all the points, to triangulation
+ * the result can be then passed to Sprite::create() to create a Polygon Sprite
+ */
+class CC_DLL AutoPolygon
+{
+public:
+    /**
+     * create an AutoPolygon and initialize it with an image file
+     * the image must be a 32bit PNG for current version 3.7
+     * @param   filename    a path to image file, e.g., 'scene1/monster.png'.
+     * @return  an AutoPolygon object;
+     */
+    AutoPolygon(const std::string &filename);
+    
+    /**
+     * Destructor of AutoPolygon.
+     */
+    ~AutoPolygon();
+    
+    /**
+     * trace all the points along the outline of the image, 
+     * @warning must create AutoPolygon with filename to use this function
+     * @param   rect    a texture rect for specify an area of the image
+     * @param   threshold   the value when alpha is greater than this value will be counted as opaque, default to 0.0
+     * @return  a vector of vec2 of all the points found in clockwise order
+     * @code
+     * auto ap = AutoPolygon('grossini.png');
+     * auto rect = Rect(100, 100, 200, 200);
+     * std::vector<Vec2> points = ap.trace(rect);//default threshold is 0.0
+     * @endcode
+     */
+     std::vector<Vec2> trace(const cocos2d::Rect& rect, float threshold = 0.0f);
+    
+    /**
+     * reduce the amount of points so its faster for GPU to process and draw
+     * based on Ramer-Douglas-Peucker algorithm
+     * @param   points  a vector of Vec2 points as input
+     * @param   rect    a texture rect for specify an area of the image to avoid over reduction
+     * @param   epsilon the perpendicular distance where points smaller than this value will be discarded
+     * @return  a vector of Vec2 of the remaining points in clockwise order
+     * @code
+     * auto ap = AutoPolygon();
+     * std::vector<Vec2> reduced = ap.reduce(inputPoints, rect);//default epsilon is 2
+     * @endcode
+     */
+    std::vector<Vec2> reduce(const std::vector<Vec2>& points, const Rect& rect, float epsilon = 2.0f);
+    
+    /**
+     * expand the points along their edge, useful after you reduce the points that cuts into the sprite
+     * using ClipperLib
+     * @param   points  a vector of Vec2 points as input
+     * @param   rect    a texture rect for specify an area of the image, the expanded points will be clamped in this rect, ultimately resulting in a quad if the expansion is too great
+     * @param   epsilon the distance which the edges will expand
+     * @return  a vector of Vec2 as the result of the expansion
+     * @code
+     * auto ap = AutoPolygon();
+     * std::vector<Vec2> expanded = ap.expand(inputPoints, rect, 2.0);
+     * @endcode
+     */
+    std::vector<Vec2> expand(const std::vector<Vec2>& points, const Rect& rect, float epsilon);
+    
+    /**
+     * Triangulate the input points into triangles for rendering
+     * using poly2tri
+     * @warning points must be closed loop, cannot have 2 points sharing the same position and cannot intersect itself
+     * @param   points  a vector of vec2 points as input
+     * @return  a Triangles object with points and indices
+     * @code
+     * auto ap = AutoPolygon();
+     * TrianglesCommand::Triangles myPolygons = ap.triangulate(myPoints);
+     * @endcode
+     */
+    TrianglesCommand::Triangles triangulate(const std::vector<Vec2>& points);
+    
+    /**
+     * calculate the UV coordinates for each points based on a texture rect
+     * @warning This method requires the AutoPolygon object to know the texture file dimension
+     * @param   rect    a texture rect to specify where to map the UV
+     * @param   verts   a pointer to the verts array, served both as input and output verts
+     * @param   count   the count for the verts array
+     * @code
+     * auto ap = AutoPolygon('grossini.png');
+     * TrianglesCommand::Triangles myPolygons = ap.triangulate(myPoints);
+     * ap.calculateUV(rect, myPolygons.verts, 20);
+     * @endcode
+     */
+    void calculateUV(const Rect& rect, V3F_C4B_T2F* verts, ssize_t count);
+    
+    /**
+     * a helper function, packing trace, reduce, expand, triangulate and calculate uv in one function
+     * @param   rect    texture rect, use Rect::ZERO for the size of the texture, default is Rect::ZERO
+     * @param   epsilon the value used to reduce and expand, default to 2.0
+     * @param   threshold   the value where bigger than the threshold will be counted as opaque, used in trace
+     * @return  a PolygonInfo, to use with sprite
+     * @code
+     * auto ap = AutoPolygon('grossini.png');
+     * PolygonInfo myInfo = ap.generateTriangles();//use all default values
+     * auto sp1 = Sprite::create(myInfo);
+     * polygonInfo myInfo2 = ap.generateTriangles(Rect::ZERO, 5.0, 0.1);//ap can be reused to generate another set of PolygonInfo with different settings
+     * auto sp2 = Sprite::create(myInfo2);
+     * @endcode
+     */
+    PolygonInfo generateTriangles(const Rect& rect = Rect::ZERO, float epsilon = 2.0f, float threshold = 0.05f);
+    
+    /**
+     * a helper function, packing autoPolygon creation, trace, reduce, expand, triangulate and calculate uv in one function
+     * @warning if you want to repetitively generate polygons, consider create an AutoPolygon object, and use generateTriangles function, as it only reads the file once
+     * @param   filename     A path to image file, e.g., 'scene1/monster.png'.
+     * @param   rect    texture rect, use Rect::ZERO for the size of the texture, default is Rect::ZERO
+     * @param   epsilon the value used to reduce and expand, default to 2.0
+     * @param   threshold   the value where bigger than the threshold will be counted as opaque, used in trace
+     * @return  a PolygonInfo, to use with sprite
+     * @code
+     * auto sp = Sprite::create(AutoPolygon::generatePolygon('grossini.png'));
+     * @endcode
+     */
+    static PolygonInfo generatePolygon(const std::string& filename, const Rect& rect = Rect::ZERO, float epsilon = 2.0f, float threshold = 0.05f);
+protected:
+    Vec2 findFirstNoneTransparentPixel(const Rect& rect, float threshold);
+    std::vector<cocos2d::Vec2> marchSquare(const Rect& rect, const Vec2& first, float threshold);
+    unsigned int getSquareValue(unsigned int x, unsigned int y, const Rect& rect, float threshold);
+    }
