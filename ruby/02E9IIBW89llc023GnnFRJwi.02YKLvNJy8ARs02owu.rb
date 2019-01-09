@@ -1,143 +1,210 @@
 
         
-              GivenDailyLike.decrement_for(user.id)
-      expect(value_for(user.id, dt)).to eq(0)
-      expect(limit_reached_for(user.id, dt)).to eq(false)
-    end
+                def render
+          options = @options.stringify_keys
+          options['type']     = 'checkbox'
+          options['value']    = @checked_value
+          options['checked'] = 'checked' if input_checked?(options)
     
-        expect(gu.notification_level).to eq(NotificationLevels.all[:tracking])
-    
-      it 'asks to accept conflicts when the scenario was modified' do
-    DefaultScenarioImporter.seed(user)
-    agent = user.agents.where(name: 'Rain Notifier').first
-    agent.options['expected_receive_period_in_days'] = 9001
-    agent.save!
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
-    click_on 'Start Import'
-    expect(page).to have_text('This Scenario already exists in your system.')
-    expect(page).to have_text('9001')
-    check('I confirm that I want to import these Agents.')
-    click_on 'Finish Import'
-    expect(page).to have_text('Import successful!')
-  end
-    
-      describe 'migrating an actual agent' do
-    before do
-      valid_params = {
-                        'auth_token' => 'token',
-                        'room_name' => 'test',
-                        'room_name_path' => '',
-                        'username' => 'Huginn',
-                        'username_path' => '$.username',
-                        'message' => 'Hello from Huginn!',
-                        'message_path' => '$.message',
-                        'notify' => false,
-                        'notify_path' => '',
-                        'color' => 'yellow',
-                        'color_path' => '',
-                      }
-    
-      let :valid_options do
-    {
-      'name' => 'XKCD',
-      'expected_update_period_in_days' => '2',
-      'type' => 'html',
-      'url' => '{{ url | default: 'http://xkcd.com/' }}',
-      'mode' => 'on_change',
-      'extract' => old_extract,
-      'template' => old_template
-    }
-  end
-    
-          it 'should accept instances of an Agent' do
-        agents = Agent.of_type(agents(:bob_website_agent))
-        expect(agents).to include(agents(:bob_website_agent))
-        expect(agents).to include(agents(:jane_website_agent))
-        expect(agents).not_to include(agents(:bob_weather_agent))
-      end
-    end
-  end
-    
-      it 'accepts a Rational' do
-    sleep(Rational(1, 9)).should be_close(0, 2)
-  end
-    
-          # @see Base#\_store
-      def _store(key, version, sha, contents)
-        compiled_filename = path_to(key)
-        FileUtils.mkdir_p(File.dirname(compiled_filename))
-        Sass::Util.atomic_create_and_write_file(compiled_filename) do |f|
-          f.puts(version)
-          f.puts(sha)
-          f.write(contents)
+            class RadioButtonBuilder < Builder # :nodoc:
+          def radio_button(extra_html_options = {})
+            html_options = extra_html_options.merge(@input_html_options)
+            html_options[:skip_default_ids] = false
+            @template_object.radio_button(@object_name, @method_name, @value, html_options)
+          end
         end
-      rescue Errno::EACCES
-        # pass
+    
+              def field_type
+            self.class.field_type
+          end
+      end
+    end
+  end
+end
+
+    
+        include ActionView::Rendering
+    
+        # Render but returns a valid Rack body. If fibers are defined, we return
+    # a streaming body that renders the template piece by piece.
+    #
+    # Note that partials are not supported to be rendered with streaming,
+    # so in such cases, we just wrap them in an array.
+    def render_body(context, options)
+      if options.key?(:partial)
+        [render_partial(context, options)]
+      else
+        StreamingTemplateRenderer.new(@lookup_context).render(context, options)
+      end
+    end
+    
+    module Gitlab
+  module GithubImport
+    module Importer
+      class DiffNotesImporter
+        include ParallelScheduling
+    
+    module Gitlab
+  module GithubImport
+    module Importer
+      class IssuesImporter
+        include ParallelScheduling
+    
+            def importer_class
+          LfsObjectImporter
+        end
+    
+          # Associates the given database ID with the current object.
+      #
+      # database_id - The ID of the corresponding database row.
+      def cache_database_id(database_id)
+        Caching.write(cache_key, database_id)
       end
     
-          def inherited_hash_writer(name)
-        class_eval <<-RUBY, __FILE__, __LINE__ + 1
-          def set_#{name}(name, value)
-            name = name.tr('_', '-')
-            @#{name}s[name] = value unless try_set_#{name}(name, value)
+          # Imports all the objects in sequence in the current thread.
+      def sequential_import
+        each_object_to_import do |object|
+          repr = representation_class.from_api_response(object)
+    
+            expose_attribute :oid, :download_link
+    
+            def cross_project?
+          return true unless source_repository_id
+    
+          def action_for_grape(env)
+        endpoint = env[ENDPOINT_KEY]
+        route = endpoint.route rescue nil
+    
+          select_agent_type('Weather Agent')
+      fill_in(:agent_name, with: 'Test Weather Agent')
+    
+        it 'understands hl=1,3-4,9' do
+      stub(params).[](:hl) { '1,3-4,9' }
+      expect((1..10).select { |i| highlighted?(i) }).to eq [1, 3, 4, 9]
+    end
+    
+      describe '#relative_distance_of_time_in_words' do
+    it 'in the past' do
+      expect(relative_distance_of_time_in_words(Time.now-5.minutes)).to eq('5m ago')
+    end
+    
+        it 'outputs a structure containing name, description, the date, all agents & their links' do
+      data = exporter.as_json
+      expect(data[:name]).to eq(name)
+      expect(data[:description]).to eq(description)
+      expect(data[:source_url]).to eq(source_url)
+      expect(data[:guid]).to eq(guid)
+      expect(data[:schema_version]).to eq(1)
+      expect(data[:tag_fg_color]).to eq(tag_fg_color)
+      expect(data[:tag_bg_color]).to eq(tag_bg_color)
+      expect(data[:icon]).to eq(icon)
+      expect(Time.parse(data[:exported_at])).to be_within(2).of(Time.now.utc)
+      expect(data[:links]).to eq([{ :source => guid_order(agent_list, :jane_weather_agent), :receiver => guid_order(agent_list, :jane_rain_notifier_agent)}])
+      expect(data[:control_links]).to eq([])
+      expect(data[:agents]).to eq(agent_list.sort_by{|a| a.guid}.map { |agent| exporter.agent_as_json(agent) })
+      expect(data[:agents].all? { |agent_json| agent_json[:guid].present? && agent_json[:type].present? && agent_json[:name].present? }).to be_truthy
+    
+      describe '#helpers' do
+    it 'should return the correct request header' do
+      expect(@checker.send(:request_options)).to eq({:headers => {'aftership-api-key' => '800deeaf-e285-9d62-bc90-j999c1973cc9', 'Content-Type'=>'application/json'}})
+    end
+    
+            # This registers a plugin. This should _NEVER_ be called by the public
+        # and should only be called from within Vagrant. Vagrant will
+        # automatically register V1 plugins when a name is set on the
+        # plugin.
+        def register(plugin)
+          if !@registered.include?(plugin)
+            @logger.info('Registered plugin: #{plugin.name}')
+            @registered << plugin
+          end
+        end
+    
+            # This is called early, before a machine is instantiated, to check
+        # if this provider is usable. This should return true or false.
+        #
+        # If raise_error is true, then instead of returning false, this
+        # should raise an error with a helpful message about why this
+        # provider cannot be used.
+        #
+        # @param [Boolean] raise_error If true, raise exception if not usable.
+        # @return [Boolean]
+        def self.usable?(raise_error=false)
+          # Return true by default for backwards compat since this was
+          # introduced long after providers were being written.
+          true
+        end
+    
+        # Merge one registry with another and return a completely new
+    # registry. Note that the result cache is completely busted, so
+    # any gets on the new registry will result in a cache miss.
+    def merge(other)
+      self.class.new.tap do |result|
+        result.merge!(self)
+        result.merge!(other)
+      end
+    end
+    
+      # Returns parsed JavaScript blocks.
+  # The parsed version is a RKelly object that allows you to be able do advanced parsing.
+  #
+  # @see https://github.com/tenderlove/rkelly
+  # @return [Array<RKelly::Nodes::SourceElementsNode>]
+  def get_html_scripts
+    n = get_html_document
+    rkelly = RKelly::Parser.new
+    n.search('//script').map { |s| rkelly.parse(s.text) }
+  end
+    
+              # Encodes the end_time field
+          #
+          # @return [String]
+          def encode_end_time
+            [end_time].pack('N')
           end
     
-        # The name of the mixin in which the error occurred.
-    # This could be `nil` if the error occurred outside a mixin.
-    #
-    # @return [String]
-    def sass_mixin
-      sass_backtrace.first[:mixin]
-    end
+              # Encodes the msg_type field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_msg_type
+            bn = OpenSSL::BN.new(msg_type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
     
-        context 'opening brace on same line as first element' do
-      it 'allows closing brace on same line as last element' do
-        expect_no_offenses(construct(false, false))
-      end
+              # Rex::Proto::Kerberos::Model::AuthorizationData decoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def decode(input)
+            raise ::NotImplementedError, 'Authorization Data decoding not supported'
+          end
     
-          # Custom destructuring method. This is used to normalize the branches
-      # for `pair` and `kwsplat` nodes, to add duck typing to `hash` elements.
-      #
-      # @return [Array<KeywordSplatNode>] the different parts of the `kwsplat`
-      def node_parts
-        [self, self]
-      end
-    end
-  end
+                int
+          end
+    
+    Given(/^the configuration is in a custom location$/) do
+  TestApp.move_configuration_to_custom_location('app')
 end
-
     
-          # Calls the given block for each condition node in the `when` branch.
-      # If no block is given, an `Enumerator` is returned.
-      #
-      # @return [self] if a block is given
-      # @return [Enumerator] if no block is given
-      def each_condition
-        return conditions.to_enum(__method__) unless block_given?
-    
-          item['class'] = item['class'].to_s
-      item['queue'] = item['queue'].to_s
-      item['jid'] ||= SecureRandom.hex(12)
-      item['created_at'] ||= Time.now.to_f
-      item
-    end
-    
-            ActiveSupport.on_load(:active_record) do
-          include Sidekiq::Extensions::ActiveRecord
+            def roles
+          @roles ||= Set.new
         end
-        ActiveSupport.on_load(:action_mailer) do
-          extend Sidekiq::Extensions::ActionMailer
+    
+          def role_properties_for(rolenames)
+        roles = rolenames.to_set
+        rps = Set.new unless block_given?
+        roles_for(rolenames).each do |host|
+          host.roles.intersection(roles).each do |role|
+            [host.properties.fetch(role)].flatten(1).each do |props|
+              if block_given?
+                yield host, role, props
+              else
+                rps << (props || {}).merge(role: role, hostname: host.hostname)
+              end
+            end
+          end
         end
+        block_given? ? nil : rps
       end
     
+          def trusted?
+        @trusted
       end
-end
-
-    
-    module Sidekiq
-  module Logging
-    
-        def patch(path, &block)
-      route(PATCH, path, &block)
-    end
