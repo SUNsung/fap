@@ -1,195 +1,281 @@
 
         
-        #include <QIcon>
-#include <QPixmap>
-#include <QString>
+          // Check if the neighbor with vertical distance of y_gap is a near and math
+  // block partition.
+  bool IsNearMathNeighbor(const int y_gap, const ColPartition *neighbor) const;
     
-    #ifndef BITCOIN_QT_QVALUECOMBOBOX_H
-#define BITCOIN_QT_QVALUECOMBOBOX_H
+    #ifndef TESSERACT_CCMAIN_PARAGRAPHS_H_
+#define TESSERACT_CCMAIN_PARAGRAPHS_H_
     
+    #include 'elst.h'        // for ELIST_ITERATOR, ELISTIZEH, ELIST_LINK
+#include 'scrollview.h'  // for ScrollView (ptr only), SVEvent (ptr only)
+#include 'strngs.h'      // for STRING
     
-    {private Q_SLOTS:
-    /* sign message */
-    void on_addressBookButton_SM_clicked();
-    void on_pasteButton_SM_clicked();
-    void on_signMessageButton_SM_clicked();
-    void on_copySignatureButton_SM_clicked();
-    void on_clearButton_SM_clicked();
-    /* verify message */
-    void on_addressBookButton_VM_clicked();
-    void on_verifyMessageButton_VM_clicked();
-    void on_clearButton_VM_clicked();
-};
-    
-    
-    {    secp256k1_fe_sqr(&z12, &a->z);
-    u1 = a->x; secp256k1_fe_normalize_weak(&u1);
-    secp256k1_fe_mul(&u2, &b->x, &z12);
-    s1 = a->y; secp256k1_fe_normalize_weak(&s1);
-    secp256k1_fe_mul(&s2, &b->y, &z12); secp256k1_fe_mul(&s2, &s2, &a->z);
-    secp256k1_fe_negate(&h, &u1, 1); secp256k1_fe_add(&h, &u2);
-    secp256k1_fe_negate(&i, &s1, 1); secp256k1_fe_add(&i, &s2);
-    if (secp256k1_fe_normalizes_to_zero_var(&h)) {
-        if (secp256k1_fe_normalizes_to_zero_var(&i)) {
-            secp256k1_gej_double_var(r, a, rzr);
-        } else {
-            if (rzr != NULL) {
-                secp256k1_fe_set_int(rzr, 0);
-            }
-            r->infinity = 1;
-        }
-        return;
-    }
-    secp256k1_fe_sqr(&i2, &i);
-    secp256k1_fe_sqr(&h2, &h);
-    secp256k1_fe_mul(&h3, &h, &h2);
-    if (rzr != NULL) {
-        *rzr = h;
-    }
-    secp256k1_fe_mul(&r->z, &a->z, &h);
-    secp256k1_fe_mul(&t, &u1, &h2);
-    r->x = t; secp256k1_fe_mul_int(&r->x, 2); secp256k1_fe_add(&r->x, &h3); secp256k1_fe_negate(&r->x, &r->x, 3); secp256k1_fe_add(&r->x, &i2);
-    secp256k1_fe_negate(&r->y, &r->x, 5); secp256k1_fe_add(&r->y, &t); secp256k1_fe_mul(&r->y, &r->y, &i);
-    secp256k1_fe_mul(&h3, &h3, &s1); secp256k1_fe_negate(&h3, &h3, 1);
-    secp256k1_fe_add(&r->y, &h3);
+    BoxWord& BoxWord::operator=(const BoxWord& src) {
+  CopyFrom(src);
+  return *this;
 }
     
-        secp256k1_pubkey_load(ctx, &pt, point);
-    secp256k1_scalar_set_b32(&s, scalar, &overflow);
-    if (overflow || secp256k1_scalar_is_zero(&s)) {
-        ret = 0;
-    } else {
-        unsigned char x[32];
-        unsigned char y[1];
-        secp256k1_sha256_t sha;
+    #ifndef TESSERACT_CSTRUCT_BOXWORD_H_
+#define TESSERACT_CSTRUCT_BOXWORD_H_
+    
+    namespace tesseract {
     }
     
-    static int recovery_test_nonce_function(unsigned char *nonce32, const unsigned char *msg32, const unsigned char *key32, const unsigned char *algo16, void *data, unsigned int counter) {
-    (void) msg32;
-    (void) key32;
-    (void) algo16;
-    (void) data;
+    template <typename Generator1, typename Generator2, typename Generator3,
+    typename Generator4, typename Generator5>
+internal::CartesianProductHolder5<Generator1, Generator2, Generator3,
+    Generator4, Generator5> Combine(
+    const Generator1& g1, const Generator2& g2, const Generator3& g3,
+        const Generator4& g4, const Generator5& g5) {
+  return internal::CartesianProductHolder5<Generator1, Generator2, Generator3,
+      Generator4, Generator5>(
+      g1, g2, g3, g4, g5);
+}
+    
+    template <typename T, size_t N>
+internal::ParamGenerator<T> ValuesIn(const T (&array)[N]) {
+  return ValuesIn(array, array + N);
+}
+    
+    // A set of macros for testing Google Test assertions or code that's expected
+// to generate Google Test fatal failures.  It verifies that the given
+// statement will cause exactly one fatal Google Test failure with 'substr'
+// being part of the failure message.
+//
+// There are two different versions of this macro. EXPECT_FATAL_FAILURE only
+// affects and considers failures generated in the current thread and
+// EXPECT_FATAL_FAILURE_ON_ALL_THREADS does the same but for all threads.
+//
+// The verification of the assertion is done correctly even when the statement
+// throws an exception or aborts the current function.
+//
+// Known restrictions:
+//   - 'statement' cannot reference local non-static variables or
+//     non-static members of the current object.
+//   - 'statement' cannot return a value.
+//   - You cannot stream a failure message to this macro.
+//
+// Note that even though the implementations of the following two
+// macros are much alike, we cannot refactor them to use a common
+// helper macro, due to some peculiarity in how the preprocessor
+// works.  The AcceptsMacroThatExpandsToUnprotectedComma test in
+// gtest_unittest.cc will fail to compile if we do that.
+#define EXPECT_FATAL_FAILURE(statement, substr) \
+  do { \
+    class GTestExpectFatalFailureHelper {\
+     public:\
+      static void Execute() { statement; }\
+    };\
+    ::testing::TestPartResultArray gtest_failures;\
+    ::testing::internal::SingleFailureChecker gtest_checker(\
+        &gtest_failures, ::testing::TestPartResult::kFatalFailure, (substr));\
+    {\
+      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
+          ::testing::ScopedFakeTestPartResultReporter:: \
+          INTERCEPT_ONLY_CURRENT_THREAD, &gtest_failures);\
+      GTestExpectFatalFailureHelper::Execute();\
+    }\
+  } while (::testing::internal::AlwaysFalse())
+    
+    namespace testing {
     }
     
-    #include <stdint.h>
-#include <errno.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdexcept>
-#include <vector>
-#include <limits>
-#include <string>
-    
-    #endif  // GTEST_INCLUDE_GTEST_GTEST_SPI_H_
-
-    
-    
-    {  // TestClass must be a subclass of WithParamInterface<T> and Test.
-  template <class TestClass> friend class internal::ParameterizedTestFactory;
+    // Factory interface for death tests.  May be mocked out for testing.
+class DeathTestFactory {
+ public:
+  virtual ~DeathTestFactory() { }
+  virtual bool Create(const char* statement, const RE* regex,
+                      const char* file, int line, DeathTest** test) = 0;
 };
     
-    // Traps C++ exceptions escaping statement and reports them as test
-// failures. Note that trapping SEH exceptions is not implemented here.
-# if GTEST_HAS_EXCEPTIONS
-#  define GTEST_EXECUTE_DEATH_TEST_STATEMENT_(statement, death_test) \
-  try { \
-    GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
-  } catch (const ::std::exception& gtest_exception) { \
-    fprintf(\
-        stderr, \
-        '\n%s: Caught std::exception-derived exception escaping the ' \
-        'death test statement. Exception message: %s\n', \
-        ::testing::internal::FormatFileLocation(__FILE__, __LINE__).c_str(), \
-        gtest_exception.what()); \
-    fflush(stderr); \
-    death_test->Abort(::testing::internal::DeathTest::TEST_THREW_EXCEPTION); \
-  } catch (...) { \
-    death_test->Abort(::testing::internal::DeathTest::TEST_THREW_EXCEPTION); \
+      // Copy an existing linked_ptr<>, adding ourselves to the list of references.
+  template <typename U> linked_ptr(linked_ptr<U> const& ptr) { copy(&ptr); }
+  linked_ptr(linked_ptr const& ptr) {  // NOLINT
+    assert(&ptr != this);
+    copy(&ptr);
   }
     
-      // Returns a pathname for a file that does not currently exist. The pathname
-  // will be directory/base_name.extension or
-  // directory/base_name_<number>.extension if directory/base_name.extension
-  // already exists. The number will be incremented until a pathname is found
-  // that does not already exist.
-  // Examples: 'dir/foo_test.xml' or 'dir/foo_test_1.xml'.
-  // There could be a race condition if two or more processes are calling this
-  // function at the same time -- they could both pick the same filename.
-  static FilePath GenerateUniqueFileName(const FilePath& directory,
-                                         const FilePath& base_name,
-                                         const char* extension);
     
-      // Compares two C strings.  Returns true iff they have the same content.
-  //
-  // Unlike strcmp(), this function can handle NULL argument(s).  A
-  // NULL C string is considered different to any non-NULL C string,
-  // including the empty string.
-  static bool CStringEquals(const char* lhs, const char* rhs);
+// Tests Factorial().
     
-    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
-    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
-    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
-    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
-    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
-    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
-    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
-    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
-    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27,
-    GTEST_TEMPLATE_ T28, GTEST_TEMPLATE_ T29, GTEST_TEMPLATE_ T30,
-    GTEST_TEMPLATE_ T31, GTEST_TEMPLATE_ T32, GTEST_TEMPLATE_ T33,
-    GTEST_TEMPLATE_ T34>
-struct Templates34 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates33<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
-      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-      T29, T30, T31, T32, T33, T34> Tail;
+    // logistic loss, but predict un-transformed margin
+struct LogisticRaw : public LogisticRegression {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    predt = common::Sigmoid(predt);
+    return predt - label;
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    const float eps = 1e-16f;
+    predt = common::Sigmoid(predt);
+    return fmaxf(predt * (1.0f - predt), eps);
+  }
+  template <typename T>
+    static T PredTransform(T x) { return x; }
+  template <typename T>
+    static T FirstOrderGradient(T predt, T label) {
+    predt = common::Sigmoid(predt);
+    return predt - label;
+  }
+  template <typename T>
+    static T SecondOrderGradient(T predt, T label) {
+    const T eps = T(1e-16f);
+    predt = common::Sigmoid(predt);
+    return std::max(predt * (T(1.0f) - predt), eps);
+  }
+  static const char* DefaultEvalMetric() { return 'auc'; }
 };
     
     
-    {  return result;
-}
-    
-    #include <string.h>
-    
-    
-// This sample shows how to write a more complex unit test for a class
-// that has multiple member functions.
-//
-// Usually, it's a good idea to have one test for each method in your
-// class.  You don't have to do that exactly, but it helps to keep
-// your tests organized.  You may also throw in additional tests as
-// needed.
-    
-    public:
-  DHTRoutingTableDeserializer(int family);
-    
-    class DHTTask;
-    
-      virtual std::shared_ptr<DHTTask>
-  createPeerLookupTask(const std::shared_ptr<DownloadContext>& ctx,
-                       uint16_t tcpPort,
-                       const std::shared_ptr<PeerStorage>& peerStorage) = 0;
-    
-    DHTTaskFactoryImpl::DHTTaskFactoryImpl()
-    : routingTable_(nullptr),
-      dispatcher_(nullptr),
-      factory_(nullptr),
-      taskQueue_(nullptr),
-      timeout_(DHT_MESSAGE_TIMEOUT)
-{
-}
-    
-    class DHTTaskFactoryImpl : public DHTTaskFactory {
-private:
-  std::shared_ptr<DHTNode> localNode_;
+    {  /*! \brief push up temp */
+  inline void PushTemp() {
+    temp.Reserve(limit_size * 2);
+    for (size_t l = 1; true; ++l) {
+      this->InitLevel(l + 1);
+      // check if level l is empty
+      if (level[l].size == 0) {
+        level[l].SetPrune(temp, limit_size);
+        break;
+      } else {
+        // level 0 is actually temp space
+        level[0].SetPrune(temp, limit_size);
+        temp.SetCombine(level[0], level[l]);
+        if (temp.size > limit_size) {
+          // try next level
+          level[l].size = 0;
+        } else {
+          // if merged record is still smaller, no need to send to next level
+          level[l].CopyFrom(temp); break;
+        }
+      }
     }
+  }
+  /*! \brief get the summary after finalize */
+  inline void GetSummary(SummaryContainer *out) {
+    if (level.size() != 0) {
+      out->Reserve(limit_size * 2);
+    } else {
+      out->Reserve(inqueue.queue.size());
+    }
+    inqueue.MakeSummary(out);
+    if (level.size() != 0) {
+      level[0].SetPrune(*out, limit_size);
+      for (size_t l = 1; l < level.size(); ++l) {
+        if (level[l].size == 0) continue;
+        if (level[0].size == 0) {
+          level[0].CopyFrom(level[l]);
+        } else {
+          out->SetCombine(level[0], level[l]);
+          level[0].SetPrune(*out, limit_size);
+        }
+      }
+      out->CopyFrom(level[0]);
+    } else {
+      if (out->size > limit_size) {
+        temp.Reserve(limit_size);
+        temp.SetPrune(*out, limit_size);
+        out->CopyFrom(temp);
+      }
+    }
+  }
+  // used for debug, check if the sketch is valid
+  inline void CheckValid(RType eps) const {
+    for (size_t l = 1; l < level.size(); ++l) {
+      level[l].CheckValid(eps);
+    }
+  }
+  // initialize level space to at least nlevel
+  inline void InitLevel(size_t nlevel) {
+    if (level.size() >= nlevel) return;
+    data.resize(limit_size * nlevel);
+    level.resize(nlevel, Summary(nullptr, 0));
+    for (size_t l = 0; l < level.size(); ++l) {
+      level[l].data = dmlc::BeginPtr(data) + l * limit_size;
+    }
+  }
+  // input data queue
+  typename Summary::Queue inqueue;
+  // number of levels
+  size_t nlevel;
+  // size of summary in each level
+  size_t limit_size;
+  // the level of each summaries
+  std::vector<Summary> level;
+  // content of the summary
+  std::vector<Entry> data;
+  // temporal summary, used for temp-merge
+  SummaryContainer temp;
+};
     
-      DHTTaskExecutor immediateTaskQueue_;
+      /* Fetch an individual column. This code should be used with XGBOOST_TYPE_SWITCH
+     to determine type of bin id's */
+  inline Column GetColumn(unsigned fid) const {
+    Column c(type_[fid], &index_[boundary_[fid].index_begin], index_base_[fid],
+             &row_ind_[boundary_[fid].row_ind_begin],
+             boundary_[fid].index_end - boundary_[fid].index_begin);
+    return c;
+  }
     
-    const std::string& DHTUnknownMessage::getMessageType() const { return UNKNOWN; }
+    DHTReplaceNodeTask::~DHTReplaceNodeTask() = default;
     
-      // do nothing; we don't use this message as outgoing message.
-  virtual bool send() CXX11_OVERRIDE;
+    void DHTRoutingTable::dropNode(const std::shared_ptr<DHTNode>& node)
+{
+  getBucketFor(node)->dropNode(node);
+}
+/*
+  void DHTRoutingTable::moveBucketHead(const std::shared_ptr<DHTNode>& node)
+  {
+  getBucketFor(node)->moveToHead(node);
+  }
+*/
+void DHTRoutingTable::moveBucketTail(const std::shared_ptr<DHTNode>& node)
+{
+  getBucketFor(node)->moveToTail(node);
+}
+    
+      void dropNode(const std::shared_ptr<DHTNode>& node);
+    
+      std::shared_ptr<DHTNode> localNode_;
+    
+        peerAnnounceStorage->setTaskQueue(taskQueue.get());
+    peerAnnounceStorage->setTaskFactory(taskFactory.get());
+    
+    #include 'common.h'
+    
+    void DHTTaskExecutor::update()
+{
+  execTasks_.erase(std::remove_if(execTasks_.begin(), execTasks_.end(),
+                                  std::mem_fn(&DHTTask::finished)),
+                   execTasks_.end());
+  int r;
+  if (static_cast<size_t>(numConcurrent_) > execTasks_.size()) {
+    r = numConcurrent_ - execTasks_.size();
+  }
+  else {
+    r = 0;
+  }
+  while (r && !queue_.empty()) {
+    std::shared_ptr<DHTTask> task = queue_.front();
+    queue_.pop_front();
+    task->startup();
+    if (!task->finished()) {
+      execTasks_.push_back(task);
+      --r;
+    }
+  }
+  A2_LOG_DEBUG(fmt('Executing %u Task(s). Queue has %u task(s).',
+                   static_cast<unsigned int>(getExecutingTaskSize()),
+                   static_cast<unsigned int>(getQueueSize())));
+}
+    
+    namespace {
+const size_t NUM_CONCURRENT_TASK = 15;
+} // namespace
     
     
     {} // namespace aria2
+    
+      virtual void process() CXX11_OVERRIDE;
