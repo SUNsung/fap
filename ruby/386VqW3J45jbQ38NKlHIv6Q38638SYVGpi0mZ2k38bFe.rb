@@ -1,133 +1,84 @@
 
         
-              it 'creates a new user' do
-        visit new_admin_user_path
-        fill_in 'Email', with: 'test@test.com'
-        fill_in 'Username', with: 'usertest'
-        fill_in 'Password', with: '12345678'
-        fill_in 'Password confirmation', with: '12345678'
-        click_on 'Create User'
-        expect(page).to have_text('User 'usertest' was successfully created.')
-        expect(page).to have_text('test@test.com')
-      end
-    
-        def inheritable_copy
-      self.class.new @filters
-    end
-    
-        def initial_paths
-      self.class.initial_paths
-    end
-    
-          base_dir = Pathname.new(normalized_path)
-      base_dir = base_dir.parent unless path.end_with? '/'
-    
-          def root
-        css('.nav-index-group').each do |node|
-          if heading = node.at_css('.nav-index-group-heading')
-            heading.name = 'h2'
-          end
-          node.parent.before(node.children)
+                def preload_commit_authors
+          # This also preloads the author of every commit. We're using 'lazy_author'
+          # here since 'author' immediately loads the data on the first call.
+          @pipeline.commit.try(:lazy_author)
         end
     
-            css('p > code:first-child:last-child', 'td > code:first-child:last-child').each do |node|
-          next if node.previous.try(:content).present? || node.next.try(:content).present?
-          node.inner_html = node.inner_html.squish.gsub(/<br(\ \/)?>\s*/, '\n')
-          node.content = node.content.strip
-          node.name = 'pre' if node.content =~ /\s/
-          node.parent.before(node.parent.children).remove if node.parent.name == 'p'
+            def sidekiq_worker_class
+          ImportDiffNoteWorker
         end
     
-      def prefix_from_bin(bin_name)
-    unless (path = `which #{bin_name}`.strip).empty?
-      File.dirname(File.dirname(path))
-    end
-  end
+            # attributes - A hash containing the raw issue details. The keys of this
+        #              Hash (and any nested hashes) must be symbols.
+        def initialize(attributes)
+          @attributes = attributes
+        end
     
-    module LogStash
-  module PluginManager
-    class Error < StandardError; end
-    
-          explicit_path = ::File.join(temp_path, LOGSTASH_DIR)
-      dependencies_path = ::File.join(temp_path, DEPENDENCIES_DIR)
-    
-      def validate_target_file
-    if File.exist?(target_file)
-      if  delete_target_file?
-        File.delete(target_file)
-      else
-        signal_error('Package creation cancelled, a previously generated package exist at location: #{target_file}, move this file to safe place and run the command again')
+            # attributes - A Hash containing the user details. The keys of this
+        #              Hash (and any nested hashes) must be symbols.
+        def initialize(attributes)
+          @attributes = attributes
+        end
       end
     end
   end
-    
-          PluginManager.ui.info('Install successful')
-    rescue ::Bundler::BundlerError => e
-      raise PluginManager::InstallError.new(e), 'An error occurred went installing plugins'
-    ensure
-      FileUtils.rm_rf(uncompressed_path) if uncompressed_path && Dir.exist?(uncompressed_path)
-    end
-    
-      parameter 'file', 'the package file name', :attribute_name => :package_file, :required => true
-    
-      def execute
-    # Turn off any jar dependencies lookup when running with `--local`
-    ENV['JARS_SKIP'] = 'true' if local?
-    
-        platforms.types.each do |type|
-      desc 'Run acceptance test in #{type} machines'
-      task type do
-        ENV['LS_TEST_PLATFORM']=type
-        exit(RSpec::Core::Runner.run([Rake::FileList['acceptance/spec/lib/*_spec.rb']]))
-      end
-    end
-    
-        context 'with a specific plugin' do
-      let(:plugin_name) { 'logstash-input-stdin' }
-      it 'list the plugin and display the plugin name' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name}$/)
-      end
-    
-    iter.times do
-  arr = Array.new(count) do
-    []
-  end
-  count.times do |idx|
-    arr[idx][0] = idx
-  end
-  Sidekiq::Client.push_bulk('class' => LoadWorker, 'args' => arr)
 end
-Sidekiq.logger.error 'Created #{count*iter} jobs'
+
     
-    module Sidekiq
-  module Generators # :nodoc:
-    class WorkerGenerator < ::Rails::Generators::NamedBase # :nodoc:
-      desc 'This generator creates a Sidekiq Worker in app/workers and a corresponding test'
-    
-          # Provide a call() method that returns the formatted message.
-      def call(severity, time, program_name, message)
-        '#{time.utc.iso8601(3)} #{::Process.pid} TID-#{Sidekiq::Logging.tid}#{context} #{severity}: #{message}\n'
-      end
-    
-        def build_sessions
-      middlewares = self.middlewares
-    
-      def generate_migration
-    migration_template('paperclip_migration.rb.erb',
-                       'db/migrate/#{migration_file_name}',
-                       migration_version: migration_version)
+    describe Admin::UsersController do
+  it 'requires to be signed in as an admin' do
+    login_as(users(:bob))
+    visit admin_users_path
+    expect(page).to have_text('Admin access required to view that page.')
   end
     
-        def add_active_record_callbacks
-      name = @name
-      @klass.send(:after_save) { send(name).send(:save) }
-      @klass.send(:before_destroy) { send(name).send(:queue_all_for_delete) }
-      if @klass.respond_to?(:after_commit)
-        @klass.send(:after_commit, on: :destroy) do
-          send(name).send(:flush_deletes)
-        end
-      else
-        @klass.send(:after_destroy) { send(name).send(:flush_deletes) }
+          it 'generates a DOT script' do
+        expect(agents_dot(@agents)).to match(%r{
+          \A
+          digraph \x20 'Agent \x20 Event \x20 Flow' \{
+            node \[ [^\]]+ \];
+            edge \[ [^\]]+ \];
+            (?<foo>\w+) \[label=foo\];
+            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
+            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
+            \k<bar1> \[label=bar1\];
+            \k<bar2> \[label=bar2,style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
+            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
+            \k<bar3> \[label=bar3\];
+          \}
+          \z
+        }x)
       end
+    
+          describe '#generate_diff' do
+        it 'should check if the agent requires a service' do
+          agent_diffs = services_scenario_import.agent_diffs
+          basecamp_agent_diff = agent_diffs[0]
+          expect(basecamp_agent_diff.requires_service?).to eq(true)
+        end
+    
+    describe AgentRunner do
+  context 'without traps' do
+    before do
+      stub.instance_of(Rufus::Scheduler).every
+      stub.instance_of(AgentRunner).set_traps
+      @agent_runner = AgentRunner.new
     end
+    
+        it 'does not output links to other agents outside of the incoming set' do
+      Link.create!(:source_id => agents(:jane_weather_agent).id, :receiver_id => agents(:jane_website_agent).id)
+      Link.create!(:source_id => agents(:jane_website_agent).id, :receiver_id => agents(:jane_rain_notifier_agent).id)
+    
+    describe AgentLog do
+  describe 'validations' do
+    before do
+      @log = AgentLog.new(:agent => agents(:jane_website_agent), :message => 'The agent did something', :level => 3)
+      expect(@log).to be_valid
+    end
+    
+      caveats <<~EOS
+    Installation or Uninstallation may fail with Exit Code 19 (Conflicting Processes running) if Browsers, Safari Notification Service or SIMBL Services (e.g. Flashlight) are running or Adobe Creative Cloud or any other Adobe Products are already installed. See Logs in /Library/Logs/Adobe/Installers if Installation or Uninstallation fails, to identifify the conflicting processes.
+  EOS
+end
