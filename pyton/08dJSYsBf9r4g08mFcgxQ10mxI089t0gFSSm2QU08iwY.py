@@ -1,146 +1,132 @@
 
         
-        FISH_COMPLETION_FILE = 'youtube-dl.fish'
-FISH_COMPLETION_TEMPLATE = 'devscripts/fish-completion.in'
+        
+def unicode_is_ascii(u_string):
+    '''Determine if unicode string only contains ASCII characters.
     
-        out = bug_text + dev_text
+    # Check imported dependencies for compatibility.
+try:
+    check_compatibility(urllib3.__version__, chardet.__version__)
+except (AssertionError, ValueError):
+    warnings.warn('urllib3 ({}) or chardet ({}) doesn't match a supported '
+                  'version!'.format(urllib3.__version__, chardet.__version__),
+                  RequestsDependencyWarning)
     
-    import itertools
-import json
-import os
-import re
-import sys
-    
-        params = {
-        'age_limit': age,
-        'skip_download': True,
-        'writeinfojson': True,
-        'outtmpl': '%(id)s.%(ext)s',
-    }
-    ydl = YoutubeDL(params)
-    ydl.add_default_info_extractors()
-    json_filename = os.path.splitext(filename)[0] + '.info.json'
-    try_rm(json_filename)
-    ydl.download([url])
-    res = os.path.exists(json_filename)
-    try_rm(json_filename)
-    return res
-    
-        def test_youtube_feeds(self):
-        self.assertMatch('https://www.youtube.com/feed/watch_later', ['youtube:watchlater'])
-        self.assertMatch('https://www.youtube.com/feed/subscriptions', ['youtube:subscriptions'])
-        self.assertMatch('https://www.youtube.com/feed/recommended', ['youtube:recommended'])
-        self.assertMatch('https://www.youtube.com/my_favorites', ['youtube:favorites'])
-    
-    - name: update an existing origin access identity using caller_reference as an identifier
-  cloudfront_origin_access_identity:
-     origin_access_identity_id: E17DRN9XUOAHZX
-     caller_reference: this is an example reference
-     comment: this is a new comment
-    
-    RETURN = '''
-block_device_mapping:
-    description: Block device mapping for the instances of launch configuration
-    type: list
-    returned: always
-    sample: '[{
-        'device_name': '/dev/xvda':,
-        'ebs': {
-            'delete_on_termination': true,
-            'volume_size': 8,
-            'volume_type': 'gp2'
-    }]'
-classic_link_vpc_security_groups:
-    description: IDs of one or more security groups for the VPC specified in classic_link_vpc_id
-    type: string
-    returned: always
-    sample:
-created_time:
-    description: The creation date and time for the launch configuration
-    type: string
-    returned: always
-    sample: '2016-05-27T13:47:44.216000+00:00'
-ebs_optimized:
-    description: EBS I/O optimized (true ) or not (false )
-    type: bool
-    returned: always
-    sample: true,
-image_id:
-    description: ID of the Amazon Machine Image (AMI)
-    type: string
-    returned: always
-    sample: 'ami-12345678'
-instance_monitoring:
-    description: Launched with detailed monitoring or not
-    type: dict
-    returned: always
-    sample: '{
-        'enabled': true
-    }'
-instance_type:
-    description: Instance type
-    type: string
-    returned: always
-    sample: 't2.micro'
-kernel_id:
-    description: ID of the kernel associated with the AMI
-    type: string
-    returned: always
-    sample:
-key_name:
-    description: Name of the key pair
-    type: string
-    returned: always
-    sample: 'user_app'
-launch_configuration_arn:
-    description: Amazon Resource Name (ARN) of the launch configuration
-    type: string
-    returned: always
-    sample: 'arn:aws:autoscaling:us-east-1:666612345678:launchConfiguration:ba785e3a-dd42-6f02-4585-ea1a2b458b3d:launchConfigurationName/lc-app'
-launch_configuration_name:
-    description: Name of the launch configuration
-    type: string
-    returned: always
-    sample: 'lc-app'
-ramdisk_id:
-    description: ID of the RAM disk associated with the AMI
-    type: string
-    returned: always
-    sample:
-security_groups:
-    description: Security groups to associated
-    type: list
-    returned: always
-    sample: '[
-        'web'
-    ]'
-user_data:
-    description: User data available
-    type: string
-    returned: always
-    sample:
+    This module handles import compatibility issues between Python 2 and
+Python 3.
 '''
-    }
     
     
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
+def dispatch_hook(key, hooks, hook_data, **kwargs):
+    '''Dispatches a hook dictionary on a given piece of data.'''
+    hooks = hooks or {}
+    hooks = hooks.get(key)
+    if hooks:
+        if hasattr(hooks, '__call__'):
+            hooks = [hooks]
+        for hook in hooks:
+            _hook_data = hook(hook_data, **kwargs)
+            if _hook_data is not None:
+                hook_data = _hook_data
+    return hook_data
+
     
-    from __future__ import absolute_import, division, print_function
-__metaclass__ = type
     
-        state = module.params.get('state')
-    group_name = module.params.get('name').lower()
-    group_description = module.params.get('description')
-    group_subnets = module.params.get('subnets') or {}
+class VersionedPackage(object):
+    def __init__(self, version):
+        self.__version__ = version
     
-        xx = range(0, n * step, step)
-    plt.figure('scikit-learn tree benchmark results')
-    plt.subplot(211)
-    plt.title('Learning with varying number of samples')
-    plt.plot(xx, scikit_classifier_results, 'g-', label='classification')
-    plt.plot(xx, scikit_regressor_results, 'r-', label='regression')
-    plt.legend(loc='upper left')
-    plt.xlabel('number of samples')
-    plt.ylabel('Time (s)')
+        def test_is_filename(self):
+        assert unquote_header_value(''\\\\Comp\\Res'', True) == '\\\\Comp\\Res'
+    
+    from .structures import LookupDict
+    
+        # Make the eyebrows into a nightmare
+    d.polygon(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 128))
+    d.polygon(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 128))
+    d.line(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 150), width=5)
+    d.line(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 150), width=5)
+    
+        # Print the location of each face in this image
+    top, right, bottom, left = face_location
+    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+    
+    # Open the input movie file
+input_movie = cv2.VideoCapture('hamilton_clip.mp4')
+length = int(input_movie.get(cv2.CAP_PROP_FRAME_COUNT))
+    
+        # Let's trace out each facial feature in the image with a line!
+    for facial_feature in face_landmarks.keys():
+        d.line(face_landmarks[facial_feature], width=5)
+    
+    setup(
+    name='face_recognition',
+    version='1.2.3',
+    description='Recognize faces from Python or from the command line',
+    long_description=readme + '\n\n' + history,
+    author='Adam Geitgey',
+    author_email='ageitgey@gmail.com',
+    url='https://github.com/ageitgey/face_recognition',
+    packages=[
+        'face_recognition',
+    ],
+    package_dir={'face_recognition': 'face_recognition'},
+    package_data={
+        'face_recognition': ['models/*.dat']
+    },
+    entry_points={
+        'console_scripts': [
+            'face_recognition=face_recognition.face_recognition_cli:main',
+            'face_detection=face_recognition.face_detection_cli:main'
+        ]
+    },
+    install_requires=requirements,
+    license='MIT license',
+    zip_safe=False,
+    keywords='face_recognition',
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+    ],
+    test_suite='tests',
+    tests_require=test_requirements
+)
+
+    
+    
+def count_to(count):
+    '''Counts by word numbers, up to a maximum of five'''
+    numbers = ['one', 'two', 'three', 'four', 'five']
+    for number in numbers[:count]:
+        yield number
+    
+        def generic_visit(self, node, *args, **kwargs):
+        print('generic_visit ' + node.__class__.__name__)
+    
+        '''Graph search emulation in python, from source
+    http://www.python.org/doc/essays/graphs/'''
+    
+        >>> objects = []
+    >>> dog = Dog()
+    >>> print(dog.__dict__)
+    {'name': 'Dog'}
+    >>> objects.append(Adapter(dog, make_noise=dog.bark))
+    >>> print(objects[0].original_dict())
+    {'name': 'Dog'}
+    >>> cat = Cat()
+    >>> objects.append(Adapter(cat, make_noise=cat.meow))
+    >>> human = Human()
+    >>> objects.append(Adapter(human, make_noise=human.speak))
+    >>> car = Car()
+    >>> car_noise = lambda: car.make_noise(3)
+    >>> objects.append(Adapter(car, make_noise=car_noise))
