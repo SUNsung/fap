@@ -1,235 +1,155 @@
-with tf.Session() as sess:
-  # restore the latest model ckpt
-  if FLAGS.checkpoint_path == 'SAMPLE_CHECKPOINT':
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    model_checkpoint_path = os.path.join(dir_path, 'trained_itb/model-65000')
+
+        
+        # Check to make sure the RNN is the one we used in the paper.
+if N == 50:
+  assert abs(rnn['W'][0,0] - 0.06239899) < 1e-8, 'Error in random seed?'
+  rem_check = nreplications * train_percentage
+  assert  abs(rem_check - int(rem_check)) < 1e-8, \
+    'Train percentage  * nreplications should be integral number.'
+    
+    rates_train, rates_valid = split_list_by_inds(rates, train_inds, valid_inds)
+spikes_train, spikes_valid = split_list_by_inds(spikes, train_inds, valid_inds)
+condition_labels_train, condition_labels_valid = split_list_by_inds(
+    condition_labels, train_inds, valid_inds)
+ext_input_train, ext_input_valid = split_list_by_inds(
+    ext_input, train_inds, valid_inds)
+    
+        if FLAGS.prefix_label and use_prefix:
+      label = sequence_example.context.feature['class'].int64_list.value[0]
+      review_words = [EOS_INDEX + 1 + label]
+    else:
+      review_words = []
+    review_words.extend([
+        f.int64_list.value[0]
+        for f in sequence_example.feature_lists.feature_list['token_id'].feature
+    ])
+    all_words.append(review_words)
+  return all_words
+    
+      # If there are no real or fake entries in the batch, we assign an average
+  # value of zero.
+  real_avg = tf.where(tf.equal(real_count, 0), zero_tensor, real_avg)
+  fake_avg = tf.where(tf.equal(fake_count, 0), zero_tensor, fake_avg)
+    
+      Returns:
+    values:  tf.float32 Tensor of predictions of shape [batch_size,
+      sequence_length]
+  '''
+  if FLAGS.baseline_method == 'critic':
+    if FLAGS.discriminator_model == 'seq2seq_vd':
+      values = critic_vd.critic_seq2seq_vd_derivative(
+          hparams, sequence, is_training, reuse=reuse)
+    else:
+      raise NotImplementedError
   else:
-    model_checkpoint_path = FLAGS.checkpoint_path
-  try:
-    saver.restore(sess, model_checkpoint_path)
-    print ('Model restored from', model_checkpoint_path)
-  except:
-    assert False, ('No checkpoints to restore from, is the path %s correct?'
-                   %model_checkpoint_path)
-    
-      # Add the 0th time-step for coherence.
-  first_token = np.expand_dims(inputs_eval[:, 0], axis=1)
-  sequence_eval = np.concatenate((first_token, sequence_eval), axis=1)
-    
-      Args:
-    hparams:  MaskGAN hyperparameters.
-    learning_rate:  tf.Variable scalar learning rate.
-    final_gen_objective:  Scalar final REINFORCE objective for the sequence.
-    averages_op:  ExponentialMovingAverage apply average op to
-      maintain the baseline.
-    global_step:  global_step tf.Variable.
-    
-    FISH_COMPLETION_FILE = 'youtube-dl.fish'
-FISH_COMPLETION_TEMPLATE = 'devscripts/fish-completion.in'
-    
-    import os
-import sys
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    
-    try:
-    input = raw_input
-except NameError:
-    pass
-    
-    entries = []
-for v in versions:
-    fields = v.split('.')
-    year, month, day = map(int, fields[:3])
-    faked = 0
-    patchlevel = 0
-    while True:
-        try:
-            datetime.date(year, month, day)
-        except ValueError:
-            day -= 1
-            faked += 1
-            assert day > 0
-            continue
-        break
-    if len(fields) >= 4:
-        try:
-            patchlevel = int(fields[3])
-        except ValueError:
-            patchlevel = 1
-    timestamp = '%04d-%02d-%02dT00:%02d:%02dZ' % (year, month, day, faked, patchlevel)
-    
-    
-if __name__ == '__main__':
-    main()
+    raise NotImplementedError
+  return values
 
     
     
-def build_completion(opt_parser):
-    opts = [opt for group in opt_parser.option_groups
-            for opt in group.option_list]
-    opts_file = [opt for opt in opts if opt.metavar == 'FILE']
-    opts_dir = [opt for opt in opts if opt.metavar == 'DIR']
+@pytest.fixture(params=[(python_3, False),
+                        (python_3, True),
+                        (python_2, False)])
+def proc(request, spawnu, TIMEOUT):
+    container, instant_mode = request.param
+    proc = spawnu(*container)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(init_bashrc.format(
+        u'--enable-experimental-instant-mode' if instant_mode else ''))
+    proc.sendline(u'bash')
+    if instant_mode:
+        assert proc.expect([TIMEOUT, u'instant mode ready: True'])
+    return proc
     
-            password = intlist_to_bytes(self.key).decode('utf-8')
-        encrypted = base64.b64encode(
-            intlist_to_bytes(self.iv[:8]) +
-            b'\x0b\xe6\xa4\xd9z\x0e\xb8\xb9\xd0\xd4i_\x85\x1d\x99\x98_\xe5\x80\xe7.\xbf\xa5\x83'
-        ).decode('utf-8')
-        decrypted = (aes_decrypt_text(encrypted, password, 32))
-        self.assertEqual(decrypted, self.secret_msg)
-    
-        params = {
-        'age_limit': age,
-        'skip_download': True,
-        'writeinfojson': True,
-        'outtmpl': '%(id)s.%(ext)s',
-    }
-    ydl = YoutubeDL(params)
-    ydl.add_default_info_extractors()
-    json_filename = os.path.splitext(filename)[0] + '.info.json'
-    try_rm(json_filename)
-    ydl.download([url])
-    res = os.path.exists(json_filename)
-    try_rm(json_filename)
-    return res
-    
-        def test_tumblr(self):
-        self.assertMatch('http://tatianamaslanydaily.tumblr.com/post/54196191430/orphan-black-dvd-extra-behind-the-scenes', ['Tumblr'])
-        self.assertMatch('http://tatianamaslanydaily.tumblr.com/post/54196191430', ['Tumblr'])
+    containers = (('thefuck/python3-fish',
+               u'''FROM python:3
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'),
+              ('thefuck/python2-fish',
+               u'''FROM python:2
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'))
     
     
-try:
-    _DEV_NULL = subprocess.DEVNULL
-except AttributeError:
-    _DEV_NULL = open(os.devnull, 'wb')
+@pytest.fixture(params=containers)
+def proc(request, spawnu, TIMEOUT):
+    proc = spawnu(*request.param)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(u'tcsh')
+    proc.sendline(u'setenv PYTHONIOENCODING utf8')
+    proc.sendline(u'eval `thefuck --alias`')
+    return proc
     
-            if not username:
-            error = 'Username is required.'
-        elif not password:
-            error = 'Password is required.'
-        elif db.execute(
-            'SELECT id FROM user WHERE username = ?', (username,)
-        ).fetchone() is not None:
-            error = 'User {0} is already registered.'.format(username)
     
-            if error is not None:
-            flash(error)
+@pytest.mark.parametrize('script, output', [
+    ('apt', invalid_operation('saerch')),
+    ('apt-get', invalid_operation('isntall')),
+    ('apt-cache', invalid_operation('rumove'))])
+def test_match(script, output):
+    assert match(Command(script, output))
+    
+            if 0 < self.recurrent_dropout < 1.:
+            h_tm1_i = h_tm1 * rec_dp_mask[0]
+            h_tm1_f = h_tm1 * rec_dp_mask[1]
+            h_tm1_c = h_tm1 * rec_dp_mask[2]
+            h_tm1_o = h_tm1 * rec_dp_mask[3]
         else:
-            db = get_db()
-            db.execute(
-                'INSERT INTO post (title, body, author_id)'
-                ' VALUES (?, ?, ?)',
-                (title, body, g.user['id'])
-            )
-            db.commit()
-            return redirect(url_for('blog.index'))
+            h_tm1_i = h_tm1
+            h_tm1_f = h_tm1
+            h_tm1_c = h_tm1
+            h_tm1_o = h_tm1
     
-        @contextmanager
-    def session_transaction(self, *args, **kwargs):
-        '''When used in combination with a ``with`` statement this opens a
-        session transaction.  This can be used to modify the session that
-        the test client uses.  Once the ``with`` block is left the session is
-        stored back.
+        # Arguments
+        units: Positive integer, dimensionality of the output space.
+        kernel_initializer: Initializer for the `kernel` weights matrix,
+            used for the linear transformation of the inputs.
+            (see [initializers](../initializers.md)).
+        recurrent_initializer: Initializer for the `recurrent_kernel`
+            weights matrix,
+            used for the linear transformation of the recurrent state.
+            (see [initializers](../initializers.md)).
+        bias_initializer: Initializer for the bias vector
+            (see [initializers](../initializers.md)).
+        kernel_regularizer: Regularizer function applied to
+            the `kernel` weights matrix
+            (see [regularizer](../regularizers.md)).
+        recurrent_regularizer: Regularizer function applied to
+            the `recurrent_kernel` weights matrix
+            (see [regularizer](../regularizers.md)).
+        bias_regularizer: Regularizer function applied to the bias vector
+            (see [regularizer](../regularizers.md)).
+        activity_regularizer: Regularizer function applied to
+            the output of the layer (its 'activation').
+            (see [regularizer](../regularizers.md)).
+        kernel_constraint: Constraint function applied to
+            the `kernel` weights matrix
+            (see [constraints](../constraints.md)).
+        recurrent_constraint: Constraint function applied to
+            the `recurrent_kernel` weights matrix
+            (see [constraints](../constraints.md)).
+        bias_constraint: Constraint function applied to the bias vector
+            (see [constraints](../constraints.md)).
+        return_sequences: Boolean. Whether to return the last output.
+            in the output sequence, or the full sequence.
+        return_state: Boolean. Whether to return the last state
+            in addition to the output.
+        stateful: Boolean (default False). If True, the last state
+            for each sample at index i in a batch will be used as initial
+            state for the sample of index i in the following batch.
+    '''
     
-        for dst in dests:
-        shutil.copy(filename, dst)
-        manifest_path = os.path.join(dst, 'MANIFEST.in')
-        setup_path = os.path.join(dst, 'setup.py')
-    
-    
-init_bashrc = u'''echo '
-export SHELL=/bin/bash
-export PS1='$ '
-echo > $HISTFILE
-eval $(thefuck --alias {})
-echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
-' > ~/.bashrc'''
-    
-    
-@pytest.mark.functional
-def test_with_confirmation(proc, TIMEOUT):
-    with_confirmation(proc, TIMEOUT)
-    
-    
-@pytest.mark.functional
-def test_refuse_with_confirmation(proc, TIMEOUT):
-    refuse_with_confirmation(proc, TIMEOUT)
-    
-    match_output = '''
-Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
-Hit:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease
-Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
-Hit:4 http://security.ubuntu.com/ubuntu zesty-security InRelease
-Hit:5 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
-Hit:6 https://download.docker.com/linux/ubuntu zesty InRelease
-Hit:7 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
-Fetched 89.2 kB in 0s (122 kB/s)
-Reading package lists... Done
-Building dependency tree
-Reading state information... Done
-8 packages can be upgraded. Run 'apt list --upgradable' to see them.
-'''
-    
-        def process_appid_not_exist(self, appid, ip):
-        ret = self.check_api(ip, 'xxnet-1')
-        if ret and ret.ok:
-            self.set_appid_not_exist(appid)
-        else:
-            self.logger.warn('process_appid_not_exist, remove ip:%s', ip)
-    
-        ca_vendor = 'GoAgent' #TODO: here should be XX-Net
-    ca_certfile = os.path.join(data_path, 'CA.crt')
-    ca_keyfile = os.path.join(data_path, 'CAkey.pem')
-    ca_thumbprint = ''
-    ca_privatekey = None
-    ca_subject = None
-    ca_certdir = os.path.join(data_path, 'certs')
-    ca_digest = 'sha256'
-    ca_lock = threading.Lock()
-    ca_validity_years = 10
-    ca_validity = 24 * 60 * 60 * 365 * ca_validity_years
-    cert_validity_years = 2
-    cert_validity = 24 * 60 * 60 * 365 * cert_validity_years
-    cert_publickey = None
-    cert_keyfile = os.path.join(data_path, 'Certkey.pem')
-    serial_reduce =  3600 * 24 * 365 * 46
-    
-    
-if __name__ == '__main__':
-    print IPv6._test_host('http://[2804:10:4068::202:82]')
-    
-            if cmd.startswith('#'):
-            log.write('%s' % cmd)
-            continue
-    
-    current_path = os.path.dirname(os.path.abspath(__file__))
-    
-    RecognitionException are generated, when a recognizer encounters incorrect
-or unexpected input.
-    
-    def generateKey(keySize):
-    print('Generating prime p...')
-    p = rabinMiller.generateLargePrime(keySize)
-    print('Generating prime q...')
-    q = rabinMiller.generateLargePrime(keySize)
-    n = p * q
-    
-    
-    
-    def signature(word):
-    return ''.join(sorted(word))
-    
-    
-'''
-* Wondering how this method works !
-* It's pretty simple.
-* Let's say you need to calculate a ^ b
-* RULE 1 : a * b = (a+a) * (b/2) ---- example : 4 * 4 = (4+4) * (4/2) = 8 * 2
-* RULE 2 : IF b is ODD, then ---- a * b = a + (a * (b - 1)) :: where (b - 1) is even.
-* Once b is even, repeat the process to get a * b
-* Repeat the process till b = 1 OR b = 0, because a*1 = a AND a*0 = 0
-*
-* As far as the modulo is concerned,
-* the fact : (a+b) % c = ((a%c) + (b%c)) % c
-* Now apply RULE 1 OR 2, whichever is required.
+    '''
+Note:
+batch_size is highly sensitive.
+Only 2 epochs are needed as the dataset is very small.
 '''
