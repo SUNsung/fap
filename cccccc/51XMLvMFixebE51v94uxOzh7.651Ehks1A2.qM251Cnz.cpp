@@ -1,230 +1,255 @@
 
         
-        
-    {        return true;
-      }
+        void WriteDocCommentBodyImpl(io::Printer* printer, SourceLocation location) {
+    string comments = location.leading_comments.empty() ?
+        location.trailing_comments : location.leading_comments;
+    if (comments.empty()) {
+        return;
+    }
+    // XML escaping... no need for apostrophes etc as the whole text is going to be a child
+    // node of a summary element, not part of an attribute.
+    comments = StringReplace(comments, '&', '&amp;', true);
+    comments = StringReplace(comments, '<', '&lt;', true);
+    std::vector<string> lines = Split(comments, '\n', false /* skip_empty */);
+    // TODO: We really should work out which part to put in the summary and which to put in the remarks...
+    // but that needs to be part of a bigger effort to understand the markdown better anyway.
+    printer->Print('/// <summary>\n');
+    bool last_was_empty = false;
+    // We squash multiple blank lines down to one, and remove any trailing blank lines. We need
+    // to preserve the blank lines themselves, as this is relevant in the markdown.
+    // Note that we can't remove leading or trailing whitespace as *that's* relevant in markdown too.
+    // (We don't skip 'just whitespace' lines, either.)
+    for (std::vector<string>::iterator it = lines.begin(); it != lines.end(); ++it) {
+        string line = *it;
+        if (line.empty()) {
+            last_was_empty = true;
+        } else {
+            if (last_was_empty) {
+                printer->Print('///\n');
+            }
+            last_was_empty = false;
+            printer->Print('///$line$\n', 'line', *it);
+        }
+    }
+    printer->Print('/// </summary>\n');
+}
     
-    namespace atom {
+    EnumGenerator::~EnumGenerator() {
+}
+    
+    
+    {
+    {  printer->Outdent();
+  printer->Print('}\n');
+  printer->Print('#endregion\n\n');
+}
+    
+    void WriteEnumValueDocComment(io::Printer* printer,
+                              const EnumValueDescriptor* value) {
+  printer->Print('/**\n');
+  WriteDocCommentBody(printer, value);
+  printer->Print(
+    ' * <code>$def$</code>\n'
+    ' */\n',
+    'def', EscapeJavadoc(FirstLineOf(value->DebugString())));
+}
+    
+    #include <google/protobuf/compiler/java/java_generator_factory.h>
+    
+    string ClassNameResolver::GetClassName(const ServiceDescriptor* descriptor,
+                                       bool immutable) {
+  return GetClassFullName(ClassNameWithoutPackage(descriptor, immutable),
+                          descriptor->file(), immutable,
+                          MultipleJavaFiles(descriptor->file(), immutable));
+}
+    
+    /*
+ * Call a function that produces a return value for each element of
+ * `inputs' in parallel, and collect the results.
+ *
+ * Requires: the type returned from the function call must be
+ * DefaultConstructible, and either MoveAssignable or Assignable.
+ *
+ * If `func' throws an exception, the results of the output vector
+ * will contain some default-constructed values.
+ */
+template<class Func, class Items>
+auto map(Items&& inputs, Func func) -> std::vector<decltype(func(inputs[0]))> {
+  std::vector<decltype(func(inputs[0]))> retVec(inputs.size());
+  auto const retMem = &retVec[0];
+    }
+    
+      bool operator!=(SrcLoc o) const { return !(*this == o); }
+    
+    
+    {  if (base64) {
+    decoded = string_base64_decode(data, data_len, true);
+    if (decoded.isNull()) {
+      raise_warning('unable to decode base64 data');
+      return nullptr;
+    }
+  } else {
+    decoded = url_decode(data, data_len);
+  }
+  return req::make<MemFile>(decoded.data(), decoded.size());
+}
+    
+      /**
+   * Dump detailed information to return string.
+   */
+  virtual String debuggerDump() {
+    return String();
+  }
+    
+    
+    {}
+
+    
+    struct GlobStreamWrapper final : Stream::Wrapper {
+  req::ptr<File> open(const String& filename, const String& mode, int options,
+                      const req::ptr<StreamContext>& context) override;
+  req::ptr<Directory> opendir(const String& path) override;
+};
+    
+      explicit OutputFile(const String& filename);
+  virtual ~OutputFile();
+    
+    void record_perf_mem_event(PerfEvent kind, const perf_event_sample* sample);
+    
+    
+    {}
+
+    
+    void Schedule::add(PackRef pack) {
+  remove(pack->getName(), pack->getSource());
+  packs_.push_back(std::move(pack));
+}
+    
+    
+    {REGISTER_INTERNAL(DecoratorsConfigParserPlugin,
+                  'config_parser',
+                  kDecorationsName.c_str());
+}
+
+    
+    /**
+ * @brief A simple ConfigParserPlugin for an 'events' dictionary key.
+ */
+class EventsConfigParserPlugin : public ConfigParserPlugin {
+ public:
+  std::vector<std::string> keys() const override {
+    return {'events'};
+  }
     }
     
     
-    {}  // namespace
+    {REGISTER_INTERNAL(FeatureVectorsConfigParserPlugin,
+                  'config_parser',
+                  'feature_vectors');
+} // namespace osquery
+
     
-    namespace mate {
-template <>
-struct Converter<ui::IdleState> {
-  static v8::Local<v8::Value> ToV8(v8::Isolate* isolate,
-                                   const ui::IdleState& in) {
-    switch (in) {
-      case ui::IDLE_STATE_ACTIVE:
-        return mate::StringToV8(isolate, 'active');
-      case ui::IDLE_STATE_IDLE:
-        return mate::StringToV8(isolate, 'idle');
-      case ui::IDLE_STATE_LOCKED:
-        return mate::StringToV8(isolate, 'locked');
-      case ui::IDLE_STATE_UNKNOWN:
-      default:
-        return mate::StringToV8(isolate, 'unknown');
+    
+    {} // namespace osquery
+
+    
+    DECLARE_bool(disable_database);
+    
+    /// Config retrieval TLS endpoint (path) using TLS hostname.
+CLI_FLAG(string,
+         config_tls_endpoint,
+         '',
+         'TLS/HTTPS endpoint for config retrieval');
+    
+      const std::vector<std::shared_ptr<DHTNode>>& getNodes() const
+  {
+    return nodes_;
+  }
+    
+    #include <vector>
+#include <memory>
+    
+    #include <memory>
+    
+      virtual void executeTask() = 0;
+    
+    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
+                                           const std::string& ipaddr,
+                                           uint16_t port,
+                                           const unsigned char* secret) const
+{
+  unsigned char src[DHT_ID_LENGTH + COMPACT_LEN_IPV6 + SECRET_SIZE];
+  memset(src, 0, sizeof(src));
+  int compactlen = bittorrent::packcompact(src + DHT_ID_LENGTH, ipaddr, port);
+  if (compactlen == 0) {
+    throw DL_ABORT_EX(fmt('Token generation failed: ipaddr=%s, port=%u',
+                          ipaddr.c_str(), port));
+  }
+  memcpy(src, infoHash, DHT_ID_LENGTH);
+  memcpy(src + DHT_ID_LENGTH + COMPACT_LEN_IPV6, secret, SECRET_SIZE);
+  unsigned char md[20];
+  message_digest::digest(md, sizeof(md), MessageDigest::sha1().get(), src,
+                         sizeof(src));
+  return std::string(&md[0], &md[sizeof(md)]);
+}
+    
+    #include 'common.h'
+    
+      FunctionRef<int(int)> fcref = clambda;
+  EXPECT_EQ(1041, fcref(5));
+  EXPECT_EQ(1047, fcref(6));
+  EXPECT_EQ(1054, fcref(7));
+    
+    #include <folly/GLog.h>
+    
+    template <class UIntType, size_t w, size_t s, size_t r>
+struct StateSize<std::subtract_with_carry_engine<UIntType, w, s, r>> {
+  // [rand.eng.sub]: r * ceil(w / 32)
+  using type = std::integral_constant<size_t, r*((w + 31) / 32)>;
+};
+    
+      /**
+   * Returns a double in [min, max), if min == max, returns 0.
+   */
+  static double randDouble(double min, double max) {
+    return randDouble(min, max, ThreadLocalPRNG());
+  }
+    
+    //////////////////////////////////////////////////////////////////////
+    
+      // We don't use std::chrono_literals suffixes here since older
+  // gcc versions silently truncate the literals to 32-bits.
+  ts = to<struct timespec>(nanoseconds(987654321012LL));
+  EXPECT_EQ(987, ts.tv_sec);
+  EXPECT_EQ(654321012, ts.tv_nsec);
+    
+    #endif // FOLLY_HAVE_LIBZ
+
+    
+    /**
+ * This class creates core-local caches for a given shared_ptr, to
+ * mitigate contention when acquiring/releasing it.
+ *
+ * It has the same thread-safety guarantees as shared_ptr: it is safe
+ * to concurrently call get(), but reset()s must be synchronized with
+ * reads and other resets().
+ *
+ * @author Giuseppe Ottaviano <ott@fb.com>
+ */
+template <class T, size_t kNumSlots = 64>
+class CoreCachedSharedPtr {
+ public:
+  explicit CoreCachedSharedPtr(const std::shared_ptr<T>& p = nullptr) {
+    reset(p);
+  }
     }
+    
+    template <template <typename> class Atom = std::atomic>
+struct counted_ptr_base {
+ protected:
+  static intrusive_shared_count<Atom>* getRef(void* pt) {
+    char* p = (char*)pt;
+    p -= sizeof(intrusive_shared_count<Atom>);
+    return (intrusive_shared_count<Atom>*)p;
   }
 };
-}  // namespace mate
-    
-    // static
-v8::Local<v8::Value> Screen::Create(v8::Isolate* isolate) {
-  if (!Browser::Get()->is_ready()) {
-    isolate->ThrowException(v8::Exception::Error(mate::StringToV8(
-        isolate, 'Cannot require \'screen\' module before app is ready')));
-    return v8::Null(isolate);
-  }
-    }
-    
-    #include 'atom/common/api/api_messages.h'
-#include 'atom/common/native_mate_converters/string16_converter.h'
-#include 'atom/common/native_mate_converters/value_converter.h'
-#include 'content/public/browser/render_frame_host.h'
-#include 'content/public/browser/web_contents.h'
-#include 'native_mate/object_template_builder.h'
-    
-    namespace content {
-class WebContents;
-}
-    
-    void AtomQuotaPermissionContext::RequestQuotaPermission(
-    const content::StorageQuotaParams& params,
-    int render_process_id,
-    const PermissionCallback& callback) {
-  callback.Run(response::QUOTA_PERMISSION_RESPONSE_ALLOW);
-}
-    
-        size_t i = 0;
-    f32* dsta = internal::getRowPtr(dstBase, dstStride, 0);
-    for (; i < size.height-1; i+=2)
-    {
-        //vertical convolution
-        ptrdiff_t idx_rm1 = internal::borderInterpolate(i - 1, size.height, borderType, borderMargin.top, borderMargin.bottom);
-        ptrdiff_t idx_rp2 = internal::borderInterpolate(i + 2, size.height, borderType, borderMargin.top, borderMargin.bottom);
-    }
-    
-                // calculate values for plain CPU part below if needed
-            if (x + 8 >= bwidth)
-            {
-                ptrdiff_t x3 = x == width ? width - 1 : x;
-                ptrdiff_t x4 = border == BORDER_MODE_CONSTANT ? x3 - 1 : std::max<ptrdiff_t>(x3 - 1, 0);
-    }
-    
-    
-    {    return 0;
-#endif
-}
-    
-                if (mask[0])
-                process(src, j, j + 8, i,
-                        minVal, minLocPtr, minLocCount, minLocCapacity,
-                        maxVal, maxLocPtr, maxLocCount, maxLocCapacity);
-            if (mask[1])
-                process(src, j + 8, j + 16, i,
-                        minVal, minLocPtr, minLocCount, minLocCapacity,
-                        maxVal, maxLocPtr, maxLocCount, maxLocCapacity);
-        }
-        for ( ; j < roiw8; j += 8)
-        {
-            uint8x8_t v_src = vld1_u8(src + j);
-    
-    #ifndef TESSERACT_ARCH_DOTPRODUCTSSE_H_
-#define TESSERACT_ARCH_DOTPRODUCTSSE_H_
-    
-    #ifndef DOCQUAL_H
-#define DOCQUAL_H
-    
-    
-    {}  // namespace tesseract.
-
-    
-    
-    {
-}  // namespace tesseract
-
-    
-      auto axis = helper.GetSingleArgument<int32_t>('axis', 1);
-  const auto canonical_axis = canonical_axis_index_(axis, in[0].dims().size());
-  auto axis_w = helper.GetSingleArgument<int32_t>('axis_w', 1);
-  const int canonical_axis_w =
-      canonical_axis_index_(axis_w, in[1].dims().size());
-  const int N = pretransposed_weight
-      ? size_from_dim_(canonical_axis_w, GetDimsVector(in[1]))
-      : size_to_dim_(canonical_axis_w, GetDimsVector(in[1]));
-    
-    <summary> <b>Example</b> </summary>
-    
-    Contrast Example 2 with Example 1. For each data point per feature, the values
-are sorted by the corresponding KEY.
-)DOC')
-    .Input(0, 'DATA', 'Tensor of rank 1.')
-    .Input(
-        1,
-        'RANGES',
-        'Tensor of int32/int64 ranges, of dims (N, M, 2). '
-        'Where N is number of examples and M is a size of each example. '
-        'Last dimention represents a range in the format (start, lengths)')
-    .Input(2, 'KEY', 'Tensor of rank 1 and type int64.')
-    .Output(0, 'OUTPUT', '1-D tensor of size sum of range lengths')
-    .Arg('lengths', 'Expected lengths for ranges')
-    .TensorInferenceFunction([](const OperatorDef& def,
-                                const vector<TensorShape>& in) {
-      ArgumentHelper helper(def);
-      auto lengths = helper.GetRepeatedArgument<int>('lengths');
-      CAFFE_ENFORCE_EQ(in[0].dims_size(), 1, 'DATA should be 1-D tensor.');
-      CAFFE_ENFORCE_EQ(in[1].dims_size(), 3, 'RANGES should be 3-D tensor.');
-      if (in.size() > 2) {
-        CAFFE_ENFORCE_EQ(in[2].dims_size(), 1, 'KEY should be 1-D tensor.');
-      }
-      CAFFE_ENFORCE_GT(lengths.size(), 0, 'lengths should be non-empty.');
-      std::vector<TensorShape> out(lengths.size());
-      for (int i = 0; i < lengths.size(); ++i) {
-        out[i].set_data_type(in[0].data_type());
-        out[i].add_dims(in[1].dims(0));
-        out[i].add_dims(lengths[i]);
-      }
-      return out;
-    });
-    
-    
-    {          return out;
-        });
-OPERATOR_SCHEMA(Float16ConstantFill)
-    .NumInputs(0)
-    .NumOutputs(1)
-    .TensorInferenceFunction(Float16FillerTensorInference)
-    .Arg('value', 'The value for the elements of the output tensor.')
-    .Arg('shape', 'The shape of the output tensor.')
-    .Output(
-        0,
-        'output',
-        'Output tensor of constant values specified by 'value'');
-    
-    	// Check for machine-specific then user config source file.
-	PathCombine(cpuCfgPath, userConfigDirPath, L'ConEmu-%COMPUTERNAME%.xml');
-	ExpandEnvironmentStrings(cpuCfgPath, cpuCfgPath, sizeof(cpuCfgPath) / sizeof(cpuCfgPath[0]));
-    
-    #ifndef COMPLEXITY_H_
-#define COMPLEXITY_H_
-    
-    class HermesCanClient : public CanClient {
- public:
-  /**
-   * @brief Initialize the BCAN client by specified CAN card parameters.
-   * @param parameter CAN card parameters to initialize the CAN client.
-   */
-  // explicit HermesCanClient(const CANCardParameter &parameter);
-    }
-    
-      std::string can_name('can' + std::to_string(port_));
-  std::strncpy(ifr.ifr_name, can_name.c_str(), IFNAMSIZ);
-  if (ioctl(dev_handler_, SIOCGIFINDEX, &ifr) < 0) {
-    AERROR << 'ioctl error';
-    return ErrorCode::CAN_CLIENT_ERROR_BASE;
-  }
-    
-    #include <string>
-#include <vector>
-    
-    TEST(ByteTest, SetValue) {
-  unsigned char byte_value = 0x1A;
-  Byte value(&byte_value);
-  value.set_value(0x06, 3, 3);
-  EXPECT_EQ(0x32, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x06, 0, 8);
-  EXPECT_EQ(0x06, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x06, 0, 10);
-  EXPECT_EQ(0x06, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x06, 1, 7);
-  EXPECT_EQ(0x0C, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x07, 1, 1);
-  EXPECT_EQ(0x1A, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x07, -1, 1);
-  EXPECT_EQ(0x1A, value.get_byte());
-}
-    
-    
-    {
-    {
-    {}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
-    
-    using apollo::common::adapter::AdapterConfig;
-using apollo::common::adapter::AdapterManager;
-using apollo::common::monitor::MonitorMessageItem;
-using apollo::common::Status;
-using apollo::common::ErrorCode;
-using apollo::common::time::Clock;
-using apollo::drivers::canbus::CanClientFactory;
-using apollo::drivers::canbus::CanClient;
-using apollo::drivers::canbus::CanReceiver;
-using apollo::drivers::canbus::SensorCanbusConf;
