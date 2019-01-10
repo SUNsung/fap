@@ -1,159 +1,325 @@
 
         
-            assert(static_cast<uint32_t>(rt) < 32);
-    assert(static_cast<uint32_t>(ra) < 32);
-    assert(static_cast<uint32_t>(rb) < 32);
+        namespace llvm {
+template<> struct DenseMapInfo<DefaultCacheKey> {
+  static inline DefaultCacheKey getEmptyKey() {
+    return { DenseMapInfo<void*>::getEmptyKey(), nullptr };
+  }
+  static inline DefaultCacheKey getTombstoneKey() {
+    return { DenseMapInfo<void*>::getTombstoneKey(), nullptr };
+  }
+  static unsigned getHashValue(const DefaultCacheKey &Val) {
+    uintptr_t Hash = Val.CBs->keyHashCB(Val.Key, nullptr);
+    return DenseMapInfo<uintptr_t>::getHashValue(Hash);
+  }
+  static bool isEqual(const DefaultCacheKey &LHS, const DefaultCacheKey &RHS) {
+    if (LHS.Key == RHS.Key)
+      return true;
+    if (LHS.Key == DenseMapInfo<void*>::getEmptyKey() ||
+        LHS.Key == DenseMapInfo<void*>::getTombstoneKey() ||
+        RHS.Key == DenseMapInfo<void*>::getEmptyKey() ||
+        RHS.Key == DenseMapInfo<void*>::getTombstoneKey())
+      return false;
+    return LHS.CBs->keyIsEqualCB(LHS.Key, RHS.Key, nullptr);
+  }
+};
+} // namespace llvm
     
-    #endif // HPHP_DATA_STREAM_WRAPPER_H
+      bool anyMatches = false;
+  auto matched = [&] {
+    if (anyMatches) return;
+    }
+    
+    using namespace swift;
+using namespace importer;
+    
+    
+    {  bool isTypedef() const {
+    assert(isValid());
+    return !Decl.isNull() && Decl.is<const clang::TypedefNameDecl *>();
+  }
+  const clang::TypedefNameDecl *getTypedef() const {
+    assert(isTypedef());
+    return Decl.get<const clang::TypedefNameDecl *>();
+  }
+};
+    
+    
+    {
+    {  } else {
+    assert(clangDiag.hasSourceManager());
+    auto clangCI = ImporterImpl.getClangInstance();
+    ClangDiagRenderer renderer(clangCI->getLangOpts(),
+                               &clangCI->getDiagnosticOpts(), emitDiag);
+    clang::FullSourceLoc clangDiagLoc(clangDiag.getLocation(),
+                                      clangDiag.getSourceManager());
+    renderer.emitDiagnostic(clangDiagLoc, clangDiagLevel, message,
+                            clangDiag.getRanges(), clangDiag.getFixItHints(),
+                            &clangDiag);
+  }
+}
 
     
-      typedef std::pair<const char*, std::string> InfoEntry;
-  typedef std::vector<InfoEntry> InfoVec;
+      bool isGetter() const {
+    return accessorKind == IAMAccessorKind::Getter;
+  }
     
-    template <typename F>
-void find(const std::string &root, const std::string& path, bool php,
-          const F& callback) {
-  auto spath = path.empty() || !isDirSeparator(path[0]) ?
-    path : path.substr(1);
-    }
+    ]]
     
-    
-    {  // if the function was called via FCallBuiltin, we'll get a bogus name as
-  // the stack frame will be wrong
-  ActRec* ar = g_context->getStackFrame();
-  const char* fn = (ar != nullptr)
-    ? ar->func()->name()->data()
-    : 'OPTIMIZED_BUILTIN';
-  raise_warning('%s(%s): failed to open stream: '
-                'wrapper does not support stream open',
-                fn, filename.data());
-  return nullptr;
+    // Used to print a non-container, non-pointer value when the user
+// doesn't define PrintTo() for it.
+template <typename T>
+void DefaultPrintTo(IsNotContainer /* dummy */,
+                    false_type /* is not a pointer */,
+                    const T& value, ::std::ostream* os) {
+  ::testing_internal::DefaultPrintNonContainerTo(value, os);
 }
     
-    template<typename AHM>
-void checkAHMSubMaps(const AHM& map, folly::StringPiece mapName,
-                     std::atomic<bool>& done) {
-  if (LIKELY(map.numSubMaps() == 1) ||
-      done.load(std::memory_order_relaxed) ||
-      done.exchange(true, std::memory_order_relaxed)) {
-    return;
-  }
+    namespace gtest_internal {
     }
     
-    using namespace std;
+    // A sample program demonstrating using Google C++ testing framework.
+//
+// Author: wan@google.com (Zhanyong Wan)
     
-        virtual void /*ComputationNodeBase::*/ Validate(bool isFinalValidationPass) override
+        template <typename ElementType>
+    /*static*/ ValuePtr Value::CreateBatch(const NDShape& sampleShape, const std::vector<ElementType>& batchData, const DeviceDescriptor& device, bool readOnly /*= false */)
+    {
+        auto shapeSize = sampleShape.TotalSize();
+        if (batchData.size() % shapeSize != 0)
+            InvalidArgument('The number of elements (%zu) in the vector containing batch data must be a multiple of the size (%zu) of the sample shape '%S'.',
+                            batchData.size(), shapeSize, sampleShape.AsString().c_str());
+    }
+    
+            CNTK_API void SetValueInitialization(const ParameterInitializer& initializationConfig, const DeviceDescriptor& device);
+    
+    class CrossProcessMutex
+{
+    // no-copying
+    CrossProcessMutex(const CrossProcessMutex&);
+    void operator=(const CrossProcessMutex&);
+    }
+    
+    public:
+    ScopeTimer(size_t verbosity, const std::string& message)
+        : m_verbosity(verbosity), m_message(message)
+    {
+        if (m_verbosity > 2)
+        {
+            m_aggregateTimer.Start();
+        }
+    }
+    
+        virtual void /*ComputationNode::*/ ForwardProp(const FrameRange& fr) override
+    {
+        auto sliceInputValue  = InputRef(0).ValueFor(fr);
+        auto sliceOutputValue =           ValueFor(fr); // row vector
+    }
+    
+        // need to feed in pseudo label data, which tells the decoder what is the beginning
+    // and ending output symbol. these symbols will constrain the search space
+    virtual void /*ComputationNodeBase::*/ Validate(bool isFinalValidationPass) override
     {
         Base::Validate(isFinalValidationPass);
         InferMBLayoutFromInputsForStandardCase(isFinalValidationPass);
     }
     
-    private:
-    shared_ptr<Matrix<ElemType>> m_maxIndexes0, m_maxIndexes1;
-    shared_ptr<Matrix<ElemType>> m_maxValues;
-    bool m_squashInputs;
-    float m_subPen;
-    float m_delPen;
-    float m_insPen;
-    std::vector<size_t> m_tokensToIgnore;
+    #include 'unicode/utypes.h'
     
-    protected:
-    Node    *_originalTarget;
-    /** 
-     * The 'target'.
-     * The target will be set with the 'startWithTarget' method.
-     * When the 'stop' method is called, target will be set to nil.
-     * The target is 'assigned', it is not 'retained'.
-     */
-    Node    *_target;
-    /** The action tag. An identifier of the action. */
-    int     _tag;
-    /** The action flag field. To categorize action into certain groups.*/
-    unsigned int _flags;
     
-        Mat4 mv = Mat4::IDENTITY;
-    
-        //
-    // Overrides
-    //
-    virtual ProgressTo* clone() const override;
-    virtual ProgressTo* reverse() const override;
-    virtual void startWithTarget(Node *target) override;
-    virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    ProgressTo() {}
-    virtual ~ProgressTo() {}
-    
-    The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-    
-        for (const auto& anim : animations)
-    {
-        std::string name = anim.first;
-        ValueMap& animationDict = const_cast<ValueMap&>(anim.second.asValueMap());
+    {        if(equalPrefixLength > 0) {
+            if((leftUnit >= 0 && data->isUnsafeBackward(leftUnit, numeric)) ||
+                    (rightUnit >= 0 && data->isUnsafeBackward(rightUnit, numeric))) {
+                // Identical prefix: Back up to the start of a contraction or reordering sequence.
+                do {
+                    --equalPrefixLength;
+                    leftUnit = left.previous(&left);
+                    right.previous(&right);
+                } while(equalPrefixLength > 0 && data->isUnsafeBackward(leftUnit, numeric));
+            }
+            // See the notes in the UTF-16 version.
+        }
     }
     
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+    #ifndef __SHARED_CALENDAR_H__
+#define __SHARED_CALENDAR_H__
+    
+    //eof
+
+    
+    UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CollationKey)
+    
+    #include 'unicode/utypes.h'
     
     
-    {    /**
-     * Create an polygoninfo from the data of another Polygoninfo
-     * @param other     another PolygonInfo to be copied
-     * @return duplicate of the other PolygonInfo
-     */
-    PolygonInfo(const PolygonInfo& other);
-    //  end of creators group
-    /// @}
-    
-    /**
-     * Copy the member of the other PolygonInfo
-     * @param other     another PolygonInfo to be copied
-     */
-    PolygonInfo& operator= (const PolygonInfo &other);
-    ~PolygonInfo();
-    
-    /**
-     * set the data to be a pointer to a quad
-     * the member verts will not be released when this PolygonInfo destructs
-     * as the verts memory are managed by other objects
-     * @param quad  a pointer to the V3F_C4B_T2F_Quad object
-     */
-    void setQuad(V3F_C4B_T2F_Quad *quad);
-    
-    void BENCHFUN(insertFront)(int iters, int initialSize) {
-  BenchmarkSuspender braces;
-  auto const obj = randomObject<VECTOR::value_type>();
-  VECTOR v(initialSize, obj);
-  braces.dismissing([&]() {
-    FOR_EACH_RANGE (i, 0, iters) { v.insert(v.begin(), obj); }
-  });
+    {    return outLen;
 }
     
-    void compareBenchmarkResults(const std::string& base, const std::string& test) {
-  printResultComparison(resultsFromFile(base), resultsFromFile(test));
+    static void Dump(benchmark::State& state, const char* filename, int indent)
+{
+    std::ifstream f(filename);
+    std::string str((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
+    json j = json::parse(str);
+    }
+    
+    #include 'colorprint.h'
+    
+      // The flag must start with '--'.
+  const std::string flag_str = std::string('--') + std::string(flag);
+  const size_t flag_len = flag_str.length();
+  if (strncmp(str, flag_str.c_str(), flag_len) != 0) return nullptr;
+    
+    // Function to return an string for the calculated complexity
+std::string GetBigOString(BigO complexity);
+    
+    namespace benchmark {
+namespace internal {
+    }
+    }
+    
+    namespace benchmark {
+// NOTE: only i386 and x86_64 have been well tested.
+// PPC, sparc, alpha, and ia64 are based on
+//    http://peter.kuscsik.com/wordpress/?p=14
+// with modifications by m3b.  See also
+//    https://setisvn.ssl.berkeley.edu/svn/lib/fftw-3.0.1/kernel/cycle.h
+namespace cycleclock {
+// This should return the number of cycles since power-on.  Thread-safe.
+inline BENCHMARK_ALWAYS_INLINE int64_t Now() {
+#if defined(BENCHMARK_OS_MACOSX)
+  // this goes at the top because we need ALL Macs, regardless of
+  // architecture, to return the number of 'mach time units' that
+  // have passed since startup.  See sysinfo.cc where
+  // InitializeSystemInfo() sets the supposed cpu clock frequency of
+  // macs to the number of mach time units per second, not actual
+  // CPU clock frequency (which can change in the face of CPU
+  // frequency scaling).  Also note that when the Mac sleeps, this
+  // counter pauses; it does not continue counting, nor does it
+  // reset to zero.
+  return mach_absolute_time();
+#elif defined(BENCHMARK_OS_EMSCRIPTEN)
+  // this goes above x86-specific code because old versions of Emscripten
+  // define __x86_64__, although they have nothing to do with it.
+  return static_cast<int64_t>(emscripten_get_now() * 1e+6);
+#elif defined(__i386__)
+  int64_t ret;
+  __asm__ volatile('rdtsc' : '=A'(ret));
+  return ret;
+#elif defined(__x86_64__) || defined(__amd64__)
+  uint64_t low, high;
+  __asm__ volatile('rdtsc' : '=a'(low), '=d'(high));
+  return (high << 32) | low;
+#elif defined(__powerpc__) || defined(__ppc__)
+  // This returns a time-base, which is not always precisely a cycle-count.
+  int64_t tbl, tbu0, tbu1;
+  asm('mftbu %0' : '=r'(tbu0));
+  asm('mftb  %0' : '=r'(tbl));
+  asm('mftbu %0' : '=r'(tbu1));
+  tbl &= -static_cast<int64_t>(tbu0 == tbu1);
+  // high 32 bits in tbu1; low 32 bits in tbl  (tbu0 is garbage)
+  return (tbu1 << 32) | tbl;
+#elif defined(__sparc__)
+  int64_t tick;
+  asm('.byte 0x83, 0x41, 0x00, 0x00');
+  asm('mov   %%g1, %0' : '=r'(tick));
+  return tick;
+#elif defined(__ia64__)
+  int64_t itc;
+  asm('mov %0 = ar.itc' : '=r'(itc));
+  return itc;
+#elif defined(COMPILER_MSVC) && defined(_M_IX86)
+  // Older MSVC compilers (like 7.x) don't seem to support the
+  // __rdtsc intrinsic properly, so I prefer to use _asm instead
+  // when I know it will work.  Otherwise, I'll use __rdtsc and hope
+  // the code is being compiled with a non-ancient compiler.
+  _asm rdtsc
+#elif defined(COMPILER_MSVC)
+  return __rdtsc();
+#elif defined(BENCHMARK_OS_NACL)
+  // Native Client validator on x86/x86-64 allows RDTSC instructions,
+  // and this case is handled above. Native Client validator on ARM
+  // rejects MRC instructions (used in the ARM-specific sequence below),
+  // so we handle it here. Portable Native Client compiles to
+  // architecture-agnostic bytecode, which doesn't provide any
+  // cycle counter access mnemonics.
+    }
+    }
+    }
+    
+    inline bool Regex::Init(const std::string& spec, std::string* error) {
+#ifdef BENCHMARK_HAS_NO_EXCEPTIONS
+  ((void)error); // suppress unused warning
+#else
+  try {
+#endif
+    re_ = std::regex(spec, std::regex_constants::extended);
+    init_ = true;
+#ifndef BENCHMARK_HAS_NO_EXCEPTIONS
+  } catch (const std::regex_error& e) {
+    if (error) {
+      *error = e.what();
+    }
+  }
+#endif
+  return init_;
 }
     
-    // Return the state size needed by RNG, expressed as a number of uint32_t
-// integers. Specialized for all templates specified in the C++11 standard.
-// For some (mersenne_twister_engine), this is exported as a state_size static
-// data member; for others, the standard shows formulas.
+    TEST(MessageManagerTest, GetMutableProtocolDataById) {
+  uint8_t mock_data = 1;
+  MockMessageManager manager;
+  manager.Parse(MockProtocolData::ID, &mock_data, 8);
+  manager.ResetSendMessages();
+  EXPECT_TRUE(manager.GetMutableProtocolDataById(MockProtocolData::ID) !=
+              nullptr);
+    }
     
-      std::shared_ptr<T> get() const {
-    return slots_[AccessSpreader<>::current(kNumSlots)];
-  }
+    #include 'gtest/gtest.h'
     
-    template <template <typename> class Atom = std::atomic>
-struct counted_ptr_base {
- protected:
-  static intrusive_shared_count<Atom>* getRef(void* pt) {
-    char* p = (char*)pt;
-    p -= sizeof(intrusive_shared_count<Atom>);
-    return (intrusive_shared_count<Atom>*)p;
-  }
-};
+      Byte t1(bytes + 3);
+  uint32_t t = t1.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
+    
+    #include 'glog/logging.h'
+    
+    #include <string>
+    
+    
+    {  MatrixXd bd_golden(20, 1);
+  bd_golden << -100, 1, -100, 1, -100, 1, -100, 1, -100, 1, -100, 1, -100, 1,
+      -100, 1, -100, 1, -100, 1;
+  EXPECT_EQ(bd, bd_golden);
+}
+    
+      const LaneGraph &lane_graph =
+      ObstacleClusters::GetLaneGraph(start_s, length, lane);
+  EXPECT_EQ(1, lane_graph.lane_sequence_size());
+  EXPECT_EQ(3, lane_graph.lane_sequence(0).lane_segment_size());
+  EXPECT_EQ('l9', lane_graph.lane_sequence(0).lane_segment(0).lane_id());
+  EXPECT_EQ('l18', lane_graph.lane_sequence(0).lane_segment(1).lane_id());
+  EXPECT_EQ('l21', lane_graph.lane_sequence(0).lane_segment(2).lane_id());
+    
+    
+    {  // Report Messages
+  AddRecvProtocolData<Accelrpt68, true>();
+  AddRecvProtocolData<Brakemotorrpt170, true>();
+  AddRecvProtocolData<Brakemotorrpt271, true>();
+  AddRecvProtocolData<Brakemotorrpt372, true>();
+  AddRecvProtocolData<Brakerpt6c, true>();
+  AddRecvProtocolData<Datetimerpt83, true>();
+  AddRecvProtocolData<Globalrpt6a, true>();
+  AddRecvProtocolData<Headlightrpt77, true>();
+  AddRecvProtocolData<Hornrpt79, true>();
+  AddRecvProtocolData<Latlonheadingrpt82, true>();
+  AddRecvProtocolData<Parkingbrakestatusrpt80, true>();
+  AddRecvProtocolData<Shiftrpt66, true>();
+  AddRecvProtocolData<Steeringmotorrpt173, true>();
+  AddRecvProtocolData<Steeringmotorrpt274, true>();
+  AddRecvProtocolData<Steeringmotorrpt375, true>();
+  AddRecvProtocolData<Steeringrpt16e, true>();
+  AddRecvProtocolData<Turnrpt64, true>();
+  AddRecvProtocolData<Vehiclespeedrpt6f, true>();
+  AddRecvProtocolData<Wheelspeedrpt7a, true>();
+  AddRecvProtocolData<Wiperrpt91, true>();
+  AddRecvProtocolData<Yawraterpt81, true>();
+}
