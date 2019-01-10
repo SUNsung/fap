@@ -1,156 +1,113 @@
 
         
-                  lfs_objects.each do |object|
-            yield object
-          end
-        rescue StandardError => e
-          Rails.logger.error('The Lfs import process failed. #{e.message}')
-        end
-      end
-    end
-  end
+        def pre_pr(url)
+  url[-1, 1] == FORWARD_SLASH ? url : File.dirname(url)
 end
-
     
-    module Gitlab
-  module GithubImport
-    # IssuableFinder can be used for caching and retrieving database IDs for
-    # issuable objects such as issues and pull requests. By caching these IDs we
-    # remove the need for running a lot of database queries when importing
-    # GitHub projects.
-    class IssuableFinder
-      attr_reader :project, :object
+    require 'benchmark/ips'
+require 'pathutil'
     
-            def truncated_title
-          title.truncate(255)
-        end
-    
-        # If a procedure was passed, mount the resource with it.
-    if (opts['Proc'])
-      mount(name, Handler::Proc, false, opts['Proc'], opts['VirtualDirectory'])
-    else
-      raise ArgumentError, 'You must specify a procedure.'
-    end
-  end
-    
-    
-end
-end
-end
-
-    
-              # Decodes the Rex::Proto::Kerberos::Model::KdcResponse from an input
           #
-          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [self] if decoding succeeds
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode(input)
-            case input
-            when String
-              decode_string(input)
-            when OpenSSL::ASN1::ASN1Data
-              decode_asn1(input)
-            else
-              raise ::RuntimeError, 'Failed to decode KdcResponse, invalid input'
-            end
     
-    <style type='text/css' media='screen'>
-  *                   {margin: 0; padding: 0; border: 0; outline: 0;}
-  div.clear           {clear: both;}
-  body                {background: #EEEEEE; margin: 0; padding: 0;
-                       font-family: 'Lucida Grande', 'Lucida Sans Unicode',
-                       'Garuda';}
-  code                {font-family: 'Lucida Console', monospace;
-                       font-size: 12px;}
-  li                  {height: 18px;}
-  ul                  {list-style: none; margin: 0; padding: 0;}
-  ol:hover            {cursor: pointer;}
-  ol li               {white-space: pre;}
-  #explanation        {font-size: 12px; color: #666666;
-                       margin: 20px 0 0 100px;}
-/* WRAP */
-  #wrap               {width: 1000px; background: #FFFFFF; margin: 0 auto;
-                       padding: 30px 50px 20px 50px;
-                       border-left: 1px solid #DDDDDD;
-                       border-right: 1px solid #DDDDDD;}
-/* HEADER */
-  #header             {margin: 0 auto 25px auto;}
-  #header img         {float: left;}
-  #header #summary    {float: left; margin: 12px 0 0 20px; width:660px;
-                       font-family: 'Lucida Grande', 'Lucida Sans Unicode';}
-  h1                  {margin: 0; font-size: 36px; color: #981919;}
-  h2                  {margin: 0; font-size: 22px; color: #333333;}
-  #header ul          {margin: 0; font-size: 12px; color: #666666;}
-  #header ul li strong{color: #444444;}
-  #header ul li       {display: inline; padding: 0 10px;}
-  #header ul li.first {padding-left: 0;}
-  #header ul li.last  {border: 0; padding-right: 0;}
-/* BODY */
-  #backtrace,
-  #get,
-  #post,
-  #cookies,
-  #rack               {width: 980px; margin: 0 auto 10px auto;}
-  p#nav               {float: right; font-size: 14px;}
-/* BACKTRACE */
-  a#expando           {float: left; padding-left: 5px; color: #666666;
-                      font-size: 14px; text-decoration: none; cursor: pointer;}
-  a#expando:hover     {text-decoration: underline;}
-  h3                  {float: left; width: 100px; margin-bottom: 10px;
-                       color: #981919; font-size: 14px; font-weight: bold;}
-  #nav a              {color: #666666; text-decoration: none; padding: 0 5px;}
-  #backtrace li.frame-info {background: #f7f7f7; padding-left: 10px;
-                           font-size: 12px; color: #333333;}
-  #backtrace ul       {list-style-position: outside; border: 1px solid #E9E9E9;
-                       border-bottom: 0;}
-  #backtrace ol       {width: 920px; margin-left: 50px;
-                       font: 10px 'Lucida Console', monospace; color: #666666;}
-  #backtrace ol li    {border: 0; border-left: 1px solid #E9E9E9;
-                       padding: 2px 0;}
-  #backtrace ol code  {font-size: 10px; color: #555555; padding-left: 5px;}
-  #backtrace-ul li    {border-bottom: 1px solid #E9E9E9; height: auto;
-                       padding: 3px 0;}
-  #backtrace-ul .code {padding: 6px 0 4px 0;}
-  #backtrace.condensed .system,
-  #backtrace.condensed .framework {display:none;}
-/* REQUEST DATA */
-  p.no-data           {padding-top: 2px; font-size: 12px; color: #666666;}
-  table.req           {width: 980px; text-align: left; font-size: 12px;
-                       color: #666666; padding: 0; border-spacing: 0;
-                       border: 1px solid #EEEEEE; border-bottom: 0;
-                       border-left: 0;
-                       clear:both}
-  table.req tr th     {padding: 2px 10px; font-weight: bold;
-                       background: #F7F7F7; border-bottom: 1px solid #EEEEEE;
-                       border-left: 1px solid #EEEEEE;}
-  table.req tr td     {padding: 2px 20px 2px 10px;
-                       border-bottom: 1px solid #EEEEEE;
-                       border-left: 1px solid #EEEEEE;}
-/* HIDE PRE/POST CODE AT START */
-  .pre-context,
-  .post-context       {display: none;}
+              new_theme_name = args.join('_')
+          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
+          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
     
-      task :all => [:readmes, :index]
+            # For a description of the protocol see
+        # http://feedback.livereload.com/knowledgebase/articles/86174-livereload-protocol
+        def reload(pages)
+          pages.each do |p|
+            json_message = JSON.dump(
+              :command => 'reload',
+              :path    => p.url,
+              :liveCSS => true
+            )
+    
+      def std?
+    @settings.include? :std
+  end
+    
+      def dump_verbose_config(f = $stdout)
+    f.puts 'HOMEBREW_VERSION: #{HOMEBREW_VERSION}'
+    f.puts 'ORIGIN: #{origin}'
+    f.puts 'HEAD: #{head}'
+    f.puts 'Last commit: #{last_commit}'
+    if CoreTap.instance.installed?
+      f.puts 'Core tap ORIGIN: #{core_tap_origin}'
+      f.puts 'Core tap HEAD: #{core_tap_head}'
+      f.puts 'Core tap last commit: #{core_tap_last_commit}'
+    else
+      f.puts 'Core tap: N/A'
+    end
+    f.puts 'HOMEBREW_PREFIX: #{HOMEBREW_PREFIX}'
+    f.puts 'HOMEBREW_REPOSITORY: #{HOMEBREW_REPOSITORY}'
+    f.puts 'HOMEBREW_CELLAR: #{HOMEBREW_CELLAR}'
+    f.puts 'HOMEBREW_BOTTLE_DOMAIN: #{BottleSpecification::DEFAULT_DOMAIN}'
+    f.puts hardware
+    f.puts 'OS X: #{MacOS.full_version}-#{kernel}'
+    f.puts 'Xcode: #{xcode ? xcode : 'N/A'}'
+    f.puts 'CLT: #{clt ? clt : 'N/A'}'
+    f.puts 'GCC-4.0: build #{gcc_40}' if gcc_40
+    f.puts 'GCC-4.2: build #{gcc_42}' if gcc_42
+    f.puts 'LLVM-GCC: build #{llvm}'  if llvm
+    f.puts 'Clang: #{clang ? '#{clang} build #{clang_build}' : 'N/A'}'
+    f.puts 'MacPorts/Fink: #{macports_or_fink}' if macports_or_fink
+    f.puts 'X11: #{describe_x11}'
+    f.puts 'System Ruby: #{describe_system_ruby}'
+    f.puts 'Perl: #{describe_perl}'
+    f.puts 'Python: #{describe_python}'
+    f.puts 'Ruby: #{describe_ruby}'
+    f.puts 'Java: #{describe_java}'
+  end
 end
+
     
-          def masked_token?(token)
-        token.length == TOKEN_LENGTH * 2
-      end
+      def cxxstdlib_check(check_type)
+    self.class.cxxstdlib_check check_type
+  end
     
-        # Creates an instance of CategoryIndex for each category page, renders it, and
-    # writes the output to a file.
-    #
-    #  +category_dir+ is the String path to the category folder.
-    #  +category+     is the category currently being processed.
-    def write_category_index(category_dir, category)
-      index = CategoryIndex.new(self, self.source, category_dir, category)
-      index.render(self.layouts, site_payload)
-      index.write(self.dest)
-      # Record the fact that this page has been added, otherwise Site::cleanup will remove it.
-      self.pages << index
+        def entries_as_json
+      @entries.sort! { |a, b| sort_fn(a.name, b.name) }.map(&:as_json)
+    end
     
-    module Jekyll
+        def pipeline_context(response)
+      options.merge url: response.url
+    end
     
-          if File.symlink?(code_path)
-        return 'Code directory '#{code_path}' cannot be a symlink'
-      end
+        def self.subscribe_to(notifier)
+      attach_to(namespace, new, notifier)
+    end
+    
+            css('pre').each do |node|
+          node.content = node.content.strip
+    
+            subtitle = at_css('.hero-subtitle').try(:content)
+        breadcrumbs = css('.breadcrumbs li').map(&:content)[2..-2]
+    
+            css('> .section', '#preamble', 'a[href*='dict.html']', 'code var', 'code strong').each do |node|
+          node.before(node.children).remove
+        end
+    
+        @statuses = @account.statuses.permitted_for(@account, signed_request_account)
+    @statuses = params[:min_id].present? ? @statuses.paginate_by_min_id(LIMIT, params[:min_id]).reverse : @statuses.paginate_by_max_id(LIMIT, params[:max_id])
+    @statuses = cache_collection(@statuses, Status)
+  end
+    
+        def resource_params
+      params.require(:custom_emoji).permit(:shortcode, :image, :visible_in_picker)
+    end
+    
+      def verify_payload?
+    payload.present? && VerifySalmonService.new.call(payload)
+  end
+    
+        data = {
+      alerts: {
+        follow: alerts_enabled,
+        favourite: alerts_enabled,
+        reblog: alerts_enabled,
+        mention: alerts_enabled,
+      },
+    }
+    
+      before_action :require_user!
