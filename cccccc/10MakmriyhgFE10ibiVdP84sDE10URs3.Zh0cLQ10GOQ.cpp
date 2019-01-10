@@ -1,484 +1,302 @@
 
         
-        bool IsUrlArg(const base::CommandLine::CharType* arg) {
-  // the first character must be a letter for this to be a URL
-  auto c = *arg;
-  if (('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z')) {
-    for (auto* p = arg + 1; *p; ++p) {
-      c = *p;
-    }
-    }
+        CacheImpl::ImplTy CacheImpl::create(StringRef Name, const CallBacks &CBs) {
+  llvm::SmallString<32> NameBuf(Name);
+  cache_attributes_t Attrs = {
+    CACHE_ATTRIBUTES_VERSION_2,
+    CBs.keyHashCB,
+    CBs.keyIsEqualCB,
+    nullptr,
+    CBs.keyDestroyCB,
+    CBs.valueReleaseCB,
+    nullptr,
+    nullptr,
+    CBs.UserData,
+    CBs.valueRetainCB,
+  };
     }
     
-    bool CheckCommandLineArguments(int argc, base::CommandLine::CharType** argv);
+    #ifndef PREPOSITION
+#  define PREPOSITION(Word)
+#endif
     
     
-    {  mate::Dictionary dict(isolate, exports);
-  dict.Set('net', Net::Create(isolate));
-  dict.Set('Net', Net::GetConstructor(isolate)->GetFunction());
+    {  return GraphemeClusterBreakProperty::Other;
 }
     
+        void emitCodeContext(clang::FullSourceLoc Loc,
+                         clang::DiagnosticsEngine::Level Level,
+                         SmallVectorImpl<clang::CharSourceRange>& Ranges,
+                         ArrayRef<clang::FixItHint> Hints) override {}
     
-    { private:
-  DISALLOW_COPY_AND_ASSIGN(Net);
-};
+    static bool encodeToUTF8(const std::vector<uint32_t> &Scalars,
+                         std::string &OutUTF8) {
+  for (auto S : Scalars) {
+    if (!isValidUnicodeScalar(S)) {
+      OutUTF8.clear();
+      return false;
+    }
+    if (S >= 0xD800 && S < 0xD880)
+      S -= 0xD800;
+    }
+    }
     
-    #if defined(OS_WIN)
-  // Static callback invoked when a message comes in to our messaging window.
-  static LRESULT CALLBACK WndProcStatic(HWND hwnd,
-                                        UINT message,
-                                        WPARAM wparam,
-                                        LPARAM lparam);
+        // Strip generic arguments from that child, then return it.
+    return stripGenericArgsFromContextNode(node->getChild(0)->getChild(0),
+                                          factory);
     
-    
-    {}  // namespace atom
-    
-    
-    {}  // namespace mate
-    
-      // Finds out the TrackableObject from the class it wraps.
-  static T* FromWrappedClass(v8::Isolate* isolate,
-                             base::SupportsUserData* wrapped) {
-    int32_t id = GetIDFromWrappedClass(wrapped);
-    if (!id)
-      return nullptr;
-    return FromWeakMapID(isolate, id);
+      /**
+   * @brief Returns the scalar loss associated with a top blob at a given index.
+   */
+  inline Dtype loss(const int top_index) const {
+    return (loss_.size() > top_index) ? loss_[top_index] : Dtype(0);
   }
     
-      // There is a new update which has been downloaded.
-  virtual void OnUpdateDownloaded(const std::string& release_notes,
-                                  const std::string& release_name,
-                                  const base::Time& release_date,
-                                  const std::string& update_url) {}
+      Blob<Dtype> mean_, variance_, temp_, x_norm_;
+  bool use_global_stats_;
+  Dtype moving_average_fraction_;
+  int channels_;
+  Dtype eps_;
     
-    #ifndef BITCOIN_REVERSELOCK_H
-#define BITCOIN_REVERSELOCK_H
+      virtual inline const char* type() const { return 'Concat'; }
+  virtual inline int MinBottomBlobs() const { return 1; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
     
+      // algorithms for forward and backwards convolutions
+  cudnnConvolutionFwdAlgo_t *fwd_algo_;
+  cudnnConvolutionBwdFilterAlgo_t *bwd_filter_algo_;
+  cudnnConvolutionBwdDataAlgo_t *bwd_data_algo_;
     
-    {    /* d += a3 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'movq %%rax,%%rcx\n'
-    'movq %%rdx,%%r15\n'
-    /* d += a2 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d = a0 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c = a4 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += (c & M) * R */
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* t3 (tmp1) = d & M */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    'movq %%rsi,%q1\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* d += a4 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a0 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += c * R */
-    'movq %%r8,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* t4 = d & M (%%rsi) */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* tx = t4 >> 48 (tmp3) */
-    'movq %%rsi,%%rax\n'
-    'shrq $48,%%rax\n'
-    'movq %%rax,%q3\n'
-    /* t4 &= (M >> 4) (tmp2) */
-    'movq $0xffffffffffff,%%rax\n'
-    'andq %%rax,%%rsi\n'
-    'movq %%rsi,%q2\n'
-    /* c = a0 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += a4 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* u0 = d & M (%%rsi) */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* u0 = (u0 << 4) | tx (%%rsi) */
-    'shlq $4,%%rsi\n'
-    'movq %q3,%%rax\n'
-    'orq %%rax,%%rsi\n'
-    /* c += u0 * (R >> 4) */
-    'movq $0x1000003d1,%%rax\n'
-    'mulq %%rsi\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[0] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,0(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += a1 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a0 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d += a4 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c += (d & M) * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* r[1] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,8(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += a2 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a1 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a0 * b2 (last use of %%r10 = a0) */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* fetch t3 (%%r10, overwrites a0), t4 (%%rsi) */
-    'movq %q2,%%rsi\n'
-    'movq %q1,%%r10\n'
-    /* d += a4 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c += (d & M) * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 (%%rcx only) */
-    'shrdq $52,%%r15,%%rcx\n'
-    /* r[2] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,16(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += t3 */
-    'addq %%r10,%%r8\n'
-    /* c += d * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[3] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,24(%%rdi)\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* c += t4 (%%r8 only) */
-    'addq %%rsi,%%r8\n'
-    /* r[4] = c */
-    'movq %%r8,32(%%rdi)\n'
-: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
-: 'b'(b), 'D'(r)
-: '%rax', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
-);
-}
-    
-        if (len > 0) {
-        /* The z of the final point gives us the 'global Z' for the table. */
-        r[i].x = a[i].x;
-        r[i].y = a[i].y;
-        *globalz = a[i].z;
-        r[i].infinity = 0;
-        zs = zr[i];
+    #ifdef USE_CUDNN
+template <typename Dtype>
+class CuDNNLCNLayer : public LRNLayer<Dtype> {
+ public:
+  explicit CuDNNLCNLayer(const LayerParameter& param)
+      : LRNLayer<Dtype>(param), handles_setup_(false), tempDataSize(0),
+        tempData1(NULL), tempData2(NULL) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNLCNLayer();
     }
     
-    int secp256k1_ecdsa_sign_recoverable(const secp256k1_context* ctx, secp256k1_ecdsa_recoverable_signature *signature, const unsigned char *msg32, const unsigned char *seckey, secp256k1_nonce_function noncefp, const void* noncedata) {
-    secp256k1_scalar r, s;
-    secp256k1_scalar sec, non, msg;
-    int recid;
-    int ret = 0;
-    int overflow = 0;
-    VERIFY_CHECK(ctx != NULL);
-    ARG_CHECK(secp256k1_ecmult_gen_context_is_built(&ctx->ecmult_gen_ctx));
-    ARG_CHECK(msg32 != NULL);
-    ARG_CHECK(signature != NULL);
-    ARG_CHECK(seckey != NULL);
-    if (noncefp == NULL) {
-        noncefp = secp256k1_nonce_function_default;
-    }
-    }
     
-    static void CheckParseTorReplyMapping(std::string input, std::map<std::string,std::string> expected)
+    {}  // namespace caffe
+    
+    #include <vector>
+    
+    enum GARBAGE_LEVEL
 {
-    BOOST_TEST_MESSAGE(std::string('CheckParseTorReplyMapping(') + input + ')');
-    auto ret = ParseTorReplyMapping(input);
-    BOOST_CHECK_EQUAL(ret.size(), expected.size());
-    auto r_it = ret.begin();
-    auto e_it = expected.begin();
-    while (r_it != ret.end() && e_it != expected.end()) {
-        BOOST_CHECK_EQUAL(r_it->first, e_it->first);
-        BOOST_CHECK_EQUAL(r_it->second, e_it->second);
-        r_it++;
-        e_it++;
-    }
-}
-    
-    namespace
-{
-static bool ParsePrechecks(const std::string& str)
-{
-    if (str.empty()) // No empty string allowed
-        return false;
-    if (str.size() >= 1 && (json_isspace(str[0]) || json_isspace(str[str.size()-1]))) // No padding allowed
-        return false;
-    if (str.size() != strlen(str.c_str())) // No embedded NUL characters allowed
-        return false;
-    return true;
-}
-    }
-    
-    
-    {	void set_flag(PhysicsServer::HingeJointFlag p_flag, bool p_value);
-	bool get_flag(PhysicsServer::HingeJointFlag p_flag) const;
+  G_NEVER_CRUNCH,
+  G_OK,
+  G_DODGY,
+  G_TERRIBLE
 };
-#endif
-
     
-    #ifdef __ANDROID__
-#include 'platform/android/thread_jandroid.h'
-#else
-#define JNIEnv void
-#define jobject void *
-#endif
+      SVMenuNode* svMenuRoot = BuildListOfAllLeaves(tess);
     
-    	BIND_ENUM_CONSTANT(CONNECTION_DISCONNECTED);
-	BIND_ENUM_CONSTANT(CONNECTION_CONNECTING);
-	BIND_ENUM_CONSTANT(CONNECTION_CONNECTED);
+    /// Base class for all tesseract image thresholding classes.
+/// Specific classes can add new thresholding methods by
+/// overriding ThresholdToPix.
+/// Each instance deals with a single image, but the design is intended to
+/// be useful for multiple calls to SetRectangle and ThresholdTo* if
+/// desired.
+class TESS_API ImageThresholder {
+ public:
+  ImageThresholder();
+  virtual ~ImageThresholder();
+    }
     
-    	static Error _get_token(const CharType *p_str, int &index, int p_len, Token &r_token, int &line, String &r_err_str);
-	static Error _parse_value(Variant &value, Token &token, const CharType *p_str, int &index, int p_len, int &line, String &r_err_str, Variant::ObjectConstruct *p_construct, void *p_ud);
-	static Error _parse_array(Array &array, const CharType *p_str, int &index, int p_len, int &line, String &r_err_str, Variant::ObjectConstruct *p_construct, void *p_ud);
-	static Error _parse_dict(Dictionary &dict, const CharType *p_str, int &index, int p_len, int &line, String &r_err_str, Variant::ObjectConstruct *p_construct, void *p_ud);
+      // Factory to build a BoxWord from a TWERD using the DENORMs on each blob to
+  // switch back to original image coordinates.
+  static BoxWord* CopyFromNormalized(TWERD* tessword);
     
-    	virtual float get_latency() { return 0; };
+    void ChannelArguments::SetSslTargetNameOverride(const grpc::string& name) {
+  SetString(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG, name);
+}
     
-    /**
- * @brief A simple ConfigParserPlugin for feature vector dictionary keys.
+    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_SERVER_FILTER_H
+#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_SERVER_FILTER_H
+    
+    // server minute
+const ViewDescriptor& ServerSentBytesPerRpcMinute() {
+  const static ViewDescriptor descriptor =
+      MinuteDescriptor()
+          .set_name('grpc.io/server/sent_bytes_per_rpc/minute')
+          .set_measure(kRpcServerSentBytesPerRpcMeasureName)
+          .set_aggregation(BytesDistributionAggregation())
+          .add_column(ServerMethodTagKey());
+  return descriptor;
+}
+    
+    using grpc::Status;
+using grpc::StatusCode;
+using grpc::reflection::v1alpha::ErrorResponse;
+using grpc::reflection::v1alpha::ExtensionNumberResponse;
+using grpc::reflection::v1alpha::ExtensionRequest;
+using grpc::reflection::v1alpha::FileDescriptorResponse;
+using grpc::reflection::v1alpha::ListServiceResponse;
+using grpc::reflection::v1alpha::ServerReflectionRequest;
+using grpc::reflection::v1alpha::ServerReflectionResponse;
+using grpc::reflection::v1alpha::ServiceResponse;
+    
+    #include <grpcpp/grpcpp.h>
+#include 'src/proto/grpc/reflection/v1alpha/reflection.grpc.pb.h'
+    
+    grpc::string ProtoServerReflectionPlugin::name() {
+  return 'proto_server_reflection';
+}
+    
+    namespace grpc {
+namespace load_reporter {
+    }
+    }
+    
+        static AGInfo& Create(const nnvm::NodePtr& node) {
+      node->info.construct<AGInfo>();
+      return Get(node);
+    }
+    
+    namespace mxnet {
+namespace op {
+template<>
+Operator *CreateOp<cpu>(CaffeLossParam param, int dtype) {
+  Operator *op = NULL;
+  switch (dtype) {
+  case mshadow::kFloat32:
+    op = new CaffeLoss<cpu, float>(param);
+    break;
+  case mshadow::kFloat64:
+    op = new CaffeLoss<cpu, double>(param);
+    break;
+  case mshadow::kFloat16:
+    LOG(FATAL) << 'float16 layer is not supported by caffe';
+    break;
+  default:
+    LOG(FATAL) << 'Unsupported type ' << dtype;
+  }
+  return op;
+}
+    }
+    }
+    
+    /*!
+ * \brief Thread pool.
  */
-class FeatureVectorsConfigParserPlugin : public ConfigParserPlugin {
+class ThreadPool {
  public:
-  std::vector<std::string> keys() const override;
+  /*! \brief Signal event upon destruction, even for exceptions (RAII) */
+  struct SetReadyOnDestroy {
+    explicit inline SetReadyOnDestroy(const std::shared_ptr<dmlc::ManualEvent>& event)
+      : event_(event) {
+    }
+    inline ~SetReadyOnDestroy() {
+      if (event_) {
+        event_->signal();
+      }
+    }
+    std::shared_ptr<dmlc::ManualEvent>  event_;
+  };
     }
     
-    Status FilePathsConfigParserPlugin::update(const std::string& source,
-                                           const ParserConfig& config) {
-  Config::get().removeFiles(source);
-  access_map_.erase(source);
-  if (config.count('file_paths') == 0 &&
-      config.count('file_paths_query') == 0) {
-    return Status();
-  }
-    }
     
-    class FilePathsConfigParserPluginTests : public testing::Test {
- public:
-  void SetUp() override {
-    Initializer::platformSetup();
-    registryAndPluginInit();
-    }
-    }
-    
-      update['awesome'] = R'raw({
-    'options': {
-      'custom_nested_json':
-        {'foo':1,'bar':'baz'}
-    }
-  })raw';
-  auto s = c.update(update);
-  EXPECT_TRUE(s.ok());
-  EXPECT_EQ(s.toString(), 'OK');
-    
-    #include <osquery/config/config.h>
-#include <osquery/filesystem/filesystem.h>
-#include <osquery/flags.h>
-#include <osquery/logger.h>
-#include <osquery/registry_factory.h>
-#include <osquery/utils/config/default_paths.h>
-    
-    bool Follow::initWithTargetAndOffset(Node *followedNode, float xOffset,float yOffset,const Rect& rect)
-{
-    CCASSERT(followedNode != nullptr, 'FollowedNode can't be NULL');
-    if(followedNode == nullptr)
     {
-        log('Follow::initWithTarget error: followedNode is nullptr!');
-        return false;
-    }
- 
-    followedNode->retain();
-    _followedNode = followedNode;
-    _worldRect = rect;
-    _boundarySet = !rect.equals(Rect::ZERO);
-    _boundaryFullyCovered = false;
-    }
-    
-    class Node;
-    
-    /** An Array that contain control points.
- * Used by CardinalSplineTo and (By) and CatmullRomTo (and By) actions.
- * @ingroup Actions
- * @js NA
+    {/*! \brief typedef the factory function of data iterator */
+typedef std::function<ImageAugmenter *()> ImageAugmenterFactory;
+/*!
+ * \brief Registry entry for DataIterator factory functions.
  */
-class CC_DLL PointArray : public Ref, public Clonable
-{
-public:
+struct ImageAugmenterReg
+    : public dmlc::FunctionRegEntryBase<ImageAugmenterReg,
+                                        ImageAugmenterFactory> {
+};
+//--------------------------------------------------------------
+// The following part are API Registration of Iterators
+//--------------------------------------------------------------
+/*!
+ * \brief Macro to register image augmenter
+ *
+ * \code
+ * // example of registering a mnist iterator
+ * REGISTER_IMAGE_AUGMENTER(aug_default)
+ * .describe('default augmenter')
+ * .set_body([]() {
+ *     return new DefaultAugmenter();
+ *   });
+ * \endcode
+ */
+#define MXNET_REGISTER_IMAGE_AUGMENTER(name)                            \
+  DMLC_REGISTRY_REGISTER(::mxnet::io::ImageAugmenterReg, ImageAugmenterReg, name)
+}  // namespace io
+}  // namespace mxnet
+#endif  // MXNET_USE_OPENCV
+    
+    
+    {  LibSVMIterParam param_;
+  // output instance
+  DataInst out_;
+  // internal instance counter
+  unsigned inst_counter_{0};
+  // at end
+  bool end_{false};
+  // label parser
+  size_t label_ptr_{0}, label_size_{0};
+  size_t data_ptr_{0}, data_size_{0};
+  std::unique_ptr<dmlc::Parser<uint64_t> > label_parser_;
+  std::unique_ptr<dmlc::Parser<uint64_t> > data_parser_;
+};
+    
+    
+    {    if (follow && valid)
+    {
+        follow->autorelease();
+        return follow;
     }
     
-    Waves* Waves::create(float duration, const Size& gridSize, unsigned int waves, float amplitude, bool horizontal, bool vertical)
-{
-    Waves *action = new (std::nothrow) Waves();
-    }
+    delete follow;
+    return nullptr;
     
-        /** initializes the action with the callback
-     typedef void (Ref::*SEL_CallFunc)();
-     @deprecated Use the std::function API instead.
+}
+Follow* Follow::clone() const
+{
+    // no copy constructor
+    return Follow::createWithOffset(_followedNode, _offsetX,_offsetY,_worldRect);
+    
+}
+    
+    
+    {    /** Reverse the current control point array inline, without generating a new one.
+     * @js NA
      */
-    CC_DEPRECATED_ATTRIBUTE bool initWithTarget(Ref* target);
-    
-    /** initializes the action with the std::function<void()>
+    void reverseInline();
+    /**
+     * @js NA
      * @lua NA
      */
-    bool initWithFunction(const std::function<void()>& func);
-    
-        /** Removes all actions from a certain target.
-     All the actions that belongs to the target will be removed.
-     *
-     * @param target    A certain target.
+    virtual PointArray* clone() const;
+    /**
+     * @js NA
      */
-    virtual void removeAllActionsFromTarget(Node *target);
+    const std::vector<Vec2>& getControlPoints() const;
+    /**
+     * @js NA
+     */
+    void setControlPoints(std::vector<Vec2> controlPoints);
+private:
+    /** Array that contains the control points. */
+    std::vector<Vec2> _controlPoints;
+};
+    
+    /** ActionTween
+    
+    Animation* Animation::create(const Vector<AnimationFrame*>& arrayOfAnimationFrameNames, float delayPerUnit, unsigned int loops /* = 1 */)
+{
+    Animation *animation = new (std::nothrow) Animation();
+    animation->initWithAnimationFrames(arrayOfAnimationFrameNames, delayPerUnit, loops);
+    animation->autorelease();
+    return animation;
+}
     
     THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -488,42 +306,31 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include '2d/CCActionPageTurn3D.h'
-#include '2d/CCGrid.h'
-#include '2d/CCNodeGrid.h'
     
     
-    {    // Overrides
-    virtual PageTurn3D* clone() const override;
-    virtual void update(float time) override;
-};
+    {    //turn the result into simply polygon (AKA, fix overlap)
     
-    protected:
-    unsigned int _jumps;
-    float _amplitude;
-    float _amplitudeRate;
+    //clamp into the specified rect
+    ClipperLib::Clipper cl;
+    cl.StrictlySimple(true);
+    cl.AddPath(p->Contour, ClipperLib::ptSubject, true);
+    //create the clipping rect
+    ClipperLib::Path clamp;
+    clamp.push_back(ClipperLib::IntPoint(0, 0));
+    clamp.push_back(ClipperLib::IntPoint(rect.size.width/_scaleFactor * PRECISION, 0));
+    clamp.push_back(ClipperLib::IntPoint(rect.size.width/_scaleFactor * PRECISION, rect.size.height/_scaleFactor * PRECISION));
+    clamp.push_back(ClipperLib::IntPoint(0, rect.size.height/_scaleFactor * PRECISION));
+    cl.AddPath(clamp, ClipperLib::ptClip, true);
+    cl.Execute(ClipperLib::ctIntersection, out);
     
-            for (auto& frameName : frameNames)
-        {
-            SpriteFrame* spriteFrame = frameCache->getSpriteFrameByName(frameName.asString());
+    std::vector<Vec2> outPoints;
+    ClipperLib::PolyNode* p2 = out.GetFirst();
+    while(p2->IsHole()){
+        p2 = p2->GetNext();
     }
-    
-    The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-    
-    PolygonInfo::PolygonInfo(const PolygonInfo& other)
-: triangles()
-, _isVertsOwner(true)
-, _rect()
-{
-    _filename = other._filename;
-    _isVertsOwner = true;
-    _rect = other._rect;
-    triangles.verts = new (std::nothrow) V3F_C4B_T2F[other.triangles.vertCount];
-    triangles.indices = new (std::nothrow) unsigned short[other.triangles.indexCount];
-    CCASSERT(triangles.verts && triangles.indices, 'not enough memory');
-    triangles.vertCount = other.triangles.vertCount;
-    triangles.indexCount = other.triangles.indexCount;
-    memcpy(triangles.verts, other.triangles.verts, other.triangles.vertCount * sizeof(other.triangles.verts[0]));
-    memcpy(triangles.indices, other.triangles.indices, other.triangles.indexCount * sizeof(other.triangles.indices[0]));
-};
+    for(const auto& pt : p2->Contour)
+    {
+        outPoints.push_back(Vec2(pt.X/PRECISION, pt.Y/PRECISION));
+    }
+    return outPoints;
+}
