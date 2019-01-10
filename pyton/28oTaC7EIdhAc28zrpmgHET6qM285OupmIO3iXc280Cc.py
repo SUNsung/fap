@@ -1,91 +1,101 @@
 
         
-            with open('README.md', 'w+') as sorted_file:
-        # Then all of the blocks are sorted individually
-        blocks = [''.join(sorted(block, key=lambda s: s.lower())) for block in blocks]
-        # And the result is written back to README.md
-        sorted_file.write(''.join(blocks))
+        
+class RangeMaxValueValidator(MaxValueValidator):
+    def compare(self, a, b):
+        return a.upper is None or a.upper > b
+    message = _('Ensure that this range is completely less than or equal to %(limit_value)s.')
     
-            # Insert the include statement to MANIFEST.in if not present
-        with open(manifest_path, 'a+') as manifest:
-            manifest.seek(0)
-            manifest_content = manifest.read()
-            if not 'include fastentrypoints.py' in manifest_content:
-                manifest.write(('\n' if manifest_content else '')
-                               + 'include fastentrypoints.py')
-    
-    
-def test_when_already_configured(usage_tracker_io, shell_pid,
-                                 shell, shell_config, logs):
-    shell.get_history.return_value = ['fuck']
-    shell_pid.return_value = 12
-    _change_tracker(usage_tracker_io, 12)
-    shell_config.read.return_value = 'eval $(thefuck --alias)'
-    main()
-    logs.already_configured.assert_called_once()
+        def save(self, must_create=False):
+        '''
+        To save, get the session key as a securely signed string and then set
+        the modified flag so that the cookie is set on the client for the
+        current request.
+        '''
+        self._session_key = self._get_session_key()
+        self.modified = True
     
     
-@pytest.mark.parametrize('command, packages', [
-    (Command('vim', 'vim: command not found'),
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('sudo vim', 'vim: command not found'),
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('vim', 'The program 'vim' is currently not installed. You can install it by typing: sudo apt install vim'),
-     [('vim', 'main'), ('vim-tiny', 'main')])])
-def test_match(mocker, command, packages):
-    mocker.patch('thefuck.rules.apt_get.which', return_value=None)
-    mocker.patch('thefuck.rules.apt_get._get_packages',
-                 create=True, return_value=packages)
+class Session(AbstractBaseSession):
+    '''
+    Django provides full support for anonymous sessions. The session
+    framework lets you store and retrieve arbitrary data on a
+    per-site-visitor basis. It stores data on the server side and
+    abstracts the sending and receiving of cookies. Cookies contain a
+    session ID -- not the data itself.
     
+        noarch_lib = os.path.abspath( os.path.join(python_path, 'lib', 'noarch'))
+    sys.path.append(noarch_lib)
     
-def test_match():
-    assert match(Command('sudo apt update', match_output))
-    
-            start = datetime.now()
-        lasso = linear_model.LassoLars()
-        lasso.fit(X, Y)
-        time_lasso[i] = total_seconds(datetime.now() - start)
-    
-        timings = []
-    for exponent in range(args.log_min_problem_size,
-                          args.log_max_problem_size):
-        n = 10 ** exponent
-        Y = DATASET_GENERATORS[args.dataset](n)
-        time_per_iteration = \
-            [bench_isotonic_regression(Y) for i in range(args.iterations)]
-        timing = (n, np.mean(time_per_iteration))
-        timings.append(timing)
-    
-        if revision is None:
-        return
-    if domain not in ('py', 'pyx'):
-        return
-    if not info.get('module') or not info.get('fullname'):
-        return
-    
-        for node in doctree.traverse(is_setting_index):
-        targetnode = get_setting_target(node)
-        assert isinstance(targetnode, nodes.target), 'Next node is not a target'
-    
-        if settings is None:
-        settings = get_project_settings()
-        # set EDITOR from environment if available
         try:
-            editor = os.environ['EDITOR']
-        except KeyError: pass
-        else:
-            settings['EDITOR'] = editor
-    check_deprecated_settings(settings)
+        # hide console in MS windows
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        startupinfo.wShowWindow = subprocess.SW_HIDE
     
-        def short_desc(self):
-        return 'Run quick benchmark test'
-    
-        def run(self, args, opts):
-        if opts.verbose:
-            versions = scrapy_components_versions()
-            width = max(len(n) for (n, _) in versions)
-            patt = '%-{}s : %s'.format(width)
-            for name, version in versions:
-                print(patt % (name, version))
+        try:
+        if cookie:
+            if 'rc4' not in options:
+                metadata = zlib.decompress(base64.b64decode(cookie), -zlib.MAX_WBITS)
+                payload = input_data or ''
+            else:
+                metadata = zlib.decompress(rc4crypt(base64.b64decode(cookie), __password__), -zlib.MAX_WBITS)
+                payload = rc4crypt(input_data, __password__) if input_data else ''
         else:
-            print('Scrapy %s' % scrapy.__version__)
+            if 'rc4' in options:
+                input_data = rc4crypt(input_data, __password__)
+            metadata_length = struct.unpack('!h', input_data[:2])
+            metadata = zlib.decompress(input_data[2:2+metadata_length], -zlib.MAX_WBITS)
+            payload = input_data[2+metadata_length:]
+        headers = dict(x.split(':', 1) for x in metadata.splitlines() if x)
+        method = headers.pop('G-Method')
+        url = headers.pop('G-Url')
+    except (zlib.error, KeyError, ValueError):
+        import traceback
+        start_response('500 Internal Server Error', [('Content-Type', 'text/html')])
+        yield message_html('500 Internal Server Error', 'Bad Request (metadata) - Possible Wrong Password', '<pre>%s</pre>' % traceback.format_exc())
+        raise StopIteration
+    
+    
+    def toString(self):
+        channelStr = ''
+        if self.channel > 0:
+            channelStr = ',channel=' + str(self.channel)
+            
+        txt = self.text
+        if txt is None:
+            txt = '<no text>'
+    
+    
+class QuadraticProbing(HashTable):
+    '''
+        Basic Hash Table example with open addressing using Quadratic Probing 
+    '''
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+    
+    def main():
+    '''
+    In this demonstration we're generating a sample data set from the sin function in numpy.
+    We then train a decision tree on the data set and use the decision tree to predict the
+    label of 10 different test values. Then the mean squared error over this test is displayed.
+    '''
+    X = np.arange(-1., 1., 0.005)
+    y = np.sin(X)
+    
+    
+def b_expo(a, b):
+    res = 1
+    while b > 0:
+        if b&1:
+            res *= a
+    
+    
+def b_expo_mod(a, b, c):
+    res = 0
+    while b > 0:
+        if b&1:
+            res = ((res%c) + (a%c)) % c
+    
+        freqPairs = list(freqToLetter.items())
+    freqPairs.sort(key = getItemAtIndexZero, reverse = True)
