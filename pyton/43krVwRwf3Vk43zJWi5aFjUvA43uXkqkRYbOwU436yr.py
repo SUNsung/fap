@@ -1,220 +1,187 @@
 
         
-          Args:
-    records: a record list with TensorFlow examples.
-    
-        Returns:
-      The test predictions.
+        
+def check_alphabetical(lines):
     '''
-    predictions, _ = zip(*self.predict_with_score(session, inputs))
-    return np.array(predictions)
+    checks if all entries per section are in alphabetical order based in entry title
+    '''
+    sections = {}
+    section_line_num = {}
+    for line_num, line in enumerate(lines):
+        if line.startswith(anchor):
+            category = line.split(anchor)[1].strip()
+            sections[category] = []
+            section_line_num[category] = line_num
+            continue
+        if not line.startswith('|') or line.startswith('|---'):
+            continue
+        raw_title = [x.strip() for x in line.split('|')[1:-1]][0]
+        title_re_match = link_re.match(raw_title)
+        if title_re_match:
+            sections[category].append(title_re_match.group(1).upper())
     
-    # write out the dataset
-write_datasets(FLAGS.save_dir, FLAGS.datafile_name, datasets)
-print ('Saved to ', os.path.join(FLAGS.save_dir,
-                                 FLAGS.datafile_name + '_' + dataset_name))
+    from httpie.compat import is_windows
+from httpie.config import DEFAULT_CONFIG_DIR, Config
+    
+            request_line = '{method} {path}{query} HTTP/1.1'.format(
+            method=self._orig.method,
+            path=url.path or '/',
+            query='?' + url.query if url.query else ''
+        )
+    
+        package_name = '(builtin)'
+    
+    
+with open(BIN_FILE_PATH, 'rb') as f:
+    BIN_FILE_CONTENT = f.read()
+    
+    
+@mock.patch('httpie.input.AuthCredentials._getpass',
+            new=lambda self, prompt: 'password')
+def test_password_prompt(httpbin):
+    r = http('--auth', 'user',
+             'GET', httpbin.url + '/basic-auth/user/password')
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
+    
+        config['implicit_content_type'] = 'json'
+    config.save()
+    config.load()
+    assert 'implicit_content_type' not in config
+    assert not config['default_options']
+    
+        exc = Timeout('Request timed out')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR_TIMEOUT
+    assert error_msg == 'Request timed out (30s).'
 
     
-      Args:
-    data_e: nexamples length list of NxT trials
-    dt: how often the data are sampled
-    max_firing_rate: the firing rate that is associated with a value of 1.0
-  Returns:
-    gauss_e: a list of length b of the data with noise.
-    '''
+        def _get_path(self):
+        '''Return the config file path without side-effects.'''
+        raise NotImplementedError()
     
-      Args:
-    in_size: The integer size of the non-batc input dimension. [(x),y]
-    out_size: The integer size of non-batch output dimension. [x,(y)]
-    do_bias (optional): Add a (learnable) bias vector to the operation,
-      if false, b will be None
-    mat_init_value (optional): numpy constant for matrix initialization, if None
-      , do random, with additional parameters.
-    alpha (optional): A multiplicative scaling for the weight initialization
-      of the matrix, in the form \alpha * 1/\sqrt{x.shape[1]}.
-    identity_if_possible (optional): just return identity,
-      if x.shape[1] == out_size.
-    normalized (optional): Option to divide out by the norms of the rows of W.
-    name (optional): The name prefix to add to variables.
-    collections (optional): List of additional collections. (Placed in
-      tf.GraphKeys.GLOBAL_VARIABLES already, so no need for that.)
+        # Theoretical justification
+        When applying ReLU, assuming that the distribution
+        of the previous output is approximately centered around 0.,
+        you are discarding half of your input. This is inefficient.
     
-    
-def ptb_iterator(raw_data, batch_size, num_steps, epoch_size_override=None):
-  '''Iterate on the raw PTB data.
-    
-        Args:
-      hparams:  Hyperparameters for the MaskGAN.
-      data: Data to evaluate.
-      id_to_word: Dictionary of indices to words.
-      log_dir: Log directory.
-      output_file:  Output file for the samples.
-  '''
-  # Boolean indicating operational mode.
-  is_training = False
-    
-    import tensorflow as tf
-    
-        for index, pred in zip(index_batch, pred_batch):
-      indices_predictions.append([str(id_to_word[index]), pred])
-    batch_of_indices_predictions.append(indices_predictions)
-  return batch_of_indices_predictions
-    
-    
-def construct_ngrams_dict(ngrams_list):
-  '''Construct a ngram dictionary which maps an ngram tuple to the number
-  of times it appears in the text.'''
-  counts = {}
-    
-        '''
-    # Serialize JSON data, if needed.
-    data = args.data
-    auto_json = data and not args.form
-    if (args.json or auto_json) and isinstance(data, dict):
-        if data:
-            data = json.dumps(data)
-        else:
-            # We need to set data to an empty string to prevent requests
-            # from assigning an empty list to `response.request.data`.
-            data = ''
-    
-        def __init__(self, groups, env=Environment(), **kwargs):
-        '''
-        :param groups: names of processor groups to be applied
-        :param env: Environment
-        :param kwargs: additional keyword arguments for processors
-    
-    
-with codecs.open(FILE_PATH, encoding='utf8') as f:
-    # Strip because we don't want new lines in the data so that we can
-    # easily count occurrences also when embedded in JSON (where the new
-    # line would be escaped).
-    FILE_CONTENT = f.read().strip()
-    
-        def test_request_body_from_file_by_path_no_data_items_allowed(
-            self, httpbin):
-        env = MockEnvironment(stdin_isatty=False)
-        r = http('POST', httpbin.url + '/post', '@' + FILE_PATH_ARG, 'foo=bar',
-                 env=env, error_exit_ok=True)
-        assert 'cannot be mixed' in r.stderr
-
-    
-        What it should do it take a markdown file, and split it into more files. A targetfile should have the same
-    number of lines as the original, with source code snippets and markdown non-words removed, for spell-checking.
-    
-    if args.dict:
-    jieba.initialize(args.dict)
+    # Run training, with or without data augmentation.
+if not data_augmentation:
+    print('Not using data augmentation.')
+    model.fit(x_train, y_train,
+              batch_size=batch_size,
+              epochs=epochs,
+              validation_data=(x_test, y_test),
+              shuffle=True,
+              callbacks=callbacks)
 else:
-    jieba.initialize()
-if args.user_dict:
-    jieba.load_userdict(args.user_dict)
+    print('Using real-time data augmentation.')
+    # This will do preprocessing and realtime data augmentation:
+    datagen = ImageDataGenerator(
+        # set input mean to 0 over the dataset
+        featurewise_center=False,
+        # set each sample mean to 0
+        samplewise_center=False,
+        # divide inputs by std of dataset
+        featurewise_std_normalization=False,
+        # divide each input by its std
+        samplewise_std_normalization=False,
+        # apply ZCA whitening
+        zca_whitening=False,
+        # epsilon for ZCA whitening
+        zca_epsilon=1e-06,
+        # randomly rotate images in the range (deg 0 to 180)
+        rotation_range=0,
+        # randomly shift images horizontally
+        width_shift_range=0.1,
+        # randomly shift images vertically
+        height_shift_range=0.1,
+        # set range for random shear
+        shear_range=0.,
+        # set range for random zoom
+        zoom_range=0.,
+        # set range for random channel shifts
+        channel_shift_range=0.,
+        # set mode for filling points outside the input boundaries
+        fill_mode='nearest',
+        # value used for fill_mode = 'constant'
+        cval=0.,
+        # randomly flip images
+        horizontal_flip=True,
+        # randomly flip images
+        vertical_flip=False,
+        # set rescaling factor (applied before any other transformation)
+        rescale=None,
+        # set function that will be applied on each input
+        preprocessing_function=None,
+        # image data format, either 'channels_first' or 'channels_last'
+        data_format=None,
+        # fraction of images reserved for validation (strictly between 0 and 1)
+        validation_split=0.0)
     
-    try:
-    import pkg_resources
-    get_module_res = lambda *res: pkg_resources.resource_stream(__name__,
-                                                                os.path.join(*res))
-except ImportError:
-    get_module_res = lambda *res: open(os.path.normpath(os.path.join(
-                            os.getcwd(), os.path.dirname(__file__), *res)), 'rb')
+    model.fit(x_train, y_train,
+          batch_size=batch_size,
+          callbacks=[tensorboard],
+          epochs=epochs,
+          verbose=1,
+          validation_data=(x_test, y_test))
+score = model.evaluate(x_test, y_test, verbose=0)
+print('Test loss:', score[0])
+print('Test accuracy:', score[1])
     
     
-class TextRank(KeywordExtractor):
+def test_imdb():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = imdb.load_data()
+        (x_train, y_train), (x_test, y_test) = imdb.load_data(maxlen=40)
+        assert len(x_train) == len(y_train)
+        assert len(x_test) == len(y_test)
+        word_index = imdb.get_word_index()
+        assert isinstance(word_index, dict)
     
     
-def viterbi(obs, states, start_p, trans_p, emit_p):
-    V = [{}]  # tabular
-    mem_path = [{}]
-    all_states = trans_p.keys()
-    for y in states.get(obs[0], all_states):  # init
-        V[0][y] = start_p[y] + emit_p[y].get(obs[0], MIN_FLOAT)
-        mem_path[0][y] = ''
-    for t in xrange(1, len(obs)):
-        V.append({})
-        mem_path.append({})
-        #prev_states = get_top_states(V[t-1])
-        prev_states = [
-            x for x in mem_path[t - 1].keys() if len(trans_p[x]) > 0]
+def test_activity_regularization():
+    x_train, y_train = get_data()
+    for reg in [regularizers.l1(), regularizers.l2()]:
+        model = create_model(activity_regularizer=reg)
+        model.compile(loss='categorical_crossentropy', optimizer='sgd')
+        assert len(model.losses) == 1
+        model.train_on_batch(x_train, y_train)
     
-        def testSetDictionary(self):
-        jieba.set_dictionary('foobar.txt')
-        for content in test_contents:
-            result = jieba.cut(content)
-            assert isinstance(result, types.GeneratorType), 'Test SetDictionary Generator error'
-            result = list(result)
-            assert isinstance(result, list), 'Test SetDictionary error on content: %s' % content
-            print(' , '.join(result), file=sys.stderr)
-        print('testSetDictionary', file=sys.stderr)
+    # LSTM
+lstm_output_size = 70
     
-        def test_del_msg_failure_with_null_msg(self):
-        '''Del_msg fails: Returns 200 and does not set del_on_recipient.'''
-        message = MagicMock(spec=Message)
-        message.name = 'msg_3'
-        message.to_id = self.id
-        message.del_on_recipient = False
+            # Sample a token
+        sampled_token_index = np.argmax(output_tokens[0, -1, :])
+        sampled_char = reverse_target_char_index[sampled_token_index]
+        decoded_sentence += sampled_char
     
-        def test_bool(self):
-        self.assertEquals(True, ConfigValue.bool('TrUe'))
-        self.assertEquals(False, ConfigValue.bool('fAlSe'))
-        with self.assertRaises(ValueError):
-            ConfigValue.bool('asdf')
+        def revert_challenge_config(self):
+        '''Used to cleanup challenge configurations.
     
-        def test_filtered_modules_do_not_include_filtered_sources(self):
-        test_files = ['foo.js', 'bar.js']
-        filtered_files = ['baz.js', 'qux.js']
-        all_files = test_files + filtered_files
-        filter_module = TestModule('filter_module', *filtered_files)
-        test_module = TestModule('test_module', filter_module=filter_module, *all_files)
-        self.assertEqual(test_module.build(), concat_sources(test_files))
-
+        _multiprocess_can_split_ = True
     
-    class TestGetScrapeUrl(unittest.TestCase):
-    @patch('r2.lib.media.Link')
-    def test_link_post(self, Link):
-        post = Link()
-        post.url = 'https://example.com'
-        post.is_self = False
-        url = _get_scrape_url(post)
-        self.assertEqual(url, 'https://example.com')
+        def testSeekForwardBytesIO(self):
+        with BytesIO(self.DATA) as bio:
+            with BZ2File(bio) as bz2f:
+                self.assertRaises(TypeError, bz2f.seek)
+                bz2f.seek(150)
+                self.assertEqual(bz2f.read(), self.TEXT[150:])
     
-            perm_set = TestPermissionSet()
-        perm_set['x'] = True
-        self.assertTrue(perm_set['x'])
-        self.assertFalse(perm_set['y'])
-        perm_set['x'] = False
-        self.assertFalse(perm_set['x'])
-        perm_set[perm_set.ALL] = True
-        self.assertTrue(perm_set['x'])
-        self.assertTrue(perm_set['y'])
-        self.assertFalse(perm_set['z'])
-        self.assertTrue(perm_set.get('x', False))
-        self.assertFalse(perm_set.get('z', False))
-        self.assertTrue(perm_set.get('z', True))
+    import smtplib
     
-        def test_no_resize(self):
-        image = dict(url='http://s3.amazonaws.com/a.jpg', width=200,
-                      height=800)
-        url = self.provider.resize_image(image)
-        self.assertEqual(url, 'https://unsplash.it/200/400')
+    # Import the email modules we'll need
+from email import policy
+from email.parser import BytesParser
     
-        def test_unpad_evil_message(self):
-        from r2.lib.tracking import _unpad_message
-        evil = ('a' * 88) + chr(57)
-        result = _unpad_message(evil)
-        self.assertEquals(result, '')
+    import os
+import email
+import mimetypes
     
-        nonce = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(9))
-    filename = topic_name.replace('/', '.') + '.' + nonce
-    filename = os.path.join(PATH_CHEAT_SHEETS_SPOOL, filename)
-    
-            if field:
-            self.field = field
-            self.size_x = len(field[0])
-            self.size_y = len(field)
-            return
-    
-        def _log_visit(self, interval, ip_address):
-        if ip_address not in self.counter[interval]:
-            self.counter[interval][ip_address] = 0
-        self.counter[interval][ip_address] += 1
-    
-    LIMITS = Limits()
+    import sqlite3
+import os
