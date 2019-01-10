@@ -1,219 +1,386 @@
 
         
-            const QString &getAppName() const { return appName; }
-    const QIcon &getAppIcon() const { return appIcon; }
-    const QIcon &getTrayAndWindowIcon() const { return trayAndWindowIcon; }
-    const QString &getTitleAddText() const { return titleAddText; }
+          bool is_started() const;
     
-    #include <QComboBox>
-#include <QVariant>
-    
-    #ifndef SECP256K1_MODULE_ECDH_MAIN_H
-#define SECP256K1_MODULE_ECDH_MAIN_H
-    
-    
-    
-    /** Encode a Bech32 string. Returns the empty string in case of failure. */
-std::string Encode(const std::string& hrp, const std::vector<uint8_t>& values);
-    
-      /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to a cv::Mat
-   *
-   * @param cv_img
-   *    cv::Mat containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See image_data_layer.cpp for an example.
-   */
-  void Transform(const cv::Mat& cv_img, Blob<Dtype>* transformed_blob);
-#endif  // USE_OPENCV
-    
-    /**
- * @brief Fills a Blob with values @f$ x \sim U(-a, +a) @f$ where @f$ a @f$ is
- *        set inversely proportional to number of incoming nodes, outgoing
- *        nodes, or their average.
- *
- * A Filler based on the paper [Bengio and Glorot 2010]: Understanding
- * the difficulty of training deep feedforward neuralnetworks.
- *
- * It fills the incoming matrix by randomly sampling uniform data from [-scale,
- * scale] where scale = sqrt(3 / n) where n is the fan_in, fan_out, or their
- * average, depending on the variance_norm option. You should make sure the
- * input blob has shape (num, a, b, c) where a * b * c = fan_in and num * b * c
- * = fan_out. Note that this is currently not the case for inner product layers.
- *
- * TODO(dox): make notation in above comment consistent with rest & use LaTeX.
- */
+    // Serialize LayerParameter to protocol buffer
 template <typename Dtype>
-class XavierFiller : public Filler<Dtype> {
- public:
-  explicit XavierFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    CHECK(blob->count());
-    int fan_in = blob->count() / blob->shape(0);
-    // Compatibility with ND blobs
-    int fan_out = blob->num_axes() > 1 ?
-                  blob->count() / blob->shape(1) :
-                  blob->count();
-    Dtype n = fan_in;  // default to fan_in
-    if (this->filler_param_.variance_norm() ==
-        FillerParameter_VarianceNorm_AVERAGE) {
-      n = (fan_in + fan_out) / Dtype(2);
-    } else if (this->filler_param_.variance_norm() ==
-        FillerParameter_VarianceNorm_FAN_OUT) {
-      n = fan_out;
-    }
-    Dtype scale = sqrt(Dtype(3) / n);
-    caffe_rng_uniform<Dtype>(blob->count(), -scale, scale,
-        blob->mutable_cpu_data());
-    CHECK_EQ(this->filler_param_.sparse(), -1)
-         << 'Sparsity not supported by this Filler.';
-  }
-};
-    
-    /**
- * Virtual class encapsulate boost::thread for use in base class
- * The child class will acquire the ability to run a single thread,
- * by reimplementing the virtual function InternalThreadEntry.
- */
-class InternalThread {
- public:
-  InternalThread() : thread_() {}
-  virtual ~InternalThread();
-    }
-    
-    /**
- * @brief Index into the input blob along its first axis.
- *
- * This layer can be used to select, reorder, and even replicate examples in a
- * batch.  The second blob is cast to int and treated as an index into the
- * first axis of the first blob.
- */
-template <typename Dtype>
-class BatchReindexLayer : public Layer<Dtype> {
- public:
-  explicit BatchReindexLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    #endif  // CAFFE_BNLL_LAYER_HPP_
-
-    
-    /**
- * @brief Takes a Blob and crop it, to the shape specified by the second input
- *  Blob, across all dimensions after the specified axis.
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-    
-    bool AuthPropertyIterator::operator==(const AuthPropertyIterator& rhs) const {
-  if (property_ == nullptr || rhs.property_ == nullptr) {
-    return property_ == rhs.property_;
-  } else {
-    return index_ == rhs.index_;
+void Layer<Dtype>::ToProto(LayerParameter* param, bool write_diff) {
+  param->Clear();
+  param->CopyFrom(layer_param_);
+  param->clear_blobs();
+  for (int i = 0; i < blobs_.size(); ++i) {
+    blobs_[i]->ToProto(param->add_blobs(), write_diff);
   }
 }
     
-      bool IsPeerAuthenticated() const override;
+      // If there are two top blobs, then the second blob will contain
+  // accuracies per class.
+  virtual inline int MinTopBlobs() const { return 1; }
+  virtual inline int MaxTopBlobs() const { return 2; }
     
-    namespace grpc {
-    }
+      /// @brief The spatial dimensions of a filter kernel.
+  Blob<int> kernel_shape_;
+  /// @brief The spatial dimensions of the stride.
+  Blob<int> stride_;
+  /// @brief The spatial dimensions of the padding.
+  Blob<int> pad_;
+  /// @brief The spatial dimensions of the dilation.
+  Blob<int> dilation_;
+  /// @brief The spatial dimensions of the convolution input.
+  Blob<int> conv_input_shape_;
+  /// @brief The spatial dimensions of the col_buffer.
+  vector<int> col_buffer_shape_;
+  /// @brief The spatial dimensions of the output.
+  vector<int> output_shape_;
+  const vector<int>* bottom_shape_;
     
-    Status ProtoServerReflection::ListService(ServerContext* context,
-                                          ListServiceResponse* response) {
-  if (services_ == nullptr) {
-    return Status(StatusCode::NOT_FOUND, 'Services not found.');
-  }
-  for (auto it = services_->begin(); it != services_->end(); ++it) {
-    ServiceResponse* service_response = response->add_service();
-    service_response->set_name(*it);
-  }
-  return Status::OK;
+    
+    {}  // namespace caffe
+    
+     protected:
+  // Function to compute part of a matrix.vector multiplication. The weights
+  // are in a very specific order (see above) in w, which is multiplied by
+  // u of length num_in, to produce output v after scaling the integer results
+  // by the corresponding member of scales.
+  // The amount of w and scales consumed is fixed and not available to the
+  // caller. The number of outputs written to v will be at most num_out.
+  typedef void (*PartialFunc)(const int8_t* w, const double* scales,
+                              const int8_t* u, int num_in, int num_out,
+                              double* v);
+    
+      // Print statistics.
+  void print_scores(void) const;
+  void print_scores(int orientation_id) const;
+    
+    // Given a MutableIterator to the start of a block, run DetectParagraphs on
+// that block and commit the results to the underlying ROW and BLOCK structs,
+// saving the ParagraphModels in models.  Caller owns the models.
+// We use unicharset during the function to answer questions such as 'is the
+// first letter of this word upper case?'
+void DetectParagraphs(int debug_level,
+                      bool after_text_recognition,
+                      const MutableIterator *block_start,
+                      GenericVector<ParagraphModel *> *models);
+    
+    // Gets the up to the first 3 prefixes from s (split by _).
+// For example, tesseract_foo_bar will be split into tesseract,foo and bar.
+void ParamsEditor::GetPrefixes(const char* s, STRING* level_one,
+                               STRING* level_two,
+                               STRING* level_three) {
+  std::unique_ptr<char[]> p(new char[1024]);
+  GetFirstWords(s, 1, p.get());
+  *level_one = p.get();
+  GetFirstWords(s, 2, p.get());
+  *level_two = p.get();
+  GetFirstWords(s, 3, p.get());
+  *level_three = p.get();
 }
     
-    #include 'src/cpp/server/dynamic_thread_pool.h'
+      // Construct the cartesian product of the best_choices of word(1) and word2.
+  WERD_CHOICE_LIST joined_choices;
+  WERD_CHOICE_IT jc_it(&joined_choices);
+  WERD_CHOICE_IT bc1_it(&word->best_choices);
+  WERD_CHOICE_IT bc2_it(&word2->best_choices);
+  int num_word1_choices = word->best_choices.length();
+  int total_joined_choices = num_word1_choices;
+  // Nota Bene: For the main loop here, we operate only on the 2nd and greater
+  // word2 choices, and put them in the joined_choices list. The 1st word2
+  // choice gets added to the original word1 choices in-place after we have
+  // finished with them.
+  int bc2_index = 1;
+  for (bc2_it.forward(); !bc2_it.at_first(); bc2_it.forward(), ++bc2_index) {
+    if (total_joined_choices >= kTooManyAltChoices &&
+        bc2_index > kAltsPerPiece)
+      break;
+    int bc1_index = 0;
+    for (bc1_it.move_to_first(); bc1_index < num_word1_choices;
+        ++bc1_index, bc1_it.forward()) {
+      if (total_joined_choices >= kTooManyAltChoices &&
+          bc1_index > kAltsPerPiece)
+        break;
+      WERD_CHOICE *wc = new WERD_CHOICE(*bc1_it.data());
+      *wc += *bc2_it.data();
+      jc_it.add_after_then_move(wc);
+      ++total_joined_choices;
+    }
+  }
+  // Now that we've filled in as many alternates as we want, paste the best
+  // choice for word2 onto the original word alt_choices.
+  bc1_it.move_to_first();
+  bc2_it.move_to_first();
+  for (bc1_it.mark_cycle_pt(); !bc1_it.cycled_list(); bc1_it.forward()) {
+    *bc1_it.data() += *bc2_it.data();
+  }
+  bc1_it.move_to_last();
+  bc1_it.add_list_after(&joined_choices);
     
-        static void Clear(const nnvm::NodePtr& node) {
-      if (node == nullptr || node->info.empty()) return;
-      AGInfo& info = Get(node);
-      if (info.grad_req != kNullOp) return;
-      node->info.clear();
+    namespace tesseract {
+    }
+    
+        float32* x; //vertex arrays
+    float32* y;
+    int32 nVertices;
+	
+	float32 area;
+	bool areaIsSet;
+	
+    b2Polygon(float32* _x, float32* _y, int32 nVert);
+    b2Polygon(b2Vec2* v, int32 nVert);
+	b2Polygon();
+    ~b2Polygon();
+	
+	float32 GetArea();
+	
+	void MergeParallelEdges(float32 tolerance);
+    b2Vec2* GetVertexVecs();
+    b2Polygon(b2Triangle& t);
+    void Set(const b2Polygon& p);
+    bool IsConvex();
+	bool IsCCW();
+	bool IsUsable(bool printError);
+	bool IsUsable();
+    bool IsSimple();
+   // void AddTo(b2FixtureDef& pd);
+	
+    b2Polygon* Add(b2Triangle& t);
+    
+    
+    {	};
+    
+    					// try each CW
+					for (unsigned int uiCW = 0; uiCW < CW_RANGES; uiCW++)
+					{
+						unsigned int auiPixelSelectors[PIXELS / 2];
+						ColorFloatRGBA	afrgbaDecodedPixels[PIXELS / 2];
+						float afPixelErrors[PIXELS / 2] = { FLT_MAX, FLT_MAX, FLT_MAX, FLT_MAX, 
+															FLT_MAX, FLT_MAX, FLT_MAX, FLT_MAX };
+    }
+    
+    
+  FT_LOCAL( FT_Error )
+  af_latin_metrics_init( AF_LatinMetrics  metrics,
+                         FT_Face          face );
+    
+      The output buffer must be at least 5% larger than the input buffer
+  and can not be smaller than 66 bytes.
+    
+    #define MIN(a,b) ((a)<(b) ? (a):(b))
+#define MAX(a,b) ((a)>(b) ? (a):(b))
+    
+       - Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+    
+    
+/** 16x32 multiplication, followed by a 15-bit shift right. Results fits in 32 bits */
+#undef MULT16_32_Q15
+static OPUS_INLINE opus_val32 MULT16_32_Q15_armv4(opus_val16 a, opus_val32 b)
+{
+  unsigned rd_lo;
+  int rd_hi;
+  __asm__(
+      '#MULT16_32_Q15\n\t'
+      'smull %0, %1, %2, %3\n\t'
+      : '=&r'(rd_lo), '=&r'(rd_hi)
+      : '%r'(b), 'r'(a<<16)
+  );
+  /*We intentionally don't OR in the high bit of rd_lo for speed.*/
+  return rd_hi<<1;
+}
+#define MULT16_32_Q15(a, b) (MULT16_32_Q15_armv4(a, b))
+    
+    /** 16x16 multiply-add where the result fits in 32 bits */
+#undef MAC16_16
+static OPUS_INLINE opus_val32 MAC16_16_armv5e(opus_val32 c, opus_val16 a,
+ opus_val16 b)
+{
+  int res;
+  __asm__(
+      '#MAC16_16\n\t'
+      'smlabb %0, %1, %2, %3;\n'
+      : '=r'(res)
+      : 'r'(a), 'r'(b), 'r'(c)
+  );
+  return res;
+}
+#define MAC16_16(c, a, b) (MAC16_16_armv5e(c, a, b))
+    
+    /********************************************************************/
+/*                    SIGNAL PROCESSING FUNCTIONS                   */
+/********************************************************************/
+    
+      // When user keys are misordered
+  ASSERT_EQ(IKey('foo', 100, kTypeValue),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('bar', 99, kTypeValue)));
+    
+    static void Usage() {
+  fprintf(
+      stderr,
+      'Usage: leveldbutil command...\n'
+      '   dump files...         -- dump contents of specified files\n'
+      );
+}
+    
+    namespace log {
+    }
+    
+      uint64_t FirstLogFile() {
+    return GetFiles(kLogFile)[0];
+  }
+    
+    class TestState {
+ public:
+  ConcurrentTest t_;
+  int seed_;
+  port::AtomicPointer quit_flag_;
     }
     
     /*!
- * \brief Environment arguments that is used by the function.
- * These can be things like scalar arguments when add a value with scalar.
- */
-struct EnvArguments {
-  /*! \brief scalar argument, if enabled */
-  real_t scalar;
-  /*! \brief keyword arguments */
-  std::vector<std::pair<std::string, std::string> > kwargs;
-  /*! \brief pointer to the resources requested */
-  std::vector<Resource> resource;
+ * Copyright (c) 2016 by Contributors
+ * \file caffe_blob.h
+ * \brief conversion between tensor and caffeBlob
+ * \author Haoran Wang
+*/
+#ifndef PLUGIN_CAFFE_CAFFE_BLOB_H_
+#define PLUGIN_CAFFE_CAFFE_BLOB_H_
+    
+    
+    {    return false;
+  }
+    
+    namespace mxnet {
+namespace op {
+template<>
+Operator *CreateOp<cpu>(CaffeLossParam param, int dtype) {
+  Operator *op = NULL;
+  switch (dtype) {
+  case mshadow::kFloat32:
+    op = new CaffeLoss<cpu, float>(param);
+    break;
+  case mshadow::kFloat64:
+    op = new CaffeLoss<cpu, double>(param);
+    break;
+  case mshadow::kFloat16:
+    LOG(FATAL) << 'float16 layer is not supported by caffe';
+    break;
+  default:
+    LOG(FATAL) << 'Unsupported type ' << dtype;
+  }
+  return op;
+}
+    }
+    }
+    
+      inline void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) {
+    std::vector<std::pair<std::string, std::string> > kwargs_left;
+    // init batch param, it could have similar param with
+    kwargs_left = param_.InitAllowUnknown(kwargs);
+    // Init space for out
+    out_.inst_index = new unsigned[param_.batch_size];
+    out_.batch_size = param_.batch_size;
+    out_.data.clear();
+    // init base iterator
+    base_->Init(kwargs);
+  }
+    
+    
+    
+    
+    {  SrcPos start;
+  SrcPos past;
 };
     
-      /*brief Set up caffeop to infer output shape*/
-  bool InferShape(std::vector<TShape> *in_shape,
-                  std::vector<TShape> *out_shape,
-                  std::vector<TShape> *aux_shape) const override {
-    using namespace mshadow;
-    using ::caffe::Blob;
-    using std::vector;
-    if (caffeOp_ == NULL)
-      caffeOp_ = caffe::LayerRegistry<float>::CreateLayer(param_.prototxt);
-    }
-    
-    /*! \brief create a batch iterator from single instance iterator */
-class BatchLoader : public IIterator<TBlobBatch> {
- public:
-  explicit BatchLoader(IIterator<DataInst> *base):
-    head_(1), num_overflow_(0), base_(base) {
-  }
-    }
-    
-    // This method must return a char* which is owned by the IniSettingMap
-// to avoid issues with the lifetime of the char*
-const char* Config::Get(const IniSettingMap &ini, const Hdf& config,
-                        const std::string& name /* = '' */,
-                        const char *defValue /* = nullptr */,
-                        const bool prepend_hhvm /* = true */) {
-  auto ini_name = IniName(name, prepend_hhvm);
-  Hdf hdf = name != '' ? config[name] : config;
-  auto value = ini_iterate(ini, ini_name);
-  if (value.isString()) {
-    // See generic Get##METHOD below for why we are doing this
-    // Note that value is a string, so value.toString() is not
-    // a temporary.
-    const char* ini_ret = value.toString().data();
-    const char* hdf_ret = hdf.configGet(ini_ret);
-    if (hdf_ret != ini_ret) {
-      ini_ret = hdf_ret;
-      IniSetting::SetSystem(ini_name, ini_ret);
-    }
-    return ini_ret;
-  }
-  return hdf.configGet(defValue);
-}
+    #endif
+
     
     
-    {///////////////////////////////////////////////////////////////////////////////
-}
-    
-        // skipping .  .. hidden files
-    if (ename[0] == '.' || !*ename) {
+    {
+    {      write(ini_fd, line.c_str(), line.length());
+      write(ini_fd, '\n', 1);
+      cnt += 2;
       continue;
     }
-    auto fe = fullPath + ename;
-    struct stat se;
-    if (stat(fe.c_str(), &se)) {
-      Logger::Error('FileUtil::find(): unable to stat %s', fe.c_str());
-      continue;
+    if (argv[cnt][0] != '-') {
+      if (show) {
+        newargv.push_back('-w');
+      } else {
+        newargv.push_back(lint ? '-l' : '-f');
+      }
+      newargv.push_back(argv[cnt++]);
+      need_file = false;
+      break;
+    }
+    if (strcmp(argv[cnt], '--') == 0) {
+      break;
+    }
+    cnt++; // skip unknown options
+  }
+    
+    #include 'hphp/runtime/base/file.h'
+    
+    static void ParseFile(benchmark::State& state, const char* filename)
+{
+    while (state.KeepRunning())
+    {
+        state.PauseTiming();
+        auto* f = new std::ifstream(filename);
+        auto* j = new json();
+        state.ResumeTiming();
+    }
     }
     
-    #include 'hphp/runtime/base/directory.h'
-#include 'hphp/runtime/ext/std/ext_std_file.h'
+      std::string const& fname = FLAGS_benchmark_out;
+  if (fname.empty() && file_reporter) {
+    Err << 'A custom file reporter was provided but '
+           '--benchmark_out=<file> was not specified.'
+        << std::endl;
+    std::exit(1);
+  }
+  if (!fname.empty()) {
+    output_file.open(fname);
+    if (!output_file.is_open()) {
+      Err << 'invalid file name: '' << fname << std::endl;
+      std::exit(1);
+    }
+    if (!file_reporter) {
+      default_file_reporter = internal::CreateReporter(
+          FLAGS_benchmark_out_format, ConsoleReporter::OO_None);
+      file_reporter = default_file_reporter.get();
+    }
+    file_reporter->SetOutputStream(&output_file);
+    file_reporter->SetErrorStream(&output_file);
+  }
+    
+    typedef void(AbortHandlerT)();
+    
+    bool IsColorTerminal() {
+#if BENCHMARK_OS_WINDOWS
+  // On Windows the TERM variable is usually not set, but the
+  // console there does support colors.
+  return 0 != _isatty(_fileno(stdout));
+#else
+  // On non-Windows platforms, we rely on the TERM variable. This list of
+  // supported TERM values is copied from Google Test:
+  // <https://github.com/google/googletest/blob/master/googletest/src/gtest.cc#L2925>.
+  const char* const SUPPORTED_TERM_VALUES[] = {
+      'xterm',         'xterm-color',     'xterm-256color',
+      'screen',        'screen-256color', 'tmux',
+      'tmux-256color', 'rxvt-unicode',    'rxvt-unicode-256color',
+      'linux',         'cygwin',
+  };
+    }
+    
+    
+    {}  // end namespace benchmark
+    
+    namespace benchmark {
+// Parses 'str' for a 32-bit signed integer.  If successful, writes the result
+// to *value and returns true; otherwise leaves *value unchanged and returns
+// false.
+bool ParseInt32(const std::string& src_text, const char* str, int32_t* value);
+    }
+    
+      // FIXME: Add locking to output.
+  template <class Tp>
+  friend LogType& operator<<(LogType&, Tp const&);
+  friend LogType& operator<<(LogType&, EndLType*);
