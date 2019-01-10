@@ -1,175 +1,163 @@
 
         
-            def __init__(self, debuglevel=0):
-        self._init_github_account()
-        https_handler = make_HTTPS_handler({}, debuglevel=debuglevel)
-        self._opener = compat_urllib_request.build_opener(https_handler)
+              if datasets and 'alignment_matrix_cxf' in datasets[name].keys():
+        dataset = datasets[name]
+        if hps.do_train_readin:
+            print('Initializing trainable readin matrix with alignment matrix' \
+                  ' provided for dataset:', name)
+        else:
+            print('Setting non-trainable readin matrix to alignment matrix' \
+                  ' provided for dataset:', name)
+        in_mat_cxf = dataset['alignment_matrix_cxf'].astype(np.float32)
+        if in_mat_cxf.shape != (data_dim, factors_dim):
+          raise ValueError('''Alignment matrix must have dimensions %d x %d
+          (data_dim x factors_dim), but currently has %d x %d.'''%
+                           (data_dim, factors_dim, in_mat_cxf.shape[0],
+                            in_mat_cxf.shape[1]))
+      if datasets and 'alignment_bias_c' in datasets[name].keys():
+        dataset = datasets[name]
+        if hps.do_train_readin:
+          print('Initializing trainable readin bias with alignment bias ' \
+                'provided for dataset:', name)
+        else:
+          print('Setting non-trainable readin bias to alignment bias ' \
+                'provided for dataset:', name)
+        align_bias_c = dataset['alignment_bias_c'].astype(np.float32)
+        align_bias_1xc = np.expand_dims(align_bias_c, axis=0)
+        if align_bias_1xc.shape[1] != data_dim:
+          raise ValueError('''Alignment bias must have dimensions %d
+          (data_dim), but currently has %d.'''%
+                           (data_dim, in_mat_cxf.shape[0]))
+        if in_mat_cxf is not None and align_bias_1xc is not None:
+          # (data - alignment_bias) * W_in
+          # data * W_in - alignment_bias * W_in
+          # So b = -alignment_bias * W_in to accommodate PCA style offset.
+          in_bias_1xf = -np.dot(align_bias_1xc, in_mat_cxf)
     
-    try:
-    input = raw_input
-except NameError:
+    rates_b, x0s_b, _ = generate_data(rnn_b, T=T, E=E, x0s=x0s, P_sxn=P_nxn,
+                                  input_magnitude=0.0, input_times=None)
+spikes_b = spikify_data(rates_b, rng, rnn_b['dt'], rnn_b['max_firing_rate'])
+    
+      try:
+    with h5py.File(data_fname, 'r') as hf:
+      data_dict = {k: np.array(v) for k, v in hf.items()}
+      return data_dict
+  except IOError:
+    print('Cannot open %s for reading.' % data_fname)
+    raise
+    
+    from six.moves import xrange
+    
+      Returns:
+    attention_keys: to be compared with target states.
+    attention_values: to be used to construct context vectors.
+    attention_score_fn: to compute similarity between key and target states.
+    attention_construct_fn: to build attention states.
+  '''
+  # Prepare attention keys / values from attention_states
+  with tf.variable_scope('attention_keys', reuse=reuse) as scope:
+    attention_keys = tf.contrib.layers.linear(
+        attention_states, num_units, biases_initializer=None, scope=scope)
+  attention_values = attention_states
+    
+            # install new cert
+        xlog.info('Add cert to database $HOME/.pki/nssdb')
+        cmd_line = 'certutil -d sql:$HOME/.pki/nssdb -A -t 'C,,' -n '%s' -i '%s'' % (common_name, ca_file)
+        os.system(cmd_line)
+        return True
+    
+            if network_ok:
+            self.last_check_time = time.time()
+            self.report_ok()
+            xlog.debug('network %s is ok, cost:%d ms', self.type, 1000 * (time.time() - time_now))
+        else:
+            xlog.warn('network %s fail', self.type)
+            self.network_stat = 'Fail'
+            self.last_check_time = time.time()
+    
+    
+runtime_version_str = __version__
+runtime_version = version_str_to_tuple(runtime_version_str)
+    
+    def handleSlides(slides):
+    for slide in slides:
+        handleSlide(slide)
+    
+            # Adding model 'ReprocessingReport'
+        db.create_table(
+            'sentry_reprocessingreport', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'project', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.Project']
+                    )
+                ), (
+                    'event_id',
+                    self.gf('django.db.models.fields.CharField')(max_length=32, null=True)
+                ), (
+                    'datetime',
+                    self.gf('django.db.models.fields.DateTimeField')()
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['ReprocessingReport'])
+    
+    
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding model 'ApiGrant'
+        db.create_table(
+            'sentry_apigrant', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'user', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.User']
+                    )
+                ), (
+                    'application', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.ApiApplication']
+                    )
+                ), (
+                    'code',
+                    self.gf('django.db.models.fields.CharField')(max_length=64, db_index=True)
+                ), ('expires_at', self.gf('django.db.models.fields.DateTimeField')(db_index=True)),
+                ('redirect_uri', self.gf('django.db.models.fields.CharField')(max_length=255)),
+                ('scopes', self.gf('django.db.models.fields.BigIntegerField')(default=None)),
+            )
+        )
+        db.send_create_signal('sentry', ['ApiGrant'])
+    
+        def test_initial_state(self):
+        state = self.radio.state.name
+        expected_state_name = 'AM'
+        self.assertEqual(state, expected_state_name)
+    
+    
+def template_function(getter, converter=False, to_save=False):
+    data = getter()
+    print('Got `{}`'.format(data))
+    
+        def is_satisfied_by(self, candidate):
+        return bool(self._one.is_satisfied_by(candidate) or self._other.is_satisfied_by(candidate))
+    
+        def toggle_amfm(self):
+        print(u'Switching to FM')
+        self.radio.state = self.radio.fmstate
+    
+    
+class A(Node):
     pass
     
-        with io.open(infile, encoding='utf-8') as inf:
-        issue_template_tmpl = inf.read()
+    *What does this example do?
+When the number of prototypes in an application can vary, it can be
+useful to keep a Dispatcher (aka, Registry or Manager). This allows
+clients to query the Dispatcher for a prototype before cloning a new
+instance.
     
-    
-def filter_options(readme):
-    ret = ''
-    in_options = False
-    for line in readme.split('\n'):
-        if line.startswith('# '):
-            if line[2:].startswith('OPTIONS'):
-                in_options = True
-            else:
-                in_options = False
-    
-        with open(ZSH_COMPLETION_TEMPLATE) as f:
-        template = f.read()
-    
-        def test_decrypt_text(self):
-        password = intlist_to_bytes(self.key).decode('utf-8')
-        encrypted = base64.b64encode(
-            intlist_to_bytes(self.iv[:8]) +
-            b'\x17\x15\x93\xab\x8d\x80V\xcdV\xe0\t\xcdo\xc2\xa5\xd8ksM\r\xe27N\xae'
-        ).decode('utf-8')
-        decrypted = (aes_decrypt_text(encrypted, password, 16))
-        self.assertEqual(decrypted, self.secret_msg)
-    
-        def load(self):
-        '''
-        Load the data from the key itself instead of fetching from some
-        external data store. Opposite of _get_session_key(), raise BadSignature
-        if signature fails.
-        '''
-        try:
-            return signing.loads(
-                self.session_key,
-                serializer=self.serializer,
-                # This doesn't handle non-default expiry dates, see #19201
-                max_age=settings.SESSION_COOKIE_AGE,
-                salt='django.contrib.sessions.backends.signed_cookies',
-            )
-        except Exception:
-            # BadSignature, ValueError, or unpickling exceptions. If any of
-            # these happen, reset the session.
-            self.create()
-        return {}
-    
-        def __str__(self):
-        return self.session_key
-    
-        if section is not None:
-        if section not in sitemaps:
-            raise Http404('No sitemap available for section: %r' % section)
-        maps = [sitemaps[section]]
-    else:
-        maps = sitemaps.values()
-    page = request.GET.get('p', 1)
-    
-    def normpath(path):
-    '''Normalize path, eliminating double slashes, etc.'''
-    path = os.fspath(path)
-    if isinstance(path, bytes):
-        sep = b'/'
-        empty = b''
-        dot = b'.'
-        dotdot = b'..'
-    else:
-        sep = '/'
-        empty = ''
-        dot = '.'
-        dotdot = '..'
-    if path == empty:
-        return dot
-    initial_slashes = path.startswith(sep)
-    # POSIX allows one or two initial slashes, but treats three or more
-    # as single slash.
-    if (initial_slashes and
-        path.startswith(sep*2) and not path.startswith(sep*3)):
-        initial_slashes = 2
-    comps = path.split(sep)
-    new_comps = []
-    for comp in comps:
-        if comp in (empty, dot):
-            continue
-        if (comp != dotdot or (not initial_slashes and not new_comps) or
-             (new_comps and new_comps[-1] == dotdot)):
-            new_comps.append(comp)
-        elif new_comps:
-            new_comps.pop()
-    comps = new_comps
-    path = sep.join(comps)
-    if initial_slashes:
-        path = sep*initial_slashes + path
-    return path or dot
-    
-        def test_normpath_issue5827(self):
-        # Make sure normpath preserves unicode
-        for path in ('', '.', '/', '\\', '///foo/.//bar//'):
-            self.assertIsInstance(self.pathmodule.normpath(path), str)
-    
-        def test_mkdir_no_parents_file(self):
-        p = self.cls(BASE, 'fileA')
-        self.assertTrue(p.exists())
-        # An exception is raised when the last path component is an existing
-        # regular file, regardless of whether exist_ok is true or not.
-        with self.assertRaises(FileExistsError) as cm:
-            p.mkdir()
-        self.assertEqual(cm.exception.errno, errno.EEXIST)
-        with self.assertRaises(FileExistsError) as cm:
-            p.mkdir(exist_ok=True)
-        self.assertEqual(cm.exception.errno, errno.EEXIST)
-    
-        def _check_child_encoding_details(self,
-                                      env_vars,
-                                      expected_fs_encoding,
-                                      expected_stream_encoding,
-                                      expected_warnings,
-                                      coercion_expected):
-        '''Check the C locale handling for the given process environment
-    
-        # Initialize and populate our database.
-    conn = sqlite3.connect(':memory:')
-    cursor = conn.cursor()
-    cursor.execute('CREATE TABLE memos(key INTEGER PRIMARY KEY, task TEXT)')
-    tasks = (
-        'give food to fish',
-        'prepare group meeting',
-        'fight with a zebra',
-        )
-    for task in tasks:
-        cursor.execute('INSERT INTO memos VALUES(NULL, ?)', (task,))
-    
-        with open(args.msgfile, 'rb') as fp:
-        msg = email.message_from_binary_file(fp, policy=default)
-    
-    document = '''\
-<slideshow>
-<title>Demo slideshow</title>
-<slide><title>Slide title</title>
-<point>This is a demo</point>
-<point>Of a program for processing slides</point>
-</slide>
-    
-        # Submit tasks
-    for task in TASKS1:
-        task_queue.put(task)
-    
-        publicKey, privateKey = generateKey(keySize)
-    print('\nWriting public key to file %s_pubkey.txt...' % name)
-    with open('%s_pubkey.txt' % name, 'w') as fo:
-        fo.write('%s,%s,%s' % (keySize, publicKey[0], publicKey[1]))
-    
-        def __hash_function_2(self, value, data):
-    
-        def __init__(self, size_table, charge_factor=None, lim_charge=None):
-        self.size_table = size_table
-        self.values = [None] * self.size_table
-        self.lim_charge = 0.75 if lim_charge is None else lim_charge
-        self.charge_factor = 1 if charge_factor is None else charge_factor
-        self.__aux_list = []
-        self._keys = {}
-    
-        for i in range(1, n+1):
-        dp[i][0] = True
+    production code which is untestable:
