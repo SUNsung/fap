@@ -1,92 +1,38 @@
 
         
-        require 'global'
-require 'build_options'
-require 'cxxstdlib'
-require 'keg'
-require 'extend/ENV'
-require 'debrew'
-require 'fcntl'
-require 'socket'
+            when IAX_TYPE_IAX
     
-    module Homebrew
-  module Cleanup
-    @@disk_cleanup_size = 0
     
-      def xcode
-    if instance_variable_defined?(:@xcode)
-      @xcode
-    elsif MacOS::Xcode.installed?
-      @xcode = MacOS::Xcode.version
-      @xcode += ' => #{MacOS::Xcode.prefix}' unless MacOS::Xcode.default_prefix?
-      @xcode
-    end
-  end
+IAX_TYPE_VOICE   = 2
+IAX_TYPE_CONTROL = 4
+IAX_TYPE_IAX     = 6
+IAX_TYPE_DTMF_BEGIN = 1
+IAX_TYPE_DTMF_END   = 12
     
-      attr_reader :tap, :initial_revision, :current_revision
-    
-        def password_change(record, opts={})
-      devise_mail(record, :password_change, opts)
-    end
-  end
-end
-
-    
-            if is_navigational_format?
-          session.delete(session_key)
-        else
-          session[session_key]
-        end
-      end
-    
-                  define_method method do |resource_or_scope, *args|
-                scope = Devise::Mapping.find_scope!(resource_or_scope)
-                router_name = Devise.mappings[scope].router_name
-                context = router_name ? send(router_name) : _devise_route_context
-                context.send('#{action}#{scope}_#{module_name}_#{path_or_url}', *args)
-              end
-            end
+              # Rex::Proto::Kerberos::Model::ApReq decoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def decode(input)
+            raise ::NotImplementedError, 'AP-REQ decoding not supported'
           end
-        end
-      end
     
-            # Upload a file to the remote machine.
-        #
-        # @param [String] from Path of the file locally to upload.
-        # @param [String] to Path of where to save the file on the remote
-        #   machine.
-        def upload(from, to)
-        end
+              # @!attribute key
+          #   @return [Integer] The type of encryption key
+          attr_accessor :type
+          # @!attribute value
+          #   @return [String] the key itself
+          attr_accessor :value
     
-              # Otherwise add the block to the list of hooks for this action.
-          hooks << block
-        end
+              # Decodes a Rex::Proto::Kerberos::Model::KdcRequestBody from an
+          # OpenSSL::ASN1::Sequence
+          #
+          # @param input [OpenSSL::ASN1::Sequence] the input to decode from
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode_asn1(input)
+            seq_values = input.value
     
-            # This is the method called to provision the system. This method
-        # is expected to do whatever necessary to provision the system (create files,
-        # SSH, etc.)
-        def provision!
-        end
-    
-            def scope
-          if params[:product_id]
-            Spree::Product.friendly.find(params[:product_id])
-          elsif params[:variant_id]
-            Spree::Variant.find(params[:variant_id])
-          end
-        end
-      end
-    end
-  end
-end
-
-    
-            def void
-          perform_payment_action(:void_transaction)
-        end
-    
-            def destroy
-          authorize! :destroy, zone
-          zone.destroy
-          respond_with(zone, status: 204)
-        end
+              # Decodes a Rex::Proto::Kerberos::Model::KdcResponse from an String
+          #
+          # @param input [String] the input to decode from
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
