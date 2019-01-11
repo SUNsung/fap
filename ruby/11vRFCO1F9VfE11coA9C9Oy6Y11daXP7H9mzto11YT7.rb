@@ -1,179 +1,159 @@
 
         
-                  relation.update_all(update)
+                def render(&block)
+          render_collection_for(RadioButtonBuilder, &block)
         end
+    
+            private
+    
+          # Creates a _layout method to be called by _default_layout .
+      #
+      # If a layout is not explicitly mentioned then look for a layout with the controller's name.
+      # if nothing is found then try same procedure to find super class's layout.
+      def _write_layout_method # :nodoc:
+        silence_redefinition_of_method(:_layout)
+    
+        private
+    
+        # Pass a action alias symbol (e.g. :enable_automatic_code_signing)
+    # and this method will return a reference to the action class
+    # if it exists. In case the action with this alias can't be found
+    # this method will return nil.
+    def class_reference_from_action_alias(method_sym)
+      alias_found = find_alias(method_sym.to_s)
+      return nil unless alias_found
+    
+          def self.authors
+        ['lmirosevic', 'maschall']
       end
-    end
-  end
-end
-
     
-          # Fetches data from the GitHub API and yields a Page object for every page
-      # of data, without loading all of them into memory.
-      #
-      # method - The Octokit method to use for getting the data.
-      # args - Arguments to pass to the Octokit method.
-      #
-      # rubocop: disable GitlabSecurity/PublicSend
-      def each_page(method, *args, &block)
-        return to_enum(__method__, method, *args) unless block_given?
+          it 'Collects logs in the specified revision range if specified' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          changelog_from_git_commits(between: ['abcd', '1234'])
+        end').runner.execute(:test)
     
-            def collection_method
-          :pull_requests_comments
-        end
+          it 'handles no extension or extensions parameters' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.')
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}'')
+      end
     
-            def collection_method
-          :issues_comments
-        end
-    
-              new(hash)
-        end
-    
-              if !matches || !matches[:type]
-            raise(
-              ArgumentError,
-              'The note URL #{note.html_url.inspect} is not supported'
+          context 'when specify false for strict option' do
+        it 'doesn't add strict option' do
+          result = Fastlane::FastFile.new.parse('lane :test do
+            swiftlint(
+              strict: false
             )
-          end
+          end').runner.execute(:test)
     
-            expose_attribute :id, :login
-    
-    Then /^'([^']*)' should be post (\d+)$/ do |post_text, position|
-  stream_element_numbers_content(position).should have_content(post_text)
-end
-    
-    When /^I have user with username '([^']*)' in an aspect called '([^']*)'$/ do |username, aspect|
-  user = User.find_by_username(username)
-  contact = @me.reload.contact_for(user.person)
-  contact.aspects << @me.aspects.find_by_name(aspect)
-end
-    
-          delete :destroy, params: {post_id: @message.id, id: like2.id}, format: :json
-      expect(response.status).to eq(404)
-      expect(response.body).to eq(I18n.t('likes.destroy.error'))
-      expect(Like.count).to eq(like_count)
+        it 'raises when no argument passed' do
+      expect do
+        command_from_args
+      end.to raise_error(ArgumentError)
     end
-  end
+    
+        def help_default_value
+      return '#{self.default_value} *'.strip if self.default_value_dynamic
+      return '' if self.default_value.nil?
+      return '''' if self.default_value.instance_of?(String) && self.default_value.empty?
+      return ':#{self.default_value}' if self.default_value.instance_of?(Symbol)
+    
+    # Contributors should always provide a changelog when submitting a PR
+if github.pr_body.length < 5
+  warn('Please provide a changelog summary in the Pull Request description @#{github.pr_author}')
 end
-
     
-              begin
-            lineno = frame.lineno-1
-            lines = ::File.readlines(frame.filename)
-            frame.pre_context_lineno = [lineno-CONTEXT, 0].max
-            frame.pre_context = lines[frame.pre_context_lineno...lineno]
-            frame.context_line = lines[lineno].chomp
-            frame.post_context_lineno = [lineno+CONTEXT, lines.size].min
-            frame.post_context = lines[lineno+1..frame.post_context_lineno]
-          rescue
-          end
-    
-          def report(env)
-        warn env, 'attack reported by #{self.class}'
-        env[options[:report_key]] = true
-      end
-    
-          def redirect(env)
-        request = Request.new(env)
-        warn env, 'attack prevented by #{self.class}'
-        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
-      end
-    
-          @left_diff_line_number = nil
-    
-          def js # custom js
-        @js
-      end
-    
-      # determine file list from git ls-files
-  files = `git ls-files`.
-    split('\n').
-    sort.
-    reject { |file| file =~ /^\./ }.
-    reject { |file| file =~ /^(rdoc|pkg|test|Home\.md|\.gitattributes)/ }.
-    map { |file| '    #{file}' }.
-    join('\n')
-    
-      s.add_development_dependency 'rack-test', '~> 0.6.2'
-  s.add_development_dependency 'shoulda', '~> 3.5.0'
-  s.add_development_dependency 'minitest-reporters', '~> 0.14.16'
-  s.add_development_dependency 'twitter_cldr', '~> 3.2.0'
-  s.add_development_dependency 'mocha', '~> 1.1.0'
-  s.add_development_dependency 'test-unit', '~> 3.1.0'
-  s.add_development_dependency 'webrick', '~> 1.3.1'
-    
-          unless described_class ==
-             RuboCop::Cop::Layout::MultilineMethodDefinitionBraceLayout
-        context 'with a chained call on the closing brace' do
-          let(:suffix) { '.any?' }
-          let(:source) { construct(false, true) }
-    
-          # Custom destructuring method. This can be used to normalize
-      # destructuring for different variations of the node.
-      #
-      # In this case, the `def` node destructures into:
-      #
-      #   `method_name, arguments, body`
-      #
-      # while the `defs` node destructures into:
-      #
-      #   `receiver, method_name, arguments, body`
-      #
-      # so we reverse the destructured array to get the optional receiver
-      # at the end, where it can be discarded.
-      #
-      # @return [Array] the different parts of the `def` or `defs` node
-      def node_parts
-        to_a.reverse
-      end
+        def subpath_to(url)
+      base_url.subpath_to url, ignore_case: true
     end
-  end
-end
-
     
-          # Calls the given block for each `pair` node in the `hash` literal.
-      # If no block is given, an `Enumerator` is returned.
-      #
-      # @return [self] if a block is given
-      # @return [Enumerator] if no block is given
-      def each_pair
-        return each_child_node(:pair).to_enum unless block_given?
+        def self.subscribe_to(notifier)
+      attach_to(namespace, new, notifier)
+    end
     
-        def render(context)
-      quote = paragraphize(super)
-      author = '<strong>#{@by.strip}</strong>' if @by
-      if @source
-        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
-        parts = []
-        url.each do |part|
-          if (parts + [part]).join('/').length < 32
-            parts << part
+            title = at_css('h1').content.strip
+        if root_page?
+          at_css('h1').content = 'Angular 2 Documentation'
+        elsif title == 'Index'
+          at_css('h1').content = result[:entries].first.name
+        elsif title == 'Angular'
+          at_css('h1').content = slug.split('/').last.gsub('-', ' ')
+        elsif at_css('.breadcrumbs') && title != result[:entries].first.name
+          at_css('h1').content = result[:entries].first.name
+        end
+    
+            css('ul.methods', 'ul.properties', 'ul.events').add_class('defs').each do |node|
+          node.css('> li > h3').each do |h3|
+            next if h3.content.present?
+            h3.content = h3.next_element.content
+            h3.next_element.remove
           end
         end
-        source = parts.join('/')
-        source << '/&hellip;' unless source == @source
-      end
-      if !@source.nil?
-        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
-      elsif !@title.nil?
-        cite = ' <cite>#{@title}</cite>'
-      end
-      blockquote = if @by.nil?
-        quote
-      elsif cite
-        '#{quote}<footer>#{author + cite}</footer>'
-      else
-        '#{quote}<footer>#{author}</footer>'
-      end
-      '<blockquote>#{blockquote}</blockquote>'
-    end
-    
-        def render(context)
-      if @img
-        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
-      else
-        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
       end
     end
   end
 end
+
+    
+            render template: 'admin/reports/show'
+      end
+    end
+    
+      def maxwidth_or_default
+    (params[:maxwidth].presence || 400).to_i
+  end
+    
+      def process_salmon
+    SalmonWorker.perform_async(@account.id, payload.force_encoding('UTF-8'))
+  end
+end
+
+    
+      def data_params
+    @data_params ||= params.require(:data).permit(alerts: [:follow, :favourite, :reblog, :mention])
+  end
+end
+
+    
+      Devise.omniauth_configs.each_key do |provider|
+    provides_callback_for provider
+  end
+    
+    end
+
+    
+          rtn = ''
+      (context.environments.first['site'][@array_name] || []).each do |file|
+        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
+          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
+        end
+    
+          def deliver(msg)
+        if msg.respond_to?(:deliver_now)
+          # Rails 4.2/5.0
+          msg.deliver_now
+        else
+          # Rails 3.2/4.0/4.1
+          msg.deliver
+        end
+      end
+    end
+    
+    module Sidekiq
+  class BasicFetch
+    # We want the fetch operation to timeout every few seconds so the thread
+    # can check if the process is shutting down.
+    TIMEOUT = 2
+    
+              worker_classes.each do |worker_class|
+            Sidekiq::Testing.constantize(worker_class).drain
+          end
+        end
+      end
+    end
+  end
+end
+    
+      class WebRoute
+    attr_accessor :request_method, :pattern, :block, :name
