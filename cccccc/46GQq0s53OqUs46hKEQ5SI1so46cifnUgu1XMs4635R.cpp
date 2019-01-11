@@ -1,393 +1,164 @@
 
-    {    Lock& lock;
-    Lock templock;
+        
+        
+    {  std::vector<OperatorDef> GetGradientDefs() override {
+    return SingleGradientDef(
+        'SubGradient',
+        '',
+        std::vector<std::string>{GO(0), I(0), I(1)},
+        std::vector<std::string>{GI(0), GI(1)});
+  }
 };
     
-    #include <script/script.h>
+    #ifndef CAFFE2_OPERATORS_FLEXIBLE_TOP_K_H_
+#define CAFFE2_OPERATORS_FLEXIBLE_TOP_K_H_
     
-    SECP256K1_INLINE static void secp256k1_fe_mul_inner(uint64_t *r, const uint64_t *a, const uint64_t * SECP256K1_RESTRICT b) {
-/**
- * Registers: rdx:rax = multiplication accumulator
- *            r9:r8   = c
- *            r15:rcx = d
- *            r10-r14 = a0-a4
- *            rbx     = b
- *            rdi     = r
- *            rsi     = a / t?
- */
-  uint64_t tmp1, tmp2, tmp3;
-__asm__ __volatile__(
-    'movq 0(%%rsi),%%r10\n'
-    'movq 8(%%rsi),%%r11\n'
-    'movq 16(%%rsi),%%r12\n'
-    'movq 24(%%rsi),%%r13\n'
-    'movq 32(%%rsi),%%r14\n'
+    OPERATOR_SCHEMA(HalfToFloat)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .TensorInferenceFunction(
+        [](const OperatorDef& def, const vector<TensorShape>& in) {
+          vector<TensorShape> out;
+          const TensorShape& X = in[0];
+          out.push_back(X);
+          out[0].set_data_type(TensorProto_DataType_FLOAT);
     }
     
-    int secp256k1_ecdh(const secp256k1_context* ctx, unsigned char *result, const secp256k1_pubkey *point, const unsigned char *scalar) {
-    int ret = 0;
-    int overflow = 0;
-    secp256k1_gej res;
-    secp256k1_ge pt;
-    secp256k1_scalar s;
-    VERIFY_CHECK(ctx != NULL);
-    ARG_CHECK(result != NULL);
-    ARG_CHECK(point != NULL);
-    ARG_CHECK(scalar != NULL);
-    }
+            checkpoint[versionKey] = CurrentVersion();
+        checkpoint[typeKey] = s_learnerTypeValue;
+        checkpoint[sampleCountKey] = m_sampleCount;
+        checkpoint[minibatchCountKey] = m_minibatchCount;
+        checkpoint[sweepCountKey] = m_sweepCount;
+        checkpoint[learningRateScheduleKey] = m_learningRateSchedule.Serialize();
+        checkpoint[noiseInjectionSeedKey] = m_noiseInjectionSeed;
+        checkpoint[masterParameterUpdatedKey] = m_masterParameterUpdated;
     
-    
-struct SepFilterCtx
-{
-    int16_t kernelx_data[3];
-    int16_t kernely_data[3];
-    CAROTENE_NS::BORDER_MODE border;
-};
-inline int TEGRA_SEPFILTERINIT(cvhalFilter2D **context, int src_type, int dst_type, int kernel_type,
-                               uchar *kernelx_data, int kernelx_length,
-                               uchar *kernely_data, int kernely_length,
-                               int anchor_x, int anchor_y, double delta, int borderType)
-{
-    if(!context || !kernelx_data || !kernely_data || src_type != CV_8UC1 || dst_type != CV_16SC1 ||
-       kernelx_length != 3 || kernely_length != 3 ||
-       delta != 0 || anchor_x != 1 || anchor_y != 1)
-        return CV_HAL_ERROR_NOT_IMPLEMENTED;
-    }
-    
-    
-    {    internal::vtransform(size,
-                     srcBase, srcStride,
-                     dstBase, dstStride,
-                     dstBase, dstStride,
-                     AccumulateWeighted(alpha));
-#else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)alpha;
-#endif
-}
-    
-            int16x8_t l02 = vaddq_s16(line0x, line2x);
-        int16x8_t l1x2 = vshlq_n_s16(line1x, 1);
-        int16x8_t dy = vsubq_s16(line2y, line0y);
-        int16x8_t dx = vaddq_s16(l1x2, l02);
-    
-    #define ALPHA_QUAD(sgn, bits) { \
-                                  internal::prefetch(src + sj); \
-                                  union { vec128_4 v4; vec128_3 v3; } vals; \
-                                  vals.v4 = vld4q_##sgn##bits(src + sj); \
-                                  vst3q_##sgn##bits(dst3 + d3j, vals.v3); \
-                                  vst1q_##sgn##bits(dst1 + d1j, vals.v4.val[3]); \
-                              }
-    
-            for (; sj < roiw8; sj += 8, syj += 16, dj += 32)
-        {
-            uint8x8x2_t v_y = vld2_u8(srcy + syj);
-            uint8x8x4_t v_dst;
-            v_dst.val[0] = vld1_u8(srcu + sj);
-            v_dst.val[1] = v_y.val[0];
-            v_dst.val[2] = vld1_u8(srcv + sj);
-            v_dst.val[3] = v_y.val[1];
-            vst4_u8(dst + dj, v_dst);
+                tensorView = new TensorView<double>(slicedMatrixView, AsTensorViewShape(sliceViewShape));
+            break;
         }
-    
-    
-    {    if (!parametersSupported) {
-        std::cerr << 'internal error: attempted to use a function with unsupported parameters' << std::endl;
-        std::abort();
-    }
-}
-    
-    #ifndef CAROTENE_SRC_COMMON_HPP
-#define CAROTENE_SRC_COMMON_HPP
-    
-             int32x4_t vline1_s32 = vcvtq_s32_f32(vline1_f32);
-         int32x4_t vline2_s32 = vcvtq_s32_f32(vline2_f32);
-         int16x4_t vline1_s16 = vqmovn_s32(vline1_s32);
-         int16x4_t vline2_s16 = vqmovn_s32(vline2_s32);
-    
-            u8 prevx[3] = { 0, 0, 0 },
-           currx[3] = { 0, 0, 0 },
-           nextx[3] = { 0, 0, 0 };
-        ptrdiff_t x = 0;
-        const ptrdiff_t bwidth = y + 2 < height ? width : (width - 8);
-    
-            vst1q_u32(sum + j, vsuml);
-        vst1q_u32(sum + j + 4, vsumh);
-    
-            // perform vertical convolution
-        for ( ; x <= bwidth; x += 8)
+        case DataType::Float16:
         {
-            internal::prefetch(srow0 + x);
-            internal::prefetch(srow1 + x);
-            internal::prefetch(srow2 + x);
-    }
+            auto currentMatrix = GetMatrix<half>();
+            std::pair<size_t, size_t> currentMatrixDims = { currentMatrix->GetNumRows(), currentMatrix->GetNumCols() };
+            std::shared_ptr<Matrix<half>> slicedMatrixView;
+            if (sliceViewMatrixDims.first != currentMatrixDims.first)
+                slicedMatrixView = make_shared<Matrix<half>>(currentMatrix->Reshaped(1, currentMatrix->GetNumElements()).ColumnSlice(flatBufferOffset, sliceViewShape.TotalSize()));
+            else
+                slicedMatrixView = make_shared<Matrix<half>>(currentMatrix->ColumnSlice(sliceMatrixColumnOffset, sliceViewMatrixDims.second));
     
     
-    {}  // namespace caffe
-    
-    
-/// @brief Fills a Blob with constant values @f$ x = 0 @f$.
-template <typename Dtype>
-class ConstantFiller : public Filler<Dtype> {
- public:
-  explicit ConstantFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    Dtype* data = blob->mutable_cpu_data();
-    const int count = blob->count();
-    const Dtype value = this->filler_param_.value();
-    CHECK(count);
-    for (int i = 0; i < count; ++i) {
-      data[i] = value;
-    }
-    CHECK_EQ(this->filler_param_.sparse(), -1)
-         << 'Sparsity not supported by this Filler.';
-  }
-};
-    
-      /**
-   * Called by the parent Layer's SetUp to check that the number of bottom
-   * and top Blobs provided as input match the expected numbers specified by
-   * the {ExactNum,Min,Max}{Bottom,Top}Blobs() functions.
-   */
-  virtual void CheckBlobCounts(const vector<Blob<Dtype>*>& bottom,
-                               const vector<Blob<Dtype>*>& top) {
-    if (ExactNumBottomBlobs() >= 0) {
-      CHECK_EQ(ExactNumBottomBlobs(), bottom.size())
-          << type() << ' Layer takes ' << ExactNumBottomBlobs()
-          << ' bottom blob(s) as input.';
-    }
-    if (MinBottomBlobs() >= 0) {
-      CHECK_LE(MinBottomBlobs(), bottom.size())
-          << type() << ' Layer takes at least ' << MinBottomBlobs()
-          << ' bottom blob(s) as input.';
-    }
-    if (MaxBottomBlobs() >= 0) {
-      CHECK_GE(MaxBottomBlobs(), bottom.size())
-          << type() << ' Layer takes at most ' << MaxBottomBlobs()
-          << ' bottom blob(s) as input.';
-    }
-    if (ExactNumTopBlobs() >= 0) {
-      CHECK_EQ(ExactNumTopBlobs(), top.size())
-          << type() << ' Layer produces ' << ExactNumTopBlobs()
-          << ' top blob(s) as output.';
-    }
-    if (MinTopBlobs() >= 0) {
-      CHECK_LE(MinTopBlobs(), top.size())
-          << type() << ' Layer produces at least ' << MinTopBlobs()
-          << ' top blob(s) as output.';
-    }
-    if (MaxTopBlobs() >= 0) {
-      CHECK_GE(MaxTopBlobs(), top.size())
-          << type() << ' Layer produces at most ' << MaxTopBlobs()
-          << ' top blob(s) as output.';
-    }
-    if (EqualNumBottomTopBlobs()) {
-      CHECK_EQ(bottom.size(), top.size())
-          << type() << ' Layer produces one top blob as output for each '
-          << 'bottom blob input.';
-    }
-  }
-    
-    #define REGISTER_LAYER_CLASS(type)                                             \
-  template <typename Dtype>                                                    \
-  shared_ptr<Layer<Dtype> > Creator_##type##Layer(const LayerParameter& param) \
-  {                                                                            \
-    return shared_ptr<Layer<Dtype> >(new type##Layer<Dtype>(param));           \
-  }                                                                            \
-  REGISTER_LAYER_CREATOR(type, Creator_##type##Layer)
-    
-    
-    {}  // namespace caffe
-    
-      /// @brief The spatial dimensions of a filter kernel.
-  Blob<int> kernel_shape_;
-  /// @brief The spatial dimensions of the stride.
-  Blob<int> stride_;
-  /// @brief The spatial dimensions of the padding.
-  Blob<int> pad_;
-  /// @brief The spatial dimensions of the dilation.
-  Blob<int> dilation_;
-  /// @brief The spatial dimensions of the convolution input.
-  Blob<int> conv_input_shape_;
-  /// @brief The spatial dimensions of the col_buffer.
-  vector<int> col_buffer_shape_;
-  /// @brief The spatial dimensions of the output.
-  vector<int> output_shape_;
-  const vector<int>* bottom_shape_;
-    
-    
-    {}  // namespace caffe
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 2+)
-   *   -# @f$ (N \times ...) @f$
-   *      the inputs @f$ x_1 @f$
-   *   -# @f$ (M) @f$
-   *      the inputs @f$ x_2 @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (M \times ...) @f$:
-   *      the reindexed array @f$
-   *        y = x_1[x_2]
-   *      @f$
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-      virtual inline const char* type() const { return 'BNLL'; }
-    
-    template <typename Dtype>
-class CropLayer : public Layer<Dtype> {
- public:
-  explicit CropLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of PoolingLayer.
- *        Fallback to PoolingLayer for CPU mode.
-*/
-template <typename Dtype>
-class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
- public:
-  explicit CuDNNPoolingLayer(const LayerParameter& param)
-      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNPoolingLayer();
-  // Currently, cuDNN does not support the extra top blob.
-  virtual inline int MinTopBlobs() const { return -1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    }
-    
-    #endif  // CAFFE_CUDNN_SOFTMAX_LAYER_HPP_
+    {    // Explicit template instantiations
+    template /*static*/ CNTK_API ValuePtr Value::Create<float>(const NDShape& sampleShape, const std::vector<std::vector<float>>& sequences, const std::vector<bool>& sequenceStartFlags, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::Create<double>(const NDShape& sampleShape, const std::vector<std::vector<double>>& sequences, const std::vector<bool>& sequenceStartFlags, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::Create<float16>(const NDShape& sampleShape, const std::vector<std::vector<float16>>& sequences, const std::vector<bool>& sequenceStartFlags, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::Create<float>(const NDShape& sampleShape, const std::vector<std::vector<size_t>>& oneHotSequences, const std::vector<bool>& sequenceStartFlags, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::Create<double>(const NDShape& sampleShape, const std::vector<std::vector<size_t>>& oneHotSequences, const std::vector<bool>& sequenceStartFlags, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::Create<float16>(const NDShape& sampleShape, const std::vector<std::vector<size_t>>& oneHotSequences, const std::vector<bool>& sequenceStartFlags, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::CreateBatch<float>(const NDShape& sampleShape, const std::vector<float>& batchData, const DeviceDescriptor& device, bool readOnly /*= false */);
+    template /*static*/ CNTK_API ValuePtr Value::CreateBatch<double>(const NDShape& sampleShape, const std::vector<double>& batchData, const DeviceDescriptor& device, bool readOnly /*= false */);
+    template /*static*/ CNTK_API ValuePtr Value::CreateBatch<float16>(const NDShape& sampleShape, const std::vector<float16>& batchData, const DeviceDescriptor& device, bool readOnly /*= false */);
+    template /*static*/ CNTK_API ValuePtr Value::CreateSequence<float>(const NDShape& sampleShape, const std::vector<float>& sequenceData, bool sequenceStartFlag, const DeviceDescriptor& device, bool readOnly /*= false */);
+    template /*static*/ CNTK_API ValuePtr Value::CreateSequence<double>(const NDShape& sampleShape, const std::vector<double>& sequenceData, bool sequenceStartFlag, const DeviceDescriptor& device, bool readOnly /*= false */);
+    template /*static*/ CNTK_API ValuePtr Value::CreateSequence<float16> (const NDShape& sampleShape, const std::vector<float16>& sequenceData, bool sequenceStartFlag, const DeviceDescriptor& device, bool readOnly /*= false */);
+    template /*static*/ CNTK_API ValuePtr Value::CreateBatch<float>(size_t dimension, const std::vector<size_t>& batchData, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::CreateBatch<double>(size_t dimension, const std::vector<size_t>& batchData, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::CreateBatch<float16> (size_t dimension, const std::vector<size_t>& batchData, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::CreateSequence<float>(size_t dimension, const std::vector<size_t>& sequenceData, bool sequenceStartFlag, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::CreateSequence<double>(size_t dimension, const std::vector<size_t>& sequenceData, bool sequenceStartFlag, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::CreateSequence<float16>(size_t dimension, const std::vector<size_t>& sequenceData, bool sequenceStartFlag, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::CreateSequence<float>(const NDShape& sampleShape, size_t sequenceLength, const SparseIndexType* colStarts, const SparseIndexType* rowIndices, const float* nonZeroValues, size_t numNonZeroValues, bool sequenceStartFlag, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::CreateSequence<double>(const NDShape& sampleShape, size_t sequenceLength, const SparseIndexType* colStarts, const SparseIndexType* rowIndices, const double* nonZeroValues, size_t numNonZeroValues, bool sequenceStartFlag, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::CreateSequence<float16>(const NDShape& sampleShape, size_t sequenceLength, const SparseIndexType* colStarts, const SparseIndexType* rowIndices, const float16* nonZeroValues, size_t numNonZeroValues, bool sequenceStartFlag, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template CNTK_API void Value::CopyVariableValueToVector<float>(const Variable& outputVariable, std::vector<std::vector<float>>& sequences);
+    template CNTK_API void Value::CopyVariableValueToVector<double>(const Variable& outputVariable, std::vector<std::vector<double>>& sequences);
+    template CNTK_API void Value::CopyVariableValueToVector<float16>(const Variable& outputVariable, std::vector<std::vector<float16>>& sequences);
+    template CNTK_API void Value::CopyVariableValueToVector<float>(const Variable& outputVariable, std::vector<std::vector<size_t>>& sequences);
+    template CNTK_API void Value::CopyVariableValueToVector<double>(const Variable& outputVariable, std::vector<std::vector<size_t>>& sequences);
+    template CNTK_API void Value::CopyVariableValueToVector<float16>(const Variable& outputVariable, std::vector<std::vector<size_t>>& sequences);
+    template CNTK_API std::tuple<size_t, size_t, size_t> Value::ValidateSparseCSCAndGetIndexBufferSizes<float>(const Variable& outputVariable);
+    template CNTK_API std::tuple<size_t, size_t, size_t> Value::ValidateSparseCSCAndGetIndexBufferSizes<double>(const Variable& outputVariable);
+    template CNTK_API std::tuple<size_t, size_t, size_t> Value::ValidateSparseCSCAndGetIndexBufferSizes<float16>(const Variable& outputVariable);
+    template CNTK_API void Value::CopyVariableValueToCSCSparse<float>(size_t sequenceLength, std::vector<SparseIndexType>& colStarts, std::vector<SparseIndexType>& rowIndices, std::vector<float>& nonZeroValues, size_t& numNonZeroValues);
+    template CNTK_API void Value::CopyVariableValueToCSCSparse<double>(size_t sequenceLength, std::vector<SparseIndexType>& colStarts, std::vector<SparseIndexType>& rowIndices, std::vector<double>& nonZeroValues, size_t& numNonZeroValues);
+    template CNTK_API void Value::CopyVariableValueToCSCSparse<float16>(size_t sequenceLength, std::vector<SparseIndexType>& colStarts, std::vector<SparseIndexType>& rowIndices, std::vector<float16>& nonZeroValues, size_t& numNonZeroValues);
+    template float Value::AsScalar<float>() const;
+    template double Value::AsScalar<double>() const;
+    template float16 Value::AsScalar<float16>() const;
+}
 
     
-    template<>
-void SetDataGradToBlob<mshadow::cpu, double>(caffeMemoryTypes memType,
-                            std::vector<::caffe::Blob<double>*>::iterator blob,
-                            std::vector<TBlob>::const_iterator itr) {
-  double *data_ptr = reinterpret_cast<double*>((*itr).dptr_);
-  if (memType == Data)
-    (*blob)->set_cpu_data(data_ptr);
-  else
-    MXCAFFEBLOB(*blob, double)->set_cpu_diff(data_ptr);
-}
-    
-    
+        // Executing this function from BrainScript merely sets up a lambda, but does not actually create any clone.
+    // This is so that the function can be called multiple times in order to create multiple clones.
+    CloneFunctionConfigLambda(const IConfigRecordPtr configp) :
+        ConfigLambda(CreateParamNames(*configp), NamedParams(), [this](vector<ConfigValuePtr> &&args, NamedParams &&namedArgs, const std::wstring &exprName){ return this->DoClone(args, exprName); })
     {
- private:
-  mutable CaffeLossParam param_;
-  mutable ::caffe::Layer<float> *caffeOp_;
-};  // class CaffeLossSymbol
-#endif
-    
-      /*!
-   * \brief Constructor takes function to run.
-   * \param size size of the thread pool.
-   * \param func the function to run on the thread pool.
-   */
-  explicit ThreadPool(size_t size, std::function<void()> func)
-      : worker_threads_(size) {
-    CHECK_GT(size, 0);
-    for (auto& i : worker_threads_) {
-      i = std::thread(func);
-    }
-  }
-  explicit ThreadPool(size_t size,
-                      std::function<void(std::shared_ptr<dmlc::ManualEvent> ready)> func,
-                      const bool wait)
-      : worker_threads_(size) {
-    CHECK_GT(size, 0);
-    for (auto& i : worker_threads_) {
-      std::shared_ptr<dmlc::ManualEvent> ptr = std::make_shared<dmlc::ManualEvent>();
-      ready_events_.emplace_back(ptr);
-      i = std::thread(func, ptr);
-    }
-    if (wait) {
-      WaitForReady();
-    }
-  }
-  ~ThreadPool() noexcept(false) {
-    for (auto&& i : worker_threads_) {
-      i.join();
-    }
-  }
-    
-    /*!
- * Copyright (c) 2016 by Contributors
- * \file inplace_addto_detect_pass.cc
- * \brief Detect whether inplace addto operation is possible for certain op.
- */
-#include <mxnet/base.h>
-#include <mxnet/operator.h>
-#include <mxnet/op_attr_types.h>
-#include <nnvm/graph_attr_types.h>
-    
-        void ProgressWriter::UpdateTraining(size_t samples, const ValuePtr& accumulatedLoss,
-                                        const ValuePtr& accumulatedMetric)
-    {
-        m_training->Update(samples, accumulatedLoss, accumulatedMetric,
-            [this](const std::pair<size_t, size_t> samples, std::pair<size_t, size_t> updates,
-                   const std::pair<double, double> aggregateLoss, std::pair<double, double> aggregateMetric)
-            {
-                OnWriteTrainingUpdate(samples, updates, aggregateLoss, aggregateMetric);
-            });
-        OnTrainingUpdateEnd();
-    }
-    
-    
-    {        const auto& type = dict[typeKey].Value<std::wstring>();
-        if (type != typeValue) 
+        let& config = *configp;
+        // input nodes
+        inputNodes = GetInputNodes(config);
+        // output nodes
+        let outputNodesParam = config[L'outputNodes'];  // can be a node or a record
+        if (outputNodesParam.Is<ComputationNodeBase>()) // scalar case: result is a single node
+            outputNodes[L''] = outputNodesParam.AsPtr<ComputationNodeBase>(); // indicated by a '' node name in outputNodes[]
+        else                                            // multi-valued case: result is a record of nodes
         {
-            const auto& version = GetVersion(dict);
-            LogicError('Unexpected '%ls':'%ls' in place of '%ls':'%ls' (%s).',
-                       typeKey.c_str(), type.c_str(), typeKey.c_str(), typeValue.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
+            let& outputNodesRecord = outputNodesParam.AsRef<IConfigRecord>();
+            for (let& nodeName : outputNodesRecord.GetMemberIds())
+                outputNodes[nodeName] = outputNodesRecord[nodeName].AsPtr<ComputationNodeBase>();
+            if (outputNodes.empty())
+                InvalidArgument('CloneFunction: At least one output nodes must be specified.');
         }
+        // treatment of parameters
+        wstring parametersOption = config[L'parameters'];
+        if      (parametersOption == L'learnable') parameterTreatment = ParameterTreatment::learnable;
+        else if (parametersOption == L'constant')  parameterTreatment = ParameterTreatment::constant;
+        else if (parametersOption == L'shared')    parameterTreatment = ParameterTreatment::shared;
+        else InvalidArgument('CloneFunction: 'parameters' option must be 'learnable', 'constant', or 'shared'.');
     }
     
-    
-    {    std::string GetCallStack(size_t skipLevels = 0, bool makeFunctionNamesStandOut = false);
-};
-    
-    __CCCallFuncND * __CCCallFuncND::clone() const
-{
-    // no copy constructor
-    auto a = new (std::nothrow) __CCCallFuncND();
-    
-    if( _selectorTarget)
-    {
-        a->initWithTarget(_selectorTarget, _callFuncND, _data);
-    }
-    
-    a->autorelease();
-    return a;
-}
-    
-        /**
+        /** Returns a new action that performs the exact reverse of the action. 
+     *
+     * @return A new action that performs the exact reverse of the action.
      * @js NA
      */
-    void setReverseAction(FadeTo* ac);
+    virtual Action* reverse() const
+    {
+        CC_ASSERT(0);
+        return nullptr;
+    }
     
+    OrbitCamera * OrbitCamera::create(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX)
+{
+    OrbitCamera * obitCamera = new (std::nothrow) OrbitCamera();
+    if(obitCamera && obitCamera->initWithDuration(t, radius, deltaRadius, angleZ, deltaAngleZ, angleX, deltaAngleX))
+    {
+        obitCamera->autorelease();
+        return obitCamera;
+    }
     
-    {    // Overrides
-    virtual PageTurn3D* clone() const override;
-    virtual void update(float time) override;
-};
+    delete obitCamera;
+    return nullptr;
+}
+    
+        /** 
+     * Creates the action with and X factor and a Y factor.
+     * @param duration Duration time, in seconds.
+     * @param sx Scale factor of x.
+     * @param sy Scale factor of y.
+     * @return An autoreleased ScaleBy object.
+     */
+    static ScaleBy* create(float duration, float sx, float sy);
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#include '2d/CCActionPageTurn3D.h'
+#include '2d/CCGrid.h'
+#include '2d/CCNodeGrid.h'
     
     ActionTween* ActionTween::create(float duration, const std::string& key, float from, float to)
 {
@@ -402,50 +173,118 @@ void SetDataGradToBlob<mshadow::cpu, double>(caffeMemoryTypes memType,
     return nullptr;
 }
     
-    http://www.cocos2d-x.org
+    void PolygonInfo::setTriangles(const TrianglesCommand::Triangles& other)
+{
+    this->releaseVertsAndIndices();
+    _isVertsOwner = false;
     
-        /** Quads to draw. */
-    ssize_t _quadsToDraw;
-    /** Color uniform. */
-    GLint    _uniformColor;
-    /** This variable is only used for LabelAtlas FPS display. So plz don't modify its value. */
-    bool _ignoreContentScaleFactor;
-    /** Quad command. */
-    QuadCommand _quadCommand;
-    
-    
-    {
-    {
-    {
-    {}  // namespace can
-}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
-
-    
-    namespace apollo {
-namespace drivers {
-namespace canbus {
-namespace can {
-    }
-    }
-    }
-    }
-    
-    #include 'gtest/gtest.h'
-    
-    int ClusterQualityInfo702::target_id(const std::uint8_t* bytes,
-                                     int32_t length) const {
-  Byte t0(bytes);
-  int32_t x = t0.get_byte(0, 8);
-    }
-    
-    
-    {  double ret = x * OBJECT_VREL_RES + OBJECT_VREL_LAT_MIN;
-  return ret;
+    this->triangles.vertCount = other.vertCount;
+    this->triangles.indexCount = other.indexCount;
+    this->triangles.verts = other.verts;
+    this->triangles.indices = other.indices;
 }
     
-    #include 'modules/common/util/file.h'
-#include 'modules/map/hdmap/hdmap_util.h'
+        /**
+     * set the data to be a pointer to a number of Quads
+     * the member verts will not be released when this PolygonInfo destructs
+     * as the verts memory are managed by other objects
+     * @param quad  a pointer to the V3F_C4B_T2F_Quad quads
+     */
+    void setQuads(V3F_C4B_T2F_Quad *quads, int numberOfQuads);
     
-      kernel.AddReferenceLineKernelMatrix(index_list, pos_list, 10.0);
+    class DB;
+    
+      virtual Status Read(uint64_t offset, size_t n, Slice* result,
+                      char* scratch) const override;
+    
+      // In this example, we set the snapshot multiple times.  This is probably
+  // only necessary if you have very strict isolation requirements to
+  // implement.
+    
+      // Write a key OUTSIDE of this transaction.
+  // Does not affect txn since this is an unrelated key.  If we wrote key 'abc'
+  // here, the transaction would fail to commit.
+  s = txn_db->Put(write_options, 'xyz', 'zzz');
+    
+      bool term_supports_color = false;
+  for (const char* candidate : SUPPORTED_TERM_VALUES) {
+    if (term && 0 == strcmp(term, candidate)) {
+      term_supports_color = true;
+      break;
+    }
+  }
+    
+    // Parses 'str' for a double.  If successful, writes the result to *value and
+// returns true; otherwise leaves *value unchanged and returns false.
+bool ParseDouble(const std::string& src_text, const char* str, double* value) {
+  // Parses the environment variable as a decimal integer.
+  char* end = nullptr;
+  const double double_value = strtod(str, &end);  // NOLINT
+    }
+    
+    
+    {}  // end namespace benchmark
+    
+    #ifdef BENCHMARK_OS_EMSCRIPTEN
+#include <emscripten.h>
+#endif
+    
+    namespace {
+    }
+    
+    #endif
+
+    
+    #define RELEASE(...) \
+  THREAD_ANNOTATION_ATTRIBUTE__(release_capability(__VA_ARGS__))
+    
+            // We don't care for comparison result here; the previous value will be stored into value anyway.
+        // Also we don't care for rbx and rcx values, they just have to be equal to rax and rdx before cmpxchg16b.
+#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+        __asm__ __volatile__
+        (
+            'movq %%rbx, %%rax\n\t'
+            'movq %%rcx, %%rdx\n\t'
+            'lock; cmpxchg16b %[storage]\n\t'
+            'movq %%rax, %[value]\n\t'
+            'movq %%rdx, 8+%[value]\n\t'
+            : [value] '=o' (value)
+            : [storage] 'm' (storage)
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory', 'rax', 'rdx'
+        );
+#else // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+        __asm__ __volatile__
+        (
+            'movq %%rbx, %%rax\n\t'
+            'movq %%rcx, %%rdx\n\t'
+            'lock; cmpxchg16b %[storage]\n\t'
+            'movq %%rax, 0(%[value])\n\t'
+            'movq %%rdx, 8(%[value])\n\t'
+            :
+            : [storage] 'm' (storage), [value] 'r' (&value)
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory', 'rax', 'rdx'
+        );
+#endif // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+    
+        static BOOST_FORCEINLINE storage_type fetch_or(storage_type volatile& storage, storage_type v, memory_order order) BOOST_NOEXCEPT
+    {
+        switch (order)
+        {
+        case memory_order_relaxed:
+            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_OR16_RELAXED(&storage, v));
+            break;
+        case memory_order_consume:
+        case memory_order_acquire:
+            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_OR16_ACQUIRE(&storage, v));
+            break;
+        case memory_order_release:
+            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_OR16_RELEASE(&storage, v));
+            break;
+        case memory_order_acq_rel:
+        case memory_order_seq_cst:
+        default:
+            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_OR16(&storage, v));
+            break;
+        }
+        return v;
+    }
