@@ -1,203 +1,216 @@
 
         
-        
-    {  for (int i = 0; i < parts.size(); i++) {
-    string::size_type equals_pos = parts[i].find_first_of('=');
-    std::pair<string, string> value;
-    if (equals_pos == string::npos) {
-      value.first = parts[i];
-      value.second = '';
-    } else {
-      value.first = parts[i].substr(0, equals_pos);
-      value.second = parts[i].substr(equals_pos + 1);
-    }
-    output->push_back(value);
-  }
-}
-    
-    TEST(MovableMessageTest, SelfMoveAssignment) {
-  // The `self` reference is necessary to defeat -Wself-move.
-  protobuf_unittest::TestAllTypes message, &self = message;
-  TestUtil::SetAllFields(&message);
-  message = std::move(self);
-  TestUtil::ExpectAllFieldsSet(message);
-}
-    
-    FileGenerator::FileGenerator(const FileDescriptor *file, const Options& options)
-    : file_(file),
-      root_class_name_(FileClassName(file)),
-      is_bundled_proto_(IsProtobufLibraryBundledProtoFile(file)),
-      options_(options) {
-  for (int i = 0; i < file_->enum_type_count(); i++) {
-    EnumGenerator *generator = new EnumGenerator(file_->enum_type(i));
-    enum_generators_.push_back(generator);
-  }
-  for (int i = 0; i < file_->message_type_count(); i++) {
-    MessageGenerator *generator =
-        new MessageGenerator(root_class_name_, file_->message_type(i), options_);
-    message_generators_.push_back(generator);
-  }
-  for (int i = 0; i < file_->extension_count(); i++) {
-    ExtensionGenerator *generator =
-        new ExtensionGenerator(root_class_name_, file_->extension(i));
-    extension_generators_.push_back(generator);
-  }
-}
-    
-      EXPECT_EQ(5, decode_data.num_entries());
-    
-    #include <iostream>
-#include <set>
-    
-    
-    {    output.WriteLittleEndian32(0x02014b50);  // magic
-    WriteShort(&output, 10);  // version made by
-    WriteShort(&output, 10);  // version needed to extract
-    WriteShort(&output, 0);  // flags
-    WriteShort(&output, 0);  // compression method: stored
-    WriteShort(&output, 0);  // last modified time
-    WriteShort(&output, kDosEpoch);  // last modified date
-    output.WriteLittleEndian32(crc32);  // crc-32
-    output.WriteLittleEndian32(size);  // compressed size
-    output.WriteLittleEndian32(size);  // uncompressed size
-    WriteShort(&output, filename_size);  // file name length
-    WriteShort(&output, 0);   // extra field length
-    WriteShort(&output, 0);   // file comment length
-    WriteShort(&output, 0);   // starting disk number
-    WriteShort(&output, 0);   // internal file attributes
-    output.WriteLittleEndian32(0);  // external file attributes
-    output.WriteLittleEndian32(offset);  // local header offset
-    output.WriteString(filename);  // file name
-  }
-  uint32 dir_len = output.ByteCount();
-    
-    namespace xgboost {
-/*!
- * \brief interface of linear updater
- */
-class LinearUpdater {
- public:
-  /*! \brief virtual destructor */
-  virtual ~LinearUpdater() = default;
-  /*!
-   * \brief Initialize the updater with given arguments.
-   * \param args arguments to the objective function.
-   */
-  virtual void Init(
-      const std::vector<std::pair<std::string, std::string> >& args) = 0;
-    }
+        namespace atom {
     }
     
-    /*!
- * \brief Registry entry for tree updater.
- */
-struct TreeUpdaterReg
-    : public dmlc::FunctionRegEntryBase<TreeUpdaterReg,
-                                        std::function<TreeUpdater* ()> > {
+    
+    { private:
+  DISALLOW_COPY_AND_ASSIGN(Net);
 };
     
-     private:
-  StreamBufferReader reader_;
-  int tmp_ch;
-  int num_prev;
-  unsigned char buf_prev[2];
-  // whether we need to do strict check
-  static const bool kStrictCheck = false;
-};
-/*! \brief the stream that write to base64, note we take from file pointers */
-class Base64OutStream: public dmlc::Stream {
- public:
-  explicit Base64OutStream(dmlc::Stream *fp) : fp(fp) {
-    buf_top = 0;
+    #if defined(OS_LINUX)
+void PowerMonitor::BlockShutdown() {
+  PowerObserverLinux::BlockShutdown();
+}
+    
+    #include 'atom/browser/api/trackable_object.h'
+#include 'atom/browser/lib/power_observer.h'
+#include 'base/compiler_specific.h'
+#include 'native_mate/handle.h'
+#include 'ui/base/idle/idle.h'
+    
+    
+    {}  // namespace atom
+    
+      gfx::Point GetCursorScreenPoint();
+  display::Display GetPrimaryDisplay();
+  std::vector<display::Display> GetAllDisplays();
+  display::Display GetDisplayNearestPoint(const gfx::Point& point);
+  display::Display GetDisplayMatching(const gfx::Rect& match_rect);
+    
+    namespace mate {
+    }
+    
+    #include 'atom/browser/atom_quota_permission_context.h'
+    
+    #endif  // ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
+
+    
+      // There is an update available and it is being downloaded
+  virtual void OnUpdateAvailable() {}
+    
+    namespace grpc {
+    }
+    
+    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CONTEXT_H
+#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CONTEXT_H
+    
+    bool ProtoServerReflectionPlugin::has_sync_methods() const {
+  if (reflection_service_) {
+    return reflection_service_->has_synchronous_methods();
   }
-  virtual void Write(const void *ptr, size_t size) {
-    using base64::EncodeTable;
-    size_t tlen = size;
-    const unsigned char *cptr = static_cast<const unsigned char*>(ptr);
-    while (tlen) {
-      while (buf_top < 3  && tlen != 0) {
-        buf[++buf_top] = *cptr++; --tlen;
-      }
-      if (buf_top == 3) {
-        // flush 4 bytes out
-        PutChar(EncodeTable[buf[1] >> 2]);
-        PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
-        PutChar(EncodeTable[((buf[2] << 2) | (buf[3] >> 6)) & 0x3F]);
-        PutChar(EncodeTable[buf[3] & 0x3F]);
-        buf_top = 0;
-      }
-    }
-  }
-  virtual size_t Read(void *ptr, size_t size) {
-    LOG(FATAL) << 'Base64OutStream do not support read';
-    return 0;
-  }
-  /*!
-   * \brief finish writing of all current base64 stream, do some post processing
-   * \param endch character to put to end of stream, if it is EOF, then nothing will be done
-   */
-  inline void Finish(char endch = EOF) {
-    using base64::EncodeTable;
-    if (buf_top == 1) {
-      PutChar(EncodeTable[buf[1] >> 2]);
-      PutChar(EncodeTable[(buf[1] << 4) & 0x3F]);
-      PutChar('=');
-      PutChar('=');
-    }
-    if (buf_top == 2) {
-      PutChar(EncodeTable[buf[1] >> 2]);
-      PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
-      PutChar(EncodeTable[(buf[2] << 2) & 0x3F]);
-      PutChar('=');
-    }
-    buf_top = 0;
-    if (endch != EOF) PutChar(endch);
-    this->Flush();
-  }
+  return false;
+}
     
-    /**
- * Common abstraction for subscribing to versioned config updates. This may be implemented via bidi
- * gRPC streams, periodic/long polling REST or inotify filesystem updates. ResourceType is expected
- * to be a protobuf serializable object.
- */
-template <class ResourceType> class Subscription {
-public:
-  virtual ~Subscription() {}
-    }
+    #ifndef GRPC_SRC_CPP_SERVER_LOAD_REPORTER_GET_CPU_STATS_H
+#define GRPC_SRC_CPP_SERVER_LOAD_REPORTER_GET_CPU_STATS_H
     
-    /**
- * Callback invoked when a signal event fires.
- */
-typedef std::function<void()> SignalCb;
+    #endif
+
     
-      /**
-   * Close the stream locally and send an empty DATA frame to the remote. No further methods may be
-   * invoked on the stream object, but callbacks may still be received until the stream is closed
-   * remotely.
-   */
-  virtual void closeStream() PURE;
     
-    /**
- * A manager for all server-side singletons.
- */
-class Manager {
-public:
-  virtual ~Manager() {}
-    }
+    {
+    {}}
     
-    void AddressJson::translateAddress(const std::string& json_address, bool url, bool resolved,
-                                   envoy::api::v2::core::Address& address) {
-  if (resolved) {
-    Network::Address::InstanceConstSharedPtr instance =
-        url ? Network::Utility::resolveUrl(json_address)
-            : Network::Utility::parseInternetAddressAndPort(json_address);
-    if (instance->type() == Network::Address::Type::Ip) {
-      address.mutable_socket_address()->set_address(instance->ip()->addressAsString());
-      address.mutable_socket_address()->set_port_value(instance->ip()->port());
+         // GP Register cannot be greater than 31
+     assert(static_cast<uint32_t>(rb) < 32);
+     assert(static_cast<uint32_t>(ra) < 32);
+     assert(static_cast<uint32_t>(rb) < 32);
+    
+        if (!semi) {
+      // only media type (type/subtype,data)
+      ssize_t media_len = comma - data;
+      meta_len -= media_len;
+      data += media_len;
+    } else if (slash && slash < semi) {
+      // media type + param (type/subtype;param,data)
+      ssize_t media_len = semi - data;
+      meta_len -= media_len;
+      data += media_len;
     } else {
-      ASSERT(instance->type() == Network::Address::Type::Pipe);
-      address.mutable_pipe()->set_path(instance->asString());
+      // no media type (;base64,data)
+      if (semi != data // ex. foo;base64,data
+          || meta_len != sizeof(';base64') - 1 // ex. ;something,data
+          || memcmp(data, ';base64',
+                    sizeof(';base64') - 1)) { // ex. ;base65,data
+          raise_warning('rfc2397: invalid meta data');
+          return nullptr;
+        }
     }
-    return;
+    
+    #ifndef HPHP_DATA_STREAM_WRAPPER_H
+#define HPHP_DATA_STREAM_WRAPPER_H
+    
+    
+    {    // If the -c option is specified without a -n, php behavior is to
+    // load the default ini/hdf
+    auto cb = [&newargv] (const char *filename) {
+      newargv.push_back('-c');
+      newargv.push_back(filename);
+    };
+    add_default_config_files_globbed(DEFAULT_CONFIG_DIR '/php*.ini', cb);
+    add_default_config_files_globbed(DEFAULT_CONFIG_DIR '/config*.hdf', cb);
   }
+    
+      // implementing File
+  bool open(const String& filename, const String& mode) override;
+  bool close() override;
+  int64_t readImpl(char *buffer, int64_t length) override;
+  int getc() override;
+  int64_t writeImpl(const char *buffer, int64_t length) override;
+  bool seek(int64_t offset, int whence = SEEK_SET) override;
+  int64_t tell() override;
+  bool eof() override;
+  bool rewind() override;
+  bool flush() override;
+  bool truncate(int64_t size) override;
+    
+    template<typename F>
+void logPerfWarningImpl(folly::StringPiece event, int64_t priority,
+                        int64_t rate, F fillCols) {
+  auto const effectiveRate = rate * RuntimeOption::EvalPerfWarningSampleRate;
+  if (effectiveRate > std::numeric_limits<uint32_t>::max()) return;
+  if (!StructuredLog::coinflip(effectiveRate)) return;
     }
+    
+    #include 'unicode/messagepattern.h'
+#include 'unicode/rbnf.h'
+#include 'unicode/selfmt.h'
+#include 'unicode/uchar.h'
+#include 'unicode/ucnv_err.h'
+#include 'unicode/umsg.h'
+#include 'unicode/ustring.h'
+#include 'unicode/utypes.h'
+#include 'cmemory.h'
+#include 'messageimpl.h'
+#include 'patternprops.h'
+#include 'selfmtimpl.h'
+#include 'uassert.h'
+#include 'ustrfmt.h'
+#include 'util.h'
+#include 'uvector.h'
+    
+    #include 'unicode/format.h'
+#include 'unicode/locid.h'
+#include 'unicode/parseerr.h'
+#include 'unicode/utypes.h'
+#include 'uvector.h'
+#include 'hash.h'
+    
+    SharedBreakIterator::SharedBreakIterator(
+        BreakIterator *biToAdopt) : ptr(biToAdopt) { }
+    
+    #ifndef __SHARED_NUMBERFORMAT_H__
+#define __SHARED_NUMBERFORMAT_H__
+    
+    #endif
+
+    
+    void 
+SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfMonth, 
+                           int32_t time, TimeMode mode, UErrorCode& status)
+{
+    setEndRule(month, dayOfMonth, 0, time, mode, status);
+}
+    
+    UnicodeSet *SimpleDateFormatStaticSets::getIgnorables(UDateFormatField fieldIndex)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    umtx_initOnce(gSimpleDateFormatStaticSetsInitOnce, &smpdtfmt_initSets, status);
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    
+    switch (fieldIndex) {
+        case UDAT_YEAR_FIELD:
+        case UDAT_MONTH_FIELD:
+        case UDAT_DATE_FIELD:
+        case UDAT_STANDALONE_DAY_FIELD:
+        case UDAT_STANDALONE_MONTH_FIELD:
+            return gStaticSets->fDateIgnorables;
+            
+        case UDAT_HOUR_OF_DAY1_FIELD:
+        case UDAT_HOUR_OF_DAY0_FIELD:
+        case UDAT_MINUTE_FIELD:
+        case UDAT_SECOND_FIELD:
+        case UDAT_HOUR1_FIELD:
+        case UDAT_HOUR0_FIELD:
+            return gStaticSets->fTimeIgnorables;
+            
+        default:
+            return gStaticSets->fOtherIgnorables;
+    }
+}
+    
+    static const UChar gZero[] = { 0x7A, 0x65, 0x72, 0x6F };
+static const UChar gOne[] = { 0x6F, 0x6E, 0x65 };
+static const UChar gTwo[] = { 0x74, 0x77, 0x6F };
+static const UChar gFew[] = { 0x66, 0x65, 0x77 };
+static const UChar gMany[] = { 0x6D, 0x61, 0x6E, 0x79 };
+static const UChar gOther[] = { 0x6F, 0x74, 0x68, 0x65, 0x72 };
+    
+    /**
+ * Implement UnicodeReplacer
+ */
+void StringReplacer::addReplacementSetTo(UnicodeSet& toUnionTo) const {
+    UChar32 ch;
+    for (int32_t i=0; i<output.length(); i+=U16_LENGTH(ch)) {
+    ch = output.char32At(i);
+    UnicodeReplacer* r = data->lookupReplacer(ch);
+    if (r == NULL) {
+        toUnionTo.add(ch);
+    } else {
+        r->addReplacementSetTo(toUnionTo);
+    }
+    }
+}
