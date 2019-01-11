@@ -1,96 +1,78 @@
 
         
-                # Insert the import statement to setup.py if not present
-        with open(setup_path, 'a+') as setup:
-            setup.seek(0)
-            setup_content = setup.read()
-            if not 'import fastentrypoints' in setup_content:
-                setup.seek(0)
-                setup.truncate()
-                setup.write('import fastentrypoints\n' + setup_content)
+            Returns:
+      a 3 tuple of costs:
+        (epoch total cost, epoch reconstruction cost, epoch KL cost)
+    '''
+    ops_to_eval = [self.cost, self.recon_cost, self.kl_cost]
+    collected_op_values = self.run_epoch(datasets, ops_to_eval, kind=kind,
+                                         keep_prob=1.0)
     
-    Commands:
-   update - Retrieve new lists of packages
-   upgrade - Perform an upgrade
-   install - Install new packages (pkg is libc6 not libc6.deb)
-   remove - Remove packages
-   autoremove - Remove automatically all unused packages
-   purge - Remove packages and config files
-   source - Download source archives
-   build-dep - Configure build-dependencies for source packages
-   dist-upgrade - Distribution upgrade, see apt-get(8)
-   dselect-upgrade - Follow dselect selections
-   clean - Erase downloaded archive files
-   autoclean - Erase old downloaded archive files
-   check - Verify that there are no broken dependencies
-   changelog - Download and display the changelog for the given package
-   download - Download the binary package into the current directory
+      Args:
+    in_size: The integer size of the non-batc input dimension. [(x),y]
+    out_size: The integer size of non-batch output dimension. [x,(y)]
+    do_bias (optional): Add a (learnable) bias vector to the operation,
+      if false, b will be None
+    mat_init_value (optional): numpy constant for matrix initialization, if None
+      , do random, with additional parameters.
+    alpha (optional): A multiplicative scaling for the weight initialization
+      of the matrix, in the form \alpha * 1/\sqrt{x.shape[1]}.
+    identity_if_possible (optional): just return identity,
+      if x.shape[1] == out_size.
+    normalized (optional): Option to divide out by the norms of the rows of W.
+    name (optional): The name prefix to add to variables.
+    collections (optional): List of additional collections. (Placed in
+      tf.GraphKeys.GLOBAL_VARIABLES already, so no need for that.)
     
-      * put-item
-  * get-item
-'''
+        self.bos_char = free_ids[0]  # <begin sentence>
+    self.eos_char = free_ids[1]  # <end sentence>
+    self.bow_char = free_ids[2]  # <begin word>
+    self.eow_char = free_ids[3]  # <end word>
+    self.pad_char = free_ids[4]  # <padding>
     
+      train_path = os.path.join(data_path, 'ptb.train.txt')
+  valid_path = os.path.join(data_path, 'ptb.valid.txt')
+  test_path = os.path.join(data_path, 'ptb.test.txt')
     
-class ArrayMinLengthValidator(MinLengthValidator):
-    message = ngettext_lazy(
-        'List contains %(show_value)d item, it should contain no fewer than %(limit_value)d.',
-        'List contains %(show_value)d items, it should contain no fewer than %(limit_value)d.',
-        'limit_value')
-    
-            if connection.savepoint_ids:
-            sid = connection.savepoint_ids.pop()
-        else:
-            # Prematurely unset this flag to allow using commit or rollback.
-            connection.in_atomic_block = False
-    
-    from ansible.module_utils.aws.core import AnsibleAWSModule
-from ansible.module_utils.ec2 import boto3_conn, ec2_argument_spec, get_aws_connection_info
-from ansible.module_utils.aws.waf import list_web_acls, get_web_acl
-    
-    EXAMPLES = '''
-# Note: These examples do not set authentication details, see the AWS Guide for details.
-    
-    import traceback
-from ansible.module_utils._text import to_native
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.ec2 import HAS_BOTO3, camel_dict_to_snake_dict, boto3_conn, ec2_argument_spec, get_aws_connection_info
-    
-        gw_mgr = Ec2CustomerGatewayManager(module)
-    
-    ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-    
-            cluster = camel_dict_to_snake_dict(cluster)
-        arn = 'arn:aws:elasticache:%s:%s:cluster:%s' % (region, account_id, cluster['cache_cluster_id'])
-        try:
-            tags = get_elasticache_tags_with_backoff(client, arn)
-        except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
-            module.fail_json_aws(e, msg='Couldn't get tags for cluster %s')
+                # Statefulness for the Generator.
+            for i, (c, h) in enumerate(model.fake_gen_initial_state):
+              eval_feed[c] = fake_gen_initial_state_eval[i].c
+              eval_feed[h] = fake_gen_initial_state_eval[i].h
     
     
-if __name__ == '__main__':
-    main()
+def percent_correct(real_sequence, fake_sequences):
+  '''Determine the percent of tokens correctly generated within a batch.'''
+  identical = 0.
+  for fake_sequence in fake_sequences:
+    for real, fake in zip(real_sequence, fake_sequence):
+      if real == fake:
+        identical += 1.
+  return identical / recursive_length(fake_sequences)
 
     
-        Basic Usage:
-        >>> import boto3
-        >>> iam = boto3.client('iam')
-        >>> name = 'server-cert-name'
-        >>> results = get_server_certs(iam, name)
-        {
-            'upload_date': '2015-04-25T00:36:40+00:00',
-            'server_certificate_id': 'ADWAJXWTZAXIPIMQHMJPO',
-            'certificate_body': '-----BEGIN CERTIFICATE-----\nbunch of random data\n-----END CERTIFICATE-----',
-            'server_certificate_name': 'server-cert-name',
-            'expiration': '2017-06-15T12:00:00+00:00',
-            'path': '/',
-            'arn': 'arn:aws:iam::911277865346:server-certificate/server-cert-name'
-        }
-    '''
-    results = dict()
-    try:
-        if name:
-            server_certs = [iam.get_server_certificate(ServerCertificateName=name)['ServerCertificate']]
-        else:
-            server_certs = iam.list_server_certificates()['ServerCertificateMetadataList']
+      Returns:
+    values:  tf.float32 Tensor of predictions of shape [batch_size,
+      sequence_length]
+  '''
+  if FLAGS.baseline_method == 'critic':
+    if FLAGS.discriminator_model == 'seq2seq_vd':
+      values = critic_vd.critic_seq2seq_vd_derivative(
+          hparams, sequence, is_training, reuse=reuse)
+    else:
+      raise NotImplementedError
+  else:
+    raise NotImplementedError
+  return values
+
+    
+    '''Model optimization.'''
+    
+    sas_datetime_formats = ('DATETIME', 'DTWKDATX',
+                        'B8601DN', 'B8601DT', 'B8601DX', 'B8601DZ', 'B8601LX',
+                        'E8601DN', 'E8601DT', 'E8601DX', 'E8601DZ', 'E8601LX',
+                        'DATEAMPM', 'DTDATE', 'DTMONYY', 'DTMONYY', 'DTWKDATX',
+                        'DTYEAR', 'TOD', 'MDYAMPM')
+
+    
+      if not pyperclip.copy:
+    print('Copy functionality unavailable!')
