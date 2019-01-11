@@ -1,178 +1,71 @@
 
         
-          # Split the data, inputs, labels and times into train vs. validation.
-  rates_train, rates_valid = \
-      split_list_by_inds(rates, train_inds, valid_inds)
-  noisy_data_train, noisy_data_valid = \
-      split_list_by_inds(noisy_data, train_inds, valid_inds)
-  input_train, inputs_valid = \
-      split_list_by_inds(inputs, train_inds, valid_inds)
-  condition_labels_train, condition_labels_valid = \
-      split_list_by_inds(condition_labels, train_inds, valid_inds)
-  input_times_train, input_times_valid = \
-      split_list_by_inds(input_times, train_inds, valid_inds)
+            def mapper(self, _, line):
+        '''Parse each log line, extract and transform relevant lines.
     
-    model = IntegrationToBoundModel(N)
-inputs_ph_t = [tf.placeholder(tf.float32,
-                              shape=[None, 1]) for _ in range(ntimesteps)]
-state = tf.zeros([batch_size, N])
-saver = tf.train.Saver()
-    
-    rng = np.random.RandomState(seed=FLAGS.synth_data_seed)
-rnn_rngs = [np.random.RandomState(seed=FLAGS.synth_data_seed+1),
-            np.random.RandomState(seed=FLAGS.synth_data_seed+2)]
-T = FLAGS.T
-C = FLAGS.C
-N = FLAGS.N
-nreplications = FLAGS.nreplications
-E = nreplications * C
-train_percentage = FLAGS.train_percentage
-ntimesteps = int(T / FLAGS.dt)
-    
-      Returns:
-    log_sum_exp of the arguments.
-  '''
-  m = tf.reduce_max(x_k)
-  x1_k = x_k - m
-  u_k = tf.exp(x1_k)
-  z = tf.reduce_sum(u_k)
-  return tf.log(z) + m
-    
-      Returns:
-    patches: A 2D matrix,
-      each entry is a matrix of shape (batch_size, num_timesteps).
-  '''
-  preprocessed = [['<S>']+sentence+['</S>'] for sentence in sentences]
-  max_len = max([len(sent) for sent in preprocessed])
-    
-              eval_feed = {model.inputs: x, model.targets: y, model.present: p}
+        def reducer(self, key, values):
+        '''Sum values for each key.
     
     
-def wasserstein_generator_loss(gen_logits, gen_labels, dis_values,
-                               is_real_input):
-  '''Computes the masked-loss for G.  This will be a blend of cross-entropy
-  loss where the true label is known and GAN loss where the true label is
-  missing.
+install_requires = [
+    'requests>=2.18.4',
+    'Pygments>=2.1.3'
+]
     
-      # Extract properties of the indices.
-  num_batches = len(indices)
-  shape = list(indices.shape)
-  shape.append(vocab_size)
-    
-    
-class GitHubReleaser(object):
-    _API_URL = 'https://api.github.com/repos/rg3/youtube-dl/releases'
-    _UPLOADS_URL = 'https://uploads.github.com/repos/rg3/youtube-dl/releases/%s/assets?name=%s'
-    _NETRC_MACHINE = 'github.com'
-    
-        for group in opt_parser.option_groups:
-        for option in group.option_list:
-            long_option = option.get_opt_string().strip('-')
-            complete_cmd = ['complete', '--command', 'youtube-dl', '--long-option', long_option]
-            if option._short_opts:
-                complete_cmd += ['--short-option', option._short_opts[0].strip('-')]
-            if option.help != optparse.SUPPRESS_HELP:
-                complete_cmd += ['--description', option.help]
-            complete_cmd.extend(EXTRA_ARGS.get(long_option, []))
-            commands.append(shell_quote(complete_cmd))
-    
-    import io
-import sys
-import re
-    
-        with io.open(outfile, 'w', encoding='utf-8') as outf:
-        outf.write(out)
-    
-                        if not split_option[-1].startswith('-'):  # metavar
-                        option = ' '.join(split_option[:-1] + ['*%s*' % split_option[-1]])
-    
-    setup(
-    name='youtube_dl',
-    version=__version__,
-    description=DESCRIPTION,
-    long_description=LONG_DESCRIPTION,
-    url='https://github.com/rg3/youtube-dl',
-    author='Ricardo Garcia',
-    author_email='ytdl@yt-dl.org',
-    maintainer='Sergey M.',
-    maintainer_email='dstftw@gmail.com',
-    license='Unlicense',
-    packages=[
-        'youtube_dl',
-        'youtube_dl.extractor', 'youtube_dl.downloader',
-        'youtube_dl.postprocessor'],
-    
-        def test_encrypt(self):
-        msg = b'message'
-        key = list(range(16))
-        encrypted = aes_encrypt(bytes_to_intlist(msg), key)
-        decrypted = intlist_to_bytes(aes_decrypt(encrypted, key))
-        self.assertEqual(decrypted, msg)
+        def test_POST_with_data_auto_JSON_headers(self, httpbin):
+        r = http('POST', httpbin.url + '/post', 'a=b')
+        assert HTTP_OK in r
+        assert r.json['headers']['Accept'] == JSON_ACCEPT
+        assert r.json['headers']['Content-Type'] == 'application/json'
     
     
-class TestCache(unittest.TestCase):
-    def setUp(self):
-        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
-        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
-        _mkdir(TESTDATA_DIR)
-        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
-        self.tearDown()
+@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
+@pytest.mark.parametrize('filename', filenames)
+def test_rst_file_syntax(filename):
+    p = subprocess.Popen(
+        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE
+    )
+    err = p.communicate()[1]
+    assert p.returncode == 0, err.decode('utf8')
+
+    
+    from httpie import __version__
+from httpie.compat import is_windows
     
     
-class TestCompat(unittest.TestCase):
-    def test_compat_getenv(self):
-        test_str = 'тест'
-        compat_setenv('YOUTUBE_DL_COMPAT_GETENV', test_str)
-        self.assertEqual(compat_getenv('YOUTUBE_DL_COMPAT_GETENV'), test_str)
+class FileModeWarning(RequestsWarning, DeprecationWarning):
+    '''A file was opened in text mode, but Requests determined its binary length.'''
+    pass
     
-    '''
-requests.hooks
-~~~~~~~~~~~~~~
+            # XXX not implemented yet
+        entdig = None
+        p_parsed = urlparse(url)
+        #: path is request-uri defined in RFC 2616 which should not be empty
+        path = p_parsed.path or '/'
+        if p_parsed.query:
+            path += '?' + p_parsed.query
     
-        def run_tests(self):
-        import pytest
+    _init()
+
     
-            with server as address:
-            sock = socket.socket()
-            sock.connect(address)
-            time.sleep(1.5)
-            sock.sendall(b'hehehe, not received')
-            sock.close()
+    # A dictionary with options for the search language support, empty by default.
+# 'ja' uses this config value.
+# 'zh' user can custom change `jieba` dictionary path.
+#
+# html_search_options = {'type': 'default'}
     
+    import voluptuous as vol
     
-@pytest.mark.parametrize(
-    'cookiejar', (
-        compat.cookielib.CookieJar(),
-        RequestsCookieJar()
-    ))
-def test_add_dict_to_cookiejar(cookiejar):
-    '''Ensure add_dict_to_cookiejar works for
-    non-RequestsCookieJar CookieJars
-    '''
-    cookiedict = {'test': 'cookies',
-                  'good': 'cookies'}
-    cj = add_dict_to_cookiejar(cookiejar, cookiedict)
-    cookies = {cookie.name: cookie.value for cookie in cj}
-    assert cookiedict == cookies
+    PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
+    vol.Required(CONF_HOST): cv.string,
+    vol.Required(CONF_PASSWORD): cv.string,
+    vol.Required(CONF_USERNAME): cv.string
+})
     
-            if auth:
-            if isinstance(auth, tuple) and len(auth) == 2:
-                # special-case basic HTTP auth
-                auth = HTTPBasicAuth(*auth)
+    DEFAULT_TIMEOUT = 10
     
-    # The name of an image file (relative to this directory) to place at the top
-# of the sidebar.
-#html_logo = None
-    
-            dupe_releases = orm.Release.objects.values_list('version', 'organization_id')\
-                                           .annotate(vcount=models.Count('id'))\
-                                           .filter(vcount__gt=1)
-    
-    
-class Migration(DataMigration):
-    def forwards(self, orm):
-        'Write your forwards methods here.'
-        db.commit_transaction()
-    
-            # Adding unique constraint on 'Distribution', fields ['release', 'name']
-        db.create_unique('sentry_distribution', ['release_id', 'name'])
+            # Test the router is accessible.
+        data = self.get_thomson_data()
+        self.success_init = data is not None
