@@ -1,204 +1,258 @@
 
         
-        #endif  // CAFFE_DATA_TRANSFORMER_HPP_
-
-    
-    
-#define REGISTER_LAYER_CREATOR(type, creator)                                  \
-  static LayerRegisterer<float> g_creator_f_##type(#type, creator<float>);     \
-  static LayerRegisterer<double> g_creator_d_##type(#type, creator<double>)    \
-    
-    
-    {}  // namespace caffe
-    
-    /**
- * @brief Normalizes the input to have 0-mean and/or unit (1) variance across
- *        the batch.
- *
- * This layer computes Batch Normalization as described in [1]. For each channel
- * in the data (i.e. axis 1), it subtracts the mean and divides by the variance,
- * where both statistics are computed across both spatial dimensions and across
- * the different examples in the batch.
- *
- * By default, during training time, the network is computing global
- * mean/variance statistics via a running average, which is then used at test
- * time to allow deterministic outputs for each input. You can manually toggle
- * whether the network is accumulating or using the statistics via the
- * use_global_stats option. For reference, these statistics are kept in the
- * layer's three blobs: (0) mean, (1) variance, and (2) moving average factor.
- *
- * Note that the original paper also included a per-channel learned bias and
- * scaling factor. To implement this in Caffe, define a `ScaleLayer` configured
- * with `bias_term: true` after each `BatchNormLayer` to handle both the bias
- * and scaling factor.
- *
- * [1] S. Ioffe and C. Szegedy, 'Batch Normalization: Accelerating Deep Network
- *     Training by Reducing Internal Covariate Shift.' arXiv preprint
- *     arXiv:1502.03167 (2015).
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-template <typename Dtype>
-class BatchNormLayer : public Layer<Dtype> {
- public:
-  explicit BatchNormLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+        int main(int argc, char** argv) {
+  if (argc > 1 && std::string(argv[1]) == '--benchmark') {
+    leveldb::BM_LogAndApply(1000, 1);
+    leveldb::BM_LogAndApply(1000, 100);
+    leveldb::BM_LogAndApply(1000, 10000);
+    leveldb::BM_LogAndApply(100, 100000);
+    return 0;
+  }
     }
     
-    
-    {}  // namespace caffe
-    
-    #endif  // CAFFE_CONTRASTIVE_LOSS_LAYER_HPP_
-
-    
-    namespace caffe {
-    }
-    
-    #ifdef USE_CUDNN
-template <typename Dtype>
-class CuDNNLRNLayer : public LRNLayer<Dtype> {
- public:
-  explicit CuDNNLRNLayer(const LayerParameter& param)
-      : LRNLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNLRNLayer();
-    }
-    
-    
-    {}  // namespace caffe
-    
-    namespace mxnet {
-    }
-    
-    /*! \brief Cuda runtime compile module. */
-class CudaModule {
- private:
-  /*! \brief Structure for holding internal info. */
-  struct Chunk {
-    /*!
-     * \brief Constructs cuda module.
-     * \param source cuda source code.
-     * \param exports export symbols before mangling.
-     */
-    Chunk(const char* source,
-          const std::vector<std::string>& options,
-          const std::vector<std::string>& exports);
-    /*! \brief deconstrutor */
-    ~Chunk();
-    /*!
-     * \brief Get handle to cuda kernel from loaded module
-     * \param mangled_name mangled kernel name
-     * \param ctx context to run kernel on
-     * \return loaded function handle
-     */
-    CUfunction GetFunction(const std::string& mangled_name, const Context& ctx);
-    /*! \brief nvrtc program handle. */
-    nvrtcProgram prog_;
-    /*! \brief compiled cuda PTX */
-    char* ptx_;
-    /*! \brief lazily loaded cuda module */
-    std::unordered_map<int, CUmodule> mod_;
-    /*! \brief exported names */
-    std::unordered_set<std::string> exports_;
-  };
-  /*! \brief pointer to Chunk */
-  std::shared_ptr<Chunk> ptr_;
-    }
-    
-    /*!
- * Copyright (c) 2016 by Contributors
- * \file caffe_op.cc
- * \brief caffe operator
- * \author Haoran Wang
-*/
-#include './caffe_op-inl.h'
-namespace mxnet {
-namespace op {
-    }
-    }
-    
-      // should be called outside the mutex
-  SuperVersion() = default;
-  ~SuperVersion();
-  SuperVersion* Ref();
-  // If Unref() returns true, Cleanup() should be called with mutex held
-  // before deleting this SuperVersion.
-  bool Unref();
-    
-    
-    {  return Merge(key_slice, value_slice);
+    void AppendInternalKey(std::string* result, const ParsedInternalKey& key) {
+  result->append(key.user_key.data(), key.user_key.size());
+  PutFixed64(result, PackSequenceAndType(key.sequence, key.type));
 }
     
-    
-    {  // Sleep just until `num_bytes` is allowed.
-  uint64_t sleep_amount =
-      static_cast<uint64_t>(num_bytes /
-                            static_cast<long double>(delayed_write_rate_) *
-                            kMicrosPerSecond) +
-      sleep_debt;
-  last_refill_time_ = time_now + sleep_amount;
-  return sleep_amount;
+    // Print contents of a log file. (*func)() is called on every record.
+Status PrintLogContents(Env* env, const std::string& fname,
+                        void (*func)(uint64_t, Slice, WritableFile*),
+                        WritableFile* dst) {
+  SequentialFile* file;
+  Status s = env->NewSequentialFile(fname, &file);
+  if (!s.ok()) {
+    return s;
+  }
+  CorruptionReporter reporter;
+  reporter.dst_ = dst;
+  log::Reader reader(file, &reporter, true, 0);
+  Slice record;
+  std::string scratch;
+  while (reader.ReadRecord(&record, &scratch)) {
+    (*func)(reader.LastRecordOffset(), record, dst);
+  }
+  delete file;
+  return Status::OK();
 }
     
-    int main() {
-  Options options;
-  options.create_if_missing = true;
-  // Disable RocksDB background compaction.
-  options.compaction_style = kCompactionStyleNone;
-  // Small slowdown and stop trigger for experimental purpose.
-  options.level0_slowdown_writes_trigger = 3;
-  options.level0_stop_writes_trigger = 5;
-  options.IncreaseParallelism(5);
-  options.listeners.emplace_back(new FullCompactor(options));
+      fname = TempFileName('tmp', 999);
+  ASSERT_EQ('tmp/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(999, number);
+  ASSERT_EQ(kTempFile, type);
+    
+    bool HandleDumpCommand(Env* env, char** files, int num) {
+  StdoutPrinter printer;
+  bool ok = true;
+  for (int i = 0; i < num; i++) {
+    Status s = DumpFile(env, files[i], &printer);
+    if (!s.ok()) {
+      fprintf(stderr, '%s\n', s.ToString().c_str());
+      ok = false;
+    }
+  }
+  return ok;
+}
+    
+    #ifndef STORAGE_LEVELDB_DB_LOG_FORMAT_H_
+#define STORAGE_LEVELDB_DB_LOG_FORMAT_H_
+    
+      ~Reader();
+    
+    bool MemTable::Get(const LookupKey& key, std::string* value, Status* s) {
+  Slice memkey = key.memtable_key();
+  Table::Iterator iter(&table_);
+  iter.Seek(memkey.data());
+  if (iter.Valid()) {
+    // entry format is:
+    //    klength  varint32
+    //    userkey  char[klength]
+    //    tag      uint64
+    //    vlength  varint32
+    //    value    char[vlength]
+    // Check that it belongs to same user key.  We do not check the
+    // sequence number since the Seek() call above should have skipped
+    // all entries with overly large sequence numbers.
+    const char* entry = iter.key();
+    uint32_t key_length;
+    const char* key_ptr = GetVarint32Ptr(entry, entry+5, &key_length);
+    if (comparator_.comparator.user_comparator()->Compare(
+            Slice(key_ptr, key_length - 8),
+            key.user_key()) == 0) {
+      // Correct user key
+      const uint64_t tag = DecodeFixed64(key_ptr + key_length - 8);
+      switch (static_cast<ValueType>(tag & 0xff)) {
+        case kTypeValue: {
+          Slice v = GetLengthPrefixedSlice(key_ptr + key_length);
+          value->assign(v.data(), v.size());
+          return true;
+        }
+        case kTypeDeletion:
+          *s = Status::NotFound(Slice());
+          return true;
+      }
+    }
+  }
+  return false;
+}
+    
+      // Immutable after construction
+  Comparator const compare_;
+  Arena* const arena_;    // Arena used for allocations of nodes
+    
+    
+    {        // Advance to next key in the valid key space
+        if (key(pos) < key(current)) {
+          pos = MakeKey(key(pos) + 1, 0);
+        } else {
+          pos = MakeKey(key(pos), gen(pos) + 1);
+        }
+      }
+    
+    
+    {
+    {
+    {
+    {          std::transform(
+            begin(inputs) + start, begin(inputs) + stop,
+            retMem + start,
+            func
+          );
+        }
+      } catch (const std::runtime_error& e) {
+        std::fprintf(stderr,
+          'worker thread exited with exception: %s\n', e.what());
+        failed = true;
+      }
+    }));
+  }
+    
+    namespace php {
     }
     
-      MyFilter filter;
     
-      // Load the options file.
-  DBOptions loaded_db_opt;
-  std::vector<ColumnFamilyDescriptor> loaded_cf_descs;
-  s = LoadLatestOptions(kDBPath, Env::Default(), &loaded_db_opt,
-                        &loaded_cf_descs);
-  assert(s.ok());
-  assert(loaded_db_opt.create_if_missing == db_opt.create_if_missing);
+    {
+    {}}
     
-      // Put key-value
-  s = db->Put(WriteOptions(), 'key1', 'value');
-  assert(s.ok());
-  std::string value;
-  // get value
-  s = db->Get(ReadOptions(), 'key1', &value);
-  assert(s.ok());
-  assert(value == 'value');
+      void branchAuto(Label& l,
+                  BranchConditions bc = BranchConditions::Always,
+                  LinkReg lr = LinkReg::DoNotTouch,
+                  bool addrMayChange = false) {
+    l.branch(*this, bc, lr, addrMayChange);
+  }
     
-      // Following counters are only populated if
-  // options.report_bg_io_stats = true;
+    void Config::ParseConfigFile(const std::string &filename, IniSettingMap &ini,
+                             Hdf &hdf, const bool is_system /* = true */) {
+  // We don't allow a filename of just '.ini'
+  if (boost::ends_with(filename, '.ini') && filename.length() > 4) {
+    Config::ParseIniFile(filename, ini, false, is_system);
+  } else {
+    // For now, assume anything else is an hdf file
+    // TODO(#5151773): Have a non-invasive warning if HDF file does not end
+    // .hdf
+    Config::ParseHdfFile(filename, hdf);
+  }
+}
     
-    // Supported only for Leveled compaction
-Status SuggestCompactRange(DB* db, ColumnFamilyHandle* column_family,
-                           const Slice* begin, const Slice* end);
-Status SuggestCompactRange(DB* db, const Slice* begin, const Slice* end);
+    #include <folly/ScopeGuard.h>
     
-    // A structure that describes the current status of a thread.
-// The status of active threads can be fetched using
-// rocksdb::GetThreadList().
-struct ThreadStatus {
-  // The type of a thread.
-  enum ThreadType : int {
-    HIGH_PRIORITY = 0,  // RocksDB BG thread in high-pri thread pool
-    LOW_PRIORITY,  // RocksDB BG thread in low-pri thread pool
-    USER,  // User thread (Non-RocksDB BG thread)
-    BOTTOM_PRIORITY,  // RocksDB BG thread in bottom-pri thread pool
-    NUM_THREAD_TYPES
-  };
+    
+    {  auto ret = m_it.second();
+  assertx(ret.isString());
+  ++m_it;
+  return Variant(HHVM_FN(basename)(ret.toString()));
+}
+    
+    #define ERROR_RAISE_WARNING(exp)        \
+  int ret = (exp);                      \
+  if (ret != 0) {                       \
+    raise_warning(                      \
+      '%s(): %s',                       \
+      __FUNCTION__,                     \
+      folly::errnoStr(errno).c_str()    \
+    );                                  \
+  }                                     \
+    
+    
+    {  auto glob = HHVM_FN(glob)(String(path_str, path_len, CopyString));
+  if (!glob.isArray()) {
+    return nullptr;
+  }
+  return req::make<ArrayDirectory>(glob.toArray());
+}
+    
+    #ifndef incl_HPHP_OUTPUT_FILE_H_
+#define incl_HPHP_OUTPUT_FILE_H_
+    
+    // Canbus gflags
+DEFINE_double(sensor_freq, 100,
+              'Sensor feedback timer frequency -- 0 means event trigger.');
+    
+    #include 'modules/drivers/radar/conti_radar/protocol/object_list_status_60a.h'
+    
+    namespace apollo {
+namespace localization {
+namespace msf {
+    }
+    }
     }
     
-    namespace rocksdb {
+    #include 'gtest/gtest.h'
+    
+    
+    {  MatrixXd bd_golden(20, 1);
+  bd_golden << -0.03, -0.03, -0.02, -0.04, -0.02, -0.04, -0.02, -0.04, -0.02,
+      -0.04, -0.02, -0.04, -0.02, -0.04, -0.02, -0.04, -0.02, -0.04, -0.02,
+      -0.04;
+  EXPECT_EQ(bd.rows(), 20);
+  EXPECT_EQ(bd.cols(), 1);
+  for (uint32_t i = 0; i < bd.rows(); ++i) {
+    EXPECT_DOUBLE_EQ(bd(i, 0), bd_golden(i, 0));
+  }
+}
+    
+    #include 'modules/prediction/common/kml_map_based_test.h'
+#include 'modules/prediction/common/prediction_map.h'
+    
+    BENCHMARK(BENCHFUN(zzInitRNG)) {
+  srand(seed);
+}
+    
+    BENCHMARK_RELATIVE(sformat_short_string_unsafe, iters) {
+  BenchmarkSuspender suspender;
+  auto const& shortString = getShortString();
+  while (iters--) {
+    std::string out;
+    suspender.dismissing([&] { out = sformat(shortString); });
+  }
+}
+    
+      for (unsigned i = 0; i < iter; ++i) {
+    FB_LOG_EVERY_MS(INFO, -1) << 'every -1ms';
+  }
+    
+    void compareBenchmarkResults(const std::string& base, const std::string& test) {
+  printResultComparison(resultsFromFile(base), resultsFromFile(test));
+}
+    
+    namespace folly {
     }
+    
+    template <class RNG, typename = void>
+struct StateSize {
+  // A sane default.
+  using type = std::integral_constant<size_t, 512>;
+};
+    
+    #include <string>
+    
+      static void inc_shared_count(counted_base* base, int64_t count) {
+    counted_ptr_base<Atom>::getRef(base)->add_ref(count);
+  }
+    
+    class SparseByteSetTest : public testing::Test {
+ protected:
+  using lims = numeric_limits<uint8_t>;
+  SparseByteSet s;
+};
