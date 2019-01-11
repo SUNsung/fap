@@ -1,181 +1,107 @@
 
         
-        
-# noinspection PyAbstractClass
-class BuiltinAuthPlugin(AuthPlugin):
+          # Predict the labels
+  pred = model.predict(session, instances)
     
+      Args:
+    record: a record with TensorFlow example.
+    max_path_len: the maximum path length.
+    input_keep_prob: 1 - the word dropout probability
     
-class PyTest(TestCommand):
-    # `$ python setup.py test' simply installs minimal requirements
-    # and runs the tests with no fancy stuff like parallel execution.
-    def finalize_options(self):
-        TestCommand.finalize_options(self)
-        self.test_args = [
-            '--doctest-modules', '--verbose',
-            './httpie', './tests'
-        ]
-        self.test_suite = True
+        # OPTIMIZATION
+    # train the io matrices only
+    if self.hps.do_train_io_only:
+      self.train_vars = tvars = \
+        tf.get_collection('IO_transformations',
+                          scope=tf.get_variable_scope().name)
+    # train the encoder only
+    elif self.hps.do_train_encoder_only:
+      tvars1 = \
+        tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES,
+                          scope='LFADS/ic_enc_*')
+      tvars2 = \
+        tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES,
+                          scope='LFADS/z/ic_enc_*')
     
+          while cur_pos < num_steps:
+        if cur_stream[i] is None or len(cur_stream[i][0]) <= 1:
+          try:
+            cur_stream[i] = list(generator.next())
+          except StopIteration:
+            # No more data, exhaust current streams and quit
+            no_more_data = True
+            break
     
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
-    )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
-
+      def word_to_id(self, word):
+    if word in self._word_to_id:
+      return self._word_to_id[word]
+    else:
+      if word.lower() in self._word_to_id:
+        return self._word_to_id[word.lower()]
+    return self.unk
     
+      Yields:
+    Pairs of the batched data, each a matrix of shape [batch_size, num_steps].
+    The second element of the tuple is the same data time-shifted to the
+    right by one. The third is a set of weights with 1 indicating a word was
+    present and 0 not.
     
-def test_follow_all_output_options_used_for_redirects(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 3
-    assert HTTP_OK not in r
+    # Useful for REINFORCE baseline.
+from losses import losses
     
-        def test_non_existent_file_raises_parse_error(self, httpbin):
-        with pytest.raises(ParseError):
-            http('--form',
-                 'POST', httpbin.url + '/post', 'foo@/__does_not_exist__')
-    
-    import traceback
-    
-        if not check_min_pkg_version(CLOUD_CLIENT, CLOUD_CLIENT_MINIMUM_VERSION):
-        module.fail_json(msg='Please install %s client version %s' %
-                         (CLOUD_CLIENT, CLOUD_CLIENT_MINIMUM_VERSION))
-    
-        module : AnsibleModule object
-    oneandone_conn: authenticated oneandone object
+    def os_constant(key):
+    # XXX TODO: In the future, this could return different constants
+    #           based on what OS we are running under.  To see an
+    #           approach to how to handle different OSes, see the
+    #           apache version of this file.  Currently, we do not
+    #           actually have any OS-specific constants on Nginx.
     '''
-    try:
-        firewall_policy_id = module.params.get('firewall_policy')
-        name = module.params.get('name')
-        description = module.params.get('description')
-        add_server_ips = module.params.get('add_server_ips')
-        remove_server_ips = module.params.get('remove_server_ips')
-        add_rules = module.params.get('add_rules')
-        remove_rules = module.params.get('remove_rules')
+    Get a constant value for operating system
     
-            elif desired_state == 'enabled':
-            if current_state == HOST_ABSENT:
-                self.allocate_host()
-                host = self.get_host_by_name(host_name)
-                self.wait_for_host_state(host, [HOST_STATES.MONITORED])
-            elif current_state in [HOST_STATES.DISABLED, HOST_STATES.OFFLINE]:
-                if one.host.status(host.ID, HOST_STATUS.ENABLED):
-                    self.wait_for_host_state(host, [HOST_STATES.MONITORED])
-                    result['changed'] = True
-                else:
-                    self.fail(msg='could not enable host')
-            elif current_state in [HOST_STATES.MONITORED]:
-                pass
-            else:
-                self.fail(msg='unknown host state %s, cowardly refusing to change state to enable' % current_state_name)
+    # Note: This example is only tested with Python 3 (not Python 2)
     
-    from __future__ import absolute_import, division, print_function
-__metaclass__ = type
+    # Note: This isn't exactly the same as a 'percent match'. The scale isn't linear. But you can assume that images with a
+# smaller distance are more similar to each other than ones with a larger distance.
     
-        module = AnsibleModule(
-        argument_spec=dict(
-            token=dict(required=True, no_log=True),
-            environment=dict(required=True),
-            user=dict(required=False),
-            repo=dict(required=False),
-            revision=dict(required=False),
-            url=dict(required=False, default='https://api.airbrake.io/deploys.txt'),
-            validate_certs=dict(default='yes', type='bool'),
-        ),
-        supports_check_mode=True
-    )
-    
-        # String is special -- it is a non-templatized type in STL.
-    matched = _RE_PATTERN_STRING.search(line)
-    if matched:
-      # Don't warn about strings in non-STL namespaces:
-      # (We check only the first match per line; good enough.)
-      prefix = line[:matched.start()]
-      if prefix.endswith('std::') or not prefix.endswith('::'):
-        required['<string>'] = (linenum, 'string')
-    
-            # Adding field 'ApiToken.expires_at'
-        db.add_column(
-            'sentry_apitoken',
-            'expires_at',
-            self.gf('django.db.models.fields.DateTimeField')(null=True),
-            keep_default=False
-        )
-    
-        def backwards(self, orm):
-        # Removing unique constraint on 'CommitAuthor', fields ['organization_id', 'external_id']
-        db.delete_unique('sentry_commitauthor', ['organization_id', 'external_id'])
-    
-    ### OUTPUT ###
-# dog σκύλος
-# parrot parrot
-# cat γάτα
-# bear bear
-
-    
-        def test_3rd_am_station_after_scan(self):
-        self.radio.scan()
-        station = self.radio.state.stations[self.radio.state.pos]
-        expected_station = '1510'
-        self.assertEqual(station, expected_station)
-    
-    
-class Delegate(object):
-    def __init__(self):
-        self.p1 = 123
-    
-    from __future__ import print_function
-    
-    print()
-    
-        REGISTRY = {}
-    
-        def __init__(self):
-        '''We have an AM state and an FM state'''
-        self.amstate = AmState(self)
-        self.fmstate = FmState(self)
-        self.state = self.amstate
-    
-    Having the algorithms as an integral part of the client can cause the
-client to be larger and harder to maintain. This is more evident when
-supporting multiple algorithms. The separation of client and algorithm
-allows us to easily replace and vary the algorithm.
-    
-    ### OUTPUT ###
-# generic_visit A
-# visit_B B
-# visit_B C
-
-    
-    *References:
-bottle
-https://github.com/bottlepy/bottle/blob/cafc15419cbb4a6cb748e6ecdccf92893bb25ce5/bottle.py#L270
-django
-https://github.com/django/django/blob/ffd18732f3ee9e6f0374aff9ccf350d85187fac2/django/utils/functional.py#L19
-pip
-https://github.com/pypa/pip/blob/cb75cca785629e15efb46c35903827b3eae13481/pip/utils/__init__.py#L821
-pyramimd
-https://github.com/Pylons/pyramid/blob/7909e9503cdfc6f6e84d2c7ace1d3c03ca1d8b73/pyramid/decorator.py#L4
-werkzeug
-https://github.com/pallets/werkzeug/blob/5a2bf35441006d832ab1ed5a31963cbc366c99ac/werkzeug/utils.py#L35
-    
-    *References:
-http://stackoverflow.com/questions/1514120/python-implementation-of-the-object-pool-design-pattern
-https://sourcemaking.com/design_patterns/object_pool
-    
+        :param img_path: path to image to be recognized
+    :param predictions: results of the predict function
+    :return:
     '''
-Port of the Java example of 'Constructor Injection' in
-'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
-(ISBN-10: 0131495054, ISBN-13: 978-0131495050)
+    pil_image = Image.open(img_path).convert('RGB')
+    draw = ImageDraw.Draw(pil_image)
     
-        def __init__(self):
-        self.time_provider = datetime.datetime
+    # Find all the faces in the image using a pre-trained convolutional neural network.
+# This method is more accurate than the default HOG model, but it's slower
+# unless you have an nvidia GPU and dlib compiled with CUDA extensions. But if you do,
+# this will use GPU acceleration and perform well.
+# See also: find_faces_in_picture.py
+face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=0, model='cnn')
+    
+    app = Flask(__name__)
+    
+    
+def _raw_face_landmarks(face_image, face_locations=None, model='large'):
+    if face_locations is None:
+        face_locations = _raw_face_locations(face_image)
+    else:
+        face_locations = [_css_to_rect(face_location) for face_location in face_locations]
+    
+        # Find all the faces and face encodings in the current frame of video
+    face_locations = face_recognition.face_locations(rgb_frame)
+    face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
+    
+    # This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
+# other example, but it includes some basic performance tweaks to make things run a lot faster:
+#   1. Process each video frame at 1/4 resolution (though still display it at full resolution)
+#   2. Only detect faces in every other frame of video.
+    
+        # Draw a box around the face using the Pillow module
+    draw.rectangle(((left, top), (right, bottom)), outline=(0, 0, 255))
+    
+        function_parameters = zip(
+        images_to_check,
+        itertools.repeat(known_names),
+        itertools.repeat(known_face_encodings),
+        itertools.repeat(tolerance),
+        itertools.repeat(show_distance)
+    )
