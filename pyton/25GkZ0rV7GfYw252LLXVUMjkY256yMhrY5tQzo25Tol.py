@@ -1,263 +1,188 @@
 
         
-            def reducer_identity(self, key, value):
-        yield key, value
+            All keys are expected to be strings. The structure remembers the
+    case of the last key to be set, and ``iter(instance)``,
+    ``keys()``, ``items()``, ``iterkeys()``, and ``iteritems()``
+    will contain case-sensitive keys. However, querying and contains
+    testing is case insensitive::
     
-    from mrjob.job import MRJob
+        return inner
     
-        def bfs(self, source, dest):
-        # Use self.visited_ids to track visited nodes
-        # Use self.lookup to translate a person_id to a Person
-        pass
-
+    from . import utils
+from . import packages
+from .models import Request, Response, PreparedRequest
+from .api import request, get, head, post, patch, put, delete, options
+from .sessions import session, Session
+from .status_codes import codes
+from .exceptions import (
+    RequestException, Timeout, URLRequired,
+    TooManyRedirects, HTTPError, ConnectionError,
+    FileModeWarning, ConnectTimeout, ReadTimeout
+)
     
-        def lower_items(self):
-        '''Like iteritems(), but with all lowercase keys.'''
-        return (
-            (lowerkey, keyval[1])
-            for (lowerkey, keyval)
-            in self._store.items()
-        )
+    if is_py2:
+    from urllib import (
+        quote, unquote, quote_plus, unquote_plus, urlencode, getproxies,
+        proxy_bypass, proxy_bypass_environment, getproxies_environment)
+    from urlparse import urlparse, urlunparse, urljoin, urlsplit, urldefrag
+    from urllib2 import parse_http_list
+    import cookielib
+    from Cookie import Morsel
+    from StringIO import StringIO
+    from collections import Callable, Mapping, MutableMapping, OrderedDict
     
-    from .__version__ import __title__, __description__, __url__, __version__
-from .__version__ import __build__, __author__, __author_email__, __license__
-from .__version__ import __copyright__, __cake__
-    
-        def __setstate__(self, state):
-        '''Unlike a normal CookieJar, this class is pickleable.'''
-        self.__dict__.update(state)
-        if '_cookies_lock' not in self.__dict__:
-            self._cookies_lock = threading.RLock()
-    
-    _proxy_combos = []
-for prefix, schemes in _schemes_by_var_prefix:
-    for scheme in schemes:
-        _proxy_combos.append(('{}_proxy'.format(prefix), scheme))
-    
-        # Client Error.
-    400: ('bad_request', 'bad'),
-    401: ('unauthorized',),
-    402: ('payment_required', 'payment'),
-    403: ('forbidden',),
-    404: ('not_found', '-o-'),
-    405: ('method_not_allowed', 'not_allowed'),
-    406: ('not_acceptable',),
-    407: ('proxy_authentication_required', 'proxy_auth', 'proxy_authentication'),
-    408: ('request_timeout', 'timeout'),
-    409: ('conflict',),
-    410: ('gone',),
-    411: ('length_required',),
-    412: ('precondition_failed', 'precondition'),
-    413: ('request_entity_too_large',),
-    414: ('request_uri_too_large',),
-    415: ('unsupported_media_type', 'unsupported_media', 'media_type'),
-    416: ('requested_range_not_satisfiable', 'requested_range', 'range_not_satisfiable'),
-    417: ('expectation_failed',),
-    418: ('im_a_teapot', 'teapot', 'i_am_a_teapot'),
-    421: ('misdirected_request',),
-    422: ('unprocessable_entity', 'unprocessable'),
-    423: ('locked',),
-    424: ('failed_dependency', 'dependency'),
-    425: ('unordered_collection', 'unordered'),
-    426: ('upgrade_required', 'upgrade'),
-    428: ('precondition_required', 'precondition'),
-    429: ('too_many_requests', 'too_many'),
-    431: ('header_fields_too_large', 'fields_too_large'),
-    444: ('no_response', 'none'),
-    449: ('retry_with', 'retry'),
-    450: ('blocked_by_windows_parental_controls', 'parental_controls'),
-    451: ('unavailable_for_legal_reasons', 'legal_reasons'),
-    499: ('client_closed_request',),
-    
-    # For 'manual' documents, if this is true, then toplevel headings are parts,
-# not chapters.
-#latex_use_parts = False
-    
-        def test_prepare_request_with_bytestring_url(self):
-        req = requests.Request('GET', b'https://httpbin.org/')
-        s = requests.Session()
-        prep = s.prepare_request(req)
-        assert prep.url == 'https://httpbin.org/'
-    
-        def __init__(self):
-        Resource.__init__(self)
-        self.concurrent = 0
-        self.tail = deque(maxlen=100)
-        self._reset_stats()
-    
-    
-class Command(ScrapyCommand):
-    
-            # prepare spidercls
-        self.set_spidercls(url, opts)
-    
-    from scrapy.utils.spider import iter_spider_classes
-from scrapy.commands import ScrapyCommand
-from scrapy.exceptions import UsageError
-from scrapy.utils.conf import arglist_to_dict
-from scrapy.utils.python import without_none_values
-    
-        class _v20_S3Connection(S3Connection):
-        '''A dummy S3Connection wrapper that doesn't do any synchronous download'''
-        def _mexe(self, http_request, *args, **kwargs):
-            http_request.authorize(connection=self)
-            return http_request.headers
-    
-        dispatch = {
-        'call': trace_call,
-        'exception': trace_exception,
-        'return': trace_return,
-        'c_call': trace_pass,
-        'c_return': trace_pass,
-        'c_exception': trace_pass,
-        }
-    
-        def test_encoding(self):
-        # Test non-default encoding.
-        text = self.TEXT.decode('ascii')
-        text_native_eol = text.replace('\n', os.linesep)
-        with self.open(self.filename, 'wt', encoding='utf-16-le') as f:
-            f.write(text)
-        with open(self.filename, 'rb') as f:
-            file_data = ext_decompress(f.read()).decode('utf-16-le')
-            self.assertEqual(file_data, text_native_eol)
-        with self.open(self.filename, 'rt', encoding='utf-16-le') as f:
-            self.assertEqual(f.read(), text)
-    
-    # Now add the related image to the html part.
-with open('roasted-asparagus.jpg', 'rb') as img:
-    msg.get_payload()[1].add_related(img.read(), 'image', 'jpeg',
-                                     cid=asparagus_cid)
-    
-    # Import the email modules we'll need
-from email import policy
-from email.parser import BytesParser
-    
-        print('-' * 20)
-    
-            try:
-            print(pool.map(f, list(range(10))))
-        except ZeroDivisionError:
-            print('\tGot ZeroDivisionError as expected from pool.map()')
-        else:
-            raise AssertionError('expected ZeroDivisionError')
-    
-    while True:
-    line = input()
-    if line == '':
-        break
-    buffer += line
-    if sqlite3.complete_statement(buffer):
+        if isinstance(cookies, dict):
+        cookiejar = cookiejar_from_dict(
+            cookies, cookiejar=cookiejar, overwrite=False)
+    elif isinstance(cookies, cookielib.CookieJar):
         try:
-            buffer = buffer.strip()
-            cur.execute(buffer)
+            cookiejar.update(cookies)
+        except AttributeError:
+            for cookie_in_jar in cookies:
+                cookiejar.set_cookie(cookie_in_jar)
     
-        for prime in lowPrimes:
-        if (num % prime) == 0:
-            return False
+            # Verify we receive an Authorization header in response, then
+        # challenge again.
+        request_content = consume_socket_content(sock, timeout=0.5)
+        assert expected_digest in request_content
+        sock.send(text_401)
     
-        def __init__(self, size_table, charge_factor=None, lim_charge=None):
-        self.size_table = size_table
-        self.values = [None] * self.size_table
-        self.lim_charge = 0.75 if lim_charge is None else lim_charge
-        self.charge_factor = 1 if charge_factor is None else charge_factor
-        self.__aux_list = []
-        self._keys = {}
+        # Informational.
+    100: ('continue',),
+    101: ('switching_protocols',),
+    102: ('processing',),
+    103: ('checkpoint',),
+    122: ('uri_too_long', 'request_uri_too_long'),
+    200: ('ok', 'okay', 'all_ok', 'all_okay', 'all_good', '\\o/', '✓'),
+    201: ('created',),
+    202: ('accepted',),
+    203: ('non_authoritative_info', 'non_authoritative_information'),
+    204: ('no_content',),
+    205: ('reset_content', 'reset'),
+    206: ('partial_content', 'partial'),
+    207: ('multi_status', 'multiple_status', 'multi_stati', 'multiple_stati'),
+    208: ('already_reported',),
+    226: ('im_used',),
     
+        plt.legend(['Ridge', 'OLS', 'LassoLars'], loc='upper left')
+    plt.axis('tight')
+    plt.show()
+
     
-class QuadraticProbing(HashTable):
-    '''
-        Basic Hash Table example with open addressing using Quadratic Probing 
-    '''
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-    
-        def __solveDP(self, x, y):
-        if (x==-1):
-            return y+1
-        elif (y==-1):
-            return x+1
-        elif (self.dp[x][y]>-1):
-            return self.dp[x][y]
-        else:
-            if (self.A[x]==self.B[y]):
-                self.dp[x][y] = self.__solveDP(x-1,y-1)
-            else:
-                self.dp[x][y] = 1+min(self.__solveDP(x,y-1), self.__solveDP(x-1,y), self.__solveDP(x-1,y-1))
-    
-        difference = predict - actual
-    square_diff = np.square(difference)
+            plot_batch_times(all_times, n_components, batch_sizes, data)
+        plot_batch_errors(all_errors, n_components, batch_sizes, data)
     
     
-'''
-* Wondering how this method works !
-* It's pretty simple.
-* Let's say you need to calculate a ^ b
-* RULE 1 : a * b = (a+a) * (b/2) ---- example : 4 * 4 = (4+4) * (4/2) = 8 * 2
-* RULE 2 : IF b is ODD, then ---- a * b = a + (a * (b - 1)) :: where (b - 1) is even.
-* Once b is even, repeat the process to get a * b
-* Repeat the process till b = 1 OR b = 0, because a*1 = a AND a*0 = 0
-*
-* As far as the modulo is concerned,
-* the fact : (a+b) % c = ((a%c) + (b%c)) % c
-* Now apply RULE 1 OR 2, whichever is required.
-'''
+def setup(app):
+    # Format template for issues URI
+    # e.g. 'https://github.com/sloria/marshmallow/issues/{issue}
+    app.add_config_value('issues_uri', default=None, rebuild='html')
+    # Shortcut for GitHub, e.g. 'sloria/marshmallow'
+    app.add_config_value('issues_github_path', default=None, rebuild='html')
+    # Format template for user profile URI
+    # e.g. 'https://github.com/{user}'
+    app.add_config_value('issues_user_uri', default=None, rebuild='html')
+    app.add_role('issue', issue_role)
+    app.add_role('user', user_role)
 
     
     
-class Delegator(object):
+# TASK: Build a vectorizer that splits strings into sequence of 1 to 3
+# characters instead of word tokens
+    
+    # Print the classification report
+print(metrics.classification_report(y_test, y_predicted,
+                                    target_names=dataset.target_names))
+    
+        print('Generating skeleton for %s' % f)
+    
+        def test_decode_bad(self):
+        self.assertRaises(jose.DeserializationError, self.field.decode, 'y')
+    
+    
+DIRECTORY_URL = 'https://acme-staging.api.letsencrypt.org/directory'
+BITS = 2048  # minimum for Boulder
+DOMAIN = 'example1.com'  # example.com is ignored by Boulder
+    
+            self.assertRaises(
+            errors.PluginError, self.config.revert_challenge_config)
+    
+        def setUp(self):
+        self.base_dir = '/example_path'
+        self.vhosts = util.get_vh_truth(
+            self.base_dir, 'debian_apache_2_4/multiple_vhosts')
+    
+        def test_nonexistent_generic(self):
+        with mock.patch('certbot.util.get_os_info') as mock_info:
+            mock_info.return_value = ('nonexistent', 'irrelevant')
+            with mock.patch('certbot.util.get_systemd_os_like') as mock_like:
+                mock_like.return_value = ['unknonwn']
+                self.assertEqual(entrypoint.get_configurator(),
+                                 configurator.ApacheConfigurator)
+    
+            self.assertFalse(self.vhost2.conflicts([self.addr1,
+                                                self.addr_default]))
+    
+        If a name, the module is imported.  If the passed or imported module
+    object is not a package, raise an exception.
     '''
-    >>> delegator = Delegator(Delegate())
-    >>> delegator.p1
-    123
-    >>> delegator.p2
-    Traceback (most recent call last):
-    ...
-    AttributeError: 'Delegate' object has no attribute 'p2'
-    >>> delegator.do_something('nothing')
-    'Doing nothing'
-    >>> delegator.do_anything()
-    Traceback (most recent call last):
-    ...
-    AttributeError: 'Delegate' object has no attribute 'do_anything'
-    '''
+    if hasattr(package, '__spec__'):
+        if package.__spec__.submodule_search_locations is None:
+            raise TypeError('{!r} is not a package'.format(
+                package.__spec__.name))
+        else:
+            return package
+    else:
+        module = import_module(package)
+        if module.__spec__.submodule_search_locations is None:
+            raise TypeError('{!r} is not a package'.format(package))
+        else:
+            return module
     
+    from email.message import EmailMessage
+from email.policy import SMTP
     
-class Visitor(object):
-    def visit(self, node, *args, **kwargs):
-        meth = None
-        for cls in node.__class__.__mro__:
-            meth_name = 'visit_' + cls.__name__
-            meth = getattr(self, meth_name, None)
-            if meth:
-                break
+    # We can extract the richest alternative in order to display it:
+richest = msg.get_body()
+partfiles = {}
+if richest['content-type'].maintype == 'text':
+    if richest['content-type'].subtype == 'plain':
+        for line in richest.get_content().splitlines():
+            print(line)
+        sys.exit()
+    elif richest['content-type'].subtype == 'html':
+        body = richest
+    else:
+        print('Don't know how to display {}'.format(richest.get_content_type()))
+        sys.exit()
+elif richest['content-type'].content_type == 'multipart/related':
+    body = richest.get_body(preferencelist=('html'))
+    for part in richest.iter_attachments():
+        fn = part.get_filename()
+        if fn:
+            extension = os.path.splitext(part.get_filename())[1]
+        else:
+            extension = mimetypes.guess_extension(part.get_content_type())
+        with tempfile.NamedTemporaryFile(suffix=extension, delete=False) as f:
+            f.write(part.get_content())
+            # again strip the <> to go from email form of cid to html form.
+            partfiles[part['content-id'][1:-1]] = f.name
+else:
+    print('Don't know how to display {}'.format(richest.get_content_type()))
+    sys.exit()
+with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
+    # The magic_html_parser has to rewrite the href='cid:....' attributes to
+    # point to the filenames in partfiles.  It also has to do a safety-sanitize
+    # of the html.  It could be written using html.parser.
+    f.write(magic_html_parser(body.get_content(), partfiles))
+webbrowser.open(f.name)
+os.remove(f.name)
+for fn in partfiles.values():
+    os.remove(fn)
     
-        '''A pet shop'''
+    class Point:
+    def __init__(self, x, y):
+        self.x, self.y = x, y
     
-    *TL;DR80
-Decouples the creation of a complex object and its representation.
-'''
-    
-        def get_current_time_as_html_fragment(self):
-        current_time = self.time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
-'''
-    
-        def run_loop(self):
-        while self.blackboard.common_state['progress'] < 100:
-            for expert in self.blackboard.experts:
-                if expert.is_eager_to_contribute:
-                    expert.contribute()
-        return self.blackboard.common_state['contributions']
-    
-        products = {
-        'milk': {'price': 1.50, 'quantity': 10},
-        'eggs': {'price': 0.20, 'quantity': 100},
-        'cheese': {'price': 2.00, 'quantity': 10},
-    }
-    
-    *References:
-http://ginstrom.com/scribbles/2008/11/06/generic-adapter-class-in-python/
-https://sourcemaking.com/design_patterns/adapter
-http://python-3-patterns-idioms-test.readthedocs.io/en/latest/ChangeInterface.html#adapter
+    cur.close()
+con.close()
