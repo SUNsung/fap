@@ -1,194 +1,176 @@
 
         
-                    v_srclo = vget_low_s16(v_src1);
-            v_srchi = vget_high_s16(v_src1);
-            v_dst1 = vcombine_s16(vqmovn_s32(vaddw_s16(vmull_s16(v_srclo, v_srclo), vget_low_s16(v_dst1))),
-                                  vqmovn_s32(vaddw_s16(vmull_s16(v_srchi, v_srchi), vget_high_s16(v_dst1))));
+        public:
+  /// Form storage for the given generic signature and its replacement
+  /// types and conformances.
+  static Storage *get(GenericSignature *genericSig,
+                      ArrayRef<Type> replacementTypes,
+                      ArrayRef<ProtocolConformanceRef> conformances);
     
-            for (; j < roiw16; j += 16)
-        {
-            internal::prefetch(src + j);
-            uint8x16_t v_src = vld1q_u8(src + j);
-            int16x8_t v_dst0 = vreinterpretq_s16_u16(vmovl_u8(vget_low_u8(v_src)));
-            int16x8_t v_dst1 = vreinterpretq_s16_u16(vmovl_u8(vget_high_u8(v_src)));
+    bool importer::isCFTypeDecl(
+       const clang::TypedefNameDecl *Decl) {
+  if (CFPointeeInfo::classifyTypedef(Decl))
+    return true;
+  return false;
+}
+    
+    
+    {
+    {/// Determine the imported CF type for the given typedef-name, or the empty
+/// string if this is not an imported CF type name.
+llvm::StringRef getCFTypeName(const clang::TypedefNameDecl *decl);
+}
+}
+    
+    
+    {
+    {
+    {}  // namespace python
+}  // namespace protobuf
+}  // namespace google
+
+    
+    namespace {
+string GetTypeUrl(const Descriptor* message,
+                  const string& type_url_prefix) {
+  if (!type_url_prefix.empty() &&
+      type_url_prefix[type_url_prefix.size() - 1] == '/') {
+    return type_url_prefix + message->full_name();
+  } else {
+    return type_url_prefix + '/' + message->full_name();
+  }
+}
+}  // namespace
+    
+    MessageGenerator* ImmutableGeneratorFactory::NewMessageGenerator(
+    const Descriptor* descriptor) const {
+  if (HasDescriptorMethods(descriptor, context_->EnforceLite())) {
+    return new ImmutableMessageGenerator(descriptor, context_);
+  } else {
+    return new ImmutableMessageLiteGenerator(descriptor, context_);
+  }
+}
+    
+    void ImmutableMapFieldGenerator::
+GenerateBuildingCode(io::Printer* printer) const {
+  printer->Print(
+      variables_,
+      'result.$name$_ = internalGet$capitalized_name$();\n'
+      'result.$name$_.makeImmutable();\n');
+}
+    
+    // Check whether there is any type defined in the proto file that has
+// the given class name.
+bool ClassNameResolver::HasConflictingClassName(
+    const FileDescriptor* file, const string& classname) {
+  for (int i = 0; i < file->enum_type_count(); i++) {
+    if (file->enum_type(i)->name() == classname) {
+      return true;
+    }
+  }
+  for (int i = 0; i < file->service_count(); i++) {
+    if (file->service(i)->name() == classname) {
+      return true;
+    }
+  }
+  for (int i = 0; i < file->message_type_count(); i++) {
+    if (MessageHasConflictingClassName(file->message_type(i), classname)) {
+      return true;
+    }
+  }
+  return false;
+}
+    
+    
+    {  decode_data.AddString(1, 'abcdefghIJ', 'abcdefghIJ');
+  decode_data.AddString(3, 'abcdefghIJ', '_AbcdefghIJ');
+  decode_data.AddString(2, 'abcdefghIJ', 'Abcd_EfghIJ');
+  EXPECT_EXIT(decode_data.AddString(2, 'xyz', 'x_yz'),
+              ::testing::KilledBySignal(SIGABRT),
+              'error: duplicate key \\(2\\) making TextFormat data, input:');
+}
+#endif  // PROTOBUF_HAS_DEATH_TEST
+    
+        void thresholdBinaryInv(const Size2D &size,
+                            const u16 *srcBase, ptrdiff_t srcStride,
+                            u16 *dstBase, ptrdiff_t dstStride,
+                            u16 threshold, u16 value);
+    
+        void operator() (const typename internal::VecTraits<T>::vec128 & v_src0, const typename internal::VecTraits<T>::vec128 & v_src1,
+              typename internal::VecTraits<T>::unsign::vec128 & v_dst) const
+    {
+        v_dst = internal::vcgtq(v_src0, v_src1);
     }
     
-            vs1 = vqadd_s32(vs1, vs2);
-        vs3 = vqadd_s32(vs3, vs4);
-        vs1 = vqadd_s32(vs1, vs3);
-        int32x2_t vsneg = vqneg_s32(vs1);
+    #endif
+
     
-        minLocCapacity <<= 1;
-    maxLocCapacity <<= 1;
     
-        if (elemSize == (u32)sizeof(u8))
-        func = &flip<u8>;
-    if (elemSize == (u32)sizeof(u16))
-        func = &flip<u16>;
-    if (elemSize == (u32)sizeof(u32))
-        func = &flip<u32>;
-    if (elemSize == (u32)sizeof(u8) * 3)
-        func = &flip3<u8>;
+    {
+    {         vst1_s16(_dst + i + 4, vline_s16);
+     }
+})
+#endif
     
-                uint32x2_t el2l = vadd_u32(vget_low_u32(el8shr01l), vget_high_u32(el8shr01l));
-            uint32x2_t el2hl = vadd_u32(vget_low_u32(el4h), vget_high_u32(el8shr01l));
-            uint32x2_t el2hh = vadd_u32(vget_low_u32(el4h), vget_high_u32(el4h));
-    
-    inline float32x2_t vrecp_f32(float32x2_t val)
+    template <int shift>
+void lshiftConst(const Size2D &size,
+                 const u8 * srcBase, ptrdiff_t srcStride,
+                 s16 * dstBase, ptrdiff_t dstStride)
 {
-    float32x2_t reciprocal = vrecpe_f32(val);
-    reciprocal = vmul_f32(vrecps_f32(val, reciprocal), reciprocal);
-    reciprocal = vmul_f32(vrecps_f32(val, reciprocal), reciprocal);
-    return reciprocal;
-}
-    
-      /**
-   * @brief Adjust the shapes of top blobs and internal buffers to accommodate
-   *        the shapes of the bottom blobs.
-   *
-   * @param bottom the input blobs, with the requested input shapes
-   * @param top the top blobs, which should be reshaped as needed
-   *
-   * This method should reshape top blobs as needed according to the shapes
-   * of the bottom (input) blobs, as well as reshaping any internal buffers
-   * and making any other necessary adjustments so that the layer can
-   * accommodate the bottom blobs.
-   */
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top) = 0;
-    
-    #include <vector>
-    
-      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
-  cudnnTensorDescriptor_t bias_desc_;
-  cudnnFilterDescriptor_t filter_desc_;
-  vector<cudnnConvolutionDescriptor_t> conv_descs_;
-  int bottom_offset_, top_offset_, bias_offset_;
-    
-    // Computes and returns the dot product of the n-vectors u and v.
-// Uses Intel SSE intrinsics to access the SIMD instruction set.
-double DotProductSSE(const double* u, const double* v, int n) {
-  int max_offset = n - 2;
-  int offset = 0;
-  // Accumulate a set of 2 sums in sum, by loading pairs of 2 values from u and
-  // v, and multiplying them together in parallel.
-  __m128d sum = _mm_setzero_pd();
-  if (offset <= max_offset) {
-    offset = 2;
-    // Aligned load is reputedly faster but requires 16 byte aligned input.
-    if ((reinterpret_cast<uintptr_t>(u) & 15) == 0 &&
-        (reinterpret_cast<uintptr_t>(v) & 15) == 0) {
-      // Use aligned load.
-      sum = _mm_load_pd(u);
-      __m128d floats2 = _mm_load_pd(v);
-      // Multiply.
-      sum = _mm_mul_pd(sum, floats2);
-      while (offset <= max_offset) {
-        __m128d floats1 = _mm_load_pd(u + offset);
-        floats2 = _mm_load_pd(v + offset);
-        offset += 2;
-        floats1 = _mm_mul_pd(floats1, floats2);
-        sum = _mm_add_pd(sum, floats1);
-      }
-    } else {
-      // Use unaligned load.
-      sum = _mm_loadu_pd(u);
-      __m128d floats2 = _mm_loadu_pd(v);
-      // Multiply.
-      sum = _mm_mul_pd(sum, floats2);
-      while (offset <= max_offset) {
-        __m128d floats1 = _mm_loadu_pd(u + offset);
-        floats2 = _mm_loadu_pd(v + offset);
-        offset += 2;
-        floats1 = _mm_mul_pd(floats1, floats2);
-        sum = _mm_add_pd(sum, floats1);
-      }
-    }
-  }
-  // Add the 2 sums in sum horizontally.
-  sum = _mm_hadd_pd(sum, sum);
-  // Extract the low result.
-  double result = _mm_cvtsd_f64(sum);
-  // Add on any left-over products.
-  while (offset < n) {
-    result += u[offset] * v[offset];
-    ++offset;
-  }
-  return result;
-}
-    
-    /**
- * Class to iterate over tesseract page structure, providing access to all
- * levels of the page hierarchy, without including any tesseract headers or
- * having to handle any tesseract structures.
- * WARNING! This class points to data held within the TessBaseAPI class, and
- * therefore can only be used while the TessBaseAPI class still exists and
- * has not been subjected to a call of Init, SetImage, Recognize, Clear, End
- * DetectOS, or anything else that changes the internal PAGE_RES.
- * See apitypes.h for the definition of PageIteratorLevel.
- * See also ResultIterator, derived from PageIterator, which adds in the
- * ability to access OCR output with text-specific methods.
- */
-    
-      //   The text of a paragraph typically starts with the start of an idea and
-  // ends with the end of an idea.  Here we define paragraph as something that
-  // may have a first line indent and a body indent which may be different.
-  // Typical words that start an idea are:
-  //   1. Words in western scripts that start with
-  //      a capital letter, for example 'The'
-  //   2. Bulleted or numbered list items, for
-  //      example '2.'
-  // Typical words which end an idea are words ending in punctuation marks. In
-  // this vocabulary, each list item is represented as a paragraph.
-  bool lword_indicates_list_item;
-  bool lword_likely_starts_idea;
-  bool lword_likely_ends_idea;
-    
-          // Start all threads
-      shared.SetStart();
-      shared.GetCondVar()->SignalAll();
-    
-      int64_t num_record_drop_hidden = 0;
-  int64_t num_record_drop_obsolete = 0;
-  int64_t num_record_drop_range_del = 0;
-  int64_t num_range_del_drop_obsolete = 0;
-  // Deletions obsoleted before bottom level due to file gap optimization.
-  int64_t num_optimized_del_drop_obsolete = 0;
-  uint64_t total_filter_time = 0;
-    
-    Status WriteBatchBase::Delete(ColumnFamilyHandle* column_family,
-                              const SliceParts& key) {
-  std::string key_buf;
-  Slice key_slice(key, &key_buf);
-  return Delete(column_family, key_slice);
-}
-    
-      if (bytes_left_ >= num_bytes) {
-    bytes_left_ -= num_bytes;
-    return 0;
-  }
-  // The frequency to get time inside DB mutex is less than one per refill
-  // interval.
-  auto time_now = NowMicrosMonotonic(env);
-    
-    class WriteControllerTest : public testing::Test {};
-    
-      // the elapsed time of this compaction in microseconds.
-  uint64_t elapsed_micros;
-    
-    namespace folly {
+    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
     }
     
-        int probeEnd = getNextZero(note, pos, pos + remaining - 1);
-    CHECK_GE(probeEnd, 0);
-    size_t probeLen = probeEnd - pos + 1;
-    std::string probe = getStr(note, pos, probeLen);
-    remaining -= probeLen;
+        for (ptrdiff_t y = 0; y < height; ++y)
+    {
+        const u8 * srow0 = y == 0 && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::max<ptrdiff_t>(y - 1, 0));
+        const u8 * srow1 = internal::getRowPtr(srcBase, srcStride, y);
+        const u8 * srow2 = y + 1 == height && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::min(y + 1, height - 1));
+        u8 * drow = internal::getRowPtr(dstBase, dstStride, y);
+    }
     
     
-    {  bool initialized_{false};
-  folly::Function<folly::Function<void(double)>()> initialize_;
-  folly::Function<void(double)> increment_;
-};
+    {            float32x2_t vres = vpadd_f32(vget_low_f32(v_sum),vget_high_f32(v_sum));
+            result += vget_lane_f32(vres, 0) + vget_lane_f32(vres, 1);
+        }
     
-      Format format;
+    bool ImGui::InputText(const char* label, std::string* str, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
+{
+    IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
+    flags |= ImGuiInputTextFlags_CallbackResize;
+    }
+    
+    //---- Don't define obsolete functions/enums names. Consider enabling from time to time after updating to avoid using soon-to-be obsolete function/names.
+//#define IMGUI_DISABLE_OBSOLETE_FUNCTIONS
+    
+    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
+
+    
+    // Called by Init/NewFrame/Shutdown
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateFontsTexture();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyFontsTexture();
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateDeviceObjects();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyDeviceObjects();
+
+    
+    
+    {    // Restore modified DX state
+    ctx->RSSetScissorRects(old.ScissorRectsCount, old.ScissorRects);
+    ctx->RSSetViewports(old.ViewportsCount, old.Viewports);
+    ctx->RSSetState(old.RS); if (old.RS) old.RS->Release();
+    ctx->OMSetBlendState(old.BlendState, old.BlendFactor, old.SampleMask); if (old.BlendState) old.BlendState->Release();
+    ctx->OMSetDepthStencilState(old.DepthStencilState, old.StencilRef); if (old.DepthStencilState) old.DepthStencilState->Release();
+    ctx->PSSetShaderResources(0, 1, &old.PSShaderResource); if (old.PSShaderResource) old.PSShaderResource->Release();
+    ctx->PSSetSamplers(0, 1, &old.PSSampler); if (old.PSSampler) old.PSSampler->Release();
+    ctx->PSSetShader(old.PS); if (old.PS) old.PS->Release();
+    ctx->VSSetShader(old.VS); if (old.VS) old.VS->Release();
+    ctx->VSSetConstantBuffers(0, 1, &old.VSConstantBuffer); if (old.VSConstantBuffer) old.VSConstantBuffer->Release();
+    ctx->IASetPrimitiveTopology(old.PrimitiveTopology);
+    ctx->IASetIndexBuffer(old.IndexBuffer, old.IndexBufferFormat, old.IndexBufferOffset); if (old.IndexBuffer) old.IndexBuffer->Release();
+    ctx->IASetVertexBuffers(0, 1, &old.VertexBuffer, &old.VertexBufferStride, &old.VertexBufferOffset); if (old.VertexBuffer) old.VertexBuffer->Release();
+    ctx->IASetInputLayout(old.InputLayout); if (old.InputLayout) old.InputLayout->Release();
+}
