@@ -1,335 +1,291 @@
 
         
+            def score(self):
+        min_over = sys.MAXSIZE
+        max_under = -sys.MAXSIZE
+        for score in self.possible_scores():
+            if self.BLACKJACK < score < min_over:
+                min_over = score
+            elif max_under < score <= self.BLACKJACK:
+                max_under = score
+        return max_under if max_under != -sys.MAXSIZE else min_over
+    
+    
+class ParkingSpot(object):
+    
+    
+class DefaultCategories(Enum):
+    
+        def mapper(self, _, line):
+        '''Parse each log line, extract and transform relevant lines.
+    
+    
+class LookupService(object):
+    
+        def set(self, key, value):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                item.value = value
+                return
+        self.table[hash_index].append(Item(key, value))
+    
+        By default, it represents the actual environment.
+    All of the attributes can be overwritten though, which
+    is used by the test suite to simulate various scenarios.
+    
+    
+def patharg(path):
+    '''
+    Back slashes need to be escaped in ITEM args,
+    even in Windows paths.
+    
+        def __eq__(self, other):
+        if isinstance(other, Mapping):
+            other = CaseInsensitiveDict(other)
+        else:
+            return NotImplemented
+        # Compare insensitively
+        return dict(self.lower_items()) == dict(other.lower_items())
+    
+    
+@pytest.fixture
+def httpbin_secure(httpbin_secure):
+    return prepare_url(httpbin_secure)
+
+    
+        def __exit__(self, exc_type, exc_value, traceback):
+        if exc_type is None:
+            self.stop_event.wait(self.WAIT_EVENT_TIMEOUT)
+        else:
+            if self.wait_to_close_event:
+                # avoid server from waiting for event timeouts
+                # if an exception is found in the main thread
+                self.wait_to_close_event.set()
+    
+        def __call__(self, r):
+        # Initialize per-thread state, if needed
+        self.init_per_thread_state()
+        # If we have a saved nonce, skip the 401
+        if self._thread_local.last_nonce:
+            r.headers['Authorization'] = self.build_digest_header(r.method, r.url)
         try:
-    # https://urllib3.readthedocs.io/en/latest/security.html
-    # noinspection PyPackageRequirements
-    import urllib3
-    urllib3.disable_warnings()
-except (ImportError, AttributeError):
-    # In some rare cases, the user may have an old version of the requests
-    # or urllib3, and there is no method called 'disable_warnings.' In these
-    # cases, we don't need to call the method.
-    # They may get some noisy output but execution shouldn't die. Move on.
-    pass
+            self._thread_local.pos = r.body.tell()
+        except AttributeError:
+            # In the case of HTTPDigestAuth being reused and the body of
+            # the previous request was a file-like object, pos has the
+            # file position of the previous body. Ensure it's set to
+            # None.
+            self._thread_local.pos = None
+        r.register_hook('response', self.handle_401)
+        r.register_hook('response', self.handle_redirect)
+        self._thread_local.num_401_calls = 1
     
-            return '\r\n'.join(headers)
+        This function works best on CPython and PyPy: in particular, it probably
+    doesn't work for Jython or IronPython. Future investigation should be done
+    to work out the correct shape of the code for those platforms.
+    '''
+    implementation = platform.python_implementation()
     
     
-def test_current_version():
-    version = Environment().config['__meta__']['httpie']
-    assert version == __version__
+def test_idna_with_version_attribute(mocker):
+    '''Verify we're actually setting idna version when it should be available.'''
+    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
+    assert info()['idna'] == {'version': '2.6'}
 
     
     
-@mock.patch('httpie.core.get_response')
-def test_timeout(get_response):
-    def error(msg, *args, **kwargs):
-        global error_msg
-        error_msg = msg % args
+def test_redirect_rfc1808_to_non_ascii_location():
+    path = u'š'
+    expected_path = b'%C5%A1'
+    redirect_request = []  # stores the second request to the server
+    
+    # List of patterns, relative to source directory, that match files and
+# directories to ignore when looking for source files.
+exclude_patterns = ['_build']
     
     
-class TestRequestBodyFromFilePath:
+def extract_zipped_paths(path):
+    '''Replace nonexistent paths that look like they refer to a member of a zip
+    archive with the location of an extracted copy of the target, or else
+    just return the provided path unchanged.
     '''
-    `http URL @file'
+    if os.path.exists(path):
+        # this is already a valid path, no need to do anything further
+        return path
     
-        def __init__(self, get_response=None):
-        if not apps.is_installed('django.contrib.sites'):
-            raise ImproperlyConfigured(
-                'You cannot use RedirectFallbackMiddleware when '
-                'django.contrib.sites is not installed.'
-            )
-        super().__init__(get_response)
+        def __init__(self, rule, targets):
+        self.rule = rule
+        self.targets = targets
     
-        For complete documentation on using Sessions in your code, consult
-    the sessions documentation that is shipped with Django (also available
-    on the Django Web site).
-    '''
-    objects = SessionManager()
+    updated:
+   description: Boolean field to denote an update has occurred.
+   returned: When an update has occurred.
+   type: bool
+   sample: True
+'''
+try:
+    from ast import literal_eval
+    HAS_PYTHON26 = True
+except ImportError:
+    HAS_PYTHON26 = False
     
-    import pytest
-from requests.compat import urljoin
+        changed = False
     
+    # Copyright: Ansible Project
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
     
-def _check_cryptography(cryptography_version):
-    # cryptography < 1.3.4
-    try:
-        cryptography_version = list(map(int, cryptography_version.split('.')))
-    except ValueError:
-        return
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-        def test_equality(self):
-        cid = CaseInsensitiveDict({'SPAM': 'blueval', 'Eggs': 'redval'})
-        othercid = CaseInsensitiveDict({'spam': 'blueval', 'eggs': 'redval'})
-        assert cid == othercid
-        del othercid['spam']
-        assert cid != othercid
-        assert cid == {'spam': 'blueval', 'eggs': 'redval'}
-        assert cid != object()
-    
-        cwe_rule = CloudWatchEventRule(module,
-                                   client=get_cloudwatchevents_client(module),
-                                   **rule_data)
-    cwe_rule_manager = CloudWatchEventRuleManager(cwe_rule, targets)
-    
-        module.exit_json(changed=changed,
-                     snapshot_id=snapshot.id,
-                     volume_id=snapshot.volume_id,
-                     volume_size=snapshot.volume_size,
-                     tags=snapshot.tags.copy())
+        changed = False
+    if state == 'present':
+        if not ipa_dnszone:
+            changed = True
+            if not module.check_mode:
+                client.dnszone_add(zone_name=zone_name)
+        else:
+            changed = False
+    else:
+        if ipa_dnszone:
+            changed = True
+            if not module.check_mode:
+                client.dnszone_del(zone_name=zone_name)
     
     from __future__ import absolute_import, division, print_function
 __metaclass__ = type
     
-        creds, params = get_google_cloud_credentials(module)
-    spanner_client = spanner.Client(project=params['project_id'],
-                                    credentials=creds,
-                                    user_agent=CLOUD_CLIENT_USER_AGENT)
-    changed = False
-    json_output = {}
     
-            if state == 'absent' and user in heroku_collaborator_list:
-            if not module.check_mode:
-                heroku_app.remove_collaborator(user)
-            affected_apps += [app]
-            result_state = True
-        elif state == 'present' and user not in heroku_collaborator_list:
-            if not module.check_mode:
-                heroku_app.add_collaborator(user_id_or_email=user, silent=module.params['suppress_invitation'])
-            affected_apps += [app]
-            result_state = True
+# ===========================================
+# Module execution.
+#
     
-    HOST_ABSENT = -99  # the host is absent (special case defined by this module)
+            if module.check_mode:
+            module.exit_json(changed=True)
     
     
-def get_role_facts(cursor, role=''):
-    facts = {}
-    cursor.execute('''
-        select r.name, r.assigned_roles
-        from roles r
-        where (? = '' or r.name ilike ?)
-    ''', role, role)
-    while True:
-        rows = cursor.fetchmany(100)
-        if not rows:
-            break
-        for row in rows:
-            role_key = row.name.lower()
-            facts[role_key] = {
-                'name': row.name,
-                'assigned_roles': []}
-            if row.assigned_roles:
-                facts[role_key]['assigned_roles'] = row.assigned_roles.replace(' ', '').split(',')
-    return facts
+def _get_resource_reader(
+        package: ModuleType) -> Optional[resources_abc.ResourceReader]:
+    # Return the package's loader if it's a ResourceReader.  We can't use
+    # a issubclass() check here because apparently abc.'s __subclasscheck__()
+    # hook wants to create a weak reference to the object, but
+    # zipimport.zipimporter does not support weak references, resulting in a
+    # TypeError.  That seems terrible.
+    spec = package.__spec__
+    if hasattr(spec.loader, 'get_resource_reader'):
+        return cast(resources_abc.ResourceReader,
+                    spec.loader.get_resource_reader(spec.name))
+    return None
     
-    
-DOCUMENTATION = '''
----
-module: vertica_schema
-version_added: '2.0'
-short_description: Adds or removes Vertica database schema and roles.
-description:
-  - Adds or removes Vertica database schema and, optionally, roles
-    with schema access privileges.
-  - A schema will not be removed until all the objects have been dropped.
-  - In such a situation, if the module tries to remove the schema it
-    will fail and only remove roles created for the schema if they have
-    no dependencies.
-options:
-  name:
-    description:
-      - Name of the schema to add or remove.
-    required: true
-  usage_roles:
-    description:
-      - Comma separated list of roles to create and grant usage access to the schema.
-    aliases: ['usage_role']
-  create_roles:
-    description:
-      - Comma separated list of roles to create and grant usage and create access to the schema.
-    aliases: ['create_role']
-  owner:
-    description:
-      - Name of the user to set as owner of the schema.
-  state:
-    description:
-      - Whether to create C(present), or drop C(absent) a schema.
-    default: present
-    choices: ['present', 'absent']
-  db:
-    description:
-      - Name of the Vertica database.
-  cluster:
-    description:
-      - Name of the Vertica cluster.
-    default: localhost
-  port:
-    description:
-      - Vertica cluster port to connect to.
-    default: 5433
-  login_user:
-    description:
-      - The username used to authenticate with.
-    default: dbadmin
-  login_password:
-    description:
-      - The password used to authenticate with.
-notes:
-  - The default authentication assumes that you are either logging in as or sudo'ing
-    to the C(dbadmin) account on the host.
-  - This module uses C(pyodbc), a Python ODBC database adapter. You must ensure
-    that C(unixODBC) and C(pyodbc) is installed on the host and properly configured.
-  - Configuring C(unixODBC) for Vertica requires C(Driver = /opt/vertica/lib64/libverticaodbc.so)
-    to be added to the C(Vertica) section of either C(/etc/odbcinst.ini) or C($HOME/.odbcinst.ini)
-    and both C(ErrorMessagesPath = /opt/vertica/lib64) and C(DriverManagerEncoding = UTF-16)
-    to be added to the C(Driver) section of either C(/etc/vertica.ini) or C($HOME/.vertica.ini).
-requirements: [ 'unixODBC', 'pyodbc' ]
-author: 'Dariusz Owczarek (@dareko)'
-'''
-    
-        # Send the data to airbrake
-    data = urlencode(params)
-    response, info = fetch_url(module, url, data=data)
-    if info['status'] == 200:
-        module.exit_json(changed=True)
+    # We can extract the richest alternative in order to display it:
+richest = msg.get_body()
+partfiles = {}
+if richest['content-type'].maintype == 'text':
+    if richest['content-type'].subtype == 'plain':
+        for line in richest.get_content().splitlines():
+            print(line)
+        sys.exit()
+    elif richest['content-type'].subtype == 'html':
+        body = richest
     else:
-        module.fail_json(msg='HTTP result code: %d connecting to %s' % (info['status'], url))
+        print('Don't know how to display {}'.format(richest.get_content_type()))
+        sys.exit()
+elif richest['content-type'].content_type == 'multipart/related':
+    body = richest.get_body(preferencelist=('html'))
+    for part in richest.iter_attachments():
+        fn = part.get_filename()
+        if fn:
+            extension = os.path.splitext(part.get_filename())[1]
+        else:
+            extension = mimetypes.guess_extension(part.get_content_type())
+        with tempfile.NamedTemporaryFile(suffix=extension, delete=False) as f:
+            f.write(part.get_content())
+            # again strip the <> to go from email form of cid to html form.
+            partfiles[part['content-id'][1:-1]] = f.name
+else:
+    print('Don't know how to display {}'.format(richest.get_content_type()))
+    sys.exit()
+with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
+    # The magic_html_parser has to rewrite the href='cid:....' attributes to
+    # point to the filenames in partfiles.  It also has to do a safety-sanitize
+    # of the html.  It could be written using html.parser.
+    f.write(magic_html_parser(body.get_content(), partfiles))
+webbrowser.open(f.name)
+os.remove(f.name)
+for fn in partfiles.values():
+    os.remove(fn)
     
-    from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import ExtraTreesClassifier
-from sklearn.ensemble import AdaBoostClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.naive_bayes import MultinomialNB
+    # Register the adapter
+sqlite3.register_adapter(Point, adapt_point)
+    
+        @property
+    def is_on(self):
+        '''Return true if sensor is on.'''
+        return self._is_down
+    
+        def get_device_name(self, device):
+        '''Return the name of the given device or None if we don't know.'''
+        if not self.last_results:
+            return None
+        for client in self.last_results:
+            if client.mac == device:
+                return client.ip
+        return None
+    
+        def dweet_event_listener(event):
+        '''Listen for new messages on the bus and sends them to Dweet.io.'''
+        state = event.data.get('new_state')
+        if state is None or state.state in (STATE_UNKNOWN, '') \
+                or state.entity_id not in whitelist:
+            return
+    
+                try:
+                payload_dict[entity_id] = state_helper.state_as_number(state)
+            except ValueError:
+                continue
+    
+                    resp_socket.sendto(self.upnp_response, addr)
+                resp_socket.close()
+    
+    DEPENDENCIES = ['history']
+    
+                result = await method(view, request, *args, **kwargs)
+            return result
     
     
-if __name__ == '__main__':
-    ap = argparse.ArgumentParser()
-    ap.add_argument('metrics', nargs='*', default=sorted(METRICS),
-                    help='Specifies metrics to benchmark, defaults to all. '
-                         'Choices are: {}'.format(sorted(METRICS)))
-    ap.add_argument('--formats', nargs='+', choices=sorted(FORMATS),
-                    help='Specifies multilabel formats to benchmark '
-                         '(defaults to all).')
-    ap.add_argument('--samples', type=int, default=1000,
-                    help='The number of samples to generate')
-    ap.add_argument('--classes', type=int, default=10,
-                    help='The number of classes')
-    ap.add_argument('--density', type=float, default=.2,
-                    help='The average density of labels per sample')
-    ap.add_argument('--plot', choices=['classes', 'density', 'samples'],
-                    default=None,
-                    help='Plot time with respect to this parameter varying '
-                         'up to the specified value')
-    ap.add_argument('--n-steps', default=10, type=int,
-                    help='Plot this many points for each metric')
-    ap.add_argument('--n-times',
-                    default=5, type=int,
-                    help='Time performance over n_times trials')
-    args = ap.parse_args()
+class TC:
+    def __init__(self):
+        self._tm = None
+        self._bProblem = 0
+    
+            for i in range(3):
+            num_obj.increment()
+            print(num_obj)
+        num_obj.value += 'x'  # will fail
+        print(num_obj)
+    except Exception as e:
+        a_transaction.rollback()
+        print('-- rolled back')
+    print(num_obj)
+    
+        print(u'Setting Data 1 = 10')
+    data1.data = 10
+    print(u'Setting Data 2 = 15')
+    data2.data = 15
+    print(u'Setting Data 1 = 3')
+    data1.data = 3
+    print(u'Setting Data 2 = 5')
+    data2.data = 5
+    print(u'Detach HexViewer from data1 and data2.')
+    data1.detach(view2)
+    data2.detach(view2)
+    print(u'Setting Data 1 = 10')
+    data1.data = 10
+    print(u'Setting Data 2 = 15')
+    data2.data = 15
+    
+    In Python, the interface we use is simply a callable, which is 'builtin' interface
+in Python, and in normal circumstances we can simply use the class itself as
+that callable, because classes are first class objects in Python.
     
     
-def benchmark(estimator, data):
-    gc.collect()
-    print('Benching %s' % estimator)
-    t0 = time()
-    estimator.fit(data)
-    training_time = time() - t0
-    data_t = estimator.transform(data)
-    data_r = estimator.inverse_transform(data_t)
-    reconstruction_error = np.mean(np.abs(data - data_r))
-    return {'time': training_time, 'error': reconstruction_error}
-    
-        for (sbplt, vals, quantity,
-         build_time, query_time) in [(311, Nrange, 'N',
-                                      N_results_build,
-                                      N_results_query),
-                                     (312, Drange, 'D',
-                                      D_results_build,
-                                      D_results_query),
-                                     (313, krange, 'k',
-                                      k_results_build,
-                                      k_results_query)]:
-        ax = plt.subplot(sbplt, yscale='log')
-        plt.grid(True)
-    
-        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
-    plt.plot(sample_sizes, one_core, label='one core')
-    plt.plot(sample_sizes, multi_core, label='multi core')
-    plt.xlabel('n_samples')
-    plt.ylabel('Time (s)')
-    plt.title('Parallel %s' % func.__name__)
-    plt.legend()
-    
-    First, we fix a training set, increase the number of
-samples to classify and plot number of classified samples as a
-function of time.
-    
-    # Plot the confusion matrix
-cm = metrics.confusion_matrix(y_test, y_predicted)
-print(cm)
-    
-    import sys
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.svm import LinearSVC
-from sklearn.pipeline import Pipeline
-from sklearn.model_selection import GridSearchCV
-from sklearn.datasets import load_files
-from sklearn.model_selection import train_test_split
-from sklearn import metrics
-    
-        # import matplotlib.pyplot as plt
-    # plt.matshow(cm)
-    # plt.show()
-
-    
-        def test_decode_good(self):
-        self.assertEqual('x', self.field.decode('x'))
-    
-    latex_elements = {
-    # The paper size ('letterpaper' or 'a4paper').
-    #'papersize': 'letterpaper',
-    }
-    
-        '''
-    deps = {
-        'ssl': ['setenvif', 'mime']
-    }
-    return deps.get(mod_name, [])
-    
-            :param bool temporary: Indicates whether the changes made will
-            be quickly reversed in the future (ie. challenges)
-    
-    AUTOHSTS_FREQ = 172800
-'''Minimum time since last increase to perform a new one: 48h'''
-    
-            from certbot_apache import tls_sni_01
-        self.sni = tls_sni_01.ApacheTlsSni01(config)
-    
-    # Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
-extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.todo',
-    'sphinx.ext.coverage',
-    'sphinx.ext.viewcode',
-]
-    
-        # Make the eyebrows into a nightmare
-    d.polygon(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 128))
-    d.polygon(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 128))
-    d.line(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 150), width=5)
-    d.line(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 150), width=5)
-    
-    # The model was trained in a way that faces with a distance of 0.6 or less should be a match. But if you want to
-# be more strict, you can look for a smaller face distance. For example, using a 0.55 cutoff would reduce false
-# positive matches at the risk of more false negatives.
-    
-    # Initialize some variables
-face_locations = []
-face_encodings = []
+class Flat(Building):
+    def build_floor(self):
+        self.floor = 'More than One'
