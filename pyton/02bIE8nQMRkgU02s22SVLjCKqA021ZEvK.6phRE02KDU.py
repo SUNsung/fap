@@ -1,133 +1,138 @@
 
         
-            def samefile(self, other_path):
-        '''Return whether other_path is the same or not as this file
-        (as returned by os.path.samefile()).
-        '''
-        st = self.stat()
-        try:
-            other_st = other_path.stat()
-        except AttributeError:
-            other_st = os.stat(other_path)
-        return os.path.samestat(st, other_st)
+            def can_fit_in_spot(self, spot):
+        return True
     
-    from . import abc as resources_abc
-from contextlib import contextmanager, suppress
-from importlib import import_module
-from importlib.abc import ResourceLoader
-from io import BytesIO, TextIOWrapper
-from pathlib import Path
-from types import ModuleType
-from typing import Iterable, Iterator, Optional, Set, Union   # noqa: F401
-from typing import cast
-from typing.io import BinaryIO, TextIO
-from zipimport import ZipImportError
     
-        def test_showrefcount(self):
-        def run_python(*args):
-            # this is similar to assert_python_ok but doesn't strip
-            # the refcount from stderr.  It can be replaced once
-            # assert_python_ok stops doing that.
-            cmd = [sys.executable]
-            cmd.extend(args)
-            PIPE = subprocess.PIPE
-            p = subprocess.Popen(cmd, stdout=PIPE, stderr=PIPE)
-            out, err = p.communicate()
-            p.stdout.close()
-            p.stderr.close()
-            rc = p.returncode
-            self.assertEqual(rc, 0)
-            return rc, out, err
-        code = 'import sys; print(sys._xoptions)'
-        # normally the refcount is hidden
-        rc, out, err = run_python('-c', code)
-        self.assertEqual(out.rstrip(), b'{}')
-        self.assertEqual(err, b'')
-        # '-X showrefcount' shows the refcount, but only in debug builds
-        rc, out, err = run_python('-X', 'showrefcount', '-c', code)
-        self.assertEqual(out.rstrip(), b'{'showrefcount': True}')
-        if Py_DEBUG:
-            self.assertRegex(err, br'^\[\d+ refs, \d+ blocks\]')
-        else:
-            self.assertEqual(err, b'')
-    
-        def testPeekBytesIO(self):
-        with BytesIO(self.DATA) as bio:
-            with BZ2File(bio) as bz2f:
-                pdata = bz2f.peek()
-                self.assertNotEqual(len(pdata), 0)
-                self.assertTrue(self.TEXT.startswith(pdata))
-                self.assertEqual(bz2f.read(), self.TEXT)
-    
-    while True:
-    line = input()
-    if line == '':
-        break
-    buffer += line
-    if sqlite3.complete_statement(buffer):
-        try:
-            buffer = buffer.strip()
-            cur.execute(buffer)
-    
-    # Register the adapter
-sqlite3.register_adapter(Point, adapt_point)
-    
-    cur.execute('insert into people (name_last, age) values ('Yeltsin',   72)')
-cur.execute('insert into people (name_last, age) values ('Putin',     51)')
-    
-            for item in self.flash_briefings.get(briefing_id, []):
-            output = {}
-            if item.get(CONF_TITLE) is not None:
-                if isinstance(item.get(CONF_TITLE), template.Template):
-                    output[ATTR_TITLE_TEXT] = item[CONF_TITLE].async_render()
-                else:
-                    output[ATTR_TITLE_TEXT] = item.get(CONF_TITLE)
-    
-            states = dict(state.attributes)
-        metric = '{}.{}'.format(prefix, state.domain)
-        tags = ['entity:{}'.format(state.entity_id)]
-    
-        def dweet_event_listener(event):
-        '''Listen for new messages on the bus and sends them to Dweet.io.'''
-        state = event.data.get('new_state')
-        if state is None or state.state in (STATE_UNKNOWN, '') \
-                or state.entity_id not in whitelist:
-            return
-    
-            def on_modified(self, event):
-            '''File modified.'''
-            self.process(event)
-    
-    # Load some images to compare against
-known_obama_image = face_recognition.load_image_file('obama.jpg')
-known_biden_image = face_recognition.load_image_file('biden.jpg')
-    
-        # Return the result as json
-    result = {
-        'face_found_in_image': face_found,
-        'is_picture_of_obama': is_obama
-    }
-    return jsonify(result)
-    
-        # macOS will crash due to a bug in libdispatch if you don't use 'forkserver'
-    context = multiprocessing
-    if 'forkserver' in multiprocessing.get_all_start_methods():
-        context = multiprocessing.get_context('forkserver')
-    
-    # Release handle to the webcam
-video_capture.release()
-cv2.destroyAllWindows()
+@pytest.fixture(autouse=True)
+def os_environ(monkeypatch):
+    env = {'PATH': os.environ['PATH']}
+    monkeypatch.setattr('os.environ', env)
+    return env
 
     
-            # Now let's list all the faces we found in all 128 frames
-        for frame_number_in_batch, face_locations in enumerate(batch_of_face_locations):
-            number_of_faces_in_frame = len(face_locations)
     
-        # Scale down image if it's giant so things run a little faster
-    if max(unknown_image.shape) > 1600:
-        pil_img = PIL.Image.fromarray(unknown_image)
-        pil_img.thumbnail((1600, 1600), PIL.Image.LANCZOS)
-        unknown_image = np.array(pil_img)
+@pytest.mark.functional
+def test_how_to_configure_alias(proc, TIMEOUT):
+    proc.sendline(u'unfunction fuck')
+    how_to_configure(proc, TIMEOUT)
+
     
-            if file.filename == '':
-            return redirect(request.url)
+    FORMATS = {
+    'sequences': lambda y: [list(np.flatnonzero(s)) for s in y],
+    'dense': lambda y: y,
+    'csr': lambda y: sp.csr_matrix(y),
+    'csc': lambda y: sp.csc_matrix(y),
+}
+    
+                plt.text((i + 0.02) / len(algorithms), 0.98, alg,
+                     transform=ax.transAxes,
+                     ha='left',
+                     va='top',
+                     bbox=dict(facecolor='w', edgecolor='w', alpha=0.5))
+    
+    # Split data in train set and test set
+n_samples = X.shape[0]
+X_train, y_train = X[:n_samples // 2], y[:n_samples // 2]
+X_test, y_test = X[n_samples // 2:], y[n_samples // 2:]
+print('test data sparsity: %f' % sparsity_ratio(X_test))
+    
+    
+def human_readable_data_quantity(quantity, multiple=1024):
+    # https://stackoverflow.com/questions/1094841/reusable-library-to-get-human-readable-version-of-file-size
+    if quantity == 0:
+        quantity = +0
+    SUFFIXES = ['B'] + [i + {1000: 'B', 1024: 'iB'}[multiple]
+                        for i in 'KMGTPEZY']
+    for suffix in SUFFIXES:
+        if quantity < multiple or suffix == SUFFIXES[-1]:
+            if suffix == SUFFIXES[0]:
+                return '%d %s' % (quantity, suffix)
+            else:
+                return '%.1f %s' % (quantity, suffix)
+        else:
+            quantity /= multiple
+    
+        target = utils.unescape(target).strip()
+    title = utils.unescape(title).strip()
+    config = inliner.document.settings.env.app.config
+    if config.issues_user_uri:
+        ref = config.issues_user_uri.format(user=target)
+    else:
+        ref = 'https://github.com/{0}'.format(target)
+    if has_explicit_title:
+        text = title
+    else:
+        text = '@{0}'.format(target)
+    
+            # split the paragraph into fake smaller paragraphs to make the
+        # problem harder e.g. more similar to tweets
+        if lang in ('zh', 'ja'):
+        # FIXME: whitespace tokenizing does not work on chinese and japanese
+            continue
+        words = content.split()
+        n_groups = len(words) / n_words_per_short_text
+        if n_groups < 1:
+            continue
+        groups = np.array_split(words, n_groups)
+    
+    import sys
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.svm import LinearSVC
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import GridSearchCV
+from sklearn.datasets import load_files
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
+    
+    # Define 'classifiers' to be used
+classifiers = {
+    'Empirical Covariance': EllipticEnvelope(support_fraction=1.,
+                                             contamination=0.261),
+    'Robust Covariance (Minimum Covariance Determinant)':
+    EllipticEnvelope(contamination=0.261),
+    'OCSVM': OneClassSVM(nu=0.261, gamma=0.05)}
+colors = ['m', 'g', 'b']
+legend1 = {}
+legend2 = {}
+    
+    _help = '''Usage: {} [OPTION]... [URL]...
+TODO
+'''.format(script_name)
+    
+    
+def download_url(url, merge, output_dir, title, info_only):
+    mime, ext, size = url_info(url)
+    print_info(site_info, title, mime, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir, merge=merge)
+    
+    __all__ = ['douban_download']
+    
+    def get_photoset_id(url, page):
+    return match1(url, pattern_url_photoset)
+    
+            # attempt to extract images first
+        # TBD: posts with > 4 images
+        # TBD: album links
+        html = get_html(parse.unquote(url), faker=True)
+        real_urls = []
+        for src in re.findall(r'src='([^']+)'[^>]*itemprop='image'', html):
+            t = src.split('/')
+            t[0], t[-2] = t[0] or 'https:', 's0-d'
+            u = '/'.join(t)
+            real_urls.append(u)
+        if not real_urls:
+            real_urls = [r1(r'<meta property='og:image' content='([^']+)', html)]
+            real_urls = [re.sub(r'w\d+-h\d+-p', 's0', u) for u in real_urls]
+        post_date = r1(r''?(20\d\d[-/]?[01]\d[-/]?[0123]\d)'?', html)
+        post_id = r1(r'/posts/([^']+)', html)
+        title = post_date + '_' + post_id
+    
+        for filename in filenames:
+        fd = codecs.open(filename, mode='r', encoding='utf-8')
+        for line in fd.readlines():
+            refs = re.findall(r'(?<=<a href=')[^']*', markdown.markdown(line))
+            for ref in refs:
+                if ref not in urls:
+                    urls.append(ref)
