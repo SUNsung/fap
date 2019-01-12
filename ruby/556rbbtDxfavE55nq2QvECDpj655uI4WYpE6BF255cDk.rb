@@ -1,170 +1,119 @@
 
         
-                      Time.utc(
-                default[:year], default[:month], default[:day],
-                default[:hour], default[:min], default[:sec]
-              )
-            end
-          end
-      end
-    end
+        begin
+  require 'cucumber/rake/task'
+  Cucumber::Rake::Task.new(:features) do |t|
+    t.profile = 'travis'
   end
+  Cucumber::Rake::Task.new(:'features:html', 'Run Cucumber features and produce HTML output') do |t|
+    t.profile = 'html_report'
+  end
+rescue LoadError
+  desc 'Cucumber rake task not available'
+  task :features do
+    abort 'Cucumber rake task is not available. Be sure to install cucumber as a gem or plugin'
+  end
+end
+    
+    if pathutil_relative == native_relative
+  Benchmark.ips do |x|
+    x.report('pathutil') { pathutil_relative }
+    x.report('native')   { native_relative }
+    x.compare!
+  end
+else
+  print 'PATHUTIL: '
+  puts pathutil_relative
+  print 'NATIVE:   '
+  puts native_relative
 end
 
     
-        %w(<< concat push insert unshift).each do |method|
-      class_eval <<-METHOD, __FILE__, __LINE__ + 1
-        def #{method}(*args)
-          paths.#{method}(*typecast(args))
+    # No trailing slash
+Benchmark.ips do |x|
+  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
+  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
+  x.compare!
+end
+
+    
+    #
+    
+              # This is too noisy even for --verbose, but uncomment if you need it for
+          # a specific WebSockets issue.  Adding ?LR-verbose=true onto the URL will
+          # enable logging on the client side.
+          # em_opts[:debug] = true
+    
+            def setup
+          @config['syntax_highlighter'] ||= highlighter
+          @config['syntax_highlighter_opts'] ||= {}
+          @config['coderay'] ||= {} # XXX: Legacy.
+          modernize_coderay_config
+          make_accessible
         end
-      METHOD
+    
+        def data_url_string?(str)
+      str.start_with?(DATA_URL)
     end
     
-      protected
-    
-      # GET /resource/unlock/new
-  def new
-    self.resource = resource_class.new
-  end
-    
-        def email_changed(record, opts={})
-      devise_mail(record, :email_changed, opts)
-    end
-    
-    require 'minitest/autorun'
-    
-    module Devise
-  module Controllers
-    # Provide sign in and sign out functionality.
-    # Included by default in all controllers.
-    module SignInOut
-      # Return true if the given scope is signed in session. If no scope given, return
-      # true if any scope is signed in. This will run authentication hooks, which may
-      # cause exceptions to be thrown from this method; if you simply want to check
-      # if a scope has already previously been authenticated without running
-      # authentication hooks, you can directly call `warden.authenticated?(scope: scope)`
-      def signed_in?(scope=nil)
-        [scope || Devise.mappings.keys].flatten.any? do |_scope|
-          warden.authenticate?(scope: _scope)
-        end
-      end
-    
-          private
-    
-            routes.each do |module_name, actions|
-          [:path, :url].each do |path_or_url|
-            actions.each do |action|
-              action = action ? '#{action}_' : ''
-              method = :'#{action}#{module_name}_#{path_or_url}'
-    
-          # If the record is persisted, remove the remember token (but only if
-      # it exists), and save the record without validations.
-      def forget_me!
-        return unless persisted?
-        self.remember_token = nil if respond_to?(:remember_token)
-        self.remember_created_at = nil if self.class.expire_all_remember_me_on_sign_out
-        save(validate: false)
-      end
-    
-              # Lock this machine
-          lock_file = lock_machine(uuid)
-          if !lock_file
-            raise Errors::MachineLocked,
-              name: entry.name,
-              provider: entry.provider
-          end
-    
-              # Add the help option, which must be on every command.
-          opts.on_tail('-h', '--help', 'Print this help') do
-            safe_puts(opts.help)
-            return nil
-          end
-    
-            # Returns the instance variables as a hash of key-value pairs.
-        def instance_variables_hash
-          instance_variables.inject({}) do |acc, iv|
-            acc[iv.to_s[1..-1]] = instance_variable_get(iv)
-            acc
-          end
+            css('h2:not([id]) a[id]:not([href])').each do |node|
+          node.parent['id'] = node['id']
+          node.before(node.children).remove
         end
     
-            # This returns all the registered guests.
+                    @env.vms.each do |name, vm|
+                  vms << vm if name =~ regex
+                end
+    
+            # This contains all the synced folder implementations by name.
         #
-        # @return [Hash]
-        def guests
-          Registry.new.tap do |result|
-            @registered.each do |plugin|
-              result.merge!(plugin.components.guests)
-            end
-          end
-        end
+        # @return [Registry<Symbol, Array<Class, Integer>>]
+        attr_reader :synced_folders
     
-        def resource_params
-      params.require(:user).permit(
-        :unconfirmed_email
-      )
-    end
-  end
-end
-
-    
-      def show
-    @status = status_finder.status
-    render json: @status, serializer: OEmbedSerializer, width: maxwidth_or_default, height: maxheight_or_default
-  end
-    
-      private
-    
-      def show
-    if subscription.valid?(params['hub.topic'])
-      @account.update(subscription_expires_at: future_expires)
-      render plain: encoded_challenge, status: 200
-    else
-      head 404
-    end
-  end
-    
-          weeks << {
-        week: week.to_time.to_i.to_s,
-        statuses: Redis.current.get('activity:statuses:local:#{week_id}') || '0',
-        logins: Redis.current.pfcount('activity:logins:#{week_id}').to_s,
-        registrations: Redis.current.get('activity:accounts:local:#{week_id}') || '0',
-      }
+          @options = options.merge(:_convert => true)
+      # Backwards compatibility
+      @options[:old] = true if @options[:alternate] == false
+      @template = template
+      @checked_encoding = false
     end
     
-        @web_subscription.update!(data: data_params)
-    
-      def update
-    setting.data = params[:data]
-    setting.save!
-    
-            self.description = <<-DESC
-          Shows the content of the pods cache as a YAML tree output, organized by pod.
-          If `NAME` is given, only the caches for that pod will be included in the output.
-        DESC
-    
-    desc 'Deploy website via rsync'
-task :rsync do
-  exclude = ''
-  if File.exists?('./rsync-exclude')
-    exclude = '--exclude-from '#{File.expand_path('./rsync-exclude')}''
-  end
-  puts '## Deploying website via Rsync'
-  ok_failed system('rsync -avze 'ssh -p #{ssh_port}' #{exclude} #{rsync_args} #{'--delete' unless rsync_delete == false} #{public_dir}/ #{ssh_user}:#{document_root}')
-end
-    
+        # The name of the mixin in which the error occurred.
+    # This could be `nil` if the error occurred outside a mixin.
+    #
+    # @return [String]
+    def sass_mixin
+      sass_backtrace.first[:mixin]
     end
     
-          Dir.chdir(code_path) do
-        code = file.read
-        @filetype = file.extname.sub('.','') if @filetype.nil?
-        title = @title ? '#{@title} (#{file.basename})' : file.basename
-        url = '/#{code_dir}/#{@file}'
-        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
-        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
-        TemplateWrapper::safe_wrap(source)
+          # Get the cache key pair for the given Sass URI.
+      # The URI need not be checked for validity.
+      #
+      # The only strict requirement is that the returned pair of strings
+      # uniquely identify the file at the given URI.
+      # However, the first component generally corresponds roughly to the directory,
+      # and the second to the basename, of the URI.
+      #
+      # Note that keys must be unique *across importers*.
+      # Thus it's probably a good idea to include the importer name
+      # at the beginning of the first component.
+      #
+      # @param uri [String] A URI known to be valid for this importer.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` currently being checked.
+      # @return [(String, String)] The key pair which uniquely identifies
+      #   the file at the given URI.
+      def key(uri, options)
+        Sass::Util.abstract(self)
+      end
+    
+        # Returns the larger of the two dimensions
+    def larger
+      [height, width].max
+    end
+    
+        def define_query
+      name = @name
+      @klass.send :define_method, '#{@name}?' do
+        send(name).file?
       end
     end
-  end
-    
-    
