@@ -1,182 +1,120 @@
 
         
-              dt = Date.today
-      freeze_time dt
+                result = block.call(parameters.first || {}) # to always pass a hash
+        self.current_lane = original_lane
     
-        # The category for users with trust level 3 has been created.
-    # Add initial permissions and description. They can be changed later.
-    
-          if staff.topic_id.nil?
-        creator = PostCreator.new(Discourse.system_user,
-          raw: I18n.t('staff_category_description'),
-          title: I18n.t('category.topic_prefix', category: staff.name),
-          category: staff.name,
-          archetype: Archetype.default
-        )
-        post = creator.create
-    
-        it 'in the future' do
-      expect(relative_distance_of_time_in_words(Time.now+5.minutes)).to eq('in 5m')
+        def handle_ssl_error!(e)
+      # SSL errors are very common when the Ruby or OpenSSL installation is somehow broken
+      # We want to show a nice error message to the user here
+      # We have over 20 GitHub issues just for this one error:
+      #   https://github.com/fastlane/fastlane/search?q=errno%3D0+state%3DSSLv3+read+server&type=Issues
+      suggest_ruby_reinstall(e)
+      display_user_error!(e, e.to_s)
     end
+    
+          def self.example_code
+        [
+          'add_git_tag # simple tag with default values',
+          'add_git_tag(
+            grouping: 'fastlane-builds',
+            prefix: 'v',
+            postfix: '-RC1',
+            build_number: 123
+          )',
+          '# Alternatively, you can specify your own tag. Note that if you do specify a tag, all other arguments are ignored.
+          add_git_tag(
+            tag: 'my_custom_tag'
+          )'
+        ]
+      end
+    
+          it 'handles no extension or extensions parameters' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.')
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}'')
+      end
+    
+          context 'with valid path to compile_commands.json' do
+        context 'with no path to oclint' do
+          let(:result) do
+            Fastlane::FastFile.new.parse('lane :test do
+              oclint( compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json' )
+            end').runner.execute(:test)
+          end
+          let(:command) { 'cd #{File.expand_path('.').shellescape} && oclint -report-type=html -o=oclint_report.html' }
+    
+          it 'should not be fooled by 10 local code signing identities available' do
+        allow(FastlaneCore::CertChecker).to receive(:wwdr_certificate_installed?).and_return(true)
+        allow(FastlaneCore::CertChecker).to receive(:list_available_identities).and_return('     10 valid identities found\n')
+        expect(FastlaneCore::UI).not_to(receive(:error))
+    
+        def replace(index, name)
+      @filters[assert_index(index)] = filter_const(name)
+    end
+    
+    module Docs
+  class PageDb
+    attr_reader :pages
+    
+        def initialize(content)
+      @content = content
+      @html = document? ? parse_as_document : parse_as_fragment
+    end
+    
+        odie 'Unknown command: #{cmd}' unless path
+    puts path
   end
 end
 
     
-      describe '#scenario_label' do
-    it 'creates a scenario label with the scenario name' do
-      expect(scenario_label(scenario)).to eq(
-        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Scene</span>'
-      )
+            self.description = <<-DESC
+          Shows the content of the pods cache as a YAML tree output, organized by pod.
+          If `NAME` is given, only the caches for that pod will be included in the output.
+        DESC
+    
+        def URIAddEncodedOctetToBuffer(octet, result, index)
+      result[index] = 37; # Char code of '%'.
+      index         += 1
+      result[index] = @@hexCharCodeArray[octet >> 4];
+      index         += 1
+      result[index] = @@hexCharCodeArray[octet & 0x0F];
+      index += 1
+      return index;
     end
     
-      let :new_extract do
-    {
-      'url' => { 'css' => '#comic img', 'value' => '@src' },
-      'title' => { 'css' => '#comic img', 'value' => '@alt' },
-      'hovertext' => { 'css' => '#comic img', 'value' => '@title', 'hidden' => true }
-    }
-  end
-    
-            mock(Agent).async_receive(agents(:bob_rain_notifier_agent).id, anything).times(0)
-        mock(Agent).async_receive(agents(:jane_rain_notifier_agent).id, anything).times(1)
-    
-    Then(/^the repo is cloned$/) do
-  run_vagrant_command(test_dir_exists(TestApp.repo_path))
-end
-    
-          def add_host(host, properties={})
-        new_host = Server[host]
-        new_host.port = properties[:port] if properties.key?(:port)
-        # This matching logic must stay in sync with `Server#matches?`.
-        key = ServerKey.new(new_host.hostname, new_host.port)
-        existing = servers_by_key[key]
-        if existing
-          existing.user = new_host.user if new_host.user
-          existing.with(properties)
+          def partial(name)
+        if name == :author_template
+          self.class.partial('history_authors/#{@page.wiki.user_icons}')
         else
-          servers_by_key[key] = new_host.with(properties)
+          super
         end
       end
     
-          # Internal use only.
-      def peek(key, default=nil, &block)
-        value = fetch_for(key, default, &block)
-        while callable_without_parameters?(value)
-          value = (values[key] = value.call)
-        end
-        value
-      end
-    
-    def source_version
-  @source_version ||= File.read(File.expand_path('../VERSION', __FILE__)).strip
+    def name
+  @name ||= Dir['*.gemspec'].first.split('.').first
 end
     
-    post '/' do
-  connections.each { |out| out << 'data: #{params[:msg]}\n\n' }
-  204 # response without entity body
-end
-    
-    task :gemspec => 'rack-protection.gemspec'
-task :default => :spec
-task :test    => :spec
-
-    
-          def initialize(app, options = {})
-        @app, @options = app, default_options.merge(options)
-      end
-    
-            reaction
-      end
-    
-      describe '#referrer' do
-    it 'Reads referrer from Referer header' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/valid'}
-      expect(subject.referrer(env)).to eq('bar.com')
-    end
-    
-          def right_diff_line_number(id, line)
-        if line =~ /^@@/
-          m, ri                   = *line.match(/\+(\d+)/)
-          @right_diff_line_number = ri.to_i
-          @current_line_number    = @right_diff_line_number
-          ret                     = '...'
-        elsif line[0] == ?-
-          ret = ' '
-        elsif line[0] == ?+
-          ret                     = @right_diff_line_number.to_s
-          @right_diff_line_number += 1
-          @current_line_number    = @right_diff_line_number - 1
-        else
-          ret                     = @right_diff_line_number.to_s
-          @right_diff_line_number += 1
-          @current_line_number    = @right_diff_line_number - 1
-        end
-        ret
-      end
+      if wiki_options[:plantuml_url]
+    Gollum::Filter::PlantUML.configure do |config|
+      puts 'Using #{wiki_options[:plantuml_url]} as PlantUML endpoint'
+      config.url = wiki_options[:plantuml_url]
     end
   end
-end
-
     
-          def next_link
-        label = 'Next &raquo;'
-        if @versions.size == Gollum::Page.per_page
-          link = '/history/#{@page.name}?page=#{@page_num+1}'
-          %(<a href='#{link}' hotkey='l'>#{label}</a>)
-        else
-          %(<span class='disabled'>#{label}</span>)
-        end
-      end
-    end
-  end
-end
-
-    
-          def mathjax_config
-        @mathjax_config
-      end
-    
-        assert_no_match /Edit Page/,             last_response.body, ''Edit Page' link not blocked in compare template'
-    assert_no_match /Revert Changes/,        last_response.body, ''Revert Changes' link not blocked in compare template'
-  end
-    
-          it 'allows closing brace on same line as multi-line element' do
-        expect_no_offenses(construct(false, a, make_multi(multi), false))
-      end
-    
-          it 'detects closing brace on separate line from last element' do
-        inspect_source(source)
-    
-          # The body of the method definition.
+          # Checks whether this node body is a void context.
+      # Always `true` for `for`.
       #
-      # @note this can be either a `begin` node, if the method body contains
-      #       multiple expressions, or any other node, if it contains a single
-      #       expression.
-      #
-      # @return [Node] the body of the method definition
-      def body
-        node_parts[0]
+      # @return [true] whether the `for` node body is a void context
+      def void_context?
+        true
       end
     
-    module RuboCop
-  module AST
-    # A node extension for `for` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `for` nodes within RuboCop.
-    class ForNode < Node
-      # Returns the keyword of the `for` statement as a string.
+          # A shorthand for getting the first argument of the node.
+      # Equivalent to `arguments.first`.
       #
-      # @return [String] the keyword of the `until` statement
-      def keyword
-        'for'
+      # @return [Node, nil] the first argument of the node,
+      #                     or `nil` if there are no arguments
+      def first_argument
+        arguments[0]
       end
-    
-          # Checks whether any argument of the node is a splat
-      # argument, i.e. `*splat`.
-      #
-      # @return [Boolean] whether the node is a splat argument
-      def splat_argument?
-        arguments? &&
-          (arguments.any?(&:splat_type?) || arguments.any?(&:restarg_type?))
-      end
-      alias rest_argument? splat_argument?
