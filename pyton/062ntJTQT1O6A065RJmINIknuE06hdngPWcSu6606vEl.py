@@ -1,147 +1,203 @@
 
         
-            See also `test_auth_plugins.py`
-    
-        Assumes `from __future__ import division`.
-    
-        plugin_manager.register(Plugin)
+        
+def win_install_service(service_name, cmdline):
+    manager = win_OpenSCManager()
     try:
-        r = http(
-            httpbin + BASIC_AUTH_URL,
-            '--auth-type',
-            Plugin.auth_type,
-            '--auth',
-            BASIC_AUTH_HEADER_VALUE,
-        )
-        assert HTTP_OK in r
-        assert r.json == AUTH_OK
-    finally:
-        plugin_manager.unregister(Plugin)
+        h = advapi32.CreateServiceW(
+            manager, service_name, None,
+            SC_MANAGER_CREATE_SERVICE, SERVICE_WIN32_OWN_PROCESS,
+            SERVICE_AUTO_START, SERVICE_ERROR_NORMAL,
+            cmdline, None, None, None, None, None)
+        if not h:
+            raise OSError('Service creation failed: %s' % ctypes.FormatError())
+    
+    filenames = {
+    'bin': 'youtube-dl',
+    'exe': 'youtube-dl.exe',
+    'tar': 'youtube-dl-%s.tar.gz' % version}
+build_dir = os.path.join('..', '..', 'build', version)
+for key, filename in filenames.items():
+    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
+    fn = os.path.join(build_dir, filename)
+    with open(fn, 'rb') as f:
+        data = f.read()
+    if not data:
+        raise ValueError('File %s is empty!' % fn)
+    sha256sum = hashlib.sha256(data).hexdigest()
+    new_version[key] = (url, sha256sum)
+    
+    versions_info['signature'] = signature
+with open('update/versions.json', 'w') as versionsf:
+    json.dump(versions_info, versionsf, indent=4, sort_keys=True)
+
+    
+    with io.open('update/releases.atom', 'w', encoding='utf-8') as atom_file:
+    atom_file.write(atom_template)
+
+    
+        bug_text = re.search(
+        r'(?s)#\s*BUGS\s*[^\n]*\s*(.*?)#\s*COPYRIGHT', readme).group(1)
+    dev_text = re.search(
+        r'(?s)(#\s*DEVELOPER INSTRUCTIONS.*?)#\s*EMBEDDING YOUTUBE-DL',
+        readme).group(1)
+    
+    import io
+import optparse
     
     
-def test_default_options(httpbin):
-    env = MockEnvironment()
-    env.config['default_options'] = ['--form']
-    env.config.save()
-    r = http(httpbin.url + '/post', 'foo=bar', env=env)
-    assert r.json['form'] == {'foo': 'bar'}
+def get_base_name(base):
+    if base is InfoExtractor:
+        return 'LazyLoadExtractor'
+    elif base is SearchInfoExtractor:
+        return 'LazyLoadSearchExtractor'
+    else:
+        return base.__name__
     
-        def test_POST_form_auto_Content_Type(self, httpbin):
-        r = http('--form', 'POST', httpbin.url + '/post')
-        assert HTTP_OK in r
-        assert ''Content-Type': 'application/x-www-form-urlencoded' in r
+        def test_cache(self):
+        ydl = FakeYDL({
+            'cachedir': self.test_dir,
+        })
+        c = Cache(ydl)
+        obj = {'x': 1, 'y': ['ä', '\\a', True]}
+        self.assertEqual(c.load('test_cache', 'k.'), None)
+        c.store('test_cache', 'k.', obj)
+        self.assertEqual(c.load('test_cache', 'k2'), None)
+        self.assertFalse(_is_empty(self.test_dir))
+        self.assertEqual(c.load('test_cache', 'k.'), obj)
+        self.assertEqual(c.load('test_cache', 'y'), None)
+        self.assertEqual(c.load('test_cache2', 'k.'), None)
+        c.remove()
+        self.assertFalse(os.path.exists(self.test_dir))
+        self.assertEqual(c.load('test_cache', 'k.'), None)
     
-        def test_download_interrupted(self, httpbin_both):
-        devnull = open(os.devnull, 'w')
-        downloader = Downloader(output_file=devnull, progress_file=devnull)
-        downloader.start(Response(
-            url=httpbin_both.url + '/',
-            headers={'Content-Length': 5}
-        ))
-        downloader.chunk_downloaded(b'1234')
-        downloader.finish()
-        assert downloader.interrupted
+    
+try:
+    _DEV_NULL = subprocess.DEVNULL
+except AttributeError:
+    _DEV_NULL = open(os.devnull, 'wb')
+    
+    
+def test_when_cant_configure_automatically(shell_pid, shell, logs):
+    shell_pid.return_value = 12
+    shell.how_to_configure.return_value = ShellConfiguration(
+        content='eval $(thefuck --alias)',
+        path='/tmp/.bashrc',
+        reload='bash',
+        can_configure_automatically=False)
+    main()
+    logs.how_to_configure_alias.assert_called_once()
+    
+     edit-sources - edit the source information file
+'''
+apt_operations = ['list', 'search', 'show', 'update', 'install', 'remove',
+                  'upgrade', 'full-upgrade', 'edit-sources']
+    
+    
+@pytest.fixture
+def brew_no_available_formula():
+    return '''Error: No available formula for elsticsearch '''
+    
+    Data structures that power Requests.
+'''
+    
+                self._thread_local.num_401_calls += 1
+            pat = re.compile(r'digest ', flags=re.IGNORECASE)
+            self._thread_local.chal = parse_dict_header(pat.sub('', s_auth, count=1))
+    
+    from requests.help import info
+    
+    _proxy_combos = []
+for prefix, schemes in _schemes_by_var_prefix:
+    for scheme in schemes:
+        _proxy_combos.append(('{}_proxy'.format(prefix), scheme))
+    
+    # The depth of the table of contents in toc.ncx.
+#epub_tocdepth = 3
+    
+        def put(self, url, data=None, **kwargs):
+        r'''Sends a PUT request. Returns :class:`Response` object.
+    
+    # Scrapy version
+import pkgutil
+__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
+version_info = tuple(int(v) if v.isdigit() else v
+                     for v in __version__.split('.'))
+del pkgutil
+    
+        if settings is None:
+        settings = get_project_settings()
+        # set EDITOR from environment if available
+        try:
+            editor = os.environ['EDITOR']
+        except KeyError: pass
+        else:
+            settings['EDITOR'] = editor
+    check_deprecated_settings(settings)
+    
+            if opts.logfile:
+            self.settings.set('LOG_ENABLED', True, priority='cmdline')
+            self.settings.set('LOG_FILE', opts.logfile, priority='cmdline')
+    
+    from six.moves.urllib.parse import urlencode
+    
+        def run(self, args, opts):
+        if len(args) != 1:
+            raise UsageError()
+    
+        def print_items(self, lvl=None, colour=True):
+        if lvl is None:
+            items = [item for lst in self.items.values() for item in lst]
+        else:
+            items = self.items.get(lvl, [])
+    
+            # set Host header based on url
+        self.headers.setdefault('Host', self.netloc)
+    
+        def test_shall_toggle_from_fm_to_am(self):
+        self.radio.toggle_amfm()
+        state = self.radio.state.name
+        expected_state_name = 'AM'
+        self.assertEqual(state, expected_state_name)
 
     
     
-def test_follow_all_output_options_used_for_redirects(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 3
-    assert HTTP_OK not in r
+class ConcreteHandler2(Handler):
+    '''... With helper methods.'''
     
-        if num in lowPrimes:
-        return True
-    
-    
-class DoubleHash(HashTable):
-    '''
-        Hash Table example with open addressing and Double Hash
-    '''
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-    
-    
+    ### OUTPUT ###
+# Got `plain-text`
+# Skip conversion
+# [SAVE]
+# `plain-text` was processed
+# ------------------------------
+# Got `pdf`
+# [CONVERT]
+# `pdf as text` was processed
+# ------------------------------
+# Got `csv`
+# Skip conversion
+# [SAVE]
+# `csv` was processed
 
     
-    try:
-	raw_input		#Python 2
-except NameError:
-	raw_input = input	#Python 3
+    from __future__ import print_function
     
-            '''
-        this section is to check that the inputs conform to our dimensionality constraints
-        '''
-        if X.ndim != 1:
-            print('Error: Input data set must be one dimensional')
-            return
-        if len(X) != len(y):
-            print('Error: X and y have different lengths')
-            return
-        if y.ndim != 1:
-            print('Error: Data set labels must be one dimensional')
-            return
+            for i in range(3):
+            num_obj.increment()
+            print(num_obj)
+        num_obj.value += 'x'  # will fail
+        print(num_obj)
+    except Exception as e:
+        a_transaction.rollback()
+        print('-- rolled back')
+    print(num_obj)
     
-            a *= a
-        b >>= 1
+        @classmethod
+    def get_registry(cls):
+        return dict(cls.REGISTRY)
     
     
-class BufferFull(UnpackException):
-    pass
-    
-        def test_frame_tz_localize(self):
-        rng = date_range('1/1/2011', periods=100, freq='H')
-    
-    
-def testUnsignedInt():
-    check(b'\x99\xcc\x00\xcc\x80\xcc\xff\xcd\x00\x00\xcd\x80\x00'
-          b'\xcd\xff\xff\xce\x00\x00\x00\x00\xce\x80\x00\x00\x00'
-          b'\xce\xff\xff\xff\xff',
-          (0,
-           128,
-           255,
-           0,
-           32768,
-           65535,
-           0,
-           2147483648,
-           4294967295, ), )
-    
-        def testPackUTF32(self):
-        test_data = [
-            compat.u(''),
-            compat.u('abcd'),
-            [compat.u('defgh')],
-            compat.u('Русский текст'),
-        ]
-        for td in test_data:
-            re = unpackb(
-                packb(td, encoding='utf-32'), use_list=1, encoding='utf-32')
-            assert re == td
-    
-        NUMBER_OF_STRINGS = 6
-    read_size = 16
-    
-        def put_string(self, col, row, s=None, color=None, background=None):
-        '''
-        Put string <s> with foreground color <color> and background color <background>
-        ad <col>, <row>
-        '''
-        for i, c in enumerate(s):
-            self.put_point(col+i, row, c, color=color, background=background)
-    
-        >>> rewrite_editor_section_name('js')
-    'js'
-    >>> rewrite_editor_section_name('vscode:js')
-    'js'
-    '''
-    if ':' not in section_name:
-        return section_name
-    
-        def __init__(self):
-        self.intervals = ['min', 'hour', 'day']
-    
-    import requests
+class OrSpecification(CompositeSpecification):
+    _one = Specification()
+    _other = Specification()
