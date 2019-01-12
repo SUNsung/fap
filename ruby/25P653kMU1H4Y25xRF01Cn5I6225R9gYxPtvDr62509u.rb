@@ -1,93 +1,77 @@
 
         
-            it 'can be incremented and decremented' do
-      SiteSetting.max_likes_per_day = 2
+                private
     
-            def preload_pipeline_warnings
-          # This preloads the number of warnings for every pipeline, ensuring
-          # that Ci::Pipeline#has_warnings? doesn't execute any additional
-          # queries.
-          @pipeline.number_of_warnings
-        end
+            result = Fastlane::FastFile.new.parse('lane :test do
+          add_git_tag ({
+            tag: '#{tag}',
+            grouping: 'grouping',
+            build_number: 'build_number',
+            prefix: 'prefix',
+          })
+        end').runner.execute(:test)
     
-            def find_target_id
-          GithubImport::IssuableFinder.new(project, issue).database_id
-        end
-      end
-    end
-  end
-end
-
-    
-              lfs_objects.each do |object|
-            yield object
+              it 'raises an exception' do
+            expect do
+              Fastlane::FastFile.new.parse('lane :test do
+                  carthage(command: '#{command}', frameworks: ['myframework', 'myframework2'])
+                end').runner.execute(:test)
+            end.to raise_error('Frameworks option is available only for 'archive' command.')
           end
-        rescue StandardError => e
-          Rails.logger.error('The Lfs import process failed. #{e.message}')
         end
-      end
-    end
-  end
-end
-
     
-            def state
-          if merged_at
-            :merged
+            expect(result[2]).to start_with('security set-keychain-settings')
+        expect(result[2]).to include('-t 300')
+        expect(result[2]).to_not(include('-l'))
+        expect(result[2]).to_not(include('-u'))
+        expect(result[2]).to include('~/Library/Keychains/test.keychain')
+      end
+    
+    # Here be helper
+    
+      def page_requested?
+    params[:page] == 'true'
+  end
+    
+            def update
+          @image = scope.images.accessible_by(current_ability, :update).find(params[:id])
+          if @image.update_attributes(image_params)
+            respond_with(@image, default_template: :show)
           else
-            attributes[:state]
+            invalid_resource!(@image)
           end
         end
     
-    module Rex
-  module Proto
-    module Kerberos
-      module Model
-        # This class provides a representation of a KRB_AP_REQ definition, containing the Kerberos protocol version number,
-        # the message type KRB_AP_REQ, an options field to indicate any options in use, and the ticket and authenticator
-        # themselves
-        class ApReq < Element
-          # @!attribute pvno
-          #   @return [Integer] The protocol version number
-          attr_accessor :pvno
-          # @!attribute msg_type
-          #   @return [Integer] The type of the protocol message
-          attr_accessor :msg_type
-          # @!attribute options
-          #   @return [Integer] request options, affects processing
-          attr_accessor :options
-          # @!attribute ticket
-          #   @return [Rex::Proto::Kerberos::Model::Ticket] The ticket authenticating the client to the server
-          attr_accessor :ticket
-          # @!attribute authenticator
-          #   @return [Rex::Proto::Kerberos::Model::EncryptedData] This contains the authenticator, which includes the
-          #   client's choice of a subkey
-          attr_accessor :authenticator
+            def show
+          authorize! :admin, ReturnAuthorization
+          @return_authorization = order.return_authorizations.accessible_by(current_ability, :read).find(params[:id])
+          respond_with(@return_authorization)
+        end
     
-              # Encodes the type field
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_type
-            bn = OpenSSL::BN.new(type.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
+            def create
+          authorize! :create, StockMovement
+          @stock_movement = scope.new(stock_movement_params)
+          if @stock_movement.save
+            respond_with(@stock_movement, status: 201, default_template: :show)
+          else
+            invalid_resource!(@stock_movement)
+          end
+        end
     
-    describe ConversationsController, :type => :controller do
-  describe '#index' do
-    before do
-      @person = alice.contacts.first.person
-      hash = {
-        :author => @person,
-        :participant_ids => [alice.person.id, @person.id],
-        :subject => 'not spam',
-        :messages_attributes => [ {:author => @person, :text => 'cool stuff'} ]
-      }
-      @conv1 = Conversation.create(hash)
-      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv1.id)
-             .increase_unread(alice)
-      Message.create(:author => @person, :created_at => Time.now + 200, :text => 'another message', :conversation_id => @conv1.id)
-             .increase_unread(alice)
+            def create
+          authorize! :create, Spree.user_class
+          @user = Spree.user_class.new(user_params)
+          if @user.save
+            respond_with(@user, status: 201, default_template: :show)
+          else
+            invalid_resource!(@user)
+          end
+        end
     
-    # This is the version that ships with OS X 10.10, so be sure we test against it.
-# At the same time, the 1.7.7 version won't install cleanly on Ruby > 2.2,
-# so we use a fork that makes a trivial change to a macro invocation.
-gem 'json', :git => 'https://github.com/segiddins/json.git', :branch => 'seg-1.7.7-ruby-2.2'
+            def zone
+          @zone ||= Spree::Zone.accessible_by(current_ability, :read).find(params[:id])
+        end
+      end
+    end
+  end
+end
