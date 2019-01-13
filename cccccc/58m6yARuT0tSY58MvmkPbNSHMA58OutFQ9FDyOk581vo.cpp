@@ -1,199 +1,204 @@
-#include <google/protobuf/compiler/csharp/csharp_doc_comment.h>
-#include <google/protobuf/compiler/csharp/csharp_enum.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/compiler/csharp/csharp_options.h>
+
+        
+        // Calls the registered C++ shape inference function for <node> (a serialized
+// NodeDef).
+// Should not be called for shape functions that access input tensors; constant
+// input tensor values are not made available, and so the inferred shapes will
+// be less precise than they could be.
+//
+// Returns an error, or OK, in <out_status> according to whether the shape
+// inference was successful.
+//
+// On success, returns a vector populated with the inferred output shapes (as
+// serialized CppShapeInferenceResult protos) followed by a serialized
+// CppShapeInferenceInputsNeeded proto.
+//
+// This is temporary code to be used during the migration
+// from python shape inference functions to C++ shape inference functions.
+std::vector<string> RunCppShapeInference(
+    int graph_def_version, const string& serialized_node_def,
+    const std::vector<string>& input_serialized_shapes,
+    PyObject* input_constant_tensor_values,
+    const std::vector<string>& input_constant_tensor_as_shape_values,
+    TF_Status* out_status);
     
-    template <typename DescriptorType>
-static void WriteDocCommentBody(
-    io::Printer* printer, const DescriptorType* descriptor) {
-  SourceLocation location;
-  if (descriptor->GetSourceLocation(&location)) {
-    WriteDocCommentBodyForLocation(printer, location);
-  }
+    REGISTER_OP('ShapelessOp');
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    #include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/op_kernel.h'
+    
+    PyObject* PyExceptionRegistry::Lookup(TF_Code code) {
+  DCHECK(singleton_ != nullptr) << 'Must call PyExceptionRegistry::Init() '
+                                   'before PyExceptionRegistry::Lookup()';
+  DCHECK_NE(code, TF_OK);
+  DCHECK(singleton_->exc_types_.find(code) != singleton_->exc_types_.end())
+      << 'Unknown error code passed to PyExceptionRegistry::Lookup: ' << code;
+  return singleton_->exc_types_[code];
 }
     
-    #include <google/protobuf/compiler/java/java_name_resolver.h>
+    #ifndef TENSORFLOW_PYTHON_LIB_IO_PY_RECORD_READER_H_
+#define TENSORFLOW_PYTHON_LIB_IO_PY_RECORD_READER_H_
     
     
-    {  printer->Print(
-      'NS_ASSUME_NONNULL_END\n'
-      '\n'
-      'CF_EXTERN_C_END\n'
-      '\n'
-      '#pragma clang diagnostic pop\n'
-      '\n'
-      '// @@protoc_insertion_point(global_scope)\n');
-}
-    
-    void OneofGenerator::GeneratePublicCasePropertyDeclaration(
-    io::Printer* printer) {
-  printer->Print(
-      variables_,
-      '$comments$'
-      '@property(nonatomic, readonly) $enum_name$ $name$OneOfCase;\n'
-      '\n');
-}
-    
-      virtual io::ZeroCopyOutputStream* OpenForInsert(
-      const string& filename, const string& insertion_point) {
-    CodeGeneratorResponse::File* file = response_->add_file();
-    file->set_name(filename);
-    file->set_insertion_point(insertion_point);
-    return new io::StringOutputStream(file->mutable_content());
-  }
-    
-    
-    {  RpcServerStatsEncoding() = delete;
-  RpcServerStatsEncoding(const RpcServerStatsEncoding&) = delete;
-  RpcServerStatsEncoding(RpcServerStatsEncoding&&) = delete;
-  RpcServerStatsEncoding operator=(const RpcServerStatsEncoding&) = delete;
-  RpcServerStatsEncoding operator=(RpcServerStatsEncoding&&) = delete;
-};
-    
-    #include 'src/core/lib/gprpp/thd.h'
-#include 'src/cpp/server/thread_pool_interface.h'
-    
-    Speed* Speed::create(ActionInterval* action, float speed)
-{
-    Speed *ret = new (std::nothrow) Speed();
-    if (ret && ret->initWithAction(action, speed))
     {
-        ret->autorelease();
-        return ret;
+    {}  // namespace swig
+}  // namespace tensorflow
+    
+    #include 'tensorflow/stream_executor/cuda/cuda_driver.h'
+#include 'tensorflow/stream_executor/cuda/cuda_stream.h'
+#include 'tensorflow/stream_executor/event.h'
+#include 'tensorflow/stream_executor/lib/status.h'
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    	if (cmderOptions.registerApp == true)
+	{
+		RegisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_BACKGROUND, cmderOptions.cmderCfgRoot, cmderOptions.cmderSingle);
+		RegisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_LISTITEM, cmderOptions.cmderCfgRoot, cmderOptions.cmderSingle);
+	}
+	else if (cmderOptions.unRegisterApp == true)
+	{
+		UnregisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_BACKGROUND);
+		UnregisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_LISTITEM);
+	}
+	else if (cmderOptions.error == true)
+	{
+		return 1;
+	}
+	else
+	{
+		StartCmder(cmderOptions.cmderStart, cmderOptions.cmderSingle, cmderOptions.cmderTask, cmderOptions.cmderCfgRoot, cmderOptions.cmderUserCfg);
+	}
+    
+      // Initialize a discovery cache at time 0.
+  discovery_cache_ = std::make_pair<size_t, bool>(0, false);
+  valid_ = true;
+    
+    namespace osquery {
     }
-    CC_SAFE_DELETE(ret);
-    return nullptr;
+    
+      if (config.count('file_paths') > 0) {
+    // We know this top-level is an Object.
+    const auto& file_paths = config.at('file_paths').doc();
+    if (file_paths.IsObject()) {
+      for (const auto& category : file_paths.GetObject()) {
+        if (category.value.IsArray()) {
+          for (const auto& path : category.value.GetArray()) {
+            std::string pattern = path.GetString();
+            if (pattern.empty()) {
+              continue;
+            }
+    }
+    }
+    }
+    }
+    }
+    
+    Status ViewsConfigParserPlugin::update(const std::string& source,
+                                       const ParserConfig& config) {
+  auto cv = config.find('views');
+  if (cv == config.end()) {
+    return Status(1);
+  }
+    }
+    
+    #include <osquery/config/config.h>
+#include <osquery/filesystem/filesystem.h>
+#include <osquery/flags.h>
+#include <osquery/logger.h>
+#include <osquery/registry_factory.h>
+#include <osquery/utils/config/default_paths.h>
+    
+    
+    {  uri_ = TLSRequestHelper::makeURI(FLAGS_config_tls_endpoint);
+  return Status(0, 'OK');
 }
     
-         */
-    bool initWithTargetAndOffset(Node *followedNode,float xOffset,float yOffset,const Rect& rect = Rect::ZERO);
+    fs::path getConfDirPathImpl() {
+  char const* kEnvVarName = 'TEST_CONF_FILES_DIR';
+  auto const value = std::getenv(kEnvVarName);
+  EXPECT_NE(value, nullptr)
+      << 'Env var ' << boost::io::quoted(kEnvVarName) << ' was not found, '
+      << ' looks like cxx_test argument 'env' is not set up.';
+  return fs::path(value);
+}
     
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
     
-    EaseBezierAction* EaseBezierAction::clone() const
-{
-    // no copy constructor
-    if (_inner)
     {
-        auto ret = EaseBezierAction::create(_inner->clone());
-        if (ret)
-        {
-            ret->setBezierParamer(_p0,_p1,_p2,_p3);
+    {
+    {                // Bind texture, Draw
+                ID3D11ShaderResourceView* texture_srv = (ID3D11ShaderResourceView*)pcmd->TextureId;
+                ctx->PSSetShaderResources(0, 1, &texture_srv);
+                ctx->DrawIndexed(pcmd->ElemCount, idx_offset, vtx_offset);
+            }
+            idx_offset += pcmd->ElemCount;
         }
-        return ret;
-    }
-    }
-    
-        //
-    // Override
-    //
-    /**
-     * @param time In seconds.
-     */
-    virtual void update(float time) override;
-    virtual RemoveSelf* clone() const override;
-    virtual RemoveSelf* reverse() const override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    RemoveSelf() : _isNeedCleanUp(true){}
-    virtual ~RemoveSelf(){}
-    
-        /** @deprecated Use getNumberOfRunningActionsInTarget() instead.
-     */
-    CC_DEPRECATED_ATTRIBUTE ssize_t numberOfRunningActionsInTarget(Node *target) const { return getNumberOfRunningActionsInTarget(target); }
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-        /** Gets the units of time the frame takes.
-     *
-     * @return The units of time the frame takes.
-     */
-    float getDelayUnits() const { return _delayUnits; };
-    
-    /** Sets the units of time the frame takes.
-     *
-     * @param delayUnits The units of time the frame takes.
-     */
-    void setDelayUnits(float delayUnits) { _delayUnits = delayUnits; };
-    
-    /** @brief Gets user information
-     * A AnimationFrameDisplayedNotification notification will be broadcast when the frame is displayed with this dictionary as UserInfo. 
-     * If UserInfo is nil, then no notification will be broadcast.
-     *
-     * @return A dictionary as UserInfo
-     */
-    const ValueMap& getUserInfo() const { return _userInfo; };
-    ValueMap& getUserInfo() { return _userInfo; };
-    
-    /** Sets user information.
-     * @param userInfo A dictionary as UserInfo.
-     */
-    void setUserInfo(const ValueMap& userInfo)
-    {
-        _userInfo = userInfo;
+        vtx_offset += cmd_list->VtxBuffer.Size;
     }
     
-    // Overrides
-    virtual AnimationFrame *clone() const override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    AnimationFrame();
-    /**
-     * @js NA
-     * @lua NA
-     */
-    virtual ~AnimationFrame();
-    
-    /** initializes the animation frame with a spriteframe, number of delay units and a notification user info */
-    bool initWithSpriteFrame(SpriteFrame* spriteFrame, float delayUnits, const ValueMap& userInfo);
-    
-    #include '2d/CCAutoPolygon.h'
-#include 'poly2tri/poly2tri.h'
-#include 'base/CCDirector.h'
-#include 'renderer/CCTextureCache.h'
-#include 'clipper/clipper.hpp'
-#include <algorithm>
-#include <math.h>
-    
-      bool Run() {
-    rocksdb::Env* env = rocksdb::Env::Default();
+            for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
+        {
+            const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
+            if (pcmd->UserCallback)
+            {
+                // User callback (registered via ImDrawList::AddCallback)
+                pcmd->UserCallback(cmd_list, pcmd);
+            }
+            else
+            {
+                ImVec4 clip_rect = ImVec4(pcmd->ClipRect.x - pos.x, pcmd->ClipRect.y - pos.y, pcmd->ClipRect.z - pos.x, pcmd->ClipRect.w - pos.y);
+                if (clip_rect.x < fb_width && clip_rect.y < fb_height && clip_rect.z >= 0.0f && clip_rect.w >= 0.0f)
+                {
+                    // Apply scissor/clipping rectangle
+                    glScissor((int)clip_rect.x, (int)(fb_height - clip_rect.w), (int)(clip_rect.z - clip_rect.x), (int)(clip_rect.w - clip_rect.y));
+    }
+    }
     }
     
-      // if background compaction is not working, write will stall
-  // because of options.level0_stop_writes_trigger
-  for (int i = 1000; i < 99999; ++i) {
-    db->Put(WriteOptions(), std::to_string(i),
-                            std::string(500, 'a' + (i % 26)));
+                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    
+      void sendMessage();
+    
+      // localnode
+  // 8bytes reserved
+  readBytes(fp, buf, buf.size(), 8);
+  // localnode ID
+  readBytes(fp, buf, buf.size(), DHT_ID_LENGTH);
+  auto localNode = std::make_shared<DHTNode>(buf);
+  // 4bytes reserved
+  readBytes(fp, buf, buf.size(), 4);
+    
+    #endif // D_DHT_TASK_H
+
+    
+      void update();
+    
+    #endif // D_DHT_TASK_QUEUE_H
+
+    
+    DHTUnknownMessage::DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
+                                     const unsigned char* data, size_t length,
+                                     const std::string& ipaddr, uint16_t port)
+    : DHTMessage(localNode, std::shared_ptr<DHTNode>()),
+      length_(length),
+      ipaddr_(ipaddr),
+      port_(port)
+{
+  if (length_ == 0) {
+    data_ = nullptr;
   }
-    
-    using namespace rocksdb;
-    
-    Status GetDBOptionsFromString(
-    const DBOptions& base_options,
-    const std::string& opts_str,
-    DBOptions* new_options);
-    
-    namespace rocksdb {
-    }
+  else {
+    data_ = new unsigned char[length];
+    memcpy(data_, data, length);
+  }
+}
