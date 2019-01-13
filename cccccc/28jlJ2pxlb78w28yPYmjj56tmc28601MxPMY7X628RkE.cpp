@@ -1,230 +1,292 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+          std::vector<string> output;
+  string input_tensors_needed_out;
+  tensorflow::Status status = RunCppShapeInferenceImpl(
+      graph_def_version, serialized_node_def, input_serialized_shapes,
+      input_constant_tensor_values_v, input_constant_tensor_as_shape_values,
+      &output, &input_tensors_needed_out);
+    
+      virtual string Code();
+    
+    namespace tensorflow {
+    }
     
     
     {}  // namespace tensorflow
     
-    namespace stream_executor {
-namespace cuda {
-    }
-    }
+    Status TF_TensorToPyArray(Safe_TF_TensorPtr tensor, PyObject** out_ndarray);
     
+    // Destructor passed to TF_NewTensor when it reuses a numpy buffer. Stores a
+// pointer to the pyobj in a buffer to be dereferenced later when we're actually
+// holding the GIL.
+void DelayedNumpyDecref(void* data, size_t len, void* obj) {
+  mutex_lock ml(*DelayedDecrefLock());
+  DecrefCache()->push_back(obj);
+}
     
-    {
-    {}  // namespace cuda
-}  // namespace stream_executor
+    #include 'tensorflow/python/lib/core/numpy.h'
     
      private:
+  static PyExceptionRegistry* singleton_;
+  PyExceptionRegistry() = default;
     
     
-    {  // The underlying CUDA event element.
-  CUevent cuda_event_;
-};
-    
-        enum BORDER_MODE
     {
-        BORDER_MODE_UNDEFINED,
-        BORDER_MODE_CONSTANT,
-        BORDER_MODE_REPLICATE,
-        BORDER_MODE_REFLECT,
-        BORDER_MODE_REFLECT101,
-        BORDER_MODE_WRAP
-    };
-    
-    
-    {    void operator() (const T * src0, const T * src1, T * dst) const
-    {
-        dst[0] = src0[0] >= src1[0] ? src0[0] - src1[0] : src1[0] - src0[0];
-    }
-};
-    
-    
-    {} //namespace CAROTENE_NS
+    {} // namespace test
+} // namespace c10d
 
     
-    void bitwiseOr(const Size2D &size,
-               const u8 *src0Base, ptrdiff_t src0Stride,
-               const u8 *src1Base, ptrdiff_t src1Stride,
-               u8 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, BitwiseOr());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
+    SHOULD_NOT_DO_GRADIENT(EnforceFinite);
     
-    SPLIT64(s, 2)
-SPLIT64(s, 3)
-SPLIT64(s, 4)
-    
-        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0, const typename internal::VecTraits<T>::vec64 & v_src1,
-              typename internal::VecTraits<T>::unsign::vec64 & v_dst) const
-    {
-        v_dst = internal::vcge(v_src0, v_src1);
-    }
-    
-    
-    {
-    {} // namespace internal
-} // namespace CAROTENE_NS
+    #endif // CAFFE2_OPERATORS_FREE_OP_H_
 
     
+    OPERATOR_SCHEMA(GivenTensorDoubleFill)
+    .NumInputs(0, 1)
+    .NumOutputs(1)
+    .AllowInplace({{0, 0}})
+    .Arg(
+        'values',
+        'The value for the elements of the output tensor.',
+        true /* required */)
+    .Arg(
+        'shape',
+        'The shape of the output tensor.'
+        'Cannot set the shape argument and pass in an input at the same time.')
+    .Arg(
+        'extra_shape',
+        'The additional dimensions appended at the end of the shape indicated'
+        'by the input blob.'
+        'Cannot set the extra_shape argument when there is no input blob.')
+    .Arg(
+        'input_as_shape',
+        '1D tensor containing the desired output shape. First input must be in CPU context.')
+    .TensorInferenceFunction(
+        FillerTensorInference<TensorProto_DataType_DOUBLE>);
     
-    {        for (; i < size.width; ++i)
-            result += src0[i] * src1[i];
+    template <>
+void GluOp<float, CPUContext>::ComputeGlu(
+    const int M,
+    const int split_dim,
+    const int N,
+    const float* Xdata,
+    float* Ydata) {
+  const int xStride = 2 * split_dim * N;
+  const int yStride = split_dim * N;
+  for (int i = 0; i < M; ++i) {
+    const int idx = i * xStride;
+    const int idy = i * yStride;
+    for (int j = 0; j < split_dim; ++j) {
+      const int jN = j * N;
+      const int jdx1 = idx + jN;
+      const int jdx2 = idx + (j + split_dim) * N;
+      const int jdy = idy + jN;
+      for (int k = 0; k < N; ++k) {
+        const float x1 = Xdata[jdx1 + k];
+        const float x2 = Xdata[jdx2 + k];
+        Ydata[jdy + k] = x1 * sigmoid(x2);
+      }
     }
-    return result;
-#else
-    (void)_size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    
-     *Neither the name of the University of Cambridge nor the names of
-  its contributors may be used to endorse or promote products derived
-  from this software without specific prior written permission.
-    
-                if (mask[0])
-                process(src, j, j + 8, i,
-                        minVal, minLocPtr, minLocCount, minLocCapacity,
-                        maxVal, maxLocPtr, maxLocCount, maxLocCapacity);
-            if (mask[1])
-                process(src, j + 8, j + 16, i,
-                        minVal, minLocPtr, minLocCount, minLocCapacity,
-                        maxVal, maxLocPtr, maxLocCount, maxLocCapacity);
-        }
-        for ( ; j < roiw8; j += 8)
-        {
-            uint8x8_t v_src = vld1_u8(src + j);
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-        // Backup the DX9 transform (DX9 documentation suggests that it is included in the StateBlock but it doesn't appear to)
-    D3DMATRIX last_world, last_view, last_projection;
-    g_pd3dDevice->GetTransform(D3DTS_WORLD, &last_world);
-    g_pd3dDevice->GetTransform(D3DTS_VIEW, &last_view);
-    g_pd3dDevice->GetTransform(D3DTS_PROJECTION, &last_projection);
-    
-    void ImGui_ImplFreeGLUT_SpecialFunc(int key, int x, int y)
-{
-    //printf('key_down_func %d\n', key);
-    ImGuiIO& io = ImGui::GetIO();
-    if (key + 256 < IM_ARRAYSIZE(io.KeysDown))
-        io.KeysDown[key + 256] = true;
-    ImGui_ImplFreeGLUT_UpdateKeyboardMods();
-    (void)x; (void)y; // Unused
+  }
 }
     
-        // Backup GL state
-    GLenum last_active_texture; glGetIntegerv(GL_ACTIVE_TEXTURE, (GLint*)&last_active_texture);
-    glActiveTexture(GL_TEXTURE0);
-    GLint last_program; glGetIntegerv(GL_CURRENT_PROGRAM, &last_program);
-    GLint last_texture; glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
-#ifdef GL_SAMPLER_BINDING
-    GLint last_sampler; glGetIntegerv(GL_SAMPLER_BINDING, &last_sampler);
-#endif
-    GLint last_array_buffer; glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &last_array_buffer);
-    GLint last_vertex_array; glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &last_vertex_array);
-#ifdef GL_POLYGON_MODE
-    GLint last_polygon_mode[2]; glGetIntegerv(GL_POLYGON_MODE, last_polygon_mode);
-#endif
-    GLint last_viewport[4]; glGetIntegerv(GL_VIEWPORT, last_viewport);
-    GLint last_scissor_box[4]; glGetIntegerv(GL_SCISSOR_BOX, last_scissor_box);
-    GLenum last_blend_src_rgb; glGetIntegerv(GL_BLEND_SRC_RGB, (GLint*)&last_blend_src_rgb);
-    GLenum last_blend_dst_rgb; glGetIntegerv(GL_BLEND_DST_RGB, (GLint*)&last_blend_dst_rgb);
-    GLenum last_blend_src_alpha; glGetIntegerv(GL_BLEND_SRC_ALPHA, (GLint*)&last_blend_src_alpha);
-    GLenum last_blend_dst_alpha; glGetIntegerv(GL_BLEND_DST_ALPHA, (GLint*)&last_blend_dst_alpha);
-    GLenum last_blend_equation_rgb; glGetIntegerv(GL_BLEND_EQUATION_RGB, (GLint*)&last_blend_equation_rgb);
-    GLenum last_blend_equation_alpha; glGetIntegerv(GL_BLEND_EQUATION_ALPHA, (GLint*)&last_blend_equation_alpha);
-    GLboolean last_enable_blend = glIsEnabled(GL_BLEND);
-    GLboolean last_enable_cull_face = glIsEnabled(GL_CULL_FACE);
-    GLboolean last_enable_depth_test = glIsEnabled(GL_DEPTH_TEST);
-    GLboolean last_enable_scissor_test = glIsEnabled(GL_SCISSOR_TEST);
-    bool clip_origin_lower_left = true;
-#ifdef GL_CLIP_ORIGIN
-    GLenum last_clip_origin = 0; glGetIntegerv(GL_CLIP_ORIGIN, (GLint*)&last_clip_origin); // Support for GL 4.5's glClipControl(GL_UPPER_LEFT)
-    if (last_clip_origin == GL_UPPER_LEFT)
-        clip_origin_lower_left = false;
-#endif
     
-    
-    {        // Create texture view
-        D3D10_SHADER_RESOURCE_VIEW_DESC srv_desc;
-        ZeroMemory(&srv_desc, sizeof(srv_desc));
-        srv_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        srv_desc.ViewDimension = D3D10_SRV_DIMENSION_TEXTURE2D;
-        srv_desc.Texture2D.MipLevels = desc.MipLevels;
-        srv_desc.Texture2D.MostDetailedMip = 0;
-        g_pd3dDevice->CreateShaderResourceView(pTexture, &srv_desc, &g_pFontTextureView);
-        pTexture->Release();
-    }
-    
-    int main(int, char**)
-{
-    // Setup Allegro
-    al_init();
-    al_install_keyboard();
-    al_install_mouse();
-    al_init_primitives_addon();
-    al_set_new_display_flags(ALLEGRO_RESIZABLE);
-    ALLEGRO_DISPLAY* display = al_create_display(1280, 720);
-    al_set_window_title(display, 'Dear ImGui Allegro 5 example');
-    ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
-    al_register_event_source(queue, al_get_display_event_source(display));
-    al_register_event_source(queue, al_get_keyboard_event_source());
-    al_register_event_source(queue, al_get_mouse_event_source());
-    }
-    
-        // Rendering
-    ImGui::Render();
-    ImGuiIO& io = ImGui::GetIO();
-    glViewport(0, 0, (GLsizei)io.DisplaySize.x, (GLsizei)io.DisplaySize.y);
-    glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-    glClear(GL_COLOR_BUFFER_BIT);
-    //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound, but prefer using the GL3+ code.
-    ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-    
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
-    
-    double ClusterGeneralInfo701::rcs(const std::uint8_t* bytes,
-                                  int32_t length) const {
-  Byte t0(bytes + 7);
-  uint32_t x = t0.get_byte(0, 8);
-  double ret = x * CLUSTER_RCS_RES + CLUSTER_RCS;
-  return ret;
+    {	return userOnly;
 }
     
-    int RadarState201::max_dist(const std::uint8_t* bytes, int32_t length) const {
-  Byte t0(bytes + 1);
-  uint32_t x = t0.get_byte(0, 8);
+    int main(int argc, char** argv) {
+  return leveldb::test::RunAllTests();
+}
+
+    
+    // State shared by all concurrent executions of the same benchmark.
+struct SharedState {
+  port::Mutex mu;
+  port::CondVar cv GUARDED_BY(mu);
+  int total GUARDED_BY(mu);
     }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-=========================================================================*/
+    #ifndef STORAGE_LEVELDB_DB_DB_ITER_H_
+#define STORAGE_LEVELDB_DB_DB_ITER_H_
+    
+    #ifndef STORAGE_LEVELDB_DB_LOG_FORMAT_H_
+#define STORAGE_LEVELDB_DB_LOG_FORMAT_H_
+    
+      // crc32c values for all supported record types.  These are
+  // pre-computed to reduce the overhead of computing the crc of the
+  // record type stored in the header.
+  uint32_t type_crc_[kMaxRecordType + 1];
+    
+      void ScanTable(uint64_t number) {
+    TableInfo t;
+    t.meta.number = number;
+    std::string fname = TableFileName(dbname_, number);
+    Status status = env_->GetFileSize(fname, &t.meta.file_size);
+    if (!status.ok()) {
+      // Try alternate file name.
+      fname = SSTTableFileName(dbname_, number);
+      Status s2 = env_->GetFileSize(fname, &t.meta.file_size);
+      if (s2.ok()) {
+        status = Status::OK();
+      }
+    }
+    if (!status.ok()) {
+      ArchiveFile(TableFileName(dbname_, number));
+      ArchiveFile(SSTTableFileName(dbname_, number));
+      Log(options_.info_log, 'Table #%llu: dropped: %s',
+          (unsigned long long) t.meta.number,
+          status.ToString().c_str());
+      return;
+    }
+    }
+    
+      // Modified only by Insert().  Read racily by readers, but stale
+  // values are ok.
+  port::AtomicPointer max_height_;   // Height of the entire list
+    
+    
+    
+    /*
+ * If Trace::hhbbc_time >= 1, print some stats about the program to a
+ * temporary file.  If it's greater than or equal to 2, also dump it
+ * to stdout.
+ */
+void print_stats(const Index&, const php::Program&);
+    
+    
+    {  // We had a counted inner array---we need to do an O(N) copy to get the
+  // collection into the request local heap.
+  auto const apcArr = APCArray::fromHandle(m_arrayHandle);
+  auto const col = Object::attach(collections::alloc(m_colType));
+  switch (m_colType) {
+  case CollectionType::ImmVector:
+  case CollectionType::Vector:
+    fillCollection(static_cast<BaseVector*>(col.get()), apcArr);
+    break;
+  case CollectionType::ImmSet:
+  case CollectionType::Set:
+    fillCollection(static_cast<BaseSet*>(col.get()), apcArr);
+    break;
+  case CollectionType::ImmMap:
+  case CollectionType::Map:
+    fillMap(static_cast<BaseMap*>(col.get()), apcArr);
+    break;
+  case CollectionType::Pair:
+    always_assert(0);
+    break;
+  }
+  return col;
+}
+    
+    #endif
+
+    
+    // No `ini` binding yet. Hdf still takes precedence but will be removed
+// once we have made all options ini-aware. All new settings should
+// use the ini path of this method (i.e., pass a bogus Hdf or keep it null)
+void Config::Iterate(std::function<void (const IniSettingMap&,
+                                         const Hdf&,
+                                         const std::string&)> cb,
+                     const IniSettingMap &ini, const Hdf& config,
+                     const std::string &name,
+                     const bool prepend_hhvm /* = true */) {
+  Hdf hdf = name.empty() ? config : config[name];
+  if (hdf.exists() && !hdf.isEmpty()) {
+    for (Hdf c = hdf.firstChild(); c.exists(); c = c.next()) {
+      cb(IniSetting::Map::object, c, '');
+    }
+  } else {
+    Hdf empty;
+    auto ini_value = name.empty() ? ini :
+      ini_iterate(ini, IniName(name, prepend_hhvm));
+    if (ini_value.isArray()) {
+      for (ArrayIter iter(ini_value.toArray()); iter; ++iter) {
+        cb(iter.second(), empty, iter.first().toString().toCppString());
+      }
+    }
+  }
+}
+    
+    String ArrayDirectory::path() {
+  if (!m_it) {
+    return empty_string();
+  }
+    }
+    
+        // skipping .  .. hidden files
+    if (ename[0] == '.' || !*ename) {
+      continue;
+    }
+    auto fe = fullPath + ename;
+    struct stat se;
+    if (stat(fe.c_str(), &se)) {
+      Logger::Error('FileUtil::find(): unable to stat %s', fe.c_str());
+      continue;
+    }
+    
+    namespace HPHP {
+    }
+    
+    
+    {  rocksdb::CacheBench bench;
+  if (FLAGS_populate_cache) {
+    bench.PopulateCache();
+  }
+  if (bench.Run()) {
+    return 0;
+  } else {
+    return 1;
+  }
+}
+    
+      // Will be called while on the write thread before the write executes.  If
+  // this function returns a non-OK status, the write will be aborted and this
+  // status will be returned to the caller of DB::Write().
+  virtual Status Callback(DB* db) = 0;
+    
+    class PosixDirectory : public Directory {
+ public:
+  explicit PosixDirectory(int fd) : fd_(fd) {}
+  ~PosixDirectory();
+  virtual Status Fsync() override;
+    }
+    
+    class MyMerge : public rocksdb::MergeOperator {
+ public:
+  virtual bool FullMergeV2(const MergeOperationInput& merge_in,
+                           MergeOperationOutput* merge_out) const override {
+    merge_out->new_value.clear();
+    if (merge_in.existing_value != nullptr) {
+      merge_out->new_value.assign(merge_in.existing_value->data(),
+                                  merge_in.existing_value->size());
+    }
+    for (const rocksdb::Slice& m : merge_in.operand_list) {
+      fprintf(stderr, 'Merge(%s)\n', m.ToString().c_str());
+      // the compaction filter filters out bad values
+      assert(m.ToString() != 'bad');
+      merge_out->new_value.assign(m.data(), m.size());
+    }
+    return true;
+  }
+    }
+    
+      // initialize BlockBasedTableOptions
+  auto cache = NewLRUCache(1 * 1024 * 1024 * 1024);
+  BlockBasedTableOptions bbt_opts;
+  bbt_opts.block_size = 32 * 1024;
+  bbt_opts.block_cache = cache;
+    
+      // the number of compaction input records.
+  uint64_t num_input_records;
+  // the number of compaction input files.
+  size_t num_input_files;
+  // the number of compaction input files at the output level.
+  size_t num_input_files_at_output_level;
+    
+    // NewThreadPool() is a function that could be used to create a ThreadPool
+// with `num_threads` background threads.
+extern ThreadPool* NewThreadPool(int num_threads);
+    
+    namespace rocksdb {
+    }
