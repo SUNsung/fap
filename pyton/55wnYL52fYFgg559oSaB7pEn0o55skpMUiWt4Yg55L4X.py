@@ -1,71 +1,57 @@
 
         
-            def mapper(self, _, line):
-        '''Parse each log line, extract and transform relevant lines.
+        import pytest
+from requests.compat import urljoin
     
-        def reducer(self, key, values):
-        '''Sum values for each key.
+        @classmethod
+    def basic_response_server(cls, **kwargs):
+        return cls.text_response_server(
+            'HTTP/1.1 200 OK\r\n' +
+            'Content-Length: 0\r\n\r\n',
+            **kwargs
+        )
+    
+        # Check urllib3 for compatibility.
+    major, minor, patch = urllib3_version  # noqa: F811
+    major, minor, patch = int(major), int(minor), int(patch)
+    # urllib3 >= 1.21.1, <= 1.24
+    assert major == 1
+    assert minor >= 21
+    assert minor <= 24
+    
+    from .compat import urlparse, str, basestring
+from .cookies import extract_cookies_to_jar
+from ._internal_utils import to_native_string
+from .utils import parse_dict_header
+    
+    try:
+    from urllib3.contrib import pyopenssl
+except ImportError:
+    pyopenssl = None
+    OpenSSL = None
+    cryptography = None
+else:
+    import OpenSSL
+    import cryptography
+    
+    ``response``:
+    The response generated from a Request.
+'''
+HOOKS = ['response']
+    
+            with server as address:
+            sock = socket.socket()
+            sock.connect(address)
+            time.sleep(1.5)
+            sock.sendall(b'hehehe, not received')
+            sock.close()
     
     
-install_requires = [
-    'requests>=2.18.4',
-    'Pygments>=2.1.3'
-]
+class TestGuessFilename:
     
-        def test_POST_with_data_auto_JSON_headers(self, httpbin):
-        r = http('POST', httpbin.url + '/post', 'a=b')
-        assert HTTP_OK in r
-        assert r.json['headers']['Accept'] == JSON_ACCEPT
-        assert r.json['headers']['Content-Type'] == 'application/json'
-    
-    
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
-    )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
-
-    
-    from httpie import __version__
-from httpie.compat import is_windows
-    
-    
-class FileModeWarning(RequestsWarning, DeprecationWarning):
-    '''A file was opened in text mode, but Requests determined its binary length.'''
-    pass
-    
-            # XXX not implemented yet
-        entdig = None
-        p_parsed = urlparse(url)
-        #: path is request-uri defined in RFC 2616 which should not be empty
-        path = p_parsed.path or '/'
-        if p_parsed.query:
-            path += '?' + p_parsed.query
-    
-    _init()
-
-    
-    # A dictionary with options for the search language support, empty by default.
-# 'ja' uses this config value.
-# 'zh' user can custom change `jieba` dictionary path.
-#
-# html_search_options = {'type': 'default'}
-    
-    import voluptuous as vol
-    
-    PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Required(CONF_HOST): cv.string,
-    vol.Required(CONF_PASSWORD): cv.string,
-    vol.Required(CONF_USERNAME): cv.string
-})
-    
-    DEFAULT_TIMEOUT = 10
-    
-            # Test the router is accessible.
-        data = self.get_thomson_data()
-        self.success_init = data is not None
+            # If redirects aren't being followed, store the response on the Request for Response.next().
+        if not allow_redirects:
+            try:
+                r._next = next(self.resolve_redirects(r, request, yield_requests=True, **kwargs))
+            except StopIteration:
+                pass
