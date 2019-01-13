@@ -1,181 +1,147 @@
 
         
-        # Direction codes used in the paths.
-DIRS = '_^V<>'
-DIR_TO_ID = {dir: did for did, dir in enumerate(DIRS)}
+          The log p(x|z) term is the reconstruction error under the model.
+  The KL term represents the penalty for passing information from the encoder
+  to the decoder.
+  To sample KL(q||p), we simply sample
+        ln q - ln p
+  by drawing samples from q and averaging.
+  '''
     
-    # save down the inputs used to generate this data
-train_inputs_u, valid_inputs_u = split_list_by_inds(u_e,
-                                                    train_inds,
-                                                    valid_inds)
-train_inputs_u = nparray_and_transpose(train_inputs_u)
-valid_inputs_u = nparray_and_transpose(valid_inputs_u)
+      LFADS generates a number of outputs for each examples, and these are all
+  saved.  They are:
+    The mean and variance of the prior of g0.
+    The mean and variance of approximate posterior of g0.
+    The control inputs (if enabled)
+    The initial conditions, g0, for all examples.
+    The generator states for all time.
+    The factors for all time.
+    The rates for all time.
     
-    rng = np.random.RandomState(seed=FLAGS.synth_data_seed)
-rnn_rngs = [np.random.RandomState(seed=FLAGS.synth_data_seed+1),
-            np.random.RandomState(seed=FLAGS.synth_data_seed+2)]
-T = FLAGS.T
-C = FLAGS.C
-N = FLAGS.N
-nreplications = FLAGS.nreplications
-E = nreplications * C
-train_percentage = FLAGS.train_percentage
-ntimesteps = int(T / FLAGS.dt)
+    from utils import write_datasets
+from synthetic_data_utils import normalize_rates
+from synthetic_data_utils import get_train_n_valid_inds, nparray_and_transpose
+from synthetic_data_utils import spikify_data, split_list_by_inds
+    
+    from synthetic_data_utils import generate_data, generate_rnn
+from synthetic_data_utils import get_train_n_valid_inds
+from synthetic_data_utils import nparray_and_transpose
+from synthetic_data_utils import spikify_data, split_list_by_inds
+import tensorflow as tf
+from utils import write_datasets
     
     
-def imdb_raw_data(data_path=None):
-  '''Load IMDB raw data from data directory 'data_path'.
-  Reads IMDB tf record files containing integer ids,
-  and performs mini-batching of the inputs.
+def split_list_by_inds(data, inds1, inds2):
+  '''Take the data, a list, and split it up based on the indices in inds1 and
+  inds2.
   Args:
-    data_path: string path to the directory where simple-examples.tgz has
-      been extracted.
-  Returns:
-    tuple (train_data, valid_data)
-    where each of the data objects can be passed to IMDBIterator.
+    data: the list of data to split
+    inds1, the first list of indices
+    inds2, the second list of indices
+  Returns: a 2-tuple of two lists.
   '''
-    
-      Returns:
-    loss_matrix:  Loss matrix of shape [batch_size, sequence_length].
-  '''
-  cross_entropy_loss = tf.nn.sparse_softmax_cross_entropy_with_logits(
-      labels=gen_labels, logits=gen_logits)
-  return cross_entropy_loss
-    
-      for i, sample in enumerate(samples):
-    print('Sample', i, '. ', sample)
-    log.write('\nSample ' + str(i) + '. ' + sample)
-  log.write('\n')
-  print('\n')
-  log.flush()
-    
-      Args:
-    hparams:  Hyperparameters for the MaskGAN.
-    sequence:  tf.int32 Tensor sequence of shape [batch_size, sequence_length]
-    is_training:  Whether the model is training.
-    reuse (Optional):  Whether to reuse the model.
+  if data is None or len(data) == 0:
+    return [], []
+  else:
+    dout1 = [data[i] for i in inds1]
+    dout2 = [data[i] for i in inds2]
+    return dout1, dout2
     
     
-def openssl_encode(algo, key, iv):
-    cmd = ['openssl', 'enc', '-e', '-' + algo, '-K', hex_str(key), '-iv', hex_str(iv)]
-    prog = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-    out, _ = prog.communicate(secret_msg)
-    return out
+# NUMPY utility functions
+def list_t_bxn_to_list_b_txn(values_t_bxn):
+  '''Convert a length T list of BxN numpy tensors of length B list of TxN numpy
+  tensors.
     
-    signature = hexlify(rsa.pkcs1.sign(json.dumps(versions_info, sort_keys=True).encode('utf-8'), privkey, 'SHA-256')).decode()
-print('signature: ' + signature)
+        sys.stderr.write('Recovering checkpoint %s\n' % ckpt_file)
+    sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True))
+    sess.run('save/restore_all', {'save/Const:0': ckpt_file})
+    sess.run(t['states_init'])
     
-    names = []
-for ie in ordered_cls:
-    name = ie.__name__
-    src = build_lazy_ie(ie, name)
-    module_contents.append(src)
-    if ie in _ALL_CLASSES:
-        names.append(name)
+            self._id_to_word.append(word_name)
+        self._word_to_id[word_name] = idx
+        idx += 1
     
-                        # Pandoc's definition_lists. See http://pandoc.org/README.html
-                    # for more information.
-                    ret += '\n%s\n:   %s\n' % (option, description)
-                    continue
-            ret += line.lstrip() + '\n'
-        else:
-            ret += line + '\n'
+      if not FLAGS.seq2seq_share_embedding:
+    variable_mapping = {
+        'Model/embeddings/input_embedding':
+            encoder_embedding,
+        'Model/RNN/GenericMultiRNNCell/Cell0/Alien/rnn_builder/big_h_mat':
+            encoder_lstm_w_0,
+        'Model/RNN/GenericMultiRNNCell/Cell0/Alien/rnn_builder/big_inputs_mat':
+            encoder_lstm_b_0,
+        'Model/RNN/GenericMultiRNNCell/Cell1/Alien/rnn_builder/big_h_mat':
+            encoder_lstm_w_1,
+        'Model/RNN/GenericMultiRNNCell/Cell1/Alien/rnn_builder/big_inputs_mat':
+            encoder_lstm_b_1
+    }
+  else:
+    variable_mapping = {
+        'Model/RNN/GenericMultiRNNCell/Cell0/Alien/rnn_builder/big_h_mat':
+            encoder_lstm_w_0,
+        'Model/RNN/GenericMultiRNNCell/Cell0/Alien/rnn_builder/big_inputs_mat':
+            encoder_lstm_b_0,
+        'Model/RNN/GenericMultiRNNCell/Cell1/Alien/rnn_builder/big_h_mat':
+            encoder_lstm_w_1,
+        'Model/RNN/GenericMultiRNNCell/Cell1/Alien/rnn_builder/big_inputs_mat':
+            encoder_lstm_b_1
+    }
+  return variable_mapping
     
-    # The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-html_theme = 'default'
+        Uses the last ([-1]) value of other fields
+    '''
+    column_width = max(max(len(k) for k in formats) + 1, 8)
+    first_width = max(len(k) for k in metrics)
+    head_fmt = ('{:<{fw}s}' + '{:>{cw}s}' * len(formats))
+    row_fmt = ('{:<{fw}s}' + '{:>{cw}.3f}' * len(formats))
+    print(head_fmt.format('Metric', *formats,
+                          cw=column_width, fw=first_width))
+    for metric, row in zip(metrics, results[:, :, -1, -1, -1]):
+        print(row_fmt.format(metric, *row,
+                             cw=column_width, fw=first_width))
     
-    # Allow direct execution
-import os
-import sys
-import unittest
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    
-        assert match(command)
-    
-    
-def test_match():
-    assert match(Command('sudo apt update', match_output))
-    
-      * scan
-'''
-    
-        assert get_new_command(Command('brew install aa',
-                                   brew_no_available_formula))\
-        != 'brew install aha'
-
-    
-            Did you mean `build`?
-'''
-    
-    from .cifar import load_batch
-from ..utils.data_utils import get_file
-from .. import backend as K
-import numpy as np
-import os
-    
-        fpath = os.path.join(path, 'test')
-    x_test, y_test = load_batch(fpath, label_key=label_mode + '_labels')
-    
-        E.g. for use with categorical_crossentropy.
-    
-                    # Apply model on slice
-                # (creating a model replica on the target device).
-                outputs = model(inputs)
-                outputs = to_list(outputs)
-    
-                if verbose == 1:
-                progbar.update(batch_end)
-        for i in range(len(outs)):
-            if i not in stateful_metric_indices:
-                outs[i] /= num_samples
-    return unpack_singleton(outs)
-
-    
-    seq.add(Conv3D(filters=1, kernel_size=(3, 3, 3),
-               activation='sigmoid',
-               padding='same', data_format='channels_last'))
-seq.compile(loss='binary_crossentropy', optimizer='adadelta')
+            descr_string = descr_string[:-2]
     
     
-class FlicButton(BinarySensorDevice):
-    '''Representation of a flic button.'''
+def euclidean_distances(X, n_jobs):
+    return pairwise_distances(X, metric='euclidean', n_jobs=n_jobs)
     
-            active_clients = [client for client in data.values() if
-                          client['status']]
-        self.last_results = active_clients
-        return True
+    import numpy as np
+from scipy.cluster import hierarchy
+import matplotlib.pyplot as plt
     
-            for order in target_orders:
-            order.place()
+    # add noise
+y += 0.01 * np.random.normal((n_samples,))
     
-    import voluptuous as vol
+    # Plot the results (= shape of the data points cloud)
+plt.figure(1)  # two clusters
+plt.title('Outlier detection on a real data set (boston housing)')
+plt.scatter(X1[:, 0], X1[:, 1], color='black')
+bbox_args = dict(boxstyle='round', fc='0.8')
+arrow_args = dict(arrowstyle='->')
+plt.annotate('several confounded points', xy=(24, 19),
+             xycoords='data', textcoords='data',
+             xytext=(13, 10), bbox=bbox_args, arrowprops=arrow_args)
+plt.xlim((xx1.min(), xx1.max()))
+plt.ylim((yy1.min(), yy1.max()))
+plt.legend((legend1_values_list[0].collections[0],
+            legend1_values_list[1].collections[0],
+            legend1_values_list[2].collections[0]),
+           (legend1_keys_list[0], legend1_keys_list[1], legend1_keys_list[2]),
+           loc='upper center',
+           prop=matplotlib.font_manager.FontProperties(size=12))
+plt.ylabel('accessibility to radial highways')
+plt.xlabel('pupil-teacher ratio by town')
     
+                if not info_only:
+                try:
+                    download_urls([real_url], title, ext, size, output_dir, merge = merge)
+                except:
+                    pass
     
-class Watcher():
-    '''Class for starting Watchdog.'''
+        urls = matchall(content, netease_embed_patterns)
+    for url in urls:
+        found = True
+        netease_download(url, output_dir=output_dir, merge=merge, info_only=info_only)
     
-        lowPrimes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59,
-                 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127,
-                 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191,
-                 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257,
-                 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331,
-                 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401,
-                 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467,
-                 479, 487, 491, 499, 503, 509, 521, 523, 541, 547, 557, 563,
-                 569, 571, 577, 587, 593, 599, 601, 607, 613, 617, 619, 631,
-                 641, 643, 647, 653, 659, 661, 673, 677, 683, 691, 701, 709,
-                 719, 727, 733, 739, 743, 751, 757, 761, 769, 773, 787, 797,
-                 809, 811, 821, 823, 827, 829, 839, 853, 857, 859, 863, 877,
-                 881, 883, 887, 907, 911, 919, 929, 937, 941, 947, 953, 967,
-                 971, 977, 983, 991, 997]
-    
-            if self.values[key] is None:
-            self._set_value(key, data)
-    
-    
-def b_expo(a, b):
-    res = 0
-    while b > 0:
-        if b&1:
-            res += a
+        point = readme_soup.find_all('h1')[1]
