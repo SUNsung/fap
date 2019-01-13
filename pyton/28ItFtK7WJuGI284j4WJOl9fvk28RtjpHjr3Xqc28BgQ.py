@@ -1,61 +1,116 @@
 
         
-            '''
-    
-    from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import ExtraTreesClassifier
-from sklearn.ensemble import AdaBoostClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.naive_bayes import MultinomialNB
-    
-        max_it = len(samples_range) * len(features_range)
-    for n_samples in samples_range:
-        for n_features in features_range:
-            it += 1
-            print('==============================')
-            print('Iteration %03d of %03d' % (it, max_it))
-            print('==============================')
-            print()
-            data = nr.randint(-50, 51, (n_samples, n_features))
-    
-                gc.collect()
-            print('benchmarking lasso_path (without Gram):', end='')
-            sys.stdout.flush()
-            tstart = time()
-            lasso_path(X, y, precompute=False)
-            delta = time() - tstart
-            print('%0.3fs' % delta)
-            results['lasso_path (without Gram)'].append(delta)
-    
-                gc.collect()
-            print('benchmarking lars_path (with Gram):', end='')
-            sys.stdout.flush()
-            tstart = time()
-            G = np.dot(X.T, X)  # precomputed Gram matrix
-            Xy = np.dot(X.T, y)
-            lars_path(X, y, Xy=Xy, Gram=G, max_iter=n_informative)
-            delta = time() - tstart
-            print('%0.3fs' % delta)
-            lars_gram[i_f, i_s] = delta
-    
-        print('Averaging results...', end='')
-    for name in sampling_algorithm:
-        time[name] = np.mean(time[name], axis=1)
-    print('done\n')
-    
-        # start time
-    tstart = datetime.now()
-    clf = DecisionTreeClassifier()
-    clf.fit(X, Y).predict(X)
-    delta = (datetime.now() - tstart)
-    # stop time
-    
-      Returns:
-    list of lines with C++11 raw strings replaced by empty strings.
+          The log p(x|z) term is the reconstruction error under the model.
+  The KL term represents the penalty for passing information from the encoder
+  to the decoder.
+  To sample KL(q||p), we simply sample
+        ln q - ln p
+  by drawing samples from q and averaging.
   '''
     
-        parser = argparse.ArgumentParser(description = 'Download all the PDF/HTML links into README.md')
-    parser.add_argument('-d', action='store', dest='directory')
-    parser.add_argument('--no-html', action='store_true', dest='nohtml', default = False)
-    parser.add_argument('--overwrite', action='store_true', default = False)    
-    results = parser.parse_args()
+      if identity_if_possible and in_size == out_size:
+    return (tf.constant(np.eye(in_size).astype(np.float32)),
+            tf.zeros(in_size))
+    
+      Yields:
+    Pairs of the batched data, each a matrix of shape [batch_size, num_steps].
+    The second element of the tuple is the same data time-shifted to the
+    right by one. The third is a set of weights with 1 indicating a word was
+    present and 0 not.
+    
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+    
+      # Averages for real and fake token values.
+  real = tf.mul(values, present)
+  fake = tf.mul(values, missing)
+  real_avg = tf.reduce_sum(real) / real_count
+  fake_avg = tf.reduce_sum(fake) / fake_count
+    
+      ## REINFORCE with different baselines.
+  # We create a separate critic functionality for the Discriminator.  This
+  # will need to operate unidirectionally and it may take in the past context.
+  if FLAGS.baseline_method == 'critic':
+    
+    
+def check_alphabetical(lines):
+    '''
+    checks if all entries per section are in alphabetical order based in entry title
+    '''
+    sections = {}
+    section_line_num = {}
+    for line_num, line in enumerate(lines):
+        if line.startswith(anchor):
+            category = line.split(anchor)[1].strip()
+            sections[category] = []
+            section_line_num[category] = line_num
+            continue
+        if not line.startswith('|') or line.startswith('|---'):
+            continue
+        raw_title = [x.strip() for x in line.split('|')[1:-1]][0]
+        title_re_match = link_re.match(raw_title)
+        if title_re_match:
+            sections[category].append(title_re_match.group(1).upper())
+    
+        if not hasattr(env, 'scrapy_all_settings'):
+        env.scrapy_all_settings = []
+    
+            slots = int(self.slots)
+        if slots > 1:
+            urls = [url.replace('localhost', '127.0.0.%d' % (x + 1)) for x in range(slots)]
+        else:
+            urls = [url]
+    
+    
+class _BenchServer(object):
+    
+        def _next_request_from_scheduler(self, spider):
+        slot = self.slot
+        request = slot.scheduler.next_request()
+        if not request:
+            return
+        d = self._download(request, spider)
+        d.addBoth(self._handle_downloader_output, request, spider)
+        d.addErrback(lambda f: logger.info('Error while handling downloader output',
+                                           exc_info=failure_to_exc_info(f),
+                                           extra={'spider': spider}))
+        d.addBoth(lambda _: slot.remove_request(request))
+        d.addErrback(lambda f: logger.info('Error while removing request from slot',
+                                           exc_info=failure_to_exc_info(f),
+                                           extra={'spider': spider}))
+        d.addBoth(lambda _: slot.nextcall.schedule())
+        d.addErrback(lambda f: logger.info('Error while scheduling new request',
+                                           exc_info=failure_to_exc_info(f),
+                                           extra={'spider': spider}))
+        return d
+    
+        result = False
+    try:
+        ret = urlopen(url, timeout=2)
+        result = (ret.code == 200)
+    except HTTPError as e:
+        print(e, file=sys.stderr)
+    except URLError as e:
+        print(e, file=sys.stderr)
+    except timeout as e:
+        print(e, file=sys.stderr)
+    except Exception as e:
+        print(e, file=sys.stderr)
+    
+        def __init__(self, deep, *targets):
+        self.deep = deep
+        self.targets = targets
+        self.commit()
+    
+    
+if __name__ == '__main__':
+    main()
+    
+    *TL;DR80
+Implements state as a derived class of the state pattern interface.
+Implements state transitions by invoking methods from the pattern's superclass.
+'''
+    
+        def __init__(self):
+        self.time_provider = datetime.datetime
