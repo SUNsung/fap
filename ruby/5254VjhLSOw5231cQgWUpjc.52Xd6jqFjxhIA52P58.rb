@@ -1,168 +1,82 @@
 
         
-                  # Generate default options for collection helpers, such as :checked and
-          # :disabled.
-          def default_html_options_for_collection(item, value)
-            html_options = @html_options.dup
-    
-              add_default_name_and_id_for_value(tag_value, name_and_id)
-          options.delete('index')
-          options.delete('namespace')
-          options['for'] = name_and_id['id'] unless options.key?('for')
-    
-        initializer 'action_view.form_with_generates_ids' do |app|
-      ActiveSupport.on_load(:action_view) do
-        form_with_generates_ids = app.config.action_view.delete(:form_with_generates_ids)
-        unless form_with_generates_ids.nil?
-          ActionView::Helpers::FormHelper.form_with_generates_ids = form_with_generates_ids
-        end
-      end
-    end
-    
-        def initialize(lookup_context)
-      @lookup_context = lookup_context
-    end
-    
-        odie 'Unknown command: #{cmd}' unless path
-    puts path
-  end
-end
-
-    
-          new_name = name
-      new_path = path
-      new_remote = default_remote
-    
-      # The global load paths for Sass files. This is meant for plugins and
-  # libraries to register the paths to their Sass stylesheets to that they may
-  # be `@imported`. This load path is used by every instance of {Sass::Engine}.
-  # They are lower-precedence than any load paths passed in via the
-  # {file:SASS_REFERENCE.md#load_paths-option `:load_paths` option}.
-  #
-  # If the `SASS_PATH` environment variable is set,
-  # the initial value of `load_paths` will be initialized based on that.
-  # The variable should be a colon-separated list of path names
-  # (semicolon-separated on Windows).
-  #
-  # Note that files on the global load path are never compiled to CSS
-  # themselves, even if they aren't partials. They exist only to be imported.
-  #
-  # @example
-  #   Sass.load_paths << File.dirname(__FILE__ + '/sass')
-  # @return [Array<String, Pathname, Sass::Importers::Base>]
-  def self.load_paths
-    @load_paths ||= if ENV['SASS_PATH']
-                      ENV['SASS_PATH'].split(Sass::Util.windows? ? ';' : ':')
-                    else
-                      []
-                    end
+          it 'accepts a Bignum as a seed' do
+    srand(0x12345678901234567890)
+    srand.should == 0x12345678901234567890
   end
     
-          # Returns the path to a file for the given key.
-      #
-      # @param key [String]
-      # @return [String] The path to the cache file.
-      def path_to(key)
-        key = key.gsub(/[<>:\\|?*%]/) {|c| '%%%03d' % c.ord}
-        File.join(cache_location, key)
-      end
+        it 'returns the time at which the file was created when passed ?C' do
+      Kernel.test(?C, @tmp_file).should == @tmp_file.ctime
     end
-  end
-end
-
     
-              def set_local_#{name}(name, value)
-            @#{name}s ||= {}
-            @#{name}s[name.tr('_', '-')] = value
+      it 'creates a public method in script binding' do
+    eval @code, script_binding
+    Object.should have_method :boom
+  end
+    
+    
+  #
+  # Waits for the HTTP service to terminate
+  #
+  def wait
+    self.listener.wait if self.listener
+  end
+    
+    
+IAX_SUBTYPE_NEW     = 1
+IAX_SUBTYPE_PING    = 2
+IAX_SUBTYPE_PONG    = 3
+IAX_SUBTYPE_ANSWER  = 4
+IAX_SUBTYPE_ACK     = 4
+IAX_SUBTYPE_HANGUP  = 5
+IAX_SUBTYPE_REJECT  = 6
+IAX_SUBTYPE_ACCEPT  = 7
+IAX_SUBTYPE_AUTHREQ = 8
+IAX_SUBTYPE_AUTHREP = 9
+IAX_SUBTYPE_INVAL   = 10
+IAX_SUBTYPE_LAGRQ   = 11
+IAX_SUBTYPE_LAGRP   = 12
+IAX_SUBTYPE_REGREQ  = 13
+IAX_SUBTYPE_REGAUTH = 14
+IAX_SUBTYPE_REGACK  = 15
+IAX_SUBTYPE_REGREJ  = 16
+IAX_SUBTYPE_REGREL  = 17
+IAX_SUBTYPE_VNAK    = 18
+    
+              # Encodes the auth_time field
+          #
+          # @return [String]
+          def encode_auth_time
+            [auth_time].pack('N')
           end
     
-          opts.on('--precision NUMBER_OF_DIGITS', Integer,
-              'How many digits of precision to use when outputting decimal numbers.',
-              'Defaults to #{Sass::Script::Value::Number.precision}.') do |precision|
-        Sass::Script::Value::Number.precision = precision
-      end
+              # Decodes the crealm field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [String]
+          def decode_crealm(input)
+            input.value[0].value
+          end
     
-      gem.add_development_dependency 'danger'
-  gem.add_development_dependency 'mocha'
-  gem.add_development_dependency 'rspec'
-  gem.add_development_dependency 'rubocop', '0.48.1'
-end
-
+      subject { described_class.new(source, pipeline_id, unordered_config_parts, settings) }
     
-            filter = Object.new
-        def filter.filter(servers)
-          block.call(servers)
-        end
-      elsif !filter.respond_to? :filter
-        raise TypeError, 'Provided custom filter <#{filter.inspect}> does ' \
-                         'not have a public 'filter' method'
-      end
-      @custom_filters ||= []
-      @custom_filters << filter
+              it 'successfully install the plugin when verification is disabled' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify logstash-filter-qatest')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-qatest')
+          end
+    
+        def clear
+      @attachments = Hash.new { |h,k| h[k] = {} }
     end
     
-          def roles_for(names)
-        options = extract_options(names)
-        s = Filter.new(:role, names).filter(servers_by_key.values)
-        s.select { |server| server.select?(options) }
-      end
-    
-      get(/.+/) do
-    send_sinatra_file(request.path) {404}
-  end
-    
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
-      end
-      super
+        def path
+      @file.respond_to?(:path) ? @file.path : @file
     end
     
-      if options.respond_to? 'keys'
-    options.each do |k,v|
-      unless v.nil?
-        v = v.join ',' if v.respond_to? 'join'
-        v = v.to_json if v.respond_to? 'keys'
-        output += ' data-#{k.sub'_','-'}='#{v}''
+        def define_query
+      name = @name
+      @klass.send :define_method, '#{@name}?' do
+        send(name).file?
       end
     end
-  elsif options.respond_to? 'join'
-    output += ' data-value='#{config[key].join(',')}''
-  else
-    output += ' data-value='#{config[key]}''
-  end
-  output += '></#{tag}>'
-end
-    
-    Liquid::Template.register_tag('img', Jekyll::ImageTag)
-
-    
-      class IncludeCodeTag < Liquid::Tag
-    def initialize(tag_name, markup, tokens)
-      @title = nil
-      @file = nil
-      if markup.strip =~ /\s*lang:(\S+)/i
-        @filetype = $1
-        markup = markup.strip.sub(/lang:\S+/i,'')
-      end
-      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
-        @title = $1 || nil
-        @file = $3
-      end
-      super
-    end
-    
-    Liquid::Template.register_tag('render_partial', Jekyll::RenderPartialTag)
