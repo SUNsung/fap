@@ -1,88 +1,106 @@
 
         
-            def is_face_card(self):
-        '''Jack = 11, Queen = 12, King = 13'''
-        return True if 10 < self._value <= 13 else False
-    
-    
-class AddRequest(object):
-    
-            (2016-01, url0), 1
-        (2016-01, url0), 1
-        (2016-01, url1), 1
-        '''
-        url = self.extract_url(line)
-        period = self.extract_year_month(line)
-        yield (period, url), 1
-    
-        def insert_crawled_link(self, url, signature):
-        '''Add the given link to `crawled_links`.'''
-        pass
-    
-    
-def write_stream_with_colors_win_py3(stream, outfile, flush):
-    '''Like `write`, but colorized chunks are written as text
-    directly to `outfile` to ensure it gets processed by colorama.
-    Applies only to Windows with Python 3 and colorized terminal output.
-    
-    
-def humanize_bytes(n, precision=2):
-    # Author: Doug Latornell
-    # Licence: MIT
-    # URL: http://code.activestate.com/recipes/577081/
-    '''Return a humanized string representation of a number of bytes.
-    
-        @pytest.mark.parametrize('header, expected_filename', [
-        ('attachment; filename=hello-WORLD_123.txt', 'hello-WORLD_123.txt'),
-        ('attachment; filename='.hello-WORLD_123.txt'', 'hello-WORLD_123.txt'),
-        ('attachment; filename='white space.txt'', 'white space.txt'),
-        (r'attachment; filename='\'quotes\'.txt'', ''quotes'.txt'),
-        ('attachment; filename=/etc/hosts', 'hosts'),
-        ('attachment; filename=', None)
-    ])
-    def test_Content_Disposition_parsing(self, header, expected_filename):
-        assert filename_from_content_disposition(header) == expected_filename
-    
-    
-def test_unicode_headers_verbose(httpbin):
-    # httpbin doesn't interpret utf8 headers
-    r = http('--verbose', httpbin.url + '/headers', u'Test:%s' % UNICODE)
-    assert HTTP_OK in r
-    assert UNICODE in r
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-l', '--list', dest='list', action='store_true',
-                          help='only list contracts, without checking them')
-        parser.add_option('-v', '--verbose', dest='verbose', default=False, action='store_true',
-                          help='print contract tests for all spiders')
-    
-        def run(self, args, opts):
-        url = args[0] if args else None
-        if url:
-            # first argument may be a local file
-            url = guess_scheme(url)
-    
-        def run(self, args, opts):
-        if opts.verbose:
-            versions = scrapy_components_versions()
-            width = max(len(n) for (n, _) in versions)
-            patt = '%-{}s : %s'.format(width)
-            for name, version in versions:
-                print(patt % (name, version))
+        
+def check_entry(line_num, segments):
+    # START Title
+    raw_title = segments[index_title]
+    title_re_match = link_re.match(raw_title)
+    # url should be wrapped in '[TITLE](LINK)' Markdown syntax
+    if not title_re_match:
+        add_error(line_num, 'Title syntax should be '[TITLE](LINK)'')
+    else:
+        # do not allow '... API' in the entry title
+        title = title_re_match.group(1)
+        if title.upper().endswith(' API'):
+            add_error(line_num, 'Title should not end with '... API'. Every entry is an API here!')
+        # do not allow duplicate links
+        link = title_re_match.group(2)
+        if link in previous_links:
+            add_error(line_num, 'Duplicate link - entries should only be included in one section')
         else:
-            print('Scrapy %s' % scrapy.__version__)
+            previous_links.append(link)
+    # END Title
+    # START Description
+    # first character should be capitalized
+    char = segments[index_desc][0]
+    if char.upper() != char:
+        add_error(line_num, 'first character of description is not capitalized')
+    # last character should not punctuation
+    char = segments[index_desc][-1]
+    if char in punctuation:
+        add_error(line_num, 'description should not end with {}'.format(char))
+    desc_length = len(segments[index_desc])
+    if desc_length > 100:
+        add_error(line_num, 'description should not exceed 100 characters (currently {})'.format(desc_length))
+    # END Description
+    # START Auth
+    # values should conform to valid options only
+    auth = segments[index_auth]
+    if auth != 'No' and (not auth.startswith('`') or not auth.endswith('`')):
+        add_error(line_num, 'auth value is not enclosed with `backticks`')
+    if auth.replace('`', '') not in auth_keys:
+        add_error(line_num, '{} is not a valid Auth option'.format(auth))
+    # END Auth
+    # START HTTPS
+    # values should conform to valid options only
+    https = segments[index_https]
+    if https not in https_keys:
+        add_error(line_num, '{} is not a valid HTTPS option'.format(https))
+    # END HTTPS
+    # START CORS
+    # values should conform to valid options only
+    cors = segments[index_cors]
+    if cors not in cors_keys:
+        add_error(line_num, '{} is not a valid CORS option'.format(cors))
+    # END CORS
     
-        class ScrapyClientContextFactory(ClientContextFactory):
-        'A SSL context factory which is more permissive against SSL bugs.'
-        # see https://github.com/scrapy/scrapy/issues/82
-        # and https://github.com/scrapy/scrapy/issues/26
-        # and https://github.com/scrapy/scrapy/issues/981
     
-        complete_apps = ['sentry']
-    symmetrical = True
-
+def fixed_batch_size_comparison(data):
+    all_features = [i.astype(int) for i in np.linspace(data.shape[1] // 10,
+                                                       data.shape[1], num=5)]
+    batch_size = 1000
+    # Compare runtimes and error for fixed batch size
+    all_times = defaultdict(list)
+    all_errors = defaultdict(list)
+    for n_components in all_features:
+        pca = PCA(n_components=n_components)
+        ipca = IncrementalPCA(n_components=n_components, batch_size=batch_size)
+        results_dict = {k: benchmark(est, data) for k, est in [('pca', pca),
+                                                               ('ipca', ipca)]}
     
-        def backwards(self, orm):
-        # Removing unique constraint on 'ReleaseHeadCommit', fields ['repository_id', 'release']
-        db.delete_unique('sentry_releaseheadcommit', ['repository_id', 'release_id'])
+        from sklearn.tree import DecisionTreeRegressor
+    
+    
+    
+    # TASK: Fit the pipeline on the training set
+    
+        # split the dataset in training and test set:
+    docs_train, docs_test, y_train, y_test = train_test_split(
+        dataset.data, dataset.target, test_size=0.25, random_state=None)
+    
+    *Where is the pattern used practically?
+In graphics editors a shape can be basic or complex. An example of a
+simple shape is a line, where a complex shape is a rectangle which is
+made of four line objects. Since shapes have many operations in common
+such as rendering the shape to screen, and since shapes follow a
+part-whole hierarchy, composite pattern can be used to enable the
+program to deal with all shapes uniformly.
+    
+        return _lazy_property
+    
+    
+class ProductionCodeTimeProvider(object):
+    '''
+    Production code version of the time provider (just a wrapper for formatting
+    datetime for this example).
+    '''
+    
+        def __init__(self):
+        self.time_provider = datetime.datetime
+    
+    *What does this example do?
+This example shows a way to add formatting options (boldface and
+italic) to a text by appending the corresponding tags (<b> and
+<i>). Also, we can see that decorators can be applied one after the other,
+since the original text is passed to the bold wrapper, which in turn
+is passed to the italic wrapper.
