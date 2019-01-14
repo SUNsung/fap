@@ -1,195 +1,127 @@
 
         
-              expect(Notification.count).to eq(2)
-    end
-  end
+                        @env.machine_names.each do |machine_name|
+                  if machine_name =~ regex
+                    machines << get_machine.call(machine_name)
+                  end
+                end
     
-    Group.user_trust_level_change!(-1, TrustLevel[4])
-    
-            unless post && post.id
-          puts post.errors.full_messages if post
-          puts creator.errors.inspect
-          raise 'Failed to create description for trust level 3 lounge!'
+            # This is called early, before a machine is instantiated, to check
+        # if this provider is installed. This should return true or false.
+        #
+        # If the provider is not installed and Vagrant determines it is
+        # able to install this provider, then it will do so. Installation
+        # is done by calling Environment.install_provider.
+        #
+        # If Environment.can_install_provider? returns false, then an error
+        # will be shown to the user.
+        def self.installed?
+          # By default return true for backwards compat so all providers
+          # continue to work.
+          true
         end
     
-            # Reset topic count because we don't count the description topic
-        DB.exec 'UPDATE categories SET topic_count = 0 WHERE id = #{staff.id}'
-      end
+        def __internal_state
+      {
+        items: @items,
+        results_cache: @results_cache
+      }
     end
   end
 end
 
     
-              issue.label_names.each do |label_name|
-            # Although unlikely it's technically possible for an issue to be
-            # given a label that was created and assigned after we imported all
-            # the project's labels.
-            next unless (label_id = label_finder.id_for(label_name))
-    
-            # Builds a new note using a Hash that was built from a JSON payload.
-        def self.from_json_hash(raw_hash)
-          hash = Representation.symbolize_hash(raw_hash)
-          hash[:author] &&= Representation::User.from_json_hash(hash[:author])
-    
-    module Gitlab
-  module GithubImport
-    module Representation
-      class LfsObject
-        include ToHash
-        include ExposeAttribute
-    
-            # Builds a new PR using a Hash that was built from a JSON payload.
-        def self.from_json_hash(raw_hash)
-          hash = Representation.symbolize_hash(raw_hash)
-    
-        def initialize(*args)
-      if args.empty?
-        super(*Array.new(9))
-      elsif args.length == 1 && args.first.is_a?(Hash)
-        args.first.assert_valid_keys URI::Generic::COMPONENT
-        super(*args.first.values_at(*URI::Generic::COMPONENT))
-      else
-        super
+      def load_logs(dir)
+    logs = {}
+    if dir.exist?
+      dir.children.sort.each do |file|
+        contents = file.size? ? file.read : 'empty log'
+        # small enough to avoid GitHub 'unicorn' page-load-timeout errors
+        max_file_size = 1_000_000
+        contents = truncate_text_to_approximate_size(contents, max_file_size, front_weight: 0.2)
+        logs[file.basename.to_s] = { content: contents }
       end
     end
-    
-            css('h1 + code').each do |node|
-          node.before('<p></p>')
-          while node.next_element.name == 'code'
-            node.previous_element << ' '
-            node.previous_element << node.next_element
-          end
-          node.previous_element.prepend_child(node)
-        end
-    
-            # Set the name of the plugin. The moment that this is called, the
-        # plugin will be registered and available. Before this is called, a
-        # plugin does not exist. The name must be unique among all installed
-        # plugins.
-        #
-        # @param [String] name Name of the plugin.
-        # @return [String] The name of the plugin.
-        def self.name(name=UNSET_VALUE)
-          # Get or set the value first, so we have a name for logging when
-          # we register.
-          result = get_or_set(:name, name)
-    
-            def initialize
-          # The action hooks hash defaults to []
-          @action_hooks = Hash.new { |h, k| h[k] = [] }
-    
-            # This returns all registered pushes.
-        #
-        # @return [Registry]
-        def pushes
-          Registry.new.tap do |result|
-            @registered.each do |plugin|
-              result.merge!(plugin.components.pushes)
-            end
-          end
-        end
-    
-        self.normalize!(resource)
-    # Set the relative resource to the actual resource.
-    self.relative_resource = resource
-  end
-    
-    
-  # Returns a collection of found hidden inputs
-  #
-  # @return [Array<Hash>] An array, each element represents a form that contains a hash of found hidden inputs
-  #  * 'name' [String] The hidden input's original name. The value is the hidden input's original value.
-  # @example
-  #  res = send_request_cgi('uri'=>'/')
-  #  inputs = res.get_hidden_inputs
-  #  session_id = inputs[0]['sessionid'] # The first form's 'sessionid' hidden input
-  def get_hidden_inputs
-    forms = []
-    noko = get_html_document
-    noko.search('form').each_entry do |form|
-      found_inputs = {}
-      form.search('input').each_entry do |input|
-        input_type = input.attributes['type'] ? input.attributes['type'].value : ''
-        next if input_type !~ /hidden/i
+    raise 'No logs.' if logs.empty?
     
       #
-  # Move these into an IPMI stack or mixin at some point
+  # HTTP GET request class wrapper.
   #
-    
-              # Rex::Proto::Kerberos::Model::Checksum decoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def decode(input)
-            raise ::NotImplementedError, 'Checksum decoding not supported'
-          end
-    
-              def self.decode(input)
-            elem = self.new
-            elem.decode(input)
-          end
-    
-              # Decodes the key_expiration field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Time]
-          def decode_key_expiration(input)
-            input.value[0].value
-          end
-    
-              # Decodes a Rex::Proto::Kerberos::Model::EncryptedData from an String
-          #
-          # @param input [String] the input to decode from
-          def decode_string(input)
-            asn1 = OpenSSL::ASN1.decode(input)
-    
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   XSS and others
-    # Supported browsers:: Firefox 23+, Safari 7+, Chrome 25+, Opera 15+
-    #
-    # Description:: Content Security Policy, a mechanism web applications
-    #               can use to mitigate a broad class of content injection
-    #               vulnerabilities, such as cross-site scripting (XSS).
-    #               Content Security Policy is a declarative policy that lets
-    #               the authors (or server administrators) of a web application
-    #               inform the client about the sources from which the
-    #               application expects to load resources.
-    #
-    # More info::   W3C CSP Level 1 : https://www.w3.org/TR/CSP1/ (deprecated)
-    #               W3C CSP Level 2 : https://www.w3.org/TR/CSP2/ (current)
-    #               W3C CSP Level 3 : https://www.w3.org/TR/CSP3/ (draft)
-    #               https://developer.mozilla.org/en-US/docs/Web/Security/CSP
-    #               http://caniuse.com/#search=ContentSecurityPolicy
-    #               http://content-security-policy.com/
-    #               https://securityheaders.io
-    #               https://scotthelme.co.uk/csp-cheat-sheet/
-    #               http://www.html5rocks.com/en/tutorials/security/content-security-policy/
-    #
-    # Sets the 'Content-Security-Policy[-Report-Only]' header.
-    #
-    # Options: ContentSecurityPolicy configuration is a complex topic with
-    #          several levels of support that has evolved over time.
-    #          See the W3C documentation and the links in the more info
-    #          section for CSP usage examples and best practices. The
-    #          CSP3 directives in the 'NO_ARG_DIRECTIVES' constant need to be
-    #          presented in the options hash with a boolean 'true' in order
-    #          to be used in a policy.
-    #
-    class ContentSecurityPolicy < Base
-      default_options default_src: :none, script_src: ''self'',
-                      img_src: ''self'', style_src: ''self'',
-                      connect_src: ''self'', report_only: false
-    
-          def close_body(body)
-        body.close if body.respond_to?(:close)
-      end
+  class Get < Request
+    def initialize(uri = '/', proto = DefaultProtocol)
+      super('GET', uri, proto)
     end
   end
-end
-
     
-      it 'accepts post form requests with masked authenticity_token field' do
-    post('/', {'authenticity_token' => masked_token}, 'rack.session' => session)
-    expect(last_response).to be_ok
+      # Returns parsed JavaScript blocks.
+  # The parsed version is a RKelly object that allows you to be able do advanced parsing.
+  #
+  # @see https://github.com/tenderlove/rkelly
+  # @return [Array<RKelly::Nodes::SourceElementsNode>]
+  def get_html_scripts
+    n = get_html_document
+    rkelly = RKelly::Parser.new
+    n.search('//script').map { |s| rkelly.parse(s.text) }
   end
+    
+              case protocol
+          when 'tcp'
+            self.connection = create_tcp_connection
+          when 'udp'
+            raise ::NotImplementedError, 'Kerberos Client: UDP not supported'
+          else
+            raise ::RuntimeError, 'Kerberos Client: unknown transport protocol'
+          end
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module Crypto
+        module Rc4Hmac
+          # Decrypts the cipher using RC4-HMAC schema
+          #
+          # @param cipher [String] the data to decrypt
+          # @param key [String] the key to decrypt
+          # @param msg_type [Integer] the message type
+          # @return [String] the decrypted cipher
+          # @raise [RuntimeError] if decryption doesn't succeed
+          def decrypt_rc4_hmac(cipher, key, msg_type)
+            unless cipher && cipher.length > 16
+              raise ::RuntimeError, 'RC4-HMAC decryption failed'
+            end
+    
+              # Decodes the Rex::Proto::Kerberos::Model::KrbError from an input
+          #
+          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::ASN1Data
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode KrbError, invalid input'
+            end
+    
+    Then(/^it creates the file with the remote_task prerequisite$/) do
+  TestApp.linked_files.each do |file|
+    run_vagrant_command(test_file_exists(TestApp.shared_path.join(file)))
+  end
+end
+    
+      def test_symlink_exists(path)
+    exists?('L', path)
+  end
+    
+      def run_vagrant_command(command)
+    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
+    return [stdout, stderr] if status.success?
+    raise VagrantSSHCommandError, status
+  end
+end
+    
+        def name
+      'cap'
+    end
