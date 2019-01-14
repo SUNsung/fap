@@ -1,77 +1,163 @@
 
         
-            def test_replace(self):
-        P = self.cls(BASE)
-        p = P / 'fileA'
-        size = p.stat().st_size
-        # Replacing a non-existing path
-        q = P / 'dirA' / 'fileAA'
-        p.replace(q)
-        self.assertEqual(q.stat().st_size, size)
-        self.assertFileNotFound(p.stat)
-        # Replacing another (existing) path
-        r = rel_join('dirB', 'fileB')
-        q.replace(r)
-        self.assertEqual(os.stat(r).st_size, size)
-        self.assertFileNotFound(q.stat)
+            if var_is_trainable:
+      z_logit_var_1xn = tf.exp(z_logvar_1xn)
+      z_var_1xn = tf.nn.sigmoid(z_logit_var_1xn)*(var_max-var_min) + var_min
+      z_logvar_1xn = tf.log(z_var_1xn)
     
-    <slide><title>Another demo slide</title>
-<point>It is important</point>
-<point>To have more than</point>
-<point>one slide</point>
-</slide>
-</slideshow>
-'''
+    def _plot_item(W, name, full_name, nspaces):
+  plt.figure()
+  if W.shape == ():
+    print(name, ': ', W)
+  elif W.shape[0] == 1:
+    plt.stem(W.T)
+    plt.title(full_name)
+  elif W.shape[1] == 1:
+    plt.stem(W)
+    plt.title(full_name)
+  else:
+    plt.imshow(np.abs(W), interpolation='nearest', cmap='jet');
+    plt.colorbar()
+    plt.title(full_name)
     
-    def test():
-    manager = MyManager()
-    manager.start()
+      Args:
+    data_dir: The directory from which to load the datasets.
+    data_filename_stem: The stem of the filename for the datasets.
     
-            try:
-            print(pool.map(f, list(range(10))))
-        except ZeroDivisionError:
-            print('\tGot ZeroDivisionError as expected from pool.map()')
-        else:
-            raise AssertionError('expected ZeroDivisionError')
+      if FLAGS.noise_type == 'poisson':
+    noisy_data = spikify_data(rates, rng, rnn['dt'], rnn['max_firing_rate'])
+  elif FLAGS.noise_type == 'gaussian':
+    noisy_data = gaussify_data(rates, rng, rnn['dt'], rnn['max_firing_rate'])
+  else:
+    raise ValueError('Only noise types supported are poisson or gaussian')
+    
+    for inp in inputs_ph_t:
+  output, state = model.call(state, inp)
+  outputs_t.append(output)
+  states_t.append(state)
+    
+      Returns:
+    log_sum_exp of the arguments.
+  '''
+  m = tf.reduce_max(x_k)
+  x1_k = x_k - m
+  u_k = tf.exp(x1_k)
+  z = tf.reduce_sum(u_k)
+  return tf.log(z) + m
+    
+        batch_size, num_timesteps = self.shape
+    softmax = softmax.reshape((num_timesteps, batch_size, -1))
+    softmax = np.transpose(softmax, [1, 0, 2])
+    probs = np.array([[softmax[row, col, target_ids[row, col]]
+                       for col in range(num_timesteps)]
+                      for row in range(batch_size)])
+    print(probs)
+    return probs
+    
+        if word:
+      tokenized.append(word)
+    tokenized += special_end_tokens
+    
+      Args:
+    gen_logits:  Generator logits.
+    gen_labels:  Labels for the correct token.
+    dis_values:  Discriminator values Tensor of shape [batch_size,
+      sequence_length].
+    is_real_input:  Tensor indicating whether the label is present.
+    
+      Args;
+    hparams:  Hyperparameters for the MaskGAN.
+    inputs:  tf.int32 Tensor of the sequence input of shape [batch_size,
+      sequence_length].
+    present:  tf.bool Tensor indicating the presence or absence of the token
+      of shape [batch_size, sequence_length].
+    is_training:  Whether the model is training.
+    is_validating:  Whether the model is being run in validation mode for
+      calculating the perplexity.
+    reuse (Optional):  Whether to reuse the model.
     
     
-if __name__ == '__main__':
-    main()
+def generate_mask():
+  '''Generate the mask to be fed into the model.'''
+  if FLAGS.mask_strategy == 'random':
+    p = np.random.choice(
+        [True, False],
+        size=[FLAGS.batch_size, FLAGS.sequence_length],
+        p=[FLAGS.is_present_rate, 1. - FLAGS.is_present_rate])
     
     
-        lowPrimes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59,
-                 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127,
-                 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191,
-                 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257,
-                 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331,
-                 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401,
-                 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467,
-                 479, 487, 491, 499, 503, 509, 521, 523, 541, 547, 557, 563,
-                 569, 571, 577, 587, 593, 599, 601, 607, 613, 617, 619, 631,
-                 641, 643, 647, 653, 659, 661, 673, 677, 683, 691, 701, 709,
-                 719, 727, 733, 739, 743, 751, 757, 761, 769, 773, 787, 797,
-                 809, 811, 821, 823, 827, 829, 839, 853, 857, 859, 863, 877,
-                 881, 883, 887, 907, 911, 919, 929, 937, 941, 947, 953, 967,
-                 971, 977, 983, 991, 997]
+      '''
+      if attention_option == 'bahdanau':
+        # transform query
+        query = tf.matmul(query, query_w)
     
-        def __hash_function_2(self, value, data):
     
-            else:
-            colision_resolution = self._colision_resolution(key, data)
-            if colision_resolution is not None:
-                self._set_value(colision_resolution, data)
-            else:
-                self.rehashing()
-                self.insert_data(data)
+@pytest.mark.functional
+def test_select_command_with_arrows(proc, TIMEOUT):
+    select_command_with_arrows(proc, TIMEOUT)
+    history_changed(proc, TIMEOUT, u'git help')
     
-    The problem is  :
-Given an ARRAY, to find the longest and increasing sub ARRAY in that given ARRAY and return it.
-Example: [10, 22, 9, 33, 21, 50, 41, 60, 80] as input will return [10, 22, 33, 41, 60, 80] as output
-'''
-from __future__ import print_function
     
-    word_bysig = collections.defaultdict(list)
-for word in word_list:
-    word_bysig[signature(word)].append(word)
+@pytest.mark.parametrize('command, new_command, packages', [
+    (Command('vim', ''), 'sudo apt-get install vim && vim',
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('convert', ''), 'sudo apt-get install imagemagick && convert',
+     [('imagemagick', 'main'),
+      ('graphicsmagick-imagemagick-compat', 'universe')]),
+    (Command('sudo vim', ''), 'sudo apt-get install vim && sudo vim',
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('sudo convert', ''), 'sudo apt-get install imagemagick && sudo convert',
+     [('imagemagick', 'main'),
+      ('graphicsmagick-imagemagick-compat', 'universe')])])
+def test_get_new_command(mocker, command, new_command, packages):
+    mocker.patch('thefuck.rules.apt_get._get_packages',
+                 create=True, return_value=packages)
     
-        return res
+    
+@pytest.mark.parametrize('command', [
+    Command('apt-cache search foo', ''),
+    Command('aptitude search foo', ''),
+    Command('apt search foo', ''),
+    Command('apt-get install foo', ''),
+    Command('apt-get source foo', ''),
+    Command('apt-get clean', ''),
+    Command('apt-get remove', ''),
+    Command('apt-get update', ''),
+    Command('sudo apt update', no_match_output)
+])
+def test_not_match(command):
+    assert not match(command)
+    
+    
+@pytest.mark.parametrize('command, result', [
+    (Command('aws dynamdb scan', misspelled_command),
+     ['aws dynamodb scan']),
+    (Command('aws dynamodb scn', misspelled_subcommand),
+     ['aws dynamodb scan']),
+    (Command('aws dynamodb t-item',
+             misspelled_subcommand_with_multiple_options),
+     ['aws dynamodb put-item', 'aws dynamodb get-item'])])
+def test_get_new_command(command, result):
+    assert get_new_command(command) == result
+
+    
+    
+@pytest.mark.parametrize('before, after', [
+    ('brew install sshfs',
+     'brew cask install osxfuse && brew install sshfs')])
+def test_get_new_command(before, after):
+    command = Command(before, output)
+    assert get_new_command(command) == after
+
+    
+    
+def makeKeyFiles(name, keySize):
+    if os.path.exists('%s_pubkey.txt' % name) or os.path.exists('%s_privkey.txt' % name):
+        print('\nWARNING:')
+        print(''%s_pubkey.txt' or '%s_privkey.txt' already exists. \n'
+              'Use a different name or delete these files and re-run this program.' %
+              (name, name))
+        sys.exit()
+    
+            a += a
+        b >>= 1
