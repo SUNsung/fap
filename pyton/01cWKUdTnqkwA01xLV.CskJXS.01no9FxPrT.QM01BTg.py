@@ -1,124 +1,114 @@
 
         
-            state = module.params.get('state')
-    group_name = module.params.get('name').lower()
-    group_description = module.params.get('description')
-    group_subnets = module.params.get('subnets') or {}
+            # This is needed to make sure that the gradients are simple.
+    # The value of the function shouldn't change.
+    if z == self.sample:
+      return gaussian_pos_log_likelihood(self.mean, self.logvar, self.noise)
     
-        creds, params = get_google_cloud_credentials(module)
-    pubsub_client = pubsub.Client(project=params['project_id'], credentials=creds, use_gax=False)
-    pubsub_client.user_agent = 'ansible-pubsub-0.1'
+      session = tf.get_default_session()
+  print('ckpt: ', ckpt)
+  if ckpt and tf.train.checkpoint_exists(ckpt.model_checkpoint_path):
+    print('Reading model parameters from %s' % ckpt.model_checkpoint_path)
+    saver.restore(session, ckpt.model_checkpoint_path)
+  else:
+    print('Created model with fresh parameters.')
+    if kind in ['posterior_sample_and_average', 'posterior_push_mean',
+                'prior_sample', 'write_model_params']:
+      print('Possible error!!! You are running ', kind, ' on a newly \
+      initialized model!')
+      # cannot print ckpt.model_check_point path if no ckpt
+      print('Are you sure you sure a checkpoint in ', hps.lfads_save_dir,
+            ' exists?')
+    
+      return gauss_e
+    
+      Args:
+    data_fname: The filename of teh file in which to write the data.
+    data_dict:  The dictionary of data to write. The keys are strings
+      and the values are numpy arrays.
+    use_json (optional): human readable format for simple items
+    compression (optional): The compression to use for h5py (disabled by
+      default because the library borks on scalars, otherwise try 'gzip').
+  '''
+    
+          while cur_pos < num_steps:
+        if cur_stream[i] is None or len(cur_stream[i][0]) <= 1:
+          try:
+            cur_stream[i] = list(generator.next())
+          except StopIteration:
+            # No more data, exhaust current streams and quit
+            no_more_data = True
+            break
+    
+      samples = []
+  for sequence_id in xrange(min(len(arr), max_num_to_print)):
+    buffer_str = ' '.join(
+        [str(id_to_word[index]) for index in arr[sequence_id, :]])
+    samples.append(buffer_str)
+  return samples
+    
+      Args;
+    hparams:  Hyperparameters for the MaskGAN.
+    inputs:  tf.int32 Tensor of the sequence input of shape [batch_size,
+      sequence_length].
+    present:  tf.bool Tensor indicating the presence or absence of the token
+      of shape [batch_size, sequence_length].
+    is_training:  Whether the model is training.
+    is_validating:  Whether the model is being run in validation mode for
+      calculating the perplexity.
+    reuse (Optional):  Whether to reuse the model.
+    
+    '''Model loss construction.'''
+    
+        elif (FLAGS.discriminator_model == 'bidirectional_zaremba' or
+          FLAGS.discriminator_model == 'bidirectional_vd'):
+      assert FLAGS.language_model_ckpt_dir_reversed is not None, (
+          'Need a reversed directory to fill in the backward components.')
+      load_fwd_ckpt = tf.train.latest_checkpoint(FLAGS.language_model_ckpt_dir)
+      load_bwd_ckpt = tf.train.latest_checkpoint(
+          FLAGS.language_model_ckpt_dir_reversed)
+      print('Restoring Discriminator from %s and %s.' % (load_fwd_ckpt,
+                                                         load_bwd_ckpt))
+      tf.logging.info('Restoring Discriminator from %s and %s.' %
+                      (load_fwd_ckpt, load_bwd_ckpt))
+      dis_fwd_init_saver = init_savers['dis_fwd_init_saver']
+      dis_bwd_init_saver = init_savers['dis_bwd_init_saver']
+      dis_fwd_init_saver.restore(sess, load_fwd_ckpt)
+      dis_bwd_init_saver.restore(sess, load_bwd_ckpt)
     
     
-def main():
-    argument_spec = vca_argument_spec()
-    argument_spec.update(
-        dict(
-            fw_rules=dict(required=True, type='list'),
-            gateway_name=dict(default='gateway'),
-            state=dict(default='present', choices=['present', 'absent'])
-        )
-    )
+class Header(jose.Header):
+    '''ACME-specific JOSE Header. Implements nonce, kid, and url.
+    '''
+    nonce = jose.Field('nonce', omitempty=True, encoder=jose.encode_b64jose)
+    kid = jose.Field('kid', omitempty=True)
+    url = jose.Field('url', omitempty=True)
     
-        if not purge_rules and not nat_rules:
-        module.fail_json(msg='Must define purge_rules or nat_rules')
-    
-    
-DOCUMENTATION = '''
----
-module: vertica_configuration
-version_added: '2.0'
-short_description: Updates Vertica configuration parameters.
-description:
-    - Updates Vertica configuration parameters.
-options:
-  name:
-    description:
-        - Name of the parameter to update.
-    required: true
-    aliases: [parameter]
-  value:
-    description:
-        - Value of the parameter to be set.
-    required: true
-  db:
-    description:
-        - Name of the Vertica database.
-  cluster:
-    description:
-        - Name of the Vertica cluster.
-    default: localhost
-  port:
-    description:
-        - Vertica cluster port to connect to.
-    default: 5433
-  login_user:
-    description:
-        - The username used to authenticate with.
-    default: dbadmin
-  login_password:
-    description:
-        - The password used to authenticate with.
-notes:
-  - The default authentication assumes that you are either logging in as or sudo'ing
-    to the C(dbadmin) account on the host.
-  - This module uses C(pyodbc), a Python ODBC database adapter. You must ensure
-    that C(unixODBC) and C(pyodbc) is installed on the host and properly configured.
-  - Configuring C(unixODBC) for Vertica requires C(Driver = /opt/vertica/lib64/libverticaodbc.so)
-    to be added to the C(Vertica) section of either C(/etc/odbcinst.ini) or C($HOME/.odbcinst.ini)
-    and both C(ErrorMessagesPath = /opt/vertica/lib64) and C(DriverManagerEncoding = UTF-16)
-    to be added to the C(Driver) section of either C(/etc/vertica.ini) or C($HOME/.vertica.ini).
-requirements: [ 'unixODBC', 'pyodbc' ]
-author: 'Dariusz Owczarek (@dareko)'
-'''
-    
-    
-def present(schema_facts, cursor, schema, usage_roles, create_roles, owner):
-    schema_key = schema.lower()
-    if schema_key not in schema_facts:
-        query_fragments = ['create schema {0}'.format(schema)]
-        if owner:
-            query_fragments.append('authorization {0}'.format(owner))
-        cursor.execute(' '.join(query_fragments))
-        update_roles(schema_facts, cursor, schema, [], usage_roles, [], create_roles)
-        schema_facts.update(get_schema_facts(cursor, schema))
         return True
-    else:
-        changed = False
-        if owner and owner.lower() != schema_facts[schema_key]['owner'].lower():
-            raise NotSupportedError((
-                'Changing schema owner is not supported. '
-                'Current owner: {0}.'
-            ).format(schema_facts[schema_key]['owner']))
-        if sorted(usage_roles) != sorted(schema_facts[schema_key]['usage_roles']) or \
-           sorted(create_roles) != sorted(schema_facts[schema_key]['create_roles']):
-    
-        def run_command(command):
-        '''Runs a monit command, and returns the new status.'''
-        module.run_command('%s %s %s' % (MONIT, command, name), check_rc=True)
-        return get_status()
-    
-        return strings
 
     
-        def set_appid_not_exist(self, appid):
-        self.logger.warn('APPID_manager, set_appid_not_exist %s', appid)
-        with self.lock:
-            if appid not in self.not_exist_appids:
-                self.not_exist_appids.append(appid)
-            try:
-                self.config.GAE_APPIDS.remove(appid)
-            except:
-                pass
+    import requests
+import voluptuous as vol
     
-        def __init__(self):
-        ca_certs = os.path.join(current_path, 'cacert.pem')
-        openssl_context = SSLContext(
-            logger, ca_certs=ca_certs,
-            cipher_suites=['ALL', '!RC4-SHA', '!ECDHE-RSA-RC4-SHA', '!ECDHE-RSA-AES128-GCM-SHA256',
-                           '!AES128-GCM-SHA256', '!ECDHE-RSA-AES128-SHA', '!AES128-SHA']
-        )
-        host_manager = HostManagerBase()
-        connect_creator = ConnectCreator(logger, config, openssl_context, host_manager,
-                                         debug=True)
-        self.check_ip = CheckIp(logger, config, connect_creator)
+            if self.home_interval:
+            boundary = dt_util.now() - self.home_interval
+            last_results = [device for device in self.last_results
+                            if device.last_update > boundary]
+            if last_results:
+                exclude_hosts = self.exclude + [device.ip for device
+                                                in last_results]
+            else:
+                exclude_hosts = self.exclude
+        else:
+            last_results = []
+            exclude_hosts = self.exclude
+        if exclude_hosts:
+            options += ' --exclude {}'.format(','.join(exclude_hosts))
+    
+            return order
+    
+    _LOGGER = logging.getLogger(__name__)
+    
+    
+class HassLaMetricManager():
+    '''A class that encapsulated requests to the LaMetric manager.'''
