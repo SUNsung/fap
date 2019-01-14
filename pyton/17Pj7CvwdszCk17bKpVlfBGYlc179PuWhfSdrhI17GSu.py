@@ -1,131 +1,54 @@
 
         
-            def __init__(self, keys, strict=False, messages=None):
-        self.keys = set(keys)
-        self.strict = strict
-        if messages is not None:
-            self.messages = {**self.messages, **messages}
+            If the resulting string contains path separators, an exception is raised.
+    '''
+    parent, file_name = os.path.split(path)
+    if parent:
+        raise ValueError('{!r} must be only a file name'.format(path))
+    else:
+        return file_name
     
-        def __init__(self, get_response=None):
-        if not apps.is_installed('django.contrib.sites'):
-            raise ImproperlyConfigured(
-                'You cannot use RedirectFallbackMiddleware when '
-                'django.contrib.sites is not installed.'
-            )
-        super().__init__(get_response)
+    def f(x):
+    return 1.0 / (x - 5.0)
     
-        def load(self):
-        try:
-            data = self._cache.get(self.cache_key)
-        except Exception:
-            # Some backends (e.g. memcache) raise an exception on invalid
-            # cache keys. If this happens, reset the session. See #17810.
-            data = None
+    def worker(input, output):
+    for func, args in iter(input.get, 'STOP'):
+        result = calculate(func, args)
+        output.put(result)
     
+    def get_extension(link):
+    extension = os.path.splitext(link)[1][1:]
+    if extension in ['pdf', 'html']:
+        return extension
+    if 'pdf' in extension:
+        return 'pdf'    
+    return 'pdf'    
     
-class BaseSessionManager(models.Manager):
-    def encode(self, session_dict):
-        '''
-        Return the given session dictionary serialized and encoded as a string.
-        '''
-        session_store_class = self.model.get_session_store_class()
-        return session_store_class().encode(session_dict)
-    
-    EXAMPLES = '''
-# Retrieve server certificate
-- iam_server_certificate_facts:
-    name: production-cert
-  register: server_cert
-    
-            if privilege is not None:
-            changed = client.modify_if_diff(name, ipa_role.get('memberof_privilege', []), privilege,
-                                            client.role_add_privilege,
-                                            client.role_remove_privilege) or changed
-        if service is not None:
-            changed = client.modify_if_diff(name, ipa_role.get('member_service', []), service,
-                                            client.role_add_service,
-                                            client.role_remove_service) or changed
-        if user is not None:
-            changed = client.modify_if_diff(name, ipa_role.get('member_user', []), user,
-                                            client.role_add_user,
-                                            client.role_remove_user) or changed
+        if not app.config.edit_on_github_project:
+        warnings.warn('edit_on_github_project not specified')
+        return
+    if not doctree:
+        warnings.warn('doctree is None')
+        return
+    path = os.path.relpath(doctree.get('source'), app.builder.srcdir)
+    show_url = get_github_url(app, 'blob', path)
+    edit_url = get_github_url(app, 'edit', path)
     
     
-DOCUMENTATION = '''
----
-module: group_by
-short_description: Create Ansible groups based on facts
-description:
-  - Use facts to create ad-hoc groups that can be used later in a playbook.
-  - This module is also supported for Windows targets.
-version_added: '0.9'
-options:
-  key:
-    description:
-    - The variables whose values will be used as groups
-    required: true
-  parents:
-    description:
-    - The list of the parent groups
-    required: false
-    default: 'all'
-    version_added: '2.4'
-author: 'Jeroen Hoekx (@jhoekx)'
-notes:
-  - Spaces in group names are converted to dashes '-'.
-  - This module is also supported for Windows targets.
-'''
+def get_scanner(hass, config):
+    '''Validate the configuration and return an Actiontec scanner.'''
+    scanner = ActiontecDeviceScanner(config[DOMAIN])
+    return scanner if scanner.success_init else None
     
-        module.run_command_environ_update = dict(LANG='C', LC_ALL='C', LC_MESSAGES='C', LC_CTYPE='C')
-    Icinga2FeatureHelper(module).manage()
+            # Without a home_id, we fetched an URL where the mobile devices can be
+        # found under the mobileDevices key.
+        if 'mobileDevices' in tado_json:
+            tado_json = tado_json['mobileDevices']
     
-    
-def main():
-    module = AnsibleModule(
-        argument_spec=dict(
-            path=dict(required=True),
-            state=dict(default='present', choices=['present', 'followed', 'absent', 'unfollowed']),
-            name=dict(required=False, default=None, type='str'),
-            logtype=dict(required=False, default=None, type='str', aliases=['type'])
-        ),
-        supports_check_mode=True
-    )
-    
-    
-def compute_bench(alpha, n_samples, n_features, precompute):
-    lasso_results = []
-    lars_lasso_results = []
-    
-    from time import time
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.neighbors import LocalOutlierFactor
-from sklearn.metrics import roc_curve, auc
-from sklearn.datasets import fetch_kddcup99, fetch_covtype, fetch_mldata
-from sklearn.preprocessing import LabelBinarizer
-    
-    def plot(func):
-    random_state = check_random_state(0)
-    one_core = []
-    multi_core = []
-    sample_sizes = range(1000, 6000, 1000)
-    
-    plt.figure('scikit-learn Ward's method benchmark results')
-plt.imshow(np.log(ratio), aspect='auto', origin='lower')
-plt.colorbar()
-plt.contour(ratio, levels=[1, ], colors='k')
-plt.yticks(range(len(n_features)), n_features.astype(np.int))
-plt.ylabel('N features')
-plt.xticks(range(len(n_samples)), n_samples.astype(np.int))
-plt.xlabel('N samples')
-plt.title('Scikit's time, in units of scipy time (log)')
-plt.show()
-
-    
-    ###############################################################################
-clf = SGDRegressor(penalty='l1', alpha=.2, fit_intercept=True, max_iter=2000,
-                   tol=None)
-clf.fit(X_train, y_train)
-print('model sparsity: %f' % sparsity_ratio(clf.coef_))
-    
-    # TASK: Fit the pipeline on the training set
+    CODE_SCHEMA = vol.Schema({
+    vol.Required(CONF_NAME): cv.string,
+    vol.Required(CONF_CODE): cv.string,
+    vol.Optional(CONF_TYPE): cv.string,
+    vol.Optional(CONF_DEVICE): cv.string,
+    vol.Optional(CONF_REPEAT): cv.positive_int,
+})
