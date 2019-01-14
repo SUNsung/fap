@@ -1,215 +1,174 @@
 
         
-        def converted_history(markdown)
-  remove_head_from_history(
-    custom_release_header_anchors(
-      liquid_escape(
-        linkify(
-          normalize_bullets(markdown)
-        )
-      )
-    )
-  )
-end
-    
-    require 'benchmark/ips'
-require 'jekyll'
-require 'json'
-    
-    # -------------------------------------------------------------------
-# Benchmarking changes in https://github.com/jekyll/jekyll/pull/6767
-# -------------------------------------------------------------------
-    
-    #
-    
-        group.remove(moderator)
-    group.save
-    
-        it 'defauls foreground and background colors' do
-      scenario.tag_fg_color = nil
-      scenario.tag_bg_color = nil
-      expect(style_colors(scenario)).to eq('color:#FFFFFF;background-color:#5BC0DE')
-    end
-  end
-    
-        it 'is turned off for existing instances of Huginn' do
-      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { nil }
-      DefaultScenarioImporter.import(user)
-    end
-    
-          context '#restart_dead_workers' do
-        before do
-          mock.instance_of(HuginnScheduler).run!
-          mock.instance_of(DelayedJobWorker).run!
-          @agent_runner.send(:run_workers)
-    
-        it 'should convert the 'escape' method correctly' do
-      expect(LiquidMigrator.convert_string('Escaped: <escape $.content.name>\nNot escaped: <$.content.name>')).to eq(
-                                    'Escaped: {{content.name | uri_escape}}\nNot escaped: {{content.name}}'
-      )
-    end
-    
-      it 'converts values to Float' do
-    expect(location.lat).to be_a Float
-    expect(location.lat).to eq 2.0
-    expect(location.lng).to be_a Float
-    expect(location.lng).to eq 3.0
-    expect(location.radius).to be_a Float
-    expect(location.radius).to eq 300.0
-    expect(location.speed).to be_a Float
-    expect(location.speed).to eq 2.0
-    expect(location.course).to be_a Float
-    expect(location.course).to eq 30.0
-  end
-    
-          it 'sets the default on new instances, allows setting new schedules, and prevents invalid schedules' do
-        @checker = Agents::SomethingSource.new(:name => 'something')
-        @checker.user = users(:bob)
-        expect(@checker.schedule).to eq('2pm')
-        @checker.save!
-        expect(@checker.reload.schedule).to eq('2pm')
-        @checker.update_attribute :schedule, '5pm'
-        expect(@checker.reload.schedule).to eq('5pm')
-    
-            format('%1$*2$e', 109.52, -20).should == '1.095200e+02        '
-        format('%1$*2$E', 109.52, -20).should == '1.095200E+02        '
-        format('%1$*2$f', 10.952, -20).should == '10.952000           '
-        format('%1$*2$g', 12.1234, -20).should == '12.1234             '
-        format('%1$*2$G', 12.1234, -20).should == '12.1234             '
-        format('%1$*2$a', 196, -20).should == '0x1.88p+7           '
-        format('%1$*2$A', 196, -20).should == '0X1.88P+7           '
-    
-    describe 'Kernel#taint' do
-  it 'returns self' do
-    o = Object.new
-    o.taint.should equal(o)
-  end
-    
-      it 'creates a public method in TOPLEVEL_BINDING' do
-    eval @code, TOPLEVEL_BINDING
-    Object.should have_method :boom
-  end
-    
-      # Compile a file on disk to CSS.
-  #
-  # @raise [Sass::SyntaxError] if there's an error in the document
-  # @raise [Encoding::UndefinedConversionError] if the source encoding
-  #   cannot be converted to UTF-8
-  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
-  #
-  # @overload compile_file(filename, options = {})
-  #   Return the compiled CSS rather than writing it to a file.
-  #
-  #   @param filename [String] The path to the Sass, SCSS, or CSS file on disk.
-  #   @param options [{Symbol => Object}] An options hash;
-  #     see {file:SASS_REFERENCE.md#Options the Sass options documentation}
-  #   @return [String] The compiled CSS.
-  #
-  # @overload compile_file(filename, css_filename, options = {})
-  #   Write the compiled CSS to a file.
-  #
-  #   @param filename [String] The path to the Sass, SCSS, or CSS file on disk.
-  #   @param options [{Symbol => Object}] An options hash;
-  #     see {file:SASS_REFERENCE.md#Options the Sass options documentation}
-  #   @param css_filename [String] The location to which to write the compiled CSS.
-  def self.compile_file(filename, *args)
-    options = args.last.is_a?(Hash) ? args.pop : {}
-    css_filename = args.shift
-    result = Sass::Engine.for_file(filename, options).render
-    if css_filename
-      options[:css_filename] ||= css_filename
-      open(css_filename, 'w') {|css_file| css_file.write(result)}
-      nil
-    else
-      result
-    end
-  end
-end
-    
-        # Same as `Kernel.puts`, but doesn't print anything if the `--quiet` option is set.
-    #
-    # @param args [Array] Passed on to `Kernel.puts`
-    def puts(*args)
-      return if @options[:for_engine][:quiet]
-      Kernel.puts(*args)
-    end
-    
-          opts.on('-v', '--version', 'Print the Sass version.') do
-        puts('Sass #{Sass.version[:string]}')
-        exit
+              xcode_outdated = false
+      begin
+        unless FastlaneCore::Helper.xcode_at_least?(Fastlane::MINIMUM_XCODE_RELEASE)
+          xcode_outdated = true
+        end
+      rescue
+        # We don't care about exceptions here
+        # We'll land here if the user doesn't have Xcode at all for example
+        # which is fine for someone who uses fastlane just for Android project
+        # What we *do* care about is when someone links an old version of Xcode
       end
+    
+          context 'as array' do
+        let(:path) { ['myfile.txt', 'yourfile.txt'] }
+    
+          it 'generates the correct git command with an array of paths' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          git_commit(path: ['./fastlane/README.md', './LICENSE'], message: 'message')
+        end').runner.execute(:test)
+    
+            it 'auto converts Array values to Strings if allowed' do
+          config_item = FastlaneCore::ConfigItem.new(key: :xcargs,
+                                                     description: 'xcargs',
+                                                     type: :shell_string)
+    
+        def initialize
+      @entries = []
+      @index = Set.new
+      @types = Hash.new { |hash, key| hash[key] = Type.new key }
     end
     
-          # If the importer is based on files on the local filesystem
-      # this method should return folders which should be watched
-      # for changes.
+        def parse_html(html)
+      warn '#{self.class.name} is re-parsing the document' unless ENV['RACK_ENV'] == 'test'
+      super
+    end
+    
+        def initialize(name = nil, path = nil, type = nil)
+      self.name = name
+      self.path = path
+      self.type = type
+    
+    module Docs
+  class PageDb
+    attr_reader :pages
+    
+          def include_default_entry?
+        INDEX.add?([name, type].join(';')) ? true : false # ¯\_(ツ)_/¯
+      end
+    
       #
-      # @return [Array<String>] List of absolute paths of directories to watch
-      def directories_to_watch
-        []
-      end
+  # Split the URI into the resource being requested and its query string.
+  #
+  def update_uri_parts
+    # If it has a query string, get the parts.
+    if ((self.raw_uri) and (md = self.raw_uri.match(/(.+?)\?(.*)$/)))
+      self.uri_parts['QueryString'] = parse_cgi_qstring(md[2])
+      self.uri_parts['Resource']    = md[1]
+    # Otherwise, just assume that the URI is equal to the resource being
+    # requested.
+    else
+      self.uri_parts['QueryString'] = {}
+      self.uri_parts['Resource']    = self.raw_uri
+    end
     
-          # @see Base#key
-      def key(name, options)
-        [self.class.name + ':' + File.dirname(File.expand_path(name)),
-         File.basename(name)]
-      end
+      #
+  # Dispatches the supplied request for a given connection.
+  #
+  def dispatch_request(cli, request)
+    # Is the client requesting keep-alive?
+    if ((request['Connection']) and
+       (request['Connection'].downcase == 'Keep-Alive'.downcase))
+      cli.keepalive = true
+    end
     
-          before_action :set_content_type
-      before_action :load_user
-      before_action :authorize_for_order, if: proc { order_token.present? }
-      before_action :authenticate_user
-      before_action :load_user_roles
+              # Encodes the type field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_type
+            bn = OpenSSL::BN.new(type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
     
-            def update
-          @option_type = Spree::OptionType.accessible_by(current_ability, :update).find(params[:id])
-          if @option_type.update_attributes(option_type_params)
-            render :show
-          else
-            invalid_resource!(@option_type)
+              # Decodes a Rex::Proto::Kerberos::Model::EncKdcResponse from an String
+          #
+          # @param input [String] the input to decode from
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
+    
+              # Encodes the enc_auth_data
+          #
+          # @return [String]
+          def encode_enc_auth_data
+            enc_auth_data.encode
           end
-        end
     
-            def return_authorization_params
-          params.require(:return_authorization).permit(permitted_return_authorization_attributes)
-        end
+              # Decodes a Rex::Proto::Kerberos::Model::KdcResponse from an String
+          #
+          # @param input [String] the input to decode from
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
+    
+    World(RemoteCommandHelpers)
+
+    
+        def run
+      Rake.application = self
+      super
+    end
+    
+        extend Forwardable
+    attr_reader :variables
+    def_delegators :variables,
+                   :set, :fetch, :fetch_for, :delete, :keys, :validate
+    
+          # rubocop:disable Security/MarshalLoad
+      def add_role(role, hosts, options={})
+        options_deepcopy = Marshal.dump(options.merge(roles: role))
+        Array(hosts).each { |host| add_host(host, Marshal.load(options_deepcopy)) }
+      end
+      # rubocop:enable Security/MarshalLoad
+    
+          # Custom destructuring method. This can be used to normalize
+      # destructuring for different variations of the node.
+      #
+      # In this case, the `def` node destructures into:
+      #
+      #   `method_name, arguments, body`
+      #
+      # while the `defs` node destructures into:
+      #
+      #   `receiver, method_name, arguments, body`
+      #
+      # so we reverse the destructured array to get the optional receiver
+      # at the end, where it can be discarded.
+      #
+      # @return [Array] the different parts of the `def` or `defs` node
+      def node_parts
+        to_a.reverse
       end
     end
   end
 end
 
     
-            def create
-          @order = Spree::Order.find_by!(number: params.fetch(:shipment).fetch(:order_id))
-          authorize! :read, @order
-          authorize! :create, Shipment
-          quantity = params[:quantity].to_i
-          @shipment = @order.shipments.create(stock_location_id: params.fetch(:stock_location_id))
+          # Whether the last argument of the node is a block pass,
+      # i.e. `&block`.
+      #
+      # @return [Boolean] whether the last argument of the node is a block pass
+      def block_argument?
+        arguments? &&
+          (last_argument.block_pass_type? || last_argument.blockarg_type?)
+      end
+    end
+  end
+end
+
     
-            def scope
-          includes = { variant: [{ option_values: :option_type }, :product] }
-          @stock_location.stock_items.accessible_by(current_ability, :read).includes(includes)
-        end
+    $redis = Redis.new
     
-            def create
-          authorize! :create, StockLocation
-          @stock_location = StockLocation.new(stock_location_params)
-          if @stock_location.save
-            respond_with(@stock_location, status: 201, default_template: :show)
-          else
-            invalid_resource!(@stock_location)
-          end
-        end
-    
-            def create
-          authorize! :create, Store
-          @store = Store.new(store_params)
-          @store.code = params[:store][:code]
-          if @store.save
-            respond_with(@store, status: 201, default_template: :show)
-          else
-            invalid_resource!(@store)
-          end
-        end
+        # Creating the Redis#brpop command takes into account any
+    # configured queue weights. By default Redis#brpop returns
+    # data from the first queue that has pending elements. We
+    # recreate the queue command each time we invoke Redis#brpop
+    # to honor weights and avoid queue starvation.
+    def queues_cmd
+      if @strictly_ordered_queues
+        @queues
+      else
+        queues = @queues.shuffle.uniq
+        queues << TIMEOUT
+        queues
+      end
+    end
