@@ -1,493 +1,209 @@
 
         
-        StringRef swift::prettyPlatformString(PlatformKind platform) {
-  switch (platform) {
-  case PlatformKind::none:
-    return '*';
-#define AVAILABILITY_PLATFORM(X, PrettyName)                                   \
-  case PlatformKind::X:                                                        \
-    return PrettyName;
-#include 'swift/AST/PlatformKinds.def'
+        #if GTEST_OS_SYMBIAN
+  // Streams a value (either a pointer or not) to this object.
+  template <typename T>
+  inline Message& operator <<(const T& value) {
+    StreamHelper(typename internal::is_pointer<T>::type(), value);
+    return *this;
   }
-  llvm_unreachable('bad PlatformKind');
-}
-    
-      if (!wasInline) delete[] oldBegin;
-    
-          if (node->Further) {
-        // Further indent, and include the line to the right child if
-        // there is one.
-        IndentScope is(this, node->Right ? '|   ' : '    ');
-        print(node->Further, ChildKind::Further);
-      }
-    
-      if (auto ptr = type->getAs<clang::PointerType>()) {
-    auto pointee = ptr->getPointeeType();
-    }
-    
-    const char *Demangle::getNodeKindString(swift::Demangle::Node::Kind k) {
-  switch (k) {
-#define NODE(ID)                                                               \
-  case Node::Kind::ID:                                                         \
-    return #ID;
-#include 'swift/Demangling/DemangleNodes.def'
-  }
-  return 'Demangle::Node::Kind::???';
-}
-    
-        // Adds the module variable 'api_version'.
-    if (PyModule_AddIntConstant(
-        module,
-        const_cast<char*>(kImplVersionName),
-        kImplVersion))
-#if PY_MAJOR_VERSION < 3
-      return;
 #else
-      { Py_DECREF(module); return NULL; }
-    
-    // This is initialized with a default, stub implementation.
-// If python-google.protobuf.cc is loaded, the function pointer is overridden
-// with a full implementation.
-const Message* (*GetCProtoInsidePyProtoPtr)(PyObject* msg) =
-    GetCProtoInsidePyProtoStub;
-Message* (*MutableCProtoInsidePyProtoPtr)(PyObject* msg) =
-    MutableCProtoInsidePyProtoStub;
-    
-    bool AnyMetadata::InternalIs(const Descriptor* descriptor) const {
-  const string type_url = type_url_->GetNoArena();
-  string full_name;
-  if (!ParseAnyTypeUrl(type_url, &full_name)) {
-    return false;
+  // Streams a non-pointer value to this object.
+  template <typename T>
+  inline Message& operator <<(const T& val) {
+    // Some libraries overload << for STL containers.  These
+    // overloads are defined in the global namespace instead of ::std.
+    //
+    // C++'s symbol lookup rule (i.e. Koenig lookup) says that these
+    // overloads are visible in either the std namespace or the global
+    // namespace, but not other namespaces, including the testing
+    // namespace which Google Test's Message class is in.
+    //
+    // To allow STL containers (and other types that has a << operator
+    // defined in the global namespace) to be used in Google Test
+    // assertions, testing::Message must access the custom << operator
+    // from the global namespace.  With this using declaration,
+    // overloads of << defined in the global namespace and those
+    // visible via Koenig lookup are both exposed in this function.
+    using ::operator <<;
+    *ss_ << val;
+    return *this;
   }
-  return full_name == descriptor->full_name();
-}
     
-    GeneratorContext::~GeneratorContext() {}
+    // Values() allows generating tests from explicitly specified list of
+// parameters.
+//
+// Synopsis:
+// Values(T v1, T v2, ..., T vN)
+//   - returns a generator producing sequences with elements v1, v2, ..., vN.
+//
+// For example, this instantiates tests from test case BarTest each
+// with values 'one', 'two', and 'three':
+//
+// INSTANTIATE_TEST_CASE_P(NumSequence, BarTest, Values('one', 'two', 'three'));
+//
+// This instantiates tests from test case BazTest each with values 1, 2, 3.5.
+// The exact type of values will depend on the type of parameter in BazTest.
+//
+// INSTANTIATE_TEST_CASE_P(FloatingNumbers, BazTest, Values(1, 2, 3.5));
+//
+// Currently, Values() supports from 1 to $n parameters.
+//
+$range i 1..n
+$for i [[
+$range j 1..i
     
-    EnumGenerator::~EnumGenerator() {
-}
-    
-    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
-  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
-  // Identifiers can't start with digits
-  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
-  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
-}
-    
-    
-    {  for (int i = 0; i < message->oneof_decl_count(); ++i) {
-    const OneofDescriptor* oneof = message->oneof_decl(i);
-    OneofGeneratorInfo info;
-    info.name = UnderscoresToCamelCase(oneof->name(), false);
-    info.capitalized_name = UnderscoresToCamelCase(oneof->name(), true);
-    oneof_generator_info_map_[oneof] = info;
-  }
-}
-    
-    ServiceGenerator* ImmutableGeneratorFactory::NewServiceGenerator(
-    const ServiceDescriptor* descriptor) const {
-  return new ImmutableServiceGenerator(descriptor, context_);
-}
-    
-    void ImmutableMapFieldGenerator::
-GenerateParsingCode(io::Printer* printer) const {
-  printer->Print(
-      variables_,
-      'if (!$get_mutable_bit_parser$) {\n'
-      '  $name$_ = com.google.protobuf.MapField.newMapField(\n'
-      '      $map_field_parameter$);\n'
-      '  $set_mutable_bit_parser$;\n'
-      '}\n');
-  if (!SupportUnknownEnumValue(descriptor_->file()) &&
-      GetJavaType(ValueField(descriptor_)) == JAVATYPE_ENUM) {
-    printer->Print(
-        variables_,
-        'com.google.protobuf.ByteString bytes = input.readBytes();\n'
-        'com.google.protobuf.MapEntry<$type_parameters$>\n'
-        '$name$__ = $default_entry$.getParserForType().parseFrom(bytes);\n');
-    printer->Print(
-        variables_,
-        'if ($value_enum_type$.forNumber($name$__.getValue()) == null) {\n'
-        '  unknownFields.mergeLengthDelimitedField($number$, bytes);\n'
-        '} else {\n'
-        '  $name$_.getMutableMap().put(\n'
-        '      $name$__.getKey(), $name$__.getValue());\n'
-        '}\n');
-  } else {
-    printer->Print(
-        variables_,
-        'com.google.protobuf.MapEntry<$type_parameters$>\n'
-        '$name$__ = input.readMessage(\n'
-        '    $default_entry$.getParserForType(), extensionRegistry);\n'
-        '$name$_.getMutableMap().put(\n'
-        '    $name$__.getKey(), $name$__.getValue());\n');
-  }
-}
-    
-      EXPECT_EQ(5, decode_data.num_entries());
-    
-      virtual void SetUp() {
-    // We want to make sure that DynamicMessage works (particularly with
-    // extensions) even if we use descriptors that are *not* from compiled-in
-    // types, so we make copies of the descriptors for unittest.proto and
-    // unittest_import.proto.
-    FileDescriptorProto unittest_file;
-    FileDescriptorProto unittest_import_file;
-    FileDescriptorProto unittest_import_public_file;
-    FileDescriptorProto unittest_no_field_presence_file;
-    }
-    
-    // =========================================================================
-    
-    #include 'caffe/proto/caffe.pb.h'
-#include 'caffe/util/format.hpp'
-#include 'caffe/util/math_functions.hpp'
-    
-      /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
-   *
-   * @param datum
-   *    Datum containing the data to be transformed.
-   */
-  vector<int> InferBlobShape(const Datum& datum);
-  /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
-   *    It uses the first element to infer the shape of the blob.
-   *
-   * @param datum_vector
-   *    A vector of Datum containing the data to be transformed.
-   */
-  vector<int> InferBlobShape(const vector<Datum> & datum_vector);
-  /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
-   *    It uses the first element to infer the shape of the blob.
-   *
-   * @param mat_vector
-   *    A vector of Mat containing the data to be transformed.
-   */
-#ifdef USE_OPENCV
-  vector<int> InferBlobShape(const vector<cv::Mat> & mat_vector);
-  /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
-   *
-   * @param cv_img
-   *    cv::Mat containing the data to be transformed.
-   */
-  vector<int> InferBlobShape(const cv::Mat& cv_img);
-#endif  // USE_OPENCV
-    
-      /** The vector that indicates whether each top blob has a non-zero weight in
-   *  the objective function. */
-  vector<Dtype> loss_;
+    // This generic version is used when k is 0.
+template <typename T, typename U>
+inline bool ArrayEq(const T& lhs, const U& rhs) { return lhs == rhs; }
     
     
-    { protected:
-  /**
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
-   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
-   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
-   *      the computed outputs @f$
-   *       y_n = \arg\max\limits_i x_{ni}
-   *      @f$ (for @f$ K = 1 @f$).
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  /// @brief Not implemented (non-differentiable function)
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
-    NOT_IMPLEMENTED;
-  }
-  bool out_max_val_;
-  size_t top_k_;
-  bool has_axis_;
-  int axis_;
+]]
+    
+    
+// Step 2. Use the TEST macro to define your tests.
+//
+// TEST has two parameters: the test case name and the test name.
+// After using the macro, you should define your test logic between a
+// pair of braces.  You can use a bunch of macros to indicate the
+// success or failure of a test.  EXPECT_TRUE and EXPECT_EQ are
+// examples of such macros.  For a complete list, see gtest.h.
+//
+// <TechnicalDetails>
+//
+// In Google Test, tests are grouped into test cases.  This is how we
+// keep test code organized.  You should put logically related tests
+// into the same test case.
+//
+// The test case name and the test name should both be valid C++
+// identifiers.  And you should not use underscore (_) in the names.
+//
+// Google Test guarantees that each test you define is run exactly
+// once, but it makes no guarantee on the order the tests are
+// executed.  Therefore, you should write your tests in such a way
+// that their results don't depend on their order.
+//
+// </TechnicalDetails>
+    
+    class CensusChannelData : public ChannelData {
+ public:
+  grpc_error* Init(grpc_channel_element* elem,
+                   grpc_channel_element_args* args) override;
 };
     
-    /**
- * @brief Provides base for data layers that feed blobs to the Net.
- *
- * TODO(dox): thorough documentation for Forward and proto params.
- */
-template <typename Dtype>
-class BaseDataLayer : public Layer<Dtype> {
- public:
-  explicit BaseDataLayer(const LayerParameter& param);
-  // LayerSetUp: implements common data layer setup functionality, and calls
-  // DataLayerSetUp to do special data layer setup for individual layer types.
-  // This method may not be overridden except by the BasePrefetchingDataLayer.
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void DataLayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top) {}
-  // Data layers have no bottoms, so reshaping is trivial.
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top) {}
-    }
+    using ::opencensus::stats::MeasureDouble;
+using ::opencensus::stats::MeasureInt64;
     
-      /**
-   * @brief Computes the Contrastive error gradient w.r.t. the inputs.
-   *
-   * Computes the gradients with respect to the two input vectors (bottom[0] and
-   * bottom[1]), but not the similarity label (bottom[2]).
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
-   *      This Blob's diff will simply contain the loss_weight* @f$ \lambda @f$,
-   *      as @f$ \lambda @f$ is the coefficient of this layer's output
-   *      @f$\ell_i@f$ in the overall Net loss
-   *      @f$ E = \lambda_i \ell_i + \mbox{other loss terms}@f$; hence
-   *      @f$ \frac{\partial E}{\partial \ell_i} = \lambda_i @f$.
-   *      (*Assuming that this top Blob is not used as a bottom (input) by any
-   *      other layer of the Net.)
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times 1 \times 1) @f$
-   *      the features @f$a@f$; Backward fills their diff with
-   *      gradients if propagate_down[0]
-   *   -# @f$ (N \times C \times 1 \times 1) @f$
-   *      the features @f$b@f$; Backward fills their diff with gradients if
-   *      propagate_down[1]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    #include <unordered_set>
+#include <vector>
     
-    /**
- * @brief Convolves the input image with a bank of learned filters,
- *        and (optionally) adds biases.
- *
- *   Caffe convolves by reduction to matrix multiplication. This achieves
- *   high-throughput and generality of input and filter dimensions but comes at
- *   the cost of memory for matrices. This makes use of efficiency in BLAS.
- *
- *   The input is 'im2col' transformed to a channel K' x H x W data matrix
- *   for multiplication with the N x K' x H x W filter matrix to yield a
- *   N' x H x W output matrix that is then 'col2im' restored. K' is the
- *   input channel * kernel height * kernel width dimension of the unrolled
- *   inputs so that the im2col matrix has a column for each input region to
- *   be filtered. col2im restores the output spatial structure by rolling up
- *   the output channel N' columns of the output matrix.
- */
-template <typename Dtype>
-class ConvolutionLayer : public BaseConvolutionLayer<Dtype> {
- public:
-  /**
-   * @param param provides ConvolutionParameter convolution_param,
-   *    with ConvolutionLayer options:
-   *  - num_output. The number of filters.
-   *  - kernel_size / kernel_h / kernel_w. The filter dimensions, given by
-   *  kernel_size for square filters or kernel_h and kernel_w for rectangular
-   *  filters.
-   *  - stride / stride_h / stride_w (\b optional, default 1). The filter
-   *  stride, given by stride_size for equal dimensions or stride_h and stride_w
-   *  for different strides. By default the convolution is dense with stride 1.
-   *  - pad / pad_h / pad_w (\b optional, default 0). The zero-padding for
-   *  convolution, given by pad for equal dimensions or pad_h and pad_w for
-   *  different padding. Input padding is computed implicitly instead of
-   *  actually padding.
-   *  - dilation (\b optional, default 1). The filter
-   *  dilation, given by dilation_size for equal dimensions for different
-   *  dilation. By default the convolution has dilation 1.
-   *  - group (\b optional, default 1). The number of filter groups. Group
-   *  convolution is a method for reducing parameterization by selectively
-   *  connecting input and output channels. The input and output channel dimensions must be divisible
-   *  by the number of groups. For group @f$ \geq 1 @f$, the
-   *  convolutional filters' input and output channels are separated s.t. each
-   *  group takes 1 / group of the input channels and makes 1 / group of the
-   *  output channels. Concretely 4 input channels, 8 output channels, and
-   *  2 groups separate input channels 1-2 and output channels 1-4 into the
-   *  first group and input channels 3-4 and output channels 5-8 into the second
-   *  group.
-   *  - bias_term (\b optional, default true). Whether to have a bias.
-   *  - engine: convolution has CAFFE (matrix multiplication) and CUDNN (library
-   *    kernels + stream parallelism) engines.
-   */
-  explicit ConvolutionLayer(const LayerParameter& param)
-      : BaseConvolutionLayer<Dtype>(param) {}
-    }
-    
-     protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include 'caffe/layers/lrn_layer.hpp'
-    
-    // Tests that an exit code describes a normal exit with a given exit code.
-class GTEST_API_ ExitedWithCode {
- public:
-  explicit ExitedWithCode(int exit_code);
-  bool operator()(int exit_status) const;
- private:
-  // No implementation - assignment is unsupported.
-  void operator=(const ExitedWithCode& other);
-    }
-    
-      // Gets the summary of the failure message by omitting the stack
-  // trace in it.
-  static std::string ExtractSummary(const char* message);
-    
-    // If the type list contains only one type, you can write that type
-// directly without Types<...>:
-//   INSTANTIATE_TYPED_TEST_CASE_P(My, FooTest, int);
-    
-    // A function to convert T* into linked_ptr<T>
-// Doing e.g. make_linked_ptr(new FooBarBaz<type>(arg)) is a shorter notation
-// for linked_ptr<FooBarBaz<type> >(new FooBarBaz<type>(arg))
-template <typename T>
-linked_ptr<T> make_linked_ptr(T* ptr) {
-  return linked_ptr<T>(ptr);
-}
-    
-     private:
-  // No implementation - assignment is unsupported.
-  void operator=(const ValueArray26& other);
-    
-      bool check_for_leaks = false;
-  if (argc > 1 && strcmp(argv[1], '--check_for_leaks') == 0 )
-    check_for_leaks = true;
-  else
-    printf('%s\n', 'Run this program with --check_for_leaks to enable '
-           'custom leak checking in the tests.');
-    
-    // Tests factorial of 0.
-TEST(FactorialTest, Zero) {
-  EXPECT_EQ(1, Factorial(0));
-}
-    
-     protected:
-  /**
-   * \struct  PredictionCacheEntry
-   *
-   * \brief Contains pointer to input matrix and associated cached predictions.
-   */
-  struct PredictionCacheEntry {
-    std::shared_ptr<DMatrix> data;
-    HostDeviceVector<bst_float> predictions;
-  };
-    
-    namespace xgboost {
-/*!
- * \brief interface of tree update module, that performs update of a tree.
- */
-class TreeUpdater {
- public:
-  /*! \brief virtual destructor */
-  virtual ~TreeUpdater() = default;
-  /*!
-   * \brief Initialize the updater with given arguments.
-   * \param args arguments to the objective function.
-   */
-  virtual void Init(const std::vector<std::pair<std::string, std::string> >& args) = 0;
-  /*!
-   * \brief perform update to the tree models
-   * \param gpair the gradient pair statistics of the data
-   * \param data The data matrix passed to the updater.
-   * \param trees references the trees to be updated, updater will change the content of trees
-   *   note: all the trees in the vector are updated, with the same statistics,
-   *         but maybe different random seeds, usually one tree is passed in at a time,
-   *         there can be multiple trees when we train random forest style model
-   */
-  virtual void Update(HostDeviceVector<GradientPair>* gpair,
-                      DMatrix* data,
-                      const std::vector<RegTree*>& trees) = 0;
+    namespace grpc {
+namespace {
     }
     }
-    
-    namespace xgboost {
-namespace common {
-/*! \brief buffer reader of the stream that allows you to get */
-class StreamBufferReader {
- public:
-  explicit StreamBufferReader(size_t buffer_size)
-      :stream_(NULL),
-       read_len_(1), read_ptr_(1) {
-    buffer_.resize(buffer_size);
-  }
-  /*!
-   * \brief set input stream
-   */
-  inline void set_stream(dmlc::Stream *stream) {
-    stream_ = stream;
-    read_len_ = read_ptr_ = 1;
-  }
-  /*!
-   * \brief allows quick read using get char
-   */
-  inline char GetChar(void) {
-    while (true) {
-      if (read_ptr_ < read_len_) {
-        return buffer_[read_ptr_++];
-      } else {
-        read_len_ = stream_->Read(&buffer_[0], buffer_.length());
-        if (read_len_ == 0) return EOF;
-        read_ptr_ = 0;
-      }
-    }
-  }
-  /*! \brief whether we are reaching the end of file */
-  inline bool AtEnd(void) const {
-    return read_len_ == 0;
-  }
-    }
-    }
-    }
-    
-          cbw.Write(buffer.data(), input.begin(), input.end());
     
     
     {
-    {/*!
- * \brief Quantile sketch use WXQSummary
- * \tparam DType type of data content
- * \tparam RType type of rank
- */
-template<typename DType, typename RType = unsigned>
-class WXQuantileSketch :
-      public QuantileSketchTemplate<DType, RType, WXQSummary<DType, RType> > {
-};
-/*!
- * \brief Quantile sketch use WQSummary
- * \tparam DType type of data content
- * \tparam RType type of rank
- */
-template<typename DType, typename RType = unsigned>
-class GKQuantileSketch :
-      public QuantileSketchTemplate<DType, RType, GKSummary<DType, RType> > {
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_QUANTILE_H_
-
+    {}  // namespace load_reporter
+}  // namespace grpc
     
-      std::vector<size_t> feature_counts_;
-  std::vector<ColumnType> type_;
-  std::vector<uint32_t> index_;  // index_: may store smaller integers; needs padding
-  std::vector<size_t> row_ind_;
-  std::vector<ColumnBoundary> boundary_;
+    
+    {
+    {				default:
+					assert(0);
+					break;
+				}
+				break;
+			}
+			break;
+    
+    // Constants:
+//  for (int i = 1; i< 32; ++i)
+//    printf('static const int cospi_%d_64 = %.0f;\n', i,
+//           round(16384 * cos(i*M_PI/64)));
+// Note: sin(k*Pi/64) = cos((32-k)*Pi/64)
+static const tran_high_t cospi_1_64  = 16364;
+static const tran_high_t cospi_2_64  = 16305;
+static const tran_high_t cospi_3_64  = 16207;
+static const tran_high_t cospi_4_64  = 16069;
+static const tran_high_t cospi_5_64  = 15893;
+static const tran_high_t cospi_6_64  = 15679;
+static const tran_high_t cospi_7_64  = 15426;
+static const tran_high_t cospi_8_64  = 15137;
+static const tran_high_t cospi_9_64  = 14811;
+static const tran_high_t cospi_10_64 = 14449;
+static const tran_high_t cospi_11_64 = 14053;
+static const tran_high_t cospi_12_64 = 13623;
+static const tran_high_t cospi_13_64 = 13160;
+static const tran_high_t cospi_14_64 = 12665;
+static const tran_high_t cospi_15_64 = 12140;
+static const tran_high_t cospi_16_64 = 11585;
+static const tran_high_t cospi_17_64 = 11003;
+static const tran_high_t cospi_18_64 = 10394;
+static const tran_high_t cospi_19_64 = 9760;
+static const tran_high_t cospi_20_64 = 9102;
+static const tran_high_t cospi_21_64 = 8423;
+static const tran_high_t cospi_22_64 = 7723;
+static const tran_high_t cospi_23_64 = 7005;
+static const tran_high_t cospi_24_64 = 6270;
+static const tran_high_t cospi_25_64 = 5520;
+static const tran_high_t cospi_26_64 = 4756;
+static const tran_high_t cospi_27_64 = 3981;
+static const tran_high_t cospi_28_64 = 3196;
+static const tran_high_t cospi_29_64 = 2404;
+static const tran_high_t cospi_30_64 = 1606;
+static const tran_high_t cospi_31_64 = 804;
+    
+    OutPt* ExcludeOp(OutPt* op)
+{
+  OutPt* result = op->Prev;
+  result->Next = op->Next;
+  op->Next->Prev = result;
+  result->Idx = 0;
+  return result;
+}
+//------------------------------------------------------------------------------
+    
+    /* Compute autocorrelation */
+void silk_autocorr(
+    opus_int32                  *results,           /* O    Result (length correlationCount)                            */
+    opus_int                    *scale,             /* O    Scaling of the correlation vector                           */
+    const opus_int16            *inputData,         /* I    Input data to correlate                                     */
+    const opus_int              inputDataSize,      /* I    Length of input                                             */
+    const opus_int              correlationCount,   /* I    Number of correlation taps to compute                       */
+    int                         arch                /* I    Run-time architecture                                       */
+);
+    
+    namespace CNTK
+{
+    CNTK_API const std::wstring Learner::MinibatchSizeKey = L'MinibatchSize';
+    ///
+    /// A special value that can be used for the minibatchSize to indicate that the reference minibatch size is not specified.
+    ///
+    CNTK_API const size_t Learner::IgnoredMinibatchSize = TrainingParameterSchedule<double>::IgnoredMinibatchSize;
+    }
+    
+        class LearnerRMSProp : public LearnerBase
+    {
+    public:
+    }
+    
+    
+    {        return MakeSharedObject<NDArrayView>(GetDataType(), Device(), GetStorageFormat(), Shape(), IsReadOnly() || readOnly, tensorView);
+    }
+    
+            // take the chance to validate inputNodes
+        let allInputsSet = set<ComputationNodeBasePtr>(allInputs.begin(), allInputs.end());
+        for (let& input : inputNodes)
+            if (allInputsSet.find(input) == allInputsSet.end())
+                InvalidArgument('CloneFunction: No specified output depends on the specified input %ls.', input->NodeDescription().c_str());
+        // TODO: Is this really always an error? Are there valid cases where one would over-specify possible input nodes, even if they are not used/needed?
+    
+    // -----------------------------------------------------------------------
+// LookupTableNode (embedding matrix, bag-of-word representation of the inputs)
+// Implements an embedding. The input vector can consist of multiple stacked
+// This is a tensor product where the matrix width may be an integer fraction of the features.
+// If it is, then the matrix will be replicated.
+// This is the same as if the input data were a tensor where the same matrix is applied to each column of the tensor.
+// TimesNode can do that.
+// -----------------------------------------------------------------------
