@@ -1,10 +1,41 @@
 
         
-                # Download a file from the remote machine to the local machine.
+          config.on_event :test_run_finished do
+    f.print_worst_offenders
+  end
+end
+
+    
+      matter = matter.join.chomp
+  content = \
+    if !input_hash['input'] || !input_hash['filter']
+      then input_hash['content']
+    else '{{ #{input_hash['input']} | ' \
+        '#{input_hash['filter']} }}'
+    end
+    
+        # Deletes a machine by UUID.
+    #
+    # The machine being deleted with this UUID must either be locked
+    # by this index or must be unlocked.
+    #
+    # @param [Entry] entry The entry to delete.
+    # @return [Boolean] true if delete is successful
+    def delete(entry)
+      return true if !entry.id
+    
+            # This is called as a last-minute hook that allows the configuration
+        # object to finalize itself before it will be put into use. This is
+        # a useful place to do some defaults in the case the user didn't
+        # configure something or so on.
         #
-        # @param [String] from Path of the file on the remote machine.
-        # @param [String] to Path of where to save the file locally.
-        def download(from, to)
+        # An example of where this sort of thing is used or has been used:
+        # the 'vm' configuration key uses this to make sure that at least
+        # one sub-VM has been defined: the default VM.
+        #
+        # The configuration object is expected to mutate itself.
+        def finalize!
+          # Default implementation is to do nothing.
         end
     
               # Set all of our instance variables on the new class
@@ -14,136 +45,117 @@
               # configuration classes to still hold around internal state
               # that isn't propagated.
               if !key.to_s.start_with?('@__')
-                result.instance_variable_set(key, obj.instance_variable_get(key))
+                # Don't set the value if it is the unset value, either.
+                value = obj.instance_variable_get(key)
+                result.instance_variable_set(key, value) if value != UNSET_VALUE
               end
             end
           end
     
-              # Return the registry
-          data[:provisioners]
-        end
+    module Vagrant
+  module Plugin
+    module V2
+      # This is the superclass for all V2 plugins.
+      class Plugin
+        # Special marker that can be used for action hooks that matches
+        # all action sequences.
+        ALL_ACTIONS = :__all_actions__
     
-          DIRECTIVES = %i(base_uri child_src connect_src default_src
-                      font_src form_action frame_ancestors frame_src
-                      img_src manifest_src media_src object_src
-                      plugin_types referrer reflected_xss report_to
-                      report_uri require_sri_for sandbox script_src
-                      style_src worker_src).freeze
-    
-          def has_vector?(request, headers)
-        return false if request.xhr?
-        return false if options[:allow_if] && options[:allow_if].call(request.env)
-        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
-        origin(request.env).nil? and referrer(request.env) != request.host
-      end
-    
-        headers = get('/', {}, 'wants' => 'text/html').headers
-    expect(headers['Content-Security-Policy']).to be_nil
-    expect(headers['Content-Security-Policy-Report-Only']).to eq('connect-src 'self'; default-src none; img-src 'self'; report-uri /my_amazing_csp_report_parser; script-src 'self'; style-src 'self'')
-  end
-    
-          def authorize_for_order
-        @order = Spree::Order.find_by(number: order_id)
-        authorize! :read, @order, order_token
-      end
+        # Get a value by the given key.
+    #
+    # This will evaluate the block given to `register` and return the
+    # resulting value.
+    def get(key)
+      return nil if !@items.key?(key)
+      return @results_cache[key] if @results_cache.key?(key)
+      @results_cache[key] = @items[key].call
     end
+    alias :[] :get
+    
+      def process_salmon
+    SalmonWorker.perform_async(@account.id, payload.force_encoding('UTF-8'))
   end
 end
 
     
-            def create
-          authorize! :create, Spree::OptionValue
-          @option_value = scope.new(option_value_params)
-          if @option_value.save
-            render :show, status: 201
-          else
-            invalid_resource!(@option_value)
-          end
-        end
-    
-              if error
-            unprocessable_entity('#{Spree.t(:shipment_transfer_errors_occured, scope: 'api')} \n#{error}')
-          else
-            @original_shipment.transfer_to_shipment(@variant, @quantity, @target_shipment)
-            render json: { success: true, message: Spree.t(:shipment_transfer_success) }, status: 201
-          end
-        end
-    
-            def create
-          authorize! :create, StockLocation
-          @stock_location = StockLocation.new(stock_location_params)
-          if @stock_location.save
-            respond_with(@stock_location, status: 201, default_template: :show)
-          else
-            invalid_resource!(@stock_location)
-          end
-        end
-    
-            def taxonomy_params
-          if params[:taxonomy] && !params[:taxonomy].empty?
-            params.require(:taxonomy).permit(permitted_taxonomy_attributes)
-          else
-            {}
-          end
-        end
-      end
-    end
+      def subscription
+    @_subscription ||= @account.subscription(
+      api_subscription_url(@account.id)
+    )
   end
-end
-
     
-            def destroy
-          authorize! :destroy, user
-          user.destroy
-          respond_with(user, status: 204)
-        end
-    
-          private
-    
-            begin
-          File.open(fp.path, 'a') { |tmpfp| fp.reopen(tmpfp) }
-          fp.sync = true
-          nr += 1
-        rescue IOError, Errno::EBADF
-          # not much we can do...
-        end
-      end
-      nr
-    rescue RuntimeError => ex
-      # RuntimeError: ObjectSpace is disabled; each_object will only work with Class, pass -X+O to enable
-      puts 'Unable to reopen logs: #{ex.message}'
-    end
-    
-          def add(klass, *args)
-        remove(klass) if exists?(klass)
-        entries << Entry.new(klass, *args)
-      end
-    
-    module Sidekiq
-  ##
-  # This module is part of Sidekiq core and not intended for extensions.
-  #
-  module Util
-    include ExceptionHandler
-    
-        def empty_file?
-      File.exist?(@filepath) && File.size(@filepath) == 0
-    end
-    
-        def cropping dst, ratio, scale
-      if ratio.horizontal? || ratio.square?
-        '%dx%d+%d+%d' % [ dst.width, dst.height, 0, (self.height * scale - dst.height) / 2 ]
+          if @user.persisted?
+        sign_in_and_redirect @user, event: :authentication
+        set_flash_message(:notice, :success, kind: provider_id.capitalize) if is_navigational_format?
       else
-        '%dx%d+%d+%d' % [ dst.width, dst.height, (self.width * scale - dst.width) / 2, 0 ]
+        session['devise.#{provider}_data'] = request.env['omniauth.auth']
+        redirect_to new_user_registration_url
       end
     end
+  end
     
-        def make
-      geometry = GeometryParser.new(geometry_string.strip).make
-      geometry || raise(Errors::NotIdentifiedByImageMagickError.new)
+          it 'displays Float::INFINITY as Inf' do
+        format('%a', Float::INFINITY).should == 'Inf'
+        format('%a', -Float::INFINITY).should == '-Inf'
+      end
+    
+        t.wakeup
+    t.value.should == 5
+  end
+end
+    
+        $?.should be_an_instance_of Process::Status
+    $?.success?.should == true
+  end
+    
+      it 'does not raise an error on a tainted, frozen object' do
+    o = Object.new.taint.freeze
+    o.taint.should equal(o)
+  end
+    
+      it 'calls #to_path on second argument when passed ?d and a directory' do
+    p = mock('path')
+    p.should_receive(:to_path).and_return @dir
+    Kernel.test(?d, p)
+  end
+end
+    
+    class FixPhotosShareVisibilities < ActiveRecord::Migration[4.2]
+  class Photo < ApplicationRecord
+  end
+    
+      class FetchWebfinger < Base
+    def perform(*_args)
+      # don't do real discovery in cucumber
+    end
+  end
+end
+
+    
+        it 'generates a jasmine fixture', fixture: true do
+      session[:mobile_view] = true
+      get :new, format: :mobile
+      save_fixture(html_for('body'), 'conversations_new_mobile')
+    end
+  end
+end
+
+    
+    describe StatusMessagesController, :type => :controller do
+  describe '#bookmarklet' do
+    before do
+      sign_in bob, scope: :user
     end
     
-        # Returns the filename, the same way as ':basename.:extension' would.
-    def filename attachment, style_name
-      [ basename(attachment, style_name), extension(attachment, style_name) ].delete_if(&:empty?).join('.'.freeze)
+    describe ParticipationsController, :type => :controller do
+  before do
+    allow(@controller).to receive(:current_user).and_return(alice)
+    sign_in alice, scope: :user
+  end
+    
+          it 'returns an empty array for a post visible to the user' do
+        sign_in(bob, scope: :user)
+        get :index, params: {post_id: @post.id}, format: :json
+        expect(JSON.parse(response.body)).to eq([])
+      end
     end
