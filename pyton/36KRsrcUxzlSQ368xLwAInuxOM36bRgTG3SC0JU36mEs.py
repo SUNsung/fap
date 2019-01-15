@@ -1,73 +1,172 @@
 
         
-        def os_constant(key):
-    # XXX TODO: In the future, this could return different constants
-    #           based on what OS we are running under.  To see an
-    #           approach to how to handle different OSes, see the
-    #           apache version of this file.  Currently, we do not
-    #           actually have any OS-specific constants on Nginx.
-    '''
-    Get a constant value for operating system
+            def set(self, results, query):
+        '''Set the result for the given query key in the cache.
     
-        def setUp(self):
-        from acme.errors import PollError
-        self.timeout = PollError(
-            exhausted=set([mock.sentinel.AR]),
-            updated={})
-        self.invalid = PollError(exhausted=set(), updated={
-            mock.sentinel.AR: mock.sentinel.AR2})
     
-    from acme import client
-from acme import messages
+class Level(object):
     
-        def setUp(self):
-        self.base_dir = '/example_path'
-        self.vhosts = util.get_vh_truth(
-            self.base_dir, 'debian_apache_2_4/multiple_vhosts')
+        def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer)
+        ]
     
-    #Some examples
+        elif not RESULT and ('info_dict' in test and 'age_limit' in test['info_dict'] and
+                         test['info_dict']['age_limit'] == 18):
+        print('\nPotential false negative: {0}'.format(test['name']))
     
-            if best_split != 0:
-            left_X = X[:best_split]
-            left_y = y[:best_split]
-            right_X = X[best_split:]
-            right_y = y[best_split:]
+    versions_info = json.load(open('update/versions.json'))
+if 'signature' in versions_info:
+    del versions_info['signature']
     
-      3. find centroids and clusters using kmeans function.
-  
-        centroids, cluster_assignment = kmeans(
-            X, 
-            k, 
-            initial_centroids, 
-            maxiter=400,
-            record_heterogeneity=heterogeneity, 
-            verbose=True # whether to print logs in console or not.(default=False)
-            )
-  
-  
-  4. Plot the loss function, hetrogeneity values for every iteration saved in hetrogeneity list.
-        plot_heterogeneity(
-            heterogeneity, 
-            k
-        )
-  
-  5. Have fun..
-  
+    if __name__ == '__main__':
+    main()
+
+    
+    
+# Import youtube_dl
+ROOT_DIR = os.path.join(os.path.dirname(__file__), '..')
+sys.path.insert(0, ROOT_DIR)
+import youtube_dl
+    
+            if in_options:
+            if line.lstrip().startswith('-'):
+                split = re.split(r'\s{2,}', line.lstrip())
+                # Description string may start with `-` as well. If there is
+                # only one piece then it's a description bit not an option.
+                if len(split) > 1:
+                    option, description = split
+                    split_option = option.split(' ')
+    
+    
+def build_completion(opt_parser):
+    opts = [opt for group in opt_parser.option_groups
+            for opt in group.option_list]
+    opts_file = [opt for opt in opts if opt.metavar == 'FILE']
+    opts_dir = [opt for opt in opts if opt.metavar == 'DIR']
+    
+                        if try_num == RETRIES:
+                        report_warning('%s failed due to network errors, skipping...' % tname)
+                        return
+    
+    # Prepare model model saving directory.
+save_dir = os.path.join(os.getcwd(), 'saved_models')
+model_name = 'cifar10_%s_model.{epoch:03d}.h5' % model_type
+if not os.path.isdir(save_dir):
+    os.makedirs(save_dir)
+filepath = os.path.join(save_dir, model_name)
+    
+    
+def test_cifar():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+        assert len(x_train) == len(y_train) == 50000
+        assert len(x_test) == len(y_test) == 10000
+        (x_train, y_train), (x_test, y_test) = cifar100.load_data('fine')
+        assert len(x_train) == len(y_train) == 50000
+        assert len(x_test) == len(y_test) == 10000
+        (x_train, y_train), (x_test, y_test) = cifar100.load_data('coarse')
+        assert len(x_train) == len(y_train) == 50000
+        assert len(x_test) == len(y_test) == 10000
+    
+            # Arguments
+            x: input data, as a Numpy array or list of Numpy arrays
+                (if the model has multiple inputs).
+            batch_size: integer.
+            verbose: verbosity mode, 0 or 1.
+    
+    model.compile(loss='binary_crossentropy',
+              optimizer='adam',
+              metrics=['accuracy'])
+model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=epochs,
+          validation_data=(x_test, y_test))
+
+    
+    usage:
+    
+        requires_project = False
+    crawler_process = None
+    
+    
+    
+        requires_project = True
+    
+            spidercls = DefaultSpider
+        spider_loader = self.crawler_process.spider_loader
+        if opts.spider:
+            spidercls = spider_loader.load(opts.spider)
+        else:
+            spidercls = spidercls_for_request(spider_loader, request, spidercls)
+        self.crawler_process.crawl(spidercls, start_requests=lambda: [request])
+        self.crawler_process.start()
+
+    
+        def run(self, args, opts):
+        if opts.verbose:
+            versions = scrapy_components_versions()
+            width = max(len(n) for (n, _) in versions)
+            patt = '%-{}s : %s'.format(width)
+            for name, version in versions:
+                print(patt % (name, version))
+        else:
+            print('Scrapy %s' % scrapy.__version__)
+    
+    ans = input('View full message?')
+if ans.lower()[0] == 'n':
+    sys.exit()
+    
+    import random
+    
+            self.A = str(A)
+        self.B = str(B)
+    
+    
+class SubArray:
+    
+    
+class Ellipse(Graphic):
+    def __init__(self, name):
+        self.name = name
+    
+    from __future__ import print_function
+    
+        def setTM(self, tm):
+        self._tm = tm
+    
+    
+def memento(obj, deep=False):
+    state = deepcopy(obj.__dict__) if deep else copy(obj.__dict__)
+    
+        def toggle_amfm(self):
+        self.state.toggle_amfm()
+    
+        def get_current_time_as_html_fragment(self):
+        current_time = self.time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
 '''
-from __future__ import print_function
-from sklearn.metrics import pairwise_distances
-import numpy as np
     
-    '''
-* Wondering how this method works !
-* It's pretty simple.
-* Let's say you need to calculate a ^ b
-* RULE 1 : a ^ b = (a*a) ^ (b/2) ---- example : 4 ^ 4 = (4*4) ^ (4/2) = 16 ^ 2
-* RULE 2 : IF b is ODD, then ---- a ^ b = a * (a ^ (b - 1)) :: where (b - 1) is even.
-* Once b is even, repeat the process to get a ^ b
-* Repeat the process till b = 1 OR b = 0, because a^1 = a AND a^0 = 1
-*
-* As far as the modulo is concerned,
-* the fact : (a*b) % c = ((a%c) * (b%c)) % c
-* Now apply RULE 1 OR 2 whichever is required.
-'''
+        def on_fault_trigger(self):
+        self._hsm._next_state('suspect')
+        self._hsm._send_diagnostics_request()
+        self._hsm._raise_alarm()
+    
+    
+if __name__ == '__main__':
+    simple_hello = TextTag('hello, world!')
+    special_hello = ItalicWrapper(BoldWrapper(simple_hello))
+    print('before:', simple_hello.render())
+    print('after:', special_hello.render())
+    
+    *Where is the pattern used practically?
+This pattern can be seen in the Python standard library when we use
+the isdir function. Although a user simply uses this function to know
+whether a path refers to a directory, the system makes a few
+operations and calls other modules (e.g., os.stat) to give the result.
