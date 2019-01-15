@@ -1,292 +1,311 @@
 
         
-            # L = -KL + log p(x|z), to maximize bound on likelihood
-    # -L = KL - log p(x|z), to minimize bound on NLL
-    # so 'KL cost' is postive KL divergence
-    z0_bxu = post_zs[0].sample
-    logq_bxu = post_zs[0].logp(z0_bxu)
-    logp_bxu = prior_z_process.logp_t(z0_bxu)
-    z_tm1_bxu = z0_bxu
-    for z_t in post_zs[1:]:
-      # posterior is independent in time, prior is not
-      z_t_bxu = z_t.sample
-      logq_bxu += z_t.logp(z_t_bxu)
-      logp_bxu += prior_z_process.logp_t(z_t_bxu, z_tm1_bxu)
-      z_tm1 = z_t_bxu
-    
-      This version is specialized for the generator, but isn't as fast, so
-  we have two.  Note this allows for l2 regularization on the recurrent
-  weights, but also implicitly rescales the inputs via the 1/sqrt(input)
-  scaling in the linear helper routine to be large magnitude, if there are
-  fewer inputs than recurrent state.
-    
-    def get_data_batch(batch_size, T, rng, u_std):
-  u_bxt = rng.randn(batch_size, T) * u_std
-  running_sum_b = np.zeros([batch_size])
-  labels_bxt = np.zeros([batch_size, T])
-  for t in xrange(T):
-    running_sum_b += u_bxt[:, t]
-    labels_bxt[:, t] += running_sum_b
-  labels_bxt = np.clip(labels_bxt, -1, 1)
-  return u_bxt, labels_bxt
-    
-      # Compute the PCs.
-  all_data_mean_nx1 = np.mean(all_data_nxtc, axis=1, keepdims=True)
-  all_data_zm_nxtc = all_data_nxtc - all_data_mean_nx1
-  corr_mat_nxn = np.dot(all_data_zm_nxtc, all_data_zm_nxtc.T)
-  evals_n, evecs_nxn = np.linalg.eigh(corr_mat_nxn)
-  sidxs = np.flipud(np.argsort(evals_n)) # sort such that 0th is highest
-  evals_n = evals_n[sidxs]
-  evecs_nxn = evecs_nxn[:,sidxs]
-    
-        if np.isnan(log_perp):
-      sys.stderr.error('log_perplexity is Nan.\n')
-    else:
-      sum_num += log_perp * weights.mean()
-      sum_den += weights.mean()
-    if sum_den > 0:
-      perplexity = np.exp(sum_num / sum_den)
-    
-    
-def imdb_raw_data(data_path=None):
-  '''Load IMDB raw data from data directory 'data_path'.
-  Reads IMDB tf record files containing integer ids,
-  and performs mini-batching of the inputs.
-  Args:
-    data_path: string path to the directory where simple-examples.tgz has
-      been extracted.
-  Returns:
-    tuple (train_data, valid_data)
-    where each of the data objects can be passed to IMDBIterator.
-  '''
-    
-    
-# TODO(adai): IMDB labels placeholder to model.
-def create_generator(hparams,
-                     inputs,
-                     targets,
-                     present,
-                     is_training,
-                     is_validating,
-                     reuse=None):
-  '''Create the Generator model specified by the FLAGS and hparams.
-    
-        # Critic loss calculated from the estimated value function \hat{V}(s)
-    # versus the true value function V*(s).
-    critic_loss = create_critic_loss(cumulative_rewards, estimated_values,
-                                     present)
-    
-          elif FLAGS.generator_model.startswith('seq2seq'):
-        load_ckpt = tf.train.latest_checkpoint(FLAGS.language_model_ckpt_dir)
-        print('Restoring Generator from %s.' % load_ckpt)
-        tf.logging.info('Restoring Generator from %s.' % load_ckpt)
-        gen_encoder_init_saver = init_savers['gen_encoder_init_saver']
-        gen_decoder_init_saver = init_savers['gen_decoder_init_saver']
-        gen_encoder_init_saver.restore(sess, load_ckpt)
-        gen_decoder_init_saver.restore(sess, load_ckpt)
-    
-    
-@pytest.fixture
-def source_root():
-    return Path(__file__).parent.parent.resolve()
-    
-    
-def test_on_run_after_other_commands(usage_tracker_io, shell_pid, shell, logs):
-    shell_pid.return_value = 12
-    shell.get_history.return_value = ['fuck', 'ls']
-    _change_tracker(usage_tracker_io, 12)
-    main()
-    logs.how_to_configure_alias.assert_called_once()
-    
-    
-def how_to_configure(proc, TIMEOUT):
-    proc.sendline(u'fuck')
-    assert proc.expect([TIMEOUT, u'alias isn't configured'])
+        # TODO: ensure that history changes.
 
     
-    python_2 = ('thefuck/python2-zsh',
-            u'''FROM python:2
-                RUN apt-get update
-                RUN apt-get install -yy zsh''',
-            u'sh')
     
-     edit-sources - edit the source information file
+@pytest.fixture(params=containers)
+def proc(request, spawnu, TIMEOUT):
+    proc = spawnu(*request.param)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(u'tcsh')
+    proc.sendline(u'setenv PYTHONIOENCODING utf8')
+    proc.sendline(u'eval `thefuck --alias`')
+    return proc
+    
+    
+@pytest.mark.parametrize('command, new_command, packages', [
+    (Command('vim', ''), 'sudo apt-get install vim && vim',
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('convert', ''), 'sudo apt-get install imagemagick && convert',
+     [('imagemagick', 'main'),
+      ('graphicsmagick-imagemagick-compat', 'universe')]),
+    (Command('sudo vim', ''), 'sudo apt-get install vim && sudo vim',
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('sudo convert', ''), 'sudo apt-get install imagemagick && sudo convert',
+     [('imagemagick', 'main'),
+      ('graphicsmagick-imagemagick-compat', 'universe')])])
+def test_get_new_command(mocker, command, new_command, packages):
+    mocker.patch('thefuck.rules.apt_get._get_packages',
+                 create=True, return_value=packages)
+    
+    
+@pytest.mark.parametrize('script, output', [
+    ('apt', invalid_operation('saerch')),
+    ('apt-get', invalid_operation('isntall')),
+    ('apt-cache', invalid_operation('rumove'))])
+def test_match(script, output):
+    assert match(Command(script, output))
+    
+    match_output = '''
+Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
+Hit:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease
+Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
+Hit:4 http://security.ubuntu.com/ubuntu zesty-security InRelease
+Hit:5 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
+Hit:6 https://download.docker.com/linux/ubuntu zesty InRelease
+Hit:7 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
+Fetched 89.2 kB in 0s (122 kB/s)
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+8 packages can be upgraded. Run 'apt list --upgradable' to see them.
 '''
-apt_operations = ['list', 'search', 'show', 'update', 'install', 'remove',
-                  'upgrade', 'full-upgrade', 'edit-sources']
+    
+      aws help
+  aws <command> help
+  aws <command> <subcommand> help
+aws: error: argument command: Invalid choice, valid choices are:
     
     
-def test_get_new_command():
-    new_command = get_new_command(Command('apt list --upgradable', match_output))
-    assert new_command == 'apt upgrade'
+@pytest.mark.skipif(_is_not_okay_to_test(),
+                    reason='No need to run if there\'s no formula')
+def test_match(brew_no_available_formula, brew_already_installed,
+               brew_install_no_argument):
+    assert match(Command('brew install elsticsearch',
+                         brew_no_available_formula))
+    assert not match(Command('brew install git',
+                             brew_already_installed))
+    assert not match(Command('brew install', brew_install_no_argument))
     
     
-def test_not_match():
-    assert not match(Command('aws dynamodb invalid', no_suggestions))
+class Environment(object):
+    '''
+    Information about the execution context
+    (standard streams, config directory, etc).
     
-                gc.collect()
-            print('- benchmarking LassoLars')
-            clf = LassoLars(alpha=alpha, fit_intercept=False,
-                            normalize=False, precompute=precompute)
-            tstart = time()
-            clf.fit(X, Y)
-            lars_lasso_results.append(time() - tstart)
+        def format_headers(self, headers):
+        for p in self.enabled_plugins:
+            headers = p.format_headers(headers)
+        return headers
     
-    import numpy as np
-from numpy import random as nr
+            if env.stdout_isatty:
+            # Use the encoding supported by the terminal.
+            output_encoding = env.stdout_encoding
+        else:
+            # Preserve the message encoding.
+            output_encoding = self.msg.encoding
     
-            # Create flat baselines to compare the variation over batch size
-        all_times['pca'].extend([results_dict['pca']['time']] *
-                                len(batch_sizes))
-        all_errors['pca'].extend([results_dict['pca']['error']] *
-                                 len(batch_sizes))
-        all_times['rpca'].extend([results_dict['rpca']['time']] *
-                                 len(batch_sizes))
-        all_errors['rpca'].extend([results_dict['rpca']['error']] *
-                                  len(batch_sizes))
-        for batch_size in batch_sizes:
-            ipca = IncrementalPCA(n_components=n_components,
-                                  batch_size=batch_size)
-            results_dict = {k: benchmark(est, data) for k, est in [('ipca',
-                                                                   ipca)]}
-            all_times['ipca'].append(results_dict['ipca']['time'])
-            all_errors['ipca'].append(results_dict['ipca']['error'])
+        # Output processing
+    def get_formatters(self):
+        return [plugin for plugin in self
+                if issubclass(plugin, FormatterPlugin)]
     
-        (opts, args) = op.parse_args()
-    if len(args) > 0:
-        op.error('this script takes no arguments.')
-        sys.exit(1)
-    opts.n_components = type_auto_or_int(opts.n_components)
-    opts.density = type_auto_or_float(opts.density)
-    selected_transformers = opts.selected_transformers.split(',')
     
-        fn = os.path.relpath(fn,
-                         start=os.path.dirname(__import__(package).__file__))
+def humanize_bytes(n, precision=2):
+    # Author: Doug Latornell
+    # Licence: MIT
+    # URL: http://code.activestate.com/recipes/577081/
+    '''Return a humanized string representation of a number of bytes.
+    
+    from httpie.input import SEP_CREDENTIALS
+from httpie.plugins import AuthPlugin, plugin_manager
+from utils import http, HTTP_OK
+    
+        def call(self, inputs):
+        inputs -= K.mean(inputs, axis=1, keepdims=True)
+        inputs = K.l2_normalize(inputs, axis=1)
+        pos = K.relu(inputs)
+        neg = K.relu(-inputs)
+        return K.concatenate([pos, neg], axis=1)
+    
+    import keras
+from keras.callbacks import TensorBoard
+from keras.datasets import mnist
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Flatten
+from keras.layers import Conv2D, MaxPooling2D
+from keras import backend as K
+    
+        dirname = 'cifar-100-python'
+    origin = 'https://www.cs.toronto.edu/~kriz/cifar-100-python.tar.gz'
+    path = get_file(dirname, origin=origin, untar=True)
+    
+        def get_config(self):
+        return {'l1': float(self.l1),
+                'l2': float(self.l2)}
+    
+    
+class MSE_MAE_loss:
+    '''Loss function with internal state, for testing serialization code.'''
+    def __init__(self, mse_fraction):
+        self.mse_fraction = mse_fraction
+    
+    batch_size = 64  # Batch size for training.
+epochs = 100  # Number of epochs to train for.
+latent_dim = 256  # Latent dimensionality of the encoding space.
+num_samples = 10000  # Number of samples to train on.
+# Path to the data txt file on disk.
+data_path = 'fra-eng/fra.txt'
+    
     try:
-        lineno = inspect.getsourcelines(obj)[1]
-    except Exception:
-        lineno = ''
-    return url_fmt.format(revision=revision, package=package,
-                          path=fn, lineno=lineno)
+    import boto3
+    import botocore
+    HAS_BOTO3 = True
+except ImportError:
+    HAS_BOTO3 = False
     
+    # Fail if the server certificate name was not found
+- iam_server_certificate_facts:
+    name: production-cert
+  register: server_cert
+  failed_when: '{{ server_cert.results | length == 0 }}'
+'''
     
-if not os.path.exists(DATA_FOLDER):
+        CLIENT_MINIMUM_VERSION = '0.22.0'
+    if not check_min_pkg_version('google-cloud-pubsub', CLIENT_MINIMUM_VERSION):
+        module.fail_json(msg='Please install google-cloud-pubsub library version %s' % CLIENT_MINIMUM_VERSION)
     
-    # Scrapy version
-import pkgutil
-__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
-version_info = tuple(int(v) if v.isdigit() else v
-                     for v in __version__.split('.'))
-del pkgutil
+        return result_state, affected_apps
     
-        def _list_templates(self):
-        print('Available templates:')
-        for filename in sorted(os.listdir(self.templates_dir)):
-            if filename.endswith('.tmpl'):
-                print('  %s' % splitext(filename)[0])
+    DOCUMENTATION = '''
+---
+module: vca_nat
+short_description: add remove nat rules in a gateway  in a vca
+description:
+  - Adds or removes nat rules from a gateway in a vca environment
+version_added: '2.0'
+author: Peter Sprygada (@privateip)
+options:
+    purge_rules:
+      description:
+        - If set to true, it will delete all rules in the gateway that are not given as parameter to this module.
+      type: bool
+      default: false
+    nat_rules:
+      description:
+        - A list of rules to be added to the gateway, Please see examples on valid entries
+      required: True
+      default: false
+extends_documentation_fragment: vca.documentation
+'''
     
-            if opts.meta:
-            try:
-                opts.meta = json.loads(opts.meta)
-            except ValueError:
-                raise UsageError('Invalid -m/--meta value, pass a valid json string to -m or --meta. ' \
-                                'Example: --meta='{\'foo\' : \'bar\'}'', print_help=False)
+        try:
+        dsn = (
+            'Driver=Vertica;'
+            'Server={0};'
+            'Port={1};'
+            'Database={2};'
+            'User={3};'
+            'Password={4};'
+            'ConnectionLoadBalance={5}'
+        ).format(module.params['cluster'], module.params['port'], db,
+                 module.params['login_user'], module.params['login_password'], 'true')
+        db_conn = pyodbc.connect(dsn, autocommit=True)
+        cursor = db_conn.cursor()
+    except Exception as e:
+        module.fail_json(msg='Unable to connect to database: {0}.'.format(to_native(e)),
+                         exception=traceback.format_exc())
     
-        def syntax(self):
-        return '[options] <spider_file>'
+    - name: creating a new schema with roles
+  vertica_schema:
+    name=schema_name
+    create_roles=schema_name_all
+    usage_roles=schema_name_ro,schema_name_rw
+    db=db_name
+    state=present
+'''
+import traceback
     
-            def getContext(self, hostname=None, port=None):
-            ctx = ClientContextFactory.getContext(self)
-            # Enable all workarounds to SSL bugs as documented by
-            # https://www.openssl.org/docs/manmaster/man3/SSL_CTX_set_options.html
-            ctx.set_options(SSL.OP_ALL)
-            return ctx
+    DOCUMENTATION = r'''
+---
+author:
+- Jeroen Hoekx (@jhoekx)
+- Matt Robinson (@ribbons)
+- Dag Wieers (@dagwieers)
+module: iso_extract
+short_description: Extract files from an ISO image
+description:
+- This module has two possible ways of operation.
+- If 7zip is installed on the system, this module extracts files from an ISO
+  into a temporary directory and copies files to a given destination,
+  if needed.
+- If the user has mount-capabilities (CAP_SYS_ADMIN on Linux) this module
+  mounts the ISO image to a temporary location, and copies files to a given
+  destination, if needed.
+version_added: '2.3'
+requirements:
+- Either 7z (from I(7zip) or I(p7zip) package)
+- Or mount capabilities (root-access, or CAP_SYS_ADMIN capability on Linux)
+options:
+  image:
+    description:
+    - The ISO image to extract files from.
+    required: yes
+    aliases: [ path, src ]
+  dest:
+    description:
+    - The destination directory to extract files to.
+    required: yes
+  files:
+    description:
+    - A list of files to extract from the image.
+    - Extracting directories does not work.
+    required: yes
+  force:
+    description:
+    - If C(yes), which will replace the remote file when contents are different than the source.
+    - If C(no), the file will only be extracted and copied if the destination does not already exist.
+    type: bool
+    default: 'yes'
+    aliases: [ thirsty ]
+    version_added: '2.4'
+  executable:
+    description:
+    - The path to the C(7z) executable to use for extracting files from the ISO.
+    default: '7z'
+    version_added: '2.4'
+notes:
+- Only the file checksum (content) is taken into account when extracting files
+  from the ISO image. If C(force=no),  only checks the presence of the file.
+- In Ansible v2.3 this module was using C(mount) and C(umount) commands only,
+  requiring root access. This is no longer needed with the introduction of 7zip
+  for extraction.
+'''
+    
+            if hostgroup is not None:
+            changed = client.modify_if_diff(name, ipa_role.get('member_hostgroup', []), hostgroup,
+                                            client.role_add_hostgroup,
+                                            client.role_remove_hostgroup) or changed
+    
+            if state == 'finished':
+            body['status'] = 'success'
+        else:
+            body['status'] = 'failure'
+    
+        params['api_key'] = module.params['token']
+    
+    import re
+from ansible.module_utils.basic import AnsibleModule
+    
+        @classmethod
+    # pylint: disable=arguments-differ,too-many-arguments
+    def sign(cls, payload, key, alg, nonce, url=None, kid=None):
+        # Per ACME spec, jwk and kid are mutually exclusive, so only include a
+        # jwk field if kid is not provided.
+        include_jwk = kid is None
+        return super(JWS, cls).sign(payload, key=key, alg=alg,
+                                    protect=frozenset(['nonce', 'url', 'kid', 'jwk', 'alg']),
+                                    nonce=nonce, url=url, kid=kid,
+                                    include_jwk=include_jwk)
 
     
-    The matching from server ftp command return codes to html response codes is defined in the
-CODE_MAPPING attribute of the handler class. The key 'default' is used for any code
-that is not explicitly present among the map keys. You may need to overwrite this
-mapping if want a different behaviour than default.
+            # Placeholder for augeas
+        self.aug = None
     
-        def __init__(self, resource_type, *args, **kwargs):
-        self.resource_type = resource_type
-        super(Resource, self).__init__(
-            'resource', default=resource_type, *args, **kwargs)
+        def __eq__(self, other):
+        '''This is defined as equivalent within Apache.
     
-            self.assertRaises(
-            jose.DeserializationError, nonce_field.decode, self.wrong_nonce)
-        self.assertEqual(b'foo', nonce_field.decode(self.good_nonce))
+        @certbot_util.patch_get_utility()
+    def test_noninteractive(self, mock_util):
+        mock_util().menu.side_effect = errors.MissingCommandlineFlag('no vhost default')
+        try:
+            self._call(self.vhosts)
+        except errors.MissingCommandlineFlag as e:
+            self.assertTrue('vhost ambiguity' in str(e))
     
-    
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-sys.path.insert(0, os.path.abspath(os.path.join(here, '..')))
-    
-    
-DIRECTORY_URL = 'https://acme-staging.api.letsencrypt.org/directory'
-BITS = 2048  # minimum for Boulder
-DOMAIN = 'example1.com'  # example.com is ignored by Boulder
-    
-            # Self test
-        self.assertTrue(self.addr.conflicts(self.addr))
-        self.assertTrue(self.addr1.conflicts(self.addr1))
-        # This is a tricky one...
-        self.assertTrue(self.addr1.conflicts(self.addr2))
-    
-            mock_exists.return_value = True
-        self.sni.configurator.parser.update_runtime_variables = mock.Mock()
-    
-    from __future__ import print_function
-    
-    '''
-http://ginstrom.com/scribbles/2007/10/08/design-patterns-python-style/
-Implementation of the iterator pattern with a generator
-    
-    ### OUTPUT ###
-# Setting Data 1 = 10
-# DecimalViewer: Subject Data 1 has data 10
-# HexViewer: Subject Data 1 has data 0xa
-# Setting Data 2 = 15
-# HexViewer: Subject Data 2 has data 0xf
-# DecimalViewer: Subject Data 2 has data 15
-# Setting Data 1 = 3
-# DecimalViewer: Subject Data 1 has data 3
-# HexViewer: Subject Data 1 has data 0x3
-# Setting Data 2 = 5
-# HexViewer: Subject Data 2 has data 0x5
-# DecimalViewer: Subject Data 2 has data 5
-# Detach HexViewer from data1 and data2.
-# Setting Data 1 = 10
-# DecimalViewer: Subject Data 1 has data 10
-# Setting Data 2 = 15
-# DecimalViewer: Subject Data 2 has data 15
-
-    
-    
-class RegistryHolder(type):
-    
-    '''
-@author: Gordeev Andrey <gordeev.and.and@gmail.com>
-    
-    
-class Visitor(object):
-    def visit(self, node, *args, **kwargs):
-        meth = None
-        for cls in node.__class__.__mro__:
-            meth_name = 'visit_' + cls.__name__
-            meth = getattr(self, meth_name, None)
-            if meth:
-                break
-    
-    
-class ComplexHouse(ComplexBuilding):
-    def build_floor(self):
-        self.floor = 'One'
-    
-        if not sample_queue.empty():
-        print(sample_queue.get())
-    
-    
-class UnsupportedMessageType(BaseException):
-    pass
+    # Add any extra paths that contain custom files (such as robots.txt or
+# .htaccess) here, relative to this directory. These files are copied
+# directly to the root of the documentation.
+#html_extra_path = []
