@@ -1,127 +1,99 @@
 
         
-        WITH_JUST_LIQUID_VAR = <<-LIQUID.freeze
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce auctor libero at
-pharetra tempus. et metus fermentum, eu cursus lorem, ac dictum enim.
-mattis. Curabitur vel dui et lacus rutrum suscipit et {{ title }} neque.
-    
-    Then(%r!^I should (not )?see '(.*)' in '(.*)'$!) do |negative, text, file|
-  step %(the '#{file}' file should exist)
-  regexp = Regexp.new(text, Regexp::MULTILINE)
-  if negative.nil? || negative.empty?
-    expect(file_contents(file)).to match regexp
-  else
-    expect(file_contents(file)).not_to match regexp
+                  def field_type
+            self.class.field_type
+          end
+      end
+    end
   end
 end
+
     
-          #
+        def find(*args)
+      find_all(*args).first || raise(MissingTemplate.new(self, *args))
+    end
     
-              theme.create!
-          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
-                             ' is ready for you in #{theme.path.to_s.cyan}!'
-          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
+        initializer 'action_view.finalize_compiled_template_methods' do |app|
+      ActiveSupport.on_load(:action_view) do
+        ActionView::Template.finalize_compiled_template_methods =
+          app.config.action_view.delete(:finalize_compiled_template_methods)
+      end
+    end
+    
+        cmd = HOMEBREW_INTERNAL_COMMAND_ALIASES.fetch(ARGV.first, ARGV.first)
+    
+        RubyProf.const_get('#{(ENV['OUTPUT'] || 'Flat').capitalize}Printer').new(result).print
+  end
+rescue LoadError; end
+
+    
+        # @param msg [String] The error message
+    # @param attrs [{Symbol => Object}] The information in the backtrace entry.
+    #   See \{#sass\_backtrace}
+    def initialize(msg, attrs = {})
+      @message = msg
+      @sass_backtrace = []
+      add_backtrace(attrs)
+    end
+    
+        def read(file)
+      if file.respond_to?(:read)
+        file.read
+      else
+        open(file, 'rb') {|f| f.read}
+      end
+    end
+  end
+end
+
+    
+            if found.size > 1 && !@same_name_warnings.include?(found.first.first)
+          found.each {|(f, _)| @same_name_warnings << f}
+          relative_to = Sass::Util.pathname(dir)
+          if options[:_from_import_node]
+            # If _line exists, we're here due to an actual import in an
+            # import_node and we want to print a warning for a user writing an
+            # ambiguous import.
+            candidates = found.map do |(f, _)|
+              '  ' + Sass::Util.pathname(f).relative_path_from(relative_to).to_s
+            end.join('\n')
+            raise Sass::SyntaxError.new(<<MESSAGE)
+It's not clear which file to import for '@import '#{name}''.
+Candidates:
+#{candidates}
+Please delete or rename all but one of these files.
+MESSAGE
+          else
+            # Otherwise, we're here via StalenessChecker, and we want to print a
+            # warning for a user running `sass --watch` with two ambiguous files.
+            candidates = found.map {|(f, _)| '    ' + File.basename(f)}.join('\n')
+            Sass::Util.sass_warn <<WARNING
+WARNING: In #{File.dirname(name)}:
+  There are multiple files that match the name '#{File.basename(name)}':
+#{candidates}
+WARNING
+          end
         end
-        # rubocop:enable Metrics/AbcSize
-      end
-    end
-  end
-end
-
-    
-        def deprecation_message(message)
-      Jekyll.logger.warn 'Deprecation:', message
-    end
-    
-        execute 'INSERT INTO share_visibilities (user_id, shareable_id, shareable_type) ' \
-            'SELECT post_visibility.user_id, photos.id, 'Photo' FROM photos ' \
-            'INNER JOIN posts ON posts.guid = photos.status_message_guid AND posts.type = 'StatusMessage' ' \
-            'LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = photos.id ' \
-            'INNER JOIN share_visibilities AS post_visibility ON post_visibility.shareable_id = posts.id ' \
-            'WHERE photos.public = false AND share_visibilities.shareable_id IS NULL ' \
-            'AND post_visibility.shareable_type = 'Post''
-  end
-    
-      def navigate_to(page_name)
-    path = path_to(page_name)
-    if path.is_a?(Hash)
-      visit(path[:path])
-      await_elem = path[:special_elem]
-      find(await_elem.delete(:selector), await_elem)
-    else
-      visit(path)
-    end
-  end
-    
-        it 'generates the contacts_json fixture', :fixture => true do
-      json = bob.contacts.map { |c|
-               ContactPresenter.new(c, bob).full_hash_with_person
-             }.to_json
-      save_fixture(json, 'contacts_json')
-    end
-  end
-end
-
-    
-        sign_in(alice, scope: :user)
-  end
-    
-        it 'does redirect if there are no invites available with this code' do
-      code = InvitationCode.create(user: bob)
-      code.update_attributes(count: 0)
-    
-          def allow_uploads
-        @allow_uploads
+        found.first
       end
     
-    context 'Precious::Views::Page' do
-  setup do
-    examples = testpath 'examples'
-    @path    = File.join(examples, 'test.git')
-    FileUtils.cp_r File.join(examples, 'empty.git'), @path, :remove_destination => true
-    @wiki = Gollum::Wiki.new(@path)
-  end
+      context 'heredoc' do
+    let(:cop_config) { { 'EnforcedStyle' => 'same_line' } }
     
-          # Custom destructuring method. This can be used to normalize
-      # destructuring for different variations of the node.
-      #
-      # In this case, the `def` node destructures into:
-      #
-      #   `method_name, arguments, body`
-      #
-      # while the `defs` node destructures into:
-      #
-      #   `receiver, method_name, arguments, body`
-      #
-      # so we reverse the destructured array to get the optional receiver
-      # at the end, where it can be discarded.
-      #
-      # @return [Array] the different parts of the `def` or `defs` node
-      def node_parts
-        to_a.reverse
-      end
-    end
-  end
-end
-
+      context 'when arguments to a method' do
+    let(:prefix) { 'bar(' }
+    let(:suffix) { ')' }
+    let(:source) { construct(false, true) }
     
-          # Returns the iteration variable of the `for` loop.
-      #
-      # @return [Node] The iteration variable of the `for` loop
-      def variable
-        node_parts[0]
-      end
+            pairs.map(&:key).each do |key|
+          yield key
+        end
     
-    module RuboCop
-  module AST
-    # Common functionality for nodes that can be used as hash elements:
-    # `pair`, `kwsplat`
-    module HashElementNode
-      # Returns the key of this `hash` element.
+          # A shorthand for getting the last argument of the node.
+      # Equivalent to `arguments.last`.
       #
-      # @note For keyword splats, this returns the whole node
-      #
-      # @return [Node] the key of the hash element
-      def key
-        node_parts[0]
+      # @return [Node, nil] the last argument of the node,
+      #                     or `nil` if there are no arguments
+      def last_argument
+        arguments[-1]
       end
