@@ -1,126 +1,81 @@
 
         
-        def native_relative
-  DOC_PATH.sub('#{COL_PATH}/', '')
-end
+          def process_bootstrap
+    log_status 'Convert Bootstrap LESS to Sass'
+    puts ' repo   : #@repo_url'
+    puts ' branch : #@branch_sha #@repo_url/tree/#@branch'
+    puts ' save to: #{@save_to.to_json}'
+    puts ' twbs cache: #{@cache_path}'
+    puts '-' * 60
     
-        if record.timedout?(last_request_at) &&
-        !env['devise.skip_timeout'] &&
-        !proxy.remember_me_is_active?(record)
-      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
-      throw :warden, scope: scope, message: :timeout
+    (allow file-read-metadata)
+(allow file-read*
+  ; This is currenly only added because using `xcodebuild` to build a resource
+  ; bundle target starts a FSEvents stream on `/`. No idea why that would be
+  ; needed, but for now it doesn’t seem like a real problem.
+  (literal '/')
+  (regex
+    ; TODO see if we can restrict this more, but it's going to be hard
+    #'^/Users/[^.]+/*'
+    ;#'^/Users/[^.]+/.netrc'
+    ;#'^/Users/[^.]+/.gemrc'
+    ;#'^/Users/[^.]+/.gem/*'
+    ;#'^/Users/[^.]+/Library/.*'
+    #'^/Library/*'
+    #'^/System/Library/*'
+    #'^/usr/lib/*'
+    #'^/usr/share/*'
+    #'^/private/*'
+    #'^/dev/*'
+    #'^<%= ruby_prefix %>'
+    #'^<%= pod_prefix %>'
+    #'^<%= xcode_app_path %>'
+    #'^<%= Pod::Config.instance.repos_dir %>'
+<% prefixes.each do |prefix| %>
+    #'^<%= prefix %>/*'
+<% end %>
+  )
+)
+    
+    ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+
+    
+    class LogStash::PluginManager::Update < LogStash::PluginManager::Command
+  REJECTED_OPTIONS = [:path, :git, :github]
+  # These are local gems used by LS and needs to be filtered out of other plugin gems
+  NON_PLUGIN_LOCAL_GEMS = ['logstash-core', 'logstash-core-plugin-api']
+    
+          it 'list the plugin with his version' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
+        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
+      end
     end
-    
-          def mailer_sender(mapping, sender = :from)
-        default_sender = default_params[sender]
-        if default_sender.present?
-          default_sender.respond_to?(:to_proc) ? instance_eval(&default_sender) : default_sender
-        elsif Devise.mailer_sender.is_a?(Proc)
-          Devise.mailer_sender.call(mapping.name)
-        else
-          Devise.mailer_sender
-        end
-      end
-    
-          # Unlock a user by cleaning locked_at and failed_attempts.
-      def unlock_access!
-        self.locked_at = nil
-        self.failed_attempts = 0 if respond_to?(:failed_attempts=)
-        self.unlock_token = nil  if respond_to?(:unlock_token=)
-        save(validate: false)
-      end
-    
-    desc 'Start a dummy (test) Rails app server'
-task :dummy_rails do
-  require 'rack'
-  require 'term/ansicolor'
-  port = ENV['PORT'] || 9292
-  puts %Q(Starting on #{Term::ANSIColor.cyan 'http://localhost:#{port}'})
-  Rack::Server.start(
-    config: 'test/dummy_rails/config.ru',
-    Port: port)
-end
-    
-        def read_cached_files(path, files)
-      full_path = '#@cache_path/#@branch_sha/#{path}'
-      contents  = {}
-      if File.directory?(full_path)
-        files.each do |name|
-          path = '#{full_path}/#{name}'
-          contents[name] = File.read(path, mode: 'rb') if File.exists?(path)
-        end
-      end
-      contents
-    end
-    
-      # insert data
-  fields.each do |field, values|
-    updated = '  s.#{field} = ['
-    updated << values.map { |v| '\n    %p' % v }.join(',')
-    updated << '\n  ]'
-    content.sub!(/  s\.#{field} = \[\n(    .*\n)*  \]/, updated)
   end
+end
+
     
-            elsif masked_token?(token)
-          token = unmask_token(token)
-    
-          def escape_hash(hash)
-        hash = hash.dup
-        hash.each { |k,v| hash[k] = escape(v) }
-        hash
-      end
-    
-          def has_vector?(request, headers)
-        return false if request.xhr?
-        return false if options[:allow_if] && options[:allow_if].call(request.env)
-        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
-        origin(request.env).nil? and referrer(request.env) != request.host
-      end
-    
-        ##
-    # The main method used to push a job to Redis.  Accepts a number of options:
-    #
-    #   queue - the named queue to use, default 'default'
-    #   class - the worker class to call, required
-    #   args - an array of simple arguments to the perform method, must be JSON-serializable
-    #   at - timestamp to schedule the job (optional), must be Numeric (e.g. Time.now.to_f)
-    #   retry - whether to retry this job if it fails, default true or an integer number of retries
-    #   backtrace - whether to save any error backtrace, default false
-    #
-    # If class is set to the class name, the jobs' options will be based on Sidekiq's default
-    # worker options. Otherwise, they will be based on the job class's options.
-    #
-    # Any options valid for a worker class's sidekiq_options are also available here.
-    #
-    # All options must be strings, not symbols.  NB: because we are serializing to JSON, all
-    # symbols in 'args' will be converted to strings.  Note that +backtrace: true+ can take quite a bit of
-    # space in Redis; a large volume of failing jobs can start Redis swapping if you aren't careful.
-    #
-    # Returns a unique Job ID.  If middleware stops the job, nil will be returned instead.
-    #
-    # Example:
-    #   push('queue' => 'my_queue', 'class' => MyWorker, 'args' => ['foo', 1, :bat => 'bar'])
-    #
-    def push(item)
-      normed = normalize_item(item)
-      payload = process_single(item['class'], normed)
-    
-          def insert_after(oldklass, newklass, *args)
-        i = entries.index { |entry| entry.klass == newklass }
-        new_entry = i.nil? ? Entry.new(newklass, *args) : entries.delete_at(i)
-        i = entries.index { |entry| entry.klass == oldklass } || entries.count - 1
-        entries.insert(i+1, new_entry)
-      end
-    
-          def process_job(job)
-        worker = new
-        worker.jid = job['jid']
-        worker.bid = job['bid'] if worker.respond_to?(:bid=)
-        Sidekiq::Testing.server_middleware.invoke(worker, job, job['queue']) do
-          execute_job(worker, job['args'])
+          def deliver(msg)
+        if msg.respond_to?(:deliver_now)
+          # Rails 4.2/5.0
+          msg.deliver_now
+        else
+          # Rails 3.2/4.0/4.1
+          msg.deliver
         end
       end
+    end
     
-              return WebAction.new(env, route.block)
-        end
+          def make_new
+        @klass.new(*@args)
       end
+    end
+  end
+end
+
+    
+          def disable!(&block)
+        __set_test_mode(:disable, &block)
+      end
+    
+        def route(method, path, &block)
+      @routes ||= { GET => [], POST => [], PUT => [], PATCH => [], DELETE => [], HEAD => [] }
