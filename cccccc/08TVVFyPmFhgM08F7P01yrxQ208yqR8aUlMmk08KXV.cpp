@@ -1,466 +1,378 @@
 
         
-        #if PY_MAJOR_VERSION >= 3
-static struct PyModuleDef _module = {
-  PyModuleDef_HEAD_INIT,
-  kModuleName,
-  kModuleDocstring,
-  -1,
-  NULL,
-  NULL,
-  NULL,
-  NULL,
-  NULL
-};
-#define INITFUNC PyInit__api_implementation
-#define INITFUNC_ERRORVAL NULL
-#else
-#define INITFUNC init_api_implementation
-#define INITFUNC_ERRORVAL
-#endif
-    
-    template <class R, class C, class P1, class P2, class P3>
-inline MethodSig3<R, C, P1, P2, P3> MatchFunc(R (C::*f)(P1, P2, P3)) {
-  UPB_UNUSED(f);  /* Only used for template parameter deduction. */
-  return MethodSig3<R, C, P1, P2, P3>();
-}
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-namespace {
-    }
-    }
-    }
-    }
-    }
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-    
-    void Context::InitializeFieldGeneratorInfoForMessage(
-    const Descriptor* message) {
-  for (int i = 0; i < message->nested_type_count(); ++i) {
-    InitializeFieldGeneratorInfoForMessage(message->nested_type(i));
-  }
-  std::vector<const FieldDescriptor*> fields;
-  for (int i = 0; i < message->field_count(); ++i) {
-    fields.push_back(message->field(i));
-  }
-  InitializeFieldGeneratorInfoForFields(fields);
-    }
-    
-    void ImmutableMapFieldGenerator::
-GenerateBuilderMembers(io::Printer* printer) const {
-  printer->Print(
-      variables_,
-      'private com.google.protobuf.MapField<\n'
-      '    $type_parameters$> $name$_;\n'
-      'private com.google.protobuf.MapField<$type_parameters$>\n'
-      'internalGet$capitalized_name$() {\n'
-      '  if ($name$_ == null) {\n'
-      '    return com.google.protobuf.MapField.emptyMapField(\n'
-      '        $map_field_parameter$);\n'
-      '  }\n'
-      '  return $name$_;\n'
-      '}\n'
-      'private com.google.protobuf.MapField<$type_parameters$>\n'
-      'internalGetMutable$capitalized_name$() {\n'
-      '  $on_changed$;\n'
-      '  if ($name$_ == null) {\n'
-      '    $name$_ = com.google.protobuf.MapField.newMapField(\n'
-      '        $map_field_parameter$);\n'
-      '  }\n'
-      '  if (!$name$_.isMutable()) {\n'
-      '    $name$_ = $name$_.copy();\n'
-      '  }\n'
-      '  return $name$_;\n'
-      '}\n');
-  GenerateMapGetters(printer);
-  printer->Print(
-      variables_,
-      '$deprecation$\n'
-      'public Builder ${$clear$capitalized_name$$}$() {\n'
-      '  internalGetMutable$capitalized_name$().getMutableMap()\n'
-      '      .clear();\n'
-      '  return this;\n'
-      '}\n');
-  printer->Annotate('{', '}', descriptor_);
-  WriteFieldDocComment(printer, descriptor_);
-  printer->Print(
-      variables_,
-      '$deprecation$\n'
-      'public Builder ${$remove$capitalized_name$$}$(\n'
-      '    $key_type$ key) {\n'
-      '  $key_null_check$\n'
-      '  internalGetMutable$capitalized_name$().getMutableMap()\n'
-      '      .remove(key);\n'
-      '  return this;\n'
-      '}\n');
-  printer->Annotate('{', '}', descriptor_);
-  if (GetJavaType(ValueField(descriptor_)) == JAVATYPE_ENUM) {
-    printer->Print(
-        variables_,
-        '/**\n'
-        ' * Use alternate mutation accessors instead.\n'
-        ' */\n'
-        '@java.lang.Deprecated\n'
-        'public java.util.Map<$boxed_key_type$, $value_enum_type$>\n'
-        '${$getMutable$capitalized_name$$}$() {\n'
-        '  return internalGetAdapted$capitalized_name$Map(\n'
-        '       internalGetMutable$capitalized_name$().getMutableMap());\n'
-        '}\n');
-    printer->Annotate('{', '}', descriptor_);
-    WriteFieldDocComment(printer, descriptor_);
-    printer->Print(variables_,
-                   '$deprecation$public Builder ${$put$capitalized_name$$}$(\n'
-                   '    $key_type$ key,\n'
-                   '    $value_enum_type$ value) {\n'
-                   '  $key_null_check$\n'
-                   '  $value_null_check$\n'
-                   '  internalGetMutable$capitalized_name$().getMutableMap()\n'
-                   '      .put(key, $name$ValueConverter.doBackward(value));\n'
-                   '  return this;\n'
-                   '}\n');
-    printer->Annotate('{', '}', descriptor_);
-    WriteFieldDocComment(printer, descriptor_);
-    printer->Print(
-        variables_,
-        '$deprecation$public Builder ${$putAll$capitalized_name$$}$(\n'
-        '    java.util.Map<$boxed_key_type$, $value_enum_type$> values) {\n'
-        '  internalGetAdapted$capitalized_name$Map(\n'
-        '      internalGetMutable$capitalized_name$().getMutableMap())\n'
-        '          .putAll(values);\n'
-        '  return this;\n'
-        '}\n');
-    printer->Annotate('{', '}', descriptor_);
-    if (SupportUnknownEnumValue(descriptor_->file())) {
-      printer->Print(
-          variables_,
-          '/**\n'
-          ' * Use alternate mutation accessors instead.\n'
-          ' */\n'
-          '@java.lang.Deprecated\n'
-          'public java.util.Map<$boxed_key_type$, $boxed_value_type$>\n'
-          '${$getMutable$capitalized_name$Value$}$() {\n'
-          '  return internalGetMutable$capitalized_name$().getMutableMap();\n'
-          '}\n');
-      printer->Annotate('{', '}', descriptor_);
-      WriteFieldDocComment(printer, descriptor_);
-      printer->Print(
-          variables_,
-          '$deprecation$public Builder ${$put$capitalized_name$Value$}$(\n'
-          '    $key_type$ key,\n'
-          '    $value_type$ value) {\n'
-          '  $key_null_check$\n'
-          '  internalGetMutable$capitalized_name$().getMutableMap()\n'
-          '      .put(key, value);\n'
-          '  return this;\n'
-          '}\n');
-      printer->Annotate('{', '}', descriptor_);
-      WriteFieldDocComment(printer, descriptor_);
-      printer->Print(
-          variables_,
-          '$deprecation$public Builder ${$putAll$capitalized_name$Value$}$(\n'
-          '    java.util.Map<$boxed_key_type$, $boxed_value_type$> values) {\n'
-          '  internalGetMutable$capitalized_name$().getMutableMap()\n'
-          '      .putAll(values);\n'
-          '  return this;\n'
-          '}\n');
-      printer->Annotate('{', '}', descriptor_);
-    }
-  } else {
-    printer->Print(
-        variables_,
-        '/**\n'
-        ' * Use alternate mutation accessors instead.\n'
-        ' */\n'
-        '@java.lang.Deprecated\n'
-        'public java.util.Map<$type_parameters$>\n'
-        '${$getMutable$capitalized_name$$}$() {\n'
-        '  return internalGetMutable$capitalized_name$().getMutableMap();\n'
-        '}\n');
-    printer->Annotate('{', '}', descriptor_);
-    WriteFieldDocComment(printer, descriptor_);
-    printer->Print(
-        variables_,
-        '$deprecation$'
-        'public Builder ${$put$capitalized_name$$}$(\n'
-        '    $key_type$ key,\n'
-        '    $value_type$ value) {\n'
-        '  $key_null_check$\n'
-        '  $value_null_check$\n'
-        '  internalGetMutable$capitalized_name$().getMutableMap()\n'
-        '      .put(key, value);\n'
-        '  return this;\n'
-        '}\n');
-    printer->Annotate('{', '}', descriptor_);
-    WriteFieldDocComment(printer, descriptor_);
-    printer->Print(
-        variables_,
-        '$deprecation$\n'
-        'public Builder ${$putAll$capitalized_name$$}$(\n'
-        '    java.util.Map<$type_parameters$> values) {\n'
-        '  internalGetMutable$capitalized_name$().getMutableMap()\n'
-        '      .putAll(values);\n'
-        '  return this;\n'
-        '}\n');
-    printer->Annotate('{', '}', descriptor_);
-  }
-}
-    
-    // Get the name of a message's Java class without package name prefix.
-string ClassNameWithoutPackage(const Descriptor* descriptor,
-                               bool immutable) {
-  return StripPackageName(descriptor->full_name(),
-                          descriptor->file());
-}
-    
-    void EnumGenerator::GenerateHeader(io::Printer* printer) {
-  string enum_comments;
-  SourceLocation location;
-  if (descriptor_->GetSourceLocation(&location)) {
-    enum_comments = BuildCommentsString(location, true);
-  } else {
-    enum_comments = '';
-  }
-    }
-    
-    bool IsDirectDependency(const FileDescriptor* dep, const FileDescriptor* file) {
-  for (int i = 0; i < file->dependency_count(); i++) {
-    if (dep == file->dependency(i)) {
-      return true;
-    }
-  }
-  return false;
-}
-    
-      EXPECT_EXIT(decode_data.AddString(1, '', ''),
-              ::testing::KilledBySignal(SIGABRT),
-              'error: got empty string for making TextFormat data, input:');
-  EXPECT_EXIT(decode_data.AddString(1, 'a', ''),
-              ::testing::KilledBySignal(SIGABRT),
-              'error: got empty string for making TextFormat data, input:');
-  EXPECT_EXIT(decode_data.AddString(1, '', 'a'),
-              ::testing::KilledBySignal(SIGABRT),
-              'error: got empty string for making TextFormat data, input:');
-    
-    #include <google/protobuf/stubs/logging.h>
-#include <google/protobuf/stubs/common.h>
-#include <google/protobuf/compiler/plugin.pb.h>
-#include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/io/zero_copy_stream_impl.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/stubs/io_win32.h>
-    
-    // An array of TestPartResult objects.
+        // Calls the registered C++ shape inference function for <node> (a serialized
+// NodeDef).
+// Should not be called for shape functions that access input tensors; constant
+// input tensor values are not made available, and so the inferred shapes will
+// be less precise than they could be.
 //
-// Don't inherit from TestPartResultArray as its destructor is not
-// virtual.
-class GTEST_API_ TestPartResultArray {
- public:
-  TestPartResultArray() {}
-    }
+// Returns an error, or OK, in <out_status> according to whether the shape
+// inference was successful.
+//
+// On success, returns a vector populated with the inferred output shapes (as
+// serialized CppShapeInferenceResult protos) followed by a serialized
+// CppShapeInferenceInputsNeeded proto.
+//
+// This is temporary code to be used during the migration
+// from python shape inference functions to C++ shape inference functions.
+std::vector<string> RunCppShapeInference(
+    int graph_def_version, const string& serialized_node_def,
+    const std::vector<string>& input_serialized_shapes,
+    PyObject* input_constant_tensor_values,
+    const std::vector<string>& input_constant_tensor_as_shape_values,
+    TF_Status* out_status);
     
-    // 5-ary predicate assertion macros.
-#define EXPECT_PRED_FORMAT5(pred_format, v1, v2, v3, v4, v5) \
-  GTEST_PRED_FORMAT5_(pred_format, v1, v2, v3, v4, v5, GTEST_NONFATAL_FAILURE_)
-#define EXPECT_PRED5(pred, v1, v2, v3, v4, v5) \
-  GTEST_PRED5_(pred, v1, v2, v3, v4, v5, GTEST_NONFATAL_FAILURE_)
-#define ASSERT_PRED_FORMAT5(pred_format, v1, v2, v3, v4, v5) \
-  GTEST_PRED_FORMAT5_(pred_format, v1, v2, v3, v4, v5, GTEST_FATAL_FAILURE_)
-#define ASSERT_PRED5(pred, v1, v2, v3, v4, v5) \
-  GTEST_PRED5_(pred, v1, v2, v3, v4, v5, GTEST_FATAL_FAILURE_)
+    // Add a _ to the end of s if necessary to avoid a Python keyword or built-in.
+string AvoidPythonReserved(const string& s);
     
-      void Set(const FilePath& rhs) {
-    pathname_ = rhs.pathname_;
-  }
+      // Initializes the NumPy descriptor.
+  PyArray_InitArrFuncs(&NPyBfloat16_ArrFuncs);
+  NPyBfloat16_ArrFuncs.getitem = NPyBfloat16_GetItem;
+  NPyBfloat16_ArrFuncs.setitem = NPyBfloat16_SetItem;
+  NPyBfloat16_ArrFuncs.copyswapn = NPyBfloat16_CopySwapN;
+  NPyBfloat16_ArrFuncs.copyswap = NPyBfloat16_CopySwap;
+  NPyBfloat16_ArrFuncs.nonzero = NPyBfloat16_NonZero;
+  NPyBfloat16_ArrFuncs.fill = NPyBfloat16_Fill;
     
-    // ImplicitlyConvertible<From, To>::value is a compile-time bool
-// constant that's true iff type From can be implicitly converted to
-// type To.
-template <typename From, typename To>
-class ImplicitlyConvertible {
- private:
-  // We need the following helper functions only for their types.
-  // They have no implementations.
-    }
-    
-      // Creates a UTF-16 wide string from the given ANSI string, allocating
-  // memory using new. The caller is responsible for deleting the return
-  // value using delete[]. Returns the wide string, or NULL if the
-  // input is NULL.
-  //
-  // The wide string is created using the ANSI codepage (CP_ACP) to
-  // match the behaviour of the ANSI versions of Win32 calls and the
-  // C runtime.
-  static LPCWSTR AnsiToUtf16(const char* c_str);
-    
-    
-    {
-}  // namespace internal
-    
-    // Sets the 0-terminated C string this MyString object
-// represents.
-void MyString::Set(const char* a_c_string) {
-  // Makes sure this works when c_string == c_string_
-  const char* const temp = MyString::CloneCString(a_c_string);
-  delete[] c_string_;
-  c_string_ = temp;
-}
+    #endif  // TENSORFLOW_PYTHON_LIB_CORE_BFLOAT16_H_
 
     
-    // A sample program demonstrating using Google C++ testing framework.
-//
-// Author: wan@google.com (Zhanyong Wan)
+    void PyExceptionRegistry::Init(PyObject* code_to_exc_type_map) {
+  DCHECK(singleton_ == nullptr) << 'PyExceptionRegistry::Init() already called';
+  singleton_ = new PyExceptionRegistry;
+    }
+    
+        http://www.apache.org/licenses/LICENSE-2.0
     
     
-    {    return new_queue;
+    {  tensorflow::DeviceNameUtils::ParsedName parsed_name;
+  if (!tensorflow::DeviceNameUtils::ParseFullName(node_def.device(),
+                                                  &parsed_name)) {
+    LOG(WARNING) << 'Failed to parse device from node_def: '
+                 << node_def.ShortDebugString();
+    return '';
   }
+  string class_name = '';
+  tensorflow::FindKernelDef(tensorflow::DeviceType(parsed_name.type.c_str()),
+                            node_def, nullptr /* kernel_def */, &class_name)
+      .IgnoreError();
+  return class_name;
+}
+    
+    namespace stream_executor {
+namespace cuda {
+    }
+    }
+    
+    
+    {  switch (status.ValueOrDie()) {
+    case CUDA_SUCCESS:
+      return Event::Status::kComplete;
+    case CUDA_ERROR_NOT_READY:
+      return Event::Status::kPending;
+    default:
+      LOG(INFO) << 'Error condition returned for event status: '
+                << status.ValueOrDie();
+      return Event::Status::kError;
+  }
+}
+    
+      // This is for complex to complex FFT, when the direction is required.
+  template <typename FuncT, typename InputT, typename OutputT>
+  bool DoFftWithDirectionInternal(Stream *stream, fft::Plan *plan,
+                                  FuncT cufft_exec,
+                                  const DeviceMemory<InputT> &input,
+                                  DeviceMemory<OutputT> *output);
+    
+    /**
+ * @brief Get a specific filler from the specification given in FillerParameter.
+ *
+ * Ideally this would be replaced by a factory pattern, but we will leave it
+ * this way for now.
+ */
+template <typename Dtype>
+Filler<Dtype>* GetFiller(const FillerParameter& param) {
+  const std::string& type = param.type();
+  if (type == 'constant') {
+    return new ConstantFiller<Dtype>(param);
+  } else if (type == 'gaussian') {
+    return new GaussianFiller<Dtype>(param);
+  } else if (type == 'positive_unitball') {
+    return new PositiveUnitballFiller<Dtype>(param);
+  } else if (type == 'uniform') {
+    return new UniformFiller<Dtype>(param);
+  } else if (type == 'xavier') {
+    return new XavierFiller<Dtype>(param);
+  } else if (type == 'msra') {
+    return new MSRAFiller<Dtype>(param);
+  } else if (type == 'bilinear') {
+    return new BilinearFiller<Dtype>(param);
+  } else {
+    CHECK(false) << 'Unknown filler name: ' << param.type();
+  }
+  return (Filler<Dtype>*)(NULL);
+}
+    
+    // Serialize LayerParameter to protocol buffer
+template <typename Dtype>
+void Layer<Dtype>::ToProto(LayerParameter* param, bool write_diff) {
+  param->Clear();
+  param->CopyFrom(layer_param_);
+  param->clear_blobs();
+  for (int i = 0; i < blobs_.size(); ++i) {
+    blobs_[i]->ToProto(param->add_blobs(), write_diff);
+  }
+}
+    
+    /**
+ * @brief Compute the index of the @f$ K @f$ max values for each datum across
+ *        all dimensions @f$ (C \times H \times W) @f$.
+ *
+ * Intended for use after a classification layer to produce a prediction.
+ * If parameter out_max_val is set to true, output is a vector of pairs
+ * (max_ind, max_val) for each image. The axis parameter specifies an axis
+ * along which to maximise.
+ *
+ * NOTE: does not implement Backwards operation.
+ */
+template <typename Dtype>
+class ArgMaxLayer : public Layer<Dtype> {
+ public:
+  /**
+   * @param param provides ArgMaxParameter argmax_param,
+   *     with ArgMaxLayer options:
+   *   - top_k (\b optional uint, default 1).
+   *     the number @f$ K @f$ of maximal items to output.
+   *   - out_max_val (\b optional bool, default false).
+   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
+   *     output max_val along the specified axis.
+   *   - axis (\b optional int).
+   *     if set, maximise along the specified axis else maximise the flattened
+   *     trailing dimensions for each index of the first / num dimension.
+   */
+  explicit ArgMaxLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+      vector<shared_ptr<Batch<Dtype> > > prefetch_;
+  BlockingQueue<Batch<Dtype>*> prefetch_free_;
+  BlockingQueue<Batch<Dtype>*> prefetch_full_;
+  Batch<Dtype>* prefetch_current_;
     
       /**
-   * \fn  static Predictor* Predictor::Create(std::string name);
+   * @brief Computes the error gradient w.r.t. the reordered input.
    *
-   * \brief Creates a new Predictor*.
-   *
+   * @param top output Blob vector (length 1), providing the error gradient
+   *        with respect to the outputs
+   *   -# @f$ (M \times ...) @f$:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2):
+   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
+   *     required) back to the input x_1
+   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
+   *     false.
    */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
+      /**
+   * @brief Computes the error gradient w.r.t. the concatenate inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *        respect to the outputs
+   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
+   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length K), into which the top gradient
+   *        @f$ \frac{\partial E}{\partial y} @f$ is deconcatenated back to the
+   *        inputs @f$
+   *        \left[ \begin{array}{cccc}
+   *          \frac{\partial E}{\partial x_1} &
+   *          \frac{\partial E}{\partial x_2} &
+   *          ... &
+   *          \frac{\partial E}{\partial x_K}
+   *        \end{array} \right] =
+   *        \frac{\partial E}{\partial y}
+   *        @f$
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    {template<typename IndexType, typename DType = real_t>
-Parser<IndexType> *
-CreateDenseLibSVMParser(const std::string& path,
-                        const std::map<std::string, std::string>& args,
-                        unsigned part_index,
-                        unsigned num_parts) {
-  CHECK_NE(args.count('num_col'), 0) << 'expect num_col in dense_libsvm';
-  return new DensifyParser<IndexType>(
-            Parser<IndexType>::Create(path.c_str(), part_index, num_parts, 'libsvm'),
-           uint32_t(atoi(args.at('num_col').c_str())));
+      /**
+   * @brief Computes the Contrastive error gradient w.r.t. the inputs.
+   *
+   * Computes the gradients with respect to the two input vectors (bottom[0] and
+   * bottom[1]), but not the similarity label (bottom[2]).
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
+   *      This Blob's diff will simply contain the loss_weight* @f$ \lambda @f$,
+   *      as @f$ \lambda @f$ is the coefficient of this layer's output
+   *      @f$\ell_i@f$ in the overall Net loss
+   *      @f$ E = \lambda_i \ell_i + \mbox{other loss terms}@f$; hence
+   *      @f$ \frac{\partial E}{\partial \ell_i} = \lambda_i @f$.
+   *      (*Assuming that this top Blob is not used as a bottom (input) by any
+   *      other layer of the Net.)
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times 1 \times 1) @f$
+   *      the features @f$a@f$; Backward fills their diff with
+   *      gradients if propagate_down[0]
+   *   -# @f$ (N \times C \times 1 \times 1) @f$
+   *      the features @f$b@f$; Backward fills their diff with gradients if
+   *      propagate_down[1]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    ChannelCredentials::~ChannelCredentials() {}
+    
+    void ChannelArguments::SetSslTargetNameOverride(const grpc::string& name) {
+  SetString(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG, name);
 }
-}  // namespace data
     
-      void InitTreesToUpdate() {
-    if (trees_to_update.size() == 0u) {
-      for (auto & tree : trees) {
-        trees_to_update.push_back(std::move(tree));
+    
+    {}  // namespace grpc
+    
+    ThreadPoolInterface* CreateDefaultThreadPool() { return g_ctp_impl(); }
+    
+      void Add(const std::function<void()>& callback) override;
+    
+    /*! \brief override type_name for caffe::LayerParameter */
+namespace dmlc {
+  DMLC_DECLARE_TYPE_NAME(::caffe::LayerParameter, 'caffe-layer-parameter');
+}
+    
+        // Caffe seems to understand phase inside an 'include {}' block
+    if (!param_.prototxt.has_phase()) {
+      if (param_.prototxt.include().size()) {
+        if (param_.prototxt.include(0).has_phase()) {
+          param_.prototxt.set_phase(param_.prototxt.include(0).phase());
+        }
       }
-      trees.clear();
-      param.num_trees = 0;
-      tree_info.clear();
     }
-  }
     
-    namespace xgboost {
-namespace common {
-TEST(CompressedIterator, Test) {
-  ASSERT_TRUE(detail::SymbolBits(256) == 8);
-  ASSERT_TRUE(detail::SymbolBits(150) == 8);
-  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
-  int num_elements = 1000;
-  int repetitions = 1000;
-  srand(9);
-    }
-    }
-    }
+      Operator* CreateOperator(Context ctx) const override {
+    LOG(FATAL) << 'Not Implemented.';
+    return NULL;
+  }
     
     
     {
-    {    // Eject all bytes
-    int tmp_bytes =
-        static_cast<int>(std::ceil(static_cast<float>(stored_bits) / 8));
-    for (int j = 0; j < tmp_bytes; j++) {
-      int shift_bits = static_cast<int>(stored_bits) - (j + 1) * 8;
-      if (shift_bits >= 0) {
-        buffer[buffer_position] =
-            static_cast<CompressedByteT>(tmp >> shift_bits);
-      } else {
-        buffer[buffer_position] =
-            static_cast<CompressedByteT>(tmp << std::abs(shift_bits));
-      }
-      buffer_position++;
+    {}  // namespace op
+}  // namespace mxnet
+
+    
+    
+    {  Engine::Get()->PushSync([=](RunContext ctx){
+      ndout.CheckAndAlloc();
+      cv::Mat buf(h, w, c == 3 ? CV_8UC3 : CV_8U, ndsrc.data().dptr_);
+      cv::Mat dst(top+h+bot, left+w+right, c == 3 ? CV_8UC3 : CV_8U, ndout.data().dptr_);
+      cv::copyMakeBorder(buf, dst, top, bot, left, right, type, cv::Scalar(value));
+      CHECK(!dst.empty());
+    }, ndout.ctx(), {ndsrc.var()}, {ndout.var()});
+  NDArray *tmp = new NDArray();
+  *tmp = ndout;
+  *out = tmp;
+  API_END();
+}
+
+    
+    
+    // exception type_error.304
+    try
+    {
+        // use at() on a non-object type
+        json str = 'I am a string';
+        str.at('the good') = 'Another string';
     }
-  }
-};
+    catch (json::type_error& e)
+    {
+        std::cout << e.what() << '\n';
+    }
     
-      void moveBucketTail(const std::shared_ptr<DHTNode>& node);
     
-    public:
-  DHTTaskFactoryImpl();
-    
-    #endif // D_DHT_TOKEN_UPDATE_COMMAND_H
+    {    // out_of_range.404
+    try
+    {
+        // try to use a JSON pointer that cannot be resolved
+        json::reference ref = j.at('/number/foo'_json_pointer);
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+}
 
     
-    const std::string DHTUnknownMessage::E('e');
-    
-      // do nothing
-  virtual void doReceivedAction() CXX11_OVERRIDE;
-    
-      SuperVersion* GetSuperVersion() { return super_version_; }
-  // thread-safe
-  // Return a already referenced SuperVersion to be used safely.
-  SuperVersion* GetReferencedSuperVersion(InstrumentedMutex* db_mutex);
-  // thread-safe
-  // Get SuperVersion stored in thread local storage. If it does not exist,
-  // get a reference from a current SuperVersion.
-  SuperVersion* GetThreadLocalSuperVersion(InstrumentedMutex* db_mutex);
-  // Try to return SuperVersion back to thread local storage. Retrun true on
-  // success and false on failure. It fails when the thread local storage
-  // contains anything other than SuperVersion::kSVInUse flag.
-  bool ReturnThreadLocalSuperVersion(SuperVersion* sv);
-  // thread-safe
-  uint64_t GetSuperVersionNumber() const {
-    return super_version_number_.load();
-  }
-  // will return a pointer to SuperVersion* if previous SuperVersion
-  // if its reference count is zero and needs deletion or nullptr if not
-  // As argument takes a pointer to allocated SuperVersion to enable
-  // the clients to allocate SuperVersion outside of mutex.
-  // IMPORTANT: Only call this from DBImpl::InstallSuperVersion()
-  void InstallSuperVersion(SuperVersionContext* sv_context,
-                           InstrumentedMutex* db_mutex,
-                           const MutableCFOptions& mutable_cf_options);
-  void InstallSuperVersion(SuperVersionContext* sv_context,
-                           InstrumentedMutex* db_mutex);
+        // the following call will not add an object, because there is already
+    // a value stored at key 'B'
+    auto res2 = null.emplace('B', 'c');
     
     
-    {}  //  namespace rocksdb
-
+    {  EsdCanClient esd_can_client;
+  EXPECT_TRUE(esd_can_client.Init(param));
+  EXPECT_EQ(esd_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
+  std::vector<CanFrame> frames;
+  int32_t num = 0;
+  EXPECT_EQ(esd_can_client.Send(frames, &num),
+            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
+  EXPECT_EQ(esd_can_client.Receive(&frames, &num),
+            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
+  CanFrame can_frame;
+  frames.push_back(can_frame);
+  EXPECT_EQ(esd_can_client.SendSingleFrame(frames),
+            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
+  esd_can_client.Stop();
+}
     
-      env.now_micros_ += 100u;  // sleep credit 200
-  // One refill: 10240 fileed, sleep credit generates 2000. 8000 used
-  //             7240 + 10240 + 2000 - 8000 = 11480 left
-  ASSERT_EQ(static_cast<uint64_t>(1024u), controller.GetDelay(&env, 8000u));
+    double ObjectExtendedInfo60D::object_width(const std::uint8_t* bytes,
+                                           int32_t length) const {
+  Byte t0(bytes + 7);
+  int32_t x = t0.get_byte(0, 8);
+    }
     
     
-    { private:
-  int fd_;
-};
+    {  int ret = x;
+  return ret;
+}
     
-    using namespace rocksdb;
+    #include 'modules/localization/msf/local_map/base_map/base_map_matrix.h'
     
-    
-    {}  // rocksdb
-
-    
-    // Some utility routines relating to unicode.
-    
-    
-    {     private:
-      Executor::KeepAlive<VirtualExecutor> keepAlive_;
-      Func f_;
-    };
-    
-        // Test the lower boundary of conversion to uint64_t nanoseconds
-    ts.tv_sec = 0;
-    ts.tv_nsec = 0;
-    EXPECT_EQ(0, to<nsec_u64>(ts).count());
-    ts.tv_sec = -1;
-    ts.tv_nsec = 0;
-    EXPECT_THROW(to<nsec_u64>(ts), std::range_error);
-    
-    #endif // FOLLY_HAVE_LIBZ
+    BackupTrajectoryGenerator::BackupTrajectoryGenerator(
+    const State& init_s, const State& init_d,
+    const double init_relative_time,
+    const std::shared_ptr<CollisionChecker>& ptr_collision_checker,
+    const Trajectory1dGenerator* trajectory1d_generator)
+    : init_relative_time_(init_relative_time),
+      ptr_collision_checker_(ptr_collision_checker),
+      ptr_trajectory1d_generator_(trajectory1d_generator) {
+  GenerateTrajectory1dPairs(init_s, init_d);
+}
