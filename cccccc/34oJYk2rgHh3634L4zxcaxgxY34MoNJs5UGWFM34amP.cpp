@@ -1,298 +1,266 @@
 
         
-        void AutoUpdater::OnError(const std::string& message,
-                          const int code,
-                          const std::string& domain) {
-  v8::Locker locker(isolate());
-  v8::HandleScope handle_scope(isolate());
-  auto error = v8::Exception::Error(mate::StringToV8(isolate(), message));
-  auto errorObject =
-      error->ToObject(isolate()->GetCurrentContext()).ToLocalChecked();
+        // Version constant.
+// This is either 0 for python, 1 for CPP V1, 2 for CPP V2.
+//
+// 0 is default and is equivalent to
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+//
+// 1 is set with -DPYTHON_PROTO2_CPP_IMPL_V1 and is equivalent to
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
+// and
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=1
+//
+// 2 is set with -DPYTHON_PROTO2_CPP_IMPL_V2 and is equivalent to
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
+// and
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
+#ifdef PYTHON_PROTO2_CPP_IMPL_V1
+#error 'PYTHON_PROTO2_CPP_IMPL_V1 is no longer supported.'
+#else
+#ifdef PYTHON_PROTO2_CPP_IMPL_V2
+static int kImplVersion = 2;
+#else
+#ifdef PYTHON_PROTO2_PYTHON_IMPL
+static int kImplVersion = 0;
+#else
+    
+    static const Message* GetCProtoInsidePyProtoStub(PyObject* msg) {
+  return NULL;
+}
+static Message* MutableCProtoInsidePyProtoStub(PyObject* msg) {
+  return NULL;
+}
+    
+    EnumGenerator::~EnumGenerator() {
+}
+    
+    #include <google/protobuf/compiler/command_line_interface.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/io/printer.h>
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
     }
     
-    void AtomBrowserMainParts::HandleSIGCHLD() {
-  // We need to accept SIGCHLD, even though our handler is a no-op because
-  // otherwise we cannot wait on children. (According to POSIX 2001.)
-  struct sigaction action;
-  memset(&action, 0, sizeof(action));
-  action.sa_handler = SIGCHLDHandler;
-  CHECK_EQ(sigaction(SIGCHLD, &action, nullptr), 0);
+    void WriteServiceDocComment(io::Printer* printer,
+                            const ServiceDescriptor* service) {
+  printer->Print('/**\n');
+  WriteDocCommentBody(printer, service);
+  printer->Print(
+    ' * Protobuf service {@code $fullname$}\n'
+    ' */\n',
+    'fullname', EscapeJavadoc(service->full_name()));
 }
     
-    namespace api {
-class WebContents;
-}
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace java {
+    }
+    }
+    }
+    }
     
-      // Split the part (horizontally), and save the split result into
-  // parts_splitted. Note that it is caller's responsibility to release the
-  // memory owns by parts_splitted. On the other hand, the part is unchanged
-  // during this process and still owns the blobs, so do NOT call DeleteBoxes
-  // when freeing the colpartitions in parts_splitted.
-  void SplitCPHor(ColPartition* part,
-                  GenericVector<ColPartition*>* parts_splitted);
-    
-    int os_detect(TO_BLOCK_LIST* port_blocks,
-              OSResults* osr,
-              tesseract::Tesseract* tess);
-    
-    
-    {  while ((n > 0) && reqd_len < full_length) {
-    reqd_len += strcspn(next_word, '_') + 1;
-    next_word += reqd_len;
-    n--;
+    string ClassNameResolver::GetFileDefaultImmutableClassName(
+    const FileDescriptor* file) {
+  string basename;
+  string::size_type last_slash = file->name().find_last_of('/');
+  if (last_slash == string::npos) {
+    basename = file->name();
+  } else {
+    basename = file->name().substr(last_slash + 1);
   }
-  strncpy(t, s, reqd_len);
-  t[reqd_len] = '\0';            // ensure null terminal
+  return UnderscoresToCamelCase(StripProto(basename), true);
 }
     
-    #endif  // GTEST_INCLUDE_GTEST_GTEST_TEST_PART_H_
-
+      printer->Print(
+      '#else\n');
     
-    // First, define a fixture class template.  It should be parameterized
-// by a type.  Remember to derive it from testing::Test.
-template <typename T>
-class FooTest : public testing::Test {
- public:
-  ...
-  typedef std::list<T> List;
-  static T shared_;
-  T value_;
+    
+    {
+    {    proto3_descriptor_ =
+      pool_.FindMessageTypeByName(
+          'proto2_nofieldpresence_unittest.TestAllTypes');
+    ASSERT_TRUE(proto3_descriptor_ != NULL);
+    proto3_prototype_ = factory_.GetPrototype(proto3_descriptor_);
+  }
 };
     
-    // Copyright 2008 Google Inc.
-// All Rights Reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are
-// met:
-//
-//     * Redistributions of source code must retain the above copyright
-// notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above
-// copyright notice, this list of conditions and the following disclaimer
-// in the documentation and/or other materials provided with the
-// distribution.
-//     * Neither the name of Google Inc. nor the names of its
-// contributors may be used to endorse or promote products derived from
-// this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// 'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-// Author: wan@google.com (Zhanyong Wan)
-    
-    TEST(ListenersTest, DoesNotLeak) {
-  Water* water = new Water;
-  delete water;
+    // Try to read <len> hex digits from ptr, and stuff the numeric result into
+// *result. Returns true if that many digits were successfully consumed.
+static bool ReadHexDigits(const char* ptr, int len, uint32* result) {
+  *result = 0;
+  if (len == 0) return false;
+  for (const char* end = ptr + len; ptr < end; ++ptr) {
+    if (*ptr == '\0') return false;
+    *result = (*result << 4) + DigitValue(*ptr);
+  }
+  return true;
 }
     
-    #include <string.h>
+    #ifdef USE_CUDNN
+/**
+ * @brief CuDNN acceleration of ReLULayer.
+ */
+template <typename Dtype>
+class CuDNNReLULayer : public ReLULayer<Dtype> {
+ public:
+  explicit CuDNNReLULayer(const LayerParameter& param)
+      : ReLULayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNReLULayer();
+    }
     
-    #if DMLC_USE_CXX11
-#include <functional>
+    #include <vector>
+    
+    
+    {} // namespace osquery
+
+    
+    DECLARE_bool(disable_database);
+    
+      const auto& doc = c.getParser('options')->getData().doc()['options'];
+    
+      // We use a restricted scope below to change the data structure from
+  // an array to a set. This lets us do deletes much more efficiently
+  std::vector<std::string> created_views;
+  std::set<std::string> erase_views;
+  {
+    std::vector<std::string> old_views_vec;
+    scanDatabaseKeys(kQueries, old_views_vec, kConfigViews);
+    for (const auto& view : old_views_vec) {
+      erase_views.insert(view.substr(kConfigViews.size()));
+    }
+  }
+    
+    #include <gtest/gtest.h>
+    
+    template <typename StorageType>
+void InMemoryStorage<StorageType>::put(const std::string& key,
+                                       const StorageType value) {
+  storage_[key] = value;
+}
+    
+    template <typename StorageType>
+class InMemoryStorage final {
+ public:
+  void put(const std::string& key, const StorageType value);
+  Expected<StorageType, DatabaseError> get(const std::string& key) const;
+  std::vector<std::string> getKeys(const std::string& prefix = '') const;
+    }
+    
+    
+    {  const std::string path_;
+  std::unordered_map<std::string, HandleRef> handles_map_;
+};
+    
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_IMPL_API void     ImGui_Marmalade_InvalidateDeviceObjects();
+IMGUI_IMPL_API bool     ImGui_Marmalade_CreateDeviceObjects();
+    
+    IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_Init(const char* glsl_version = NULL);
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data);
+    
+    #include 'imgui.h'
+#include 'imgui_impl_dx11.h'
+    
+    static void ImGui_ImplFreeGLUT_UpdateKeyboardMods()
+{
+    ImGuiIO& io = ImGui::GetIO();
+    int mods = glutGetModifiers();
+    io.KeyCtrl = (mods & GLUT_ACTIVE_CTRL) != 0;
+    io.KeyShift = (mods & GLUT_ACTIVE_SHIFT) != 0;
+    io.KeyAlt = (mods & GLUT_ACTIVE_ALT) != 0;
+}
+    
+        const GLchar* vertex_shader_glsl_410_core =
+        'layout (location = 0) in vec2 Position;\n'
+        'layout (location = 1) in vec2 UV;\n'
+        'layout (location = 2) in vec4 Color;\n'
+        'uniform mat4 ProjMtx;\n'
+        'out vec2 Frag_UV;\n'
+        'out vec4 Frag_Color;\n'
+        'void main()\n'
+        '{\n'
+        '    Frag_UV = UV;\n'
+        '    Frag_Color = Color;\n'
+        '    gl_Position = ProjMtx * vec4(Position.xy,0,1);\n'
+        '}\n';
+    
+        VkMemoryRequirements req;
+    vkGetBufferMemoryRequirements(g_Device, buffer, &req);
+    g_BufferMemoryAlignment = (g_BufferMemoryAlignment > req.alignment) ? g_BufferMemoryAlignment : req.alignment;
+    VkMemoryAllocateInfo alloc_info = {};
+    alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+    alloc_info.allocationSize = req.size;
+    alloc_info.memoryTypeIndex = ImGui_ImplVulkan_MemoryType(VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, req.memoryTypeBits);
+    err = vkAllocateMemory(g_Device, &alloc_info, g_Allocator, &buffer_memory);
+    check_vk_result(err);
+    
+    
+    {    // Set mouse position
+    io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
+    POINT pos;
+    if (::GetActiveWindow() == g_hWnd && ::GetCursorPos(&pos))
+        if (::ScreenToClient(g_hWnd, &pos))
+            io.MousePos = ImVec2((float)pos.x, (float)pos.y);
+}
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+    #include 'rocksdb/status.h'
+    
+    // For non linux platform, the following macros are used only as place
+// holder.
+#if !(defined OS_LINUX) && !(defined CYGWIN) && !(defined OS_AIX)
+#define POSIX_FADV_NORMAL 0     /* [MC1] no further special treatment */
+#define POSIX_FADV_RANDOM 1     /* [MC1] expect random page refs */
+#define POSIX_FADV_SEQUENTIAL 2 /* [MC1] expect sequential page refs */
+#define POSIX_FADV_WILLNEED 3   /* [MC1] will need these pages */
+#define POSIX_FADV_DONTNEED 4   /* [MC1] dont need these pages */
 #endif
     
-    template<>
-void SetDataGradToBlob<mshadow::cpu, double>(caffeMemoryTypes memType,
-                            std::vector<::caffe::Blob<double>*>::iterator blob,
-                            std::vector<TBlob>::const_iterator itr) {
-  double *data_ptr = reinterpret_cast<double*>((*itr).dptr_);
-  if (memType == Data)
-    (*blob)->set_cpu_data(data_ptr);
-  else
-    MXCAFFEBLOB(*blob, double)->set_cpu_diff(data_ptr);
-}
+    int main() {
+  // open DB
+  Options options;
+  options.create_if_missing = true;
+  DB* db;
+  Status s = DB::Open(options, kDBPath, &db);
+  assert(s.ok());
+    }
     
-    #include <mxnet/tensor_blob.h>
-#include <vector>
-#include <caffe/blob.hpp>
-#include <caffe/layer.hpp>
+      // Write a key OUTSIDE of this transaction.
+  // Does not affect txn since this is an unrelated key.  If we wrote key 'abc'
+  // here, the transaction would fail to commit.
+  s = db->Put(write_options, 'xyz', 'zzz');
+    
+    #include 'rocksdb/db.h'
     
     
-    {  DMLC_DECLARE_PARAMETER(CaffeDataParam) {
-    DMLC_DECLARE_FIELD(prototxt).set_default('layer{}')
-      .describe('Caffe's layer parameter');
-    DMLC_DECLARE_FIELD(flat).set_default(false)
-      .describe('Augmentation Param: Whether to flat the data into 1D.');
-    DMLC_DECLARE_FIELD(num_examples).set_lower_bound(1).set_default(10000)
-      .describe('Number of examples in the epoch.');
-  }
+    {  virtual ~Checkpoint() {}
 };
-    
-      virtual void PrintDefaultValueString(std::ostream &os) const {  // NOLINT(*)
-    std::string s;
-    caffe::NetParameter np;
-    // Avoid wasting time making a copy -- just push in out default object's pointer
-    np.mutable_layer()->AddAllocated(const_cast<::caffe::LayerParameter *>(&default_value_));
-    google::protobuf::TextFormat::PrintToString(np, &s);
-    np.mutable_layer()->ReleaseLast();
-    os << '\'' << s << '\'';
-  }
-    
-    // Read through the first n keys repeatedly and check that they get
-// compacted (verified by checking the size of the key space).
-void AutoCompactTest::DoReads(int n) {
-  std::string value(kValueSize, 'x');
-  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
-    }
-    
-      void MaybeScheduleCompaction() EXCLUSIVE_LOCKS_REQUIRED(mutex_);
-  static void BGWork(void* db);
-  void BackgroundCall();
-  void BackgroundCompaction() EXCLUSIVE_LOCKS_REQUIRED(mutex_);
-  void CleanupCompaction(CompactionState* compact)
-      EXCLUSIVE_LOCKS_REQUIRED(mutex_);
-  Status DoCompactionWork(CompactionState* compact)
-      EXCLUSIVE_LOCKS_REQUIRED(mutex_);
-    
-    // Print contents of a log file. (*func)() is called on every record.
-Status PrintLogContents(Env* env, const std::string& fname,
-                        void (*func)(uint64_t, Slice, WritableFile*),
-                        WritableFile* dst) {
-  SequentialFile* file;
-  Status s = env->NewSequentialFile(fname, &file);
-  if (!s.ok()) {
-    return s;
-  }
-  CorruptionReporter reporter;
-  reporter.dst_ = dst;
-  log::Reader reader(file, &reporter, true, 0);
-  Slice record;
-  std::string scratch;
-  while (reader.ReadRecord(&record, &scratch)) {
-    (*func)(reader.LastRecordOffset(), record, dst);
-  }
-  delete file;
-  return Status::OK();
-}
-    
-    #include 'db/filename.h'
-    
-      /**
-   * \fn  virtual void Predictor::PredictInstance( const SparsePage::Inst&
-   * inst, std::vector<bst_float>* out_preds, const gbm::GBTreeModel& model,
-   * unsigned ntree_limit = 0, unsigned root_index = 0) = 0;
-   *
-   * \brief online prediction function, predict score for one instance at a time
-   * NOTE: use the batch prediction interface if possible, batch prediction is
-   * usually more efficient than online prediction This function is NOT
-   * threadsafe, make sure you only call from one thread.
-   *
-   * \param           inst        The instance to predict.
-   * \param [in,out]  out_preds   The output preds.
-   * \param           model       The model to predict from
-   * \param           ntree_limit (Optional) The ntree limit.
-   * \param           root_index  (Optional) Zero-based index of the root.
-   */
-    
-    namespace xgboost {
-/*!
- * \brief interface of tree update module, that performs update of a tree.
- */
-class TreeUpdater {
- public:
-  /*! \brief virtual destructor */
-  virtual ~TreeUpdater() = default;
-  /*!
-   * \brief Initialize the updater with given arguments.
-   * \param args arguments to the objective function.
-   */
-  virtual void Init(const std::vector<std::pair<std::string, std::string> >& args) = 0;
-  /*!
-   * \brief perform update to the tree models
-   * \param gpair the gradient pair statistics of the data
-   * \param data The data matrix passed to the updater.
-   * \param trees references the trees to be updated, updater will change the content of trees
-   *   note: all the trees in the vector are updated, with the same statistics,
-   *         but maybe different random seeds, usually one tree is passed in at a time,
-   *         there can be multiple trees when we train random forest style model
-   */
-  virtual void Update(HostDeviceVector<GradientPair>* gpair,
-                      DMatrix* data,
-                      const std::vector<RegTree*>& trees) = 0;
-    }
-    }
-    
-        if (left_node_id >= elem_of_each_node_.size()) {
-      elem_of_each_node_.resize(left_node_id + 1, Elem(nullptr, nullptr, -1));
-    }
-    if (right_node_id >= elem_of_each_node_.size()) {
-      elem_of_each_node_.resize(right_node_id + 1, Elem(nullptr, nullptr, -1));
-    }
-    
-    SparsePageWriter::~SparsePageWriter() {
-  for (auto& queue : qworkers_) {
-    // use nullptr to signal termination.
-    std::shared_ptr<SparsePage> sig(nullptr);
-    queue.Push(std::move(sig));
-  }
-  for (auto& thread : workers_) {
-    thread->join();
-  }
-}
-    
-    
-    {
-    {
-    {      // Test write Symbol
-      std::vector<unsigned char> buffer2(
-        CompressedBufferWriter::CalculateBufferSize(input.size(),
-          alphabet_size));
-      for (int i = 0; i < input.size(); i++) {
-        cbw.WriteSymbol(buffer2.data(), input[i], i);
-      }
-      CompressedIterator<int> ci2(buffer.data(), alphabet_size);
-      std::vector<int> output2(input.size());
-      for (int i = 0; i < input.size(); i++) {
-        output2[i] = ci2[i];
-      }
-      ASSERT_TRUE(input == output2);
-    }
-  }
-}
-    
-    
-    {
-    {
-    {
-    {}  // namespace can
-}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
-
-    
-    class MockProtocolData : public ProtocolData<::apollo::canbus::ChassisDetail> {
- public:
-  static const int32_t ID = 0x111;
-  MockProtocolData() {}
-};
-    
-    
-    {  double ret = x * OBJECT_AREL_RES + OBJECT_AREL_LONG_MIN;
-  return ret;
-}
-    
-    BaseMapMatrix::~BaseMapMatrix() {}
-    
-    namespace {
-int GetLongZone(double longitude) {
-  double longZone = 0.0;
-  if (longitude < 0.0) {
-    longZone = ((180.0 + longitude) / 6.0) + 1;
-  } else {
-    longZone = (longitude / 6.0) + 31;
-  }
-  return static_cast<int>(longZone);
-}
-}  // namespace
-    
-    #include 'modules/common/util/string_util.h'
