@@ -1,115 +1,158 @@
 
         
-        from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import ExtraTreesClassifier
-from sklearn.ensemble import AdaBoostClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.naive_bayes import MultinomialNB
+        
+def plot_lfads_timeseries(data_bxtxn, model_vals, ext_input_bxtxi=None,
+                          truth_bxtxn=None, bidx=None, output_dist='poisson',
+                          conversion_factor=1.0, subplot_cidx=0,
+                          col_title=None):
     
-        plt.figure('scikit-learn GLM benchmark results')
-    plt.xlabel('Dimensions')
-    plt.ylabel('Time (s)')
-    plt.plot(dimensions, time_ridge, color='r')
-    plt.plot(dimensions, time_ols, color='g')
-    plt.plot(dimensions, time_lasso, color='b')
+      Args:
+    values_t_bxn: The length T list of BxN numpy tensors.
     
-    We generate a synthetic dataset of size 10^n, for n in [min, max], and
-examine the time taken to run isotonic regression over the dataset.
+        # Add 'lstm/lstm_0/control_dependency' if you want to dump previous layer
+    # LSTM.
+    lstm_emb = sess.run(t['lstm/lstm_1/control_dependency'],
+                        feed_dict={t['char_inputs_in']: char_ids_inputs,
+                                   t['inputs_in']: inputs,
+                                   t['targets_in']: targets,
+                                   t['target_weights_in']: weights})
     
-        if dataset_name == 'SA':
-        lb = LabelBinarizer()
-        x1 = lb.fit_transform(X[:, 1].astype(str))
-        x2 = lb.fit_transform(X[:, 2].astype(str))
-        x3 = lb.fit_transform(X[:, 3].astype(str))
-        X = np.c_[X[:, :1], x1, x2, x3, X[:, 4:]]
-        y = (y != b'normal.').astype(int)
+        for i in range(batch_size):
+      data_index = batch * batch_size + i
+      example = raw_data[data_index]
     
-    '''
+      Args;
+    hparams:  Hyperparameters for the MaskGAN.
+    inputs:  tf.int32 Tensor of the sequence input of shape [batch_size,
+      sequence_length].
+    present:  tf.bool Tensor indicating the presence or absence of the token
+      of shape [batch_size, sequence_length].
+    is_training:  Whether the model is training.
+    is_validating:  Whether the model is being run in validation mode for
+      calculating the perplexity.
+    reuse (Optional):  Whether to reuse the model.
     
-        ###########################################################################
-    # Set custom tracking based method
-    sampling_algorithm['custom-tracking-selection'] = \
-        lambda n_population, n_samples, random_state=None: \
-            sample_without_replacement(n_population,
-                                       n_samples,
-                                       method='tracking_selection',
-                                       random_state=random_state)
+          for s in xrange(t, FLAGS.sequence_length):
+        cum_advantage += reward_missing_list[s] * np.power(gamma, (s - t)) * (
+            rewards_list[s] - baselines[s])
+      # Clip advantages.
+      cum_advantage = tf.clip_by_value(cum_advantage, -FLAGS.advantage_clipping,
+                                       FLAGS.advantage_clipping)
+      advantages.append(reward_missing_list[t] * cum_advantage)
+      final_gen_objective += tf.multiply(
+          log_probability,
+          reward_missing_list[t] * tf.stop_gradient(cum_advantage))
     
-        dim = start_dim
-    for i in range(0, n):
-        print('============================================')
-        print('Entering iteration %s of %s' % (i, n))
-        print('============================================')
-        dim += step
-        X = np.random.randn(100, dim)
-        Y = np.random.randint(0, n_classes, (100,))
-        bench_scikit_tree_classifier(X, Y)
-        Y = np.random.randn(100)
-        bench_scikit_tree_regressor(X, Y)
+      # LSTM vs GRU
+  if isinstance(top_state, tf.contrib.rnn.LSTMStateTuple):
+    attn = tf.zeros_like(top_state.h)
+  else:
+    attn = tf.zeros_like(top_state)
     
-    # If extensions (or modules to document with autodoc) are in another
-# directory, add these directories to sys.path here. If the directory is
-# relative to the documentation root, use os.path.abspath to make it
-# absolute, like shown here.
-#sys.path.insert(0, os.path.abspath('.'))
+            sans = set(sans) if sans else set()
+        sans.add(commonname)
+        if isip:
+            sans = 'IP: ' + commonname
+        else:
+            sans = 'DNS: %s, DNS: *.%s' % (commonname,  commonname)
+        cert.add_extensions([OpenSSL.crypto.X509Extension(b'subjectAltName', True, sans)])
     
-    # See how far apart the test image is from the known faces
-face_distances = face_recognition.face_distance(known_encodings, image_to_test_encoding)
+    import simple_http_client
+from xlog import getLogger
+xlog = getLogger('gae_proxy')
     
-            # Display results overlaid on an image
-        show_prediction_labels_on_image(os.path.join('knn_examples/test', image_file), predictions)
-
+        if __hostsdeny__ and netloc.endswith(__hostsdeny__):
+        start_response('403 Forbidden', [('Content-Type', 'text/html')])
+        yield message_html('403 Hosts Deny', 'Hosts Deny(%r)' % netloc, detail='共用appid因为资源有限，限制观看视频和文件下载等消耗资源过多的访问，请使用自己的appid <a href=' https://github.com/XX-net/XX-Net/wiki/Register-Google-appid' target='_blank'>帮助</a> ')
+        raise StopIteration
     
-        # Print the location of each face in this image
-    top, right, bottom, left = face_location
-    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+                    if self.accept[s] >= 1:
+                    #print 'accept state for alt %d' % self.accept[s]
+                    return self.accept[s]
     
-        # Hit 'q' on the keyboard to quit!
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+        def __init__(self, tokenSource=None, channel=DEFAULT_CHANNEL):
+        CommonTokenStream.__init__(self, tokenSource, channel)
     
-        # Print the location of each facial feature in this image
-    for facial_feature in face_landmarks.keys():
-        print('The {} in this face has the following points: {}'.format(facial_feature, face_landmarks[facial_feature]))
+        Each code snipped should get additional C++ code around it to help compile the line in context, with
+    some heuristic guessing of what is needed around. The wrapping code should have a token in each line allowing
+    other tools to filter out these lines
     
-    with open('HISTORY.rst') as history_file:
-    history = history_file.read()
+        def _forwards(self, orm):
+        'Write your forwards methods here.'
+        for release in RangeQuerySetWrapperWithProgressBar(
+            orm.Release.objects.exclude(new_groups=0)
+        ):
+            projects = list(release.projects.values_list('id', flat=True))
+            if len(projects) > 1:
+                # do something fancy where we look at Group.first_release
+                # to calculate ReleaseProject.new_group
+                for p_id in projects:
+                    new_groups = orm.Group.objects.filter(
+                        first_release=release, project_id=p_id
+                    ).count()
+                    if not new_groups:
+                        continue
+                    orm.ReleaseProject.objects.filter(
+                        release_id=release.id, project_id=p_id
+                    ).update(new_groups=new_groups)
+            elif len(projects) == 1:
+                # copy Release.new_groups to ReleaseProject.new_group
+                orm.ReleaseProject.objects.filter(
+                    release_id=release.id, project_id=projects[0]
+                ).update(new_groups=release.new_groups)
     
-            self.last_results = {}
-        response = self._make_request()
-        if response.status_code != 200:
-            _LOGGER.error(
-                'Got HTTP status code %d when getting device list',
-                response.status_code)
-            return False
-        try:
-            data = response.json()
-            result = data['responses'][0]
-            devices = result['output']['devices']
-            for device in devices:
-                macs = device['knownMACAddresses']
-                if not macs:
-                    _LOGGER.warning(
-                        'Skipping device without known MAC address')
-                    continue
-                mac = macs[-1]
-                connections = device['connections']
-                if not connections:
-                    _LOGGER.debug('Device %s is not connected', mac)
-                    continue
+            sentry_models.Group.objects.filter(first_release=release).update(first_release=to_release)
     
-            # Find devices that have geofencing enabled, and are currently at home.
-        for mobile_device in tado_json:
-            if mobile_device.get('location'):
-                if mobile_device['location']['atHome']:
-                    device_id = mobile_device['id']
-                    device_name = mobile_device['name']
-                    last_results.append(Device(device_id, device_name))
+        def backwards(self, orm):
+        # Removing unique constraint on 'EnvironmentProject', fields ['project', 'environment']
+        db.delete_unique('sentry_environmentproject', ['project_id', 'environment_id'])
     
-    # The domain of your component. Should be equal to the name of your component.
-DOMAIN = 'dominos'
-ENTITY_ID_FORMAT = DOMAIN + '.{}'
+            # Changing field 'Environment.organization_id'
+        db.alter_column(
+            'sentry_environment',
+            'organization_id',
+            self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(null=True)
+        )
     
-        devicelist = session.core.initialise_api(username,
-                                             password,
-                                             update_interval)
+            # Deleting model 'ProcessingIssue'
+        db.delete_table('sentry_processingissue')
+    
+            for release_project in RangeQuerySetWrapperWithProgressBar(
+            orm.ReleaseProject.objects.all()
+        ):
+            orm.ReleaseProject.objects.filter(id=release_project.id).update(
+                new_groups=orm.Group.objects.filter(
+                    project_id=release_project.project_id,
+                    first_release_id=release_project.release_id,
+                ).count()
+            )
+    
+        def backwards(self, orm):
+        'Write your backwards methods here.'
+    
+    
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding model 'Distribution'
+        db.create_table(
+            'sentry_distribution', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'organization_id',
+                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(
+                        db_index=True
+                    )
+                ), (
+                    'release', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.Release']
+                    )
+                ), ('name', self.gf('django.db.models.fields.CharField')(max_length=64)), (
+                    'date_added',
+                    self.gf('django.db.models.fields.DateTimeField')()
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['Distribution'])
