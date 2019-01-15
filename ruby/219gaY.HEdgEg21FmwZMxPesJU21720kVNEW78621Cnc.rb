@@ -1,71 +1,105 @@
 
         
-        require 'action_view/helpers/tags/placeholderable'
-    
-        # Controls whether an action should be rendered using a layout.
-    # If you want to disable any <tt>layout</tt> settings for the
-    # current action so that it is rendered without a layout then
-    # either override this method in your controller to return false
-    # for that action or set the <tt>action_has_layout</tt> attribute
-    # to false before rendering.
-    def action_has_layout?
-      @_action_has_layout
-    end
-    
-        # Main render entry point shared by Action View and Action Controller.
-    def render(context, options)
-      if options.key?(:partial)
-        render_partial(context, options)
-      else
-        render_template(context, options)
-      end
-    end
-    
-    module BuildEnvironmentDSL
-  def env(*settings)
-    @env ||= BuildEnvironment.new
-    @env.merge(settings)
+            odie 'Unknown command: #{cmd}' unless path
+    puts path
   end
 end
+
     
-          begin
-        result = Formulary.factory(query).name
-      rescue FormulaUnavailableError
-        result = search_tap(user, repo, name)
-      end
+      desc <<END
+Run a profile of sass.
+  TIMES=n sets the number of runs. Defaults to 1000.
+  FILE=str sets the file to profile. Defaults to 'complex'.
+  OUTPUT=str sets the ruby-prof output format.
+    Can be Flat, CallInfo, or Graph. Defaults to Flat. Defaults to Flat.
+END
+  task :profile do
+    times  = (ENV['TIMES'] || '1000').to_i
+    file   = ENV['FILE']
     
-          # Reads an integer from the cache, or returns nil if no value was found.
+    module Sass
+  module CacheStores
+    # A backend for the Sass cache using the filesystem.
+    class Filesystem < Base
+      # The directory where the cached files will be stored.
       #
-      # See Caching.read for more information.
-      def self.read_integer(raw_key, timeout: TIMEOUT)
-        value = read(raw_key, timeout: timeout)
+      # @return [String]
+      attr_accessor :cache_location
     
-        not_same_pipeline_id = described_class.new(source, :another_pipeline, unordered_config_parts, settings)
-    expect(subject).not_to eq(not_same_pipeline_id)
-  end
+        def tree(arr, i = 0)
+      return [], i if arr[i].nil?
     
-        before do
-      logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version #{previous_version} #{plugin_name}')
-      # Logstash won't update when we have a pinned version in the gemfile so we remove them
-      logstash.replace_in_gemfile(',[[:space:]]'0.1.0'', '')
-      expect(logstash).to have_installed?(plugin_name, previous_version)
+      # A read-only wrapper for a lexical environment for SassScript.
+  class ReadOnlyEnvironment < BaseEnvironment
+    def initialize(parent = nil, options = nil)
+      super
+      @content_cached = nil
+    end
+    # The read-only environment of the caller of this environment's mixin or function.
+    #
+    # @see BaseEnvironment#caller
+    # @return {ReadOnlyEnvironment}
+    def caller
+      return @caller if @caller
+      env = super
+      @caller ||= env.is_a?(ReadOnlyEnvironment) ? env : ReadOnlyEnvironment.new(env, env.options)
     end
     
-      let(:cop_config) { { 'EnforcedStyle' => 'symmetrical' } }
-    
-    shared_examples_for 'multiline literal brace layout method argument' do
-  include MultilineLiteralBraceHelper
-    
-    module Jekyll
-    
-          Dir.chdir(code_path) do
-        code = file.read
-        @filetype = file.extname.sub('.','') if @filetype.nil?
-        title = @title ? '#{@title} (#{file.basename})' : file.basename
-        url = '/#{code_dir}/#{@file}'
-        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
-        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
-        TemplateWrapper::safe_wrap(source)
+          # Get the publicly-visible URL for an imported file. This URL is used by
+      # source maps to link to the source stylesheet. This may return `nil` to
+      # indicate that no public URL is available; however, this will cause
+      # sourcemap generation to fail if any CSS is generated from files imported
+      # from this importer.
+      #
+      # If an absolute 'file:' URI can be produced for an imported file, that
+      # should be preferred to returning `nil`. However, a URL relative to
+      # `sourcemap_directory` should be preferred over an absolute 'file:' URI.
+      #
+      # @param uri [String] A URI known to be valid for this importer.
+      # @param sourcemap_directory [String, NilClass] The absolute path to a
+      #   directory on disk where the sourcemap will be saved. If uri refers to
+      #   a file on disk that's accessible relative to sourcemap_directory, this
+      #   may return a relative URL. This may be `nil` if the sourcemap's
+      #   eventual location is unknown.
+      # @return [String?] The publicly-visible URL for this file, or `nil`
+      #   indicating that no publicly-visible URL exists. This should be
+      #   appropriately URL-escaped.
+      def public_url(uri, sourcemap_directory)
+        return if @public_url_warning_issued
+        @public_url_warning_issued = true
+        Sass::Util.sass_warn <<WARNING
+WARNING: #{self.class.name} should define the #public_url method.
+WARNING
+        nil
       end
-    end
+    
+      task :index do
+    doc = File.read('README.md')
+    file = 'doc/rack-protection-readme.md'
+    Dir.mkdir 'doc' unless File.directory? 'doc'
+    puts 'writing #{file}'
+    File.open(file, 'w') { |f| f << doc }
   end
+    
+          def self.default_reaction(reaction)
+        alias_method(:default_reaction, reaction)
+      end
+    
+            # Set these key values to boolean 'true' to include in policy
+        NO_ARG_DIRECTIVES.each do |d|
+          if options.key?(d) && options[d].is_a?(TrueClass)
+            directives << d.to_s.sub(/_/, '-')
+          end
+        end
+    
+            close_body(body) if reaction
+    
+      it 'accepts post requests with correct X-CSRF-Token header' do
+    post('/', {}, 'rack.session' => session, 'HTTP_X_CSRF_TOKEN' => token)
+    expect(last_response).to be_ok
+  end
+    
+        it 'Reads referrer from Host header when Referer header is missing' do
+      env = {'HTTP_HOST' => 'foo.com'}
+      expect(subject.referrer(env)).to eq('foo.com')
+    end
