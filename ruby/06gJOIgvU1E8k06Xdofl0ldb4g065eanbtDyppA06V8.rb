@@ -1,119 +1,102 @@
 
         
-        module Docs
-  class EntryIndex
-    attr_reader :entries, :types
-    
-        def effective_url
-      @effective_url ||= URL.parse super
+            # This will detect the proper guest OS for the machine and set up
+    # the class to actually execute capabilities.
+    def detect!
+      guest_name = @machine.config.vm.guest
+      initialize_capabilities!(guest_name, @guests, @capabilities, @machine)
+    rescue Errors::CapabilityHostExplicitNotDetected => e
+      raise Errors::GuestExplicitNotDetected, value: e.extra_data[:value]
+    rescue Errors::CapabilityHostNotDetected
+      raise Errors::GuestNotDetected
     end
     
-            private
+              if name != UNSET_VALUE
+            # Validate the name of the command
+            if name.to_s !~ /^[-a-z0-9]+$/i
+              raise InvalidCommandName, 'Commands can only contain letters, numbers, and hyphens'
+            end
     
-        ['d', 'i', 'u'].each do |f|
-      describe f do
-        it 'converts argument as a decimal number' do
-          format('%#{f}', 112).should == '112'
-          format('%#{f}', -112).should == '-112'
+              # Creating a shallow copy of the arguments so the OptionParser
+          # doesn't destroy the originals.
+          argv = @argv.dup
+    
+            # Converts this configuration object to JSON.
+        def to_json(*a)
+          instance_variables_hash.to_json(*a)
         end
     
-    describe 'Kernel#srand' do
-  it 'needs to be reviewed for spec completeness'
+        t.wakeup
+    t.value.should == 5
+  end
+end
+    
+      ruby_version_is '2.6' do
+    it 'raises RuntimeError when `exception: true` is given and the command exits with a non-zero exit status' do
+      lambda { @object.system(ruby_cmd('exit 1'), exception: true) }.should raise_error(RuntimeError)
+    end
+    
+      it 'raises an UncaughtThrowError if there is no catch block for the symbol' do
+    lambda { throw :blah }.should raise_error(UncaughtThrowError)
+  end
+    
+      # Do not fallback to assets pipeline if a precompiled asset is missed.
+  config.assets.compile = false
+    
+      # The test environment is used exclusively to run your application's
+  # test suite. You never need to work with it otherwise. Remember that
+  # your test database is 'scratch space' for the test suite and is wiped
+  # and recreated between test runs. Don't rely on the data there!
+  config.cache_classes = true
+    
+        context 'on a public post from a stranger' do
+      before do
+        @post = stranger.post :status_message, :text => 'something', :public => true, :to => 'all'
+      end
+    
+        it 'requires authentication' do
+      post_request!
+      expect(response).not_to be_success
+    end
+    
+          def right_diff_line_number(id, line)
+        if line =~ /^@@/
+          m, ri                   = *line.match(/\+(\d+)/)
+          @right_diff_line_number = ri.to_i
+          @current_line_number    = @right_diff_line_number
+          ret                     = '...'
+        elsif line[0] == ?-
+          ret = ' '
+        elsif line[0] == ?+
+          ret                     = @right_diff_line_number.to_s
+          @right_diff_line_number += 1
+          @current_line_number    = @right_diff_line_number - 1
+        else
+          ret                     = @right_diff_line_number.to_s
+          @right_diff_line_number += 1
+          @current_line_number    = @right_diff_line_number - 1
+        end
+        ret
+      end
+    end
+  end
 end
 
     
-      platform_is :windows do
-    it 'does expand shell variables when given multiples arguments' do
-      # See https://bugs.ruby-lang.org/issues/12231
-      lambda { @object.system('echo', @shell_var) }.should output_to_fd('foo\n')
-    end
+          def previous_link
+        label = '&laquo; Previous'
+        if @page_num == 1
+          %(<span class='disabled'>#{label}</span>)
+        else
+          link = url('/history/#{@page.name}?page=#{@page_num-1}')
+          %(<a href='#{link}' hotkey='h'>#{label}</a>)
+        end
+      end
+    
+        page = @wiki.page('k')
+    assert_equal '한글 text', utf8(page.raw_data)
+    assert_equal 'def', page.version.message
   end
     
-    describe 'Kernel.throw' do
-  it 'transfers control to the end of the active catch block waiting for symbol' do
-    catch(:blah) do
-      :value
-      throw :blah
-      fail('throw didn't transfer the control')
-    end.should be_nil
-  end
-    
-        def str_to_byte_pos(pos)
-      @s.string.slice(0, pos).bytesize
-    end
-  end
-end
-    
-        change.down do
-      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
-      Mention.where(mentions_container_type: 'Comment').destroy_all
-      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
-    end
-  end
-end
-
-    
-    When /^I (?:sign|log) in manually as '([^']*)' with password '([^']*)'( on the mobile website)?$/ \
-do |username, password, mobile|
-  @me = User.find_by_username(username)
-  @me.password ||= password
-  manual_login
-  confirm_login mobile
-end
-    
-    And /^I follow the '([^\']*)' link from the last sent email$/ do |link_text|
-  email_text = Devise.mailer.deliveries.first.body.to_s
-  email_text = Devise.mailer.deliveries.first.html_part.body.raw_source if email_text.blank?
-  doc = Nokogiri('<div>' + email_text + '</div>')
-    
-    module NavigationHelpers
-  def path_to(page_name)
-    case page_name
-    when /^person_photos page$/
-      person_photos_path(@me.person)
-    when /^the home(?: )?page$/
-      stream_path
-    when /^the mobile path$/
-      force_mobile_path
-    when /^the user applications page$/
-      api_openid_connect_user_applications_path
-    when /^the tag page for '([^\']*)'$/
-      tag_path(Regexp.last_match(1))
-    when /^its ([\w ]+) page$/
-      send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', @it)
-    when /^the mobile ([\w ]+) page$/
-      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', format: 'mobile')
-    when /^the ([\w ]+) page$/
-      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path')
-    when /^my edit profile page$/
-      edit_profile_path
-    when /^my profile page$/
-      person_path(@me.person)
-    when /^my acceptance form page$/
-      invite_code_path(InvitationCode.first)
-    when /^the requestors profile$/
-      person_path(Request.where(recipient_id: @me.person.id).first.sender)
-    when /^'([^\']*)''s page$/
-      p = User.find_by_email(Regexp.last_match(1)).person
-      {path:         person_path(p),
-       # '#diaspora_handle' on desktop, '.description' on mobile
-       special_elem: {selector: '#diaspora_handle, .description', text: p.diaspora_handle}
-      }
-    when /^'([^\']*)''s photos page$/
-      p = User.find_by_email(Regexp.last_match(1)).person
-      person_photos_path p
-    when /^my account settings page$/
-      edit_user_path
-    when /^forgot password page$/
-      new_user_password_path
-    when %r{^'(/.*)'}
-      Regexp.last_match(1)
-    else
-      raise 'Can't find mapping from \'#{page_name}\' to a path.'
-    end
-  end
-    
-      describe '#new' do
-    before do
-      sign_in alice, scope: :user
-    end
+      s.rdoc_options = ['--charset=UTF-8']
+  s.extra_rdoc_files = %w[README.md LICENSE]
