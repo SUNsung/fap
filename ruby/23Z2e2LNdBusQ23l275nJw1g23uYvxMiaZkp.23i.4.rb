@@ -1,113 +1,122 @@
 
         
-        def pre_pr(url)
-  url[-1, 1] == FORWARD_SLASH ? url : File.dirname(url)
-end
-    
-    require 'benchmark/ips'
-require 'pathutil'
-    
-          #
-    
-              new_theme_name = args.join('_')
-          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
-          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
-    
-            # For a description of the protocol see
-        # http://feedback.livereload.com/knowledgebase/articles/86174-livereload-protocol
-        def reload(pages)
-          pages.each do |p|
-            json_message = JSON.dump(
-              :command => 'reload',
-              :path    => p.url,
-              :liveCSS => true
-            )
-    
-      def std?
-    @settings.include? :std
+          # GET /resource/sign_in
+  def new
+    self.resource = resource_class.new(sign_in_params)
+    clean_up_passwords(resource)
+    yield resource if block_given?
+    respond_with(resource, serialize_options(resource))
   end
     
-      def dump_verbose_config(f = $stdout)
-    f.puts 'HOMEBREW_VERSION: #{HOMEBREW_VERSION}'
-    f.puts 'ORIGIN: #{origin}'
-    f.puts 'HEAD: #{head}'
-    f.puts 'Last commit: #{last_commit}'
-    if CoreTap.instance.installed?
-      f.puts 'Core tap ORIGIN: #{core_tap_origin}'
-      f.puts 'Core tap HEAD: #{core_tap_head}'
-      f.puts 'Core tap last commit: #{core_tap_last_commit}'
+    begin
+  require 'bundler/inline'
+rescue LoadError => e
+  $stderr.puts 'Bundler version 1.10 or later is required. Please update your Bundler'
+  raise e
+end
+    
+          def remember_me_is_active?(resource)
+        return false unless resource.respond_to?(:remember_me)
+        scope = Devise::Mapping.find_scope!(resource)
+        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
+        resource.remember_me?(token, generated_at)
+      end
+    
+          # Sign out all active users or scopes. This helper is useful for signing out all roles
+      # in one click. This signs out ALL scopes in warden. Returns true if there was at least one logout
+      # and false if there was no user logged in on all scopes.
+      def sign_out_all_scopes(lock=true)
+        users = Devise.mappings.keys.map { |s| warden.user(scope: s, run_callbacks: false) }
+    
+    # Each time a record is set we check whether its session has already timed out
+# or not, based on last request time. If so, the record is logged out and
+# redirected to the sign in page. Also, each time the request comes and the
+# record is set, we set the last request time inside its scoped session to
+# verify timeout in the following request.
+Warden::Manager.after_set_user do |record, warden, options|
+  scope = options[:scope]
+  env   = warden.request.env
+    
+      #
+  # Gets cookies from the Set-Cookie header in a parsed format
+  #
+  def get_cookies_parsed
+    if (self.headers.include?('Set-Cookie'))
+      ret = CGI::Cookie::parse(self.headers['Set-Cookie'])
     else
-      f.puts 'Core tap: N/A'
+      ret = {}
     end
-    f.puts 'HOMEBREW_PREFIX: #{HOMEBREW_PREFIX}'
-    f.puts 'HOMEBREW_REPOSITORY: #{HOMEBREW_REPOSITORY}'
-    f.puts 'HOMEBREW_CELLAR: #{HOMEBREW_CELLAR}'
-    f.puts 'HOMEBREW_BOTTLE_DOMAIN: #{BottleSpecification::DEFAULT_DOMAIN}'
-    f.puts hardware
-    f.puts 'OS X: #{MacOS.full_version}-#{kernel}'
-    f.puts 'Xcode: #{xcode ? xcode : 'N/A'}'
-    f.puts 'CLT: #{clt ? clt : 'N/A'}'
-    f.puts 'GCC-4.0: build #{gcc_40}' if gcc_40
-    f.puts 'GCC-4.2: build #{gcc_42}' if gcc_42
-    f.puts 'LLVM-GCC: build #{llvm}'  if llvm
-    f.puts 'Clang: #{clang ? '#{clang} build #{clang_build}' : 'N/A'}'
-    f.puts 'MacPorts/Fink: #{macports_or_fink}' if macports_or_fink
-    f.puts 'X11: #{describe_x11}'
-    f.puts 'System Ruby: #{describe_system_ruby}'
-    f.puts 'Perl: #{describe_perl}'
-    f.puts 'Python: #{describe_python}'
-    f.puts 'Ruby: #{describe_ruby}'
-    f.puts 'Java: #{describe_java}'
-  end
-end
-
-    
-      def cxxstdlib_check(check_type)
-    self.class.cxxstdlib_check check_type
+    ret
   end
     
-        def entries_as_json
-      @entries.sort! { |a, b| sort_fn(a.name, b.name) }.map(&:as_json)
-    end
-    
-        def pipeline_context(response)
-      options.merge url: response.url
-    end
-    
-        def self.subscribe_to(notifier)
-      attach_to(namespace, new, notifier)
-    end
-    
-            css('pre').each do |node|
-          node.content = node.content.strip
-    
-            subtitle = at_css('.hero-subtitle').try(:content)
-        breadcrumbs = css('.breadcrumbs li').map(&:content)[2..-2]
-    
-            css('> .section', '#preamble', 'a[href*='dict.html']', 'code var', 'code strong').each do |node|
-          node.before(node.children).remove
-        end
-    
-        @statuses = @account.statuses.permitted_for(@account, signed_request_account)
-    @statuses = params[:min_id].present? ? @statuses.paginate_by_min_id(LIMIT, params[:min_id]).reverse : @statuses.paginate_by_max_id(LIMIT, params[:max_id])
-    @statuses = cache_collection(@statuses, Status)
+      def hangup
+    self.client.send_hangup(self)
+    self.state = :hangup
+    true
   end
     
-        def resource_params
-      params.require(:custom_emoji).permit(:shortcode, :image, :visible_in_picker)
-    end
+              # Decodes the etype from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_etype(input)
+            input.value[0].value.to_i
+          end
     
-      def verify_payload?
-    payload.present? && VerifySalmonService.new.call(payload)
+              # Decodes the value from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [String]
+          def decode_value(input)
+            input.value[0].value
+          end
+    
+              # Decodes a Rex::Proto::Kerberos::Model::LastReque from an String
+          #
+          # @param input [String] the input to decode from
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
+    
+          def header_content
+        has_header && @header.formatted_data
+      end
+    
+      test 'transliteration' do
+    # we transliterate only when adapter is grit
+    return if defined?(Gollum::GIT_ADAPTER) && Gollum::GIT_ADAPTER != 'grit'
+    
+    # --gollum-path wins over ARGV[0]
+gollum_path = ARGV[0] || Dir.pwd
+    
+      it 'ignores implicit hashes' do
+    expect_no_offenses(<<-RUBY.strip_indent)
+      foo(a: 1,
+      b: 2)
+    RUBY
   end
     
-        data = {
-      alerts: {
-        follow: alerts_enabled,
-        favourite: alerts_enabled,
-        reblog: alerts_enabled,
-        mention: alerts_enabled,
-      },
-    }
+      context 'when arguments to a method' do
+    let(:prefix) { 'bar(' }
+    let(:suffix) { ')' }
+    let(:source) { construct(false, true) }
     
-      before_action :require_user!
+    module RuboCop
+  module AST
+    # A node extension for `kwsplat` nodes. This will be used in place of a
+    # plain  node when the builder constructs the AST, making its methods
+    # available to all `kwsplat` nodes within RuboCop.
+    class KeywordSplatNode < Node
+      include HashElementNode
+    
+    module RuboCop
+  module AST
+    # A node extension for `when` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `when` nodes within RuboCop.
+    class WhenNode < Node
+      # Returns an array of all the conditions in the `when` branch.
+      #
+      # @return [Array<Node>] an array of condition nodes
+      def conditions
+        node_parts[0...-1]
+      end
