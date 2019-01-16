@@ -1,220 +1,121 @@
 
         
-          # Check if there is no signed in user before doing the sign out.
+            You can install it using Cask:
+    
+      def self.repository(tap = nil)
+    if tap.nil? || tap.core_tap?
+      'bottles'
+    else
+      'bottles-#{tap.repo}'
+    end
+  end
+end
+    
+      # True if a {Formula} is being built in 32-bit/x86 mode.
+  # This is needed for some use-cases though we prefer to build Universal
+  # when a 32-bit version is needed.
+  def build_32_bit?
+    include?('32-bit') && option_defined?('32-bit')
+  end
+    
+      def plist_caveats
+    s = []
+    if f.plist || (keg && keg.plist_installed?)
+      destination = if f.plist_startup
+        '/Library/LaunchDaemons'
+      else
+        '~/Library/LaunchAgents'
+      end
+    
+      def std_cmake_parameters
+    '-DCMAKE_INSTALL_PREFIX='#{prefix}' -DCMAKE_BUILD_TYPE=None -DCMAKE_FIND_FRAMEWORK=LAST -Wno-dev'
+  end
+    
+        group.remove(moderator)
+    group.save
+    
+            staff.topic_id = post.topic.id
+        unless staff.save
+          puts staff.errors.full_messages
+          puts 'Failed to set the Staff category description topic!'
+        end
+    
+      # Compile a file on disk to CSS.
   #
-  # If there is no signed in user, it will set the flash message and redirect
-  # to the after_sign_out path.
-  def verify_signed_out_user
-    if all_signed_out?
-      set_flash_message! :notice, :already_signed_out
-    
-      ActiveSupport.run_load_hooks(:devise_controller, self)
-end
-
-    
-                bypass_sign_in(user)
-          DEPRECATION
-          warden.session_serializer.store(resource, scope)
-        elsif warden.user(scope) == resource && !options.delete(:force)
-          # Do nothing. User already signed in and we are not forcing it.
-          true
-        else
-          warden.set_user(resource, options.merge!(scope: scope))
-        end
-      end
-    
-    # Each time a record is set we check whether its session has already timed out
-# or not, based on last request time. If so, the record is logged out and
-# redirected to the sign in page. Also, each time the request comes and the
-# record is set, we set the last request time inside its scoped session to
-# verify timeout in the following request.
-Warden::Manager.after_set_user do |record, warden, options|
-  scope = options[:scope]
-  env   = warden.request.env
-    
-        # Creates configuration values for Devise and for the given module.
-    #
-    #   Devise::Models.config(Devise::Models::DatabaseAuthenticatable, :stretches)
-    #
-    # The line above creates:
-    #
-    #   1) An accessor called Devise.stretches, which value is used by default;
-    #
-    #   2) Some class methods for your model Model.stretches and Model.stretches=
-    #      which have higher priority than Devise.stretches;
-    #
-    #   3) And an instance method stretches.
-    #
-    # To add the class methods you need to have a module ClassMethods defined
-    # inside the given class.
-    #
-    def self.config(mod, *accessors) #:nodoc:
-      class << mod; attr_accessor :available_configs; end
-      mod.available_configs = accessors
-    
-          def remember_expires_at
-        self.class.remember_for.from_now
-      end
-    
-        def destroy
-      authorize @report_note, :destroy?
-      @report_note.destroy!
-      redirect_to admin_report_path(@report_note.report_id), notice: I18n.t('admin.report_notes.destroyed_msg')
-    end
-    
-        render json: @web_subscription, serializer: REST::WebPushSubscriptionSerializer
-  end
-    
-    class Auth::OmniauthCallbacksController < Devise::OmniauthCallbacksController
-  skip_before_action :verify_authenticity_token
-    
-          @conv2 = Conversation.create(hash)
-      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv2.id)
-             .increase_unread(alice)
-    
-        it 'should redirect back in the html version if it has > 0 notifications' do
-      FactoryGirl.create(:notification, recipient: alice, type: 'Notifications::StartedSharing')
-      get :read_all, params: {type: 'liked'}, format: :html
-      expect(response).to redirect_to(notifications_path)
-    end
-    
-    Given(/^all linked files exists in shared path$/) do
-  TestApp.linked_files.each do |linked_file|
-    step %Q{file '#{linked_file}' exists in shared path}
-  end
-end
-    
-      class VagrantSSHCommandError < RuntimeError; end
-    
-    module Capistrano
-  class ValidationError < RuntimeError; end
-    
-          # Runs all validation rules registered for the given key against the
-      # user-supplied value for that variable. If no validator raises an
-      # exception, the value is assumed to be valid.
-      def assert_valid_now(key, value)
-        validators[key].each do |validator|
-          validator.call(key, value)
-        end
-      end
-    
-          def fetch_for(key, default, &block)
-        block ? values.fetch(key, &block) : values.fetch(key, default)
-      end
-    
-    module Sidekiq
-  module Generators # :nodoc:
-    class WorkerGenerator < ::Rails::Generators::NamedBase # :nodoc:
-      desc 'This generator creates a Sidekiq Worker in app/workers and a corresponding test'
-    
-          raw_push(payloads) if !payloads.empty?
-      payloads.collect { |payload| payload['jid'] }
-    end
-    
-      module ClassMethods
-    # +has_attached_file+ gives the class it is called on an attribute that maps to a file. This
-    # is typically a file stored somewhere on the filesystem and has been uploaded by a user.
-    # The attribute returns a Paperclip::Attachment object which handles the management of
-    # that file. The intent is to make the attachment as much like a normal attribute. The
-    # thumbnails will be created when the new file is assigned, but they will *not* be saved
-    # until +save+ is called on the record. Likewise, if the attribute is set to +nil+ is
-    # called on it, the attachment will *not* be deleted until +save+ is called. See the
-    # Paperclip::Attachment documentation for more specifics. There are a number of options
-    # you can set to change the behavior of a Paperclip attachment:
-    # * +url+: The full URL of where the attachment is publicly accessible. This can just
-    #   as easily point to a directory served directly through Apache as it can to an action
-    #   that can control permissions. You can specify the full domain and path, but usually
-    #   just an absolute path is sufficient. The leading slash *must* be included manually for
-    #   absolute paths. The default value is
-    #   '/system/:class/:attachment/:id_partition/:style/:filename'. See
-    #   Paperclip::Attachment#interpolate for more information on variable interpolaton.
-    #     :url => '/:class/:attachment/:id/:style_:filename'
-    #     :url => 'http://some.other.host/stuff/:class/:id_:extension'
-    #   Note: When using the +s3+ storage option, the +url+ option expects
-    #   particular values. See the Paperclip::Storage::S3#url documentation for
-    #   specifics.
-    # * +default_url+: The URL that will be returned if there is no attachment assigned.
-    #   This field is interpolated just as the url is. The default value is
-    #   '/:attachment/:style/missing.png'
-    #     has_attached_file :avatar, :default_url => '/images/default_:style_avatar.png'
-    #     User.new.avatar_url(:small) # => '/images/default_small_avatar.png'
-    # * +styles+: A hash of thumbnail styles and their geometries. You can find more about
-    #   geometry strings at the ImageMagick website
-    #   (http://www.imagemagick.org/script/command-line-options.php#resize). Paperclip
-    #   also adds the '#' option (e.g. '50x50#'), which will resize the image to fit maximally
-    #   inside the dimensions and then crop the rest off (weighted at the center). The
-    #   default value is to generate no thumbnails.
-    # * +default_style+: The thumbnail style that will be used by default URLs.
-    #   Defaults to +original+.
-    #     has_attached_file :avatar, :styles => { :normal => '100x100#' },
-    #                       :default_style => :normal
-    #     user.avatar.url # => '/avatars/23/normal_me.png'
-    # * +keep_old_files+: Keep the existing attachment files (original + resized) from
-    #   being automatically deleted when an attachment is cleared or updated. Defaults to +false+.
-    # * +preserve_files+: Keep the existing attachment files in all cases, even if the parent
-    #   record is destroyed. Defaults to +false+.
-    # * +whiny+: Will raise an error if Paperclip cannot post_process an uploaded file due
-    #   to a command line error. This will override the global setting for this attachment.
-    #   Defaults to true.
-    # * +convert_options+: When creating thumbnails, use this free-form options
-    #   array to pass in various convert command options.  Typical options are '-strip' to
-    #   remove all Exif data from the image (save space for thumbnails and avatars) or
-    #   '-depth 8' to specify the bit depth of the resulting conversion.  See ImageMagick
-    #   convert documentation for more options: (http://www.imagemagick.org/script/convert.php)
-    #   Note that this option takes a hash of options, each of which correspond to the style
-    #   of thumbnail being generated. You can also specify :all as a key, which will apply
-    #   to all of the thumbnails being generated. If you specify options for the :original,
-    #   it would be best if you did not specify destructive options, as the intent of keeping
-    #   the original around is to regenerate all the thumbnails when requirements change.
-    #     has_attached_file :avatar, :styles => { :large => '300x300', :negative => '100x100' }
-    #                                :convert_options => {
-    #                                  :all => '-strip',
-    #                                  :negative => '-negate'
-    #                                }
-    #   NOTE: While not deprecated yet, it is not recommended to specify options this way.
-    #   It is recommended that :convert_options option be included in the hash passed to each
-    #   :styles for compatibility with future versions.
-    #   NOTE: Strings supplied to :convert_options are split on space in order to undergo
-    #   shell quoting for safety. If your options require a space, please pre-split them
-    #   and pass an array to :convert_options instead.
-    # * +storage+: Chooses the storage backend where the files will be stored. The current
-    #   choices are :filesystem, :fog and :s3. The default is :filesystem. Make sure you read the
-    #   documentation for Paperclip::Storage::Filesystem, Paperclip::Storage::Fog and Paperclip::Storage::S3
-    #   for backend-specific options.
-    #
-    # It's also possible for you to dynamically define your interpolation string for :url,
-    # :default_url, and :path in your model by passing a method name as a symbol as a argument
-    # for your has_attached_file definition:
-    #
-    #   class Person
-    #     has_attached_file :avatar, :default_url => :default_url_by_gender
-    #
-    #     private
-    #
-    #     def default_url_by_gender
-    #       '/assets/avatars/default_#{gender}.png'
-    #     end
-    #   end
-    def has_attached_file(name, options = {})
-      HasAttachedFile.define_on(self, name, options)
-    end
-  end
-end
-    
-        # True if the dimensions represent a square
-    def square?
-      height == width
-    end
-    
-        # Perform the actual interpolation. Takes the pattern to interpolate
-    # and the arguments to pass, which are the attachment and style name.
-    # You can pass a method name on your record as a symbol, which should turn
-    # an interpolation pattern for Paperclip to use.
-    def self.interpolate pattern, *args
-      pattern = args.first.instance.send(pattern) if pattern.kind_of? Symbol
-      result = pattern.dup
-      interpolators_cache.each do |method, token|
-        result.gsub!(token) { send(method, *args) } if result.include?(token)
-      end
+  # @raise [Sass::SyntaxError] if there's an error in the document
+  # @raise [Encoding::UndefinedConversionError] if the source encoding
+  #   cannot be converted to UTF-8
+  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
+  #
+  # @overload compile_file(filename, options = {})
+  #   Return the compiled CSS rather than writing it to a file.
+  #
+  #   @param filename [String] The path to the Sass, SCSS, or CSS file on disk.
+  #   @param options [{Symbol => Object}] An options hash;
+  #     see {file:SASS_REFERENCE.md#Options the Sass options documentation}
+  #   @return [String] The compiled CSS.
+  #
+  # @overload compile_file(filename, css_filename, options = {})
+  #   Write the compiled CSS to a file.
+  #
+  #   @param filename [String] The path to the Sass, SCSS, or CSS file on disk.
+  #   @param options [{Symbol => Object}] An options hash;
+  #     see {file:SASS_REFERENCE.md#Options the Sass options documentation}
+  #   @param css_filename [String] The location to which to write the compiled CSS.
+  def self.compile_file(filename, *args)
+    options = args.last.is_a?(Hash) ? args.pop : {}
+    css_filename = args.shift
+    result = Sass::Engine.for_file(filename, options).render
+    if css_filename
+      options[:css_filename] ||= css_filename
+      open(css_filename, 'w') {|css_file| css_file.write(result)}
+      nil
+    else
       result
     end
+  end
+end
+    
+          # Get the cache key pair for the given Sass URI.
+      # The URI need not be checked for validity.
+      #
+      # The only strict requirement is that the returned pair of strings
+      # uniquely identify the file at the given URI.
+      # However, the first component generally corresponds roughly to the directory,
+      # and the second to the basename, of the URI.
+      #
+      # Note that keys must be unique *across importers*.
+      # Thus it's probably a good idea to include the importer name
+      # at the beginning of the first component.
+      #
+      # @param uri [String] A URI known to be valid for this importer.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` currently being checked.
+      # @return [(String, String)] The key pair which uniquely identifies
+      #   the file at the given URI.
+      def key(uri, options)
+        Sass::Util.abstract(self)
+      end
+    
+        class << self
+      def elastic_pack_base_uri
+        env_url = ENV['LOGSTASH_PACK_URL']
+        (env_url.nil? || env_url.empty?) ? DEFAULT_PACK_URL : env_url
+      end
+    
+          # Install the gems to make them available locally when bundler does his local resolution
+      post_install_messages = []
+      pack.gems.each do |packed_gem|
+        PluginManager.ui.debug('Installing, #{packed_gem.name}, version: #{packed_gem.version} file: #{packed_gem.file}')
+        post_install_messages << LogStash::PluginManager::GemInstaller::install(packed_gem.file, packed_gem.plugin?)
+      end
+    
+    task :spec    => 'spec:all'
+task :default => :spec
+    
+              it 'successfully install the plugin' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install #{gem_path_on_vagrant}')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-dns')
+          end
+        end
