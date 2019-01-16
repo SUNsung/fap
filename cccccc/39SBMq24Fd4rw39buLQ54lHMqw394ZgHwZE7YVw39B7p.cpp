@@ -1,231 +1,222 @@
 
         
-        template <> struct wAdd<s32>
-{
-    typedef s32 type;
+        namespace {
     }
     
-        for (size_t i = 0; i < size.height; ++i)
+      // WindowListObserver:
+  void OnWindowAllClosed() override;
+    
+    #include 'atom/browser/api/atom_api_browser_window.h'
+    
+      static void BuildPrototype(v8::Isolate* isolate,
+                             v8::Local<v8::FunctionTemplate> prototype);
+    
+    class Net : public mate::EventEmitter<Net> {
+ public:
+  static v8::Local<v8::Value> Create(v8::Isolate* isolate);
+    }
+    
+    NODE_BUILTIN_MODULE_CONTEXT_AWARE(atom_common_screen, Initialize)
+
+    
+    class Screen : public mate::EventEmitter<Screen>,
+               public display::DisplayObserver {
+ public:
+  static v8::Local<v8::Value> Create(v8::Isolate* isolate);
+    }
+    
+    namespace gfx {
+class Image;
+}
+    
+      // content::JavaScriptDialogManager implementations.
+  void RunJavaScriptDialog(content::WebContents* web_contents,
+                           content::RenderFrameHost* rfh,
+                           content::JavaScriptDialogType dialog_type,
+                           const base::string16& message_text,
+                           const base::string16& default_prompt_text,
+                           DialogClosedCallback callback,
+                           bool* did_suppress_message) override;
+  void RunBeforeUnloadDialog(content::WebContents* web_contents,
+                             content::RenderFrameHost* rfh,
+                             bool is_reload,
+                             DialogClosedCallback callback) override;
+  void CancelDialogs(content::WebContents* web_contents,
+                     bool reset_state) override;
+    
+      // content::QuotaPermissionContext:
+  void RequestQuotaPermission(const content::StorageQuotaParams& params,
+                              int render_process_id,
+                              const PermissionCallback& callback) override;
+    
+    #endif  // ATOM_BROWSER_LIB_POWER_OBSERVER_H_
+
+    
+    #endif  // ATOM_BROWSER_MAC_IN_APP_PURCHASE_H_
+
+    
+    // Tell browser to allocate a new object.
+// function AllocateObject(id, name, options);
+v8::Handle<v8::Value> AllocateObject(int routing_id,
+                                     int object_id,
+                                     const std::string& type,
+                                     v8::Handle<v8::Value> options);
+    
+    
+#include 'content/nw/src/api/event/event.h'
+#include 'base/values.h'
+#include 'content/nw/src/api/dispatcher_host.h'
+#include 'ui/gfx/screen.h'
+    
+    Menu::Menu(int id,
+           const base::WeakPtr<ObjectManager>& object_manager,
+           const base::DictionaryValue& option,
+           const std::string& extension_id)
+  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
+  Create(option);
+}
+    
+    namespace nw {
+    }
+    
+    void NwDesktopCaptureMonitor::OnSourceThumbnailChanged(DesktopMediaList* list, int index) {
+    std::string base64;
+    }
+    
+        /** Returns a new copy of the array reversed. User is responsible for releasing this copy.
+     *
+     * @js NA
+     * @return A new copy of the array reversed.
+     */
+    PointArray* reverse() const;
+    
+        /**
+    @brief Set the center position of lens effect.
+    @param position The center position will be set.
+    */
+    void setPosition(const Vec2& position);
+    
+        /** Creates the Spawn action.
+     *
+     * @param action1   The first spawned action.
+     * @param action2   The second spawned action.
+     * @return An autoreleased Spawn object.
+     * @js NA
+     */
+    static Spawn* createWithTwoActions(FiniteTimeAction *action1, FiniteTimeAction *action2);
+    
+    GridBase* PageTurn3D::getGrid()
+{
+    auto result = Grid3D::create(_gridSize, _gridNodeTarget->getGridRect());
+    if (result)
     {
-        const u8* src = internal::getRowPtr(srcBase, srcStride, i);
-        u8* dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t j = 0;
+        result->setNeedDepthTestForBlit(true);
     }
     
-    #define COMBINE(sgn,bits,n) void combine##n(const Size2D &_size                                             \
-                                        FILL_LINES##n(FARG, sgn##bits),                                     \
-                                        sgn##bits * dstBase, ptrdiff_t dstStride)                           \
-{                                                                                                           \
-    internal::assertSupportedConfiguration();                                                               \
-    Size2D size(_size);                                                                                     \
-    if (CONTSRC##n                                                                                          \
-        dstStride == (ptrdiff_t)(size.width))                                                               \
-    {                                                                                                       \
-        size.width *= size.height;                                                                          \
-        size.height = 1;                                                                                    \
-    }                                                                                                       \
-    typedef internal::VecTraits<sgn##bits, n>::vec128 vec128;                                               \
-    size_t roiw16 = size.width >= (16/sizeof(sgn##bits) - 1) ? size.width - (16/sizeof(sgn##bits) - 1) : 0; \
-    typedef internal::VecTraits<sgn##bits, n>::vec64 vec64;                                                 \
-    size_t roiw8 = size.width >= (8/sizeof(sgn##bits) - 1) ? size.width - (8/sizeof(sgn##bits) - 1) : 0;    \
-                                                                                                            \
-    for (size_t i = 0u; i < size.height; ++i)                                                               \
-    {                                                                                                       \
-        FILL_LINES##n(VROW, sgn##bits)                                                                      \
-        sgn##bits * dst = internal::getRowPtr(dstBase, dstStride, i);                                       \
-        size_t sj = 0u, dj = 0u;                                                                            \
-                                                                                                            \
-        for (; sj < roiw16; sj += 16/sizeof(sgn##bits), dj += MUL##n(16)/sizeof(sgn##bits))                 \
-            MERGE_QUAD(sgn, bits, n)                                                                        \
-                                                                                                            \
-        if ( sj < roiw8 )                                                                                   \
-        {                                                                                                   \
-            vec64 v_dst;                                                                                    \
-            FILL_LINES##n(VLD1, sgn##bits)                                                                  \
-            vst##n##_##sgn##bits(dst + dj, v_dst);                                                          \
-            sj += 8/sizeof(sgn##bits); dj += MUL##n(8)/sizeof(sgn##bits);                                   \
-        }                                                                                                   \
-                                                                                                            \
-        for (; sj < size.width; ++sj, dj += n)                                                              \
-        {                                                                                                   \
-            FILL_LINES##n(SLD, sgn##bits)                                                                   \
-        }                                                                                                   \
-    }                                                                                                       \
+    return result;
 }
     
-    namespace CAROTENE_NS {
+        // Overrides
+	virtual TurnOffTiles* clone() const override;
+    virtual void startWithTarget(Node *target) override;
+    virtual void update(float time) override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    TurnOffTiles() {}
+    virtual ~TurnOffTiles();
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    #include '2d/CCNode.h'
+#include 'base/CCProtocols.h'
+#include 'base/ccTypes.h'
+#include 'renderer/CCQuadCommand.h'
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+      {
+    auto ka = getKeepAliveToken(exec);
+    EXPECT_TRUE(ka);
+    EXPECT_EQ(&exec, ka.get());
+    EXPECT_EQ(1, exec.refCount);
+  }
+    
+    #include <folly/Format.h>
+    
+    // ============================================================================
+// folly/test/GLogBenchmark.cpp                    relative  time/iter  iters/s
+// ============================================================================
+// skip_overhead                                               36.37ns   27.49M
+// dev_null_log_overhead                                        2.61us  382.57K
+// ============================================================================
+    
+    static int getNextZero(
+    const std::vector<uint8_t>& v,
+    const size_t curPos,
+    const size_t limit) {
+  auto pos = std::find(v.begin() + curPos, v.begin() + limit, 0);
+  if (pos == v.begin() + limit) {
+    return -1;
+  }
+  return std::distance(v.begin(), pos);
+}
+    
+    template <class RNG>
+struct SeedData {
+  SeedData() {
+    Random::secureRandom(seedData.data(), seedData.size() * sizeof(uint32_t));
+  }
     }
     
-    /*!
- *  Aligns pointer by the certain number of bytes
- *
- *  This small inline function aligns the pointer by the certain number of bytes by shifting
- *  it forward by 0 or a positive offset.
- */
-template<typename T> inline T* alignPtr(T* ptr, size_t n=sizeof(T))
-{
-    return (T*)(((size_t)ptr + n-1) & -n);
-}
+    template <
+    class Iterator = const char*,
+    class Base = folly::Range<boost::u8_to_u32_iterator<Iterator>>>
+class UTF8Range : public Base {
+ public:
+  /* implicit */ UTF8Range(const folly::Range<Iterator> baseRange)
+      : Base(
+            boost::u8_to_u32_iterator<Iterator>(
+                baseRange.begin(),
+                baseRange.begin(),
+                baseRange.end()),
+            boost::u8_to_u32_iterator<Iterator>(
+                baseRange.end(),
+                baseRange.begin(),
+                baseRange.end())) {}
+  /* implicit */ UTF8Range(const std::string& baseString)
+      : Base(folly::Range<Iterator>(baseString)) {}
+};
     
-                uint32x4_t vequ1 = vceqq_u32(vreinterpretq_u32_u64(vm1), vc0);
+    namespace folly {
+namespace io {
+enum class CodecType;
+} // namespace io
+    }
     
     template <typename T>
-void flip(const Size2D & size,
-          const void * srcBase, ptrdiff_t srcStride,
-          void * dstBase, ptrdiff_t dstStride,
-          FLIP_MODE flipMode)
-{
-    using namespace internal;
-    }
-    
-            uint16x8_t el8 = vaddq_u16(el8shr12, el8shr03);
-        uint16x4_t el4h = vadd_u16(vget_low_u16(el8), vget_high_u16(el8));
-    
-    
-    {
-    {        for( ; x < cols; x++ )
-        {
-            if (x == 0) {
-                // make border
-                if (border == BORDER_MODE_REPLICATE) {
-                    pprevx = v0[0] + 2*v1[0] + 2*v2[0] + 2*v3[0] + v4[0];
-                    prevx = 2*v0[0] - 4*v2[0] + 2*v4[0];
-                } else if (border == BORDER_MODE_REFLECT) {
-                    pprevx = v0[1] + 2*v1[1] + 2*v2[1] + 2*v3[1] + v4[1];
-                    prevx = 2*v0[0] - 4*v2[0] + 2*v4[0];
-                } else if (border == BORDER_MODE_REFLECT101) {
-                    pprevx = v0[2] + 2*v1[2] + 2*v2[2] + 2*v3[2] + v4[2];
-                    prevx = 2*v0[1] - 4*v2[1] + 2*v4[1];
-                } else if (border == BORDER_MODE_CONSTANT) {
-                    pprevx = 8 * borderValue;
-                    prevx = 0;
-                }
-            } else if (x == 1) {
-                // make border
-                if (border == BORDER_MODE_REPLICATE || border == BORDER_MODE_REFLECT) {
-                    pprevx = v0[0] + 2*v1[0] + 2*v2[0] + 2*v3[0] + v4[0];
-                } else if (border == BORDER_MODE_REFLECT101) {
-                    pprevx = v0[1] + 2*v1[1] + 2*v2[1] + 2*v3[1] + v4[1];
-                } else if (border == BORDER_MODE_CONSTANT) {
-                    pprevx = 8 * borderValue;
-                }
-                prevx = 2*v0[0] - 4*v2[0] + 2*v4[0];
-            } else {
-                pprevx = v0[x-2] + 2*v1[x-2] + 2*v2[x-2] + 2*v3[x-2] + v4[x-2];
-                prevx = 2*v0[x-1] - 4*v2[x-1] + 2*v4[x-1];
-            }
-            s16 currx = 2*v0[x] - 4*v1[x] - 12*v2[x] - 4*v3[x] + 2*v4[x];
-            if (x == cols-1) {
-                // make border
-                if (border == BORDER_MODE_REPLICATE) {
-                    nextx = 2*v0[x] - 4*v2[x] + 2*v4[x];
-                    nnextx = v0[x] + 2*v1[x] + 2*v2[x] + 2*v3[x] + v4[x];
-                } else if (border == BORDER_MODE_REFLECT) {
-                    nextx = 2*v0[x] - 4*v2[x] + 2*v4[x];
-                    nnextx = v0[x-1] + 2*v1[x-1] + 2*v2[x-1] + 2*v3[x-1] + v4[x-1];
-                } else if (border == BORDER_MODE_REFLECT101) {
-                    nextx = 2*v0[x-1] - 4*v2[x-1] + 2*v4[x-1];
-                    nnextx = v0[x-2] + 2*v1[x-2] + 2*v2[x-2] + 2*v3[x-2] + v4[x-2];
-                } else if (border == BORDER_MODE_CONSTANT) {
-                    nextx = 0;
-                    nnextx = 8 * borderValue;
-                }
-            } else if (x == cols-2) {
-                // make border
-                if (border == BORDER_MODE_REPLICATE || border == BORDER_MODE_REFLECT) {
-                    nnextx = v0[x+1] + 2*v1[x+1] + 2*v2[x+1] + 2*v3[x+1] + v4[x+1];
-                } else if (border == BORDER_MODE_REFLECT101) {
-                    nnextx = v0[x] + 2*v1[x] + 2*v2[x] + 2*v3[x] + v4[x];
-                } else if (border == BORDER_MODE_CONSTANT) {
-                    nnextx = 8 * borderValue;
-                }
-                nextx = 2*v0[x+1] - 4*v2[x+1] + 2*v4[x+1];
-            } else {
-                nextx = 2*v0[x+1] - 4*v2[x+1] + 2*v4[x+1];
-                nnextx = v0[x+2] + 2*v1[x+2] + 2*v2[x+2] + 2*v3[x+2] + v4[x+2];
-            }
-            s16 res = pprevx + prevx + currx + nextx + nnextx;
-            *(drow+x) = 2*res;
-        }
-    }
-#else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)border;
-    (void)borderValue;
-#endif
+typename std::enable_if<std::is_arithmetic<T>::value, std::string>::type
+prefixToStringLE(T prefix, uint64_t n = sizeof(T)) {
+  DCHECK_GT(n, 0);
+  DCHECK_LE(n, sizeof(T));
+  prefix = Endian::little(prefix);
+  std::string result;
+  result.resize(n);
+  memcpy(&result[0], &prefix, n);
+  return result;
 }
     
-    Carver::Carver(const std::set<std::string>& paths,
-               const std::string& guid,
-               const std::string& requestId)
-    : InternalRunnable('Carver') {
-  status_ = Status(0, 'Ok');
-  for (const auto& p : paths) {
-    carvePaths_.insert(fs::path(p));
+    TEST_F(SparseByteSetTest, empty) {
+  for (auto c = lims::min(); c < lims::max(); ++c) {
+    EXPECT_FALSE(s.contains(c));
   }
-    }
-    
-      /*
-   * @brief the uri used to begin POSTing carve data
-   *
-   * This endpoint should negotiate the details of the carve, as well
-   * as give the client a session id used to continue POSTing the data.
-   */
-  std::string startUri_;
-    
-    
-    {  auto tarPath = carveFSPath + '/' + kTestCarveNamePrefix + guid_ + '.tar';
-  PlatformFile tar(tarPath, PF_OPEN_EXISTING | PF_READ);
-  EXPECT_TRUE(tar.isValid());
-  EXPECT_GT(tar.size(), 0U);
 }
-    
-    using KeyValueMap = std::map<std::string, std::string>;
-using DecorationStore = std::map<std::string, KeyValueMap>;
-    
-    /**
- * @brief A simple ConfigParserPlugin for an 'events' dictionary key.
- */
-class EventsConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override {
-    return {'events'};
-  }
-    }
-    
-    #include <string>
-#include <vector>
-    
-      if (config.count('file_accesses') > 0) {
-    const auto& accesses = config.at('file_accesses').doc();
-    if (accesses.IsArray()) {
-      for (const auto& category : accesses.GetArray()) {
-        if (!category.IsString()) {
-          continue;
-        }
-        std::string path = category.GetString();
-        access_map_[source].push_back(path);
-      }
-    }
-    }
-    
-    #include <osquery/config/config.h>
-#include <osquery/config/parsers/kafka_topics.h>
-#include <osquery/registry_factory.h>
-    
-    #include <string>
-#include <vector>
-    
-    #include <set>
-    
-      auto s = TLSRequestHelper::go<JSONSerializer>(
-      uri_, params, json, FLAGS_config_tls_max_attempts);
-  if (s.ok()) {
-    if (FLAGS_tls_node_api) {
-      // The node API embeds configuration data (JSON escaped).
-    }
-    }
