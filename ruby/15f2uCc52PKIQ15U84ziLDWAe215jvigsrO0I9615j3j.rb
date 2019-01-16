@@ -1,72 +1,100 @@
 
         
-                @response = (gets || '').chomp
-      end
-    
-            print_deprecation_warnings_if_applicable
-    
-    # when launched as a script, not require'd, (currently from bin/logstash and bin/logstash-plugin) the first
-# argument is the path of a Ruby file to require and a LogStash::Runner class is expected to be
-# defined and exposing the LogStash::Runner#main instance method which will be called with the current ARGV
-# currently lib/logstash/runner.rb and lib/pluginmanager/main.rb are called using this.
-if $0 == __FILE__
-  LogStash::Bundler.setup!({:without => [:build, :development]})
-  require_relative 'patches/jar_dependencies'
-    
-        context 'with a specific plugin' do
-      let(:plugin_name) { 'logstash-input-stdin' }
-      it 'list the plugin and display the plugin name' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name}$/)
-      end
-    
-        context 'update a specific plugin' do
-      it 'has executed successfully' do
-        cmd = logstash.run_command_in_path('bin/logstash-plugin update --no-verify #{plugin_name}')
-        expect(cmd.stdout).to match(/Updating #{plugin_name}/)
-        expect(logstash).not_to have_installed?(plugin_name, previous_version)
+          p.action do |args, _|
+    if args.empty?
+      Jekyll.logger.error 'A subcommand is required.'
+      puts p
+      abort
+    else
+      subcommand = args.first
+      unless p.has_command? subcommand
+        Jekyll.logger.abort_with 'fatal: 'jekyll #{args.first}' could not' \
+          ' be found. You may need to install the jekyll-#{args.first} gem' \
+          ' or a related gem to be able to use this subcommand.'
       end
     end
-    
-    # test/spec/mini 3
-# http://gist.github.com/25455
-# chris@ozmm.org
-# file:lib/test/spec/mini.rb
-def context(*args, &block)
-  return super unless (name = args.first) && block
-  require 'test/unit'
-  klass = Class.new(defined?(ActiveSupport::TestCase) ? ActiveSupport::TestCase : Test::Unit::TestCase) do
-    def self.test(name, &block)
-      define_method('test_#{name.gsub(/\W/, '_')}', &block) if block
-    end
-    
-      test 'creates korean page which contains korean content' do
-    post '/create', :content => '한글 text', :page => 'k',
-         :format             => 'markdown', :message => 'def'
-    follow_redirect!
-    assert last_response.ok?
-    
-        # Extract the path string that Gollum::Wiki expects
-    def extract_path(file_path)
-      return nil if file_path.nil?
-      last_slash = file_path.rindex('/')
-      if last_slash
-        file_path[0, last_slash]
-      end
-    end
-    
-    Given(/^I add a '(.*?)' processor in '(.*?)'$/) do |processor, directory|
-  filename = '#{directory}/#{processor}.rb'
-  cd('.') do
-    FileUtils.mkdir_p directory
-    File.open(filename, 'w') do |f|
-      f.write(<<-CLASS)
-        module Paperclip
-          class #{processor.capitalize} < Processor
-            def make
-              basename = File.basename(file.path, File.extname(file.path))
-              dst_format = options[:format] ? '.\#{options[:format]}' : ''
-    
-      def migration_file_name
-    '#{migration_name}.rb'
   end
+end
+
+    
+          def after_background(_background)
+        @in_background = nil
+      end
+    
+            def initialize(_opts)
+          # If EventMachine SSL support on Windows ever gets better, the code below will
+          # set up the reactor to handle SSL
+          #
+          # @ssl_enabled = opts['ssl_cert'] && opts['ssl_key']
+          # if @ssl_enabled
+          #   em_opts[:tls_options] = {
+          #   :private_key_file => Jekyll.sanitized_path(opts['source'], opts['ssl_key']),
+          #   :cert_chain_file  => Jekyll.sanitized_path(opts['source'], opts['ssl_cert'])
+          #   }
+          #   em_opts[:secure] = true
+          # end
+    
+        def effective_url
+      @effective_url ||= URL.parse super
+    end
+    
+            css('pre.prettyprint').each do |node|
+          node.content = node.content.strip
+          node['data-language'] = 'dart' if node['class'].include?('dart')
+          node['data-language'] = 'html' if node.content.start_with?('<')
+          node.remove_attribute('class')
+        end
+    
+      context 'writable test' do
+    before do
+      @tmp_file = tmp('file.kernel.test')
+      touch(@tmp_file)
+    end
+    
+      # String arguments should be evaluated in the context of the caller.
+  it 'accepts a String argument instead of a Proc or block' do
+    trace_var :$Kernel_trace_var_global, '$Kernel_trace_var_extra = true'
+    
+    Then(/the current symlink points to the previous release/) do
+  previous_release_path = @release_paths[-2]
+    
+          private
+    
+          unless described_class ==
+             RuboCop::Cop::Layout::MultilineMethodDefinitionBraceLayout
+        context 'with a chained call on the closing brace' do
+          let(:suffix) { '.any?' }
+          let(:source) { construct(false, true) }
+    
+          # Checks whether this case statement has an `else` branch.
+      #
+      # @return [Boolean] whether the `case` statement has an `else` branch
+      def else?
+        loc.else
+      end
+    end
+  end
+end
+
+    
+          # Returns the body of the `for` loop.
+      #
+      # @return [Node, nil] The body of the `for` loop.
+      def body
+        node_parts[2]
+      end
+    end
+  end
+end
+
+    
+    
+    {      # Checks whether the `hash` literal is delimited by curly braces.
+      #
+      # @return [Boolean] whether the `hash` literal is enclosed in braces
+      def braces?
+        loc.end && loc.end.is?('}')
+      end
+    end
+  end
+end
