@@ -1,363 +1,307 @@
 
         
-        namespace CAROTENE_NS {
-    using std::size_t;
-    using std::ptrdiff_t;
-    }
-    
-        f32 alpha, beta, gamma;
-    float32x4_t valpha, vbeta, vgamma;
-    wAdd(f32 _alpha, f32 _beta, f32 _gamma):
-        alpha(_alpha), beta(_beta), gamma(_gamma)
-    {
-        valpha = vdupq_n_f32(_alpha);
-        vbeta = vdupq_n_f32(_beta);
-        vgamma = vdupq_n_f32(_gamma + 0.5);
-    }
-    
-            x -= 8;
-        if(x == colsn){
-            x -= cn;
-        }
-        s16 pprevx[4], prevx[4], rowx[4], nextx[4], nnextx[4];
-        ptrdiff_t px = x / cn;
-        for( s32 k = 0; k < cn; k++ )
-        {
-            ptrdiff_t ploc;
-            ploc = internal::borderInterpolate(px-2, size.width, borderType);
-            pprevx[k] = ploc < 0 ? 5*borderValue :
-                                   srow4[ploc*cn+k] + srow3[ploc*cn+k] + srow2[ploc*cn+k] + srow1[ploc*cn+k] + srow0[ploc*cn+k];
-    }
-    
-    namespace CAROTENE_NS {
-    }
-    
-                op(v_src00, v_src10, v_dst0);
-            op(v_src01, v_src11, v_dst1);
-    
-    
-    {    minLocCount >>= 1;
-    maxLocCount >>= 1;
-#else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)minVal;
-    (void)minLocPtr;
-    (void)minLocCount;
-    (void)minLocCapacity;
-    (void)maxVal;
-    (void)maxLocPtr;
-    (void)maxLocCount;
-    (void)maxLocCapacity;
-#endif
+        bool ParseAnyTypeUrl(const string& type_url, string* full_type_name) {
+  return ParseAnyTypeUrl(type_url, NULL, full_type_name);
 }
     
-      /// @brief Deprecated; use <code>Blob(const vector<int>& shape)</code>.
-  explicit Blob(const int num, const int channels, const int height,
-      const int width);
-  explicit Blob(const vector<int>& shape);
-    
-      /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
-   *
-   * @param datum
-   *    Datum containing the data to be transformed.
-   */
-  vector<int> InferBlobShape(const Datum& datum);
-  /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
-   *    It uses the first element to infer the shape of the blob.
-   *
-   * @param datum_vector
-   *    A vector of Datum containing the data to be transformed.
-   */
-  vector<int> InferBlobShape(const vector<Datum> & datum_vector);
-  /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
-   *    It uses the first element to infer the shape of the blob.
-   *
-   * @param mat_vector
-   *    A vector of Mat containing the data to be transformed.
-   */
-#ifdef USE_OPENCV
-  vector<int> InferBlobShape(const vector<cv::Mat> & mat_vector);
-  /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
-   *
-   * @param cv_img
-   *    cv::Mat containing the data to be transformed.
-   */
-  vector<int> InferBlobShape(const cv::Mat& cv_img);
-#endif  // USE_OPENCV
-    
-      /* Should be tested when running loops to exit when requested. */
-  bool must_stop();
-    
-      // Get a layer using a LayerParameter.
-  static shared_ptr<Layer<Dtype> > CreateLayer(const LayerParameter& param) {
-    if (Caffe::root_solver()) {
-      LOG(INFO) << 'Creating layer ' << param.name();
-    }
-    const string& type = param.type();
-    CreatorRegistry& registry = Registry();
-    CHECK_EQ(registry.count(type), 1) << 'Unknown layer type: ' << type
-        << ' (known types: ' << LayerTypeListString() << ')';
-    return registry[type](param);
-  }
-    
-      virtual inline const char* type() const { return 'AbsVal'; }
-  virtual inline int ExactNumBottomBlobs() const { return 1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the predictions @f$ x @f$, a Blob with values in
-   *      @f$ [-\infty, +\infty] @f$ indicating the predicted score for each of
-   *      the @f$ K = CHW @f$ classes. Each @f$ x_n @f$ is mapped to a predicted
-   *      label @f$ \hat{l}_n @f$ given by its maximal index:
-   *      @f$ \hat{l}_n = \arg\max\limits_k x_{nk} @f$
-   *   -# @f$ (N \times 1 \times 1 \times 1) @f$
-   *      the labels @f$ l @f$, an integer-valued Blob with values
-   *      @f$ l_n \in [0, 1, 2, ..., K - 1] @f$
-   *      indicating the correct class label among the @f$ K @f$ classes
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
-   *      the computed accuracy: @f$
-   *        \frac{1}{N} \sum\limits_{n=1}^N \delta\{ \hat{l}_n = l_n \}
-   *      @f$, where @f$
-   *      \delta\{\mathrm{condition}\} = \left\{
-   *         \begin{array}{lr}
-   *            1 & \mbox{if condition} \\
-   *            0 & \mbox{otherwise}
-   *         \end{array} \right.
-   *      @f$
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+    // Parses a set of comma-delimited name/value pairs.
+void ParseGeneratorParameter(const string& text,
+                             std::vector<std::pair<string, string> >* output) {
+  std::vector<string> parts = Split(text, ',', true);
     }
     
-    /**
- * @brief Compute the index of the @f$ K @f$ max values for each datum across
- *        all dimensions @f$ (C \times H \times W) @f$.
- *
- * Intended for use after a classification layer to produce a prediction.
- * If parameter out_max_val is set to true, output is a vector of pairs
- * (max_ind, max_val) for each image. The axis parameter specifies an axis
- * along which to maximise.
- *
- * NOTE: does not implement Backwards operation.
- */
-template <typename Dtype>
-class ArgMaxLayer : public Layer<Dtype> {
- public:
-  /**
-   * @param param provides ArgMaxParameter argmax_param,
-   *     with ArgMaxLayer options:
-   *   - top_k (\b optional uint, default 1).
-   *     the number @f$ K @f$ of maximal items to output.
-   *   - out_max_val (\b optional bool, default false).
-   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
-   *     output max_val along the specified axis.
-   *   - axis (\b optional int).
-   *     if set, maximise along the specified axis else maximise the flattened
-   *     trailing dimensions for each index of the first / num dimension.
-   */
-  explicit ArgMaxLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    #ifndef CPU_ONLY
-  void forward_gpu_gemm(const Dtype* col_input, const Dtype* weights,
-      Dtype* output, bool skip_im2col = false);
-  void forward_gpu_bias(Dtype* output, const Dtype* bias);
-  void backward_gpu_gemm(const Dtype* input, const Dtype* weights,
-      Dtype* col_output);
-  void weight_gpu_gemm(const Dtype* col_input, const Dtype* output, Dtype*
-      weights);
-  void backward_gpu_bias(Dtype* bias, const Dtype* input);
-#endif
-    
-    /**
- * @brief Computes the contrastive loss @f$
- *          E = \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
- *              \left(1-y\right) \max \left(margin-d, 0\right)^2
- *          @f$ where @f$
- *          d = \left| \left| a_n - b_n \right| \right|_2 @f$. This can be
- *          used to train siamese networks.
- *
- * @param bottom input Blob vector (length 3)
- *   -# @f$ (N \times C \times 1 \times 1) @f$
- *      the features @f$ a \in [-\infty, +\infty]@f$
- *   -# @f$ (N \times C \times 1 \times 1) @f$
- *      the features @f$ b \in [-\infty, +\infty]@f$
- *   -# @f$ (N \times 1 \times 1 \times 1) @f$
- *      the binary similarity @f$ s \in [0, 1]@f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
- *      the computed contrastive loss: @f$ E =
- *          \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
- *          \left(1-y\right) \max \left(margin-d, 0\right)^2
- *          @f$ where @f$
- *          d = \left| \left| a_n - b_n \right| \right|_2 @f$.
- * This can be used to train siamese networks.
- */
-template <typename Dtype>
-class ContrastiveLossLayer : public LossLayer<Dtype> {
- public:
-  explicit ContrastiveLossLayer(const LayerParameter& param)
-      : LossLayer<Dtype>(param), diff_() {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    #ifdef USE_CUDNN
-template <typename Dtype>
-class CuDNNLCNLayer : public LRNLayer<Dtype> {
- public:
-  explicit CuDNNLCNLayer(const LayerParameter& param)
-      : LRNLayer<Dtype>(param), handles_setup_(false), tempDataSize(0),
-        tempData1(NULL), tempData2(NULL) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNLCNLayer();
-    }
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    {  bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnTensorDescriptor_t bottom_desc_;
-  cudnnTensorDescriptor_t top_desc_;
-  cudnnActivationDescriptor_t activ_desc_;
-};
-#endif
-    
-    
-    {  // Verify that the size of the key space not touched by the reads
-  // is pretty much unchanged.
-  const int64_t final_other_size = Size(Key(n), Key(kCount));
-  ASSERT_LE(final_other_size, initial_other_size + 1048576);
-  ASSERT_GE(final_other_size, initial_other_size/5 - 1048576);
+    std::string SourceGeneratorBase::class_access_level() {
+  return (IsDescriptorProto(descriptor_) || this->options()->internal_access) ? 'internal' : 'public';
 }
     
-    
-    {  if (s.ok() && current_entries > 0) {
-    // Verify that the table is usable
-    Iterator* iter = table_cache_->NewIterator(ReadOptions(),
-                                               output_number,
-                                               current_bytes);
-    s = iter->status();
-    delete iter;
-    if (s.ok()) {
-      Log(options_.info_log,
-          'Generated table #%llu@%d: %lld keys, %lld bytes',
-          (unsigned long long) output_number,
-          compact->compaction->level(),
-          (unsigned long long) current_entries,
-          (unsigned long long) current_bytes);
-    }
-  }
-  return s;
-}
-    
-    void InternalKeyComparator::FindShortSuccessor(std::string* key) const {
-  Slice user_key = ExtractUserKey(*key);
-  std::string tmp(user_key.data(), user_key.size());
-  user_comparator_->FindShortSuccessor(&tmp);
-  if (tmp.size() < user_key.size() &&
-      user_comparator_->Compare(user_key, tmp) < 0) {
-    // User key has become shorter physically, but larger logically.
-    // Tack on the earliest possible number to the shortened user key.
-    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
-    assert(this->Compare(*key, tmp) < 0);
-    key->swap(tmp);
-  }
-}
-    
-    static std::string MakeFileName(const std::string& dbname, uint64_t number,
-                                const char* suffix) {
-  char buf[100];
-  snprintf(buf, sizeof(buf), '/%06llu.%s',
-           static_cast<unsigned long long>(number),
-           suffix);
-  return dbname + buf;
-}
-    
-    #endif  // STORAGE_LEVELDB_DB_FILENAME_H_
-
-    
-    int main(int argc, char** argv) {
-  leveldb::Env* env = leveldb::Env::Default();
-  bool ok = true;
-  if (argc < 2) {
-    Usage();
-    ok = false;
+    // Get the name of an enum's Java class without package name prefix.
+string ClassNameWithoutPackage(const EnumDescriptor* descriptor,
+                               bool immutable) {
+  // Doesn't append 'Mutable' for enum type's name.
+  const Descriptor* message_descriptor = descriptor->containing_type();
+  if (message_descriptor == NULL) {
+    return descriptor->name();
   } else {
-    std::string command = argv[1];
-    if (command == 'dump') {
-      ok = leveldb::HandleDumpCommand(env, argv+2, argc-2);
-    } else {
-      Usage();
-      ok = false;
+    return ClassNameWithoutPackage(message_descriptor, immutable) +
+           '.' + descriptor->name();
+  }
+}
+    
+      if (HasDescriptorMethods(file_, options_.enforce_lite)) {
+    // Generate descriptors.
+    string classname = name_resolver_->GetDescriptorClassName(file_);
+    string filename = package_dir + classname + '.java';
+    file_list->push_back(filename);
+    std::unique_ptr<io::ZeroCopyOutputStream> output(context->Open(filename));
+    GeneratedCodeInfo annotations;
+    io::AnnotationProtoCollector<GeneratedCodeInfo> annotation_collector(
+        &annotations);
+    std::unique_ptr<io::Printer> printer(
+        new io::Printer(output.get(), '$',
+                        options_.annotate_code ? &annotation_collector : NULL));
+    string info_relative_path = classname + '.java.pb.meta';
+    string info_full_path = filename + '.pb.meta';
+    printer->Print(
+        '// Generated by the protocol buffer compiler.  DO NOT EDIT!\n'
+        '// source: $filename$\n'
+        '\n',
+        'filename', file_->name());
+    if (!java_package.empty()) {
+      printer->Print(
+        'package $package$;\n'
+        '\n',
+        'package', java_package);
+    }
+    PrintGeneratedAnnotation(printer.get(), '$',
+                             options_.annotate_code ? info_relative_path : '');
+    printer->Print(
+        'public final class $classname$ {\n'
+        '  public static com.google.protobuf.Descriptors.FileDescriptor\n'
+        '      descriptor;\n'
+        '  static {\n',
+        'classname', classname);
+    printer->Annotate('classname', file_->name());
+    printer->Indent();
+    printer->Indent();
+    GenerateDescriptors(printer.get());
+    printer->Outdent();
+    printer->Outdent();
+    printer->Print(
+      '  }\n'
+      '}\n');
+    }
+    
+    void OneofGenerator::GenerateClearFunctionDeclaration(io::Printer* printer) {
+  printer->Print(
+      variables_,
+      '/**\n'
+      ' * Clears whatever value was set for the oneof '$name$'.\n'
+      ' **/\n'
+      'void $owning_message_class$_Clear$capitalized_name$OneOfCase($owning_message_class$ *message);\n');
+}
+    
+    TEST_P(DynamicMessageTest, Oneof) {
+  // Check that oneof fields work properly.
+  Arena arena;
+  Message* message = oneof_prototype_->New(GetParam()? &arena : NULL);
+    }
+    
+      // Parsing halted on a '.'.  Perhaps we're in a different locale?  Let's
+  // try to replace the '.' with a locale-specific radix character and
+  // try again.
+  string localized = LocalizeRadix(text, temp_endptr);
+  const char* localized_cstr = localized.c_str();
+  char* localized_endptr;
+  result = strtod(localized_cstr, &localized_endptr);
+  if ((localized_endptr - localized_cstr) >
+      (temp_endptr - text)) {
+    // This attempt got further, so replacing the decimal must have helped.
+    // Update original_endptr to point at the right location.
+    if (original_endptr != NULL) {
+      // size_diff is non-zero if the localized radix has multiple bytes.
+      int size_diff = localized.size() - strlen(text);
+      // const_cast is necessary to match the strtod() interface.
+      *original_endptr = const_cast<char*>(
+        text + (localized_endptr - localized_cstr - size_diff));
     }
   }
-  return (ok ? 0 : 1);
+    
+    Status KafkaTopicsConfigParserPlugin::update(const std::string& source,
+                                             const ParserConfig& config) {
+  auto topics = config.find(kKafkaTopicParserRootKey);
+  if (topics != config.end()) {
+    auto obj = data_.getObject();
+    data_.copyFrom(topics->second.doc(), obj);
+    data_.add(kKafkaTopicParserRootKey, obj);
+  }
+  return Status();
 }
+    
+    ExpectedSuccess<DatabaseError> InMemoryDatabase::open() {
+  debug_only::verifyTrue(!is_open_, 'database is already open');
+  for (const auto& domain : kDomains) {
+    storage_[domain] = std::make_unique<InMemoryStorage<DataType>>();
+  }
+  is_open_ = true;
+  return Success();
+}
+    
+      virtual void SetUp() {
+    boost::uuids::uuid uuid = boost::uuids::random_generator()();
+    auto random_name = boost::uuids::to_string(uuid);
+    auto path = boost::filesystem::temp_directory_path().append(random_name);
+    boost::filesystem::create_directory(path);
+    path_ = path.string();
+  }
+    
+    
+    {} // namespace aria2
 
     
-      kFullType = 1,
+    #include 'DHTNode.h'
+#include 'DHTBucket.h'
+#include 'DHTBucketTree.h'
+#include 'DHTTaskQueue.h'
+#include 'DHTTaskFactory.h'
+#include 'DHTTask.h'
+#include 'util.h'
+#include 'LogFactory.h'
+#include 'Logger.h'
+#include 'fmt.h'
     
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
+      ~DHTRoutingTableDeserializer();
     
-        for (int n = 0; n < 50; n++)
+    
+    {} // namespace aria2
+
+    
+    
+    {} // namespace aria2
+
+    
+    void DHTTaskFactoryImpl::setRoutingTable(DHTRoutingTable* routingTable)
+{
+  routingTable_ = routingTable;
+}
+    
+    #include <memory>
+    
+      virtual void executeTask() CXX11_OVERRIDE;
+    
+    DHTTokenUpdateCommand::~DHTTokenUpdateCommand() = default;
+    
+    void DNSCache::put(const std::string& hostname, const std::string& ipaddr,
+                   uint16_t port)
+{
+  auto target = std::make_shared<CacheEntry>(hostname, port);
+  auto i = entries_.lower_bound(target);
+  if (i != entries_.end() && *(*i) == *target) {
+    (*i)->add(ipaddr);
+  }
+  else {
+    target->add(ipaddr);
+    entries_.insert(i, target);
+  }
+}
+    
+        template <typename OutputIterator>
+    void getAllGoodAddrs(OutputIterator out) const
     {
-        printf('NewFrame() %d\n', n);
-        io.DisplaySize = ImVec2(1920, 1080);
-        io.DeltaTime = 1.0f / 60.0f;
-        ImGui::NewFrame();
+      for (auto& elem : addrEntries_) {
+        if (elem.good_) {
+          *out++ = elem.addr_;
+        }
+      }
     }
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
+      int64_t num_record_drop_hidden = 0;
+  int64_t num_record_drop_obsolete = 0;
+  int64_t num_record_drop_range_del = 0;
+  int64_t num_range_del_drop_obsolete = 0;
+  // Deletions obsoleted before bottom level due to file gap optimization.
+  int64_t num_optimized_del_drop_obsolete = 0;
+  uint64_t total_filter_time = 0;
     
-        // Setup orthographic projection matrix
-    // Our visible imgui space lies from draw_data->DisplayPos (top left) to draw_data->DisplayPos+data_data->DisplaySize (bottom right).
-    {
-        float L = draw_data->DisplayPos.x;
-        float R = draw_data->DisplayPos.x + draw_data->DisplaySize.x;
-        float T = draw_data->DisplayPos.y;
-        float B = draw_data->DisplayPos.y + draw_data->DisplaySize.y;
-        ALLEGRO_TRANSFORM transform;
-        al_identity_transform(&transform);
-        al_use_transform(&transform);
-        al_orthographic_transform(&transform, L, T, 1.0f, R, B, -1.0f);
-        al_use_projection_transform(&transform);
+    std::unique_ptr<WriteControllerToken> WriteController::GetDelayToken(
+    uint64_t write_rate) {
+  total_delayed_++;
+  // Reset counters.
+  last_refill_time_ = 0;
+  bytes_left_ = 0;
+  set_delayed_write_rate(write_rate);
+  return std::unique_ptr<WriteControllerToken>(new DelayWriteToken(this));
+}
+    
+      uint64_t max_delayed_write_rate() const { return max_delayed_write_rate_; }
+    
+    
+    {  // Means Close() will properly take care of truncate
+  // and it does not need any additional information
+  virtual Status Truncate(uint64_t /*size*/) override { return Status::OK(); }
+  virtual Status Close() override;
+  virtual Status Append(const Slice& data) override;
+  virtual Status Flush() override;
+  virtual Status Sync() override;
+  virtual Status Fsync() override;
+  virtual uint64_t GetFileSize() override;
+  virtual Status InvalidateCache(size_t offset, size_t length) override;
+#ifdef ROCKSDB_FALLOCATE_PRESENT
+  virtual Status Allocate(uint64_t offset, uint64_t len) override;
+#endif
+};
+    
+      DB* db = nullptr;
+  DestroyDB(kDBPath, options);
+  Status s = DB::Open(options, kDBPath, &db);
+  assert(s.ok());
+  assert(db);
+    
+      // In this example, we set the snapshot multiple times.  This is probably
+  // only necessary if you have very strict isolation requirements to
+  // implement.
+    
+    #include 'rocksdb/db.h'
+    
+    class DB;
+    
+    
+    {}  // namespace rocksdb
+#endif  // !ROCKSDB_LITE
+
+    
+    #include 'modules/drivers/canbus/can_comm/can_sender.h'
+    
+    #include 'modules/drivers/canbus/can_comm/message_manager.h'
+    
+    #include 'modules/drivers/radar/conti_radar/protocol/object_quality_info_60c.h'
+#include 'modules/drivers/radar/conti_radar/protocol/const_vars.h'
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+=========================================================================*/
+    
+    namespace apollo {
+namespace planning {
+    }
     }
     
-    #include 'imgui.h'
-#include 'imgui_impl_freeglut.h'
-#include <GL/freeglut.h>
+    Spline1dSeg::Spline1dSeg(const uint32_t order) {
+  SetSplineFunc(PolynomialXd(order));
+}
+    
+      const LaneGraph &lane_graph =
+      ObstacleClusters::GetLaneGraph(start_s, length, lane);
+  EXPECT_EQ(1, lane_graph.lane_sequence_size());
+  EXPECT_EQ(3, lane_graph.lane_sequence(0).lane_segment_size());
+  EXPECT_EQ('l9', lane_graph.lane_sequence(0).lane_segment(0).lane_id());
+  EXPECT_EQ('l18', lane_graph.lane_sequence(0).lane_segment(1).lane_id());
+  EXPECT_EQ('l21', lane_graph.lane_sequence(0).lane_segment(2).lane_id());
+    
+      FunctionRef<int(int, char const*)> variant5 = of;
+  EXPECT_EQ(100 + 5 * 19, variant5(19, 'foo'));
+  FunctionRef<int(int, char const*)> const cvariant5 = of;
+  EXPECT_EQ(100 + 5 * 19, cvariant5(19, 'foo'));
+    
+    
+    {
+    {    if (provider == expectedProvider && probe == expectedProbe) {
+      CHECK_EQ(expectedSemaphore, semaphoreAddr);
+      return true;
+    }
+  }
+  return false;
+}
+    
+    #include <folly/Range.h>
+    
+    
+    {} // namespace uri_detail
+    
+          void operator()() {
+        f_();
+      }
+    
+    #endif // FOLLY_HAVE_LIBZ
