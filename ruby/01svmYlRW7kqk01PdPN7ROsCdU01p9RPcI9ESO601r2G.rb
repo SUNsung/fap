@@ -1,137 +1,111 @@
 
         
-            def to_a
-      @filters.dup
-    end
+            remove_duplicates
+    remove_index :share_visibilities, name: :shareable_and_user_id
+    add_index :share_visibilities, %i(shareable_id shareable_type user_id), name: :shareable_and_user_id, unique: true
     
-        def initialize
-      @pages = {}
-    end
-    
-        def mime_type
-      headers['Content-Type'] || 'text/plain'
-    end
-    
-          private
-    
-      it 'accepts a negative seed' do
-    srand(-17)
-    srand.should == -17
-  end
-    
-    
-  #
-  # Payload types were copied from xCAT-server source code (IPMI.pm)
-  #
-  RMCP_ERRORS = {
-    1 => 'Insufficient resources to create new session (wait for existing sessions to timeout)',
-    2 => 'Invalid Session ID', #this shouldn't occur...
-    3 => 'Invalid payload type',#shouldn't occur..
-    4 => 'Invalid authentication algorithm', #if this happens, we need to enhance our mechanism for detecting supported auth algorithms
-    5 => 'Invalid integrity algorithm', #same as above
-    6 => 'No matching authentication payload',
-    7 => 'No matching integrity payload',
-    8 => 'Inactive Session ID', #this suggests the session was timed out while trying to negotiate, shouldn't happen
-    9 => 'Invalid role',
-    0xa => 'Unauthorised role or privilege level requested',
-    0xb => 'Insufficient resources to create a session at the requested role',
-    0xc => 'Invalid username length',
-    0xd => 'Unauthorized name',
-    0xe => 'Unauthorized GUID',
-    0xf => 'Invalid integrity check value',
-    0x10 => 'Invalid confidentiality algorithm',
-    0x11 => 'No cipher suite match with proposed security algorithms',
-    0x12 => 'Illegal or unrecognized parameter', #have never observed this, would most likely mean a bug in xCAT or IPMI device
-  }
-    
-        data =
-    [   # Maximum access
-      0x00, 0x00,
-      # Reserved
-      0x00, 0x00
-    ].pack('C*') +
-    console_session_id +
-    [
-      0x00, 0x00, 0x00, 0x08,
-      # Cipher 0
-      0x00, 0x00, 0x00, 0x00,
-      0x01, 0x00, 0x00, 0x08,
-      # Cipher 0
-      0x00, 0x00, 0x00, 0x00,
-      0x02, 0x00, 0x00, 0x08,
-      # No Encryption
-      0x00, 0x00, 0x00, 0x00
-    ].pack('C*')
-    
-            # Closes the connection
-        def close
-          if connection
-            connection.shutdown
-            connection.close unless connection.closed?
-          end
-    
-              # Decodes the msg_type from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_msg_type(input)
-            input.value[0].value.to_i
-          end
-    
-              # Decodes the ctime field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Time]
-          def decode_ctime(input)
-            input.value[0].value
-          end
-    
-    Given /^I am signed in( on the mobile website)?$/ do |mobile|
+    When /^I (?:sign|log) in with password '([^']*)'( on the mobile website)?$/ do |password, mobile|
+  @me.password = password
   automatic_login
   confirm_login mobile
 end
     
-      def login_page
-    path_to 'the new user session page'
-  end
+    Then /^'([^']*)' should be post (\d+)$/ do |post_text, position|
+  stream_element_numbers_content(position).should have_content(post_text)
+end
     
-      describe '#new' do
-    before do
-      sign_in alice, scope: :user
+        it 'generates a jasmine fixture', :fixture => true do
+      contact = alice.contact_for(bob.person)
+      aspect = alice.aspects.create(:name => 'people')
+      contact.aspects << aspect
+      contact.save
+      get :new, params: {person_id: bob.person.id}
+      save_fixture(html_for('body'), 'status_message_new')
+    end
+  end
+end
+
+    
+        it 'returns a 404 for a post not visible to the user' do
+      sign_in eve
+      expect {
+        get :index, params: {post_id: @message.id}
+      }.to raise_error(ActiveRecord::RecordNotFound)
     end
     
-        it 'does redirect when invitations are closed now' do
-      code = InvitationCode.create(user: bob)
-      AppConfig.settings.invitations.open = false
-    
-            if Utils::HttpClient.remote_file_exist?(uri)
-          PluginManager.ui.debug('Found package at: #{uri}')
-          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
-        else
-          PluginManager.ui.debug('Package not found at: #{uri}')
-          return nil
+              expect(User.find_by(username: 'jdoe').invited_by).to eq(bob)
         end
-      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
-        # This probably means there is a firewall in place of the proxy is not correctly configured.
-        # So lets skip this strategy but log a meaningful errors.
-        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
+      end
+    end
     
-    describe LogStash::Config::PipelineConfig do
-  let(:source) { LogStash::Config::Source::Local }
-  let(:pipeline_id) { :main }
-  let(:ordered_config_parts) do
-    [
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/1', 0, 0, 'input { generator1 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/2', 0, 0,  'input { generator2 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/3', 0, 0, 'input { generator3 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/4', 0, 0, 'input { generator4 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/5', 0, 0, 'input { generator5 }'),
-      org.logstash.common.SourceWithMetadata.new('file', '/tmp/6', 0, 0, 'input { generator6 }'),
-      org.logstash.common.SourceWithMetadata.new('string', 'config_string', 0, 0, 'input { generator1 }'),
-    ]
+    @@ login
+<form action='/'>
+  <label for='user'>User Name:</label>
+  <input name='user' value='' />
+  <input type='submit' value='GO!' />
+</form>
+    
+    # This is basically a copy of the original bundler 'bundle' shim
+# with the addition of the loading of our Bundler patches that
+# modify Bundler's caching behaviour.
+    
+        def explicitly_declared_plugins_specs
+      @plugins_to_package.collect do |plugin_pattern|
+        specs = SpecificationHelpers.find_by_name_with_wildcards(plugin_pattern)
+    
+          # Try to add the gems to the current gemfile and lock file, if successful
+      # both of them will be updated. This injector is similar to Bundler's own injector class
+      # minus the support for additionals source and doing local resolution only.
+      ::Bundler::LogstashInjector.inject!(pack)
+    
+      def self.source_root
+    @source_root ||= File.expand_path('../templates', __FILE__)
   end
     
-      class PostFilters < Octopress::Hooks::Post
-    def pre_render(post)
-      OctopressFilters::pre_filter(post)
+        def definitions_for(klass)
+      parent_classes = klass.ancestors.reverse
+      parent_classes.each_with_object({}) do |ancestor, inherited_definitions|
+        inherited_definitions.deep_merge! @attachments[ancestor]
+      end
     end
+  end
+end
+
+    
+        # Gives a Geometry representing the given height and width
+    def initialize(width = nil, height = nil, modifier = nil)
+      if width.is_a?(Hash)
+        options = width
+        @height = options[:height].to_f
+        @width = options[:width].to_f
+        @modifier = options[:modifier]
+        @orientation = options[:orientation].to_i
+      else
+        @height = height.to_f
+        @width  = width.to_f
+        @modifier = modifier
+      end
+    end
+    
+        def geometry_string
+      begin
+        orientation = Paperclip.options[:use_exif_orientation] ?
+          '%[exif:orientation]' : '1'
+        Paperclip.run(
+          Paperclip.options[:is_windows] ? 'magick identify' : 'identify',
+          '-format '%wx%h,#{orientation}' :file', {
+            :file => '#{path}[0]'
+          }, {
+            :swallow_stderr => true
+          }
+        )
+      rescue Terrapin::ExitStatusError
+        ''
+      rescue Terrapin::CommandNotFoundError => e
+        raise_because_imagemagick_missing
+      end
+    end
+    
+        def define_instance_getter
+      name = @name
+      options = @options
