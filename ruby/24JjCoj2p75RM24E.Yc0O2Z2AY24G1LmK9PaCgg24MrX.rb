@@ -1,44 +1,15 @@
 
         
-            group.add(moderator)
-    group.save
-    
-            unless post && post.id
-          puts post.errors.full_messages if post
-          puts creator.errors.inspect
-          raise 'Failed to create description for Staff category!'
+                # Returns the instance variables as a hash of key-value pairs.
+        def instance_variables_hash
+          instance_variables.inject({}) do |acc, iv|
+            acc[iv.to_s[1..-1]] = instance_variable_get(iv)
+            acc
+          end
         end
     
-        def root?
-      path == 'index'
-    end
-    
-        def html?
-      mime_type.include? 'html'
-    end
-    
-            css('.status-badge').each do |node|
-          node.name = 'code'
-          node.content = node.content.strip
-          node.remove_attribute('class')
+              result
         end
-    
-            css('> .section', '#preamble', 'a[href*='dict.html']', 'code var', 'code strong').each do |node|
-          node.before(node.children).remove
-        end
-    
-    describe 'main#define_method' do
-  before :each do
-    @code = 'define_method(:boom) { :bam }'
-  end
-    
-        def initialize(*args)
-      @s = StringScanner.new(*args)
-    end
-    
-      # Precompile additional assets.
-  # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
-  # config.assets.precompile += %w( search.js )
     
       # Configure static asset server for tests with Cache-Control for performance.
   if config.respond_to?(:serve_static_files)
@@ -50,27 +21,90 @@
   end
   config.static_cache_control = 'public, max-age=3600'
     
-        # The name of the mixin in which the error occurred.
-    # This could be `nil` if the error occurred outside a mixin.
-    #
-    # @return [String]
-    def sass_mixin
-      sass_backtrace.first[:mixin]
+      class Notification < ApplicationRecord
+  end
+    
+      def confirm_on_page(page_name)
+    if page_name == 'my profile page'
+      expect(page).to have_path_in([person_path(@me.person), user_profile_path(@me.username)])
+    else
+      expect(page).to have_path(path_to(page_name))
+    end
+  end
+end
+    
+      describe '#create' do
+    let(:like_hash) {
+      {post_id: @target.id}
+    }
+    
+          it 'should remove participation' do
+        delete :destroy, params: {post_id: post.id}
+        expect(alice.participations.where(:target_id => post.id)).not_to exist
+        expect(response.code).to eq('200')
+      end
     end
     
-          opts.on('-g', '--debug-info',
-              'Emit output that can be used by the FireSass Firebug plugin.') do
-        @options[:for_engine][:debug_info] = true
+          locations = Array.new
+      while (data.code.to_i == 301 || data.code.to_i == 302)
+        data = handle_gist_redirecting(data)
+        break if locations.include? data.header['Location']
+        locations << data.header['Location']
       end
     
-          Sidekiq.redis do |conn|
-        conn.pipelined do
-          jobs_to_requeue.each do |queue, jobs|
-            conn.rpush('queue:#{queue}', jobs)
-          end
-        end
+      class RenderPartialTag < Liquid::Tag
+    include OctopressFilters
+    def initialize(tag_name, markup, tokens)
+      @file = nil
+      @raw = false
+      if markup =~ /^(\S+)\s?(\w+)?/
+        @file = $1.strip
+        @raw = $2 == 'raw'
       end
-      Sidekiq.logger.info('Pushed #{inprogress.size} jobs back to Redis')
-    rescue => ex
-      Sidekiq.logger.warn('Failed to requeue #{inprogress.size} jobs: #{ex.message}')
+      super
+    end
+    
+        def render(context)
+      output = super
+      types = {
+        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
+        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
+        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
+      }
+      if @videos.size > 0
+        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
+        @videos.each do |v|
+          video << '<source src='#{v}' #{types[File.extname(v)]}>'
+        end
+        video += '</video>'
+      else
+        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
+      end
+    end
+    
+        module PsychAutoload
+      def resolve_class(klass_name)
+        return nil if !klass_name || klass_name.empty?
+        # constantize
+        names = klass_name.split('::')
+        names.shift if names.empty? || names.first.empty?
+    
+    module Sidekiq
+  module Extensions
+    ##
+    # Adds 'delay', 'delay_for' and `delay_until` methods to ActionMailer to offload arbitrary email
+    # delivery to Sidekiq.  Example:
+    #
+    #    UserMailer.delay.send_welcome_email(new_user)
+    #    UserMailer.delay_for(5.days).send_welcome_email(new_user)
+    #    UserMailer.delay_until(5.days.from_now).send_welcome_email(new_user)
+    class DelayedMailer
+      include Sidekiq::Worker
+    
+        def self.with_context(msg)
+      Thread.current[:sidekiq_context] ||= []
+      Thread.current[:sidekiq_context] << msg
+      yield
+    ensure
+      Thread.current[:sidekiq_context].pop
     end
