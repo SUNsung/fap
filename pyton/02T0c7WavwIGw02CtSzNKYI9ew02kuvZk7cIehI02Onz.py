@@ -1,227 +1,223 @@
 
         
-        from .compat import is_py2, builtin_str, str
+        
+if __name__ == '__main__':
+    ap = argparse.ArgumentParser()
+    ap.add_argument('metrics', nargs='*', default=sorted(METRICS),
+                    help='Specifies metrics to benchmark, defaults to all. '
+                         'Choices are: {}'.format(sorted(METRICS)))
+    ap.add_argument('--formats', nargs='+', choices=sorted(FORMATS),
+                    help='Specifies multilabel formats to benchmark '
+                         '(defaults to all).')
+    ap.add_argument('--samples', type=int, default=1000,
+                    help='The number of samples to generate')
+    ap.add_argument('--classes', type=int, default=10,
+                    help='The number of classes')
+    ap.add_argument('--density', type=float, default=.2,
+                    help='The average density of labels per sample')
+    ap.add_argument('--plot', choices=['classes', 'density', 'samples'],
+                    default=None,
+                    help='Plot time with respect to this parameter varying '
+                         'up to the specified value')
+    ap.add_argument('--n-steps', default=10, type=int,
+                    help='Plot this many points for each metric')
+    ap.add_argument('--n-times',
+                    default=5, type=int,
+                    help='Time performance over n_times trials')
+    args = ap.parse_args()
     
-        def __exit__(self, exc_type, exc_value, traceback):
-        if exc_type is None:
-            self.stop_event.wait(self.WAIT_EVENT_TIMEOUT)
+    
+def barplot_neighbors(Nrange=2 ** np.arange(1, 11),
+                      Drange=2 ** np.arange(7),
+                      krange=2 ** np.arange(10),
+                      N=1000,
+                      D=64,
+                      k=5,
+                      leaf_size=30,
+                      dataset='digits'):
+    algorithms = ('kd_tree', 'brute', 'ball_tree')
+    fiducial_values = {'N': N,
+                       'D': D,
+                       'k': k}
+    
+    import matplotlib.pyplot as plt
+    
+    # Gather data for each version directory, including symlinks
+dirs = {}
+symlinks = {}
+root_listing = json_urlread(ROOT_URL)
+for path_details in root_listing:
+    name = path_details['name']
+    if not (name[:1].isdigit() or name in NAMED_DIRS):
+        continue
+    if path_details['type'] == 'dir':
+        html = urlopen(RAW_FMT % name).read().decode('utf8')
+        version_num = VERSION_RE.search(html).group(1)
+        pdf_size = get_pdf_size(name)
+        dirs[name] = (version_num, pdf_size)
+    
+        if not os.path.exists(ARCHIVE_NAME):
+        print('Downloading dataset from %s (3 MB)' % URL)
+        opener = urlopen(URL)
+        with open(ARCHIVE_NAME, 'wb') as archive:
+            archive.write(opener.read())
+    
+        # TASK: Build a grid search to find out whether unigrams or bigrams are
+    # more useful.
+    # Fit the pipeline on the training set using grid search for the parameters
+    parameters = {
+        'vect__ngram_range': [(1, 1), (1, 2)],
+    }
+    grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1)
+    grid_search.fit(docs_train, y_train)
+    
+        print('Generating skeleton for %s' % f)
+    
+    In both examples below, the main result is that the empirical covariance
+estimate, as a non-robust one, is highly influenced by the heterogeneous
+structure of the observations. Although the robust covariance estimate is
+able to focus on the main mode of the data distribution, it sticks to the
+assumption that the data should be Gaussian distributed, yielding some biased
+estimation of the data structure, but yet accurate to some extent.
+The One-Class SVM does not assume any parametric form of the data distribution
+and can therefore model the complex shape of the data much better.
+    
+    def _print_commands(settings, inproject):
+    _print_header(settings, inproject)
+    print('Usage:')
+    print('  scrapy <command> [options] [args]\n')
+    print('Available commands:')
+    cmds = _get_commands_dict(settings, inproject)
+    for cmdname, cmdclass in sorted(cmds.items()):
+        print('  %-13s %s' % (cmdname, cmdclass.short_desc()))
+    if not inproject:
+        print()
+        print('  [ more ]      More commands available when run from project directory')
+    print()
+    print('Use 'scrapy <command> -h' to see more info about a command')
+    
+        def run(self, args, opts):
+        if opts.list:
+            self._list_templates()
+            return
+        if opts.dump:
+            template_file = self._find_template(opts.dump)
+            if template_file:
+                with open(template_file, 'r') as f:
+                    print(f.read())
+            return
+        if len(args) != 2:
+            raise UsageError()
+    
+            if opts.verbose:
+            for level in range(1, self.max_level+1):
+                print('\n>>> DEPTH LEVEL: %s <<<' % level)
+                if not opts.noitems:
+                    self.print_items(level, colour)
+                if not opts.nolinks:
+                    self.print_requests(level, colour)
         else:
-            if self.wait_to_close_event:
-                # avoid server from waiting for event timeouts
-                # if an exception is found in the main thread
-                self.wait_to_close_event.set()
+            print('\n>>> STATUS DEPTH LEVEL %s <<<' % self.max_level)
+            if not opts.noitems:
+                self.print_items(colour=colour)
+            if not opts.nolinks:
+                self.print_requests(colour=colour)
     
+    from scrapy.utils.spider import iter_spider_classes
+from scrapy.commands import ScrapyCommand
+from scrapy.exceptions import UsageError
+from scrapy.utils.conf import arglist_to_dict
+from scrapy.utils.python import without_none_values
     
-    builtin_str = str
-    bytes = str
-    str = unicode
-    basestring = basestring
-    numeric_types = (int, long, float)
-    integer_types = (int, long)
-    
-        :param jar: cookielib.CookieJar (not necessarily a RequestsCookieJar)
-    :param request: our own requests.Request object
-    :param response: urllib3.HTTPResponse object
-    '''
-    if not (hasattr(response, '_original_response') and
-            response._original_response):
-        return
-    # the _original_response field is the wrapped httplib.HTTPResponse object,
-    req = MockRequest(request)
-    # pull out the HTTPMessage with the headers and put it in the mock:
-    res = MockResponse(response._original_response.msg)
-    jar.extract_cookies(res, req)
-    
-    '''
-requests.hooks
-~~~~~~~~~~~~~~
-    
-        def test_server_closes(self):
-        '''the server closes when leaving the context manager'''
-        with Server.basic_response_server() as (host, port):
-            sock = socket.socket()
-            sock.connect((host, port))
-    
-            if not stream:
-            r.content
-    
-    
-def from_key_val_list(value):
-    '''Take an object and test to see if it can be represented as a
-    dictionary. Unless it can not be represented as such, return an
-    OrderedDict, e.g.,
-    
-            if state == 'absent':
-            if exists:
-                conn.delete_cache_subnet_group(group_name)
-                changed = True
+        def run(self, args, opts):
+        if opts.verbose:
+            versions = scrapy_components_versions()
+            width = max(len(n) for (n, _) in versions)
+            patt = '%-{}s : %s'.format(width)
+            for name, version in versions:
+                print(patt % (name, version))
         else:
-            if not exists:
-                new_group = conn.create_cache_subnet_group(group_name, cache_subnet_group_description=group_description, subnet_ids=group_subnets)
-                changed = True
-            else:
-                changed_group = conn.modify_cache_subnet_group(group_name, cache_subnet_group_description=group_description, subnet_ids=group_subnets)
-                changed = True
+            print('Scrapy %s' % scrapy.__version__)
     
-    RETURN = ''' # '''
+        def adjust_request_args(self, args):
+        args['url'] = self.args[0]
+        return args
     
-    - hosts: localhost
-  connection: local
-  tasks:
-   - vca_fw:
-       instance_id: 'b15ff1e5-1024-4f55-889f-ea0209726282'
-       vdc_name: 'benz_ansible'
-       state: 'absent'
-       fw_rules:
-         - description: 'ben testing'
-           source_ip: 'Any'
-           dest_ip: 192.0.2.23
-         - description: 'ben testing 2'
-           source_ip: 192.0.2.50
-           source_port: 'Any'
-           dest_port: '22'
-           dest_ip: 192.0.2.101
-           is_enable: 'true'
-           enable_logging: 'false'
-           protocol: 'Tcp'
-           policy: 'allow'
+        @defer.inlineCallbacks
+    def open_spider(self, spider, start_requests=(), close_if_idle=True):
+        assert self.has_capacity(), 'No free spider slot when opening %r' % \
+            spider.name
+        logger.info('Spider opened', extra={'spider': spider})
+        nextcall = CallLaterOnce(self._next_request, spider)
+        scheduler = self.scheduler_cls.from_crawler(self.crawler)
+        start_requests = yield self.scraper.spidermw.process_start_requests(start_requests, spider)
+        slot = Slot(start_requests, close_if_idle, nextcall, scheduler)
+        self.slot = slot
+        self.spider = spider
+        yield scheduler.open(spider)
+        yield self.scraper.open_spider(spider)
+        self.crawler.stats.open_spider(spider)
+        yield self.signals.send_catch_log_deferred(signals.spider_opened, spider=spider)
+        slot.nextcall.schedule()
+        slot.heartbeat.start(5)
     
+    
+def setup(hass, config):
+    '''Listen for browse_url events.'''
+    import webbrowser
+    
+            statsd.gauge(metric, value, sample_rate=sample_rate, tags=tags)
+    
+        def random_see(dev_id, name):
+        '''Randomize a sighting.'''
+        see(
+            dev_id=dev_id,
+            host_name=name,
+            gps=(hass.config.latitude + offset(),
+                 hass.config.longitude + offset()),
+            gps_accuracy=random.randrange(50, 150),
+            battery=random.randrange(10, 90)
+        )
+    
+            return self.last_results.keys()
+    
+            return [device.mac for device in self.last_results]
+    
+    
+GRAPH_SCHEMA = vol.Schema({
+    vol.Required(CONF_ENTITIES): cv.entity_ids,
+    vol.Optional(CONF_NAME): cv.string,
+    vol.Optional(CONF_HOURS_TO_SHOW, default=24): vol.Range(min=1),
+    vol.Optional(CONF_REFRESH, default=0): vol.Range(min=0),
+})
+    
+    
+class Migration(DataMigration):
+    def forwards(self, orm):
+        db.commit_transaction()
         try:
-        configuration_facts = get_configuration_facts(cursor)
-        if module.check_mode:
-            changed = not check(configuration_facts, parameter_name, current_value)
-        else:
-            try:
-                changed = present(configuration_facts, cursor, parameter_name, current_value)
-            except pyodbc.Error as e:
-                module.fail_json(msg=to_native(e), exception=traceback.format_exc())
-    except NotSupportedError as e:
-        module.fail_json(msg=to_native(e), ansible_facts={'vertica_configuration': configuration_facts})
-    except CannotDropError as e:
-        module.fail_json(msg=to_native(e), ansible_facts={'vertica_configuration': configuration_facts})
-    except SystemExit:
-        # avoid catching this on python 2.4
-        raise
-    except Exception as e:
-        module.fail_json(msg=to_native(e), exception=traceback.format_exc())
+            self._forwards(orm)
+        except Exception:
+            # Explicitly resume the transaction because
+            # South is going to try and roll it back, but when
+            # it can't find one, it'll error itself, masking
+            # the actual exception being raised
+            #
+            # See https://github.com/getsentry/sentry/issues/5035
+            db.start_transaction()
+            raise
+        db.start_transaction()
     
+            # Adding unique constraint on 'GroupCommitResolution', fields ['group_id', 'commit_id']
+        db.create_unique('sentry_groupcommitresolution', ['group_id', 'commit_id'])
     
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
+            # Adding unique constraint on 'EnvironmentProject', fields ['project', 'environment']
+        db.create_unique('sentry_environmentproject', ['project_id', 'environment_id'])
     
-    
-def main():
-    
-    from __future__ import absolute_import, division, print_function
-__metaclass__ = type
-    
-    
-class SettingsListDirective(Directive):
-    def run(self):
-        return [settingslist_node('')]
-    
-        def __init__(self, *a, **kw):
-        super(QPSSpider, self).__init__(*a, **kw)
-        if self.qps is not None:
-            self.qps = float(self.qps)
-            self.download_delay = 1 / self.qps
-        elif self.download_delay is not None:
-            self.download_delay = float(self.download_delay)
-    
-        def help(self):
-        '''An extensive help for the command. It will be shown when using the
-        'help' command. It can contain newlines, since not post-formatting will
-        be applied to its contents.
-        '''
-        return self.long_desc()
-    
-    from scrapy.commands import ScrapyCommand
-from scrapy.contracts import ContractsManager
-from scrapy.utils.misc import load_object
-from scrapy.utils.conf import build_component_list
-    
-            for x in iterate_spider_output(cb(response)):
-            if isinstance(x, (BaseItem, dict)):
-                items.append(x)
-            elif isinstance(x, Request):
-                requests.append(x)
-        return items, requests
-    
-        requires_project = False
-    default_settings = {'SPIDER_LOADER_WARN_ONLY': True}
-    
-    else:
-    
-                # if multiple releases have files, just rename them
-            # instead of trying to merge
-            if len(releases_with_files) > 1:
-                for release in releases:
-                    update_version(release, orm)
-                continue
-    
-            # Changing field 'Environment.organization_id'
-        db.alter_column(
-            'sentry_environment',
-            'organization_id',
-            self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(null=True)
+            # User chose to not deal with backwards NULL issues for 'ReleaseEnvironment.project_id'
+        raise RuntimeError(
+            'Cannot reverse this migration. 'ReleaseEnvironment.project_id' and its values cannot be restored.'
         )
-    
-            # Adding model 'ApiApplication'
-        db.create_table(
-            'sentry_apiapplication', (
-                (
-                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
-                        primary_key=True
-                    )
-                ), (
-                    'client_id',
-                    self.gf('django.db.models.fields.CharField')(unique=True, max_length=64)
-                ), (
-                    'client_secret',
-                    self.gf('sentry.db.models.fields.encrypted.EncryptedTextField')()
-                ), (
-                    'owner', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.User']
-                    )
-                ),
-                ('name', self.gf('django.db.models.fields.CharField')(max_length=64, blank=True)), (
-                    'status',
-                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(
-                        default=0, db_index=True
-                    )
-                ), (
-                    'allowed_origins',
-                    self.gf('django.db.models.fields.TextField')(null=True, blank=True)
-                ), ('redirect_uris', self.gf('django.db.models.fields.TextField')()), (
-                    'homepage_url',
-                    self.gf('django.db.models.fields.URLField')(max_length=200, null=True)
-                ), (
-                    'privacy_url',
-                    self.gf('django.db.models.fields.URLField')(max_length=200, null=True)
-                ), (
-                    'terms_url',
-                    self.gf('django.db.models.fields.URLField')(max_length=200, null=True)
-                ), (
-                    'date_added',
-                    self.gf('django.db.models.fields.DateTimeField')()
-                ),
-            )
-        )
-        db.send_create_signal('sentry', ['ApiApplication'])
-    
-            # Adding field 'ApiKey.scope_list'
-        db.add_column(
-            'sentry_apikey',
-            'scope_list',
-            self.gf('sentry.db.models.fields.array.ArrayField')(
-                of=('django.db.models.fields.TextField', [], {})
-            ),
-            keep_default=False
-        )
-    
-            # Deleting model 'ReleaseHeadCommit'
-        db.delete_table('sentry_releaseheadcommit')
     
         models = {
         'sentry.activity': {
@@ -263,146 +259,6 @@ from scrapy.utils.conf import build_component_list
                 }
             )
         },
-        'sentry.apiapplication': {
-            'Meta': {
-                'object_name': 'ApiApplication'
-            },
-            'allowed_origins':
-            ('django.db.models.fields.TextField', [], {
-                'null': 'True',
-                'blank': 'True'
-            }),
-            'client_id': (
-                'django.db.models.fields.CharField', [], {
-                    'default': ''224ad6adff31470a9e43e87388cb3332adc0f38b62224fbd9d2c5827625885d2'',
-                    'unique': 'True',
-                    'max_length': '64'
-                }
-            ),
-            'client_secret': (
-                'sentry.db.models.fields.encrypted.EncryptedTextField', [], {
-                    'default': ''8958c588f498407288eb88a09d633c1ed7a93edf651846b4a7657dd7545ffb3e''
-                }
-            ),
-            'date_added':
-            ('django.db.models.fields.DateTimeField', [], {
-                'default': 'datetime.datetime.now'
-            }),
-            'homepage_url':
-            ('django.db.models.fields.URLField', [], {
-                'max_length': '200',
-                'null': 'True'
-            }),
-            'id':
-            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
-                'primary_key': 'True'
-            }),
-            'name': (
-                'django.db.models.fields.CharField', [], {
-                    'default': ''Granulose Denyse'',
-                    'max_length': '64',
-                    'blank': 'True'
-                }
-            ),
-            'owner': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.User']'
-                }
-            ),
-            'privacy_url':
-            ('django.db.models.fields.URLField', [], {
-                'max_length': '200',
-                'null': 'True'
-            }),
-            'redirect_uris': ('django.db.models.fields.TextField', [], {}),
-            'status': (
-                'sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {
-                    'default': '0',
-                    'db_index': 'True'
-                }
-            ),
-            'terms_url':
-            ('django.db.models.fields.URLField', [], {
-                'max_length': '200',
-                'null': 'True'
-            })
-        },
-        'sentry.apiauthorization': {
-            'Meta': {
-                'unique_together': '(('user', 'application'),)',
-                'object_name': 'ApiAuthorization'
-            },
-            'application': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.ApiApplication']',
-                    'null': 'True'
-                }
-            ),
-            'date_added':
-            ('django.db.models.fields.DateTimeField', [], {
-                'default': 'datetime.datetime.now'
-            }),
-            'id':
-            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
-                'primary_key': 'True'
-            }),
-            'scope_list': (
-                'sentry.db.models.fields.array.ArrayField', [], {
-                    'of': ('django.db.models.fields.TextField', [], {})
-                }
-            ),
-            'scopes': ('django.db.models.fields.BigIntegerField', [], {
-                'default': 'None'
-            }),
-            'user': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.User']'
-                }
-            )
-        },
-        'sentry.apigrant': {
-            'Meta': {
-                'object_name': 'ApiGrant'
-            },
-            'application': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.ApiApplication']'
-                }
-            ),
-            'code': (
-                'django.db.models.fields.CharField', [], {
-                    'default': ''04511aab0b6545fd862d97b0e0b392fe'',
-                    'max_length': '64',
-                    'db_index': 'True'
-                }
-            ),
-            'expires_at': (
-                'django.db.models.fields.DateTimeField', [], {
-                    'default': 'datetime.datetime(2017, 4, 5, 0, 0)',
-                    'db_index': 'True'
-                }
-            ),
-            'id':
-            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
-                'primary_key': 'True'
-            }),
-            'redirect_uri': ('django.db.models.fields.CharField', [], {
-                'max_length': '255'
-            }),
-            'scope_list': (
-                'sentry.db.models.fields.array.ArrayField', [], {
-                    'of': ('django.db.models.fields.TextField', [], {})
-                }
-            ),
-            'scopes': ('django.db.models.fields.BigIntegerField', [], {
-                'default': 'None'
-            }),
-            'user': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.User']'
-                }
-            )
-        },
         'sentry.apikey': {
             'Meta': {
                 'object_name': 'ApiKey'
@@ -438,11 +294,6 @@ from scrapy.utils.conf import build_component_list
                     'to': 'orm['sentry.Organization']'
                 }
             ),
-            'scope_list': (
-                'sentry.db.models.fields.array.ArrayField', [], {
-                    'of': ('django.db.models.fields.TextField', [], {})
-                }
-            ),
             'scopes': ('django.db.models.fields.BigIntegerField', [], {
                 'default': 'None'
             }),
@@ -457,49 +308,28 @@ from scrapy.utils.conf import build_component_list
             'Meta': {
                 'object_name': 'ApiToken'
             },
-            'application': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.ApiApplication']',
-                    'null': 'True'
-                }
-            ),
             'date_added':
             ('django.db.models.fields.DateTimeField', [], {
                 'default': 'datetime.datetime.now'
             }),
-            'expires_at': (
-                'django.db.models.fields.DateTimeField', [], {
-                    'default': 'datetime.datetime(2017, 5, 5, 0, 0)',
-                    'null': 'True'
-                }
-            ),
             'id':
             ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
                 'primary_key': 'True'
             }),
-            'refresh_token': (
-                'django.db.models.fields.CharField', [], {
-                    'default': ''a0bcb70d00954a2a8b671d27fd8406fed2c9b6641f6646be8d433b203aed97d0'',
-                    'max_length': '64',
-                    'unique': 'True',
+            'key': (
+                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
+                    'to': 'orm['sentry.ApiKey']',
                     'null': 'True'
-                }
-            ),
-            'scope_list': (
-                'sentry.db.models.fields.array.ArrayField', [], {
-                    'of': ('django.db.models.fields.TextField', [], {})
                 }
             ),
             'scopes': ('django.db.models.fields.BigIntegerField', [], {
                 'default': 'None'
             }),
-            'token': (
-                'django.db.models.fields.CharField', [], {
-                    'default': ''46b15f4812734479b5978e2b78119dcc66e3a0b7e5c945e88a415e12a90adfb2'',
-                    'unique': 'True',
-                    'max_length': '64'
-                }
-            ),
+            'token':
+            ('django.db.models.fields.CharField', [], {
+                'unique': 'True',
+                'max_length': '64'
+            }),
             'user': (
                 'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
                     'to': 'orm['sentry.User']'
@@ -572,7 +402,7 @@ from scrapy.utils.conf import build_component_list
                 'object_name': 'Authenticator',
                 'db_table': ''auth_authenticator''
             },
-            'config': ('sentry.db.models.fields.encrypted.EncryptedPickledObjectField', [], {}),
+            'config': ('sentry.db.models.fields.pickle.UnicodePickledObjectField', [], {}),
             'created_at':
             ('django.db.models.fields.DateTimeField', [], {
                 'default': 'datetime.datetime.now'
@@ -600,7 +430,7 @@ from scrapy.utils.conf import build_component_list
                     'to': 'orm['sentry.AuthProvider']'
                 }
             ),
-            'data': ('sentry.db.models.fields.encrypted.EncryptedJsonField', [], {
+            'data': ('jsonfield.fields.JSONField', [], {
                 'default': '{}'
             }),
             'date_added':
@@ -632,8 +462,7 @@ from scrapy.utils.conf import build_component_list
             'Meta': {
                 'object_name': 'AuthProvider'
             },
-            'config':
-            ('sentry.db.models.fields.encrypted.EncryptedJsonField', [], {
+            'config': ('jsonfield.fields.JSONField', [], {
                 'default': '{}'
             }),
             'date_added':
@@ -689,7 +518,7 @@ from scrapy.utils.conf import build_component_list
             }),
             'date_expires': (
                 'django.db.models.fields.DateTimeField', [], {
-                    'default': 'datetime.datetime(2017, 4, 12, 0, 0)',
+                    'default': 'datetime.datetime(2017, 3, 2, 0, 0)',
                     'null': 'True',
                     'blank': 'True'
                 }
@@ -847,91 +676,6 @@ from scrapy.utils.conf import build_component_list
                 }
             ),
             'value': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {})
-        },
-        'sentry.deploy': {
-            'Meta': {
-                'object_name': 'Deploy'
-            },
-            'date_finished':
-            ('django.db.models.fields.DateTimeField', [], {
-                'default': 'datetime.datetime.now'
-            }),
-            'date_started':
-            ('django.db.models.fields.DateTimeField', [], {
-                'null': 'True',
-                'blank': 'True'
-            }),
-            'environment_id': (
-                'sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {
-                    'db_index': 'True'
-                }
-            ),
-            'id':
-            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
-                'primary_key': 'True'
-            }),
-            'name': (
-                'django.db.models.fields.CharField', [], {
-                    'max_length': '64',
-                    'null': 'True',
-                    'blank': 'True'
-                }
-            ),
-            'organization_id': (
-                'sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {
-                    'db_index': 'True'
-                }
-            ),
-            'release': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.Release']'
-                }
-            ),
-            'url': (
-                'django.db.models.fields.URLField', [], {
-                    'max_length': '200',
-                    'null': 'True',
-                    'blank': 'True'
-                }
-            )
-        },
-        'sentry.dsymapp': {
-            'Meta': {
-                'unique_together': '(('project', 'platform', 'app_id'),)',
-                'object_name': 'DSymApp'
-            },
-            'app_id': ('django.db.models.fields.CharField', [], {
-                'max_length': '64'
-            }),
-            'data': ('jsonfield.fields.JSONField', [], {
-                'default': '{}'
-            }),
-            'date_added':
-            ('django.db.models.fields.DateTimeField', [], {
-                'default': 'datetime.datetime.now'
-            }),
-            'id':
-            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
-                'primary_key': 'True'
-            }),
-            'last_synced':
-            ('django.db.models.fields.DateTimeField', [], {
-                'default': 'datetime.datetime.now'
-            }),
-            'platform':
-            ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {
-                'default': '0'
-            }),
-            'project': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.Project']'
-                }
-            ),
-            'sync_id':
-            ('django.db.models.fields.CharField', [], {
-                'max_length': '64',
-                'null': 'True'
-            })
         },
         'sentry.dsymbundle': {
             'Meta': {
@@ -1968,7 +1712,7 @@ from scrapy.utils.conf import build_component_list
             ('django.db.models.fields.DateTimeField', [], {
                 'default': 'datetime.datetime.now'
             }),
-            'value': ('sentry.db.models.fields.encrypted.EncryptedPickledObjectField', [], {})
+            'value': ('sentry.db.models.fields.pickle.UnicodePickledObjectField', [], {})
         },
         'sentry.organization': {
             'Meta': {
@@ -2211,7 +1955,7 @@ from scrapy.utils.conf import build_component_list
                     'to': 'orm['sentry.Organization']'
                 }
             ),
-            'value': ('sentry.db.models.fields.encrypted.EncryptedPickledObjectField', [], {})
+            'value': ('sentry.db.models.fields.pickle.UnicodePickledObjectField', [], {})
         },
         'sentry.processingissue': {
             'Meta': {
@@ -2420,7 +2164,7 @@ from scrapy.utils.conf import build_component_list
                     'to': 'orm['sentry.Project']'
                 }
             ),
-            'value': ('sentry.db.models.fields.encrypted.EncryptedPickledObjectField', [], {})
+            'value': ('sentry.db.models.fields.pickle.UnicodePickledObjectField', [], {})
         },
         'sentry.projectplatform': {
             'Meta': {
@@ -2652,33 +2396,6 @@ from scrapy.utils.conf import build_component_list
                 }
             )
         },
-        'sentry.releaseheadcommit': {
-            'Meta': {
-                'unique_together': '(('repository_id', 'release'),)',
-                'object_name': 'ReleaseHeadCommit'
-            },
-            'commit': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.Commit']'
-                }
-            ),
-            'id':
-            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
-                'primary_key': 'True'
-            }),
-            'organization_id': (
-                'sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {
-                    'db_index': 'True'
-                }
-            ),
-            'release': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.Release']'
-                }
-            ),
-            'repository_id':
-            ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {})
-        },
         'sentry.releaseproject': {
             'Meta': {
                 'unique_together': '(('project', 'release'),)',
@@ -2824,12 +2541,6 @@ from scrapy.utils.conf import build_component_list
             'name': ('django.db.models.fields.CharField', [], {
                 'max_length': '128'
             }),
-            'owner': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.User']',
-                    'null': 'True'
-                }
-            ),
             'project': (
                 'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
                     'to': 'orm['sentry.Project']'
@@ -3096,7 +2807,7 @@ from scrapy.utils.conf import build_component_list
             ),
             'validation_hash': (
                 'django.db.models.fields.CharField', [], {
-                    'default': 'u'niTW4OgDa3WpF4EtCz2kBurkK7XVfn4Y'',
+                    'default': 'u'xSM70zG7MyRUVIUcaNBY2CyvizXoGfhQ'',
                     'max_length': '32'
                 }
             )
@@ -3124,7 +2835,7 @@ from scrapy.utils.conf import build_component_list
                     'to': 'orm['sentry.User']'
                 }
             ),
-            'value': ('sentry.db.models.fields.encrypted.EncryptedPickledObjectField', [], {})
+            'value': ('sentry.db.models.fields.pickle.UnicodePickledObjectField', [], {})
         },
         'sentry.userreport': {
             'Meta': {
@@ -3161,41 +2872,5 @@ from scrapy.utils.conf import build_component_list
                     'to': 'orm['sentry.Project']'
                 }
             )
-        },
-        'sentry.versiondsymfile': {
-            'Meta': {
-                'unique_together': '(('dsym_file', 'version', 'build'),)',
-                'object_name': 'VersionDSymFile'
-            },
-            'build':
-            ('django.db.models.fields.CharField', [], {
-                'max_length': '32',
-                'null': 'True'
-            }),
-            'date_added':
-            ('django.db.models.fields.DateTimeField', [], {
-                'default': 'datetime.datetime.now'
-            }),
-            'dsym_app': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.DSymApp']'
-                }
-            ),
-            'dsym_file': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.ProjectDSymFile']',
-                    'null': 'True'
-                }
-            ),
-            'id':
-            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
-                'primary_key': 'True'
-            }),
-            'version': ('django.db.models.fields.CharField', [], {
-                'max_length': '32'
-            })
         }
     }
-    
-            # Adding unique constraint on 'Distribution', fields ['release', 'name']
-        db.create_unique('sentry_distribution', ['release_id', 'name'])
