@@ -1,221 +1,333 @@
-  print('Number of distinct paths: %d' % len(path_index))
-  return path_index, path_vectors
+
+        
+            def is_face_card(self):
+        '''Jack = 11, Queen = 12, King = 13'''
+        return True if 10 < self._value <= 13 else False
+    
+        def add_user(self, user_id, name, pass_hash):
+        pass
+    
+    from enum import Enum
     
     
-# GENERATION
-    
-      if FLAGS.noise_type == 'poisson':
-    noisy_data = spikify_data(rates, rng, rnn['dt'], rnn['max_firing_rate'])
-  elif FLAGS.noise_type == 'gaussian':
-    noisy_data = gaussify_data(rates, rng, rnn['dt'], rnn['max_firing_rate'])
-  else:
-    raise ValueError('Only noise types supported are poisson or gaussian')
-    
-      Returns:
-    loss: Scalar tf.float32 total loss.
-  '''
-  cross_entropy_loss = tf.nn.sparse_softmax_cross_entropy_with_logits(
-      labels=gen_labels, logits=gen_logits)
-  gan_loss = -tf.log(dis_predictions)
-  loss_matrix = tf.where(is_real_input, cross_entropy_loss, gan_loss)
-  return tf.reduce_mean(loss_matrix)
+class RangeMaxValueValidator(MaxValueValidator):
+    def compare(self, a, b):
+        return a.upper is None or a.upper > b
+    message = _('Ensure that this range is completely less than or equal to %(limit_value)s.')
     
     
-def create_discriminator(hparams,
-                         sequence,
-                         is_training,
-                         reuse=None,
-                         initial_state=None,
-                         inputs=None,
-                         present=None):
-  '''Create the Discriminator model specified by the FLAGS and hparams.
+def get_eips_details(module):
+    connection = module.client('ec2')
+    filters = module.params.get('filters')
+    try:
+        response = connection.describe_addresses(
+            Filters=ansible_dict_to_boto3_filter_list(filters)
+        )
+    except (BotoCoreError, ClientError) as e:
+        module.fail_json_aws(
+            e,
+            msg='Error retrieving EIPs')
     
-    
-def create_dis_pretrain_op(hparams, dis_loss, global_step):
-  '''Create a train op for pretraining.'''
-  with tf.name_scope('pretrain_generator'):
-    optimizer = tf.train.AdamOptimizer(hparams.dis_pretrain_learning_rate)
-    dis_vars = [
-        v for v in tf.trainable_variables() if v.op.name.startswith('dis')
-    ]
-    if FLAGS.dis_update_share_embedding and FLAGS.dis_share_embedding:
-      shared_embedding = [
-          v for v in tf.trainable_variables()
-          if v.op.name == 'gen/decoder/rnn/embedding'
-      ][0]
-      dis_vars.append(shared_embedding)
-    dis_grads = tf.gradients(dis_loss, dis_vars)
-    dis_grads_clipped, _ = tf.clip_by_global_norm(dis_grads,
-                                                  FLAGS.grad_clipping)
-    dis_pretrain_op = optimizer.apply_gradients(
-        zip(dis_grads_clipped, dis_vars), global_step=global_step)
-    return dis_pretrain_op
-    
-      for t in ngrams_list:
-    key = hash_function(t)
-    if key in counts:
-      counts[key] += 1
-    else:
-      counts[key] = 1
-  return counts
-    
-            if error is not None:
-            flash(error)
+        try:
+        configuration_facts = get_configuration_facts(cursor)
+        if module.check_mode:
+            changed = not check(configuration_facts, parameter_name, current_value)
         else:
-            db = get_db()
-            db.execute(
-                'UPDATE post SET title = ?, body = ? WHERE id = ?',
-                (title, body, id)
-            )
-            db.commit()
-            return redirect(url_for('blog.index'))
+            try:
+                changed = present(configuration_facts, cursor, parameter_name, current_value)
+            except pyodbc.Error as e:
+                module.fail_json(msg=to_native(e), exception=traceback.format_exc())
+    except NotSupportedError as e:
+        module.fail_json(msg=to_native(e), ansible_facts={'vertica_configuration': configuration_facts})
+    except CannotDropError as e:
+        module.fail_json(msg=to_native(e), ansible_facts={'vertica_configuration': configuration_facts})
+    except SystemExit:
+        # avoid catching this on python 2.4
+        raise
+    except Exception as e:
+        module.fail_json(msg=to_native(e), exception=traceback.format_exc())
     
-        if db is not None:
-        db.close()
+        return changed, client.role_find(name=name)
     
+        # If we're in check mode, just exit pretending like we succeeded
+    if module.check_mode:
+        module.exit_json(changed=True)
     
-@pytest.fixture
-def app():
-    '''Create and configure a new app instance for each test.'''
-    # create a temporary file to isolate the database for each test
-    db_fd, db_path = tempfile.mkstemp()
-    # create the app with common test config
-    app = create_app({
-        'TESTING': True,
-        'DATABASE': db_path,
-    })
+        if not isinstance(body['hosts'], list):
+        body['hosts'] = [body['hosts']]
     
-            :param name: the optional name of the global, otherwise the
-                     function name will be used.
-        '''
-        def register_template(state):
-            state.app.jinja_env.globals[name or f.__name__] = f
-        self.record_once(register_template)
-    
-    This typically means that you attempted to use functionality that needed
-an active HTTP request.  Consult the documentation on testing for
-information about how to avoid this problem.\
-'''
-_app_ctx_err_msg = '''\
-Working outside of application context.
+        try:
+        data = urlencode(params)
+        response, info = fetch_url(module, url, data=data)
+    except Exception as e:
+        module.fail_json(msg='Unable to notify Honeybadger: %s' % to_native(e), exception=traceback.format_exc())
+    else:
+        if info['status'] == 201:
+            module.exit_json(changed=True)
+        else:
+            module.fail_json(msg='HTTP result code: %d connecting to %s' % (info['status'], url))
     
     
-# Core signals.  For usage examples grep the source code or consult
-# the API documentation in docs/api.rst as well as docs/signals.rst
-template_rendered = _signals.signal('template-rendered')
-before_render_template = _signals.signal('before-render-template')
-request_started = _signals.signal('request-started')
-request_finished = _signals.signal('request-finished')
-request_tearing_down = _signals.signal('request-tearing-down')
-got_request_exception = _signals.signal('got-request-exception')
-appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
-appcontext_pushed = _signals.signal('appcontext-pushed')
-appcontext_popped = _signals.signal('appcontext-popped')
-message_flashed = _signals.signal('message-flashed')
+def main():
+    module = AnsibleModule(
+        argument_spec=dict(
+            name=dict(type='str', required=True),
+            state=dict(type='str', choices=['present', 'absent'], default='present')
+        ),
+        supports_check_mode=True
+    )
+    
+        def start_requests(self):
+        qargs = {'total': self.total, 'show': self.show}
+        url = '{}?{}'.format(self.baseurl, urlencode(qargs, doseq=1))
+        return [scrapy.Request(url, dont_filter=True)]
+    
+            spider_loader = self.crawler_process.spider_loader
+    
+        def process_options(self, args, opts):
+        ScrapyCommand.process_options(self, args, opts)
+        try:
+            opts.spargs = arglist_to_dict(opts.spargs)
+        except ValueError:
+            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
+        if opts.output:
+            if opts.output == '-':
+                self.settings.set('FEED_URI', 'stdout:', priority='cmdline')
+            else:
+                self.settings.set('FEED_URI', opts.output, priority='cmdline')
+            feed_exporters = without_none_values(
+                self.settings.getwithbase('FEED_EXPORTERS'))
+            valid_output_formats = feed_exporters.keys()
+            if not opts.output_format:
+                opts.output_format = os.path.splitext(opts.output)[1].replace('.', '')
+            if opts.output_format not in valid_output_formats:
+                raise UsageError('Unrecognized output format '%s', set one'
+                                 ' using the '-t' switch or as a file extension'
+                                 ' from the supported list %s' % (opts.output_format,
+                                                                  tuple(valid_output_formats)))
+            self.settings.set('FEED_FORMAT', opts.output_format, priority='cmdline')
+    
+            spidercls = DefaultSpider
+        spider_loader = self.crawler_process.spider_loader
+        if opts.spider:
+            spidercls = spider_loader.load(opts.spider)
+        else:
+            spidercls = spidercls_for_request(spider_loader, request, spidercls)
+        self.crawler_process.crawl(spidercls, start_requests=lambda: [request])
+        self.crawler_process.start()
 
     
-            if trv is not None:
-            return trv
-        raise TemplateNotFound(template)
+            if self.crawler_process.bootstrap_failed:
+            self.exitcode = 1
+
     
-            If the ``obj`` argument is not given, passes an instance of
-        :class:`~flask.cli.ScriptInfo` that knows how to load the Flask
-        app being tested.
-    
-            # Broken links can't be fixed and
-        # I am not sure what do with the local ones.
-        if errortype.lower() in ['broken', 'local']:
-            print('Not Fixed: ' + line)
-        else:
-            # If this is a new file
-            if newfilename != _filename:
-    
-    def _run_print_help(parser, func, *a, **kw):
-    try:
-        func(*a, **kw)
-    except UsageError as e:
-        if str(e):
-            parser.error(str(e))
-        if e.print_help:
-            parser.print_help()
-        sys.exit(2)
-    
-        def set_crawler(self, crawler):
-        assert not hasattr(self, '_crawler'), 'crawler already set'
-        self._crawler = crawler
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
-                          help='set spider argument (may be repeated)')
-        parser.add_option('-o', '--output', metavar='FILE',
-                          help='dump scraped items into FILE (use - for stdout)')
-        parser.add_option('-t', '--output-format', metavar='FORMAT',
-                          help='format to use for dumping items with -o')
-    
-        def print_requests(self, lvl=None, colour=True):
-        if lvl is None:
-            levels = list(self.requests.keys())
-            if levels:
-                requests = self.requests[max(levels)]
+        def run(self, args, opts):
+        settings = self.crawler_process.settings
+        if opts.get:
+            s = settings.get(opts.get)
+            if isinstance(s, BaseSettings):
+                print(json.dumps(s.copy_to_dict()))
             else:
-                requests = []
+                print(s)
+        elif opts.getbool:
+            print(settings.getbool(opts.getbool))
+        elif opts.getint:
+            print(settings.getint(opts.getint))
+        elif opts.getfloat:
+            print(settings.getfloat(opts.getfloat))
+        elif opts.getlist:
+            print(settings.getlist(opts.getlist))
+
+    
+        if twisted_version < (17, 0, 0):
+        from twisted.internet._sslverify import _maybeSetHostNameIndication
+        set_tlsext_host_name = _maybeSetHostNameIndication
+    else:
+        def set_tlsext_host_name(connection, hostNameBytes):
+            connection.set_tlsext_host_name(hostNameBytes)
+    
+        def reset_appid(self):
+        # called by web_control
+        with self.lock:
+            self.working_appid_list = list()
+            for appid in self.config.GAE_APPIDS:
+                if not appid:
+                    self.config.GAE_APPIDS.remove(appid)
+                    continue
+                self.working_appid_list.append(appid)
+            self.not_exist_appids = []
+            self.out_of_quota_appids = []
+        self.last_reset_time = time.time()
+    
+            if buf1 != buf2:
+            return False
         else:
-            requests = self.requests.get(lvl, [])
+            return True
+    
+        global pteredor_is_running, usable
+    pteredor_is_running = probe_nat
+    prober = teredo_prober(probe_nat=probe_nat)
+    
+    # [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+    
+    # Predefined token types
+EOR_TOKEN_TYPE = 1
     
     
-def _import_file(filepath):
-    abspath = os.path.abspath(filepath)
-    dirname, file = os.path.split(abspath)
-    fname, fext = os.path.splitext(file)
-    if fext != '.py':
-        raise ValueError('Not a Python source file: %s' % abspath)
-    if dirname:
-        sys.path = [dirname] + sys.path
-    try:
-        module = import_module(fname)
-    finally:
-        if dirname:
-            sys.path.pop(0)
-    return module
-    
-        def __init__(self, *args, **kwargs):
-        super(ReturnsContract, self).__init__(*args, **kwargs)
-    
-    
-def get_github_url(app, view, path):
-    github_fmt = 'https://github.com/{}/{}/{}/{}{}'
-    return (
-        github_fmt.format(app.config.edit_on_github_project, view,
-                          app.config.edit_on_github_branch,
-                          app.config.edit_on_github_src_path, path))
-    
-        def get_device_name(self, device):
-        '''Return the name of the given device or None if we don't know.'''
-        if not self.last_results:
-            return None
-        for client in self.last_results:
-            if client['mac'] == device:
-                return client['host']
-        return None
+    def predict(self, input):
+        '''
+        From the input stream, predict what alternative will succeed
+	using this DFA (representing the covering regular approximation
+	to the underlying CFL).  Return an alternative number 1..n.  Throw
+	 an exception upon error.
+	'''
+        mark = input.mark()
+        s = 0 # we always start at s0
+        try:
+            for _ in xrange(50000):
+                #print '***Current state = %d' % s
+                
+                specialState = self.special[s]
+                if specialState >= 0:
+                    #print 'is special'
+                    s = self.specialStateTransition(specialState, input)
+                    if s == -1:
+                        self.noViableAlt(s, input)
+                        return 0
+                    input.consume()
+                    continue
     
     
-def setup(hass, config):
-    '''Set up the Emoncms history component.'''
-    conf = config[DOMAIN]
-    whitelist = conf.get(CONF_WHITELIST)
+class RecognizerSharedState(object):
+    '''
+    The set of fields needed by an abstract recognizer to recognize input
+    and recover from errors etc...  As a separate state object, it can be
+    shared among multiple grammars; e.g., when one grammar imports another.
     
-        def run(self):
-        '''Run the server.'''
-        # Listen for UDP port 1900 packets sent to SSDP multicast address
-        ssdp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        ssdp_socket.setblocking(False)
+        def __init__(self):
+        self.__prepare__()
     
-    import homeassistant.helpers.config_validation as cv
-from homeassistant.const import CONF_ENTITIES, CONF_NAME, ATTR_ENTITY_ID
-from homeassistant.helpers.entity import Entity
-from homeassistant.helpers.entity_component import EntityComponent
+    print(longestSub([4,8,7,5,1,12,2,3,9]))
+print(longestSub([9,8,7,6,5,7]))
     
-        hass.data[DOMAIN] = hlmn
-    for dev in devices:
-        _LOGGER.debug('Discovered LaMetric device: %s', dev)
+        def solve_sub_array(self):
+        rear = [int(self.array[0])]*len(self.array)
+        sum_value = [int(self.array[0])]*len(self.array)
+        for i in range(1, len(self.array)):
+            sum_value[i] = max(int(self.array[i]) + sum_value[i-1], int(self.array[i]))
+            rear[i] = max(sum_value[i], rear[i-1])
+        return rear[len(self.array)-1]
+    
+    * @author chinmoy159
+* @version 1.0 dated 10/08/2017
+'''
+    
+    def getFrequencyOrder(message):
+    letterToFreq = getLetterCount(message)
+    freqToLetter = {}
+    for letter in LETTERS:
+        if letterToFreq[letter] not in freqToLetter:
+            freqToLetter[letterToFreq[letter]] = [letter]
+        else:
+            freqToLetter[letterToFreq[letter]].append(letter)
+    
+    
+def filter_for_training(roidb):
+    '''Remove roidb entries that have no usable RoIs based on config settings.
+    '''
+    def is_valid(entry):
+        # Valid images have:
+        #   (1) At least one foreground RoI OR
+        #   (2) At least one background RoI
+        overlaps = entry['max_overlaps']
+        # find boxes with sufficient overlap
+        fg_inds = np.where(overlaps >= cfg.TRAIN.FG_THRESH)[0]
+        # Select background RoIs as those within [BG_THRESH_LO, BG_THRESH_HI)
+        bg_inds = np.where((overlaps < cfg.TRAIN.BG_THRESH_HI) &
+                           (overlaps >= cfg.TRAIN.BG_THRESH_LO))[0]
+        # image is only valid if such boxes exist
+        valid = len(fg_inds) > 0 or len(bg_inds) > 0
+        if cfg.MODEL.KEYPOINTS_ON:
+            # If we're training for keypoints, exclude images with no keypoints
+            valid = valid and entry['has_visible_keypoints']
+        return valid
+    
+    
+def _get_voc_results_file_template(json_dataset, salt):
+    info = voc_info(json_dataset)
+    year = info['year']
+    image_set = info['image_set']
+    devkit_path = info['devkit_path']
+    # VOCdevkit/results/VOC2007/Main/<comp_id>_det_test_aeroplane.txt
+    filename = 'comp4' + salt + '_det_' + image_set + '_{:s}.txt'
+    return os.path.join(devkit_path, 'results', 'VOC' + year, 'Main', filename)
+    
+            if cfg.RPN.RPN_ON:
+            # Add the RPN head
+            head_loss_gradients['rpn'] = rpn_heads.add_generic_rpn_outputs(
+                model, blob_conv, dim_conv, spatial_scale_conv
+            )
+    
+        # rois are in [[batch_idx, x0, y0, x1, y2], ...] format
+    # Combine predictions across all levels and retain the top scoring
+    rois = np.concatenate([blob.data for blob in roi_inputs])
+    scores = np.concatenate([blob.data for blob in score_inputs]).squeeze()
+    inds = np.argsort(-scores)[:post_nms_topN]
+    rois = rois[inds, :]
+    return rois
+    
+        sampled_fg_rois *= im_scale
+    repeated_batch_idx = batch_idx * blob_utils.ones(
+        (sampled_fg_rois.shape[0], 1)
+    )
+    sampled_fg_rois = np.hstack((repeated_batch_idx, sampled_fg_rois))
+    
+    '''Construct minibatches for Detectron networks.'''
+    
+        retnet_roi_fg_bbox_locs -> for the bbox regression, since we are only
+                               interested in regressing on fg bboxes which are
+                               M in number and the output prediction of the network
+                               is of shape N x (A * 4) x H x W
+                               (in case of non class-specific bbox), so we
+                               store the locations of positive fg boxes in this
+                               blob retnet_roi_fg_bbox_locs of shape M x 4 where
+                               each row looks like: [img_id, anchor_id, x_loc, y_loc]
+    '''
+    # im_info: (height, width, image scale)
+    blob_names = ['im_info']
+    assert cfg.FPN.FPN_ON, 'RetinaNet uses FPN for dense detection'
+    # Same format as RPN blobs, but one per FPN level
+    if is_training:
+        blob_names += ['retnet_fg_num', 'retnet_bg_num']
+        for lvl in range(cfg.FPN.RPN_MIN_LEVEL, cfg.FPN.RPN_MAX_LEVEL + 1):
+            suffix = 'fpn{}'.format(lvl)
+            blob_names += [
+                'retnet_cls_labels_' + suffix,
+                'retnet_roi_bbox_targets_' + suffix,
+                'retnet_roi_fg_bbox_locs_' + suffix,
+            ]
+    return blob_names
