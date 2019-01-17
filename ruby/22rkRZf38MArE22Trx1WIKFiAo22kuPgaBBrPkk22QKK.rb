@@ -1,130 +1,167 @@
 
         
-        platforms :ruby do
-  gem 'sqlite3'
+            if resource.errors.empty?
+      set_flash_message! :notice, :unlocked
+      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
+    else
+      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+    end
+  end
+    
+      ActiveSupport.run_load_hooks(:devise_controller, self)
+end
+
+    
+        def default_failure_app(options)
+      @failure_app = options[:failure_app] || Devise::FailureApp
+      if @failure_app.is_a?(String)
+        ref = Devise.ref(@failure_app)
+        @failure_app = lambda { |env| ref.get.call(env) }
+      end
+    end
+    
+      # Returns parsed JavaScript blocks.
+  # The parsed version is a RKelly object that allows you to be able do advanced parsing.
+  #
+  # @see https://github.com/tenderlove/rkelly
+  # @return [Array<RKelly::Nodes::SourceElementsNode>]
+  def get_html_scripts
+    n = get_html_document
+    rkelly = RKelly::Parser.new
+    n.search('//script').map { |s| rkelly.parse(s.text) }
+  end
+    
+              sent = 0
+          case protocol
+          when 'tcp'
+            sent = send_request_tcp(req)
+          when 'udp'
+            sent = send_request_udp(req)
+          else
+            raise ::RuntimeError, 'Kerberos Client: unknown transport protocol'
+          end
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module Crypto
+        module Rc4Hmac
+          # Decrypts the cipher using RC4-HMAC schema
+          #
+          # @param cipher [String] the data to decrypt
+          # @param key [String] the key to decrypt
+          # @param msg_type [Integer] the message type
+          # @return [String] the decrypted cipher
+          # @raise [RuntimeError] if decryption doesn't succeed
+          def decrypt_rc4_hmac(cipher, key, msg_type)
+            unless cipher && cipher.length > 16
+              raise ::RuntimeError, 'RC4-HMAC decryption failed'
+            end
+    
+              # Encodes the Rex::Proto::Kerberos::Model::Element into an ASN.1 String. This
+          # method has been designed to be overridden by subclasses.
+          #
+          # @raise [NoMethodError]
+          def encode
+            raise ::NoMethodError, 'Method designed to be overridden'
+          end
+        end
+      end
+    end
+  end
 end
     
-      def sign_in_params
-    devise_parameter_sanitizer.sanitize(:sign_in)
-  end
-    
-        def confirmation_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :confirmation_instructions, opts)
-    end
-    
-              def current_#{mapping}
-            @current_#{mapping} ||= warden.authenticate(scope: :#{mapping})
+              # Decodes the crealm field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [String]
+          def decode_crealm(input)
+            input.value[0].value
           end
     
-          def self.generate_helpers!(routes=nil)
-        routes ||= begin
-          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
-          Devise::URL_HELPERS.slice(*mappings)
-        end
-    
-        def inheritable_copy
-      self.class.new @filters
-    end
-    
-        def blank?
-      body.blank?
-    end
-    
-          def initial_urls
-        super + self.class.base_urls[1..-1].deep_dup
-      end
-    
-            css('header').each do |node|
-          node.before(node.children).remove
-        end
-    
-        ff.each do |f|
-      missing = f.missing_dependencies(hide: ARGV.values('hide'))
-      next if missing.empty?
-    
-      def initialize(repo: 'twbs/bootstrap', branch: 'master', save_to: {}, cache_path: 'tmp/converter-cache-bootstrap')
-    @logger     = Logger.new
-    @repo       = repo
-    @branch     = branch || 'master'
-    @branch_sha = get_branch_sha
-    @cache_path = cache_path
-    @repo_url   = 'https://github.com/#@repo'
-    @save_to    = {
-        js:    'assets/javascripts/bootstrap',
-        scss:  'assets/stylesheets/bootstrap',
-        fonts: 'assets/fonts/bootstrap'}.merge(save_to)
-  end
-    
-        # advance scanner to pos after the next match of pattern and return the match
-    def scan_next(pattern)
-      return unless @s.scan_until(pattern)
-      @s.matched
-    end
-    
-          replace_rules file do |rule|
-        replace_properties rule do |props|
-          props.gsub /(?<!\w)([\w-]+):(.*?);/ do |m|
-            prop, vals = $1, split_prop_val.call($2)
-            next m unless vals.length >= 2 && vals.any? { |v| v =~ /^[\+\-]\$/ }
-            transformed = vals.map { |v| v.strip =~ %r(^\(.*\)$) ? v : '(#{v})' }
-            log_transform 'property #{prop}: #{transformed * ' '}', from: 'wrap_calculation'
-            '#{prop}: #{transformed * ' '};'
+              # Decodes the ctime field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_ctime(input)
+            input.value[0].value
           end
-        end
-      end
-    end
     
-        def puts(*args)
-      STDERR.puts *args unless @silence
-    end
-    
-        def open_file(filename, flag = 'r')
-      return if filename.nil?
-      flag = 'wb' if @options[:unix_newlines] && flag == 'w'
-      file = File.open(filename, flag)
-      return file unless block_given?
-      yield file
-      file.close
-    end
-    
-          # Returns the time the given Sass file was last modified.
-      #
-      # If the given file has been deleted or the time can't be accessed
-      # for some other reason, this should return nil.
-      #
-      # @param uri [String] The URI of the file to check.
-      #   Comes from a `:filename` option set on an engine returned by this importer.
-      # @param options [{Symbol => Object}] Options for the Sass file
-      #   containing the `@import` currently being checked.
-      # @return [Time, nil]
-      def mtime(uri, options)
-        Sass::Util.abstract(self)
-      end
-    
-          # @see Base#find
-      def find(name, options)
-        _find(@root, name, options)
-      end
-    
-          def unprocessable_entity(message)
-        render plain: { exception: message }.to_json, status: 422
-      end
-    
-              inventory_unit.transaction do
-            if inventory_unit.update_attributes(inventory_unit_params)
-              fire
-              render :show, status: 200
-            else
-              invalid_resource!(inventory_unit)
-            end
+              # Rex::Proto::Kerberos::Model::LastRequest encoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def encode
+            raise ::NotImplementedError, 'LastRequest encoding not supported'
           end
-        end
     
-            def find_payment
-          @payment = @order.payments.find_by!(number: params[:id])
-        end
+    # skip over blogs that aren't found
+unavailable = []
+fast_forwards = [
+  'Baidu Research',
+  'Booking.com',
+  'Fynd',
+  'Graphcool',
+  'LinkedIn',
+  'Medallia',
+  'OmniTI',
+  'Paperless Post',
+  'Pluralsight',
+  'Prolific Interactive',
+  'Quora',
+  'Robert Elder Software',
+  'Simple',
+  'SlideShare',
+  'SourceClear',
+  'Viget',
+  'Zalando',
+  'Zapier',
+  'Zynga',
+  'Dave Beazley',
+  'Edan Kwan',
+  'Grzegorz Gajos',
+  'Joe Armstrong',
+  'Kai Hendry',
+  'LiveOverflow'
+]
     
-            def show
-          respond_with(stock_location)
-        end
+      find_files = ->(path) {
+    Find.find(Pathname.new(path).relative_path_from(Pathname.new Dir.pwd).to_s).map do |path|
+      path if File.file?(path)
+    end.compact
+  }
+    
+        def clear
+      @attachments = Hash.new { |h,k| h[k] = {} }
+    end
+    
+        def cropping dst, ratio, scale
+      if ratio.horizontal? || ratio.square?
+        '%dx%d+%d+%d' % [ dst.width, dst.height, 0, (self.height * scale - dst.height) / 2 ]
+      else
+        '%dx%d+%d+%d' % [ dst.width, dst.height, (self.width * scale - dst.width) / 2, 0 ]
+      end
+    end
+    
+        def geometry_string
+      begin
+        orientation = Paperclip.options[:use_exif_orientation] ?
+          '%[exif:orientation]' : '1'
+        Paperclip.run(
+          Paperclip.options[:is_windows] ? 'magick identify' : 'identify',
+          '-format '%wx%h,#{orientation}' :file', {
+            :file => '#{path}[0]'
+          }, {
+            :swallow_stderr => true
+          }
+        )
+      rescue Terrapin::ExitStatusError
+        ''
+      rescue Terrapin::CommandNotFoundError => e
+        raise_because_imagemagick_missing
+      end
+    end
+    
+        # Returns the Rails.root constant.
+    def rails_root attachment, style_name
+      Rails.root
+    end
