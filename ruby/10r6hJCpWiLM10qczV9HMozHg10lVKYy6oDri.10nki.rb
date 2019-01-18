@@ -1,133 +1,125 @@
 
         
-                # The VM which this system is tied to.
-        attr_reader :vm
+              # Converts the array to a comma-separated sentence where the last element is
+      # joined by the connector word. This is the html_safe-aware version of
+      # ActiveSupport's {Array#to_sentence}[http://api.rubyonrails.org/classes/Array.html#method-i-to_sentence].
+      #
+      def to_sentence(array, options = {})
+        options.assert_valid_keys(:words_connector, :two_words_connector, :last_word_connector, :locale)
     
-            # This registers a plugin. This should _NEVER_ be called by the public
-        # and should only be called from within Vagrant. Vagrant will
-        # automatically register V1 plugins when a name is set on the
-        # plugin.
-        def register(plugin)
-          if !@registered.include?(plugin)
-            @logger.info('Registered plugin: #{plugin.name}')
-            @registered << plugin
+                  if accept
+                html_options[option] = true
+              elsif option == :checked
+                html_options[option] = false
+              end
+            end
+    
+              def field_type
+            self.class.field_type
           end
-        end
-    
-            # This contains all the provider plugins by name, and returns
-        # the provider class and options.
-        #
-        # @return [Hash<Symbol, Registry>]
-        attr_reader :providers
-    
-            # An internal finalize call that no subclass should override.
-        def _finalize!
-          @__finalized = true
-        end
       end
     end
   end
 end
 
     
-      THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-  'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-=end
+          if staff.topic_id.nil?
+        creator = PostCreator.new(Discourse.system_user,
+          raw: I18n.t('staff_category_description'),
+          title: I18n.t('category.topic_prefix', category: staff.name),
+          category: staff.name,
+          archetype: Archetype.default
+        )
+        post = creator.create
     
-          attr_reader :wiki
-    
-          # Wraps page formatted data to Nokogiri::HTML document.
-      #
-      def build_document(content)
-        Nokogiri::HTML::fragment(%{<div id='gollum-root'>} + content.to_s + %{</div>}, 'UTF-8')
-      end
-    
-      teardown do
-    FileUtils.rm_r(File.join(File.dirname(__FILE__), *%w[examples test.git]))
-  end
-    
-      teardown do
-    FileUtils.rm_r(File.join(File.dirname(__FILE__), *%w[examples test.git]))
-  end
-    
-      teardown do
-    FileUtils.rm_rf(@path)
-  end
-    
-    desc 'Build and install'
-task :install => :build do
-  sh 'gem install --local --no-ri --no-rdoc pkg/#{name}-#{version}.gem'
-end
-    
-        def post_render(page)
-      OctopressFilters::post_filter(page)
-    end
-  end
-    
-        worker_count.times do |count|
-      template '/data/#{app}/shared/config/sidekiq_#{count}.yml' do
-        owner node[:owner_name]
-        group node[:owner_name]
-        mode 0644
-        source 'sidekiq.yml.erb'
-        variables({
-          :require => '/data/#{app}/current'
-        })
-      end
+        def new
+      authorize :custom_emoji, :create?
+      @custom_emoji = CustomEmoji.new
     end
     
-      def perform(msg='lulz you forgot a msg!')
-    $redis.lpush('sinkiq-example-messages', msg)
+          @email_domain_block = EmailDomainBlock.new(resource_params)
+    
+    class Api::OEmbedController < Api::BaseController
+  respond_to :json
+    
+      before_action :set_account
+  respond_to :txt
+    
+      def body
+    @_body ||= request.body.read
+  end
+    
+        12.times do |i|
+      day     = i.weeks.ago.to_date
+      week_id = day.cweek
+      week    = Date.commercial(day.cwyear, week_id)
+    
+      def data_params
+    return {} if params[:data].blank?
+    params.require(:data).permit(alerts: [:follow, :favourite, :reblog, :mention])
   end
 end
+
     
-          def create_worker_file
-        template 'worker.rb.erb', File.join('app/workers', class_path, '#{file_name}_worker.rb')
+    module Rex
+  module Proto
+    module Kerberos
+      module CredentialCache
+        # This class provides a representation of credential times stored in the Kerberos Credential Cache.
+        class Time < Element
+          # @!attribute auth_time
+          #   @return [Integer]
+          attr_accessor :auth_time
+          # @!attribute start_time
+          #   @return [Integer]
+          attr_accessor :start_time
+          # @!attribute end_time
+          #   @return [Integer]
+          attr_accessor :end_time
+          # @!attribute renew_till
+          #   @return [Integer]
+          attr_accessor :renew_till
+    
+              # Encrypts the cipher using RC4-HMAC schema
+          #
+          # @param data [String] the data to encrypt
+          # @param key [String] the key to encrypt
+          # @param msg_type [Integer] the message type
+          # @return [String] the encrypted data
+          def encrypt_rc4_hmac(data, key, msg_type)
+            k1 = OpenSSL::HMAC.digest('MD5', key, [msg_type].pack('V'))
+    
+              # Encodes the type field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_type
+            bn = OpenSSL::BN.new(type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+              # Decodes the end_time field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_end_time(input)
+            input.value[0].value
+          end
+    
+              # @!attribute key
+          #   @return [Integer] The type of encryption key
+          attr_accessor :type
+          # @!attribute value
+          #   @return [String] the key itself
+          attr_accessor :value
+    
+              # Decodes the req_body from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Rex::Proto::Kerberos::Model::KdcRequestBody]
+          def decode_asn1_req_body(input)
+            Rex::Proto::Kerberos::Model::KdcRequestBody.decode(input.value[0])
+          end
+        end
       end
-    
-        ##
-    # The main method used to push a job to Redis.  Accepts a number of options:
-    #
-    #   queue - the named queue to use, default 'default'
-    #   class - the worker class to call, required
-    #   args - an array of simple arguments to the perform method, must be JSON-serializable
-    #   at - timestamp to schedule the job (optional), must be Numeric (e.g. Time.now.to_f)
-    #   retry - whether to retry this job if it fails, default true or an integer number of retries
-    #   backtrace - whether to save any error backtrace, default false
-    #
-    # If class is set to the class name, the jobs' options will be based on Sidekiq's default
-    # worker options. Otherwise, they will be based on the job class's options.
-    #
-    # Any options valid for a worker class's sidekiq_options are also available here.
-    #
-    # All options must be strings, not symbols.  NB: because we are serializing to JSON, all
-    # symbols in 'args' will be converted to strings.  Note that +backtrace: true+ can take quite a bit of
-    # space in Redis; a large volume of failing jobs can start Redis swapping if you aren't careful.
-    #
-    # Returns a unique Job ID.  If middleware stops the job, nil will be returned instead.
-    #
-    # Example:
-    #   push('queue' => 'my_queue', 'class' => MyWorker, 'args' => ['foo', 1, :bat => 'bar'])
-    #
-    def push(item)
-      normed = normalize_item(item)
-      payload = process_single(item['class'], normed)
-    
-        def self.enable_delay!
-      if defined?(::ActiveSupport)
-        require 'sidekiq/extensions/active_record'
-        require 'sidekiq/extensions/action_mailer'
-    
-          def prepend(klass, *args)
-        remove(klass) if exists?(klass)
-        entries.insert(0, Entry.new(klass, *args))
-      end
+    end
+  end
+end
