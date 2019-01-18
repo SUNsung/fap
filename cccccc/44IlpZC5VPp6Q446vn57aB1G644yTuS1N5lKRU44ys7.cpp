@@ -1,272 +1,169 @@
 
         
-            void showTab_SM(bool fShow);
-    void showTab_VM(bool fShow);
+        namespace atom {
+    }
     
-    #endif // BITCOIN_QT_TRAFFICGRAPHWIDGET_H
+    
+    {}  // namespace atom
 
     
-    
-static void secp256k1_rfc6979_hmac_sha256_initialize(secp256k1_rfc6979_hmac_sha256_t *rng, const unsigned char *key, size_t keylen) {
-    secp256k1_hmac_sha256_t hmac;
-    static const unsigned char zero[1] = {0x00};
-    static const unsigned char one[1] = {0x01};
+    namespace {
     }
     
-        /* Check all NULLs are detected */
-    CHECK(secp256k1_ecdh(tctx, res, &point, s_one) == 1);
-    CHECK(ecount == 0);
-    CHECK(secp256k1_ecdh(tctx, NULL, &point, s_one) == 0);
-    CHECK(ecount == 1);
-    CHECK(secp256k1_ecdh(tctx, res, NULL, s_one) == 0);
-    CHECK(ecount == 2);
-    CHECK(secp256k1_ecdh(tctx, res, &point, NULL) == 0);
-    CHECK(ecount == 3);
-    CHECK(secp256k1_ecdh(tctx, res, &point, s_one) == 1);
-    CHECK(ecount == 3);
-    
-    #include <boost/test/unit_test.hpp>
-    
-    /* Given a BlockIndex with the provided nbits,
- * verify that the expected difficulty results.
- */
-static void TestDifficulty(uint32_t nbits, double expected_difficulty)
-{
-    CBlockIndex* block_index = CreateBlockIndexWithNbits(nbits);
-    double difficulty = GetDifficulty(block_index);
-    delete block_index;
-    }
-    
-    // Computes and returns the dot product of the n-vectors u and v.
-// Uses Intel SSE intrinsics to access the SIMD instruction set.
-double DotProductSSE(const double* u, const double* v, int n);
-// Computes and returns the dot product of the n-vectors u and v.
-// Uses Intel SSE intrinsics to access the SIMD instruction set.
-int32_t IntDotProductSSE(const int8_t* u, const int8_t* v, int n);
-    
-    IntSimdMatrixSSE::IntSimdMatrixSSE() {
-#ifdef __SSE4_1__
-  partial_funcs_ = {PartialMatrixDotVector1};
-#endif  // __SSE4_1__
+    bool SavePageHandler::Handle(const base::FilePath& full_path,
+                             const content::SavePageType& save_type) {
+  auto* download_manager = content::BrowserContext::GetDownloadManager(
+      web_contents_->GetBrowserContext());
+  download_manager->AddObserver(this);
+  // Chromium will create a 'foo_files' directory under the directory of saving
+  // page 'foo.html' for holding other resource files of 'foo.html'.
+  base::FilePath saved_main_directory_path = full_path.DirName().Append(
+      full_path.RemoveExtension().BaseName().value() +
+      FILE_PATH_LITERAL('_files'));
+  bool result =
+      web_contents_->SavePage(full_path, saved_main_directory_path, save_type);
+  download_manager->RemoveObserver(this);
+  // If initialization fails which means fail to create |DownloadItem|, we need
+  // to delete the |SavePageHandler| instance to avoid memory-leak.
+  if (!result)
+    delete this;
+  return result;
 }
     
-    // A rather hackish helper structure which can take any kind of parameter input
-// (defined by ParamType) and do a couple of common operations on them, like
-// comparisond or getting its value. It is used in the context of the
-// ParamsEditor as a bridge from the internal tesseract parameters to the
-// ones displayed by the ScrollView server.
-class ParamContent : public ELIST_LINK {
- public:
-  // Compare two VC objects by their name.
-  static int Compare(const void* v1, const void* v2);
-    }
-    
-      // The d'tor restores the previous test part result reporter.
-  virtual ~ScopedFakeTestPartResultReporter();
-    
-      // Gets the name of the source file where the test part took place, or
-  // NULL if it's unknown.
-  const char* file_name() const {
-    return file_name_.empty() ? NULL : file_name_.c_str();
-  }
+     protected:
+  virtual ~TrackableObjectBase();
     
     
-    {  const T1 v1_;
-  const T2 v2_;
-  const T3 v3_;
-  const T4 v4_;
-  const T5 v5_;
-  const T6 v6_;
-  const T7 v7_;
-  const T8 v8_;
-  const T9 v9_;
-  const T10 v10_;
-  const T11 v11_;
-  const T12 v12_;
-  const T13 v13_;
-  const T14 v14_;
-  const T15 v15_;
-  const T16 v16_;
-  const T17 v17_;
-  const T18 v18_;
-  const T19 v19_;
-  const T20 v20_;
-  const T21 v21_;
-  const T22 v22_;
+    {  DISALLOW_COPY_AND_ASSIGN(AtomQuotaPermissionContext);
 };
     
+    #define CONTENT_IMPLEMENTATION 1
+#include 'content/common/content_export.h'
     
-    {  return clone;
+    IPC_MESSAGE_ROUTED3(ShellViewHostMsg_Call_Static_Method,
+                    std::string /* type name */,
+                    std::string /* method name */,
+                    base::ListValue /* arguments */)
+    
+    
+    {
+    {
+    {      rph->Send(new ViewMsg_WillQuit(&no_use));
+    }
+    CloseAllWindows(true);
+  }
+  // Then quit.
+  MessageLoop::current()->PostTask(FROM_HERE, MessageLoop::QuitClosure());
 }
     
-     public:
-  // Clones a 0-terminated C string, allocating memory using new.
-  static const char* CloneCString(const char* a_c_string);
+      bool delay_destruction() { return delay_destruction_; }
+  void set_delay_destruction(bool val) { delay_destruction_ = val; }
+  bool pending_destruction() { return pending_destruction_; }
+  void set_pending_destruction (bool val) { pending_destruction_ = val; }
+ protected:
+  int id_;
+  bool delay_destruction_;
+  bool pending_destruction_;
+  base::WeakPtr<ObjectManager> object_manager_;
     
-    	const btDiscreteDynamicsWorld *m_world;
-	btPersistentManifold *m_manifoldPtr;
-	bool m_ownManifold;
-	bool m_isSwapped;
+      WebView* view = frame->view();
+  if (!view)
+    return NULL;  // can happen during closing.
     
-    	void setPivotInA(const Vector3 &p_pos);
-	void setPivotInB(const Vector3 &p_pos);
+       void Call(const std::string& method,
+                    const base::ListValue& arguments) override;
+   void CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result) override;
     
-    	real_t getSoftnessDirLin() const;
-	real_t getRestitutionDirLin() const;
-	real_t getDampingDirLin() const;
-	real_t getSoftnessDirAng() const;
-	real_t getRestitutionDirAng() const;
-	real_t getDampingDirAng() const;
-	real_t getSoftnessLimLin() const;
-	real_t getRestitutionLimLin() const;
-	real_t getDampingLimLin() const;
-	real_t getSoftnessLimAng() const;
-	real_t getRestitutionLimAng() const;
-	real_t getDampingLimAng() const;
-	real_t getSoftnessOrthoLin() const;
-	real_t getRestitutionOrthoLin() const;
-	real_t getDampingOrthoLin() const;
-	real_t getSoftnessOrthoAng() const;
-	real_t getRestitutionOrthoAng() const;
-	real_t getDampingOrthoAng() const;
-	void setSoftnessDirLin(real_t softnessDirLin);
-	void setRestitutionDirLin(real_t restitutionDirLin);
-	void setDampingDirLin(real_t dampingDirLin);
-	void setSoftnessDirAng(real_t softnessDirAng);
-	void setRestitutionDirAng(real_t restitutionDirAng);
-	void setDampingDirAng(real_t dampingDirAng);
-	void setSoftnessLimLin(real_t softnessLimLin);
-	void setRestitutionLimLin(real_t restitutionLimLin);
-	void setDampingLimLin(real_t dampingLimLin);
-	void setSoftnessLimAng(real_t softnessLimAng);
-	void setRestitutionLimAng(real_t restitutionLimAng);
-	void setDampingLimAng(real_t dampingLimAng);
-	void setSoftnessOrthoLin(real_t softnessOrthoLin);
-	void setRestitutionOrthoLin(real_t restitutionOrthoLin);
-	void setDampingOrthoLin(real_t dampingOrthoLin);
-	void setSoftnessOrthoAng(real_t softnessOrthoAng);
-	void setRestitutionOrthoAng(real_t restitutionOrthoAng);
-	void setDampingOrthoAng(real_t dampingOrthoAng);
-	void setPoweredLinMotor(bool onOff);
-	bool getPoweredLinMotor();
-	void setTargetLinMotorVelocity(real_t targetLinMotorVelocity);
-	real_t getTargetLinMotorVelocity();
-	void setMaxLinMotorForce(real_t maxLinMotorForce);
-	real_t getMaxLinMotorForce();
-	void setPoweredAngMotor(bool onOff);
-	bool getPoweredAngMotor();
-	void setTargetAngMotorVelocity(real_t targetAngMotorVelocity);
-	real_t getTargetAngMotorVelocity();
-	void setMaxAngMotorForce(real_t maxAngMotorForce);
-	real_t getMaxAngMotorForce();
-	real_t getLinearPos();
-    
-    	if (id == 0) {
-		r_error.error = Variant::CallError::CALL_ERROR_INSTANCE_IS_NULL;
-		return Variant();
-	}
-	Object *obj = ObjectDB::get_instance(id);
-    
-    	unzFile pkg = unzOpen2(packages[file.package].filename.utf8().get_data(), &io);
-	ERR_FAIL_COND_V(!pkg, NULL);
-	int unz_err = unzGoToFilePos(pkg, &file.file_pos);
-	if (unz_err != UNZ_OK || unzOpenCurrentFile(pkg) != UNZ_OK) {
+      template<typename T> T* AddListener() {
+    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
+    if (i==listerners_.end()) {
+      T* listener_object = new T(this);
+      listerners_[T::id] = listener_object;
+      return listener_object;
     }
+    return NULL;
+  }
     
-    void Speed::startWithTarget(Node* target)
-{
-    if (target && _innerAction)
-    {
-        Action::startWithTarget(target);
-        _innerAction->startWithTarget(target);
-    }
-    else
-        log('Speed::startWithTarget error: target(%p) or _innerAction(%p) is nullptr!', target, _innerAction);
+    // Popup menus may get squished if they open up too close to the bottom of the
+// screen. This function takes the size of the screen, the size of the menu,
+// an optional widget, the Y position of the mouse click, and adjusts the popup
+// menu's Y position to make it fit if it's possible to do so.
+// Returns the new Y position of the popup menu.
+int CalculateMenuYPosition(const GdkRectangle* screen_rect,
+                           const GtkRequisition* menu_req,
+                           GtkWidget* widget, const int y) {
+  CHECK(screen_rect);
+  CHECK(menu_req);
+  // If the menu would run off the bottom of the screen, and there is enough
+  // screen space upwards to accommodate the menu, then pop upwards. If there
+  // is a widget, then also move the anchor point to the top of the widget
+  // rather than the bottom.
+  const int screen_top = screen_rect->y;
+  const int screen_bottom = screen_rect->y + screen_rect->height;
+  const int menu_bottom = y + menu_req->height;
+  int alternate_y = y - menu_req->height;
+  if (widget) {
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+    alternate_y -= allocation.height;
+  }
+  if (menu_bottom >= screen_bottom && alternate_y >= screen_top)
+    return alternate_y;
+  return y;
 }
     
-    /** @class OrbitCamera
- *
- * @brief OrbitCamera action.
- * Orbits the camera around the center of the screen using spherical coordinates.
- * @ingroup Actions
- */
-class CC_DLL OrbitCamera : public ActionCamera
-{
-public:
-    /** Creates a OrbitCamera action with radius, delta-radius,  z, deltaZ, x, deltaX. 
-     *
-     * @param t Duration in seconds.
-     * @param radius The start radius.
-     * @param deltaRadius The delta radius.
-     * @param angleZ The start angle in Z.
-     * @param deltaAngleZ The delta angle in Z.
-     * @param angleX The start angle in X.
-     * @param deltaAngleX The delta angle in X.
-     * @return An OrbitCamera.
-     */
-    static OrbitCamera* create(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX);
     
-    /** Positions the camera according to spherical coordinates. 
-     *
-     * @param r The spherical radius.
-     * @param zenith The spherical zenith.
-     * @param azimuth The spherical azimuth.
-     */
-    void sphericalRadius(float *r, float *zenith, float *azimuth);
+    {  is_menu_modified_ = true;
+  menu_items_.push_back(menu_item);
+  menu_item->menu_ = this;
+}
+    
+     protected:
+  ~NwAppCrashBrowserFunction() override {}
+    
+    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
+ public:
+  NwMenuGetNSStringFWithFixupFunction() {}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    
+ protected:
+  ~NwMenuGetNSStringFWithFixupFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
+};
+    
+      SVMenuNode* std_menu = svMenuRoot->AddChild ('Build Config File');
+    
+    // Reads all boxes from the given filename.
+// Reads a specific target_page number if >= 0, or all pages otherwise.
+// Skips blanks if skip_blanks is true.
+// The UTF-8 label of the box is put in texts, and the full box definition as
+// a string is put in box_texts, with the corresponding page number in pages.
+// Each of the output vectors is optional (may be nullptr).
+// Returns false if no boxes are found.
+bool ReadAllBoxes(int target_page, bool skip_blanks, const STRING& filename,
+                  GenericVector<TBOX>* boxes,
+                  GenericVector<STRING>* texts,
+                  GenericVector<STRING>* box_texts,
+                  GenericVector<int>* pages);
+    
+    // Class to hold a Pixa collection of debug images with captions and save them
+// to a PDF file.
+class DebugPixa {
+ public:
+  // TODO(rays) add another constructor with size control.
+  DebugPixa() {
+    pixa_ = pixaCreate(0);
+    fonts_ = bmfCreate(nullptr, 14);
+  }
+  // If the filename_ has been set and there are any debug images, they are
+  // written to the set filename_.
+  ~DebugPixa() {
+    pixaDestroy(&pixa_);
+    bmfDestroy(&fonts_);
+  }
     }
-    
-        /** Returns the number of objects of the control point array.
-     *
-     * @js NA
-     * @return The number of objects of the control point array.
-     */
-    ssize_t count() const;
-    
-    CC_CONSTRUCTOR_ACCESS:
-    ToggleVisibility(){}
-    virtual ~ToggleVisibility(){}
-    
-    bool Animate::initWithAnimation(Animation* animation)
-{
-    CCASSERT( animation!=nullptr, 'Animate: argument Animation must be non-nullptr');
-    if (animation == nullptr)
-    {
-        log('Animate::initWithAnimation: argument Animation must be non-nullptr');
-        return false;
-    }
-    }
-    
-        /**
-     * @js NA
-     */
-    void setReverseAction(FadeTo* ac);
-    
-    
-    /** Returns the numbers of actions that are running in a
-     *  certain target with a specific tag.
-     * Like getNumberOfRunningActionsInTarget Composable actions
-     * are counted as 1 action. Example:
-     * - If you are running 1 Sequence of 7 actions, it will return 1.
-     * - If you are running 7 Sequences of 2 actions, it will return 7.
-     *
-     * @param target    A certain target.
-     * @param tag       Tag that will be searched.
-     * @return  The numbers of actions that are running in a certain target
-     *          with a specific tag.
-     * @see getNumberOfRunningActionsInTarget
-     * @js NA
-     */
-    virtual size_t getNumberOfRunningActionsInTargetByTag(const Node *target, int tag);
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-    
-    
-    {// end of sprite_nodes group
-/// @}
