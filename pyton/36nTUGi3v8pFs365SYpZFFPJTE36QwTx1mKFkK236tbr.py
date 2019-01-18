@@ -1,214 +1,185 @@
 
         
-              self.nc_initial_value_t = tf.placeholder(tf.float32, None)
+            def __init__(self, timestamp, seller, amount):
+        self.timestamp = timestamp
+        self.seller = seller
+        self.amount = amount
     
-    rates_train, rates_valid = split_list_by_inds(rates, train_inds, valid_inds)
-spikes_train, spikes_valid = split_list_by_inds(spikes, train_inds, valid_inds)
-condition_labels_train, condition_labels_valid = split_list_by_inds(
-    condition_labels, train_inds, valid_inds)
-ext_input_train, ext_input_valid = split_list_by_inds(
-    ext_input, train_inds, valid_inds)
+        def get_people(self, ids):
+        results = []
+        for id in ids:
+            if id in self.people:
+                results.append(self.people[id])
+        return results
     
-    _START_SPECIAL_CHARS = ['.', ',', '?', '!', ';', ':', '[', ']', '\'', '+', '/',
-                        '\xc2\xa3', '$', '~', '*', '%', '{', '}', '#', '&', '-',
-                        ''', '(', ')', '='] + list(_SPECIAL_CHAR_MAP.keys())
-_SPECIAL_CHARS = _START_SPECIAL_CHARS + [
-    '\'s', '\'m', '\'t', '\'re', '\'d', '\'ve', '\'ll']
+    signature = hexlify(rsa.pkcs1.sign(json.dumps(versions_info, sort_keys=True).encode('utf-8'), privkey, 'SHA-256')).decode()
+print('signature: ' + signature)
     
-      if epoch_size == 0:
-    raise ValueError('epoch_size == 0, decrease batch_size or num_steps')
+        ie_htmls = []
+    for ie in youtube_dl.list_extractors(age_limit=None):
+        ie_html = '<b>{}</b>'.format(ie.IE_NAME)
+        ie_desc = getattr(ie, 'IE_DESC', None)
+        if ie_desc is False:
+            continue
+        elif ie_desc is not None:
+            ie_html += ': {}'.format(ie.IE_DESC)
+        if not ie.working():
+            ie_html += ' (Currently broken)'
+        ie_htmls.append('<li>{}</li>'.format(ie_html))
     
-      for i, sample in enumerate(samples):
-    print('Sample', i, '. ', sample)
-    log.write('\nSample ' + str(i) + '. ' + sample)
-  log.write('\n')
-  print('\n')
-  log.flush()
+    youtube\-dl \- download videos from youtube.com or other video platforms
     
-    # Dependency imports
+        for release in releases:
+        compat_print(release['name'])
+        for asset in release['assets']:
+            asset_name = asset['name']
+            total_bytes += asset['download_count'] * asset['size']
+            if all(not re.match(p, asset_name) for p in (
+                    r'^youtube-dl$',
+                    r'^youtube-dl-\d{4}\.\d{2}\.\d{2}(?:\.\d+)?\.tar\.gz$',
+                    r'^youtube-dl\.exe$')):
+                continue
+            compat_print(
+                ' %s size: %s downloads: %d'
+                % (asset_name, format_size(asset['size']), asset['download_count']))
     
-        elif FLAGS.discriminator_model == 'seq2seq_vd':
-      load_ckpt = tf.train.latest_checkpoint(FLAGS.language_model_ckpt_dir)
-      print('Restoring Discriminator from %s.' % load_ckpt)
-      tf.logging.info('Restoring Discriminator from %s.' % load_ckpt)
-      dis_encoder_init_saver = init_savers['dis_encoder_init_saver']
-      dis_decoder_init_saver = init_savers['dis_decoder_init_saver']
-      dis_encoder_init_saver.restore(sess, load_ckpt)
-      dis_decoder_init_saver.restore(sess, load_ckpt)
     
-        def database_forwards(self, app_label, schema_editor, from_state, to_state):
-        if schema_editor.connection.vendor != 'postgresql':
-            return
-        schema_editor.execute('CREATE EXTENSION IF NOT EXISTS %s' % schema_editor.quote_name(self.name))
-        # Clear cached, stale oids.
-        get_hstore_oids.cache_clear()
-        get_citext_oids.cache_clear()
-        # Registering new type handlers cannot be done before the extension is
-        # installed, otherwise a subsequent data migration would use the same
-        # connection.
-        register_type_handlers(schema_editor.connection)
+def build_completion(opt_parser):
+    opts = [opt for group in opt_parser.option_groups
+            for opt in group.option_list]
+    opts_file = [opt for opt in opts if opt.metavar == 'FILE']
+    opts_dir = [opt for opt in opts if opt.metavar == 'DIR']
     
-    model = Sequential()
-model.add(Conv2D(32, kernel_size=(3, 3),
-                 activation='relu',
-                 input_shape=input_shape))
-model.add(Conv2D(64, (3, 3), activation='relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.25))
-model.add(Flatten())
-model.add(Dense(128, activation='relu', name='features'))
-model.add(Dropout(0.5))
-model.add(Dense(num_classes, activation='softmax'))
+    from test.helper import try_rm
     
-        ```python
-         ..
-         # Not needed to change the device scope for model definition:
-         model = Xception(weights=None, ..)
     
-        # To prevent a slowdown,
-    # we find beforehand the arrays that need conversion.
-    feed = (model._feed_inputs +
-            model._feed_targets +
-            model._feed_sample_weights)
-    indices_for_conversion_to_dense = []
-    for i in range(len(feed)):
-        if issparse(fit_inputs[i]) and not K.is_sparse(feed[i]):
-            indices_for_conversion_to_dense.append(i)
+init_bashrc = u'''echo '
+export SHELL=/bin/bash
+export PS1='$ '
+echo > $HISTFILE
+eval $(thefuck --alias {})
+echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
+' > ~/.bashrc'''
     
-        addresses = camel_dict_to_snake_dict(response)['addresses']
-    for address in addresses:
-        if 'tags' in address:
-            address['tags'] = boto3_tag_list_to_ansible_dict(address['tags'])
-    return addresses
     
-        creds, params = get_google_cloud_credentials(module)
-    pubsub_client = pubsub.Client(project=params['project_id'], credentials=creds, use_gax=False)
-    pubsub_client.user_agent = 'ansible-pubsub-0.1'
+@pytest.fixture(params=containers)
+def proc(request, spawnu, TIMEOUT):
+    proc = spawnu(*request.param)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(u'tcsh')
+    proc.sendline(u'setenv PYTHONIOENCODING utf8')
+    proc.sendline(u'eval `thefuck --alias`')
+    return proc
     
-        if not check_min_pkg_version(CLOUD_CLIENT, CLOUD_CLIENT_MINIMUM_VERSION):
-        module.fail_json(msg='Please install %s client version %s' %
-                         (CLOUD_CLIENT, CLOUD_CLIENT_MINIMUM_VERSION))
-    
-                if self.requires_template_update(host.TEMPLATE, desired_template_changes):
-                # setup the root element so that pyone will generate XML instead of attribute vector
-                desired_template_changes = {'TEMPLATE': desired_template_changes}
-                if one.host.update(host.ID, desired_template_changes, 1):  # merge the template
-                    result['changed'] = True
-                else:
-                    self.fail(msg='failed to update the host template')
-    
-    from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.ipa import IPAClient, ipa_argument_spec
-from ansible.module_utils._text import to_native
-    
-        changed = False
-    if state in ['present', 'enabled', 'disabled']:
-        if not ipa_hbacrule:
-            changed = True
-            if not module.check_mode:
-                ipa_hbacrule = client.hbacrule_add(name=name, item=module_hbacrule)
-        else:
-            diff = get_hbcarule_diff(client, ipa_hbacrule, module_hbacrule)
-            if len(diff) > 0:
-                changed = True
-                if not module.check_mode:
-                    data = {}
-                    for key in diff:
-                        data[key] = module_hbacrule.get(key)
-                    client.hbacrule_mod(name=name, item=data)
-    
-        # Insert state-specific attributes to body
-    if state == 'started':
-        for k in ('source_system', 'env', 'owner', 'description'):
-            v = module.params[k]
-            if v is not None:
-                body[k] = v
-    
-    short_description: Manage Icinga2 feature
-description:
-    - This module can be used to enable or disable an Icinga2 feature.
-version_added: '2.3'
-author: 'Loic Blot (@nerzhul)'
-options:
-    name:
-      description:
-      - This is the feature name to enable or disable.
-      required: True
-    state:
-      description:
-      - If set to C(present) and feature is disabled, then feature is enabled.
-      - If set to C(present) and feature is already enabled, then nothing is changed.
-      - If set to C(absent) and feature is enabled, then feature is disabled.
-      - If set to C(absent) and feature is already disabled, then nothing is changed.
-      choices: [ 'present', 'absent' ]
-      default: present
+    no_match_output = '''
+Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
+Get:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease [89.2 kB]
+Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
+Get:4 http://security.ubuntu.com/ubuntu zesty-security InRelease [89.2 kB]
+Hit:5 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
+Hit:6 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
+Hit:7 https://download.docker.com/linux/ubuntu zesty InRelease
+Get:8 http://us.archive.ubuntu.com/ubuntu zesty-updates/main i386 Packages [232 kB]
+Get:9 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 Packages [235 kB]
+Get:10 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 DEP-11 Metadata [55.2 kB]
+Get:11 http://us.archive.ubuntu.com/ubuntu zesty-updates/main DEP-11 64x64 Icons [32.3 kB]
+Get:12 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 Packages [156 kB]
+Get:13 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe i386 Packages [156 kB]
+Get:14 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 DEP-11 Metadata [175 kB]
+Get:15 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe DEP-11 64x64 Icons [253 kB]
+Get:16 http://us.archive.ubuntu.com/ubuntu zesty-updates/multiverse amd64 DEP-11 Metadata [5,840 B]
+Get:17 http://us.archive.ubuntu.com/ubuntu zesty-backports/universe amd64 DEP-11 Metadata [4,588 B]
+Get:18 http://security.ubuntu.com/ubuntu zesty-security/main amd64 DEP-11 Metadata [12.7 kB]
+Get:19 http://security.ubuntu.com/ubuntu zesty-security/main DEP-11 64x64 Icons [17.6 kB]
+Get:20 http://security.ubuntu.com/ubuntu zesty-security/universe amd64 DEP-11 Metadata [21.6 kB]
+Get:21 http://security.ubuntu.com/ubuntu zesty-security/universe DEP-11 64x64 Icons [47.7 kB]
+Get:22 http://security.ubuntu.com/ubuntu zesty-security/multiverse amd64 DEP-11 Metadata [208 B]
+Fetched 1,673 kB in 0s (1,716 kB/s)
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+All packages are up to date.
 '''
     
-                    log.println('    platform: {}'.format(platform.platform()))
-                log.println('    python:   {}'.format(sys.version.split('\n')[0]))
     
-    #----------------------------------------------------------------------
-def dilidili_parser_data_to_stream_types(typ ,vid ,hd2 ,sign, tmsign, ulk):
-    '''->list'''
-    another_url = 'https://newplayer.jfrft.com/parse.php?xmlurl=null&type={typ}&vid={vid}&hd={hd2}&sign={sign}&tmsign={tmsign}&userlink={ulk}'.format(typ = typ, vid = vid, hd2 = hd2, sign = sign, tmsign = tmsign, ulk = ulk)
-    parse_url = 'http://player.005.tv/parse.php?xmlurl=null&type={typ}&vid={vid}&hd={hd2}&sign={sign}&tmsign={tmsign}&userlink={ulk}'.format(typ = typ, vid = vid, hd2 = hd2, sign = sign, tmsign = tmsign, ulk = ulk)
-    html = get_content(another_url, headers=headers)
+@pytest.mark.parametrize('command, new_command', [
+    (Command('cargo buid', no_such_subcommand_old), 'cargo build'),
+    (Command('cargo buils', no_such_subcommand), 'cargo build')])
+def test_get_new_command(command, new_command):
+    assert get_new_command(command) == new_command
+
     
-    info = re.search(r'(\{[^{]+\})(\{[^{]+\})(\{[^{]+\})(\{[^{]+\})(\{[^{]+\})', html).groups()
-    info = [i.strip('{}').split('->') for i in info]
-    info = {i[0]: i [1] for i in info}
+    __all__ = ['__version__', 'version_info', 'twisted_version',
+           'Spider', 'Request', 'FormRequest', 'Selector', 'Item', 'Field']
     
-    stream_types = []
-    for i in zip(info['deft'].split('|'), info['defa'].split('|')):
-        stream_types.append({'id': str(i[1][-1]), 'container': 'mp4', 'video_profile': i[0]})
-    return stream_types
-    }
-    }
-    }
-    }
-    }
     
-        elif 'subject' in url:
-        titles = re.findall(r'data-title='([^']*)'>', html)
-        song_id = re.findall(r'<li class='song-item' id='([^']*)'', html)
-        song_ssid = re.findall(r'data-ssid='([^']*)'', html)
-        get_song_url = 'http://music.douban.com/j/songlist/get_song_url'
+class TextTestResult(_TextTestResult):
+    def printSummary(self, start, stop):
+        write = self.stream.write
+        writeln = self.stream.writeln
+    
+            editor = self.settings['EDITOR']
+        try:
+            spidercls = self.crawler_process.spider_loader.load(args[0])
+        except KeyError:
+            return self._err('Spider not found: %s' % args[0])
+    
+                raise ContractFail('Returned %s %s, expected %s' % \
+                (occurrences, self.obj_name, expected))
+    
+                # backward-compatible SSL/TLS method:
+            #
+            # * this will respect `method` attribute in often recommended
+            #   `ScrapyClientContextFactory` subclass
+            #   (https://github.com/scrapy/scrapy/issues/1429#issuecomment-131782133)
+            #
+            # * getattr() for `_ssl_method` attribute for context factories
+            #   not calling super(..., self).__init__
+            return CertificateOptions(verify=False,
+                        method=getattr(self, 'method',
+                                       getattr(self, '_ssl_method', None)),
+                        fixBrokenPeers=True,
+                        acceptableCiphers=DEFAULT_CIPHERS)
+    
+        if twisted_version < (17, 0, 0):
+        from twisted.internet._sslverify import _maybeSetHostNameIndication
+        set_tlsext_host_name = _maybeSetHostNameIndication
+    else:
+        def set_tlsext_host_name(connection, hostNameBytes):
+            connection.set_tlsext_host_name(hostNameBytes)
+    
+        def _set_connection_attributes(self, request):
+        parsed = urlparse_cached(request)
+        self.scheme, self.netloc, self.host, self.port, self.path = _parsed_url_args(parsed)
+        proxy = request.meta.get('proxy')
+        if proxy:
+            self.scheme, _, self.host, self.port, _ = _parse(proxy)
+            self.path = self.url
+    
+    PROJ_METADATA = '%s.json' % PROJ_NAME
     
     from ..common import *
+import urllib.parse
     
-    def clean_text(text, replacements = {':': '_', ' ': '_', '/': '_', '.': '', ''': ''}):
-    for key, rep in replacements.items():
-        text = text.replace(key, rep)
-    return text    
+    __all__ = ['facebook_download']
     
-    # If true, '()' will be appended to :func: etc. cross-reference text.
-#
-# add_function_parentheses = True
+        type, ext, size = url_info(url[0], True)
+    size = urls_size(url)
     
-    ATTR_URL = 'url'
-ATTR_URL_DEFAULT = 'https://www.google.com'
-    
-    import homeassistant.helpers.config_validation as cv
-from homeassistant.components import http
-from homeassistant.core import callback
-from homeassistant.helpers.entity import Entity
-from homeassistant.helpers.entity_component import EntityComponent
-from homeassistant.util import Throttle
-    
-                            if match:
-                            filename = match[0].strip(''\' ')
-    
-    _LOGGER = logging.getLogger(__name__)
-    
-            def on_modified(self, event):
-            '''File modified.'''
-            self.process(event)
-    
-    import voluptuous as vol
-    
-        for ha_type, hive_type in DEVICETYPES.items():
-        for key, devices in devicelist.items():
-            if key == hive_type:
-                for hivedevice in devices:
-                    load_platform(hass, ha_type, DOMAIN, hivedevice, config)
-    return True
+            # attempt to extract images first
+        # TBD: posts with > 4 images
+        # TBD: album links
+        html = get_html(parse.unquote(url), faker=True)
+        real_urls = []
+        for src in re.findall(r'src='([^']+)'[^>]*itemprop='image'', html):
+            t = src.split('/')
+            t[0], t[-2] = t[0] or 'https:', 's0-d'
+            u = '/'.join(t)
+            real_urls.append(u)
+        if not real_urls:
+            real_urls = [r1(r'<meta property='og:image' content='([^']+)', html)]
+            real_urls = [re.sub(r'w\d+-h\d+-p', 's0', u) for u in real_urls]
+        post_date = r1(r''?(20\d\d[-/]?[01]\d[-/]?[0123]\d)'?', html)
+        post_id = r1(r'/posts/([^']+)', html)
+        title = post_date + '_' + post_id
