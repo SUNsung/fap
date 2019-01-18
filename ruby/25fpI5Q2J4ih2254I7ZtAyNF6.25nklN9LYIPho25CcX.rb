@@ -1,40 +1,96 @@
 
         
-            def byte_to_str_pos(pos)
-      @s.string.byteslice(0, pos).length
+          describe '#style_colors' do
+    it 'returns a css style-formated version of the scenario foreground and background colors' do
+      expect(style_colors(scenario)).to eq('color:#AAAAAA;background-color:#000000')
     end
     
-      # Generate digests for assets URLs.
-  config.assets.digest = true
+      describe '#interpolate_jsonpaths' do
+    let(:payload) { { :there => { :world => 'WORLD' }, :works => 'should work' } }
     
-          prepare_package(explicit_plugins_specs, temp_path)
-      LogStash::Util::Zip.compress(temp_path, @target)
-    ensure
-      FileUtils.rm_rf(temp_path)
-    end
-    
-          # Try to add the gems to the current gemfile and lock file, if successful
-      # both of them will be updated. This injector is similar to Bundler's own injector class
-      # minus the support for additionals source and doing local resolution only.
-      ::Bundler::LogstashInjector.inject!(pack)
-    
-        FileUtils.rm_rf(LogStash::Environment::CACHE_PATH)
-    validate_cache_location
-    archive_manager.extract(package_file, LogStash::Environment::CACHE_PATH)
-    puts('Unpacked at #{LogStash::Environment::CACHE_PATH}')
-    puts('The unpacked plugins can now be installed in local-only mode using bin/logstash-plugin install --local [plugin name]')
+      it 'accepts a Bignum as a seed' do
+    srand(0x12345678901234567890)
+    srand.should == 0x12345678901234567890
   end
     
-      def update_gems!
-    # If any error is raise inside the block the Gemfile will restore a backup of the Gemfile
-    previous_gem_specs_map = find_latest_gem_specs
+          it 'raises ArgumentError if passed negative value' do
+        -> { warn '', uplevel: -2 }.should raise_error(ArgumentError)
+        -> { warn '', uplevel: -100 }.should raise_error(ArgumentError)
+      end
     
-      describe 'on #{logstash.hostname}' do
-    context 'with a direct internet connection' do
-      context 'when the plugin exist' do
-        context 'from a local `.GEM` file' do
-          let(:gem_name) { 'logstash-filter-qatest-0.1.1.gem' }
-          let(:gem_path_on_vagrant) { '/tmp/#{gem_name}' }
-          before(:each) do
-            logstash.download('https://rubygems.org/gems/#{gem_name}', gem_path_on_vagrant)
+    
+  def self.create_rakp_hmac_sha1_salt(con_sid, bmc_sid, con_rid, bmc_rid, bmc_gid, auth_level, username)
+    con_sid +
+    bmc_sid +
+    con_rid +
+    bmc_rid +
+    bmc_gid +
+    [ auth_level ].pack('C') +
+    [ username.length ].pack('C') +
+    username
+  end
+    
+            # Sends a kerberos request, and reads the response through the connection
+        #
+        # @param req [Rex::Proto::Kerberos::Model::KdcRequest] the request to send
+        # @return [<Rex::Proto::Kerberos::Model::KrbError, Rex::Proto::Kerberos::Model::KdcResponse>] The kerberos message
+        # @raise [RuntimeError] if the transport protocol is unknown or the response can't be parsed.
+        # @raise [NotImplementedError] if the transport protocol isn't supported
+        def send_recv(req)
+          send_request(req)
+          res = recv_response
+    
+              # Encodes the end_time field
+          #
+          # @return [String]
+          def encode_end_time
+            [end_time].pack('N')
           end
+    
+                res = checksum + encrypted
+            res
+          end
+        end
+      end
+    end
+  end
+end
+    
+              # Rex::Proto::Kerberos::Model::AuthorizationData decoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def decode(input)
+            raise ::NotImplementedError, 'Authorization Data decoding not supported'
+          end
+    
+            end
+      end
+    end
+  end
+end
+    
+              # Rex::Proto::Kerberos::Model::KdcResponse encoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def encode
+            raise ::NotImplementedError, 'KdcResponse encoding not supported'
+          end
+    
+        it 'generates a jasmine fixture', fixture: true do
+      session[:mobile_view] = true
+      get :new, format: :mobile
+      save_fixture(html_for('body'), 'conversations_new_mobile')
+    end
+  end
+end
+
+    
+          get :update, params: {id: note.id, set_unread: 'false'}, format: :json
+    
+        shared_examples 'on a visible post' do
+      it 'creates the participation' do
+        post :create, params: {post_id: @post.id}
+        expect(alice.participations.where(:target_id => @post.id)).to exist
+        expect(response.code).to eq('201')
+      end
+    end
