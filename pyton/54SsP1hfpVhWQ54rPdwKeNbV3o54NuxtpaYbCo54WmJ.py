@@ -1,73 +1,93 @@
 
         
-            def iter_body(self):
-        return self.msg.iter_body(self.chunk_size)
+            # Then we call the sorting method
+    sort_blocks()
     
     
-def test_current_version():
-    version = Environment().config['__meta__']['httpie']
-    assert version == __version__
+@pytest.mark.functional
+def test_refuse_with_confirmation(proc, TIMEOUT):
+    refuse_with_confirmation(proc, TIMEOUT)
+    
+    
+def test_match():
+    command = Command('brew install sshfs', output)
+    assert match(command)
+    
+    
+@parametrize_extensions
+@parametrize_filename
+@parametrize_script
+def test_side_effect(ext, tar_error, filename, unquoted, quoted, script, fixed):
+    tar_error(unquoted.format(ext))
+    side_effect(Command(script.format(filename.format(ext)), ''), None)
+    assert set(os.listdir('.')) == {unquoted.format(ext), 'd'}
+    
+    
+if __name__ == '__main__':
+    main()
 
     
-        def __getitem__(self, idx):
-        if idx < 0 or idx >= len(self):
-            raise IndexError(idx)
-        return self._pathcls._from_parsed_parts(self._drv, self._root,
-                                                self._parts[:-idx - 1])
-    
-        def testFileno(self):
-        self.createTempFile()
-        with open(self.filename, 'rb') as rawf:
-            bz2f = BZ2File(rawf)
-            try:
-                self.assertEqual(bz2f.fileno(), rawf.fileno())
-            finally:
-                bz2f.close()
-        self.assertRaises(ValueError, bz2f.fileno)
-    
-    Cela ressemble à un excellent recipie[1] déjeuner.
-    
-            try:
-            print(pool.apply(f, (5,)))
-        except ZeroDivisionError:
-            print('\tGot ZeroDivisionError as expected from pool.apply()')
-        else:
-            raise AssertionError('expected ZeroDivisionError')
-    
-        # Start worker processes
-    for i in range(NUMBER_OF_PROCESSES):
-        Process(target=worker, args=(task_queue, done_queue)).start()
+    #example for a DNAT
+- hosts: localhost
+  connection: local
+  tasks:
+   - vca_nat:
+       instance_id: 'b15ff1e5-1024-4f55-889f-ea0209726282'
+       vdc_name: 'benz_ansible'
+       state: 'present'
+       nat_rules:
+         - rule_type: DNAT
+           original_ip: 203.0.113.23
+           original_port: 22
+           translated_ip: 192.0.2.42
+           translated_port: 22
     
     
-def _CompileFilters( config ):
-  '''Given a filter config dictionary, return a list of compiled filters'''
-  filters = []
+def main():
+    argument_spec = ipa_argument_spec()
+    argument_spec.update(cn=dict(type='str', required=True, aliases=['name']),
+                         description=dict(type='str'),
+                         host=dict(type='list'),
+                         hostcategory=dict(type='str', choices=['all']),
+                         hostgroup=dict(type='list'),
+                         service=dict(type='list'),
+                         servicecategory=dict(type='str', choices=['all']),
+                         servicegroup=dict(type='list'),
+                         sourcehost=dict(type='list'),
+                         sourcehostcategory=dict(type='str', choices=['all']),
+                         sourcehostgroup=dict(type='list'),
+                         state=dict(type='str', default='present', choices=['present', 'absent', 'enabled', 'disabled']),
+                         user=dict(type='list'),
+                         usercategory=dict(type='str', choices=['all']),
+                         usergroup=dict(type='list'))
+    
+        module = AnsibleModule(
+        argument_spec=dict(
+            token=dict(required=True, no_log=True),
+            environment=dict(required=True),
+            user=dict(required=False),
+            repo=dict(required=False),
+            revision=dict(required=False),
+            url=dict(required=False, default='https://api.airbrake.io/deploys.txt'),
+            validate_certs=dict(default='yes', type='bool'),
+        ),
+        supports_check_mode=True
+    )
+    
+        token = module.params['token']
+    state = module.params['state']
+    url = module.params['url']
     
     
-def HandlePollResponse_SingleDiagnostic_test():
-  diagnostics_handler = ExtendedMock()
-  messages = [
-    { 'filepath': 'foo', 'diagnostics': [ 'PLACEHOLDER' ] },
-  ]
-  assert_that( _HandlePollResponse( messages, diagnostics_handler ),
-               equal_to( True ) )
-  diagnostics_handler.UpdateWithNewDiagnosticsForFile.assert_has_exact_calls( [
-    call( 'foo', [ 'PLACEHOLDER' ] )
-  ] )
+def main():
+    module = AnsibleModule(
+        argument_spec=dict(
+            path=dict(required=True),
+            state=dict(default='present', choices=['present', 'followed', 'absent', 'unfollowed']),
+            name=dict(required=False, default=None, type='str'),
+            logtype=dict(required=False, default=None, type='str', aliases=['type'])
+        ),
+        supports_check_mode=True
+    )
     
-    from ycm.tests.test_utils import ( CurrentWorkingDirectory, ExtendedMock,
-                                   MockVimModule, MockVimBuffers, VimBuffer )
-MockVimModule()
-    
-      f = _CreateFilterForTypes( opts, [ 'java', 'xml' ] )
-    
-    
-def EndsWithPython_BadPaths_test():
-  not_python_paths = [
-    None,
-    '',
-    '/opt/local/bin/vim',
-    r'C:\Program Files\Vim\vim74\gvim.exe',
-    '/usr/bin/python2.5',
-    '/home/user/.pyenv/shims/python3.2',
-  ]
+        Code is a simple port of what is already in the /scripts directory
