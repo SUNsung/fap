@@ -1,79 +1,78 @@
 
         
-        module Gitlab
-  module BackgroundMigration
-    class MigrateStageStatus
-      STATUSES = { created: 0, pending: 1, running: 2, success: 3,
-                   failed: 4, canceled: 5, skipped: 6, manual: 7 }.freeze
+        # Supported
+IAX_SUPPORTED_CODECS  = IAX_CODEC_G711_MULAW | IAX_CODEC_G711_ALAW | IAX_CODEC_LINEAR_PCM
     
-    module Gitlab
-  module Ci
-    module Pipeline
-      # Class for preloading data associated with pipelines such as commit
-      # authors.
-      class Preloader
-        def self.preload!(pipelines)
-          ##
-          # This preloads all commits at once, because `Ci::Pipeline#commit` is
-          # using a lazy batch loading, what results in only one batched Gitaly
-          # call.
-          #
-          pipelines.each(&:commit)
     
-          # Sets a cache key to the given value.
-      #
-      # key - The cache key to write.
-      # value - The value to set.
-      # timeout - The time after which the cache key should expire.
-      def self.write(raw_key, value, timeout: TIMEOUT)
-        key = cache_key_for(raw_key)
+  # open rmcpplus_request with cipherzero
+  def self.create_ipmi_session_open_cipher_zero_request(console_session_id)
+    head = [
+      0x06, 0x00, 0xff, 0x07,   # RMCP Header
+      0x06,                     # RMCP+ Authentication Type
+      PAYLOAD_RMCPPLUSOPEN_REQ, # Payload Type
+      0x00, 0x00, 0x00, 0x00,   # Session ID
+      0x00, 0x00, 0x00, 0x00    # Sequence Number
+    ].pack('C*')
     
-    module Gitlab
-  module GithubImport
-    # HTTP client for interacting with the GitHub API.
-    #
-    # This class is basically a fancy wrapped around Octokit while adding some
-    # functionality to deal with rate limiting and parallel imports. Usage is
-    # mostly the same as Octokit, for example:
-    #
-    #     client = GithubImport::Client.new('hunter2')
-    #
-    #     client.labels.each do |label|
-    #       puts label.name
-    #     end
-    class Client
-      include ::Gitlab::Utils::StrongMemoize
-    
-            def collection_method
-          :issues
-        end
-    
-            # issue - An instance of `Gitlab::GithubImport::Representation::Issue`
-        # project - An instance of `Project`
-        # client - An instance of `Gitlab::GithubImport::Client`
-        def initialize(issue, project, client)
-          @issue = issue
-          @project = project
-          @client = client
-          @label_finder = LabelFinder.new(project)
-        end
-    
-            # Builds a diff note from a GitHub API response.
+            # Creates a connection through a Rex socket
         #
-        # note - An instance of `Sawyer::Resource` containing the note details.
-        def self.from_api_response(note)
-          matches = note.html_url.match(NOTEABLE_ID_REGEX)
+        # @return [Rex::Socket::Tcp]
+        # @raise [RuntimeError] if the connection can not be created
+        def connect
+          return connection if connection
     
-        Thread.pass until running
-    Thread.pass while t.status and t.status != 'sleep'
+              # Decodes the pvno from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_pvno(input)
+            input.value[0].value.to_i
+          end
     
-    describe 'Kernel#system' do
-  it 'is a private method' do
-    Kernel.should have_private_instance_method(:system)
+              # Decodes a Rex::Proto::Kerberos::Model::EncryptionKey from an
+          # OpenSSL::ASN1::Sequence
+          #
+          # @param input [OpenSSL::ASN1::Sequence] the input to decode from
+          def decode_asn1(input)
+            seq_values = input.value
+            self.type = decode_type(seq_values[0])
+            self.value = decode_value(seq_values[1])
+          end
+    
+      if config.log_to.include? 'file'
+    # Configure an appender that will write log events to a file.
+    if AppConfig.environment.logging.logrotate.enable?
+      # The file will be rolled on a daily basis, and the rolled files will be kept
+      # the configured number of days. Older files will be deleted. The default pattern
+      # layout is used when formatting log events into strings.
+      Logging.appenders.rolling_file('file',
+                                     filename:      config.paths['log'].first,
+                                     keep:          AppConfig.environment.logging.logrotate.days.to_i,
+                                     age:           'daily',
+                                     truncate:      false,
+                                     auto_flushing: true,
+                                     layout:        layout
+                                    )
+    else
+      # No file rolling, use logrotate to roll the logfile.
+      Logging.appenders.file('file',
+                             filename:      config.paths['log'].first,
+                             truncate:      false,
+                             auto_flushing: true,
+                             layout:        layout
+                            )
+    end
   end
     
-        after do
-      rm_r @tmp_file
+        reversible(&method(:up_down))
+  end
+    
+        it 'paginates the notifications' do
+      25.times { FactoryGirl.create(:notification, :recipient => alice, :target => @post) }
+      get :index
+      expect(assigns[:notifications].count).to eq(25)
+      get :index, params: {page: 2}
+      expect(assigns[:notifications].count).to eq(1)
     end
     
                 case platform
@@ -81,33 +80,61 @@
             when 'macOS' then self.platform :macos, '10.10'
             end
     
-            self.description = <<-DESC
-          Shows the content of the pods cache as a YAML tree output, organized by pod.
-          If `NAME` is given, only the caches for that pod will be included in the output.
-        DESC
-    
-          def run
-        UI.puts report
-      end
-    
-      it 'ignores empty arrays' do
-    expect_no_offenses('[]')
+    desc 'list of authors'
+task :authors, [:commit_range, :format, :sep] do |t, a|
+  a.with_defaults :format => '%s (%d)', :sep => ', ', :commit_range => '--all'
+  authors = Hash.new(0)
+  blake   = 'Blake Mizerany'
+  overall = 0
+  mapping = {
+    'blake.mizerany@gmail.com' => blake, 'bmizerany' => blake,
+    'a_user@mac.com' => blake, 'ichverstehe' => 'Harry Vangberg',
+    'Wu Jiang (nouse)' => 'Wu Jiang' }
+  `git shortlog -s #{a.commit_range}`.lines.map do |line|
+    line = line.force_encoding 'binary' if line.respond_to? :force_encoding
+    num, name = line.split('\t', 2).map(&:strip)
+    authors[mapping[name] || name] += num.to_i
+    overall += num.to_i
   end
+  puts '#{overall} commits by #{authors.count} authors:'
+  puts authors.sort_by { |n,c| -c }.map { |e| a.format % e }.join(a.sep)
+end
     
-      include_examples 'multiline literal brace layout method argument' do
-    let(:open) { '{' }
-    let(:close) { '}' }
-    let(:a) { 'a: 1' }
-    let(:b) { 'b: 2' }
-    let(:multi_prefix) { 'b: ' }
-    let(:multi) { ['[', '1', ']'] }
-  end
-    
-    module RuboCop
-  module AST
-    # A node extension for `def` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `def` nodes within RuboCop.
-    class DefNode < Node
-      include ParameterizedNode
-      include MethodIdentifierPredicates
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   XSS and others
+    # Supported browsers:: Firefox 23+, Safari 7+, Chrome 25+, Opera 15+
+    #
+    # Description:: Content Security Policy, a mechanism web applications
+    #               can use to mitigate a broad class of content injection
+    #               vulnerabilities, such as cross-site scripting (XSS).
+    #               Content Security Policy is a declarative policy that lets
+    #               the authors (or server administrators) of a web application
+    #               inform the client about the sources from which the
+    #               application expects to load resources.
+    #
+    # More info::   W3C CSP Level 1 : https://www.w3.org/TR/CSP1/ (deprecated)
+    #               W3C CSP Level 2 : https://www.w3.org/TR/CSP2/ (current)
+    #               W3C CSP Level 3 : https://www.w3.org/TR/CSP3/ (draft)
+    #               https://developer.mozilla.org/en-US/docs/Web/Security/CSP
+    #               http://caniuse.com/#search=ContentSecurityPolicy
+    #               http://content-security-policy.com/
+    #               https://securityheaders.io
+    #               https://scotthelme.co.uk/csp-cheat-sheet/
+    #               http://www.html5rocks.com/en/tutorials/security/content-security-policy/
+    #
+    # Sets the 'Content-Security-Policy[-Report-Only]' header.
+    #
+    # Options: ContentSecurityPolicy configuration is a complex topic with
+    #          several levels of support that has evolved over time.
+    #          See the W3C documentation and the links in the more info
+    #          section for CSP usage examples and best practices. The
+    #          CSP3 directives in the 'NO_ARG_DIRECTIVES' constant need to be
+    #          presented in the options hash with a boolean 'true' in order
+    #          to be used in a policy.
+    #
+    class ContentSecurityPolicy < Base
+      default_options default_src: :none, script_src: ''self'',
+                      img_src: ''self'', style_src: ''self'',
+                      connect_src: ''self'', report_only: false
