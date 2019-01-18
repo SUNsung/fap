@@ -1,68 +1,52 @@
 
         
-            proc.sendline(u'fuck')
-    assert proc.expect([TIMEOUT, u'git show'])
-    proc.send('\033[B')
-    assert proc.expect([TIMEOUT, u'git push'])
-    proc.send('\033[B')
-    assert proc.expect([TIMEOUT, u'git help'])
-    proc.send('\033[A')
-    assert proc.expect([TIMEOUT, u'git push'])
-    proc.send('\033[B')
-    assert proc.expect([TIMEOUT, u'git help'])
-    proc.send('\n')
+                if error is None:
+            # store the user id in a new session and return to the index
+            session.clear()
+            session['user_id'] = user['id']
+            return redirect(url_for('index'))
+    
+    This typically means that you attempted to use functionality that needed
+to interface with the current application object in some way. To solve
+this, set up an application context with app.app_context().  See the
+documentation for more information.\
+'''
+    
+        def to_json(self, value):
+        return http_date(value)
     
     
-@pytest.mark.parametrize('command', [
-    Command('apt-cache search foo', ''),
-    Command('aptitude search foo', ''),
-    Command('apt search foo', ''),
-    Command('apt-get install foo', ''),
-    Command('apt-get source foo', ''),
-    Command('apt-get clean', ''),
-    Command('apt-get remove', ''),
-    Command('apt-get update', ''),
-    Command('sudo apt update', no_match_output)
-])
-def test_not_match(command):
-    assert not match(command)
+http_method_funcs = frozenset(['get', 'post', 'head', 'options',
+                               'delete', 'put', 'trace', 'patch'])
     
-            assert certdata, 'cert file %r is broken' % certfile
-        import ctypes
-        import ctypes.wintypes
-        class CERT_CONTEXT(ctypes.Structure):
-            _fields_ = [
-                ('dwCertEncodingType', ctypes.wintypes.DWORD),
-                ('pbCertEncoded', ctypes.POINTER(ctypes.wintypes.BYTE)),
-                ('cbCertEncoded', ctypes.wintypes.DWORD),
-                ('pCertInfo', ctypes.c_void_p),
-                ('hCertStore', ctypes.c_void_p),]
-        X509_ASN_ENCODING = 0x1
-        CERT_STORE_ADD_ALWAYS = 4
-        CERT_STORE_PROV_SYSTEM = 10
-        CERT_STORE_OPEN_EXISTING_FLAG = 0x4000
-        CERT_SYSTEM_STORE_CURRENT_USER = 1 << 16
-        CERT_SYSTEM_STORE_LOCAL_MACHINE = 2 << 16
-        CERT_FIND_SUBJECT_STR = 8 << 16 | 7
-        crypt32 = ctypes.windll.crypt32
-        ca_exists = False
-        store_handle = None
-        pCertCtx = None
-        ret = 0
-        for store in (CERT_SYSTEM_STORE_LOCAL_MACHINE, CERT_SYSTEM_STORE_CURRENT_USER):
-            try:
-                store_handle = crypt32.CertOpenStore(CERT_STORE_PROV_SYSTEM, 0, None, CERT_STORE_OPEN_EXISTING_FLAG | store, u'root')
-                if not store_handle:
-                    if store == CERT_SYSTEM_STORE_CURRENT_USER and not ca_exists:
-                        xlog.warning('CertUtil.import_windows_ca failed: could not open system cert store')
-                        return False
-                    else:
-                        continue
     
-            if first > last or first < 0 or last < 0 or last >= len(self.tokens):
-            raise ValueError(
-                'replace: range invalid: '+first+'..'+last+
-                '(size='+len(self.tokens)+')')
+def get_git_tags():
+    return set(
+        Popen(['git', 'tag'], stdout=PIPE).communicate()[0].splitlines()
+    )
     
-            raise NotImplementedError
+        yield out
+    mp.undo()
     
+            next_prime_gt = next_prime(value % self.size_table) \
+            if not check_prime(value % self.size_table) else value % self.size_table  #gt = bigger than
+        return next_prime_gt - (data % next_prime_gt)
+    
+    print(longestSub([4,8,7,5,1,12,2,3,9]))
+print(longestSub([9,8,7,6,5,7]))
+    
+    Usage:
+  1. define 'k' value, 'X' features array and 'hetrogeneity' empty list
+  
+  2. create initial_centroids,
+        initial_centroids = get_initial_centroids(
+            X, 
+            k, 
+            seed=0 # seed value for initial centroid generation, None for randomness(default=None)
+            )
+    
+            a *= a
+        b >>= 1
+    
+    
+if __name__ == '__main__':
