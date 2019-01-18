@@ -1,79 +1,109 @@
 
         
-        
-  #
-  # Payload types were copied from xCAT-server source code (IPMI.pm)
-  #
-  RMCP_ERRORS = {
-    1 => 'Insufficient resources to create new session (wait for existing sessions to timeout)',
-    2 => 'Invalid Session ID', #this shouldn't occur...
-    3 => 'Invalid payload type',#shouldn't occur..
-    4 => 'Invalid authentication algorithm', #if this happens, we need to enhance our mechanism for detecting supported auth algorithms
-    5 => 'Invalid integrity algorithm', #same as above
-    6 => 'No matching authentication payload',
-    7 => 'No matching integrity payload',
-    8 => 'Inactive Session ID', #this suggests the session was timed out while trying to negotiate, shouldn't happen
-    9 => 'Invalid role',
-    0xa => 'Unauthorised role or privilege level requested',
-    0xb => 'Insufficient resources to create a session at the requested role',
-    0xc => 'Invalid username length',
-    0xd => 'Unauthorized name',
-    0xe => 'Unauthorized GUID',
-    0xf => 'Invalid integrity check value',
-    0x10 => 'Invalid confidentiality algorithm',
-    0x11 => 'No cipher suite match with proposed security algorithms',
-    0x12 => 'Illegal or unrecognized parameter', #have never observed this, would most likely mean a bug in xCAT or IPMI device
-  }
+            private
     
-              data = connection.get_once(length, timeout)
-          unless data && data.length == length
-            raise ::RuntimeError, 'Kerberos Client: failed to read response'
-          end
+        def options
+      @options ||= self.class.options.deep_dup.tap do |options|
+        options.merge! base_url: base_url, root_url: root_url,
+                       root_path: root_path, initial_paths: initial_paths,
+                       version: self.class.version, release: self.class.release
     
-              private
-    
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
-    
-        context 'after deleting a person' do
-      before do
-        user = FactoryGirl.create(:user_with_aspect)
-        user.share_with(alice.person, user.aspects.first)
-        user.person.delete
+          def include_default_entry?
+        INDEX.add?([name, type].join(';')) ? true : false # ¯\_(ツ)_/¯
       end
     
-        shared_examples 'on a visible post' do
-      it 'creates the participation' do
-        post :create, params: {post_id: @post.id}
-        expect(alice.participations.where(:target_id => @post.id)).to exist
-        expect(response.code).to eq('201')
+            css('p > code:first-child:last-child', 'td > code:first-child:last-child').each do |node|
+          next if node.previous.try(:content).present? || node.next.try(:content).present?
+          node.inner_html = node.inner_html.squish.gsub(/<br(\ \/)?>\s*/, '\n')
+          node.content = node.content.strip
+          node.name = 'pre' if node.content =~ /\s/
+          node.parent.before(node.parent.children).remove if node.parent.name == 'p'
+        end
+    
+          def remember_cookie_values(resource)
+        options = { httponly: true }
+        options.merge!(forget_cookie_values(resource))
+        options.merge!(
+          value: resource.class.serialize_into_cookie(resource),
+          expires: resource.remember_expires_at
+        )
       end
+    
+          def parse_uri(location)
+        location && URI.parse(location)
+      rescue URI::InvalidURIError
+        nil
+      end
+    
+    module Devise
+  module Mailers
+    module Helpers
+      extend ActiveSupport::Concern
+    
+        def log_status(status)
+      puts bold status
     end
     
-      # Compile a Sass or SCSS string to CSS.
-  # Defaults to SCSS.
-  #
-  # @param contents [String] The contents of the Sass file.
-  # @param options [{Symbol => Object}] An options hash;
-  #   see {file:SASS_REFERENCE.md#Options the Sass options documentation}
-  # @raise [Sass::SyntaxError] if there's an error in the document
-  # @raise [Encoding::UndefinedConversionError] if the source encoding
-  #   cannot be converted to UTF-8
-  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
-  def self.compile(contents, options = {})
-    options[:syntax] ||= :scss
-    Engine.new(contents, options).to_css
+        def vendor_path(path)
+      return ::File.join(LOGSTASH_HOME, 'vendor', path)
+    end
+    
+    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
+  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.windows?
+  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.windows?
+    
+          puts 'Halting #{machines}'
+      LogStash::VagrantHelpers.halt(machines, options)
+    end
   end
     
-        # The name of the mixin in which the error occurred.
-    # This could be `nil` if the error occurred outside a mixin.
-    #
-    # @return [String]
-    def sass_mixin
-      sass_backtrace.first[:mixin]
-    end
+            def advance
+          authorize! :update, @order, order_token
+          while @order.next; end
+          respond_with(@order, default_template: 'spree/api/v1/orders/show', status: 200)
+        end
     
-        def input_and_output(opts)
-      opts.separator ''
-      opts.separator 'Input and Output:'
+            def create
+          authorize! :create, Image
+          @image = scope.images.new(image_params)
+          if @image.save
+            respond_with(@image, status: 201, default_template: :show)
+          else
+            invalid_resource!(@image)
+          end
+        end
+    
+            def find_property
+          @property = Spree::Property.accessible_by(current_ability, :read).find(params[:id])
+        rescue ActiveRecord::RecordNotFound
+          @property = Spree::Property.accessible_by(current_ability, :read).find_by!(name: params[:id])
+        end
+    
+            def update
+          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
+          if @return_authorization.update_attributes(return_authorization_params)
+            respond_with(@return_authorization, default_template: :show)
+          else
+            invalid_resource!(@return_authorization)
+          end
+        end
+    
+              if params[:stock_item].key?(:backorderable)
+            @stock_item.backorderable = params[:stock_item][:backorderable]
+            @stock_item.save
+          end
+    
+        module PsychAutoload
+      def resolve_class(klass_name)
+        return nil if !klass_name || klass_name.empty?
+        # constantize
+        names = klass_name.split('::')
+        names.shift if names.empty? || names.first.empty?
+    
+    module Sidekiq
+  class Web
+    ROOT = File.expand_path('#{File.dirname(__FILE__)}/../../web')
+    VIEWS = '#{ROOT}/views'
+    LOCALES = ['#{ROOT}/locales']
+    LAYOUT = '#{VIEWS}/layout.erb'
+    ASSETS = '#{ROOT}/assets'
