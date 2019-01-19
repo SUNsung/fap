@@ -1,194 +1,163 @@
 
         
-        #endif // BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
-
+        #include <cstdint>  // for int16_t
     
-    private:
-    void paintPath(QPainterPath &path, QQueue<float> &samples);
+    // Given a MutableIterator to the start of a block, run DetectParagraphs on
+// that block and commit the results to the underlying ROW and BLOCK structs,
+// saving the ParagraphModels in models.  Caller owns the models.
+// We use unicharset during the function to answer questions such as 'is the
+// first letter of this word upper case?'
+void DetectParagraphs(int debug_level,
+                      bool after_text_recognition,
+                      const MutableIterator *block_start,
+                      GenericVector<ParagraphModel *> *models);
     
-    #ifndef BITCOIN_QT_TRANSACTIONDESCDIALOG_H
-#define BITCOIN_QT_TRANSACTIONDESCDIALOG_H
+      // Gets a pix that contains an 8 bit threshold value at each pixel. The
+  // returned pix may be an integer reduction of the binary image such that
+  // the scale factor may be inferred from the ratio of the sizes, even down
+  // to the extreme of a 1x1 pixel thresholds image.
+  // Ideally the 8 bit threshold should be the exact threshold used to generate
+  // the binary image in ThresholdToPix, but this is not a hard constraint.
+  // Returns nullptr if the input is binary. PixDestroy after use.
+  virtual Pix* GetPixRectThresholds();
     
-    
-    {        secp256k1_sha256_initialize(&sha);
-        secp256k1_sha256_write(&sha, y, sizeof(y));
-        secp256k1_sha256_write(&sha, x, sizeof(x));
-        secp256k1_sha256_finalize(&sha, result);
-        ret = 1;
+    bool read_unlv_file(                    //print list of sides
+                     STRING name,        //basename of file
+                     int32_t xsize,        //image size
+                     int32_t ysize,        //image size
+                     BLOCK_LIST *blocks  //output list
+                    ) {
+  FILE *pdfp;                    //file pointer
+  BLOCK *block;                  //current block
+  int x;                         //current top-down coords
+  int y;
+  int width;                     //of current block
+  int height;
+  BLOCK_IT block_it = blocks;    //block iterator
     }
     
-        uv.setInt(43);
-    obj.pushKV('age', uv);
-    BOOST_CHECK_EQUAL(obj.size(), 1);
-    BOOST_CHECK_EQUAL(obj['age'].getValStr(), '43');
+    // Returns the box file name corresponding to the given image_filename.
+STRING BoxFileName(const STRING& image_filename);
     
+    #include 'allheaders.h'
     
-    {}  // namespace grpc
-    
-    Status ProtoServerReflection::GetAllExtensionNumbers(
-    ServerContext* context, const grpc::string& type,
-    ExtensionNumberResponse* response) {
-  if (descriptor_pool_ == nullptr) {
-    return Status::CANCELLED;
-  }
-    }
-    
-    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
-    const grpc::string& name, int value) {
-  class IntOption final : public ServerBuilderOption {
-   public:
-    IntOption(const grpc::string& name, int value)
-        : name_(name), value_(value) {}
-    }
-    }
-    
-    
-    {  void ThreadFunc();
-  static void ReapThreads(std::list<DynamicThread*>* tlist);
-};
-    
-    /*!
-* \brief Maximum ndim supported for special operators like broadcasting with non contiguous lhs/rhs
-*/
-#define MXNET_SPECIAL_MAX_NDIM 5
-    
-    #endif  // MXNET_USE_CUDA && MXNET_ENABLE_CUDA_RTC
-#endif  // MXNET_RTC_H_
-
-    
-    /**
- * \brief The class sets caffe's mode before doing forward/backward
- * \tparam xpu The device that the op will be executed on.
- */
-class CaffeMode {
+    // This class fits a line to a set of ICOORD points.
+// There is no restriction on the direction of the line, as it
+// uses a vector method, ie no concern over infinite gradients.
+// The fitted line has the least upper quartile of squares of perpendicular
+// distances of all source points from the line, subject to the constraint
+// that the line is made from one of the pairs of [{p1,p2,p3},{pn-2, pn-1, pn}]
+// i.e. the 9 combinations of one of the first 3 and last 3 points.
+// A fundamental assumption of this algorithm is that one of the first 3 and
+// one of the last 3 points are near the best line fit.
+// The points must be Added in line order for the algorithm to work properly.
+// No floating point calculations are needed* to make an accurate fit,
+// and no random numbers are needed** so the algorithm is deterministic,
+// architecture-stable, and compiler-stable as well as stable to minor
+// changes in the input.
+// *A single floating point division is used to compute each line's distance.
+// This is unlikely to result in choice of a different line, but if it does,
+// it would be easy to replace with a 64 bit integer calculation.
+// **Random numbers are used in the nth_item function, but the worst
+// non-determinism that can result is picking a different result among equals,
+// and that wouldn't make any difference to the end-result distance, so the
+// randomness does not affect the determinism of the algorithm. The random
+// numbers are only there to guarantee average linear time.
+// Fitting time is linear, but with a high constant, as it tries 9 different
+// lines and computes the distance of all points each time.
+// This class is aimed at replacing the LLSQ (linear least squares) and
+// LMS (least median of squares) classes that are currently used for most
+// of the line fitting in Tesseract.
+class DetLineFit {
  public:
-  template<typename xpu> static void SetMode();
+  DetLineFit();
+  ~DetLineFit() = default;
+    }
+    
+      double m() const;  // get gradient
+  double c(double m) const;            // get constant
+  double rms(double m, double c) const;            // get error
+  double pearson() const;  // get correlation coefficient.
+    
+        template <>
+    /*static*/ NDArrayViewPtr NDArrayView::RandomNormal<int16_t>(const NDShape& shape, double mean, double stdDev, unsigned long seed, const DeviceDescriptor& device)
+    {
+        return NDArrayView::_RandomNormal<int16_t, short>(shape, mean, stdDev, seed, device);
+    }
+    
+                if (m_varKind == VariableKind::Input)
+            {
+                for (auto dim : m_shape.Dimensions())
+                {
+                    if (dim == 0)
+                        InvalidArgument('Variable '%S' has invalid shape '%S'.', AsString().c_str(), m_shape.AsString().c_str());
+                }
+            }
+    
+    
+    {    ~CrossProcessMutex()
+    {
+        if (m_fd != -1)
+        {
+            Release();
+        }
+    }
 };
     
-    template<>
-Operator* CreateOp<cpu>(CaffeOpParam param, int dtype) {
-  Operator *op = NULL;
-  switch (dtype) {
-  case mshadow::kFloat32:
-    op = new CaffeOp<cpu, float>(param);
-    break;
-  case mshadow::kFloat64:
-    op = new CaffeOp<cpu, double>(param);
-    break;
-  case mshadow::kFloat16:
-    LOG(FATAL) << 'float16 layer is not supported by caffe';
-    break;
-  default:
-    LOG(FATAL) << 'Unsupported type ' << dtype;
-  }
-  return op;
+    
+template <class ConfigRecordType>
+void DataReader::InitFromConfig(const ConfigRecordType& /*config*/)
+{
+    RuntimeError('Init shouldn't be called, use constructor');
+    // not implemented, calls the underlying class instead
 }
     
-    namespace mxnet {
-namespace io {
-/*! \return the parameter of default augmenter */
-std::vector<dmlc::ParamFieldInfo> ListDefaultAugParams();
-std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
-}  // namespace io
-}  // namespace mxnet
-#endif  // MXNET_IO_IMAGE_AUGMENTER_H_
-
+    using namespace std;
     
-      Byte t1(bytes + 2);
-  int32_t t = t1.get_byte(6, 2);
-    
-    bool RadarState201::send_ext_info(const std::uint8_t* bytes,
-                                  int32_t length) const {
-  Byte t0(bytes + 5);
-  uint32_t x = t0.get_byte(5, 1);
-    }
-    
-    namespace apollo {
-namespace hdmap {
-namespace adapter {
-    }
-    }
-    }
-    
-    #include 'modules/planning/common/speed/st_point.h'
-    
-    using apollo::common::PathPoint;
-using State = std::array<double, 3>;
-    
-    DiscretizedTrajectory TrajectoryCombiner::Combine(
-    const std::vector<PathPoint>& reference_line, const Curve1d& lon_trajectory,
-    const Curve1d& lat_trajectory, const double init_relative_time) {
-  DiscretizedTrajectory combined_trajectory;
-    }
-    
-    BENCHMARK(dev_null_log_overhead, iter) {
-  auto prev = FLAGS_minloglevel;
-  FLAGS_minloglevel = 2;
-    }
-    
-    
-    {} // namespace folly
-    
-        int probeEnd = getNextZero(note, pos, pos + remaining - 1);
-    CHECK_GE(probeEnd, 0);
-    size_t probeLen = probeEnd - pos + 1;
-    std::string probe = getStr(note, pos, probeLen);
-    remaining -= probeLen;
-    
-    exception_wrapper exception_wrapper::from_exception_ptr(
-    std::exception_ptr const& ptr) noexcept {
-  if (!ptr) {
-    return exception_wrapper();
-  }
-  try {
-    std::rethrow_exception(ptr);
-  } catch (std::exception& e) {
-    return exception_wrapper(std::current_exception(), e);
-  } catch (...) {
-    return exception_wrapper(std::current_exception());
-  }
+    std::vector<std::string> KafkaTopicsConfigParserPlugin::keys() const {
+  return {kKafkaTopicParserRootKey};
 }
     
-    /// An Executor accepts units of work with add(), which should be
-/// threadsafe.
-class Executor {
+    
+    {/// KafkaTopicsConfigParserPlugin extracts, updates, and parses Kafka topic
+/// configurations from Osquery's configurations.
+class KafkaTopicsConfigParserPlugin : public ConfigParserPlugin {
  public:
-  // Workaround for a linkage problem with explicitly defaulted dtor t22914621
-  virtual ~Executor() {}
-    }
-    
-    template <class UIntType, size_t w, size_t s, size_t r>
-struct StateSize<std::subtract_with_carry_engine<UIntType, w, s, r>> {
-  // [rand.eng.sub]: r * ceil(w / 32)
-  using type = std::integral_constant<size_t, r*((w + 31) / 32)>;
+  std::vector<std::string> keys() const override;
+  Status update(const std::string& source, const ParserConfig& config) override;
 };
+} // namespace osquery
+
     
-      /**
-   * 'The memLevel parameter specifies how much memory should be allocated for
-   * the internal compression state. memLevel=1 uses minimum memory but is slow
-   * and reduces compression ratio; memLevel=9 uses maximum memory for optimal
-   * speed. The default value is 8.'
-   */
-  int memLevel;
+    ExpectedSuccess<DatabaseError> Database::putInt32(const std::string& domain,
+                                                  const std::string& key,
+                                                  const int32_t value) {
+  std::string buffer = std::to_string(value);
+  return putString(domain, key, buffer);
+}
     
-      void store(
-      SharedPtr n,
-      std::memory_order order = std::memory_order_seq_cst) /* noexcept */ {
-    auto newptr = get_newptr(std::move(n));
-    auto old = ptr_.exchange(newptr, order);
-    release_external(old);
+    ExpectedSuccess<DatabaseError> InMemoryDatabase::putStringsUnsafe(
+    const std::string& domain,
+    const std::vector<std::pair<std::string, std::string>>& data) {
+  debug_only::verifyTrue(is_open_, 'database is not open');
+  auto storage_iter = storage_.find(domain);
+  if (storage_iter == storage_.end()) {
+    return domainNotFoundError(domain);
   }
-    
-    TEST_F(SparseByteSetTest, each_random) {
-  mt19937 rng;
-  uniform_int_distribution<uint16_t> dist{lims::min(), lims::max()};
-  set<uint8_t> added;
-  while (added.size() <= lims::max()) {
-    auto c = uint8_t(dist(rng));
-    EXPECT_EQ(added.count(c), s.contains(c));
-    EXPECT_EQ(!added.count(c), s.add(c));
-    added.insert(c);
-    EXPECT_TRUE(added.count(c)); // sanity
-    EXPECT_TRUE(s.contains(c));
+  std::lock_guard<std::mutex> lock(storage_iter->second->getMutex());
+  for (const auto& pair : data) {
+    storage_iter->second->put(pair.first, pair.second);
   }
+  return Success();
+}
+    
+      ExpectedSuccess<DatabaseError> putInt32(const std::string& domain,
+                                          const std::string& key,
+                                          const int32_t value) override;
+  ExpectedSuccess<DatabaseError> putString(const std::string& domain,
+                                           const std::string& key,
+                                           const std::string& value) override;
+    
+    long int Flag::getInt32Value(const std::string& name) {
+  return tryTo<long int>(Flag::getValue(name), 10).takeOr(0l);
 }
