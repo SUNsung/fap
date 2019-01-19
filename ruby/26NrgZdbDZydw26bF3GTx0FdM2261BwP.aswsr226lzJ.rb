@@ -1,12 +1,6 @@
 
         
-            it 'orders stuff correctly' do
-      a = unread_pm
-          regular
-      c = pm
-      d = regular
-    
-          if staff.topic_id.nil?
+              if staff.topic_id.nil?
         creator = PostCreator.new(Discourse.system_user,
           raw: I18n.t('staff_category_description'),
           title: I18n.t('category.topic_prefix', category: staff.name),
@@ -15,55 +9,36 @@
         )
         post = creator.create
     
-    require 'vagrant/capability_host'
-    
-                  # Break so we don't find the next non flag and shift our
-              # main args.
-              break
-            end
-          end
-    
-              # Register a new guest class only if a name was given
-          data[:guests].register(name.to_sym, &block) if name != UNSET_VALUE
-    
-        # Merge one registry with another and return a completely new
-    # registry. Note that the result cache is completely busted, so
-    # any gets on the new registry will result in a cache miss.
-    def merge(other)
-      self.class.new.tap do |result|
-        result.merge!(self)
-        result.merge!(other)
-      end
-    end
-    
-    Then(/^the failure task will not run$/) do
-  failed = TestApp.shared_path.join('failed')
-  expect { run_vagrant_command(test_file_exists(failed)) }
-    .to raise_error(VagrantHelpers::VagrantSSHCommandError)
+    Given(/^a task which executes as root$/) do
+  TestApp.copy_task_to_test_app('spec/support/tasks/root.rake')
 end
     
-    http://capistranorb.com/documentation/advanced-features/custom-scm
+        private
     
-          # Runs all validation rules registered for the given key against the
-      # user-supplied value for that variable. If no validator raises an
-      # exception, the value is assumed to be valid.
-      def assert_valid_now(key, value)
-        validators[key].each do |validator|
-          validator.call(key, value)
+          def fetch_primary(role)
+        hosts = roles_for([role])
+        hosts.find(&:primary) || hosts.first
+      end
+    
+            def update
+          authorize! :update, @order, order_token
+          @address = find_address
+    
+            def log_state_changes
+          if @order.previous_changes[:state]
+            @order.log_state_changes(
+              state_name: 'order',
+              old_state: @order.previous_changes[:state].first,
+              new_state: @order.previous_changes[:state].last
+            )
+          end
         end
-      end
     
-        BUNDLE_DIR = ::File.join(LOGSTASH_HOME, 'vendor', 'bundle')
-    GEMFILE_PATH = ::File.join(LOGSTASH_HOME, 'Gemfile')
-    LOCAL_GEM_PATH = ::File.join(LOGSTASH_HOME, 'vendor', 'local_gems')
-    CACHE_PATH = ::File.join(LOGSTASH_HOME, 'vendor', 'cache')
-    LOCKFILE = Pathname.new(::File.join(LOGSTASH_HOME, 'Gemfile.lock'))
-    GEMFILE = Pathname.new(::File.join(LOGSTASH_HOME, 'Gemfile'))
+              respond_with(@shipment, default_template: :show)
+        end
     
-    require 'bootstrap/environment'
-    
-            return nil
-      end
-    end
-  end
-end end end
+              count_on_hand = 0
+          if params[:stock_item].key?(:count_on_hand)
+            count_on_hand = params[:stock_item][:count_on_hand].to_i
+            params[:stock_item].delete(:count_on_hand)
+          end
