@@ -1,102 +1,203 @@
 
         
-            context 'destroy' do
-      let!(:notification) { Fabricate(:notification) }
+          p.option 'source', '-s', '--source [DIR]', 'Source directory (defaults to ./)'
+  p.option 'destination', '-d', '--destination [DIR]',
+    'Destination directory (defaults to ./_site)'
+  p.option 'safe', '--safe', 'Safe mode (defaults to false)'
+  p.option 'plugins_dir', '-p', '--plugins PLUGINS_DIR1[,PLUGINS_DIR2[,...]]', Array,
+    'Plugins directory (defaults to ./_plugins)'
+  p.option 'layouts_dir', '--layouts DIR', String,
+    'Layouts directory (defaults to ./_layouts)'
+  p.option 'profile', '--profile', 'Generate a Liquid rendering profile'
     
-        return cookies.strip
+          def feature_element_timing_key(feature_element)
+        '\'#{feature_element.name}\' (#{feature_element.location})'
+      end
+    
+            # Execute a command on the remote machine. The exact semantics
+        # of this method are up to the implementor, but in general the
+        # users of this class will expect this to be a shell.
+        #
+        # This method gives you no way to write data back to the remote
+        # machine, so only execute commands that don't expect input.
+        #
+        # @param [String] command Command to execute.
+        # @yield [type, data] Realtime output of the command being executed.
+        # @yieldparam [String] type Type of the output. This can be
+        #   `:stdout`, `:stderr`, etc. The exact types are up to the
+        #   implementor.
+        # @yieldparam [String] data Data for the given output.
+        # @return [Integer] Exit code of the command.
+        def execute(command, opts=nil)
+        end
+    
+            # Allows setting options from a hash. By default this simply calls
+        # the `#{key}=` method on the config class with the value, which is
+        # the expected behavior most of the time.
+        #
+        # This is expected to mutate itself.
+        #
+        # @param [Hash] options A hash of options to set on this configuration
+        #   key.
+        def set_options(options)
+          options.each do |key, value|
+            send('#{key}=', value)
+          end
+        end
+    
+              @registered.each do |plugin|
+            plugin.config.each do |key, klass|
+              result[key] = klass
+            end
+          end
+    
+            # An internal finalize call that no subclass should override.
+        def _finalize!
+          @__finalized = true
+        end
+      end
+    end
   end
+end
+
     
-        self.codec = res[2][IAX_IE_DESIRED_CODEC].unpack('N')[0]
-    self.state = :ringing
-    self.ring_start = ::Time.now.to_i
-    self.client.send_ack(self)
-    true
-  end
+            # This returns all synced folder implementations.
+        #
+        # @return [Registry]
+        def synced_folders
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.synced_folders)
+            end
+          end
+        end
     
-              # Encodes the realm field
+            # This should return a hash of information that explains how to
+        # SSH into the machine. If the machine is not at a point where
+        # SSH is even possible, then `nil` should be returned.
+        #
+        # The general structure of this returned hash should be the
+        # following:
+        #
+        #     {
+        #       host: '1.2.3.4',
+        #       port: '22',
+        #       username: 'mitchellh',
+        #       private_key_path: '/path/to/my/key'
+        #     }
+        #
+        # **Note:** Vagrant only supports private key based authentication,
+        # mainly for the reason that there is no easy way to exec into an
+        # `ssh` prompt with a password, whereas we can pass a private key
+        # via commandline.
+        #
+        # @return [Hash] SSH information. For the structure of this hash
+        #   read the accompanying documentation for this method.
+        def ssh_info
+          nil
+        end
+    
+        # ghettoooooo!
+    # If we don't have any newlines..., put one there.
+    if (header.size > 0 && header !~ /\r\n/)
+      header << '\r\n'
+    end
+    
+        self.method    = method
+    self.raw_uri   = uri
+    self.uri_parts = {}
+    self.proto     = proto || DefaultProtocol
+    self.chunk_min_size = 1
+    self.chunk_max_size = 10
+    self.uri_encode_mode = 'hex-normal'
+    
+      #
+  # A hash that associated a file extension with a mime type for use as the
+  # content type of responses.
+  #
+  ExtensionMimeTypes =
+    {
+      'rhtml' => 'text/html',
+      'html'  => 'text/html',
+      'htm'   => 'text/htm',
+      'jpg'   => 'image/jpeg',
+      'jpeg'  => 'image/jpeg',
+      'gif'   => 'image/gif',
+      'png'   => 'image/png',
+      'bmp'   => 'image/bmp',
+      'txt'   => 'text/plain',
+      'css'   => 'text/css',
+      'ico'   => 'image/x-icon',
+    }
+    
+        info  = nil
+    stype = pkt[11,1].unpack('C')[0]
+    info  = process_elements(pkt, 12) if [IAX_TYPE_IAX, IAX_TYPE_CONTROL].include?(itype)
+    
+              # Encodes the components field
           #
           # @return [String]
-          def encode_realm
+          def encode_components
             encoded = ''
-            encoded << [realm.length].pack('N')
-            encoded << realm
     
-            end
+              # Encodes the msg_type field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_msg_type
+            bn = OpenSSL::BN.new(msg_type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+              # Encodes the type field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_type
+            bn = OpenSSL::BN.new(type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+                self
+          end
+    
+              # Decodes the value from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_value(input)
+            input.value[0].value
+          end
+        end
       end
     end
   end
 end
     
-              # Encodes a Rex::Proto::Kerberos::Model::AuthorizationData into an ASN.1 String
-          #
-          # @return [String]
-          def encode
-            seqs = []
-            elements.each do |elem|
-              elems = []
-              type_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_type(elem[:type])], 0, :CONTEXT_SPECIFIC)
-              elems << type_asn1
-              data_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_data(elem[:data])], 1, :CONTEXT_SPECIFIC)
-              elems << data_asn1
-              seqs << OpenSSL::ASN1::Sequence.new(elems)
-            end
+      # if rss_url already in existing opml file, use that; otherwise, do a lookup
+  rss_url = nil
+  if File.exist?(OUTPUT_FILENAME)
+    xml = Nokogiri::XML(File.open(OUTPUT_FILENAME))
+    existing_blog = xml.xpath('//outline[@htmlUrl='#{web_url}']').first
+    if existing_blog
+      rss_url = existing_blog.attr('xmlUrl')
+      puts '#{name}: ALREADY HAVE'
+    end
+  end
     
-              # Decodes the etype from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_etype(input)
-            input.value[0].value.to_i
-          end
+        def paragraphize(input)
+      '<p>#{input.lstrip.rstrip.gsub(/\n\n/, '</p><p>').gsub(/\n/, '<br/>')}</p>'
+    end
+  end
+end
     
-              # @!attribute key
-          #   @return [Integer] The type of encryption key
-          attr_accessor :type
-          # @!attribute value
-          #   @return [String] the key itself
-          attr_accessor :value
+    Liquid::Template.register_tag('img', Jekyll::ImageTag)
+
     
-              # Decodes the pvno from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_asn1_pvno(input)
-            input.value[0].value.to_i
-          end
-    
-    module Rex
-  module Proto
-    module Kerberos
-      module Model
-        # This class provides a representation of a Kerberos KDC-REQ (response) data
-        # definition
-        class KdcResponse < Element
-          # @!attribute pvno
-          #   @return [Integer] The protocol version number
-          attr_accessor :pvno
-          # @!attribute msg_type
-          #   @return [Integer] The type of a protocol message
-          attr_accessor :msg_type
-          # @!attribute crealm
-          #   @return [String] The realm part of the client's principal identifier
-          attr_accessor :crealm
-          # @!attribute cname
-          #   @return [Rex::Proto::Kerberos::Model::PrincipalName] The name part of the client's principal identifier
-          attr_accessor :cname
-          # @!attribute ticket
-          #   @return [Rex::Proto::Kerberos::Model::Ticket] The issued ticket
-          attr_accessor :ticket
-          # @!attribute enc_part
-          #   @return [Rex::Proto::Kerberos::Model::EncryptedData] The encrypted part of the response
-          attr_accessor :enc_part
-    
-        def_delegators :@s, :scan_until, :skip_until, :string
-    
-        def log_http_get_file(url, cached = false)
-      s = '  #{'CACHED ' if cached}GET #{url}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
+      class RenderPartialTag < Liquid::Tag
+    include OctopressFilters
+    def initialize(tag_name, markup, tokens)
+      @file = nil
+      @raw = false
+      if markup =~ /^(\S+)\s?(\w+)?/
+        @file = $1.strip
+        @raw = $2 == 'raw'
       end
+      super
     end
