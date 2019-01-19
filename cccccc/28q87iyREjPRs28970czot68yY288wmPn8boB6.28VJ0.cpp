@@ -1,137 +1,221 @@
 
         
-        namespace tensorflow {
+         private:
+  std::string GetFeedURL();
+  void SetFeedURL(mate::Arguments* args);
+  void QuitAndInstall();
+    
+    #include 'atom/browser/native_window_views.h'
+    
+    namespace mate {
     }
     
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    namespace tensorflow {
-    }
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-      // Form that takes a pImpl executor and extracts a CUDA implementation --
-  // fatal failure if it is not CUDA inside.
-  explicit ScopedActivateExecutorContext(StreamExecutor* stream_exec);
-    
-    DHTReplaceNodeTask::DHTReplaceNodeTask(const std::shared_ptr<DHTBucket>& bucket,
-                                       const std::shared_ptr<DHTNode>& newNode)
-    : bucket_(bucket),
-      newNode_(newNode),
-      numRetry_(0),
-      timeout_(DHT_MESSAGE_TIMEOUT)
-{
-}
-    
-      virtual void fillMessage(Dict* msgDict) CXX11_OVERRIDE;
-    
-      void getBuckets(std::vector<std::shared_ptr<DHTBucket>>& buckets) const;
-    
-    class DHTSetup {
-public:
-  DHTSetup();
-    }
-    
-      virtual void startup() = 0;
-    
-    #include 'DHTTask.h'
-#include 'Logger.h'
-#include 'LogFactory.h'
-#include 'a2functional.h'
-#include 'fmt.h'
-    
-    #include 'common.h'
-    
-      virtual std::shared_ptr<DHTTask>
-  createPingTask(const std::shared_ptr<DHTNode>& remoteNode,
-                 int numRetry = 0) = 0;
-    
-    std::shared_ptr<DHTTask> DHTTaskFactoryImpl::createBucketRefreshTask()
-{
-  auto task = std::make_shared<DHTBucketRefreshTask>();
-  setCommonProperty(task);
-  return task;
-}
-    
-    class DHTTokenTracker;
-    
-      double ScoreOutputSize(int size) const override;
-    
-    static const uint8_t* kRangeLimit = kRangeLimitLut + 384;
+      void PurchaseProduct(const std::string& product_id, mate::Arguments* args);
     
     
-    {}  // namespace guetzli
+    { private:
+  DISALLOW_COPY_AND_ASSIGN(Net);
+};
     
-          // The sentinel node becomes the parent node.
-      size_t j_end = 2 * n - k;
-      tree[j_end].total_count_ =
-          tree[left].total_count_ + tree[right].total_count_;
-      tree[j_end].index_left_ = static_cast<int16_t>(left);
-      tree[j_end].index_right_or_value_ = static_cast<int16_t>(right);
-    
-    namespace guetzli {
-    }
-    
-    inline int Log2FloorNonZero(uint32_t n) {
-#ifdef __GNUC__
-  return 31 ^ __builtin_clz(n);
-#else
-  unsigned int result = 0;
-  while (n >>= 1) result++;
-  return result;
+    #if defined(OS_LINUX)
+  // Private JS APIs.
+  void BlockShutdown();
+  void UnblockShutdown();
 #endif
-}
     
-    ///////////////////////////////////////////////////////////////////////////////
-// Cosine table: C(k) = cos(k.pi/16)/sqrt(2), k = 1..7 using 15 bits signed
-const coeff_t kTable04[7] = { 22725, 21407, 19266, 16384, 12873,  8867, 4520 };
-// rows #1 and #7 are pre-multiplied by 2.C(1) before the 2nd pass.
-// This multiply is merged in the table of constants used during 1st pass:
-const coeff_t kTable17[7] = { 31521, 29692, 26722, 22725, 17855, 12299, 6270 };
-// rows #2 and #6 are pre-multiplied by 2.C(2):
-const coeff_t kTable26[7] = { 29692, 27969, 25172, 21407, 16819, 11585, 5906 };
-// rows #3 and #5 are pre-multiplied by 2.C(3):
-const coeff_t kTable35[7] = { 26722, 25172, 22654, 19266, 15137, 10426, 5315 };
-    
-      // Writes the given byte to the output, writes an extra zero if byte is 0xff.
-  void EmitByte(int byte) {
-    if (pos < len) {
-      data[pos++] = byte;
-    } else {
-      overflow = true;
+    namespace atom {
     }
-    if (byte == 0xff) {
-      EmitByte(0);
-    }
-  }
     
     
-    {}  // namespace guetzli
+    {}  // namespace api
+    
+        v8::MaybeLocal<v8::Object> object = weak_map_->Get(isolate, id);
+    if (object.IsEmpty())
+      return nullptr;
+    
+    #endif  // ATOM_BROWSER_ATOM_JAVASCRIPT_DIALOG_MANAGER_H_
 
     
-    // Creates a JPEG from the rgb pixel data. Returns true on success.
-bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
-                     JPEGData* jpg);
+    #ifndef ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
+#define ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
     
-    // Reads the DRI marker and saved the restart interval into *jpg.
-bool ProcessDRI(const uint8_t* data, const size_t len, size_t* pos,
-                JPEGData* jpg) {
-  if (jpg->restart_interval > 0) {
-    fprintf(stderr, 'Duplicate DRI marker.\n');
-    jpg->error = JPEG_DUPLICATE_DRI;
-    return false;
-  }
-  const size_t start_pos = *pos;
-  VERIFY_LEN(4);
-  size_t marker_len = ReadUint16(data, pos);
-  int restart_interval = ReadUint16(data, pos);
-  jpg->restart_interval = restart_interval;
-  VERIFY_MARKER_END();
-  return true;
+    // Functions to create C# XML documentation comments.
+// Currently this only includes documentation comments containing text specified as comments
+// in the .proto file; documentation comments generated just from field/message/enum/proto names
+// is inlined in the relevant code. If more control is required, that code can be moved here.
+    
+    #include <google/protobuf/compiler/csharp/csharp_doc_comment.h>
+#include <google/protobuf/compiler/csharp/csharp_enum.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/compiler/csharp/csharp_options.h>
+    
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/plugin.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/stubs/strutil.h>
+    
+    string ClassNameResolver::GetJavaImmutableClassName(
+    const EnumDescriptor* descriptor) {
+  return GetJavaClassFullName(
+      ClassNameWithoutPackage(descriptor, true),
+      descriptor->file(), true);
 }
     
-    void BuildDCHistograms(const JPEGData& jpg, JpegHistogram* histo);
-void BuildACHistograms(const JPEGData& jpg, JpegHistogram* histo);
-size_t JpegHeaderSize(const JPEGData& jpg, bool strip_metadata);
-size_t EstimateJpegDataSize(const int num_components,
-                            const std::vector<JpegHistogram>& histograms);
+    #include <google/protobuf/compiler/java/java_helpers.h>
+#include <google/protobuf/compiler/java/java_name_resolver.h>
+#include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/stubs/strutil.h>
+    
+    // Helper to print the import of the runtime support at the top of generated
+// files. This currently only supports the runtime coming from a framework
+// as defined by the official CocoaPod.
+void FileGenerator::PrintFileRuntimePreamble(
+    io::Printer* printer, const std::set<string>& headers_to_import) const {
+  printer->Print(
+      '// Generated by the protocol buffer compiler.  DO NOT EDIT!\n'
+      '// source: $filename$\n'
+      '\n',
+      'filename', file_->name());
+    }
+    
+    OneofGenerator::OneofGenerator(const OneofDescriptor* descriptor)
+    : descriptor_(descriptor) {
+  variables_['enum_name'] = OneofEnumName(descriptor_);
+  variables_['name'] = OneofName(descriptor_);
+  variables_['capitalized_name'] = OneofNameCapitalized(descriptor_);
+  variables_['raw_index'] = SimpleItoa(descriptor_->index());
+  const Descriptor* msg_descriptor = descriptor_->containing_type();
+  variables_['owning_message_class'] = ClassName(msg_descriptor);
+    }
+    
+      virtual io::ZeroCopyOutputStream* OpenForInsert(
+      const string& filename, const string& insertion_point) {
+    CodeGeneratorResponse::File* file = response_->add_file();
+    file->set_name(filename);
+    file->set_insertion_point(insertion_point);
+    return new io::StringOutputStream(file->mutable_content());
+  }
+    
+    template <typename Dtype>
+class Batch {
+ public:
+  Blob<Dtype> data_, label_;
+};
+    
+    /**
+ * @brief Computes the contrastive loss @f$
+ *          E = \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
+ *              \left(1-y\right) \max \left(margin-d, 0\right)^2
+ *          @f$ where @f$
+ *          d = \left| \left| a_n - b_n \right| \right|_2 @f$. This can be
+ *          used to train siamese networks.
+ *
+ * @param bottom input Blob vector (length 3)
+ *   -# @f$ (N \times C \times 1 \times 1) @f$
+ *      the features @f$ a \in [-\infty, +\infty]@f$
+ *   -# @f$ (N \times C \times 1 \times 1) @f$
+ *      the features @f$ b \in [-\infty, +\infty]@f$
+ *   -# @f$ (N \times 1 \times 1 \times 1) @f$
+ *      the binary similarity @f$ s \in [0, 1]@f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
+ *      the computed contrastive loss: @f$ E =
+ *          \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
+ *          \left(1-y\right) \max \left(margin-d, 0\right)^2
+ *          @f$ where @f$
+ *          d = \left| \left| a_n - b_n \right| \right|_2 @f$.
+ * This can be used to train siamese networks.
+ */
+template <typename Dtype>
+class ContrastiveLossLayer : public LossLayer<Dtype> {
+ public:
+  explicit ContrastiveLossLayer(const LayerParameter& param)
+      : LossLayer<Dtype>(param), diff_() {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    
+    {  size_t *workspace_fwd_sizes_;
+  size_t *workspace_bwd_data_sizes_;
+  size_t *workspace_bwd_filter_sizes_;
+  size_t workspaceSizeInBytes;  // size of underlying storage
+  void *workspaceData;  // underlying storage
+  void **workspace;  // aliases into workspaceData
+};
+#endif
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    OPERATOR_SCHEMA(EnforceFinite)
+    .NumInputs(1)
+    .NumOutputs(0)
+    .SetDoc(R'DOC(
+Raise if there is NaN or Inf values in the input tensor.
+)DOC')
+    .Input(0, 'input', 'Input tensor');
+    
+      FlexibleTopKGradientOp(const OperatorDef& operator_def, Workspace* ws)
+      : Operator<Context>(operator_def, ws) {}
+    
+    namespace caffe2 {
+    }
+    
+    template <>
+void GluOp<float, CPUContext>::ComputeGlu(
+    const int M,
+    const int split_dim,
+    const int N,
+    const float* Xdata,
+    float* Ydata) {
+  const int xStride = 2 * split_dim * N;
+  const int yStride = split_dim * N;
+  for (int i = 0; i < M; ++i) {
+    const int idx = i * xStride;
+    const int idy = i * yStride;
+    for (int j = 0; j < split_dim; ++j) {
+      const int jN = j * N;
+      const int jdx1 = idx + jN;
+      const int jdx2 = idx + (j + split_dim) * N;
+      const int jdy = idy + jN;
+      for (int k = 0; k < N; ++k) {
+        const float x1 = Xdata[jdx1 + k];
+        const float x2 = Xdata[jdx2 + k];
+        Ydata[jdy + k] = x1 * sigmoid(x2);
+      }
+    }
+  }
+}
+    
+    
+    {          return out;
+        })
+    .Input(0, 'X', '4-tensor in NCHW or NHWC.')
+    .Output(
+        0,
+        'Y',
+        '4-tensor. For NCHW: N x (C x kH x kW) x outH x outW.'
+        'For NHWC: N x outH x outW x (kH x kW x C');
