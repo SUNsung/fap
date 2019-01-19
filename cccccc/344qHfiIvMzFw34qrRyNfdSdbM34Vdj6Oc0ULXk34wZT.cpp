@@ -1,171 +1,408 @@
 
         
-        
-    {
-    {} // namespace test
-} // namespace c10d
-
+        // Tell browser to delete a object.
+// function DeallocateObject(id);
+v8::Handle<v8::Value> DeallocateObject(int routing_id,
+                                       int object_id);
     
-    data:
- [8. 2. 1. 1. 7. 8. 1.]
-indices:
- [3 5 6]
+    #include 'base/values.h'
+#include 'components/zoom/zoom_controller.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/common/page_zoom.h'
+#include 'ui/views/controls/menu/menu_runner.h'
     
-    #include <stdexcept>
-#include <iterator>
-#include <cstdio>
-#include <thread>
-#include <vector>
-#include <type_traits>
-#include <string>
-#include <atomic>
-#include <algorithm>
-#include <exception>
-    
-    
-    {
-    {}}
-    
-    void Assembler::bcctr(uint8_t bo, uint8_t bi, uint16_t bh) {
-  EmitXLForm(19, bo, bi, (bh & 0x3), 528);
-}
+    void Menu::Popup(int x, int y, content::Shell* shell) {
+  GdkEventButton* event = NULL; //FIXME: shell->web_contents()->GetRenderWidgetHostView()->GetLastMouseDown();
+  uint32_t triggering_event_time = event ? event->time : GDK_CURRENT_TIME;
+  gfx::Point point;
+  if (!event) {
+    // gfx::Rect bounds = shell->web_contents()->GetRenderWidgetHostView()->GetViewBounds();
+    // point = gfx::Point(x + bounds.x(), y + bounds.y());
+    DVLOG(1) << 'no last mouse down event';
+    point = gfx::Point(x, y);
+  }else
+    point = gfx::Point(event->x_root, event->y_root);
+    }
     
     
-    {///////////////////////////////////////////////////////////////////////////////
-}
+    {  // ExtensionFunction:
+  ResponseAction Run() override;
+  DECLARE_EXTENSION_FUNCTION('nw.App.closeAllWindows', UNKNOWN)
+};
     
-    IMPLEMENT_RESOURCE_ALLOCATION(PlainDirectory)
+        bool ReadImage(ClipboardData& data) {
+      DCHECK(data.type == TYPE_PNG || data.type == TYPE_JPEG);
+      std::vector<unsigned char> encoded_image;
+      SkBitmap bitmap = clipboard_->ReadImage(ui::CLIPBOARD_TYPE_COPY_PASTE);
+    }
     
-      CLASSNAME_IS('OutputFile');
-  // overriding ResourceData
-  const String& o_getClassNameHook() const override { return classnameof(); }
+      // Open leveldb
+  leveldb::DB* db;
+  leveldb::Options options;
+  options.create_if_missing = true;
+  options.error_if_exists = true;
+  leveldb::Status status = leveldb::DB::Open(
+      options, db_filename, &db);
+  CHECK(status.ok()) << 'Failed to open leveldb ' << db_filename
+      << '. Is it already existing?';
     
-    #endif
-
+    #define INSTANTIATE_LAYER_GPU_FUNCS(classname) \
+  INSTANTIATE_LAYER_GPU_FORWARD(classname); \
+  INSTANTIATE_LAYER_GPU_BACKWARD(classname)
     
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-                    _currentTarget->currentActionSalvaged = false;
-    
-        /** 
-     * @brief Initializes with a duration and destination percentage. 
-     * @param duration Specify the duration of the ProgressTo action. It's a value in seconds.
-     * @param percent Specify the destination percentage.
-     * @return If the creation success, return true; otherwise, return false.
-     */
-    bool initWithDuration(float duration, float percent);
-    
-    
-    {    delete action;
-    return nullptr;
-}
+      /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *
+   * @param datum
+   *    Datum containing the data to be transformed.
+   */
+  vector<int> InferBlobShape(const Datum& datum);
+  /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *    It uses the first element to infer the shape of the blob.
+   *
+   * @param datum_vector
+   *    A vector of Datum containing the data to be transformed.
+   */
+  vector<int> InferBlobShape(const vector<Datum> & datum_vector);
+  /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *    It uses the first element to infer the shape of the blob.
+   *
+   * @param mat_vector
+   *    A vector of Mat containing the data to be transformed.
+   */
+#ifdef USE_OPENCV
+  vector<int> InferBlobShape(const vector<cv::Mat> & mat_vector);
+  /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *
+   * @param cv_img
+   *    cv::Mat containing the data to be transformed.
+   */
+  vector<int> InferBlobShape(const cv::Mat& cv_img);
+#endif  // USE_OPENCV
     
     /**
-@brief ShatteredTiles3D action.
-@details This action make the target node shattered with many tiles.
-        You can create the action by these parameters:
-        duration, grid size, range, whether shatter on the z axis.
-*/
-class CC_DLL ShatteredTiles3D : public TiledGrid3DAction
-{
-public:
-    /** 
-     * @brief Create the action with a range, whether of not to shatter Z vertices, grid size and duration.
-     * @param duration Specify the duration of the ShatteredTiles3D action. It's a value in seconds.
-     * @param gridSize Specify the size of the grid.
-     * @param range Specify the range of the shatter effect.
-     * @param shatterZ Specify whether shatter on the z axis.
-     * @return If the creation success, return a pointer of ShatteredTiles3D action; otherwise, return nil.
-     */
-    static ShatteredTiles3D* create(float duration, const Size& gridSize, int range, bool shatterZ);
+ * @brief Fills a Blob with values @f$ x \sim U(-a, +a) @f$ where @f$ a @f$ is
+ *        set inversely proportional to number of incoming nodes, outgoing
+ *        nodes, or their average.
+ *
+ * A Filler based on the paper [Bengio and Glorot 2010]: Understanding
+ * the difficulty of training deep feedforward neuralnetworks.
+ *
+ * It fills the incoming matrix by randomly sampling uniform data from [-scale,
+ * scale] where scale = sqrt(3 / n) where n is the fan_in, fan_out, or their
+ * average, depending on the variance_norm option. You should make sure the
+ * input blob has shape (num, a, b, c) where a * b * c = fan_in and num * b * c
+ * = fan_out. Note that this is currently not the case for inner product layers.
+ *
+ * TODO(dox): make notation in above comment consistent with rest & use LaTeX.
+ */
+template <typename Dtype>
+class XavierFiller : public Filler<Dtype> {
+ public:
+  explicit XavierFiller(const FillerParameter& param)
+      : Filler<Dtype>(param) {}
+  virtual void Fill(Blob<Dtype>* blob) {
+    CHECK(blob->count());
+    int fan_in = blob->count() / blob->shape(0);
+    // Compatibility with ND blobs
+    int fan_out = blob->num_axes() > 1 ?
+                  blob->count() / blob->shape(1) :
+                  blob->count();
+    Dtype n = fan_in;  // default to fan_in
+    if (this->filler_param_.variance_norm() ==
+        FillerParameter_VarianceNorm_AVERAGE) {
+      n = (fan_in + fan_out) / Dtype(2);
+    } else if (this->filler_param_.variance_norm() ==
+        FillerParameter_VarianceNorm_FAN_OUT) {
+      n = fan_out;
     }
-    
-    /**
-@brief The delegate class for ActionTween.
-@details If you want to use ActionTween on a node.
-        You should implement the node follow these steps:
-        1. The node should be inherit from ActionTweenDelegate.
-        2. Override the virtual method updateTweenAction in the node.
-    
-    Animation* Animation::clone() const
-{
-    // no copy constructor    
-    auto a = new (std::nothrow) Animation();
-    a->initWithAnimationFrames(_frames, _delayPerUnit, _loops);
-    a->setRestoreOriginalFrame(_restoreOriginalFrame);
-    a->autorelease();
-    return a;
-}
-    
-    
-    {// end of base_node group
-/// @}
-    
-    #ifndef BENCHMARK_HAS_CXX11
-#define BENCHMARK_DISALLOW_COPY_AND_ASSIGN(TypeName) \
-  TypeName(const TypeName&);                         \
-  TypeName& operator=(const TypeName&)
-#else
-#define BENCHMARK_DISALLOW_COPY_AND_ASSIGN(TypeName) \
-  TypeName(const TypeName&) = delete;                \
-  TypeName& operator=(const TypeName&) = delete
-#endif
-    
-      CheckHandler& operator=(const CheckHandler&) = delete;
-  CheckHandler(const CheckHandler&) = delete;
-  CheckHandler() = delete;
-    
-    // Returns true if stdout appears to be a terminal that supports colored
-// output, false otherwise.
-bool IsColorTerminal();
-    
-    struct LeastSq {
-  LeastSq() : coef(0.0), rms(0.0), complexity(oNone) {}
-    }
-    
-    bool SameNames(UserCounters const& l, UserCounters const& r) {
-  if (&l == &r) return true;
-  if (l.size() != r.size()) {
-    return false;
-  }
-  for (auto const& c : l) {
-    if (r.find(c.first) == r.end()) {
-      return false;
-    }
-  }
-  return true;
-}
-    
-    
-    {} // end namespace benchmark
-
-    
-    
-    {  // Enter the barrier and wait until all other threads have also
-  // entered the barrier.  Returns iff this is the last thread to
-  // enter the barrier.
-  bool createBarrier(MutexLock& ml) REQUIRES(lock_) {
-    CHECK_LT(entered_, running_threads_);
-    entered_++;
-    if (entered_ < running_threads_) {
-      // Wait for all threads to enter
-      int phase_number_cp = phase_number_;
-      auto cb = [this, phase_number_cp]() {
-        return this->phase_number_ > phase_number_cp ||
-               entered_ == running_threads_;  // A thread has aborted in error
-      };
-      phase_condition_.wait(ml.native_handle(), cb);
-      if (phase_number_ > phase_number_cp) return false;
-      // else (running_threads_ == entered_) and we are the last thread.
-    }
-    // Last thread has reached the barrier
-    phase_number_++;
-    entered_ = 0;
-    return true;
+    Dtype scale = sqrt(Dtype(3) / n);
+    caffe_rng_uniform<Dtype>(blob->count(), -scale, scale,
+        blob->mutable_cpu_data());
+    CHECK_EQ(this->filler_param_.sparse(), -1)
+         << 'Sparsity not supported by this Filler.';
   }
 };
+    
+    
+#define REGISTER_LAYER_CREATOR(type, creator)                                  \
+  static LayerRegisterer<float> g_creator_f_##type(#type, creator<float>);     \
+  static LayerRegisterer<double> g_creator_d_##type(#type, creator<double>)    \
+    
+     protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 2+)
+   *   -# @f$ (N \times ...) @f$
+   *      the inputs @f$ x_1 @f$
+   *   -# @f$ (M) @f$
+   *      the inputs @f$ x_2 @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (M \times ...) @f$:
+   *      the reindexed array @f$
+   *        y = x_1[x_2]
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    
+    {}  // namespace caffe
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
+  cudnnTensorDescriptor_t bias_desc_;
+  cudnnFilterDescriptor_t filter_desc_;
+  vector<cudnnConvolutionDescriptor_t> conv_descs_;
+  int bottom_offset_, top_offset_, bias_offset_;
+    
+    #ifdef USE_CUDNN
+template <typename Dtype>
+class CuDNNLRNLayer : public LRNLayer<Dtype> {
+ public:
+  explicit CuDNNLRNLayer(const LayerParameter& param)
+      : LRNLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNLRNLayer();
+    }
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    namespace caffe2 {
+    }
+    
+    REGISTER_CPU_OPERATOR(
+    MergeSingleListFeatureTensors,
+    MergeSingleListFeatureTensorsOp<CPUContext>);
+OPERATOR_SCHEMA(MergeSingleListFeatureTensors)
+    .SetDoc(
+        'Merge given single-feature tensors with list features into one '
+        'multi-feature tensor.' +
+        doc)
+    .NumInputs([](int n) { return n >= 3 && n % 3 == 0; })
+    .NumOutputs(4)
+    .Input(0, 'in1_lengths', '.lengths')
+    .Input(1, 'in1_values', '.values')
+    .Input(2, 'in1_presence', '.presence')
+    .Output(0, 'out_lengths', '.lengths')
+    .Output(1, 'out_keys', '.keys')
+    .Output(2, 'out_values_lengths', '.values.lengths')
+    .Output(3, 'out_values_values', '.values.values')
+    .Arg('feature_ids', 'feature ids');
+    
+    OPERATOR_SCHEMA(GivenTensorBoolFill)
+    .NumInputs(0, 1)
+    .NumOutputs(1)
+    .AllowInplace({{0, 0}})
+    .Arg(
+        'values',
+        'The value for the elements of the output tensor.',
+        true /* required */)
+    .Arg(
+        'shape',
+        'The shape of the output tensor.'
+        'Cannot set the shape argument and pass in an input at the same time.')
+    .Arg(
+        'extra_shape',
+        'The additional dimensions appended at the end of the shape indicated'
+        'by the input blob.'
+        'Cannot set the extra_shape argument when there is no input blob.')
+    .Arg(
+        'input_as_shape',
+        '1D tensor containing the desired output shape. First input must be in CPU context.')
+    .TensorInferenceFunction(FillerTensorInference<TensorProto_DataType_BOOL>);
+    
+        case URX_SETREF:
+    case URX_LOOP_SR_I:
+        {
+            UnicodeString s;
+            UnicodeSet *set = (UnicodeSet *)fSets->elementAt(val);
+            set->toPattern(s, TRUE);
+            printf('%s', CStr(s)());
+        }
+        break;
+    
+    class Calendar;
+    
+    // Bitwise comparison for the collation keys.
+UCollationResult
+CollationKey::compareTo(const CollationKey& target, UErrorCode &status) const
+{
+  if(U_SUCCESS(status)) {
+    const uint8_t *src = getBytes();
+    const uint8_t *tgt = target.getBytes();
+    }
+    }
+    
+    //---- Avoid multiple STB libraries implementations, or redefine path/filenames to prioritize another version
+// By default the embedded implementations are declared static and not available outside of imgui cpp files.
+//#define IMGUI_STB_TRUETYPE_FILENAME   'my_folder/stb_truetype.h'
+//#define IMGUI_STB_RECT_PACK_FILENAME  'my_folder/stb_rect_pack.h'
+//#define IMGUI_DISABLE_STB_TRUETYPE_IMPLEMENTATION
+//#define IMGUI_DISABLE_STB_RECT_PACK_IMPLEMENTATION
+    
+    IMGUI_IMPL_API bool     ImGui_ImplDX10_Init(ID3D10Device* device);
+IMGUI_IMPL_API void     ImGui_ImplDX10_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplDX10_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data);
+    
+        if (!g_pIB || g_IndexBufferSize < draw_data->TotalIdxCount)
+    {
+        if (g_pIB) { g_pIB->Release(); g_pIB = NULL; }
+        g_IndexBufferSize = draw_data->TotalIdxCount + 10000;
+        D3D10_BUFFER_DESC desc;
+        memset(&desc, 0, sizeof(D3D10_BUFFER_DESC));
+        desc.Usage = D3D10_USAGE_DYNAMIC;
+        desc.ByteWidth = g_IndexBufferSize * sizeof(ImDrawIdx);
+        desc.BindFlags = D3D10_BIND_INDEX_BUFFER;
+        desc.CPUAccessFlags = D3D10_CPU_ACCESS_WRITE;
+        if (ctx->CreateBuffer(&desc, NULL, &g_pIB) < 0)
+            return;
+    }
+    
+    void    ImGui_ImplOpenGL2_DestroyDeviceObjects()
+{
+    ImGui_ImplOpenGL2_DestroyFontsTexture();
+}
+
+    
+        // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();
+    
+    
+    {    // Create Descriptor Pool
+    {
+        VkDescriptorPoolSize pool_sizes[] =
+        {
+            { VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },
+            { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000 },
+            { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000 },
+            { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1000 },
+            { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1000 },
+            { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1000 },
+            { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000 },
+            { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1000 },
+            { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1000 },
+            { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000 },
+            { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000 }
+        };
+        VkDescriptorPoolCreateInfo pool_info = {};
+        pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+        pool_info.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+        pool_info.maxSets = 1000 * IM_ARRAYSIZE(pool_sizes);
+        pool_info.poolSizeCount = (uint32_t)IM_ARRAYSIZE(pool_sizes);
+        pool_info.pPoolSizes = pool_sizes;
+        err = vkCreateDescriptorPool(g_Device, &pool_info, g_Allocator, &g_DescriptorPool);
+        check_vk_result(err);
+    }
+}
+    
+            // Poll and handle inputs
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        s3eKeyboardUpdate();
+        s3ePointerUpdate();
+    
+    
+    {        // Setup the debug report callback
+        VkDebugReportCallbackCreateInfoEXT debug_report_ci = {};
+        debug_report_ci.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
+        debug_report_ci.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT | VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
+        debug_report_ci.pfnCallback = debug_report;
+        debug_report_ci.pUserData = NULL;
+        err = vkCreateDebugReportCallbackEXT(g_Instance, &debug_report_ci, g_Allocator, &g_DebugReport);
+        check_vk_result(err);
+#else
+        // Create Vulkan Instance without any debug feature
+        err = vkCreateInstance(&create_info, g_Allocator, &g_Instance);
+        check_vk_result(err);
+#endif
+    }
+    
+    #include 'gtest/gtest.h'
+    
+    
+    {  double ret = x * OBJECT_DIST_RES + OBJECT_DIST_LONG_MIN;
+  return ret;
+}
+    
+    
+    {
+    {
+    {}  // namespace msf
+}  // namespace localization
+}  // namespace apollo
+
+    
+    namespace apollo {
+namespace hdmap {
+DEFINE_string(test_map_file,
+              'modules/map/data/sunnyvale_loop/base_map_test.bin',
+              'The test map file');
+DEFINE_string(
+    test_routing_file,
+    'modules/map/pnc_map/testdata/sample_sunnyvale_loop_routing.pb.txt',
+    'The test map file');
+    }
+    }
+    
+      MatrixXd mat_golden(20, 10);
+  // clang-format off
+  mat_golden <<
+    -1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+     1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+     1, -1,  0,  0,  0,  0,  0,  0,  0,  0,
+    -1,  1,  0,  0,  0,  0,  0,  0,  0,  0,
+     0,  1, -1,  0,  0,  0,  0,  0,  0,  0,
+     0, -1,  1,  0,  0,  0,  0,  0,  0,  0,
+     0,  0,  1, -1,  0,  0,  0,  0,  0,  0,
+     0,  0, -1,  1,  0,  0,  0,  0,  0,  0,
+     0,  0,  0,  1, -1,  0,  0,  0,  0,  0,
+     0,  0,  0, -1,  1,  0,  0,  0,  0,  0,
+     0,  0,  0,  0,  1, -1,  0,  0,  0,  0,
+     0,  0,  0,  0, -1,  1,  0,  0,  0,  0,
+     0,  0,  0,  0,  0,  1, -1,  0,  0,  0,
+     0,  0,  0,  0,  0, -1,  1,  0,  0,  0,
+     0,  0,  0,  0,  0,  0,  1, -1,  0,  0,
+     0,  0,  0,  0,  0,  0, -1,  1,  0,  0,
+     0,  0,  0,  0,  0,  0,  0,  1, -1,  0,
+     0,  0,  0,  0,  0,  0,  0, -1,  1,  0,
+     0,  0,  0,  0,  0,  0,  0,  0,  1, -1,
+     0,  0,  0,  0,  0,  0,  0,  0, -1,  1;
+  // clang-format on
+  EXPECT_EQ(mat, mat_golden);
