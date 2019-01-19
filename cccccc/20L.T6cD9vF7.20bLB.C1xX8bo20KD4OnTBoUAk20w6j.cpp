@@ -1,176 +1,194 @@
 
         
-        class ScriptDetector {
- public:
-  ScriptDetector(const GenericVector<int>* allowed_scripts,
-                 OSResults* osr, tesseract::Tesseract* tess);
-  void detect_blob(BLOB_CHOICE_LIST* scores);
-  bool must_stop(int orientation);
- private:
-  OSResults* osr_;
-  static const char* korean_script_;
-  static const char* japanese_script_;
-  static const char* fraktur_script_;
-  int korean_id_;
-  int japanese_id_;
-  int katakana_id_;
-  int hiragana_id_;
-  int han_id_;
-  int hangul_id_;
-  int latin_id_;
-  int fraktur_id_;
-  tesseract::Tesseract* tess_;
-  const GenericVector<int>* allowed_scripts_;
-};
+        #include 'tensorflow/core/framework/api_def.pb.h'
+#include 'tensorflow/core/framework/attr_value.pb.h'
+#include 'tensorflow/core/framework/op_def.pb.h'
+#include 'tensorflow/core/platform/types.h'
     
-    // Constructors for the various ParamTypes.
-ParamContent::ParamContent(tesseract::StringParam* it) {
-  my_id_ = nrParams;
-  nrParams++;
-  param_type_ = VT_STRING;
-  sIt = it;
-  vcMap[my_id_] = this;
-}
-// Constructors for the various ParamTypes.
-ParamContent::ParamContent(tesseract::IntParam* it) {
-  my_id_ = nrParams;
-  nrParams++;
-  param_type_ = VT_INTEGER;
-  iIt = it;
-  vcMap[my_id_] = this;
-}
-// Constructors for the various ParamTypes.
-ParamContent::ParamContent(tesseract::BoolParam* it) {
-  my_id_ = nrParams;
-  nrParams++;
-  param_type_ = VT_BOOLEAN;
-  bIt = it;
-  vcMap[my_id_] = this;
-}
-// Constructors for the various ParamTypes.
-ParamContent::ParamContent(tesseract::DoubleParam* it) {
-  my_id_ = nrParams;
-  nrParams++;
-  param_type_ = VT_DOUBLE;
-  dIt = it;
-  vcMap[my_id_] = this;
+    
+    {}  // end namespace tensorflow
+
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    #ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_FUNC_H_
+#define TENSORFLOW_PYTHON_LIB_CORE_PY_FUNC_H_
+    
+    Safe_TF_TensorPtr make_safe(TF_Tensor* tensor) {
+  return Safe_TF_TensorPtr(tensor);
 }
     
-    #ifndef GRAPHICS_DISABLED
+    #include 'tensorflow/core/framework/node_def.pb.h'
+#include 'tensorflow/core/framework/node_def_util.h'
+#include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/op_kernel.h'
+#include 'tensorflow/core/framework/types.h'
+#include 'tensorflow/core/lib/core/status.h'
+#include 'tensorflow/core/util/device_name_utils.h'
     
-    // Returns the box file name corresponding to the given image_filename.
-STRING BoxFileName(const STRING& image_filename);
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    // Clip output boxes to input blob boxes for bounds that are within this
-// tolerance. Otherwise, the blob may be chopped and we have to just use
-// the word bounding box.
-const int kBoxClipTolerance = 2;
+      // Given the DSO version number and the driver version file contents, extracts
+  // the driver version and compares, warning the user in the case of
+  // incompatibility.
+  //
+  // This is solely used for more informative log messages when the user is
+  // running on a machine that happens to have a libcuda/kernel driver mismatch.
+  static void WarnOnDsoKernelMismatch(
+      port::StatusOr<DriverVersion> dso_version,
+      port::StatusOr<DriverVersion> kernel_version);
     
-      // Clean up the bounding boxes from the polygonal approximation by
-  // expanding slightly, then clipping to the blobs from the original_word
-  // that overlap. If not null, the block provides the inverse rotation.
-  void ClipToOriginalWord(const BLOCK* block, WERD* original_word);
+      // Populates the CUDA-platform-specific elements of this object.
+  port::Status Init();
     
-      // Constrained fit with a supplied direction vector. Finds the best line_pt,
-  // that is one of the supplied points having the median cross product with
-  // direction, ignoring points that have a cross product outside of the range
-  // [min_dist, max_dist]. Returns the resulting error metric using the same
-  // reduced set of points.
-  // *Makes use of floating point arithmetic*
-  double ConstrainedFit(const FCOORD& direction,
-                        double min_dist, double max_dist,
-                        bool debug, ICOORD* line_pt);
-    
-    /*!
- * \brief Registry entry for linear updater.
- */
-struct LinearUpdaterReg
-    : public dmlc::FunctionRegEntryBase<LinearUpdaterReg,
-                                        std::function<LinearUpdater*()> > {};
-    
-    #include <xgboost/logging.h>
-#include <cctype>
-#include <cstdio>
-#include <string>
-#include './io.h'
-    
-    
-    { private:
-  /*! \brief number of allocated pages */
-  size_t num_free_buffer_;
-  /*! \brief clock_pointer */
-  size_t clock_ptr_;
-  /*! \brief writer threads */
-  std::vector<std::unique_ptr<std::thread> > workers_;
-  /*! \brief recycler queue */
-  dmlc::ConcurrentBlockingQueue<std::shared_ptr<SparsePage> > qrecycle_;
-  /*! \brief worker threads */
-  std::vector<dmlc::ConcurrentBlockingQueue<std::shared_ptr<SparsePage> > > qworkers_;
-};
-#endif  // DMLC_ENABLE_STD_THREAD
-    
-    // Should GradStats be in this header, rather than param.h?
-struct GradStats;
-    
-    /*!
- * \brief Quantile sketch use WQSummary
- * \tparam DType type of data content
- * \tparam RType type of rank
- */
-template<typename DType, typename RType = unsigned>
-class WQuantileSketch :
-      public QuantileSketchTemplate<DType, RType, WQSummary<DType, RType> > {
-};
-    
-    std::string genGuid() {
-  return boost::uuids::to_string(boost::uuids::random_generator()());
-};
-    
-    Status KafkaTopicsConfigParserPlugin::update(const std::string& source,
-                                             const ParserConfig& config) {
-  auto topics = config.find(kKafkaTopicParserRootKey);
-  if (topics != config.end()) {
-    auto obj = data_.getObject();
-    data_.copyFrom(topics->second.doc(), obj);
-    data_.add(kKafkaTopicParserRootKey, obj);
-  }
-  return Status();
+    static void secp256k1_gej_neg(secp256k1_gej *r, const secp256k1_gej *a) {
+    r->infinity = a->infinity;
+    r->x = a->x;
+    r->y = a->y;
+    r->z = a->z;
+    secp256k1_fe_normalize_weak(&r->y);
+    secp256k1_fe_negate(&r->y, &r->y, 1);
 }
     
-    /**
- * @brief Parser plugin for logger configurations.
- */
-class LoggerConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override {
-    return {kLoggerKey};
-  }
+    
+    {    secp256k1_scalar_get_b32(brx, sigr);
+    r = secp256k1_fe_set_b32(&fx, brx);
+    (void)r;
+    VERIFY_CHECK(r); /* brx comes from a scalar, so is less than the order; certainly less than p */
+    if (recid & 2) {
+        if (secp256k1_fe_cmp_var(&fx, &secp256k1_ecdsa_const_p_minus_order) >= 0) {
+            return 0;
+        }
+        secp256k1_fe_add(&fx, &secp256k1_ecdsa_const_order_as_fe);
     }
+    if (!secp256k1_ge_set_xo_var(&x, &fx, recid & 1)) {
+        return 0;
+    }
+    secp256k1_gej_set_ge(&xj, &x);
+    secp256k1_scalar_inverse_var(&rn, sigr);
+    secp256k1_scalar_mul(&u1, &rn, message);
+    secp256k1_scalar_negate(&u1, &u1);
+    secp256k1_scalar_mul(&u2, &rn, sigs);
+    secp256k1_ecmult(ctx, &qj, &xj, &u2, &u1);
+    secp256k1_ge_set_gej_var(pubkey, &qj);
+    return !secp256k1_gej_is_infinity(&qj);
+}
     
-          // Assemble an intermediate property tree for simplified parsing.
-      pt::ptree single_pack;
-      stripConfigComments(content);
-      try {
-        std::stringstream json_stream;
-        json_stream << content;
-        pt::read_json(json_stream, single_pack);
-      } catch (const pt::json_parser::json_parser_error& /* e */) {
-        LOG(WARNING) << 'Cannot read multi-pack JSON: ' << path;
-        continue;
-      }
-    
-                // We scale z here to avoid the animation being
-            // too much bigger than the screen due to perspective transform
+    /// Format list of arguments according to the given format string and return
+/// the result as a string.
+template<typename... Args>
+std::string format(const char* fmt, const Args&... args)
+{
+    std::ostringstream oss;
+    format(oss, fmt, args...);
+    return oss.str();
+}
     
     
-    {protected:
-    std::string       _key;
-    float            _from, _to;
-    float            _delta;
-};
+    {bool ParseDouble(const std::string& str, double *out)
+{
+    if (!ParsePrechecks(str))
+        return false;
+    if (str.size() >= 2 && str[0] == '0' && str[1] == 'x') // No hexadecimal floats allowed
+        return false;
+    std::istringstream text(str);
+    text.imbue(std::locale::classic());
+    double result;
+    text >> result;
+    if(out) *out = result;
+    return text.eof() && !text.fail();
+}
+}
     
-        /** Initializes an AtlasNode  with an Atlas file the width and height of each item and the quantity of items to render*/
-    bool initWithTileFile(const std::string& tile, int tileWidth, int tileHeight, int itemsToRender);
+        if (!bytes) return;
     
-    /** Initializes an AtlasNode  with a texture the width and height of each item measured in points and the quantity of items to render*/
-    bool initWithTexture(Texture2D* texture, int tileWidth, int tileHeight, int itemsToRender);
+      printer->Print(
+    '/// <summary>Holder for reflection information generated from $file_name$</summary>\n'
+    '$access_level$ static partial class $reflection_class_name$ {\n'
+    '\n',
+    'file_name', file_->name(),
+    'access_level', class_access_level(),
+    'reflection_class_name', reflectionClassname_);
+  printer->Indent();
+}
+    
+    // ===================================================================
+    
+    void OneofGenerator::GeneratePublicCasePropertyDeclaration(
+    io::Printer* printer) {
+  printer->Print(
+      variables_,
+      '$comments$'
+      '@property(nonatomic, readonly) $enum_name$ $name$OneOfCase;\n'
+      '\n');
+}
+    
+    // Author: ambrose@google.com (Ambrose Feinstein),
+//         kenton@google.com (Kenton Varda)
+//
+// Based on http://www.pkware.com/documents/casestudies/APPNOTE.TXT
+    
+    #pragma once
+    
+    struct IDirect3DDevice9;
+    
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_IMPL_API void     ImGui_Marmalade_InvalidateDeviceObjects();
+IMGUI_IMPL_API bool     ImGui_Marmalade_CreateDeviceObjects();
+    
+    struct GLFWwindow;
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+    void DHTReplaceNodeTask::onReceived(const DHTPingReplyMessage* message)
+{
+  A2_LOG_INFO(fmt('ReplaceNode: Ping reply received from %s.',
+                  message->getRemoteNode()->toString().c_str()));
+  setFinished(true);
+}
+    
+      bool addGoodNode(const std::shared_ptr<DHTNode>& node);
+    
+      std::shared_ptr<DHTNode> localNode_;
+    
+    #include 'common.h'
+    
+      virtual void startup() = 0;
+    
+    DHTTaskExecutor::~DHTTaskExecutor() = default;
+    
+      virtual std::shared_ptr<DHTTask> createBucketRefreshTask() CXX11_OVERRIDE;
+    
+    
+    {} // namespace aria2
+
+    
+    #endif // D_DHT_UNKNOWN_MESSAGE_H
+
+    
+    
+    // out_of_range.106
+    try
+    {
+        // try to use an array index with leading '0'
+        json::reference ref = j.at('/array/01'_json_pointer);
+    }
+    catch (json::parse_error& e)
+    {
+        std::cout << e.what() << '\n';
+    }
