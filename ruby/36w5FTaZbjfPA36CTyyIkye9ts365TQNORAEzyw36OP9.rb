@@ -1,74 +1,178 @@
 
         
-            def log_processed(name)
-      puts green '    #{name}'
+        WITH_LIQUID = <<-LIQUID.freeze
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce auctor libero at
+pharetra tempus. {{ author }} et metus fermentum, eu cursus lorem
+mattis. Curabitur vel dui et lacus rutrum suscipit et eget neque.
+    
+    if pathutil_relative == native_relative
+  Benchmark.ips do |x|
+    x.report('pathutil') { pathutil_relative }
+    x.report('native')   { native_relative }
+    x.compare!
+  end
+else
+  print 'PATHUTIL: '
+  puts pathutil_relative
+  print 'NATIVE:   '
+  puts native_relative
+end
+
+    
+      p.option 'source', '-s', '--source [DIR]', 'Source directory (defaults to ./)'
+  p.option 'destination', '-d', '--destination [DIR]',
+    'Destination directory (defaults to ./_site)'
+  p.option 'safe', '--safe', 'Safe mode (defaults to false)'
+  p.option 'plugins_dir', '-p', '--plugins PLUGINS_DIR1[,PLUGINS_DIR2[,...]]', Array,
+    'Plugins directory (defaults to ./_plugins)'
+  p.option 'layouts_dir', '--layouts DIR', String,
+    'Layouts directory (defaults to ./_layouts)'
+  p.option 'profile', '--profile', 'Generate a Liquid rendering profile'
+    
+    require 'em-websocket'
+    
+            # If our highlighter is CodeRay we go in to merge the CodeRay defaults
+        # with your 'coderay' key if it's there, deprecating it in the
+        # process of you using it.
+        def modernize_coderay_config
+          unless @config['coderay'].empty?
+            Jekyll::Deprecator.deprecation_message(
+              'You are using 'kramdown.coderay' in your configuration, ' \
+              'please use 'syntax_highlighter_opts' instead.'
+            )
+    
+        def data_url_string?(str)
+      str.start_with?(DATA_URL)
     end
     
-      def test_font_helper_with_suffix_question
-    assert_match %r(url\(['']?/assets/.*eot\?.*['']?\)), @css
-  end
+        def error?
+      code == 0 || code != 404 && code != 403 && code >= 400 && code <= 599
+    end
     
-    Then(/^the invalid (.+) release is ignored$/) do |filename|
-  test = 'ls -g #{TestApp.releases_path} | grep #{filename}'
-  _, _, status = vagrant_cli_command('ssh -c #{test.shellescape}')
-  expect(status).to be_success
-end
+            css('pre').each do |node|
+          node.content = node.content.strip
     
-          def lines
-        lines = []
-        @diff.diff.split('\n')[2..-1].each_with_index do |line, line_index|
-          lines << { :line  => line,
-                     :class => line_class(line),
-                     :ldln  => left_diff_line_number(0, line),
-                     :rdln  => right_diff_line_number(0, line) }
-        end if @diff
-        lines
-      end
-    
-          def upload_dest
-        @upload_dest
-      end
-    
-          def partial(name)
-        if name == :author_template
-          self.class.partial('history_authors/#{@wiki.user_icons}')
-        else
-          super
+                  define_method method do |resource_or_scope, *args|
+                scope = Devise::Mapping.find_scope!(resource_or_scope)
+                router_name = Devise.mappings[scope].router_name
+                context = router_name ? send(router_name) : _devise_route_context
+                context.send('#{action}#{scope}_#{module_name}_#{path_or_url}', *args)
+              end
+            end
+          end
         end
       end
     
-          def base_url
-        @base_url
-      end
+          def headers_for(action, opts)
+        headers = {
+          subject: subject_for(action),
+          to: resource.email,
+          from: mailer_sender(devise_mapping),
+          reply_to: mailer_reply_to(devise_mapping),
+          template_path: template_paths,
+          template_name: action
+        }.merge(opts)
     
-        @wiki.update_page(@wiki.page('PG'), nil, nil, '다른 text', {})
-    page = @wiki.page('PG')
-    assert_equal '다른 text', utf8(page.raw_data)
-    
-          # File.basename is too eager to please and will return the last
-      # component of the path even if it ends with a directory separator.
-      ::File.basename(file_path)
+        def no_input_strategies
+      self.strategies & Devise::NO_INPUT
     end
     
-          # Checks whether this node body is a void context.
-      #
-      # @return [Boolean] whether the `def` node body is a void context
-      def void_context?
-        method?(:initialize) || assignment_method?
+            # This contains all the command plugins by name, and returns
+        # the command class and options. The command class is wrapped
+        # in a Proc so that it can be lazy loaded.
+        #
+        # @return [Registry<Symbol, Array<Proc, Hash>>]
+        attr_reader :commands
+    
+        $?.should be_an_instance_of Process::Status
+    $?.success?.should == false
+    $?.exitstatus.should == 1
+  end
+    
+      it 'raises an ArgumentError if there is no catch block for the symbol' do
+    lambda { throw :blah }.should raise_error(ArgumentError)
+  end
+    
+    (allow process-exec
+  (literal
+    '<%= pod_bin %>'
+    '<%= ruby_bin %>'
+  )
+  (regex
+<% prefixes.each do |prefix| %>
+    #'^<%= prefix %>/*'
+<% end %>
+  )
+)
+    
+        pod 'ObjCPod', path: 'ObjCPod'
+    pod 'SwiftPod', path: 'SwiftPod'
+    pod 'MixedPod', path: 'MixedPod'
+    pod 'CustomModuleMapPod', path: 'CustomModuleMapPod'
+    
+          def plugins_string
+        UI::ErrorReport.plugins_string
       end
     
-          # Returns the iteration variable of the `for` loop.
-      #
-      # @return [Node] The iteration variable of the `for` loop
-      def variable
-        node_parts[0]
+        def install_plugin(plugin, load_hooks: true, load_immediately: false)
+      installer.install(plugin,
+                        load_hooks: load_hooks,
+                        load_immediately: load_immediately)
+    end
+    
+          def add_host(host, properties={})
+        new_host = Server[host]
+        new_host.port = properties[:port] if properties.key?(:port)
+        # This matching logic must stay in sync with `Server#matches?`.
+        key = ServerKey.new(new_host.hostname, new_host.port)
+        existing = servers_by_key[key]
+        if existing
+          existing.user = new_host.user if new_host.user
+          existing.with(properties)
+        else
+          servers_by_key[key] = new_host.with(properties)
+        end
       end
     
-          # Returns the delta between this element's value and the argument's.
-      #
-      # @note Keyword splats always return a delta of 0
-      #
-      # @return [Integer] the delta between the two values
-      def value_delta(other)
-        HashElementDelta.new(self, other).value_delta
+    %i(git_strategy hg_strategy svn_strategy).each do |strategy|
+  validate(strategy) do |key, _value|
+    warn(
+      '[Deprecation Warning] #{key} is deprecated and will be removed in '\
+      'Capistrano 3.7.0.\n'\
+      'https://github.com/capistrano/capistrano/blob/master/UPGRADING-3.7.md'
+    )
+  end
+end
+    
+    module LogStash
+  module PluginManager
+    class Error < StandardError; end
+    
+          packet_gem.pack
+    
+      def validate_cache_location
+    cache_location = LogStash::Environment::CACHE_PATH
+    if File.exist?(cache_location)
+      puts('Directory #{cache_location} is going to be overwritten, do you want to continue? (Y/N)')
+      override = ( 'y' == STDIN.gets.strip.downcase ? true : false)
+      if override
+        FileUtils.rm_rf(cache_location)
+      else
+        puts('Unpack cancelled: file #{cache_location} already exists, please delete or move it')
+        exit
       end
+    end
+  end
+end
+
+    
+      it 'returns the source' do
+    expect(subject.source).to eq(source)
+  end
+    
+          options = {:debug => ENV['LS_QA_DEBUG']}
+      puts 'Destroying #{machines}'
+      LogStash::VagrantHelpers.destroy(machines, options)
+      puts 'Bootstrapping #{machines}'
+      LogStash::VagrantHelpers.bootstrap(machines, options)
+    end
