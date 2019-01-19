@@ -1,44 +1,94 @@
 
         
-            You can install it using Cask:
+        multitask :default => [:test, :features]
     
-      def self.repository(tap = nil)
-    if tap.nil? || tap.core_tap?
-      'bottles'
-    else
-      'bottles-#{tap.repo}'
+    # No trailing slash
+Benchmark.ips do |x|
+  path = '/some/very/very/long/path/to/a/file/i/like'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
+end
+    
+    STDOUT.sync = true
+    
+              case protocol
+          when 'tcp'
+            self.connection = create_tcp_connection
+          when 'udp'
+            raise ::NotImplementedError, 'Kerberos Client: UDP not supported'
+          else
+            raise ::RuntimeError, 'Kerberos Client: unknown transport protocol'
+          end
+    
+              # Encodes the type
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_type(type)
+            bn = OpenSSL::BN.new(type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+              # Encodes the checksum field
+          #
+          # @return [OpenSSL::ASN1::OctetString]
+          def encode_checksum
+            OpenSSL::ASN1::OctetString.new(checksum)
+          end
+        end
+      end
     end
   end
 end
     
-      # True if a {Formula} is being built in 32-bit/x86 mode.
-  # This is needed for some use-cases though we prefer to build Universal
-  # when a 32-bit version is needed.
-  def build_32_bit?
-    include?('32-bit') && option_defined?('32-bit')
-  end
-    
-      def plist_caveats
-    s = []
-    if f.plist || (keg && keg.plist_installed?)
-      destination = if f.plist_startup
-        '/Library/LaunchDaemons'
-      else
-        '~/Library/LaunchAgents'
-      end
-    
-      def std_cmake_parameters
-    '-DCMAKE_INSTALL_PREFIX='#{prefix}' -DCMAKE_BUILD_TYPE=None -DCMAKE_FIND_FRAMEWORK=LAST -Wno-dev'
-  end
-    
-        group.remove(moderator)
-    group.save
-    
-            staff.topic_id = post.topic.id
-        unless staff.save
-          puts staff.errors.full_messages
-          puts 'Failed to set the Staff category description topic!'
+              # Encodes the Rex::Proto::Kerberos::Model::Element into an ASN.1 String. This
+          # method has been designed to be overridden by subclasses.
+          #
+          # @raise [NoMethodError]
+          def encode
+            raise ::NoMethodError, 'Method designed to be overridden'
+          end
         end
+      end
+    end
+  end
+end
+    
+              # Encodes the cipher
+          #
+          # @return [OpenSSL::ASN1::OctetString]
+          def encode_cipher
+            OpenSSL::ASN1::OctetString.new(cipher)
+          end
+    
+              # Decodes a Rex::Proto::Kerberos::Model::KdcRequest
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode_asn1(input)
+            input.value[0].value.each do |val|
+              case val.tag
+              when 1
+                self.pvno = decode_asn1_pvno(val)
+              when 2
+                self.msg_type = decode_asn1_msg_type(val)
+              when 3
+                self.pa_data  = decode_asn1_pa_data(val)
+              when 4
+                self.req_body = decode_asn1_req_body(val)
+              else
+                raise ::RuntimeError, 'Failed to decode KdcRequest SEQUENCE'
+              end
+            end
+          end
+    
+              # Decodes the susec field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_susec(input)
+            input.value[0].value.to_i
+          end
     
       # Compile a file on disk to CSS.
   #
@@ -76,46 +126,26 @@ end
   end
 end
     
-          # Get the cache key pair for the given Sass URI.
-      # The URI need not be checked for validity.
-      #
-      # The only strict requirement is that the returned pair of strings
-      # uniquely identify the file at the given URI.
-      # However, the first component generally corresponds roughly to the directory,
-      # and the second to the basename, of the URI.
-      #
-      # Note that keys must be unique *across importers*.
-      # Thus it's probably a good idea to include the importer name
-      # at the beginning of the first component.
-      #
-      # @param uri [String] A URI known to be valid for this importer.
-      # @param options [{Symbol => Object}] Options for the Sass file
-      #   containing the `@import` currently being checked.
-      # @return [(String, String)] The key pair which uniquely identifies
-      #   the file at the given URI.
-      def key(uri, options)
-        Sass::Util.abstract(self)
-      end
-    
-        class << self
-      def elastic_pack_base_uri
-        env_url = ENV['LOGSTASH_PACK_URL']
-        (env_url.nil? || env_url.empty?) ? DEFAULT_PACK_URL : env_url
-      end
-    
-          # Install the gems to make them available locally when bundler does his local resolution
-      post_install_messages = []
-      pack.gems.each do |packed_gem|
-        PluginManager.ui.debug('Installing, #{packed_gem.name}, version: #{packed_gem.version} file: #{packed_gem.file}')
-        post_install_messages << LogStash::PluginManager::GemInstaller::install(packed_gem.file, packed_gem.plugin?)
-      end
-    
-    task :spec    => 'spec:all'
-task :default => :spec
-    
-              it 'successfully install the plugin' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install #{gem_path_on_vagrant}')
-            expect(command).to install_successfully
-            expect(logstash).to have_installed?('logstash-filter-dns')
-          end
+          if vars.nil? # scan failed, try to figure out why for error message
+        if value !~ /^[^\s]+/
+          expected = 'variable name'
+        elsif value !~ /^[^\s]+(?:\s*,\s*[^\s]+)*[^\s]+\s+from\s+.+/
+          expected = ''in <expr>''
         end
+        raise SyntaxError.new('Invalid each directive '@each #{value}': expected #{expected}.')
+      end
+    
+          # If this importer is based on files on the local filesystem This method
+      # should return true if the file, when changed, should trigger a
+      # recompile.
+      #
+      # It is acceptable for non-sass files to be watched and trigger a recompile.
+      #
+      # @param filename [String] The absolute filename for a file that has changed.
+      # @return [Boolean] When the file changed should cause a recompile.
+      def watched_file?(filename)
+        false
+      end
+    end
+  end
+end
