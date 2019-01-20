@@ -1,165 +1,199 @@
 
         
-        
-    {}  // namespace api
-    
-    
-    {}  // namespace atom
-    
-    namespace api {
-    }
-    
-    #ifndef ATOM_BROWSER_API_SAVE_PAGE_HANDLER_H_
-#define ATOM_BROWSER_API_SAVE_PAGE_HANDLER_H_
-    
-    void ShutdownDetector::ThreadMain() {
-  base::PlatformThread::SetName('CrShutdownDetector');
-    }
-    
-    namespace atom {
-    }
-    
-    Delegate* AutoUpdater::GetDelegate() {
-  return delegate_;
+        SILLayout::SILLayout(CanGenericSignature Sig,
+                     ArrayRef<SILField> Fields)
+  : GenericSigAndFlags(Sig, getFlagsValue(anyMutable(Fields))),
+    NumFields(Fields.size())
+{
+#ifndef NDEBUG
+  verifyFields(Sig, Fields);
+#endif
+  auto FieldsMem = getTrailingObjects<SILField>();
+  for (unsigned i : indices(Fields)) {
+    new (FieldsMem + i) SILField(Fields[i]);
+  }
 }
     
-    namespace caffe {
+    void swift::printOpaquePrefixMap(raw_ostream &out, void *_root,
+                         void (*printNodeData)(raw_ostream &out, void *node)) {
+  auto root = reinterpret_cast<Node*>(_root);
+  if (!root) {
+    out << '(empty)\n';
+    return;
+  }
+  TreePrinter(out, *printNodeData).print(root, ChildKind::Root);
+}
+    
+    using namespace swift;
+using namespace camel_case;
+    
+      static CFPointeeInfo forRecord(bool isConst, const clang::RecordDecl *decl) {
+    assert(decl);
+    CFPointeeInfo info;
+    info.IsValid = true;
+    info.IsConst = isConst;
+    info.Decl = decl;
+    return info;
+  }
+    
+    void swift::Demangle::Node::dump() {
+  std::string TreeStr = getNodeTreeAsString(this);
+  fputs(TreeStr.c_str(), stderr);
+}
+    
+      /**
+   * Returns the polygon outline of the current block. The returned Pta must
+   * be ptaDestroy-ed after use. Note that the returned Pta lists the vertices
+   * of the polygon, and the last edge is the line segment between the last
+   * point and the first point. nullptr will be returned if the iterator is
+   * at the end of the document or layout analysis was not used.
+   */
+  Pta* BlockPolygon() const;
+    
+    // Event listener. Waits for SVET_POPUP events and processes them.
+void ParamsEditor::Notify(const SVEvent* sve) {
+  if (sve->type == SVET_POPUP) {  // only catch SVET_POPUP!
+    char* param = sve->parameter;
+    if (sve->command_id == writeCommands[0]) {
+      WriteParams(param, false);
+    } else if (sve->command_id == writeCommands[1]) {
+      WriteParams(param, true);
+    } else {
+      ParamContent* vc = ParamContent::GetParamContentById(
+          sve->command_id);
+      vc->SetValue(param);
+      sv_window_->AddMessage('Setting %s to %s',
+                             vc->GetName(), vc->GetValue().string());
     }
+  }
+}
+    
+    namespace tesseract {
+    }
+    
+    
+    {    if (s.ok()) {
+      // Verify that the table is usable
+      Iterator* it = table_cache->NewIterator(ReadOptions(),
+                                              meta->number,
+                                              meta->file_size);
+      s = it->status();
+      delete it;
+    }
+  }
+    
+    // Maximum level to which a new compacted memtable is pushed if it
+// does not create overlap.  We try to push to level 2 to avoid the
+// relatively expensive level 0=>1 compactions and to avoid some
+// expensive manifest file operations.  We do not push all the way to
+// the largest level since that can generate a lot of wasted disk
+// space if the same key space is being repeatedly overwritten.
+static const int kMaxMemCompactLevel = 2;
+    
+    TEST(FormatTest, InternalKey_EncodeDecode) {
+  const char* keys[] = { '', 'k', 'hello', 'longggggggggggggggggggggg' };
+  const uint64_t seq[] = {
+    1, 2, 3,
+    (1ull << 8) - 1, 1ull << 8, (1ull << 8) + 1,
+    (1ull << 16) - 1, 1ull << 16, (1ull << 16) + 1,
+    (1ull << 32) - 1, 1ull << 32, (1ull << 32) + 1
+  };
+  for (int k = 0; k < sizeof(keys) / sizeof(keys[0]); k++) {
+    for (int s = 0; s < sizeof(seq) / sizeof(seq[0]); s++) {
+      TestKey(keys[k], seq[s], kTypeValue);
+      TestKey('hello', 1, kTypeDeletion);
+    }
+  }
+}
+    
+    static const int kBlockSize = 32768;
+    
+        // Parse the header
+    const char* header = buffer_.data();
+    const uint32_t a = static_cast<uint32_t>(header[4]) & 0xff;
+    const uint32_t b = static_cast<uint32_t>(header[5]) & 0xff;
+    const unsigned int type = header[6];
+    const uint32_t length = a | (b << 8);
+    if (kHeaderSize + length > buffer_.size()) {
+      size_t drop_size = buffer_.size();
+      buffer_.clear();
+      if (!eof_) {
+        ReportCorruption(drop_size, 'bad record length');
+        return kBadRecord;
+      }
+      // If the end of the file has been reached without reading |length| bytes
+      // of payload, assume the writer died in the middle of writing the record.
+      // Don't report a corruption.
+      return kEof;
+    }
+    
+    template<typename Key, class Comparator>
+int SkipList<Key,Comparator>::RandomHeight() {
+  // Increase height with probability 1 in kBranching
+  static const unsigned int kBranching = 4;
+  int height = 1;
+  while (height < kMaxHeight && ((rnd_.Next() % kBranching) == 0)) {
+    height++;
+  }
+  assert(height > 0);
+  assert(height <= kMaxHeight);
+  return height;
+}
+    
+    //-------------------------------------------------------------------------------
+//
+//  ScriptSet - A bit set representing a set of scripts.
+//
+//              This class was originally used exclusively with script sets appearing
+//              as part of the spoof check whole script confusable binary data. Its
+//              use has since become more general, but the continued use to wrap
+//              prebuilt binary data does constrain the design.
+//
+//-------------------------------------------------------------------------------
+class U_I18N_API ScriptSet: public UMemory {
+  public:
+    ScriptSet();
+    ScriptSet(const ScriptSet &other);
+    ~ScriptSet();
+    }
+    
+    void
+SelectFormat::parseObject(const UnicodeString& /*source*/,
+                        Formattable& /*result*/,
+                        ParsePosition& pos) const
+{
+    // Parsing not supported.
+    pos.setErrorIndex(pos.getIndex());
+}
+    
+    class UnicodeSet;
+    
+    U_NAMESPACE_BEGIN
+    
+    U_NAMESPACE_BEGIN
     
     /**
- * @brief Compute the index of the @f$ K @f$ max values for each datum across
- *        all dimensions @f$ (C \times H \times W) @f$.
- *
- * Intended for use after a classification layer to produce a prediction.
- * If parameter out_max_val is set to true, output is a vector of pairs
- * (max_ind, max_val) for each image. The axis parameter specifies an axis
- * along which to maximise.
- *
- * NOTE: does not implement Backwards operation.
+ * A representation an acceptable range of digit counts for integers.
  */
-template <typename Dtype>
-class ArgMaxLayer : public Layer<Dtype> {
- public:
-  /**
-   * @param param provides ArgMaxParameter argmax_param,
-   *     with ArgMaxLayer options:
-   *   - top_k (\b optional uint, default 1).
-   *     the number @f$ K @f$ of maximal items to output.
-   *   - out_max_val (\b optional bool, default false).
-   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
-   *     output max_val along the specified axis.
-   *   - axis (\b optional int).
-   *     if set, maximise along the specified axis else maximise the flattened
-   *     trailing dimensions for each index of the first / num dimension.
-   */
-  explicit ArgMaxLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
+class U_I18N_API IntDigitCountRange : public UMemory {
+public:
+    /**
+     * No constraints: 0 up to INT32_MAX
+     */
+    IntDigitCountRange() : fMin(0), fMax(INT32_MAX) { }
+    IntDigitCountRange(int32_t min, int32_t max);
+    int32_t pin(int32_t digitCount) const;
+    int32_t getMax() const { return fMax; }
+    int32_t getMin() const { return fMin; }
+private:
+    int32_t fMin;
+    int32_t fMax;
+};
     
-     protected:
-  /// @copydoc BNLLLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #endif  // CAFFE_CUDNN_DECONV_LAYER_HPP_
-
-    
-    namespace caffe {
-    }
-    
-      std::string fname = TableFileName(dbname, meta->number);
-  if (iter->Valid()) {
-    WritableFile* file;
-    s = env->NewWritableFile(fname, &file);
-    if (!s.ok()) {
-      return s;
-    }
-    }
-    
-    
-    {}  // namespace leveldb
-    
-    class DBImpl;
-    
-    
-    {  delete iter;
-}
-    
-    static void TestKey(const std::string& key,
-                    uint64_t seq,
-                    ValueType vt) {
-  std::string encoded = IKey(key, seq, vt);
-    }
-    
-    Status Writer::AddRecord(const Slice& slice) {
-  const char* ptr = slice.data();
-  size_t left = slice.size();
-    }
-    
-      // SkipList is not protected by mu_.  We just use a single writer
-  // thread to modify it.
-  SkipList<Key, Comparator> list_;
-    
-    bool Follow::initWithTarget(Node *followedNode, const Rect& rect /*= Rect::ZERO*/){
-    
-    return initWithTargetAndOffset(followedNode, 0.0, 0.0,rect);
-    
-}
-void Follow::step(float /*dt*/)
-{
-    if(_boundarySet)
-    {
-        // whole map fits inside a single screen, no need to modify the position - unless map boundaries are increased
-        if(_boundaryFullyCovered)
-        {
-            return;
-        }
-    }
-    }
-    
-    ActionEase::~ActionEase(void)
-{
-    CC_SAFE_RELEASE(_inner);
-}
-    
-    
-    {    delete ret;
-    return nullptr;
-}
+    #if !UCONFIG_NO_FORMATTING
     
         /**
-     * @js NA
-     * @lua NA
+     * Implement UnicodeFunctor
+     * @return a copy of the object.
      */
-    virtual ~ActionManager();
-    
-    void ActionTween::startWithTarget(Node *target)
-{
-    CCASSERT(dynamic_cast<ActionTweenDelegate*>(target), 'target must implement ActionTweenDelegate');
-    ActionInterval::startWithTarget(target);
-    _delta = _to - _from;
-}
-    
-     Another example: ScaleTo action could be rewritten using PropertyAction:
-    
-        /** Adds a frame with an image filename. Internally it will create a SpriteFrame and it will add it.
-     * The frame will be added with one 'delay unit'.
-     * Added to facilitate the migration from v0.8 to v0.9.
-     * @param filename The path of SpriteFrame.
-     */
-    void addSpriteFrameWithFile(const std::string& filename);
-    /**
-     * @deprecated. Use addSpriteFrameWithFile() instead.
-     @js NA
-     */
-    CC_DEPRECATED_ATTRIBUTE void addSpriteFrameWithFileName(const std::string& filename){ addSpriteFrameWithFile(filename);}
+    virtual UnicodeFunctor* clone() const;
