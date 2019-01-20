@@ -1,40 +1,78 @@
 
         
-            def __init__(self, param):
-        # simple test to validate param value
-        if param in self._class_method_choices:
-            self.param = param
-        else:
-            raise ValueError('Invalid Value for Param: {0}'.format(param))
+                account_number = match1(html, r'data-account='(\d+)'')
     
-        def setProblem(self, value):
-        self._bProblem = value
     
-        def __init__(self, method):
-        self.method = method
+def download_url(url, merge, output_dir, title, info_only):
+    mime, ext, size = url_info(url)
+    print_info(site_info, title, mime, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir, merge=merge)
     
-    # Create a random animal
-def random_animal():
-    '''Let's be dynamic!'''
-    return random.choice([Dog, Cat])()
+    	html = get_html(url)
+	contentid = r1(r'<meta name='contentid' scheme='DMINSTR2' content='([^']+)' />', html)
+	vid = r1(r''demand_ehow_videoid':'([^']+)'', html)
+	assert vid
     
-        def test_object(queue):
-        pool = ObjectPool(queue, True)
-        print('Inside func: {}'.format(pool.item))
+    # image size suffixes used in inline json 'key' field
+# listed in descending order
+size_suffixes = ['o', 'k', 'h', 'l', 'c', 'z', 'm', 'n', 's', 't', 'q', 'sq']
     
-        def get_current_time_as_html_fragment(self):
-        current_time = self.time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
-'''
+            basename = os.path.splitext(os.path.basename(im_name))[0]
+        txtname = os.path.join(output_dir, basename + 'pred.txt')
+        with open(txtname, 'w') as fid_txt:
+            if i % 10 == 0:
+                logger.info('i: {}: {}'.format(i, basename))
+            for j in range(1, len(all_segms)):
+                clss = json_dataset.classes[j]
+                clss_id = cityscapes_eval.name2label[clss].id
+                segms = all_segms[j][i]
+                boxes = all_boxes[j][i]
+                if segms == []:
+                    continue
+                masks = mask_util.decode(segms)
     
-        def product_information(self, product):
-        return self.data['products'].get(product, None)
+        def AddLosses(self, losses):
+        if not isinstance(losses, list):
+            losses = [losses]
+        # Conversion to str allows losses to include BlobReferences
+        losses = [c2_utils.UnscopeName(str(l)) for l in losses]
+        self.losses = list(set(self.losses + losses))
     
-    *Where is the pattern used practically?
-The Grok framework uses adapters to make objects work with a
-particular API without modifying the objects themselves:
-http://grok.zope.org/doc/current/grok_overview.html#adapters
     
-        mobile_type = 'mobile'
-    tablet_type = 'tablet'
+def add_roi_Xconv1fc_gn_head(model, blob_in, dim_in, spatial_scale):
+    '''Add a X conv + 1fc head, with GroupNorm'''
+    hidden_dim = cfg.FAST_RCNN.CONV_HEAD_DIM
+    roi_size = cfg.FAST_RCNN.ROI_XFORM_RESOLUTION
+    roi_feat = model.RoIFeatureTransform(
+        blob_in, 'roi_feat',
+        blob_rois='rois',
+        method=cfg.FAST_RCNN.ROI_XFORM_METHOD,
+        resolution=roi_size,
+        sampling_ratio=cfg.FAST_RCNN.ROI_XFORM_SAMPLING_RATIO,
+        spatial_scale=spatial_scale
+    )
+    
+        By default, this function will generate a data parallel model configured to
+    run on cfg.NUM_GPUS devices. However, you can restrict it to build a model
+    targeted to a specific GPU by specifying gpu_id. This is used by
+    optimizer.build_data_parallel_model() during test time.
+    '''
+    model = DetectionModelHelper(
+        name=model_type_func,
+        train=train,
+        num_classes=cfg.MODEL.NUM_CLASSES,
+        init_params=train
+    )
+    model.only_build_forward_pass = False
+    model.target_gpu_id = gpu_id
+    return get_func(model_type_func)(model)
+    
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+    
+    from caffe2.python import muji
+    
+    logger = logging.getLogger(__name__)
