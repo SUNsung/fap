@@ -1,124 +1,123 @@
-)DOC')
-    .Input(0, 'X', '*(type: Tensor`<float>`)* Input tensor.')
-    .Output(0, 'Y', '*(type: Tensor`<float>`)* Output tensor.');
-    
-    Example 2 (with KEY):
-DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
-KEY   = [0, 1, 3, 2, 1, 0, 1, 0]
-RANGES = [
-  [
-    [2, 4],
-    [0, 2],
-  ],
-  [
-    [0, 0],
-    [6, 2],
-  ]
-]
-lengths = [4, 2]
-OUTPUT[0] = [[6, 5, 4, 3], [0, 0, 0, 0]]
-OUTPUT[1] = [[1, 2], [8, 7]]
-    
-    template <>
-void GluOp<float, CPUContext>::ComputeGlu(
-    const int M,
-    const int split_dim,
-    const int N,
-    const float* Xdata,
-    float* Ydata) {
-  const int xStride = 2 * split_dim * N;
-  const int yStride = split_dim * N;
-  for (int i = 0; i < M; ++i) {
-    const int idx = i * xStride;
-    const int idy = i * yStride;
-    for (int j = 0; j < split_dim; ++j) {
-      const int jN = j * N;
-      const int jdx1 = idx + jN;
-      const int jdx2 = idx + (j + split_dim) * N;
-      const int jdy = idy + jN;
-      for (int k = 0; k < N; ++k) {
-        const float x1 = Xdata[jdx1 + k];
-        const float x2 = Xdata[jdx2 + k];
-        Ydata[jdy + k] = x1 * sigmoid(x2);
-      }
+
+        
+        void CacheImpl::setAndRetain(void *Key, void *Value, size_t Cost) {
+  DefaultCache &DCache = *static_cast<DefaultCache*>(Impl);
+  llvm::sys::ScopedLock L(DCache.Mux);
     }
+    
+    void swift::printOpaquePrefixMap(raw_ostream &out, void *_root,
+                         void (*printNodeData)(raw_ostream &out, void *node)) {
+  auto root = reinterpret_cast<Node*>(_root);
+  if (!root) {
+    out << '(empty)\n';
+    return;
   }
+  TreePrinter(out, *printNodeData).print(root, ChildKind::Root);
 }
     
+    bool swift::canBeMemberName(StringRef identifier) {
+  return llvm::StringSwitch<bool>(identifier)
+    .Case('init', false)
+    .Case('Protocol', false)
+    .Case('self', false)
+    .Case('Type', false)
+    .Default(true);
+}
     
-    {          return out;
-        })
-    .Input(0, 'X', '4-tensor in NCHW or NHWC.')
-    .Output(
-        0,
-        'Y',
-        '4-tensor. For NCHW: N x (C x kH x kW) x outH x outW.'
-        'For NHWC: N x outH x outW x (kH x kW x C');
-    
-      std::atomic<int> total_stopped_;
-  std::atomic<int> total_delayed_;
-  std::atomic<int> total_compaction_pressure_;
-  uint64_t bytes_left_;
-  uint64_t last_refill_time_;
-  // write rate set when initialization or by `DBImpl::SetDBOptions`
-  uint64_t max_delayed_write_rate_;
-  // current write rate
-  uint64_t delayed_write_rate_;
-    
-    // Returns an Env that translates paths such that the root directory appears to
-// be chroot_dir. chroot_dir should refer to an existing directory.
-Env* NewChrootEnv(Env* base_env, const std::string& chroot_dir);
-    
-    /*
- * DirectIOHelper
- */
-#ifndef NDEBUG
-namespace {
+        /// Returns true if \p loc is inside one of Swift's synthetic buffers.
+    static bool isInSwiftBuffers(clang::FullSourceLoc loc) {
+      StringRef bufName = StringRef(loc.getManager().getBufferName(loc));
+      return bufName == ClangImporter::Implementation::moduleImportBufferName ||
+             bufName == ClangImporter::Implementation::bridgingHeaderBufferName;
     }
     
-    int main() {
-  rocksdb::DB* raw_db;
-  rocksdb::Status status;
+    #include 'SwiftLookupTable.h'
+    
+    #include <script/script.h>
+    
+        strKey = 'distance';
+    BOOST_CHECK(obj.pushKV(strKey, (int64_t) 25));
+    
+    /** Decode a Bech32 string. Returns (hrp, data). Empty hrp means failure. */
+std::pair<std::string, std::vector<uint8_t>> Decode(const std::string& str);
+    
+    public:
+    static const size_t OUTPUT_SIZE = 20;
+    
+      /**
+   * @brief Returns the scalar loss associated with a top blob at a given index.
+   */
+  inline Dtype loss(const int top_index) const {
+    return (loss_.size() > top_index) ? loss_[top_index] : Dtype(0);
+  }
+    
+    #endif  // CAFFE_ABSVAL_LAYER_HPP_
+
+    
+    namespace caffe {
     }
     
-    // Move all L0 files to target_level skipping compaction.
-// This operation succeeds only if the files in L0 have disjoint ranges; this
-// is guaranteed to happen, for instance, if keys are inserted in sorted
-// order. Furthermore, all levels between 1 and target_level must be empty.
-// If any of the above condition is violated, InvalidArgument will be
-// returned.
-Status PromoteL0(DB* db, ColumnFamilyHandle* column_family,
-                 int target_level = 1);
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-      // restore from backup with backup_id
-  // IMPORTANT -- if options_.share_table_files == true,
-  // options_.share_files_with_checksum == false, you restore DB from some
-  // backup that is not the latest, and you start creating new backups from the
-  // new DB, they will probably fail.
-  //
-  // Example: Let's say you have backups 1, 2, 3, 4, 5 and you restore 3.
-  // If you add new data to the DB and try creating a new backup now, the
-  // database will diverge from backups 4 and 5 and the new backup will fail.
-  // If you want to create new backup, you will first have to delete backups 4
-  // and 5.
-  virtual Status RestoreDBFromBackup(
-      BackupID backup_id, const std::string& db_dir, const std::string& wal_dir,
-      const RestoreOptions& restore_options = RestoreOptions()) = 0;
     
-        // change element at index 1 (second element) to 'second'
-    array.at(1) = 'second';
-    
-        // out_of_range.401
-    try
-    {
-        // try to use a an invalid array index
-        json::const_reference ref = j.at('/array/4'_json_pointer);
+    { private:
+  struct pair_sort_first {
+    bool operator()(const std::pair<int, int> &left,
+                    const std::pair<int, int> &right) {
+      return left.first < right.first;
     }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
+  };
+  void check_batch_reindex(int initial_num, int final_num,
+                           const Dtype* ridx_data);
+};
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    namespace caffe {
     }
     
-        // the following call will not add an object, because there is already
-    // a value stored at key 'B'
-    auto res2 = null.emplace('B', 'c');
+    bool b2Triangle::IsInside(float32 _x, float32 _y){
+	if (_x < x[0] && _x < x[1] && _x < x[2]) return false;
+	if (_x > x[0] && _x > x[1] && _x > x[2]) return false;
+	if (_y < y[0] && _y < y[1] && _y < y[2]) return false;
+	if (_y > y[0] && _y > y[1] && _y > y[2]) return false;
+		
+		float32 vx2 = _x-x[0]; float32 vy2 = _y-y[0];
+		float32 vx1 = x[1]-x[0]; float32 vy1 = y[1]-y[0];
+		float32 vx0 = x[2]-x[0]; float32 vy0 = y[2]-y[0];
+		
+		float32 dot00 = vx0*vx0+vy0*vy0;
+		float32 dot01 = vx0*vx1+vy0*vy1;
+		float32 dot02 = vx0*vx2+vy0*vy2;
+		float32 dot11 = vx1*vx1+vy1*vy1;
+		float32 dot12 = vx1*vx2+vy1*vy2;
+		float32 invDenom = 1.0f / (dot00*dot11 - dot01*dot01);
+		float32 u = (dot11*dot02 - dot01*dot12)*invDenom;
+		float32 v = (dot00*dot12 - dot01*dot02)*invDenom;
+		
+		return ((u>=0)&&(v>=0)&&(u+v<=1));    
+}
+    
+    	// C-style inteface to the encoder
+	void Encode(float *a_pafSourceRGBA,
+				unsigned int a_uiSourceWidth,
+				unsigned int a_uiSourceHeight,
+				Image::Format a_format,
+				ErrorMetric a_eErrMetric,
+				float a_fEffort,
+				unsigned int a_uiJobs,
+				unsigned int a_uimaxJobs,
+				unsigned char **a_ppaucEncodingBits,
+				unsigned int *a_puiEncodingBitsBytes,
+				unsigned int *a_puiExtendedWidth,
+				unsigned int *a_puiExtendedHeight,
+				int *a_piEncodingTime_ms, bool a_bVerboseOutput = false);
+    
+    		inline unsigned int GetSourceV(void)
+		{
+			return m_uiSourceV;
+		}
