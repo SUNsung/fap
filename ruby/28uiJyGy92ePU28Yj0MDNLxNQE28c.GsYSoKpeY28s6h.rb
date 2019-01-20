@@ -1,112 +1,154 @@
 
         
-          p.action do |args, _|
-    if args.empty?
-      Jekyll.logger.error 'A subcommand is required.'
-      puts p
-      abort
-    else
-      subcommand = args.first
-      unless p.has_command? subcommand
-        Jekyll.logger.abort_with 'fatal: 'jekyll #{args.first}' could not' \
-          ' be found. You may need to install the jekyll-#{args.first} gem' \
-          ' or a related gem to be able to use this subcommand.'
-      end
+            def limit_reached_for(user_id, date)
+      GivenDailyLike.find_for(user_id, date).pluck(:limit_reached)[0] || false
     end
-  end
-end
-
     
-                @config['syntax_highlighter_opts'] = begin
-              strip_coderay_prefix(
-                @config['syntax_highlighter_opts'] \
-                  .merge(CODERAY_DEFAULTS) \
-                  .merge(@config['coderay'])
-              )
-            end
+            staff.topic_id = post.topic.id
+        unless staff.save
+          puts staff.errors.full_messages
+          puts 'Failed to set the Staff category description topic!'
+        end
+    
+        def verify_supported_os(name, class_ref)
+      if class_ref.respond_to?(:is_supported?)
+        # This value is filled in based on the executed platform block. Might be nil when lane is in root of Fastfile
+        platform = Actions.lane_context[Actions::SharedValues::PLATFORM_NAME]
+        if platform
+          unless class_ref.is_supported?(platform)
+            UI.important('Action '#{name}' isn't known to support operating system '#{platform}'.')
           end
         end
       end
     end
+    
+          it 'handles the exclude_dirs parameter with no elements correctly' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', exclude_dirs: [])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}'')
+      end
+    
+          it 'passes an environment Hash' do
+        expect_command({ 'PATH' => '/usr/local/bin' }, 'git', 'commit')
+        Fastlane::Actions.sh({ 'PATH' => '/usr/local/bin' }, 'git', 'commit')
+      end
+    
+    class String
+  # CrossplatformShellwords
+  def shellescape
+    CrossplatformShellwords.shellescape(self)
+  end
+end
+    
+          describe 'config conflicts' do
+        it 'raises an error if a key was used twice' do
+          expect do
+            FastlaneCore::Configuration.create([FastlaneCore::ConfigItem.new(
+              key: :cert_name,
+         env_name: 'asdf'
+            ),
+                                                FastlaneCore::ConfigItem.new(
+                                                  key: :cert_name,
+                                             env_name: 'asdf'
+                                                )], {})
+          end.to raise_error('Multiple entries for configuration key 'cert_name' found!')
+        end
+    
+    # To avoid 'PR & Runs' for which tests don't pass, we want to make spec errors more visible
+# The code below will run on Circle, parses the results in JSON and posts them to the PR as comment
+containing_dir = ENV['CIRCLE_TEST_REPORTS'] || '.' # for local testing
+file_path = File.join(containing_dir, 'rspec', 'fastlane-junit-results.xml')
+    
+            c.action do |args, options|
+          Cert.config = FastlaneCore::Configuration.create(Cert::Options.available_options, options.__hash__)
+          Cert::Runner.new.revoke_expired_certs!
+        end
+      end
+    
+      it 'imports a scenario which requires a service' do
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'spec/data_fixtures/twitter_scenario.json'))
+    click_on 'Start Import'
+    check('I confirm that I want to import these Agents.')
+    expect { click_on 'Finish Import' }.to change(Scenario, :count).by(1)
+    expect(page).to have_text('Import successful!')
   end
 end
 
     
-        def show_message
-      UI.message('Sending anonymous analytics information')
-      UI.message('Learn more at https://docs.fastlane.tools/#metrics')
-      UI.message('No personal or sensitive data is sent.')
-      UI.message('You can disable this by adding `opt_out_usage` at the top of your Fastfile')
+        it 'should work with nested arrays' do
+      @agent.options['array'] = ['one', '$.two']
+      LiquidMigrator.convert_all_agent_options(@agent)
+      expect(@agent.reload.options).to eq({'auth_token' => 'token', 'color' => 'yellow', 'array' => ['one', '{{two}}'], 'notify' => false, 'room_name' => 'test', 'username' => '{{username}}', 'message' => '{{message}}'})
     end
     
-          it 'adds docset_bundle_name param to command' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          appledoc(
-            project_name: 'Project Name',
-            project_company: 'Company',
-            input: 'input/dir',
-            docset_bundle_name: 'Bundle name'
-          )
-        end').runner.execute(:test)
-    
-          it 'adds use-submodules flag to command if use_submodules is set to true' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            carthage(
-              use_submodules: true
-            )
-          end').runner.execute(:test)
-    
-          context 'as string with wildcards' do
-        it 'executes the correct git command' do
-          allow(Fastlane::Actions).to receive(:sh).with('git add *.txt', anything).and_return('')
-          result = Fastlane::FastFile.new.parse('lane :test do
-            git_add(path: '*.txt', shell_escape: false)
-          end').runner.execute(:test)
-        end
-      end
-    
-          it 'generates the correct git command with an array of paths' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          git_commit(path: ['./fastlane/README.md', './LICENSE'], message: 'message')
-        end').runner.execute(:test)
-    
-        # [Boolean] Set if the default value should never be used during code generation for Swift
-    #   We generate the Swift API at deployment time, and if there is a value that should never be
-    #   included in the Fastlane.swift or other autogenerated classes, we need to strip it out.
-    #   This includes things like API keys that could be read from ENV[]
-    attr_accessor :code_gen_sensitive
-    
-    # Contributors should always provide a changelog when submitting a PR
-if github.pr_body.length < 5
-  warn('Please provide a changelog summary in the Pull Request description @#{github.pr_author}')
-end
-    
-    tool_name = File.basename($0)
-    
-        def paragraphize(input)
-      '<p>#{input.lstrip.rstrip.gsub(/\n\n/, '</p><p>').gsub(/\n/, '<br/>')}</p>'
+        it 'optionally supports treating values that start with '$' as raw JSONPath' do
+      expect(Utils.interpolate_jsonpaths('$.there.world', payload)).to eq('$.there.world')
+      expect(Utils.interpolate_jsonpaths('$.there.world', payload, :leading_dollarsign_is_jsonpath => true)).to eq('WORLD')
     end
   end
-end
     
-          cache(gist, file, data.body) unless @cache_disabled
-      data.body
+      describe '#working?' do
+    it 'should not be working until the first event was received' do
+      expect(@checker).not_to be_working
+      @checker.last_receive_at = Time.now
+      expect(@checker).to be_working
+    end
+  end
+    
+          def primary
+        self if fetch(:primary)
+      end
+    
+        worker_count.times do |count|
+      template '/data/#{app}/shared/config/sidekiq_#{count}.yml' do
+        owner node[:owner_name]
+        group node[:owner_name]
+        mode 0644
+        source 'sidekiq.yml.erb'
+        variables({
+          :require => '/data/#{app}/current'
+        })
+      end
     end
     
-        def render(context)
-      output = super
-      types = {
-        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
-        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
-        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
-      }
-      if @videos.size > 0
-        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
-        @videos.each do |v|
-          video << '<source src='#{v}' #{types[File.extname(v)]}>'
+        def raw_push(payloads)
+      @redis_pool.with do |conn|
+        conn.multi do
+          atomic_push(conn, payloads)
         end
-        video += '</video>'
-      else
-        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
       end
+      true
+    end
+    
+        module PsychAutoload
+      def resolve_class(klass_name)
+        return nil if !klass_name || klass_name.empty?
+        # constantize
+        names = klass_name.split('::')
+        names.shift if names.empty? || names.first.empty?
+    
+    module Sidekiq
+  module Extensions
+    ##
+    # Adds 'delay', 'delay_for' and `delay_until` methods to ActionMailer to offload arbitrary email
+    # delivery to Sidekiq.  Example:
+    #
+    #    UserMailer.delay.send_welcome_email(new_user)
+    #    UserMailer.delay_for(5.days).send_welcome_email(new_user)
+    #    UserMailer.delay_until(5.days.from_now).send_welcome_email(new_user)
+    class DelayedMailer
+      include Sidekiq::Worker
+    
+          # Clear all queued jobs across all workers
+      def clear_all
+        Queues.clear_all
+      end
+    
+            middlewares.unshift [[::Rack::Session::Cookie, options], nil]
+      end
+    end
+    
+          erb(content, options)
     end
