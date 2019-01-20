@@ -1,53 +1,22 @@
 
         
-              path_to_use = FastlaneCore::FastlaneFolder.path || Dir.pwd
-      parameters ||= {}
-      begin
-        Dir.chdir(path_to_use) do # the file is located in the fastlane folder
-          execute_flow_block(before_all_blocks, current_platform, current_lane, parameters)
-          execute_flow_block(before_each_blocks, current_platform, current_lane, parameters)
-    
-            expect(result).to eq('appledoc --project-name \'Project Name\' --project-company \'Company\' --docset-package-url \'http://docset-package-url.com\' --exit-threshold \'2\' input/dir')
-      end
-    
-            expect(result).to eq('carthage update')
-      end
-    
-            inner_command = 'git describe --tags `git rev-list --tags --max-count=1`'
-        pseudocommand = 'git log --pretty=\'%B\' #{inner_command.shellescape}...HEAD --no-merges'
-        expect(result).to eq(pseudocommand)
-      end
-    
-            context 'with given path to oclint' do
-          let(:result) do
-            Fastlane::FastFile.new.parse('lane :test do
-              oclint(
-                compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
-                oclint_path: 'test/bin/oclint'
-              )
-            end').runner.execute(:test)
           end
-          let(:command) { 'cd #{File.expand_path('.').shellescape} && test/bin/oclint -report-type=html -o=oclint_report.html' }
     
-            it 'supports lint mode option' do
-          result = Fastlane::FastFile.new.parse('lane :test do
-            swiftlint(
-              mode: :lint
-            )
-          end').runner.execute(:test)
+          if lounge.topic_id.nil?
+        creator = PostCreator.new(Discourse.system_user,
+          raw: I18n.t('vip_category_description'),
+          title: I18n.t('category.topic_prefix', category: lounge.name),
+          category: lounge.name,
+          archetype: Archetype.default,
+          skip_validations: true
+        )
+        post = creator.create
     
-        # Make sure, the value is valid (based on the verify block)
-    # Raises an exception if the value is invalid
-    def valid?(value)
-      # we also allow nil values, which do not have to be verified.
-      return true if value.nil?
-    
-    # The * turns the array into a parameter list
-# This is using the form of exec which takes a variable parameter list, e.g. `exec(command, param1, param2, ...)`
-# We need to use that, because otherwise invocations like
-# `spaceauth -u user@fastlane.tools` would recognize '-u user@fastlane.tools' as a single parameter and throw errors
-exec(*exec_arr)
-
+            staff.topic_id = post.topic.id
+        unless staff.save
+          puts staff.errors.full_messages
+          puts 'Failed to set the Staff category description topic!'
+        end
     
           def perform(start_id, stop_id)
         update = '
@@ -57,106 +26,148 @@ exec(*exec_arr)
             WHERE merge_requests.id = merge_request_diffs.merge_request_id
           )'.squish
     
-          # Sets the expiration time of a key.
+    module Gitlab
+  module Ci
+    module Pipeline
+      # Class for preloading data associated with pipelines such as commit
+      # authors.
+      class Preloader
+        def self.preload!(pipelines)
+          ##
+          # This preloads all commits at once, because `Ci::Pipeline#commit` is
+          # using a lazy batch loading, what results in only one batched Gitaly
+          # call.
+          #
+          pipelines.each(&:commit)
+    
+            value
+      end
+    
+          # The minimum number of requests we want to keep available.
       #
-      # raw_key - The key for which to change the timeout.
-      # timeout - The new timeout.
-      def self.expire(raw_key, timeout)
-        key = cache_key_for(raw_key)
+      # We don't use a value of 0 as multiple threads may be using the same
+      # token in parallel. This could result in all of them hitting the GitHub
+      # rate limit at once. The threshold is put in place to not hit the limit
+      # in most cases.
+      RATE_LIMIT_THRESHOLD = 50
     
-            def id_for_already_imported_cache(note)
-          note.id
+            def sidekiq_worker_class
+          ImportDiffNoteWorker
         end
-      end
+    
+            def id_for_already_imported_cache(issue)
+          issue.number
+        end
+    
+            # We inject the page number here to make sure that all importers always
+        # start where they left off. Simply starting over wouldn't work for
+        # repositories with a lot of data (e.g. tens of thousands of comments).
+        options = collection_options.merge(page: page_counter.current)
+    
+            # Builds a lfs_object
+        def self.from_api_response(lfs_object)
+          new({ oid: lfs_object[0], download_link: lfs_object[1] })
+        end
+    
+              hash[:author] &&= Representation::User.from_json_hash(hash[:author])
+    
+        def resource_params
+      params.require(:report_note).permit(
+        :content,
+        :report_id
+      )
     end
+    
+      def process_push_request
+    case hub_mode
+    when 'subscribe'
+      Pubsubhubbub::SubscribeService.new.call(account_from_topic, hub_callback, hub_secret, hub_lease_seconds, verified_domain)
+    when 'unsubscribe'
+      Pubsubhubbub::UnsubscribeService.new.call(account_from_topic, hub_callback)
+    else
+      ['Unknown mode: #{hub_mode}', 422]
+    end
+  end
+    
+      def future_expires
+    Time.now.utc + lease_seconds_or_default
+  end
+    
+      def setting
+    @_setting ||= ::Web::Setting.where(user: current_user).first_or_initialize(user: current_user)
   end
 end
 
     
-          # Imports all the objects in sequence in the current thread.
-      def sequential_import
-        each_object_to_import do |object|
-          repr = representation_class.from_api_response(object)
+          format('%20e', 109.52).should == '        1.095200e+02'
+      format('%20E', 109.52).should == '        1.095200E+02'
+      format('%20f', 10.952).should == '           10.952000'
+      format('%20g', 12.1234).should == '             12.1234'
+      format('%20G', 12.1234).should == '             12.1234'
+      format('%20a', 196).should == '           0x1.88p+7'
+      format('%20A', 196).should == '           0X1.88P+7'
     
-              hash[:state] = hash[:state].to_sym
-          hash[:assignees].map! { |u| Representation::User.from_json_hash(u) }
-          hash[:author] &&= Representation::User.from_json_hash(hash[:author])
-    
-            # attributes - A Hash containing the raw lfs_object details. The keys of this
-        #              Hash must be Symbols.
-        def initialize(attributes)
-          @attributes = attributes
+          ruby_bug '#14846', '2.5'...'2.6' do
+        it 'does not prepend caller information if line number is too big' do
+          w = KernelSpecs::WarnInNestedCall.new
+          -> { w.f4('foo', 100) }.should output(nil, 'warning: foo\n')
         end
       end
+    
+          start_offset = offset
+      offset += scanner.matched.length
+      val = Sass::Script::Value::String.value(scanner[1] || scanner[2])
+      scanned = scanner.scan(/\s*/)
+      if !scanner.match?(/[,;]|$/)
+        offset += scanned.length if scanned
+        media_parser = Sass::SCSS::Parser.new(scanner,
+          @options[:filename], @options[:importer], @line, offset)
+        media = media_parser.parse_media_query_list
+        node = Tree::CssImportNode.new(quoted_val, media.to_a)
+        node.source_range = Sass::Source::Range.new(
+          Sass::Source::Position.new(@line, to_parser_offset(start_offset)),
+          Sass::Source::Position.new(@line, media_parser.offset),
+          @options[:filename], @options[:importer])
+      elsif val =~ %r{^(https?:)?//}
+        node = Tree::CssImportNode.new(quoted_val)
+        node.source_range = Sass::Source::Range.new(
+          Sass::Source::Position.new(@line, to_parser_offset(start_offset)),
+          Sass::Source::Position.new(@line, to_parser_offset(offset)),
+          @options[:filename], @options[:importer])
+      else
+        node = Tree::ImportNode.new(val)
+        node.source_range = Sass::Source::Range.new(
+          Sass::Source::Position.new(@line, to_parser_offset(start_offset)),
+          Sass::Source::Position.new(@line, to_parser_offset(offset)),
+          @options[:filename], @options[:importer])
+      end
+      node
     end
+    # @comment
+    #   rubocop:enable MethodLength
+    
+        desc 'Build all examples'
+    task :build do
+      Bundler.require 'xcodeproj', :development
+      Dir['examples/*'].sort.each do |dir|
+        Dir.chdir(dir) do
+          puts 'Example: #{dir}'
+    
+    class Profile
+  def pod_bin
+    File.expand_path('../pod', __FILE__)
+  end
+    
+    Given /^I add this snippet to the User model:$/ do |snippet|
+  file_name = 'app/models/user.rb'
+  cd('.') do
+    content = File.read(file_name)
+    File.open(file_name, 'w') { |f| f << content.sub(/end\Z/, '#{snippet}\nend') }
   end
 end
-
     
-        # we assume that the first file that requires 'sinatra' is the
-    # app_file. all other path related options are calculated based
-    # on this path by default.
-    set :app_file, caller_files.first || $0
+    ENV['RAILS_ENV'] = 'test'
     
-      table td.code       {width:750px}
-  table td.code div   {width:750px;overflow:hidden}
-</style>
-</head>
-<body>
-  <div id='wrap'>
-    <div id='header'>
-      <img src='<%= env['SCRIPT_NAME'] %>/__sinatra__/500.png' alt='application error' height='161' width='313' />
-      <div id='summary'>
-        <h1><strong><%=h exception.class %></strong> at <strong><%=h path %>
-          </strong></h1>
-        <h2><%=h exception.message %></h2>
-        <ul>
-          <li class='first'><strong>file:</strong> <code>
-            <%=h frames.first.filename.split('/').last %></code></li>
-          <li><strong>location:</strong> <code><%=h frames.first.function %>
-            </code></li>
-          <li class='last'><strong>line:
-            </strong> <%=h frames.first.lineno %></li>
-        </ul>
-      </div>
-      <div class='clear'></div>
-    </div>
-    
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   CSRF
-    # Supported browsers:: all
-    # More infos::         http://flask.pocoo.org/docs/0.10/security/#json-security
-    #                      http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx
-    #
-    # JSON GET APIs are vulnerable to being embedded as JavaScript when the
-    # Array prototype has been patched to track data. Checks the referrer
-    # even on GET requests if the content type is JSON.
-    #
-    # If request includes Origin HTTP header, defers to HttpOrigin to determine
-    # if the request is safe. Please refer to the documentation for more info.
-    #
-    # The `:allow_if` option can be set to a proc to use custom allow/deny logic.
-    class JsonCsrf < Base
-      default_options :allow_if => nil
-    
-    __END__
-    
-        def normalize_item(item)
-      raise(ArgumentError, 'Job must be a Hash with 'class' and 'args' keys: { 'class' => SomeWorker, 'args' => ['bob', 1, :foo => 'bar'] }') unless item.is_a?(Hash) && item.has_key?('class') && item.has_key?('args')
-      raise(ArgumentError, 'Job args must be an Array') unless item['args'].is_a?(Array)
-      raise(ArgumentError, 'Job class must be either a Class or String representation of the class name') unless item['class'].is_a?(Class) || item['class'].is_a?(String)
-      raise(ArgumentError, 'Job 'at' must be a Numeric timestamp') if item.has_key?('at') && !item['at'].is_a?(Numeric)
-      #raise(ArgumentError, 'Arguments must be native JSON types, see https://github.com/mperham/sidekiq/wiki/Best-Practices') unless JSON.load(JSON.dump(item['args'])) == item['args']
-    
-            # Need to patch Psych so it can autoload classes whose names are serialized
-        # in the delayed YAML.
-        Psych::Visitors::ToRuby.prepend(Sidekiq::Extensions::PsychAutoload)
-    
-          def remove(klass)
-        entries.delete_if { |entry| entry.klass == klass }
-      end
-    
-      # Default to fake testing to keep old behavior
-  Sidekiq::Testing.fake!
+        def empty_file?
+      File.exist?(@filepath) && File.size(@filepath) == 0
+    end
