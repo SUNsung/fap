@@ -1,159 +1,84 @@
 
         
-            def relative_url_string?(str)
-      str !~ SCHEME_RGX && !fragment_url_string?(str) && !data_url_string?(str)
-    end
-    
-        attr_reader :filters
-    
-          private
-    
-            if at_css('.api-type-label.module')
-          at_css('h1').content = subpath.remove('api/')
-        end
-    
-          def get_type
-        if slug.start_with?('guide/')
-          'Guide'
-        elsif slug.start_with?('cookbook/')
-          'Cookbook'
-        elsif slug == 'glossary'
-          'Guide'
+                if Pathname::BOTTLE_EXTNAME_RX === file.to_s
+          version = bottle_resolve_version(file) rescue file.version
         else
-          type = at_css('.nav-title.is-selected').content.strip
-          type.remove! ' Reference'
-          type << ': #{mod}' if mod
-          type
+          version = file.version
         end
-      end
+        next unless version
+        next unless (name = file.basename.to_s[/(.*)-(?:#{Regexp.escape(version)})/, 1])
     
-            css('p > code:first-child:last-child', 'td > code:first-child:last-child').each do |node|
-          next if node.previous.try(:content).present? || node.next.try(:content).present?
-          node.inner_html = node.inner_html.squish.gsub(/<br(\ \/)?>\s*/, '\n')
-          node.content = node.content.strip
-          node.name = 'pre' if node.content =~ /\s/
-          node.parent.before(node.parent.children).remove if node.parent.name == 'p'
-        end
-    
-        # If keep-alive isn't enabled for this client, close the connection
-    if (cli.keepalive == false)
-      close_client(cli)
-    end
+      def hardware
+    'CPU: #{Hardware.cores_as_words}-core #{Hardware::CPU.bits}-bit #{Hardware::CPU.family}'
   end
     
-                checksum = cipher[0, 16]
-            data = cipher[16, cipher.length - 1]
+          out = checks.send(method)
+      unless out.nil? || out.empty?
+        if first_warning
+          $stderr.puts <<-EOS.undent
+            #{Tty.white}Please note that these warnings are just used to help the Homebrew maintainers
+            with debugging if you file an issue. If everything you use Homebrew for is
+            working fine: please don't worry and just ignore them. Thanks!#{Tty.reset}
+          EOS
+        end
     
-              # Decodes the etype from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_etype(input)
-            input.value[0].value.to_i
+    module Gitlab
+  module BackgroundMigration
+    class PopulateMergeRequestsLatestMergeRequestDiffId
+      BATCH_SIZE = 1_000
+    
+            def preload_pipeline_warnings
+          # This preloads the number of warnings for every pipeline, ensuring
+          # that Ci::Pipeline#has_warnings? doesn't execute any additional
+          # queries.
+          @pipeline.number_of_warnings
+        end
+    
+              waiter.jobs_remaining += 1
+        end
+    
+    Liquid::Template.register_tag('img', Jekyll::ImageTag)
+
+    
+            Dir.chdir(includes_dir) do
+          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
+          if choices.include?(file)
+            source = File.read(file)
+            partial = Liquid::Template.parse(source)
+            context.stack do
+              rtn = rtn + partial.render(context)
+            end
+          else
+            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
           end
-    
-              # @!attribute key
-          #   @return [Integer] The type of encryption key
-          attr_accessor :type
-          # @!attribute value
-          #   @return [String] the key itself
-          attr_accessor :value
-    
-              # Decodes the Rex::Proto::Kerberos::Model::KdcRequest from an input
-          #
-          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [self] if decoding succeeds
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode(input)
-            case input
-            when String
-              decode_string(input)
-            when OpenSSL::ASN1::ASN1Data
-              decode_asn1(input)
-            else
-              raise ::RuntimeError, 'Failed to decode KdcRequest, invalid input'
-            end
-    
-              # Decodes the Rex::Proto::Kerberos::Model::KrbError from an input
-          #
-          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [self] if decoding succeeds
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode(input)
-            case input
-            when String
-              decode_string(input)
-            when OpenSSL::ASN1::ASN1Data
-              decode_asn1(input)
-            else
-              raise ::RuntimeError, 'Failed to decode KrbError, invalid input'
-            end
-    
-    When /^I (?:sign|log) in manually as '([^']*)' with password '([^']*)'( on the mobile website)?$/ \
-do |username, password, mobile|
-  @me = User.find_by_username(username)
-  @me.password ||= password
-  manual_login
-  confirm_login mobile
-end
-    
-    module Workers
-  class PublishToHub < Base
-    def perform(*_args)
-      # don't publish to pubsubhubbub in cucumber
+        end
+      end
+      rtn
     end
   end
     
-    task :permissions do
-  sh %{chmod -R a+rx bin}
-  sh %{chmod -R a+r .}
-  require 'shellwords'
-  Dir.glob('test/**/*_test.rb') do |file|
-    next if file =~ %r{^test/haml/spec/}
-    sh %{chmod a+rx #{file}}
-  end
+    Given /^I run a paperclip generator to add a paperclip '([^']*)' to the '([^']*)' model$/ do |attachment_name, model_name|
+  step %[I successfully run `rails generate paperclip #{model_name} #{attachment_name}`]
 end
     
-      # Compile a Sass or SCSS string to CSS.
-  # Defaults to SCSS.
-  #
-  # @param contents [String] The contents of the Sass file.
-  # @param options [{Symbol => Object}] An options hash;
-  #   see {file:SASS_REFERENCE.md#Options the Sass options documentation}
-  # @raise [Sass::SyntaxError] if there's an error in the document
-  # @raise [Encoding::UndefinedConversionError] if the source encoding
-  #   cannot be converted to UTF-8
-  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
-  def self.compile(contents, options = {})
-    options[:syntax] ||= :scss
-    Engine.new(contents, options).to_css
-  end
+    When /^(?:|I )follow '([^']*)'$/ do |link|
+  click_link(link)
+end
     
-        # function
-    # Sass::Callable
-    inherited_hash_writer :function
-  end
-    
-          @options
-    end
-    
-    module Sass
-  module Importers
-    # The default importer, used for any strings found in the load path.
-    # Simply loads Sass files from the filesystem using the default logic.
-    class Filesystem < Base
-      attr_accessor :root
-    
-        def render(context)
-      if @img
-        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
-      else
-        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
+        def type_from_mime_magic
+      @type_from_mime_magic ||= File.open(@filepath) do |file|
+        MimeMagic.by_magic(file).try(:type)
       end
     end
-  end
-end
     
-        def poster
-      'poster='#{@poster}'' if @poster
+          [ scale_geometry, crop_geometry ]
+    end
+    
+        def add_required_validations
+      options = Paperclip::Attachment.default_options.deep_merge(@options)
+      if options[:validate_media_type] != false
+        name = @name
+        @klass.validates_media_type_spoof_detection name,
+          :if => ->(instance){ instance.send(name).dirty? }
+      end
     end
