@@ -1,187 +1,172 @@
 
         
-        std::vector<string> RunCppShapeInference(
-    int graph_def_version, const string& serialized_node_def,
-    const std::vector<string>& input_serialized_shapes,
-    PyObject* input_constant_tensor_values,
-    const std::vector<string>& input_constant_tensor_as_shape_values,
-    TF_Status* out_status) {
-  if (!PyList_Check(input_constant_tensor_values)) {
-    TF_SetStatus(out_status, TF_INVALID_ARGUMENT, 'Invalid python value');
-    return std::vector<string>();
-  }
-    }
-    
-    void CostAnalyzer::PredictCosts(CostEstimator* cost_estimator,
-                                CostGraphDef* cost_graph, int64* total_time) {
-  TF_CHECK_OK(cost_estimator->Initialize(*item_));
-  Costs costs;
-  const Status status =
-      cost_estimator->PredictCosts(item_->graph, cost_graph, &costs);
-  *total_time = costs.execution_time.count();
-  if (!status.ok()) {
-    LOG(ERROR) << 'Could not estimate the cost for item ' << item_->id << ': '
-               << status.error_message();
-    return;
-  }
-}
-    
-    namespace tensorflow {
-namespace grappler {
-    }
-    }
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
+        #include 'atom/app/uv_task_runner.h'
     
     
-    {  tensorflow::DeviceNameUtils::ParsedName parsed_name;
-  if (!tensorflow::DeviceNameUtils::ParseFullName(node_def.device(),
-                                                  &parsed_name)) {
-    LOG(WARNING) << 'Failed to parse device from node_def: '
-                 << node_def.ShortDebugString();
-    return '';
-  }
-  string class_name = '';
-  tensorflow::FindKernelDef(tensorflow::DeviceType(parsed_name.type.c_str()),
-                            node_def, nullptr /* kernel_def */, &class_name)
-      .IgnoreError();
-  return class_name;
-}
-    
-    // Returns the kernel class name required to execute <node_def> on the device
-// type of <node_def.device>, or an empty string if the kernel class is not
-// found or the device name is invalid.
-string TryFindKernelClass(const string& serialized_node_def);
-    
-    // Converts a parsed driver version or status value to natural string form.
-string DriverVersionStatusToString(port::StatusOr<DriverVersion> version);
-    
-    size_t num_threads = 31;
-size_t work_chunk  = 120;
-    
-    
-    {  SrcPos start;
-  SrcPos past;
+    { private:
+  DISALLOW_COPY_AND_ASSIGN(InAppPurchase);
 };
     
-    void Assembler::limmediate(const Reg64& rt, int64_t imm64,
-                           ImmType immt, bool immMayChange) {
-  static_assert(
-      std::is_unsigned<
-        decltype(HPHP::RuntimeOption::EvalPPC64MinTOCImmSize)>::value,
-      'RuntimeOption::EvalPPC64MinTOCImmSize is expected to be unsigned.');
-  always_assert(HPHP::RuntimeOption::EvalPPC64MinTOCImmSize <= 64);
-    }
+    #include 'atom/browser/api/event.h'
     
-    APCHandle::Pair APCCollection::Make(const ObjectData* obj,
-                                    APCHandleLevel level,
-                                    bool unserializeObj) {
-  auto bail = [&] {
-    return APCString::MakeSerializedObject(
-      apc_serialize(Variant(const_cast<ObjectData*>(obj)))
-    );
-  };
-    }
-    
-    namespace HPHP {
-///////////////////////////////////////////////////////////////////////////////
-    }
-    
-    
-    {}
-    
-    template<typename F>
-void logPerfWarning(folly::StringPiece event, F fillCols) {
-  logPerfWarningImpl(event, 1, kDefaultPerfWarningRate, fillCols);
-}
-template<typename F>
-void logPerfWarning(folly::StringPiece event, int64_t rate, F fillCols) {
-  logPerfWarningImpl(event, 1, rate, fillCols);
+    Delegate* AutoUpdater::GetDelegate() {
+  return delegate_;
 }
     
-    void logAHMSubMapWarning(folly::StringPiece mapName);
+    // --------------------------- Functions ---------------------------
     
     
-    {} // namespace aria2
+    {} // namespace caffe2
+    
+    
+    {          return out;
+        })
+    .Input(0, 'X', '4-tensor in NCHW or NHWC.')
+    .Output(
+        0,
+        'Y',
+        '4-tensor. For NCHW: N x (C x kH x kW) x outH x outW.'
+        'For NHWC: N x outH x outW x (kH x kW x C');
+    
+    // Helper method to convert an orientation index to its value in degrees.
+// The value represents the amount of clockwise rotation in degrees that must be
+// applied for the text to be upright (readable).
+TESS_API int OrientationIdToValue(const int& id);
+    
+    // Given a MutableIterator to the start of a block, run DetectParagraphs on
+// that block and commit the results to the underlying ROW and BLOCK structs,
+// saving the ParagraphModels in models.  Caller owns the models.
+// We use unicharset during the function to answer questions such as 'is the
+// first letter of this word upper case?'
+void DetectParagraphs(int debug_level,
+                      bool after_text_recognition,
+                      const MutableIterator *block_start,
+                      GenericVector<ParagraphModel *> *models);
+    
+    
+    {  int                  image_width_;    //< Width of source pix_.
+  int                  image_height_;   //< Height of source pix_.
+  int                  pix_channels_;   //< Number of 8-bit channels in pix_.
+  int                  pix_wpl_;        //< Words per line of pix_.
+  // Limits of image rectangle to be processed.
+  int                  scale_;          //< Scale factor from original image.
+  int                  yres_;           //< y pixels/inch in source image.
+  int                  estimated_res_;  //< Resolution estimate from text size.
+  int                  rect_left_;
+  int                  rect_top_;
+  int                  rect_width_;
+  int                  rect_height_;
+};
+    
+    #define UNLV_EXT  '.uzn'  // unlv zone file
+    
+      // Clean up the bounding boxes from the polygonal approximation by
+  // expanding slightly, then clipping to the blobs from the original_word
+  // that overlap. If not null, the block provides the inverse rotation.
+  void ClipToOriginalWord(const BLOCK* block, WERD* original_word);
+    
+      // Backwards compatible fit returning a gradient and constant.
+  // Deprecated. Prefer Fit(ICOORD*, ICOORD*) where possible, but use this
+  // function in preference to the LMS class.
+  double Fit(float* m, float* c);
+    
+    // Solve the dynamic programming problem for the given array of points, with
+// the given size and cost function.
+// Steps backwards are limited to being between min_step and max_step
+// inclusive.
+// The return value is the tail of the best path.
+DPPoint* DPPoint::Solve(int min_step, int max_step, bool debug,
+                        CostFunc cost_func, int size, DPPoint* points) {
+  if (size <= 0 || max_step < min_step || min_step >= size)
+    return nullptr;  // Degenerate, but not necessarily an error.
+  ASSERT_HOST(min_step > 0);  // Infinite loop possible if this is not true.
+  if (debug)
+    tprintf('min = %d, max=%d\n',
+            min_step, max_step);
+  // Evaluate the total cost at each point.
+  for (int i = 0; i < size; ++i) {
+    for (int offset = min_step; offset <= max_step; ++offset) {
+      DPPoint* prev = offset <= i ? points + i - offset : nullptr;
+      int64_t new_cost = (points[i].*cost_func)(prev);
+      if (points[i].best_prev_ != nullptr && offset > min_step * 2 &&
+          new_cost > points[i].total_cost_)
+        break;  // Find only the first minimum if going over twice the min.
+    }
+    points[i].total_cost_ += points[i].local_cost_;
+    if (debug) {
+      tprintf('At point %d, local cost=%d, total_cost=%d, steps=%d\n',
+              i, points[i].local_cost_, points[i].total_cost_,
+              points[i].total_steps_);
+    }
+  }
+  // Now find the end of the best path and return it.
+  int best_cost = points[size - 1].total_cost_;
+  int best_end = size - 1;
+  for (int end = best_end - 1; end >= size - min_step; --end) {
+    int cost = points[end].total_cost_;
+    if (cost < best_cost) {
+      best_cost = cost;
+      best_end = end;
+    }
+  }
+  return points + best_end;
+}
+    
+      // Writes to the given file. Returns false in case of error.
+  bool Serialize(FILE* fp) const;
+  // Reads from the given file. Returns false in case of error.
+  // If swap is true, assumes a big/little-endian swap is needed.
+  bool DeSerialize(bool swap, FILE* fp);
+    
+      /*!
+   * \brief determines whether updater has enough knowledge about a given dataset
+   *        to quickly update prediction cache its training data and performs the
+   *        update if possible.
+   * \param data: data matrix
+   * \param out_preds: prediction cache to be updated
+   * \return boolean indicating whether updater has capability to update
+   *         the prediction cache. If true, the prediction cache will have been
+   *         updated by the time this function returns.
+   */
+  virtual bool UpdatePredictionCache(const DMatrix* data,
+                                     HostDeviceVector<bst_float>* out_preds) {
+    return false;
+  }
+    
+      bool Next() override {
+    if (!parser_->Next()) return false;
+    const RowBlock<IndexType>& batch = parser_->Value();
+    LOG(INFO) << batch.size;
+    dense_index_.resize(num_col_ * batch.size);
+    dense_value_.resize(num_col_ * batch.size);
+    std::fill(dense_value_.begin(), dense_value_.end(), 0.0);
+    offset_.resize(batch.size + 1);
+    offset_[0] = 0;
+    }
+    
+    
+    {
+    {/*!
+ * \brief Quantile sketch use WXQSummary
+ * \tparam DType type of data content
+ * \tparam RType type of rank
+ */
+template<typename DType, typename RType = unsigned>
+class WXQuantileSketch :
+      public QuantileSketchTemplate<DType, RType, WXQSummary<DType, RType> > {
+};
+/*!
+ * \brief Quantile sketch use WQSummary
+ * \tparam DType type of data content
+ * \tparam RType type of rank
+ */
+template<typename DType, typename RType = unsigned>
+class GKQuantileSketch :
+      public QuantileSketchTemplate<DType, RType, GKSummary<DType, RType> > {
+};
+}  // namespace common
+}  // namespace xgboost
+#endif  // XGBOOST_COMMON_QUANTILE_H_
 
     
-    #include 'DHTAbstractMessage.h'
-#include 'A2STR.h'
-#include 'ValueBase.h'
-    
-      uint32_t temp32;
-  uint64_t temp64;
-  // time
-  if (version == 2) {
-    READ_CHECK(fp, &temp32, sizeof(temp32));
-    serializedTime_.setTimeFromEpoch(ntohl(temp32));
-    // 4bytes reserved
-    readBytes(fp, buf, buf.size(), 4);
-  }
-  else {
-    READ_CHECK(fp, &temp64, sizeof(temp64));
-    serializedTime_.setTimeFromEpoch(ntoh64(temp64));
-  }
-    
-    
-    {} // namespace aria2
-
-    
-    namespace aria2 {
-    }
-    
-    std::shared_ptr<DHTTask> DHTTaskFactoryImpl::createBucketRefreshTask()
-{
-  auto task = std::make_shared<DHTBucketRefreshTask>();
-  setCommonProperty(task);
-  return task;
-}
-    
-    public:
-  DHTTaskFactoryImpl();
-    
-    bool DHTTokenTracker::validateToken(const std::string& token,
-                                    const unsigned char* infoHash,
-                                    const std::string& ipaddr,
-                                    uint16_t port) const
-{
-  for (auto& elem : secret_) {
-    if (generateToken(infoHash, ipaddr, port, elem) == token) {
-      return true;
-    }
-  }
-  return false;
-}
-    
-    #endif // D_DHT_TOKEN_UPDATE_COMMAND_H
+    using json = nlohmann::json;
