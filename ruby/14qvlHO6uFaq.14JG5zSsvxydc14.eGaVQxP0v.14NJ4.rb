@@ -1,41 +1,117 @@
 
         
-            def reraise_formatted!(e, message)
-      backtrace = FastlaneCore::Env.truthy?('FASTLANE_HIDE_BACKTRACE') ? [] : e.backtrace
-      raise e, '[!] #{message}'.red, backtrace
+                  def tag_name(multiple = false, index = nil)
+            # a little duplication to construct less strings
+            case
+            when @object_name.empty?
+              '#{sanitized_method_name}#{multiple ? '[]' : ''}'
+            when index
+              '#{@object_name}[#{index}][#{sanitized_method_name}]#{multiple ? '[]' : ''}'
+            else
+              '#{@object_name}[#{sanitized_method_name}]#{multiple ? '[]' : ''}'
+            end
+          end
+    
+            private
+    
+    module ActionView
+  module Helpers
+    module Tags # :nodoc:
+      class Label < Base # :nodoc:
+        class LabelBuilder # :nodoc:
+          attr_reader :object
+    
+            layout_definition = \
+          case _layout
+          when String
+            _layout.inspect
+          when Symbol
+            <<-RUBY
+              #{_layout}.tap do |layout|
+                return #{default_behavior} if layout.nil?
+                unless layout.is_a?(String) || !layout
+                  raise ArgumentError, 'Your layout method :#{_layout} returned \#{layout}. It ' \
+                    'should have returned a String, false, or nil'
+                end
+              end
+            RUBY
+          when Proc
+            define_method :_layout_from_proc, &_layout
+            protected :_layout_from_proc
+            <<-RUBY
+              result = _layout_from_proc(#{_layout.arity == 0 ? '' : 'self'})
+              return #{default_behavior} if result.nil?
+              result
+            RUBY
+          when false
+            nil
+          when true
+            raise ArgumentError, 'Layouts must be specified as a String, Symbol, Proc, false, or nil'
+          when nil
+            name_clause
+          end
+    
+          []
     end
     
-      # make sure local implementation is also used in shelljoin
-  def shelljoin(array)
-    array.map { |arg| shellescape(arg) }.join(' ')
+    require 'rubygems'
+require 'rake'
+require 'rdoc'
+require 'date'
+require 'yaml'
+    
+                # stream_file_data would free us from keeping livereload.js in memory
+            # but JRuby blocks on that call and never returns
+            send_data(reload_body)
+            close_connection_after_writing
+          else
+            body = 'This port only serves livereload.js over HTTP.\n'
+            headers = [
+              'HTTP/1.1 400 Bad Request',
+              'Content-Type: text/plain',
+              'Content-Length: #{body.bytesize}',
+              '',
+              '',
+            ].join('\r\n')
+            send_data(headers)
+            send_data(body)
+            close_connection_after_writing
+          end
+        end
+        # rubocop:enable Metrics/MethodLength
+      end
+    end
   end
-  module_function :shelljoin
 end
+
     
-          it 'should not be fooled by 10 local code signing identities available' do
-        allow(FastlaneCore::CertChecker).to receive(:wwdr_certificate_installed?).and_return(true)
-        allow(FastlaneCore::CertChecker).to receive(:list_available_identities).and_return('     10 valid identities found\n')
-        expect(FastlaneCore::UI).not_to(receive(:error))
+    module Jekyll
+  module Deprecator
+    extend self
     
-    # test shellescape Windows implementation directly
-describe 'WindowsShellwords#shellescape' do
-  os = 'windows'
-  shellescape_testcases.each do |testcase|
-    it testcase['it'] + ': ' + testcase['it_result'][os] do
-      str = testcase['str']
-      escaped = WindowsShellwords.shellescape(str)
+            lounge.topic_id = post.topic.id
+        unless lounge.save
+          puts lounge.errors.full_messages
+          puts 'Failed to set the lounge description topic!'
+        end
     
-      # POST /resource/sign_in
-  def create
-    self.resource = warden.authenticate!(auth_options)
-    set_flash_message!(:notice, :signed_in)
-    sign_in(resource_name, resource)
-    yield resource if block_given?
-    respond_with resource, location: after_sign_in_path_for(resource)
-  end
+        Category.transaction do
+      staff.group_names = ['staff']
+      unless staff.save
+        puts staff.errors.full_messages
+        raise 'Failed to set permissions on the Staff category!'
+      end
     
-    Rails.application.routes.draw do
-  devise_for :users
+      # Helper for use after calling send_*_instructions methods on a resource.
+  # If we are in paranoid mode, we always act as if the resource was valid
+  # and instructions were sent.
+  def successfully_sent?(resource)
+    notice = if Devise.paranoid
+      resource.errors.clear
+      :send_paranoid_instructions
+    elsif resource.errors.empty?
+      :send_instructions
+    end
     
           # Remembers the given resource by setting up a cookie
       def remember_me(resource)
@@ -45,121 +121,160 @@ describe 'WindowsShellwords#shellescape' do
         cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
       end
     
-          def expire_data_after_sign_in!
-        # session.keys will return an empty array if the session is not yet loaded.
-        # This is a bug in both Rack and Rails.
-        # A call to #empty? forces the session to be loaded.
-        session.empty?
-        session.keys.grep(/^devise\./).each { |k| session.delete(k) }
+          # Sign in a user bypassing the warden callbacks and stores the user
+      # straight in session. This option is useful in cases the user is already
+      # signed in, but we want to refresh the credentials in session.
+      #
+      # Examples:
+      #
+      #   bypass_sign_in @user, scope: :user
+      #   bypass_sign_in @user
+      def bypass_sign_in(resource, scope: nil)
+        scope ||= Devise::Mapping.find_scope!(resource)
+        expire_data_after_sign_in!
+        warden.session_serializer.store(resource, scope)
       end
     
-    # Supported
-IAX_SUPPORTED_CODECS  = IAX_CODEC_G711_MULAW | IAX_CODEC_G711_ALAW | IAX_CODEC_LINEAR_PCM
+              providers
+        end
     
-              # Encodes the realm field
-          #
-          # @return [String]
-          def encode_realm
-            encoded = ''
-            encoded << [realm.length].pack('N')
-            encoded << realm
+            # This method will split the argv given into three parts: the
+        # flags to this command, the subcommand, and the flags to the
+        # subcommand. For example:
+        #
+        #     -v status -h -v
+        #
+        # The above would yield 3 parts:
+        #
+        #     ['-v']
+        #     'status'
+        #     ['-h', '-v']
+        #
+        # These parts are useful because the first is a list of arguments
+        # given to the current command, the second is a subcommand, and the
+        # third are the commands given to the subcommand.
+        #
+        # @return [Array] The three parts.
+        def split_main_and_subcommand(argv)
+          # Initialize return variables
+          main_args   = nil
+          sub_command = nil
+          sub_args    = []
     
-    module Rex
-  module Proto
-    module Kerberos
-      module CredentialCache
-        # This class provides a representation of credential times stored in the Kerberos Credential Cache.
-        class Time < Element
-          # @!attribute auth_time
-          #   @return [Integer]
-          attr_accessor :auth_time
-          # @!attribute start_time
-          #   @return [Integer]
-          attr_accessor :start_time
-          # @!attribute end_time
-          #   @return [Integer]
-          attr_accessor :end_time
-          # @!attribute renew_till
-          #   @return [Integer]
-          attr_accessor :renew_till
+            # Called after the configuration is finalized and loaded to validate
+        # this object.
+        #
+        # @param [Machine] machine Access to the machine that is being
+        #   validated.
+        # @return [Hash]
+        def validate(machine)
+          return { self.to_s => _detected_errors }
+        end
     
-              # Decodes the sname field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Rex::Proto::Kerberos::Type::PrincipalName]
-          def decode_sname(input)
-            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
+            # This returns all the config classes for the various provisioners.
+        #
+        # @return [Registry]
+        def provisioner_configs
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.configs[:provisioner])
+            end
           end
         end
-      end
-    end
+    
+      it 'accepts a negative seed' do
+    srand(-17)
+    srand.should == -17
   end
-end
     
-              # @!attribute key
-          #   @return [Integer] The type of encryption key
-          attr_accessor :type
-          # @!attribute value
-          #   @return [String] the key itself
-          attr_accessor :value
-    
-              private
-    
-              # Decodes the cname field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Rex::Proto::Kerberos::Type::PrincipalName]
-          def decode_cname(input)
-            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
-          end
-    
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have path #{expected.inspect} but was #{actual.current_path.inspect}'
+      it 'does not append line-end if last character is line-end' do
+    lambda {
+      $VERBOSE = true
+      warn('this is some simple text with line-end\n')
+    }.should output(nil, 'this is some simple text with line-end\n')
   end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have path #{expected.inspect} but it had'
-  end
-end
     
-          context 'resharing a reshared post' do
-        before do
-          FactoryGirl.create(:reshare, :root => @post, :author => bob.person)
-        end
+      url 'http://swupdl.adobe.com/updates/oobe/aam20/mac/AdobeLightroom-#{version.major}.0/#{version}/setup.dmg'
+  name 'Adobe Photoshop Lightroom'
+  homepage 'https://www.adobe.com/products/photoshop-lightroom.html'
     
-    module Jekyll
+        private
     
-          if File.symlink?(code_path)
-        return 'Code directory '#{code_path}' cannot be a symlink'
+            safe?(env) ||
+          valid_token?(session, env['HTTP_X_CSRF_TOKEN']) ||
+          valid_token?(session, Request.new(env).params[options[:authenticity_param]]) ||
+          ( options[:allow_if] && options[:allow_if].call(env) )
       end
     
-          if payload
-        raw_push([payload])
-        payload['jid']
+          def handle(hash)
+        was = hash.dup
+        hash.replace escape(hash)
+        was
       end
-    end
     
-          def context
-        c = Thread.current[:sidekiq_context]
-        ' #{c.join(SPACE)}' if c && c.any?
-      end
-    end
-    
-          arr = Sidekiq.options[:lifecycle_events][event]
-      arr.reverse! if reverse
-      arr.each do |block|
-        begin
-          block.call
-        rescue => ex
-          handle_exception(ex, { context: 'Exception during Sidekiq lifecycle event.', event: event })
-          raise ex if reraise
-        end
-      end
-      arr.clear
-    end
+      it 'should not override the header if already set' do
+    mock_app with_headers('Content-Security-Policy' => 'default-src: none')
+    expect(get('/', {}, 'wants' => 'text/html').headers['Content-Security-Policy']).to eq('default-src: none')
   end
 end
 
     
-        def json(payload)
-      [200, { 'Content-Type' => 'application/json', 'Cache-Control' => 'no-cache' }, [Sidekiq.dump_json(payload)]]
+        def render(context)
+      if @img
+        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
+      else
+        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
+      end
+    end
+  end
+end
+    
+          Dir.chdir(code_path) do
+        code = file.read
+        @filetype = file.extname.sub('.','') if @filetype.nil?
+        title = @title ? '#{@title} (#{file.basename})' : file.basename
+        url = '/#{code_dir}/#{@file}'
+        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
+        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
+        TemplateWrapper::safe_wrap(source)
+      end
+    end
+  end
+    
+      # Condenses multiple spaces and tabs into a single space
+  def condense_spaces(input)
+    input.gsub(/\s{2,}/, ' ')
+  end
+    
+    Liquid::Template.register_tag('render_partial', Jekyll::RenderPartialTag)
+
+    
+    # Use this to fill in an entire form with data from a table. Example:
+#
+#   When I fill in the following:
+#     | Account Number | 5002       |
+#     | Expiry date    | 2009-11-01 |
+#     | Note           | Nice guy   |
+#     | Wants Email?   |            |
+#
+# TODO: Add support for checkbox, select og option
+# based on naming conventions.
+#
+When /^(?:|I )fill in the following:$/ do |fields|
+  fields.rows_hash.each do |name, value|
+    When %{I fill in '#{name}' with '#{value}'}
+  end
+end
+    
+    Before do
+  gemfile = ENV['BUNDLE_GEMFILE'].to_s
+  ENV['BUNDLE_GEMFILE'] = File.join(Dir.pwd, gemfile) unless gemfile.start_with?(Dir.pwd)
+  @framework_version = nil
+end
+    
+      argument :attachment_names, :required => true, :type => :array, :desc => 'The names of the attachment(s) to add.',
+           :banner => 'attachment_one attachment_two attachment_three ...'
+    
+        def self.names_for(klass)
+      instance.names_for(klass)
     end
