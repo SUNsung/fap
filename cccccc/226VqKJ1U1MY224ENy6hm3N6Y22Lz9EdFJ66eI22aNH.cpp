@@ -1,204 +1,215 @@
 
         
-            // TODO: This could actually be strided?
-    template <typename ElementType>
-    ElementType* NDArrayView::WritableDataBuffer()
-    {
-        if (IsReadOnly())
-            InvalidArgument('NDArrayView::WritableDataBuffer: Cannot get writable data buffer from a read-only NDArrayView.');
-    }
+        #include <unordered_map>
     
-    namespace CNTK
-{
-    class ProgressWriter::Impl
-    {
-    public:
-        Impl(size_t updateWriteFrequency, size_t firstUpdatesToWrite)
-            : m_frequency(updateWriteFrequency), m_firstN(firstUpdatesToWrite),
-            m_totalUpdates(0), m_totalSummaries(0)
-        {
-            Reset();
-        }
-    }
-    }
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    
-    {
-    {                    if (input.IsOutput())
-                    {
-                        auto retVal = FindTrainingSampleCountVar(input.Owner());
-                        if (retVal.second)
-                            return retVal;
-                    }
-                }
-                return std::make_pair(Variable(), false);
-            };
-    
-        ParameterInitializer NormalInitializer(double scale, int outputRank, int filterRank, unsigned long seed)
-    {
-        return CreateInitializer(Microsoft::MSR::CNTK::NormalInitializerTypeName, scale, outputRank, filterRank, seed);
-    }
-    
-        static void setupTimeout(int seconds)
-    {
-        struct sigaction action = {};
-        action.sa_handler = &CrossProcessMutex::noOpAlarmHandler;
-        sigaction(SIGALRM, &action, NULL);
-        alarm(seconds);
-    }
-    
-            // If node derives from ILateAttachingNode() then it has unresolved inputs. Resolve them now.
-        // This may generate a whole new load of nodes, including nodes which in turn have late init.
-        // Note: In case of editing, we may be adding a new node that references nodes from the old
-        // network that must be mapped because their inputs have changed. Hence, it is important to
-        // to the mapping *after* late attaching.
-        if (node->GetNumInputs() == 0) // (if this function is called during model editing, we may already have our inputs)
-        {
-            let lateAttachingNode = dynamic_pointer_cast<ILateAttachingNode>(node);
-            if (lateAttachingNode)
-                lateAttachingNode->LateAttachInputs();
-        }
-    
-    
-    
-    U_CAPI UBool U_EXPORT2
-uhash_compareScriptSet(const UElement key1, const UElement key2);
-    
-    UnicodeString&
-SelectFormat::format(const UnicodeString& keyword,
-                     UnicodeString& appendTo,
-                     FieldPosition& /*pos */,
-                     UErrorCode& status) const {
-    if (U_FAILURE(status)) {
-        return appendTo;
-    }
-    // Check for the validity of the keyword
-    if (!PatternProps::isIdentifier(keyword.getBuffer(), keyword.length())) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;  // Invalid formatting argument.
-    }
-    if (msgPattern.countParts() == 0) {
-        status = U_INVALID_STATE_ERROR;
-        return appendTo;
-    }
-    int32_t msgStart = findSubMessage(msgPattern, 0, keyword, status);
-    if (!MessageImpl::jdkAposMode(msgPattern)) {
-        int32_t patternStart = msgPattern.getPart(msgStart).getLimit();
-        int32_t msgLimit = msgPattern.getLimitPartIndex(msgStart);
-        appendTo.append(msgPattern.getPatternString(),
-                        patternStart,
-                        msgPattern.getPatternIndex(msgLimit) - patternStart);
-        return appendTo;
-    }
-    // JDK compatibility mode: Remove SKIP_SYNTAX.
-    return MessageImpl::appendSubMessageWithoutSkipSyntax(msgPattern, msgStart, appendTo);
-}
-    
-    U_NAMESPACE_BEGIN
-    
-    U_NAMESPACE_END
-    
-        // Bail out if we are before the onset of daylight savings time
-    if(!useDaylight || year < startYear || era != GregorianCalendar::AD) 
-        return result;
-    
-    /**
- * A representation an acceptable range of digit counts for integers.
- */
-class U_I18N_API IntDigitCountRange : public UMemory {
-public:
-    /**
-     * No constraints: 0 up to INT32_MAX
-     */
-    IntDigitCountRange() : fMin(0), fMax(INT32_MAX) { }
-    IntDigitCountRange(int32_t min, int32_t max);
-    int32_t pin(int32_t digitCount) const;
-    int32_t getMax() const { return fMax; }
-    int32_t getMin() const { return fMin; }
-private:
-    int32_t fMin;
-    int32_t fMax;
-};
-    
-    UnicodeSet *SimpleDateFormatStaticSets::getIgnorables(UDateFormatField fieldIndex)
-{
-    UErrorCode status = U_ZERO_ERROR;
-    umtx_initOnce(gSimpleDateFormatStaticSetsInitOnce, &smpdtfmt_initSets, status);
-    if (U_FAILURE(status)) {
-        return NULL;
-    }
-    
-    switch (fieldIndex) {
-        case UDAT_YEAR_FIELD:
-        case UDAT_MONTH_FIELD:
-        case UDAT_DATE_FIELD:
-        case UDAT_STANDALONE_DAY_FIELD:
-        case UDAT_STANDALONE_MONTH_FIELD:
-            return gStaticSets->fDateIgnorables;
-            
-        case UDAT_HOUR_OF_DAY1_FIELD:
-        case UDAT_HOUR_OF_DAY0_FIELD:
-        case UDAT_MINUTE_FIELD:
-        case UDAT_SECOND_FIELD:
-        case UDAT_HOUR1_FIELD:
-        case UDAT_HOUR0_FIELD:
-            return gStaticSets->fTimeIgnorables;
-            
-        default:
-            return gStaticSets->fOtherIgnorables;
-    }
-}
-    
-        /**
-     * @param keyword for example 'few' or 'other'
-     * @return the index of the plural form corresponding to the keyword, or OTHER
-     */
-    static int32_t indexOrOtherIndexFromString(const UnicodeString &keyword) {
-        int32_t i = indexOrNegativeFromString(keyword);
-        return i >= 0 ? i : OTHER;
-    }
-    
-        /**
-     * Construct a matcher that matches the given pattern string.
-     * @param string the pattern to be matched, possibly containing
-     * stand-ins that represent nested UnicodeMatcher objects.
-     * @param start inclusive start index of text to be replaced
-     * @param limit exclusive end index of text to be replaced;
-     * must be greater than or equal to start
-     * @param segmentNum the segment number from 1..n, or 0 if this is
-     * not a segment.
-     * @param data context object mapping stand-ins to
-     * UnicodeMatcher objects.
-     */
-    StringMatcher(const UnicodeString& string,
-                  int32_t start,
-                  int32_t limit,
-                  int32_t segmentNum,
-                  const TransliterationRuleData& data);
-    
-        factory->setRoutingTable(routingTable.get());
-    factory->setConnection(connection.get());
-    factory->setMessageDispatcher(dispatcher.get());
-    factory->setPeerAnnounceStorage(peerAnnounceStorage.get());
-    factory->setTokenTracker(tokenTracker.get());
-    factory->setLocalNode(localNode);
-    factory->setBtRegistry(e->getBtRegistry().get());
-    
-    void DHTTaskQueueImpl::addImmediateTask(const std::shared_ptr<DHTTask>& task)
-{
-  immediateTaskQueue_.addTask(task);
-}
-    
-    #endif // D_DHT_TASK_QUEUE_IMPL_H
-
-    
-    void DNSCache::CacheEntry::markBad(const std::string& addr)
-{
-  auto i = find(addr);
-  if (i != addrEntries_.end()) {
-    i->good_ = false;
+    // Performs a NumPy array cast from type 'From' to 'To'.
+template <typename From, typename To>
+void NPyCast(void* from_void, void* to_void, npy_intp n, void* fromarr,
+             void* toarr) {
+  const From* from = reinterpret_cast<From*>(from_void);
+  To* to = reinterpret_cast<To*>(to_void);
+  for (npy_intp i = 0; i < n; ++i) {
+    to[i] = static_cast<To>(from[i]);
   }
 }
     
-    #ifdef BOOST_HAS_PRAGMA_ONCE
-#pragma once
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    // Actually dereferences cached numpy arrays. REQUIRES being called while
+// holding the GIL.
+void ClearDecrefCache() {
+  std::vector<void*> cache_copy;
+  {
+    mutex_lock ml(*DelayedDecrefLock());
+    cache_copy.swap(*DecrefCache());
+  }
+  for (void* obj : cache_copy) {
+    Py_DECREF(reinterpret_cast<PyObject*>(obj));
+  }
+}
+    
+    #include 'tensorflow/python/lib/core/numpy.h'
+    
+    #include <Python.h>
+    
+    #ifndef PyObject_HEAD
+struct _object;
+typedef _object PyObject;
 #endif
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    #include 'tensorflow/stream_executor/platform/port.h'
+#include <tuple>
+    
+                int16x8_t vabsx = vabsq_s16(vx);
+            int16x8_t vabsy = vabsq_s16(vy);
+    
+    #define FILL_LINES2(macro,type) \
+            macro##_LINE(type,0) \
+            macro##_LINE(type,1)
+#define FILL_LINES3(macro,type) \
+            FILL_LINES2(macro,type) \
+            macro##_LINE(type,2)
+#define FILL_LINES4(macro,type) \
+            FILL_LINES3(macro,type) \
+            macro##_LINE(type,3)
+    
+    #ifdef CAROTENE_NEON
+#include <arm_neon.h>
+#include 'intrinsics.hpp'
+#endif
+    
+                int32x4_t v_dst0 = v_zero_s32, v_dst1 = v_zero_s32;
+    
+        s32 result = 0;
+    for(size_t k = 0; k < size.height; ++k)
+    {
+        const f64* src = internal::getRowPtr( srcBase,  srcStride, k);
+        size_t i = 0;
+    }
+    
+    inline void vnst(u8* dst, uint8x16_t v1, uint8x16_t v2) { vst1q_u8(dst, v1); vst1q_u8(dst+16, v2); }
+inline void vnst(u8* dst, uint16x8_t v1, uint16x8_t v2) { vst1q_u8(dst, vcombine_u8(vmovn_u16(v1), vmovn_u16(v2))); }
+inline void vnst(u8* dst, uint32x4_t v1, uint32x4_t v2) { vst1_u8(dst, vmovn_u16(vcombine_u16(vmovn_u32(v1), vmovn_u32(v2)))); }
+    
+            uint8x8_t vsrc = vld1_u8(src + j);
+    
+      /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *
+   * @param datum
+   *    Datum containing the data to be transformed.
+   */
+  vector<int> InferBlobShape(const Datum& datum);
+  /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *    It uses the first element to infer the shape of the blob.
+   *
+   * @param datum_vector
+   *    A vector of Datum containing the data to be transformed.
+   */
+  vector<int> InferBlobShape(const vector<Datum> & datum_vector);
+  /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *    It uses the first element to infer the shape of the blob.
+   *
+   * @param mat_vector
+   *    A vector of Mat containing the data to be transformed.
+   */
+#ifdef USE_OPENCV
+  vector<int> InferBlobShape(const vector<cv::Mat> & mat_vector);
+  /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *
+   * @param cv_img
+   *    cv::Mat containing the data to be transformed.
+   */
+  vector<int> InferBlobShape(const cv::Mat& cv_img);
+#endif  // USE_OPENCV
+    
+    
+    {}  // namespace caffe
+    
+      static CreatorRegistry& Registry() {
+    static CreatorRegistry* g_registry_ = new CreatorRegistry();
+    return *g_registry_;
+  }
+    
+    /**
+ * @brief Compute the index of the @f$ K @f$ max values for each datum across
+ *        all dimensions @f$ (C \times H \times W) @f$.
+ *
+ * Intended for use after a classification layer to produce a prediction.
+ * If parameter out_max_val is set to true, output is a vector of pairs
+ * (max_ind, max_val) for each image. The axis parameter specifies an axis
+ * along which to maximise.
+ *
+ * NOTE: does not implement Backwards operation.
+ */
+template <typename Dtype>
+class ArgMaxLayer : public Layer<Dtype> {
+ public:
+  /**
+   * @param param provides ArgMaxParameter argmax_param,
+   *     with ArgMaxLayer options:
+   *   - top_k (\b optional uint, default 1).
+   *     the number @f$ K @f$ of maximal items to output.
+   *   - out_max_val (\b optional bool, default false).
+   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
+   *     output max_val along the specified axis.
+   *   - axis (\b optional int).
+   *     if set, maximise along the specified axis else maximise the flattened
+   *     trailing dimensions for each index of the first / num dimension.
+   */
+  explicit ArgMaxLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    
+    {  // extra temporarary variables is used to carry out sums/broadcasting
+  // using BLAS
+  Blob<Dtype> batch_sum_multiplier_;
+  Blob<Dtype> num_by_chans_;
+  Blob<Dtype> spatial_sum_multiplier_;
+};
+    
+    #include 'caffe/layers/base_conv_layer.hpp'
+    
+      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
+  cudnnTensorDescriptor_t    bias_desc_;
+  cudnnFilterDescriptor_t      filter_desc_;
+  vector<cudnnConvolutionDescriptor_t> conv_descs_;
+  int bottom_offset_, top_offset_, bias_offset_;
+    
+    
+    {  size_t *workspace_fwd_sizes_;
+  size_t *workspace_bwd_data_sizes_;
+  size_t *workspace_bwd_filter_sizes_;
+  size_t workspaceSizeInBytes;  // size of underlying storage
+  void *workspaceData;  // underlying storage
+  void **workspace;  // aliases into workspaceData
+};
+#endif
+    
+    #endif  // CORE_RENDER_ACTION_RENDER_ACTION_ADD_EVENT_H_
+
+    
+    
+    {
+    { public:
+  std::map<std::string, std::string> *styles_;
+  std::map<std::string, std::string> *attributes_;
+  std::set<std::string> *events_;
+  WXCoreMargin margins_;
+  WXCorePadding paddings_;
+  WXCoreBorderWidth borders_;
+  std::string page_id_;
+  std::string component_type_;
+  std::string ref_;
+};
+}  // namespace WeexCore
+    
+    
+    {
+    { public:
+  std::string page_id_;
+};
+}  // namespace WeexCore
