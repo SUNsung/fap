@@ -1,137 +1,226 @@
 
         
-                  def checked?(value)
-            case value
-            when TrueClass, FalseClass
-              value == !!@checked_value
-            when NilClass
-              false
-            when String
-              value == @checked_value
-            else
-              if value.respond_to?(:include?)
-                value.include?(@checked_value)
+          def serialize_options(resource)
+    methods = resource_class.authentication_keys.dup
+    methods = methods.keys if methods.is_a?(Hash)
+    methods << :password if resource.respond_to?(:password)
+    { methods: methods, only: [:password] }
+  end
+    
+      # Sets the flash message with :key, using I18n. By default you are able
+  # to set up your messages using specific resource scope, and if no message is
+  # found we look to the default scope. Set the 'now' options key to a true
+  # value to populate the flash.now hash in lieu of the default flash hash (so
+  # the flash message will be available to the current action instead of the
+  # next action).
+  # Example (i18n locale file):
+  #
+  #   en:
+  #     devise:
+  #       passwords:
+  #         #default_scope_messages - only if resource_scope is not found
+  #         user:
+  #           #resource_scope_messages
+  #
+  # Please refer to README or en.yml locale file to check what messages are
+  # available.
+  def set_flash_message(key, kind, options = {})
+    message = find_message(kind, options)
+    if options[:now]
+      flash.now[key] = message if message.present?
+    else
+      flash[key] = message if message.present?
+    end
+  end
+    
+          # Sign in a user bypassing the warden callbacks and stores the user
+      # straight in session. This option is useful in cases the user is already
+      # signed in, but we want to refresh the credentials in session.
+      #
+      # Examples:
+      #
+      #   bypass_sign_in @user, scope: :user
+      #   bypass_sign_in @user
+      def bypass_sign_in(resource, scope: nil)
+        scope ||= Devise::Mapping.find_scope!(resource)
+        expire_data_after_sign_in!
+        warden.session_serializer.store(resource, scope)
+      end
+    
+          # A callback initiated after successfully being remembered. This can be
+      # used to insert your own logic that is only run after the user is
+      # remembered.
+      #
+      # Example:
+      #
+      #   def after_remembered
+      #     self.update_attribute(:invite_code, nil)
+      #   end
+      #
+      def after_remembered
+      end
+    
+    module Rex
+  module Proto
+    module Kerberos
+      # This class is a representation of a kerberos client.
+      class Client
+        # @!attribute host
+        #   @return [String] The kerberos server host
+        attr_accessor :host
+        # @!attribute port
+        #   @return [Integer] The kerberos server port
+        attr_accessor :port
+        # @!attribute timeout
+        #   @return [Integer] The connect / read timeout
+        attr_accessor :timeout
+        # @todo Support UDP
+        # @!attribute protocol
+        #   @return [String] The transport protocol used (tcp/udp)
+        attr_accessor :protocol
+        # @!attribute connection
+        #   @return [IO] The connection established through Rex sockets
+        attr_accessor :connection
+        # @!attribute context
+        #   @return [Hash] The Msf context where the connection belongs to
+        attr_accessor :context
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of a Kerberos AuthorizationData data
+        # definition.
+        class AuthorizationData < Element
+          # @!attribute elements
+          #   @return [Hash{Symbol => <Integer, String>}] The type of the authorization data
+          #   @option [Integer] :type
+          #   @option [String] :data
+          attr_accessor :elements
+    
+              # Encodes the Rex::Proto::Kerberos::Model::Element into an ASN.1 String. This
+          # method has been designed to be overridden by subclasses.
+          #
+          # @raise [NoMethodError]
+          def encode
+            raise ::NoMethodError, 'Method designed to be overridden'
+          end
+        end
+      end
+    end
+  end
+end
+    
+              # Encodes a Rex::Proto::Kerberos::Model::EncryptedData into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            elems = []
+            etype_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_etype], 0, :CONTEXT_SPECIFIC)
+            elems << etype_asn1
+    
+              # Decodes a Rex::Proto::Kerberos::Model::KrbError
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode_asn1(input)
+            input.value[0].value.each do |val|
+              case val.tag
+              when 0
+                self.pvno = decode_pvno(val)
+              when 1
+                self.msg_type = decode_msg_type(val)
+              when 2
+                self.ctime = decode_ctime(val)
+              when 3
+                self.cusec = decode_cusec(val)
+              when 4
+                self.stime = decode_stime(val)
+              when 5
+                self.susec = decode_susec(val)
+              when 6
+                self.error_code = decode_error_code(val)
+              when 7
+                self.crealm = decode_crealm(val)
+              when 8
+                self.cname = decode_cname(val)
+              when 9
+                self.realm = decode_realm(val)
+              when 10
+                self.sname = decode_sname(val)
+              when 12
+                self.e_data = decode_e_data(val)
               else
-                value.to_i == @checked_value.to_i
+                raise ::RuntimeError, 'Failed to decode KRB-ERROR SEQUENCE'
               end
             end
           end
     
-            class RadioButtonBuilder < Builder # :nodoc:
-          def radio_button(extra_html_options = {})
-            html_options = extra_html_options.merge(@input_html_options)
-            html_options[:skip_default_ids] = false
-            @template_object.radio_button(@object_name, @method_name, @value, html_options)
-          end
-        end
-    
-                case options[:default]
-            when nil
-              Time.current
-            when Date, Time
-              options[:default]
-            else
-              default = options[:default].dup
-    
-              content = if block_given?
-            @template_object.capture(builder, &block)
-          elsif @content.present?
-            @content.to_s
-          else
-            render_component(builder)
-          end
-    
-              # Determines whether the current action has a layout definition by
-          # checking the action name against the :only and :except conditions
-          # set by the <tt>layout</tt> method.
+              # Decodes the key_type from an OpenSSL::ASN1::ASN1Data
           #
-          # ==== Returns
-          # * <tt>Boolean</tt> - True if the action has a layout definition, false otherwise.
-          def _conditional_layout?
-            return unless super
-    
-                  # Break so we don't find the next non flag and shift our
-              # main args.
-              break
-            end
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_type(input)
+            input.value[0].value.to_i
           end
     
-            # This is called to upgrade this V1 config to V2. The parameter given
-        # is the full V2 configuration object, so you can do anything to it
-        # that you want.
-        #
-        # No return value is expected, modifications should be made directly
-        # to the new V2 object.
-        #
-        # @param [V2::Root] new
-        def upgrade(new)
-        end
+    When /^I put in my password in '([^']*)'$/ do |field|
+ step %(I fill in '#{field}' with '#{@me.password}')
+end
     
-            # Set the root class up to be ourself, so that we can reference this
-        # from within methods which are probably in subclasses.
-        ROOT_CLASS = self
+        it 'generates a jasmine fixture', fixture: true do
+      session[:mobile_view] = true
+      get :new, format: :mobile
+      save_fixture(html_for('body'), 'conversations_new_mobile')
+    end
+  end
+end
+
     
-            # This is the method called to provision the system. This method
-        # is expected to do whatever necessary to provision the system (create files,
-        # SSH, etc.)
-        def provision!
-        end
+              code = InvitationCode.create(user: bob)
     
-            # This method will split the argv given into three parts: the
-        # flags to this command, the subcommand, and the flags to the
-        # subcommand. For example:
-        #
-        #     -v status -h -v
-        #
-        # The above would yield 3 parts:
-        #
-        #     ['-v']
-        #     'status'
-        #     ['-h', '-v']
-        #
-        # These parts are useful because the first is a list of arguments
-        # given to the current command, the second is a subcommand, and the
-        # third are the commands given to the subcommand.
-        #
-        # @return [Array] The three parts.
-        def split_main_and_subcommand(argv)
-          # Initialize return variables
-          main_args   = nil
-          sub_command = nil
-          sub_args    = []
+          def has_footer
+        @footer = (@page.footer || false) if @footer.nil? && @page
+        !!@footer
+      end
     
-            # Returns the instance variables as a hash of key-value pairs.
-        def instance_variables_hash
-          instance_variables.inject({}) do |acc, iv|
-            acc[iv.to_s[1..-1]] = instance_variable_get(iv)
-            acc
+    ENV['RACK_ENV'] = 'test'
+require 'gollum'
+require 'gollum/app'
+    
+        assert_no_match /Delete this Page/, last_response.body, ''Delete this Page' link not blocked in page template'
+    assert_no_match /New/,              last_response.body, ''New' button not blocked in page template'
+    assert_no_match /Upload/,           last_response.body, ''Upload' link not blocked in page template'
+    assert_no_match /Rename/,           last_response.body, ''Rename' link not blocked in page template'
+    assert_no_match /Edit/,             last_response.body, ''Edit' link not blocked in page template'
+    
+      test 'edit page with empty message' do
+    page_1 = @wiki.page('A')
+    post '/edit/A', :content => 'abc', :page => 'A',
+         :format             => page_1.format
+    follow_redirect!
+    assert last_response.ok?
+    
+      test 'heavy use 1' do
+    post '/create', :content => '한글 text', :page => 'PG',
+         :format             => 'markdown', :message => 'def'
+    follow_redirect!
+    assert last_response.ok?
+    
+            def find_address
+          if @order.bill_address_id == params[:id].to_i
+            @order.bill_address
+          elsif @order.ship_address_id == params[:id].to_i
+            @order.ship_address
+          else
+            raise CanCan::AccessDenied
           end
-        end
-    
-            # This is an internal initialize function that should never be
-        # overridden. It is used to initialize some common internal state
-        # that is used in a provider.
-        def _initialize(name, machine)
-          initialize_capabilities!(
-            name.to_sym,
-            { name.to_sym => [Class.new, nil] },
-            Vagrant.plugin('2').manager.provider_capabilities,
-            machine,
-          )
         end
       end
     end
   end
 end
 
-    
-            private
-    
-            def destroy
-          @option_type = Spree::OptionType.accessible_by(current_ability, :destroy).find(params[:id])
-          @option_type.destroy
-          render plain: nil, status: 204
-        end
     
             def update
           @option_value = scope.accessible_by(current_ability, :update).find(params[:id])
@@ -142,17 +231,32 @@ end
           end
         end
     
-              @properties = if params[:ids]
-                          @properties.where(id: params[:ids].split(',').flatten)
-                        else
-                          @properties.ransack(params[:q]).result
-                        end
-    
-            def products
-          # Returns the products sorted by their position with the classification
-          # Products#index does not do the sorting.
-          taxon = Spree::Taxon.find(params[:id])
-          @products = taxon.products.ransack(params[:q]).result
-          @products = @products.page(params[:page]).per(params[:per_page] || 500)
-          render 'spree/api/v1/products/index'
+        # Loops through the list of category pages and processes each one.
+    def write_category_indexes
+      if self.layouts.key? 'category_index'
+        dir = self.config['category_dir'] || 'categories'
+        self.categories.keys.each do |category|
+          self.write_category_index(File.join(dir, category.to_url), category)
         end
+    
+    
+module OctopressLiquidFilters
+    
+          Dir.chdir(file_path) do
+        contents = file.read
+        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
+          contents = $1.lstrip
+        end
+        contents = pre_filter(contents)
+        if @raw
+          contents
+        else
+          partial = Liquid::Template.parse(contents)
+          context.stack do
+            partial.render(context)
+          end
+        end
+      end
+    end
+  end
+end
