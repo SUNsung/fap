@@ -1,118 +1,55 @@
 
         
-        # Windows implementation
-module WindowsShellwords
-  def shellescape(str)
-    str = str.to_s
-    
-          it 'should shell escape keychain names when checking for installation' do
-        expect(FastlaneCore::CertChecker).to receive(:wwdr_keychain).and_return(keychain_name)
-        expect(FastlaneCore::Helper).to receive(:backticks).with(name_regex, anything).and_return('')
-    
-    if git.modified_files.include?('snapshot/lib/assets/SnapshotHelperXcode8.swift')
-  warn('You modified `SnapshotHelperXcode8.swift`, make sure to update the version number at the bottom of the file to notify users about the new helper file.')
-end
-    
-        it 'defauls foreground and background colors' do
-      scenario.tag_fg_color = nil
-      scenario.tag_bg_color = nil
-      expect(style_colors(scenario)).to eq('color:#FFFFFF;background-color:#5BC0DE')
-    end
-  end
-    
-            it 'kills no long active workers' do
-          mock.instance_of(HuginnScheduler).run!
-          mock.instance_of(DelayedJobWorker).run!
-          @agent_runner.send(:run_workers)
-          AgentRunner.class_variable_set(:@@agents, [DelayedJobWorker])
-          mock.instance_of(HuginnScheduler).stop!
-          @agent_runner.send(:run_workers)
-        end
-      end
-    
-            # This is what is called on the class to actually execute it. Any
-        # subclasses should implement this method and do any option parsing
-        # and validation here.
-        def execute
-        end
-    
-            # This is called to upgrade this V1 config to V2. The parameter given
-        # is the full V2 configuration object, so you can do anything to it
-        # that you want.
-        #
-        # No return value is expected, modifications should be made directly
-        # to the new V2 object.
-        #
-        # @param [V2::Root] new
-        def upgrade(new)
-        end
-    
-            # Called to change the hostname of the virtual machine.
-        def change_host_name(name)
-          raise BaseError, _key: :unsupported_host_name
-        end
-      end
+          def respond_to_on_destroy
+    # We actually need to hardcode this as Rails default responder doesn't
+    # support returning empty response on GET request
+    respond_to do |format|
+      format.all { head :no_content }
+      format.any(*navigational_formats) { redirect_to after_sign_out_path_for(resource_name) }
     end
   end
 end
 
     
-            # This is the method called to provision the system. This method
-        # is expected to do whatever necessary to provision the system (create files,
-        # SSH, etc.)
-        def provision!
-        end
+      # POST /resource/unlock
+  def create
+    self.resource = resource_class.send_unlock_instructions(resource_params)
+    yield resource if block_given?
     
-            # This method will split the argv given into three parts: the
-        # flags to this command, the subcommand, and the flags to the
-        # subcommand. For example:
-        #
-        #     -v status -h -v
-        #
-        # The above would yield 3 parts:
-        #
-        #     ['-v']
-        #     'status'
-        #     ['-h', '-v']
-        #
-        # These parts are useful because the first is a list of arguments
-        # given to the current command, the second is a subcommand, and the
-        # third are the commands given to the subcommand.
-        #
-        # @return [Array] The three parts.
-        def split_main_and_subcommand(argv)
-          # Initialize return variables
-          main_args   = nil
-          sub_command = nil
-          sub_args    = []
-    
-            # This returns all registered providers.
-        #
-        # @return [Hash]
-        def providers
-          Registry.new.tap do |result|
-            @registered.each do |plugin|
-              result.merge!(plugin.components.providers)
+                if class_mod.respond_to?(:available_configs)
+              available_configs = class_mod.available_configs
+              available_configs.each do |config|
+                next unless options.key?(config)
+                send(:'#{config}=', options.delete(config))
+              end
             end
           end
+    
+          def remember_me?(token, generated_at)
+        # TODO: Normalize the JSON type coercion along with the Timeoutable hook
+        # in a single place https://github.com/plataformatec/devise/blob/ffe9d6d406e79108cf32a2c6a1d0b3828849c40b/lib/devise/hooks/timeoutable.rb#L14-L18
+        if generated_at.is_a?(String)
+          generated_at = time_from_json(generated_at)
         end
     
-        # Merge one registry with another and return a completely new
-    # registry. Note that the result cache is completely busted, so
-    # any gets on the new registry will result in a cache miss.
-    def merge(other)
-      self.class.new.tap do |result|
-        result.merge!(self)
-        result.merge!(other)
+          def default_options
+        DEFAULT_OPTIONS
       end
-    end
     
-          old_initial_revision_var = 'HOMEBREW_UPDATE_BEFORE#{repo_var}'
-      old_current_revision_var = 'HOMEBREW_UPDATE_AFTER#{repo_var}'
+    module RuboCop
+  module AST
+    # A node extension for `hash` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `hash` nodes within RuboCop.
+    class HashNode < Node
+      # Returns an array of all the key value pairs in the `hash` literal.
+      #
+      # @return [Array<PairNode>] an array of `pair` nodes
+      def pairs
+        each_pair.to_a
+      end
     
-      it 'ignores empty arrays' do
-    expect_no_offenses('[]')
-  end
+          DOUBLE_SPLAT = '**'.freeze
     
           # Checks whether any argument of the node is a splat
       # argument, i.e. `*splat`.
@@ -124,51 +61,131 @@ end
       end
       alias rest_argument? splat_argument?
     
-      end
-    
-            Dir.chdir(includes_dir) do
-          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
-          if choices.include?(file)
-            source = File.read(file)
-            partial = Liquid::Template.parse(source)
-            context.stack do
-              rtn = rtn + partial.render(context)
-            end
-          else
-            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
-          end
+            def show
+          authorize! :read, @order, order_token
+          @address = find_address
+          respond_with(@address)
         end
-      end
-      rtn
-    end
-  end
     
-      # Improved version of Liquid's truncate:
-  # - Doesn't cut in the middle of a word.
-  # - Uses typographically correct ellipsis (…) insted of '...'
-  def truncate(input, length)
-    if input.length > length && input[0..(length-1)] =~ /(.+)\b.+$/im
-      $1.strip + ' &hellip;'
-    else
-      input
-    end
-  end
+            private
     
-          Dir.chdir(file_path) do
-        contents = file.read
-        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
-          contents = $1.lstrip
-        end
-        contents = pre_filter(contents)
-        if @raw
-          contents
-        else
-          partial = Liquid::Template.parse(contents)
-          context.stack do
-            partial.render(context)
-          end
+            def mine_includes
+          {
+            order: {
+              bill_address: {
+                state: {},
+                country: {}
+              },
+              ship_address: {
+                state: {},
+                country: {}
+              },
+              adjustments: {},
+              payments: {
+                order: {},
+                payment_method: {}
+              }
+            },
+            inventory_units: {
+              line_item: {
+                product: {},
+                variant: {}
+              },
+              variant: {
+                product: {},
+                default_price: {},
+                option_values: {
+                  option_type: {}
+                }
+              }
+            }
+          }
         end
       end
     end
   end
 end
+
+    
+            def stock_location
+          render 'spree/api/v1/shared/stock_location_required', status: 422 and return unless params[:stock_location_id]
+          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:stock_location_id])
+        end
+    
+    class SinatraStaticServer < Sinatra::Base
+    
+          Dir.chdir(code_path) do
+        code = file.read
+        @filetype = file.extname.sub('.','') if @filetype.nil?
+        title = @title ? '#{@title} (#{file.basename})' : file.basename
+        url = '/#{code_dir}/#{@file}'
+        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
+        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
+        TemplateWrapper::safe_wrap(source)
+      end
+    end
+  end
+    
+    Sidekiq.configure_server do |config|
+  #config.options[:concurrency] = 1
+  config.redis = { db: 13 }
+  config.options[:queues] << 'default'
+  config.logger.level = Logger::ERROR
+  config.average_scheduled_poll_interval = 2
+  config.reliable! if defined?(Sidekiq::Pro)
+end
+    
+        def normalized_hash(item_class)
+      if item_class.is_a?(Class)
+        raise(ArgumentError, 'Message must include a Sidekiq::Worker class, not class name: #{item_class.ancestors.inspect}') if !item_class.respond_to?('get_sidekiq_options')
+        item_class.get_sidekiq_options
+      else
+        Sidekiq.default_worker_options
+      end
+    end
+  end
+end
+
+    
+        def retrieve_work
+      work = Sidekiq.redis { |conn| conn.brpop(*queues_cmd) }
+      UnitOfWork.new(*work) if work
+    end
+    
+          def insert_after(oldklass, newklass, *args)
+        i = entries.index { |entry| entry.klass == newklass }
+        new_entry = i.nil? ? Entry.new(newklass, *args) : entries.delete_at(i)
+        i = entries.index { |entry| entry.klass == oldklass } || entries.count - 1
+        entries.insert(i+1, new_entry)
+      end
+    
+      # Default to fake testing to keep old behavior
+  Sidekiq::Testing.fake!
+    
+          def custom_tabs
+        @custom_tabs ||= {}
+      end
+      alias_method :tabs, :custom_tabs
+    
+        # Gives a Geometry representing the given height and width
+    def initialize(width = nil, height = nil, modifier = nil)
+      if width.is_a?(Hash)
+        options = width
+        @height = options[:height].to_f
+        @width = options[:width].to_f
+        @modifier = options[:modifier]
+        @orientation = options[:orientation].to_i
+      else
+        @height = height.to_f
+        @width  = width.to_f
+        @modifier = modifier
+      end
+    end
+    
+        # Returns the extension of the file. e.g. 'jpg' for 'file.jpg'
+    # If the style has a format defined, it will return the format instead
+    # of the actual extension.
+    def extension attachment, style_name
+      ((style = attachment.styles[style_name.to_s.to_sym]) && style[:format]) ||
+        File.extname(attachment.original_filename).sub(/\A\.+/, ''.freeze)
+    end
