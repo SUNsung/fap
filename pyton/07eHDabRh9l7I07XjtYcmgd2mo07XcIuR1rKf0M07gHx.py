@@ -1,333 +1,165 @@
 
         
-            def is_face_card(self):
-        '''Jack = 11, Queen = 12, King = 13'''
-        return True if 10 < self._value <= 13 else False
-    
-        def add_user(self, user_id, name, pass_hash):
-        pass
-    
-    from enum import Enum
-    
-    
-class RangeMaxValueValidator(MaxValueValidator):
-    def compare(self, a, b):
-        return a.upper is None or a.upper > b
-    message = _('Ensure that this range is completely less than or equal to %(limit_value)s.')
-    
-    
-def get_eips_details(module):
-    connection = module.client('ec2')
-    filters = module.params.get('filters')
-    try:
-        response = connection.describe_addresses(
-            Filters=ansible_dict_to_boto3_filter_list(filters)
-        )
-    except (BotoCoreError, ClientError) as e:
-        module.fail_json_aws(
-            e,
-            msg='Error retrieving EIPs')
-    
-        try:
-        configuration_facts = get_configuration_facts(cursor)
-        if module.check_mode:
-            changed = not check(configuration_facts, parameter_name, current_value)
-        else:
-            try:
-                changed = present(configuration_facts, cursor, parameter_name, current_value)
-            except pyodbc.Error as e:
-                module.fail_json(msg=to_native(e), exception=traceback.format_exc())
-    except NotSupportedError as e:
-        module.fail_json(msg=to_native(e), ansible_facts={'vertica_configuration': configuration_facts})
-    except CannotDropError as e:
-        module.fail_json(msg=to_native(e), ansible_facts={'vertica_configuration': configuration_facts})
-    except SystemExit:
-        # avoid catching this on python 2.4
-        raise
-    except Exception as e:
-        module.fail_json(msg=to_native(e), exception=traceback.format_exc())
-    
-        return changed, client.role_find(name=name)
-    
-        # If we're in check mode, just exit pretending like we succeeded
-    if module.check_mode:
-        module.exit_json(changed=True)
-    
-        if not isinstance(body['hosts'], list):
-        body['hosts'] = [body['hosts']]
-    
-        try:
-        data = urlencode(params)
-        response, info = fetch_url(module, url, data=data)
-    except Exception as e:
-        module.fail_json(msg='Unable to notify Honeybadger: %s' % to_native(e), exception=traceback.format_exc())
-    else:
-        if info['status'] == 201:
-            module.exit_json(changed=True)
-        else:
-            module.fail_json(msg='HTTP result code: %d connecting to %s' % (info['status'], url))
-    
-    
-def main():
-    module = AnsibleModule(
-        argument_spec=dict(
-            name=dict(type='str', required=True),
-            state=dict(type='str', choices=['present', 'absent'], default='present')
-        ),
-        supports_check_mode=True
-    )
-    
-        def start_requests(self):
-        qargs = {'total': self.total, 'show': self.show}
-        url = '{}?{}'.format(self.baseurl, urlencode(qargs, doseq=1))
-        return [scrapy.Request(url, dont_filter=True)]
-    
-            spider_loader = self.crawler_process.spider_loader
-    
-        def process_options(self, args, opts):
-        ScrapyCommand.process_options(self, args, opts)
-        try:
-            opts.spargs = arglist_to_dict(opts.spargs)
-        except ValueError:
-            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
-        if opts.output:
-            if opts.output == '-':
-                self.settings.set('FEED_URI', 'stdout:', priority='cmdline')
-            else:
-                self.settings.set('FEED_URI', opts.output, priority='cmdline')
-            feed_exporters = without_none_values(
-                self.settings.getwithbase('FEED_EXPORTERS'))
-            valid_output_formats = feed_exporters.keys()
-            if not opts.output_format:
-                opts.output_format = os.path.splitext(opts.output)[1].replace('.', '')
-            if opts.output_format not in valid_output_formats:
-                raise UsageError('Unrecognized output format '%s', set one'
-                                 ' using the '-t' switch or as a file extension'
-                                 ' from the supported list %s' % (opts.output_format,
-                                                                  tuple(valid_output_formats)))
-            self.settings.set('FEED_FORMAT', opts.output_format, priority='cmdline')
-    
-            spidercls = DefaultSpider
-        spider_loader = self.crawler_process.spider_loader
-        if opts.spider:
-            spidercls = spider_loader.load(opts.spider)
-        else:
-            spidercls = spidercls_for_request(spider_loader, request, spidercls)
-        self.crawler_process.crawl(spidercls, start_requests=lambda: [request])
-        self.crawler_process.start()
-
-    
-            if self.crawler_process.bootstrap_failed:
-            self.exitcode = 1
-
-    
-        def run(self, args, opts):
-        settings = self.crawler_process.settings
-        if opts.get:
-            s = settings.get(opts.get)
-            if isinstance(s, BaseSettings):
-                print(json.dumps(s.copy_to_dict()))
-            else:
-                print(s)
-        elif opts.getbool:
-            print(settings.getbool(opts.getbool))
-        elif opts.getint:
-            print(settings.getint(opts.getint))
-        elif opts.getfloat:
-            print(settings.getfloat(opts.getfloat))
-        elif opts.getlist:
-            print(settings.getlist(opts.getlist))
-
-    
-        if twisted_version < (17, 0, 0):
-        from twisted.internet._sslverify import _maybeSetHostNameIndication
-        set_tlsext_host_name = _maybeSetHostNameIndication
-    else:
-        def set_tlsext_host_name(connection, hostNameBytes):
-            connection.set_tlsext_host_name(hostNameBytes)
-    
-        def reset_appid(self):
-        # called by web_control
-        with self.lock:
-            self.working_appid_list = list()
-            for appid in self.config.GAE_APPIDS:
-                if not appid:
-                    self.config.GAE_APPIDS.remove(appid)
-                    continue
-                self.working_appid_list.append(appid)
-            self.not_exist_appids = []
-            self.out_of_quota_appids = []
-        self.last_reset_time = time.time()
-    
-            if buf1 != buf2:
+            def bfs(self, source, dest):
+        if source is None:
             return False
-        else:
-            return True
-    
-        global pteredor_is_running, usable
-    pteredor_is_running = probe_nat
-    prober = teredo_prober(probe_nat=probe_nat)
-    
-    # [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-    
-    # Predefined token types
-EOR_TOKEN_TYPE = 1
+        queue = deque()
+        queue.append(source)
+        source.visit_state = State.visited
+        while queue:
+            node = queue.popleft()
+            print(node)
+            if dest is node:
+                return True
+            for adjacent_node in node.adj_nodes.values():
+                if adjacent_node.visit_state == State.unvisited:
+                    queue.append(adjacent_node)
+                    adjacent_node.visit_state = State.visited
+        return False
     
     
-    def predict(self, input):
-        '''
-        From the input stream, predict what alternative will succeed
-	using this DFA (representing the covering regular approximation
-	to the underlying CFL).  Return an alternative number 1..n.  Throw
-	 an exception upon error.
-	'''
-        mark = input.mark()
-        s = 0 # we always start at s0
+class QueryApi(object):
+    
+    
+def init_app(app):
+    '''Register database functions with the Flask app. This is called by
+    the application factory.
+    '''
+    app.teardown_appcontext(close_db)
+    app.cli.add_command(init_db_command)
+
+    
+    
+def explain_template_loading_attempts(app, template, attempts):
+    '''This should help developers understand what failed'''
+    info = ['Locating template '%s':' % template]
+    total_found = 0
+    blueprint = None
+    reqctx = _request_ctx_stack.top
+    if reqctx is not None and reqctx.request.blueprint is not None:
+        blueprint = reqctx.request.blueprint
+    
+            print('benchmarking scikit-learn: ')
+        scikit_results.append(bench(ScikitLasso, X, Y, X_test, Y_test, coef_))
+        print('benchmarking glmnet: ')
+        glmnet_results.append(bench(GlmnetLasso, X, Y, X_test, Y_test, coef_))
+    
+        if not os.path.exists(ARCHIVE_NAME):
+        print('Downloading dataset from %s (3 MB)' % URL)
+        opener = urlopen(URL)
+        with open(ARCHIVE_NAME, 'wb') as archive:
+            archive.write(opener.read())
+    
+    
+if __name__ == '__main__':
+    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
+    # block to be able to use a multi-core grid search that also works under
+    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
+    # The multiprocessing module is used as the backend of joblib.Parallel
+    # that is used when n_jobs != 1 in GridSearchCV
+    
+        # case 1: only ip
+    # case 2: ip + domain
+    #    connect use domain
+    
+        deadline = URLFETCH_TIMEOUT
+    validate_certificate = bool(int(kwargs.get('validate', 0)))
+    accept_encoding = headers.get('Accept-Encoding', '')
+    errors = []
+    for i in xrange(int(kwargs.get('fetchmax', URLFETCH_MAX))):
         try:
-            for _ in xrange(50000):
-                #print '***Current state = %d' % s
-                
-                specialState = self.special[s]
-                if specialState >= 0:
-                    #print 'is special'
-                    s = self.specialStateTransition(specialState, input)
-                    if s == -1:
-                        self.noViableAlt(s, input)
-                        return 0
-                    input.consume()
-                    continue
+            response = urlfetch.fetch(url, payload, fetchmethod, headers, allow_truncated=False, follow_redirects=False, deadline=deadline, validate_certificate=validate_certificate)
+            break
+        except apiproxy_errors.OverQuotaError as e:
+            time.sleep(5)
+        except urlfetch.DeadlineExceededError as e:
+            errors.append('%r, deadline=%s' % (e, deadline))
+            logging.error('DeadlineExceededError(deadline=%s, url=%r)', deadline, url)
+            time.sleep(1)
+            deadline = URLFETCH_TIMEOUT * 2
+        except urlfetch.DownloadError as e:
+            errors.append('%r, deadline=%s' % (e, deadline))
+            logging.error('DownloadError(deadline=%s, url=%r)', deadline, url)
+            time.sleep(1)
+            deadline = URLFETCH_TIMEOUT * 2
+        except urlfetch.ResponseTooLargeError as e:
+            errors.append('%r, deadline=%s' % (e, deadline))
+            response = e.response
+            logging.error('ResponseTooLargeError(deadline=%s, url=%r) response(%r)', deadline, url, response)
+            m = re.search(r'=\s*(\d+)-', headers.get('Range') or headers.get('range') or '')
+            if m is None:
+                headers['Range'] = 'bytes=0-%d' % int(kwargs.get('fetchmaxsize', URLFETCH_MAXSIZE))
+            else:
+                headers.pop('Range', '')
+                headers.pop('range', '')
+                start = int(m.group(1))
+                headers['Range'] = 'bytes=%s-%d' % (start, start+int(kwargs.get('fetchmaxsize', URLFETCH_MAXSIZE)))
+            deadline = URLFETCH_TIMEOUT * 2
+        except urlfetch.SSLCertificateError as e:
+            errors.append('%r, should validate=0 ?' % e)
+            logging.error('%r, deadline=%s', e, deadline)
+        except Exception as e:
+            errors.append(str(e))
+            if i == 0 and method == 'GET':
+                deadline = URLFETCH_TIMEOUT * 2
+    else:
+        start_response('500 Internal Server Error', [('Content-Type', 'text/html')])
+        error_string = '<br />\n'.join(errors)
+        if not error_string:
+            logurl = 'https://appengine.google.com/logs?&app_id=%s' % os.environ['APPLICATION_ID']
+            error_string = 'Internal Server Error. <p/>try <a href='javascript:window.location.reload(true);'>refresh</a> or goto <a href='%s' target='_blank'>appengine.google.com</a> for details' % logurl
+        yield message_html('502 Urlfetch Error', 'Python Urlfetch Error: %r' % method,  error_string)
+        raise StopIteration
     
     
-class RecognizerSharedState(object):
-    '''
-    The set of fields needed by an abstract recognizer to recognize input
-    and recover from errors etc...  As a separate state object, it can be
-    shared among multiple grammars; e.g., when one grammar imports another.
+class DFA(object):
+    '''@brief A DFA implemented as a set of transition tables.
     
-        def __init__(self):
-        self.__prepare__()
+            If current token is consistent with what could come after
+        ttype then it is ok to 'insert' the missing token, else throw
+        exception For example, Input 'i=(3;' is clearly missing the
+        ')'.  When the parser returns from the nested call to expr, it
+        will have call chain:
     
-    print(longestSub([4,8,7,5,1,12,2,3,9]))
-print(longestSub([9,8,7,6,5,7]))
+            self.seek(p)
+        self.line = line
+        self.charPositionInLine = charPositionInLine
+        self.release(marker)
     
-        def solve_sub_array(self):
-        rear = [int(self.array[0])]*len(self.array)
-        sum_value = [int(self.array[0])]*len(self.array)
-        for i in range(1, len(self.array)):
-            sum_value[i] = max(int(self.array[i]) + sum_value[i-1], int(self.array[i]))
-            rear[i] = max(sum_value[i], rear[i-1])
-        return rear[len(self.array)-1]
-    
-    * @author chinmoy159
-* @version 1.0 dated 10/08/2017
-'''
-    
-    def getFrequencyOrder(message):
-    letterToFreq = getLetterCount(message)
-    freqToLetter = {}
-    for letter in LETTERS:
-        if letterToFreq[letter] not in freqToLetter:
-            freqToLetter[letterToFreq[letter]] = [letter]
-        else:
-            freqToLetter[letterToFreq[letter]].append(letter)
+        good_nonce = jose.encode_b64jose(b'foo')
+    wrong_nonce = u'F'
+    # Following just makes sure wrong_nonce is wrong
+    try:
+        jose.b64decode(wrong_nonce)
+    except (ValueError, TypeError):
+        assert True
+    else:
+        assert False  # pragma: no cover
     
     
-def filter_for_training(roidb):
-    '''Remove roidb entries that have no usable RoIs based on config settings.
-    '''
-    def is_valid(entry):
-        # Valid images have:
-        #   (1) At least one foreground RoI OR
-        #   (2) At least one background RoI
-        overlaps = entry['max_overlaps']
-        # find boxes with sufficient overlap
-        fg_inds = np.where(overlaps >= cfg.TRAIN.FG_THRESH)[0]
-        # Select background RoIs as those within [BG_THRESH_LO, BG_THRESH_HI)
-        bg_inds = np.where((overlaps < cfg.TRAIN.BG_THRESH_HI) &
-                           (overlaps >= cfg.TRAIN.BG_THRESH_LO))[0]
-        # image is only valid if such boxes exist
-        valid = len(fg_inds) > 0 or len(bg_inds) > 0
-        if cfg.MODEL.KEYPOINTS_ON:
-            # If we're training for keypoints, exclude images with no keypoints
-            valid = valid and entry['has_visible_keypoints']
-        return valid
+MOD_SSL_CONF_DEST = 'options-ssl-apache.conf'
+'''Name of the mod_ssl config file as saved in `IConfig.config_dir`.'''
     
     
-def _get_voc_results_file_template(json_dataset, salt):
-    info = voc_info(json_dataset)
-    year = info['year']
-    image_set = info['image_set']
-    devkit_path = info['devkit_path']
-    # VOCdevkit/results/VOC2007/Main/<comp_id>_det_test_aeroplane.txt
-    filename = 'comp4' + salt + '_det_' + image_set + '_{:s}.txt'
-    return os.path.join(devkit_path, 'results', 'VOC' + year, 'Main', filename)
+# -- Options for HTML output ----------------------------------------------
     
-            if cfg.RPN.RPN_ON:
-            # Add the RPN head
-            head_loss_gradients['rpn'] = rpn_heads.add_generic_rpn_outputs(
-                model, blob_conv, dim_conv, spatial_scale_conv
-            )
+        def scan_completed_callback(scan_wizard, result, address, name):
+        '''Restart scan wizard to constantly check for new buttons.'''
+        if result == pyflic.ScanWizardResult.WizardSuccess:
+            _LOGGER.info('Found new button %s', address)
+        elif result != pyflic.ScanWizardResult.WizardFailedTimeout:
+            _LOGGER.warning(
+                'Failed to connect to button %s. Reason: %s', address, result)
     
-        # rois are in [[batch_idx, x0, y0, x1, y2], ...] format
-    # Combine predictions across all levels and retain the top scoring
-    rois = np.concatenate([blob.data for blob in roi_inputs])
-    scores = np.concatenate([blob.data for blob in score_inputs]).squeeze()
-    inds = np.argsort(-scores)[:post_nms_topN]
-    rois = rois[inds, :]
-    return rois
+        def scan_devices(self):
+        '''Scan for new devices and return a list with found device IDs.'''
+        self._update_info()
+        return [client['mac'] for client in self.last_results]
     
-        sampled_fg_rois *= im_scale
-    repeated_batch_idx = batch_idx * blob_utils.ones(
-        (sampled_fg_rois.shape[0], 1)
-    )
-    sampled_fg_rois = np.hstack((repeated_batch_idx, sampled_fg_rois))
+            self.last_results = {}
+        self.token = _get_token(self.host, self.username, self.password)
     
-    '''Construct minibatches for Detectron networks.'''
+            return False
     
-        retnet_roi_fg_bbox_locs -> for the bbox regression, since we are only
-                               interested in regressing on fg bboxes which are
-                               M in number and the output prediction of the network
-                               is of shape N x (A * 4) x H x W
-                               (in case of non class-specific bbox), so we
-                               store the locations of positive fg boxes in this
-                               blob retnet_roi_fg_bbox_locs of shape M x 4 where
-                               each row looks like: [img_id, anchor_id, x_loc, y_loc]
-    '''
-    # im_info: (height, width, image scale)
-    blob_names = ['im_info']
-    assert cfg.FPN.FPN_ON, 'RetinaNet uses FPN for dense detection'
-    # Same format as RPN blobs, but one per FPN level
-    if is_training:
-        blob_names += ['retnet_fg_num', 'retnet_bg_num']
-        for lvl in range(cfg.FPN.RPN_MIN_LEVEL, cfg.FPN.RPN_MAX_LEVEL + 1):
-            suffix = 'fpn{}'.format(lvl)
-            blob_names += [
-                'retnet_cls_labels_' + suffix,
-                'retnet_roi_bbox_targets_' + suffix,
-                'retnet_roi_fg_bbox_locs_' + suffix,
-            ]
-    return blob_names
+    CONF_CLIENT_ID = 'client_id'
+CONF_CLIENT_SECRET = 'client_secret'
