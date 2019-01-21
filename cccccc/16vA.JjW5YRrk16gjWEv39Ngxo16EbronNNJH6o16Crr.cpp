@@ -1,145 +1,169 @@
 
         
-        std::string tmppath() {
-  // TMPFILE is for manual test execution during which the user will specify
-  // the full temp file path using the environmental variable TMPFILE
-  const char* tmpfile = getenv('TMPFILE');
-  if (tmpfile) {
-    return std::string(tmpfile);
+        #endif
+
+    
+      size_t capacity() const {
+    return codeBlock.capacity();
   }
+    
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////
     }
     
-    Github Links:
     
-    **Code**
+    {  /**
+   * Execute a debugger action.
+   */
+  virtual String debuggerVerb(const std::string& /*verb*/,
+                              const std::vector<std::string>& /*args*/) {
+    return String();
+  }
+};
     
-    class AutoCompactTest {
- public:
-  std::string dbname_;
-  Cache* tiny_cache_;
-  Options options_;
-  DB* db_;
+      DIR *dir = opendir(fullPath.c_str());
+  if (dir == nullptr) {
+    Logger::Error('FileUtil::find(): unable to open directory %s',
+                  fullPath.c_str());
+    return;
+  }
+    
+    template<typename F>
+void logPerfWarningImpl(folly::StringPiece event, int64_t priority,
+                        int64_t rate, F fillCols) {
+  auto const effectiveRate = rate * RuntimeOption::EvalPerfWarningSampleRate;
+  if (effectiveRate > std::numeric_limits<uint32_t>::max()) return;
+  if (!StructuredLog::coinflip(effectiveRate)) return;
     }
     
-    // Build a Table file from the contents of *iter.  The generated file
-// will be named according to meta->number.  On success, the rest of
-// *meta will be filled with metadata about the generated table.
-// If no data is present in *iter, meta->file_size will be set to
-// zero, and no Table file will be produced.
-Status BuildTable(const std::string& dbname,
-                  Env* env,
-                  const Options& options,
-                  TableCache* table_cache,
-                  Iterator* iter,
-                  FileMetaData* meta);
     
-    // Return the name of the current file.  This file contains the name
-// of the current manifest file.  The result will be prefixed with
-// 'dbname'.
-std::string CurrentFileName(const std::string& dbname);
-    
-    enum RecordType {
-  // Zero is reserved for preallocated files
-  kZeroType = 0,
+    {        ImGui::Render();
     }
     
-    TEST(LogTest, Fragmentation) {
-  Write('small');
-  Write(BigString('medium', 50000));
-  Write(BigString('large', 100000));
-  ASSERT_EQ('small', Read());
-  ASSERT_EQ(BigString('medium', 50000), Read());
-  ASSERT_EQ(BigString('large', 100000), Read());
-  ASSERT_EQ('EOF', Read());
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        double mouse_x, mouse_y;
+    mouse_x = s3ePointerGetX();
+    mouse_y = s3ePointerGetY();
+    io.MousePos = ImVec2((float)mouse_x/g_scale.x, (float)mouse_y/g_scale.y);   // Mouse position (set to -FLT_MAX,-FLT_MAX if no mouse / on another screen, etc.)
+    
+            ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
+        ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
+        ImGui::Checkbox('Another Window', &show_another_window);
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+            g_pd3dCommandList->Reset(frameCtxt->CommandAllocator, NULL);
+        g_pd3dCommandList->ResourceBarrier(1, &barrier);
+        g_pd3dCommandList->ClearRenderTargetView(g_mainRenderTargetDescriptor[backBufferIdx], (float*)&clear_color, 0, NULL);
+        g_pd3dCommandList->OMSetRenderTargets(1, &g_mainRenderTargetDescriptor[backBufferIdx], FALSE, NULL);
+        g_pd3dCommandList->SetDescriptorHeaps(1, &g_pd3dSrvDescHeap);
+        ImGui::Render();
+        ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), g_pd3dCommandList);
+        barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+        barrier.Transition.StateAfter  = D3D12_RESOURCE_STATE_PRESENT;
+        g_pd3dCommandList->ResourceBarrier(1, &barrier);
+        g_pd3dCommandList->Close();
+    
+    
+    {    // Store our identifier
+    static_assert(sizeof(ImTextureID) >= sizeof(g_hFontSrvGpuDescHandle.ptr), 'Can't pack descriptor handle into TexID, 32-bit not supported yet.');
+    io.Fonts->TexID = (ImTextureID)g_hFontSrvGpuDescHandle.ptr;
 }
     
+      char zero[18];
+  memset(zero, 0, sizeof(zero));
     
-    {    if (counter > 0 && s.ok()) {
-      std::string orig = TableFileName(dbname_, t.meta.number);
-      s = env_->RenameFile(copy, orig);
-      if (s.ok()) {
-        Log(options_.info_log, 'Table #%llu: %d entries repaired',
-            (unsigned long long) t.meta.number, counter);
-        tables_.push_back(t);
-      }
+        DHTRoutingTableDeserializer deserializer(family);
+    const std::string& dhtFile = e->getOption()->get(
+        family == AF_INET ? PREF_DHT_FILE_PATH : PREF_DHT_FILE_PATH6);
+    try {
+      deserializer.deserialize(dhtFile);
+      localNode = deserializer.getLocalNode();
     }
-    if (!s.ok()) {
-      env_->DeleteFile(copy);
+    catch (RecoverableException& e) {
+      A2_LOG_ERROR_EX(
+          fmt('Exception caught while loading DHT routing table from %s',
+              dhtFile.c_str()),
+          e);
     }
-  }
+    if (!localNode) {
+      localNode = std::make_shared<DHTNode>();
+    }
     
-        // create string from std::string
-    std::string s_stdstring = 'The quick brown fox jumps over the lazy dog.';
-    json j_stdstring(s_stdstring);
+      ~DHTSetup();
     
-    int main()
+    
+    {  virtual bool finished() = 0;
+};
+    
+    std::shared_ptr<DHTTask> DHTTaskFactoryImpl::createReplaceNodeTask(
+    const std::shared_ptr<DHTBucket>& bucket,
+    const std::shared_ptr<DHTNode>& newNode)
 {
-    // create JSON values
-    json object = {{'one', 1}, {'two', 2}};
-    json null;
+  auto task = std::make_shared<DHTReplaceNodeTask>(bucket, newNode);
+  task->setTimeout(timeout_);
+  setCommonProperty(task);
+  return task;
+}
+    
+      virtual void addPeriodicTask1(const std::shared_ptr<DHTTask>& task) = 0;
+    
+    namespace aria2 {
     }
     
     #include <folly/Benchmark.h>
-#include <folly/FileUtil.h>
-#include <folly/init/Init.h>
-#include <folly/json.h>
     
-    
-    {} // namespace folly
-
-    
-    #include <folly/Range.h>
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    #ifndef FOLLY_URI_H_
-#error This file may only be included from folly/Uri.h
-#endif
-    
-      struct timespec ts;
-  if (!std::is_same<decltype(ts.tv_sec), int64_t>::value) {
-    LOG(INFO) << 'skipping most overflow tests: time_t is not int64_t';
-  } else {
-    // Check for overflow converting from uint64_t seconds to time_t
-    using sec_u64 = duration<uint64_t>;
-    ts = to<struct timespec>(sec_u64(9223372036854775807ULL));
-    EXPECT_EQ(ts.tv_sec, 9223372036854775807ULL);
-    EXPECT_EQ(ts.tv_nsec, 0);
-    }
-    
-      void add_external(BasePtr* res, int64_t c = 0) const {
-    assert(res);
-    CountedDetail::inc_shared_count(res, EXTERNAL_OFFSET + c);
+    template <std::size_t SIZE>
+static void checkTracepointArguments(
+    const std::string& arguments,
+    std::array<int, SIZE>& expectedSize) {
+  std::vector<std::string> args;
+  folly::split(' ', arguments, args);
+  EXPECT_EQ(expectedSize.size(), args.size());
+  for (size_t i = 0; i < args.size(); i++) {
+    EXPECT_FALSE(args[i].empty());
+    auto pos = args[i].find('@');
+    EXPECT_NE(pos, std::string::npos);
+    EXPECT_LT(pos, args[i].size() - 1);
+    std::string argSize = args[i].substr(0, pos);
+    EXPECT_EQ(expectedSize[i], abs(folly::to<int>(argSize)));
   }
-  void release_external(PackedPtr& res, int64_t c = 0) const {
-    if (!res.get()) {
-      return;
-    }
-    int64_t count = get_local_count(res) + c;
-    int64_t diff = EXTERNAL_OFFSET - count;
-    assert(diff >= 0);
-    CountedDetail::template release_shared<T>(res.get(), diff);
+}
+    
+    template <>
+struct equal_to<folly::Uri> {
+  bool operator()(const folly::Uri& a, const folly::Uri& b) const {
+    return folly::uri_detail::as_tuple(a) == folly::uri_detail::as_tuple(b);
   }
-  PackedPtr get_newptr(const SharedPtr& n) const {
-    BasePtr* newval;
-    unsigned count = 0;
-    if (!n) {
-      newval = nullptr;
-    } else {
-      newval = CountedDetail::get_counted_base(n);
-      if (n.get() != CountedDetail::template get_shared_ptr<T>(newval)) {
-        // This is an aliased sharedptr.  Make an un-aliased one
-        // by wrapping in *another* shared_ptr.
-        auto data = CountedDetail::template make_ptr<SharedPtr>(n);
-        newval = CountedDetail::get_counted_base(data);
-        count = ALIASED_PTR;
-        // (add external must happen before data goes out of scope)
-        add_external(newval);
-      } else {
-        add_external(newval);
+};
+    
+      SharedPtr load(std::memory_order order = std::memory_order_seq_cst) const
+      noexcept {
+    auto local = takeOwnedBase(order);
+    return get_shared_ptr(local, false);
+  }
+    
+      static void prepare() noexcept {
+    instance().tasksLock.lock();
+    while (true) {
+      auto& tasks = instance().tasks;
+      auto task = tasks.rbegin();
+      for (; task != tasks.rend(); ++task) {
+        if (!task->prepare()) {
+          break;
+        }
+      }
+      if (task == tasks.rend()) {
+        return;
+      }
+      for (auto untask = tasks.rbegin(); untask != task; ++untask) {
+        untask->parent();
       }
     }
-    }
-    
-    
-    {} // namespace folly
+  }
