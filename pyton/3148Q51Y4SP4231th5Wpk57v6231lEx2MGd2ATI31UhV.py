@@ -1,200 +1,665 @@
 
         
-            def message_group(self, group_id, message):
+            cwe_rule = CloudWatchEventRule(module,
+                                   client=get_cloudwatchevents_client(module),
+                                   **rule_data)
+    cwe_rule_manager = CloudWatchEventRuleManager(cwe_rule, targets)
+    
+        module.exit_json(changed=changed,
+                     snapshot_id=snapshot.id,
+                     volume_id=snapshot.volume_id,
+                     volume_size=snapshot.volume_size,
+                     tags=snapshot.tags.copy())
+    
+    
+DOCUMENTATION = '''
+---
+module: elasticache_subnet_group
+version_added: '2.0'
+short_description: manage Elasticache subnet groups
+description:
+     - Creates, modifies, and deletes Elasticache subnet groups. This module has a dependency on python-boto >= 2.5.
+options:
+  state:
+    description:
+      - Specifies whether the subnet should be present or absent.
+    required: true
+    default: present
+    choices: [ 'present' , 'absent' ]
+  name:
+    description:
+      - Database subnet group identifier.
+    required: true
+  description:
+    description:
+      - Elasticache subnet group description. Only set when a new group is added.
+  subnets:
+    description:
+      - List of subnet IDs that make up the Elasticache subnet group.
+author: 'Tim Mahoney (@timmahoney)'
+extends_documentation_fragment:
+    - aws
+    - ec2
+'''
+    
+            try:
+            lambda_facts.update(versions=client.list_versions_by_function(FunctionName=function_name, **params)['Versions'])
+        except ClientError as e:
+            if e.response['Error']['Code'] == 'ResourceNotFoundException':
+                lambda_facts.update(versions=[])
+            else:
+                module.fail_json_aws(e, msg='Trying to get {0} versions'.format(function_name))
+    else:
+        module.fail_json(msg='Parameter function_name required for query=versions.')
+    
+        json_output = {}
+    if mod_params['view'] == 'topics':
+        json_output['topics'] = list_func(pubsub_client.list_topics())
+    elif mod_params['view'] == 'subscriptions':
+        if mod_params['topic']:
+            t = pubsub_client.topic(mod_params['topic'])
+            json_output['subscriptions'] = list_func(t.list_subscriptions())
+        else:
+            json_output['subscriptions'] = list_func(pubsub_client.list_subscriptions())
+    
+        for app in module.params['apps']:
+        if app not in client.apps():
+            module.fail_json(msg='App {0} does not exist'.format(app))
+    
+    # Remove server from a firewall policy.
+    
+            monitoring_policy = oneandone_conn.delete_monitoring_policy_port(
+            monitoring_policy_id=monitoring_policy_id,
+            port_id=port_id)
+        return monitoring_policy
+    except Exception as ex:
+        module.fail_json(msg=str(ex))
+    
+    
+def get_role_facts(cursor, role=''):
+    facts = {}
+    cursor.execute('''
+        select r.name, r.assigned_roles
+        from roles r
+        where (? = '' or r.name ilike ?)
+    ''', role, role)
+    while True:
+        rows = cursor.fetchmany(100)
+        if not rows:
+            break
+        for row in rows:
+            role_key = row.name.lower()
+            facts[role_key] = {
+                'name': row.name,
+                'assigned_roles': []}
+            if row.assigned_roles:
+                facts[role_key]['assigned_roles'] = row.assigned_roles.replace(' ', '').split(',')
+    return facts
+    
+    # Create nested groups
+- group_by:
+    key: el{{ ansible_distribution_major_version }}-{{ ansible_architecture }}
+    parents:
+      - el{{ ansible_distribution_major_version }}
+    
+    
+# ===========================================
+# Module execution.
+#
+    
+        # Build the deployment object we return
+    deployment = dict(token=token, url=url)
+    deployment.update(body)
+    if 'errorMessage' in deployment:
+        message = deployment.pop('errorMessage')
+        deployment['message'] = message
+    
+                gc.collect()
+            print('- benchmarking Lasso')
+            clf = Lasso(alpha=alpha, fit_intercept=False,
+                        precompute=precompute)
+            tstart = time()
+            clf.fit(X, Y)
+            lasso_results.append(time() - tstart)
+    
+        if dataset_name == 'forestcover':
+        dataset = fetch_covtype()
+        X = dataset.data
+        y = dataset.target
+        # normal data are those with attribute 2
+        # abnormal those with attribute 4
+        s = (y == 2) + (y == 4)
+        X = X[s, :]
+        y = y[s]
+        y = (y != 2).astype(int)
+    
+                gc.collect()
+            print('benchmarking lars_path (with Gram):', end='')
+            sys.stdout.flush()
+            tstart = time()
+            G = np.dot(X.T, X)  # precomputed Gram matrix
+            Xy = np.dot(X.T, y)
+            lars_path(X, y, Xy=Xy, Gram=G, method='lasso')
+            delta = time() - tstart
+            print('%0.3fs' % delta)
+            results['lars_path (with Gram)'].append(delta)
+    
+        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
+    plt.plot(sample_sizes, one_core, label='one core')
+    plt.plot(sample_sizes, multi_core, label='multi core')
+    plt.xlabel('n_samples')
+    plt.ylabel('Time (s)')
+    plt.title('Parallel %s' % func.__name__)
+    plt.legend()
+    
+    Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    56                                           @profile
+    57                                           def benchmark_sparse_predict():
+    58         1        10854  10854.0      2.8      X_test_sparse = csr_matrix(X_test)
+    59       301          477      1.6      0.1      for _ in range(300):
+    60       300       381409   1271.4     97.1          clf.predict(X_test_sparse)
+'''
+    
+        try:
+        fn = inspect.getsourcefile(obj)
+    except Exception:
+        fn = None
+    if not fn:
+        try:
+            fn = inspect.getsourcefile(sys.modules[obj.__module__])
+        except Exception:
+            fn = None
+    if not fn:
+        return
+    
+    ARCHIVE_NAME = URL.rsplit('/', 1)[1]
+TRAIN_FOLDER = '20news-bydate-train'
+TEST_FOLDER = '20news-bydate-test'
+    
+    # #############################################################################
+# Main code
+regression_data = generate_data('regression')
+classification_data = generate_data('classification', sparse=True)
+configurations = [
+    {'estimator': SGDClassifier,
+     'tuned_params': {'penalty': 'elasticnet', 'alpha': 0.001, 'loss':
+                      'modified_huber', 'fit_intercept': True, 'tol': 1e-3},
+     'changing_param': 'l1_ratio',
+     'changing_param_values': [0.25, 0.5, 0.75, 0.9],
+     'complexity_label': 'non_zero coefficients',
+     'complexity_computer': _count_nonzero_coefficients,
+     'prediction_performance_computer': hamming_loss,
+     'prediction_performance_label': 'Hamming Loss (Misclassification Ratio)',
+     'postfit_hook': lambda x: x.sparsify(),
+     'data': classification_data,
+     'n_samples': 30},
+    {'estimator': NuSVR,
+     'tuned_params': {'C': 1e3, 'gamma': 2 ** -15},
+     'changing_param': 'nu',
+     'changing_param_values': [0.1, 0.25, 0.5, 0.75, 0.9],
+     'complexity_label': 'n_support_vectors',
+     'complexity_computer': lambda x: len(x.support_vectors_),
+     'data': regression_data,
+     'postfit_hook': lambda x: x,
+     'prediction_performance_computer': mean_squared_error,
+     'prediction_performance_label': 'MSE',
+     'n_samples': 30},
+    {'estimator': GradientBoostingRegressor,
+     'tuned_params': {'loss': 'ls'},
+     'changing_param': 'n_estimators',
+     'changing_param_values': [10, 50, 100, 200, 500],
+     'complexity_label': 'n_trees',
+     'complexity_computer': lambda x: x.n_estimators,
+     'data': regression_data,
+     'postfit_hook': lambda x: x,
+     'prediction_performance_computer': mean_squared_error,
+     'prediction_performance_label': 'MSE',
+     'n_samples': 30},
+]
+for conf in configurations:
+    prediction_performances, prediction_times, complexities = \
+        benchmark_influence(conf)
+    plot_influence(conf, prediction_performances, prediction_times,
+                   complexities)
+
+    
+        @staticmethod
+    def get_linux_firefox_path():
+        home_path = os.path.expanduser('~')
+        firefox_path = os.path.join(home_path, '.mozilla/firefox')
+        if not os.path.isdir(firefox_path):
+            return
+    
+        # case 1: only ip
+    # case 2: ip + domain
+    #    connect use domain
+    
+    - tree.CommonTreeNodeStream: A basic and most commonly used tree.TreeNodeStream
+  implementation.
+  
+    
+            Python does not have any size restrictions, but the compilation of
+        such large source files seems to be pretty memory hungry. The memory
+        consumption of the python process grew to >1.5GB when importing a
+        15MB lexer, eating all my swap space and I was to impacient to see,
+        if it could finish at all. With packed initializers that are unpacked
+        at import time of the lexer module, everything works like a charm.
+        
+        '''
+        
+        ret = []
+        for i in range(len(string) / 2):
+            (n, v) = ord(string[i*2]), ord(string[i*2+1])
+    
         pass
     
-        def take_spot(self, spot):
-        self.spots_taken.append(spot)
+        def LA(self, i):
+        '''Get int at current input pointer + i ahead where i=1 is next int.
     
-        def __init__(self, size):
-        self.size = size
-        self.table = [[] for _ in range(self.size)]
+        
+    def getLine(self):
+        return self.line
     
-        def set(self, results, query):
-        '''Set the result for the given query key in the cache.
+    def setLine(self, line):
+        self.line = line
     
-        # Second, multiply the distributions and frequencies element-wise.
-    self.weighted = tf.multiply(self.path_freq, self.distributions)
+    from homeassistant.const import __version__, __short_version__
     
-        ff = 0
-    factors = [np_vals_flat[f] for f in fidxs[ff]]; ff += 1
-    gen_states = [np_vals_flat[f] for f in fidxs[ff]]; ff += 1
-    gen_ics = [np_vals_flat[f] for f in fidxs[ff]]; ff += 1
-    costs = [np_vals_flat[f] for f in fidxs[ff]]; ff += 1
-    output_dist_params = [np_vals_flat[f] for f in fidxs[ff]]; ff += 1
-    if hps.ic_dim > 0:
-      prior_g0_mean = [np_vals_flat[f] for f in fidxs[ff]]; ff += 1
-      prior_g0_logvar = [np_vals_flat[f] for f in fidxs[ff]]; ff += 1
-    if hps.co_dim > 0:
-      prior_zs_ar_con = [np_vals_flat[f] for f in fidxs[ff]]; ff += 1
+            if self.home_interval:
+            boundary = dt_util.now() - self.home_interval
+            last_results = [device for device in self.last_results
+                            if device.last_update > boundary]
+            if last_results:
+                exclude_hosts = self.exclude + [device.ip for device
+                                                in last_results]
+            else:
+                exclude_hosts = self.exclude
+        else:
+            last_results = []
+            exclude_hosts = self.exclude
+        if exclude_hosts:
+            options += ' --exclude {}'.format(','.join(exclude_hosts))
     
-    # Pull out some commonly used parameters.
-# These are user parameters (configuration)
-rng = np.random.RandomState(seed=FLAGS.synth_data_seed)
-T = FLAGS.T
-C = FLAGS.C
-N = FLAGS.N
-S = FLAGS.S
-input_magnitude = FLAGS.input_magnitude
-nreplications = FLAGS.nreplications
-E = nreplications * C         # total number of trials
-# S is the number of measurements in each datasets, w/ each
-# dataset having a different set of observations.
-ndatasets = N/S                 # ok if rounded down
-train_percentage = FLAGS.train_percentage
-ntime_steps = int(T / FLAGS.dt)
-# End of user parameters
+    _DEVICES_REGEX = re.compile(
+    r'(?P<mac>(([0-9a-f]{2}[:-]){5}([0-9a-f]{2})))\s'
+    r'(?P<ip>([0-9]{1,3}[\.]){3}[0-9]{1,3})\s+'
+    r'(?P<status>([^\s]+))\s+'
+    r'(?P<type>([^\s]+))\s+'
+    r'(?P<intf>([^\s]+))\s+'
+    r'(?P<hwintf>([^\s]+))\s+'
+    r'(?P<host>([^\s]+))')
     
-    import h5py
-import numpy as np
-import os
-from six.moves import xrange
-import tensorflow as tf
+            return web.Response(text=resp_text, content_type='text/xml')
     
-    flags = tf.app.flags
-flags.DEFINE_string('save_dir', '/tmp/' + DATA_DIR + '/',
-                    'Directory for saving data.')
-flags.DEFINE_string('datafile_name', 'conditioned_rnn_data',
-                    'Name of data file for input case.')
-flags.DEFINE_integer('synth_data_seed', 5, 'Random seed for RNN generation.')
-flags.DEFINE_float('T', 1.0, 'Time in seconds to generate.')
-flags.DEFINE_integer('C', 400, 'Number of conditions')
-flags.DEFINE_integer('N', 50, 'Number of units for the RNN')
-flags.DEFINE_float('train_percentage', 4.0/5.0,
-                   'Percentage of train vs validation trials')
-flags.DEFINE_integer('nreplications', 10,
-                     'Number of spikifications of the same underlying rates.')
-flags.DEFINE_float('g', 1.5, 'Complexity of dynamics')
-flags.DEFINE_float('x0_std', 1.0,
-                   'Volume from which to pull initial conditions (affects diversity of dynamics.')
-flags.DEFINE_float('tau', 0.025, 'Time constant of RNN')
-flags.DEFINE_float('dt', 0.010, 'Time bin')
-flags.DEFINE_float('max_firing_rate', 30.0, 'Map 1.0 of RNN to a spikes per second')
-FLAGS = flags.FLAGS
+        def run(self):
+        '''Run the loop of the LIRC interface thread.'''
+        import lirc
+        _LOGGER.debug('LIRC interface thread started')
+        while not self.stopped.isSet():
+            try:
+                code = lirc.nextcode()  # list; empty if no buttons pressed
+            except lirc.NextCodeError:
+                _LOGGER.warning('Error reading next code from LIRC')
+                code = None
+            # interpret result from python-lirc
+            if code:
+                code = code[0]
+                _LOGGER.info('Got new LIRC code %s', code)
+                self.hass.bus.fire(
+                    EVENT_IR_COMMAND_RECEIVED, {BUTTON_NAME: code})
+            else:
+                time.sleep(0.2)
+        lirc.deinit()
+        _LOGGER.debug('LIRC interface thread stopped')
+
     
-      if FLAGS.mode == 'eval':
-    dataset = data_utils.LM1BDataset(FLAGS.input_data, vocab)
-    _EvalModel(dataset)
-  elif FLAGS.mode == 'sample':
-    _SampleModel(FLAGS.prefix, vocab)
-  elif FLAGS.mode == 'dump_emb':
-    _DumpEmb(vocab)
-  elif FLAGS.mode == 'dump_lstm_emb':
-    _DumpSentenceEmbedding(FLAGS.sentence, vocab)
-  else:
-    raise Exception('Mode not supported.')
+    # Available datasets
+_DATASETS = {
+    'cityscapes_fine_instanceonly_seg_train': {
+        _IM_DIR:
+            _DATA_DIR + '/cityscapes/images',
+        _ANN_FN:
+            _DATA_DIR + '/cityscapes/annotations/instancesonly_gtFine_train.json',
+        _RAW_DIR:
+            _DATA_DIR + '/cityscapes/raw'
+    },
+    'cityscapes_fine_instanceonly_seg_val': {
+        _IM_DIR:
+            _DATA_DIR + '/cityscapes/images',
+        # use filtered validation as there is an issue converting contours
+        _ANN_FN:
+            _DATA_DIR + '/cityscapes/annotations/instancesonly_filtered_gtFine_val.json',
+        _RAW_DIR:
+            _DATA_DIR + '/cityscapes/raw'
+    },
+    'cityscapes_fine_instanceonly_seg_test': {
+        _IM_DIR:
+            _DATA_DIR + '/cityscapes/images',
+        _ANN_FN:
+            _DATA_DIR + '/cityscapes/annotations/instancesonly_gtFine_test.json',
+        _RAW_DIR:
+            _DATA_DIR + '/cityscapes/raw'
+    },
+    'coco_2014_train': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_train2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/instances_train2014.json'
+    },
+    'coco_2014_val': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/instances_val2014.json'
+    },
+    'coco_2014_minival': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/instances_minival2014.json'
+    },
+    'coco_2014_valminusminival': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/instances_valminusminival2014.json'
+    },
+    'coco_2015_test': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test2015.json'
+    },
+    'coco_2015_test-dev': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test-dev2015.json'
+    },
+    'coco_2017_test': {  # 2017 test uses 2015 test images
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test2017.json',
+        _IM_PREFIX:
+            'COCO_test2015_'
+    },
+    'coco_2017_test-dev': {  # 2017 test-dev uses 2015 test images
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test-dev2017.json',
+        _IM_PREFIX:
+            'COCO_test2015_'
+    },
+    'coco_stuff_train': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_train2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/coco_stuff_train.json'
+    },
+    'coco_stuff_val': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/coco_stuff_val.json'
+    },
+    'keypoints_coco_2014_train': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_train2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/person_keypoints_train2014.json'
+    },
+    'keypoints_coco_2014_val': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/person_keypoints_val2014.json'
+    },
+    'keypoints_coco_2014_minival': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/person_keypoints_minival2014.json'
+    },
+    'keypoints_coco_2014_valminusminival': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/person_keypoints_valminusminival2014.json'
+    },
+    'keypoints_coco_2015_test': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test2015.json'
+    },
+    'keypoints_coco_2015_test-dev': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test-dev2015.json'
+    },
+    'voc_2007_train': {
+        _IM_DIR:
+            _DATA_DIR + '/VOC2007/JPEGImages',
+        _ANN_FN:
+            _DATA_DIR + '/VOC2007/annotations/voc_2007_train.json',
+        _DEVKIT_DIR:
+            _DATA_DIR + '/VOC2007/VOCdevkit2007'
+    },
+    'voc_2007_val': {
+        _IM_DIR:
+            _DATA_DIR + '/VOC2007/JPEGImages',
+        _ANN_FN:
+            _DATA_DIR + '/VOC2007/annotations/voc_2007_val.json',
+        _DEVKIT_DIR:
+            _DATA_DIR + '/VOC2007/VOCdevkit2007'
+    },
+    'voc_2007_test': {
+        _IM_DIR:
+            _DATA_DIR + '/VOC2007/JPEGImages',
+        _ANN_FN:
+            _DATA_DIR + '/VOC2007/annotations/voc_2007_test.json',
+        _DEVKIT_DIR:
+            _DATA_DIR + '/VOC2007/VOCdevkit2007'
+    },
+    'voc_2012_train': {
+        _IM_DIR:
+            _DATA_DIR + '/VOC2012/JPEGImages',
+        _ANN_FN:
+            _DATA_DIR + '/VOC2012/annotations/voc_2012_train.json',
+        _DEVKIT_DIR:
+            _DATA_DIR + '/VOC2012/VOCdevkit2012'
+    },
+    'voc_2012_val': {
+        _IM_DIR:
+            _DATA_DIR + '/VOC2012/JPEGImages',
+        _ANN_FN:
+            _DATA_DIR + '/VOC2012/annotations/voc_2012_val.json',
+        _DEVKIT_DIR:
+            _DATA_DIR + '/VOC2012/VOCdevkit2012'
+    }
+}
     
-      return question_ids, sentences, labels
-    
-    
-@pytest.fixture(autouse=True)
-def functional(request):
-    if request.node.get_marker('functional') \
-            and not request.config.getoption('enable_functional'):
-        pytest.skip('functional tests are disabled')
-    
-    
-def test_when_cant_configure_automatically(shell_pid, shell, logs):
-    shell_pid.return_value = 12
-    shell.how_to_configure.return_value = ShellConfiguration(
-        content='eval $(thefuck --alias)',
-        path='/tmp/.bashrc',
-        reload='bash',
-        can_configure_automatically=False)
-    main()
-    logs.how_to_configure_alias.assert_called_once()
-    
-        proc.sendline(u'ehco test')
-    
-    
-@pytest.mark.functional
-def test_refuse_with_confirmation(proc, TIMEOUT):
-    refuse_with_confirmation(proc, TIMEOUT)
-    history_not_changed(proc, TIMEOUT)
-    
-        return _set_text
-    
-    no_match_output = '''
-Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
-Get:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease [89.2 kB]
-Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
-Get:4 http://security.ubuntu.com/ubuntu zesty-security InRelease [89.2 kB]
-Hit:5 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
-Hit:6 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
-Hit:7 https://download.docker.com/linux/ubuntu zesty InRelease
-Get:8 http://us.archive.ubuntu.com/ubuntu zesty-updates/main i386 Packages [232 kB]
-Get:9 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 Packages [235 kB]
-Get:10 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 DEP-11 Metadata [55.2 kB]
-Get:11 http://us.archive.ubuntu.com/ubuntu zesty-updates/main DEP-11 64x64 Icons [32.3 kB]
-Get:12 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 Packages [156 kB]
-Get:13 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe i386 Packages [156 kB]
-Get:14 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 DEP-11 Metadata [175 kB]
-Get:15 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe DEP-11 64x64 Icons [253 kB]
-Get:16 http://us.archive.ubuntu.com/ubuntu zesty-updates/multiverse amd64 DEP-11 Metadata [5,840 B]
-Get:17 http://us.archive.ubuntu.com/ubuntu zesty-backports/universe amd64 DEP-11 Metadata [4,588 B]
-Get:18 http://security.ubuntu.com/ubuntu zesty-security/main amd64 DEP-11 Metadata [12.7 kB]
-Get:19 http://security.ubuntu.com/ubuntu zesty-security/main DEP-11 64x64 Icons [17.6 kB]
-Get:20 http://security.ubuntu.com/ubuntu zesty-security/universe amd64 DEP-11 Metadata [21.6 kB]
-Get:21 http://security.ubuntu.com/ubuntu zesty-security/universe DEP-11 64x64 Icons [47.7 kB]
-Get:22 http://security.ubuntu.com/ubuntu zesty-security/multiverse amd64 DEP-11 Metadata [208 B]
-Fetched 1,673 kB in 0s (1,716 kB/s)
-Reading package lists... Done
-Building dependency tree
-Reading state information... Done
-All packages are up to date.
-'''
-    
-        def __hash_double_function(self, key, data, increment):
-        return (increment * self.__hash_function_2(key, data)) % self.size_table
-    
-                if new_key is None:
-                break
-    
-    The problem is :
-Given two strings A and B. Find the minimum number of operations to string B such that A = B. The permitted operations are removal,  insertion, and substitution.
-'''
+    from __future__ import absolute_import
+from __future__ import division
 from __future__ import print_function
-    
-    #Some examples
-    
+from __future__ import unicode_literals
     
     
-        for i in range(1, s+1):
-        dp[0][i] = False
-    
-        # Gloss the lips
-    d.polygon(face_landmarks['top_lip'], fill=(150, 0, 0, 128))
-    d.polygon(face_landmarks['bottom_lip'], fill=(150, 0, 0, 128))
-    d.line(face_landmarks['top_lip'], fill=(150, 0, 0, 64), width=8)
-    d.line(face_landmarks['bottom_lip'], fill=(150, 0, 0, 64), width=8)
-    
-    # The model was trained in a way that faces with a distance of 0.6 or less should be a match. But if you want to
-# be more strict, you can look for a smaller face distance. For example, using a 0.55 cutoff would reduce false
-# positive matches at the risk of more false negatives.
-    
-    # Get a reference to the Raspberry Pi camera.
-# If this fails, make sure you have a camera connected to the RPi and that you
-# enabled your camera in raspi-config and rebooted first.
-camera = picamera.PiCamera()
-camera.resolution = (320, 240)
-output = np.empty((240, 320, 3), dtype=np.uint8)
+def fpn_level_info_ResNet50_conv5():
+    return FpnLevelInfo(
+        blobs=('res5_2_sum', 'res4_5_sum', 'res3_3_sum', 'res2_2_sum'),
+        dims=(2048, 1024, 512, 256),
+        spatial_scales=(1. / 32., 1. / 16., 1. / 8., 1. / 4.)
+    )
     
     
-@click.command()
-@click.argument('known_people_folder')
-@click.argument('image_to_check')
-@click.option('--cpus', default=1, help='number of CPU cores to use in parallel (can speed up processing lots of images). -1 means 'use all in system'')
-@click.option('--tolerance', default=0.6, help='Tolerance for face comparisons. Default is 0.6. Lower this if you get multiple matches for the same person.')
-@click.option('--show-distance', default=False, type=bool, help='Output face distance. Useful for tweaking tolerance setting.')
-def main(known_people_folder, image_to_check, cpus, tolerance, show_distance):
-    known_names, known_face_encodings = scan_known_people(known_people_folder)
+def add_single_gpu_param_update_ops(model, gpu_id):
+    # Learning rate of 0 is a dummy value to be set properly at the
+    # start of training
+    lr = model.param_init_net.ConstantFill(
+        [], 'lr', shape=[1], value=0.0
+    )
+    one = model.param_init_net.ConstantFill(
+        [], 'one', shape=[1], value=1.0
+    )
+    wd = model.param_init_net.ConstantFill(
+        [], 'wd', shape=[1], value=cfg.SOLVER.WEIGHT_DECAY
+    )
+    # weight decay of GroupNorm's parameters
+    wd_gn = model.param_init_net.ConstantFill(
+        [], 'wd_gn', shape=[1], value=cfg.SOLVER.WEIGHT_DECAY_GN
+    )
+    for param in model.TrainableParams(gpu_id=gpu_id):
+        logger.debug('param ' + str(param) + ' will be updated')
+        param_grad = model.param_to_grad[param]
+        # Initialize momentum vector
+        param_momentum = model.param_init_net.ConstantFill(
+            [param], param + '_momentum', value=0.0
+        )
+        if param in model.biases:
+            # Special treatment for biases (mainly to match historical impl.
+            # details):
+            # (1) Do not apply weight decay
+            # (2) Use a 2x higher learning rate
+            model.Scale(param_grad, param_grad, scale=2.0)
+        elif param in model.gn_params:
+            # Special treatment for GroupNorm's parameters
+            model.WeightedSum([param_grad, one, param, wd_gn], param_grad)
+        elif cfg.SOLVER.WEIGHT_DECAY > 0:
+            # Apply weight decay to non-bias weights
+            model.WeightedSum([param_grad, one, param, wd], param_grad)
+        # Update param_grad and param_momentum in place
+        model.net.MomentumSGDUpdate(
+            [param_grad, param_momentum, lr, param],
+            [param_grad, param_momentum, param],
+            momentum=cfg.SOLVER.MOMENTUM
+        )
+
     
-            face_encoding_a1 = api.face_encodings(img_a1)[0]
-        face_encoding_a2 = api.face_encodings(img_a2)[0]
-        face_encoding_a3 = api.face_encodings(img_a3)[0]
-        face_encoding_b1 = api.face_encodings(img_b1)[0]
+        # ==========================================================================
+    # classification tower with logits and prob prediction
+    # ==========================================================================
+    for lvl in range(k_min, k_max + 1):
+        bl_in = blobs_in[k_max - lvl]  # blobs_in is in reversed order
+        # classification tower stack convolution starts
+        for nconv in range(cfg.RETINANET.NUM_CONVS):
+            suffix = 'n{}_fpn{}'.format(nconv, lvl)
+            dim_in, dim_out = dim_in, dim_in
+            if lvl == k_min:
+                bl_out = model.Conv(
+                    bl_in,
+                    'retnet_cls_conv_' + suffix,
+                    dim_in,
+                    dim_out,
+                    3,
+                    stride=1,
+                    pad=1,
+                    weight_init=('GaussianFill', {
+                        'std': 0.01
+                    }),
+                    bias_init=('ConstantFill', {
+                        'value': 0.
+                    })
+                )
+            else:
+                bl_out = model.ConvShared(
+                    bl_in,
+                    'retnet_cls_conv_' + suffix,
+                    dim_in,
+                    dim_out,
+                    3,
+                    stride=1,
+                    pad=1,
+                    weight='retnet_cls_conv_n{}_fpn{}_w'.format(nconv, k_min),
+                    bias='retnet_cls_conv_n{}_fpn{}_b'.format(nconv, k_min)
+                )
+            bl_in = model.Relu(bl_out, bl_out)
+            bl_feat = bl_in
+        # cls tower stack convolution ends. Add the logits layer now
+        if lvl == k_min:
+            retnet_cls_pred = model.Conv(
+                bl_feat,
+                'retnet_cls_pred_fpn{}'.format(lvl),
+                dim_in,
+                cls_pred_dim * A,
+                3,
+                pad=1,
+                stride=1,
+                weight_init=('GaussianFill', {
+                    'std': 0.01
+                }),
+                bias_init=bias_init
+            )
+        else:
+            retnet_cls_pred = model.ConvShared(
+                bl_feat,
+                'retnet_cls_pred_fpn{}'.format(lvl),
+                dim_in,
+                cls_pred_dim * A,
+                3,
+                pad=1,
+                stride=1,
+                weight='retnet_cls_pred_fpn{}_w'.format(k_min),
+                bias='retnet_cls_pred_fpn{}_b'.format(k_min)
+            )
+        if not model.train:
+            if cfg.RETINANET.SOFTMAX:
+                model.net.GroupSpatialSoftmax(
+                    retnet_cls_pred,
+                    'retnet_cls_prob_fpn{}'.format(lvl),
+                    num_classes=cls_pred_dim
+                )
+            else:
+                model.net.Sigmoid(
+                    retnet_cls_pred, 'retnet_cls_prob_fpn{}'.format(lvl)
+                )
+        if cfg.RETINANET.SHARE_CLS_BBOX_TOWER:
+            bbox_feat_list.append(bl_feat)
     
-    # 你需要一个2代以上的树莓派，并在树莓派上安装face_recognition，并连接上picamera摄像头
-# 并确保picamera这个模块已经安装（树莓派一般会内置安装）
-# 你可以参考这个教程配制你的树莓派：
-# https://gist.github.com/ageitgey/1ac8dbe8572f3f533df6269dab35df65
+        # Create new roi blobs for each FPN level
+    # (See: modeling.FPN.add_multilevel_roi_blobs which is similar but annoying
+    # to generalize to support this particular case.)
+    rois_idx_order = np.empty((0, ))
+    for output_idx, lvl in enumerate(range(lvl_min, lvl_max + 1)):
+        idx_lvl = np.where(lvls == lvl)[0]
+        blob_roi_level = rois[idx_lvl, :]
+        outputs[output_idx + 1].reshape(blob_roi_level.shape)
+        outputs[output_idx + 1].data[...] = blob_roi_level
+        rois_idx_order = np.concatenate((rois_idx_order, idx_lvl))
+    rois_idx_restore = np.argsort(rois_idx_order)
+    blob_utils.py_op_copy_blob(rois_idx_restore.astype(np.int32), outputs[-1])
+
+    
+        def forward(self, inputs, outputs):
+        '''See modeling.detector.GenerateProposalLabels for inputs/outputs
+        documentation.
+        '''
+        # During training we reuse the data loader code. We populate roidb
+        # entries on the fly using the rois generated by RPN.
+        # im_info: [[im_height, im_width, im_scale], ...]
+        rois = inputs[0].data
+        roidb = blob_utils.deserialize(inputs[1].data)
+        im_info = inputs[2].data
+        im_scales = im_info[:, 2]
+        output_blob_names = fast_rcnn_roi_data.get_fast_rcnn_blob_names()
+        # For historical consistency with the original Faster R-CNN
+        # implementation we are *not* filtering crowd proposals.
+        # This choice should be investigated in the future (it likely does
+        # not matter).
+        json_dataset.add_proposals(roidb, rois, im_scales, crowd_thresh=0)
+        roidb_utils.add_bbox_regression_targets(roidb)
+        blobs = {k: [] for k in output_blob_names}
+        fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
+        for i, k in enumerate(output_blob_names):
+            blob_utils.py_op_copy_blob(blobs[k], outputs[i])
+
+    
+        # Perform any final work and validity checks after the collating blobs for
+    # all minibatch images
+    valid = True
+    if cfg.MODEL.KEYPOINTS_ON:
+        valid = keypoint_rcnn_roi_data.finalize_keypoint_minibatch(blobs, valid)
