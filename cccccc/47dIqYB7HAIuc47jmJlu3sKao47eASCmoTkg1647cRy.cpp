@@ -1,163 +1,202 @@
 
         
-        #include <cstdint>  // for int16_t
+        void Initialize(v8::Local<v8::Object> exports,
+                v8::Local<v8::Value> unused,
+                v8::Local<v8::Context> context,
+                void* priv) {
+  v8::Isolate* isolate = context->GetIsolate();
+  mate::Dictionary dict(isolate, exports);
+  dict.Set('autoUpdater', AutoUpdater::Create(isolate));
+  dict.Set('AutoUpdater', AutoUpdater::GetConstructor(isolate)->GetFunction());
+}
     
-    // Given a MutableIterator to the start of a block, run DetectParagraphs on
-// that block and commit the results to the underlying ROW and BLOCK structs,
-// saving the ParagraphModels in models.  Caller owns the models.
-// We use unicharset during the function to answer questions such as 'is the
-// first letter of this word upper case?'
-void DetectParagraphs(int debug_level,
-                      bool after_text_recognition,
-                      const MutableIterator *block_start,
-                      GenericVector<ParagraphModel *> *models);
+    v8::Local<v8::Value> Net::URLRequest(v8::Isolate* isolate) {
+  return URLRequest::GetConstructor(isolate)->GetFunction();
+}
     
-      // Gets a pix that contains an 8 bit threshold value at each pixel. The
-  // returned pix may be an integer reduction of the binary image such that
-  // the scale factor may be inferred from the ratio of the sizes, even down
-  // to the extreme of a 1x1 pixel thresholds image.
-  // Ideally the 8 bit threshold should be the exact threshold used to generate
-  // the binary image in ThresholdToPix, but this is not a hard constraint.
-  // Returns nullptr if the input is binary. PixDestroy after use.
-  virtual Pix* GetPixRectThresholds();
+    #if defined(OS_WIN)
+#include 'ui/display/win/screen_win.h'
+#endif
     
-    bool read_unlv_file(                    //print list of sides
-                     STRING name,        //basename of file
-                     int32_t xsize,        //image size
-                     int32_t ysize,        //image size
-                     BLOCK_LIST *blocks  //output list
-                    ) {
-  FILE *pdfp;                    //file pointer
-  BLOCK *block;                  //current block
-  int x;                         //current top-down coords
-  int y;
-  int width;                     //of current block
-  int height;
-  BLOCK_IT block_it = blocks;    //block iterator
-    }
+    #include 'atom/browser/api/trackable_object.h'
+#include 'atom/browser/ui/tray_icon.h'
+#include 'atom/browser/ui/tray_icon_observer.h'
+#include 'native_mate/handle.h'
     
-    // Returns the box file name corresponding to the given image_filename.
-STRING BoxFileName(const STRING& image_filename);
-    
-    #include 'allheaders.h'
-    
-    // This class fits a line to a set of ICOORD points.
-// There is no restriction on the direction of the line, as it
-// uses a vector method, ie no concern over infinite gradients.
-// The fitted line has the least upper quartile of squares of perpendicular
-// distances of all source points from the line, subject to the constraint
-// that the line is made from one of the pairs of [{p1,p2,p3},{pn-2, pn-1, pn}]
-// i.e. the 9 combinations of one of the first 3 and last 3 points.
-// A fundamental assumption of this algorithm is that one of the first 3 and
-// one of the last 3 points are near the best line fit.
-// The points must be Added in line order for the algorithm to work properly.
-// No floating point calculations are needed* to make an accurate fit,
-// and no random numbers are needed** so the algorithm is deterministic,
-// architecture-stable, and compiler-stable as well as stable to minor
-// changes in the input.
-// *A single floating point division is used to compute each line's distance.
-// This is unlikely to result in choice of a different line, but if it does,
-// it would be easy to replace with a 64 bit integer calculation.
-// **Random numbers are used in the nth_item function, but the worst
-// non-determinism that can result is picking a different result among equals,
-// and that wouldn't make any difference to the end-result distance, so the
-// randomness does not affect the determinism of the algorithm. The random
-// numbers are only there to guarantee average linear time.
-// Fitting time is linear, but with a high constant, as it tries 9 different
-// lines and computes the distance of all points each time.
-// This class is aimed at replacing the LLSQ (linear least squares) and
-// LMS (least median of squares) classes that are currently used for most
-// of the line fitting in Tesseract.
-class DetLineFit {
- public:
-  DetLineFit();
-  ~DetLineFit() = default;
-    }
-    
-      double m() const;  // get gradient
-  double c(double m) const;            // get constant
-  double rms(double m, double c) const;            // get error
-  double pearson() const;  // get correlation coefficient.
-    
-        template <>
-    /*static*/ NDArrayViewPtr NDArrayView::RandomNormal<int16_t>(const NDShape& shape, double mean, double stdDev, unsigned long seed, const DeviceDescriptor& device)
-    {
-        return NDArrayView::_RandomNormal<int16_t, short>(shape, mean, stdDev, seed, device);
-    }
-    
-                if (m_varKind == VariableKind::Input)
-            {
-                for (auto dim : m_shape.Dimensions())
-                {
-                    if (dim == 0)
-                        InvalidArgument('Variable '%S' has invalid shape '%S'.', AsString().c_str(), m_shape.AsString().c_str());
-                }
-            }
+    #ifndef ATOM_BROWSER_API_SAVE_PAGE_HANDLER_H_
+#define ATOM_BROWSER_API_SAVE_PAGE_HANDLER_H_
     
     
-    {    ~CrossProcessMutex()
-    {
-        if (m_fd != -1)
-        {
-            Release();
-        }
-    }
-};
+    {}  // namespace atom
     
+    void PurchaseProduct(const std::string& productID,
+                     int quantity,
+                     const InAppPurchaseCallback& callback);
     
-template <class ConfigRecordType>
-void DataReader::InitFromConfig(const ConfigRecordType& /*config*/)
+    /* Coin network-specific GUI style information */
+class NetworkStyle
 {
-    RuntimeError('Init shouldn't be called, use constructor');
-    // not implemented, calls the underlying class instead
+public:
+    /** Get style associated with provided BIP70 network id, or 0 if not known */
+    static const NetworkStyle *instantiate(const QString &networkId);
+    }
+    
+    #include <univalue.h>
+    
+    
+    {    secp256k1_scalar_set_b32(&r, &input64[0], &overflow);
+    ret &= !overflow;
+    secp256k1_scalar_set_b32(&s, &input64[32], &overflow);
+    ret &= !overflow;
+    if (ret) {
+        secp256k1_ecdsa_recoverable_signature_save(sig, &r, &s, recid);
+    } else {
+        memset(sig, 0, sizeof(*sig));
+    }
+    return ret;
 }
     
-    using namespace std;
-    
-    std::vector<std::string> KafkaTopicsConfigParserPlugin::keys() const {
-  return {kKafkaTopicParserRootKey};
+    static bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
+{
+    if (s1.size() != s2.size()) return false;
+    for (size_t i = 0; i < s1.size(); ++i) {
+        char c1 = s1[i];
+        if (c1 >= 'A' && c1 <= 'Z') c1 -= ('A' - 'a');
+        char c2 = s2[i];
+        if (c2 >= 'A' && c2 <= 'Z') c2 -= ('A' - 'a');
+        if (c1 != c2) return false;
+    }
+    return true;
 }
     
+    /*
+ * Call a function that produces a return value for each element of
+ * `inputs' in parallel, and collect the results.
+ *
+ * Requires: the type returned from the function call must be
+ * DefaultConstructible, and either MoveAssignable or Assignable.
+ *
+ * If `func' throws an exception, the results of the output vector
+ * will contain some default-constructed values.
+ */
+template<class Func, class Items>
+auto map(Items&& inputs, Func func) -> std::vector<decltype(func(inputs[0]))> {
+  std::vector<decltype(func(inputs[0]))> retVec(inputs.size());
+  auto const retMem = &retVec[0];
+    }
     
-    {/// KafkaTopicsConfigParserPlugin extracts, updates, and parses Kafka topic
-/// configurations from Osquery's configurations.
-class KafkaTopicsConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override;
-  Status update(const std::string& source, const ParserConfig& config) override;
-};
-} // namespace osquery
+    
+    {
+    {}}
+    
+      static void ParseConfigFile(const std::string &filename, IniSettingMap &ini,
+                              Hdf &hdf, const bool is_system = true);
+    
+    #include 'hphp/runtime/base/file.h'
+#include 'hphp/runtime/base/mem-file.h'
+#include 'hphp/runtime/base/stream-wrapper.h'
+#include <folly/String.h>
+#include <folly/portability/SysStat.h>
+#include <folly/portability/Unistd.h>
+    
+    
+    {  // if the function was called via FCallBuiltin, we'll get a bogus name as
+  // the stack frame will be wrong
+  ActRec* ar = g_context->getStackFrame();
+  const char* fn = (ar != nullptr)
+    ? ar->func()->name()->data()
+    : 'OPTIMIZED_BUILTIN';
+  raise_warning('%s(%s): failed to open stream: '
+                'wrapper does not support stream open',
+                fn, filename.data());
+  return nullptr;
+}
+    
+      bool valid() const { return !isClosed(); }
+    
+    #endif
 
     
-    ExpectedSuccess<DatabaseError> Database::putInt32(const std::string& domain,
-                                                  const std::string& key,
-                                                  const int32_t value) {
-  std::string buffer = std::to_string(value);
-  return putString(domain, key, buffer);
+    #include 'hphp/runtime/base/perf-warning-inl.h'
+    
+    
+    {  SocketCanClientRaw socket_can_client;
+  EXPECT_TRUE(socket_can_client.Init(param));
+  EXPECT_EQ(socket_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
+  std::vector<CanFrame> frames;
+  int32_t num = 0;
+  EXPECT_EQ(socket_can_client.Send(frames, &num),
+            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
+  EXPECT_EQ(socket_can_client.Receive(&frames, &num),
+            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
+  CanFrame can_frame;
+  frames.push_back(can_frame);
+  EXPECT_EQ(socket_can_client.SendSingleFrame(frames),
+            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
+  socket_can_client.Stop();
 }
     
-    ExpectedSuccess<DatabaseError> InMemoryDatabase::putStringsUnsafe(
-    const std::string& domain,
-    const std::vector<std::pair<std::string, std::string>>& data) {
-  debug_only::verifyTrue(is_open_, 'database is not open');
-  auto storage_iter = storage_.find(domain);
-  if (storage_iter == storage_.end()) {
-    return domainNotFoundError(domain);
-  }
-  std::lock_guard<std::mutex> lock(storage_iter->second->getMutex());
-  for (const auto& pair : data) {
-    storage_iter->second->put(pair.first, pair.second);
-  }
-  return Success();
+    DEFINE_string(adapter_config_filename, 'modules/canbus/conf/adapter.conf',
+              'The adapter config file');
+    
+    int ClusterQualityInfo702::pdh0(const std::uint8_t* bytes,
+                                int32_t length) const {
+  Byte t0(bytes + 3);
+  int32_t x = t0.get_byte(0, 3);
+    }
+    
+    namespace apollo {
+namespace hdmap {
+DEFINE_string(test_map_file,
+              'modules/map/data/sunnyvale_loop/base_map_test.bin',
+              'The test map file');
+DEFINE_string(
+    test_routing_file,
+    'modules/map/pnc_map/testdata/sample_sunnyvale_loop_routing.pb.txt',
+    'The test map file');
+    }
+    }
+    
+    void Spline1dSeg::SetSplineFunc(const PolynomialXd& spline_func) {
+  spline_func_ = spline_func;
+  derivative_ = PolynomialXd::DerivedFrom(spline_func_);
+  second_order_derivative_ = PolynomialXd::DerivedFrom(derivative_);
+  third_order_derivative_ = PolynomialXd::DerivedFrom(second_order_derivative_);
 }
     
-      ExpectedSuccess<DatabaseError> putInt32(const std::string& domain,
-                                          const std::string& key,
-                                          const int32_t value) override;
-  ExpectedSuccess<DatabaseError> putString(const std::string& domain,
-                                           const std::string& key,
-                                           const std::string& value) override;
-    
-    long int Flag::getInt32Value(const std::string& name) {
-  return tryTo<long int>(Flag::getValue(name), 10).takeOr(0l);
+    TEST_F(GemMessageManagerTest, GetRecvProtocols) {
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Accelrpt68::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt170::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt271::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt372::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakerpt6c::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Datetimerpt83::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Globalrpt6a::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Headlightrpt77::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Hornrpt79::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Latlonheadingrpt82::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(
+                  Parkingbrakestatusrpt80::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Shiftrpt66::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt173::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt274::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt375::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringrpt16e::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Turnrpt64::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Vehiclespeedrpt6f::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Wheelspeedrpt7a::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Wiperrpt91::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Yawraterpt81::ID) != nullptr);
 }
