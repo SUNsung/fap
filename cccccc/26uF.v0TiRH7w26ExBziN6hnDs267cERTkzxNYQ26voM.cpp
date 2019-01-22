@@ -1,301 +1,257 @@
 
         
-        bool UvTaskRunner::PostNonNestableDelayedTask(const base::Location& from_here,
-                                              base::OnceClosure task,
-                                              base::TimeDelta delay) {
-  return PostDelayedTask(from_here, std::move(task), delay);
+        // This is initialized with a default, stub implementation.
+// If python-google.protobuf.cc is loaded, the function pointer is overridden
+// with a full implementation.
+const Message* (*GetCProtoInsidePyProtoPtr)(PyObject* msg) =
+    GetCProtoInsidePyProtoStub;
+Message* (*MutableCProtoInsidePyProtoPtr)(PyObject* msg) =
+    MutableCProtoInsidePyProtoStub;
+    
+      // -----------------------------------------------------------------
+  // Invoke InternalBuildGeneratedFileFrom() to build the file.
+  printer->Print(
+      'descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,\n');
+  printer->Print('    new pbr::FileDescriptor[] { ');
+  for (int i = 0; i < file_->dependency_count(); i++) {
+    // descriptor.proto is special: we don't allow access to the generated code, but there's
+    // a separately-exposed property to get at the file descriptor, specifically to allow this
+    // kind of dependency.
+    if (IsDescriptorProto(file_->dependency(i))) {
+      printer->Print('pbr::FileDescriptor.DescriptorProtoFileDescriptor, ');
+    } else {
+      printer->Print(
+      '$full_reflection_class_name$.Descriptor, ',
+      'full_reflection_class_name',
+      GetReflectionClassName(file_->dependency(i)));
+    }
+  }
+  printer->Print('},\n'
+      '    new pbr::GeneratedClrTypeInfo(');
+  // Specify all the generated code information, recursively.
+  if (file_->enum_type_count() > 0) {
+      printer->Print('new[] {');
+      for (int i = 0; i < file_->enum_type_count(); i++) {
+          printer->Print('typeof($type_name$), ', 'type_name', GetClassName(file_->enum_type(i)));
+      }
+      printer->Print('}, ');
+  }
+  else {
+      printer->Print('null, ');
+  }
+  if (file_->message_type_count() > 0) {
+      printer->Print('new pbr::GeneratedClrTypeInfo[] {\n');
+      printer->Indent();
+      printer->Indent();
+      printer->Indent();
+      for (int i = 0; i < file_->message_type_count(); i++) {
+          WriteGeneratedCodeInfo(file_->message_type(i), printer, i == file_->message_type_count() - 1);
+      }
+      printer->Outdent();
+      printer->Print('\n}));\n');
+      printer->Outdent();
+      printer->Outdent();
+  }
+  else {
+      printer->Print('null));\n');
+  }
+    
+    std::string SourceGeneratorBase::class_access_level() {
+  return (IsDescriptorProto(descriptor_) || this->options()->internal_access) ? 'internal' : 'public';
 }
     
-      std::map<uv_timer_t*, base::OnceClosure> tasks_;
     
-    #include 'atom/browser/native_window_views.h'
-    
-    template <>
-struct Converter<in_app_purchase::Transaction> {
-  static v8::Local<v8::Value> ToV8(v8::Isolate* isolate,
-                                   const in_app_purchase::Transaction& val) {
-    mate::Dictionary dict = mate::Dictionary::CreateEmpty(isolate);
-    dict.SetHidden('simple', true);
-    dict.Set('transactionIdentifier', val.transactionIdentifier);
-    dict.Set('transactionDate', val.transactionDate);
-    dict.Set('originalTransactionIdentifier',
-             val.originalTransactionIdentifier);
-    dict.Set('transactionState', val.transactionState);
-    dict.Set('errorCode', val.errorCode);
-    dict.Set('errorMessage', val.errorMessage);
-    dict.Set('payment', val.payment);
-    return dict.GetHandle();
+    {  WriteFieldDocComment(printer, descriptor_);
+  if (descriptor_->is_repeated()) {
+    printer->Print(
+        vars,
+        'public static final\n'
+        '  com.google.protobuf.GeneratedMessageLite.GeneratedExtension<\n'
+        '    $containing_type$,\n'
+        '    $type$> $name$ = com.google.protobuf.GeneratedMessageLite\n'
+        '        .newRepeatedGeneratedExtension(\n'
+        '      $containing_type$.getDefaultInstance(),\n'
+        '      $prototype$,\n'
+        '      $enum_map$,\n'
+        '      $number$,\n'
+        '      com.google.protobuf.WireFormat.FieldType.$type_constant$,\n'
+        '      $packed$,\n'
+        '      $singular_type$.class);\n');
+  } else {
+    printer->Print(
+        vars,
+        'public static final\n'
+        '  com.google.protobuf.GeneratedMessageLite.GeneratedExtension<\n'
+        '    $containing_type$,\n'
+        '    $type$> $name$ = com.google.protobuf.GeneratedMessageLite\n'
+        '        .newSingularGeneratedExtension(\n'
+        '      $containing_type$.getDefaultInstance(),\n'
+        '      $default$,\n'
+        '      $prototype$,\n'
+        '      $enum_map$,\n'
+        '      $number$,\n'
+        '      com.google.protobuf.WireFormat.FieldType.$type_constant$,\n'
+        '      $singular_type$.class);\n');
   }
-};
+  printer->Annotate('name', descriptor_);
+}
     
-    
-    {  DISALLOW_COPY_AND_ASSIGN(RenderProcessPreferences);
-};
-    
-    
-    {}  // namespace mate
-    
-    // A self-destroyed class for handling save page request.
-class SavePageHandler : public content::DownloadManager::Observer,
-                        public download::DownloadItem::Observer {
- public:
-  using SavePageCallback = base::Callback<void(v8::Local<v8::Value>)>;
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace java {
+    }
+    }
+    }
     }
     
-      // There is a new update which has been downloaded.
-  virtual void OnUpdateDownloaded(const std::string& release_notes,
-                                  const std::string& release_name,
-                                  const base::Time& release_date,
-                                  const std::string& update_url) {}
+    #include <google/protobuf/compiler/objectivec/objectivec_helpers.h>
+#include <google/protobuf/testing/googletest.h>
+#include <gtest/gtest.h>
     
-    PlatformKind swift::targetPlatform(LangOptions &LangOpts) {
-  if (LangOpts.Target.isMacOSX()) {
-    return (LangOpts.EnableAppExtensionRestrictions
-                ? PlatformKind::OSXApplicationExtension
-                : PlatformKind::OSX);
+      virtual io::ZeroCopyOutputStream* OpenForInsert(
+      const string& filename, const string& insertion_point) {
+    CodeGeneratorResponse::File* file = response_->add_file();
+    file->set_name(filename);
+    file->set_insertion_point(insertion_point);
+    return new io::StringOutputStream(file->mutable_content());
   }
-    }
     
+    bool GzipOutputStream::Close() {
+  if ((zerror_ != Z_OK) && (zerror_ != Z_BUF_ERROR)) {
+    return false;
+  }
+  do {
+    zerror_ = Deflate(Z_FINISH);
+  } while (zerror_ == Z_OK);
+  zerror_ = deflateEnd(&zcontext_);
+  bool ok = zerror_ == Z_OK;
+  zerror_ = Z_STREAM_END;
+  return ok;
+}
     
-    {    return GenericTypeParamType::get(genericParam->getDepth(),
-                                     genericParam->getIndex(), ctx);
+    CallCredentials::CallCredentials() { g_gli_initializer.summon(); }
+    
+    ::opencensus::stats::MeasureInt64 RpcClientSentMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientSentBytesPerRpc();
+::opencensus::stats::MeasureInt64 RpcClientReceivedMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientReceivedBytesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientRoundtripLatency();
+::opencensus::stats::MeasureDouble RpcClientServerLatency();
+::opencensus::stats::MeasureInt64 RpcClientCompletedRpcs();
+    
+      // Fixed Field ID values:
+  enum FieldIdValue {
+    kTraceIdField = 0,
+    kSpanIdField = 1,
+    kTraceOptionsField = 2,
   };
-  auto conformanceToSyntheticConformanceFn =
-      MakeAbstractConformanceForGenericType();
     
-      assert(capacity % 16 == 0 && 'not allocating multiple of alignment');
     
-    #if !defined(PREPOSITION) && !defined(VERB)
-#  error define one or more of PREPOSITION, VERB
+    {
+    {   private:
+    const grpc::string name_;
+    const grpc::string value_;
+  };
+  return std::unique_ptr<ServerBuilderOption>(new StringOption(name, value));
+}
+    
+    void DynamicThreadPool::DynamicThread::ThreadFunc() {
+  pool_->ThreadFunc();
+  // Now that we have killed ourselves, we should reduce the thread count
+  std::unique_lock<std::mutex> lock(pool_->mu_);
+  pool_->nthreads_--;
+  // Move ourselves to dead list
+  pool_->dead_threads_.push_back(this);
+    }
+    
+    // Per-thread state for concurrent executions of the same benchmark.
+struct ThreadState {
+  int tid;             // 0..n-1 when running in n threads
+  Random rand;         // Has different seeds for different threads
+  Stats stats;
+  SharedState* shared;
+    }
+    
+    void InternalKeyComparator::FindShortSuccessor(std::string* key) const {
+  Slice user_key = ExtractUserKey(*key);
+  std::string tmp(user_key.data(), user_key.size());
+  user_comparator_->FindShortSuccessor(&tmp);
+  if (tmp.size() < user_key.size() &&
+      user_comparator_->Compare(user_key, tmp) < 0) {
+    // User key has become shorter physically, but larger logically.
+    // Tack on the earliest possible number to the shortened user key.
+    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
+    assert(this->Compare(*key, tmp) < 0);
+    key->swap(tmp);
+  }
+}
+    
+      ASSERT_TRUE(ParseInternalKey(in, &decoded));
+  ASSERT_EQ(key, decoded.user_key.ToString());
+  ASSERT_EQ(seq, decoded.sequence);
+  ASSERT_EQ(vt, decoded.type);
+    
+      size_t WrittenBytes() const {
+    return dest_.contents_.size();
+  }
+    
+    // Encode a suitable internal key target for 'target' and return it.
+// Uses *scratch as scratch space, and the returned pointer will point
+// into this scratch space.
+static const char* EncodeKey(std::string* scratch, const Slice& target) {
+  scratch->clear();
+  PutVarint32(scratch, target.size());
+  scratch->append(target.data(), target.size());
+  return scratch->data();
+}
+    
+    #include 'guetzli/stats.h'
+    
+    inline int Log2FloorNonZero(uint32_t n) {
+#ifdef __GNUC__
+  return 31 ^ __builtin_clz(n);
+#else
+  unsigned int result = 0;
+  while (n >>= 1) result++;
+  return result;
 #endif
+}
     
-    #include 'swift/AST/Identifier.h'
-    
-    #include 'remtrans.h'
-#include 'unicode/unifilt.h'
-    
-        /**
-     * Implements {@link Transliterator#handleTransliterate}.
-     * @param text          the buffer holding transliterated and
-     *                      untransliterated text
-     * @param offset        the start and limit of the text, the position
-     *                      of the cursor, and the start and limit of transliteration.
-     * @param incremental   if true, assume more text may be coming after
-     *                      pos.contextLimit. Otherwise, assume the text is complete.
-     */
-    virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
-                                     UBool isIncremental) const;
-    
-    #endif
-
-    
-    #include 'unicode/utypes.h'
-#include 'sharedobject.h'
-#include 'unicode/dtfmtsym.h'
-    
-    void
-SimpleTimeZone::initTransitionRules(UErrorCode& status) {
-    if (U_FAILURE(status)) {
-        return;
-    }
-    if (transitionRulesInitialized) {
-        return;
-    }
-    deleteTransitionRules();
-    UnicodeString tzid;
-    getID(tzid);
-    }
-    
-    U_NAMESPACE_END
-    
-    #include <dmlc/registry.h>
-#include <functional>
-#include <vector>
-#include <utility>
-#include <string>
-#include './base.h'
-#include './data.h'
-#include './tree_model.h'
-#include '../../src/common/host_device_vector.h'
-    
-    /*! \brief namespace of base64 decoding and encoding table */
-namespace base64 {
-const char DecodeTable[] = {
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  62,  // '+'
-  0, 0, 0,
-  63,  // '/'
-  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
-  0, 0, 0, 0, 0, 0, 0,
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
-  0, 0, 0, 0, 0, 0,
-  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
-  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
-};
-static const char EncodeTable[] =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-}  // namespace base64
-/*! \brief the stream that reads from base64, note we take from file pointers */
-class Base64InStream: public dmlc::Stream {
- public:
-  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
-    reader_.set_stream(fs);
-    num_prev = 0; tmp_ch = 0;
-  }
-  /*!
-   * \brief initialize the stream position to beginning of next base64 stream
-   * call this function before actually start read
-   */
-  inline void InitPosition(void) {
-    // get a character
-    do {
-      tmp_ch = reader_.GetChar();
-    } while (isspace(tmp_ch));
-  }
-  /*! \brief whether current position is end of a base64 stream */
-  inline bool IsEOF(void) const {
-    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
-  }
-  virtual size_t Read(void *ptr, size_t size) {
-    using base64::DecodeTable;
-    if (size == 0) return 0;
-    // use tlen to record left size
-    size_t tlen = size;
-    unsigned char *cptr = static_cast<unsigned char*>(ptr);
-    // if anything left, load from previous buffered result
-    if (num_prev != 0) {
-      if (num_prev == 2) {
-        if (tlen >= 2) {
-          *cptr++ = buf_prev[0];
-          *cptr++ = buf_prev[1];
-          tlen -= 2;
-          num_prev = 0;
-        } else {
-          // assert tlen == 1
-          *cptr++ = buf_prev[0]; --tlen;
-          buf_prev[0] = buf_prev[1];
-          num_prev = 1;
-        }
-      } else {
-        // assert num_prev == 1
-        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
-      }
-    }
-    if (tlen == 0) return size;
-    int nvalue;
-    // note: everything goes with 4 bytes in Base64
-    // so we process 4 bytes a unit
-    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
-      // first byte
-      nvalue = DecodeTable[tmp_ch] << 18;
-      {
-        // second byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        nvalue |= DecodeTable[tmp_ch] << 12;
-        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
-        }
-      {
-        // third byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        // handle termination
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == '=') << 'invalid base64 format';
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch] << 6;
-        if (tlen) {
-          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
-        }
-      }
-      {
-        // fourth byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
-            << 'invalid base64 format';
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch];
-        if (tlen) {
-          *cptr++ = nvalue & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev ++] = nvalue & 0xFF;
-        }
-      }
-      // get next char
-      tmp_ch = reader_.GetChar();
-    }
-    if (kStrictCheck) {
-      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
-    }
-    return size - tlen;
-  }
-  virtual void Write(const void *ptr, size_t size) {
-    LOG(FATAL) << 'Base64InStream do not support write';
-  }
-    }
-    
-    /*!
- * \brief Macro to register sparse page format.
- *
- * \code
- * // example of registering a objective
- * XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(raw)
- * .describe('Raw binary data format.')
- * .set_body([]() {
- *     return new RawFormat();
- *   });
- * \endcode
- */
-#define XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(Name)                       \
-  DMLC_REGISTRY_REGISTER(::xgboost::data::SparsePageFormatReg, SparsePageFormat, Name)
-    
-      /* Fetch an individual column. This code should be used with XGBOOST_TYPE_SWITCH
-     to determine type of bin id's */
-  inline Column GetColumn(unsigned fid) const {
-    Column c(type_[fid], &index_[boundary_[fid].index_begin], index_base_[fid],
-             &row_ind_[boundary_[fid].row_ind_begin],
-             boundary_[fid].index_end - boundary_[fid].index_begin);
-    return c;
+      if (setjmp(png_jmpbuf(png_ptr)) != 0) {
+    // Ok we are here because of the setjmp.
+    png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
+    return false;
   }
     
-        // Create texture
-    atlas->TexHeight = (atlas->Flags & ImFontAtlasFlags_NoPowerOfTwoHeight) ? (atlas->TexHeight + 1) : ImUpperPowerOfTwo(atlas->TexHeight);
-    atlas->TexUvScale = ImVec2(1.0f / atlas->TexWidth, 1.0f / atlas->TexHeight);
-    atlas->TexPixelsAlpha8 = (unsigned char*)ImGui::MemAlloc(atlas->TexWidth * atlas->TexHeight);
-    memset(atlas->TexPixelsAlpha8, 0, atlas->TexWidth * atlas->TexHeight);
+    // Saves the COM marker segment as a string to *jpg.
+bool ProcessCOM(const uint8_t* data, const size_t len, size_t* pos,
+                JPEGData* jpg) {
+  VERIFY_LEN(2);
+  size_t marker_len = ReadUint16(data, pos);
+  VERIFY_INPUT(marker_len, 2, 65535, MARKER_LEN);
+  VERIFY_LEN(marker_len - 2);
+  std::string com_str(reinterpret_cast<const char*>(
+      &data[*pos - 2]), marker_len);
+  *pos += marker_len - 2;
+  jpg->com_data.push_back(com_str);
+  return true;
+}
     
-    #include 'imgui.h'
-#include 'imgui_stdlib.h'
+    bool WriteJpeg(const JPEGData& jpg, bool strip_metadata, JPEGOutput out) {
+  static const uint8_t kSOIMarker[2] = { 0xff, 0xd8 };
+  static const uint8_t kEOIMarker[2] = { 0xff, 0xd9 };
+  std::vector<HuffmanCodeTable> dc_codes;
+  std::vector<HuffmanCodeTable> ac_codes;
+  return (JPEGWrite(out, kSOIMarker, sizeof(kSOIMarker)) &&
+          EncodeMetadata(jpg, strip_metadata, out) &&
+          EncodeDQT(jpg.quant, out) &&
+          EncodeSOF(jpg, out) &&
+          BuildAndEncodeHuffmanCodes(jpg, out, &dc_codes, &ac_codes) &&
+          EncodeScan(jpg, dc_codes, ac_codes, out) &&
+          JPEGWrite(out, kEOIMarker, sizeof(kEOIMarker)) &&
+          (strip_metadata || JPEGWrite(out, jpg.tail_data)));
+}
     
-    //---- Don't define obsolete functions/enums names. Consider enabling from time to time after updating to avoid using soon-to-be obsolete function/names.
-//#define IMGUI_DISABLE_OBSOLETE_FUNCTIONS
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_IMPL_API void     ImGui_Marmalade_InvalidateDeviceObjects();
-IMGUI_IMPL_API bool     ImGui_Marmalade_CreateDeviceObjects();
-    
-    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
-// **Prefer using the code in imgui_impl_opengl3.cpp**
-// This code is mostly provided as a reference to learn how ImGui integration works, because it is shorter to read.
-// If your code is using GL3+ context or any semi modern OpenGL calls, using this is likely to make everything more
-// complicated, will require your code to reset every single OpenGL attributes to their initial state, and might
-// confuse your GPU driver. 
-// The GL2 code is unable to reset attributes or even call e.g. 'glUseProgram(0)' because they don't exist in that API.
-    
-        bool show_demo_window = true;
-    bool show_another_window = false;
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    namespace guetzli {
+    }
