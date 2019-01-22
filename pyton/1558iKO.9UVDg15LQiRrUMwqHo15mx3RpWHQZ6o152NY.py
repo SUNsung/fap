@@ -1,158 +1,115 @@
 
         
-            z_logvar_1xn = \
-        tf.get_variable(name=(name+'/logvar'), shape=size_1xn,
-                        initializer=tf.constant_initializer(log_var_init),
-                        trainable=var_is_trainable)
+                super(DownloadBuilder, self).__init__(**kwargs)
     
+    import codecs
+import subprocess
     
-# OPTIMIZATION
-flags.DEFINE_integer('batch_size', BATCH_SIZE,
-                     'Batch size to use during training.')
-flags.DEFINE_float('learning_rate_init', LEARNING_RATE_INIT,
-                   'Learning rate initial value')
-flags.DEFINE_float('learning_rate_decay_factor', LEARNING_RATE_DECAY_FACTOR,
-                   'Learning rate decay, decay by this fraction every so \
-                   often.')
-flags.DEFINE_float('learning_rate_stop', LEARNING_RATE_STOP,
-                   'The lr is adaptively reduced, stop training at this value.')
-# Rather put the learning rate on an exponentially decreasiong schedule,
-# the current algorithm pays attention to the learning rate, and if it
-# isn't regularly decreasing, it will decrease the learning rate.  So far,
-# it works fine, though it is not perfect.
-flags.DEFINE_integer('learning_rate_n_to_compare', LEARNING_RATE_N_TO_COMPARE,
-                     'Number of previous costs current cost has to be worse \
-                     than, to lower learning rate.')
+    new_version = {}
     
-      Returns:
-    The dataset structures, with the field alignment_matrix_cxf added.
-    This is # channels x npcs dimension
-'''
-  nchannels_all = 0
-  channel_idxs = {}
-  conditions_all = {}
-  nconditions_all = 0
-  for name, dataset in datasets.items():
-    cidxs = np.where(dataset['P_sxn'])[1] # non-zero entries in columns
-    channel_idxs[name] = [cidxs[0], cidxs[-1]+1]
-    nchannels_all += cidxs[-1]+1 - cidxs[0]
-    conditions_all[name] = np.unique(dataset['condition_labels_train'])
+    # We must be able to import youtube_dl
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     
-    
-def get_iterator(data):
-  '''Return the data iterator.'''
-  if FLAGS.data_set == 'ptb':
-    iterator = ptb_loader.ptb_iterator(data, FLAGS.batch_size,
-                                       FLAGS.sequence_length,
-                                       FLAGS.epoch_size_override)
-  elif FLAGS.data_set == 'imdb':
-    iterator = imdb_loader.imdb_iterator(data, FLAGS.batch_size,
-                                         FLAGS.sequence_length)
-  return iterator
-    
-      ## Load Generator weights from MaskGAN checkpoint.
-  if FLAGS.maskgan_ckpt:
-    gen_vars = [
-        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
-    ]
-    init_saver = tf.train.Saver(var_list=gen_vars)
-    init_savers['init_saver'] = init_saver
-    
-      # *Total* number of n-grams produced by the generator.
-  total_ngrams_produced = 0
-    
-            # remove old cert first
-        xlog.info('Removing old cert in database $HOME/.pki/nssdb')
-        cmd_line = 'certutil -L -d sql:$HOME/.pki/nssdb |grep 'GoAgent' && certutil -d sql:$HOME/.pki/nssdb -D -n '%s' ' % ( common_name)
-        os.system(cmd_line)
-    
-        for qualified, server, _, _ in server_list:
-        if qualified:
-            best_server = server[0]
-            break
-    log = Log()
-    if best_server:
-        log.write('best server is: %s.' % best_server)
-    else:
-        xlog.warning('no server detected, return default: teredo.remlab.net.')
-        log.write('no server detected, return default: teredo.remlab.net.')
-        best_server = 'teredo.remlab.net'
-    log.close()
-    return best_server
-    
-    # begin[licence]
-#
-# [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-# end[licence]
-    
-    
-    def reset(self):
-        BaseRecognizer.reset(self) # reset all recognizer state variables
-        if self.input is not None:
-            self.input.seek(0) # rewind the input
-    
-    image = face_recognition.load_image_file('{}')
+    ie_template = '''
+class {name}({bases}):
+    _VALID_URL = {valid_url!r}
+    _module = '{module}'
 '''
     
-    for face_location in face_locations:
+    options = helptext[helptext.index('  General Options:') + 19:]
+options = re.sub(r'(?m)^  (\w.+)$', r'## \1', options)
+options = '# OPTIONS\n' + options + '\n'
     
-    for face_location in face_locations:
+        readme = re.sub(r'(?s)^.*?(?=# DESCRIPTION)', '', readme)
+    readme = re.sub(r'\s+youtube-dl \[OPTIONS\] URL \[URL\.\.\.\]', '', readme)
+    readme = PREFIX + readme
     
-        raw_detections_batched = _raw_face_locations_batched(images, number_of_times_to_upsample, batch_size)
+        fileopts = []
+    for opt in opts_file:
+        if opt._short_opts:
+            fileopts.extend(opt._short_opts)
+        if opt._long_opts:
+            fileopts.extend(opt._long_opts)
+    
+    # the encrypted data can be generate with 'devscripts/generate_aes_testdata.py'
     
     
-def test_image(image_to_check, model):
-    unknown_image = face_recognition.load_image_file(image_to_check)
-    face_locations = face_recognition.face_locations(unknown_image, number_of_times_to_upsample=0, model=model)
+if __name__ == '__main__':
+    unittest.main()
+
     
-        face_names = []
-    for face_encoding in face_encodings:
-        # See if the face is a match for the known face(s)
-        match = face_recognition.compare_faces(known_faces, face_encoding, tolerance=0.50)
+            return view(**kwargs)
     
-        # Loop over each face found in the frame to see if it's someone we know.
-    for face_encoding in face_encodings:
-        # See if the face is a match for the known face(s)
-        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
-        name = '<Unknown Person>'
     
-    # Create arrays of known face encodings and their names
-known_face_encodings = [
-    obama_face_encoding,
-    biden_face_encoding
-]
-known_face_names = [
-    'Barack Obama',
-    'Joe Biden'
-]
+@pytest.fixture
+def app():
+    '''Create and configure a new app instance for each test.'''
+    # create a temporary file to isolate the database for each test
+    db_fd, db_path = tempfile.mkstemp()
+    # create the app with common test config
+    app = create_app({
+        'TESTING': True,
+        'DATABASE': db_path,
+    })
     
-        def test_command_line_interface(self):
-        target_string = 'obama.jpg,obama'
-        runner = CliRunner()
-        image_folder = os.path.join(os.path.dirname(__file__), 'test_images')
-        image_file = os.path.join(os.path.dirname(__file__), 'test_images', 'obama.jpg')
+            url_prefix = self.options.get('url_prefix')
+        if url_prefix is None:
+            url_prefix = self.blueprint.url_prefix
+        #: The prefix that should be used for all URLs defined on the
+        #: blueprint.
+        self.url_prefix = url_prefix
+    
+    This typically means that you attempted to use functionality that needed
+to interface with the current application object in some way. To solve
+this, set up an application context with app.app_context().  See the
+documentation for more information.\
+'''
+    
+        The following characters are escaped in strings:
+    
+        def to_json(self, value):
+        return [self.serializer.tag(item) for item in value]
+    
+            egg_setup = base.join('setup.py')
+        egg_setup.write(textwrap.dedent('''
+        from setuptools import setup
+        setup(name='{0}',
+              version='1.0',
+              packages=['site_egg'],
+              zip_safe=True)
+        '''.format(name)))
+    
+        return roidb
+    
+    $ find . -name '*.yaml' -exec sed -i -e \
+   's/head_builder\.add_roi_2mlp_head/fast_rcnn_heads.add_roi_2mlp_head/g' {} \;
+    
+    
+def collect(inputs, is_training):
+    cfg_key = 'TRAIN' if is_training else 'TEST'
+    post_nms_topN = cfg[cfg_key].RPN_POST_NMS_TOP_N
+    k_max = cfg.FPN.RPN_MAX_LEVEL
+    k_min = cfg.FPN.RPN_MIN_LEVEL
+    num_lvls = k_max - k_min + 1
+    roi_inputs = inputs[:num_lvls]
+    score_inputs = inputs[num_lvls:]
+    if is_training:
+        score_inputs = score_inputs[:-2]
+    
+        # Scale rois_fg and format as (batch_idx, x1, y1, x2, y2)
+    rois_fg *= im_scale
+    repeated_batch_idx = batch_idx * blob_utils.ones((rois_fg.shape[0], 1))
+    rois_fg = np.hstack((repeated_batch_idx, rois_fg))
+    
+        # Compute anchor labels:
+    # label=1 is positive, 0 is negative, -1 is don't care (ignore)
+    labels = np.empty((num_inside, ), dtype=np.float32)
+    labels.fill(-1)
+    if len(gt_boxes) > 0:
+        # Compute overlaps between the anchors and the gt boxes overlaps
+        anchor_by_gt_overlap = box_utils.bbox_overlaps(anchors, gt_boxes)
+        # Map from anchor to gt box that has highest overlap
+        anchor_to_gt_argmax = anchor_by_gt_overlap.argmax(axis=1)
+        # For each anchor, amount of overlap with most overlapping gt box
+        anchor_to_gt_max = anchor_by_gt_overlap[
+            np.arange(num_inside), anchor_to_gt_argmax]
