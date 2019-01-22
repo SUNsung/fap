@@ -1,367 +1,427 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    #ifndef UINT32_MAX
-    #define UINT32_MAX (4294967295U)
-#endif
-    
-    void add(const Size2D &size,
-         const u32 * src0Base, ptrdiff_t src0Stride,
-         const u32 * src1Base, ptrdiff_t src1Stride,
-         u32 * dstBase, ptrdiff_t dstStride,
-         CONVERT_POLICY policy)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-        if (policy == CONVERT_POLICY_SATURATE)
-    {
-        internal::vtransform(size,
-                             src0Base, src0Stride,
-                             src1Base, src1Stride,
-                             dstBase, dstStride,
-                             AddSaturate<u32, u64>());
+            if (info.bytes > buf.size()) {
+      llvm::dbgs() << 'AST section too small.\n';
+      return false;
     }
-    else
-    {
-        internal::vtransform(size,
-                             src0Base, src0Stride,
-                             src1Base, src1Stride,
-                             dstBase, dstStride,
-                             AddWrap<u32, u64>());
-    }
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)policy;
-#endif
+    
+    bool CacheImpl::remove(const void *Key) {
+  int Ret = cache_remove(static_cast<cache_t*>(Impl), const_cast<void*>(Key));
+  return Ret == 0;
 }
     
-    void Canny3x3L2(const Size2D &size,
-                const u8 * srcBase, ptrdiff_t srcStride,
-                u8 * dstBase, ptrdiff_t dstStride,
-                f64 low_thresh, f64 high_thresh,
-                Margin borderMargin)
-{
-    internal::assertSupportedConfiguration(isCanny3x3Supported(size));
-#ifdef CAROTENE_NEON
-    Canny3x3<true, false>(size, 1,
-                          srcBase, srcStride,
-                          dstBase, dstStride,
-                          NULL, 0,
-                          NULL, 0,
-                          low_thresh, high_thresh,
-                          borderMargin);
-#else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)low_thresh;
-    (void)high_thresh;
-    (void)borderMargin;
-#endif
-}
+    DIRECTIONAL_PREPOSITION(above)
+DIRECTIONAL_PREPOSITION(after)
+DIRECTIONAL_PREPOSITION(along)
+DIRECTIONAL_PREPOSITION(alongside)
+DIRECTIONAL_PREPOSITION(as)
+DIRECTIONAL_PREPOSITION(at)
+DIRECTIONAL_PREPOSITION(before)
+DIRECTIONAL_PREPOSITION(below)
+DIRECTIONAL_PREPOSITION(by)
+DIRECTIONAL_PREPOSITION(following)
+DIRECTIONAL_PREPOSITION(for)
+DIRECTIONAL_PREPOSITION(from)
+DIRECTIONAL_PREPOSITION(given)
+DIRECTIONAL_PREPOSITION(in)
+DIRECTIONAL_PREPOSITION(including)
+DIRECTIONAL_PREPOSITION(inside)
+DIRECTIONAL_PREPOSITION(into)
+DIRECTIONAL_PREPOSITION(matching)
+DIRECTIONAL_PREPOSITION(of)
+DIRECTIONAL_PREPOSITION(on)
+DIRECTIONAL_PREPOSITION(passing)
+DIRECTIONAL_PREPOSITION(preceding)
+DIRECTIONAL_PREPOSITION(since)
+DIRECTIONAL_PREPOSITION(to)
+DIRECTIONAL_PREPOSITION(until)
+DIRECTIONAL_PREPOSITION(using)
+DIRECTIONAL_PREPOSITION(via)
+DIRECTIONAL_PREPOSITION(when)
+PREPOSITION(with)
+DIRECTIONAL_PREPOSITION(within)
     
-        for (size_t i = 0; i < size.height; ++i)
-    {
-        const u8 * src = internal::getRowPtr(srcBase, srcStride, i);
-        s16 * dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t j = 0;
+      image_file.read(reinterpret_cast<char*>(&magic), 4);
+  magic = swap_endian(magic);
+  CHECK_EQ(magic, 2051) << 'Incorrect image file magic.';
+  label_file.read(reinterpret_cast<char*>(&magic), 4);
+  magic = swap_endian(magic);
+  CHECK_EQ(magic, 2049) << 'Incorrect label file magic.';
+  image_file.read(reinterpret_cast<char*>(&num_items), 4);
+  num_items = swap_endian(num_items);
+  label_file.read(reinterpret_cast<char*>(&num_labels), 4);
+  num_labels = swap_endian(num_labels);
+  CHECK_EQ(num_items, num_labels);
+  image_file.read(reinterpret_cast<char*>(&rows), 4);
+  rows = swap_endian(rows);
+  image_file.read(reinterpret_cast<char*>(&cols), 4);
+  cols = swap_endian(cols);
+    
+    namespace caffe {
     }
     
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVTS_FUNC(s32, u8, 8,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.32 {d4-d5}, [%[src1]]                              \n\t'
-            'vld1.32 {d6-d7}, [%[src2]]                              \n\t'
-            'vcvt.f32.s32 q4, q2                                     \n\t'
-            'vcvt.f32.s32 q5, q3                                     \n\t'
-            'vmul.f32 q6, q4, q0                                     \n\t'
-            'vmul.f32 q7, q5, q0                                     \n\t'
-            'vadd.f32 q8, q6, q1                                     \n\t'
-            'vadd.f32 q9, q7, q1                                     \n\t'
-            'vcvt.s32.f32 q10, q8                                    \n\t'
-            'vcvt.s32.f32 q11, q9                                    \n\t'
-            'vqmovun.s32 d24, q10                                    \n\t'
-            'vqmovun.s32 d25, q11                                    \n\t'
-            'vqmovn.u16  d26, q12                                    \n\t'
-            'vst1.8 {d26}, [%[dst]]                                  \n\t'
-            : /*no output*/
-            : [src1] 'r' (_src + i + 0),
-              [src2] 'r' (_src + i + 4),
-              [dst] 'r' (_dst + i),
-              'w'  (vscale), 'w' (vshift)
-            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26'
-        );
+      // Returns the mode: running on CPU or GPU.
+  inline static Brew mode() { return Get().mode_; }
+  // The setters for the variables
+  // Sets the mode. It is recommended that you don't change the mode halfway
+  // into the program since that may cause allocation of pinned memory being
+  // freed in a non-pinned way, which may cause problems - I haven't verified
+  // it personally but better to note it here in the header file.
+  inline static void set_mode(Brew mode) { Get().mode_ = mode; }
+  // Sets the random seed of both boost and curand
+  static void set_random_seed(const unsigned int seed);
+  // Sets the device. Since we have cublas and curand stuff, set device also
+  // requires us to reset those values.
+  static void SetDevice(const int device_id);
+  // Prints the current GPU status.
+  static void DeviceQuery();
+  // Check if specified device is available
+  static bool CheckDevice(const int device_id);
+  // Search from start_id to the highest possible device ordinal,
+  // return the ordinal of the first available device.
+  static int FindDevice(const int start_id = 0);
+  // Parallel training
+  inline static int solver_count() { return Get().solver_count_; }
+  inline static void set_solver_count(int val) { Get().solver_count_ = val; }
+  inline static int solver_rank() { return Get().solver_rank_; }
+  inline static void set_solver_rank(int val) { Get().solver_rank_ = val; }
+  inline static bool multiprocess() { return Get().multiprocess_; }
+  inline static void set_multiprocess(bool val) { Get().multiprocess_ = val; }
+  inline static bool root_solver() { return Get().solver_rank_ == 0; }
+    
+      // Get a layer using a LayerParameter.
+  static shared_ptr<Layer<Dtype> > CreateLayer(const LayerParameter& param) {
+    if (Caffe::root_solver()) {
+      LOG(INFO) << 'Creating layer ' << param.name();
     }
-})
-#else
-CVTS_FUNC(s32, u8, 8,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        int32x4_t vline1_s32 = vld1q_s32(_src + i + 0);
-        int32x4_t vline2_s32 = vld1q_s32(_src + i + 4);
-        float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
-        float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        vline1_s32 = vcvtq_s32_f32(vline1_f32);
-        vline2_s32 = vcvtq_s32_f32(vline2_f32);
-        uint16x4_t vRes1 = vqmovun_s32(vline1_s32);
-        uint16x4_t vRes2 = vqmovun_s32(vline2_s32);
-        uint8x8_t vRes = vqmovn_u16(vcombine_u16(vRes1, vRes2));
-        vst1_u8(_dst + i, vRes);
-    }
-})
-#endif
-    
-    #include <carotene/definitions.hpp>
-    
-    
-    {            vsub = x1;
-        }
-    
-    
-    {};
-    
-    		virtual void InitFromEncodingBits(Block4x4 *a_pblockParent,
-											unsigned char *a_paucEncodingBits,
-											ColorFloatRGBA *a_pafrgbaSource,
-    
-    	// ################################################################################
-	// Block4x4EncodingBits_RGB8
-	// Encoding bits for the RGB portion of ETC1, RGB8, RGB8A1 and RGBA8
-	// ################################################################################
-    
-    								if (fPixelError < afPixelErrors[uiPixel])
-								{
-									auiPixelSelectors[uiPixel] = uiSelector;
-									afrgbaDecodedPixels[uiPixel] = frgbaDecodedPixel;
-									afPixelErrors[uiPixel] = fPixelError;
-								}
-    
-      typedef enum  AF_Blue_Stringset_
-  {
-    AF_BLUE_STRINGSET_ADLM = 0,
-    AF_BLUE_STRINGSET_ARAB = 5,
-    AF_BLUE_STRINGSET_ARMN = 9,
-    AF_BLUE_STRINGSET_AVST = 16,
-    AF_BLUE_STRINGSET_BAMU = 19,
-    AF_BLUE_STRINGSET_BENG = 22,
-    AF_BLUE_STRINGSET_BUHD = 27,
-    AF_BLUE_STRINGSET_CAKM = 32,
-    AF_BLUE_STRINGSET_CANS = 36,
-    AF_BLUE_STRINGSET_CARI = 43,
-    AF_BLUE_STRINGSET_CHER = 46,
-    AF_BLUE_STRINGSET_COPT = 53,
-    AF_BLUE_STRINGSET_CPRT = 58,
-    AF_BLUE_STRINGSET_CYRL = 63,
-    AF_BLUE_STRINGSET_DEVA = 69,
-    AF_BLUE_STRINGSET_DSRT = 75,
-    AF_BLUE_STRINGSET_ETHI = 80,
-    AF_BLUE_STRINGSET_GEOR = 83,
-    AF_BLUE_STRINGSET_GEOK = 90,
-    AF_BLUE_STRINGSET_GLAG = 97,
-    AF_BLUE_STRINGSET_GOTH = 102,
-    AF_BLUE_STRINGSET_GREK = 105,
-    AF_BLUE_STRINGSET_GUJR = 112,
-    AF_BLUE_STRINGSET_GURU = 118,
-    AF_BLUE_STRINGSET_HEBR = 124,
-    AF_BLUE_STRINGSET_KALI = 128,
-    AF_BLUE_STRINGSET_KHMR = 134,
-    AF_BLUE_STRINGSET_KHMS = 140,
-    AF_BLUE_STRINGSET_KNDA = 143,
-    AF_BLUE_STRINGSET_LAO = 146,
-    AF_BLUE_STRINGSET_LATN = 152,
-    AF_BLUE_STRINGSET_LATB = 159,
-    AF_BLUE_STRINGSET_LATP = 166,
-    AF_BLUE_STRINGSET_LISU = 173,
-    AF_BLUE_STRINGSET_MLYM = 176,
-    AF_BLUE_STRINGSET_MYMR = 179,
-    AF_BLUE_STRINGSET_NKOO = 184,
-    AF_BLUE_STRINGSET_NONE = 189,
-    AF_BLUE_STRINGSET_OLCK = 190,
-    AF_BLUE_STRINGSET_ORKH = 193,
-    AF_BLUE_STRINGSET_OSGE = 196,
-    AF_BLUE_STRINGSET_OSMA = 204,
-    AF_BLUE_STRINGSET_SAUR = 207,
-    AF_BLUE_STRINGSET_SHAW = 210,
-    AF_BLUE_STRINGSET_SINH = 216,
-    AF_BLUE_STRINGSET_SUND = 220,
-    AF_BLUE_STRINGSET_TAML = 224,
-    AF_BLUE_STRINGSET_TAVT = 227,
-    AF_BLUE_STRINGSET_TELU = 230,
-    AF_BLUE_STRINGSET_TFNG = 233,
-    AF_BLUE_STRINGSET_THAI = 236,
-    AF_BLUE_STRINGSET_VAII = 244,
-    af_blue_2_1 = 247,
-#ifdef AF_CONFIG_OPTION_CJK
-    AF_BLUE_STRINGSET_HANI = af_blue_2_1 + 0,
-    af_blue_2_1_1 = af_blue_2_1 + 2,
-#ifdef AF_CONFIG_OPTION_CJK_BLUE_HANI_VERT
-    af_blue_2_1_2 = af_blue_2_1_1 + 2,
-#else
-    af_blue_2_1_2 = af_blue_2_1_1 + 0,
-#endif /* AF_CONFIG_OPTION_CJK_BLUE_HANI_VERT */
-    af_blue_2_2 = af_blue_2_1_2 + 1,
-#else
-    af_blue_2_2 = af_blue_2_1 + 0,
-#endif /* AF_CONFIG_OPTION_CJK                */
-    }
-    
-    
-    {  friend inline bool operator== (const IntPoint& a, const IntPoint& b)
-  {
-    return a.X == b.X && a.Y == b.Y;
+    const string& type = param.type();
+    CreatorRegistry& registry = Registry();
+    CHECK_EQ(registry.count(type), 1) << 'Unknown layer type: ' << type
+        << ' (known types: ' << LayerTypeListString() << ')';
+    return registry[type](param);
   }
-  friend inline bool operator!= (const IntPoint& a, const IntPoint& b)
-  {
-    return a.X != b.X  || a.Y != b.Y; 
-  }
+    
+    
+    {  /// Whether to ignore instances with a certain label.
+  bool has_ignore_label_;
+  /// The label indicating that an instance should be ignored.
+  int ignore_label_;
+  /// Keeps counts of the number of samples per class.
+  Blob<Dtype> nums_buffer_;
 };
-//------------------------------------------------------------------------------
     
-    #include 'opus_types.h'
-#include 'opus_defines.h'
+    /**
+ * @brief Provides base for data layers that feed blobs to the Net.
+ *
+ * TODO(dox): thorough documentation for Forward and proto params.
+ */
+template <typename Dtype>
+class BaseDataLayer : public Layer<Dtype> {
+ public:
+  explicit BaseDataLayer(const LayerParameter& param);
+  // LayerSetUp: implements common data layer setup functionality, and calls
+  // DataLayerSetUp to do special data layer setup for individual layer types.
+  // This method may not be overridden except by the BasePrefetchingDataLayer.
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void DataLayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) {}
+  // Data layers have no bottoms, so reshaping is trivial.
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) {}
+    }
     
-       - Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer.
-    
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+    #endif  // CAFFE_BIAS_LAYER_HPP_
+
     
     
-    {    Transliterator::_registerSpecialInverse(UNICODE_STRING_SIMPLE('Remove'),
-                                            UNICODE_STRING_SIMPLE('Null'), FALSE);
+    {  size_t *workspace_fwd_sizes_;
+  size_t *workspace_bwd_data_sizes_;
+  size_t *workspace_bwd_filter_sizes_;
+  size_t workspaceSizeInBytes;  // size of underlying storage
+  void *workspaceData;  // underlying storage
+  void **workspace;  // aliases into workspaceData
+};
+#endif
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    class CorruptionTest {
+ public:
+  test::ErrorEnv env_;
+  std::string dbname_;
+  Cache* tiny_cache_;
+  Options options_;
+  DB* db_;
+    }
+    
+      // Implementations of the DB interface
+  virtual Status Put(const WriteOptions&, const Slice& key, const Slice& value);
+  virtual Status Delete(const WriteOptions&, const Slice& key);
+  virtual Status Write(const WriteOptions& options, WriteBatch* updates);
+  virtual Status Get(const ReadOptions& options,
+                     const Slice& key,
+                     std::string* value);
+  virtual Iterator* NewIterator(const ReadOptions&);
+  virtual const Snapshot* GetSnapshot();
+  virtual void ReleaseSnapshot(const Snapshot* snapshot);
+  virtual bool GetProperty(const Slice& property, std::string* value);
+  virtual void GetApproximateSizes(const Range* range, int n, uint64_t* sizes);
+  virtual void CompactRange(const Slice* begin, const Slice* end);
+    
+    inline int InternalKeyComparator::Compare(
+    const InternalKey& a, const InternalKey& b) const {
+  return Compare(a.Encode(), b.Encode());
 }
     
-    #include 'unicode/uchar.h'
-#include 'unicode/unistr.h'
     
-    #include 'uelement.h'
+    {}  // namespace leveldb
+
     
-    class Calendar;
+    // Return the name of the info log file for 'dbname'.
+std::string InfoLogFileName(const std::string& dbname);
     
-        /**
-     * Returns TRUE if this object is equal to rhs.
-     */
-    UBool equals(const SignificantDigitInterval &rhs) const {
-        return ((fMax == rhs.fMax) && (fMin == rhs.fMin));
+     private:
+  WritableFile* dest_;
+  int block_offset_;       // Current offset in block
+    
+    // Simple test that does single-threaded testing of the ConcurrentTest
+// scaffolding.
+TEST(SkipTest, ConcurrentWithoutThreads) {
+  ConcurrentTest test;
+  Random rnd(test::RandomSeed());
+  for (int i = 0; i < 10000; i++) {
+    test.ReadStep(&rnd);
+    test.WriteStep(&rnd);
+  }
+}
+    
+    int32_t ScriptSet::hashCode() const {
+    int32_t hash = 0;
+    for (int32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
+        hash ^= bits[i];
     }
+    return hash;
+}
     
-    U_NAMESPACE_END
+    U_CAPI int32_t U_EXPORT2
+uhash_hashScriptSet(const UElement key);
     
-        /**
-     * @param keyword for example 'few' or 'other'
-     * @return the plural form corresponding to the keyword, or OTHER
-     */
-    static Form orOtherFromString(const char *keyword) {
-        return static_cast<Form>(indexOrOtherIndexFromString(keyword));
-    }
-    
-    
-    {        UnicodeReplacer* r = data->lookupReplacer(c);
-        if (r == NULL) {
-            ICU_Utility::appendToRule(rule, c, FALSE, escapeUnprintable, quoteBuf);
-        } else {
-            UnicodeString buf;
-            r->toReplacerPattern(buf, escapeUnprintable);
-            buf.insert(0, (UChar)0x20);
-            buf.append((UChar)0x20);
-            ICU_Utility::appendToRule(rule, buf,
-                                      TRUE, escapeUnprintable, quoteBuf);
+            // Create a TimeZoneRule for daylight saving time
+        timeRuleType = (startTimeMode == STANDARD_TIME) ? DateTimeRule::STANDARD_TIME :
+            ((startTimeMode == UTC_TIME) ? DateTimeRule::UTC_TIME : DateTimeRule::WALL_TIME);
+        switch (startMode) {
+        case DOM_MODE:
+            dtRule = new DateTimeRule(startMonth, startDay, startTime, timeRuleType);
+            break;
+        case DOW_IN_MONTH_MODE:
+            dtRule = new DateTimeRule(startMonth, startDay, startDayOfWeek, startTime, timeRuleType);
+            break;
+        case DOW_GE_DOM_MODE:
+            dtRule = new DateTimeRule(startMonth, startDay, startDayOfWeek, true, startTime, timeRuleType);
+            break;
+        case DOW_LE_DOM_MODE:
+            dtRule = new DateTimeRule(startMonth, startDay, startDayOfWeek, false, startTime, timeRuleType);
+            break;
+        default:
+            status = U_INVALID_STATE_ERROR;
+            return;
         }
+        // Check for Null pointer
+        if (dtRule == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        // For now, use ID + '(DST)' as the name
+        dstRule = new AnnualTimeZoneRule(tzid+UnicodeString(DST_STR), getRawOffset(), getDSTSavings(),
+            dtRule, startYear, AnnualTimeZoneRule::MAX_YEAR);
+        
+        // Check for Null pointer
+        if (dstRule == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            deleteTransitionRules();
+            return;
+        }
+ 
+        // Calculate the first DST start time
+        dstRule->getFirstStart(getRawOffset(), 0, firstDstStart);
+    
+    #include 'unicode/udat.h'
+    
+    /**
+ * Implement UnicodeMatcher
+ */
+UMatchDegree StringMatcher::matches(const Replaceable& text,
+                                    int32_t& offset,
+                                    int32_t limit,
+                                    UBool incremental) {
+    int32_t i;
+    int32_t cursor = offset;
+    if (limit < cursor) {
+        // Match in the reverse direction
+        for (i=pattern.length()-1; i>=0; --i) {
+            UChar keyChar = pattern.charAt(i);
+            UnicodeMatcher* subm = data->lookupMatcher(keyChar);
+            if (subm == 0) {
+                if (cursor > limit &&
+                    keyChar == text.charAt(cursor)) {
+                    --cursor;
+                } else {
+                    return U_MISMATCH;
+                }
+            } else {
+                UMatchDegree m =
+                    subm->matches(text, cursor, limit, incremental);
+                if (m != U_MATCH) {
+                    return m;
+                }
+            }
+        }
+        // Record the match position, but adjust for a normal
+        // forward start, limit, and only if a prior match does not
+        // exist -- we want the rightmost match.
+        if (matchStart < 0) {
+            matchStart = cursor+1;
+            matchLimit = offset+1;
+        }
+    } else {
+        for (i=0; i<pattern.length(); ++i) {
+            if (incremental && cursor == limit) {
+                // We've reached the context limit without a mismatch and
+                // without completing our match.
+                return U_PARTIAL_MATCH;
+            }
+            UChar keyChar = pattern.charAt(i);
+            UnicodeMatcher* subm = data->lookupMatcher(keyChar);
+            if (subm == 0) {
+                // Don't need the cursor < limit check if
+                // incremental is TRUE (because it's done above); do need
+                // it otherwise.
+                if (cursor < limit &&
+                    keyChar == text.charAt(cursor)) {
+                    ++cursor;
+                } else {
+                    return U_MISMATCH;
+                }
+            } else {
+                UMatchDegree m =
+                    subm->matches(text, cursor, limit, incremental);
+                if (m != U_MATCH) {
+                    return m;
+                }
+            }
+        }
+        // Record the match position
+        matchStart = offset;
+        matchLimit = cursor;
+    }
     }
     
-    class DHTResponseMessage : public DHTAbstractMessage {
-protected:
-  virtual std::string toStringOptional() const { return A2STR::NIL; }
+    /**
+ * An object that matches a fixed input string, implementing the
+ * UnicodeMatcher API.  This object also implements the
+ * UnicodeReplacer API, allowing it to emit the matched text as
+ * output.  Since the match text may contain flexible match elements,
+ * such as UnicodeSets, the emitted text is not the match pattern, but
+ * instead a substring of the actual matched text.  Following
+ * convention, the output text is the leftmost match seen up to this
+ * point.
+ *
+ * A StringMatcher may represent a segment, in which case it has a
+ * positive segment number.  This affects how the matcher converts
+ * itself to a pattern but does not otherwise affect its function.
+ *
+ * A StringMatcher that is not a segment should not be used as a
+ * UnicodeReplacer.
+ */
+class StringMatcher : public UnicodeFunctor, public UnicodeMatcher, public UnicodeReplacer {
     }
     
-      void moveBucketTail(const std::shared_ptr<DHTNode>& node);
+                    // Insert any accumulated straight text.
+                if (buf.length() > 0) {
+                    text.handleReplaceBetween(destLimit, destLimit, buf);
+                    destLimit += buf.length();
+                    buf.truncate(0);
+                }
     
-      // number of nodes
-  uint32_t numNodes = htonl(nodes_.size());
-  WRITE_CHECK(fp, &numNodes, sizeof(uint32_t));
-  // 4bytes reserved
-  WRITE_CHECK(fp, zero, 4);
-    
-    #include 'common.h'
-    
-    #include 'common.h'
-    
-      std::chrono::seconds timeout_;
-    
-      virtual void process() CXX11_OVERRIDE;
-    
-    std::vector<DNSCache::AddrEntry>::const_iterator
-DNSCache::CacheEntry::find(const std::string& addr) const
-{
-  for (auto i = addrEntries_.begin(), eoi = addrEntries_.end(); i != eoi; ++i) {
-    if ((*i).addr_ == addr) {
-      return i;
+    BENCHMARK(dev_null_log_overhead, iter) {
+  auto prev = FLAGS_minloglevel;
+  FLAGS_minloglevel = 2;
     }
+    
+    #include <boost/filesystem.hpp>
+#include <folly/Conv.h>
+#include <folly/Format.h>
+#include <folly/Random.h>
+#include <folly/String.h>
+#include <folly/Subprocess.h>
+#include <folly/lang/Bits.h>
+#include <folly/portability/GTest.h>
+#include <folly/portability/Unistd.h>
+#include <folly/tracing/StaticTracepoint.h>
+#include <folly/tracing/test/StaticTracepointTestModule.h>
+    
+    exception_wrapper exception_wrapper::from_exception_ptr(
+    std::exception_ptr const& ptr) noexcept {
+  if (!ptr) {
+    return exception_wrapper();
   }
-  return addrEntries_.end();
+  try {
+    std::rethrow_exception(ptr);
+  } catch (std::exception& e) {
+    return exception_wrapper(std::current_exception(), e);
+  } catch (...) {
+    return exception_wrapper(std::current_exception());
+  }
 }
     
-    #include <list>
+    template <class RNG, typename = void>
+struct StateSize {
+  // A sane default.
+  using type = std::integral_constant<size_t, 512>;
+};
     
-      template <typename ExecutorT>
-  static KeepAlive<ExecutorT> getKeepAliveToken(ExecutorT& executor) {
-    static_assert(
-        std::is_base_of<Executor, ExecutorT>::value,
-        'getKeepAliveToken only works for folly::Executor implementations.');
-    return getKeepAliveToken(&executor);
+    #include <type_traits>
+    
+    /**
+ * Get a codec with the given options and compression level.
+ *
+ * If the windowSize is 15 and the format is Format::ZLIB or Format::GZIP, then
+ * the type of the codec will be CodecType::ZLIB or CodecType::GZIP
+ * respectively. Otherwise, the type will be CodecType::USER_DEFINED.
+ *
+ * Automatic uncompression is not supported with USER_DEFINED codecs.
+ *
+ * Levels supported: 0 = no compression, 1 = fast, ..., 9 = best; default = 6
+ */
+std::unique_ptr<Codec> getCodec(
+    Options options = Options(),
+    int level = COMPRESSION_LEVEL_DEFAULT);
+std::unique_ptr<StreamCodec> getStreamCodec(
+    Options options = Options(),
+    int level = COMPRESSION_LEVEL_DEFAULT);
+    
+    struct counted_shared_tag {};
+template <template <typename> class Atom = std::atomic>
+struct intrusive_shared_count {
+  intrusive_shared_count() {
+    counts.store(0);
   }
-    
-        static constexpr result_type min() {
-      return std::numeric_limits<result_type>::min();
+  void add_ref(uint64_t count = 1) {
+    counts.fetch_add(count);
+  }
     }
     
-    TEST_F(SparseByteSetTest, empty) {
-  for (auto c = lims::min(); c < lims::max(); ++c) {
-    EXPECT_FALSE(s.contains(c));
+      static void child() noexcept {
+    auto& tasks = instance().tasks;
+    for (auto& task : tasks) {
+      task.child();
+    }
+    instance().tasksLock.unlock();
   }
-}
