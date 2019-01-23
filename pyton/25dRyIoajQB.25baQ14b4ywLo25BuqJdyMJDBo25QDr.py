@@ -1,18 +1,88 @@
 
         
-                Antirectifier allows to return all-positive outputs like ReLU,
-        without discarding any data.
+        model = IntegrationToBoundModel(N)
+inputs_ph_t = [tf.placeholder(tf.float32,
+                              shape=[None, 1]) for _ in range(ntimesteps)]
+state = tf.zeros([batch_size, N])
+saver = tf.train.Saver()
     
-        # Add classifier on top.
-    # v1 does not use BN after last shortcut connection-ReLU
-    x = AveragePooling2D(pool_size=8)(x)
-    y = Flatten()(x)
-    outputs = Dense(num_classes,
-                    activation='softmax',
-                    kernel_initializer='he_normal')(y)
+      Args:
+    values_t_bxn: The length T list of BxN numpy tensors.
     
-    # input image dimensions
-img_rows, img_cols = 28, 28
+    
+class LM1BDataset(object):
+  '''Utility class for 1B word benchmark dataset.
+    
+    
+def create_reinforce_gen_train_op(hparams, learning_rate, final_gen_reward,
+                                  averages_op, global_step):
+  '''Create the Generator train_op when using REINFORCE.
+    
+    
+def create_app(test_config=None):
+    '''Create and configure an instance of the Flask application.'''
+    app = Flask(__name__, instance_relative_config=True)
+    app.config.from_mapping(
+        # a default secret that should be overridden by instance config
+        SECRET_KEY='dev',
+        # store the database in the instance folder
+        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+    )
+    
+        auth.login()
+    response = client.get('/')
+    assert b'test title' in response.data
+    assert b'by test on 2018-01-01' in response.data
+    assert b'test\nbody' in response.data
+    assert b'href='/1/update'' in response.data
+    
+            for blueprint in self.app.iter_blueprints():
+            loader = blueprint.jinja_loader
+            if loader is not None:
+                yield blueprint, loader
+    
+        Implements the WSGI wrappers (request and response).
+    
+    
+def test_when_successfully_configured(usage_tracker_io, shell_pid,
+                                      shell, shell_config, logs):
+    shell.get_history.return_value = ['fuck']
+    shell_pid.return_value = 12
+    _change_tracker(usage_tracker_io, 12)
+    shell_config.read.return_value = ''
+    main()
+    shell_config.write.assert_any_call('eval $(thefuck --alias)')
+    logs.configured_successfully.assert_called_once()
+
+    
+    
+@pytest.mark.functional
+def test_without_confirmation(proc, TIMEOUT):
+    without_confirmation(proc, TIMEOUT)
+    
+    
+init_zshrc = u'''echo '
+export SHELL=/usr/bin/zsh
+export HISTFILE=~/.zsh_history
+echo > $HISTFILE
+export SAVEHIST=100
+export HISTSIZE=100
+eval $(thefuck --alias {})
+setopt INC_APPEND_HISTORY
+echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
+' > ~/.zshrc'''
+    
+    
+@pytest.mark.parametrize('script, output', [
+    ('brew link sshfs', output),
+    ('cat output', output),
+    ('brew install sshfs', '')])
+def test_not_match(script, output):
+    command = Command(script, output)
+    assert not match(command)
+    
+    # the data, split between train and test sets
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
     
         paths = []
     for fname in files:
@@ -20,180 +90,84 @@ img_rows, img_cols = 28, 28
                               origin=base + fname,
                               cache_subdir=dirname))
     
-        layers = model.layers
-    for i in range(len(layers)):
-        if sequential_like:
-            print_layer_summary(layers[i])
-        else:
-            print_layer_summary_with_connections(layers[i])
-        if i == len(layers) - 1:
-            print_fn('=' * line_length)
-        else:
-            print_fn('_' * line_length)
+        def __call__(self, x):
+        return 0.
     
-        # Arguments
-        y: class vector to be converted into a matrix
-            (integers from 0 to num_classes).
-        num_classes: total number of classes.
-        dtype: The data type expected by the input, as a string
-            (`float32`, `float64`, `int32`...)
     
-        # Arguments
-        units: Positive integer, dimensionality of the output space.
-        kernel_initializer: Initializer for the `kernel` weights matrix,
-            used for the linear transformation of the inputs.
-            (see [initializers](../initializers.md)).
-        unit_forget_bias: Boolean.
-            If True, add 1 to the bias of the forget gate at initialization.
-            Setting it to true will also force `bias_initializer='zeros'`.
-            This is recommended in [Jozefowicz et al. (2015)](
-            http://www.jmlr.org/proceedings/papers/v37/jozefowicz15.pdf).
-        recurrent_initializer: Initializer for the `recurrent_kernel`
-            weights matrix,
-            used for the linear transformation of the recurrent state.
-            (see [initializers](../initializers.md)).
-        bias_initializer: Initializer for the bias vector
-            (see [initializers](../initializers.md)).
-        kernel_regularizer: Regularizer function applied to
-            the `kernel` weights matrix
-            (see [regularizer](../regularizers.md)).
-        recurrent_regularizer: Regularizer function applied to
-            the `recurrent_kernel` weights matrix
-            (see [regularizer](../regularizers.md)).
-        bias_regularizer: Regularizer function applied to the bias vector
-            (see [regularizer](../regularizers.md)).
-        activity_regularizer: Regularizer function applied to
-            the output of the layer (its 'activation').
-            (see [regularizer](../regularizers.md)).
-        kernel_constraint: Constraint function applied to
-            the `kernel` weights matrix
-            (see [constraints](../constraints.md)).
-        recurrent_constraint: Constraint function applied to
-            the `recurrent_kernel` weights matrix
-            (see [constraints](../constraints.md)).
-        bias_constraint: Constraint function applied to the bias vector
-            (see [constraints](../constraints.md)).
-        return_sequences: Boolean. Whether to return the last output.
-            in the output sequence, or the full sequence.
-        return_state: Boolean. Whether to return the last state
-            in addition to the output.
-        stateful: Boolean (default False). If True, the last state
-            for each sample at index i in a batch will be used as initial
-            state for the sample of index i in the following batch.
-    '''
-    def __init__(self, units,
-                 kernel_initializer='glorot_uniform',
-                 recurrent_initializer='orthogonal',
-                 bias_initializer='zeros',
-                 unit_forget_bias=True,
-                 kernel_regularizer=None,
-                 recurrent_regularizer=None,
-                 bias_regularizer=None,
-                 activity_regularizer=None,
-                 kernel_constraint=None,
-                 recurrent_constraint=None,
-                 bias_constraint=None,
-                 return_sequences=False,
-                 return_state=False,
-                 stateful=False,
-                 **kwargs):
-        self.units = units
-        super(CuDNNLSTM, self).__init__(
-            return_sequences=return_sequences,
-            return_state=return_state,
-            stateful=stateful,
-            **kwargs)
+def test_sparse_categorical_crossentropy():
+    y_pred = K.variable(np.array([[0.3, 0.6, 0.1],
+                                  [0.1, 0.2, 0.7]]))
+    y_true = K.variable(np.array([1, 2]))
+    expected_loss = - (np.log(0.6) + np.log(0.7)) / 2
+    loss = K.eval(losses.sparse_categorical_crossentropy(y_true, y_pred))
+    assert np.isclose(expected_loss, np.mean(loss))
     
-    print('Train...')
-model.fit(x_train, y_train,
-          batch_size=batch_size,
-          epochs=epochs,
-          validation_data=(x_test, y_test))
-score, acc = model.evaluate(x_test, y_test, batch_size=batch_size)
-print('Test score:', score)
-print('Test accuracy:', acc)
-
+        E.g. for use with categorical_crossentropy.
     
-        def __init__(self, data=None, **kwargs):
-        self._store = OrderedDict()
-        if data is None:
-            data = {}
-        self.update(data, **kwargs)
+    # Benchmark of `ImageGenerator` vs `AugmentLayer` both using augmentation 2D:
+(backend = Tensorflow-GPU, Nvidia Tesla P100-SXM2)
     
-            content += new_content
+    # Testing the network on one movie
+# feed it with the first 7 positions and then
+# predict the new positions
+which = 1004
+track = noisy_movies[which][:7, ::, ::, ::]
     
-                if not cert_loc:
-                cert_loc = extract_zipped_paths(DEFAULT_CA_BUNDLE_PATH)
+    # we add a Convolution1D, which will learn filters
+# word group filters of size filter_length:
+model.add(Conv1D(filters,
+                 kernel_size,
+                 padding='valid',
+                 activation='relu',
+                 strides=1))
+# we use max pooling:
+model.add(GlobalMaxPooling1D())
     
-        builtin_str = str
-    str = str
-    bytes = bytes
-    basestring = (str, bytes)
-    numeric_types = (int, float)
-    integer_types = (int,)
-
+    print('Input shape:', data_input.shape)
+print('Output shape:', expected_output.shape)
+print('Input head: ')
+print(data_input.head())
+print('Output head: ')
+print(expected_output.head())
+print('Input tail: ')
+print(data_input.tail())
+print('Output tail: ')
+print(expected_output.tail())
     
-            with Server.basic_response_server(wait_to_close_event=block_server) as (host, port):
-            sock = socket.socket()
-            sock.connect((host, port))
-            sock.sendall(b'send something')
-            time.sleep(2.5)
-            sock.sendall(b'still alive')
-            block_server.set()  # release server block
+        :returns: Dict of Define:Value pairs
+    :rtype: `dict`
     
-    def os_constant(key):
-    # XXX TODO: In the future, this could return different constants
-    #           based on what OS we are running under.  To see an
-    #           approach to how to handle different OSes, see the
-    #           apache version of this file.  Currently, we do not
-    #           actually have any OS-specific constants on Nginx.
-    '''
-    Get a constant value for operating system
     
-        def decode(self, value):
-        if value != self.resource_type:
-            raise jose.DeserializationError(
-                'Wrong resource type: {0} instead of {1}'.format(
-                    value, self.resource_type))
-        return value
-
+MOD_SSL_CONF_DEST = 'options-ssl-apache.conf'
+'''Name of the mod_ssl config file as saved in `IConfig.config_dir`.'''
     
-        def get_names(self):
-        '''Return a set of all names.'''
-        all_names = set()  # type: Set[str]
-        all_names.update(self.aliases)
-        # Strip out any scheme:// and <port> field from servername
-        if self.name is not None:
-            all_names.add(VirtualHost.strip_name.findall(self.name)[0])
+            self.assertEqual(len(matches), 1)
+        self.assertEqual(self.parser.get_arg(matches[0]), '1234')
     
-        publicKey, privateKey = generateKey(keySize)
-    print('\nWriting public key to file %s_pubkey.txt...' % name)
-    with open('%s_pubkey.txt' % name, 'w') as fo:
-        fo.write('%s,%s,%s' % (keySize, publicKey[0], publicKey[1]))
+    # If true, sectionauthor and moduleauthor directives will be shown in the
+# output. They are ignored by default.
+#show_authors = False
     
-        def __solveDP(self, x, y):
-        if (x==-1):
-            return y+1
-        elif (y==-1):
-            return x+1
-        elif (self.dp[x][y]>-1):
-            return self.dp[x][y]
-        else:
-            if (self.A[x]==self.B[y]):
-                self.dp[x][y] = self.__solveDP(x-1,y-1)
-            else:
-                self.dp[x][y] = 1+min(self.__solveDP(x,y-1), self.__solveDP(x-1,y), self.__solveDP(x-1,y-1))
+    # Documents to append as an appendix to all manuals.
+#latex_appendices = []
     
-    #Some examples
+        pose_predictor = pose_predictor_68_point
     
-    def leftrot32(i,s):
-	return (i << s) ^ (i >> (32-s))
     
-        difference = log_predict - log_actual
-    square_diff = np.square(difference)
-    mean_square_diff = square_diff.mean()
+def test_image(image_to_check, model):
+    unknown_image = face_recognition.load_image_file(image_to_check)
+    face_locations = face_recognition.face_locations(unknown_image, number_of_times_to_upsample=0, model=model)
     
-    print('writing anagrams to file...')
-with open('anagrams.txt', 'w') as file:
-    file.write('all_anagrams = ')
-    file.write(pprint.pformat(all_anagrams))
+        # Find all the faces and face enqcodings in the frame of video
+    face_locations = face_recognition.face_locations(rgb_frame)
+    face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
+    
+        # Loop over each face found in the frame to see if it's someone we know.
+    for face_encoding in face_encodings:
+        # See if the face is a match for the known face(s)
+        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
+        name = '<Unknown Person>'
+    
+        # Save each frame of the video to a list
+    frame_count += 1
+    frames.append(frame)
