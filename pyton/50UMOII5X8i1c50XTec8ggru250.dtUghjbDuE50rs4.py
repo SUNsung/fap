@@ -1,81 +1,117 @@
 
         
-            if RESULT and ('info_dict' not in test or 'age_limit' not in test['info_dict'] or
-                   test['info_dict']['age_limit'] != 18):
-        print('\nPotential missing age_limit check: {0}'.format(test['name']))
+                '''
+        assert all(hasattr(type(self), attr) for attr in kwargs.keys())
+        self.__dict__.update(**kwargs)
     
-    signature = hexlify(rsa.pkcs1.sign(json.dumps(versions_info, sort_keys=True).encode('utf-8'), privkey, 'SHA-256')).decode()
-print('signature: ' + signature)
+        def __init__(self, **kwargs):
+        '''
+        :param env: an class:`Environment` instance
+        :param kwargs: additional keyword argument that some
+                       processor might require.
     
-        bug_text = re.search(
-        r'(?s)#\s*BUGS\s*[^\n]*\s*(.*?)#\s*COPYRIGHT', readme).group(1)
-    dev_text = re.search(
-        r'(?s)(#\s*DEVELOPER INSTRUCTIONS.*?)#\s*EMBEDDING YOUTUBE-DL',
-        readme).group(1)
-    
-    ie_template = '''
-class {name}({bases}):
-    _VALID_URL = {valid_url!r}
-    _module = '{module}'
-'''
-    
-        def gen_ies_md(ies):
-        for ie in ies:
-            ie_md = '**{0}**'.format(ie.IE_NAME)
-            ie_desc = getattr(ie, 'IE_DESC', None)
-            if ie_desc is False:
-                continue
-            if ie_desc is not None:
-                ie_md += ': {0}'.format(ie.IE_DESC)
-            if not ie.working():
-                ie_md += ' (Currently broken)'
-            yield ie_md
-    
-    for page in itertools.count(1):
-    releases = json.loads(compat_urllib_request.urlopen(
-        'https://api.github.com/repos/rg3/youtube-dl/releases?page=%s' % page
-    ).read().decode('utf-8'))
+        exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR
+    assert error_msg == (
+        'ConnectionError: '
+        'Connection aborted while doing GET request to URL: '
+        'http://www.google.com')
     
     
-class TestCache(unittest.TestCase):
-    def setUp(self):
-        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
-        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
-        _mkdir(TESTDATA_DIR)
-        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
-        self.tearDown()
+def test_max_redirects(httpbin):
+    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
+             error_exit_ok=True)
+    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
+
     
-        scrapy runspider qpsclient.py --loglevel=INFO --set RANDOMIZE_DOWNLOAD_DELAY=0 --set CONCURRENT_REQUESTS=50 -a qps=10 -a latency=0.3
     
-            infos = []
-        if not self.wasSuccessful():
-            write('FAILED')
-            failed, errored = map(len, (self.failures, self.errors))
-            if failed:
-                infos.append('failures=%d' % failed)
-            if errored:
-                infos.append('errors=%d' % errored)
-        else:
-            write('OK')
+def test_unicode_json_item_verbose(httpbin):
+    r = http('--verbose', '--json',
+             'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
+    assert HTTP_OK in r
+    assert UNICODE in r
     
-            e.g.:
-        @returns request
-        @returns request 2
-        @returns request 2 10
-        @returns request 0 10
-    '''
+        def test_upload_ok(self, httpbin):
+        r = http('--form', '--verbose', 'POST', httpbin.url + '/post',
+                 'test-file@%s' % FILE_PATH_ARG, 'foo=bar')
+        assert HTTP_OK in r
+        assert 'Content-Disposition: form-data; name='foo'' in r
+        assert 'Content-Disposition: form-data; name='test-file';' \
+               ' filename='%s'' % os.path.basename(FILE_PATH) in r
+        assert FILE_CONTENT in r
+        assert ''foo': 'bar'' in r
+        assert 'Content-Type: text/plain' in r
     
-      Returns:
-    True if an error was emitted.
-    False otherwise.
-  '''
-  line = clean_lines.elided[linenum]
-  match = Search(pattern, line)
-  if not match:
-    return False
     
-                group.append(HTML('htmlout.html').render())
-            print('Rendered page {} of the directory {}'.format(str(i), operating_sys))
-            i += 1
-        
-        allmd.clear()
+class PostgresSimpleLookup(Lookup):
+    def as_sql(self, qn, connection):
+        lhs, lhs_params = self.process_lhs(qn, connection)
+        rhs, rhs_params = self.process_rhs(qn, connection)
+        params = lhs_params + rhs_params
+        return '%s %s %s' % (lhs, self.operator, rhs), params
+    
+            # Feed some input
+        len_ = len(self.BIG_DATA) - 64
+        out.append(bzd.decompress(self.BIG_DATA[:len_],
+                                  max_length=max_length))
+        self.assertFalse(bzd.needs_input)
+        self.assertEqual(len(out[-1]), max_length)
+    
+    # Add the html version.  This converts the message into a multipart/alternative
+# container, with the original text message as the first part and the new html
+# message as the second part.
+asparagus_cid = make_msgid()
+msg.add_alternative('''\
+<html>
+  <head></head>
+  <body>
+    <p>Salut!</p>
+    <p>Cela ressemble à un excellent
+        <a href='http://www.yummly.com/recipe/Roasted-Asparagus-Epicurious-203718'>
+            recipie
+        </a> déjeuner.
+    </p>
+    <img src='cid:{asparagus_cid}' />
+  </body>
+</html>
+'''.format(asparagus_cid=asparagus_cid[1:-1]), subtype='html')
+# note that we needed to peel the <> off the msgid for use in the html.
+    
+    
+def main():
+    parser = ArgumentParser(description='''\
+Send the contents of a directory as a MIME message.
+Unless the -o option is given, the email is sent by forwarding to your local
+SMTP server, which then does the normal delivery process.  Your local machine
+must be running an SMTP server.
+''')
+    parser.add_argument('-d', '--directory',
+                        help='''Mail the contents of the specified directory,
+                        otherwise use the current directory.  Only the regular
+                        files in the directory are sent, and we don't recurse to
+                        subdirectories.''')
+    parser.add_argument('-o', '--output',
+                        metavar='FILE',
+                        help='''Print the composed message to FILE instead of
+                        sending the message to the SMTP server.''')
+    parser.add_argument('-s', '--sender', required=True,
+                        help='The value of the From: header (required)')
+    parser.add_argument('-r', '--recipient', required=True,
+                        action='append', metavar='RECIPIENT',
+                        default=[], dest='recipients',
+                        help='A To: header value (at least one required)')
+    args = parser.parse_args()
+    directory = args.directory
+    if not directory:
+        directory = '.'
+    # Create the message
+    msg = EmailMessage()
+    msg['Subject'] = 'Contents of directory %s' % os.path.abspath(directory)
+    msg['To'] = ', '.join(args.recipients)
+    msg['From'] = args.sender
+    msg.preamble = 'You will not see this in a MIME-aware mail reader.\n'
+    
+    from email.policy import default
