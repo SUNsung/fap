@@ -1,175 +1,396 @@
 
         
         
-    {    int32_t number = uhash_geti(fNamedCaptureMap, &groupName);
-    if (number == 0) {
-        status = U_REGEX_INVALID_CAPTURE_GROUP_NAME;
-    }
-    return number;
-}
-    
-    //-------------------------------------------------------------------------------
-//
-//  ScriptSet - A bit set representing a set of scripts.
-//
-//              This class was originally used exclusively with script sets appearing
-//              as part of the spoof check whole script confusable binary data. Its
-//              use has since become more general, but the continued use to wrap
-//              prebuilt binary data does constrain the design.
-//
-//-------------------------------------------------------------------------------
-class U_I18N_API ScriptSet: public UMemory {
-  public:
-    ScriptSet();
-    ScriptSet(const ScriptSet &other);
-    ~ScriptSet();
-    }
-    
-    UBool SearchIterator::operator==(const SearchIterator &that) const
-{
-    if (this == &that) {
-        return TRUE;
-    }
-    return (m_breakiterator_            == that.m_breakiterator_ &&
-            m_search_->isCanonicalMatch == that.m_search_->isCanonicalMatch &&
-            m_search_->isOverlap        == that.m_search_->isOverlap &&
-            m_search_->elementComparisonType == that.m_search_->elementComparisonType &&
-            m_search_->matchedIndex     == that.m_search_->matchedIndex &&
-            m_search_->matchedLength    == that.m_search_->matchedLength &&
-            m_search_->textLength       == that.m_search_->textLength &&
-            getOffset() == that.getOffset() &&
-            (uprv_memcmp(m_search_->text, that.m_search_->text, 
-                              m_search_->textLength * sizeof(UChar)) == 0));
-}
-    
-    UnicodeString&
-SelectFormat::format(const Formattable& obj,
-                   UnicodeString& appendTo,
-                   FieldPosition& pos,
-                   UErrorCode& status) const
-{
-    if (U_FAILURE(status)) {
-        return appendTo;
-    }
-    if (obj.getType() == Formattable::kString) {
-        return format(obj.getString(status), appendTo, pos, status);
-    } else {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return appendTo;
-    }
-}
-    
-    class U_I18N_API SharedNumberFormat : public SharedObject {
-public:
-    SharedNumberFormat(NumberFormat *nfToAdopt) : ptr(nfToAdopt) { }
-    virtual ~SharedNumberFormat();
-    const NumberFormat *get() const { return ptr; }
-    const NumberFormat *operator->() const { return ptr; }
-    const NumberFormat &operator*() const { return *ptr; }
-private:
-    NumberFormat *ptr;
-    SharedNumberFormat(const SharedNumberFormat &);
-    SharedNumberFormat &operator=(const SharedNumberFormat &);
+    {private:
+    Ui::OpenURIDialog *ui;
 };
     
-    class U_I18N_API SharedPluralRules : public SharedObject {
-public:
-    SharedPluralRules(PluralRules *prToAdopt) : ptr(prToAdopt) { }
-    virtual ~SharedPluralRules();
-    const PluralRules *operator->() const { return ptr; }
-    const PluralRules &operator*() const { return *ptr; }
-private:
-    PluralRules *ptr;
-    SharedPluralRules(const SharedPluralRules &);
-    SharedPluralRules &operator=(const SharedPluralRules &);
+    #ifndef BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
+#define BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
+    
+    
+    {    /* d = (a0*2) * a3 */
+    'leaq (%%r10,%%r10,1),%%rax\n'
+    'mulq %%r13\n'
+    'movq %%rax,%%rbx\n'
+    'movq %%rdx,%%rcx\n'
+    /* d += (a1*2) * a2 */
+    'leaq (%%r11,%%r11,1),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c = a4 * a4 */
+    'movq %%r14,%%rax\n'
+    'mulq %%r14\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += (c & M) * R */
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* t3 (tmp1) = d & M */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    'movq %%rsi,%q1\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* a4 *= 2 */
+    'addq %%r14,%%r14\n'
+    /* d += a0 * a4 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d+= (a1*2) * a3 */
+    'leaq (%%r11,%%r11,1),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += a2 * a2 */
+    'movq %%r12,%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += c * R */
+    'movq %%r8,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* t4 = d & M (%%rsi) */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* tx = t4 >> 48 (tmp3) */
+    'movq %%rsi,%%rax\n'
+    'shrq $48,%%rax\n'
+    'movq %%rax,%q3\n'
+    /* t4 &= (M >> 4) (tmp2) */
+    'movq $0xffffffffffff,%%rax\n'
+    'andq %%rax,%%rsi\n'
+    'movq %%rsi,%q2\n'
+    /* c = a0 * a0 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r10\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += a1 * a4 */
+    'movq %%r11,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += (a2*2) * a3 */
+    'leaq (%%r12,%%r12,1),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* u0 = d & M (%%rsi) */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* u0 = (u0 << 4) | tx (%%rsi) */
+    'shlq $4,%%rsi\n'
+    'movq %q3,%%rax\n'
+    'orq %%rax,%%rsi\n'
+    /* c += u0 * (R >> 4) */
+    'movq $0x1000003d1,%%rax\n'
+    'mulq %%rsi\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[0] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,0(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* a0 *= 2 */
+    'addq %%r10,%%r10\n'
+    /* c += a0 * a1 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a2 * a4 */
+    'movq %%r12,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += a3 * a3 */
+    'movq %%r13,%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c += (d & M) * R */
+    'movq %%rbx,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* r[1] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,8(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a0 * a2 (last use of %%r10) */
+    'movq %%r10,%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* fetch t3 (%%r10, overwrites a0),t4 (%%rsi) */
+    'movq %q2,%%rsi\n'
+    'movq %q1,%%r10\n'
+    /* c += a1 * a1 */
+    'movq %%r11,%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a3 * a4 */
+    'movq %%r13,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c += (d & M) * R */
+    'movq %%rbx,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 (%%rbx only) */
+    'shrdq $52,%%rcx,%%rbx\n'
+    /* r[2] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,16(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += t3 */
+    'addq %%r10,%%r8\n'
+    /* c += d * R */
+    'movq %%rbx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[3] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,24(%%rdi)\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* c += t4 (%%r8 only) */
+    'addq %%rsi,%%r8\n'
+    /* r[4] = c */
+    'movq %%r8,32(%%rdi)\n'
+: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
+: 'D'(r)
+: '%rax', '%rbx', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
+);
+}
+    
+    static void CheckSplitTorReplyLine(std::string input, std::string command, std::string args)
+{
+    BOOST_TEST_MESSAGE(std::string('CheckSplitTorReplyLine(') + input + ')');
+    auto ret = SplitTorReplyLine(input);
+    BOOST_CHECK_EQUAL(ret.first, command);
+    BOOST_CHECK_EQUAL(ret.second, args);
+}
+    
+    #include <stdint.h>
+#include <string>
+#include <vector>
+    
+    #ifndef BITCOIN_CRYPTO_RIPEMD160_H
+#define BITCOIN_CRYPTO_RIPEMD160_H
+    
+    // Generate constructors.
+#include 'ipc/struct_constructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
+    
+    IPC_MESSAGE_ROUTED3(ShellViewHostMsg_Call_Static_Method,
+                    std::string /* type name */,
+                    std::string /* method name */,
+                    base::ListValue /* arguments */)
+    
+    void MenuItem::CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result) {
+  if (method == 'GetChecked') {
+    result->AppendBoolean(GetChecked());
+  } else {
+    NOTREACHED() << 'Invalid call to MenuItem method:' << method
+                 << ' arguments:' << arguments;
+  }
+}
+    
+    
+    {} // namespace
+    
+     protected:
+  ~NwClipboardSetListSyncFunction() override;
+    
+          rect = gfx_display.work_area();
+      DisplayGeometry& work_area = displayResult->work_area;
+      work_area.x = rect.x();
+      work_area.y = rect.y();
+      work_area.width = rect.width();
+      work_area.height = rect.height();
+    
+    SparsePageWriter::SparsePageWriter(
+    const std::vector<std::string>& name_shards,
+    const std::vector<std::string>& format_shards,
+    size_t extra_buffer_capacity)
+    : num_free_buffer_(extra_buffer_capacity + name_shards.size()),
+      clock_ptr_(0),
+      workers_(name_shards.size()),
+      qworkers_(name_shards.size()) {
+  CHECK_EQ(name_shards.size(), format_shards.size());
+  // start writer threads
+  for (size_t i = 0; i < name_shards.size(); ++i) {
+    std::string name_shard = name_shards[i];
+    std::string format_shard = format_shards[i];
+    auto* wqueue = &qworkers_[i];
+    workers_[i].reset(new std::thread(
+        [this, name_shard, format_shard, wqueue] () {
+          std::unique_ptr<dmlc::Stream> fo(
+              dmlc::Stream::Create(name_shard.c_str(), 'w'));
+          std::unique_ptr<SparsePageFormat> fmt(
+              SparsePageFormat::Create(format_shard));
+          fo->Write(format_shard);
+          std::shared_ptr<SparsePage> page;
+          while (wqueue->Pop(&page)) {
+            if (page == nullptr) break;
+            fmt->Write(*page, fo.get());
+            qrecycle_.Push(std::move(page));
+          }
+          fo.reset(nullptr);
+          LOG(CONSOLE) << 'SparsePage::Writer Finished writing to ' << name_shard;
+        }));
+  }
+}
+    
+    
+    {
+    {}  // namespace data
+}  // namespace xgboost
+#endif  // XGBOOST_DATA_SPARSE_PAGE_WRITER_H_
+
+    
+    
+    {
+    {
+    {  // base margin
+  bst_float base_margin;
+  // model parameter
+  GBTreeModelParam param;
+  /*! \brief vector of trees stored in the model */
+  std::vector<std::unique_ptr<RegTree> > trees;
+  /*! \brief for the update process, a place to keep the initial trees */
+  std::vector<std::unique_ptr<RegTree> > trees_to_update;
+  /*! \brief some information indicator of the tree, reserved */
+  std::vector<int> tree_info;
 };
+}  // namespace gbm
+}  // namespace xgboost
+
     
-    UnicodeSet *SimpleDateFormatStaticSets::getIgnorables(UDateFormatField fieldIndex)
-{
-    UErrorCode status = U_ZERO_ERROR;
-    umtx_initOnce(gSimpleDateFormatStaticSetsInitOnce, &smpdtfmt_initSets, status);
-    if (U_FAILURE(status)) {
-        return NULL;
+    
+    {
+    {}  // namespace obj
+}  // namespace xgboost
+    
+      // Resets the SplitEvaluator to the state it was in after the Init was called
+  virtual void Reset();
+    
+    namespace detail {
+inline void SetBit(CompressedByteT *byte, int bit_idx) {
+  *byte |= 1 << bit_idx;
+}
+template <typename T>
+inline T CheckBit(const T &byte, int bit_idx) {
+  return byte & (1 << bit_idx);
+}
+inline void ClearBit(CompressedByteT *byte, int bit_idx) {
+  *byte &= ~(1 << bit_idx);
+}
+static const int kPadding = 4;  // Assign padding so we can read slightly off
+                               // the beginning of the array
     }
     
-    switch (fieldIndex) {
-        case UDAT_YEAR_FIELD:
-        case UDAT_MONTH_FIELD:
-        case UDAT_DATE_FIELD:
-        case UDAT_STANDALONE_DAY_FIELD:
-        case UDAT_STANDALONE_MONTH_FIELD:
-            return gStaticSets->fDateIgnorables;
-            
-        case UDAT_HOUR_OF_DAY1_FIELD:
-        case UDAT_HOUR_OF_DAY0_FIELD:
-        case UDAT_MINUTE_FIELD:
-        case UDAT_SECOND_FIELD:
-        case UDAT_HOUR1_FIELD:
-        case UDAT_HOUR0_FIELD:
-            return gStaticSets->fTimeIgnorables;
-            
-        default:
-            return gStaticSets->fOtherIgnorables;
+        // output element with JSON pointer '/number'
+    std::cout << j.at('/number'_json_pointer) << '\n';
+    // output element with JSON pointer '/string'
+    std::cout << j.at('/string'_json_pointer) << '\n';
+    // output element with JSON pointer '/array'
+    std::cout << j.at('/array'_json_pointer) << '\n';
+    // output element with JSON pointer '/array/1'
+    std::cout << j.at('/array/1'_json_pointer) << '\n';
+    
+        // out_of_range.403
+    try
+    {
+        // try to use a JSON pointer to an nonexistent object key
+        json::const_reference ref = j.at('/foo'_json_pointer);
     }
-}
-    
-    U_NAMESPACE_BEGIN
-    
-    bool Follow::isDone() const
-{
-    return ( !_followedNode->isRunning() );
-}
-    
-    class Camera;
-    
-    
-    {    _previousPosition = target->getPosition();
-    _accumulatedDiff.setZero();
-}
-    
-        /** Get the value of a controlPoint at a given index.
-     *
-     * @js NA
-     * @param index Get the point in index.
-     * @return A Vec2.
-     */
-    const Vec2& getControlPointAtIndex(ssize_t index) const;
-    
-    
-    {        return true;
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
     }
     
-        tHashElement *element = nullptr;
-    HASH_FIND_PTR(_targets, &target, element);
+      const std::vector<float> distmap() const override { return distmap_; }
+  float distmap_aggregate() const override { return distance_; }
     
-    
-    /** Returns the numbers of actions that are running in a
-     *  certain target with a specific tag.
-     * Like getNumberOfRunningActionsInTarget Composable actions
-     * are counted as 1 action. Example:
-     * - If you are running 1 Sequence of 7 actions, it will return 1.
-     * - If you are running 7 Sequences of 2 actions, it will return 7.
-     *
-     * @param target    A certain target.
-     * @param tag       Tag that will be searched.
-     * @return  The numbers of actions that are running in a certain target
-     *          with a specific tag.
-     * @see getNumberOfRunningActionsInTarget
-     * @js NA
-     */
-    virtual size_t getNumberOfRunningActionsInTargetByTag(const Node *target, int tag);
-    
-    bool AnimationCache::init()
-{
-    return true;
+    void IDCT1d(const double* in, int stride, double* out) {
+  for (int x = 0; x < 8; ++x) {
+    out[x * stride] = 0.0;
+    for (int u = 0; u < 8; ++u) {
+      out[x * stride] += kDCTMatrix[8 * u + x] * in[u * stride];
+    }
+  }
 }
     
-        /** Adds a Animation with a name.
-     *
-     * @param animation An animation.
-     * @param name The name of animation.
-     */
-    void addAnimation(Animation *animation, const std::string& name);
+    // Performs in-place floating point 8x8 DCT on block[0..63].
+// Note that the DCT used here is the DCT-2 with the first term multiplied by
+// 1/sqrt(2) and the result scaled by 1/2.
+void ComputeBlockDCTDouble(double block[64]);
     
-        std::vector<cocos2d::Vec2> rdp(const std::vector<cocos2d::Vec2>& v, float optimization);
-    float perpendicularDistance(const cocos2d::Vec2& i, const cocos2d::Vec2& start, const cocos2d::Vec2& end);
+    const double* NewSrgb8ToLinearTable() {
+  double* table = new double[256];
+  int i = 0;
+  for (; i < 11; ++i) {
+    table[i] = i / 12.92;
+  }
+  for (; i < 256; ++i) {
+    table[i] = 255.0 * std::pow(((i / 255.0) + 0.055) / 1.055, 2.4);
+  }
+  return table;
+}
+    
+    namespace guetzli {
+    }
+    
+    
+    {}  // namespace guetzli
+
+    
+    #endif  // GUETZLI_JPEG_DATA_DECODER_H_
+
+    
+    #include 'guetzli/fdct.h'
