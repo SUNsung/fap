@@ -1,129 +1,179 @@
 
         
-          # POST /resource/sign_in
-  def create
-    self.resource = warden.authenticate!(auth_options)
-    set_flash_message!(:notice, :signed_in)
-    sign_in(resource_name, resource)
-    yield resource if block_given?
-    respond_with resource, location: after_sign_in_path_for(resource)
-  end
+            # This will detect the proper guest OS for the machine and set up
+    # the class to actually execute capabilities.
+    def detect!
+      guest_name = @machine.config.vm.guest
+      initialize_capabilities!(guest_name, @guests, @capabilities, @machine)
+    rescue Errors::CapabilityHostExplicitNotDetected => e
+      raise Errors::GuestExplicitNotDetected, value: e.extra_data[:value]
+    rescue Errors::CapabilityHostNotDetected
+      raise Errors::GuestNotDetected
+    end
     
-      # GET /resource/unlock?unlock_token=abcdef
-  def show
-    self.resource = resource_class.unlock_access_by_token(params[:unlock_token])
-    yield resource if block_given?
-    
-    module Devise
-  module Controllers
-    # A module that may be optionally included in a controller in order
-    # to provide remember me behavior. Useful when signing in is done
-    # through a callback, like in OmniAuth.
-    module Rememberable
-      # Return default cookie values retrieved from session options.
-      def self.cookie_values
-        Rails.configuration.session_options.slice(:path, :domain, :secure)
-      end
-    
-    require 'uri'
-    
-      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
-     options[:store] != false && !env['devise.skip_timeoutable']
-    last_request_at = warden.session(scope)['last_request_at']
-    
-      gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
-  gem.executables   = %w(cap capify)
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ['lib']
-    
-    Then(/^the current symlink points to that specific release$/) do
-  specific_release_path = TestApp.releases_path.join(@rollback_release)
-    
-      def run_vagrant_command(command)
-    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
-    return [stdout, stderr] if status.success?
-    raise VagrantSSHCommandError, status
-  end
-end
-    
-          def select?(options)
-        options.each do |k, v|
-          callable = v.respond_to?(:call) ? v : ->(server) { server.fetch(v) }
-          result = \
-            case k
-            when :filter, :select
-              callable.call(self)
-            when :exclude
-              !callable.call(self)
-            else
-              fetch(k) == v
-            end
-          return false unless result
+            # Initializes the system. Any subclasses MUST make sure this
+        # method is called on the parent. Therefore, if a subclass overrides
+        # `initialize`, then you must call `super`.
+        def initialize(vm)
+          @vm = vm
         end
     
-          def role_properties_for(rolenames)
-        roles = rolenames.to_set
-        rps = Set.new unless block_given?
-        roles_for(rolenames).each do |host|
-          host.roles.intersection(roles).each do |role|
-            [host.properties.fetch(role)].flatten(1).each do |props|
-              if block_given?
-                yield host, role, props
-              else
-                rps << (props || {}).merge(role: role, hostname: host.hostname)
+                    if provider_to_use && provider_to_use != active_provider
+                  # We found an active machine with a provider that doesn't
+                  # match the requested provider. Show an error.
+                  raise Errors::ActiveMachineWithDifferentProvider,
+                    name: active_name.to_s,
+                    active_provider: active_provider.to_s,
+                    requested_provider: provider_to_use.to_s
+                else
+                  # Use this provider and exit out of the loop. One of the
+                  # invariants [for now] is that there shouldn't be machines
+                  # with multiple providers.
+                  @logger.info('Active machine found with name #{active_name}. ' +
+                               'Using provider: #{active_provider}')
+                  provider_to_use = active_provider
+                  break
+                end
               end
+            end
+    
+            # This returns all registered pushes.
+        #
+        # @return [Registry]
+        def pushes
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.pushes)
             end
           end
         end
-        block_given? ? nil : rps
+    
+        # Get a value by the given key.
+    #
+    # This will evaluate the block given to `register` and return the
+    # resulting value.
+    def get(key)
+      return nil if !@items.key?(key)
+      return @results_cache[key] if @results_cache.key?(key)
+      @results_cache[key] = @items[key].call
+    end
+    alias :[] :get
+    
+      def reject(&block)
+    self.class.new(@paths.reject(&block))
+  end
+    
+      it 'calls #to_int on seed' do
+    srand(3.8)
+    srand.should == 3
+    
+      it 'returns nil when command execution fails' do
+    @object.system('sad').should be_nil
+    
+      it 'does not raise an error on a tainted, frozen object' do
+    o = Object.new.taint.freeze
+    o.taint.should equal(o)
+  end
+    
+      it 'returns true when passed ?r if the argument is readable by the effective uid' do
+    Kernel.test(?r, @file).should be_true
+  end
+    
+      it 'calls #write on $stderr if $VERBOSE is false' do
+    lambda {
+      $VERBOSE = false
+      warn('this is some simple text')
+    }.should output(nil, 'this is some simple text\n')
+  end
+    
+      #
+  # If there were CGI parameters in the URI, this will hold a hash of each
+  # variable to value.  If there is more than one value for a given variable,
+  # an array of each value is returned.
+  #
+  def qstring
+    self.uri_parts['QueryString']
+  end
+    
+                encoded
+          end
+    
+                k3 = OpenSSL::HMAC.digest('MD5', k1, checksum)
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of a principal, an asset (e.g., a
+        # workstation user or a network server) on a network.
+        class Element
+    
+          def content_type
+        case params[:format]
+        when 'json'
+          'application/json; charset=utf-8'
+        when 'xml'
+          'text/xml; charset=utf-8'
+        end
       end
     
-          class ValidatedQuestion < Question
-        def initialize(validator)
-          @validator = validator
+            def find_address
+          if @order.bill_address_id == params[:id].to_i
+            @order.bill_address
+          elsif @order.ship_address_id == params[:id].to_i
+            @order.ship_address
+          else
+            raise CanCan::AccessDenied
+          end
         end
-    
-    ::Bundler.with_friendly_errors do
-  ::Bundler::CLI.start(ARGV, :debug => true)
-end
-
-    
-          !File.exists?(File.join(LogStash::Environment::LOGSTASH_HOME, 'x-pack'))
-    end
-    
-            return nil
       end
     end
   end
-end end end
+end
 
     
-      def update_gems!
-    # If any error is raise inside the block the Gemfile will restore a backup of the Gemfile
-    previous_gem_specs_map = find_latest_gem_specs
+            include Spree::Core::ControllerHelpers::Auth
+        include Spree::Core::ControllerHelpers::Order
+        # This before_action comes from Spree::Core::ControllerHelpers::Order
+        skip_before_action :set_current_order
     
-      describe '#system?' do
-    context 'when the pipeline is a system pipeline' do
-      let(:settings) { mock_settings({ 'pipeline.system' => true })}
+            def new; end
     
-    task :spec    => 'spec:all'
-task :default => :spec
+              @properties = if params[:ids]
+                          @properties.where(id: params[:ids].split(',').flatten)
+                        else
+                          @properties.ransack(params[:q]).result
+                        end
     
-          # Returns the delta between this pair's key and the argument pair's.
-      #
-      # @note Keys on the same line always return a delta of 0
-      # @note Keyword splats always return a delta of 0 for right alignment
-      #
-      # @param [Symbol] alignment whether to check the left or right side
-      # @return [Integer] the delta between the two keys
-      def key_delta(other, alignment = :left)
-        HashElementDelta.new(self, other).key_delta(alignment)
+            def show
+          authorize! :admin, ReturnAuthorization
+          @return_authorization = order.return_authorizations.accessible_by(current_ability, :read).find(params[:id])
+          respond_with(@return_authorization)
+        end
+    
+              respond_with(@shipment, default_template: :show)
+        end
+    
+            def update
+          authorize! :update, taxonomy
+          if taxonomy.update_attributes(taxonomy_params)
+            respond_with(taxonomy, status: 200, default_template: :show)
+          else
+            invalid_resource!(taxonomy)
+          end
+        end
+    
+            def update
+          authorize! :update, user
+          if user.update_attributes(user_params)
+            respond_with(user, status: 200, default_template: :show)
+          else
+            invalid_resource!(user)
+          end
+        end
+    
+        def handle_gist_redirecting(data)
+      redirected_url = data.header['Location']
+      if redirected_url.nil? || redirected_url.empty?
+        raise ArgumentError, 'GitHub replied with a 302 but didn't provide a location in the response headers.'
       end
-    
-          # Calls the given block for each condition node in the `when` branch.
-      # If no block is given, an `Enumerator` is returned.
-      #
-      # @return [self] if a block is given
-      # @return [Enumerator] if no block is given
-      def each_condition
-        return conditions.to_enum(__method__) unless block_given?
