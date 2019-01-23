@@ -1,173 +1,220 @@
 
         
-              it 'requires the passwords to match' do
-        visit new_admin_user_path
-        fill_in 'Email', with: 'test@test.com'
-        fill_in 'Username', with: 'usertest'
-        fill_in 'Password', with: '12345678'
-        fill_in 'Password confirmation', with: 'no_match'
-        click_on 'Create User'
-        expect(page).to have_text('Password confirmation doesn't match')
-      end
-    end
+        module Vagrant
+  # This class handles guest-OS specific interactions with a machine.
+  # It is primarily responsible for detecting the proper guest OS
+  # implementation and then delegating capabilities.
+  #
+  # Vagrant has many tasks which require specific guest OS knowledge.
+  # These are implemented using a guest/capability system. Various plugins
+  # register as 'guests' which determine the underlying OS of the system.
+  # Then, 'guest capabilities' register themselves for a specific OS (one
+  # or more), and these capabilities are called.
+  #
+  # Example capabilities might be 'mount_virtualbox_shared_folder' or
+  # 'configure_networks'.
+  #
+  # This system allows for maximum flexibility and pluginability for doing
+  # guest OS specific operations.
+  class Guest
+    include CapabilityHost
     
-      before do
-    login_as(user)
-  end
-    
-          it 'generates a richer DOT script' do
-        expect(agents_dot(@agents, rich: true)).to match(%r{
-          \A
-          digraph \x20 'Agent \x20 Event \x20 Flow' \{
-            (graph \[ [^\]]+ \];)?
-            node \[ [^\]]+ \];
-            edge \[ [^\]]+ \];
-            (?<foo>\w+) \[label=foo,tooltip='Dot \x20 Foo',URL='#{Regexp.quote(agent_path(@foo))}'\];
-            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
-            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
-            \k<bar1> \[label=bar1,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar1))}'\];
-            \k<bar2> \[label=bar2,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar2))}',style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
-            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
-            \k<bar3> \[label=bar3,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar3))}'\];
-          \}
-          \z
-        }x)
-      end
-    end
-  end
-    
-          a = '        Events will have the fields you specified.  Your options look like:\n\n            {\n      \'url\': {\n        \'css\': \'#comic img\',\n        \'value\': \'@src\'\n      },\n      \'title\': {\n        \'css\': \'#comic img\',\n        \'value\': \'@title\'\n      }\n    }\'\n'
-      expect(Utils.unindent(a)).to eq('Events will have the fields you specified.  Your options look like:\n\n    {\n      \'url\': {\n\'css\': \'#comic img\',\n\'value\': \'@src\'\n      },\n      \'title\': {\n\'css\': \'#comic img\',\n\'value\': \'@title\'\n      }\n    }\'')
-    end
-  end
-    
-      let :new_template do
-    {
-      'description' => '{{ hovertext }}',
-      'comment' => '{{ comment }}'
-    }
-  end
-    
-      def translation_scope
-    'devise.sessions'
-  end
-    
-        if resource.errors.empty?
-      set_flash_message! :notice, :unlocked
-      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
-    else
-      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
-    end
-  end
-    
-      end
-end
-    
-    # Each time a record is set we check whether its session has already timed out
-# or not, based on last request time. If so, the record is logged out and
-# redirected to the sign in page. Also, each time the request comes and the
-# record is set, we set the last request time inside its scoped session to
-# verify timeout in the following request.
-Warden::Manager.after_set_user do |record, warden, options|
-  scope = options[:scope]
-  env   = warden.request.env
-    
-          def template_paths
-        template_path = _prefixes.dup
-        template_path.unshift '#{@devise_mapping.scoped_path}/mailer' if self.class.scoped_views?
-        template_path
-      end
-    
-        def default_path_names(options)
-      @path_names = Hash.new { |h,k| h[k] = k.to_s }
-      @path_names[:registration] = ''
-      @path_names.merge!(options[:path_names]) if options[:path_names]
-    end
-    
-              record = to_adapter.get(id)
-          record if record && record.remember_me?(token, generated_at)
+            # Execute a command on the remote machine. The exact semantics
+        # of this method are up to the implementor, but in general the
+        # users of this class will expect this to be a shell.
+        #
+        # This method gives you no way to write data back to the remote
+        # machine, so only execute commands that don't expect input.
+        #
+        # @param [String] command Command to execute.
+        # @yield [type, data] Realtime output of the command being executed.
+        # @yieldparam [String] type Type of the output. This can be
+        #   `:stdout`, `:stderr`, etc. The exact types are up to the
+        #   implementor.
+        # @yieldparam [String] data Data for the given output.
+        # @return [Integer] Exit code of the command.
+        def execute(command, opts=nil)
         end
     
-      # if rss_url already in existing opml file, use that; otherwise, do a lookup
-  rss_url = nil
-  if File.exist?(OUTPUT_FILENAME)
-    xml = Nokogiri::XML(File.open(OUTPUT_FILENAME))
-    existing_blog = xml.xpath('//outline[@htmlUrl='#{web_url}']').first
-    if existing_blog
-      rss_url = existing_blog.attr('xmlUrl')
-      puts '#{name}: ALREADY HAVE'
+            # This is called to upgrade this V1 config to V2. The parameter given
+        # is the full V2 configuration object, so you can do anything to it
+        # that you want.
+        #
+        # No return value is expected, modifications should be made directly
+        # to the new V2 object.
+        #
+        # @param [V2::Root] new
+        def upgrade(new)
+        end
+    
+            # Mounts a shared folder.
+        #
+        # This method should create, mount, and properly set permissions
+        # on the shared folder. This method should also properly
+        # adhere to any configuration values such as `shared_folder_uid`
+        # on `config.vm`.
+        #
+        # @param [String] name The name of the shared folder.
+        # @param [String] guestpath The path on the machine which the user
+        #   wants the folder mounted.
+        # @param [Hash] options Additional options for the shared folder
+        #   which can be honored.
+        def mount_shared_folder(name, guestpath, options)
+          raise BaseError, _key: :unsupported_shared_folder
+        end
+    
+            # This method is expected to return a class that is used for
+        # configuring the provisioner. This return value is expected to be
+        # a subclass of {Config}.
+        #
+        # @return [Config]
+        def self.config_class
+        end
+    
+            # Called after the configuration is finalized and loaded to validate
+        # this object.
+        #
+        # @param [Machine] machine Access to the machine that is being
+        #   validated.
+        # @return [Hash]
+        def validate(machine)
+          return { self.to_s => _detected_errors }
+        end
+    
+        it 'converts String argument with Kernel#Integer' do
+      format('%d', '0b1010').should == '10'
+      format('%d', '112').should == '112'
+      format('%d', '0127').should == '87'
+      format('%d', '0xc4').should == '196'
     end
+    
+      it 'raises a TypeError when passed a String' do
+    lambda { sleep('2')   }.should raise_error(TypeError)
   end
     
-          yaml_file = 'CocoaPods-version.yml'
-      unless File.exist?(yaml_file)
-        $stderr.puts red('[!] Unable to find #{yaml_file}!')
-        exit 1
-      end
-      require 'yaml'
-      cocoapods_version = YAML.load_file(yaml_file)
-      cocoapods_version['last'] = gem_version
-      File.open(yaml_file, 'w') do |f|
-        f.write(cocoapods_version.to_yaml)
+      it 'raises a TypeError when passed nil' do
+    lambda { srand(nil) }.should raise_error(TypeError)
+  end
+    
+      it 'writes each array element on a line when passes an array' do
+    lambda {
+      $VERBOSE = true
+      warn(['line 1', 'line 2'])
+    }.should output(nil, 'line 1\nline 2\n')
+  end
+    
+    # skip over blogs that aren't found
+unavailable = []
+fast_forwards = [
+  'Baidu Research',
+  'Booking.com',
+  'Fynd',
+  'Graphcool',
+  'LinkedIn',
+  'Medallia',
+  'OmniTI',
+  'Paperless Post',
+  'Pluralsight',
+  'Prolific Interactive',
+  'Quora',
+  'Robert Elder Software',
+  'Simple',
+  'SlideShare',
+  'SourceClear',
+  'Viget',
+  'Zalando',
+  'Zapier',
+  'Zynga',
+  'Dave Beazley',
+  'Edan Kwan',
+  'Grzegorz Gajos',
+  'Joe Armstrong',
+  'Kai Hendry',
+  'LiveOverflow'
+]
+    
+            <<END
+/*
+#{header.gsub('*/', '*\\/')}
+    
+          @options[:for_engine][:filename] = @options[:filename]
+      @options[:for_engine][:css_filename] = @options[:output] if @options[:output].is_a?(String)
+      @options[:for_engine][:sourcemap_filename] = @options[:sourcemap_filename]
+      @options[:for_engine][:sourcemap] = @options[:sourcemap]
+    
+            found = possible_files(remove_root(name)).map do |f, s|
+          path = if dir == '.' || Sass::Util.pathname(f).absolute?
+                   f
+                 else
+                   '#{escape_glob_characters(dir)}/#{f}'
+                 end
+          Dir[path].map do |full_path|
+            full_path.gsub!(REDUNDANT_DIRECTORY, File::SEPARATOR)
+            [Sass::Util.cleanpath(full_path).to_s, s]
+          end
+        end.flatten(1)
+        return if found.empty?
+    
+        pod 'ObjCPod', path: 'ObjCPod'
+    pod 'SwiftPod', path: 'SwiftPod'
+    pod 'MixedPod', path: 'MixedPod'
+    pod 'CustomModuleMapPod', path: 'CustomModuleMapPod'
+    
+        attr_reader :local_file
+    
+        after :each do
+      logstash.uninstall
+    end
+    
+          def order_token
+        request.headers['X-Spree-Order-Token'] || params[:order_token]
       end
     
-    #{stack}
-#{executable_path}
-### Plugins
+            include Spree::Core::ControllerHelpers::Auth
+        include Spree::Core::ControllerHelpers::Order
+        # This before_action comes from Spree::Core::ControllerHelpers::Order
+        skip_before_action :set_current_order
     
-                  expect(new_source).to eq(['#{prefix}#{open}#{a},',
-                                        '#{b}#{close}',
-                                        suffix].join($RS))
-            end
+            def update
+          @image = scope.images.accessible_by(current_ability, :update).find(params[:id])
+          if @image.update_attributes(image_params)
+            respond_with(@image, default_template: :show)
+          else
+            invalid_resource!(@image)
           end
         end
-      end
-    end
     
-            expect(cop.highlights).to eq([close])
-        expect(cop.messages)
-          .to eq([described_class::SAME_LINE_MESSAGE])
-      end
-    
-            when_branches.each do |condition|
-          yield condition
+              unless inventory_unit.respond_to?(can_event) &&
+              inventory_unit.send(can_event)
+            render plain: { exception: 'cannot transition to #{@event}' }.to_json,
+                   status: 200
+            false
+          end
         end
     
-          # Custom destructuring method. This can be used to normalize
-      # destructuring for different variations of the node.
-      #
-      # In this case, the `def` node destructures into:
-      #
-      #   `method_name, arguments, body`
-      #
-      # while the `defs` node destructures into:
-      #
-      #   `receiver, method_name, arguments, body`
-      #
-      # so we reverse the destructured array to get the optional receiver
-      # at the end, where it can be discarded.
-      #
-      # @return [Array] the different parts of the `def` or `defs` node
-      def node_parts
-        to_a.reverse
-      end
-    end
-  end
-end
-
+            private
     
-          # Checks whether this node body is a void context.
-      # Always `true` for `for`.
-      #
-      # @return [true] whether the `for` node body is a void context
-      def void_context?
-        true
-      end
+            def create
+          authorize! :create, StockLocation
+          @stock_location = StockLocation.new(stock_location_params)
+          if @stock_location.save
+            respond_with(@stock_location, status: 201, default_template: :show)
+          else
+            invalid_resource!(@stock_location)
+          end
+        end
     
-          # Calls the given block for each condition node in the `when` branch.
-      # If no block is given, an `Enumerator` is returned.
-      #
-      # @return [self] if a block is given
-      # @return [Enumerator] if no block is given
-      def each_condition
-        return conditions.to_enum(__method__) unless block_given?
+            def update
+          authorize! :update, taxon
+          if taxon.update_attributes(taxon_params)
+            respond_with(taxon, status: 200, default_template: :show)
+          else
+            invalid_resource!(taxon)
+          end
+        end
+    
+              @users = @users.result.page(params[:page]).per(params[:per_page])
+          expires_in 15.minutes, public: true
+          headers['Surrogate-Control'] = 'max-age=#{15.minutes}'
+          respond_with(@users)
+        end
