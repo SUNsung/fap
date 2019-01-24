@@ -1,359 +1,285 @@
 
         
-        StringRef swift::platformString(PlatformKind platform) {
-  switch (platform) {
-  case PlatformKind::none:
-    return '*';
-#define AVAILABILITY_PLATFORM(X, PrettyName)                                   \
-  case PlatformKind::X:                                                        \
-    return #X;
-#include 'swift/AST/PlatformKinds.def'
+        REGISTER_OP('Add').Doc(R'doc(
+An op to test that duplicate registrations don't override previously
+registered ops.
+)doc');
+    
+    #ifndef PyObject_HEAD
+struct _object;
+typedef _object PyObject;
+#endif
+    
+    #include 'tensorflow/core/framework/tensor.h'
+#include 'tensorflow/core/lib/core/status.h'
+    
+    
+    {  switch (status.ValueOrDie()) {
+    case CUDA_SUCCESS:
+      return Event::Status::kComplete;
+    case CUDA_ERROR_NOT_READY:
+      return Event::Status::kPending;
+    default:
+      LOG(INFO) << 'Error condition returned for event status: '
+                << status.ValueOrDie();
+      return Event::Status::kError;
   }
-  llvm_unreachable('bad PlatformKind');
 }
     
-    void CacheImpl::destroy() {
-  cache_destroy(static_cast<cache_t*>(Impl));
-}
-
-    
-        {
-      Out << Indent;
-      if (childKind == ChildKind::Root) {
-        Out << '+- ';
-      } else if (childKind == ChildKind::Left) {
-        Out << '/- ';
-      } else if (childKind == ChildKind::Right) {
-        Out << '\\- ';
-      } else if (childKind == ChildKind::Further) {
-        Out << '\\-> ';
-      }
-      PrintNodeData(Out, node);
-      Out << '\n';
-    }
-    
-        // If this is a skippable suffix, skip it and keep looking.
-    if (nameWordRevIter == nameWordRevIterBegin) {
-      if (auto withoutSuffix = skipTypeSuffix(typeName.Name)) {
-        typeName.Name = *withoutSuffix;
-        typeWords = camel_case::getWords(typeName.Name);
-        typeWordRevIter = typeWords.rbegin();
-        typeWordRevIterEnd = typeWords.rend();
-        continue;
-      }
-    }
-    
-    /// The list of known CF types.  We use 'constexpr' to verify that this is
-/// emitted as a constant.  Note that this is expected to be sorted in
-/// quasi-lexicographic order.
-static constexpr const llvm::StringLiteral KnownCFTypes[] = {
-#define CF_TYPE(NAME) #NAME,
-#define NON_CF_TYPE(NAME)
-#include 'SortedCFDatabase.def'
-};
-const size_t NumKnownCFTypes = sizeof(KnownCFTypes) / sizeof(*KnownCFTypes);
-    
-    #include <grpc/impl/codegen/grpc_types.h>
-#include <grpc/support/log.h>
-#include <grpcpp/grpcpp.h>
-#include <grpcpp/resource_quota.h>
-#include 'src/core/lib/channel/channel_args.h'
-#include 'src/core/lib/iomgr/exec_ctx.h'
-#include 'src/core/lib/iomgr/socket_mutator.h'
-    
-      CensusClientCallData()
-      : recv_trailing_metadata_(nullptr),
-        initial_on_done_recv_trailing_metadata_(nullptr),
-        initial_on_done_recv_message_(nullptr),
-        elapsed_time_(0),
-        recv_message_(nullptr),
-        recv_message_count_(0),
-        sent_message_count_(0) {
-    memset(&stats_bin_, 0, sizeof(grpc_linked_mdelem));
-    memset(&tracing_bin_, 0, sizeof(grpc_linked_mdelem));
-    memset(&path_, 0, sizeof(grpc_slice));
-    memset(&on_done_recv_trailing_metadata_, 0, sizeof(grpc_closure));
-    memset(&on_done_recv_message_, 0, sizeof(grpc_closure));
-  }
-    
-    namespace grpc {
-    }
-    
-    
-    {}  // namespace
-    
-    /*!
- * \file graph_attr_types.h
- * \brief Data structures that can appear in graph attributes.
- */
-#ifndef MXNET_GRAPH_ATTR_TYPES_H_
-#define MXNET_GRAPH_ATTR_TYPES_H_
-    
-    /*!
- * \brief Shape inference function to get the correct shape given source shapes.
- * \param lhs The shape of left operand.
- * \param rhs The shape of right operand.
- * \param env The Environment arguments.
- * \return The inferred result shape.
- */
-typedef TShape (*BinaryShapeFunction)(const TShape& lhs,
-                                      const TShape& rhs,
-                                      const EnvArguments& env);
-/*!
- * \brief Gradient function that takes only output gradient and computes gradient wrt to input.
- *  We support total gradient as a whole to make it easy to combine a few ops.
- * \param out_grad the gradient wrt to output of the function.
- * \param env The Environment arguments.
- * \param lhs_grad The container to store result of lhs gradient.
- * \param rhs_grad The container to store result of lhs gradient.
- * \param req_lhs_grad The requirement to store the lhs_grad
- * \param req_rhs_grad The requirement to store the rhs_grad
- * \param ctx Runtime context to execute the function.
- */
-typedef void (*BinaryGradFunctionT0)(const OutputGrad& out_grad,
-                                     const EnvArguments& env,
-                                     TBlob* lhs_grad,
-                                     TBlob* rhs_grad,
-                                     OpReqType req_lhs_grad,
-                                     OpReqType req_rhs_grad,
-                                     RunContext ctx);
-/*!
- * \brief Gradient function that takes inputs of function anod computes gradient wrt to input.
- * \param out_grad the gradient wrt to output of the function.
- * \param lhs The left operand to the function.
- * \param rhs The right operand to the function.
- * \param env The Environment arguments.
- * \param lhs_grad The container to store result of lhs gradient.
- * \param rhs_grad The container to store result of lhs gradient.
- * \param req_lhs_grad The requirement to store the lhs_grad
- * \param req_rhs_grad The requirement to store the rhs_grad
- * \param ctx Runtime context to execute the function.
- */
-typedef void (*BinaryGradFunctionT1)(const OutputGrad& out_grad,
-                                     const Input0& lhs,
-                                     const Input1& rhs,
-                                     const EnvArguments& env,
-                                     TBlob* lhs_grad,
-                                     TBlob* rhs_grad,
-                                     OpReqType req_lhs_grad,
-                                     OpReqType req_rhs_grad,
-                                     RunContext ctx);
-    
-    TShape Vector2TShape(const std::vector<int> &vec_int) {
-  std::vector<mshadow::index_t> vec;
-  for (uint32_t i = 0; i < vec_int.size(); ++i)
-    vec.push_back(vec_int[i]);
-  // 0-dim represents scalar in caffe
-  if (vec_int.size() == 0)
-    vec.push_back(1);
-  return {vec.begin(), vec.end()};
-}
-    
-    
-    {  /*! \brief milliseconds spent in Next() */
-  std::atomic<uint64_t> next_time_;
-};  // class CaffeDataIterWrapper
-    
-    MXNET_REGISTER_OP_PROPERTY(CaffeLoss, CaffeLossProp)
-.describe('Caffe loss layer')
-.add_arguments(CaffeLossParam::__FIELDS__());
-    
-    /*!
- * Copyright (c) 2016 by Contributors
- * \file caffe_op.cc
- * \brief caffe operator
- * \author Haoran Wang
-*/
-#include './caffe_op-inl.h'
-namespace mxnet {
-namespace op {
+    namespace stream_executor {
+namespace cuda {
     }
     }
     
-    /*!
- * \brief Thread pool.
- */
-class ThreadPool {
- public:
-  /*! \brief Signal event upon destruction, even for exceptions (RAII) */
-  struct SetReadyOnDestroy {
-    explicit inline SetReadyOnDestroy(const std::shared_ptr<dmlc::ManualEvent>& event)
-      : event_(event) {
+    #include 'swift/AST/PlatformKind.h'
+#include 'swift/Basic/LangOptions.h'
+#include 'llvm/ADT/StringSwitch.h'
+#include 'llvm/Support/ErrorHandling.h'
+    
+    DIRECTIONAL_PREPOSITION(above)
+DIRECTIONAL_PREPOSITION(after)
+DIRECTIONAL_PREPOSITION(along)
+DIRECTIONAL_PREPOSITION(alongside)
+DIRECTIONAL_PREPOSITION(as)
+DIRECTIONAL_PREPOSITION(at)
+DIRECTIONAL_PREPOSITION(before)
+DIRECTIONAL_PREPOSITION(below)
+DIRECTIONAL_PREPOSITION(by)
+DIRECTIONAL_PREPOSITION(following)
+DIRECTIONAL_PREPOSITION(for)
+DIRECTIONAL_PREPOSITION(from)
+DIRECTIONAL_PREPOSITION(given)
+DIRECTIONAL_PREPOSITION(in)
+DIRECTIONAL_PREPOSITION(including)
+DIRECTIONAL_PREPOSITION(inside)
+DIRECTIONAL_PREPOSITION(into)
+DIRECTIONAL_PREPOSITION(matching)
+DIRECTIONAL_PREPOSITION(of)
+DIRECTIONAL_PREPOSITION(on)
+DIRECTIONAL_PREPOSITION(passing)
+DIRECTIONAL_PREPOSITION(preceding)
+DIRECTIONAL_PREPOSITION(since)
+DIRECTIONAL_PREPOSITION(to)
+DIRECTIONAL_PREPOSITION(until)
+DIRECTIONAL_PREPOSITION(using)
+DIRECTIONAL_PREPOSITION(via)
+DIRECTIONAL_PREPOSITION(when)
+PREPOSITION(with)
+DIRECTIONAL_PREPOSITION(within)
+    
+      struct IndentScope {
+    TreePrinter *Printer;
+    size_t OldLength;
+    IndentScope(TreePrinter *printer, StringRef indent)
+        : Printer(printer), OldLength(printer->Indent.size()) {
+      Printer->Indent += indent;
     }
-    inline ~SetReadyOnDestroy() {
-      if (event_) {
-        event_->signal();
-      }
-    }
-    std::shared_ptr<dmlc::ManualEvent>  event_;
+    ~IndentScope() { Printer->Indent.resize(OldLength); }
   };
-    }
     
-      ~ThreadedEnginePooled() noexcept(false) {
-    StopNoWait();
+        StringRef Line = RawText.substr(0, Pos);
+    Lines.push_back(Line);
+    if (!IsFirstLine) {
+      size_t NonWhitespacePos = RawText.find_first_not_of(' ');
+      if (NonWhitespacePos != StringRef::npos)
+        WhitespaceToTrim =
+            std::min(WhitespaceToTrim,
+                     static_cast<unsigned>(NonWhitespacePos));
+    }
+    IsFirstLine = false;
+    
+      const ASTContext &ctx = ImporterImpl.SwiftContext;
+    
+    /// Translate the given operator character into its mangled form.
+///
+/// Current operator characters:   @/=-+*%<>!&|^~ and the special operator '..'
+char Mangle::translateOperatorChar(char op) {
+  switch (op) {
+    case '&': return 'a'; // 'and'
+    case '@': return 'c'; // 'commercial at sign'
+    case '/': return 'd'; // 'divide'
+    case '=': return 'e'; // 'equal'
+    case '>': return 'g'; // 'greater'
+    case '<': return 'l'; // 'less'
+    case '*': return 'm'; // 'multiply'
+    case '!': return 'n'; // 'negate'
+    case '|': return 'o'; // 'or'
+    case '+': return 'p'; // 'plus'
+    case '?': return 'q'; // 'question'
+    case '%': return 'r'; // 'remainder'
+    case '-': return 's'; // 'subtract'
+    case '~': return 't'; // 'tilde'
+    case '^': return 'x'; // 'xor'
+    case '.': return 'z'; // 'zperiod' (the z is silent)
+    default:
+      return op;
+  }
+}
+    
+    
+    {    auto newNode = factory.createNode(node->getKind());
+    newNode->addChild(newContext, factory);
+    for (unsigned i = 1, n = node->getNumChildren(); i != n; ++i)
+      newNode->addChild(node->getChild(i), factory);
+    return newNode;
+  }
+      
+  case Demangle::Node::Kind::Extension: {
+    // Strip generic arguments from the extended type.
+    if (node->getNumChildren() < 2)
+      return node;
+    
+    auto newExtended = stripGenericArgsFromContextNode(node->getChild(1),
+                                                       factory);
+    if (newExtended == node->getChild(1)) return node;
+    
+    auto newNode = factory.createNode(Node::Kind::Extension);
+    newNode->addChild(node->getChild(0), factory);
+    newNode->addChild(newExtended, factory);
+    if (node->getNumChildren() == 3)
+      newNode->addChild(node->getChild(2), factory);
+    return newNode;
   }
     
-    Graph DetectInplaceAddTo(Graph g) {
-  nnvm::StorageVector storage_id =
-      g.MoveCopyAttr<nnvm::StorageVector>('storage_id');
-  std::vector<int> storage_inplace_index =
-      g.MoveCopyAttr<std::vector<int> >('storage_inplace_index');
-  static const Op* ewise_plus_op = Op::Get('_grad_add');
-  auto& idx = g.indexed_graph();
-  // reference cont.
-  std::vector<int> ref_count(idx.num_node_entries(), 0);
-  std::vector<int> addto_entry(idx.num_node_entries(), 0);
-  std::vector<int> skip_plus_node(idx.num_nodes(), 0);
+    void Clipboard::SetText(std::string& text) {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  ui::Clipboard::ObjectMap map;
+  map[ui::Clipboard::CBF_TEXT].push_back(
+      std::vector<char>(text.begin(), text.end()));
+  clipboard->WriteObjects(ui::CLIPBOARD_TYPE_COPY_PASTE, map);
+}
+    
+    void Menu::Create(const base::DictionaryValue& option) {
+  gtk_accel_group = NULL;
+  std::string type;
+  if (option.GetString('type', &type) && type == 'menubar')
+    menu_ = gtk_menu_bar_new();
+  else
+    menu_ = gtk_menu_new();
     }
     
-    class TBlobContainer : public TBlob {
- public:
-  TBlobContainer(void)
-    : TBlob(), tensor_container_(nullptr) {}
-  ~TBlobContainer() {
-    if (tensor_container_) {
-      release();
-    }
-  }
-  void resize(const TShape &shape, int type_flag) {
-    if (tensor_container_) {
-      CHECK_EQ(this->type_flag_, type_flag);
-      this->shape_ = shape;
-      resize();
-    } else {
-      this->type_flag_ = type_flag;
-      this->shape_ = shape;
-      create();
-    }
-  }
-    }
-    
-    // This template function declaration is used in defining arraysize.
-// Note that the function doesn't need an implementation, as we only
-// use its type.
-template <typename T, size_t N>
-char (&ArraySizeHelper(T (&array)[N]))[N];
+      // Map point from document to screen.
+  gfx::Point screen_point(x, y);
     
     namespace {
-// For non-dense Range, intermediate values are powers of kRangeMultiplier.
-static const int kRangeMultiplier = 8;
-// The size of a benchmark family determines is the number of inputs to repeat
-// the benchmark on. If this is 'large' then warn the user during configuration.
-static const size_t kMaxFamilySize = 100;
-}  // end namespace
-    
-    
-    {    printed_header_ = true;
-  } else {
-    // check that all the current counters are saved in the name set
-    for (const auto& run : reports) {
-      for (const auto& cnt : run.counters) {
-        CHECK(user_counter_names_.find(cnt.first) != user_counter_names_.end())
-              << 'All counters must be present in each run. '
-              << 'Counter named \'' << cnt.first
-              << '\' was not in a run after being added to the header';
-      }
-    }
-  }
-    
-    #define RELEASE_SHARED(...) \
-  THREAD_ANNOTATION_ATTRIBUTE__(release_shared_capability(__VA_ARGS__))
-    
-    #include 'benchmark/benchmark.h'
-#include 'timers.h'
-    
-      /**
-   * @brief Destructor
-   */
-  virtual ~CanClient() = default;
-    
-      CanAgent agent_a(param_ptr_a.get());
-  CanAgent agent_b(param_ptr_b.get());
-  agent_a.AddOtherAgent(&agent_b);
-  agent_b.AddOtherAgent(&agent_a);
-  if (!agent_a.Start()) {
-    AERROR << 'Agent a start failed.';
-    return -1;
-  }
-  if (FLAGS_only_one_send) {
-    agent_b.is_receiving(true);
-    agent_b.is_sending_finish(true);
-  } else {
-    if (!agent_b.Start()) {
-      AERROR << 'Agent b start failed.';
-      return -1;
-    }
-  }
-    
-    TEST_F(FakeCanClientTest, SendMessage) {
-  std::vector<CanFrame> frames;
-  frames.resize(FRAME_LEN);
-  for (int32_t i = 0; i < FRAME_LEN; ++i) {
-    frames[i].id = 1 & 0x3FF;
-    frames[i].len = 8;
-    frames[i].data[7] = 1 % 256;
-    for (int32_t j = 0; j < 7; ++j) {
-      frames[i].data[j] = j;
-    }
-  }
+  const char* kPNGDataUriPrefix = 'data:image/png;base64,';
+  const char* kJPEGDataUriPrefix = 'data:image/jpeg;base64,';
+  const int   kQuality = 100;
     }
     
-      if (ret != ErrorCode::OK) {
-    AERROR << 'Open device error code: ' << ret
-           << ', channel id: ' << _card_port;
-    return ErrorCode::CAN_CLIENT_ERROR_BASE;
-  }
-  AERROR << 'Open device succ code: ' << ret << ', channel id: ' << _card_port;
+    #include <vector>
     
-    // Synchronous transmission of CAN messages
-ErrorCode SocketCanClientRaw::Send(const std::vector<CanFrame> &frames,
-                                   int32_t *const frame_num) {
-  CHECK_NOTNULL(frame_num);
-  CHECK_EQ(frames.size(), static_cast<size_t>(*frame_num));
-    }
     
-    TEST(SocketCanClientRawTest, simple_test) {
-  CANCardParameter param;
-  param.set_brand(CANCardParameter::SOCKET_CAN_RAW);
-  param.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
-    }
-    
-      ProtocolData<::apollo::canbus::ChassisDetail> mpd;
-  SenderMessage<::apollo::canbus::ChassisDetail> msg(1, &mpd);
-  EXPECT_FALSE(sender.NeedSend(msg, 1));
-  EXPECT_EQ(msg.message_id(), 1);
-  int32_t period = msg.curr_period();
-  msg.UpdateCurrPeriod(-50);
-  EXPECT_EQ(msg.curr_period(), period + 50);
-  EXPECT_EQ(msg.CanFrame().id, 1);
-    
-    class MockMessageManager
-    : public MessageManager<::apollo::canbus::ChassisDetail> {
- public:
-  MockMessageManager() {
-    AddRecvProtocolData<MockProtocolData, true>();
-    AddSendProtocolData<MockProtocolData, true>();
-  }
-};
-    
-      /**
-   * @brief Reset the lower 4 bits as the lower 4 bits of a specified one-byte
-   *        unsigned integer.
-   * @param value The one-byte unsigned integer whose lower 4 bits are used to
-   *        set this Byte's lower 4 bits.
-   */
-  void set_value_low_4_bits(const uint8_t value);
-    
-    TEST(ByteTest, CopyConstructor) {
-  unsigned char byte_value = 0xFF;
-  Byte value(&byte_value);
-  Byte another_value(value);
-  EXPECT_EQ(another_value.to_hex_string(), value.to_hex_string());
-  EXPECT_EQ(another_value.to_binary_string(), value.to_binary_string());
+    {  nw::ObjectManager* manager = nw::ObjectManager::Get(browser_context());
+  manager->OnAllocateObject(id, type, *options, extension_id());
+  return true;
 }
     
-    #endif  // MODULES_DRIVERS_CANBUS_COMMON_CANBUS_CONSTS_H_
+     protected:
+  ~NwObjAllocateIdFunction() override;
+    
+      ~Fork() {
+    if (pid > 0) {
+      kill(pid, SIGKILL);
+      waitpid(pid, nullptr, 0);
+    }
+  }
+    
+    OPERATOR_SCHEMA(EnforceFinite)
+    .NumInputs(1)
+    .NumOutputs(0)
+    .SetDoc(R'DOC(
+Raise if there is NaN or Inf values in the input tensor.
+)DOC')
+    .Input(0, 'input', 'Input tensor');
+    
+    </details>
+    
+    ```
+    
+    OPERATOR_SCHEMA(GivenTensorStringFill)
+    .NumInputs(0, 1)
+    .NumOutputs(1)
+    .AllowInplace({{0, 0}})
+    .Arg(
+        'values',
+        'The value for the elements of the output tensor.',
+        true /* required */)
+    .Arg(
+        'shape',
+        'The shape of the output tensor.'
+        'Cannot set the shape argument and pass in an input at the same time.')
+    .Arg(
+        'extra_shape',
+        'The additional dimensions appended at the end of the shape indicated'
+        'by the input blob.'
+        'Cannot set the extra_shape argument when there is no input blob.')
+    .Arg(
+        'input_as_shape',
+        '1D tensor containing the desired output shape. First input must be in CPU context.')
+    .TensorInferenceFunction(
+        FillerTensorInference<TensorProto_DataType_STRING>);
+    
+      bool Next() override {
+    if (!parser_->Next()) return false;
+    const RowBlock<IndexType>& batch = parser_->Value();
+    LOG(INFO) << batch.size;
+    dense_index_.resize(num_col_ * batch.size);
+    dense_value_.resize(num_col_ * batch.size);
+    std::fill(dense_value_.begin(), dense_value_.end(), 0.0);
+    offset_.resize(batch.size + 1);
+    offset_[0] = 0;
+    }
+    
+    namespace xgboost {
+namespace common {
+TEST(CompressedIterator, Test) {
+  ASSERT_TRUE(detail::SymbolBits(256) == 8);
+  ASSERT_TRUE(detail::SymbolBits(150) == 8);
+  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
+  int num_elements = 1000;
+  int repetitions = 1000;
+  srand(9);
+    }
+    }
+    }
+    
+    #ifdef __CUDACC__
+  __device__ void AtomicWriteSymbol
+    (CompressedByteT* buffer, uint64_t symbol, size_t offset) {
+    size_t ibit_start = offset * symbol_bits_;
+    size_t ibit_end = (offset + 1) * symbol_bits_ - 1;
+    size_t ibyte_start = ibit_start / 8, ibyte_end = ibit_end / 8;
+    }
+    
+    //---- Define attributes of all API symbols declarations, e.g. for DLL under Windows.
+//#define IMGUI_API __declspec( dllexport )
+//#define IMGUI_API __declspec( dllimport )
+    
+    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
 
     
-    // System gflags
-DEFINE_string(sensor_node_name, '', 'Sensor node name.');
+                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
+            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
+            ImGui::Checkbox('Another Window', &show_another_window);
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+    
+        // output element with JSON pointer '/number'
+    std::cout << j.at('/number'_json_pointer) << '\n';
+    // output element with JSON pointer '/string'
+    std::cout << j.at('/string'_json_pointer) << '\n';
+    // output element with JSON pointer '/array'
+    std::cout << j.at('/array'_json_pointer) << '\n';
+    // output element with JSON pointer '/array/1'
+    std::cout << j.at('/array/1'_json_pointer) << '\n';
