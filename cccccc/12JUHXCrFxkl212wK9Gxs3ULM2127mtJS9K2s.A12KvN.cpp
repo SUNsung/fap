@@ -1,226 +1,141 @@
-namespace leveldb {
-    }
-    
-     private:
-  // We construct a char array of the form:
-  //    klength  varint32               <-- start_
-  //    userkey  char[klength]          <-- kstart_
-  //    tag      uint64
-  //                                    <-- end_
-  // The array is a suitable MemTable key.
-  // The suffix starting with 'userkey' can be used as an InternalKey.
-  const char* start_;
-  const char* kstart_;
-  const char* end_;
-  char space_[200];      // Avoid allocation for short keys
-    
-      Slice in(encoded);
-  ParsedInternalKey decoded('', 0, kTypeValue);
-    
-    namespace leveldb {
-namespace log {
-    }
-    }
-    
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
-}
 
-    
-      // Compute the crc of the record type and the payload.
-  uint32_t crc = crc32c::Extend(type_crc_[t], ptr, n);
-  crc = crc32c::Mask(crc);                 // Adjust for storage
-  EncodeFixed32(buf, crc);
-    
-        /*virtual*/ void LearnerFSAdaGrad::Update(const Parameter& parameter, const NDArrayViewPtr& gradientValue, 
-                                              const NDArrayViewPtr& smoothedGradientValue, size_t trainingSampleCount) /*override*/
-    {
-        DISPATCH_TO_TYPED_UPDATE_FUNCTION;
-    }
-    
-            const std::unordered_map<StreamInformation, MinibatchData>& GetNextMinibatch(
-            size_t minibatchSizeInSamples,
-            size_t minibatchSizeInSequences,
-            size_t numberOfWorkers,
-            size_t workerRank,
-            const DeviceDescriptor& device = DeviceDescriptor::UseDefaultDevice()) override;
-    
-        template <typename ElementType, typename V1ElemType>
-    ElementType NDArrayView::_AsScalar() const
-    {
-        auto scalarData = this->shared_from_this();
-        if (scalarData->Shape().TotalSize() != 1)
-            LogicError('NDArrayView::AsScalar: The NDArrayView shaped '%S' is not a scalar.', scalarData->Shape().AsString().c_str());
-    }
-    
-            if (sectionShape.Rank() > m_maskShape.Rank())
-            LogicError('NDMask::MaskSection: The section shape '%S' rank (%d) must be <= rank (%d) of 'this' mask.', sectionShape.AsString().c_str(), (int)sectionShape.Rank(), (int)m_maskShape.Rank());
-    
-            // (start, end) values in the current window to be reported.
-        std::pair<double, double> m_loss;
-        std::pair<double, double> m_metric;
-        std::pair<size_t, size_t> m_samples;
-        std::pair<size_t, size_t> m_updates;
-    
-    namespace CNTK
-{
-    const std::wstring versionKey = L'version';
-    const std::wstring typeKey = L'type';
-    const std::wstring uidKey = L'uid';
-    const std::wstring kindKey = L'kind';
-    const std::wstring dataTypeKey = L'data_type';
-    const std::wstring dynamicAxisKey = L'dynamic_axis';
-    const std::wstring isSparseKey = L'is_sparse';
-    const std::wstring nameKey = L'name';
-    const std::wstring needsGradientKey = L'needs_gradient';
-    const std::wstring shapeKey = L'shape';
-    const std::wstring valueKey = L'value';
-    const std::wstring opKey = L'op';
-    const std::wstring attributesKey = L'attributes';
-    const std::wstring inputsKey = L'inputs';
-    const std::wstring rootKey = L'root';
-    const std::wstring functionsKey = L'primitive_functions';
-    const std::wstring sampleCountKey = L'sample_count';
-    const std::wstring minibatchCountKey = L'minibatchCount'; // TODO: Python-style spelling
-    const std::wstring sweepCountKey = L'sweepCount';
-    const std::wstring unitKey = L'unit';
-    const std::wstring refMBSizeKey = L'ref_mb_size';
-    const std::wstring epochSizeKey = L'epoch_size';
-    const std::wstring scheduleKey = L'schedule';
-    const std::wstring learningRateScheduleKey = L'learnig_rate_schedule';
-    const std::wstring smoothedGradientsKey = L'smoothed_gradients';
-    const std::wstring noiseInjectionSeedKey = L'noise_injection_seed';
-    const std::wstring masterParameterUpdatedKey = L'master_parameter_updated';
-    const std::wstring smoothedCountKey = L'smoothed_count';
-    const std::wstring stateKey = L'state';
-    const std::wstring rngSeedKey = L'rng_seed';
-    const std::wstring rngOffsetKey = L'rng_offset';
-    const std::wstring blockFunctionCompositeKey = L'block_function_composite';
-    const std::wstring blockFunctionOpNameKey = L'block_function_op_name';
-    const std::wstring blockFunctionCompositeArgumentsMapKeysKey = L'block_function_composite_arguments_map_keys';
-    const std::wstring blockFunctionCompositeArgumentsMapValuesKey = L'block_function_composite_arguments_map_values';
-    const std::wstring internalWorkerStateKey = L'internal_worker_state';
-    const std::wstring externalWorkerStateKey = L'external_worker_state';
-    const std::wstring userDefinedStateKey = L'user_defined_state';
-    const std::wstring udfModuleNameKey = L'module';
-    const std::wstring udfFactoryMethodNameKey = L'deserialize_method';
-    const std::wstring nativeUDFKey = L'native';
-    }
-    
-            static bool IsUDF(const Dictionary& dict);
-    
-            static NDShape GetUnpackedShape(const NDShape& sampleShape, const std::vector<Axis>& sampleDynamicAxes, const std::shared_ptr<Microsoft::MSR::CNTK::MBLayout>& packedDataLayout)
-        {
-            // Determine unpacked shape
-            auto unpackedShape = sampleShape;
-            if (packedDataLayout)
-            {
-                if (sampleDynamicAxes.empty())
-                    LogicError('A PackedValue object that has a layout must have at least one dynamic axis.');
-    }
-    }
-    
-    public:
-    CrossProcessMutex(const std::string& name)
-        : m_fd(-1),
-          m_fileName('/var/lock/' + name)
-    {
-    }
-    
-        // Executing this function from BrainScript merely sets up a lambda, but does not actually create any clone.
-    // This is so that the function can be called multiple times in order to create multiple clones.
-    CloneFunctionConfigLambda(const IConfigRecordPtr configp) :
-        ConfigLambda(CreateParamNames(*configp), NamedParams(), [this](vector<ConfigValuePtr> &&args, NamedParams &&namedArgs, const std::wstring &exprName){ return this->DoClone(args, exprName); })
-    {
-        let& config = *configp;
-        // input nodes
-        inputNodes = GetInputNodes(config);
-        // output nodes
-        let outputNodesParam = config[L'outputNodes'];  // can be a node or a record
-        if (outputNodesParam.Is<ComputationNodeBase>()) // scalar case: result is a single node
-            outputNodes[L''] = outputNodesParam.AsPtr<ComputationNodeBase>(); // indicated by a '' node name in outputNodes[]
-        else                                            // multi-valued case: result is a record of nodes
-        {
-            let& outputNodesRecord = outputNodesParam.AsRef<IConfigRecord>();
-            for (let& nodeName : outputNodesRecord.GetMemberIds())
-                outputNodes[nodeName] = outputNodesRecord[nodeName].AsPtr<ComputationNodeBase>();
-            if (outputNodes.empty())
-                InvalidArgument('CloneFunction: At least one output nodes must be specified.');
-        }
-        // treatment of parameters
-        wstring parametersOption = config[L'parameters'];
-        if      (parametersOption == L'learnable') parameterTreatment = ParameterTreatment::learnable;
-        else if (parametersOption == L'constant')  parameterTreatment = ParameterTreatment::constant;
-        else if (parametersOption == L'shared')    parameterTreatment = ParameterTreatment::shared;
-        else InvalidArgument('CloneFunction: 'parameters' option must be 'learnable', 'constant', or 'shared'.');
-    }
-    
-        virtual void /*ComputationNodeBase::*/ Validate(bool isFinalValidationPass) override
-    {
-        Base::Validate(isFinalValidationPass);
-        InferMBLayoutFromInputsForStandardCase(isFinalValidationPass);
-    }
-    
-      virtual std::unique_ptr<Dict> getResponse() = 0;
-    
-    std::shared_ptr<DHTBucket>
-DHTRoutingTable::getBucketFor(const unsigned char* nodeID) const
-{
-  return dht::findBucketFor(root_.get(), nodeID);
+        
+        static const Message* GetCProtoInsidePyProtoStub(PyObject* msg) {
+  return NULL;
+}
+static Message* MutableCProtoInsidePyProtoStub(PyObject* msg) {
+  return NULL;
 }
     
-    class DHTRoutingTableDeserializer {
-private:
-  int family_;
+    #include <google/protobuf/compiler/csharp/csharp_doc_comment.h>
+#include <google/protobuf/compiler/csharp/csharp_enum.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/compiler/csharp/csharp_options.h>
+    
+    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
+  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
+  // Identifiers can't start with digits
+  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
+  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
+}
+    
+        if (file_contains_extensions) {
+      printer->Print(
+          'static GPBExtensionDescription descriptions[] = {\n');
+      printer->Indent();
+      for (std::vector<ExtensionGenerator *>::iterator iter =
+               extension_generators_.begin();
+           iter != extension_generators_.end(); ++iter) {
+        (*iter)->GenerateStaticVariablesInitialization(printer);
+      }
+      for (std::vector<MessageGenerator *>::iterator iter =
+               message_generators_.begin();
+           iter != message_generators_.end(); ++iter) {
+        (*iter)->GenerateStaticVariablesInitialization(printer);
+      }
+      printer->Outdent();
+      printer->Print(
+          '};\n'
+          'for (size_t i = 0; i < sizeof(descriptions) / sizeof(descriptions[0]); ++i) {\n'
+          '  GPBExtensionDescriptor *extension =\n'
+          '      [[GPBExtensionDescriptor alloc] initWithExtensionDescription:&descriptions[i]];\n'
+          '  [registry addExtension:extension];\n'
+          '  [self globallyRegisterExtension:extension];\n'
+          '  [extension release];\n'
+          '}\n');
     }
     
-    #include 'LogFactory.h'
-#include 'Logger.h'
-#include 'util.h'
-#include 'DHTNode.h'
-#include 'DHTConnectionImpl.h'
-#include 'DHTRoutingTable.h'
-#include 'DHTMessageFactoryImpl.h'
-#include 'DHTMessageTracker.h'
-#include 'DHTMessageDispatcherImpl.h'
-#include 'DHTMessageReceiver.h'
-#include 'DHTTaskQueueImpl.h'
-#include 'DHTTaskFactoryImpl.h'
-#include 'DHTPeerAnnounceStorage.h'
-#include 'DHTTokenTracker.h'
-#include 'DHTInteractionCommand.h'
-#include 'DHTTokenUpdateCommand.h'
-#include 'DHTBucketRefreshCommand.h'
-#include 'DHTPeerAnnounceCommand.h'
-#include 'DHTEntryPointNameResolveCommand.h'
-#include 'DHTAutoSaveCommand.h'
-#include 'DHTTask.h'
-#include 'DHTRoutingTableDeserializer.h'
-#include 'DHTRegistry.h'
-#include 'DHTBucketRefreshTask.h'
-#include 'DHTMessageCallback.h'
-#include 'DHTMessageTrackerEntry.h'
-#include 'DHTMessageEntry.h'
-#include 'UDPTrackerClient.h'
-#include 'BtRegistry.h'
-#include 'prefs.h'
-#include 'Option.h'
-#include 'SocketCore.h'
-#include 'DlAbortEx.h'
-#include 'RecoverableException.h'
-#include 'a2functional.h'
-#include 'DownloadEngine.h'
-#include 'fmt.h'
+    #include <map>
+#include <string>
     
-    #include 'common.h'
+    #include <iostream>
+#include <set>
     
-      ~DHTTaskExecutor();
+    static uint32 ComputeCRC32(const string &buf) {
+  uint32 x = ~0U;
+  for (int i = 0; i < buf.size(); ++i) {
+    unsigned char c = buf[i];
+    x = kCRC32Table[(x ^ c) & 0xff] ^ (x >> 8);
+  }
+  return ~x;
+}
     
-    namespace aria2 {
+    float SafeDoubleToFloat(double value) {
+  if (value > std::numeric_limits<float>::max()) {
+    return std::numeric_limits<float>::infinity();
+  } else if (value < -std::numeric_limits<float>::max()) {
+    return -std::numeric_limits<float>::infinity();
+  } else {
+    return static_cast<float>(value);
+  }
+}
+    
+      uint64 result = 0;
+  for (; *ptr != '\0'; ptr++) {
+    int digit = DigitValue(*ptr);
+    if (digit < 0 || digit >= base) {
+      // The token provided by Tokenizer is invalid. i.e., 099 is an invalid
+      // token, but Tokenizer still think it's integer.
+      return false;
+    }
+    if (digit > max_value || result > (max_value - digit) / base) {
+      // Overflow.
+      return false;
+    }
+    result = result * base + digit;
+  }
+    
+    
+    {                      ' trailing block comment\n'
+                      ' line 2\n'
+                      ' line 3\n',
+                      {},
+                      ' leading block comment\n'
+                      ' line 2\n'
+                      ' line 3 '
+                    },
+    
+    namespace mxnet {
+/*! \brief runtime functions for NDArray */
+class Imperative {
+ public:
+  /*! \brief */
+  class AGInfo {
+   public:
+    Context ctx;
+    OpReqType grad_req;
+    OpStatePtr state;
+    std::vector<NDArray> outputs;
+    std::vector<NDArray> out_grads;
+    bool fresh_out_grad;
+    }
+    }
     }
     
-      // show some sample bytes
-  virtual std::string toString() const CXX11_OVERRIDE;
+      std::string TypeString() const override {
+    return 'CaffeLoss';
+  }
     
-        // change element with key 'the bad'
-    object.at('the bad') = 'il cattivo';
+    When `num_parts` and `part_index` are provided, the data is split into `num_parts` partitions,
+and the iterator only reads the `part_index`-th partition. However, the partitions are not
+guaranteed to be even.
+    
+    BOOST_FORCEINLINE void pause() BOOST_NOEXCEPT
+{
+#if defined(_MSC_VER) && (defined(_M_AMD64) || defined(_M_IX86))
+    _mm_pause();
+#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+    __asm__ __volatile__('pause;');
+#endif
+}
