@@ -1,160 +1,135 @@
 
         
-                infos = []
-        if not self.wasSuccessful():
-            write('FAILED')
-            failed, errored = map(len, (self.failures, self.errors))
-            if failed:
-                infos.append('failures=%d' % failed)
-            if errored:
-                infos.append('errors=%d' % errored)
-        else:
-            write('OK')
+            def format_headers(self, headers):
+        for p in self.enabled_plugins:
+            headers = p.format_headers(headers)
+        return headers
     
-            try:
-            spidercls = self.crawler_process.spider_loader.load(name)
-        except KeyError:
-            pass
-        else:
-            # if spider already exists and not --force then halt
-            if not opts.force:
-                print('Spider %r already exists in module:' % name)
-                print('  %s' % spidercls.__module__)
-                return
-        template_file = self._find_template(opts.template)
-        if template_file:
-            self._genspider(module, name, domain, opts.template, template_file)
-            if opts.edit:
-                self.exitcode = os.system('scrapy edit '%s'' % name)
+        def get_adapter(self):
+        '''
+        Return a ``requests.adapters.BaseAdapter`` subclass instance to be
+        mounted to ``self.prefix``.
     
-        def syntax(self):
-        return '[options] <url>'
+        def get_converters(self):
+        return [plugin for plugin in self
+                if issubclass(plugin, ConverterPlugin)]
     
-            e.g.:
-        @returns request
-        @returns request 2
-        @returns request 2 10
-        @returns request 0 10
-    '''
     
-            # Load GoAgent CA
-        with open(CertUtil.ca_keyfile, 'rb') as fp:
-            content = fp.read()
-        ca = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, content)
-        CertUtil.ca_privatekey = OpenSSL.crypto.load_privatekey(OpenSSL.crypto.FILETYPE_PEM, content)
-        CertUtil.ca_thumbprint = ca.digest('sha1')
-        CertUtil.ca_subject = ca.get_subject()
-        ca_cert_error = True
-        if os.path.exists(CertUtil.ca_certfile):
-            with open(CertUtil.ca_certfile, 'rb') as fp:
-                ca_cert_error = fp.read() not in content
-        if ca_cert_error:
-            with open(CertUtil.ca_certfile, 'wb') as fp:
-                fp.write(OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM, ca))
+def humanize_bytes(n, precision=2):
+    # Author: Doug Latornell
+    # Licence: MIT
+    # URL: http://code.activestate.com/recipes/577081/
+    '''Return a humanized string representation of a number of bytes.
     
-        def write(self, content):
-        self.fd.write(content + '\n')
-        self.fd.flush()
+        '''
+    args = httpie.cli.parser.parse_args(args=[url], env=MockEnvironment())
+    assert args.auth
+    assert args.auth.username == 'username'
+    assert args.auth.password == ''
     
-        def __str__(self):
-        return 'MismatchedTreeNodeException(%r!=%r)' % (
-            self.getUnexpectedType(), self.expecting
-            )
-    __repr__ = __str__
+    
+def test_max_redirects(httpbin):
+    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
+             error_exit_ok=True)
+    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
 
     
-            raise NotImplementedError
-    
-        # Print the location of each facial feature in this image
-    for facial_feature in face_landmarks.keys():
-        print('The {} in this face has the following points: {}'.format(facial_feature, face_landmarks[facial_feature]))
-    
-    requirements = [
-    'face_recognition_models>=0.3.0',
-    'Click>=6.0',
-    'dlib>=19.7',
-    'numpy',
-    'Pillow'
-]
+        outputs1 = Lambda(lambda x: utils.preprocess_input(x, 'channels_last'),
+                      output_shape=x.shape)(inputs)
+    model1 = Model(inputs, outputs1)
+    out1 = model1.predict(x[np.newaxis])[0]
+    x2 = np.transpose(x, (2, 0, 1))
+    inputs2 = Input(shape=x2.shape)
+    outputs2 = Lambda(lambda x: utils.preprocess_input(x, 'channels_first'),
+                      output_shape=x2.shape)(inputs2)
+    model2 = Model(inputs2, outputs2)
+    out2 = model2.predict(x2[np.newaxis])[0]
+    assert_allclose(out1, out2.transpose(1, 2, 0))
     
     
-def keypoint_results(cls_boxes, pred_heatmaps, ref_boxes):
-    num_classes = cfg.MODEL.NUM_CLASSES
-    cls_keyps = [[] for _ in range(num_classes)]
-    person_idx = keypoint_utils.get_person_class_index()
-    xy_preds = keypoint_utils.heatmaps_to_keypoints(pred_heatmaps, ref_boxes)
+def test_regularization_shared_model():
+    dense_layer = Dense(num_classes,
+                        kernel_regularizer=regularizers.l1(),
+                        activity_regularizer=regularizers.l1())
     
+            self.kernel = self.add_weight(shape=kernel_shape,
+                                      initializer=self.kernel_initializer,
+                                      name='kernel',
+                                      regularizer=self.kernel_regularizer,
+                                      constraint=self.kernel_constraint)
+        self.recurrent_kernel = self.add_weight(
+            shape=recurrent_kernel_shape,
+            initializer=self.recurrent_initializer,
+            name='recurrent_kernel',
+            regularizer=self.recurrent_regularizer,
+            constraint=self.recurrent_constraint)
+        if self.use_bias:
+            if self.unit_forget_bias:
+                def bias_initializer(_, *args, **kwargs):
+                    return K.concatenate([
+                        self.bias_initializer((self.filters,), *args, **kwargs),
+                        initializers.Ones()((self.filters,), *args, **kwargs),
+                        self.bias_initializer((self.filters * 2,), *args, **kwargs),
+                    ])
+            else:
+                bias_initializer = self.bias_initializer
+            self.bias = self.add_weight(shape=(self.filters * 4,),
+                                        name='bias',
+                                        initializer=bias_initializer,
+                                        regularizer=self.bias_regularizer,
+                                        constraint=self.bias_constraint)
+        else:
+            self.bias = None
     
-def add_ResNet_convX_body(model, block_counts):
-    '''Add a ResNet body from input data up through the res5 (aka conv5) stage.
-    The final res5/conv5 stage may be optionally excluded (hence convX, where
-    X = 4 or 5).'''
-    freeze_at = cfg.TRAIN.FREEZE_AT
-    assert freeze_at in [0, 2, 3, 4, 5]
+    model = Sequential()
+model.add(Embedding(max_features, 128, input_length=maxlen))
+model.add(Bidirectional(LSTM(64)))
+model.add(Dropout(0.5))
+model.add(Dense(1, activation='sigmoid'))
     
-        if upsample_heatmap:
-        # Increase heatmap output size via bilinear upsampling
-        blob_out = model.BilinearInterpolation(
-            blob_out, 'kps_score', cfg.KRCNN.NUM_KEYPOINTS,
-            cfg.KRCNN.NUM_KEYPOINTS, cfg.KRCNN.UP_SCALE
-        )
+    # We add a vanilla hidden layer:
+model.add(Dense(hidden_dims))
+model.add(Dropout(0.2))
+model.add(Activation('relu'))
     
+            if config.PROXY_ENABLE:
+            if config.PROXY_USER:
+                self.proxy = '%s://%s:%s@%s:%d' % \
+                    (config.PROXY_TYPE, config.PROXY_USER, config.PROXY_PASSWD, config.PROXY_HOST, config.PROXY_PORT)
+            else:
+                self.proxy = '%s://%s:%d' % \
+                    (config.PROXY_TYPE, config.PROXY_HOST, config.PROXY_PORT)
+        else:
+            self.proxy = None
     
-_RENAME = {
-    # Removed 'ResNet_' from the name because it wasn't relevent
-    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v1up4convs':
-        'mask_rcnn_heads.mask_rcnn_fcn_head_v1up4convs',
-    # Removed 'ResNet_' from the name because it wasn't relevent
-    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v1up':
-        'mask_rcnn_heads.mask_rcnn_fcn_head_v1up',
-    # Removed 'ResNet_' from the name because it wasn't relevent
-    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v0upshare':
-        'mask_rcnn_heads.mask_rcnn_fcn_head_v0upshare',
-    # Removed 'ResNet_' from the name because it wasn't relevent
-    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v0up':
-        'mask_rcnn_heads.mask_rcnn_fcn_head_v0up',
-    # Removed head_builder module in favor of the more specific fast_rcnn name
-    'head_builder.add_roi_2mlp_head':
-        'fast_rcnn_heads.add_roi_2mlp_head',
-}
+        for qualified, server, _, _ in server_list:
+        if qualified:
+            best_server = server[0]
+            break
+    log = Log()
+    if best_server:
+        log.write('best server is: %s.' % best_server)
+    else:
+        xlog.warning('no server detected, return default: teredo.remlab.net.')
+        log.write('no server detected, return default: teredo.remlab.net.')
+        best_server = 'teredo.remlab.net'
+    log.close()
+    return best_server
     
-    import logging
+    A character stream is usually the first element in the pipeline of a typical
+ANTLR3 application. It is used as the input for a Lexer.
     
-        # Select background RoIs as those within [BG_THRESH_LO, BG_THRESH_HI)
-    bg_inds = np.where(
-        (max_overlaps < cfg.TRAIN.BG_THRESH_HI) &
-        (max_overlaps >= cfg.TRAIN.BG_THRESH_LO)
-    )[0]
-    # Compute number of background RoIs to take from this image (guarding
-    # against there being fewer than desired)
-    bg_rois_per_this_image = rois_per_image - fg_rois_per_this_image
-    bg_rois_per_this_image = np.minimum(bg_rois_per_this_image, bg_inds.size)
-    # Sample foreground regions without replacement
-    if bg_inds.size > 0:
-        bg_inds = npr.choice(
-            bg_inds, size=bg_rois_per_this_image, replace=False
-        )
+        def test_jwk_serialize(self):
+        from acme.jws import JWS
+        jws = JWS.sign(payload=b'foo', key=self.privkey,
+                       alg=jose.RS256, nonce=self.nonce,
+                       url=self.url)
+        self.assertEqual(jws.signature.combined.kid, None)
+        self.assertEqual(jws.signature.combined.jwk, self.pubkey)
     
-            # add fg targets
-        for i in range(rois_fg.shape[0]):
-            fg_polys_ind = fg_polys_inds[i]
-            poly_gt = polys_gt[fg_polys_ind]
-            roi_fg = rois_fg[i]
-            # Rasterize the portion of the polygon mask within the given fg roi
-            # to an M x M binary image
-            mask = segm_utils.polys_to_mask_wrt_box(poly_gt, roi_fg, M)
-            mask = np.array(mask > 0, dtype=np.int32)  # Ensure it's binary
-            masks[i, :] = np.reshape(mask, M**2)
-    else:  # If there are no fg masks (it does happen)
-        # The network cannot handle empty blobs, so we must provide a mask
-        # We simply take the first bg roi, given it an all -1's mask (ignore
-        # label), and label it with class zero (bg).
-        bg_inds = np.where(blobs['labels_int32'] == 0)[0]
-        # rois_fg is actually one background roi, but that's ok because ...
-        rois_fg = sampled_boxes[bg_inds[0]].reshape((1, -1))
-        # We give it an -1's blob (ignore label)
-        masks = -blob_utils.ones((1, M**2), int32=True)
-        # We label it with class = 0 (background)
-        mask_class_labels = blob_utils.zeros((1, ))
-        # Mark that the first roi has a mask
-        roi_has_mask[0] = 1
+        def test_bad_save_finalize_checkpoint(self):
+        self.config.reverter.finalize_checkpoint = mock.Mock(
+            side_effect=errors.ReverterError)
+        self.config.parser.add_dir(
+            self.vh_truth[0].path, 'Test', 'bad_save_ckpt')
+        self.assertRaises(errors.PluginError, self.config.save, 'Title')
