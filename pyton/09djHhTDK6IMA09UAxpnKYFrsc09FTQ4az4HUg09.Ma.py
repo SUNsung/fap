@@ -1,152 +1,197 @@
 
         
-            def __init__(self, cards):
-        self.cards = cards
-        self.deal_index = 0
+          # First generate all firing rates. in the next loop, generate all
+  # replications this allows the random state for rate generation to be
+  # independent of n_replications.
+  dataset_name = 'dataset_N' + str(N) + '_S' + str(S)
+  if S < N:
+    dataset_name += '_n' + str(n+1)
     
-        def approve_friend_request(self, friend_id):
-        pass
-    
-    
-# find the correct sorting and add the required base classes so that sublcasses
-# can be correctly created
-classes = _ALL_CLASSES[:-1]
-ordered_cls = []
-while classes:
-    for c in classes[:]:
-        bases = set(c.__bases__) - set((object, InfoExtractor, SearchInfoExtractor))
-        stop = False
-        for b in bases:
-            if b not in classes and b not in ordered_cls:
-                if b.__name__ == 'GenericIE':
-                    exit()
-                classes.insert(0, b)
-                stop = True
-        if stop:
-            break
-        if all(b in ordered_cls for b in bases):
-            ordered_cls.append(c)
-            classes.remove(c)
-            break
-ordered_cls.append(_ALL_CLASSES[-1])
-    
-        diropts = []
-    for opt in opts_dir:
-        if opt._short_opts:
-            diropts.extend(opt._short_opts)
-        if opt._long_opts:
-            diropts.extend(opt._long_opts)
-    
-    # Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
-extensions = [
-    'sphinx.ext.autodoc',
-]
-    
-            info_dict = _make_result(list(formats_order), extractor='youtube')
-        ydl = YDL({'format': '(bestvideo[ext=none]/bestvideo[ext=webm])+bestaudio'})
-        yie = YoutubeIE(ydl)
-        yie._sort_formats(info_dict['formats'])
-        ydl.process_ie_result(info_dict)
-        downloaded_ids = [info['format_id'] for info in ydl.downloaded_info_dicts]
-        self.assertEqual(downloaded_ids, ['248+141'])
+      Yields:
+    Pairs of the batched data, each a matrix of shape [batch_size, num_steps].
+    The second element of the tuple is the same data time-shifted to the
+    right by one. The third is a set of weights with 1 indicating a word was
+    present and 0 not.
     
     
-def _mkdir(d):
-    if not os.path.exists(d):
-        os.mkdir(d)
+def create_discriminator(hparams,
+                         sequence,
+                         is_training,
+                         reuse=None,
+                         initial_state=None,
+                         inputs=None,
+                         present=None):
+  '''Create the Discriminator model specified by the FLAGS and hparams.
     
-    from __future__ import unicode_literals
+      Returns:
+    avg_log_perplexity:  Scalar indicating the average log perplexity per
+      missing token in the batch.
+  '''
+  # logits = tf.Print(logits, [logits], message='logits:', summarize=50)
+  # targets = tf.Print(targets, [targets], message='targets:', summarize=50)
+  eps = 1e-12
+  logits = tf.reshape(logits, [-1, FLAGS.vocab_size])
     
-        # Instantiate the stack of residual units
-    for stage in range(3):
-        for res_block in range(num_res_blocks):
-            activation = 'relu'
-            batch_normalization = True
-            strides = 1
-            if stage == 0:
-                num_filters_out = num_filters_in * 4
-                if res_block == 0:  # first layer and first stage
-                    activation = None
-                    batch_normalization = False
-            else:
-                num_filters_out = num_filters_in * 2
-                if res_block == 0:  # first layer but not first stage
-                    strides = 2    # downsample
+        elif not RESULT and ('info_dict' in test and 'age_limit' in test['info_dict'] and
+                         test['info_dict']['age_limit'] == 18):
+        print('\nPotential false negative: {0}'.format(test['name']))
+    
+        def create_asset(self, release_id, asset):
+        asset_name = os.path.basename(asset)
+        url = self._UPLOADS_URL % (release_id, asset_name)
+        # Our files are small enough to be loaded directly into memory.
+        data = open(asset, 'rb').read()
+        req = sanitized_Request(url, data)
+        mime_type, _ = mimetypes.guess_type(asset_name)
+        req.add_header('Content-Type', mime_type or 'application/octet-stream')
+        return self._call(req)
     
     
-def load_data(label_mode='fine'):
-    '''Loads CIFAR100 dataset.
-    
-    
-def test_imdb():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = imdb.load_data()
-        (x_train, y_train), (x_test, y_test) = imdb.load_data(maxlen=40)
-        assert len(x_train) == len(y_train)
-        assert len(x_test) == len(y_test)
-        word_index = imdb.get_word_index()
-        assert isinstance(word_index, dict)
-    
-        # Returns
-        A normalized copy of the array.
-    '''
-    l2 = np.atleast_1d(np.linalg.norm(x, order, axis))
-    l2[l2 == 0] = 1
-    return x / np.expand_dims(l2, axis)
+parser = youtube_dl.parseOpts()[0]
+build_completion(parser)
 
     
-                if set_inputs:
-                if len(layer._inbound_nodes[-1].output_tensors) != 1:
-                    raise ValueError('All layers in a Sequential model '
-                                     'should have a single output tensor. '
-                                     'For multi-output layers, '
-                                     'use the functional API.')
-                self.outputs = [layer._inbound_nodes[-1].output_tensors[0]]
-                self.inputs = network.get_source_inputs(self.outputs[0])
-        elif self.outputs:
-            output_tensor = layer(self.outputs[0])
-            if isinstance(output_tensor, list):
-                raise TypeError('All layers in a Sequential model '
-                                'should have a single output tensor. '
-                                'For multi-output layers, '
-                                'use the functional API.')
-            self.outputs = [output_tensor]
-        if self.inputs:
-            self.build()
-        else:
-            self._layers.append(layer)
+    entry_template = textwrap.dedent('''
+    <entry>
+        <id>https://yt-dl.org/feed/youtube-dl-updates-feed/youtube-dl-@VERSION@</id>
+        <title>New version @VERSION@</title>
+        <link href='http://rg3.github.io/youtube-dl' />
+        <content type='xhtml'>
+            <div xmlns='http://www.w3.org/1999/xhtml'>
+                Downloads available at <a href='https://yt-dl.org/downloads/@VERSION@/'>https://yt-dl.org/downloads/@VERSION@/</a>
+            </div>
+        </content>
+        <author>
+            <name>The youtube-dl maintainers</name>
+        </author>
+        <updated>@TIMESTAMP@</updated>
+    </entry>
+    ''')
     
-        # Find all the faces and face encodings in the current frame of video
-    face_locations = face_recognition.face_locations(small_frame, model='cnn')
     
-        # You can access the actual face itself like this:
-    face_image = image[top:bottom, left:right]
-    pil_image = Image.fromarray(face_image)
-    pil_image.show()
+def main():
+    with open('supportedsites.html.in', 'r', encoding='utf-8') as tmplf:
+        template = tmplf.read()
+    
+    
+if __name__ == '__main__':
+    main()
 
     
     if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    main()
 
     
-        :param img: A list of images (each as a numpy array)
-    :param number_of_times_to_upsample: How many times to upsample the image looking for faces. Higher numbers find smaller faces.
-    :return: A list of dlib 'rect' objects of found face locations
-    '''
-    return cnn_face_detector(images, number_of_times_to_upsample, batch_size=batch_size)
     
-            # If you had more than 2 faces, you could make this logic a lot prettier
-        # but I kept it simple for the demo
-        name = None
-        if match[0]:
-            name = 'Lin-Manuel Miranda'
-        elif match[1]:
-            name = 'Alex Lacamoire'
+# Import youtube_dl
+ROOT_DIR = os.path.join(os.path.dirname(__file__), '..')
+sys.path.insert(0, ROOT_DIR)
+import youtube_dl
     
-        # Display the resulting image
-    cv2.imshow('Video', frame)
+        with open(ZSH_COMPLETION_TEMPLATE) as f:
+        template = f.read()
+    
+        def test_encrypt(self):
+        msg = b'message'
+        key = list(range(16))
+        encrypted = aes_encrypt(bytes_to_intlist(msg), key)
+        decrypted = intlist_to_bytes(aes_decrypt(encrypted, key))
+        self.assertEqual(decrypted, msg)
+    
+        params = {
+        'age_limit': age,
+        'skip_download': True,
+        'writeinfojson': True,
+        'outtmpl': '%(id)s.%(ext)s',
+    }
+    ydl = YoutubeDL(params)
+    ydl.add_default_info_extractors()
+    json_filename = os.path.splitext(filename)[0] + '.info.json'
+    try_rm(json_filename)
+    ydl.download([url])
+    res = os.path.exists(json_filename)
+    try_rm(json_filename)
+    return res
+    
+        def tearDown(self):
+        if os.path.exists(self.test_dir):
+            shutil.rmtree(self.test_dir)
+    
+    
+class Antirectifier(layers.Layer):
+    '''This is the combination of a sample-wise
+    L2 normalization with the concatenation of the
+    positive part of the input with the negative part
+    of the input. The result is a tensor of samples that are
+    twice as large as the input samples.
+    
+    # Normalize data.
+x_train = x_train.astype('float32') / 255
+x_test = x_test.astype('float32') / 255
+    
+    
+def test_cce_one_hot():
+    y_a = K.variable(np.random.randint(0, 7, (5, 6)))
+    y_b = K.variable(np.random.random((5, 6, 7)))
+    objective_output = losses.sparse_categorical_crossentropy(y_a, y_b)
+    assert K.eval(objective_output).shape == (5, 6)
+    
+        E.g. for use with categorical_crossentropy.
+    
+    # Score trained model.
+scores = model.evaluate(x_test, y_test, verbose=1)
+print('Test loss:', scores[0])
+print('Test accuracy:', scores[1])
+
+    
+    seq = Sequential()
+seq.add(ConvLSTM2D(filters=40, kernel_size=(3, 3),
+                   input_shape=(None, 40, 40, 1),
+                   padding='same', return_sequences=True))
+seq.add(BatchNormalization())
+    
+    try:
+    import boto3
+    import botocore
+    HAS_BOTO3 = True
+except ImportError:
+    HAS_BOTO3 = False
+    
+        return result_state, affected_apps
+    
+    ANSIBLE_METADATA = {'metadata_version': '1.1',
+                    'status': ['preview'],
+                    'supported_by': 'community'}
+    
+        try:
+        client.login(
+            username=module.params['ipa_user'],
+            password=module.params['ipa_pass']
+        )
+        changed, zone = ensure(module, client)
+        module.exit_json(changed=changed, zone=zone)
+    except Exception as e:
+        module.fail_json(msg=to_native(e))
+    
+        module = AnsibleModule(argument_spec=argument_spec,
+                           supports_check_mode=True)
+    
+        url = module.params.get('url')
+    
+    
+ANSIBLE_METADATA = {'metadata_version': '1.1',
+                    'status': ['preview'],
+                    'supported_by': 'community'}
+    
+        def _raise_closed(self):
+        raise ValueError('I/O operation on closed path')
+    
+            #
+        # Testing timeouts
+        #
+    
+        # Get and print some more results
+    for i in range(len(TASKS2)):
+        print('\t', done_queue.get())
+    
+    DB_FILE = 'mydb'
