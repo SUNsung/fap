@@ -1,140 +1,127 @@
 
         
-        #include 'base/callback.h'
-#include 'base/location.h'
-#include 'base/single_thread_task_runner.h'
-#include 'uv.h'  // NOLINT(build/include)
-    
-      // Delegate implementations.
-  void OnError(const std::string& error) override;
-  void OnError(const std::string& message,
-               const int code,
-               const std::string& domain) override;
-  void OnCheckingForUpdate() override;
-  void OnUpdateAvailable() override;
-  void OnUpdateNotAvailable() override;
-  void OnUpdateDownloaded(const std::string& release_notes,
-                          const std::string& release_name,
-                          const base::Time& release_date,
-                          const std::string& update_url) override;
-    
-    #include 'atom/browser/native_window_views.h'
-    
-      static void BuildPrototype(v8::Isolate* isolate,
-                             v8::Local<v8::FunctionTemplate> prototype);
-    
-    class RenderProcessPreferences
-    : public mate::Wrappable<RenderProcessPreferences> {
- public:
-  static mate::Handle<RenderProcessPreferences> ForAllWebContents(
-      v8::Isolate* isolate);
+                  if (!IsInplace) {
+            // Just swap both pointers if we allocated on the heap
+            to->ptr_ = from->ptr_;
     }
     
-    display::Display Screen::GetDisplayNearestPoint(const gfx::Point& point) {
-  return screen_->GetDisplayNearestPoint(point);
-}
+    /* optparse */
+#define OPTPARSE_IMPLEMENTATION
+#include 'helpers/optparse.h'
     
-      // C++ can not distinguish overloaded member function.
-  template <AtomNetworkDelegate::SimpleEvent type>
-  void SetSimpleListener(mate::Arguments* args);
-  template <AtomNetworkDelegate::ResponseEvent type>
-  void SetResponseListener(mate::Arguments* args);
-  template <typename Listener, typename Method, typename Event>
-  void SetListener(Method method, Event type, mate::Arguments* args);
+    #include 'HttpParser.h'
+#include 'AsyncSocketData.h'
+#include <functional>
     
-    // Users should use TrackableObject instead.
-class TrackableObjectBase {
- public:
-  TrackableObjectBase();
+    #endif // ASYNCSOCKETDATA_H
+
+    
+    
+    {        httpResponseData->onWritable = std::move(handler);
+        return this;
     }
     
-    Delegate* AutoUpdater::delegate_ = nullptr;
+     * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an 'AS IS' BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
     
-    #if defined(OS_LINUX)
-#include 'atom/browser/lib/power_observer_linux.h'
-#else
-#include 'base/power_monitor/power_observer.h'
-#endif  // defined(OS_LINUX)
+    //    return 0;
     
-    void add(const Size2D &size,
-         const u8 * src0Base, ptrdiff_t src0Stride,
-         const u8 * src1Base, ptrdiff_t src1Stride,
-         s16 *dstBase, ptrdiff_t dstStride,
-         CONVERT_POLICY)
+        /* Routes by method and url until handler found and said handler consumes the request by returning true.
+     * If a handler returns false, we keep searching for another match. If we cannot find a handler that
+     * a) matches the url and method and b) consume the request, then we fail and return false.
+     * In that case, a second pass where method changed to '*' to denote 'any' could be used to
+     * give such routes a chance. If second pass fails, we have an unhandled request and you may
+     * do whatever you want with your connection, such as close it, or respond with a fix message */
+    bool route(std::string_view method, std::string_view url, USERDATA &userData) {
+        /* Reset url parsing cache */
+        setUrl(url);
+        routeParameters.reset();
+    }
+    
+    class Plus : public Expression 
 {
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    size_t roiw32 = size.width >= 31 ? size.width - 31 : 0;
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
+    public:
+        Plus(Expression* left, Expression* right) :leftOperand(left), rightOperand(right) { } 
+        ~Plus() { delete leftOperand; delete rightOperand; }
+        int interpret() { return leftOperand->interpret() + rightOperand->interpret(); }
+    private:
+        Expression* leftOperand;
+        Expression* rightOperand;
+};
+    
+    /********************************************************************************** 
+* 
+* Given a binary tree, return the level order traversal of its nodes' values. 
+* (ie, from left to right, level by level).
+* 
+* For example:
+* Given binary tree {3,9,20,#,#,15,7},
+* 
+*     3
+*    / \
+*   9  20
+*     /  \
+*    15   7
+* 
+* return its level order traversal as:
+* 
+* [
+*   [3],
+*   [9,20],
+*   [15,7]
+* ]
+* 
+* confused what '{1,#,2,3}' means? > read more on how binary tree is serialized on OJ.
+* 
+* OJ's Binary Tree Serialization:
+* 
+* The serialization of a binary tree follows a level order traversal, where '#' signifies 
+* a path terminator where no node exists below.
+* 
+* Here's an example:
+* 
+*    1
+*   / \
+*  2   3
+*     /
+*    4
+*     \
+*      5
+* 
+* The above binary tree is serialized as '{1,2,3,#,#,4,#,#,5}'. 
+* 
+*               
+**********************************************************************************/
+    
+        auto constructor = NAPA_GET_PERSISTENT_CONSTRUCTOR(_exportName, PlusNumberWrap);
+    auto context = isolate->GetCurrentContext();
+    auto instance = constructor->NewInstance(context, argc, argv).ToLocalChecked();
+    
+    inline void OutputAssertMessage(const char* condition, const char* file, int line, const char* format, ...) {
+    char message[MAX_ASSERT_MESSAGE_SIZE];
     }
     
-    IMPL_ADDWEIGHTED(u8)
-IMPL_ADDWEIGHTED(s8)
-IMPL_ADDWEIGHTED(u16)
-IMPL_ADDWEIGHTED(s16)
-IMPL_ADDWEIGHTED(u32)
-IMPL_ADDWEIGHTED(s32)
-IMPL_ADDWEIGHTED(f32)
+    /// <summary> Free memory using napa allocator from napa_allocator_set, which is using C runtime ::free if not called. </summary>
+/// <param name='pointer'> Pointer to memory to be freed. </param>
+/// <param name='size_hint'> Hint of size to deallocate. </param>
+EXTERN_C NAPA_API void napa_deallocate(void* pointer, size_t size_hint);
     
-            //left&right borders
-        if (borderType != BORDER_MODE_CONSTANT)
-            for (s32 k = 0; k < cn; ++k)
-            {
-                lanea[-cn+k] = lanea[idx_l + k];
-                lanea[colsn+k] = lanea[idx_r + k];
-                laneb[-cn+k] = laneb[idx_l + k];
-                laneb[colsn+k] = laneb[idx_r + k];
-            }
+    #include <napa/assert.h>
+#include <napa/providers/logging.h>
     
-    void assertSupportedConfiguration(bool parametersSupported)
-{
-    if (!isSupportedConfiguration()) {
-        std::cerr << 'internal error: attempted to use an unavailable function' << std::endl;
-        std::abort();
-    }
-    }
+        /// <summary> It sets the persistent constructor at the current V8 isolate. </summary>
+    /// <param name='name'> Unique constructor name. It's recommended to use the same name as module. </param>
+    /// <param name='constructor'> V8 persistent function to constructor V8 object. </param>
+    NAPA_API void SetPersistentConstructor(const char* name, v8::Local<v8::Function> constructor);
     
-    
-    {    minLocCount >>= 1;
-    maxLocCount >>= 1;
-#else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)minVal;
-    (void)minLocPtr;
-    (void)minLocCount;
-    (void)minLocCapacity;
-    (void)maxVal;
-    (void)maxLocPtr;
-    (void)maxLocCount;
-    (void)maxLocCapacity;
-#endif
-}
-    
-    
-    {        u32 buf[8];
-        vst1_u32(buf, vget_low_u32(el8shr01l));
-        vst1_u32(buf+2, el2l);
-        vst1_u32(buf+4, el2hl);
-        vst1_u32(buf+6, el2hh);
-        for(u32 k=0; k < 8; k++)
-            sqsum[j+k] = prev + buf[k];
-        prev += buf[7];
-    }
-    
-    // NOTE: Wrappers for std::mutex and std::unique_lock are provided so that
-// we can annotate them with thread safety attributes and use the
-// -Wthread-safety warning with clang. The standard library types cannot be
-// used directly because they do not provided the required annotations.
-class CAPABILITY('mutex') Mutex {
- public:
-  Mutex() {}
-    }
-    
-    inline Regex::~Regex() {}
-    
-    #include <boost/atomic/detail/config.hpp>
-    
-    
-    {} // namespace mars_boost
+            /// <summary> Represents verboseness for logging. </summary>
+        enum class Verboseness {
+            Error = 0,
+            Warning,
+            Info,
+            Debug
+        };
