@@ -1,215 +1,311 @@
 
         
-        #include 'base/stl_util.h'
-    
-    namespace atom {
+        namespace mate {
     }
     
-    void DownloadItem::Cancel() {
-  download_item_->Cancel(true);
-}
     
-    void Menu::Clear() {
-  model_->Clear();
-}
+    {}  // namespace api
+    
+      // Downloadable Content Information
+  bool downloadable = false;
     
     
-    {}  // namespace mate
-    
-    void SILLayout::Profile(llvm::FoldingSetNodeID &id,
-                        CanGenericSignature Generics,
-                        ArrayRef<SILField> Fields) {
-  id.AddPointer(Generics.getPointer());
-  for (auto &field : Fields) {
-    id.AddPointer(field.getLoweredType().getPointer());
-    id.AddBoolean(field.isMutable());
+    {  DefaultCacheKey CKey(const_cast<void*>(Key), &DCache.CBs);
+  auto Entry = DCache.Entries.find(CKey);
+  if (Entry != DCache.Entries.end()) {
+    // FIXME: Not thread-safe! It should avoid deleting the value until
+    // 'releaseValue is called on it.
+    *Value_out = Entry->second;
+    return true;
   }
+  return false;
+}
+    
+      if (!wasInline) delete[] oldBegin;
+    
+    void PrefixMapKeyPrinter<unsigned char>::print(raw_ostream &out,
+                                               ArrayRef<unsigned char> key) {
+  out << '\'';
+  for (auto byte : key) {
+    if (byte < 16) out << '0';
+    out.write_hex(byte);
+  }
+  out << '\'';
 }
 
     
-    public:
-  /// Form storage for the given generic signature and its replacement
-  /// types and conformances.
-  static Storage *get(GenericSignature *genericSig,
-                      ArrayRef<Type> replacementTypes,
-                      ArrayRef<ProtocolConformanceRef> conformances);
+    #include 'swift/Basic/PrimitiveParsing.h'
+#include 'llvm/ADT/SmallVector.h'
     
-        assert(info.name.size() < (2 << 10) && 'name failed sanity check');
+    break_table = GraphemeClusterBreakPropertyTable(unicodeGraphemeBreakPropertyFile)
     
-    #include 'stdafx.h'
-#include 'CNTKLibrary.h'
-#include 'Utils.h'
-#include 'Matrix.h'
-#include <algorithm>
-#include 'TensorShape.h'
     
-        void ProgressWriter::WriteTestSummary(const ValuePtr& accumulatedMetric)
-    {
-        m_test->WriteSummary(
-            nullptr, accumulatedMetric,
-            [this](size_t samples, size_t updates, size_t summaries, double /*aggregateLoss*/, double aggregateMetric,
-                uint64_t elapsedMs)
-            {
-                OnWriteTestSummary(samples, updates, summaries, aggregateMetric, elapsedMs);
-            });
-    }
+    {  return forInvalid();
+}
     
-                // Validate that each of the dynamic axes are unique
-            std::unordered_set<Axis> uniqueDynamicAxis;
-            for (auto& currentDynamicAxis : dynamicAxes)
-            {
-                auto retVal = uniqueDynamicAxis.insert(currentDynamicAxis);
-                if (!retVal.second)
-                    InvalidArgument('Dynamic axis named %S is specified more than once for Variable '%S'', currentDynamicAxis.Name().c_str(), AsString().c_str());
-            }
-    
-            // Get the first element in the sequence
-        size_t lastId = (int)firstSeq(0, columnIndices[0]);
-        if (std::find(tokensToIgnore.begin(), tokensToIgnore.end(), lastId) == tokensToIgnore.end())
-            out_SampleSeqVec.push_back(lastId);
-    
-      inline void SkipLine() {
-    do {
-      ch_buf_ = this->GetChar();
-    } while (ch_buf_ != EOF && ch_buf_ != '\n' && ch_buf_ != '\r');
+      bool isRecord() const {
+    assert(isValid());
+    return !Decl.isNull() && Decl.is<const clang::RecordDecl *>();
+  }
+  const clang::RecordDecl *getRecord() const {
+    assert(isRecord());
+    return Decl.get<const clang::RecordDecl *>();
   }
     
+    enum class IAMAccessorKind : uint8_t { None, Getter, Setter };
     
-    {
-    {
-    { private:
-  /*! \brief input stream */
-  dmlc::Stream *strm_;
-  /*! \brief current buffer pointer */
-  size_t buffer_ptr_;
-  /*! \brief internal buffer */
-  std::string buffer_;
+    /// Translate the given operator character into its mangled form.
+///
+/// Current operator characters:   @/=-+*%<>!&|^~ and the special operator '..'
+char Mangle::translateOperatorChar(char op) {
+  switch (op) {
+    case '&': return 'a'; // 'and'
+    case '@': return 'c'; // 'commercial at sign'
+    case '/': return 'd'; // 'divide'
+    case '=': return 'e'; // 'equal'
+    case '>': return 'g'; // 'greater'
+    case '<': return 'l'; // 'less'
+    case '*': return 'm'; // 'multiply'
+    case '!': return 'n'; // 'negate'
+    case '|': return 'o'; // 'or'
+    case '+': return 'p'; // 'plus'
+    case '?': return 'q'; // 'question'
+    case '%': return 'r'; // 'remainder'
+    case '-': return 's'; // 'subtract'
+    case '~': return 't'; // 'tilde'
+    case '^': return 'x'; // 'xor'
+    case '.': return 'z'; // 'zperiod' (the z is silent)
+    default:
+      return op;
+  }
+}
+    
+    static void printNode(DemanglerPrinter &Out, const Node *node, unsigned depth) {
+  // Indent two spaces per depth.
+  for (unsigned i = 0; i < depth * 2; ++i) {
+    Out << ' ';
+  }
+  if (!node) {
+    Out << '<<NULL>>';
+    return;
+  }
+  Out << 'kind=' << getNodeKindString(node->getKind());
+  if (node->hasText()) {
+    Out << ', text=\'' << node->getText() << '\'';
+  }
+  if (node->hasIndex()) {
+    Out << ', index=' << node->getIndex();
+  }
+  Out << '\n';
+  for (auto &child : *node) {
+    printNode(Out, child, depth + 1);
+  }
+}
+    
+    # if !GTEST_OS_WINDOWS
+// Tests that an exit code describes an exit due to termination by a
+// given signal.
+class GTEST_API_ KilledBySignal {
+ public:
+  explicit KilledBySignal(int signum);
+  bool operator()(int exit_status) const;
+ private:
+  const int signum_;
 };
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_IO_H_
-
+# endif  // !GTEST_OS_WINDOWS
     
-      void InitTreesToUpdate() {
-    if (trees_to_update.size() == 0u) {
-      for (auto & tree : trees) {
-        trees_to_update.push_back(std::move(tree));
-      }
-      trees.clear();
-      param.num_trees = 0;
-      tree_info.clear();
-    }
-  }
-    
-    Status WriteBatchBase::DeleteRange(const SliceParts& begin_key,
-                                   const SliceParts& end_key) {
-  std::string begin_key_buf, end_key_buf;
-  Slice begin_key_slice(begin_key, &begin_key_buf);
-  Slice end_key_slice(end_key, &end_key_buf);
-  return DeleteRange(begin_key_slice, end_key_slice);
-}
-    
-    #pragma once
-    
-      // Remove any kind of caching of data from the offset to offset+length
-  // of this file. If the length is 0, then it refers to the end of file.
-  // If the system is not caching the file contents, then this is a noop.
-  virtual Status InvalidateCache(size_t offset, size_t length) override {
-    return file_->InvalidateCache(offset + prefixLength_, length);
-  }
-    
-      virtual Status GetChildren(const std::string& dir,
-                             std::vector<std::string>* result) override;
-    
-    std::string kDBPath = '/tmp/rocksdb_transaction_example';
-    
-    // Performs in-place floating point 8x8 DCT on block[0..63].
-// Note that the DCT used here is the DCT-2 with the first term multiplied by
-// 1/sqrt(2) and the result scaled by 1/2.
-void ComputeBlockDCTDouble(double block[64]);
-    
-    bool SetDepth(int p0, HuffmanTree *pool, uint8_t *depth, int max_depth) {
-  int stack[17];
-  int level = 0;
-  int p = p0;
-  assert(max_depth <= 16);
-  stack[0] = -1;
-  while (true) {
-    if (pool[p].index_left_ >= 0) {
-      level++;
-      if (level > max_depth) return false;
-      stack[level] = pool[p].index_right_or_value_;
-      p = pool[p].index_left_;
-      continue;
+    #if GTEST_HAS_STD_WSTRING
+template <>
+class UniversalTersePrinter<const wchar_t*> {
+ public:
+  static void Print(const wchar_t* str, ::std::ostream* os) {
+    if (str == NULL) {
+      *os << 'NULL';
     } else {
-      depth[pool[p].index_right_or_value_] = static_cast<uint8_t>(level);
+      UniversalPrint(::std::wstring(str), os);
     }
-    while (level >= 0 && stack[level] == -1) level--;
-    if (level < 0) return true;
-    p = stack[level];
-    stack[level] = -1;
+  }
+};
+#endif
+    
+      const std::string& file() const { return file_; }
+  int line() const { return line_; }
+  int index() const { return index_; }
+  int write_fd() const { return write_fd_; }
+    
+    #include 'gtest/internal/gtest-string.h'
+    
+    
+    { private:
+  mutable linked_ptr_internal const* next_;
+};
+    
+    // This provides interface PrimeTable that determines whether a number is a
+// prime and determines a next prime number. This interface is used
+// in Google Test samples demonstrating use of parameterized tests.
+    
+    //  16384 * sqrt(2) * sin(kPi/9) * 2 / 3
+static const tran_high_t sinpi_1_9 = 5283;
+static const tran_high_t sinpi_2_9 = 9929;
+static const tran_high_t sinpi_3_9 = 13377;
+static const tran_high_t sinpi_4_9 = 15212;
+    
+       - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+    
+    /* silk_min() versions with typecast in the function call */
+static OPUS_INLINE opus_int silk_min_int(opus_int a, opus_int b)
+{
+    return (((a) < (b)) ? (a) : (b));
+}
+static OPUS_INLINE opus_int16 silk_min_16(opus_int16 a, opus_int16 b)
+{
+    return (((a) < (b)) ? (a) : (b));
+}
+static OPUS_INLINE opus_int32 silk_min_32(opus_int32 a, opus_int32 b)
+{
+    return (((a) < (b)) ? (a) : (b));
+}
+static OPUS_INLINE opus_int64 silk_min_64(opus_int64 a, opus_int64 b)
+{
+    return (((a) < (b)) ? (a) : (b));
+}
+    
+      void onReceived(const DHTPingReplyMessage* message);
+    
+    DHTResponseMessage::DHTResponseMessage(
+    const std::shared_ptr<DHTNode>& localNode,
+    const std::shared_ptr<DHTNode>& remoteNode,
+    const std::string& transactionID)
+    : DHTAbstractMessage(localNode, remoteNode, transactionID)
+{
+}
+    
+      virtual const std::string& getType() const CXX11_OVERRIDE;
+    
+      void moveBucketTail(const std::shared_ptr<DHTNode>& node);
+    
+    void DHTRoutingTableSerializer::setLocalNode(
+    const std::shared_ptr<DHTNode>& localNode)
+{
+  localNode_ = localNode;
+}
+    
+    
+    {  // Returns two vector of Commands.  First one contains regular
+  // commands.  Secod one contains so called routine commands, which
+  // executed once per event poll returns.
+  std::pair<std::vector<std::unique_ptr<Command>>,
+            std::vector<std::unique_ptr<Command>>>
+  setup(DownloadEngine* e, int family);
+};
+    
+      virtual std::shared_ptr<DHTTask> createBucketRefreshTask() = 0;
+    
+    void DHTTaskFactoryImpl::setRoutingTable(DHTRoutingTable* routingTable)
+{
+  routingTable_ = routingTable;
+}
+    
+      std::chrono::seconds timeout_;
+    
+        bool contains(const std::string& addr) const;
+    
+    The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+    
+    
+    {    return false;
+}
+    
+    #ifndef __CCINSTANT_ACTION_H__
+#define __CCINSTANT_ACTION_H__
+    
+    
+    {    return false;
+}
+    
+    BENCHMARK(copy_long_string, iters) {
+  BenchmarkSuspender suspender;
+  auto const& longString = getLongString();
+  while (iters--) {
+    fbstring out;
+    suspender.dismissing([&] { out = longString; });
   }
 }
     
-      tmp0 = in[4 * stride];
-  tmp1 = kIDCTMatrix[ 4] * tmp0;
-  out[0] += tmp1;
-  out[1] -= tmp1;
-  out[2] -= tmp1;
-  out[3] += tmp1;
-  out[4] += tmp1;
-  out[5] -= tmp1;
-  out[6] -= tmp1;
-  out[7] += tmp1;
     
-    #include 'guetzli/jpeg_data.h'
-    
-     public:
-  struct Result {
-    double real_time_used = 0;
-    double cpu_time_used = 0;
-    double manual_time_used = 0;
-    int64_t bytes_processed = 0;
-    int64_t items_processed = 0;
-    int complexity_n = 0;
-    std::string report_label_;
-    std::string error_message_;
-    bool has_error_ = false;
-    UserCounters counters;
-  };
-  GUARDED_BY(GetBenchmarkMutex()) Result results;
-    
-    
-    {  AddRange(&thread_counts_, min_threads, max_threads, 2);
-  return this;
-}
-    
-    
-    {  fflush(stdout);
-  // Restores the text color.
-  SetConsoleTextAttribute(stdout_handle, old_color_attrs);
-#else
-  const char* color_code = GetPlatformColorCode(color);
-  if (color_code) out << FormatString('\033[0;3%sm', color_code);
-  out << FormatString(fmt, args) << '\033[m';
-#endif
-}
-    
-    #endif  // BENCHMARK_COLORPRINT_H_
+    {} // namespace folly
 
     
-      // Aborts if the parsing failed.
-  if (value_str == nullptr) return false;
+      // Test with unusual durations where neither the numerator nor denominator
+  // are 1.
+  using five_sevenths = std::chrono::duration<int64_t, std::ratio<5, 7>>;
+  ts.tv_sec = 1;
+  ts.tv_nsec = 0;
+  EXPECT_EQ(1, to<five_sevenths>(ts).count());
+  ts.tv_sec = 1;
+  ts.tv_nsec = 428571500;
+  EXPECT_EQ(2, to<five_sevenths>(ts).count());
     
+    /**
+ * Get a codec with the given options and compression level.
+ *
+ * If the windowSize is 15 and the format is Format::ZLIB or Format::GZIP, then
+ * the type of the codec will be CodecType::ZLIB or CodecType::GZIP
+ * respectively. Otherwise, the type will be CodecType::USER_DEFINED.
+ *
+ * Automatic uncompression is not supported with USER_DEFINED codecs.
+ *
+ * Levels supported: 0 = no compression, 1 = fast, ..., 9 = best; default = 6
+ */
+std::unique_ptr<Codec> getCodec(
+    Options options = Options(),
+    int level = COMPRESSION_LEVEL_DEFAULT);
+std::unique_ptr<StreamCodec> getStreamCodec(
+    Options options = Options(),
+    int level = COMPRESSION_LEVEL_DEFAULT);
     
-    {}  // end namespace benchmark
-    
-    #include 'benchmark/benchmark.h'
-#include 'internal_macros.h'
-    
-    namespace benchmark {
-namespace internal {
+      counted_ptr(const counted_ptr& o) : p_(o.p_) {
+    if (p_) {
+      counted_ptr_base<Atom>::getRef(p_)->add_ref();
     }
+  }
+  counted_ptr& operator=(const counted_ptr& o) {
+    if (p_ && counted_ptr_base<Atom>::getRef(p_)->release_ref() == 1) {
+      p_->~T();
+      free(counted_ptr_base<Atom>::getRef(p_));
     }
+    p_ = o.p_;
+    if (p_) {
+      counted_ptr_base<Atom>::getRef(p_)->add_ref();
+    }
+    return *this;
+  }
+  explicit counted_ptr(T* p) : p_(p) {
+    CHECK(!p);
+  }
+  ~counted_ptr() {
+    if (p_ && counted_ptr_base<Atom>::getRef(p_)->release_ref() == 1) {
+      p_->~T();
+      free(counted_ptr_base<Atom>::getRef(p_));
+    }
+  }
+  typename std::add_lvalue_reference<T>::type operator*() const {
+    return *p_;
+  }
     
-    #define GUARDED_BY(x) THREAD_ANNOTATION_ATTRIBUTE__(guarded_by(x))
+    TEST_F(SparseByteSetTest, each_random) {
+  mt19937 rng;
+  uniform_int_distribution<uint16_t> dist{lims::min(), lims::max()};
+  set<uint8_t> added;
+  while (added.size() <= lims::max()) {
+    auto c = uint8_t(dist(rng));
+    EXPECT_EQ(added.count(c), s.contains(c));
+    EXPECT_EQ(!added.count(c), s.add(c));
+    added.insert(c);
+    EXPECT_TRUE(added.count(c)); // sanity
+    EXPECT_TRUE(s.contains(c));
+  }
+}
