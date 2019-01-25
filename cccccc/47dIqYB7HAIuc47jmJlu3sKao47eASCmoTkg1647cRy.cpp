@@ -1,202 +1,206 @@
 
         
-        void Initialize(v8::Local<v8::Object> exports,
-                v8::Local<v8::Value> unused,
-                v8::Local<v8::Context> context,
-                void* priv) {
-  v8::Isolate* isolate = context->GetIsolate();
-  mate::Dictionary dict(isolate, exports);
-  dict.Set('autoUpdater', AutoUpdater::Create(isolate));
-  dict.Set('AutoUpdater', AutoUpdater::GetConstructor(isolate)->GetFunction());
-}
-    
-    v8::Local<v8::Value> Net::URLRequest(v8::Isolate* isolate) {
-  return URLRequest::GetConstructor(isolate)->GetFunction();
-}
-    
-    #if defined(OS_WIN)
-#include 'ui/display/win/screen_win.h'
-#endif
-    
-    #include 'atom/browser/api/trackable_object.h'
-#include 'atom/browser/ui/tray_icon.h'
-#include 'atom/browser/ui/tray_icon_observer.h'
-#include 'native_mate/handle.h'
-    
-    #ifndef ATOM_BROWSER_API_SAVE_PAGE_HANDLER_H_
-#define ATOM_BROWSER_API_SAVE_PAGE_HANDLER_H_
-    
-    
-    {}  // namespace atom
-    
-    void PurchaseProduct(const std::string& productID,
-                     int quantity,
-                     const InAppPurchaseCallback& callback);
-    
-    /* Coin network-specific GUI style information */
-class NetworkStyle
-{
-public:
-    /** Get style associated with provided BIP70 network id, or 0 if not known */
-    static const NetworkStyle *instantiate(const QString &networkId);
-    }
-    
-    #include <univalue.h>
-    
-    
-    {    secp256k1_scalar_set_b32(&r, &input64[0], &overflow);
-    ret &= !overflow;
-    secp256k1_scalar_set_b32(&s, &input64[32], &overflow);
-    ret &= !overflow;
-    if (ret) {
-        secp256k1_ecdsa_recoverable_signature_save(sig, &r, &s, recid);
-    } else {
-        memset(sig, 0, sizeof(*sig));
-    }
-    return ret;
-}
-    
-    static bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
-{
-    if (s1.size() != s2.size()) return false;
-    for (size_t i = 0; i < s1.size(); ++i) {
-        char c1 = s1[i];
-        if (c1 >= 'A' && c1 <= 'Z') c1 -= ('A' - 'a');
-        char c2 = s2[i];
-        if (c2 >= 'A' && c2 <= 'Z') c2 -= ('A' - 'a');
-        if (c1 != c2) return false;
-    }
-    return true;
-}
-    
-    /*
- * Call a function that produces a return value for each element of
- * `inputs' in parallel, and collect the results.
- *
- * Requires: the type returned from the function call must be
- * DefaultConstructible, and either MoveAssignable or Assignable.
- *
- * If `func' throws an exception, the results of the output vector
- * will contain some default-constructed values.
- */
-template<class Func, class Items>
-auto map(Items&& inputs, Func func) -> std::vector<decltype(func(inputs[0]))> {
-  std::vector<decltype(func(inputs[0]))> retVec(inputs.size());
-  auto const retMem = &retVec[0];
-    }
+            // Writing a binary file or initializing in RAM from ARPA:
+    // Size for vocabulary.
+    void *SetupJustVocab(std::size_t memory_size, uint8_t order);
+    // Warning: can change the vocaulary base pointer.
+    void *GrowForSearch(std::size_t memory_size, std::size_t vocab_pad, void *&vocab_base);
+    // Warning: can change vocabulary and search base addresses.
+    void WriteVocabWords(const std::string &buffer, void *&vocab_base, void *&search_base);
+    // Write the header at the beginning of the file.
+    void FinishFile(const Config &config, ModelType model_type, unsigned int search_version, const std::vector<uint64_t> &counts);
     
     
     {
-    {}}
-    
-      static void ParseConfigFile(const std::string &filename, IniSettingMap &ini,
-                              Hdf &hdf, const bool is_system = true);
-    
-    #include 'hphp/runtime/base/file.h'
-#include 'hphp/runtime/base/mem-file.h'
-#include 'hphp/runtime/base/stream-wrapper.h'
-#include <folly/String.h>
-#include <folly/portability/SysStat.h>
-#include <folly/portability/Unistd.h>
-    
-    
-    {  // if the function was called via FCallBuiltin, we'll get a bogus name as
-  // the stack frame will be wrong
-  ActRec* ar = g_context->getStackFrame();
-  const char* fn = (ar != nullptr)
-    ? ar->func()->name()->data()
-    : 'OPTIMIZED_BUILTIN';
-  raise_warning('%s(%s): failed to open stream: '
-                'wrapper does not support stream open',
-                fn, filename.data());
-  return nullptr;
+    {
+    {      order = current;
+      if (!order) return;
+    }
+  }
 }
     
-      bool valid() const { return !isClosed(); }
+    namespace {
+class SizeNotify {
+  public:
+    explicit SizeNotify(std::size_t &out) : behind_(out) {}
+    }
+    }
     
-    #endif
+    
+  // Left rest options.  Only used when the model includes rest costs.
+  enum RestFunction {
+    REST_MAX,   // Maximum of any score to the left
+    REST_LOWER, // Use lower-order files given below.
+  };
+  RestFunction rest_function;
+  // Only used for REST_LOWER.
+  std::vector<std::string> rest_lower_files;
+    
+    vector<vector<int> > fourSum(vector<int> &num, int target) {
+    vector< vector<int> > result;
+    if (num.size()<4) return result;
+    sort( num.begin(), num.end() );
+    
+    for(int i=0; i<num.size()-3; i++) {
+        //skip the duplication
+        if (i>0 && num[i-1]==num[i]) continue;
+        vector<int> n(num.begin()+i+1, num.end());
+        vector<vector<int> > ret = threeSum(n, target-num[i]);
+        for(int j=0; j<ret.size(); j++){
+            ret[j].insert(ret[j].begin(), num[i]);
+            result.push_back(ret[j]);
+        }
+    }
+    }
+    
+            //regualr way
+        int addDigits01(int num) {
+            while(num > 9) {
+                int sum;
+                for(sum=0; num > 0; sum += num%10 , num/=10);
+                num = sum;
+            }
+            return num;
+    }
+    
+    long long calculate_exp(long long x, long long y, char op) {
+    switch(op) {
+        case '+': return x + y;
+        case '-': return x - y;
+        case '*': return x * y;
+        case '/': return x / y;
+    }
+    return -1;
+}
+    
+    int Factorial( int number ) {
+   return number <= 1 ? number : Factorial( number - 1 ) * number;  // fail
+// return number <= 1 ? 1      : Factorial( number - 1 ) * number;  // pass
+}
+    
+    TEST_CASE( '2: Factorial of 0 is 1 (fail)', '[multi-file:2]' ) {
+    REQUIRE( Factorial(0) == 1 );
+}
+    
+            REQUIRE( v.size() == 5 );
+        REQUIRE( v.capacity() >= 5 );
+    
+            // IConfig interface
+        bool allowThrows() const override;
+        std::ostream& stream() const override;
+        std::string name() const override;
+        bool includeSuccessfulResults() const override;
+        bool warnAboutMissingAssertions() const override;
+        bool warnAboutNoTests() const override;
+        ShowDurations::OrNot showDurations() const override;
+        RunTests::InWhatOrder runOrder() const override;
+        unsigned int rngSeed() const override;
+        int benchmarkResolutionMultiple() const override;
+        UseColour::YesOrNo useColour() const override;
+        bool shouldDebugBreak() const override;
+        int abortAfter() const override;
+        bool showInvisibles() const override;
+        Verbosity verbosity() const override;
+    
+            // Use constructed object for RAII guard
+        Colour( Code _colourCode );
+        Colour( Colour&& other ) noexcept;
+        Colour& operator=( Colour&& other ) noexcept;
+        ~Colour();
+    
+    #endif // TWOBLUECUBES_CATCH_CONTEXT_H_INCLUDED
 
     
-    #include 'hphp/runtime/base/perf-warning-inl.h'
-    
-    
-    {  SocketCanClientRaw socket_can_client;
-  EXPECT_TRUE(socket_can_client.Init(param));
-  EXPECT_EQ(socket_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
-  std::vector<CanFrame> frames;
-  int32_t num = 0;
-  EXPECT_EQ(socket_can_client.Send(frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  EXPECT_EQ(socket_can_client.Receive(&frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
-  CanFrame can_frame;
-  frames.push_back(can_frame);
-  EXPECT_EQ(socket_can_client.SendSingleFrame(frames),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  socket_can_client.Stop();
-}
-    
-    DEFINE_string(adapter_config_filename, 'modules/canbus/conf/adapter.conf',
-              'The adapter config file');
-    
-    int ClusterQualityInfo702::pdh0(const std::uint8_t* bytes,
-                                int32_t length) const {
-  Byte t0(bytes + 3);
-  int32_t x = t0.get_byte(0, 3);
-    }
-    
-    namespace apollo {
-namespace hdmap {
-DEFINE_string(test_map_file,
-              'modules/map/data/sunnyvale_loop/base_map_test.bin',
-              'The test map file');
-DEFINE_string(
-    test_routing_file,
-    'modules/map/pnc_map/testdata/sample_sunnyvale_loop_routing.pb.txt',
-    'The test map file');
+        namespace Catch{
+        // The standard POSIX way of detecting a debugger is to attempt to
+        // ptrace() the process, but this needs to be done from a child and not
+        // this process itself to still allow attaching to this process later
+        // if wanted, so is rather heavy. Under Linux we have the PID of the
+        // 'debugger' (which doesn't need to be gdb, of course, it could also
+        // be strace, for example) in /proc/$PID/status, so just get it from
+        // there instead.
+        bool isDebuggerActive(){
+            // Libstdc++ has a bug, where std::ifstream sets errno to 0
+            // This way our users can properly assert over errno values
+            ErrnoGuard guard;
+            std::ifstream in('/proc/self/status');
+            for( std::string line; std::getline(in, line); ) {
+                static const int PREFIX_LEN = 11;
+                if( line.compare(0, PREFIX_LEN, 'TracerPid:\t') == 0 ) {
+                    // We're traced if the PID is not 0 and no other PID starts
+                    // with 0 digit, so it's enough to check for just a single
+                    // character.
+                    return line.length() > PREFIX_LEN && line[PREFIX_LEN] != '0';
+                }
+            }
     }
     }
     
-    void Spline1dSeg::SetSplineFunc(const PolynomialXd& spline_func) {
-  spline_func_ = spline_func;
-  derivative_ = PolynomialXd::DerivedFrom(spline_func_);
-  second_order_derivative_ = PolynomialXd::DerivedFrom(derivative_);
-  third_order_derivative_ = PolynomialXd::DerivedFrom(second_order_derivative_);
-}
+    namespace Envoy {
+namespace Config {
+    }
+    }
     
-    TEST_F(GemMessageManagerTest, GetRecvProtocols) {
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Accelrpt68::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt170::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt271::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt372::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakerpt6c::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Datetimerpt83::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Globalrpt6a::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Headlightrpt77::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Hornrpt79::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Latlonheadingrpt82::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(
-                  Parkingbrakestatusrpt80::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Shiftrpt66::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt173::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt274::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt375::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringrpt16e::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Turnrpt64::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Vehiclespeedrpt6f::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Wheelspeedrpt7a::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Wiperrpt91::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Yawraterpt81::ID) != nullptr);
-}
+    /**
+ * Callback invoked when a FileEvent is ready for reading or writing.
+ */
+typedef std::function<void(uint32_t events)> FileReadyCb;
+    
+    namespace Envoy {
+namespace Event {
+    }
+    }
+    
+    #include 'envoy/buffer/buffer.h'
+#include 'envoy/http/header_map.h'
+    
+    // This template function declaration is used in defining arraysize.
+// Note that the function doesn't need an implementation, as we only
+// use its type.
+template <typename T, size_t N>
+char (&ArraySizeHelper(T (&array)[N]))[N];
+    
+      // Accessors to get the owned object.
+  // operator* and operator-> will assert() if there is no current object.
+  element_type& operator*() const {
+    assert(impl_.get() != NULL);
+    return *impl_.get();
+  }
+  element_type* operator->() const  {
+    assert(impl_.get() != NULL);
+    return impl_.get();
+  }
+  element_type* get() const { return impl_.get(); }
+    
+    class Lock {
+ public:
+  Lock() {
+    const int ret = pthread_mutex_init(&mutex_, NULL);
+    (void) ret;
+    DCHECK_EQ(0, ret);
+  }
+    }
+    
+    // Note that I18N_PHONENUMBERS_NO_THREAD_SAFETY must be defined only to let the
+// user of the library know that it can't be used in a thread-safe manner when
+// it is not depending on Boost.
+#if !defined(__linux__) && !defined(__APPLE__) && \
+    !defined(I18N_PHONENUMBERS_NO_THREAD_SAFETY)
+#error Building without Boost, please provide \
+       -DI18N_PHONENUMBERS_NO_THREAD_SAFETY
+#endif
+    
+      virtual R Run(A1 a1, A2 a2, A3 a3, A4 a4) {
+    return (instance_->*method_)(a1, a2, a3, a4);
+  }
+    
+    #include 'phonenumbers/base/basictypes.h'
+#include 'phonenumbers/base/logging.h'
+#include 'phonenumbers/geocoding/geocoding_data.h'
+    
+    #include 'phonenumbers/geocoding/mapping_file_provider.h'
+    
+    
+    {
+    {}  // namespace phonenumbers
+}  // namespace i18n
