@@ -1,161 +1,95 @@
 
         
-        # Just a slash
-Benchmark.ips do |x|
-  path = '/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
+          def all_signed_out?
+    users = Devise.mappings.keys.map { |s| warden.user(scope: s, run_callbacks: false) }
     
-    Jekyll::Deprecator.process(ARGV)
-    
-    #
-    
-    #
-    
-          # @see Base#\_store
-      def _store(key, version, sha, contents)
-        compiled_filename = path_to(key)
-        FileUtils.mkdir_p(File.dirname(compiled_filename))
-        Sass::Util.atomic_create_and_write_file(compiled_filename) do |f|
-          f.puts(version)
-          f.puts(sha)
-          f.write(contents)
-        end
-      rescue Errno::EACCES
-        # pass
-      end
-    
-          def inherited_hash_reader(name)
-        class_eval <<-RUBY, __FILE__, __LINE__ + 1
-          def #{name}(name)
-            _#{name}(name.tr('_', '-'))
-          end
-    
-        # Returns a string representation of the Sass backtrace.
-    #
-    # @param default_filename [String] The filename to use for unknown files
-    # @see #sass_backtrace
-    # @return [String]
-    def sass_backtrace_str(default_filename = 'an unknown file')
-      lines = message.split('\n')
-      msg = lines[0] + lines[1..-1].
-        map {|l| '\n' + (' ' * 'Error: '.size) + l}.join
-      'Error: #{msg}' +
-        sass_backtrace.each_with_index.map do |entry, i|
-          '\n        #{i == 0 ? 'on' : 'from'} line #{entry[:line]}' +
-            ' of #{entry[:filename] || default_filename}' +
-            (entry[:mixin] ? ', in `#{entry[:mixin]}'' : '')
-        end.join
+        def confirmation_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :confirmation_instructions, opts)
     end
     
-        def open_file(filename, flag = 'r')
-      return if filename.nil?
-      flag = 'wb' if @options[:unix_newlines] && flag == 'w'
-      file = File.open(filename, flag)
-      return file unless block_given?
-      yield file
-      file.close
-    end
-    
-          if @options[:sourcemap] != :none && @options[:sourcemap_filename]
-        relative_sourcemap_path = Sass::Util.relative_path_from(
-          @options[:sourcemap_filename], Sass::Util.pathname(@options[:output_filename]).dirname)
-        rendered, mapping = engine.render_with_sourcemap(relative_sourcemap_path.to_s)
-        write_output(rendered, output)
-        write_output(
-          mapping.to_json(
-            :type => @options[:sourcemap],
-            :css_path => @options[:output_filename],
-            :sourcemap_path => @options[:sourcemap_filename]) + '\n',
-          @options[:sourcemap_filename])
-      else
-        write_output(engine.render, output)
-      end
-    rescue Sass::SyntaxError => e
-      write_output(Sass::SyntaxError.exception_to_css(e), output) if output.is_a?(String)
-      raise e
-    ensure
-      output.close if output.is_a? File
-    end
-    
-      it 'ignores empty arrays' do
-    expect_no_offenses('[]')
-  end
-    
-          it 'does not autocorrect the closing brace' do
-        new_source = autocorrect_source(source)
-        expect(new_source).to eq([source].join($RS))
-      end
-    end
-    
-          # Calls the given block for each `value` node in the `hash` literal.
-      # If no block is given, an `Enumerator` is returned.
-      #
-      # @return [self] if a block is given
-      # @return [Enumerator] if no block is given
-      def each_value
-        return pairs.map(&:value).to_enum unless block_given?
-    
-          # Returns the body of the `when` node.
-      #
-      # @return [Node, nil] the body of the `when` node
-      def body
-        node_parts[-1]
-      end
-    end
-  end
-end
-
-    
-            def new; end
-    
-              Spree::Cart::AddItem.call(order: @shipment.order,
-                                    variant: variant,
-                                    quantity: quantity,
-                                    options: { shipment: @shipment })
-    
-            def show
-          @stock_movement = scope.find(params[:id])
-          respond_with(@stock_movement)
-        end
-    
-            def destroy
-          authorize! :destroy, taxon
-          taxon.destroy
-          respond_with(taxon, status: 204)
-        end
-    
-              @users = @users.result.page(params[:page]).per(params[:per_page])
-          expires_in 15.minutes, public: true
-          headers['Surrogate-Control'] = 'max-age=#{15.minutes}'
-          respond_with(@users)
-        end
-    
-      def framework_major_version
-    framework_version.split('.').first.to_i
-  end
-end
-World(RailsCommandHelpers)
-
-    
-        def geometry_string
-      begin
-        orientation = Paperclip.options[:use_exif_orientation] ?
-          '%[exif:orientation]' : '1'
-        Paperclip.run(
-          Paperclip.options[:is_windows] ? 'magick identify' : 'identify',
-          '-format '%wx%h,#{orientation}' :file', {
-            :file => '#{path}[0]'
-          }, {
-            :swallow_stderr => true
-          }
+          def remember_cookie_values(resource)
+        options = { httponly: true }
+        options.merge!(forget_cookie_values(resource))
+        options.merge!(
+          value: resource.class.serialize_into_cookie(resource),
+          expires: resource.remember_expires_at
         )
-      rescue Terrapin::ExitStatusError
-        ''
-      rescue Terrapin::CommandNotFoundError => e
-        raise_because_imagemagick_missing
+      end
+    
+          def get_installer_for(plugin_name)
+        uri = pack_uri(plugin_name)
+    
+    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
+  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.windows?
+  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.windows?
+    
+    describe LogStash::Config::PipelineConfig do
+  let(:source) { LogStash::Config::Source::Local }
+  let(:pipeline_id) { :main }
+  let(:ordered_config_parts) do
+    [
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/1', 0, 0, 'input { generator1 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/2', 0, 0,  'input { generator2 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/3', 0, 0, 'input { generator3 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/4', 0, 0, 'input { generator4 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/5', 0, 0, 'input { generator5 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/6', 0, 0, 'input { generator6 }'),
+      org.logstash.common.SourceWithMetadata.new('string', 'config_string', 0, 0, 'input { generator1 }'),
+    ]
+  end
+    
+        context 'update all the plugins' do
+      it 'has executed successfully' do
+        logstash.run_command_in_path('bin/logstash-plugin update --no-verify')
+        expect(logstash).to have_installed?(plugin_name, '0.1.1')
       end
     end
+  end
+end
+
+    
+      node[:applications].each do |app, data|
+    template '/etc/monit.d/sidekiq_#{app}.monitrc' do 
+      owner 'root' 
+      group 'root' 
+      mode 0644 
+      source 'monitrc.conf.erb' 
+      variables({ 
+        :num_workers => worker_count,
+        :app_name => app, 
+        :rails_env => node[:environment][:framework_env] 
+      }) 
+    end
+    
+    module Sidekiq
+  module Generators # :nodoc:
+    class WorkerGenerator < ::Rails::Generators::NamedBase # :nodoc:
+      desc 'This generator creates a Sidekiq Worker in app/workers and a corresponding test'
+    
+          def perform(yml)
+        (target, method_name, args) = YAML.load(yml)
+        msg = target.public_send(method_name, *args)
+        # The email method can return nil, which causes ActionMailer to return
+        # an undeliverable empty message.
+        if msg
+          deliver(msg)
+        else
+          raise '#{target.name}##{method_name} returned an undeliverable mail object'
+        end
+      end
+    
+    if defined?(::Rails) && Rails.respond_to?(:env) && !Rails.env.test?
+  puts('**************************************************')
+  puts('⛔️ WARNING: Sidekiq testing API enabled, but this is not the test environment.  Your jobs will not go to Redis.')
+  puts('**************************************************')
+end
+
+    
+        def erb(content, options = {})
+      if content.kind_of? Symbol
+        unless respond_to?(:'_erb_#{content}')
+          src = ERB.new(File.read('#{Web.settings.views}/#{content}.erb')).src
+          WebAction.class_eval('def _erb_#{content}\n#{src}\n end')
+        end
+      end
