@@ -1,166 +1,100 @@
 
         
-                  def hidden_field_for_checkbox(options)
-            @unchecked_value ? tag('input', options.slice('name', 'disabled', 'form').merge!('type' => 'hidden', 'value' => @unchecked_value)) : ''.html_safe
-          end
-      end
-    end
-  end
-end
-
-    
-    module ActionView
-  module Helpers
-    module Tags # :nodoc:
-      class DateSelect < Base # :nodoc:
-        def initialize(object_name, method_name, template_object, options, html_options)
-          @html_options = html_options
-    
-          def typecast(paths)
-        paths.map do |path|
-          case path
-          when Pathname, String
-            OptimizedFileSystemResolver.new path.to_s
-          else
-            path
-          end
-        end
-      end
-  end
-end
-
-    
-        initializer 'action_view.per_request_digest_cache' do |app|
-      ActiveSupport.on_load(:action_view) do
-        unless ActionView::Resolver.caching?
-          app.executor.to_run ActionView::Digestor::PerExecutionDigestCacheExpiry
-        end
-      end
+            def initialize(analytics_ingester_client: AnalyticsIngesterClient.new(GA_TRACKING))
+      require 'securerandom'
+      @session_id = SecureRandom.uuid
+      @client = analytics_ingester_client
+      @threads = []
+      @launch_event_sent = false
     end
     
-    def liquid_escape(markdown)
-  markdown.gsub(%r!(`{[{%].+[}%]}`)!, '{% raw %}\\1{% endraw %}')
-end
-    
-    Then(%r!^I should get a non-zero exit(?:\-| )status$!) do
-  step %(I should not see 'EXIT STATUS: 0' in the build output)
-end
-
-    
-        def arg_is_present?(args, deprecated_argument, message)
-      deprecation_message(message) if args.include?(deprecated_argument)
-    end
-    
-            # Execute a command on the remote machine. The exact semantics
-        # of this method are up to the implementor, but in general the
-        # users of this class will expect this to be a shell.
-        #
-        # This method gives you no way to write data back to the remote
-        # machine, so only execute commands that don't expect input.
-        #
-        # @param [String] command Command to execute.
-        # @yield [type, data] Realtime output of the command being executed.
-        # @yieldparam [String] type Type of the output. This can be
-        #   `:stdout`, `:stderr`, etc. The exact types are up to the
-        #   implementor.
-        # @yieldparam [String] data Data for the given output.
-        # @return [Integer] Exit code of the command.
-        def execute(command, opts=nil)
-        end
-    
-            # Helper method that will set a value if a value is given, or otherwise
-        # return the already set value.
-        #
-        # @param [Symbol] key Key for the data
-        # @param [Object] value Value to store.
-        # @return [Object] Stored value.
-        def self.get_or_set(key, value=UNSET_VALUE)
-          # If no value is to be set, then return the value we have already set
-          return data[key] if value.eql?(UNSET_VALUE)
-    
-            # This should return an action callable for the given name.
-        #
-        # @param [Symbol] name Name of the action.
-        # @return [Object] A callable action sequence object, whether it
-        #   is a proc, object, etc.
-        def action(name)
-          nil
-        end
-    
-    describe 'main#define_method' do
-  before :each do
-    @code = 'define_method(:boom) { :bam }'
-  end
-    
-    namespace :bower do
-    
-      def_delegators :@logger, :log, :log_status, :log_processing, :log_transform, :log_file_info, :log_processed, :log_http_get_file, :log_http_get_files, :silence_log
-    
-        def_delegators :@s, :scan_until, :skip_until, :string
-    
-        # These mixins will get vararg definitions in SCSS (not supported by LESS):
-    VARARG_MIXINS               = %w(
-      scale transition transition-duration transition-property transition-transform box-shadow
-    )
-    
-        def log_http_get_file(url, cached = false)
-      s = '  #{'CACHED ' if cached}GET #{url}...'
-      if cached
-        puts dark green s
+        def rescue_connection_failed_error(e)
+      if e.message.include?('Connection reset by peer - SSL_connect')
+        handle_tls_error!(e)
       else
-        puts dark cyan s
+        handle_unknown_error!(e)
       end
     end
     
-        def get_paths_by_type(dir, file_re, recursive = true)
-      get_file_paths(dir, recursive).select { |path| path =~ file_re }
-    end
+          it 'handles the extensions parameter with no elements correctly' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', extensions: [])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}'')
+      end
     
-      # Show full error reports and disable caching.
-  config.consider_all_requests_local       = true
-  config.action_controller.perform_caching = false
+          it 'passes the deprecated pathspec parameter to path parameter' do
+        with_verbose(true) do
+          allow(Fastlane::Actions).to receive(:sh).with(anything, { log: true }).and_return('')
+          result = Fastlane::FastFile.new.parse('lane :test do
+            git_add(pathspec: 'myfile.txt')
+          end').runner.execute(:test)
+        end
+      end
     
-        if run? && ARGV.any?
-      require 'optparse'
-      OptionParser.new { |op|
-        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
-        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
-        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
-        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
-        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
-        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
-      }.parse!(ARGV.dup)
+    # Here be monkey patches
+    
+          describe 'Use a valid Configuration Manager' do
+        before do
+          @options = [
+            FastlaneCore::ConfigItem.new(key: :cert_name,
+                                    env_name: 'SIGH_PROVISIONING_PROFILE_NAME',
+                                 description: 'Set the profile name',
+                               default_value: 'production_default',
+                                verify_block: nil),
+            FastlaneCore::ConfigItem.new(key: :output,
+                                    env_name: 'SIGH_OUTPUT_PATH',
+                                 description: 'Directory in which the profile should be stored',
+                               default_value: '.',
+                                verify_block: proc do |value|
+                                  UI.user_error!('Could not find output directory '#{value}'') unless File.exist?(value)
+                                end),
+            FastlaneCore::ConfigItem.new(key: :wait_processing_interval,
+                                short_option: '-k',
+                                    env_name: 'PILOT_WAIT_PROCESSING_INTERVAL',
+                                 description: 'Interval in seconds to wait for App Store Connect processing',
+                               default_value: 30,
+                                        type: Integer,
+                                verify_block: proc do |value|
+                                  UI.user_error!('Please enter a valid positive number of seconds') unless value.to_i > 0
+                                end)
+          ]
+          @values = {
+            cert_name: 'asdf',
+            output: '..',
+            wait_processing_interval: 10
+          }
+          @config = FastlaneCore::Configuration.create(@options, @values)
+        end
+    
+      it 'should allow changing the protection settings' do
+    mock_app do
+      use Rack::Protection::ContentSecurityPolicy, :default_src => 'none', :script_src => 'https://cdn.mybank.net', :style_src => 'https://cdn.mybank.net', :img_src => 'https://cdn.mybank.net', :connect_src => 'https://api.mybank.com', :frame_src => 'self', :font_src => 'https://cdn.mybank.net', :object_src => 'https://cdn.mybank.net', :media_src => 'https://cdn.mybank.net', :report_uri => '/my_amazing_csp_report_parser', :sandbox => 'allow-scripts'
+    
+      def send_sinatra_file(path, &missing_file_block)
+    file_path = File.join(File.dirname(__FILE__), 'public',  path)
+    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
+    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
+  end
+    
+    module Jekyll
+    
+            Dir.chdir(includes_dir) do
+          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
+          if choices.include?(file)
+            source = File.read(file)
+            partial = Liquid::Template.parse(source)
+            context.stack do
+              rtn = rtn + partial.render(context)
+            end
+          else
+            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
+          end
+        end
+      end
+      rtn
     end
   end
     
-    task :gemspec => 'rack-protection.gemspec'
-task :default => :spec
-task :test    => :spec
-
     
-          def masked_token?(token)
-        token.length == TOKEN_LENGTH * 2
-      end
-    
-    module Rack
-  module Protection
-    class Base
-      DEFAULT_OPTIONS = {
-        :reaction    => :default_reaction, :logging   => true,
-        :message     => 'Forbidden',       :encryptor => Digest::SHA1,
-        :session_key => 'rack.session',    :status    => 403,
-        :allow_empty_referrer => true,
-        :report_key           => 'protection.failed',
-        :html_types           => %w[text/html application/xhtml text/xml application/xml]
-      }
-    
-          def call(env)
-        status, headers, body = super
-        response = Rack::Response.new(body, status, headers)
-        request = Rack::Request.new(env)
-        remove_bad_cookies(request, response)
-        response.finish
-      end
-    
-            if has_vector?(request, headers)
-          warn env, 'attack prevented by #{self.class}'
+module OctopressLiquidFilters
