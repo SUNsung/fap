@@ -1,152 +1,128 @@
 
         
-          def fixopt(f)
-    path = if f.linked_keg.directory? && f.linked_keg.symlink?
-      f.linked_keg.resolved_path
-    elsif f.prefix.directory?
-      f.prefix
-    elsif (kids = f.rack.children).size == 1 && kids.first.directory?
-      kids.first
-    else
-      raise
-    end
-    Keg.new(path).optlink
-  rescue StandardError
-    raise '#{f.opt_prefix} not present or broken\nPlease reinstall #{f.full_name}. Sorry :('
-  end
-end
+              if staff.topic_id.nil?
+        creator = PostCreator.new(Discourse.system_user,
+          raw: I18n.t('staff_category_description'),
+          title: I18n.t('category.topic_prefix', category: staff.name),
+          category: staff.name,
+          archetype: Archetype.default
+        )
+        post = creator.create
     
-        keys.each do |key|
-      value = env[key]
-      s = '#{key}: #{value}'
-      case key
-      when 'CC', 'CXX', 'LD'
-        s << ' => #{Pathname.new(value).realpath}' if File.symlink?(value)
-      end
-      f.puts s
-    end
-  end
-end
-
+    module Vagrant
+  # This class handles guest-OS specific interactions with a machine.
+  # It is primarily responsible for detecting the proper guest OS
+  # implementation and then delegating capabilities.
+  #
+  # Vagrant has many tasks which require specific guest OS knowledge.
+  # These are implemented using a guest/capability system. Various plugins
+  # register as 'guests' which determine the underlying OS of the system.
+  # Then, 'guest capabilities' register themselves for a specific OS (one
+  # or more), and these capabilities are called.
+  #
+  # Example capabilities might be 'mount_virtualbox_shared_folder' or
+  # 'configure_networks'.
+  #
+  # This system allows for maximum flexibility and pluginability for doing
+  # guest OS specific operations.
+  class Guest
+    include CapabilityHost
     
-            EOS
-      s << '    LDFLAGS:  -L#{f.opt_lib}\n' if f.lib.directory?
-      s << '    CPPFLAGS: -I#{f.opt_include}\n' if f.include.directory?
-    end
-    s << '\n'
-  end
+            include Vagrant::Util
     
-        def self.cleanup_logs
-      return unless HOMEBREW_LOGS.directory?
-      HOMEBREW_LOGS.subdirs.each do |dir|
-        cleanup_path(dir) { dir.rmtree } if prune?(dir, :days_default => 14)
-      end
-    end
-    
-      def describe_java
-    java_xml = Utils.popen_read('/usr/libexec/java_home', '--xml', '--failfast')
-    return 'N/A' unless $?.success?
-    javas = []
-    REXML::XPath.each(REXML::Document.new(java_xml), '//key[text()='JVMVersion']/following-sibling::string') do |item|
-      javas << item.text
-    end
-    javas.uniq.join(', ')
-  end
-    
-        if ARGV.include? '--list-checks'
-      puts checks.all.sort
-      exit
-    end
-    
-    module Homebrew
-  def list
-    # Use of exec means we don't explicitly exit
-    list_unbrewed if ARGV.flag? '--unbrewed'
-    
-      def outbox_presenter
-    if page_requested?
-      ActivityPub::CollectionPresenter.new(
-        id: account_outbox_url(@account, page_params),
-        type: :ordered,
-        part_of: account_outbox_url(@account),
-        prev: prev_page,
-        next: next_page,
-        items: @statuses
-      )
-    else
-      ActivityPub::CollectionPresenter.new(
-        id: account_outbox_url(@account),
-        type: :ordered,
-        size: @account.statuses_count,
-        first: account_outbox_url(@account, page: true),
-        last: account_outbox_url(@account, page: true, min_id: 0)
-      )
-    end
-  end
-    
-          weeks << {
-        week: week.to_time.to_i.to_s,
-        statuses: Redis.current.get('activity:statuses:local:#{week_id}') || '0',
-        logins: Redis.current.pfcount('activity:logins:#{week_id}').to_s,
-        registrations: Redis.current.get('activity:accounts:local:#{week_id}') || '0',
-      }
-    end
-    
-      def set_web_push_subscription
-    @web_subscription = ::Web::PushSubscription.find_by(access_token_id: doorkeeper_token.id)
-  end
-    
-      def update
-    setting.data = params[:data]
-    setting.save!
-    
-              if @order.update_from_params(params, permitted_checkout_attributes, request.headers.env)
-            if current_api_user.has_spree_role?('admin') && user_id.present?
-              @order.associate_user!(Spree.user_class.find(user_id))
-            end
-    
-            def image_params
-          params.require(:image).permit(permitted_image_attributes)
+            # This is the method called to provision the system. This method
+        # is expected to do whatever necessary to provision the system (create files,
+        # SSH, etc.)
+        def provision!
         end
     
-            def property_params
-          params.require(:property).permit(permitted_property_attributes)
+            # Returns the instance variables as a hash of key-value pairs.
+        def instance_variables_hash
+          instance_variables.inject({}) do |acc, iv|
+            acc[iv.to_s[1..-1]] = instance_variable_get(iv)
+            acc
+          end
         end
-      end
+    
+            # Set the name of the plugin. The moment that this is called, the
+        # plugin will be registered and available. Before this is called, a
+        # plugin does not exist. The name must be unique among all installed
+        # plugins.
+        #
+        # @param [String] name Name of the plugin.
+        # @return [String] The name of the plugin.
+        def self.name(name=UNSET_VALUE)
+          # Get or set the value first, so we have a name for logging when
+          # we register.
+          result = get_or_set(:name, name)
+    
+        # Return the number of elements in this registry.
+    #
+    # @return [Integer]
+    def length
+      @items.keys.length
     end
-  end
+    alias_method :size, :length
+    
+        describe 'X' do
+      it 'converts argument as a hexadecimal number with uppercase letters' do
+        format('%X', 196).should == 'C4'
+      end
+    
+    describe 'Kernel.system' do
+  it_behaves_like :kernel_system, :system, Kernel
 end
 
     
-            def jstree
-          show
-        end
+        # Flattens a single rule.
+    #
+    # @param rule [Tree::RuleNode] The candidate for flattening
+    # @see #flatten_rules
+    def flatten_rule(rule)
+      while rule.children.size == 1 && rule.children.first.is_a?(Tree::RuleNode)
+        child = rule.children.first
     
-            private
-    
-            def index
-          @zones = Zone.accessible_by(current_ability, :read).order('name ASC').ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
-          respond_with(@zones)
-        end
-    
-      class IncludeCodeTag < Liquid::Tag
-    def initialize(tag_name, markup, tokens)
-      @title = nil
-      @file = nil
-      if markup.strip =~ /\s*lang:(\S+)/i
-        @filetype = $1
-        markup = markup.strip.sub(/lang:\S+/i,'')
+        # Set an option for specifying `Encoding.default_external`.
+    #
+    # @param opts [OptionParser]
+    def encoding_option(opts)
+      encoding_desc = 'Specify the default encoding for input files.'
+      opts.on('-E', '--default-encoding ENCODING', encoding_desc) do |encoding|
+        Encoding.default_external = encoding
       end
-      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
-        @title = $1 || nil
-        @file = $3
-      end
-      super
     end
     
-        def initialize(tag_name, markup, tokens)
-      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
-      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
-      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
-      super
+          @options[:for_engine][:syntax] ||= :scss if input.is_a?(File) && input.path =~ /\.scss$/
+      @options[:for_engine][:syntax] ||= @default_syntax
+      engine =
+        if input.is_a?(File) && !@options[:check_syntax]
+          Sass::Engine.for_file(input.path, @options[:for_engine])
+        else
+          # We don't need to do any special handling of @options[:check_syntax] here,
+          # because the Sass syntax checking happens alongside evaluation
+          # and evaluation doesn't actually evaluate any code anyway.
+          Sass::Engine.new(input.read, @options[:for_engine])
+        end
+    
+          # Returns the time the given Sass file was last modified.
+      #
+      # If the given file has been deleted or the time can't be accessed
+      # for some other reason, this should return nil.
+      #
+      # @param uri [String] The URI of the file to check.
+      #   Comes from a `:filename` option set on an engine returned by this importer.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` currently being checked.
+      # @return [Time, nil]
+      def mtime(uri, options)
+        Sass::Util.abstract(self)
+      end
+    
+          # @see Base#find_relative
+      def find_relative(name, base, options)
+        _find(File.dirname(base), name, options)
+      end
+    
+        def set_if_empty(key, value=nil, &block)
+      set(key, value, &block) unless keys.include?(key)
     end
