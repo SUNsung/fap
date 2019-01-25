@@ -1,485 +1,355 @@
 
         
-        class OpenURIDialog : public QDialog
-{
-    Q_OBJECT
+        #include <map>
+    
+    void BrowserWindow::UpdateDraggableRegions(
+    content::RenderFrameHost* rfh,
+    const std::vector<DraggableRegion>& regions) {
+  if (window_->has_frame())
+    return;
+  static_cast<NativeWindowViews*>(window_.get())
+      ->UpdateDraggableRegions(DraggableRegionsToSkRegion(regions));
+}
+    
+    
+    {}  // namespace atom
+    
+      // Called by native calles.
+  bool ShouldShutdown();
+    
+      // C++ can not distinguish overloaded member function.
+  template <AtomNetworkDelegate::SimpleEvent type>
+  void SetSimpleListener(mate::Arguments* args);
+  template <AtomNetworkDelegate::ResponseEvent type>
+  void SetResponseListener(mate::Arguments* args);
+  template <typename Listener, typename Method, typename Event>
+  void SetListener(Method method, Event type, mate::Arguments* args);
+    
+    class Event : public Wrappable<Event>, public content::WebContentsObserver {
+ public:
+  static Handle<Event> Create(v8::Isolate* isolate);
     }
     
-    
-    {    /* d += a3 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'movq %%rax,%%rcx\n'
-    'movq %%rdx,%%r15\n'
-    /* d += a2 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d = a0 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c = a4 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += (c & M) * R */
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* t3 (tmp1) = d & M */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    'movq %%rsi,%q1\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* d += a4 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a0 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += c * R */
-    'movq %%r8,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* t4 = d & M (%%rsi) */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* tx = t4 >> 48 (tmp3) */
-    'movq %%rsi,%%rax\n'
-    'shrq $48,%%rax\n'
-    'movq %%rax,%q3\n'
-    /* t4 &= (M >> 4) (tmp2) */
-    'movq $0xffffffffffff,%%rax\n'
-    'andq %%rax,%%rsi\n'
-    'movq %%rsi,%q2\n'
-    /* c = a0 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += a4 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* u0 = d & M (%%rsi) */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* u0 = (u0 << 4) | tx (%%rsi) */
-    'shlq $4,%%rsi\n'
-    'movq %q3,%%rax\n'
-    'orq %%rax,%%rsi\n'
-    /* c += u0 * (R >> 4) */
-    'movq $0x1000003d1,%%rax\n'
-    'mulq %%rsi\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[0] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,0(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += a1 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a0 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d += a4 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c += (d & M) * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* r[1] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,8(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += a2 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a1 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a0 * b2 (last use of %%r10 = a0) */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* fetch t3 (%%r10, overwrites a0), t4 (%%rsi) */
-    'movq %q2,%%rsi\n'
-    'movq %q1,%%r10\n'
-    /* d += a4 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c += (d & M) * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 (%%rcx only) */
-    'shrdq $52,%%r15,%%rcx\n'
-    /* r[2] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,16(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += t3 */
-    'addq %%r10,%%r8\n'
-    /* c += d * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[3] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,24(%%rdi)\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* c += t4 (%%r8 only) */
-    'addq %%rsi,%%r8\n'
-    /* r[4] = c */
-    'movq %%r8,32(%%rdi)\n'
-: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
-: 'b'(b), 'D'(r)
-: '%rax', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
-);
+    void SavePageHandler::OnDownloadUpdated(download::DownloadItem* item) {
+  if (item->IsDone()) {
+    v8::Isolate* isolate = v8::Isolate::GetCurrent();
+    v8::Locker locker(isolate);
+    v8::HandleScope handle_scope(isolate);
+    if (item->GetState() == download::DownloadItem::COMPLETE) {
+      callback_.Run(v8::Null(isolate));
+    } else {
+      v8::Local<v8::String> error_message =
+          v8::String::NewFromUtf8(isolate, 'Fail to save page');
+      callback_.Run(v8::Exception::Error(error_message));
+    }
+    Destroy(item);
+  }
 }
     
     
-    {        secp256k1_sha256_initialize(&sha);
-        secp256k1_sha256_write(&sha, y, sizeof(y));
-        secp256k1_sha256_write(&sha, x, sizeof(x));
-        secp256k1_sha256_finalize(&sha, result);
-        ret = 1;
+    {}  // namespace api
+    
+    namespace atom {
     }
     
+    #if defined(OS_LINUX)
+#include 'atom/browser/lib/power_observer_linux.h'
+#else
+#include 'base/power_monitor/power_observer.h'
+#endif  // defined(OS_LINUX)
     
-    {    /* Try to multiply it by bad values */
-    CHECK(secp256k1_ecdh(ctx, output, &point, s_zero) == 0);
-    CHECK(secp256k1_ecdh(ctx, output, &point, s_overflow) == 0);
-    /* ...and a good one */
-    s_overflow[31] -= 1;
-    CHECK(secp256k1_ecdh(ctx, output, &point, s_overflow) == 1);
+    std::string GetReceiptURL(void);
+    
+    namespace base {
+class TaskRunner;
 }
     
-        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 0));
-    CHECK(!secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
-    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 1));
-    CHECK(secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
-    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 2));
-    CHECK(!secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
-    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 3));
-    CHECK(!secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
+    OPERATOR_SCHEMA(FindDuplicateElements)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .SetDoc(R'DOC(
+The *FindDuplicateElements* op takes a single 1-D tensor *data* as input and returns a single 1-D output tensor *indices*. The output tensor contains the indices of the duplicate elements of the input, excluding the first occurrences. If all elements of *data* are unique, *indices* will be empty.
     
-        // C escapes
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar\\nBaz\\t\' Spam=\'\\rEggs\' Octals=\'\\1a\\11\\17\\18\\81\\377\\378\\400\\2222\' Final=Check', {
-            {'Foo', 'Bar\nBaz\t'},
-            {'Spam', '\rEggs'},
-            {'Octals', '\1a\11\17\1' '881\377\37' '8\40' '0\222' '2'},
-            {'Final', 'Check'},
-        });
-    CheckParseTorReplyMapping(
-        'Valid=Mapping Escaped=\'Escape\\\\\'', {
-            {'Valid', 'Mapping'},
-            {'Escaped', 'Escape\\'},
-        });
-    CheckParseTorReplyMapping(
-        'Valid=Mapping Bare=\'Escape\\\'', {});
-    CheckParseTorReplyMapping(
-        'OneOctal=\'OneEnd\\1\' TwoOctal=\'TwoEnd\\11\'', {
-            {'OneOctal', 'OneEnd\1'},
-            {'TwoOctal', 'TwoEnd\11'},
-        });
     
-    bool ParseInt32(const std::string& str, int32_t *out)
-{
-    if (!ParsePrechecks(str))
-        return false;
-    char *endp = NULL;
-    errno = 0; // strtol will not set errno if valid
-    long int n = strtol(str.c_str(), &endp, 10);
-    if(out) *out = (int32_t)n;
-    // Note that strtol returns a *long int*, so even if strtol doesn't report a over/underflow
-    // we still have to check that the returned value is within the range of an *int32_t*. On 64-bit
-    // platforms the size of these types may be different.
-    return endp && *endp == 0 && !errno &&
-        n >= std::numeric_limits<int32_t>::min() &&
-        n <= std::numeric_limits<int32_t>::max();
-}
+    {} // namespace caffe2
     
-        BOOST_CHECK(v.setStr('zum'));
-    BOOST_CHECK(v.isStr());
-    BOOST_CHECK_EQUAL(v.getValStr(), 'zum');
+    REGISTER_CPU_OPERATOR(GatherRangesToDense, GatherRangesToDenseOp<CPUContext>);
+NO_GRADIENT(GatherRangesToDense);
     
-    // Bech32 is a string encoding format used in newer address types.
-// The output consists of a human-readable part (alphanumeric), a
-// separator character (1), and a base32 data section, the last
-// 6 characters of which are a checksum.
+    <summary> <b>Example</b> </summary>
+    
+    int16_t word_blob_quality(WERD_RES *word, ROW *row);
+void reject_whole_page(PAGE_RES_IT &page_res_it);
+    
+    // Main entry point for Paragraph Detection Algorithm.
 //
-// For more information, see BIP 173.
+// Given a set of equally spaced textlines (described by row_infos),
+// Split them into paragraphs.  See http://goto/paragraphstalk
+//
+// Output:
+//   row_owners - one pointer for each row, to the paragraph it belongs to.
+//   paragraphs - this is the actual list of PARA objects.
+//   models - the list of paragraph models referenced by the PARA objects.
+//            caller is responsible for deleting the models.
+void DetectParagraphs(int debug_level,
+                      GenericVector<RowInfo> *row_infos,
+                      GenericVector<PARA *> *row_owners,
+                      PARA_LIST *paragraphs,
+                      GenericVector<ParagraphModel *> *models);
     
-    #include <string.h>
-    
-    public:
-    static const size_t OUTPUT_SIZE = 20;
-    
-    enum class ImmType {
-              // Supports TOC? | Supports li64? | Fixed size?
-              // -------------------------------------------
-  AnyCompact, // Yes           | Yes            | No
-  AnyFixed,   // Yes           | Yes            | Yes (5 instr)
-  TocOnly,    // Yes           | No             | Yes (2 instr)
-};
-    
-    static HackStrictOption GetHackStrictOption(const IniSettingMap& ini,
-                                            const Hdf& config,
-                                            const std::string& name /* = '' */,
-                                            HackStrictOption def
-                                           ) {
-  auto val = Config::GetString(ini, config, name);
-  if (val.empty()) {
-    return def;
+      /// Return true if we are processing the full image.
+  bool IsFullImage() const {
+    return rect_left_ == 0 && rect_top_ == 0 &&
+           rect_width_ == image_width_ && rect_height_ == image_height_;
   }
-  if (val == 'warn') {
-    return HackStrictOption::WARN;
-  }
-  bool ret;
-  ini_on_update(val, ret);
-  return ret ? HackStrictOption::ON : HackStrictOption::OFF;
+    
+    // Creates a box file string from a unichar string, TBOX and page number.
+void MakeBoxFileStr(const char* unichar_str, const TBOX& box, int page_num,
+                    STRING* box_str);
+    
+    // Deletes all the boxes stored in BoxWord.
+void BoxWord::DeleteAllBoxes() {
+  length_ = 0;
+  boxes_.clear();
+  bbox_ = TBOX();
 }
     
-    /**
- * Parts of the language can individually be made stricter, warning or
- * erroring when there's dangerous/unintuive usage; for example,
- * array_fill_keys() with non-int/string keys: Hack.Lang.StrictArrayFillKeys
- */
-enum class HackStrictOption {
-  OFF, // PHP5 behavior
-  WARN,
-  ON
-};
     
-    Variant ArrayDirectory::read() {
-  if (!m_it) {
-    return false;
+    {}  // namespace tesseract.
+
+    
+    template <typename T> class GenericVector;
+    
+    #include <grpcpp/impl/grpc_library.h>
+#include <grpcpp/security/credentials.h>
+    
+    namespace grpc {
+    }
+    
+    inline absl::string_view GetMethod(const grpc_slice* path) {
+  if (GRPC_SLICE_IS_EMPTY(*path)) {
+    return '';
+  }
+  // Check for leading '/' and trim it if present.
+  return absl::StripPrefix(absl::string_view(reinterpret_cast<const char*>(
+                                                 GRPC_SLICE_START_PTR(*path)),
+                                             GRPC_SLICE_LENGTH(*path)),
+                           '/');
+}
+    
+    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_SERVER_FILTER_H
+#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_SERVER_FILTER_H
+    
+    class ProtoServerReflection final
+    : public reflection::v1alpha::ServerReflection::Service {
+ public:
+  ProtoServerReflection();
+    }
+    
+    DynamicThreadPool::DynamicThreadPool(int reserve_threads)
+    : shutdown_(false),
+      reserve_threads_(reserve_threads),
+      nthreads_(0),
+      threads_waiting_(0) {
+  for (int i = 0; i < reserve_threads_; i++) {
+    std::lock_guard<std::mutex> lock(mu_);
+    nthreads_++;
+    new DynamicThread(this);
+  }
+}
+    
+    template<>
+void SetDataGradToBlob<mshadow::gpu, float>(caffeMemoryTypes memType,
+                            std::vector<::caffe::Blob<float>*>::iterator blob,
+                            std::vector<TBlob>::const_iterator itr) {
+  float *data_ptr = reinterpret_cast<float*>((*itr).dptr_);
+  if (memType == Data)
+    (*blob)->set_gpu_data(data_ptr);
+  else
+    MXCAFFEBLOB(*blob, float)->set_gpu_diff(data_ptr);
+}
+    
+    // Initialization funciton called by caffeOp & caffeLoss
+template<typename Dtype>
+void InitCaffeBlobs(std::vector< ::caffe::Blob<Dtype>*>* v, int n_num) {
+  for (index_t i=0; i < n_num; ++i)
+    v->push_back(new ::caffe::Blob<Dtype>());
+}
+    
+      for (auto& e : idx.outputs()) {
+    ++ref_count[idx.entry_id(e)];
+  }
+  for (uint32_t nid = 0; nid < idx.num_nodes(); ++nid) {
+    for (auto &e : idx[nid].inputs) {
+      ++ref_count[idx.entry_id(e)];
+    }
+  }
+    
+    namespace mxnet {
+namespace io {
+// iterator on image recordio
+class PrefetcherIter : public IIterator<DataBatch> {
+ public:
+  explicit PrefetcherIter(IIterator<TBlobBatch>* base)
+      : loader_(base), out_(nullptr) {}
+    }
+    }
+    }
+    
+      int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+    
+    std::pair<JSON, QueryLogItem> getSerializedQueryLogItem() {
+  std::pair<JSON, QueryLogItem> p;
+  QueryLogItem i;
+  JSON doc = JSON::newObject();
+  auto dr = getSerializedDiffResults();
+  i.results = std::move(dr.second);
+  i.name = 'foobar';
+  i.calendar_time = 'Mon Aug 25 12:10:57 2014';
+  i.time = 1408993857;
+  i.identifier = 'foobaz';
+  i.epoch = 0L;
+  i.counter = 0L;
+    }
+    
+    #include <smartmontools/libsmartctl.h>
+    
+    #include <fstream>
+    
+    Expected<std::size_t, Error> decodeCpuNumber(const std::string& str) {
+  auto exp = tryTo<std::size_t>(str);
+  if (exp.isError()) {
+    return createError(Error::IncorrectRange, '', exp.takeError())
+           << 'Incorrect CPU number representation ' << boost::io::quoted(str);
+  }
+  return exp.take();
+}
+    
+    #include <gtest/gtest.h>
+    
+    class PosixDirectory : public Directory {
+ public:
+  explicit PosixDirectory(int fd) : fd_(fd) {}
+  ~PosixDirectory();
+  virtual Status Fsync() override;
+    }
+    
+    std::string kDBPath = '/tmp/rocksdb_column_families_example';
+    
+      const char* Name() const override { return 'MyFilter'; }
+    
+    #pragma once
+#include <stddef.h>
+#include <stdint.h>
+#include <string>
+    
+    // Verify the checksum of file
+Status VerifySstFileChecksum(const Options& options,
+                             const EnvOptions& env_options,
+                             const std::string& file_path);
+#endif  // ROCKSDB_LITE
+    
+    // Move all L0 files to target_level skipping compaction.
+// This operation succeeds only if the files in L0 have disjoint ranges; this
+// is guaranteed to happen, for instance, if keys are inserted in sorted
+// order. Furthermore, all levels between 1 and target_level must be empty.
+// If any of the above condition is violated, InvalidArgument will be
+// returned.
+Status PromoteL0(DB* db, ColumnFamilyHandle* column_family,
+                 int target_level = 1);
+    
+      // Return a new block flush policy that flushes data blocks by data size.
+  // FlushBlockPolicy may need to access the metadata of the data block
+  // builder to determine when to flush the blocks.
+  //
+  // Callers must delete the result after any database that is using the
+  // result has been closed.
+  virtual FlushBlockPolicy* NewFlushBlockPolicy(
+      const BlockBasedTableOptions& table_options,
+      const BlockBuilder& data_block_builder) const = 0;
+    
+    struct IOStatsContext {
+  // reset all io-stats counter to zero
+  void Reset();
+    }
+    
+      ThreadStatus(const uint64_t _id,
+               const ThreadType _thread_type,
+               const std::string& _db_name,
+               const std::string& _cf_name,
+               const OperationType _operation_type,
+               const uint64_t _op_elapsed_micros,
+               const OperationStage _operation_stage,
+               const uint64_t _op_props[],
+               const StateType _state_type) :
+      thread_id(_id), thread_type(_thread_type),
+      db_name(_db_name),
+      cf_name(_cf_name),
+      operation_type(_operation_type),
+      op_elapsed_micros(_op_elapsed_micros),
+      operation_stage(_operation_stage),
+      state_type(_state_type) {
+    for (int i = 0; i < kNumOperationProperties; ++i) {
+      op_properties[i] = _op_props[i];
+    }
+  }
+    
+    #include 'modules/drivers/canbus/sensor_gflags.h'
+    
+    
+    {  int ret = x;
+  return ret;
+}
+    
+    namespace apollo {
+namespace drivers {
+namespace conti_radar {
+    }
+    }
+    }
+    
+    
+    {  int ret = x;
+  return ret;
+}
+    
+    TEST_F(SpeedLimitTest, SimpleSpeedLimitCreation) {
+  SpeedLimit simple_speed_limit;
+  EXPECT_TRUE(simple_speed_limit.speed_limit_points().empty());
+  EXPECT_EQ(speed_limit_.speed_limit_points().size(), 100);
+}
+    
+    void BackupTrajectoryGenerator::GenerateTrajectory1dPairs(
+    const State& init_s, const State& init_d) {
+  std::vector<std::shared_ptr<Curve1d>> lon_trajectories;
+  std::array<double, 5> dds_condidates = {-0.1, -1.0, -2.0, -3.0, -4.0};
+  for (const auto dds : dds_condidates) {
+    lon_trajectories.emplace_back(
+        new ConstantDecelerationTrajectory1d(init_s[0], init_s[1], dds));
   }
     }
     
-      int cnt = 1;
-  bool ignore_default_configs = ::getenv('HHVM_NO_DEFAULT_CONFIGS') != nullptr;
-  while (cnt < argc) {
-    if (strcmp(argv[cnt], '-a') == 0 ||
-        strcmp(argv[cnt], '--interactive') == 0) {
-      need_file = false;
-      newargv.push_back('-a');
-      cnt++;
-      continue;
-    }
-    if (strcmp(argv[cnt], '-z') == 0) {
-      std::string arg = '-vDynamicExtensions.0=';
-      arg.append(argv[cnt+1]);
-      newargv.push_back(arg.c_str());
-      cnt += 2;
-      continue;
-    }
-    if (strcmp(argv[cnt], '-l') == 0 || strcmp(argv[cnt], '--lint') == 0) {
-      cnt++;
-      lint = true;
-      continue;
-    }
-    if (strcmp(argv[cnt], '-r') == 0) {
-      if (cnt + 1 == argc) {
-        // Hmm, no program fragment passed along. Let hhvm print its usage
-        // message?
-        newargv.push_back(argv[cnt++]);
-        continue;
-      }
-      assertx(cnt + 1 < argc);
-      program = argv[cnt + 1];
-      need_file = true;
-      cnt += 2;
-      continue;
-    }
-    if (strcmp(argv[cnt], '-i') == 0 || strcmp(argv[cnt], '--info') == 0) {
-      // Pretend they did '-r 'phpinfo();''
-      program = 'phpinfo();';
-      need_file = true;
-      cnt = argc; // no need to check the rest of options and arguments
-      break;
-    }
-    if (strcmp(argv[cnt], '-w') == 0) {
-      cnt++;
-      show = true;
-      continue;
-    }
-    if (strcmp(argv[cnt], '-v') == 0 || strcmp(argv[cnt], '--version') == 0) {
-      newargv.push_back('--version');
-      cnt = argc; // no need to check the rest of options and arguments
-      need_file = false;
-      break;
-    }
-    if (strcmp(argv[cnt], '--modules') == 0) {
-    // zend has a -m flag but we're already using it for --mode
-      newargv.push_back('--modules');
-      cnt = argc; // no need to check the rest of options and arguments
-      need_file = false;
-      break;
-    }
-    if (strcmp(argv[cnt], '-f') == 0 || strcmp(argv[cnt], '--file') == 0) {
-      cnt++;
-      newargv.push_back(lint ? '-l' : '-f');
-      newargv.push_back(argv[cnt++]);
-      need_file = false;
-      break;
-    }
-    if (strcmp(argv[cnt], '-n') == 0) {
-      ignore_default_configs = true;
-      cnt++;
-      newargv.push_back('--no-config');
-      continue;
-    }
-    if (strcmp(argv[cnt], '-c')  == 0) {
-      if (cnt + 1 < argc && argv[cnt + 1][0] != '-') {
-        newargv.push_back('-c');
-        newargv.push_back(argv[cnt + 1]);
-        cnt = cnt + 2;
-        continue;
-      } else {
-        fprintf(stderr, 'Notice: No config file specified');
-        exit(EXIT_FAILURE);
-      }
-    }
-    if (strcmp(argv[cnt], '-d')  == 0 || strcmp(argv[cnt], '--define') == 0) {
-      ini_fd = get_tempfile_if_not_exists(ini_fd, ini_path);
-    }
-    }
+    const PolynomialXd& Spline1dSeg::ThirdOrderDerivative() const {
+  return third_order_derivative_;
+}
     
-    struct GlobStreamWrapper final : Stream::Wrapper {
-  req::ptr<File> open(const String& filename, const String& mode, int options,
-                      const req::ptr<StreamContext>& context) override;
-  req::ptr<Directory> opendir(const String& path) override;
-};
+    Eigen::MatrixXd SplineSegKernel::ThirdOrderDerivativeKernel(
+    const uint32_t num_params, const double accumulated_x) {
+  if (num_params > reserved_order_ + 1) {
+    CalculateThirdOrderDerivative(num_params);
+  }
+  Eigen::MatrixXd term_matrix;
+  IntegratedTermMatrix(num_params, accumulated_x, 'third_order', &term_matrix);
+  return (kernel_third_order_derivative_.block(0, 0, num_params, num_params))
+      .cwiseProduct(term_matrix);
+}
     
-    #include 'hphp/util/perf-event.h'
+    #include 'modules/prediction/common/kml_map_based_test.h'
+#include 'modules/prediction/common/prediction_map.h'
     
-    template<typename F>
-void logPerfWarningImpl(folly::StringPiece event, int64_t priority,
-                        int64_t rate, F fillCols) {
-  auto const effectiveRate = rate * RuntimeOption::EvalPerfWarningSampleRate;
-  if (effectiveRate > std::numeric_limits<uint32_t>::max()) return;
-  if (!StructuredLog::coinflip(effectiveRate)) return;
+    namespace apollo {
+namespace routing {
+    }
     }
