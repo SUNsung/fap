@@ -1,262 +1,180 @@
 
         
-          def serialize_options(resource)
-    methods = resource_class.authentication_keys.dup
-    methods = methods.keys if methods.is_a?(Hash)
-    methods << :password if resource.respond_to?(:password)
-    { methods: methods, only: [:password] }
-  end
+                def render(&block)
+          options = @options.stringify_keys
+          tag_value = options.delete('value')
+          name_and_id = options.dup
     
-      # Sets the flash message with :key, using I18n. By default you are able
-  # to set up your messages using specific resource scope, and if no message is
-  # found we look to the default scope. Set the 'now' options key to a true
-  # value to populate the flash.now hash in lieu of the default flash hash (so
-  # the flash message will be available to the current action instead of the
-  # next action).
-  # Example (i18n locale file):
-  #
-  #   en:
-  #     devise:
-  #       passwords:
-  #         #default_scope_messages - only if resource_scope is not found
-  #         user:
-  #           #resource_scope_messages
-  #
-  # Please refer to README or en.yml locale file to check what messages are
-  # available.
-  def set_flash_message(key, kind, options = {})
-    message = find_message(kind, options)
-    if options[:now]
-      flash.now[key] = message if message.present?
-    else
-      flash[key] = message if message.present?
-    end
-  end
+            def render
+          options = @options.stringify_keys
+          options['size'] = options['maxlength'] unless options.key?('size')
+          options['type'] ||= field_type
+          options['value'] = options.fetch('value') { value_before_type_cast } unless field_type == 'file'
+          add_default_name_and_id(options)
+          tag('input', options)
+        end
     
-          # Sign in a user bypassing the warden callbacks and stores the user
-      # straight in session. This option is useful in cases the user is already
-      # signed in, but we want to refresh the credentials in session.
-      #
-      # Examples:
-      #
-      #   bypass_sign_in @user, scope: :user
-      #   bypass_sign_in @user
-      def bypass_sign_in(resource, scope: nil)
-        scope ||= Devise::Mapping.find_scope!(resource)
-        expire_data_after_sign_in!
-        warden.session_serializer.store(resource, scope)
-      end
-    
-          # A callback initiated after successfully being remembered. This can be
-      # used to insert your own logic that is only run after the user is
-      # remembered.
-      #
-      # Example:
-      #
-      #   def after_remembered
-      #     self.update_attribute(:invite_code, nil)
-      #   end
-      #
-      def after_remembered
-      end
-    
-    module Rex
-  module Proto
-    module Kerberos
-      # This class is a representation of a kerberos client.
-      class Client
-        # @!attribute host
-        #   @return [String] The kerberos server host
-        attr_accessor :host
-        # @!attribute port
-        #   @return [Integer] The kerberos server port
-        attr_accessor :port
-        # @!attribute timeout
-        #   @return [Integer] The connect / read timeout
-        attr_accessor :timeout
-        # @todo Support UDP
-        # @!attribute protocol
-        #   @return [String] The transport protocol used (tcp/udp)
-        attr_accessor :protocol
-        # @!attribute connection
-        #   @return [IO] The connection established through Rex sockets
-        attr_accessor :connection
-        # @!attribute context
-        #   @return [Hash] The Msf context where the connection belongs to
-        attr_accessor :context
-    
-    module Rex
-  module Proto
-    module Kerberos
-      module Model
-        # This class provides a representation of a Kerberos AuthorizationData data
-        # definition.
-        class AuthorizationData < Element
-          # @!attribute elements
-          #   @return [Hash{Symbol => <Integer, String>}] The type of the authorization data
-          #   @option [Integer] :type
-          #   @option [String] :data
-          attr_accessor :elements
-    
-              # Encodes the Rex::Proto::Kerberos::Model::Element into an ASN.1 String. This
-          # method has been designed to be overridden by subclasses.
-          #
-          # @raise [NoMethodError]
-          def encode
-            raise ::NoMethodError, 'Method designed to be overridden'
-          end
+            ActiveSupport::Notifications.instrument('render_#{name}.action_view', options) do |payload|
+          yield payload
         end
       end
+    
+        # Some actions have special handling in fast_file.rb, that means we can't directly call the action
+    # but we have to use the same logic that is in fast_file.rb instead.
+    # That's where this switch statement comes into play
+    def run_action_requiring_special_handling(command: nil, parameter_map: nil, action_return_type: nil)
+      action_return = nil
+      closure_argument_value = nil # only used if the action uses it
+    
+            expect(result).to eq('carthage bootstrap')
+      end
+    
+          it 'Does not accept a :commits_count < 1' do
+        expect do
+          Fastlane::FastFile.new.parse('lane :test do
+            changelog_from_git_commits(commits_count: -1)
+          end').runner.execute(:test)
+        end.to raise_error(':commits_count must be >= 1')
+      end
+    
+          it 'passes the deprecated pathspec parameter to path parameter' do
+        with_verbose(true) do
+          allow(Fastlane::Actions).to receive(:sh).with(anything, { log: true }).and_return('')
+          result = Fastlane::FastFile.new.parse('lane :test do
+            git_add(pathspec: 'myfile.txt')
+          end').runner.execute(:test)
+        end
+      end
+    
+    def expect_command(*command, exitstatus: 0, output: '')
+  mock_input = double(:input)
+  mock_output = StringIO.new(output)
+  mock_status = double(:status, exitstatus: exitstatus)
+  mock_thread = double(:thread, value: mock_status)
+    
+        def to_s
+      [@key, @description].join(': ')
+    end
+    
+              expect(value).to eq(array.shelljoin)
+        end
+    
+        def log_status(status)
+      puts bold status
+    end
+    
+      config.active_support.deprecation = :stderr
+end
+
+    
+        def bubble_subject(root)
+      root.children.each do |child|
+        bubble_subject(child) if child.is_a?(Tree::RuleNode) || child.is_a?(Tree::DirectiveNode)
+        next unless child.is_a?(Tree::RuleNode) && !child.children.empty?
+        next unless child.children.all? do |c|
+          next unless c.is_a?(Tree::RuleNode)
+          first_simple_sel(c).is_a?(Sass::Selector::Parent) && first_sseq(c).subject?
+        end
+        first_sseq(child).subject = true
+        child.children.each {|c| first_sseq(c).subject = false}
+      end
+    end
+    
+        # The import/mixin stack.
+    #
+    # @return [Sass::Stack]
+    def stack
+      @stack || global_env.stack
     end
   end
-end
     
-              # Encodes a Rex::Proto::Kerberos::Model::EncryptedData into an ASN.1 String
-          #
-          # @return [String]
-          def encode
-            elems = []
-            etype_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_etype], 0, :CONTEXT_SPECIFIC)
-            elems << etype_asn1
-    
-              # Decodes a Rex::Proto::Kerberos::Model::KrbError
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode_asn1(input)
-            input.value[0].value.each do |val|
-              case val.tag
-              when 0
-                self.pvno = decode_pvno(val)
-              when 1
-                self.msg_type = decode_msg_type(val)
-              when 2
-                self.ctime = decode_ctime(val)
-              when 3
-                self.cusec = decode_cusec(val)
-              when 4
-                self.stime = decode_stime(val)
-              when 5
-                self.susec = decode_susec(val)
-              when 6
-                self.error_code = decode_error_code(val)
-              when 7
-                self.crealm = decode_crealm(val)
-              when 8
-                self.cname = decode_cname(val)
-              when 9
-                self.realm = decode_realm(val)
-              when 10
-                self.sname = decode_sname(val)
-              when 12
-                self.e_data = decode_e_data(val)
-              else
-                raise ::RuntimeError, 'Failed to decode KRB-ERROR SEQUENCE'
-              end
-            end
-          end
-    
-              # Decodes the key_type from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_type(input)
-            input.value[0].value.to_i
-          end
-    
-    When /^I put in my password in '([^']*)'$/ do |field|
- step %(I fill in '#{field}' with '#{@me.password}')
-end
-    
-        it 'generates a jasmine fixture', fixture: true do
-      session[:mobile_view] = true
-      get :new, format: :mobile
-      save_fixture(html_for('body'), 'conversations_new_mobile')
+        # @return [String] The error message
+    def to_s
+      @message
     end
+    
+    # This is basically a copy of the original bundler 'bundle' shim
+# with the addition of the loading of our Bundler patches that
+# modify Bundler's caching behaviour.
+    
+    if $0 == __FILE__
+  begin
+    LogStash::PluginManager::Main.run('bin/logstash-plugin', ARGV)
+  rescue LogStash::PluginManager::Error => e
+    $stderr.puts(e.message)
+    exit(1)
   end
 end
 
     
-              code = InvitationCode.create(user: bob)
+              after(:each) { logstash.delete_file(gem_path_on_vagrant) }
     
-          def has_footer
-        @footer = (@page.footer || false) if @footer.nil? && @page
-        !!@footer
+        def messages
+      return @messages
+    end # def messages
+    
+        settings['registry'] = attributes[:npm_registry] if attributes[:npm_registry_given?]
+    set_default_prefix unless attributes[:prefix_given?]
+    
+      def output(output_path)
+    
+    # Fixup the category to an acceptable solaris category
+    case @category
+    when nil, 'default'
+      @category = 'Applications/System Utilities'
+    end
+    
+      # Add a new source to this package.
+  # The exact behavior depends on the kind of package being managed.
+  #
+  # For instance:
+  #
+  # * for FPM::Package::Dir, << expects a path to a directory or files.
+  # * for FPM::Package::RPM, << expects a path to an rpm.
+  #
+  # The idea is that you can keep pumping in new things to a package
+  # for later conversion or output.
+  #
+  # Implementations are expected to put files relevant to the 'input' in the
+  # staging_path
+  def input(pacman_pkg_path)
+    control = {}
+    # Unpack the control tarball
+    safesystem(tar_cmd, '-C', staging_path, '-xf', pacman_pkg_path)
+    pkginfo = staging_path('.PKGINFO')
+    mtree = staging_path('.MTREE')
+    install = staging_path('.INSTALL')
+    
+        platforms.each do |platform|
+      logger.info('Generating service manifest.', :platform => platform.class.name)
+      platform.program = command.first
+      platform.name = attributes[:pleaserun_name]
+      platform.args = command[1..-1]
+      platform.description = if attributes[:description_given?]
+        attributes[:description]
+      else
+        platform.name
       end
-    
-    ENV['RACK_ENV'] = 'test'
-require 'gollum'
-require 'gollum/app'
-    
-        assert_no_match /Delete this Page/, last_response.body, ''Delete this Page' link not blocked in page template'
-    assert_no_match /New/,              last_response.body, ''New' button not blocked in page template'
-    assert_no_match /Upload/,           last_response.body, ''Upload' link not blocked in page template'
-    assert_no_match /Rename/,           last_response.body, ''Rename' link not blocked in page template'
-    assert_no_match /Edit/,             last_response.body, ''Edit' link not blocked in page template'
-    
-      test 'edit page with empty message' do
-    page_1 = @wiki.page('A')
-    post '/edit/A', :content => 'abc', :page => 'A',
-         :format             => page_1.format
-    follow_redirect!
-    assert last_response.ok?
-    
-      test 'heavy use 1' do
-    post '/create', :content => '한글 text', :page => 'PG',
-         :format             => 'markdown', :message => 'def'
-    follow_redirect!
-    assert last_response.ok?
-    
-            def find_address
-          if @order.bill_address_id == params[:id].to_i
-            @order.bill_address
-          elsif @order.ship_address_id == params[:id].to_i
-            @order.ship_address
-          else
-            raise CanCan::AccessDenied
-          end
+      pleaserun_attributes.each do |attribute_name|
+        attribute = 'pleaserun_#{attribute_name}'.to_sym
+        if attributes.has_key?(attribute) and not attributes[attribute].nil?
+          platform.send('#{attribute_name}=', attributes[attribute])
         end
       end
-    end
+    
+      # Where we keep metadata and post install scripts and such
+  def fpm_meta_path
+    @fpm_meta_path ||= begin
+                         path = File.join(staging_path, '.fpm')
+                         FileUtils.mkdir_p(path)
+                         path
+                       end
   end
 end
 
     
-            def update
-          @option_value = scope.accessible_by(current_ability, :update).find(params[:id])
-          if @option_value.update_attributes(option_value_params)
-            render :show
-          else
-            invalid_resource!(@option_value)
-          end
-        end
     
-        # Loops through the list of category pages and processes each one.
-    def write_category_indexes
-      if self.layouts.key? 'category_index'
-        dir = self.config['category_dir'] || 'categories'
-        self.categories.keys.each do |category|
-          self.write_category_index(File.join(dir, category.to_url), category)
-        end
-    
-    
-module OctopressLiquidFilters
-    
-          Dir.chdir(file_path) do
-        contents = file.read
-        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
-          contents = $1.lstrip
-        end
-        contents = pre_filter(contents)
-        if @raw
-          contents
-        else
-          partial = Liquid::Template.parse(contents)
-          context.stack do
-            partial.render(context)
-          end
-        end
-      end
-    end
-  end
-end
+    # Convert the 'package directory' built above to a real solaris package.
+    safesystem('pkgtrans', '-s', build_path, output_path, name)
+    safesystem('cp', '#{build_path}/#{output_path}', output_path)
+  end # def output
