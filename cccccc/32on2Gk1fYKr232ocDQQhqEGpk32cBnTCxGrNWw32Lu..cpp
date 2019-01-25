@@ -1,507 +1,537 @@
-  /// @brief Deprecated legacy shape accessor num: use shape(0) instead.
-  inline int num() const { return LegacyShape(0); }
-  /// @brief Deprecated legacy shape accessor channels: use shape(1) instead.
-  inline int channels() const { return LegacyShape(1); }
-  /// @brief Deprecated legacy shape accessor height: use shape(2) instead.
-  inline int height() const { return LegacyShape(2); }
-  /// @brief Deprecated legacy shape accessor width: use shape(3) instead.
-  inline int width() const { return LegacyShape(3); }
-  inline int LegacyShape(int index) const {
-    CHECK_LE(num_axes(), 4)
-        << 'Cannot use legacy accessors on Blobs with > 4 axes.';
-    CHECK_LT(index, 4);
-    CHECK_GE(index, -4);
-    if (index >= num_axes() || index < -num_axes()) {
-      // Axis is out of range, but still in [0, 3] (or [-4, -1] for reverse
-      // indexing) -- this special case simulates the one-padding used to fill
-      // extraneous axes of legacy blobs.
-      return 1;
+
+        
+        // Author: tibell@google.com (Johan Tibell)
+    
+    CodeGenerator::~CodeGenerator() {}
+    
+    void WriteDocCommentBodyImpl(io::Printer* printer, SourceLocation location) {
+    string comments = location.leading_comments.empty() ?
+        location.trailing_comments : location.leading_comments;
+    if (comments.empty()) {
+        return;
     }
-    return shape(index);
-  }
-    
-      /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to a vector of Datum.
-   *
-   * @param datum_vector
-   *    A vector of Datum containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See memory_layer.cpp for an example.
-   */
-  void Transform(const vector<Datum> & datum_vector,
-                Blob<Dtype>* transformed_blob);
-    
-    /// @brief Fills a Blob with uniformly distributed values @f$ x\sim U(a, b) @f$.
-template <typename Dtype>
-class UniformFiller : public Filler<Dtype> {
- public:
-  explicit UniformFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    CHECK(blob->count());
-    caffe_rng_uniform<Dtype>(blob->count(), Dtype(this->filler_param_.min()),
-        Dtype(this->filler_param_.max()), blob->mutable_cpu_data());
-    CHECK_EQ(this->filler_param_.sparse(), -1)
-         << 'Sparsity not supported by this Filler.';
-  }
-};
-    
-      /**
-   * @brief Does layer-specific setup: your layer should implement this function
-   *        as well as Reshape.
-   *
-   * @param bottom
-   *     the preshaped input blobs, whose data fields store the input data for
-   *     this layer
-   * @param top
-   *     the allocated but unshaped output blobs
-   *
-   * This method should do one-time layer specific setup. This includes reading
-   * and processing relevent parameters from the <code>layer_param_</code>.
-   * Setting up the shapes of top blobs and internal buffers should be done in
-   * <code>Reshape</code>, which will be called before the forward pass to
-   * adjust the top blob sizes.
-   */
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top) {}
-    
-     protected:
-  /// @copydoc AbsValLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    /**
- * @brief Computes the classification accuracy for a one-of-many
- *        classification task.
- */
-template <typename Dtype>
-class AccuracyLayer : public Layer<Dtype> {
- public:
-  /**
-   * @param param provides AccuracyParameter accuracy_param,
-   *     with AccuracyLayer options:
-   *   - top_k (\b optional, default 1).
-   *     Sets the maximum rank @f$ k @f$ at which a prediction is considered
-   *     correct.  For example, if @f$ k = 5 @f$, a prediction is counted
-   *     correct if the correct label is among the top 5 predicted labels.
-   */
-  explicit AccuracyLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+    // XML escaping... no need for apostrophes etc as the whole text is going to be a child
+    // node of a summary element, not part of an attribute.
+    comments = StringReplace(comments, '&', '&amp;', true);
+    comments = StringReplace(comments, '<', '&lt;', true);
+    std::vector<string> lines = Split(comments, '\n', false /* skip_empty */);
+    // TODO: We really should work out which part to put in the summary and which to put in the remarks...
+    // but that needs to be part of a bigger effort to understand the markdown better anyway.
+    printer->Print('/// <summary>\n');
+    bool last_was_empty = false;
+    // We squash multiple blank lines down to one, and remove any trailing blank lines. We need
+    // to preserve the blank lines themselves, as this is relevant in the markdown.
+    // Note that we can't remove leading or trailing whitespace as *that's* relevant in markdown too.
+    // (We don't skip 'just whitespace' lines, either.)
+    for (std::vector<string>::iterator it = lines.begin(); it != lines.end(); ++it) {
+        string line = *it;
+        if (line.empty()) {
+            last_was_empty = true;
+        } else {
+            if (last_was_empty) {
+                printer->Print('///\n');
+            }
+            last_was_empty = false;
+            printer->Print('///$line$\n', 'line', *it);
+        }
     }
-    
-    /**
- * @brief Computes @f$ y = x + \log(1 + \exp(-x)) @f$ if @f$ x > 0 @f$;
- *        @f$ y = \log(1 + \exp(x)) @f$ otherwise.
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$
- *      y = \left\{
- *         \begin{array}{ll}
- *            x + \log(1 + \exp(-x)) & \mbox{if } x > 0 \\
- *            \log(1 + \exp(x)) & \mbox{otherwise}
- *         \end{array} \right.
- *      @f$
- */
-template <typename Dtype>
-class BNLLLayer : public NeuronLayer<Dtype> {
- public:
-  explicit BNLLLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-    }
-    }
-    
-    
-    {  Blob<Dtype> diff_;  // cached for backward pass
-  Blob<Dtype> dist_sq_;  // cached for backward pass
-  Blob<Dtype> diff_sq_;  // tmp storage for gpu forward pass
-  Blob<Dtype> summer_vec_;  // tmp storage for gpu forward pass
-};
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    // ValuesIn() function allows generation of tests with parameters coming from
-// a container.
-//
-// Synopsis:
-// ValuesIn(const T (&array)[N])
-//   - returns a generator producing sequences with elements from
-//     a C-style array.
-// ValuesIn(const Container& container)
-//   - returns a generator producing sequences with elements from
-//     an STL-style container.
-// ValuesIn(Iterator begin, Iterator end)
-//   - returns a generator producing sequences with elements from
-//     a range [begin, end) defined by a pair of STL-style iterators. These
-//     iterators can also be plain C pointers.
-//
-// Please note that ValuesIn copies the values from the containers
-// passed in and keeps them to generate tests in RUN_ALL_TESTS().
-//
-// Examples:
-//
-// This instantiates tests from test case StringTest
-// each with C-string values of 'foo', 'bar', and 'baz':
-//
-// const char* strings[] = {'foo', 'bar', 'baz'};
-// INSTANTIATE_TEST_CASE_P(StringSequence, SrtingTest, ValuesIn(strings));
-//
-// This instantiates tests from test case StlStringTest
-// each with STL strings with values 'a' and 'b':
-//
-// ::std::vector< ::std::string> GetParameterStrings() {
-//   ::std::vector< ::std::string> v;
-//   v.push_back('a');
-//   v.push_back('b');
-//   return v;
-// }
-//
-// INSTANTIATE_TEST_CASE_P(CharSequence,
-//                         StlStringTest,
-//                         ValuesIn(GetParameterStrings()));
-//
-//
-// This will also instantiate tests from CharTest
-// each with parameter values 'a' and 'b':
-//
-// ::std::list<char> GetParameterChars() {
-//   ::std::list<char> list;
-//   list.push_back('a');
-//   list.push_back('b');
-//   return list;
-// }
-// ::std::list<char> l = GetParameterChars();
-// INSTANTIATE_TEST_CASE_P(CharSequence2,
-//                         CharTest,
-//                         ValuesIn(l.begin(), l.end()));
-//
-template <typename ForwardIterator>
-internal::ParamGenerator<
-  typename ::testing::internal::IteratorTraits<ForwardIterator>::value_type>
-ValuesIn(ForwardIterator begin, ForwardIterator end) {
-  typedef typename ::testing::internal::IteratorTraits<ForwardIterator>
-      ::value_type ParamType;
-  return internal::ParamGenerator<ParamType>(
-      new internal::ValuesInIteratorRangeGenerator<ParamType>(begin, end));
+    printer->Print('/// </summary>\n');
 }
     
-      // Gets the message associated with the test part.
-  const char* message() const { return message_.c_str(); }
-    
-    #ifdef __BORLANDC__
-// string.h is not guaranteed to provide strcpy on C++ Builder.
-# include <mem.h>
-#endif
-    
-    // We will track memory used by this class.
-class Water {
- public:
-  // Normal Water declarations go here.
+    // implements ZeroCopyInputStream ----------------------------------
+bool GzipInputStream::Next(const void** data, int* size) {
+  bool ok = (zerror_ == Z_OK) || (zerror_ == Z_STREAM_END)
+      || (zerror_ == Z_BUF_ERROR);
+  if ((!ok) || (zcontext_.next_out == NULL)) {
+    return false;
+  }
+  if (zcontext_.next_out != output_position_) {
+    DoNextOutput(data, size);
+    return true;
+  }
+  if (zerror_ == Z_STREAM_END) {
+    if (zcontext_.next_out != NULL) {
+      // sub_stream_ may have concatenated streams to follow
+      zerror_ = inflateEnd(&zcontext_);
+      byte_count_ += zcontext_.total_out;
+      if (zerror_ != Z_OK) {
+        return false;
+      }
+      zerror_ = internalInflateInit2(&zcontext_, format_);
+      if (zerror_ != Z_OK) {
+        return false;
+      }
+    } else {
+      *data = NULL;
+      *size = 0;
+      return false;
     }
+  }
+  zerror_ = Inflate(Z_NO_FLUSH);
+  if ((zerror_ == Z_STREAM_END) && (zcontext_.next_out == NULL)) {
+    // The underlying stream's Next returned false inside Inflate.
+    return false;
+  }
+  ok = (zerror_ == Z_OK) || (zerror_ == Z_STREAM_END)
+      || (zerror_ == Z_BUF_ERROR);
+  if (!ok) {
+    return false;
+  }
+  DoNextOutput(data, size);
+  return true;
+}
+void GzipInputStream::BackUp(int count) {
+  output_position_ = reinterpret_cast<void*>(
+      reinterpret_cast<uintptr_t>(output_position_) - count);
+}
+bool GzipInputStream::Skip(int count) {
+  const void* data;
+  int size = 0;
+  bool ok = Next(&data, &size);
+  while (ok && (size < count)) {
+    count -= size;
+    ok = Next(&data, &size);
+  }
+  if (size > count) {
+    BackUp(size - count);
+  }
+  return ok;
+}
+int64 GzipInputStream::ByteCount() const {
+  int64 ret = byte_count_ + zcontext_.total_out;
+  if (zcontext_.next_out != NULL && output_position_ != NULL) {
+    ret += reinterpret_cast<uintptr_t>(zcontext_.next_out) -
+           reinterpret_cast<uintptr_t>(output_position_);
+  }
+  return ret;
+}
     
-      ////////////////////////////////////////////////////////////
-  //
-  // C'tors
+    void Assembler::rldicr(const Reg64& ra, const Reg64& rs, uint8_t sh,
+                       uint8_t mb, bool rc) {
+  EmitMDForm(30, rn(rs), rn(ra), sh, mb, 1, rc);
+}
     
-    // Tests the default c'tor.
-TEST(MyString, DefaultConstructor) {
-  const MyString s;
+    // Deserializing an array could give back a different ArrayKind than we need,
+// so we have to go with the slow case of calling a collection constructor.
+NEVER_INLINE
+Object createFromSerialized(CollectionType colType, APCHandle* handle) {
+  auto const col = Object::attach(collections::alloc(colType));
+  auto const arr = handle->toLocal();
+  switch (colType) {
+  case CollectionType::ImmVector:
+  case CollectionType::Vector:
+    static_cast<BaseVector*>(col.get())->init(arr);
+    break;
+  case CollectionType::ImmSet:
+  case CollectionType::Set:
+    static_cast<BaseSet*>(col.get())->init(arr);
+    break;
+  case CollectionType::ImmMap:
+  case CollectionType::Map:
+    static_cast<BaseMap*>(col.get())->init(arr);
+    break;
+  case CollectionType::Pair:
+    not_reached();
+    break;
+  }
+  return col;
+}
+    
+    void logAHMSubMapWarning(folly::StringPiece mapName) {
+  StackTrace st;
+  logPerfWarning(
+    'AtomicHashMap overflow',
+    [&](StructuredLogEntry& cols) {
+      cols.setStr('map_name', mapName);
+      cols.setStackTrace('stack', st);
     }
-    
-    		// the alpha mix for a 4x4 block of pixels
-		enum class SourceAlphaMix
-		{
-			UNKNOWN,
-			//
-			OPAQUE,			// all 1.0
-			TRANSPARENT,	// all 0.0 or NAN
-			TRANSLUCENT		// not all opaque or transparent
-		};
-    
-    		ColorFloatRGBA frgbaColor1;
-		ColorFloatRGBA frgbaColor2;
-    
-      /* The next level is to group blue strings into style-specific sets. */
-    
-    #ifndef GLOBAL_STACK_SIZE
-#ifdef FIXED_POINT
-#define GLOBAL_STACK_SIZE 100000
-#else
-#define GLOBAL_STACK_SIZE 100000
-#endif
-#endif
+  );
+}
     
     #endif
 
     
-    #ifndef FIXED_ARMv5E_H
-#define FIXED_ARMv5E_H
     
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+    { private:
+  /*! \brief the underlying stream */
+  dmlc::Stream *stream_;
+  /*! \brief buffer to hold data */
+  std::string buffer_;
+  /*! \brief length of valid data in buffer */
+  size_t read_len_;
+  /*! \brief pointer in the buffer */
+  size_t read_ptr_;
+};
     
-    template<>
-void SetDataGradToBlob<mshadow::gpu, float>(caffeMemoryTypes memType,
-                            std::vector<::caffe::Blob<float>*>::iterator blob,
-                            std::vector<TBlob>::const_iterator itr) {
-  float *data_ptr = reinterpret_cast<float*>((*itr).dptr_);
-  if (memType == Data)
-    (*blob)->set_gpu_data(data_ptr);
-  else
-    MXCAFFEBLOB(*blob, float)->set_gpu_diff(data_ptr);
-}
-    
-    namespace mxnet {
-namespace op {
-template<>
-Operator *CreateOp<cpu>(CaffeLossParam param, int dtype) {
-  Operator *op = NULL;
-  switch (dtype) {
-  case mshadow::kFloat32:
-    op = new CaffeLoss<cpu, float>(param);
-    break;
-  case mshadow::kFloat64:
-    op = new CaffeLoss<cpu, double>(param);
-    break;
-  case mshadow::kFloat16:
-    LOG(FATAL) << 'float16 layer is not supported by caffe';
-    break;
-  default:
-    LOG(FATAL) << 'Unsupported type ' << dtype;
-  }
-  return op;
-}
-    }
-    }
-    
-    MXNET_DLL int MXCVcopyMakeBorder(NDArrayHandle src,
-                                 const int top,
-                                 const int bot,
-                                 const int left,
-                                 const int right,
-                                 const int type,
-                                 const double value,
-                                 NDArrayHandle *out) {
-  API_BEGIN();
-  NDArray ndsrc = *static_cast<NDArray*>(src);
-  CHECK_EQ(ndsrc.shape().ndim(), 3);
-  CHECK_EQ(ndsrc.ctx(), Context::CPU());
-  CHECK_EQ(ndsrc.dtype(), mshadow::kUint8);
-    }
-    
-    namespace mxnet {
-namespace io {
-/*! \return the parameter of default augmenter */
-std::vector<dmlc::ParamFieldInfo> ListDefaultAugParams();
-std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
-}  // namespace io
-}  // namespace mxnet
-#endif  // MXNET_IO_IMAGE_AUGMENTER_H_
-
-    
-    class TBlobContainer : public TBlob {
+    #if DMLC_ENABLE_STD_THREAD
+/*!
+ * \brief A threaded writer to write sparse batch page to sharded files.
+ */
+class SparsePageWriter {
  public:
-  TBlobContainer(void)
-    : TBlob(), tensor_container_(nullptr) {}
-  ~TBlobContainer() {
-    if (tensor_container_) {
-      release();
+  /*!
+   * \brief constructor
+   * \param name_shards name of shard files.
+   * \param format_shards format of each shard.
+   * \param extra_buffer_capacity Extra buffer capacity before block.
+   */
+  explicit SparsePageWriter(
+      const std::vector<std::string>& name_shards,
+      const std::vector<std::string>& format_shards,
+      size_t extra_buffer_capacity);
+  /*! \brief destructor, will close the files automatically */
+  ~SparsePageWriter();
+  /*!
+   * \brief Push a write job to the writer.
+   * This function won't block,
+   * writing is done by another thread inside writer.
+   * \param page The page to be written
+   */
+  void PushWrite(std::shared_ptr<SparsePage>&& page);
+  /*!
+   * \brief Allocate a page to store results.
+   *  This function can block when the writer is too slow and buffer pages
+   *  have not yet been recycled.
+   * \param out_page Used to store the allocated pages.
+   */
+  void Alloc(std::shared_ptr<SparsePage>* out_page);
     }
+    
+      // Resets the SplitEvaluator to the state it was in after the Init was called
+  virtual void Reset();
+    
+    /*! \brief try to do efficient pruning */
+template<typename DType, typename RType>
+struct WXQSummary : public WQSummary<DType, RType> {
+  // redefine entry type
+  using Entry = typename WQSummary<DType, RType>::Entry;
+  // constructor
+  WXQSummary(Entry *data, size_t size)
+      : WQSummary<DType, RType>(data, size) {}
+  // check if the block is large chunk
+  inline static bool CheckLarge(const Entry &e, RType chunk) {
+    return  e.RMinNext() > e.RMaxPrev() + chunk;
   }
-  void resize(const TShape &shape, int type_flag) {
-    if (tensor_container_) {
-      CHECK_EQ(this->type_flag_, type_flag);
-      this->shape_ = shape;
-      resize();
+  // set prune
+  inline void SetPrune(const WQSummary<DType, RType> &src, size_t maxsize) {
+    if (src.size <= maxsize) {
+      this->CopyFrom(src); return;
+    }
+    RType begin = src.data[0].rmax;
+    // n is number of points exclude the min/max points
+    size_t n = maxsize - 2, nbig = 0;
+    // these is the range of data exclude the min/max point
+    RType range = src.data[src.size - 1].rmin - begin;
+    // prune off zero weights
+    if (range == 0.0f || maxsize <= 2) {
+      // special case, contain only two effective data pts
+      this->data[0] = src.data[0];
+      this->data[1] = src.data[src.size - 1];
+      this->size = 2;
+      return;
     } else {
-      this->type_flag_ = type_flag;
-      this->shape_ = shape;
-      create();
+      range = std::max(range, static_cast<RType>(1e-3f));
     }
-  }
-    }
-    
-    std::vector<std::string> KafkaTopicsConfigParserPlugin::keys() const {
-  return {kKafkaTopicParserRootKey};
-}
-    
-      auto cv = config.find(kLoggerKey);
-  if (cv != config.end()) {
-    auto obj = data_.getObject();
-    data_.copyFrom(cv->second.doc(), obj);
-    data_.add(kLoggerKey, obj);
-  }
-    
-    TEST_F(EventsConfigParserPluginTests, test_get_event) {
-  // Reset the schedule in case other tests were modifying.
-  auto& c = Config::get();
-  c.reset();
-    }
-    
-        for (int n = 0; n < 50; n++)
+    // Get a big enough chunk size, bigger than range / n
+    // (multiply by 2 is a safe factor)
+    const RType chunk = 2 * range / n;
+    // minimized range
+    RType mrange = 0;
     {
-        printf('NewFrame() %d\n', n);
-        io.DisplaySize = ImVec2(1920, 1080);
-        io.DeltaTime = 1.0f / 60.0f;
-        ImGui::NewFrame();
+      // first scan, grab all the big chunk
+      // moving block index, exclude the two ends.
+      size_t bid = 0;
+      for (size_t i = 1; i < src.size - 1; ++i) {
+        // detect big chunk data point in the middle
+        // always save these data points.
+        if (CheckLarge(src.data[i], chunk)) {
+          if (bid != i - 1) {
+            // accumulate the range of the rest points
+            mrange += src.data[i].RMaxPrev() - src.data[bid].RMinNext();
+          }
+          bid = i; ++nbig;
+        }
+      }
+      if (bid != src.size - 2) {
+        mrange += src.data[src.size-1].RMaxPrev() - src.data[bid].RMinNext();
+      }
     }
-    
-    bool ImGui::InputText(const char* label, std::string* str, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
-{
-    IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
-    flags |= ImGuiInputTextFlags_CallbackResize;
+    // assert: there cannot be more than n big data points
+    if (nbig >= n) {
+      // see what was the case
+      LOG(INFO) << ' check quantile stats, nbig=' << nbig << ', n=' << n;
+      LOG(INFO) << ' srcsize=' << src.size << ', maxsize=' << maxsize
+                << ', range=' << range << ', chunk=' << chunk;
+      src.Print();
+      CHECK(nbig < n) << 'quantile: too many large chunk';
     }
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_IMPL_API void     ImGui_ImplDX9_InvalidateDeviceObjects();
-IMGUI_IMPL_API bool     ImGui_ImplDX9_CreateDeviceObjects();
-
-    
-    void ImGui_ImplDX9_NewFrame()
-{
-    if (!g_FontTexture)
-        ImGui_ImplDX9_CreateDeviceObjects();
-}
-
-    
-    void ImGui_ImplFreeGLUT_KeyboardFunc(unsigned char c, int x, int y)
-{
-    // Send character to imgui
-    //printf('char_down_func %d '%c'\n', c, c);
-    ImGuiIO& io = ImGui::GetIO();
-    if (c >= 32)
-        io.AddInputCharacter((unsigned short)c);
+    this->data[0] = src.data[0];
+    this->size = 1;
+    // The counter on the rest of points, to be selected equally from small chunks.
+    n = n - nbig;
+    // find the rest of point
+    size_t bid = 0, k = 1, lastidx = 0;
+    for (size_t end = 1; end < src.size; ++end) {
+      if (end == src.size - 1 || CheckLarge(src.data[end], chunk)) {
+        if (bid != end - 1) {
+          size_t i = bid;
+          RType maxdx2 = src.data[end].RMaxPrev() * 2;
+          for (; k < n; ++k) {
+            RType dx2 =  2 * ((k * mrange) / n + begin);
+            if (dx2 >= maxdx2) break;
+            while (i < end &&
+                   dx2 >= src.data[i + 1].rmax + src.data[i + 1].rmin) ++i;
+            if (i == end) break;
+            if (dx2 < src.data[i].RMinNext() + src.data[i + 1].RMaxPrev()) {
+              if (i != lastidx) {
+                this->data[this->size++] = src.data[i]; lastidx = i;
+              }
+            } else {
+              if (i + 1 != lastidx) {
+                this->data[this->size++] = src.data[i + 1]; lastidx = i + 1;
+              }
+            }
+          }
+        }
+        if (lastidx != end) {
+          this->data[this->size++] = src.data[end];
+          lastidx = end;
+        }
+        bid = end;
+        // shift base by the gap
+        begin += src.data[bid].RMinNext() - src.data[bid].RMaxPrev();
+      }
     }
+  }
+};
+/*!
+ * \brief traditional GK summary
+ */
+template<typename DType, typename RType>
+struct GKSummary {
+  /*! \brief an entry in the sketch summary */
+  struct Entry {
+    /*! \brief minimum rank */
+    RType rmin;
+    /*! \brief maximum rank */
+    RType rmax;
+    /*! \brief the value of data */
+    DType value;
+    // constructor
+    Entry() = default;
+    // constructor
+    Entry(RType rmin, RType rmax, DType value)
+        : rmin(rmin), rmax(rmax), value(value) {}
+  };
+  /*! \brief input data queue before entering the summary */
+  struct Queue {
+    // the input queue
+    std::vector<DType> queue;
+    // end of the queue
+    size_t qtail;
+    // push data to the queue
+    inline void Push(DType x, RType w) {
+      queue[qtail++] = x;
+    }
+    inline void MakeSummary(GKSummary *out) {
+      std::sort(queue.begin(), queue.begin() + qtail);
+      out->size = qtail;
+      for (size_t i = 0; i < qtail; ++i) {
+        out->data[i] = Entry(i + 1, i + 1, queue[i]);
+      }
+    }
+  };
+  /*! \brief data field */
+  Entry *data;
+  /*! \brief number of elements in the summary */
+  size_t size;
+  GKSummary(Entry *data, size_t size)
+      : data(data), size(size) {}
+  /*! \brief the maximum error of the summary */
+  inline RType MaxError() const {
+    RType res = 0;
+    for (size_t i = 1; i < size; ++i) {
+      res = std::max(data[i].rmax - data[i-1].rmin, res);
+    }
+    return res;
+  }
+  /*! \return maximum rank in the summary */
+  inline RType MaxRank() const {
+    return data[size - 1].rmax;
+  }
+  /*!
+   * \brief copy content from src
+   * \param src source sketch
+   */
+  inline void CopyFrom(const GKSummary &src) {
+    size = src.size;
+    std::memcpy(data, src.data, sizeof(Entry) * size);
+  }
+  inline void CheckValid(RType eps) const {
+    // assume always valid
+  }
+  /*! \brief used for debug purpose, print the summary */
+  inline void Print() const {
+    for (size_t i = 0; i < size; ++i) {
+      LOG(CONSOLE) << 'x=' << data[i].value << '\t'
+                   << '[' << data[i].rmin << ',' << data[i].rmax << ']';
+    }
+  }
+  /*!
+   * \brief set current summary to be pruned summary of src
+   *        assume data field is already allocated to be at least maxsize
+   * \param src source summary
+   * \param maxsize size we can afford in the pruned sketch
+   */
+  inline void SetPrune(const GKSummary &src, size_t maxsize) {
+    if (src.size <= maxsize) {
+      this->CopyFrom(src); return;
+    }
+    const RType max_rank = src.MaxRank();
+    this->size = maxsize;
+    data[0] = src.data[0];
+    size_t n = maxsize - 1;
+    RType top = 1;
+    for (size_t i = 1; i < n; ++i) {
+      RType k = (i * max_rank) / n;
+      while (k > src.data[top + 1].rmax) ++top;
+      // assert src.data[top].rmin <= k
+      // because k > src.data[top].rmax >= src.data[top].rmin
+      if ((k - src.data[top].rmin) < (src.data[top+1].rmax - k)) {
+        data[i] = src.data[top];
+      } else {
+        data[i] = src.data[top + 1];
+      }
+    }
+    data[n] = src.data[src.size - 1];
+  }
+  inline void SetCombine(const GKSummary &sa,
+                         const GKSummary &sb) {
+    if (sa.size == 0) {
+      this->CopyFrom(sb); return;
+    }
+    if (sb.size == 0) {
+      this->CopyFrom(sa); return;
+    }
+    CHECK(sa.size > 0 && sb.size > 0) << 'invalid input for merge';
+    const Entry *a = sa.data, *a_end = sa.data + sa.size;
+    const Entry *b = sb.data, *b_end = sb.data + sb.size;
+    this->size = sa.size + sb.size;
+    RType aprev_rmin = 0, bprev_rmin = 0;
+    Entry *dst = this->data;
+    while (a != a_end && b != b_end) {
+      if (a->value < b->value) {
+        *dst = Entry(bprev_rmin + a->rmin,
+                     a->rmax + b->rmax - 1, a->value);
+        aprev_rmin = a->rmin;
+        ++dst; ++a;
+      } else {
+        *dst = Entry(aprev_rmin + b->rmin,
+                     b->rmax + a->rmax - 1, b->value);
+        bprev_rmin = b->rmin;
+        ++dst; ++b;
+      }
+    }
+    if (a != a_end) {
+      RType bprev_rmax = (b_end - 1)->rmax;
+      do {
+        *dst = Entry(bprev_rmin + a->rmin, bprev_rmax + a->rmax, a->value);
+        ++dst; ++a;
+      } while (a != a_end);
+    }
+    if (b != b_end) {
+      RType aprev_rmax = (a_end - 1)->rmax;
+      do {
+        *dst = Entry(aprev_rmin + b->rmin, aprev_rmax + b->rmax, b->value);
+        ++dst; ++b;
+      } while (b != b_end);
+    }
+    CHECK(dst == data + size) << 'bug in combine';
+  }
+};
     
-            for (int i = 0; i < nVert; i++)
+        ASSERT_EQ(first.size(), 4);
+    ASSERT_EQ(first.data(), arr);
+    
+            if(_rightBoundary < _leftBoundary)
         {
-            // TODO: optimize multiplication on gpu using vertex shader/projection matrix.
-            pVertStream[i].x = cmd_list->VtxBuffer[i].pos.x * g_RenderScale.x;
-            pVertStream[i].y = cmd_list->VtxBuffer[i].pos.y * g_RenderScale.y;
-            pUVStream[i].x = cmd_list->VtxBuffer[i].uv.x;
-            pUVStream[i].y = cmd_list->VtxBuffer[i].uv.y;
-            pColStream[i] = cmd_list->VtxBuffer[i].col;
+            // screen width is larger than world's boundary width
+            //set both in the middle of the world
+            _rightBoundary = _leftBoundary = (_leftBoundary + _rightBoundary) / 2;
+        }
+        if(_topBoundary < _bottomBoundary)
+        {
+            // screen width is larger than world's boundary width
+            //set both in the middle of the world
+            _topBoundary = _bottomBoundary = (_topBoundary + _bottomBoundary) / 2;
         }
     
-    // OpenGL2 Render function.
-// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
-// Note that this implementation is little overcomplicated because we are saving/setting up/restoring every OpenGL state explicitly, in order to be able to run within any OpenGL engine that doesn't do so. 
-void ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data)
+    class Camera;
+    
+    NS_CC_BEGIN;
+    
+    void StopGrid::startWithTarget(Node *target)
 {
-    // Avoid rendering when minimized, scale coordinates for retina displays (screen coordinates != framebuffer coordinates)
-    ImGuiIO& io = ImGui::GetIO();
-    int fb_width = (int)(draw_data->DisplaySize.x * io.DisplayFramebufferScale.x);
-    int fb_height = (int)(draw_data->DisplaySize.y * io.DisplayFramebufferScale.y);
-    if (fb_width == 0 || fb_height == 0)
-        return;
-    draw_data->ScaleClipRects(io.DisplayFramebufferScale);
+    ActionInstant::startWithTarget(target);
+    cacheTargetAsGridNode();
+    GridBase *grid = _gridNodeTarget->getGrid();
+    if (grid && grid->isActive())
+    {
+        grid->setActive(false);
+    }
+}
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __ACTION_CCPROGRESS_TIMER_H__
+#define __ACTION_CCPROGRESS_TIMER_H__
+    
+        unsigned int t = 0;
+    for (unsigned int i = 0; i < _tilesCount; i++ )
+    {
+        t = _tilesOrder[i];
+        Vec2 tilePos( (unsigned int)(t / _gridSize.height), t % (unsigned int)_gridSize.height );
     }
     
-    int main(int, char**)
+        void shuffle(unsigned int *array, unsigned int len);
+    Size getDelta(const Size& pos) const;
+    void placeTile(const Vec2& pos, Tile *t);
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    unsigned int AutoPolygon::getSquareValue(unsigned int x, unsigned int y, const Rect& rect, float threshold)
 {
-    // Setup Allegro
-    al_init();
-    al_install_keyboard();
-    al_install_mouse();
-    al_init_primitives_addon();
-    al_set_new_display_flags(ALLEGRO_RESIZABLE);
-    ALLEGRO_DISPLAY* display = al_create_display(1280, 720);
-    al_set_window_title(display, 'Dear ImGui Allegro 5 example');
-    ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
-    al_register_event_source(queue, al_get_display_event_source(display));
-    al_register_event_source(queue, al_get_keyboard_event_source());
-    al_register_event_source(queue, al_get_mouse_event_source());
-    }
+    /*
+     checking the 2x2 pixel grid, assigning these values to each pixel, if not transparent
+     +---+---+
+     | 1 | 2 |
+     +---+---+
+     | 4 | 8 | <- current pixel (curx,cury)
+     +---+---+
+     */
+    unsigned int sv = 0;
+    //NOTE: due to the way we pick points from texture, rect needs to be smaller, otherwise it goes outside 1 pixel
+    auto fixedRect = Rect(rect.origin, rect.size-Size(2,2));
     
-    class CompactionPressureToken : public WriteControllerToken {
- public:
-  explicit CompactionPressureToken(WriteController* controller)
-      : WriteControllerToken(controller) {}
-  virtual ~CompactionPressureToken();
-};
-    
-      Status MapNewRegion();
-  Status UnmapCurrentRegion();
-  Status Msync();
-    
-      // put and get from non-default column family
-  s = db->Put(WriteOptions(), handles[1], Slice('key'), Slice('value'));
-  assert(s.ok());
-  std::string value;
-  s = db->Get(ReadOptions(), handles[1], Slice('key'), &value);
-  assert(s.ok());
-    
-      int ret = system('rm -rf /tmp/rocksmergetest');
-  if (ret != 0) {
-    fprintf(stderr, 'Error deleting /tmp/rocksmergetest, code: %d\n', ret);
-    return ret;
-  }
-  rocksdb::Options options;
-  options.create_if_missing = true;
-  options.merge_operator.reset(new MyMerge);
-  options.compaction_filter = &filter;
-  status = rocksdb::DB::Open(options, '/tmp/rocksmergetest', &raw_db);
-  assert(status.ok());
-  std::unique_ptr<rocksdb::DB> db(raw_db);
-    
-    namespace {
-// A dummy compaction filter
-class DummyCompactionFilter : public CompactionFilter {
- public:
-  virtual ~DummyCompactionFilter() {}
-  virtual bool Filter(int level, const Slice& key, const Slice& existing_value,
-                      std::string* new_value, bool* value_changed) const {
-    return false;
-  }
-  virtual const char* Name() const { return 'DummyCompactionFilter'; }
-};
-    }
-    
-      ////////////////////////////////////////////////////////
-  //
-  // 'Read Committed' (Monotonic Atomic Views) Example
-  //   --Using multiple Snapshots
-  //
-  ////////////////////////////////////////////////////////
-    
-    namespace rocksdb {
-    }
-    
-      // Builds an openable snapshot of RocksDB on the same disk, which
-  // accepts an output directory on the same disk, and under the directory
-  // (1) hard-linked SST files pointing to existing live SST files
-  // SST files will be copied if output directory is on a different filesystem
-  // (2) a copied manifest files and other files
-  // The directory should not already exist and will be created by this API.
-  // The directory will be an absolute path
-  // log_size_for_flush: if the total log file size is equal or larger than
-  // this value, then a flush is triggered for all the column families. The
-  // default value is 0, which means flush is always triggered. If you move
-  // away from the default, the checkpoint may not contain up-to-date data
-  // if WAL writing is not always enabled.
-  // Flush will always trigger if it is 2PC.
-  virtual Status CreateCheckpoint(const std::string& checkpoint_dir,
-                                  uint64_t log_size_for_flush = 0);
+    Vec2 tl = Vec2(x-1, y-1);
+    sv += (fixedRect.containsPoint(tl) && getAlphaByPos(tl) > threshold)? 1 : 0;
+    Vec2 tr = Vec2(x, y-1);
+    sv += (fixedRect.containsPoint(tr) && getAlphaByPos(tr) > threshold)? 2 : 0;
+    Vec2 bl = Vec2(x-1, y);
+    sv += (fixedRect.containsPoint(bl) && getAlphaByPos(bl) > threshold)? 4 : 0;
+    Vec2 br = Vec2(x, y);
+    sv += (fixedRect.containsPoint(br) && getAlphaByPos(br) > threshold)? 8 : 0;
+    CCASSERT(sv != 0 && sv != 15, 'square value should not be 0, or 15');
+    return sv;
+}
