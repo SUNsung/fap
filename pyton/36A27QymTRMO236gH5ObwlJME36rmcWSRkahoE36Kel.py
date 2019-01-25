@@ -1,126 +1,109 @@
 
         
-            def __init__(self, chat_id):
-        self.chat_id = chat_id
-        self.users = []
-        self.messages = []
+          dim = embeddings.shape[1]
     
-        def extract_year_month(self, timestamp):
-        '''Return the year and month portions of the timestamp.'''
-        ...
+    # write out the dataset
+write_datasets(FLAGS.save_dir, FLAGS.datafile_name, datasets)
+print ('Saved to ', os.path.join(FLAGS.save_dir,
+                                 FLAGS.datafile_name + '_' + dataset_name))
+
     
-        def reducer(self, key, values):
-        '''Sum values for each key.
+          scorings.append(dict(
+          correctness=correctness,
+          sentence=sentence,
+          joint_prob=joint_prob,
+          word_probs=word_probs))
+    scoring_mode = 'full' if self.test_data_name == 'pdp60' else 'partial'
+    return utils.compare_substitutions(
+        self.question_ids, scorings, scoring_mode)
     
-        def reduce_priority_link_to_crawl(self, url):
-        '''Reduce the priority of a link in `links_to_crawl` to avoid cycles.'''
-        pass
+      # Generator rewards are log-probabilities.
+  eps = tf.constant(1e-7, tf.float32)
+  dis_predictions = tf.nn.sigmoid(dis_predictions)
+  rewards = tf.log(dis_predictions + eps)
     
-        for ns in n_samples:
-        for nf in n_features:
-            it += 1
-            print('==================')
-            print('Iteration %s of %s' % (it, max(len(n_samples),
-                                          len(n_features))))
-            print('==================')
-            n_informative = nf // 10
-            X, Y, coef_ = make_regression(n_samples=ns, n_features=nf,
-                                          n_informative=n_informative,
-                                          noise=0.1, coef=True)
+        elif (FLAGS.discriminator_model == 'bidirectional_zaremba' or
+          FLAGS.discriminator_model == 'bidirectional_vd'):
+      assert FLAGS.language_model_ckpt_dir_reversed is not None, (
+          'Need a reversed directory to fill in the backward components.')
+      load_fwd_ckpt = tf.train.latest_checkpoint(FLAGS.language_model_ckpt_dir)
+      load_bwd_ckpt = tf.train.latest_checkpoint(
+          FLAGS.language_model_ckpt_dir_reversed)
+      print('Restoring Discriminator from %s and %s.' % (load_fwd_ckpt,
+                                                         load_bwd_ckpt))
+      tf.logging.info('Restoring Discriminator from %s and %s.' %
+                      (load_fwd_ckpt, load_bwd_ckpt))
+      dis_fwd_init_saver = init_savers['dis_fwd_init_saver']
+      dis_bwd_init_saver = init_savers['dis_bwd_init_saver']
+      dis_fwd_init_saver.restore(sess, load_fwd_ckpt)
+      dis_bwd_init_saver.restore(sess, load_bwd_ckpt)
     
-        classes : array-like of ints (1d or 0d)
-        The number of classes in the input.
-    
-                gc.collect()
-            print('benchmarking lars_path (without Gram):', end='')
-            sys.stdout.flush()
-            tstart = time()
-            lars_path(X, y, method='lasso')
-            delta = time() - tstart
-            print('%0.3fs' % delta)
-            results['lars_path (without Gram)'].append(delta)
-    
-        # decode the payload explicitly as UTF-8 since lxml is confused for some
-    # reason
-    with codecs.open(html_filename,'r','utf-8') as html_file:
-        html_content = html_file.read()
-    tree = ElementTree(lxml.html.document_fromstring(html_content))
-    i = 0
-    j = 0
-    for p in tree.findall('//p'):
-        content = p.text_content()
-        if len(content) < 100:
-            # skip paragraphs that are too short - probably too noisy and not
-            # representative of the actual language
-            continue
-    
-    from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import Perceptron
-from sklearn.pipeline import Pipeline
-from sklearn.datasets import load_files
-from sklearn.model_selection import train_test_split
-from sklearn import metrics
-    
-    '''
-# Author: Olivier Grisel <olivier.grisel@ensta.org>
-# License: Simplified BSD
-    
-    # Predict the result on some short new sentences:
-sentences = [
-    u'This is a language detection test.',
-    u'Ceci est un test de d\xe9tection de la langue.',
-    u'Dies ist ein Test, um die Sprache zu erkennen.',
-]
-predicted = clf.predict(sentences)
-    
-        # TASK: print the mean and std for each candidate along with the parameter
-    # settings for all the candidates explored by grid search.
-    n_candidates = len(grid_search.cv_results_['params'])
-    for i in range(n_candidates):
-        print(i, 'params - %s; mean - %0.2f; std - %0.2f'
-                 % (grid_search.cv_results_['params'][i],
-                    grid_search.cv_results_['mean_test_score'][i],
-                    grid_search.cv_results_['std_test_score'][i]))
-    
-        print('Generating skeleton for %s' % f)
-    
-    def _print_header(settings, inproject):
-    if inproject:
-        print('Scrapy %s - project: %s\n' % (scrapy.__version__, \
-            settings['BOT_NAME']))
-    else:
-        print('Scrapy %s - no active project\n' % scrapy.__version__)
+    import logging
+from tornado.curl_httpclient import CurlAsyncHTTPClient
+from tornado.simple_httpclient import SimpleAsyncHTTPClient
+from tornado.ioloop import IOLoop
+from tornado.options import define, options, parse_command_line
+from tornado.web import RequestHandler, Application
     
     
-# contracts
-class UrlContract(Contract):
-    ''' Contract to set the url of the request (mandatory)
-        @url http://scrapy.org
-    '''
+if __name__ == '__main__':
+    main()
+
     
-            Quoting https://twistedmatrix.com/documents/current/api/twisted.web.client.Agent.html:
-        'The default is to use a BrowserLikePolicyForHTTPS,
-        so unless you have special requirements you can leave this as-is.'
+        PATTERN = '''import_from< 'from' module_name='__future__' 'import' any >'''
     
-    def isPrime(num):
-    if (num < 2):
-        return False
+    Most applications should not access this module directly.  Instead,
+pass the keyword argument ``autoreload=True`` to the
+`tornado.web.Application` constructor (or ``debug=True``, which
+enables this setting and several others).  This will enable autoreload
+mode as well as checking for changes to templates and static
+resources.  Note that restarting is a destructive operation and any
+requests in progress will be aborted when the process restarts.  (If
+you want to disable autoreload while using other debug-mode features,
+pass both ``debug=True`` and ``autoreload=False``).
     
-        def _colision_resolution(self, key, data=None):
-        i = 1
-        new_key = self.hash_function(key + i*i)
+        def _handle_events(self, fd: int, events: int) -> None:
+        fileobj, handler_func = self.handlers[fd]
+        handler_func(fileobj, events)
     
-    if __name__ == '__main__':
-	import sys
+        def feed(self, byte_str, num_bytes):
+        if self._done:
+            return
     
-        dp = [[False for x in range(s+1)]for y in range(n+1)]
+    # Character Mapping Table:
+Latin2_HungarianCharToOrderMap = (
+255,255,255,255,255,255,255,255,255,255,254,255,255,254,255,255,  # 00
+255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,  # 10
+253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,  # 20
+252,252,252,252,252,252,252,252,252,252,253,253,253,253,253,253,  # 30
+253, 28, 40, 54, 45, 32, 50, 49, 38, 39, 53, 36, 41, 34, 35, 47,
+ 46, 71, 43, 33, 37, 57, 48, 64, 68, 55, 52,253,253,253,253,253,
+253,  2, 18, 26, 17,  1, 27, 12, 20,  9, 22,  7,  6, 13,  4,  8,
+ 23, 67, 10,  5,  3, 21, 19, 65, 62, 16, 11,253,253,253,253,253,
+159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,
+175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,
+191,192,193,194,195,196,197, 75,198,199,200,201,202,203,204,205,
+ 79,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,
+221, 51, 81,222, 78,223,224,225,226, 44,227,228,229, 61,230,231,
+232,233,234, 58,235, 66, 59,236,237,238, 60, 69, 63,239,240,241,
+ 82, 14, 74,242, 70, 80,243, 72,244, 15, 83, 77, 84, 30, 76, 85,
+245,246,247, 25, 73, 42, 24,248,249,250, 31, 56, 29,251,252,253,
+)
     
-        test_cases = (np.random.rand(10) * 2) - 1
-    predictions = np.array([tree.predict(x) for x in test_cases])
-    avg_error = np.mean((predictions - test_cases) ** 2)
+        def reset(self):
+        super(MultiByteCharSetProber, self).reset()
+        if self.coding_sm:
+            self.coding_sm.reset()
+        if self.distribution_analyzer:
+            self.distribution_analyzer.reset()
+        self._last_char = [0, 0]
     
-            a *= a
-        b >>= 1
+    EUCJP_ST = (
+          3,     4,     3,     5,MachineState.START,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,#00-07
+     MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,#08-0f
+     MachineState.ITS_ME,MachineState.ITS_ME,MachineState.START,MachineState.ERROR,MachineState.START,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,#10-17
+     MachineState.ERROR,MachineState.ERROR,MachineState.START,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,     3,MachineState.ERROR,#18-1f
+          3,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.START,MachineState.START,MachineState.START,MachineState.START#20-27
+)
     
-            a += a
-        b >>= 1
+        .. code::
