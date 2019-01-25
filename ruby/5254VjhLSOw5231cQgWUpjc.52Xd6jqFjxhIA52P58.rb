@@ -1,82 +1,128 @@
 
         
-          it 'accepts a Bignum as a seed' do
-    srand(0x12345678901234567890)
-    srand.should == 0x12345678901234567890
-  end
+                  def render_collection_for(builder_class, &block)
+            options = @options.stringify_keys
+            rendered_collection = render_collection do |item, value, text, default_html_options|
+              builder = instantiate_builder(builder_class, item, value, text, default_html_options)
     
-        it 'returns the time at which the file was created when passed ?C' do
-      Kernel.test(?C, @tmp_file).should == @tmp_file.ctime
-    end
-    
-      it 'creates a public method in script binding' do
-    eval @code, script_binding
-    Object.should have_method :boom
-  end
-    
-    
-  #
-  # Waits for the HTTP service to terminate
-  #
-  def wait
-    self.listener.wait if self.listener
-  end
-    
-    
-IAX_SUBTYPE_NEW     = 1
-IAX_SUBTYPE_PING    = 2
-IAX_SUBTYPE_PONG    = 3
-IAX_SUBTYPE_ANSWER  = 4
-IAX_SUBTYPE_ACK     = 4
-IAX_SUBTYPE_HANGUP  = 5
-IAX_SUBTYPE_REJECT  = 6
-IAX_SUBTYPE_ACCEPT  = 7
-IAX_SUBTYPE_AUTHREQ = 8
-IAX_SUBTYPE_AUTHREP = 9
-IAX_SUBTYPE_INVAL   = 10
-IAX_SUBTYPE_LAGRQ   = 11
-IAX_SUBTYPE_LAGRP   = 12
-IAX_SUBTYPE_REGREQ  = 13
-IAX_SUBTYPE_REGAUTH = 14
-IAX_SUBTYPE_REGACK  = 15
-IAX_SUBTYPE_REGREJ  = 16
-IAX_SUBTYPE_REGREL  = 17
-IAX_SUBTYPE_VNAK    = 18
-    
-              # Encodes the auth_time field
-          #
-          # @return [String]
-          def encode_auth_time
-            [auth_time].pack('N')
-          end
-    
-              # Decodes the crealm field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [String]
-          def decode_crealm(input)
-            input.value[0].value
-          end
-    
-      subject { described_class.new(source, pipeline_id, unordered_config_parts, settings) }
-    
-              it 'successfully install the plugin when verification is disabled' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify logstash-filter-qatest')
-            expect(command).to install_successfully
-            expect(logstash).to have_installed?('logstash-filter-qatest')
-          end
-    
-        def clear
-      @attachments = Hash.new { |h,k| h[k] = {} }
-    end
-    
-        def path
-      @file.respond_to?(:path) ? @file.path : @file
-    end
-    
-        def define_query
-      name = @name
-      @klass.send :define_method, '#{@name}?' do
-        send(name).file?
+        initializer 'action_view.setup_action_pack' do |app|
+      ActiveSupport.on_load(:action_controller) do
+        ActionView::RoutingUrlFor.include(ActionDispatch::Routing::UrlFor)
       end
     end
+    
+      UserOption.where(user_id: smoke_user.id).update_all(
+    email_direct: false,
+    email_digests: false,
+    email_private_messages: false,
+  )
+    
+            lounge.topic_id = post.topic.id
+        unless lounge.save
+          puts lounge.errors.full_messages
+          puts 'Failed to set the lounge description topic!'
+        end
+    
+          if staff.topic_id.nil?
+        creator = PostCreator.new(Discourse.system_user,
+          raw: I18n.t('staff_category_description'),
+          title: I18n.t('category.topic_prefix', category: staff.name),
+          category: staff.name,
+          archetype: Archetype.default
+        )
+        post = creator.create
+    
+    end
+end
+end
+
+    
+      #
+  # Move these into an IPMI stack or mixin at some point
+  #
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module CredentialCache
+        # This class provides a representation of a Principal stored in the Kerberos Credential Cache.
+        class Principal < Element
+          # @!attribute name_type
+          #   @return [Integer]
+          attr_accessor :name_type
+          # @!attribute realm
+          #   @return [String]
+          attr_accessor :realm
+          # @!attribute components
+          #   @return [Array<String>]
+          attr_accessor :components
+    
+              # Encodes the renew_time field
+          #
+          # @return [String]
+          def encode_renew_time
+            [renew_till].pack('N')
+          end
+    
+    module Pod
+  class Command
+    class Env < Command
+      self.summary = 'Display pod environment'
+      self.description = 'Display pod environment.'
+    
+    Gem::Specification.new do |gem|
+  gem.name          = 'capistrano'
+  gem.version       = Capistrano::VERSION
+  gem.authors       = ['Tom Clements', 'Lee Hambley']
+  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
+  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
+  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
+  gem.homepage      = 'http://capistranorb.com/'
+    
+      def run_vagrant_command(command)
+    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
+    return [stdout, stderr] if status.success?
+    raise VagrantSSHCommandError, status
+  end
+end
+    
+          servers.add_role(name, hosts, options)
+    end
+    
+              context 'but no comment after the last element' do
+            it 'autocorrects the closing brace' do
+              new_source = autocorrect_source(source)
+    
+          # Returns the collection the `for` loop is iterating over.
+      #
+      # @return [Node] The collection the `for` loop is iterating over
+      def collection
+        node_parts[1]
+      end
+    
+          # Custom destructuring method. This is used to normalize the branches
+      # for `pair` and `kwsplat` nodes, to add duck typing to `hash` elements.
+      #
+      # @return [Array<KeywordSplatNode>] the different parts of the `kwsplat`
+      def node_parts
+        [self, self]
+      end
+    end
+  end
+end
+
+    
+      before_action { @server = organization.servers.present.find_by_permalink!(params[:server_id]) }
+  before_action { params[:id] && @credential = @server.credentials.find_by_key!(params[:id]) }
+    
+      private
+    
+          organization_domains = server.organization.domains.verified.order(:name)
+      unless organization_domains.empty?
+        s << '<optgroup label='Organization Domains'>'
+        for domain in organization_domains
+          selected = domain == selected_domain ? 'selected='selected'' : ''
+          s << '<option value='#{domain.id}' #{selected}>#{domain.name}</option>'
+        end
+        s << '</optgroup>'
+      end
