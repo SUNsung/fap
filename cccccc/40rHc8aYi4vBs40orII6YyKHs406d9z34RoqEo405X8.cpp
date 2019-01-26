@@ -1,362 +1,175 @@
 
         
-        
-    {
-    {      // white-space before a colon means it's not a URL
-      if (c == ' ' || (0x9 <= c && c <= 0xD))
+        AuthPropertyIterator& AuthPropertyIterator::operator++() {
+  grpc_auth_property_iterator iter = {ctx_, index_, name_};
+  property_ = grpc_auth_property_iterator_next(&iter);
+  ctx_ = iter.ctx;
+  index_ = iter.index;
+  name_ = iter.name;
+  return *this;
+}
+    
+    
+    {    size_t pos = kVersionIdSize;
+    while (pos < buf.size()) {
+      size_t bytes_read =
+          ParseField(absl::string_view(&buf[pos], buf.size() - pos), tc);
+      if (bytes_read == 0) {
         break;
-    }
-  }
-    
-    #endif  // ATOM_APP_COMMAND_LINE_ARGS_H_
-
-    
-    bool UvTaskRunner::PostNonNestableDelayedTask(const base::Location& from_here,
-                                              base::OnceClosure task,
-                                              base::TimeDelta delay) {
-  return PostDelayedTask(from_here, std::move(task), delay);
-}
-    
-    
-    {}  // namespace
-    
-      // Delegate implementations.
-  void OnError(const std::string& error) override;
-  void OnError(const std::string& message,
-               const int code,
-               const std::string& domain) override;
-  void OnCheckingForUpdate() override;
-  void OnUpdateAvailable() override;
-  void OnUpdateNotAvailable() override;
-  void OnUpdateDownloaded(const std::string& release_notes,
-                          const std::string& release_name,
-                          const base::Time& release_date,
-                          const std::string& update_url) override;
-    
-    namespace atom {
-    }
-    
-    template <>
-struct Converter<in_app_purchase::Payment> {
-  static v8::Local<v8::Value> ToV8(v8::Isolate* isolate,
-                                   const in_app_purchase::Payment& payment) {
-    mate::Dictionary dict = mate::Dictionary::CreateEmpty(isolate);
-    dict.SetHidden('simple', true);
-    dict.Set('productIdentifier', payment.productIdentifier);
-    dict.Set('quantity', payment.quantity);
-    return dict.GetHandle();
-  }
-};
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(RenderProcessPreferences);
-};
-    
-      // C++ can not distinguish overloaded member function.
-  template <AtomNetworkDelegate::SimpleEvent type>
-  void SetSimpleListener(mate::Arguments* args);
-  template <AtomNetworkDelegate::ResponseEvent type>
-  void SetResponseListener(mate::Arguments* args);
-  template <typename Listener, typename Method, typename Event>
-  void SetListener(Method method, Event type, mate::Arguments* args);
-    
-    namespace content {
-class WebContents;
-}
-    
-    void AtomQuotaPermissionContext::RequestQuotaPermission(
-    const content::StorageQuotaParams& params,
-    int render_process_id,
-    const PermissionCallback& callback) {
-  callback.Run(response::QUOTA_PERMISSION_RESPONSE_ALLOW);
-}
-    
-    
-    {}  // namespace auto_updater
-
-    
-    namespace auto_updater {
-    }
-    
-    
-    {}  // namespace atom
-    
-    IPC_MESSAGE_ROUTED3(ShellViewHostMsg_Call_Static_Method,
-                    std::string /* type name */,
-                    std::string /* method name */,
-                    base::ListValue /* arguments */)
-    
-    
-    {}  // namespace nw
-
-    
-    
-    {  base::ListValue result;
-  RenderThread::Get()->Send(new ShellViewHostMsg_Call_Object_Method_Sync(
-      routing_id,
-      object_id,
-      type,
-      method,
-      *static_cast<base::ListValue*>(value_args.get()),
-      &result));
-  return converter->ToV8Value(&result, isolate->GetCurrentContext());
-}
-    
-    void Clipboard::CallSync(const std::string& method,
-                         const base::ListValue& arguments,
-                         base::ListValue* result) {
-  if (method == 'Get') {
-    result->AppendString(GetText());
-  } else {
-    NOTREACHED() << 'Invalid call to Clipboard method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-    EventListener::EventListener(int id,
-  const base::WeakPtr<DispatcherHost>& dispatcher_host,
-  const base::DictionaryValue& option) : Base(id, dispatcher_host, option) {
-    }
-    
-    void MenuItem::SetSubmenu(Menu* sub_menu) {
-  submenu_ = sub_menu;
-  if (GTK_IS_ACCEL_GROUP(gtk_accel_group)){
-    sub_menu->UpdateKeys(gtk_accel_group);
-  }
-  if (sub_menu == NULL)
-    gtk_menu_item_remove_submenu(GTK_MENU_ITEM(menu_item_));
-  else
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_item_), sub_menu->menu_);
-}
-    
-      /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to a vector of Datum.
-   *
-   * @param datum_vector
-   *    A vector of Datum containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See memory_layer.cpp for an example.
-   */
-  void Transform(const vector<Datum> & datum_vector,
-                Blob<Dtype>* transformed_blob);
-    
-    A common use case is with the DeconvolutionLayer acting as upsampling.
-You can upsample a feature map with shape of (B, C, H, W) by any integer factor
-using the following proto.
-\code
-layer {
-  name: 'upsample', type: 'Deconvolution'
-  bottom: '{{bottom_name}}' top: '{{top_name}}'
-  convolution_param {
-    kernel_size: {{2 * factor - factor % 2}} stride: {{factor}}
-    num_output: {{C}} group: {{C}}
-    pad: {{ceil((factor - 1) / 2.)}}
-    weight_filler: { type: 'bilinear' } bias_term: false
-  }
-  param { lr_mult: 0 decay_mult: 0 }
-}
-\endcode
-Please use this by replacing `{{}}` with your values. By specifying
-`num_output: {{C}} group: {{C}}`, it behaves as
-channel-wise convolution. The filter shape of this deconvolution layer will be
-(C, 1, K, K) where K is `kernel_size`, and this filler will set a (K, K)
-interpolation kernel for every channel of the filter identically. The resulting
-shape of the top feature map will be (B, C, factor * H, factor * W).
-Note that the learning rate and the
-weight decay are set to 0 in order to keep coefficient values of bilinear
-interpolation unchanged during training. If you apply this to an image, this
-operation is equivalent to the following call in Python with Scikit.Image.
-\code{.py}
-out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
-\endcode
- */
-template <typename Dtype>
-class BilinearFiller : public Filler<Dtype> {
- public:
-  explicit BilinearFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    CHECK_EQ(blob->num_axes(), 4) << 'Blob must be 4 dim.';
-    CHECK_EQ(blob->width(), blob->height()) << 'Filter must be square';
-    Dtype* data = blob->mutable_cpu_data();
-    int f = ceil(blob->width() / 2.);
-    Dtype c = (blob->width() - 1) / (2. * f);
-    for (int i = 0; i < blob->count(); ++i) {
-      Dtype x = i % blob->width();
-      Dtype y = (i / blob->width()) % blob->height();
-      data[i] = (1 - fabs(x / f - c)) * (1 - fabs(y / f - c));
-    }
-    CHECK_EQ(this->filler_param_.sparse(), -1)
-         << 'Sparsity not supported by this Filler.';
-  }
-};
-    
-      /**
-   * Called by SetUp to initialize the weights associated with any top blobs in
-   * the loss function. Store non-zero loss weights in the diff blob.
-   */
-  inline void SetLossWeights(const vector<Blob<Dtype>*>& top) {
-    const int num_loss_weights = layer_param_.loss_weight_size();
-    if (num_loss_weights) {
-      CHECK_EQ(top.size(), num_loss_weights) << 'loss_weight must be '
-          'unspecified or specified once per top blob.';
-      for (int top_id = 0; top_id < top.size(); ++top_id) {
-        const Dtype loss_weight = layer_param_.loss_weight(top_id);
-        if (loss_weight == Dtype(0)) { continue; }
-        this->set_loss(top_id, loss_weight);
-        const int count = top[top_id]->count();
-        Dtype* loss_multiplier = top[top_id]->mutable_cpu_diff();
-        caffe_set(count, loss_weight, loss_multiplier);
+      } else {
+        pos += bytes_read;
       }
     }
+    return pos;
   }
     
-     protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-      /**
-   * @brief Computes the error gradient w.r.t. the reordered input.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient
-   *        with respect to the outputs
-   *   -# @f$ (M \times ...) @f$:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2):
-   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
-   *     required) back to the input x_1
-   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
-   *     false.
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    { private:
+  CensusContext context_;
+  // server method
+  absl::string_view method_;
+  std::string qualified_method_;
+  grpc_slice path_;
+  // Pointer to the grpc_call element
+  grpc_call* gc_;
+  // Authorization context for the call.
+  grpc_auth_context* auth_context_;
+  // Metadata element for census stats.
+  grpc_linked_mdelem census_bin_;
+  // recv callback
+  grpc_metadata_batch* recv_initial_metadata_;
+  grpc_closure* initial_on_done_recv_initial_metadata_;
+  grpc_closure on_done_recv_initial_metadata_;
+  // recv message
+  grpc_closure* initial_on_done_recv_message_;
+  grpc_closure on_done_recv_message_;
+  absl::Time start_time_;
+  absl::Duration elapsed_time_;
+  grpc_core::OrphanablePtr<grpc_core::ByteStream>* recv_message_;
+  uint64_t recv_message_count_;
+  uint64_t sent_message_count_;
+  // Buffer needed for grpc_slice to reference it when adding metatdata to
+  // response.
+  char stats_buf_[kMaxServerStatsLen];
+};
     
-      virtual inline const char* type() const { return 'Concat'; }
-  virtual inline int MinBottomBlobs() const { return 1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
+    // server hour
+const ViewDescriptor& ServerSentBytesPerRpcHour() {
+  const static ViewDescriptor descriptor =
+      HourDescriptor()
+          .set_name('grpc.io/server/sent_bytes_per_rpc/hour')
+          .set_measure(kRpcServerSentBytesPerRpcMeasureName)
+          .set_aggregation(BytesDistributionAggregation())
+          .add_column(ServerMethodTagKey());
+  return descriptor;
+}
     
     
-    {}  // namespace caffe
+    {  std::vector<const protobuf::FieldDescriptor*> extensions;
+  descriptor_pool_->FindAllExtensions(desc, &extensions);
+  for (auto it = extensions.begin(); it != extensions.end(); it++) {
+    response->add_extension_number((*it)->number());
+  }
+  response->set_base_type_name(type);
+  return Status::OK;
+}
     
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of ConvolutionLayer.
- *        Fallback to ConvolutionLayer for CPU mode.
- *
- * cuDNN accelerates convolution through forward kernels for filtering and bias
- * plus backward kernels for the gradient w.r.t. the filters, biases, and
- * inputs. Caffe + cuDNN further speeds up the computation through forward
- * parallelism across groups and backward parallelism across gradients.
- *
- * The CUDNN engine does not have memory overhead for matrix buffers. For many
- * input and filter regimes the CUDNN engine is faster than the CAFFE engine,
- * but for fully-convolutional models and large inputs the CAFFE engine can be
- * faster as long as it fits in memory.
-*/
-template <typename Dtype>
-class CuDNNConvolutionLayer : public ConvolutionLayer<Dtype> {
- public:
-  explicit CuDNNConvolutionLayer(const LayerParameter& param)
-      : ConvolutionLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNConvolutionLayer();
+    namespace grpc {
     }
     
-      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
-  cudnnTensorDescriptor_t bias_desc_;
-  cudnnFilterDescriptor_t filter_desc_;
-  vector<cudnnConvolutionDescriptor_t> conv_descs_;
-  int bottom_offset_, top_offset_, bias_offset_;
+    DynamicThreadPool::~DynamicThreadPool() {
+  std::unique_lock<std::mutex> lock(mu_);
+  shutdown_ = true;
+  cv_.notify_all();
+  while (nthreads_ != 0) {
+    shutdown_cv_.wait(lock);
+  }
+  ReapThreads(&dead_threads_);
+}
     
-    #include 'caffe/layers/pooling_layer.hpp'
+    #ifdef GPR_LINUX
     
+    std::unique_ptr<php::Unit> parse_unit(php::Program& prog,
+                                      std::unique_ptr<UnitEmitter> ue);
     
-    {}  // namespace caffe
+    #include <cstdint>
+#include <tuple>
     
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+    //////////////////////////////////////////////////////////////////////
     
-    /**
- * @addtogroup actions
- * @{
+    #include 'hphp/util/data-block.h'
+    
+    #define CONFIG_BODY(T, METHOD) \
+T Config::Get##METHOD(const IniSetting::Map &ini, const Hdf& config, \
+                      const std::string &name /* = '' */, \
+                      const T defValue /* = 0ish */, \
+                      const bool prepend_hhvm /* = true */) { \
+  auto ini_name = IniName(name, prepend_hhvm); \
+  /* If we don't pass a name, then we just use the raw config as-is. */ \
+  /* This could happen when we are at a known leaf of a config node. */ \
+  Hdf hdf = name != '' ? config[name] : config; \
+  auto value = ini_iterate(ini, ini_name); \
+  if (value.isString()) { \
+    T ini_ret, hdf_ret; \
+    ini_on_update(value.toString(), ini_ret); \
+    /* I don't care what the ini_ret was if it isn't equal to what  */ \
+    /* is returned back from from an HDF get call, which it will be */ \
+    /* if the call just passes back ini_ret because either they are */ \
+    /* the same or the hdf option associated with this name does    */ \
+    /* not exist.... REMEMBER HDF WINS OVER INI UNTIL WE WIPE HDF   */ \
+    hdf_ret = hdf.configGet##METHOD(ini_ret); \
+    if (hdf_ret != ini_ret) { \
+      ini_ret = hdf_ret; \
+      IniSetting::SetSystem(ini_name, variant_init(ini_ret)); \
+    } \
+    return ini_ret; \
+  } \
+  /* If there is a value associated with this setting in the hdf config */ \
+  /* then return it; otherwise the defValue will be returned as it is   */ \
+  /* assigned to the return value for this call when nothing exists     */ \
+  return hdf.configGet##METHOD(defValue); \
+} \
+void Config::Bind(T& loc, const IniSetting::Map &ini, const Hdf& config, \
+                  const std::string& name /* = '' */, \
+                  const T defValue /* = 0ish */, \
+                  const bool prepend_hhvm /* = true */) { \
+  loc = Get##METHOD(ini, config, name, defValue, prepend_hhvm); \
+  IniSetting::Bind(IniSetting::CORE, IniSetting::PHP_INI_SYSTEM, \
+                   IniName(name, prepend_hhvm), &loc); \
+}
+    
+          std::string line = argv[cnt+1];
+      std::string section = 'php';
+      int pos_period = line.find_first_of('.');
+      int pos_equals = line.find_first_of('=');
+    
+      virtual void PredictInteractionContributions(DMatrix* dmat,
+                                   std::vector<bst_float>* out_contribs,
+                                   const gbm::GBTreeModel& model,
+                                   unsigned ntree_limit = 0,
+                                   bool approximate = false) = 0;
+    
+    /** @class FadeIn
+ * @brief Fades In an object that implements the RGBAProtocol protocol. It modifies the opacity from 0 to 255.
+ The 'reverse' of this action is FadeOut
  */
+class CC_DLL FadeIn : public FadeTo
+{
+public:
+    /** 
+     * Creates the action.
+     * @param d Duration time, in seconds.
+     * @return An autoreleased FadeIn object.
+     */
+    static FadeIn* create(float d);
     }
     
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    
-    {        return true;
-    }
-    
-    #endif // __ACTION_CCGRID3D_ACTION_H__
+    #endif // __ACTION_CCPROGRESS_TIMER_H__
 
     
+        /** @deprecated Use destroyInstance() instead. */
+    CC_DEPRECATED_ATTRIBUTE static void purgeSharedAnimationCache() { return AnimationCache::destroyInstance(); }
     
-    {        // only delete currentTarget if no actions were scheduled during the cycle (issue #481)
-        if (_currentTargetSalvaged && _currentTarget->actions->num == 0)
-        {
-            deleteHashElement(_currentTarget);
-        }
-        //if some node reference 'target', it's reference count >= 2 (issues #14050)
-        else if (_currentTarget->target->getReferenceCount() == 1)
-        {
-            deleteHashElement(_currentTarget);
-        }
-    }
-    
-    
-    {    delete action;
-    return nullptr;
-}
-    
-    ActionTween *ActionTween::clone() const
-{
-    return ActionTween::create(_duration, _key, _from, _to);
-}
-    
-     Another example: ScaleTo action could be rewritten using PropertyAction:
-    
-            for (auto& frameName : frameNames)
-        {
-            SpriteFrame* spriteFrame = frameCache->getSpriteFrameByName(frameName.asString());
-    }
-    
-    
-    {    releaseVertsAndIndices();
-    _isVertsOwner = false;
-    triangles.indices = quadIndices9;
-    triangles.vertCount = 4 * numberOfQuads;
-    triangles.indexCount = 6 * numberOfQuads;
-    triangles.verts = (V3F_C4B_T2F*)quad;
-}
-    
-    // Returns an Env that translates paths such that the root directory appears to
-// be chroot_dir. chroot_dir should refer to an existing directory.
-Env* NewChrootEnv(Env* base_env, const std::string& chroot_dir);
-    
-    Status GetOptionsFromString(const Options& base_options,
-                            const std::string& opts_str, Options* new_options);
+    CC_CONSTRUCTOR_ACCESS:
+    AtlasNode();
+    virtual ~AtlasNode();
