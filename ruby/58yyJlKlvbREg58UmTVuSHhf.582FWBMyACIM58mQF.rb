@@ -1,109 +1,100 @@
 
         
-                sql = <<-SQL
-          UPDATE ci_stages SET status = (#{status_sql})
-            WHERE ci_stages.status IS NULL
-            AND ci_stages.id BETWEEN #{start_id.to_i} AND #{stop_id.to_i}
-        SQL
+              it 'deactivates an existing user' do
+        visit admin_users_path
+        expect(page).to have_no_text('inactive')
+        find(:css, 'a[href='/admin/users/#{users(:bob).id}/deactivate']').click
+        expect(page).to have_text('inactive')
+        users(:bob).reload
+        expect(users(:bob)).not_to be_active
+      end
     
-              relation.update_all(update)
+      it 'asks to accept conflicts when the scenario was modified' do
+    DefaultScenarioImporter.seed(user)
+    agent = user.agents.where(name: 'Rain Notifier').first
+    agent.options['expected_receive_period_in_days'] = 9001
+    agent.save!
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
+    click_on 'Start Import'
+    expect(page).to have_text('This Scenario already exists in your system.')
+    expect(page).to have_text('9001')
+    check('I confirm that I want to import these Agents.')
+    click_on 'Finish Import'
+    expect(page).to have_text('Import successful!')
+  end
+    
+        it 'works for queued jobs' do
+      expect(status(job)).to eq('<span class='label label-warning'>queued</span>')
+    end
+  end
+    
+        it 'defauls foreground and background colors' do
+      scenario.tag_fg_color = nil
+      scenario.tag_bg_color = nil
+      expect(style_colors(scenario)).to eq('color:#FFFFFF;background-color:#5BC0DE')
+    end
+  end
+    
+      context '#set_traps' do
+    it 'sets traps for INT TERM and QUIT' do
+      agent_runner = AgentRunner.new
+      mock(Signal).trap('INT')
+      mock(Signal).trap('TERM')
+      mock(Signal).trap('QUIT')
+      agent_runner.set_traps
+    
+          expect(data[:agents][guid_order(agent_list, :jane_weather_agent)]).not_to have_key(:propagate_immediately) # can't receive events
+      expect(data[:agents][guid_order(agent_list, :jane_rain_notifier_agent)]).not_to have_key(:schedule) # can't be scheduled
+    end
+    
+      before(:each) do
+    stub_request(:get, /events.json$/).to_return(
+      :body => File.read(Rails.root.join('spec/data_fixtures/basecamp.json')),
+      :status => 200,
+      :headers => {'Content-Type' => 'text/json'}
+    )
+    stub_request(:get, /projects.json$/).to_return(
+      :body => JSON.dump([{name: 'test', id: 1234},{name: 'test1', id: 1235}]),
+      :status => 200,
+      :headers => {'Content-Type' => 'text/json'}
+    )
+    stub_request(:get, /02:00$/).to_return(
+      :body => File.read(Rails.root.join('spec/data_fixtures/basecamp.json')),
+      :status => 200,
+      :headers => {'Content-Type' => 'text/json'}
+    )
+    @valid_params = { :project_id => 6789 }
+    
+      it 'no raises a RuntimeError on symbols' do
+    v = :sym
+    lambda { v.taint }.should_not raise_error(RuntimeError)
+    v.tainted?.should == false
+  end
+    
+      it 'returns true when passed ?f if the argument is a regular file' do
+    Kernel.test(?f, @file).should == true
+  end
+    
+      it 'transfers control to the innermost catch block waiting for the same sympol' do
+    one = two = three = 0
+    catch :duplicate do
+      catch :duplicate do
+        catch :duplicate do
+          one = 1
+          throw :duplicate
         end
+        two = 2
+        throw :duplicate
       end
+      three = 3
+      throw :duplicate
     end
-  end
-end
-
-    
-    module Gitlab
-  module Ci
-    module Pipeline
-      # Class for preloading data associated with pipelines such as commit
-      # authors.
-      class Preloader
-        def self.preload!(pipelines)
-          ##
-          # This preloads all commits at once, because `Ci::Pipeline#commit` is
-          # using a lazy batch loading, what results in only one batched Gitaly
-          # call.
-          #
-          pipelines.each(&:commit)
-    
-              unless matches
-            raise(
-              ArgumentError,
-              'The note URL #{note.html_url.inspect} is not supported'
-            )
-          end
-    
-              hash = {
-            iid: issue.number,
-            title: issue.title,
-            description: issue.body,
-            milestone_number: issue.milestone&.number,
-            state: issue.state == 'open' ? :opened : :closed,
-            assignees: issue.assignees.map do |u|
-              Representation::User.from_api_response(u)
-            end,
-            label_names: issue.labels.map(&:name),
-            author: user,
-            created_at: issue.created_at,
-            updated_at: issue.updated_at,
-            pull_request: issue.pull_request ? true : false
-          }
-    
-              user = Representation::User.from_api_response(pr.user) if pr.user
-          hash = {
-            iid: pr.number,
-            title: pr.title,
-            description: pr.body,
-            source_branch: pr.head.ref,
-            target_branch: pr.base.ref,
-            source_branch_sha: pr.head.sha,
-            target_branch_sha: pr.base.sha,
-            source_repository_id: pr.head&.repo&.id,
-            target_repository_id: pr.base&.repo&.id,
-            source_repository_owner: pr.head&.user&.login,
-            state: pr.state == 'open' ? :opened : :closed,
-            milestone_number: pr.milestone&.number,
-            author: user,
-            assignee: assignee,
-            created_at: pr.created_at,
-            updated_at: pr.updated_at,
-            merged_at: pr.merged_at
-          }
-    
-      def test_file_exists(path)
-    exists?('f', path)
+    [one, two, three].should == [1, 2, 3]
   end
     
-          def set(key, value=nil, &block)
-        @trusted_keys << key if trusted? && !@trusted_keys.include?(key)
-        remember_location(key)
-        values[key] = block || value
-        trace_set(key)
-        values[key]
+    $redis = Redis.new
+    
+          def clear
+        entries.clear
       end
-    
-        def names_for(klass)
-      @attachments[klass].keys
-    end
-    
-        def calculated_type_matches
-      possible_types.select do |content_type|
-        content_type == type_from_file_contents
-      end
-    end
-    
-        def raise_if_blank_file
-      if path.blank?
-        raise Errors::NotIdentifiedByImageMagickError.new('Cannot find the geometry of a file with a blank name')
-      end
-    end
-    
-        # Returns the extension of the file. e.g. 'jpg' for 'file.jpg'
-    # If the style has a format defined, it will return the format instead
-    # of the actual extension.
-    def extension attachment, style_name
-      ((style = attachment.styles[style_name.to_s.to_sym]) && style[:format]) ||
-        File.extname(attachment.original_filename).sub(/\A\.+/, ''.freeze)
-    end
