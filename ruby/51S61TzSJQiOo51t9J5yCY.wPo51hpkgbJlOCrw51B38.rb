@@ -1,118 +1,132 @@
 
         
-                def id_for_already_imported_cache(note)
-          note.id
+        Nullam luctus fermentum est id blandit. Phasellus consectetur ullamcorper
+ligula, {% if author == 'Jane Doe' %} at finibus eros laoreet id. {% else %}
+Etiam sit amet est in libero efficitur.{% endif %}
+tristique. Ut nec magna augue. Quisque ut fringilla lacus, ac dictum enim.
+Aliquam vel ornare mauris. Suspendisse ornare diam tempor nulla facilisis
+aliquet. Sed ultrices placerat ultricies.
+LIQUID
+    
+    CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+    
+              theme.create!
+          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
+                             ' is ready for you in #{theme.path.to_s.cyan}!'
+          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
         end
+        # rubocop:enable Metrics/AbcSize
       end
     end
   end
 end
 
     
-            def collection_options
-          { state: 'all', sort: 'created', direction: 'asc' }
-        end
+        def to_json
+      JSON.generate(as_json)
+    end
+    
+        def subpath
+      @subpath ||= subpath_to(current_url)
+    end
+    
+        def inheritable_copy
+      self.class.new @filters
+    end
+    
+          unless root?
+        raise Invalid, 'missing name' if !name || name.empty?
+        raise Invalid, 'missing path' if !path || path.empty?
+        raise Invalid, 'missing type' if !type || type.empty?
       end
+    end
+    
+        def initialize
+      @pages = {}
+    end
+    
+        def effective_path
+      @effective_path ||= effective_url.path
     end
   end
 end
 
     
-            def execute
-          create_labels
+    require 'active_support/subscriber'
+    
+              if node['class'] && node['class'].include?('api-heading')
+            node.name = 'h3'
+            node.inner_html = '<code>#{node.inner_html}</code>'
+          end
+    
+            css('.c10', '.showcase', '.showcase-content', '.l-main-section', 'div.div', 'div[flex]', 'code-tabs', 'md-card', 'md-card-content', 'div:not([class])', 'footer', '.card-row', '.card-row-container', 'figure', 'blockquote', 'exported', 'defined', 'div.ng-scope', '.code-example header', 'section.desc', '.row', '.dart-api-entry-main', '.main-content', 'section.summary', 'span.signature').each do |node|
+          node.before(node.children).remove
         end
     
-          # Returns the ID to use for the cache used for checking if an object has
-      # already been imported or not.
+          INDEX = Set.new
+    
+            css('.toplang', '#quickview', '.top').remove
+    
+      def test_symlink_exists(path)
+    exists?('L', path)
+  end
+    
+          attr_reader :key, :default, :options
+    
+    MESSAGE
+      end
+    
+            def set(key, value)
+          pval = @properties[key]
+          if pval.is_a?(Hash) && value.is_a?(Hash)
+            pval.merge!(value)
+          elsif pval.is_a?(Set) && value.is_a?(Set)
+            pval.merge(value)
+          elsif pval.is_a?(Array) && value.is_a?(Array)
+            pval.concat value
+          else
+            @properties[key] = value
+          end
+        end
+    
+      let(:cop_config) { { 'EnforcedStyle' => 'symmetrical' } }
+    
+    module RuboCop
+  module AST
+    # A node extension for `for` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `for` nodes within RuboCop.
+    class ForNode < Node
+      # Returns the keyword of the `for` statement as a string.
       #
-      # object - The object we may want to import.
-      def id_for_already_imported_cache(object)
-        raise NotImplementedError
+      # @return [String] the keyword of the `until` statement
+      def keyword
+        'for'
       end
     
-            expose_attribute :iid, :title, :description, :source_branch,
-                         :source_branch_sha, :target_branch, :target_branch_sha,
-                         :milestone_number, :author, :assignee, :created_at,
-                         :updated_at, :merged_at, :source_repository_id,
-                         :target_repository_id, :source_repository_owner
+          # Calls the given block for each `pair` node in the `hash` literal.
+      # If no block is given, an `Enumerator` is returned.
+      #
+      # @return [self] if a block is given
+      # @return [Enumerator] if no block is given
+      def each_pair
+        return each_child_node(:pair).to_enum unless block_given?
     
-    module Gitlab
-  module QueryLimiting
-    # Middleware for reporting (or raising) when a request performs more than a
-    # certain amount of database queries.
-    class Middleware
-      CONTROLLER_KEY = 'action_controller.instance'.freeze
-      ENDPOINT_KEY = 'api.endpoint'.freeze
-    
-        it 'generates a jasmine fixture', :fixture => true do
-      contact = alice.contact_for(bob.person)
-      aspect = alice.aspects.create(:name => 'people')
-      contact.aspects << aspect
-      contact.save
-      get :new, params: {person_id: bob.person.id}
-      save_fixture(html_for('body'), 'status_message_new')
-    end
-  end
-end
-
-    
-        context 'with invalid parameters' do
-      let(:invalid_params) { valid_params.deep_merge(user: {password_confirmation: 'baddword'}) }
-    
-          it 'federates' do
-        allow_any_instance_of(Participation::Generator).to receive(:create!)
-        expect(Diaspora::Federation::Dispatcher).to receive(:defer_dispatch)
-        post_request!
-      end
-    
-          explicit_path = ::File.join(temp_path, LOGSTASH_DIR)
-      dependencies_path = ::File.join(temp_path, DEPENDENCIES_DIR)
-    
-          PluginManager.ui.info('Install successful')
-    rescue ::Bundler::BundlerError => e
-      raise PluginManager::InstallError.new(e), 'An error occurred went installing plugins'
-    ensure
-      FileUtils.rm_rf(uncompressed_path) if uncompressed_path && Dir.exist?(uncompressed_path)
-    end
-    
-    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
-  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.windows?
-  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.windows?
-    
-        puts('Updating #{filtered_plugins.collect(&:name).join(', ')}') unless filtered_plugins.empty?
-    
-        desc 'Bootstrap all the VM's used for this tests'
-    task :setup, :platform do |t, args|
-      config   = PlatformConfig.new
-      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
-      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
-    
-        let(:plugin_name) { 'logstash-filter-qatest' }
-    let(:previous_version) { '0.1.0' }
-    
-        def get_cached_gist(gist, file)
-      return nil if @cache_disabled
-      cache_file = get_cache_file_for gist, file
-      File.read cache_file if File.exist? cache_file
-    end
-    
-      class ImageTag < Liquid::Tag
-    @img = nil
-    
-        def render(context)
-      output = super
-      types = {
-        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
-        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
-        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
-      }
-      if @videos.size > 0
-        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
-        @videos.each do |v|
-          video << '<source src='#{v}' #{types[File.extname(v)]}>'
-        end
-        video += '</video>'
-      else
-        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
-      end
-    end
+    module RuboCop
+  module AST
+    # A node extension for `kwsplat` nodes. This will be used in place of a
+    # plain  node when the builder constructs the AST, making its methods
+    # available to all `kwsplat` nodes within RuboCop.
+    class KeywordSplatNode < Node
+      include HashElementNode
