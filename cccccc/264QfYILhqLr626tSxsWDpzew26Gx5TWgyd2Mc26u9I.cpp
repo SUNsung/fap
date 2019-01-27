@@ -1,228 +1,237 @@
 
         
-            http://www.apache.org/licenses/LICENSE-2.0
+            // Adds the module variable 'api_version'.
+    if (PyModule_AddIntConstant(
+        module,
+        const_cast<char*>(kImplVersionName),
+        kImplVersion))
+#if PY_MAJOR_VERSION < 3
+      return;
+#else
+      { Py_DECREF(module); return NULL; }
     
-      int width = 35;
-  int width_narrow = 15;
-  int width_wide = 20;
-  os << std::setw(width + 1) << 'Op,';
-  os << std::setw(width_narrow + 1) << 'Count,';
-  os << std::setw(width_wide + 1) << 'Measured time (ns),';
-  os << std::setw(width_narrow + 2) << 'Time percent,';
-  os << std::setw(width_narrow + 2) << 'Acc percent,';
-  os << std::setw(width_wide + 1) << 'Analytical upper,';
-  os << std::setw(width_wide + 1) << 'Analytical lower,';
-  os << std::setw(width_narrow + 2) << 'Overall eff';
-  os << std::setw(width_narrow + 2) << 'Compute eff';
-  os << std::setw(width_narrow + 2) << 'Memory eff' << std::endl;
-  float acc_percent = 0;
-  for (const auto& op : ops_) {
-    double percent = static_cast<double>(op.time) /
-                     static_cast<double>(total_time_measured_serialized_);
-    double eff =
-        static_cast<double>(op.time_upper) / static_cast<double>(op.time);
-    double compute_eff =
-        static_cast<double>(op.compute_time) / static_cast<double>(op.time);
-    double memory_eff =
-        static_cast<double>(op.memory_time) / static_cast<double>(op.time);
-    os << std::setw(width) << op.name << ',';
-    os << std::setw(width_narrow) << op.count << ',';
-    os << std::setw(width_wide) << op.time << ',';
-    os << std::setw(width_narrow) << std::setprecision(2) << percent * 100
-       << '%,';
-    acc_percent += percent;
-    os << std::setw(width_narrow) << std::setprecision(2) << acc_percent * 100
-       << '%,';
-    os << std::setw(width_wide) << op.time_upper << ',';
-    os << std::setw(width_wide) << op.time_lower << ',';
-    os << std::setw(width_narrow) << std::setprecision(2) << eff * 100 << '%,';
-    os << std::setw(width_narrow) << std::setprecision(2) << compute_eff * 100
-       << '%,';
-    os << std::setw(width_narrow) << std::setprecision(2) << memory_eff * 100
-       << '%,';
-    os << std::endl;
+      // True when a ScopedPyObjectPtr and a raw pointer refer to the same object.
+  // Comparison operators are non reflexive.
+  bool operator==(const PyObjectStruct* p) const { return ptr_ == p; }
+  bool operator!=(const PyObjectStruct* p) const { return ptr_ != p; }
+    
+    bool ParseAnyTypeUrl(const string& type_url, string* url_prefix,
+                     string* full_type_name) {
+  size_t pos = type_url.find_last_of('/');
+  if (pos == string::npos || pos + 1 == type_url.size()) {
+    return false;
   }
-  os << std::endl;
+  if (url_prefix) {
+    *url_prefix = type_url.substr(0, pos + 1);
+  }
+  *full_type_name = type_url.substr(pos + 1);
+  return true;
+}
     
-    void ModelAnalyzer::PrintNodeInfo(const NodeDef* node,
-                                  const GraphProperties& properties, bool debug,
-                                  std::ostream& os) const {
-  os << node->name() << ' [' << node->op() << ']' << std::endl;
-  if (properties.HasOutputProperties(node->name())) {
-    const std::vector<OpInfo::TensorProperties>& props =
-        properties.GetOutputProperties(node->name());
-    for (int i = 0; i < props.size(); ++i) {
-      const OpInfo::TensorProperties& prop = props[i];
-      os << '\t'
-         << 'output ' << i << ' (' << DataTypeString(prop.dtype())
-         << ') has shape ';
-      if (prop.shape().unknown_rank()) {
-        os << '?';
-      } else {
-        os << '[';
-        for (int i = 0; i < prop.shape().dim_size(); ++i) {
-          if (i > 0) {
-            os << ', ';
-          }
-          if (prop.shape().dim(i).size() >= 0) {
-            // Print the actual dimension.
-            os << prop.shape().dim(i).size();
-          } else if (prop.shape().dim(i).size() == -1) {
-            // We don't know anything about the dimension.
-            os << '?';
-          } else {
-            // Symbolic dimension.
-            os << 'x' << -prop.shape().dim(i).size();
-          }
-        }
-        os << ']';
-      }
-      os << std::endl;
+    io::ZeroCopyOutputStream*
+GeneratorContext::OpenForAppend(const string& filename) {
+  return NULL;
+}
+    
+    const Options* SourceGeneratorBase::options() {
+  return this->options_;
+}
+    
+    template <typename DescriptorType>
+static void WriteDocCommentBody(
+    io::Printer* printer, const DescriptorType* descriptor) {
+  SourceLocation location;
+  if (descriptor->GetSourceLocation(&location)) {
+    WriteDocCommentBodyForLocation(printer, location);
+  }
+}
+    
+    
+    {  WriteFieldDocComment(printer, descriptor_);
+  if (descriptor_->is_repeated()) {
+    printer->Print(
+        vars,
+        'public static final\n'
+        '  com.google.protobuf.GeneratedMessageLite.GeneratedExtension<\n'
+        '    $containing_type$,\n'
+        '    $type$> $name$ = com.google.protobuf.GeneratedMessageLite\n'
+        '        .newRepeatedGeneratedExtension(\n'
+        '      $containing_type$.getDefaultInstance(),\n'
+        '      $prototype$,\n'
+        '      $enum_map$,\n'
+        '      $number$,\n'
+        '      com.google.protobuf.WireFormat.FieldType.$type_constant$,\n'
+        '      $packed$,\n'
+        '      $singular_type$.class);\n');
+  } else {
+    printer->Print(
+        vars,
+        'public static final\n'
+        '  com.google.protobuf.GeneratedMessageLite.GeneratedExtension<\n'
+        '    $containing_type$,\n'
+        '    $type$> $name$ = com.google.protobuf.GeneratedMessageLite\n'
+        '        .newSingularGeneratedExtension(\n'
+        '      $containing_type$.getDefaultInstance(),\n'
+        '      $default$,\n'
+        '      $prototype$,\n'
+        '      $enum_map$,\n'
+        '      $number$,\n'
+        '      com.google.protobuf.WireFormat.FieldType.$type_constant$,\n'
+        '      $singular_type$.class);\n');
+  }
+  printer->Annotate('name', descriptor_);
+}
+    
+    // Returns a string identical to *input except that the character pointed to
+// by radix_pos (which should be '.') is replaced with the locale-specific
+// radix character.
+string LocalizeRadix(const char* input, const char* radix_pos) {
+  // Determine the locale-specific radix character by calling sprintf() to
+  // print the number 1.5, then stripping off the digits.  As far as I can
+  // tell, this is the only portable, thread-safe way to get the C library
+  // to divuldge the locale's radix character.  No, localeconv() is NOT
+  // thread-safe.
+  char temp[16];
+  int size = sprintf(temp, '%.1f', 1.5);
+  GOOGLE_CHECK_EQ(temp[0], '1');
+  GOOGLE_CHECK_EQ(temp[size-1], '5');
+  GOOGLE_CHECK_LE(size, 6);
     }
+    
+    // An input stream that is basically like an ArrayInputStream but sometimes
+// returns empty buffers, just to throw us off.
+class TestInputStream : public ZeroCopyInputStream {
+ public:
+  TestInputStream(const void* data, int size, int block_size)
+    : array_stream_(data, size, block_size), counter_(0) {}
+  ~TestInputStream() {}
+    }
+    
+    namespace CNTK
+{
+    class CompositeMinibatchSource final : public MinibatchSource
+    {
+        static const std::wstring PositionAttributeName;
+        static const std::wstring DistributedAfterSampleCountAttributeName;
+    }
+    }
+    
+    // Same as above but with additional information about required streams.
+void DataReader::StartDistributedMinibatchLoop(size_t mbSize, size_t epoch, size_t subsetNum, size_t numSubsets, const std::unordered_set<InputStreamDescription>& streamDescriptions, size_t requestedEpochSamples /* = requestDataSize*/)
+{
+    for (size_t i = 0; i < m_ioNames.size(); i++)
+    {
+        m_dataReaders[m_ioNames[i]]->StartDistributedMinibatchLoop(mbSize, epoch, subsetNum, numSubsets, streamDescriptions, requestedEpochSamples);
+    }
+}
+    
+    // base class that we can catch, independent of the type parameter
+struct /*interface*/ IExceptionWithCallStackBase
+{
+    virtual const char * CallStack() const = 0;
+    virtual ~IExceptionWithCallStackBase() noexcept = default;
+};
+    
+        // return the randomized feature bounds for a time range
+    std::pair<size_t, size_t> Bounds(size_t ts, size_t te) const
+    {
+        size_t tbegin = max(ts, randomizationrange / 2) - randomizationrange / 2;
+        size_t tend = min(te + randomizationrange / 2, map.size());
+        return std::make_pair<size_t, size_t>(std::move(tbegin), move(tend));
+    }
+    
+    class ExtensionHandler : virtual public ExtensionIf {
+ public:
+  ExtensionHandler() {
+    // Your initialization goes here
   }
     }
     
     
-    {}  // namespace tensorflow
+    {
+    {}} // namespace
+    
+    // getSerializedQueryData() return an std::pair where pair->first is a string
+// which should serialize to pair->second. pair->second should
+// deserialize to pair->first. getSerializedQueryDataWithColumnOrder
+// returns a pair where pair->second is a tree that has a repeated column and
+// the child nodes are not in alphabetical order
+std::pair<JSON, QueryData> getSerializedQueryData();
+std::pair<JSON, QueryData> getSerializedQueryDataWithColumnOrder();
+std::pair<std::string, QueryData> getSerializedQueryDataJSON();
+    
+    
+    {} // namespace scope_guard
+    
+    Expected<std::string, Error> getOnlineRaw() {
+  return readSysCpuFile('/sys/devices/system/cpu/online');
+}
+    
+    #include <gtest/gtest.h>
+    
+      /**
+   * @brief Attach a table at runtime.
+   *
+   * The SQL implementation plugin may need to manage how virtual tables are
+   * attached at run time. In the case of SQLite where a single DB object is
+   * managed, tables are enumerated and attached during initialization.
+   */
+  virtual Status attach(const std::string& /*name*/) {
+    return Status(0, 'Not used');
+  }
+    
+    #pragma once
+    
+    
+    {
+    {} // namespace
+} // namespace osquery
 
     
-    PyArray_ArrFuncs NPyBfloat16_ArrFuncs;
     
-    // Actually dereferences cached numpy arrays. REQUIRES being called while
-// holding the GIL.
-void ClearDecrefCache() {
-  std::vector<void*> cache_copy;
-  {
-    mutex_lock ml(*DelayedDecrefLock());
-    cache_copy.swap(*DecrefCache());
-  }
-  for (void* obj : cache_copy) {
-    Py_DECREF(reinterpret_cast<PyObject*>(obj));
-  }
+    {    return nullptr;
 }
     
-    namespace tensorflow {
+    void ActionManager::actionAllocWithHashElement(tHashElement *element)
+{
+    // 4 actions per Node by default
+    if (element->actions == nullptr)
+    {
+        element->actions = ccArrayNew(4);
+    }else 
+    if (element->actions->num == element->actions->max)
+    {
+        ccArrayDoubleCapacity(element->actions);
+    }
     }
     
-    #include 'tensorflow/core/framework/tensor.h'
-#include 'tensorflow/core/lib/core/status.h'
+        // actions
     
-    Safe_TFE_TensorHandlePtr make_safe(TFE_TensorHandle* handle) {
-  return Safe_TFE_TensorHandlePtr(handle);
-}
-    
-      ~ScopedActivateExecutorContext();
-    
-      // Logs information about the kernel driver version and userspace driver
-  // library version.
-  static void LogDriverVersionInformation();
-    
-      // TransactionObserver:
-  void OnTransactionsUpdated(
-      const std::vector<in_app_purchase::Transaction>& transactions) override;
-    
-    #ifndef ATOM_BROWSER_API_ATOM_API_RENDER_PROCESS_PREFERENCES_H_
-#define ATOM_BROWSER_API_ATOM_API_RENDER_PROCESS_PREFERENCES_H_
-    
-      // C++ can not distinguish overloaded member function.
-  template <AtomNetworkDelegate::SimpleEvent type>
-  void SetSimpleListener(mate::Arguments* args);
-  template <AtomNetworkDelegate::ResponseEvent type>
-  void SetResponseListener(mate::Arguments* args);
-  template <typename Listener, typename Method, typename Event>
-  void SetListener(Method method, Event type, mate::Arguments* args);
+    /** Adds an action with a target. 
+     If the target is already present, then the action will be added to the existing target.
+     If the target is not present, a new instance of this target will be created either paused or not, and the action will be added to the newly created target.
+     When the target is paused, the queued actions won't be 'ticked'.
+     *
+     * @param action    A certain action.
+     * @param target    The target which need to be added an action.
+     * @param paused    Is the target paused or not.
+     */
+    virtual void addAction(Action *action, Node *target, bool paused);
     
     
-    {}  // namespace mate
+    {// end of actions group
+/// @}
     
-    void AtomQuotaPermissionContext::RequestQuotaPermission(
-    const content::StorageQuotaParams& params,
-    int render_process_id,
-    const PermissionCallback& callback) {
-  callback.Run(response::QUOTA_PERMISSION_RESPONSE_ALLOW);
-}
+    protected:
+    unsigned int _cols;
+    Size _winSize;
     
-    IntSimdMatrixSSE::IntSimdMatrixSSE() {
-#ifdef __SSE4_1__
-  partial_funcs_ = {PartialMatrixDotVector1};
-#endif  // __SSE4_1__
-}
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
     
-      // Split the part (horizontally), and save the split result into
-  // parts_splitted. Note that it is caller's responsibility to release the
-  // memory owns by parts_splitted. On the other hand, the part is unchanged
-  // during this process and still owns the blobs, so do NOT call DeleteBoxes
-  // when freeing the colpartitions in parts_splitted.
-  void SplitCPHor(ColPartition* part,
-                  GenericVector<ColPartition*>* parts_splitted);
-    
-    #include 'tesseractclass.h'
-#ifdef _OPENMP
-#include <omp.h>
-#endif  // _OPENMP
-    
-    	// Set path to vendored ConEmu config file
-	PathCombine(cfgPath, exeDir, L'vendor\\conemu-maximus5\\ConEmu.xml');
-    
-    bool SetDepth(int p0, HuffmanTree *pool, uint8_t *depth, int max_depth) {
-  int stack[17];
-  int level = 0;
-  int p = p0;
-  assert(max_depth <= 16);
-  stack[0] = -1;
-  while (true) {
-    if (pool[p].index_left_ >= 0) {
-      level++;
-      if (level > max_depth) return false;
-      stack[level] = pool[p].index_right_or_value_;
-      p = pool[p].index_left_;
-      continue;
-    } else {
-      depth[pool[p].index_right_or_value_] = static_cast<uint8_t>(level);
-    }
-    while (level >= 0 && stack[level] == -1) level--;
-    if (level < 0) return true;
-    p = stack[level];
-    stack[level] = -1;
-  }
-}
-    
-    
-    {}  // namespace guetzli
-    
-    #include <algorithm>
-#include <cstdio>
-#include <cstdlib>
-#include <exception>
-#include <memory>
-#include <string>
-#include <sstream>
-#include <string.h>
-#include 'png.h'
-#include 'guetzli/jpeg_data.h'
-#include 'guetzli/jpeg_data_reader.h'
-#include 'guetzli/processor.h'
-#include 'guetzli/quality.h'
-#include 'guetzli/stats.h'
-    
-    #include 'guetzli/jpeg_data.h'
-    
-    // Mimic libjpeg's heuristics to guess jpeg color space.
-// Requires that the jpg has 3 components.
-bool HasYCbCrColorSpace(const JPEGData& jpg);
-    
-    size_t HistogramHeaderCost(const JpegHistogram& histo) {
-  size_t header_bits = 17 * 8;
-  for (int i = 0; i + 1 < JpegHistogram::kSize; ++i) {
-    if (histo.counts[i] > 0) {
-      header_bits += 8;
-    }
-  }
-  return header_bits;
-}
-    
-    void BuildDCHistograms(const JPEGData& jpg, JpegHistogram* histo);
-void BuildACHistograms(const JPEGData& jpg, JpegHistogram* histo);
-size_t JpegHeaderSize(const JPEGData& jpg, bool strip_metadata);
-size_t EstimateJpegDataSize(const int num_components,
-                            const std::vector<JpegHistogram>& histograms);
+    #ifndef __CCATLAS_NODE_H__
+#define __CCATLAS_NODE_H__
