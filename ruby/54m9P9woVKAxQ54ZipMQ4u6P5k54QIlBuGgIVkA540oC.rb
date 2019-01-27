@@ -1,180 +1,96 @@
 
         
-                def render(&block)
-          options = @options.stringify_keys
-          tag_value = options.delete('value')
-          name_and_id = options.dup
-    
-            def render
-          options = @options.stringify_keys
-          options['size'] = options['maxlength'] unless options.key?('size')
-          options['type'] ||= field_type
-          options['value'] = options.fetch('value') { value_before_type_cast } unless field_type == 'file'
-          add_default_name_and_id(options)
-          tag('input', options)
+                  pipelines.each do |pipeline|
+            self.new(pipeline).tap do |preloader|
+              preloader.preload_commit_authors
+              preloader.preload_pipeline_warnings
+              preloader.preload_stages_warnings
+            end
+          end
         end
     
-            ActiveSupport::Notifications.instrument('render_#{name}.action_view', options) do |payload|
-          yield payload
-        end
-      end
+          # The minimum number of requests we want to keep available.
+      #
+      # We don't use a value of 0 as multiple threads may be using the same
+      # token in parallel. This could result in all of them hitting the GitHub
+      # rate limit at once. The threshold is put in place to not hit the limit
+      # in most cases.
+      RATE_LIMIT_THRESHOLD = 50
     
-        # Some actions have special handling in fast_file.rb, that means we can't directly call the action
-    # but we have to use the same logic that is in fast_file.rb instead.
-    # That's where this switch statement comes into play
-    def run_action_requiring_special_handling(command: nil, parameter_map: nil, action_return_type: nil)
-      action_return = nil
-      closure_argument_value = nil # only used if the action uses it
-    
-            expect(result).to eq('carthage bootstrap')
-      end
-    
-          it 'Does not accept a :commits_count < 1' do
-        expect do
-          Fastlane::FastFile.new.parse('lane :test do
-            changelog_from_git_commits(commits_count: -1)
-          end').runner.execute(:test)
-        end.to raise_error(':commits_count must be >= 1')
-      end
-    
-          it 'passes the deprecated pathspec parameter to path parameter' do
-        with_verbose(true) do
-          allow(Fastlane::Actions).to receive(:sh).with(anything, { log: true }).and_return('')
-          result = Fastlane::FastFile.new.parse('lane :test do
-            git_add(pathspec: 'myfile.txt')
-          end').runner.execute(:test)
+          def action_name(env)
+        if env[CONTROLLER_KEY]
+          action_for_rails(env)
+        elsif env[ENDPOINT_KEY]
+          action_for_grape(env)
         end
       end
     
-    def expect_command(*command, exitstatus: 0, output: '')
-  mock_input = double(:input)
-  mock_output = StringIO.new(output)
-  mock_status = double(:status, exitstatus: exitstatus)
-  mock_thread = double(:thread, value: mock_status)
-    
-        def to_s
-      [@key, @description].join(': ')
-    end
-    
-              expect(value).to eq(array.shelljoin)
-        end
-    
-        def log_status(status)
-      puts bold status
-    end
-    
-      config.active_support.deprecation = :stderr
-end
-
-    
-        def bubble_subject(root)
-      root.children.each do |child|
-        bubble_subject(child) if child.is_a?(Tree::RuleNode) || child.is_a?(Tree::DirectiveNode)
-        next unless child.is_a?(Tree::RuleNode) && !child.children.empty?
-        next unless child.children.all? do |c|
-          next unless c.is_a?(Tree::RuleNode)
-          first_simple_sel(c).is_a?(Sass::Selector::Parent) && first_sseq(c).subject?
-        end
-        first_sseq(child).subject = true
-        child.children.each {|c| first_sseq(c).subject = false}
+          it 'requires the passwords to match when changing them' do
+        visit edit_admin_user_path(users(:bob))
+        fill_in 'Password', with: '12345678'
+        fill_in 'Password confirmation', with: 'no_match'
+        click_on 'Update User'
+        expect(page).to have_text('Password confirmation doesn't match')
       end
     end
     
-        # The import/mixin stack.
-    #
-    # @return [Sass::Stack]
-    def stack
-      @stack || global_env.stack
+    describe ApplicationHelper do
+  describe '#icon_tag' do
+    it 'returns a Glyphicon icon element' do
+      icon = icon_tag('glyphicon-help')
+      expect(icon).to be_html_safe
+      expect(Nokogiri(icon).at('span.glyphicon.glyphicon-help')).to be_a Nokogiri::XML::Element
+    end
+    
+      describe '#relative_distance_of_time_in_words' do
+    it 'in the past' do
+      expect(relative_distance_of_time_in_words(Time.now-5.minutes)).to eq('5m ago')
+    end
+    
+        it 'is turned off for existing instances of Huginn' do
+      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { nil }
+      DefaultScenarioImporter.import(user)
+    end
+    
+          describe '#generate_diff' do
+        it 'returns AgentDiff objects that include 'current' values from any agents that already exist' do
+          agent_diffs = scenario_import.agent_diffs
+          weather_agent_diff = agent_diffs[0]
+          trigger_agent_diff = agent_diffs[1]
+    
+          context '#run_workers' do
+        it 'runs all the workers' do
+          mock.instance_of(HuginnScheduler).run!
+          mock.instance_of(DelayedJobWorker).run!
+          @agent_runner.send(:run_workers)
+        end
+    
+      describe 'converting escaped JSONPath strings' do
+    it 'should work' do
+      expect(LiquidMigrator.convert_string('Weather looks like <$.conditions> according to the forecast at <$.pretty_date.time>')).to eq(
+                                    'Weather looks like {{conditions}} according to the forecast at {{pretty_date.time}}'
+      )
+    end
+    
+      describe '#helpers' do
+    it 'should return the correct request header' do
+      expect(@checker.send(:request_options)).to eq({:headers => {'aftership-api-key' => '800deeaf-e285-9d62-bc90-j999c1973cc9', 'Content-Type'=>'application/json'}})
+    end
+    
+        describe 'x' do
+      it 'converts argument as a hexadecimal number' do
+        format('%x', 196).should == 'c4'
+      end
+    
+          def accepts?(env)
+        session = session env
+        set_token(session)
+    
+        it 'Returns nil when Referer header is invalid' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
+      expect(subject.referrer(env)).to be_nil
     end
   end
-    
-        # @return [String] The error message
-    def to_s
-      @message
-    end
-    
-    # This is basically a copy of the original bundler 'bundle' shim
-# with the addition of the loading of our Bundler patches that
-# modify Bundler's caching behaviour.
-    
-    if $0 == __FILE__
-  begin
-    LogStash::PluginManager::Main.run('bin/logstash-plugin', ARGV)
-  rescue LogStash::PluginManager::Error => e
-    $stderr.puts(e.message)
-    exit(1)
-  end
 end
-
-    
-              after(:each) { logstash.delete_file(gem_path_on_vagrant) }
-    
-        def messages
-      return @messages
-    end # def messages
-    
-        settings['registry'] = attributes[:npm_registry] if attributes[:npm_registry_given?]
-    set_default_prefix unless attributes[:prefix_given?]
-    
-      def output(output_path)
-    
-    # Fixup the category to an acceptable solaris category
-    case @category
-    when nil, 'default'
-      @category = 'Applications/System Utilities'
-    end
-    
-      # Add a new source to this package.
-  # The exact behavior depends on the kind of package being managed.
-  #
-  # For instance:
-  #
-  # * for FPM::Package::Dir, << expects a path to a directory or files.
-  # * for FPM::Package::RPM, << expects a path to an rpm.
-  #
-  # The idea is that you can keep pumping in new things to a package
-  # for later conversion or output.
-  #
-  # Implementations are expected to put files relevant to the 'input' in the
-  # staging_path
-  def input(pacman_pkg_path)
-    control = {}
-    # Unpack the control tarball
-    safesystem(tar_cmd, '-C', staging_path, '-xf', pacman_pkg_path)
-    pkginfo = staging_path('.PKGINFO')
-    mtree = staging_path('.MTREE')
-    install = staging_path('.INSTALL')
-    
-        platforms.each do |platform|
-      logger.info('Generating service manifest.', :platform => platform.class.name)
-      platform.program = command.first
-      platform.name = attributes[:pleaserun_name]
-      platform.args = command[1..-1]
-      platform.description = if attributes[:description_given?]
-        attributes[:description]
-      else
-        platform.name
-      end
-      pleaserun_attributes.each do |attribute_name|
-        attribute = 'pleaserun_#{attribute_name}'.to_sym
-        if attributes.has_key?(attribute) and not attributes[attribute].nil?
-          platform.send('#{attribute_name}=', attributes[attribute])
-        end
-      end
-    
-      # Where we keep metadata and post install scripts and such
-  def fpm_meta_path
-    @fpm_meta_path ||= begin
-                         path = File.join(staging_path, '.fpm')
-                         FileUtils.mkdir_p(path)
-                         path
-                       end
-  end
-end
-
-    
-    
-    # Convert the 'package directory' built above to a real solaris package.
-    safesystem('pkgtrans', '-s', build_path, output_path, name)
-    safesystem('cp', '#{build_path}/#{output_path}', output_path)
-  end # def output
