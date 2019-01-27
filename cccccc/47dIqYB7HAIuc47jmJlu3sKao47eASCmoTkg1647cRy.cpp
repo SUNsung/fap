@@ -1,206 +1,267 @@
 
         
-            // Writing a binary file or initializing in RAM from ARPA:
-    // Size for vocabulary.
-    void *SetupJustVocab(std::size_t memory_size, uint8_t order);
-    // Warning: can change the vocaulary base pointer.
-    void *GrowForSearch(std::size_t memory_size, std::size_t vocab_pad, void *&vocab_base);
-    // Warning: can change vocabulary and search base addresses.
-    void WriteVocabWords(const std::string &buffer, void *&vocab_base, void *&search_base);
-    // Write the header at the beginning of the file.
-    void FinishFile(const Config &config, ModelType model_type, unsigned int search_version, const std::vector<uint64_t> &counts);
-    
-    
-    {
-    {
-    {      order = current;
-      if (!order) return;
+        /* Coin network-specific GUI style information */
+class NetworkStyle
+{
+public:
+    /** Get style associated with provided BIP70 network id, or 0 if not known */
+    static const NetworkStyle *instantiate(const QString &networkId);
     }
-  }
+    
+        /** Colorize an icon (given filename) with the icon color */
+    QIcon SingleColorIcon(const QString& filename) const;
+    
+    
+    {    /* d = (a0*2) * a3 */
+    'leaq (%%r10,%%r10,1),%%rax\n'
+    'mulq %%r13\n'
+    'movq %%rax,%%rbx\n'
+    'movq %%rdx,%%rcx\n'
+    /* d += (a1*2) * a2 */
+    'leaq (%%r11,%%r11,1),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c = a4 * a4 */
+    'movq %%r14,%%rax\n'
+    'mulq %%r14\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += (c & M) * R */
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* t3 (tmp1) = d & M */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    'movq %%rsi,%q1\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* a4 *= 2 */
+    'addq %%r14,%%r14\n'
+    /* d += a0 * a4 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d+= (a1*2) * a3 */
+    'leaq (%%r11,%%r11,1),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += a2 * a2 */
+    'movq %%r12,%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += c * R */
+    'movq %%r8,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* t4 = d & M (%%rsi) */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* tx = t4 >> 48 (tmp3) */
+    'movq %%rsi,%%rax\n'
+    'shrq $48,%%rax\n'
+    'movq %%rax,%q3\n'
+    /* t4 &= (M >> 4) (tmp2) */
+    'movq $0xffffffffffff,%%rax\n'
+    'andq %%rax,%%rsi\n'
+    'movq %%rsi,%q2\n'
+    /* c = a0 * a0 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r10\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += a1 * a4 */
+    'movq %%r11,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += (a2*2) * a3 */
+    'leaq (%%r12,%%r12,1),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* u0 = d & M (%%rsi) */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* u0 = (u0 << 4) | tx (%%rsi) */
+    'shlq $4,%%rsi\n'
+    'movq %q3,%%rax\n'
+    'orq %%rax,%%rsi\n'
+    /* c += u0 * (R >> 4) */
+    'movq $0x1000003d1,%%rax\n'
+    'mulq %%rsi\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[0] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,0(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* a0 *= 2 */
+    'addq %%r10,%%r10\n'
+    /* c += a0 * a1 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a2 * a4 */
+    'movq %%r12,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += a3 * a3 */
+    'movq %%r13,%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c += (d & M) * R */
+    'movq %%rbx,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* r[1] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,8(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a0 * a2 (last use of %%r10) */
+    'movq %%r10,%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* fetch t3 (%%r10, overwrites a0),t4 (%%rsi) */
+    'movq %q2,%%rsi\n'
+    'movq %q1,%%r10\n'
+    /* c += a1 * a1 */
+    'movq %%r11,%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a3 * a4 */
+    'movq %%r13,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c += (d & M) * R */
+    'movq %%rbx,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 (%%rbx only) */
+    'shrdq $52,%%rcx,%%rbx\n'
+    /* r[2] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,16(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += t3 */
+    'addq %%r10,%%r8\n'
+    /* c += d * R */
+    'movq %%rbx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[3] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,24(%%rdi)\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* c += t4 (%%r8 only) */
+    'addq %%rsi,%%r8\n'
+    /* r[4] = c */
+    'movq %%r8,32(%%rdi)\n'
+: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
+: 'D'(r)
+: '%rax', '%rbx', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
+);
 }
     
-    namespace {
-class SizeNotify {
-  public:
-    explicit SizeNotify(std::size_t &out) : behind_(out) {}
-    }
-    }
+    
+    {    CRIPEMD160();
+    CRIPEMD160& Write(const unsigned char* data, size_t len);
+    void Finalize(unsigned char hash[OUTPUT_SIZE]);
+    CRIPEMD160& Reset();
+};
     
     
-  // Left rest options.  Only used when the model includes rest costs.
-  enum RestFunction {
-    REST_MAX,   // Maximum of any score to the left
-    REST_LOWER, // Use lower-order files given below.
-  };
-  RestFunction rest_function;
-  // Only used for REST_LOWER.
-  std::vector<std::string> rest_lower_files;
-    
-    vector<vector<int> > fourSum(vector<int> &num, int target) {
-    vector< vector<int> > result;
-    if (num.size()<4) return result;
-    sort( num.begin(), num.end() );
-    
-    for(int i=0; i<num.size()-3; i++) {
-        //skip the duplication
-        if (i>0 && num[i-1]==num[i]) continue;
-        vector<int> n(num.begin()+i+1, num.end());
-        vector<vector<int> > ret = threeSum(n, target-num[i]);
-        for(int j=0; j<ret.size(); j++){
-            ret[j].insert(ret[j].begin(), num[i]);
-            result.push_back(ret[j]);
-        }
-    }
-    }
-    
-            //regualr way
-        int addDigits01(int num) {
-            while(num > 9) {
-                int sum;
-                for(sum=0; num > 0; sum += num%10 , num/=10);
-                num = sum;
-            }
-            return num;
-    }
-    
-    long long calculate_exp(long long x, long long y, char op) {
-    switch(op) {
-        case '+': return x + y;
-        case '-': return x - y;
-        case '*': return x * y;
-        case '/': return x / y;
-    }
-    return -1;
-}
-    
-    int Factorial( int number ) {
-   return number <= 1 ? number : Factorial( number - 1 ) * number;  // fail
-// return number <= 1 ? 1      : Factorial( number - 1 ) * number;  // pass
-}
-    
-    TEST_CASE( '2: Factorial of 0 is 1 (fail)', '[multi-file:2]' ) {
-    REQUIRE( Factorial(0) == 1 );
-}
-    
-            REQUIRE( v.size() == 5 );
-        REQUIRE( v.capacity() >= 5 );
-    
-            // IConfig interface
-        bool allowThrows() const override;
-        std::ostream& stream() const override;
-        std::string name() const override;
-        bool includeSuccessfulResults() const override;
-        bool warnAboutMissingAssertions() const override;
-        bool warnAboutNoTests() const override;
-        ShowDurations::OrNot showDurations() const override;
-        RunTests::InWhatOrder runOrder() const override;
-        unsigned int rngSeed() const override;
-        int benchmarkResolutionMultiple() const override;
-        UseColour::YesOrNo useColour() const override;
-        bool shouldDebugBreak() const override;
-        int abortAfter() const override;
-        bool showInvisibles() const override;
-        Verbosity verbosity() const override;
-    
-            // Use constructed object for RAII guard
-        Colour( Code _colourCode );
-        Colour( Colour&& other ) noexcept;
-        Colour& operator=( Colour&& other ) noexcept;
-        ~Colour();
-    
-    #endif // TWOBLUECUBES_CATCH_CONTEXT_H_INCLUDED
-
-    
-        namespace Catch{
-        // The standard POSIX way of detecting a debugger is to attempt to
-        // ptrace() the process, but this needs to be done from a child and not
-        // this process itself to still allow attaching to this process later
-        // if wanted, so is rather heavy. Under Linux we have the PID of the
-        // 'debugger' (which doesn't need to be gdb, of course, it could also
-        // be strace, for example) in /proc/$PID/status, so just get it from
-        // there instead.
-        bool isDebuggerActive(){
-            // Libstdc++ has a bug, where std::ifstream sets errno to 0
-            // This way our users can properly assert over errno values
-            ErrnoGuard guard;
-            std::ifstream in('/proc/self/status');
-            for( std::string line; std::getline(in, line); ) {
-                static const int PREFIX_LEN = 11;
-                if( line.compare(0, PREFIX_LEN, 'TracerPid:\t') == 0 ) {
-                    // We're traced if the PID is not 0 and no other PID starts
-                    // with 0 digit, so it's enough to check for just a single
-                    // character.
-                    return line.length() > PREFIX_LEN && line[PREFIX_LEN] != '0';
-                }
-            }
-    }
-    }
-    
-    namespace Envoy {
-namespace Config {
-    }
-    }
+    {}  // namespace mxnet
     
     /**
- * Callback invoked when a FileEvent is ready for reading or writing.
+ * \brief The class sets caffe's mode before doing forward/backward
+ * \tparam xpu The device that the op will be executed on.
  */
-typedef std::function<void(uint32_t events)> FileReadyCb;
-    
-    namespace Envoy {
-namespace Event {
-    }
-    }
-    
-    #include 'envoy/buffer/buffer.h'
-#include 'envoy/http/header_map.h'
-    
-    // This template function declaration is used in defining arraysize.
-// Note that the function doesn't need an implementation, as we only
-// use its type.
-template <typename T, size_t N>
-char (&ArraySizeHelper(T (&array)[N]))[N];
-    
-      // Accessors to get the owned object.
-  // operator* and operator-> will assert() if there is no current object.
-  element_type& operator*() const {
-    assert(impl_.get() != NULL);
-    return *impl_.get();
-  }
-  element_type* operator->() const  {
-    assert(impl_.get() != NULL);
-    return impl_.get();
-  }
-  element_type* get() const { return impl_.get(); }
-    
-    class Lock {
+class CaffeMode {
  public:
-  Lock() {
-    const int ret = pthread_mutex_init(&mutex_, NULL);
-    (void) ret;
-    DCHECK_EQ(0, ret);
-  }
+  template<typename xpu> static void SetMode();
+};
+    
+        caffeOp_->Backward(top_, flags_, bot_);
+    
+     protected:
+  /*! \brief prefetcher parameters */
+  PrefetcherParam param_;
+  /*! \brief backend thread */
+  dmlc::ThreadedIter<DataBatch> iter;
+  /*! \brief internal batch loader */
+  std::unique_ptr<IIterator<TBlobBatch> > loader_;
+    
+    #include 'modules/drivers/canbus/proto/can_card_parameter.pb.h'
+    
+    #include 'modules/drivers/canbus/can_comm/protocol_data.h'
+    
+    void ObjectExtendedInfo60D::Parse(const std::uint8_t* bytes, int32_t length,
+                                  ContiRadar* conti_radar) const {
+  int obj_id = object_id(bytes, length);
+  for (int i = 0; i < conti_radar->contiobs_size(); ++i) {
+    if (conti_radar->contiobs(i).obstacle_id() == obj_id) {
+      auto obs = conti_radar->mutable_contiobs(i);
+      obs->set_longitude_accel(longitude_accel(bytes, length));
+      obs->set_lateral_accel(lateral_accel(bytes, length));
+      obs->set_oritation_angle(oritation_angle(bytes, length));
+      obs->set_length(object_length(bytes, length));
+      obs->set_width(object_width(bytes, length));
+      obs->set_obstacle_class(obstacle_class(bytes, length));
+      break;
     }
-    
-    // Note that I18N_PHONENUMBERS_NO_THREAD_SAFETY must be defined only to let the
-// user of the library know that it can't be used in a thread-safe manner when
-// it is not depending on Boost.
-#if !defined(__linux__) && !defined(__APPLE__) && \
-    !defined(I18N_PHONENUMBERS_NO_THREAD_SAFETY)
-#error Building without Boost, please provide \
-       -DI18N_PHONENUMBERS_NO_THREAD_SAFETY
-#endif
-    
-      virtual R Run(A1 a1, A2 a2, A3 a3, A4 a4) {
-    return (instance_->*method_)(a1, a2, a3, a4);
   }
+  // auto conti_obs = conti_radar->mutable_contiobs(object_id(bytes, length));
+}
     
-    #include 'phonenumbers/base/basictypes.h'
-#include 'phonenumbers/base/logging.h'
-#include 'phonenumbers/geocoding/geocoding_data.h'
+      x <<= 8;
+  x |= t;
     
-    #include 'phonenumbers/geocoding/mapping_file_provider.h'
+    using apollo::drivers::canbus::Byte;
     
-    
-    {
-    {}  // namespace phonenumbers
-}  // namespace i18n
+    BaseMapMatrix::BaseMapMatrix() {}
