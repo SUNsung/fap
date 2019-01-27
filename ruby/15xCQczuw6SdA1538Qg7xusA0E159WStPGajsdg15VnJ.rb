@@ -1,130 +1,129 @@
 
         
-            it 'does not send previously configured control targets when the current agent does not support them' do
-      select_agent_type('Commander Agent')
-      select2('SF Weather', from: 'Control targets')
-      select_agent_type('Webhook Agent')
-      fill_in(:agent_name, with: 'No control targets')
-      click_on 'Save'
-      expect(page).to have_content('No control targets')
-      agent = Agent.find_by(name: 'No control targets')
-      expect(agent.control_targets).to eq([])
-    end
+              def perform(start_id, stop_id)
+        update = '
+          latest_merge_request_diff_id = (
+            SELECT MAX(id)
+            FROM merge_request_diffs
+            WHERE merge_requests.id = merge_request_diffs.merge_request_id
+          )'.squish
     
-              expect(scenario_import.scenario.name).to eq(name)
-          expect(scenario_import.scenario.description).to eq(description)
-          expect(scenario_import.scenario.guid).to eq(guid)
-          expect(scenario_import.scenario.tag_fg_color).to eq(tag_fg_color)
-          expect(scenario_import.scenario.tag_bg_color).to eq(tag_bg_color)
-          expect(scenario_import.scenario.icon).to eq(icon)
-          expect(scenario_import.scenario.source_url).to eq(source_url)
-          expect(scenario_import.scenario.public).to be_falsey
-        end
+    module Gitlab
+  module GithubImport
+    module Importer
+      class IssuesImporter
+        include ParallelScheduling
     
-        it 'outputs a structure containing name, description, the date, all agents & their links' do
-      data = exporter.as_json
-      expect(data[:name]).to eq(name)
-      expect(data[:description]).to eq(description)
-      expect(data[:source_url]).to eq(source_url)
-      expect(data[:guid]).to eq(guid)
-      expect(data[:schema_version]).to eq(1)
-      expect(data[:tag_fg_color]).to eq(tag_fg_color)
-      expect(data[:tag_bg_color]).to eq(tag_bg_color)
-      expect(data[:icon]).to eq(icon)
-      expect(Time.parse(data[:exported_at])).to be_within(2).of(Time.now.utc)
-      expect(data[:links]).to eq([{ :source => guid_order(agent_list, :jane_weather_agent), :receiver => guid_order(agent_list, :jane_rain_notifier_agent)}])
-      expect(data[:control_links]).to eq([])
-      expect(data[:agents]).to eq(agent_list.sort_by{|a| a.guid}.map { |agent| exporter.agent_as_json(agent) })
-      expect(data[:agents].all? { |agent_json| agent_json[:guid].present? && agent_json[:type].present? && agent_json[:name].present? }).to be_truthy
+            attr_reader :attributes
     
-      describe '#helpers' do
-    it 'should return the correct request header' do
-      expect(@checker.send(:request_options)).to eq({:headers => {'aftership-api-key' => '800deeaf-e285-9d62-bc90-j999c1973cc9', 'Content-Type'=>'application/json'}})
-    end
+            expose_attribute :iid, :title, :description, :source_branch,
+                         :source_branch_sha, :target_branch, :target_branch_sha,
+                         :milestone_number, :author, :assignee, :created_at,
+                         :updated_at, :merged_at, :source_repository_id,
+                         :target_repository_id, :source_repository_owner
     
-        def html?
-      mime_type.include? 'html'
-    end
+            attr_reader :attributes
     
-        def options
-      @options ||= self.class.options.deep_dup.tap do |options|
-        options.merge! base_url: base_url, root_url: root_url,
-                       root_path: root_path, initial_paths: initial_paths,
-                       version: self.class.version, release: self.class.release
+      it 'expands shell variables when given a single string argument' do
+    lambda { @object.system('echo #{@shell_var}') }.should output_to_fd('foo\n')
+  end
     
-            css('h1 + code').each do |node|
-          node.before('<p></p>')
-          while node.next_element.name == 'code'
-            node.previous_element << ' '
-            node.previous_element << node.next_element
-          end
-          node.previous_element.prepend_child(node)
-        end
+      it 'returns true when passed ?r if the argument is readable by the effective uid' do
+    Kernel.test(?r, @file).should be_true
+  end
     
-            doc
+      it 'raises ArgumentError if no block or proc is provided' do
+    lambda do
+      trace_var :$Kernel_trace_var_global
+    end.should raise_error(ArgumentError)
+  end
+end
+
+    
+      task :index do
+    doc = File.read('README.md')
+    file = 'doc/rack-protection-readme.md'
+    Dir.mkdir 'doc' unless File.directory? 'doc'
+    puts 'writing #{file}'
+    File.open(file, 'w') { |f| f << doc }
+  end
+    
+          def referrer(env)
+        ref = env['HTTP_REFERER'].to_s
+        return if !options[:allow_empty_referrer] and ref.empty?
+        URI.parse(ref).host || Request.new(env).host
+      rescue URI::InvalidURIError
+      end
+    
+          def session_key
+        @session_key ||= options[:session_key]
       end
     end
   end
 end
 
     
-          it 'raises ArgumentError if passed negative value' do
-        -> { warn '', uplevel: -2 }.should raise_error(ArgumentError)
-        -> { warn '', uplevel: -100 }.should raise_error(ArgumentError)
+    RSpec.describe RuboCop::Cop::Layout::MultilineArrayBraceLayout, :config do
+  subject(:cop) { described_class.new(config) }
+    
+          # The body of the method definition.
+      #
+      # @note this can be either a `begin` node, if the method body contains
+      #       multiple expressions, or any other node, if it contains a single
+      #       expression.
+      #
+      # @return [Node] the body of the method definition
+      def body
+        node_parts[0]
       end
     
-    desc 'generate gemspec'
-task 'rack-protection.gemspec' do
-  require 'rack/protection/version'
-  content = File.binread 'rack-protection.gemspec'
-    
-          def redirect(env)
-        request = Request.new(env)
-        warn env, 'attack prevented by #{self.class}'
-        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
+          # Whether the last argument of the node is a block pass,
+      # i.e. `&block`.
+      #
+      # @return [Boolean] whether the last argument of the node is a block pass
+      def block_argument?
+        arguments? &&
+          (last_argument.block_pass_type? || last_argument.blockarg_type?)
       end
-    
-              react_and_close(env, body) or [status, headers, body]
-        else
-          [status, headers, body]
-        end
-      end
-    
-        it 'Reads referrer from Host header when Referer header is relative' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => '/valid'}
-      expect(subject.referrer(env)).to eq('foo.com')
     end
-    
-        puts('Generated at #{target_file}')
   end
+end
+
     
-    module LogStash module PluginManager module PackFetchStrategy
-  class Repository
-    DEFAULT_PACK_URL = 'https://artifacts.elastic.co/downloads/logstash-plugins'
-    PACK_EXTENSION = 'zip'
-    
-          def page_name
-        @name.gsub('-', ' ')
+      if options.respond_to? 'keys'
+    options.each do |k,v|
+      unless v.nil?
+        v = v.join ',' if v.respond_to? 'join'
+        v = v.to_json if v.respond_to? 'keys'
+        output += ' data-#{k.sub'_','-'}='#{v}''
       end
-    
-          def use_identicon
-        @page.wiki.user_icons == 'identicon'
-      end
-    
-          def base_url
-        @base_url
-      end
-    
-    def cloned_testpath(path)
-  repo   = File.expand_path(testpath(path))
-  path   = File.dirname(repo)
-  cloned = File.join(path, self.class.name)
-  FileUtils.rm_rf(cloned)
-  Dir.chdir(path) do
-    %x{git clone #{File.basename(repo)} #{self.class.name} 2>/dev/null}
+    end
+  elsif options.respond_to? 'join'
+    output += ' data-value='#{config[key].join(',')}''
+  else
+    output += ' data-value='#{config[key]}''
   end
-  cloned
+  output += '></#{tag}>'
 end
     
-      s.summary     = 'A simple, Git-powered wiki.'
-  s.description = 'A simple, Git-powered wiki with a sweet API and local frontend.'
+          if File.symlink?(code_path)
+        return 'Code directory '#{code_path}' cannot be a symlink'
+      end
+    
+        def render(context)
+      output = super
+      types = {
+        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
+        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
+        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
+      }
+      if @videos.size > 0
+        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
+        @videos.each do |v|
+          video << '<source src='#{v}' #{types[File.extname(v)]}>'
+        end
+        video += '</video>'
+      else
+        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
+      end
+    end
