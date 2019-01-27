@@ -1,237 +1,162 @@
 
         
-          labels = tf.squeeze(curr_features['rel_id'], [-1])
-  return labels
+            if state == 'present':
+        if not all((replication_id, cluster_id)):
+            module.fail_json(msg='The state 'present' requires options: 'replication_id' and 'cluster_id'')
+        response, changed = create(module, connection, replication_id, cluster_id, name)
+    elif state == 'absent':
+        response, changed = delete(module, connection, name)
+    elif state == 'copy':
+        if not all((target, bucket)):
+            module.fail_json(msg='The state 'copy' requires options: 'target' and 'bucket'.')
+        response, changed = copy(module, connection, name, target, bucket)
     
-      index_to_path = {i: p for p, i in path_index.iteritems()}
-  path_vocab = [index_to_path[i] for i in index_range]
+            for server_cert in server_certs:
+            if not name:
+                server_cert = iam.get_server_certificate(ServerCertificateName=server_cert['ServerCertificateName'])['ServerCertificate']
+            cert_md = server_cert['ServerCertificateMetadata']
+            results[cert_md['ServerCertificateName']] = {
+                'certificate_body': server_cert['CertificateBody'],
+                'server_certificate_id': cert_md['ServerCertificateId'],
+                'server_certificate_name': cert_md['ServerCertificateName'],
+                'arn': cert_md['Arn'],
+                'path': cert_md['Path'],
+                'expiration': cert_md['Expiration'].isoformat(),
+                'upload_date': cert_md['UploadDate'].isoformat(),
+            }
     
-    spiking_data_e = spikify_data(truth_data_e, rng, dt=FLAGS.dt,
-                              max_firing_rate=FLAGS.max_firing_rate)
-train_inds, valid_inds = get_train_n_valid_inds(E, train_percentage,
-                                                nreplications)
+    # Copyright: (c) 2017, Google Inc.
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
     
-    x0s = []
-condition_labels = []
-condition_number = 0
-for c in range(C):
-  x0 = FLAGS.x0_std * rng.randn(N, 1)
-  x0s.append(np.tile(x0, nreplications))
-  for ns in range(nreplications):
-    condition_labels.append(condition_number)
-  condition_number += 1
-x0s = np.concatenate(x0s, axis=1)
+        keys = ['protocol', 'dest_port', 'dest_ip', 'source_port', 'source_ip']
+    for rule in deletions:
+        if not module.check_mode:
+            kwargs = dict([(k, v) for k, v in rule.items() if k in keys])
+            kwargs['protocol'] = protocol_to_string(kwargs['protocol'])
+            gateway.delete_fw_rule(**kwargs)
+        result['changed'] = True
     
+        ipa_dnszone = client.dnszone_find(zone_name)
     
-def get_iterator(data):
-  '''Return the data iterator.'''
-  if FLAGS.data_set == 'ptb':
-    iterator = ptb_loader.ptb_iterator(data, FLAGS.batch_size,
-                                       FLAGS.sequence_length,
-                                       FLAGS.epoch_size_override)
-  elif FLAGS.data_set == 'imdb':
-    iterator = imdb_loader.imdb_iterator(data, FLAGS.batch_size,
-                                         FLAGS.sequence_length)
-  return iterator
-    
-        for index, pred in zip(index_batch, pred_batch):
-      indices_predictions.append([str(id_to_word[index]), pred])
-    batch_of_indices_predictions.append(indices_predictions)
-  return batch_of_indices_predictions
-    
-      ## REINFORCE with different baselines.
-  # We create a separate critic functionality for the Discriminator.  This
-  # will need to operate unidirectionally and it may take in the past context.
-  if FLAGS.baseline_method == 'critic':
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-    
-      ## Load weights from language model checkpoint.
-  if FLAGS.language_model_ckpt_dir:
-    if FLAGS.maskgan_ckpt is None:
-      ## Generator Models.
-      if FLAGS.generator_model == 'rnn_nas':
-        load_ckpt = tf.train.latest_checkpoint(FLAGS.language_model_ckpt_dir)
-        print('Restoring Generator from %s.' % load_ckpt)
-        tf.logging.info('Restoring Generator from %s.' % load_ckpt)
-        gen_init_saver = init_savers['gen_init_saver']
-        gen_init_saver.restore(sess, load_ckpt)
+        host = module.params['host']
+    hostcategory = module.params['hostcategory']
+    hostgroup = module.params['hostgroup']
+    service = module.params['service']
+    servicecategory = module.params['servicecategory']
+    servicegroup = module.params['servicegroup']
+    sourcehost = module.params['sourcehost']
+    sourcehostcategory = module.params['sourcehostcategory']
+    sourcehostgroup = module.params['sourcehostgroup']
+    user = module.params['user']
+    usercategory = module.params['usercategory']
+    usergroup = module.params['usergroup']
     
     
-def explain_ignored_app_run():
-    if os.environ.get('WERKZEUG_RUN_MAIN') != 'true':
-        warn(Warning('Silently ignoring app.run() because the '
-                     'application is run from the flask command line '
-                     'executable.  Consider putting app.run() behind an '
-                     'if __name__ == '__main__' guard to silence this '
-                     'warning.'), stacklevel=3)
-
+def get_role_diff(client, ipa_role, module_role):
+    return client.get_diff(ipa_data=ipa_role, module_data=module_role)
     
     
-def how_to_configure(proc, TIMEOUT):
-    proc.sendline(u'fuck')
-    assert proc.expect([TIMEOUT, u'alias isn't configured'])
-
+def source_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
+    ref = 'https://github.com/scrapy/scrapy/blob/master/' + text
+    set_classes(options)
+    node = nodes.reference(rawtext, text, refuri=ref, **options)
+    return [node], []
     
+        def long_desc(self):
+        '''A long description of the command. Return short description when not
+        available. It cannot contain newlines, since contents will be formatted
+        by optparser which removes newlines and wraps text.
+        '''
+        return self.short_desc()
     
-Invalid choice: 'dynamdb', maybe you meant:
+            infos = []
+        if not self.wasSuccessful():
+            write('FAILED')
+            failed, errored = map(len, (self.failures, self.errors))
+            if failed:
+                infos.append('failures=%d' % failed)
+            if errored:
+                infos.append('errors=%d' % errored)
+        else:
+            write('OK')
     
-    no_such_subcommand = '''error: no such subcommand
+        requires_project = True
     
-        @pytest.fixture(autouse=True)
-    def setup(self):
-        '''CaseInsensitiveDict instance with 'Accept' header.'''
-        self.case_insensitive_dict = CaseInsensitiveDict()
-        self.case_insensitive_dict['Accept'] = 'application/json'
+            if self.settings.get('BOT_NAME') == module:
+            print('Cannot create a spider with the same name as your project')
+            return
     
-    import copy
-import time
-import calendar
+        class _v19_S3Connection(S3Connection):
+        '''A dummy S3Connection wrapper that doesn't do any synchronous download'''
+        def _mexe(self, method, bucket, key, headers, *args, **kwargs):
+            return headers
     
+    REVERSE_NAME_MAPPING.update({
+    ('_functools', 'reduce'): ('__builtin__', 'reduce'),
+    ('tkinter.filedialog', 'FileDialog'): ('FileDialog', 'FileDialog'),
+    ('tkinter.filedialog', 'LoadFileDialog'): ('FileDialog', 'LoadFileDialog'),
+    ('tkinter.filedialog', 'SaveFileDialog'): ('FileDialog', 'SaveFileDialog'),
+    ('tkinter.simpledialog', 'SimpleDialog'): ('SimpleDialog', 'SimpleDialog'),
+    ('xmlrpc.server', 'ServerHTMLDoc'): ('DocXMLRPCServer', 'ServerHTMLDoc'),
+    ('xmlrpc.server', 'XMLRPCDocGenerator'):
+        ('DocXMLRPCServer', 'XMLRPCDocGenerator'),
+    ('xmlrpc.server', 'DocXMLRPCRequestHandler'):
+        ('DocXMLRPCServer', 'DocXMLRPCRequestHandler'),
+    ('xmlrpc.server', 'DocXMLRPCServer'):
+        ('DocXMLRPCServer', 'DocXMLRPCServer'),
+    ('xmlrpc.server', 'DocCGIXMLRPCRequestHandler'):
+        ('DocXMLRPCServer', 'DocCGIXMLRPCRequestHandler'),
+    ('http.server', 'SimpleHTTPRequestHandler'):
+        ('SimpleHTTPServer', 'SimpleHTTPRequestHandler'),
+    ('http.server', 'CGIHTTPRequestHandler'):
+        ('CGIHTTPServer', 'CGIHTTPRequestHandler'),
+    ('_socket', 'socket'): ('socket', '_socketobject'),
+})
     
-def info():
-    '''Generate information for a bug report.'''
-    try:
-        platform_info = {
-            'system': platform.system(),
-            'release': platform.release(),
-        }
-    except IOError:
-        platform_info = {
-            'system': 'Unknown',
-            'release': 'Unknown',
-        }
+        @classmethod
+    def _parse_args(cls, args):
+        # This is useful when you don't want to create an instance, just
+        # canonicalize some constructor arguments.
+        parts = []
+        for a in args:
+            if isinstance(a, PurePath):
+                parts += a._parts
+            else:
+                a = os.fspath(a)
+                if isinstance(a, str):
+                    # Force-cast str subclasses to str (issue #21127)
+                    parts.append(str(a))
+                else:
+                    raise TypeError(
+                        'argument should be a str object or an os.PathLike '
+                        'object returning str, not %r'
+                        % type(a))
+        return cls._flavour.parse_parts(parts)
     
-    class PyTest(TestCommand):
-    user_options = [('pytest-args=', 'a', 'Arguments to pass into py.test')]
+    # If true, keep warnings as 'system message' paragraphs in the built
+# documents.
+#keep_warnings = False
     
+        :param img: An image (as a numpy array)
+    :param number_of_times_to_upsample: How many times to upsample the image looking for faces. Higher numbers find smaller faces.
+    :param model: Which face detection model to use. 'hog' is less accurate but faster on CPUs. 'cnn' is a more accurate
+                  deep-learning model which is GPU/CUDA accelerated (if available). The default is 'hog'.
+    :return: A list of dlib 'rect' objects of found face locations
+    '''
+    if model == 'cnn':
+        return cnn_face_detector(img, number_of_times_to_upsample)
+    else:
+        return face_detector(img, number_of_times_to_upsample)
     
-http_proxies = {'http': 'http://http.proxy',
-                'http://some.host': 'http://some.host.proxy'}
-all_proxies = {'all': 'socks5://http.proxy',
-               'all://some.host': 'socks5://some.host.proxy'}
-mixed_proxies = {'http': 'http://http.proxy',
-                 'http://some.host': 'http://some.host.proxy',
-                 'all': 'socks5://http.proxy'}
-@pytest.mark.parametrize(
-    'url, expected, proxies', (
-        ('hTTp://u:p@Some.Host/path', 'http://some.host.proxy', http_proxies),
-        ('hTTp://u:p@Other.Host/path', 'http://http.proxy', http_proxies),
-        ('hTTp:///path', 'http://http.proxy', http_proxies),
-        ('hTTps://Other.Host', None, http_proxies),
-        ('file:///etc/motd', None, http_proxies),
+                for face_location in face_locations:
+                # Print the location of each face in this frame
+                top, right, bottom, left = face_location
+                print(' - A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
     
+            if True in result:
+            [print_result(image_to_check, name, distance, show_distance) for is_match, name, distance in zip(result, known_names, distances) if is_match]
+        else:
+            print_result(image_to_check, 'unknown_person', None, show_distance)
     
-ALL_SSL_OPTIONS_HASHES = [
-    '0f81093a1465e3d4eaa8b0c14e77b2a2e93568b0fc1351c2b87893a95f0de87c',
-    '9a7b32c49001fed4cff8ad24353329472a50e86ade1ef9b2b9e43566a619612e',
-    'a6d9f1c7d6b36749b52ba061fff1421f9a0a3d2cfdafbd63c05d06f65b990937',
-    '7f95624dd95cf5afc708b9f967ee83a24b8025dc7c8d9df2b556bbc64256b3ff',
-    '394732f2bbe3e5e637c3fb5c6e980a1f1b90b01e2e8d6b7cff41dde16e2a756d',
-    '4b16fec2bcbcd8a2f3296d886f17f9953ffdcc0af54582452ca1e52f5f776f16',
-]
-'''SHA256 hashes of the contents of all versions of MOD_SSL_CONF_SRC'''
-    
-        def __init__(self, resource_type, *args, **kwargs):
-        self.resource_type = resource_type
-        super(Resource, self).__init__(
-            'resource', default=resource_type, *args, **kwargs)
-    
-    # If true, 'Created using Sphinx' is shown in the HTML footer. Default is True.
-#html_show_sphinx = True
-    
-        def revert_challenge_config(self):
-        '''Used to cleanup challenge configurations.
-    
-        def test_nonexistent_like(self):
-        with mock.patch('certbot.util.get_os_info') as mock_info:
-            mock_info.return_value = ('nonexistent', 'irrelevant')
-            with mock.patch('certbot.util.get_systemd_os_like') as mock_like:
-                for like in entrypoint.OVERRIDE_CLASSES.keys():
-                    mock_like.return_value = [like]
-                    self.assertEqual(entrypoint.get_configurator(),
-                                     entrypoint.OVERRIDE_CLASSES[like])
-    
-            self.assertFalse(self.vhost2.conflicts([self.addr1,
-                                                self.addr_default]))
-    
-        def prepare(self, **kwargs):
-        self.api_data = json.loads(get_content(self.__class__.ep.format(self.vid)))
-        self.title = self.api_data['title']
-        for s in self.api_data['video']:
-            for st in self.__class__.stream_types:
-                if st['map_to'] == s:
-                    urls = self.api_data['video'][s]
-                    src = [u['url'] for u in urls]
-                    stream_data = dict(src=src, size=0, container='mp4', video_profile=st['video_profile'])
-                    self.streams[st['id']] = stream_data
-    
-        vids = matchall(content, youku_embed_patterns)
-    for vid in set(vids):
-        found = True
-        youku_download_by_vid(vid, title=title, output_dir=output_dir, merge=merge, info_only=info_only)
-    
-    __all__ = ['fantasy_download']
-    
-        return ''
-    
-            next_prime_gt = next_prime(value % self.size_table) \
-            if not check_prime(value % self.size_table) else value % self.size_table  #gt = bigger than
-        return next_prime_gt - (data % next_prime_gt)
-    
-            print('step {0}'.format(step_ord))
-        print([i for i in range(len(self.values))])
-        print(self.values)
-    
-    	TEMPORARY_ARRAY = [ element for element in ARRAY[1:] if element >= PIVOT ]
-	TEMPORARY_ARRAY = [PIVOT] + longestSub(TEMPORARY_ARRAY)
-	if ( len(TEMPORARY_ARRAY) > len(LONGEST_SUB) ):
-		return TEMPORARY_ARRAY
-	else:
-		return LONGEST_SUB
-    
-    
-    
-    ### OUTPUT ###
-# dog σκύλος
-# parrot parrot
-# cat γάτα
-# bear bear
-
-    
-        def __getattr__(self, name):
-        attr = getattr(self.delegate, name)
-        
-        if not callable(attr):
-            return attr
-    
-        def insert(self):
-        print('Inserting the execution begin status in the Database')
-        time.sleep(0.1)
-        # Following code is to simulate a communication from DB to TC
-        if random.randrange(1, 4) == 3:
-            return -1
-    
-    
-class Transaction(object):
-    '''A transaction guard.
-    
-    
-if __name__ == '__main__':
-    print('Specification')
-    andrey = User()
-    ivan = User(super_user=True)
-    vasiliy = 'not User instance'
-    
-            if start == end:
-            return path
-        shortest = None
-        for node in self.graph.get(start, []):
-            if node not in path:
-                newpath = self.find_shortest_path(node, end, path[:])
-                if newpath:
-                    if not shortest or len(newpath) < len(shortest):
-                        shortest = newpath
-        return shortest
+    # Find all facial features in all the faces in the image
+face_landmarks_list = face_recognition.face_landmarks(image)
