@@ -1,98 +1,165 @@
 
         
-          // Do n memtable compactions, each of which produces an sstable
-  // covering the range [small,large].
-  void MakeTables(int n, const std::string& small, const std::string& large) {
-    for (int i = 0; i < n; i++) {
-      Put(small, 'begin');
-      Put(large, 'end');
-      dbfull()->TEST_CompactMemTable();
-    }
-  }
+        REGISTER_CPU_OPERATOR(
+    MergeMultiMapFeatureTensors,
+    MergeMultiMapFeatureTensorsOp<CPUContext>);
+OPERATOR_SCHEMA(MergeMultiMapFeatureTensors)
+    .SetDoc(
+        'Merge given multi-feature tensors with map features into one.' + doc)
+    .NumInputs([](int n) { return n >= 5 && n % 5 == 0; })
+    .NumOutputs(5)
+    .Input(0, 'in1_lengths', '.lengths')
+    .Input(1, 'in1_keys', '.keys')
+    .Input(2, 'in1_values_lengths', '.values.lengths')
+    .Input(3, 'in1_values_keys', '.values.keys')
+    .Input(4, 'in1_values_values', '.values.values')
+    .Output(0, 'out_lengths', '.lengths')
+    .Output(1, 'out_keys', '.keys')
+    .Output(2, 'out_values_lengths', '.values_lengths')
+    .Output(3, 'out_values_keys', '.values.keys')
+    .Output(4, 'out_values_values', '.values.values');
+    
+    ```
+    
+              const int dkernel_h = dilation_h * (kernel_h - 1) + 1;
+          const int dkernel_w = dilation_w * (kernel_w - 1) + 1;
+          CAFFE_ENFORCE(H >= dkernel_h);
+          CAFFE_ENFORCE(W >= dkernel_w);
+          const int out_h = (H + 2 * pad - dkernel_h) / stride_h + 1;
+          const int out_w = (W + 2 * pad - dkernel_w) / stride_w + 1;
     
     
-    {  ParsedInternalKey() { }  // Intentionally left uninitialized (for speed)
-  ParsedInternalKey(const Slice& u, const SequenceNumber& seq, ValueType t)
-      : user_key(u), sequence(seq), type(t) { }
-  std::string DebugString() const;
-};
-    
-    std::string SSTTableFileName(const std::string& dbname, uint64_t number) {
-  assert(number > 0);
-  return MakeFileName(dbname, number, 'sst');
-}
-    
-    #ifndef STORAGE_LEVELDB_DB_FILENAME_H_
-#define STORAGE_LEVELDB_DB_FILENAME_H_
-    
-    #endif  // STORAGE_LEVELDB_DB_LOG_FORMAT_H_
+    {}  // namespace grpc
 
     
-      // Make a bunch of uncompacted log files.
-  uint64_t old_log = FirstLogFile();
-  MakeLogFile(old_log+1, 1000, 'hello', 'world');
-  MakeLogFile(old_log+2, 1001, 'hi', 'there');
-  MakeLogFile(old_log+3, 1002, 'foo', 'bar2');
-    
-      Status ConvertLogToTable(uint64_t log) {
-    struct LogReporter : public log::Reader::Reporter {
-      Env* env;
-      Logger* info_log;
-      uint64_t lognum;
-      virtual void Corruption(size_t bytes, const Status& s) {
-        // We print error messages for corruption, but continue repairing.
-        Log(info_log, 'Log #%llu: dropping %d bytes; %s',
-            (unsigned long long) lognum,
-            static_cast<int>(bytes),
-            s.ToString().c_str());
-      }
-    };
+    namespace {
     }
     
-    namespace leveldb {
+    ::opencensus::stats::MeasureInt64 RpcClientSentMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientSentBytesPerRpc();
+::opencensus::stats::MeasureInt64 RpcClientReceivedMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientReceivedBytesPerRpc();
+::opencensus::stats::MeasureDouble RpcClientRoundtripLatency();
+::opencensus::stats::MeasureDouble RpcClientServerLatency();
+::opencensus::stats::MeasureInt64 RpcClientCompletedRpcs();
+    
+      Status GetFileContainingExtension(
+      ServerContext* context,
+      const reflection::v1alpha::ExtensionRequest* request,
+      reflection::v1alpha::ServerReflectionResponse* response);
+    
+    #ifndef GRPC_CUSTOM_DEFAULT_THREAD_POOL
+    
+            virtual void Update(const Parameter& parameter, const NDArrayViewPtr& gradientValue, const NDArrayViewPtr& smoothedGradientValue, size_t trainingSampleCount) override;
+        virtual void UpdateOnMinibatch(size_t trainingSampleCount) override;
+    
+            if (!m_lossFunction->Output().DynamicAxes().empty())
+        {
+            m_aggregatedLossFunction = ReduceSum(lossFunction, Axis::AllAxes(), L'aggregateLoss');
+            combinedFunctionArgs.push_back(m_aggregatedLossFunction);
+            m_trainingSampleCountVar = m_lossFunction;
+        }
+        else
+        {
+            m_aggregatedLossFunction = m_lossFunction;
     }
     
-    class DHTResponseMessage : public DHTAbstractMessage {
-protected:
-  virtual std::string toStringOptional() const { return A2STR::NIL; }
-    }
     
-    DHTRoutingTable::DHTRoutingTable(const std::shared_ptr<DHTNode>& localNode)
-    : localNode_(localNode),
-      root_(make_unique<DHTBucketTreeNode>(
-          std::make_shared<DHTBucket>(localNode_))),
-      numBucket_(1),
-      taskQueue_{nullptr},
-      taskFactory_{nullptr}
-{
-}
+    {    std::string GetCallStack(size_t skipLevels = 0, bool makeFunctionNamesStandOut = false);
+};
     
-    
+        ConfigValuePtr NodeToConfigValuePtr(ComputationNodeBasePtr node)
     {
-    {    nodes.push_back(node);
-  }
-  localNode_ = localNode;
-  nodes_ = nodes;
-  A2_LOG_INFO('DHT routing table was loaded successfully');
-}
-    
-    #include <vector>
-#include <string>
-#include <memory>
-    
-    namespace aria2 {
+        assert(node);
+        auto valuep = ConfigValuePtr(node, [](const std::wstring& msg) { LogicError('CloneFunction (NodeToConfigValuePtr): Unexpected failure: %ls', msg.c_str()); }, node->NodeName());
+        return valuep;
     }
-    
-      virtual void executeTask() = 0;
-    
-      DHTTaskExecutor immediateTaskQueue_;
     
     public:
-  DHTTokenTracker();
+    OneHotNode(DEVICEID_TYPE deviceId, size_t num_class, bool is_sparse, int axis, const wstring& name) : Base(deviceId, name)
+    {
+        m_num_class = num_class;
+        m_sparse = is_sparse;
+        m_axis = axis;
+        m_offset = -1;
+    }
+    //do we really need this?
+    OneHotNode(DEVICEID_TYPE deviceId, const wstring& name) : OneHotNode(deviceId, 0, false, -1, name)
+    {
+    }
     
-    bool DHTUnknownMessage::isReply() const { return false; }
+        Size winSize = Director::getInstance()->getWinSize();
+    _fullScreenSize.set(winSize.width, winSize.height);
+    _halfScreenSize = _fullScreenSize * 0.5f;
+    _offsetX=xOffset;
+    _offsetY=yOffset;
+    _halfScreenSize.x += _offsetX;
+    _halfScreenSize.y += _offsetY;
     
-      virtual ~DHTUnknownMessage();
+    if (_boundarySet)
+    {
+        _leftBoundary = -((rect.origin.x+rect.size.width) - _fullScreenSize.x);
+        _rightBoundary = -rect.origin.x ;
+        _topBoundary = -rect.origin.y;
+        _bottomBoundary = -((rect.origin.y+rect.size.height) - _fullScreenSize.y);
+    }
     
-      void put(const std::string& hostname, const std::string& ipaddr,
-           uint16_t port);
+    /** @class CatmullRomTo
+ * An action that moves the target with a CatmullRom curve to a destination point.
+ * A Catmull Rom is a Cardinal Spline with a tension of 0.5.
+ * http://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull.E2.80.93Rom_spline
+ * @ingroup Actions
+ */
+class CC_DLL CatmullRomTo : public CardinalSplineTo
+{
+public:
+    }
+    
+    //
+// EaseBezierAction
+//
+    
+    bool FlipX::initWithFlipX(bool x)
+{
+    _flipX = x;
+    return true;
+}
+    
+    
+    {}
+    
+    
+    {    delete action;
+    return nullptr;
+}
+    
+        //
+    // Overrides
+    //
+    virtual ProgressTo* clone() const override;
+    virtual ProgressTo* reverse() const override;
+    virtual void startWithTarget(Node *target) override;
+    virtual void update(float time) override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    ProgressTo() {}
+    virtual ~ProgressTo() {}
+    
+    bool AnimationCache::init()
+{
+    return true;
+}
+    
+    
+class Animation;
+    
+        /** Quads to draw. */
+    ssize_t _quadsToDraw;
+    /** Color uniform. */
+    GLint    _uniformColor;
+    /** This variable is only used for LabelAtlas FPS display. So plz don't modify its value. */
+    bool _ignoreContentScaleFactor;
+    /** Quad command. */
+    QuadCommand _quadCommand;
+    
+    http://www.cocos2d-x.org
