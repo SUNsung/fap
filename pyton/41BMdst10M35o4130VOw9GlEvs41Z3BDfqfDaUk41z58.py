@@ -1,24 +1,48 @@
 
         
-        
-class PostgresSimpleLookup(Lookup):
-    def as_sql(self, qn, connection):
-        lhs, lhs_params = self.process_lhs(qn, connection)
-        rhs, rhs_params = self.process_rhs(qn, connection)
-        params = lhs_params + rhs_params
-        return '%s %s %s' % (lhs, self.operator, rhs), params
-    
-        def __init__(self):
-        self.name = 'citext'
+            # Arguments
+        label_mode: one of 'fine', 'coarse'.
     
     
-class RangeMaxValueValidator(MaxValueValidator):
-    def compare(self, a, b):
-        return a.upper is None or a.upper > b
-    message = _('Ensure that this range is completely less than or equal to %(limit_value)s.')
+def test_objective_shapes_3d():
+    y_a = K.variable(np.random.random((5, 6, 7)))
+    y_b = K.variable(np.random.random((5, 6, 7)))
+    for obj in allobj:
+        objective_output = obj(y_a, y_b)
+        assert K.eval(objective_output).shape == (5, 6)
     
+        def reset_states(self, states=None):
+        if not self.stateful:
+            raise AttributeError('Layer must be stateful.')
+        input_shape = self.input_spec[0].shape
+        state_shape = self.compute_output_shape(input_shape)
+        if self.return_state:
+            state_shape = state_shape[0]
+        if self.return_sequences:
+            state_shape = state_shape[:1] + state_shape[2:]
+        if None in state_shape:
+            raise ValueError('If a RNN is stateful, it needs to know '
+                             'its batch size. Specify the batch size '
+                             'of your input tensors: \n'
+                             '- If using a Sequential model, '
+                             'specify the batch size by passing '
+                             'a `batch_input_shape` '
+                             'argument to your first layer.\n'
+                             '- If using the functional API, specify '
+                             'the time dimension by passing a '
+                             '`batch_shape` argument to your Input layer.\n'
+                             'The same thing goes for the number of rows '
+                             'and columns.')
     
-class AbstractBaseSession(models.Model):
-    session_key = models.CharField(_('session key'), max_length=40, primary_key=True)
-    session_data = models.TextField(_('session data'))
-    expire_date = models.DateTimeField(_('expire date'), db_index=True)
+    # Convolution
+kernel_size = 5
+filters = 64
+pool_size = 4
+    
+        The decoding-related arguments have the same semantics as those of
+    bytes.decode().
+    '''
+    resource = _normalize_path(resource)
+    package = _get_package(package)
+    with open_text(package, resource, encoding, errors) as fp:
+        return fp.read()
