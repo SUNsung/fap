@@ -1,63 +1,70 @@
 
         
-                next unless path.file?
-        file = path
-    
-          # Find commands in Homebrew/dev-cmd
-      if ARGV.homebrew_developer?
-        puts
-        puts 'Built-in development commands'
-        puts_columns internal_development_commands
-      end
-    
-      def self.canonical_name(name)
-    Formulary.canonical_name(name)
-  end
-    
-      it 'raises a TypeError when passed a String' do
-    lambda { srand('7') }.should raise_error(TypeError)
-  end
-end
-    
-        context 'after deleting a person' do
-      before do
-        user = FactoryGirl.create(:user_with_aspect)
-        user.share_with(alice.person, user.aspects.first)
-        user.person.delete
-      end
-    
-          it 'keeps invalid params in form' do
-        get :create, params: invalid_params
-        expect(response.body).to match /jdoe@example.com/m
-      end
+            def links
+      context[:links]
     end
-  end
-end
-
-    
-    Given(/^I add a '(.*?)' processor in '(.*?)'$/) do |processor, directory|
-  filename = '#{directory}/#{processor}.rb'
-  cd('.') do
-    FileUtils.mkdir_p directory
-    File.open(filename, 'w') do |f|
-      f.write(<<-CLASS)
-        module Paperclip
-          class #{processor.capitalize} < Processor
-            def make
-              basename = File.basename(file.path, File.extname(file.path))
-              dst_format = options[:format] ? '.\#{options[:format]}' : ''
-    
-      def generate_migration
-    migration_template('paperclip_migration.rb.erb',
-                       'db/migrate/#{migration_file_name}',
-                       migration_version: migration_version)
-  end
-    
-    require 'mimemagic'
-require 'mimemagic/overlay'
-require 'logger'
-require 'terrapin'
     
         def initialize
-      clear
+      @pages = {}
     end
+    
+            subtitle = at_css('.hero-subtitle').try(:content)
+        breadcrumbs = css('.breadcrumbs li').map(&:content)[2..-2]
+    
+            css('.note h3', '.warning h3').each do |node|
+          node.before('<p><strong>#{node.inner_html}</strong></p>').remove
+        end
+    
+            private
+    
+            def shipment_params
+          if params[:shipment] && !params[:shipment].empty?
+            params.require(:shipment).permit(permitted_shipment_attributes)
+          else
+            {}
+          end
+        end
+    
+            def create
+          authorize! :create, Store
+          @store = Store.new(store_params)
+          @store.code = params[:store][:code]
+          if @store.save
+            respond_with(@store, status: 201, default_template: :show)
+          else
+            invalid_resource!(@store)
+          end
+        end
+    
+        scripts = {}
+    
+      def to_s_fullversion()
+    # iteration (PORTREVISION on FreeBSD) shall be appended only(?) if non-zero.
+    # https://www.freebsd.org/doc/en/books/porters-handbook/makefile-naming.html
+    (iteration and (iteration.to_i > 0)) ?  '#{version}_#{iteration}' : '#{version}'
+  end
+    
+      def self.default_prefix
+    npm_prefix = safesystemout('npm', 'prefix', '-g').chomp
+    if npm_prefix.count('\n') > 0
+      raise FPM::InvalidPackageConfiguration, '`npm prefix -g` returned unexpected output.'
+    elsif !File.directory?(npm_prefix)
+      raise FPM::InvalidPackageConfiguration, '`npm prefix -g` returned a non-existent directory'
+    end
+    logger.info('Setting default npm install prefix', :prefix => npm_prefix)
+    npm_prefix
+  end
+    
+          base = staging_path(File.join(attributes[:prefix], '#{platform.platform}/#{platform.target_version || 'default'}'))
+      target = File.join(base, 'files')
+      actions_script = File.join(base, 'install_actions.sh')
+      ::PleaseRun::Installer.install_files(platform, target, false)
+      ::PleaseRun::Installer.write_actions(platform, actions_script)
+    end
+    
+    
+    
+      # Input a tarball. Compressed tarballs should be OK.
+  def input(input_path)
+    # use part of the filename as the package name
+    self.name = File.basename(input_path).split('.').first
