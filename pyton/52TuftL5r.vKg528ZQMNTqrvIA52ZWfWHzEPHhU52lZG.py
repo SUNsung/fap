@@ -1,163 +1,118 @@
 
         
-        print()
-
+        
+class CloudWatchEventRule(object):
+    def __init__(self, module, name, client, schedule_expression=None,
+                 event_pattern=None, description=None, role_arn=None):
+        self.name = name
+        self.client = client
+        self.changed = False
+        self.schedule_expression = schedule_expression
+        self.event_pattern = event_pattern
+        self.description = description
+        self.role_arn = role_arn
+        self.module = module
     
+        :returns True on success, raises ValueError on type error.
+    :rtype ``bool``
+    '''
+    errmsg = ''
+    if not isinstance(instance.node_count, int):
+        errmsg = 'node_count must be an integer %s (%s)' % (
+            instance.node_count, type(instance.node_count))
+    if instance.display_name and not isinstance(instance.display_name,
+                                                string_types):
+        errmsg = 'instance_display_name must be an string %s (%s)' % (
+            instance.display_name, type(instance.display_name))
+    if errmsg:
+        raise ValueError(errmsg)
     
-class GitHubReleaser(object):
-    _API_URL = 'https://api.github.com/repos/rg3/youtube-dl/releases'
-    _UPLOADS_URL = 'https://uploads.github.com/repos/rg3/youtube-dl/releases/%s/assets?name=%s'
-    _NETRC_MACHINE = 'github.com'
-    
-    import rsa
-import json
-from binascii import hexlify
-    
-    entries = []
-for v in versions:
-    fields = v.split('.')
-    year, month, day = map(int, fields[:3])
-    faked = 0
-    patchlevel = 0
-    while True:
+        if state == 'absent':
+        if not module.params.get('name'):
+            module.fail_json(
+                msg=''name' parameter is required to delete a firewall policy.')
         try:
-            datetime.date(year, month, day)
-        except ValueError:
-            day -= 1
-            faked += 1
-            assert day > 0
-            continue
-        break
-    if len(fields) >= 4:
+            (changed, firewall_policy) = remove_firewall_policy(module, oneandone_conn)
+        except Exception as e:
+            module.fail_json(msg=str(e))
+    
+    #example for a DNAT
+- hosts: localhost
+  connection: local
+  tasks:
+   - vca_nat:
+       instance_id: 'b15ff1e5-1024-4f55-889f-ea0209726282'
+       vdc_name: 'benz_ansible'
+       state: 'present'
+       nat_rules:
+         - rule_type: DNAT
+           original_ip: 203.0.113.23
+           original_port: 22
+           translated_ip: 192.0.2.42
+           translated_port: 22
+    
+    from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils._text import to_native
+    
         try:
-            patchlevel = int(fields[3])
-        except ValueError:
-            patchlevel = 1
-    timestamp = '%04d-%02d-%02dT00:%02d:%02dZ' % (year, month, day, faked, patchlevel)
+        dsn = (
+            'Driver=Vertica;'
+            'Server={0};'
+            'Port={1};'
+            'Database={2};'
+            'User={3};'
+            'Password={4};'
+            'ConnectionLoadBalance={5}'
+        ).format(module.params['cluster'], module.params['port'], db,
+                 module.params['login_user'], module.params['login_password'], 'true')
+        db_conn = pyodbc.connect(dsn, autocommit=True)
+        cursor = db_conn.cursor()
+    except Exception as e:
+        module.fail_json(msg='Unable to connect to database: {0}.'.format(to_native(e)))
     
+    def os_constant(key):
+    # XXX TODO: In the future, this could return different constants
+    #           based on what OS we are running under.  To see an
+    #           approach to how to handle different OSes, see the
+    #           apache version of this file.  Currently, we do not
+    #           actually have any OS-specific constants on Nginx.
+    '''
+    Get a constant value for operating system
     
-class TestAgeRestriction(unittest.TestCase):
-    def _assert_restricted(self, url, filename, age, old_age=None):
-        self.assertTrue(_download_restricted(url, filename, old_age))
-        self.assertFalse(_download_restricted(url, filename, age))
+            :raises .errors.PluginError: If there was an error in Augeas, in
+            an attempt to save the configuration, or an error creating a
+            checkpoint
     
-        def test_no_duplicates(self):
-        ies = gen_extractors()
-        for tc in gettestcases(include_onlymatching=True):
-            url = tc['url']
-            for ie in ies:
-                if type(ie).__name__ in ('GenericIE', tc['name'] + 'IE'):
-                    self.assertTrue(ie.suitable(url), '%s should match URL %r' % (type(ie).__name__, url))
-                else:
-                    self.assertFalse(
-                        ie.suitable(url),
-                        '%s should not match URL %r . That URL belongs to %s.' % (type(ie).__name__, url, tc['name']))
+        def test_basic_ifdefine(self):
+        self.assertEqual(len(self.parser.find_dir('VAR_DIRECTIVE')), 2)
+        self.assertEqual(len(self.parser.find_dir('INVALID_VAR_DIRECTIVE')), 0)
     
+        def test_get_addrs_default(self):
+        self.sni.configurator.choose_vhost = mock.Mock(
+            return_value=obj.VirtualHost(
+                'path', 'aug_path',
+                set([obj.Addr.fromstring('_default_:443')]),
+                False, False)
+        )
     
-class Unaccent(Transform):
-    bilateral = True
-    lookup_name = 'unaccent'
-    function = 'UNACCENT'
+            self._is_down = click_type == pyflic.ClickType.ButtonDown
+        self.schedule_update_ha_state()
     
+        def _update_info(self):
+        '''Ensure the information from the router is up to date.
     
-class RangeMaxValueValidator(MaxValueValidator):
-    def compare(self, a, b):
-        return a.upper is None or a.upper > b
-    message = _('Ensure that this range is completely less than or equal to %(limit_value)s.')
+    For more details about this platform, please refer to the documentation
+https://home-assistant.io/components/demo/
+'''
+import random
     
-        def save(self, must_create=False):
-        '''
-        Save the current session data to the database. If 'must_create' is
-        True, raise a database error if the saving operation doesn't create a
-        new entry (as opposed to possibly updating an existing entry).
-        '''
-        if self.session_key is None:
-            return self.create()
-        data = self._get_session(no_load=must_create)
-        obj = self.create_model_instance(data)
-        using = router.db_for_write(self.model, instance=obj)
-        try:
-            with transaction.atomic(using=using):
-                obj.save(force_insert=must_create, force_update=not must_create, using=using)
-        except IntegrityError:
-            if must_create:
-                raise CreateError
-            raise
-        except DatabaseError:
-            if not must_create:
-                raise UpdateError
-            raise
+            self.hosts = config[CONF_HOSTS]
+        self.exclude = config[CONF_EXCLUDE]
+        minutes = config[CONF_HOME_INTERVAL]
+        self._options = config[CONF_OPTIONS]
+        self.home_interval = timedelta(minutes=minutes)
     
-        def delete(self, session_key=None):
-        '''
-        To delete, clear the session key and the underlying data structure
-        and set the modified flag so that the cookie is set on the client for
-        the current request.
-        '''
-        self._session_key = ''
-        self._session_cache = {}
-        self.modified = True
+            self.username = config[CONF_USERNAME]
+        self.password = config[CONF_PASSWORD]
     
-        @classmethod
-    def get_session_store_class(cls):
-        raise NotImplementedError
-    
-            # Find all people in the image using a trained classifier model
-        # Note: You can pass in either a classifier file name or a classifier model instance
-        predictions = predict(full_file_path, model_path='trained_knn_model.clf')
-    
-    # Find all the faces in the image using a pre-trained convolutional neural network.
-# This method is more accurate than the default HOG model, but it's slower
-# unless you have an nvidia GPU and dlib compiled with CUDA extensions. But if you do,
-# this will use GPU acceleration and perform well.
-# See also: find_faces_in_picture.py
-face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=0, model='cnn')
-    
-        # Scale down image if it's giant so things run a little faster
-    if max(unknown_image.shape) > 1600:
-        pil_img = PIL.Image.fromarray(unknown_image)
-        pil_img.thumbnail((1600, 1600), PIL.Image.LANCZOS)
-        unknown_image = np.array(pil_img)
-    
-    setup(
-    name='face_recognition',
-    version='1.2.3',
-    description='Recognize faces from Python or from the command line',
-    long_description=readme + '\n\n' + history,
-    author='Adam Geitgey',
-    author_email='ageitgey@gmail.com',
-    url='https://github.com/ageitgey/face_recognition',
-    packages=[
-        'face_recognition',
-    ],
-    package_dir={'face_recognition': 'face_recognition'},
-    package_data={
-        'face_recognition': ['models/*.dat']
-    },
-    entry_points={
-        'console_scripts': [
-            'face_recognition=face_recognition.face_recognition_cli:main',
-            'face_detection=face_recognition.face_detection_cli:main'
-        ]
-    },
-    install_requires=requirements,
-    license='MIT license',
-    zip_safe=False,
-    keywords='face_recognition',
-    classifiers=[
-        'Development Status :: 4 - Beta',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
-        'Natural Language :: English',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-    ],
-    test_suite='tests',
-    tests_require=test_requirements
-)
+    from aiohttp import web
