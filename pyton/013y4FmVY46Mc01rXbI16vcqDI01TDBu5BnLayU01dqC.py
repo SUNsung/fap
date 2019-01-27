@@ -1,77 +1,6 @@
 
         
-            i = 0
-    for c, (label, timings) in zip('br',
-                                   sorted(six.iteritems(results_2))):
-        i += 1
-        ax = fig.add_subplot(2, 2, i + 2)
-        y = np.asarray(timings)
-        ax.plot(chunks, y, color=c, alpha=0.8)
-        ax.set_xlabel('Chunks')
-        ax.set_ylabel(label)
-    
-        it = 0
-    
-        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
-    plt.plot(sample_sizes, one_core, label='one core')
-    plt.plot(sample_sizes, multi_core, label='multi core')
-    plt.xlabel('n_samples')
-    plt.ylabel('Time (s)')
-    plt.title('Parallel %s' % func.__name__)
-    plt.legend()
-    
-        def _forwards(self, orm):
-        'Write your forwards methods here.'
-        for release in RangeQuerySetWrapperWithProgressBar(
-            orm.Release.objects.exclude(new_groups=0)
-        ):
-            projects = list(release.projects.values_list('id', flat=True))
-            if len(projects) > 1:
-                # do something fancy where we look at Group.first_release
-                # to calculate ReleaseProject.new_group
-                for p_id in projects:
-                    new_groups = orm.Group.objects.filter(
-                        first_release=release, project_id=p_id
-                    ).count()
-                    if not new_groups:
-                        continue
-                    orm.ReleaseProject.objects.filter(
-                        release_id=release.id, project_id=p_id
-                    ).update(new_groups=new_groups)
-            elif len(projects) == 1:
-                # copy Release.new_groups to ReleaseProject.new_group
-                orm.ReleaseProject.objects.filter(
-                    release_id=release.id, project_id=projects[0]
-                ).update(new_groups=release.new_groups)
-    
-                releases_with_files = list(
-                orm.ReleaseFile.objects.filter(
-                    release__in=releases).values_list(
-                    'release_id', flat=True).distinct()
-            )
-    
-    
-class Migration(SchemaMigration):
-    def forwards(self, orm):
-        # Adding model 'EnvironmentProject'
-        db.create_table(
-            'sentry_environmentproject', (
-                (
-                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
-                        primary_key=True
-                    )
-                ), (
-                    'project', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.Project']
-                    )
-                ), (
-                    'environment', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.Environment']
-                    )
-                ),
-            )
-        )
-        db.send_create_signal('sentry', ['EnvironmentProject'])
+                db.start_transaction()
     
         models = {
         'sentry.activity': {
@@ -113,6 +42,146 @@ class Migration(SchemaMigration):
                 }
             )
         },
+        'sentry.apiapplication': {
+            'Meta': {
+                'object_name': 'ApiApplication'
+            },
+            'allowed_origins':
+            ('django.db.models.fields.TextField', [], {
+                'null': 'True',
+                'blank': 'True'
+            }),
+            'client_id': (
+                'django.db.models.fields.CharField', [], {
+                    'default': ''90ad7e5fa38040e5960b53783ae21ad05b6ce9e66b8a4dbbaeb29535bb086787'',
+                    'unique': 'True',
+                    'max_length': '64'
+                }
+            ),
+            'client_secret': (
+                'sentry.db.models.fields.encrypted.EncryptedTextField', [], {
+                    'default': ''6dbc1fbf818c4d1da6461a83f8f540845bff496a57cb407d896dc41d2067c02e''
+                }
+            ),
+            'date_added':
+            ('django.db.models.fields.DateTimeField', [], {
+                'default': 'datetime.datetime.now'
+            }),
+            'homepage_url':
+            ('django.db.models.fields.URLField', [], {
+                'max_length': '200',
+                'null': 'True'
+            }),
+            'id':
+            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
+                'primary_key': 'True'
+            }),
+            'name': (
+                'django.db.models.fields.CharField', [], {
+                    'default': ''Ungeneralized Ronan'',
+                    'max_length': '64',
+                    'blank': 'True'
+                }
+            ),
+            'owner': (
+                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
+                    'to': 'orm['sentry.User']'
+                }
+            ),
+            'privacy_url':
+            ('django.db.models.fields.URLField', [], {
+                'max_length': '200',
+                'null': 'True'
+            }),
+            'redirect_uris': ('django.db.models.fields.TextField', [], {}),
+            'status': (
+                'sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {
+                    'default': '0',
+                    'db_index': 'True'
+                }
+            ),
+            'terms_url':
+            ('django.db.models.fields.URLField', [], {
+                'max_length': '200',
+                'null': 'True'
+            })
+        },
+        'sentry.apiauthorization': {
+            'Meta': {
+                'unique_together': '(('user', 'application'),)',
+                'object_name': 'ApiAuthorization'
+            },
+            'application': (
+                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
+                    'to': 'orm['sentry.ApiApplication']',
+                    'null': 'True'
+                }
+            ),
+            'date_added':
+            ('django.db.models.fields.DateTimeField', [], {
+                'default': 'datetime.datetime.now'
+            }),
+            'id':
+            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
+                'primary_key': 'True'
+            }),
+            'scope_list': (
+                'sentry.db.models.fields.array.ArrayField', [], {
+                    'of': ('django.db.models.fields.TextField', [], {})
+                }
+            ),
+            'scopes': ('django.db.models.fields.BigIntegerField', [], {
+                'default': 'None'
+            }),
+            'user': (
+                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
+                    'to': 'orm['sentry.User']'
+                }
+            )
+        },
+        'sentry.apigrant': {
+            'Meta': {
+                'object_name': 'ApiGrant'
+            },
+            'application': (
+                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
+                    'to': 'orm['sentry.ApiApplication']'
+                }
+            ),
+            'code': (
+                'django.db.models.fields.CharField', [], {
+                    'default': ''507f7c453c134c73b1ab1a5d1ebddaee'',
+                    'max_length': '64',
+                    'db_index': 'True'
+                }
+            ),
+            'expires_at': (
+                'django.db.models.fields.DateTimeField', [], {
+                    'default': 'datetime.datetime(2017, 3, 22, 0, 0)',
+                    'db_index': 'True'
+                }
+            ),
+            'id':
+            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
+                'primary_key': 'True'
+            }),
+            'redirect_uri': ('django.db.models.fields.CharField', [], {
+                'max_length': '255'
+            }),
+            'scope_list': (
+                'sentry.db.models.fields.array.ArrayField', [], {
+                    'of': ('django.db.models.fields.TextField', [], {})
+                }
+            ),
+            'scopes': ('django.db.models.fields.BigIntegerField', [], {
+                'default': 'None'
+            }),
+            'user': (
+                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
+                    'to': 'orm['sentry.User']'
+                }
+            )
+        },
         'sentry.apikey': {
             'Meta': {
                 'object_name': 'ApiKey'
@@ -148,6 +217,11 @@ class Migration(SchemaMigration):
                     'to': 'orm['sentry.Organization']'
                 }
             ),
+            'scope_list': (
+                'sentry.db.models.fields.array.ArrayField', [], {
+                    'of': ('django.db.models.fields.TextField', [], {})
+                }
+            ),
             'scopes': ('django.db.models.fields.BigIntegerField', [], {
                 'default': 'None'
             }),
@@ -162,28 +236,49 @@ class Migration(SchemaMigration):
             'Meta': {
                 'object_name': 'ApiToken'
             },
+            'application': (
+                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
+                    'to': 'orm['sentry.ApiApplication']',
+                    'null': 'True'
+                }
+            ),
             'date_added':
             ('django.db.models.fields.DateTimeField', [], {
                 'default': 'datetime.datetime.now'
             }),
+            'expires_at': (
+                'django.db.models.fields.DateTimeField', [], {
+                    'default': 'datetime.datetime(2017, 4, 21, 0, 0)',
+                    'null': 'True'
+                }
+            ),
             'id':
             ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
                 'primary_key': 'True'
             }),
-            'key': (
-                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
-                    'to': 'orm['sentry.ApiKey']',
+            'refresh_token': (
+                'django.db.models.fields.CharField', [], {
+                    'default': ''e4f8c544288144d383de40706085c0362a60c7b1a2754f018ef80a3b4492282a'',
+                    'max_length': '64',
+                    'unique': 'True',
                     'null': 'True'
+                }
+            ),
+            'scope_list': (
+                'sentry.db.models.fields.array.ArrayField', [], {
+                    'of': ('django.db.models.fields.TextField', [], {})
                 }
             ),
             'scopes': ('django.db.models.fields.BigIntegerField', [], {
                 'default': 'None'
             }),
-            'token':
-            ('django.db.models.fields.CharField', [], {
-                'unique': 'True',
-                'max_length': '64'
-            }),
+            'token': (
+                'django.db.models.fields.CharField', [], {
+                    'default': ''10941cc78a564b92a15ece43d456e7f4c4ee773360a54e4e910fa68af79ac307'',
+                    'unique': 'True',
+                    'max_length': '64'
+                }
+            ),
             'user': (
                 'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
                     'to': 'orm['sentry.User']'
@@ -256,7 +351,7 @@ class Migration(SchemaMigration):
                 'object_name': 'Authenticator',
                 'db_table': ''auth_authenticator''
             },
-            'config': ('sentry.db.models.fields.pickle.UnicodePickledObjectField', [], {}),
+            'config': ('sentry.db.models.fields.encrypted.EncryptedPickledObjectField', [], {}),
             'created_at':
             ('django.db.models.fields.DateTimeField', [], {
                 'default': 'datetime.datetime.now'
@@ -284,7 +379,7 @@ class Migration(SchemaMigration):
                     'to': 'orm['sentry.AuthProvider']'
                 }
             ),
-            'data': ('jsonfield.fields.JSONField', [], {
+            'data': ('sentry.db.models.fields.encrypted.EncryptedJsonField', [], {
                 'default': '{}'
             }),
             'date_added':
@@ -316,7 +411,8 @@ class Migration(SchemaMigration):
             'Meta': {
                 'object_name': 'AuthProvider'
             },
-            'config': ('jsonfield.fields.JSONField', [], {
+            'config':
+            ('sentry.db.models.fields.encrypted.EncryptedJsonField', [], {
                 'default': '{}'
             }),
             'date_added':
@@ -372,7 +468,7 @@ class Migration(SchemaMigration):
             }),
             'date_expires': (
                 'django.db.models.fields.DateTimeField', [], {
-                    'default': 'datetime.datetime(2017, 3, 2, 0, 0)',
+                    'default': 'datetime.datetime(2017, 3, 29, 0, 0)',
                     'null': 'True',
                     'blank': 'True'
                 }
@@ -530,6 +626,53 @@ class Migration(SchemaMigration):
                 }
             ),
             'value': ('sentry.db.models.fields.bounded.BoundedBigIntegerField', [], {})
+        },
+        'sentry.deploy': {
+            'Meta': {
+                'object_name': 'Deploy'
+            },
+            'date_finished':
+            ('django.db.models.fields.DateTimeField', [], {
+                'default': 'datetime.datetime.now'
+            }),
+            'date_started':
+            ('django.db.models.fields.DateTimeField', [], {
+                'null': 'True',
+                'blank': 'True'
+            }),
+            'environment_id': (
+                'sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {
+                    'db_index': 'True'
+                }
+            ),
+            'id':
+            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
+                'primary_key': 'True'
+            }),
+            'name': (
+                'django.db.models.fields.CharField', [], {
+                    'max_length': '64',
+                    'null': 'True',
+                    'blank': 'True'
+                }
+            ),
+            'organization_id': (
+                'sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {
+                    'db_index': 'True'
+                }
+            ),
+            'release': (
+                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
+                    'to': 'orm['sentry.Release']'
+                }
+            ),
+            'url': (
+                'django.db.models.fields.URLField', [], {
+                    'max_length': '200',
+                    'null': 'True',
+                    'blank': 'True'
+                }
+            )
         },
         'sentry.dsymbundle': {
             'Meta': {
@@ -1566,7 +1709,7 @@ class Migration(SchemaMigration):
             ('django.db.models.fields.DateTimeField', [], {
                 'default': 'datetime.datetime.now'
             }),
-            'value': ('sentry.db.models.fields.pickle.UnicodePickledObjectField', [], {})
+            'value': ('sentry.db.models.fields.encrypted.EncryptedPickledObjectField', [], {})
         },
         'sentry.organization': {
             'Meta': {
@@ -1809,7 +1952,7 @@ class Migration(SchemaMigration):
                     'to': 'orm['sentry.Organization']'
                 }
             ),
-            'value': ('sentry.db.models.fields.pickle.UnicodePickledObjectField', [], {})
+            'value': ('sentry.db.models.fields.encrypted.EncryptedPickledObjectField', [], {})
         },
         'sentry.processingissue': {
             'Meta': {
@@ -2018,7 +2161,7 @@ class Migration(SchemaMigration):
                     'to': 'orm['sentry.Project']'
                 }
             ),
-            'value': ('sentry.db.models.fields.pickle.UnicodePickledObjectField', [], {})
+            'value': ('sentry.db.models.fields.encrypted.EncryptedPickledObjectField', [], {})
         },
         'sentry.projectplatform': {
             'Meta': {
@@ -2661,7 +2804,7 @@ class Migration(SchemaMigration):
             ),
             'validation_hash': (
                 'django.db.models.fields.CharField', [], {
-                    'default': 'u'fKyAvmgARQPEgYgFFlJJYUyjwKjFoJSK'',
+                    'default': 'u'Q9uumn1w1BWKCPBB1u2SmjrLjq20dEy5'',
                     'max_length': '32'
                 }
             )
@@ -2689,7 +2832,7 @@ class Migration(SchemaMigration):
                     'to': 'orm['sentry.User']'
                 }
             ),
-            'value': ('sentry.db.models.fields.pickle.UnicodePickledObjectField', [], {})
+            'value': ('sentry.db.models.fields.encrypted.EncryptedPickledObjectField', [], {})
         },
         'sentry.userreport': {
             'Meta': {
@@ -2729,6 +2872,23 @@ class Migration(SchemaMigration):
         }
     }
     
-    from sentry.utils.query import RangeQuerySetWrapperWithProgressBar
     
-        complete_apps = ['sentry']
+class Migration(DataMigration):
+    def forwards(self, orm):
+        db.commit_transaction()
+        try:
+            self._forwards(orm)
+        except Exception:
+            # Explicitly resume the transaction because
+            # South is going to try and roll it back, but when
+            # it can't find one, it'll error itself, masking
+            # the actual exception being raised
+            #
+            # See https://github.com/getsentry/sentry/issues/5035
+            db.start_transaction()
+            raise
+        db.start_transaction()
+    
+        def backwards(self, orm):
+        # Removing unique constraint on 'UserOption', fields ['user', 'organization', 'key']
+        db.delete_unique('sentry_useroption', ['user_id', 'organization_id', 'key'])
