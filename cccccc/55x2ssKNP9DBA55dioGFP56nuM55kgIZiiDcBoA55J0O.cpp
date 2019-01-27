@@ -1,311 +1,207 @@
 
         
-        namespace mate {
+            void convertScale(const Size2D &_size,
+                      const f32 * srcBase, ptrdiff_t srcStride,
+                      s16 * dstBase, ptrdiff_t dstStride,
+                      f64 alpha, f64 beta);
+    
+            size_t width;
+        size_t height;
+    
+                v_srclo = vget_low_s16(v_src1);
+            v_srchi = vget_high_s16(v_src1);
+            v_dst1 = vcombine_s16(vqmovn_s32(vaddw_s16(vshrq_n_s32(vmull_s16(v_srclo, v_srclo), shift), vget_low_s16(v_dst1))),
+                                  vqmovn_s32(vaddw_s16(vshrq_n_s32(vmull_s16(v_srchi, v_srchi), shift), vget_high_s16(v_dst1))));
+    
+    void add(const Size2D &size,
+         const u16 * src0Base, ptrdiff_t src0Stride,
+         const u16 * src1Base, ptrdiff_t src1Stride,
+         u16 * dstBase, ptrdiff_t dstStride,
+         CONVERT_POLICY policy)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+        if (policy == CONVERT_POLICY_SATURATE)
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddSaturate<u16, u32>());
     }
-    
-    
-    {}  // namespace api
-    
-      // Downloadable Content Information
-  bool downloadable = false;
-    
-    
-    {  DefaultCacheKey CKey(const_cast<void*>(Key), &DCache.CBs);
-  auto Entry = DCache.Entries.find(CKey);
-  if (Entry != DCache.Entries.end()) {
-    // FIXME: Not thread-safe! It should avoid deleting the value until
-    // 'releaseValue is called on it.
-    *Value_out = Entry->second;
-    return true;
-  }
-  return false;
-}
-    
-      if (!wasInline) delete[] oldBegin;
-    
-    void PrefixMapKeyPrinter<unsigned char>::print(raw_ostream &out,
-                                               ArrayRef<unsigned char> key) {
-  out << '\'';
-  for (auto byte : key) {
-    if (byte < 16) out << '0';
-    out.write_hex(byte);
-  }
-  out << '\'';
-}
-
-    
-    #include 'swift/Basic/PrimitiveParsing.h'
-#include 'llvm/ADT/SmallVector.h'
-    
-    break_table = GraphemeClusterBreakPropertyTable(unicodeGraphemeBreakPropertyFile)
-    
-    
-    {  return forInvalid();
-}
-    
-      bool isRecord() const {
-    assert(isValid());
-    return !Decl.isNull() && Decl.is<const clang::RecordDecl *>();
-  }
-  const clang::RecordDecl *getRecord() const {
-    assert(isRecord());
-    return Decl.get<const clang::RecordDecl *>();
-  }
-    
-    enum class IAMAccessorKind : uint8_t { None, Getter, Setter };
-    
-    /// Translate the given operator character into its mangled form.
-///
-/// Current operator characters:   @/=-+*%<>!&|^~ and the special operator '..'
-char Mangle::translateOperatorChar(char op) {
-  switch (op) {
-    case '&': return 'a'; // 'and'
-    case '@': return 'c'; // 'commercial at sign'
-    case '/': return 'd'; // 'divide'
-    case '=': return 'e'; // 'equal'
-    case '>': return 'g'; // 'greater'
-    case '<': return 'l'; // 'less'
-    case '*': return 'm'; // 'multiply'
-    case '!': return 'n'; // 'negate'
-    case '|': return 'o'; // 'or'
-    case '+': return 'p'; // 'plus'
-    case '?': return 'q'; // 'question'
-    case '%': return 'r'; // 'remainder'
-    case '-': return 's'; // 'subtract'
-    case '~': return 't'; // 'tilde'
-    case '^': return 'x'; // 'xor'
-    case '.': return 'z'; // 'zperiod' (the z is silent)
-    default:
-      return op;
-  }
-}
-    
-    static void printNode(DemanglerPrinter &Out, const Node *node, unsigned depth) {
-  // Indent two spaces per depth.
-  for (unsigned i = 0; i < depth * 2; ++i) {
-    Out << ' ';
-  }
-  if (!node) {
-    Out << '<<NULL>>';
-    return;
-  }
-  Out << 'kind=' << getNodeKindString(node->getKind());
-  if (node->hasText()) {
-    Out << ', text=\'' << node->getText() << '\'';
-  }
-  if (node->hasIndex()) {
-    Out << ', index=' << node->getIndex();
-  }
-  Out << '\n';
-  for (auto &child : *node) {
-    printNode(Out, child, depth + 1);
-  }
-}
-    
-    # if !GTEST_OS_WINDOWS
-// Tests that an exit code describes an exit due to termination by a
-// given signal.
-class GTEST_API_ KilledBySignal {
- public:
-  explicit KilledBySignal(int signum);
-  bool operator()(int exit_status) const;
- private:
-  const int signum_;
-};
-# endif  // !GTEST_OS_WINDOWS
-    
-    #if GTEST_HAS_STD_WSTRING
-template <>
-class UniversalTersePrinter<const wchar_t*> {
- public:
-  static void Print(const wchar_t* str, ::std::ostream* os) {
-    if (str == NULL) {
-      *os << 'NULL';
-    } else {
-      UniversalPrint(::std::wstring(str), os);
+    else
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddWrap<u16, u32>());
     }
-  }
-};
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)policy;
 #endif
-    
-      const std::string& file() const { return file_; }
-  int line() const { return line_; }
-  int index() const { return index_; }
-  int write_fd() const { return write_fd_; }
-    
-    #include 'gtest/internal/gtest-string.h'
-    
-    
-    { private:
-  mutable linked_ptr_internal const* next_;
-};
-    
-    // This provides interface PrimeTable that determines whether a number is a
-// prime and determines a next prime number. This interface is used
-// in Google Test samples demonstrating use of parameterized tests.
-    
-    //  16384 * sqrt(2) * sin(kPi/9) * 2 / 3
-static const tran_high_t sinpi_1_9 = 5283;
-static const tran_high_t sinpi_2_9 = 9929;
-static const tran_high_t sinpi_3_9 = 13377;
-static const tran_high_t sinpi_4_9 = 15212;
-    
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
-    
-    /* silk_min() versions with typecast in the function call */
-static OPUS_INLINE opus_int silk_min_int(opus_int a, opus_int b)
-{
-    return (((a) < (b)) ? (a) : (b));
-}
-static OPUS_INLINE opus_int16 silk_min_16(opus_int16 a, opus_int16 b)
-{
-    return (((a) < (b)) ? (a) : (b));
-}
-static OPUS_INLINE opus_int32 silk_min_32(opus_int32 a, opus_int32 b)
-{
-    return (((a) < (b)) ? (a) : (b));
-}
-static OPUS_INLINE opus_int64 silk_min_64(opus_int64 a, opus_int64 b)
-{
-    return (((a) < (b)) ? (a) : (b));
 }
     
-      void onReceived(const DHTPingReplyMessage* message);
-    
-    DHTResponseMessage::DHTResponseMessage(
-    const std::shared_ptr<DHTNode>& localNode,
-    const std::shared_ptr<DHTNode>& remoteNode,
-    const std::string& transactionID)
-    : DHTAbstractMessage(localNode, remoteNode, transactionID)
-{
-}
-    
-      virtual const std::string& getType() const CXX11_OVERRIDE;
-    
-      void moveBucketTail(const std::shared_ptr<DHTNode>& node);
-    
-    void DHTRoutingTableSerializer::setLocalNode(
-    const std::shared_ptr<DHTNode>& localNode)
-{
-  localNode_ = localNode;
-}
+        for (size_t i = 0u; i < size.height; ++i)
+    {
+        const u8 * src = internal::getRowPtr(srcBase, srcStride, i);
+        u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
+        size_t sj = 0u, dj = 0u;
+    }
     
     
-    {  // Returns two vector of Commands.  First one contains regular
-  // commands.  Secod one contains so called routine commands, which
-  // executed once per event poll returns.
-  std::pair<std::vector<std::unique_ptr<Command>>,
-            std::vector<std::unique_ptr<Command>>>
-  setup(DownloadEngine* e, int family);
-};
-    
-      virtual std::shared_ptr<DHTTask> createBucketRefreshTask() = 0;
-    
-    void DHTTaskFactoryImpl::setRoutingTable(DHTRoutingTable* routingTable)
-{
-  routingTable_ = routingTable;
-}
-    
-      std::chrono::seconds timeout_;
-    
-        bool contains(const std::string& addr) const;
-    
-    The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-    
-    
-    {    return false;
-}
-    
-    #ifndef __CCINSTANT_ACTION_H__
-#define __CCINSTANT_ACTION_H__
-    
-    
-    {    return false;
-}
-    
-    BENCHMARK(copy_long_string, iters) {
-  BenchmarkSuspender suspender;
-  auto const& longString = getLongString();
-  while (iters--) {
-    fbstring out;
-    suspender.dismissing([&] { out = longString; });
-  }
-}
-    
-    
-    {} // namespace folly
+    {
+    {} // namespace internal
+} // namespace CAROTENE_NS
 
     
-      // Test with unusual durations where neither the numerator nor denominator
-  // are 1.
-  using five_sevenths = std::chrono::duration<int64_t, std::ratio<5, 7>>;
-  ts.tv_sec = 1;
-  ts.tv_nsec = 0;
-  EXPECT_EQ(1, to<five_sevenths>(ts).count());
-  ts.tv_sec = 1;
-  ts.tv_nsec = 428571500;
-  EXPECT_EQ(2, to<five_sevenths>(ts).count());
+    template <typename T>
+inline T *getRowPtr(T *base, ptrdiff_t stride, size_t row)
+{
+    char *baseRaw = const_cast<char *>(reinterpret_cast<const char *>(base));
+    return reinterpret_cast<T *>(baseRaw + ptrdiff_t(row) * stride);
+}
     
-    /**
- * Get a codec with the given options and compression level.
- *
- * If the windowSize is 15 and the format is Format::ZLIB or Format::GZIP, then
- * the type of the codec will be CodecType::ZLIB or CodecType::GZIP
- * respectively. Otherwise, the type will be CodecType::USER_DEFINED.
- *
- * Automatic uncompression is not supported with USER_DEFINED codecs.
- *
- * Levels supported: 0 = no compression, 1 = fast, ..., 9 = best; default = 6
- */
-std::unique_ptr<Codec> getCodec(
-    Options options = Options(),
-    int level = COMPRESSION_LEVEL_DEFAULT);
-std::unique_ptr<StreamCodec> getStreamCodec(
-    Options options = Options(),
-    int level = COMPRESSION_LEVEL_DEFAULT);
+                for (; j < size.width; j++)
+            {
+                dst[j] = internal::saturate_cast<u8>((src[j] >> shift));
+            }
+        }
+        else // CONVERT_POLICY_WRAP
+        {
+            for (; j < roiw16; j += 16)
+            {
+                internal::prefetch(src + j);
+                int16x8_t v_src0 = vshrq_n_s16(vld1q_s16(src + j), shift),
+                          v_src1 = vshrq_n_s16(vld1q_s16(src + j + 8), shift);
+                int8x16_t v_dst = vcombine_s8(vmovn_s16(v_src0),
+                                              vmovn_s16(v_src1));
+                vst1q_u8(dst + j, vreinterpretq_u8_s8(v_dst));
+            }
+            for (; j < roiw8; j += 8)
+            {
+                int16x8_t v_src = vshrq_n_s16(vld1q_s16(src + j), shift);
+                vst1_u8(dst + j, vreinterpret_u8_s8(vmovn_s16(v_src)));
+            }
     
-      counted_ptr(const counted_ptr& o) : p_(o.p_) {
-    if (p_) {
-      counted_ptr_base<Atom>::getRef(p_)->add_ref();
+                    v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t0_16s), kernelBase[5]);
+                v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t1_16s), kernelBase[4]);
+                v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t2_16s), kernelBase[3]);
+    
+    
+    {        for (; i < size.width; i++)
+            result += (src[i] != 0)?1:0;
+        if (result < 0)//saturate in case of overflow ~ 8GB of non-zeros...
+        {
+            return 0x7fFFffFF;
+        }
     }
-  }
-  counted_ptr& operator=(const counted_ptr& o) {
-    if (p_ && counted_ptr_base<Atom>::getRef(p_)->release_ref() == 1) {
-      p_->~T();
-      free(counted_ptr_base<Atom>::getRef(p_));
+    return result;
+#else
+    (void)_size;
+    (void)srcBase;
+    (void)srcStride;
+    
+            result += (double)vget_lane_s64(vadd_s64(vget_low_s64(ws), vget_high_s64(ws)), 0);
+    
+    #ifdef CAROTENE_NEON
+    
+    #include 'common.hpp'
+    
+    
+    {} // namespace CAROTENE_NS
+
+    
+    // Soft limit on number of level-0 files.  We slow down writes at this point.
+static const int kL0_SlowdownWritesTrigger = 8;
+    
+      // When user keys are different, but correctly ordered
+  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('hello', 200, kTypeValue)));
+    
+    #include <ctype.h>
+#include <stdio.h>
+#include 'db/filename.h'
+#include 'db/dbformat.h'
+#include 'leveldb/env.h'
+#include 'util/logging.h'
+    
+    // Return the name of the sstable with the specified number
+// in the db named by 'dbname'.  The result will be prefixed with
+// 'dbname'.
+std::string TableFileName(const std::string& dbname, uint64_t number);
+    
+      fname = InfoLogFileName('foo');
+  ASSERT_EQ('foo/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(0, number);
+  ASSERT_EQ(kInfoLogFile, type);
+    
+    #endif  // STORAGE_LEVELDB_DB_LOG_FORMAT_H_
+
+    
+      // Skip to start of first block that can contain the initial record
+  if (block_start_location > 0) {
+    Status skip_status = file_->Skip(block_start_location);
+    if (!skip_status.ok()) {
+      ReportDrop(block_start_location, skip_status);
+      return false;
     }
-    p_ = o.p_;
-    if (p_) {
-      counted_ptr_base<Atom>::getRef(p_)->add_ref();
-    }
-    return *this;
-  }
-  explicit counted_ptr(T* p) : p_(p) {
-    CHECK(!p);
-  }
-  ~counted_ptr() {
-    if (p_ && counted_ptr_base<Atom>::getRef(p_)->release_ref() == 1) {
-      p_->~T();
-      free(counted_ptr_base<Atom>::getRef(p_));
-    }
-  }
-  typename std::add_lvalue_reference<T>::type operator*() const {
-    return *p_;
   }
     
-    TEST_F(SparseByteSetTest, each_random) {
-  mt19937 rng;
-  uniform_int_distribution<uint16_t> dist{lims::min(), lims::max()};
-  set<uint8_t> added;
-  while (added.size() <= lims::max()) {
-    auto c = uint8_t(dist(rng));
-    EXPECT_EQ(added.count(c), s.contains(c));
-    EXPECT_EQ(!added.count(c), s.add(c));
-    added.insert(c);
-    EXPECT_TRUE(added.count(c)); // sanity
-    EXPECT_TRUE(s.contains(c));
+          if (force_error_) {
+        force_error_ = false;
+        returned_partial_ = true;
+        return Status::Corruption('read error');
+      }
+    
+        RecordType type;
+    const bool end = (left == fragment_length);
+    if (begin && end) {
+      type = kFullType;
+    } else if (begin) {
+      type = kFirstType;
+    } else if (end) {
+      type = kLastType;
+    } else {
+      type = kMiddleType;
+    }
+    
+    template<typename Key, class Comparator>
+inline void SkipList<Key,Comparator>::Iterator::Prev() {
+  // Instead of using explicit 'prev' links, we just search for the
+  // last node that falls before key.
+  assert(Valid());
+  node_ = list_->FindLessThan(node_->key);
+  if (node_ == list_->head_) {
+    node_ = nullptr;
   }
+}
+    
+    SEXP XGBoosterLoadModelFromRaw_R(SEXP handle, SEXP raw) {
+  R_API_BEGIN();
+  CHECK_CALL(XGBoosterLoadModelFromBuffer(R_ExternalPtrAddr(handle),
+                                          RAW(raw),
+                                          length(raw)));
+  R_API_END();
+  return R_NilValue;
+}
+    
+      // Compute the Score for a node with the given stats
+  virtual bst_float ComputeScore(bst_uint parentid,
+                                const GradStats &stats,
+                                bst_float weight) const = 0;
+    
+    TEST(SpanIter, Ref) {
+  int status = 1;
+  TestIterRef{&status}();
+  ASSERT_EQ(status, 1);
 }
