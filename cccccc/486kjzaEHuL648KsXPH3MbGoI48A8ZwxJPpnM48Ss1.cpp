@@ -1,324 +1,267 @@
 
         
-        #endif // BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
-
-    
-    static void secp256k1_gej_add_zinv_var(secp256k1_gej *r, const secp256k1_gej *a, const secp256k1_ge *b, const secp256k1_fe *bzinv) {
-    /* 9 mul, 3 sqr, 4 normalize, 12 mul_int/add/negate */
-    secp256k1_fe az, z12, u1, u2, s1, s2, h, i, i2, h2, h3, t;
-    }
-    
-        Round(a, b, c, d, e, f, g, h, 0x428a2f98, w0 = BE32(chunk[0]));
-    Round(h, a, b, c, d, e, f, g, 0x71374491, w1 = BE32(chunk[1]));
-    Round(g, h, a, b, c, d, e, f, 0xb5c0fbcf, w2 = BE32(chunk[2]));
-    Round(f, g, h, a, b, c, d, e, 0xe9b5dba5, w3 = BE32(chunk[3]));
-    Round(e, f, g, h, a, b, c, d, 0x3956c25b, w4 = BE32(chunk[4]));
-    Round(d, e, f, g, h, a, b, c, 0x59f111f1, w5 = BE32(chunk[5]));
-    Round(c, d, e, f, g, h, a, b, 0x923f82a4, w6 = BE32(chunk[6]));
-    Round(b, c, d, e, f, g, h, a, 0xab1c5ed5, w7 = BE32(chunk[7]));
-    Round(a, b, c, d, e, f, g, h, 0xd807aa98, w8 = BE32(chunk[8]));
-    Round(h, a, b, c, d, e, f, g, 0x12835b01, w9 = BE32(chunk[9]));
-    Round(g, h, a, b, c, d, e, f, 0x243185be, w10 = BE32(chunk[10]));
-    Round(f, g, h, a, b, c, d, e, 0x550c7dc3, w11 = BE32(chunk[11]));
-    Round(e, f, g, h, a, b, c, d, 0x72be5d74, w12 = BE32(chunk[12]));
-    Round(d, e, f, g, h, a, b, c, 0x80deb1fe, w13 = BE32(chunk[13]));
-    Round(c, d, e, f, g, h, a, b, 0x9bdc06a7, w14 = BE32(chunk[14]));
-    Round(b, c, d, e, f, g, h, a, 0xc19bf174, w15 = BE32(chunk[15]));
-    
-            secp256k1_ecmult_const(&res, &pt, &s);
-        secp256k1_ge_set_gej(&pt, &res);
-        /* Compute a hash of the point in compressed form
-         * Note we cannot use secp256k1_eckey_pubkey_serialize here since it does not
-         * expect its output to be secret and has a timing sidechannel. */
-        secp256k1_fe_normalize(&pt.x);
-        secp256k1_fe_normalize(&pt.y);
-        secp256k1_fe_get_b32(x, &pt.x);
-        y[0] = 0x02 | secp256k1_fe_is_odd(&pt.y);
-    
-    
-    {    secp256k1_scalar_get_b32(brx, sigr);
-    r = secp256k1_fe_set_b32(&fx, brx);
-    (void)r;
-    VERIFY_CHECK(r); /* brx comes from a scalar, so is less than the order; certainly less than p */
-    if (recid & 2) {
-        if (secp256k1_fe_cmp_var(&fx, &secp256k1_ecdsa_const_p_minus_order) >= 0) {
-            return 0;
-        }
-        secp256k1_fe_add(&fx, &secp256k1_ecdsa_const_order_as_fe);
-    }
-    if (!secp256k1_ge_set_xo_var(&x, &fx, recid & 1)) {
-        return 0;
-    }
-    secp256k1_gej_set_ge(&xj, &x);
-    secp256k1_scalar_inverse_var(&rn, sigr);
-    secp256k1_scalar_mul(&u1, &rn, message);
-    secp256k1_scalar_negate(&u1, &u1);
-    secp256k1_scalar_mul(&u2, &rn, sigs);
-    secp256k1_ecmult(ctx, &qj, &xj, &u2, &u1);
-    secp256k1_ge_set_gej_var(pubkey, &qj);
-    return !secp256k1_gej_is_infinity(&qj);
+        template <typename T1, typename T2, typename T3, typename T4>
+internal::ValueArray4<T1, T2, T3, T4> Values(T1 v1, T2 v2, T3 v3, T4 v4) {
+  return internal::ValueArray4<T1, T2, T3, T4>(v1, v2, v3, v4);
 }
     
-        secp256k1_context_set_error_callback(none, counting_illegal_callback_fn, &ecount);
-    secp256k1_context_set_error_callback(sign, counting_illegal_callback_fn, &ecount);
-    secp256k1_context_set_error_callback(vrfy, counting_illegal_callback_fn, &ecount);
-    secp256k1_context_set_error_callback(both, counting_illegal_callback_fn, &ecount);
-    secp256k1_context_set_illegal_callback(none, counting_illegal_callback_fn, &ecount);
-    secp256k1_context_set_illegal_callback(sign, counting_illegal_callback_fn, &ecount);
-    secp256k1_context_set_illegal_callback(vrfy, counting_illegal_callback_fn, &ecount);
-    secp256k1_context_set_illegal_callback(both, counting_illegal_callback_fn, &ecount);
+    #if 0
     
-    EventListener::~EventListener() {
-  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
-    delete i->second;
-  }
-}
-    
-    
-    {  template<typename T> bool RemoveListener() {
-    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
-    if (i!=listerners_.end()) {
-      delete i->second;
-      listerners_.erase(i);
-      return true;
+    // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
+// A class that enables one to stream messages to assertion macros
+class GTEST_API_ AssertHelper {
+ public:
+  // Constructor.
+  AssertHelper(TestPartResult::Type type,
+               const char* file,
+               int line,
+               const char* message);
+  ~AssertHelper();
     }
-    return false;
-  }
-private:
-  DISALLOW_COPY_AND_ASSIGN(EventListener);
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32, typename T33, typename T34, typename T35,
+    typename T36, typename T37, typename T38, typename T39, typename T40,
+    typename T41, typename T42, typename T43, typename T44, typename T45,
+    typename T46, typename T47, typename T48, typename T49>
+class ValueArray49 {
+ public:
+  ValueArray49(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
+      T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17,
+      T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23, T24 v24, T25 v25,
+      T26 v26, T27 v27, T28 v28, T29 v29, T30 v30, T31 v31, T32 v32, T33 v33,
+      T34 v34, T35 v35, T36 v36, T37 v37, T38 v38, T39 v39, T40 v40, T41 v41,
+      T42 v42, T43 v43, T44 v44, T45 v45, T46 v46, T47 v47, T48 v48,
+      T49 v49) : v1_(v1), v2_(v2), v3_(v3), v4_(v4), v5_(v5), v6_(v6), v7_(v7),
+      v8_(v8), v9_(v9), v10_(v10), v11_(v11), v12_(v12), v13_(v13), v14_(v14),
+      v15_(v15), v16_(v16), v17_(v17), v18_(v18), v19_(v19), v20_(v20),
+      v21_(v21), v22_(v22), v23_(v23), v24_(v24), v25_(v25), v26_(v26),
+      v27_(v27), v28_(v28), v29_(v29), v30_(v30), v31_(v31), v32_(v32),
+      v33_(v33), v34_(v34), v35_(v35), v36_(v36), v37_(v37), v38_(v38),
+      v39_(v39), v40_(v40), v41_(v41), v42_(v42), v43_(v43), v44_(v44),
+      v45_(v45), v46_(v46), v47_(v47), v48_(v48), v49_(v49) {}
+    }
+    
+    // The template 'selector' struct TemplateSel<Tmpl> is used to
+// represent Tmpl, which must be a class template with one type
+// parameter, as a type.  TemplateSel<Tmpl>::Bind<T>::type is defined
+// as the type Tmpl<T>.  This allows us to actually instantiate the
+// template 'selected' by TemplateSel<Tmpl>.
+//
+// This trick is necessary for simulating typedef for class templates,
+// which C++ doesn't support directly.
+template <GTEST_TEMPLATE_ Tmpl>
+struct TemplateSel {
+  template <typename T>
+  struct Bind {
+    typedef Tmpl<T> type;
+  };
 };
     
-      class ClipboardWriter {
-  public:
-    ClipboardWriter() {
-      scw_.reset(new ui::ScopedClipboardWriter(ui::CLIPBOARD_TYPE_COPY_PASTE));
-    }
-    }
-    
-    namespace extensions {
-    }
-    
-    
-    {  nw::ObjectManager* manager = nw::ObjectManager::Get(browser_context());
-  manager->OnCallObjectMethod(render_frame_host(), id, type, method, *arguments);
-  return RespondNow(NoArguments());
+    // Sets the 0-terminated C string this MyString object
+// represents.
+void MyString::Set(const char* a_c_string) {
+  // Makes sure this works when c_string == c_string_
+  const char* const temp = MyString::CloneCString(a_c_string);
+  delete[] c_string_;
+  c_string_ = temp;
 }
+
     
-    
-    {		for (unsigned int uiPixel = 0; uiPixel < PIXELS; uiPixel++)
-		{
-			m_fError += CalcPixelError(m_afrgbaDecodedColors[uiPixel], m_afDecodedAlphas[uiPixel],
-										m_pafrgbaSource[uiPixel]);
-		}
-		
-	}
-    
-    
-#define AF_LATIN_BLUE_ACTIVE      ( 1U << 0 ) /* zone height is <= 3/4px   */
-#define AF_LATIN_BLUE_TOP         ( 1U << 1 ) /* we have a top blue zone   */
-#define AF_LATIN_BLUE_SUB_TOP     ( 1U << 2 ) /* we have a subscript top   */
-                                              /* blue zone                 */
-#define AF_LATIN_BLUE_NEUTRAL     ( 1U << 3 ) /* we have neutral blue zone */
-#define AF_LATIN_BLUE_ADJUSTMENT  ( 1U << 4 ) /* used for scale adjustment */
-                                              /* optimization              */
-    
-    
-    {
-    {    if (Reverse1)
-    {
-      op1b = DupOutPt(op1, false);
-      op2b = DupOutPt(op2, true);
-      op1->Prev = op2;
-      op2->Next = op1;
-      op1b->Next = op2b;
-      op2b->Prev = op1b;
-      j->OutPt1 = op1;
-      j->OutPt2 = op1b;
-      return true;
-    } else
-    {
-      op1b = DupOutPt(op1, true);
-      op2b = DupOutPt(op2, false);
-      op1->Next = op2;
-      op2->Prev = op1;
-      op1b->Prev = op2b;
-      op2b->Next = op1b;
-      j->OutPt1 = op1;
-      j->OutPt2 = op1b;
-      return true;
+    class b2Triangle{
+public:
+	float* x;
+    float* y;
+	b2Triangle();
+	b2Triangle(float32 x1, float32 y1, float32 x2, float32 y2, float32 x3, float32 y3);
+	~b2Triangle();
+	bool IsInside(float32 _x, float32 _y);
+	void Set(const b2Triangle& toMe);
     }
-  }
+    
+    #if !defined(OPUS_HAVE_RTCD)
+#define OVERRIDE_OPUS_FFT (1)
+    
+    /** 16x32 multiplication, followed by a 16-bit shift right. Results fits in 32 bits */
+#undef MULT16_32_Q16
+static OPUS_INLINE opus_val32 MULT16_32_Q16_armv4(opus_val16 a, opus_val32 b)
+{
+  unsigned rd_lo;
+  int rd_hi;
+  __asm__(
+      '#MULT16_32_Q16\n\t'
+      'smull %0, %1, %2, %3\n\t'
+      : '=&r'(rd_lo), '=&r'(rd_hi)
+      : '%r'(b),'r'(a<<16)
+  );
+  return rd_hi;
 }
-//----------------------------------------------------------------------
+#define MULT16_32_Q16(a, b) (MULT16_32_Q16_armv4(a, b))
     
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
+    /*The number of bits to output at a time.*/
+# define EC_SYM_BITS   (8)
+/*The total number of bits in each of the state registers.*/
+# define EC_CODE_BITS  (32)
+/*The maximum symbol value.*/
+# define EC_SYM_MAX    ((1U<<EC_SYM_BITS)-1)
+/*Bits to shift by to move a symbol into the high-order position.*/
+# define EC_CODE_SHIFT (EC_CODE_BITS-EC_SYM_BITS-1)
+/*Carry bit of the high-order range symbol.*/
+# define EC_CODE_TOP   (((opus_uint32)1U)<<(EC_CODE_BITS-1))
+/*Low-order bit of the high-order range symbol.*/
+# define EC_CODE_BOT   (EC_CODE_TOP>>EC_SYM_BITS)
+/*The number of bits available for the last, partial symbol in the code field.*/
+# define EC_CODE_EXTRA ((EC_CODE_BITS-2)%EC_SYM_BITS+1)
+#endif
+
     
     
-    {        auto maskMatrix = GetMatrix();
-        size_t rowOffset = offset[0];
-        size_t colOffset = offset[1];
-        size_t sliceRowLength = (shape[0] != NDShape::InferredDimension) ? shape[0] : (maskMatrix->GetNumRows() - rowOffset);
-        size_t sliceColLength = (shape[1] != NDShape::InferredDimension) ? shape[1] : (maskMatrix->GetNumCols() - colOffset);
-        if ((rowOffset == 0) && (sliceRowLength == maskMatrix->GetNumRows()))
-            maskMatrix->ColumnSlice(colOffset, sliceColLength).SetValue((char)maskKind);
-        else
-        {
-            // Since Matrix does not support strides in the row dimension, we will need to create separate slices for each column
-            for (size_t i = colOffset; i < (colOffset + sliceColLength); ++i)
-            {
-                auto column = maskMatrix->ColumnSlice(i, 1);
-                column.Reshape(1, maskMatrix->GetNumRows());
-                column.ColumnSlice(rowOffset, sliceRowLength).SetValue((char)maskKind);
-            }
+    {    // Back up until we come to a non-combining char, determine whether
+    //  that char is a word char.
+    UBool prevCIsWord = FALSE;
+    for (;;) {
+        if (pos <= fLookStart) {
+            break;
+        }
+        UChar32 prevChar;
+        U16_PREV(inputBuf, fLookStart, pos, prevChar);
+        if (!(u_hasBinaryProperty(prevChar, UCHAR_GRAPHEME_EXTEND)
+              || u_charType(prevChar) == U_FORMAT_CHAR)) {
+            prevCIsWord = fPattern->fStaticSets[URX_ISWORD_SET]->contains(prevChar);
+            break;
         }
     }
-    
-    #pragma once
-    
-    
-    {
-    {    private:
-        static bool IsNativeUDF(const Dictionary& dict);
-    };
-}
-
-    
-    
-    {    return false;
+    isBoundary = cIsWord ^ prevCIsWord;
+    return isBoundary;
 }
     
-    // implementation AccelDeccelAmplitude
     
-    Place * Place::reverse() const
-{
-    // no reverse, just clone
-    return this->clone();
-}
-    
-    CC_CONSTRUCTOR_ACCESS:
-    /** initializes the action */
-    bool initWithDuration(float d);
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-                p.y = ( R + ay - ( r * (1 - cosBeta) * sinTheta));
-    
-    #endif // __ACTION_CCPAGETURN3D_ACTION_H__
-
-    
-    /**
-@brief SplitCols action.
-@details Split the target node in many columns.
-        Then move out some columns from top, move out the other columns from bottom.
-*/
-class CC_DLL SplitCols : public TiledGrid3DAction
-{
-public:
-    
-    /** 
-     * @brief Create the action with the number of columns and the duration.
-     * @param duration Specify the duration of the SplitCols action. It's a value in seconds.
-     * @param cols Specify the columns count should be split.
-     * @return If the creation success, return a pointer of SplitCols action; otherwise, return nil.
-     */
-    static SplitCols* create(float duration, unsigned int cols);
+    {    } else if (fStartType == START_CHAR) {
+        printf('    First char of Match: ');
+        if (fInitialChar > 0x20) {
+                printf(''%s'\n', CStr(UnicodeString(fInitialChar))());
+            } else {
+                printf('%#x\n', fInitialChar);
+            }
     }
     
-    void ActionTween::update(float dt)
-{
-    dynamic_cast<ActionTweenDelegate*>(_target)->updateTweenAction(_to  - _delta * (1 - dt), _key);
+    U_CAPI int32_t U_EXPORT2
+uhash_hashScriptSet(const UElement key);
+    
+    #endif
+
+    
+    #ifndef __SMALLINTFORMATTER_H__
+#define __SMALLINTFORMATTER_H__
+    
+    #if !UCONFIG_NO_FORMATTING
+    
+    int32_t StandardPlural::indexFromString(const UnicodeString &keyword, UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode)) { return OTHER; }
+    int32_t i = indexOrNegativeFromString(keyword);
+    if (i >= 0) {
+        return i;
+    } else {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return OTHER;
+    }
 }
     
-     @since v0.99.2
+        /**
+     * @param keyword for example 'few' or 'other'
+     * @return the plural form corresponding to the keyword, or OTHER
+     */
+    static Form orOtherFromString(const UnicodeString &keyword) {
+        return static_cast<Form>(indexOrOtherIndexFromString(keyword));
+    }
+    
+    /**
+ * UnicodeReplacer API
  */
-class CC_DLL ActionTween : public ActionInterval
-{
-public:
-    /** 
-     * @brief Create and initializes the action with the property name (key), and the from and to parameters.
-     * @param duration The duration of the ActionTween. It's a value in seconds.
-     * @param key The key of property which should be updated.
-     * @param from The value of the specified property when the action begin.
-     * @param to The value of the specified property when the action end.
-     * @return If the creation success, return a pointer of ActionTween; otherwise, return nil.
-     */
-    static ActionTween* create(float duration, const std::string& key, float from, float to);
-    }
-    
-    bool Animation::init()
-{
-    _loops = 1;
-    _delayPerUnit = 0.0f;
-    
-    return true;
+UnicodeString& StringMatcher::toReplacerPattern(UnicodeString& rule,
+                                                UBool /*escapeUnprintable*/) const {
+    // assert(segmentNumber > 0);
+    rule.truncate(0);
+    rule.append((UChar)0x0024 /*$*/);
+    ICU_Utility::appendNumber(rule, segmentNumber, 10, 1);
+    return rule;
 }
     
-        /** Gets the units of time the frame takes.
-     *
-     * @return The units of time the frame takes.
+        /**
+     * Remove any match data.  This must be called before performing a
+     * set of matches with this segment.
      */
-    float getDelayUnits() const { return _delayUnits; };
+    void resetMatch();
     
-    /** Sets the units of time the frame takes.
-     *
-     * @param delayUnits The units of time the frame takes.
-     */
-    void setDelayUnits(float delayUnits) { _delayUnits = delayUnits; };
     
-    /** @brief Gets user information
-     * A AnimationFrameDisplayedNotification notification will be broadcast when the frame is displayed with this dictionary as UserInfo. 
-     * If UserInfo is nil, then no notification will be broadcast.
-     *
-     * @return A dictionary as UserInfo
-     */
-    const ValueMap& getUserInfo() const { return _userInfo; };
-    ValueMap& getUserInfo() { return _userInfo; };
-    
-    /** Sets user information.
-     * @param userInfo A dictionary as UserInfo.
-     */
-    void setUserInfo(const ValueMap& userInfo)
+    {    // exception out_of_range.401
+    try
     {
-        _userInfo = userInfo;
+        // try to write beyond the array limit
+        array.at(5) = 'sixth';
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+}
+
+    
+        // print values
+    std::cout << object << '\n';
+    std::cout << null << '\n';
+    
+      ProtocolData<::apollo::canbus::ChassisDetail> mpd;
+  SenderMessage<::apollo::canbus::ChassisDetail> msg(1, &mpd);
+  EXPECT_FALSE(sender.NeedSend(msg, 1));
+  EXPECT_EQ(msg.message_id(), 1);
+  int32_t period = msg.curr_period();
+  msg.UpdateCurrPeriod(-50);
+  EXPECT_EQ(msg.curr_period(), period + 50);
+  EXPECT_EQ(msg.CanFrame().id, 1);
+    
+    double ClusterGeneralInfo701::longitude_vel(const std::uint8_t* bytes,
+                                            int32_t length) const {
+  Byte t0(bytes + 4);
+  uint32_t x = t0.get_byte(0, 8);
     }
     
-    // Overrides
-    virtual AnimationFrame *clone() const override;
+      Byte t1(bytes + 3);
+  uint32_t t = t0.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
     
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    AnimationFrame();
-    /**
-     * @js NA
-     * @lua NA
-     */
-    virtual ~AnimationFrame();
     
-    /** initializes the animation frame with a spriteframe, number of delay units and a notification user info */
-    bool initWithSpriteFrame(SpriteFrame* spriteFrame, float delayUnits, const ValueMap& userInfo);
+    {  int ret = x;
+  return ret;
+}
     
-    void AnimationCache::removeAnimation(const std::string& name)
+    BaseMapMatrix::BaseMapMatrix() {}
+    
+    #include 'modules/common/util/file.h'
+#include 'modules/map/hdmap/hdmap_util.h'
+    
+    class ObstacleClustersTest : public KMLMapBasedTest {};
+    
+    TEST_F(GemVehicleFactoryTest, InitMessageManager) {
+  EXPECT_TRUE(gem_factory_.CreateMessageManager() != nullptr);
+}
+    
+        static BOOST_FORCEINLINE storage_type load(storage_type const volatile& storage, memory_order) BOOST_NOEXCEPT
+    {
+        storage_type value;
+    }
+    
+    BOOST_FORCEINLINE void pause() BOOST_NOEXCEPT
 {
-    if (name.empty())
-        return;
-    }
-    
-    // implementation AtlasNode
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
+#if defined(_MSC_VER) && (defined(_M_AMD64) || defined(_M_IX86))
+    _mm_pause();
+#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+    __asm__ __volatile__('pause;');
+#endif
+}
