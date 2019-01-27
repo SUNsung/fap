@@ -1,84 +1,289 @@
 
         
-                def preload_commit_authors
-          # This also preloads the author of every commit. We're using 'lazy_author'
-          # here since 'author' immediately loads the data on the first call.
-          @pipeline.commit.try(:lazy_author)
-        end
+            def did_show_message?
+      file_name = '.did_show_opt_info'
     
-            def sidekiq_worker_class
-          ImportDiffNoteWorker
-        end
+            return_value = run_active_command
     
-            # attributes - A hash containing the raw issue details. The keys of this
-        #              Hash (and any nested hashes) must be symbols.
-        def initialize(attributes)
-          @attributes = attributes
-        end
-    
-            # attributes - A Hash containing the user details. The keys of this
-        #              Hash (and any nested hashes) must be symbols.
-        def initialize(attributes)
-          @attributes = attributes
-        end
+            expect(result).to eq('appledoc --project-name \'Project Name\' --project-company \'Company\' --docset-feed-url \'http://docset-feed-url.com\' --exit-threshold \'2\' input/dir')
       end
-    end
-  end
-end
+    
+    # Here be helper
+    
+    shellescape_testcases = [
+  # baseline
+  {
+    'it' => '(#1) on simple string',
+    'it_result' => {
+      'windows' => 'doesn't change it',
+      'other'   => 'doesn't change it'
+    },
+    'str' => 'normal_string_without_spaces',
+    'expect' => {
+      'windows' => 'normal_string_without_spaces',
+      'other'   => 'normal_string_without_spaces'
+    }
+  },
+  {
+    'it' => '(#2) on empty string',
+    'it_result' => {
+      'windows' => 'wraps it in double quotes',
+      'other'   => 'wraps it in single quotes'
+    },
+    'str' => '',
+    'expect' => {
+      'windows' => '''',
+      'other'   => '\'\''
+    }
+  },
+  # spaces
+  {
+    'it' => '(#3) on string with spaces',
+    'it_result' => {
+      'windows' => 'wraps it in double quotes',
+      'other'   => 'escapes spaces with <backslash>'
+    },
+    'str' => 'string with spaces',
+    'expect' => {
+      'windows' => ''string with spaces'',
+      'other'   => 'string\ with\ spaces'
+    }
+  },
+  # double quotes
+  {
+    'it' => '(#4) on simple string that is already wrapped in double quotes',
+    'it_result' => {
+      'windows' => 'doesn't touch it',
+      'other'   => 'escapes the double quotes with <backslash>'
+    },
+    'str' => ''normal_string_without_spaces'',
+    'expect' => {
+      'windows' => ''normal_string_without_spaces'',
+      'other'   => '\'normal_string_without_spaces\''
+    }
+  },
+  {
+    'it' => '(#5) on string with spaces that is already wrapped in double quotes',
+    'it_result' => {
+      'windows' => 'wraps in double quotes and duplicates existing double quotes',
+      'other'   => 'escapes the double quotes and spaces with <backslash>'
+    },
+    'str' => ''string with spaces already wrapped in double quotes'',
+    'expect' => {
+      'windows' => ''''string with spaces already wrapped in double quotes'''',
+      'other'   => '\'string\ with\ spaces\ already\ wrapped\ in\ double\ quotes\''
+    }
+  },
+  {
+    'it' => '(#6) on string with spaces and double quotes',
+    'it_result' => {
+      'windows' => 'wraps in double quotes and duplicates existing double quotes',
+      'other'   => 'escapes the double quotes and spaces with <backslash>'
+    },
+    'str' => 'string with spaces and 'double' quotes',
+    'expect' => {
+      'windows' => ''string with spaces and ''double'' quotes'',
+      'other'   => 'string\ with\ spaces\ and\ \'double\'\ quotes'
+    }
+  },
+  # https://github.com/ruby/ruby/blob/ac543abe91d7325ace7254f635f34e71e1faaf2e/test/test_shellwords.rb#L64-L65
+  {
+    'it' => '(#7) on simple int',
+    'it_result' => {
+      'windows' => 'doesn't change it',
+      'other'   => 'doesn't change it'
+    },
+    'str' => 3,
+    'expect' => {
+      'windows' => '3',
+      'other'   => '3'
+    }
+  },
+  # single quotes
+  {
+    'it' => '(#8) on simple string that is already wrapped in single quotes',
+    'it_result' => {
+      'windows' => 'doesn't touch it',
+      'other'   => 'escapes the single quotes with <backslash>'
+    },
+    'str' => ''normal_string_without_spaces'',
+    'expect' => {
+      'windows' => ''normal_string_without_spaces'',
+      'other'   => '\\'normal_string_without_spaces\\''
+    }
+  },
+  {
+    'it' => '(#9) on string with spaces that is already wrapped in single quotes',
+    'it_result' => {
+      'windows' => 'wraps in double quotes',
+      'other'   => 'escapes the single quotes and spaces with <backslash>'
+    },
+    'str' => ''string with spaces already wrapped in single quotes'',
+    'expect' => {
+      'windows' => '\''string with spaces already wrapped in single quotes'\'',
+      'other'   => '\\'string\\ with\\ spaces\\ already\\ wrapped\\ in\\ single\\ quotes\\''
+    }
+  },
+  {
+    'it' => '(#10) string with spaces and single quotes',
+    'it_result' => {
+      'windows' => 'wraps in double quotes and leaves single quotes',
+      'other'   => 'escapes the single quotes and spaces with <backslash>'
+    },
+    'str' => 'string with spaces and 'single' quotes',
+    'expect' => {
+      'windows' => '\'string with spaces and 'single' quotes\'',
+      'other'   => 'string\ with\ spaces\ and\ \\\'single\\\'\ quotes'
+    }
+  },
+  {
+    'it' => '(#11) string with spaces and <backslash>',
+    'it_result' => {
+      'windows' => 'wraps in double quotes and escapes the backslash with backslash',
+      'other'   => 'escapes the spaces and the backslash (which in results in quite a lot of them)'
+    },
+    'str' => 'string with spaces and \\ in it',
+    'expect' => {
+      'windows' => '\'string with spaces and \\ in it\'',
+      'other'   => 'string\\ with\\ spaces\\ and\\ \\\\\\ in\\ it'
+    }
+  },
+  {
+    'it' => '(#12) string with spaces and <slash>',
+    'it_result' => {
+      'windows' => 'wraps in double quotes',
+      'other'   => 'escapes the spaces'
+    },
+    'str' => 'string with spaces and / in it',
+    'expect' => {
+      'windows' =>  '\'string with spaces and / in it\'',
+      'other'   => 'string\\ with\\ spaces\\ and\\ /\\ in\\ it'
+    }
+  },
+  {
+    'it' => '(#13) string with spaces and parens',
+    'it_result' => {
+      'windows' => 'wraps in double quotes',
+      'other'   => 'escapes the spaces and parens'
+    },
+    'str' => 'string with spaces and (parens) in it',
+    'expect' => {
+      'windows' => '\'string with spaces and (parens) in it\'',
+      'other'   => 'string\\ with\\ spaces\\ and\\ \\(parens\\)\\ in\\ it'
+    }
+  },
+  {
+    'it' => '(#14) string with spaces, single quotes and parens',
+    'it_result' => {
+      'windows' => 'wraps in double quotes',
+      'other'   => 'escapes the spaces, single quotes and parens'
+    },
+    'str' => 'string with spaces and 'quotes' (and parens) in it',
+    'expect' => {
+      'windows' => '\'string with spaces and 'quotes' (and parens) in it\'',
+      'other'   => 'string\\ with\\ spaces\\ and\\ \\'quotes\\'\\ \\(and\\ parens\\)\\ in\\ it'
+    }
+  }
+]
+    
+    # The * turns the array into a parameter list
+# This is using the form of exec which takes a variable parameter list, e.g. `exec(command, param1, param2, ...)`
+# We need to use that, because otherwise invocations like
+# `spaceauth -u user@fastlane.tools` would recognize '-u user@fastlane.tools' as a single parameter and throw errors
+exec(*exec_arr)
 
     
-    describe Admin::UsersController do
-  it 'requires to be signed in as an admin' do
-    login_as(users(:bob))
-    visit admin_users_path
-    expect(page).to have_text('Admin access required to view that page.')
-  end
-    
-          it 'generates a DOT script' do
-        expect(agents_dot(@agents)).to match(%r{
-          \A
-          digraph \x20 'Agent \x20 Event \x20 Flow' \{
-            node \[ [^\]]+ \];
-            edge \[ [^\]]+ \];
-            (?<foo>\w+) \[label=foo\];
-            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
-            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
-            \k<bar1> \[label=bar1\];
-            \k<bar2> \[label=bar2,style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
-            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
-            \k<bar3> \[label=bar3\];
-          \}
-          \z
-        }x)
+        context '(de)activating users' do
+      it 'does not show deactivation buttons for the current user' do
+        visit admin_users_path
+        expect(page).to have_no_css('a[href='/admin/users/#{users(:jane).id}/deactivate']')
       end
     
-          describe '#generate_diff' do
-        it 'should check if the agent requires a service' do
-          agent_diffs = services_scenario_import.agent_diffs
-          basecamp_agent_diff = agent_diffs[0]
-          expect(basecamp_agent_diff.requires_service?).to eq(true)
+    describe ScenarioImportsController do
+  let(:user) { users(:bob) }
+    
+          expect(data[:agents][guid_order(agent_list, :jane_weather_agent)]).not_to have_key(:propagate_immediately) # can't receive events
+      expect(data[:agents][guid_order(agent_list, :jane_rain_notifier_agent)]).not_to have_key(:schedule) # can't be scheduled
+    end
+    
+        it 'should raise error when response says unauthorized' do
+      stub(HTTParty).post { {'Response' => 'Not authorized'} }
+      expect { @checker.send_notification({}) }.to raise_error(StandardError, /Not authorized/)
+    end
+    
+        # Dump all the parsed {Sass::Tree::RuleNode} selectors to strings.
+    #
+    # @param root [Tree::Node] The parent node
+    def dump_selectors(root)
+      root.children.each do |child|
+        next dump_selectors(child) if child.is_a?(Tree::DirectiveNode)
+        next unless child.is_a?(Tree::RuleNode)
+        child.rule = [child.parsed_rules.to_s]
+        dump_selectors(child)
+      end
+    end
+    
+          def _identicon_code(blob)
+        string_to_code blob + @request.host
+      end
+    
+    context 'Precious::Helpers' do
+  include Precious::Helpers
+    
+      test 'remove page extentions' do
+    view = Precious::Views::LatestChanges.new
+    assert_equal 'page', view.remove_page_extentions('page.wiki')
+    assert_equal 'page-wiki', view.remove_page_extentions('page-wiki.md')
+    assert_equal 'file.any_extention', view.remove_page_extentions('file.any_extention')
+  end
+    
+        def sanitize_empty_params(param)
+      [nil, ''].include?(param) ? nil : CGI.unescape(param)
+    end
+    
+      s.add_dependency 'gollum-lib', '~> 4.2', '>= 4.2.10'
+  s.add_dependency 'kramdown', '~> 1.9.0'
+  s.add_dependency 'sinatra', '~> 1.4', '>= 1.4.4'
+  s.add_dependency 'mustache', ['>= 0.99.5', '< 1.0.0']
+  s.add_dependency 'useragent', '~> 0.16.2'
+  s.add_dependency 'gemojione', '~> 3.2'
+    
+          def order_token
+        request.headers['X-Spree-Order-Token'] || params[:order_token]
+      end
+    
+                if handler.error.present?
+              @coupon_message = handler.error
+              respond_with(@order, default_template: 'spree/api/v1/orders/could_not_apply_coupon', status: 422)
+              return true
+            end
+          end
+          false
         end
     
-    describe AgentRunner do
-  context 'without traps' do
-    before do
-      stub.instance_of(Rufus::Scheduler).every
-      stub.instance_of(AgentRunner).set_traps
-      @agent_runner = AgentRunner.new
-    end
+            def update
+          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
+          if @return_authorization.update_attributes(return_authorization_params)
+            respond_with(@return_authorization, default_template: :show)
+          else
+            invalid_resource!(@return_authorization)
+          end
+        end
     
-        it 'does not output links to other agents outside of the incoming set' do
-      Link.create!(:source_id => agents(:jane_weather_agent).id, :receiver_id => agents(:jane_website_agent).id)
-      Link.create!(:source_id => agents(:jane_website_agent).id, :receiver_id => agents(:jane_rain_notifier_agent).id)
+            def scope
+          includes = { variant: [{ option_values: :option_type }, :product] }
+          @stock_location.stock_items.accessible_by(current_ability, :read).includes(includes)
+        end
     
-    describe AgentLog do
-  describe 'validations' do
-    before do
-      @log = AgentLog.new(:agent => agents(:jane_website_agent), :message => 'The agent did something', :level => 3)
-      expect(@log).to be_valid
-    end
+            # Because JSTree wants parameters in a *slightly* different format
+        def jstree
+          show
+        end
     
-      caveats <<~EOS
-    Installation or Uninstallation may fail with Exit Code 19 (Conflicting Processes running) if Browsers, Safari Notification Service or SIMBL Services (e.g. Flashlight) are running or Adobe Creative Cloud or any other Adobe Products are already installed. See Logs in /Library/Logs/Adobe/Installers if Installation or Uninstallation fails, to identifify the conflicting processes.
-  EOS
-end
+            def zone_params
+          attrs = params.require(:zone).permit!
+          if attrs[:zone_members]
+            attrs[:zone_members_attributes] = attrs.delete(:zone_members)
+          end
+          attrs
+        end
