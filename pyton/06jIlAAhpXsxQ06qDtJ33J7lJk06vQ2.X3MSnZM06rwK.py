@@ -1,110 +1,135 @@
 
         
-            def score(self):
-        min_over = sys.MAXSIZE
-        max_under = -sys.MAXSIZE
-        for score in self.possible_scores():
-            if self.BLACKJACK < score < min_over:
-                min_over = score
-            elif max_under < score <= self.BLACKJACK:
-                max_under = score
-        return max_under if max_under != -sys.MAXSIZE else min_over
-    
-        def mapper(self, _, line):
-        '''Parse each log line, extract and transform relevant lines.
+        
+class RangeMaxValueValidator(MaxValueValidator):
+    def compare(self, a, b):
+        return a.upper is None or a.upper > b
+    message = _('Ensure that this range is completely less than or equal to %(limit_value)s.')
     
     
-if __name__ == '__main__':
-    RemoveDuplicateUrls.run()
-
-    
-    
-def get_db():
-    '''Connect to the application's configured database. The connection
-    is unique for each request and will be reused if this is called
-    again.
-    '''
-    if 'db' not in g:
-        g.db = sqlite3.connect(
-            current_app.config['DATABASE'],
-            detect_types=sqlite3.PARSE_DECLTYPES
-        )
-        g.db.row_factory = sqlite3.Row
-    
-        def logout(self):
-        return self._client.get('/auth/logout')
-    
-        Some py2/py3 compatibility support based on a stripped down
-    version of six so we don't have to depend on a specific version
-    of it.
-    
-        def add_app_template_global(self, f, name=None):
-        '''Register a custom template global, available application wide.  Like
-        :meth:`Flask.add_template_global` but for a blueprint.  Works exactly
-        like the :meth:`app_template_global` decorator.
-    
-    
-# context locals
-_request_ctx_stack = LocalStack()
-_app_ctx_stack = LocalStack()
-current_app = LocalProxy(_find_app)
-request = LocalProxy(partial(_lookup_req_object, 'request'))
-session = LocalProxy(partial(_lookup_req_object, 'session'))
-g = LocalProxy(partial(_lookup_app_object, 'g'))
-
-    
-        class _FakeSignal(object):
-        '''If blinker is unavailable, create a fake class with the same
-        interface that allows sending of signals but will fail with an
-        error on anything else.  Instead of doing anything on send, it
-        will just ignore the arguments and do nothing instead.
+class BaseSessionManager(models.Manager):
+    def encode(self, session_dict):
         '''
+        Return the given session dictionary serialized and encoded as a string.
+        '''
+        session_store_class = self.model.get_session_store_class()
+        return session_store_class().encode(session_dict)
+    
+        For complete documentation on using Sessions in your code, consult
+    the sessions documentation that is shipped with Django (also available
+    on the Django Web site).
+    '''
+    objects = SessionManager()
     
     
-def make_test_environ_builder(
-    app, path='/', base_url=None, subdomain=None, url_scheme=None,
-    *args, **kwargs
-):
-    '''Create a :class:`~werkzeug.test.EnvironBuilder`, taking some
-    defaults from the application.
+class AppidManager(object):
+    lock = threading.Lock()
     
-        def short_desc(self):
-        return 'Run quick benchmark test'
+            import_command = 'security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain ../../../../data/gae_proxy/CA.crt'# % certfile.decode('utf-8')
+        if exist_ca_sha1:
+            delete_ca_command = 'security delete-certificate -Z %s' % exist_ca_sha1
+            exec_command = '%s;%s' % (delete_ca_command, import_command)
+        else:
+            exec_command = import_command
+    
+        if __password__ and __password__ != kwargs.get('password', ''):
+        start_response('403 Forbidden', [('Content-Type', 'text/html')])
+        yield message_html('403 Wrong password', 'Wrong password(%r)' % kwargs.get('password', ''), 'GoAgent proxy.ini password is wrong!')
+        raise StopIteration
+    
+        :param str filepath: Path of file to parse
+    :param str varname: Name of the variable
     
     
-class Command(ScrapyCommand):
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return (self.filep == other.filep and self.path == other.path and
+                    self.addrs == other.addrs and
+                    self.get_names() == other.get_names() and
+                    self.ssl == other.ssl and
+                    self.enabled == other.enabled and
+                    self.modmacro == other.modmacro)
     
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-l', '--list', dest='list', action='store_true',
-            help='List available templates')
-        parser.add_option('-e', '--edit', dest='edit', action='store_true',
-            help='Edit spider after creating it')
-        parser.add_option('-d', '--dump', dest='dump', metavar='TEMPLATE',
-            help='Dump template to standard output')
-        parser.add_option('-t', '--template', dest='template', default='basic',
-            help='Uses a custom template.')
-        parser.add_option('--force', dest='force', action='store_true',
-            help='If the spider already exists, overwrite it with the template')
+        def test_revert_challenge_config(self):
+        mock_load = mock.Mock()
+        self.config.aug.load = mock_load
     
-        requires_project = False
-    default_settings = {'LOG_ENABLED': False,
-                        'SPIDER_LOADER_WARN_ONLY': True}
+        def test_basic_variable_parsing(self):
+        matches = self.parser.find_dir('TestVariablePort')
     
-            spidercls = DefaultSpider
-        if opts.spider:
-            spidercls = spider_loader.load(opts.spider)
-        elif url:
-            spidercls = spidercls_for_request(spider_loader, Request(url),
-                                              spidercls, log_multiple=True)
+        def setUp(self):  # pylint: disable=arguments-differ
+        super(TlsSniPerformTest, self).setUp()
     
-            def creatorForNetloc(self, hostname, port):
-            return ScrapyClientTLSOptions(hostname.decode('ascii'), self.getContext())
+        @staticmethod
+    def get_streams_by_id(account_number, video_id):
+        '''
+        int, int->list
+        
+        Get the height of the videos.
+        
+        Since brightcove is using 3 kinds of links: rtmp, http and https,
+        we will be using the HTTPS one to make it secure.
+        
+        If somehow akamaihd.net is blocked by the Great Fucking Wall,
+        change the 'startswith https' to http.
+        '''
+        endpoint = 'https://edge.api.brightcove.com/playback/v1/accounts/{account_number}/videos/{video_id}'.format(account_number = account_number, video_id = video_id)
+        fake_header_id = fake_headers
+        #is this somehow related to the time? Magic....
+        fake_header_id['Accept'] ='application/json;pk=BCpkADawqM1cc6wmJQC2tvoXZt4mrB7bFfi6zGt9QnOzprPZcGLE9OMGJwspQwKfuFYuCjAAJ53JdjI8zGFx1ll4rxhYJ255AXH1BQ10rnm34weknpfG-sippyQ'
     
-        def download_request(self, request, spider):
-        scheme = urlparse_cached(request).scheme
-        handler = self._get_handler(scheme)
-        if not handler:
-            raise NotSupported('Unsupported URL scheme '%s': %s' %
-                               (scheme, self._notconfigured[scheme]))
-        return handler.download_request(request, spider)
+    class BokeCC(VideoExtractor):
+    name = 'BokeCC'
+    
+    site_info = 'CKPlayer General'
+download = ckplayer_download
+download_playlist = playlist_not_supported('ckplayer')
+
+    
+    #----------------------------------------------------------------------
+def dilidili_parser_data_to_stream_types(typ ,vid ,hd2 ,sign, tmsign, ulk):
+    '''->list'''
+    another_url = 'https://newplayer.jfrft.com/parse.php?xmlurl=null&type={typ}&vid={vid}&hd={hd2}&sign={sign}&tmsign={tmsign}&userlink={ulk}'.format(typ = typ, vid = vid, hd2 = hd2, sign = sign, tmsign = tmsign, ulk = ulk)
+    parse_url = 'http://player.005.tv/parse.php?xmlurl=null&type={typ}&vid={vid}&hd={hd2}&sign={sign}&tmsign={tmsign}&userlink={ulk}'.format(typ = typ, vid = vid, hd2 = hd2, sign = sign, tmsign = tmsign, ulk = ulk)
+    html = get_content(another_url, headers=headers)
+    
+    info = re.search(r'(\{[^{]+\})(\{[^{]+\})(\{[^{]+\})(\{[^{]+\})(\{[^{]+\})', html).groups()
+    info = [i.strip('{}').split('->') for i in info]
+    info = {i[0]: i [1] for i in info}
+    
+    stream_types = []
+    for i in zip(info['deft'].split('|'), info['defa'].split('|')):
+        stream_types.append({'id': str(i[1][-1]), 'container': 'mp4', 'video_profile': i[0]})
+    return stream_types
+    }
+    }
+    }
+    }
+    }
+    
+                type, ext, size = url_info(real_url)
+    
+    __all__ = ['ehow_download']
+    
+        def insert_data(self, data):
+        key = self.hash_function(data)
+    
+        def _colision_resolution(self, key, data=None):
+        i = 1
+        new_key = self.hash_function(key + i*i)
+    
+            return self.__solveDP(len(A)-1, len(B)-1)
+    
+    class Decision_Tree:
+    def __init__(self, depth = 5, min_leaf_size = 5):
+        self.depth = depth
+        self.decision_boundary = 0
+        self.left = None
+        self.right = None
+        self.min_leaf_size = min_leaf_size
+        self.prediction = None
+    
+            a *= a
+        b >>= 1
+    
+        return ''.join(freqOrder)
