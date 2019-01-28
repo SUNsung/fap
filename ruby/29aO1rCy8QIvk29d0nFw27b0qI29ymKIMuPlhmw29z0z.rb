@@ -1,126 +1,107 @@
 
         
-        module Vagrant
-  # This class handles guest-OS specific interactions with a machine.
-  # It is primarily responsible for detecting the proper guest OS
-  # implementation and then delegating capabilities.
-  #
-  # Vagrant has many tasks which require specific guest OS knowledge.
-  # These are implemented using a guest/capability system. Various plugins
-  # register as 'guests' which determine the underlying OS of the system.
-  # Then, 'guest capabilities' register themselves for a specific OS (one
-  # or more), and these capabilities are called.
-  #
-  # Example capabilities might be 'mount_virtualbox_shared_folder' or
-  # 'configure_networks'.
-  #
-  # This system allows for maximum flexibility and pluginability for doing
-  # guest OS specific operations.
-  class Guest
-    include CapabilityHost
-    
-            # This registers a plugin. This should _NEVER_ be called by the public
-        # and should only be called from within Vagrant. Vagrant will
-        # automatically register V1 plugins when a name is set on the
-        # plugin.
-        def register(plugin)
-          if !@registered.include?(plugin)
-            @logger.info('Registered plugin: #{plugin.name}')
-            @registered << plugin
-          end
-        end
-    
-            # Helper method that will set a value if a value is given, or otherwise
-        # return the already set value.
-        #
-        # @param [Symbol] key Key for the data
-        # @param [Object] value Value to store.
-        # @return [Object] Stored value.
-        def self.get_or_set(key, value=UNSET_VALUE)
-          # If no value is to be set, then return the value we have already set
-          return data[key] if value.eql?(UNSET_VALUE)
-    
-    (allow file-read-metadata)
-(allow file-read*
-  ; This is currenly only added because using `xcodebuild` to build a resource
-  ; bundle target starts a FSEvents stream on `/`. No idea why that would be
-  ; needed, but for now it doesn’t seem like a real problem.
-  (literal '/')
-  (regex
-    ; TODO see if we can restrict this more, but it's going to be hard
-    #'^/Users/[^.]+/*'
-    ;#'^/Users/[^.]+/.netrc'
-    ;#'^/Users/[^.]+/.gemrc'
-    ;#'^/Users/[^.]+/.gem/*'
-    ;#'^/Users/[^.]+/Library/.*'
-    #'^/Library/*'
-    #'^/System/Library/*'
-    #'^/usr/lib/*'
-    #'^/usr/share/*'
-    #'^/private/*'
-    #'^/dev/*'
-    #'^<%= ruby_prefix %>'
-    #'^<%= pod_prefix %>'
-    #'^<%= xcode_app_path %>'
-    #'^<%= Pod::Config.instance.repos_dir %>'
-<% prefixes.each do |prefix| %>
-    #'^<%= prefix %>/*'
-<% end %>
-  )
-)
-    
-            # Prints the list of specs & pod cache dirs for a single pod name.
-        #
-        # This output is valid YAML so it can be parsed with 3rd party tools
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        The various infos about a pod cache. Keys are
-        #        :spec_file, :version, :release and :slug
-        #
-        def print_pod_cache_infos(pod_name, cache_descriptors)
-          UI.puts '#{pod_name}:'
-          cache_descriptors.each do |desc|
-            if @short_output
-              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
-            end
-            UI.puts('  - Version: #{desc[:version]}')
-            UI.puts('    Type:    #{pod_type(desc)}')
-            UI.puts('    Spec:    #{desc[:spec_file]}')
-            UI.puts('    Pod:     #{desc[:slug]}')
-          end
-        end
-      end
+            def to_json
+      JSON.generate(as_json)
     end
   end
 end
 
     
-            def create
-          authorize! :create, Image
-          @image = scope.images.new(image_params)
-          if @image.save
-            respond_with(@image, status: 201, default_template: :show)
-          else
-            invalid_resource!(@image)
-          end
-        end
+        private
     
-            def create
-          authorize! :create, Store
-          @store = Store.new(store_params)
-          @store.code = params[:store][:code]
-          if @store.save
-            respond_with(@store, status: 201, default_template: :show)
-          else
-            invalid_resource!(@store)
-          end
-        end
+      if respond_to?(:helper_method)
+    helpers = %w(resource scope_name resource_name signed_in_resource
+                 resource_class resource_params devise_mapping)
+    helper_method(*helpers)
+  end
     
-            def update
-          authorize! :update, zone
-          if zone.update_attributes(zone_params)
-            respond_with(zone, status: 200, default_template: :show)
-          else
-            invalid_resource!(zone)
-          end
-        end
+        def self.check_fields!(klass)
+      failed_attributes = []
+      instance = klass.new
+    
+            format('%1$*2$e', 109.52, -20).should == '1.095200e+02        '
+        format('%1$*2$E', 109.52, -20).should == '1.095200E+02        '
+        format('%1$*2$f', 10.952, -20).should == '10.952000           '
+        format('%1$*2$g', 12.1234, -20).should == '12.1234             '
+        format('%1$*2$G', 12.1234, -20).should == '12.1234             '
+        format('%1$*2$a', 196, -20).should == '0x1.88p+7           '
+        format('%1$*2$A', 196, -20).should == '0X1.88P+7           '
+    
+    describe 'Kernel.throw' do
+  it 'transfers control to the end of the active catch block waiting for symbol' do
+    catch(:blah) do
+      :value
+      throw :blah
+      fail('throw didn't transfer the control')
+    end.should be_nil
+  end
+    
+            -> { w.f4(0.1) }.should output(nil, %r|classes.rb:#{w.warn_call_lineno}:|)
+        -> { w.f4(Rational(1, 2)) }.should output(nil, %r|classes.rb:#{w.warn_call_lineno}:|)
+      end
+    
+      it 'creates a public method in script binding' do
+    eval @code, script_binding
+    Object.should have_method :boom
+  end
+    
+          prepare_package(explicit_plugins_specs, temp_path)
+      LogStash::Util::Zip.compress(temp_path, @target)
+    ensure
+      FileUtils.rm_rf(temp_path)
+    end
+    
+    class LogStash::PluginManager::Pack < LogStash::PluginManager::PackCommand
+  option '--tgz', :flag, 'compress package as a tar.gz file', :default => !LogStash::Environment.windows?
+  option '--zip', :flag, 'compress package as a zip file', :default => LogStash::Environment.windows?
+  option '--[no-]clean', :flag, 'clean up the generated dump of plugins', :default => true
+  option '--overwrite', :flag, 'Overwrite a previously generated package file', :default => false
+    
+        FileUtils.rm_rf(LogStash::Environment::CACHE_PATH)
+    validate_cache_location
+    archive_manager.extract(package_file, LogStash::Environment::CACHE_PATH)
+    puts('Unpacked at #{LogStash::Environment::CACHE_PATH}')
+    puts('The unpacked plugins can now be installed in local-only mode using bin/logstash-plugin install --local [plugin name]')
+  end
+    
+      def execute
+    # Turn off any jar dependencies lookup when running with `--local`
+    ENV['JARS_SKIP'] = 'true' if local?
+    
+        not_matching_pipeline = described_class.new(source, pipeline_id, [], settings)
+    expect(subject).not_to eq(not_matching_pipeline)
+    
+        desc 'Halt all VM's involved in the acceptance test round'
+    task :halt, :platform do |t, args|
+      config   = PlatformConfig.new
+      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
+      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
+    
+    module Jekyll
+    
+        def get_web_content(url)
+      raw_uri           = URI.parse url
+      proxy             = ENV['http_proxy']
+      if proxy
+        proxy_uri       = URI.parse(proxy)
+        https           = Net::HTTP::Proxy(proxy_uri.host, proxy_uri.port).new raw_uri.host, raw_uri.port
+      else
+        https           = Net::HTTP.new raw_uri.host, raw_uri.port
+      end
+      https.use_ssl     = true
+      https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      request           = Net::HTTP::Get.new raw_uri.request_uri
+      data              = https.request request
+    end
+  end
+    
+      # Improved version of Liquid's truncatewords:
+  # - Uses typographically correct ellipsis (…) insted of '...'
+  def truncatewords(input, length)
+    truncate = input.split(' ')
+    if truncate.length > length
+      truncate[0..length-1].join(' ').strip + ' &hellip;'
+    else
+      input
+    end
+  end
