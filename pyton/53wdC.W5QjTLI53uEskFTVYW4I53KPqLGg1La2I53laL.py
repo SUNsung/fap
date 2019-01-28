@@ -1,230 +1,134 @@
 
         
-            assert proc.expect([TIMEOUT, u'usage'])
-    
-    
-@pytest.mark.parametrize('script, output', [
-    ('apt', invalid_operation('saerch')),
-    ('apt-get', invalid_operation('isntall')),
-    ('apt-cache', invalid_operation('rumove'))])
-def test_match(script, output):
-    assert match(Command(script, output))
-    
-            Did you mean `build`?
-'''
-    
-    ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-    
-    ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-    
-    - heroku_collaborator:
-    api_key: YOUR_API_KEY
-    user: '{{ item.user }}'
-    apps: '{{ item.apps | default(apps) }}'
-    suppress_invitation: '{{ item.suppress_invitation | default(suppress_invitation) }}'
-    state: '{{ item.state | default('present') }}'
-  with_items:
-    - { user: 'a.b@example.com' }
-    - { state: 'absent', user: 'b.c@example.com', suppress_invitation: false }
-    - { user: 'x.y@example.com', apps: ['heroku-example-app'] }
-'''
-    
-            argument_spec = dict(
-            name=dict(type='str', required=True),
-            state=dict(choices=['present', 'absent', 'enabled', 'disabled', 'offline'], default='present'),
-            im_mad_name=dict(type='str', default='kvm'),
-            vmm_mad_name=dict(type='str', default='kvm'),
-            cluster_id=dict(type='int', default=0),
-            cluster_name=dict(type='str'),
-            labels=dict(type='list'),
-            template=dict(type='dict', aliases=['attributes']),
-        )
-    
-        return module.exit_json(**result)
-    
-    from __future__ import absolute_import, division, print_function
-__metaclass__ = type
-    
-    def main():
-    
-        def test_include_single_quotes(self):
-        self.verify_fnmatch(''' + self.config_path + ''')
-    
-        for trials in range(5):
-        a = random.randrange(2, num - 1)
-        v = pow(a, s, num)
-        if v != 1:
-            i = 0
-            while v != (num - 1):
-                if i == t - 1:
-                    return False
-                else:
-                    i = i + 1
-                    v = (v ** 2) % num
-    return True
-    
-        publicKey, privateKey = generateKey(keySize)
-    print('\nWriting public key to file %s_pubkey.txt...' % name)
-    with open('%s_pubkey.txt' % name, 'w') as fo:
-        fo.write('%s,%s,%s' % (keySize, publicKey[0], publicKey[1]))
-    
-    
-class DoubleHash(HashTable):
+            Returns:
+      The cost for the current batch.
     '''
-        Hash Table example with open addressing and Double Hash
+    cost, _ = session.run([self.cost, self.train_op],
+                          feed_dict={self.instances: batch_instances})
+    
+        Args:
+      hparams: the hyper-parameters.
+      lemma_embeddings: word embeddings for the path-based component.
+      instance: string tensor containing the input instance
     '''
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    self.hparams = hparams
+    self.lemma_embeddings = lemma_embeddings
+    self.instance = instance
+    self.vocab_size, self.lemma_dim = self.lemma_embeddings.shape
+    
+        self._word_char_ids = np.zeros([num_words, max_word_length], dtype=np.int32)
+    
+      for key, _ in gen_ngrams_dict.iteritems():
+    if key in train_ngrams_dict:
+      unique_ngrams_in_train += 1
+  return float(unique_ngrams_in_train) / float(total_ngrams_produced)
+
+    
+    
+def load_data(label_mode='fine'):
+    '''Loads CIFAR100 dataset.
+    
+    
+def test_mnist():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = mnist.load_data()
+        assert len(x_train) == len(y_train) == 60000
+        assert len(x_test) == len(y_test) == 10000
+    
+        Example 2 - Training models with weights merge on CPU using cpu_relocation
+    
+            if rotation > 0:
+            angle_rad = rotation * 3.141592653589793 / 180.0
+            angles = tf.random_uniform([batch_size], -angle_rad, angle_rad)
+            f = tf.contrib.image.angles_to_projective_transforms(angles,
+                                                                 height, width)
+            transforms.append(f)
+    
+    Gets to 0.89 test accuracy after 2 epochs.
+90s/epoch on Intel i5 2.4Ghz CPU.
+10s/epoch on Tesla K40 GPU.
+'''
+from __future__ import print_function
+    
+    x_train = x_train.astype('float32')
+x_test = x_test.astype('float32')
+x_train /= 255
+x_test /= 255
+print('x_train shape:', x_train.shape)
+print(x_train.shape[0], 'train samples')
+print(x_test.shape[0], 'test samples')
+    
+    # Save the model weights.
+weight_path = os.path.join(tempfile.gettempdir(), 'saved_wt.h5')
+train_model.save_weights(weight_path)
+    
+        def __eq__(self, other):
+        if isinstance(other, Mapping):
+            other = CaseInsensitiveDict(other)
+        else:
+            return NotImplemented
+        # Compare insensitively
+        return dict(self.lower_items()) == dict(other.lower_items())
+    
+        builtin_str = str
+    str = str
+    bytes = bytes
+    basestring = (str, bytes)
+    numeric_types = (int, float)
+    integer_types = (int,)
+
+    
+        def get_origin_req_host(self):
+        return self.get_host()
+    
+    '''
+requests.hooks
+~~~~~~~~~~~~~~
+    
+    # Grouping the document tree into LaTeX files. List of tuples
+# (source start file, target name, title,
+#  author, documentclass [howto, manual, or own class]).
+latex_documents = [
+    (master_doc, 'Requests.tex', u'Requests Documentation',
+     u'Kenneth Reitz', 'manual'),
+]
+    
+    site_info = 'CBS.com'
+download = cbs_download
+download_playlist = playlist_not_supported('cbs')
+
+    
+    #----------------------------------------------------------------------
+def ckplayer_download_by_xml(ckinfo, output_dir = '.', merge = False, info_only = False, **kwargs):
+    #Info XML
+    video_info = ckplayer_get_info_by_xml(ckinfo)
     
     try:
-	xrange		#Python 2
-except NameError:
-	xrange = range	#Python 3
+        title = kwargs['title']
+    except:
+        title = ''
+    type_ = ''
+    size = 0
     
-    	Arguments:
-		i {[int]} -- [integer]
-	'''
+    if len(video_info['links']) > 0:  #has link
+        type_, _ext, size = url_info(video_info['links'][0])  #use 1st to determine type, ext
     
-    # Mock test below
-if False: # change to true to run this test case.
-    import sklearn.datasets as ds
-    dataset = ds.load_iris()
-    k = 3
-    heterogeneity = []
-    initial_centroids = get_initial_centroids(dataset['data'], k, seed=0)
-    centroids, cluster_assignment = kmeans(dataset['data'], k, initial_centroids, maxiter=400,
-                                        record_heterogeneity=heterogeneity, verbose=True)
-    plot_heterogeneity(heterogeneity, k)
-
+    if 'size' in video_info:
+        size = int(video_info['size'])
+    else:
+        for i in video_info['links'][1:]:  #save 1st one
+            size += url_info(i)[2]
     
-    # frequency taken from http://en.wikipedia.org/wiki/Letter_frequency
-englishLetterFreq = {'E': 12.70, 'T': 9.06, 'A': 8.17, 'O': 7.51, 'I': 6.97,
-                     'N': 6.75, 'S': 6.33, 'H': 6.09, 'R': 5.99, 'D': 4.25,
-                     'L': 4.03, 'C': 2.78, 'U': 2.76, 'M': 2.41, 'W': 2.36,
-                     'F': 2.23, 'G': 2.02, 'Y': 1.97, 'P': 1.93, 'B': 1.29,
-                     'V': 0.98, 'K': 0.77, 'J': 0.15, 'X': 0.15, 'Q': 0.10,
-                     'Z': 0.07}
-ETAOIN = 'ETAOINSHRDLCUMWFGYPBVKJXQZ'
-LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    print_info(site_info, title, type_, size)
+    if not info_only:
+        download_urls(video_info['links'], title, _ext, size, output_dir=output_dir, merge=merge)
     
-        if not app.config.edit_on_github_project:
-        warnings.warn('edit_on_github_project not specified')
-        return
-    if not doctree:
-        warnings.warn('doctree is None')
-        return
-    path = os.path.relpath(doctree.get('source'), app.builder.srcdir)
-    show_url = get_github_url(app, 'blob', path)
-    edit_url = get_github_url(app, 'edit', path)
-    
-    # The name of an image file (relative to this directory) to use as a favicon of
-# the docs.
-# This file should be a Windows icon file (.ico) being 16x16 or 32x32
-# pixels large.
-#
-html_favicon = '_static/favicon.ico'
-    
-        def _queued_event_check(self, click_type, time_diff):
-        '''Generate a log message and returns true if timeout exceeded.'''
-        time_string = '{:d} {}'.format(
-            time_diff, 'second' if time_diff == 1 else 'seconds')
-    
-    CONFIG_SCHEMA = vol.Schema({
-    DOMAIN: vol.Schema({
-        vol.Required(CONF_HOST, default=DEFAULT_HOST): cv.string,
-        vol.Optional(CONF_PORT, default=DEFAULT_PORT): cv.port,
-        vol.Optional(CONF_PREFIX, default=DEFAULT_PREFIX): cv.string,
-        vol.Optional(CONF_RATE, default=DEFAULT_RATE):
-            vol.All(vol.Coerce(int), vol.Range(min=1)),
-    }),
-}, extra=vol.ALLOW_EXTRA)
-    
-    PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Required(CONF_HOST): cv.string,
-    vol.Required(CONF_USERNAME): cv.string,
-    vol.Required(CONF_PASSWORD): cv.string,
-    vol.Optional(CONF_TYPE, default=DEFAULT_TYPE): cv.string,
-})
-    
-    DEFAULT_IP = '192.168.1.1'
-    
-        def send_url_service(service):
-        '''Service to open url on devices.'''
-        send_url(api_key=api_key, device_id=device_id,
-                 device_ids=device_ids, device_names=device_names,
-                 url=service.data.get('url'))
-    
-    REQUIREMENTS = ['pykira==0.1.1']
-    
-        def run(self):
-        '''Run the loop of the LIRC interface thread.'''
-        import lirc
-        _LOGGER.debug('LIRC interface thread started')
-        while not self.stopped.isSet():
-            try:
-                code = lirc.nextcode()  # list; empty if no buttons pressed
-            except lirc.NextCodeError:
-                _LOGGER.warning('Error reading next code from LIRC')
-                code = None
-            # interpret result from python-lirc
-            if code:
-                code = code[0]
-                _LOGGER.info('Got new LIRC code %s', code)
-                self.hass.bus.fire(
-                    EVENT_IR_COMMAND_RECEIVED, {BUTTON_NAME: code})
-            else:
-                time.sleep(0.2)
-        lirc.deinit()
-        _LOGGER.debug('LIRC interface thread stopped')
-
-    
-    
-def datasets():
-    '''Retrieve the list of available dataset names.'''
-    return _DATASETS.keys()
-    
-        # Histogram of ground-truth objects
-    gt_hist = np.zeros((len(classes)), dtype=np.int)
-    for entry in roidb:
-        gt_inds = np.where(
-            (entry['gt_classes'] > 0) & (entry['is_crowd'] == 0))[0]
-        gt_classes = entry['gt_classes'][gt_inds]
-        gt_hist += np.histogram(gt_classes, bins=hist_bins)[0]
-    logger.debug('Ground-truth class histogram:')
-    for i, v in enumerate(gt_hist):
-        logger.debug(
-            '{:d}{:s}: {:d}'.format(
-                i, classes[i].rjust(char_len), v))
-    logger.debug('-' * char_len)
-    logger.debug(
-        '{:s}: {:d}'.format(
-            'total'.rjust(char_len), np.sum(gt_hist)))
-
-    
-    
-def _do_matlab_eval(json_dataset, salt, output_dir='output'):
-    import subprocess
-    logger.info('-----------------------------------------------------')
-    logger.info('Computing results with the official MATLAB eval code.')
-    logger.info('-----------------------------------------------------')
-    info = voc_info(json_dataset)
-    path = os.path.join(
-        cfg.ROOT_DIR, 'detectron', 'datasets', 'VOCdevkit-matlab-wrapper')
-    cmd = 'cd {} && '.format(path)
-    cmd += '{:s} -nodisplay -nodesktop '.format(cfg.MATLAB)
-    cmd += '-r 'dbstop if error; '
-    cmd += 'voc_eval(\'{:s}\',\'{:s}\',\'{:s}\',\'{:s}\'); quit;'' \
-       .format(info['devkit_path'], 'comp4' + salt, info['image_set'],
-               output_dir)
-    logger.info('Running:\n{}'.format(cmd))
-    subprocess.call(cmd, shell=True)
-    
-            If used during training, then the output blobs will also include:
-          [labels, bbox_targets, bbox_inside_weights, bbox_outside_weights].
-        '''
-        k_max = cfg.FPN.RPN_MAX_LEVEL
-        k_min = cfg.FPN.RPN_MIN_LEVEL
+    '''
+http://www.tudou.com/programs/view/html5embed.action?type=0&amp;code=3LS_URGvl54&amp;lcode=&amp;resourceId=0_06_05_99
+'''
+tudou_embed_patterns = [ 'tudou\.com[a-zA-Z0-9\/\?=\&\.\;]+code=([a-zA-Z0-9_-]+)\&',
+                         'www\.tudou\.com/v/([a-zA-Z0-9_-]+)/[^']*v\.swf'
+                       ]
