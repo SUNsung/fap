@@ -1,400 +1,209 @@
 
         
-                if any([s_line.startswith(s) for s in ['* [', '- [']]):
-            if indent == last_indent:
-                blocks[-1].append(line)
-            else:
-                blocks.append([line])
-            last_indent = indent
-        else:
-            blocks.append([line])
-            last_indent = None
+            # Correlation of inferred inputs cost.
+    self.corr_cost = tf.constant(0.0)
+    if hps.co_mean_corr_scale > 0.0:
+      all_sum_corr = []
+      for i in range(hps.co_dim):
+        for j in range(i+1, hps.co_dim):
+          sum_corr_ij = tf.constant(0.0)
+          for t in range(num_steps):
+            u_mean_t = posterior_zs_co[t].mean
+            sum_corr_ij += u_mean_t[:,i]*u_mean_t[:,j]
+          all_sum_corr.append(0.5 * tf.square(sum_corr_ij))
+      self.corr_cost = tf.reduce_mean(all_sum_corr) # div by batch and by n*(n-1)/2 pairs
     
-        def __init__(self):
-        self.users_by_id = {}  # key: user id, value: User
+    def _plot_item(W, name, full_name, nspaces):
+  plt.figure()
+  if W.shape == ():
+    print(name, ': ', W)
+  elif W.shape[0] == 1:
+    plt.stem(W.T)
+    plt.title(full_name)
+  elif W.shape[1] == 1:
+    plt.stem(W)
+    plt.title(full_name)
+  else:
+    plt.imshow(np.abs(W), interpolation='nearest', cmap='jet');
+    plt.colorbar()
+    plt.title(full_name)
     
-    from mrjob.job import MRJob
+            cur_pos = next_pos
+        cur_stream[i][0] = cur_stream[i][0][how_many:]
+        cur_stream[i][1] = cur_stream[i][1][how_many:]
+        cur_stream[i][2] = cur_stream[i][2][how_many:]
     
-        def mapper(self, _, line):
-        yield line, 1
+      Returns:
+    mask1: mask for first sentence
+    mask2: mask for second sentence
+  '''
+  mask1_start, mask2_start = [], []
+  while sent1[0] == sent2[0]:
+    sent1 = sent1[1:]
+    sent2 = sent2[1:]
+    mask1_start.append(0.)
+    mask2_start.append(0.)
     
+    # Dependency imports
     
-MIME_RE = re.compile(r'^[^/]+/[^/]+$')
-    
-    import requests.auth
-    
-    
-def repr_dict_nice(d):
-    def prepare_dict(d):
-        for k, v in d.items():
-            if isinstance(v, dict):
-                v = dict(prepare_dict(v))
-            elif isinstance(v, bytes):
-                v = v.decode('utf8')
-            elif not isinstance(v, (int, str)):
-                v = repr(v)
-            yield k, v
-    return json.dumps(
-        dict(prepare_dict(d)),
-        indent=4, sort_keys=True,
-    )
-    
-    
-class PyTest(TestCommand):
-    # `$ python setup.py test' simply installs minimal requirements
-    # and runs the tests with no fancy stuff like parallel execution.
-    def finalize_options(self):
-        TestCommand.finalize_options(self)
-        self.test_args = [
-            '--doctest-modules', '--verbose',
-            './httpie', './tests'
-        ]
-        self.test_suite = True
-    
-    
-FILE_PATH_ARG = patharg(FILE_PATH)
-BIN_FILE_PATH_ARG = patharg(BIN_FILE_PATH)
-JSON_FILE_PATH_ARG = patharg(JSON_FILE_PATH)
-    
-        def test_print_overridable_when_stdout_redirected(self, httpbin):
-        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
-        r = http('--print=h', 'GET', httpbin.url + '/get', env=env)
-        assert HTTP_OK in r
-
-    
-    
-def test_unicode_url_query_arg_item(httpbin):
-    r = http(httpbin.url + '/get', u'test==%s' % UNICODE)
-    assert HTTP_OK in r
-    assert r.json['args'] == {'test': UNICODE}, r
-    
-        for i in range(1, 6):
-        fpath = os.path.join(path, 'data_batch_' + str(i))
-        (x_train[(i - 1) * 10000: i * 10000, :, :, :],
-         y_train[(i - 1) * 10000: i * 10000]) = load_batch(fpath)
-    
-        fpath = os.path.join(path, 'test')
-    x_test, y_test = load_batch(fpath, label_key=label_mode + '_labels')
-    
-        with tf.name_scope('augmentation'):
-        shp = tf.shape(inputs)
-        batch_size, height, width = shp[0], shp[1], shp[2]
-        width = tf.cast(width, tf.float32)
-        height = tf.cast(height, tf.float32)
-    
-    This script loads the s2s.h5 model saved by lstm_seq2seq.py and generates
-sequences from it.  It assumes that no changes have been made (for example:
-latent_dim is unchanged, and the input data and model architecture are unchanged).
-    
-    print('Training')
-model_stateless.fit(x_train,
-                    y_train,
-                    batch_size=batch_size,
-                    epochs=epochs,
-                    verbose=1,
-                    validation_data=(x_test, y_test),
-                    shuffle=False)
-    
-    x_train = x_train.astype('float32')
-x_test = x_test.astype('float32')
-x_train /= 255
-x_test /= 255
-print('x_train shape:', x_train.shape)
-print(x_train.shape[0], 'train samples')
-print(x_test.shape[0], 'test samples')
+      # Unstack Tensors into lists.
+  rewards_list = tf.unstack(rewards, axis=1)
+  log_probs_list = tf.unstack(log_probs, axis=1)
+  missing = 1. - tf.cast(present, tf.float32)
+  missing_list = tf.unstack(missing, axis=1)
     
     '''
-requests.exceptions
-~~~~~~~~~~~~~~~~~~~
+requests._internal_utils
+~~~~~~~~~~~~~~
     
-    import pytest
-from requests.compat import urljoin
+        def __repr__(self):
+        return str(dict(self.items()))
     
-    Requests is an HTTP library, written in Python, for human beings. Basic GET
-usage:
+        possible_keys = pytest.mark.parametrize('key', ('accept', 'ACCEPT', 'aCcEpT', 'Accept'))
     
-            :param proxy: The proxy to return a urllib3 ProxyManager for.
-        :param proxy_kwargs: Extra keyword arguments used to configure the Proxy Manager.
-        :returns: ProxyManager
-        :rtype: urllib3.ProxyManager
+    
+    builtin_str = str
+    bytes = str
+    str = unicode
+    basestring = basestring
+    numeric_types = (int, long, float)
+    integer_types = (int, long)
+    
+            .. seealso:: itervalues() and iteritems().
         '''
-        if proxy in self.proxy_manager:
-            manager = self.proxy_manager[proxy]
-        elif proxy.lower().startswith('socks'):
-            username, password = get_auth_from_url(proxy)
-            manager = self.proxy_manager[proxy] = SOCKSProxyManager(
-                proxy,
-                username=username,
-                password=password,
-                num_pools=self._pool_connections,
-                maxsize=self._pool_maxsize,
-                block=self._pool_block,
-                **proxy_kwargs
-            )
+        for cookie in iter(self):
+            yield cookie.name
+    
+            # if the server thread fails to finish, the test suite will hang
+        # and get killed by the jenkins timeout.
+    
+    # Grouping the document tree into Texinfo files. List of tuples
+# (source start file, target name, title, author,
+#  dir menu entry, description, category)
+texinfo_documents = [
+    (master_doc, 'Requests', u'Requests Documentation',
+     author, 'Requests', 'One line description of project.',
+     'Miscellaneous'),
+]
+    
+        It basically works like :func:`parse_set_header` just that items
+    may appear multiple times and case sensitivity is preserved.
+    
+            if 400 <= self.status_code < 500:
+            http_error_msg = u'%s Client Error: %s for url: %s' % (self.status_code, reason, self.url)
+    
+        def __str__(self):
+        cls = self.__class__
+        if self._name_ is not None:
+            return '%s.%s' % (cls.__name__, self._name_)
+        members, uncovered = _decompose(cls, self._value_)
+        if len(members) == 1 and members[0]._name_ is None:
+            return '%s.%r' % (cls.__name__, members[0]._value_)
         else:
-            proxy_headers = self.proxy_headers(proxy)
-            manager = self.proxy_manager[proxy] = proxy_from_url(
-                proxy,
-                proxy_headers=proxy_headers,
-                num_pools=self._pool_connections,
-                maxsize=self._pool_maxsize,
-                block=self._pool_block,
-                **proxy_kwargs)
+            return '%s.%s' % (
+                    cls.__name__,
+                    '|'.join([str(m._name_ or m._value_) for m in members]),
+                    )
     
-    # ---------
-# Specifics
-# ---------
+            self.assertEqual(partial_sums, [0, 1, 3, 6, 10])
+        self.assertEqual(total, 10)
+    
+    def handleSlides(slides):
+    for slide in slides:
+        handleSlide(slide)
+    
+    def print_title(title, pattern = '-'):
+    print('\n'.join(('', title, pattern * len(title)))) 
+    
+            if CLICK_TYPE_DOUBLE in self._ignored_click_types:
+            # Listen to all but double click type events
+            channel.on_button_click_or_hold = self._on_click
+        elif CLICK_TYPE_HOLD in self._ignored_click_types:
+            # Listen to all but hold click type events
+            channel.on_button_single_or_double_click = self._on_click
+        else:
+            # Listen to all click type events
+            channel.on_button_single_or_double_click_or_hold = self._on_click
+    
+    CONFIG_SCHEMA = vol.Schema({
+    DOMAIN: vol.Schema({
+        vol.Required(CONF_NAME): cv.string,
+        vol.Required(CONF_WHITELIST, default=[]):
+            vol.All(cv.ensure_list, [cv.entity_id]),
+    }),
+}, extra=vol.ALLOW_EXTRA)
+    
+        for idx, module_conf in enumerate(remotes):
+        load_module(CONF_REMOTE, idx, module_conf)
+    
+    from homeassistant.const import (
+    EVENT_HOMEASSISTANT_STOP, EVENT_HOMEASSISTANT_START)
     
     
-def default_hooks():
-    return {event: [] for event in HOOKS}
+def contains(name):
+    '''Determine if the dataset is in the catalog.'''
+    return name in _DATASETS.keys()
     
-            ('http://u:p@other.host/path', 'http://http.proxy', mixed_proxies),
-        ('http://u:p@some.host/path', 'http://some.host.proxy', mixed_proxies),
-        ('https://u:p@other.host/path', 'socks5://http.proxy', mixed_proxies),
-        ('https://u:p@some.host/path', 'socks5://http.proxy', mixed_proxies),
-        ('https://', 'socks5://http.proxy', mixed_proxies),
-        # XXX: unsure whether this is reasonable behavior
-        ('file:///etc/motd', 'socks5://http.proxy', all_proxies),
-    ))
-def test_select_proxies(url, expected, proxies):
-    '''Make sure we can select per-host proxies correctly.'''
-    assert select_proxy(url, proxies) == expected
     
-            cookie_header = get_cookie_header(self._cookies, self)
-        if cookie_header is not None:
-            self.headers['Cookie'] = cookie_header
+def add_single_gpu_param_update_ops(model, gpu_id):
+    # Learning rate of 0 is a dummy value to be set properly at the
+    # start of training
+    lr = model.param_init_net.ConstantFill(
+        [], 'lr', shape=[1], value=0.0
+    )
+    one = model.param_init_net.ConstantFill(
+        [], 'one', shape=[1], value=1.0
+    )
+    wd = model.param_init_net.ConstantFill(
+        [], 'wd', shape=[1], value=cfg.SOLVER.WEIGHT_DECAY
+    )
+    # weight decay of GroupNorm's parameters
+    wd_gn = model.param_init_net.ConstantFill(
+        [], 'wd_gn', shape=[1], value=cfg.SOLVER.WEIGHT_DECAY_GN
+    )
+    for param in model.TrainableParams(gpu_id=gpu_id):
+        logger.debug('param ' + str(param) + ' will be updated')
+        param_grad = model.param_to_grad[param]
+        # Initialize momentum vector
+        param_momentum = model.param_init_net.ConstantFill(
+            [param], param + '_momentum', value=0.0
+        )
+        if param in model.biases:
+            # Special treatment for biases (mainly to match historical impl.
+            # details):
+            # (1) Do not apply weight decay
+            # (2) Use a 2x higher learning rate
+            model.Scale(param_grad, param_grad, scale=2.0)
+        elif param in model.gn_params:
+            # Special treatment for GroupNorm's parameters
+            model.WeightedSum([param_grad, one, param, wd_gn], param_grad)
+        elif cfg.SOLVER.WEIGHT_DECAY > 0:
+            # Apply weight decay to non-bias weights
+            model.WeightedSum([param_grad, one, param, wd], param_grad)
+        # Update param_grad and param_momentum in place
+        model.net.MomentumSGDUpdate(
+            [param_grad, param_momentum, lr, param],
+            [param_grad, param_momentum, param],
+            momentum=cfg.SOLVER.MOMENTUM
+        )
+
     
-        module.exit_json(**cwe_rule_manager.fetch_aws_state())
-    
-        # Retrieve any AWS settings from the environment.
-    region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module, boto3=True)
-    if not region:
-        module.fail_json(msg=str('Either region or AWS_REGION or EC2_REGION environment variable or boto config aws_region or ec2_region must be set.'))
-    
-    ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-    
-            if add_processes:
-            monitoring_policy = _add_processes(module,
-                                               oneandone_conn,
-                                               monitoring_policy['id'],
-                                               add_processes)
-            _check_mode(module, monitoring_policy)
-            changed = True
-    
-    DOCUMENTATION = '''
----
-module: vca_nat
-short_description: add remove nat rules in a gateway  in a vca
-description:
-  - Adds or removes nat rules from a gateway in a vca environment
-version_added: '2.0'
-author: Peter Sprygada (@privateip)
-options:
-    purge_rules:
-      description:
-        - If set to true, it will delete all rules in the gateway that are not given as parameter to this module.
-      type: bool
-      default: false
-    nat_rules:
-      description:
-        - A list of rules to be added to the gateway, Please see examples on valid entries
-      required: True
-      default: false
-extends_documentation_fragment: vca.documentation
+    '''Construct minibatches for Mask R-CNN training when keypoints are enabled.
+Handles the minibatch blobs that are specific to training Mask R-CNN for
+keypoint detection. Other blobs that are generic to RPN or Fast/er R-CNN are
+handled by their respecitive roi_data modules.
 '''
     
     
-def check(schema_facts, schema, usage_roles, create_roles, owner):
-    schema_key = schema.lower()
-    if schema_key not in schema_facts:
-        return False
-    if owner and owner.lower() == schema_facts[schema_key]['owner'].lower():
-        return False
-    if sorted(usage_roles) != sorted(schema_facts[schema_key]['usage_roles']):
-        return False
-    if sorted(create_roles) != sorted(schema_facts[schema_key]['create_roles']):
-        return False
-    return True
-    
-    ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-    
-        elif state == 'restarted':
-        if module.check_mode:
-            module.exit_json(changed=True)
-        status = run_command('restart')
-        if status in ['initializing', 'running'] or 'restart pending' in status:
-            module.exit_json(changed=True, name=name, state=state)
-        module.fail_json(msg='%s process not restarted' % name, status=status)
-    
-        if not app.config.edit_on_github_project:
-        warnings.warn('edit_on_github_project not specified')
-        return
-    if not doctree:
-        warnings.warn('doctree is None')
-        return
-    path = os.path.relpath(doctree.get('source'), app.builder.srcdir)
-    show_url = get_github_url(app, 'blob', path)
-    edit_url = get_github_url(app, 'edit', path)
-    
-    # -- General configuration ------------------------------------------------
-    
-        hass.services.register(DOMAIN, SERVICE_BROWSE_URL,
-                           lambda service:
-                           webbrowser.open(service.data[ATTR_URL]),
-                           schema=SERVICE_BROWSE_URL_SCHEMA)
-    
-        def __init__(self, config):
-        '''Initialize the scanner.'''
-        self.last_results = []
-        host = config[CONF_HOST]
-        self._url = 'http://{}/data/getConnectInfo.asp'.format(host)
-        self._loginurl = 'http://{}/goform/login'.format(host)
-    
-            # Without a home_id, we fetched an URL where the mobile devices can be
-        # found under the mobileDevices key.
-        if 'mobileDevices' in tado_json:
-            tado_json = tado_json['mobileDevices']
-    
-        def get_device_name(self, device):
-        '''Return the name of the given device or None if we don't know.'''
-        if not self.last_results:
-            return None
-        for client in self.last_results:
-            if client['mac'] == device:
-                return client['host']
-        return None
-    
-    PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Required(CONF_HOST): cv.string,
-    vol.Required(CONF_USERNAME, default='admin'): cv.string,
-    vol.Required(CONF_PASSWORD): cv.string
-})
-    
-        def dweet_event_listener(event):
-        '''Listen for new messages on the bus and sends them to Dweet.io.'''
-        state = event.data.get('new_state')
-        if state is None or state.state in (STATE_UNKNOWN, '') \
-                or state.entity_id not in whitelist:
-            return
-    
-    CONFIG_SCHEMA = vol.Schema({
-    DOMAIN: vol.All(cv.ensure_list, [{
-        vol.Required(CONF_API_KEY): cv.string,
-        vol.Optional(CONF_DEVICE_ID): cv.string,
-        vol.Optional(CONF_DEVICE_IDS): cv.string,
-        vol.Optional(CONF_DEVICE_NAMES): cv.string,
-        vol.Optional(CONF_NAME): cv.string
-    }])
-}, extra=vol.ALLOW_EXTRA)
-    
-    
-def evaluate_masks(
-    json_dataset,
-    all_boxes,
-    all_segms,
-    output_dir,
-    use_salt=True,
-    cleanup=False
-):
-    if cfg.CLUSTER.ON_CLUSTER:
-        # On the cluster avoid saving these files in the job directory
-        output_dir = '/tmp'
-    res_file = os.path.join(
-        output_dir, 'segmentations_' + json_dataset.name + '_results')
-    if use_salt:
-        res_file += '_{}'.format(str(uuid.uuid4()))
-    res_file += '.json'
-    
-    
-def cityscapes_to_coco_all_random(cityscapes_id):
-    lookup = {
-        0: -1,  # ... background
-        1: -1,  # bicycle
-        2: -1,  # car
-        3: -1,  # person (ignore)
-        4: -1,  # train
-        5: -1,  # truck
-        6: -1,  # motorcycle
-        7: -1,  # bus
-        8: -1,  # rider (ignore)
-    }
-    return lookup[cityscapes_id]
-
-    
-    
-def _generate_anchors(base_size, scales, aspect_ratios):
-    '''Generate anchor (reference) windows by enumerating aspect ratios X
-    scales wrt a reference (0, 0, base_size - 1, base_size - 1) window.
-    '''
-    anchor = np.array([1, 1, base_size, base_size], dtype=np.float) - 1
-    anchors = _ratio_enum(anchor, aspect_ratios)
-    anchors = np.vstack(
-        [_scale_enum(anchors[i, :], scales) for i in range(anchors.shape[0])]
+def main(opts):
+    logger = logging.getLogger(__name__)
+    roidb = combined_roidb_for_training(
+        cfg.TRAIN.DATASETS, cfg.TRAIN.PROPOSAL_FILES)
+    logger.info('{:d} roidb entries'.format(len(roidb)))
+    roi_data_loader = RoIDataLoader(
+        roidb,
+        num_loaders=cfg.DATA_LOADER.NUM_THREADS,
+        minibatch_queue_size=cfg.DATA_LOADER.MINIBATCH_QUEUE_SIZE,
+        blobs_queue_capacity=cfg.DATA_LOADER.BLOBS_QUEUE_CAPACITY
     )
-    return anchors
-    
-    
-def add_keypoint_losses(model):
-    '''Add Mask R-CNN keypoint specific losses.'''
-    # Reshape input from (N, K, H, W) to (NK, HW)
-    model.net.Reshape(
-        ['kps_score'], ['kps_score_reshaped', '_kps_score_old_shape'],
-        shape=(-1, cfg.KRCNN.HEATMAP_SIZE * cfg.KRCNN.HEATMAP_SIZE)
-    )
-    # Softmax across **space** (woahh....space!)
-    # Note: this is not what is commonly called 'spatial softmax'
-    # (i.e., softmax applied along the channel dimension at each spatial
-    # location); This is softmax applied over a set of spatial locations (i.e.,
-    # each spatial location is a 'class').
-    kps_prob, loss_kps = model.net.SoftmaxWithLoss(
-        ['kps_score_reshaped', 'keypoint_locations_int32', 'keypoint_weights'],
-        ['kps_prob', 'loss_kps'],
-        scale=cfg.KRCNN.LOSS_WEIGHT / cfg.NUM_GPUS,
-        spatial=0
-    )
-    if not cfg.KRCNN.NORMALIZE_BY_VISIBLE_KEYPOINTS:
-        # Discussion: the softmax loss above will average the loss by the sum of
-        # keypoint_weights, i.e. the total number of visible keypoints. Since
-        # the number of visible keypoints can vary significantly between
-        # minibatches, this has the effect of up-weighting the importance of
-        # minibatches with few visible keypoints. (Imagine the extreme case of
-        # only one visible keypoint versus N: in the case of N, each one
-        # contributes 1/N to the gradient compared to the single keypoint
-        # determining the gradient direction). Instead, we can normalize the
-        # loss by the total number of keypoints, if it were the case that all
-        # keypoints were visible in a full minibatch. (Returning to the example,
-        # this means that the one visible keypoint contributes as much as each
-        # of the N keypoints.)
-        model.StopGradient(
-            'keypoint_loss_normalizer', 'keypoint_loss_normalizer'
-        )
-        loss_kps = model.net.Mul(
-            ['loss_kps', 'keypoint_loss_normalizer'], 'loss_kps_normalized'
-        )
-    loss_gradients = blob_utils.get_loss_gradients(model, [loss_kps])
-    model.AddLosses(loss_kps)
-    return loss_gradients
-    
-    
-_RENAME = {
-    # Removed 'ResNet_' from the name because it wasn't relevent
-    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v1up4convs':
-        'mask_rcnn_heads.mask_rcnn_fcn_head_v1up4convs',
-    # Removed 'ResNet_' from the name because it wasn't relevent
-    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v1up':
-        'mask_rcnn_heads.mask_rcnn_fcn_head_v1up',
-    # Removed 'ResNet_' from the name because it wasn't relevent
-    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v0upshare':
-        'mask_rcnn_heads.mask_rcnn_fcn_head_v0upshare',
-    # Removed 'ResNet_' from the name because it wasn't relevent
-    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v0up':
-        'mask_rcnn_heads.mask_rcnn_fcn_head_v0up',
-    # Removed head_builder module in favor of the more specific fast_rcnn name
-    'head_builder.add_roi_2mlp_head':
-        'fast_rcnn_heads.add_roi_2mlp_head',
-}
+    blob_names = roi_data_loader.get_output_names()
