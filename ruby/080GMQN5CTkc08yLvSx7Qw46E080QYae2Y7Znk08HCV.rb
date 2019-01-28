@@ -1,98 +1,64 @@
 
         
-            expect(gu.notification_level).to eq(NotificationLevels.all[:tracking])
+            describe '-' do
+      it 'left-justifies the result of conversion if width is specified' do
+        format('%-10b', 10).should == '1010      '
+        format('%-10B', 10).should == '1010      '
+        format('%-10d', 112).should == '112       '
+        format('%-10i', 112).should == '112       '
+        format('%-10o', 87).should == '127       '
+        format('%-10u', 112).should == '112       '
+        format('%-10x', 196).should == 'c4        '
+        format('%-10X', 196).should == 'C4        '
     
-                rows << {
-              label_id: label_id,
-              target_id: target_id,
-              target_type: issue.issuable_type,
-              created_at: time,
-              updated_at: time
-            }
-          end
+      it 'accepts a Fixnum' do
+    sleep(0).should be_close(0, 2)
+  end
     
-            def representation_class
-          Representation::Note
-        end
+      it 'accepts a Bignum as a seed' do
+    srand(0x12345678901234567890)
+    srand.should == 0x12345678901234567890
+  end
     
-              hash[:state] = hash[:state].to_sym
-          hash[:assignees].map! { |u| Representation::User.from_json_hash(u) }
-          hash[:author] &&= Representation::User.from_json_hash(hash[:author])
+      it 'raises #{frozen_error_class} on an untainted, frozen object' do
+    o = Object.new.freeze
+    lambda { o.taint }.should raise_error(frozen_error_class)
+  end
     
-            NOTEABLE_TYPE_REGEX = %r{/(?<type>(pull|issues))/(?<iid>\d+)}i
+    require_relative 'converter/fonts_conversion'
+require_relative 'converter/less_conversion'
+require_relative 'converter/js_conversion'
+require_relative 'converter/logger'
+require_relative 'converter/network'
     
-          it 'updates an existing user' do
-        visit edit_admin_user_path(users(:bob))
-        check 'Admin'
-        click_on 'Update User'
-        expect(page).to have_text('User 'bob' was successfully updated.')
-        visit edit_admin_user_path(users(:bob))
-        expect(page).to have_checked_field('Admin')
+      # Enable Rack::Cache to put a simple HTTP cache in front of your application
+  # Add `rack-cache` to your Gemfile before enabling this.
+  # For large-scale production use, consider using a caching reverse proxy like nginx, varnish or squid.
+  # config.action_dispatch.rack_cache = true
+    
+      # Configure static asset server for tests with Cache-Control for performance.
+  if config.respond_to?(:serve_static_files)
+    # rails >= 4.2
+    config.serve_static_files = true
+  elsif config.respond_to?(:serve_static_assets)
+    # rails < 4.2
+    config.serve_static_assets = true
+  end
+  config.static_cache_control = 'public, max-age=3600'
+    
+          it 'allows closing brace on same line as multi-line element' do
+        expect_no_offenses(construct(false, a, make_multi(multi), false))
       end
     
-      it 'shows the dry run pop up without previous events and selects the log tab when no event was created' do
-    stub_request(:get, 'http://xkcd.com/').
-      with(:headers => {'Accept-Encoding'=>'gzip,deflate', 'User-Agent'=>'Huginn - https://github.com/huginn/huginn'}).
-      to_return(:status => 200, :body => '', :headers => {})
-    
-          expect(data[:agents][guid_order(agent_list, :jane_weather_agent)]).not_to have_key(:propagate_immediately) # can't receive events
-      expect(data[:agents][guid_order(agent_list, :jane_rain_notifier_agent)]).not_to have_key(:schedule) # can't be scheduled
-    end
-    
-      describe '#pretty_jsonify' do
-    it 'escapes </script> tags in the output JSON' do
-      cleaned_json = Utils.pretty_jsonify(:foo => 'bar', :xss => '</script><script>alert('oh no!')</script>')
-      expect(cleaned_json).not_to include('</script>')
-      expect(cleaned_json).to include('<\\/script>')
-    end
-  end
-    
-      describe '#check' do
-    it 'should check that initial run creates an event' do
-      @checker.memory[:last_updated_at] = '2016-03-15T14:01:05+00:00'
-      expect { @checker.check }.to change { Event.count }.by(1)
-    end
-  end
-end
-
-    
-          it 'collapse negative number representation if it equals 7' do
-        format('%o', -1).should_not == '..77'
-        format('%o', -1).should == '..7'
+    module RuboCop
+  module AST
+    # A node extension for `for` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `for` nodes within RuboCop.
+    class ForNode < Node
+      # Returns the keyword of the `for` statement as a string.
+      #
+      # @return [String] the keyword of the `until` statement
+      def keyword
+        'for'
       end
-    end
-    
-      it 'raises an ArgumentError when passed a negative duration' do
-    lambda { sleep(-0.1) }.should raise_error(ArgumentError)
-    lambda { sleep(-1) }.should raise_error(ArgumentError)
-  end
-    
-        $?.should be_an_instance_of Process::Status
-    $?.success?.should == true
-    $?.exitstatus.should == 0
-  end
-    
-      it 'sets the tainted bit' do
-    o = Object.new
-    o.taint
-    o.tainted?.should == true
-  end
-    
-      it 'calls #to_path on second argument when passed ?e and a filename' do
-    p = mock('path')
-    p.should_receive(:to_path).and_return @file
-    Kernel.test(?e, p)
-  end
-    
-          it 'raises ArgumentError if passed negative value' do
-        -> { warn '', uplevel: -2 }.should raise_error(ArgumentError)
-        -> { warn '', uplevel: -100 }.should raise_error(ArgumentError)
-      end
-    
-              # Decodes the Rex::Proto::Kerberos::Model::Element from the input. This
-          # method has been designed to be overridden by subclasses.
-          #
-          # @raise [NoMethodError]
-          def decode(input)
-            raise ::NoMethodError, 'Method designed to be overridden'
-          end
