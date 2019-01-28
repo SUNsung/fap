@@ -1,370 +1,454 @@
 
         
-        #endif // BITCOIN_REVERSELOCK_H
+        
+    {private Q_SLOTS:
+    /* sign message */
+    void on_addressBookButton_SM_clicked();
+    void on_pasteButton_SM_clicked();
+    void on_signMessageButton_SM_clicked();
+    void on_copySignatureButton_SM_clicked();
+    void on_clearButton_SM_clicked();
+    /* verify message */
+    void on_addressBookButton_VM_clicked();
+    void on_verifyMessageButton_VM_clicked();
+    void on_clearButton_VM_clicked();
+};
+    
+    
+    {    Lock& lock;
+    Lock templock;
+};
+    
+        if (b->infinity) {
+        *r = *a;
+        return;
+    }
+    if (a->infinity) {
+        secp256k1_fe bzinv2, bzinv3;
+        r->infinity = b->infinity;
+        secp256k1_fe_sqr(&bzinv2, bzinv);
+        secp256k1_fe_mul(&bzinv3, &bzinv2, bzinv);
+        secp256k1_fe_mul(&r->x, &b->x, &bzinv2);
+        secp256k1_fe_mul(&r->y, &b->y, &bzinv3);
+        secp256k1_fe_set_int(&r->z, 1);
+        return;
+    }
+    r->infinity = 0;
+    
+    static void secp256k1_hmac_sha256_initialize(secp256k1_hmac_sha256_t *hash, const unsigned char *key, size_t keylen) {
+    int n;
+    unsigned char rkey[64];
+    if (keylen <= 64) {
+        memcpy(rkey, key, keylen);
+        memset(rkey + keylen, 0, 64 - keylen);
+    } else {
+        secp256k1_sha256_t sha256;
+        secp256k1_sha256_initialize(&sha256);
+        secp256k1_sha256_write(&sha256, key, keylen);
+        secp256k1_sha256_finalize(&sha256, rkey);
+        memset(rkey + 32, 0, 32);
+    }
+    }
+    
+    #endif // BITCOIN_CRYPTO_RIPEMD160_H
 
     
-    static void secp256k1_ge_set_all_gej_var(secp256k1_ge *r, const secp256k1_gej *a, size_t len, const secp256k1_callback *cb) {
-    secp256k1_fe *az;
-    secp256k1_fe *azi;
-    size_t i;
-    size_t count = 0;
-    az = (secp256k1_fe *)checked_malloc(cb, sizeof(secp256k1_fe) * len);
-    for (i = 0; i < len; i++) {
-        if (!a[i].infinity) {
-            az[count++] = a[i].z;
+    namespace {
+    }
+    
+    namespace {
+    }
+    
+        void operator() (const typename VecTraits<s32>::vec64 & v_src0,
+                     const typename VecTraits<s32>::vec64 & v_src1,
+                     typename VecTraits<s32>::vec64 & v_dst) const
+    {
+        float32x2_t vs1 = vcvt_f32_s32(v_src0);
+        float32x2_t vs2 = vcvt_f32_s32(v_src1);
+    }
+    
+    #ifndef __ANDROID__
+        for (; sj < roiw32; sj += 32, syj += 64, dj += 128)
+        {
+            internal::prefetch(srcy + syj);
+            internal::prefetch(srcu + sj);
+            internal::prefetch(srcv + sj);
+    }
+    
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
+CVT_FUNC(u16, f32, 8,
+,
+{
+     for (size_t i = 0; i < w; i += 8)
+     {
+         internal::prefetch(_src + i);
+         __asm__ (
+             'vld1.16 {d0-d1}, [%[src]]                              \n\t'
+             'vmovl.u16 q1, d0                                       \n\t'
+             'vmovl.u16 q2, d1                                       \n\t'
+             'vcvt.f32.u32 q3, q1                                    \n\t'
+             'vcvt.f32.u32 q4, q2                                    \n\t'
+             'vst1.32 {d6-d7}, [%[dst1]]                             \n\t'
+             'vst1.32 {d8-d9}, [%[dst2]]                             \n\t'
+             : /*no output*/
+             : [src] 'r' (_src + i),
+               [dst1] 'r' (_dst + i + 0),
+               [dst2] 'r' (_dst + i + 4)
+             : 'd0','d1','d2','d3','d4','d5','d6','d7','d8','d9'
+         );
+     }
+})
+#else
+CVT_FUNC(u16, f32, 8,
+,
+{
+     for (size_t i = 0; i < w; i += 8)
+     {
+         internal::prefetch(_src + i);
+         uint16x8_t vline_u16 = vld1q_u16(_src + i);
+    }
+    }
+    
+    inline float32x4_t vrsqrtq_f32(float32x4_t val)
+{
+    float32x4_t e = vrsqrteq_f32(val);
+    e = vmulq_f32(vrsqrtsq_f32(vmulq_f32(e, e), val), e);
+    e = vmulq_f32(vrsqrtsq_f32(vmulq_f32(e, e), val), e);
+    return e;
+}
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    
+    {
+    {    RNAME(v16); RNAME(v17); RNAME(v18); RNAME(v19); RNAME(v20); RNAME(v21);
+    RNAME(v22); RNAME(v23); RNAME(v24); RNAME(v25); RNAME(v26); RNAME(v27);
+    RNAME(v28); RNAME(v29);
+    return nullptr;
+  }
+ inline const char* regname(RegSF) {
+    return 'cr0';
+ }
+#undef RNAME
+}
+    
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////
+    }
+    
+    req::ptr<File>
+GlobStreamWrapper::open(const String& filename, const String& /*mode*/,
+                        int /*options*/,
+                        const req::ptr<StreamContext>& /*context*/) {
+  // Can't open a glob as a file, it's meant to be opened as a directory
+    }
+    
+    #include 'hphp/runtime/base/perf-warning.h'
+    
+    ScientificNumberFormatter *ScientificNumberFormatter::createMarkupInstance(
+        const Locale &locale,
+        const UnicodeString &beginMarkup,
+        const UnicodeString &endMarkup,
+        UErrorCode &status) {
+    return createInstance(
+            static_cast<DecimalFormat *>(
+                    DecimalFormat::createScientificInstance(locale, status)),
+            new MarkupStyle(beginMarkup, endMarkup),
+            status);
+}
+    
+    int32_t ScriptSet::countMembers() const {
+    // This bit counter is good for sparse numbers of '1's, which is
+    //  very much the case that we will usually have.
+    int32_t count = 0;
+    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
+        uint32_t x = bits[i];
+        while (x > 0) {
+            count++;
+            x &= (x - 1);    // and off the least significant one bit.
         }
     }
-    }
+    return count;
+}
     
-    const UniValue& UniValue::get_obj() const
+    UBool
+SimpleDateFormat::isAfterNonNumericField(const UnicodeString &pattern, int32_t patternOffset) {
+    if (patternOffset <= 0) {
+        // not after any field
+        return FALSE;
+    }
+    UChar ch = pattern.charAt(--patternOffset);
+    UDateFormatField f = DateFormatSymbols::getPatternCharIndex(ch);
+    if (f == UDAT_FIELD_COUNT) {
+        // not after any field
+        return FALSE;
+    }
+    int32_t i = patternOffset;
+    while (pattern.charAt(--i) == ch) {}
+    return !DateFormatSymbols::isNumericField(f, patternOffset - i);
+}
+    
+    CollationKey::~CollationKey()
 {
-    if (typ != VOBJ)
-        throw std::runtime_error('JSON value is not an object as expected');
-    return *this;
+    if(fFlagAndLength < 0) { uprv_free(fUnion.fFields.fBytes); }
 }
     
-    	// Check for machine-specific then user config source file.
-	PathCombine(cpuCfgPath, userConfigDirPath, L'ConEmu-%COMPUTERNAME%.xml');
-	ExpandEnvironmentStrings(cpuCfgPath, cpuCfgPath, sizeof(cpuCfgPath) / sizeof(cpuCfgPath[0]));
+        /**
+     * UnicodeFunctor API.  Cast 'this' to a UnicodeMatcher* pointer
+     * and return the pointer.
+     * @return the UnicodeMatcher point.
+     */
+    virtual UnicodeMatcher* toMatcher() const;
     
-    /**
- * \brief The interface to convert mxnet's tensor to caffe's blob
- * \brief called in caffe_operator_inl.h
+    namespace xgboost {
+/*!
+ * \brief interface of linear updater
  */
-template<typename Device, typename Dtype>
-void TBlob2CaffeBlob(caffeMemoryTypes memType,
-                     typename std::vector< ::caffe::Blob<Dtype>*>::iterator blob,
-                     typename std::vector<TBlob>::const_iterator tblob,
-                     int n = 1) {
-  for (int i = 0; i < n; ++i, ++blob, ++tblob) {
-    (*blob)->Reshape(TShape2Vector((*tblob).shape_));
-    SetDataGradToBlob<Device, Dtype>(memType, blob, tblob);
-  }
-}
-    
-    #endif  // PLUGIN_CAFFE_CAFFE_COMMON_H_
-
-    
-    // specialize define for Layer Parameter
-template<>
-class FieldEntry<caffe::LayerParameter>
-    : public FieldEntryBase<FieldEntry<caffe::LayerParameter>, caffe::LayerParameter> {
+class LinearUpdater {
  public:
-  // parent class
-  typedef FieldEntryBase<FieldEntry<caffe::LayerParameter>, caffe::LayerParameter> Parent;
+  /*! \brief virtual destructor */
+  virtual ~LinearUpdater() = default;
+  /*!
+   * \brief Initialize the updater with given arguments.
+   * \param args arguments to the objective function.
+   */
+  virtual void Init(
+      const std::vector<std::pair<std::string, std::string> >& args) = 0;
+    }
     }
     
-    namespace mxnet {
-namespace op {
-template<>
-Operator *CreateOp<cpu>(CaffeLossParam param, int dtype) {
-  Operator *op = NULL;
-  switch (dtype) {
-  case mshadow::kFloat32:
-    op = new CaffeLoss<cpu, float>(param);
-    break;
-  case mshadow::kFloat64:
-    op = new CaffeLoss<cpu, double>(param);
-    break;
-  case mshadow::kFloat16:
-    LOG(FATAL) << 'float16 layer is not supported by caffe';
-    break;
-  default:
-    LOG(FATAL) << 'Unsupported type ' << dtype;
+    SparsePageWriter::SparsePageWriter(
+    const std::vector<std::string>& name_shards,
+    const std::vector<std::string>& format_shards,
+    size_t extra_buffer_capacity)
+    : num_free_buffer_(extra_buffer_capacity + name_shards.size()),
+      clock_ptr_(0),
+      workers_(name_shards.size()),
+      qworkers_(name_shards.size()) {
+  CHECK_EQ(name_shards.size(), format_shards.size());
+  // start writer threads
+  for (size_t i = 0; i < name_shards.size(); ++i) {
+    std::string name_shard = name_shards[i];
+    std::string format_shard = format_shards[i];
+    auto* wqueue = &qworkers_[i];
+    workers_[i].reset(new std::thread(
+        [this, name_shard, format_shard, wqueue] () {
+          std::unique_ptr<dmlc::Stream> fo(
+              dmlc::Stream::Create(name_shard.c_str(), 'w'));
+          std::unique_ptr<SparsePageFormat> fmt(
+              SparsePageFormat::Create(format_shard));
+          fo->Write(format_shard);
+          std::shared_ptr<SparsePage> page;
+          while (wqueue->Pop(&page)) {
+            if (page == nullptr) break;
+            fmt->Write(*page, fo.get());
+            qrecycle_.Push(std::move(page));
+          }
+          fo.reset(nullptr);
+          LOG(CONSOLE) << 'SparsePage::Writer Finished writing to ' << name_shard;
+        }));
   }
-  return op;
 }
+    
+    namespace xgboost {
+namespace gbm {
+/*! \brief model parameters */
+struct GBTreeModelParam : public dmlc::Parameter<GBTreeModelParam> {
+  /*! \brief number of trees */
+  int num_trees;
+  /*! \brief number of roots */
+  int num_roots;
+  /*! \brief number of features to be used by trees */
+  int num_feature;
+  /*! \brief pad this space, for backward compatibility reason.*/
+  int pad_32bit;
+  /*! \brief deprecated padding space. */
+  int64_t num_pbuffer_deprecated;
+  /*!
+   * \brief how many output group a single instance can produce
+   *  this affects the behavior of number of output we have:
+   *    suppose we have n instance and k group, output will be k * n
+   */
+  int num_output_group;
+  /*! \brief size of leaf vector needed in tree */
+  int size_leaf_vector;
+  /*! \brief reserved parameters */
+  int reserved[32];
+  /*! \brief constructor */
+  GBTreeModelParam() {
+    std::memset(this, 0, sizeof(GBTreeModelParam));
+    static_assert(sizeof(GBTreeModelParam) == (4 + 2 + 2 + 32) * sizeof(int),
+                  '64/32 bit compatibility issue');
+  }
+  // declare parameters, only declare those that need to be set.
+  DMLC_DECLARE_PARAMETER(GBTreeModelParam) {
+    DMLC_DECLARE_FIELD(num_output_group)
+        .set_lower_bound(1)
+        .set_default(1)
+        .describe(
+            'Number of output groups to be predicted,'
+            ' used for multi-class classification.');
+    DMLC_DECLARE_FIELD(num_roots).set_lower_bound(1).set_default(1).describe(
+        'Tree updater sequence.');
+    DMLC_DECLARE_FIELD(num_feature)
+        .set_lower_bound(0)
+        .describe('Number of features used for training and prediction.');
+    DMLC_DECLARE_FIELD(size_leaf_vector)
+        .set_lower_bound(0)
+        .set_default(0)
+        .describe('Reserved option for vector tree.');
+  }
+};
     }
     }
     
-        caffe::TBlob2CaffeBlob<xpu, Dtype>(caffe::Data,
-                                       bot_.begin(),
-                                       in_data.begin(),
-                                       param_.num_data);
-    caffe::TBlob2CaffeBlob<xpu, Dtype>(caffe::Data,
-                                       top_.begin(),
-                                       out_data.begin(),
-                                       param_.num_out);
-    CaffeOpSetup();
-    // Init caffe's weight pointer
-    if (!init_w_) {
-      init_w_ = true;
-      caffe::TBlob2CaffeBlob<xpu, Dtype>(caffe::Data,
-                                         wei_.begin(),
-                                         in_data.begin() + param_.num_data,
-                                         param_.num_weight);
-      caffe::SetOpBlobs(caffeOp_, wei_);
-    }
-    if (ctx.is_train)
-      MXCAFFELAYER(caffeOp_, Dtype)->SetPhase(::caffe::TRAIN);
-    else
-      MXCAFFELAYER(caffeOp_, Dtype)->SetPhase(::caffe::TEST);
-    caffeOp_->Forward(bot_, top_);
-    
-    // DO_BIND_DISPATCH comes from static_operator_common.h
-Operator *CaffeOpProp::CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
-                                     std::vector<int> *in_type) const {
-  std::vector<int> out_type, aux_type;
-  std::vector<TShape> out_shape, aux_shape;
-  out_type.resize(this->ListOutputs().size());
-  out_shape.resize(this->ListOutputs().size());
-  aux_type.resize(this->ListAuxiliaryStates().size());
-  aux_shape.resize(this->ListAuxiliaryStates().size());
-  CHECK(InferType(in_type, &out_type, &aux_type));
-  CHECK(InferShape(in_shape, &out_shape, &aux_shape));
-  DO_BIND_DISPATCH(CreateOp, param_, (*in_type)[0]);
+    SEXP XGBoosterGetAttr_R(SEXP handle, SEXP name) {
+  SEXP out;
+  R_API_BEGIN();
+  int success;
+  const char *val;
+  CHECK_CALL(XGBoosterGetAttr(R_ExternalPtrAddr(handle),
+                              CHAR(asChar(name)),
+                              &val,
+                              &success));
+  if (success) {
+    out = PROTECT(allocVector(STRSXP, 1));
+    SET_STRING_ELT(out, 0, mkChar(val));
+  } else {
+    out = PROTECT(R_NilValue);
+  }
+  R_API_END();
+  UNPROTECT(1);
+  return out;
 }
     
     /*!
- * \brief Thread pool.
+ * \brief Macro to register tree split evaluator.
+ *
+ * \code
+ * // example of registering a split evaluator
+ * XGBOOST_REGISTER_SPLIT_EVALUATOR(SplitEval, 'splitEval')
+ * .describe('Some split evaluator')
+ * .set_body([]() {
+ *     return new SplitEval();
+ *   });
+ * \endcode
  */
-class ThreadPool {
- public:
-  /*! \brief Signal event upon destruction, even for exceptions (RAII) */
-  struct SetReadyOnDestroy {
-    explicit inline SetReadyOnDestroy(const std::shared_ptr<dmlc::ManualEvent>& event)
-      : event_(event) {
-    }
-    inline ~SetReadyOnDestroy() {
-      if (event_) {
-        event_->signal();
-      }
-    }
-    std::shared_ptr<dmlc::ManualEvent>  event_;
-  };
-    }
+#define XGBOOST_REGISTER_SPLIT_EVALUATOR(UniqueID, Name) \
+  static DMLC_ATTRIBUTE_UNUSED ::xgboost::tree::SplitEvaluatorReg& \
+  __make_ ## SplitEvaluatorReg ## _ ## UniqueID ## __ = \
+      ::dmlc::Registry< ::xgboost::tree::SplitEvaluatorReg>::Get()->__REGISTER__(Name)  //NOLINT
     
+        /** Return true if the action has finished. 
+     * 
+     * @return Is true if the action has finished.
+     */
+    virtual bool isDone() const;
     
+        /* Sets the Eye value of the Camera. 
+     * 
+     * @param eye The Eye value of the Camera.
+     * @js NA
+     */
+    void setEye(const Vec3 &eye);
+    void setEye(float x, float y, float z);
+    /* Returns the Eye value of the Camera. 
+     *
+     * @return The Eye value of the Camera.
+     * @js NA
+     */
+    const Vec3& getEye() const { return _eye; }
+    /* Sets the Center value of the Camera. 
+     *
+     * @param center The Center value of the Camera.
+     * @js NA
+     */
+    void setCenter(const Vec3 &center);
+    /* Returns the Center value of the Camera. 
+     *
+     * @return The Center value of the Camera.
+     * @js NA
+     */
+    const Vec3& getCenter() const { return _center; }
+    /* Sets the Up value of the Camera. 
+     *
+     * @param up The Up value of the Camera.
+     * @js NA
+     */
+    void setUp(const Vec3 &up);
+    /* Returns the Up value of the Camera. 
+     *
+     * @return The Up value of the Camera.
+     * @js NA
+     */
+    const Vec3& getUp() const { return _up; }
+    
+        EaseRateAction *easeRateAction = new (std::nothrow) EaseRateAction();
+    if (easeRateAction && easeRateAction->initWithAction(action, rate))
     {
-    {
-    { private:
-  /*! \brief base iterator */
-  IIterator<DataInst> *base_;
-  /*! \brief data shape */
-  std::vector<TShape> shape_;
-  /*! \brief unit size */
-  std::vector<size_t> unit_size_;
-  // initialize the data holder by using from the first batch.
-  inline void InitData(const DataInst& first_batch) {
-    shape_.resize(first_batch.data.size());
-    data_.resize(first_batch.data.size());
-    unit_size_.resize(first_batch.data.size());
-    for (size_t i = 0; i < first_batch.data.size(); ++i) {
-      TShape src_shape = first_batch.data[i].shape_;
-      int src_type_flag = first_batch.data[i].type_flag_;
-      // init object attributes
-      std::vector<index_t> shape_vec;
-      shape_vec.push_back(param_.batch_size);
-      for (index_t dim = 0; dim < src_shape.ndim(); ++dim) {
-        shape_vec.push_back(src_shape[dim]);
-      }
-      TShape dst_shape(shape_vec.begin(), shape_vec.end());
-      shape_[i] = dst_shape;
-      data_[i].resize(mshadow::Shape1(dst_shape.Size()), src_type_flag);
-      unit_size_[i] = src_shape.Size();
-      out_.data.push_back(TBlob(data_[i].dptr_, dst_shape, cpu::kDevMask, src_type_flag, 0));
-    }
-  }
-};  // class BatchLoader
-}  // namespace io
-}  // namespace mxnet
-#endif  // MXNET_IO_ITER_BATCHLOADER_H_
-
-    
-      virtual bool Next(void) {
-    if (out_ != nullptr) {
-      recycle_queue_.push(out_); out_ = nullptr;
-    }
-    // do recycle
-    if (recycle_queue_.size() == param_.prefetch_buffer) {
-      DataBatch *old_batch =  recycle_queue_.front();
-      // can be more efficient on engine
-      for (NDArray& arr : old_batch->data) {
-        arr.WaitToWrite();
-      }
-      recycle_queue_.pop();
-      iter.Recycle(&old_batch);
-    }
-    return iter.Next(&out_);
-  }
-  virtual const DataBatch &Value(void) const {
-    return *out_;
-  }
-    
-            const auto learningRate = ElementType(LearningRate(trainingSampleCount));
-        const auto momentum = ElementType(MomentumValueForMB(trainingSampleCount));
-        const auto unitGainFactor = UnitGainFactor<ElementType>(trainingSampleCount);
-    
-    namespace CNTK
-{
-    static Matrix<char>* AllocateMatrix(const NDShape& viewShape, const DeviceDescriptor& device)
-    {
-        auto matrixDims = GetMatrixDimensions(viewShape);
-        return new Matrix<char>(matrixDims.first, matrixDims.second, AsCNTKImplDeviceId(device));
-    }
+        easeRateAction->autorelease();
+        return easeRateAction;
     }
     
-        static void noOpAlarmHandler(int /*signum*/)
-    {
-        // this handler is intentionally NO-OP
-        // the side effect of execution this handler
-        // will be a termination of fcntl call below with EINTR
-    }
-    
-        // this returns the map directly (read-only) and will lazily initialize it for a given seed
-    const std::vector<INDEXTYPE>& operator()(size_t seed) // throw()
-    {
-        // if wrong seed then lazily recache the sequence
-        if (seed != currentseed && randomizationrange != randomizeDisable)
-        {
-            // test for numeric overflow
-            if (map.size() - 1 != (INDEXTYPE)(map.size() - 1))
-                RuntimeError('RandomOrdering: INDEXTYPE has too few bits for this corpus');
-            // 0, 1, 2...
-            foreach_index (t, map)
-                map[t] = (INDEXTYPE) t;
-    }
-    }
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#include '2d/CCActionPageTurn3D.h'
+#include '2d/CCGrid.h'
+#include '2d/CCNodeGrid.h'
     
     
-ExtensionManager_getQueryColumns_presult::~ExtensionManager_getQueryColumns_presult() throw() {
-}
-    
-    
-    {
-    {}} // namespace
-    
-    QueryData getTestDBExpectedResults() {
-  QueryData d;
-  Row row1;
-  row1['username'] = 'mike';
-  row1['age'] = '23';
-  d.push_back(row1);
-  Row row2;
-  row2['username'] = 'matt';
-  row2['age'] = '24';
-  d.push_back(row2);
-  return d;
-}
-    
-    // getSerializedQueryData() return an std::pair where pair->first is a string
-// which should serialize to pair->second. pair->second should
-// deserialize to pair->first. getSerializedQueryDataWithColumnOrder
-// returns a pair where pair->second is a tree that has a repeated column and
-// the child nodes are not in alphabetical order
-std::pair<JSON, QueryData> getSerializedQueryData();
-std::pair<JSON, QueryData> getSerializedQueryDataWithColumnOrder();
-std::pair<std::string, QueryData> getSerializedQueryDataJSON();
-    
-    class SQLPlugin : public Plugin {
- public:
-  /// Run a SQL query string against the SQL implementation.
-  virtual Status query(const std::string& query,
-                       QueryData& results,
-                       bool use_cache) const = 0;
-    }
-    
-    enum class PosixError {
-  Unknown = 0,
-  PERM = EPERM,
-  NOENT = ENOENT,
-  SRCH = ESRCH,
-  INTR = EINTR,
-  IO = EIO,
-  NXIO = ENXIO,
-  T_BIG = E2BIG,
-  NOEXEC = ENOEXEC,
-  BADF = EBADF,
-  CHILD = ECHILD,
-  AGAIN = EAGAIN,
-  NOMEM = ENOMEM,
-  ACCES = EACCES,
-  FAULT = EFAULT,
-  NOTBLK = ENOTBLK,
-  BUSY = EBUSY,
-  EXIST = EEXIST,
-  XDEV = EXDEV,
-  NODEV = ENODEV,
-  NOTDIR = ENOTDIR,
-  ISDIR = EISDIR,
-  INVAL = EINVAL,
-  NFILE = ENFILE,
-  MFILE = EMFILE,
-  NOTTY = ENOTTY,
-  TXTBSY = ETXTBSY,
-  FBIG = EFBIG,
-  NOSPC = ENOSPC,
-  SPIPE = ESPIPE,
-  ROFS = EROFS,
-  MLINK = EMLINK,
-  PIPE = EPIPE,
-  DOM = EDOM,
-  RANGE = ERANGE,
+    {private:
+    CC_DISALLOW_COPY_AND_ASSIGN(ProgressTo);
 };
     
     
-    {
-    {
-    {      shell_callback(pArg, 2, &row[0], COLUMN_NAMES, nullptr);
-    }
-    pretty_print_if_needed(pArg);
-  } else {
-    fprintf(
-        stdout, 'Error %d: %s\n', status.getCode(), status.toString().c_str());
-  }
+    {protected:
+    std::string       _key;
+    float            _from, _to;
+    float            _delta;
+};
+    
+    #include 'modules/drivers/canbus/can_client/esd/esd_can_client.h'
+    
+    #include 'modules/common/time/time.h'
+#include 'modules/drivers/canbus/common/byte.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
+#include 'modules/drivers/radar/conti_radar/protocol/const_vars.h'
+    
+    
+    {  int ret = x;
+  return ret;
 }
     
-      uint64_t single_refill_amount =
-      delayed_write_rate_ * kRefillInterval / kMicrosPerSecond;
-  if (bytes_left_ + single_refill_amount >= num_bytes) {
-    // Wait until a refill interval
-    // Never trigger expire for less than one refill interval to avoid to get
-    // time.
-    bytes_left_ = bytes_left_ + single_refill_amount - num_bytes;
-    last_refill_time_ = time_now + kRefillInterval;
-    return kRefillInterval + sleep_debt;
-  }
     
-      // Set a snapshot at start of transaction
-  txn_options.set_snapshot = true;
-  txn = txn_db->BeginTransaction(write_options, txn_options);
+    {  int ret = x;
+  return ret;
+}
     
+    void RadarState201::Parse(const std::uint8_t* bytes, int32_t length,
+                          ContiRadar* conti_radar) const {
+  auto state = conti_radar->mutable_radar_state();
+  state->set_max_distance(max_dist(bytes, length));
+  state->set_output_type(output_type(bytes, length));
+  state->set_rcs_threshold(rcs_threshold(bytes, length));
+  state->set_radar_power(radar_power(bytes, length));
+  state->set_send_quality(send_quality(bytes, length));
+  state->set_send_ext_info(send_ext_info(bytes, length));
+}
     
-    {class DbUndumpTool {
- public:
-  bool Run(const UndumpOptions& undump_options,
-           rocksdb::Options options = rocksdb::Options());
-};
-}  // namespace rocksdb
-#endif  // ROCKSDB_LITE
-
+    void Spline1dSeg::SetParams(const std::vector<double>& params) {
+  SetSplineFunc(PolynomialXd(params));
+}
     
-      static const std::string MicrosToString(uint64_t op_elapsed_time);
+    NodeWithRange::~NodeWithRange() {}
     
-      // Wait for all threads to finish.
-  // Discard those threads that did not start
-  // executing
-  virtual void JoinAllThreads() = 0;
-    
-        static BOOST_FORCEINLINE storage_type fetch_add(storage_type volatile& storage, storage_type v, memory_order order) BOOST_NOEXCEPT
-    {
-        switch (order)
-        {
-        case memory_order_relaxed:
-            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD_RELAXED(&storage, v));
-            break;
-        case memory_order_consume:
-        case memory_order_acquire:
-            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD_ACQUIRE(&storage, v));
-            break;
-        case memory_order_release:
-            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD_RELEASE(&storage, v));
-            break;
-        case memory_order_acq_rel:
-        case memory_order_seq_cst:
-        default:
-            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD(&storage, v));
-            break;
-        }
-        return v;
+    namespace apollo {
+namespace canbus {
+    }
     }
