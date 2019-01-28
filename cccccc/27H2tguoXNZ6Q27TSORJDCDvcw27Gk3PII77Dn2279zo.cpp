@@ -1,247 +1,206 @@
 
         
-            Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged USER true)
-    
-    #endif // BITCOIN_QT_TRANSACTIONDESCDIALOG_H
-
-    
-    
-    {    secp256k1_fe_sqr(&z12, &a->z);
-    u1 = a->x; secp256k1_fe_normalize_weak(&u1);
-    secp256k1_fe_mul(&u2, &b->x, &z12);
-    s1 = a->y; secp256k1_fe_normalize_weak(&s1);
-    secp256k1_fe_mul(&s2, &b->y, &z12); secp256k1_fe_mul(&s2, &s2, &a->z);
-    secp256k1_fe_negate(&h, &u1, 1); secp256k1_fe_add(&h, &u2);
-    secp256k1_fe_negate(&i, &s1, 1); secp256k1_fe_add(&i, &s2);
-    if (secp256k1_fe_normalizes_to_zero_var(&h)) {
-        if (secp256k1_fe_normalizes_to_zero_var(&i)) {
-            secp256k1_gej_double_var(r, a, rzr);
-        } else {
-            if (rzr != NULL) {
-                secp256k1_fe_set_int(rzr, 0);
-            }
-            r->infinity = 1;
-        }
-        return;
-    }
-    secp256k1_fe_sqr(&i2, &i);
-    secp256k1_fe_sqr(&h2, &h);
-    secp256k1_fe_mul(&h3, &h, &h2);
-    if (rzr != NULL) {
-        *rzr = h;
-    }
-    secp256k1_fe_mul(&r->z, &a->z, &h);
-    secp256k1_fe_mul(&t, &u1, &h2);
-    r->x = t; secp256k1_fe_mul_int(&r->x, 2); secp256k1_fe_add(&r->x, &h3); secp256k1_fe_negate(&r->x, &r->x, 3); secp256k1_fe_add(&r->x, &i2);
-    secp256k1_fe_negate(&r->y, &r->x, 5); secp256k1_fe_add(&r->y, &t); secp256k1_fe_mul(&r->y, &r->y, &i);
-    secp256k1_fe_mul(&h3, &h3, &s1); secp256k1_fe_negate(&h3, &h3, 1);
-    secp256k1_fe_add(&r->y, &h3);
-}
-    
-    #ifndef SECP256K1_MODULE_ECDH_TESTS_H
-#define SECP256K1_MODULE_ECDH_TESTS_H
-    
-    BOOST_AUTO_TEST_CASE(bip173_testvectors_valid)
-{
-    static const std::string CASES[] = {
-        'A12UEL5L',
-        'a12uel5l',
-        'an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1tt5tgs',
-        'abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw',
-        '11qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqc8247j',
-        'split1checkupstagehandshakeupstreamerranterredcaperred2y9e3w',
-        '?1ezyfcl',
-    };
-    for (const std::string& str : CASES) {
-        auto ret = bech32::Decode(str);
-        BOOST_CHECK(!ret.first.empty());
-        std::string recode = bech32::Encode(ret.first, ret.second);
-        BOOST_CHECK(!recode.empty());
-        BOOST_CHECK(CaseInsensitiveEqual(str, recode));
-    }
-}
-    
-    static void CheckSplitTorReplyLine(std::string input, std::string command, std::string args)
-{
-    BOOST_TEST_MESSAGE(std::string('CheckSplitTorReplyLine(') + input + ')');
-    auto ret = SplitTorReplyLine(input);
-    BOOST_CHECK_EQUAL(ret.first, command);
-    BOOST_CHECK_EQUAL(ret.second, args);
-}
-    
-    namespace
-{
-static bool ParsePrechecks(const std::string& str)
-{
-    if (str.empty()) // No empty string allowed
-        return false;
-    if (str.size() >= 1 && (json_isspace(str[0]) || json_isspace(str[str.size()-1]))) // No padding allowed
-        return false;
-    if (str.size() != strlen(str.c_str())) // No embedded NUL characters allowed
-        return false;
-    return true;
-}
+         public:
+  /*! \brief cuda kernel argument descriptor */
+  struct ArgType {
+    /*! \brief whether argument is NDArray */
+    bool is_ndarray;
+    /*! \brief whether argument is constant (input) */
+    bool is_const;
+    /*! \brief data type of argument */
+    mshadow::TypeFlag dtype;
+  };
+  /*! \brief Cuda kernel */
+  class Kernel {
+   public:
+    /*! \brief Launch the kernel */
+    void Launch(const Context& ctx, const std::vector<dmlc::any>& args,
+                uint32_t grid_dim_x, uint32_t grid_dim_y, uint32_t grid_dim_z,
+                uint32_t block_dim_x, uint32_t block_dim_y, uint32_t block_dim_z,
+                uint32_t shared_mem);
+    /*! \brief kernel interface signature */
+    const std::vector<ArgType>& signature() { return signature_; }
     }
     
-        BOOST_CHECK(v.setArray());
-    BOOST_CHECK(v.isArray());
-    BOOST_CHECK_EQUAL(v.size(), 0);
+    /*!
+ * Copyright (c) 2016 by Contributors
+ * \file caffe_blob.cc
+ * \brief Implementations of SetDataGradToBlob given various device/dimension
+ * \author Haoran Wang
+*/
+#include 'caffe_blob.h'
+namespace mxnet {
+namespace op {
+namespace caffe {
+    }
+    }
+    }
     
-      // True when a ScopedPyObjectPtr and a raw pointer refer to the same object.
-  // Comparison operators are non reflexive.
-  bool operator==(const PyObjectStruct* p) const { return ptr_ == p; }
-  bool operator!=(const PyObjectStruct* p) const { return ptr_ != p; }
+     protected:
+  IF_CHECK_TIMING(
+    static uint64_t GetTickCountMS() {
+      struct timeval tv;
+      gettimeofday(&tv, 0);
+      return uint64_t( tv.tv_sec ) * 1000 + tv.tv_usec / 1000;
+    }
+  )
     
-    // A CodeGenerator that captures the FileDescriptor it's passed as a
-// FileDescriptorProto.
-class DescriptorCapturingGenerator : public CodeGenerator {
+    #include '../../src/operator/operator_common.h'
+#include 'caffe_common.h'
+#include 'caffe_stream.h'
+#include 'caffe_fieldentry.h'
+#include 'caffe_blob.h'
+    
+    
+MXNET_DLL int MXCVResize(NDArrayHandle src, const mx_uint w, const mx_uint h,
+                         const int interpolation, NDArrayHandle *out) {
+  API_BEGIN();
+  NDArray ndsrc = *static_cast<NDArray*>(src);
+  CHECK_EQ(ndsrc.shape().ndim(), 3);
+  CHECK_EQ(ndsrc.ctx(), Context::CPU());
+  CHECK_EQ(ndsrc.dtype(), mshadow::kUint8);
+    }
+    
+    /*!
+ * \brief Thread pool.
+ */
+class ThreadPool {
  public:
-  // Does not own file; file must outlive the Generator.
-  explicit DescriptorCapturingGenerator(FileDescriptorProto* file)
-      : file_(file) {}
+  /*! \brief Signal event upon destruction, even for exceptions (RAII) */
+  struct SetReadyOnDestroy {
+    explicit inline SetReadyOnDestroy(const std::shared_ptr<dmlc::ManualEvent>& event)
+      : event_(event) {
+    }
+    inline ~SetReadyOnDestroy() {
+      if (event_) {
+        event_->signal();
+      }
+    }
+    std::shared_ptr<dmlc::ManualEvent>  event_;
+  };
     }
     
+    #include <dmlc/registry.h>
     
-    {  for (int i = 0; i < parts.size(); i++) {
-    string::size_type equals_pos = parts[i].find_first_of('=');
-    std::pair<string, string> value;
-    if (equals_pos == string::npos) {
-      value.first = parts[i];
-      value.second = '';
+    class TBlobContainer : public TBlob {
+ public:
+  TBlobContainer(void)
+    : TBlob(), tensor_container_(nullptr) {}
+  ~TBlobContainer() {
+    if (tensor_container_) {
+      release();
+    }
+  }
+  void resize(const TShape &shape, int type_flag) {
+    if (tensor_container_) {
+      CHECK_EQ(this->type_flag_, type_flag);
+      this->shape_ = shape;
+      resize();
     } else {
-      value.first = parts[i].substr(0, equals_pos);
-      value.second = parts[i].substr(equals_pos + 1);
+      this->type_flag_ = type_flag;
+      this->shape_ = shape;
+      create();
     }
-    output->push_back(value);
   }
-}
+    }
     
-    string ClassNameResolver::GetClassName(const EnumDescriptor* descriptor,
-                                       bool immutable) {
-  return GetClassFullName(ClassNameWithoutPackage(descriptor, immutable),
-                          descriptor->file(), immutable,
-                          MultipleJavaFiles(descriptor->file(), immutable));
-}
+    /*!
+ *  Copyright (c) 2015 by Contributors
+ * \file iter_normalize.h
+ * \brief Iterator that subtracts mean and do a few augmentations.
+ */
+#ifndef MXNET_IO_ITER_NORMALIZE_H_
+#define MXNET_IO_ITER_NORMALIZE_H_
     
-      for (int i = 0; i < dependencies.size(); i++) {
-    const string& dependency = dependencies[i].second;
-    printer->Print(
-        '      $dependency$.getDescriptor(),\n',
-        'dependency', dependency);
+    namespace HPHP {
+    }
+    
+      static void ParseIniFile(const std::string &filename,
+                           const bool is_system = true);
+  static void ParseIniFile(const std::string &filename, IniSettingMap &ini,
+                           const bool constants_only = false,
+                           const bool is_system = true);
+    
+    const StaticString
+  s_wrapper_type('wrapper_type'),
+  s_stream_type('stream_type'),
+  s_mode('mode'),
+  s_unread_bytes('unread_bytes'),
+  s_seekable('seekable'),
+  s_timed_out('timed_out'),
+  s_blocked('blocked'),
+  s_eof('eof'),
+  s_plainfile('plainfile'),
+  s_dir('dir'),
+  s_r('r');
+    
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    
+    #include 'hphp/runtime/base/runtime-option.h'
+    
+      while(true) {
+    if(!this->sync_.getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare('ping') != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+    }
+    }
+    }
+    
+      ExtensionManager_query_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+    
+      void __set_success(const ExtensionStatus& val);
+    
+    #include 'osquery_types.h'
+    
+    #include <smartmontools/libsmartctl.h>
+    
+      // Get the hash value for the kernel's .text memory segment
+  auto f2 = osquery::readFile(kKernelTextHashPath, content);
+  if (f2.ok()) {
+    boost::trim(content);
+    text_segment_hash = content;
+  } else {
+    VLOG(1) << 'Cannot read file: ' << kKernelTextHashPath;
+    return results;
   }
     
-    MeasureDouble RpcClientReceivedBytesPerRpc() {
-  static const auto measure = MeasureDouble::Register(
-      kRpcClientReceivedBytesPerRpcMeasureName,
-      'Total bytes received across all response messages per RPC', kUnitBytes);
-  return measure;
-}
-    
-    
-    {}  // namespace grpc
-
-    
-    ProtoServerReflectionPlugin::ProtoServerReflectionPlugin()
-    : reflection_service_(new grpc::ProtoServerReflection()) {}
-    
-    
-    {  if ((pool_->shutdown_) && (pool_->nthreads_ == 0)) {
-    pool_->shutdown_cv_.notify_one();
+      ~Guard() {
+    final_routine_();
   }
+    
+    /*
+** Allocate space and save off current error string.
+*/
+static char* save_err_msg(sqlite3* db) {
+  int nErrMsg = 1 + strlen30(sqlite3_errmsg(db));
+  auto* zErrMsg = reinterpret_cast<char*>(sqlite3_malloc(nErrMsg));
+  if (zErrMsg != nullptr) {
+    memcpy(zErrMsg, sqlite3_errmsg(db), nErrMsg);
+  }
+  return zErrMsg;
 }
-    
-    template <typename T>
-inline StringName __constant_get_enum_name(T param, const String &p_constant) {
-	if (GetTypeInfo<T>::VARIANT_TYPE == Variant::NIL)
-		ERR_PRINTS('Missing VARIANT_ENUM_CAST for constant's enum: ' + p_constant);
-	return GetTypeInfo<T>::get_class_info().class_name;
-}
-    
-    #include 'collision_object_bullet.h'
-    
-    #include 'csg_gizmos.h'
-#include 'csg_shape.h'
-    
-    Shell::~Shell() {
-}
-    
-    void RemoveTransliterator::handleTransliterate(Replaceable& text, UTransPosition& index,
-                                               UBool /*isIncremental*/) const {
-    // Our caller (filteredTransliterate) has already narrowed us
-    // to an unfiltered run.  Delete it.
-    UnicodeString empty;
-    text.handleReplaceBetween(index.start, index.limit, empty);
-    int32_t len = index.limit - index.start;
-    index.contextLimit -= len;
-    index.limit -= len;
-}
-U_NAMESPACE_END
-    
-    ScientificNumberFormatter::ScientificNumberFormatter(
-        DecimalFormat *fmtToAdopt, Style *styleToAdopt, UErrorCode &status)
-        : fPreExponent(),
-          fDecimalFormat(fmtToAdopt),
-          fStyle(styleToAdopt),
-          fStaticSets(NULL) {
-    if (U_FAILURE(status)) {
-        return;
-    }
-    if (fDecimalFormat == NULL || fStyle == NULL) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
-    const DecimalFormatSymbols *sym = fDecimalFormat->getDecimalFormatSymbols();
-    if (sym == NULL) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
-    getPreExponent(*sym, fPreExponent);
-    fStaticSets = DecimalFormatStaticSets::getStaticSets(status);
-}
-    
-    #endif /* #if !UCONFIG_NO_TRANSLITERATION */
-    
-        float x = _eye.x - _center.x;
-    float y = _eye.y - _center.y;
-    float z = _eye.z - _center.z;
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-    
-        /** Gets the total Delay units of the Animation. 
-     *
-     * @return The total Delay units of the Animation.
-     */
-    float getTotalDelayUnits() const { return _totalDelayUnits; };
-    
-    /** Sets the delay in seconds of the 'delay unit'.
-     *
-     * @param delayPerUnit The delay in seconds of the 'delay unit'.
-     */
-    void setDelayPerUnit(float delayPerUnit) { _delayPerUnit = delayPerUnit; };
-    
-    /** Gets the delay in seconds of the 'delay unit'.
-     * 
-     * @return The delay in seconds of the 'delay unit'.
-     */
-    float getDelayPerUnit() const { return _delayPerUnit; };
-    
-        /** Returns a Animation that was previously added.
-     * If the name is not found it will return nil.
-     * You should retain the returned copy if you are going to use it.
-     *
-     * @return A Animation that was previously added. If the name is not found it will return nil.
-     */
-    Animation* getAnimation(const std::string& name);
-    /**
-     * @deprecated. Use getAnimation() instead
-     * @js NA
-     * @lua NA
-     */
-    CC_DEPRECATED_ATTRIBUTE Animation* animationByName(const std::string& name){ return getAnimation(name); }
