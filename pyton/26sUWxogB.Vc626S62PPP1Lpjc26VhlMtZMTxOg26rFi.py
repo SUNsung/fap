@@ -1,234 +1,105 @@
 
         
-        
-@bp.route('/login', methods=('GET', 'POST'))
-def login():
-    '''Log in a registered user by adding the user id to the session.'''
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        db = get_db()
-        error = None
-        user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)
-        ).fetchone()
+        def main():
+    # First, we load the current README into memory as an array of lines
+    with open('README.md', 'r') as read_me_file:
+        read_me = read_me_file.readlines()
+    
+        # Returns
+        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
+    '''
+    dirname = 'cifar-10-batches-py'
+    origin = 'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
+    path = get_file(dirname, origin=origin, untar=True)
+    
+        # Arguments
+        label_mode: one of 'fine', 'coarse'.
+    
+        # Returns
+        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
+    '''
+    dirname = os.path.join('datasets', 'fashion-mnist')
+    base = 'http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/'
+    files = ['train-labels-idx1-ubyte.gz', 'train-images-idx3-ubyte.gz',
+             't10k-labels-idx1-ubyte.gz', 't10k-images-idx3-ubyte.gz']
     
     
-@pytest.fixture
-def auth(client):
-    return AuthActions(client)
-
+def test_objective_shapes_3d():
+    y_a = K.variable(np.random.random((5, 6, 7)))
+    y_b = K.variable(np.random.random((5, 6, 7)))
+    for obj in allobj:
+        objective_output = obj(y_a, y_b)
+        assert K.eval(objective_output).shape == (5, 6)
     
-        # test that the user was inserted into the database
-    with app.app_context():
-        assert get_db().execute(
-            'select * from user where username = 'a'',
-        ).fetchone() is not None
+        def get_slice(data, i, parts):
+        shape = K.shape(data)
+        batch_size = shape[:1]
+        input_shape = shape[1:]
+        step = batch_size // parts
+        if i == parts - 1:
+            size = batch_size - step * i
+        else:
+            size = step
+        size = K.concatenate([size, input_shape], axis=0)
+        stride = K.concatenate([step, input_shape * 0], axis=0)
+        start = stride * i
+        return K.slice(data, start, size)
     
+    seq.add(ConvLSTM2D(filters=40, kernel_size=(3, 3),
+                   padding='same', return_sequences=True))
+seq.add(BatchNormalization())
     
-def test_update(client, auth, app):
-    auth.login()
-    assert client.get('/1/update').status_code == 200
-    client.post('/1/update', data={'title': 'updated', 'body': ''})
-    
-        def fake_init_db():
-        Recorder.called = True
-    
-        def __init__(self, request, key):
-        form_matches = request.form.getlist(key)
-        buf = ['You tried to access the file '%s' in the request.files '
-               'dictionary but it does not exist.  The mimetype for the request '
-               'is '%s' instead of 'multipart/form-data' which means that no '
-               'file contents were transmitted.  To fix this error you should '
-               'provide enctype='multipart/form-data' in your form.' %
-               (key, request.mimetype)]
-        if form_matches:
-            buf.append('\n\nThe browser instead transmitted some file names. '
-                       'This was submitted: %s' % ', '.join(''%s'' % x
-                            for x in form_matches))
-        self.msg = ''.join(buf)
-    
-    
-#: Log messages to :func:`~flask.logging.wsgi_errors_stream` with the format
-#: ``[%(asctime)s] %(levelname)s in %(module)s: %(message)s``.
-default_handler = logging.StreamHandler(wsgi_errors_stream)
-default_handler.setFormatter(logging.Formatter(
-    '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
-))
-    
-            def __init__(self, name, doc=None):
-            self.name = name
-            self.__doc__ = doc
-        def _fail(self, *args, **kwargs):
-            raise RuntimeError('signalling support is unavailable '
-                               'because the blinker library is '
-                               'not installed.')
-        send = lambda *a, **kw: None
-        connect = disconnect = has_receivers_for = receivers_for = \
-            temporarily_connected_to = connected_to = _fail
-        del _fail
-    
-        with open(filename) as f:
-        contents = re.sub(
-            r'^(\s*%s\s*=\s*')(.+?)(')' % pattern,
-            inject_version, f.read(),
-            flags=re.DOTALL | re.MULTILINE
-        )
-    
-            def __getattr__(self, name):
-            if name in ('archive', 'get_filename'):
-                msg = 'Mocking a loader which does not have `%s.`' % name
-                raise AttributeError(msg)
-            return getattr(self.loader, name)
-    
-    from ..utils.data_utils import get_file
-import numpy as np
-    
-    This script loads the s2s.h5 model saved by lstm_seq2seq.py and generates
-sequences from it.  It assumes that no changes have been made (for example:
-latent_dim is unchanged, and the input data and model architecture are unchanged).
-    
-        return {function_name: camel_dict_to_snake_dict(lambda_facts)}
-    
-    - name: Delete instance (and all databases)
-- gcspanner:
-    instance_id: '{{ instance_id }}'
-    configuration: '{{ configuration }}'
-    state: absent
-    force_instance_delete: yes
-'''
-    
-    # TODO: Documentation on valid state transitions is required to properly implement all valid cases
-# TODO: To be coherent with CLI this module should also provide 'flush' functionality
+    model = Sequential()
+model.add(Conv2D(32, kernel_size=(3, 3),
+                 activation='relu',
+                 input_shape=input_shape))
+model.add(Conv2D(64, (3, 3), activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
+model.add(Flatten())
+model.add(Dense(128, activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(num_classes, activation='softmax'))
     
     
-if __name__ == '__main__':
+def cnn_layers(inputs):
+    x = layers.Conv2D(32, (3, 3),
+                      activation='relu', padding='valid')(inputs)
+    x = layers.MaxPooling2D(pool_size=(2, 2))(x)
+    x = layers.Conv2D(64, (3, 3), activation='relu')(x)
+    x = layers.MaxPooling2D(pool_size=(2, 2))(x)
+    x = layers.Flatten()(x)
+    x = layers.Dense(512, activation='relu')(x)
+    x = layers.Dropout(0.5)(x)
+    predictions = layers.Dense(num_classes,
+                               activation='softmax',
+                               name='x_train_out')(x)
+    return predictions
+    
+        # case 1: only ip
+    # case 2: ip + domain
+    #    connect use domain
+    
+    ##
+# imaginary tree navigation type; traverse 'get child' link
+DOWN = 2
+##
+#imaginary tree navigation type; finish with a child list
+UP = 3
+    
+    if __name__ == '__main__':
     main()
 
     
-        rc, out, err = module.run_command(cmd)
-    if rc != 0:
-        result.update(dict(
-            cmd=cmd,
-            rc=rc,
-            stderr=err,
-            stdout=out,
-        ))
-        shutil.rmtree(tmp_dir)
+        def __hash_double_function(self, key, data, increment):
+        return (increment * self.__hash_function_2(key, data)) % self.size_table
     
-        module_hbacrule = get_hbacrule_dict(description=module.params['description'],
-                                        hostcategory=hostcategory,
-                                        ipaenabledflag=ipaenabledflag,
-                                        servicecategory=servicecategory,
-                                        sourcehostcategory=sourcehostcategory,
-                                        usercategory=usercategory)
-    ipa_hbacrule = client.hbacrule_find(name=name)
-    
-    # Ensure role is absent
-- ipa_role:
-    name: dba
-    state: absent
-    ipa_host: ipa.example.com
-    ipa_user: admin
-    ipa_pass: topsecret
-'''
-    
-    
-DOCUMENTATION = '''
----
-module: group_by
-short_description: Create Ansible groups based on facts
-description:
-  - Use facts to create ad-hoc groups that can be used later in a playbook.
-  - This module is also supported for Windows targets.
-version_added: '0.9'
-options:
-  key:
-    description:
-    - The variables whose values will be used as groups
-    required: true
-  parents:
-    description:
-    - The list of the parent groups
-    required: false
-    default: 'all'
-    version_added: '2.4'
-author: 'Jeroen Hoekx (@jhoekx)'
-notes:
-  - Spaces in group names are converted to dashes '-'.
-  - This module is also supported for Windows targets.
-'''
-    
-    def main():
-    
-        def parse(parts):
-        if is_version_higher_than_5_18():
-            return parse_current(parts)
-        else:
-            return parse_older_versions(parts)
-    
-            _LOGGER.info('Request successful')
-        return True
-
-    
-            devices = {}
-        for device in request.json()['status']:
-            try:
-                devices[device['Key']] = {
-                    'ip': device['IPAddress'],
-                    'mac': device['PhysAddress'],
-                    'host': device['Name'],
-                    'status': device['Active']
-                    }
-            except (KeyError, requests.exceptions.RequestException):
-                pass
-        return devices
-
-    
-    For more details about this platform, please refer to the documentation at
-https://home-assistant.io/components/device_tracker.tado/
-'''
-import logging
-from datetime import timedelta
-from collections import namedtuple
-    
-    
-def clean_socket_close(sock):
-    '''Close a socket connection and logs its closure.'''
-    _LOGGER.info('UPNP responder shutting down.')
-    
-    CONFIG_SCHEMA = vol.Schema({
-    DOMAIN: vol.All(cv.ensure_list, [vol.Schema({
-        vol.Required(CONF_FOLDER): cv.isdir,
-        vol.Optional(CONF_PATTERNS, default=[DEFAULT_PATTERN]):
-            vol.All(cv.ensure_list, [cv.string]),
-    })])
-}, extra=vol.ALLOW_EXTRA)
-    
-        # Apply some eyeliner
-    d.line(face_landmarks['left_eye'] + [face_landmarks['left_eye'][0]], fill=(0, 0, 0, 110), width=6)
-    d.line(face_landmarks['right_eye'] + [face_landmarks['right_eye'][0]], fill=(0, 0, 0, 110), width=6)
-    
-        :param model_save_path: (optional) path to save model on disk
-    :param n_neighbors: (optional) number of neighbors to weigh in classification. Chosen automatically if not specified
-    :param knn_algo: (optional) underlying data structure to support knn.default is ball_tree
-    :param verbose: verbosity of training
-    :return: returns knn classifier that was trained on the given data.
-    '''
-    X = []
-    y = []
-    
-        # Load the uploaded image file
-    img = face_recognition.load_image_file(file_stream)
-    # Get face encodings for any faces in the uploaded image
-    unknown_face_encodings = face_recognition.face_encodings(img)
-    
-    al_image = face_recognition.load_image_file('alex-lacamoire.png')
-al_face_encoding = face_recognition.face_encodings(al_image)[0]
-    
-    # Display the resulting image
-pil_image.show()
-    
-    
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    Usage:
+  1. define 'k' value, 'X' features array and 'hetrogeneity' empty list
+  
+  2. create initial_centroids,
+        initial_centroids = get_initial_centroids(
+            X, 
+            k, 
+            seed=0 # seed value for initial centroid generation, None for randomness(default=None)
+            )
