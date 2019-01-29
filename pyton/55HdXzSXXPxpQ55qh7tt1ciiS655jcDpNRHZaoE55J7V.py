@@ -1,108 +1,46 @@
 
         
-        # read in SQL for populating test data
-with open(os.path.join(os.path.dirname(__file__), 'data.sql'), 'rb') as f:
-    _data_sql = f.read().decode('utf8')
+        
+class UserService(object):
     
-        # test that successful login redirects to the index page
-    response = auth.login()
-    assert response.headers['Location'] == 'http://localhost/'
+        def reducer(self, key, values):
+        '''Sum values for each key.
     
-        auth.login()
-    # current user can't modify other user's post
-    assert client.post('/1/update').status_code == 403
-    assert client.post('/1/delete').status_code == 403
-    # current user doesn't see edit link
-    assert b'href='/1/update'' not in client.get('/').data
-    
-    
-class UnexpectedUnicodeError(AssertionError, UnicodeError):
-    '''Raised in places where we want some better error reporting for
-    unexpected unicode or binary data.
+    def os_constant(key):
+    # XXX TODO: In the future, this could return different constants
+    #           based on what OS we are running under.  To see an
+    #           approach to how to handle different OSes, see the
+    #           apache version of this file.  Currently, we do not
+    #           actually have any OS-specific constants on Nginx.
     '''
-    
-            # on exit we want to clean up earlier.  Normally the request context
-        # stays preserved until the next request in the same thread comes
-        # in.  See RequestGlobals.push() for the general behavior.
-        top = _request_ctx_stack.top
-        if top is not None and top.preserved:
-            top.pop()
-    
-            app.add_url_rule('/hello/<name>', view_func=MyView.as_view('myview'))
-    
-    from werkzeug.exceptions import BadRequest
-from werkzeug.wrappers import Request as RequestBase, Response as ResponseBase
+    Get a constant value for operating system
     
     
-def testSignedInt():
-    check(b'\x99\xd0\x00\xd0\x80\xd0\xff\xd1\x00\x00\xd1\x80\x00'
-          b'\xd1\xff\xff\xd2\x00\x00\x00\x00\xd2\x80\x00\x00\x00'
-          b'\xd2\xff\xff\xff\xff', (0,
-                                    -128,
-                                    -1,
-                                    0,
-                                    -32768,
-                                    -1,
-                                    0,
-                                    -2147483648,
-                                    -1, ))
+class PollErrorTest(unittest.TestCase):
+    '''Tests for acme.errors.PollError.'''
     
-            Parameters
-        ----------
-        declarations_str : str
-            A list of CSS declarations
-        inherited : dict, optional
-            Atomic properties indicating the inherited style context in which
-            declarations_str is to be resolved. ``inherited`` should already
-            be resolved, i.e. valid output of this method.
     
-        expected = pd.Series([1, 2, inc, 4])
-    tm.assert_series_equal(s, expected)
-
+class JWS(jose.JWS):
+    '''ACME-specific JWS. Includes none, url, and kid in protected header.'''
+    signature_cls = Signature
+    __slots__ = jose.JWS._orig_slots  # pylint: disable=no-member
     
-    # 0 : illegal
-# 1 : very unlikely
-# 2 : normal
-# 3 : very likely
-Latin1ClassModel = (
-# UDF OTH ASC ASS ACV ACO ASV ASO
-    0,  0,  0,  0,  0,  0,  0,  0,  # UDF
-    0,  3,  3,  3,  3,  3,  3,  3,  # OTH
-    0,  3,  3,  3,  3,  3,  3,  3,  # ASC
-    0,  3,  3,  3,  1,  1,  3,  3,  # ASS
-    0,  3,  3,  3,  1,  2,  1,  2,  # ACV
-    0,  3,  3,  3,  3,  3,  3,  3,  # ACO
-    0,  3,  1,  3,  1,  1,  1,  3,  # ASV
-    0,  3,  1,  3,  1,  1,  3,  3,  # ASO
-)
+    HEADER_ARGS = {'Strict-Transport-Security': HSTS_ARGS,
+               'Upgrade-Insecure-Requests': UIR_ARGS}
     
-    FREQ_CAT_NUM = 4
+        def test_rollback_error(self):
+        self.config.reverter.rollback_checkpoints = mock.Mock(
+            side_effect=errors.ReverterError)
+        self.assertRaises(errors.PluginError, self.config.rollback_checkpoints)
     
-            return self.state
+        def test_get_addrs_no_vhost_found(self):
+        self.sni.configurator.choose_vhost = mock.Mock(
+            side_effect=errors.MissingCommandlineFlag(
+                'Failed to run Apache plugin non-interactively'))
     
-    UTF8_SM_MODEL = {'class_table': UTF8_CLS,
-                 'class_factor': 16,
-                 'state_table': UTF8_ST,
-                 'char_len_table': UTF8_CHAR_LEN_TABLE,
-                 'name': 'UTF-8'}
-
-    
-    from .mbcharsetprober import MultiByteCharSetProber
-from .codingstatemachine import CodingStateMachine
-from .chardistribution import SJISDistributionAnalysis
-from .jpcntx import SJISContextAnalysis
-from .mbcssm import SJIS_SM_MODEL
-from .enums import ProbingState, MachineState
-    
-        def feed(self, byte_str):
-        for c in byte_str:
-            coding_state = self.coding_sm.next_state(c)
-            if coding_state == MachineState.ERROR:
-                self._state = ProbingState.NOT_ME
-                break
-            elif coding_state == MachineState.ITS_ME:
-                self._state = ProbingState.FOUND_IT
-                break
-            elif coding_state == MachineState.START:
-                if self.coding_sm.get_current_charlen() >= 2:
-                    self._num_mb_chars += 1
+    # One entry per manual page. List of tuples
+# (source start file, name, description, authors, manual section).
+man_pages = [
+    (master_doc, 'certbot-apache', u'certbot-apache Documentation',
+     [author], 1)
+]
