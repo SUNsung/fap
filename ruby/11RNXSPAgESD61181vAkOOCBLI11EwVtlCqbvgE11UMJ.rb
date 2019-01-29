@@ -1,79 +1,178 @@
 
         
-            # The path used after confirmation.
-    def after_confirmation_path_for(resource_name, resource)
-      if signed_in?(resource_name)
-        signed_in_root_path(resource)
-      else
-        new_session_path(resource_name)
-      end
-    end
+        DOC_PATH = File.join(File.expand_path(__dir__), '_puppies', 'rover.md')
+COL_PATH = File.join(File.expand_path(__dir__), '_puppies')
     
-    if defined?(ActionMailer)
-  class Devise::Mailer < Devise.parent_mailer.constantize
-    include Devise::Mailers::Helpers
+      config.on_event :test_run_finished do
+    f.print_worst_offenders
+  end
+end
+
     
-          # If the record is persisted, remove the remember token (but only if
-      # it exists), and save the record without validations.
-      def forget_me!
-        return unless persisted?
-        self.remember_token = nil if respond_to?(:remember_token)
-        self.remember_created_at = nil if self.class.expire_all_remember_me_on_sign_out
-        save(validate: false)
-      end
+    def location(folder, direction)
+  if folder
+    before = folder if direction == 'in'
+    after  = folder if direction == 'under'
+  end
     
-          def versions
-        i = @versions.size + 1
-        @versions.map do |v|
-          i -= 1
-          { :id        => v.id,
-            :id7       => v.id[0..6],
-            :num       => i,
-            :selected  => @page.version.id == v.id,
-            :author    => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
-            :message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
-            :date      => v.authored_date.strftime('%B %d, %Y'),
-            :gravatar  => Digest::MD5.hexdigest(v.author.email.strip.downcase),
-            :identicon => self._identicon_code(v.author.email),
-            :date_full => v.authored_date,
-          }
+    module Jekyll
+  module Commands
+    class NewTheme < Jekyll::Command
+      class << self
+        def init_with_program(prog)
+          prog.command(:'new-theme') do |c|
+            c.syntax 'new-theme NAME'
+            c.description 'Creates a new Jekyll theme scaffold'
+            c.option 'code_of_conduct', \
+                     '-c', '--code-of-conduct', \
+                     'Include a Code of Conduct. (defaults to false)'
+    
+    module Jekyll
+  module Commands
+    class Serve
+      # The LiveReload protocol requires the server to serve livereload.js over HTTP
+      # despite the fact that the protocol itself uses WebSockets.  This custom connection
+      # class addresses the dual protocols that the server needs to understand.
+      class HttpAwareConnection < EventMachine::WebSocket::Connection
+        attr_reader :reload_body, :reload_size
+    
+            lounge.topic_id = post.topic.id
+        unless lounge.save
+          puts lounge.errors.full_messages
+          puts 'Failed to set the lounge description topic!'
         end
+    
+          it 'adds clean_output param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            clean_output: true
+          )
+        end').runner.execute(:test)
+    
+          it 'works with name and password that contain spaces or `\'`' do
+        password = '\'test password\''
+        result = Fastlane::FastFile.new.parse('lane :test do
+          create_keychain ({
+            name: 'test.keychain',
+            password: '#{password}',
+          })
+        end').runner.execute(:test)
+    
+          it 'shellescapes the exclude_dirs correctly' do
+        directory = 'My Dir'
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', exclude_dirs: ['#{directory}'])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --exclude-dir #{directory.shellescape}')
       end
     
-    context 'Precious::Views::Editing' do
-  include Rack::Test::Methods
-  setup do
-    examples = testpath 'examples'
-    @path    = File.join(examples, 'test.git')
-    Precious::App.set(:gollum_path, @path)
-    FileUtils.cp_r File.join(examples, 'revert.git'), @path, :remove_destination => true
-    @wiki = Gollum::Wiki.new(@path)
-  end
+          context 'when specify mode explicitly' do
+        it 'uses lint mode as default' do
+          result = Fastlane::FastFile.new.parse('lane :test do
+            swiftlint
+          end').runner.execute(:test)
     
-      setup do
-    @path = cloned_testpath('examples/revert.git')
-    @wiki = Gollum::Wiki.new(@path)
-    Precious::App.set(:gollum_path, @path)
-    Precious::App.set(:wiki_options, {})
-  end
+        # An optional block which is called when options conflict happens
+    attr_accessor :conflict_block
     
-        def not_found(msg = nil)
-      @message = msg || 'The requested page does not exist.'
-      status 404
-      return mustache :error
+    # To avoid 'PR & Runs' for which tests don't pass, we want to make spec errors more visible
+# The code below will run on Circle, parses the results in JSON and posts them to the PR as comment
+containing_dir = ENV['CIRCLE_TEST_REPORTS'] || '.' # for local testing
+file_path = File.join(containing_dir, 'rspec', 'fastlane-junit-results.xml')
+    
+        delegate :empty?, :blank?, to: :pages
+    
+        def error?
+      code == 0 || code != 404 && code != 403 && code >= 400 && code <= 599
     end
     
-    # The project root directory
-$root = ::File.dirname(__FILE__)
+        def format_url(url)
+      url.to_s.remove %r{\Ahttps?://}
+    end
     
-      class RenderPartialTag < Liquid::Tag
-    include OctopressFilters
-    def initialize(tag_name, markup, tokens)
-      @file = nil
-      @raw = false
-      if markup =~ /^(\S+)\s?(\w+)?/
-        @file = $1.strip
-        @raw = $2 == 'raw'
+            css('.c10', '.showcase', '.showcase-content', '.l-main-section', 'div.div', 'div[flex]', 'code-tabs', 'md-card', 'md-card-content', 'div:not([class])', 'footer', '.card-row', '.card-row-container', 'figure', 'blockquote', 'exported', 'defined', 'div.ng-scope', '.code-example header', 'section.desc', '.row', '.dart-api-entry-main', '.main-content', 'section.summary', 'span.signature').each do |node|
+          node.before(node.children).remove
+        end
+    
+            name = name.split(':').first
+    
+              node.before(node.children).remove
+        end
+    
+        # we assume that the first file that requires 'sinatra' is the
+    # app_file. all other path related options are calculated based
+    # on this path by default.
+    set :app_file, caller_files.first || $0
+    
+          def set_token(session)
+        session[:csrf] ||= self.class.random_token
       end
+    
+          def self.default_reaction(reaction)
+        alias_method(:default_reaction, reaction)
+      end
+    
+          def session_key
+        @session_key ||= options[:session_key]
+      end
+    end
+  end
+end
+
+    
+      it 'sets a new csrf token for the session in env, even after a 'safe' request' do
+    get('/', {}, {})
+    expect(env['rack.session'][:csrf]).not_to be_nil
+  end
+    
+      def send_sinatra_file(path, &missing_file_block)
+    file_path = File.join(File.dirname(__FILE__), 'public',  path)
+    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
+    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
+  end
+    
+    end
+
+    
+    module Jekyll
+  class GistTag < Liquid::Tag
+    def initialize(tag_name, text, token)
+      super
+      @text           = text
+      @cache_disabled = false
+      @cache_folder   = File.expand_path '../.gist-cache', File.dirname(__FILE__)
+      FileUtils.mkdir_p @cache_folder
+    end
+    
+    module OctopressFilters
+  def self.pre_filter(page)
+    if page.ext.match('html|textile|markdown|md|haml|slim|xml')
+      input = BacktickCodeBlock::render_code_block(page.content)
+      page.content = input.gsub /(<figure.+?>.+?<\/figure>)/m do
+        TemplateWrapper::safe_wrap($1)
+      end
+    end
+  end
+  def self.post_filter(page)
+    if page.ext.match('html|textile|markdown|md|haml|slim|xml')
+      page.output = TemplateWrapper::unwrap(page.output)
+    end
+  end
+    
+        def initialize(tag_name, markup, tokens)
+      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
+      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
+      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
       super
     end
+    
+    When /^(?:|I )check '([^']*)'$/ do |field|
+  check(field)
+end
+    
+      def migration_name
+    'add_attachment_#{attachment_names.join('_')}_to_#{name.underscore.pluralize}'
+  end
