@@ -1,45 +1,47 @@
 
         
-        WITH_LIQUID = <<-LIQUID.freeze
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce auctor libero at
-pharetra tempus. {{ author }} et metus fermentum, eu cursus lorem
-mattis. Curabitur vel dui et lacus rutrum suscipit et eget neque.
+          it 'correctly sets notification level' do
+    moderator = Fabricate(:moderator)
     
-    # Just a slash
-Benchmark.ips do |x|
-  path = '/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
+          if lounge.topic_id.nil?
+        creator = PostCreator.new(Discourse.system_user,
+          raw: I18n.t('vip_category_description'),
+          title: I18n.t('category.topic_prefix', category: lounge.name),
+          category: lounge.name,
+          archetype: Archetype.default,
+          skip_validations: true
+        )
+        post = creator.create
     
-    module Jekyll
-  module Commands
-    class Serve
-      class LiveReloadReactor
-        attr_reader :started_event
-        attr_reader :stopped_event
-        attr_reader :thread
+      private
     
-        def log_status(status)
-      puts bold status
+        def require_local_account!
+      redirect_to admin_account_path(@account.id) unless @account.local? && @account.user.present?
     end
     
-      # Send deprecation notices to registered listeners.
-  config.active_support.deprecation = :notify
+        private
     
-        context 'opening brace on separate line from first element' do
-      it 'allows closing brace on same line as last element' do
-        expect_no_offenses(construct(true, false))
-      end
+        define_method provider do
+      @user = User.find_for_oauth(request.env['omniauth.auth'], current_user)
     
-          # The receiver of the method definition, if any.
-      #
-      # @return [Node, nil] the receiver of the method definition, or `nil`.
-      def receiver
-        node_parts[3]
-      end
+      def pin_at(version)
+    HOMEBREW_PINNED_KEGS.mkpath
+    version_path = @f.rack/version
+    path.make_relative_symlink(version_path) unless pinned? || !version_path.exist?
+  end
+    
+    source 'https://rubygems.org'
+    
+          if lint
+        title 'Running RuboCop'
+        Rake::Task['rubocop'].invoke
+    
+    (allow file-ioctl)
+(allow sysctl-read)
+(allow mach-lookup)
+(allow ipc-posix-shm)
+(allow process-fork)
+(allow system-socket)
     
           # Custom destructuring method. This is used to normalize the branches
       # for `pair` and `kwsplat` nodes, to add duck typing to `hash` elements.
@@ -53,65 +55,59 @@ end
 end
 
     
-            def delta(first, second, alignment = :left)
-          case alignment
-          when :left
-            first.column - second.column
-          when :right
-            first.last_column - second.last_column
-          else
-            0
-          end
-        end
+      def send_sinatra_file(path, &missing_file_block)
+    file_path = File.join(File.dirname(__FILE__), 'public',  path)
+    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
+    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
+  end
     
-    module RuboCop
-  module AST
-    # A node extension for `when` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `when` nodes within RuboCop.
-    class WhenNode < Node
-      # Returns an array of all the conditions in the `when` branch.
-      #
-      # @return [Array<Node>] an array of condition nodes
-      def conditions
-        node_parts[0...-1]
-      end
+    class ConfigTag < Liquid::Tag
+  def initialize(tag_name, options, tokens)
+    super
+    options = options.split(' ').map {|i| i.strip }
+    @key = options.slice!(0)
+    @tag = nil
+    @classname = nil
+    options.each do |option|
+      @tag = $1 if option =~ /tag:(\S+)/ 
+      @classname = $1 if option =~ /classname:(\S+)/
+    end
+  end
     
-    When /^(?:|I )choose '([^']*)'$/ do |field|
-  choose(field)
+    module Jekyll
+    
+    Given 'I remove turbolinks' do
+  cd('.') do
+    transform_file('app/assets/javascripts/application.js') do |content|
+      content.gsub('//= require turbolinks', '')
+    end
+    transform_file('app/views/layouts/application.html.erb') do |content|
+      content.gsub(', 'data-turbolinks-track' => true', '')
+    end
+  end
 end
     
-        def self.each_definition(&block)
-      instance.each_definition(&block)
+      def generate_migration
+    migration_template('paperclip_migration.rb.erb',
+                       'db/migrate/#{migration_file_name}',
+                       migration_version: migration_version)
+  end
+    
+        def define
+      define_flush_errors
+      define_getters
+      define_setter
+      define_query
+      register_new_attachment
+      add_active_record_callbacks
+      add_paperclip_callbacks
+      add_required_validations
     end
     
-        def type_from_file_contents
-      type_from_mime_magic || type_from_file_command
-    rescue Errno::ENOENT => e
-      Paperclip.log('Error while determining content type: #{e}')
-      SENSIBLE_DEFAULT
-    end
-    
-        private
-    
-        def add_active_record_callbacks
-      name = @name
-      @klass.send(:after_save) { send(name).send(:save) }
-      @klass.send(:before_destroy) { send(name).send(:queue_all_for_delete) }
-      if @klass.respond_to?(:after_commit)
-        @klass.send(:after_commit, on: :destroy) do
-          send(name).send(:flush_deletes)
-        end
-      else
-        @klass.send(:after_destroy) { send(name).send(:flush_deletes) }
-      end
-    end
-    
-        # Returns the underscored, pluralized version of the class name.
-    # e.g. 'users' for the User class.
-    # NOTE: The arguments need to be optional, because some tools fetch
-    # all class names. Calling #class will return the expected class.
-    def class attachment = nil, style_name = nil
-      return super() if attachment.nil? && style_name.nil?
-      plural_cache.underscore_and_pluralize_class(attachment.instance.class)
+        # Returns the dot+extension of the file. e.g. '.jpg' for 'file.jpg'
+    # If the style has a format defined, it will return the format instead
+    # of the actual extension. If the extension is empty, no dot is added.
+    def dotextension attachment, style_name
+      ext = extension(attachment, style_name)
+      ext.empty? ? ext : '.#{ext}'
     end
