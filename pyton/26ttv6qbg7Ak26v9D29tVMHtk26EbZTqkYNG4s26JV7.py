@@ -1,107 +1,99 @@
 
         
-            def message_user(self, friend_id, message):
-        pass
+            theplatform_download_by_pid(pid, title, output_dir=output_dir, merge=merge, info_only=info_only)
     
     
-class RemoveDuplicateUrls(MRJob):
+site_info = 'coub.com'
+download = coub_download
+download_playlist = playlist_not_supported('coub')
+
     
-        def append_to_front(self, node):
-        ...
+        for quality in ['1080','720','480','380','240','144','auto']:
+        try:
+            real_url = info[quality][1]['url']
+            if real_url:
+                break
+        except KeyError:
+            pass
     
+            # here s the parser...
+        stream_types = dilidili_parser_data_to_stream_types(typ, vid, hd2, sign, tmsign, ulk)
+        
+        #get best
+        best_id = max([i['id'] for i in stream_types])
+        
+        parse_url = 'http://player.005.tv/parse.php?xmlurl=null&type={typ}&vid={vid}&hd={hd2}&sign={sign}&tmsign={tmsign}&userlink={ulk}'.format(typ = typ, vid = vid, hd2 = best_id, sign = sign, tmsign = tmsign, ulk = ulk)
+        
+        another_url = 'https://newplayer.jfrft.com/parse.php?xmlurl=null&type={typ}&vid={vid}&hd={hd2}&sign={sign}&tmsign={tmsign}&userlink={ulk}'.format(typ = typ, vid = vid, hd2 = hd2, sign = sign, tmsign = tmsign, ulk = ulk)
     
-@pytest.mark.parametrize('path', (
-    '/create',
-    '/1/update',
-))
-def test_create_update_validate(client, auth, path):
-    auth.login()
-    response = client.post(path, data={'title': '', 'body': ''})
-    assert b'Title is required.' in response.data
+    import urllib.request, urllib.parse
+from ..common import *
     
-        :copyright: © 2010 by the Pallets team.
-    :license: BSD, see LICENSE for more details.
-'''
+    #----------------------------------------------------------------------
+def makeMimi(upid):
+    '''From http://cdn37.atwikiimg.com/sitescript/pub/dksitescript/FC2.site.js
+    Also com.hps.util.fc2.FC2EncrptUtil.makeMimiLocal
+    L110'''
+    strSeed = 'gGddgPfeaf_gzyr'
+    prehash = upid + '_' + strSeed
+    return md5(prehash.encode('utf-8')).hexdigest()
     
-            .. versionadded:: 0.10
+    __all__ = ['flickr_download_main']
     
+        def prepare(self, **kwargs):
+        if self.__class__.coeff is None:
+            magic_list = self.__class__.fetch_magic(self.__class__.a_mobile_url)
+            self.__class__.coeff = self.__class__.get_coeff(magic_list)
     
-def attach_enctype_error_multidict(request):
-    '''Since Flask 0.8 we're monkeypatching the files object in case a
-    request is detected that does not use multipart form data but the files
-    object is accessed.
-    '''
-    oldcls = request.files.__class__
-    class newcls(oldcls):
-        def __getitem__(self, key):
-            try:
-                return oldcls.__getitem__(self, key)
-            except KeyError:
-                if key not in request.form:
-                    raise
-                raise DebugFilesKeyError(request, key)
-    newcls.__name__ = oldcls.__name__
-    newcls.__module__ = oldcls.__module__
-    request.files.__class__ = newcls
+    def generateKey(keySize):
+    print('Generating prime p...')
+    p = rabinMiller.generateLargePrime(keySize)
+    print('Generating prime q...')
+    q = rabinMiller.generateLargePrime(keySize)
+    n = p * q
     
-    This typically means that you attempted to use functionality that needed
-an active HTTP request.  Consult the documentation on testing for
-information about how to avoid this problem.\
-'''
-_app_ctx_err_msg = '''\
-Working outside of application context.
+        def _colision_resolution(self, key, data=None):
+        i = 1
+        new_key = self.hash_function(data)
     
-        # If request specific information is available we have some extra
-    # features that support 'relative' URLs.
-    if reqctx is not None:
-        url_adapter = reqctx.url_adapter
-        blueprint_name = request.blueprint
+            return
     
-            # chop off the port which is usually not supported by browsers
-        # remove any leading '.' since we'll add that later
-        rv = rv.rsplit(':', 1)[0].lstrip('.')
+        difference = predict - actual
+    numerator = np.sum(difference) / len(predict) 
+    denumerator =  np.sum(actual) / len(predict)
+    print(numerator)
+    print(denumerator)
     
+        def scan_devices(self):
+        '''Scan for new devices and return a list with device IDs (MACs).'''
+        self._update_info()
     
-class RetryError(RequestException):
-    '''Custom retries logic failed'''
+    CONF_EXCLUDE = 'exclude'
+# Interval in minutes to exclude devices from a scan while they are home
+CONF_HOME_INTERVAL = 'home_interval'
+CONF_OPTIONS = 'scan_options'
+DEFAULT_OPTIONS = '-F --host-timeout 5s'
     
-        def test_list(self):
-        assert list(self.case_insensitive_dict) == ['Accept']
+        def get_device_name(self, device):
+        '''Return the name of the given device or None if we don't know.'''
+        if not self.last_results:
+            return None
+        for client in self.last_results:
+            if client['mac'] == device:
+                return client['host']
+        return None
     
-        while True:
-        more_to_read = select.select([sock], [], [], timeout)[0]
-        if not more_to_read:
-            break
+                    if ssdp_socket in read:
+                    data, addr = ssdp_socket.recvfrom(1024)
+                else:
+                    # most likely the timeout, so check for interrupt
+                    continue
+            except socket.error as ex:
+                if self._interrupted:
+                    clean_socket_close(ssdp_socket)
+                    return
     
-    
-def _check_cryptography(cryptography_version):
-    # cryptography < 1.3.4
-    try:
-        cryptography_version = list(map(int, cryptography_version.split('.')))
-    except ValueError:
-        return
-    
-            return response
-    
-    '''
-requests.auth
-~~~~~~~~~~~~~
-    
-    ``response``:
-    The response generated from a Request.
-'''
-HOOKS = ['response']
-    
-    
-class VersionedPackage(object):
-    def __init__(self, version):
-        self.__version__ = version
-    
-            with server as (host, port):
-            server_url = 'http://{}:{}'.format(host, port)
-            for _ in range(requests_to_handle):
-                r = requests.get(server_url)
-                assert r.status_code == 200
-    
-    
-# -- Options for HTML output ----------------------------------------------
+    CONF_FOLDER = 'folder'
+CONF_PATTERNS = 'patterns'
+DEFAULT_PATTERN = '*'
+DOMAIN = 'folder_watcher'
