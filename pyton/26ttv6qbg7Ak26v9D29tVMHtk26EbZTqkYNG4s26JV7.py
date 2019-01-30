@@ -1,99 +1,127 @@
 
         
-            theplatform_download_by_pid(pid, title, output_dir=output_dir, merge=merge, info_only=info_only)
+            This could be extended by having nested blocks, sorting them recursively
+    and flattening the end structure into a list of lines. Revision 2 maybe ^.^.
+'''
     
     
-site_info = 'coub.com'
-download = coub_download
-download_playlist = playlist_not_supported('coub')
+def create_app(test_config=None):
+    '''Create and configure an instance of the Flask application.'''
+    app = Flask(__name__, instance_relative_config=True)
+    app.config.from_mapping(
+        # a default secret that should be overridden by instance config
+        SECRET_KEY='dev',
+        # store the database in the instance folder
+        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+    )
+    
+    
+@pytest.mark.parametrize(('username', 'password', 'message'), (
+    ('', '', b'Username is required.'),
+    ('a', '', b'Password is required.'),
+    ('test', 'test', b'already registered'),
+))
+def test_register_validate_input(client, username, password, message):
+    response = client.post(
+        '/auth/register',
+        data={'username': username, 'password': password}
+    )
+    assert message in response.data
+    
+        monkeypatch.setattr('flaskr.db.init_db', fake_init_db)
+    result = runner.invoke(args=['init-db'])
+    assert 'Initialized' in result.output
+    assert Recorder.called
 
     
-        for quality in ['1080','720','480','380','240','144','auto']:
-        try:
-            real_url = info[quality][1]['url']
-            if real_url:
-                break
-        except KeyError:
-            pass
     
-            # here s the parser...
-        stream_types = dilidili_parser_data_to_stream_types(typ, vid, hd2, sign, tmsign, ulk)
-        
-        #get best
-        best_id = max([i['id'] for i in stream_types])
-        
-        parse_url = 'http://player.005.tv/parse.php?xmlurl=null&type={typ}&vid={vid}&hd={hd2}&sign={sign}&tmsign={tmsign}&userlink={ulk}'.format(typ = typ, vid = vid, hd2 = best_id, sign = sign, tmsign = tmsign, ulk = ulk)
-        
-        another_url = 'https://newplayer.jfrft.com/parse.php?xmlurl=null&type={typ}&vid={vid}&hd={hd2}&sign={sign}&tmsign={tmsign}&userlink={ulk}'.format(typ = typ, vid = vid, hd2 = hd2, sign = sign, tmsign = tmsign, ulk = ulk)
+def has_level_handler(logger):
+    '''Check if there is a handler in the logging chain that will handle the
+    given logger's :meth:`effective level <~logging.Logger.getEffectiveLevel>`.
+    '''
+    level = logger.getEffectiveLevel()
+    current = logger
     
-    import urllib.request, urllib.parse
-from ..common import *
+        @app.route('/')
+    def index():
+        with flask._app_ctx_stack.top:
+            with flask._request_ctx_stack.top:
+                pass
+        env = flask._request_ctx_stack.top.request.environ
+        assert env['werkzeug.request'] is not None
+        return u''
     
-    #----------------------------------------------------------------------
-def makeMimi(upid):
-    '''From http://cdn37.atwikiimg.com/sitescript/pub/dksitescript/FC2.site.js
-    Also com.hps.util.fc2.FC2EncrptUtil.makeMimiLocal
-    L110'''
-    strSeed = 'gGddgPfeaf_gzyr'
-    prehash = upid + '_' + strSeed
-    return md5(prehash.encode('utf-8')).hexdigest()
     
-    __all__ = ['flickr_download_main']
+def is_setting_index(node):
+    if node.tagname == 'index':
+        # index entries for setting directives look like:
+        # [(u'pair', u'SETTING_NAME; setting', u'std:setting-SETTING_NAME', '')]
+        entry_type, info, refid = node['entries'][0][:3]
+        return entry_type == 'pair' and info.endswith('; setting')
+    return False
     
-        def prepare(self, **kwargs):
-        if self.__class__.coeff is None:
-            magic_list = self.__class__.fetch_magic(self.__class__.a_mobile_url)
-            self.__class__.coeff = self.__class__.get_coeff(magic_list)
+            if now - self.lastmark >= 3:
+            self.lastmark = now
+            qps = len(self.tail) / sum(self.tail)
+            print('samplesize={0} concurrent={1} qps={2:0.2f}'.format(len(self.tail), self.concurrent, qps))
     
-    def generateKey(keySize):
-    print('Generating prime p...')
-    p = rabinMiller.generateLargePrime(keySize)
-    print('Generating prime q...')
-    q = rabinMiller.generateLargePrime(keySize)
-    n = p * q
+        # Max concurrency is limited by global CONCURRENT_REQUESTS setting
+    max_concurrent_requests = 8
+    # Requests per second goal
+    qps = None # same as: 1 / download_delay
+    download_delay = None
+    # time in seconds to delay server responses
+    latency = None
+    # number of slots to create
+    slots = 1
     
-        def _colision_resolution(self, key, data=None):
-        i = 1
-        new_key = self.hash_function(data)
+        def add_options(self, parser):
+        '''
+        Populate option parse with options available for this command
+        '''
+        group = OptionGroup(parser, 'Global Options')
+        group.add_option('--logfile', metavar='FILE',
+            help='log file. if omitted stderr will be used')
+        group.add_option('-L', '--loglevel', metavar='LEVEL', default=None,
+            help='log level (default: %s)' % self.settings['LOG_LEVEL'])
+        group.add_option('--nolog', action='store_true',
+            help='disable logging completely')
+        group.add_option('--profile', metavar='FILE', default=None,
+            help='write python cProfile stats to FILE')
+        group.add_option('--pidfile', metavar='FILE',
+            help='write process ID to FILE')
+        group.add_option('-s', '--set', action='append', default=[], metavar='NAME=VALUE',
+            help='set/override setting (may be repeated)')
+        group.add_option('--pdb', action='store_true', help='enable pdb on failure')
     
-            return
     
-        difference = predict - actual
-    numerator = np.sum(difference) / len(predict) 
-    denumerator =  np.sum(actual) / len(predict)
-    print(numerator)
-    print(denumerator)
+class Command(ScrapyCommand):
     
-        def scan_devices(self):
-        '''Scan for new devices and return a list with device IDs (MACs).'''
-        self._update_info()
+        def long_desc(self):
+        return ('Edit a spider using the editor defined in the EDITOR environment'
+                ' variable or else the EDITOR setting')
     
-    CONF_EXCLUDE = 'exclude'
-# Interval in minutes to exclude devices from a scan while they are home
-CONF_HOME_INTERVAL = 'home_interval'
-CONF_OPTIONS = 'scan_options'
-DEFAULT_OPTIONS = '-F --host-timeout 5s'
+            self.crawler_process.crawl(spidercls, **opts.spargs)
+        self.crawler_process.start()
     
-        def get_device_name(self, device):
-        '''Return the name of the given device or None if we don't know.'''
-        if not self.last_results:
-            return None
-        for client in self.last_results:
-            if client['mac'] == device:
-                return client['host']
-        return None
+        def _build_response(self, body, request):
+        request.meta['download_latency'] = self.headers_time-self.start_time
+        status = int(self.status)
+        headers = Headers(self.response_headers)
+        respcls = responsetypes.from_args(headers=headers, url=self._url)
+        return respcls(url=self._url, status=status, headers=headers, body=body)
     
-                    if ssdp_socket in read:
-                    data, addr = ssdp_socket.recvfrom(1024)
-                else:
-                    # most likely the timeout, so check for interrupt
-                    continue
-            except socket.error as ex:
-                if self._interrupted:
-                    clean_socket_close(ssdp_socket)
-                    return
+        def test_decode(self):
+        self.assertEqual('x', self.field.decode('x'))
     
-    CONF_FOLDER = 'folder'
-CONF_PATTERNS = 'patterns'
-DEFAULT_PATTERN = '*'
-DOMAIN = 'folder_watcher'
+        def test_nonce_decoder(self):
+        from acme.jws import Header
+        nonce_field = Header._fields['nonce']
+    
+    # Custom sidebar templates, maps document names to template names.
+#html_sidebars = {}
+    
+            '''
+        error_files = self.aug.match('/augeas//error')
+    
+    from certbot import errors
