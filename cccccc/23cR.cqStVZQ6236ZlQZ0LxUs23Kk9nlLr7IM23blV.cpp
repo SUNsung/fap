@@ -1,123 +1,261 @@
 
         
-          env.now_micros_ += 3000724u;  // sleep credit 100
-  // 6000 used, 4480 left.
-  ASSERT_EQ(static_cast<uint64_t>(0), controller.GetDelay(&env, 6000u));
+        
+    {}  // namespace grpc
+
     
-    class PosixWritableFile : public WritableFile {
- protected:
-  const std::string filename_;
-  const bool use_direct_io_;
-  int fd_;
-  uint64_t filesize_;
-  size_t logical_sector_size_;
-#ifdef ROCKSDB_FALLOCATE_PRESENT
-  bool allow_fallocate_;
-  bool fallocate_with_keep_size_;
-#endif
+    #ifndef GRPC_CUSTOM_DEFAULT_THREAD_POOL
+    
+    #endif  // GPR_LINUX
+
+    
+    		inline float GetError(void)
+		{
+			return m_pencoding->GetError();
+		}
+    
+    								float fPixelError;
+    
+    
+/** 16x32 multiply, followed by a 15-bit shift right and 32-bit add.
+    b must fit in 31 bits.
+    Result fits in 32 bits. */
+#undef MAC16_32_Q15
+#define MAC16_32_Q15(c, a, b) ADD32(c, MULT16_32_Q15(a, b))
+    
+    
+/** 16x32 multiplication, followed by a 15-bit shift right. Results fits in 32 bits */
+#undef MULT16_32_Q15
+static OPUS_INLINE opus_val32 MULT16_32_Q15_armv5e(opus_val16 a, opus_val32 b)
+{
+  int res;
+  __asm__(
+      '#MULT16_32_Q15\n\t'
+      'smulwb %0, %1, %2\n\t'
+      : '=r'(res)
+      : 'r'(b), 'r'(a)
+  );
+  return res<<1;
+}
+#define MULT16_32_Q15(a, b) (MULT16_32_Q15_armv5e(a, b))
+    
+    /*!
+ * Initialize/reset the resampler state for a given pair of input/output sampling rates
+*/
+opus_int silk_resampler_init(
+    silk_resampler_state_struct *S,                 /* I/O  Resampler state                                             */
+    opus_int32                  Fs_Hz_in,           /* I    Input sampling rate (Hz)                                    */
+    opus_int32                  Fs_Hz_out,          /* I    Output sampling rate (Hz)                                   */
+    opus_int                    forEnc              /* I    If 1: encoder; if 0: decoder                                */
+);
+    
+    /**!
+ * \brief Workaround for missing functions in ::caffe::Blob
+ * \warning Do not add or override any virtual functions in this class
+ * @tparam Dtype
+ */
+template<class Dtype>
+class CaffeBlobFriend : public ::caffe::Blob<Dtype> {
+ public:
+  inline void set_cpu_diff(Dtype* diff) {
+    CHECK(diff);
+    this->diff_->set_cpu_data(diff);
+  }
     }
     
-      std::string ToString(bool exclude_zero_counters = false) const;
+     protected:
+  IF_CHECK_TIMING(
+    static uint64_t GetTickCountMS() {
+      struct timeval tv;
+      gettimeofday(&tv, 0);
+      return uint64_t( tv.tv_sec ) * 1000 + tv.tv_usec / 1000;
+    }
+  )
+    
+    
+    {
+    {
+    {  /*!
+   * \brief Worker threads.
+   */
+  std::vector<std::thread> worker_threads_;
+  /*!
+   * \brief Startup synchronization objects
+   */
+  std::list<std::shared_ptr<dmlc::ManualEvent>> ready_events_;
+  /*!
+   * \brief Disallow default construction.
+   */
+  ThreadPool() = delete;
+  /*!
+   * \brief Disallow copy construction and assignment.
+   */
+  DISALLOW_COPY_AND_ASSIGN(ThreadPool);
+};
+}  // namespace engine
+}  // namespace mxnet
+#endif  // MXNET_ENGINE_THREAD_POOL_H_
+
+    
+    RemoveTransliterator::RemoveTransliterator() : Transliterator(UnicodeString(TRUE, ::CURR_ID, -1), 0) {}
+    
+    
+    {
+    {        if (matchlength > 0) {
+            // if matchlength is 0 we are at the start of the iteration
+            if (m_search_->isOverlap) {
+                offset ++;
+            }
+            else {
+                offset += matchlength;
+            }
+        }
+        return handleNext(offset, status);
+    }
+    return USEARCH_DONE;
+}
     
     /**
- * This file is supposed to be included from within
- * FBVectorBenchmark. Do not use otherwise.
+ * Given a set of encoded rules in startDay and startDayOfMonth, decode
+ * them and set the startMode appropriately.  Do the same for endDay and
+ * endDayOfMonth.  Upon entry, the day of week variables may be zero or
+ * negative, in order to indicate special modes.  The day of month
+ * variables may also be negative.  Upon exit, the mode variables will be
+ * set, and the day of week and day of month variables will be positive.
+ * This method also recognizes a startDay or endDay of zero as indicating
+ * no DST.
  */
+void 
+SimpleTimeZone::decodeRules(UErrorCode& status)
+{
+    decodeStartRule(status);
+    decodeEndRule(status);
+}
     
-      template <typename ExecutorT>
-  static KeepAlive<ExecutorT> makeKeepAlive(ExecutorT* executor) {
-    static_assert(
-        std::is_base_of<Executor, ExecutorT>::value,
-        'makeKeepAlive only works for folly::Executor implementations.');
-    return KeepAlive<ExecutorT>{executor, false};
-  }
+    #include 'unicode/udat.h'
     
-    template <>
-struct hash<folly::Uri> {
-  std::size_t operator()(const folly::Uri& k) const {
-    return std::hash<folly::uri_detail::UriTuple>{}(
-        folly::uri_detail::as_tuple(k));
-  }
+            for (oOutput=0; oOutput<output.length(); ) {
+            if (oOutput == cursorPos) {
+                // Record the position of the cursor
+                newStart = destLimit - destStart; // relative to start
+            }
+            UChar32 c = output.char32At(oOutput);
+            UnicodeReplacer* r = data->lookupReplacer(c);
+            if (r == NULL) {
+                // Accumulate straight (non-segment) text.
+                buf.append(c);
+            } else {
+                isComplex = TRUE;
+    }
+    }
+    
+            ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
+        ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
+        ImGui::Checkbox('Another Window', &show_another_window);
+    
+    static ImGui_ImplVulkanH_WindowData g_WindowData;
+    
+        // Main loop
+    MSG msg;
+    ZeroMemory(&msg, sizeof(msg));
+    while (msg.message != WM_QUIT)
+    {
+        // Poll and handle messages (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
+        {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+            continue;
+        }
+    }
+    
+        const GLchar* vertex_shader_glsl_300_es =
+        'precision mediump float;\n'
+        'layout (location = 0) in vec2 Position;\n'
+        'layout (location = 1) in vec2 UV;\n'
+        'layout (location = 2) in vec4 Color;\n'
+        'uniform mat4 ProjMtx;\n'
+        'out vec2 Frag_UV;\n'
+        'out vec4 Frag_Color;\n'
+        'void main()\n'
+        '{\n'
+        '    Frag_UV = UV;\n'
+        '    Frag_Color = Color;\n'
+        '    gl_Position = ProjMtx * vec4(Position.xy,0,1);\n'
+        '}\n';
+    
+    
+    {
+    {        throw invalid_argument('the input has no solution');
+    }
 };
     
-    namespace folly {
+    
+    {
+    {        return true;
+    }
+};
+    
+    
+    {
+    {        int index = 0;
+        for(int i = 0 ; i < count[0] ; i ++)
+            nums[index++] = 0;
+        for(int i = 0 ; i < count[1] ; i ++)
+            nums[index++] = 1;
+        for(int i = 0 ; i < count[2] ; i ++)
+            nums[index++] = 2;
+    }
+};
+    
+    // Three Way Quick Sort
+// Time Complexity: O(n)
+// Space Complexity: O(1)
+class Solution {
+public:
+    void sortColors(vector<int> &nums) {
+    }
+    }
+    
+            for(ListNode* cur = head ; cur != NULL ;){
+            if(cur->val < x){
+                prev1->next = cur;
+                cur = cur->next;
+                prev1 = prev1->next;
+                prev1->next = NULL;
+            }
+            else{
+                prev2->next = cur;
+                cur = cur->next;
+                prev2 = prev2->next;
+                prev2->next = NULL;
+            }
+        }
+    
+    
+    {        vector<int> res;
+        __inorderTraversal(root, res);
+        return res;
     }
     
     
-    {  // Test with some unusual durations where neither the numerator nor
-  // denominator are 1.
-  using five_sevenths = std::chrono::duration<int64_t, std::ratio<5, 7>>;
-  ts = to<struct timespec>(five_sevenths(7));
-  EXPECT_EQ(5, ts.tv_sec);
-  EXPECT_EQ(0, ts.tv_nsec);
-  ts = to<struct timespec>(five_sevenths(19));
-  EXPECT_EQ(13, ts.tv_sec);
-  EXPECT_EQ(571428571, ts.tv_nsec);
-  using seven_fifths = std::chrono::duration<int64_t, std::ratio<7, 5>>;
-  ts = to<struct timespec>(seven_fifths(5));
-  EXPECT_EQ(7, ts.tv_sec);
-  EXPECT_EQ(0, ts.tv_nsec);
-}
+// Another Classic Non-Recursive algorithm for inorder traversal
+// Time Complexity: O(n), n is the node number in the tree
+// Space Complexity: O(h), h is the height of the tree
+class Solution {
+    }
     
-    /**
- * Reads sizeof(T) bytes, and returns false if not enough bytes are available.
- * Returns true if the first n bytes are equal to prefix when interpreted as
- * a little endian T.
- */
-template <typename T>
-typename std::enable_if<std::is_unsigned<T>::value, bool>::type
-dataStartsWithLE(const IOBuf* data, T prefix, uint64_t n = sizeof(T)) {
-  DCHECK_GT(n, 0);
-  DCHECK_LE(n, sizeof(T));
-  T value;
-  Cursor cursor{data};
-  if (!cursor.tryReadLE(value)) {
-    return false;
-  }
-  const T mask = n == sizeof(T) ? T(-1) : (T(1) << (8 * n)) - 1;
-  return prefix == (value & mask);
-}
+            queue<pair<TreeNode*,int>> q;
+        q.push(make_pair(root, 0));
     
-    
-    { private:
-  std::array<std::weak_ptr<T>, kNumSlots> slots_;
+    /// Definition for a binary tree node.
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
-    
-    using namespace std;
-using namespace folly;
-    
-    // Performs in-place floating point 8x8 inverse DCT on block[0..63].
-void ComputeBlockIDCTDouble(double block[64]);
-    
-        std::sort(tree, tree + n, SortHuffmanTree);
-    
-    bool SetDepth(int p, HuffmanTree *pool, uint8_t *depth, int max_depth);
-    
-    const double* NewSrgb8ToLinearTable() {
-  double* table = new double[256];
-  int i = 0;
-  for (; i < 11; ++i) {
-    table[i] = i / 12.92;
-  }
-  for (; i < 256; ++i) {
-    table[i] = 255.0 * std::pow(((i / 255.0) + 0.055) / 1.055, 2.4);
-  }
-  return table;
-}
-    
-    // Saves the APP marker segment as a string to *jpg.
-bool ProcessAPP(const uint8_t* data, const size_t len, size_t* pos,
-                JPEGData* jpg) {
-  VERIFY_LEN(2);
-  size_t marker_len = ReadUint16(data, pos);
-  VERIFY_INPUT(marker_len, 2, 65535, MARKER_LEN);
-  VERIFY_LEN(marker_len - 2);
-  // Save the marker type together with the app data.
-  std::string app_str(reinterpret_cast<const char*>(
-      &data[*pos - 3]), marker_len + 1);
-  *pos += marker_len - 2;
-  jpg->app_data.push_back(app_str);
-  return true;
-}
-    
-    #include <string>
