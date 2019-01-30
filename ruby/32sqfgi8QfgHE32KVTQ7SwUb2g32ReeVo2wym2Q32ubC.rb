@@ -1,70 +1,96 @@
 
         
-            def links
-      context[:links]
+          it 'imports a scenario which requires a service' do
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'spec/data_fixtures/twitter_scenario.json'))
+    click_on 'Start Import'
+    check('I confirm that I want to import these Agents.')
+    expect { click_on 'Finish Import' }.to change(Scenario, :count).by(1)
+    expect(page).to have_text('Import successful!')
+  end
+end
+
+    
+        describe 'with block' do
+      it 'returns a nav link with menu' do
+        stub(self).current_page?('/things') { false }
+        stub(self).current_page?('/things/stuff') { false }
+        nav = nav_link('Things', '/things') { nav_link('Stuff', '/things/stuff') }
+        expect(nav).to be_html_safe
+        a0 = Nokogiri(nav).at('li.dropdown.dropdown-hover:not(.active) > a[href='/things']')
+        expect(a0).to be_a Nokogiri::XML::Element
+        expect(a0.text.strip).to eq('Things')
+        a1 = Nokogiri(nav).at('li.dropdown.dropdown-hover:not(.active) > li:not(.active) > a[href='/things/stuff']')
+        expect(a1).to be_a Nokogiri::XML::Element
+        expect(a1.text.strip).to eq('Stuff')
+      end
+    
+        it 'should revert extract and template options for an updated WebsiteAgent' do
+      expect(agent.options).to include('extract' => new_extract,
+                                       'template' => new_template)
+      ConvertWebsiteAgentTemplateForMerge.new.down
+      agent.reload
+      expect(agent.options).to include('extract' => reverted_extract,
+                                       'template' => reverted_template)
     end
+  end
+end
+
     
-        def initialize
-      @pages = {}
-    end
-    
-            subtitle = at_css('.hero-subtitle').try(:content)
-        breadcrumbs = css('.breadcrumbs li').map(&:content)[2..-2]
-    
-            css('.note h3', '.warning h3').each do |node|
-          node.before('<p><strong>#{node.inner_html}</strong></p>').remove
+            def log_state_changes
+          if @order.previous_changes[:state]
+            @order.log_state_changes(
+              state_name: 'order',
+              old_state: @order.previous_changes[:state].first,
+              new_state: @order.previous_changes[:state].last
+            )
+          end
         end
     
-            private
+            def inventory_unit_params
+          params.require(:inventory_unit).permit(permitted_inventory_unit_attributes)
+        end
+      end
+    end
+  end
+end
+
     
-            def shipment_params
-          if params[:shipment] && !params[:shipment].empty?
-            params.require(:shipment).permit(permitted_shipment_attributes)
+            def update
+          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
+          if @return_authorization.update_attributes(return_authorization_params)
+            respond_with(@return_authorization, default_template: :show)
           else
-            {}
+            invalid_resource!(@return_authorization)
+          end
+        end
+    
+              state = @states.last
+          respond_with(@states) if stale?(state)
+        end
+    
+              if updated
+            respond_with(@stock_item, status: 200, default_template: :show)
+          else
+            invalid_resource!(@stock_item)
           end
         end
     
             def create
-          authorize! :create, Store
-          @store = Store.new(store_params)
-          @store.code = params[:store][:code]
-          if @store.save
-            respond_with(@store, status: 201, default_template: :show)
+          authorize! :create, Taxonomy
+          @taxonomy = Taxonomy.new(taxonomy_params)
+          if @taxonomy.save
+            respond_with(@taxonomy, status: 201, default_template: :show)
           else
-            invalid_resource!(@store)
+            invalid_resource!(@taxonomy)
           end
         end
     
-        scripts = {}
-    
-      def to_s_fullversion()
-    # iteration (PORTREVISION on FreeBSD) shall be appended only(?) if non-zero.
-    # https://www.freebsd.org/doc/en/books/porters-handbook/makefile-naming.html
-    (iteration and (iteration.to_i > 0)) ?  '#{version}_#{iteration}' : '#{version}'
-  end
-    
-      def self.default_prefix
-    npm_prefix = safesystemout('npm', 'prefix', '-g').chomp
-    if npm_prefix.count('\n') > 0
-      raise FPM::InvalidPackageConfiguration, '`npm prefix -g` returned unexpected output.'
-    elsif !File.directory?(npm_prefix)
-      raise FPM::InvalidPackageConfiguration, '`npm prefix -g` returned a non-existent directory'
-    end
-    logger.info('Setting default npm install prefix', :prefix => npm_prefix)
-    npm_prefix
-  end
-    
-          base = staging_path(File.join(attributes[:prefix], '#{platform.platform}/#{platform.target_version || 'default'}'))
-      target = File.join(base, 'files')
-      actions_script = File.join(base, 'install_actions.sh')
-      ::PleaseRun::Installer.install_files(platform, target, false)
-      ::PleaseRun::Installer.write_actions(platform, actions_script)
-    end
-    
-    
-    
-      # Input a tarball. Compressed tarballs should be OK.
-  def input(input_path)
-    # use part of the filename as the package name
-    self.name = File.basename(input_path).split('.').first
+            def products
+          # Returns the products sorted by their position with the classification
+          # Products#index does not do the sorting.
+          taxon = Spree::Taxon.find(params[:id])
+          @products = taxon.products.ransack(params[:q]).result
+          @products = @products.page(params[:page]).per(params[:per_page] || 500)
+          render 'spree/api/v1/products/index'
+        end
