@@ -1,111 +1,115 @@
 
         
-        module Admin
-  class ChangeEmailsController < BaseController
-    before_action :set_account
-    before_action :require_local_account!
-    
-        def status_params
-      params.require(:status).permit(:sensitive)
+            def slug
+      @slug ||= subpath.sub(/\A\//, '').remove(/\.html\z/)
     end
     
-      private
-    
-    Given(/^(\d+) valid existing releases$/) do |num|
-  a_day = 86_400 # in seconds
-  offset = -(a_day * num.to_i)
-  num.to_i.times do
-    run_vagrant_command('mkdir -p #{TestApp.release_path(TestApp.timestamp(offset))}')
-    offset += a_day
-  end
-end
-    
-        def remove(key, *values)
-      set(key, Array(fetch(key)) - values)
-    end
-    
-          class ValidatedQuestion < Question
-        def initialize(validator)
-          @validator = validator
+            css('.filetree .children').each do |node|
+          node.css('.file').each do |n|
+            n.content = '  #{n.content}'
+          end
         end
     
-          def is_edit_page
-        false
-      end
+      url 'http://swupdl.adobe.com/updates/oobe/aam20/mac/AdobeLightroom-#{version.major}.0/#{version}/setup.dmg'
+  name 'Adobe Photoshop Lightroom'
+  homepage 'https://www.adobe.com/products/photoshop-lightroom.html'
     
-          attr_reader :page, :page_num, :allow_editing
-    
-          def versions
-        i = @versions.size + 1
-        @versions.map do |v|
-          i -= 1
-          { :id        => v.id,
-            :id7       => v.id[0..6],
-            :num       => i,
-            :author    => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
-            :message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
-            :date      => v.authored_date.strftime('%B %d, %Y'),
-            :gravatar  => Digest::MD5.hexdigest(v.author.email.strip.downcase),
-            :identicon => self._identicon_code(v.author.email),
-            :date_full => v.authored_date,
-            :files     => v.stats.files.map { |f,*rest|
-              page_path = extract_renamed_path_destination(f)
-              page_path = remove_page_extentions(page_path)
-              { :file => f,
-                :link => '#{page_path}/#{v.id}'
-              }
-            }
-          }
+            if Utils::HttpClient.remote_file_exist?(uri)
+          PluginManager.ui.debug('Found package at: #{uri}')
+          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
+        else
+          PluginManager.ui.debug('Package not found at: #{uri}')
+          return nil
         end
-      end
+      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
+        # This probably means there is a firewall in place of the proxy is not correctly configured.
+        # So lets skip this strategy but log a meaningful errors.
+        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
     
-          def has_path
-        !@path.nil?
-      end
+          PluginManager.ui.info('Installing file: #{local_file}')
+      uncompressed_path = uncompress(local_file)
+      PluginManager.ui.debug('Pack uncompressed to #{uncompressed_path}')
+      pack = LogStash::PluginManager::PackInstaller::Pack.new(uncompressed_path)
+      raise PluginManager::InvalidPackError, 'The pack must contains at least one plugin' unless pack.valid?
     
-          def header_format
-        has_header && @header.format.to_s
-      end
+        # remove any version constrain from the Gemfile so the plugin(s) can be updated to latest version
+    # calling update without requirements will remove any previous requirements
+    plugins = plugins_to_update(previous_gem_specs_map)
+    # Skipping the major version validation when using a local cache as we can have situations
+    # without internet connection.
+    filtered_plugins = plugins.map { |plugin| gemfile.find(plugin) }
+      .compact
+      .reject { |plugin| REJECTED_OPTIONS.any? { |key| plugin.options.has_key?(key) } }
+      .each   { |plugin| gemfile.update(plugin.name) }
     
-    def cloned_testpath(path)
-  repo   = File.expand_path(testpath(path))
-  path   = File.dirname(repo)
-  cloned = File.join(path, self.class.name)
-  FileUtils.rm_rf(cloned)
-  Dir.chdir(path) do
-    %x{git clone #{File.basename(repo)} #{self.class.name} 2>/dev/null}
+      it 'returns the source' do
+    expect(subject.source).to eq(source)
   end
-  cloned
+    
+          def sidebar
+        if @sidebar.nil?
+          if page = @page.sidebar
+            @sidebar = page.text_data
+          else
+            @sidebar = false
+          end
+        end
+        @sidebar
+      end
+    
+        assert last_response.ok?
+    assert_match /meta name='robots' content='noindex, nofollow'/, last_response.body
+  end
+    
+    context 'Precious::Views::Page' do
+  setup do
+    examples = testpath 'examples'
+    @path    = File.join(examples, 'test.git')
+    FileUtils.cp_r File.join(examples, 'empty.git'), @path, :remove_destination => true
+    @wiki = Gollum::Wiki.new(@path)
+  end
+    
+    def gem_file
+  '#{name}-#{version}.gem'
 end
     
-      test 'creates pages with escaped characters in title' do
-    post '/create', :content => 'abc', :page => 'Title with spaces',
-         :format             => 'markdown', :message => 'foo'
-    assert_equal 'http://example.org/Title-with-spaces', last_response.headers['Location']
-    get '/Title-with-spaces'
-    assert_match /abc/, last_response.body
-  end
-    
-      test 'extracting paths from URLs' do
-    assert_nil extract_path('Eye-Of-Sauron')
-    assert_equal 'Mordor', extract_path('Mordor/Sauron')
-    assert_equal 'Mordor/Sauron', extract_path('Mordor/Sauron/Evil')
-  end
-    
-      test 'extract destination file name in case of path renaming' do
-    view = Precious::Views::LatestChanges.new
-    assert_equal 'newname.md', view.extract_renamed_path_destination('oldname.md => newname.md')
-    assert_equal 'newDirectoryName/fileName.md', view.extract_renamed_path_destination('{oldDirectoryName => newDirectoryName}/fileName.md')
-  end
-    
-        @view = Precious::Views::Page.new
-    @view.instance_variable_set :@page, page
-    @view.instance_variable_set :@content, page.formatted_data
-    @view.instance_variable_set :@h1_title, false
-    
-        # Remove all slashes from the start of string.
-    # Remove all double slashes
-    def clean_url url
-      return url if url.nil?
-      url.gsub('%2F', '/').gsub(/^\/+/, '').gsub('//', '/')
+        # Extract the path string that Gollum::Wiki expects
+    def extract_path(file_path)
+      return nil if file_path.nil?
+      last_slash = file_path.rindex('/')
+      if last_slash
+        file_path[0, last_slash]
+      end
     end
+    
+                  expect(new_source).to eq(['#{prefix}#{open}#{a},',
+                                        '#{b}#{close}',
+                                        suffix].join($RS))
+            end
+          end
+        end
+      end
+    end
+    
+          # Returns the keyword of the `case` statement as a string.
+      #
+      # @return [String] the keyword of the `case` statement
+      def keyword
+        'case'
+      end
+    
+    
+    {      # Checks whether the `hash` literal is delimited by curly braces.
+      #
+      # @return [Boolean] whether the `hash` literal is enclosed in braces
+      def braces?
+        loc.end && loc.end.is?('}')
+      end
+    end
+  end
+end
+
+    
+    Then /^I should see a fieldset titled '([^']*)'$/ do |title|
+  expect(page).to have_css 'fieldset legend', text: title
+end
