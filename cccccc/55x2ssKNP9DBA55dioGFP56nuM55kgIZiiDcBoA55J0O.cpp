@@ -1,207 +1,281 @@
 
         
-            void convertScale(const Size2D &_size,
-                      const f32 * srcBase, ptrdiff_t srcStride,
-                      s16 * dstBase, ptrdiff_t dstStride,
-                      f64 alpha, f64 beta);
-    
-            size_t width;
-        size_t height;
-    
-                v_srclo = vget_low_s16(v_src1);
-            v_srchi = vget_high_s16(v_src1);
-            v_dst1 = vcombine_s16(vqmovn_s32(vaddw_s16(vshrq_n_s32(vmull_s16(v_srclo, v_srclo), shift), vget_low_s16(v_dst1))),
-                                  vqmovn_s32(vaddw_s16(vshrq_n_s32(vmull_s16(v_srchi, v_srchi), shift), vget_high_s16(v_dst1))));
-    
-    void add(const Size2D &size,
-         const u16 * src0Base, ptrdiff_t src0Stride,
-         const u16 * src1Base, ptrdiff_t src1Stride,
-         u16 * dstBase, ptrdiff_t dstStride,
-         CONVERT_POLICY policy)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-        if (policy == CONVERT_POLICY_SATURATE)
-    {
-        internal::vtransform(size,
-                             src0Base, src0Stride,
-                             src1Base, src1Stride,
-                             dstBase, dstStride,
-                             AddSaturate<u16, u32>());
-    }
-    else
-    {
-        internal::vtransform(size,
-                             src0Base, src0Stride,
-                             src1Base, src1Stride,
-                             dstBase, dstStride,
-                             AddWrap<u16, u32>());
-    }
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)policy;
-#endif
-}
-    
-        for (size_t i = 0u; i < size.height; ++i)
-    {
-        const u8 * src = internal::getRowPtr(srcBase, srcStride, i);
-        u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t sj = 0u, dj = 0u;
-    }
-    
-    
-    {
-    {} // namespace internal
-} // namespace CAROTENE_NS
-
-    
-    template <typename T>
-inline T *getRowPtr(T *base, ptrdiff_t stride, size_t row)
-{
-    char *baseRaw = const_cast<char *>(reinterpret_cast<const char *>(base));
-    return reinterpret_cast<T *>(baseRaw + ptrdiff_t(row) * stride);
-}
-    
-                for (; j < size.width; j++)
-            {
-                dst[j] = internal::saturate_cast<u8>((src[j] >> shift));
-            }
-        }
-        else // CONVERT_POLICY_WRAP
-        {
-            for (; j < roiw16; j += 16)
-            {
-                internal::prefetch(src + j);
-                int16x8_t v_src0 = vshrq_n_s16(vld1q_s16(src + j), shift),
-                          v_src1 = vshrq_n_s16(vld1q_s16(src + j + 8), shift);
-                int8x16_t v_dst = vcombine_s8(vmovn_s16(v_src0),
-                                              vmovn_s16(v_src1));
-                vst1q_u8(dst + j, vreinterpretq_u8_s8(v_dst));
-            }
-            for (; j < roiw8; j += 8)
-            {
-                int16x8_t v_src = vshrq_n_s16(vld1q_s16(src + j), shift);
-                vst1_u8(dst + j, vreinterpret_u8_s8(vmovn_s16(v_src)));
-            }
-    
-                    v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t0_16s), kernelBase[5]);
-                v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t1_16s), kernelBase[4]);
-                v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t2_16s), kernelBase[3]);
-    
-    
-    {        for (; i < size.width; i++)
-            result += (src[i] != 0)?1:0;
-        if (result < 0)//saturate in case of overflow ~ 8GB of non-zeros...
-        {
-            return 0x7fFFffFF;
-        }
-    }
-    return result;
-#else
-    (void)_size;
-    (void)srcBase;
-    (void)srcStride;
-    
-            result += (double)vget_lane_s64(vadd_s64(vget_low_s64(ws), vget_high_s64(ws)), 0);
-    
-    #ifdef CAROTENE_NEON
-    
-    #include 'common.hpp'
-    
-    
-    {} // namespace CAROTENE_NS
-
-    
-    // Soft limit on number of level-0 files.  We slow down writes at this point.
-static const int kL0_SlowdownWritesTrigger = 8;
-    
-      // When user keys are different, but correctly ordered
-  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('hello', 200, kTypeValue)));
-    
-    #include <ctype.h>
-#include <stdio.h>
-#include 'db/filename.h'
-#include 'db/dbformat.h'
-#include 'leveldb/env.h'
-#include 'util/logging.h'
-    
-    // Return the name of the sstable with the specified number
-// in the db named by 'dbname'.  The result will be prefixed with
-// 'dbname'.
-std::string TableFileName(const std::string& dbname, uint64_t number);
-    
-      fname = InfoLogFileName('foo');
-  ASSERT_EQ('foo/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(0, number);
-  ASSERT_EQ(kInfoLogFile, type);
-    
-    #endif  // STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-
-    
-      // Skip to start of first block that can contain the initial record
-  if (block_start_location > 0) {
-    Status skip_status = file_->Skip(block_start_location);
-    if (!skip_status.ok()) {
-      ReportDrop(block_start_location, skip_status);
-      return false;
-    }
-  }
-    
-          if (force_error_) {
-        force_error_ = false;
-        returned_partial_ = true;
-        return Status::Corruption('read error');
-      }
-    
-        RecordType type;
-    const bool end = (left == fragment_length);
-    if (begin && end) {
-      type = kFullType;
-    } else if (begin) {
-      type = kFirstType;
-    } else if (end) {
-      type = kLastType;
+          // Convert input tensor values;
+  std::vector<Tensor> input_tensor_values(input_constant_tensor_values.size());
+  std::vector<const Tensor*> input_tensors;
+  for (int i = 0; i < input_constant_tensor_values.size(); ++i) {
+    auto* py_val = input_constant_tensor_values[i];
+    if (py_val == Py_None) {
+      input_tensors.push_back(nullptr);
     } else {
-      type = kMiddleType;
+      TF_RETURN_IF_ERROR(
+          ConvertNdarrayToTensor(py_val, &input_tensor_values[i]));
+      input_tensors.push_back(&input_tensor_values[i]);
+    }
+  }
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    PyArray_Descr NPyBfloat16_Descr = {
+    PyObject_HEAD_INIT(nullptr) & PyBfloat16_Type,  // typeobj
+    // We must register bfloat16 with a kind other than 'f', because numpy
+    // considers two types with the same kind and size to be equal, but
+    // float16 != bfloat16.
+    'V',  // kind
+    // TODO(phawkins): there doesn't seem to be a way of guaranteeing a type
+    // character is unique.
+    'E',                                                  // type
+    '=',                                                  // byteorder
+    NPY_NEEDS_PYAPI | NPY_USE_GETITEM | NPY_USE_SETITEM,  // hasobject
+    0,                                                    // type_num
+    sizeof(bfloat16),                                     // elsize
+    alignof(bfloat16),                                    // alignment
+    nullptr,                                              // subarray
+    nullptr,                                              // fields
+    nullptr,                                              // names
+    &NPyBfloat16_ArrFuncs,                                // f
+};
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+#ifndef TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
+#define TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    struct PyDecrefDeleter {
+  void operator()(PyObject* p) const { Py_DECREF(p); }
+};
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    port::StatusOr<StreamExecutor*> ExecutorCache::GetOrCreate(
+    const StreamExecutorConfig& config,
+    const std::function<ExecutorFactory>& factory) {
+  // In the fast path case, the cache already has an entry and we can just
+  // return after Get() which only takes a shared lock and not a unique lock.
+  // If we need to create, we take a unique lock on cache_.
+  auto fast_result = Get(config);
+  if (fast_result.ok()) {
+    return fast_result;
+  }
     }
     
-    template<typename Key, class Comparator>
-inline void SkipList<Key,Comparator>::Iterator::Prev() {
-  // Instead of using explicit 'prev' links, we just search for the
-  // last node that falls before key.
-  assert(Valid());
-  node_ = list_->FindLessThan(node_->key);
-  if (node_ == list_->head_) {
-    node_ = nullptr;
+    void GeneratorContext::GetCompilerVersion(Version* version) const {
+  version->set_major(GOOGLE_PROTOBUF_VERSION / 1000000);
+  version->set_minor(GOOGLE_PROTOBUF_VERSION / 1000 % 1000);
+  version->set_patch(GOOGLE_PROTOBUF_VERSION % 1000);
+  version->set_suffix(GOOGLE_PROTOBUF_VERSION_SUFFIX);
+}
+    
+    
+    {  // Moving messages on two different arenas should lead to a copy.
+  *message2_on_arena = std::move(*message1_on_arena);
+  EXPECT_NE(nested, &message2_on_arena->optional_nested_message());
+  TestUtil::ExpectAllFieldsSet(*message1_on_arena);
+  TestUtil::ExpectAllFieldsSet(*message2_on_arena);
+}
+    
+    void EnumGenerator::Generate(io::Printer* printer) {
+  WriteEnumDocComment(printer, descriptor_);
+  printer->Print('$access_level$ enum $name$ {\n',
+                 'access_level', class_access_level(),
+                 'name', descriptor_->name());
+  printer->Indent();
+  std::set<string> used_names;
+  std::set<int> used_number;
+  for (int i = 0; i < descriptor_->value_count(); i++) {
+      WriteEnumValueDocComment(printer, descriptor_->value(i));
+      string original_name = descriptor_->value(i)->name();
+      string name = GetEnumValueName(descriptor_->name(), descriptor_->value(i)->name());
+      // Make sure we don't get any duplicate names due to prefix removal.
+      while (!used_names.insert(name).second) {
+        // It's possible we'll end up giving this warning multiple times, but that's better than not at all.
+        GOOGLE_LOG(WARNING) << 'Duplicate enum value ' << name << ' (originally ' << original_name
+          << ') in ' << descriptor_->name() << '; adding underscore to distinguish';
+        name += '_';
+      }
+      int number = descriptor_->value(i)->number();
+      if (!used_number.insert(number).second) {
+          printer->Print('[pbr::OriginalName(\'$original_name$\', PreferredAlias = false)] $name$ = $number$,\n',
+             'original_name', original_name,
+             'name', name,
+             'number', SimpleItoa(number));
+      } else {
+          printer->Print('[pbr::OriginalName(\'$original_name$\')] $name$ = $number$,\n',
+             'original_name', original_name,
+             'name', name,
+             'number', SimpleItoa(number));
+      }
   }
+  printer->Outdent();
+  printer->Print('}\n');
+  printer->Print('\n');
 }
     
-    SEXP XGBoosterLoadModelFromRaw_R(SEXP handle, SEXP raw) {
-  R_API_BEGIN();
-  CHECK_CALL(XGBoosterLoadModelFromBuffer(R_ExternalPtrAddr(handle),
-                                          RAW(raw),
-                                          length(raw)));
-  R_API_END();
-  return R_NilValue;
+    namespace {
+    }
+    
+    
+    {  EXPECT_EQ(expected, decode_data.Data());
 }
     
-      // Compute the Score for a node with the given stats
-  virtual bst_float ComputeScore(bst_uint parentid,
-                                const GradStats &stats,
-                                bst_float weight) const = 0;
+    IMGUI_IMPL_API bool     ImGui_ImplDX9_Init(IDirect3DDevice9* device);
+IMGUI_IMPL_API void     ImGui_ImplDX9_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplDX9_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data);
     
-    TEST(SpanIter, Ref) {
-  int status = 1;
-  TestIterRef{&status}();
-  ASSERT_EQ(status, 1);
+    static bool ImGui_ImplDX9_CreateFontsTexture()
+{
+    // Build texture atlas
+    ImGuiIO& io = ImGui::GetIO();
+    unsigned char* pixels;
+    int width, height, bytes_per_pixel;
+    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height, &bytes_per_pixel);
+    }
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+        ImGui_ImplDX10_Shutdown();
+    ImGui_ImplWin32_Shutdown();
+    ImGui::DestroyContext();
+    
+        // Create the blending setup
+    {
+        D3D11_BLEND_DESC desc;
+        ZeroMemory(&desc, sizeof(desc));
+        desc.AlphaToCoverageEnable = false;
+        desc.RenderTarget[0].BlendEnable = true;
+        desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+        desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+        desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+        desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
+        desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+        desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+        desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+        g_pd3dDevice->CreateBlendState(&desc, &g_pBlendState);
+    }
+    
+        // Create the root signature
+    {
+        D3D12_DESCRIPTOR_RANGE descRange = {};
+        descRange.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+        descRange.NumDescriptors = 1;
+        descRange.BaseShaderRegister = 0;
+        descRange.RegisterSpace = 0;
+        descRange.OffsetInDescriptorsFromTableStart = 0;
+    }
+    
+    static void ImGui_ImplFreeGLUT_UpdateKeyboardMods()
+{
+    ImGuiIO& io = ImGui::GetIO();
+    int mods = glutGetModifiers();
+    io.KeyCtrl = (mods & GLUT_ACTIVE_CTRL) != 0;
+    io.KeyShift = (mods & GLUT_ACTIVE_SHIFT) != 0;
+    io.KeyAlt = (mods & GLUT_ACTIVE_ALT) != 0;
 }
+    
+    // Implemented features:
+//  [X] Platform: Clipboard support.
+//  [X] Platform: Gamepad support. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
+//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
+//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).
+    
+    // Called by Init/NewFrame/Shutdown
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateFontsTexture();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyFontsTexture();
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateDeviceObjects();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyDeviceObjects();
+
+    
+    
+    {    auto ka2 = std::move(ka);
+    EXPECT_FALSE(ka);
+    EXPECT_TRUE(ka2);
+    EXPECT_EQ(&exec, ka2.get());
+    EXPECT_EQ(1, exec.refCount);
+  }
+    
+    /**
+ * This helper reads the .note.stapsdt section of the currently running binary,
+ * checks if the tracepoints listed there are properly formatted, and return the
+ * arguments layout description string for the expected provider and probe
+ * combination if it exists.
+ */
+static bool getTracepointArguments(
+    const std::string& expectedProvider,
+    const std::string& expectedProbe,
+    const uintptr_t expectedSemaphore,
+    std::string& arguments) {
+  // Read the note and check if it's non-empty.
+  std::string exe = getExe();
+  auto note = readNote(exe);
+  auto len = note.size();
+  CHECK_GT(len, 0);
+  // The loop to read tracepoints one by one.
+  size_t pos = 0;
+  while (pos < len) {
+    // Check size information of the tracepoint.
+    CHECK_LE(pos + 12, len);
+    }
+    }
+    
+    using UTF8StringPiece = UTF8Range<const char*>;
+    
+     public:
+  explicit VirtualExecutor(KeepAlive<> executor)
+      : executor_(std::move(executor)) {
+    assert(!isKeepAliveDummy(executor_));
+  }
+    
+        EXPECT_THROW(
+        to<struct timespec>(sec_u64(9223372036854775808ULL)), std::range_error);
+    
+    /// Wrapper around the makeCompressionCounterHandler() extension point.
+class CompressionCounter {
+ public:
+  CompressionCounter() {}
+  CompressionCounter(
+      folly::io::CodecType codecType,
+      folly::StringPiece codecName,
+      folly::Optional<int> level,
+      CompressionCounterKey key,
+      CompressionCounterType counterType) {
+    initialize_ = [=]() {
+      return makeCompressionCounterHandler(
+          codecType, codecName, level, key, counterType);
+    };
+    DCHECK(!initialize_.hasAllocatedMemory());
+  }
+    }
