@@ -1,154 +1,199 @@
 
         
-        # Dependency labels used in the paths.
-DEPLABELS = [
-    'PAD',     'UNK',       'ROOT',    'abbrev',    'acomp', 'advcl',
-    'advmod',  'agent',     'amod',    'appos',     'attr',  'aux',
-    'auxpass', 'cc',        'ccomp',   'complm',    'conj',  'cop',
-    'csubj',   'csubjpass', 'dep',     'det',       'dobj',  'expl',
-    'infmod',  'iobj',      'mark',    'mwe',       'nc',    'neg',
-    'nn',      'npadvmod',  'nsubj',   'nsubjpass', 'num',   'number',
-    'p',       'parataxis', 'partmod', 'pcomp',     'pobj',  'poss',
-    'preconj', 'predet',    'prep',    'prepc',     'prt',   'ps',
-    'purpcl',  'quantmod',  'rcmod',   'ref',       'rel',   'suffix',
-    'title',   'tmod',      'xcomp',   'xsubj',
-]
+        
+@bp.route('/')
+def index():
+    '''Show all the posts, most recent first.'''
+    db = get_db()
+    posts = db.execute(
+        'SELECT p.id, title, body, created, author_id, username'
+        ' FROM post p JOIN user u ON p.author_id = u.id'
+        ' ORDER BY created DESC'
+    ).fetchall()
+    return render_template('blog/index.html', posts=posts)
     
     
-  if truth_bxtxn is not None:
-    plot_time_series(truth_bxtxn, bidx, n_to_plot=n_to_plot, color='k',
-                     scale=scale)
+def get_db():
+    '''Connect to the application's configured database. The connection
+    is unique for each request and will be reused if this is called
+    again.
+    '''
+    if 'db' not in g:
+        g.db = sqlite3.connect(
+            current_app.config['DATABASE'],
+            detect_types=sqlite3.PARSE_DECLTYPES
+        )
+        g.db.row_factory = sqlite3.Row
     
-      # Split the data, inputs, labels and times into train vs. validation.
-  rates_train, rates_valid = \
-      split_list_by_inds(rates, train_inds, valid_inds)
-  noisy_data_train, noisy_data_valid = \
-      split_list_by_inds(noisy_data, train_inds, valid_inds)
-  input_train, inputs_valid = \
-      split_list_by_inds(inputs, train_inds, valid_inds)
-  condition_labels_train, condition_labels_valid = \
-      split_list_by_inds(condition_labels, train_inds, valid_inds)
-  input_times_train, input_times_valid = \
-      split_list_by_inds(input_times, train_inds, valid_inds)
+    # read in SQL for populating test data
+with open(os.path.join(os.path.dirname(__file__), 'data.sql'), 'rb') as f:
+    _data_sql = f.read().decode('utf8')
+    
+        def to_json(self, value):
+        return http_date(value)
+    
+        Implements signals based on blinker if available, otherwise
+    falls silently back to a noop.
+    
+        .. versionchanged:: 0.12
+       `app.test_client()` includes preset default environment, which can be
+       set after instantiation of the `app.test_client()` object in
+       `client.environ_base`.
     
     
-def log_sum_exp(x_k):
-  '''Computes log \sum exp in a numerically stable way.
-    log ( sum_i exp(x_i) )
-    log ( sum_i exp(x_i - m + m) ),       with m = max(x_i)
-    log ( sum_i exp(x_i - m)*exp(m) )
-    log ( sum_i exp(x_i - m) + m
-    
-      def encode(self, sentence):
-    '''Convert a sentence to a list of ids, with special tokens added.'''
-    word_ids = [self.word_to_id(cur_word) for cur_word in sentence.split()]
-    return np.array([self.bos] + word_ids + [self.eos], dtype=np.int32)
-    
-      # If there are no real or fake entries in the batch, we assign an average
-  # value of zero.
-  real_avg = tf.where(tf.equal(real_count, 0), zero_tensor, real_avg)
-  fake_avg = tf.where(tf.equal(fake_count, 0), zero_tensor, fake_avg)
-    
-      for key, _ in gen_ngrams_dict.iteritems():
-    if key in train_ngrams_dict:
-      unique_ngrams_in_train += 1
-  return float(unique_ngrams_in_train) / float(total_ngrams_produced)
+@pytest.mark.functional
+def test_how_to_configure_alias(proc, TIMEOUT):
+    proc.sendline(u'unfunction fuck')
+    how_to_configure(proc, TIMEOUT)
 
     
-      ## Encoder forward variables.
-  if not FLAGS.seq2seq_share_embedding:
-    encoder_embedding = [
-        v for v in tf.trainable_variables()
-        if v.op.name == 'gen/encoder/rnn/embedding'
-    ][0]
-  encoder_lstm_w_0 = [
-      v for v in tf.trainable_variables() if v.op.name ==
-      'gen/encoder/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/kernel'
-  ][0]
-  encoder_lstm_b_0 = [
-      v for v in tf.trainable_variables() if v.op.name ==
-      'gen/encoder/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/bias'
-  ][0]
-  encoder_lstm_w_1 = [
-      v for v in tf.trainable_variables() if v.op.name ==
-      'gen/encoder/rnn/multi_rnn_cell/cell_1/basic_lstm_cell/kernel'
-  ][0]
-  encoder_lstm_b_1 = [
-      v for v in tf.trainable_variables() if v.op.name ==
-      'gen/encoder/rnn/multi_rnn_cell/cell_1/basic_lstm_cell/bias'
-  ][0]
+    
+@pytest.mark.parametrize('command', [
+    Command('aws dynamdb scan', misspelled_command),
+    Command('aws dynamodb scn', misspelled_subcommand),
+    Command('aws dynamodb t-item',
+            misspelled_subcommand_with_multiple_options)])
+def test_match(command):
+    assert match(command)
+    
+    You can download from:
+  https://osxfuse.github.io/
+Error: An unsatisfied requirement failed this build.'''
     
     
-def to_native_string(string, encoding='ascii'):
-    '''Given a string object, regardless of type, returns a representation of
-    that string in the native string type, encoding and decoding where
-    necessary. This assumes ASCII unless told otherwise.
-    '''
-    if isinstance(string, builtin_str):
-        out = string
-    else:
-        if is_py2:
-            out = string.encode(encoding)
-        else:
-            out = string.decode(encoding)
+@parametrize_extensions
+@parametrize_filename
+@parametrize_script
+def test_get_new_command(ext, tar_error, filename, unquoted, quoted, script, fixed):
+    tar_error(unquoted.format(ext))
+    assert (get_new_command(Command(script.format(filename.format(ext)), ''))
+            == fixed.format(dir=quoted.format(''), filename=filename.format(ext)))
+
     
-    '''
-requests.structures
-~~~~~~~~~~~~~~~~~~~
+                if is_short_sha(version) or \
+                    is_head_tag(version) or \
+                    is_short_sha_and_date(version):
+                # if projects are across multiple environments, allow 1 week difference
+                if projects_split_by_env and date_diff and date_diff < 604800:
+                    merge(to_release=to_release, from_releases=from_releases, sentry_models=orm)
+                    continue
+                # +/- 8 hours
+                if date_diff and date_diff > 28800:
+                    for release in releases:
+                        update_version(release, orm)
+                else:
+                    merge(to_release=to_release, from_releases=from_releases, sentry_models=orm)
+                continue
+    
+        complete_apps = ['sentry']
+
+    
+        complete_apps = ['sentry']
+
+    
+        def _forwards(self, orm):
+        'Write your forwards methods here.'
+        dupe_envs = orm.Environment.objects.values_list('name', 'organization_id')\
+                                           .annotate(ecount=models.Count('id'))\
+                                           .filter(ecount__gt=1)
+    
+            # Adding model 'ApiApplication'
+        db.create_table(
+            'sentry_apiapplication', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'client_id',
+                    self.gf('django.db.models.fields.CharField')(unique=True, max_length=64)
+                ), (
+                    'client_secret',
+                    self.gf('sentry.db.models.fields.encrypted.EncryptedTextField')()
+                ), (
+                    'owner', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.User']
+                    )
+                ),
+                ('name', self.gf('django.db.models.fields.CharField')(max_length=64, blank=True)), (
+                    'status',
+                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(
+                        default=0, db_index=True
+                    )
+                ), (
+                    'allowed_origins',
+                    self.gf('django.db.models.fields.TextField')(null=True, blank=True)
+                ), ('redirect_uris', self.gf('django.db.models.fields.TextField')()), (
+                    'homepage_url',
+                    self.gf('django.db.models.fields.URLField')(max_length=200, null=True)
+                ), (
+                    'privacy_url',
+                    self.gf('django.db.models.fields.URLField')(max_length=200, null=True)
+                ), (
+                    'terms_url',
+                    self.gf('django.db.models.fields.URLField')(max_length=200, null=True)
+                ), (
+                    'date_added',
+                    self.gf('django.db.models.fields.DateTimeField')()
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['ApiApplication'])
+    
+            # Adding field 'ApiKey.scope_list'
+        db.add_column(
+            'sentry_apikey',
+            'scope_list',
+            self.gf('sentry.db.models.fields.array.ArrayField')(
+                of=('django.db.models.fields.TextField', [], {})
+            ),
+            keep_default=False
+        )
+    
+            users = orm.User.objects.exclude(
+            email__in=orm.UserEmail.objects.all().values_list('email', flat=True)
+        )
+    
+        REGISTRY = {}
     
     
-def prepare_url(value):
-    # Issue #1483: Make sure the URL always has a trailing slash
-    httpbin_url = value.url.rstrip('/') + '/'
+# In some very complex cases, it might be desirable to pull out the building
+# logic into another function (or a method on another class), rather than being
+# in the base class '__init__'. (This leaves you in the strange situation where
+# a concrete class does not have a useful constructor)
     
-    try:
-    from urllib3.contrib import pyopenssl
-except ImportError:
-    pyopenssl = None
-    OpenSSL = None
-    cryptography = None
-else:
-    import OpenSSL
-    import cryptography
     
-    import sys
+class EnglishGetter(object):
     
-        # Informational.
-    100: ('continue',),
-    101: ('switching_protocols',),
-    102: ('processing',),
-    103: ('checkpoint',),
-    122: ('uri_too_long', 'request_uri_too_long'),
-    200: ('ok', 'okay', 'all_ok', 'all_okay', 'all_good', '\\o/', '✓'),
-    201: ('created',),
-    202: ('accepted',),
-    203: ('non_authoritative_info', 'non_authoritative_information'),
-    204: ('no_content',),
-    205: ('reset_content', 'reset'),
-    206: ('partial_content', 'partial'),
-    207: ('multi_status', 'multiple_status', 'multi_stati', 'multiple_stati'),
-    208: ('already_reported',),
-    226: ('im_used',),
+        def __get__(self, obj, type_):
+        if obj is None:
+            return self
+        val = self.function(obj)
+        obj.__dict__[self.function.__name__] = val
+        return val
     
-        def testReadLines(self):
-        self.createTempFile()
-        with BZ2File(self.filename) as bz2f:
-            self.assertRaises(TypeError, bz2f.readlines, None)
-            self.assertEqual(bz2f.readlines(), self.TEXT_LINES)
+        def __exit__(self, Type, value, traceback):
+        if self.item is not None:
+            self._queue.put(self.item)
+            self.item = None
     
-    # If we want to print a preview of the message content, we can extract whatever
-# the least formatted payload is and print the first three lines.  Of course,
-# if the message has no plain text part printing the first three lines of html
-# is probably useless, but this is just a conceptual example.
-simplest = msg.get_body(preferencelist=('plain', 'html'))
-print()
-print(''.join(simplest.get_content().splitlines(keepends=True)[:3]))
+        def __init__(self):
+        self.time_provider = datetime.datetime
     
-                if buffer.lstrip().upper().startswith('SELECT'):
-                print(cur.fetchall())
-        except sqlite3.Error as e:
-            print('An error occurred:', e.args[0])
-        buffer = ''
+        def _abort_diagnostics(self):
+        return 'abort diagnostics'
     
-    cur.execute('insert into people (name_last, age) values ('Yeltsin',   72)')
-cur.execute('insert into people (name_last, age) values ('Putin',     51)')
+    
+# Refined Abstraction
+class CircleShape(object):
+    def __init__(self, x, y, radius, drawing_api):
+        self._x = x
+        self._y = y
+        self._radius = radius
+        self._drawing_api = drawing_api
+    
+    
+class ProductModel(Model):
+    class Price(float):
+        '''A polymorphic way to pass a float with a particular
+        __str__ functionality.'''
