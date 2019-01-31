@@ -1,140 +1,218 @@
 
         
-                      accept = if current_value.respond_to?(:call)
-                current_value.call(item)
-              else
-                Array(current_value).map(&:to_s).include?(value.to_s)
-              end
+                    if placeholder_required?(html_options)
+              raise ArgumentError, 'include_blank cannot be false for a required field.' if options[:include_blank] == false
+              options[:include_blank] ||= true unless options[:prompt]
+            end
     
-    require 'action_view/helpers/tags/placeholderable'
+            def render
+          options = @options.stringify_keys
+          options['type']     = 'checkbox'
+          options['value']    = @checked_value
+          options['checked'] = 'checked' if input_checked?(options)
     
-    module ActionView
-  # This class defines the interface for a renderer. Each class that
-  # subclasses +AbstractRenderer+ is used by the base +Renderer+ class to
-  # render a specific type of object.
-  #
-  # The base +Renderer+ class uses its +render+ method to delegate to the
-  # renderers. These currently consist of
-  #
-  #   PartialRenderer - Used for rendering partials
-  #   TemplateRenderer - Used for rendering other types of templates
-  #   StreamingTemplateRenderer - Used for streaming
-  #
-  # Whenever the +render+ method is called on the base +Renderer+ class, a new
-  # renderer object of the correct type is created, and the +render+ method on
-  # that new object is called in turn. This abstracts the setup and rendering
-  # into a separate classes for partials and templates.
-  class AbstractRenderer #:nodoc:
-    delegate :find_template, :find_file, :template_exists?, :any_templates?, :with_fallbacks, :with_layout_format, :formats, to: :@lookup_context
-    
-    module Vagrant
-  # This class handles guest-OS specific interactions with a machine.
-  # It is primarily responsible for detecting the proper guest OS
-  # implementation and then delegating capabilities.
-  #
-  # Vagrant has many tasks which require specific guest OS knowledge.
-  # These are implemented using a guest/capability system. Various plugins
-  # register as 'guests' which determine the underlying OS of the system.
-  # Then, 'guest capabilities' register themselves for a specific OS (one
-  # or more), and these capabilities are called.
-  #
-  # Example capabilities might be 'mount_virtualbox_shared_folder' or
-  # 'configure_networks'.
-  #
-  # This system allows for maximum flexibility and pluginability for doing
-  # guest OS specific operations.
-  class Guest
-    include CapabilityHost
-    
-            # Initializes the system. Any subclasses MUST make sure this
-        # method is called on the parent. Therefore, if a subclass overrides
-        # `initialize`, then you must call `super`.
-        def initialize(vm)
-          @vm = vm
+            class << self
+          def field_type
+            @field_type ||= name.split('::').last.sub('Field', '').downcase
+          end
         end
     
-            # Sets a human-friendly description of the plugin.
-        #
-        # @param [String] value Description of the plugin.
-        # @return [String] Description of the plugin.
-        def self.description(value=UNSET_VALUE)
-          get_or_set(:description, value)
+        %w(<< concat push insert unshift).each do |method|
+      class_eval <<-METHOD, __FILE__, __LINE__ + 1
+        def #{method}(*args)
+          paths.#{method}(*typecast(args))
+        end
+      METHOD
+    end
+    
+        def initialize(lookup_context)
+      @lookup_context = lookup_context
+    end
+    
+      it 'shows the dry run pop up without previous events and selects the log tab when no event was created' do
+    stub_request(:get, 'http://xkcd.com/').
+      with(:headers => {'Accept-Encoding'=>'gzip,deflate', 'User-Agent'=>'Huginn - https://github.com/huginn/huginn'}).
+      to_return(:status => 200, :body => '', :headers => {})
+    
+        it 'works for running jobs' do
+      job.locked_at = Time.now
+      job.locked_by = 'test'
+      expect(status(job)).to eq('<span class='label label-info'>running</span>')
+    end
+    
+    describe AgentsExporter do
+  describe '#as_json' do
+    let(:name) { 'My set of Agents' }
+    let(:description) { 'These Agents work together nicely!' }
+    let(:guid) { 'some-guid' }
+    let(:tag_fg_color) { '#ffffff' }
+    let(:tag_bg_color) { '#000000' }
+    let(:icon) { 'Camera' }
+    let(:source_url) { 'http://yourhuginn.com/scenarios/2/export.json' }
+    let(:agent_list) { [agents(:jane_weather_agent), agents(:jane_rain_notifier_agent)] }
+    let(:exporter) { AgentsExporter.new(
+      agents: agent_list, name: name, description: description,
+      source_url: source_url, guid: guid, tag_fg_color: tag_fg_color,
+      tag_bg_color: tag_bg_color, icon: icon) }
+    
+    Given(/^file '(.*?)' exists in shared path$/) do |file|
+  file_shared_path = TestApp.shared_path.join(file)
+  run_vagrant_command('mkdir -p #{file_shared_path.dirname}')
+  run_vagrant_command('touch #{file_shared_path}')
+end
+    
+    http://capistranorb.com/documentation/advanced-features/custom-scm
+    
+          # rubocop:disable Security/MarshalLoad
+      def add_role(role, hosts, options={})
+        options_deepcopy = Marshal.dump(options.merge(roles: role))
+        Array(hosts).each { |host| add_host(host, Marshal.load(options_deepcopy)) }
+      end
+      # rubocop:enable Security/MarshalLoad
+    
+        # also set the env LOGSTASH_HOME
+    LOGSTASH_HOME = ENV['LOGSTASH_HOME'] = ::File.expand_path(::File.join(__FILE__, '..', '..', '..'))
+    
+    require 'bootstrap/environment'
+    
+      def target_file
+    target_file = File.join(LogStash::Environment::LOGSTASH_HOME, 'plugins_package')
+    '#{target_file}#{file_extension}'
+  end
+end
+
+    
+            if Utils::HttpClient.remote_file_exist?(uri)
+          PluginManager.ui.debug('Found package at: #{uri}')
+          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
+        else
+          PluginManager.ui.debug('Package not found at: #{uri}')
+          return nil
+        end
+      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
+        # This probably means there is a firewall in place of the proxy is not correctly configured.
+        # So lets skip this strategy but log a meaningful errors.
+        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
+    
+          # Install the gems to make them available locally when bundler does his local resolution
+      post_install_messages = []
+      pack.gems.each do |packed_gem|
+        PluginManager.ui.debug('Installing, #{packed_gem.name}, version: #{packed_gem.version} file: #{packed_gem.file}')
+        post_install_messages << LogStash::PluginManager::GemInstaller::install(packed_gem.file, packed_gem.plugin?)
+      end
+    
+              it 'successfully install the plugin when verification is disabled' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify logstash-filter-qatest')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-qatest')
+          end
+    
+    # Quiet some warnings we see when running in warning mode:
+# RUBYOPT=-w bundle exec sidekiq
+$TESTING = false
+    
+          def requeue
+        Sidekiq.redis do |conn|
+          conn.rpush('queue:#{queue_name}', job)
+        end
+      end
+    end
+    
+            begin
+          b = File.stat(fp.path)
+          next if orig_st.ino == b.ino && orig_st.dev == b.dev
+        rescue Errno::ENOENT
         end
     
-    describe 'Kernel.srand' do
-  it 'is a private method' do
-    Kernel.should have_private_instance_method(:srand)
+      module TestingClient
+    def raw_push(payloads)
+      if Sidekiq::Testing.fake?
+        payloads.each do |job|
+          job = Sidekiq.load_json(Sidekiq.dump_json(job))
+          job.merge!('enqueued_at' => Time.now.to_f) unless job['at']
+          Queues.push(job['queue'], job['class'], job)
+        end
+        true
+      elsif Sidekiq::Testing.inline?
+        payloads.each do |job|
+          klass = Sidekiq::Testing.constantize(job['class'])
+          job['id'] ||= SecureRandom.hex(12)
+          job_hash = Sidekiq.load_json(Sidekiq.dump_json(job))
+          klass.process_job(job_hash)
+        end
+        true
+      else
+        super
+      end
+    end
   end
     
-      desc 'Run sass-spec tests against the local code.'
-  task :spec do
-    require 'yaml'
-    sass_spec_options = YAML.load_file(scope('test/sass-spec.yml'))
-    enabled = sass_spec_options.delete(:enabled)
-    unless enabled
-      puts 'SassSpec tests are disabled.'
-      next
-    end
-    if ruby_version_at_least?('1.9.2')
-      old_load_path = $:.dup
-      begin
-        $:.unshift(File.join(File.dirname(__FILE__), 'lib'))
-        begin
-          require 'sass_spec'
-        rescue LoadError
-          puts 'You probably forgot to run: bundle exec rake'
-          raise
+        def params
+      indifferent_hash = Hash.new {|hash,key| hash[key.to_s] if Symbol === key }
+    
+              return WebAction.new(env, route.block)
         end
-        default_options = {
-          :spec_directory => SassSpec::SPEC_DIR,
-          :engine_adapter => SassEngineAdapter.new,
-          :generate => false,
-          :tap => false,
-          :skip => false,
-          :verbose => false,
-          :filter => '',
-          :limit => -1,
-          :unexpected_pass => false,
-          :nuke => false,
-        }
-        SassSpec::Runner.new(default_options.merge(sass_spec_options)).run || exit(1)
-      ensure
-        $:.replace(old_load_path)
       end
+    
+        @name = nil
+    @architecture = 'native'
+    @description = 'no description given'
+    @version = nil
+    @epoch = nil
+    @iteration = nil
+    @url = nil
+    @category = 'default'
+    @license = 'unknown'
+    @vendor = 'none'
+    
+        File.write('#{base_path}/.PKGINFO', pkginfo)
+  end
+    
+        File.write(build_path('description'), self.description + '\n')
+    
+        platforms.each do |platform|
+      logger.info('Generating service manifest.', :platform => platform.class.name)
+      platform.program = command.first
+      platform.name = attributes[:pleaserun_name]
+      platform.args = command[1..-1]
+      platform.description = if attributes[:description_given?]
+        attributes[:description]
+      else
+        platform.name
+      end
+      pleaserun_attributes.each do |attribute_name|
+        attribute = 'pleaserun_#{attribute_name}'.to_sym
+        if attributes.has_key?(attribute) and not attributes[attribute].nil?
+          platform.send('#{attribute_name}=', attributes[attribute])
+        end
+      end
+    
+        if !File.exist?(setup_py)
+      logger.error('Could not find 'setup.py'', :path => setup_py)
+      raise 'Unable to find python package; tried #{setup_py}'
+    end
+    
+      # Generate the proper tar flags based on the path name.
+  def tar_compression_flag(path)
+    case path
+      when /\.tar\.bz2$/
+        return '-j'
+      when /\.tar\.gz$|\.tgz$/
+        return '-z'
+      when /\.tar\.xz$/
+        return '-J'
+      else
+        return nil
+    end
+  end # def tar_compression_flag
+end # class FPM::Package::Tar
+
+    
+        # use dir to set stuff up properly, mainly so I don't have to reimplement
+    # the chdir/prefix stuff special for zip.
+    dir = convert(FPM::Package::Dir)
+    if attributes[:chdir]
+      dir.attributes[:chdir] = File.join(build_path, attributes[:chdir])
     else
-      'Skipping sass-spec on ruby versions less than 1.9.2'
+      dir.attributes[:chdir] = build_path
     end
-  end
-end
-    
-          opts.on('-T', '--to FORMAT',
-        'The format to convert to. Can be scss or sass.',
-        'By default, this is inferred from the output filename.',
-        'If there is none, defaults to sass.') do |name|
-        @options[:to] = name.downcase.to_sym
-        unless [:scss, :sass].include?(@options[:to])
-          raise 'Unknown format for sass-convert --to: #{name}'
-        end
-      end
-    
-    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
-  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.windows?
-  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.windows?
-    
-      it 'returns the merged `ConfigPart#config_string`' do
-    expect(subject.config_string).to eq(ordered_config_parts.collect(&:text).join('\n'))
-  end
-    
-        desc 'Bootstrap all the VM's used for this tests'
-    task :setup, :platform do |t, args|
-      config   = PlatformConfig.new
-      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
-      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
-    
-          it 'list the plugin with his version' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
-      end
-    end
-  end
-end
