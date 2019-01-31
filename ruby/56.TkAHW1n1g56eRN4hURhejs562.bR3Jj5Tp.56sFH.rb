@@ -1,106 +1,68 @@
 
         
-                scope :exclude_ignored, -> do
-          where('allow_failure = ? OR status IN (?)',
-            false, %w[created pending running success skipped])
-        end
+            it 'returns a correct icon tag for GitHub' do
+      icon = omniauth_provider_icon(:github)
+      expect(icon).to be_html_safe
+      elem = Nokogiri(icon).at('i.fa.fa-github')
+      expect(elem).to be_a Nokogiri::XML::Element
+    end
     
-    module Gitlab
-  module GithubImport
-    module Importer
-      class LfsObjectsImporter
-        include ParallelScheduling
+              weather_agent = scenario_import.scenario.agents.find_by(:guid => 'a-weather-agent')
+          trigger_agent = scenario_import.scenario.agents.find_by(:guid => 'a-trigger-agent')
     
-            # attributes - A Hash containing the raw note details. The keys of this
-        #              Hash must be Symbols.
-        def initialize(attributes)
-          @attributes = attributes
-        end
+      it 'replaces invalid byte sequences in a message' do
+    log = AgentLog.new(:agent => agents(:jane_website_agent), level: 3)
+    log.message = '\u{3042}\xffA\x95'
+    expect { log.save! }.not_to raise_error
+    expect(log.message).to eq('\u{3042}<ff>A\<95>')
+  end
     
-            alias_method :issuable_type, :noteable_type
-      end
+        @opts = {
+      'api_key' => '800deeaf-e285-9d62-bc90-j999c1973cc9',
+      'path' => 'trackings'
+    }
+    
+      @event = Event.new
+  @event.agent = agents(:bob_weather_agent)
+  @event.payload = { :body => 'Sample message' }
+  @event.save!
+  end
+    
+      respond_to :json
+    
+      def update
+    raise ActiveRecord::RecordNotFound if @web_subscription.nil?
+    
+      def subscription_params
+    @subscription_params ||= params.require(:subscription).permit(:endpoint, keys: [:auth, :p256dh])
+  end
+    
+    # Exit cleanly from an early interrupt
+Signal.trap('INT') { exit 1 }
+    
+        def generate_temporary_path
+      Stud::Temporary.pathname
+    end
+    
+      # retrieve only the latest spec for all locally installed plugins
+  # @return [Hash] result hash {plugin_name.downcase => plugin_spec}
+  def find_latest_gem_specs
+    LogStash::PluginManager.all_installed_plugins_gem_specs(gemfile).inject({}) do |result, spec|
+      previous = result[spec.name.downcase]
+      result[spec.name.downcase] = previous ? [previous, spec].max_by{|s| s.version} : spec
+      result
     end
   end
 end
 
     
-            # This is the method called to provision the system. This method
-        # is expected to do whatever necessary to provision the system (create files,
-        # SSH, etc.)
-        def provision!
-        end
-    
-                    @env.machine_names.each do |machine_name|
-                  if machine_name =~ regex
-                    machines << get_machine.call(machine_name)
-                  end
-                end
-    
-    module Vagrant
-  module Plugin
-    module V2
-      # This is the superclass for all V2 plugins.
-      class Plugin
-        # Special marker that can be used for action hooks that matches
-        # all action sequences.
-        ALL_ACTIONS = :__all_actions__
-    
-        # Merge one registry with another and return a completely new
-    # registry. Note that the result cache is completely busted, so
-    # any gets on the new registry will result in a cache miss.
-    def merge(other)
-      self.class.new.tap do |result|
-        result.merge!(self)
-        result.merge!(other)
-      end
+        # Extracts the Geometry from a file (or path to a file)
+    def self.from_file(file)
+      GeometryDetector.new(file).make
     end
     
-        # variable
-    # Script::Value
-    inherited_hash_reader :var
-    
-        # The name of the mixin in which the error occurred.
-    # This could be `nil` if the error occurred outside a mixin.
-    #
-    # @return [String]
-    def sass_mixin
-      sass_backtrace.first[:mixin]
-    end
-    
-        def colon_path?(path)
-      !split_colon_path(path)[1].nil?
-    end
-    
-    Then(/^git wrapper permissions are 0700$/) do
-  permissions_test = %Q([ $(stat -c '%a' #{TestApp.git_wrapper_path.shellescape}) == '700' ])
-  _stdout, _stderr, status = vagrant_cli_command('ssh -c #{permissions_test.shellescape}')
-    
-          def scm_name
-        fetch(:scm)
-      end
-    
-          def assert_value_or_block_not_both(value, block)
-        return if value.nil? || block.nil?
-        raise Capistrano::ValidationError,
-              'Value and block both passed to Configuration#set'
-      end
-    
-          def trace_set(key)
-        return unless fetch(:print_config_variables, false)
-        puts 'Config variable set: #{key.inspect} => #{values[key].inspect}'
-      end
+        def raise_because_imagemagick_missing
+      raise Errors::CommandNotFoundError.new('Could not run the `identify` command. Please install ImageMagick.')
     end
   end
 end
-
-    
-        def initialize(plugins_to_package, target)
-      @plugins_to_package = Array(plugins_to_package)
-      @target = target
-    
-        before do
-      logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version #{previous_version} #{plugin_name}')
-      # Logstash won't update when we have a pinned version in the gemfile so we remove them
-      logstash.replace_in_gemfile(',[[:space:]]'0.1.0'', '')
-      expect(logstash).to have_installed?(plugin_name, previous_version)
-    end
