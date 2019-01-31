@@ -1,261 +1,355 @@
 
         
-        #endif  // TESSERACT_CCMAIN_PARAGRAPHS_H_
+        REGISTER_OP('Ackermann')
+    .Output('ackermann: string')
+    .Doc(R'doc(
+Output a fact about the ackermann function.
+)doc');
+    
+    
+    {}  // namespace tensorflow
 
     
-    #endif  // TESSERACT_CCMAIN_THRESHOLDER_H_
-
+    #include <functional>
     
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8>
-internal::ValueArray8<T1, T2, T3, T4, T5, T6, T7, T8> Values(T1 v1, T2 v2,
-    T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8) {
-  return internal::ValueArray8<T1, T2, T3, T4, T5, T6, T7, T8>(v1, v2, v3, v4,
-      v5, v6, v7, v8);
+    PyObject* PyExceptionRegistry::Lookup(TF_Code code) {
+  DCHECK(singleton_ != nullptr) << 'Must call PyExceptionRegistry::Init() '
+                                   'before PyExceptionRegistry::Lookup()';
+  DCHECK_NE(code, TF_OK);
+  DCHECK(singleton_->exc_types_.find(code) != singleton_->exc_types_.end())
+      << 'Unknown error code passed to PyExceptionRegistry::Lookup: ' << code;
+  return singleton_->exc_types_[code];
 }
     
-    #endif  // 0
+      static const unsigned kMask = 0xf;  // Mask of all available flags.
     
-    // Helper function for implementing {EXPECT|ASSERT}_PRED5.  Don't use
-// this in your code.
-template <typename Pred,
-          typename T1,
-          typename T2,
-          typename T3,
-          typename T4,
-          typename T5>
-AssertionResult AssertPred5Helper(const char* pred_text,
-                                  const char* e1,
-                                  const char* e2,
-                                  const char* e3,
-                                  const char* e4,
-                                  const char* e5,
-                                  Pred pred,
-                                  const T1& v1,
-                                  const T2& v2,
-                                  const T3& v3,
-                                  const T4& v4,
-                                  const T5& v5) {
-  if (pred(v1, v2, v3, v4, v5)) return AssertionSuccess();
+    namespace stream_executor {
     }
     
-    // A concrete DeathTestFactory implementation for normal use.
-class DefaultDeathTestFactory : public DeathTestFactory {
- public:
-  virtual bool Create(const char* statement, const RE* regex,
-                      const char* file, int line, DeathTest** test);
-};
+      /// Destroy the Pix if there is one, freeing memory.
+  virtual void Clear();
     
-      // Generates a random number from [0, range).  Crashes if 'range' is
-  // 0 or greater than kMaxRange.
-  UInt32 Generate(UInt32 range);
+    #define UNLV_EXT  '.uzn'  // unlv zone file
     
-    template <typename T1>
-struct Types1 {
-  typedef T1 Head;
-  typedef Types0 Tail;
-};
-    
-    #include <string.h>
-    
-    
-    {  EXPECT_EQ(0u, s.Length());
+    // Deletes the box with the given index, and shuffles up the rest.
+// Recomputes the bounding box.
+void BoxWord::DeleteBox(int index) {
+  ASSERT_HOST(0 <= index && index < length_);
+  boxes_.remove(index);
+  --length_;
+  ComputeBoundingBox();
 }
     
-    #include <mxnet/op_attr_types.h>
-#include <mxnet/graph_attr_types.h>
-#include <mxnet/c_api.h>
-#include <nnvm/symbolic.h>
-#include <nnvm/op.h>
-#include <nnvm/graph.h>
-#include <vector>
-#include <atomic>
-#include <utility>
-#include <string>
-#include <unordered_map>
     
-    /*!
- * \brief assign the expression to out according to request
- * \param out the data to be assigned
- * \param req the assignment request
- * \param exp the expression
- * \tparam OType output type
- * \tparam Exp expression type
- */
-#define ASSIGN_DISPATCH(out, req, exp)  \
-  {                                     \
-    switch (req) {                      \
-      case kNullOp:                     \
-        break;                          \
-      case kWriteTo:                    \
-      case kWriteInplace:               \
-        (out) = (exp);                  \
-        break;                          \
-      case kAddTo:                      \
-        (out) += (exp);                 \
-        break;                          \
-      default:                          \
-        LOG(FATAL) << 'not reached';    \
-    }                                   \
+    {    ICOORD pt;
+    int halfwidth;
+  };
+  // Type holds the distance of each point from the fitted line and the point
+  // itself. Use of double allows integer distances from ICOORDs to be stored
+  // exactly, and also the floating point results from ConstrainedFit.
+  using DistPointPair = KDPairInc<double, ICOORD>;
+    
+    namespace leveldb {
+    }
+    
+      void DoDelete(ThreadState* thread, bool seq) {
+    RandomGenerator gen;
+    WriteBatch batch;
+    Status s;
+    for (int i = 0; i < num_; i += entries_per_batch_) {
+      batch.Clear();
+      for (int j = 0; j < entries_per_batch_; j++) {
+        const int k = seq ? i+j : (thread->rand.Next() % FLAGS_num);
+        char key[100];
+        snprintf(key, sizeof(key), '%016d', k);
+        batch.Delete(key);
+        thread->stats.FinishedSingleOp();
+      }
+      s = db_->Write(write_options_, &batch);
+      if (!s.ok()) {
+        fprintf(stderr, 'del error: %s\n', s.ToString().c_str());
+        exit(1);
+      }
+    }
   }
     
-    
-    {  Engine::Get()->PushSync([=](RunContext ctx){
-      ndout.CheckAndAlloc();
-      cv::Mat buf(ndsrc.shape()[0], ndsrc.shape()[1],
-                  dims[2] == 3 ? CV_8UC3 : CV_8U, ndsrc.data().dptr_);
-      cv::Mat dst(h, w, dims[2] == 3 ? CV_8UC3 : CV_8U, ndout.data().dptr_);
-      cv::resize(buf, dst, cv::Size(w, h), 0, 0, interpolation);
-      CHECK(!dst.empty());
-    }, ndout.ctx(), {ndsrc.var()}, {ndout.var()});
-  NDArray *tmp = new NDArray();
-  *tmp = ndout;
-  *out = tmp;
-  API_END();
-}
-    
-    #include <mxnet/base.h>
-#include <mxnet/io.h>
-#include <mxnet/ndarray.h>
-#include <dmlc/logging.h>
-#include <dmlc/parameter.h>
-#include <dmlc/timer.h>
-#include <mshadow/tensor.h>
-#include <utility>
-#include <string>
-#include <vector>
-#include '../common/utils.h'
-#include './image_iter_common.h'
-    
-    private:
-  APCCollection();
-  ~APCCollection();
-  static APCHandle::Pair WrapArray(APCHandle::Pair, CollectionType);
-    
-    
-    {///////////////////////////////////////////////////////////////////////////////
-}
-    
-      char** newargv_array = (char**)alloca(sizeof(char*) * (newargv.size() + 1));
-  for (unsigned i = 0; i < newargv.size(); i++) {
-    // printf('%s\n', newargv[i].data());
-    newargv_array[i] = (char *)newargv[i].data();
-  }
-  // NULL-terminate the argument array.
-  newargv_array[newargv.size()] = nullptr;
-    
-    #include 'hphp/runtime/base/stream-wrapper.h'
-#include 'hphp/runtime/base/runtime-error.h'
-    
-    template<typename F>
-void logPerfWarning(folly::StringPiece event, F fillCols) {
-  logPerfWarningImpl(event, 1, kDefaultPerfWarningRate, fillCols);
-}
-template<typename F>
-void logPerfWarning(folly::StringPiece event, int64_t rate, F fillCols) {
-  logPerfWarningImpl(event, 1, rate, fillCols);
-}
-    
-    bool Waves::initWithDuration(float duration, const Size& gridSize, unsigned int waves, float amplitude, bool horizontal, bool vertical)
-{
-    if (Grid3DAction::initWithDuration(duration, gridSize))
-    {
-        _waves = waves;
-        _amplitude = amplitude;
-        _amplitudeRate = 1.0f;
-        _horizontal = horizontal;
-        _vertical = vertical;
-    }
-    }
-    
-    ssize_t ActionManager::getNumberOfRunningActions() const
-{
-    ssize_t count = 0;
-    struct _hashElement* element = nullptr;
-    struct _hashElement* tmp = nullptr;
-    HASH_ITER(hh, _targets, element, tmp)
-    {
-        count += (element->actions ? element->actions->num : 0);
-    }
-    return count;
-}
-    
-    SplitRows* SplitRows::create(float duration, unsigned int nRows)
-{
-    SplitRows *action = new (std::nothrow) SplitRows();
-    }
-    
-        // Override
-    virtual ShatteredTiles3D* clone() const override;
-    virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    ShatteredTiles3D() {}
-    virtual ~ShatteredTiles3D() {}
-    
-     @since v0.99.2
- */
-class CC_DLL ActionTween : public ActionInterval
-{
-public:
-    /** 
-     * @brief Create and initializes the action with the property name (key), and the from and to parameters.
-     * @param duration The duration of the ActionTween. It's a value in seconds.
-     * @param key The key of property which should be updated.
-     * @param from The value of the specified property when the action begin.
-     * @param to The value of the specified property when the action end.
-     * @return If the creation success, return a pointer of ActionTween; otherwise, return nil.
-     */
-    static ActionTween* create(float duration, const std::string& key, float from, float to);
-    }
-    
-    
+    #endif  // STORAGE_LEVELDB_DB_DB_ITER_H_
 
     
-    TEST(FunctionRef, DefaultConstructAndAssign) {
-  FunctionRef<int(int, int)> fref;
-    }
-    
-    
-    {  FLAGS_minloglevel = prev;
+    void InternalFilterPolicy::CreateFilter(const Slice* keys, int n,
+                                        std::string* dst) const {
+  // We rely on the fact that the code in table.cc does not mind us
+  // adjusting keys[].
+  Slice* mkey = const_cast<Slice*>(keys);
+  for (int i = 0; i < n; i++) {
+    mkey[i] = ExtractUserKey(keys[i]);
+    // TODO(sanjay): Suppress dups?
+  }
+  user_policy_->CreateFilter(keys, n, dst);
 }
     
-    vector<detail::BenchmarkResult> resultsFromFile(const std::string& filename) {
-  string content;
-  readFile(filename.c_str(), content);
-  vector<detail::BenchmarkResult> ret;
-  benchmarkResultsFromDynamic(parseJson(content), ret);
-  return ret;
-}
+      const Comparator* user_comparator() const { return user_comparator_; }
     
-    #include <stdexcept>
     
-      /**
-   * Returns true 1/n of the time. If n == 0, always returns false
-   */
-  template <class RNG = ThreadLocalPRNG, class /* EnableIf */ = ValidRNG<RNG>>
-  static bool oneIn(uint32_t n, RNG&& rng) {
-    if (n == 0) {
+// Owned filenames have the form:
+//    dbname/CURRENT
+//    dbname/LOCK
+//    dbname/LOG
+//    dbname/LOG.old
+//    dbname/MANIFEST-[0-9]+
+//    dbname/[0-9]+.(log|sst|ldb)
+bool ParseFileName(const std::string& filename,
+                   uint64_t* number,
+                   FileType* type) {
+  Slice rest(filename);
+  if (rest == 'CURRENT') {
+    *number = 0;
+    *type = kCurrentFile;
+  } else if (rest == 'LOCK') {
+    *number = 0;
+    *type = kDBLockFile;
+  } else if (rest == 'LOG' || rest == 'LOG.old') {
+    *number = 0;
+    *type = kInfoLogFile;
+  } else if (rest.starts_with('MANIFEST-')) {
+    rest.remove_prefix(strlen('MANIFEST-'));
+    uint64_t num;
+    if (!ConsumeDecimalNumber(&rest, &num)) {
       return false;
     }
-    return rand32(0, n, rng) == 0;
+    if (!rest.empty()) {
+      return false;
+    }
+    *type = kDescriptorFile;
+    *number = num;
+  } else {
+    // Avoid strtoull() to keep filename format independent of the
+    // current locale
+    uint64_t num;
+    if (!ConsumeDecimalNumber(&rest, &num)) {
+      return false;
+    }
+    Slice suffix = rest;
+    if (suffix == Slice('.log')) {
+      *type = kLogFile;
+    } else if (suffix == Slice('.sst') || suffix == Slice('.ldb')) {
+      *type = kTableFile;
+    } else if (suffix == Slice('.dbtmp')) {
+      *type = kTempFile;
+    } else {
+      return false;
+    }
+    *number = num;
+  }
+  return true;
+}
+    
+      // Create a reader that will return log records from '*file'.
+  // '*file' must remain live while this Reader is in use.
+  //
+  // If 'reporter' is non-null, it is notified whenever some data is
+  // dropped due to a detected corruption.  '*reporter' must remain
+  // live while this Reader is in use.
+  //
+  // If 'checksum' is true, verify checksums if available.
+  //
+  // The Reader will start reading at the first record located at physical
+  // position >= initial_offset within the file.
+  Reader(SequentialFile* file, Reporter* reporter, bool checksum,
+         uint64_t initial_offset);
+    
+      // Create a writer that will append data to '*dest'.
+  // '*dest' must have initial length 'dest_length'.
+  // '*dest' must remain live while this Writer is in use.
+  Writer(WritableFile* dest, uint64_t dest_length);
+    
+    #include <string>
+#include 'leveldb/db.h'
+#include 'db/dbformat.h'
+#include 'db/skiplist.h'
+#include 'util/arena.h'
+    
+      bool operator == (const ExtensionManager_deregisterExtension_args & rhs) const
+  {
+    if (!(uuid == rhs.uuid))
+      return false;
+    return true;
+  }
+  bool operator != (const ExtensionManager_deregisterExtension_args &rhs) const {
+    return !(*this == rhs);
   }
     
-      explicit Options(
-      Format format_ = Format::ZLIB,
-      int windowSize_ = 15,
-      int memLevel_ = 8,
-      int strategy_ = Z_DEFAULT_STRATEGY)
-      : format(format_),
-        windowSize(windowSize_),
-        memLevel(memLevel_),
-        strategy(strategy_) {}
+    using namespace ::apache::thrift;
+using namespace ::apache::thrift::protocol;
+using namespace ::apache::thrift::transport;
+using namespace ::apache::thrift::server;
     
-    BOOST_FORCEINLINE void pause() BOOST_NOEXCEPT
+      std::string q2 =
+      R'(INSERT INTO test_table (username, age) VALUES ('joe', 25))';
+  QueryData d2;
+  Row row2_1;
+  row2_1['username'] = 'mike';
+  row2_1['age'] = '23';
+  d2.push_back(row2_1);
+  Row row2_2;
+  row2_2['username'] = 'matt';
+  row2_2['age'] = '24';
+  d2.push_back(row2_2);
+  Row row2_3;
+  row2_3['username'] = 'joe';
+  row2_3['age'] = '25';
+  d2.push_back(row2_3);
+  results.push_back(std::make_pair(q2, d2));
+    
+    namespace {
+    }
+    
+    class SQLPlugin : public Plugin {
+ public:
+  /// Run a SQL query string against the SQL implementation.
+  virtual Status query(const std::string& query,
+                       QueryData& results,
+                       bool use_cache) const = 0;
+    }
+    
+    namespace osquery {
+namespace cpu {
+    }
+    }
+    
+        // Build atlas
+    unsigned char* tex_pixels = NULL;
+    int tex_w, tex_h;
+    io.Fonts->GetTexDataAsRGBA32(&tex_pixels, &tex_w, &tex_h);
+    
+    #if ALLEGRO_HAS_CLIPBOARD
+static const char* ImGui_ImplAllegro5_GetClipboardText(void*)
 {
-#if defined(_MSC_VER) && (defined(_M_AMD64) || defined(_M_IX86))
-    _mm_pause();
-#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
-    __asm__ __volatile__('pause;');
-#endif
+    if (g_ClipboardTextData)
+        al_free(g_ClipboardTextData);
+    g_ClipboardTextData = al_get_clipboard_text(g_Display);
+    return g_ClipboardTextData;
 }
+    
+                ImGui::Begin('Hello, world!');                          // Create a window called 'Hello, world!' and append into it.
+    
+        // Backup DX state that will be modified to restore it afterwards (unfortunately this is very ugly looking and verbose. Close your eyes!)
+    struct BACKUP_DX10_STATE
+    {
+        UINT                        ScissorRectsCount, ViewportsCount;
+        D3D10_RECT                  ScissorRects[D3D10_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE];
+        D3D10_VIEWPORT              Viewports[D3D10_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE];
+        ID3D10RasterizerState*      RS;
+        ID3D10BlendState*           BlendState;
+        FLOAT                       BlendFactor[4];
+        UINT                        SampleMask;
+        UINT                        StencilRef;
+        ID3D10DepthStencilState*    DepthStencilState;
+        ID3D10ShaderResourceView*   PSShaderResource;
+        ID3D10SamplerState*         PSSampler;
+        ID3D10PixelShader*          PS;
+        ID3D10VertexShader*         VS;
+        D3D10_PRIMITIVE_TOPOLOGY    PrimitiveTopology;
+        ID3D10Buffer*               IndexBuffer, *VertexBuffer, *VSConstantBuffer;
+        UINT                        IndexBufferOffset, VertexBufferStride, VertexBufferOffset;
+        DXGI_FORMAT                 IndexBufferFormat;
+        ID3D10InputLayout*          InputLayout;
+    };
+    BACKUP_DX10_STATE old;
+    old.ScissorRectsCount = old.ViewportsCount = D3D10_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE;
+    ctx->RSGetScissorRects(&old.ScissorRectsCount, old.ScissorRects);
+    ctx->RSGetViewports(&old.ViewportsCount, old.Viewports);
+    ctx->RSGetState(&old.RS);
+    ctx->OMGetBlendState(&old.BlendState, old.BlendFactor, &old.SampleMask);
+    ctx->OMGetDepthStencilState(&old.DepthStencilState, &old.StencilRef);
+    ctx->PSGetShaderResources(0, 1, &old.PSShaderResource);
+    ctx->PSGetSamplers(0, 1, &old.PSSampler);
+    ctx->PSGetShader(&old.PS);
+    ctx->VSGetShader(&old.VS);
+    ctx->VSGetConstantBuffers(0, 1, &old.VSConstantBuffer);
+    ctx->IAGetPrimitiveTopology(&old.PrimitiveTopology);
+    ctx->IAGetIndexBuffer(&old.IndexBuffer, &old.IndexBufferFormat, &old.IndexBufferOffset);
+    ctx->IAGetVertexBuffers(0, 1, &old.VertexBuffer, &old.VertexBufferStride, &old.VertexBufferOffset);
+    ctx->IAGetInputLayout(&old.InputLayout);
+    
+        g_AttribLocationTex = glGetUniformLocation(g_ShaderHandle, 'Texture');
+    g_AttribLocationProjMtx = glGetUniformLocation(g_ShaderHandle, 'ProjMtx');
+    g_AttribLocationPosition = glGetAttribLocation(g_ShaderHandle, 'Position');
+    g_AttribLocationUV = glGetAttribLocation(g_ShaderHandle, 'UV');
+    g_AttribLocationColor = glGetAttribLocation(g_ShaderHandle, 'Color');
+    
+    namespace apollo {
+namespace planning {
+    }
+    }
+    
+    TEST(TestPiecewiseLinearConstraint, add_boundary) {
+  PiecewiseLinearConstraint constraint(10, 0.1);
+  std::vector<uint32_t> index_list;
+  std::vector<double> lower_bound;
+  std::vector<double> upper_bound;
+  for (uint32_t i = 0; i < 10; ++i) {
+    index_list.push_back(i);
+    lower_bound.push_back(1.0);
+    upper_bound.push_back(100.0);
+  }
+    }
+    
+    double Spline1dSeg::operator()(const double x) const { return spline_func_(x); }
+    
+    
+    {
+    {}  // namespace planning
+}  // namespace apollo
+
+    
+    #include 'modules/canbus/vehicle/gem/gem_message_manager.h'
+    
+    class GemVehicleFactoryTest : public ::testing::Test {
+ public:
+  virtual void SetUp() {
+    VehicleParameter parameter;
+    parameter.set_brand(VehicleParameter::GEM);
+    gem_factory_.SetVehicleParameter(parameter);
+  }
+  virtual void TearDown() {}
+    }
+    
+    
+    {    return head;
+}
+    
+    
+    {    return 0;
+}
+    
+    
+/// Recursive
+/// Time Complexity: O(n)
+/// Space Complexity: O(n)
+    
+    // Recursive
+// Time Complexity: O(n), n is the node number in the tree
+// Space Complexity: O(h), h is the height of the tree
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+    }
+    }
+    
+    
+    {    return 0;
+}
+    
+    
+int main() {
+    }
+    
+        TreeNode* root = new TreeNode(1);
+    root->right = new TreeNode(2);
+    root->right->left = new TreeNode(3);
+    vector<int> res = Solution().preorderTraversal(root);
+    print_vec(res);
+    
+    int main() {
+    }
