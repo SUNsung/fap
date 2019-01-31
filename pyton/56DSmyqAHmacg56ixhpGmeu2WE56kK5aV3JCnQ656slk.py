@@ -1,192 +1,228 @@
 
         
-          def _load_random_shard(self):
-    '''Randomly select a file and read it.'''
-    return self._load_shard(random.choice(self._all_shards))
-    
-      def __init__(self, test_data_name='wsc273'):
-    vocab_file = os.path.join(FLAGS.data_dir, 'vocab.txt')
-    self.vocab = utils.CharsVocabulary(vocab_file, 50)
-    assert test_data_name in ['pdp60', 'wsc273'], (
-        'Test data must be pdp60 or wsc273, got {}'.format(test_data_name))
-    self.test_data_name = test_data_name
-    
-      word_to_id = build_vocab(train_path)
-  train_data = _file_to_word_ids(train_path, word_to_id)
-  valid_data = _file_to_word_ids(valid_path, word_to_id)
-  test_data = _file_to_word_ids(test_path, word_to_id)
-  vocabulary = len(word_to_id)
-  return train_data, valid_data, test_data, vocabulary
-    
-      Args:
-    gen_logits: Generator logits.
-    gen_labels:  Labels for the correct token.
-    dis_predictions:  Discriminator predictions.
-    is_real_input:  Tensor indicating whether the label is present.
+        
+def create_app(test_config=None):
+    '''Create and configure an instance of the Flask application.'''
+    app = Flask(__name__, instance_relative_config=True)
+    app.config.from_mapping(
+        # a default secret that should be overridden by instance config
+        SECRET_KEY='dev',
+        # store the database in the instance folder
+        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+    )
     
     
-def create_gen_pretrain_op(hparams, cross_entropy_loss, global_step):
-  '''Create a train op for pretraining.'''
-  with tf.name_scope('pretrain_generator'):
-    optimizer = tf.train.AdamOptimizer(hparams.gen_pretrain_learning_rate)
-    gen_vars = [
-        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
-    ]
-    gen_grads = tf.gradients(cross_entropy_loss, gen_vars)
-    gen_grads_clipped, _ = tf.clip_by_global_norm(gen_grads,
-                                                  FLAGS.grad_clipping)
-    gen_pretrain_op = optimizer.apply_gradients(
-        zip(gen_grads_clipped, gen_vars), global_step=global_step)
-    return gen_pretrain_op
+class AuthActions(object):
+    def __init__(self, client):
+        self._client = client
     
-    tensorboard = TensorBoard(batch_size=batch_size,
-                          embeddings_freq=1,
-                          embeddings_layer_names=['features'],
-                          embeddings_metadata='metadata.tsv',
-                          embeddings_data=x_test)
+                def default(self, o):
+                try:
+                    iterable = iter(o)
+                except TypeError:
+                    pass
+                else:
+                    return list(iterable)
+                return JSONEncoder.default(self, o)
+        '''
+        if isinstance(o, datetime):
+            return http_date(o.utctimetuple())
+        if isinstance(o, date):
+            return http_date(o.timetuple())
+        if isinstance(o, uuid.UUID):
+            return str(o)
+        if hasattr(o, '__html__'):
+            return text_type(o.__html__())
+        return _json.JSONEncoder.default(self, o)
     
-        fpath = os.path.join(path, 'test')
-    x_test, y_test = load_batch(fpath, label_key=label_mode + '_labels')
+    from .globals import _request_ctx_stack, _app_ctx_stack
+from .signals import template_rendered, before_render_template
     
-        # Returns
-        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
-    '''
-    dirname = os.path.join('datasets', 'fashion-mnist')
-    base = 'http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/'
-    files = ['train-labels-idx1-ubyte.gz', 'train-images-idx3-ubyte.gz',
-             't10k-labels-idx1-ubyte.gz', 't10k-images-idx3-ubyte.gz']
+        def __exit__(self, exc_type, exc_value, tb):
+        self.preserve_context = False
     
+        #: The canonical way to decorate class-based views is to decorate the
+    #: return value of as_view().  However since this moves parts of the
+    #: logic from the class declaration to the place where it's hooked
+    #: into the routing system.
+    #:
+    #: You can place one or more decorators in this list and whenever the
+    #: view function is created the result is automatically decorated.
+    #:
+    #: .. versionadded:: 0.8
+    decorators = ()
     
-def test_preprocess_input_symbolic():
-    # Test image batch
-    x = np.random.uniform(0, 255, (2, 10, 10, 3))
-    inputs = Input(shape=x.shape[1:])
-    outputs = Lambda(utils.preprocess_input, output_shape=x.shape[1:])(inputs)
-    model = Model(inputs, outputs)
-    assert model.predict(x).shape == x.shape
-    
-    
-def test_categorical_hinge():
-    y_pred = K.variable(np.array([[0.3, 0.2, 0.1],
-                                  [0.1, 0.2, 0.7]]))
-    y_true = K.variable(np.array([[0, 1, 0],
-                                  [1, 0, 0]]))
-    expected_loss = ((0.3 - 0.2 + 1) + (0.7 - 0.1 + 1)) / 2.0
-    loss = K.eval(losses.categorical_hinge(y_true, y_pred))
-    assert np.isclose(expected_loss, np.mean(loss))
-    
-        # Arguments
-        units: Positive integer, dimensionality of the output space.
-        kernel_initializer: Initializer for the `kernel` weights matrix,
-            used for the linear transformation of the inputs.
-            (see [initializers](../initializers.md)).
-        unit_forget_bias: Boolean.
-            If True, add 1 to the bias of the forget gate at initialization.
-            Setting it to true will also force `bias_initializer='zeros'`.
-            This is recommended in [Jozefowicz et al. (2015)](
-            http://www.jmlr.org/proceedings/papers/v37/jozefowicz15.pdf).
-        recurrent_initializer: Initializer for the `recurrent_kernel`
-            weights matrix,
-            used for the linear transformation of the recurrent state.
-            (see [initializers](../initializers.md)).
-        bias_initializer: Initializer for the bias vector
-            (see [initializers](../initializers.md)).
-        kernel_regularizer: Regularizer function applied to
-            the `kernel` weights matrix
-            (see [regularizer](../regularizers.md)).
-        recurrent_regularizer: Regularizer function applied to
-            the `recurrent_kernel` weights matrix
-            (see [regularizer](../regularizers.md)).
-        bias_regularizer: Regularizer function applied to the bias vector
-            (see [regularizer](../regularizers.md)).
-        activity_regularizer: Regularizer function applied to
-            the output of the layer (its 'activation').
-            (see [regularizer](../regularizers.md)).
-        kernel_constraint: Constraint function applied to
-            the `kernel` weights matrix
-            (see [constraints](../constraints.md)).
-        recurrent_constraint: Constraint function applied to
-            the `recurrent_kernel` weights matrix
-            (see [constraints](../constraints.md)).
-        bias_constraint: Constraint function applied to the bias vector
-            (see [constraints](../constraints.md)).
-        return_sequences: Boolean. Whether to return the last output.
-            in the output sequence, or the full sequence.
-        return_state: Boolean. Whether to return the last state
-            in addition to the output.
-        stateful: Boolean (default False). If True, the last state
-            for each sample at index i in a batch will be used as initial
-            state for the sample of index i in the following batch.
-    '''
-    def __init__(self, units,
-                 kernel_initializer='glorot_uniform',
-                 recurrent_initializer='orthogonal',
-                 bias_initializer='zeros',
-                 unit_forget_bias=True,
-                 kernel_regularizer=None,
-                 recurrent_regularizer=None,
-                 bias_regularizer=None,
-                 activity_regularizer=None,
-                 kernel_constraint=None,
-                 recurrent_constraint=None,
-                 bias_constraint=None,
-                 return_sequences=False,
-                 return_state=False,
-                 stateful=False,
-                 **kwargs):
-        self.units = units
-        super(CuDNNLSTM, self).__init__(
-            return_sequences=return_sequences,
-            return_state=return_state,
-            stateful=stateful,
-            **kwargs)
-    
-        # Whereas if you specify the input shape, the model gets built continuously
-    # as you are adding layers:
-    model = Sequential()
-    model.add(Dense(32, input_shape=(500,)))
-    model.add(Dense(32))
-    model.weights  # returns list of length 4
-    
-    
-max_features = 20000
-# cut texts after this number of words
-# (among top max_features most common words)
-maxlen = 100
-batch_size = 32
-    
-    @section recognizers Recognizers
-    
-            Upon erroneous input '[]', the call chain is
-    
-    ### OUTPUT ###
-# Ellipse: 1
-# Ellipse: 2
-# Ellipse: 3
-# Ellipse: 4
-
-    
-    *TL;DR80
-Allows object composition to achieve the same code reuse as inheritance.
+        :copyright: © 2010 by the Pallets team.
+    :license: BSD, see LICENSE for more details.
 '''
     
-            # and can also be undone at will
-        for cmd in reversed(command_stack):
-            cmd.undo()
-    finally:
-        os.unlink('foo.txt')
+        proc.sendline(u'ehco test')
     
-        def __new__(cls, name, bases, attrs):
-        new_cls = type.__new__(cls, name, bases, attrs)
-        '''
-            Here the name of the class is used as key but it could be any class
-            parameter.
-        '''
-        cls.REGISTRY[new_cls.__name__] = new_cls
-        return new_cls
     
-        @property
-    def _lazy_property(self):
-        if not hasattr(self, attr):
-            setattr(self, attr, fn(self))
-        return getattr(self, attr)
+@pytest.mark.functional
+def test_without_confirmation(proc, TIMEOUT):
+    without_confirmation(proc, TIMEOUT)
+    
+    
+python_3 = ('thefuck/python3-zsh',
+            u'''FROM python:3
+                RUN apt-get update
+                RUN apt-get install -yy zsh''',
+            u'sh')
+    
+    
+@pytest.fixture
+def set_help(mocker):
+    mock = mocker.patch('subprocess.Popen')
+    
+    
+@pytest.mark.parametrize('command', [
+    Command('apt list --upgradable', no_match_output),
+    Command('sudo apt list --upgradable', no_match_output)
+])
+def test_not_match(command):
+    assert not match(command)
+    
+    
+# bdist_wheel
+extras_require = {
+    # http://wheel.readthedocs.io/en/latest/#defining-conditional-dependencies
+    'python_version == '3.0' or python_version == '3.1'': ['argparse>=1.2.1'],
+    ':sys_platform == 'win32'': ['colorama>=0.2.4'],
+}
+    
+    
+def patharg(path):
+    '''
+    Back slashes need to be escaped in ITEM args,
+    even in Windows paths.
+    
+    from httpie import ExitStatus
+from utils import http, HTTP_OK
+    
+    
+def test_unicode_headers_verbose(httpbin):
+    # httpbin doesn't interpret utf8 headers
+    r = http('--verbose', httpbin.url + '/headers', u'Test:%s' % UNICODE)
+    assert HTTP_OK in r
+    assert UNICODE in r
+    
+        def _get_path(self):
+        return os.path.join(self.directory, self.name + '.json')
+    
+    '''
+    
+            if state == 'absent':
+            if exists:
+                conn.delete_cache_subnet_group(group_name)
+                changed = True
+        else:
+            if not exists:
+                new_group = conn.create_cache_subnet_group(group_name, cache_subnet_group_description=group_description, subnet_ids=group_subnets)
+                changed = True
+            else:
+                changed_group = conn.modify_cache_subnet_group(group_name, cache_subnet_group_description=group_description, subnet_ids=group_subnets)
+                changed = True
+    
+        if not module.params.get('auth_token'):
+        module.fail_json(
+            msg='The 'auth_token' parameter or ' +
+            'ONEANDONE_AUTH_TOKEN environment variable is required.')
+    
+        for rule in desired_rules:
+        if rule not in current_rules:
+            additions += 1
+            if not module.check_mode:
+                gateway.add_nat_rule(**rule)
+            result['changed'] = True
+    result['rules_added'] = additions
+    
+    
+def get_schema_facts(cursor, schema=''):
+    facts = {}
+    cursor.execute('''
+        select schema_name, schema_owner, create_time
+        from schemata
+        where not is_system_schema and schema_name not in ('public', 'TxtIndex')
+        and (? = '' or schema_name ilike ?)
+    ''', schema, schema)
+    while True:
+        rows = cursor.fetchmany(100)
+        if not rows:
+            break
+        for row in rows:
+            facts[row.schema_name.lower()] = {
+                'name': row.schema_name,
+                'owner': row.schema_owner,
+                'create_time': str(row.create_time),
+                'usage_roles': [],
+                'create_roles': []}
+    cursor.execute('''
+        select g.object_name as schema_name, r.name as role_name,
+        lower(g.privileges_description) privileges_description
+        from roles r join grants g
+        on g.grantee_id = r.role_id and g.object_type='SCHEMA'
+        and g.privileges_description like '%USAGE%'
+        and g.grantee not in ('public', 'dbadmin')
+        and (? = '' or g.object_name ilike ?)
+    ''', schema, schema)
+    while True:
+        rows = cursor.fetchmany(100)
+        if not rows:
+            break
+        for row in rows:
+            schema_key = row.schema_name.lower()
+            if 'create' in row.privileges_description:
+                facts[schema_key]['create_roles'].append(row.role_name)
+            else:
+                facts[schema_key]['usage_roles'].append(row.role_name)
+    return facts
+    
+    
+class DNSZoneIPAClient(IPAClient):
+    def __init__(self, module, host, port, protocol):
+        super(DNSZoneIPAClient, self).__init__(module, host, port, protocol)
+    
+    '''
+    
+    
+def main():
+    module = AnsibleModule(
+        argument_spec=dict(
+            path=dict(required=True),
+            state=dict(default='present', choices=['present', 'followed', 'absent', 'unfollowed']),
+            name=dict(required=False, default=None, type='str'),
+            logtype=dict(required=False, default=None, type='str', aliases=['type'])
+        ),
+        supports_check_mode=True
+    )
+    
+    - CommonTokenStream: A basic and most commonly used TokenStream
+  implementation.
+- TokenRewriteStream: A modification of CommonTokenStream that allows the
+  stream to be altered (by the Parser). See the 'tweak' example for a usecase.
+    
+    	# The current Token when an error occurred.  Since not all streams
+	# can retrieve the ith Token, we have to track the Token object.
+	# For parsers.  Even when it's a tree parser, token might be set.
+        self.token = None
+    
+    
+MOD_SSL_CONF_DEST = 'options-ssl-nginx.conf'
+'''Name of the mod_ssl config file as saved in `IConfig.config_dir`.'''
+    
+        def test_decode_wrong(self):
+        self.assertRaises(jose.DeserializationError, self.field.decode, 'y')
+    
+        def __hash__(self):
+        return hash((self.filep, self.path,
+                     tuple(self.addrs), tuple(self.get_names()),
+                     self.ssl, self.enabled, self.modmacro))
+    
+        def test_nonexistent_generic(self):
+        with mock.patch('certbot.util.get_os_info') as mock_info:
+            mock_info.return_value = ('nonexistent', 'irrelevant')
+            with mock.patch('certbot.util.get_systemd_os_like') as mock_like:
+                mock_like.return_value = ['unknonwn']
+                self.assertEqual(entrypoint.get_configurator(),
+                                 configurator.ApacheConfigurator)
