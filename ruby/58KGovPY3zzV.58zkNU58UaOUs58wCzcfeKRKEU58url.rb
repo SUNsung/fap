@@ -1,11 +1,14 @@
 
         
-          def set_statuses
-    return unless page_requested?
+                render template: 'admin/reports/show'
+      end
+    end
     
-        private
-    
-        active_session.update!(web_push_subscription: web_subscription)
-    
-        define_method provider do
-      @user = User.find_for_oauth(request.env['omniauth.auth'], current_user)
+          def process_job(job)
+        worker = new
+        worker.jid = job['jid']
+        worker.bid = job['bid'] if worker.respond_to?(:bid=)
+        Sidekiq::Testing.server_middleware.invoke(worker, job, job['queue']) do
+          execute_job(worker, job['args'])
+        end
+      end
