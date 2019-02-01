@@ -1,106 +1,99 @@
 
         
-          it 'can throw an object' do
-    lambda {
-      obj = Object.new
-      catch obj do
-        throw obj
+        
+  def dprint(msg)
+    self.client.dprint(msg)
+  end
+    
+              # Encodes the end_time field
+          #
+          # @return [String]
+          def encode_end_time
+            [end_time].pack('N')
+          end
+    
+              # Decodes the flags field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_flags(input)
+            input.value[0].value.to_i
+          end
+    
+              # Encodes the value field
+          #
+          # @return [OpenSSL::ASN1::OctetString]
+          def encode_value
+            OpenSSL::ASN1::OctetString.new(value)
+          end
+        end
       end
-    }.should_not raise_error(NameError)
+    end
   end
 end
     
-      it 'does not append line-end if last character is line-end' do
-    lambda {
-      $VERBOSE = true
-      warn('this is some simple text with line-end\n')
-    }.should output(nil, 'this is some simple text with line-end\n')
-  end
+              # Decodes a Rex::Proto::Kerberos::Model::KdcRequest
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode_asn1(input)
+            input.value[0].value.each do |val|
+              case val.tag
+              when 1
+                self.pvno = decode_asn1_pvno(val)
+              when 2
+                self.msg_type = decode_asn1_msg_type(val)
+              when 3
+                self.pa_data  = decode_asn1_pa_data(val)
+              when 4
+                self.req_body = decode_asn1_req_body(val)
+              else
+                raise ::RuntimeError, 'Failed to decode KdcRequest SEQUENCE'
+              end
+            end
+          end
     
-        BUNDLE_DIR = ::File.join(LOGSTASH_HOME, 'vendor', 'bundle')
-    GEMFILE_PATH = ::File.join(LOGSTASH_HOME, 'Gemfile')
-    LOCAL_GEM_PATH = ::File.join(LOGSTASH_HOME, 'vendor', 'local_gems')
-    CACHE_PATH = ::File.join(LOGSTASH_HOME, 'vendor', 'cache')
-    LOCKFILE = Pathname.new(::File.join(LOGSTASH_HOME, 'Gemfile.lock'))
-    GEMFILE = Pathname.new(::File.join(LOGSTASH_HOME, 'Gemfile'))
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of a Kerberos KDC-REQ-BODY (request body) data
+        # definition
+        class KdcRequestBody < Element
+          # @!attribute options
+          #   @return [Integer] The ticket flags
+          attr_accessor :options
+          # @!attribute cname
+          #   @return [Rex::Proto::Kerberos::Model::PrincipalName] The name part of the client's principal identifier
+          attr_accessor :cname
+          # @!attribute realm
+          #   @return [String] The realm part of the server's principal identifier
+          attr_accessor :realm
+          # @!attribute sname
+          #   @return [Rex::Proto::Kerberos::Model::PrincipalName] The name part of the server's identity
+          attr_accessor :sname
+          # @!attribute from
+          #   @return [Time] Start time when the ticket is to be postdated
+          attr_accessor :from
+          # @!attribute till
+          #   @return [Time] Expiration date requested by the client
+          attr_accessor :till
+          # @!attribute rtime
+          #   @return [Time] Optional requested renew-till time
+          attr_accessor :rtime
+          # @!attribute nonce
+          #   @return [Integer] random number
+          attr_accessor :nonce
+          # @!attribute etype
+          #   @return [Array<Integer>] The desired encryption algorithm to be used in the response
+          attr_accessor :etype
+          # @!attribute enc_auth_data
+          #   @return [Rex::Proto::Kerberos::Model::EncryptedData] An encoding of the desired authorization-data encrypted
+          attr_accessor :enc_auth_data
     
-            if explicit_plugins.any? { |spec| filename =~ /^#{spec.name}/ }
-          FileUtils.mv(gem_file, ::File.join(explicit_path, filename))
-        else
-          FileUtils.mv(gem_file, ::File.join(dependencies_path, filename))
-        end
-      end
-    end
-    
-        puts('Unpacking #{package_file}')
-    
-        desc 'Halt all VM's involved in the acceptance test round'
-    task :halt, :platform do |t, args|
-      config   = PlatformConfig.new
-      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
-      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
-    
-            def after_update_attributes
-          if params[:order] && params[:order][:coupon_code].present?
-            handler = PromotionHandler::Coupon.new(@order)
-            handler.apply
-    
-            def taxonomies
-          @taxonomies = Taxonomy.accessible_by(current_ability, :read).order('name').includes(root: :children).
-                        ransack(params[:q]).result.
-                        page(params[:page]).per(params[:per_page])
-        end
-    
-            def show
-          respond_with(user)
-        end
-    
-            def show
-          respond_with(zone)
-        end
-    
-        def render(context)
-      if parts = @text.match(/([a-zA-Z\d]*) (.*)/)
-        gist, file = parts[1].strip, parts[2].strip
-      else
-        gist, file = @text.strip, ''
-      end
-      if gist.empty?
-        ''
-      else
-        script_url = script_url_for gist, file
-        code       = get_cached_gist(gist, file) || get_gist_from_web(gist, file)
-        html_output_for script_url, code
-      end
-    end
-    
-    Liquid::Template.register_tag('img', Jekyll::ImageTag)
-
-    
-      expansion(:inspection) {
-    {
-      :inspected => o.inspected == 1 ? true : false,
-      :spam => o.spam == 1 ? true : false,
-      :spam_score => o.spam_score.to_f,
-      :threat => o.threat == 1 ? true : false,
-      :threat_details => o.threat_details
-    }
-  }
-    
-      def destroy
-    @http_endpoint.destroy
-    redirect_to_with_json [organization, @server, :http_endpoints]
-  end
-    
-      include WithinOrganization
-    
-        if @user.save
-      if email_changed
-        redirect_to_with_json verify_path(:return_to => settings_path), :notice => 'Your settings have been updated successfully. As you've changed, your e-mail address you'll need to verify it before you can continue.'
-      else
-        redirect_to_with_json settings_path, :notice => 'Your settings have been updated successfully.'
-      end
-    else
-      render_form_errors 'edit', @user
-    end
-  end
+              # @!attribute type
+          #   @return [Integer] The type of value
+          attr_accessor :type
+          # @!attribute value
+          #   @return [Time] the time of the last request
+          attr_accessor :value
