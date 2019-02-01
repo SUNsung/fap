@@ -1,203 +1,180 @@
 
         
-        
-class Environment(object):
+            auth.login()
+    # current user can't modify other user's post
+    assert client.post('/1/update').status_code == 403
+    assert client.post('/1/delete').status_code == 403
+    # current user doesn't see edit link
+    assert b'href='/1/update'' not in client.get('/').data
+    
+        def __init__(self, request, key):
+        form_matches = request.form.getlist(key)
+        buf = ['You tried to access the file '%s' in the request.files '
+               'dictionary but it does not exist.  The mimetype for the request '
+               'is '%s' instead of 'multipart/form-data' which means that no '
+               'file contents were transmitted.  To fix this error you should '
+               'provide enctype='multipart/form-data' in your form.' %
+               (key, request.mimetype)]
+        if form_matches:
+            buf.append('\n\nThe browser instead transmitted some file names. '
+                       'This was submitted: %s' % ', '.join(''%s'' % x
+                            for x in form_matches))
+        self.msg = ''.join(buf)
+    
+    This typically means that you attempted to use functionality that needed
+an active HTTP request.  Consult the documentation on testing for
+information about how to avoid this problem.\
+'''
+_app_ctx_err_msg = '''\
+Working outside of application context.
+    
+        def _get_source_explained(self, environment, template):
+        attempts = []
+        trv = None
+    
+    
+class MethodView(with_metaclass(MethodViewType, View)):
+    '''A class-based view that dispatches request methods to the corresponding
+    class methods. For example, if you implement a ``get`` method, it will be
+    used to handle ``GET`` requests. ::
+    
+        class LimitedLoader(object):
+        def __init__(self, loader):
+            self.loader = loader
+    
+            return new_key
+
+    
+    
+class QuadraticProbing(HashTable):
     '''
-    Information about the execution context
-    (standard streams, config directory, etc).
+        Basic Hash Table example with open addressing using Quadratic Probing 
+    '''
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
     
-                yield line.decode(self.msg.encoding) \
-                      .encode(self.output_encoding, 'replace') + lf
+    def longestSub(ARRAY): 			#This function is recursive
+	
+	ARRAY_LENGTH = len(ARRAY)
+	if(ARRAY_LENGTH <= 1):  	#If the array contains only one element, we return it (it's the stop condition of recursion)
+		return ARRAY
+								#Else
+	PIVOT=ARRAY[0]
+	isFound=False
+	i=1
+	LONGEST_SUB=[]
+	while(not isFound and i<ARRAY_LENGTH):
+		if (ARRAY[i] < PIVOT):
+			isFound=True
+			TEMPORARY_ARRAY = [ element for element in ARRAY[i:] if element >= ARRAY[i] ]
+			TEMPORARY_ARRAY = longestSub(TEMPORARY_ARRAY)
+			if ( len(TEMPORARY_ARRAY) > len(LONGEST_SUB) ):
+				LONGEST_SUB = TEMPORARY_ARRAY
+		else:
+			i+=1
     
-        def __init__(self, **kwargs):
-        '''
-        :param env: an class:`Environment` instance
-        :param kwargs: additional keyword argument that some
-                       processor might require.
-    
-        >>> humanize_bytes(1)
-    '1 B'
-    >>> humanize_bytes(1024, precision=1)
-    '1.0 kB'
-    >>> humanize_bytes(1024 * 123, precision=1)
-    '123.0 kB'
-    >>> humanize_bytes(1024 * 12342, precision=1)
-    '12.1 MB'
-    >>> humanize_bytes(1024 * 12342, precision=2)
-    '12.05 MB'
-    >>> humanize_bytes(1024 * 1234, precision=2)
-    '1.21 MB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
-    '1.31 GB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
-    '1.3 GB'
-    
-    
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
-    )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
-
-    
-    
-def test_unicode_digest_auth(httpbin):
-    # it doesn't really authenticate us because httpbin
-    # doesn't interpret the utf8-encoded auth
-    http('--auth-type=digest',
-         '--auth', u'test:%s' % UNICODE,
-         httpbin.url + u'/digest-auth/auth/test/' + UNICODE)
-
-    
-    from httpie.input import ParseError
-from utils import MockEnvironment, http, HTTP_OK
-from fixtures import FILE_PATH_ARG, FILE_PATH, FILE_CONTENT
-    
-        state = module.params.get('state')
-    group_name = module.params.get('name').lower()
-    group_description = module.params.get('description')
-    group_subnets = module.params.get('subnets') or {}
-    
-    updated:
-   description: Boolean field to denote an update has occurred.
-   returned: When an update has occurred.
-   type: bool
-   sample: True
+    The problem is  :
+Given an array, to find the longest and continuous sub array and get the max sum of the sub array in the given array.
 '''
-try:
-    from ast import literal_eval
-    HAS_PYTHON26 = True
-except ImportError:
-    HAS_PYTHON26 = False
+from __future__ import print_function
     
-    from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.heroku import HerokuHelper
+    	currPos = 0
+	while currPos < len(bitString):
+		currPart = bitString[currPos:currPos+512]
+		mySplits = []
+		for i in range(16):
+			mySplits.append(int(rearrange(currPart[32*i:32*i+32]),2))
+		yield mySplits
+		currPos += 512
+    
+        freqPairs = list(freqToLetter.items())
+    freqPairs.sort(key = getItemAtIndexZero, reverse = True)
+    
+        # Max pooling is performed prior to the first stage (which is uniquely
+    # distinguished by dim_in = 64), thus we keep stride = 1 for the first stage
+    stride = stride_init if (
+        dim_in != dim_out and dim_in != 64 and dilation == 1
+    ) else 1
+    
+        def AddLosses(self, losses):
+        if not isinstance(losses, list):
+            losses = [losses]
+        # Conversion to str allows losses to include BlobReferences
+        losses = [c2_utils.UnscopeName(str(l)) for l in losses]
+        self.losses = list(set(self.losses + losses))
+    
+            if model.train:
+            loss_gradients = {}
+            for lg in head_loss_gradients.values():
+                if lg is not None:
+                    loss_gradients.update(lg)
+            return loss_gradients
+        else:
+            return None
     
     
-if __name__ == '__main__':
-    main()
-
+# ---------------------------------------------------------------------------- #
+# RPN and Faster R-CNN outputs and losses
+# ---------------------------------------------------------------------------- #
     
-        ipa_dnszone = client.dnszone_find(zone_name)
-    
-    # Create nested groups
-- group_by:
-    key: el{{ ansible_distribution_major_version }}-{{ ansible_architecture }}
-    parents:
-      - el{{ ansible_distribution_major_version }}
-    
-        def decode(self, value):
-        if value != self.resource_type:
-            raise jose.DeserializationError(
-                'Wrong resource type: {0} instead of {1}'.format(
-                    value, self.resource_type))
-        return value
-
-    
-    
-if __name__ == '__main__':
-    unittest.main()  # pragma: no cover
-
-    
-    The JWS implementation in josepy only implements the base JOSE standard. In
-order to support the new header fields defined in ACME, this module defines some
-ACME-specific classes that layer on top of josepy.
-'''
-import josepy as jose
-    
-        def test_jwk_serialize(self):
-        from acme.jws import JWS
-        jws = JWS.sign(payload=b'foo', key=self.privkey,
-                       alg=jose.RS256, nonce=self.nonce,
-                       url=self.url)
-        self.assertEqual(jws.signature.combined.kid, None)
-        self.assertEqual(jws.signature.combined.jwk, self.pubkey)
-    
+        def forward(self, inputs, outputs):
+        '''See modeling.detector.GenerateProposalLabels for inputs/outputs
+        documentation.
         '''
-    return_vars = {}
-    # Get list of words in the variable
-    a_opts = util.get_var_from_file(varname, filepath).split()
-    for i, v in enumerate(a_opts):
-        # Handle Define statements and make sure it has an argument
-        if v == '-D' and len(a_opts) >= i+2:
-            var_parts = a_opts[i+1].partition('=')
-            return_vars[var_parts[0]] = var_parts[2]
-        elif len(v) > 2 and v.startswith('-D'):
-            # Found var with no whitespace separator
-            var_parts = v[2:].partition('=')
-            return_vars[var_parts[0]] = var_parts[2]
-    return return_vars
+        # During training we reuse the data loader code. We populate roidb
+        # entries on the fly using the rois generated by RPN.
+        # im_info: [[im_height, im_width, im_scale], ...]
+        rois = inputs[0].data
+        roidb = blob_utils.deserialize(inputs[1].data)
+        im_info = inputs[2].data
+        im_scales = im_info[:, 2]
+        output_blob_names = fast_rcnn_roi_data.get_fast_rcnn_blob_names()
+        # For historical consistency with the original Faster R-CNN
+        # implementation we are *not* filtering crowd proposals.
+        # This choice should be investigated in the future (it likely does
+        # not matter).
+        json_dataset.add_proposals(roidb, rois, im_scales, crowd_thresh=0)
+        roidb_utils.add_bbox_regression_targets(roidb)
+        blobs = {k: [] for k in output_blob_names}
+        fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
+        for i, k in enumerate(output_blob_names):
+            blob_utils.py_op_copy_blob(blobs[k], outputs[i])
+
     
-            :param int rollback: Number of checkpoints to revert
     
-            :param str port: Desired port
+def test_match():
+    cases = [
+        (None, b'\xc0'),
+        (False, b'\xc2'),
+        (True, b'\xc3'),
+        (0, b'\x00'),
+        (127, b'\x7f'),
+        (128, b'\xcc\x80'),
+        (256, b'\xcd\x01\x00'),
+        (-1, b'\xff'),
+        (-33, b'\xd0\xdf'),
+        (-129, b'\xd1\xff\x7f'),
+        ({1: 1}, b'\x81\x01\x01'),
+        (1.0, b'\xcb\x3f\xf0\x00\x00\x00\x00\x00\x00'),
+        ((), b'\x90'),
+        (tuple(range(15)), (b'\x9f\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09'
+                            b'\x0a\x0b\x0c\x0d\x0e')),
+        (tuple(range(16)), (b'\xdc\x00\x10\x00\x01\x02\x03\x04\x05\x06\x07'
+                            b'\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f')),
+        ({}, b'\x80'),
+        ({x: x for x in range(15)},
+         (b'\x8f\x00\x00\x01\x01\x02\x02\x03\x03\x04\x04\x05\x05\x06\x06\x07'
+          b'\x07\x08\x08\t\t\n\n\x0b\x0b\x0c\x0c\r\r\x0e\x0e')),
+        ({x: x for x in range(16)},
+         (b'\xde\x00\x10\x00\x00\x01\x01\x02\x02\x03\x03\x04\x04\x05\x05\x06'
+          b'\x06\x07\x07\x08\x08\t\t\n\n\x0b\x0b\x0c\x0c\r\r\x0e\x0e'
+          b'\x0f\x0f')),
+    ]
     
-            self.setup_variables()
-        # This needs to happen after due to setup_variables not being run
-        # until after
-        self.parser.parse_modules()  # pylint: disable=protected-access
+            # object
+        exp = pd.Index([pd.Timestamp('2011-01-01 09:00'), 'x',
+                        pd.Timestamp('2011-01-01 11:00')], dtype=object)
+        tm.assert_index_equal(idx.fillna('x'), exp)
     
-        @property
-    def name(self):
-        '''Return the name of the device.'''
-        return 'flic_{}'.format(self.address.replace(':', ''))
-    
-            # doing a request
-        try:
-            res = requests.get(self._url, timeout=10, cookies={
-                'userid': self._userid
-            })
-        except requests.exceptions.Timeout:
-            _LOGGER.error(
-                'Connection to the router timed out at URL %s', self._url)
-            return False
-        if res.status_code != 200:
-            _LOGGER.error(
-                'Connection failed with http code %s', res.status_code)
-            return False
-        try:
-            result = res.json()
-        except ValueError:
-            # If json decoder could not parse the response
-            _LOGGER.error('Failed to parse response from router')
-            return False
-    
-    CONFIG_SCHEMA = vol.Schema({
-    DOMAIN: vol.Schema({
-        vol.Required(CONF_API_KEY): cv.string,
-        vol.Required(CONF_URL): cv.string,
-        vol.Required(CONF_INPUTNODE): cv.positive_int,
-        vol.Required(CONF_WHITELIST): cv.entity_ids,
-        vol.Optional(CONF_SCAN_INTERVAL, default=30): cv.positive_int,
-    }),
-}, extra=vol.ALLOW_EXTRA)
-    
-            def process(self, event):
-            '''On Watcher event, fire HA event.'''
-            _LOGGER.debug('process(%s)', event)
-            if not event.is_directory:
-                folder, file_name = os.path.split(event.src_path)
-                self.hass.bus.fire(
-                    DOMAIN, {
-                        'event_type': event.event_type,
-                        'path': event.src_path,
-                        'file': file_name,
-                        'folder': folder,
-                        })
-    
-        def send_sms_service(service):
-        '''Service to send sms from devices.'''
-        send_sms(device_id=device_id,
-                 device_ids=device_ids,
-                 device_names=device_names,
-                 sms_number=service.data.get('number'),
-                 sms_text=service.data.get('message'),
-                 api_key=api_key)
-    
-    DEFAULT_HOST = '0.0.0.0'
-DEFAULT_PORT = 65432
+            exp2 = ('0   1 days\n'
+                'dtype: timedelta64[ns]')
