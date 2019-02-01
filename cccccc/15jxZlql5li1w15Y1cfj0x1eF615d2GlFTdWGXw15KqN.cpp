@@ -1,276 +1,412 @@
 
         
-        // Computes and returns the dot product of the n-vectors u and v.
-// Uses Intel AVX intrinsics to access the SIMD instruction set.
-double DotProductAVX(const double* u, const double* v, int n) {
-  int max_offset = n - 4;
-  int offset = 0;
-  // Accumulate a set of 4 sums in sum, by loading pairs of 4 values from u and
-  // v, and multiplying them together in parallel.
-  __m256d sum = _mm256_setzero_pd();
-  if (offset <= max_offset) {
-    offset = 4;
-    // Aligned load is reputedly faster but requires 32 byte aligned input.
-    if ((reinterpret_cast<uintptr_t>(u) & 31) == 0 &&
-        (reinterpret_cast<uintptr_t>(v) & 31) == 0) {
-      // Use aligned load.
-      __m256d floats1 = _mm256_load_pd(u);
-      __m256d floats2 = _mm256_load_pd(v);
-      // Multiply.
-      sum = _mm256_mul_pd(floats1, floats2);
-      while (offset <= max_offset) {
-        floats1 = _mm256_load_pd(u + offset);
-        floats2 = _mm256_load_pd(v + offset);
-        offset += 4;
-        __m256d product = _mm256_mul_pd(floats1, floats2);
-        sum = _mm256_add_pd(sum, product);
-      }
-    } else {
-      // Use unaligned load.
-      __m256d floats1 = _mm256_loadu_pd(u);
-      __m256d floats2 = _mm256_loadu_pd(v);
-      // Multiply.
-      sum = _mm256_mul_pd(floats1, floats2);
-      while (offset <= max_offset) {
-        floats1 = _mm256_loadu_pd(u + offset);
-        floats2 = _mm256_loadu_pd(v + offset);
-        offset += 4;
-        __m256d product = _mm256_mul_pd(floats1, floats2);
-        sum = _mm256_add_pd(sum, product);
-      }
-    }
-  }
-  // Add the 4 product sums together horizontally. Not so easy as with sse, as
-  // there is no add across the upper/lower 128 bit boundary, so permute to
-  // move the upper 128 bits to lower in another register.
-  __m256d sum2 = _mm256_permute2f128_pd(sum, sum, 1);
-  sum = _mm256_hadd_pd(sum, sum2);
-  sum = _mm256_hadd_pd(sum, sum);
-  double result;
-  // _mm256_extract_f64 doesn't exist, but resist the temptation to use an sse
-  // instruction, as that introduces a 70 cycle delay. All this casting is to
-  // fool the intrinsics into thinking we are extracting the bottom int64.
-  auto cast_sum = _mm256_castpd_si256(sum);
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored '-Wstrict-aliasing'
-  *(reinterpret_cast<int64_t*>(&result)) =
-#if defined(_WIN32) || defined(__i386__)
-      // This is a very simple workaround that is activated
-      // for all platforms that do not have _mm256_extract_epi64.
-      // _mm256_extract_epi64(X, Y) == ((uint64_t*)&X)[Y]
-      ((uint64_t*)&cast_sum)[0]
-#else
-      _mm256_extract_epi64(cast_sum, 0)
-#endif
-      ;
-#pragma GCC diagnostic pop
-  while (offset < n) {
-    result += u[offset] * v[offset];
-    ++offset;
-  }
-  return result;
-}
+            float alpha, beta;
+    float32x4_t v_alpha, v_beta;
     
-    void Tesseract::PrerecAllWordsPar(const GenericVector<WordData>& words) {
-  // Prepare all the blobs.
-  GenericVector<BlobData> blobs;
-  for (int w = 0; w < words.size(); ++w) {
-    if (words[w].word->ratings != nullptr &&
-        words[w].word->ratings->get(0, 0) == nullptr) {
-      for (int s = 0; s < words[w].lang_words.size(); ++s) {
-        Tesseract* sub = s < sub_langs_.size() ? sub_langs_[s] : this;
-        const WERD_RES& word = *words[w].lang_words[s];
-        for (int b = 0; b < word.chopped_word->NumBlobs(); ++b) {
-          blobs.push_back(BlobData(b, sub, word));
+                for (; j < size.width; j++)
+                dst[j] = internal::saturate_cast<s16>((s32)src0[j] + (s32)src1[j]);
         }
-      }
+        else
+        {
+            for (; j < roiw16; j += 16)
+            {
+                internal::prefetch(src0 + j);
+                internal::prefetch(src1 + j);
+                uint8x16_t v_src0 = vld1q_u8(src0 + j);
+                int16x8_t v_src00 = vreinterpretq_s16_u16(vmovl_u8(vget_low_u8(v_src0)));
+                int16x8_t v_src01 = vreinterpretq_s16_u16(vmovl_u8(vget_high_u8(v_src0)));
+                int16x8_t v_src10 = vld1q_s16(src1 + j), v_src11 = vld1q_s16(src1 + j + 8);
+                int16x8_t v_dst0 = vaddq_s16(v_src00, v_src10);
+                int16x8_t v_dst1 = vaddq_s16(v_src01, v_src11);
+                vst1q_s16(dst + j, v_dst0);
+                vst1q_s16(dst + j + 8, v_dst1);
+            }
+            for (; j < roiw8; j += 8)
+            {
+                int16x8_t v_src0 = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(src0 + j)));
+                int16x8_t v_src1 = vld1q_s16(src1 + j);
+                int16x8_t v_dst = vaddq_s16(v_src0, v_src1);
+                vst1q_s16(dst + j, v_dst);
+            }
+    
+    
+    {
+    {        for (; j < size.width; j++)
+        {
+            dst[j] = ~src[j];
+        }
     }
-  }
-  // Pre-classify all the blobs.
-  if (tessedit_parallelize > 1) {
-#ifdef _OPENMP
-#pragma omp parallel for num_threads(10)
-#endif  // _OPENMP
-    for (int b = 0; b < blobs.size(); ++b) {
-      *blobs[b].choices =
-          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
-    }
-  } else {
-    // TODO(AMD) parallelize this.
-    for (int b = 0; b < blobs.size(); ++b) {
-      *blobs[b].choices =
-          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
-    }
-  }
+#else
+    (void)size;
+    (void)srcBase;
+    (void)srcStride;
+    (void)dstBase;
+    (void)dstStride;
+#endif
 }
     
-    // Main entry point for Paragraph Detection Algorithm.
-//
-// Given a set of equally spaced textlines (described by row_infos),
-// Split them into paragraphs.  See http://goto/paragraphstalk
-//
-// Output:
-//   row_owners - one pointer for each row, to the paragraph it belongs to.
-//   paragraphs - this is the actual list of PARA objects.
-//   models - the list of paragraph models referenced by the PARA objects.
-//            caller is responsible for deleting the models.
-void DetectParagraphs(int debug_level,
-                      GenericVector<RowInfo> *row_infos,
-                      GenericVector<PARA *> *row_owners,
-                      PARA_LIST *paragraphs,
-                      GenericVector<ParagraphModel *> *models);
+        ptrdiff_t width = (ptrdiff_t)size.width, height = (ptrdiff_t)size.height;
+    static const vshrq_s32_func vshrq_s32_a[33] =
+    {
+        vshrq_s32<0>,
+        vshrq_s32<1>,
+        vshrq_s32<2>,
+        vshrq_s32<3>,
+        vshrq_s32<4>,
+        vshrq_s32<5>,
+        vshrq_s32<6>,
+        vshrq_s32<7>,
+        vshrq_s32<8>,
+        vshrq_s32<9>,
+        vshrq_s32<10>,
+        vshrq_s32<11>,
+        vshrq_s32<12>,
+        vshrq_s32<13>,
+        vshrq_s32<14>,
+        vshrq_s32<15>,
+        vshrq_s32<16>,
+        vshrq_s32<17>,
+        vshrq_s32<18>,
+        vshrq_s32<19>,
+        vshrq_s32<20>,
+        vshrq_s32<21>,
+        vshrq_s32<22>,
+        vshrq_s32<23>,
+        vshrq_s32<24>,
+        vshrq_s32<25>,
+        vshrq_s32<26>,
+        vshrq_s32<27>,
+        vshrq_s32<28>,
+        vshrq_s32<29>,
+        vshrq_s32<30>,
+        vshrq_s32<31>,
+        vshrq_s32<32>
+    };
+    vshrq_s32_func vshrq_s32_p = vshrq_s32_a[scale];
     
-      // Try to adjust the blamer bundle.
-  if (orig_bb != nullptr) {
-    // TODO(rays) Looks like a leak to me.
-    // orig_bb should take, rather than copy.
-    word->blamer_bundle = new BlamerBundle();
-    word2->blamer_bundle = new BlamerBundle();
-    orig_bb->SplitBundle(chopped->blobs.back()->bounding_box().right(),
-                         word2->chopped_word->blobs[0]->bounding_box().left(),
-                         wordrec_debug_blamer,
-                         word->blamer_bundle, word2->blamer_bundle);
-  }
-    
-    // Creates a box file string from a unichar string, TBOX and page number.
-void MakeBoxFileStr(const char* unichar_str, const TBOX& box, int page_num,
-                    STRING* box_str);
-    
-    template <class A1> class TessCallback1;
-    
-    CallCredentials::CallCredentials() { g_gli_initializer.summon(); }
-    
-    namespace grpc {
+    s32 countNonZero(const Size2D &_size,
+                 const u8 * srcBase, ptrdiff_t srcStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    Size2D size(_size);
+    if (srcStride == (ptrdiff_t)(size.width))
+    {
+        size.width *= size.height;
+        size.height = 1;
+    }
+    size_t roiw16 = size.width & ~15u;
+    s32 result = 0;
+    for(size_t k = 0; k < size.height; ++k)
+    {
+        const u8* src = internal::getRowPtr( srcBase,  srcStride, k);
+        size_t i = 0;
+    }
     }
     
-    namespace grpc {
-    }
+            uint16x8_t el8 = vaddq_u16(el8shr12, el8shr03);
+        uint16x4_t el4h = vadd_u16(vget_low_u16(el8), vget_high_u16(el8));
     
-      // Fixed Field ID values:
-  enum FieldIdValue {
-    kTraceIdField = 0,
-    kSpanIdField = 1,
-    kTraceOptionsField = 2,
-  };
+      enum Brew { CPU, GPU };
     
-    const ViewDescriptor& ClientRoundtripLatencyMinute() {
-  const static ViewDescriptor descriptor =
-      MinuteDescriptor()
-          .set_name('grpc.io/client/roundtrip_latency/minute')
-          .set_measure(kRpcClientRoundtripLatencyMeasureName)
-          .set_aggregation(MillisDistributionAggregation())
-          .add_column(ClientMethodTagKey());
-  return descriptor;
-}
+      /**
+   * @brief Applies the transformation defined in the data layer's
+   * transform_param block to a vector of Datum.
+   *
+   * @param datum_vector
+   *    A vector of Datum containing the data to be transformed.
+   * @param transformed_blob
+   *    This is destination blob. It can be part of top blob's data if
+   *    set_cpu_data() is used. See memory_layer.cpp for an example.
+   */
+  void Transform(const vector<Datum> & datum_vector,
+                Blob<Dtype>* transformed_blob);
     
-    void ProtoServerReflection::FillErrorResponse(const Status& status,
-                                              ErrorResponse* error_response) {
-  error_response->set_error_code(status.error_code());
-  error_response->set_error_message(status.error_message());
-}
-    
-    // Reads the CPU stats (in a pair of busy and total numbers) from the system.
-// The units of the stats should be the same.
-std::pair<uint64_t, uint64_t> GetCpuStatsImpl();
-    
-      void Corrupt(FileType filetype, int offset, int bytes_to_corrupt) {
-    // Pick file to corrupt
-    std::vector<std::string> filenames;
-    ASSERT_OK(env_.GetChildren(dbname_, &filenames));
-    uint64_t number;
-    FileType type;
-    std::string fname;
-    int picked_number = -1;
-    for (size_t i = 0; i < filenames.size(); i++) {
-      if (ParseFileName(filenames[i], &number, &type) &&
-          type == filetype &&
-          int(number) > picked_number) {  // Pick latest file
-        fname = dbname_ + '/' + filenames[i];
-        picked_number = number;
-      }
-    }
-    ASSERT_TRUE(!fname.empty()) << filetype;
-    }
-    
-    #include <deque>
-#include <set>
-#include 'db/dbformat.h'
-#include 'db/log_writer.h'
-#include 'db/snapshot.h'
-#include 'leveldb/db.h'
-#include 'leveldb/env.h'
-#include 'port/port.h'
-#include 'port/thread_annotations.h'
-    
-    namespace leveldb {
-    }
-    
-    // Return the name of the log file with the specified number
-// in the db named by 'dbname'.  The result will be prefixed with
-// 'dbname'.
-std::string LogFileName(const std::string& dbname, uint64_t number);
-    
-    #ifndef STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-#define STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-    
-      // Reports dropped bytes to the reporter.
-  // buffer_ must be updated to remove the dropped bytes prior to invocation.
-  void ReportCorruption(uint64_t bytes, const char* reason);
-  void ReportDrop(uint64_t bytes, const Status& reason);
-    
-      Status OpenWithStatus(Options* options = nullptr) {
-    Close();
-    Options opts;
-    if (options != nullptr) {
-      opts = *options;
-    } else {
-      opts.reuse_logs = true;  // TODO(sanjay): test both ways
-      opts.create_if_missing = true;
-    }
-    if (opts.env == nullptr) {
-      opts.env = env_;
-    }
-    return DB::Open(opts, dbname_, &db_);
-  }
-    
-    namespace leveldb {
-    }
-    
-      /// Remove a pack, by name.
-  void remove(const std::string& pack);
-    
-    QueryData ATCPlugin::generate(QueryContext& context) {
-  QueryData qd;
-  std::vector<std::string> paths;
-  auto s = resolveFilePattern(path_, paths);
-  if (!s.ok()) {
-    LOG(WARNING) << 'Could not glob: ' << path_;
-  }
-  for (const auto& path : paths) {
-    s = genQueryDataForSqliteTable(path, sqlite_query_, qd, false);
-    if (!s.ok()) {
-      LOG(WARNING) << 'Error Code: ' << s.getCode()
-                   << ' Could not generate data: ' << s.getMessage();
-    }
-  }
-  return qd;
-}
+     protected:
+  /* Implement this method in your subclass
+      with the code you want your thread to run. */
+  virtual void InternalThreadEntry() {}
     
     /**
- * @brief Iterate the discovered decorators for a given point type.
+ * @brief Computes @f$ y = |x| @f$
  *
- * The configuration maintains various sources, each may contain a set of
- * decorators. The source tracking is abstracted for the decorator iterator.
- *
- * @param point request execution of decorators for this given point.
- * @param time an optional time for points using intervals.
- * @param source restrict run to a specific config source.
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$ y = |x| @f$
  */
-void runDecorators(DecorationPoint point,
-                   size_t time = 0,
-                   const std::string& source = '');
+template <typename Dtype>
+class AbsValLayer : public NeuronLayer<Dtype> {
+ public:
+  explicit AbsValLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
     
-    #include <gflags/gflags.h>
-#include <gtest/gtest.h>
+      // If there are two top blobs, then the second blob will contain
+  // accuracies per class.
+  virtual inline int MinTopBlobs() const { return 1; }
+  virtual inline int MaxTopBlobs() const { return 2; }
+    
+    /**
+ * @brief Compute the index of the @f$ K @f$ max values for each datum across
+ *        all dimensions @f$ (C \times H \times W) @f$.
+ *
+ * Intended for use after a classification layer to produce a prediction.
+ * If parameter out_max_val is set to true, output is a vector of pairs
+ * (max_ind, max_val) for each image. The axis parameter specifies an axis
+ * along which to maximise.
+ *
+ * NOTE: does not implement Backwards operation.
+ */
+template <typename Dtype>
+class ArgMaxLayer : public Layer<Dtype> {
+ public:
+  /**
+   * @param param provides ArgMaxParameter argmax_param,
+   *     with ArgMaxLayer options:
+   *   - top_k (\b optional uint, default 1).
+   *     the number @f$ K @f$ of maximal items to output.
+   *   - out_max_val (\b optional bool, default false).
+   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
+   *     output max_val along the specified axis.
+   *   - axis (\b optional int).
+   *     if set, maximise along the specified axis else maximise the flattened
+   *     trailing dimensions for each index of the first / num dimension.
+   */
+  explicit ArgMaxLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    namespace caffe {
+    }
+    
+    /**
+ * @brief Computes @f$ y = x + \log(1 + \exp(-x)) @f$ if @f$ x > 0 @f$;
+ *        @f$ y = \log(1 + \exp(x)) @f$ otherwise.
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$
+ *      y = \left\{
+ *         \begin{array}{ll}
+ *            x + \log(1 + \exp(-x)) & \mbox{if } x > 0 \\
+ *            \log(1 + \exp(x)) & \mbox{otherwise}
+ *         \end{array} \right.
+ *      @f$
+ */
+template <typename Dtype>
+class BNLLLayer : public NeuronLayer<Dtype> {
+ public:
+  explicit BNLLLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+    }
+    }
+    
+     private:
+  // Recursive copy function.
+  void crop_copy(const vector<Blob<Dtype>*>& bottom,
+               const vector<Blob<Dtype>*>& top,
+               const int* offsets,
+               vector<int> indices,
+               int cur_dim,
+               const Dtype* src_data,
+               Dtype* dest_data,
+               bool is_forward);
+    
+    #include 'caffe/layers/conv_layer.hpp'
     
     #include <vector>
+    
+    
+    {
+    {
+    {        for (;;) {
+          auto start = index.fetch_add(work_chunk);
+          auto const stop = std::min(start + work_chunk, inputs.size());
+          if (start >= stop) break;
+          for (auto i = start; i != stop; ++i) func(inputs[i]);
+        }
+      } catch (const std::exception& e) {
+        std::fprintf(stderr,
+          'worker thread exited with exception: %s\n', e.what());
+        failed = true;
+      }
+    }));
+  }
+    
+    namespace {
+    }
+    
+    void Config::ParseIniFile(const std::string &filename, IniSettingMap &ini,
+                          const bool constants_only /* = false */,
+                          const bool is_system /* = true */ ) {
+    std::ifstream ifs(filename);
+    std::string str((std::istreambuf_iterator<char>(ifs)),
+                    std::istreambuf_iterator<char>());
+    std::string with_includes;
+    Config::ReplaceIncludesWithIni(filename, str, with_includes);
+    Config::SetParsedIni(ini, with_includes, filename, constants_only,
+                         is_system);
+}
+    
+      /**
+   * Use the Iterate method for iterating over options that are stored as
+   * objects in runtime options (e.g. FilesMatch). This function iterates over
+   * the settings passed as ini/hdf, calls back to, generally, the constructor
+   * of the object in question.
+   *
+   * Note: For now, we are not `ini_get()` enabling these type of options as
+   * it is not trivial to come up with a non-hacky and workable way to store
+   * the data correctly. Also, as usual, Hdf takes priority.
+   */
+  static void Iterate(std::function<void (const IniSettingMap&,
+                                          const Hdf&,
+                                          const std::string&)> cb,
+                      const IniSettingMap &ini, const Hdf& config,
+                      const std::string &name, const bool prepend_hhvm = true);
+    
+    #include 'hphp/runtime/base/glob-stream-wrapper.h'
+    
+    #endif // HPHP_GLOB_STREAM_WRAPPER_H
+
+    
+    #include 'hphp/util/stack-trace.h'
+    
+    Status WriteBatchBase::DeleteRange(const SliceParts& begin_key,
+                                   const SliceParts& end_key) {
+  std::string begin_key_buf, end_key_buf;
+  Slice begin_key_slice(begin_key, &begin_key_buf);
+  Slice end_key_slice(end_key, &end_key_buf);
+  return DeleteRange(begin_key_slice, end_key_slice);
+}
+    
+      int ret = system('rm -rf /tmp/rocksmergetest');
+  if (ret != 0) {
+    fprintf(stderr, 'Error deleting /tmp/rocksmergetest, code: %d\n', ret);
+    return ret;
+  }
+  rocksdb::Options options;
+  options.create_if_missing = true;
+  options.merge_operator.reset(new MyMerge);
+  options.compaction_filter = &filter;
+  status = rocksdb::DB::Open(options, '/tmp/rocksmergetest', &raw_db);
+  assert(status.ok());
+  std::unique_ptr<rocksdb::DB> db(raw_db);
+    
+    // Take a default PlainTableOptions 'table_options' in addition to a
+// map 'opts_map' of option name to option value to construct the new
+// PlainTableOptions 'new_table_options'.
+//
+// @param table_options the default options of the output 'new_table_options'.
+// @param opts_map an option name to value map for specifying how
+//     'new_table_options' should be set.
+// @param new_table_options the resulting options based on 'table_options'
+//     with the change specified in 'opts_map'.
+// @param input_strings_escaped when set to true, each escaped characters
+//     prefixed by '\' in the values of the opts_map will be further converted
+//     back to the raw string before assigning to the associated options.
+// @param ignore_unknown_options when set to true, unknown options are ignored
+//     instead of resulting in an unknown-option error.
+// @return Status::OK() on success.  Otherwise, a non-ok status indicating
+//     error will be returned, and 'new_table_options' will be set to
+//     'table_options'.
+Status GetPlainTableOptionsFromMap(
+    const PlainTableOptions& table_options,
+    const std::unordered_map<std::string, std::string>& opts_map,
+    PlainTableOptions* new_table_options, bool input_strings_escaped = false,
+    bool ignore_unknown_options = false);
+    
+    
+    {}  // namespace rocksdb
+
+    
+      static Status Open(const Options& options, const std::string& dbname,
+                     DBWithTTL** dbptr, int32_t ttl = 0,
+                     bool read_only = false);
+    
+      static LDBCommandExecuteResult Succeed(std::string msg) {
+    return LDBCommandExecuteResult(EXEC_SUCCEED, msg);
+  }
+    
+    
+    {    // exception out_of_range.401
+    try
+    {
+        // try to write beyond the array limit
+        array.at(5) = 'sixth';
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+}
+
+    
+        // add values
+    auto res1 = object.emplace('three', 3);
+    null.emplace('A', 'a');
+    null.emplace('B', 'b');
+    
+    #include <iostream>
+#include <stack>
+#include <cassert>
+    
+    
+    {
+    {        delete dummyHead1;
+        delete dummyHead2;
+        return ret;
+    }
+};
+    
+    
+    {
+    {
+    {            if(cur != NULL){
+                stack.push(cur);
+                cur = cur->left;
+            }
+            else {
+                cur = stack.top();
+                stack.pop();
+                res.push_back(cur->val);
+                cur = cur->right;
+            }
+        }
+        return res;
+    }
+};
+    
+    
+    {    return 0;
+}
+
+    
+    
+    {    return 0;
+}
+
+    
+    
+/// Definition for a binary tree node.
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+    
+    #include <iostream>
+#include <vector>
+#include <stack>
