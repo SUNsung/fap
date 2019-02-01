@@ -1,267 +1,383 @@
 
         
-        /* Coin network-specific GUI style information */
-class NetworkStyle
+        
+    {                // make border
+                switch(cn)
+                {
+                case 1:
+                    if (borderType == BORDER_MODE_CONSTANT)
+                    {
+                        tcurr = vsetq_lane_u16(borderValue, tcurr, 6);
+                        tcurr = vsetq_lane_u16(borderValue, tcurr, 7);
+                    }
+                    else if (borderType == BORDER_MODE_REFLECT101)
+                    {
+                        tcurr = vsetq_lane_u16(vgetq_lane_u16(tcurr, 2),tcurr, 6);
+                        tcurr = vsetq_lane_u16(vgetq_lane_u16(tcurr, 1),tcurr, 7);
+                    }
+                    else if (borderType == BORDER_MODE_REFLECT)
+                    {
+                        tcurr = vsetq_lane_u16(vgetq_lane_u16(tcurr, 1),tcurr, 6);
+                        tcurr = vsetq_lane_u16(vgetq_lane_u16(tcurr, 0),tcurr, 7);
+                    }
+                    else
+                    {
+                        tcurr = vsetq_lane_u16(vgetq_lane_u16(tcurr, 0),tcurr, 6);
+                        tcurr = vsetq_lane_u16(vgetq_lane_u16(tcurr, 0),tcurr, 7);
+                    }
+                    break;
+                case 2:
+                    if (borderType == BORDER_MODE_CONSTANT)
+                    {
+                        tcurr = vsetq_lane_u16(borderValue, tcurr, 4);
+                        tcurr = vsetq_lane_u16(borderValue, tcurr, 5);
+                        tcurr = vsetq_lane_u16(borderValue, tcurr, 6);
+                        tcurr = vsetq_lane_u16(borderValue, tcurr, 7);
+                    }
+                    else if (borderType == BORDER_MODE_REFLECT101)
+                    {
+                        tcurr = vsetq_lane_u16(vgetq_lane_u16(tcurr, 2),tcurr, 6);
+                        tcurr = vsetq_lane_u16(vgetq_lane_u16(tcurr, 3),tcurr, 7);
+                    }
+                    else if (borderType == BORDER_MODE_REFLECT)
+                    {
+                        tcurr = vsetq_lane_u16(vgetq_lane_u16(tcurr, 2),tcurr, 4);
+                        tcurr = vsetq_lane_u16(vgetq_lane_u16(tcurr, 3),tcurr, 5);
+                        tcurr = vsetq_lane_u16(vgetq_lane_u16(tcurr, 0),tcurr, 6);
+                        tcurr = vsetq_lane_u16(vgetq_lane_u16(tcurr, 1),tcurr, 7);
+                    }
+                    else
+                    {
+                        tcurr = vsetq_lane_u16(vgetq_lane_u16(tcurr, 0),tcurr, 4);
+                        tcurr = vsetq_lane_u16(vgetq_lane_u16(tcurr, 1),tcurr, 5);
+                        tcurr = vsetq_lane_u16(vgetq_lane_u16(tcurr, 0),tcurr, 6);
+                        tcurr = vsetq_lane_u16(vgetq_lane_u16(tcurr, 1),tcurr, 7);
+                    }
+                    break;
+                case 3:
+                    if (borderType == BORDER_MODE_CONSTANT)
+                    {
+                        tcurr = vsetq_lane_u16(borderValue, tcurr, 2);
+                        tcurr = vsetq_lane_u16(borderValue, tcurr, 3);
+                        tcurr = vsetq_lane_u16(borderValue, tcurr, 4);
+                        tcurr = vsetq_lane_u16(borderValue, tcurr, 5);
+                        tcurr = vsetq_lane_u16(borderValue, tcurr, 6);
+                        tcurr = vsetq_lane_u16(borderValue, tcurr, 7);
+                    }
+                    else if (borderType == BORDER_MODE_REFLECT101)
+                    {
+                        tprev = vsetq_lane_u16(vgetq_lane_u16(tcurr, 6),tcurr, 2);
+                        tprev = vsetq_lane_u16(vgetq_lane_u16(tcurr, 7),tprev, 3);
+                        tprev = vsetq_lane_u16(vgetq_lane_u16(tcurr, 3),tprev, 5);
+                        tprev = vsetq_lane_u16(vgetq_lane_u16(tcurr, 4),tprev, 6);
+                        tprev = vsetq_lane_u16(vgetq_lane_u16(tcurr, 5),tprev, 7);
+                        s16 lane8 = srow4[8] + srow3[8] + srow2[8] + srow1[8] + srow0[8];
+                        tcurr = vsetq_lane_u16(lane8,tprev, 4);
+                    }
+                    else if (borderType == BORDER_MODE_REFLECT)
+                    {
+                        tprev = vsetq_lane_u16(vgetq_lane_u16(tcurr, 3),tcurr, 2);
+                        tprev = vsetq_lane_u16(vgetq_lane_u16(tcurr, 4),tprev, 3);
+                        tprev = vsetq_lane_u16(vgetq_lane_u16(tcurr, 5),tprev, 4);
+                        tprev = vsetq_lane_u16(vgetq_lane_u16(tcurr, 0),tprev, 5);
+                        tprev = vsetq_lane_u16(vgetq_lane_u16(tcurr, 1),tprev, 6);
+                        tcurr = vsetq_lane_u16(vgetq_lane_u16(tcurr, 2),tprev, 7);
+                    }
+                    else
+                    {
+                        tprev = vsetq_lane_u16(vgetq_lane_u16(tcurr, 0),tcurr, 2);
+                        tprev = vsetq_lane_u16(vgetq_lane_u16(tcurr, 1),tprev, 3);
+                        tprev = vsetq_lane_u16(vgetq_lane_u16(tcurr, 2),tprev, 4);
+                        tprev = vsetq_lane_u16(vgetq_lane_u16(tcurr, 0),tprev, 5);
+                        tprev = vsetq_lane_u16(vgetq_lane_u16(tcurr, 1),tprev, 6);
+                        tcurr = vsetq_lane_u16(vgetq_lane_u16(tcurr, 2),tprev, 7);
+                    }
+                    break;
+                case 4:
+                    if (borderType == BORDER_MODE_CONSTANT)
+                    {
+                        tcurr = vsetq_lane_u16(borderValue, tcurr, 0);
+                        tcurr = vsetq_lane_u16(borderValue, tcurr, 1);
+                        tcurr = vsetq_lane_u16(borderValue, tcurr, 2);
+                        tcurr = vsetq_lane_u16(borderValue, tcurr, 3);
+                        tcurr = vsetq_lane_u16(borderValue, tcurr, 4);
+                        tcurr = vsetq_lane_u16(borderValue, tcurr, 5);
+                        tcurr = vsetq_lane_u16(borderValue, tcurr, 6);
+                        tcurr = vsetq_lane_u16(borderValue, tcurr, 7);
+                    }
+                    else if (borderType == BORDER_MODE_REFLECT101)
+                    {
+                        s16 lane8  = srow4[ 8] + srow3[ 8] + srow2[ 8] + srow1[ 8] + srow0[ 8];
+                        s16 lane9  = srow4[ 9] + srow3[ 9] + srow2[ 9] + srow1[ 9] + srow0[ 9];
+                        s16 lane10 = srow4[10] + srow3[10] + srow2[10] + srow1[10] + srow0[10];
+                        s16 lane11 = srow4[11] + srow3[11] + srow2[11] + srow1[11] + srow0[11];
+                        tprev = vsetq_lane_u16( lane8,tcurr, 0);
+                        tprev = vsetq_lane_u16( lane9,tprev, 1);
+                        tprev = vsetq_lane_u16(lane10,tprev, 2);
+                        tcurr = vsetq_lane_u16(lane11,tprev, 3);
+                    }
+                    else if (borderType == BORDER_MODE_REFLECT)
+                    {
+                        tcurr = vcombine_u16(vget_high_u16(tcurr),vget_low_u16(tcurr));//swap 64-bit parts
+                    }
+                    else
+                    {
+                        tcurr = vcombine_u16(vget_low_u16(tcurr),vget_low_u16(tcurr));//double 64-bit part
+                    }
+                    break;
+                }
+                continue;
+            }
+            switch(cn)
+            {
+            case 1:
+                t0 = vextq_u16(tprev, tcurr, 6);
+                t1 = vextq_u16(tprev, tcurr, 7);
+                t2 = tcurr;
+                t3 = vextq_u16(tcurr, tnext, 1);
+                t4 = vextq_u16(tcurr, tnext, 2);
+                break;
+            case 2:
+                t0 = vextq_u16(tprev, tcurr, 4);
+                t1 = vextq_u16(tprev, tcurr, 6);
+                t2 = tcurr;
+                t3 = vextq_u16(tcurr, tnext, 2);
+                t4 = vextq_u16(tcurr, tnext, 4);
+                break;
+            case 3:
+                t0 = vextq_u16(tprev, tcurr, 2);
+                t1 = vextq_u16(tprev, tcurr, 5);
+                t2 = tcurr;
+                t3 = vextq_u16(tcurr, tnext, 3);
+                t4 = vextq_u16(tcurr, tnext, 6);
+                break;
+            case 4:
+                t0 = tprev;
+                t1 = vextq_u16(tprev, tcurr, 4);
+                t2 = tcurr;
+                t3 = vextq_u16(tcurr, tnext, 4);
+                t4 = tnext;
+                break;
+            default:
+                internal::assertSupportedConfiguration(false);//Unsupported channels number
+                return;
+            }
+            t0 = vqaddq_u16(vqaddq_u16(vqaddq_u16(t0, t1), vqaddq_u16(t2, t3)), t4);
+    
+    template <bool L2gradient>
+inline void NormCanny(const ptrdiff_t colscn, s16* _dx, s16* _dy, s32* _norm)
 {
-public:
-    /** Get style associated with provided BIP70 network id, or 0 if not known */
-    static const NetworkStyle *instantiate(const QString &networkId);
+    ptrdiff_t j = 0;
+    if (colscn >= 8)
+    {
+        int16x8_t vx = vld1q_s16(_dx);
+        int16x8_t vy = vld1q_s16(_dy);
+        for (; j <= colscn - 16; j+=8)
+        {
+            internal::prefetch(_dx);
+            internal::prefetch(_dy);
+    }
+    }
     }
     
-        /** Colorize an icon (given filename) with the icon color */
-    QIcon SingleColorIcon(const QString& filename) const;
+                uint32x4_t vequ1 = vceqq_u32(vreinterpretq_u32_u64(vm1), vc0);
+            uint32x4_t vequ2 = vceqq_u32(vreinterpretq_u32_u64(vm2), vc0);
+            uint32x4_t vequ3 = vceqq_u32(vreinterpretq_u32_u64(vm3), vc0);
+            uint32x4_t vequ4 = vceqq_u32(vreinterpretq_u32_u64(vm4), vc0);
     
-    
-    {    /* d = (a0*2) * a3 */
-    'leaq (%%r10,%%r10,1),%%rax\n'
-    'mulq %%r13\n'
-    'movq %%rax,%%rbx\n'
-    'movq %%rdx,%%rcx\n'
-    /* d += (a1*2) * a2 */
-    'leaq (%%r11,%%r11,1),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* c = a4 * a4 */
-    'movq %%r14,%%rax\n'
-    'mulq %%r14\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += (c & M) * R */
-    'andq %%r15,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* t3 (tmp1) = d & M */
-    'movq %%rbx,%%rsi\n'
-    'andq %%r15,%%rsi\n'
-    'movq %%rsi,%q1\n'
-    /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
-    /* a4 *= 2 */
-    'addq %%r14,%%r14\n'
-    /* d += a0 * a4 */
-    'movq %%r10,%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d+= (a1*2) * a3 */
-    'leaq (%%r11,%%r11,1),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d += a2 * a2 */
-    'movq %%r12,%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d += c * R */
-    'movq %%r8,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* t4 = d & M (%%rsi) */
-    'movq %%rbx,%%rsi\n'
-    'andq %%r15,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
-    /* tx = t4 >> 48 (tmp3) */
-    'movq %%rsi,%%rax\n'
-    'shrq $48,%%rax\n'
-    'movq %%rax,%q3\n'
-    /* t4 &= (M >> 4) (tmp2) */
-    'movq $0xffffffffffff,%%rax\n'
-    'andq %%rax,%%rsi\n'
-    'movq %%rsi,%q2\n'
-    /* c = a0 * a0 */
-    'movq %%r10,%%rax\n'
-    'mulq %%r10\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += a1 * a4 */
-    'movq %%r11,%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d += (a2*2) * a3 */
-    'leaq (%%r12,%%r12,1),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* u0 = d & M (%%rsi) */
-    'movq %%rbx,%%rsi\n'
-    'andq %%r15,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
-    /* u0 = (u0 << 4) | tx (%%rsi) */
-    'shlq $4,%%rsi\n'
-    'movq %q3,%%rax\n'
-    'orq %%rax,%%rsi\n'
-    /* c += u0 * (R >> 4) */
-    'movq $0x1000003d1,%%rax\n'
-    'mulq %%rsi\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[0] = c & M */
-    'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq %%rax,0(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* a0 *= 2 */
-    'addq %%r10,%%r10\n'
-    /* c += a0 * a1 */
-    'movq %%r10,%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d += a2 * a4 */
-    'movq %%r12,%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* d += a3 * a3 */
-    'movq %%r13,%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* c += (d & M) * R */
-    'movq %%rbx,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 */
-    'shrdq $52,%%rcx,%%rbx\n'
-    'xorq %%rcx,%%rcx\n'
-    /* r[1] = c & M */
-    'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq %%rax,8(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += a0 * a2 (last use of %%r10) */
-    'movq %%r10,%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* fetch t3 (%%r10, overwrites a0),t4 (%%rsi) */
-    'movq %q2,%%rsi\n'
-    'movq %q1,%%r10\n'
-    /* c += a1 * a1 */
-    'movq %%r11,%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d += a3 * a4 */
-    'movq %%r13,%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rbx\n'
-    'adcq %%rdx,%%rcx\n'
-    /* c += (d & M) * R */
-    'movq %%rbx,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 (%%rbx only) */
-    'shrdq $52,%%rcx,%%rbx\n'
-    /* r[2] = c & M */
-    'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq %%rax,16(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += t3 */
-    'addq %%r10,%%r8\n'
-    /* c += d * R */
-    'movq %%rbx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[3] = c & M */
-    'movq %%r8,%%rax\n'
-    'andq %%r15,%%rax\n'
-    'movq %%rax,24(%%rdi)\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* c += t4 (%%r8 only) */
-    'addq %%rsi,%%r8\n'
-    /* r[4] = c */
-    'movq %%r8,32(%%rdi)\n'
-: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
-: 'D'(r)
-: '%rax', '%rbx', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
-);
+    #define INRANGEFUNC(T)                                       \
+void inRange(const Size2D &_size,                            \
+             const T * srcBase, ptrdiff_t srcStride,         \
+             const T * rng1Base, ptrdiff_t rng1Stride,       \
+             const T * rng2Base, ptrdiff_t rng2Stride,       \
+             u8 * dstBase, ptrdiff_t dstStride)              \
+{                                                            \
+    internal::assertSupportedConfiguration();                \
+    inRangeCheck(_size, srcBase, srcStride,                  \
+                 rng1Base, rng1Stride, rng2Base, rng2Stride, \
+                 dstBase, dstStride);                        \
 }
+#else
+#define INRANGEFUNC(T)                                       \
+void inRange(const Size2D &,                                 \
+             const T *, ptrdiff_t,                           \
+             const T *, ptrdiff_t,                           \
+             const T *, ptrdiff_t,                           \
+             u8 *, ptrdiff_t)                                \
+{                                                            \
+    internal::assertSupportedConfiguration();                \
+}
+#endif
     
     
-    {    CRIPEMD160();
-    CRIPEMD160& Write(const unsigned char* data, size_t len);
-    void Finalize(unsigned char hash[OUTPUT_SIZE]);
-    CRIPEMD160& Reset();
-};
+    {
+    {} }
+    
+    // scripts/fuse_gtest.py depends on gtest's own header being #included
+// *unconditionally*.  Therefore these #includes cannot be moved
+// inside #if GTEST_HAS_PARAM_TEST.
+#include 'gtest/internal/gtest-internal.h'
+#include 'gtest/internal/gtest-param-util.h'
+#include 'gtest/internal/gtest-param-util-generated.h'
+    
+      // Returns true iff the test part fatally failed.
+  bool fatally_failed() const { return type_ == kFatalFailure; }
+    
+    #include 'sample1.h'
+    
+      static int allocated() { return allocated_; }
     
     
-    {}  // namespace mxnet
+// This sample shows how to write a simple unit test for a function,
+// using Google C++ testing framework.
+//
+// Writing a unit test using Google C++ testing framework is easy as 1-2-3:
     
-    /**
- * \brief The class sets caffe's mode before doing forward/backward
- * \tparam xpu The device that the op will be executed on.
- */
-class CaffeMode {
+    // Sets the 0-terminated C string this MyString object
+// represents.
+void MyString::Set(const char* a_c_string) {
+  // Makes sure this works when c_string == c_string_
+  const char* const temp = MyString::CloneCString(a_c_string);
+  delete[] c_string_;
+  c_string_ = temp;
+}
+
+    
+      // Copy c'tor
+  MyString(const MyString& string) : c_string_(NULL) {
+    Set(string.c_string_);
+  }
+    
+      void SeekRandom(ThreadState* thread) {
+    ReadOptions options;
+    int found = 0;
+    for (int i = 0; i < reads_; i++) {
+      Iterator* iter = db_->NewIterator(options);
+      char key[100];
+      const int k = thread->rand.Next() % FLAGS_num;
+      snprintf(key, sizeof(key), '%016d', k);
+      iter->Seek(key);
+      if (iter->Valid() && iter->key() == key) found++;
+      delete iter;
+      thread->stats.FinishedSingleOp();
+    }
+    char msg[100];
+    snprintf(msg, sizeof(msg), '(%d of %d found)', found, num_);
+    thread->stats.AddMessage(msg);
+  }
+    
+          case kLastType:
+        if (!in_fragmented_record) {
+          ReportCorruption(fragment.size(),
+                           'missing start of fragmented record(2)');
+        } else {
+          scratch->append(fragment.data(), fragment.size());
+          *record = Slice(*scratch);
+          last_record_offset_ = prospective_record_offset;
+          return true;
+        }
+        break;
+    
+    class MemTable {
  public:
-  template<typename xpu> static void SetMode();
+  // MemTables are reference counted.  The initial reference count
+  // is zero and the caller must call Ref() at least once.
+  explicit MemTable(const InternalKeyComparator& comparator);
+    }
+    
+    class TestState {
+ public:
+  ConcurrentTest t_;
+  int seed_;
+  port::AtomicPointer quit_flag_;
+    }
+    
+    /*!
+ * \brief Environment arguments that is used by the function.
+ * These can be things like scalar arguments when add a value with scalar.
+ */
+struct EnvArguments {
+  /*! \brief scalar argument, if enabled */
+  real_t scalar;
+  /*! \brief keyword arguments */
+  std::vector<std::pair<std::string, std::string> > kwargs;
+  /*! \brief pointer to the resources requested */
+  std::vector<Resource> resource;
 };
     
-        caffeOp_->Backward(top_, flags_, bot_);
+    template<typename Dtype>
+class CaffeDataIter : public IIterator<TBlobBatch> {
+ public:
+  explicit CaffeDataIter(int type_flag) : batch_size_(0), channels_(1), width_(1), height_(1)
+                               , type_flag_(type_flag), loc_(0)
+  {}
+  virtual ~CaffeDataIter(void) {}
+    }
     
-     protected:
-  /*! \brief prefetcher parameters */
-  PrefetcherParam param_;
-  /*! \brief backend thread */
-  dmlc::ThreadedIter<DataBatch> iter;
-  /*! \brief internal batch loader */
-  std::unique_ptr<IIterator<TBlobBatch> > loader_;
+    namespace mxnet {
+namespace io {
+/*! \return the parameter of default augmenter */
+std::vector<dmlc::ParamFieldInfo> ListDefaultAugParams();
+std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
+}  // namespace io
+}  // namespace mxnet
+#endif  // MXNET_IO_IMAGE_AUGMENTER_H_
+
     
-    #include 'modules/drivers/canbus/proto/can_card_parameter.pb.h'
-    
-    #include 'modules/drivers/canbus/can_comm/protocol_data.h'
-    
-    void ObjectExtendedInfo60D::Parse(const std::uint8_t* bytes, int32_t length,
-                                  ContiRadar* conti_radar) const {
-  int obj_id = object_id(bytes, length);
-  for (int i = 0; i < conti_radar->contiobs_size(); ++i) {
-    if (conti_radar->contiobs(i).obstacle_id() == obj_id) {
-      auto obs = conti_radar->mutable_contiobs(i);
-      obs->set_longitude_accel(longitude_accel(bytes, length));
-      obs->set_lateral_accel(lateral_accel(bytes, length));
-      obs->set_oritation_angle(oritation_angle(bytes, length));
-      obs->set_length(object_length(bytes, length));
-      obs->set_width(object_width(bytes, length));
-      obs->set_obstacle_class(obstacle_class(bytes, length));
-      break;
+    class TBlobContainer : public TBlob {
+ public:
+  TBlobContainer(void)
+    : TBlob(), tensor_container_(nullptr) {}
+  ~TBlobContainer() {
+    if (tensor_container_) {
+      release();
     }
   }
-  // auto conti_obs = conti_radar->mutable_contiobs(object_id(bytes, length));
+  void resize(const TShape &shape, int type_flag) {
+    if (tensor_container_) {
+      CHECK_EQ(this->type_flag_, type_flag);
+      this->shape_ = shape;
+      resize();
+    } else {
+      this->type_flag_ = type_flag;
+      this->shape_ = shape;
+      create();
+    }
+  }
+    }
+    
+    #ifdef REGEX_RUN_DEBUG
+    if (fTraceDebug) {
+        if (isMatch) {
+            printf('Match.  start=%ld   end=%ld\n\n', fMatchStart, fMatchEnd);
+        } else {
+            printf('No match\n\n');
+        }
+    }
+#endif
+    
+            if (periodType != DayPeriodRules::DAYPERIOD_AM &&
+                periodType != DayPeriodRules::DAYPERIOD_PM &&
+                periodType != DayPeriodRules::DAYPERIOD_MIDNIGHT) {
+            index = (int32_t)periodType;
+            if (count <= 3) {
+                toAppend = &fSymbols->fAbbreviatedDayPeriods[index];  // i.e. short
+            } else if (count == 4 || count > 5) {
+                toAppend = &fSymbols->fWideDayPeriods[index];
+            } else {  // count == 5
+                toAppend = &fSymbols->fNarrowDayPeriods[index];
+            }
+        }
+    
+    ExitConstrDeleteAll: // Remove all sets and return error
+    delete fDateIgnorables;  fDateIgnorables = NULL;
+    delete fTimeIgnorables;  fTimeIgnorables = NULL;
+    delete fOtherIgnorables; fOtherIgnorables = NULL;
+    
+    
+    {    return fHashCode;
 }
     
-      x <<= 8;
-  x |= t;
+    U_NAMESPACE_END
     
-    using apollo::drivers::canbus::Byte;
-    
-    BaseMapMatrix::BaseMapMatrix() {}
+    U_NAMESPACE_END
