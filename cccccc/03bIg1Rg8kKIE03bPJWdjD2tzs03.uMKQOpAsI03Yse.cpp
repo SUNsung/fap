@@ -1,210 +1,161 @@
 
         
-        EnumGenerator::EnumGenerator(const EnumDescriptor* descriptor, const Options* options) :
-    SourceGeneratorBase(descriptor->file(), options),
-    descriptor_(descriptor) {
-}
+        
+    {			return fDX*fDX + fDY*fDY + fDZ*fDZ + fDW*fDW;
+		}
     
+    		virtual bool HasSeverelyBentDifferentialColors(void) const = 0;
     
-    {
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+    
+    /* For input in Q24 domain */
+opus_int32 silk_LPC_inverse_pred_gain_Q24(          /* O    Returns inverse prediction gain in energy domain, Q30       */
+    const opus_int32            *A_Q24,             /* I    Prediction coefficients [order]                             */
+    const opus_int              order               /* I    Prediction order                                            */
+);
+    
+    // InitXXX function with 'install_callbacks=true': install GLFW callbacks. They will call user's previously installed callbacks, if any.
+// InitXXX function with 'install_callbacks=false': do not install GLFW callbacks. You will need to call them yourself from your own GLFW callbacks.
+IMGUI_IMPL_API void     ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
 
     
-      for (int i = 0; i < dependencies.size(); i++) {
-    const string& dependency = dependencies[i].second;
-    printer->Print(
-        '      $dependency$.getDescriptor(),\n',
-        'dependency', dependency);
-  }
+    #include 'imgui.h'
+#include 'imgui_impl_marmalade.h'
     
+    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+// Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
     
-    {    output.WriteLittleEndian32(0x02014b50);  // magic
-    WriteShort(&output, 10);  // version made by
-    WriteShort(&output, 10);  // version needed to extract
-    WriteShort(&output, 0);  // flags
-    WriteShort(&output, 0);  // compression method: stored
-    WriteShort(&output, 0);  // last modified time
-    WriteShort(&output, kDosEpoch);  // last modified date
-    output.WriteLittleEndian32(crc32);  // crc-32
-    output.WriteLittleEndian32(size);  // compressed size
-    output.WriteLittleEndian32(size);  // uncompressed size
-    WriteShort(&output, filename_size);  // file name length
-    WriteShort(&output, 0);   // extra field length
-    WriteShort(&output, 0);   // file comment length
-    WriteShort(&output, 0);   // starting disk number
-    WriteShort(&output, 0);   // internal file attributes
-    output.WriteLittleEndian32(0);  // external file attributes
-    output.WriteLittleEndian32(offset);  // local header offset
-    output.WriteString(filename);  // file name
-  }
-  uint32 dir_len = output.ByteCount();
-    
-    class OrientationDetector {
- public:
-  OrientationDetector(const GenericVector<int>* allowed_scripts,
-                      OSResults* results);
-  bool detect_blob(BLOB_CHOICE_LIST* scores);
-  int get_orientation();
- private:
-  OSResults* osr_;
-  const GenericVector<int>* allowed_scripts_;
-};
-    
-    void Tesseract::PrerecAllWordsPar(const GenericVector<WordData>& words) {
-  // Prepare all the blobs.
-  GenericVector<BlobData> blobs;
-  for (int w = 0; w < words.size(); ++w) {
-    if (words[w].word->ratings != nullptr &&
-        words[w].word->ratings->get(0, 0) == nullptr) {
-      for (int s = 0; s < words[w].lang_words.size(); ++s) {
-        Tesseract* sub = s < sub_langs_.size() ? sub_langs_[s] : this;
-        const WERD_RES& word = *words[w].lang_words[s];
-        for (int b = 0; b < word.chopped_word->NumBlobs(); ++b) {
-          blobs.push_back(BlobData(b, sub, word));
+            // 3. Show another simple window.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
         }
-      }
-    }
-  }
-  // Pre-classify all the blobs.
-  if (tessedit_parallelize > 1) {
-#ifdef _OPENMP
-#pragma omp parallel for num_threads(10)
-#endif  // _OPENMP
-    for (int b = 0; b < blobs.size(); ++b) {
-      *blobs[b].choices =
-          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
-    }
-  } else {
-    // TODO(AMD) parallelize this.
-    for (int b = 0; b < blobs.size(); ++b) {
-      *blobs[b].choices =
-          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
-    }
-  }
-}
-    
-      int num_words;
-  TBOX lword_box;     // in normalized (horiz text rows) space
-  TBOX rword_box;     // in normalized (horiz text rows) space
     
     
-    {}  // namespace tesseract
-    
-      // Backwards compatible constrained fit with a supplied gradient.
-  // Deprecated. Use ConstrainedFit(const FCOORD& direction) where possible
-  // to avoid potential difficulties with infinite gradients.
-  double ConstrainedFit(double m, float* c);
-    
-    #include 'dppoint.h'
-#include 'errcode.h'
-#include 'tprintf.h'
-    
-    #  define ASSERT_DEBUG_DEATH(statement, regex) \
-  ASSERT_DEATH(statement, regex)
-    
-    // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
-//
-// Expands to the namespace name that the type-parameterized tests for
-// the given type-parameterized test case are defined in.  The exact
-// name of the namespace is subject to change without notice.
-# define GTEST_CASE_NAMESPACE_(TestCaseName) \
-  gtest_case_##TestCaseName##_
-    
-    namespace testing {
-namespace internal {
-    }
+    {        // Handle loss of D3D9 device
+        if (result == D3DERR_DEVICELOST && g_pd3dDevice->TestCooperativeLevel() == D3DERR_DEVICENOTRESET)
+        {
+            ImGui_ImplDX9_InvalidateDeviceObjects();
+            g_pd3dDevice->Reset(&g_d3dpp);
+            ImGui_ImplDX9_CreateDeviceObjects();
+        }
     }
     
-    template <class Generator1, class Generator2, class Generator3,
-    class Generator4, class Generator5, class Generator6>
-class CartesianProductHolder6 {
- public:
-CartesianProductHolder6(const Generator1& g1, const Generator2& g2,
-    const Generator3& g3, const Generator4& g4, const Generator5& g5,
-    const Generator6& g6)
-      : g1_(g1), g2_(g2), g3_(g3), g4_(g4), g5_(g5), g6_(g6) {}
-  template <typename T1, typename T2, typename T3, typename T4, typename T5,
-      typename T6>
-  operator ParamGenerator< ::std::tr1::tuple<T1, T2, T3, T4, T5, T6> >() const {
-    return ParamGenerator< ::std::tr1::tuple<T1, T2, T3, T4, T5, T6> >(
-        new CartesianProductGenerator6<T1, T2, T3, T4, T5, T6>(
-        static_cast<ParamGenerator<T1> >(g1_),
-        static_cast<ParamGenerator<T2> >(g2_),
-        static_cast<ParamGenerator<T3> >(g3_),
-        static_cast<ParamGenerator<T4> >(g4_),
-        static_cast<ParamGenerator<T5> >(g5_),
-        static_cast<ParamGenerator<T6> >(g6_)));
-  }
-    }
+            // Create the input layout
+        D3D11_INPUT_ELEMENT_DESC local_layout[] =
+        {
+            { 'POSITION', 0, DXGI_FORMAT_R32G32_FLOAT,   0, (size_t)(&((ImDrawVert*)0)->pos), D3D11_INPUT_PER_VERTEX_DATA, 0 },
+            { 'TEXCOORD', 0, DXGI_FORMAT_R32G32_FLOAT,   0, (size_t)(&((ImDrawVert*)0)->uv),  D3D11_INPUT_PER_VERTEX_DATA, 0 },
+            { 'COLOR',    0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, (size_t)(&((ImDrawVert*)0)->col), D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        };
+        if (g_pd3dDevice->CreateInputLayout(local_layout, 3, g_pVertexShaderBlob->GetBufferPointer(), g_pVertexShaderBlob->GetBufferSize(), &g_pInputLayout) != S_OK)
+            return false;
     
-      // Compares two wide C strings.  Returns true iff they have the same
-  // content.
-  //
-  // Unlike wcscmp(), this function can handle NULL argument(s).  A
-  // NULL C string is considered different to any non-NULL C string,
-  // including the empty string.
-  static bool WideCStringEquals(const wchar_t* lhs, const wchar_t* rhs);
+        // Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array.
+    io.KeyMap[ImGuiKey_Tab] = GLFW_KEY_TAB;
+    io.KeyMap[ImGuiKey_LeftArrow] = GLFW_KEY_LEFT;
+    io.KeyMap[ImGuiKey_RightArrow] = GLFW_KEY_RIGHT;
+    io.KeyMap[ImGuiKey_UpArrow] = GLFW_KEY_UP;
+    io.KeyMap[ImGuiKey_DownArrow] = GLFW_KEY_DOWN;
+    io.KeyMap[ImGuiKey_PageUp] = GLFW_KEY_PAGE_UP;
+    io.KeyMap[ImGuiKey_PageDown] = GLFW_KEY_PAGE_DOWN;
+    io.KeyMap[ImGuiKey_Home] = GLFW_KEY_HOME;
+    io.KeyMap[ImGuiKey_End] = GLFW_KEY_END;
+    io.KeyMap[ImGuiKey_Insert] = GLFW_KEY_INSERT;
+    io.KeyMap[ImGuiKey_Delete] = GLFW_KEY_DELETE;
+    io.KeyMap[ImGuiKey_Backspace] = GLFW_KEY_BACKSPACE;
+    io.KeyMap[ImGuiKey_Space] = GLFW_KEY_SPACE;
+    io.KeyMap[ImGuiKey_Enter] = GLFW_KEY_ENTER;
+    io.KeyMap[ImGuiKey_Escape] = GLFW_KEY_ESCAPE;
+    io.KeyMap[ImGuiKey_A] = GLFW_KEY_A;
+    io.KeyMap[ImGuiKey_C] = GLFW_KEY_C;
+    io.KeyMap[ImGuiKey_V] = GLFW_KEY_V;
+    io.KeyMap[ImGuiKey_X] = GLFW_KEY_X;
+    io.KeyMap[ImGuiKey_Y] = GLFW_KEY_Y;
+    io.KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
     
-    // GetTypeName<T>() returns a human-readable name of type T.
-// NB: This function is also used in Google Mock, so don't move it inside of
-// the typed-test-only section below.
-template <typename T>
-std::string GetTypeName() {
-# if GTEST_HAS_RTTI
-    }
-    
-    // Tests the Set method.
-TEST(MyString, Set) {
-  MyString s;
-    }
+    IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_Init();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data);
     
     #pragma once
     
-    #include <algorithm>
-#include <chrono>
-#include <functional>
-#include <map>
-#include <string>
-#include <vector>
+      FunctionRef<int(int, char const*)> variant5 = of;
+  EXPECT_EQ(100 + 5 * 19, variant5(19, 'foo'));
+  FunctionRef<int(int, char const*)> const cvariant5 = of;
+  EXPECT_EQ(100 + 5 * 19, cvariant5(19, 'foo'));
     
-    namespace rj = rapidjson;
     
-    /**
- * @brief A simple ConfigParserPlugin for an 'events' dictionary key.
- */
-class EventsConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override {
-    return {'events'};
+    {} // namespace folly
+    
+    #include <iostream>
+    
+    template <class RNG>
+struct SeedData {
+  SeedData() {
+    Random::secureRandom(seedData.data(), seedData.size() * sizeof(uint32_t));
   }
     }
     
-    Status FilePathsConfigParserPlugin::setUp() {
-  auto paths_obj = data_.getObject();
-  data_.add('file_paths', paths_obj);
-  auto paths_query_obj = data_.getObject();
-  data_.add('file_paths_query', paths_query_obj);
-  auto accesses_arr = data_.getArray();
-  data_.add('file_accesses', accesses_arr);
-  auto exclude_obj = data_.getObject();
-  data_.add('exclude_paths', exclude_obj);
-  return Status();
+    template <
+    class Iterator = const char*,
+    class Base = folly::Range<boost::u8_to_u32_iterator<Iterator>>>
+class UTF8Range : public Base {
+ public:
+  /* implicit */ UTF8Range(const folly::Range<Iterator> baseRange)
+      : Base(
+            boost::u8_to_u32_iterator<Iterator>(
+                baseRange.begin(),
+                baseRange.begin(),
+                baseRange.end()),
+            boost::u8_to_u32_iterator<Iterator>(
+                baseRange.end(),
+                baseRange.begin(),
+                baseRange.end())) {}
+  /* implicit */ UTF8Range(const std::string& baseString)
+      : Base(folly::Range<Iterator>(baseString)) {}
+};
+    
+      bool is_lock_free() const noexcept {
+    // lock free unless more than EXTERNAL_OFFSET threads are
+    // contending and they all get unlucky and scheduled out during
+    // load().
+    //
+    // TODO: Could use a lock-free external map to fix this
+    // corner case.
+    return true;
+  }
+    
+    
+    {  // New allocation.
+  auto mem = mem_;
+  mem_ += sz_;
+  assert(intptr_t(mem) % 128 != 0);
+  return mem;
 }
     
-    
-    {/// KafkaTopicsConfigParserPlugin extracts, updates, and parses Kafka topic
-/// configurations from Osquery's configurations.
-class KafkaTopicsConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override;
-  Status update(const std::string& source, const ParserConfig& config) override;
-};
-} // namespace osquery
-
-    
-    #include <osquery/config/config.h>
+      template <typename T>
+  static T* get_shared_ptr(counted_base* base) {
+    return (T*)base;
+  }
