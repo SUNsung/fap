@@ -1,158 +1,77 @@
 
         
-        
-def login_required(view):
-    '''View decorator that redirects anonymous users to the login page.'''
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if g.user is None:
-            return redirect(url_for('auth.login'))
+            # Gloss the lips
+    d.polygon(face_landmarks['top_lip'], fill=(150, 0, 0, 128))
+    d.polygon(face_landmarks['bottom_lip'], fill=(150, 0, 0, 128))
+    d.line(face_landmarks['top_lip'], fill=(150, 0, 0, 64), width=8)
+    d.line(face_landmarks['bottom_lip'], fill=(150, 0, 0, 64), width=8)
+    
+        # Load the uploaded image file
+    img = face_recognition.load_image_file(file_stream)
+    # Get face encodings for any faces in the uploaded image
+    unknown_face_encodings = face_recognition.face_encodings(img)
+    
+        face_names = []
+    for face_encoding in face_encodings:
+        # See if the face is a match for the known face(s)
+        match = face_recognition.compare_faces(known_faces, face_encoding, tolerance=0.50)
+    
+            if cfg.TEST.BBOX_AUG.ASPECT_RATIO_H_FLIP:
+            scores_ar_hf, boxes_ar_hf = im_detect_bbox_aspect_ratio(
+                model, im, aspect_ratio, box_proposals, hflip=True
+            )
+            add_preds_t(scores_ar_hf, boxes_ar_hf)
     
     
-class Environment(BaseEnvironment):
-    '''Works like a regular Jinja2 environment but has some additional
-    knowledge of how Flask's blueprint works so that it can prepend the
-    name of the blueprint to referenced templates if necessary.
-    '''
+def add_roi_pose_head_v1convX(model, blob_in, dim_in, spatial_scale):
+    '''Add a Mask R-CNN keypoint head. v1convX design: X * (conv).'''
+    hidden_dim = cfg.KRCNN.CONV_HEAD_DIM
+    kernel_size = cfg.KRCNN.CONV_HEAD_KERNEL
+    pad_size = kernel_size // 2
+    current = model.RoIFeatureTransform(
+        blob_in,
+        '_[pose]_roi_feat',
+        blob_rois='keypoint_rois',
+        method=cfg.KRCNN.ROI_XFORM_METHOD,
+        resolution=cfg.KRCNN.ROI_XFORM_RESOLUTION,
+        sampling_ratio=cfg.KRCNN.ROI_XFORM_SAMPLING_RATIO,
+        spatial_scale=spatial_scale
+    )
     
-            # on exit we want to clean up earlier.  Normally the request context
-        # stays preserved until the next request in the same thread comes
-        # in.  See RequestGlobals.push() for the general behavior.
-        top = _request_ctx_stack.top
-        if top is not None and top.preserved:
-            top.pop()
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
     
+        if cfg.MODEL.FASTER_RCNN:
+        if model.train:
+            # Add op that generates training labels for in-network RPN proposals
+            model.GenerateProposalLabels(['rpn_rois', 'roidb', 'im_info'])
+        else:
+            # Alias rois to rpn_rois for inference
+            model.net.Alias('rpn_rois', 'rois')
     
-def test_activity_regularization():
-    x_train, y_train = get_data()
-    for reg in [regularizers.l1(), regularizers.l2()]:
-        model = create_model(activity_regularizer=reg)
-        model.compile(loss='categorical_crossentropy', optimizer='sgd')
-        assert len(model.losses) == 1
-        model.train_on_batch(x_train, y_train)
-    
-        ```python
-    # Consider an array of 5 labels out of a set of 3 classes {0, 1, 2}:
-    > labels
-    array([0, 2, 1, 2, 0])
-    # `to_categorical` converts this into a matrix with as many
-    # columns as there are classes. The number of rows
-    # stays the same.
-    > to_categorical(labels)
-    array([[ 1.,  0.,  0.],
-           [ 0.,  0.,  1.],
-           [ 0.,  1.,  0.],
-           [ 0.,  0.,  1.],
-           [ 1.,  0.,  0.]], dtype=float32)
-    ```
-    '''
-    
-             try:
-             parallel_model = multi_gpu_model(model, cpu_merge=False)
-             print('Training using multiple GPUs..')
-         except:
-             parallel_model = model
-             print('Training using single GPU or CPU..')
-    
-        # Output shape
-        - if `return_sequences`
-             - if data_format='channels_first'
-                5D tensor with shape:
-                `(samples, time, filters, output_row, output_col)`
-             - if data_format='channels_last'
-                5D tensor with shape:
-                `(samples, time, output_row, output_col, filters)`
-        - else
-            - if data_format='channels_first'
-                4D tensor with shape:
-                `(samples, filters, output_row, output_col)`
-            - if data_format='channels_last'
-                4D tensor with shape:
-                `(samples, output_row, output_col, filters)`
-            where o_row and o_col depend on the shape of the filter and
-            the padding
-    
-        def call(self, inputs, states, training=None):
-        if 0 < self.dropout < 1 and self._dropout_mask is None:
-            self._dropout_mask = _generate_dropout_mask(
-                K.ones_like(inputs),
-                self.dropout,
-                training=training,
-                count=4)
-        if (0 < self.recurrent_dropout < 1 and
-                self._recurrent_dropout_mask is None):
-            self._recurrent_dropout_mask = _generate_dropout_mask(
-                K.ones_like(states[0]),
-                self.recurrent_dropout,
-                training=training,
-                count=4)
-    
-    from . import network
-from .training import Model
-from .base_layer import Layer
-from .input_layer import Input
-from .input_layer import InputLayer
-from .. import backend as K
-from .. import layers as layer_module
-    
-        def test_simple(self):
-        def f(p):
-            pass
-        f_ident = ident(f)
-        self.check_events(f, [(1, 'call', f_ident),
-                              (1, 'return', f_ident),
-                              ])
+        num_keypoints = gt_keypoints.shape[2]
+    sampled_keypoints = -np.ones(
+        (len(sampled_fg_rois), gt_keypoints.shape[1], num_keypoints),
+        dtype=gt_keypoints.dtype
+    )
+    for ii in range(len(sampled_fg_rois)):
+        ind = box_to_gt_ind_map[ii]
+        if ind >= 0:
+            sampled_keypoints[ii, :, :] = gt_keypoints[gt_inds[ind], :, :]
+            assert np.sum(sampled_keypoints[ii, 2, :]) > 0
     
     
-# Does a path exist?
-# This is false for dangling symbolic links on systems that support them.
-def exists(path):
-    '''Test whether a path exists.  Returns False for broken symbolic links'''
-    try:
-        os.stat(path)
-    except (OSError, ValueError):
-        return False
-    return True
-    
-        def test_match_common(self):
-        P = self.cls
-        # Absolute patterns
-        self.assertTrue(P('c:/b.py').match('/*.py'))
-        self.assertTrue(P('c:/b.py').match('c:*.py'))
-        self.assertTrue(P('c:/b.py').match('c:/*.py'))
-        self.assertFalse(P('d:/b.py').match('c:/*.py'))  # wrong drive
-        self.assertFalse(P('b.py').match('/*.py'))
-        self.assertFalse(P('b.py').match('c:*.py'))
-        self.assertFalse(P('b.py').match('c:/*.py'))
-        self.assertFalse(P('c:b.py').match('/*.py'))
-        self.assertFalse(P('c:b.py').match('c:/*.py'))
-        self.assertFalse(P('/b.py').match('c:*.py'))
-        self.assertFalse(P('/b.py').match('c:/*.py'))
-        # UNC patterns
-        self.assertTrue(P('//some/share/a.py').match('/*.py'))
-        self.assertTrue(P('//some/share/a.py').match('//some/share/*.py'))
-        self.assertFalse(P('//other/share/a.py').match('//some/share/*.py'))
-        self.assertFalse(P('//some/share/a/b.py').match('//some/share/*.py'))
-        # Case-insensitivity
-        self.assertTrue(P('B.py').match('b.PY'))
-        self.assertTrue(P('c:/a/B.Py').match('C:/A/*.pY'))
-        self.assertTrue(P('//Some/Share/B.Py').match('//somE/sharE/*.pY'))
-    
-    # Of course, there are lots of email messages that could break this simple
-# minded program, but it will handle the most common ones.
-
-    
-    
-def main():
-    parser = ArgumentParser(description='''\
-Unpack a MIME message into a directory of files.
-''')
-    parser.add_argument('-d', '--directory', required=True,
-                        help='''Unpack the MIME message into the named
-                        directory, which will be created if it doesn't already
-                        exist.''')
-    parser.add_argument('msgfile')
-    args = parser.parse_args()
-    
-    # register the generator function baz; use `GeneratorProxy` to make proxies
-MyManager.register('baz', baz, proxytype=GeneratorProxy)
+def main(opts):
+    logger = logging.getLogger(__name__)
+    roidb = combined_roidb_for_training(
+        cfg.TRAIN.DATASETS, cfg.TRAIN.PROPOSAL_FILES)
+    logger.info('{:d} roidb entries'.format(len(roidb)))
+    roi_data_loader = RoIDataLoader(
+        roidb,
+        num_loaders=cfg.DATA_LOADER.NUM_THREADS,
+        minibatch_queue_size=cfg.DATA_LOADER.MINIBATCH_QUEUE_SIZE,
+        blobs_queue_capacity=cfg.DATA_LOADER.BLOBS_QUEUE_CAPACITY
+    )
+    blob_names = roi_data_loader.get_output_names()
