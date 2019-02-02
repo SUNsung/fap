@@ -1,123 +1,113 @@
 
         
-        void CacheImpl::setAndRetain(void *Key, void *Value, size_t Cost) {
-  DefaultCache &DCache = *static_cast<DefaultCache*>(Impl);
-  llvm::sys::ScopedLock L(DCache.Mux);
-    }
+        #include <google/protobuf/generated_message_util.h>
     
-    void swift::printOpaquePrefixMap(raw_ostream &out, void *_root,
-                         void (*printNodeData)(raw_ostream &out, void *node)) {
-  auto root = reinterpret_cast<Node*>(_root);
-  if (!root) {
-    out << '(empty)\n';
-    return;
-  }
-  TreePrinter(out, *printNodeData).print(root, ChildKind::Root);
-}
     
-    bool swift::canBeMemberName(StringRef identifier) {
-  return llvm::StringSwitch<bool>(identifier)
-    .Case('init', false)
-    .Case('Protocol', false)
-    .Case('self', false)
-    .Case('Type', false)
-    .Default(true);
-}
-    
-        /// Returns true if \p loc is inside one of Swift's synthetic buffers.
-    static bool isInSwiftBuffers(clang::FullSourceLoc loc) {
-      StringRef bufName = StringRef(loc.getManager().getBufferName(loc));
-      return bufName == ClangImporter::Implementation::moduleImportBufferName ||
-             bufName == ClangImporter::Implementation::bridgingHeaderBufferName;
-    }
-    
-    #include 'SwiftLookupTable.h'
-    
-    #include <script/script.h>
-    
-        strKey = 'distance';
-    BOOST_CHECK(obj.pushKV(strKey, (int64_t) 25));
-    
-    /** Decode a Bech32 string. Returns (hrp, data). Empty hrp means failure. */
-std::pair<std::string, std::vector<uint8_t>> Decode(const std::string& str);
-    
-    public:
-    static const size_t OUTPUT_SIZE = 20;
-    
-      /**
-   * @brief Returns the scalar loss associated with a top blob at a given index.
-   */
-  inline Dtype loss(const int top_index) const {
-    return (loss_.size() > top_index) ? loss_[top_index] : Dtype(0);
-  }
-    
-    #endif  // CAFFE_ABSVAL_LAYER_HPP_
+    {
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
 
     
-    namespace caffe {
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
+    
+      // -----------------------------------------------------------------
+  // Invoke internalBuildGeneratedFileFrom() to build the file.
+  printer->Print(
+    'com.google.protobuf.Descriptors.FileDescriptor\n'
+    '  .internalBuildGeneratedFileFrom(descriptorData,\n');
+  printer->Print(
+    '    new com.google.protobuf.Descriptors.FileDescriptor[] {\n');
     }
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
+      desired_output_for_decode = '_AbcdefghIJ';
+  expected = string('\xCA\x0', 2);
+  result = TextFormatDecodeData::DecodeDataForString(input_for_decode,
+                                                     desired_output_for_decode);
+  EXPECT_EQ(expected, result);
     
-    
-    { private:
-  struct pair_sort_first {
-    bool operator()(const std::pair<int, int> &left,
-                    const std::pair<int, int> &right) {
-      return left.first < right.first;
-    }
-  };
-  void check_batch_reindex(int initial_num, int final_num,
-                           const Dtype* ridx_data);
-};
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    namespace caffe {
-    }
-    
-    bool b2Triangle::IsInside(float32 _x, float32 _y){
-	if (_x < x[0] && _x < x[1] && _x < x[2]) return false;
-	if (_x > x[0] && _x > x[1] && _x > x[2]) return false;
-	if (_y < y[0] && _y < y[1] && _y < y[2]) return false;
-	if (_y > y[0] && _y > y[1] && _y > y[2]) return false;
-		
-		float32 vx2 = _x-x[0]; float32 vy2 = _y-y[0];
-		float32 vx1 = x[1]-x[0]; float32 vy1 = y[1]-y[0];
-		float32 vx0 = x[2]-x[0]; float32 vy0 = y[2]-y[0];
-		
-		float32 dot00 = vx0*vx0+vy0*vy0;
-		float32 dot01 = vx0*vx1+vy0*vy1;
-		float32 dot02 = vx0*vx2+vy0*vy2;
-		float32 dot11 = vx1*vx1+vy1*vy1;
-		float32 dot12 = vx1*vx2+vy1*vy2;
-		float32 invDenom = 1.0f / (dot00*dot11 - dot01*dot01);
-		float32 u = (dot11*dot02 - dot01*dot12)*invDenom;
-		float32 v = (dot00*dot12 - dot01*dot02)*invDenom;
-		
-		return ((u>=0)&&(v>=0)&&(u+v<=1));    
+    void OneofGenerator::GenerateClearFunctionDeclaration(io::Printer* printer) {
+  printer->Print(
+      variables_,
+      '/**\n'
+      ' * Clears whatever value was set for the oneof '$name$'.\n'
+      ' **/\n'
+      'void $owning_message_class$_Clear$capitalized_name$OneOfCase($owning_message_class$ *message);\n');
 }
     
-    	// C-style inteface to the encoder
-	void Encode(float *a_pafSourceRGBA,
-				unsigned int a_uiSourceWidth,
-				unsigned int a_uiSourceHeight,
-				Image::Format a_format,
-				ErrorMetric a_eErrMetric,
-				float a_fEffort,
-				unsigned int a_uiJobs,
-				unsigned int a_uimaxJobs,
-				unsigned char **a_ppaucEncodingBits,
-				unsigned int *a_puiEncodingBitsBytes,
-				unsigned int *a_puiExtendedWidth,
-				unsigned int *a_puiExtendedHeight,
-				int *a_piEncodingTime_ms, bool a_bVerboseOutput = false);
     
-    		inline unsigned int GetSourceV(void)
-		{
-			return m_uiSourceV;
-		}
+Status DBImpl::InstallCompactionResults(CompactionState* compact) {
+  mutex_.AssertHeld();
+  Log(options_.info_log,  'Compacted %d@%d + %d@%d files => %lld bytes',
+      compact->compaction->num_input_files(0),
+      compact->compaction->level(),
+      compact->compaction->num_input_files(1),
+      compact->compaction->level() + 1,
+      static_cast<long long>(compact->total_bytes));
+    }
+    
+    TEST(DBTest, IterSmallAndLargeMix) {
+  ASSERT_OK(Put('a', 'va'));
+  ASSERT_OK(Put('b', std::string(100000, 'b')));
+  ASSERT_OK(Put('c', 'vc'));
+  ASSERT_OK(Put('d', std::string(100000, 'd')));
+  ASSERT_OK(Put('e', std::string(100000, 'e')));
+    }
+    
+      // When start user key is prefix of limit user key
+  ASSERT_EQ(IKey('foo', 100, kTypeValue),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('foobar', 200, kTypeValue)));
+    
+    
+    {  // For fragments
+  kFirstType = 2,
+  kMiddleType = 3,
+  kLastType = 4
+};
+static const int kMaxRecordType = kLastType;
+    
+      // Fragment the record if necessary and emit it.  Note that if slice
+  // is empty, we still want to iterate once to emit a single
+  // zero-length record
+  Status s;
+  bool begin = true;
+  do {
+    const int leftover = kBlockSize - block_offset_;
+    assert(leftover >= 0);
+    if (leftover < kHeaderSize) {
+      // Switch to a new block
+      if (leftover > 0) {
+        // Fill the trailer (literal below relies on kHeaderSize being 7)
+        assert(kHeaderSize == 7);
+        dest_->Append(Slice('\x00\x00\x00\x00\x00\x00', leftover));
+      }
+      block_offset_ = 0;
+    }
+    }
+    
+    #endif  // STORAGE_LEVELDB_DB_LOG_WRITER_H_
+
+    
+    namespace leveldb {
+    }
+    
+     public:
+  // Create a new SkipList object that will use 'cmp' for comparing keys,
+  // and will allocate memory using '*arena'.  Objects allocated in the arena
+  // must remain allocated for the lifetime of the skiplist object.
+  explicit SkipList(Comparator cmp, Arena* arena);
+    
+      SequenceNumber sequence_number() const { return sequence_number_; }
