@@ -1,127 +1,144 @@
 
         
-          preflight do
-    processes = system_command '/bin/launchctl', args: ['list']
+              @launch_event_sent = true
+      builder = AnalyticsEventBuilder.new(
+        p_hash: launch_context.p_hash,
+        session_id: session_id,
+        action_name: nil,
+        fastlane_client_language: launch_context.fastlane_client_language
+      )
     
-        def log_processing(name)
-      puts yellow '  #{File.basename(name)}'
+            expect(result).to eq('carthage archive')
+      end
+    
+            expect(result).to include(''fastlane/spec/fixtures/oclint/src/AppDelegate.m'')
+        expect(result).not_to(include('Test'))
+      end
+    
+              expect(result).to eq('SCRIPT_INPUT_FILE_COUNT=3 SCRIPT_INPUT_FILE_0=AppDelegate.swift SCRIPT_INPUT_FILE_1=path/to/project/src/Model.swift SCRIPT_INPUT_FILE_2=path/to/project/test/Test.swift swiftlint lint --use-script-input-files')
+        end
+      end
+    
+        os = 'windows'
+    shelljoin_testcases.each do |testcase|
+      it testcase['it'] + ': ' + testcase['it_result'][os] do
+        array = testcase['input']
+        expect_correct_implementation_to_be_called(array, :shelljoin, os)
+        joined = array.shelljoin
+        expect(joined).to eq(testcase['expect'][os])
+      end
+    end
+  end
+    
+    if git.modified_files.include?('snapshot/lib/assets/SnapshotHelper.swift')
+  warn('You modified `SnapshotHelper.swift`, make sure to update the version number at the bottom of the file to notify users about the new helper file.')
+end
+    
+          # Fetches data from the GitHub API and yields a Page object for every page
+      # of data, without loading all of them into memory.
+      #
+      # method - The Octokit method to use for getting the data.
+      # args - Arguments to pass to the Octokit method.
+      #
+      # rubocop: disable GitlabSecurity/PublicSend
+      def each_page(method, *args, &block)
+        return to_enum(__method__, method, *args) unless block_given?
+    
+              if !matches || !matches[:type]
+            raise(
+              ArgumentError,
+              'The note URL #{note.html_url.inspect} is not supported'
+            )
+          end
+    
+            # Builds a user from a GitHub API response.
+        #
+        # user - An instance of `Sawyer::Resource` containing the user details.
+        def self.from_api_response(user)
+          new(id: user.id, login: user.login)
+        end
+    
+          def action_for_grape(env)
+        endpoint = env[ENDPOINT_KEY]
+        route = endpoint.route rescue nil
+    
+      it 'expands shell variables when given a single string argument' do
+    lambda { @object.system('echo #{@shell_var}') }.should output_to_fd('foo\n')
+  end
+    
+      it 'raises an ArgumentError if there is no catch block for the symbol' do
+    lambda { throw :blah }.should raise_error(ArgumentError)
+  end
+    
+        trace_var :$Kernel_trace_var_global do |value|
+      captured = value
     end
     
-      release = Rake.application.top_level_tasks.include?('release') || File.exist?(scope('EDGE_GEM_VERSION'))
-  if Sass.version[:rev] && !release
-    File.open(scope('REVISION'), 'w') { |f| f.puts Sass.version[:rev] }
-  elsif release
-    File.open(scope('REVISION'), 'w') { |f| f.puts '(release)' }
-  else
-    File.open(scope('REVISION'), 'w') { |f| f.puts '(unknown)' }
+          ruby_bug '#14846', '2.5'...'2.6' do
+        it 'does not prepend caller information if line number is too big' do
+          w = KernelSpecs::WarnInNestedCall.new
+          -> { w.f4('foo', 100) }.should output(nil, 'warning: foo\n')
+        end
+      end
+    
+    script_binding = binding
+    
+      # body
+  xml.tag!('body') do
+    xml.tag!('outline', text: TITLE, title: TITLE) do
+      blogs.each do |blog|
+        xml.tag!('outline', type: 'rss', text: blog.name, title: blog.name,
+          xmlUrl: blog.rss_url, htmlUrl: blog.web_url)
+      end
+    end
   end
 end
     
-      # The global load paths for Sass files. This is meant for plugins and
-  # libraries to register the paths to their Sass stylesheets to that they may
-  # be `@imported`. This load path is used by every instance of {Sass::Engine}.
-  # They are lower-precedence than any load paths passed in via the
-  # {file:SASS_REFERENCE.md#load_paths-option `:load_paths` option}.
-  #
-  # If the `SASS_PATH` environment variable is set,
-  # the initial value of `load_paths` will be initialized based on that.
-  # The variable should be a colon-separated list of path names
-  # (semicolon-separated on Windows).
-  #
-  # Note that files on the global load path are never compiled to CSS
-  # themselves, even if they aren't partials. They exist only to be imported.
-  #
-  # @example
-  #   Sass.load_paths << File.dirname(__FILE__ + '/sass')
-  # @return [Array<String, Pathname, Sass::Importers::Base>]
-  def self.load_paths
-    @load_paths ||= if ENV['SASS_PATH']
-                      ENV['SASS_PATH'].split(Sass::Util.windows? ? ';' : ':')
-                    else
-                      []
-                    end
-  end
+    Then(/^the tasks folder is created$/) do
+  path = TestApp.test_app_path.join('lib/capistrano/tasks')
+  expect(Dir.exist?(path)).to be true
+end
     
-          super
-      input = @options[:input]
-      if File.directory?(input)
-        raise 'Error: '#{input.path}' is a directory (did you mean to use --recursive?)'
-      end
-      output = @options[:output]
-      output = input if @options[:in_place]
-      process_file(input, output)
-    end
-    
-          # If the importer is based on files on the local filesystem
-      # this method should return folders which should be watched
-      # for changes.
-      #
-      # @return [Array<String>] List of absolute paths of directories to watch
-      def directories_to_watch
-        []
-      end
-    
-          private
-    
-            value_to_evaluate = block || value
-    
-    require 'bundler/cli'
-require 'bundler/friendly_errors'
-    
-        class Main < Clamp::Command
-      subcommand 'list', 'List all installed Logstash plugins', LogStash::PluginManager::List
-      subcommand 'install', 'Install a Logstash plugin', LogStash::PluginManager::Install
-      subcommand 'remove', 'Remove a Logstash plugin', LogStash::PluginManager::Remove
-      subcommand 'update', 'Update a plugin', LogStash::PluginManager::Update
-      subcommand 'pack', 'Package currently installed plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Pack
-      subcommand 'unpack', 'Unpack packaged plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Unpack
-      subcommand 'generate', 'Create the foundation for a new plugin', LogStash::PluginManager::Generate
-      subcommand 'uninstall', 'Uninstall a plugin. Deprecated: Please use remove instead', LogStash::PluginManager::Remove
-      subcommand 'prepare-offline-pack', 'Create an archive of specified plugins to use for offline installation', LogStash::PluginManager::PrepareOfflinePack
-    end
+      def safely_remove_file(_path)
+    run_vagrant_command('rm #{test_file}')
+  rescue
+    VagrantHelpers::VagrantSSHCommandError
   end
 end
     
-          explicit_plugins_specs = explicitly_declared_plugins_specs
+        private
     
-          warn_local_gems(plugins_with_path) if plugins_with_path.size > 0
-    end
-    update_gems!
+          def primary
+        self if fetch(:primary)
+      end
+    
+          def set(key, value=nil, &block)
+        @trusted_keys << key if trusted? && !@trusted_keys.include?(key)
+        remember_location(key)
+        values[key] = block || value
+        trace_set(key)
+        values[key]
+      end
+    
+    %i(git_strategy hg_strategy svn_strategy).each do |strategy|
+  validate(strategy) do |key, _value|
+    warn(
+      '[Deprecation Warning] #{key} is deprecated and will be removed in '\
+      'Capistrano 3.7.0.\n'\
+      'https://github.com/capistrano/capistrano/blob/master/UPGRADING-3.7.md'
+    )
+  end
+end
+    
+      setup do
+    @path = cloned_testpath('examples/revert.git')
+    @wiki = Gollum::Wiki.new(@path)
+    Precious::App.set(:gollum_path, @path)
+    Precious::App.set(:wiki_options, {})
   end
     
-    RSpec.describe RuboCop::Cop::Layout::MultilineArrayBraceLayout, :config do
-  subject(:cop) { described_class.new(config) }
-    
-          # Returns the collection the `for` loop is iterating over.
-      #
-      # @return [Node] The collection the `for` loop is iterating over
-      def collection
-        node_parts[1]
-      end
-    
-          # Checks whether any argument of the node is a splat
-      # argument, i.e. `*splat`.
-      #
-      # @return [Boolean] whether the node is a splat argument
-      def splat_argument?
-        arguments? &&
-          (arguments.any?(&:splat_type?) || arguments.any?(&:restarg_type?))
-      end
-      alias rest_argument? splat_argument?
-    
-      node[:applications].each do |app, data|
-    template '/etc/monit.d/sidekiq_#{app}.monitrc' do 
-      owner 'root' 
-      group 'root' 
-      mode 0644 
-      source 'monitrc.conf.erb' 
-      variables({ 
-        :num_workers => worker_count,
-        :app_name => app, 
-        :rails_env => node[:environment][:framework_env] 
-      }) 
-    end
-    
-        def session
-      env[RACK_SESSION]
-    end
+      s.name              = 'gollum'
+  s.version           = '4.1.4'
+  s.date              = '2018-10-01'
+  s.rubyforge_project = 'gollum'
+  s.license           = 'MIT'
