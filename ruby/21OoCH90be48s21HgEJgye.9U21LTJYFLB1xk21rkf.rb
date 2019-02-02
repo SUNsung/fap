@@ -1,160 +1,123 @@
 
         
-                  def render_collection
-            @collection.map do |item|
-              value = value_for_collection(item, @value_method)
-              text  = value_for_collection(item, @text_method)
-              default_html_options = default_html_options_for_collection(item, value)
-              additional_html_options = option_html_attributes(item)
+        module Vagrant
+  # This class handles guest-OS specific interactions with a machine.
+  # It is primarily responsible for detecting the proper guest OS
+  # implementation and then delegating capabilities.
+  #
+  # Vagrant has many tasks which require specific guest OS knowledge.
+  # These are implemented using a guest/capability system. Various plugins
+  # register as 'guests' which determine the underlying OS of the system.
+  # Then, 'guest capabilities' register themselves for a specific OS (one
+  # or more), and these capabilities are called.
+  #
+  # Example capabilities might be 'mount_virtualbox_shared_folder' or
+  # 'configure_networks'.
+  #
+  # This system allows for maximum flexibility and pluginability for doing
+  # guest OS specific operations.
+  class Guest
+    include CapabilityHost
     
-              def render_component(builder)
-            builder.radio_button + builder.label
-          end
+            # Get the machine
+        machine = nil
+        begin
+          machine = env.machine(self.name.to_sym, self.provider.to_sym)
+        rescue Errors::MachineNotFound
+          return false
+        end
+    
+            # This is what is called on the class to actually execute it. Any
+        # subclasses should implement this method and do any option parsing
+        # and validation here.
+        def execute
+        end
+    
+            # Executes a command and returns true if the command succeeded,
+        # and false otherwise. By default, this executes as a normal user,
+        # and it is up to the communicator implementation if they expose an
+        # option for running tests as an administrator.
+        #
+        # @see #execute
+        def test(command, opts=nil)
+        end
       end
     end
   end
 end
 
     
-            private
+            # Merge another configuration object into this one. This assumes that
+        # the other object is the same class as this one. This should not
+        # mutate this object, but instead should return a new, merged object.
+        #
+        # The default implementation will simply iterate over the instance
+        # variables and merge them together, with this object overriding
+        # any conflicting instance variables of the older object. Instance
+        # variables starting with '__' (double underscores) will be ignored.
+        # This lets you set some sort of instance-specific state on your
+        # configuration keys without them being merged together later.
+        #
+        # @param [Object] other The other configuration object to merge from,
+        #   this must be the same type of object as this one.
+        # @return [Object] The merged object.
+        def merge(other)
+          result = self.class.new
     
-        initializer 'action_view.embed_authenticity_token_in_remote_forms' do |app|
-      ActiveSupport.on_load(:action_view) do
-        ActionView::Helpers::FormTagHelper.embed_authenticity_token_in_remote_forms =
-          app.config.action_view.delete(:embed_authenticity_token_in_remote_forms)
-      end
-    end
+            # Mounts a shared folder via NFS. This assumes that the exports
+        # via the host are already done.
+        def mount_nfs(ip, folders)
+          raise BaseError, _key: :unsupported_nfs
+        end
     
-        # Direct access to partial rendering.
-    def render_partial(context, options, &block) #:nodoc:
-      PartialRenderer.new(@lookup_context).render(context, options, block)
-    end
+            # Defines additional command line commands available by key. The key
+        # becomes the subcommand, so if you register a command 'foo' then
+        # 'vagrant foo' becomes available.
+        #
+        # @param [String] name Subcommand key.
+        def self.command(name=UNSET_VALUE, &block)
+          data[:command] ||= Registry.new
     
-      url = File.dirname(url)
-  url == FORWARD_SLASH ? url : '#{url}/'
-end
-    
-      config.on_event :test_case_started do |event|
-    f.print_feature_element_name(event.test_case)
-    f.before_feature_element(event.test_case)
-  end
-    
-            def convert(content)
-          document = Kramdown::Document.new(content, @config)
-          html_output = document.to_html
-          if @config['show_warnings']
-            document.warnings.each do |warning|
-              Jekyll.logger.warn 'Kramdown warning:', warning
+                    if provider_to_use && provider_to_use != active_provider
+                  # We found an active machine with a provider that doesn't
+                  # match the requested provider. Show an error.
+                  raise Errors::ActiveMachineWithDifferentProvider,
+                    name: active_name.to_s,
+                    active_provider: active_provider.to_s,
+                    requested_provider: provider_to_use.to_s
+                else
+                  # Use this provider and exit out of the loop. One of the
+                  # invariants [for now] is that there shouldn't be machines
+                  # with multiple providers.
+                  @logger.info('Active machine found with name #{active_name}. ' +
+                               'Using provider: #{active_provider}')
+                  provider_to_use = active_provider
+                  break
+                end
+              end
             end
-          end
-          html_output
+    
+            # Returns the internal data associated with this plugin. This
+        # should NOT be called by the general public.
+        #
+        # @return [Hash]
+        def self.data
+          @data ||= {}
         end
     
-        def defaults_deprecate_type(old, current)
-      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
-      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
-                        'type: #{current}'.'
-    end
+      def set_statuses
+    return unless page_requested?
+    
+        head 200
   end
-end
-
     
-    Group.user_trust_level_change!(-1, TrustLevel[4])
-    
-    module Homebrew
-  module_function
-    
-      gem.licenses      = ['MIT']
-    
-    Then(/^the failure task will not run$/) do
-  failed = TestApp.shared_path.join('failed')
-  expect { run_vagrant_command(test_file_exists(failed)) }
-    .to raise_error(VagrantHelpers::VagrantSSHCommandError)
-end
-    
-        def print_config_variables
-      ['--print-config-variables', '-p',
-       'Display the defined config variables before starting the deployment tasks.',
-       lambda do |_value|
-         Configuration.env.set(:print_config_variables, true)
-       end]
-    end
-  end
-end
-
-    
-        def set_if_empty(key, value=nil, &block)
-      set(key, value, &block) unless keys.include?(key)
+          weeks << {
+        week: week.to_time.to_i.to_s,
+        statuses: Redis.current.get('activity:statuses:local:#{week_id}') || '0',
+        logins: Redis.current.pfcount('activity:logins:#{week_id}').to_s,
+        registrations: Redis.current.get('activity:accounts:local:#{week_id}') || '0',
+      }
     end
     
-          def add_host(host, properties={})
-        new_host = Server[host]
-        new_host.port = properties[:port] if properties.key?(:port)
-        # This matching logic must stay in sync with `Server#matches?`.
-        key = ServerKey.new(new_host.hostname, new_host.port)
-        existing = servers_by_key[key]
-        if existing
-          existing.user = new_host.user if new_host.user
-          existing.with(properties)
-        else
-          servers_by_key[key] = new_host.with(properties)
-        end
-      end
-    
-          def assert_value_or_block_not_both(value, block)
-        return if value.nil? || block.nil?
-        raise Capistrano::ValidationError,
-              'Value and block both passed to Configuration#set'
-      end
-    
-    module Capistrano
-  class Configuration
-    # Holds the variables assigned at Capistrano runtime via `set` and retrieved
-    # with `fetch`. Does internal bookkeeping to help identify user mistakes
-    # like spelling errors or unused variables that may lead to unexpected
-    # behavior.
-    class Variables
-      CAPISTRANO_LOCATION = File.expand_path('../..', __FILE__).freeze
-      IGNORED_LOCATIONS = [
-        '#{CAPISTRANO_LOCATION}/configuration/variables.rb:',
-        '#{CAPISTRANO_LOCATION}/configuration.rb:',
-        '#{CAPISTRANO_LOCATION}/dsl/env.rb:',
-        '/dsl.rb:',
-        '/forwardable.rb:'
-      ].freeze
-      private_constant :CAPISTRANO_LOCATION, :IGNORED_LOCATIONS
-    
-        context 'and a comment after the last element' do
-      let(:b_comment) { ' # comment b' }
-    
-    module RuboCop
-  module AST
-    # A node extension for `case` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `case` nodes within RuboCop.
-    class CaseNode < Node
-      include ConditionalNode
-    
-          # The body of the method definition.
-      #
-      # @note this can be either a `begin` node, if the method body contains
-      #       multiple expressions, or any other node, if it contains a single
-      #       expression.
-      #
-      # @return [Node] the body of the method definition
-      def body
-        node_parts[0]
-      end
-    
-    module RuboCop
-  module AST
-    # A node extension for `hash` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `hash` nodes within RuboCop.
-    class HashNode < Node
-      # Returns an array of all the key value pairs in the `hash` literal.
-      #
-      # @return [Array<PairNode>] an array of `pair` nodes
-      def pairs
-        each_pair.to_a
-      end
+    class Auth::OmniauthCallbacksController < Devise::OmniauthCallbacksController
+  skip_before_action :verify_authenticity_token
