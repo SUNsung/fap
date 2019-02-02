@@ -1,99 +1,156 @@
 
         
-        
-  def dprint(msg)
-    self.client.dprint(msg)
-  end
+        # -------------------------------------------------------------------
+# Benchmarking changes in https://github.com/jekyll/jekyll/pull/6767
+# -------------------------------------------------------------------
     
-              # Encodes the end_time field
-          #
-          # @return [String]
-          def encode_end_time
-            [end_time].pack('N')
-          end
-    
-              # Decodes the flags field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_flags(input)
-            input.value[0].value.to_i
-          end
-    
-              # Encodes the value field
-          #
-          # @return [OpenSSL::ASN1::OctetString]
-          def encode_value
-            OpenSSL::ASN1::OctetString.new(value)
-          end
+              theme.create!
+          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
+                             ' is ready for you in #{theme.path.to_s.cyan}!'
+          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
         end
+        # rubocop:enable Metrics/AbcSize
       end
     end
   end
 end
+
     
-              # Decodes a Rex::Proto::Kerberos::Model::KdcRequest
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode_asn1(input)
-            input.value[0].value.each do |val|
-              case val.tag
-              when 1
-                self.pvno = decode_asn1_pvno(val)
-              when 2
-                self.msg_type = decode_asn1_msg_type(val)
-              when 3
-                self.pa_data  = decode_asn1_pa_data(val)
-              when 4
-                self.req_body = decode_asn1_req_body(val)
-              else
-                raise ::RuntimeError, 'Failed to decode KdcRequest SEQUENCE'
-              end
-            end
+            def connect(websocket, handshake)
+          @connections_count += 1
+          if @connections_count == 1
+            message = 'Browser connected'
+            message += ' over SSL/TLS' if handshake.secure?
+            Jekyll.logger.info 'LiveReload:', message
           end
+          websocket.send(
+            JSON.dump(
+              :command    => 'hello',
+              :protocols  => ['http://livereload.com/protocols/official-7'],
+              :serverName => 'jekyll'
+            )
+          )
     
-    module Rex
-  module Proto
-    module Kerberos
-      module Model
-        # This class provides a representation of a Kerberos KDC-REQ-BODY (request body) data
-        # definition
-        class KdcRequestBody < Element
-          # @!attribute options
-          #   @return [Integer] The ticket flags
-          attr_accessor :options
-          # @!attribute cname
-          #   @return [Rex::Proto::Kerberos::Model::PrincipalName] The name part of the client's principal identifier
-          attr_accessor :cname
-          # @!attribute realm
-          #   @return [String] The realm part of the server's principal identifier
-          attr_accessor :realm
-          # @!attribute sname
-          #   @return [Rex::Proto::Kerberos::Model::PrincipalName] The name part of the server's identity
-          attr_accessor :sname
-          # @!attribute from
-          #   @return [Time] Start time when the ticket is to be postdated
-          attr_accessor :from
-          # @!attribute till
-          #   @return [Time] Expiration date requested by the client
-          attr_accessor :till
-          # @!attribute rtime
-          #   @return [Time] Optional requested renew-till time
-          attr_accessor :rtime
-          # @!attribute nonce
-          #   @return [Integer] random number
-          attr_accessor :nonce
-          # @!attribute etype
-          #   @return [Array<Integer>] The desired encryption algorithm to be used in the response
-          attr_accessor :etype
-          # @!attribute enc_auth_data
-          #   @return [Rex::Proto::Kerberos::Model::EncryptedData] An encoding of the desired authorization-data encrypted
-          attr_accessor :enc_auth_data
+                # stream_file_data would free us from keeping livereload.js in memory
+            # but JRuby blocks on that call and never returns
+            send_data(reload_body)
+            close_connection_after_writing
+          else
+            body = 'This port only serves livereload.js over HTTP.\n'
+            headers = [
+              'HTTP/1.1 400 Bad Request',
+              'Content-Type: text/plain',
+              'Content-Length: #{body.bytesize}',
+              '',
+              '',
+            ].join('\r\n')
+            send_data(headers)
+            send_data(body)
+            close_connection_after_writing
+          end
+        end
+        # rubocop:enable Metrics/MethodLength
+      end
+    end
+  end
+end
+
     
-              # @!attribute type
-          #   @return [Integer] The type of value
-          attr_accessor :type
-          # @!attribute value
-          #   @return [Time] the time of the last request
-          attr_accessor :value
+          begin
+        Dir.chdir(custom_dir) do # go up from the fastlane folder, to the project folder
+          # If another action is calling this action, we shouldn't show it in the summary
+          # (see https://github.com/fastlane/fastlane/issues/4546)
+    
+          new_path = File.join(FastlaneCore.fastlane_user_dir, file_name)
+      did_show = File.exist?(new_path)
+    
+          def self.available_options
+        [
+          FastlaneCore::ConfigItem.new(key: :tag,
+                                       env_name: 'FL_GIT_TAG_TAG',
+                                       description: 'Define your own tag text. This will replace all other parameters',
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :grouping,
+                                       env_name: 'FL_GIT_TAG_GROUPING',
+                                       description: 'Is used to keep your tags organised under one 'folder'',
+                                       default_value: 'builds'),
+          FastlaneCore::ConfigItem.new(key: :prefix,
+                                       env_name: 'FL_GIT_TAG_PREFIX',
+                                       description: 'Anything you want to put in front of the version number (e.g. 'v')',
+                                       default_value: ''),
+          FastlaneCore::ConfigItem.new(key: :postfix,
+                                       env_name: 'FL_GIT_TAG_POSTFIX',
+                                       description: 'Anything you want to put at the end of the version number (e.g. '-RC1')',
+                                       default_value: ''),
+          FastlaneCore::ConfigItem.new(key: :build_number,
+                                       env_name: 'FL_GIT_TAG_BUILD_NUMBER',
+                                       description: 'The build number. Defaults to the result of increment_build_number if you\'re using it',
+                                       default_value: Actions.lane_context[Actions::SharedValues::BUILD_NUMBER],
+                                       default_value_dynamic: true,
+                                       is_string: false),
+          FastlaneCore::ConfigItem.new(key: :message,
+                                       env_name: 'FL_GIT_TAG_MESSAGE',
+                                       description: 'The tag message. Defaults to the tag's name',
+                                       default_value_dynamic: true,
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :commit,
+                                       env_name: 'FL_GIT_TAG_COMMIT',
+                                       description: 'The commit or object where the tag will be set. Defaults to the current HEAD',
+                                       default_value_dynamic: true,
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :force,
+                                       env_name: 'FL_GIT_TAG_FORCE',
+                                       description: 'Force adding the tag',
+                                       optional: true,
+                                       is_string: false,
+                                       default_value: false),
+          FastlaneCore::ConfigItem.new(key: :sign,
+                                       env_name: 'FL_GIT_TAG_SIGN',
+                                       description: 'Make a GPG-signed tag, using the default e-mail address's key',
+                                       optional: true,
+                                       is_string: false,
+                                       default_value: false)
+        ]
+      end
+    
+            context 'with given path to oclint' do
+          let(:result) do
+            Fastlane::FastFile.new.parse('lane :test do
+              oclint(
+                compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
+                oclint_path: 'test/bin/oclint'
+              )
+            end').runner.execute(:test)
+          end
+          let(:command) { 'cd #{File.expand_path('.').shellescape} && test/bin/oclint -report-type=html -o=oclint_report.html' }
+    
+        # [String] A description shown to the user
+    attr_accessor :description
+    
+            def importer_class
+          DiffNoteImporter
+        end
+    
+            def collection_method
+          :issues_comments
+        end
+    
+            # We inject the page number here to make sure that all importers always
+        # start where they left off. Simply starting over wouldn't work for
+        # repositories with a lot of data (e.g. tens of thousands of comments).
+        options = collection_options.merge(page: page_counter.current)
+    
+            # Returns a Hash that can be used to populate `notes.st_diff`, removing
+        # the need for requesting Git data for every diff note.
+        def diff_hash
+          {
+            diff: diff_hunk,
+            new_path: file_path,
+            old_path: file_path,
+    }
+    
+        it 'returns true if the given string is a switch' do
+      %w[n s i].each do |s|
+        expect(subject.switch?(s)).to be true
+      end
+    end
