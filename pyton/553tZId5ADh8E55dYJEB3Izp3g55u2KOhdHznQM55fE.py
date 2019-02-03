@@ -1,60 +1,111 @@
 
         
-            def test_encrypt(self):
-        msg = b'message'
-        key = list(range(16))
-        encrypted = aes_encrypt(bytes_to_intlist(msg), key)
-        decrypted = intlist_to_bytes(aes_decrypt(encrypted, key))
-        self.assertEqual(decrypted, msg)
-    
-                for tc_num, tc in enumerate(test_cases):
-                tc_res_dict = res_dict['entries'][tc_num]
-                # First, check test cases' data against extracted data alone
-                expect_info_dict(self, tc_res_dict, tc.get('info_dict', {}))
-                # Now, check downloaded file consistency
-                tc_filename = get_tc_filename(tc)
-                if not test_case.get('params', {}).get('skip_download', False):
-                    self.assertTrue(os.path.exists(tc_filename), msg='Missing file ' + tc_filename)
-                    self.assertTrue(tc_filename in finished_hook_called)
-                    expected_minsize = tc.get('file_minsize', 10000)
-                    if expected_minsize is not None:
-                        if params.get('test'):
-                            expected_minsize = max(expected_minsize, 10000)
-                        got_fsize = os.path.getsize(tc_filename)
-                        assertGreaterEqual(
-                            self, got_fsize, expected_minsize,
-                            'Expected %s to be at least %s, but it\'s only %s ' %
-                            (tc_filename, format_bytes(expected_minsize),
-                                format_bytes(got_fsize)))
-                    if 'md5' in tc:
-                        md5_for_file = _file_md5(tc_filename)
-                        self.assertEqual(tc['md5'], md5_for_file)
-                # Finally, check test cases' data again but this time against
-                # extracted data from info JSON file written during processing
-                info_json_fn = os.path.splitext(tc_filename)[0] + '.info.json'
-                self.assertTrue(
-                    os.path.exists(info_json_fn),
-                    'Missing info file %s' % info_json_fn)
-                with io.open(info_json_fn, encoding='utf-8') as infof:
-                    info_dict = json.load(infof)
-                expect_info_dict(self, info_dict, tc.get('info_dict', {}))
-        finally:
-            try_rm_tcs_files()
-            if is_playlist and res_dict is not None and res_dict.get('entries'):
-                # Remove all other files that may have been extracted if the
-                # extractor returns full results even with extract_flat
-                res_tcs = [{'info_dict': e} for e in res_dict['entries']]
-                try_rm_tcs_files(res_tcs)
-    
-    def cbs_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    '''Downloads CBS videos by URL.
+        
+def init_app(app):
+    '''Register database functions with the Flask app. This is called by
+    the application factory.
     '''
+    app.teardown_appcontext(close_db)
+    app.cli.add_command(init_db_command)
+
     
     
-def get_file_path(merge, output_dir, title, url):
-    mime, ext, size = url_info(url)
-    file_name = get_output_filename([], title, ext, output_dir, merge)
-    file_path = os.path.join(output_dir, file_name)
-    return file_name, file_path
+def test_register(client, app):
+    # test that viewing the page renders without template errors
+    assert client.get('/auth/register').status_code == 200
     
-        service = url.split('/')[2].split('.')[0]
+        def app_errorhandler(self, code):
+        '''Like :meth:`Flask.errorhandler` but for a blueprint.  This
+        handler is used for all requests, even if outside of the blueprint.
+        '''
+        def decorator(f):
+            self.record_once(lambda s: s.app.errorhandler(code)(f))
+            return f
+        return decorator
+    
+            for line in _dump_loader_info(loader):
+            info.append('       %s' % line)
+    
+    
+class CreateExtension(Operation):
+    reversible = True
+    
+        The Django sessions framework is entirely cookie-based. It does
+    not fall back to putting session IDs in URLs. This is an intentional
+    design decision. Not only does that behavior make URLs ugly, it makes
+    your site vulnerable to session-ID theft via the 'Referer' header.
+    
+    
+def x_robots_tag(func):
+    @wraps(func)
+    def inner(request, *args, **kwargs):
+        response = func(request, *args, **kwargs)
+        response['X-Robots-Tag'] = 'noindex, noodp, noarchive'
+        return response
+    return inner
+    
+    def generateKey(keySize):
+    print('Generating prime p...')
+    p = rabinMiller.generateLargePrime(keySize)
+    print('Generating prime q...')
+    q = rabinMiller.generateLargePrime(keySize)
+    n = p * q
+    
+        def __hash_function_2(self, value, data):
+    
+    '''
+The number of partitions of a number n into at least k parts equals the number of partitions into exactly k parts
+plus the number of partitions into at least k-1 parts. Subtracting 1 from each part of a partition of n into k parts
+gives a partition of n-k into k parts. These two facts together are used for this algorithm.
+'''
+def partition(m):
+	memo = [[0 for _ in xrange(m)] for _ in xrange(m+1)]
+	for i in xrange(m+1):
+		memo[i][0] = 1
+    
+    The problem is  :
+Given an ARRAY, to find the longest and increasing sub ARRAY in that given ARRAY and return it.
+Example: [10, 22, 9, 33, 21, 50, 41, 60, 80] as input will return [10, 22, 33, 41, 60, 80] as output
+'''
+from __future__ import print_function
+    
+        def solve_sub_array(self):
+        rear = [int(self.array[0])]*len(self.array)
+        sum_value = [int(self.array[0])]*len(self.array)
+        for i in range(1, len(self.array)):
+            sum_value[i] = max(int(self.array[i]) + sum_value[i-1], int(self.array[i]))
+            rear[i] = max(sum_value[i], rear[i-1])
+        return rear[len(self.array)-1]
+    
+      3. find centroids and clusters using kmeans function.
+  
+        centroids, cluster_assignment = kmeans(
+            X, 
+            k, 
+            initial_centroids, 
+            maxiter=400,
+            record_heterogeneity=heterogeneity, 
+            verbose=True # whether to print logs in console or not.(default=False)
+            )
+  
+  
+  4. Plot the loss function, hetrogeneity values for every iteration saved in hetrogeneity list.
+        plot_heterogeneity(
+            heterogeneity, 
+            k
+        )
+  
+  5. Have fun..
+  
+'''
+from __future__ import print_function
+from sklearn.metrics import pairwise_distances
+import numpy as np
+    
+      # A single unnamed argument for a function tends to look like old style cast.
+  # If we see those, don't issue warnings for deprecated casts.
+  remainder = line[match.end(0):]
+  if Match(r'^\s*(?:;|const\b|throw\b|final\b|override\b|[=>{),]|->)',
+           remainder):
+    return False
+    }
