@@ -1,247 +1,377 @@
 
         
-        #if  defined(__BORLANDC__) && (__BORLANDC__ < 0x600)
+        void CacheImpl::destroy() {
+  removeAll();
+  delete static_cast<DefaultCache*>(Impl);
+}
     
-    namespace boost{
-namespace detail{
+        StringRef Line = RawText.substr(0, Pos);
+    Lines.push_back(Line);
+    if (!IsFirstLine) {
+      size_t NonWhitespacePos = RawText.find_first_not_of(' ');
+      if (NonWhitespacePos != StringRef::npos)
+        WhitespaceToTrim =
+            std::min(WhitespaceToTrim,
+                     static_cast<unsigned>(NonWhitespacePos));
     }
+    IsFirstLine = false;
+    
+    %# Ignore the following admonition; it applies to the resulting .cpp file only
+//// Automatically Generated From UnicodeExtendedGraphemeClusters.cpp.gyb.
+//// Do Not Edit Directly!
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2017 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+    
+    /// Classify a potential CF typedef.
+CFPointeeInfo
+CFPointeeInfo::classifyTypedef(const clang::TypedefNameDecl *typedefDecl) {
+  clang::QualType type = typedefDecl->getUnderlyingType();
     }
     
-     /*
-  *   LOCATION:    see http://www.boost.org for most recent version.
-  *   FILE         mem_block_cache.hpp
-  *   VERSION      see <boost/version.hpp>
-  *   DESCRIPTION: memory block cache used by the non-recursive matcher.
-  */
+      private:
+    /// Is this a diagnostic that doesn't do the user any good to show if it
+    /// is located in one of Swift's synthetic buffers? If so, returns true to
+    /// suppress it.
+    static bool shouldSuppressDiagInSwiftBuffers(clang::DiagOrStoredDiag info) {
+      if (info.isNull())
+        return false;
+    }
     
-    struct any_type 
-{
-   template <class T>
-   any_type(const T&); 
-   template <class T, class U>
-   any_type(const T&, const U&); 
-   template <class T, class U, class V>
-   any_type(const T&, const U&, const V&); 
+    
+    {  llvm_unreachable('invalid class');
+}
+    
+      // Handles |request| by serving cache-able response.
+  static std::unique_ptr<net::test_server::HttpResponse>
+  CacheControlResponseHandler(const std::string& path,
+                              const net::test_server::HttpRequest& request) {
+    if (!base::StartsWith(path, request.relative_url,
+                          base::CompareCase::SENSITIVE))
+      return std::unique_ptr<net::test_server::HttpResponse>();
+    }
+    
+    // Generate constructors.
+#include 'ipc/struct_constructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
+    
+    
+void Base::Call(const std::string& method, const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  NOTREACHED() << 'Uncatched call in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
+}
+    
+       bool IsCommandIdChecked(int command_id) const override;
+   bool IsCommandIdEnabled(int command_id) const override;
+    
+    void MenuItem::SetIcon(const std::string& icon) {
+  if (icon.empty()) {
+    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_), NULL); 
+  } else {
+    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_),
+                                  gtk_image_new_from_file(icon.c_str()));
+    gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(menu_item_),
+                                              TRUE);
+  }
+}
+    
+    
+    {  // ExtensionFunction:
+  ResponseAction Run() override;
+  DECLARE_EXTENSION_FUNCTION('nw.App.crashBrowser', UNKNOWN)
 };
-typedef char no_type;
-typedef char (&unary_type)[2];
-typedef char (&binary_type)[3];
-typedef char (&ternary_type)[4];
     
-    #endif
+    
+    {} // namespace extensions
+#endif
+
+    
+    class NwObjDestroyFunction : public NWSyncExtensionFunction {
+ public:
+  NwObjDestroyFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    /*
+ * If Trace::hhbbc_time >= 1, print some stats about the program to a
+ * temporary file.  If it's greater than or equal to 2, also dump it
+ * to stdout.
+ */
+void print_stats(const Index&, const php::Program&);
+    
+    #include 'hphp/ppc64-asm/branch-ppc64.h'
+#include 'hphp/ppc64-asm/decoded-instr-ppc64.h'
+#include 'hphp/ppc64-asm/isa-ppc64.h'
     
       /**
-   * \fn  virtual void Predictor::Init(const std::vector<std::pair<std::string,
-   * std::string> >&cfg ,const std::vector<std::shared_ptr<DMatrix> > &cache);
-   *
-   * \brief Configure and register input matrices in prediction cache.
-   *
-   * \param cfg   The configuration.
-   * \param cache Vector of DMatrix's to be used in prediction.
+   * Prefer the Bind() over the GetFoo() as it makes ini_get() work too.
+   * These Bind()s should be used for ini settings. Specifically, they
+   * should be used when the bound setting is needed before the main ini
+   * processing pass. Unlike IniSetting::Bind, these bindings will fetch the
+   * value in an ini setting if it is set otherwise it will use the defValue.
    */
+  static void Bind(bool& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const bool defValue = false,
+                   const bool prepend_hhvm = true);
+  static void Bind(const char*& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const char *defValue = nullptr,
+                   const bool prepend_hhvm = true);
+  static void Bind(std::string& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const std::string defValue = '',
+                   const bool prepend_hhvm = true);
+  static void Bind(char& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const char defValue = 0, const bool prepend_hhvm = true);
+  static void Bind(unsigned char& loc,const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const unsigned char defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(int16_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const int16_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(uint16_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const uint16_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(int32_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const int32_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(uint32_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const uint32_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(int64_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const int64_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(uint64_t& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const uint64_t defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(double& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name = '',
+                   const double defValue = 0,
+                   const bool prepend_hhvm = true);
+  static void Bind(HackStrictOption& loc, const IniSettingMap &ini,
+                   const Hdf& config, const std::string& name,
+                   HackStrictOption def);
+  static void
+  Bind(std::vector<uint32_t>& loc, const IniSettingMap& ini,
+       const Hdf& config, const std::string& name = '',
+       const std::vector<uint32_t>& defValue = std::vector<uint32_t>(),
+       const bool prepend_hhvm = true);
+  static void
+  Bind(std::vector<std::string>& loc, const IniSettingMap& ini,
+       const Hdf& config, const std::string& name = '',
+       const std::vector<std::string>& defValue = std::vector<std::string>(),
+       const bool prepend_hhvm = true);
+  static void
+  Bind(std::unordered_map<std::string, int>& loc,
+       const IniSettingMap& ini, const Hdf& config,
+       const std::string& name = '',
+       const std::unordered_map<std::string, int>& defValue =
+         std::unordered_map<std::string, int>{},
+       const bool prepend_hhvm = true);
+  static void Bind(ConfigMap& loc, const IniSettingMap& ini, const Hdf& config,
+                   const std::string& name = '',
+                   const ConfigMap& defValue = ConfigMap(),
+                   const bool prepend_hhvm = true);
+  static void Bind(ConfigMapC& loc, const IniSettingMap& ini, const Hdf& config,
+                   const std::string& name = '',
+                   const ConfigMapC& defValue = ConfigMapC(),
+                   const bool prepend_hhvm = true);
+  static void Bind(ConfigSet& loc, const IniSettingMap& ini, const Hdf& config,
+                   const std::string& name = '',
+                   const ConfigSet& defValue = ConfigSet(),
+                   const bool prepend_hhvm = true);
+  static void Bind(ConfigSetC& loc, const IniSettingMap& ini, const Hdf& config,
+                   const std::string& name = '',
+                   const ConfigSetC& defValue = ConfigSetC(),
+                   const bool prepend_hhvm = true);
+  static void Bind(ConfigIMap& loc, const IniSettingMap& ini, const Hdf& config,
+                   const std::string& name = '',
+                   const ConfigIMap& defValue = ConfigIMap(),
+                   const bool prepend_hhvm = true);
+  static void Bind(ConfigFlatSet& loc, const IniSettingMap& ini,
+                   const Hdf& config, const std::string& name = '',
+                   const ConfigFlatSet& defValue = ConfigFlatSet(),
+                   const bool prepend_hhvm = true);
     
-                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
-            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
     
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-    
-    // Copyright (C) 2015 by Giovanni Zito
-// This file is part of Dear ImGui
-    
-    IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_Init(const char* glsl_version = NULL);
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data);
-    
-    // Frame data
-struct FrameDataForRender
-{
-    VkDeviceMemory  VertexBufferMemory;
-    VkDeviceMemory  IndexBufferMemory;
-    VkDeviceSize    VertexBufferSize;
-    VkDeviceSize    IndexBufferSize;
-    VkBuffer        VertexBuffer;
-    VkBuffer        IndexBuffer;
-};
-static int                    g_FrameIndex = 0;
-static FrameDataForRender     g_FramesDataBuffers[IMGUI_VK_QUEUED_FRAMES] = {};
-    
-    class DHTNode;
-class DHTRoutingTable;
-class DHTTaskQueue;
-class DHTTaskFactory;
-class DHTPeerAnnounceStorage;
-class DHTTokenTracker;
-class DHTMessageDispatcher;
-class DHTMessageReceiver;
-class DHTMessageFactory;
-    
-    void DHTRoutingTable::showBuckets() const
-{
-  /*
-    for(std::deque<std::shared_ptr<DHTBucket> >::const_iterator itr =
-    buckets_.begin(); itr != buckets_.end(); ++itr) {
-    cerr << 'prefix = ' << (*itr)->getPrefixLength() << ', '
-    << 'nodes = ' << (*itr)->countNode() << endl;
+    {
+    {      write(ini_fd, line.c_str(), line.length());
+      write(ini_fd, '\n', 1);
+      cnt += 2;
+      continue;
     }
-  */
-}
-    
-      uint32_t temp32;
-  uint64_t temp64;
-  // time
-  if (version == 2) {
-    READ_CHECK(fp, &temp32, sizeof(temp32));
-    serializedTime_.setTimeFromEpoch(ntohl(temp32));
-    // 4bytes reserved
-    readBytes(fp, buf, buf.size(), 4);
-  }
-  else {
-    READ_CHECK(fp, &temp64, sizeof(temp64));
-    serializedTime_.setTimeFromEpoch(ntoh64(temp64));
-  }
-    
-    namespace aria2 {
+    if (argv[cnt][0] != '-') {
+      if (show) {
+        newargv.push_back('-w');
+      } else {
+        newargv.push_back(lint ? '-l' : '-f');
+      }
+      newargv.push_back(argv[cnt++]);
+      need_file = false;
+      break;
     }
-    
-    #include <vector>
-#include <deque>
-#include <memory>
-    
-    DHTTaskQueueImpl::~DHTTaskQueueImpl() = default;
-    
-    #include 'util.h'
-#include 'bittorrent_helper.h'
-#include 'DlAbortEx.h'
-#include 'DHTConstants.h'
-#include 'MessageDigest.h'
-#include 'message_digest_helper.h'
-#include 'fmt.h'
-    
-      ~DHTTokenTracker();
-    
-    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
-                                             std::chrono::seconds interval)
-    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
-{
-}
-    
-    DNSCache::AddrEntry::AddrEntry(const std::string& addr)
-    : addr_(addr), good_(true)
-{
-}
-    
-        bool contains(const std::string& addr) const;
-    
-      FunctionRef<int(int, std::vector<int> const&)> variant6 = of;
-  EXPECT_EQ(100 + 6 * 20, variant6(20, {}));
-  EXPECT_EQ(100 + 6 * 20, variant6(20, {1, 2, 3}));
-  FunctionRef<int(int, std::vector<int> const&)> const cvariant6 = of;
-  EXPECT_EQ(100 + 6 * 20, cvariant6(20, {}));
-  EXPECT_EQ(100 + 6 * 20, cvariant6(20, {1, 2, 3}));
-    
-    // Format of each probe arguments as operand.
-// Size of the arugment tagged with FOLLY_SDT_Sn, with 'n' constraint.
-// Value of the argument tagged with FOLLY_SDT_An, with configured constraint.
-#define FOLLY_SDT_ARG(n, x)                                                    \
-  [FOLLY_SDT_S##n] 'n'                ((size_t)FOLLY_SDT_ARGSIZE(x)),          \
-  [FOLLY_SDT_A##n] FOLLY_SDT_ARG_CONSTRAINT (x)
-    
-     protected:
-  /**
-   * Returns true if the KeepAlive is constructed from an executor that does
-   * not support the keep alive ref-counting functionality
-   */
-  template <typename ExecutorT>
-  static bool isKeepAliveDummy(const KeepAlive<ExecutorT>& keepAlive) {
-    return reinterpret_cast<intptr_t>(keepAlive.executorAndDummyFlag_) &
-        KeepAlive<ExecutorT>::kDummyFlag;
+    if (strcmp(argv[cnt], '--') == 0) {
+      break;
+    }
+    cnt++; // skip unknown options
   }
     
-    template <class RNG, class /* EnableIf */>
-void Random::seed(RNG& rng) {
-  detail::SeedData<RNG> sd;
-  std::seed_seq s(std::begin(sd.seedData), std::end(sd.seedData));
-  rng.seed(s);
+      // implementing File
+  bool open(const String& filename, const String& mode) override;
+  bool close() override;
+  int64_t readImpl(char *buffer, int64_t length) override;
+  int getc() override;
+  int64_t writeImpl(const char *buffer, int64_t length) override;
+  bool seek(int64_t offset, int whence = SEEK_SET) override;
+  int64_t tell() override;
+  bool eof() override;
+  bool rewind() override;
+  bool flush() override;
+  bool truncate(int64_t size) override;
+    
+    template<typename F>
+void logPerfWarning(folly::StringPiece event, F fillCols) {
+  logPerfWarningImpl(event, 1, kDefaultPerfWarningRate, fillCols);
+}
+template<typename F>
+void logPerfWarning(folly::StringPiece event, int64_t rate, F fillCols) {
+  logPerfWarningImpl(event, 1, rate, fillCols);
 }
     
-     public:
-  // Default generator type.
-#if FOLLY_HAVE_EXTRANDOM_SFMT19937
-  typedef __gnu_cxx::sfmt19937 DefaultGenerator;
-#else
-  typedef std::mt19937 DefaultGenerator;
-#endif
+    Array php_globals_as_array() {
+  return Array(get_global_variables()->asArrayData());
+}
     
-    namespace folly {
-    }
-    
-    template <class String>
-String Uri::toString() const {
-  String str;
-  if (hasAuthority_) {
-    toAppend(scheme_, '://', &str);
-    if (!password_.empty()) {
-      toAppend(username_, ':', password_, '@', &str);
-    } else if (!username_.empty()) {
-      toAppend(username_, '@', &str);
-    }
-    toAppend(host_, &str);
-    if (port_ != 0) {
-      toAppend(':', port_, &str);
-    }
+    SQLInternal monitor(const std::string& name, const ScheduledQuery& query) {
+  if (FLAGS_enable_numeric_monitoring) {
+    CodeProfiler profiler(
+        {(boost::format('scheduler.pack.%s') % query.pack_name).str(),
+         (boost::format('scheduler.query.%s.%s') % query.pack_name % query.name)
+             .str()});
+    return SQLInternal(query.query, true);
   } else {
-    toAppend(scheme_, ':', &str);
+    // Snapshot the performance and times for the worker before running.
+    auto pid = std::to_string(PlatformProcess::getCurrentPid());
+    auto r0 = SQL::selectFrom({'resident_size', 'user_time', 'system_time'},
+                              'processes',
+                              'pid',
+                              EQUALS,
+                              pid);
+    auto t0 = getUnixTime();
+    Config::get().recordQueryStart(name);
+    SQLInternal sql(query.query, true);
+    // Snapshot the performance after, and compare.
+    auto t1 = getUnixTime();
+    auto r1 = SQL::selectFrom({'resident_size', 'user_time', 'system_time'},
+                              'processes',
+                              'pid',
+                              EQUALS,
+                              pid);
+    if (r0.size() > 0 && r1.size() > 0) {
+      // Always called while processes table is working.
+      Config::get().recordQueryPerformance(name, t1 - t0, r0[0], r1[0]);
+    }
+    return sql;
   }
-  toAppend(path_, &str);
-  if (!query_.empty()) {
-    toAppend('?', query_, &str);
-  }
-  if (!fragment_.empty()) {
-    toAppend('#', fragment_, &str);
-  }
-  return str;
 }
     
-      tv.tv_sec = 1;
-  tv.tv_usec = 10;
-  EXPECT_EQ(1000010000ns, to<nanoseconds>(tv));
-  EXPECT_EQ(1000010us, to<microseconds>(tv));
-  EXPECT_EQ(1000ms, to<milliseconds>(tv));
-  EXPECT_EQ(1s, to<seconds>(tv));
-  EXPECT_EQ(
-      createTimePoint<system_clock>(1000010000ns),
-      to<system_clock::time_point>(tv));
-  EXPECT_EQ(
-      createTimePoint<steady_clock>(1000010000ns),
-      to<steady_clock::time_point>(tv));
+    #include <osquery/database.h>
+#include <osquery/distributed.h>
+#include <osquery/flags.h>
+#include <osquery/system.h>
+    
+      ScheduledQuery(const std::string& pack_name,
+                 const std::string& name,
+                 const std::string& query)
+      : pack_name(pack_name), name(name), query(query) {}
+  ScheduledQuery() = default;
+  ScheduledQuery(ScheduledQuery&&) = default;
+  ScheduledQuery& operator=(ScheduledQuery&&) = default;
+    
+      void TearDown() override {
+    FLAGS_disable_logging = logging_;
+    Config::get().reset();
+  }
+    
+    Status deserializeQueryData(const rj::Value& v, QueryDataSet& qd) {
+  if (!v.IsArray()) {
+    return Status(1, 'JSON object was not an array');
+  }
+    }
+    
+      virtual ExtensionManagerIf* getHandler(const ::apache::thrift::TConnectionInfo&) {
+    return iface_.get();
+  }
+  virtual void releaseHandler(ExtensionIf* /* handler */) {}
+    
+    // getSerializedRowColumnNames returns a vector of test column names that
+// are in alphabetical order. If unordered_and_repeated is true, the
+// vector includes a repeated column name and is in non-alphabetical order
+ColumnNames getSerializedRowColumnNames(bool unordered_and_repeated);
+    
+    double ClusterGeneralInfo701::lateral_dist(const std::uint8_t* bytes,
+                                           int32_t length) const {
+  Byte t0(bytes + 2);
+  uint32_t x = t0.get_byte(0, 2);
+    }
+    
+    int ObjectExtendedInfo60D::object_id(const std::uint8_t* bytes,
+                                     int32_t length) const {
+  Byte t0(bytes);
+  int32_t x = t0.get_byte(0, 8);
+    }
+    
+    #include 'modules/drivers/canbus/common/byte.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
+    
+      MatrixXd mat_golden(10, 10);
+  // clang-format off
+  mat_golden <<
+   1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+  -1,  1,  0,  0,  0,  0,  0,  0,  0,  0,
+   0, -1,  1,  0,  0,  0,  0,  0,  0,  0,
+   0,  0, -1,  1,  0,  0,  0,  0,  0,  0,
+   0,  0,  0, -1,  1,  0,  0,  0,  0,  0,
+   0,  0,  0,  0, -1,  1,  0,  0,  0,  0,
+   0,  0,  0,  0,  0, -1,  1,  0,  0,  0,
+   0,  0,  0,  0,  0,  0, -1,  1,  0,  0,
+   0,  0,  0,  0,  0,  0,  0, -1,  1,  0,
+   0,  0,  0,  0,  0,  0,  0,  0, -1,  1;
+  // clang-format on
+  EXPECT_EQ(mat, mat_golden);
+    
+      std::vector<uint32_t> index_list;
+  std::vector<double> pos_list;
+  for (int i = 0; i < 10; ++i) {
+    index_list.push_back(i);
+    pos_list.push_back(i * 2);
+  }
+    
+    NodeWithRange::NodeWithRange(const TopoNode* node, const NodeSRange& range)
+    : NodeSRange(range), topo_node_(node) {}
     
     
-    {  /**
-   * The strategy parameter is used to tune the compression algorithm.
-   * Supported values:
-   * - Z_DEFAULT_STRATEGY: normal data
-   * - Z_FILTERED: data produced by a filter (or predictor)
-   * - Z_HUFFMAN_ONLY: force Huffman encoding only (no string match)
-   * - Z_RLE: limit match distances to one
-   * - Z_FIXED: prevents the use of dynamic Huffman codes
-   *
-   * The strategy parameter only affects the compression ratio but not the
-   * correctness of the compressed output.
-   */
-  int strategy;
-};
+    {
+    {
+    {}  // namespace gem
+}  // namespace canbus
+}  // namespace apollo
