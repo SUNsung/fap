@@ -1,88 +1,141 @@
 
         
-              keg_only_deps.each do |dep|
-        ENV.prepend_path 'PATH', dep.opt_bin.to_s
-        ENV.prepend_path 'PKG_CONFIG_PATH', '#{dep.opt_lib}/pkgconfig'
-        ENV.prepend_path 'PKG_CONFIG_PATH', '#{dep.opt_share}/pkgconfig'
-        ENV.prepend_path 'ACLOCAL_PATH', '#{dep.opt_share}/aclocal'
-        ENV.prepend_path 'CMAKE_PREFIX_PATH', dep.opt_prefix.to_s
-        ENV.prepend 'LDFLAGS', '-L#{dep.opt_lib}' if dep.opt_lib.directory?
-        ENV.prepend 'CPPFLAGS', '-I#{dep.opt_include}' if dep.opt_include.directory?
-      end
-    end
-    
-          # Find commands in the path
-      unless (exts = external_commands).empty?
-        puts
-        puts 'External commands'
-        puts_columns exts
-      end
-    end
+        if pathutil_relative == native_relative
+  Benchmark.ips do |x|
+    x.report('pathutil') { pathutil_relative }
+    x.report('native')   { native_relative }
+    x.compare!
   end
+else
+  print 'PATHUTIL: '
+  puts pathutil_relative
+  print 'NATIVE:   '
+  puts native_relative
+end
+
     
-        first_warning = true
-    methods.each do |method|
-      unless checks.respond_to?(method)
-        Homebrew.failed = true
-        puts 'No check available by the name: #{method}'
-        next
-      end
+      </body>
+</html>
+HTML
+CONTENT_NOT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
     
-      def print_remaining_files(files, root, other = '')
-    case files.length
-    when 0
-      # noop
-    when 1
-      puts files
+      p.action do |args, _|
+    if args.empty?
+      Jekyll.logger.error 'A subcommand is required.'
+      puts p
+      abort
     else
-      puts '#{root}/ (#{files.length} #{other}files)'
+      subcommand = args.first
+      unless p.has_command? subcommand
+        Jekyll.logger.abort_with 'fatal: 'jekyll #{args.first}' could not' \
+          ' be found. You may need to install the jekyll-#{args.first} gem' \
+          ' or a related gem to be able to use this subcommand.'
+      end
     end
   end
 end
 
     
-      def search_tap(user, repo, rx)
-    if (HOMEBREW_LIBRARY/'Taps/#{user.downcase}/homebrew-#{repo.downcase}').directory? && \
-       user != 'Caskroom'
-      return []
-    end
-    
-      it 'ignores empty arrays' do
-    expect_no_offenses('[]')
+      config.on_event :test_case_finished do |event|
+    f.after_feature_element(event.test_case)
   end
     
-    module RuboCop
-  module AST
-    # A node extension for `case` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `case` nodes within RuboCop.
-    class CaseNode < Node
-      include ConditionalNode
+    require 'erb'
     
-          # Checks whether the `if` node has an `else` clause.
-      #
-      # @note This returns `true` for nodes containing an `elsif` clause.
-      #       This is legacy behavior, and many cops rely on it.
-      #
-      # @return [Boolean] whether the node has an `else` clause
-      def else?
-        loc.respond_to?(:else) && loc.else
-      end
+            def convert(content)
+          document = Kramdown::Document.new(content, @config)
+          html_output = document.to_html
+          if @config['show_warnings']
+            document.warnings.each do |warning|
+              Jekyll.logger.warn 'Kramdown warning:', warning
+            end
+          end
+          html_output
+        end
     
-        # Outputs a list of categories as comma-separated <a> links. This is used
-    # to output the category list for each post on a category page.
-    #
-    #  +categories+ is the list of categories to format.
-    #
-    # Returns string
-    #
-    def category_links(categories)
-      categories.sort.map { |c| category_link c }.join(', ')
+    module Jekyll
+  module Deprecator
+    extend self
+    
+        remove_duplicates
+    remove_index :share_visibilities, name: :shareable_and_user_id
+    add_index :share_visibilities, %i(shareable_id shareable_type user_id), name: :shareable_and_user_id, unique: true
+    
+        it 'generates the aspects_manage fixture', :fixture => true do
+      get :index, params: {a_id: @aspect.id}
+      save_fixture(html_for('body'), 'aspects_manage')
     end
     
-        def render(context)
-      code_dir = (context.registers[:site].config['code_dir'].sub(/^\//,'') || 'downloads/code')
-      code_path = (Pathname.new(context.registers[:site].source) + code_dir).expand_path
-      file = code_path + @file
+        context 'on a post from a contact' do
+      before do
+        @target = bob.post(:status_message, text: 'AWESOME', to: @bobs_aspect.id)
+      end
     
-    Liquid::Template.register_tag('video', Jekyll::VideoTag)
+          context 'when the plugin doesnt exist' do
+        it 'fails to install and report an error' do
+          command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify logstash-output-impossible-plugin')
+          expect(command.stderr).to match(/Plugin not found, aborting/)
+        end
+      end
+    end
+  end
+end
+
+    
+          @left_diff_line_number = nil
+    
+          def next_link
+        label = 'Next &raquo;'
+        if @versions.size == Gollum::Page.per_page
+          link = '/history/#{@page.name}?page=#{@page_num+1}'
+          %(<a href='#{link}' hotkey='l'>#{label}</a>)
+        else
+          %(<span class='disabled'>#{label}</span>)
+        end
+      end
+    end
+  end
+end
+
+    
+      test 'extract destination file name in case of path renaming' do
+    view = Precious::Views::LatestChanges.new
+    assert_equal 'newname.md', view.extract_renamed_path_destination('oldname.md => newname.md')
+    assert_equal 'newDirectoryName/fileName.md', view.extract_renamed_path_destination('{oldDirectoryName => newDirectoryName}/fileName.md')
+  end
+    
+        EMOJI_PATHNAME = Pathname.new(Gemojione.images_path).freeze
+    
+      # This method is used by the puppet manifest template
+  def puppetsort(hash)
+    # TODO(sissel): Implement sorting that follows the puppet style guide
+    # Such as, 'ensure' goes first, etc.
+    return hash.to_a
+  end # def puppetsort
+    
+        args = [ tar_cmd,
+             '-C',
+             staging_path,
+             '-cf',
+             payload_tar,
+             '--owner=0',
+             '--group=0',
+             '--numeric-owner',
+             '.' ]
+    
+        # Generate the package 'Prototype' file
+    File.open('#{build_path}/Prototype', 'w') do |prototype|
+      prototype.puts('i pkginfo')
+      prototype.puts('i preinstall') if self.scripts['pre-install']
+      prototype.puts('i postinstall') if self.scripts['post-install']
