@@ -1,160 +1,127 @@
 
         
-        from mrjob.job import MRJob
+        
+class CallCenter(object):
     
-        def set(self, results, query):
-        '''Set the result for the given query key in the cache.
+        def __init__(self):
+        self.head = None
+        self.tail = None
     
-    
-class PrettyStream(EncodedStream):
-    '''In addition to :class:`EncodedStream` behaviour, this stream applies
-    content processing.
-    
-    
-def test_credentials_in_url(httpbin_both):
-    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
-                   auth='user:password')
-    r = http('GET', url)
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
+        def _find_available_spot(self, vehicle):
+        '''Find an available spot where vehicle can fit, or return None'''
+        pass
     
     
-def test_migrate_implicit_content_type():
-    config = MockEnvironment().config
+class Categorizer(object):
+    
+        def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer),
+            self.mr(mapper=self.mapper_sort,
+                    reducer=self.reducer_identity),
+        ]
+    
+        def __init__(self, url, contents, child_urls):
+        self.url = url
+        self.contents = contents
+        self.child_urls = child_urls
+        self.signature = self.create_signature()
+    
+    # the data, split between train and test sets
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
+    
+        with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
+        loaded_model = keras.models.load_model(model_filename)
+        loaded_model.predict(np.random.rand(128, 2))
+    
+    data_dim = 5
+num_classes = 2
+batch_size = 10
+    
+        - Divide the model's input(s) into multiple sub-batches.
+    - Apply a model copy on each sub-batch. Every model copy
+        is executed on a dedicated GPU.
+    - Concatenate the results (on CPU) into one big batch.
+    
+    model = Sequential()
+model.add(Embedding(max_features, 128, input_length=maxlen))
+model.add(Bidirectional(LSTM(64)))
+model.add(Dropout(0.5))
+model.add(Dense(1, activation='sigmoid'))
+    
+        # Apply some eyeliner
+    d.line(face_landmarks['left_eye'] + [face_landmarks['left_eye'][0]], fill=(0, 0, 0, 110), width=6)
+    d.line(face_landmarks['right_eye'] + [face_landmarks['right_eye'][0]], fill=(0, 0, 0, 110), width=6)
     
     
-def test_unicode_form_item_verbose(httpbin):
-    r = http('--verbose', '--form',
-             'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
-    assert HTTP_OK in r
-    assert UNICODE in r
-    
-    from .compat import urlparse, str, basestring
-from .cookies import extract_cookies_to_jar
-from ._internal_utils import to_native_string
-from .utils import parse_dict_header
-    
-    ``response``:
-    The response generated from a Request.
-'''
-HOOKS = ['response']
-    
-        def test_super_len_with_no__len__(self):
-        class LenFile(object):
-            def __init__(self):
-                self.len = 5
-    
-    # Documents to append as an appendix to all manuals.
-#latex_appendices = []
-    
-        Save previous value, yield, and then restore the previous value stored in
-    the environment variable 'env_name'.
+def test_image(image_to_check, model):
+    unknown_image = face_recognition.load_image_file(image_to_check)
+    face_locations = face_recognition.face_locations(unknown_image, number_of_times_to_upsample=0, model=model)
     
     
-def make_setting_element(setting_data, app, fromdocname):
-    refnode = make_refnode(app.builder, fromdocname,
-                           todocname=setting_data['docname'],
-                           targetid=setting_data['refid'],
-                           child=nodes.Text(setting_data['setting_name']))
-    p = nodes.paragraph()
-    p += refnode
+    # Display the results
+    for (top, right, bottom, left), name in zip(face_locations, face_names):
+        # Scale back up face locations since the frame we detected in was scaled to 1/4 size
+        top *= 4
+        right *= 4
+        bottom *= 4
+        left *= 4
     
-            if opts.logfile:
-            self.settings.set('LOG_ENABLED', True, priority='cmdline')
-            self.settings.set('LOG_FILE', opts.logfile, priority='cmdline')
+            # Now let's list all the faces we found in all 128 frames
+        for frame_number_in_batch, face_locations in enumerate(batch_of_face_locations):
+            number_of_faces_in_frame = len(face_locations)
     
-        def _err(self, msg):
-        sys.stderr.write(msg + os.linesep)
-        self.exitcode = 1
+    # 你需要一个2代以上的树莓派，并在树莓派上安装face_recognition，并连接上picamera摄像头
+# 并确保picamera这个模块已经安装（树莓派一般会内置安装）
+# 你可以参考这个教程配制你的树莓派：
+# https://gist.github.com/ageitgey/1ac8dbe8572f3f533df6269dab35df65
     
+        if len(unknown_face_encodings) > 0:
+        face_found = True
+        # 看看图片中的第一张脸是不是奥巴马
+        match_results = face_recognition.compare_faces([known_face_encoding], unknown_face_encodings[0])
+        if match_results[0]:
+            is_obama = True
     
-class Command(ScrapyCommand):
+        complete_apps = ['sentry']
+
     
-            if not assertion:
-            if self.min_bound == self.max_bound:
-                expected = self.min_bound
-            else:
-                expected = '%s..%s' % (self.min_bound, self.max_bound)
+            # Adding field 'Environment.organization_id'
+        db.add_column(
+            'sentry_environment',
+            'organization_id',
+            self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(null=True),
+            keep_default=False
+        )
     
-        :param key: name of cli constant
-    :return: value of constant for active os
-    '''
-    return CLI_DEFAULTS[key]
+            for environment in RangeQuerySetWrapperWithProgressBar(orm.Environment.objects.all()):
+            try:
+                with transaction.atomic():
+                    orm.EnvironmentProject.objects.create(
+                        environment=environment, project_id=environment.project_id
+                    )
+            except IntegrityError:
+                pass
     
-        def test_timeout(self):
-        self.assertTrue(self.timeout.timeout)
-        self.assertFalse(self.invalid.timeout)
+            # User chose to not deal with backwards NULL issues for 'ReleaseEnvironment.project_id'
+        raise RuntimeError(
+            'Cannot reverse this migration. 'ReleaseEnvironment.project_id' and its values cannot be restored.'
+        )
     
-        @certbot_util.patch_get_utility()
-    def test_multiple_names(self, mock_util):
-        mock_util().menu.return_value = (display_util.OK, 5)
+        def _forwards(self, orm):
+        'Write your forwards methods here.'
+        dupe_envs = orm.Environment.objects.values_list('name', 'organization_id')\
+                                           .annotate(ecount=models.Count('id'))\
+                                           .filter(ecount__gt=1)
     
-        def test_eq(self):
-        self.assertTrue(self.vhost1b == self.vhost1)
-        self.assertFalse(self.vhost1 == self.vhost2)
-        self.assertEqual(str(self.vhost1b), str(self.vhost1))
-        self.assertFalse(self.vhost1b == 1234)
-    
-        def test_perform2(self):
-        # Avoid load module
-        self.sni.configurator.parser.modules.add('ssl_module')
-        self.sni.configurator.parser.modules.add('socache_shmcb_module')
-        acme_responses = []
-        for achall in self.achalls:
-            self.sni.add_chall(achall)
-            acme_responses.append(achall.response(self.auth_key))
-    
-    # If true, show URL addresses after external links.
-#man_show_urls = False
-    
-        long_description = README,
-    
-        # Get options and arguments.
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], _short_options, _options)
-    except getopt.GetoptError as e:
-        log.wtf('''
-    [Fatal] {}.
-    Try '{} --help' for more options.'''.format(e, script_name))
-    
-        def extract(self, **kwargs):
-        for i in self.streams:
-            s = self.streams[i]
-            _, s['container'], s['size'] = url_info(s['url'])
-            s['src'] = [s['url']]
-    
-    def cbs_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    '''Downloads CBS videos by URL.
-    '''
-    
-    def rebuilt_url(url):
-    path = urllib.parse.urlparse(url).path
-    aid = path.split('/')[-1].split('_')[0]
-    return 'http://www.dailymotion.com/embed/video/{}?autoplay=1'.format(aid)
-    
-    from ..common import *
-from .ckplayer import ckplayer_download
-    
-    recur_limit = 3
-    
-        print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls(urls, title, ext, size, output_dir, merge=False)
-    
-    # looks that flickr won't return urls for all sizes
-# we required in 'extras field without a acceptable header
-dummy_header = {
-    'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0'
-}
-def get_content_headered(url):
-    return get_content(url, dummy_header)
-    
-        # Remember top of the previous nesting stack.
-    #
-    # The stack is always pushed/popped and not modified in place, so
-    # we can just do a shallow copy instead of copy.deepcopy.  Using
-    # deepcopy would slow down cpplint by ~28%.
-    if self.stack:
-      self.previous_stack_top = self.stack[-1]
-    else:
-      self.previous_stack_top = None
+            # Adding field 'ApiKey.scope_list'
+        db.add_column(
+            'sentry_apikey',
+            'scope_list',
+            self.gf('sentry.db.models.fields.array.ArrayField')(
+                of=('django.db.models.fields.TextField', [], {})
+            ),
+            keep_default=False
+        )
