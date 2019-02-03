@@ -1,100 +1,114 @@
 
         
-        
-def hex_str(int_list):
-    return codecs.encode(intlist_to_bytes(int_list), 'hex')
+            def ensure_present(self, enabled=True):
+        '''Ensures the rule and targets are present and synced'''
+        rule_description = self.rule.describe()
+        if rule_description:
+            # Rule exists so update rule, targets and state
+            self._sync_rule(enabled)
+            self._sync_targets()
+            self._sync_state(enabled)
+        else:
+            # Rule does not exist, so create new rule and targets
+            self._create(enabled)
     
-    print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
+    
+def copy(module, connection, name, target, bucket):
+    ''' Copy an Elasticache backup. '''
     try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
+        response = connection.copy_snapshot(SourceSnapshotName=name,
+                                            TargetSnapshotName=target,
+                                            TargetBucket=bucket)
+        changed = True
+    except botocore.exceptions.ClientError as e:
+        module.fail_json(msg='Unable to copy the snapshot.', exception=traceback.format_exc())
+    return response, changed
+    
+    from __future__ import absolute_import, division, print_function
+__metaclass__ = type
+    
+        lambda_facts = dict()
     
     
-atom_template = textwrap.dedent('''\
-    <?xml version='1.0' encoding='utf-8'?>
-    <feed xmlns='http://www.w3.org/2005/Atom'>
-        <link rel='self' href='http://rg3.github.io/youtube-dl/update/releases.atom' />
-        <title>youtube-dl releases</title>
-        <id>https://yt-dl.org/feed/youtube-dl-updates-feed</id>
-        <updated>@TIMESTAMP@</updated>
-        @ENTRIES@
-    </feed>''')
+if __name__ == '__main__':
+    main()
+
     
-        infile, outfile = args
+            for _port in ports:
+            monitoring_policy_port = oneandone.client.Port(
+                protocol=_port['protocol'],
+                port=_port['port'],
+                alert_if=_port['alert_if'],
+                email_notification=_port['email_notification']
+            )
+            monitoring_policy_ports.append(monitoring_policy_port)
     
-        outfile, = args
     
-    RETURN = '''
-subscriptions:
-    description: List of subscriptions.
-    returned: When view is set to subscriptions.
-    type: list
-    sample: ['mysubscription', 'mysubscription2']
-topic:
-    description: Name of topic. Used to filter subscriptions.
-    returned: Always
-    type: str
-    sample: 'mytopic'
-topics:
-    description: List of topics.
-    returned: When view is set to topics.
-    type: list
-    sample: ['mytopic', 'mytopic2']
+DOCUMENTATION = '''
+---
+module: vertica_facts
+version_added: '2.0'
+short_description: Gathers Vertica database facts.
+description:
+  - Gathers Vertica database facts.
+options:
+  cluster:
+    description:
+      - Name of the cluster running the schema.
+    default: localhost
+  port:
+    description:
+      Database port to connect to.
+    default: 5433
+  db:
+    description:
+      - Name of the database running the schema.
+  login_user:
+    description:
+      - The username used to authenticate with.
+    default: dbadmin
+  login_password:
+    description:
+      - The password used to authenticate with.
+notes:
+  - The default authentication assumes that you are either logging in as or sudo'ing
+    to the C(dbadmin) account on the host.
+  - This module uses C(pyodbc), a Python ODBC database adapter. You must ensure
+    that C(unixODBC) and C(pyodbc) is installed on the host and properly configured.
+  - Configuring C(unixODBC) for Vertica requires C(Driver = /opt/vertica/lib64/libverticaodbc.so)
+    to be added to the C(Vertica) section of either C(/etc/odbcinst.ini) or C($HOME/.odbcinst.ini)
+    and both C(ErrorMessagesPath = /opt/vertica/lib64) and C(DriverManagerEncoding = UTF-16)
+    to be added to the C(Driver) section of either C(/etc/vertica.ini) or C($HOME/.vertica.ini).
+requirements: [ 'unixODBC', 'pyodbc' ]
+author: 'Dariusz Owczarek (@dareko)'
 '''
     
-        module : AnsibleModule object
-    oneandone_conn: authenticated oneandone object
-    '''
-    try:
-        name = module.params.get('name')
-        description = module.params.get('description')
-        email = module.params.get('email')
-        agent = module.params.get('agent')
-        thresholds = module.params.get('thresholds')
-        ports = module.params.get('ports')
-        processes = module.params.get('processes')
-        wait = module.params.get('wait')
-        wait_timeout = module.params.get('wait_timeout')
-        wait_interval = module.params.get('wait_interval')
-    
-    
-class HostModule(OpenNebulaModule):
-    
-        for (index, rule) in enumerate(desired_rules):
         try:
-            if rule != current_rules[index]:
-                updates.append((index, rule))
-        except IndexError:
-            additions.append(rule)
+        client.login(
+            username=module.params['ipa_user'],
+            password=module.params['ipa_pass']
+        )
+        changed, zone = ensure(module, client)
+        module.exit_json(changed=changed, zone=zone)
+    except Exception as e:
+        module.fail_json(msg=to_native(e))
     
-    # Copyright: (c) 2013, Jeroen Hoekx <jeroen.hoekx@dsquare.be>
-# Copyright: (c) 2016, Matt Robinson <git@nerdoftheherd.com>
-# Copyright: (c) 2017, Dag Wieers <dag@wieers.com>
-# Copyright: (c) 2017, Ansible Project
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+    - bigpanda:
+    component: myapp
+    version: '1.3'
+    token: '{{ bigpanda_token }}'
+    state: finished
     
-        changed = False
-    if state in ['present', 'enabled', 'disabled']:
-        if not ipa_hbacrule:
-            changed = True
-            if not module.check_mode:
-                ipa_hbacrule = client.hbacrule_add(name=name, item=module_hbacrule)
-        else:
-            diff = get_hbcarule_diff(client, ipa_hbacrule, module_hbacrule)
-            if len(diff) > 0:
-                changed = True
-                if not module.check_mode:
-                    data = {}
-                    for key in diff:
-                        data[key] = module_hbacrule.get(key)
-                    client.hbacrule_mod(name=name, item=data)
+    from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.six.moves.urllib.parse import urlencode
+from ansible.module_utils._text import to_native
+from ansible.module_utils.urls import fetch_url
     
-        def role_add_host(self, name, item):
-        return self.role_add_member(name=name, item={'host': item})
+    # Check whether nginx is running
+- name: check nginx process
+  sensu_check:
+    name: nginx_running
+    command: /etc/sensu/plugins/processes/check-procs.rb -f /var/run/nginx.pid
+    handlers: default
+    subscribers: nginx
+    interval: 60
