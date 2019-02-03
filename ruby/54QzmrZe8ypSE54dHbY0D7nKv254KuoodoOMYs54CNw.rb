@@ -1,104 +1,90 @@
 
         
-              def instrument(name, **options) # :doc:
-        options[:identifier] ||= (@template && @template.identifier) || @path
+                tag = options[:tag] || '#{options[:grouping]}/#{lane_name}/#{options[:prefix]}#{options[:build_number]}#{options[:postfix]}'
+        message = options[:message] || '#{tag} (fastlane)'
     
-    module ActionView
-  # This is the main entry point for rendering. It basically delegates
-  # to other objects like TemplateRenderer and PartialRenderer which
-  # actually renders the template.
-  #
-  # The Renderer will parse the options from the +render+ or +render_body+
-  # method and render a partial or a template based on the options. The
-  # +TemplateRenderer+ and +PartialRenderer+ objects are wrappers which do all
-  # the setup and logic necessary to render a view and a new object is created
-  # each time +render+ is called.
-  class Renderer
-    attr_accessor :lookup_context
-    
-            expect(result).to eq('git commit -m message ./fastlane/README.md ./LICENSE ' + './fastlane/spec/fixtures/git_commit/A FILE WITH SPACE'.shellescape)
-      end
-    
-          it 'works with select regex when regex is string' do
+          it 'works with name and password that contain spaces or `\'`' do
+        password = '\'test password\''
         result = Fastlane::FastFile.new.parse('lane :test do
-            oclint(
-              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
-              select_regex: \'\/AppDelegate\'
-            )
-          end').runner.execute(:test)
+          create_keychain ({
+            name: 'test.keychain',
+            password: '#{password}',
+          })
+        end').runner.execute(:test)
     
-    # Here be monkey patches
+          context 'the `ignore_exit_status` option' do
+        context 'by default' do
+          it 'should raise if swiftlint completes with a non-zero exit status' do
+            allow(FastlaneCore::UI).to receive(:important)
+            expect(FastlaneCore::UI).to receive(:important).with(/If you want fastlane to continue anyway/)
+            # This is simulating the exception raised if the return code is non-zero
+            expect(Fastlane::Actions).to receive(:sh).and_raise('fake error')
+            expect(FastlaneCore::UI).to receive(:user_error!).with(/SwiftLint finished with errors/).and_call_original
     
-            FastlaneCore::CertChecker.installed_identies
-      end
-    
-    # The * turns the array into a parameter list
-# This is using the form of exec which takes a variable parameter list, e.g. `exec(command, param1, param2, ...)`
-# We need to use that, because otherwise invocations like
-# `spaceauth -u user@fastlane.tools` would recognize '-u user@fastlane.tools' as a single parameter and throw errors
-exec(*exec_arr)
-
-    
-          it 'updates an existing user' do
-        visit edit_admin_user_path(users(:bob))
-        check 'Admin'
-        click_on 'Update User'
-        expect(page).to have_text('User 'bob' was successfully updated.')
-        visit edit_admin_user_path(users(:bob))
-        expect(page).to have_checked_field('Admin')
-      end
-    
-          click_on 'Save'
-    
-      it 'imports a scenario which requires a service' do
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'spec/data_fixtures/twitter_scenario.json'))
-    click_on 'Start Import'
-    check('I confirm that I want to import these Agents.')
-    expect { click_on 'Finish Import' }.to change(Scenario, :count).by(1)
-    expect(page).to have_text('Import successful!')
-  end
-end
-
-    
-      after(:each) do
-    @rufus_scheduler.shutdown(:wait)
-  end
-    
-      describe 'migrating the 'make_message' format' do
-    it 'should work' do
-      expect(LiquidMigrator.convert_make_message('<message>')).to eq('{{message}}')
-      expect(LiquidMigrator.convert_make_message('<new.message>')).to eq('{{new.message}}')
-      expect(LiquidMigrator.convert_make_message('Hello <world>. How is <nested.life>')).to eq('Hello {{world}}. How is {{nested.life}}')
+        it 'shell-escapes environment variable values' do
+      message = 'A message'
+      path = '/usr/my local/bin'
+      command = command_from_args({ 'PATH' => path }, 'git', 'commit', '-m', message)
+      expect(command).to eq('PATH=#{path.shellescape} git commit -m #{message.shellescape}')
     end
-  end
     
-          @log.level = 4
-      expect(@log).to be_valid
+    if git.modified_files.include?('snapshot/lib/assets/SnapshotHelperXcode8.swift')
+  warn('You modified `SnapshotHelperXcode8.swift`, make sure to update the version number at the bottom of the file to notify users about the new helper file.')
+end
     
-        describe '(digit)$' do
-      it 'specifies the absolute argument number for this field' do
-        format('%2$b', 0, 10).should == '1010'
-        format('%2$B', 0, 10).should == '1010'
-        format('%2$d', 0, 112).should == '112'
-        format('%2$i', 0, 112).should == '112'
-        format('%2$o', 0, 87).should == '127'
-        format('%2$u', 0, 112).should == '112'
-        format('%2$x', 0, 196).should == 'c4'
-        format('%2$X', 0, 196).should == 'C4'
+        # Iterate over every machine in the index. The yielded {Entry} objects
+    # will NOT be locked, so you'll have to call {#get} manually to acquire
+    # the lock on them.
+    def each(reload=false)
+      if reload
+        @lock.synchronize do
+          with_index_lock do
+            unlocked_reload
+          end
+        end
+      end
     
-      it 'raises #{frozen_error_class} on an untainted, frozen object' do
-    o = Object.new.freeze
-    lambda { o.taint }.should raise_error(frozen_error_class)
-  end
+            # Parses the options given an OptionParser instance.
+        #
+        # This is a convenience method that properly handles duping the
+        # originally argv array so that it is not destroyed.
+        #
+        # This method will also automatically detect '-h' and '--help'
+        # and print help. And if any invalid options are detected, the help
+        # will be printed, as well.
+        #
+        # If this method returns `nil`, then you should assume that help
+        # was printed and parsing failed.
+        def parse_options(opts=nil)
+          # Creating a shallow copy of the arguments so the OptionParser
+          # doesn't destroy the originals.
+          argv = @argv.dup
     
-    describe 'Kernel.throw' do
-  it 'transfers control to the end of the active catch block waiting for symbol' do
-    catch(:blah) do
-      :value
-      throw :blah
-      fail('throw didn't transfer the control')
-    end.should be_nil
-  end
+            # Merge another configuration object into this one. This assumes that
+        # the other object is the same class as this one. This should not
+        # mutate this object, but instead should return a new, merged object.
+        #
+        # The default implementation will simply iterate over the instance
+        # variables and merge them together, with this object overriding
+        # any conflicting instance variables of the older object. Instance
+        # variables starting with '__' (double underscores) will be ignored.
+        # This lets you set some sort of instance-specific state on your
+        # configuration keys without them being merged together later.
+        #
+        # @param [Object] other The other configuration object to merge from,
+        #   this must be the same type of object as this one.
+        # @return [Object] The merged object.
+        def merge(other)
+          result = self.class.new
     
-    script_binding = binding
+            # Set the name of the plugin. The moment that this is called, the
+        # plugin will be registered and available. Before this is called, a
+        # plugin does not exist. The name must be unique among all installed
+        # plugins.
+        #
+        # @param [String] name Name of the plugin.
+        # @return [String] The name of the plugin.
+        def self.name(name=UNSET_VALUE)
+          # Get or set the value first, so we have a name for logging when
+          # we register.
+          result = get_or_set(:name, name)
