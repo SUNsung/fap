@@ -1,147 +1,187 @@
-  string proto_path = '-I' + TestTempDir();
-  string capture_out = '--capture_out=' + TestTempDir();
+
+        
+        private:
+  unsigned getNumReplacementTypes() const {
+    return genericSig->getGenericParams().size();
+  }
     
-    SourceGeneratorBase::SourceGeneratorBase(const FileDescriptor* descriptor,
-                                         const Options *options)
-    : descriptor_(descriptor), options_(options) {
-}
+    #include 'swift/ASTSectionImporter/ASTSectionImporter.h'
+#include 'swift/Basic/Dwarf.h'
+#include 'swift/Serialization/SerializedModuleLoader.h'
+#include 'swift/Serialization/Validation.h'
+#include 'llvm/Support/Debug.h'
+#include 'llvm/Support/raw_ostream.h'
     
-    #include <google/protobuf/stubs/common.h>
-#include <google/protobuf/stubs/logging.h>
-    
-    
-    {  UNICHARSET* unicharset;
-  OSBestResult best_result;
-};
-    
-      /**
-   * Returns orientation for the block the iterator points to.
-   *   orientation, writing_direction, textline_order: see publictypes.h
-   *   deskew_angle: after rotating the block so the text orientation is
-   *                 upright, how many radians does one have to rotate the
-   *                 block anti-clockwise for it to be level?
-   *                   -Pi/4 <= deskew_angle <= Pi/4
-   */
-  void Orientation(tesseract::Orientation *orientation,
-                   tesseract::WritingDirection *writing_direction,
-                   tesseract::TextlineOrder *textline_order,
-                   float *deskew_angle) const;
-    
-    bool read_unlv_file(                    //print list of sides
-                     STRING name,        //basename of file
-                     int32_t xsize,        //image size
-                     int32_t ysize,        //image size
-                     BLOCK_LIST *blocks  //output list
-                    ) {
-  FILE *pdfp;                    //file pointer
-  BLOCK *block;                  //current block
-  int x;                         //current top-down coords
-  int y;
-  int width;                     //of current block
-  int height;
-  BLOCK_IT block_it = blocks;    //block iterator
+    class TreePrinter {
+  llvm::raw_ostream &Out;
+  void (&PrintNodeData)(llvm::raw_ostream &out, void *node);
+  SmallString<40> Indent;
+public:
+  TreePrinter(llvm::raw_ostream &out,
+              void (&printNodeData)(llvm::raw_ostream &out, void *node))
+    : Out(out), PrintNodeData(printNodeData) {}
     }
     
-      BoxWord& operator=(const BoxWord& src);
     
-            // (start, end) values in the current window to be reported.
-        std::pair<double, double> m_loss;
-        std::pair<double, double> m_metric;
-        std::pair<size_t, size_t> m_samples;
-        std::pair<size_t, size_t> m_updates;
-    
-    
-    {
-    {        mutable bool m_isPacked;
-        mutable NDArrayViewPtr m_packedData;
-        mutable std::shared_ptr<Microsoft::MSR::CNTK::MBLayout> m_packedDataLayout;
-    };
+    {  OutLines.append(Lines.begin(), Lines.end());
 }
 
     
+    swift::unicode::GraphemeClusterBreakProperty
+swift::unicode::getGraphemeClusterBreakProperty(uint32_t C) {
+  // FIXME: replace linear search with a trie lookup.
+    }
     
-    {
-    {    private:
-        // Disallow copy and move construction and assignment
-        VariableFields(const VariableFields&) = delete; VariableFields& operator=(const VariableFields& other) = delete; VariableFields(VariableFields&&) = delete; VariableFields& operator=(VariableFields&&) = delete;
-    };
-}
+      /// Whether to specify a linker -rpath to the Swift runtime library path.
+  /// -rpath is not supported on all platforms, and subclasses may override
+  /// this method to return false on platforms that don't support it. The
+  /// default is to return true (and so specify an -rpath).
+  virtual bool shouldProvideRPathToLinker() const;
+    
+    /*
+Method:
+Start at vertex with minimum y (pick maximum x one if there are two).  
+We aim our 'lastDir' vector at (1.0, 0)
+We look at the two rays going off from our start vertex, and follow whichever
+has the smallest angle (in -Pi -> Pi) wrt lastDir ('rightest' turn)
+    
+    
+    {		*a_piEncodingTime_ms = totalEncodingTime;
+	}
+    
+    		SourceAlphaMix		m_sourcealphamix;
+		bool				m_boolBorderPixels;			// marked as rgba(NAN, NAN, NAN, NAN)
+		bool				m_boolPunchThroughPixels;	// RGB8A1 or SRGB8A1 with any pixels with alpha < 0.5
+    
+    	// ----------------------------------------------------------------------------------------------------
+	//
+	Block4x4Encoding::Block4x4Encoding(void)
+	{
+    }
+    
+    #include <assert.h>
+#include <float.h>
+    
+    
+    {}
 
     
-    size_t DataReader::GetNumParallelSequencesForFixingBPTTMode()
+    struct DoublePoint
 {
-    size_t nNbr = 0;
-    for (size_t i = 0; i < m_ioNames.size(); i++)
-    {
-        IDataReader* ptr = m_dataReaders[m_ioNames[i]];
-        if (nNbr == 0)
-            nNbr = ptr->GetNumParallelSequencesForFixingBPTTMode();
-        else if (nNbr != ptr->GetNumParallelSequencesForFixingBPTTMode())
-            LogicError('GetNumParallelSequences: number of slices in each minibatch not consistent for these streams');
-    }
-    return nNbr;
+  double X;
+  double Y;
+  DoublePoint(double x = 0, double y = 0) : X(x), Y(y) {}
+  DoublePoint(IntPoint ip) : X((double)ip.X), Y((double)ip.Y) {}
+};
+//------------------------------------------------------------------------------
+    
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+    
+    void InternalKeyComparator::FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const {
+  // Attempt to shorten the user portion of the key
+  Slice user_start = ExtractUserKey(*start);
+  Slice user_limit = ExtractUserKey(limit);
+  std::string tmp(user_start.data(), user_start.size());
+  user_comparator_->FindShortestSeparator(&tmp, user_limit);
+  if (tmp.size() < user_start.size() &&
+      user_comparator_->Compare(user_start, tmp) < 0) {
+    // User key has become shorter physically, but larger logically.
+    // Tack on the earliest possible number to the shortened user key.
+    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
+    assert(this->Compare(*start, tmp) < 0);
+    assert(this->Compare(tmp, limit) < 0);
+    start->swap(tmp);
+  }
 }
     
-        // this returns the map directly (read-only) and will lazily initialize it for a given seed
-    const std::vector<INDEXTYPE>& operator()(size_t seed) // throw()
+    // Grouping of constants.  We may want to make some of these
+// parameters set via options.
+namespace config {
+static const int kNumLevels = 7;
+    }
+    
+    // Return the name of the descriptor file for the db named by
+// 'dbname' and the specified incarnation number.  The result will be
+// prefixed with 'dbname'.
+std::string DescriptorFileName(const std::string& dbname, uint64_t number);
+    
+    namespace leveldb {
+namespace {
+    }
+    }
+    
+    
     {
-        // if wrong seed then lazily recache the sequence
-        if (seed != currentseed && randomizationrange != randomizeDisable)
-        {
-            // test for numeric overflow
-            if (map.size() - 1 != (INDEXTYPE)(map.size() - 1))
-                RuntimeError('RandomOrdering: INDEXTYPE has too few bits for this corpus');
-            // 0, 1, 2...
-            foreach_index (t, map)
-                map[t] = (INDEXTYPE) t;
-    }
-    }
+    {}  // namespace log
+}  // namespace leveldb
     
-        // Clear out_SampleSeqVec and extract a vector of samples from the matrix into out_SampleSeqVec.
-    static void ExtractSampleSequence(const Matrix<ElemType>& firstSeq, vector<size_t>& columnIndices, bool squashInputs, const vector<size_t>& tokensToIgnore, std::vector<int>& out_SampleSeqVec)
-    {
-        out_SampleSeqVec.clear();
-    }
+      ~Reader();
     
-      /*! \brief return corresponding element set given the node_id */
-  inline const Elem& operator[](unsigned node_id) const {
-    const Elem& e = elem_of_each_node_[node_id];
-    CHECK(e.begin != nullptr)
-        << 'access element that is not in the set';
-    return e;
+    Writer::~Writer() {
+}
+    
+      virtual bool Valid() const { return iter_.Valid(); }
+  virtual void Seek(const Slice& k) { iter_.Seek(EncodeKey(&tmp_, k)); }
+  virtual void SeekToFirst() { iter_.SeekToFirst(); }
+  virtual void SeekToLast() { iter_.SeekToLast(); }
+  virtual void Next() { iter_.Next(); }
+  virtual void Prev() { iter_.Prev(); }
+  virtual Slice key() const { return GetLengthPrefixedSlice(iter_.key()); }
+  virtual Slice value() const {
+    Slice key_slice = GetLengthPrefixedSlice(iter_.key());
+    return GetLengthPrefixedSlice(key_slice.data() + key_slice.size());
   }
-  // clear up things
-  inline void Clear() {
-    row_indices_.clear();
-    elem_of_each_node_.clear();
+    
+    TEST(RecoveryTest, LogFileReuse) {
+  if (!CanAppend()) {
+    fprintf(stderr, 'skipping test because env does not support appending\n');
+    return;
   }
-  // initialize node id 0->everything
-  inline void Init() {
-    CHECK_EQ(elem_of_each_node_.size(), 0U);
+  for (int i = 0; i < 2; i++) {
+    ASSERT_OK(Put('foo', 'bar'));
+    if (i == 0) {
+      // Compact to ensure current log is empty
+      CompactMemTable();
     }
+    Close();
+    ASSERT_EQ(1, NumLogs());
+    uint64_t number = FirstLogFile();
+    if (i == 0) {
+      ASSERT_EQ(0, FileSize(LogName(number)));
+    } else {
+      ASSERT_LT(0, FileSize(LogName(number)));
+    }
+    Open();
+    ASSERT_EQ(1, NumLogs());
+    ASSERT_EQ(number, FirstLogFile()) << 'did not reuse log file';
+    ASSERT_EQ('bar', Get('foo'));
+    Open();
+    ASSERT_EQ(1, NumLogs());
+    ASSERT_EQ(number, FirstLogFile()) << 'did not reuse log file';
+    ASSERT_EQ('bar', Get('foo'));
+  }
+}
     
-    namespace xgboost {
-namespace common {
-TEST(CompressedIterator, Test) {
-  ASSERT_TRUE(detail::SymbolBits(256) == 8);
-  ASSERT_TRUE(detail::SymbolBits(150) == 8);
-  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
-  int num_elements = 1000;
-  int repetitions = 1000;
-  srand(9);
-    }
-    }
-    }
+    // ===================================================================
+// ComputationNetworkWithEdits
+// scripting wrapper to construct by modifying an input network (aka 'Edit')
+// ===================================================================
     
-      // Compute the Score for a node with the given stats
-  virtual bst_float ComputeScore(bst_uint parentid,
-                                const GradStats &stats,
-                                bst_float weight) const = 0;
     
-    #ifdef __CUDACC__
-  __device__ void AtomicWriteSymbol
-    (CompressedByteT* buffer, uint64_t symbol, size_t offset) {
-    size_t ibit_start = offset * symbol_bits_;
-    size_t ibit_end = (offset + 1) * symbol_bits_ - 1;
-    size_t ibyte_start = ibit_start / 8, ibyte_end = ibit_end / 8;
-    }
+    {private:
+    shared_ptr<Matrix<ElemType>> m_innerproduct;
+    shared_ptr<Matrix<ElemType>> m_rightGradient;
+};
