@@ -1,255 +1,190 @@
 
         
-        # Just a slash
-Benchmark.ips do |x|
-  path = '/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
-    
-    DATA = {'foo'=>'bar', 'alpha'=>{'beta'=>'gamma'}, 'lipsum'=>['lorem', 'ipsum', 'dolor']}
-    
-    # No trailing slash
-Benchmark.ips do |x|
-  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
-  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
-  x.compare!
-end
-
-    
-    def file_contents(path)
-  return Pathname.new(path).read
-end
-    
-            def print_message(json_message)
-          msg = JSON.parse(json_message)
-          # Not sure what the 'url' command even does in LiveReload.  The spec is silent
-          # on its purpose.
-          Jekyll.logger.info 'LiveReload:', 'Browser URL: #{msg['url']}' if msg['command'] == 'url'
-        end
-    
-            def make_accessible(hash = @config)
-          hash.keys.each do |key|
-            hash[key.to_sym] = hash[key]
-            make_accessible(hash[key]) if hash[key].is_a?(Hash)
-          end
-        end
-    
-          it 'activates an existing user' do
-        users(:bob).deactivate!
-        visit admin_users_path
-        find(:css, 'a[href='/admin/users/#{users(:bob).id}/activate']').click
-        expect(page).to have_no_text('inactive')
-        users(:bob).reload
-        expect(users(:bob)).to be_active
+              # It's important to *not* have this code inside the rescue block
+      # otherwise all NameErrors will be caught and the error message is
+      # confusing
+      begin
+        return self.try_switch_to_lane(method_sym, arguments)
+      rescue LaneNotAvailableError
+        # We don't actually handle this here yet
+        # We just try to use a user configured lane first
+        # and only if there is none, we're gonna check for the
+        # built-in actions
       end
-    end
-  end
-end
-
     
-              @bar3 = Agents::DotBar.new(name: 'bar3').tap { |agent|
-            agent.user = users(:bob)
-            agent.sources << @bar2
-            agent.save!
-          },
-        ]
-        @foo.reload
-        @bar2.reload
+            expect(result).to eq('appledoc --project-name \'Project Name\' --project-company \'Company\' --docset-feed-formats \'atom\' --exit-threshold \'2\' input/dir')
+      end
     
-        it 'works for queued jobs' do
-      expect(status(job)).to eq('<span class='label label-warning'>queued</span>')
-    end
-  end
-    
-      describe '#values_at' do
-    it 'returns arrays of matching values' do
-      expect(Utils.values_at({ :foo => { :bar => :baz }}, 'foo.bar')).to eq(%w[baz])
-      expect(Utils.values_at({ :foo => [ { :bar => :baz }, { :bar => :bing } ]}, 'foo[*].bar')).to eq(%w[baz bing])
-      expect(Utils.values_at({ :foo => [ { :bar => :baz }, { :bar => :bing } ]}, 'foo[*].bar')).to eq(%w[baz bing])
-    end
-    
-      let :valid_options do
-    {
-      'name' => 'XKCD',
-      'expected_update_period_in_days' => '2',
-      'type' => 'html',
-      'url' => '{{ url | default: 'http://xkcd.com/' }}',
-      'mode' => 'on_change',
-      'extract' => old_extract,
-      'template' => old_template
-    }
-  end
-    
-          @log.level = 5
-      expect(@log).not_to be_valid
-      expect(@log).to have(1).error_on(:level)
-    
-      describe '#working?' do
-    it 'should not be working until the first event was received' do
-      expect(@checker).not_to be_working
-      @checker.last_receive_at = Time.now
-      expect(@checker).to be_working
-    end
-  end
-    
-              # Make sure we're only working with one VM if single target
-          if options[:single_target] && vms.length != 1
-            vm = @env.primary_vm
-            raise Errors::MultiVMTargetRequired if !vm
-            vms = [vm]
-          end
-    
-            # Mounts a shared folder via NFS. This assumes that the exports
-        # via the host are already done.
-        def mount_nfs(ip, folders)
-          raise BaseError, _key: :unsupported_nfs
-        end
-    
-            # This registers a plugin. This should _NEVER_ be called by the public
-        # and should only be called from within Vagrant. Vagrant will
-        # automatically register V1 plugins when a name is set on the
-        # plugin.
-        def register(plugin)
-          if !@registered.include?(plugin)
-            @logger.info('Registered plugin: #{plugin.name}')
-            @registered << plugin
+              it 'raises an exception' do
+            expect do
+              Fastlane::FastFile.new.parse('lane :test do
+                  carthage(command: '#{command}', output: 'bla.framework.zip')
+                end').runner.execute(:test)
+            end.to raise_error('Output option is available only for 'archive' command.')
           end
         end
+      end
     
-            # This is the method called to provision the system. This method
-        # is expected to do whatever necessary to provision the system (create files,
-        # SSH, etc.)
-        def provision!
-        end
-    
-              # Determine if we require a local Vagrant environment. There are
-          # two cases that we require a local environment:
-          #
-          #   * We're asking for ANY/EVERY VM (no names given).
-          #
-          #   * We're asking for specific VMs, at least once of which
-          #     is NOT in the local machine index.
-          #
-          requires_local_env = false
-          requires_local_env = true if names.empty?
-          requires_local_env ||= names.any? { |n|
-            !@env.machine_index.include?(n)
+              # Override the already overridden swiftlint_version method to check
+          # that the correct exectuable is being passed in as a parameter.
+          allow(Fastlane::Actions::SwiftlintAction).to receive(:swiftlint_version) { |params|
+            expect(params[:executable]).to eq(CUSTOM_EXECUTABLE_NAME)
+            swiftlint_gem_version
           }
-          raise Errors::NoEnvironmentError if requires_local_env && !@env.root_path
     
-            # Merge another configuration object into this one. This assumes that
-        # the other object is the same class as this one. This should not
-        # mutate this object, but instead should return a new, merged object.
-        #
-        # The default implementation will simply iterate over the instance
-        # variables and merge them together, with this object overriding
-        # any conflicting instance variables of the older object. Instance
-        # variables starting with '__' (double underscores) will be ignored.
-        # This lets you set some sort of instance-specific state on your
-        # configuration keys without them being merged together later.
-        #
-        # @param [Object] other The other configuration object to merge from,
-        #   this must be the same type of object as this one.
-        # @return [Object] The merged object.
-        def merge(other)
-          result = self.class.new
-    
-            # This should return the state of the machine within this provider.
-        # The state must be an instance of {MachineState}. Please read the
-        # documentation of that class for more information.
-        #
-        # @return [MachineState]
-        def state
-          nil
-        end
-    
-        # Register a key with a lazy-loaded value.
-    #
-    # If a key with the given name already exists, it is overwritten.
-    def register(key, &block)
-      raise ArgumentError, 'block required' if !block_given?
-      @items[key] = block
+        it 'adds an environment Hash at the beginning' do
+      message = 'A message'
+      command = command_from_args({ 'PATH' => '/usr/local/bin' }, 'git', 'commit', '-m', message)
+      expect(command).to eq('PATH=/usr/local/bin git commit -m #{message.shellescape}')
     end
     
-          # Returns the path to a file for the given key.
-      #
-      # @param key [String]
-      # @return [String] The path to the cache file.
-      def path_to(key)
-        key = key.gsub(/[<>:\\|?*%]/) {|c| '%%%03d' % c.ord}
-        File.join(cache_location, key)
+        # Returns an updated value type (if necessary)
+    def auto_convert_value(value)
+      return nil if value.nil?
+    
+      # https://stackoverflow.com/a/18623297/252627, last variant
+  require 'open3'
+  Open3.popen3(compare_command) do |stdin, stdout, stderr, thread|
+    error = stderr.read.chomp
+    # expect(error).to eq(expected_compare_error)
+    expect(error).to eq(expected_compare_error) # match(/#{expected_compare_error}/)
+  end
+end
+    
+      # String arguments should be evaluated in the context of the caller.
+  it 'accepts a String argument instead of a Proc or block' do
+    trace_var :$Kernel_trace_var_global, '$Kernel_trace_var_extra = true'
+    
+              # Encodes the authenticator field
+          #
+          # @return [String]
+          def encode_authenticator
+            authenticator.encode
+          end
+        end
       end
     end
   end
 end
+    
+              # Encodes the type
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_type(type)
+            bn = OpenSSL::BN.new(type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+              # Decodes a Rex::Proto::Kerberos::Model::EncryptedData from an
+          # OpenSSL::ASN1::Sequence
+          #
+          # @param input [OpenSSL::ASN1::Sequence] the input to decode from
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode_asn1(input)
+            seq_values = input.value
+    
+              # Encodes the pvno field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_pvno
+            bn = OpenSSL::BN.new(pvno.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+              # Decodes the Rex::Proto::Kerberos::Model::KrbError from an input
+          #
+          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::ASN1Data
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode KrbError, invalid input'
+            end
+    
+        def log_processed(name)
+      puts green '    #{name}'
+    end
+    
+      # Code is not reloaded between requests.
+  config.cache_classes = true
+    
+      config.active_support.deprecation = :stderr
+end
 
     
-          opts.on('-C', '--no-cache', 'Don't cache parsed Sass files.') do
-        @options[:for_engine][:cache] = false
-      end
-    
-      <a href='/'>Refresh page</a>
-    
-          private
-    
-        def initialize(options)
-      @strictly_ordered_queues = !!options[:strict]
-      @queues = options[:queues].map { |q| 'queue:#{q}' }
-      if @strictly_ordered_queues
-        @queues = @queues.uniq
-        @queues << TIMEOUT
-      end
-    end
-    
-        def self.job_hash_context(job_hash)
-      # If we're using a wrapper class, like ActiveJob, use the 'wrapped'
-      # attribute to expose the underlying thing.
-      klass = job_hash['wrapped'] || job_hash['class']
-      bid = job_hash['bid']
-      '#{klass} JID-#{job_hash['jid']}#{' BID-#{bid}' if bid}'
-    end
-    
-          def fake?
-        self.__test_mode == :fake
-      end
-    
-      config.vm.define 'freebsd10' do |freebsd10|
-    freebsd10.vm.box = 'tjay/freebsd-10.1'
+      include_examples 'multiline literal brace layout' do
+    let(:open) { '[' }
+    let(:close) { ']' }
   end
     
-      option '--workdir', 'WORKDIR',
-    'The directory you want fpm to do its work in, where 'work' is any file ' \
-    'copying, downloading, etc. Roughly any scratch space fpm needs to build ' \
-    'your package.', :default => Dir.tmpdir
-    
-        if @attributes.include?(:prefix)
-      installdir = staging_path(@attributes[:prefix])
-    else
-      installdir = staging_path
+          it 'does not autocorrect the closing brace' do
+        new_source = autocorrect_source(source)
+        expect(new_source).to eq([source].join($RS))
+      end
     end
     
-        # npm installs dependencies in the module itself, so if you do
-    # 'npm install express' it installs dependencies (like 'connect')
-    # to: node_modules/express/node_modules/connect/...
-    #
-    # To that end, I don't think we necessarily need to include
-    # any automatic dependency information since every 'npm install'
-    # is fully self-contained. That's why you don't see any bother, yet,
-    # to include the package's dependencies in here.
-    #
-    # It's possible someone will want to decouple that in the future,
-    # but I will wait for that feature request.
-  end
+          # Calls the given block for each `when` node in the `case` statement.
+      # If no block is given, an `Enumerator` is returned.
+      #
+      # @return [self] if a block is given
+      # @return [Enumerator] if no block is given
+      def each_when
+        return when_branches.to_enum(__method__) unless block_given?
     
-        # Final format of manifest
-    safesystem('pkgfmt', manifest_fn)
+          # Returns the collection the `for` loop is iterating over.
+      #
+      # @return [Node] The collection the `for` loop is iterating over
+      def collection
+        node_parts[1]
+      end
     
-        # do channel-update if requested
-    if attributes[:pear_channel_update?]
-      channel = attributes[:pear_channel] || 'pear'
-      logger.info('Updating the channel', :channel => channel)
-      safesystem('pear', '-c', config, 'channel-update', channel)
+          # Checks whether any of the key value pairs in the `hash` literal are on
+      # the same line.
+      #
+      # @note A multiline `pair` is considered to be on the same line if it
+      #       shares any of its lines with another `pair`
+      #
+      # @return [Boolean] whether any `pair` nodes are on the same line
+      def pairs_on_same_line?
+        pairs.each_cons(2).any? { |first, second| first.same_line?(second) }
+      end
+    
+            private
+    
+    __END__
+    
+          def create_test_file
+        if defined?(RSpec)
+          create_worker_spec
+        else
+          create_worker_test
+        end
+      end
+    
+          # Example usage:
+      #   Sidekiq::Client.enqueue_in(3.minutes, MyWorker, 'foo', 1, :bat => 'bar')
+      #
+      def enqueue_in(interval, klass, *args)
+        klass.perform_in(interval, *args)
+      end
+    end
+    
+          require 'sidekiq/extensions/class_methods'
+      Module.__send__(:include, Sidekiq::Extensions::Klass)
+    end
+    
+      end
+end
+
+    
+        def render(engine, content, options = {})
+      raise 'Only erb templates are supported' if engine != :erb
+    
+            Regexp.new('\\A#{p}\\Z')
+      else
+        pattern
+      end
     end
