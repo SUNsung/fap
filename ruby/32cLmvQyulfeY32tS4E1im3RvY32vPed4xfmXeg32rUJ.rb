@@ -1,118 +1,120 @@
 
         
-          #
-  # Overrides the builtin 'each' operator to avoid the following exception on Ruby 1.9.2+
-  #    'can't add a new key into hash during iteration'
-  #
-  def each(&block)
-    list = []
-    self.keys.sort.each do |sidx|
-      list << [sidx, self[sidx]]
+            private
+    
+        def error?
+      code == 0 || code != 404 && code != 403 && code >= 400 && code <= 599
     end
-    list.each(&block)
+    
+              node['data-language'] = 'typescript' if node['path'].try(:ends_with?, '.ts')
+          node['data-language'] = 'html' if node['path'].try(:ends_with?, '.html')
+          node['data-language'] = 'css' if node['path'].try(:ends_with?, '.css')
+          node['data-language'] = 'js' if node['path'].try(:ends_with?, '.js')
+          node['data-language'] = 'json' if node['path'].try(:ends_with?, '.json')
+          node['data-language'] = node['language'].sub(/\Ats/, 'typescript').strip if node['language']
+          node['data-language'] ||= 'typescript' if node.content.start_with?('@')
+    
+        def destroy
+      authorize @custom_emoji, :destroy?
+      @custom_emoji.destroy!
+      log_action :destroy, @custom_emoji
+      flash[:notice] = I18n.t('admin.custom_emojis.destroyed_msg')
+      redirect_to admin_custom_emojis_path(page: params[:page], **@filter_params)
+    end
+    
+        private
+    
+      private
+    
+      def show
+    render_cached_json('api:v1:instances:activity:show', expires_in: 1.day) { activity }
   end
     
-          update_uri_parts
-    else
-      raise RuntimeError, 'Invalid request command string', caller
-    end
+        render json: @web_subscription, serializer: REST::WebPushSubscriptionSerializer
   end
     
-    # Supported
-IAX_SUPPORTED_CODECS  = IAX_CODEC_G711_MULAW | IAX_CODEC_G711_ALAW | IAX_CODEC_LINEAR_PCM
+        data = {
+      alerts: {
+        follow: alerts_enabled,
+        favourite: alerts_enabled,
+        reblog: alerts_enabled,
+        mention: alerts_enabled,
+      },
+    }
     
-                k1 = OpenSSL::HMAC.digest('MD5', key, [msg_type].pack('V'))
-            k3 = OpenSSL::HMAC.digest('MD5', k1, checksum)
+      uninstall_preflight do
+    system_command '#{HOMEBREW_PREFIX}/bin/brew', args: ['cask', 'uninstall', 'adobe-photoshop-lightroom600']
+  end
     
-              # Decodes the kvno from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_kvno(input)
-            input.value[0].value.to_i
-          end
+          # return path set in app.rb not @page.path
+      def path
+        @path
+      end
     
-    module Rex
-  module Proto
-    module Kerberos
-      module Model
-        # This class provides a representation of a Kerberos EncryptionKey data
-        # definition
-        class EncryptionKey < Element
-    
-              # Encodes the Rex::Proto::Kerberos::Model::KdcRequest into an ASN.1 String
-          #
-          # @return [String]
-          def encode
-            pvno_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_pvno], 1, :CONTEXT_SPECIFIC)
-            msg_type_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_msg_type], 2, :CONTEXT_SPECIFIC)
-            pa_data_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_pa_data], 3, :CONTEXT_SPECIFIC)
-            req_body_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_req_body], 4, :CONTEXT_SPECIFIC)
-            seq = OpenSSL::ASN1::Sequence.new([pvno_asn1, msg_type_asn1, pa_data_asn1, req_body_asn1])
-            seq_asn1 = OpenSSL::ASN1::ASN1Data.new([seq], msg_type, :APPLICATION)
-            seq_asn1.to_der
-          end
-    
-    DEPRECATION
-    
-          # @see Base#\_retrieve
-      def _retrieve(key, version, sha)
-        return unless File.readable?(path_to(key))
-        begin
-          File.open(path_to(key), 'rb') do |f|
-            if f.readline('\n').strip == version && f.readline('\n').strip == sha
-              return f.read
-            end
-          end
-          File.unlink path_to(key)
-        rescue Errno::ENOENT
-          # Already deleted. Race condition?
+          def versions
+        i = @versions.size + 1
+        @versions.map do |v|
+          i -= 1
+          { :id        => v.id,
+            :id7       => v.id[0..6],
+            :num       => i,
+            :author    => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
+            :message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
+            :date      => v.authored_date.strftime('%B %d, %Y'),
+            :gravatar  => Digest::MD5.hexdigest(v.author.email.strip.downcase),
+            :identicon => self._identicon_code(v.author.email),
+            :date_full => v.authored_date,
+            :files     => v.stats.files.map { |f,*rest|
+              page_path = extract_renamed_path_destination(f)
+              page_path = remove_page_extentions(page_path)
+              { :file => f,
+                :link => '#{page_path}/#{v.id}'
+              }
+            }
+          }
         end
-        nil
-      rescue EOFError, TypeError, ArgumentError => e
-        Sass::Util.sass_warn 'Warning. Error encountered while reading cache #{path_to(key)}: #{e}'
       end
     
-        def write_output(text, destination)
-      if destination.is_a?(String)
-        open_file(destination, 'w') {|file| file.write(text)}
+          # Finds header node inside Nokogiri::HTML document.
+      #
+      def find_header_node(doc)
+        case @page.format
+          when :asciidoc
+            doc.css('div#gollum-root > h1:first-child')
+          when :org
+            doc.css('div#gollum-root > p.title:first-child')
+          when :pod
+            doc.css('div#gollum-root > a.dummyTopAnchor:first-child + h1')
+          when :rest
+            doc.css('div#gollum-root > div > div > h1:first-child')
+          else
+            doc.css('div#gollum-root > h1:first-child')
+        end
+      end
+    
+        def initialize(dir, existing, attempted, message = nil)
+      @dir            = dir
+      @existing_path  = existing
+      @attempted_path = attempted
+      super(message || 'Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.')
+    end
+  end
+end
+    
+        def render(context)
+      output = super
+      types = {
+        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
+        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
+        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
+      }
+      if @videos.size > 0
+        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
+        @videos.each do |v|
+          video << '<source src='#{v}' #{types[File.extname(v)]}>'
+        end
+        video += '</video>'
       else
-        destination.write(text)
+        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
       end
     end
-    
-          # Get the cache key pair for the given Sass URI.
-      # The URI need not be checked for validity.
-      #
-      # The only strict requirement is that the returned pair of strings
-      # uniquely identify the file at the given URI.
-      # However, the first component generally corresponds roughly to the directory,
-      # and the second to the basename, of the URI.
-      #
-      # Note that keys must be unique *across importers*.
-      # Thus it's probably a good idea to include the importer name
-      # at the beginning of the first component.
-      #
-      # @param uri [String] A URI known to be valid for this importer.
-      # @param options [{Symbol => Object}] Options for the Sass file
-      #   containing the `@import` currently being checked.
-      # @return [(String, String)] The key pair which uniquely identifies
-      #   the file at the given URI.
-      def key(uri, options)
-        Sass::Util.abstract(self)
-      end
-    
-          def public_url(name, sourcemap_directory)
-        file_pathname = Sass::Util.cleanpath(File.absolute_path(name, @root))
-        return Sass::Util.file_uri_from_path(file_pathname) if sourcemap_directory.nil?
-    
-    desc 'Clean up files.'
-task :clean do |t|
-  FileUtils.rm_rf 'doc'
-  FileUtils.rm_rf 'tmp'
-  FileUtils.rm_rf 'pkg'
-  FileUtils.rm_rf 'public'
-  FileUtils.rm 'test/debug.log' rescue nil
-  FileUtils.rm 'test/paperclip.db' rescue nil
-  Dir.glob('paperclip-*.gem').each{|f| FileUtils.rm f }
-end
