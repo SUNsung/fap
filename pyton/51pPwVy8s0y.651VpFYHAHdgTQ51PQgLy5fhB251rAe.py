@@ -1,170 +1,206 @@
 
         
-            def is_ace(self):
-        return True if self._value == 1 else False
-    
-        def insert_crawled_link(self, url, signature):
-        '''Add the given link to `crawled_links`.'''
-        pass
-    
-    
-def create_app(test_config=None):
-    '''Create and configure an instance of the Flask application.'''
-    app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        # a default secret that should be overridden by instance config
-        SECRET_KEY='dev',
-        # store the database in the instance folder
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
-    )
-    
-        :param id: id of post to get
-    :param check_author: require the current user to be the author
-    :return: the post with author information
-    :raise 404: if a post with the given id doesn't exist
-    :raise 403: if the current user isn't the author
+            Args:
+      dataset_name: The name of the dataset to grab the factors -> rates
+      alignment matrices from.
+      output_fname: The name of the file in which to save the generated
+        samples.
     '''
-    post = get_db().execute(
-        'SELECT p.id, title, body, created, author_id, username'
-        ' FROM post p JOIN user u ON p.author_id = u.id'
-        ' WHERE p.id = ?',
-        (id,)
-    ).fetchone()
+    hps = self.hps
+    batch_size = hps.batch_size
     
-        class _FakeSignal(object):
-        '''If blinker is unavailable, create a fake class with the same
-        interface that allows sending of signals but will fail with an
-        error on anything else.  Instead of doing anything on send, it
-        will just ignore the arguments and do nothing instead.
-        '''
+      T, N = vals_txn.shape
+  if n_to_plot > N:
+    n_to_plot = N
     
-        Implements test support helpers.  This module is lazily imported
-    and usually not used in production environments.
+      # Build and run the model, for varying purposes.
+  config = tf.ConfigProto(allow_soft_placement=True,
+                          log_device_placement=False)
+  if FLAGS.allow_gpu_growth:
+    config.gpu_options.allow_growth = True
+  sess = tf.Session(config=config)
+  with sess.as_default():
+    with tf.device(hps.device):
+      if kind == 'train':
+        train(hps, datasets)
+      elif kind == 'posterior_sample_and_average':
+        write_model_runs(hps, datasets, hps.output_filename_stem,
+                         push_mean=False)
+      elif kind == 'posterior_push_mean':
+        write_model_runs(hps, datasets, hps.output_filename_stem,
+                         push_mean=True)
+      elif kind == 'prior_sample':
+        write_model_samples(hps, datasets, hps.output_filename_stem)
+      elif kind == 'write_model_params':
+        write_model_parameters(hps, hps.output_filename_stem, datasets)
+      else:
+        assert False, ('Kind %s is not implemented. ' % kind)
     
-    _date_strip_re = re.compile(r'(?<=\d)(st|nd|rd|th)')
+      # generate data for trials
+  data_e = []
+  u_e = []
+  outs_e = []
+  for c in range(C):
+    u_1xt, outs_1xt = get_data_batch(batch_size, ntimesteps, u_rng, FLAGS.u_std)
+    
+      if mat_init_value is None:
+    stddev = alpha/np.sqrt(float(in_size))
+    mat_init = tf.random_normal_initializer(0.0, stddev)
+    
+        # Loop through the 2D matrix of word_patches and score each.
+    for i, row in enumerate(word_patches):
+      print('Reset RNN states.')
+      self.reset()  # reset states before processing each row.
+      row_probs = np.zeros([batch_size, 0])
+      for j, word_patch in enumerate(row):
+        print('Processing patch '
+              '({}, {}) / ({}, {})'.format(i+1, j+1, nrow, ncol))
+        patch_probs = (self._score(word_patch) if word_patch else
+                       np.zeros([batch_size, num_timesteps]))
+        row_probs = np.concatenate([row_probs, patch_probs], 1)
+      probs = np.concatenate([probs, row_probs], 0)
+    return probs
+    
+          for n in xrange(FLAGS.number_epochs):
+        print('Epoch number: %d' % n)
+        # print('Percent done: %.2f' % float(n) / float(FLAGS.number_epochs))
+        iterator = get_iterator(data)
+        for x, y, _ in iterator:
+          if FLAGS.eval_language_model:
+            is_present_rate = 0.
+          else:
+            is_present_rate = FLAGS.is_present_rate
+          tf.logging.info(
+              'Evaluating on is_present_rate=%.3f.' % is_present_rate)
+    
+      # Unstack Tensors into lists.
+  rewards_list = tf.unstack(rewards, axis=1)
+  log_probs_list = tf.unstack(log_probs, axis=1)
+  missing = 1. - tf.cast(present, tf.float32)
+  missing_list = tf.unstack(missing, axis=1)
+    
+    
+def dis_bwd_bidirectional(hparams):
+  '''Returns the *backward* PTB Variable name to MaskGAN Variable dictionary
+  mapping.  This is a highly restrictive function just for testing. This is for
+  the bidirectional_zaremba discriminator.
+    
+    
+def main():
+    argument_spec = ec2_argument_spec()
+    argument_spec.update(dict(
+        state=dict(required=True, choices=['present', 'absent']),
+        name=dict(required=True),
+        description=dict(required=False),
+        subnets=dict(required=False, type='list'),
+    )
+    )
+    module = AnsibleModule(argument_spec=argument_spec)
     
     EXAMPLES = '''
-- cloudwatchevent_rule:
-    name: MyCronTask
-    schedule_expression: 'cron(0 20 * * ? *)'
-    description: Run my scheduled task
-    targets:
-      - id: MyTargetId
-        arn: arn:aws:lambda:us-east-1:123456789012:function:MyFunction
+- name: creating a new vertica role
+  vertica_role: name=role_name db=db_name state=present
     
-    - debug: msg='{{ my_vm_eips.addresses | json_query(\'[?private_ip_address=='10.0.0.5']\') }}'
+    import traceback
     
-            if state == 'absent':
-            if exists:
-                conn.delete_cache_subnet_group(group_name)
-                changed = True
-        else:
-            if not exists:
-                new_group = conn.create_cache_subnet_group(group_name, cache_subnet_group_description=group_description, subnet_ids=group_subnets)
-                changed = True
-            else:
-                changed_group = conn.modify_cache_subnet_group(group_name, cache_subnet_group_description=group_description, subnet_ids=group_subnets)
-                changed = True
+    Linkfix - a companion to sphinx's linkcheck builder.
+    
+    # Declare top-level shortcuts
+from scrapy.spiders import Spider
+from scrapy.http import Request, FormRequest
+from scrapy.selector import Selector
+from scrapy.item import Item, Field
+    
+            parser.add_option_group(group)
+    
+        def __init__(self, crawler, spider_closed_callback):
+        self.crawler = crawler
+        self.settings = crawler.settings
+        self.signals = crawler.signals
+        self.logformatter = crawler.logformatter
+        self.slot = None
+        self.spider = None
+        self.running = False
+        self.paused = False
+        self.scheduler_cls = load_object(self.settings['SCHEDULER'])
+        downloader_cls = load_object(self.settings['DOWNLOADER'])
+        self.downloader = downloader_cls(crawler)
+        self.scraper = Scraper(crawler)
+        self._spider_closed_callback = spider_closed_callback
+    
+    # Theme options are theme-specific and customize the look and feel of a theme
+# further.  For a list of options available for each theme, see the
+# documentation.
+#
+html_theme_options = {
+    'logo': 'logo.png',
+    'logo_name': PROJECT_NAME,
+    'description': PROJECT_LONG_DESCRIPTION,
+    'github_user': PROJECT_GITHUB_USERNAME,
+    'github_repo': PROJECT_GITHUB_REPOSITORY,
+    'github_type': 'star',
+    'github_banner': True,
+    'travis_button': True,
+    'touch_icon': 'logo-apple.png',
+    # 'fixed_sidebar': True, # Re-enable when we have more content
+}
+    
+        return True
+
+    
+            self.hosts = config[CONF_HOSTS]
+        self.exclude = config[CONF_EXCLUDE]
+        minutes = config[CONF_HOME_INTERVAL]
+        self._options = config[CONF_OPTIONS]
+        self.home_interval = timedelta(minutes=minutes)
+    
+    from aiohttp.hdrs import CONTENT_TYPE
+import requests
+import voluptuous as vol
+    
+        def send_data(url, apikey, node, payload):
+        '''Send payload data to Emoncms.'''
+        try:
+            fullurl = '{}/input/post.json'.format(url)
+            data = {'apikey': apikey, 'data': payload}
+            parameters = {'node': node}
+            req = requests.post(
+                fullurl, params=parameters, data=data, allow_redirects=True,
+                timeout=5)
     
     
-DOCUMENTATION = '''
----
-module: iam_server_certificate_facts
-short_description: Retrieve the facts of a server certificate
-description:
-  - Retrieve the attributes of a server certificate
-version_added: '2.2'
-author: 'Allen Sanabria (@linuxdynasty)'
-requirements: [boto3, botocore]
-options:
-  name:
-    description:
-      - The name of the server certificate you are retrieving attributes for.
-    required: true
-extends_documentation_fragment:
-    - aws
-    - ec2
+class DescriptionXmlView(HomeAssistantView):
+    '''Handles requests for the description.xml file.'''
+    
+        def __init__(self, path, patterns, hass):
+        '''Initialise the watchdog observer.'''
+        from watchdog.observers import Observer
+        self._observer = Observer()
+        self._observer.schedule(
+            create_event_handler(patterns, hass),
+            path,
+            recursive=True)
+        hass.bus.listen_once(EVENT_HOMEASSISTANT_START, self.startup)
+        hass.bus.listen_once(EVENT_HOMEASSISTANT_STOP, self.shutdown)
+    
+    For more details about this component, please refer to the documentation at
+https://home-assistant.io/components/lirc/
+'''
+# pylint: disable=no-member
+import threading
+import time
+import logging
+    
+    CONF_EXCLUDE_NAMES = 'exclude_names'
+CONF_INCLUDE_SWITCHES = 'include_switches'
+    
+    For more details about this component, please refer to the documentation at
+https://home-assistant.io/components/mycroft
 '''
     
-    - heroku_collaborator:
-    api_key: YOUR_API_KEY
-    user: '{{ item.user }}'
-    apps: '{{ item.apps | default(apps) }}'
-    suppress_invitation: '{{ item.suppress_invitation | default(suppress_invitation) }}'
-    state: '{{ item.state | default('present') }}'
-  with_items:
-    - { user: 'a.b@example.com' }
-    - { state: 'absent', user: 'b.c@example.com', suppress_invitation: false }
-    - { user: 'x.y@example.com', apps: ['heroku-example-app'] }
-'''
-    
-            if add_server_ips:
-            if module.check_mode:
-                _check_mode(module, _add_server_ips(module,
-                                                    oneandone_conn,
-                                                    firewall_policy['id'],
-                                                    add_server_ips))
-    
-    # Remove a process from a monitoring policy.
-    
-    
-class DNSZoneIPAClient(IPAClient):
-    def __init__(self, module, host, port, protocol):
-        super(DNSZoneIPAClient, self).__init__(module, host, port, protocol)
-    
-    # Ensure rule with certain limitations
-- ipa_hbacrule:
-    name: allow_all_developers_access_to_db
-    description: Allow all developers to access any database from any host
-    hostgroup:
-    - db-server
-    usergroup:
-    - developers
-    state: present
-    ipa_host: ipa.example.com
-    ipa_user: admin
-    ipa_pass: topsecret
-    
-    from __future__ import absolute_import, division, print_function
-__metaclass__ = type
-    
-    plt.figure()
-for dataset_name in datasets:
-    # loading and vectorization
-    print('loading data')
-    if dataset_name in ['http', 'smtp', 'SA', 'SF']:
-        dataset = fetch_kddcup99(subset=dataset_name, percent10=True,
-                                 random_state=random_state)
-        X = dataset.data
-        y = dataset.target
-    
-    n_samples, n_features = 5000, 300
-X = np.random.randn(n_samples, n_features)
-inds = np.arange(n_samples)
-np.random.shuffle(inds)
-X[inds[int(n_features / 1.2):]] = 0  # sparsify input
-print('input data sparsity: %f' % sparsity_ratio(X))
-coef = 3 * np.random.randn(n_features)
-inds = np.arange(n_features)
-np.random.shuffle(inds)
-coef[inds[n_features // 2:]] = 0  # sparsify coef
-print('true coef sparsity: %f' % sparsity_ratio(coef))
-y = np.dot(X, coef)
-    
-        try:
-        fn = inspect.getsourcefile(obj)
-    except Exception:
-        fn = None
-    if not fn:
-        try:
-            fn = inspect.getsourcefile(sys.modules[obj.__module__])
-        except Exception:
-            fn = None
-    if not fn:
-        return
-    
-    
-URL = ('http://www.cs.cornell.edu/people/pabo/'
-       'movie-review-data/review_polarity.tar.gz')
-    
-    # TASK: Fit the pipeline on the training set
+        def __init__(self, token, default_room):
+        '''Initialize the service.'''
+        from ciscosparkapi import CiscoSparkAPI
+        self._default_room = default_room
+        self._token = token
+        self._spark = CiscoSparkAPI(access_token=self._token)
