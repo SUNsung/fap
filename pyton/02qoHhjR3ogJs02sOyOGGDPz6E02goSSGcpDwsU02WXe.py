@@ -1,78 +1,163 @@
 
-class Hand(object):
+        
+          Args:
+    tensor_bxtxn: The BxTxN numpy tensor.
+    
+        Args:
+      filepattern: Dataset file pattern.
+      vocab: Vocabulary.
+    '''
+    self._vocab = vocab
+    self._all_shards = tf.gfile.Glob(filepattern)
+    tf.logging.info('Found %d shards at %s', len(self._all_shards), filepattern)
+    
+    '''Losses for Generator and Discriminator.'''
+    
+            outputs_train, state_train = seq2seq.dynamic_rnn_decoder(...)
+        logits_train = output_fn(outputs_train)
+    
+        >>> humanize_bytes(1)
+    '1 B'
+    >>> humanize_bytes(1024, precision=1)
+    '1.0 kB'
+    >>> humanize_bytes(1024 * 123, precision=1)
+    '123.0 kB'
+    >>> humanize_bytes(1024 * 12342, precision=1)
+    '12.1 MB'
+    >>> humanize_bytes(1024 * 12342, precision=2)
+    '12.05 MB'
+    >>> humanize_bytes(1024 * 1234, precision=2)
+    '1.21 MB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
+    '1.31 GB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
+    '1.3 GB'
     
     
-class LinkedList(object):
+FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
+FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
+JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
+BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
     
-    
-class HashTable(object):
-    
-    
-def cityscapes_to_coco_with_rider(cityscapes_id):
-    lookup = {
-        0: 0,  # ... background
-        1: 2,  # bicycle
-        2: 3,  # car
-        3: 1,  # person
-        4: 7,  # train
-        5: 8,  # truck
-        6: 4,  # motorcycle
-        7: 6,  # bus
-        8: 1,  # rider ('person', *rider has human right!*)
-    }
-    return lookup[cityscapes_id]
-    
-    
-def get_raw_dir(name):
-    '''Retrieve the raw dir for the dataset.'''
-    return _DATASETS[name][_RAW_DIR]
+        try:
+        r = http(
+            httpbin + BASIC_AUTH_URL,
+            '--auth-type',
+            Plugin.auth_type,
+            '--auth',
+            USERNAME,
+        )
+        assert HTTP_OK in r
+        assert r.json == AUTH_OK
+    finally:
+        plugin_manager.unregister(Plugin)
 
     
-        # transformation blob
-    tr = globals()[cfg.RESNETS.TRANS_FUNC](
-        model,
-        blob_in,
-        dim_in,
-        dim_out,
-        stride,
-        prefix,
-        dim_inner,
-        group=cfg.RESNETS.NUM_GROUPS,
-        dilation=dilation
-    )
     
-            blobs_out:
-          - (variable set of blobs): returns whatever blobs are required for
-            training the model. It does this by querying the data loader for
-            the list of blobs that are needed.
-        '''
-        name = 'GenerateProposalLabelsOp:' + ','.join(
-            [str(b) for b in blobs_in]
-        )
+def test_follow_all_output_options_used_for_redirects(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 3
+    assert HTTP_OK not in r
     
-    Flexible network configuration is achieved by specifying the function name that
-builds a network module (e.g., the name of the conv backbone or the mask roi
-head). However we may wish to change names over time without breaking previous
-config files. This module provides backwards naming compatibility by providing
-a mapping from the old name to the new name.
+        def test_request_body_from_file_by_path_no_field_name_allowed(
+            self, httpbin):
+        env = MockEnvironment(stdin_isatty=True)
+        r = http('POST', httpbin.url + '/post', 'field-name@' + FILE_PATH_ARG,
+                 env=env, error_exit_ok=True)
+        assert 'perhaps you meant --form?' in r.stderr
     
-        This function expands those targets into the 4-of-4*K representation used
-    by the network (i.e. only one class has non-zero targets). The loss weights
-    are similarly expanded.
+                    # Update the previous file
+                if _filename:
+                    with open(_filename, 'w') as _file:
+                        _file.write(_contents)
     
-        sampled_fg_rois *= im_scale
-    repeated_batch_idx = batch_idx * blob_utils.ones(
-        (sampled_fg_rois.shape[0], 1)
-    )
-    sampled_fg_rois = np.hstack((repeated_batch_idx, sampled_fg_rois))
+        def __init__(self):
+        self.settings = None  # set in scrapy.cmdline
     
-    import jinja2
-from flask import Flask, request, send_from_directory, redirect, Response
+        def __enter__(self):
+        from scrapy.utils.test import get_testenv
+        pargs = [sys.executable, '-u', '-m', 'scrapy.utils.benchserver']
+        self.proc = subprocess.Popen(pargs, stdout=subprocess.PIPE,
+                                     env=get_testenv())
+        self.proc.stdout.readline()
     
-            self._topics_list = [x for x, _ in self._blocks]
-        if 'Comments' in self._topics_list:
-            self._topics_list = [x for x in self._topics_list if x != 'Comments'] + ['Comments']
-        self._topics_list += [':learn']
-        print(self.prefix, self._topics_list)
+        def short_desc(self):
+        return 'Edit spider'
     
-            answer = beautifier.beautify(answer.encode('utf-8'), filetype, request_options)
+            if opts.meta:
+            try:
+                opts.meta = json.loads(opts.meta)
+            except ValueError:
+                raise UsageError('Invalid -m/--meta value, pass a valid json string to -m or --meta. ' \
+                                'Example: --meta='{\'foo\' : \'bar\'}'', print_help=False)
+    
+        # https://en.wikipedia.org/wiki/Playfair_cipher#Description
+    for char1, char2 in chunker(ciphertext, 2):
+        row1, col1 = divmod(table.index(char1), 5)
+        row2, col2 = divmod(table.index(char2), 5)
+    
+        for trials in range(5):
+        a = random.randrange(2, num - 1)
+        v = pow(a, s, num)
+        if v != 1:
+            i = 0
+            while v != (num - 1):
+                if i == t - 1:
+                    return False
+                else:
+                    i = i + 1
+                    v = (v ** 2) % num
+    return True
+    
+    The problem is :
+Given two strings A and B. Find the minimum number of operations to string B such that A = B. The permitted operations are removal,  insertion, and substitution.
+'''
+from __future__ import print_function
+    
+    The problem is  :
+Given an ARRAY, to find the longest and increasing sub ARRAY in that given ARRAY and return it.
+Example: [10, 22, 9, 33, 21, 50, 41, 60, 80] as input will return [10, 22, 33, 41, 60, 80] as output
+'''
+from __future__ import print_function
+    
+        def observe(call=None):
+        '''Observe three entities.'''
+        random_see('demo_paulus', 'Paulus')
+        random_see('demo_anne_therese', 'Anne Therese')
+    
+    PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
+    vol.Required(CONF_HOST): cv.string,
+    vol.Required(CONF_USERNAME): cv.string,
+    vol.Required(CONF_PASSWORD): cv.string,
+    vol.Optional(CONF_TYPE, default=DEFAULT_TYPE): cv.string,
+})
+    
+        def get_extra_attributes(self, device):
+        '''Return the IP of the given device.'''
+        filter_ip = next((
+            result.ip for result in self.last_results
+            if result.mac == device), None)
+        return {'ip': filter_ip}
+    
+    import homeassistant.helpers.config_validation as cv
+from homeassistant.components.device_tracker import (
+    DOMAIN, PLATFORM_SCHEMA, DeviceScanner)
+from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_USERNAME
+    
+    _LOGGER = logging.getLogger(__name__)
+    
+        def startup(self, event):
+        '''Start the watcher.'''
+        self._observer.start()
+    
+    CONFIG_SCHEMA = vol.Schema({
+    DOMAIN: vol.Schema({
+        vol.Required(CONF_PORT): cv.string,
+        vol.Optional(CONF_EXCLUDE_NAMES): vol.All(cv.ensure_list, [cv.string]),
+        vol.Optional(CONF_INCLUDE_SWITCHES, default=False): cv.boolean
+    })
+}, extra=vol.ALLOW_EXTRA)
