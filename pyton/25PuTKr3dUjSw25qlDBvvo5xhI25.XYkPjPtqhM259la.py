@@ -1,77 +1,143 @@
 
         
-        from mrjob.job import MRJob
+        
+def htmlsafe_dumps(obj, **kwargs):
+    '''Works exactly like :func:`dumps` but is safe for use in ``<script>``
+    tags.  It accepts the same arguments and returns a JSON string.  Note that
+    this is available in templates through the ``|tojson`` filter which will
+    also mark the result as safe.  Due to how this function escapes certain
+    characters this is safe even if used outside of ``<script>`` tags.
     
-        def extract_year_month(self, line):
-        '''Return the year and month portions of the timestamp.'''
-        pass
+            if key is not None:
+            if not force and key in self.tags:
+                raise KeyError('Tag '{0}' is already registered.'.format(key))
     
-        The message bytes are converted to an encoding suitable for
-    `self.env.stdout`. Unicode errors are replaced and binary data
-    is suppressed. The body is always streamed by line.
+    from click.testing import CliRunner
+from flask.cli import ScriptInfo
+from werkzeug.test import Client, EnvironBuilder
+from flask import _request_ctx_stack
+from flask.json import dumps as json_dumps
+from werkzeug.urls import url_parse
     
-    
-def test_unicode_basic_auth(httpbin):
-    # it doesn't really authenticate us because httpbin
-    # doesn't interpret the utf8-encoded auth
-    http('--verbose', '--auth', u'test:%s' % UNICODE,
-         httpbin.url + u'/basic-auth/test/' + UNICODE)
-    
-        def __init__(self, directory=DEFAULT_CONFIG_DIR):
-        super(Config, self).__init__()
-        self.update(self.DEFAULTS)
-        self.directory = directory
-    
-        @pytest.mark.parametrize(
-        'other, result', (
-            ({'AccePT': 'application/json'}, True),
-            ({}, False),
-            (None, False)
-        )
-    )
-    def test_instance_equality(self, other, result):
-        assert (self.case_insensitive_dict == other) is result
-    
-        @pytest.mark.parametrize(
-        'value, expected', (
-            ([('key', 'val')], [('key', 'val')]),
-            ((('key', 'val'), ), [('key', 'val')]),
-            ({'key': 'val'}, [('key', 'val')]),
-            (None, None)
-        ))
-    def test_valid(self, value, expected):
-        assert to_key_val_list(value) == expected
-    
-        requests = [2, 5, 14, 22, 18, 3, 35, 27, 20]
-    for request in requests:
-        h0.handle(request)
-    
-        def __init__(self, one, other):
-        self._one = one
-        self._other = other
+            class SecretView(View):
+            methods = ['GET']
+            decorators = [superuser_required]
     
     
-class Visitor(object):
-    def visit(self, node, *args, **kwargs):
-        meth = None
-        for cls in node.__class__.__mro__:
-            meth_name = 'visit_' + cls.__name__
-            meth = getattr(self, meth_name, None)
-            if meth:
-                break
+@pytest.fixture(autouse=True)
+def catch_deprecation_warnings(recwarn):
+    yield
+    gc.collect()
+    assert not recwarn.list, '\n'.join(str(w.message) for w in recwarn.list)
+
     
-    *References:
-bottle
-https://github.com/bottlepy/bottle/blob/cafc15419cbb4a6cb748e6ecdccf92893bb25ce5/bottle.py#L270
-django
-https://github.com/django/django/blob/ffd18732f3ee9e6f0374aff9ccf350d85187fac2/django/utils/functional.py#L19
-pip
-https://github.com/pypa/pip/blob/cb75cca785629e15efb46c35903827b3eae13481/pip/utils/__init__.py#L821
-pyramimd
-https://github.com/Pylons/pyramid/blob/7909e9503cdfc6f6e84d2c7ace1d3c03ca1d8b73/pyramid/decorator.py#L4
-werkzeug
-https://github.com/pallets/werkzeug/blob/5a2bf35441006d832ab1ed5a31963cbc366c99ac/werkzeug/utils.py#L35
+        def __enter__(self):
+        from scrapy.utils.test import get_testenv
+        pargs = [sys.executable, '-u', '-m', 'scrapy.utils.benchserver']
+        self.proc = subprocess.Popen(pargs, stdout=subprocess.PIPE,
+                                     env=get_testenv())
+        self.proc.stdout.readline()
     
-    production code which is untestable:
+        def short_desc(self):
+        return 'Edit spider'
     
-        data = Data()
+    from scrapy.commands import ScrapyCommand
+from scrapy.http import Request
+from scrapy.exceptions import UsageError
+from scrapy.utils.datatypes import SequenceExclude
+from scrapy.utils.spider import spidercls_for_request, DefaultSpider
+    
+            general form:
+        @returns request(s)/item(s) [min=1 [max]]
+    
+            # pure Enum branch
+        if self._member_type_ is object:
+            cls = str
+            val = str(self)
+        # mix-in branch
+        else:
+            cls = self._member_type_
+            val = self._value_
+        return cls.__format__(val, format_spec)
+    
+            self.assertEqual(list(LabelledList), [LabelledList.unprocessed, LabelledList.payment_complete])
+        self.assertEqual(LabelledList.unprocessed, 1)
+        self.assertEqual(LabelledList(1), LabelledList.unprocessed)
+    
+        # 'The specifier name is a ``dotted name'' that may resolve ... to
+    # ... a test case class'
+    def test_loadTestsFromNames__relative_TestCase_subclass(self):
+        m = types.ModuleType('m')
+        class MyTestCase(unittest.TestCase):
+            def test(self):
+                pass
+        m.testcase_1 = MyTestCase
+    
+            self.check_tokenize('class async(Bar):pass', '''\
+    NAME       'class'       (1, 0) (1, 5)
+    NAME       'async'       (1, 6) (1, 11)
+    OP         '('           (1, 11) (1, 12)
+    NAME       'Bar'         (1, 12) (1, 15)
+    OP         ')'           (1, 15) (1, 16)
+    OP         ':'           (1, 16) (1, 17)
+    NAME       'pass'        (1, 17) (1, 21)
+    ''')
+    
+    # Are two stat buffers (obtained from stat, fstat or lstat)
+# describing the same file?
+def samestat(s1, s2):
+    '''Test whether two stat buffers reference the same file'''
+    return (s1.st_ino == s2.st_ino and
+            s1.st_dev == s2.st_dev)
+    
+        If the resulting string contains path separators, an exception is raised.
+    '''
+    parent, file_name = os.path.split(path)
+    if parent:
+        raise ValueError('{!r} must be only a file name'.format(path))
+    else:
+        return file_name
+    
+    # Create the base text message.
+msg = EmailMessage()
+msg['Subject'] = 'Ayons asperges pour le déjeuner'
+msg['From'] = Address('Pepé Le Pew', 'pepe', 'example.com')
+msg['To'] = (Address('Penelope Pussycat', 'penelope', 'example.com'),
+             Address('Fabrette Pussycat', 'fabrette', 'example.com'))
+msg.set_content('''\
+Salut!
+    
+    # If we want to print a preview of the message content, we can extract whatever
+# the least formatted payload is and print the first three lines.  Of course,
+# if the message has no plain text part printing the first three lines of html
+# is probably useless, but this is just a conceptual example.
+simplest = msg.get_body(preferencelist=('plain', 'html'))
+print()
+print(''.join(simplest.get_content().splitlines(keepends=True)[:3]))
+    
+        counter = 1
+    for part in msg.walk():
+        # multipart/* are just containers
+        if part.get_content_maintype() == 'multipart':
+            continue
+        # Applications should really sanitize the given filename so that an
+        # email message can't be used to overwrite important files
+        filename = part.get_filename()
+        if not filename:
+            ext = mimetypes.guess_extension(part.get_content_type())
+            if not ext:
+                # Use a generic bag-of-bits extension
+                ext = '.bin'
+            filename = 'part-%03d%s' % (counter, ext)
+        counter += 1
+        with open(os.path.join(args.directory, filename), 'wb') as fp:
+            fp.write(part.get_payload(decode=True))
+    
+        with multiprocessing.Pool(PROCESSES) as pool:
+        #
+        # Tests
+        #
+    
+    #
+#
+#
