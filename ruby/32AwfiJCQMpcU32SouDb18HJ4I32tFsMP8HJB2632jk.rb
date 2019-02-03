@@ -1,151 +1,101 @@
 
         
-        multitask :default => [:test, :features]
+                  include_hidden = options.delete('include_hidden') { true }
+          checkbox = tag('input', options)
     
-    # No trailing slash
-Benchmark.ips do |x|
-  path = '/some/very/very/long/path/to/a/file/i/like'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
+            def render
+          options = @options.stringify_keys
+          options['size'] = options['maxlength'] unless options.key?('size')
+          options['type'] ||= field_type
+          options['value'] = options.fetch('value') { value_before_type_cast } unless field_type == 'file'
+          add_default_name_and_id(options)
+          tag('input', options)
+        end
     
-    STDOUT.sync = true
+        attr_internal_writer :action_has_layout
     
-              case protocol
-          when 'tcp'
-            self.connection = create_tcp_connection
-          when 'udp'
-            raise ::NotImplementedError, 'Kerberos Client: UDP not supported'
-          else
-            raise ::RuntimeError, 'Kerberos Client: unknown transport protocol'
-          end
+          if lounge.topic_id.nil?
+        creator = PostCreator.new(Discourse.system_user,
+          raw: I18n.t('vip_category_description'),
+          title: I18n.t('category.topic_prefix', category: lounge.name),
+          category: lounge.name,
+          archetype: Archetype.default,
+          skip_validations: true
+        )
+        post = creator.create
     
-              # Encodes the type
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_type(type)
-            bn = OpenSSL::BN.new(type.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
+        # The path used after sending unlock password instructions
+    def after_sending_unlock_instructions_path_for(resource)
+      new_session_path(resource) if is_navigational_format?
+    end
     
-              # Encodes the checksum field
-          #
-          # @return [OpenSSL::ASN1::OctetString]
-          def encode_checksum
-            OpenSSL::ASN1::OctetString.new(checksum)
-          end
+        def unlock_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :unlock_instructions, opts)
+    end
+    
+    class BugTest < ActionDispatch::IntegrationTest
+  include Rack::Test::Methods
+  include Warden::Test::Helpers
+    
+          # Sign out all active users or scopes. This helper is useful for signing out all roles
+      # in one click. This signs out ALL scopes in warden. Returns true if there was at least one logout
+      # and false if there was no user logged in on all scopes.
+      def sign_out_all_scopes(lock=true)
+        users = Devise.mappings.keys.map { |s| warden.user(scope: s, run_callbacks: false) }
+    
+          def mailer_sender(mapping, sender = :from)
+        default_sender = default_params[sender]
+        if default_sender.present?
+          default_sender.respond_to?(:to_proc) ? instance_eval(&default_sender) : default_sender
+        elsif Devise.mailer_sender.is_a?(Proc)
+          Devise.mailer_sender.call(mapping.name)
+        else
+          Devise.mailer_sender
         end
       end
-    end
-  end
-end
     
-              # Encodes the Rex::Proto::Kerberos::Model::Element into an ASN.1 String. This
-          # method has been designed to be overridden by subclasses.
-          #
-          # @raise [NoMethodError]
-          def encode
-            raise ::NoMethodError, 'Method designed to be overridden'
-          end
+          def message
+        'The following attribute(s) is (are) missing on your model: #{@attributes.join(', ')}'
+      end
+    end
+    
+    module Devise
+  module Models
+    # Timeoutable takes care of verifying whether a user session has already
+    # expired or not. When a session expires after the configured time, the user
+    # will be asked for credentials again, it means, they will be redirected
+    # to the sign in page.
+    #
+    # == Options
+    #
+    # Timeoutable adds the following options to devise_for:
+    #
+    #   * +timeout_in+: the interval to timeout the user session without activity.
+    #
+    # == Examples
+    #
+    #   user.timedout?(30.minutes.ago)
+    #
+    module Timeoutable
+      extend ActiveSupport::Concern
+    
+          def create_worker_file
+        template 'worker.rb.erb', File.join('app/workers', class_path, '#{file_name}_worker.rb')
+      end
+    
+            names.inject(Object) do |constant, name|
+          constant.const_defined?(name) ? constant.const_get(name) : constant.const_missing(name)
         end
+      rescue NameError
+        super
       end
     end
   end
 end
     
-              # Encodes the cipher
-          #
-          # @return [OpenSSL::ASN1::OctetString]
-          def encode_cipher
-            OpenSSL::ASN1::OctetString.new(cipher)
-          end
-    
-              # Decodes a Rex::Proto::Kerberos::Model::KdcRequest
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode_asn1(input)
-            input.value[0].value.each do |val|
-              case val.tag
-              when 1
-                self.pvno = decode_asn1_pvno(val)
-              when 2
-                self.msg_type = decode_asn1_msg_type(val)
-              when 3
-                self.pa_data  = decode_asn1_pa_data(val)
-              when 4
-                self.req_body = decode_asn1_req_body(val)
-              else
-                raise ::RuntimeError, 'Failed to decode KdcRequest SEQUENCE'
-              end
-            end
-          end
-    
-              # Decodes the susec field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_susec(input)
-            input.value[0].value.to_i
-          end
-    
-      # Compile a file on disk to CSS.
-  #
-  # @raise [Sass::SyntaxError] if there's an error in the document
-  # @raise [Encoding::UndefinedConversionError] if the source encoding
-  #   cannot be converted to UTF-8
-  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
-  #
-  # @overload compile_file(filename, options = {})
-  #   Return the compiled CSS rather than writing it to a file.
-  #
-  #   @param filename [String] The path to the Sass, SCSS, or CSS file on disk.
-  #   @param options [{Symbol => Object}] An options hash;
-  #     see {file:SASS_REFERENCE.md#Options the Sass options documentation}
-  #   @return [String] The compiled CSS.
-  #
-  # @overload compile_file(filename, css_filename, options = {})
-  #   Write the compiled CSS to a file.
-  #
-  #   @param filename [String] The path to the Sass, SCSS, or CSS file on disk.
-  #   @param options [{Symbol => Object}] An options hash;
-  #     see {file:SASS_REFERENCE.md#Options the Sass options documentation}
-  #   @param css_filename [String] The location to which to write the compiled CSS.
-  def self.compile_file(filename, *args)
-    options = args.last.is_a?(Hash) ? args.pop : {}
-    css_filename = args.shift
-    result = Sass::Engine.for_file(filename, options).render
-    if css_filename
-      options[:css_filename] ||= css_filename
-      open(css_filename, 'w') {|css_file| css_file.write(result)}
-      nil
-    else
-      result
-    end
-  end
-end
-    
-          if vars.nil? # scan failed, try to figure out why for error message
-        if value !~ /^[^\s]+/
-          expected = 'variable name'
-        elsif value !~ /^[^\s]+(?:\s*,\s*[^\s]+)*[^\s]+\s+from\s+.+/
-          expected = ''in <expr>''
-        end
-        raise SyntaxError.new('Invalid each directive '@each #{value}': expected #{expected}.')
+          def server_middleware
+        @server_chain ||= Middleware::Chain.new
+        yield @server_chain if block_given?
+        @server_chain
       end
-    
-          # If this importer is based on files on the local filesystem This method
-      # should return true if the file, when changed, should trigger a
-      # recompile.
-      #
-      # It is acceptable for non-sass files to be watched and trigger a recompile.
-      #
-      # @param filename [String] The absolute filename for a file that has changed.
-      # @return [Boolean] When the file changed should cause a recompile.
-      def watched_file?(filename)
-        false
-      end
-    end
-  end
-end
