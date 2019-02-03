@@ -1,105 +1,74 @@
 
         
-            env.each do |key, value|
-      ENV[key] = value
-    end
-    tasks.each do |task|
-      print_header('Running task: #{task}, env: #{env}')
-      Rake::Task[task].execute
+                  # Make sure we're only working with one VM if single target
+          if options[:single_target] && vms.length != 1
+            vm = @env.primary_vm
+            raise Errors::MultiVMTargetRequired if !vm
+            vms = [vm]
+          end
+    
+              @commands = Registry.new
+          @configs = Hash.new { |h, k| h[k] = Registry.new }
+          @guests  = Registry.new
+          @guest_capabilities = Hash.new { |h, k| h[k] = Registry.new }
+          @hosts   = Registry.new
+          @host_capabilities = Hash.new { |h, k| h[k] = Registry.new }
+          @providers = Registry.new
+          @provider_capabilities = Hash.new { |h, k| h[k] = Registry.new }
+          @pushes = Registry.new
+          @synced_folders = Registry.new
+        end
+      end
     end
   end
 end
+
     
-              if scanner.eos?
-            node = Tree::CssImportNode.new(str, [], supports_condition)
-          else
-            media_parser = Sass::SCSS::Parser.new(scanner,
-              @options[:filename], @options[:importer],
-              @line, str.source_range.end_pos.offset)
-            media = media_parser.parse_media_query_list
-            end_pos = Sass::Source::Position.new(@line, media_parser.offset + 1)
-            node = Tree::CssImportNode.new(str, media.to_a, supports_condition)
+        # undo folding, kinda ugly but works for now.
+    header.gsub!(/:\s*\r\n\s+/smni,': ')
+    
+      #
+  # Initializes an HTTP server as listening on the provided port and
+  # hostname.
+  #
+  def initialize(port = 80, listen_host = '0.0.0.0', ssl = false, context = {},
+                 comm = nil, ssl_cert = nil, ssl_compression = false,
+                 ssl_cipher = nil)
+    self.listen_host     = listen_host
+    self.listen_port     = port
+    self.ssl             = ssl
+    self.context         = context
+    self.comm            = comm
+    self.ssl_cert        = ssl_cert
+    self.ssl_compression = ssl_compression
+    self.ssl_cipher      = ssl_cipher
+    self.listener        = nil
+    self.resources       = {}
+    self.server_name     = DefaultServer
+  end
+    
+        self.itime  = ::Time.now
+    self.queue  = ::Queue.new
+    
+                encoded
           end
-        end
     
-        # @return [String] A description of the executable
-    def to_s
-      @opts.to_s
-    end
+              # Encodes the type field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_type
+            bn = OpenSSL::BN.new(type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
     
-      gem.required_ruby_version = '>= 2.0'
-  gem.add_dependency 'airbrussh', '>= 1.0.0'
-  gem.add_dependency 'i18n'
-  gem.add_dependency 'rake', '>= 10.0.0'
-  gem.add_dependency 'sshkit', '>= 1.9.0'
-    
-      def exists?(type, path)
-    %Q{[ -#{type} '#{path}' ]}
-  end
-    
-          def add_property(key, value)
-        if respond_to?('#{key}=')
-          send('#{key}=', value)
-        else
-          set(key, value)
-        end
-      end
-    
-          def add_host(host, properties={})
-        new_host = Server[host]
-        new_host.port = properties[:port] if properties.key?(:port)
-        # This matching logic must stay in sync with `Server#matches?`.
-        key = ServerKey.new(new_host.hostname, new_host.port)
-        existing = servers_by_key[key]
-        if existing
-          existing.user = new_host.user if new_host.user
-          existing.with(properties)
-        else
-          servers_by_key[key] = new_host.with(properties)
-        end
-      end
-    
-          def remember_location(key)
-        location = caller.find do |line|
-          IGNORED_LOCATIONS.none? { |i| line.include?(i) }
-        end
-        (locations[key] ||= []) << location
-      end
-    
-      not_found do
-    send_file(File.join(File.dirname(__FILE__), 'public', '404.html'), {:status => 404})
-  end
-    
-    def config_tag(config, key, tag=nil, classname=nil)
-  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
-  tag       ||= 'div'
-  classname ||= key.sub(/_/, '-').sub(/\./, '-')
-  output      = '<#{tag} class='#{classname}''
-    
-            Dir.chdir(includes_dir) do
-          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
-          if choices.include?(file)
-            source = File.read(file)
-            partial = Liquid::Template.parse(source)
-            context.stack do
-              rtn = rtn + partial.render(context)
-            end
-          else
-            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
+              # Decodes the e_data from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [String]
+          def decode_e_data(input)
+            input.value[0].value
           end
         end
       end
-      rtn
     end
   end
-    
-          unless file.file?
-        return 'File #{file} could not be found'
-      end
-    
-        def initialize(tag_name, markup, tokens)
-      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
-      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
-      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
-      super
-    end
+end
