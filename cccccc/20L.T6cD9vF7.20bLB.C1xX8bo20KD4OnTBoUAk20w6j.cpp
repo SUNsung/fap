@@ -1,194 +1,310 @@
 
         
-        #include 'tensorflow/core/framework/api_def.pb.h'
-#include 'tensorflow/core/framework/attr_value.pb.h'
-#include 'tensorflow/core/framework/op_def.pb.h'
-#include 'tensorflow/core/platform/types.h'
+          TemporaryFile() {
+    path = tmppath();
+  }
+    
+    ```
+    
+              vector<TensorShape> out(1);
+          switch (order) {
+            case StorageOrder::NCHW:
+              out[0] = CreateTensorShape(
+                  vector<int>{N, C * kernel_h * kernel_w, out_h, out_w},
+                  TensorProto::FLOAT);
+              break;
+            case StorageOrder::NHWC:
+              out[0] = CreateTensorShape(
+                  vector<int>{N, out_h, out_w, kernel_h * kernel_w * C},
+                  TensorProto::FLOAT);
+              break;
+            default:
+              CAFFE_THROW('Unknown storage order: ', order);
+          }
     
     
-    {}  // end namespace tensorflow
-
+    {    // Do it
+    std::string contents;
+    Status s = ReadFileToString(Env::Default(), fname, &contents);
+    ASSERT_TRUE(s.ok()) << s.ToString();
+    for (int i = 0; i < bytes_to_corrupt; i++) {
+      contents[i + offset] ^= 0x80;
+    }
+    s = WriteStringToFile(Env::Default(), contents, fname);
+    ASSERT_TRUE(s.ok()) << s.ToString();
+  }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
     
-        http://www.apache.org/licenses/LICENSE-2.0
+    {
+    {    fprintf(stdout, '%-12s : %11.3f micros/op;%s%s\n',
+            name.ToString().c_str(),
+            seconds_ * 1e6 / done_,
+            (extra.empty() ? '' : ' '),
+            extra.c_str());
+    if (FLAGS_histogram) {
+      fprintf(stdout, 'Microseconds per op:\n%s\n', hist_.ToString().c_str());
+    }
+    fflush(stdout);
+  }
+};
     
-    #ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_FUNC_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_PY_FUNC_H_
-    
-    Safe_TF_TensorPtr make_safe(TF_Tensor* tensor) {
-  return Safe_TF_TensorPtr(tensor);
+    int InternalKeyComparator::Compare(const Slice& akey, const Slice& bkey) const {
+  // Order by:
+  //    increasing user key (according to user-supplied comparator)
+  //    decreasing sequence number
+  //    decreasing type (though sequence# should be enough to disambiguate)
+  int r = user_comparator_->Compare(ExtractUserKey(akey), ExtractUserKey(bkey));
+  if (r == 0) {
+    const uint64_t anum = DecodeFixed64(akey.data() + akey.size() - 8);
+    const uint64_t bnum = DecodeFixed64(bkey.data() + bkey.size() - 8);
+    if (anum > bnum) {
+      r = -1;
+    } else if (anum < bnum) {
+      r = +1;
+    }
+  }
+  return r;
 }
     
-    #include 'tensorflow/core/framework/node_def.pb.h'
-#include 'tensorflow/core/framework/node_def_util.h'
-#include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/op_kernel.h'
-#include 'tensorflow/core/framework/types.h'
-#include 'tensorflow/core/lib/core/status.h'
-#include 'tensorflow/core/util/device_name_utils.h'
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-      // Given the DSO version number and the driver version file contents, extracts
-  // the driver version and compares, warning the user in the case of
-  // incompatibility.
+      // Returns the physical offset of the last record returned by ReadRecord.
   //
-  // This is solely used for more informative log messages when the user is
-  // running on a machine that happens to have a libcuda/kernel driver mismatch.
-  static void WarnOnDsoKernelMismatch(
-      port::StatusOr<DriverVersion> dso_version,
-      port::StatusOr<DriverVersion> kernel_version);
+  // Undefined before the first call to ReadRecord.
+  uint64_t LastRecordOffset();
     
-      // Populates the CUDA-platform-specific elements of this object.
-  port::Status Init();
+      // Compute the crc of the record type and the payload.
+  uint32_t crc = crc32c::Extend(type_crc_[t], ptr, n);
+  crc = crc32c::Mask(crc);                 // Adjust for storage
+  EncodeFixed32(buf, crc);
     
-    static void secp256k1_gej_neg(secp256k1_gej *r, const secp256k1_gej *a) {
-    r->infinity = a->infinity;
-    r->x = a->x;
-    r->y = a->y;
-    r->z = a->z;
-    secp256k1_fe_normalize_weak(&r->y);
-    secp256k1_fe_negate(&r->y, &r->y, 1);
-}
-    
-    
-    {    secp256k1_scalar_get_b32(brx, sigr);
-    r = secp256k1_fe_set_b32(&fx, brx);
-    (void)r;
-    VERIFY_CHECK(r); /* brx comes from a scalar, so is less than the order; certainly less than p */
-    if (recid & 2) {
-        if (secp256k1_fe_cmp_var(&fx, &secp256k1_ecdsa_const_p_minus_order) >= 0) {
-            return 0;
-        }
-        secp256k1_fe_add(&fx, &secp256k1_ecdsa_const_order_as_fe);
+      Status WriteDescriptor() {
+    std::string tmp = TempFileName(dbname_, 1);
+    WritableFile* file;
+    Status status = env_->NewWritableFile(tmp, &file);
+    if (!status.ok()) {
+      return status;
     }
-    if (!secp256k1_ge_set_xo_var(&x, &fx, recid & 1)) {
-        return 0;
     }
-    secp256k1_gej_set_ge(&xj, &x);
-    secp256k1_scalar_inverse_var(&rn, sigr);
-    secp256k1_scalar_mul(&u1, &rn, message);
-    secp256k1_scalar_negate(&u1, &u1);
-    secp256k1_scalar_mul(&u2, &rn, sigs);
-    secp256k1_ecmult(ctx, &qj, &xj, &u2, &u1);
-    secp256k1_ge_set_gej_var(pubkey, &qj);
-    return !secp256k1_gej_is_infinity(&qj);
-}
     
-    /// Format list of arguments according to the given format string and return
-/// the result as a string.
-template<typename... Args>
-std::string format(const char* fmt, const Args&... args)
-{
-    std::ostringstream oss;
-    format(oss, fmt, args...);
-    return oss.str();
-}
+    #if DMLC_ENABLE_STD_THREAD
+/*!
+ * \brief A threaded writer to write sparse batch page to sharded files.
+ */
+class SparsePageWriter {
+ public:
+  /*!
+   * \brief constructor
+   * \param name_shards name of shard files.
+   * \param format_shards format of each shard.
+   * \param extra_buffer_capacity Extra buffer capacity before block.
+   */
+  explicit SparsePageWriter(
+      const std::vector<std::string>& name_shards,
+      const std::vector<std::string>& format_shards,
+      size_t extra_buffer_capacity);
+  /*! \brief destructor, will close the files automatically */
+  ~SparsePageWriter();
+  /*!
+   * \brief Push a write job to the writer.
+   * This function won't block,
+   * writing is done by another thread inside writer.
+   * \param page The page to be written
+   */
+  void PushWrite(std::shared_ptr<SparsePage>&& page);
+  /*!
+   * \brief Allocate a page to store results.
+   *  This function can block when the writer is too slow and buffer pages
+   *  have not yet been recycled.
+   * \param out_page Used to store the allocated pages.
+   */
+  void Alloc(std::shared_ptr<SparsePage>* out_page);
+    }
     
+      void InitTreesToUpdate() {
+    if (trees_to_update.size() == 0u) {
+      for (auto & tree : trees) {
+        trees_to_update.push_back(std::move(tree));
+      }
+      trees.clear();
+      param.num_trees = 0;
+      tree_info.clear();
+    }
+  }
     
-    {bool ParseDouble(const std::string& str, double *out)
-{
-    if (!ParsePrechecks(str))
-        return false;
-    if (str.size() >= 2 && str[0] == '0' && str[1] == 'x') // No hexadecimal floats allowed
-        return false;
-    std::istringstream text(str);
-    text.imbue(std::locale::classic());
-    double result;
-    text >> result;
-    if(out) *out = result;
-    return text.eof() && !text.fail();
-}
-}
-    
-        if (!bytes) return;
-    
-      printer->Print(
-    '/// <summary>Holder for reflection information generated from $file_name$</summary>\n'
-    '$access_level$ static partial class $reflection_class_name$ {\n'
-    '\n',
-    'file_name', file_->name(),
-    'access_level', class_access_level(),
-    'reflection_class_name', reflectionClassname_);
-  printer->Indent();
-}
-    
-    // ===================================================================
-    
-    void OneofGenerator::GeneratePublicCasePropertyDeclaration(
-    io::Printer* printer) {
-  printer->Print(
-      variables_,
-      '$comments$'
-      '@property(nonatomic, readonly) $enum_name$ $name$OneOfCase;\n'
-      '\n');
-}
-    
-    // Author: ambrose@google.com (Ambrose Feinstein),
-//         kenton@google.com (Kenton Varda)
-//
-// Based on http://www.pkware.com/documents/casestudies/APPNOTE.TXT
-    
-    #pragma once
-    
-    struct IDirect3DDevice9;
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_IMPL_API void     ImGui_Marmalade_InvalidateDeviceObjects();
-IMGUI_IMPL_API bool     ImGui_Marmalade_CreateDeviceObjects();
-    
-    struct GLFWwindow;
-    
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
-    
-    void DHTReplaceNodeTask::onReceived(const DHTPingReplyMessage* message)
-{
-  A2_LOG_INFO(fmt('ReplaceNode: Ping reply received from %s.',
-                  message->getRemoteNode()->toString().c_str()));
-  setFinished(true);
-}
-    
-      bool addGoodNode(const std::shared_ptr<DHTNode>& node);
-    
-      std::shared_ptr<DHTNode> localNode_;
-    
-    #include 'common.h'
-    
-      virtual void startup() = 0;
-    
-    DHTTaskExecutor::~DHTTaskExecutor() = default;
-    
-      virtual std::shared_ptr<DHTTask> createBucketRefreshTask() CXX11_OVERRIDE;
+    // common regressions
+// linear regression
+struct LinearSquareLoss {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
+  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return true; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    return predt - label;
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    return 1.0f;
+  }
+  template <typename T>
+  static T PredTransform(T x) { return x; }
+  template <typename T>
+  static T FirstOrderGradient(T predt, T label) { return predt - label; }
+  template <typename T>
+  static T SecondOrderGradient(T predt, T label) { return T(1.0f); }
+  static bst_float ProbToMargin(bst_float base_score) { return base_score; }
+  static const char* LabelErrorMsg() { return ''; }
+  static const char* DefaultEvalMetric() { return 'rmse'; }
+};
     
     
-    {} // namespace aria2
-
-    
-    #endif // D_DHT_UNKNOWN_MESSAGE_H
+    {
+    {}  // namespace common
+}  // namespace xgboost
 
     
     
-    // out_of_range.106
-    try
-    {
-        // try to use an array index with leading '0'
-        json::reference ref = j.at('/array/01'_json_pointer);
+    {  for (size_t i = 0; i < nindptr; ++i) {
+    col_ptr_[i] = static_cast<size_t>(p_indptr[i]);
+  }
+  #pragma omp parallel for schedule(static)
+  for (int64_t i = 0; i < static_cast<int64_t>(ndata); ++i) {
+    indices_[i] = static_cast<unsigned>(p_indices[i]);
+    data_[i] = static_cast<float>(p_data[i]);
+  }
+  DMatrixHandle handle;
+  CHECK_CALL(XGDMatrixCreateFromCSCEx(BeginPtr(col_ptr_), BeginPtr(indices_),
+                                      BeginPtr(data_), nindptr, ndata,
+                                      nrow, &handle));
+  ret = PROTECT(R_MakeExternalPtr(handle, R_NilValue, R_NilValue));
+  R_RegisterCFinalizerEx(ret, _DMatrixFinalizer, TRUE);
+  R_API_END();
+  UNPROTECT(1);
+  return ret;
+}
+    
+    #ifndef XGBOOST_TREE_SPLIT_EVALUATOR_H_
+#define XGBOOST_TREE_SPLIT_EVALUATOR_H_
+    
+      /*!
+   * \brief feature contributions to individual predictions; the output will be a vector
+   *         of length (nfeats + 1) * num_output_group * nsample, arranged in that order
+   * \param dmat feature matrix
+   * \param out_contribs output vector to hold the contributions
+   * \param ntree_limit limit the number of trees used in prediction, when it equals 0, this means
+   *    we do not limit number of trees
+   * \param approximate use a faster (inconsistent) approximation of SHAP values
+   * \param condition condition on the condition_feature (0=no, -1=cond off, 1=cond on).
+   * \param condition_feature feature to condition on (i.e. fix) during calculations
+   */
+  virtual void PredictContribution(DMatrix* dmat,
+                           std::vector<bst_float>* out_contribs,
+                           unsigned ntree_limit = 0, bool approximate = false,
+                           int condition = 0, unsigned condition_feature = 0) = 0;
+    
+    #include <boost/format.hpp>
+#include <boost/io/detail/quoted_manip.hpp>
+    
+      /**
+   * @brief Add a new set of results to the persistent storage.
+   *
+   * Given the results of the execution of a scheduled query, add the results
+   * to the database using addNewResults.
+   *
+   * @param qd the QueryData object, which has the results of the query.
+   * @param epoch the epoch associated with QueryData
+   * @param counter [output] the output that holds the query execution counter.
+   *
+   * @return the success or failure of the operation.
+   */
+  Status addNewResults(QueryData qd, uint64_t epoch, uint64_t& counter) const;
+    
+      kToolType = ToolType::TEST;
+  if (osquery::isPlatform(PlatformType::TYPE_OSX)) {
+    kTestWorkingDirectory = '/private/tmp/osquery-tests';
+  } else {
+    kTestWorkingDirectory =
+        (fs::temp_directory_path() / 'osquery-tests').string();
+  }
+    
+    Status deserializeQueryDataJSON(const std::string& json, QueryDataSet& qd) {
+  rj::Document doc;
+  if (doc.Parse(json.c_str()).HasParseError()) {
+    return Status(1, 'Error serializing JSON');
+  }
+  return deserializeQueryData(doc, qd);
+}
+    
+    
+    {  for (const auto& i : doc.GetObject()) {
+    std::string name(i.name.GetString());
+    if (!name.empty()) {
+      if (i.value.IsString()) {
+        r[name] = i.value.GetString();
+      } else if (i.value.IsDouble()) {
+        r[name] = i.value.GetDouble();
+      } else if (i.value.IsInt64()) {
+        // Cast required for linux-x86_64
+        r[name] = (long long)i.value.GetInt64();
+      }
     }
-    catch (json::parse_error& e)
-    {
-        std::cout << e.what() << '\n';
-    }
+  }
+  return Status();
+}
+    
+    class ExtensionClient : virtual public ExtensionIf {
+ public:
+  ExtensionClient(apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
+    setProtocol(prot);
+  }
+  ExtensionClient(apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> iprot, apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> oprot) {
+    setProtocol(iprot,oprot);
+  }
+ private:
+  void setProtocol(apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
+  setProtocol(prot,prot);
+  }
+  void setProtocol(apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> iprot, apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> oprot) {
+    piprot_=iprot;
+    poprot_=oprot;
+    iprot_ = iprot.get();
+    oprot_ = oprot.get();
+  }
+ public:
+  apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getInputProtocol() {
+    return piprot_;
+  }
+  apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
+    return poprot_;
+  }
+  void ping(ExtensionStatus& _return);
+  void send_ping();
+  void recv_ping(ExtensionStatus& _return);
+  void call(ExtensionResponse& _return, const std::string& registry, const std::string& item, const ExtensionPluginRequest& request);
+  void send_call(const std::string& registry, const std::string& item, const ExtensionPluginRequest& request);
+  void recv_call(ExtensionResponse& _return);
+  void shutdown();
+  void send_shutdown();
+  void recv_shutdown();
+ protected:
+  apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
+  apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
+  ::apache::thrift::protocol::TProtocol* iprot_;
+  ::apache::thrift::protocol::TProtocol* oprot_;
+};
+    
+    void ExtensionManagerClient::getQueryColumns(ExtensionResponse& _return, const std::string& sql)
+{
+  send_getQueryColumns(sql);
+  recv_getQueryColumns(_return);
+}
+    
+    
+    {};
+    
+      auto diff_doc = doc.getObject();
+  diff_doc.Swap(dr.first.doc());
+  doc.add('diffResults', diff_doc);
+  doc.addRef('name', 'foobar');
+  doc.addRef('hostIdentifier', 'foobaz');
+  doc.addRef('calendarTime', 'Mon Aug 25 12:10:57 2014');
+  doc.add('unixTime', 1408993857);
+  doc.add('epoch', std::size_t{0});
+  doc.add('counter', std::size_t{0});
