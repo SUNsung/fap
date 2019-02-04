@@ -1,359 +1,256 @@
 
         
-        #ifdef _MSC_VER
-#pragma warning(disable:4503)  // disable warning: decorated name length exceeded.
+        #if defined(COMPONENT_BUILD) && defined(WIN32)
+#define NW_HOOK_MAP(type, sym, fn) BASE_EXPORT type fn;
+#else
+#define NW_HOOK_MAP(type, sym, fn) extern type fn;
 #endif
+#include 'content/nw/src/common/node_hooks.h'
+#undef NW_HOOK_MAP
     
-    TShape Vector2TShape(const std::vector<int> &vec_int) {
-  std::vector<mshadow::index_t> vec;
-  for (uint32_t i = 0; i < vec_int.size(); ++i)
-    vec.push_back(vec_int[i]);
-  // 0-dim represents scalar in caffe
-  if (vec_int.size() == 0)
-    vec.push_back(1);
-  return {vec.begin(), vec.end()};
+      // Post 'reopen' event.
+  // (This event is received when the user clicked the icon in the Dock).
+  static void EmitReopenEvent();
+    
+    
+    {}  // namespace nw
+
+    
+    
+    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  return item->is_checked_;
 }
     
-    // implementation of tensor to blob, called by TensorToBlob
-template<typename Device, typename Dtype>
-void SetDataGradToBlob(caffeMemoryTypes memType,
-                       typename std::vector< ::caffe::Blob<Dtype>*>::iterator blob,
-                       typename std::vector<TBlob>::const_iterator itr);
+    void Menu::Remove(MenuItem* menu_item, int pos) {
+  std::vector<MenuItem*>::iterator begin = menu_items.begin();
+  menu_items.erase(begin+pos);
+  gtk_container_remove(GTK_CONTAINER(menu_), menu_item->menu_item_);
+}
     
-      // override set_default
-  inline FieldEntry<caffe::LayerParameter> &set_default(const std::string &value) {
-    caffe::NetParameter net_param;
-    if (!ReadProtoFromTextContent(value, &net_param))
-      CHECK(false)<< 'Caffe Net Prototxt: ' << value << 'Initialized Failed';
-    }
     
-        // Handle OpReqType of weights
-    for (int i = param_.num_data; i < expected_num_data; ++i)
-      HandleOpReq(s, req[i], in_grad[i]);
-    
-    MXNET_REGISTER_IO_ITER(LibSVMIter)
-.describe(R'code(Returns the LibSVM iterator which returns data with `csr`
-storage type. This iterator is experimental and should be used with care.
-    
-      // Read until size drops significantly.
-  std::string limit_key = Key(n);
-  for (int read = 0; true; read++) {
-    ASSERT_LT(read, 100) << 'Taking too long to compact';
-    Iterator* iter = db_->NewIterator(ReadOptions());
-    for (iter->SeekToFirst();
-         iter->Valid() && iter->key().ToString() < limit_key;
-         iter->Next()) {
-      // Drop data
-    }
-    delete iter;
-    // Wait a little bit to allow any triggered compactions to complete.
-    Env::Default()->SleepForMicroseconds(1000000);
-    uint64_t size = Size(Key(0), Key(n));
-    fprintf(stderr, 'iter %3d => %7.3f MB [other %7.3f MB]\n',
-            read+1, size/1048576.0, Size(Key(n), Key(kCount))/1048576.0);
-    if (size <= initial_size/10) {
-      break;
-    }
+    {  // Convert from content coordinates to window coordinates.
+  // This code copied from chrome_web_contents_view_delegate_views.cc
+  aura::Window* target_window = GetActiveNativeView(rfh);
+  aura::Window* root_window = target_window->GetRootWindow();
+  views::Widget* top_level_widget =
+    views::Widget::GetTopLevelWidgetForNativeView(target_window);
+  aura::client::ScreenPositionClient* screen_position_client =
+        aura::client::GetScreenPositionClient(root_window);
+  if (screen_position_client) {
+    screen_position_client->ConvertPointToScreen(target_window,
+             &screen_point);
   }
-    
-      // Recover the descriptor from persistent storage.  May do a significant
-  // amount of work to recover recently logged updates.  Any changes to
-  // be made to the descriptor are added to *edit.
-  Status Recover(VersionEdit* edit, bool* save_manifest)
-      EXCLUSIVE_LOCKS_REQUIRED(mutex_);
-    
-    
-    {}  // namespace leveldb
-    
-    class Writer {
- public:
-  // Create a writer that will append data to '*dest'.
-  // '*dest' must be initially empty.
-  // '*dest' must remain live while this Writer is in use.
-  explicit Writer(WritableFile* dest);
-    }
-    
-    public:
-    
-    uint32_t
-RuleBasedCollator::setVariableTop(const UChar *varTop, int32_t len, UErrorCode &errorCode) {
-    if(U_FAILURE(errorCode)) { return 0; }
-    if(varTop == NULL && len !=0) {
-        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-    if(len < 0) { len = u_strlen(varTop); }
-    if(len == 0) {
-        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-    UBool numeric = settings->isNumeric();
-    int64_t ce1, ce2;
-    if(settings->dontCheckFCD()) {
-        UTF16CollationIterator ci(data, numeric, varTop, varTop, varTop + len);
-        ce1 = ci.nextCE(errorCode);
-        ce2 = ci.nextCE(errorCode);
-    } else {
-        FCDUTF16CollationIterator ci(data, numeric, varTop, varTop, varTop + len);
-        ce1 = ci.nextCE(errorCode);
-        ce2 = ci.nextCE(errorCode);
-    }
-    if(ce1 == Collation::NO_CE || ce2 != Collation::NO_CE) {
-        errorCode = U_CE_NOT_FOUND_ERROR;
-        return 0;
-    }
-    setVariableTop((uint32_t)(ce1 >> 32), errorCode);
-    return settings->variableTop;
+  set_delay_destruction(true);
+  menu_runner_.reset(new views::MenuRunner(menu_model_.get(), views::MenuRunner::CONTEXT_MENU,
+                                           base::Bind(&Menu::OnMenuClosed, base::Unretained(this))));
+  menu_runner_->RunMenuAt(top_level_widget,
+                       nullptr,
+                       gfx::Rect(screen_point, gfx::Size()),
+                       views::MENU_ANCHOR_TOPRIGHT,
+                       ui::MENU_SOURCE_NONE);
+  // It is possible for the same MenuMessageLoopAura to start a nested
+  // message-loop while it is already running a nested loop. So make
+  // sure the quit-closure gets reset to the outer loop's quit-closure
+  // once the innermost loop terminates.
+  {
+    base::AutoReset<base::Closure> reset_quit_closure(&message_loop_quit_,
+                                                      base::Closure());
+  
+    //base::MessageLoop* loop = base::MessageLoop::current();
+    base::MessageLoopCurrent::ScopedNestableTaskAllower allow;
+    base::RunLoop run_loop;
+    message_loop_quit_ = run_loop.QuitClosure();
+  
+    run_loop.Run();
+  }
+  set_delay_destruction(false);
+  if (pending_destruction())
+    object_manager_->OnDeallocateObject(id_);
 }
     
-    // SharedBreakIterator encapsulates a shared BreakIterator. Because
-// BreakIterator has mutable semantics, clients must ensure that all uses
-// of a particular shared BreakIterator is protected by the same mutex
-// ensuring that only one thread at a time gets access to that shared
-// BreakIterator. Clients can accomplish this by creating a mutex for all
-// uses of break iterator within a particular class. Then objects of that
-// class may then freely share break iterators among themselves. However,
-// these shared break iterators must never be exposed outside of that class.
-class U_I18N_API SharedBreakIterator : public SharedObject {
-public:
-    SharedBreakIterator(BreakIterator *biToAdopt);
-    virtual ~SharedBreakIterator();
-    }
     
-    void 
-SimpleTimeZone::setDSTSavings(int32_t millisSavedDuringDST, UErrorCode& status) 
-{
-    if (millisSavedDuringDST <= 0) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-    }
-    else {
-        dstSavings = millisSavedDuringDST;
-    }
-    transitionRulesInitialized = FALSE;
+void MenuItem::UpdateKeys(GtkAccelGroup *gtk_accel_group){
+  this->gtk_accel_group = gtk_accel_group;
+  if (enable_shortcut && GTK_IS_ACCEL_GROUP(gtk_accel_group)){
+    gtk_widget_add_accelerator(
+      menu_item_,
+      'activate',
+      gtk_accel_group,
+      keyval,
+      modifiers_mask,
+      GTK_ACCEL_VISIBLE);
+  }
+  if (submenu_ != NULL){
+    submenu_->UpdateKeys(gtk_accel_group);
+  }
+  return;
 }
     
-    class  UnicodeSet;
+      static void DoJob(AppWindowRegistry* registry, std::string id);
+ protected:
+  ~NwAppCloseAllWindowsFunction() override {}
     
-        /**
-     * @param keyword for example 'few' or 'other'
-     * @return the plural form corresponding to the keyword, or OTHER
-     */
-    static Form orOtherFromString(const UnicodeString &keyword) {
-        return static_cast<Form>(indexOrOtherIndexFromString(keyword));
+    bool NwObjCreateFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  base::DictionaryValue* options = nullptr;
+  int id = 0;
+  std::string type;
+  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetDictionary(2, &options));
     }
     
-        /** Creates an action with a Cardinal Spline array of points and tension.
-     * @param duration In seconds.
-     * @param points An PointArray.
-     * @param tension Goodness of fit.
-     * @code
-     * When this function bound to js or lua,the input params are changed.
-     * In js: var create(var t,var table)
-     * In lua: local create(local t, local table)
-     * @endcode
-     */
-    static CardinalSplineTo* create(float duration, PointArray* points, float tension);
-    /**
-     * @js NA
-     * @lua NA
-     */
-    virtual ~CardinalSplineTo();
-    /**
-     * @js ctor
-     * @lua NA
-     */
-    CardinalSplineTo();
+     protected:
+  ~NwObjCallObjectMethodFunction() override;
     
-        if (action)
-    {
-        if (action->initWithDuration(duration, gridSize, position, radius))
-        {
-            action->autorelease();
-        }
-        else
-        {
-            CC_SAFE_RELEASE_NULL(action);
-        }
-    }
+    TegraUnaryOp_Invoker(bitwiseNot, bitwiseNot)
+#define TEGRA_UNARYOP(type, op, src1, sz1, dst, sz, w, h) \
+( \
+    CAROTENE_NS::isSupportedConfiguration() ? \
+    parallel_for_(Range(0, h), \
+    TegraGenOp_##op##_Invoker<const type, type>(src1, sz1, dst, sz, w, h), \
+    (w * h) / static_cast<double>(1<<16)), \
+    CV_HAL_ERROR_OK \
+    : CV_HAL_ERROR_NOT_IMPLEMENTED \
+)
     
-        // Overrides
-    virtual Liquid* clone() const override;
-    virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    Liquid() {}
-    virtual ~Liquid() {}
-    
-    /**
-    @brief Initializes the action with amplitude, grid size, waves count and duration.
-    @param duration Specify the duration of the Liquid action. It's a value in seconds.
-    @param gridSize Specify the size of the grid.
-    @param waves Specify the waves count of the Liquid action.
-    @param amplitude Specify the amplitude of the Liquid action.
-    @return If the initialization success, return true; otherwise, return false.
+        /*
+        Reduce matrix to a vector by calculatin given operation for each column
     */
-    bool initWithDuration(float duration, const Size& gridSize, unsigned int waves, float amplitude);
+    void reduceColSum(const Size2D &size,
+                      const u8 * srcBase, ptrdiff_t srcStride,
+                      s32 * dstBase);
     
+    #ifdef CAROTENE_NEON
+    // in this case we can use the following scheme:
+    // dst[p] = (src[p] + dst[p]) >> 1
+    // which is faster
+    if (alpha == 0.5f)
+    {
+        internal::vtransform(size,
+                             srcBase, srcStride,
+                             dstBase, dstStride,
+                             dstBase, dstStride,
+                             AccumulateWeightedHalf());
+    }
     
-    {
-    {
-    {            p.z = (r * ( 1 - cosBeta ) * cosTheta);// '100' didn't work for
-            p.x = p.z * sinf(rotateByYAxis) + p.x * cosf(rotateByYAxis);
-            p.z = p.z * cosf(rotateByYAxis) - p.x * sinf(rotateByYAxis);
-            p.z/=7;
-            //    Stop z coord from dropping beneath underlying page in a transition
-            // issue #751
-            if( p.z < 0.5f )
-            {
-                p.z = 0.5f;
-            }
-            
-            // Set new coords
-            p.x += getGridRect().origin.x;
-            setVertex(Vec2(i, j), p);
-            
+    void bitwiseOr(const Size2D &size,
+               const u8 *src0Base, ptrdiff_t src0Stride,
+               const u8 *src1Base, ptrdiff_t src1Stride,
+               u8 *dstBase, ptrdiff_t dstStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    internal::vtransform(size,
+                         src0Base, src0Stride,
+                         src1Base, src1Stride,
+                         dstBase, dstStride, BitwiseOr());
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+#endif
+}
+    
+        if (borderType == BORDER_MODE_CONSTANT)
+        for (s32 k = 0; k < cn; ++k)
+        {
+            lanea[-cn+k] = borderValue;
+            lanea[colsn+k] = borderValue;
+            laneA[-cn+k] = borderValue;
+            laneA[colsn+k] = borderValue;
+            laneb[-cn+k] = borderValue;
+            laneb[colsn+k] = borderValue;
+            laneB[-cn+k] = borderValue;
+            laneB[colsn+k] = borderValue;
         }
+    
+                int16x8_t tail02 = vreinterpretq_s16_u16(vaddl_u8(tail2, tail0));
+            int16x8_t tail1x2 = vreinterpretq_s16_u16(vshll_n_u8(tail1, 1));
+            int16x8_t taildx = vreinterpretq_s16_u16(vsubl_u8(tail2, tail0));
+            int16x8_t taildy = vqaddq_s16(tail02, tail1x2);
+    
+            if (s[0] < 0 || s[1] < 0)//saturate in case of overflow ~ 8GB of non-zeros...
+        {
+            return 0x7fFFffFF;
+        }
+        result += (s[0] += s[1]);
+        if (s[0] < 0 || result < 0)
+        {
+            return 0x7fFFffFF;
+        }
+    
+        int16x8_t q0 = vdupq_n_s16((s16)(-1000));
+    int16x8_t q1 = vdupq_n_s16((s16)(1000));
+    
+                    vSum_0_4 = vmlaq_u16(vSum_0_4, vSum_4_8, vc4u16);
+                vSum_1_5 = vmlaq_u16(vSum_1_5, vSum_5_9, vc4u16);
+                vSum_0_4 = vmlaq_u16(vSum_0_4, vLane2.val[0], vc6u16);
+                vSum_1_5 = vmlaq_u16(vSum_1_5, vLane2.val[1], vc6u16);
+    
+    OPERATOR_SCHEMA(Floor)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .AllowInplace({{0, 0}})
+    .SetDoc(R'DOC(
+Element-wise application of the floor function ($y=floor(x)$) to the input
+tensor `X`. Output tensor shape is the same as the input tensor. This
+operator can be used in an in-place fashion by using the same input blob as the
+output blob.
+    
+    namespace caffe2 {
+namespace {
     }
+    }
+    
+    namespace caffe2 {
+OPERATOR_SCHEMA(FloatToHalf)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .TensorInferenceFunction(
+        [](const OperatorDef& def, const vector<TensorShape>& in) {
+          vector<TensorShape> out;
+          const TensorShape& X = in[0];
+          out.push_back(X);
+          out[0].set_data_type(TensorProto_DataType_FLOAT16);
+    }
+    }
+    
+    											ErrorMetric a_errormetric) = 0;
+    
+    		static const unsigned int BYTES_PER_BLOCK = 8;
+		static const unsigned int SELECTOR_BYTES = 6;
+    
+    #define UNIT_QUANT_SHIFT 2
+#define UNIT_QUANT_FACTOR (1 << UNIT_QUANT_SHIFT)
+    
+    
+    {  EsdCanClient esd_can_client;
+  EXPECT_TRUE(esd_can_client.Init(param));
+  EXPECT_EQ(esd_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
+  std::vector<CanFrame> frames;
+  int32_t num = 0;
+  EXPECT_EQ(esd_can_client.Send(frames, &num),
+            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
+  EXPECT_EQ(esd_can_client.Receive(&frames, &num),
+            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
+  CanFrame can_frame;
+  frames.push_back(can_frame);
+  EXPECT_EQ(esd_can_client.SendSingleFrame(frames),
+            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
+  esd_can_client.Stop();
 }
     
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#ifndef __ACTION_CCPROGRESS_TIMER_H__
-#define __ACTION_CCPROGRESS_TIMER_H__
     
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#ifndef __CC_ANIMATION_CACHE_H__
-#define __CC_ANIMATION_CACHE_H__
-    
-    #define CHECK_FLOAT_EQ(a, b, eps) CHECK(std::fabs((a) - (b)) <  (eps))
-#define CHECK_FLOAT_NE(a, b, eps) CHECK(std::fabs((a) - (b)) >= (eps))
-#define CHECK_FLOAT_GE(a, b, eps) CHECK((a) - (b) > -(eps))
-#define CHECK_FLOAT_LE(a, b, eps) CHECK((b) - (a) > -(eps))
-#define CHECK_FLOAT_GT(a, b, eps) CHECK((a) - (b) >  (eps))
-#define CHECK_FLOAT_LT(a, b, eps) CHECK((b) - (a) >  (eps))
-    
-      // currently there is no error handling for failure, so this is hack.
-  CHECK(ret >= 0);
-    
-      if (!printed_header_) {
-    // save the names of all the user counters
-    for (const auto& run : reports) {
-      for (const auto& cnt : run.counters) {
-        user_counter_names_.insert(cnt.first);
-      }
-    }
-    }
-    
-    namespace benchmark {
-// NOTE: only i386 and x86_64 have been well tested.
-// PPC, sparc, alpha, and ia64 are based on
-//    http://peter.kuscsik.com/wordpress/?p=14
-// with modifications by m3b.  See also
-//    https://setisvn.ssl.berkeley.edu/svn/lib/fftw-3.0.1/kernel/cycle.h
-namespace cycleclock {
-// This should return the number of cycles since power-on.  Thread-safe.
-inline BENCHMARK_ALWAYS_INLINE int64_t Now() {
-#if defined(BENCHMARK_OS_MACOSX)
-  // this goes at the top because we need ALL Macs, regardless of
-  // architecture, to return the number of 'mach time units' that
-  // have passed since startup.  See sysinfo.cc where
-  // InitializeSystemInfo() sets the supposed cpu clock frequency of
-  // macs to the number of mach time units per second, not actual
-  // CPU clock frequency (which can change in the face of CPU
-  // frequency scaling).  Also note that when the Mac sleeps, this
-  // counter pauses; it does not continue counting, nor does it
-  // reset to zero.
-  return mach_absolute_time();
-#elif defined(BENCHMARK_OS_EMSCRIPTEN)
-  // this goes above x86-specific code because old versions of Emscripten
-  // define __x86_64__, although they have nothing to do with it.
-  return static_cast<int64_t>(emscripten_get_now() * 1e+6);
-#elif defined(__i386__)
-  int64_t ret;
-  __asm__ volatile('rdtsc' : '=A'(ret));
+    {  int ret = x;
   return ret;
-#elif defined(__x86_64__) || defined(__amd64__)
-  uint64_t low, high;
-  __asm__ volatile('rdtsc' : '=a'(low), '=d'(high));
-  return (high << 32) | low;
-#elif defined(__powerpc__) || defined(__ppc__)
-  // This returns a time-base, which is not always precisely a cycle-count.
-  int64_t tbl, tbu0, tbu1;
-  asm('mftbu %0' : '=r'(tbu0));
-  asm('mftb  %0' : '=r'(tbl));
-  asm('mftbu %0' : '=r'(tbu1));
-  tbl &= -static_cast<int64_t>(tbu0 == tbu1);
-  // high 32 bits in tbu1; low 32 bits in tbl  (tbu0 is garbage)
-  return (tbu1 << 32) | tbl;
-#elif defined(__sparc__)
-  int64_t tick;
-  asm('.byte 0x83, 0x41, 0x00, 0x00');
-  asm('mov   %%g1, %0' : '=r'(tick));
-  return tick;
-#elif defined(__ia64__)
-  int64_t itc;
-  asm('mov %0 = ar.itc' : '=r'(itc));
-  return itc;
-#elif defined(COMPILER_MSVC) && defined(_M_IX86)
-  // Older MSVC compilers (like 7.x) don't seem to support the
-  // __rdtsc intrinsic properly, so I prefer to use _asm instead
-  // when I know it will work.  Otherwise, I'll use __rdtsc and hope
-  // the code is being compiled with a non-ancient compiler.
-  _asm rdtsc
-#elif defined(COMPILER_MSVC)
-  return __rdtsc();
-#elif defined(BENCHMARK_OS_NACL)
-  // Native Client validator on x86/x86-64 allows RDTSC instructions,
-  // and this case is handled above. Native Client validator on ARM
-  // rejects MRC instructions (used in the ARM-specific sequence below),
-  // so we handle it here. Portable Native Client compiles to
-  // architecture-agnostic bytecode, which doesn't provide any
-  // cycle counter access mnemonics.
-    }
-    }
-    }
-    
-    inline Regex::~Regex() {
-  if (init_) {
-    regfree(&re_);
-  }
 }
     
-    namespace benchmark {
-#ifdef BENCHMARK_OS_WINDOWS
-// Window's Sleep takes milliseconds argument.
-void SleepForMilliseconds(int milliseconds) { Sleep(milliseconds); }
-void SleepForSeconds(double seconds) {
-  SleepForMilliseconds(static_cast<int>(kNumMillisPerSecond * seconds));
-}
-#else   // BENCHMARK_OS_WINDOWS
-void SleepForMicroseconds(int microseconds) {
-  struct timespec sleep_time;
-  sleep_time.tv_sec = microseconds / kNumMicrosPerSecond;
-  sleep_time.tv_nsec = (microseconds % kNumMicrosPerSecond) * kNumNanosPerMicro;
-  while (nanosleep(&sleep_time, &sleep_time) != 0 && errno == EINTR)
-    ;  // Ignore signals and wait for the full interval to elapse.
-}
+    int ObjectListStatus60A::num_of_objects(const std::uint8_t* bytes,
+                                        int32_t length) const {
+  Byte t0(bytes);
+  int32_t x = t0.get_byte(0, 8);
     }
