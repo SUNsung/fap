@@ -1,561 +1,521 @@
 
         
-        bool CheckCommandLineArguments(int argc, base::CommandLine::CharType** argv) {
-  const base::CommandLine::StringType dashdash(2, '-');
-  bool block_args = false;
-  for (int i = 0; i < argc; ++i) {
-    if (argv[i] == dashdash)
-      break;
-    if (block_args) {
-      return false;
-    } else if (IsUrlArg(argv[i])) {
-      block_args = true;
-    }
+        public:
+  /// Form storage for the given generic signature and its replacement
+  /// types and conformances.
+  static Storage *get(GenericSignature *genericSig,
+                      ArrayRef<Type> replacementTypes,
+                      ArrayRef<ProtocolConformanceRef> conformances);
+    
+    using namespace swift;
+    
+      if (!wasInline) delete[] oldBegin;
+    
+    
+    {  bool isTypedef() const {
+    assert(isValid());
+    return !Decl.isNull() && Decl.is<const clang::TypedefNameDecl *>();
   }
+  const clang::TypedefNameDecl *getTypedef() const {
+    assert(isTypedef());
+    return Decl.get<const clang::TypedefNameDecl *>();
+  }
+};
+    
+    /// The result of out inference system
+struct IAMResult {
+  // The name to import as
+  DeclName name = {};
+    }
+    
+    void REPLJobAction::anchor() {}
+    
+    
+    {}  // namespace caffe
+    
+    /// @brief Fills a Blob with constant or randomly-generated data.
+template <typename Dtype>
+class Filler {
+ public:
+  explicit Filler(const FillerParameter& param) : filler_param_(param) {}
+  virtual ~Filler() {}
+  virtual void Fill(Blob<Dtype>* blob) = 0;
+ protected:
+  FillerParameter filler_param_;
+};  // class Filler
+    
+    /**
+ * @brief Takes a Blob and crop it, to the shape specified by the second input
+ *  Blob, across all dimensions after the specified axis.
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+    
+    
+    {  size_t *workspace_fwd_sizes_;
+  size_t *workspace_bwd_data_sizes_;
+  size_t *workspace_bwd_filter_sizes_;
+  size_t workspaceSizeInBytes;  // size of underlying storage
+  void *workspaceData;  // underlying storage
+  void **workspace;  // aliases into workspaceData
+};
+#endif
+    
+    
+    {  ~TemporaryFile() {
+    unlink(path.c_str());
+  }
+};
+    
+    REGISTER_CPU_OPERATOR(
+    MergeSingleListFeatureTensorsGradient,
+    MergeSingleListOrMapFeatureTensorsGradientOp<CPUContext>);
+OPERATOR_SCHEMA(MergeSingleListFeatureTensorsGradient)
+    .SetDoc(
+        'Explode multi-feature tensors with list features into '
+        'single-feature tensors.' +
+        doc)
+    .NumInputs([](int n) { return n >= 3 && n % 2 == 1; })
+    .NumOutputs([](int n) { return n >= 1; })
+    .Input(0, 'in1_lengths', '.lengths')
+    .Input(1, 'in1_presence', '.presence')
+    .Input(2, 'out_values_values', '.values.values_grad')
+    .Output(0, 'out1_values', '.values_grad');
+REGISTER_GRADIENT(
+    MergeSingleListFeatureTensors,
+    GetMergeSingleListFeatureTensorsGradient);
+    
+    OPERATOR_SCHEMA(FindDuplicateElements)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .SetDoc(R'DOC(
+The *FindDuplicateElements* op takes a single 1-D tensor *data* as input and returns a single 1-D output tensor *indices*. The output tensor contains the indices of the duplicate elements of the input, excluding the first occurrences. If all elements of *data* are unique, *indices* will be empty.
+    
+    #include 'caffe2/core/context.h'
+#include 'caffe2/core/operator.h'
+    
+    /**
+ * Returns the bounding rectangle of the current object at the given level in
+ * the coordinates of the working image that is pix_binary().
+ * See comment on coordinate system above.
+ * Returns false if there is no such object at the current position.
+ */
+bool PageIterator::BoundingBoxInternal(PageIteratorLevel level,
+                                       int* left, int* top,
+                                       int* right, int* bottom) const {
+  if (Empty(level))
+    return false;
+  TBOX box;
+  PARA *para = nullptr;
+  switch (level) {
+    case RIL_BLOCK:
+      box = it_->block()->block->restricted_bounding_box(include_upper_dots_,
+                                                         include_lower_dots_);
+      break;
+    case RIL_PARA:
+      para = it_->row()->row->para();
+      // explicit fall-through.
+    case RIL_TEXTLINE:
+      box = it_->row()->row->restricted_bounding_box(include_upper_dots_,
+                                                     include_lower_dots_);
+      break;
+    case RIL_WORD:
+      box = it_->word()->word->restricted_bounding_box(include_upper_dots_,
+                                                       include_lower_dots_);
+      break;
+    case RIL_SYMBOL:
+      if (cblob_it_ == nullptr)
+        box = it_->word()->box_word->BlobBox(blob_index_);
+      else
+        box = cblob_it_->data()->bounding_box();
+  }
+  if (level == RIL_PARA) {
+    PageIterator other = *this;
+    other.Begin();
+    do {
+      if (other.it_->block() &&
+          other.it_->block()->block == it_->block()->block &&
+          other.it_->row() && other.it_->row()->row &&
+          other.it_->row()->row->para() == para) {
+        box = box.bounding_union(other.it_->row()->row->bounding_box());
+      }
+    } while (other.Next(RIL_TEXTLINE));
+  }
+  if (level != RIL_SYMBOL || cblob_it_ != nullptr)
+    box.rotate(it_->block()->block->re_rotation());
+  // Now we have a box in tesseract coordinates relative to the image rectangle,
+  // we have to convert the coords to a top-down system.
+  const int pix_height = pixGetHeight(tesseract_->pix_binary());
+  const int pix_width = pixGetWidth(tesseract_->pix_binary());
+  *left = ClipToRange(static_cast<int>(box.left()), 0, pix_width);
+  *top = ClipToRange(pix_height - box.top(), 0, pix_height);
+  *right = ClipToRange(static_cast<int>(box.right()), *left, pix_width);
+  *bottom = ClipToRange(pix_height - box.bottom(), *top, pix_height);
   return true;
 }
     
-    #include 'atom/browser/browser.h'
-#include 'atom/browser/native_window.h'
-#include 'atom/browser/window_list.h'
-#include 'atom/common/api/event_emitter_caller.h'
-#include 'atom/common/native_mate_converters/callback.h'
-#include 'atom/common/node_includes.h'
-#include 'base/time/time.h'
-#include 'native_mate/dictionary.h'
-#include 'native_mate/object_template_builder.h'
+      STRING lword_text;   // the UTF-8 text of the leftmost werd
+  STRING rword_text;   // the UTF-8 text of the rightmost werd
     
-      // TransactionObserver:
-  void OnTransactionsUpdated(
-      const std::vector<in_app_purchase::Transaction>& transactions) override;
-    
-    NODE_BUILTIN_MODULE_CONTEXT_AWARE(atom_browser_net, Initialize)
-
-    
-    void SavePageHandler::OnDownloadCreated(content::DownloadManager* manager,
-                                        download::DownloadItem* item) {
-  // OnDownloadCreated is invoked during WebContents::SavePage, so the |item|
-  // here is the one stated by WebContents::SavePage.
-  item->AddObserver(this);
+    // Getter for the description.
+const char* ParamContent::GetDescription() const {
+  if (param_type_ == VT_INTEGER) { return iIt->info_str(); }
+  else if (param_type_ == VT_BOOLEAN) { return bIt->info_str(); }
+  else if (param_type_ == VT_DOUBLE) { return dIt->info_str(); }
+  else if (param_type_ == VT_STRING) { return sIt->info_str(); }
+  else return nullptr;
 }
     
-    #ifndef ATOM_BROWSER_API_SAVE_PAGE_HANDLER_H_
-#define ATOM_BROWSER_API_SAVE_PAGE_HANDLER_H_
+    // Creates a box file string from a unichar string, TBOX and page number.
+void MakeBoxFileStr(const char* unichar_str, const TBOX& box, int page_num,
+                    STRING* box_str);
     
-    class AtomJavaScriptDialogManager : public content::JavaScriptDialogManager {
- public:
-  explicit AtomJavaScriptDialogManager(api::WebContents* api_web_contents);
-  ~AtomJavaScriptDialogManager() override;
+    // Solve the dynamic programming problem for the given array of points, with
+// the given size and cost function.
+// Steps backwards are limited to being between min_step and max_step
+// inclusive.
+// The return value is the tail of the best path.
+DPPoint* DPPoint::Solve(int min_step, int max_step, bool debug,
+                        CostFunc cost_func, int size, DPPoint* points) {
+  if (size <= 0 || max_step < min_step || min_step >= size)
+    return nullptr;  // Degenerate, but not necessarily an error.
+  ASSERT_HOST(min_step > 0);  // Infinite loop possible if this is not true.
+  if (debug)
+    tprintf('min = %d, max=%d\n',
+            min_step, max_step);
+  // Evaluate the total cost at each point.
+  for (int i = 0; i < size; ++i) {
+    for (int offset = min_step; offset <= max_step; ++offset) {
+      DPPoint* prev = offset <= i ? points + i - offset : nullptr;
+      int64_t new_cost = (points[i].*cost_func)(prev);
+      if (points[i].best_prev_ != nullptr && offset > min_step * 2 &&
+          new_cost > points[i].total_cost_)
+        break;  // Find only the first minimum if going over twice the min.
     }
-    
-        const QString &getAppName() const { return appName; }
-    const QIcon &getAppIcon() const { return appIcon; }
-    const QIcon &getTrayAndWindowIcon() const { return trayAndWindowIcon; }
-    const QString &getTitleAddText() const { return titleAddText; }
-    
-    #endif // BITCOIN_REVERSELOCK_H
-
-    
-    #endif
-
-    
-    
-static void secp256k1_gej_add_ge(secp256k1_gej *r, const secp256k1_gej *a, const secp256k1_ge *b) {
-    /* Operations: 7 mul, 5 sqr, 4 normalize, 21 mul_int/add/negate/cmov */
-    static const secp256k1_fe fe_1 = SECP256K1_FE_CONST(0, 0, 0, 0, 0, 0, 0, 1);
-    secp256k1_fe zz, u1, u2, s1, s2, t, tt, m, n, q, rr;
-    secp256k1_fe m_alt, rr_alt;
-    int infinity, degenerate;
-    VERIFY_CHECK(!b->infinity);
-    VERIFY_CHECK(a->infinity == 0 || a->infinity == 1);
+    points[i].total_cost_ += points[i].local_cost_;
+    if (debug) {
+      tprintf('At point %d, local cost=%d, total_cost=%d, steps=%d\n',
+              i, points[i].local_cost_, points[i].total_cost_,
+              points[i].total_steps_);
     }
-    
-    static int recovery_test_nonce_function(unsigned char *nonce32, const unsigned char *msg32, const unsigned char *key32, const unsigned char *algo16, void *data, unsigned int counter) {
-    (void) msg32;
-    (void) key32;
-    (void) algo16;
-    (void) data;
+  }
+  // Now find the end of the best path and return it.
+  int best_cost = points[size - 1].total_cost_;
+  int best_end = size - 1;
+  for (int end = best_end - 1; end >= size - min_step; --end) {
+    int cost = points[end].total_cost_;
+    if (cost < best_cost) {
+      best_cost = cost;
+      best_end = end;
     }
-    
-    int UniValue::get_int() const
-{
-    if (typ != VNUM)
-        throw std::runtime_error('JSON value is not an integer as expected');
-    int32_t retval;
-    if (!ParseInt32(getValStr(), &retval))
-        throw std::runtime_error('JSON integer out of range');
-    return retval;
+  }
+  return points + best_end;
 }
     
-    /** Encode a Bech32 string. Returns the empty string in case of failure. */
-std::string Encode(const std::string& hrp, const std::vector<uint8_t>& values);
+     private:
+  // Saves the given Pix as a PNG-encoded string and destroys it.
+  static void SetPixInternal(Pix* pix, GenericVector<char>* image_data);
+  // Returns the Pix image for the image_data. Must be pixDestroyed after use.
+  static Pix* GetPixInternal(const GenericVector<char>& image_data);
+  // Parses the text string as a box file and adds any discovered boxes that
+  // match the page number. Returns false on error.
+  bool AddBoxes(const char* box_text);
     
-    constexpr size_t RpcServerStatsEncoding::kRpcServerStatsSize;
-constexpr size_t RpcServerStatsEncoding::kEncodeDecodeFailure;
-constexpr size_t RpcServerStatsEncoding::kVersionIdSize;
-constexpr size_t RpcServerStatsEncoding::kFieldIdSize;
-constexpr size_t RpcServerStatsEncoding::kVersionIdOffset;
-constexpr size_t RpcServerStatsEncoding::kVersionId;
+      // Adds an element with a weight of 1.
+  void add(double x, double y);
+  // Adds an element with a specified weight.
+  void add(double x, double y, double weight);
+  // Adds a whole LLSQ.
+  void add(const LLSQ& other);
+  // Deletes an element with a weight of 1.
+  void remove(double x, double y);
+  int32_t count() const {  // no of elements
+    return static_cast<int>(total_weight + 0.5);
+  }
     
-      // Serializes rpc server stats into the provided buffer.  It returns the
-  // number of bytes written to the buffer. If the buffer is smaller than
-  // kRpcServerStatsSize bytes it will return kEncodeDecodeFailure. Inlined for
-  // performance reasons.
-  static size_t Encode(uint64_t time, char* buf, size_t buf_size) {
-    if (buf_size < kRpcServerStatsSize) {
-      return kEncodeDecodeFailure;
-    }
-    }
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
     
-    namespace grpc {
-    }
+    // Data
+static double       g_Time = 0.0f;
+static bool         g_MousePressed[3] = { false, false, false };
+static CIwTexture*  g_FontTexture = NULL;
+static char*        g_ClipboardText = NULL;
+static bool         g_osdKeyboardEnabled = false;
     
-    #include <grpc/support/cpu.h>
+                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
     
+        // By using D3DCompile() from <d3dcompiler.h> / d3dcompiler.lib, we introduce a dependency to a given version of d3dcompiler_XX.dll (see D3DCOMPILER_DLL_A)
+    // If you would like to use this DX11 sample code but remove this dependency you can:
+    //  1) compile once, save the compiled shader blobs into a file or source code and pass them to CreateVertexShader()/CreatePixelShader() [preferred solution]
+    //  2) use code to detect any version of the DLL and grab a pointer to D3DCompile from the DLL.
+    // See https://github.com/ocornut/imgui/pull/638 for sources and details.
     
-    {}  // namespace grpc
-    
-    
-    {};
-    
-    			if(mip == 0)
-			{
-				pImageData = a_pafSourceRGBA;
-			}
-			else
-			{
-				pMipImage = new float[mipWidth*mipHeight*4];
-				if(FilterTwoPass(a_pafSourceRGBA, a_uiSourceWidth, a_uiSourceHeight, pMipImage, mipWidth, mipHeight, a_uiMipFilterFlags, Etc::FilterLanczos3) )
-				{
-					pImageData = pMipImage;
-				}
-			}
-    
-      /* The AF_Blue_Stringset enumeration values are offsets into the */
-  /* `af_blue_stringsets' array.                                   */
-    
-    #ifndef VPX_DSP_TXFM_COMMON_H_
-#define VPX_DSP_TXFM_COMMON_H_
-    
-    void ClipperOffset::DoRound(int j, int k)
+    void ImGui_ImplFreeGLUT_NewFrame()
 {
-  double a = std::atan2(m_sinA,
-  m_normals[k].X * m_normals[j].X + m_normals[k].Y * m_normals[j].Y);
-  int steps = std::max((int)Round(m_StepsPerRad * std::fabs(a)), 1);
+    // Setup time step
+    ImGuiIO& io = ImGui::GetIO();
+    int current_time = glutGet(GLUT_ELAPSED_TIME);
+    io.DeltaTime = (current_time - g_Time) / 1000.0f;
+    g_Time = current_time;
     }
     
-    class clipperException : public std::exception
-{
-  public:
-    clipperException(const char* description): m_descr(description) {}
-    virtual ~clipperException() throw() {}
-    virtual const char* what() const throw() {return m_descr.c_str();}
-  private:
-    std::string m_descr;
-};
-//------------------------------------------------------------------------------
+        /** 
+     * Creates the action with X Y Z factor.
+     * @param duration Duration time, in seconds.
+     * @param sx Scale factor of x.
+     * @param sy Scale factor of y.
+     * @param sz Scale factor of z.
+     * @return An autoreleased ScaleTo object.
+     */
+    static ScaleTo* create(float duration, float sx, float sy, float sz);
     
+        int count = 0;
+    auto limit = element->actions->num;
+    for(int i = 0; i < limit; ++i)
+    {
+        auto action = static_cast<Action*>(element->actions->arr[i]);
+        if(action->getTag() == tag)
+            ++count;
+    }
     
-/** 16x32 multiplication, followed by a 15-bit shift right. Results fits in 32 bits */
-#undef MULT16_32_Q15
-static OPUS_INLINE opus_val32 MULT16_32_Q15_armv5e(opus_val16 a, opus_val32 b)
-{
-  int res;
-  __asm__(
-      '#MULT16_32_Q15\n\t'
-      'smulwb %0, %1, %2\n\t'
-      : '=r'(res)
-      : 'r'(b), 'r'(a)
-  );
-  return res<<1;
-}
-#define MULT16_32_Q15(a, b) (MULT16_32_Q15_armv5e(a, b))
-    
-    /** 16x32 multiplication, followed by a 16-bit shift right. Results fits in 32 bits */
-#if OPUS_FAST_INT64
-#define MULT16_32_Q16(a,b) ((opus_val32)SHR((opus_int64)((opus_val16)(a))*(b),16))
-#else
-#define MULT16_32_Q16(a,b) ADD32(MULT16_16((a),SHR((b),16)), SHR(MULT16_16SU((a),((b)&0x0000ffff)),16))
-#endif
-    
-    /*!
- * Copyright (c) 2016 by Contributors
- * \file caffe_blob.cc
- * \brief Implementations of SetDataGradToBlob given various device/dimension
- * \author Haoran Wang
+            Then once you running ActionTween on the node, the method updateTweenAction will be invoked.
 */
-#include 'caffe_blob.h'
-namespace mxnet {
-namespace op {
-namespace caffe {
-    }
-    }
-    }
-    
+class CC_DLL ActionTweenDelegate
+{
+public:
     /**
- * \brief The interface to convert mxnet's tensor to caffe's blob
- * \brief called in caffe_operator_inl.h
- */
-template<typename Device, typename Dtype>
-void TBlob2CaffeBlob(caffeMemoryTypes memType,
-                     typename std::vector< ::caffe::Blob<Dtype>*>::iterator blob,
-                     typename std::vector<TBlob>::const_iterator tblob,
-                     int n = 1) {
-  for (int i = 0; i < n; ++i, ++blob, ++tblob) {
-    (*blob)->Reshape(TShape2Vector((*tblob).shape_));
-    SetDataGradToBlob<Device, Dtype>(memType, blob, tblob);
-  }
-}
-    
-    // Initialization funciton called by caffeOp & caffeLoss
-template<typename Dtype>
-void InitCaffeBlobs(std::vector< ::caffe::Blob<Dtype>*>* v, int n_num) {
-  for (index_t i=0; i < n_num; ++i)
-    v->push_back(new ::caffe::Blob<Dtype>());
-}
-    
-    namespace mxnet {
-namespace io {
-    }
+     * @js NA
+     * @lua NA
+     */
+    virtual ~ActionTweenDelegate() {}
     }
     
     
-    {  Engine::Get()->PushSync([=](RunContext ctx){
-      ndout.CheckAndAlloc();
-      cv::Mat buf(ndsrc.shape()[0], ndsrc.shape()[1],
-                  dims[2] == 3 ? CV_8UC3 : CV_8U, ndsrc.data().dptr_);
-      cv::Mat dst(h, w, dims[2] == 3 ? CV_8UC3 : CV_8U, ndout.data().dptr_);
-      cv::resize(buf, dst, cv::Size(w, h), 0, 0, interpolation);
-      CHECK(!dst.empty());
-    }, ndout.ctx(), {ndsrc.var()}, {ndout.var()});
-  NDArray *tmp = new NDArray();
-  *tmp = ndout;
-  *out = tmp;
-  API_END();
-}
-    
-    
-    {
-    {}  // namespace exec
-}  // namespace mxnet
-
-    
-    The `LibSVMIter` only support `round_batch` parameter set to ``True``. Therefore, if `batch_size`
-is 3 and there are 4 total rows in libsvm file, 2 more examples are consumed at the first round.
-    
-    size_t num_threads = 31;
-size_t work_chunk  = 120;
-    
-    /*
- * Call a function on each element of `inputs', in parallel.
- *
- * If `func' throws an exception, some of the work will not be
- * attempted.
- */
-template<class Func, class Item>
-void for_each(const std::vector<Item>& inputs, Func func) {
-  std::atomic<bool> failed{false};
-  std::atomic<size_t> index{0};
-    }
-    
-    
-    {
-    {}}
-    
-    void Assembler::li64TOC(const Reg64& rt, int64_t imm64, ImmType /*immt*/,
-                        bool immMayChange) {
-  int64_t TOCoffset;
-  TOCoffset = VMTOC::getInstance().pushElem(imm64, immMayChange);
-    }
-    
-    
-    {///////////////////////////////////////////////////////////////////////////////
-}
-    
-    
-    {    InputTextCallback_UserData cb_user_data;
-    cb_user_data.Str = str;
-    cb_user_data.ChainCallback = callback;
-    cb_user_data.ChainCallbackUserData = user_data;
-    return InputTextMultiline(label, (char*)str->c_str(), str->capacity() + 1, size, flags, InputTextCallback, &cb_user_data);
-}
-
-    
-    // Implemented features:
-//  [X] Renderer: User texture binding. Use 'CIwTexture*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
-    
-    void ImGui_ImplOpenGL2_DestroyFontsTexture()
-{
-    if (g_FontTexture)
-    {
-        ImGuiIO& io = ImGui::GetIO();
-        glDeleteTextures(1, &g_FontTexture);
-        io.Fonts->TexID = 0;
-        g_FontTexture = 0;
-    }
-}
-    
-    //----------------------------------------
-// OpenGL    GLSL      GLSL
-// version   version   string
-//----------------------------------------
-//  2.0       110       '#version 110'
-//  2.1       120
-//  3.0       130
-//  3.1       140
-//  3.2       150       '#version 150'
-//  3.3       330
-//  4.0       400
-//  4.1       410       '#version 410 core'
-//  4.2       420
-//  4.3       430
-//  ES 2.0    100       '#version 100'
-//  ES 3.0    300       '#version 300 es'
-//----------------------------------------
-    
-        // Setup Platform/Renderer bindings
-    ImGui_ImplAllegro5_Init(display);
-    
-            // 3. Show another simple window.
-        if (show_another_window)
+    {                
+            case 4:
+            case 12:
+            case 14:
+                /* going LEFT with these cases:
+                 4          12          14
+                 +---+---+  +---+---+   +---+---+
+                 |   |   |  |   |   |   |   | 2 |
+                 +---+---+  +---+---+   +---+---+
+                 | 4 |   |  | 4 | 8 |   | 4 | 8 |
+                 +---+---+  +---+---+  	+---+---+
+                 */
+                stepx = -1;
+                stepy = 0;
+                break;
+                
+                
+            case 2 :
+            case 3 :
+            case 7 :
+                /* going RIGHT with these cases:
+                 2          3           7        
+                 +---+---+  +---+---+   +---+---+
+                 |   | 2 |  | 1 | 2 |   | 1 | 2 |
+                 +---+---+  +---+---+   +---+---+
+                 |   |   |  |   |   |   | 4 |   |
+                 +---+---+  +---+---+  	+---+---+
+                 */
+                stepx=1;
+                stepy=0;
+                break;
+            case 9 :
+                /*
+                 +---+---+
+                 | 1 |   |
+                 +---+---+
+                 |   | 8 |
+                 +---+---+
+                 this should normally go UP, but if we already been here, we go down
+                */
+                //find index from xy;
+                i = getIndexFromPos(curx, cury);
+                it = find (case9s.begin(), case9s.end(), i);
+                if (it != case9s.end())
+                {
+                    //found, so we go down, and delete from case9s;
+                    stepx = 0;
+                    stepy = 1;
+                    case9s.erase(it);
+                }
+                else
+                {
+                    //not found, we go up, and add to case9s;
+                    stepx = 0;
+                    stepy = -1;
+                    case9s.push_back(i);
+                }
+                break;
+            case 6 :
+                /*
+                 6
+                 +---+---+
+                 |   | 2 |
+                 +---+---+
+                 | 4 |   |
+                 +---+---+
+                 this normally go RIGHT, but if its coming from UP, it should go LEFT
+                 */
+                i = getIndexFromPos(curx, cury);
+                it = find (case6s.begin(), case6s.end(), i);
+                if (it != case6s.end())
+                {
+                    //found, so we go down, and delete from case9s;
+                    stepx = -1;
+                    stepy = 0;
+                    case6s.erase(it);
+                }
+                else{
+                    //not found, we go up, and add to case9s;
+                    stepx = 1;
+                    stepy = 0;
+                    case6s.push_back(i);
+                }
+                break;
+            default:
+                CCLOG('this shouldn't happen.');
+        }
+        //little optimization
+        // if previous direction is same as current direction,
+        // then we should modify the last vec to current
+        curx += stepx;
+        cury += stepy;
+        if(stepx == prevx && stepy == prevy)
         {
-            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
+            _points.back().x = (float)(curx-rect.origin.x) / _scaleFactor;
+            _points.back().y = (float)(rect.size.height - cury + rect.origin.y) / _scaleFactor;
+        }
+        else
+        {
+            _points.push_back(Vec2((float)(curx - rect.origin.x) / _scaleFactor, (float)(rect.size.height - cury + rect.origin.y) / _scaleFactor));
         }
     
-            // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
     
-    namespace aria2 {
-    }
-    
-      std::shared_ptr<DHTNode> newNode_;
-    
-    
-    {  static const std::string R;
-};
-    
-    #include 'DHTNode.h'
-#include 'DHTConstants.h'
-#include 'bittorrent_helper.h'
-#include 'DlAbortEx.h'
-#include 'Logger.h'
-#include 'a2netcompat.h'
-#include 'fmt.h'
-#include 'util.h'
-#include 'array_fun.h'
-#include 'LogFactory.h'
-#include 'BufferedFile.h'
-    
-    namespace aria2 {
-    }
-    
-    void DHTRoutingTableSerializer::serialize(const std::string& filename)
-{
-  A2_LOG_INFO(fmt('Saving DHT routing table to %s.', filename.c_str()));
-  std::string filenameTemp = filename;
-  filenameTemp += '__temp';
-  BufferedFile fp(filenameTemp.c_str(), BufferedFile::WRITE);
-  if (!fp) {
-    throw DL_ABORT_EX(
-        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
-  }
-  char header[8];
-  memset(header, 0, sizeof(header));
-  // magic
-  header[0] = 0xa1u;
-  header[1] = 0xa2u;
-  // format ID
-  header[2] = 0x02u;
-  // version
-  header[6] = 0;
-  header[7] = 0x03u;
-    }
-    
-    
-    {
-    {    PrefPtr prefEntryPointHost = family == AF_INET ? PREF_DHT_ENTRY_POINT_HOST
-                                                   : PREF_DHT_ENTRY_POINT_HOST6;
-    if (!e->getOption()->get(prefEntryPointHost).empty()) {
-      {
-        PrefPtr prefEntryPointPort = family == AF_INET
-                                         ? PREF_DHT_ENTRY_POINT_PORT
-                                         : PREF_DHT_ENTRY_POINT_PORT6;
-        std::pair<std::string, uint16_t> addr(
-            e->getOption()->get(prefEntryPointHost),
-            e->getOption()->getAsInt(prefEntryPointPort));
-        std::vector<std::pair<std::string, uint16_t>> entryPoints;
-        entryPoints.push_back(addr);
-        auto command = make_unique<DHTEntryPointNameResolveCommand>(
-            e->newCUID(), e, family, entryPoints);
-        command->setBootstrapEnabled(true);
-        command->setTaskQueue(taskQueue.get());
-        command->setTaskFactory(taskFactory.get());
-        command->setRoutingTable(routingTable.get());
-        command->setLocalNode(localNode);
-        tempCommands.push_back(std::move(command));
-      }
-    }
-    else {
-      A2_LOG_INFO('No DHT entry point specified.');
-    }
-    {
-      auto command = make_unique<DHTInteractionCommand>(e->newCUID(), e);
-      command->setMessageDispatcher(dispatcher.get());
-      command->setMessageReceiver(receiver.get());
-      command->setTaskQueue(taskQueue.get());
-      command->setReadCheckSocket(connection->getSocket());
-      command->setConnection(std::move(connection));
-      command->setUDPTrackerClient(udpTrackerClient);
-      tempRoutineCommands.push_back(std::move(command));
-    }
-    {
-      auto command = make_unique<DHTTokenUpdateCommand>(
-          e->newCUID(), e, DHT_TOKEN_UPDATE_INTERVAL);
-      command->setTokenTracker(tokenTracker.get());
-      tempCommands.push_back(std::move(command));
-    }
-    {
-      auto command = make_unique<DHTBucketRefreshCommand>(
-          e->newCUID(), e, DHT_BUCKET_REFRESH_CHECK_INTERVAL);
-      command->setTaskQueue(taskQueue.get());
-      command->setRoutingTable(routingTable.get());
-      command->setTaskFactory(taskFactory.get());
-      tempCommands.push_back(std::move(command));
-    }
-    {
-      auto command = make_unique<DHTPeerAnnounceCommand>(
-          e->newCUID(), e, DHT_PEER_ANNOUNCE_CHECK_INTERVAL);
-      command->setPeerAnnounceStorage(peerAnnounceStorage.get());
-      tempCommands.push_back(std::move(command));
-    }
-    {
-      auto command =
-          make_unique<DHTAutoSaveCommand>(e->newCUID(), e, family, 30_min);
-      command->setLocalNode(localNode);
-      command->setRoutingTable(routingTable.get());
-      tempCommands.push_back(std::move(command));
-    }
-    // add deserialized nodes to routing table
-    auto& desnodes = deserializer.getNodes();
-    for (auto& node : desnodes) {
-      routingTable->addNode(node);
-    }
-    if (!desnodes.empty()) {
-      auto task = std::static_pointer_cast<DHTBucketRefreshTask>(
-          taskFactory->createBucketRefreshTask());
-      task->setForceRefresh(true);
-      taskQueue->addPeriodicTask1(task);
-    }
-    // assign them into DHTRegistry
-    if (family == AF_INET) {
-      DHTRegistry::getMutableData().localNode = localNode;
-      DHTRegistry::getMutableData().routingTable = std::move(routingTable);
-      DHTRegistry::getMutableData().taskQueue = std::move(taskQueue);
-      DHTRegistry::getMutableData().taskFactory = std::move(taskFactory);
-      DHTRegistry::getMutableData().peerAnnounceStorage =
-          std::move(peerAnnounceStorage);
-      DHTRegistry::getMutableData().tokenTracker = std::move(tokenTracker);
-      DHTRegistry::getMutableData().messageDispatcher = std::move(dispatcher);
-      DHTRegistry::getMutableData().messageReceiver = std::move(receiver);
-      DHTRegistry::getMutableData().messageFactory = std::move(factory);
-      e->getBtRegistry()->setUDPTrackerClient(udpTrackerClient);
-      DHTRegistry::setInitialized(true);
-    }
-    else {
-      DHTRegistry::getMutableData6().localNode = localNode;
-      DHTRegistry::getMutableData6().routingTable = std::move(routingTable);
-      DHTRegistry::getMutableData6().taskQueue = std::move(taskQueue);
-      DHTRegistry::getMutableData6().taskFactory = std::move(taskFactory);
-      DHTRegistry::getMutableData6().peerAnnounceStorage =
-          std::move(peerAnnounceStorage);
-      DHTRegistry::getMutableData6().tokenTracker = std::move(tokenTracker);
-      DHTRegistry::getMutableData6().messageDispatcher = std::move(dispatcher);
-      DHTRegistry::getMutableData6().messageReceiver = std::move(receiver);
-      DHTRegistry::getMutableData6().messageFactory = std::move(factory);
-      DHTRegistry::setInitialized6(true);
-    }
-    if (e->getBtRegistry()->getUdpPort() == 0) {
-      // We assign port last so that no exception gets in the way
-      e->getBtRegistry()->setUdpPort(port);
-    }
-  }
-  catch (RecoverableException& ex) {
-    A2_LOG_ERROR_EX(fmt('Exception caught while initializing DHT functionality.'
-                        ' DHT is disabled.'),
-                    ex);
-    tempCommands.clear();
-    tempRoutineCommands.clear();
-    if (family == AF_INET) {
-      DHTRegistry::clearData();
-      e->getBtRegistry()->setUDPTrackerClient(
-          std::shared_ptr<UDPTrackerClient>{});
-    }
-    else {
-      DHTRegistry::clearData6();
-    }
-  }
-  return std::make_pair(std::move(tempCommands),
-                        std::move(tempRoutineCommands));
+    {    return 0;
 }
     
-      virtual std::shared_ptr<DHTTask>
-  createPeerAnnounceTask(const unsigned char* infoHash) CXX11_OVERRIDE;
+        ListNode* curNode = head;
+    while(curNode != NULL){
+        ListNode* delNode = curNode;
+        curNode = curNode->next;
+        delete delNode;
+    }
+    
+    // Recursive
+// Time Complexity: O(n), n is the node number in the tree
+// Space Complexity: O(h), h is the height of the tree
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+    }
+    }
+    
+    #include <iostream>
+#include <vector>
     
     
-    {} // namespace aria2
-    
-    void DHTTokenUpdateCommand::process()
-{
-  try {
-    tokenTracker_->updateTokenSecret();
-  }
-  catch (RecoverableException& e) {
-    A2_LOG_ERROR_EX(EX_EXCEPTION_CAUGHT, e);
-  }
+    {    return 0;
 }
+
     
-      ProtocolData<::apollo::canbus::ChassisDetail> mpd;
-  SenderMessage<::apollo::canbus::ChassisDetail> msg(1, &mpd);
-  EXPECT_FALSE(sender.NeedSend(msg, 1));
-  EXPECT_EQ(msg.message_id(), 1);
-  int32_t period = msg.curr_period();
-  msg.UpdateCurrPeriod(-50);
-  EXPECT_EQ(msg.curr_period(), period + 50);
-  EXPECT_EQ(msg.CanFrame().id, 1);
+            TreeNode* cur = root;
+        while(cur != NULL){
+            if(cur->left == NULL){
+                res.push_back(cur->val);
+                cur = cur->right;
+            }
+            else{
+                TreeNode* prev = cur->left;
+                while(prev->right != NULL && prev->right != cur)
+                    prev = prev->right;
+    }
+    }
     
-    #include 'modules/canbus/proto/chassis_detail.pb.h'
+    
+    
+    
+    
+    using ::apollo::canbus::ChassisDetail;
     
     unsigned int BaseMapMatrix::LoadBinary(unsigned char* buf) { return 0; }
     
-    const PolynomialXd& Spline1dSeg::SecondOrderDerivative() const {
-  return second_order_derivative_;
+    #include 'modules/map/pnc_map/route_segments.h'
+    
+    
+    {  MatrixXd bd_golden(20, 1);
+  bd_golden << -0.03, -0.03, -0.02, -0.04, -0.02, -0.04, -0.02, -0.04, -0.02,
+      -0.04, -0.02, -0.04, -0.02, -0.04, -0.02, -0.04, -0.02, -0.04, -0.02,
+      -0.04;
+  EXPECT_EQ(bd.rows(), 20);
+  EXPECT_EQ(bd.cols(), 1);
+  for (uint32_t i = 0; i < bd.rows(); ++i) {
+    EXPECT_DOUBLE_EQ(bd(i, 0), bd_golden(i, 0));
+  }
 }
     
-    bool NodeWithRange::operator<(const NodeWithRange& other) const {
-  return StartS() > other.StartS();
-}
+    #include 'modules/routing/graph/node_with_range.h'
     
-    #include <boost/atomic/detail/config.hpp>
+    #include 'modules/canbus/vehicle/gem/protocol/accel_rpt_68.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_1_70.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_2_71.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_3_72.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_rpt_6c.h'
+#include 'modules/canbus/vehicle/gem/protocol/date_time_rpt_83.h'
+#include 'modules/canbus/vehicle/gem/protocol/global_rpt_6a.h'
+#include 'modules/canbus/vehicle/gem/protocol/headlight_rpt_77.h'
+#include 'modules/canbus/vehicle/gem/protocol/horn_rpt_79.h'
+#include 'modules/canbus/vehicle/gem/protocol/lat_lon_heading_rpt_82.h'
+#include 'modules/canbus/vehicle/gem/protocol/parking_brake_status_rpt_80.h'
+#include 'modules/canbus/vehicle/gem/protocol/shift_rpt_66.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_1_73.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_2_74.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_3_75.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_rpt_1_6e.h'
+#include 'modules/canbus/vehicle/gem/protocol/turn_rpt_64.h'
+#include 'modules/canbus/vehicle/gem/protocol/vehicle_speed_rpt_6f.h'
+#include 'modules/canbus/vehicle/gem/protocol/wheel_speed_rpt_7a.h'
+#include 'modules/canbus/vehicle/gem/protocol/wiper_rpt_91.h'
+#include 'modules/canbus/vehicle/gem/protocol/yaw_rate_rpt_81.h'
     
-    #if BOOST_ATOMIC_SIGNAL_FENCE > 0
-BOOST_FORCEINLINE void atomic_signal_fence(memory_order order) BOOST_NOEXCEPT
-{
-    detail::signal_fence(order);
+    TEST_F(GemMessageManagerTest, GetRecvProtocols) {
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Accelrpt68::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt170::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt271::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt372::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakerpt6c::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Datetimerpt83::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Globalrpt6a::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Headlightrpt77::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Hornrpt79::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Latlonheadingrpt82::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(
+                  Parkingbrakestatusrpt80::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Shiftrpt66::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt173::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt274::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt375::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringrpt16e::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Turnrpt64::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Vehiclespeedrpt6f::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Wheelspeedrpt7a::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Wiperrpt91::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Yawraterpt81::ID) != nullptr);
 }
-#else
-BOOST_FORCEINLINE void atomic_signal_fence(memory_order) BOOST_NOEXCEPT
-{
-    detail::lockpool::signal_fence();
-}
-#endif
