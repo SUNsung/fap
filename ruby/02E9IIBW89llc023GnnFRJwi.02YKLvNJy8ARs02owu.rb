@@ -1,210 +1,139 @@
 
         
-                def render
-          options = @options.stringify_keys
-          options['type']     = 'checkbox'
-          options['value']    = @checked_value
-          options['checked'] = 'checked' if input_checked?(options)
+              expect(value_for(user.id, dt)).to eq(0)
+      expect(limit_reached_for(user.id, dt)).to eq(false)
     
-            class RadioButtonBuilder < Builder # :nodoc:
-          def radio_button(extra_html_options = {})
-            html_options = extra_html_options.merge(@input_html_options)
-            html_options[:skip_default_ids] = false
-            @template_object.radio_button(@object_name, @method_name, @value, html_options)
-          end
+        def sort_fn(a, b)
+      if (a.getbyte(0) >= 49 && a.getbyte(0) <= 57) || (b.getbyte(0) >= 49 && b.getbyte(0) <= 57)
+        a_split = a.split(SPLIT_INTS)
+        b_split = b.split(SPLIT_INTS)
+    
+        def data_url_string?(str)
+      str.start_with?(DATA_URL)
+    end
+    
+            @counter += 1
+    
+    require 'active_support/subscriber'
+    
+              node['data-language'] = 'typescript' if node['path'].try(:ends_with?, '.ts')
+          node['data-language'] = 'html' if node['path'].try(:ends_with?, '.html')
+          node['data-language'] = 'css' if node['path'].try(:ends_with?, '.css')
+          node['data-language'] = 'js' if node['path'].try(:ends_with?, '.js')
+          node['data-language'] = 'json' if node['path'].try(:ends_with?, '.json')
+          node['data-language'] = node['language'].sub(/\Ats/, 'typescript').strip if node['language']
+          node['data-language'] ||= 'typescript' if node.content.start_with?('@')
+    
+            css('.nav-index-section').each do |node|
+          node.content = node.content
         end
     
-              def field_type
-            self.class.field_type
-          end
+            doc
       end
     end
   end
 end
 
     
-        include ActionView::Rendering
-    
-        # Render but returns a valid Rack body. If fibers are defined, we return
-    # a streaming body that renders the template piece by piece.
-    #
-    # Note that partials are not supported to be rendered with streaming,
-    # so in such cases, we just wrap them in an array.
-    def render_body(context, options)
-      if options.key?(:partial)
-        [render_partial(context, options)]
-      else
-        StreamingTemplateRenderer.new(@lookup_context).render(context, options)
-      end
-    end
-    
-    module Gitlab
-  module GithubImport
-    module Importer
-      class DiffNotesImporter
-        include ParallelScheduling
-    
-    module Gitlab
-  module GithubImport
-    module Importer
-      class IssuesImporter
-        include ParallelScheduling
-    
-            def importer_class
-          LfsObjectImporter
+          def question
+        if default.nil?
+          I18n.t(:question, key: key, scope: :capistrano)
+        else
+          I18n.t(:question_default, key: key, default_value: default, scope: :capistrano)
         end
-    
-          # Associates the given database ID with the current object.
-      #
-      # database_id - The ID of the corresponding database row.
-      def cache_database_id(database_id)
-        Caching.write(cache_key, database_id)
       end
     
-          # Imports all the objects in sequence in the current thread.
-      def sequential_import
-        each_object_to_import do |object|
-          repr = representation_class.from_api_response(object)
-    
-            expose_attribute :oid, :download_link
-    
-            def cross_project?
-          return true unless source_repository_id
-    
-          def action_for_grape(env)
-        endpoint = env[ENDPOINT_KEY]
-        route = endpoint.route rescue nil
-    
-          select_agent_type('Weather Agent')
-      fill_in(:agent_name, with: 'Test Weather Agent')
-    
-        it 'understands hl=1,3-4,9' do
-      stub(params).[](:hl) { '1,3-4,9' }
-      expect((1..10).select { |i| highlighted?(i) }).to eq [1, 3, 4, 9]
-    end
-    
-      describe '#relative_distance_of_time_in_words' do
-    it 'in the past' do
-      expect(relative_distance_of_time_in_words(Time.now-5.minutes)).to eq('5m ago')
-    end
-    
-        it 'outputs a structure containing name, description, the date, all agents & their links' do
-      data = exporter.as_json
-      expect(data[:name]).to eq(name)
-      expect(data[:description]).to eq(description)
-      expect(data[:source_url]).to eq(source_url)
-      expect(data[:guid]).to eq(guid)
-      expect(data[:schema_version]).to eq(1)
-      expect(data[:tag_fg_color]).to eq(tag_fg_color)
-      expect(data[:tag_bg_color]).to eq(tag_bg_color)
-      expect(data[:icon]).to eq(icon)
-      expect(Time.parse(data[:exported_at])).to be_within(2).of(Time.now.utc)
-      expect(data[:links]).to eq([{ :source => guid_order(agent_list, :jane_weather_agent), :receiver => guid_order(agent_list, :jane_rain_notifier_agent)}])
-      expect(data[:control_links]).to eq([])
-      expect(data[:agents]).to eq(agent_list.sort_by{|a| a.guid}.map { |agent| exporter.agent_as_json(agent) })
-      expect(data[:agents].all? { |agent_json| agent_json[:guid].present? && agent_json[:type].present? && agent_json[:name].present? }).to be_truthy
-    
-      describe '#helpers' do
-    it 'should return the correct request header' do
-      expect(@checker.send(:request_options)).to eq({:headers => {'aftership-api-key' => '800deeaf-e285-9d62-bc90-j999c1973cc9', 'Content-Type'=>'application/json'}})
-    end
-    
-            # This registers a plugin. This should _NEVER_ be called by the public
-        # and should only be called from within Vagrant. Vagrant will
-        # automatically register V1 plugins when a name is set on the
-        # plugin.
-        def register(plugin)
-          if !@registered.include?(plugin)
-            @logger.info('Registered plugin: #{plugin.name}')
-            @registered << plugin
+            # rubocop:disable Style/MethodMissing
+        def method_missing(key, value=nil)
+          if value
+            set(lvalue(key), value)
+          else
+            fetch(key)
           end
         end
+        # rubocop:enable Style/MethodMissing
     
-            # This is called early, before a machine is instantiated, to check
-        # if this provider is usable. This should return true or false.
-        #
-        # If raise_error is true, then instead of returning false, this
-        # should raise an error with a helpful message about why this
-        # provider cannot be used.
-        #
-        # @param [Boolean] raise_error If true, raise exception if not usable.
-        # @return [Boolean]
-        def self.usable?(raise_error=false)
-          # Return true by default for backwards compat since this was
-          # introduced long after providers were being written.
-          true
-        end
+          attr_reader :locations, :values, :fetched_keys
     
-        # Merge one registry with another and return a completely new
-    # registry. Note that the result cache is completely busted, so
-    # any gets on the new registry will result in a cache miss.
-    def merge(other)
-      self.class.new.tap do |result|
-        result.merge!(self)
-        result.merge!(other)
+          * Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+      * Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials provided
+        with the distribution.
+      * Neither the name of Google Inc. nor the names of its
+        contributors may be used to endorse or promote products derived
+        from this software without specific prior written permission.
+    
+          def escaped_name
+        CGI.escape(@name)
       end
-    end
     
-      # Returns parsed JavaScript blocks.
-  # The parsed version is a RKelly object that allows you to be able do advanced parsing.
-  #
-  # @see https://github.com/tenderlove/rkelly
-  # @return [Array<RKelly::Nodes::SourceElementsNode>]
-  def get_html_scripts
-    n = get_html_document
-    rkelly = RKelly::Parser.new
-    n.search('//script').map { |s| rkelly.parse(s.text) }
+        get page
+    assert_match /'\/custom.js'/, last_response.body
+    Precious::App.set(:wiki_options, { :js => nil })
   end
     
-              # Encodes the end_time field
-          #
-          # @return [String]
-          def encode_end_time
-            [end_time].pack('N')
+    context 'Precious::Views::Page' do
+  setup do
+    examples = testpath 'examples'
+    @path    = File.join(examples, 'test.git')
+    FileUtils.cp_r File.join(examples, 'empty.git'), @path, :remove_destination => true
+    @wiki = Gollum::Wiki.new(@path)
+  end
+    
+        post '/edit/' + CGI.escape('한글'), :page => 'k', :content => '바뀐 text',
+         :format                            => 'markdown', :message => 'ghi'
+    follow_redirect!
+    assert last_response.ok?
+    
+        # Ensure path begins with a single leading slash
+    def clean_path(path)
+      if path
+        (path[0] != '/' ? path.insert(0, '/') : path).gsub(/\/{2,}/, '/')
+      end
+    end
+    
+        def self.add_writer(name)
+      define_singleton_method('#{name}=') do |value|
+        value.builder_method name
+        instance_variable_set :'@#{name}', value
+      end
+    end
+    
+    module ActiveAdmin
+  module BatchActions
+    
+        def authorized?(action_name, abstract_model = nil, object = nil)
+      object = nil if object.try :new_record?
+      action(action_name, abstract_model, object).try(:authorized?)
+    end
+    
+        def field_for(field)
+      field.read_only? ? @template.content_tag(:div, field.pretty_value, class: 'form-control-static') : field.render
+    end
+    
+        def ordered_filters
+      return @ordered_filters if @ordered_filters.present?
+      @index = 0
+      @ordered_filters = (params[:f].try(:permit!).try(:to_h) || @model_config.list.filters).inject({}) do |memo, filter|
+        field_name = filter.is_a?(Array) ? filter.first : filter
+        (filter.is_a?(Array) ? filter.last : {(@index += 1) => {'v' => ''}}).each do |index, filter_hash|
+          if filter_hash['disabled'].blank?
+            memo[index] = {field_name => filter_hash}
+          else
+            params[:f].delete(field_name)
           end
+        end
+        memo
+      end.to_a.sort_by(&:first)
+    end
     
-              # Encodes the msg_type field
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_msg_type
-            bn = OpenSSL::BN.new(msg_type.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
-    
-              # Rex::Proto::Kerberos::Model::AuthorizationData decoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def decode(input)
-            raise ::NotImplementedError, 'Authorization Data decoding not supported'
-          end
-    
-                int
-          end
-    
-    Given(/^the configuration is in a custom location$/) do
-  TestApp.move_configuration_to_custom_location('app')
-end
-    
-            def roles
-          @roles ||= Set.new
+            def name
+          association.name.to_sym
         end
     
-          def role_properties_for(rolenames)
-        roles = rolenames.to_set
-        rps = Set.new unless block_given?
-        roles_for(rolenames).each do |host|
-          host.roles.intersection(roles).each do |role|
-            [host.properties.fetch(role)].flatten(1).each do |props|
-              if block_given?
-                yield host, role, props
-              else
-                rps << (props || {}).merge(role: role, hostname: host.hostname)
-              end
-            end
-          end
+            # http://getbootstrap.com/2.3.2/base-css.html#icons
+        register_instance_option :link_icon do
+          'icon-question-sign'
         end
-        block_given? ? nil : rps
-      end
-    
-          def trusted?
-        @trusted
-      end
