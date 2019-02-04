@@ -1,96 +1,56 @@
 
         
-                  pipelines.each do |pipeline|
-            self.new(pipeline).tap do |preloader|
-              preloader.preload_commit_authors
-              preloader.preload_pipeline_warnings
-              preloader.preload_stages_warnings
-            end
+                  def placeholder_required?(html_options)
+            # See https://html.spec.whatwg.org/multipage/forms.html#attr-select-required
+            html_options['required'] && !html_options['multiple'] && html_options.fetch('size', 1).to_i == 1
           end
+    
+            def render(&block)
+          render_collection_for(RadioButtonBuilder, &block)
         end
     
-          # The minimum number of requests we want to keep available.
-      #
-      # We don't use a value of 0 as multiple threads may be using the same
-      # token in parallel. This could result in all of them hitting the GitHub
-      # rate limit at once. The threshold is put in place to not hit the limit
-      # in most cases.
-      RATE_LIMIT_THRESHOLD = 50
+              def datetime_selector(options, html_options)
+            datetime = options.fetch(:selected) { value || default_datetime(options) }
+            @auto_index ||= nil
     
-          def action_name(env)
-        if env[CONTROLLER_KEY]
-          action_for_rails(env)
-        elsif env[ENDPOINT_KEY]
-          action_for_grape(env)
-        end
-      end
+          # This module is mixed in if layout conditions are provided. This means
+      # that if no layout conditions are used, this method is not used
+      module LayoutConditions # :nodoc:
+        private
     
-          it 'requires the passwords to match when changing them' do
-        visit edit_admin_user_path(users(:bob))
-        fill_in 'Password', with: '12345678'
-        fill_in 'Password confirmation', with: 'no_match'
-        click_on 'Update User'
-        expect(page).to have_text('Password confirmation doesn't match')
-      end
-    end
+      it 'returns true when the command exits with a zero exit status' do
+    @object.system(ruby_cmd('exit 0')).should == true
     
-    describe ApplicationHelper do
-  describe '#icon_tag' do
-    it 'returns a Glyphicon icon element' do
-      icon = icon_tag('glyphicon-help')
-      expect(icon).to be_html_safe
-      expect(Nokogiri(icon).at('span.glyphicon.glyphicon-help')).to be_a Nokogiri::XML::Element
-    end
-    
-      describe '#relative_distance_of_time_in_words' do
-    it 'in the past' do
-      expect(relative_distance_of_time_in_words(Time.now-5.minutes)).to eq('5m ago')
-    end
-    
-        it 'is turned off for existing instances of Huginn' do
-      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { nil }
-      DefaultScenarioImporter.import(user)
-    end
-    
-          describe '#generate_diff' do
-        it 'returns AgentDiff objects that include 'current' values from any agents that already exist' do
-          agent_diffs = scenario_import.agent_diffs
-          weather_agent_diff = agent_diffs[0]
-          trigger_agent_diff = agent_diffs[1]
-    
-          context '#run_workers' do
-        it 'runs all the workers' do
-          mock.instance_of(HuginnScheduler).run!
-          mock.instance_of(DelayedJobWorker).run!
-          @agent_runner.send(:run_workers)
-        end
-    
-      describe 'converting escaped JSONPath strings' do
-    it 'should work' do
-      expect(LiquidMigrator.convert_string('Weather looks like <$.conditions> according to the forecast at <$.pretty_date.time>')).to eq(
-                                    'Weather looks like {{conditions}} according to the forecast at {{pretty_date.time}}'
-      )
-    end
-    
-      describe '#helpers' do
-    it 'should return the correct request header' do
-      expect(@checker.send(:request_options)).to eq({:headers => {'aftership-api-key' => '800deeaf-e285-9d62-bc90-j999c1973cc9', 'Content-Type'=>'application/json'}})
-    end
-    
-        describe 'x' do
-      it 'converts argument as a hexadecimal number' do
-        format('%x', 196).should == 'c4'
-      end
-    
-          def accepts?(env)
-        session = session env
-        set_token(session)
-    
-        it 'Returns nil when Referer header is invalid' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
-      expect(subject.referrer(env)).to be_nil
-    end
+      it 'returns true when passed ?R if the argument is readable by the real uid' do
+    Kernel.test(?R, @file).should be_true
   end
-end
+    
+      it 'hooks assignments to a global variable' do
+    captured = nil
+    
+    group :development do
+  cp_gem 'claide',                'CLAide'
+  cp_gem 'cocoapods-core',        'Core'
+  cp_gem 'cocoapods-deintegrate', 'cocoapods-deintegrate'
+  cp_gem 'cocoapods-downloader',  'cocoapods-downloader'
+  cp_gem 'cocoapods-plugins',     'cocoapods-plugins'
+  cp_gem 'cocoapods-search',      'cocoapods-search'
+  cp_gem 'cocoapods-stats',       'cocoapods-stats'
+  cp_gem 'cocoapods-trunk',       'cocoapods-trunk'
+  cp_gem 'cocoapods-try',         'cocoapods-try'
+  cp_gem 'molinillo',             'Molinillo'
+  cp_gem 'nanaimo',               'Nanaimo'
+  cp_gem 'xcodeproj',             'Xcodeproj'
+    
+        it 'displays the nickname if no name, first, or last is available' do
+      subject.info.name = nil
+      %w[first_name last_name].each { |k| subject.info[k] = nil }
+      expect(subject.info.name).to eq('meatbag')
+    end
+    
+    task :default => %i[spec rubocop]
+    
+      SimpleCov.formatters = [
+    SimpleCov::Formatter::HTMLFormatter,
+    Coveralls::SimpleCov::Formatter
+  ]
