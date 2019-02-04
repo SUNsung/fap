@@ -1,120 +1,146 @@
 
         
-            private
+            expect(gu.notification_level).to eq(NotificationLevels.all[:tracking])
     
-        def error?
-      code == 0 || code != 404 && code != 403 && code >= 400 && code <= 599
+          if lounge.topic_id.nil?
+        creator = PostCreator.new(Discourse.system_user,
+          raw: I18n.t('vip_category_description'),
+          title: I18n.t('category.topic_prefix', category: lounge.name),
+          category: lounge.name,
+          archetype: Archetype.default,
+          skip_validations: true
+        )
+        post = creator.create
+    
+            staff.topic_id = post.topic.id
+        unless staff.save
+          puts staff.errors.full_messages
+          puts 'Failed to set the Staff category description topic!'
+        end
+    
+        it 'returns an active nav link' do
+      stub(self).current_page?('/things') { true }
+      nav = nav_link('Things', '/things')
+      expect(nav).to be_html_safe
+      a = Nokogiri(nav).at('li.active > a[href='/things']')
+      expect(a).to be_a Nokogiri::XML::Element
+      expect(a.text.strip).to eq('Things')
     end
     
-              node['data-language'] = 'typescript' if node['path'].try(:ends_with?, '.ts')
-          node['data-language'] = 'html' if node['path'].try(:ends_with?, '.html')
-          node['data-language'] = 'css' if node['path'].try(:ends_with?, '.css')
-          node['data-language'] = 'js' if node['path'].try(:ends_with?, '.js')
-          node['data-language'] = 'json' if node['path'].try(:ends_with?, '.json')
-          node['data-language'] = node['language'].sub(/\Ats/, 'typescript').strip if node['language']
-          node['data-language'] ||= 'typescript' if node.content.start_with?('@')
+              @bar3 = Agents::DotBar.new(name: 'bar3').tap { |agent|
+            agent.user = users(:bob)
+            agent.sources << @bar2
+            agent.save!
+          },
+        ]
+        @foo.reload
+        @bar2.reload
+    
+          expect(@scheduler.scheduler_agent_jobs.map(&:scheduler_agent)).to eq([@agent2])
+    end
+    
+        it 'should provide the since attribute after the first run' do
+      time = (Time.now-1.minute).iso8601
+      @checker.memory[:last_event] = time
+      @checker.save
+      expect(@checker.reload.send(:query_parameters)).to eq({:query => {:since => time}})
+    end
+  end
     
         def destroy
-      authorize @custom_emoji, :destroy?
-      @custom_emoji.destroy!
-      log_action :destroy, @custom_emoji
-      flash[:notice] = I18n.t('admin.custom_emojis.destroyed_msg')
-      redirect_to admin_custom_emojis_path(page: params[:page], **@filter_params)
+      authorize @report_note, :destroy?
+      @report_note.destroy!
+      redirect_to admin_report_path(@report_note.report_id), notice: I18n.t('admin.report_notes.destroyed_msg')
     end
     
-        private
+          weeks << {
+        week: week.to_time.to_i.to_s,
+        statuses: Redis.current.get('activity:statuses:local:#{week_id}') || '0',
+        logins: Redis.current.pfcount('activity:logins:#{week_id}').to_s,
+        registrations: Redis.current.get('activity:accounts:local:#{week_id}') || '0',
+      }
+    end
     
-      private
+        # advance scanner to pos after the next match of pattern and return the match
+    def scan_next(pattern)
+      return unless @s.scan_until(pattern)
+      @s.matched
+    end
     
-      def show
-    render_cached_json('api:v1:instances:activity:show', expires_in: 1.day) { activity }
-  end
-    
-        render json: @web_subscription, serializer: REST::WebPushSubscriptionSerializer
-  end
-    
-        data = {
-      alerts: {
-        follow: alerts_enabled,
-        favourite: alerts_enabled,
-        reblog: alerts_enabled,
-        mention: alerts_enabled,
-      },
-    }
-    
-      uninstall_preflight do
-    system_command '#{HOMEBREW_PREFIX}/bin/brew', args: ['cask', 'uninstall', 'adobe-photoshop-lightroom600']
-  end
-    
-          # return path set in app.rb not @page.path
-      def path
-        @path
+          def self.default_generator_root
+        File.dirname(__FILE__)
       end
     
-          def versions
-        i = @versions.size + 1
-        @versions.map do |v|
-          i -= 1
-          { :id        => v.id,
-            :id7       => v.id[0..6],
-            :num       => i,
-            :author    => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
-            :message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
-            :date      => v.authored_date.strftime('%B %d, %Y'),
-            :gravatar  => Digest::MD5.hexdigest(v.author.email.strip.downcase),
-            :identicon => self._identicon_code(v.author.email),
-            :date_full => v.authored_date,
-            :files     => v.stats.files.map { |f,*rest|
-              page_path = extract_renamed_path_destination(f)
-              page_path = remove_page_extentions(page_path)
-              { :file => f,
-                :link => '#{page_path}/#{v.id}'
-              }
-            }
-          }
+    module Sidekiq
+  class Client
+    
+            names.inject(Object) do |constant, name|
+          constant.const_defined?(name) ? constant.const_get(name) : constant.const_missing(name)
         end
+      rescue NameError
+        super
       end
-    
-          # Finds header node inside Nokogiri::HTML document.
-      #
-      def find_header_node(doc)
-        case @page.format
-          when :asciidoc
-            doc.css('div#gollum-root > h1:first-child')
-          when :org
-            doc.css('div#gollum-root > p.title:first-child')
-          when :pod
-            doc.css('div#gollum-root > a.dummyTopAnchor:first-child + h1')
-          when :rest
-            doc.css('div#gollum-root > div > div > h1:first-child')
-          else
-            doc.css('div#gollum-root > h1:first-child')
-        end
-      end
-    
-        def initialize(dir, existing, attempted, message = nil)
-      @dir            = dir
-      @existing_path  = existing
-      @attempted_path = attempted
-      super(message || 'Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.')
     end
   end
 end
     
-        def render(context)
-      output = super
-      types = {
-        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
-        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
-        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
-      }
-      if @videos.size > 0
-        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
-        @videos.each do |v|
-          video << '<source src='#{v}' #{types[File.extname(v)]}>'
+    module Sidekiq
+  module Extensions
+    ##
+    # Adds 'delay', 'delay_for' and `delay_until` methods to ActionMailer to offload arbitrary email
+    # delivery to Sidekiq.  Example:
+    #
+    #    UserMailer.delay.send_welcome_email(new_user)
+    #    UserMailer.delay_for(5.days).send_welcome_email(new_user)
+    #    UserMailer.delay_until(5.days.from_now).send_welcome_email(new_user)
+    class DelayedMailer
+      include Sidekiq::Worker
+    
+          Sidekiq.logger.debug { 'Re-queueing terminated jobs' }
+      jobs_to_requeue = {}
+      inprogress.each do |unit_of_work|
+        jobs_to_requeue[unit_of_work.queue_name] ||= []
+        jobs_to_requeue[unit_of_work.queue_name] << unit_of_work.job
+      end
+    
+          def invoke(*args)
+        chain = retrieve.dup
+        traverse_chain = lambda do
+          if chain.empty?
+            yield
+          else
+            chain.shift.call(*args, &traverse_chain)
+          end
         end
-        video += '</video>'
-      else
-        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
+        traverse_chain.call
       end
     end
+    
+          arr = Sidekiq.options[:lifecycle_events][event]
+      arr.reverse! if reverse
+      arr.each do |block|
+        begin
+          block.call
+        rescue => ex
+          handle_exception(ex, { context: 'Exception during Sidekiq lifecycle event.', event: event })
+          raise ex if reraise
+        end
+      end
+      arr.clear
+    end
+  end
+end
+
+    
+        class << self
+      def settings
+        self
+      end
+    
+        def erb(content, options = {})
+      if content.kind_of? Symbol
+        unless respond_to?(:'_erb_#{content}')
+          src = ERB.new(File.read('#{Web.settings.views}/#{content}.erb')).src
+          WebAction.class_eval('def _erb_#{content}\n#{src}\n end')
+        end
+      end
