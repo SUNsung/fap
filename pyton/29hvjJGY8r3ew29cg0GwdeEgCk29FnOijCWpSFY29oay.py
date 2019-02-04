@@ -1,273 +1,154 @@
 
         
-        from httpie.plugins.base import AuthPlugin
+            # apply the blueprints to the app
+    from flaskr import auth, blog
+    app.register_blueprint(auth.bp)
+    app.register_blueprint(blog.bp)
     
+            if user is None:
+            error = 'Incorrect username.'
+        elif not check_password_hash(user['password'], password):
+            error = 'Incorrect password.'
     
-with open(BIN_FILE_PATH, 'rb') as f:
-    BIN_FILE_CONTENT = f.read()
+            #: a reference to the blueprint that created this setup state.
+        self.blueprint = blueprint
     
-    
-def test_basic_auth(httpbin_both):
-    r = http('--auth=user:password',
-             'GET', httpbin_both + '/basic-auth/user/password')
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
-    
-    
-def test_default_options(httpbin):
-    env = MockEnvironment()
-    env.config['default_options'] = ['--form']
-    env.config.save()
-    r = http(httpbin.url + '/post', 'foo=bar', env=env)
-    assert r.json['form'] == {'foo': 'bar'}
-    
-    
-def has_docutils():
-    try:
-        # noinspection PyUnresolvedReferences
-        import docutils
-        return True
-    except ImportError:
-        return False
-    
-        def test_download_no_Content_Length(self, httpbin_both):
-        devnull = open(os.devnull, 'w')
-        downloader = Downloader(output_file=devnull, progress_file=devnull)
-        downloader.start(Response(url=httpbin_both.url + '/'))
-        time.sleep(1.1)
-        downloader.chunk_downloaded(b'12345')
-        downloader.finish()
-        assert not downloader.interrupted
-    
-        def test_cert_pem(self, httpbin_secure):
-        r = http(httpbin_secure + '/get',
-                 '--cert', CLIENT_PEM)
-        assert HTTP_OK in r
-    
-    
-def test_unicode_raw_json_item_verbose(httpbin):
-    r = http('--json', 'POST', httpbin.url + '/post',
-             u'test:={ '%s' : [ '%s' ] }' % (UNICODE, UNICODE))
-    assert HTTP_OK in r
-    assert r.json['json'] == {'test': {UNICODE: [UNICODE]}}
-    
-    # convert class vectors to binary class matrices
-y_train = keras.utils.to_categorical(y_train, num_classes)
-y_test = keras.utils.to_categorical(y_test, num_classes)
-    
-    
-def test_boston_housing():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = boston_housing.load_data()
-        assert len(x_train) == len(y_train)
-        assert len(x_test) == len(y_test)
-    
-        def get_config(self):
-        config = {
-            'units': self.units,
-            'kernel_initializer': initializers.serialize(self.kernel_initializer),
-            'recurrent_initializer':
-                initializers.serialize(self.recurrent_initializer),
-            'bias_initializer': initializers.serialize(self.bias_initializer),
-            'unit_forget_bias': self.unit_forget_bias,
-            'kernel_regularizer': regularizers.serialize(self.kernel_regularizer),
-            'recurrent_regularizer':
-                regularizers.serialize(self.recurrent_regularizer),
-            'bias_regularizer': regularizers.serialize(self.bias_regularizer),
-            'activity_regularizer':
-                regularizers.serialize(self.activity_regularizer),
-            'kernel_constraint': constraints.serialize(self.kernel_constraint),
-            'recurrent_constraint': constraints.serialize(self.recurrent_constraint),
-            'bias_constraint': constraints.serialize(self.bias_constraint)}
-        base_config = super(CuDNNLSTM, self).get_config()
-        return dict(list(base_config.items()) + list(config.items()))
-
-    
-        # Example
-    
-    print('Train...')
-model.fit(x_train, y_train,
-          batch_size=batch_size,
-          epochs=4,
-          validation_data=[x_test, y_test])
-
-    
-    
-def main():
-    argument_spec = ec2_argument_spec()
-    argument_spec.update(
-        dict(
-            name=dict(required=True),
-            metric_name=dict(),
-            state=dict(default='present', choices=['present', 'absent']),
-            conditions=dict(type='list'),
-            purge_conditions=dict(type='bool', default=False)
-        ),
+        info(
+        'Releasing %s (codename %s, release date %s)',
+        version, codename, release_date.strftime('%d/%m/%Y')
     )
-    module = AnsibleAWSModule(argument_spec=argument_spec)
-    state = module.params.get('state')
+    tags = get_git_tags()
     
-        # Purge rules before adding new ones in case a deletion shares the same
-    # priority as an insertion.
-    params = {
-        'WebACLId': acl['WebACLId'],
-        'DefaultAction': acl['DefaultAction']
-    }
-    change_tokens = []
-    if deletions:
-        try:
-            params['Updates'] = deletions
-            result = run_func_with_change_token_backoff(client, module, params, client.update_web_acl)
-            change_tokens.append(result['ChangeToken'])
-            get_waiter(
-                client, 'change_token_in_sync',
-            ).wait(
-                ChangeToken=result['ChangeToken']
-            )
-        except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
-            module.fail_json_aws(e, msg='Could not update Web ACL')
-    if insertions:
-        try:
-            params['Updates'] = insertions
-            result = run_func_with_change_token_backoff(client, module, params, client.update_web_acl)
-            change_tokens.append(result['ChangeToken'])
-        except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
-            module.fail_json_aws(e, msg='Could not update Web ACL')
-    if change_tokens:
-        for token in change_tokens:
-            get_waiter(
-                client, 'change_token_in_sync',
-            ).wait(
-                ChangeToken=token
-            )
-    if changed:
-        acl = get_web_acl(client, module, web_acl_id)
-    return changed, acl
+            X_test = X[-n_test_samples:]
+        Y_test = Y[-n_test_samples:]
+        X = X[:(i * step)]
+        Y = Y[:(i * step)]
     
-        argument_spec.update(dict(
-        state=dict(choices=['present', 'absent'], default='present'),
-        origin_access_identity_id=dict(),
-        caller_reference=dict(),
-        comment=dict(),
-    ))
+    ###############################################################################
+clf = SGDRegressor(penalty='l1', alpha=.2, fit_intercept=True, max_iter=2000,
+                   tol=None)
+clf.fit(X_train, y_train)
+print('model sparsity: %f' % sparsity_ratio(clf.coef_))
     
-        def _targets_to_put(self):
-        '''Returns a list of targets that need to be updated or added remotely'''
-        remote_targets = self.rule.list_targets()
-        return [t for t in self.targets if t not in remote_targets]
+        url_fmt is along the lines of ('https://github.com/USER/PROJECT/'
+                                   'blob/{revision}/{package}/'
+                                   '{path}#L{lineno}')
+    '''
+    revision = _get_git_revision()
+    return partial(_linkcode_resolve, revision=revision, package=package,
+                   url_fmt=url_fmt)
+
     
-            if matched_name and matched_tags:
-            asg = camel_dict_to_snake_dict(asg)
-            # compatibility with ec2_asg module
-            asg['launch_config_name'] = asg['launch_configuration_name']
-            # workaround for https://github.com/ansible/ansible/pull/25015
-            if 'target_group_ar_ns' in asg:
-                asg['target_group_arns'] = asg['target_group_ar_ns']
-                del(asg['target_group_ar_ns'])
-            if asg.get('target_group_arns'):
-                if elbv2:
-                    try:
-                        tg_paginator = elbv2.get_paginator('describe_target_groups')
-                        tg_result = tg_paginator.paginate(TargetGroupArns=asg['target_group_arns']).build_full_result()
-                        asg['target_group_names'] = [tg['TargetGroupName'] for tg in tg_result['TargetGroups']]
-                    except ClientError as e:
-                        if e.response['Error']['Code'] == 'TargetGroupNotFound':
-                            asg['target_group_names'] = []
-            else:
-                asg['target_group_names'] = []
-            matched_asgs.append(asg)
+    The dataset is the Boston Housing dataset (resp. 20 Newsgroups) for
+regression (resp. classification).
     
-    try:
-    import botocore
-except ImportError:
-    pass  # handled by AnsibleAWSModule
+    '''
+print(__doc__)
     
-        connection = boto3_conn(module, conn_type='client', resource='iam', region=region, endpoint=ec2_url, **aws_connect_params)
+    from sklearn.cluster import KMeans
+from sklearn import datasets
     
-    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url)
-    title = r1(r'<title>(.*)</title>', html)
-    assert title
-    id = r1(r'flvid\s*=\s*(\d+)', html)
-    assert id
-    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
+            for i in self.tree.iterfind('video/quality'):
+            quality = i.attrib ['value']
+            url = i[0].attrib['playurl']
+            self.stream_types.append({'id': quality,
+                                      'video_profile': i.attrib ['desp']})
+            self.streams[quality] = {'url': url,
+                                     'video_profile': i.attrib ['desp']}
+            self.streams_sorted = [dict([('id', stream_type['id'])] + list(self.streams[stream_type['id']].items())) for stream_type in self.__class__.stream_types if stream_type['id'] in self.streams]
     
-        html = get_content(rebuilt_url(url))
-    info = json.loads(match1(html, r'qualities':({.+?}),''))
-    title = match1(html, r''video_title'\s*:\s*'([^']+)'') or \
-            match1(html, r''title'\s*:\s*'([^']+)'')
-    title = unicodize(title)
     
-    headers = {
-    'DNT': '1',
-    'Accept-Encoding': 'gzip, deflate, sdch, br',
-    'Accept-Language': 'en-CA,en;q=0.8,en-US;q=0.6,zh-CN;q=0.4,zh;q=0.2',
-    'Upgrade-Insecure-Requests': '1',
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36',
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-    'Cache-Control': 'max-age=0',
-    'Referer': 'http://www.dilidili.com/',
-    'Connection': 'keep-alive',
-    'Save-Data': 'on',
-}
+def cntv_download_by_id(rid, **kwargs):
+    CNTV().download_by_vid(rid, **kwargs)
     
-        def test_commonprefix(self):
-        commonprefix = self.pathmodule.commonprefix
-        self.assertEqual(
-            commonprefix([]),
-            ''
-        )
-        self.assertEqual(
-            commonprefix(['/home/swenson/spam', '/home/swen/spam']),
-            '/home/swen'
-        )
-        self.assertEqual(
-            commonprefix(['/home/swen/spam', '/home/swen/eggs']),
-            '/home/swen/'
-        )
-        self.assertEqual(
-            commonprefix(['/home/swen/spam', '/home/swen/spam']),
-            '/home/swen/spam'
-        )
-        self.assertEqual(
-            commonprefix(['home:swenson:spam', 'home:swen:spam']),
-            'home:swen'
-        )
-        self.assertEqual(
-            commonprefix([':home:swen:spam', ':home:swen:eggs']),
-            ':home:swen:'
-        )
-        self.assertEqual(
-            commonprefix([':home:swen:spam', ':home:swen:spam']),
-            ':home:swen:spam'
-        )
     
-                if '0x0' in main:
-                # XXX Fix on Windows (and other platforms): something
-                # is going on with the pointers in Programs/_testembed.c.
-                # interp.interp is 0x0 and interp.modules is the same
-                # between interpreters.
-                raise unittest.SkipTest('platform prints pointers as 0x0')
+def download_url(url, merge, output_dir, title, info_only):
+    mime, ext, size = url_info(url)
+    print_info(site_info, title, mime, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir, merge=merge)
     
-        # Initialize and populate our database.
-    conn = sqlite3.connect(':memory:')
-    cursor = conn.cursor()
-    cursor.execute('CREATE TABLE memos(key INTEGER PRIMARY KEY, task TEXT)')
-    tasks = (
-        'give food to fish',
-        'prepare group meeting',
-        'fight with a zebra',
-        )
-    for task in tasks:
-        cursor.execute('INSERT INTO memos VALUES(NULL, ?)', (task,))
+        if re.match(re_str, url):
+        html = get_content(url)
+        title = match1(html, r'<title>(.+)丨(.+)</title>')  #title
+        
+        # player loaded via internal iframe
+        frame_url = re.search(r'<iframe src=\'(.+?)\'', html).group(1)
+        logging.debug('dilidili_download: %s' % frame_url)
+        
+        #https://player.005.tv:60000/?vid=a8760f03fd:a04808d307&v=yun&sign=a68f8110cacd892bc5b094c8e5348432
+        html = get_content(frame_url, headers=headers, decoded=False).decode('utf-8')
+        
+        match = re.search(r'(.+?)var video =(.+?);', html)
+        vid = match1(html, r'var vid='(.+)'')
+        hd2 = match1(html, r'var hd2='(.+)'')
+        typ = match1(html, r'var typ='(.+)'')
+        sign = match1(html, r'var sign='(.+)'')
+        tmsign = match1(html, r'tmsign=([A-Za-z0-9]+)')
+        ulk =  match1(html, r'var ulk='(.+)'')
     
-    # Proxy type for generator objects
-class GeneratorProxy(BaseProxy):
-    _exposed_ = ['__next__']
-    def __iter__(self):
-        return self
-    def __next__(self):
-        return self._callmethod('__next__')
+    
+def fantasy_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    if 'fantasy.tv' not in url:
+        raise Exception('Wrong place!')
+    
+            while self.values[new_key] is not None \
+                and self.values[new_key] != key:
+            i += 1
+            new_key = self.hash_function(key + i*i) if not \
+                self.balanced_factor() >= self.lim_charge else None
+    
+            print()
+        print('The minimum Edit Distance is: %d' % (solver.solve(S1, S2)))
+        print()
+        print('*************** End of Testing Edit Distance DP Algorithm ***************')
+
+    
+    def longestSub(ARRAY): 			#This function is recursive
+	
+	ARRAY_LENGTH = len(ARRAY)
+	if(ARRAY_LENGTH <= 1):  	#If the array contains only one element, we return it (it's the stop condition of recursion)
+		return ARRAY
+								#Else
+	PIVOT=ARRAY[0]
+	isFound=False
+	i=1
+	LONGEST_SUB=[]
+	while(not isFound and i<ARRAY_LENGTH):
+		if (ARRAY[i] < PIVOT):
+			isFound=True
+			TEMPORARY_ARRAY = [ element for element in ARRAY[i:] if element >= ARRAY[i] ]
+			TEMPORARY_ARRAY = longestSub(TEMPORARY_ARRAY)
+			if ( len(TEMPORARY_ARRAY) > len(LONGEST_SUB) ):
+				LONGEST_SUB = TEMPORARY_ARRAY
+		else:
+			i+=1
+    
+    The problem is  :
+Given an array, to find the longest and continuous sub array and get the max sum of the sub array in the given array.
+'''
+from __future__ import print_function
+    
+        for i in range(1, n+1):
+        for j in range(1, s+1):
+            dp[i][j]= dp[i][j-1]
+    
+    def compute_heterogeneity(data, k, centroids, cluster_assignment):
+    
+    heterogeneity = 0.0
+    for i in range(k):
+        
+        # Select all data points that belong to cluster i. Fill in the blank (RHS only)
+        member_data_points = data[cluster_assignment==i, :]
+        
+        if member_data_points.shape[0] > 0: # check if i-th cluster is non-empty
+            # Compute distances from centroid to data points (RHS only)
+            distances = pairwise_distances(member_data_points, [centroids[i]], metric='euclidean')
+            squared_distances = distances**2
+            heterogeneity += np.sum(squared_distances)
+        
+    return heterogeneity
+    
+        for uncommonLetter in ETAOIN[-6:]:
+        if uncommonLetter in freqOrder[-6:]:
+            matchScore += 1
