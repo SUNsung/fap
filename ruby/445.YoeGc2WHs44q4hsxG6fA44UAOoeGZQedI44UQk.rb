@@ -1,109 +1,93 @@
 
         
-            private
-    
-        def options
-      @options ||= self.class.options.deep_dup.tap do |options|
-        options.merge! base_url: base_url, root_url: root_url,
-                       root_path: root_path, initial_paths: initial_paths,
-                       version: self.class.version, release: self.class.release
-    
-          def include_default_entry?
-        INDEX.add?([name, type].join(';')) ? true : false # ¯\_(ツ)_/¯
+                val ? true : false
       end
     
-            css('p > code:first-child:last-child', 'td > code:first-child:last-child').each do |node|
-          next if node.previous.try(:content).present? || node.next.try(:content).present?
-          node.inner_html = node.inner_html.squish.gsub(/<br(\ \/)?>\s*/, '\n')
-          node.content = node.content.strip
-          node.name = 'pre' if node.content =~ /\s/
-          node.parent.before(node.parent.children).remove if node.parent.name == 'p'
+    module Gitlab
+  module GithubImport
+    module Importer
+      class IssuesImporter
+        include ParallelScheduling
+    
+            def collection_method
+          :lfs_objects
         end
     
-          def remember_cookie_values(resource)
-        options = { httponly: true }
-        options.merge!(forget_cookie_values(resource))
-        options.merge!(
-          value: resource.class.serialize_into_cookie(resource),
-          expires: resource.remember_expires_at
-        )
+            # attributes - A Hash containing the raw note details. The keys of this
+        #              Hash must be Symbols.
+        def initialize(attributes)
+          @attributes = attributes
+        end
+    
+        context 'multiple arguments' do
+      before do
+        subject.instance_eval do
+          env :userpaths, :std
+        end
       end
     
-          def parse_uri(location)
-        location && URI.parse(location)
-      rescue URI::InvalidURIError
-        nil
-      end
-    
-    module Devise
-  module Mailers
-    module Helpers
-      extend ActiveSupport::Concern
-    
-        def log_status(status)
-      puts bold status
-    end
-    
-        def vendor_path(path)
-      return ::File.join(LOGSTASH_HOME, 'vendor', path)
-    end
-    
-    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
-  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.windows?
-  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.windows?
-    
-          puts 'Halting #{machines}'
-      LogStash::VagrantHelpers.halt(machines, options)
-    end
+        execute 'INSERT INTO share_visibilities (user_id, shareable_id, shareable_type) ' \
+            'SELECT post_visibility.user_id, photos.id, 'Photo' FROM photos ' \
+            'INNER JOIN posts ON posts.guid = photos.status_message_guid AND posts.type = 'StatusMessage' ' \
+            'LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = photos.id ' \
+            'INNER JOIN share_visibilities AS post_visibility ON post_visibility.shareable_id = posts.id ' \
+            'WHERE photos.public = false AND share_visibilities.shareable_id IS NULL ' \
+            'AND post_visibility.shareable_type = 'Post''
   end
     
-            def advance
-          authorize! :update, @order, order_token
-          while @order.next; end
-          respond_with(@order, default_template: 'spree/api/v1/orders/show', status: 200)
-        end
+      failure_message_for_should do |actual|
+    'expected #{actual.inspect} to have path #{expected.inspect} but was #{actual.current_path.inspect}'
+  end
+  failure_message_for_should_not do |actual|
+    'expected #{actual.inspect} to not have path #{expected.inspect} but it had'
+  end
+end
     
-            def create
-          authorize! :create, Image
-          @image = scope.images.new(image_params)
-          if @image.save
-            respond_with(@image, status: 201, default_template: :show)
-          else
-            invalid_resource!(@image)
-          end
-        end
+      class FetchWebfinger < Base
+    def perform(*_args)
+      # don't do real discovery in cucumber
+    end
+  end
+end
+
     
-            def find_property
-          @property = Spree::Property.accessible_by(current_ability, :read).find(params[:id])
-        rescue ActiveRecord::RecordNotFound
-          @property = Spree::Property.accessible_by(current_ability, :read).find_by!(name: params[:id])
-        end
+    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
     
-            def update
-          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
-          if @return_authorization.update_attributes(return_authorization_params)
-            respond_with(@return_authorization, default_template: :show)
-          else
-            invalid_resource!(@return_authorization)
-          end
-        end
+        it 'paginates the notifications' do
+      25.times { FactoryGirl.create(:notification, :recipient => alice, :target => @post) }
+      get :index
+      expect(assigns[:notifications].count).to eq(25)
+      get :index, params: {page: 2}
+      expect(assigns[:notifications].count).to eq(1)
+    end
     
-              if params[:stock_item].key?(:backorderable)
-            @stock_item.backorderable = params[:stock_item][:backorderable]
-            @stock_item.save
-          end
+      # Compile a Sass or SCSS string to CSS.
+  # Defaults to SCSS.
+  #
+  # @param contents [String] The contents of the Sass file.
+  # @param options [{Symbol => Object}] An options hash;
+  #   see {file:SASS_REFERENCE.md#Options the Sass options documentation}
+  # @raise [Sass::SyntaxError] if there's an error in the document
+  # @raise [Encoding::UndefinedConversionError] if the source encoding
+  #   cannot be converted to UTF-8
+  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
+  def self.compile(contents, options = {})
+    options[:syntax] ||= :scss
+    Engine.new(contents, options).to_css
+  end
     
-        module PsychAutoload
-      def resolve_class(klass_name)
-        return nil if !klass_name || klass_name.empty?
-        # constantize
-        names = klass_name.split('::')
-        names.shift if names.empty? || names.first.empty?
+        # Return the first {Sass::Selector::SimpleSequence} in a
+    # {Sass::Tree::RuleNode}.
+    #
+    # @param rule [Sass::Tree::RuleNode]
+    # @return [Sass::Selector::SimpleSequence, String]
+    def first_sseq(rule)
+      first_seq(rule).members.first
+    end
     
-    module Sidekiq
-  class Web
-    ROOT = File.expand_path('#{File.dirname(__FILE__)}/../../web')
-    VIEWS = '#{ROOT}/views'
-    LOCALES = ['#{ROOT}/locales']
-    LAYOUT = '#{VIEWS}/layout.erb'
-    ASSETS = '#{ROOT}/assets'
+              options = { variants_attrs: variants_params, options_attrs: option_types_params }
+          @product = Core::Importer::Product.new(@product, product_params, options).update
+    
+          include Grape::DSL::Configuration
