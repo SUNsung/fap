@@ -1,133 +1,51 @@
-  /// Retrieve the array of replacement types, which line up with the
-  /// generic parameters.
-  ///
-  /// Note that the types may be null, for cases where the generic parameter
-  /// is concrete but hasn't been queried yet.
-  ArrayRef<Type> getReplacementTypes() const {
-    return llvm::makeArrayRef(getTrailingObjects<Type>(),
-                              getNumReplacementTypes());
-  }
-    
-    char *DiverseListBase::addNewStorageSlow(std::size_t needed) {
-  bool wasInline = isAllocatedInline();
-    }
-    
-    #endif // SWIFT_IMPORTER_CFTYPEINFO_H
 
+        
+        OPERATOR_SCHEMA(EnforceFinite)
+    .NumInputs(1)
+    .NumOutputs(0)
+    .SetDoc(R'DOC(
+Raise if there is NaN or Inf values in the input tensor.
+)DOC')
+    .Input(0, 'input', 'Input tensor');
     
-      // FIXME: Map over source ranges in the diagnostic.
-  auto emitDiag = [&ctx, this](clang::FullSourceLoc clangNoteLoc,
-                      clang::DiagnosticsEngine::Level clangDiagLevel,
-                      StringRef message) {
-    decltype(diag::error_from_clang) diagKind;
-    switch (clangDiagLevel) {
-    case clang::DiagnosticsEngine::Ignored:
-      return;
-    case clang::DiagnosticsEngine::Note:
-      diagKind = diag::note_from_clang;
-      break;
-    case clang::DiagnosticsEngine::Remark:
-      // FIXME: We don't handle remarks yet.
-      return;
-    case clang::DiagnosticsEngine::Warning:
-      diagKind = diag::warning_from_clang;
-      break;
-    case clang::DiagnosticsEngine::Error:
-    case clang::DiagnosticsEngine::Fatal:
-      // FIXME: What happens after a fatal error in the importer?
-      diagKind = diag::error_from_clang;
-      break;
-    }
-    }
+    workspace.RunOperatorOnce(op)
+print('indices: \n', workspace.FetchBlob('indices'))
     
-    char Mangle::getStandardTypeSubst(StringRef TypeName) {
-#define STANDARD_TYPE(KIND, MANGLING, TYPENAME)      \
-  if (TypeName == #TYPENAME) {                       \
-    return #MANGLING[0];                             \
-  }
-    }
+    Example 1:
+  DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
+  RANGES = [
+    [
+      [2, 4],
+      [0, 2],
+    ],
+    [
+      [0, 0],
+      [6, 2],
+    ]
+  ]
+  lengths = [4, 2]
+  OUTPUT[0] = [[3, 4, 5, 6], [0, 0, 0, 0]]
+  OUTPUT[1] = [[1, 2], [7, 8]]
     
-    static void printNode(DemanglerPrinter &Out, const Node *node, unsigned depth) {
-  // Indent two spaces per depth.
-  for (unsigned i = 0; i < depth * 2; ++i) {
-    Out << ' ';
-  }
-  if (!node) {
-    Out << '<<NULL>>';
-    return;
-  }
-  Out << 'kind=' << getNodeKindString(node->getKind());
-  if (node->hasText()) {
-    Out << ', text=\'' << node->getText() << '\'';
-  }
-  if (node->hasIndex()) {
-    Out << ', index=' << node->getIndex();
-  }
-  Out << '\n';
-  for (auto &child : *node) {
-    printNode(Out, child, depth + 1);
-  }
-}
+    OPERATOR_SCHEMA(Glu)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .SetDoc(R'DOC(
+Applies gated linear unit to the input Tensor X. The output Y is half the size
+of the input X, so if the shape of X is [d1, d2, ..., N] shape of Y will be
+[d1, d2, ..., dn/2] and Y(:dn-1, i) = GLU(X(:dn-1, i), X(:dn-1, i+N/2)) =
+X(dn-1, i) * sigmoid(X(dn-1, i+N/2))
+)DOC')
+    .Input(0, 'X', '1D input tensor')
+    .Output(0, 'Y', '1D output tensor');
     
-    IPC_SYNC_MESSAGE_ROUTED3_1(ShellViewHostMsg_Call_Static_Method_Sync,
-                           std::string /* type name */,
-                           std::string /* method name */,
-                           base::ListValue /* arguments */,
-                           base::ListValue /* result */)
-    
-      static void Call(content::Shell* shell,
-                   const std::string& method,
-                   const base::ListValue& arguments,
-                   base::ListValue* result,
-                   DispatcherHost* dispatcher_host);
-    
-    class MenuDelegate : public ui::SimpleMenuModel::Delegate {
- public:
-  MenuDelegate(ObjectManager* object_manager);
-  ~MenuDelegate() override;
+    namespace grpc {
     }
     
-    namespace nwapi {
-    }
-    
-        std::string error() const {
-      return error_;
-    }
-    
-      NwScreenStopMonitorFunction::NwScreenStopMonitorFunction() {}
-    
-    
-    {}  // namespace tesseract.
-    
-      /// Get a clone/copy of the source image rectangle.
-  /// The returned Pix must be pixDestroyed.
-  /// This function will be used in the future by the page layout analysis, and
-  /// the layout analysis that uses it will only be available with Leptonica,
-  /// so there is no raw equivalent.
-  Pix* GetPixRect();
-    
-    /**********************************************************************
- * read_unlv_file
- *
- * Read a whole unlv zone file to make a list of blocks.
- **********************************************************************/
-    
-    // Class to hold a Pixa collection of debug images with captions and save them
-// to a PDF file.
-class DebugPixa {
- public:
-  // TODO(rays) add another constructor with size control.
-  DebugPixa() {
-    pixa_ = pixaCreate(0);
-    fonts_ = bmfCreate(nullptr, 14);
-  }
-  // If the filename_ has been set and there are any debug images, they are
-  // written to the set filename_.
-  ~DebugPixa() {
-    pixaDestroy(&pixa_);
-    bmfDestroy(&fonts_);
-  }
-    }
+    #include 'absl/strings/string_view.h'
+#include 'absl/time/time.h'
+#include 'src/cpp/ext/filters/census/channel_filter.h'
+#include 'src/cpp/ext/filters/census/context.h'
     
     // Thread compatible.
 class CensusContext {
@@ -135,173 +53,100 @@ class CensusContext {
   CensusContext() : span_(::opencensus::trace::Span::BlankSpan()) {}
     }
     
-    namespace grpc {
-    }
+    #include 'opencensus/stats/stats.h'
+#include 'src/cpp/ext/filters/census/grpc_plugin.h'
     
-      // Serializes a GrpcTraceContext into the provided buffer. Returns the number
-  // of bytes serialized into the buffer. If the buffer is not of sufficient
-  // size (it must be at least kGrpcTraceContextSize bytes) it will drop
-  // everything and return 0 bytes serialized. Inlined for performance reasons.
-  static size_t Encode(const GrpcTraceContext& tc, char* buf, size_t buf_size) {
-    if (buf_size < kGrpcTraceContextSize) {
-      return kEncodeDecodeFailure;
-    }
-    buf[kVersionIdOffset] = kVersionId;
-    buf[kTraceIdOffset] = kTraceIdField;
-    memcpy(&buf[kTraceIdOffset + 1], tc.trace_id,
-           opencensus::trace::TraceId::kSize);
-    buf[kSpanIdOffset] = kSpanIdField;
-    memcpy(&buf[kSpanIdOffset + 1], tc.span_id,
-           opencensus::trace::SpanId::kSize);
-    buf[kTraceOptionsOffset] = kTraceOptionsField;
-    memcpy(&buf[kTraceOptionsOffset + 1], tc.trace_options,
-           opencensus::trace::TraceOptions::kSize);
-    return kGrpcTraceContextSize;
+    
+    {  const protobuf::FileDescriptor* file_desc =
+      descriptor_pool_->FindFileContainingSymbol(symbol);
+  if (file_desc == nullptr) {
+    return Status(StatusCode::NOT_FOUND, 'Symbol not found.');
   }
-    
-    // client cumulative
-const ViewDescriptor& ClientSentBytesPerRpcCumulative() {
-  const static ViewDescriptor descriptor =
-      ViewDescriptor()
-          .set_name('grpc.io/client/sent_bytes_per_rpc/cumulative')
-          .set_measure(kRpcClientSentBytesPerRpcMeasureName)
-          .set_aggregation(BytesDistributionAggregation())
-          .add_column(ClientMethodTagKey());
-  return descriptor;
-}
-    
-    #include <grpc/impl/codegen/port_platform.h>
-    
-    /**
- * Factory method
- */
-static Transliterator* RemoveTransliterator_create(const UnicodeString& /*ID*/,
-                                                   Transliterator::Token /*context*/) {
-    /* We don't need the ID or context. We just remove data */
-    return new RemoveTransliterator();
-}
-    
-    #endif
-
-    
-    ScriptSet &ScriptSet::parseScripts(const UnicodeString &scriptString, UErrorCode &status) {
-    resetAll();
-    if (U_FAILURE(status)) {
-        return *this;
-    }
-    UnicodeString oneScriptName;
-    for (int32_t i=0; i<scriptString.length();) {
-        UChar32 c = scriptString.char32At(i);
-        i = scriptString.moveIndex32(i, 1);
-        if (!u_isUWhiteSpace(c)) {
-            oneScriptName.append(c);
-            if (i < scriptString.length()) {
-                continue;
-            }
-        }
-        if (oneScriptName.length() > 0) {
-            char buf[40];
-            oneScriptName.extract(0, oneScriptName.length(), buf, sizeof(buf)-1, US_INV);
-            buf[sizeof(buf)-1] = 0;
-            int32_t sc = u_getPropertyValueEnum(UCHAR_SCRIPT, buf);
-            if (sc == UCHAR_INVALID_CODE) {
-                status = U_ILLEGAL_ARGUMENT_ERROR;
-            } else {
-                this->set((UScriptCode)sc, status);
-            }
-            if (U_FAILURE(status)) {
-                return *this;
-            }
-            oneScriptName.remove();
-        }
-    }
-    return *this;
+  std::unordered_set<grpc::string> seen_files;
+  FillFileDescriptorResponse(file_desc, response, &seen_files);
+  return Status::OK;
 }
     
     
-    {    useDaylight = (UBool)((startDay != 0) && (endDay != 0) ? TRUE : FALSE);
-    if (useDaylight && dstSavings == 0) {
-        dstSavings = U_MILLIS_PER_HOUR;
-    }
-    if (endDay != 0) {
-        if (endMonth < UCAL_JANUARY || endMonth > UCAL_DECEMBER) {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-            return;
-        }
-        if (endTime < 0 || endTime > U_MILLIS_PER_DAY ||
-            endTimeMode < WALL_TIME || endTimeMode > UTC_TIME) {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-            return;
-        }
-        if (endDayOfWeek == 0) {
-            endMode = DOM_MODE;
-        } else {
-            if (endDayOfWeek > 0) {
-                endMode = DOW_IN_MONTH_MODE;
-            } else {
-                endDayOfWeek = (int8_t)-endDayOfWeek;
-                if (endDay > 0) {
-                    endMode = DOW_GE_DOM_MODE;
-                } else {
-                    endDay = (int8_t)-endDay;
-                    endMode = DOW_LE_DOM_MODE;
-                }
-            }
-            if (endDayOfWeek > UCAL_SATURDAY) {
-                status = U_ILLEGAL_ARGUMENT_ERROR;
-                return;
-            }
-        }
-        if (endMode == DOW_IN_MONTH_MODE) {
-            if (endDay < -5 || endDay > 5) {
-                status = U_ILLEGAL_ARGUMENT_ERROR;
-                return;
-            }
-        } else if (endDay<1 || endDay > STATICMONTHLENGTH[endMonth]) {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-            return;
-        }
-    }
-}
-    
-    
-    {    /**
-     * Formats positiveValue using the given range of digit counts.
-     * Always uses standard digits '0' through '9'. Formatted value is
-     * left padded with '0' as necessary to achieve minimum digit count.
-     * Does not produce any grouping separators or trailing decimal point.
-     * Calling format to format a value with a particular digit count range
-     * when canFormat indicates that the same value and digit count range
-     * cannot be formatted results in undefined behavior.
-     *
-     * @param positiveValue the value to format
-     * @param range the acceptable range of digit counts.
-     */
-    static UnicodeString &format(
-            int32_t positiveValue,
-            const IntDigitCountRange &range,
-            UnicodeString &appendTo);
-    
+    {  const protobuf::DescriptorPool* descriptor_pool_;
+  const std::vector<string>* services_;
 };
     
-        /**
-     * @param keyword for example 'few' or 'other'
-     * @return the index of the plural form corresponding to the keyword, or a negative value
-     */
-    static int32_t indexOrNegativeFromString(const UnicodeString &keyword);
     
-    //eof
+    {   private:
+    DynamicThreadPool* pool_;
+    grpc_core::Thread thd_;
+    void ThreadFunc();
+  };
+  std::mutex mu_;
+  std::condition_variable cv_;
+  std::condition_variable shutdown_cv_;
+  bool shutdown_;
+  std::queue<std::function<void()>> callbacks_;
+  int reserve_threads_;
+  int nthreads_;
+  int threads_waiting_;
+  std::list<DynamicThread*> dead_threads_;
+    
+    #endif  // GRPC_SRC_CPP_SERVER_LOAD_REPORTER_GET_CPU_STATS_H
 
     
-    namespace rocksdb {
+    
+/*
+ * Given sines and cosines, tells if A's angle is less than B's on -Pi, Pi
+ * (in other words, is A 'righter' than B)
+ */
+bool IsRighter(float32 sinA, float32 cosA, float32 sinB, float32 cosB){
+	if (sinA < 0){
+		if (sinB > 0 || cosA <= cosB) return true;
+		else return false;
+	} else {
+		if (sinB < 0 || cosA <= cosB) return false;
+		else return true;
+	}
+}
+    
+    void b2Triangle::Set(const b2Triangle& toMe) {
+	for (int32 i=0; i<3; ++i) {
+		x[i] = toMe.x[i];
+		y[i] = toMe.y[i];
+	}
+}
+    
+    		inline bool GetFlip(void)
+		{
+			return m_pencoding->GetFlip();
+		}
+    
+    		virtual bool IsDifferential(void) = 0;
+    
+    	// ################################################################################
+	// Block4x4EncodingBits_A8
+	// Encoding bits for the A portion of RGBA8
+	// ################################################################################
+    
+    
+  typedef struct  AF_Blue_StringRec_
+  {
+    AF_Blue_String  string;
+    FT_UShort       properties;
     }
     
-    using namespace rocksdb;
+       - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
     
-      // the number of deletion entries before compaction. Deletion entries
-  // can disappear after compaction because they expired
-  uint64_t num_input_deletion_records;
-  // number of deletion records that were found obsolete and discarded
-  // because it is not possible to delete any more keys with this entry
-  // (i.e. all possible deletions resulting from it have been completed)
-  uint64_t num_expired_deletion_records;
+    /** 16x16 multiplication where the result fits in 32 bits */
+#undef MULT16_16
+static OPUS_INLINE opus_val32 MULT16_16_armv5e(opus_val16 a, opus_val16 b)
+{
+  int res;
+  __asm__(
+      '#MULT16_16\n\t'
+      'smulbb %0, %1, %2;\n'
+      : '=r'(res)
+      : 'r'(a), 'r'(b)
+  );
+  return res;
+}
+#define MULT16_16(a, b) (MULT16_16_armv5e(a, b))
