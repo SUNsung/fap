@@ -1,108 +1,152 @@
 
         
-        from youtube_dl.utils import intlist_to_bytes
-from youtube_dl.aes import aes_encrypt, key_expansion
-    
-    sys.path.insert(0, dirn(dirn((os.path.abspath(__file__)))))
-    
-    
-class TestAgeRestriction(unittest.TestCase):
-    def _assert_restricted(self, url, filename, age, old_age=None):
-        self.assertTrue(_download_restricted(url, filename, old_age))
-        self.assertFalse(_download_restricted(url, filename, age))
-    
-        def test_facebook_matching(self):
-        self.assertTrue(FacebookIE.suitable('https://www.facebook.com/Shiniknoh#!/photo.php?v=10153317450565268'))
-        self.assertTrue(FacebookIE.suitable('https://www.facebook.com/cindyweather?fref=ts#!/photo.php?v=10152183998945793'))
-    
-        # test that successful registration redirects to the login page
-    response = client.post(
-        '/auth/register', data={'username': 'a', 'password': 'a'}
-    )
-    assert 'http://localhost/auth/login' == response.headers['Location']
-    
-    from .globals import _request_ctx_stack, _app_ctx_stack
-from .signals import template_rendered, before_render_template
-    
-            assert meth is not None, 'Unimplemented method %r' % request.method
-        return meth(*args, **kwargs)
-
-    
-    
-@classmethod
-def get_args(cls, dist, header=None):
+            Validates that the username is not already taken. Hashes the
+    password for security.
     '''
-    Yield write_script() argument tuples for a distribution's
-    console_scripts and gui_scripts entry points.
-    '''
-    if header is None:
-        header = cls.get_header()
-    spec = str(dist.as_requirement())
-    for type_ in 'console', 'gui':
-        group = type_ + '_scripts'
-        for name, ep in dist.get_entry_map(group).items():
-            # ensure_safe_name
-            if re.search(r'[\\/]', name):
-                raise ValueError('Path separators not allowed in script names')
-            script_text = TEMPLATE.format(
-                          ep.module_name, ep.attrs[0], '.'.join(ep.attrs),
-                          spec, group, name)
-            args = cls._get_script_args(type_, name, header, script_text)
-            for res in args:
-                yield res
-    
-        proc.sendline(u'fuck')
-    assert proc.expect([TIMEOUT, u'echo test'])
-    assert proc.expect([TIMEOUT, u'enter'])
-    assert proc.expect_exact([TIMEOUT, u'ctrl+c'])
-    proc.send('\n')
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        db = get_db()
+        error = None
     
     
-@pytest.mark.functional
-def test_refuse_with_confirmation(proc, TIMEOUT):
-    refuse_with_confirmation(proc, TIMEOUT)
+def get_post(id, check_author=True):
+    '''Get a post and its author by id.
     
     
-@pytest.mark.parametrize('app, help_text, operations', [
-    ('apt', apt_help, apt_operations),
-    ('apt-get', apt_get_help, apt_get_operations)
-])
-def test_get_operations(set_help, app, help_text, operations):
-    set_help(help_text)
-    assert _get_operations(app) == operations
+@pytest.fixture
+def runner(app):
+    '''A test runner for the app's Click commands.'''
+    return app.test_cli_runner()
     
-    match_output = '''
-Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
-Hit:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease
-Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
-Hit:4 http://security.ubuntu.com/ubuntu zesty-security InRelease
-Hit:5 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
-Hit:6 https://download.docker.com/linux/ubuntu zesty InRelease
-Hit:7 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
-Fetched 89.2 kB in 0s (122 kB/s)
-Reading package lists... Done
-Building dependency tree
-Reading state information... Done
-8 packages can be upgraded. Run 'apt list --upgradable' to see them.
+        for idx, (loader, srcobj, triple) in enumerate(attempts):
+        if isinstance(srcobj, Flask):
+            src_info = 'application '%s'' % srcobj.import_name
+        elif isinstance(srcobj, Blueprint):
+            src_info = 'blueprint '%s' (%s)' % (srcobj.name,
+                                                srcobj.import_name)
+        else:
+            src_info = repr(srcobj)
+    
+    
+def _lookup_app_object(name):
+    top = _app_ctx_stack.top
+    if top is None:
+        raise RuntimeError(_app_ctx_err_msg)
+    return getattr(top, name)
+    
+        :copyright: © 2010 by the Pallets team.
+    :license: BSD, see LICENSE for more details.
 '''
     
+        try:
+        with app.test_request_context():
+            called.append(flask.current_app.name)
+    except ZeroDivisionError:
+        pass
     
-def test_get_new_command():
-    new_command = get_new_command(Command('apt list --upgradable', match_output))
-    assert new_command == 'apt upgrade'
+        def load(self):
+        try:
+            data = self._cache.get(self.cache_key)
+        except Exception:
+            # Some backends (e.g. memcache) raise an exception on invalid
+            # cache keys. If this happens, reset the session. See #17810.
+            data = None
     
-        assert get_new_command(Command('brew install aa',
-                                   brew_no_available_formula))\
-        != 'brew install aha'
-
+        publicKey = (n, e)
+    privateKey = (n, d)
+    return (publicKey, privateKey)
     
-    # encoding=utf8  
-import sys  
-try:
-    reload(sys)
-except NameError:
-    pass
-try:
-    sys.setdefaultencoding('utf8')
-except AttributeError:
-    pass
+            while self.values[new_key] is not None and self.values[new_key] != key:
+            new_key = self.__hash_double_function(key, data, i) if \
+                self.balanced_factor() >= self.lim_charge else None
+            if new_key is None: break 
+            else: i += 1
+    
+    '''
+The number of partitions of a number n into at least k parts equals the number of partitions into exactly k parts
+plus the number of partitions into at least k-1 parts. Subtracting 1 from each part of a partition of n into k parts
+gives a partition of n-k into k parts. These two facts together are used for this algorithm.
+'''
+def partition(m):
+	memo = [[0 for _ in xrange(m)] for _ in xrange(m+1)]
+	for i in xrange(m+1):
+		memo[i][0] = 1
+    
+    The problem is  :
+Given an array, to find the longest and continuous sub array and get the max sum of the sub array in the given array.
+'''
+from __future__ import print_function
+    
+    def reformatHex(i):
+	'''[summary]
+	Converts the given integer into 8-digit hex number.
+    
+            '''
+        this section is to check that the inputs conform to our dimensionality constraints
+        '''
+        if X.ndim != 1:
+            print('Error: Input data set must be one dimensional')
+            return
+        if len(X) != len(y):
+            print('Error: X and y have different lengths')
+            return
+        if y.ndim != 1:
+            print('Error: Data set labels must be one dimensional')
+            return
+    
+                # if we made it this far, assume we should just rename
+            for release in releases:
+                update_version(release, orm)
+    
+            # Adding unique constraint on 'ReprocessingReport', fields ['project', 'event_id']
+        db.create_unique('sentry_reprocessingreport', ['project_id', 'event_id'])
+    
+        def backwards(self, orm):
+        # Removing unique constraint on 'CommitAuthor', fields ['organization_id', 'external_id']
+        db.delete_unique('sentry_commitauthor', ['organization_id', 'external_id'])
+    
+    
+def evaluate_boxes(
+    json_dataset,
+    all_boxes,
+    output_dir,
+    use_salt=True,
+    cleanup=True,
+    use_matlab=False
+):
+    salt = '_{}'.format(str(uuid.uuid4())) if use_salt else ''
+    filenames = _write_voc_results_files(json_dataset, all_boxes, salt)
+    _do_python_eval(json_dataset, salt, output_dir)
+    if use_matlab:
+        _do_matlab_eval(json_dataset, salt, output_dir)
+    if cleanup:
+        for filename in filenames:
+            shutil.copy(filename, output_dir)
+            os.remove(filename)
+    return None
+    
+    
+def generate_anchors(
+    stride=16, sizes=(32, 64, 128, 256, 512), aspect_ratios=(0.5, 1, 2)
+):
+    '''Generates a matrix of anchor boxes in (x1, y1, x2, y2) format. Anchors
+    are centered on stride / 2, have (approximate) sqrt areas of the specified
+    sizes, and aspect ratios as given.
+    '''
+    return _generate_anchors(
+        stride,
+        np.array(sizes, dtype=np.float) / stride,
+        np.array(aspect_ratios, dtype=np.float)
+    )
+    
+            if not model.train:  # == inference
+            # Create a net that can be used to execute the conv body on an image
+            # (without also executing RPN or any other network heads)
+            model.conv_body_net = model.net.Clone('conv_body_net')
+    
+    '''Handle mapping from old network building function names to new names.
+    
+        logger.debug('total_anchors: {}'.format(total_anchors))
+    logger.debug('inds_inside: {}'.format(num_inside))
+    logger.debug('anchors.shape: {}'.format(anchors.shape))
