@@ -1,228 +1,177 @@
 
         
-          # Predict the labels
-  pred = model.predict(session, instances)
+            dirname = 'cifar-100-python'
+    origin = 'https://www.cs.toronto.edu/~kriz/cifar-100-python.tar.gz'
+    path = get_file(dirname, origin=origin, untar=True)
     
-        Args:
-      hps: The dictionary of hyper parameters.
-      kind: the type of model to build (see above).
-      datasets: a dictionary of named data_dictionaries, see top of lfads.py
-    '''
-    print('Building graph...')
-    all_kinds = ['train', 'posterior_sample_and_average', 'posterior_push_mean',
-                 'prior_sample']
-    assert kind in all_kinds, 'Wrong kind'
-    if hps.feedback_factors_or_rates == 'rates':
-      assert len(hps.dataset_names) == 1, \
-      'Multiple datasets not supported for rate feedback.'
-    num_steps = hps.num_steps
-    ic_dim = hps.ic_dim
-    co_dim = hps.co_dim
-    ext_input_dim = hps.ext_input_dim
-    cell_class = GRU
-    gen_cell_class = GenGRU
     
-        softmax = self.sess.run(self.tensors['softmax_out'], feed_dict={
-        self.tensors['inputs_in']: input_ids,
-        self.tensors['char_inputs_in']: input_char_ids
-    })
+def test_sparse_categorical_crossentropy_4d():
+    y_pred = K.variable(np.array([[[[0.7, 0.1, 0.2],
+                                    [0.0, 0.3, 0.7],
+                                    [0.1, 0.1, 0.8]],
+                                   [[0.3, 0.7, 0.0],
+                                    [0.3, 0.4, 0.3],
+                                    [0.2, 0.5, 0.3]],
+                                   [[0.8, 0.1, 0.1],
+                                    [1.0, 0.0, 0.0],
+                                    [0.4, 0.3, 0.3]]]]))
+    y_true = K.variable(np.array([[[0, 1, 0],
+                                   [2, 1, 0],
+                                   [2, 2, 1]]]))
+    expected_loss = - (np.log(0.7) + np.log(0.3) + np.log(0.1) +
+                       np.log(K.epsilon()) + np.log(0.4) + np.log(0.2) +
+                       np.log(0.1) + np.log(K.epsilon()) + np.log(0.3)) / 9
+    loss = K.eval(losses.sparse_categorical_crossentropy(y_true, y_pred))
+    assert np.isclose(expected_loss, np.mean(loss))
     
-        yield (x, y, w)
+    model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=epochs,
+          validation_data=(x_test, y_test),
+          shuffle=True)
+    
+    model.compile(loss='binary_crossentropy',
+              optimizer='adam',
+              metrics=['accuracy'])
+model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=epochs,
+          validation_data=(x_test, y_test))
 
     
+    x_train = x_train.astype('float32')
+x_test = x_test.astype('float32')
+x_train /= 255
+x_test /= 255
+print('x_train shape:', x_train.shape)
+print(x_train.shape[0], 'train samples')
+print(x_test.shape[0], 'test samples')
     
-def _file_to_word_ids(filename, word_to_id):
-  data = _read_words(filename)
-  return [word_to_id[word] for word in data if word in word_to_id]
+            print('benchmarking scikit-learn: ')
+        scikit_results.append(bench(ScikitLasso, X, Y, X_test, Y_test, coef_))
+        print('benchmarking glmnet: ')
+        glmnet_results.append(bench(GlmnetLasso, X, Y, X_test, Y_test, coef_))
     
-        module.exit_json(changed=False, addresses=get_eips_details(module))
+    plt.figure('scikit-learn Ward's method benchmark results')
+plt.imshow(np.log(ratio), aspect='auto', origin='lower')
+plt.colorbar()
+plt.contour(ratio, levels=[1, ], colors='k')
+plt.yticks(range(len(n_features)), n_features.astype(np.int))
+plt.ylabel('N features')
+plt.xticks(range(len(n_samples)), n_samples.astype(np.int))
+plt.xlabel('N samples')
+plt.title('Scikit's time, in units of scipy time (log)')
+plt.show()
+
     
-        function_name = module.params.get('function_name')
-    if function_name:
-        lambda_facts[function_name] = {}
-        lambda_facts[function_name].update(config_details(client, module)[function_name])
-        lambda_facts[function_name].update(alias_details(client, module)[function_name])
-        lambda_facts[function_name].update(policy_details(client, module)[function_name])
-        lambda_facts[function_name].update(version_details(client, module)[function_name])
-        lambda_facts[function_name].update(mapping_details(client, module)[function_name])
-    else:
-        lambda_facts.update(config_details(client, module))
+    from time import time
     
-    from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.gcp import check_min_pkg_version, get_google_cloud_credentials
-from ansible.module_utils.six import string_types
+      * scikit-learn
     
-    - heroku_collaborator:
-    api_key: YOUR_API_KEY
-    user: '{{ item.user }}'
-    apps: '{{ item.apps | default(apps) }}'
-    suppress_invitation: '{{ item.suppress_invitation | default(suppress_invitation) }}'
-    state: '{{ item.state | default('present') }}'
-  with_items:
-    - { user: 'a.b@example.com' }
-    - { state: 'absent', user: 'b.c@example.com', suppress_invitation: false }
-    - { user: 'x.y@example.com', apps: ['heroku-example-app'] }
-'''
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
     
-            firewall_policy = oneandone_conn.remove_firewall_rule(
-            firewall_id=firewall_id,
-            rule_id=rule_id
+    from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import Perceptron
+from sklearn.pipeline import Pipeline
+from sklearn.datasets import load_files
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
+    
+    '''
+# Author: Olivier Grisel <olivier.grisel@ensta.org>
+# License: Simplified BSD
+    
+    Second, when using a connectivity matrix, single, average and complete
+linkage are unstable and tend to create a few clusters that grow very
+quickly. Indeed, average and complete linkage fight this percolation behavior
+by considering all the distances between two clusters when merging them (
+while single linkage exaggerates the behaviour by considering only the
+shortest distance between clusters). The connectivity graph breaks this
+mechanism for average and complete linkage, making them resemble the more
+brittle single linkage. This effect is more pronounced for very sparse graphs
+(try decreasing the number of neighbors in kneighbors_graph) and with
+complete linkage. In particular, having a very small number of neighbors in
+the graph, imposes a geometry that is close to that of single linkage,
+which is well known to have this percolation instability. '''
+# Authors: Gael Varoquaux, Nelle Varoquaux
+# License: BSD 3 clause
+    
+    We add observation noise to these waveforms. We generate very sparse
+noise: only 6% of the time points contain noise. As a result, the
+l1 norm of this noise (ie 'cityblock' distance) is much smaller than it's
+l2 norm ('euclidean' distance). This can be seen on the inter-class
+distance matrices: the values on the diagonal, that characterize the
+spread of the class, are much bigger for the Euclidean distance than for
+the cityblock distance.
+    
+    ax.w_xaxis.set_ticklabels([])
+ax.w_yaxis.set_ticklabels([])
+ax.w_zaxis.set_ticklabels([])
+ax.set_xlabel('Petal width')
+ax.set_ylabel('Sepal length')
+ax.set_zlabel('Petal length')
+ax.set_title('Ground Truth')
+ax.dist = 12
+    
+        if not model.train or cfg.MODEL.FASTER_RCNN:
+        # Proposals are needed during:
+        #  1) inference (== not model.train) for RPN only and Faster R-CNN
+        #  OR
+        #  2) training for Faster R-CNN
+        # Otherwise (== training for RPN only), proposals are not needed
+        model.net.Sigmoid('rpn_cls_logits', 'rpn_cls_probs')
+        model.GenerateProposals(
+            ['rpn_cls_probs', 'rpn_bbox_pred', 'im_info'],
+            ['rpn_rois', 'rpn_roi_probs'],
+            anchors=anchors,
+            spatial_scale=spatial_scale
         )
-        return firewall_policy
-    except Exception as e:
-        module.fail_json(msg=str(e))
     
-    - oneandone_moitoring_policy:
-    auth_token: oneandone_private_api_key
-    monitoring_policy: ansible monitoring policy updated
-    add_processes:
-     -
-       process: test_2
-       alert_if: NOT_RUNNING
-       email_notification: false
-    wait: true
-    state: update
+        if len(data.shape) == 1:
+        ret = np.empty((count, ), dtype=data.dtype)
+        ret.fill(fill)
+        ret[inds] = data
+    else:
+        ret = np.empty((count, ) + data.shape[1:], dtype=data.dtype)
+        ret.fill(fill)
+        ret[inds, :] = data
+    return ret
     
-    options:
-    name:
-        description:
-            - Hostname of the machine to manage.
-        required: true
-    state:
-        description:
-            - Takes the host to the desired lifecycle state.
-            - If C(absent) the host will be deleted from the cluster.
-            - If C(present) the host will be created in the cluster (includes C(enabled), C(disabled) and C(offline) states).
-            - If C(enabled) the host is fully operational.
-            - C(disabled), e.g. to perform maintenance operations.
-            - C(offline), host is totally offline.
-        choices:
-            - absent
-            - present
-            - enabled
-            - disabled
-            - offline
-        default: present
-    im_mad_name:
-        description:
-            - The name of the information manager, this values are taken from the oned.conf with the tag name IM_MAD (name)
-        default: kvm
-    vmm_mad_name:
-        description:
-            - The name of the virtual machine manager mad name, this values are taken from the oned.conf with the tag name VM_MAD (name)
-        default: kvm
-    cluster_id:
-        description:
-            - The cluster ID.
-        default: 0
-    cluster_name:
-        description:
-            - The cluster specified by name.
-    labels:
-        description:
-            - The labels for this host.
-    template:
-        description:
-            - The template or attribute changes to merge into the host template.
-        aliases:
-            - attributes
+    logger = logging.getLogger(__name__)
     
-        def role_find(self, name):
-        return self._post_json(method='role_find', name=None, item={'all': True, 'cn': name})
+                if k.find('retnet_cls_labels') >= 0:
+                tmp = []
+                # concat anchors within an image
+                for i in range(0, len(v), A):
+                    tmp.append(np.concatenate(v[i: i + A], axis=1))
+                # concat images
+                blobs[k] = np.concatenate(tmp, axis=0)
+            else:
+                # for the bbox branch elements [per FPN level],
+                #  we have the targets and the fg boxes locations
+                # in the shape: M x 4 where M is the number of fg locations in a
+                # given image at the current FPN level. For the given level,
+                # the bbox predictions will be. The elements in the list are in
+                # order [[a0, ..., a9], [a0, ..., a9]]
+                # Concatenate them to form M x 4
+                blobs[k] = np.concatenate(v, axis=0)
+    return True
     
     
-if __name__ == '__main__':
-    main()
-
-    
-            if module.params['subdue_begin'] is not None and module.params['subdue_end'] is not None:
-            subdue = {'begin': module.params['subdue_begin'],
-                      'end': module.params['subdue_end'],
-                      }
-            if 'subdue' not in check or check['subdue'] != subdue:
-                check['subdue'] = subdue
-                changed = True
-                reasons.append('`subdue\' did not exist or was different')
-        else:
-            if 'subdue' in check:
-                del check['subdue']
-                changed = True
-                reasons.append('`subdue\' was removed')
-    
-        _tabulate(results, args.metrics, args.formats)
-    
-    input data sparsity: 0.050000
-true coef sparsity: 0.000100
-test data sparsity: 0.027400
-model sparsity: 0.000024
-r^2 on test data (dense model) : 0.233651
-r^2 on test data (sparse model) : 0.233651
-Wrote profile results to sparsity_benchmark.py.lprof
-Timer unit: 1e-06 s
-    
-        # start time
-    tstart = datetime.now()
-    clf = DecisionTreeClassifier()
-    clf.fit(X, Y).predict(X)
-    delta = (datetime.now() - tstart)
-    # stop time
-    
-    
-def get_pdf_size(version):
-    api_url = ROOT_URL + '%s/_downloads' % version
-    for path_details in json_urlread(api_url):
-        if path_details['name'] == 'scikit-learn-docs.pdf':
-            return human_readable_data_quantity(path_details['size'], 1000)
-    
-    
-if __name__ == '__main__':
-    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
-    # block to be able to use a multi-core grid search that also works under
-    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
-    # The multiprocessing module is used as the backend of joblib.Parallel
-    # that is used when n_jobs != 1 in GridSearchCV
-    
-    print(__doc__)
-    
-    # Learn a frontier for outlier detection with several classifiers
-xx1, yy1 = np.meshgrid(np.linspace(-8, 28, 500), np.linspace(3, 40, 500))
-xx2, yy2 = np.meshgrid(np.linspace(3, 10, 500), np.linspace(-5, 45, 500))
-for i, (clf_name, clf) in enumerate(classifiers.items()):
-    plt.figure(1)
-    clf.fit(X1)
-    Z1 = clf.decision_function(np.c_[xx1.ravel(), yy1.ravel()])
-    Z1 = Z1.reshape(xx1.shape)
-    legend1[clf_name] = plt.contour(
-        xx1, yy1, Z1, levels=[0], linewidths=2, colors=colors[i])
-    plt.figure(2)
-    clf.fit(X2)
-    Z2 = clf.decision_function(np.c_[xx2.ravel(), yy2.ravel()])
-    Z2 = Z2.reshape(xx2.shape)
-    legend2[clf_name] = plt.contour(
-        xx2, yy2, Z2, levels=[0], linewidths=2, colors=colors[i])
-    
-            # put all lines in the file into a Python list
-        strings = f.readlines()
-        
-        # above line leaves trailing newline characters; strip them out
-        strings = [x.strip(u'\n') for x in strings]
-        
-        # remove empty-lines and comments
-        strings = [x for x in strings if x and not x.startswith(u'#')]
-        
-        # insert empty string since all are being removed
-        strings.insert(0, u'')
-    
-            if response.status not in self.config.check_ip_accept_status:
-            return False
-    
-        global pteredor_is_running, usable
-    pteredor_is_running = probe_nat
-    prober = teredo_prober(probe_nat=probe_nat)
-    
-    
-class MissingTokenException(MismatchedTokenException):
-    '''
-    We were expecting a token but it's not found.  The current token
-    is actually what we wanted next.
-    '''
+def main(opts):
+    logger = logging.getLogger(__name__)
+    roidb = combined_roidb_for_training(
+        cfg.TRAIN.DATASETS, cfg.TRAIN.PROPOSAL_FILES)
+    logger.info('{:d} roidb entries'.format(len(roidb)))
+    roi_data_loader = RoIDataLoader(
+        roidb,
+        num_loaders=cfg.DATA_LOADER.NUM_THREADS,
+        minibatch_queue_size=cfg.DATA_LOADER.MINIBATCH_QUEUE_SIZE,
+        blobs_queue_capacity=cfg.DATA_LOADER.BLOBS_QUEUE_CAPACITY
+    )
+    blob_names = roi_data_loader.get_output_names()
