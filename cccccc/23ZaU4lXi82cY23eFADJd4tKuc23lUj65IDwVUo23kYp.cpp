@@ -1,394 +1,372 @@
 
         
-        
-    {private Q_SLOTS:
-    /* sign message */
-    void on_addressBookButton_SM_clicked();
-    void on_pasteButton_SM_clicked();
-    void on_signMessageButton_SM_clicked();
-    void on_copySignatureButton_SM_clicked();
-    void on_clearButton_SM_clicked();
-    /* verify message */
-    void on_addressBookButton_VM_clicked();
-    void on_verifyMessageButton_VM_clicked();
-    void on_clearButton_VM_clicked();
-};
-    
-    
-    {    Lock& lock;
-    Lock templock;
-};
-    
-        if (b->infinity) {
-        *r = *a;
-        return;
+          ~Fork() {
+    if (pid > 0) {
+      kill(pid, SIGKILL);
+      waitpid(pid, nullptr, 0);
     }
-    if (a->infinity) {
-        secp256k1_fe bzinv2, bzinv3;
-        r->infinity = b->infinity;
-        secp256k1_fe_sqr(&bzinv2, bzinv);
-        secp256k1_fe_mul(&bzinv3, &bzinv2, bzinv);
-        secp256k1_fe_mul(&r->x, &b->x, &bzinv2);
-        secp256k1_fe_mul(&r->y, &b->y, &bzinv3);
-        secp256k1_fe_set_int(&r->z, 1);
-        return;
-    }
-    r->infinity = 0;
+  }
     
-    static void secp256k1_hmac_sha256_initialize(secp256k1_hmac_sha256_t *hash, const unsigned char *key, size_t keylen) {
-    int n;
-    unsigned char rkey[64];
-    if (keylen <= 64) {
-        memcpy(rkey, key, keylen);
-        memset(rkey + keylen, 0, 64 - keylen);
-    } else {
-        secp256k1_sha256_t sha256;
-        secp256k1_sha256_initialize(&sha256);
-        secp256k1_sha256_write(&sha256, key, keylen);
-        secp256k1_sha256_finalize(&sha256, rkey);
-        memset(rkey + 32, 0, 32);
-    }
-    }
+    REGISTER_CPU_OPERATOR(GivenTensorFill, GivenTensorFillOp<float, CPUContext>);
+REGISTER_CPU_OPERATOR(
+    GivenTensorDoubleFill,
+    GivenTensorFillOp<double, CPUContext>);
+REGISTER_CPU_OPERATOR(GivenTensorBoolFill, GivenTensorFillOp<bool, CPUContext>);
+REGISTER_CPU_OPERATOR(GivenTensorIntFill, GivenTensorFillOp<int, CPUContext>);
+REGISTER_CPU_OPERATOR(
+    GivenTensorInt64Fill,
+    GivenTensorFillOp<int64_t, CPUContext>);
+REGISTER_CPU_OPERATOR(
+    GivenTensorStringFill,
+    GivenTensorFillOp<std::string, CPUContext>);
     
-    #endif // BITCOIN_CRYPTO_RIPEMD160_H
+    
+    {          return out;
+        })
+    .Input(0, 'X', '4-tensor in NCHW or NHWC.')
+    .Output(
+        0,
+        'Y',
+        '4-tensor. For NCHW: N x (C x kH x kW) x outH x outW.'
+        'For NHWC: N x outH x outW x (kH x kW x C');
+    
+    
+    {}  // namespace tesseract.
 
     
-    namespace {
-    }
+      //   The text of a paragraph typically starts with the start of an idea and
+  // ends with the end of an idea.  Here we define paragraph as something that
+  // may have a first line indent and a body indent which may be different.
+  // Typical words that start an idea are:
+  //   1. Words in western scripts that start with
+  //      a capital letter, for example 'The'
+  //   2. Bulleted or numbered list items, for
+  //      example '2.'
+  // Typical words which end an idea are words ending in punctuation marks. In
+  // this vocabulary, each list item is represented as a paragraph.
+  bool lword_indicates_list_item;
+  bool lword_likely_starts_idea;
+  bool lword_likely_ends_idea;
     
-    namespace {
-    }
+      // Constructors for the various ParamTypes.
+  ParamContent() = default;
+  explicit ParamContent(tesseract::StringParam* it);
+  explicit ParamContent(tesseract::IntParam* it);
+  explicit ParamContent(tesseract::BoolParam* it);
+  explicit ParamContent(tesseract::DoubleParam* it);
     
-        void operator() (const typename VecTraits<s32>::vec64 & v_src0,
-                     const typename VecTraits<s32>::vec64 & v_src1,
-                     typename VecTraits<s32>::vec64 & v_dst) const
-    {
-        float32x2_t vs1 = vcvt_f32_s32(v_src0);
-        float32x2_t vs2 = vcvt_f32_s32(v_src1);
-    }
+      // Delete all Added points.
+  void Clear();
     
-    #ifndef __ANDROID__
-        for (; sj < roiw32; sj += 32, syj += 64, dj += 128)
-        {
-            internal::prefetch(srcy + syj);
-            internal::prefetch(srcu + sj);
-            internal::prefetch(srcv + sj);
-    }
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
-CVT_FUNC(u16, f32, 8,
-,
-{
-     for (size_t i = 0; i < w; i += 8)
-     {
-         internal::prefetch(_src + i);
-         __asm__ (
-             'vld1.16 {d0-d1}, [%[src]]                              \n\t'
-             'vmovl.u16 q1, d0                                       \n\t'
-             'vmovl.u16 q2, d1                                       \n\t'
-             'vcvt.f32.u32 q3, q1                                    \n\t'
-             'vcvt.f32.u32 q4, q2                                    \n\t'
-             'vst1.32 {d6-d7}, [%[dst1]]                             \n\t'
-             'vst1.32 {d8-d9}, [%[dst2]]                             \n\t'
-             : /*no output*/
-             : [src] 'r' (_src + i),
-               [dst1] 'r' (_dst + i + 0),
-               [dst2] 'r' (_dst + i + 4)
-             : 'd0','d1','d2','d3','d4','d5','d6','d7','d8','d9'
-         );
-     }
-})
-#else
-CVT_FUNC(u16, f32, 8,
-,
-{
-     for (size_t i = 0; i < w; i += 8)
-     {
-         internal::prefetch(_src + i);
-         uint16x8_t vline_u16 = vld1q_u16(_src + i);
-    }
-    }
-    
-    inline float32x4_t vrsqrtq_f32(float32x4_t val)
-{
-    float32x4_t e = vrsqrteq_f32(val);
-    e = vmulq_f32(vrsqrtsq_f32(vmulq_f32(e, e), val), e);
-    e = vmulq_f32(vrsqrtsq_f32(vmulq_f32(e, e), val), e);
-    return e;
-}
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    
-    {
-    {    RNAME(v16); RNAME(v17); RNAME(v18); RNAME(v19); RNAME(v20); RNAME(v21);
-    RNAME(v22); RNAME(v23); RNAME(v24); RNAME(v25); RNAME(v26); RNAME(v27);
-    RNAME(v28); RNAME(v29);
-    return nullptr;
+      // Accessors.
+  int total_cost() const {
+    return total_cost_;
   }
- inline const char* regname(RegSF) {
-    return 'cr0';
- }
-#undef RNAME
-}
+  int Pathlength() const {
+    return total_steps_;
+  }
+  const DPPoint* best_prev() const {
+    return best_prev_;
+  }
+  void AddLocalCost(int new_cost) {
+    local_cost_ += new_cost;
+  }
     
-    namespace HPHP {
-///////////////////////////////////////////////////////////////////////////////
+    namespace Etc
+{
+	// ----------------------------------------------------------------------------------------------------
+	// C-style inteface to the encoder
+	//
+	void Encode(float *a_pafSourceRGBA,
+				unsigned int a_uiSourceWidth, 
+				unsigned int a_uiSourceHeight,
+				Image::Format a_format,
+				ErrorMetric a_eErrMetric,
+				float a_fEffort,
+				unsigned int a_uiJobs,
+				unsigned int a_uiMaxJobs,
+				unsigned char **a_ppaucEncodingBits,
+				unsigned int *a_puiEncodingBitsBytes,
+				unsigned int *a_puiExtendedWidth,
+				unsigned int *a_puiExtendedHeight, 
+				int *a_piEncodingTime_ms, bool a_bVerboseOutput)
+	{
+    }
     }
     
-    req::ptr<File>
-GlobStreamWrapper::open(const String& filename, const String& /*mode*/,
-                        int /*options*/,
-                        const req::ptr<StreamContext>& /*context*/) {
-  // Can't open a glob as a file, it's meant to be opened as a directory
+    	// C-style inteface to the encoder
+	void Encode(float *a_pafSourceRGBA,
+				unsigned int a_uiSourceWidth,
+				unsigned int a_uiSourceHeight,
+				Image::Format a_format,
+				ErrorMetric a_eErrMetric,
+				float a_fEffort,
+				unsigned int a_uiJobs,
+				unsigned int a_uimaxJobs,
+				unsigned char **a_ppaucEncodingBits,
+				unsigned int *a_puiEncodingBitsBytes,
+				unsigned int *a_puiExtendedWidth,
+				unsigned int *a_puiExtendedHeight,
+				int *a_piEncodingTime_ms, bool a_bVerboseOutput = false);
+    
+    
+    {		for (unsigned int uiPixel = 0; uiPixel < PIXELS; uiPixel++)
+		{
+			m_fError += CalcPixelError(m_afrgbaDecodedColors[uiPixel], m_afDecodedAlphas[uiPixel],
+										m_pafrgbaSource[uiPixel]);
+		}
+		
+	}
+    
+      typedef enum  AF_Blue_Stringset_
+  {
+    AF_BLUE_STRINGSET_ADLM = 0,
+    AF_BLUE_STRINGSET_ARAB = 5,
+    AF_BLUE_STRINGSET_ARMN = 9,
+    AF_BLUE_STRINGSET_AVST = 16,
+    AF_BLUE_STRINGSET_BAMU = 19,
+    AF_BLUE_STRINGSET_BENG = 22,
+    AF_BLUE_STRINGSET_BUHD = 27,
+    AF_BLUE_STRINGSET_CAKM = 32,
+    AF_BLUE_STRINGSET_CANS = 36,
+    AF_BLUE_STRINGSET_CARI = 43,
+    AF_BLUE_STRINGSET_CHER = 46,
+    AF_BLUE_STRINGSET_COPT = 53,
+    AF_BLUE_STRINGSET_CPRT = 58,
+    AF_BLUE_STRINGSET_CYRL = 63,
+    AF_BLUE_STRINGSET_DEVA = 69,
+    AF_BLUE_STRINGSET_DSRT = 75,
+    AF_BLUE_STRINGSET_ETHI = 80,
+    AF_BLUE_STRINGSET_GEOR = 83,
+    AF_BLUE_STRINGSET_GEOK = 90,
+    AF_BLUE_STRINGSET_GLAG = 97,
+    AF_BLUE_STRINGSET_GOTH = 102,
+    AF_BLUE_STRINGSET_GREK = 105,
+    AF_BLUE_STRINGSET_GUJR = 112,
+    AF_BLUE_STRINGSET_GURU = 118,
+    AF_BLUE_STRINGSET_HEBR = 124,
+    AF_BLUE_STRINGSET_KALI = 128,
+    AF_BLUE_STRINGSET_KHMR = 134,
+    AF_BLUE_STRINGSET_KHMS = 140,
+    AF_BLUE_STRINGSET_KNDA = 143,
+    AF_BLUE_STRINGSET_LAO = 146,
+    AF_BLUE_STRINGSET_LATN = 152,
+    AF_BLUE_STRINGSET_LATB = 159,
+    AF_BLUE_STRINGSET_LATP = 166,
+    AF_BLUE_STRINGSET_LISU = 173,
+    AF_BLUE_STRINGSET_MLYM = 176,
+    AF_BLUE_STRINGSET_MYMR = 179,
+    AF_BLUE_STRINGSET_NKOO = 184,
+    AF_BLUE_STRINGSET_NONE = 189,
+    AF_BLUE_STRINGSET_OLCK = 190,
+    AF_BLUE_STRINGSET_ORKH = 193,
+    AF_BLUE_STRINGSET_OSGE = 196,
+    AF_BLUE_STRINGSET_OSMA = 204,
+    AF_BLUE_STRINGSET_SAUR = 207,
+    AF_BLUE_STRINGSET_SHAW = 210,
+    AF_BLUE_STRINGSET_SINH = 216,
+    AF_BLUE_STRINGSET_SUND = 220,
+    AF_BLUE_STRINGSET_TAML = 224,
+    AF_BLUE_STRINGSET_TAVT = 227,
+    AF_BLUE_STRINGSET_TELU = 230,
+    AF_BLUE_STRINGSET_TFNG = 233,
+    AF_BLUE_STRINGSET_THAI = 236,
+    AF_BLUE_STRINGSET_VAII = 244,
+    af_blue_2_1 = 247,
+#ifdef AF_CONFIG_OPTION_CJK
+    AF_BLUE_STRINGSET_HANI = af_blue_2_1 + 0,
+    af_blue_2_1_1 = af_blue_2_1 + 2,
+#ifdef AF_CONFIG_OPTION_CJK_BLUE_HANI_VERT
+    af_blue_2_1_2 = af_blue_2_1_1 + 2,
+#else
+    af_blue_2_1_2 = af_blue_2_1_1 + 0,
+#endif /* AF_CONFIG_OPTION_CJK_BLUE_HANI_VERT */
+    af_blue_2_2 = af_blue_2_1_2 + 1,
+#else
+    af_blue_2_2 = af_blue_2_1 + 0,
+#endif /* AF_CONFIG_OPTION_CJK                */
     }
     
-    #include 'hphp/runtime/base/perf-warning.h'
+        FT_UInt          width_count;                 /* number of used widths */
+    AF_WidthRec      widths[AF_LATIN_MAX_WIDTHS]; /* widths array          */
+    FT_Pos           edge_distance_threshold;   /* used for creating edges */
+    FT_Pos           standard_width;         /* the default stem thickness */
+    FT_Bool          extra_light;         /* is standard width very light? */
     
-    ScientificNumberFormatter *ScientificNumberFormatter::createMarkupInstance(
-        const Locale &locale,
-        const UnicodeString &beginMarkup,
-        const UnicodeString &endMarkup,
-        UErrorCode &status) {
-    return createInstance(
-            static_cast<DecimalFormat *>(
-                    DecimalFormat::createScientificInstance(locale, status)),
-            new MarkupStyle(beginMarkup, endMarkup),
-            status);
+    #define FASTLZ_VERSION_MAJOR     0
+#define FASTLZ_VERSION_MINOR     0
+#define FASTLZ_VERSION_REVISION  0
+    
+    #endif /* OPUS_HAVE_RTCD */
+    
+       - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+    
+    
+    {  if (s.ok() && meta->file_size > 0) {
+    // Keep it
+  } else {
+    env->DeleteFile(fname);
+  }
+  return s;
 }
     
-    int32_t ScriptSet::countMembers() const {
-    // This bit counter is good for sparse numbers of '1's, which is
-    //  very much the case that we will usually have.
-    int32_t count = 0;
-    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
-        uint32_t x = bits[i];
-        while (x > 0) {
-            count++;
-            x &= (x - 1);    // and off the least significant one bit.
+    TEST(CorruptionTest, CorruptedDescriptor) {
+  ASSERT_OK(db_->Put(WriteOptions(), 'foo', 'hello'));
+  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
+  dbi->TEST_CompactMemTable();
+  dbi->TEST_CompactRange(0, nullptr, nullptr);
+    }
+    
+    
+    {}  // namespace leveldb
+
+    
+      // Create a reader that will return log records from '*file'.
+  // '*file' must remain live while this Reader is in use.
+  //
+  // If 'reporter' is non-null, it is notified whenever some data is
+  // dropped due to a detected corruption.  '*reporter' must remain
+  // live while this Reader is in use.
+  //
+  // If 'checksum' is true, verify checksums if available.
+  //
+  // The Reader will start reading at the first record located at physical
+  // position >= initial_offset within the file.
+  Reader(SequentialFile* file, Reporter* reporter, bool checksum,
+         uint64_t initial_offset);
+    
+        RecordType type;
+    const bool end = (left == fragment_length);
+    if (begin && end) {
+      type = kFullType;
+    } else if (begin) {
+      type = kFirstType;
+    } else if (end) {
+      type = kLastType;
+    } else {
+      type = kMiddleType;
+    }
+    
+      ~Repairer() {
+    delete table_cache_;
+    if (owns_info_log_) {
+      delete options_.info_log;
+    }
+    if (owns_cache_) {
+      delete options_.block_cache;
+    }
+  }
+    
+      // Return the latest node with a key < key.
+  // Return head_ if there is no such node.
+  Node* FindLessThan(const Key& key) const;
+    
+      int64_t num_record_drop_hidden = 0;
+  int64_t num_record_drop_obsolete = 0;
+  int64_t num_record_drop_range_del = 0;
+  int64_t num_range_del_drop_obsolete = 0;
+  // Deletions obsoleted before bottom level due to file gap optimization.
+  int64_t num_optimized_del_drop_obsolete = 0;
+  uint64_t total_filter_time = 0;
+    
+    #if !defined(ROCKSDB_LITE) && !defined(OS_WIN)
+    
+      // atomic write
+  WriteBatch batch;
+  batch.Put(handles[0], Slice('key2'), Slice('value2'));
+  batch.Put(handles[1], Slice('key3'), Slice('value3'));
+  batch.Delete(handles[0], Slice('key'));
+  s = db->Write(WriteOptions(), &batch);
+  assert(s.ok());
+    
+      int ret = system('rm -rf /tmp/rocksmergetest');
+  if (ret != 0) {
+    fprintf(stderr, 'Error deleting /tmp/rocksmergetest, code: %d\n', ret);
+    return ret;
+  }
+  rocksdb::Options options;
+  options.create_if_missing = true;
+  options.merge_operator.reset(new MyMerge);
+  options.compaction_filter = &filter;
+  status = rocksdb::DB::Open(options, '/tmp/rocksmergetest', &raw_db);
+  assert(status.ok());
+  std::unique_ptr<rocksdb::DB> db(raw_db);
+    
+      // Attempt to commit transaction
+  s = txn->Commit();
+    
+    std::string kDBPath = '/tmp/rocksdb_options_file_example';
+    
+    // Delete files which are entirely in the given range
+// Could leave some keys in the range which are in files which are not
+// entirely in the range. Also leaves L0 files regardless of whether they're
+// in the range.
+// Snapshots before the delete might not see the data in the given range.
+Status DeleteFilesInRange(DB* db, ColumnFamilyHandle* column_family,
+                          const Slice* begin, const Slice* end,
+                          bool include_end = true);
+    
+    struct DumpOptions {
+  // Database that will be dumped
+  std::string db_path;
+  // File location that will contain dump output
+  std::string dump_location;
+  // Don't include db information header in the dump
+  bool anonymous = false;
+};
+    
+    // Supported only for Leveled compaction
+Status SuggestCompactRange(DB* db, ColumnFamilyHandle* column_family,
+                           const Slice* begin, const Slice* end);
+Status SuggestCompactRange(DB* db, const Slice* begin, const Slice* end);
+    
+    class Checkpoint {
+ public:
+  // Creates a Checkpoint object to be used for creating openable snapshots
+  static Status Create(DB* db, Checkpoint** checkpoint_ptr);
+    }
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    CardinalSplineTo* CardinalSplineTo::create(float duration, PointArray *points, float tension)
+{
+    CardinalSplineTo *ret = new (std::nothrow) CardinalSplineTo();
+    if (ret)
+    {
+        if (ret->initWithDuration(duration, points, tension))
+        {
+            ret->autorelease();
+        }
+        else 
+        {
+            CC_SAFE_RELEASE_NULL(ret);
         }
     }
-    return count;
+    }
+    
+    NS_CC_BEGIN
+    
+    // implementation of Liquid
+    
+    CC_CONSTRUCTOR_ACCESS:
+    JumpTo() {}
+    virtual ~JumpTo() {}
+    
+        ccArrayRemoveObjectAtIndex(element->actions, index, true);
+    
+    #ifndef __ACTION_CCACTION_MANAGER_H__
+#define __ACTION_CCACTION_MANAGER_H__
+    
+    
+    {    CC_SAFE_RELEASE(_spriteFrame);
 }
-    
-    UBool
-SimpleDateFormat::isAfterNonNumericField(const UnicodeString &pattern, int32_t patternOffset) {
-    if (patternOffset <= 0) {
-        // not after any field
-        return FALSE;
-    }
-    UChar ch = pattern.charAt(--patternOffset);
-    UDateFormatField f = DateFormatSymbols::getPatternCharIndex(ch);
-    if (f == UDAT_FIELD_COUNT) {
-        // not after any field
-        return FALSE;
-    }
-    int32_t i = patternOffset;
-    while (pattern.charAt(--i) == ch) {}
-    return !DateFormatSymbols::isNumericField(f, patternOffset - i);
-}
-    
-    CollationKey::~CollationKey()
-{
-    if(fFlagAndLength < 0) { uprv_free(fUnion.fFields.fBytes); }
-}
-    
-        /**
-     * UnicodeFunctor API.  Cast 'this' to a UnicodeMatcher* pointer
-     * and return the pointer.
-     * @return the UnicodeMatcher point.
-     */
-    virtual UnicodeMatcher* toMatcher() const;
-    
-    namespace xgboost {
-/*!
- * \brief interface of linear updater
- */
-class LinearUpdater {
- public:
-  /*! \brief virtual destructor */
-  virtual ~LinearUpdater() = default;
-  /*!
-   * \brief Initialize the updater with given arguments.
-   * \param args arguments to the objective function.
-   */
-  virtual void Init(
-      const std::vector<std::pair<std::string, std::string> >& args) = 0;
-    }
-    }
-    
-    SparsePageWriter::SparsePageWriter(
-    const std::vector<std::string>& name_shards,
-    const std::vector<std::string>& format_shards,
-    size_t extra_buffer_capacity)
-    : num_free_buffer_(extra_buffer_capacity + name_shards.size()),
-      clock_ptr_(0),
-      workers_(name_shards.size()),
-      qworkers_(name_shards.size()) {
-  CHECK_EQ(name_shards.size(), format_shards.size());
-  // start writer threads
-  for (size_t i = 0; i < name_shards.size(); ++i) {
-    std::string name_shard = name_shards[i];
-    std::string format_shard = format_shards[i];
-    auto* wqueue = &qworkers_[i];
-    workers_[i].reset(new std::thread(
-        [this, name_shard, format_shard, wqueue] () {
-          std::unique_ptr<dmlc::Stream> fo(
-              dmlc::Stream::Create(name_shard.c_str(), 'w'));
-          std::unique_ptr<SparsePageFormat> fmt(
-              SparsePageFormat::Create(format_shard));
-          fo->Write(format_shard);
-          std::shared_ptr<SparsePage> page;
-          while (wqueue->Pop(&page)) {
-            if (page == nullptr) break;
-            fmt->Write(*page, fo.get());
-            qrecycle_.Push(std::move(page));
-          }
-          fo.reset(nullptr);
-          LOG(CONSOLE) << 'SparsePage::Writer Finished writing to ' << name_shard;
-        }));
-  }
-}
-    
-    namespace xgboost {
-namespace gbm {
-/*! \brief model parameters */
-struct GBTreeModelParam : public dmlc::Parameter<GBTreeModelParam> {
-  /*! \brief number of trees */
-  int num_trees;
-  /*! \brief number of roots */
-  int num_roots;
-  /*! \brief number of features to be used by trees */
-  int num_feature;
-  /*! \brief pad this space, for backward compatibility reason.*/
-  int pad_32bit;
-  /*! \brief deprecated padding space. */
-  int64_t num_pbuffer_deprecated;
-  /*!
-   * \brief how many output group a single instance can produce
-   *  this affects the behavior of number of output we have:
-   *    suppose we have n instance and k group, output will be k * n
-   */
-  int num_output_group;
-  /*! \brief size of leaf vector needed in tree */
-  int size_leaf_vector;
-  /*! \brief reserved parameters */
-  int reserved[32];
-  /*! \brief constructor */
-  GBTreeModelParam() {
-    std::memset(this, 0, sizeof(GBTreeModelParam));
-    static_assert(sizeof(GBTreeModelParam) == (4 + 2 + 2 + 32) * sizeof(int),
-                  '64/32 bit compatibility issue');
-  }
-  // declare parameters, only declare those that need to be set.
-  DMLC_DECLARE_PARAMETER(GBTreeModelParam) {
-    DMLC_DECLARE_FIELD(num_output_group)
-        .set_lower_bound(1)
-        .set_default(1)
-        .describe(
-            'Number of output groups to be predicted,'
-            ' used for multi-class classification.');
-    DMLC_DECLARE_FIELD(num_roots).set_lower_bound(1).set_default(1).describe(
-        'Tree updater sequence.');
-    DMLC_DECLARE_FIELD(num_feature)
-        .set_lower_bound(0)
-        .describe('Number of features used for training and prediction.');
-    DMLC_DECLARE_FIELD(size_leaf_vector)
-        .set_lower_bound(0)
-        .set_default(0)
-        .describe('Reserved option for vector tree.');
-  }
-};
-    }
-    }
-    
-    SEXP XGBoosterGetAttr_R(SEXP handle, SEXP name) {
-  SEXP out;
-  R_API_BEGIN();
-  int success;
-  const char *val;
-  CHECK_CALL(XGBoosterGetAttr(R_ExternalPtrAddr(handle),
-                              CHAR(asChar(name)),
-                              &val,
-                              &success));
-  if (success) {
-    out = PROTECT(allocVector(STRSXP, 1));
-    SET_STRING_ELT(out, 0, mkChar(val));
-  } else {
-    out = PROTECT(R_NilValue);
-  }
-  R_API_END();
-  UNPROTECT(1);
-  return out;
-}
-    
-    /*!
- * \brief Macro to register tree split evaluator.
- *
- * \code
- * // example of registering a split evaluator
- * XGBOOST_REGISTER_SPLIT_EVALUATOR(SplitEval, 'splitEval')
- * .describe('Some split evaluator')
- * .set_body([]() {
- *     return new SplitEval();
- *   });
- * \endcode
- */
-#define XGBOOST_REGISTER_SPLIT_EVALUATOR(UniqueID, Name) \
-  static DMLC_ATTRIBUTE_UNUSED ::xgboost::tree::SplitEvaluatorReg& \
-  __make_ ## SplitEvaluatorReg ## _ ## UniqueID ## __ = \
-      ::dmlc::Registry< ::xgboost::tree::SplitEvaluatorReg>::Get()->__REGISTER__(Name)  //NOLINT
-    
-        /** Return true if the action has finished. 
-     * 
-     * @return Is true if the action has finished.
-     */
-    virtual bool isDone() const;
-    
-        /* Sets the Eye value of the Camera. 
-     * 
-     * @param eye The Eye value of the Camera.
-     * @js NA
-     */
-    void setEye(const Vec3 &eye);
-    void setEye(float x, float y, float z);
-    /* Returns the Eye value of the Camera. 
-     *
-     * @return The Eye value of the Camera.
-     * @js NA
-     */
-    const Vec3& getEye() const { return _eye; }
-    /* Sets the Center value of the Camera. 
-     *
-     * @param center The Center value of the Camera.
-     * @js NA
-     */
-    void setCenter(const Vec3 &center);
-    /* Returns the Center value of the Camera. 
-     *
-     * @return The Center value of the Camera.
-     * @js NA
-     */
-    const Vec3& getCenter() const { return _center; }
-    /* Sets the Up value of the Camera. 
-     *
-     * @param up The Up value of the Camera.
-     * @js NA
-     */
-    void setUp(const Vec3 &up);
-    /* Returns the Up value of the Camera. 
-     *
-     * @return The Up value of the Camera.
-     * @js NA
-     */
-    const Vec3& getUp() const { return _up; }
-    
-        EaseRateAction *easeRateAction = new (std::nothrow) EaseRateAction();
-    if (easeRateAction && easeRateAction->initWithAction(action, rate))
-    {
-        easeRateAction->autorelease();
-        return easeRateAction;
-    }
     
     THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -398,57 +376,29 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include '2d/CCActionPageTurn3D.h'
-#include '2d/CCGrid.h'
-#include '2d/CCNodeGrid.h'
     
-    
-    {private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ProgressTo);
-};
-    
-    
-    {protected:
-    std::string       _key;
-    float            _from, _to;
-    float            _delta;
-};
-    
-    #include 'modules/drivers/canbus/can_client/esd/esd_can_client.h'
-    
-    #include 'modules/common/time/time.h'
-#include 'modules/drivers/canbus/common/byte.h'
-#include 'modules/drivers/canbus/common/canbus_consts.h'
-#include 'modules/drivers/radar/conti_radar/protocol/const_vars.h'
-    
-    
-    {  int ret = x;
-  return ret;
-}
-    
-    
-    {  int ret = x;
-  return ret;
-}
-    
-    void RadarState201::Parse(const std::uint8_t* bytes, int32_t length,
-                          ContiRadar* conti_radar) const {
-  auto state = conti_radar->mutable_radar_state();
-  state->set_max_distance(max_dist(bytes, length));
-  state->set_output_type(output_type(bytes, length));
-  state->set_rcs_threshold(rcs_threshold(bytes, length));
-  state->set_radar_power(radar_power(bytes, length));
-  state->set_send_quality(send_quality(bytes, length));
-  state->set_send_ext_info(send_ext_info(bytes, length));
-}
-    
-    void Spline1dSeg::SetParams(const std::vector<double>& params) {
-  SetSplineFunc(PolynomialXd(params));
-}
-    
-    NodeWithRange::~NodeWithRange() {}
-    
-    namespace apollo {
-namespace canbus {
+    std::vector<cocos2d::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& start, float threshold)
+{
+    int stepx = 0;
+    int stepy = 0;
+    int prevx = 0;
+    int prevy = 0;
+    int startx = start.x;
+    int starty = start.y;
+    int curx = startx;
+    int cury = starty;
+    unsigned int count = 0;
+    std::vector<int> case9s;
+    std::vector<int> case6s;
+    int i;
+    std::vector<int>::iterator it;
+    std::vector<cocos2d::Vec2> _points;
+    do{
+        int sv = getSquareValue(curx, cury, rect, threshold);
+        switch(sv){
     }
     }
+    }
+    
+        int getIndexFromPos(unsigned int x, unsigned int y) { return y*_width+x; }
+    cocos2d::Vec2 getPosFromIndex(unsigned int i) { return cocos2d::Vec2(static_cast<float>(i%_width), static_cast<float>(i/_width)); }
