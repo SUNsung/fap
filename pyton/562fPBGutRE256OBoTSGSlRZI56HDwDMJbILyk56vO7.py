@@ -1,186 +1,80 @@
 
         
-        
-class PrivateChat(Chat):
+                for i in link_list:
+            self.stream_types.append({'id': str(i[0])})
+            self.streams[i[0]] = {'url': i[1]}
     
-        def __init__(self, num_levels):
-        self.num_levels = num_levels
-        self.levels = []  # List of Levels
-    
-            (foo, p1), 2
-        (bar, p1), 2
-        (bar, p1), 1
-        (foo, p2), 3
-        (bar, p3), 10
-        (foo, p4), 1
-        '''
-        timestamp, product_id, category, quantity = line.split('\t')
-        if self.within_past_week(timestamp):
-            yield (category, product_id), quantity
-    
-    
-if __name__ == '__main__':
-    RemoveDuplicateUrls.run()
-
-    
-        def __init__(self, person_ids, lookup):
-        self.lookup = lookup
-        self.person_ids = person_ids
-        self.visited_ids = set()
-    
-        def _init_github_account(self):
-        try:
-            info = netrc.netrc().authenticators(self._NETRC_MACHINE)
-            if info is not None:
-                self._username = info[0]
-                self._password = info[2]
-                compat_print('Using GitHub credentials found in .netrc...')
-                return
-            else:
-                compat_print('No GitHub credentials found in .netrc')
-        except (IOError, netrc.NetrcParseError):
-            compat_print('Unable to parse .netrc')
-        self._username = compat_input(
-            'Type your GitHub username or email address and press [Return]: ')
-        self._password = compat_getpass(
-            'Type your GitHub password and press [Return]: ')
+    #----------------------------------------------------------------------
+#helper
+#https://stackoverflow.com/questions/2148119/how-to-convert-an-xml-string-to-a-dictionary-in-python
+def dictify(r,root=True):
+    if root:
+        return {r.tag : dictify(r, False)}
+    d=copy(r.attrib)
+    if r.text:
+        d['_text']=r.text
+    for x in r.findall('./*'):
+        if x.tag not in d:
+            d[x.tag]=[]
+        d[x.tag].append(dictify(x,False))
+    return d
     
     
-if len(sys.argv) <= 1:
-    print('Specify the version number as parameter')
-    sys.exit()
-version = sys.argv[1]
+def download_url(url, merge, output_dir, title, info_only):
+    mime, ext, size = url_info(url)
+    print_info(site_info, title, mime, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir, merge=merge)
     
-        ie_htmls = []
-    for ie in youtube_dl.list_extractors(age_limit=None):
-        ie_html = '<b>{}</b>'.format(ie.IE_NAME)
-        ie_desc = getattr(ie, 'IE_DESC', None)
-        if ie_desc is False:
-            continue
-        elif ie_desc is not None:
-            ie_html += ': {}'.format(ie.IE_DESC)
-        if not ie.working():
-            ie_html += ' (Currently broken)'
-        ie_htmls.append('<li>{}</li>'.format(ie_html))
-    
-    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        elif 'subject' in url:
+        titles = re.findall(r'data-title='([^']*)'>', html)
+        song_id = re.findall(r'<li class='song-item' id='([^']*)'', html)
+        song_ssid = re.findall(r'data-ssid='([^']*)'', html)
+        get_song_url = 'http://music.douban.com/j/songlist/get_song_url'
     
     
-def build_completion(opt_parser):
-    opts = [opt for group in opt_parser.option_groups
-            for opt in group.option_list]
-    opts_file = [opt for opt in opts if opt.metavar == 'FILE']
-    opts_dir = [opt for opt in opts if opt.metavar == 'DIR']
+def fantasy_download_by_id_channelId(id = 0, channelId = 0, output_dir = '.', merge = True, info_only = False,
+                                     **kwargs):
+    api_url = 'http://www.fantasy.tv/tv/playDetails.action?' \
+              'myChannelId=1&id={id}&channelId={channelId}&t={t}'.format(id = id,
+                                                                         channelId = channelId,
+                                                                         t = str(random.random())
+                                                                         )
+    html = get_content(api_url)
+    html = json.loads(html)
     
-    # The master toctree document.
-master_doc = 'index'
-    
-        By default, it represents the actual environment.
-    All of the attributes can be overwritten though, which
-    is used by the test suite to simulate various scenarios.
-    
-        package_name = '(builtin)'
+        type, ext, size = url_info(video_url, headers=fake_headers)
     
     
-class PluginManager(object):
+def ExtractKeywordsFromGroup_KeywordStarts_test():
+  assert_that( syntax_parse._ExtractKeywordsFromGroup(
+                 syntax_parse.SyntaxGroup( '', [
+                   'foo bar',
+                   'contained boo baa',
+                   'zoo goo',
+                 ] ) ),
+               contains_inanyorder( 'foo', 'bar', 'boo', 'baa', 'zoo', 'goo' ) )
     
+        # For pickling to work, the __module__ variable needs to be set to the frame
+    # where the named tuple is created.  Bypass this step in enviroments where
+    # sys._getframe is not defined (Jython for example).
+    if hasattr(_sys, '_getframe'):
+        result.__module__ = _sys._getframe(1).f_globals.get('__name__', '__main__')
     
-# bdist_wheel
-extras_require = {
-    # http://wheel.readthedocs.io/en/latest/#defining-conditional-dependencies
-    'python_version == '3.0' or python_version == '3.1'': ['argparse>=1.2.1'],
-    ':sys_platform == 'win32'': ['colorama>=0.2.4'],
-}
-    
-        data_train = fetch_20newsgroups_vectorized(subset='train')
-    data_test = fetch_20newsgroups_vectorized(subset='test')
-    X_train = check_array(data_train.data, dtype=np.float32,
-                          accept_sparse='csc')
-    X_test = check_array(data_test.data, dtype=np.float32, accept_sparse='csr')
-    y_train = data_train.target
-    y_test = data_test.target
-    
-            X, Y, coef_ = make_regression(
-            n_samples=(i * step) + n_test_samples, n_features=n_features,
-            noise=0.1, n_informative=n_informative, coef=True)
-    
-    import numpy as np
-import gc
-from datetime import datetime
-from sklearn.isotonic import isotonic_regression
-from sklearn.utils.bench import total_seconds
-import matplotlib.pyplot as plt
-import argparse
-    
-    ###############################################################################
-clf = SGDRegressor(penalty='l1', alpha=.2, fit_intercept=True, max_iter=2000,
-                   tol=None)
-clf.fit(X_train, y_train)
-print('model sparsity: %f' % sparsity_ratio(clf.coef_))
-    
-        xx = range(0, n * step, step)
-    plt.figure('scikit-learn tree benchmark results')
-    plt.subplot(211)
-    plt.title('Learning with varying number of samples')
-    plt.plot(xx, scikit_classifier_results, 'g-', label='classification')
-    plt.plot(xx, scikit_regressor_results, 'r-', label='regression')
-    plt.legend(loc='upper left')
-    plt.xlabel('number of samples')
-    plt.ylabel('Time (s)')
-    
-    Copyright 2014 Steven Loria
-    
-    
-URL = ('http://www.cs.cornell.edu/people/pabo/'
-       'movie-review-data/review_polarity.tar.gz')
-    
-    # Split the dataset in training and test set:
-docs_train, docs_test, y_train, y_test = train_test_split(
-    dataset.data, dataset.target, test_size=0.5)
-    
-    from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import Perceptron
-from sklearn.pipeline import Pipeline
-from sklearn.datasets import load_files
-from sklearn.model_selection import train_test_split
-from sklearn import metrics
-    
-            channel = pyflic.ButtonConnectionChannel(self._address)
-        channel.on_button_up_or_down = self._on_up_down
-    
-        @Throttle(MIN_TIME_BETWEEN_SCANS)
-    async def _async_update_info(self):
-        '''
-        Query Tado for device marked as at home.
-    
-        def download_file(service):
-        '''Start thread to download file specified in the URL.'''
-        def do_download():
-            '''Download the file.'''
+            for future in as_completed(future_to_url):
             try:
-                url = service.data[ATTR_URL]
+                url_to_content[future_to_url[future]] = future.result()
+            except:
+                pass
+        return url_to_content
+    finally:
+        executor.shutdown()
     
-    
-def setup(hass, config):
-    '''Set up the folder watcher.'''
-    conf = config[DOMAIN]
-    for watcher in conf:
-        path = watcher[CONF_FOLDER]
-        patterns = watcher[CONF_PATTERNS]
-        if not hass.config.is_allowed_path(path):
-            _LOGGER.error('folder %s is not valid or allowed', path)
-            return False
-        Watcher(path, patterns, hass)
-    
-    _LOGGER = logging.getLogger(__name__)
-DOMAIN = 'hive'
-DATA_HIVE = 'data_hive'
-DEVICETYPES = {
-    'binary_sensor': 'device_list_binary_sensor',
-    'climate': 'device_list_climate',
-    'light': 'device_list_light',
-    'switch': 'device_list_plug',
-    'sensor': 'device_list_sensor',
-    }
-    
-    import voluptuous as vol
+    PRIMES = [
+    112272535095293,
+    112582705942171,
+    112272535095293,
+    115280095190773,
+    115797848077099,
+    117450548693743,
+    993960000099397]
