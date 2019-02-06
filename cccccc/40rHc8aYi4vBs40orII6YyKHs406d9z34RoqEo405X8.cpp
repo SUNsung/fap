@@ -1,175 +1,145 @@
 
         
-        AuthPropertyIterator& AuthPropertyIterator::operator++() {
-  grpc_auth_property_iterator iter = {ctx_, index_, name_};
-  property_ = grpc_auth_property_iterator_next(&iter);
-  ctx_ = iter.ctx;
-  index_ = iter.index;
-  name_ = iter.name;
-  return *this;
+        using namespace swift::sys;
+using llvm::StringRef;
+    
+    /// Translate the given operator character into its mangled form.
+///
+/// Current operator characters:   @/=-+*%<>!&|^~ and the special operator '..'
+char Mangle::translateOperatorChar(char op) {
+  switch (op) {
+    case '&': return 'a'; // 'and'
+    case '@': return 'c'; // 'commercial at sign'
+    case '/': return 'd'; // 'divide'
+    case '=': return 'e'; // 'equal'
+    case '>': return 'g'; // 'greater'
+    case '<': return 'l'; // 'less'
+    case '*': return 'm'; // 'multiply'
+    case '!': return 'n'; // 'negate'
+    case '|': return 'o'; // 'or'
+    case '+': return 'p'; // 'plus'
+    case '?': return 'q'; // 'question'
+    case '%': return 'r'; // 'remainder'
+    case '-': return 's'; // 'subtract'
+    case '~': return 't'; // 'tilde'
+    case '^': return 'x'; // 'xor'
+    case '.': return 'z'; // 'zperiod' (the z is silent)
+    default:
+      return op;
+  }
 }
     
-    
-    {    size_t pos = kVersionIdSize;
-    while (pos < buf.size()) {
-      size_t bytes_read =
-          ParseField(absl::string_view(&buf[pos], buf.size() - pos), tc);
-      if (bytes_read == 0) {
-        break;
-      } else {
-        pos += bytes_read;
-      }
-    }
-    return pos;
+    const char *Demangle::getNodeKindString(swift::Demangle::Node::Kind k) {
+  switch (k) {
+#define NODE(ID)                                                               \
+  case Node::Kind::ID:                                                         \
+    return #ID;
+#include 'swift/Demangling/DemangleNodes.def'
   }
+  return 'Demangle::Node::Kind::???';
+}
     
+    # if !GTEST_OS_WINDOWS
+// Tests that an exit code describes an exit due to termination by a
+// given signal.
+class GTEST_API_ KilledBySignal {
+ public:
+  explicit KilledBySignal(int signum);
+  bool operator()(int exit_status) const;
+ private:
+  const int signum_;
+};
+# endif  // !GTEST_OS_WINDOWS
     
-    { private:
-  CensusContext context_;
-  // server method
-  absl::string_view method_;
-  std::string qualified_method_;
-  grpc_slice path_;
-  // Pointer to the grpc_call element
-  grpc_call* gc_;
-  // Authorization context for the call.
-  grpc_auth_context* auth_context_;
-  // Metadata element for census stats.
-  grpc_linked_mdelem census_bin_;
-  // recv callback
-  grpc_metadata_batch* recv_initial_metadata_;
-  grpc_closure* initial_on_done_recv_initial_metadata_;
-  grpc_closure on_done_recv_initial_metadata_;
-  // recv message
-  grpc_closure* initial_on_done_recv_message_;
-  grpc_closure on_done_recv_message_;
-  absl::Time start_time_;
-  absl::Duration elapsed_time_;
-  grpc_core::OrphanablePtr<grpc_core::ByteStream>* recv_message_;
-  uint64_t recv_message_count_;
-  uint64_t sent_message_count_;
-  // Buffer needed for grpc_slice to reference it when adding metatdata to
-  // response.
-  char stats_buf_[kMaxServerStatsLen];
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+          typename T6, typename T7>
+void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7>& t,
+             ::std::ostream* os) {
+  PrintTupleTo(t, os);
+}
+    
+      // Same as above, but you can choose the interception scope of this object.
+  ScopedFakeTestPartResultReporter(InterceptMode intercept_mode,
+                                   TestPartResultArray* result);
+    
+    #include 'gtest/internal/gtest-port.h'
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32, typename T33, typename T34, typename T35,
+    typename T36, typename T37, typename T38, typename T39, typename T40,
+    typename T41, typename T42, typename T43, typename T44, typename T45,
+    typename T46, typename T47, typename T48, typename T49, typename T50>
+struct Types50 {
+  typedef T1 Head;
+  typedef Types49<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
+      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
+      T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43,
+      T44, T45, T46, T47, T48, T49, T50> Tail;
 };
     
-    // server hour
-const ViewDescriptor& ServerSentBytesPerRpcHour() {
-  const static ViewDescriptor descriptor =
-      HourDescriptor()
-          .set_name('grpc.io/server/sent_bytes_per_rpc/hour')
-          .set_measure(kRpcServerSentBytesPerRpcMeasureName)
-          .set_aggregation(BytesDistributionAggregation())
-          .add_column(ServerMethodTagKey());
-  return descriptor;
-}
+     public:
+  // Gets the element in this node.
+  const E& element() const { return element_; }
+    
+    DECLARE_bool(enroll_always);
+    
+    #ifdef __linux__
+// Needed for linux specific RUSAGE_THREAD, before including anything else
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
+#endif
     
     
-    {  std::vector<const protobuf::FieldDescriptor*> extensions;
-  descriptor_pool_->FindAllExtensions(desc, &extensions);
-  for (auto it = extensions.begin(); it != extensions.end(); it++) {
-    response->add_extension_number((*it)->number());
+    {
+    {
+    {    record(names_, '.time.wall.millis', query_duration.count());
   }
-  response->set_base_type_name(type);
-  return Status::OK;
 }
-    
-    namespace grpc {
-    }
-    
-    DynamicThreadPool::~DynamicThreadPool() {
-  std::unique_lock<std::mutex> lock(mu_);
-  shutdown_ = true;
-  cv_.notify_all();
-  while (nthreads_ != 0) {
-    shutdown_cv_.wait(lock);
-  }
-  ReapThreads(&dead_threads_);
-}
-    
-    #ifdef GPR_LINUX
-    
-    std::unique_ptr<php::Unit> parse_unit(php::Program& prog,
-                                      std::unique_ptr<UnitEmitter> ue);
-    
-    #include <cstdint>
-#include <tuple>
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    #include 'hphp/util/data-block.h'
-    
-    #define CONFIG_BODY(T, METHOD) \
-T Config::Get##METHOD(const IniSetting::Map &ini, const Hdf& config, \
-                      const std::string &name /* = '' */, \
-                      const T defValue /* = 0ish */, \
-                      const bool prepend_hhvm /* = true */) { \
-  auto ini_name = IniName(name, prepend_hhvm); \
-  /* If we don't pass a name, then we just use the raw config as-is. */ \
-  /* This could happen when we are at a known leaf of a config node. */ \
-  Hdf hdf = name != '' ? config[name] : config; \
-  auto value = ini_iterate(ini, ini_name); \
-  if (value.isString()) { \
-    T ini_ret, hdf_ret; \
-    ini_on_update(value.toString(), ini_ret); \
-    /* I don't care what the ini_ret was if it isn't equal to what  */ \
-    /* is returned back from from an HDF get call, which it will be */ \
-    /* if the call just passes back ini_ret because either they are */ \
-    /* the same or the hdf option associated with this name does    */ \
-    /* not exist.... REMEMBER HDF WINS OVER INI UNTIL WE WIPE HDF   */ \
-    hdf_ret = hdf.configGet##METHOD(ini_ret); \
-    if (hdf_ret != ini_ret) { \
-      ini_ret = hdf_ret; \
-      IniSetting::SetSystem(ini_name, variant_init(ini_ret)); \
-    } \
-    return ini_ret; \
-  } \
-  /* If there is a value associated with this setting in the hdf config */ \
-  /* then return it; otherwise the defValue will be returned as it is   */ \
-  /* assigned to the return value for this call when nothing exists     */ \
-  return hdf.configGet##METHOD(defValue); \
-} \
-void Config::Bind(T& loc, const IniSetting::Map &ini, const Hdf& config, \
-                  const std::string& name /* = '' */, \
-                  const T defValue /* = 0ish */, \
-                  const bool prepend_hhvm /* = true */) { \
-  loc = Get##METHOD(ini, config, name, defValue, prepend_hhvm); \
-  IniSetting::Bind(IniSetting::CORE, IniSetting::PHP_INI_SYSTEM, \
-                   IniName(name, prepend_hhvm), &loc); \
-}
-    
-          std::string line = argv[cnt+1];
-      std::string section = 'php';
-      int pos_period = line.find_first_of('.');
-      int pos_equals = line.find_first_of('=');
-    
-      virtual void PredictInteractionContributions(DMatrix* dmat,
-                                   std::vector<bst_float>* out_contribs,
-                                   const gbm::GBTreeModel& model,
-                                   unsigned ntree_limit = 0,
-                                   bool approximate = false) = 0;
-    
-    /** @class FadeIn
- * @brief Fades In an object that implements the RGBAProtocol protocol. It modifies the opacity from 0 to 255.
- The 'reverse' of this action is FadeOut
- */
-class CC_DLL FadeIn : public FadeTo
-{
-public:
-    /** 
-     * Creates the action.
-     * @param d Duration time, in seconds.
-     * @return An autoreleased FadeIn object.
-     */
-    static FadeIn* create(float d);
-    }
-    
-    #endif // __ACTION_CCPROGRESS_TIMER_H__
+} // namespace osquery
 
     
-        /** @deprecated Use destroyInstance() instead. */
-    CC_DEPRECATED_ATTRIBUTE static void purgeSharedAnimationCache() { return AnimationCache::destroyInstance(); }
+        // output element with JSON pointer '/number'
+    std::cout << j.at('/number'_json_pointer) << '\n';
+    // output element with JSON pointer '/string'
+    std::cout << j.at('/string'_json_pointer) << '\n';
+    // output element with JSON pointer '/array'
+    std::cout << j.at('/array'_json_pointer) << '\n';
+    // output element with JSON pointer '/array/1'
+    std::cout << j.at('/array/1'_json_pointer) << '\n';
     
-    CC_CONSTRUCTOR_ACCESS:
-    AtlasNode();
-    virtual ~AtlasNode();
+            if(index == 0){
+            left = head->next;
+            return head;
+        }
+    
+    int main() {
+    }
+    
+    
+// Another Classic Non-Recursive algorithm for inorder traversal
+// Time Complexity: O(n), n is the node number in the tree
+// Space Complexity: O(h), h is the height of the tree
+class Solution {
+    }
+    
+    public:
+    vector<int> inorderTraversal(TreeNode* root) {
+    }
+    
+                TreeNode* node = q.front().first;
+            int level = q.front().second;
+            q.pop();
+    
+    #include <iostream>
+#include <vector>
+#include <stack>
+    
+    
+    {    return 0;
+}
