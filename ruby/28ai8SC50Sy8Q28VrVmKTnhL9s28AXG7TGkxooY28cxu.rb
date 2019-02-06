@@ -1,57 +1,95 @@
 
         
-            def initialize
-      @pages = {}
+              # Iterates over all of the objects for the given method (e.g. `:labels`).
+      #
+      # method - The method to send to Octokit for querying data.
+      # args - Any arguments to pass to the Octokit method.
+      def each_object(method, *args, &block)
+        return to_enum(__method__, method, *args) unless block_given?
+    
+    module Gitlab
+  module GithubImport
+    module Importer
+      class IssuesImporter
+        include ParallelScheduling
+    
+          # The base cache key to use for storing/retrieving issuable IDs.
+      CACHE_KEY = 'github-import/issuable-finder/%{project}/%{type}/%{iid}'.freeze
+    
+            expose_attribute :iid, :title, :description, :source_branch,
+                         :source_branch_sha, :target_branch, :target_branch_sha,
+                         :milestone_number, :author, :assignee, :created_at,
+                         :updated_at, :merged_at, :source_repository_id,
+                         :target_repository_id, :source_repository_owner
+    
+        it 'does not send previously configured control targets when the current agent does not support them' do
+      select_agent_type('Commander Agent')
+      select2('SF Weather', from: 'Control targets')
+      select_agent_type('Webhook Agent')
+      fill_in(:agent_name, with: 'No control targets')
+      click_on 'Save'
+      expect(page).to have_content('No control targets')
+      agent = Agent.find_by(name: 'No control targets')
+      expect(agent.control_targets).to eq([])
     end
     
-        def effective_path
-      @effective_path ||= effective_url.path
+      describe '#status' do
+    it 'works for failed jobs' do
+      job.failed_at = Time.now
+      expect(status(job)).to eq('<span class='label label-danger'>failed</span>')
+    end
+    
+        it 'creates a scenario label with the given text' do
+      expect(scenario_label(scenario, 'Other')).to eq(
+        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Other</span>'
+      )
+    end
+  end
+    
+        it 'should ignore strings which just contain a JSONPath' do
+      expect(LiquidMigrator.convert_string('$.data')).to eq('$.data')
+      expect(LiquidMigrator.convert_string('$first_title')).to eq('$first_title')
+      expect(LiquidMigrator.convert_string(' $.data', true)).to eq(' $.data')
+      expect(LiquidMigrator.convert_string('lorem $.data', true)).to eq('lorem $.data')
+    end
+    it 'should raise an exception when encountering complex JSONPaths' do
+      expect { LiquidMigrator.convert_string('$.data.test.*', true) }.
+        to raise_error('JSONPath '$.data.test.*' is too complex, please check your migration.')
+    end
+  end
+    
+        def log_file_info(s)
+      puts '    #{magenta s}'
+    end
+    
+      GEMS_AND_ROOT_DIRECTORIES.each do |gem, directory|
+    file package(gem, '.gem') => ['pkg/', '#{directory + '/' + gem}.gemspec'] do |f|
+      sh 'cd #{directory} && gem build #{gem}.gemspec'
+      mv directory + '/' + File.basename(f.name), f.name
+    end
+    
+            # Set these key values to boolean 'true' to include in policy
+        NO_ARG_DIRECTIVES.each do |d|
+          if options.key?(d) && options[d].is_a?(TrueClass)
+            directives << d.to_s.sub(/_/, '-')
+          end
+        end
+    
+          def escape_hash(hash)
+        hash = hash.dup
+        hash.each { |k,v| hash[k] = escape(v) }
+        hash
+      end
+    
+    require 'stringex'
+    
+        def sizes
+      attrs = 'width='#{@sizes[0]}'' if @sizes[0]
+      attrs += ' height='#{@sizes[1]}'' if @sizes[1]
+      attrs
     end
   end
 end
-
-    
-              node['data-language'] = 'typescript' if node['path'].try(:ends_with?, '.ts')
-          node['data-language'] = 'html' if node['path'].try(:ends_with?, '.html')
-          node['data-language'] = 'css' if node['path'].try(:ends_with?, '.css')
-          node['data-language'] = 'js' if node['path'].try(:ends_with?, '.js')
-          node['data-language'] = 'json' if node['path'].try(:ends_with?, '.json')
-          node['data-language'] = node['language'].sub(/\Ats/, 'typescript').strip if node['language']
-          node['data-language'] ||= 'typescript' if node.content.start_with?('@')
-    
-            css('button.verbose', 'button.verbose + .l-verbose-section', 'a[id=top]', 'a[href='#top']', '.sidebar', 'br').remove
-    
-      it 'defaults number to a random value' do
-    lambda { srand }.should_not raise_error
-    srand.should_not == 0
-  end
-    
-      url 'http://swupdl.adobe.com/updates/oobe/aam20/mac/AdobeLightroom-#{version.major}.0/#{version}/setup.dmg'
-  name 'Adobe Photoshop Lightroom'
-  homepage 'https://www.adobe.com/products/photoshop-lightroom.html'
-    
-    Then(/^the invalid (.+) release is ignored$/) do |filename|
-  test = 'ls -g #{TestApp.releases_path} | grep #{filename}'
-  _, _, status = vagrant_cli_command('ssh -c #{test.shellescape}')
-  expect(status).to be_success
-end
-    
-    Given(/^a linked file '(.*?)'$/) do |file|
-  # ignoring other linked files
-  TestApp.append_to_deploy_file('set :linked_files, ['#{file}']')
-end
-    
-        def servers
-      @servers ||= Servers.new
-    end
-    
-          private
-    
-    
-require 'uri'
-require 'cgi'
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'support', 'paths'))
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'support', 'selectors'))
     
     Before do
   gemfile = ENV['BUNDLE_GEMFILE'].to_s
@@ -63,21 +101,23 @@ end
     migration_name.camelize
   end
     
-        def geometry_string
-      begin
-        orientation = Paperclip.options[:use_exif_orientation] ?
-          '%[exif:orientation]' : '1'
-        Paperclip.run(
-          Paperclip.options[:is_windows] ? 'magick identify' : 'identify',
-          '-format '%wx%h,#{orientation}' :file', {
-            :file => '#{path}[0]'
-          }, {
-            :swallow_stderr => true
-          }
-        )
-      rescue Terrapin::ExitStatusError
-        ''
-      rescue Terrapin::CommandNotFoundError => e
-        raise_because_imagemagick_missing
-      end
+        # The aspect ratio of the dimensions.
+    def aspect
+      width / height
+    end
+    
+        def make
+      geometry = GeometryParser.new(geometry_string.strip).make
+      geometry || raise(Errors::NotIdentifiedByImageMagickError.new)
+    end
+    
+        def define
+      define_flush_errors
+      define_getters
+      define_setter
+      define_query
+      register_new_attachment
+      add_active_record_callbacks
+      add_paperclip_callbacks
+      add_required_validations
     end
