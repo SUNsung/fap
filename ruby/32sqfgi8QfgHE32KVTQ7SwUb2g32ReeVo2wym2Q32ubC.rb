@@ -1,96 +1,66 @@
 
         
-          it 'imports a scenario which requires a service' do
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'spec/data_fixtures/twitter_scenario.json'))
-    click_on 'Start Import'
-    check('I confirm that I want to import these Agents.')
-    expect { click_on 'Finish Import' }.to change(Scenario, :count).by(1)
-    expect(page).to have_text('Import successful!')
+        namespace :test do
+  desc 'Run the ruby tests (without sass-spec)'
+  Rake::TestTask.new('ruby') do |t|
+    t.libs << 'test'
+    test_files = FileList[scope('test/**/*_test.rb')]
+    test_files.exclude(scope('test/rails/*'))
+    test_files.exclude(scope('test/plugins/*'))
+    t.test_files = test_files
+    t.warning = true
+    t.verbose = true
   end
-end
-
     
-        describe 'with block' do
-      it 'returns a nav link with menu' do
-        stub(self).current_page?('/things') { false }
-        stub(self).current_page?('/things/stuff') { false }
-        nav = nav_link('Things', '/things') { nav_link('Stuff', '/things/stuff') }
-        expect(nav).to be_html_safe
-        a0 = Nokogiri(nav).at('li.dropdown.dropdown-hover:not(.active) > a[href='/things']')
-        expect(a0).to be_a Nokogiri::XML::Element
-        expect(a0.text.strip).to eq('Things')
-        a1 = Nokogiri(nav).at('li.dropdown.dropdown-hover:not(.active) > li:not(.active) > a[href='/things/stuff']')
-        expect(a1).to be_a Nokogiri::XML::Element
-        expect(a1.text.strip).to eq('Stuff')
+    module Sass
+  # This class converts CSS documents into Sass or SCSS templates.
+  # It works by parsing the CSS document into a {Sass::Tree} structure,
+  # and then applying various transformations to the structure
+  # to produce more concise and idiomatic Sass/SCSS.
+  #
+  # Example usage:
+  #
+  #     Sass::CSS.new('p { color: blue }').render(:sass) #=> 'p\n  color: blue'
+  #     Sass::CSS.new('p { color: blue }').render(:scss) #=> 'p {\n  color: blue; }'
+  class CSS
+    # @param template [String] The CSS stylesheet.
+    #   This stylesheet can be encoded using any encoding
+    #   that can be converted to Unicode.
+    #   If the stylesheet contains an `@charset` declaration,
+    #   that overrides the Ruby encoding
+    #   (see {file:SASS_REFERENCE.md#Encodings the encoding documentation})
+    # @option options :old [Boolean] (false)
+    #     Whether or not to output old property syntax
+    #     (`:color blue` as opposed to `color: blue`).
+    #     This is only meaningful when generating Sass code,
+    #     rather than SCSS.
+    # @option options :indent [String] ('  ')
+    #     The string to use for indenting each line. Defaults to two spaces.
+    def initialize(template, options = {})
+      if template.is_a? IO
+        template = template.read
       end
     
-        it 'should revert extract and template options for an updated WebsiteAgent' do
-      expect(agent.options).to include('extract' => new_extract,
-                                       'template' => new_template)
-      ConvertWebsiteAgentTemplateForMerge.new.down
-      agent.reload
-      expect(agent.options).to include('extract' => reverted_extract,
-                                       'template' => reverted_template)
-    end
-  end
-end
-
-    
-            def log_state_changes
-          if @order.previous_changes[:state]
-            @order.log_state_changes(
-              state_name: 'order',
-              old_state: @order.previous_changes[:state].first,
-              new_state: @order.previous_changes[:state].last
-            )
-          end
-        end
-    
-            def inventory_unit_params
-          params.require(:inventory_unit).permit(permitted_inventory_unit_attributes)
+          opts.on('-F', '--from FORMAT',
+        'The format to convert from. Can be css, scss, sass.',
+        'By default, this is inferred from the input filename.',
+        'If there is none, defaults to css.') do |name|
+        @options[:from] = name.downcase.to_sym
+        raise 'sass-convert no longer supports LessCSS.' if @options[:from] == :less
+        unless [:css, :scss, :sass].include?(@options[:from])
+          raise 'Unknown format for sass-convert --from: #{name}'
         end
       end
-    end
-  end
+    
+    # Single-line step scoper
+When /^(.*) within (.*[^:])$/ do |step, parent|
+  with_scope(parent) { When step }
 end
-
     
-            def update
-          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
-          if @return_authorization.update_attributes(return_authorization_params)
-            respond_with(@return_authorization, default_template: :show)
-          else
-            invalid_resource!(@return_authorization)
-          end
-        end
+      def migration_file_name
+    '#{migration_name}.rb'
+  end
     
-              state = @states.last
-          respond_with(@states) if stale?(state)
-        end
-    
-              if updated
-            respond_with(@stock_item, status: 200, default_template: :show)
-          else
-            invalid_resource!(@stock_item)
-          end
-        end
-    
-            def create
-          authorize! :create, Taxonomy
-          @taxonomy = Taxonomy.new(taxonomy_params)
-          if @taxonomy.save
-            respond_with(@taxonomy, status: 201, default_template: :show)
-          else
-            invalid_resource!(@taxonomy)
-          end
-        end
-    
-            def products
-          # Returns the products sorted by their position with the classification
-          # Products#index does not do the sorting.
-          taxon = Spree::Taxon.find(params[:id])
-          @products = taxon.products.ransack(params[:q]).result
-          @products = @products.page(params[:page]).per(params[:per_page] || 500)
-          render 'spree/api/v1/products/index'
-        end
+        def initialize(filepath)
+      @filepath = filepath
+    end
