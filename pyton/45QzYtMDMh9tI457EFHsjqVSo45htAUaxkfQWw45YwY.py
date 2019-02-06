@@ -1,77 +1,98 @@
 
         
-            # Gloss the lips
-    d.polygon(face_landmarks['top_lip'], fill=(150, 0, 0, 128))
-    d.polygon(face_landmarks['bottom_lip'], fill=(150, 0, 0, 128))
-    d.line(face_landmarks['top_lip'], fill=(150, 0, 0, 64), width=8)
-    d.line(face_landmarks['bottom_lip'], fill=(150, 0, 0, 64), width=8)
+            lastmod = None
+    all_sites_lastmod = True
+    urls = []
+    for site in maps:
+        try:
+            if callable(site):
+                site = site()
+            urls.extend(site.get_urls(page=page, site=req_site,
+                                      protocol=req_protocol))
+            if all_sites_lastmod:
+                site_lastmod = getattr(site, 'latest_lastmod', None)
+                if site_lastmod is not None:
+                    site_lastmod = (
+                        site_lastmod.utctimetuple() if isinstance(site_lastmod, datetime.datetime)
+                        else site_lastmod.timetuple()
+                    )
+                    lastmod = site_lastmod if lastmod is None else max(lastmod, site_lastmod)
+                else:
+                    all_sites_lastmod = False
+        except EmptyPage:
+            raise Http404('Page %s empty' % page)
+        except PageNotAnInteger:
+            raise Http404('No page '%s'' % page)
+    response = TemplateResponse(request, template_name, {'urlset': urls},
+                                content_type=content_type)
+    if all_sites_lastmod and lastmod is not None:
+        # if lastmod is defined for all sites, set header so as
+        # ConditionalGetMiddleware is able to send 304 NOT MODIFIED
+        response['Last-Modified'] = http_date(timegm(lastmod))
+    return response
+
     
-        # Load the uploaded image file
-    img = face_recognition.load_image_file(file_stream)
-    # Get face encodings for any faces in the uploaded image
-    unknown_face_encodings = face_recognition.face_encodings(img)
+    Uses the linkcheck's output file to fix links in docs.
     
-        face_names = []
-    for face_encoding in face_encodings:
-        # See if the face is a match for the known face(s)
-        match = face_recognition.compare_faces(known_faces, face_encoding, tolerance=0.50)
-    
-            if cfg.TEST.BBOX_AUG.ASPECT_RATIO_H_FLIP:
-            scores_ar_hf, boxes_ar_hf = im_detect_bbox_aspect_ratio(
-                model, im, aspect_ratio, box_proposals, hflip=True
-            )
-            add_preds_t(scores_ar_hf, boxes_ar_hf)
-    
-    
-def add_roi_pose_head_v1convX(model, blob_in, dim_in, spatial_scale):
-    '''Add a Mask R-CNN keypoint head. v1convX design: X * (conv).'''
-    hidden_dim = cfg.KRCNN.CONV_HEAD_DIM
-    kernel_size = cfg.KRCNN.CONV_HEAD_KERNEL
-    pad_size = kernel_size // 2
-    current = model.RoIFeatureTransform(
-        blob_in,
-        '_[pose]_roi_feat',
-        blob_rois='keypoint_rois',
-        method=cfg.KRCNN.ROI_XFORM_METHOD,
-        resolution=cfg.KRCNN.ROI_XFORM_RESOLUTION,
-        sampling_ratio=cfg.KRCNN.ROI_XFORM_SAMPLING_RATIO,
-        spatial_scale=spatial_scale
-    )
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-    
-        if cfg.MODEL.FASTER_RCNN:
-        if model.train:
-            # Add op that generates training labels for in-network RPN proposals
-            model.GenerateProposalLabels(['rpn_rois', 'roidb', 'im_info'])
+            infos = []
+        if not self.wasSuccessful():
+            write('FAILED')
+            failed, errored = map(len, (self.failures, self.errors))
+            if failed:
+                infos.append('failures=%d' % failed)
+            if errored:
+                infos.append('errors=%d' % errored)
         else:
-            # Alias rois to rpn_rois for inference
-            model.net.Alias('rpn_rois', 'rois')
+            write('OK')
     
-        num_keypoints = gt_keypoints.shape[2]
-    sampled_keypoints = -np.ones(
-        (len(sampled_fg_rois), gt_keypoints.shape[1], num_keypoints),
-        dtype=gt_keypoints.dtype
-    )
-    for ii in range(len(sampled_fg_rois)):
-        ind = box_to_gt_ind_map[ii]
-        if ind >= 0:
-            sampled_keypoints[ii, :, :] = gt_keypoints[gt_inds[ind], :, :]
-            assert np.sum(sampled_keypoints[ii, 2, :]) > 0
+        def run(self, args, opts):
+        if len(args) != 1 or not is_url(args[0]):
+            raise UsageError()
+        cb = lambda x: self._print_response(x, opts)
+        request = Request(args[0], callback=cb, dont_filter=True)
+        # by default, let the framework handle redirects,
+        # i.e. command handles all codes expect 3xx
+        if not opts.no_redirect:
+            request.meta['handle_httpstatus_list'] = SequenceExclude(range(300, 400))
+        else:
+            request.meta['handle_httpstatus_all'] = True
+    
+    from scrapy.utils.spider import iter_spider_classes
+from scrapy.commands import ScrapyCommand
+from scrapy.exceptions import UsageError
+from scrapy.utils.conf import arglist_to_dict
+from scrapy.utils.python import without_none_values
+    
+        default_settings = {'LOG_ENABLED': False,
+                        'SPIDER_LOADER_WARN_ONLY': True}
+    
+        def post_process(self, output):
+        for x in output:
+            if isinstance(x, (BaseItem, dict)):
+                for arg in self.args:
+                    if not arg in x:
+                        raise ContractFail(''%s' field is missing' % arg)
+
+    
+        return None
+    
+    TEST_IMAGES = [
+    'obama-240p.jpg',
+    'obama-480p.jpg',
+    'obama-720p.jpg',
+    'obama-1080p.jpg'
+]
+    
+    # You can also save a copy of the new image to disk if you want by uncommenting this line
+# pil_image.save('image_with_boxes.jpg')
+
+    
+    # Show the picture
+pil_image.show()
+
     
     
-def main(opts):
-    logger = logging.getLogger(__name__)
-    roidb = combined_roidb_for_training(
-        cfg.TRAIN.DATASETS, cfg.TRAIN.PROPOSAL_FILES)
-    logger.info('{:d} roidb entries'.format(len(roidb)))
-    roi_data_loader = RoIDataLoader(
-        roidb,
-        num_loaders=cfg.DATA_LOADER.NUM_THREADS,
-        minibatch_queue_size=cfg.DATA_LOADER.MINIBATCH_QUEUE_SIZE,
-        blobs_queue_capacity=cfg.DATA_LOADER.BLOBS_QUEUE_CAPACITY
-    )
-    blob_names = roi_data_loader.get_output_names()
+def parse_args(args=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('version', type=str, help='Pandas version (0.23.0)')
+    return parser.parse_args(args)
