@@ -1,184 +1,251 @@
 
         
-        bool DecodeMetadata(const string& path, GeneratedCodeInfo* info) {
-  string data;
-  GOOGLE_CHECK_OK(File::GetContents(path, &data, true));
-  io::ArrayInputStream input(data.data(), data.size());
-  return info->ParseFromZeroCopyStream(&input);
-}
+        
+    {}  // namespace api
     
     
-    {  string str_with_null_char('ab\0c', 4);
-  EXPECT_EXIT(
-      TextFormatDecodeData::DecodeDataForString(str_with_null_char, 'def'),
-      ::testing::KilledBySignal(SIGABRT),
-      'error: got a null char in a string for making TextFormat data, input:');
-  EXPECT_EXIT(
-      TextFormatDecodeData::DecodeDataForString('def', str_with_null_char),
-      ::testing::KilledBySignal(SIGABRT),
-      'error: got a null char in a string for making TextFormat data, input:');
-}
-#endif  // PROTOBUF_HAS_DEATH_TEST
+    {}  // namespace api
     
+    namespace api {
+    }
     
-    { private:
-  Version compiler_version_;
-  CodeGeneratorResponse* response_;
-  const std::vector<const FileDescriptor*>& parsed_files_;
-};
+      gfx::Point GetCursorScreenPoint();
+  display::Display GetPrimaryDisplay();
+  std::vector<display::Display> GetAllDisplays();
+  display::Display GetDisplayNearestPoint(const gfx::Point& point);
+  display::Display GetDisplayMatching(const gfx::Rect& match_rect);
     
-    bool GzipOutputStream::Flush() {
-  zerror_ = Deflate(Z_FULL_FLUSH);
-  // Return true if the flush succeeded or if it was a no-op.
-  return  (zerror_ == Z_OK) ||
-      (zerror_ == Z_BUF_ERROR && zcontext_.avail_in == 0 &&
-       zcontext_.avail_out != 0);
-}
-    
-    
-    {}  // namespace internal
-    
-    #if 0
-    
-    // First, define a fixture class template.  It should be parameterized
-// by a type.  Remember to derive it from testing::Test.
-template <typename T>
-class FooTest : public testing::Test {
+    class WebRequest : public mate::TrackableObject<WebRequest> {
  public:
-  ...
-  typedef std::list<T> List;
-  static T shared_;
-  T value_;
-};
-    
-    // SameSizeTuplePrefixComparator<k, k>::Eq(t1, t2) returns true if the
-// first k fields of t1 equals the first k fields of t2.
-// SameSizeTuplePrefixComparator(k1, k2) would be a compiler error if
-// k1 != k2.
-template <int kSize1, int kSize2>
-struct SameSizeTuplePrefixComparator;
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37, typename T38, typename T39, typename T40,
-    typename T41, typename T42, typename T43, typename T44, typename T45>
-struct Types45 {
-  typedef T1 Head;
-  typedef Types44<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
-      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
-      T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43,
-      T44, T45> Tail;
-};
-    
-      // If we are given the --check_for_leaks command line flag, installs the
-  // leak checker.
-  if (check_for_leaks) {
-    TestEventListeners& listeners = UnitTest::GetInstance()->listeners();
+  static mate::Handle<WebRequest> Create(v8::Isolate* isolate,
+                                         AtomBrowserContext* browser_context);
     }
     
-      // Gets the number of elements.
-  size_t Size() const { return size_; }
+      // Pass the sender and message to be replied.
+  void SetSenderAndMessage(content::RenderFrameHost* sender,
+                           IPC::Message* message);
     
-    	if (cmderOptions.registerApp == true)
-	{
-		RegisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_BACKGROUND, cmderOptions.cmderCfgRoot, cmderOptions.cmderSingle);
-		RegisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_LISTITEM, cmderOptions.cmderCfgRoot, cmderOptions.cmderSingle);
-	}
-	else if (cmderOptions.unRegisterApp == true)
-	{
-		UnregisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_BACKGROUND);
-		UnregisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_LISTITEM);
-	}
-	else if (cmderOptions.error == true)
-	{
-		return 1;
-	}
-	else
-	{
-		StartCmder(cmderOptions.cmderStart, cmderOptions.cmderSingle, cmderOptions.cmderTask, cmderOptions.cmderCfgRoot, cmderOptions.cmderUserCfg);
-	}
-    
-    /*! \brief a single data instance */
-struct DataInst {
-  /*! \brief unique id for instance */
-  unsigned index;
-  /*! \brief content of data */
-  std::vector<TBlob> data;
-  /*! \brief extra data to be fed to the network */
-  std::string extra_data;
-};  // struct DataInst
-    
-    TShape Vector2TShape(const std::vector<int> &vec_int) {
-  std::vector<mshadow::index_t> vec;
-  for (uint32_t i = 0; i < vec_int.size(); ++i)
-    vec.push_back(vec_int[i]);
-  // 0-dim represents scalar in caffe
-  if (vec_int.size() == 0)
-    vec.push_back(1);
-  return {vec.begin(), vec.end()};
+    bool SavePageHandler::Handle(const base::FilePath& full_path,
+                             const content::SavePageType& save_type) {
+  auto* download_manager = content::BrowserContext::GetDownloadManager(
+      web_contents_->GetBrowserContext());
+  download_manager->AddObserver(this);
+  // Chromium will create a 'foo_files' directory under the directory of saving
+  // page 'foo.html' for holding other resource files of 'foo.html'.
+  base::FilePath saved_main_directory_path = full_path.DirName().Append(
+      full_path.RemoveExtension().BaseName().value() +
+      FILE_PATH_LITERAL('_files'));
+  bool result =
+      web_contents_->SavePage(full_path, saved_main_directory_path, save_type);
+  download_manager->RemoveObserver(this);
+  // If initialization fails which means fail to create |DownloadItem|, we need
+  // to delete the |SavePageHandler| instance to avoid memory-leak.
+  if (!result)
+    delete this;
+  return result;
 }
     
-    namespace mxnet {
-namespace op {
-template<>
-Operator *CreateOp<cpu>(CaffeLossParam param, int dtype) {
-  Operator *op = NULL;
-  switch (dtype) {
-  case mshadow::kFloat32:
-    op = new CaffeLoss<cpu, float>(param);
-    break;
-  case mshadow::kFloat64:
-    op = new CaffeLoss<cpu, double>(param);
-    break;
-  case mshadow::kFloat16:
-    LOG(FATAL) << 'float16 layer is not supported by caffe';
-    break;
-  default:
-    LOG(FATAL) << 'Unsupported type ' << dtype;
-  }
-  return op;
+    
+    {}  // namespace atom
+    
+     private:
+  void Destroy();
+    
+    namespace atom {
+    }
+    
+    void AutoUpdater::SetFeedURL(mate::Arguments* args) {}
+    
+    namespace in_app_purchase {
+    }
+    
+    #define TEGRA_MUL(src1, sz1, src2, sz2, dst, sz, w, h, scale) \
+( \
+    CAROTENE_NS::isSupportedConfiguration() ? \
+    CAROTENE_NS::mul(CAROTENE_NS::Size2D(w, h), \
+                     src1, sz1, \
+                     src2, sz2, \
+                     dst, sz, \
+                     scale, \
+                     CAROTENE_NS::CONVERT_POLICY_SATURATE), \
+    CV_HAL_ERROR_OK \
+    : CV_HAL_ERROR_NOT_IMPLEMENTED \
+)
+    
+    void assertSupportedConfiguration(bool parametersSupported)
+{
+    if (!isSupportedConfiguration()) {
+        std::cerr << 'internal error: attempted to use an unavailable function' << std::endl;
+        std::abort();
+    }
+    }
+    
+             vline_f32 = vld1q_f32(_src + i + 4);
+    
+                tnext[0] = x0;
+            tnext[1] = x1;
+            tnext[2] = x2;
+    
+    
+    {    return 0;
+#endif
 }
-    }
-    }
     
-      for (auto& e : idx.outputs()) {
-    ++ref_count[idx.entry_id(e)];
-  }
-  for (uint32_t nid = 0; nid < idx.num_nodes(); ++nid) {
-    for (auto &e : idx[nid].inputs) {
-      ++ref_count[idx.entry_id(e)];
-    }
-  }
+                if (mask[0])
+                process(src, j, j + 8, i,
+                        minVal, minLocPtr, minLocCount, minLocCapacity,
+                        maxVal, maxLocPtr, maxLocCount, maxLocCapacity);
+            if (mask[1])
+                process(src, j + 8, j + 16, i,
+                        minVal, minLocPtr, minLocCount, minLocCapacity,
+                        maxVal, maxLocPtr, maxLocCount, maxLocCapacity);
+        }
+        for ( ; j < roiw8; j += 8)
+        {
+            uint8x8_t v_src = vld1_u8(src + j);
     
-    std::unique_ptr<BenchmarkReporter> CreateReporter(
-    std::string const& name, ConsoleReporter::OutputOptions output_opts) {
-  typedef std::unique_ptr<BenchmarkReporter> PtrType;
-  if (name == 'console') {
-    return PtrType(new ConsoleReporter(output_opts));
-  } else if (name == 'json') {
-    return PtrType(new JSONReporter);
-  } else if (name == 'csv') {
-    return PtrType(new CSVReporter);
-  } else {
-    std::cerr << 'Unexpected format: '' << name << ''\n';
-    std::exit(1);
-  }
+    
+    {
+    {        for (jd -= 3; j < size.width; ++j, js += 3, jd -= 3)
+        {
+            dst[jd] = src[js];
+            dst[jd + 1] = src[js + 1];
+            dst[jd + 2] = src[js + 2];
+        }
+    }
 }
     
-    std::string FormatString(const char* msg, va_list args);
-std::string FormatString(const char* msg, ...);
+    namespace CAROTENE_NS {
+    }
     
-    namespace benchmark {
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    namespace caffe {
+    }
+    
+    #ifdef USE_CUDNN
+/*
+ * @brief cuDNN implementation of DeConvolutionLayer.
+ *        Fallback to DeConvolutionLayer for CPU mode.
+ *
+ * cuDNN accelerates deconvolution through forward kernels for filtering and
+ * bias plus backward kernels for the gradient w.r.t. the filters, biases, and
+ * inputs. Caffe + cuDNN further speeds up the computation through forward
+ * parallelism across groups and backward parallelism across gradients.
+*/
+template <typename Dtype>
+class CuDNNDeconvolutionLayer : public DeconvolutionLayer<Dtype> {
+ public:
+  explicit CuDNNDeconvolutionLayer(const LayerParameter& param)
+    : DeconvolutionLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+                          const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+                       const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNDeconvolutionLayer();
+    }
+    
+    #endif  // CAFFE_CUDNN_LCN_LAYER_HPP_
+
+    
+    
+    {} // namespace caffe2
+
+    
+    namespace caffe2 {
+namespace {
+REGISTER_CPU_OPERATOR(
+    FindDuplicateElements,
+    FindDuplicateElementsOp<CPUContext>);
+    }
     }
     
     
-    { private:
-  LogType(std::ostream* out) : out_(out) {}
-  std::ostream* out_;
-  BENCHMARK_DISALLOW_COPY_AND_ASSIGN(LogType);
+    {  bool RunOnDevice() override;
 };
+    
+    /**
+ * Returns true if the iterator is at the start of an object at the given
+ * level. Possible uses include determining if a call to Next(RIL_WORD)
+ * moved to the start of a RIL_PARA.
+ */
+bool PageIterator::IsAtBeginningOf(PageIteratorLevel level) const {
+  if (it_->block() == nullptr) return false;  // Already at the end!
+  if (it_->word() == nullptr) return true;  // In an image block.
+  switch (level) {
+    case RIL_BLOCK:
+      return blob_index_ == 0 && it_->block() != it_->prev_block();
+    case RIL_PARA:
+      return blob_index_ == 0 &&
+          (it_->block() != it_->prev_block() ||
+           it_->row()->row->para() != it_->prev_row()->row->para());
+    case RIL_TEXTLINE:
+      return blob_index_ == 0 && it_->row() != it_->prev_row();
+    case RIL_WORD:
+      return blob_index_ == 0;
+    case RIL_SYMBOL:
+      return true;
+  }
+  return false;
+}
+    
+      // How many alt choices from each should we try to get?
+  const int kAltsPerPiece = 2;
+  // When do we start throwing away extra alt choices?
+  const int kTooManyAltChoices = 100;
+    
+    
+    {}  // namespace tesseract.
+    
+      // This and other putatively are the same, so call the (permanent) callback
+  // for each blob index where the bounding boxes match.
+  // The callback is deleted on completion.
+  void ProcessMatchedBlobs(const TWERD& other, TessCallback1<int>* cb) const;
+    
+    using ::opencensus::stats::MeasureDouble;
+using ::opencensus::stats::MeasureInt64;
+    
+    #undef HEADER_ARG
+#undef HEADER_NONE
+    
+    void Config::SetParsedIni(IniSettingMap &ini, const std::string confStr,
+                          const std::string &filename, bool constants_only,
+                          bool is_system) {
+  // if we are setting constants, we must be setting system settings
+  if (constants_only) {
+    assertx(is_system);
+  }
+  auto parsed_ini = IniSetting::FromStringAsMap(confStr, filename);
+  for (ArrayIter iter(parsed_ini.toArray()); iter; ++iter) {
+    // most likely a string, but just make sure that we are dealing
+    // with something that can be converted to a string
+    assertx(iter.first().isScalar());
+    ini.set(iter.first().toString(), iter.second());
+    if (constants_only) {
+      IniSetting::FillInConstant(iter.first().toString().toCppString(),
+                                 iter.second());
+    } else if (is_system) {
+      IniSetting::SetSystem(iter.first().toString().toCppString(),
+                            iter.second());
+    }
+  }
+}
+    
+    
+    {}
+    
+    void logAHMSubMapWarning(folly::StringPiece mapName) {
+  StackTrace st;
+  logPerfWarning(
+    'AtomicHashMap overflow',
+    [&](StructuredLogEntry& cols) {
+      cols.setStr('map_name', mapName);
+      cols.setStackTrace('stack', st);
+    }
+  );
+}
+    
+    #include 'hphp/runtime/base/type-array.h'
+#include 'hphp/runtime/vm/globals-array.h'
