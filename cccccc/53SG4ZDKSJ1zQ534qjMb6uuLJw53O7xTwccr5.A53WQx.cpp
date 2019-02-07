@@ -1,175 +1,322 @@
 
         
-        
-    {        if (specialized)
-          return ProtocolConformanceRef(specialized);
-      }
+          void wait(int n = 1) {
+    std::unique_lock<std::mutex> lock(m_);
+    while (n_ < n) {
+      cv_.wait(lock);
+    }
+    n_ -= n;
+  }
+    
+    class GetSubGradient final : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+    }
+    
+    namespace caffe2 {
+    }
     
     
-    {  /// Profile the substitution map storage, for use with LLVM's FoldingSet.
-  static void Profile(llvm::FoldingSetNodeID &id,
-                      GenericSignature *genericSig,
-                      ArrayRef<Type> replacementTypes,
-                      ArrayRef<ProtocolConformanceRef> conformances);
-};
+    {} // namespace caffe2
     
-    using namespace swift;
+    Example 2 (with KEY):
+DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
+KEY   = [0, 1, 3, 2, 1, 0, 1, 0]
+RANGES = [
+  [
+    [2, 4],
+    [0, 2],
+  ],
+  [
+    [0, 0],
+    [6, 2],
+  ]
+]
+lengths = [4, 2]
+OUTPUT[0] = [[6, 5, 4, 3], [0, 0, 0, 0]]
+OUTPUT[1] = [[1, 2], [8, 7]]
     
-    #undef VERB
-#undef DIRECTIONAL_PREPOSITION
-#undef PREPOSITION
+    OPERATOR_SCHEMA(HalfToFloat)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .TensorInferenceFunction(
+        [](const OperatorDef& def, const vector<TensorShape>& in) {
+          vector<TensorShape> out;
+          const TensorShape& X = in[0];
+          out.push_back(X);
+          out[0].set_data_type(TensorProto_DataType_FLOAT);
+    }
+    
+    	LocalFree(szArgList);
+    
+    class Env;
+class Iterator;
+class TableCache;
+class VersionEdit;
+    
+    void DBImpl::MaybeScheduleCompaction() {
+  mutex_.AssertHeld();
+  if (background_compaction_scheduled_) {
+    // Already scheduled
+  } else if (shutting_down_.Acquire_Load()) {
+    // DB is being deleted; no more background compactions
+  } else if (!bg_error_.ok()) {
+    // Already got an error; no more changes
+  } else if (imm_ == nullptr &&
+             manual_compaction_ == nullptr &&
+             !versions_->NeedsCompaction()) {
+    // No work to be done
+  } else {
+    background_compaction_scheduled_ = true;
+    env_->Schedule(&DBImpl::BGWork, this);
+  }
+}
+    
+    // Return the name of the sstable with the specified number
+// in the db named by 'dbname'.  The result will be prefixed with
+// 'dbname'.
+std::string TableFileName(const std::string& dbname, uint64_t number);
+    
+    #endif  // STORAGE_LEVELDB_DB_LOG_READER_H_
 
     
-        StringRef Line = RawText.substr(0, Pos);
-    Lines.push_back(Line);
-    if (!IsFirstLine) {
-      size_t NonWhitespacePos = RawText.find_first_not_of(' ');
-      if (NonWhitespacePos != StringRef::npos)
-        WhitespaceToTrim =
-            std::min(WhitespaceToTrim,
-                     static_cast<unsigned>(NonWhitespacePos));
-    }
-    IsFirstLine = false;
     
-    /// Determine whether the preposition in a split is 'vacuous', and
-/// should be removed.
-static bool isVacuousPreposition(StringRef beforePreposition,
-                                 StringRef preposition,
-                                 StringRef afterPreposition,
-                                 const OmissionTypeName &paramType) {
-  // Only consider 'with' or 'using' to be potentially vacuous.
-  if (!camel_case::sameWordIgnoreFirstCase(preposition, 'with') &&
-      !camel_case::sameWordIgnoreFirstCase(preposition, 'using'))
-    return false;
-    }
-    
-    static bool isValidUnicodeScalar(uint32_t S) {
-  // Also accept the range of 0xD800 - 0xD880, which is used for non-symbol
-  // ASCII characters.
-  return (S < 0xD880) || (S >= 0xE000 && S <= 0x1FFFFF);
+    {  // Check that introducing an older log file does not cause it to be re-read.
+  Close();
+  MakeLogFile(old_log+1, 2000, 'hello', 'stale write');
+  Open();
+  ASSERT_LE(1, NumTables());
+  ASSERT_EQ(1, NumLogs());
+  if (CanAppend()) {
+    ASSERT_EQ(new_log, FirstLogFile());
+  }
+  ASSERT_EQ('bar2', Get('foo'));
+  ASSERT_EQ('world', Get('hello'));
+  ASSERT_EQ('there', Get('hi'));
 }
     
     
-    {    auto newNode = factory.createNode(node->getKind());
-    newNode->addChild(newContext, factory);
-    for (unsigned i = 1, n = node->getNumChildren(); i != n; ++i)
-      newNode->addChild(node->getChild(i), factory);
-    return newNode;
-  }
-      
-  case Demangle::Node::Kind::Extension: {
-    // Strip generic arguments from the extended type.
-    if (node->getNumChildren() < 2)
-      return node;
+    {}  // namespace leveldb
     
-    auto newExtended = stripGenericArgsFromContextNode(node->getChild(1),
-                                                       factory);
-    if (newExtended == node->getChild(1)) return node;
+    #include 'stdafx.h'
+#include 'CNTKLibrary.h'
     
-    auto newNode = factory.createNode(Node::Kind::Extension);
-    newNode->addChild(node->getChild(0), factory);
-    newNode->addChild(newExtended, factory);
-    if (node->getNumChildren() == 3)
-      newNode->addChild(node->getChild(2), factory);
-    return newNode;
-  }
+    public:
+    CrossProcessMutex(const std::string& name)
+        : m_handle(NULL),
+          m_name('Global\\' + name)
+    {
+    }
     
-        caffe::TBlob2CaffeBlob<xpu, Dtype>(caffe::Data,
-                                      bot_.begin(),
-                                      in_data.begin(),
-                                      param_.num_data);
-    caffe::TBlob2CaffeBlob<xpu, Dtype>(caffe::Data,
-                                      top_.begin(),
-                                      out_data.begin(),
-                                      param_.num_out);
-    CaffeOpSetup();
-    if (ctx.is_train)
-      MXCAFFELAYER(caffeOp_, Dtype)->SetPhase(::caffe::TRAIN);
-    else
-      MXCAFFELAYER(caffeOp_, Dtype)->SetPhase(::caffe::TEST);
-    caffeOp_->Forward(bot_, top_);
     
-    /*!
- * Copyright (c) 2015 by Contributors
- */
-#ifndef MXNET_ENGINE_THREAD_POOL_H_
-#define MXNET_ENGINE_THREAD_POOL_H_
+    {
+    {            if (map.size() > RAND_MAX * (size_t) RAND_MAX)
+                RuntimeError('RandomOrdering: too large training set: need to change to different random generator!');
+            srand((unsigned int) seed);
+            size_t retries = 0;
+            foreach_index (t, map)
+            {
+                for (int tries = 0; tries < 5; tries++)
+                {
+                    // swap current pos with a random position
+                    // Random positions are limited to t+randomizationrange.
+                    // This ensures some locality suitable for paging with a sliding window.
+                    const size_t tbegin = max((size_t) t, randomizationrange / 2) - randomizationrange / 2; // range of window  --TODO: use bounds() function above
+                    const size_t tend = min(t + randomizationrange / 2, map.size());
+                    assert(tend >= tbegin);                  // (guard against potential numeric-wraparound bug)
+                    const size_t trand = rand(tbegin, tend); // random number within windows
+                    assert((size_t) t <= trand + randomizationrange / 2 && trand < (size_t) t + randomizationrange / 2);
+                    // if range condition is fulfilled then swap
+                    if (trand <= map[t] + randomizationrange / 2 && map[t] < trand + randomizationrange / 2 && (size_t) t <= map[trand] + randomizationrange / 2 && map[trand] < (size_t) t + randomizationrange / 2)
+                    {
+                        std::swap(map[t], map[trand]);
+                        break;
+                    }
+                    // but don't multi-swap stuff out of its range (for swapping positions that have been swapped before)
+                    // instead, try again with a different random number
+                    retries++;
+                }
+            }
+            fprintf(stderr, 'RandomOrdering: %lu retries for %lu elements (%.1f%%) to ensure window condition\n', (unsigned long) retries, (unsigned long) map.size(), 100.0 * retries / map.size());
+            // ensure the window condition
+            foreach_index (t, map)
+                assert((size_t) t <= map[t] + randomizationrange / 2 && map[t] < (size_t) t + randomizationrange / 2);
+#if 0 // and a live check since I don't trust myself here yet
+            foreach_index (t, map) if (!((size_t) t <= map[t] + randomizationrange/2 && map[t] < (size_t) t + randomizationrange/2))
+            {
+                fprintf (stderr, 'RandomOrdering: windowing condition violated %d -> %d\n', t, map[t]);
+                LogicError('RandomOrdering: windowing condition violated');
+            }
+#endif
+#if 0 // test whether it is indeed a unique complete sequence
+            auto map2 = map;
+            ::sort (map2.begin(), map2.end());
+            foreach_index (t, map2) assert (map2[t] == (size_t) t);
+#endif
+            fprintf(stderr, 'RandomOrdering: recached sequence for seed %d: %d, %d, ...\n', (int) seed, (int) map[0], (int) map[1]);
+            currentseed = seed;
+        }
+        return map; // caller can now access it through operator[]
+    }
     
-    #if MXNET_USE_OPENCV
-#include <opencv2/opencv.hpp>
-#include <vector>  // NOLINT(*)
-#include <utility> // NOLINT(*)
-#include <string> // NOLINT(*)
+            if (Input(1)->HasMBLayout())
+        {
+            // infer rows1 as rows0
+            Input(1)->ValidateInferInputDimsFrom(TensorShape(rows0));
+            SetDims(TensorShape(rows0), true);
+        }
+        else // multiplying two straight matrices
+        {
+            size_t cols1 = Input(1)->GetAsMatrixNumCols();
+            // infer rows1 as rows0
+            Input(1)->ValidateInferInputDimsFrom(TensorShape(rows0, cols1));
+            SetDims(TensorShape(rows0, cols1), false);
+        }
     
-    TEST_F(CarverTests, test_compression) {
-  auto s = osquery::compress(getTestConfigDirectory() / 'test.config',
-                             fs::temp_directory_path() / fs::path('test.zst'));
-  EXPECT_TRUE(s.ok());
+        // Build atlas
+    unsigned char* tex_pixels = NULL;
+    int tex_w, tex_h;
+    io.Fonts->GetTexDataAsRGBA32(&tex_pixels, &tex_w, &tex_h);
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        SDL_GL_DeleteContext(gl_context);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+    
+            // 3. Show another simple window.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
+    
+    void ImGui_ImplFreeGLUT_MouseFunc(int glut_button, int state, int x, int y)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    io.MousePos = ImVec2((float)x, (float)y);
+    int button = -1;
+    if (glut_button == GLUT_LEFT_BUTTON) button = 0;
+    if (glut_button == GLUT_RIGHT_BUTTON) button = 1;
+    if (glut_button == GLUT_MIDDLE_BUTTON) button = 2;
+    if (button != -1 && state == GLUT_DOWN)
+        io.MouseDown[button] = true;
+    if (button != -1 && state == GLUT_UP)
+        io.MouseDown[button] = false;
 }
     
-      /// A set of performance stats for each query in the schedule.
-  std::map<std::string, QueryPerformance> performance_;
+    struct CompactionIterationStats {
+  // Compaction statistics
+    }
     
+      // Will be called while on the write thread before the write executes.  If
+  // this function returns a non-OK status, the write will be aborted and this
+  // status will be returned to the caller of DB::Write().
+  virtual Status Callback(DB* db) = 0;
     
-    {  // If the splayed interval was not restored from the database.
-  auto splay = splayValue(interval, FLAGS_schedule_splay_percent);
-  content = std::to_string(interval) + ':' + std::to_string(splay);
-  setDatabaseValue(kPersistentSettings, 'interval.' + name, content);
-  return splay;
+    std::unique_ptr<WriteControllerToken> WriteController::GetDelayToken(
+    uint64_t write_rate) {
+  total_delayed_++;
+  // Reset counters.
+  last_refill_time_ = 0;
+  bytes_left_ = 0;
+  set_delayed_write_rate(write_rate);
+  return std::unique_ptr<WriteControllerToken>(new DelayWriteToken(this));
 }
     
-    Status FeatureVectorsConfigParserPlugin::update(const std::string& source,
-                                                const ParserConfig& config) {
-  auto fv = config.find(kFeatureVectorsRootKey);
-  if (fv == config.end()) {
-    return Status();
-  }
+    TEST_F(WriteControllerTest, ChangeDelayRateTest) {
+  TimeSetEnv env;
+  WriteController controller(40000000u);  // also set max delayed rate
+  controller.set_delayed_write_rate(10000000u);
+  auto delay_token_0 =
+      controller.GetDelayToken(controller.delayed_write_rate());
+  ASSERT_EQ(static_cast<uint64_t>(2000000),
+            controller.GetDelay(&env, 20000000u));
+  auto delay_token_1 = controller.GetDelayToken(2000000u);
+  ASSERT_EQ(static_cast<uint64_t>(10000000),
+            controller.GetDelay(&env, 20000000u));
+  auto delay_token_2 = controller.GetDelayToken(1000000u);
+  ASSERT_EQ(static_cast<uint64_t>(20000000),
+            controller.GetDelay(&env, 20000000u));
+  auto delay_token_3 = controller.GetDelayToken(20000000u);
+  ASSERT_EQ(static_cast<uint64_t>(1000000),
+            controller.GetDelay(&env, 20000000u));
+  // This is more than max rate. Max delayed rate will be used.
+  auto delay_token_4 =
+      controller.GetDelayToken(controller.delayed_write_rate() * 3);
+  ASSERT_EQ(static_cast<uint64_t>(500000),
+            controller.GetDelay(&env, 20000000u));
+}
+    
+    
+    {  return 0;
+}
+
+    
+      PinnableSlice pinnable_val;
+  db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key1', &pinnable_val);
+  assert(s.IsNotFound());
+  // Reset PinnableSlice after each use and before each reuse
+  pinnable_val.Reset();
+  db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key2', &pinnable_val);
+  assert(pinnable_val == 'value');
+  pinnable_val.Reset();
+  // The Slice pointed by pinnable_val is not valid after this point
+    
+      // Read a key in this transaction
+  s = txn->Get(read_options, 'abc', &value);
+  assert(s.IsNotFound());
+    
+      // Return a new block flush policy that flushes data blocks by data size.
+  // FlushBlockPolicy may need to access the metadata of the data block
+  // builder to determine when to flush the blocks.
+  //
+  // Callers must delete the result after any database that is using the
+  // result has been closed.
+  virtual FlushBlockPolicy* NewFlushBlockPolicy(
+      const BlockBasedTableOptions& table_options,
+      const BlockBuilder& data_block_builder) const = 0;
+    
+    using namespace std;
+    
+    void deleteLinkedList(ListNode* head){
     }
     
-      Status update(const std::string& source, const ParserConfig& config) override;
+            ListNode* dummyHead1 = new ListNode(-1);
+        ListNode* dummyHead2 = new ListNode(-1);
+        ListNode* prev1 = dummyHead1;
+        ListNode* prev2 = dummyHead2;
     
-        if (value.empty() || name.empty()) {
-      continue;
+    
+    {    return 0;
+}
+
+    
+    
+    {
+    {        stack<TreeNode*> stack;
+        TreeNode* cur = root;
+        while(cur != NULL || !stack.empty()){
+            if(cur != NULL){
+                res.push_back(cur->val);
+                stack.push(cur);
+                cur = cur->left;
+            }
+            else{
+                cur = stack.top();
+                stack.pop();
+                cur = cur->right;
+            }
+        }
+        return res;
     }
-    
-    BENCHMARK_PARAM(BENCHFUN(insertFront), 16)
-BENCHMARK_PARAM(BENCHFUN(insertFront), 128)
-BENCHMARK_PARAM(BENCHFUN(insertFront), 1024)
-BENCHMARK_PARAM(BENCHFUN(insertFront), 10240)
-BENCHMARK_PARAM(BENCHFUN(insertFront), 102400)
-BENCHMARK_PARAM(BENCHFUN(insertFront), 1024000)
-    
-        KeepAlive(ExecutorT* executor, bool dummy)
-        : executorAndDummyFlag_(
-              reinterpret_cast<intptr_t>(executor) | (dummy ? kDummyFlag : 0)) {
-      assert(executor);
-      assert(
-          (reinterpret_cast<intptr_t>(executor) & kExecutorMask) ==
-          reinterpret_cast<intptr_t>(executor));
-    }
-    
-      template <class T>
-  class SecureRNG {
-   public:
-    using result_type = typename std::enable_if<
-        std::is_integral<T>::value && !std::is_same<T, bool>::value,
-        T>::type;
-    }
-    
-    #include <string>
-    
-    enum class CompressionCounterKey {
-  BYTES_BEFORE_COMPRESSION = 0,
-  BYTES_AFTER_COMPRESSION = 1,
-  BYTES_BEFORE_DECOMPRESSION = 2,
-  BYTES_AFTER_DECOMPRESSION = 3,
-  COMPRESSIONS = 4,
-  DECOMPRESSIONS = 5,
-  COMPRESSION_MILLISECONDS = 6,
-  DECOMPRESSION_MILLISECONDS = 7,
 };
     
-        if (old.get()) {
-      old_ptr = get_shared_ptr(old);
-      release_external(old);
-    }
+    #include <iostream>
+#include <vector>
+    
+            stack<TreeNode*> stack, output;
