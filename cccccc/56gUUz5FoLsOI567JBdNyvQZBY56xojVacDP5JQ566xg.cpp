@@ -1,277 +1,401 @@
 
         
-        namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-    }
-    }
-    }
-    }
-    
-    void ReflectionClassGenerator::Generate(io::Printer* printer) {
-  WriteIntroduction(printer);
-    }
-    
-      for (string::size_type i = 0; i < input.size(); i++) {
-    char c = input[i];
-    switch (c) {
-      case '*':
-        // Avoid '/*'.
-        if (prev == '/') {
-          result.append('&#42;');
-        } else {
-          result.push_back(c);
-        }
-        break;
-      case '/':
-        // Avoid '*/'.
-        if (prev == '*') {
-          result.append('&#47;');
-        } else {
-          result.push_back(c);
-        }
-        break;
-      case '@':
-        // '@' starts javadoc tags including the @deprecated tag, which will
-        // cause a compile-time error if inserted before a declaration that
-        // does not have a corresponding @Deprecated annotation.
-        result.append('&#64;');
-        break;
-      case '<':
-        // Avoid interpretation as HTML.
-        result.append('&lt;');
-        break;
-      case '>':
-        // Avoid interpretation as HTML.
-        result.append('&gt;');
-        break;
-      case '&':
-        // Avoid interpretation as HTML.
-        result.append('&amp;');
-        break;
-      case '\\':
-        // Java interprets Unicode escape sequences anywhere!
-        result.append('&#92;');
-        break;
-      default:
-        result.push_back(c);
-        break;
-    }
-    }
-    
-      // write file header
-  io::CodedOutputStream output(raw_output_);
-  output.WriteLittleEndian32(0x04034b50);  // magic
-  WriteShort(&output, 10);  // version needed to extract
-  WriteShort(&output, 0);  // flags
-  WriteShort(&output, 0);  // compression method: stored
-  WriteShort(&output, 0);  // last modified time
-  WriteShort(&output, kDosEpoch);  // last modified date
-  output.WriteLittleEndian32(info.crc32);  // crc-32
-  output.WriteLittleEndian32(info.size);  // compressed size
-  output.WriteLittleEndian32(info.size);  // uncompressed size
-  WriteShort(&output, filename_size);  // file name length
-  WriteShort(&output, 0);   // extra field length
-  output.WriteString(filename);  // file name
-  output.WriteString(contents);  // file data
-    
-    IMGUI_IMPL_API bool     ImGui_ImplDX10_Init(ID3D10Device* device);
-IMGUI_IMPL_API void     ImGui_ImplDX10_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplDX10_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data);
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    #include 'imgui.h'
-#include 'imgui_impl_win32.h'
-#include 'imgui_impl_dx11.h'
-#include <d3d11.h>
-#define DIRECTINPUT_VERSION 0x0800
-#include <dinput.h>
-#include <tchar.h>
-    
-        {
-        IDXGIFactory4* dxgiFactory = NULL;
-        IDXGISwapChain1* swapChain1 = NULL;
-        if (CreateDXGIFactory1(IID_PPV_ARGS(&dxgiFactory)) != S_OK ||
-            dxgiFactory->CreateSwapChainForHwnd(g_pd3dCommandQueue, hWnd, &sd, NULL, NULL, &swapChain1) != S_OK ||
-            swapChain1->QueryInterface(IID_PPV_ARGS(&g_pSwapChain)) != S_OK)
-            return E_FAIL;
-        swapChain1->Release();
-        dxgiFactory->Release();
-        g_pSwapChain->SetMaximumFrameLatency(NUM_BACK_BUFFERS);
-        g_hSwapChainWaitableObject = g_pSwapChain->GetFrameLatencyWaitableObject();
-    }
-    
-        if (!g_pIB || g_IndexBufferSize < draw_data->TotalIdxCount)
-    {
-        if (g_pIB) { g_pIB->Release(); g_pIB = NULL; }
-        g_IndexBufferSize = draw_data->TotalIdxCount + 10000;
-        D3D10_BUFFER_DESC desc;
-        memset(&desc, 0, sizeof(D3D10_BUFFER_DESC));
-        desc.Usage = D3D10_USAGE_DYNAMIC;
-        desc.ByteWidth = g_IndexBufferSize * sizeof(ImDrawIdx);
-        desc.BindFlags = D3D10_BIND_INDEX_BUFFER;
-        desc.CPUAccessFlags = D3D10_CPU_ACCESS_WRITE;
-        if (ctx->CreateBuffer(&desc, NULL, &g_pIB) < 0)
-            return;
-    }
-    
-    
-    {    // Start the frame
-    ImGui::NewFrame();
+        void SavePageHandler::OnDownloadCreated(content::DownloadManager* manager,
+                                        download::DownloadItem* item) {
+  // OnDownloadCreated is invoked during WebContents::SavePage, so the |item|
+  // here is the one stated by WebContents::SavePage.
+  item->AddObserver(this);
 }
     
-    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
-// **Prefer using the code in imgui_impl_opengl3.cpp**
-// This code is mostly provided as a reference to learn how ImGui integration works, because it is shorter to read.
-// If your code is using GL3+ context or any semi modern OpenGL calls, using this is likely to make everything more
-// complicated, will require your code to reset every single OpenGL attributes to their initial state, and might
-// confuse your GPU driver.
-// The GL2 code is unable to reset attributes or even call e.g. 'glUseProgram(0)' because they don't exist in that API.
+      // Get the weak_map_id from SupportsUserData.
+  static int32_t GetIDFromWrappedClass(base::SupportsUserData* wrapped);
     
-        // Backup GL state
-    GLenum last_active_texture; glGetIntegerv(GL_ACTIVE_TEXTURE, (GLint*)&last_active_texture);
-    glActiveTexture(GL_TEXTURE0);
-    GLint last_program; glGetIntegerv(GL_CURRENT_PROGRAM, &last_program);
-    GLint last_texture; glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
-#ifdef GL_SAMPLER_BINDING
-    GLint last_sampler; glGetIntegerv(GL_SAMPLER_BINDING, &last_sampler);
-#endif
-    GLint last_array_buffer; glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &last_array_buffer);
-    GLint last_vertex_array; glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &last_vertex_array);
-#ifdef GL_POLYGON_MODE
-    GLint last_polygon_mode[2]; glGetIntegerv(GL_POLYGON_MODE, last_polygon_mode);
-#endif
-    GLint last_viewport[4]; glGetIntegerv(GL_VIEWPORT, last_viewport);
-    GLint last_scissor_box[4]; glGetIntegerv(GL_SCISSOR_BOX, last_scissor_box);
-    GLenum last_blend_src_rgb; glGetIntegerv(GL_BLEND_SRC_RGB, (GLint*)&last_blend_src_rgb);
-    GLenum last_blend_dst_rgb; glGetIntegerv(GL_BLEND_DST_RGB, (GLint*)&last_blend_dst_rgb);
-    GLenum last_blend_src_alpha; glGetIntegerv(GL_BLEND_SRC_ALPHA, (GLint*)&last_blend_src_alpha);
-    GLenum last_blend_dst_alpha; glGetIntegerv(GL_BLEND_DST_ALPHA, (GLint*)&last_blend_dst_alpha);
-    GLenum last_blend_equation_rgb; glGetIntegerv(GL_BLEND_EQUATION_RGB, (GLint*)&last_blend_equation_rgb);
-    GLenum last_blend_equation_alpha; glGetIntegerv(GL_BLEND_EQUATION_ALPHA, (GLint*)&last_blend_equation_alpha);
-    GLboolean last_enable_blend = glIsEnabled(GL_BLEND);
-    GLboolean last_enable_cull_face = glIsEnabled(GL_CULL_FACE);
-    GLboolean last_enable_depth_test = glIsEnabled(GL_DEPTH_TEST);
-    GLboolean last_enable_scissor_test = glIsEnabled(GL_SCISSOR_TEST);
-    bool clip_origin_lower_left = true;
-#ifdef GL_CLIP_ORIGIN
-    GLenum last_clip_origin = 0; glGetIntegerv(GL_CLIP_ORIGIN, (GLint*)&last_clip_origin); // Support for GL 4.5's glClipControl(GL_UPPER_LEFT)
-    if (last_clip_origin == GL_UPPER_LEFT)
-        clip_origin_lower_left = false;
-#endif
+      // content::JavaScriptDialogManager implementations.
+  void RunJavaScriptDialog(content::WebContents* web_contents,
+                           content::RenderFrameHost* rfh,
+                           content::JavaScriptDialogType dialog_type,
+                           const base::string16& message_text,
+                           const base::string16& default_prompt_text,
+                           DialogClosedCallback callback,
+                           bool* did_suppress_message) override;
+  void RunBeforeUnloadDialog(content::WebContents* web_contents,
+                             content::RenderFrameHost* rfh,
+                             bool is_reload,
+                             DialogClosedCallback callback) override;
+  void CancelDialogs(content::WebContents* web_contents,
+                     bool reset_state) override;
     
-    // About OpenGL function loaders:
-// About OpenGL function loaders: modern OpenGL doesn't have a standard header file and requires individual function pointers to be loaded manually.
-// Helper libraries are often used for this purpose! Here we are supporting a few common ones: gl3w, glew, glad.
-// You may use another loader/header of your choice (glext, glLoadGen, etc.), or chose to manually implement your own.
+    #include 'content/public/browser/quota_permission_context.h'
+#include 'content/public/common/storage_quota_params.h'
     
-    class MockProtocolData : public ProtocolData<::apollo::canbus::ChassisDetail> {
+    void AutoUpdater::SetDelegate(Delegate* delegate) {
+  delegate_ = delegate;
+}
+    
+    // --------------------------- Structures ---------------------------
+    
+    class AboutProtocolHandler : public net::URLRequestJobFactory::ProtocolHandler {
  public:
-  static const int32_t ID = 0x111;
-  MockProtocolData() {}
+  AboutProtocolHandler();
+  ~AboutProtocolHandler() override;
+    }
+    
+    void DumpAxTree(std::string* dump_output, content::RenderFrameHost* frame) {
+  content::RenderFrameHostImpl* f = static_cast<content::RenderFrameHostImpl*>(frame);
+  content::BrowserAccessibilityManager* manager = f->GetOrCreateBrowserAccessibilityManager();
+  ui::AXTreeUpdate ax_tree = manager->SnapshotAXTreeForTesting();
+  std::string ax_tree_dump = DumpPdfAccessibilityTree(ax_tree);
+  *dump_output += ax_tree_dump;
+}
+    
+    using base::MessageLoop;
+using base::CommandLine;
+using content::BrowserThread;
+using content::Shell;
+using content::ShellBrowserContext;
+using content::RenderProcessHost;
+    
+      static void ClearCache(content::RenderProcessHost* render_view_host);
+  static void SetProxyConfig(content::RenderProcessHost* render_process_host,
+                             const std::string& proxy_config);
+    
+    
+void Base::Call(const std::string& method, const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  NOTREACHED() << 'Uncatched call in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
+}
+    
+    // Tell browser to delete a object.
+// function DeallocateObject(id);
+v8::Handle<v8::Value> DeallocateObject(int routing_id,
+                                       int object_id);
+    
+      static int getUID() {
+    static int id = 0;
+    return ++id;
+  }
+    
+       bool GetAcceleratorForCommandId(
+      int command_id,
+      ui::Accelerator* accelerator) const override;
+    
+    
+    {}
+    
+    #include 'extensions/browser/extension_function.h'
+    
+    #include <cstdint>  // for int16_t
+    
+    // This class fits a line to a set of ICOORD points.
+// There is no restriction on the direction of the line, as it
+// uses a vector method, ie no concern over infinite gradients.
+// The fitted line has the least upper quartile of squares of perpendicular
+// distances of all source points from the line, subject to the constraint
+// that the line is made from one of the pairs of [{p1,p2,p3},{pn-2, pn-1, pn}]
+// i.e. the 9 combinations of one of the first 3 and last 3 points.
+// A fundamental assumption of this algorithm is that one of the first 3 and
+// one of the last 3 points are near the best line fit.
+// The points must be Added in line order for the algorithm to work properly.
+// No floating point calculations are needed* to make an accurate fit,
+// and no random numbers are needed** so the algorithm is deterministic,
+// architecture-stable, and compiler-stable as well as stable to minor
+// changes in the input.
+// *A single floating point division is used to compute each line's distance.
+// This is unlikely to result in choice of a different line, but if it does,
+// it would be easy to replace with a 64 bit integer calculation.
+// **Random numbers are used in the nth_item function, but the worst
+// non-determinism that can result is picking a different result among equals,
+// and that wouldn't make any difference to the end-result distance, so the
+// randomness does not affect the determinism of the algorithm. The random
+// numbers are only there to guarantee average linear time.
+// Fitting time is linear, but with a high constant, as it tries 9 different
+// lines and computes the distance of all points each time.
+// This class is aimed at replacing the LLSQ (linear least squares) and
+// LMS (least median of squares) classes that are currently used for most
+// of the line fitting in Tesseract.
+class DetLineFit {
+ public:
+  DetLineFit();
+  ~DetLineFit() = default;
+    }
+    
+      // Solve the dynamic programming problem for the given array of points, with
+  // the given size and cost function.
+  // Steps backwards are limited to being between min_step and max_step
+  // inclusive.
+  // The return value is the tail of the best path.
+  static DPPoint* Solve(int min_step, int max_step, bool debug,
+                        CostFunc cost_func, int size, DPPoint* points);
+    
+    class CensusChannelData : public ChannelData {
+ public:
+  grpc_error* Init(grpc_channel_element* elem,
+                   grpc_channel_element_args* args) override;
 };
     
-    #include 'modules/drivers/canbus/can_comm/protocol_data.h'
-    
-    
-    {  Byte t1(bytes + 3);
-  uint32_t t = t1.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
-  double ret = x * CLUSTER_DIST_RES + CLUSTER_DIST_LAT_MIN;
-  return ret;
+    grpc_error* CensusClientCallData::Init(grpc_call_element* elem,
+                                       const grpc_call_element_args* args) {
+  path_ = grpc_slice_ref_internal(args->path);
+  start_time_ = absl::Now();
+  method_ = GetMethod(&path_);
+  qualified_method_ = absl::StrCat('Sent.', method_);
+  GRPC_CLOSURE_INIT(&on_done_recv_message_, OnDoneRecvMessageCb, elem,
+                    grpc_schedule_on_exec_ctx);
+  GRPC_CLOSURE_INIT(&on_done_recv_trailing_metadata_,
+                    OnDoneRecvTrailingMetadataCb, elem,
+                    grpc_schedule_on_exec_ctx);
+  return GRPC_ERROR_NONE;
 }
     
-    int ClusterQualityInfo702::lateral_vel_rms(const std::uint8_t* bytes,
-                                           int32_t length) const {
-  Byte t0(bytes + 2);
-  int32_t x = t0.get_byte(0, 1);
+    namespace grpc {
     }
     
-    using apollo::drivers::canbus::Byte;
-using apollo::drivers::ContiRadarObs;
-    
-    
-    {  for (int i = 0; i < conti_radar->contiobs_size(); ++i) {
-    if (conti_radar->contiobs(i).obstacle_id() == obj_id) {
-      auto obs = conti_radar->mutable_contiobs(i);
-      obs->set_longitude_dist_rms(
-          LINEAR_RMS[longitude_dist_rms(bytes, length)]);
-      obs->set_lateral_dist_rms(LINEAR_RMS[lateral_dist_rms(bytes, length)]);
-      obs->set_longitude_vel_rms(LINEAR_RMS[longitude_vel_rms(bytes, length)]);
-      obs->set_lateral_vel_rms(LINEAR_RMS[lateral_vel_rms(bytes, length)]);
-      obs->set_longitude_accel_rms(
-          LINEAR_RMS[longitude_accel_rms(bytes, length)]);
-      obs->set_lateral_accel_rms(LINEAR_RMS[lateral_accel_rms(bytes, length)]);
-      obs->set_oritation_angle_rms(
-          ANGLE_RMS[oritation_angle_rms(bytes, length)]);
-      obs->set_probexist(PROBOFEXIST[probexist(bytes, length)]);
-      obs->set_meas_state(meas_state(bytes, length));
-      break;
+    namespace grpc {
     }
+    
+    namespace leveldb {
+    }
+    
+    namespace leveldb {
+    }
+    
+    static uint64_t PackSequenceAndType(uint64_t seq, ValueType t) {
+  assert(seq <= kMaxSequenceNumber);
+  assert(t <= kValueTypeForSeek);
+  return (seq << 8) | t;
+}
+    
+    #include 'db/dbformat.h'
+#include 'db/filename.h'
+#include 'db/log_reader.h'
+#include 'db/version_edit.h'
+#include 'db/write_batch_internal.h'
+#include 'leveldb/env.h'
+#include 'leveldb/iterator.h'
+#include 'leveldb/options.h'
+#include 'leveldb/status.h'
+#include 'leveldb/table.h'
+#include 'leveldb/write_batch.h'
+#include 'util/logging.h'
+    
+    
+// Owned filenames have the form:
+//    dbname/CURRENT
+//    dbname/LOCK
+//    dbname/LOG
+//    dbname/LOG.old
+//    dbname/MANIFEST-[0-9]+
+//    dbname/[0-9]+.(log|sst|ldb)
+bool ParseFileName(const std::string& filename,
+                   uint64_t* number,
+                   FileType* type) {
+  Slice rest(filename);
+  if (rest == 'CURRENT') {
+    *number = 0;
+    *type = kCurrentFile;
+  } else if (rest == 'LOCK') {
+    *number = 0;
+    *type = kDBLockFile;
+  } else if (rest == 'LOG' || rest == 'LOG.old') {
+    *number = 0;
+    *type = kInfoLogFile;
+  } else if (rest.starts_with('MANIFEST-')) {
+    rest.remove_prefix(strlen('MANIFEST-'));
+    uint64_t num;
+    if (!ConsumeDecimalNumber(&rest, &num)) {
+      return false;
+    }
+    if (!rest.empty()) {
+      return false;
+    }
+    *type = kDescriptorFile;
+    *number = num;
+  } else {
+    // Avoid strtoull() to keep filename format independent of the
+    // current locale
+    uint64_t num;
+    if (!ConsumeDecimalNumber(&rest, &num)) {
+      return false;
+    }
+    Slice suffix = rest;
+    if (suffix == Slice('.log')) {
+      *type = kLogFile;
+    } else if (suffix == Slice('.sst') || suffix == Slice('.ldb')) {
+      *type = kTableFile;
+    } else if (suffix == Slice('.dbtmp')) {
+      *type = kTempFile;
+    } else {
+      return false;
+    }
+    *number = num;
+  }
+  return true;
+}
+    
+    
+    {  // Errors
+  static const char* errors[] = {
+    '',
+    'foo',
+    'foo-dx-100.log',
+    '.log',
+    '',
+    'manifest',
+    'CURREN',
+    'CURRENTX',
+    'MANIFES',
+    'MANIFEST',
+    'MANIFEST-',
+    'XMANIFEST-3',
+    'MANIFEST-3x',
+    'LOC',
+    'LOCKx',
+    'LO',
+    'LOGx',
+    '18446744073709551616.log',
+    '184467440737095516150.log',
+    '100',
+    '100.',
+    '100.lop'
+  };
+  for (int i = 0; i < sizeof(errors) / sizeof(errors[0]); i++) {
+    std::string f = errors[i];
+    ASSERT_TRUE(!ParseFileName(f, &number, &type)) << f;
   }
 }
     
-    BaseMapMatrix::BaseMapMatrix(const BaseMapMatrix& cells) {}
-    
-        auto it_lower = std::lower_bound(
-        speed_limit_.speed_limit_points().begin(),
-        speed_limit_.speed_limit_points().end(), s,
-        [](const std::pair<double, double>& point, const double curr_s) {
-          return point.first < curr_s;
-        });
+    #ifndef STORAGE_LEVELDB_DB_LOG_FORMAT_H_
+#define STORAGE_LEVELDB_DB_LOG_FORMAT_H_
     
     
-    {  EXPECT_EQ(offset, offset_golden);
+    {
+    {}  // namespace log
+}  // namespace leveldb
+
+    
+    TEST(LogTest, Empty) {
+  ASSERT_EQ('EOF', Read());
 }
     
-    /**
- * @file : spline_1d_seg.cc
- * @brief: polynomial smoothing spline segment
- **/
+      // Fragment the record if necessary and emit it.  Note that if slice
+  // is empty, we still want to iterate once to emit a single
+  // zero-length record
+  Status s;
+  bool begin = true;
+  do {
+    const int leftover = kBlockSize - block_offset_;
+    assert(leftover >= 0);
+    if (leftover < kHeaderSize) {
+      // Switch to a new block
+      if (leftover > 0) {
+        // Fill the trailer (literal below relies on kHeaderSize being 7)
+        assert(kHeaderSize == 7);
+        dest_->Append(Slice('\x00\x00\x00\x00\x00\x00', leftover));
+      }
+      block_offset_ = 0;
+    }
+    }
     
-        static BOOST_FORCEINLINE bool compare_exchange_strong(
-        storage_type volatile& storage, storage_type& expected, storage_type desired, memory_order, memory_order) BOOST_NOEXCEPT
+      Status ConvertLogToTable(uint64_t log) {
+    struct LogReporter : public log::Reader::Reporter {
+      Env* env;
+      Logger* info_log;
+      uint64_t lognum;
+      virtual void Corruption(size_t bytes, const Status& s) {
+        // We print error messages for corruption, but continue repairing.
+        Log(info_log, 'Log #%llu: dropping %d bytes; %s',
+            (unsigned long long) lognum,
+            static_cast<int>(bytes),
+            s.ToString().c_str());
+      }
+    };
+    }
+    
+    // Implementation details follow
+template<typename Key, class Comparator>
+struct SkipList<Key,Comparator>::Node {
+  explicit Node(const Key& k) : key(k) { }
+    }
+    
+        SnapshotImpl* snapshot = new SnapshotImpl(sequence_number);
+    
+            auto currentWorkerNumSamples = m_prevMinibatchNumSamples;
+        auto prevTotalNumSamples = TotalNumberOfSamplesSeen();
+    
+            void Erase() override
+        {
+            if (IsPacked())
+            {
+                m_packedData = nullptr;
+                m_packedDataLayout = nullptr;
+                m_isPacked = false;
+            }
+            else
+                Value::Erase();
+        }
+    
+        ParameterInitializer GlorotUniformInitializer(double scale, int outputRank, int filterRank, unsigned long seed)
     {
-#if defined(__clang__)
-        // Clang cannot allocate rax:rdx register pairs but it has sync intrinsics
-        storage_type old_expected = expected;
-        expected = __sync_val_compare_and_swap(&storage, old_expected, desired);
-        return expected == old_expected;
-#elif defined(BOOST_ATOMIC_DETAIL_NO_ASM_RAX_RDX_PAIRS)
-        // GCC 4.4 can't allocate rax:rdx register pair either but it also doesn't support 128-bit __sync_val_compare_and_swap
-        uint64_t const* p_desired = (uint64_t const*)&desired;
-        bool success;
-#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
-        __asm__ __volatile__
-        (
-            'movq %[expected], %%rax\n\t'
-            'movq 8+%[expected], %%rdx\n\t'
-            'lock; cmpxchg16b %[dest]\n\t'
-            'sete %[success]\n\t'
-            'movq %%rax, %[expected]\n\t'
-            'movq %%rdx, 8+%[expected]\n\t'
-            : [dest] '+m' (storage), [expected] '+o' (expected), [success] '=q' (success)
-            : 'b' (p_desired[0]), 'c' (p_desired[1])
-            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory', 'rax', 'rdx'
-        );
-#else // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
-        __asm__ __volatile__
-        (
-            'movq 0(%[expected]), %%rax\n\t'
-            'movq 8(%[expected]), %%rdx\n\t'
-            'lock; cmpxchg16b %[dest]\n\t'
-            'sete %[success]\n\t'
-            'movq %%rax, 0(%[expected])\n\t'
-            'movq %%rdx, 8(%[expected])\n\t'
-            : [dest] '+m' (storage), [success] '=q' (success)
-            : 'b' (p_desired[0]), 'c' (p_desired[1]), [expected] 'r' (&expected)
-            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory', 'rax', 'rdx'
-        );
-#endif // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+        return CreateInitializer(Microsoft::MSR::CNTK::GlorotUniformInitializerTypeName, scale, outputRank, filterRank, seed);
+    }
+    
+            // add it to the respective node groups based on the tags
+        for (auto tag : node->GetTags())
+        {
+#if 1       // we keep this for a while (we already verified that our samples no longer use this)
+            // map legacy names
+            if      (tag == L'criteria') tag = L'criterion';
+            else if (tag == L'eval'    ) tag = L'evaluation';
+#endif
+            AddToNodeGroup(tag, node); // tag may be empty, or may have been set by array parameters
+        }
+    
+        // out_of_range.109
+    try
+    {
+        // try to use an array index that is not a number
+        json::reference ref = j.at('/array/one'_json_pointer);
+    }
+    catch (json::parse_error& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+    
+    
+    {    return 0;
+}
+    
+        const int nums[] = {0,4,3,0};
+    vector<int> nums_vec( nums, nums + sizeof(nums)/sizeof(int) );
+    int target = 0;
+    printVec(Solution().twoSum(nums_vec, target));
+    
+        deleteLinkedList(head);
+    
+    
+    {    return;
+}
+    
+        vector<int> nums1 = {1, 1, 2};
+    cout << Solution().removeDuplicates(nums1) << endl;
+    
+    
+    {    return 0;
+}
+
+    
+    /// BFS
+/// No need to store level information in the queue :-)
+///
+/// Time Complexity: O(n), where n is the number of nodes in the tree
+/// Space Complexity: O(n)
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+    }
+    }
+    
+    int main() {
     }
