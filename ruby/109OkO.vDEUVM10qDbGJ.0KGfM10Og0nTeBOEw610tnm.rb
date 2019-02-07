@@ -1,96 +1,154 @@
 
         
-                # Checks if the target machine is ready for communication. If this
-        # returns true, then all the other methods for communicating with
-        # the machine are expected to be functional.
-        #
-        # @return [Boolean]
-        def ready?
-          false
+        module ActionView #:nodoc:
+  # = Action View Raw Output Helper
+  module Helpers #:nodoc:
+    module OutputSafetyHelper
+      # This method outputs without escaping a string. Since escaping tags is
+      # now default, this can be used when you don't want Rails to automatically
+      # escape tags. This is not recommended if the data is coming from the user's
+      # input.
+      #
+      # For example:
+      #
+      #  raw @user.name
+      #  # => 'Jimmy <alert>Tables</alert>'
+      def raw(stringish)
+        stringish.to_s.html_safe
+      end
+    
+              add_default_name_and_id_for_value(tag_value, name_and_id)
+          options.delete('index')
+          options.delete('namespace')
+          options['for'] = name_and_id['id'] unless options.key?('for')
+    
+          def source_extract(indentation = 0, output = :console)
+        return unless num = line_number
+        num = num.to_i
+    
+          dt = Date.today
+      freeze_time dt
+    
+      smoke_user = User.seed do |u|
+    u.id = 0
+    u.name = 'smoke_user'
+    u.username = 'smoke_user'
+    u.username_lower = 'smoke_user'
+    u.password = 'P4ssw0rd'
+    u.active = true
+    u.approved = true
+    u.approved_at = Time.now
+    u.trust_level = TrustLevel[3]
+  end.first
+    
+          if lounge.topic_id.nil?
+        creator = PostCreator.new(Discourse.system_user,
+          raw: I18n.t('vip_category_description'),
+          title: I18n.t('category.topic_prefix', category: lounge.name),
+          category: lounge.name,
+          archetype: Archetype.default,
+          skip_validations: true
+        )
+        post = creator.create
+    
+          if staff.topic_id.nil?
+        creator = PostCreator.new(Discourse.system_user,
+          raw: I18n.t('staff_category_description'),
+          title: I18n.t('category.topic_prefix', category: staff.name),
+          category: staff.name,
+          archetype: Archetype.default
+        )
+        post = creator.create
+    
+                case platform
+            when 'iOS' then self.platform :ios, '10.0'
+            when 'macOS' then self.platform :macos, '10.10'
+            end
+    
+            def run
+          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
+          if @pod_name.nil? # Print all
+            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
+              print_pod_cache_infos(pod_name, cache_descriptors)
+            end
+          else # Print only for the requested pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            else
+              print_pod_cache_infos(@pod_name, cache_descriptors)
+            end
+          end
         end
     
-            # This returns all registered providers.
-        #
-        # @return [Hash]
-        def providers
-          providers = {}
+          private
     
-                # Register a new command class only if a name was given.
-            data[:command].register(name.to_sym, &block)
-          end
-    
-        it 'executes with `sh` if the command contains shell characters' do
-      lambda { @object.system('echo $0') }.should output_to_fd('sh\n')
-    end
-    
-    describe 'Kernel.throw' do
-  it 'transfers control to the end of the active catch block waiting for symbol' do
-    catch(:blah) do
-      :value
-      throw :blah
-      fail('throw didn't transfer the control')
-    end.should be_nil
+    desc 'list of authors'
+task :authors, [:commit_range, :format, :sep] do |t, a|
+  a.with_defaults :format => '%s (%d)', :sep => ', ', :commit_range => '--all'
+  authors = Hash.new(0)
+  blake   = 'Blake Mizerany'
+  overall = 0
+  mapping = {
+    'blake.mizerany@gmail.com' => blake, 'bmizerany' => blake,
+    'a_user@mac.com' => blake, 'ichverstehe' => 'Harry Vangberg',
+    'Wu Jiang (nouse)' => 'Wu Jiang' }
+  `git shortlog -s #{a.commit_range}`.lines.map do |line|
+    line = line.force_encoding 'binary' if line.respond_to? :force_encoding
+    num, name = line.split('\t', 2).map(&:strip)
+    authors[mapping[name] || name] += num.to_i
+    overall += num.to_i
   end
-    
-    describe 'main#define_method' do
-  before :each do
-    @code = 'define_method(:boom) { :bam }'
-  end
-    
-        @save_to.each { |_, v| FileUtils.mkdir_p(v) }
-    
-      # Eager load code on boot. This eager loads most of Rails and
-  # your application in memory, allowing both thread web servers
-  # and those relying on copy on write to perform better.
-  # Rake tasks automatically ignore this option for performance.
-  config.eager_load = true
-    
-      # Configure static asset server for tests with Cache-Control for performance.
-  if config.respond_to?(:serve_static_files)
-    # rails >= 4.2
-    config.serve_static_files = true
-  elsif config.respond_to?(:serve_static_assets)
-    # rails < 4.2
-    config.serve_static_assets = true
-  end
-  config.static_cache_control = 'public, max-age=3600'
-    
-      def test_font_helper_with_suffix_question
-    assert_match %r(url\(['']?/assets/.*eot\?.*['']?\)), @css
-  end
-    
-      # Objects will be converted to strings using the :inspect method.
-  Logging.format_as :inspect
-    
-    class FixPhotosShareVisibilities < ActiveRecord::Migration[4.2]
-  class Photo < ApplicationRecord
-  end
-    
-    When /^I toggle nsfw posts$/ do
-  find('.toggle_nsfw_state', match: :first).click
+  puts '#{overall} commits by #{authors.count} authors:'
+  puts authors.sort_by { |n,c| -c }.map { |e| a.format % e }.join(a.sep)
 end
     
-      def navigate_to(page_name)
-    path = path_to(page_name)
-    if path.is_a?(Hash)
-      visit(path[:path])
-      await_elem = path[:special_elem]
-      find(await_elem.delete(:selector), await_elem)
-    else
-      visit(path)
-    end
+      // writing
+  $('form').on('submit',function(e) {
+    $.post('/', {msg: '<%= user %>: ' + $('#msg').val()});
+    $('#msg').val(''); $('#msg').focus();
+    e.preventDefault();
+  });
+</script>
+    
+      task :index do
+    doc = File.read('README.md')
+    file = 'doc/rack-protection-readme.md'
+    Dir.mkdir 'doc' unless File.directory? 'doc'
+    puts 'writing #{file}'
+    File.open(file, 'w') { |f| f << doc }
   end
     
-      describe '#check_registrations_open_or_valid_invite!' do
-    before do
-      AppConfig.settings.enable_registrations = false
+          def self.token(session)
+        self.new(nil).mask_authenticity_token(session)
+      end
+    
+          def accepts?(env)
+        cookie_header = env['HTTP_COOKIE']
+        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
+        cookies.each do |k, v|
+          if k == session_key && Array(v).size > 1
+            bad_cookies << k
+          elsif k != session_key && Rack::Utils.unescape(k) == session_key
+            bad_cookies << k
+          end
+        end
+        bad_cookies.empty?
+      end
+    
+          def escape(object)
+        case object
+        when Hash   then escape_hash(object)
+        when Array  then object.map { |o| escape(o) }
+        when String then escape_string(object)
+        when Tempfile then object
+        else nil
+        end
+      end
+    
+        it 'Returns nil when Referer header is invalid' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
+      expect(subject.referrer(env)).to be_nil
     end
-    
-    module RailsCommandHelpers
-  def framework_version?(version_string)
-    framework_version =~ /^#{version_string}/
   end
-    
-    require 'paperclip/railtie' if defined?(Rails::Railtie)
-    
-        private
+end
