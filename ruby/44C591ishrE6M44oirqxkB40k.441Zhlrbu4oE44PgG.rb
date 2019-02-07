@@ -1,106 +1,140 @@
 
         
-            def initialize(name = nil, path = nil, type = nil)
-      self.name = name
-      self.path = path
-      self.type = type
+            it 'shows the dry run pop up with previous events and allows use previously received event' do
+      emitter.events << Event.new(payload: {url: 'http://xkcd.com/'})
+      agent.sources << emitter
+      agent.options.merge!('url' => '', 'url_from_event' => '{{url}}')
+      agent.save!
     
-              if node['class'] && node['class'].include?('api-heading')
-            node.name = 'h3'
-            node.inner_html = '<code>#{node.inner_html}</code>'
-          end
-    
-            css('code').each do |node|
-          node.inner_html = node.inner_html.squish
-        end
-    
-    gemfile(true) do
-  source 'https://rubygems.org'
-  # Activate the gem you are reporting the issue against.
-  gem 'rails', '~> 4.2.0'
-  gem 'devise', '~> 4.0'
-  gem 'sqlite3'
-  gem 'byebug'
-end
-    
-          # Sign out a given user or scope. This helper is useful for signing out a user
-      # after deleting accounts. Returns true if there was a logout and false if there
-      # is no user logged in on the referred scope
-      #
-      # Examples:
-      #
-      #   sign_out :user     # sign_out(scope)
-      #   sign_out @user     # sign_out(resource)
-      #
-      def sign_out(resource_or_scope=nil)
-        return sign_out_all_scopes unless resource_or_scope
-        scope = Devise::Mapping.find_scope!(resource_or_scope)
-        user = warden.user(scope: scope, run_callbacks: false) # If there is no user
-    
-          private
-    
-    # Each time a record is set we check whether its session has already timed out
-# or not, based on last request time. If so, the record is logged out and
-# redirected to the sign in page. Also, each time the request comes and the
-# record is set, we set the last request time inside its scoped session to
-# verify timeout in the following request.
-Warden::Manager.after_set_user do |record, warden, options|
-  scope = options[:scope]
-  env   = warden.request.env
-    
-          def self.required_fields(klass)
-        []
+        describe 'with block' do
+      it 'returns a nav link with menu' do
+        stub(self).current_page?('/things') { false }
+        stub(self).current_page?('/things/stuff') { false }
+        nav = nav_link('Things', '/things') { nav_link('Stuff', '/things/stuff') }
+        expect(nav).to be_html_safe
+        a0 = Nokogiri(nav).at('li.dropdown.dropdown-hover:not(.active) > a[href='/things']')
+        expect(a0).to be_a Nokogiri::XML::Element
+        expect(a0.text.strip).to eq('Things')
+        a1 = Nokogiri(nav).at('li.dropdown.dropdown-hover:not(.active) > li:not(.active) > a[href='/things/stuff']')
+        expect(a1).to be_a Nokogiri::XML::Element
+        expect(a1.text.strip).to eq('Stuff')
       end
     
-        # This returns whether the guest is ready to work. If this returns
-    # `false`, then {#detect!} should be called in order to detect the
-    # guest OS.
-    #
-    # @return [Boolean]
-    def ready?
-      !!capability_host_chain
+              weather_agent = scenario_import.scenario.agents.find_by(:guid => 'a-weather-agent')
+          trigger_agent = scenario_import.scenario.agents.find_by(:guid => 'a-trigger-agent')
+    
+      describe '#filename' do
+    it 'strips special characters' do
+      expect(AgentsExporter.new(:name => 'ƏfooƐƕƺbar').filename).to eq('foo-bar.json')
+    end
+    
+        def resource_params
+      params.require(:user).permit(
+        :unconfirmed_email
+      )
     end
   end
 end
 
     
-            # This is the method called to 'prepare' the provisioner. This is called
-        # before any actions are run by the action runner (see {Vagrant::Actions::Runner}).
-        # This can be used to setup shared folders, forward ports, etc. Whatever is
-        # necessary on a 'meta' level.
-        #
-        # No return value is expected.
-        def prepare
-        end
+        private
     
-              name = name.to_s
-          name = name[0...-1] if name.end_with?('=')
+          if @email_domain_block.save
+        log_action :create, @email_domain_block
+        redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.created_msg')
+      else
+        render :new
+      end
+    end
     
-          spec['main'] =
-          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
-          find_files.(Bootstrap.fonts_path) +
-          %w(assets/javascripts/bootstrap.js)
+      #
+  # Parses a CGI query string into the var/val combinations.
+  #
+  def parse_cgi_qstring(str)
+    qstring = {}
     
-      # The test environment is used exclusively to run your application's
-  # test suite. You never need to work with it otherwise. Remember that
-  # your test database is 'scratch space' for the test suite and is wiped
-  # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
-    
-      def test_font_helper_without_suffix
-    assert_match %r(url\(['']?/assets/.*eot['']?\)), @css
+        # Send it off.
+    put(response.to_s)
   end
     
-          def each(&block)
-        entries.each(&block)
-      end
+    =begin
+   +-------------+---------------+-------------------------------------+
+   | VALUE       | Name          | Description                         |
+   +-------------+---------------+-------------------------------------+
+   | 0x01        | Hangup        | The call has been hungup at the     |
+   |             |               | remote end                          |
+   |             |               |                                     |
+   | 0x02        | Reserved      | Reserved for future use             |
+   |             |               |                                     |
+   | 0x03        | Ringing       | Remote end is ringing (ring-back)   |
+   |             |               |                                     |
+   | 0x04        | Answer        | Remote end has answered             |
+   |             |               |                                     |
+   | 0x05        | Busy          | Remote end is busy                  |
+   |             |               |                                     |
+   | 0x06        | Reserved      | Reserved for future use             |
+   |             |               |                                     |
+   | 0x07        | Reserved      | Reserved for future use             |
+   |             |               |                                     |
+   | 0x08        | Congestion    | The call is congested               |
+   |             |               |                                     |
+   | 0x09        | Flash Hook    | Flash hook                          |
+   |             |               |                                     |
+   | 0x0a        | Reserved      | Reserved for future use             |
+   |             |               |                                     |
+   | 0x0b        | Option        | Device-specific options are being   |
+   |             |               | transmitted                         |
+   |             |               |                                     |
+   | 0x0c        | Key Radio     | Key Radio                           |
+   |             |               |                                     |
+   | 0x0d        | Unkey Radio   | Unkey Radio                         |
+   |             |               |                                     |
+   | 0x0e        | Call Progress | Call is in progress                 |
+   |             |               |                                     |
+   | 0x0f        | Call          | Call is proceeding                  |
+   |             | Proceeding    |                                     |
+   |             |               |                                     |
+   | 0x10        | Hold          | Call is placed on hold              |
+   |             |               |                                     |
+   | 0x11        | Unhold        | Call is taken off hold              |
+   +-------------+---------------+-------------------------------------+
+=end
     
-    module Sidekiq
-  ##
-  # This module is part of Sidekiq core and not intended for extensions.
-  #
-  module Util
-    include ExceptionHandler
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of a principal, an asset (e.g., a
+        # workstation user or a network server) on a network.
+        class Element
     
-      Sidekiq::WebApplication.helpers WebHelpers
-  Sidekiq::WebApplication.helpers Sidekiq::Paginator
+              # Decodes the end_time field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_end_time(input)
+            input.value[0].value
+          end
+    
+              # Decodes a Rex::Proto::Kerberos::Model::EncryptedData from an String
+          #
+          # @param input [String] the input to decode from
+          def decode_string(input)
+            asn1 = OpenSSL::ASN1.decode(input)
+    
+                OpenSSL::ASN1::Sequence.new(encoded_types)
+          end
+    
+      # log-levels from the diaspora.yml for SQL and federation debug-logging
+  Logging.logger[ActionView::Base].level = Rails.env.development? ? :debug : :warn
+  Logging.logger[ActiveRecord::Base].level = AppConfig.environment.logging.debug.sql? ? :debug : :info
+  Logging.logger[DiasporaFederation::Salmon::MagicEnvelope].level =
+    AppConfig.environment.logging.debug.federation? ? :debug : :info
+    
+      failure_message_for_should do |actual|
+    'expected #{actual.inspect} to have path #{expected.inspect} but was #{actual.current_path.inspect}'
+  end
+  failure_message_for_should_not do |actual|
+    'expected #{actual.inspect} to not have path #{expected.inspect} but it had'
+  end
+end
