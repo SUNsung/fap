@@ -1,114 +1,122 @@
 
         
-            # This is needed to make sure that the gradients are simple.
-    # The value of the function shouldn't change.
-    if z == self.sample:
-      return gaussian_pos_log_likelihood(self.mean, self.logvar, self.noise)
+            # Retrieve any AWS settings from the environment.
+    region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module, boto3=True)
+    if not region:
+        module.fail_json(msg=str('Either region or AWS_REGION or EC2_REGION environment variable or boto config aws_region or ec2_region must be set.'))
     
-      session = tf.get_default_session()
-  print('ckpt: ', ckpt)
-  if ckpt and tf.train.checkpoint_exists(ckpt.model_checkpoint_path):
-    print('Reading model parameters from %s' % ckpt.model_checkpoint_path)
-    saver.restore(session, ckpt.model_checkpoint_path)
-  else:
-    print('Created model with fresh parameters.')
-    if kind in ['posterior_sample_and_average', 'posterior_push_mean',
-                'prior_sample', 'write_model_params']:
-      print('Possible error!!! You are running ', kind, ' on a newly \
-      initialized model!')
-      # cannot print ckpt.model_check_point path if no ckpt
-      print('Are you sure you sure a checkpoint in ', hps.lfads_save_dir,
-            ' exists?')
+            heroku_app = client.apps()[app]
     
-      return gauss_e
+        for (index, rule) in enumerate(desired_rules):
+        try:
+            if rule != current_rules[index]:
+                updates.append((index, rule))
+        except IndexError:
+            additions.append(rule)
     
-      Args:
-    data_fname: The filename of teh file in which to write the data.
-    data_dict:  The dictionary of data to write. The keys are strings
-      and the values are numpy arrays.
-    use_json (optional): human readable format for simple items
-    compression (optional): The compression to use for h5py (disabled by
-      default because the library borks on scalars, otherwise try 'gzip').
-  '''
+            cmd = [le_path, 'follow', log]
+        if name:
+            cmd.extend(['--name', name])
+        if logtype:
+            cmd.extend(['--type', logtype])
+        rc, out, err = module.run_command(' '.join(cmd))
     
-          while cur_pos < num_steps:
-        if cur_stream[i] is None or len(cur_stream[i][0]) <= 1:
-          try:
-            cur_stream[i] = list(generator.next())
-          except StopIteration:
-            # No more data, exhaust current streams and quit
-            no_more_data = True
-            break
-    
-      samples = []
-  for sequence_id in xrange(min(len(arr), max_num_to_print)):
-    buffer_str = ' '.join(
-        [str(id_to_word[index]) for index in arr[sequence_id, :]])
-    samples.append(buffer_str)
-  return samples
-    
-      Args;
-    hparams:  Hyperparameters for the MaskGAN.
-    inputs:  tf.int32 Tensor of the sequence input of shape [batch_size,
-      sequence_length].
-    present:  tf.bool Tensor indicating the presence or absence of the token
-      of shape [batch_size, sequence_length].
-    is_training:  Whether the model is training.
-    is_validating:  Whether the model is being run in validation mode for
-      calculating the perplexity.
-    reuse (Optional):  Whether to reuse the model.
-    
-    '''Model loss construction.'''
-    
-        elif (FLAGS.discriminator_model == 'bidirectional_zaremba' or
-          FLAGS.discriminator_model == 'bidirectional_vd'):
-      assert FLAGS.language_model_ckpt_dir_reversed is not None, (
-          'Need a reversed directory to fill in the backward components.')
-      load_fwd_ckpt = tf.train.latest_checkpoint(FLAGS.language_model_ckpt_dir)
-      load_bwd_ckpt = tf.train.latest_checkpoint(
-          FLAGS.language_model_ckpt_dir_reversed)
-      print('Restoring Discriminator from %s and %s.' % (load_fwd_ckpt,
-                                                         load_bwd_ckpt))
-      tf.logging.info('Restoring Discriminator from %s and %s.' %
-                      (load_fwd_ckpt, load_bwd_ckpt))
-      dis_fwd_init_saver = init_savers['dis_fwd_init_saver']
-      dis_bwd_init_saver = init_savers['dis_bwd_init_saver']
-      dis_fwd_init_saver.restore(sess, load_fwd_ckpt)
-      dis_bwd_init_saver.restore(sess, load_bwd_ckpt)
+        @property
+    def name(self):
+        '''Return the name of the device.'''
+        return 'flic_{}'.format(self.address.replace(':', ''))
     
     
-class Header(jose.Header):
-    '''ACME-specific JOSE Header. Implements nonce, kid, and url.
-    '''
-    nonce = jose.Field('nonce', omitempty=True, encoder=jose.encode_b64jose)
-    kid = jose.Field('kid', omitempty=True)
-    url = jose.Field('url', omitempty=True)
+class LinksysSmartWifiDeviceScanner(DeviceScanner):
+    '''This class queries a Linksys Access Point.'''
     
-        return True
-
+    EVENT_NOTIFY = 'notify'
     
-    import requests
-import voluptuous as vol
+    import homeassistant.util.dt as dt_util
+from homeassistant.components.notify import (
+    ATTR_TITLE, ATTR_TITLE_DEFAULT, PLATFORM_SCHEMA, BaseNotificationService)
+from homeassistant.const import CONF_FILENAME
+import homeassistant.helpers.config_validation as cv
     
-            if self.home_interval:
-            boundary = dt_util.now() - self.home_interval
-            last_results = [device for device in self.last_results
-                            if device.last_update > boundary]
-            if last_results:
-                exclude_hosts = self.exclude + [device.ip for device
-                                                in last_results]
-            else:
-                exclude_hosts = self.exclude
-        else:
-            last_results = []
-            exclude_hosts = self.exclude
-        if exclude_hosts:
-            options += ' --exclude {}'.format(','.join(exclude_hosts))
+    import homeassistant.helpers.config_validation as cv
+from homeassistant.components.notify import (
+    ATTR_TARGET, ATTR_DATA, PLATFORM_SCHEMA, BaseNotificationService)
+from homeassistant.const import CONF_TOKEN, CONF_HOST, CONF_ROOM
     
-            return order
+    # Add any paths that contain templates here, relative to this directory.
+templates_path = ['_templates']
     
-    _LOGGER = logging.getLogger(__name__)
+        # Apply some eyeliner
+    d.line(face_landmarks['left_eye'] + [face_landmarks['left_eye'][0]], fill=(0, 0, 0, 110), width=6)
+    d.line(face_landmarks['right_eye'] + [face_landmarks['right_eye'][0]], fill=(0, 0, 0, 110), width=6)
+    
+    # Find all the faces in the image using a pre-trained convolutional neural network.
+# This method is more accurate than the default HOG model, but it's slower
+# unless you have an nvidia GPU and dlib compiled with CUDA extensions. But if you do,
+# this will use GPU acceleration and perform well.
+# See also: find_faces_in_picture.py
+face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=0, model='cnn')
     
     
-class HassLaMetricManager():
-    '''A class that encapsulated requests to the LaMetric manager.'''
+def _raw_face_landmarks(face_image, face_locations=None, model='large'):
+    if face_locations is None:
+        face_locations = _raw_face_locations(face_image)
+    else:
+        face_locations = [_css_to_rect(face_location) for face_location in face_locations]
+    
+        pool.starmap(test_image, function_parameters)
+    
+    
+def print_result(filename, name, distance, show_distance=False):
+    if show_distance:
+        print('{},{},{}'.format(filename, name, distance))
+    else:
+        print('{},{}'.format(filename, name))
+    
+            face_encoding_a1 = api.face_encodings(img_a1)[0]
+        face_encoding_a2 = api.face_encodings(img_a2)[0]
+        face_encoding_a3 = api.face_encodings(img_a3)[0]
+        face_encoding_b1 = api.face_encodings(img_b1)[0]
+    
+    setup(
+    name='face_recognition',
+    version='1.2.3',
+    description='Recognize faces from Python or from the command line',
+    long_description=readme + '\n\n' + history,
+    author='Adam Geitgey',
+    author_email='ageitgey@gmail.com',
+    url='https://github.com/ageitgey/face_recognition',
+    packages=[
+        'face_recognition',
+    ],
+    package_dir={'face_recognition': 'face_recognition'},
+    package_data={
+        'face_recognition': ['models/*.dat']
+    },
+    entry_points={
+        'console_scripts': [
+            'face_recognition=face_recognition.face_recognition_cli:main',
+            'face_detection=face_recognition.face_detection_cli:main'
+        ]
+    },
+    install_requires=requirements,
+    license='MIT license',
+    zip_safe=False,
+    keywords='face_recognition',
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+    ],
+    test_suite='tests',
+    tests_require=test_requirements
+)
