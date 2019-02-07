@@ -1,154 +1,144 @@
 
         
-            def insert_after(index, *names)
-      insert assert_index(index) + 1, *names
-    end
-    
-        attr_accessor :name, :type, :path
-    
-        def to_json
-      JSON.generate(as_json)
-    end
-  end
-end
-
-    
-        self.initial_paths = []
-    self.options = {}
-    self.stubs = {}
-    
-          def to_proc
-        method(:call).to_proc
+            def set_error(platform, block)
+      unless error_blocks[platform].nil?
+        UI.error('You defined multiple `error` blocks in your `Fastfile`. The last one being set will be used.')
       end
+      error_blocks[platform] = block
     end
-  end
-end
-
     
-          @terminal_width = if !tty?
-        nil
-      elsif ENV['COLUMNS']
-        ENV['COLUMNS'].to_i
-      else
-        `stty size`.scan(/\d+/).last.to_i
-      end
-    rescue
-      @terminal_width = nil
-    end
-  end
-end
-
-    
-            css('img[style]').each do |node|
-          node['align'] ||= node['style'][/float:\s*(left|right)/, 1]
-          node['style'] = node['style'].split(';').map(&:strip).select { |s| s =~ /\Awidth|height/ }.join(';')
+          begin
+        if xcode_outdated
+          # We have to raise that error within this `begin` block to show a nice user error without a stack trace
+          FastlaneCore::UI.user_error!('fastlane requires a minimum version of Xcode #{Fastlane::MINIMUM_XCODE_RELEASE}, please upgrade and make sure to use `sudo xcode-select -s /Applications/Xcode.app`')
         end
     
-            css('p > code:first-child:last-child', 'td > code:first-child:last-child').each do |node|
-          next if node.previous.try(:content).present? || node.next.try(:content).present?
-          node.inner_html = node.inner_html.squish.gsub(/<br(\ \/)?>\s*/, '\n')
-          node.content = node.content.strip
-          node.name = 'pre' if node.content =~ /\s/
-          node.parent.before(node.parent.children).remove if node.parent.name == 'p'
+          def self.example_code
+        [
+          'add_git_tag # simple tag with default values',
+          'add_git_tag(
+            grouping: 'fastlane-builds',
+            prefix: 'v',
+            postfix: '-RC1',
+            build_number: 123
+          )',
+          '# Alternatively, you can specify your own tag. Note that if you do specify a tag, all other arguments are ignored.
+          add_git_tag(
+            tag: 'my_custom_tag'
+          )'
+        ]
+      end
+    
+          it 'logs the command if verbose' do
+        with_verbose(true) do
+          allow(Fastlane::Actions).to receive(:sh).with(anything, { log: true }).and_return('')
+          result = Fastlane::FastFile.new.parse('lane :test do
+            git_add(path: 'foo.bar')
+          end').runner.execute(:test)
+        end
+      end
+    
+          context 'when specify strict option' do
+        it 'adds strict option' do
+          result = Fastlane::FastFile.new.parse('lane :test do
+            swiftlint(
+              strict: true
+            )
+          end').runner.execute(:test)
+    
+          it 'yields command output' do
+        expect_command('ls', '-la', exitstatus: 1, output: 'Heeeelp! Something went wrong.')
+        Fastlane::Actions.sh('ls', '-la') do |status, result|
+          expect(status.exitstatus).to eq(1)
+          expect(result).to eq('Heeeelp! Something went wrong.')
+        end
+      end
+    
+      if FastlaneCore::CommandExecutor.which('grep')
+    if FastlaneCore::Helper.windows?
+      compare_string = simulate_windows_shell_unwrapping(compare_string)
+    else
+      compare_string = simulate_normal_shell_unwrapping(compare_string)
+    end
+    compare_command = 'grep 'foo' #{escaped}'
+    expected_compare_error = 'grep: ' + compare_string + ': No such file or directory'
+  elsif FastlaneCore::CommandExecutor.which('find')
+    compare_string = simulate_normal_shell_unwrapping(compare_string)
+    compare_string = compare_string.upcase
+    compare_command = 'find \'foo\' #{escaped}'
+    expected_compare_error = 'File not found - ' + compare_string
+  end
+    
+          sh <<-SH
+        git commit --allow-empty -a -m '#{source_version} release'  &&
+        git tag -s v#{source_version} -m '#{source_version} release'  &&
+        git push && (git push origin || true) &&
+        git push --tags && (git push origin --tags || true)
+      SH
+    end
+    
+      <script type='text/javascript'>
+  //<!--
+  function toggle(id) {
+    var pre  = document.getElementById('pre-' + id);
+    var post = document.getElementById('post-' + id);
+    var context = document.getElementById('context-' + id);
+    }
+    
+            safe?(env) ||
+          valid_token?(session, env['HTTP_X_CSRF_TOKEN']) ||
+          valid_token?(session, Request.new(env).params[options[:authenticity_param]]) ||
+          ( options[:allow_if] && options[:allow_if].call(env) )
+      end
+    
+            DIRECTIVES.each do |d|
+          if options.key?(d)
+            directives << '#{d.to_s.sub(/_/, '-')} #{options[d]}'
+          end
         end
     
-      def up
-    Photo.joins('INNER JOIN posts ON posts.guid = photos.status_message_guid')
-         .where(posts: {type: 'StatusMessage', public: true}).update_all(public: true)
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   CSRF
+    # Supported browsers:: all
+    # More infos::         http://flask.pocoo.org/docs/0.10/security/#json-security
+    #                      http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx
+    #
+    # JSON GET APIs are vulnerable to being embedded as JavaScript when the
+    # Array prototype has been patched to track data. Checks the referrer
+    # even on GET requests if the content type is JSON.
+    #
+    # If request includes Origin HTTP header, defers to HttpOrigin to determine
+    # if the request is safe. Please refer to the documentation for more info.
+    #
+    # The `:allow_if` option can be set to a proc to use custom allow/deny logic.
+    class JsonCsrf < Base
+      default_options :allow_if => nil
     
-    module NavigationHelpers
-  def path_to(page_name)
-    case page_name
-    when /^person_photos page$/
-      person_photos_path(@me.person)
-    when /^the home(?: )?page$/
-      stream_path
-    when /^the mobile path$/
-      force_mobile_path
-    when /^the user applications page$/
-      api_openid_connect_user_applications_path
-    when /^the tag page for '([^\']*)'$/
-      tag_path(Regexp.last_match(1))
-    when /^its ([\w ]+) page$/
-      send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', @it)
-    when /^the mobile ([\w ]+) page$/
-      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', format: 'mobile')
-    when /^the ([\w ]+) page$/
-      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path')
-    when /^my edit profile page$/
-      edit_profile_path
-    when /^my profile page$/
-      person_path(@me.person)
-    when /^my acceptance form page$/
-      invite_code_path(InvitationCode.first)
-    when /^the requestors profile$/
-      person_path(Request.where(recipient_id: @me.person.id).first.sender)
-    when /^'([^\']*)''s page$/
-      p = User.find_by_email(Regexp.last_match(1)).person
-      {path:         person_path(p),
-       # '#diaspora_handle' on desktop, '.description' on mobile
-       special_elem: {selector: '#diaspora_handle, .description', text: p.diaspora_handle}
-      }
-    when /^'([^\']*)''s photos page$/
-      p = User.find_by_email(Regexp.last_match(1)).person
-      person_photos_path p
-    when /^my account settings page$/
-      edit_user_path
-    when /^forgot password page$/
-      new_user_password_path
-    when %r{^'(/.*)'}
-      Regexp.last_match(1)
-    else
-      raise 'Can't find mapping from \'#{page_name}\' to a path.'
-    end
-  end
-    
-          # Calls the given block for each `when` node in the `case` statement.
-      # If no block is given, an `Enumerator` is returned.
-      #
-      # @return [self] if a block is given
-      # @return [Enumerator] if no block is given
-      def each_when
-        return when_branches.to_enum(__method__) unless block_given?
-    
+          def deliver(msg)
+        if msg.respond_to?(:deliver_now)
+          # Rails 4.2/5.0
+          msg.deliver_now
+        else
+          # Rails 3.2/4.0/4.1
+          msg.deliver
+        end
+      end
     end
     
-      # Improved version of Liquid's truncate:
-  # - Doesn't cut in the middle of a word.
-  # - Uses typographically correct ellipsis (…) insted of '...'
-  def truncate(input, length)
-    if input.length > length && input[0..(length-1)] =~ /(.+)\b.+$/im
-      $1.strip + ' &hellip;'
-    else
-      input
+          def retrieve
+        map(&:make_new)
+      end
+    
+          # Clear all queued jobs across all workers
+      def clear_all
+        Queues.clear_all
+      end
+    
+          def enable(*opts)
+        opts.each {|key| set(key, true) }
+      end
+    
+          erb(content, options)
     end
-  end
-    
-    Liquid::Template.register_tag('render_partial', Jekyll::RenderPartialTag)
-
-    
-    module Jekyll
-    
-        def delete(path, &block)
-      route(DELETE, path, &block)
-    end
-    
-            header = file.read(TAR_CHUNK_SIZE)
-        typeflag = header[TAR_TYPEFLAG_OFFSET]
-        record_length = header[TAR_LENGTH_OFFSET_START..TAR_LENGTH_OFFSET_END].to_i(8)
-    
-      # Output this package to the given directory.
-  def output(output_path)
-    output_check(output_path)
-    
-        install_args = [
-      attributes[:npm_bin],
-      'install',
-      # use 'package' or 'package@version'
-     (version ? '#{package}@#{version}' : package)
-    ]
-    
-        # Make one file. The installscript can unpack itself.
-    `cat #{install_script} #{payload} > #{output_path}`
-    FileUtils.chmod('+x', output_path)
-  end
