@@ -1,33 +1,16 @@
 
         
-        This is better.
+            def get_converter(self, mime):
+        if is_valid_mime(mime):
+            for converter_class in plugin_manager.get_converters():
+                if converter_class.supports(mime):
+                    return converter_class(mime)
     
-    
-@pytest.mark.functional
-def test_refuse_with_confirmation(proc, TIMEOUT):
-    refuse_with_confirmation(proc, TIMEOUT)
-    history_not_changed(proc, TIMEOUT)
-    
-    CLI for apt.
-Basic commands:
- list - list packages based on package names
- search - search in package descriptions
- show - show package details
-    
-    
-def test_get_new_command():
-    new_command = get_new_command(Command('apt list --upgradable', match_output))
-    assert new_command == 'apt upgrade'
-    
-            '''
-        assert all(hasattr(type(self), attr) for attr in kwargs.keys())
-        self.__dict__.update(**kwargs)
-    
-    from httpie.plugins import plugin_manager
-from httpie.context import Environment
-    
-                if b'\0' in line:
-                raise BinarySuppressedError()
+            def get_auth(self, username=None, password=None):
+            assert username is None
+            assert password is None
+            assert self.raw_auth == BASIC_AUTH_HEADER_VALUE
+            return basic_auth(self.raw_auth)
     
         exc = ConnectionError('Connection aborted')
     exc.request = Request(method='GET', url='http://www.google.com')
@@ -39,101 +22,87 @@ from httpie.context import Environment
         'Connection aborted while doing GET request to URL: '
         'http://www.google.com')
     
-        def test_non_existent_file_raises_parse_error(self, httpbin):
-        with pytest.raises(ParseError):
-            http('--form',
-                 'POST', httpbin.url + '/post', 'foo@/__does_not_exist__')
     
-        def is_new(self):
-        return not os.path.exists(self._get_path())
+def test_follow_all_redirects_shown(httpbin):
+    r = http('--follow', '--all', httpbin.url + '/redirect/2')
+    assert r.count('HTTP/1.1') == 3
+    assert r.count('HTTP/1.1 302 FOUND', 2)
+    assert HTTP_OK in r
     
-    Provides utility functions that are consumed internally by Requests
-which depend on extremely few external helpers (such as compat)
-'''
+        if args.auth_plugin:
+        session.auth = {
+            'type': args.auth_plugin.auth_type,
+            'raw_auth': args.auth_plugin.raw_auth,
+        }
+    elif session.auth:
+        kwargs['auth'] = session.auth
     
-            String:                    '#4e9a06',        # class: 's'
-        String.Backtick:           '#4e9a06',        # class: 'sb'
-        String.Char:               '#4e9a06',        # class: 'sc'
-        String.Doc:                'italic #8f5902', # class: 'sd' - like a comment
-        String.Double:             '#4e9a06',        # class: 's2'
-        String.Escape:             '#4e9a06',        # class: 'se'
-        String.Heredoc:            '#4e9a06',        # class: 'sh'
-        String.Interpol:           '#4e9a06',        # class: 'si'
-        String.Other:              '#4e9a06',        # class: 'sx'
-        String.Regex:              '#4e9a06',        # class: 'sr'
-        String.Single:             '#4e9a06',        # class: 's1'
-        String.Symbol:             '#4e9a06',        # class: 'ss'
+    # A dictionary with options for the search language support, empty by default.
+# 'ja' uses this config value.
+# 'zh' user can custom change `jieba` dictionary path.
+#
+# html_search_options = {'type': 'default'}
     
-    try:
-    from urllib3.contrib import pyopenssl
-except ImportError:
-    pyopenssl = None
-    OpenSSL = None
-    cryptography = None
-else:
-    import OpenSSL
-    import cryptography
+            # Restart scan wizard
+        start_scanning(config, add_entities, client)
     
-    import sys
+        def __init__(self, config):
+        '''Initialize the scanner.'''
+        self.host = config[CONF_HOST]
+        self.username = config[CONF_USERNAME]
+        self.password = config[CONF_PASSWORD]
+        self.last_results = []
+        data = self.get_actiontec_data()
+        self.success_init = data is not None
+        _LOGGER.info('canner initialized')
     
-        def start_requests(self):
-        qargs = {'total': self.total, 'show': self.show}
-        url = '{}?{}'.format(self.baseurl, urlencode(qargs, doseq=1))
-        return [scrapy.Request(url, dont_filter=True)]
+    _LOGGER = logging.getLogger(__name__)
     
-            editor = self.settings['EDITOR']
-        try:
-            spidercls = self.crawler_process.spider_loader.load(args[0])
-        except KeyError:
-            return self._err('Spider not found: %s' % args[0])
+                    _LOGGER.error('UPNP Responder socket exception occurred: %s',
+                              ex.__str__)
+                # without the following continue, a second exception occurs
+                # because the data object has not been initialized
+                continue
+    
+    _LOGGER = logging.getLogger(__name__)
+    
+        @property
+    def targets(self):
+        '''Return a dictionary of registered targets.'''
+        return {'test target name': 'test target id'}
+    
+            if data is not None:
+            body_message.update(data)
+            # Only one of text or attachment can be specified
+            if 'attachment' in body_message:
+                body_message.pop('text')
     
     
-def _import_file(filepath):
-    abspath = os.path.abspath(filepath)
-    dirname, file = os.path.split(abspath)
-    fname, fext = os.path.splitext(file)
-    if fext != '.py':
-        raise ValueError('Not a Python source file: %s' % abspath)
-    if dirname:
-        sys.path = [dirname] + sys.path
-    try:
-        module = import_module(fname)
-    finally:
-        if dirname:
-            sys.path.pop(0)
-    return module
+CONF_APP_NAME = 'app_name'
+CONF_APP_ICON = 'app_icon'
+CONF_HOSTNAME = 'hostname'
     
-            self.factory.noPage(\
-                defer.TimeoutError('Getting %s took longer than %s seconds.' % \
-                (self.factory.url, self.factory.timeout)))
+        return current, hidden_dim
+
     
-        def get(self):
-        if len(self.config.GAE_APPIDS):
-            if len(self.working_appid_list) == 0:
-                time_to_reset = 600 - (time.time() - self.last_reset_time)
-                if time_to_reset > 0:
-                    self.logger.warn('all appid out of quota, wait %d seconds to reset', time_to_reset)
-                    time.sleep(time_to_reset)
-                    return None
-                else:
-                    self.logger.warn('reset appid')
-                    self.reset_appid()
+    Flexible network configuration is achieved by specifying the function name that
+builds a network module (e.g., the name of the conv backbone or the mask roi
+head). However we may wish to change names over time without breaking previous
+config files. This module provides backwards naming compatibility by providing
+a mapping from the old name to the new name.
     
-            nvae = NoViableAltException(
-            self.getDescription(),
-            self.decisionNumber,
-            s,
-            input
-            )
     
-        #Parsing the arguments
-    parser = argparse.ArgumentParser()
-    parser.add_argument('dir_path', help = 'Path to tldr 'pages' directory')
-    parser.add_argument('-c', choices=['solarized-light', 'solarized-dark'], help='Color scheme of the PDF')
-    args = parser.parse_args()
-    
-    loc = args.dir_path
-    if args.c == 'solarized-light' or args.c == 'solarized-dark':
-        colorscheme = args.c
-        
-    main(loc, colorscheme)
+def add_fast_rcnn_blobs(blobs, im_scales, roidb):
+    '''Add blobs needed for training Fast R-CNN style models.'''
+    # Sample training RoIs from each image and append them to the blob lists
+    for im_i, entry in enumerate(roidb):
+        frcn_blobs = _sample_rois(entry, im_scales[im_i], im_i)
+        for k, v in frcn_blobs.items():
+            blobs[k].append(v)
+    # Concat the training blob lists into tensors
+    for k, v in blobs.items():
+        if isinstance(v, list) and len(v) > 0:
+            blobs[k] = np.concatenate(v)
+    # Add FPN multilevel training RoIs, if configured
+    if cfg.FPN.FPN_ON and cfg.FPN.MULTILEVEL_ROIS:
+        _add_multilevel_rois(blobs)
