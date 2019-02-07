@@ -1,263 +1,408 @@
 
         
-          if (LangOpts.Target.isTvOS()) {
-    return (LangOpts.EnableAppExtensionRestrictions
-            ? PlatformKind::tvOSApplicationExtension
-            : PlatformKind::tvOS);
-  }
-    
-      // This is a substitution function from the generic parameters of the
-  // conforming type to the synthetic environment.
-  //
-  // For structs, enums and protocols, this is a 1:1 mapping; for classes,
-  // we increase the depth of each generic parameter by 1 so that we can
-  // introduce a class-bound 'Self' parameter.
-  //
-  // This is a raw function rather than a substitution map because we need to
-  // keep generic parameters as generic, even if the conformanceSig (the best
-  // way to create the substitution map) equates them to concrete types.
-  auto conformanceToSyntheticTypeFn = [&](SubstitutableType *type) {
-    auto *genericParam = cast<GenericTypeParamType>(type);
-    if (covariantSelf) {
-      return GenericTypeParamType::get(genericParam->getDepth() + 1,
-                                       genericParam->getIndex(), ctx);
-    }
-    }
-    
-    PartOfSpeech swift::getPartOfSpeech(StringRef word) {
-  // FIXME: This implementation is woefully inefficient.
-#define PREPOSITION(Word)                       \
-  if (word.equals_lower(#Word))                 \
-    return PartOfSpeech::Preposition;
-#define VERB(Word)                              \
-  if (word.equals_lower(#Word))                 \
-    return PartOfSpeech::Verb;
-#include 'PartsOfSpeech.def'
-    }
-    
-    #include 'swift/Basic/Unicode.h'
-    
-    bool AnyMetadata::InternalIs(const Descriptor* descriptor) const {
-  const string type_url = type_url_->GetNoArena();
-  string full_name;
-  if (!ParseAnyTypeUrl(type_url, &full_name)) {
-    return false;
-  }
-  return full_name == descriptor->full_name();
-}
-    
-    void ReflectionClassGenerator::WriteDescriptor(io::Printer* printer) {
-  printer->Print(
-    '#region Descriptor\n'
-    '/// <summary>File descriptor for $file_name$</summary>\n'
-    'public static pbr::FileDescriptor Descriptor {\n'
-    '  get { return descriptor; }\n'
-    '}\n'
-    'private static pbr::FileDescriptor descriptor;\n'
-    '\n'
-    'static $reflection_class_name$() {\n',
-    'file_name', file_->name(),
-    'reflection_class_name', reflectionClassname_);
-  printer->Indent();
-  printer->Print(
-    'byte[] descriptorData = global::System.Convert.FromBase64String(\n');
-  printer->Indent();
-  printer->Indent();
-  printer->Print('string.Concat(\n');
-  printer->Indent();
-    }
-    }
-    
-    void ImmutableMapFieldGenerator::
-GenerateInterfaceMembers(io::Printer* printer) const {
-  WriteFieldDocComment(printer, descriptor_);
-  printer->Print(
-      variables_,
-      '$deprecation$int ${$get$capitalized_name$Count$}$();\n');
-  printer->Annotate('{', '}', descriptor_);
-  WriteFieldDocComment(printer, descriptor_);
-  printer->Print(
-      variables_,
-      '$deprecation$boolean ${$contains$capitalized_name$$}$(\n'
-      '    $key_type$ key);\n');
-  printer->Annotate('{', '}', descriptor_);
-  if (GetJavaType(ValueField(descriptor_)) == JAVATYPE_ENUM) {
-    printer->Print(
-        variables_,
-        '/**\n'
-        ' * Use {@link #get$capitalized_name$Map()} instead.\n'
-        ' */\n'
-        '@java.lang.Deprecated\n'
-        'java.util.Map<$boxed_key_type$, $value_enum_type$>\n'
-        '${$get$capitalized_name$$}$();\n');
-    printer->Annotate('{', '}', descriptor_);
-    WriteFieldDocComment(printer, descriptor_);
-    printer->Print(
-        variables_,
-        '$deprecation$java.util.Map<$boxed_key_type$, $value_enum_type$>\n'
-        '${$get$capitalized_name$Map$}$();\n');
-    printer->Annotate('{', '}', descriptor_);
-    WriteFieldDocComment(printer, descriptor_);
-    printer->Print(
-        variables_,
-        '$deprecation$$value_enum_type$ ${$get$capitalized_name$OrDefault$}$(\n'
-        '    $key_type$ key,\n'
-        '    $value_enum_type$ defaultValue);\n');
-    printer->Annotate('{', '}', descriptor_);
-    WriteFieldDocComment(printer, descriptor_);
-    printer->Print(
-        variables_,
-        '$deprecation$$value_enum_type$ ${$get$capitalized_name$OrThrow$}$(\n'
-        '    $key_type$ key);\n');
-    printer->Annotate('{', '}', descriptor_);
-    if (SupportUnknownEnumValue(descriptor_->file())) {
-      printer->Print(
-          variables_,
-          '/**\n'
-          ' * Use {@link #get$capitalized_name$ValueMap()} instead.\n'
-          ' */\n'
-          '@java.lang.Deprecated\n'
-          'java.util.Map<$type_parameters$>\n'
-          '${$get$capitalized_name$Value$}$();\n');
-      printer->Annotate('{', '}', descriptor_);
-      WriteFieldDocComment(printer, descriptor_);
-      printer->Print(
-          variables_,
-          '$deprecation$java.util.Map<$type_parameters$>\n'
-          '${$get$capitalized_name$ValueMap$}$();\n');
-      printer->Annotate('{', '}', descriptor_);
-      WriteFieldDocComment(printer, descriptor_);
-      printer->Print(
-          variables_,
-          '$deprecation$\n'
-          '$value_type$ ${$get$capitalized_name$ValueOrDefault$}$(\n'
-          '    $key_type$ key,\n'
-          '    $value_type$ defaultValue);\n');
-      printer->Annotate('{', '}', descriptor_);
-      WriteFieldDocComment(printer, descriptor_);
-      printer->Print(
-          variables_,
-          '$deprecation$\n'
-          '$value_type$ ${$get$capitalized_name$ValueOrThrow$}$(\n'
-          '    $key_type$ key);\n');
-      printer->Annotate('{', '}', descriptor_);
-    }
-  } else {
-    printer->Print(
-        variables_,
-        '/**\n'
-        ' * Use {@link #get$capitalized_name$Map()} instead.\n'
-        ' */\n'
-        '@java.lang.Deprecated\n'
-        'java.util.Map<$type_parameters$>\n'
-        '${$get$capitalized_name$$}$();\n');
-    printer->Annotate('{', '}', descriptor_);
-    WriteFieldDocComment(printer, descriptor_);
-    printer->Print(
-        variables_,
-        '$deprecation$java.util.Map<$type_parameters$>\n'
-        '${$get$capitalized_name$Map$}$();\n');
-    printer->Annotate('{', '}', descriptor_);
-    WriteFieldDocComment(printer, descriptor_);
-    printer->Print(
-        variables_,
-        '$deprecation$\n'
-        '$value_type$ ${$get$capitalized_name$OrDefault$}$(\n'
-        '    $key_type$ key,\n'
-        '    $value_type$ defaultValue);\n');
-    printer->Annotate('{', '}', descriptor_);
-    WriteFieldDocComment(printer, descriptor_);
-    printer->Print(
-        variables_,
-        '$deprecation$\n'
-        '$value_type$ ${$get$capitalized_name$OrThrow$}$(\n'
-        '    $key_type$ key);\n');
-    printer->Annotate('{', '}', descriptor_);
+        #ifndef NDEBUG
+/// Verify that the types of fields are valid within a given generic signature.
+static void verifyFields(CanGenericSignature Sig, ArrayRef<SILField> Fields) {
+  for (auto &field : Fields) {
+    auto ty = field.getLoweredType();
+    // Layouts should never refer to archetypes, since they represent an
+    // abstract generic type layout.
+    assert(!ty->hasArchetype()
+           && 'SILLayout field cannot have an archetype type');
+    assert(!ty->hasTypeVariable()
+           && 'SILLayout cannot contain constraint system type variables');
+    if (!ty->hasTypeParameter())
+      continue;
+    field.getLoweredType().findIf([Sig](Type t) -> bool {
+      if (auto gpt = t->getAs<GenericTypeParamType>()) {
+        // Check that the generic param exists in the generic signature.
+        assert(Sig && 'generic param in nongeneric layout?');
+        assert(std::find(Sig.getGenericParams().begin(),
+                         Sig.getGenericParams().end(),
+                         gpt->getCanonicalType()) != Sig.getGenericParams().end()
+               && 'generic param not declared in generic signature?!');
+      }
+      return false;
+    });
   }
 }
+#endif
     
-    void ConstraintBullet::disable_collisions_between_bodies(const bool p_disabled) {
-	disabled_collisions_between_bodies = p_disabled;
-    }
+    #include 'swift/AST/GenericSignature.h'
+#include 'swift/AST/SubstitutionMap.h'
+#include 'llvm/Support/TrailingObjects.h'
+#include 'llvm/ADT/FoldingSet.h'
     
-    class ConstraintBullet : public RIDBullet {
-    }
-    
-    #ifndef HINGE_JOINT_BULLET_H
-#define HINGE_JOINT_BULLET_H
-    
-    class JointBullet : public ConstraintBullet {
-    }
-    
-    	jclass activityThread = env->FindClass('android/app/ActivityThread');
-	jmethodID currentActivityThread = env->GetStaticMethodID(activityThread, 'currentActivityThread', '()Landroid/app/ActivityThread;');
-	jobject at = env->CallStaticObjectMethod(activityThread, currentActivityThread);
-	jmethodID getApplication = env->GetMethodID(activityThread, 'getApplication', '()Landroid/app/Application;');
-	jobject context = env->CallObjectMethod(at, getApplication);
-    
-    #include 'core/reference.h'
-    
-    
-    {	if (get_thread_id_func)
-		return get_thread_id_func();
-	return 0;
+    void CacheImpl::releaseValue(void *Value) {
+  // FIXME: Implementation.
 }
     
     
-    {	Pair() {}
-	Pair(F p_first, const S &p_second) :
-			first(p_first),
-			second(p_second) {
-	}
+    {    // Must be 'const' or nothing.
+    clang::Qualifiers quals = pointee.getQualifiers();
+    bool isConst = quals.hasConst();
+    quals.removeConst();
+    if (quals.empty()) {
+      if (auto record = pointee->getAs<clang::RecordType>()) {
+        auto recordDecl = record->getDecl();
+        if (recordDecl->hasAttr<clang::ObjCBridgeAttr>() ||
+            recordDecl->hasAttr<clang::ObjCBridgeMutableAttr>() ||
+            recordDecl->hasAttr<clang::ObjCBridgeRelatedAttr>() ||
+            isKnownCFTypeName(typedefDecl->getName())) {
+          return forRecord(isConst, record->getDecl());
+        }
+      } else if (pointee->isVoidType()) {
+        if (typedefDecl->hasAttr<clang::ObjCBridgeAttr>() ||
+            isKnownCFTypeName(typedefDecl->getName())) {
+          return isConst ? forConstVoid() : forVoid();
+        }
+      }
+    }
+  }
+    
+    
+    {  bool isTypedef() const {
+    assert(isValid());
+    return !Decl.isNull() && Decl.is<const clang::TypedefNameDecl *>();
+  }
+  const clang::TypedefNameDecl *getTypedef() const {
+    assert(isTypedef());
+    return Decl.get<const clang::TypedefNameDecl *>();
+  }
 };
     
+      llvm::SmallString<128> message;
+  clangDiag.FormatDiagnostic(message);
     
+    static const int base         = 36;
+static const int tmin         = 1;
+static const int tmax         = 26;
+static const int skew         = 38;
+static const int damp         = 700;
+static const int initial_bias = 72;
+static const uint32_t initial_n = 128;
+    
+        enum COLOR_SPACE
     {
-    {}  // namespace common
-}  // namespace xgboost
+        COLOR_SPACE_BT601,
+        COLOR_SPACE_BT709
+    };
     
-    namespace xgboost {
-namespace common {
-TEST(CompressedIterator, Test) {
-  ASSERT_TRUE(detail::SymbolBits(256) == 8);
-  ASSERT_TRUE(detail::SymbolBits(150) == 8);
-  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
-  int num_elements = 1000;
-  int repetitions = 1000;
-  srand(9);
+    void add(const Size2D &size,
+         const s32 * src0Base, ptrdiff_t src0Stride,
+         const s32 * src1Base, ptrdiff_t src1Stride,
+         s32 *dstBase, ptrdiff_t dstStride,
+         CONVERT_POLICY policy)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+        if (policy == CONVERT_POLICY_SATURATE)
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddSaturate<s32, s64>());
     }
+    else
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddWrap<s32, s64>());
     }
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)policy;
+#endif
+}
+    
+    #define CONTSRC2 dstStride == src0Stride && \
+                 dstStride == src1Stride &&
+#define CONTSRC3 dstStride == src0Stride && \
+                 dstStride == src1Stride && \
+                 dstStride == src2Stride &&
+#define CONTSRC4 dstStride == src0Stride && \
+                 dstStride == src1Stride && \
+                 dstStride == src2Stride && \
+                 dstStride == src3Stride &&
+    
+    #endif
+    
+    #include <carotene/functions.hpp>
+#include 'saturate_cast.hpp'
+    
+                    uint8x16_t c0 = vmovq_n_u8(0);
+                uint8x16_t c1 = vmovq_n_u8(0);
+                uint8x16_t max0 = vmovq_n_u8(0);
+                uint8x16_t max1 = vmovq_n_u8(0);
+                for( k = 0; k < N; k++ )
+                {
+                    int8x16_t x = vreinterpretq_s8_u8(veorq_u8(vld1q_u8(ptr + pixel[k]), delta));
+                    m0 = vcgtq_s8(x, v2);
+                    m1 = vcgtq_s8(v1, x);
     }
     
-    // Should GradStats be in this header, rather than param.h?
-struct GradStats;
+            const u8* ln0 = idx_rm2 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rm2) : tmp;
+        const u8* ln1 = idx_rm1 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rm1) : tmp;
+        const u8* ln2 = internal::getRowPtr(srcBase, srcStride, i);
+        const u8* ln3 = idx_rp1 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rp1) : tmp;
+        const u8* ln4 = idx_rp2 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rp2) : tmp;
     
-    /**
- * \class CompressedBufferWriter
- *
- * \brief Writes bit compressed symbols to a memory buffer. Use
- * CompressedIterator to read symbols back from buffer. Currently limited to a
- * maximum symbol size of 28 bits.
- *
- * \author  Rory
- * \date  7/9/2017
+    #ifndef CAROTENE_INTRINSICS_HPP
+#define CAROTENE_INTRINSICS_HPP
+    
+    static const int kValueSize = 200 * 1024;
+static const int kTotalSize = 100 * 1024 * 1024;
+static const int kCount = kTotalSize / kValueSize;
+    
+    class Env;
+class Iterator;
+class TableCache;
+class VersionEdit;
+    
+      void Reopen() {
+    ASSERT_OK(TryReopen());
+  }
+    
+    // Arrange to generate values that shrink to this fraction of
+// their original size after compression
+static double FLAGS_compression_ratio = 0.5;
+    
+    class DBImpl;
+    
+    inline bool ParseInternalKey(const Slice& internal_key,
+                             ParsedInternalKey* result) {
+  const size_t n = internal_key.size();
+  if (n < 8) return false;
+  uint64_t num = DecodeFixed64(internal_key.data() + n - 8);
+  unsigned char c = num & 0xff;
+  result->sequence = num >> 8;
+  result->type = static_cast<ValueType>(c);
+  result->user_key = Slice(internal_key.data(), n - 8);
+  return (c <= static_cast<unsigned char>(kTypeValue));
+}
+    
+    // Return the name of the info log file for 'dbname'.
+std::string InfoLogFileName(const std::string& dbname);
+    
+    
+    {}  // namespace leveldb
+    
+      ~Reader();
+    
+    MemTable::MemTable(const InternalKeyComparator& cmp)
+    : comparator_(cmp),
+      refs_(0),
+      table_(comparator_, &arena_) {
+}
+    
+      // Recover and check that all log files were processed.
+  Open();
+  ASSERT_LE(1, NumTables());
+  ASSERT_EQ(1, NumLogs());
+  uint64_t new_log = FirstLogFile();
+  ASSERT_LE(old_log+3, new_log);
+  ASSERT_EQ('bar2', Get('foo'));
+  ASSERT_EQ('world', Get('hello'));
+  ASSERT_EQ('there', Get('hi'));
+    
+      ~Repairer() {
+    delete table_cache_;
+    if (owns_info_log_) {
+      delete options_.info_log;
+    }
+    if (owns_cache_) {
+      delete options_.block_cache;
+    }
+  }
+    
+    
+    {}  // namespace leveldb
+    
+    
+    {        // First make sure that the underlying matrix is on the right device
+        auto matrix = GetMatrix<V1ElemType>();
+        matrix->TransferToDeviceIfNotThere(AsCNTKImplDeviceId(m_device), true);
+        return reinterpret_cast<ElementType*>(matrix->Data());
+    }
+    
+        // TODO: This could actually be strided?
+    const MaskKind* NDMask::DataBuffer() const
+    {
+        // First make sure that the underlying matrix is on the right device
+        auto matrix = GetMatrix();
+        matrix->TransferToDeviceIfNotThere(AsCNTKImplDeviceId(m_device), true);
+        return (const MaskKind*)(matrix->Data());
+    }
+    
+                m_samples.second += samples;
+            m_updates.second++;
+            m_totalUpdates++;
+            
+            if (ShouldWriteUpdate(m_updates.second))
+            {
+                // Time to output the accumulated updates.
+                // Note that we take snapshot of the accumulated loss/metric only when we want to write.
+                // We do it this way on purpose, since accumulated loss/metric may be stored on a GPU
+                // and we want to minimize the number of GPU->CPU data transfers.
+                if (accumulatedLoss)
+                {
+                    m_loss.second = accumulatedLoss->AsScalar<double>();
+                }
+    }
+    
+            ValidateType<T>(dict, typeValue, currentVersion);
+    
+    #include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/file.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <signal.h>
+    
+    // ---------------------------------------------------------------------------
+// RandomOrdering -- class to help manage randomization of input data
+// ---------------------------------------------------------------------------
+    
+    
+    {    ~ScopeTimer()
+    {
+        if (m_verbosity > 2)
+        {
+            m_aggregateTimer.Stop();
+            double time = m_aggregateTimer.ElapsedSeconds();
+            fprintf(stderr, m_message.c_str(), time);
+        }
+    }
+};
+    
+    #if DMLC_ENABLE_STD_THREAD
+/*!
+ * \brief A threaded writer to write sparse batch page to sharded files.
  */
-    
-        // want to compute storage boundary for each feature
-    // using variants of prefix sum scan
-    boundary_.resize(nfeature);
-    size_t accum_index_ = 0;
-    size_t accum_row_ind_ = 0;
-    for (bst_uint fid = 0; fid < nfeature; ++fid) {
-      boundary_[fid].index_begin = accum_index_;
-      boundary_[fid].row_ind_begin = accum_row_ind_;
-      if (type_[fid] == kDenseColumn) {
-        accum_index_ += static_cast<size_t>(nrow);
-        accum_row_ind_ += static_cast<size_t>(nrow);
-      } else {
-        accum_index_ += feature_counts_[fid];
-        accum_row_ind_ += feature_counts_[fid];
-      }
-      boundary_[fid].index_end = accum_index_;
-      boundary_[fid].row_ind_end = accum_row_ind_;
+class SparsePageWriter {
+ public:
+  /*!
+   * \brief constructor
+   * \param name_shards name of shard files.
+   * \param format_shards format of each shard.
+   * \param extra_buffer_capacity Extra buffer capacity before block.
+   */
+  explicit SparsePageWriter(
+      const std::vector<std::string>& name_shards,
+      const std::vector<std::string>& format_shards,
+      size_t extra_buffer_capacity);
+  /*! \brief destructor, will close the files automatically */
+  ~SparsePageWriter();
+  /*!
+   * \brief Push a write job to the writer.
+   * This function won't block,
+   * writing is done by another thread inside writer.
+   * \param page The page to be written
+   */
+  void PushWrite(std::shared_ptr<SparsePage>&& page);
+  /*!
+   * \brief Allocate a page to store results.
+   *  This function can block when the writer is too slow and buffer pages
+   *  have not yet been recycled.
+   * \param out_page Used to store the allocated pages.
+   */
+  void Alloc(std::shared_ptr<SparsePage>* out_page);
     }
+    
+      void InitTreesToUpdate() {
+    if (trees_to_update.size() == 0u) {
+      for (auto & tree : trees) {
+        trees_to_update.push_back(std::move(tree));
+      }
+      trees.clear();
+      param.num_trees = 0;
+      tree_info.clear();
+    }
+  }
+    
+    // logistic loss for probability regression task
+struct LogisticRegression {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return common::Sigmoid(x); }
+  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return x >= 0.0f && x <= 1.0f; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    return predt - label;
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    const float eps = 1e-16f;
+    return fmaxf(predt * (1.0f - predt), eps);
+  }
+  template <typename T>
+  static T PredTransform(T x) { return common::Sigmoid(x); }
+  template <typename T>
+  static T FirstOrderGradient(T predt, T label) { return predt - label; }
+  template <typename T>
+  static T SecondOrderGradient(T predt, T label) {
+    const T eps = T(1e-16f);
+    return std::max(predt * (T(1.0f) - predt), eps);
+  }
+  static bst_float ProbToMargin(bst_float base_score) {
+    CHECK(base_score > 0.0f && base_score < 1.0f)
+      << 'base_score must be in (0,1) for logistic loss';
+    return -logf(1.0f / base_score - 1.0f);
+  }
+  static const char* LabelErrorMsg() {
+    return 'label must be in [0,1] for logistic regression';
+  }
+  static const char* DefaultEvalMetric() { return 'rmse'; }
+};
+    
+      for (auto alphabet_size : test_cases) {
+    for (int i = 0; i < repetitions; i++) {
+      std::vector<int> input(num_elements);
+      std::generate(input.begin(), input.end(),
+        [=]() { return rand() % alphabet_size; });
+      CompressedBufferWriter cbw(alphabet_size);
+    }
+    }
+    
+      static size_t CalculateBufferSize(size_t num_elements, size_t num_symbols) {
+    const int bits_per_byte = 8;
+    size_t compressed_size = static_cast<size_t>(std::ceil(
+        static_cast<double>(detail::SymbolBits(num_symbols) * num_elements) /
+        bits_per_byte));
+    return compressed_size + detail::kPadding;
+  }
+    
+    std::string DHTResponseMessage::toString() const
+{
+  return fmt('dht response %s TransactionID=%s Remote:%s(%u), id=%s, v=%s, %s',
+             getMessageType().c_str(), util::toHex(getTransactionID()).c_str(),
+             getRemoteNode()->getIPAddress().c_str(),
+             getRemoteNode()->getPort(),
+             util::toHex(getRemoteNode()->getID(), DHT_ID_LENGTH).c_str(),
+             util::torrentPercentEncode(getVersion()).c_str(),
+             toStringOptional().c_str());
+}
+    
+      void moveBucketHead(const std::shared_ptr<DHTNode>& node);
+    
+    #endif // D_DHT_TASK_H
+
+    
+      void addTask(const std::shared_ptr<DHTTask>& task) { queue_.push_back(task); }
+    
+    
+    {} // namespace aria2
+    
+    public:
+  DHTTaskQueueImpl();
+    
+    DHTUnknownMessage::~DHTUnknownMessage() { delete[] data_; }
