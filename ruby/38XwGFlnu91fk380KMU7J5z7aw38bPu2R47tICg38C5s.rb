@@ -1,200 +1,174 @@
 
         
-            it 'does not send previously configured receivers when the current agent does not support them' do
-      select_agent_type('Website Agent scrapes')
-      sleep 0.5
-      select2('ZKCD', from: 'Receivers')
-      select_agent_type('Email Agent')
-      fill_in(:agent_name, with: 'No receivers')
-      click_on 'Save'
-      expect(page).to have_content('No receivers')
-      agent = Agent.find_by(name: 'No receivers')
-      expect(agent.receivers).to eq([])
+            group.add(moderator)
+    group.save
+    
+      #
+  # HTTP 200/OK response class wrapper.
+  #
+  class OK < Response
+    def initialize(message = 'OK', proto = DefaultProtocol)
+      super(200, message, proto)
+    end
+  end
+    
+    # Default timings
+IAX_DEFAULT_REG_REFRESH = 60
+IAX_DEFAULT_TIMEOUT     = 10
+    
+                encoded
+          end
+    
+                decrypted
+          end
+    
+              # Encodes the Rex::Proto::Kerberos::Model::ApReq into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            elems = []
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_pvno], 0, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_msg_type], 1, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_options], 2, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_ticket], 3, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_authenticator], 4, :CONTEXT_SPECIFIC)
+            seq = OpenSSL::ASN1::Sequence.new(elems)
+    
+              # Encodes the value field
+          #
+          # @return [OpenSSL::ASN1::OctetString]
+          def encode_value
+            OpenSSL::ASN1::OctetString.new(value)
+          end
+        end
+      end
     end
   end
 end
-
     
-        it 'works for queued jobs' do
-      expect(status(job)).to eq('<span class='label label-warning'>queued</span>')
-    end
-  end
+              # Encodes the pa_data field
+          #
+          # @return [String]
+          def encode_pa_data
+            elems = []
+            pa_data.each do |data|
+              elems << data.encode
+            end
     
-        it 'creates a scenario label with the given text' do
-      expect(scenario_label(scenario, 'Other')).to eq(
-        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Other</span>'
-      )
-    end
-  end
+              # Encodes the Rex::Proto::Kerberos::Model::KdcRequestBody into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            elems = []
     
-        it 'can not be turned off' do
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'true' }
-      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
-    end
-  end
-end
-
+    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
     
-          it 'runs until stop is called' do
-        mock.instance_of(Rufus::Scheduler).join
-        Thread.new { while @agent_runner.instance_variable_get(:@running) != false do sleep 0.1; @agent_runner.stop end }
-        @agent_runner.run
-      end
-    
-        def update
-      authorize @user, :change_email?
-    
-            redirect_to admin_report_path(@report), notice: I18n.t('admin.report_notes.created_msg')
-      else
-        @report_notes = @report.notes.latest
-        @report_history = @report.history
-        @form = Form::StatusBatch.new
-    
-          weeks << {
-        week: week.to_time.to_i.to_s,
-        statuses: Redis.current.get('activity:statuses:local:#{week_id}') || '0',
-        logins: Redis.current.pfcount('activity:logins:#{week_id}').to_s,
-        registrations: Redis.current.get('activity:accounts:local:#{week_id}') || '0',
-      }
+        it 'returns likes for a public post without login' do
+      post = alice.post(:status_message, text: 'hey', public: true)
+      bob.like!(post)
+      sign_out :user
+      get :index, params: {post_id: post.id}, format: :json
+      expect(JSON.parse(response.body).map {|h| h['id'] }).to match_array(post.likes.map(&:id))
     end
     
-        # Mobile devices do not support regular notifications, so we enable push notifications by default
-    alerts_enabled = active_session.detection.device.mobile? || active_session.detection.device.tablet?
+    describe ResharesController, :type => :controller do
+  describe '#create' do
+    let(:post_request!) {
+      post :create, params: {root_guid: @post_guid}, format: :json
+    }
     
-          root.children.each {|v| nest_seqs(v)}
-    end
+    @@ index
+  <h1>Sinatra + Sidekiq Example</h1>
+  <h2>Failed: <%= @failed %></h2>
+  <h2>Processed: <%= @processed %></h2>
     
-            exit 1
-      end
-      exit 0
-      # rubocop:enable RescueException
-    end
+          normed = normalize_item(items)
+      payloads = items['args'].map do |args|
+        copy = normed.merge('args' => args, 'jid' => SecureRandom.hex(12), 'enqueued_at' => Time.now.to_f)
+        result = process_single(items['class'], copy)
+        result ? result : nil
+      end.compact
     
-          opts.on('--update', 'Compile files or directories to CSS.',
-                          'Locations are set like --watch.') do
-        @options[:update] = true
-      end
-    
-        # we assume that the first file that requires 'sinatra' is the
-    # app_file. all other path related options are calculated based
-    # on this path by default.
-    set :app_file, caller_files.first || $0
-    
-          def redirect(env)
-        request = Request.new(env)
-        warn env, 'attack prevented by #{self.class}'
-        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
-      end
-    
-          default_options :escape => :html,
-        :escaper => defined?(EscapeUtils) ? EscapeUtils : self
-    
-          explicit_plugins_specs = explicitly_declared_plugins_specs
-    
-        FileUtils.rm_rf(LogStash::Environment::CACHE_PATH)
-    validate_cache_location
-    archive_manager.extract(package_file, LogStash::Environment::CACHE_PATH)
-    puts('Unpacked at #{LogStash::Environment::CACHE_PATH}')
-    puts('The unpacked plugins can now be installed in local-only mode using bin/logstash-plugin install --local [plugin name]')
-  end
-    
-        not_same_pipeline_id = described_class.new(source, :another_pipeline, unordered_config_parts, settings)
-    expect(subject).not_to eq(not_same_pipeline_id)
-  end
-    
-                log_state_changes if params[:state]
-    
-            def create
-          authorize! :create, Spree::OptionType
-          @option_type = Spree::OptionType.new(option_type_params)
-          if @option_type.save
-            render :show, status: 201
-          else
-            invalid_resource!(@option_type)
-          end
-        end
-    
-            def cancel
-          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
-          if @return_authorization.cancel
-            respond_with @return_authorization, default_template: :show
-          else
-            invalid_resource!(@return_authorization)
-          end
-        end
-    
-            def destroy
-          authorize! :destroy, @store
-          @store.destroy
-          respond_with(@store, status: 204)
-        end
-    
-            private
-    
-            def update
-          authorize! :update, zone
-          if zone.update_attributes(zone_params)
-            respond_with(zone, status: 200, default_template: :show)
-          else
-            invalid_resource!(zone)
-          end
-        end
-    
-        # Initializes a new CategoryIndex.
+      module Worker
+    ##
+    # The Sidekiq testing infrastructure overrides perform_async
+    # so that it does not actually touch the network.  Instead it
+    # stores the asynchronous jobs in a per-class array so that
+    # their presence/absence can be asserted by your tests.
     #
-    #  +base+         is the String path to the <source>.
-    #  +category_dir+ is the String path between <source> and the category folder.
-    #  +category+     is the category currently being processed.
-    def initialize(site, base, category_dir, category)
-      @site = site
-      @base = base
-      @dir  = category_dir
-      @name = 'index.html'
-      self.process(@name)
-      # Read the YAML data from the layout page.
-      self.read_yaml(File.join(base, '_layouts'), 'category_index.html')
-      self.data['category']    = category
-      # Set the title for this page.
-      title_prefix             = site.config['category_title_prefix'] || 'Category: '
-      self.data['title']       = '#{title_prefix}#{category}'
-      # Set the meta-description for this page.
-      meta_description_prefix  = site.config['category_meta_description_prefix'] || 'Category: '
-      self.data['description'] = '#{meta_description_prefix}#{category}'
-    end
+    # This is similar to ActionMailer's :test delivery_method and its
+    # ActionMailer::Base.deliveries array.
+    #
+    # Example:
+    #
+    #   require 'sidekiq/testing'
+    #
+    #   assert_equal 0, HardWorker.jobs.size
+    #   HardWorker.perform_async(:something)
+    #   assert_equal 1, HardWorker.jobs.size
+    #   assert_equal :something, HardWorker.jobs[0]['args'][0]
+    #
+    #   assert_equal 0, Sidekiq::Extensions::DelayedMailer.jobs.size
+    #   MyMailer.delay.send_welcome_email('foo@example.com')
+    #   assert_equal 1, Sidekiq::Extensions::DelayedMailer.jobs.size
+    #
+    # You can also clear and drain all workers' jobs:
+    #
+    #   assert_equal 0, Sidekiq::Extensions::DelayedMailer.jobs.size
+    #   assert_equal 0, Sidekiq::Extensions::DelayedModel.jobs.size
+    #
+    #   MyMailer.delay.send_welcome_email('foo@example.com')
+    #   MyModel.delay.do_something_hard
+    #
+    #   assert_equal 1, Sidekiq::Extensions::DelayedMailer.jobs.size
+    #   assert_equal 1, Sidekiq::Extensions::DelayedModel.jobs.size
+    #
+    #   Sidekiq::Worker.clear_all # or .drain_all
+    #
+    #   assert_equal 0, Sidekiq::Extensions::DelayedMailer.jobs.size
+    #   assert_equal 0, Sidekiq::Extensions::DelayedModel.jobs.size
+    #
+    # This can be useful to make sure jobs don't linger between tests:
+    #
+    #   RSpec.configure do |config|
+    #     config.before(:each) do
+    #       Sidekiq::Worker.clear_all
+    #     end
+    #   end
+    #
+    # or for acceptance testing, i.e. with cucumber:
+    #
+    #   AfterStep do
+    #     Sidekiq::Worker.drain_all
+    #   end
+    #
+    #   When I sign up as 'foo@example.com'
+    #   Then I should receive a welcome email to 'foo@example.com'
+    #
+    module ClassMethods
     
-      class RenderPartialTag < Liquid::Tag
-    include OctopressFilters
-    def initialize(tag_name, markup, tokens)
-      @file = nil
-      @raw = false
-      if markup =~ /^(\S+)\s?(\w+)?/
-        @file = $1.strip
-        @raw = $2 == 'raw'
+          arr = Sidekiq.options[:lifecycle_events][event]
+      arr.reverse! if reverse
+      arr.each do |block|
+        begin
+          block.call
+        rescue => ex
+          handle_exception(ex, { context: 'Exception during Sidekiq lifecycle event.', event: event })
+          raise ex if reraise
+        end
       end
-      super
+      arr.clear
     end
-    
-    When /^(?:|I )uncheck '([^']*)'$/ do |field|
-  uncheck(field)
-end
-    
-      def framework_major_version
-    framework_version.split('.').first.to_i
   end
 end
-World(RailsCommandHelpers)
 
     
-        def register(klass, attachment_name, attachment_options)
-      @attachments ||= {}
-      @attachments[klass] ||= {}
-      @attachments[klass][attachment_name] = attachment_options
-    end
-    
-        alias :empty? :empty_file?
-    
-        def make
-      geometry = GeometryParser.new(geometry_string.strip).make
-      geometry || raise(Errors::NotIdentifiedByImageMagickError.new)
-    end
+        def erb(content, options = {})
+      if content.kind_of? Symbol
+        unless respond_to?(:'_erb_#{content}')
+          src = ERB.new(File.read('#{Web.settings.views}/#{content}.erb')).src
+          WebAction.class_eval('def _erb_#{content}\n#{src}\n end')
+        end
+      end
