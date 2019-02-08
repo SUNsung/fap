@@ -1,774 +1,335 @@
 
         
-        void WriteEnumDocComment(io::Printer* printer, const EnumDescriptor* enumDescriptor) {
-    WriteDocCommentBody(printer, enumDescriptor);
-}
-void WriteEnumValueDocComment(io::Printer* printer, const EnumValueDescriptor* value) {
-    WriteDocCommentBody(printer, value);
-}
-    
-    
-#include <google/protobuf/compiler/csharp/csharp_enum.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/compiler/csharp/csharp_message.h>
-#include <google/protobuf/compiler/csharp/csharp_names.h>
-#include <google/protobuf/compiler/csharp/csharp_options.h>
-#include <google/protobuf/compiler/csharp/csharp_reflection_class.h>
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-    
-    
-    {
-    {    printer->Print(' * <pre>\n');
-    for (int i = 0; i < lines.size(); i++) {
-      // Most lines should start with a space.  Watch out for lines that start
-      // with a /, since putting that right after the leading asterisk will
-      // close the comment.
-      if (!lines[i].empty() && lines[i][0] == '/') {
-        printer->Print(' * $line$\n', 'line', lines[i]);
-      } else {
-        printer->Print(' *$line$\n', 'line', lines[i]);
-      }
-    }
-    printer->Print(
-        ' * </pre>\n'
-        ' *\n');
-  }
-}
-    
-    ImmutableGeneratorFactory::ImmutableGeneratorFactory(
-    Context* context) : context_(context) {
-}
-ImmutableGeneratorFactory::~ImmutableGeneratorFactory() {}
-    
-        // If any indirect dependency provided extensions, it needs to be directly
-    // imported so it can get merged into the root's extensions registry.
-    // See the Note by CollectMinimalFileDepsContainingExtensions before
-    // changing this.
-    for (std::vector<const FileDescriptor *>::iterator iter =
-             deps_with_extensions.begin();
-         iter != deps_with_extensions.end(); ++iter) {
-      if (!IsDirectDependency(*iter, file_)) {
-        import_writer.AddFile(*iter, header_extension);
-      }
-    }
-    
-    #include 'publictypes.h'
-#include 'platform.h'
-    
-    void Tesseract::PrerecAllWordsPar(const GenericVector<WordData>& words) {
-  // Prepare all the blobs.
-  GenericVector<BlobData> blobs;
-  for (int w = 0; w < words.size(); ++w) {
-    if (words[w].word->ratings != nullptr &&
-        words[w].word->ratings->get(0, 0) == nullptr) {
-      for (int s = 0; s < words[w].lang_words.size(); ++s) {
-        Tesseract* sub = s < sub_langs_.size() ? sub_langs_[s] : this;
-        const WERD_RES& word = *words[w].lang_words[s];
-        for (int b = 0; b < word.chopped_word->NumBlobs(); ++b) {
-          blobs.push_back(BlobData(b, sub, word));
-        }
-      }
-    }
-  }
-  // Pre-classify all the blobs.
-  if (tessedit_parallelize > 1) {
-#ifdef _OPENMP
-#pragma omp parallel for num_threads(10)
-#endif  // _OPENMP
-    for (int b = 0; b < blobs.size(); ++b) {
-      *blobs[b].choices =
-          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
-    }
-  } else {
-    // TODO(AMD) parallelize this.
-    for (int b = 0; b < blobs.size(); ++b) {
-      *blobs[b].choices =
-          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
-    }
-  }
-}
-    
-      int num_words;
-  TBOX lword_box;     // in normalized (horiz text rows) space
-  TBOX rword_box;     // in normalized (horiz text rows) space
-    
-    #endif  // TESSERACT_CCSTRUCT_DEBUGPIXA_H_
-
-    
-    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CONTEXT_H */
-
-    
-    
-    {}  // namespace grpc
-    
-    constexpr size_t RpcServerStatsEncoding::kRpcServerStatsSize;
-constexpr size_t RpcServerStatsEncoding::kEncodeDecodeFailure;
-constexpr size_t RpcServerStatsEncoding::kVersionIdSize;
-constexpr size_t RpcServerStatsEncoding::kFieldIdSize;
-constexpr size_t RpcServerStatsEncoding::kVersionIdOffset;
-constexpr size_t RpcServerStatsEncoding::kVersionId;
-    
-      // implementation of ServerReflectionInfo(stream ServerReflectionRequest) rpc
-  // in ServerReflection service
-  Status ServerReflectionInfo(
-      ServerContext* context,
-      ServerReaderWriter<reflection::v1alpha::ServerReflectionResponse,
-                         reflection::v1alpha::ServerReflectionRequest>* stream)
-      override;
-    
-    
-    {
-    {}  // namespace load_reporter
-}  // namespace grpc
-    
-    /*!
- * \brief Gradient function that takes output value of function and computes gradient wrt to input.
- * \param out_grad the gradient wrt to output of the function.
- * \param env The Environment arguments.
- * \param in_grad The container to store result input gradient.
- * \param req The requirement to store the ret value.
- * \param ctx Runtime context to execute the function.
- */
-typedef void (*UnaryGradFunctionT0)(const OutputGrad& out_grad,
-                                    const EnvArguments& env,
-                                    TBlob* in_grad,
-                                    OpReqType req,
-                                    RunContext ctx);
-/*!
- * \brief Gradient function that takes output value of function and computes gradient wrt to input.
- * \param out_grad the gradient wrt to output of the function.
- * \param out_value the value of the function.
- * \param env The Environment arguments.
- * \param in_grad The container to store result input gradient.
- * \param req The requirement to store the ret value.
- * \param ctx Runtime context to execute the function.
- */
-typedef void (*UnaryGradFunctionT1)(const OutputGrad& out_grad,
-                                    const OutputValue& out_value,
-                                    const EnvArguments& env,
-                                    TBlob* in_grad,
-                                    OpReqType req,
-                                    RunContext ctx);
-/*!
- * \brief Gradient function that takes input value of function and computes gradient wrt to input.
- * \param out_grad the gradient wrt to output of the function.
- * \param in_data0 the input value of the function.
- * \param env The Environment arguments.
- * \param in_grad The container to store result input gradient.
- * \param req The requirement to store the ret value.
- * \param ctx Runtime context to execute the function.
- */
-typedef void (*UnaryGradFunctionT2)(const OutputGrad& out_grad,
-                                    const Input0& in_data0,
-                                    const EnvArguments& env,
-                                    TBlob* in_grad,
-                                    OpReqType req,
-                                    RunContext ctx);
-/*!
- * \brief Binary function that takes lhs, rhs and save result to ret.
- *  The result container is pre-allocated with the correct shape.
- * \param lhs The left operand
- * \param rhs The right operand
- * \param env The Environment arguments.
- * \param ret The containter to store return value.
- * \param req The requirement to stroe the ret.
- * \param ctx Runtime context to execute the function.
- */
-typedef void (*BinaryFunction)(const TBlob& lhs,
-                               const TBlob& rhs,
-                               const EnvArguments& env,
-                               TBlob* ret,
-                               OpReqType req,
-                               RunContext ctx);
-    
-    /**!
- * \brief Workaround for missing functions in ::caffe::Blob
- * \warning Do not add or override any virtual functions in this class
- * @tparam Dtype
- */
-template<class Dtype>
-class CaffeBlobFriend : public ::caffe::Blob<Dtype> {
- public:
-  inline void set_cpu_diff(Dtype* diff) {
-    CHECK(diff);
-    this->diff_->set_cpu_data(diff);
-  }
-    }
-    
-    class CaffeDataIterWrapper : public PrefetcherIter {
- public:
-  CaffeDataIterWrapper() : PrefetcherIter(NULL), next_time_(0) {}
-  virtual ~CaffeDataIterWrapper() {
-    IF_CHECK_TIMING(
-      if (next_time_.load() > 0) {
-        LOG(WARNING) << 'Caffe data loader was blocked for '
-                     << next_time_.load()
-                     << ' ms waiting for incoming data';
-      }
-    )
-  }
-  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) {
-    // We need to init prefetcher args in order to get dtype
-    this->param_.InitAllowUnknown(kwargs);
-    if (!this->param_.dtype) this->param_.dtype = mshadow::kFloat32;
-    switch (this->param_.dtype.value()) {
-      case mshadow::kFloat32:
-        this->loader_.reset(new CaffeDataIter<float>(this->param_.dtype.value()));
-        break;
-      case mshadow::kFloat64:
-        this->loader_.reset(new CaffeDataIter<double>(this->param_.dtype.value()));
-        break;
-      case mshadow::kFloat16:
-        LOG(FATAL) << 'float16 layer is not supported by caffe';
-        return;
-      default:
-        LOG(FATAL) << 'Unsupported type ' << this->param_.dtype.value();
-        return;
-    }
-    PrefetcherIter::Init(kwargs);
-    this->param_.prefetch_buffer = 1;
-  }
-  virtual void BeforeFirst(void) {
-    return PrefetcherIter::BeforeFirst();
-  }
-  virtual bool Next(void) {
-    IF_CHECK_TIMING(
-      const uint64_t start_time = GetTickCountMS();
-    )
-    const bool rc = PrefetcherIter::Next();
-    IF_CHECK_TIMING(
-      const uint64_t diff_time  = GetTickCountMS() - start_time;
-      next_time_.fetch_add(diff_time);
-    )
-    return rc;
-  }
-    }
-    
-    #if defined(__CUDACC__)
-    Stream<xpu> *s = ctx.get_stream<xpu>();
-    // TODO(Haoran): when need cublas handle in stream?
-    CHECK_EQ(s->blas_handle_ownership_, Stream<xpu>::OwnHandle)
-          << 'Must init CuBLAS handle in stream';
-#endif  // __CUDACC__
-    
-        for (int i = 0; i < param_.num_data; ++i) {
-      TShape tshape = (*in_shape)[i];
-      if (tshape.ndim() == 0) return false;
-      auto blob_ptr = new Blob<float>();
-      blob_ptr->Reshape(caffe::TShape2Vector(tshape));
-      bot_blobs.push_back(blob_ptr);
-    }
-    
-    template<>
-Operator* CreateOp<cpu>(CaffeOpParam param, int dtype) {
-  Operator *op = NULL;
-  switch (dtype) {
-  case mshadow::kFloat32:
-    op = new CaffeOp<cpu, float>(param);
-    break;
-  case mshadow::kFloat64:
-    op = new CaffeOp<cpu, double>(param);
-    break;
-  case mshadow::kFloat16:
-    LOG(FATAL) << 'float16 layer is not supported by caffe';
-    break;
-  default:
-    LOG(FATAL) << 'Unsupported type ' << dtype;
-  }
-  return op;
-}
-    
-    /*!
- * Copyright (c) 2015 by Contributors
- */
-#ifndef MXNET_ENGINE_THREAD_POOL_H_
-#define MXNET_ENGINE_THREAD_POOL_H_
-    
-    namespace mxnet {
-namespace io {
-/*!
- * \brief OpenCV based Image augmenter,
- *  The augmenter can contain internal temp state.
- */
-class ImageAugmenter {
- public:
-  /*!
-   *  \brief Initialize the Operator by setting the parameters
-   *  This function need to be called before all other functions.
-   *  \param kwargs the keyword arguments parameters
-   */
-  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) = 0;
-  /*!
-   * \brief augment src image.
-   *   this function is not thread safe, and will only be called by one thread
-   *   however, it will tries to re-use memory space as much as possible
-   * \param src the source image
-   * \param prnd pointer to random number generator.
-   * \return The processed image.
-   */
-  virtual cv::Mat Process(const cv::Mat &src, std::vector<float> *label,
-                          common::RANDOM_ENGINE *prnd) = 0;
-  // virtual destructor
-  virtual ~ImageAugmenter() {}
-  /*!
-   * \brief factory function
-   * \param name Name of the augmenter
-   * \return The created augmenter.
-   */
-  static ImageAugmenter* Create(const std::string& name);
-};
-    }
-    }
-    
-        outimg_.Resize(data.shape_);
-    float contrast =
-        rand_uniform(rnd_) * param_.max_random_contrast * 2 - param_.max_random_contrast + 1;
-    float illumination =
-        rand_uniform(rnd_) * param_.max_random_illumination * 2 - param_.max_random_illumination;
-    bool flip = (param_.rand_mirror && coin_flip(rnd_)) || param_.mirror;
-    
-        static ParameterInitializer CreateInitializer(const std::wstring& initializerTypeName, double scale, unsigned long seed) 
-    {
-        if (scale <= 0) 
-            InvalidArgument('CreateInitializer: scale value for initializer '%S' cannot be 0.', 
-                initializerTypeName.c_str());
-    }
-    
-    
-    {
-    {    private:
-        // Disallow copy and move construction and assignment
-        VariableFields(const VariableFields&) = delete; VariableFields& operator=(const VariableFields& other) = delete; VariableFields(VariableFields&&) = delete; VariableFields& operator=(VariableFields&&) = delete;
-    };
-}
-
-    
-    // ---------------------------------------------------------------------------
-// RandomOrdering -- class to help manage randomization of input data
-// ---------------------------------------------------------------------------
-    
-            // if dimension not specified we assume two operands' dimensions should match
-        Input(0)->ValidateInferInputDimsFrom(TensorShape(rows1));
-    
-        virtual bool OutputUsedInComputingInputNodesGradients() const override
-    {
-        return false;
-    }
-    virtual bool InputUsedInComputingInputNodesGradients(size_t /*childIndex*/) const override
-    {
-        return false;
-    }
-    
-    
-    {    fPattern           = fPatternOwned;
-    init2(RegexStaticSets::gStaticSets->fEmptyText, status);
-}
-    
-    /**
- * Factory method
- */
-static Transliterator* RemoveTransliterator_create(const UnicodeString& /*ID*/,
-                                                   Transliterator::Token /*context*/) {
-    /* We don't need the ID or context. We just remove data */
-    return new RemoveTransliterator();
-}
-    
-        const uint32_t allFlags = UREGEX_CANON_EQ | UREGEX_CASE_INSENSITIVE | UREGEX_COMMENTS |
-                              UREGEX_DOTALL   | UREGEX_MULTILINE        | UREGEX_UWORD |
-                              UREGEX_ERROR_ON_UNKNOWN_ESCAPES           | UREGEX_UNIX_LINES | UREGEX_LITERAL;
-    
-    UCollationResult
-RuleBasedCollator::compare(UCharIterator &left, UCharIterator &right,
-                           UErrorCode &errorCode) const {
-    if(U_FAILURE(errorCode) || &left == &right) { return UCOL_EQUAL; }
-    UBool numeric = settings->isNumeric();
-    }
-    
-    U_CAPI UBool U_EXPORT2
-uhash_compareScriptSet(const UElement key1, const UElement key2);
-    
-    #define DOT               ((UChar)0x002E)
-#define SINGLE_QUOTE      ((UChar)0x0027)
-#define SLASH             ((UChar)0x002F)
-#define BACKSLASH         ((UChar)0x005C)
-#define SPACE             ((UChar)0x0020)
-#define TAB               ((UChar)0x0009)
-#define QUOTATION_MARK    ((UChar)0x0022)
-#define ASTERISK          ((UChar)0x002A)
-#define COMMA             ((UChar)0x002C)
-#define HYPHEN            ((UChar)0x002D)
-#define U_ZERO            ((UChar)0x0030)
-#define U_ONE             ((UChar)0x0031)
-#define U_TWO             ((UChar)0x0032)
-#define U_THREE           ((UChar)0x0033)
-#define U_FOUR            ((UChar)0x0034)
-#define U_FIVE            ((UChar)0x0035)
-#define U_SIX             ((UChar)0x0036)
-#define U_SEVEN           ((UChar)0x0037)
-#define U_EIGHT           ((UChar)0x0038)
-#define U_NINE            ((UChar)0x0039)
-#define COLON             ((UChar)0x003A)
-#define SEMI_COLON        ((UChar)0x003B)
-#define CAP_A             ((UChar)0x0041)
-#define CAP_B             ((UChar)0x0042)
-#define CAP_R             ((UChar)0x0052)
-#define CAP_Z             ((UChar)0x005A)
-#define LOWLINE           ((UChar)0x005F)
-#define LEFTBRACE         ((UChar)0x007B)
-#define RIGHTBRACE        ((UChar)0x007D)
-    
-    SharedBreakIterator::SharedBreakIterator(
-        BreakIterator *biToAdopt) : ptr(biToAdopt) { }
-    
-    #endif
-
-    
-    class U_I18N_API SharedPluralRules : public SharedObject {
-public:
-    SharedPluralRules(PluralRules *prToAdopt) : ptr(prToAdopt) { }
-    virtual ~SharedPluralRules();
-    const PluralRules *operator->() const { return ptr; }
-    const PluralRules &operator*() const { return *ptr; }
-private:
-    PluralRules *ptr;
-    SharedPluralRules(const SharedPluralRules &);
-    SharedPluralRules &operator=(const SharedPluralRules &);
-};
-    
-        /**
-     * Sets maximum significant digits. 0 or negative means no maximum.
-     */
-    void setMax(int32_t count) {
-        fMax = count <= 0 ? INT32_MAX : count;
-    }
-    
-            // Create a TimeZoneRule for standard time
-        timeRuleType = (endTimeMode == STANDARD_TIME) ? DateTimeRule::STANDARD_TIME :
-            ((endTimeMode == UTC_TIME) ? DateTimeRule::UTC_TIME : DateTimeRule::WALL_TIME);
-        switch (endMode) {
-        case DOM_MODE:
-            dtRule = new DateTimeRule(endMonth, endDay, endTime, timeRuleType);
-            break;
-        case DOW_IN_MONTH_MODE:
-            dtRule = new DateTimeRule(endMonth, endDay, endDayOfWeek, endTime, timeRuleType);
-            break;
-        case DOW_GE_DOM_MODE:
-            dtRule = new DateTimeRule(endMonth, endDay, endDayOfWeek, true, endTime, timeRuleType);
-            break;
-        case DOW_LE_DOM_MODE:
-            dtRule = new DateTimeRule(endMonth, endDay, endDayOfWeek, false, endTime, timeRuleType);
-            break;
-        }
         
-        // Check for Null pointer
-        if (dtRule == NULL) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            deleteTransitionRules();
-            return;
-        }
-        // For now, use ID + '(STD)' as the name
-        stdRule = new AnnualTimeZoneRule(tzid+UnicodeString(STD_STR), getRawOffset(), 0,
-            dtRule, startYear, AnnualTimeZoneRule::MAX_YEAR);
-        
-        //Check for Null pointer
-        if (stdRule == NULL) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            deleteTransitionRules();
-            return;
-        }
+    {  return false;
+}
     
-    UnicodeSet *SimpleDateFormatStaticSets::getIgnorables(UDateFormatField fieldIndex)
+      uv_loop_t* loop_;
+    
+    #include 'atom/browser/native_window_views.h'
+    
+      // The window used for processing events.
+  HWND window_;
+#endif
+    
+     protected:
+  RenderProcessPreferences(
+      v8::Isolate* isolate,
+      const atom::RenderProcessPreferences::Predicate& predicate);
+  ~RenderProcessPreferences() override;
+    
+    #include 'atom/common/api/api_messages.h'
+#include 'atom/common/native_mate_converters/string16_converter.h'
+#include 'atom/common/native_mate_converters/value_converter.h'
+#include 'content/public/browser/render_frame_host.h'
+#include 'content/public/browser/web_contents.h'
+#include 'native_mate/object_template_builder.h'
+    
+    void SavePageHandler::OnDownloadCreated(content::DownloadManager* manager,
+                                        download::DownloadItem* item) {
+  // OnDownloadCreated is invoked during WebContents::SavePage, so the |item|
+  // here is the one stated by WebContents::SavePage.
+  item->AddObserver(this);
+}
+    
+    namespace base {
+class SupportsUserData;
+}
+    
+    #include 'atom/browser/atom_quota_permission_context.h'
+    
+    
+    {} // namespace
+    
+    void add(const Size2D &size,
+         const u16 * src0Base, ptrdiff_t src0Stride,
+         const u16 * src1Base, ptrdiff_t src1Stride,
+         u16 * dstBase, ptrdiff_t dstStride,
+         CONVERT_POLICY policy)
 {
-    UErrorCode status = U_ZERO_ERROR;
-    umtx_initOnce(gSimpleDateFormatStaticSetsInitOnce, &smpdtfmt_initSets, status);
-    if (U_FAILURE(status)) {
-        return NULL;
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+        if (policy == CONVERT_POLICY_SATURATE)
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddSaturate<u16, u32>());
     }
-    
-    switch (fieldIndex) {
-        case UDAT_YEAR_FIELD:
-        case UDAT_MONTH_FIELD:
-        case UDAT_DATE_FIELD:
-        case UDAT_STANDALONE_DAY_FIELD:
-        case UDAT_STANDALONE_MONTH_FIELD:
-            return gStaticSets->fDateIgnorables;
-            
-        case UDAT_HOUR_OF_DAY1_FIELD:
-        case UDAT_HOUR_OF_DAY0_FIELD:
-        case UDAT_MINUTE_FIELD:
-        case UDAT_SECOND_FIELD:
-        case UDAT_HOUR1_FIELD:
-        case UDAT_HOUR0_FIELD:
-            return gStaticSets->fTimeIgnorables;
-            
-        default:
-            return gStaticSets->fOtherIgnorables;
+    else
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddWrap<u16, u32>());
     }
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)policy;
+#endif
 }
     
-    
-    {    return *this;
+    void bitwiseOr(const Size2D &size,
+               const u8 *src0Base, ptrdiff_t src0Stride,
+               const u8 *src1Base, ptrdiff_t src1Stride,
+               u8 *dstBase, ptrdiff_t dstStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    internal::vtransform(size,
+                         src0Base, src0Stride,
+                         src1Base, src1Stride,
+                         dstBase, dstStride, BitwiseOr());
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+#endif
 }
     
-        /**
-     * @param keyword for example 'few' or 'other'
-     * @return the index of the plural form corresponding to the keyword, or OTHER
-     */
-    static int32_t indexOrOtherIndexFromString(const UnicodeString &keyword) {
-        int32_t i = indexOrNegativeFromString(keyword);
-        return i >= 0 ? i : OTHER;
-    }
-    
-    /**
- * Union the set of all characters that may output by this object
- * into the given set.
- * @param toUnionTo the set into which to union the output characters
- */
-void StringMatcher::addReplacementSetTo(UnicodeSet& /*toUnionTo*/) const {
-    // The output of this replacer varies; it is the source text between
-    // matchStart and matchLimit.  Since this varies depending on the
-    // input text, we can't compute it here.  We can either do nothing
-    // or we can add ALL characters to the set.  It's probably more useful
-    // to do nothing.
+    template <>
+int32x4_t vshrq_s32<0>(int32x4_t value)
+{
+    return value;
 }
     
-      /*!
-   * \brief determines whether updater has enough knowledge about a given dataset
-   *        to quickly update prediction cache its training data and performs the
-   *        update if possible.
-   * \param data: data matrix
-   * \param out_preds: prediction cache to be updated
-   * \return boolean indicating whether updater has capability to update
-   *         the prediction cache. If true, the prediction cache will have been
-   *         updated by the time this function returns.
-   */
-  virtual bool UpdatePredictionCache(const DMatrix* data,
-                                     HostDeviceVector<bst_float>* out_preds) {
-    return false;
-  }
-    
-    template<typename IndexType>
-class DensifyParser : public dmlc::Parser<IndexType> {
- public:
-  DensifyParser(dmlc::Parser<IndexType>* parser, uint32_t num_col)
-      : parser_(parser), num_col_(num_col) {
-  }
+    void fillMinMaxLocs(const Size2D & size,
+                    const s32 * srcBase, ptrdiff_t srcStride,
+                    s32 minVal, size_t * minLocPtr, s32 & minLocCount, s32 minLocCapacity,
+                    s32 maxVal, size_t * maxLocPtr, s32 & maxLocCount, s32 maxLocCapacity)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
     }
     
-    struct GBTreeModel {
-  explicit GBTreeModel(bst_float base_margin) : base_margin(base_margin) {}
-  void Configure(const std::vector<std::pair<std::string, std::string> >& cfg) {
-    // initialize model parameters if not yet been initialized.
-    if (trees.size() == 0) {
-      param.InitAllowUnknown(cfg);
-    }
-  }
-    }
+                v = vmlaq_s32(v, v2, vc6s32);
+            v = vmlaq_s32(v, v13, vc4s32);
     
-    // common regressions
-// linear regression
-struct LinearSquareLoss {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
-  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return true; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    return predt - label;
-  }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    return 1.0f;
-  }
-  template <typename T>
-  static T PredTransform(T x) { return x; }
-  template <typename T>
-  static T FirstOrderGradient(T predt, T label) { return predt - label; }
-  template <typename T>
-  static T SecondOrderGradient(T predt, T label) { return T(1.0f); }
-  static bst_float ProbToMargin(bst_float base_score) { return base_score; }
-  static const char* LabelErrorMsg() { return ''; }
-  static const char* DefaultEvalMetric() { return 'rmse'; }
+    enum GARBAGE_LEVEL
+{
+  G_NEVER_CRUNCH,
+  G_OK,
+  G_DODGY,
+  G_TERRIBLE
 };
     
-    SEXP XGDMatrixCreateFromFile_R(SEXP fname, SEXP silent) {
-  SEXP ret;
-  R_API_BEGIN();
-  DMatrixHandle handle;
-  CHECK_CALL(XGDMatrixCreateFromFile(CHAR(asChar(fname)), asInteger(silent), &handle));
-  ret = PROTECT(R_MakeExternalPtr(handle, R_NilValue, R_NilValue));
-  R_RegisterCFinalizerEx(ret, _DMatrixFinalizer, TRUE);
-  R_API_END();
-  UNPROTECT(1);
-  return ret;
-}
+      // Iterate over the blobs inside to_block, and set the blobs that we want to
+  // process to BSTT_NONE. (By default, they should be BSTT_SKIP). The function
+  // returns 0 upon success.
+  int LabelSpecialText(TO_BLOCK* to_block);
     
     
-    {    // Read 5 bytes - the maximum we will need
-    uint64_t tmp = static_cast<uint64_t>(buffer_[start_byte_idx - 4]) << 32 |
-                   static_cast<uint64_t>(buffer_[start_byte_idx - 3]) << 24 |
-                   static_cast<uint64_t>(buffer_[start_byte_idx - 2]) << 16 |
-                   static_cast<uint64_t>(buffer_[start_byte_idx - 1]) << 8 |
-                   buffer_[start_byte_idx];
-    int bit_shift =
-        (bits_per_byte - ((offset_ + 1) * symbol_bits_)) % bits_per_byte;
-    tmp >>= bit_shift;
-    // Mask off unneeded bits
-    uint64_t mask = (1 << symbol_bits_) - 1;
-    return static_cast<T>(tmp & mask);
+    {  TBLOB* blob;
+  Tesseract* tesseract;
+  BLOB_CHOICE_LIST** choices;
+};
+    
+    // This structure captures all information needed about a text line for the
+// purposes of paragraph detection.  It is meant to be exceedingly light-weight
+// so that we can easily test paragraph detection independent of the rest of
+// Tesseract.
+class RowInfo {
+ public:
+  // Constant data derived from Tesseract output.
+  STRING text;        // the full UTF-8 text of the line.
+  bool ltr;           // whether the majority of the text is left-to-right
+                      // TODO(eger) make this more fine-grained.
+    }
+    
+      // Adds the given pix to the set of pages in the PDF file, with the given
+  // caption added to the top.
+  void AddPix(const Pix* pix, const char* caption) {
+    int depth = pixGetDepth(const_cast<Pix*>(pix));
+    int color = depth < 8 ? 1 : (depth > 8 ? 0x00ff0000 : 0x80);
+    Pix* pix_debug = pixAddSingleTextblock(
+        const_cast<Pix*>(pix), fonts_, caption, color, L_ADD_BELOW, nullptr);
+    pixaAddPix(pixa_, pix_debug, L_INSERT);
   }
     
     
-    {  /*! \brief push up temp */
-  inline void PushTemp() {
-    temp.Reserve(limit_size * 2);
-    for (size_t l = 1; true; ++l) {
-      this->InitLevel(l + 1);
-      // check if level l is empty
-      if (level[l].size == 0) {
-        level[l].SetPrune(temp, limit_size);
-        break;
-      } else {
-        // level 0 is actually temp space
-        level[0].SetPrune(temp, limit_size);
-        temp.SetCombine(level[0], level[l]);
-        if (temp.size > limit_size) {
-          // try next level
-          level[l].size = 0;
-        } else {
-          // if merged record is still smaller, no need to send to next level
-          level[l].CopyFrom(temp); break;
+    {  int32_t local_cost_;    // Cost of this point on its own.
+  int32_t total_cost_;    // Sum of all costs in best path to here.
+                        // During cost calculations local_cost is excluded.
+  int32_t total_steps_;   // Number of steps in best path to here.
+  const DPPoint* best_prev_;  // Pointer to prev point in best path from here.
+  // Information for computing the variance part of the cost.
+  int32_t n_;             // Number of steps in best path to here for variance.
+  int32_t sig_x_;         // Sum of step sizes for computing variance.
+  int64_t sig_xsq_;       // Sum of squares of steps for computing variance.
+};
+    
+      // Adds an element with a weight of 1.
+  void add(double x, double y);
+  // Adds an element with a specified weight.
+  void add(double x, double y, double weight);
+  // Adds a whole LLSQ.
+  void add(const LLSQ& other);
+  // Deletes an element with a weight of 1.
+  void remove(double x, double y);
+  int32_t count() const {  // no of elements
+    return static_cast<int>(total_weight + 0.5);
+  }
+    
+    // The tests from the instantiation above will have these names:
+//
+//    * AnotherInstantiationName/FooTest.DoesBlah/0 for 'cat'
+//    * AnotherInstantiationName/FooTest.DoesBlah/1 for 'dog'
+//    * AnotherInstantiationName/FooTest.HasBlahBlah/0 for 'cat'
+//    * AnotherInstantiationName/FooTest.HasBlahBlah/1 for 'dog'
+//
+// Please note that INSTANTIATE_TEST_CASE_P will instantiate all tests
+// in the given test case, whether their definitions come before or
+// AFTER the INSTANTIATE_TEST_CASE_P statement.
+//
+// Please also note that generator expressions (including parameters to the
+// generators) are evaluated in InitGoogleTest(), after main() has started.
+// This allows the user on one hand, to adjust generator parameters in order
+// to dynamically determine a set of tests to run and on the other hand,
+// give the user a chance to inspect the generated tests with Google Test
+// reflection API before RUN_ALL_TESTS() is executed.
+//
+// You can see samples/sample7_unittest.cc and samples/sample8_unittest.cc
+// for more examples.
+//
+// In the future, we plan to publish the API for defining new parameter
+// generators. But for now this interface remains part of the internal
+// implementation and is subject to change.
+//
+//
+// A parameterized test fixture must be derived from testing::Test and from
+// testing::WithParamInterface<T>, where T is the type of the parameter
+// values. Inheriting from TestWithParam<T> satisfies that requirement because
+// TestWithParam<T> inherits from both Test and WithParamInterface. In more
+// complicated hierarchies, however, it is occasionally useful to inherit
+// separately from Test and WithParamInterface. For example:
+    
+      // Same as above, but you can choose the interception scope of this object.
+  ScopedFakeTestPartResultReporter(InterceptMode intercept_mode,
+                                   TestPartResultArray* result);
+    
+    // An array of TestPartResult objects.
+//
+// Don't inherit from TestPartResultArray as its destructor is not
+// virtual.
+class GTEST_API_ TestPartResultArray {
+ public:
+  TestPartResultArray() {}
+    }
+    
+    // A concrete DeathTestFactory implementation for normal use.
+class DefaultDeathTestFactory : public DeathTestFactory {
+ public:
+  virtual bool Create(const char* statement, const RE* regex,
+                      const char* file, int line, DeathTest** test);
+};
+    
+    // Protects copying of all linked_ptr objects.
+GTEST_API_ GTEST_DECLARE_STATIC_MUTEX_(g_linked_ptr_mutex);
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17>
+class ValueArray17 {
+ public:
+  ValueArray17(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
+      T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16,
+      T17 v17) : v1_(v1), v2_(v2), v3_(v3), v4_(v4), v5_(v5), v6_(v6), v7_(v7),
+      v8_(v8), v9_(v9), v10_(v10), v11_(v11), v12_(v12), v13_(v13), v14_(v14),
+      v15_(v15), v16_(v16), v17_(v17) {}
+    }
+    
+    template <GTEST_10_TYPENAMES_(T)>
+struct TupleElement<true, 6, GTEST_10_TUPLE_(T) > {
+  typedef T6 type;
+};
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32, typename T33, typename T34, typename T35,
+    typename T36, typename T37, typename T38, typename T39, typename T40,
+    typename T41, typename T42, typename T43>
+struct Types43 {
+  typedef T1 Head;
+  typedef Types42<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
+      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
+      T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42,
+      T43> Tail;
+};
+    
+    
+    {    // Now, we have i <= n/i < n.
+    // If n is divisible by i, n is not prime.
+    if (n % i == 0) return false;
+  }
+    
+    
+    {
+    {
+    {			}
+			if (decomposed[i].IsUsable()){
+				decomposed[i].AddTo(*toAdd);
+				
+				bd->CreateFixture((const b2FixtureDef*)toAdd);
+			} else if (B2_POLYGON_REPORT_ERRORS){
+				printf('Didn't add unusable polygon.  Dumping vertices:\n');
+				decomposed[i].print();
+			}
+Skip:
+			;
         }
-      }
-    }
-  }
-  /*! \brief get the summary after finalize */
-  inline void GetSummary(SummaryContainer *out) {
-    if (level.size() != 0) {
-      out->Reserve(limit_size * 2);
-    } else {
-      out->Reserve(inqueue.queue.size());
-    }
-    inqueue.MakeSummary(out);
-    if (level.size() != 0) {
-      level[0].SetPrune(*out, limit_size);
-      for (size_t l = 1; l < level.size(); ++l) {
-        if (level[l].size == 0) continue;
-        if (level[0].size == 0) {
-          level[0].CopyFrom(level[l]);
-        } else {
-          out->SetCombine(level[0], level[l]);
-          level[0].SetPrune(*out, limit_size);
-        }
-      }
-      out->CopyFrom(level[0]);
-    } else {
-      if (out->size > limit_size) {
-        temp.Reserve(limit_size);
-        temp.SetPrune(*out, limit_size);
-        out->CopyFrom(temp);
-      }
-    }
-  }
-  // used for debug, check if the sketch is valid
-  inline void CheckValid(RType eps) const {
-    for (size_t l = 1; l < level.size(); ++l) {
-      level[l].CheckValid(eps);
-    }
-  }
-  // initialize level space to at least nlevel
-  inline void InitLevel(size_t nlevel) {
-    if (level.size() >= nlevel) return;
-    data.resize(limit_size * nlevel);
-    level.resize(nlevel, Summary(nullptr, 0));
-    for (size_t l = 0; l < level.size(); ++l) {
-      level[l].data = dmlc::BeginPtr(data) + l * limit_size;
-    }
-  }
-  // input data queue
-  typename Summary::Queue inqueue;
-  // number of levels
-  size_t nlevel;
-  // size of summary in each level
-  size_t limit_size;
-  // the level of each summaries
-  std::vector<Summary> level;
-  // content of the summary
-  std::vector<Entry> data;
-  // temporal summary, used for temp-merge
-  SummaryContainer temp;
-};
+		delete[] pdarray;
+        delete[] decomposed;
+		return;// pdarray; //needs to be deleted after body is created
+}
     
-    // Returns an Env that translates paths such that the root directory appears to
-// be chroot_dir. chroot_dir should refer to an existing directory.
-Env* NewChrootEnv(Env* base_env, const std::string& chroot_dir);
+    #include 'EtcErrorMetric.h'
     
+    #ifdef OPUS_ARM_PRESUME_AARCH64_NEON_INTR
+#include 'arm/fixed_arm64.h'
+#elif OPUS_ARM_INLINE_EDSP
+#include 'arm/fixed_armv5e.h'
+#elif defined (OPUS_ARM_INLINE_ASM)
+#include 'arm/fixed_armv4.h'
+#elif defined (BFIN_ASM)
+#include 'fixed_bfin.h'
+#elif defined (TI_C5X_ASM)
+#include 'fixed_c5x.h'
+#elif defined (TI_C6X_ASM)
+#include 'fixed_c6x.h'
+#endif
     
-    {  mutable int count_ = 0;
-  mutable int merge_count_ = 0;
-};
+    #if !defined(OPUS_HAVE_RTCD)
+#define OVERRIDE_OPUS_FFT (1)
     
-    #include 'rocksdb/cache.h'
-#include 'rocksdb/compaction_filter.h'
-#include 'rocksdb/db.h'
-#include 'rocksdb/options.h'
-#include 'rocksdb/slice.h'
-#include 'rocksdb/table.h'
-#include 'rocksdb/utilities/options_util.h'
-    
-      s = db->Get(ReadOptions(), 'key1', &value);
-  assert(s.IsNotFound());
-    
-      ////////////////////////////////////////////////////////
-  //
-  // 'Read Committed' (Monotonic Atomic Views) Example
-  //   --Using multiple Snapshots
-  //
-  ////////////////////////////////////////////////////////
-    
-    class DbDumpTool {
- public:
-  bool Run(const DumpOptions& dump_options,
-           rocksdb::Options options = rocksdb::Options());
-};
-    
-    // FlushBlockPolicy provides a configurable way to determine when to flush a
-// block in the block based tables,
-class FlushBlockPolicy {
- public:
-  // Keep track of the key/value sequences and return the boolean value to
-  // determine if table builder should flush current data block.
-  virtual bool Update(const Slice& key,
-                      const Slice& value) = 0;
-    }
-    
-    // Get Thread-local IOStatsContext object pointer
-IOStatsContext* get_iostats_context();
-    
-      // Lookup page cache by page identifier
-  //
-  // page_key   Page identifier
-  // buf        Buffer where the data should be copied
-  // size       Size of the page
-  virtual Status Lookup(const Slice& key, std::unique_ptr<char[]>* data,
-                        size_t* size) = 0;
-    
-      // A list of properties that describe some details about the current
-  // operation.  Same field in op_properties[] might have different
-  // meanings for different operations.
-  uint64_t op_properties[kNumOperationProperties];
-    
-      // When Open() is called, it will open at most this many of the latest
-  // non-corrupted backups.
-  //
-  // Note setting this to a non-default value prevents old files from being
-  // deleted in the shared directory, as we can't do proper ref-counting. If
-  // using this option, make sure to occasionally disable it (by resetting to
-  // INT_MAX) and run GarbageCollect to clean accumulated stale files.
-  //
-  // Default: INT_MAX
-  int max_valid_backups_to_open;
+    /** 16x16 multiplication where the result fits in 32 bits */
+#undef MULT16_16
+static OPUS_INLINE opus_val32 MULT16_16_armv5e(opus_val16 a, opus_val16 b)
+{
+  int res;
+  __asm__(
+      '#MULT16_16\n\t'
+      'smulbb %0, %1, %2;\n'
+      : '=r'(res)
+      : 'r'(a), 'r'(b)
+  );
+  return res;
+}
+#define MULT16_16(a, b) (MULT16_16_armv5e(a, b))
