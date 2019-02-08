@@ -1,153 +1,124 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+        const AuthProperty AuthPropertyIterator::operator*() {
+  return std::pair<grpc::string_ref, grpc::string_ref>(
+      property_->name,
+      grpc::string_ref(property_->value, property_->value_length));
+}
     
-    #endif  // TENSORFLOW_PYTHON_LIB_CORE_PY_FUNC_H_
-
+    #include <grpc/grpc_security.h>
+#include 'src/core/lib/channel/channel_args.h'
     
-    
-    {
-    {}  // namespace io
-}  // namespace tensorflow
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#include 'tensorflow/python/util/kernel_registry.h'
-    
-    #endif  // TENSORFLOW_STREAM_EXECUTOR_CUDA_CUDA_ACTIVATION_H_
-
-    
-    #define ROW_VAL_ARG0
-#define ROW_VAL_STORE0
-#define ROW_VAL_VAR0
-#define ROW_VAL_ARG1 , double val_
-#define ROW_VAL_STORE1 , val(val_)
-#define ROW_VAL_VAR1 double val;
-    
-        for (size_t i = 0; i < size.height; ++i)
-    {
-        const u8* src = internal::getRowPtr(srcBase, srcStride, i);
-        s16* dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t j = 0;
+    namespace grpc {
     }
     
-            const f32* ln0 = idx_rm1 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rm1) : tmp;
-        const f32* ln1 = internal::getRowPtr(srcBase, srcStride, i);
-        const f32* ln2 = idx_rp1 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rp1) : tmp;
+    // Deserialize incoming server stats. Returns the number of bytes deserialized.
+size_t ServerStatsDeserialize(const char* buf, size_t buf_size,
+                              uint64_t* server_elapsed_time);
     
-    template <int shift>
-int32x4_t vshrq_s32(int32x4_t value)
-{
-    return vshrq_n_s32(value, shift);
+    namespace grpc {
+    }
+    
+    ThreadPoolInterface* CreateDefaultThreadPool() { return g_ctp_impl(); }
+    
+    class DynamicThreadPool final : public ThreadPoolInterface {
+ public:
+  explicit DynamicThreadPool(int reserve_threads);
+  ~DynamicThreadPool();
+    }
+    
+    void Assembler::cmpli(uint16_t bf, bool l, const Reg64& ra, Immed imm) {
+  assert(imm.fits(HPHP::sz::word) && 'Immediate is too big');
+  EmitDForm(10, rn((bf << 2) | (uint16_t)l), rn(ra), imm.w());
 }
     
-                vec128 v_src = vld3q(src + js), v_dst;
-            v_src.val[0] = vrev64q(v_src.val[0]);
-            v_src.val[1] = vrev64q(v_src.val[1]);
-            v_src.val[2] = vrev64q(v_src.val[2]);
     
-    namespace tesseract {
-double DotProductSSE(const double* u, const double* v, int n) {
-  fprintf(stderr, 'DotProductSSE can't be used on Android\n');
-  abort();
-}
-int32_t IntDotProductSSE(const int8_t* u, const int8_t* v, int n) {
-  fprintf(stderr, 'IntDotProductSSE can't be used on Android\n');
-  abort();
-}
-}  // namespace tesseract
-    
-    
-    {  // Number of 32 bit outputs held in each register.
-  int num_outputs_per_register_;
-  // Maximum number of registers that we will use to hold outputs.
-  int max_output_registers_;
-  // Number of 8 bit inputs in the inputs register.
-  int num_inputs_per_register_;
-  // Number of inputs in each weight group.
-  int num_inputs_per_group_;
-  // Number of groups of inputs to be broadcast.
-  int num_input_groups_;
-  // The weights matrix reorganized in whatever way suits this instance.
-  std::vector<int8_t> shaped_w_;
-  // A series of functions to compute a partial result.
-  std::vector<PartialFunc> partial_funcs_;
+    {  req::ptr<File> open(const String& filename, const String& mode, int options,
+                      const req::ptr<StreamContext>& context) override;
 };
     
-      // This and other putatively are the same, so call the (permanent) callback
-  // for each blob index where the bounding boxes match.
-  // The callback is deleted on completion.
-  void ProcessMatchedBlobs(const TWERD& other, TessCallback1<int>* cb) const;
+    #include 'hphp/runtime/base/runtime-option.h'
     
-    std::shared_ptr<DHTNode> DHTRoutingTable::getNode(const unsigned char* nodeID,
-                                                  const std::string& ipaddr,
-                                                  uint16_t port) const
-{
-  std::shared_ptr<DHTBucket> bucket = getBucketFor(nodeID);
-  return bucket->getNode(nodeID, ipaddr, port);
-}
+    #include 'modules/canbus/proto/chassis_detail.pb.h'
+#include 'modules/drivers/canbus/can_comm/protocol_data.h'
     
-    #include <vector>
-#include <string>
-#include <memory>
+    #include 'modules/drivers/canbus/can_comm/protocol_data.h'
     
-        factory->setRoutingTable(routingTable.get());
-    factory->setConnection(connection.get());
-    factory->setMessageDispatcher(dispatcher.get());
-    factory->setPeerAnnounceStorage(peerAnnounceStorage.get());
-    factory->setTokenTracker(tokenTracker.get());
-    factory->setLocalNode(localNode);
-    factory->setBtRegistry(e->getBtRegistry().get());
     
-      ~DHTSetup();
-    
-    void DHTTaskExecutor::update()
-{
-  execTasks_.erase(std::remove_if(execTasks_.begin(), execTasks_.end(),
-                                  std::mem_fn(&DHTTask::finished)),
-                   execTasks_.end());
-  int r;
-  if (static_cast<size_t>(numConcurrent_) > execTasks_.size()) {
-    r = numConcurrent_ - execTasks_.size();
-  }
-  else {
-    r = 0;
-  }
-  while (r && !queue_.empty()) {
-    std::shared_ptr<DHTTask> task = queue_.front();
-    queue_.pop_front();
-    task->startup();
-    if (!task->finished()) {
-      execTasks_.push_back(task);
-      --r;
+    {  for (int i = 0; i < conti_radar->contiobs_size(); ++i) {
+    if (conti_radar->contiobs(i).obstacle_id() == obj_id) {
+      auto obs = conti_radar->mutable_contiobs(i);
+      obs->set_longitude_dist_rms(
+          LINEAR_RMS[longitude_dist_rms(bytes, length)]);
+      obs->set_lateral_dist_rms(LINEAR_RMS[lateral_dist_rms(bytes, length)]);
+      obs->set_longitude_vel_rms(LINEAR_RMS[longitude_vel_rms(bytes, length)]);
+      obs->set_lateral_vel_rms(LINEAR_RMS[lateral_vel_rms(bytes, length)]);
+      obs->set_longitude_accel_rms(
+          LINEAR_RMS[longitude_accel_rms(bytes, length)]);
+      obs->set_lateral_accel_rms(LINEAR_RMS[lateral_accel_rms(bytes, length)]);
+      obs->set_oritation_angle_rms(
+          ANGLE_RMS[oritation_angle_rms(bytes, length)]);
+      obs->set_probexist(PROBOFEXIST[probexist(bytes, length)]);
+      obs->set_meas_state(meas_state(bytes, length));
+      break;
     }
   }
-  A2_LOG_DEBUG(fmt('Executing %u Task(s). Queue has %u task(s).',
-                   static_cast<unsigned int>(getExecutingTaskSize()),
-                   static_cast<unsigned int>(getQueueSize())));
 }
     
-    #endif // D_DHT_TASK_FACTORY_H
+    
+    {  switch (x) {
+    case 0x0:
+      return RCS_THRESHOLD_STANDARD;
+    case 0x1:
+      return RCS_THRESHOLD_HIGH_SENSITIVITY;
+    default:
+      return RCS_THRESHOLD_ERROR;
+  }
+}
+    
+    void BackupTrajectoryGenerator::GenerateTrajectory1dPairs(
+    const State& init_s, const State& init_d) {
+  std::vector<std::shared_ptr<Curve1d>> lon_trajectories;
+  std::array<double, 5> dds_condidates = {-0.1, -1.0, -2.0, -3.0, -4.0};
+  for (const auto dds : dds_condidates) {
+    lon_trajectories.emplace_back(
+        new ConstantDecelerationTrajectory1d(init_s[0], init_s[1], dds));
+  }
+    }
+    
+    
+    {
+    {}  // namespace planning
+}  // namespace apollo
 
     
-    void DHTTaskFactoryImpl::setRoutingTable(DHTRoutingTable* routingTable)
-{
-  routingTable_ = routingTable;
-}
-    
-      // do nothing; we don't use this message as outgoing message.
-  virtual bool send() CXX11_OVERRIDE;
-    
-    DNSCache::CacheEntry::CacheEntry(const CacheEntry& c) = default;
-    
-      void put(const std::string& hostname, const std::string& ipaddr,
-           uint16_t port);
+    #include 'modules/canbus/vehicle/gem/protocol/accel_cmd_67.h'
+#include 'modules/canbus/vehicle/gem/protocol/accel_rpt_68.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_cmd_6b.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_1_70.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_2_71.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_3_72.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_rpt_6c.h'
+#include 'modules/canbus/vehicle/gem/protocol/date_time_rpt_83.h'
+#include 'modules/canbus/vehicle/gem/protocol/global_cmd_69.h'
+#include 'modules/canbus/vehicle/gem/protocol/global_rpt_6a.h'
+#include 'modules/canbus/vehicle/gem/protocol/headlight_cmd_76.h'
+#include 'modules/canbus/vehicle/gem/protocol/headlight_rpt_77.h'
+#include 'modules/canbus/vehicle/gem/protocol/horn_cmd_78.h'
+#include 'modules/canbus/vehicle/gem/protocol/horn_rpt_79.h'
+#include 'modules/canbus/vehicle/gem/protocol/lat_lon_heading_rpt_82.h'
+#include 'modules/canbus/vehicle/gem/protocol/parking_brake_status_rpt_80.h'
+#include 'modules/canbus/vehicle/gem/protocol/shift_cmd_65.h'
+#include 'modules/canbus/vehicle/gem/protocol/shift_rpt_66.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_cmd_6d.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_1_73.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_2_74.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_3_75.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_rpt_1_6e.h'
+#include 'modules/canbus/vehicle/gem/protocol/turn_cmd_63.h'
+#include 'modules/canbus/vehicle/gem/protocol/turn_rpt_64.h'
+#include 'modules/canbus/vehicle/gem/protocol/vehicle_speed_rpt_6f.h'
+#include 'modules/canbus/vehicle/gem/protocol/wheel_speed_rpt_7a.h'
+#include 'modules/canbus/vehicle/gem/protocol/wiper_cmd_90.h'
+#include 'modules/canbus/vehicle/gem/protocol/wiper_rpt_91.h'
+#include 'modules/canbus/vehicle/gem/protocol/yaw_rate_rpt_81.h'
