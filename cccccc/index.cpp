@@ -1,219 +1,250 @@
 
         
-        
-    {}  // namespace tensorflow
-
+         private:
+  std::string GetFeedURL();
+  void SetFeedURL(mate::Arguments* args);
+  void QuitAndInstall();
     
-    long TfPyInt_AsLong(PyObject* x) {  // NOLINT
-  return PyLong_AsLong(x);
-}
+    namespace api {
+    }
     
-    // Creates a numpy array in 'ret' which either aliases the content of 't' or has
-// a copy.
-Status TensorToNdarray(const Tensor& t, PyObject** ret);
+    namespace gfx {
+class Point;
+class Rect;
+class Screen;
+}  // namespace gfx
     
-    #endif  // TENSORFLOW_PYTHON_LIB_CORE_PY_SEQ_TENSOR_H_
-
+      ~TrackableObject() override { RemoveFromWeakMap(); }
     
-    class FooTest : public ::testing::TestWithParam<const char*> {
-  // You can implement all the usual class fixture members here.
+    #include 'atom/browser/auto_updater.h'
+    
+    class AutoUpdater {
+ public:
+  typedef std::map<std::string, std::string> HeaderMap;
+    }
+    
+      auto* message1_on_arena =
+      Arena::CreateMessage<protobuf_unittest::TestAllTypes>(&arena);
+  TestUtil::SetAllFields(message1_on_arena);
+  const auto* nested = &message1_on_arena->optional_nested_message();
+    
+    #include <google/protobuf/compiler/csharp/csharp_doc_comment.h>
+#include <google/protobuf/compiler/csharp/csharp_enum.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/compiler/csharp/csharp_options.h>
+    
+      // write children: Enums
+  if (file_->enum_type_count() > 0) {
+    printer->Print('#region Enums\n');
+    for (int i = 0; i < file_->enum_type_count(); i++) {
+      EnumGenerator enumGenerator(file_->enum_type(i), this->options());
+      enumGenerator.Generate(printer);
+    }
+    printer->Print('#endregion\n');
+    printer->Print('\n');
+  }
+    
+    void ImmutableExtensionLiteGenerator::Generate(io::Printer* printer) {
+  std::map<string, string> vars;
+  const bool kUseImmutableNames = true;
+  InitTemplateVars(descriptor_, scope_, kUseImmutableNames, name_resolver_,
+                   &vars);
+  printer->Print(vars,
+      'public static final int $constant_name$ = $number$;\n');
+    }
+    
+    TEST_P(DynamicMessageTest, IndependentOffsets) {
+  // Check that all fields have independent offsets by setting each
+  // one to a unique value then checking that they all still have those
+  // unique values (i.e. they don't stomp each other).
+  Arena arena;
+  Message* message = prototype_->New(GetParam()? &arena : NULL);
+  TestUtil::ReflectionTester reflection_tester(descriptor_);
+    }
+    
+    
+    {
+    {      EndToken();
+      return true;
+    }
+  }
+    
+      char label_i;
+  char label_j;
+  char* pixels = new char[2 * rows * cols];
+  std::string value;
+    
+    
+    { protected:
+  shared_ptr<SyncedMemory> rand_vec_;
 };
     
-    template <typename T1, typename T2, typename T3>
-void PrintTo(const ::std::tr1::tuple<T1, T2, T3>& t, ::std::ostream* os) {
-  PrintTupleTo(t, os);
-}
+      /**
+   * Caffe's thread local state will be initialized using the current
+   * thread values, e.g. device id, solver index etc. The random seed
+   * is initialized using caffe_rng_rand.
+   */
+  void StartInternalThread();
     
-    #define EXPECT_NONFATAL_FAILURE_ON_ALL_THREADS(statement, substr) \
-  do {\
-    ::testing::TestPartResultArray gtest_failures;\
-    ::testing::internal::SingleFailureChecker gtest_checker(\
-        &gtest_failures, ::testing::TestPartResult::kNonFatalFailure, \
-        (substr));\
-    {\
-      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
-          ::testing::ScopedFakeTestPartResultReporter::INTERCEPT_ALL_THREADS, \
-          &gtest_failures);\
-      if (::testing::internal::AlwaysTrue()) { statement; }\
-    }\
-  } while (::testing::internal::AlwaysFalse())
+      /**
+   * @brief Returns the vector of learnable parameter blobs.
+   */
+  vector<shared_ptr<Blob<Dtype> > >& blobs() {
+    return blobs_;
+  }
     
-    // Use this function in main() to run all tests.  It returns 0 if all
-// tests are successful, or 1 otherwise.
-//
-// RUN_ALL_TESTS() should be invoked after the command line has been
-// parsed by InitGoogleTest().
-//
-// This function was formerly a macro; thus, it is in the global
-// namespace and has an all-caps name.
-int RUN_ALL_TESTS() GTEST_MUST_USE_RESULT_;
+      int label_axis_, outer_num_, inner_num_;
     
-    // Returns a newly created InternalRunDeathTestFlag object with fields
-// initialized from the GTEST_FLAG(internal_run_death_test) flag if
-// the flag is specified; otherwise returns NULL.
-InternalRunDeathTestFlag* ParseInternalRunDeathTestFlag();
-    
-      // Returns true iff n is a prime number.
-  virtual bool IsPrime(int n) const = 0;
-    
-    // This sample shows how to use Google Test listener API to implement
-// a primitive leak checker.
-    
-    // Tests factorial of negative numbers.
-TEST(FactorialTest, Negative) {
-  // This test is named 'Negative', and belongs to the 'FactorialTest'
-  // test case.
-  EXPECT_EQ(1, Factorial(-5));
-  EXPECT_EQ(1, Factorial(-1));
-  EXPECT_GT(Factorial(-10), 0);
-    }
-    
-    
-// This sample shows how to write a more complex unit test for a class
-// that has multiple member functions.
-//
-// Usually, it's a good idea to have one test for each method in your
-// class.  You don't have to do that exactly, but it helps to keep
-// your tests organized.  You may also throw in additional tests as
-// needed.
-    
-      // Return an internal iterator over the current state of the database.
-  // The keys of this iterator are internal keys (see format.h).
-  // The returned iterator should be deleted when no longer needed.
-  Iterator* TEST_NewInternalIterator();
-    
-    TEST(FormatTest, InternalKeyShortestSuccessor) {
-  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
-            ShortSuccessor(IKey('foo', 100, kTypeValue)));
-  ASSERT_EQ(IKey('\xff\xff', 100, kTypeValue),
-            ShortSuccessor(IKey('\xff\xff', 100, kTypeValue)));
-}
-    
-    #include <stdio.h>
-    
-    static std::string MakeFileName(const std::string& dbname, uint64_t number,
-                                const char* suffix) {
-  char buf[100];
-  snprintf(buf, sizeof(buf), '/%06llu.%s',
-           static_cast<unsigned long long>(number),
-           suffix);
-  return dbname + buf;
-}
-    
-    // Return the name of the current file.  This file contains the name
-// of the current manifest file.  The result will be prefixed with
-// 'dbname'.
-std::string CurrentFileName(const std::string& dbname);
-    
-    int main(int argc, char** argv) {
-  leveldb::Env* env = leveldb::Env::Default();
-  bool ok = true;
-  if (argc < 2) {
-    Usage();
-    ok = false;
-  } else {
-    std::string command = argv[1];
-    if (command == 'dump') {
-      ok = leveldb::HandleDumpCommand(env, argv+2, argc-2);
+     private:
+  // wrap im2col/col2im so we don't have to remember the (long) argument lists
+  inline void conv_im2col_cpu(const Dtype* data, Dtype* col_buff) {
+    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
+      im2col_cpu(data, conv_in_channels_,
+          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
+          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
+          pad_.cpu_data()[0], pad_.cpu_data()[1],
+          stride_.cpu_data()[0], stride_.cpu_data()[1],
+          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
     } else {
-      Usage();
-      ok = false;
+      im2col_nd_cpu(data, num_spatial_axes_, conv_input_shape_.cpu_data(),
+          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
+          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), col_buff);
     }
   }
-  return (ok ? 0 : 1);
-}
-
-    
-    void Reader::ReportDrop(uint64_t bytes, const Status& reason) {
-  if (reporter_ != nullptr &&
-      end_of_buffer_offset_ - buffer_.size() - bytes >= initial_offset_) {
-    reporter_->Corruption(static_cast<size_t>(bytes), reason);
-  }
-}
-    
-      // Create a writer that will append data to '*dest'.
-  // '*dest' must have initial length 'dest_length'.
-  // '*dest' must remain live while this Writer is in use.
-  Writer(WritableFile* dest, uint64_t dest_length);
-    
-    namespace leveldb {
-    }
-    
-    
-    {  x = NewNode(key, height);
-  for (int i = 0; i < height; i++) {
-    // NoBarrier_SetNext() suffices since we will add a barrier when
-    // we publish a pointer to 'x' in prev[i].
-    x->NoBarrier_SetNext(i, prev[i]->NoBarrier_Next(i));
-    prev[i]->SetNext(i, x);
-  }
-}
-    
-    
-    {    // Compare against model iterator
-    std::set<Key>::iterator model_iter = keys.lower_bound(i);
-    for (int j = 0; j < 3; j++) {
-      if (model_iter == keys.end()) {
-        ASSERT_TRUE(!iter.Valid());
-        break;
-      } else {
-        ASSERT_TRUE(iter.Valid());
-        ASSERT_EQ(*model_iter, iter.key());
-        ++model_iter;
-        iter.Next();
-      }
+  inline void conv_col2im_cpu(const Dtype* col_buff, Dtype* data) {
+    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
+      col2im_cpu(col_buff, conv_in_channels_,
+          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
+          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
+          pad_.cpu_data()[0], pad_.cpu_data()[1],
+          stride_.cpu_data()[0], stride_.cpu_data()[1],
+          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
+    } else {
+      col2im_nd_cpu(col_buff, num_spatial_axes_, conv_input_shape_.cpu_data(),
+          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
+          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), data);
     }
   }
-    
-    
-    {#if !defined(NDEBUG)
-    snapshot->list_ = this;
-#endif  // !defined(NDEBUG)
-    snapshot->next_ = &head_;
-    snapshot->prev_ = head_.prev_;
-    snapshot->prev_->next_ = snapshot;
-    snapshot->next_->prev_ = snapshot;
-    return snapshot;
+#ifndef CPU_ONLY
+  inline void conv_im2col_gpu(const Dtype* data, Dtype* col_buff) {
+    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
+      im2col_gpu(data, conv_in_channels_,
+          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
+          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
+          pad_.cpu_data()[0], pad_.cpu_data()[1],
+          stride_.cpu_data()[0], stride_.cpu_data()[1],
+          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
+    } else {
+      im2col_nd_gpu(data, num_spatial_axes_, num_kernels_im2col_,
+          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
+          kernel_shape_.gpu_data(), pad_.gpu_data(),
+          stride_.gpu_data(), dilation_.gpu_data(), col_buff);
+    }
   }
+  inline void conv_col2im_gpu(const Dtype* col_buff, Dtype* data) {
+    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
+      col2im_gpu(col_buff, conv_in_channels_,
+          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
+          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
+          pad_.cpu_data()[0], pad_.cpu_data()[1],
+          stride_.cpu_data()[0], stride_.cpu_data()[1],
+          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
+    } else {
+      col2im_nd_gpu(col_buff, num_spatial_axes_, num_kernels_col2im_,
+          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
+          kernel_shape_.gpu_data(), pad_.gpu_data(), stride_.gpu_data(),
+          dilation_.gpu_data(), data);
+    }
+  }
+#endif
     
+    namespace caffe {
+    }
     
-    {// end of actions group
-/// @}
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    /** @class Show
-* @brief Show the node.
-**/
-class CC_DLL Show : public ActionInstant
-{
+    #ifdef USE_CUDNN
+/*
+ * @brief cuDNN implementation of DeConvolutionLayer.
+ *        Fallback to DeConvolutionLayer for CPU mode.
+ *
+ * cuDNN accelerates deconvolution through forward kernels for filtering and
+ * bias plus backward kernels for the gradient w.r.t. the filters, biases, and
+ * inputs. Caffe + cuDNN further speeds up the computation through forward
+ * parallelism across groups and backward parallelism across gradients.
+*/
+template <typename Dtype>
+class CuDNNDeconvolutionLayer : public DeconvolutionLayer<Dtype> {
+ public:
+  explicit CuDNNDeconvolutionLayer(const LayerParameter& param)
+    : DeconvolutionLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+                          const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+                       const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNDeconvolutionLayer();
+    }
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+        if (U_FAILURE(fDeferredStatus)) {
+        return *this;
+    }
+    
+    UCollationResult
+RuleBasedCollator::compare(UCharIterator &left, UCharIterator &right,
+                           UErrorCode &errorCode) const {
+    if(U_FAILURE(errorCode) || &left == &right) { return UCOL_EQUAL; }
+    UBool numeric = settings->isNumeric();
+    }
+    
+    // SharedBreakIterator encapsulates a shared BreakIterator. Because
+// BreakIterator has mutable semantics, clients must ensure that all uses
+// of a particular shared BreakIterator is protected by the same mutex
+// ensuring that only one thread at a time gets access to that shared
+// BreakIterator. Clients can accomplish this by creating a mutex for all
+// uses of break iterator within a particular class. Then objects of that
+// class may then freely share break iterators among themselves. However,
+// these shared break iterators must never be exposed outside of that class.
+class U_I18N_API SharedBreakIterator : public SharedObject {
 public:
-    /** Allocates and initializes the action.
-     *
-     * @return  An autoreleased Show object.
+    SharedBreakIterator(BreakIterator *biToAdopt);
+    virtual ~SharedBreakIterator();
+    }
+    
+    #include 'unicode/udat.h'
+    
+    int32_t StandardPlural::indexFromString(const UnicodeString &keyword, UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode)) { return OTHER; }
+    int32_t i = indexOrNegativeFromString(keyword);
+    if (i >= 0) {
+        return i;
+    } else {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return OTHER;
+    }
+}
+    
+        /**
+     * Construct a matcher that matches the given pattern string.
+     * @param string the pattern to be matched, possibly containing
+     * stand-ins that represent nested UnicodeMatcher objects.
+     * @param start inclusive start index of text to be replaced
+     * @param limit exclusive end index of text to be replaced;
+     * must be greater than or equal to start
+     * @param segmentNum the segment number from 1..n, or 0 if this is
+     * not a segment.
+     * @param data context object mapping stand-ins to
+     * UnicodeMatcher objects.
      */
-    static Show * create();
-    }
-    
-    protected:
-    float _to;
-    float _from;
-    
-    Animation* AnimationCache::getAnimation(const std::string& name)
-{
-    return _animations.at(name);
-}
-    
-    const BlendFunc& AtlasNode::getBlendFunc() const
-{
-    return _blendFunc;
-}
-    
-        static BOOST_FORCEINLINE bool compare_exchange_strong(
-        storage_type volatile& storage, storage_type& expected, storage_type desired, memory_order, memory_order) BOOST_NOEXCEPT
-    {
-        storage_type previous = expected;
-        storage_type old_val = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_COMPARE_EXCHANGE64(&storage, desired, previous));
-        expected = old_val;
-        return (previous == old_val);
-    }
-    
-    #include <boost/atomic/detail/config.hpp>
+    StringMatcher(const UnicodeString& string,
+                  int32_t start,
+                  int32_t limit,
+                  int32_t segmentNum,
+                  const TransliterationRuleData& data);
