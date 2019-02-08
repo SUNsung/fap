@@ -1,355 +1,406 @@
 
         
-        REGISTER_OP('Ackermann')
-    .Output('ackermann: string')
-    .Doc(R'doc(
-Output a fact about the ackermann function.
-)doc');
-    
-    
-    {}  // namespace tensorflow
-
-    
-    #include <functional>
-    
-    PyObject* PyExceptionRegistry::Lookup(TF_Code code) {
-  DCHECK(singleton_ != nullptr) << 'Must call PyExceptionRegistry::Init() '
-                                   'before PyExceptionRegistry::Lookup()';
-  DCHECK_NE(code, TF_OK);
-  DCHECK(singleton_->exc_types_.find(code) != singleton_->exc_types_.end())
-      << 'Unknown error code passed to PyExceptionRegistry::Lookup: ' << code;
-  return singleton_->exc_types_[code];
-}
-    
-      static const unsigned kMask = 0xf;  // Mask of all available flags.
-    
-    namespace stream_executor {
+        bool IsUrlArg(const base::CommandLine::CharType* arg) {
+  // the first character must be a letter for this to be a URL
+  auto c = *arg;
+  if (('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z')) {
+    for (auto* p = arg + 1; *p; ++p) {
+      c = *p;
+    }
+    }
     }
     
-      /// Destroy the Pix if there is one, freeing memory.
-  virtual void Clear();
-    
-    #define UNLV_EXT  '.uzn'  // unlv zone file
-    
-    // Deletes the box with the given index, and shuffles up the rest.
-// Recomputes the bounding box.
-void BoxWord::DeleteBox(int index) {
-  ASSERT_HOST(0 <= index && index < length_);
-  boxes_.remove(index);
-  --length_;
-  ComputeBoundingBox();
-}
-    
-    
-    {    ICOORD pt;
-    int halfwidth;
-  };
-  // Type holds the distance of each point from the fitted line and the point
-  // itself. Use of double allows integer distances from ICOORDs to be stored
-  // exactly, and also the floating point results from ConstrainedFit.
-  using DistPointPair = KDPairInc<double, ICOORD>;
-    
-    namespace leveldb {
-    }
-    
-      void DoDelete(ThreadState* thread, bool seq) {
-    RandomGenerator gen;
-    WriteBatch batch;
-    Status s;
-    for (int i = 0; i < num_; i += entries_per_batch_) {
-      batch.Clear();
-      for (int j = 0; j < entries_per_batch_; j++) {
-        const int k = seq ? i+j : (thread->rand.Next() % FLAGS_num);
-        char key[100];
-        snprintf(key, sizeof(key), '%016d', k);
-        batch.Delete(key);
-        thread->stats.FinishedSingleOp();
-      }
-      s = db_->Write(write_options_, &batch);
-      if (!s.ok()) {
-        fprintf(stderr, 'del error: %s\n', s.ToString().c_str());
-        exit(1);
-      }
-    }
-  }
-    
-    #endif  // STORAGE_LEVELDB_DB_DB_ITER_H_
-
-    
-    void InternalFilterPolicy::CreateFilter(const Slice* keys, int n,
-                                        std::string* dst) const {
-  // We rely on the fact that the code in table.cc does not mind us
-  // adjusting keys[].
-  Slice* mkey = const_cast<Slice*>(keys);
-  for (int i = 0; i < n; i++) {
-    mkey[i] = ExtractUserKey(keys[i]);
-    // TODO(sanjay): Suppress dups?
-  }
-  user_policy_->CreateFilter(keys, n, dst);
-}
-    
-      const Comparator* user_comparator() const { return user_comparator_; }
-    
-    
-// Owned filenames have the form:
-//    dbname/CURRENT
-//    dbname/LOCK
-//    dbname/LOG
-//    dbname/LOG.old
-//    dbname/MANIFEST-[0-9]+
-//    dbname/[0-9]+.(log|sst|ldb)
-bool ParseFileName(const std::string& filename,
-                   uint64_t* number,
-                   FileType* type) {
-  Slice rest(filename);
-  if (rest == 'CURRENT') {
-    *number = 0;
-    *type = kCurrentFile;
-  } else if (rest == 'LOCK') {
-    *number = 0;
-    *type = kDBLockFile;
-  } else if (rest == 'LOG' || rest == 'LOG.old') {
-    *number = 0;
-    *type = kInfoLogFile;
-  } else if (rest.starts_with('MANIFEST-')) {
-    rest.remove_prefix(strlen('MANIFEST-'));
-    uint64_t num;
-    if (!ConsumeDecimalNumber(&rest, &num)) {
-      return false;
-    }
-    if (!rest.empty()) {
-      return false;
-    }
-    *type = kDescriptorFile;
-    *number = num;
-  } else {
-    // Avoid strtoull() to keep filename format independent of the
-    // current locale
-    uint64_t num;
-    if (!ConsumeDecimalNumber(&rest, &num)) {
-      return false;
-    }
-    Slice suffix = rest;
-    if (suffix == Slice('.log')) {
-      *type = kLogFile;
-    } else if (suffix == Slice('.sst') || suffix == Slice('.ldb')) {
-      *type = kTableFile;
-    } else if (suffix == Slice('.dbtmp')) {
-      *type = kTempFile;
-    } else {
-      return false;
-    }
-    *number = num;
-  }
-  return true;
-}
-    
-      // Create a reader that will return log records from '*file'.
-  // '*file' must remain live while this Reader is in use.
-  //
-  // If 'reporter' is non-null, it is notified whenever some data is
-  // dropped due to a detected corruption.  '*reporter' must remain
-  // live while this Reader is in use.
-  //
-  // If 'checksum' is true, verify checksums if available.
-  //
-  // The Reader will start reading at the first record located at physical
-  // position >= initial_offset within the file.
-  Reader(SequentialFile* file, Reporter* reporter, bool checksum,
-         uint64_t initial_offset);
-    
-      // Create a writer that will append data to '*dest'.
-  // '*dest' must have initial length 'dest_length'.
-  // '*dest' must remain live while this Writer is in use.
-  Writer(WritableFile* dest, uint64_t dest_length);
-    
-    #include <string>
-#include 'leveldb/db.h'
-#include 'db/dbformat.h'
-#include 'db/skiplist.h'
-#include 'util/arena.h'
-    
-      bool operator == (const ExtensionManager_deregisterExtension_args & rhs) const
-  {
-    if (!(uuid == rhs.uuid))
-      return false;
-    return true;
-  }
-  bool operator != (const ExtensionManager_deregisterExtension_args &rhs) const {
-    return !(*this == rhs);
-  }
-    
-    using namespace ::apache::thrift;
-using namespace ::apache::thrift::protocol;
-using namespace ::apache::thrift::transport;
-using namespace ::apache::thrift::server;
-    
-      std::string q2 =
-      R'(INSERT INTO test_table (username, age) VALUES ('joe', 25))';
-  QueryData d2;
-  Row row2_1;
-  row2_1['username'] = 'mike';
-  row2_1['age'] = '23';
-  d2.push_back(row2_1);
-  Row row2_2;
-  row2_2['username'] = 'matt';
-  row2_2['age'] = '24';
-  d2.push_back(row2_2);
-  Row row2_3;
-  row2_3['username'] = 'joe';
-  row2_3['age'] = '25';
-  d2.push_back(row2_3);
-  results.push_back(std::make_pair(q2, d2));
-    
-    namespace {
-    }
-    
-    class SQLPlugin : public Plugin {
+    class InAppPurchase : public mate::EventEmitter<InAppPurchase>,
+                      public in_app_purchase::TransactionObserver {
  public:
-  /// Run a SQL query string against the SQL implementation.
-  virtual Status query(const std::string& query,
-                       QueryData& results,
-                       bool use_cache) const = 0;
+  static mate::Handle<InAppPurchase> Create(v8::Isolate* isolate);
     }
     
-    namespace osquery {
-namespace cpu {
-    }
+      // The window used for processing events.
+  HWND window_;
+#endif
+    
+    class Event : public Wrappable<Event>, public content::WebContentsObserver {
+ public:
+  static Handle<Event> Create(v8::Isolate* isolate);
     }
     
-        // Build atlas
-    unsigned char* tex_pixels = NULL;
-    int tex_w, tex_h;
-    io.Fonts->GetTexDataAsRGBA32(&tex_pixels, &tex_w, &tex_h);
+    // --------------------------- Structures ---------------------------
     
-    #if ALLEGRO_HAS_CLIPBOARD
-static const char* ImGui_ImplAllegro5_GetClipboardText(void*)
+    net::URLRequestJob* AboutProtocolHandler::MaybeCreateJob(
+    net::URLRequest* request,
+    net::NetworkDelegate* network_delegate) const {
+  return new URLRequestAboutJob(request, network_delegate);
+}
+    
+    
+    {}  // namespace asar
+    
+      void Corrupt(FileType filetype, int offset, int bytes_to_corrupt) {
+    // Pick file to corrupt
+    std::vector<std::string> filenames;
+    ASSERT_OK(env_.GetChildren(dbname_, &filenames));
+    uint64_t number;
+    FileType type;
+    std::string fname;
+    int picked_number = -1;
+    for (size_t i = 0; i < filenames.size(); i++) {
+      if (ParseFileName(filenames[i], &number, &type) &&
+          type == filetype &&
+          int(number) > picked_number) {  // Pick latest file
+        fname = dbname_ + '/' + filenames[i];
+        picked_number = number;
+      }
+    }
+    ASSERT_TRUE(!fname.empty()) << filetype;
+    }
+    
+      void SeekRandom(ThreadState* thread) {
+    ReadOptions options;
+    int found = 0;
+    for (int i = 0; i < reads_; i++) {
+      Iterator* iter = db_->NewIterator(options);
+      char key[100];
+      const int k = thread->rand.Next() % FLAGS_num;
+      snprintf(key, sizeof(key), '%016d', k);
+      iter->Seek(key);
+      if (iter->Valid() && iter->key() == key) found++;
+      delete iter;
+      thread->stats.FinishedSingleOp();
+    }
+    char msg[100];
+    snprintf(msg, sizeof(msg), '(%d of %d found)', found, num_);
+    thread->stats.AddMessage(msg);
+  }
+    
+    // Return a new iterator that converts internal keys (yielded by
+// '*internal_iter') that were live at the specified 'sequence' number
+// into appropriate user keys.
+Iterator* NewDBIterator(DBImpl* db,
+                        const Comparator* user_key_comparator,
+                        Iterator* internal_iter,
+                        SequenceNumber sequence,
+                        uint32_t seed);
+    
+    
+    {  // When limit user key is prefix of start user key
+  ASSERT_EQ(IKey('foobar', 100, kTypeValue),
+            Shorten(IKey('foobar', 100, kTypeValue),
+                    IKey('foo', 200, kTypeValue)));
+}
+    
+    #ifndef STORAGE_LEVELDB_DB_LOG_WRITER_H_
+#define STORAGE_LEVELDB_DB_LOG_WRITER_H_
+    
+          // Verify that everything in [pos,current) was not present in
+      // initial_state.
+      while (pos < current) {
+        ASSERT_LT(key(pos), K) << pos;
+    }
+    
+        inline size_t GetVersion(const Dictionary& dict)
+    {
+        if (!dict.Contains(versionKey))
+             LogicError('Required key '%ls' is not found in the dictionary.', versionKey.c_str());
+    }
+    
+    
+    {            Microsoft::MSR::CNTK::LearnableParameter<ElementType>::InitRandom(*valueMatrix, AsTensorShape(shape), initializerType, randomSeed, (ElementType)scale,
+                                                                              filterRank, outputRank, /*initOnCPUOnly=*/true,
+                                                                              AsCNTKImplDeviceId(device));
+        }
+    
+        // Releases the mutex
+    void Release()
+    {
+        assert(m_handle != NULL);
+        int rc = 0;
+        rc = ::ReleaseMutex(m_handle);
+        if ((rc == RELEASEMUTEX_ERROR) && !std::uncaught_exception())
+        {
+            RuntimeError('Mutex Release: Failed to release mutex %s: %d', m_name.c_str(), ::GetLastError());
+        }
+        rc = ::CloseHandle(m_handle);
+        if ((rc == CLOSEHANDLE_ERROR) && !std::uncaught_exception())
+        {
+            RuntimeError('Mutex Release: Failed to close handler %s: %d', m_name.c_str(), ::GetLastError());
+        }
+        m_handle = NULL;
+    }
+    
+    class ScopeTimer
 {
-    if (g_ClipboardTextData)
-        al_free(g_ClipboardTextData);
-    g_ClipboardTextData = al_get_clipboard_text(g_Display);
-    return g_ClipboardTextData;
+    Timer m_aggregateTimer;
+    size_t m_verbosity;
+    std::string m_message;
+    }
+    
+    
+    {        for (int t = 0; t < iNumPos; t++)
+        {
+            for (int k = 0; k < iNumLab; k++)
+            {
+                ElemType fTmp = (ElemType) LZERO;
+                if (t > 1)
+                {
+                    for (int j = 0; j < iNumLab; j++)
+                    {
+                        ElemType fAlpha = alpha(j, t - 1) + pair_scores(k, j);
+                        if (fAlpha > fTmp)
+                        {
+                            fTmp = fAlpha;
+                            iTmp = j;
+                        }
+                    }
+                    fTmp += pos_scores(k, t); // include position dependent score
+                }
+                else
+                {
+                    // with constrain that the first word is labeled as a given symbol
+                    iTmp = stt;
+                    fTmp = 0;
+                    if (t == 1)
+                    {
+                        fTmp = alpha(iTmp, t - 1);
+                        fTmp += pair_scores(k, iTmp);
+                        fTmp += pos_scores(k, t);
+                    }
+                    else
+                    {
+                        fTmp = (k == stt) ? pos_scores(k, t) : (ElemType) LZERO;
+                    }
+                }
+                alpha(k, t) = fTmp;
+                backtrace(k, t) = (ElemType) iTmp;
+            }
+        }
+    };
+    
+    
+//---------------------------------------------------------------------
+//
+//   dump    Output the compiled form of the pattern.
+//           Debugging function only.
+//
+//---------------------------------------------------------------------
+void   RegexPattern::dumpOp(int32_t index) const {
+    (void)index;  // Suppress warnings in non-debug build.
+#if defined(REGEX_DEBUG)
+    static const char * const opNames[] = {URX_OPCODE_NAMES};
+    int32_t op          = fCompiledPat->elementAti(index);
+    int32_t val         = URX_VAL(op);
+    int32_t type        = URX_TYPE(op);
+    int32_t pinnedType  = type;
+    if ((uint32_t)pinnedType >= UPRV_LENGTHOF(opNames)) {
+        pinnedType = 0;
+    }
+    }
+    
+    #if !UCONFIG_NO_BREAK_ITERATION
+    
+    class U_I18N_API SharedPluralRules : public SharedObject {
+public:
+    SharedPluralRules(PluralRules *prToAdopt) : ptr(prToAdopt) { }
+    virtual ~SharedPluralRules();
+    const PluralRules *operator->() const { return ptr; }
+    const PluralRules &operator*() const { return *ptr; }
+private:
+    PluralRules *ptr;
+    SharedPluralRules(const SharedPluralRules &);
+    SharedPluralRules &operator=(const SharedPluralRules &);
+};
+    
+        /**
+     * Get maximum significant digits. INT32_MAX means no maximum.
+     */
+    int32_t getMax() const {
+        return fMax;
+    }
+    
+    static const int32_t gMaxFastInt = 4096;
+    
+    #include 'unicode/uobject.h'
+#include 'unicode/utypes.h'
+    
+    #ifndef SMPDTFST_H
+#define SMPDTFST_H
+    
+    U_NAMESPACE_END
+    
+        /**
+     * @param keyword for example 'few' or 'other'
+     * @return the index of the plural form corresponding to the keyword, or OTHER
+     */
+    static int32_t indexOrOtherIndexFromString(const UnicodeString &keyword) {
+        int32_t i = indexOrNegativeFromString(keyword);
+        return i >= 0 ? i : OTHER;
+    }
+    
+    #endif /* #if !UCONFIG_NO_TRANSLITERATION */
+    
+      /**
+   * \fn  virtual void Predictor::PredictLeaf(DMatrix* dmat,
+   * std::vector<bst_float>* out_preds, const gbm::GBTreeModel& model, unsigned
+   * ntree_limit = 0) = 0;
+   *
+   * \brief predict the leaf index of each tree, the output will be nsample *
+   * ntree vector this is only valid in gbtree predictor.
+   *
+   * \param [in,out]  dmat        The input feature matrix.
+   * \param [in,out]  out_preds   The output preds.
+   * \param           model       Model to make predictions from.
+   * \param           ntree_limit (Optional) The ntree limit.
+   */
+    
+    // common regressions
+// linear regression
+struct LinearSquareLoss {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
+  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return true; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    return predt - label;
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    return 1.0f;
+  }
+  template <typename T>
+  static T PredTransform(T x) { return x; }
+  template <typename T>
+  static T FirstOrderGradient(T predt, T label) { return predt - label; }
+  template <typename T>
+  static T SecondOrderGradient(T predt, T label) { return T(1.0f); }
+  static bst_float ProbToMargin(bst_float base_score) { return base_score; }
+  static const char* LabelErrorMsg() { return ''; }
+  static const char* DefaultEvalMetric() { return 'rmse'; }
+};
+    
+    SEXP XGDMatrixGetInfo_R(SEXP handle, SEXP field) {
+  SEXP ret;
+  R_API_BEGIN();
+  bst_ulong olen;
+  const float *res;
+  CHECK_CALL(XGDMatrixGetFloatInfo(R_ExternalPtrAddr(handle),
+                                   CHAR(asChar(field)),
+                                 &olen,
+                                 &res));
+  ret = PROTECT(allocVector(REALSXP, olen));
+  for (size_t i = 0; i < olen; ++i) {
+    REAL(ret)[i] = res[i];
+  }
+  R_API_END();
+  UNPROTECT(1);
+  return ret;
 }
     
-                ImGui::Begin('Hello, world!');                          // Create a window called 'Hello, world!' and append into it.
+      // Computes the score (negative loss) resulting from performing this split
+  virtual bst_float ComputeSplitScore(bst_uint nodeid,
+                                      bst_uint featureid,
+                                      const GradStats& left_stats,
+                                      const GradStats& right_stats,
+                                      bst_float left_weight,
+                                      bst_float right_weight) const = 0;
     
-        // Backup DX state that will be modified to restore it afterwards (unfortunately this is very ugly looking and verbose. Close your eyes!)
-    struct BACKUP_DX10_STATE
-    {
-        UINT                        ScissorRectsCount, ViewportsCount;
-        D3D10_RECT                  ScissorRects[D3D10_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE];
-        D3D10_VIEWPORT              Viewports[D3D10_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE];
-        ID3D10RasterizerState*      RS;
-        ID3D10BlendState*           BlendState;
-        FLOAT                       BlendFactor[4];
-        UINT                        SampleMask;
-        UINT                        StencilRef;
-        ID3D10DepthStencilState*    DepthStencilState;
-        ID3D10ShaderResourceView*   PSShaderResource;
-        ID3D10SamplerState*         PSSampler;
-        ID3D10PixelShader*          PS;
-        ID3D10VertexShader*         VS;
-        D3D10_PRIMITIVE_TOPOLOGY    PrimitiveTopology;
-        ID3D10Buffer*               IndexBuffer, *VertexBuffer, *VSConstantBuffer;
-        UINT                        IndexBufferOffset, VertexBufferStride, VertexBufferOffset;
-        DXGI_FORMAT                 IndexBufferFormat;
-        ID3D10InputLayout*          InputLayout;
-    };
-    BACKUP_DX10_STATE old;
-    old.ScissorRectsCount = old.ViewportsCount = D3D10_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE;
-    ctx->RSGetScissorRects(&old.ScissorRectsCount, old.ScissorRects);
-    ctx->RSGetViewports(&old.ViewportsCount, old.Viewports);
-    ctx->RSGetState(&old.RS);
-    ctx->OMGetBlendState(&old.BlendState, old.BlendFactor, &old.SampleMask);
-    ctx->OMGetDepthStencilState(&old.DepthStencilState, &old.StencilRef);
-    ctx->PSGetShaderResources(0, 1, &old.PSShaderResource);
-    ctx->PSGetSamplers(0, 1, &old.PSSampler);
-    ctx->PSGetShader(&old.PS);
-    ctx->VSGetShader(&old.VS);
-    ctx->VSGetConstantBuffers(0, 1, &old.VSConstantBuffer);
-    ctx->IAGetPrimitiveTopology(&old.PrimitiveTopology);
-    ctx->IAGetIndexBuffer(&old.IndexBuffer, &old.IndexBufferFormat, &old.IndexBufferOffset);
-    ctx->IAGetVertexBuffers(0, 1, &old.VertexBuffer, &old.VertexBufferStride, &old.VertexBufferOffset);
-    ctx->IAGetInputLayout(&old.InputLayout);
+      /**
+   * \fn  static size_t CompressedBufferWriter::CalculateBufferSize(int
+   * num_elements, int num_symbols)
+   *
+   * \brief Calculates number of bytes requiredm for a given number of elements
+   * and a symbol range.
+   *
+   * \author  Rory
+   * \date  7/9/2017
+   *
+   * \param num_elements  Number of elements.
+   * \param num_symbols   Max number of symbols (alphabet size)
+   *
+   * \return  The calculated buffer size.
+   */
     
-        g_AttribLocationTex = glGetUniformLocation(g_ShaderHandle, 'Texture');
-    g_AttribLocationProjMtx = glGetUniformLocation(g_ShaderHandle, 'ProjMtx');
-    g_AttribLocationPosition = glGetAttribLocation(g_ShaderHandle, 'Position');
-    g_AttribLocationUV = glGetAttribLocation(g_ShaderHandle, 'UV');
-    g_AttribLocationColor = glGetAttribLocation(g_ShaderHandle, 'Color');
-    
-    namespace apollo {
-namespace planning {
+      /*!
+   * \brief add an element to a sketch
+   * \param x The element added to the sketch
+   * \param w The weight of the element.
+   */
+  inline void Push(DType x, RType w = 1) {
+    if (w == static_cast<RType>(0)) return;
+    if (inqueue.qtail == inqueue.queue.size()) {
+      // jump from lazy one value to limit_size * 2
+      if (inqueue.queue.size() == 1) {
+        inqueue.queue.resize(limit_size * 2);
+      } else {
+        temp.Reserve(limit_size * 2);
+        inqueue.MakeSummary(&temp);
+        // cleanup queue
+        inqueue.qtail = 0;
+        this->PushTemp();
+      }
     }
-    }
-    
-    TEST(TestPiecewiseLinearConstraint, add_boundary) {
-  PiecewiseLinearConstraint constraint(10, 0.1);
-  std::vector<uint32_t> index_list;
-  std::vector<double> lower_bound;
-  std::vector<double> upper_bound;
-  for (uint32_t i = 0; i < 10; ++i) {
-    index_list.push_back(i);
-    lower_bound.push_back(1.0);
-    upper_bound.push_back(100.0);
+    inqueue.Push(x, w);
   }
+    
+    void DHTRoutingTable::dropNode(const std::shared_ptr<DHTNode>& node)
+{
+  getBucketFor(node)->dropNode(node);
+}
+/*
+  void DHTRoutingTable::moveBucketHead(const std::shared_ptr<DHTNode>& node)
+  {
+  getBucketFor(node)->moveToHead(node);
+  }
+*/
+void DHTRoutingTable::moveBucketTail(const std::shared_ptr<DHTNode>& node)
+{
+  getBucketFor(node)->moveToTail(node);
+}
+    
+    namespace aria2 {
     }
     
-    double Spline1dSeg::operator()(const double x) const { return spline_func_(x); }
+    #include <vector>
+#include <deque>
+#include <memory>
     
+      virtual void
+  addPeriodicTask2(const std::shared_ptr<DHTTask>& task) CXX11_OVERRIDE;
     
-    {
-    {}  // namespace planning
-}  // namespace apollo
+    #endif // D_DHT_TOKEN_TRACKER_H
 
     
-    #include 'modules/canbus/vehicle/gem/gem_message_manager.h'
+    public:
+  // _remoteNode is always null
+  DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
+                    const unsigned char* data, size_t length,
+                    const std::string& ipaddr, uint16_t port);
     
-    class GemVehicleFactoryTest : public ::testing::Test {
- public:
-  virtual void SetUp() {
-    VehicleParameter parameter;
-    parameter.set_brand(VehicleParameter::GEM);
-    gem_factory_.SetVehicleParameter(parameter);
+      /**
+   * Returns a double in [0, 1)
+   */
+  static double randDouble01() {
+    return randDouble01(ThreadLocalPRNG());
   }
-  virtual void TearDown() {}
+    
+    namespace folly {
     }
     
     
-    {    return head;
-}
-    
-    
-    {    return 0;
-}
-    
-    
-/// Recursive
-/// Time Complexity: O(n)
-/// Space Complexity: O(n)
-    
-    // Recursive
-// Time Complexity: O(n), n is the node number in the tree
-// Space Complexity: O(h), h is the height of the tree
-class Solution {
-public:
-    vector<int> inorderTraversal(TreeNode* root) {
-    }
+    {      if (equiv == cpu) {
+        // we only want to count the equiv classes once, so we do it when
+        // we first encounter them
+        while (numCachesByLevel.size() <= level) {
+          numCachesByLevel.push_back(0);
+        }
+        numCachesByLevel[level]++;
+      }
     }
     
-    
-    {    return 0;
-}
-    
-    
-int main() {
-    }
-    
-        TreeNode* root = new TreeNode(1);
-    root->right = new TreeNode(2);
-    root->right->left = new TreeNode(3);
-    vector<int> res = Solution().preorderTraversal(root);
-    print_vec(res);
-    
-    int main() {
-    }
+    template <template <typename> class Atom = std::atomic>
+struct counted_ptr_base {
+ protected:
+  static intrusive_shared_count<Atom>* getRef(void* pt) {
+    char* p = (char*)pt;
+    p -= sizeof(intrusive_shared_count<Atom>);
+    return (intrusive_shared_count<Atom>*)p;
+  }
+};
