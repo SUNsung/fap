@@ -1,100 +1,69 @@
 
         
-          p.action do |args, _|
-    if args.empty?
-      Jekyll.logger.error 'A subcommand is required.'
-      puts p
-      abort
-    else
-      subcommand = args.first
-      unless p.has_command? subcommand
-        Jekyll.logger.abort_with 'fatal: 'jekyll #{args.first}' could not' \
-          ' be found. You may need to install the jekyll-#{args.first} gem' \
-          ' or a related gem to be able to use this subcommand.'
-      end
-    end
-  end
-end
-
-    
-          def after_background(_background)
-        @in_background = nil
-      end
-    
-            def initialize(_opts)
-          # If EventMachine SSL support on Windows ever gets better, the code below will
-          # set up the reactor to handle SSL
-          #
-          # @ssl_enabled = opts['ssl_cert'] && opts['ssl_key']
-          # if @ssl_enabled
-          #   em_opts[:tls_options] = {
-          #   :private_key_file => Jekyll.sanitized_path(opts['source'], opts['ssl_key']),
-          #   :cert_chain_file  => Jekyll.sanitized_path(opts['source'], opts['ssl_cert'])
-          #   }
-          #   em_opts[:secure] = true
-          # end
-    
-        def effective_url
-      @effective_url ||= URL.parse super
-    end
-    
-            css('pre.prettyprint').each do |node|
-          node.content = node.content.strip
-          node['data-language'] = 'dart' if node['class'].include?('dart')
-          node['data-language'] = 'html' if node.content.start_with?('<')
-          node.remove_attribute('class')
+                def importer_class
+          IssueAndLabelLinksImporter
         end
     
-      context 'writable test' do
-    before do
-      @tmp_file = tmp('file.kernel.test')
-      touch(@tmp_file)
-    end
+              page.objects.each do |object|
+            next if already_imported?(object)
     
-      # String arguments should be evaluated in the context of the caller.
-  it 'accepts a String argument instead of a Proc or block' do
-    trace_var :$Kernel_trace_var_global, '$Kernel_trace_var_extra = true'
+            def truncated_title
+          title.truncate(255)
+        end
     
-    Then(/the current symlink points to the previous release/) do
-  previous_release_path = @release_paths[-2]
+    module Gitlab
+  module GithubImport
+    module Representation
+      class PullRequest
+        include ToHash
+        include ExposeAttribute
     
-          private
+            # Builds a user using a Hash that was built from a JSON payload.
+        def self.from_json_hash(raw_hash)
+          new(Representation.symbolize_hash(raw_hash))
+        end
     
-          unless described_class ==
-             RuboCop::Cop::Layout::MultilineMethodDefinitionBraceLayout
-        context 'with a chained call on the closing brace' do
-          let(:suffix) { '.any?' }
-          let(:source) { construct(false, true) }
+          def call(env)
+        transaction, retval = Transaction.run do
+          @app.call(env)
+        end
     
-          # Checks whether this case statement has an `else` branch.
-      #
-      # @return [Boolean] whether the `case` statement has an `else` branch
-      def else?
-        loc.else
-      end
-    end
-  end
-end
-
+          emoji = CustomEmoji.find_or_initialize_by(domain: nil,
+                                                shortcode: @custom_emoji.shortcode)
+      emoji.image = @custom_emoji.image
     
-          # Returns the body of the `for` loop.
-      #
-      # @return [Node, nil] The body of the `for` loop.
-      def body
-        node_parts[2]
-      end
+        def set_report_note
+      @report_note = ReportNote.find(params[:id])
     end
   end
 end
 
     
+    module Admin
+  class ReportedStatusesController < BaseController
+    before_action :set_report
     
-    {      # Checks whether the `hash` literal is delimited by curly braces.
-      #
-      # @return [Boolean] whether the `hash` literal is enclosed in braces
-      def braces?
-        loc.end && loc.end.is?('}')
-      end
+      def show
+    render_cached_json('api:v1:instances:activity:show', expires_in: 1.day) { activity }
+  end
+    
+      private
+    
+      context 'every shim script' do
+    it 'has valid bash syntax' do
+      # These have no file extension, but can be identified by their shebang.
+      (HOMEBREW_LIBRARY_PATH/'shims').find do |path|
+        next if path.directory?
+        next if path.symlink?
+        next unless path.executable?
+        next unless path.read(12) == '#!/bin/bash\n'
+    
+    
     end
   end
 end
+
+    
+            _render { content }
+      end
+    end
