@@ -1,114 +1,235 @@
 
         
-        PosixMmapReadableFile::~PosixMmapReadableFile() {
-  int ret = munmap(mmapped_region_, length_);
-  if (ret != 0) {
-    fprintf(stdout, 'failed to munmap %p length %' ROCKSDB_PRIszt ' \n',
-            mmapped_region_, length_);
-  }
-  close(fd_);
-}
-    
-    
-    {#if defined(OS_LINUX) || defined(OS_MACOSX) || defined(OS_AIX)
-  virtual size_t GetUniqueId(char* id, size_t max_size) const override;
-#endif
-  virtual void Hint(AccessPattern pattern) override;
-  virtual Status InvalidateCache(size_t offset, size_t length) override;
-  virtual bool use_direct_io() const override { return use_direct_io_; }
-  virtual size_t GetRequiredBufferAlignment() const override {
-    return logical_sector_size_;
-  }
-};
-    
-      // When flush happens, it determines whether to trigger compaction. If
-  // triggered_writes_stop is true, it will also set the retry flag of
-  // compaction-task to true.
-  void OnFlushCompleted(
-      DB* db, const FlushJobInfo& info) override {
-    CompactionTask* task = PickCompaction(db, info.cf_name);
-    if (task != nullptr) {
-      if (info.triggered_writes_stop) {
-        task->retry_on_fail = true;
+            const auto* shapes_and_types = c.output_handle_shapes_and_types(i);
+    if (shapes_and_types != nullptr) {
+      auto* out_handle_data = out.mutable_handle_data();
+      out_handle_data->set_is_set(true);
+      for (const auto& p : *shapes_and_types) {
+        auto* out_shape_and_type = out_handle_data->add_shape_and_type();
+        ProtoFromShapeHandle(p.shape, &c, out_shape_and_type->mutable_shape());
+        out_shape_and_type->set_dtype(p.dtype);
       }
-      // Schedule compaction in a different thread.
-      ScheduleCompaction(task);
     }
-  }
     
-      ////////////////////////////////////////////////////////
-  //
-  // Simple OptimisticTransaction Example ('Read Committed')
-  //
-  ////////////////////////////////////////////////////////
+    // Get the python wrappers for a list of ops in a OpList.
+// `op_list_buf` should be a pointer to a buffer containing
+// the binary encoded OpList proto, and `op_list_len` should be the
+// length of that buffer.
+string GetPythonWrappers(const char* op_list_buf, size_t op_list_len);
     
-    // Move all L0 files to target_level skipping compaction.
-// This operation succeeds only if the files in L0 have disjoint ranges; this
-// is guaranteed to happen, for instance, if keys are inserted in sorted
-// order. Furthermore, all levels between 1 and target_level must be empty.
-// If any of the above condition is violated, InvalidArgument will be
-// returned.
-Status PromoteL0(DB* db, ColumnFamilyHandle* column_family,
-                 int target_level = 1);
-    
-      // the thread pool id
-  uint64_t thread_pool_id;
+    #include 'tensorflow/core/framework/op.h'
     
     
-    {}  // namespace rocksdb
+    {
+    {}  // namespace cuda
+}  // namespace stream_executor
 
     
-      enum CompactionPropertyType : int {
-    COMPACTION_JOB_ID = 0,
-    COMPACTION_INPUT_OUTPUT_LEVEL,
-    COMPACTION_PROP_FLAGS,
-    COMPACTION_TOTAL_INPUT_BYTES,
-    COMPACTION_BYTES_READ,
-    COMPACTION_BYTES_WRITTEN,
-    NUM_COMPACTION_PROPERTIES
-  };
+        /** Colorize an icon (given filename) with the text color */
+    QIcon TextColorIcon(const QString& filename) const;
     
     
-    {  explicit BackupableDBOptions(
-      const std::string& _backup_dir, Env* _backup_env = nullptr,
-      bool _share_table_files = true, Logger* _info_log = nullptr,
-      bool _sync = true, bool _destroy_old_data = false,
-      bool _backup_log_files = true, uint64_t _backup_rate_limit = 0,
-      uint64_t _restore_rate_limit = 0, int _max_background_operations = 1,
-      uint64_t _callback_trigger_interval_size = 4 * 1024 * 1024,
-      int _max_valid_backups_to_open = INT_MAX)
-      : backup_dir(_backup_dir),
-        backup_env(_backup_env),
-        share_table_files(_share_table_files),
-        info_log(_info_log),
-        sync(_sync),
-        destroy_old_data(_destroy_old_data),
-        backup_log_files(_backup_log_files),
-        backup_rate_limit(_backup_rate_limit),
-        restore_rate_limit(_restore_rate_limit),
-        share_files_with_checksum(false),
-        max_background_operations(_max_background_operations),
-        callback_trigger_interval_size(_callback_trigger_interval_size),
-        max_valid_backups_to_open(_max_valid_backups_to_open) {
-    assert(share_table_files || !share_files_with_checksum);
-  }
+    {private Q_SLOTS:
+    /* sign message */
+    void on_addressBookButton_SM_clicked();
+    void on_pasteButton_SM_clicked();
+    void on_signMessageButton_SM_clicked();
+    void on_copySignatureButton_SM_clicked();
+    void on_clearButton_SM_clicked();
+    /* verify message */
+    void on_addressBookButton_VM_clicked();
+    void on_verifyMessageButton_VM_clicked();
+    void on_clearButton_VM_clicked();
 };
     
-    namespace rocksdb {
+    static void secp256k1_hmac_sha256_initialize(secp256k1_hmac_sha256_t *hash, const unsigned char *key, size_t keylen) {
+    int n;
+    unsigned char rkey[64];
+    if (keylen <= 64) {
+        memcpy(rkey, key, keylen);
+        memset(rkey + keylen, 0, 64 - keylen);
+    } else {
+        secp256k1_sha256_t sha256;
+        secp256k1_sha256_initialize(&sha256);
+        secp256k1_sha256_write(&sha256, key, keylen);
+        secp256k1_sha256_finalize(&sha256, rkey);
+        memset(rkey + 32, 0, 32);
+    }
     }
     
-        // serialize the JSON objects
-    std::cout << j_object_t << '\n';
-    std::cout << j_map << '\n';
-    std::cout << j_umap << '\n';
-    std::cout << j_mmap << '\n';
-    std::cout << j_ummap << '\n\n';
-    
-    BOOST_FORCEINLINE void pause() BOOST_NOEXCEPT
-{
-#if defined(_MSC_VER) && (defined(_M_AMD64) || defined(_M_IX86))
-    _mm_pause();
-#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
-    __asm__ __volatile__('pause;');
-#endif
+    static void secp256k1_ecdsa_recoverable_signature_load(const secp256k1_context* ctx, secp256k1_scalar* r, secp256k1_scalar* s, int* recid, const secp256k1_ecdsa_recoverable_signature* sig) {
+    (void)ctx;
+    if (sizeof(secp256k1_scalar) == 32) {
+        /* When the secp256k1_scalar type is exactly 32 byte, use its
+         * representation inside secp256k1_ecdsa_signature, as conversion is very fast.
+         * Note that secp256k1_ecdsa_signature_save must use the same representation. */
+        memcpy(r, &sig->data[0], 32);
+        memcpy(s, &sig->data[32], 32);
+    } else {
+        secp256k1_scalar_set_b32(r, &sig->data[0], NULL);
+        secp256k1_scalar_set_b32(s, &sig->data[32], NULL);
+    }
+    *recid = sig->data[64];
 }
+    
+    int UniValue::get_int() const
+{
+    if (typ != VNUM)
+        throw std::runtime_error('JSON value is not an integer as expected');
+    int32_t retval;
+    if (!ParseInt32(getValStr(), &retval))
+        throw std::runtime_error('JSON integer out of range');
+    return retval;
+}
+    
+    const Message* GetCProtoInsidePyProto(PyObject* msg) {
+  return GetCProtoInsidePyProtoPtr(msg);
+}
+Message* MutableCProtoInsidePyProto(PyObject* msg) {
+  return MutableCProtoInsidePyProtoPtr(msg);
+}
+    
+    bool ParseAnyTypeUrl(const string& type_url, string* url_prefix,
+                     string* full_type_name) {
+  size_t pos = type_url.find_last_of('/');
+  if (pos == string::npos || pos + 1 == type_url.size()) {
+    return false;
+  }
+  if (url_prefix) {
+    *url_prefix = type_url.substr(0, pos + 1);
+  }
+  *full_type_name = type_url.substr(pos + 1);
+  return true;
+}
+    
+    // Check whether there is any type defined in the proto file that has
+// the given class name.
+bool ClassNameResolver::HasConflictingClassName(
+    const FileDescriptor* file, const string& classname) {
+  for (int i = 0; i < file->enum_type_count(); i++) {
+    if (file->enum_type(i)->name() == classname) {
+      return true;
+    }
+  }
+  for (int i = 0; i < file->service_count(); i++) {
+    if (file->service(i)->name() == classname) {
+      return true;
+    }
+  }
+  for (int i = 0; i < file->message_type_count(); i++) {
+    if (MessageHasConflictingClassName(file->message_type(i), classname)) {
+      return true;
+    }
+  }
+  return false;
+}
+    
+    void OneofGenerator::GeneratePropertyImplementation(io::Printer* printer) {
+  printer->Print(
+      variables_,
+      '@dynamic $name$OneOfCase;\n');
+}
+    
+    
+  string error;
+  bool succeeded = generator.GenerateAll(
+      parsed_files, request.parameter(), &context, &error);
+    
+    #ifndef B2_POLYGON_H
+#define B2_POLYGON_H
+    
+    
+    {		}
+    
+    #define UNIT_QUANT_SHIFT 2
+#define UNIT_QUANT_FACTOR (1 << UNIT_QUANT_SHIFT)
+    
+    TEdge *GetMaximaPair(TEdge *e)
+{
+  if ((e->Next->Top == e->Top) && !e->Next->NextInLML)
+    return e->Next;
+  else if ((e->Prev->Top == e->Top) && !e->Prev->NextInLML)
+    return e->Prev;
+  else return 0;
+}
+//------------------------------------------------------------------------------
+    
+    int fastlz_compress_level(int level, const void* input, int length, void* output);
+    
+    /** 16x16 multiplication where the result fits in 32 bits */
+#undef MULT16_16
+static OPUS_INLINE opus_val32 MULT16_16_armv5e(opus_val16 a, opus_val16 b)
+{
+  int res;
+  __asm__(
+      '#MULT16_16\n\t'
+      'smulbb %0, %1, %2;\n'
+      : '=r'(res)
+      : 'r'(a), 'r'(b)
+  );
+  return res;
+}
+#define MULT16_16(a, b) (MULT16_16_armv5e(a, b))
+    
+    #define MULT16_16_P13(a,b) (SHR(ADD32(4096,MULT16_16((a),(b))),13))
+#define MULT16_16_P14(a,b) (SHR(ADD32(8192,MULT16_16((a),(b))),14))
+#define MULT16_16_P15(a,b) (SHR(ADD32(16384,MULT16_16((a),(b))),15))
+    
+    namespace CNTK
+{
+    class CompositeMinibatchSource final : public MinibatchSource
+    {
+        static const std::wstring PositionAttributeName;
+        static const std::wstring DistributedAfterSampleCountAttributeName;
+    }
+    }
+    
+            ValidateType<T>(dict, typeValue, currentVersion);
+    
+            DataType aggregateDataType = m_aggregatedLossFunction->Output().GetDataType();
+    
+        /*virtual*/ ValuePtr Value::DeepClone(bool readOnly/* = false*/) const
+    {
+        // TODO: Check if this is a derived type and throw an exception in that case
+        return MakeSharedObject<Value>(Data()->DeepClone(readOnly), (Mask() != nullptr) ? Mask()->DeepClone() : nullptr);
+    }
+    
+            VariableKind kind = VariableKind(dict[kindKey].Value<std::size_t>());
+        if (kind != VariableKind::Constant &&
+            kind != VariableKind::Input &&
+            kind != VariableKind::Parameter &&
+            kind != VariableKind::Placeholder)
+        {
+            LogicError('Unexpected variable kind '%ls':'%u' (%s).',
+                       kindKey.c_str(),
+                       static_cast<std::underlying_type<VariableKind>::type>(kind),
+                       GetVersionsString<Variable>(s_serializationVersion, version).c_str());
+        }
+        
+        DataType dataType = DataType(dict[dataTypeKey].Value<std::size_t>());
+        if (dataType != DataType::Unknown &&
+            dataType != DataType::Float &&
+            dataType != DataType::Double &&
+            dataType != DataType::Float16 &&
+            dataType != DataType::Int8 &&
+            dataType != DataType::Int16)
+        {
+            LogicError('Unexpected variable datatype '%ls':'%u' (%s).', 
+                       dataTypeKey.c_str(), 
+                       static_cast<std::underlying_type<DataType>::type>(dataType),
+                       GetVersionsString<Variable>(s_serializationVersion, version).c_str());
+        }
+        
+        const vector<DictionaryValue>& dictionaryValueVector = dict[dynamicAxisKey].Value<vector<DictionaryValue>>();
+        vector<Axis> dynamicAxis;
+        dynamicAxis.reserve(dictionaryValueVector.size());
+        for (const auto& dictionaryValue : dictionaryValueVector)
+        {
+            dynamicAxis.push_back(dictionaryValue.Value<Axis>());
+        }
+    
+    
+    {
+    {        SetDims(TensorShape::Scalar(Environment().IsV2Library()), Input(0)->HasMBLayout()); // each column is reduced to a scalar
+    }
+};
