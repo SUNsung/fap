@@ -1,65 +1,95 @@
 
         
-            open_dry_run_modal(agent)
-    click_on('Dry Run')
-    expect(page).to have_text('Dry Run started')
-    expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabLog']')
-  end
-end
-
-    
-        it 'in the future' do
-      expect(relative_distance_of_time_in_words(Time.now+5.minutes)).to eq('in 5m')
-    end
-  end
-end
-
-    
-        it 'can be turned off' do
-      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'false' }
-      DefaultScenarioImporter.import(user)
-    end
-    
-      # Setup the root logger with the Rails log level and the desired set of
-  # appenders. The list of appenders to use should be set in the environment
-  # specific configuration file.
-  #
-  # For example, in a production application you would not want to log to
-  # STDOUT, but you would want to send an email for 'error' and 'fatal'
-  # messages:
-  #
-  # => config/environments/production.rb
-  #
-  #     config.log_to = %w[file email]
-  #
-  # In development you would want to log to STDOUT and possibly to a file:
-  #
-  # => config/environments/development.rb
-  #
-  #     config.log_to = %w[stdout file]
-  #
-  Logging.logger.root.appenders = config.log_to unless config.log_to.empty?
-    
-    When /^I submit forgot password form$/ do
-  submit_forgot_password_form
-end
-    
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
-    
-        it 'generates a jasmine fixture', :fixture => true do
-      get :index, params: {conversation_id: @conv1.id}
-      save_fixture(html_for('body'), 'conversations_unread')
-    
-          # Example usage:
-      #   Sidekiq::Client.enqueue_to_in(:queue_name, 3.minutes, MyWorker, 'foo', 1, :bat => 'bar')
+              # This method returns an HTML safe string similar to what <tt>Array#join</tt>
+      # would return. The array is flattened, and all items, including
+      # the supplied separator, are HTML escaped unless they are HTML
+      # safe, and the returned string is marked as HTML safe.
       #
-      def enqueue_to_in(queue, interval, klass, *args)
-        int = interval.to_f
-        now = Time.now.to_f
-        ts = (int < 1_000_000_000 ? now + int : int)
+      #   safe_join([raw('<p>foo</p>'), '<p>bar</p>'], '<br />')
+      #   # => '<p>foo</p>&lt;br /&gt;&lt;p&gt;bar&lt;/p&gt;'
+      #
+      #   safe_join([raw('<p>foo</p>'), raw('<p>bar</p>')], raw('<br />'))
+      #   # => '<p>foo</p><br /><p>bar</p>'
+      #
+      def safe_join(array, sep = $,)
+        sep = ERB::Util.unwrapped_html_escape(sep)
+    
+        # Direct access to partial rendering.
+    def render_partial(context, options, &block) #:nodoc:
+      PartialRenderer.new(@lookup_context).render(context, options, block)
+    end
+    
+              it 'cuts excessive digits in fractional part and keeps only 4 ones' do
+            format('%#{f}', 12.12341111).should == '12.1234'
+            format('%#{f}', -12.12341111).should == '-12.1234'
+          end
+    
+      it_behaves_like :kernel_system, :system, KernelSpecs::Method.new
+end
+    
+    describe 'main#define_method' do
+  before :each do
+    @code = 'define_method(:boom) { :bam }'
+  end
+    
+      desc 'update main and version in bower.json'
+  task :generate do
+    require 'bootstrap-sass'
+    Dir.chdir Bootstrap.gem_path do
+      spec       = JSON.parse(File.read 'bower.json')
+    
+        def initialize(*args)
+      @s = StringScanner.new(*args)
+    end
+    
+        def log_http_get_files(files, from, cached = false)
+      return if files.empty?
+      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
+      if cached
+        puts dark green s
+      else
+        puts dark cyan s
+      end
+    end
+    
+      config.active_support.test_order = :random
+    
+          def initialize(argv)
+        super
+        config.silent = false
+      end
     
     
+  class << self
+    # This method is invoked when subclass occurs.
+    #
+    # Lets us track all known FPM::Package subclasses
+    def inherited(klass)
+      @subclasses ||= {}
+      @subclasses[klass.name.gsub(/.*:/, '').downcase] = klass
+    end # def self.inherited
+    
+      option '--lint' , :flag, 'Check manifest with pkglint',
+    :default => true
+    
+        # Copy all files from staging to BUILD dir
+    Find.find(staging_path) do |path|
+      src = path.gsub(/^#{staging_path}/, '')
+      dst = build_path(src)
+      copy_entry(path, dst, preserve=true, remove_destination=true)
+      copy_metadata(path, dst)
+    end
+    
+      def build!(params)
+    # TODO(sissel): Support these somehow, perhaps with execs and files.
+    self.scripts.each do |name, path|
+      case name
+        when 'pre-install'
+        when 'post-install'
+        when 'pre-uninstall'
+        when 'post-uninstall'
+      end # case name
+    end # self.scripts.each
+    
+        safesystem('tar', *args)
+  end # def output
