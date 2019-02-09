@@ -1,102 +1,96 @@
 
         
-            # This will detect the proper guest OS for the machine and set up
-    # the class to actually execute capabilities.
-    def detect!
-      guest_name = @machine.config.vm.guest
-      initialize_capabilities!(guest_name, @guests, @capabilities, @machine)
-    rescue Errors::CapabilityHostExplicitNotDetected => e
-      raise Errors::GuestExplicitNotDetected, value: e.extra_data[:value]
-    rescue Errors::CapabilityHostNotDetected
-      raise Errors::GuestNotDetected
+                if options[:bypass]
+          ActiveSupport::Deprecation.warn(<<-DEPRECATION.strip_heredoc, caller)
+          [Devise] bypass option is deprecated and it will be removed in future version of Devise.
+          Please use bypass_sign_in method instead.
+          Example:
+    
+        def default_defaults(options)
+      @defaults = Hash.new
+      @defaults.merge!(options[:defaults]) if options[:defaults]
     end
     
-              if name != UNSET_VALUE
-            # Validate the name of the command
-            if name.to_s !~ /^[-a-z0-9]+$/i
-              raise InvalidCommandName, 'Commands can only contain letters, numbers, and hyphens'
+                if class_mod.respond_to?(:available_configs)
+              available_configs = class_mod.available_configs
+              available_configs.each do |config|
+                next unless options.key?(config)
+                send(:'#{config}=', options.delete(config))
+              end
             end
+          end
     
-              # Creating a shallow copy of the arguments so the OptionParser
-          # doesn't destroy the originals.
-          argv = @argv.dup
-    
-            # Converts this configuration object to JSON.
-        def to_json(*a)
-          instance_variables_hash.to_json(*a)
+            # Initializes the system. Any subclasses MUST make sure this
+        # method is called on the parent. Therefore, if a subclass overrides
+        # `initialize`, then you must call `super`.
+        def initialize(vm)
+          @vm = vm
         end
     
-        t.wakeup
-    t.value.should == 5
-  end
-end
-    
-      ruby_version_is '2.6' do
-    it 'raises RuntimeError when `exception: true` is given and the command exits with a non-zero exit status' do
-      lambda { @object.system(ruby_cmd('exit 1'), exception: true) }.should raise_error(RuntimeError)
-    end
-    
-      it 'raises an UncaughtThrowError if there is no catch block for the symbol' do
-    lambda { throw :blah }.should raise_error(UncaughtThrowError)
-  end
-    
-      # Do not fallback to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = false
-    
-      # The test environment is used exclusively to run your application's
-  # test suite. You never need to work with it otherwise. Remember that
-  # your test database is 'scratch space' for the test suite and is wiped
-  # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
-    
-        context 'on a public post from a stranger' do
-      before do
-        @post = stranger.post :status_message, :text => 'something', :public => true, :to => 'all'
-      end
-    
-        it 'requires authentication' do
-      post_request!
-      expect(response).not_to be_success
-    end
-    
-          def right_diff_line_number(id, line)
-        if line =~ /^@@/
-          m, ri                   = *line.match(/\+(\d+)/)
-          @right_diff_line_number = ri.to_i
-          @current_line_number    = @right_diff_line_number
-          ret                     = '...'
-        elsif line[0] == ?-
-          ret = ' '
-        elsif line[0] == ?+
-          ret                     = @right_diff_line_number.to_s
-          @right_diff_line_number += 1
-          @current_line_number    = @right_diff_line_number - 1
-        else
-          ret                     = @right_diff_line_number.to_s
-          @right_diff_line_number += 1
-          @current_line_number    = @right_diff_line_number - 1
+              result
         end
-        ret
+    
+              @commands = Registry.new
+          @configs = Hash.new { |h, k| h[k] = Registry.new }
+          @guests  = Registry.new
+          @guest_capabilities = Hash.new { |h, k| h[k] = Registry.new }
+          @hosts   = Registry.new
+          @host_capabilities = Hash.new { |h, k| h[k] = Registry.new }
+          @providers = Registry.new
+          @provider_capabilities = Hash.new { |h, k| h[k] = Registry.new }
+          @pushes = Registry.new
+          @synced_folders = Registry.new
+        end
       end
     end
   end
 end
 
     
-          def previous_link
-        label = '&laquo; Previous'
-        if @page_num == 1
-          %(<span class='disabled'>#{label}</span>)
-        else
-          link = url('/history/#{@page.name}?page=#{@page_num-1}')
-          %(<a href='#{link}' hotkey='h'>#{label}</a>)
+            # This is an internal initialize function that should never be
+        # overridden. It is used to initialize some common internal state
+        # that is used in a provider.
+        def _initialize(name, machine)
+          initialize_capabilities!(
+            name.to_sym,
+            { name.to_sym => [Class.new, nil] },
+            Vagrant.plugin('2').manager.provider_capabilities,
+            machine,
+          )
         end
       end
-    
-        page = @wiki.page('k')
-    assert_equal '한글 text', utf8(page.raw_data)
-    assert_equal 'def', page.version.message
+    end
   end
+end
+
     
-      s.rdoc_options = ['--charset=UTF-8']
-  s.extra_rdoc_files = %w[README.md LICENSE]
+        # Merge one registry with another and return a completely new
+    # registry. Note that the result cache is completely busted, so
+    # any gets on the new registry will result in a cache miss.
+    def merge(other)
+      self.class.new.tap do |result|
+        result.merge!(self)
+        result.merge!(other)
+      end
+    end
+    
+                case platform
+            when 'iOS' then self.platform :ios, '10.0'
+            when 'macOS' then self.platform :macos, '10.10'
+            end
+    
+          def run
+        UI.puts report
+      end
+    
+      context 'when arguments to a method' do
+    let(:prefix) { 'bar(' }
+    let(:suffix) { ')' }
+    let(:source) { construct(false, true) }
+    
+          # Checks whether this node body is a void context.
+      #
+      # @return [Boolean] whether the `def` node body is a void context
+      def void_context?
+        method?(:initialize) || assignment_method?
+      end
