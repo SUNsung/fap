@@ -1,237 +1,228 @@
 
         
-        class NWJSAppTest : public NWAppTest {};
-    
-    IPC_MESSAGE_ROUTED3(ShellViewHostMsg_Call_Static_Method,
-                    std::string /* type name */,
-                    std::string /* method name */,
-                    base::ListValue /* arguments */)
-    
-    base::StringPiece GetStringResource(int resource_id) {
-  return ResourceBundle::GetSharedInstance().GetRawDataResource(resource_id);
-}
-    
-    class Clipboard : public Base {
- public:
-  Clipboard(int id,
-            const base::WeakPtr<DispatcherHost>& dispatcher_host,
-            const base::DictionaryValue& option);
-  ~Clipboard() override;
-    }
-    
-    namespace nwapi {
-    }
-    
-    Menu::~Menu() {
-  Destroy();
-}
-    
-    NwAppClearAppCacheFunction::~NwAppClearAppCacheFunction() {
-}
-    
-        bool ReadRTF(ClipboardData& data) {
-      DCHECK(data.type == TYPE_RTF);
-      std::string text;
-      clipboard_->ReadRTF(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
-      data.data.reset(new std::string(text));
-      return true;
-    }
+          // Writing direction
+  bool is_vertical_text = (block->classify_rotation().x() == 0.0);
+  bool right_to_left = block->right_to_left();
+  *writing_direction =
+      is_vertical_text
+          ? WRITING_DIRECTION_TOP_TO_BOTTOM
+          : (right_to_left
+                ? WRITING_DIRECTION_RIGHT_TO_LEFT
+                : WRITING_DIRECTION_LEFT_TO_RIGHT);
     
     
-    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.readAvailableTypes', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwClipboardReadAvailableTypesFunction);
+    {  TBLOB* blob;
+  Tesseract* tesseract;
+  BLOB_CHOICE_LIST** choices;
 };
     
-    namespace extensions {
-    }
     
-    NwObjCallObjectMethodSyncFunction::NwObjCallObjectMethodSyncFunction() {
-}
-    
-     protected:
-  ~NwObjAllocateIdFunction() override;
-    
-      const char* tmpdir = getenv('TMPDIR');
-  if (tmpdir == nullptr) {
-    tmpdir = '/tmp';
-  }
-    
-    
-    {} // namespace caffe2
-    
-      ScheduledQuery(const std::string& pack_name,
-                 const std::string& name,
-                 const std::string& query)
-      : pack_name(pack_name), name(name), query(query) {}
-  ScheduledQuery() = default;
-  ScheduledQuery(ScheduledQuery&&) = default;
-  ScheduledQuery& operator=(ScheduledQuery&&) = default;
-    
-    Status serializeRowJSON(const RowTyped& r, std::string& json) {
-  auto doc = JSON::newObject();
-    }
-    
-    /**
- * @brief Serialize a RowTyped into a JSON document.
- *
- * @param r the RowTyped to serialize.
- * @param cols the TableColumn vector indicating column order
- * @param doc the managed JSON document.
- * @param obj [output] the JSON object to assign values.
- *
- * @return Status indicating the success or failure of the operation.
- */
-Status serializeRow(const RowTyped& r,
-                    const ColumnNames& cols,
-                    JSON& doc,
-                    rapidjson::Value& obj);
-    
-    
-    {  virtual void printTo(std::ostream& out) const;
+    {  tesseract::StringParam* sIt;
+  tesseract::IntParam* iIt;
+  tesseract::BoolParam* bIt;
+  tesseract::DoubleParam* dIt;
 };
     
-    /**
- * @brief Queries SMART devices on the system by autodetection and explicit
- * storage controller arguments.
- *
- * @param client libsmartctl client
- * @param walk_func function that walks the system devices and runs the handler
- * function on each device
- * @param results reference to QueryData to store results in
- */
-void querySmartDevices(
-    libsmartctl::ClientInterface& client,
-    std::function<void(
-        std::function<void(const std::string&, hardwareDriver*)>)> walk_func,
-    QueryData& results);
     
-    #include <iostream>
-#include <vector>
-    
-    
-    {    return;
-}
-    
-            stack<char> stack;
-        for( int i = 0 ; i < s.size() ; i ++ )
-            if( s[i] == '(' || s[i] == '{' || s[i] == '[')
-                stack.push(s[i]);
-            else{
-    }
-    }
-    
-            int res = 1;
-        int index = nextDifferentCharacterIndex(nums, 1);
-        int i = 1;
-        while(index < nums.size()){
-            res ++;
-            nums[i++] = nums[index];
-            index = nextDifferentCharacterIndex(nums, index + 1);
-        }
-    
-            stack<TreeNode*> stack;
-        stack.push(root);
-        while(!stack.empty()){
-            TreeNode* curNode = stack.top();
-            stack.pop();
-            res.push_back(curNode->val);
-    }
-    
-        TreeNode* root = new TreeNode(1);
-    root->right = new TreeNode(2);
-    root->right->left = new TreeNode(3);
-    vector<int> res = Solution().preorderTraversal(root);
-    print_vec(res);
-    
-    public:
-    vector<int> preorderTraversal(TreeNode* root) {
-    }
-    
-    public:
-    vector<int> preorderTraversal(TreeNode* root) {
-    }
-    
-    
-    {    return 0;
-}
-    
-            vector<int> res;
-        if(root == NULL)
-            return res;
-    
-    void BENCHFUN(fillCtor)(int iters, int size) {
-  FOR_EACH_RANGE (i, 0, iters) {
-    VECTOR v(size_t(size), randomObject<VECTOR::value_type>());
-    doNotOptimizeAway(&v);
+    {  // Do sanity checks and minor fixes on best_choice.
+  if (word->best_choice->length() > word_length) {
+    word->best_choice->make_bad();  // should never happen
+    tprintf('recog_word: Discarded long string \'%s\''
+            ' (%d characters vs %d blobs)\n',
+            word->best_choice->unichar_string().string(),
+            word->best_choice->length(), word_length);
+    tprintf('Word is at:');
+    word->word->bounding_box().print();
   }
-}
-BENCHMARK_PARAM(BENCHFUN(fillCtor), 16)
-BENCHMARK_PARAM(BENCHFUN(fillCtor), 128)
-BENCHMARK_PARAM(BENCHFUN(fillCtor), 1024)
-    
-    BENCHMARK(copy_long_string, iters) {
-  BenchmarkSuspender suspender;
-  auto const& longString = getLongString();
-  while (iters--) {
-    fbstring out;
-    suspender.dismissing([&] { out = longString; });
-  }
-}
-    
-    static void align4Bytes(size_t& pos) {
-  if (pos % 4 != 0) {
-    pos += 4 - pos % 4;
-  }
-}
-    
-    exception_wrapper::exception_wrapper(std::exception_ptr ptr) noexcept
-    : exception_wrapper{} {
-  if (ptr) {
-    if (auto e = get_std_exception_(ptr)) {
-      LOG(DFATAL)
-          << 'Performance error: Please construct exception_wrapper with a '
-             'reference to the std::exception along with the '
-             'std::exception_ptr.';
-      *this = exception_wrapper{std::move(ptr), *e};
-    } else {
-      Unknown uk;
-      *this = exception_wrapper{ptr, uk};
+  if (word->best_choice->length() < word_length) {
+    UNICHAR_ID space_id = unicharset.unichar_to_id(' ');
+    while (word->best_choice->length() < word_length) {
+      word->best_choice->append_unichar_id(space_id, 1, 0.0,
+                                           word->best_choice->certainty());
     }
   }
 }
     
-    template <class UIntType, UIntType a, UIntType c, UIntType m>
-struct StateSize<std::linear_congruential_engine<UIntType, a, c, m>> {
-  // From the standard [rand.eng.lcong], this is ceil(log2(m) / 32) + 3,
-  // which is the same as ceil(ceil(log2(m) / 32) + 3, and
-  // ceil(log2(m)) <= std::numeric_limits<UIntType>::digits
-  using type = std::integral_constant<
-      size_t,
-      (std::numeric_limits<UIntType>::digits + 31) / 32 + 3>;
-};
+      /// Get a clone/copy of the source image rectangle.
+  /// The returned Pix must be pixDestroyed.
+  /// This function will be used in the future by the page layout analysis, and
+  /// the layout analysis that uses it will only be available with Leptonica,
+  /// so there is no raw equivalent.
+  Pix* GetPixRect();
     
-    using UTF8StringPiece = UTF8Range<const char*>;
+    #endif  // TESSERACT_CCUTIL_BOXREAD_H_
+
     
-    //////////////////////////////////////////////////////////////////////
-    
-    
-    {  std::array<std::shared_ptr<T>, kNumSlots> slots_;
-};
-    
-      template <typename T>
-  static T* release_ptr(counted_ptr<T, Atom>& p) {
-    auto res = p.p_;
-    p.p_ = nullptr;
-    return res;
+      // Accessors.
+  int total_cost() const {
+    return total_cost_;
+  }
+  int Pathlength() const {
+    return total_steps_;
+  }
+  const DPPoint* best_prev() const {
+    return best_prev_;
+  }
+  void AddLocalCost(int new_cost) {
+    local_cost_ += new_cost;
   }
     
-    void AtFork::registerHandler(
-    void* object,
-    folly::Function<bool()> prepare,
-    folly::Function<void()> parent,
-    folly::Function<void()> child) {
-  std::lock_guard<std::mutex> lg(AtForkList::instance().tasksLock);
-  AtForkList::instance().tasks.push_back(
-      {object, std::move(prepare), std::move(parent), std::move(child)});
+    grpc::string ChannelArguments::GetSslTargetNameOverride() const {
+  for (unsigned int i = 0; i < args_.size(); i++) {
+    if (grpc::string(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG) == args_[i].key) {
+      return args_[i].value.string;
+    }
+  }
+  return '';
+}
+    
+    void CensusClientCallData::OnDoneRecvTrailingMetadataCb(void* user_data,
+                                                        grpc_error* error) {
+  grpc_call_element* elem = reinterpret_cast<grpc_call_element*>(user_data);
+  CensusClientCallData* calld =
+      reinterpret_cast<CensusClientCallData*>(elem->call_data);
+  GPR_ASSERT(calld != nullptr);
+  if (error == GRPC_ERROR_NONE) {
+    GPR_ASSERT(calld->recv_trailing_metadata_ != nullptr);
+    FilterTrailingMetadata(calld->recv_trailing_metadata_,
+                           &calld->elapsed_time_);
+  }
+  GRPC_CLOSURE_RUN(calld->initial_on_done_recv_trailing_metadata_,
+                   GRPC_ERROR_REF(error));
+}
+    
+    MeasureDouble RpcServerReceivedBytesPerRpc() {
+  static const auto measure = MeasureDouble::Register(
+      kRpcServerReceivedBytesPerRpcMeasureName,
+      'Total bytes received across all messages per RPC', kUnitBytes);
+  return measure;
+}
+    
+    
+    {}  // namespace grpc
+    
+    
+    {  const protobuf::FieldDescriptor* field_desc =
+      descriptor_pool_->FindExtensionByNumber(desc,
+                                              request->extension_number());
+  if (field_desc == nullptr) {
+    return Status(StatusCode::NOT_FOUND, 'Extension not found.');
+  }
+  std::unordered_set<grpc::string> seen_files;
+  FillFileDescriptorResponse(field_desc->file(), response, &seen_files);
+  return Status::OK;
+}
+    
+    void InitProtoReflectionServerBuilderPlugin() {
+  static bool already_here = false;
+  if (already_here) return;
+  already_here = true;
+  ::grpc::ServerBuilder::InternalAddPluginFactory(&CreateProtoReflection);
+}
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    
+    {    // Create Descriptor Pool
+    {
+        VkDescriptorPoolSize pool_sizes[] =
+        {
+            { VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },
+            { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000 },
+            { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000 },
+            { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1000 },
+            { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1000 },
+            { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1000 },
+            { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000 },
+            { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1000 },
+            { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1000 },
+            { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000 },
+            { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000 }
+        };
+        VkDescriptorPoolCreateInfo pool_info = {};
+        pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+        pool_info.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+        pool_info.maxSets = 1000 * IM_ARRAYSIZE(pool_sizes);
+        pool_info.poolSizeCount = (uint32_t)IM_ARRAYSIZE(pool_sizes);
+        pool_info.pPoolSizes = pool_sizes;
+        err = vkCreateDescriptorPool(g_Device, &pool_info, g_Allocator, &g_DescriptorPool);
+        check_vk_result(err);
+    }
+}
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+        // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();
+    
+    extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
+        return true;
+    }
+    
+        void restore();
+    void updateTransform();
+    
+    FlipX * FlipX::clone() const
+{
+    // no copy constructor
+    return FlipX::create(_flipX);
+}
+//
+// FlipY
+//
+    
+    void ActionManager::removeAllActionsByTag(int tag, Node *target)
+{
+    CCASSERT(tag != Action::INVALID_TAG, 'Invalid tag value!');
+    CCASSERT(target != nullptr, 'target can't be nullptr!');
+    if (target == nullptr)
+    {
+        return;
+    }
+    
+    tHashElement *element = nullptr;
+    HASH_FIND_PTR(_targets, &target, element);
+    
+    if (element)
+    {
+        auto limit = element->actions->num;
+        for (int i = 0; i < limit;)
+        {
+            Action *action = static_cast<Action*>(element->actions->arr[i]);
+    }
+    }
+    }
+    
+    #endif // __ACTION_CCTILEDGRID_ACTION_H__
+
+    
+    Animation::Animation()
+: _totalDelayUnits(0.0f)
+, _delayPerUnit(0.0f)
+, _duration(0.0f)
+, _restoreOriginalFrame(false)
+, _loops(0)
+{
+    }
+    
+    void AtlasNode::calculateMaxItems()
+{
+    Size s = _textureAtlas->getTexture()->getContentSize();
+    
+    if (_ignoreContentScaleFactor)
+    {
+        s = _textureAtlas->getTexture()->getContentSizeInPixels();
+    }
+    
+    _itemsPerColumn = (int)(s.height / _itemHeight);
+    _itemsPerRow = (int)(s.width / _itemWidth);
 }
