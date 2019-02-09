@@ -1,222 +1,263 @@
 
         
-            with open(FISH_COMPLETION_TEMPLATE) as f:
-        template = f.read()
-    filled_template = template.replace('{{commands}}', '\n'.join(commands))
-    with open(FISH_COMPLETION_FILE, 'w') as f:
-        f.write(filled_template)
-    
-    from youtube_dl.utils import intlist_to_bytes
-from youtube_dl.aes import aes_encrypt, key_expansion
-    
-        infile, outfile = args
+            # Define the loss function and the optimization algorithm
+    self.cross_entropies = tf.nn.sparse_softmax_cross_entropy_with_logits(
+        logits=self.scores, labels=tf.reduce_mean(self.batch_labels))
+    self.cost = tf.reduce_sum(self.cross_entropies, name='cost')
+    self.global_step = tf.Variable(0, name='global_step', trainable=False)
+    self.optimizer = tf.train.AdamOptimizer()
+    self.train_op = self.optimizer.minimize(self.cost,
+                                            global_step=self.global_step)
     
     
-class BinarySuppressedError(Exception):
-    '''An error indicating that the body is binary and won't be written,
-     e.g., for terminal output).'''
-    
-        # Adapters
-    def get_transport_plugins(self):
-        return [plugin for plugin in self
-                if issubclass(plugin, TransportPlugin)]
-
-    
-    
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
-    )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
-
-    
-    
-def test_unicode_form_item_verbose(httpbin):
-    r = http('--verbose', '--form',
-             'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
-    assert HTTP_OK in r
-    assert UNICODE in r
-    
-        def _get_path(self):
-        return os.path.join(self.directory, self.name + '.json')
-    
-            volume_id = volumes[0].id
-    
-        # Retrieve any AWS settings from the environment.
-    region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module, boto3=True)
-    if not region:
-        module.fail_json(msg=str('Either region or AWS_REGION or EC2_REGION environment variable or boto config aws_region or ec2_region must be set.'))
-    
-            if module.params.get('next_marker'):
-            params['Marker'] = module.params.get('next_marker')
-        try:
-            lambda_facts.update(aliases=client.list_aliases(FunctionName=function_name, **params)['Aliases'])
-        except ClientError as e:
-            if e.response['Error']['Code'] == 'ResourceNotFoundException':
-                lambda_facts.update(aliases=[])
-            else:
-                module.fail_json_aws(e, msg='Trying to get aliases')
+def all_plot(d, full_name='', exclude='', nspaces=0):
+  '''Recursively plot all the LFADS model parameters in the nested
+  dictionary.'''
+  for k, v in d.iteritems():
+    this_name = full_name+'/'+k
+    if isinstance(v, dict):
+      all_plot(v, full_name=this_name, exclude=exclude, nspaces=nspaces+4)
     else:
-        module.fail_json(msg='Parameter function_name required for query=aliases.')
+      if exclude == '' or exclude not in this_name:
+        _plot_item(v, name=k, full_name=full_name+'/'+k, nspaces=nspaces+4)
     
-        try:
-        configuration_facts = get_configuration_facts(cursor)
-        if module.check_mode:
-            changed = not check(configuration_facts, parameter_name, current_value)
-        else:
-            try:
-                changed = present(configuration_facts, cursor, parameter_name, current_value)
-            except pyodbc.Error as e:
-                module.fail_json(msg=to_native(e), exception=traceback.format_exc())
-    except NotSupportedError as e:
-        module.fail_json(msg=to_native(e), ansible_facts={'vertica_configuration': configuration_facts})
-    except CannotDropError as e:
-        module.fail_json(msg=to_native(e), ansible_facts={'vertica_configuration': configuration_facts})
-    except SystemExit:
-        # avoid catching this on python 2.4
-        raise
-    except Exception as e:
-        module.fail_json(msg=to_native(e), exception=traceback.format_exc())
+    # Containers for storing data across data.
+datasets = {}
+for n in range(ndatasets):
+  print(n+1, ' of ', ndatasets)
     
-        # Use 7zip when we have a binary, otherwise try to mount
-    if binary:
-        cmd = '%s x '%s' -o'%s' %s' % (binary, image, tmp_dir, ' '.join([quote(f) for f in extract_files]))
+    
+def main(_):
+  evaluate_ensemble('pdp60', 1)  # 60%
+  evaluate_ensemble('pdp60', 5)  # 70%
+  evaluate_ensemble('wsc273', 10)  # 61.5%
+  evaluate_ensemble('wsc273', 14)  # 63.7%
+    
+      def id_to_word(self, cur_id):
+    if cur_id < self.size:
+      return self._id_to_word[int(cur_id)]
+    return '<ERROR_out_of_vocab_id>'
+    
+      Returns:
+    values:  tf.float32 Tensor of predictions of shape [batch_size,
+      sequence_length]
+  '''
+  if FLAGS.baseline_method == 'critic':
+    if FLAGS.discriminator_model == 'seq2seq_vd':
+      values = critic_vd.critic_seq2seq_vd_derivative(
+          hparams, sequence, is_training, reuse=reuse)
     else:
-        cmd = 'mount -o loop,ro '%s' '%s'' % (image, tmp_dir)
-    
-    from __future__ import absolute_import, division, print_function
-__metaclass__ = type
-    
-    
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['stableinterface'],
-                    'supported_by': 'core'}
-    
-    
-class Icinga2FeatureHelper:
-    def __init__(self, module):
-        self.module = module
-        self._icinga2 = module.get_bin_path('icinga2', True)
-        self.feature_name = self.module.params['name']
-        self.state = self.module.params['state']
-    
-        removed_count = 0
-    
-        name = module.params['name']
-    state = module.params['state']
-    timeout = module.params['timeout']
-    
-        def splitroot(self, part, sep=sep):
-        if part and part[0] == sep:
-            stripped_part = part.lstrip(sep)
-            # According to POSIX path resolution:
-            # http://pubs.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap04.html#tag_04_11
-            # 'A pathname that begins with two successive slashes may be
-            # interpreted in an implementation-defined manner, although more
-            # than two leading slashes shall be treated as a single slash'.
-            if len(part) - len(stripped_part) == 2:
-                return '', sep * 2, stripped_part
-            else:
-                return '', sep, stripped_part
-        else:
-            return '', '', part
-    
-        def test_large_PYTHONPATH(self):
-        path1 = 'ABCDE' * 100
-        path2 = 'FGHIJ' * 100
-        path = path1 + os.pathsep + path2
-    
-        for filename in os.listdir(directory):
-        path = os.path.join(directory, filename)
-        if not os.path.isfile(path):
-            continue
-        # Guess the content type based on the file's extension.  Encoding
-        # will be ignored, although we should check for simple things like
-        # gzip'd or compressed files.
-        ctype, encoding = mimetypes.guess_type(path)
-        if ctype is None or encoding is not None:
-            # No guess could be made, or the file is encoded (compressed), so
-            # use a generic bag-of-bits type.
-            ctype = 'application/octet-stream'
-        maintype, subtype = ctype.split('/', 1)
-        with open(path, 'rb') as fp:
-            msg.add_attachment(fp.read(),
-                               maintype=maintype,
-                               subtype=subtype,
-                               filename=filename)
-    # Now send or store the message
-    if args.output:
-        with open(args.output, 'wb') as fp:
-            fp.write(msg.as_bytes(policy=SMTP))
-    else:
-        with smtplib.SMTP('localhost') as s:
-            s.send_message(msg)
-    
-        # Add more tasks using `put()`
-    for task in TASKS2:
-        task_queue.put(task)
-    
-    cur.close()
-con.close()
+      raise NotImplementedError
+  else:
+    raise NotImplementedError
+  return values
 
     
+          # Calculate the forward advantage only on the missing tokens.
+      cum_advantage = tf.zeros(shape=[FLAGS.batch_size])
+      for s in xrange(t, FLAGS.sequence_length):
+        cum_advantage += missing_list[s] * np.power(gamma, (s - t)) * (
+            rewards_list[s] - baselines[s])
+      # Clip advantages.
+      cum_advantage = tf.clip_by_value(cum_advantage, -FLAGS.advantage_clipping,
+                                       FLAGS.advantage_clipping)
+      advantages.append(missing_list[t] * cum_advantage)
+      final_gen_objective += tf.multiply(
+          log_probability, missing_list[t] * tf.stop_gradient(cum_advantage))
     
-def main():
-    print('Making key files...')
-    makeKeyFiles('elgamal', 2048)
-    print('Key files generation successful')
+        elif FLAGS.discriminator_model == 'seq2seq_vd':
+      load_ckpt = tf.train.latest_checkpoint(FLAGS.language_model_ckpt_dir)
+      print('Restoring Discriminator from %s.' % load_ckpt)
+      tf.logging.info('Restoring Discriminator from %s.' % load_ckpt)
+      dis_encoder_init_saver = init_savers['dis_encoder_init_saver']
+      dis_decoder_init_saver = init_savers['dis_decoder_init_saver']
+      dis_encoder_init_saver.restore(sess, load_ckpt)
+      dis_decoder_init_saver.restore(sess, load_ckpt)
     
-        publicKey = (n, e)
-    privateKey = (n, d)
-    return (publicKey, privateKey)
     
-            return new_key
+def test_current_version():
+    version = Environment().config['__meta__']['httpie']
+    assert version == __version__
 
     
-        def bulk_insert(self, values):
-        i = 1
-        self.__aux_list = values
-        for value in values:
-            self.insert_data(value)
-            self._step_by_step(i)
-            i += 1
+        name = None
+    helpurl = None
+    about = None
     
-    try:
-	xrange		#Python 2
-except NameError:
-	xrange = range	#Python 3
+        num_train_samples = 50000
     
-    	currPos = 0
-	while currPos < len(bitString):
-		currPart = bitString[currPos:currPos+512]
-		mySplits = []
-		for i in range(16):
-			mySplits.append(int(rearrange(currPart[32*i:32*i+32]),2))
-		yield mySplits
-		currPos += 512
+        - Divide the model's input(s) into multiple sub-batches.
+    - Apply a model copy on each sub-batch. Every model copy
+        is executed on a dedicated GPU.
+    - Concatenate the results (on CPU) into one big batch.
+    
+    print('Pad sequences (samples x time)')
+x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
+x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
+print('x_train shape:', x_train.shape)
+print('x_test shape:', x_test.shape)
+    
+    # Reverse-lookup token index to decode sequences back to
+# something readable.
+reverse_input_char_index = dict(
+    (i, char) for char, i in input_token_index.items())
+reverse_target_char_index = dict(
+    (i, char) for char, i in target_token_index.items())
+    
+        print('vectorizing data')
     
     
-        '''
-        loop over all possible splits for the decision tree. find the best split.
-        if no split exists that is less than 2 * error for the entire array
-        then the data set is not split and the average for the entire array is used as the predictor
-        '''
-        for i in range(len(X)):
-            if len(X[:i]) < self.min_leaf_size:
-                continue
-            elif len(X[i:]) < self.min_leaf_size:
-                continue
-            else:
-                error_left = self.mean_squared_error(X[:i], np.mean(y[:i]))
-                error_right = self.mean_squared_error(X[i:], np.mean(y[i:]))
-                error = error_left + error_right
-                if error < min_error:
-                    best_split = i
-                    min_error = error
+def fixed_batch_size_comparison(data):
+    all_features = [i.astype(int) for i in np.linspace(data.shape[1] // 10,
+                                                       data.shape[1], num=5)]
+    batch_size = 1000
+    # Compare runtimes and error for fixed batch size
+    all_times = defaultdict(list)
+    all_errors = defaultdict(list)
+    for n_components in all_features:
+        pca = PCA(n_components=n_components)
+        ipca = IncrementalPCA(n_components=n_components, batch_size=batch_size)
+        results_dict = {k: benchmark(est, data) for k, est in [('pca', pca),
+                                                               ('ipca', ipca)]}
     
-        urls = []
+        # start time
+    tstart = datetime.now()
+    clf = DecisionTreeClassifier()
+    clf.fit(X, Y).predict(X)
+    delta = (datetime.now() - tstart)
+    # stop time
+    
+        target = utils.unescape(target).strip()
+    title = utils.unescape(title).strip()
+    config = inliner.document.settings.env.app.config
+    if config.issues_user_uri:
+        ref = config.issues_user_uri.format(user=target)
+    else:
+        ref = 'https://github.com/{0}'.format(target)
+    if has_explicit_title:
+        text = title
+    else:
+        text = '@{0}'.format(target)
+    
+        if f == os.path.basename(__file__):
+        continue
+    
+    
+def benchmark_influence(conf):
+    '''
+    Benchmark influence of :changing_param: on both MSE and latency.
+    '''
+    prediction_times = []
+    prediction_powers = []
+    complexities = []
+    for param_value in conf['changing_param_values']:
+        conf['tuned_params'][conf['changing_param']] = param_value
+        estimator = conf['estimator'](**conf['tuned_params'])
+        print('Benchmarking %s' % estimator)
+        estimator.fit(conf['data']['X_train'], conf['data']['y_train'])
+        conf['postfit_hook'](estimator)
+        complexity = conf['complexity_computer'](estimator)
+        complexities.append(complexity)
+        start_time = time.time()
+        for _ in range(conf['n_samples']):
+            y_pred = estimator.predict(conf['data']['X_test'])
+        elapsed_time = (time.time() - start_time) / float(conf['n_samples'])
+        prediction_times.append(elapsed_time)
+        pred_score = conf['prediction_performance_computer'](
+            conf['data']['y_test'], y_pred)
+        prediction_powers.append(pred_score)
+        print('Complexity: %d | %s: %.4f | Pred. Time: %fs\n' % (
+            complexity, conf['prediction_performance_label'], pred_score,
+            elapsed_time))
+    return prediction_powers, prediction_times, complexities
+    
+    In both examples below, the main result is that the empirical covariance
+estimate, as a non-robust one, is highly influenced by the heterogeneous
+structure of the observations. Although the robust covariance estimate is
+able to focus on the main mode of the data distribution, it sticks to the
+assumption that the data should be Gaussian distributed, yielding some biased
+estimation of the data structure, but yet accurate to some extent.
+The One-Class SVM does not assume any parametric form of the data distribution
+and can therefore model the complex shape of the data much better.
+    
+    # Create a graph capturing local connectivity. Larger number of neighbors
+# will give more homogeneous clusters to the cost of computation
+# time. A very large number of neighbors gives more evenly distributed
+# cluster sizes, but may not impose the local manifold structure of
+# the data
+knn_graph = kneighbors_graph(X, 30, include_self=False)
+    
+    estimators = [('k_means_iris_8', KMeans(n_clusters=8)),
+              ('k_means_iris_3', KMeans(n_clusters=3)),
+              ('k_means_iris_bad_init', KMeans(n_clusters=3, n_init=1,
+                                               init='random'))]
+    
+    import numpy as np
+import matplotlib.pyplot as plt
+    
+                    # Update the previous file
+                if _filename:
+                    with open(_filename, 'w') as _file:
+                        _file.write(_contents)
+    
+    
+class QPSSpider(Spider):
+    
+    
+    
+    from scrapy.commands import ScrapyCommand
+from scrapy.exceptions import UsageError
+    
+        def _print_headers(self, headers, prefix):
+        for key, values in headers.items():
+            for value in values:
+                self._print_bytes(prefix + b' ' + key + b': ' + value)
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('--get', dest='get', metavar='SETTING',
+            help='print raw setting value')
+        parser.add_option('--getbool', dest='getbool', metavar='SETTING',
+            help='print setting value, interpreted as a boolean')
+        parser.add_option('--getint', dest='getint', metavar='SETTING',
+            help='print setting value, interpreted as an integer')
+        parser.add_option('--getfloat', dest='getfloat', metavar='SETTING',
+            help='print setting value, interpreted as a float')
+        parser.add_option('--getlist', dest='getlist', metavar='SETTING',
+            help='print setting value, interpreted as a list')
+    
+    __all__ = ['cntv_download', 'cntv_download_by_id']
+    
+    from ..common import *
+import json
+    
+                    moz_ec_name = search_dict(sym_to_name, 'mozEcName')
+                push = search_dict(sym_to_name, 'push')
+                patt = '{}\.{}\('(.+?)'\)'.format(moz_ec_name, push)
+                ec_list = re.findall(patt, code)
+                [magic_list.append(sym_to_name[ec]) for ec in ec_list]
+        return magic_list
+    
+        (prob, state) = max((V[len(obs) - 1][y], y) for y in 'ES')
+    
+    if opt.topK is None:
+    topK = 10
+else:
+    topK = int(opt.topK)
+    
+    while True:
+    line = sys.stdin.readline()
+    if line=='':
+        break
+    line = line.strip()
+    for word in jieba.cut(line):
+        print(word)
+    
+    parser = OptionParser(USAGE)
+parser.add_option('-k',dest='topK')
+opt, args = parser.parse_args()
+    
+    url = sys.argv[1]
+content = open(url,'rb').read()
+t1 = time.time()
+words = list(pseg.cut(content))
