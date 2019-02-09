@@ -1,139 +1,110 @@
 
         
-              expect(value_for(user.id, dt)).to eq(0)
-      expect(limit_reached_for(user.id, dt)).to eq(false)
+                      if accept
+                html_options[option] = true
+              elsif option == :checked
+                html_options[option] = false
+              end
+            end
     
-        def sort_fn(a, b)
-      if (a.getbyte(0) >= 49 && a.getbyte(0) <= 57) || (b.getbyte(0) >= 49 && b.getbyte(0) <= 57)
-        a_split = a.split(SPLIT_INTS)
-        b_split = b.split(SPLIT_INTS)
-    
-        def data_url_string?(str)
-      str.start_with?(DATA_URL)
-    end
-    
-            @counter += 1
-    
-    require 'active_support/subscriber'
-    
-              node['data-language'] = 'typescript' if node['path'].try(:ends_with?, '.ts')
-          node['data-language'] = 'html' if node['path'].try(:ends_with?, '.html')
-          node['data-language'] = 'css' if node['path'].try(:ends_with?, '.css')
-          node['data-language'] = 'js' if node['path'].try(:ends_with?, '.js')
-          node['data-language'] = 'json' if node['path'].try(:ends_with?, '.json')
-          node['data-language'] = node['language'].sub(/\Ats/, 'typescript').strip if node['language']
-          node['data-language'] ||= 'typescript' if node.content.start_with?('@')
-    
-            css('.nav-index-section').each do |node|
-          node.content = node.content
-        end
-    
-            doc
+        # Main render entry point shared by Action View and Action Controller.
+    def render(context, options)
+      if options.key?(:partial)
+        render_partial(context, options)
+      else
+        render_template(context, options)
       end
     end
-  end
-end
-
     
-          def question
-        if default.nil?
-          I18n.t(:question, key: key, scope: :capistrano)
+    module Docs
+  class PageDb
+    attr_reader :pages
+    
+        DOCUMENT_RGX = /\A(?:\s|(?:<!--.*?-->))*<(?:\!doctype|html)/i
+    
+            if mod
+          if name == 'Index'
+            return slug.split('/')[1..-2].join('/')
+          elsif name == 'Angular'
+            return slug.split('/').last.split('-').first
+          end
+        end
+    
+          # Returns an array of all the values in the `hash` literal.
+      #
+      # @return [Array<Node>] an array of values in the `hash` literal
+      def values
+        each_pair.map(&:value)
+      end
+    
+          # This is used for duck typing with `pair` nodes which also appear as
+      # `hash` elements.
+      #
+      # @return [false]
+      def hash_rocket?
+        false
+      end
+    
+    module RuboCop
+  module AST
+    # Common functionality for nodes that are parameterized:
+    # `send`, `super`, `zsuper`, `def`, `defs`
+    module ParameterizedNode
+      # Checks whether this node's arguments are wrapped in parentheses.
+      #
+      # @return [Boolean] whether this node's arguments are
+      #                   wrapped in parentheses
+      def parenthesized?
+        loc.end && loc.end.is?(')')
+      end
+    
+          locations = Array.new
+      while (data.code.to_i == 301 || data.code.to_i == 302)
+        data = handle_gist_redirecting(data)
+        break if locations.include? data.header['Location']
+        locations << data.header['Location']
+      end
+    
+          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
+        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
+        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
+          @img['title']  = title
+          @img['alt']    = alt
         else
-          I18n.t(:question_default, key: key, default_value: default, scope: :capistrano)
+          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
         end
+        @img['class'].gsub!(/'/, '') if @img['class']
       end
+      super
+    end
     
-            # rubocop:disable Style/MethodMissing
-        def method_missing(key, value=nil)
-          if value
-            set(lvalue(key), value)
-          else
-            fetch(key)
-          end
-        end
-        # rubocop:enable Style/MethodMissing
-    
-          attr_reader :locations, :values, :fetched_keys
-    
-          * Redistributions of source code must retain the above copyright
-        notice, this list of conditions and the following disclaimer.
-      * Redistributions in binary form must reproduce the above
-        copyright notice, this list of conditions and the following
-        disclaimer in the documentation and/or other materials provided
-        with the distribution.
-      * Neither the name of Google Inc. nor the names of its
-        contributors may be used to endorse or promote products derived
-        from this software without specific prior written permission.
-    
-          def escaped_name
-        CGI.escape(@name)
-      end
-    
-        get page
-    assert_match /'\/custom.js'/, last_response.body
-    Precious::App.set(:wiki_options, { :js => nil })
+      # Improved version of Liquid's truncate:
+  # - Doesn't cut in the middle of a word.
+  # - Uses typographically correct ellipsis (…) insted of '...'
+  def truncate(input, length)
+    if input.length > length && input[0..(length-1)] =~ /(.+)\b.+$/im
+      $1.strip + ' &hellip;'
+    else
+      input
+    end
   end
     
-    context 'Precious::Views::Page' do
-  setup do
-    examples = testpath 'examples'
-    @path    = File.join(examples, 'test.git')
-    FileUtils.cp_r File.join(examples, 'empty.git'), @path, :remove_destination => true
-    @wiki = Gollum::Wiki.new(@path)
-  end
+        # Note: didn't use `self.directories`.
+    # Pacman doesn't really record that information, to my knowledge.
     
-        post '/edit/' + CGI.escape('한글'), :page => 'k', :content => '바뀐 text',
-         :format                            => 'markdown', :message => 'ghi'
-    follow_redirect!
-    assert last_response.ok?
-    
-        # Ensure path begins with a single leading slash
-    def clean_path(path)
-      if path
-        (path[0] != '/' ? path.insert(0, '/') : path).gsub(/\/{2,}/, '/')
-      end
+        if File.exists?(params[:output])
+      # TODO(sissel): Allow folks to choose output?
+      logger.error('Puppet module directory '#{params[:output]}' already ' \
+                    'exists. Delete it or choose another output (-p flag)')
     end
     
-        def self.add_writer(name)
-      define_singleton_method('#{name}=') do |value|
-        value.builder_method name
-        instance_variable_set :'@#{name}', value
-      end
+        # use dir to set stuff up properly, mainly so I don't have to reimplement
+    # the chdir/prefix stuff special for zip.
+    dir = convert(FPM::Package::Dir)
+    if attributes[:chdir]
+      dir.attributes[:chdir] = File.join(build_path, attributes[:chdir])
+    else
+      dir.attributes[:chdir] = build_path
     end
     
-    module ActiveAdmin
-  module BatchActions
-    
-        def authorized?(action_name, abstract_model = nil, object = nil)
-      object = nil if object.try :new_record?
-      action(action_name, abstract_model, object).try(:authorized?)
-    end
-    
-        def field_for(field)
-      field.read_only? ? @template.content_tag(:div, field.pretty_value, class: 'form-control-static') : field.render
-    end
-    
-        def ordered_filters
-      return @ordered_filters if @ordered_filters.present?
-      @index = 0
-      @ordered_filters = (params[:f].try(:permit!).try(:to_h) || @model_config.list.filters).inject({}) do |memo, filter|
-        field_name = filter.is_a?(Array) ? filter.first : filter
-        (filter.is_a?(Array) ? filter.last : {(@index += 1) => {'v' => ''}}).each do |index, filter_hash|
-          if filter_hash['disabled'].blank?
-            memo[index] = {field_name => filter_hash}
-          else
-            params[:f].delete(field_name)
-          end
-        end
-        memo
-      end.to_a.sort_by(&:first)
-    end
-    
-            def name
-          association.name.to_sym
-        end
-    
-            # http://getbootstrap.com/2.3.2/base-css.html#icons
-        register_instance_option :link_icon do
-          'icon-question-sign'
-        end
+        args.flatten!.compact!
