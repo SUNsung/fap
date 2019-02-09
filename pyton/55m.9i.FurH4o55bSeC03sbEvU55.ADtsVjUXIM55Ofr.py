@@ -1,74 +1,79 @@
 
         
-        
-def finalize_headers(headers):
-    final_headers = {}
-    for name, value in headers.items():
-        if value is not None:
+                    # bottleneck residual unit
+            y = resnet_layer(inputs=x,
+                             num_filters=num_filters_in,
+                             kernel_size=1,
+                             strides=strides,
+                             activation=activation,
+                             batch_normalization=batch_normalization,
+                             conv_first=False)
+            y = resnet_layer(inputs=y,
+                             num_filters=num_filters_in,
+                             conv_first=False)
+            y = resnet_layer(inputs=y,
+                             num_filters=num_filters_out,
+                             kernel_size=1,
+                             conv_first=False)
+            if res_block == 0:
+                # linear projection residual shortcut connection to match
+                # changed dims
+                x = resnet_layer(inputs=x,
+                                 num_filters=num_filters_out,
+                                 kernel_size=1,
+                                 strides=strides,
+                                 activation=None,
+                                 batch_normalization=False)
+            x = keras.layers.add([x, y])
     
-        def get_formatters_grouped(self):
-        groups = {}
-        for group_name, group in groupby(
-                self.get_formatters(),
-                key=lambda p: getattr(p, 'group_name', 'format')):
-            groups[group_name] = list(group)
-        return groups
+        num_train_samples = 50000
     
+    # We add a vanilla hidden layer:
+model.add(Dense(hidden_dims))
+model.add(Dropout(0.2))
+model.add(Activation('relu'))
     
-FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
-FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
-JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
-BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
+    (x_train, y_train), (x_test, y_test) = mnist.load_data()
+x_train = x_train.astype(np.float32) / 255
+x_train = np.expand_dims(x_train, -1)
+y_train = tf.one_hot(y_train, num_classes)
     
+    # Build the Autoencoder Model
+# First build the Encoder Model
+inputs = Input(shape=input_shape, name='encoder_input')
+x = inputs
+# Stack of Conv2D blocks
+# Notes:
+# 1) Use Batch Normalization before ReLU on deep networks
+# 2) Use MaxPooling2D as alternative to strides>1
+# - faster but not as good as strides>1
+for filters in layer_filters:
+    x = Conv2D(filters=filters,
+               kernel_size=kernel_size,
+               strides=2,
+               activation='relu',
+               padding='same')(x)
     
-def test_follow_all_output_options_used_for_redirects(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 3
-    assert HTTP_OK not in r
+    from time import time
     
-                return _r
+    # add noise
+y += 0.01 * np.random.normal((n_samples,))
     
-        def __init__(self, headers):
-        '''Make a MockResponse for `cookielib` to read.
-    
-        with server as (host, port):
-        url = u'http://{}:{}'.format(host, port)
-        r = requests.get(url=url, allow_redirects=True)
-        assert r.status_code == 200
-        assert len(r.history) == 1
-        assert r.history[0].status_code == 301
-        assert redirect_request[0].startswith(b'GET /' + expected_path + b' HTTP/1.1')
-        assert r.url == u'{}/{}'.format(url, expected_path.decode('ascii'))
-    
-    Some codes have multiple names, and both upper- and lower-case versions of
-the names are allowed. For example, ``codes.ok``, ``codes.OK``, and
-``codes.okay`` all correspond to the HTTP status code 200.
-'''
-    
-        # First check whether no_proxy is defined. If it is, check that the URL
-    # we're getting isn't in the no_proxy list.
-    no_proxy_arg = no_proxy
-    if no_proxy is None:
-        no_proxy = get_proxy('no_proxy')
-    parsed = urlparse(url)
-    
-    
-def barplot_neighbors(Nrange=2 ** np.arange(1, 11),
-                      Drange=2 ** np.arange(7),
-                      krange=2 ** np.arange(10),
-                      N=1000,
-                      D=64,
-                      k=5,
-                      leaf_size=30,
-                      dataset='digits'):
-    algorithms = ('kd_tree', 'brute', 'ball_tree')
-    fiducial_values = {'N': N,
-                       'D': D,
-                       'k': k}
+        n = 10
+    step = 10000
+    n_samples = 10000
+    dim = 10
+    n_classes = 10
+    for i in range(n):
+        print('============================================')
+        print('Entering iteration %s of %s' % (i, n))
+        print('============================================')
+        n_samples += step
+        X = np.random.randn(n_samples, dim)
+        Y = np.random.randint(0, n_classes, (n_samples,))
+        bench_scikit_tree_classifier(X, Y)
+        Y = np.random.randn(n_samples)
+        bench_scikit_tree_regressor(X, Y)
     
     # Learn a frontier for outlier detection with several classifiers
 xx1, yy1 = np.meshgrid(np.linspace(-8, 28, 500), np.linspace(3, 40, 500))
@@ -87,84 +92,75 @@ for i, (clf_name, clf) in enumerate(classifiers.items()):
     legend2[clf_name] = plt.contour(
         xx2, yy2, Z2, levels=[0], linewidths=2, colors=colors[i])
     
-    # Author: Kemal Eren <kemal@kemaleren.com>
-# License: BSD 3 clause
+    # Plot the ground truth
+fig = plt.figure(fignum, figsize=(4, 3))
+ax = Axes3D(fig, rect=[0, 0, .95, 1], elev=48, azim=134)
     
-    The plots display firstly what a K-means algorithm would yield
-using three clusters. It is then shown what the effect of a bad
-initialization is on the classification process:
-By setting n_init to only 1 (default is 10), the amount of
-times that the algorithm will be run with different centroid
-seeds is reduced.
-The next plot displays what using eight clusters would deliver
-and finally the ground truth.
-    
-    from sklearn import cluster
-    
-    def os_constant(key):
-    # XXX TODO: In the future, this could return different constants
-    #           based on what OS we are running under.  To see an
-    #           approach to how to handle different OSes, see the
-    #           apache version of this file.  Currently, we do not
-    #           actually have any OS-specific constants on Nginx.
-    '''
-    Get a constant value for operating system
-    
-        def setUp(self):
-        from acme.errors import PollError
-        self.timeout = PollError(
-            exhausted=set([mock.sentinel.AR]),
-            updated={})
-        self.invalid = PollError(exhausted=set(), updated={
-            mock.sentinel.AR: mock.sentinel.AR2})
-    
-        def test_default_decoder(self):
-        from acme.fields import RFC3339Field
-        self.assertEqual(
-            self.decoded, RFC3339Field.default_decoder(self.encoded))
-    
-        # TODO: decoder should check that nonce is in the protected header
+        # normalize dataset for easier parameter selection
+    X = StandardScaler().fit_transform(X)
     
     
-UPDATED_MOD_SSL_CONF_DIGEST = '.updated-options-ssl-apache-conf-digest.txt'
-'''Name of the hash of the updated or informed mod_ssl_conf as saved in `IConfig.config_dir`.'''
+def issue_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
+    ref = 'https://github.com/scrapy/scrapy/issues/' + text
+    set_classes(options)
+    node = nodes.reference(rawtext, 'issue ' + text, refuri=ref, **options)
+    return [node], []
     
-        def __init__(self, filep, path, addrs, ssl, enabled, name=None,
-                 aliases=None, modmacro=False, ancestor=None):
     
-        def test_view_config_changes_error(self):
-        self.config.reverter.view_config_changes = mock.Mock(
-            side_effect=errors.ReverterError)
-        self.assertRaises(errors.PluginError, self.config.view_config_changes)
+class QPSSpider(Spider):
     
-        @certbot_util.patch_get_utility()
-    def test_select_cancel(self, mock_util):
-        mock_util().checklist.return_value = (display_util.CANCEL, 'whatever')
-        vhs = select_vhost_multiple([self.vhosts[2], self.vhosts[3]])
-        self.assertFalse(vhs)
+    # Scrapy version
+import pkgutil
+__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
+version_info = tuple(int(v) if v.isdigit() else v
+                     for v in __version__.split('.'))
+del pkgutil
     
-            self.vhost2 = VirtualHost(
-            'fp', 'vhp', set([self.addr2]), False, False, 'localhost')
+        def short_desc(self):
+        return 'Run a spider'
     
-    # The language for content autogenerated by Sphinx. Refer to documentation
-# for a list of supported languages.
-#
-# This is also used if you do content translation via gettext catalogs.
-# Usually you set 'language' from the command line for these cases.
-language = 'en'
+        def print_results(self, opts):
+        colour = not opts.nocolour
     
-    # The model was trained in a way that faces with a distance of 0.6 or less should be a match. But if you want to
-# be more strict, you can look for a smaller face distance. For example, using a 0.55 cutoff would reduce false
-# positive matches at the risk of more false negatives.
     
-        # Load the uploaded image file
-    img = face_recognition.load_image_file(file_stream)
-    # Get face encodings for any faces in the uploaded image
-    unknown_face_encodings = face_recognition.face_encodings(img)
+    @implementer(IPolicyForHTTPS)
+    class BrowserLikeContextFactory(ScrapyClientContextFactory):
+        '''
+        Twisted-recommended context factory for web clients.
     
-    # Load a sample picture and learn how to recognize it.
-obama_image = face_recognition.load_image_file('obama.jpg')
-obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
+        class _v19_S3Connection(S3Connection):
+        '''A dummy S3Connection wrapper that doesn't do any synchronous download'''
+        def _mexe(self, method, bucket, key, headers, *args, **kwargs):
+            return headers
     
-        face_found = False
-    is_obama = False
+    openssl_methods = {
+    METHOD_TLS:    SSL.SSLv23_METHOD,                   # protocol negotiation (recommended)
+    METHOD_SSLv3:  SSL.SSLv3_METHOD,                    # SSL 3 (NOT recommended)
+    METHOD_TLSv10: SSL.TLSv1_METHOD,                    # TLS 1.0 only
+    METHOD_TLSv11: getattr(SSL, 'TLSv1_1_METHOD', 5),   # TLS 1.1 only
+    METHOD_TLSv12: getattr(SSL, 'TLSv1_2_METHOD', 6),   # TLS 1.2 only
+}
+    
+    if platform.system() in ('FreeBSD', 'Darwin'):
+    server_root_tmp = FREEBSD_DARWIN_SERVER_ROOT
+else:
+    server_root_tmp = LINUX_SERVER_ROOT
+    
+            self.assertEqual(len(matches), 1)
+        self.assertEqual(self.parser.get_arg(matches[0]), '1234')
+    
+    from certbot_apache import obj
+from certbot_apache.tests import util
+    
+    __all__ = ['cbs_download']
+    
+    site_info = 'dilidili'
+download = dilidili_download
+download_playlist = playlist_not_supported('dilidili')
+
+    
+        if 'tvId' not in q or 'channelId' not in q:
+        raise Exception('No enough arguments!')
+    
+    def get_photoset_id(url, page):
+    return match1(url, pattern_url_photoset)
