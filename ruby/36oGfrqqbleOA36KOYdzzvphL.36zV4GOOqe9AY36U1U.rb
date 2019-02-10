@@ -1,89 +1,58 @@
 
         
-            def class_ref_for_action(named: nil)
-      class_ref = Actions.action_class_ref(named)
-      unless class_ref
-        if Fastlane::Actions.formerly_bundled_actions.include?(action)
-          # This was a formerly bundled action which is now a plugin.
-          UI.verbose(caller.join('\n'))
-          UI.user_error!('The action '#{action}' is no longer bundled with fastlane. You can install it using `fastlane add_plugin #{action}`')
-        else
-          Fastlane::ActionsList.print_suggestions(action)
-          UI.user_error!('Action '#{action}' not available, run `fastlane actions` to get a full list')
-        end
+                expect(result).to eq('carthage bootstrap --configuration Release')
       end
     
-        def action_completed(completion_context: nil)
+        str = str.dup
+    
+        @statuses = @account.statuses.permitted_for(@account, signed_request_account)
+    @statuses = params[:min_id].present? ? @statuses.paginate_by_min_id(LIMIT, params[:min_id]).reverse : @statuses.paginate_by_max_id(LIMIT, params[:max_id])
+    @statuses = cache_collection(@statuses, Status)
+  end
+    
+        def set_account
+      @account = Account.find(params[:account_id])
+      @user = @account.user
     end
     
-          def self.details
-        list = <<-LIST.markdown_list
-          `grouping` is just to keep your tags organised under one 'folder', defaults to 'builds'
-          `lane` is the name of the current fastlane lane
-          `prefix` is anything you want to stick in front of the version number, e.g. 'v'
-          `postfix` is anything you want to stick at the end of the version number, e.g. '-RC1'
-          `build_number` is the build number, which defaults to the value emitted by the `increment_build_number` action
-        LIST
-    
-          it 'handles the exclude_dirs parameter with no elements correctly' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          ensure_no_debug_code(text: 'pry', path: '.', exclude_dirs: [])
-        end').runner.execute(:test)
-        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}'')
-      end
-    
-          it 'works with both select and exclude regex' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            oclint(
-              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
-              select_regex: /\.*m/,
-              exclude_regex: /Test/
-            )
-          end').runner.execute(:test)
-    
-        change.down do
-      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
-      Mention.where(mentions_container_type: 'Comment').destroy_all
-      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
+        def set_filter_params
+      @filter_params = filter_params.to_hash.symbolize_keys
     end
-  end
-end
-
     
-    Given /^I have an aspect called '([^\']*)'$/ do |aspect_name|
-  @me.aspects.create!(:name => aspect_name)
-  @me.reload
-end
+    module Admin
+  class EmailDomainBlocksController < BaseController
+    before_action :set_email_domain_block, only: [:show, :destroy]
     
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have value #{expected.inspect} but was #{actual.value.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have value #{expected.inspect} but it had'
+    Given(/^(\d+) valid existing releases$/) do |num|
+  a_day = 86_400 # in seconds
+  offset = -(a_day * num.to_i)
+  num.to_i.times do
+    run_vagrant_command('mkdir -p #{TestApp.release_path(TestApp.timestamp(offset))}')
+    offset += a_day
   end
 end
     
-        context 'on a post you partecipate to' do
-      before { alice.participate! post }
+        def install_plugin(plugin, load_hooks: true, load_immediately: false)
+      installer.install(plugin,
+                        load_hooks: load_hooks,
+                        load_immediately: load_immediately)
+    end
     
-    module VagrantHelpers
-  extend self
+    # This example uses the API to create a package from local files
+# it also creates necessary init-scripts and systemd files so our executable can be used as a service
     
-            def set(key, value)
-          pval = @properties[key]
-          if pval.is_a?(Hash) && value.is_a?(Hash)
-            pval.merge!(value)
-          elsif pval.is_a?(Set) && value.is_a?(Set)
-            pval.merge(value)
-          elsif pval.is_a?(Array) && value.is_a?(Array)
-            pval.concat value
-          else
-            @properties[key] = value
-          end
-        end
+        wordsize = case @architecture
+    when nil, 'native'
+      %x{getconf LONG_BIT}.chomp # 'native' is current arch
+    when 'amd64'
+      '64'
+    when 'i386'
+      '32'
+    else
+      %x{getconf LONG_BIT}.chomp # default to native, the current arch
+    end
     
-          def assert_value_or_block_not_both(value, block)
-        return if value.nil? || block.nil?
-        raise Capistrano::ValidationError,
-              'Value and block both passed to Configuration#set'
-      end
+      option '--channel', 'CHANNEL_URL',
+    'The pear channel url to use instead of the default.'
+    
+        safesystem('tar', *args)
