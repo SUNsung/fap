@@ -1,96 +1,73 @@
 
         
-        def liquid_escape(markdown)
-  markdown.gsub(%r!(`{[{%].+[}%]}`)!, '{% raw %}\\1{% endraw %}')
-end
+                  content_is_options = content_or_options.is_a?(Hash)
+          if content_is_options
+            options.merge! content_or_options
+            @content = nil
+          else
+            @content = content_or_options
+          end
     
-    WITH_JUST_LIQUID_VAR = <<-LIQUID.freeze
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce auctor libero at
-pharetra tempus. et metus fermentum, eu cursus lorem, ac dictum enim.
-mattis. Curabitur vel dui et lacus rutrum suscipit et {{ title }} neque.
+            private
     
-    
-def pathutil_relative
-  Pathutil.new(DOC_PATH).relative_path_from(COL_PATH).to_s
-end
-    
-    CONTENT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
-    
-      p.option 'source', '-s', '--source [DIR]', 'Source directory (defaults to ./)'
-  p.option 'destination', '-d', '--destination [DIR]',
-    'Destination directory (defaults to ./_site)'
-  p.option 'safe', '--safe', 'Safe mode (defaults to false)'
-  p.option 'plugins_dir', '-p', '--plugins PLUGINS_DIR1[,PLUGINS_DIR2[,...]]', Array,
-    'Plugins directory (defaults to ./_plugins)'
-  p.option 'layouts_dir', '--layouts DIR', String,
-    'Layouts directory (defaults to ./_layouts)'
-  p.option 'profile', '--profile', 'Generate a Liquid rendering profile'
-    
+        # Render but returns a valid Rack body. If fibers are defined, we return
+    # a streaming body that renders the template piece by piece.
     #
-    
-    module Jekyll
-  module Commands
-    class Serve
-      # The LiveReload protocol requires the server to serve livereload.js over HTTP
-      # despite the fact that the protocol itself uses WebSockets.  This custom connection
-      # class addresses the dual protocols that the server needs to understand.
-      class HttpAwareConnection < EventMachine::WebSocket::Connection
-        attr_reader :reload_body, :reload_size
-    
-              format('%+e', 109.52).should == '+1.095200e+02'
-          format('%+E', 109.52).should == '+1.095200E+02'
-          format('%+f', 10.952).should == '+10.952000'
-          format('%+g', 12.1234).should == '+12.1234'
-          format('%+G', 12.1234).should == '+12.1234'
-          format('%+a', 196).should == '+0x1.88p+7'
-          format('%+A', 196).should == '+0X1.88P+7'
-        end
-    
-      it 'returns true when passed ?r if the argument is readable by the effective uid' do
-    Kernel.test(?r, @file).should be_true
-  end
-    
-          it 'autocorrects closing brace on different line from last element' do
-        new_source = autocorrect_source(<<-RUBY.strip_indent.chomp)
-          #{prefix}#{open}#{a}, # a
-          #{b} # b
-          #{close}
-          #{suffix}
-        RUBY
-    
-          # Returns an array of all the when branches in the `case` statement.
-      #
-      # @return [Array<WhenNode>] an array of `when` nodes
-      def when_branches
-        node_parts[1...-1]
-      end
-    
-          # Returns the body of the `for` loop.
-      #
-      # @return [Node, nil] The body of the `for` loop.
-      def body
-        node_parts[2]
+    # Note that partials are not supported to be rendered with streaming,
+    # so in such cases, we just wrap them in an array.
+    def render_body(context, options)
+      if options.key?(:partial)
+        [render_partial(context, options)]
+      else
+        StreamingTemplateRenderer.new(@lookup_context).render(context, options)
       end
     end
-  end
-end
-
     
-    module RuboCop
-  module AST
-    # A node extension for `kwsplat` nodes. This will be used in place of a
-    # plain  node when the builder constructs the AST, making its methods
-    # available to all `kwsplat` nodes within RuboCop.
-    class KeywordSplatNode < Node
-      include HashElementNode
+        # The content passed to this environment. This is naturally only set
+    # for mixin body environments with content passed in.
+    #
+    # @return {[Array<Sass::Tree::Node>, Environment]?} The content nodes and
+    #   the lexical environment of the content block.
+    def content
+      @content || (@parent && @parent.content)
+    end
+    
+      s.author    = 'You'
+  s.email     = 'you@example.com'
+  s.homepage  = 'https://github.com/your-github-handle/<%= file_name %>'
+  s.license = 'BSD-3-Clause'
+    
+          it 'returns proper links data' do
+        expect(json_response['links']['self']).to include('/api/v2/storefront/account/orders')
+        expect(json_response['links']['next']).to include('/api/v2/storefront/account/orders?page=1')
+        expect(json_response['links']['prev']).to include('/api/v2/storefront/account/orders?page=1')
+      end
+    end
+    
+        it 'return JSON API payload of User and associations (default billing and shipping address)' do
+      expect(json_response['data']).to have_id(user.id.to_s)
+      expect(json_response['data']).to have_type('user')
+      expect(json_response['data']).to have_relationships(:default_shipping_address, :default_billing_address)
+    
+        shared_examples 'apply coupon code' do
+      before { execute }
+    
+        context 'as a guest user with token' do
+      before { get '/api/v2/storefront/order_status/#{order.number}', headers: headers_order_token }
+    
+              def serialize_resource(resource)
+            resource_serializer.new(
+              resource,
+              include: resource_includes,
+              sparse_fields: sparse_fields
+            ).serializable_hash
+          end
+    
+              def serialize_order(order)
+            resource_serializer.new(order.reload, include: resource_includes, fields: sparse_fields).serializable_hash
+          end
+    
+            include Spree::Core::ControllerHelpers::Auth
+        include Spree::Core::ControllerHelpers::Order
+        # This before_action comes from Spree::Core::ControllerHelpers::Order
+        skip_before_action :set_current_order
