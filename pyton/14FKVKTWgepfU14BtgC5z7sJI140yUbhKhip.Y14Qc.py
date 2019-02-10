@@ -1,70 +1,110 @@
 
         
-            context['show_on_github_url'] = show_url
-    context['edit_on_github_url'] = edit_url
+            self.instances_to_load = tf.placeholder(dtype=tf.string, shape=[None])
+    self.labels_to_load = lexnet_common.load_all_labels(self.instances_to_load)
+    self.pairs_to_load = lexnet_common.load_all_pairs(self.instances_to_load)
     
-    # The name of an image file (relative to this directory) to use as a favicon of
-# the docs.
-# This file should be a Windows icon file (.ico) being 16x16 or 32x32
-# pixels large.
-#
-html_favicon = '_static/favicon.ico'
+    model = IntegrationToBoundModel(N)
+inputs_ph_t = [tf.placeholder(tf.float32,
+                              shape=[None, 1]) for _ in range(ntimesteps)]
+state = tf.zeros([batch_size, N])
+saver = tf.train.Saver()
     
-            now = dt_util.now()
-        actiontec_data = self.get_actiontec_data()
-        if not actiontec_data:
-            return False
-        self.last_results = [Device(data['mac'], name, now)
-                             for name, data in actiontec_data.items()
-                             if data['timevalid'] > -60]
-        _LOGGER.info('Scan successful')
-        return True
+      Returns:
+    In the equation, y = x W + b, returns the tensorflow op that yields y.
+  '''
+  in_size = int(x.get_shape()[1]) # from Dimension(10) -> 10
+  stddev = alpha/np.sqrt(float(in_size))
+  mat_init = tf.random_normal_initializer(0.0, stddev)
+  wname = (name + '/W') if name else '/W'
     
-    import homeassistant.helpers.config_validation as cv
-from homeassistant.components.device_tracker import (
-    DOMAIN, PLATFORM_SCHEMA, DeviceScanner)
-from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_USERNAME
+        # Loop through the 2D matrix of word_patches and score each.
+    for i, row in enumerate(word_patches):
+      print('Reset RNN states.')
+      self.reset()  # reset states before processing each row.
+      row_probs = np.zeros([batch_size, 0])
+      for j, word_patch in enumerate(row):
+        print('Processing patch '
+              '({}, {}) / ({}, {})'.format(i+1, j+1, nrow, ncol))
+        patch_probs = (self._score(word_patch) if word_patch else
+                       np.zeros([batch_size, num_timesteps]))
+        row_probs = np.concatenate([row_probs, patch_probs], 1)
+      probs = np.concatenate([probs, row_probs], 0)
+    return probs
     
+      if epoch_size_override:
+    epoch_size = epoch_size_override
+  else:
+    epoch_size = (batch_len - 1) // num_steps
     
-class DominosOrder(Entity):
-    '''Represents a Dominos order entity.'''
+    def roundtrip(filename, output=sys.stdout):
+    with open(filename, 'rb') as pyfile:
+        encoding = tokenize.detect_encoding(pyfile.readline)[0]
+    with open(filename, 'r', encoding=encoding) as pyfile:
+        source = pyfile.read()
+    tree = compile(source, filename, 'exec', ast.PyCF_ONLY_AST)
+    Unparser(tree, output)
     
-            def __init__(self, patterns, hass):
-            '''Initialise the EventHandler.'''
-            super().__init__(patterns)
-            self.hass = hass
+    IMPORT_MAPPING.update({
+    'cPickle': 'pickle',
+    '_elementtree': 'xml.etree.ElementTree',
+    'FileDialog': 'tkinter.filedialog',
+    'SimpleDialog': 'tkinter.simpledialog',
+    'DocXMLRPCServer': 'xmlrpc.server',
+    'SimpleHTTPServer': 'http.server',
+    'CGIHTTPServer': 'http.server',
+    # For compatibility with broken pickles saved in old Python 3 versions
+    'UserDict': 'collections',
+    'UserList': 'collections',
+    'UserString': 'collections',
+    'whichdb': 'dbm',
+    'StringIO':  'io',
+    'cStringIO': 'io',
+})
     
-        Takes in a voluptuous schema and adds 'post_data' as
-    keyword argument to the function call.
+        def testSeekBackwardsAcrossStreams(self):
+        self.createTempFile(streams=2)
+        with BZ2File(self.filename) as bz2f:
+            readto = len(self.TEXT) + 100
+            while readto > 0:
+                readto -= len(bz2f.read(readto))
+            bz2f.seek(-150, 1)
+            self.assertEqual(bz2f.read(), self.TEXT[100-150:] + self.TEXT)
     
+        counter = 1
+    for part in msg.walk():
+        # multipart/* are just containers
+        if part.get_content_maintype() == 'multipart':
+            continue
+        # Applications should really sanitize the given filename so that an
+        # email message can't be used to overwrite important files
+        filename = part.get_filename()
+        if not filename:
+            ext = mimetypes.guess_extension(part.get_content_type())
+            if not ext:
+                # Use a generic bag-of-bits extension
+                ext = '.bin'
+            filename = 'part-%03d%s' % (counter, ext)
+        counter += 1
+        with open(os.path.join(args.directory, filename), 'wb') as fp:
+            fp.write(part.get_payload(decode=True))
     
-class Client(object):
-    def __init__(self):
-        self.handler = ConcreteHandler1(ConcreteHandler3(ConcreteHandler2(DefaultHandler())))
+    from ..common import *
+from ..extractor import VideoExtractor
     
+            if title is None:
+            self.title = '_'.join([i.text for i in self.tree.iterfind('video/videomarks/videomark/markdesc')])
+        else:
+            self.title = title
     
-class Subject(object):
-    def __init__(self):
-        self._observers = []
+    from ..common import *
     
-        @classmethod
-    def get_registry(cls):
-        return dict(cls.REGISTRY)
-    
-    '''
-*What is this pattern about?
-This pattern aims to encapsulate each algorithm and allow them to be
-interchangeable. Separating algorithms allows the client to scale
-with larger and more complex algorithms, since the client and the
-strategies are kept independent of each other.
-    
-        def __str__(self):
-        return 'Dog'
-    
-    ### OUTPUT ###
-# Floor: One | Size: Big
-# Floor: More than One | Size: Small
-# Floor: One | Size: Big and fancy
+    site_info = 'ehow.com'
+download = ehow_download
+download_playlist = playlist_not_supported('ehow')
 
     
-    https://en.wikipedia.org/wiki/Lazy_evaluation
+        if title is None:
+      title = url[0]
+    
+            i = 1
