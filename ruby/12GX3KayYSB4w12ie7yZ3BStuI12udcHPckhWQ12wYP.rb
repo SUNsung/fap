@@ -1,91 +1,129 @@
 
         
-            lambda {
-      catch :blah do
-        throw :blah, :return_value, 2, 3, 4, 5
-      end
-    }.should raise_error(ArgumentError)
-  end
-    
-      it 'calls #write on $stderr if $VERBOSE is false' do
-    lambda {
-      $VERBOSE = false
-      warn('this is some simple text')
-    }.should output(nil, 'this is some simple text\n')
-  end
-    
-      def framework_major_version
-    framework_version.split('.').first.to_i
-  end
+        def pre_pr(url)
+  url[-1, 1] == FORWARD_SLASH ? url : File.dirname(url)
 end
-World(RailsCommandHelpers)
+    
+    Benchmark.ips do |x|
+  x.report('local-require') { local_require }
+  x.report('global-require') { global_require }
+  x.report('graceful-require') { graceful_require }
+  x.compare!
+end
 
     
-      def generate_migration
-    migration_template('paperclip_migration.rb.erb',
-                       'db/migrate/#{migration_file_name}',
-                       migration_version: migration_version)
-  end
+    # No trailing slash
+Benchmark.ips do |x|
+  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
+  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
+  x.compare!
+end
+
     
-      # Provides configurability to Paperclip. The options available are:
-  # * whiny: Will raise an error if Paperclip cannot process thumbnails of
-  #   an uploaded image. Defaults to true.
-  # * log: Logs progress to the Rails log. Uses ActiveRecord's logger, so honors
-  #   log levels, etc. Defaults to true.
-  # * command_path: Defines the path at which to find the command line
-  #   programs if they are not visible to Rails the system's search path. Defaults to
-  #   nil, which uses the first executable found in the user's search path.
-  # * use_exif_orientation: Whether to inspect EXIF data to determine an
-  #   image's orientation. Defaults to true.
-  def self.options
-    @options ||= {
-      command_path: nil,
-      content_type_mappings: {},
-      log: true,
-      log_command: true,
-      read_timeout: nil,
-      swallow_stderr: true,
-      use_exif_orientation: true,
-      whiny: true,
-      is_windows: Gem.win_platform?
-    }
-  end
+    Mercenary.program(:jekyll) do |p|
+  p.version Jekyll::VERSION
+  p.description 'Jekyll is a blog-aware, static site generator in Ruby'
+  p.syntax 'jekyll <subcommand> [options]'
     
-      option '--description', 'DESCRIPTION', 'Add a description for this package.' \
-    ' You can include '\\n' sequences to indicate newline breaks.',
-    :default => 'no description'
-  option '--url', 'URI', 'Add a url for this package.',
-    :default => 'http://example.com/no-uri-given'
-  option '--inputs', 'INPUTS_PATH',
-    'The path to a file containing a newline-separated list of ' \
-    'files and dirs to use as input.'
+            # rubocop:disable Metrics/AbcSize
+        def process(args, opts)
+          if !args || args.empty?
+            raise Jekyll::Errors::InvalidThemeName, 'You must specify a theme name.'
+          end
     
-      #######################################
-  # The following methods are provided to
-  # easily override particular substitut-
-  # ions performed by to_s for subclasses
-  #######################################
-  def to_s_arch;        architecture.to_s;  end
-  def to_s_name;        name.to_s;          end
-  def to_s_fullversion; iteration ? '#{version}-#{iteration}' : '#{version}'; end
-  def to_s_version;     version.to_s;       end
-  def to_s_iteration;   iteration.to_s;     end
-  def to_s_epoch;       epoch.to_s;         end
-  def to_s_type;        type.to_s;          end
-  def to_s_extension;   type.to_s;          end
-  #######################################
-    
-      option '--group', 'GROUP',
-    'Set the group to GROUP in the prototype file.',
-    :default => 'root'
-    
-        libs = [ 'install.sh', 'install-path.sh', 'generate-cleanup.sh' ]
-    libs.each do |file|
-      base = staging_path(File.join(attributes[:prefix]))
-      File.write(File.join(base, file), template(File.join('pleaserun', file)).result(binding))
-      File.chmod(0755, File.join(base, file))
+        def deprecation_message(message)
+      Jekyll.logger.warn 'Deprecation:', message
     end
     
-          safesystem(attributes[:python_bin], 'setup.py', 'install', *flags)
+      def page_requested?
+    params[:page] == 'true'
+  end
+    
+      before_action :set_account
+  respond_to :txt
+    
+      private
+    
+      def data_params
+    return {} if params[:data].blank?
+    params.require(:data).permit(alerts: [:follow, :favourite, :reblog, :mention])
+  end
+end
+
+    
+        head + [data.length].pack('v') + data
+  end
+    
+                encoded
+          end
+    
+                if OpenSSL::HMAC.digest('MD5', k1, decrypted) != checksum
+              raise ::RuntimeError, 'RC4-HMAC decryption failed, incorrect checksum verification'
+            end
+    
+              # @!attribute type
+          #   @return [Integer] The algorithm used to generate the checksum
+          attr_accessor :type
+          # @!attribute checksum
+          #   @return [String] The checksum itself
+          attr_accessor :checksum
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of an encrypted message.
+        class EncryptedData < Element
+          # @!attribute name_type
+          #   @return [Integer] The encryption algorithm
+          attr_accessor :etype
+          # @!attribute kvno
+          #   @return [Integer] The version number of the key
+          attr_accessor :kvno
+          # @!attribute cipher
+          #   @return [String] The enciphered text
+          attr_accessor :cipher
+    
+                self
+          end
+    
+                self
+          end
+    
+    When /^I (?:sign|log) in manually as '([^']*)' with password '([^']*)'( on the mobile website)?$/ \
+do |username, password, mobile|
+  @me = User.find_by_username(username)
+  @me.password ||= password
+  manual_login
+  confirm_login mobile
+end
+    
+    Then /^I should have (\d+) nsfw posts$/ do |num_posts|
+  page.should have_css('.nsfw-shield', count: num_posts.to_i)
+end
+    
+    RSpec::Matchers.define :have_path do |expected|
+  match do |actual|
+    await_condition { actual.current_path == expected }
+  end
+    
+    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
+    
+        it 'generates the contacts_json fixture', :fixture => true do
+      json = bob.contacts.map { |c|
+               ContactPresenter.new(c, bob).full_hash_with_person
+             }.to_json
+      save_fixture(json, 'contacts_json')
     end
-  end # def install_to_staging
+  end
+end
+
+    
+      describe '#index' do
+    context 'with a private post' do
+      before do
+        @alices_aspect = alice.aspects.where(name: 'generic').first
+        @post = alice.post(:status_message, text: 'hey', to: @alices_aspect.id)
+      end
