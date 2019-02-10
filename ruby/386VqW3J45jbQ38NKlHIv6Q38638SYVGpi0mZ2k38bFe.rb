@@ -1,289 +1,237 @@
 
         
-            def did_show_message?
-      file_name = '.did_show_opt_info'
+              def perform(start_id, stop_id)
+        update = '
+          latest_merge_request_diff_id = (
+            SELECT MAX(id)
+            FROM merge_request_diffs
+            WHERE merge_requests.id = merge_request_diffs.merge_request_id
+          )'.squish
     
-            return_value = run_active_command
+            def collection_method
+          :issues
+        end
     
-            expect(result).to eq('appledoc --project-name \'Project Name\' --project-company \'Company\' --docset-feed-url \'http://docset-feed-url.com\' --exit-threshold \'2\' input/dir')
+                rows << {
+              label_id: label_id,
+              target_id: target_id,
+              target_type: issue.issuable_type,
+              created_at: time,
+              updated_at: time
+            }
+          end
+    
+            # Builds a note from a GitHub API response.
+        #
+        # note - An instance of `Sawyer::Resource` containing the note details.
+        def self.from_api_response(note)
+          matches = note.html_url.match(NOTEABLE_TYPE_REGEX)
+    
+      #
+  # The raw command string associated with the header which will vary between
+  # requests and responses.
+  #
+  attr_accessor :junk_headers
+  attr_accessor :cmd_string
+  attr_accessor :fold
+    
+      def wait_for(*stypes)
+    begin
+      ::Timeout.timeout( IAX_DEFAULT_TIMEOUT ) do
+        while (res = self.queue.pop )
+          if stypes.include?(res[1])
+            return res
+          end
+        end
       end
-    
-    # Here be helper
-    
-    shellescape_testcases = [
-  # baseline
-  {
-    'it' => '(#1) on simple string',
-    'it_result' => {
-      'windows' => 'doesn't change it',
-      'other'   => 'doesn't change it'
-    },
-    'str' => 'normal_string_without_spaces',
-    'expect' => {
-      'windows' => 'normal_string_without_spaces',
-      'other'   => 'normal_string_without_spaces'
-    }
-  },
-  {
-    'it' => '(#2) on empty string',
-    'it_result' => {
-      'windows' => 'wraps it in double quotes',
-      'other'   => 'wraps it in single quotes'
-    },
-    'str' => '',
-    'expect' => {
-      'windows' => '''',
-      'other'   => '\'\''
-    }
-  },
-  # spaces
-  {
-    'it' => '(#3) on string with spaces',
-    'it_result' => {
-      'windows' => 'wraps it in double quotes',
-      'other'   => 'escapes spaces with <backslash>'
-    },
-    'str' => 'string with spaces',
-    'expect' => {
-      'windows' => ''string with spaces'',
-      'other'   => 'string\ with\ spaces'
-    }
-  },
-  # double quotes
-  {
-    'it' => '(#4) on simple string that is already wrapped in double quotes',
-    'it_result' => {
-      'windows' => 'doesn't touch it',
-      'other'   => 'escapes the double quotes with <backslash>'
-    },
-    'str' => ''normal_string_without_spaces'',
-    'expect' => {
-      'windows' => ''normal_string_without_spaces'',
-      'other'   => '\'normal_string_without_spaces\''
-    }
-  },
-  {
-    'it' => '(#5) on string with spaces that is already wrapped in double quotes',
-    'it_result' => {
-      'windows' => 'wraps in double quotes and duplicates existing double quotes',
-      'other'   => 'escapes the double quotes and spaces with <backslash>'
-    },
-    'str' => ''string with spaces already wrapped in double quotes'',
-    'expect' => {
-      'windows' => ''''string with spaces already wrapped in double quotes'''',
-      'other'   => '\'string\ with\ spaces\ already\ wrapped\ in\ double\ quotes\''
-    }
-  },
-  {
-    'it' => '(#6) on string with spaces and double quotes',
-    'it_result' => {
-      'windows' => 'wraps in double quotes and duplicates existing double quotes',
-      'other'   => 'escapes the double quotes and spaces with <backslash>'
-    },
-    'str' => 'string with spaces and 'double' quotes',
-    'expect' => {
-      'windows' => ''string with spaces and ''double'' quotes'',
-      'other'   => 'string\ with\ spaces\ and\ \'double\'\ quotes'
-    }
-  },
-  # https://github.com/ruby/ruby/blob/ac543abe91d7325ace7254f635f34e71e1faaf2e/test/test_shellwords.rb#L64-L65
-  {
-    'it' => '(#7) on simple int',
-    'it_result' => {
-      'windows' => 'doesn't change it',
-      'other'   => 'doesn't change it'
-    },
-    'str' => 3,
-    'expect' => {
-      'windows' => '3',
-      'other'   => '3'
-    }
-  },
-  # single quotes
-  {
-    'it' => '(#8) on simple string that is already wrapped in single quotes',
-    'it_result' => {
-      'windows' => 'doesn't touch it',
-      'other'   => 'escapes the single quotes with <backslash>'
-    },
-    'str' => ''normal_string_without_spaces'',
-    'expect' => {
-      'windows' => ''normal_string_without_spaces'',
-      'other'   => '\\'normal_string_without_spaces\\''
-    }
-  },
-  {
-    'it' => '(#9) on string with spaces that is already wrapped in single quotes',
-    'it_result' => {
-      'windows' => 'wraps in double quotes',
-      'other'   => 'escapes the single quotes and spaces with <backslash>'
-    },
-    'str' => ''string with spaces already wrapped in single quotes'',
-    'expect' => {
-      'windows' => '\''string with spaces already wrapped in single quotes'\'',
-      'other'   => '\\'string\\ with\\ spaces\\ already\\ wrapped\\ in\\ single\\ quotes\\''
-    }
-  },
-  {
-    'it' => '(#10) string with spaces and single quotes',
-    'it_result' => {
-      'windows' => 'wraps in double quotes and leaves single quotes',
-      'other'   => 'escapes the single quotes and spaces with <backslash>'
-    },
-    'str' => 'string with spaces and 'single' quotes',
-    'expect' => {
-      'windows' => '\'string with spaces and 'single' quotes\'',
-      'other'   => 'string\ with\ spaces\ and\ \\\'single\\\'\ quotes'
-    }
-  },
-  {
-    'it' => '(#11) string with spaces and <backslash>',
-    'it_result' => {
-      'windows' => 'wraps in double quotes and escapes the backslash with backslash',
-      'other'   => 'escapes the spaces and the backslash (which in results in quite a lot of them)'
-    },
-    'str' => 'string with spaces and \\ in it',
-    'expect' => {
-      'windows' => '\'string with spaces and \\ in it\'',
-      'other'   => 'string\\ with\\ spaces\\ and\\ \\\\\\ in\\ it'
-    }
-  },
-  {
-    'it' => '(#12) string with spaces and <slash>',
-    'it_result' => {
-      'windows' => 'wraps in double quotes',
-      'other'   => 'escapes the spaces'
-    },
-    'str' => 'string with spaces and / in it',
-    'expect' => {
-      'windows' =>  '\'string with spaces and / in it\'',
-      'other'   => 'string\\ with\\ spaces\\ and\\ /\\ in\\ it'
-    }
-  },
-  {
-    'it' => '(#13) string with spaces and parens',
-    'it_result' => {
-      'windows' => 'wraps in double quotes',
-      'other'   => 'escapes the spaces and parens'
-    },
-    'str' => 'string with spaces and (parens) in it',
-    'expect' => {
-      'windows' => '\'string with spaces and (parens) in it\'',
-      'other'   => 'string\\ with\\ spaces\\ and\\ \\(parens\\)\\ in\\ it'
-    }
-  },
-  {
-    'it' => '(#14) string with spaces, single quotes and parens',
-    'it_result' => {
-      'windows' => 'wraps in double quotes',
-      'other'   => 'escapes the spaces, single quotes and parens'
-    },
-    'str' => 'string with spaces and 'quotes' (and parens) in it',
-    'expect' => {
-      'windows' => '\'string with spaces and 'quotes' (and parens) in it\'',
-      'other'   => 'string\\ with\\ spaces\\ and\\ \\'quotes\\'\\ \\(and\\ parens\\)\\ in\\ it'
-    }
-  }
-]
-    
-    # The * turns the array into a parameter list
-# This is using the form of exec which takes a variable parameter list, e.g. `exec(command, param1, param2, ...)`
-# We need to use that, because otherwise invocations like
-# `spaceauth -u user@fastlane.tools` would recognize '-u user@fastlane.tools' as a single parameter and throw errors
-exec(*exec_arr)
-
-    
-        context '(de)activating users' do
-      it 'does not show deactivation buttons for the current user' do
-        visit admin_users_path
-        expect(page).to have_no_css('a[href='/admin/users/#{users(:jane).id}/deactivate']')
-      end
-    
-    describe ScenarioImportsController do
-  let(:user) { users(:bob) }
-    
-          expect(data[:agents][guid_order(agent_list, :jane_weather_agent)]).not_to have_key(:propagate_immediately) # can't receive events
-      expect(data[:agents][guid_order(agent_list, :jane_rain_notifier_agent)]).not_to have_key(:schedule) # can't be scheduled
+    rescue ::Timeout::Error
+      return nil
     end
-    
-        it 'should raise error when response says unauthorized' do
-      stub(HTTParty).post { {'Response' => 'Not authorized'} }
-      expect { @checker.send_notification({}) }.to raise_error(StandardError, /Not authorized/)
-    end
-    
-        # Dump all the parsed {Sass::Tree::RuleNode} selectors to strings.
-    #
-    # @param root [Tree::Node] The parent node
-    def dump_selectors(root)
-      root.children.each do |child|
-        next dump_selectors(child) if child.is_a?(Tree::DirectiveNode)
-        next unless child.is_a?(Tree::RuleNode)
-        child.rule = [child.parsed_rules.to_s]
-        dump_selectors(child)
-      end
-    end
-    
-          def _identicon_code(blob)
-        string_to_code blob + @request.host
-      end
-    
-    context 'Precious::Helpers' do
-  include Precious::Helpers
-    
-      test 'remove page extentions' do
-    view = Precious::Views::LatestChanges.new
-    assert_equal 'page', view.remove_page_extentions('page.wiki')
-    assert_equal 'page-wiki', view.remove_page_extentions('page-wiki.md')
-    assert_equal 'file.any_extention', view.remove_page_extentions('file.any_extention')
   end
     
-        def sanitize_empty_params(param)
-      [nil, ''].include?(param) ? nil : CGI.unescape(param)
-    end
+    =begin
+      +------+-----------+-----------------------------------------+
+      | Hex  | Name      | Description                             |
+      +------+-----------+-----------------------------------------+
+      | 0x01 | NEW       | Initiate a new call                     |
+      |      |           |                                         |
+      | 0x02 | PING      | Ping request                            |
+      |      |           |                                         |
+      | 0x03 | PONG      | Ping or poke reply                      |
+      |      |           |                                         |
+      | 0x04 | ACK       | Explicit acknowledgment                 |
+      |      |           |                                         |
+      | 0x05 | HANGUP    | Initiate call tear-down                 |
+      |      |           |                                         |
+      | 0x06 | REJECT    | Reject a call                           |
+      |      |           |                                         |
+      | 0x07 | ACCEPT    | Accept a call                           |
+      |      |           |                                         |
+      | 0x08 | AUTHREQ   | Authentication request                  |
+      |      |           |                                         |
+      | 0x09 | AUTHREP   | Authentication reply                    |
+      |      |           |                                         |
+      | 0x0a | INVAL     | Invalid message                         |
+      |      |           |                                         |
+      | 0x0b | LAGRQ     | Lag request                             |
+      |      |           |                                         |
+      | 0x0c | LAGRP     | Lag reply                               |
+      |      |           |                                         |
+      | 0x0d | REGREQ    | Registration request                    |
+      |      |           |                                         |
+      | 0x0e | REGAUTH   | Registration authentication             |
+      |      |           |                                         |
+      | 0x0f | REGACK    | Registration acknowledgement            |
+      |      |           |                                         |
+      | 0x10 | REGREJ    | Registration reject                     |
+      |      |           |                                         |
+      | 0x11 | REGREL    | Registration release                    |
+      |      |           |                                         |
+      | 0x12 | VNAK      | Video/Voice retransmit request          |
+      |      |           |                                         |
+      | 0x13 | DPREQ     | Dialplan request                        |
+      |      |           |                                         |
+      | 0x14 | DPREP     | Dialplan reply                          |
+      |      |           |                                         |
+      | 0x15 | DIAL      | Dial                                    |
+      |      |           |                                         |
+      | 0x16 | TXREQ     | Transfer request                        |
+      |      |           |                                         |
+      | 0x17 | TXCNT     | Transfer connect                        |
+      |      |           |                                         |
+      | 0x18 | TXACC     | Transfer accept                         |
+      |      |           |                                         |
+      | 0x19 | TXREADY   | Transfer ready                          |
+      |      |           |                                         |
+      | 0x1a | TXREL     | Transfer release                        |
+      |      |           |                                         |
+      | 0x1b | TXREJ     | Transfer reject                         |
+      |      |           |                                         |
+      | 0x1c | QUELCH    | Halt audio/video [media] transmission   |
+      |      |           |                                         |
+      | 0x1d | UNQUELCH  | Resume audio/video [media] transmission |
+      |      |           |                                         |
+      | 0x1e | POKE      | Poke request                            |
+      |      |           |                                         |
+      | 0x1f | Reserved  | Reserved for future use                 |
+      |      |           |                                         |
+      | 0x20 | MWI       | Message waiting indication              |
+      |      |           |                                         |
+      | 0x21 | UNSUPPORT | Unsupported message                     |
+      |      |           |                                         |
+      | 0x22 | TRANSFER  | Remote transfer request                 |
+      |      |           |                                         |
+      | 0x23 | Reserved  | Reserved for future use                 |
+      |      |           |                                         |
+      | 0x24 | Reserved  | Reserved for future use                 |
+      |      |           |                                         |
+      | 0x25 | Reserved  | Reserved for future use                 |
+      +------+-----------+-----------------------------------------+
+=end
     
-      s.add_dependency 'gollum-lib', '~> 4.2', '>= 4.2.10'
-  s.add_dependency 'kramdown', '~> 1.9.0'
-  s.add_dependency 'sinatra', '~> 1.4', '>= 1.4.4'
-  s.add_dependency 'mustache', ['>= 0.99.5', '< 1.0.0']
-  s.add_dependency 'useragent', '~> 0.16.2'
-  s.add_dependency 'gemojione', '~> 3.2'
-    
-          def order_token
-        request.headers['X-Spree-Order-Token'] || params[:order_token]
-      end
-    
-                if handler.error.present?
-              @coupon_message = handler.error
-              respond_with(@order, default_template: 'spree/api/v1/orders/could_not_apply_coupon', status: 422)
-              return true
+              def initialize(options = {})
+            self.class.attributes.each do |attr|
+              if options.has_key?(attr)
+                m = (attr.to_s + '=').to_sym
+                self.send(m, options[attr])
+              end
             end
           end
-          false
-        end
     
-            def update
-          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
-          if @return_authorization.update_attributes(return_authorization_params)
-            respond_with(@return_authorization, default_template: :show)
-          else
-            invalid_resource!(@return_authorization)
+              # Decodes the srealm field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [String]
+          def decode_srealm(input)
+            input.value[0].value
           end
-        end
     
-            def scope
-          includes = { variant: [{ option_values: :option_type }, :product] }
-          @stock_location.stock_items.accessible_by(current_ability, :read).includes(includes)
-        end
-    
-            # Because JSTree wants parameters in a *slightly* different format
-        def jstree
-          show
-        end
-    
-            def zone_params
-          attrs = params.require(:zone).permit!
-          if attrs[:zone_members]
-            attrs[:zone_members_attributes] = attrs.delete(:zone_members)
+                seq_values.each do |val|
+              case val.tag
+              when 0
+                self.etype = decode_etype(val)
+              when 1
+                self.kvno = decode_kvno(val)
+              when 2
+                self.cipher = decode_cipher(val)
+              else
+                raise ::RuntimeError, 'Failed to decode EncryptedData SEQUENCE'
+              end
+            end
           end
-          attrs
-        end
+    
+              # Decodes a Rex::Proto::Kerberos::Model::EncryptionKey
+          #
+          # @param input [String, OpenSSL::ASN1::Sequence] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::Sequence
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode EncryptionKey, invalid input'
+            end
+    
+        def initialize(*args)
+      @s = StringScanner.new(*args)
+    end
+    
+        def log_file_info(s)
+      puts '    #{magenta s}'
+    end
+    
+      # Configure static asset server for tests with Cache-Control for performance.
+  if config.respond_to?(:serve_static_files)
+    # rails >= 4.2
+    config.serve_static_files = true
+  elsif config.respond_to?(:serve_static_assets)
+    # rails < 4.2
+    config.serve_static_assets = true
+  end
+  config.static_cache_control = 'public, max-age=3600'
+    
+      def test_image_helper
+    assert_match %r(url\(['']?/assets/apple-touch-icon-144-precomposed.*png['']?\)), @css
+  end
+    
+        # Outputs a single category as an <a> link.
+    #
+    #  +category+ is a category string to format as an <a> link
+    #
+    # Returns string
+    #
+    def category_link(category)
+      dir = @context.registers[:site].config['category_dir']
+      '<a class='category' href='/#{dir}/#{category.to_url}/'>#{category}</a>'
+    end
+    
+      if options.respond_to? 'keys'
+    options.each do |k,v|
+      unless v.nil?
+        v = v.join ',' if v.respond_to? 'join'
+        v = v.to_json if v.respond_to? 'keys'
+        output += ' data-#{k.sub'_','-'}='#{v}''
+      end
+    end
+  elsif options.respond_to? 'join'
+    output += ' data-value='#{config[key].join(',')}''
+  else
+    output += ' data-value='#{config[key]}''
+  end
+  output += '></#{tag}>'
+end
+    
+          Dir.chdir(code_path) do
+        code = file.read
+        @filetype = file.extname.sub('.','') if @filetype.nil?
+        title = @title ? '#{@title} (#{file.basename})' : file.basename
+        url = '/#{code_dir}/#{@file}'
+        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
+        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
+        TemplateWrapper::safe_wrap(source)
+      end
+    end
+  end
