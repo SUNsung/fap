@@ -1,390 +1,941 @@
 
         
-        #include 'swift/Basic/Cache.h'
-#include 'llvm/ADT/SmallString.h'
-#include <cache.h>
+          Begin = new char[capacity];
+  EndOfAllocation = Begin + capacity;
+  End = Begin + oldSize + needed;
+  std::memcpy(Begin, oldBegin, oldSize);
     
-      IsFirstLine = true;
-  for (auto &Line : Lines) {
-    if (!IsFirstLine) {
-      Line = Line.drop_front(WhitespaceToTrim);
-    }
-    IsFirstLine = false;
+    VERB(abbreviate)
+VERB(accept)
+VERB(activate)
+VERB(add)
+VERB(adjust)
+VERB(admire)
+VERB(admit)
+VERB(advise)
+VERB(afford)
+VERB(agree)
+VERB(alert)
+VERB(allow)
+VERB(alter)
+VERB(amuse)
+VERB(analyse)
+VERB(analyze)
+VERB(animate)
+VERB(announce)
+VERB(annoy)
+VERB(answer)
+VERB(apologise)
+VERB(appear)
+VERB(append)
+VERB(applaud)
+VERB(apply)
+VERB(apportion)
+VERB(appreciate)
+VERB(approve)
+VERB(argue)
+VERB(arrange)
+VERB(arrest)
+VERB(arrive)
+VERB(ask)
+VERB(assign)
+VERB(attach)
+VERB(attack)
+VERB(attempt)
+VERB(attend)
+VERB(attract)
+VERB(avoid)
+VERB(awake)
+VERB(back)
+VERB(bake)
+VERB(balance)
+VERB(ban)
+VERB(bang)
+VERB(bare)
+VERB(bat)
+VERB(bathe)
+VERB(battle)
+VERB(be)
+VERB(beat)
+VERB(become)
+VERB(beg)
+VERB(begin)
+VERB(behave)
+VERB(belong)
+VERB(bend)
+VERB(bet)
+VERB(bid)
+VERB(bite)
+VERB(bleach)
+VERB(bless)
+VERB(blind)
+VERB(blink)
+VERB(blot)
+VERB(blow)
+VERB(blush)
+VERB(boast)
+VERB(boil)
+VERB(bolt)
+VERB(bomb)
+VERB(book)
+VERB(bore)
+VERB(borrow)
+VERB(bounce)
+VERB(bow)
+VERB(box)
+VERB(brake)
+VERB(branch)
+VERB(break)
+VERB(breathe)
+VERB(bring)
+VERB(broadcast)
+VERB(bruise)
+VERB(brush)
+VERB(bubble)
+VERB(build)
+VERB(bump)
+VERB(burn)
+VERB(bury)
+VERB(buy)
+VERB(buzz)
+VERB(calculate)
+VERB(call)
+VERB(camp)
+VERB(cancel)
+VERB(capture)
+VERB(care)
+VERB(carry)
+VERB(carve)
+VERB(cast)
+VERB(catch)
+VERB(cause)
+VERB(center)
+VERB(challenge)
+VERB(change)
+VERB(charge)
+VERB(chase)
+VERB(cheat)
+VERB(check)
+VERB(cheer)
+VERB(chew)
+VERB(choke)
+VERB(choose)
+VERB(chop)
+VERB(claim)
+VERB(clap)
+VERB(clean)
+VERB(clear)
+VERB(click)
+VERB(close)
+VERB(coach)
+VERB(coil)
+VERB(collect)
+VERB(collapse)
+VERB(colour)
+VERB(comb)
+VERB(come)
+VERB(command)
+VERB(commit)
+VERB(communicate)
+VERB(compare)
+VERB(compete)
+VERB(complain)
+VERB(complete)
+VERB(concentrate)
+VERB(concern)
+VERB(confess)
+VERB(confuse)
+VERB(connect)
+VERB(consider)
+VERB(consist)
+VERB(contain)
+VERB(contains)
+VERB(continue)
+VERB(convert)
+VERB(copy)
+VERB(correct)
+VERB(cough)
+VERB(cost)
+VERB(count)
+VERB(cover)
+VERB(crack)
+VERB(crash)
+VERB(crawl)
+VERB(cross)
+VERB(crush)
+VERB(cry)
+VERB(cure)
+VERB(curl)
+VERB(curve)
+VERB(customize)
+VERB(cut)
+VERB(cycle)
+VERB(dam)
+VERB(damage)
+VERB(dance)
+VERB(dare)
+VERB(decay)
+VERB(deceive)
+VERB(decide)
+VERB(decode)
+VERB(decorate)
+VERB(defer)
+VERB(define)
+VERB(delay)
+VERB(delete)
+VERB(delight)
+VERB(deliver)
+VERB(depend)
+VERB(describe)
+VERB(deselect)
+VERB(desert)
+VERB(deserve)
+VERB(destroy)
+VERB(detach)
+VERB(detect)
+VERB(develop)
+VERB(dig)
+VERB(dim)
+VERB(disagree)
+VERB(disappear)
+VERB(disapprove)
+VERB(disarm)
+VERB(discover)
+VERB(dislike)
+VERB(dismiss)
+VERB(display)
+VERB(divide)
+VERB(do)
+VERB(double)
+VERB(doubt)
+VERB(drag)
+VERB(drain)
+VERB(draw)
+VERB(dream)
+VERB(dress)
+VERB(drink)
+VERB(drip)
+VERB(drive)
+VERB(drop)
+VERB(drown)
+VERB(drum)
+VERB(dry)
+VERB(duplicate)
+VERB(dust)
+VERB(earn)
+VERB(eat)
+VERB(echo)
+VERB(edit)
+VERB(educate)
+VERB(embarrass)
+VERB(employ)
+VERB(empty)
+VERB(enable)
+VERB(encode)
+VERB(encourage)
+VERB(end)
+VERB(enjoy)
+VERB(enter)
+VERB(entertain)
+VERB(enumerate)
+VERB(enqueue)
+VERB(escape)
+VERB(examine)
+VERB(excite)
+VERB(excuse)
+VERB(execute)
+VERB(exercise)
+VERB(exist)
+VERB(expand)
+VERB(expect)
+VERB(explain)
+VERB(explode)
+VERB(export)
+VERB(extend)
+VERB(face)
+VERB(fade)
+VERB(fail)
+VERB(fancy)
+VERB(fasten)
+VERB(fax)
+VERB(fear)
+VERB(feel)
+VERB(fence)
+VERB(fetch)
+VERB(fight)
+VERB(fill)
+VERB(film)
+VERB(find)
+VERB(finish)
+VERB(fire)
+VERB(fit)
+VERB(fix)
+VERB(flap)
+VERB(flash)
+VERB(flatten)
+VERB(flip)
+VERB(float)
+VERB(flood)
+VERB(flow)
+VERB(flower)
+VERB(fly)
+VERB(focus)
+VERB(fold)
+VERB(follow)
+VERB(fool)
+VERB(force)
+VERB(forget)
+VERB(forgive)
+VERB(form)
+VERB(found)
+VERB(freeze)
+VERB(frighten)
+VERB(fry)
+VERB(gain)
+VERB(gather)
+VERB(gaze)
+VERB(generate)
+VERB(get)
+VERB(give)
+VERB(glow)
+VERB(glue)
+VERB(go)
+VERB(grab)
+VERB(grate)
+VERB(grease)
+VERB(greet)
+VERB(grin)
+VERB(grip)
+VERB(groan)
+VERB(grow)
+VERB(guarantee)
+VERB(guard)
+VERB(guess)
+VERB(guide)
+VERB(hammer)
+VERB(hand)
+VERB(handle)
+VERB(hang)
+VERB(happen)
+VERB(harass)
+VERB(harm)
+VERB(hate)
+VERB(haunt)
+VERB(head)
+VERB(heal)
+VERB(heap)
+VERB(hear)
+VERB(heat)
+VERB(help)
+VERB(hide)
+VERB(highlight)
+VERB(hit)
+VERB(hold)
+VERB(hook)
+VERB(hop)
+VERB(hope)
+VERB(hover)
+VERB(hug)
+VERB(hum)
+VERB(hunt)
+VERB(hurry)
+VERB(hurt)
+VERB(identify)
+VERB(ignore)
+VERB(imagine)
+VERB(import)
+VERB(impress)
+VERB(improve)
+VERB(include)
+VERB(increase)
+VERB(influence)
+VERB(inform)
+VERB(inject)
+VERB(injure)
+VERB(insert)
+VERB(instruct)
+VERB(intend)
+VERB(interest)
+VERB(interfere)
+VERB(interrupt)
+VERB(intersect)
+VERB(intersects)
+VERB(introduce)
+VERB(invent)
+VERB(invite)
+VERB(irritate)
+VERB(itch)
+VERB(jail)
+VERB(jam)
+VERB(jog)
+VERB(join)
+VERB(joke)
+VERB(judge)
+VERB(juggle)
+VERB(jump)
+VERB(keep)
+VERB(kick)
+VERB(kill)
+VERB(kiss)
+VERB(kneel)
+VERB(knit)
+VERB(knock)
+VERB(knot)
+VERB(know)
+VERB(label)
+VERB(land)
+VERB(last)
+VERB(laugh)
+VERB(launch)
+VERB(lay)
+VERB(lead)
+VERB(learn)
+VERB(leave)
+VERB(lend)
+VERB(let)
+VERB(level)
+VERB(license)
+VERB(lick)
+VERB(lie)
+VERB(lighten)
+VERB(like)
+VERB(listen)
+VERB(live)
+VERB(load)
+VERB(localize)
+VERB(lock)
+VERB(long)
+VERB(look)
+VERB(lose)
+VERB(love)
+VERB(maintain)
+VERB(make)
+VERB(man)
+VERB(manage)
+VERB(march)
+VERB(mark)
+VERB(marry)
+VERB(match)
+VERB(mate)
+VERB(matter)
+VERB(mean)
+VERB(measure)
+VERB(meddle)
+VERB(meet)
+VERB(melt)
+VERB(memorise)
+VERB(mend)
+VERB(merge)
+VERB(mess)
+VERB(milk)
+VERB(mine)
+VERB(miss)
+VERB(minus)
+VERB(mix)
+VERB(moan)
+VERB(moor)
+VERB(mourn)
+VERB(move)
+VERB(muddle)
+VERB(mug)
+VERB(multiply)
+VERB(murder)
+VERB(nail)
+VERB(nest)
+VERB(nod)
+VERB(normalize)
+VERB(note)
+VERB(notice)
+VERB(notify)
+VERB(number)
+VERB(obey)
+VERB(observe)
+VERB(obtain)
+VERB(occur)
+VERB(offend)
+VERB(offer)
+VERB(open)
+VERB(order)
+VERB(overflow)
+VERB(owe)
+VERB(own)
+VERB(pack)
+VERB(paddle)
+VERB(paint)
+VERB(park)
+VERB(part)
+VERB(pass)
+VERB(paste)
+VERB(pat)
+VERB(pause)
+VERB(pay)
+VERB(peck)
+VERB(pedal)
+VERB(peel)
+VERB(peep)
+VERB(perform)
+VERB(permit)
+VERB(phone)
+VERB(pick)
+VERB(pinch)
+VERB(pine)
+VERB(place)
+VERB(plan)
+VERB(plant)
+VERB(play)
+VERB(please)
+VERB(plug)
+VERB(poke)
+VERB(polish)
+VERB(pop)
+VERB(possess)
+VERB(post)
+VERB(pour)
+VERB(practice)
+VERB(practise)
+VERB(pray)
+VERB(preach)
+VERB(precede)
+VERB(prefer)
+VERB(preload)
+VERB(prepare)
+VERB(prepend)
+VERB(present)
+VERB(preserve)
+VERB(press)
+VERB(pretend)
+VERB(prevent)
+VERB(prick)
+VERB(print)
+VERB(produce)
+VERB(program)
+VERB(promise)
+VERB(protect)
+VERB(provide)
+VERB(pull)
+VERB(pump)
+VERB(punch)
+VERB(puncture)
+VERB(punish)
+VERB(push)
+VERB(put)
+VERB(question)
+VERB(queue)
+VERB(race)
+VERB(radiate)
+VERB(rain)
+VERB(raise)
+VERB(reach)
+VERB(read)
+VERB(realise)
+VERB(receive)
+VERB(recognise)
+VERB(record)
+VERB(reduce)
+VERB(reflect)
+VERB(refuse)
+VERB(register)
+VERB(regret)
+VERB(reign)
+VERB(reject)
+VERB(rejoice)
+VERB(relax)
+VERB(release)
+VERB(rely)
+VERB(remain)
+VERB(remember)
+VERB(remind)
+VERB(remove)
+VERB(repair)
+VERB(repeat)
+VERB(replace)
+VERB(reply)
+VERB(report)
+VERB(request)
+VERB(require)
+VERB(resize)
+VERB(rescue)
+VERB(resolve)
+VERB(retain)
+VERB(retire)
+VERB(return)
+VERB(reverse)
+VERB(review)
+VERB(rhyme)
+VERB(ride)
+VERB(ring)
+VERB(rinse)
+VERB(rise)
+VERB(risk)
+VERB(rob)
+VERB(rock)
+VERB(roll)
+VERB(rot)
+VERB(rub)
+VERB(ruin)
+VERB(rule)
+VERB(run)
+VERB(rush)
+VERB(sack)
+VERB(sail)
+VERB(satisfy)
+VERB(save)
+VERB(saw)
+VERB(say)
+VERB(scale)
+VERB(scare)
+VERB(scatter)
+VERB(scold)
+VERB(scorch)
+VERB(scrape)
+VERB(scratch)
+VERB(scream)
+VERB(screw)
+VERB(scribble)
+VERB(scroll)
+VERB(scrub)
+VERB(seal)
+VERB(search)
+VERB(see)
+VERB(select)
+VERB(sell)
+VERB(send)
+VERB(separate)
+VERB(serve)
+VERB(settle)
+VERB(shade)
+VERB(share)
+VERB(shave)
+VERB(shelter)
+VERB(shiver)
+VERB(shock)
+VERB(shop)
+VERB(show)
+VERB(shrug)
+VERB(shut)
+VERB(sigh)
+VERB(sign)
+VERB(signal)
+VERB(sin)
+VERB(sing)
+VERB(sip)
+VERB(sit)
+VERB(ski)
+VERB(skip)
+VERB(slap)
+VERB(sleep)
+VERB(slip)
+VERB(slow)
+VERB(smash)
+VERB(smell)
+VERB(smile)
+VERB(smoke)
+VERB(snatch)
+VERB(sneeze)
+VERB(sniff)
+VERB(snore)
+VERB(snow)
+VERB(soak)
+VERB(soothe)
+VERB(sound)
+VERB(spare)
+VERB(spark)
+VERB(sparkle)
+VERB(speak)
+VERB(spell)
+VERB(spend)
+VERB(spill)
+VERB(spoil)
+VERB(spot)
+VERB(spray)
+VERB(sprout)
+VERB(squash)
+VERB(squeak)
+VERB(squeal)
+VERB(squeeze)
+VERB(stain)
+VERB(stamp)
+VERB(stand)
+VERB(standardise)
+VERB(standardize)
+VERB(stare)
+VERB(start)
+VERB(stay)
+VERB(steer)
+VERB(step)
+VERB(stir)
+VERB(stitch)
+VERB(stop)
+VERB(store)
+VERB(strap)
+VERB(strengthen)
+VERB(stretch)
+VERB(strip)
+VERB(stroke)
+VERB(stuff)
+VERB(subtract)
+VERB(succeed)
+VERB(suck)
+VERB(suffer)
+VERB(suggest)
+VERB(suit)
+VERB(supply)
+VERB(support)
+VERB(suppose)
+VERB(suppress)
+VERB(surprise)
+VERB(surround)
+VERB(suspect)
+VERB(suspend)
+VERB(swim)
+VERB(switch)
+VERB(take)
+VERB(talk)
+VERB(tame)
+VERB(tap)
+VERB(taste)
+VERB(teach)
+VERB(tear)
+VERB(tease)
+VERB(telephone)
+VERB(tell)
+VERB(tempt)
+VERB(terrify)
+VERB(test)
+VERB(thank)
+VERB(thaw)
+VERB(think)
+VERB(throw)
+VERB(tick)
+VERB(tickle)
+VERB(tie)
+VERB(time)
+VERB(tip)
+VERB(tire)
+VERB(toggle)
+VERB(touch)
+VERB(tour)
+VERB(tow)
+VERB(trace)
+VERB(trade)
+VERB(train)
+VERB(translate)
+VERB(transform)
+VERB(transport)
+VERB(trap)
+VERB(travel)
+VERB(traverse)
+VERB(treat)
+VERB(tremble)
+VERB(trick)
+VERB(trip)
+VERB(trot)
+VERB(trouble)
+VERB(truncate)
+VERB(trust)
+VERB(try)
+VERB(tug)
+VERB(tumble)
+VERB(turn)
+VERB(twist)
+VERB(understand)
+VERB(undress)
+VERB(unfasten)
+VERB(union)
+VERB(unite)
+VERB(unload)
+VERB(unlock)
+VERB(unpack)
+VERB(untidy)
+VERB(up)
+VERB(update)
+VERB(use)
+VERB(validate)
+VERB(vanish)
+VERB(visit)
+VERB(wail)
+VERB(wait)
+VERB(wake)
+VERB(walk)
+VERB(wander)
+VERB(want)
+VERB(warm)
+VERB(warn)
+VERB(wash)
+VERB(waste)
+VERB(watch)
+VERB(water)
+VERB(wave)
+VERB(wear)
+VERB(weigh)
+VERB(welcome)
+VERB(whine)
+VERB(whip)
+VERB(whirl)
+VERB(whisper)
+VERB(whistle)
+VERB(win)
+VERB(wink)
+VERB(wipe)
+VERB(wish)
+VERB(wobble)
+VERB(wonder)
+VERB(work)
+VERB(worry)
+VERB(wrap)
+VERB(wreck)
+VERB(wrestle)
+VERB(wriggle)
+VERB(write)
+VERB(yawn)
+VERB(yell)
+VERB(zip)
+VERB(zoom)
+    
+      bool isRecord() const {
+    assert(isValid());
+    return !Decl.isNull() && Decl.is<const clang::RecordDecl *>();
+  }
+  const clang::RecordDecl *getRecord() const {
+    assert(isRecord());
+    return Decl.get<const clang::RecordDecl *>();
   }
     
+      // If this is a getter/setter, the other accessor
+  const clang::FunctionDecl *pairedAccessor = nullptr;
     
-    {    void operator() (const T * src0, const T * src1, T * dst) const
-    {
-        dst[0] = internal::saturate_cast<T>(src0[0] >= src1[0] ? (s64)src0[0] - src1[0] : (s64)src1[0] - src0[0]);
-    }
-};
+    #include 'swift/Demangling/ManglingUtils.h'
     
-    #define SPLIT4ALPHA(sgn,bits) void split4(const Size2D &size,                                        \
-                                          const sgn##bits * srcBase, ptrdiff_t srcStride,            \
-                                          sgn##bits * dst3Base, ptrdiff_t dst3Stride,                \
-                                          sgn##bits * dst1Base, ptrdiff_t dst1Stride)                \
-{                                                                                                    \
-    internal::assertSupportedConfiguration();                                                        \
-    (void)size;                                                                                      \
-    (void)srcBase;                                                                                   \
-    (void)srcStride;                                                                                 \
-    (void)dst3Base;                                                                                  \
-    (void)dst3Stride;                                                                                \
-    (void)dst1Base;                                                                                  \
-    (void)dst1Stride;                                                                                \
+    static bool isValidUnicodeScalar(uint32_t S) {
+  // Also accept the range of 0xD800 - 0xD880, which is used for non-symbol
+  // ASCII characters.
+  return (S < 0xD880) || (S >= 0xE000 && S <= 0x1FFFFF);
 }
     
-    #define MERGE_QUAD(sgn, bits, n) { \
-                                     vec128 v_dst; \
-                                     /*FILL_LINES##n(PREF, sgn##bits) \
-                                     FILL_LINES##n(VLD1Q, sgn##bits)*/ \
-                                     FILL_LINES##n(PRLD, sgn##bits) \
-                                     vst##n##q_##sgn##bits(dst + dj, v_dst); \
-                                 }
     
-    namespace internal {
+    {    return 0;
+}
+
+    
+        // Setup Platform/Renderer bindings
+    ImGui_Marmalade_Init(true);
+    
+        bool show_demo_window = true;
+    bool show_another_window = false;
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+        // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    
+    void ImGui_ImplDX10_NewFrame()
+{
+    if (!g_pFontSampler)
+        ImGui_ImplDX10_CreateDeviceObjects();
+}
+
+    
+    void ImGui_ImplFreeGLUT_MouseFunc(int glut_button, int state, int x, int y)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    io.MousePos = ImVec2((float)x, (float)y);
+    int button = -1;
+    if (glut_button == GLUT_LEFT_BUTTON) button = 0;
+    if (glut_button == GLUT_RIGHT_BUTTON) button = 1;
+    if (glut_button == GLUT_MIDDLE_BUTTON) button = 2;
+    if (button != -1 && state == GLUT_DOWN)
+        io.MouseDown[button] = true;
+    if (button != -1 && state == GLUT_UP)
+        io.MouseDown[button] = false;
+}
+    
+    namespace rocksdb {
     }
     
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVTS_FUNC(f32, s16, 8,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.32 {d4-d5}, [%[src1]]                              \n\t'
-            'vld1.32 {d6-d7}, [%[src2]]                              \n\t'
-            'vmul.f32 q4, q2, q0                                     \n\t'
-            'vmul.f32 q5, q3, q0                                     \n\t'
-            'vadd.f32 q6, q4, q1                                     \n\t'
-            'vadd.f32 q7, q5, q1                                     \n\t'
-            'vcvt.s32.f32 q8, q6                                     \n\t'
-            'vcvt.s32.f32 q9, q7                                     \n\t'
-            'vqmovn.s32 d8, q8                                       \n\t'
-            'vqmovn.s32 d9, q9                                       \n\t'
-            'vst1.16 {d8-d9}, [%[dst]]                               \n\t'
-            : /*no output*/
-            : [src1] 'r' (_src + i + 0),
-              [src2] 'r' (_src + i + 4),
-              [dst] 'r' (_dst + i),
-              'w' (vscale), 'w' (vshift)
-            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19'
-        );
-    }
-})
-#else
-CVTS_FUNC(f32, s16, 8,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        float32x4_t vline1_f32 = vld1q_f32(_src + i + 0);
-        float32x4_t vline2_f32 = vld1q_f32(_src + i + 4);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        int32x4_t vline1_s32 = vcvtq_s32_f32(vline1_f32);
-        int32x4_t vline2_s32 = vcvtq_s32_f32(vline2_f32);
-        int16x4_t vRes1 = vqmovn_s32(vline1_s32);
-        int16x4_t vRes2 = vqmovn_s32(vline2_s32);
-        vst1q_s16(_dst + i, vcombine_s16(vRes1, vRes2));
-    }
-})
+    class PosixWritableFile : public WritableFile {
+ protected:
+  const std::string filename_;
+  const bool use_direct_io_;
+  int fd_;
+  uint64_t filesize_;
+  size_t logical_sector_size_;
+#ifdef ROCKSDB_FALLOCATE_PRESENT
+  bool allow_fallocate_;
+  bool fallocate_with_keep_size_;
 #endif
+    }
     
-        for (ptrdiff_t y = 0; y < height; ++y)
+      // Read a key using the snapshot
+  read_options.snapshot = snapshot;
+  s = txn->GetForUpdate(read_options, 'abc', &value);
+  assert(value == 'def');
+    
+    
+    {}  // namespace rocksdb
+
+    
+            for(int i = 0 ; i < nums.size() ; i ++){
+            unordered_map<int,int>::iterator iter = record.find(target - nums[i]);
+            if(iter != record.end() && iter->second != i){
+                int res[] = {i, iter->second};
+                return vector<int>(res, res + 2);
+            }
+        }
+    
+    
     {
-        const u8 * srow0 = y == 0 && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::max<ptrdiff_t>(y - 1, 0));
-        const u8 * srow1 = internal::getRowPtr(srcBase, srcStride, y);
-        const u8 * srow2 = y + 1 == height && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::min(y + 1, height - 1));
-        u8 * drow = internal::getRowPtr(dstBase, dstStride, y);
+    {        ListNode* retNode = dummyHead->next;
+        delete dummyHead;
+        return retNode;
     }
-    
-    namespace grpc {
-    }
-    
-    #include <grpc/grpc_security.h>
-#include 'src/core/lib/channel/channel_args.h'
-    
-    constexpr size_t RpcServerStatsEncoding::kRpcServerStatsSize;
-constexpr size_t RpcServerStatsEncoding::kEncodeDecodeFailure;
-constexpr size_t RpcServerStatsEncoding::kVersionIdSize;
-constexpr size_t RpcServerStatsEncoding::kFieldIdSize;
-constexpr size_t RpcServerStatsEncoding::kVersionIdOffset;
-constexpr size_t RpcServerStatsEncoding::kVersionId;
-    
-    #include 'absl/strings/string_view.h'
-#include 'absl/time/clock.h'
-#include 'absl/time/time.h'
-#include 'include/grpc/grpc_security.h'
-#include 'src/cpp/ext/filters/census/channel_filter.h'
-#include 'src/cpp/ext/filters/census/context.h'
-    
-    const ViewDescriptor& ClientServerLatencyHour() {
-  const static ViewDescriptor descriptor =
-      HourDescriptor()
-          .set_name('grpc.io/client/server_latency/hour')
-          .set_measure(kRpcClientServerLatencyMeasureName)
-          .set_aggregation(MillisDistributionAggregation())
-          .add_column(ClientMethodTagKey());
-  return descriptor;
-}
-    
-    
-    {  const protobuf::FieldDescriptor* field_desc =
-      descriptor_pool_->FindExtensionByNumber(desc,
-                                              request->extension_number());
-  if (field_desc == nullptr) {
-    return Status(StatusCode::NOT_FOUND, 'Extension not found.');
-  }
-  std::unordered_set<grpc::string> seen_files;
-  FillFileDescriptorResponse(field_desc->file(), response, &seen_files);
-  return Status::OK;
-}
-    
-    
-    {}  // namespace grpc
-
-    
-    namespace grpc {
-    }
-    
-    #include <utility>
-    
-    class b2Triangle{
-public:
-	float* x;
-    float* y;
-	b2Triangle();
-	b2Triangle(float32 x1, float32 y1, float32 x2, float32 y2, float32 x3, float32 y3);
-	~b2Triangle();
-	bool IsInside(float32 _x, float32 _y);
-	void Set(const b2Triangle& toMe);
-    }
-    
-    			if(mip == 0)
-			{
-				pImageData = a_pafSourceRGBA;
-			}
-			else
-			{
-				pMipImage = new float[mipWidth*mipHeight*4];
-				if(FilterTwoPass(a_pafSourceRGBA, a_uiSourceWidth, a_uiSourceHeight, pMipImage, mipWidth, mipHeight, a_uiMipFilterFlags, Etc::FilterLanczos3) )
-				{
-					pImageData = pMipImage;
-				}
-			}
-    
-    
-    {} // namespace Etc
-
-    
-    		static const unsigned int ROWS = 4;
-		static const unsigned int COLUMNS = 4;
-		static const unsigned int PIXELS = ROWS * COLUMNS;
-		static const float LUMA_WEIGHT;
-		static const float CHROMA_BLUE_WEIGHT;
-    
-      bool              m_UseFullRange;
-  EdgeList          m_edges;
-  bool              m_PreserveCollinear;
-  bool              m_HasOpenPaths;
-  PolyOutList       m_PolyOuts;
-  TEdge           *m_ActiveEdges;
-    
-      Compression level can be specified in parameter level. At the moment,
-  only level 1 and level 2 are supported.
-  Level 1 is the fastest compression and generally useful for short data.
-  Level 2 is slightly slower but it gives better compression ratio.
-    
-    #include 'opus_types.h'
-#include 'opus_defines.h'
-    
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-    
-       - Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer.
-    
-    #include <memory>
-    
-      virtual ~DHTReplaceNodeTask();
-    
-      virtual bool isReply() const CXX11_OVERRIDE;
-    
-    void DHTRoutingTable::setTaskQueue(DHTTaskQueue* taskQueue)
-{
-  taskQueue_ = taskQueue;
-}
-    
-      void getClosestKNodes(std::vector<std::shared_ptr<DHTNode>>& nodes,
-                        const unsigned char* key) const;
-    
-    
-    {  void serialize(const std::string& filename);
 };
     
-    #include <vector>
-#include <memory>
     
-      void update();
-    
-      virtual std::shared_ptr<DHTTask>
-  createNodeLookupTask(const unsigned char* targetID) CXX11_OVERRIDE;
-    
-    bool DHTTokenTracker::validateToken(const std::string& token,
-                                    const unsigned char* infoHash,
-                                    const std::string& ipaddr,
-                                    uint16_t port) const
-{
-  for (auto& elem : secret_) {
-    if (generateToken(infoHash, ipaddr, port, elem) == token) {
-      return true;
+int main() {
     }
-  }
-  return false;
+    
+    
+/// Definition for a binary tree node.
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+    
+            vector<int> res;
+        if( root == NULL )
+            return res;
+    
+    
+    {    return 0;
 }
-    
-    
-    {} // namespace aria2
 
     
-    //
-// Speed
-//
-Speed::Speed()
-: _speed(0.0)
-, _innerAction(nullptr)
-{
-}
+    // Classic Non-Recursive algorithm for preorder traversal
+// Time Complexity: O(n), n is the node number in the tree
+// Space Complexity: O(h), h is the height of the tree
+class Solution {
+    }
     
-    Vec3 Grid3DAction::getOriginalVertex(const Vec2& position) const
-{
-    Grid3D *g = (Grid3D*)_gridNodeTarget->getGrid();
-    return g->getOriginalVertex(position);
-}
+    #include <iostream>
+#include <vector>
+#include <stack>
+#include <cassert>
     
     
-    {    CC_SAFE_DELETE(ret);
-    return nullptr;
-}
-    
-        /** 
-     * Creates the action with 3D rotation angles.
-     * @param duration Duration time, in seconds.
-     * @param dstAngle3D A Vec3 angle.
-     * @return An autoreleased RotateTo object.
-     */
-    static RotateTo* create(float duration, const Vec3& dstAngle3D);
-    
-        /** @deprecated Use getNumberOfRunningActionsInTarget() instead.
-     */
-    CC_DEPRECATED_ATTRIBUTE ssize_t numberOfRunningActionsInTarget(Node *target) const { return getNumberOfRunningActionsInTarget(target); }
-    
-    /*
- * Update each tick
- * Time is the percentage of the way through the duration
- */
-void PageTurn3D::update(float time)
-{
-    float tt = MAX(0, time - 0.25f);
-    float deltaAy = (tt * tt * 500);
-    float ay = -100 - deltaAy;
-    
-    float deltaTheta = sqrtf(time);
-    float theta = deltaTheta > 0.5f ? (float)M_PI_2*deltaTheta : (float)M_PI_2*(1-deltaTheta);
-    
-    float rotateByYAxis = (2-time)* M_PI;
-    
-    float sinTheta = sinf(theta);
-    float cosTheta = cosf(theta);
-    
-    for (int i = 0; i <= _gridSize.width; ++i)
     {
-        for (int j = 0; j <= _gridSize.height; ++j)
-        {
-            // Get original vertex
-            Vec3 p = getOriginalVertex(Vec2(i ,j));
-            
-            p.x -= getGridRect().origin.x;
-            float R = sqrtf((p.x * p.x) + ((p.y - ay) * (p.y - ay)));
-            float r = R * sinTheta;
-            float alpha = asinf( p.x / R );
-            float beta = alpha / sinTheta;
-            float cosBeta = cosf( beta );
-            
-            // If beta > PI then we've wrapped around the cone
-            // Reduce the radius to stop these points interfering with others
-            if (beta <= M_PI)
-            {
-                p.x = ( r * sinf(beta));
-            }
-            else
-            {
-                // Force X = 0 to stop wrapped
-                // points
-                p.x = 0;
-            }
+    {        if( node ){
+            __postorderTraversal(node->left, res);
+            __postorderTraversal(node->right, res);
+            res.push_back(node->val);
+        }
     }
-    }
-    }
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#ifndef __ACTION_CCPROGRESS_TIMER_H__
-#define __ACTION_CCPROGRESS_TIMER_H__
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    void AnimationCache::addAnimationsWithDictionary(const ValueMap& dictionary,const std::string& plist)
-{
-    auto anisItr = dictionary.find('animations');
-    if (anisItr == dictionary.end() )
-    {
-        CCLOG('cocos2d: AnimationCache: No animations were found in provided dictionary.');
-        return;
-    }
-    
-    const Value& animations = anisItr->second;
-    unsigned int version = 1;
-    }
-    
-        /** Deletes a Animation from the cache.
-     *
-     * @param name The name of animation.
-     */
-    void removeAnimation(const std::string& name);
-    /** @deprecated. Use removeAnimation() instead
-     * @js NA
-     * @lua NA
-     */
-    CC_DEPRECATED_ATTRIBUTE void removeAnimationByName(const std::string& name){ removeAnimation(name);}
-    
-    #ifndef BOOST_ATOMIC_FENCES_HPP_INCLUDED_
-#define BOOST_ATOMIC_FENCES_HPP_INCLUDED_
+};
