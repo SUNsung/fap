@@ -1,90 +1,88 @@
 
         
-        import rsa
-import json
-from binascii import hexlify
+          # Note that we put these 'truth' rates and input into this
+  # structure, the only data that is used in LFADS are the noisy
+  # data e.g. spike trains.  The rest is either for printing or posterity.
+  data = {'train_truth': rates_train,
+          'valid_truth': rates_valid,
+          'input_train_truth' : input_train,
+          'input_valid_truth' : inputs_valid,
+          'train_data' : noisy_data_train,
+          'valid_data' : noisy_data_valid,
+          'train_percentage' : train_percentage,
+          'nreplications' : nreplications,
+          'dt' : rnn['dt'],
+          'input_magnitude' : input_magnitude,
+          'input_times_train' : input_times_train,
+          'input_times_valid' : input_times_valid,
+          'P_sxn' : P_sxn,
+          'condition_labels_train' : condition_labels_train,
+          'condition_labels_valid' : condition_labels_valid,
+          'conversion_factor': 1.0 / rnn['conversion_factor']}
+  datasets[dataset_name] = data
     
-    versions_info = json.load(open('update/versions.json'))
-versions = list(versions_info['versions'].keys())
-versions.sort()
-    
-    
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
-    
-        ies = sorted(youtube_dl.gen_extractors(), key=lambda i: i.IE_NAME.lower())
-    out = '# Supported sites\n' + ''.join(
-        ' - ' + md + '\n'
-        for md in gen_ies_md(ies))
-    
-        def test_youtube_feeds(self):
-        self.assertMatch('https://www.youtube.com/feed/watch_later', ['youtube:watchlater'])
-        self.assertMatch('https://www.youtube.com/feed/subscriptions', ['youtube:subscriptions'])
-        self.assertMatch('https://www.youtube.com/feed/recommended', ['youtube:recommended'])
-        self.assertMatch('https://www.youtube.com/my_favorites', ['youtube:favorites'])
-    
-        plt.figure('scikit-learn LASSO benchmark results')
-    plt.subplot(211)
-    plt.plot(list_n_samples, lasso_results, 'b-',
-                            label='Lasso')
-    plt.plot(list_n_samples, lars_lasso_results, 'r-',
-                            label='LassoLars')
-    plt.title('precomputed Gram matrix, %d features, alpha=%s' % (n_features,
-                            alpha))
-    plt.legend(loc='upper left')
-    plt.xlabel('number of samples')
-    plt.ylabel('Time (s)')
-    plt.axis('tight')
+      generate_samples(hparams, data_set, id_to_word, log_dir, output_file)
     
     
-def sparsity_ratio(X):
-    return np.count_nonzero(X) / float(n_samples * n_features)
+def create_dis_train_op(hparams, dis_loss, global_step):
+  '''Create Discriminator train op.'''
+  with tf.name_scope('train_discriminator'):
+    dis_optimizer = tf.train.AdamOptimizer(hparams.dis_learning_rate)
+    dis_vars = [
+        v for v in tf.trainable_variables() if v.op.name.startswith('dis')
+    ]
+    if FLAGS.dis_update_share_embedding and FLAGS.dis_share_embedding:
+      shared_embedding = [
+          v for v in tf.trainable_variables()
+          if v.op.name == 'gen/decoder/rnn/embedding'
+      ][0]
+      dis_vars.append(shared_embedding)
+    print('\nOptimizing Discriminator vars:')
+    for v in dis_vars:
+      print(v)
+    dis_grads = tf.gradients(dis_loss, dis_vars)
+    dis_grads_clipped, _ = tf.clip_by_global_norm(dis_grads,
+                                                  FLAGS.grad_clipping)
+    dis_train_op = dis_optimizer.apply_gradients(
+        zip(dis_grads_clipped, dis_vars), global_step=global_step)
+    return dis_train_op, dis_grads_clipped, dis_vars
     
-            :issue:`123`
-        :issue:`42,45`
-    '''
-    options = options or {}
-    content = content or []
-    issue_nos = [each.strip() for each in utils.unescape(text).split(',')]
-    config = inliner.document.settings.env.app.config
-    ret = []
-    for i, issue_no in enumerate(issue_nos):
-        node = _make_issue_node(issue_no, config, options=options)
-        ret.append(node)
-        if i != len(issue_nos) - 1:
-            sep = nodes.raw(text=', ', format='html')
-            ret.append(sep)
-    return ret, []
+      ## Encoder variables.
+  encoder_lstm_w_0 = [
+      v for v in tf.trainable_variables() if v.op.name ==
+      'dis/encoder/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/kernel'
+  ][0]
+  encoder_lstm_b_0 = [
+      v for v in tf.trainable_variables() if v.op.name ==
+      'dis/encoder/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/bias'
+  ][0]
+  encoder_lstm_w_1 = [
+      v for v in tf.trainable_variables() if v.op.name ==
+      'dis/encoder/rnn/multi_rnn_cell/cell_1/basic_lstm_cell/kernel'
+  ][0]
+  encoder_lstm_b_1 = [
+      v for v in tf.trainable_variables() if v.op.name ==
+      'dis/encoder/rnn/multi_rnn_cell/cell_1/basic_lstm_cell/bias'
+  ][0]
     
-    import numpy as np
-from matplotlib import pyplot as plt
+        with tf.variable_scope('rnn') as vs:
+      outputs, _, _ = tf.contrib.rnn.static_bidirectional_rnn(
+          cell_fwd, cell_bwd, rnn_inputs, state_fwd, state_bwd, scope=vs)
     
-        if len(sys.argv) > 2:
-        top_domain = sys.argv[2]
-    else:
-        top_domain = None
+            # Adding field 'ApiToken.scope_list'
+        db.add_column(
+            'sentry_apitoken',
+            'scope_list',
+            self.gf('sentry.db.models.fields.array.ArrayField')(
+                of=('django.db.models.fields.TextField', [], {})
+            ),
+            keep_default=False
+        )
     
-    def version_str_to_tuple(version_str):
-    import re
-    import sys
+        complete_apps = ['sentry']
+    symmetrical = True
+
     
-    ## All tokens go to the parser (unless skip() is called in that rule)
-# on a particular 'channel'.  The parser tunes to a particular channel
-# so that whitespace etc... can go to the parser on a 'hidden' channel.
-DEFAULT_CHANNEL = 0
-    
-    
-class RewriteOperation(object):
-    '''@brief Internal helper class.'''
-    
-    def __init__(self, stream, index, text):
-        self.stream = stream
-        self.index = index
-        self.text = text
-    
-    
-    def getInputStream(self):
-        return None
+        def backwards(self, orm):
+        # Removing unique constraint on 'UserOption', fields ['user', 'organization', 'key']
+        db.delete_unique('sentry_useroption', ['user_id', 'organization_id', 'key'])
