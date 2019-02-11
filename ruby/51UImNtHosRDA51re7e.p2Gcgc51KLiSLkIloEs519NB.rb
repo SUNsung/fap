@@ -1,140 +1,134 @@
 
         
-                # Reset topic count because we don't count the description topic
-        DB.exec 'UPDATE categories SET topic_count = 0 WHERE id = #{lounge.id}'
+            def pos=(i)
+      @s.pos = str_to_byte_pos i
+      i
+    end
+    
+      # Disable request forgery protection in test environment.
+  config.action_controller.allow_forgery_protection = false
+    
+      def test_font_helper_without_suffix
+    assert_match %r(url\(['']?/assets/.*eot['']?\)), @css
+  end
+    
+          root.options = @options
+      if @options[:cache] && key && sha
+        begin
+          old_options = root.options
+          root.options = {}
+          @options[:cache_store].store(key, sha, root)
+        ensure
+          root.options = old_options
+        end
+      end
+      root
+    rescue SyntaxError => e
+      e.modify_backtrace(:filename => @options[:filename], :line => @line)
+      e.sass_template = @template
+      raise e
+    end
+    
+        # @param msg [String] The error message
+    # @param attrs [{Symbol => Object}] The information in the backtrace entry.
+    #   See \{#sass\_backtrace}
+    def initialize(msg, attrs = {})
+      @message = msg
+      @sass_backtrace = []
+      add_backtrace(attrs)
+    end
+    
+          # Get the cache key pair for the given Sass URI.
+      # The URI need not be checked for validity.
+      #
+      # The only strict requirement is that the returned pair of strings
+      # uniquely identify the file at the given URI.
+      # However, the first component generally corresponds roughly to the directory,
+      # and the second to the basename, of the URI.
+      #
+      # Note that keys must be unique *across importers*.
+      # Thus it's probably a good idea to include the importer name
+      # at the beginning of the first component.
+      #
+      # @param uri [String] A URI known to be valid for this importer.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` currently being checked.
+      # @return [(String, String)] The key pair which uniquely identifies
+      #   the file at the given URI.
+      def key(uri, options)
+        Sass::Util.abstract(self)
+      end
+    
+          get '/orders/mine', to: 'orders#mine', as: 'my_orders'
+      get '/orders/current', to: 'orders#current', as: 'current_order'
+    
+      s.add_dependency 'activemerchant', '~> 1.67'
+  s.add_dependency 'acts_as_list', '~> 0.8'
+  s.add_dependency 'awesome_nested_set', '~> 3.1.4'
+  s.add_dependency 'carmen', '~> 1.0.0'
+  s.add_dependency 'cancancan', '~> 2.0'
+  s.add_dependency 'deface', '~> 1.0'
+  s.add_dependency 'ffaker', '~> 2.9'
+  s.add_dependency 'friendly_id', '~> 5.2.1'
+  s.add_dependency 'highline', '~> 2.0.0' # Necessary for the install generator
+  s.add_dependency 'kaminari', '~> 1.0.1'
+  s.add_dependency 'money', '~> 6.13'
+  s.add_dependency 'monetize', '~> 1.9'
+  s.add_dependency 'paranoia', '~> 2.4.1'
+  s.add_dependency 'premailer-rails'
+  s.add_dependency 'acts-as-taggable-on', '~> 6.0'
+  s.add_dependency 'rails', '~> 5.2.1', '>= 5.2.1.1'
+  s.add_dependency 'ransack', '~> 2.1.1'
+  s.add_dependency 'responders'
+  s.add_dependency 'state_machines-activerecord', '~> 0.5'
+  s.add_dependency 'stringex'
+  s.add_dependency 'twitter_cldr', '~> 4.3'
+  s.add_dependency 'sprockets-rails'
+  s.add_dependency 'mini_magick', '~> 4.8.0'
+    
+    desc 'Generates a dummy app for testing for every Spree engine'
+task :test_app do
+  SPREE_GEMS.each do |gem_name|
+    Dir.chdir('#{File.dirname(__FILE__)}/#{gem_name}') do
+      sh 'rake test_app'
+    end
+  end
+end
+    
+              def find_spree_current_order
+            Spree::Api::Dependencies.storefront_current_order_finder.constantize.new.execute(
+              store: spree_current_store,
+              user: spree_current_user,
+              token: order_token,
+              currency: current_currency
+            )
+          end
+    
+          def invalid_api_key
+        render 'spree/api/errors/invalid_api_key', status: 401
+      end
+    
+            def inventory_unit_params
+          params.require(:inventory_unit).permit(permitted_inventory_unit_attributes)
+        end
       end
     end
   end
 end
 
     
-          it 'requires the passwords to match' do
-        visit new_admin_user_path
-        fill_in 'Email', with: 'test@test.com'
-        fill_in 'Username', with: 'usertest'
-        fill_in 'Password', with: '12345678'
-        fill_in 'Password confirmation', with: 'no_match'
-        click_on 'Create User'
-        expect(page).to have_text('Password confirmation doesn't match')
-      end
-    end
+            def update
+          @line_item = find_line_item
     
-    describe 'Dry running an Agent', js: true do
-  let(:agent)   { agents(:bob_website_agent) }
-  let(:formatting_agent) { agents(:bob_formatting_agent) }
-  let(:user)    { users(:bob) }
-  let(:emitter) { agents(:bob_weather_agent) }
+            def update
+          @option_type = Spree::OptionType.accessible_by(current_ability, :update).find(params[:id])
+          if @option_type.update_attributes(option_type_params)
+            render :show
+          else
+            invalid_resource!(@option_type)
+          end
+        end
     
-      describe 'DotHelper::DotDrawer' do
-    describe '#id' do
-      it 'properly escapes double quotaion and backslash' do
-        expect(DotHelper::DotDrawer.draw(foo: '') {
-          id('hello\\'')
-        }).to eq(''hello\\\\\\''')
-      end
-    end
+      not_found do
+    send_file(File.join(File.dirname(__FILE__), 'public', '404.html'), {:status => 404})
   end
-end
-
-    
-        it 'works for queued jobs' do
-      expect(status(job)).to eq('<span class='label label-warning'>queued</span>')
-    end
-  end
-    
-          expect(@scheduler.scheduler_agent_jobs.map(&:scheduler_agent).sort_by(&:id)).to eq([@agent1, @agent2])
-    end
-    
-        it 'should raise an exception when encountering complex JSONPaths' do
-      @agent.options['username_path'] = '$.very.complex[*]'
-      expect { LiquidMigrator.convert_all_agent_options(@agent) }.
-        to raise_error('JSONPath '$.very.complex[*]' is too complex, please check your migration.')
-    end
-    
-      it 'provides hash-style access to its properties with both symbol and string keys' do
-    expect(location[:lat]).to be_a Float
-    expect(location[:lat]).to eq 2.0
-    expect(location['lat']).to be_a Float
-    expect(location['lat']).to eq 2.0
-  end
-    
-    describe Utils do
-  describe '#unindent' do
-    it 'unindents to the level of the greatest consistant indention' do
-      expect(Utils.unindent(<<-MD)).to eq('Hello World')
-        Hello World
-      MD
-    
-      let :valid_options do
-    {
-      'name' => 'XKCD',
-      'expected_update_period_in_days' => '2',
-      'type' => 'html',
-      'url' => '{{ url | default: 'http://xkcd.com/' }}',
-      'mode' => 'on_change',
-      'extract' => old_extract,
-      'template' => old_template
-    }
-  end
-    
-      it 'truncates message to a reasonable length' do
-    log = AgentLog.new(:agent => agents(:jane_website_agent), :level => 3)
-    log.message = 'a' * 11_000
-    log.save!
-    expect(log.message.length).to eq(10_000)
-  end
-    
-        cmd = HOMEBREW_INTERNAL_COMMAND_ALIASES.fetch(ARGV.first, ARGV.first)
-    
-          new_user = 'Homebrew'
-      new_repo = (repo == 'cask') ? repo : 'cask-#{repo}'
-    
-    end
-    
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
-      end
-      super
-    end
-    
-    class ConfigTag < Liquid::Tag
-  def initialize(tag_name, options, tokens)
-    super
-    options = options.split(' ').map {|i| i.strip }
-    @key = options.slice!(0)
-    @tag = nil
-    @classname = nil
-    options.each do |option|
-      @tag = $1 if option =~ /tag:(\S+)/ 
-      @classname = $1 if option =~ /classname:(\S+)/
-    end
-  end
-    
-        def render(context)
-      if parts = @text.match(/([a-zA-Z\d]*) (.*)/)
-        gist, file = parts[1].strip, parts[2].strip
-      else
-        gist, file = @text.strip, ''
-      end
-      if gist.empty?
-        ''
-      else
-        script_url = script_url_for gist, file
-        code       = get_cached_gist(gist, file) || get_gist_from_web(gist, file)
-        html_output_for script_url, code
-      end
-    end
