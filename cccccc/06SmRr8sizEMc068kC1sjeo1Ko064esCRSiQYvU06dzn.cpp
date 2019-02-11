@@ -1,72 +1,95 @@
 
         
-          // Deletes the current owned object, if any.
-  // Then takes ownership of a new object without incrementing the reference
-  // count.
-  // This function must be called with a reference that you own.
-  //   this->reset(this->get()) is wrong!
-  //   this->reset(this->release()) is OK.
-  PyObjectStruct* reset(PyObjectStruct* p = NULL) {
-    Py_XDECREF(ptr_);
-    ptr_ = p;
-    return ptr_;
-  }
+          static const Data& getData6() { return data6_; }
     
-      template<class T>
-  OneofDef* FindOneofByName(const T& str) {
-    return FindOneofByName(str.c_str(), str.size());
-  }
-  template<class T>
-  const OneofDef* FindOneofByName(const T& str) const {
-    return FindOneofByName(str.c_str(), str.size());
-  }
     
-    void AnyMetadata::PackFrom(const Message& message) {
-  PackFrom(message, kTypeGoogleApisComPrefix);
+    {  // Returns two vector of Commands.  First one contains regular
+  // commands.  Secod one contains so called routine commands, which
+  // executed once per event poll returns.
+  std::pair<std::vector<std::unique_ptr<Command>>,
+            std::vector<std::unique_ptr<Command>>>
+  setup(DownloadEngine* e, int family);
+};
+    
+    
+    {  virtual bool finished() = 0;
+};
+    
+      ~DHTTokenTracker();
+    
+    DHTUnknownMessage::DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
+                                     const unsigned char* data, size_t length,
+                                     const std::string& ipaddr, uint16_t port)
+    : DHTMessage(localNode, std::shared_ptr<DHTNode>()),
+      length_(length),
+      ipaddr_(ipaddr),
+      port_(port)
+{
+  if (length_ == 0) {
+    data_ = nullptr;
+  }
+  else {
+    data_ = new unsigned char[length];
+    memcpy(data_, data, length);
+  }
 }
     
-    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
-//   can only really compare the output against a golden value, which is a
-//   fairly tedious and fragile testing strategy.  If we want to go that route,
-//   it probably makes sense to bite the bullet and write a test that compares
-//   the whole generated output for unittest.proto against a golden value, with
-//   a very simple script that can be run to regenerate it with the latest code.
-//   This would mean that updates to the golden file would have to be included
-//   in any change to the code generator, which would actually be fairly useful
-//   as it allows the reviewer to see clearly how the generated code is
-//   changing.
+      // always return false
+  virtual bool isReply() const CXX11_OVERRIDE;
     
-      if (GenerateCode(request, *generator, &response, &error_msg)) {
-    if (!response.SerializeToFileDescriptor(STDOUT_FILENO)) {
-      std::cerr << argv[0] << ': Error writing to stdout.' << std::endl;
-      return 1;
+      double ScoreOutputSize(int size) const override;
+    
+    
+    {}  // namespace guetzli
+    
+        size_t i = 0;      // Points to the next leaf node.
+    size_t j = n + 1;  // Points to the next non-leaf node.
+    for (size_t k = n - 1; k != 0; --k) {
+      size_t left, right;
+      if (tree[i].total_count_ <= tree[j].total_count_) {
+        left = i;
+        ++i;
+      } else {
+        left = j;
+        ++j;
+      }
+      if (tree[i].total_count_ <= tree[j].total_count_) {
+        right = i;
+        ++i;
+      } else {
+        right = j;
+        ++j;
+      }
     }
-  } else {
-    if (!error_msg.empty()) {
-      std::cerr << argv[0] << ': ' << error_msg << std::endl;
-    }
-    return 1;
+    
+    // Entropy encoding (Huffman) utilities.
+    
+    #endif  // GUETZLI_FAST_LOG_H_
+
+    
+      template <typename T>
+  void set_allocated() noexcept {
+    using type = std::decay_t<T>;
+    vtable_ = invoke_table_t::template get_invocation_table_of<type, false>();
+    cmd_ = &trait<type>::template process_cmd<false>;
   }
     
-      // Will be called while on the write thread before the write executes.  If
-  // this function returns a non-OK status, the write will be aborted and this
-  // status will be returned to the caller of DB::Write().
-  virtual Status Callback(DB* db) = 0;
+    struct alignas(16) LoopData {
+    friend struct Loop;
+private:
+    std::mutex deferMutex;
+    int currentDeferQueue = 0;
+    std::vector<fu2::unique_function<void()>> deferQueues[2];
+    }
     
-      Status s = OptimisticTransactionDB::Open(options, kDBPath, &txn_db);
-  assert(s.ok());
-  db = txn_db->GetBaseDB();
+                    /* First of all we need to check if this socket was deleted due to upgrade */
+                if (httpContextData->upgradedWebSocket) {
+                    /* Reset upgradedWebSocket before we return */
+                    void *tmp = httpContextData->upgradedWebSocket;
+                    httpContextData->upgradedWebSocket = nullptr;
+                    return tmp;
+                }
     
-      // initialize column families options
-  std::unique_ptr<CompactionFilter> compaction_filter;
-  compaction_filter.reset(new DummyCompactionFilter());
-  cf_descs[0].options.table_factory.reset(NewBlockBasedTableFactory(bbt_opts));
-  cf_descs[0].options.compaction_filter = compaction_filter.get();
-  cf_descs[1].options.table_factory.reset(NewBlockBasedTableFactory(bbt_opts));
     
-    // Supported only for Leveled compaction
-Status SuggestCompactRange(DB* db, ColumnFamilyHandle* column_family,
-                           const Slice* begin, const Slice* end);
-Status SuggestCompactRange(DB* db, const Slice* begin, const Slice* end);
-    
-      std::string ToString(bool exclude_zero_counters = false) const;
+    {            return s;
+        });
