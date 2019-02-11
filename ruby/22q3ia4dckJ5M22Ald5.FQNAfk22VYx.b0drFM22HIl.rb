@@ -1,119 +1,126 @@
 
         
-            it 'opens the dry run modal even when clicking on the refresh icon' do
-      visit edit_agent_path(agent)
-      find('.agent-dry-run-button span.glyphicon').click
-      expect(page).to have_text('Event to send (Optional)')
+            def disable
+      authorize @custom_emoji, :disable?
+      @custom_emoji.update!(disabled: true)
+      log_action :disable, @custom_emoji
+      flash[:notice] = I18n.t('admin.custom_emojis.disabled_msg')
+      redirect_to admin_custom_emojis_path(page: params[:page], **@filter_params)
     end
     
-        it 'returns a FontAwesome icon element' do
-      icon = icon_tag('fa-copy')
-      expect(icon).to be_html_safe
-      expect(Nokogiri(icon).at('i.fa.fa-copy')).to be_a Nokogiri::XML::Element
+          if @email_domain_block.save
+        log_action :create, @email_domain_block
+        redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.created_msg')
+      else
+        render :new
+      end
     end
     
-        it 'outputs control links to agents within the incoming set, but not outside it' do
-      agents(:jane_rain_notifier_agent).control_targets = [agents(:jane_weather_agent), agents(:jane_basecamp_agent)]
-      agents(:jane_rain_notifier_agent).save!
-    
-    class Profile
-  def pod_bin
-    File.expand_path('../pod', __FILE__)
+      def hub_topic_params
+    @_hub_topic_params ||= Rails.application.routes.recognize_path(hub_topic_uri.path)
   end
     
-    Then(/^references in the remote repo are listed$/) do
-  expect(@output).to include('refs/heads/master')
+      def subscription_params
+    params.require(:subscription).permit(:endpoint, keys: [:auth, :p256dh])
+  end
+    
+    task :permissions do
+  sh %{chmod -R a+rx bin}
+  sh %{chmod -R a+r .}
+  require 'shellwords'
+  Dir.glob('test/**/*_test.rb') do |file|
+    next if file =~ %r{^test/haml/spec/}
+    sh %{chmod a+rx #{file}}
+  end
 end
     
-          def call
-        ask_question
-        value_or_default
+        def watching_and_updating(opts)
+      opts.separator ''
+      opts.separator 'Watching and Updating:'
+    
+          # Find a Sass file, if it exists.
+      #
+      # This is the primary entry point of the Importer.
+      # It corresponds directly to an `@import` statement in Sass.
+      # It should do three basic things:
+      #
+      # * Determine if the URI is in this importer's format.
+      #   If not, return nil.
+      # * Determine if the file indicated by the URI actually exists and is readable.
+      #   If not, return nil.
+      # * Read the file and place the contents in a {Sass::Engine}.
+      #   Return that engine.
+      #
+      # If this importer's format allows for file extensions,
+      # it should treat them the same way as the default {Filesystem} importer.
+      # If the URI explicitly has a `.sass` or `.scss` filename,
+      # the importer should look for that exact file
+      # and import it as the syntax indicated.
+      # If it doesn't exist, the importer should return nil.
+      #
+      # If the URI doesn't have either of these extensions,
+      # the importer should look for files with the extensions.
+      # If no such files exist, it should return nil.
+      #
+      # The {Sass::Engine} to be returned should be passed `options`,
+      # with a few modifications. `:syntax` should be set appropriately,
+      # `:filename` should be set to `uri`,
+      # and `:importer` should be set to this importer.
+      #
+      # @param uri [String] The URI to import.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` that's currently being resolved.
+      #   This is safe for subclasses to modify destructively.
+      #   Callers should only pass in a value they don't mind being destructively modified.
+      # @return [Sass::Engine, nil] An Engine containing the imported file,
+      #   or nil if it couldn't be found or was in the wrong format.
+      def find(uri, options)
+        Sass::Util.abstract(self)
       end
     
-          def add_host(host, properties={})
-        new_host = Server[host]
-        new_host.port = properties[:port] if properties.key?(:port)
-        # This matching logic must stay in sync with `Server#matches?`.
-        key = ServerKey.new(new_host.hostname, new_host.port)
-        existing = servers_by_key[key]
-        if existing
-          existing.user = new_host.user if new_host.user
-          existing.with(properties)
-        else
-          servers_by_key[key] = new_host.with(properties)
-        end
+          def hash
+        @root.hash
       end
     
-    module Capistrano
-  class Configuration
-    # Decorates a Variables object to additionally perform an optional set of
-    # user-supplied validation rules. Each rule for a given key is invoked
-    # immediately whenever `set` is called with a value for that key.
-    #
-    # If `set` is called with a callable value or a block, validation is not
-    # performed immediately. Instead, the validation rules are invoked the first
-    # time `fetch` is used to access the value.
-    #
-    # A rule is simply a block that accepts two arguments: key and value. It is
-    # up to the rule to raise an exception when it deems the value is invalid
-    # (or just print a warning).
-    #
-    # Rules can be registered using the DSL like this:
-    #
-    #   validate(:my_key) do |key, value|
-    #     # rule goes here
-    #   end
-    #
-    class ValidatedVariables < SimpleDelegator
-      include Capistrano::ProcHelpers
+        validate_target_file
+    LogStash::Bundler.invoke!({:package => true, :all => true})
+    archive_manager.compress(LogStash::Environment::CACHE_PATH, target_file)
+    FileUtils.rm_rf(LogStash::Environment::CACHE_PATH) if clean?
     
-          def initialize(values={})
-        @trusted_keys = []
-        @fetched_keys = []
-        @locations = {}
-        @values = values
-        @trusted = true
-      end
+    module LogStash module PluginManager module PackInstaller
+  class Local
+    PACK_EXTENSION = '.zip'
+    LOGSTASH_PATTERN_RE = /logstash\/?/
     
-            if Utils::HttpClient.remote_file_exist?(uri)
-          PluginManager.ui.debug('Found package at: #{uri}')
-          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
-        else
-          PluginManager.ui.debug('Package not found at: #{uri}')
-          return nil
-        end
-      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
-        # This probably means there is a firewall in place of the proxy is not correctly configured.
-        # So lets skip this strategy but log a meaningful errors.
-        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
+      # retrieve only the latest spec for all locally installed plugins
+  # @return [Hash] result hash {plugin_name.downcase => plugin_spec}
+  def find_latest_gem_specs
+    LogStash::PluginManager.all_installed_plugins_gem_specs(gemfile).inject({}) do |result, spec|
+      previous = result[spec.name.downcase]
+      result[spec.name.downcase] = previous ? [previous, spec].max_by{|s| s.version} : spec
+      result
+    end
+  end
+end
+
     
-        private
-    def uncompress(source)
-      temporary_directory = Stud::Temporary.pathname
-      LogStash::Util::Zip.extract(source, temporary_directory, LOGSTASH_PATTERN_RE)
-      temporary_directory
-    rescue Zip::Error => e
-      # OK Zip's handling of file is bit weird, if the file exist but is not a valid zip, it will raise
-      # a `Zip::Error` exception with a file not found message...
-      raise InvalidPackError, 'Cannot uncompress the zip: #{source}'
+      it 'records when the config was read' do
+    expect(subject.read_at).to be <= Time.now
+  end
+    
+        before do
+      logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version #{previous_version} #{plugin_name}')
+      # Logstash won't update when we have a pinned version in the gemfile so we remove them
+      logstash.replace_in_gemfile(',[[:space:]]'0.1.0'', '')
+      expect(logstash).to have_installed?(plugin_name, previous_version)
     end
     
-    namespace :qa do
-    
-      describe 'on #{logstash.hostname}' do
-    context 'with a direct internet connection' do
-      context 'when the plugin exist' do
-        context 'from a local `.GEM` file' do
-          let(:gem_name) { 'logstash-filter-qatest-0.1.1.gem' }
-          let(:gem_path_on_vagrant) { '/tmp/#{gem_name}' }
-          before(:each) do
-            logstash.download('https://rubygems.org/gems/#{gem_name}', gem_path_on_vagrant)
-          end
-    
-          it 'list the plugins with their versions' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose')
-        result.stdout.split('\n').each do |plugin|
-          expect(plugin).to match(/^logstash-\w+-\w+\s\(\d+\.\d+.\d+(.\w+)?\)/)
-        end
+          def page_dir
+        @page_dir
       end
-    end
+    
+        assert_no_match /Delete this Page/, last_response.body, ''Delete this Page' link not blocked in page template'
+    assert_no_match /New/,              last_response.body, ''New' button not blocked in page template'
+    assert_no_match /Upload/,           last_response.body, ''Upload' link not blocked in page template'
+    assert_no_match /Rename/,           last_response.body, ''Rename' link not blocked in page template'
+    assert_no_match /Edit/,             last_response.body, ''Edit' link not blocked in page template'
