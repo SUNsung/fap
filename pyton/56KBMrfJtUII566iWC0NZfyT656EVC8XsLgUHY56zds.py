@@ -1,88 +1,143 @@
 
         
-                self.assertRaises(
-            jose.DeserializationError, nonce_field.decode, self.wrong_nonce)
-        self.assertEqual(b'foo', nonce_field.decode(self.good_nonce))
+            def __init__(self, query, results):
+        self.query = query
+        self.results = results
     
-        @mock.patch('certbot_apache.display_ops.display_util')
-    @certbot_util.patch_get_utility()
-    @mock.patch('certbot_apache.display_ops.logger')
-    def test_small_display(self, mock_logger, mock_util, mock_display_util):
-        mock_display_util.WIDTH = 20
-        mock_util().menu.return_value = (display_util.OK, 0)
-        self._call(self.vhosts)
+    sys.path.insert(0, os.path.dirname(os.path.dirname((os.path.abspath(__file__)))))
+from youtube_dl.compat import (
+    compat_input,
+    compat_http_server,
+    compat_str,
+    compat_urlparse,
+)
     
-        def test_nonexistent_like(self):
-        with mock.patch('certbot.util.get_os_info') as mock_info:
-            mock_info.return_value = ('nonexistent', 'irrelevant')
-            with mock.patch('certbot.util.get_systemd_os_like') as mock_like:
-                for like in entrypoint.OVERRIDE_CLASSES.keys():
-                    mock_like.return_value = [like]
-                    self.assertEqual(entrypoint.get_configurator(),
-                                     entrypoint.OVERRIDE_CLASSES[like])
-    
-    IMPORT_MAPPING.update({
-    'cPickle': 'pickle',
-    '_elementtree': 'xml.etree.ElementTree',
-    'FileDialog': 'tkinter.filedialog',
-    'SimpleDialog': 'tkinter.simpledialog',
-    'DocXMLRPCServer': 'xmlrpc.server',
-    'SimpleHTTPServer': 'http.server',
-    'CGIHTTPServer': 'http.server',
-    # For compatibility with broken pickles saved in old Python 3 versions
-    'UserDict': 'collections',
-    'UserList': 'collections',
-    'UserString': 'collections',
-    'whichdb': 'dbm',
-    'StringIO':  'io',
-    'cStringIO': 'io',
-})
-    
-    
-def getsize(filename):
-    '''Return the size of a file, reported by os.stat().'''
-    return os.stat(filename).st_size
-    
-    [1] http://www.yummly.com/recipe/Roasted-Asparagus-Epicurious-203718
-    
-    # Now the header items can be accessed as a dictionary, and any non-ASCII will
-# be converted to unicode:
-print('To:', msg['to'])
-print('From:', msg['from'])
-print('Subject:', msg['subject'])
-    
-    if __name__ == '__main__':
-    freeze_support()
-    test()
+    with open('update/versions.json', 'w') as jsonf:
+    json.dump(versions_info, jsonf, indent=4, sort_keys=True)
 
     
-      def UpdatePreprocessor(self, line):
-    '''Update preprocessor stack.
-    
-        pil_image.show()
-
+    import rsa
+import json
+from binascii import hexlify
     
     
-def predict(X_img_path, knn_clf=None, model_path=None, distance_threshold=0.6):
-    '''
-    Recognizes faces in given image using a trained KNN classifier
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
     
-        function_parameters = zip(
-        images_to_check,
-        itertools.repeat(model),
+    
+# Import youtube_dl
+ROOT_DIR = os.path.join(os.path.dirname(__file__), '..')
+sys.path.insert(0, ROOT_DIR)
+import youtube_dl
+    
+        fileopts = []
+    for opt in opts_file:
+        if opt._short_opts:
+            fileopts.extend(opt._short_opts)
+        if opt._long_opts:
+            fileopts.extend(opt._long_opts)
+    
+    # Add any Sphinx extension module names here, as strings. They can be
+# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
+# ones.
+extensions = [
+    'sphinx.ext.autodoc',
+]
+    
+        def test_keywords(self):
+        self.assertMatch(':ytsubs', ['youtube:subscriptions'])
+        self.assertMatch(':ytsubscriptions', ['youtube:subscriptions'])
+        self.assertMatch(':ythistory', ['youtube:history'])
+    
+        def debug(self, msg):
+        pass
+    
+        def _get_session_key(self):
+        '''
+        Instead of generating a random string, generate a secure url-safe
+        base64-encoded string of data as our session key.
+        '''
+        return signing.dumps(
+            self._session, compress=True,
+            salt='django.contrib.sessions.backends.signed_cookies',
+            serializer=self.serializer,
+        )
+    
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+    
+        # conv 1x1 -> BN -> ReLU
+    cur = model.ConvAffine(
+        blob_in,
+        prefix + '_branch2a',
+        dim_in,
+        dim_inner,
+        kernel=1,
+        stride=str1x1,
+        pad=0,
+        inplace=True
     )
+    cur = model.Relu(cur, cur)
     
-        # Loop through each face in this frame of video
-    for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
-        # See if the face is a match for the known face(s)
-        matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+    The keypoint head produces a feature representation of the RoI for the purpose
+of keypoint prediction. The keypoint output module converts the feature
+representation into keypoint heatmaps.
+'''
     
-            face_names = []
-        for face_encoding in face_encodings:
-            # See if the face is a match for the known face(s)
-            matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
-            name = 'Unknown'
     
-    # Initialize some variables
-face_locations = []
-face_encodings = []
+def distribute(rois, label_blobs, outputs, train):
+    '''To understand the output blob order see return value of
+    detectron.roi_data.fast_rcnn.get_fast_rcnn_blob_names(is_training=False)
+    '''
+    lvl_min = cfg.FPN.ROI_MIN_LEVEL
+    lvl_max = cfg.FPN.ROI_MAX_LEVEL
+    lvls = fpn.map_rois_to_fpn_levels(rois[:, 1:5], lvl_min, lvl_max)
+    
+        def forward(self, inputs, outputs):
+        '''See modeling.detector.GenerateProposalLabels for inputs/outputs
+        documentation.
+        '''
+        # During training we reuse the data loader code. We populate roidb
+        # entries on the fly using the rois generated by RPN.
+        # im_info: [[im_height, im_width, im_scale], ...]
+        rois = inputs[0].data
+        roidb = blob_utils.deserialize(inputs[1].data)
+        im_info = inputs[2].data
+        im_scales = im_info[:, 2]
+        output_blob_names = fast_rcnn_roi_data.get_fast_rcnn_blob_names()
+        # For historical consistency with the original Faster R-CNN
+        # implementation we are *not* filtering crowd proposals.
+        # This choice should be investigated in the future (it likely does
+        # not matter).
+        json_dataset.add_proposals(roidb, rois, im_scales, crowd_thresh=0)
+        roidb_utils.add_bbox_regression_targets(roidb)
+        blobs = {k: [] for k in output_blob_names}
+        fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
+        for i, k in enumerate(output_blob_names):
+            blob_utils.py_op_copy_blob(blobs[k], outputs[i])
+
+    
+    
+def get_minibatch_blob_names(is_training=True):
+    '''Return blob names in the order in which they are read by the data loader.
+    '''
+    # data blob: holds a batch of N images, each with 3 channels
+    blob_names = ['data']
+    if cfg.RPN.RPN_ON:
+        # RPN-only or end-to-end Faster R-CNN
+        blob_names += rpn_roi_data.get_rpn_blob_names(is_training=is_training)
+    elif cfg.RETINANET.RETINANET_ON:
+        blob_names += retinanet_roi_data.get_retinanet_blob_names(
+            is_training=is_training
+        )
+    else:
+        # Fast R-CNN like models trained on precomputed proposals
+        blob_names += fast_rcnn_roi_data.get_fast_rcnn_blob_names(
+            is_training=is_training
+        )
+    return blob_names
