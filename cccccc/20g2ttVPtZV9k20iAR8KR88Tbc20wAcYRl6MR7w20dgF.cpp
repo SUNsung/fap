@@ -1,232 +1,174 @@
 
         
-        // Calls the registered C++ shape inference function for <node> (a serialized
-// NodeDef).
-// Should not be called for shape functions that access input tensors; constant
-// input tensor values are not made available, and so the inferred shapes will
-// be less precise than they could be.
-//
-// Returns an error, or OK, in <out_status> according to whether the shape
-// inference was successful.
-//
-// On success, returns a vector populated with the inferred output shapes (as
-// serialized CppShapeInferenceResult protos) followed by a serialized
-// CppShapeInferenceInputsNeeded proto.
-//
-// This is temporary code to be used during the migration
-// from python shape inference functions to C++ shape inference functions.
-std::vector<string> RunCppShapeInference(
-    int graph_def_version, const string& serialized_node_def,
-    const std::vector<string>& input_serialized_shapes,
-    PyObject* input_constant_tensor_values,
-    const std::vector<string>& input_constant_tensor_as_shape_values,
-    TF_Status* out_status);
-    
-    #ifndef TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_H_
-    
-    #include 'tensorflow/c/c_api.h'
-#include 'tensorflow/core/lib/core/errors.h'
-#include 'tensorflow/core/platform/mutex.h'
-#include 'tensorflow/python/lib/core/bfloat16.h'
-#include 'tensorflow/python/lib/core/ndarray_tensor_bridge.h'
-    
-    // Safe containers for an owned TFE_TensorHandle. On destruction, the handle
-// will be deleted by TFE_DeleteTensorHandle.
-using Safe_TFE_TensorHandlePtr =
-    std::unique_ptr<TFE_TensorHandle, detail::TFETensorHandleDeleter>;
-Safe_TFE_TensorHandlePtr make_safe(TFE_TensorHandle* handle);
-    
-      // Calculate the depth at which the requirement's generic parameters
-  // appear in the synthetic signature.
-  unsigned depth = 0;
-  if (covariantSelf) {
-    depth++;
-  }
-  if (conformanceSig) {
-    depth += conformanceSig->getGenericParams().back()->getDepth() + 1;
-  }
-    
-    DIRECTIONAL_PREPOSITION(above)
-DIRECTIONAL_PREPOSITION(after)
-DIRECTIONAL_PREPOSITION(along)
-DIRECTIONAL_PREPOSITION(alongside)
-DIRECTIONAL_PREPOSITION(as)
-DIRECTIONAL_PREPOSITION(at)
-DIRECTIONAL_PREPOSITION(before)
-DIRECTIONAL_PREPOSITION(below)
-DIRECTIONAL_PREPOSITION(by)
-DIRECTIONAL_PREPOSITION(following)
-DIRECTIONAL_PREPOSITION(for)
-DIRECTIONAL_PREPOSITION(from)
-DIRECTIONAL_PREPOSITION(given)
-DIRECTIONAL_PREPOSITION(in)
-DIRECTIONAL_PREPOSITION(including)
-DIRECTIONAL_PREPOSITION(inside)
-DIRECTIONAL_PREPOSITION(into)
-DIRECTIONAL_PREPOSITION(matching)
-DIRECTIONAL_PREPOSITION(of)
-DIRECTIONAL_PREPOSITION(on)
-DIRECTIONAL_PREPOSITION(passing)
-DIRECTIONAL_PREPOSITION(preceding)
-DIRECTIONAL_PREPOSITION(since)
-DIRECTIONAL_PREPOSITION(to)
-DIRECTIONAL_PREPOSITION(until)
-DIRECTIONAL_PREPOSITION(using)
-DIRECTIONAL_PREPOSITION(via)
-DIRECTIONAL_PREPOSITION(when)
-PREPOSITION(with)
-DIRECTIONAL_PREPOSITION(within)
-    
-        {
-      Out << Indent;
-      if (childKind == ChildKind::Root) {
-        Out << '+- ';
-      } else if (childKind == ChildKind::Left) {
-        Out << '/- ';
-      } else if (childKind == ChildKind::Right) {
-        Out << '\\- ';
-      } else if (childKind == ChildKind::Further) {
-        Out << '\\-> ';
-      }
-      PrintNodeData(Out, node);
-      Out << '\n';
-    }
-    
-    
-    {    RawText = RawText.drop_front(Pos);
-    unsigned NewlineBytes = measureNewline(RawText);
-    RawText = RawText.drop_front(NewlineBytes);
-  }
-    
-    bool importer::isCFTypeDecl(
-       const clang::TypedefNameDecl *Decl) {
-  if (CFPointeeInfo::classifyTypedef(Decl))
-    return true;
-  return false;
-}
-    
-      bool isStaticMember() const {
-    return isImportAsMember() && !selfIndex.hasValue();
-  }
-    
-    // Generate param traits read methods.
-#include 'ipc/param_traits_read_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
-    
-    #endif  // CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
+        
+    {}  // namespace grpc
 
     
+      static void OnDoneSendInitialMetadataCb(void* user_data, grpc_error* error);
     
-namespace nwapi {
-    }
+    constexpr size_t TraceContextEncoding::kGrpcTraceContextSize;
+constexpr size_t TraceContextEncoding::kEncodeDecodeFailure;
+constexpr size_t TraceContextEncoding::kVersionIdSize;
+constexpr size_t TraceContextEncoding::kFieldIdSize;
+constexpr size_t TraceContextEncoding::kVersionIdOffset;
+constexpr size_t TraceContextEncoding::kVersionId;
     
-    #include 'base/run_loop.h'
-#include 'base/values.h'
-#include 'base/strings/utf_string_conversions.h'
-#include 'base/message_loop/message_loop_current.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/public/browser/render_frame_host.h'
-#include 'content/public/browser/render_view_host.h'
-#include 'content/public/browser/render_widget_host_view.h'
-#include 'content/public/browser/web_contents.h'
-#include 'extensions/browser/app_window/app_window.h'
-#include 'skia/ext/image_operations.h'
-#include 'ui/aura/client/screen_position_client.h'
-#include 'ui/aura/window.h'
-#include 'ui/aura/window_tree_host.h'
-#include 'ui/events/platform/platform_event_source.h'
-#include 'ui/views/controls/menu/menu_runner.h'
-#include 'ui/views/widget/widget.h'
-#include 'ui/views/focus/focus_manager.h'
-#include 'vector'
+    #ifndef GRPC_INTERNAL_CPP_EXT_PROTO_SERVER_REFLECTION_H
+#define GRPC_INTERNAL_CPP_EXT_PROTO_SERVER_REFLECTION_H
     
-    void MenuItem::CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) {
-  if (method == 'GetChecked') {
-    result->AppendBoolean(GetChecked());
-  } else {
-    NOTREACHED() << 'Invalid call to MenuItem method:' << method
-                 << ' arguments:' << arguments;
+    #include 'src/cpp/ext/proto_server_reflection.h'
+    
+    #include 'src/core/lib/gprpp/thd.h'
+    
+        std::unique_ptr<DHTMessageFactory> messageFactory;
+    
+    class DHTMessageCallback;
+    
+    
+    {  void serialize(const std::string& filename);
+};
+    
+    
+    {} // namespace aria2
+    
+    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
+                                           const std::string& ipaddr,
+                                           uint16_t port) const
+{
+  return generateToken(infoHash, ipaddr, port, secret_[0]);
+}
+    
+      virtual ~DHTTokenUpdateCommand();
+    
+    DHTUnknownMessage::DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
+                                     const unsigned char* data, size_t length,
+                                     const std::string& ipaddr, uint16_t port)
+    : DHTMessage(localNode, std::shared_ptr<DHTNode>()),
+      length_(length),
+      ipaddr_(ipaddr),
+      port_(port)
+{
+  if (length_ == 0) {
+    data_ = nullptr;
+  }
+  else {
+    data_ = new unsigned char[length];
+    memcpy(data_, data, length);
   }
 }
     
-    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
- public:
-  NwMenuGetNSStringWithFixupFunction(){}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    
- protected:
-  ~NwMenuGetNSStringWithFixupFunction() override {}
-    
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
-};
-    
-        base::LazyInstance<NwDesktopCaptureMonitor>::Leaky
-      g_desktop_capture_monitor = LAZY_INSTANCE_INITIALIZER;
-    
-    #include 'extensions/browser/extension_function.h'
-    
-    ```
-    
-    namespace caffe2 {
+      void OperateCache(ThreadState* thread) {
+    for (uint64_t i = 0; i < FLAGS_ops_per_thread; i++) {
+      uint64_t rand_key = thread->rnd.Next() % FLAGS_max_key;
+      // Cast uint64* to be char*, data would be copied to cache
+      Slice key(reinterpret_cast<char*>(&rand_key), 8);
+      int32_t prob_op = thread->rnd.Uniform(100);
+      if (prob_op >= 0 && prob_op < FLAGS_insert_percent) {
+        // do insert
+        cache_->Insert(key, new char[10], 1, &deleter);
+      } else if (prob_op -= FLAGS_insert_percent &&
+                 prob_op < FLAGS_lookup_percent) {
+        // do lookup
+        auto handle = cache_->Lookup(key);
+        if (handle) {
+          cache_->Release(handle);
+        }
+      } else if (prob_op -= FLAGS_lookup_percent &&
+                 prob_op < FLAGS_erase_percent) {
+        // do erase
+        cache_->Erase(key);
+      }
     }
-    
-    OPERATOR_SCHEMA(GatherRangesToDense)
-    .NumInputs(2, 3)
-    .NumOutputs(1, INT_MAX)
-    .SetDoc(R'DOC(
-Given DATA tensor of rank 1, and RANGES tensor of rank 3, gather values
-corresponding to each range into a separate output tensor. If the optional input
-KEY tensor is also given, the output will be sorted by KEY for each example.
-    
-      // Compute the foreground pixel density for a tbox area.
-  float ComputeForegroundDensity(const TBOX& tbox);
-    
-      /**
-   * Page/ResultIterators may be copied! This makes it possible to iterate over
-   * all the objects at a lower level, while maintaining an iterator to
-   * objects at a higher level. These constructors DO NOT CALL Begin, so
-   * iterations will continue from the location of src.
-   */
-  PageIterator(const PageIterator& src);
-  const PageIterator& operator=(const PageIterator& src);
-    
-      STRING lword_text;   // the UTF-8 text of the leftmost werd
-  STRING rword_text;   // the UTF-8 text of the rightmost werd
-    
-    #define UNLV_EXT  '.uzn'  // unlv zone file
-    
-     private:
-  std::shared_ptr<Cache> cache_;
-  uint32_t num_threads_;
-    
-      int64_t num_record_drop_hidden = 0;
-  int64_t num_record_drop_obsolete = 0;
-  int64_t num_record_drop_range_del = 0;
-  int64_t num_range_del_drop_obsolete = 0;
-  // Deletions obsoleted before bottom level due to file gap optimization.
-  int64_t num_optimized_del_drop_obsolete = 0;
-  uint64_t total_filter_time = 0;
-    
-      virtual Status Flush() override;
-  virtual Status Sync() override;
-  virtual Status Fsync() override;
-  virtual Status Close() override;
-    
-      // Do a write outside of the transaction to key 'y'
-  s = db->Put(write_options, 'y', 'y');
-    
-    #include 'rocksdb/env.h'
-#include 'rocksdb/slice.h'
-#include 'rocksdb/statistics.h'
-#include 'rocksdb/status.h'
+  }
     
     namespace rocksdb {
     }
+    
+      // open DB with two column families
+  std::vector<ColumnFamilyDescriptor> column_families;
+  // have to open default column family
+  column_families.push_back(ColumnFamilyDescriptor(
+      kDefaultColumnFamilyName, ColumnFamilyOptions()));
+  // open the new one, too
+  column_families.push_back(ColumnFamilyDescriptor(
+      'new_cf', ColumnFamilyOptions()));
+  std::vector<ColumnFamilyHandle*> handles;
+  s = DB::Open(DBOptions(), kDBPath, column_families, &handles, &db);
+  assert(s.ok());
+    
+    // Verify the checksum of file
+Status VerifySstFileChecksum(const Options& options,
+                             const EnvOptions& env_options,
+                             const std::string& file_path);
+#endif  // ROCKSDB_LITE
+    
+      // The maximum number of properties of an operation.
+  // This number should be set to the biggest NUM_XXX_PROPERTIES.
+  static const int kNumOperationProperties =
+      constexpr_max<NUM_COMPACTION_PROPERTIES, NUM_FLUSH_PROPERTIES>::result;
+    
+      // Submit a fire and forget jobs
+  // This allows to submit the same job multiple times
+  virtual void SubmitJob(const std::function<void()>&) = 0;
+  // This moves the function in for efficiency
+  virtual void SubmitJob(std::function<void()>&&) = 0;
+    
+    private:
+  State state_;
+  std::string message_;
+    
+    void Action::update(float /*time*/)
+{
+    CCLOG('[Action update]. override me');
+}
+    
+        /**
+    @brief Get the amplitude rate of the effect.
+    @return Return the amplitude rate of the effect.
+    */
+    float getAmplitudeRate() const { return _amplitudeRate; }
+    /**
+    @brief Set the amplitude rate of the effect.
+    @param amplitudeRate The value of amplitude rate will be set.
+    */
+    void setAmplitudeRate(float amplitudeRate) { _amplitudeRate = amplitudeRate; }
+    
+        /** Creates the action with the callback.
+    
+    
+    {}
+    
+    /**
+@brief Progress from a percentage to another percentage.
+@since v0.99.1
+*/
+class CC_DLL ProgressFromTo : public ActionInterval
+{
+public:
+    /** 
+     * @brief Create and initializes the action with a duration, a 'from' percentage and a 'to' percentage.
+     * @param duration Specify the duration of the ProgressFromTo action. It's a value in seconds.
+     * @param fromPercentage Specify the source percentage.
+     * @param toPercentage Specify the destination percentage.
+     * @return If the creation success, return a pointer of ProgressFromTo action; otherwise, return nil.
+     */
+    static ProgressFromTo* create(float duration, float fromPercentage, float toPercentage);
+    }
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+        // change element at index 1 (second element) to 'second'
+    array.at(1) = 'second';
+    
+        // create an array from std::list
+    std::list<bool> c_list {true, true, false, true};
+    json j_list(c_list);
+    
+        // print values
+    std::cout << object << '\n';
+    std::cout << *res1.first << ' ' << std::boolalpha << res1.second << '\n';
