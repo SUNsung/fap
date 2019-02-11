@@ -1,147 +1,168 @@
 
         
-              new_path = File.join(FastlaneCore.fastlane_user_dir, file_name)
-      did_show = File.exist?(new_path)
+              # This method returns an HTML safe string similar to what <tt>Array#join</tt>
+      # would return. The array is flattened, and all items, including
+      # the supplied separator, are HTML escaped unless they are HTML
+      # safe, and the returned string is marked as HTML safe.
+      #
+      #   safe_join([raw('<p>foo</p>'), '<p>bar</p>'], '<br />')
+      #   # => '<p>foo</p>&lt;br /&gt;&lt;p&gt;bar&lt;/p&gt;'
+      #
+      #   safe_join([raw('<p>foo</p>'), raw('<p>bar</p>')], raw('<br />'))
+      #   # => '<p>foo</p><br /><p>bar</p>'
+      #
+      def safe_join(array, sep = $,)
+        sep = ERB::Util.unwrapped_html_escape(sep)
     
-          it 'handles the extensions parameter with no elements correctly' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          ensure_no_debug_code(text: 'pry', path: '.', extensions: [])
-        end').runner.execute(:test)
-        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}'')
-      end
-    
-          it 'generates the correct git command' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          git_commit(path: './fastlane/README.md', message: 'message')
-        end').runner.execute(:test)
-    
-            context 'with given path to oclint' do
-          let(:result) do
-            Fastlane::FastFile.new.parse('lane :test do
-              oclint(
-                compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
-                oclint_path: 'test/bin/oclint'
-              )
-            end').runner.execute(:test)
+            class RadioButtonBuilder < Builder # :nodoc:
+          def radio_button(extra_html_options = {})
+            html_options = extra_html_options.merge(@input_html_options)
+            html_options[:skip_default_ids] = false
+            @template_object.radio_button(@object_name, @method_name, @value, html_options)
           end
-          let(:command) { 'cd #{File.expand_path('.').shellescape} && test/bin/oclint -report-type=html -o=oclint_report.html' }
-    
-        context 'with a postfix block' do
-      it 'yields the status, result and command' do
-        expect_command('ls', '-la')
-        Fastlane::Actions.sh('ls', '-la') do |status, result, command|
-          expect(status.exitstatus).to eq(0)
-          expect(result).to be_empty
-          expect(command).to eq('ls -la')
         end
-      end
     
-        os = 'windows'
-    shellescape_testcases.each do |testcase|
-      it testcase['it'] + ': ' + testcase['it_result'][os] do
-        str = testcase['str'].to_s
-        expect_correct_implementation_to_be_called(str, :shellescape, os)
-        escaped = str.shellescape
-        expect(escaped).to eq(testcase['expect'][os])
-      end
+        def message
+      @string.force_encoding(Encoding::ASCII_8BIT)
+      'Your template was not saved as valid #{@encoding}. Please ' \
+      'either specify #{@encoding} as the encoding for your template ' \
+      'in your text editor, or mark the template with its ' \
+      'encoding by inserting the following as the first line ' \
+      'of the template:\n\n# encoding: <name of correct encoding>.\n\n' \
+      'The source of your template was:\n\n#{@string}'
     end
   end
     
-        def current_url
-      context[:url]
-    end
-    
-        private
-    
-            doc
-      end
+        it 'returns a correct icon tag for other services' do
+      icon = omniauth_provider_icon(:'37signals')
+      expect(icon).to be_html_safe
+      elem = Nokogiri(icon).at('i.fa.fa-lock')
+      expect(elem).to be_a Nokogiri::XML::Element
     end
   end
-end
-
     
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have value #{expected.inspect} but was #{actual.value.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have value #{expected.inspect} but it had'
-  end
-end
-    
-        context 'on a public post from a stranger' do
+        describe '#agents_dot' do
       before do
-        @post = stranger.post :status_message, :text => 'something', :public => true, :to => 'all'
-      end
+        @agents = [
+          @foo = Agents::DotFoo.new(name: 'foo').tap { |agent|
+            agent.user = users(:bob)
+            agent.save!
+          },
     
-              code = InvitationCode.create(user: bob)
-    
-    Then(/^the invalid (.+) release is ignored$/) do |filename|
-  test = 'ls -g #{TestApp.releases_path} | grep #{filename}'
-  _, _, status = vagrant_cli_command('ssh -c #{test.shellescape}')
-  expect(status).to be_success
-end
-    
-        def backtrace_pattern
-      loc = Rake.application.find_rakefile_location
-      return unless loc
-    
-          def question
-        if default.nil?
-          I18n.t(:question, key: key, scope: :capistrano)
-        else
-          I18n.t(:question_default, key: key, default_value: default, scope: :capistrano)
-        end
-      end
-    
-          class Properties
-        def initialize
-          @properties = {}
-        end
-    
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   Cookie Tossing
-    # Supported browsers:: all
-    # More infos::         https://github.com/blog/1466-yummy-cookies-across-domains
-    #
-    # Does not accept HTTP requests if the HTTP_COOKIE header contains more than one
-    # session cookie. This does not protect against a cookie overflow attack.
-    #
-    # Options:
-    #
-    # session_key:: The name of the session cookie (default: 'rack.session')
-    class CookieTossing < Base
-      default_reaction :deny
-    
-          explicit_plugins_specs.each do |spec|
-        packet_gem.add(spec.name)
-      end
-    
-        puts('Generated at #{target_file}')
+        it 'defauls foreground and background colors' do
+      scenario.tag_fg_color = nil
+      scenario.tag_bg_color = nil
+      expect(style_colors(scenario)).to eq('color:#FFFFFF;background-color:#5BC0DE')
+    end
   end
     
-        def execute
-      raise PluginManager::FileNotFoundError, 'Can't file local file #{local_file}' unless ::File.exist?(local_file)
-      raise PluginManager::InvalidPackError, 'Invalid format, the pack must be in zip format' unless valid_format?(local_file)
+      it 'schould clean up expired events' do
+    mock(Event).cleanup_expired!
+    stub.instance_of(IO).puts
+    @scheduler.send(:cleanup_expired_events!)
+  end
     
-        # remove any version constrain from the Gemfile so the plugin(s) can be updated to latest version
-    # calling update without requirements will remove any previous requirements
-    plugins = plugins_to_update(previous_gem_specs_map)
-    # Skipping the major version validation when using a local cache as we can have situations
-    # without internet connection.
-    filtered_plugins = plugins.map { |plugin| gemfile.find(plugin) }
-      .compact
-      .reject { |plugin| REJECTED_OPTIONS.any? { |key| plugin.options.has_key?(key) } }
-      .each   { |plugin| gemfile.update(plugin.name) }
+          expect(Utils.unindent(<<-MD)).to eq('Hello World\nThis is\nnot indented')
+        Hello World
+        This is
+        not indented
+      MD
     
-          it 'display a list of installed plugins' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --installed')
-        expect(result.stdout.split('\n').size).to be > 1
+      let :valid_options do
+    {
+      'name' => 'XKCD',
+      'expected_update_period_in_days' => '2',
+      'type' => 'html',
+      'url' => '{{ url | default: 'http://xkcd.com/' }}',
+      'mode' => 'on_change',
+      'extract' => old_extract,
+      'template' => old_template
+    }
+  end
+    
+    module Admin
+  class CustomEmojisController < BaseController
+    before_action :set_custom_emoji, except: [:index, :new, :create]
+    before_action :set_filter_params
+    
+        def new
+      authorize :email_domain_block, :create?
+      @email_domain_block = EmailDomainBlock.new
+    end
+    
+    class Api::SubscriptionsController < Api::BaseController
+  before_action :set_account
+  respond_to :txt
+    
+        # Mobile devices do not support regular notifications, so we enable push notifications by default
+    alerts_enabled = active_session.detection.device.mobile? || active_session.detection.device.tablet?
+    
+    class FormulaPin
+  def initialize(f)
+    @f = f
+  end
+    
+            expect(path).to have_valid_bash_syntax
+      end
+    end
+  end
+    
+        # Tells optparse how to parse the arguments
+    # available for all executables.
+    #
+    # This is meant to be overridden by subclasses
+    # so they can add their own options.
+    #
+    # @param opts [OptionParser]
+    def set_opts(opts)
+      Sass::Util.abstract(this)
+    end
+    
+          opts.on('-s', '--stdin', :NONE,
+              'Read input from standard input instead of an input file.',
+              'This is the default if no input file is specified.') do
+        @options[:input] = $stdin
       end
     
-    shared_examples 'logstash update' do |logstash|
-  describe 'logstash-plugin update on #{logstash.hostname}' do
-    before :each do
-      logstash.install({:version => LOGSTASH_VERSION})
-    end
+          # Returns the time the given Sass file was last modified.
+      #
+      # If the given file has been deleted or the time can't be accessed
+      # for some other reason, this should return nil.
+      #
+      # @param uri [String] The URI of the file to check.
+      #   Comes from a `:filename` option set on an engine returned by this importer.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` currently being checked.
+      # @return [Time, nil]
+      def mtime(uri, options)
+        Sass::Util.abstract(self)
+      end
+    
+      def output(output_path)
+    # See https://github.com/jordansissel/fpm/issues/1090
+    # require xz later, because this triggers a load of liblzma.so.5 that is
+    # unavailable on older CentOS/RH distros.
+    require 'xz'
+    output_check(output_path)
+    
+      def output(output_path)
+    self.scripts.each do |name, path|
+      case name
+        when 'pre-install'
+          safesystem('cp', path, './preinstall')
+          File.chmod(0755, './preinstall')
+        when 'post-install'
+          safesystem('cp', path, './postinstall')
+          File.chmod(0755, './postinstall')
+        when 'pre-uninstall'
+          raise FPM::InvalidPackageConfiguration.new(
+            'pre-uninstall is not supported by Solaris packages'
+          )
+        when 'post-uninstall'
+          raise FPM::InvalidPackageConfiguration.new(
+            'post-uninstall is not supported by Solaris packages'
+          )
+      end # case name
+    end # self.scripts.each
+    
+        safesystem('tar', *args)
