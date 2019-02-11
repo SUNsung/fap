@@ -1,235 +1,828 @@
 
         
-            const auto* shapes_and_types = c.output_handle_shapes_and_types(i);
-    if (shapes_and_types != nullptr) {
-      auto* out_handle_data = out.mutable_handle_data();
-      out_handle_data->set_is_set(true);
-      for (const auto& p : *shapes_and_types) {
-        auto* out_shape_and_type = out_handle_data->add_shape_and_type();
-        ProtoFromShapeHandle(p.shape, &c, out_shape_and_type->mutable_shape());
-        out_shape_and_type->set_dtype(p.dtype);
+          virtual void BeforeFirst(void) {
+    loc_ = 0;
+  }
+    
+        caffe::TBlob2CaffeBlob<xpu, Dtype>(caffe::Data,
+                                       bot_.begin(),
+                                       in_data.begin(),
+                                       param_.num_data);
+    caffe::TBlob2CaffeBlob<xpu, Dtype>(caffe::Data,
+                                       top_.begin(),
+                                       out_data.begin(),
+                                       param_.num_out);
+    CaffeOpSetup();
+    // Init caffe's weight pointer
+    if (!init_w_) {
+      init_w_ = true;
+      caffe::TBlob2CaffeBlob<xpu, Dtype>(caffe::Data,
+                                         wei_.begin(),
+                                         in_data.begin() + param_.num_data,
+                                         param_.num_weight);
+      caffe::SetOpBlobs(caffeOp_, wei_);
+    }
+    if (ctx.is_train)
+      MXCAFFELAYER(caffeOp_, Dtype)->SetPhase(::caffe::TRAIN);
+    else
+      MXCAFFELAYER(caffeOp_, Dtype)->SetPhase(::caffe::TEST);
+    caffeOp_->Forward(bot_, top_);
+    
+    
+MXNET_DLL int MXCVResize(NDArrayHandle src, const mx_uint w, const mx_uint h,
+                         const int interpolation, NDArrayHandle *out) {
+  API_BEGIN();
+  NDArray ndsrc = *static_cast<NDArray*>(src);
+  CHECK_EQ(ndsrc.shape().ndim(), 3);
+  CHECK_EQ(ndsrc.ctx(), Context::CPU());
+  CHECK_EQ(ndsrc.dtype(), mshadow::kUint8);
+    }
+    
+      virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) {
+    param_.InitAllowUnknown(kwargs);
+    base_->Init(kwargs);
+    rnd_.seed(kRandMagic + param_.seed);
+    outimg_.set_pad(false);
+    meanimg_.set_pad(false);
+    if (param_.mean_img.length() != 0) {
+      std::unique_ptr<dmlc::Stream> fi(
+          dmlc::Stream::Create(param_.mean_img.c_str(), 'r', true));
+      if (fi.get() == nullptr) {
+        this->CreateMeanImg();
+      } else {
+        fi.reset(nullptr);
+        if (param_.verbose) {
+          LOG(INFO) << 'Load mean image from ' << param_.mean_img;
+        }
+        // use python compatible ndarray store format
+        std::vector<NDArray> data;
+        std::vector<std::string> keys;
+        {
+          std::unique_ptr<dmlc::Stream> fi(dmlc::Stream::Create(param_.mean_img.c_str(), 'r'));
+          NDArray::Load(fi.get(), &data, &keys);
+        }
+        CHECK_EQ(data.size(), 1)
+            << 'Invalid mean image file format';
+        data[0].WaitToRead();
+        mshadow::Tensor<cpu, 3> src = data[0].data().get<cpu, 3, real_t>();
+        meanimg_.Resize(src.shape_);
+        mshadow::Copy(meanimg_, src);
+        meanfile_ready_ = true;
       }
     }
-    
-    // Get the python wrappers for a list of ops in a OpList.
-// `op_list_buf` should be a pointer to a buffer containing
-// the binary encoded OpList proto, and `op_list_len` should be the
-// length of that buffer.
-string GetPythonWrappers(const char* op_list_buf, size_t op_list_len);
-    
-    #include 'tensorflow/core/framework/op.h'
+  }
     
     
-    {
-    {}  // namespace cuda
-}  // namespace stream_executor
+    {    delete matcher;
+    delete pat;
+    return retVal;
+}
+    
+    ScientificNumberFormatter *ScientificNumberFormatter::createMarkupInstance(
+        const Locale &locale,
+        const UnicodeString &beginMarkup,
+        const UnicodeString &endMarkup,
+        UErrorCode &status) {
+    return createInstance(
+            static_cast<DecimalFormat *>(
+                    DecimalFormat::createScientificInstance(locale, status)),
+            new MarkupStyle(beginMarkup, endMarkup),
+            status);
+}
+    
+    #if !UCONFIG_NO_BREAK_ITERATION
+    
+    U_NAMESPACE_END
+    
+    class NumberFormat;
+    
+        static const int32_t gDigitCount[] = {
+        1,1,1,1,1,1,1,1,
+        1,1,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4};
+    
+    
+/**
+ * A formatter for small, positive integers.
+ */
+class U_I18N_API SmallIntFormatter : public UMemory {
+public:
+    /**
+     * Estimates the actual digit count needed to format positiveValue
+     * using the given range of digit counts.
+     * Returns a value that is at least the actual digit count needed.
+     *
+     * @param positiveValue the value to format
+     * @param range the acceptable range of digit counts.
+     */
+    static int32_t estimateDigitCount(
+            int32_t positiveValue, const IntDigitCountRange &range);
+    }
+    
+    #endif   // #if !UCONFIG_NO_FORMATTING
+#endif   // SMPDTFST_H
 
     
-        /** Colorize an icon (given filename) with the text color */
-    QIcon TextColorIcon(const QString& filename) const;
+    #endif /* #if !UCONFIG_NO_TRANSLITERATION */
+    
+        const auto query_duration =
+        std::chrono::duration_cast<std::chrono::milliseconds>(
+            code_profiler_data_end.getWallTime() -
+            code_profiler_data_->getWallTime());
+    
+      /// equals operator
+  bool operator==(const ScheduledQuery& comp) const {
+    return (comp.query == query) && (comp.interval == interval);
+  }
     
     
-    {private Q_SLOTS:
-    /* sign message */
-    void on_addressBookButton_SM_clicked();
-    void on_pasteButton_SM_clicked();
-    void on_signMessageButton_SM_clicked();
-    void on_copySignatureButton_SM_clicked();
-    void on_clearButton_SM_clicked();
-    /* verify message */
-    void on_addressBookButton_VM_clicked();
-    void on_verifyMessageButton_VM_clicked();
-    void on_clearButton_VM_clicked();
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += (*(this->success)).read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+    
+    
+  virtual ~Extension_ping_presult() throw();
+  ExtensionStatus* success;
+    
+    
+    {};
+    
+    #include <boost/algorithm/string/join.hpp>
+#include <boost/algorithm/string/predicate.hpp>
+    
+    struct ID3D10Device;
+    
+        // Create Vulkan Instance
+    {
+        VkInstanceCreateInfo create_info = {};
+        create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+        create_info.enabledExtensionCount = extensions_count;
+        create_info.ppEnabledExtensionNames = extensions;
+    }
+    
+        // Main loop
+    MSG msg;
+    ZeroMemory(&msg, sizeof(msg));
+    ShowWindow(hwnd, SW_SHOWDEFAULT);
+    UpdateWindow(hwnd);
+    while (msg.message != WM_QUIT)
+    {
+        // Poll and handle messages (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
+        {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+            continue;
+        }
+    }
+    
+    // CHANGELOG
+// (minor and older changes stripped away, please see git history for details)
+//  2018-11-30: Misc: Setting up io.BackendPlatformName so it can be displayed in the About Window.
+//  2018-03-22: Added FreeGLUT Platform binding.
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    namespace ImGuiFreeType
+{
+    // Hinting greatly impacts visuals (and glyph sizes).
+    // When disabled, FreeType generates blurrier glyphs, more or less matches the stb's output.
+    // The Default hinting mode usually looks good, but may distort glyphs in an unusual way.
+    // The Light hinting mode generates fuzzier glyphs but better matches Microsoft's rasterizer.
+    }
+    
+    void DHTReplaceNodeTask::startup() { sendMessage(); }
+    
+    std::string DHTResponseMessage::toString() const
+{
+  return fmt('dht response %s TransactionID=%s Remote:%s(%u), id=%s, v=%s, %s',
+             getMessageType().c_str(), util::toHex(getTransactionID()).c_str(),
+             getRemoteNode()->getIPAddress().c_str(),
+             getRemoteNode()->getPort(),
+             util::toHex(getRemoteNode()->getID(), DHT_ID_LENGTH).c_str(),
+             util::torrentPercentEncode(getVersion()).c_str(),
+             toStringOptional().c_str());
+}
+    
+    DHTRoutingTable::~DHTRoutingTable() = default;
+    
+    public:
+  DHTRoutingTableSerializer(int family);
+    
+        taskFactory->setLocalNode(localNode);
+    taskFactory->setRoutingTable(routingTable.get());
+    taskFactory->setMessageDispatcher(dispatcher.get());
+    taskFactory->setMessageFactory(factory.get());
+    taskFactory->setTaskQueue(taskQueue.get());
+    taskFactory->setTimeout(std::chrono::seconds(messageTimeout));
+    
+    
+    {} // namespace aria2
+    
+    namespace aria2 {
+    }
+    
+    #include 'DHTTaskQueue.h'
+#include 'DHTTaskExecutor.h'
+    
+    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
+                                           const std::string& ipaddr,
+                                           uint16_t port) const
+{
+  return generateToken(infoHash, ipaddr, port, secret_[0]);
+}
+    
+    
+    {} // namespace aria2
+    
+    
+    {    std::vector<std::string> input_file_names;
+    for (auto level : cf_meta.levels) {
+      for (auto file : level.files) {
+        if (file.being_compacted) {
+          return nullptr;
+        }
+        input_file_names.push_back(file.name);
+      }
+    }
+    return new CompactionTask(
+        db, this, cf_name, input_file_names,
+        options_.num_levels - 1, compact_options_, false);
+  }
+    
+    std::string kDBPath = '/tmp/rocksdb_simple_example';
+    
+    
+    {  virtual ~FlushBlockPolicyFactory() { }
 };
     
-    static void secp256k1_hmac_sha256_initialize(secp256k1_hmac_sha256_t *hash, const unsigned char *key, size_t keylen) {
-    int n;
-    unsigned char rkey[64];
-    if (keylen <= 64) {
-        memcpy(rkey, key, keylen);
-        memset(rkey + keylen, 0, 64 - keylen);
-    } else {
-        secp256k1_sha256_t sha256;
-        secp256k1_sha256_initialize(&sha256);
-        secp256k1_sha256_write(&sha256, key, keylen);
-        secp256k1_sha256_finalize(&sha256, rkey);
-        memset(rkey + 32, 0, 32);
-    }
+    // Abstract handle to particular state of a DB.
+// A Snapshot is an immutable object and can therefore be safely
+// accessed from multiple threads without any external synchronization.
+//
+// To Create a Snapshot, call DB::GetSnapshot().
+// To Destroy a Snapshot, call DB::ReleaseSnapshot(snapshot).
+class Snapshot {
+ public:
+  // returns Snapshot's sequence number
+  virtual SequenceNumber GetSequenceNumber() const = 0;
     }
     
-    static void secp256k1_ecdsa_recoverable_signature_load(const secp256k1_context* ctx, secp256k1_scalar* r, secp256k1_scalar* s, int* recid, const secp256k1_ecdsa_recoverable_signature* sig) {
-    (void)ctx;
-    if (sizeof(secp256k1_scalar) == 32) {
-        /* When the secp256k1_scalar type is exactly 32 byte, use its
-         * representation inside secp256k1_ecdsa_signature, as conversion is very fast.
-         * Note that secp256k1_ecdsa_signature_save must use the same representation. */
-        memcpy(r, &sig->data[0], 32);
-        memcpy(s, &sig->data[32], 32);
-    } else {
-        secp256k1_scalar_set_b32(r, &sig->data[0], NULL);
-        secp256k1_scalar_set_b32(s, &sig->data[32], NULL);
-    }
-    *recid = sig->data[64];
-}
+      enum OperationStage : int {
+    STAGE_UNKNOWN = 0,
+    STAGE_FLUSH_RUN,
+    STAGE_FLUSH_WRITE_L0,
+    STAGE_COMPACTION_PREPARE,
+    STAGE_COMPACTION_RUN,
+    STAGE_COMPACTION_PROCESS_KV,
+    STAGE_COMPACTION_INSTALL,
+    STAGE_COMPACTION_SYNC_FILE,
+    STAGE_PICK_MEMTABLES_TO_FLUSH,
+    STAGE_MEMTABLE_ROLLBACK,
+    STAGE_MEMTABLE_INSTALL_FLUSH_RESULTS,
+    NUM_OP_STAGES
+  };
     
-    int UniValue::get_int() const
-{
-    if (typ != VNUM)
-        throw std::runtime_error('JSON value is not an integer as expected');
-    int32_t retval;
-    if (!ParseInt32(getValStr(), &retval))
-        throw std::runtime_error('JSON integer out of range');
-    return retval;
-}
-    
-    const Message* GetCProtoInsidePyProto(PyObject* msg) {
-  return GetCProtoInsidePyProtoPtr(msg);
-}
-Message* MutableCProtoInsidePyProto(PyObject* msg) {
-  return MutableCProtoInsidePyProtoPtr(msg);
-}
-    
-    bool ParseAnyTypeUrl(const string& type_url, string* url_prefix,
-                     string* full_type_name) {
-  size_t pos = type_url.find_last_of('/');
-  if (pos == string::npos || pos + 1 == type_url.size()) {
-    return false;
-  }
-  if (url_prefix) {
-    *url_prefix = type_url.substr(0, pos + 1);
-  }
-  *full_type_name = type_url.substr(pos + 1);
-  return true;
-}
-    
-    // Check whether there is any type defined in the proto file that has
-// the given class name.
-bool ClassNameResolver::HasConflictingClassName(
-    const FileDescriptor* file, const string& classname) {
-  for (int i = 0; i < file->enum_type_count(); i++) {
-    if (file->enum_type(i)->name() == classname) {
-      return true;
-    }
-  }
-  for (int i = 0; i < file->service_count(); i++) {
-    if (file->service(i)->name() == classname) {
-      return true;
-    }
-  }
-  for (int i = 0; i < file->message_type_count(); i++) {
-    if (MessageHasConflictingClassName(file->message_type(i), classname)) {
-      return true;
-    }
-  }
-  return false;
-}
-    
-    void OneofGenerator::GeneratePropertyImplementation(io::Printer* printer) {
-  printer->Print(
-      variables_,
-      '@dynamic $name$OneOfCase;\n');
-}
+      void Dump(Logger* logger) const;
     
     
-  string error;
-  bool succeeded = generator.GenerateAll(
-      parsed_files, request.parameter(), &context, &error);
+    {}  // namespace rocksdb
+#endif  // !ROCKSDB_LITE
+
     
-    #ifndef B2_POLYGON_H
-#define B2_POLYGON_H
-    
-    
-    {		}
-    
-    #define UNIT_QUANT_SHIFT 2
-#define UNIT_QUANT_FACTOR (1 << UNIT_QUANT_SHIFT)
-    
-    TEdge *GetMaximaPair(TEdge *e)
-{
-  if ((e->Next->Top == e->Top) && !e->Next->NextInLML)
-    return e->Next;
-  else if ((e->Prev->Top == e->Top) && !e->Prev->NextInLML)
-    return e->Prev;
-  else return 0;
-}
-//------------------------------------------------------------------------------
-    
-    int fastlz_compress_level(int level, const void* input, int length, void* output);
-    
-    /** 16x16 multiplication where the result fits in 32 bits */
-#undef MULT16_16
-static OPUS_INLINE opus_val32 MULT16_16_armv5e(opus_val16 a, opus_val16 b)
-{
-  int res;
-  __asm__(
-      '#MULT16_16\n\t'
-      'smulbb %0, %1, %2;\n'
-      : '=r'(res)
-      : 'r'(a), 'r'(b)
-  );
-  return res;
-}
-#define MULT16_16(a, b) (MULT16_16_armv5e(a, b))
-    
-    #define MULT16_16_P13(a,b) (SHR(ADD32(4096,MULT16_16((a),(b))),13))
-#define MULT16_16_P14(a,b) (SHR(ADD32(8192,MULT16_16((a),(b))),14))
-#define MULT16_16_P15(a,b) (SHR(ADD32(16384,MULT16_16((a),(b))),15))
-    
-    namespace CNTK
-{
-    class CompositeMinibatchSource final : public MinibatchSource
-    {
-        static const std::wstring PositionAttributeName;
-        static const std::wstring DistributedAfterSampleCountAttributeName;
-    }
-    }
-    
-            ValidateType<T>(dict, typeValue, currentVersion);
-    
-            DataType aggregateDataType = m_aggregatedLossFunction->Output().GetDataType();
-    
-        /*virtual*/ ValuePtr Value::DeepClone(bool readOnly/* = false*/) const
-    {
-        // TODO: Check if this is a derived type and throw an exception in that case
-        return MakeSharedObject<Value>(Data()->DeepClone(readOnly), (Mask() != nullptr) ? Mask()->DeepClone() : nullptr);
-    }
-    
-            VariableKind kind = VariableKind(dict[kindKey].Value<std::size_t>());
-        if (kind != VariableKind::Constant &&
-            kind != VariableKind::Input &&
-            kind != VariableKind::Parameter &&
-            kind != VariableKind::Placeholder)
-        {
-            LogicError('Unexpected variable kind '%ls':'%u' (%s).',
-                       kindKey.c_str(),
-                       static_cast<std::underlying_type<VariableKind>::type>(kind),
-                       GetVersionsString<Variable>(s_serializationVersion, version).c_str());
-        }
-        
-        DataType dataType = DataType(dict[dataTypeKey].Value<std::size_t>());
-        if (dataType != DataType::Unknown &&
-            dataType != DataType::Float &&
-            dataType != DataType::Double &&
-            dataType != DataType::Float16 &&
-            dataType != DataType::Int8 &&
-            dataType != DataType::Int16)
-        {
-            LogicError('Unexpected variable datatype '%ls':'%u' (%s).', 
-                       dataTypeKey.c_str(), 
-                       static_cast<std::underlying_type<DataType>::type>(dataType),
-                       GetVersionsString<Variable>(s_serializationVersion, version).c_str());
-        }
-        
-        const vector<DictionaryValue>& dictionaryValueVector = dict[dynamicAxisKey].Value<vector<DictionaryValue>>();
-        vector<Axis> dynamicAxis;
-        dynamicAxis.reserve(dictionaryValueVector.size());
-        for (const auto& dictionaryValue : dictionaryValueVector)
-        {
-            dynamicAxis.push_back(dictionaryValue.Value<Axis>());
-        }
-    
-    
-    {
-    {        SetDims(TensorShape::Scalar(Environment().IsV2Library()), Input(0)->HasMBLayout()); // each column is reduced to a scalar
-    }
-};
+      LDBCommandExecuteResult(State state, std::string& msg) :
+    state_(state), message_(msg) {}
