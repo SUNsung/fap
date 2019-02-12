@@ -1,229 +1,246 @@
 
-    {  // Moving to a message on the arena should lead to a copy.
-  *message2_on_arena = std::move(message1);
-  EXPECT_NE(nested, &message2_on_arena->optional_nested_message());
-  TestUtil::ExpectAllFieldsSet(message1);
-  TestUtil::ExpectAllFieldsSet(*message2_on_arena);
-}
-    
-    void WriteEnumValueDocComment(io::Printer* printer,
-                              const EnumValueDescriptor* value) {
-  printer->Print('/**\n');
-  WriteDocCommentBody(printer, value);
-  printer->Print(
-    ' * <code>$def$</code>\n'
-    ' */\n',
-    'def', EscapeJavadoc(FirstLineOf(value->DebugString())));
-}
-    
-    #include <google/protobuf/compiler/java/java_context.h>
-#include <google/protobuf/compiler/java/java_enum_field.h>
-#include <google/protobuf/compiler/java/java_extension.h>
-#include <google/protobuf/compiler/java/java_extension_lite.h>
-#include <google/protobuf/compiler/java/java_field.h>
-#include <google/protobuf/compiler/java/java_helpers.h>
-#include <google/protobuf/compiler/java/java_message.h>
-#include <google/protobuf/compiler/java/java_message_lite.h>
-#include <google/protobuf/compiler/java/java_service.h>
-    
-      string error_msg;
-  CodeGeneratorResponse response;
-    
-        NDMask::NDMask(const NDShape& shape, Matrix<char>* matrix)
-        : m_device(AsDeviceDescriptor(matrix->GetDeviceId())), m_maskShape(shape)
-    {
-        m_matrixView = std::shared_ptr<Matrix<char>>(matrix, [](Matrix<char>* ptr) { delete ptr; });
+        
+        namespace atom {
     }
     
-            // (start, end) values in the current window to be reported.
-        std::pair<double, double> m_loss;
-        std::pair<double, double> m_metric;
-        std::pair<size_t, size_t> m_samples;
-        std::pair<size_t, size_t> m_updates;
-    
-            NDShape m_shape;
-        VariableKind m_varKind;
-        ::CNTK::DataType m_dataType;
-        std::weak_ptr<Function> m_ownerFunction;
-        std::unique_ptr<std::once_flag> m_initValueFlag;
-        NDArrayViewPtr m_value;
-        std::unique_ptr<ParameterInitializer> m_valueInitializer;
-        std::unique_ptr<DeviceDescriptor> m_valueInitializationDevice;
-        bool m_needsGradient;
-        std::wstring m_name;
-        std::vector<Axis> m_dynamicAxes;
-        bool m_isSparse;
-        std::wstring m_uid;
-        std::atomic<size_t> m_valueTimeStamp;
-        Variable m_blockFunctionVariableMapping;
-    
-    static inline size_t rand(const size_t begin, const size_t end)
-{
-    const size_t randno = ::rand() * RAND_MAX + ::rand(); // BUGBUG: still only covers 32-bit range
-    return begin + randno % (end - begin);
-}
-    
-        ImGuiIO &io = ImGui::GetIO();
+    #include 'atom/browser/api/event_emitter.h'
+#include 'atom/common/key_weak_map.h'
+#include 'base/bind.h'
+#include 'base/memory/weak_ptr.h'
+#include 'native_mate/object_template_builder.h'
     
     
-    {    return frameCtxt;
-}
+    {}  // namespace atom
     
-    #include 'imgui.h'
-#include 'imgui_impl_dx11.h'
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-            glBindBuffer(GL_ARRAY_BUFFER, g_VboHandle);
-        glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr)cmd_list->VtxBuffer.Size * sizeof(ImDrawVert), (const GLvoid*)cmd_list->VtxBuffer.Data, GL_STREAM_DRAW);
-    
-    // Called by Init/NewFrame/Shutdown
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateFontsTexture();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyFontsTexture();
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateDeviceObjects();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyDeviceObjects();
+    {}  // namespace auto_updater
 
     
-    /** @class Speed
- * @brief Changes the speed of an action, making it take longer (speed>1)
- * or shorter (speed<1) time.
- * Useful to simulate 'slow motion' or 'fast forward' effect.
- * @warning This action can't be Sequenceable because it is not an IntervalAction.
- */
-class CC_DLL Speed : public Action
+    #endif  // ATOM_BROWSER_LIB_POWER_OBSERVER_H_
+
+    
+      // Pricing Information
+  double price = 0.0;
+  std::string formattedPrice;
+    
+    // Sent by the renderer when the draggable regions are updated.
+IPC_MESSAGE_ROUTED1(ShellViewHostMsg_UpdateDraggableRegions,
+                    std::vector<extensions::DraggableRegion> /* regions */)
+    
+    // Call method of an object in browser.
+// function CallObjectMethod(id, type, method, args);
+v8::Handle<v8::Value> CallObjectMethod(int routing_id,
+                                       int object_id,
+                                       const std::string& type,
+                                       const std::string& method,
+                                       v8::Handle<v8::Value> args);
+    
+    class BaseEvent {
+  friend class EventListener;
+  DISALLOW_COPY_AND_ASSIGN(BaseEvent);
+    }
+    
+       void ExecuteCommand(int command_id, int event_flags) override;
+    
+      // implement nw.Screen.stopMonitor()
+  class NwScreenStopMonitorFunction : public NWSyncExtensionFunction {
+  public:
+    NwScreenStopMonitorFunction();
+    bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    enum GARBAGE_LEVEL
 {
-public:
-    /** Create the action and set the speed.
-     *
-     * @param action An action.
-     * @param speed The action speed.
-     */
-    static Speed* create(ActionInterval* action, float speed);
-    /** Return the speed.
-     *
-     * @return The action speed.
-     */
-    float getSpeed() const { return _speed; }
-    /** Alter the speed of the inner function in runtime. 
-     *
-     * @param speed Alter the speed of the inner function in runtime.
-     */
-    void setSpeed(float speed) { _speed = speed; }
+  G_NEVER_CRUNCH,
+  G_OK,
+  G_DODGY,
+  G_TERRIBLE
+};
+    
+      // Check if part from seed2 label: with low math density and left indented. We
+  // are using two checks:
+  // 1. If its left is aligned with any coordinates in indented_texts_left,
+  // which we assume have been sorted.
+  // 2. If its foreground density is over foreground_density_th.
+  bool CheckForSeed2(
+      const GenericVector<int>& indented_texts_left,
+      const float foreground_density_th,
+      ColPartition* part);
+    
+      // Array holding scores for each orientation id [0,3].
+  // Orientation ids [0..3] map to [0, 270, 180, 90] degree orientations of the
+  // page respectively, where the values refer to the amount of clockwise
+  // rotation to be applied to the page for the text to be upright and readable.
+  float orientations[4];
+  // Script confidence scores for each of 4 possible orientations.
+  float scripts_na[4][kMaxNumberOfScripts];
+    
+    // Main entry point for Paragraph Detection Algorithm.
+//
+// Given a set of equally spaced textlines (described by row_infos),
+// Split them into paragraphs.  See http://goto/paragraphstalk
+//
+// Output:
+//   row_owners - one pointer for each row, to the paragraph it belongs to.
+//   paragraphs - this is the actual list of PARA objects.
+//   models - the list of paragraph models referenced by the PARA objects.
+//            caller is responsible for deleting the models.
+void DetectParagraphs(int debug_level,
+                      GenericVector<RowInfo> *row_infos,
+                      GenericVector<PARA *> *row_owners,
+                      PARA_LIST *paragraphs,
+                      GenericVector<ParagraphModel *> *models);
+    
+    // Getter for the value.
+STRING ParamContent::GetValue() const {
+  STRING result;
+  if (param_type_ == VT_INTEGER) {
+    result.add_str_int('', *iIt);
+  } else if (param_type_ == VT_BOOLEAN) {
+    result.add_str_int('', *bIt);
+  } else if (param_type_ == VT_DOUBLE) {
+    result.add_str_double('', *dIt);
+  } else if (param_type_ == VT_STRING) {
+    if (((STRING) * (sIt)).string() != nullptr) {
+      result = sIt->string();
+    } else {
+      result = 'Null';
     }
-    
-    class Node;
-    
-        if (action && action->initWithDuration(duration, gridSize, waves, amplitude))
-    {
-        action->autorelease();
-        return action;
-    }
-    
-        //
-    // Overrides
-    //
-    virtual ScaleTo* clone() const override;
-    virtual ScaleTo* reverse() const override;
-    virtual void startWithTarget(Node *target) override;
-    /**
-     * @param time In seconds.
-     */
-    virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    ScaleTo() {}
-    virtual ~ScaleTo() {}
-    
-    // remove
-    
-    /** @class ActionManager
- @brief ActionManager is a singleton that manages all the actions.
- Normally you won't need to use this singleton directly. 99% of the cases you will use the Node interface,
- which uses this singleton.
- But there are some cases where you might need to use this singleton.
- Examples:
-    - When you want to run an action where the target is different from a Node. 
-    - When you want to pause / resume the actions.
- 
- @since v0.8
- */
-class CC_DLL ActionManager : public Ref
-{
-public:
-    /**
-     * @js ctor
-     */
-    ActionManager();
-    }
-    
-    protected:
-    void calculateMaxItems();
-    void updateBlendFunc();
-    void updateOpacityModifyRGB();
-    
-    
-    {  EsdCanClient esd_can_client;
-  EXPECT_TRUE(esd_can_client.Init(param));
-  EXPECT_EQ(esd_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
-  std::vector<CanFrame> frames;
-  int32_t num = 0;
-  EXPECT_EQ(esd_can_client.Send(frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  EXPECT_EQ(esd_can_client.Receive(&frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
-  CanFrame can_frame;
-  frames.push_back(can_frame);
-  EXPECT_EQ(esd_can_client.SendSingleFrame(frames),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  esd_can_client.Stop();
+  }
+  return result;
 }
     
-      sender.AddMessage(1, &mpd);
-  EXPECT_EQ(sender.Start(), common::ErrorCode::OK);
-  EXPECT_TRUE(sender.IsRunning());
-  EXPECT_TRUE(sender.enable_log());
+     private:
+  // Gets the up to the first 3 prefixes from s (split by _).
+  // For example, tesseract_foo_bar will be split into tesseract,foo and bar.
+  void GetPrefixes(const char* s, STRING* level_one,
+                   STRING* level_two, STRING* level_three);
     
-      Byte t1(bytes + 3);
-  uint32_t t = t0.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
+      /// Threshold the source image as efficiently as possible to the output Pix.
+  /// Creates a Pix and sets pix to point to the resulting pointer.
+  /// Caller must use pixDestroy to free the created Pix.
+  /// Returns false on error.
+  virtual bool ThresholdToPix(PageSegMode pageseg_mode, Pix** pix);
     
-    using apollo::drivers::canbus::Byte;
+    // Clip output boxes to input blob boxes for bounds that are within this
+// tolerance. Otherwise, the blob may be chopped and we have to just use
+// the word bounding box.
+const int kBoxClipTolerance = 2;
     
-    double ObjectGeneralInfo60B::lateral_vel(const std::uint8_t* bytes,
-                                         int32_t length) const {
-  Byte t0(bytes + 5);
-  int32_t x = t0.get_byte(0, 6);
+      // Deletes all the boxes stored in BoxWord.
+  void DeleteAllBoxes();
+    
+    namespace tesseract {
     }
     
-    int ObjectListStatus60A::num_of_objects(const std::uint8_t* bytes,
-                                        int32_t length) const {
-  Byte t0(bytes);
-  int32_t x = t0.get_byte(0, 8);
+    // A CostFunc that takes the variance of step into account in the cost.
+int64_t DPPoint::CostWithVariance(const DPPoint* prev) {
+  if (prev == nullptr || prev == this) {
+    UpdateIfBetter(0, 1, nullptr, 0, 0, 0);
+    return 0;
+  }
     }
     
     
-    {  bool ret = (x == 0x1);
-  return ret;
+    { private:
+  double total_weight;         // no of elements or sum of weights.
+  double sigx;                 // sum of x
+  double sigy;                 // sum of y
+  double sigxx;                // sum x squared
+  double sigxy;                // sum of xy
+  double sigyy;                // sum y squared
+};
+    
+    Action::Action()
+:_originalTarget(nullptr)
+,_target(nullptr)
+,_tag(Action::INVALID_TAG)
+,_flags(0)
+{
+#if CC_ENABLE_SCRIPT_BINDING
+    ScriptEngineProtocol* engine = ScriptEngineManager::getInstance()->getScriptEngine();
+    _scriptType = engine != nullptr ? engine->getScriptType() : kScriptTypeNone;
+#endif
 }
     
-    unsigned int BaseMapMatrix::GetBinarySize() const { return 0; }
     
+// implementation of Lens3D
     
-    {  for (auto& lon : lon_trajectories) {
-    for (auto& lat : lat_trajectories) {
-      trajectory_pair_pqueue_.emplace(lon, lat);
+    bool RemoveSelf::init(bool isNeedCleanUp)
+{
+    _isNeedCleanUp = isNeedCleanUp;
+    return true;
+}
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    bool Animation::initWithAnimationFrames(const Vector<AnimationFrame*>& arrayOfAnimationFrames, float delayPerUnit, unsigned int loops)
+{
+    _delayPerUnit = delayPerUnit;
+    _loops = loops;
     }
+    
+    // AtlasNode - draw
+void AtlasNode::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
+{
+    // ETC1 ALPHA supports.
+    _quadCommand.init(_globalZOrder, _textureAtlas->getTexture(), getGLProgramState(), _blendFunc, _textureAtlas->getQuads(), _quadsToDraw, transform, flags);
+    
+    renderer->addCommand(&_quadCommand);
+    }
+    
+    BENCHMARK_RELATIVE(sformat_short_string_safe, iters) {
+  BenchmarkSuspender suspender;
+  auto const& shortString = getShortString();
+  while (iters--) {
+    std::string out;
+    suspender.dismissing([&] { out = sformat('{}', shortString); });
   }
 }
     
-      MatrixXd offset_golden = MatrixXd::Zero(10, 1);
-  offset_golden(0, 0) = -2.0 * 1.0 *
-                            (init_derivative + init_second_derivative * 0.1) /
-                            std::pow(0.1, 5) -
-                        6.0 * 1.0 * init_derivative / std::pow(0.1, 5);
-  offset_golden(1, 0) = 2.0 * 1.0 * init_derivative / std::pow(0.1, 5);
+    vector<detail::BenchmarkResult> resultsFromFile(const std::string& filename) {
+  string content;
+  readFile(filename.c_str(), content);
+  vector<detail::BenchmarkResult> ret;
+  benchmarkResultsFromDynamic(parseJson(content), ret);
+  return ret;
+}
     
-    #include 'gtest/gtest.h'
+    #include <folly/Range.h>
+    
+    #include <string>
+    
+    using UriTuple = std::tuple<
+    const std::string&,
+    const std::string&,
+    const std::string&,
+    const std::string&,
+    uint16_t,
+    const std::string&,
+    const std::string&,
+    const std::string&>;
+    
+    
+    {    return FuncAndKeepAlive(std::move(f), this);
+  }
+    
+      void operator+=(double sum) {
+    performLazyInit();
+    if (increment_) {
+      increment_(sum);
+    }
+  }
+    
+      auto func = Getcpu::Func(dlsym(h, '__vdso_getcpu'));
+  if (func == nullptr) {
+    // technically a null result could either be a failure or a successful
+    // lookup of a symbol with the null value, but the second can't actually
+    // happen for this symbol.  No point holding the handle forever if
+    // we don't need the code
+    dlclose(h);
+  }
