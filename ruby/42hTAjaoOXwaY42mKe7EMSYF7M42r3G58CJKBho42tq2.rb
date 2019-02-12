@@ -1,162 +1,186 @@
 
         
-        # For this pull request, which changes Page#dir
-# https://github.com/jekyll/jekyll/pull/4403
+                  if options['multiple']
+            add_default_name_and_id_for_value(@checked_value, options)
+            options.delete('multiple')
+          else
+            add_default_name_and_id(options)
+          end
     
-    Then(%r!^I should see today's time in '(.*)'$!) do |file|
-  step %(I should see '#{seconds_agnostic_time(Time.now)}' in '#{file}')
+                content ||= Translator
+              .new(object, @object_name, method_and_value, scope: 'helpers.label')
+              .translate
+            content ||= @method_name.humanize
+    
+            class << self
+          def field_type
+            @field_type ||= name.split('::').last.sub('Field', '').downcase
+          end
+        end
+    
+        # Controls whether an action should be rendered using a layout.
+    # If you want to disable any <tt>layout</tt> settings for the
+    # current action so that it is rendered without a layout then
+    # either override this method in your controller to return false
+    # for that action or set the <tt>action_has_layout</tt> attribute
+    # to false before rendering.
+    def action_has_layout?
+      @_action_has_layout
+    end
+    
+        def find_file(path, prefixes = [], *args)
+      _find_all(path, prefixes, args, true).first || raise(MissingTemplate.new(self, path, prefixes, *args))
+    end
+    
+          # Override to prevent #cause resetting during re-raise.
+      attr_reader :cause
+    
+        begin
+      json = JSON.parse(self.body)
+    rescue JSON::ParserError => e
+      elog('#{e.class} #{e.message}\n#{e.backtrace * '\n'}')
+    end
+    
+    end
+end
 end
     
-          CHARS = {
-        :failed    => '\u2718'.red,
-        :pending   => '\u203D'.yellow,
-        :undefined => '\u2718'.red,
-        :passed    => '\u2714'.green,
-        :skipped   => '\u203D'.blue,
-      }.freeze
+    =begin
+ +------+----------------+-------------------------------------------+
+   | HEX  | NAME           | DESCRIPTION                               |
+   +------+----------------+-------------------------------------------+
+   | HEX  | NAME           | DESCRIPTION                               |
+   | 0x01 | CALLED NUMBER  | Number/extension being called             |
+   | 0x02 | CALLING NUMBER | Calling number                            |
+   | 0x03 | CALLING ANI    | Calling number ANI for billing            |
+   | 0x04 | CALLING NAME   | Name of caller                            |
+   | 0x05 | CALLED CONTEXT | Context for number                        |
+   | 0x06 | USERNAME       | Username (peer or user) for               |
+   |      |                | authentication                            |
+   | 0x07 | PASSWORD       | Password for authentication               |
+   | 0x08 | CAPABILITY     | Actual CODEC capability                   |
+   | 0x09 | FORMAT         | Desired CODEC format                      |
+   | 0x0a | LANGUAGE       | Desired language                          |
+   | 0x0b | VERSION        | Protocol version                          |
+   | 0x0c | ADSICPE        | CPE ADSI capability                       |
+   | 0x0d | DNID           | Originally dialed DNID                    |
+   | 0x0e | AUTHMETHODS    | Authentication method(s)                  |
+   | 0x0f | CHALLENGE      | Challenge data for MD5/RSA                |
+   | 0x10 | MD5 RESULT     | MD5 challenge result                      |
+   | 0x11 | RSA RESULT     | RSA challenge result                      |
+   | 0x12 | APPARENT ADDR  | Apparent address of peer                  |
+   | 0x13 | REFRESH        | When to refresh registration              |
+   | 0x14 | DPSTATUS       | Dialplan status                           |
+   | 0x15 | CALLNO         | Call number of peer                       |
+   | 0x16 | CAUSE          | Cause                                     |
+   | 0x17 | IAX UNKNOWN    | Unknown IAX command                       |
+   | 0x18 | MSGCOUNT       | How many messages waiting                 |
+   | 0x19 | AUTOANSWER     | Request auto-answering                    |
+   | 0x1a | MUSICONHOLD    | Request musiconhold with QUELCH           |
+   | 0x1b | TRANSFERID     | Transfer Request Identifier               |
+   | 0x1c | RDNIS          | Referring DNIS                            |
+   | 0x1d | Reserved       | Reserved for future use                   |
+   | 0x1e | Reserved       | Reserved for future use                   |
+   | 0x1f | DATETIME       | Date/Time                                 |
+   | 0x20 | Reserved       | Reserved for future use                   |
+   | 0x21 | Reserved       | Reserved for future use                   |
+   | 0x22 | Reserved       | Reserved for future use                   |
+   | 0x23 | Reserved       | Reserved for future use                   |
+   | 0x24 | Reserved       | Reserved for future use                   |
+   | 0x25 | Reserved       | Reserved for future use                   |
+   | 0x26 | CALLINGPRES    | Calling presentation                      |
+   | 0x27 | CALLINGTON     | Calling type of number                    |
+   | 0x28 | CALLINGTNS     | Calling transit network select            |
+   | 0x29 | SAMPLINGRATE   | Supported sampling rates                  |
+   | 0x2a | CAUSECODE      | Hangup cause                              |
+   | 0x2b | ENCRYPTION     | Encryption format                         |
+   | 0x2c | ENCKEY         | Reserved for future Use                   |
+   | 0x2d | CODEC PREFS    | CODEC Negotiation                         |
+   | 0x2e | RR JITTER      | Received jitter, as in RFC 3550           |
+   | 0x2f | RR LOSS        | Received loss, as in RFC 3550             |
+   | 0x30 | RR PKTS        | Received frames                           |
+   | 0x31 | RR DELAY       | Max playout delay for received frames in  |
+   |      |                | ms                                        |
+   | 0x32 | RR DROPPED     | Dropped frames (presumably by jitter      |
+   |      |                | buffer)                                   |
+   | 0x33 | RR OOO         | Frames received Out of Order              |
+   | 0x34 | OSPTOKEN       | OSP Token Block                           |
+   +------+----------------+-------------------------------------------+
+=end
     
-            def stop
-          # There is only one EventMachine instance per Ruby process so stopping
-          # it here will stop the reactor thread we have running.
-          EM.stop if EM.reactor_running?
-          Jekyll.logger.debug 'LiveReload Server:', 'halted'
-        end
     
-        def process(args)
-      arg_is_present? args, '--server', 'The --server command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--serve', 'The --serve command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--no-server', 'To build Jekyll without launching a server, \
-                          use the 'build' subcommand.'
-      arg_is_present? args, '--auto', 'The switch '--auto' has been replaced with \
-                          '--watch'.'
-      arg_is_present? args, '--no-auto', 'To disable auto-replication, simply leave off \
-                          the '--watch' switch.'
-      arg_is_present? args, '--pygments', 'The 'pygments'settings has been removed in \
-                          favour of 'highlighter'.'
-      arg_is_present? args, '--paginate', 'The 'paginate' setting can only be set in \
-                          your config files.'
-      arg_is_present? args, '--url', 'The 'url' setting can only be set in your \
-                          config files.'
-      no_subcommand(args)
-    end
+end
+end
+end
+
     
-      #
-  # The current request context.
-  #
-  attr_accessor :request
-  #
-  # Boolean that indicates whether or not the connection supports keep-alive.
-  #
-  attr_accessor :keepalive
-  #
-  # A reference to the server the client is associated with.
-  #
-  attr_accessor :server
-    
-    
-  #
-  # Payload types were copied from xCAT-server source code (IPMI.pm)
-  #
-  RMCP_ERRORS = {
-    1 => 'Insufficient resources to create new session (wait for existing sessions to timeout)',
-    2 => 'Invalid Session ID', #this shouldn't occur...
-    3 => 'Invalid payload type',#shouldn't occur..
-    4 => 'Invalid authentication algorithm', #if this happens, we need to enhance our mechanism for detecting supported auth algorithms
-    5 => 'Invalid integrity algorithm', #same as above
-    6 => 'No matching authentication payload',
-    7 => 'No matching integrity payload',
-    8 => 'Inactive Session ID', #this suggests the session was timed out while trying to negotiate, shouldn't happen
-    9 => 'Invalid role',
-    0xa => 'Unauthorised role or privilege level requested',
-    0xb => 'Insufficient resources to create a session at the requested role',
-    0xc => 'Invalid username length',
-    0xd => 'Unauthorized name',
-    0xe => 'Unauthorized GUID',
-    0xf => 'Invalid integrity check value',
-    0x10 => 'Invalid confidentiality algorithm',
-    0x11 => 'No cipher suite match with proposed security algorithms',
-    0x12 => 'Illegal or unrecognized parameter', #have never observed this, would most likely mean a bug in xCAT or IPMI device
-  }
-    
-              # Encodes the realm field
+              # Decodes the Rex::Proto::Kerberos::Model::Element from the input. This
+          # method has been designed to be overridden by subclasses.
           #
-          # @return [String]
-          def encode_realm
-            encoded = ''
-            encoded << [realm.length].pack('N')
-            encoded << realm
-    
-              private
-    
-              # Encodes the options field
-          #
-          # @return [OpenSSL::ASN1::BitString]
-          def encode_options
-            OpenSSL::ASN1::BitString.new([options].pack('N'))
+          # @raise [NoMethodError]
+          def decode(input)
+            raise ::NoMethodError, 'Method designed to be overridden'
           end
     
-              # Decodes the key from an OpenSSL::ASN1::ASN1Data
+              # Decodes the key_expiration field
           #
           # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [EncryptionKey]
-          def decode_key(input)
-            Rex::Proto::Kerberos::Model::EncryptionKey.decode(input.value[0])
+          # @return [Time]
+          def decode_key_expiration(input)
+            input.value[0].value
           end
     
-      def initialize(repo: 'twbs/bootstrap', branch: 'master', save_to: {}, cache_path: 'tmp/converter-cache-bootstrap')
-    @logger     = Logger.new
-    @repo       = repo
-    @branch     = branch || 'master'
-    @branch_sha = get_branch_sha
-    @cache_path = cache_path
-    @repo_url   = 'https://github.com/#@repo'
-    @save_to    = {
-        js:    'assets/javascripts/bootstrap',
-        scss:  'assets/stylesheets/bootstrap',
-        fonts: 'assets/fonts/bootstrap'}.merge(save_to)
+                elems << OpenSSL::ASN1::ASN1Data.new([encode_options], 0, :CONTEXT_SPECIFIC) if options
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_cname], 1, :CONTEXT_SPECIFIC) if cname
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_realm], 2, :CONTEXT_SPECIFIC) if realm
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_sname], 3, :CONTEXT_SPECIFIC) if sname
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_from], 4, :CONTEXT_SPECIFIC) if from
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_till], 5, :CONTEXT_SPECIFIC) if till
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_rtime], 6, :CONTEXT_SPECIFIC) if rtime
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_nonce], 7, :CONTEXT_SPECIFIC) if nonce
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_etype], 8, :CONTEXT_SPECIFIC) if etype
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_enc_auth_data], 10, :CONTEXT_SPECIFIC) if enc_auth_data
+    
+      def up
+    Photo.joins('INNER JOIN posts ON posts.guid = photos.status_message_guid')
+         .where(posts: {type: 'StatusMessage', public: true}).update_all(public: true)
+    
+    When /^I toggle all nsfw posts$/ do
+  all('a.toggle_nsfw_state').each &:click
+end
+    
+      class PostToService < Base
+    def perform(*_args)
+      # don't post to services in cucumber
+    end
   end
     
-        def pos
-      byte_to_str_pos @s.pos
+        it 'generates a jasmine fixture', fixture: true do
+      session[:mobile_view] = true
+      get :new, format: :mobile
+      save_fixture(html_for('body'), 'conversations_new_mobile')
     end
+  end
+end
+
     
-      # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
-  config.action_controller.perform_caching = true
-    
-        def render(context)
-      quote = paragraphize(super)
-      author = '<strong>#{@by.strip}</strong>' if @by
-      if @source
-        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
-        parts = []
-        url.each do |part|
-          if (parts + [part]).join('/').length < 32
-            parts << part
-          end
-        end
-        source = parts.join('/')
-        source << '/&hellip;' unless source == @source
-      end
-      if !@source.nil?
-        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
-      elsif !@title.nil?
-        cite = ' <cite>#{@title}</cite>'
-      end
-      blockquote = if @by.nil?
-        quote
-      elsif cite
-        '#{quote}<footer>#{author + cite}</footer>'
-      else
-        '#{quote}<footer>#{author}</footer>'
-      end
-      '<blockquote>#{blockquote}</blockquote>'
+          get :new, params: {invite: {token: code.token}}
+      expect(response).not_to be_redirect
     end
+  end
     
-          rtn = ''
-      (context.environments.first['site'][@array_name] || []).each do |file|
-        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
-          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
+        def sort_options(options)
+      not_applicable_to_capistrano = %w(quiet silent verbose)
+      options.reject! do |(switch, *)|
+        switch =~ /--#{Regexp.union(not_applicable_to_capistrano)}/
+      end
+    
+            @response = (gets || '').chomp
+      end
+    
+            if Rake::Task.task_defined?('deploy:check')
+          before 'deploy:check', '#{scm_name}:check'
         end
+    
+    set_if_empty :format, :airbrussh
+set_if_empty :log_level, :debug
