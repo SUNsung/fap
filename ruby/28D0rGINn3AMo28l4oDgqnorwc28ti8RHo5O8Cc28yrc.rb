@@ -1,177 +1,122 @@
 
         
-        
-    {      # Add the item to the hash with logic to convert values to an array
-      # if so desired.
-      if (qstring.include?(var))
-        if (qstring[var].kind_of?(Array))
-          qstring[var] << val
-        else
-          curr = self.qstring[var]
-          qstring[var] = [ curr, val ]
-        end
+        # The module that contains everything Sass-related:
+#
+# * {Sass::Engine} is the class used to render Sass/SCSS within Ruby code.
+# * {Sass::Plugin} is interfaces with web frameworks (Rails and Merb in particular).
+# * {Sass::SyntaxError} is raised when Sass encounters an error.
+# * {Sass::CSS} handles conversion of CSS to Sass.
+#
+# Also see the {file:SASS_REFERENCE.md full Sass reference}.
+module Sass
+  class << self
+    # @private
+    attr_accessor :tests_running
+  end
+    
+          options[:cache_store] ||= Sass::CacheStores::Chain.new(
+        Sass::CacheStores::Memory.new, Sass::CacheStores::Filesystem.new(options[:cache_location]))
+      # Support both, because the docs said one and the other actually worked
+      # for quite a long time.
+      options[:line_comments] ||= options[:line_numbers]
+    
+    module Sass
+  # The abstract base class for lexical environments for SassScript.
+  class BaseEnvironment
+    class << self
+      # Note: when updating this,
+      # update sass/yard/inherited_hash.rb as well.
+      def inherited_hash_accessor(name)
+        inherited_hash_reader(name)
+        inherited_hash_writer(name)
+      end
+    
+      def pod_prefix
+    File.expand_path('../..', pod_bin)
+  end
+    
+          def stack
+        UI::ErrorReport.stack
+      end
+    
+    require 'clamp'
+require 'pluginmanager/util'
+require 'pluginmanager/gemfile'
+require 'pluginmanager/install'
+require 'pluginmanager/remove'
+require 'pluginmanager/list'
+require 'pluginmanager/update'
+require 'pluginmanager/pack'
+require 'pluginmanager/unpack'
+require 'pluginmanager/generate'
+require 'pluginmanager/prepare_offline_pack'
+require 'pluginmanager/proxy_support'
+configure_proxy
+    
+      def validate_target_file
+    if File.exist?(target_file)
+      if  delete_target_file?
+        File.delete(target_file)
       else
-        qstring[var] = val
-      end
-    }
-    
-    # Default timings
-IAX_DEFAULT_REG_REFRESH = 60
-IAX_DEFAULT_TIMEOUT     = 10
-    
-    
-end
-end
-end
-
-    
-            # Receives a Kerberos Response over a tcp connection
-        #
-        # @return [<Rex::Proto::Kerberos::Model::KrbError, Rex::Proto::Kerberos::Model::KdcResponse>] the kerberos message response
-        # @raise [RuntimeError] if the response can't be processed
-        # @raise [EOFError] if expected data can't be read
-        def recv_response_tcp
-          length_raw = connection.get_once(4, timeout)
-          unless length_raw && length_raw.length == 4
-            raise ::RuntimeError, 'Kerberos Client: failed to read response'
-          end
-          length = length_raw.unpack('N')[0]
-    
-              # @!attribute type
-          #   @return [Integer] The algorithm used to generate the checksum
-          attr_accessor :type
-          # @!attribute checksum
-          #   @return [String] The checksum itself
-          attr_accessor :checksum
-    
-              # Decodes the key_expiration field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Time]
-          def decode_key_expiration(input)
-            input.value[0].value
-          end
-    
-              # Decodes a Rex::Proto::Kerberos::Model::KdcRequest from an String
-          #
-          # @param input [String] the input to decode from
-          def decode_string(input)
-            asn1 = OpenSSL::ASN1.decode(input)
-    
-    module Rex
-  module Proto
-    module Kerberos
-      module Model
-        # This class provides a representation of a Kerberos KRB-ERROR (response error)
-        # message definition.
-        class KrbError < Element
-          # @!attribute pvno
-          #   @return [Integer] The protocol version number
-          attr_accessor :pvno
-          # @!attribute msg_type
-          #   @return [Integer] The type of a protocol message
-          attr_accessor :msg_type
-          # @!attribute ctime
-          #   @return [Time] The current time of the client's host
-          attr_accessor :ctime
-          # @!attribute cusec
-          #   @return [Integer] The microseconds part of the client timestamp
-          attr_accessor :cusec
-          # @!attribute stime
-          #   @return [Time] The current time of the server
-          attr_accessor :stime
-          # @!attribute susec
-          #   @return [Integer] The microseconds part of the server timestamp
-          attr_accessor :susec
-          # @!attribute error_code
-          #   @return [Integer] The error request returned by kerberos or the server when a request fails
-          attr_accessor :error_code
-          # @!attribute crealm
-          #   @return [String] The realm part of the client's principal identifier
-          attr_accessor :crealm
-          # @!attribute cname
-          #   @return [Rex::Proto::Kerberos::Model::PrincipalName] The name part of the client's principal identifier
-          attr_accessor :cname
-          # @!attribute realm
-          #   @return [String] The realm part of the server's principal identifier
-          attr_accessor :realm
-          # @!attribute sname
-          #   @return [Rex::Proto::Kerberos::Model::PrincipalName] The name part of the server's identity
-          attr_accessor :sname
-          # @!attribute e_data
-          #   @return [String] additional data about the error (ASN.1 encoded data)
-          attr_accessor :e_data
-    
-    # include would include the module in Object
-# extend only extends the `main` object
-extend Sinatra::Delegator
-    
-      File.open('rack-protection.gemspec', 'w') { |f| f << content }
-end
-    
-          DIRECTIVES = %i(base_uri child_src connect_src default_src
-                      font_src form_action frame_ancestors frame_src
-                      img_src manifest_src media_src object_src
-                      plugin_types referrer reflected_xss report_to
-                      report_uri require_sri_for sandbox script_src
-                      style_src worker_src).freeze
-    
-          def redirect(env)
-        request = Request.new(env)
-        warn env, 'attack prevented by #{self.class}'
-        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
-      end
-    
-          # Checks whether this node body is a void context.
-      #
-      # @return [Boolean] whether the `def` node body is a void context
-      def void_context?
-        method?(:initialize) || assignment_method?
-      end
-    
-          # Returns the delta between this element's value and the argument's.
-      #
-      # @note Keyword splats always return a delta of 0
-      #
-      # @return [Integer] the delta between the two values
-      def value_delta(other)
-        HashElementDelta.new(self, other).value_delta
-      end
-    
-    get '/' do
-  stats = Sidekiq::Stats.new
-  @failed = stats.failed
-  @processed = stats.processed
-  @messages = $redis.lrange('sinkiq-example-messages', 0, -1)
-  erb :index
-end
-    
-          def insert_after(oldklass, newklass, *args)
-        i = entries.index { |entry| entry.klass == newklass }
-        new_entry = i.nil? ? Entry.new(newklass, *args) : entries.delete_at(i)
-        i = entries.index { |entry| entry.klass == oldklass } || entries.count - 1
-        entries.insert(i+1, new_entry)
-      end
-    
-      module TestingClient
-    def raw_push(payloads)
-      if Sidekiq::Testing.fake?
-        payloads.each do |job|
-          job = Sidekiq.load_json(Sidekiq.dump_json(job))
-          job.merge!('enqueued_at' => Time.now.to_f) unless job['at']
-          Queues.push(job['queue'], job['class'], job)
-        end
-        true
-      elsif Sidekiq::Testing.inline?
-        payloads.each do |job|
-          klass = Sidekiq::Testing.constantize(job['class'])
-          job['id'] ||= SecureRandom.hex(12)
-          job_hash = Sidekiq.load_json(Sidekiq.dump_json(job))
-          klass.process_job(job_hash)
-        end
-        true
-      else
-        super
+        signal_error('Package creation cancelled, a previously generated package exist at location: #{target_file}, move this file to safe place and run the command again')
       end
     end
   end
+    
+          # Try to add the gems to the current gemfile and lock file, if successful
+      # both of them will be updated. This injector is similar to Bundler's own injector class
+      # minus the support for additionals source and doing local resolution only.
+      ::Bundler::LogstashInjector.inject!(pack)
+    
+    # Silence locale validation warning
+require 'i18n'
+I18n.enforce_available_locales = false
+    
+        get page
+    # good html:
+    # <pre><code>one\ntwo\nthree\nfour\n</code></pre>\n
+    # broken html:
+    # <pre>\n  <code>one\ntwo\nthree\nfour\n</code>\n</pre>
+    assert_match /<pre><code>one\ntwo\nthree\nfour\n<\/code><\/pre>\n/m, last_response.body
+  end
+    
+    
+    
+      class DuplicatePageError < Error
+    attr_accessor :dir
+    attr_accessor :existing_path
+    attr_accessor :attempted_path
+    
+    # Multi-line step scoper
+When /^(.*) within (.*[^:]):$/ do |step, parent, table_or_string|
+  with_scope(parent) { When '#{step}:', table_or_string }
+end
+    
+    # This stuff needs to be run after Paperclip is defined.
+require 'paperclip/io_adapters/registry'
+require 'paperclip/io_adapters/abstract_adapter'
+require 'paperclip/io_adapters/empty_string_adapter'
+require 'paperclip/io_adapters/identity_adapter'
+require 'paperclip/io_adapters/file_adapter'
+require 'paperclip/io_adapters/stringio_adapter'
+require 'paperclip/io_adapters/data_uri_adapter'
+require 'paperclip/io_adapters/nil_adapter'
+require 'paperclip/io_adapters/attachment_adapter'
+require 'paperclip/io_adapters/uploaded_file_adapter'
+require 'paperclip/io_adapters/uri_adapter'
+require 'paperclip/io_adapters/http_url_proxy_adapter'
+
+    
+        def calculated_type_matches
+      possible_types.select do |content_type|
+        content_type == type_from_file_contents
+      end
+    end
+    
+        def cropping dst, ratio, scale
+      if ratio.horizontal? || ratio.square?
+        '%dx%d+%d+%d' % [ dst.width, dst.height, 0, (self.height * scale - dst.height) / 2 ]
+      else
+        '%dx%d+%d+%d' % [ dst.width, dst.height, (self.width * scale - dst.width) / 2, 0 ]
+      end
+    end
