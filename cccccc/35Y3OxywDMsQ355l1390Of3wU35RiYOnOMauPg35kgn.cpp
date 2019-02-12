@@ -1,166 +1,197 @@
-namespace leveldb {
-    }
+
+        
+          bool isValid() const { return past != SrcPos{0,0}; }
     
-    Status DBImpl::RecoverLogFile(uint64_t log_number, bool last_log,
-                              bool* save_manifest, VersionEdit* edit,
-                              SequenceNumber* max_sequence) {
-  struct LogReporter : public log::Reader::Reporter {
-    Env* env;
-    Logger* info_log;
-    const char* fname;
-    Status* status;  // null if options_.paranoid_checks==false
-    virtual void Corruption(size_t bytes, const Status& s) {
-      Log(info_log, '%s%s: dropping %d bytes; %s',
-          (this->status == nullptr ? '(ignoring error) ' : ''),
-          fname, static_cast<int>(bytes), s.ToString().c_str());
-      if (this->status != nullptr && this->status->ok()) *this->status = s;
-    }
-  };
-    }
+    //////////////////////////////////////////////////////////////////////
     
-    namespace leveldb {
-    }
-    
-    namespace leveldb {
-    }
-    
-    bool HandleDumpCommand(Env* env, char** files, int num) {
-  StdoutPrinter printer;
-  bool ok = true;
-  for (int i = 0; i < num; i++) {
-    Status s = DumpFile(env, files[i], &printer);
-    if (!s.ok()) {
-      fprintf(stderr, '%s\n', s.ToString().c_str());
-      ok = false;
-    }
+    // Deserializing an array could give back a different ArrayKind than we need,
+// so we have to go with the slow case of calling a collection constructor.
+NEVER_INLINE
+Object createFromSerialized(CollectionType colType, APCHandle* handle) {
+  auto const col = Object::attach(collections::alloc(colType));
+  auto const arr = handle->toLocal();
+  switch (colType) {
+  case CollectionType::ImmVector:
+  case CollectionType::Vector:
+    static_cast<BaseVector*>(col.get())->init(arr);
+    break;
+  case CollectionType::ImmSet:
+  case CollectionType::Set:
+    static_cast<BaseSet*>(col.get())->init(arr);
+    break;
+  case CollectionType::ImmMap:
+  case CollectionType::Map:
+    static_cast<BaseMap*>(col.get())->init(arr);
+    break;
+  case CollectionType::Pair:
+    not_reached();
+    break;
   }
-  return ok;
+  return col;
 }
     
-    #include <string>
-#include 'leveldb/db.h'
-#include 'db/dbformat.h'
-#include 'db/skiplist.h'
-#include 'util/arena.h'
     
-      static const APCCollection* fromHandle(const APCHandle* handle) {
-    assertx(handle->checkInvariants());
-    assertx(handle->kind() == APCKind::SharedCollection);
-    static_assert(offsetof(APCCollection, m_handle) == 0, '');
-    return reinterpret_cast<const APCCollection*>(handle);
+    {private:
+  APCHandle m_handle;
+  APCHandle* m_arrayHandle;
+  CollectionType m_colType;
+};
+    
+    #include <fstream>
+#include <sstream>
+    
+      /**
+   * Returns a map of those support bits. Tells caller which function can be
+   * called.
+   */
+  virtual int debuggerSupport() {
+    return 0;
   }
     
-    CONFIG_BODY(bool, Bool)
-CONFIG_BODY(char, Byte)
-CONFIG_BODY(unsigned char, UByte)
-CONFIG_BODY(int16_t, Int16)
-CONFIG_BODY(uint16_t, UInt16)
-CONFIG_BODY(int32_t, Int32)
-CONFIG_BODY(uint32_t, UInt32)
-CONFIG_BODY(int64_t, Int64)
-CONFIG_BODY(uint64_t, UInt64)
-CONFIG_BODY(double, Double)
-CONFIG_BODY(std::string, String)
+    #endif // HPHP_GLOB_STREAM_WRAPPER_H
+
     
-      private:
     
-      // implementing File
-  bool open(const String& filename, const String& mode) override;
-  bool close() override;
-  int64_t readImpl(char *buffer, int64_t length) override;
-  int getc() override;
-  int64_t writeImpl(const char *buffer, int64_t length) override;
-  bool seek(int64_t offset, int whence = SEEK_SET) override;
-  int64_t tell() override;
-  bool eof() override;
-  bool rewind() override;
-  bool flush() override;
-  bool truncate(int64_t size) override;
+    {}
     
-    namespace HPHP {
+    template<typename AHM>
+void checkAHMSubMaps(const AHM& map, folly::StringPiece mapName,
+                     std::atomic<bool>& done) {
+  if (LIKELY(map.numSubMaps() == 1) ||
+      done.load(std::memory_order_relaxed) ||
+      done.exchange(true, std::memory_order_relaxed)) {
+    return;
+  }
     }
     
+    #include <atomic>
     
-    {template<typename IndexType, typename DType = real_t>
-Parser<IndexType> *
-CreateDenseLibSVMParser(const std::string& path,
-                        const std::map<std::string, std::string>& args,
-                        unsigned part_index,
-                        unsigned num_parts) {
-  CHECK_NE(args.count('num_col'), 0) << 'expect num_col in dense_libsvm';
-  return new DensifyParser<IndexType>(
-            Parser<IndexType>::Create(path.c_str(), part_index, num_parts, 'libsvm'),
-           uint32_t(atoi(args.at('num_col').c_str())));
+                    // Pick up the three extra operands that CTR_INIT_NG has, and
+                //    skip the pattern location counter past
+                int32_t instrOperandLoc = (int32_t)fp->fPatIdx;
+                fp->fPatIdx += 3;
+                int32_t loopLoc  = URX_VAL(pat[instrOperandLoc]);
+                int32_t minCount = (int32_t)pat[instrOperandLoc+1];
+                int32_t maxCount = (int32_t)pat[instrOperandLoc+2];
+                U_ASSERT(minCount>=0);
+                U_ASSERT(maxCount>=minCount || maxCount==-1);
+                U_ASSERT(loopLoc>fp->fPatIdx);
+                if (maxCount == -1) {
+                    fp->fExtra[opValue+1] = fp->fInputIdx;   //  Save initial input index for loop breaking.
+                }
+    
+        ScriptSet &setAll();
+    ScriptSet &resetAll();
+    int32_t countMembers() const;
+    int32_t hashCode() const;
+    int32_t nextSetBit(int32_t script) const;
+    
+    SearchIterator::SearchIterator(const SearchIterator &other)
+    : UObject(other)
+{   
+    m_breakiterator_            = other.m_breakiterator_;
+    m_text_                     = other.m_text_;
+    m_search_                   = (USearch *)uprv_malloc(sizeof(USearch));   
+    m_search_->breakIter        = other.m_search_->breakIter;
+    m_search_->isCanonicalMatch = other.m_search_->isCanonicalMatch;
+    m_search_->isOverlap        = other.m_search_->isOverlap;
+    m_search_->elementComparisonType = other.m_search_->elementComparisonType;
+    m_search_->matchedIndex     = other.m_search_->matchedIndex;
+    m_search_->matchedLength    = other.m_search_->matchedLength;
+    m_search_->text             = other.m_search_->text;
+    m_search_->textLength       = other.m_search_->textLength;
 }
-}  // namespace data
     
-        size_t* it = begin;
-    for (bst_omp_uint tid = 0; tid < nthread; ++tid) {
-      std::copy(row_split_tloc[tid].left.begin(), row_split_tloc[tid].left.end(), it);
-      it += row_split_tloc[tid].left.size();
-    }
-    size_t* split_pt = it;
-    for (bst_omp_uint tid = 0; tid < nthread; ++tid) {
-      std::copy(row_split_tloc[tid].right.begin(), row_split_tloc[tid].right.end(), it);
-      it += row_split_tloc[tid].right.size();
-    }
-    
-    /*!
- * \brief Macro to register sparse page format.
- *
- * \code
- * // example of registering a objective
- * XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(raw)
- * .describe('Raw binary data format.')
- * .set_body([]() {
- *     return new RawFormat();
- *   });
- * \endcode
- */
-#define XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(Name)                       \
-  DMLC_REGISTRY_REGISTER(::xgboost::data::SparsePageFormatReg, SparsePageFormat, Name)
-    
-    
-    {// The number of bits required to represent a given unsigned range
-static size_t SymbolBits(size_t num_symbols) {
-  auto bits = std::ceil(std::log2(num_symbols));
-  return std::max(static_cast<size_t>(bits), size_t(1));
+    Format* SelectFormat::clone() const
+{
+    return new SelectFormat(*this);
 }
-}  // namespace detail
+    
+    class NumberFormat;
+    
+    uint8_t *CollationKey::reallocate(int32_t newCapacity, int32_t length) {
+    uint8_t *newBytes = static_cast<uint8_t *>(uprv_malloc(newCapacity));
+    if(newBytes == NULL) { return NULL; }
+    if(length > 0) {
+        uprv_memcpy(newBytes, getBytes(), length);
+    }
+    if(fFlagAndLength < 0) { uprv_free(fUnion.fFields.fBytes); }
+    fUnion.fFields.fBytes = newBytes;
+    fUnion.fFields.fCapacity = newCapacity;
+    fFlagAndLength |= 0x80000000;
+    return newBytes;
+}
+    
+     public:
+    
+    void printLinkedList(ListNode* head){
+    }
+    
+                    char match;
+                if( s[i] == ')' )
+                    match = '(';
+                else if( s[i] == ']' )
+                    match = '[';
+                else{
+                    assert( s[i] == '}' );
+                    match = '{';
+                }
+    
+    #include <iostream>
+#include <vector>
+#include <cassert>
+    
+    #include <iostream>
+#include <vector>
+#include <cassert>
+    
+            ListNode* dummyHead = new ListNode(-1);
+        dummyHead->next = head;
     
     
     {
-    {/*!
- * \brief Quantile sketch use WXQSummary
- * \tparam DType type of data content
- * \tparam RType type of rank
- */
-template<typename DType, typename RType = unsigned>
-class WXQuantileSketch :
-      public QuantileSketchTemplate<DType, RType, WXQSummary<DType, RType> > {
+    {
+    {            if(command.s == 'print')
+                res.push_back(command.node->val);
+            else{
+                assert(command.s == 'go');
+                if(command.node->right)
+                    stack.push(Command('go',command.node->right));
+                stack.push(Command('print', command.node));
+                if(command.node->left)
+                    stack.push(Command('go',command.node->left));
+            }
+        }
+        return res;
+    }
 };
-/*!
- * \brief Quantile sketch use WQSummary
- * \tparam DType type of data content
- * \tparam RType type of rank
- */
-template<typename DType, typename RType = unsigned>
-class GKQuantileSketch :
-      public QuantileSketchTemplate<DType, RType, GKSummary<DType, RType> > {
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_QUANTILE_H_
-
     
-    #include <dmlc/registry.h>
-#include <vector>
-#include <utility>
-#include <string>
-#include <functional>
-#include <memory>
-#include './base.h'
-#include './data.h'
-#include './objective.h'
-#include './feature_map.h'
-#include '../../src/common/host_device_vector.h'
+    
+/// Definition for a binary tree node.
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+    
+    
+/// Definition for a binary tree node.
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+    
+                if(cur->left == NULL){
+                res.push_back(cur->val);
+                cur = cur->right;
+            }
+            else{
+                TreeNode* prev = cur->left;
+                while(prev->right != NULL && prev->right != cur)
+                    prev = prev->right;
+    }
+    
+    using namespace std;
