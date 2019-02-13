@@ -1,117 +1,216 @@
 
         
-        // Version constant.
-// This is either 0 for python, 1 for CPP V1, 2 for CPP V2.
-//
-// 0 is default and is equivalent to
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
-//
-// 1 is set with -DPYTHON_PROTO2_CPP_IMPL_V1 and is equivalent to
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
-// and
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=1
-//
-// 2 is set with -DPYTHON_PROTO2_CPP_IMPL_V2 and is equivalent to
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
-// and
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
-#ifdef PYTHON_PROTO2_CPP_IMPL_V1
-#error 'PYTHON_PROTO2_CPP_IMPL_V1 is no longer supported.'
+        /*!
+ * \file graph_attr_types.h
+ * \brief Data structures that can appear in graph attributes.
+ */
+#ifndef MXNET_GRAPH_ATTR_TYPES_H_
+#define MXNET_GRAPH_ATTR_TYPES_H_
+    
+    
+    { private:
+  friend class NDArray;
+  /*! \brief make constructor protected. */
+  Imperative() {
+    if (dmlc::GetEnv('MXNET_EXEC_BULK_EXEC_TRAIN', 1)) {
+      backward_bulk_size_ =  dmlc::GetEnv('MXNET_EXEC_BULK_EXEC_MAX_NODE_TRAIN', 15);
+    }
+  }
+  /*! \brief find the input/output ndarrays that are needed for backward */
+  void GetBackwardDependency(
+      const nnvm::NodePtr& node,
+      uint32_t num_inputs, uint32_t num_outputs,
+      std::vector<bool> *p_save_inputs,
+      std::vector<bool> *p_save_outputs);
+  /*! \brief indicate whether is training. */
+#if DMLC_CXX11_THREAD_LOCAL
+  static thread_local bool is_train_;
+  static thread_local bool is_recording_;
 #else
-#ifdef PYTHON_PROTO2_CPP_IMPL_V2
-static int kImplVersion = 2;
-#else
-#ifdef PYTHON_PROTO2_PYTHON_IMPL
-static int kImplVersion = 0;
-#else
+  static MX_THREAD_LOCAL bool is_train_;
+  static MX_THREAD_LOCAL bool is_recording_;
+#endif
+  /*! \brief node count used for naming */
+  std::atomic<uint64_t> node_count_{0};
+  /*! \brief variable count used for naming */
+  std::atomic<uint64_t> variable_count_{0};
+  /*! \brief default backward bulk size */
+  int backward_bulk_size_{0};
+};
     
     
     {
-    {
-    {}  // namespace python
-}  // namespace protobuf
-}  // namespace google
+    {}  // namespace exec
+}  // namespace mxnet
 
     
-    void SharedCodeGenerator::GenerateDescriptors(io::Printer* printer) {
-  // Embed the descriptor.  We simply serialize the entire FileDescriptorProto
-  // and embed it as a string literal, which is parsed and built into real
-  // descriptors at initialization time.  We unfortunately have to put it in
-  // a string literal, not a byte array, because apparently using a literal
-  // byte array causes the Java compiler to generate *instructions* to
-  // initialize each and every byte of the array, e.g. as if you typed:
-  //   b[0] = 123; b[1] = 456; b[2] = 789;
-  // This makes huge bytecode files and can easily hit the compiler's internal
-  // code size limits (error 'code to large').  String literals are apparently
-  // embedded raw, which is what we want.
-  FileDescriptorProto file_proto;
-  file_->CopyTo(&file_proto);
+    #include '../common/utils.h'
+    
+    
+    {    if(group == UCOL_REORDER_CODE_DEFAULT) {
+        group = (UColReorderCode)(UCOL_REORDER_CODE_FIRST + defaultSettings.getMaxVariable());
     }
-    
-      // write central directory
-  io::CodedOutputStream output(raw_output_);
-  for (int i = 0; i < num_entries; ++i) {
-    const string &filename = files_[i].name;
-    uint16 filename_size = filename.size();
-    uint32 crc32 = files_[i].crc32;
-    uint32 size = files_[i].size;
-    uint32 offset = files_[i].offset;
+    uint32_t varTop = data->getLastPrimaryForGroup(group);
+    U_ASSERT(varTop != 0);
+    ownedSettings->setMaxVariable(value, defaultSettings.options, errorCode);
+    if(U_FAILURE(errorCode)) { return *this; }
+    ownedSettings->variableTop = varTop;
+    setFastLatinOptions(*ownedSettings);
+    if(value == UCOL_DEFAULT) {
+        setAttributeDefault(ATTR_VARIABLE_TOP);
+    } else {
+        setAttributeExplicitly(ATTR_VARIABLE_TOP);
     }
-    
-    
-    {  GOOGLE_LOG_IF(DFATAL, end - start != text.size() || *start == '-')
-    << ' Tokenizer::ParseFloat() passed text that could not have been'
-       ' tokenized as a float: ' << CEscape(text);
-  return result;
+    return *this;
 }
     
-    OPERATOR_SCHEMA(EnforceFinite)
-    .NumInputs(1)
-    .NumOutputs(0)
-    .SetDoc(R'DOC(
-Raise if there is NaN or Inf values in the input tensor.
-)DOC')
-    .Input(0, 'input', 'Input tensor');
+    UBool SearchIterator::operator==(const SearchIterator &that) const
+{
+    if (this == &that) {
+        return TRUE;
+    }
+    return (m_breakiterator_            == that.m_breakiterator_ &&
+            m_search_->isCanonicalMatch == that.m_search_->isCanonicalMatch &&
+            m_search_->isOverlap        == that.m_search_->isOverlap &&
+            m_search_->elementComparisonType == that.m_search_->elementComparisonType &&
+            m_search_->matchedIndex     == that.m_search_->matchedIndex &&
+            m_search_->matchedLength    == that.m_search_->matchedLength &&
+            m_search_->textLength       == that.m_search_->textLength &&
+            getOffset() == that.getOffset() &&
+            (uprv_memcmp(m_search_->text, that.m_search_->text, 
+                              m_search_->textLength * sizeof(UChar)) == 0));
+}
     
-    REGISTER_CPU_OPERATOR(
-    MergeSingleListFeatureTensorsGradient,
-    MergeSingleListOrMapFeatureTensorsGradientOp<CPUContext>);
-OPERATOR_SCHEMA(MergeSingleListFeatureTensorsGradient)
-    .SetDoc(
-        'Explode multi-feature tensors with list features into '
-        'single-feature tensors.' +
-        doc)
-    .NumInputs([](int n) { return n >= 3 && n % 2 == 1; })
-    .NumOutputs([](int n) { return n >= 1; })
-    .Input(0, 'in1_lengths', '.lengths')
-    .Input(1, 'in1_presence', '.presence')
-    .Input(2, 'out_values_values', '.values.values_grad')
-    .Output(0, 'out1_values', '.values_grad');
-REGISTER_GRADIENT(
-    MergeSingleListFeatureTensors,
-    GetMergeSingleListFeatureTensorsGradient);
     
-    template <typename T, class Context>
-class FlexibleTopKGradientOp : public Operator<Context> {
- public:
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
+#ifndef SELFMTIMPL
+#define SELFMTIMPL
+    
+    // -------------------------------------
+    
+    #ifdef U_USE_COLLATION_KEY_DEPRECATES
+// Create a copy of the byte array.
+uint8_t*
+CollationKey::toByteArray(int32_t& count) const
+{
+    uint8_t *result = (uint8_t*) uprv_malloc( sizeof(uint8_t) * fCount );
     }
     
-    OPERATOR_SCHEMA(GivenTensorFill)
-    .NumInputs(0, 1)
-    .NumOutputs(1)
-    .AllowInplace({{0, 0}})
-    .SetDoc(R'DOC(
-This op fills an output tensor with the data specified by the *value* and *dtype* arguments.  The output tensor shape is specified by the *shape* argument. Beware, when using this argument *value* should have a value for every element of the *output*, as missing values will not be initialized automatically. If *input_as_shape* is set to *true*, then the *input* should be a 1D tensor containing the desired output shape (the dimensions specified in *extra_shape* will also be appended). In this case, the *shape* argument should **not** be set.
+    /**
+ * Implement UnicodeMatcher
+ */
+UnicodeString& StringMatcher::toPattern(UnicodeString& result,
+                                        UBool escapeUnprintable) const
+{
+    result.truncate(0);
+    UnicodeString str, quoteBuf;
+    if (segmentNumber > 0) {
+        result.append((UChar)40); /*(*/
+    }
+    for (int32_t i=0; i<pattern.length(); ++i) {
+        UChar keyChar = pattern.charAt(i);
+        const UnicodeMatcher* m = data->lookupMatcher(keyChar);
+        if (m == 0) {
+            ICU_Utility::appendToRule(result, keyChar, FALSE, escapeUnprintable, quoteBuf);
+        } else {
+            ICU_Utility::appendToRule(result, m->toPattern(str, escapeUnprintable),
+                         TRUE, escapeUnprintable, quoteBuf);
+        }
+    }
+    if (segmentNumber > 0) {
+        result.append((UChar)41); /*)*/
+    }
+    // Flush quoteBuf out to result
+    ICU_Utility::appendToRule(result, -1,
+                              TRUE, escapeUnprintable, quoteBuf);
+    return result;
+}
     
-    class GetIm2ColGradient : public GradientMakerBase {
-  using GradientMakerBase::GradientMakerBase;
-  vector<OperatorDef> GetGradientDefs() override {
-    return SingleGradientDef(
-        'Col2Im',
-        '',
-        std::vector<string>{GO(0), I(0)},
-        std::vector<string>{GI(0)});
+    
+    {  if (action->second == Killswitch::refresh_) {
+    auto result = refresh();
+    if (result) {
+      return Status::success();
+    } else {
+      return Status::failure(result.getError().getMessage());
+    }
+  } else {
+    return KillswitchPlugin::call(request, response);
   }
-};
-REGISTER_GRADIENT(Im2Col, GetIm2ColGradient);
+}
+    
+    GTEST_TEST(ErrorTest, createErrorFromOtherError) {
+  const auto firstMsg = std::string{'2018-06-28 08:13 451014'};
+    }
+    
+    GTEST_TEST(ExpectedTest, get_error_from_expected_with_value) {
+  auto action = []() {
+    auto expected = Expected<int, TestError>(228);
+    const auto& error = expected.getError();
+    boost::ignore_unused(error);
+  };
+#ifndef NDEBUG
+  ASSERT_DEATH(action(), 'Do not try to get error from Expected with value');
+#else
+  boost::ignore_unused(action);
+#endif
+}
+    
+    #include <osquery/utils/error/error.h>
+#include <osquery/utils/expected/expected.h>
+#include <sstream>
+#include <string>
+    
+    Expected<int, NativeEvent::Error> extractIdFromTheSystem(
+    fs::path const& full_event_path) {
+  auto const id_path = full_event_path / 'id';
+  auto id_in =
+      std::fstream(id_path.native(), std::ios_base::in | std::ios_base::binary);
+  auto id_str = std::string{};
+  if (id_in.is_open()) {
+    id_in >> id_str;
+  }
+  if (!id_in.is_open() || id_in.fail()) {
+    return createError(NativeEvent::Error::System,
+                       'Could not open linux event id file ')
+           << boost::io::quoted(id_path.string());
+  }
+  auto id_exp = tryTo<SystemEventId>(id_str);
+  if (id_exp.isError()) {
+    return createError(NativeEvent::Error::System,
+                       'Could not parse linux event id from the string ')
+           << boost::io::quoted(id_str);
+  }
+  return id_exp.get();
+}
+    
+    IMGUI_IMPL_API bool     ImGui_ImplGlfw_InitForOpenGL(GLFWwindow* window, bool install_callbacks);
+IMGUI_IMPL_API bool     ImGui_ImplGlfw_InitForVulkan(GLFWwindow* window, bool install_callbacks);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplGlfw_NewFrame();
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+    void ImGui_ImplFreeGLUT_MouseWheelFunc(int button, int dir, int x, int y)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    io.MousePos = ImVec2((float)x, (float)y);
+    if (dir > 0)
+        io.MouseWheel += 1.0;
+    else if (dir < 0)
+        io.MouseWheel -= 1.0;
+    (void)button; // Unused
+}
+    
+    IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_Init();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_NewFrame();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data);
+    
+        // Setup back-end capabilities flags
+    ImGuiIO& io = ImGui::GetIO();
+    io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;       // We can honor GetMouseCursor() values (optional)
+    io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;        // We can honor io.WantSetMousePos requests (optional, rarely used)
+    io.BackendPlatformName = 'imgui_impl_sdl';
