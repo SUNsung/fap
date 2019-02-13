@@ -1,378 +1,443 @@
 
         
-        // Calls the registered C++ shape inference function for <node> (a serialized
-// NodeDef).
-// Should not be called for shape functions that access input tensors; constant
-// input tensor values are not made available, and so the inferred shapes will
-// be less precise than they could be.
-//
-// Returns an error, or OK, in <out_status> according to whether the shape
-// inference was successful.
-//
-// On success, returns a vector populated with the inferred output shapes (as
-// serialized CppShapeInferenceResult protos) followed by a serialized
-// CppShapeInferenceInputsNeeded proto.
-//
-// This is temporary code to be used during the migration
-// from python shape inference functions to C++ shape inference functions.
-std::vector<string> RunCppShapeInference(
-    int graph_def_version, const string& serialized_node_def,
-    const std::vector<string>& input_serialized_shapes,
-    PyObject* input_constant_tensor_values,
-    const std::vector<string>& input_constant_tensor_as_shape_values,
-    TF_Status* out_status);
-    
-    // Add a _ to the end of s if necessary to avoid a Python keyword or built-in.
-string AvoidPythonReserved(const string& s);
-    
-      // Initializes the NumPy descriptor.
-  PyArray_InitArrFuncs(&NPyBfloat16_ArrFuncs);
-  NPyBfloat16_ArrFuncs.getitem = NPyBfloat16_GetItem;
-  NPyBfloat16_ArrFuncs.setitem = NPyBfloat16_SetItem;
-  NPyBfloat16_ArrFuncs.copyswapn = NPyBfloat16_CopySwapN;
-  NPyBfloat16_ArrFuncs.copyswap = NPyBfloat16_CopySwap;
-  NPyBfloat16_ArrFuncs.nonzero = NPyBfloat16_NonZero;
-  NPyBfloat16_ArrFuncs.fill = NPyBfloat16_Fill;
-    
-    #endif  // TENSORFLOW_PYTHON_LIB_CORE_BFLOAT16_H_
-
-    
-    void PyExceptionRegistry::Init(PyObject* code_to_exc_type_map) {
-  DCHECK(singleton_ == nullptr) << 'PyExceptionRegistry::Init() already called';
-  singleton_ = new PyExceptionRegistry;
-    }
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    
-    {  tensorflow::DeviceNameUtils::ParsedName parsed_name;
-  if (!tensorflow::DeviceNameUtils::ParseFullName(node_def.device(),
-                                                  &parsed_name)) {
-    LOG(WARNING) << 'Failed to parse device from node_def: '
-                 << node_def.ShortDebugString();
-    return '';
-  }
-  string class_name = '';
-  tensorflow::FindKernelDef(tensorflow::DeviceType(parsed_name.type.c_str()),
-                            node_def, nullptr /* kernel_def */, &class_name)
-      .IgnoreError();
-  return class_name;
+        
+    {  return false;
 }
     
-    namespace stream_executor {
-namespace cuda {
-    }
-    }
+      void PurchaseProduct(const std::string& product_id, mate::Arguments* args);
     
     
-    {  switch (status.ValueOrDie()) {
-    case CUDA_SUCCESS:
-      return Event::Status::kComplete;
-    case CUDA_ERROR_NOT_READY:
-      return Event::Status::kPending;
-    default:
-      LOG(INFO) << 'Error condition returned for event status: '
-                << status.ValueOrDie();
-      return Event::Status::kError;
+    {}  // namespace api
+    
+    void SavePageHandler::OnDownloadUpdated(download::DownloadItem* item) {
+  if (item->IsDone()) {
+    v8::Isolate* isolate = v8::Isolate::GetCurrent();
+    v8::Locker locker(isolate);
+    v8::HandleScope handle_scope(isolate);
+    if (item->GetState() == download::DownloadItem::COMPLETE) {
+      callback_.Run(v8::Null(isolate));
+    } else {
+      v8::Local<v8::String> error_message =
+          v8::String::NewFromUtf8(isolate, 'Fail to save page');
+      callback_.Run(v8::Exception::Error(error_message));
+    }
+    Destroy(item);
   }
 }
     
-      // This is for complex to complex FFT, when the direction is required.
-  template <typename FuncT, typename InputT, typename OutputT>
-  bool DoFftWithDirectionInternal(Stream *stream, fft::Plan *plan,
-                                  FuncT cufft_exec,
-                                  const DeviceMemory<InputT> &input,
-                                  DeviceMemory<OutputT> *output);
+     protected:
+  virtual ~TrackableObjectBase();
     
-    /**
- * @brief Get a specific filler from the specification given in FillerParameter.
- *
- * Ideally this would be replaced by a factory pattern, but we will leave it
- * this way for now.
- */
-template <typename Dtype>
-Filler<Dtype>* GetFiller(const FillerParameter& param) {
-  const std::string& type = param.type();
-  if (type == 'constant') {
-    return new ConstantFiller<Dtype>(param);
-  } else if (type == 'gaussian') {
-    return new GaussianFiller<Dtype>(param);
-  } else if (type == 'positive_unitball') {
-    return new PositiveUnitballFiller<Dtype>(param);
-  } else if (type == 'uniform') {
-    return new UniformFiller<Dtype>(param);
-  } else if (type == 'xavier') {
-    return new XavierFiller<Dtype>(param);
-  } else if (type == 'msra') {
-    return new MSRAFiller<Dtype>(param);
-  } else if (type == 'bilinear') {
-    return new BilinearFiller<Dtype>(param);
+    Base::~Base() {
+}
+    
+    #include 'base/values.h'
+#include 'components/zoom/zoom_controller.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/common/page_zoom.h'
+#include 'ui/views/controls/menu/menu_runner.h'
+    
+    void Menu::UpdateKeys(views::FocusManager *focus_manager){
+  if (focus_manager == NULL){
+    return ;
   } else {
-    CHECK(false) << 'Unknown filler name: ' << param.type();
+    focus_manager_ = focus_manager;
+    for(auto* item : menu_items_) {
+      item->UpdateKeys(focus_manager);
+    }
   }
-  return (Filler<Dtype>*)(NULL);
 }
     
-    // Serialize LayerParameter to protocol buffer
-template <typename Dtype>
-void Layer<Dtype>::ToProto(LayerParameter* param, bool write_diff) {
-  param->Clear();
-  param->CopyFrom(layer_param_);
-  param->clear_blobs();
-  for (int i = 0; i < blobs_.size(); ++i) {
-    blobs_[i]->ToProto(param->add_blobs(), write_diff);
+    #include 'base/values.h'
+#include 'content/nw/src/api/dispatcher_host.h'
+#include 'content/nw/src/api/menu/menu.h'
+#include 'gdk/gdkkeysyms.h'//to get keyval from name
+    
+        bool Write(ClipboardData& data) {
+      switch(data.type) {
+        case TYPE_TEXT:
+        return WriteText(data);
+        break;
+        case TYPE_HTML:
+        return WriteHTML(data);
+        break;
+        case TYPE_RTF:
+        return WriteRTF(data);
+        break;
+        case TYPE_PNG:
+        case TYPE_JPEG:
+        return WriteImage(data);
+        break;
+        case TYPE_NONE:
+        NOTREACHED();
+        return false;
+      }
+      NOTREACHED();
+      return false;
+    }
+    
+    
+    {
+    {}}
+    
+    //////////////////////////////////////////////////////////////////////
+    
+      static const APCCollection* fromHandle(const APCHandle* handle) {
+    assertx(handle->checkInvariants());
+    assertx(handle->kind() == APCKind::SharedCollection);
+    static_assert(offsetof(APCCollection, m_handle) == 0, '');
+    return reinterpret_cast<const APCCollection*>(handle);
   }
+    
+      /**
+   * Dump detailed information to return string.
+   */
+  virtual String debuggerDump() {
+    return String();
+  }
+    
+    template<typename F>
+void logPerfWarning(folly::StringPiece event, F fillCols) {
+  logPerfWarningImpl(event, 1, kDefaultPerfWarningRate, fillCols);
+}
+template<typename F>
+void logPerfWarning(folly::StringPiece event, int64_t rate, F fillCols) {
+  logPerfWarningImpl(event, 1, rate, fillCols);
+}
+    
+    #include 'hphp/util/stack-trace.h'
+    
+    namespace CNTK
+{
+    static Matrix<char>* AllocateMatrix(const NDShape& viewShape, const DeviceDescriptor& device)
+    {
+        auto matrixDims = GetMatrixDimensions(viewShape);
+        return new Matrix<char>(matrixDims.first, matrixDims.second, AsCNTKImplDeviceId(device));
+    }
+    }
+    
+            static Dictionary Serialize(const FunctionPtr& f);
+    
+    
+    {
+    {            if (m_unpackedShape != m_data->Shape())
+                LogicError('The computed unpacked shape '%S' of the PackedValue object does not match the actual Data NDArrayView's shape '%S' after unpacking.',
+                           m_unpackedShape.AsString().c_str(), m_data->Shape().AsString().c_str());
+        }
+    }
+    
+        // Acquires the mutex. If 'wait' is true and mutex is acquired by someone else then
+    // function waits until mutex is released
+    // Returns false if !wait and lock cannot be acquired, or in case of a system error that prevents us from acquiring the lock.
+    bool Acquire(bool wait)
+    {
+        assert(m_handle == NULL);
+        m_handle = ::CreateMutexA(NULL /*security attr*/, FALSE /*bInitialOwner*/, m_name.c_str());
+        if (m_handle == NULL)
+        {
+            if (!wait)
+                return false;   // can't lock due to access permissions: lock already exists, consider not available
+            else
+                RuntimeError('Acquire: Failed to create named mutex %s: %d.', m_name.c_str(), GetLastError());
+        }
+    }
+    
+    // Rand based on Mersenne Twister.
+// We use our own distribution in order to match baselines between different operating systems,
+// because uniform_distribution is not guaranteed to provide the same numbers on different platforms.
+// TODO: Switching to Boost would eliminate this problem.
+static inline size_t RandMT(const size_t begin, const size_t end, std::mt19937_64& rng)
+{
+    const size_t randomNumber = rng();
+    return begin + randomNumber % (end - begin);
 }
     
     /**
- * @brief Compute the index of the @f$ K @f$ max values for each datum across
- *        all dimensions @f$ (C \times H \times W) @f$.
+ * @brief Event publisher responsible for processing events of a certain type
+ * and publish them to registered ev2::Subscription instances.
  *
- * Intended for use after a classification layer to produce a prediction.
- * If parameter out_max_val is set to true, output is a vector of pairs
- * (max_ind, max_val) for each image. The axis parameter specifies an axis
- * along which to maximise.
- *
- * NOTE: does not implement Backwards operation.
+ * @details A ev2::Publisher is the responsible for processing events coming
+ * from producers and forwarding them to the registered ev2::Subscription
+ * instances. This class is meant to be specialized by consumers according to
+ * their needs.
  */
-template <typename Dtype>
-class ArgMaxLayer : public Layer<Dtype> {
+class Publisher {
  public:
   /**
-   * @param param provides ArgMaxParameter argmax_param,
-   *     with ArgMaxLayer options:
-   *   - top_k (\b optional uint, default 1).
-   *     the number @f$ K @f$ of maximal items to output.
-   *   - out_max_val (\b optional bool, default false).
-   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
-   *     output max_val along the specified axis.
-   *   - axis (\b optional int).
-   *     if set, maximise along the specified axis else maximise the flattened
-   *     trailing dimensions for each index of the first / num dimension.
+   * @brief Errors return by this class' methods.
    */
-  explicit ArgMaxLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+  enum class Error {
+    InvalidSubscription,
+  };
     }
     
-      vector<shared_ptr<Batch<Dtype> > > prefetch_;
-  BlockingQueue<Batch<Dtype>*> prefetch_free_;
-  BlockingQueue<Batch<Dtype>*> prefetch_full_;
-  Batch<Dtype>* prefetch_current_;
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the reordered input.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient
-   *        with respect to the outputs
-   *   -# @f$ (M \times ...) @f$:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2):
-   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
-   *     required) back to the input x_1
-   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
-   *     false.
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the concatenate inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *        respect to the outputs
-   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
-   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length K), into which the top gradient
-   *        @f$ \frac{\partial E}{\partial y} @f$ is deconcatenated back to the
-   *        inputs @f$
-   *        \left[ \begin{array}{cccc}
-   *          \frac{\partial E}{\partial x_1} &
-   *          \frac{\partial E}{\partial x_2} &
-   *          ... &
-   *          \frac{\partial E}{\partial x_K}
-   *        \end{array} \right] =
-   *        \frac{\partial E}{\partial y}
-   *        @f$
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-      /**
-   * @brief Computes the Contrastive error gradient w.r.t. the inputs.
-   *
-   * Computes the gradients with respect to the two input vectors (bottom[0] and
-   * bottom[1]), but not the similarity label (bottom[2]).
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
-   *      This Blob's diff will simply contain the loss_weight* @f$ \lambda @f$,
-   *      as @f$ \lambda @f$ is the coefficient of this layer's output
-   *      @f$\ell_i@f$ in the overall Net loss
-   *      @f$ E = \lambda_i \ell_i + \mbox{other loss terms}@f$; hence
-   *      @f$ \frac{\partial E}{\partial \ell_i} = \lambda_i @f$.
-   *      (*Assuming that this top Blob is not used as a bottom (input) by any
-   *      other layer of the Net.)
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times 1 \times 1) @f$
-   *      the features @f$a@f$; Backward fills their diff with
-   *      gradients if propagate_down[0]
-   *   -# @f$ (N \times C \times 1 \times 1) @f$
-   *      the features @f$b@f$; Backward fills their diff with gradients if
-   *      propagate_down[1]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    ChannelCredentials::~ChannelCredentials() {}
-    
-    void ChannelArguments::SetSslTargetNameOverride(const grpc::string& name) {
-  SetString(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG, name);
+    const std::string& Subscription::subscriber() const {
+  return subscriber_;
 }
     
+      /**
+   * @brief Retrieve the subscriber name.
+   *
+   * @returns A const reference to the subscriber name with the lifetime of the
+   * ev2::Subscription object.
+   */
+  const std::string& subscriber() const;
+  /**
+   * @brief Retrieve the publisher type.
+   *
+   * @returns A const reference to std::type_index of the subscriber with the
+   * lifetime of the ev2::Subscription.
+   */
+  const std::type_index& pubType() const;
     
-    {}  // namespace grpc
-    
-    ThreadPoolInterface* CreateDefaultThreadPool() { return g_ctp_impl(); }
-    
-      void Add(const std::function<void()>& callback) override;
-    
-    /*! \brief override type_name for caffe::LayerParameter */
-namespace dmlc {
-  DMLC_DECLARE_TYPE_NAME(::caffe::LayerParameter, 'caffe-layer-parameter');
-}
-    
-        // Caffe seems to understand phase inside an 'include {}' block
-    if (!param_.prototxt.has_phase()) {
-      if (param_.prototxt.include().size()) {
-        if (param_.prototxt.include(0).has_phase()) {
-          param_.prototxt.set_phase(param_.prototxt.include(0).phase());
-        }
-      }
-    }
-    
-      Operator* CreateOperator(Context ctx) const override {
-    LOG(FATAL) << 'Not Implemented.';
-    return NULL;
+      std::size_t wait(std::size_t batch = 1,
+                   std::chrono::milliseconds timeout =
+                       std::chrono::milliseconds::zero()) override {
+    return batch;
   }
     
-    
-    {
-    {}  // namespace op
-}  // namespace mxnet
-
-    
-    
-    {  Engine::Get()->PushSync([=](RunContext ctx){
-      ndout.CheckAndAlloc();
-      cv::Mat buf(h, w, c == 3 ? CV_8UC3 : CV_8U, ndsrc.data().dptr_);
-      cv::Mat dst(top+h+bot, left+w+right, c == 3 ? CV_8UC3 : CV_8U, ndout.data().dptr_);
-      cv::copyMakeBorder(buf, dst, top, bot, left, right, type, cv::Scalar(value));
-      CHECK(!dst.empty());
-    }, ndout.ctx(), {ndsrc.var()}, {ndout.var()});
-  NDArray *tmp = new NDArray();
-  *tmp = ndout;
-  *out = tmp;
-  API_END();
-}
-
-    
-    
-    // exception type_error.304
-    try
-    {
-        // use at() on a non-object type
-        json str = 'I am a string';
-        str.at('the good') = 'Another string';
-    }
-    catch (json::type_error& e)
-    {
-        std::cout << e.what() << '\n';
+    namespace osquery {
     }
     
     
-    {    // out_of_range.404
-    try
+class ExtensionManager_registerExtension_pargs {
+ public:
+    }
+    
+      void ping(ExtensionStatus& _return) {
+    // Your implementation goes here
+    printf('ping\n');
+  }
+    
+    IMGUI_IMPL_API bool     ImGui_Marmalade_Init(bool install_callbacks);
+IMGUI_IMPL_API void     ImGui_Marmalade_Shutdown();
+IMGUI_IMPL_API void     ImGui_Marmalade_NewFrame();
+IMGUI_IMPL_API void     ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data);
+    
+        // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();
+    
+    void CreateRenderTarget()
+{
+    ID3D11Texture2D* pBackBuffer;
+    g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+    g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &g_mainRenderTargetView);
+    pBackBuffer->Release();
+}
+    
+    static void ImGui_ImplFreeGLUT_UpdateKeyboardMods()
+{
+    ImGuiIO& io = ImGui::GetIO();
+    int mods = glutGetModifiers();
+    io.KeyCtrl = (mods & GLUT_ACTIVE_CTRL) != 0;
+    io.KeyShift = (mods & GLUT_ACTIVE_SHIFT) != 0;
+    io.KeyAlt = (mods & GLUT_ACTIVE_ALT) != 0;
+}
+    
+    CardinalSplineTo* CardinalSplineTo::create(float duration, PointArray *points, float tension)
+{
+    CardinalSplineTo *ret = new (std::nothrow) CardinalSplineTo();
+    if (ret)
     {
-        // try to use a JSON pointer that cannot be resolved
-        json::reference ref = j.at('/number/foo'_json_pointer);
+        if (ret->initWithDuration(duration, points, tension))
+        {
+            ret->autorelease();
+        }
+        else 
+        {
+            CC_SAFE_RELEASE_NULL(ret);
+        }
     }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
-    }
-}
-
-    
-        // the following call will not add an object, because there is already
-    // a value stored at key 'B'
-    auto res2 = null.emplace('B', 'c');
-    
-    
-    {  EsdCanClient esd_can_client;
-  EXPECT_TRUE(esd_can_client.Init(param));
-  EXPECT_EQ(esd_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
-  std::vector<CanFrame> frames;
-  int32_t num = 0;
-  EXPECT_EQ(esd_can_client.Send(frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  EXPECT_EQ(esd_can_client.Receive(&frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
-  CanFrame can_frame;
-  frames.push_back(can_frame);
-  EXPECT_EQ(esd_can_client.SendSingleFrame(frames),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  esd_can_client.Stop();
-}
-    
-    double ObjectExtendedInfo60D::object_width(const std::uint8_t* bytes,
-                                           int32_t length) const {
-  Byte t0(bytes + 7);
-  int32_t x = t0.get_byte(0, 8);
     }
     
+        GLshort _fromR;
+    GLshort _fromG;
+    GLshort _fromB;
     
-    {  int ret = x;
-  return ret;
-}
     
-    #include 'modules/localization/msf/local_map/base_map/base_map_matrix.h'
+    /** Returns the numbers of actions that are running in a
+     *  certain target with a specific tag.
+     * Like getNumberOfRunningActionsInTarget Composable actions
+     * are counted as 1 action. Example:
+     * - If you are running 1 Sequence of 7 actions, it will return 1.
+     * - If you are running 7 Sequences of 2 actions, it will return 7.
+     *
+     * @param target    A certain target.
+     * @param tag       Tag that will be searched.
+     * @return  The numbers of actions that are running in a certain target
+     *          with a specific tag.
+     * @see getNumberOfRunningActionsInTarget
+     * @js NA
+     */
+    virtual size_t getNumberOfRunningActionsInTargetByTag(const Node *target, int tag);
     
-    BackupTrajectoryGenerator::BackupTrajectoryGenerator(
-    const State& init_s, const State& init_d,
-    const double init_relative_time,
-    const std::shared_ptr<CollisionChecker>& ptr_collision_checker,
-    const Trajectory1dGenerator* trajectory1d_generator)
-    : init_relative_time_(init_relative_time),
-      ptr_collision_checker_(ptr_collision_checker),
-      ptr_trajectory1d_generator_(trajectory1d_generator) {
-  GenerateTrajectory1dPairs(init_s, init_d);
-}
+    void FadeOutTRTiles::transformTile(const Vec2& pos, float distance)
+{
+    Quad3 coords = getOriginalTile(pos);
+    Vec2 step = _gridNodeTarget->getGrid()->getStep();
+    }
+    
+        /**
+    @brief Get the amplitude rate of the effect.
+    @return Return the amplitude rate of the effect.
+    */
+    float getAmplitudeRate() const { return _amplitudeRate; }
+    /**
+    @brief Set the amplitude rate of the effect.
+    @param amplitudeRate The value of amplitude rate will be set.
+    */
+    void setAmplitudeRate(float amplitudeRate) { _amplitudeRate = amplitudeRate; }
+    
+    void AutoPolygon::calculateUV(const Rect& rect, V3F_C4B_T2F* verts, ssize_t count)
+{
+    /*
+     whole texture UV coordination
+     0,0                  1,0
+     +---------------------+
+     |                     |0.1
+     |                     |0.2
+     |     +--------+      |0.3
+     |     |texRect |      |0.4
+     |     |        |      |0.5
+     |     |        |      |0.6
+     |     +--------+      |0.7
+     |                     |0.8
+     |                     |0.9
+     +---------------------+
+     0,1                  1,1
+     */
+    
+    CCASSERT(_width && _height, 'please specify width and height for this AutoPolygon instance');
+    float texWidth  = _width;
+    float texHeight = _height;
+    }
+    
+    
+/**
+ * AutoPolygon is a helper Object
+ * AutoPolygon's purpose is to process an image into 2d polygon mesh in runtime
+ * It has functions for each step in the process, from tracing all the points, to triangulation
+ * the result can be then passed to Sprite::create() to create a Polygon Sprite
+ */
+class CC_DLL AutoPolygon
+{
+public:
+    /**
+     * create an AutoPolygon and initialize it with an image file
+     * the image must be a 32bit PNG for current version 3.7
+     * @param   filename    a path to image file, e.g., 'scene1/monster.png'.
+     * @return  an AutoPolygon object;
+     */
+    AutoPolygon(const std::string &filename);
+    
+    /**
+     * Destructor of AutoPolygon.
+     */
+    ~AutoPolygon();
+    
+    /**
+     * trace all the points along the outline of the image, 
+     * @warning must create AutoPolygon with filename to use this function
+     * @param   rect    a texture rect for specify an area of the image
+     * @param   threshold   the value when alpha is greater than this value will be counted as opaque, default to 0.0
+     * @return  a vector of vec2 of all the points found in clockwise order
+     * @code
+     * auto ap = AutoPolygon('grossini.png');
+     * auto rect = Rect(100, 100, 200, 200);
+     * std::vector<Vec2> points = ap.trace(rect);//default threshold is 0.0
+     * @endcode
+     */
+     std::vector<Vec2> trace(const cocos2d::Rect& rect, float threshold = 0.0f);
+    
+    /**
+     * reduce the amount of points so its faster for GPU to process and draw
+     * based on Ramer-Douglas-Peucker algorithm
+     * @param   points  a vector of Vec2 points as input
+     * @param   rect    a texture rect for specify an area of the image to avoid over reduction
+     * @param   epsilon the perpendicular distance where points smaller than this value will be discarded
+     * @return  a vector of Vec2 of the remaining points in clockwise order
+     * @code
+     * auto ap = AutoPolygon();
+     * std::vector<Vec2> reduced = ap.reduce(inputPoints, rect);//default epsilon is 2
+     * @endcode
+     */
+    std::vector<Vec2> reduce(const std::vector<Vec2>& points, const Rect& rect, float epsilon = 2.0f);
+    
+    /**
+     * expand the points along their edge, useful after you reduce the points that cuts into the sprite
+     * using ClipperLib
+     * @param   points  a vector of Vec2 points as input
+     * @param   rect    a texture rect for specify an area of the image, the expanded points will be clamped in this rect, ultimately resulting in a quad if the expansion is too great
+     * @param   epsilon the distance which the edges will expand
+     * @return  a vector of Vec2 as the result of the expansion
+     * @code
+     * auto ap = AutoPolygon();
+     * std::vector<Vec2> expanded = ap.expand(inputPoints, rect, 2.0);
+     * @endcode
+     */
+    std::vector<Vec2> expand(const std::vector<Vec2>& points, const Rect& rect, float epsilon);
+    
+    /**
+     * Triangulate the input points into triangles for rendering
+     * using poly2tri
+     * @warning points must be closed loop, cannot have 2 points sharing the same position and cannot intersect itself
+     * @param   points  a vector of vec2 points as input
+     * @return  a Triangles object with points and indices
+     * @code
+     * auto ap = AutoPolygon();
+     * TrianglesCommand::Triangles myPolygons = ap.triangulate(myPoints);
+     * @endcode
+     */
+    TrianglesCommand::Triangles triangulate(const std::vector<Vec2>& points);
+    
+    /**
+     * calculate the UV coordinates for each points based on a texture rect
+     * @warning This method requires the AutoPolygon object to know the texture file dimension
+     * @param   rect    a texture rect to specify where to map the UV
+     * @param   verts   a pointer to the verts array, served both as input and output verts
+     * @param   count   the count for the verts array
+     * @code
+     * auto ap = AutoPolygon('grossini.png');
+     * TrianglesCommand::Triangles myPolygons = ap.triangulate(myPoints);
+     * ap.calculateUV(rect, myPolygons.verts, 20);
+     * @endcode
+     */
+    void calculateUV(const Rect& rect, V3F_C4B_T2F* verts, ssize_t count);
+    
+    /**
+     * a helper function, packing trace, reduce, expand, triangulate and calculate uv in one function
+     * @param   rect    texture rect, use Rect::ZERO for the size of the texture, default is Rect::ZERO
+     * @param   epsilon the value used to reduce and expand, default to 2.0
+     * @param   threshold   the value where bigger than the threshold will be counted as opaque, used in trace
+     * @return  a PolygonInfo, to use with sprite
+     * @code
+     * auto ap = AutoPolygon('grossini.png');
+     * PolygonInfo myInfo = ap.generateTriangles();//use all default values
+     * auto sp1 = Sprite::create(myInfo);
+     * polygonInfo myInfo2 = ap.generateTriangles(Rect::ZERO, 5.0, 0.1);//ap can be reused to generate another set of PolygonInfo with different settings
+     * auto sp2 = Sprite::create(myInfo2);
+     * @endcode
+     */
+    PolygonInfo generateTriangles(const Rect& rect = Rect::ZERO, float epsilon = 2.0f, float threshold = 0.05f);
+    
+    /**
+     * a helper function, packing autoPolygon creation, trace, reduce, expand, triangulate and calculate uv in one function
+     * @warning if you want to repetitively generate polygons, consider create an AutoPolygon object, and use generateTriangles function, as it only reads the file once
+     * @param   filename     A path to image file, e.g., 'scene1/monster.png'.
+     * @param   rect    texture rect, use Rect::ZERO for the size of the texture, default is Rect::ZERO
+     * @param   epsilon the value used to reduce and expand, default to 2.0
+     * @param   threshold   the value where bigger than the threshold will be counted as opaque, used in trace
+     * @return  a PolygonInfo, to use with sprite
+     * @code
+     * auto sp = Sprite::create(AutoPolygon::generatePolygon('grossini.png'));
+     * @endcode
+     */
+    static PolygonInfo generatePolygon(const std::string& filename, const Rect& rect = Rect::ZERO, float epsilon = 2.0f, float threshold = 0.05f);
+protected:
+    Vec2 findFirstNoneTransparentPixel(const Rect& rect, float threshold);
+    std::vector<cocos2d::Vec2> marchSquare(const Rect& rect, const Vec2& first, float threshold);
+    unsigned int getSquareValue(unsigned int x, unsigned int y, const Rect& rect, float threshold);
+    }
