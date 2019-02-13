@@ -1,278 +1,239 @@
 
         
-        #endif // BITCOIN_QT_TRANSACTIONDESCDIALOG_H
+            /** Colorize an icon (given object) with the text color */
+    QIcon TextColorIcon(const QIcon& icon) const;
+    
+    
+    {    secp256k1_ecdsa_recoverable_signature_load(ctx, &r, &s, recid, sig);
+    secp256k1_scalar_get_b32(&output64[0], &r);
+    secp256k1_scalar_get_b32(&output64[32], &s);
+    return 1;
+}
+    
+    #endif // BITCOIN_CRYPTO_RIPEMD160_H
 
     
-    #include <univalue.h>
-    
-    static bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
-{
-    if (s1.size() != s2.size()) return false;
-    for (size_t i = 0; i < s1.size(); ++i) {
-        char c1 = s1[i];
-        if (c1 >= 'A' && c1 <= 'Z') c1 -= ('A' - 'a');
-        char c2 = s2[i];
-        if (c2 >= 'A' && c2 <= 'Z') c2 -= ('A' - 'a');
-        if (c1 != c2) return false;
-    }
-    return true;
-}
-    
-        BOOST_CHECK(v.setBool(false));
-    BOOST_CHECK_EQUAL(v.isBool(), true);
-    BOOST_CHECK_EQUAL(v.isTrue(), false);
-    BOOST_CHECK_EQUAL(v.isFalse(), true);
-    BOOST_CHECK_EQUAL(v.getBool(), false);
-    
-    
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    #include 'base/values.h'
-#include 'components/zoom/zoom_controller.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/public/browser/web_contents.h'
-#include 'content/public/common/page_zoom.h'
-#include 'ui/views/controls/menu/menu_runner.h'
-    
-    
-    {  *accelerator = item->accelerator_;
-  return true;
-}
-    
-      private:
-    bool ReadText(ClipboardData& data) {
-      DCHECK(data.type == TYPE_TEXT);
-      base::string16 text;
-      clipboard_->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
-      data.data.reset(new std::string(base::UTF16ToUTF8(text)));
-      return true;
-    }
-    
-    #endif  // CAFFE_COMMON_HPP_
+    #endif  // CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
 
     
-      /**
-   * Called by the parent Layer's SetUp to check that the number of bottom
-   * and top Blobs provided as input match the expected numbers specified by
-   * the {ExactNum,Min,Max}{Bottom,Top}Blobs() functions.
+       bool IsItemForCommandIdDynamic(int command_id) const override;
+   base::string16 GetLabelForCommandId(int command_id) const override;
+   bool GetIconForCommandId(int command_id,
+                                   gfx::Image* icon) const override;
+    
+    namespace {
+    }
+    
+          // strip off data uri header if raw is set
+      if (!(data.raw.get() && *(data.raw))) {
+        if (data.type == TYPE_PNG && base::StartsWith(content, kPNGDataUriPrefix, base::CompareCase::INSENSITIVE_ASCII)) {
+          content = content.substr(strlen(kPNGDataUriPrefix));
+        } else if (data.type == TYPE_JPEG && base::StartsWith(content, kJPEGDataUriPrefix, base::CompareCase::INSENSITIVE_ASCII)) {
+          content = content.substr(strlen(kJPEGDataUriPrefix));
+        } else {
+          error_ = base::StringPrintf('Invalid data URI. Only \'%s\' or \'%s\' is accepted.', kPNGDataUriPrefix, kJPEGDataUriPrefix);
+          return false;
+        }
+      }
+    
+    #include 'extensions/browser/extension_function.h'
+    
+    // Functions to create C# XML documentation comments.
+// Currently this only includes documentation comments containing text specified as comments
+// in the .proto file; documentation comments generated just from field/message/enum/proto names
+// is inlined in the relevant code. If more control is required, that code can be moved here.
+    
+    EnumGenerator::~EnumGenerator() {
+}
+    
+    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
+  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
+  // Identifiers can't start with digits
+  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
+  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
+}
+    
+    SourceGeneratorBase::~SourceGeneratorBase() {
+}
+    
+    #endif  // HAVE_ZLIB
+
+    
+    // This test causes gcc 3.3.5 (and earlier?) to give the cryptic error:
+//   'sorry, unimplemented: `method_call_expr' not supported by dump_expr'
+#if !defined(__GNUC__) || __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3)
+    
+    // Instantiate a class with float and double specifications.
+#define INSTANTIATE_CLASS(classname) \
+  char gInstantiationGuard##classname; \
+  template class classname<float>; \
+  template class classname<double>
+    
+    #define REGISTER_LAYER_CLASS(type)                                             \
+  template <typename Dtype>                                                    \
+  shared_ptr<Layer<Dtype> > Creator_##type##Layer(const LayerParameter& param) \
+  {                                                                            \
+    return shared_ptr<Layer<Dtype> >(new type##Layer<Dtype>(param));           \
+  }                                                                            \
+  REGISTER_LAYER_CREATOR(type, Creator_##type##Layer)
+    
+      // If there are two top blobs, then the second blob will contain
+  // accuracies per class.
+  virtual inline int MinTopBlobs() const { return 1; }
+  virtual inline int MaxTopBlobs() const { return 2; }
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 2+)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_1 @f$
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_2 @f$
+   *   -# ...
+   *   - K @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_K @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
+   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
+   *      the concatenated output @f$
+   *        y = [\begin{array}{cccc} x_1 & x_2 & ... & x_K \end{array}]
+   *      @f$
    */
-  virtual void CheckBlobCounts(const vector<Blob<Dtype>*>& bottom,
-                               const vector<Blob<Dtype>*>& top) {
-    if (ExactNumBottomBlobs() >= 0) {
-      CHECK_EQ(ExactNumBottomBlobs(), bottom.size())
-          << type() << ' Layer takes ' << ExactNumBottomBlobs()
-          << ' bottom blob(s) as input.';
-    }
-    if (MinBottomBlobs() >= 0) {
-      CHECK_LE(MinBottomBlobs(), bottom.size())
-          << type() << ' Layer takes at least ' << MinBottomBlobs()
-          << ' bottom blob(s) as input.';
-    }
-    if (MaxBottomBlobs() >= 0) {
-      CHECK_GE(MaxBottomBlobs(), bottom.size())
-          << type() << ' Layer takes at most ' << MaxBottomBlobs()
-          << ' bottom blob(s) as input.';
-    }
-    if (ExactNumTopBlobs() >= 0) {
-      CHECK_EQ(ExactNumTopBlobs(), top.size())
-          << type() << ' Layer produces ' << ExactNumTopBlobs()
-          << ' top blob(s) as output.';
-    }
-    if (MinTopBlobs() >= 0) {
-      CHECK_LE(MinTopBlobs(), top.size())
-          << type() << ' Layer produces at least ' << MinTopBlobs()
-          << ' top blob(s) as output.';
-    }
-    if (MaxTopBlobs() >= 0) {
-      CHECK_GE(MaxTopBlobs(), top.size())
-          << type() << ' Layer produces at most ' << MaxTopBlobs()
-          << ' top blob(s) as output.';
-    }
-    if (EqualNumBottomTopBlobs()) {
-      CHECK_EQ(bottom.size(), top.size())
-          << type() << ' Layer produces one top blob as output for each '
-          << 'bottom blob input.';
-    }
-  }
-    
-      int label_axis_, outer_num_, inner_num_;
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
     #include 'caffe/blob.hpp'
 #include 'caffe/layer.hpp'
 #include 'caffe/proto/caffe.pb.h'
     
-    
-    {  Blob<Dtype> transformed_data_;
-};
-    
     /**
- * @brief Convolves the input image with a bank of learned filters,
- *        and (optionally) adds biases.
+ * @brief Takes a Blob and crop it, to the shape specified by the second input
+ *  Blob, across all dimensions after the specified axis.
  *
- *   Caffe convolves by reduction to matrix multiplication. This achieves
- *   high-throughput and generality of input and filter dimensions but comes at
- *   the cost of memory for matrices. This makes use of efficiency in BLAS.
- *
- *   The input is 'im2col' transformed to a channel K' x H x W data matrix
- *   for multiplication with the N x K' x H x W filter matrix to yield a
- *   N' x H x W output matrix that is then 'col2im' restored. K' is the
- *   input channel * kernel height * kernel width dimension of the unrolled
- *   inputs so that the im2col matrix has a column for each input region to
- *   be filtered. col2im restores the output spatial structure by rolling up
- *   the output channel N' columns of the output matrix.
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
  */
-template <typename Dtype>
-class ConvolutionLayer : public BaseConvolutionLayer<Dtype> {
- public:
-  /**
-   * @param param provides ConvolutionParameter convolution_param,
-   *    with ConvolutionLayer options:
-   *  - num_output. The number of filters.
-   *  - kernel_size / kernel_h / kernel_w. The filter dimensions, given by
-   *  kernel_size for square filters or kernel_h and kernel_w for rectangular
-   *  filters.
-   *  - stride / stride_h / stride_w (\b optional, default 1). The filter
-   *  stride, given by stride_size for equal dimensions or stride_h and stride_w
-   *  for different strides. By default the convolution is dense with stride 1.
-   *  - pad / pad_h / pad_w (\b optional, default 0). The zero-padding for
-   *  convolution, given by pad for equal dimensions or pad_h and pad_w for
-   *  different padding. Input padding is computed implicitly instead of
-   *  actually padding.
-   *  - dilation (\b optional, default 1). The filter
-   *  dilation, given by dilation_size for equal dimensions for different
-   *  dilation. By default the convolution has dilation 1.
-   *  - group (\b optional, default 1). The number of filter groups. Group
-   *  convolution is a method for reducing parameterization by selectively
-   *  connecting input and output channels. The input and output channel dimensions must be divisible
-   *  by the number of groups. For group @f$ \geq 1 @f$, the
-   *  convolutional filters' input and output channels are separated s.t. each
-   *  group takes 1 / group of the input channels and makes 1 / group of the
-   *  output channels. Concretely 4 input channels, 8 output channels, and
-   *  2 groups separate input channels 1-2 and output channels 1-4 into the
-   *  first group and input channels 3-4 and output channels 5-8 into the second
-   *  group.
-   *  - bias_term (\b optional, default true). Whether to have a bias.
-   *  - engine: convolution has CAFFE (matrix multiplication) and CUDNN (library
-   *    kernels + stream parallelism) engines.
-   */
-  explicit ConvolutionLayer(const LayerParameter& param)
-      : BaseConvolutionLayer<Dtype>(param) {}
-    }
     
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of ReLULayer.
- */
-template <typename Dtype>
-class CuDNNReLULayer : public ReLULayer<Dtype> {
- public:
-  explicit CuDNNReLULayer(const LayerParameter& param)
-      : ReLULayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNReLULayer();
-    }
-    
-    #ifdef USE_CUDNN
-/**
- * @brief cuDNN implementation of SoftmaxLayer.
- *        Fallback to SoftmaxLayer for CPU mode.
- */
-template <typename Dtype>
-class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
- public:
-  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
-      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNSoftmaxLayer();
-    }
-    
-    // Computes and returns the dot product of the n-vectors u and v.
-// Uses Intel SSE intrinsics to access the SIMD instruction set.
-double DotProductSSE(const double* u, const double* v, int n);
-// Computes and returns the dot product of the n-vectors u and v.
-// Uses Intel SSE intrinsics to access the SIMD instruction set.
-int32_t IntDotProductSSE(const int8_t* u, const int8_t* v, int n);
-    
-    template <typename T> class GenericVector;
-    
-    #endif  // TESSERACT_CCMAIN_THRESHOLDER_H_
+    #endif  // CAFFE_CUDNN_LRN_LAYER_HPP_
 
     
-    // Reads all boxes from the given filename.
-// Reads a specific target_page number if >= 0, or all pages otherwise.
-// Skips blanks if skip_blanks is true.
-// The UTF-8 label of the box is put in texts, and the full box definition as
-// a string is put in box_texts, with the corresponding page number in pages.
-// Each of the output vectors is optional (may be nullptr).
-// Returns false if no boxes are found.
-bool ReadAllBoxes(int target_page, bool skip_blanks, const STRING& filename,
-                  GenericVector<TBOX>* boxes,
-                  GenericVector<STRING>* texts,
-                  GenericVector<STRING>* box_texts,
-                  GenericVector<int>* pages);
-    
-      // Backwards compatible fit returning a gradient and constant.
-  // Deprecated. Prefer Fit(ICOORD*, ICOORD*) where possible, but use this
-  // function in preference to the LMS class.
-  double Fit(float* m, float* c);
-    
-    std::unique_ptr<WriteControllerToken> WriteController::GetDelayToken(
-    uint64_t write_rate) {
-  total_delayed_++;
-  // Reset counters.
-  last_refill_time_ = 0;
-  bytes_left_ = 0;
-  set_delayed_write_rate(write_rate);
-  return std::unique_ptr<WriteControllerToken>(new DelayWriteToken(this));
-}
-    
-    namespace rocksdb {
+        /*virtual*/ void LearnerRMSProp::Update(const Parameter& parameter, const NDArrayViewPtr& gradientValue, 
+                                            const NDArrayViewPtr& smoothedGradientValue, size_t trainingSampleCount) /*override*/
+    {
+        DISPATCH_TO_TYPED_UPDATE_FUNCTION;
     }
     
-      // Schedule the specified compaction task in background.
-  void ScheduleCompaction(CompactionTask* task) override {
-    options_.env->Schedule(&FullCompactor::CompactFiles, task);
+            virtual void Update(const Parameter& parameter, const NDArrayViewPtr& gradientValue, const NDArrayViewPtr& smoothedGradientValue, size_t trainingSampleCount) = 0;
+    
+            for (const auto& parameter : m_learnerParameters)
+            parameterGradients[parameter] = nullptr;
+    
+        // Releases the mutex
+    void Release()
+    {
+        assert(m_handle != NULL);
+        int rc = 0;
+        rc = ::ReleaseMutex(m_handle);
+        if ((rc == RELEASEMUTEX_ERROR) && !std::uncaught_exception())
+        {
+            RuntimeError('Mutex Release: Failed to release mutex %s: %d', m_name.c_str(), ::GetLastError());
+        }
+        rc = ::CloseHandle(m_handle);
+        if ((rc == CLOSEHANDLE_ERROR) && !std::uncaught_exception())
+        {
+            RuntimeError('Mutex Release: Failed to close handler %s: %d', m_name.c_str(), ::GetLastError());
+        }
+        m_handle = NULL;
+    }
+    
+    
+    {
+    {
+    {}}}
+
+    
+    // -----------------------------------------------------------------------
+// SumColumnElements (input)
+// Sums up all elements in each sample (column) of the input. Every sample
+// will be reduced to a scalar. This is equivalent to multiplying with a row of ones.
+// This is deprecated, in favor of ReduceElements().
+// -----------------------------------------------------------------------
+    
+    void EventManager::registerPublisher(std::shared_ptr<Publisher> pub) {
+  std::unique_lock<std::mutex> lock(mutex_);
+    }
+    
+    #include <gtest/gtest.h>
+    
+      void shutdown() {
+    // Your implementation goes here
+    printf('shutdown\n');
   }
     
-    struct UndumpOptions {
-  // Database that we will load the dumped file into
-  std::string db_path;
-  // File location of the dumped file that will be loaded
-  std::string dump_location;
-  // Compact the db after loading the dumped file
-  bool compact_db = false;
-};
     
-      enum OperationStage : int {
-    STAGE_UNKNOWN = 0,
-    STAGE_FLUSH_RUN,
-    STAGE_FLUSH_WRITE_L0,
-    STAGE_COMPACTION_PREPARE,
-    STAGE_COMPACTION_RUN,
-    STAGE_COMPACTION_PROCESS_KV,
-    STAGE_COMPACTION_INSTALL,
-    STAGE_COMPACTION_SYNC_FILE,
-    STAGE_PICK_MEMTABLES_TO_FLUSH,
-    STAGE_MEMTABLE_ROLLBACK,
-    STAGE_MEMTABLE_INSTALL_FLUSH_RESULTS,
-    NUM_OP_STAGES
-  };
+    {};
     
-      // If sync == true, we can guarantee you'll get consistent backup even
-  // on a machine crash/reboot. Backup process is slower with sync enabled.
-  // If sync == false, we don't guarantee anything on machine reboot. However,
-  // chances are some of the backups are consistent.
-  // Default: true
-  bool sync;
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_IMPL_API void     ImGui_Marmalade_InvalidateDeviceObjects();
+IMGUI_IMPL_API bool     ImGui_Marmalade_CreateDeviceObjects();
+    
+            // Start the Dear ImGui frame
+        ImGui_ImplAllegro5_NewFrame();
+        ImGui::NewFrame();
+    
+        // Upload Fonts
+    {
+        // Use any command queue
+        VkCommandPool command_pool = wd->Frames[wd->FrameIndex].CommandPool;
+        VkCommandBuffer command_buffer = wd->Frames[wd->FrameIndex].CommandBuffer;
+    }
+    
+    
+    {    switch (msg)
+    {
+    case WM_SIZE:
+        if (g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
+        {
+            CleanupRenderTarget();
+            g_pSwapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
+            CreateRenderTarget();
+        }
+        return 0;
+    case WM_SYSCOMMAND:
+        if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
+            return 0;
+        break;
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        return 0;
+    }
+    return DefWindowProc(hWnd, msg, wParam, lParam);
+}
+    
+    int main(int, char**)
+{
+    // Create application window
+    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
+    RegisterClassEx(&wc);
+    HWND hwnd = CreateWindow(wc.lpszClassName, _T('Dear ImGui DirectX9 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
+    }
+    
+    
+    {    InputTextCallback_UserData cb_user_data;
+    cb_user_data.Str = str;
+    cb_user_data.ChainCallback = callback;
+    cb_user_data.ChainCallbackUserData = user_data;
+    return InputTextMultiline(label, (char*)str->c_str(), str->capacity() + 1, size, flags, InputTextCallback, &cb_user_data);
+}
