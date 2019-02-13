@@ -1,150 +1,126 @@
 
         
-        #include 'atom/browser/render_process_preferences.h'
-#include 'native_mate/handle.h'
-#include 'native_mate/wrappable.h'
+        private:
+    Ui::SignVerifyMessageDialog *ui;
+    WalletModel *model;
+    const PlatformStyle *platformStyle;
     
-      static void BuildPrototype(v8::Isolate* isolate,
-                             v8::Local<v8::FunctionTemplate> prototype);
-    
-      // download::DownloadItem::Observer:
-  void OnDownloadUpdated(download::DownloadItem* item) override;
-    
-    
-    {  // We need to handle SIGTERM, because that is how many POSIX-based distros ask
-  // processes to quit gracefully at shutdown time.
-  struct sigaction action;
-  memset(&action, 0, sizeof(action));
-  action.sa_handler = SIGTERMHandler;
-  CHECK_EQ(sigaction(SIGTERM, &action, nullptr), 0);
-  // Also handle SIGINT - when the user terminates the browser via Ctrl+C. If
-  // the browser process is being debugged, GDB will catch the SIGINT first.
-  action.sa_handler = SIGINTHandler;
-  CHECK_EQ(sigaction(SIGINT, &action, nullptr), 0);
-  // And SIGHUP, for when the terminal disappears. On shutdown, many Linux
-  // distros send SIGHUP, SIGTERM, and then SIGKILL.
-  action.sa_handler = SIGHUPHandler;
-  CHECK_EQ(sigaction(SIGHUP, &action, nullptr), 0);
+    static void secp256k1_ge_set_gej_zinv(secp256k1_ge *r, const secp256k1_gej *a, const secp256k1_fe *zi) {
+    secp256k1_fe zi2;
+    secp256k1_fe zi3;
+    secp256k1_fe_sqr(&zi2, zi);
+    secp256k1_fe_mul(&zi3, &zi2, zi);
+    secp256k1_fe_mul(&r->x, &a->x, &zi2);
+    secp256k1_fe_mul(&r->y, &a->y, &zi3);
+    r->infinity = a->infinity;
 }
     
-    #ifndef ATOM_BROWSER_ATOM_JAVASCRIPT_DIALOG_MANAGER_H_
-#define ATOM_BROWSER_ATOM_JAVASCRIPT_DIALOG_MANAGER_H_
     
-    void ChannelArguments::SetSslTargetNameOverride(const grpc::string& name) {
-  SetString(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG, name);
+    {    secp256k1_scalar_clear(&s);
+    return ret;
 }
     
-    #include <grpc/support/port_platform.h>
     
-    constexpr size_t TraceContextEncoding::kGrpcTraceContextSize;
-constexpr size_t TraceContextEncoding::kEncodeDecodeFailure;
-constexpr size_t TraceContextEncoding::kVersionIdSize;
-constexpr size_t TraceContextEncoding::kFieldIdSize;
-constexpr size_t TraceContextEncoding::kVersionIdOffset;
-constexpr size_t TraceContextEncoding::kVersionId;
     
-      ::opencensus::trace::SpanContext ToSpanContext() const {
-    return ::opencensus::trace::SpanContext(
-        ::opencensus::trace::TraceId(trace_id),
-        ::opencensus::trace::SpanId(span_id),
-        ::opencensus::trace::TraceOptions(trace_options));
-  }
-    
-    const ViewDescriptor& ServerReceivedMessagesPerRpcCumulative() {
-  const static ViewDescriptor descriptor =
-      ViewDescriptor()
-          .set_name('grpc.io/server/sent_messages_per_rpc/cumulative')
-          .set_measure(kRpcServerReceivedMessagesPerRpcMeasureName)
-          .set_aggregation(CountDistributionAggregation())
-          .add_column(ServerMethodTagKey());
-  return descriptor;
+    void ChaCha20::SetIV(uint64_t iv)
+{
+    input[14] = iv;
+    input[15] = iv >> 32;
 }
     
-    #include 'src/core/lib/gprpp/thd.h'
-#include 'src/cpp/server/thread_pool_interface.h'
+        void LearnerNesterov::UpdateHalf(const Parameter& parameter, const NDArrayViewPtr& gradientValue,
+        const NDArrayViewPtr& smoothedGradientValue, size_t trainingSampleCount) const
+    {
+        const auto& compoundMatrix = GetWritableMatrix<float>(smoothedGradientValue);
+        const auto& gradientMatrix = GetWritableMatrix<half>(gradientValue);
+        auto smoothedGradientMatrix = compoundMatrix->ColumnSlice(0, gradientMatrix->GetNumCols());
+        auto tempGradientMatrix = compoundMatrix->ColumnSlice(gradientMatrix->GetNumCols(), gradientMatrix->GetNumCols());
+        auto parameterMatrix = compoundMatrix->ColumnSlice(2 * gradientMatrix->GetNumCols(), gradientMatrix->GetNumCols());
+    }
     
-    #endif  // GRPC_SRC_CPP_SERVER_LOAD_REPORTER_GET_CPU_STATS_H
+    #pragma once
+    
+        /*virtual*/ Value::~Value()
+    {
+    }
+    
+        /*virtual*/ Dictionary Variable::Serialize() const
+    {
+        if (IsOutput())
+            LogicError('Variable '%S': Output variables cannot be saved.', AsString().c_str());
+    }
+    
+    #ifdef WIN32 // --- Windows version
+    
+    
+    {private:
+    long long m_start;
+    long long m_end;
+};
+    
+        virtual void /*ComputationNode::*/ BackpropTo(const size_t /*inputIndex*/, const FrameRange& fr) override
+    {
+        auto sliceInputGrad  = InputRef(0).GradientFor(fr);
+        auto sliceOutputGrad =           GradientFor(fr);
+    }
+    
+    public:
+    OneHotNode(DEVICEID_TYPE deviceId, size_t num_class, bool is_sparse, int axis, const wstring& name) : Base(deviceId, name)
+    {
+        m_num_class = num_class;
+        m_sparse = is_sparse;
+        m_axis = axis;
+        m_offset = -1;
+    }
+    //do we really need this?
+    OneHotNode(DEVICEID_TYPE deviceId, const wstring& name) : OneHotNode(deviceId, 0, false, -1, name)
+    {
+    }
+    
+            static float f = 0.0f;
+        ImGui::Text('Hello, world!');
+        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
+        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
+        ImGui::ShowDemoWindow(NULL);
+    
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_IMPL_API void     ImGui_ImplDX10_InvalidateDeviceObjects();
+IMGUI_IMPL_API bool     ImGui_ImplDX10_CreateDeviceObjects();
 
     
-    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
-  uint64_t busy = 0, total = 0;
-  FILE* fp;
-  fp = fopen('/proc/stat', 'r');
-  uint64_t user, nice, system, idle;
-  fscanf(fp, 'cpu %lu %lu %lu %lu', &user, &nice, &system, &idle);
-  fclose(fp);
-  busy = user + nice + system;
-  total = busy + idle;
-  return std::make_pair(busy, total);
-}
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
     
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
     
-    {
-    {}}
-    
-    
-    {  req::ptr<File> open(const String& filename, const String& mode, int options,
-                      const req::ptr<StreamContext>& context) override;
-};
-    
-      // only accept paths with the glob:// prefix
-  if (strncmp(path_str, prefix, strlen(prefix)) != 0) {
-    return nullptr;
-  }
-    
-    
-    {protected:
-  bool closeImpl();
-};
-    
-    /*
- * If the given AtomicHashMap has more than one submap allocated, log a perf
- * warning with its name.
- *
- * A single unique done flag should exist for each map being checked, to avoid
- * logging more than once (process, map) pair.
- */
-template<typename AHM>
-void checkAHMSubMaps(const AHM& map, folly::StringPiece mapName,
-                     std::atomic<bool>& done);
-    
-        // Build atlas
-    unsigned char* tex_pixels = NULL;
-    int tex_w, tex_h;
-    io.Fonts->GetTexDataAsRGBA32(&tex_pixels, &tex_w, &tex_h);
-    
-    //---- Don't implement demo windows functionality (ShowDemoWindow()/ShowStyleEditor()/ShowUserGuide() methods will be empty)
-//---- It is very strongly recommended to NOT disable the demo windows during development. Please read the comments in imgui_demo.cpp.
-//#define IMGUI_DISABLE_DEMO_WINDOWS
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-        // Create custom vertex declaration.
-    // Unfortunately Allegro doesn't support 32-bits packed colors so we have to convert them to 4 floats.
-    // We still use a custom declaration to use 'ALLEGRO_PRIM_TEX_COORD' instead of 'ALLEGRO_PRIM_TEX_COORD_PIXEL' else we can't do a reliable conversion.
-    ALLEGRO_VERTEX_ELEMENT elems[] =
-    {
-        { ALLEGRO_PRIM_POSITION, ALLEGRO_PRIM_FLOAT_2, IM_OFFSETOF(ImDrawVertAllegro, pos) },
-        { ALLEGRO_PRIM_TEX_COORD, ALLEGRO_PRIM_FLOAT_2, IM_OFFSETOF(ImDrawVertAllegro, uv) },
-        { ALLEGRO_PRIM_COLOR_ATTR, 0, IM_OFFSETOF(ImDrawVertAllegro, col) },
-        { 0, 0, 0 }
-    };
-    g_VertexDecl = al_create_vertex_decl(elems, sizeof(ImDrawVertAllegro));
-    
-    // Include OpenGL header (without an OpenGL loader) requires a bit of fiddling
-#if defined(_WIN32) && !defined(APIENTRY)
-#define APIENTRY __stdcall                  // It is customary to use APIENTRY for OpenGL function pointer declarations on all platforms.  Additionally, the Windows OpenGL header needs APIENTRY.
-#endif
-#if defined(_WIN32) && !defined(WINGDIAPI)
-#define WINGDIAPI __declspec(dllimport)     // Some Windows OpenGL headers need this
-#endif
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
+            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
+            ImGui::Checkbox('Another Window', &show_another_window);
     
             // 3. Show another simple window.
         if (show_another_window)
@@ -156,6 +132,177 @@ void checkAHMSubMaps(const AHM& map, folly::StringPiece mapName,
             ImGui::End();
         }
     
-        // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
-    //ImGui::StyleColorsClassic();
+    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+// Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+// If you have multiple SDL events and some of them are not meant to be used by dear imgui, you may need to filter events based on their windowID field.
+bool ImGui_ImplSDL2_ProcessEvent(const SDL_Event* event)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    switch (event->type)
+    {
+    case SDL_MOUSEWHEEL:
+        {
+            if (event->wheel.x > 0) io.MouseWheelH += 1;
+            if (event->wheel.x < 0) io.MouseWheelH -= 1;
+            if (event->wheel.y > 0) io.MouseWheel += 1;
+            if (event->wheel.y < 0) io.MouseWheel -= 1;
+            return true;
+        }
+    case SDL_MOUSEBUTTONDOWN:
+        {
+            if (event->button.button == SDL_BUTTON_LEFT) g_MousePressed[0] = true;
+            if (event->button.button == SDL_BUTTON_RIGHT) g_MousePressed[1] = true;
+            if (event->button.button == SDL_BUTTON_MIDDLE) g_MousePressed[2] = true;
+            return true;
+        }
+    case SDL_TEXTINPUT:
+        {
+            io.AddInputCharactersUTF8(event->text.text);
+            return true;
+        }
+    case SDL_KEYDOWN:
+    case SDL_KEYUP:
+        {
+            int key = event->key.keysym.scancode;
+            IM_ASSERT(key >= 0 && key < IM_ARRAYSIZE(io.KeysDown));
+            io.KeysDown[key] = (event->type == SDL_KEYDOWN);
+            io.KeyShift = ((SDL_GetModState() & KMOD_SHIFT) != 0);
+            io.KeyCtrl = ((SDL_GetModState() & KMOD_CTRL) != 0);
+            io.KeyAlt = ((SDL_GetModState() & KMOD_ALT) != 0);
+            io.KeySuper = ((SDL_GetModState() & KMOD_GUI) != 0);
+            return true;
+        }
+    }
+    return false;
+}
+    
+    void DHTReplaceNodeTask::sendMessage()
+{
+  std::shared_ptr<DHTNode> questionableNode = bucket_->getLRUQuestionableNode();
+  if (!questionableNode) {
+    setFinished(true);
+  }
+  else {
+    getMessageDispatcher()->addMessageToQueue(
+        getMessageFactory()->createPingMessage(questionableNode), timeout_,
+        make_unique<DHTPingReplyMessageCallback<DHTReplaceNodeTask>>(this));
+  }
+}
+    
+      uint32_t temp32;
+  uint64_t temp64;
+  // time
+  if (version == 2) {
+    READ_CHECK(fp, &temp32, sizeof(temp32));
+    serializedTime_.setTimeFromEpoch(ntohl(temp32));
+    // 4bytes reserved
+    readBytes(fp, buf, buf.size(), 4);
+  }
+  else {
+    READ_CHECK(fp, &temp64, sizeof(temp64));
+    serializedTime_.setTimeFromEpoch(ntoh64(temp64));
+  }
+    
+    class DHTTaskFactory {
+public:
+  virtual ~DHTTaskFactory() = default;
+    }
+    
+    #endif // D_DHT_TOKEN_UPDATE_COMMAND_H
+
+    
+        /** Returns a new action that performs the exact reverse of the action. 
+     *
+     * @return A new action that performs the exact reverse of the action.
+     * @js NA
+     */
+    virtual Action* reverse() const
+    {
+        CC_ASSERT(0);
+        return nullptr;
+    }
+    
+    /** @class CatmullRomTo
+ * An action that moves the target with a CatmullRom curve to a destination point.
+ * A Catmull Rom is a Cardinal Spline with a tension of 0.5.
+ * http://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull.E2.80.93Rom_spline
+ * @ingroup Actions
+ */
+class CC_DLL CatmullRomTo : public CardinalSplineTo
+{
+public:
+    }
+    
+    bool Waves::initWithDuration(float duration, const Size& gridSize, unsigned int waves, float amplitude, bool horizontal, bool vertical)
+{
+    if (Grid3DAction::initWithDuration(duration, gridSize))
+    {
+        _waves = waves;
+        _amplitude = amplitude;
+        _amplitudeRate = 1.0f;
+        _horizontal = horizontal;
+        _vertical = vertical;
+    }
+    }
+    
+         typedef void (Ref::*SEL_CallFuncO)(Ref*);
+     */
+    bool initWithTarget(Ref* target, SEL_CallFuncO selector, Ref* object);
+    
+protected:
+    /** object to be passed as argument */
+    Ref* _object;
+    SEL_CallFuncO _callFuncO;
+    
+    void ActionManager::resumeTarget(Node *target)
+{
+    tHashElement *element = nullptr;
+    HASH_FIND_PTR(_targets, &target, element);
+    if (element)
+    {
+        element->paused = false;
+    }
+}
+    
+    /**
+ * @addtogroup actions
+ * @{
+ */
+    }
+    
+        /** array of AnimationFrames. */
+    Vector<AnimationFrame*> _frames;
+    
+    
+    {    return s_sharedAnimationCache;
+}
+    
+    
+    {}
+    
+    http://www.cocos2d-x.org
+    
+    std::vector<cocos2d::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& start, float threshold)
+{
+    int stepx = 0;
+    int stepy = 0;
+    int prevx = 0;
+    int prevy = 0;
+    int startx = start.x;
+    int starty = start.y;
+    int curx = startx;
+    int cury = starty;
+    unsigned int count = 0;
+    std::vector<int> case9s;
+    std::vector<int> case6s;
+    int i;
+    std::vector<int>::iterator it;
+    std::vector<cocos2d::Vec2> _points;
+    do{
+        int sv = getSquareValue(curx, cury, rect, threshold);
+        switch(sv){
+    }
+    }
+    }
