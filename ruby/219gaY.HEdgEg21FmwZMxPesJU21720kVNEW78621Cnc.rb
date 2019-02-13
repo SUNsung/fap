@@ -1,105 +1,143 @@
 
         
-            odie 'Unknown command: #{cmd}' unless path
-    puts path
+                  def render_component(builder)
+            builder.translation
+          end
+      end
+    end
   end
 end
 
     
-      desc <<END
-Run a profile of sass.
-  TIMES=n sets the number of runs. Defaults to 1000.
-  FILE=str sets the file to profile. Defaults to 'complex'.
-  OUTPUT=str sets the ruby-prof output format.
-    Can be Flat, CallInfo, or Graph. Defaults to Flat. Defaults to Flat.
-END
-  task :profile do
-    times  = (ENV['TIMES'] || '1000').to_i
-    file   = ENV['FILE']
-    
-    module Sass
-  module CacheStores
-    # A backend for the Sass cache using the filesystem.
-    class Filesystem < Base
-      # The directory where the cached files will be stored.
-      #
-      # @return [String]
-      attr_accessor :cache_location
-    
-        def tree(arr, i = 0)
-      return [], i if arr[i].nil?
-    
-      # A read-only wrapper for a lexical environment for SassScript.
-  class ReadOnlyEnvironment < BaseEnvironment
-    def initialize(parent = nil, options = nil)
-      super
-      @content_cached = nil
-    end
-    # The read-only environment of the caller of this environment's mixin or function.
-    #
-    # @see BaseEnvironment#caller
-    # @return {ReadOnlyEnvironment}
-    def caller
-      return @caller if @caller
-      env = super
-      @caller ||= env.is_a?(ReadOnlyEnvironment) ? env : ReadOnlyEnvironment.new(env, env.options)
-    end
-    
-          # Get the publicly-visible URL for an imported file. This URL is used by
-      # source maps to link to the source stylesheet. This may return `nil` to
-      # indicate that no public URL is available; however, this will cause
-      # sourcemap generation to fail if any CSS is generated from files imported
-      # from this importer.
-      #
-      # If an absolute 'file:' URI can be produced for an imported file, that
-      # should be preferred to returning `nil`. However, a URL relative to
-      # `sourcemap_directory` should be preferred over an absolute 'file:' URI.
-      #
-      # @param uri [String] A URI known to be valid for this importer.
-      # @param sourcemap_directory [String, NilClass] The absolute path to a
-      #   directory on disk where the sourcemap will be saved. If uri refers to
-      #   a file on disk that's accessible relative to sourcemap_directory, this
-      #   may return a relative URL. This may be `nil` if the sourcemap's
-      #   eventual location is unknown.
-      # @return [String?] The publicly-visible URL for this file, or `nil`
-      #   indicating that no publicly-visible URL exists. This should be
-      #   appropriately URL-escaped.
-      def public_url(uri, sourcemap_directory)
-        return if @public_url_warning_issued
-        @public_url_warning_issued = true
-        Sass::Util.sass_warn <<WARNING
-WARNING: #{self.class.name} should define the #public_url method.
-WARNING
-        nil
-      end
-    
-      task :index do
-    doc = File.read('README.md')
-    file = 'doc/rack-protection-readme.md'
-    Dir.mkdir 'doc' unless File.directory? 'doc'
-    puts 'writing #{file}'
-    File.open(file, 'w') { |f| f << doc }
-  end
-    
-          def self.default_reaction(reaction)
-        alias_method(:default_reaction, reaction)
-      end
-    
-            # Set these key values to boolean 'true' to include in policy
-        NO_ARG_DIRECTIVES.each do |d|
-          if options.key?(d) && options[d].is_a?(TrueClass)
-            directives << d.to_s.sub(/_/, '-')
-          end
+            # If no layout is supplied, look for a template named the return
+        # value of this method.
+        #
+        # ==== Returns
+        # * <tt>String</tt> - A template name
+        def _implied_layout_name
+          controller_path
         end
+    end
     
-            close_body(body) if reaction
+        def exists?(path, prefixes, *args)
+      find_all(path, prefixes, *args).any?
+    end
     
-      it 'accepts post requests with correct X-CSRF-Token header' do
-    post('/', {}, 'rack.session' => session, 'HTTP_X_CSRF_TOKEN' => token)
-    expect(last_response).to be_ok
+        Category.transaction do
+      lounge.group_names = ['trust_level_3']
+      unless lounge.save
+        puts lounge.errors.full_messages
+        raise 'Failed to set permissions on trust level 3 lounge category!'
+      end
+    
+        def did_show_message?
+      file_name = '.did_show_opt_info'
+    
+          it 'adds create_docset param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            create_docset: true
+          )
+        end').runner.execute(:test)
+    
+            expect(result[3]).to start_with('security set-keychain-settings')
+        expect(result[3]).to include('-t 600')
+        expect(result[3]).to include('-l')
+        expect(result[3]).to include('-u')
+        expect(result[3]).to include('~/Library/Keychains/test.keychain')
+      end
+    end
+  end
+end
+
+    
+          it 'cannot have both path and pathspec parameters' do
+        expect do
+          Fastlane::FastFile.new.parse('lane :test do
+            git_add(path: 'myfile.txt', pathspec: '*.txt')
+          end').runner.execute(:test)
+        end.to raise_error(FastlaneCore::Interface::FastlaneError)
+      end
+    end
+  end
+end
+
+    
+    module CrossplatformShellwords
+  # handle switching between implementations of shellescape
+  def shellescape(str)
+    if FastlaneCore::Helper.windows?
+      WindowsShellwords.shellescape(str)
+    else
+      # using `escape` instead of expected `shellescape` here
+      # which corresponds to Shellword's `String.shellescape` implementation
+      # https://github.com/ruby/ruby/blob/1cf2bb4b2085758112503e7da7414d1ef52d4f48/lib/shellwords.rb#L216
+      Shellwords.escape(str)
+    end
+  end
+  module_function :shellescape
+    
+            keychain = 'keychain with spaces.keychain'
+        cmd = %r{curl -f -o (([A-Z]\:)?\/.+) https://developer\.apple\.com/certificationauthority/AppleWWDRCA.cer && security import \1 -k #{Regexp.escape(keychain.shellescape)}}
+        require 'open3'
+    
+      protected
+    
+      def unknown_action!(msg)
+    logger.debug '[Devise] #{msg}' if logger
+    raise AbstractController::ActionNotFound, msg
   end
     
-        it 'Reads referrer from Host header when Referer header is missing' do
-      env = {'HTTP_HOST' => 'foo.com'}
-      expect(subject.referrer(env)).to eq('foo.com')
+            routes.each do |module_name, actions|
+          [:path, :url].each do |path_or_url|
+            actions.each do |action|
+              action = action ? '#{action}_' : ''
+              method = :'#{action}#{module_name}_#{path_or_url}'
+    
+    # Each time a record is set we check whether its session has already timed out
+# or not, based on last request time. If so, the record is logged out and
+# redirected to the sign in page. Also, each time the request comes and the
+# record is set, we set the last request time inside its scoped session to
+# verify timeout in the following request.
+Warden::Manager.after_set_user do |record, warden, options|
+  scope = options[:scope]
+  env   = warden.request.env
+    
+          if failed_attributes.any?
+        fail Devise::Models::MissingAttribute.new(failed_attributes)
+      end
     end
+    
+            context 'with nested resources' do
+          before { get '/api/v2/storefront/products/#{product.id}?include=option_types,option_types.option_values' }
+    
+          it 'returns account data with included default billing and shipping addresses' do
+        expect(json_response['included']).to    include(have_type('address'))
+        expect(json_response['included'][0]).to eq(Spree::V2::Storefront::AddressSerializer.new(user.billing_address).as_json['data'])
+        expect(json_response['included'][1]).to eq(Spree::V2::Storefront::AddressSerializer.new(user.shipping_address).as_json['data'])
+      end
+    end
+    
+          it_behaves_like 'no current order'
+    end
+  end
+    
+          it_behaves_like 'returns valid cart JSON'
+    end
+    
+      desc 'Install all spree gems'
+  task install: :build do
+    for_each_gem do |gem_path|
+      Bundler.with_clean_env do
+        sh 'gem install #{gem_path}'
+      end
+    end
+  end
+    
+              if @order.update_from_params(params, permitted_checkout_attributes, request.headers.env)
+            if current_api_user.has_spree_role?('admin') && user_id.present?
+              @order.associate_user!(Spree.user_class.find(user_id))
+            end
