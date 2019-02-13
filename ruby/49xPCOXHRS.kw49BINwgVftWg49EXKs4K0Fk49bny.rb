@@ -1,113 +1,56 @@
 
         
-          it 'correctly sets notification level' do
-    moderator = Fabricate(:moderator)
-    
-          if lounge.topic_id.nil?
-        creator = PostCreator.new(Discourse.system_user,
-          raw: I18n.t('vip_category_description'),
-          title: I18n.t('category.topic_prefix', category: lounge.name),
-          category: lounge.name,
-          archetype: Archetype.default,
-          skip_validations: true
-        )
-        post = creator.create
-    
-      private
-    
-        def require_local_account!
-      redirect_to admin_account_path(@account.id) unless @account.local? && @account.user.present?
-    end
-    
-        private
-    
-        define_method provider do
-      @user = User.find_for_oauth(request.env['omniauth.auth'], current_user)
-    
-      def pin_at(version)
-    HOMEBREW_PINNED_KEGS.mkpath
-    version_path = @f.rack/version
-    path.make_relative_symlink(version_path) unless pinned? || !version_path.exist?
-  end
-    
-    source 'https://rubygems.org'
-    
-          if lint
-        title 'Running RuboCop'
-        Rake::Task['rubocop'].invoke
-    
-    (allow file-ioctl)
-(allow sysctl-read)
-(allow mach-lookup)
-(allow ipc-posix-shm)
-(allow process-fork)
-(allow system-socket)
-    
-          # Custom destructuring method. This is used to normalize the branches
-      # for `pair` and `kwsplat` nodes, to add duck typing to `hash` elements.
-      #
-      # @return [Array<KeywordSplatNode>] the different parts of the `kwsplat`
-      def node_parts
-        [self, self]
+            def initialize_stubs
+      self.class.stubs.each do |path, block|
+        Typhoeus.stub(url_for(path)).and_return do
+          Typhoeus::Response.new \
+            effective_url: url_for(path),
+            code: 200,
+            headers: { 'Content-Type' => 'text/html' },
+            body: self.instance_exec(&block)
+        end
       end
     end
-  end
-end
-
     
-      def send_sinatra_file(path, &missing_file_block)
-    file_path = File.join(File.dirname(__FILE__), 'public',  path)
-    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
-    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
-  end
+          module ClassMethods
+        attr_reader :base_urls
     
-    class ConfigTag < Liquid::Tag
-  def initialize(tag_name, options, tokens)
-    super
-    options = options.split(' ').map {|i| i.strip }
-    @key = options.slice!(0)
-    @tag = nil
-    @classname = nil
-    options.each do |option|
-      @tag = $1 if option =~ /tag:(\S+)/ 
-      @classname = $1 if option =~ /classname:(\S+)/
-    end
+          private
+    
+            css('> .section', '#preamble', 'a[href*='dict.html']', 'code var', 'code strong').each do |node|
+          node.before(node.children).remove
+        end
+    
+      # Returns real navigational formats which are supported by Rails
+  def navigational_formats
+    @navigational_formats ||= Devise.navigational_formats.select { |format| Mime::EXTENSION_LOOKUP[format.to_s] }
   end
     
-    module Jekyll
-    
-    Given 'I remove turbolinks' do
-  cd('.') do
-    transform_file('app/assets/javascripts/application.js') do |content|
-      content.gsub('//= require turbolinks', '')
-    end
-    transform_file('app/views/layouts/application.html.erb') do |content|
-      content.gsub(', 'data-turbolinks-track' => true', '')
-    end
-  end
-end
-    
-      def generate_migration
-    migration_template('paperclip_migration.rb.erb',
-                       'db/migrate/#{migration_file_name}',
-                       migration_version: migration_version)
-  end
-    
-        def define
-      define_flush_errors
-      define_getters
-      define_setter
-      define_query
-      register_new_attachment
-      add_active_record_callbacks
-      add_paperclip_callbacks
-      add_required_validations
+        def reset_password_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :reset_password_instructions, opts)
     end
     
-        # Returns the dot+extension of the file. e.g. '.jpg' for 'file.jpg'
-    # If the style has a format defined, it will return the format instead
-    # of the actual extension. If the extension is empty, no dot is added.
-    def dotextension attachment, style_name
-      ext = extension(attachment, style_name)
-      ext.empty? ? ext : '.#{ext}'
-    end
+            expire_data_after_sign_in!
+    
+          def headers_for(action, opts)
+        headers = {
+          subject: subject_for(action),
+          to: resource.email,
+          from: mailer_sender(devise_mapping),
+          reply_to: mailer_reply_to(devise_mapping),
+          template_path: template_paths,
+          template_name: action
+        }.merge(opts)
+    
+          def remember_me?(token, generated_at)
+        # TODO: Normalize the JSON type coercion along with the Timeoutable hook
+        # in a single place https://github.com/plataformatec/devise/blob/ffe9d6d406e79108cf32a2c6a1d0b3828849c40b/lib/devise/hooks/timeoutable.rb#L14-L18
+        if generated_at.is_a?(String)
+          generated_at = time_from_json(generated_at)
+        end
+    
+    module Capistrano
+  class Configuration
+    class Servers
+      include Enumerable
