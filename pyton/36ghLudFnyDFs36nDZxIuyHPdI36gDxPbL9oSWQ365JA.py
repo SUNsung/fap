@@ -1,198 +1,159 @@
 
         
-        rates_train = nparray_and_transpose(rates_train)
-rates_valid = nparray_and_transpose(rates_valid)
-spikes_train = nparray_and_transpose(spikes_train)
-spikes_valid = nparray_and_transpose(spikes_valid)
+        import pytest
+from flaskr.db import get_db
     
-        sys.stderr.write('Recovering checkpoint %s\n' % ckpt_file)
-    sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True))
-    sess.run('save/restore_all', {'save/Const:0': ckpt_file})
-    sess.run(t['states_init'])
+        indent = None
+    separators = (',', ':')
     
-      def _convert_word_to_char_ids(self, word):
-    code = np.zeros([self.max_word_length], dtype=np.int32)
-    code[:] = ord(self.pad_char)
+        def to_python(self, value):
+        return Markup(value)
     
-      return word_to_id
-    
-    '''Losses for Generator and Discriminator.'''
-    
-    
-# TODO(adai): IMDB labels placeholder to model.
-def create_generator(hparams,
-                     inputs,
-                     targets,
-                     present,
-                     is_training,
-                     is_validating,
-                     reuse=None):
-  '''Create the Generator model specified by the FLAGS and hparams.
-    
-        ## Calculate the Advantages, A(s,a) = Q(s,a) - \hat{V}(s).
-    advantages = []
-    for t in xrange(FLAGS.sequence_length):
-      log_probability = log_probs_list[t]
-      cum_advantage = tf.zeros(shape=[FLAGS.batch_size / 2])
-    
-        proc.sendline(u'ehco test')
-    
-    
-@pytest.fixture(params=containers)
-def proc(request, spawnu, TIMEOUT):
-    proc = spawnu(*request.param)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(u'tcsh')
-    proc.sendline(u'setenv PYTHONIOENCODING utf8')
-    proc.sendline(u'eval `thefuck --alias`')
-    return proc
-    
-    
-@pytest.mark.functional
-def test_refuse_with_confirmation(proc, TIMEOUT):
-    refuse_with_confirmation(proc, TIMEOUT)
-    history_not_changed(proc, TIMEOUT)
-    
-    
-@pytest.mark.parametrize('command, packages, which', [
-    (Command('a_bad_cmd', 'a_bad_cmd: command not found'),
-     [], None),
-    (Command('vim', ''), [], None),
-    (Command('', ''), [], None),
-    (Command('vim', 'vim: command not found'),
-     ['vim'], '/usr/bin/vim'),
-    (Command('sudo vim', 'vim: command not found'),
-     ['vim'], '/usr/bin/vim')])
-def test_not_match(mocker, command, packages, which):
-    mocker.patch('thefuck.rules.apt_get.which', return_value=which)
-    mocker.patch('thefuck.rules.apt_get._get_packages',
-                 create=True, return_value=packages)
-    
-    
-@pytest.mark.parametrize('command', [
-    Command('apt-cache search foo', ''),
-    Command('aptitude search foo', ''),
-    Command('apt search foo', ''),
-    Command('apt-get install foo', ''),
-    Command('apt-get source foo', ''),
-    Command('apt-get clean', ''),
-    Command('apt-get remove', ''),
-    Command('apt-get update', ''),
-    Command('sudo apt update', no_match_output)
-])
-def test_not_match(command):
-    assert not match(command)
-    
-      * dynamodb
+    :copyright: © 2010 by the Pallets team.
+:license: BSD, see LICENSE for more details.
 '''
     
     
-@pytest.mark.skipif(_is_not_okay_to_test(),
-                    reason='No need to run if there\'s no formula')
-def test_match(brew_no_available_formula, brew_already_installed,
-               brew_install_no_argument):
-    assert match(Command('brew install elsticsearch',
-                         brew_no_available_formula))
-    assert not match(Command('brew install git',
-                             brew_already_installed))
-    assert not match(Command('brew install', brew_install_no_argument))
-    
-        def run(self, args, opts):
-        if len(args) < 1:
-            raise UsageError()
-        elif len(args) > 1:
-            raise UsageError('running 'scrapy crawl' with more than one spider is no longer supported')
-        spname = args[0]
-    
-    from scrapy.utils.spider import iter_spider_classes
-from scrapy.commands import ScrapyCommand
-from scrapy.exceptions import UsageError
-from scrapy.utils.conf import arglist_to_dict
-from scrapy.utils.python import without_none_values
-    
-        def post_process(self, output):
-        for x in output:
-            if isinstance(x, (BaseItem, dict)):
-                for arg in self.args:
-                    if not arg in x:
-                        raise ContractFail(''%s' field is missing' % arg)
-
-    
-            fn = os.path.join(current_path, 'appids.txt')
-        self.public_appid = RandomGetSlice(fn, 60)
-    
-            # remove old cert first
-        xlog.info('Removing old cert in database $HOME/.pki/nssdb')
-        cmd_line = 'certutil -L -d sql:$HOME/.pki/nssdb |grep 'GoAgent' && certutil -d sql:$HOME/.pki/nssdb -D -n '%s' ' % ( common_name)
-        os.system(cmd_line)
-    
-        if prober.nat_type in ('cone', 'restricted'):
-        usable = 'usable'
-    elif prober.nat_type == 'offline':
-        usable = 'unusable'
-    else:
-        usable = 'unknown'
-    
-            ## What character index in the stream did the current token start at?
-        # Needed, for example, to get the text for current token.  Set at
-        # the start of nextToken.
-        self.tokenStartCharIndex = -1
-    
-            self.download(output_dir = output_dir, 
-                    merge = merge, 
-                    info_only = info_only, **kwargs)
-    
-    def cbs_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    '''Downloads CBS videos by URL.
+class Environment(BaseEnvironment):
+    '''Works like a regular Jinja2 environment but has some additional
+    knowledge of how Flask's blueprint works so that it can prepend the
+    name of the blueprint to referenced templates if necessary.
     '''
     
-        mime, ext, size = url_info(real_url)
+            The arguments passed to :meth:`as_view` are forwarded to the
+        constructor of the class.
+        '''
+        def view(*args, **kwargs):
+            self = view.view_class(*class_args, **class_kwargs)
+            return self.dispatch_request(*args, **kwargs)
     
-        vids = matchall(content, iqiyi_embed_patterns)
-    for vid in vids:
-        found = True
-        iqiyi_download_by_vid((vid[1], vid[0]), title=title, output_dir=output_dir, merge=merge, info_only=info_only)
+        yield out
+    mp.undo()
     
-        print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls([video_url], title, ext, size, output_dir, merge = merge, headers = headers)
     
-    site_info = 'FC2Video'
-download = fc2video_download
-download_playlist = playlist_not_supported('fc2video')
-
+ANSIBLE_METADATA = {'metadata_version': '1.1',
+                    'status': ['preview'],
+                    'supported_by': 'community'}
     
-        print('Generating e that is relatively prime to (p - 1) * (q - 1)...')
-    while True:
-        e = random.randrange(2 ** (keySize - 1), 2 ** (keySize))
-        if cryptoMath.gcd(e, (p - 1) * (q - 1)) == 1:
-            break
+        return results
     
-            return new_key
-
+        for index, rule in updates:
+        if not module.check_mode:
+            rule = create_fw_rule(**rule)
+            fwservice.replace_FirewallRule_at(index, rule)
+        result['changed'] = True
     
-    def get_initial_centroids(data, k, seed=None):
-    '''Randomly choose k data points as initial centroids'''
-    if seed is not None: # useful for obtaining consistent results
-        np.random.seed(seed)
-    n = data.shape[0] # number of data points
+    EXAMPLES = '''
+# Ensure rule to allow all users to access any host from any host
+- ipa_hbacrule:
+    name: allow_all
+    description: Allow all users to access any host from any host
+    hostcategory: all
+    servicecategory: all
+    usercategory: all
+    state: present
+    ipa_host: ipa.example.com
+    ipa_user: admin
+    ipa_pass: topsecret
+    
+    EXAMPLES = '''
+# Create groups based on the machine architecture
+- group_by:
+    key: machine_{{ ansible_machine }}
+    
+        url = module.params.get('url')
+    
+        def get_status():
+        '''Return the status of the process in monit, or the empty string if not present.'''
+        rc, out, err = module.run_command('%s %s' % (MONIT, SUMMARY_COMMAND), check_rc=True)
+        for line in out.split('\n'):
+            # Sample output lines:
+            # Process 'name'    Running
+            # Process 'name'    Running - restart pending
+            parts = parse(line.split())
+            if parts != '':
+                return parts
+    
+            # put all lines in the file into a Python list
+        strings = f.readlines()
         
-    # Pick K indices from range [0, N).
-    rand_indices = np.random.randint(0, n, k)
+        # above line leaves trailing newline characters; strip them out
+        strings = [x.strip(u'\n') for x in strings]
+        
+        # remove empty-lines and comments
+        strings = [x for x in strings if x and not x.startswith(u'#')]
+        
+        # insert empty string since all are being removed
+        strings.insert(0, u'')
     
-    # Keep centroids as dense format, as many entries will be nonzero due to averaging.
-    # As long as at least one document in a cluster contains a word,
-    # it will carry a nonzero weight in the TF-IDF vector of the centroid.
-    centroids = data[rand_indices,:]
+        return ciphertext
     
-    return centroids
     
-    def loadDictionary():
-    path = os.path.split(os.path.realpath(__file__))
-    dictionaryFile = open(path[0] + '/Dictionary.txt')
-    englishWords = {}
-    for word in dictionaryFile.read().split('\n'):
-        englishWords[word] = None
-    dictionaryFile.close()
-    return englishWords
+def im_detect_mask_hflip(model, im, target_scale, target_max_size, boxes):
+    '''Performs mask detection on the horizontally flipped image.
+    Function signature is the same as for im_detect_mask_aug.
+    '''
+    # Compute the masks for the flipped image
+    im_hf = im[:, ::-1, :]
+    boxes_hf = box_utils.flip_boxes(boxes, im.shape[1])
+    
+    
+def cityscapes_to_coco_all_random(cityscapes_id):
+    lookup = {
+        0: -1,  # ... background
+        1: -1,  # bicycle
+        2: -1,  # car
+        3: -1,  # person (ignore)
+        4: -1,  # train
+        5: -1,  # truck
+        6: -1,  # motorcycle
+        7: -1,  # bus
+        8: -1,  # rider (ignore)
+    }
+    return lookup[cityscapes_id]
+
+    
+    
+def add_stage(
+    model,
+    prefix,
+    blob_in,
+    n,
+    dim_in,
+    dim_out,
+    dim_inner,
+    dilation,
+    stride_init=2
+):
+    '''Add a ResNet stage to the model by stacking n residual blocks.'''
+    # e.g., prefix = res2
+    for i in range(n):
+        blob_in = add_residual_block(
+            model,
+            '{}_{}'.format(prefix, i),
+            blob_in,
+            dim_in,
+            dim_out,
+            dim_inner,
+            dilation,
+            stride_init,
+            # Not using inplace for the last block;
+            # it may be fetched externally or used by FPN
+            inplace_sum=i < n - 1
+        )
+        dim_in = dim_out
+    return blob_in, dim_in
+    
+    
+def keypoint_rcnn_frozen_features(model):
+    logger.warn('Deprecated: use `TRAIN.FREEZE_CONV_BODY: True` instead')
+    return build_generic_detection_model(
+        model,
+        get_func(cfg.MODEL.CONV_BODY),
+        add_roi_box_head_func=get_func(cfg.FAST_RCNN.ROI_BOX_HEAD),
+        add_roi_keypoint_head_func=get_func(cfg.KRCNN.ROI_KEYPOINTS_HEAD),
+        freeze_conv_body=True
+    )
+    
+    When renaming functions, it's generally a good idea to codemod existing yaml
+config files. An easy way to batch edit, by example, is a shell command like
