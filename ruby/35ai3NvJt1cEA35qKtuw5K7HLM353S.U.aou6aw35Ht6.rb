@@ -1,142 +1,131 @@
 
         
-            if successfully_sent?(resource)
-      respond_with({}, location: after_sending_unlock_instructions_path_for(resource))
+        module FastlaneCore
+  class AnalyticsSession
+    GA_TRACKING = 'UA-121171860-1'
+    
+            expect(result).to eq('appledoc --project-name \'Project Name\' --project-company \'Company\' --docset-cert-signer \'Some signer\' --exit-threshold \'2\' input/dir')
+      end
+    
+          it 'works with :path param' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          create_keychain ({
+            path: '/tmp/test.keychain',
+            password: 'testpassword',
+            default_keychain: true,
+            unlock: true,
+            timeout: 600,
+            lock_when_sleeps: true,
+            lock_after_timeout: true,
+            add_to_search_list: false,
+          })
+        end').runner.execute(:test)
+        expect(result.size).to eq(4)
+        expect(result[0]).to eq('security create-keychain -p testpassword /tmp/test.keychain')
+    
+        # wrap in double quotes if contains space
+    if str =~ /\s/
+      # double quotes have to be doubled if will be quoted
+      str.gsub!(''', '''')
+      return ''' + str + '''
     else
-      respond_with(resource)
+      return str
     end
   end
-    
-      ActiveSupport.run_load_hooks(:devise_controller, self)
+  module_function :shellescape
 end
 
     
-            expire_data_after_sign_in!
-    
-    module Devise
-  module Controllers
-    # Create url helpers to be used with resource/scope configuration. Acts as
-    # proxies to the generated routes created by devise.
-    # Resource param can be a string or symbol, a class, or an instance object.
-    # Example using a :user resource:
-    #
-    #   new_session_path(:user)      => new_user_session_path
-    #   session_path(:user)          => user_session_path
-    #   destroy_session_path(:user)  => destroy_user_session_path
-    #
-    #   new_password_path(:user)     => new_user_password_path
-    #   password_path(:user)         => user_password_path
-    #   edit_password_path(:user)    => edit_user_password_path
-    #
-    #   new_confirmation_path(:user) => new_user_confirmation_path
-    #   confirmation_path(:user)     => user_confirmation_path
-    #
-    # Those helpers are included by default to ActionController::Base.
-    #
-    # In case you want to add such helpers to another class, you can do
-    # that as long as this new class includes both url_helpers and
-    # mounted_helpers. Example:
-    #
-    #     include Rails.application.routes.url_helpers
-    #     include Rails.application.routes.mounted_helpers
-    #
-    module UrlHelpers
-      def self.remove_helpers!
-        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
-          remove_method method
-        end
-      end
-    
-      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
-     options[:store] != false && !env['devise.skip_timeoutable']
-    last_request_at = warden.session(scope)['last_request_at']
-    
-          def devise_mapping
-        @devise_mapping ||= Devise.mappings[scope_name]
-      end
-    
-    Gem::Specification.new do |gem|
-  gem.name          = 'capistrano'
-  gem.version       = Capistrano::VERSION
-  gem.authors       = ['Tom Clements', 'Lee Hambley']
-  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
-  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
-  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
-  gem.homepage      = 'http://capistranorb.com/'
-    
-    Given(/^file '(.*?)' exists in shared path$/) do |file|
-  file_shared_path = TestApp.shared_path.join(file)
-  run_vagrant_command('mkdir -p #{file_shared_path.dirname}')
-  run_vagrant_command('touch #{file_shared_path}')
+    if git.modified_files.include?('snapshot/lib/assets/SnapshotHelper.swift')
+  warn('You modified `SnapshotHelper.swift`, make sure to update the version number at the bottom of the file to notify users about the new helper file.')
 end
     
-    World(RemoteCommandHelpers)
-
-    
-            def fetch(key)
-          @properties[key]
-        end
-    
-    shared_examples_for 'multiline literal brace layout' do
-  include MultilineLiteralBraceHelper
-    
-          # Checks whether this case statement has an `else` branch.
-      #
-      # @return [Boolean] whether the `case` statement has an `else` branch
-      def else?
-        loc.else
-      end
-    end
-  end
-end
-
-    
-              raise ArgumentError unless valid_argument_types?
-        end
-    
-    public_dir      = 'public'    # compiled site directory
-source_dir      = 'source'    # source file directory
-blog_index_dir  = 'source'    # directory for your blog's index page (if you put your index in source/blog/index.html, set this to 'source/blog')
-deploy_dir      = '_deploy'   # deploy directory (for Github pages deployment)
-stash_dir       = '_stash'    # directory to stash posts for speedy generation
-posts_dir       = '_posts'    # directory for blog files
-themes_dir      = '.themes'   # directory for blog files
-new_post_ext    = 'markdown'  # default new post file extension when using the new_post task
-new_page_ext    = 'markdown'  # default new page file extension when using the new_page task
-server_port     = '4000'      # port for preview server eg. localhost:4000
-    
-        # Outputs a single category as an <a> link.
-    #
-    #  +category+ is a category string to format as an <a> link
-    #
-    # Returns string
-    #
-    def category_link(category)
-      dir = @context.registers[:site].config['category_dir']
-      '<a class='category' href='/#{dir}/#{category.to_url}/'>#{category}</a>'
-    end
-    
-    
-    
-          if File.symlink?(includes_dir)
-        return 'Includes directory '#{includes_dir}' cannot be a symlink'
-      end
-    
-          Dir.chdir(file_path) do
-        contents = file.read
-        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
-          contents = $1.lstrip
-        end
-        contents = pre_filter(contents)
-        if @raw
-          contents
-        else
-          partial = Liquid::Template.parse(contents)
-          context.stack do
-            partial.render(context)
+          def fetch_redirections
+        result = {}
+        with_filters 'apply_base_url', 'container', 'normalize_urls', 'internal_urls' do
+          build_pages do |page|
+            next if page[:response_effective_path] == page[:response_path]
+            result[page[:response_path].downcase] = page[:response_effective_path]
           end
         end
+        result
+      end
+    
+            css('.filetree .children').each do |node|
+          node.css('.file').each do |n|
+            n.content = '  #{n.content}'
+          end
+        end
+    
+            # Download a file from the remote machine to the local machine.
+        #
+        # @param [String] from Path of the file on the remote machine.
+        # @param [String] to Path of where to save the file locally.
+        def download(from, to)
+        end
+    
+            # This registers a plugin. This should _NEVER_ be called by the public
+        # and should only be called from within Vagrant. Vagrant will
+        # automatically register V1 plugins when a name is set on the
+        # plugin.
+        def register(plugin)
+          if !@registered.include?(plugin)
+            @logger.info('Registered plugin: #{plugin.name}')
+            @registered << plugin
+          end
+        end
+    
+            # Returns the internal data associated with this plugin. This
+        # should NOT be called by the general public.
+        #
+        # @return [Hash]
+        def self.data
+          @data ||= {}
+        end
+    
+    RSpec.describe RuboCop::Cop::Layout::MultilineArrayBraceLayout, :config do
+  subject(:cop) { described_class.new(config) }
+    
+          # Checks whether the `for` node has a `do` keyword.
+      #
+      # @return [Boolean] whether the `for` node has a `do` keyword
+      def do?
+        loc.begin && loc.begin.is?('do')
+      end
+    
+          # Returns the operator for the `kwsplat` as a string.
+      #
+      # @return [String] the double splat operator
+      def operator
+        DOUBLE_SPLAT
+      end
+    
+          # Checks whether the `when` node has a `then` keyword.
+      #
+      # @return [Boolean] whether the `when` node has a `then` keyword
+      def then?
+        loc.begin && loc.begin.is?('then')
+      end
+    
+          def __set_test_mode(mode)
+        if block_given?
+          current_mode = self.__test_mode
+          begin
+            self.__test_mode = mode
+            yield
+          ensure
+            self.__test_mode = current_mode
+          end
+        else
+          self.__test_mode = mode
+        end
+      end
+    
+          def custom_tabs
+        @custom_tabs ||= {}
+      end
+      alias_method :tabs, :custom_tabs
+    
+            _render { content }
       end
     end
-  end
-end
