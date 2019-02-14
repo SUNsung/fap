@@ -1,396 +1,415 @@
 
         
-        void ModelAnalyzer::PrintNodeInfo(const NodeDef* node,
-                                  const GraphProperties& properties, bool debug,
-                                  std::ostream& os) const {
-  os << node->name() << ' [' << node->op() << ']' << std::endl;
-  if (properties.HasOutputProperties(node->name())) {
-    const std::vector<OpInfo::TensorProperties>& props =
-        properties.GetOutputProperties(node->name());
-    for (int i = 0; i < props.size(); ++i) {
-      const OpInfo::TensorProperties& prop = props[i];
-      os << '\t'
-         << 'output ' << i << ' (' << DataTypeString(prop.dtype())
-         << ') has shape ';
-      if (prop.shape().unknown_rank()) {
-        os << '?';
-      } else {
-        os << '[';
-        for (int i = 0; i < prop.shape().dim_size(); ++i) {
-          if (i > 0) {
-            os << ', ';
-          }
-          if (prop.shape().dim(i).size() >= 0) {
-            // Print the actual dimension.
-            os << prop.shape().dim(i).size();
-          } else if (prop.shape().dim(i).size() == -1) {
-            // We don't know anything about the dimension.
-            os << '?';
-          } else {
-            // Symbolic dimension.
-            os << 'x' << -prop.shape().dim(i).size();
-          }
+          const OpRegistrationData* op_reg_data;
+  TF_RETURN_IF_ERROR(OpRegistry::Global()->LookUp(node.op(), &op_reg_data));
+    
+    
+    {  if (debug) {
+    const OpRegistrationData* op_reg_data;
+    Status status = OpRegistry::Global()->LookUp(node->op(), &op_reg_data);
+    if (!status.ok()) {
+      os << '\tCouldn't find op registration for ' << node->op() << std::endl;
+    } else if (!op_reg_data->shape_inference_fn) {
+      os << '\tCouldn't find shape function for op ' << node->op() << std::endl;
+    } else if (properties.HasInputProperties(node->name())) {
+      const std::vector<OpInfo::TensorProperties>& props =
+          properties.GetInputProperties(node->name());
+      for (int i = 0; i < props.size(); ++i) {
+        const OpInfo::TensorProperties& prop = props[i];
+        if (prop.has_value()) {
+          os << '\t'
+             << 'input ' << i << ' (' << DataTypeString(prop.dtype())
+             << ') has known value' << std::endl;
         }
-        os << ']';
       }
-      os << std::endl;
     }
   }
-    }
+}
     
-    class AckermannOp : public OpKernel {
+    
+    {  DCHECK(PyDict_Check(code_to_exc_type_map));
+  PyObject* key;
+  PyObject* value;
+  Py_ssize_t pos = 0;
+  while (PyDict_Next(code_to_exc_type_map, &pos, &key, &value)) {
+    TF_Code code = static_cast<TF_Code>(PyLong_AsLong(key));
+    singleton_->exc_types_[code] = value;
+    // The exception classes should also have the lifetime of the process, but
+    // incref just in case.
+    Py_INCREF(value);
+  }
+}
+    
+    #ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_SEQ_TENSOR_H_
+#define TENSORFLOW_PYTHON_LIB_CORE_PY_SEQ_TENSOR_H_
+    
+    Safe_TF_TensorPtr make_safe(TF_Tensor* tensor) {
+  return Safe_TF_TensorPtr(tensor);
+}
+    
+    // Indicates a set of options for a device's usage, which generally must be
+// provided at StreamExecutor device-initialization time.
+//
+// These are intended to be useful-but-not-mandatorily-supported options for
+// using devices on the underlying platform. Presently, if the option requested
+// is not available on the target platform, a warning will be emitted.
+struct DeviceOptions {
  public:
-  explicit AckermannOp(OpKernelConstruction* context) : OpKernel(context) {}
+  // When it is observed that more memory has to be allocated for thread stacks,
+  // this flag prevents it from ever being deallocated. Potentially saves
+  // thrashing the thread stack memory allocation, but at the potential cost of
+  // some memory space.
+  static const unsigned kDoNotReclaimStackAllocation = 0x1;
     }
     
-    // Workarounds for Python 2 vs 3 API differences.
-#if PY_MAJOR_VERSION < 3
+      Storage() = delete;
     
-    namespace tensorflow {
+      // An AST section consists of one or more AST modules, optionally with
+  // headers. Iterate over all AST modules.
+  while (!buf.empty()) {
+    auto info = serialization::validateSerializedAST(buf);
     }
     
-    // Mutex used to serialize accesses to cached vector of pointers to python
-// arrays to be dereferenced.
-static mutex* DelayedDecrefLock() {
-  static mutex* decref_lock = new mutex;
-  return decref_lock;
+    
+    {  for (auto Entry : DCache.Entries) {
+    DCache.CBs.keyDestroyCB(Entry.first.Key, nullptr);
+    DCache.CBs.valueReleaseCB(Entry.second, nullptr);
+  }
+  DCache.Entries.clear();
 }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
-    
-    void PyExceptionRegistry::Init(PyObject* code_to_exc_type_map) {
-  DCHECK(singleton_ == nullptr) << 'PyExceptionRegistry::Init() already called';
-  singleton_ = new PyExceptionRegistry;
+      struct IndentScope {
+    TreePrinter *Printer;
+    size_t OldLength;
+    IndentScope(TreePrinter *printer, StringRef indent)
+        : Printer(printer), OldLength(printer->Indent.size()) {
+      Printer->Indent += indent;
     }
+    ~IndentScope() { Printer->Indent.resize(OldLength); }
+  };
     
-    // Converts Python object `obj` representing a rectangular array of
-// Python values (a scalar, a sequence of scalars, a sequence of
-// sequences, etc.) into a C++ TensorFlow Tensor and stores it in
-// *ret.  If dtype is not None it should by a Python integer
-// representing the desired dtype of the resulting Tensor.
-// This is used only as a hint, *ret may not have that dtype on
-// success and may require a cast.
-Status PySeqToTensor(PyObject* obj, PyObject* dtype, Tensor* ret);
-    
-    Safe_TF_StatusPtr make_safe(TF_Status* status) {
-  return Safe_TF_StatusPtr(status);
-}
-    
-    // Safe containers for an owned TF_Status. On destruction, the handle
-// will be deleted by TF_DeleteStatus.
-using Safe_TF_StatusPtr = std::unique_ptr<TF_Status, detail::TFStatusDeleter>;
-Safe_TF_StatusPtr make_safe(TF_Status* status);
-    
-    
-    {
-    {}  // namespace cuda
-}  // namespace stream_executor
-    
-    #include 'tensorflow/stream_executor/lib/stringprintf.h'
-    
-      // Updates the plan's work area with space allocated by a new scratch
-  // allocator. This facilitates plan reuse with scratch allocators.
-  //
-  // This requires that the plan was originally created using a scratch
-  // allocator, as otherwise scratch space will have been allocated internally
-  // by cuFFT.
-  virtual void UpdatePlanWithScratchAllocator(
-      Stream *stream, Plan *plan, ScratchAllocator *scratch_allocator) = 0;
-    
-      if (!item->enable_shortcut_)
-    return false;
-    
-    MenuItem::~MenuItem() {
-  Destroy();
-}
-    
-    void MenuItem::SetChecked(bool checked) {
-  // Set active will cause 'activate' to be emitted, so block here
-  block_active_ = true;
-  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menu_item_), checked);
-  block_active_ = false;
-}
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.callObjectMethod', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwObjCallObjectMethodFunction);
+    const uint16_t swift::unicode::ExtendedGraphemeClusterNoBoundaryRulesMatrix[] = {
+% for row in get_extended_grapheme_cluster_rules_matrix(break_table):
+  ${row},
+% end
 };
     
-        for (size_t i = 0; i < size.height; ++i)
+      using SourceManagerRef = llvm::IntrusiveRefCntPtr<const clang::SourceManager>;
+  auto iter = std::lower_bound(sourceManagersWithDiagnostics.begin(),
+                               sourceManagersWithDiagnostics.end(),
+                               &clangSrcMgr,
+                               [](const SourceManagerRef &inArray,
+                                  const clang::SourceManager *toInsert) {
+    return std::less<const clang::SourceManager *>()(inArray.get(), toInsert);
+  });
+  if (iter == sourceManagersWithDiagnostics.end() ||
+      iter->get() != &clangSrcMgr) {
+    sourceManagersWithDiagnostics.insert(iter, &clangSrcMgr);
+  }
+    
+    /// Translate the given operator character into its mangled form.
+///
+/// Current operator characters:   @/=-+*%<>!&|^~ and the special operator '..'
+char Mangle::translateOperatorChar(char op) {
+  switch (op) {
+    case '&': return 'a'; // 'and'
+    case '@': return 'c'; // 'commercial at sign'
+    case '/': return 'd'; // 'divide'
+    case '=': return 'e'; // 'equal'
+    case '>': return 'g'; // 'greater'
+    case '<': return 'l'; // 'less'
+    case '*': return 'm'; // 'multiply'
+    case '!': return 'n'; // 'negate'
+    case '|': return 'o'; // 'or'
+    case '+': return 'p'; // 'plus'
+    case '?': return 'q'; // 'question'
+    case '%': return 'r'; // 'remainder'
+    case '-': return 's'; // 'subtract'
+    case '~': return 't'; // 'tilde'
+    case '^': return 'x'; // 'xor'
+    case '.': return 'z'; // 'zperiod' (the z is silent)
+    default:
+      return op;
+  }
+}
+    
+        enum CONVERT_POLICY
     {
-        const u8* src = internal::getRowPtr(srcBase, srcStride, i);
-        s16* dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t j = 0;
+        CONVERT_POLICY_WRAP,
+        CONVERT_POLICY_SATURATE
+    };
+    
+    #ifdef CAROTENE_NEON
+    // this ugly contruction is needed to avoid:
+    // /usr/lib/gcc/arm-linux-gnueabihf/4.8/include/arm_neon.h:3581:59: error: argument must be a constant
+    // return (int16x8_t)__builtin_neon_vshr_nv8hi (__a, __b, 1);
+    
+        void operator() (const typename VecTraits<f32>::vec128 & v_src0,
+                     const typename VecTraits<f32>::vec128 & v_src1,
+                     typename VecTraits<f32>::vec128 & v_dst) const
+    {
+        float32x4_t vs1 = vmlaq_f32(vgamma, v_src0, valpha);
+        v_dst = vmlaq_f32(vs1, v_src1, vbeta);
     }
     
-        void operator() (const typename internal::VecTraits<T>::vec128 & v_src0,
-                     const typename internal::VecTraits<T>::vec128 & v_src1,
-                     typename internal::VecTraits<T>::vec128 & v_dst) const
-    {
-        v_dst = internal::vaddq(v_src0, v_src1);
-    }
-    
-    
-    {    void operator() (const u32 * src0, const u32 * src1, u32 * dst) const
-    {
-        dst[0] = saturate_cast<u32>(alpha*src0[0] + beta*src1[0] + gamma);
-    }
-};
+                    uint16x8_t vSum_3_1 = vaddq_u16(vLane3.val[0], vLane1.val[0]);
+                uint16x8_t vSum_4_2 = vaddq_u16(vLane3.val[1], vLane1.val[1]);
+                uint16x8_t vSum_5_6 = vaddq_u16(vLane3.val[2], vLane1.val[2]);
     
     namespace CAROTENE_NS {
     }
     
-    bool isFlipSupported(FLIP_MODE flipMode, u32 elemSize)
+    void Laplacian3OpenCV(const Size2D &size,
+                      const u8 * srcBase, ptrdiff_t srcStride,
+                      s16 * dstBase, ptrdiff_t dstStride,
+                      BORDER_MODE border, u8 borderValue)
 {
-    bool supportedElemSize = (elemSize == 1) || (elemSize == 2) || (elemSize == 3) || (elemSize == 4);
-    return isSupportedConfiguration() &&
-            ((supportedElemSize && ((flipMode == FLIP_BOTH_MODE) || (flipMode == FLIP_HORIZONTAL_MODE))) ||
-             (flipMode == FLIP_VERTICAL_MODE));
-}
-    
-                uint8x8_t x0 = vld1_u8(v0 + x);
-            uint8x8_t x1 = vld1_u8(v1 + x);
-            uint8x8_t x2 = vld1_u8(v2 + x);
-            uint8x8_t x3 = vld1_u8(v3 + x);
-            uint8x8_t x4 = vld1_u8(v4 + x);
-            if(x) {
-                tcurr1 = tnext1;
-            }
-    
-                    // Pick up the three extra operands that CTR_INIT has, and
-                //    skip the pattern location counter past
-                int32_t instrOperandLoc = (int32_t)fp->fPatIdx;
-                fp->fPatIdx += 3;
-                int32_t loopLoc  = URX_VAL(pat[instrOperandLoc]);
-                int32_t minCount = (int32_t)pat[instrOperandLoc+1];
-                int32_t maxCount = (int32_t)pat[instrOperandLoc+2];
-                U_ASSERT(minCount>=0);
-                U_ASSERT(maxCount>=minCount || maxCount==-1);
-                U_ASSERT(loopLoc>=fp->fPatIdx);
-    
-    void SearchIterator::setText(CharacterIterator &text, UErrorCode &status)
-{
-    if (U_SUCCESS(status)) {
-        text.getText(m_text_);
-        setText(m_text_, status);
-    }
-}
-    
-const UnicodeString & SearchIterator::getText(void) const
-{
-    return m_text_;
-}
-    
-    #endif
-    
-    U_NAMESPACE_BEGIN
-    
-    U_NAMESPACE_END
-    
-        /**
-     * Make this instance have no limit on significant digits.
-     */
-    void clear() {
-        fMin = 0;
-        fMax = INT32_MAX;
+    internal::assertSupportedConfiguration(isLaplacianOpenCVSupported(size, border));
+#ifdef CAROTENE_NEON
+    ptrdiff_t rows = size.height, cols = size.width;
     }
     
     /*!
- * \brief Registry entry for linear updater.
+ * \file graph_attr_types.h
+ * \brief Data structures that can appear in graph attributes.
  */
-struct LinearUpdaterReg
-    : public dmlc::FunctionRegEntryBase<LinearUpdaterReg,
-                                        std::function<LinearUpdater*()> > {};
+#ifndef MXNET_GRAPH_ATTR_TYPES_H_
+#define MXNET_GRAPH_ATTR_TYPES_H_
     
-      virtual void PredictInteractionContributions(DMatrix* dmat,
-                                   std::vector<bst_float>* out_contribs,
-                                   const gbm::GBTreeModel& model,
-                                   unsigned ntree_limit = 0,
-                                   bool approximate = false) = 0;
-    
-    namespace xgboost {
+    //---------------------------------------------------------------------------------
+// The following part are API Registration of Operators
+// See also MXNET_REGISTER_SIMPLE_OP in operator_util.h for registering simple ops.
+//---------------------------------------------------------------------------------
 /*!
- * \brief interface of tree update module, that performs update of a tree.
+ * \brief Macro to register OperatorProperty
+ *
+ * \code
+ * // example of registering a fully connected operator
+ * REGISTER_OP_PROPERTY(FullyConnected, FullyConnectedOpProp)
+ * .describe('Fully connected layer');
+ *
+ * \endcode
  */
-class TreeUpdater {
- public:
-  /*! \brief virtual destructor */
-  virtual ~TreeUpdater() = default;
-  /*!
-   * \brief Initialize the updater with given arguments.
-   * \param args arguments to the objective function.
-   */
-  virtual void Init(const std::vector<std::pair<std::string, std::string> >& args) = 0;
-  /*!
-   * \brief perform update to the tree models
-   * \param gpair the gradient pair statistics of the data
-   * \param data The data matrix passed to the updater.
-   * \param trees references the trees to be updated, updater will change the content of trees
-   *   note: all the trees in the vector are updated, with the same statistics,
-   *         but maybe different random seeds, usually one tree is passed in at a time,
-   *         there can be multiple trees when we train random forest style model
-   */
-  virtual void Update(HostDeviceVector<GradientPair>* gpair,
-                      DMatrix* data,
-                      const std::vector<RegTree*>& trees) = 0;
-    }
-    }
-    
-    
-    { private:
-  RowBlock<IndexType> out_;
-  std::unique_ptr<Parser<IndexType> > parser_;
-  uint32_t num_col_;
-  std::vector<size_t> offset_;
-  std::vector<IndexType> dense_index_;
-  std::vector<xgboost::bst_float> dense_value_;
-};
+#define MXNET_REGISTER_OP_PROPERTY(name, OperatorPropertyType)          \
+  DMLC_REGISTRY_REGISTER(::mxnet::OperatorPropertyReg, OperatorPropertyReg, name) \
+  .set_body([]() { return new OperatorPropertyType(); })                \
+  .set_return_type('NDArray-or-Symbol') \
+  .check_name()
     
     /*!
- * \brief Quantile sketch use WQSummary
- * \tparam DType type of data content
- * \tparam RType type of rank
+ * \brief Environment arguments that is used by the function.
+ * These can be things like scalar arguments when add a value with scalar.
  */
-template<typename DType, typename RType = unsigned>
-class WQuantileSketch :
-      public QuantileSketchTemplate<DType, RType, WQSummary<DType, RType> > {
+struct EnvArguments {
+  /*! \brief scalar argument, if enabled */
+  real_t scalar;
+  /*! \brief keyword arguments */
+  std::vector<std::pair<std::string, std::string> > kwargs;
+  /*! \brief pointer to the resources requested */
+  std::vector<Resource> resource;
 };
     
-    TEST(Span, Obversers) {
-  int status = 1;
-  TestObservers{&status}();
-  ASSERT_EQ(status, 1);
-}
+    /*! \brief Cuda runtime compile module. */
+class CudaModule {
+ private:
+  /*! \brief Structure for holding internal info. */
+  struct Chunk {
+    /*!
+     * \brief Constructs cuda module.
+     * \param source cuda source code.
+     * \param exports export symbols before mangling.
+     */
+    Chunk(const char* source,
+          const std::vector<std::string>& options,
+          const std::vector<std::string>& exports);
+    /*! \brief deconstrutor */
+    ~Chunk();
+    /*!
+     * \brief Get handle to cuda kernel from loaded module
+     * \param mangled_name mangled kernel name
+     * \param ctx context to run kernel on
+     * \return loaded function handle
+     */
+    CUfunction GetFunction(const std::string& mangled_name, const Context& ctx);
+    /*! \brief nvrtc program handle. */
+    nvrtcProgram prog_;
+    /*! \brief compiled cuda PTX */
+    char* ptx_;
+    /*! \brief lazily loaded cuda module */
+    std::unordered_map<int, CUmodule> mod_;
+    /*! \brief exported names */
+    std::unordered_set<std::string> exports_;
+  };
+  /*! \brief pointer to Chunk */
+  std::shared_ptr<Chunk> ptr_;
+    }
     
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_IMPL_API void     ImGui_ImplDX9_InvalidateDeviceObjects();
-IMGUI_IMPL_API bool     ImGui_ImplDX9_CreateDeviceObjects();
+    // specialize define for Layer Parameter
+template<>
+class FieldEntry<caffe::LayerParameter>
+    : public FieldEntryBase<FieldEntry<caffe::LayerParameter>, caffe::LayerParameter> {
+ public:
+  // parent class
+  typedef FieldEntryBase<FieldEntry<caffe::LayerParameter>, caffe::LayerParameter> Parent;
+    }
+    
+    
+    {
+    {}  // namespace op
+}  // namespace mxnet
+#endif  // PLUGIN_CAFFE_CAFFE_LOSS_INL_H_
 
     
-    bool ImGui_Marmalade_CreateDeviceObjects()
-{
-    // Build texture atlas
-    ImGuiIO& io = ImGui::GetIO();
-    unsigned char* pixels;
-    int width, height;
-    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
+    MXNET_REGISTER_OP_PROPERTY(CaffeOp, CaffeOpProp)
+.describe('Apply caffe operator')
+.add_argument('data', 'Symbol[]', 'List of tensors')
+.add_arguments(CaffeOpParam::__FIELDS__());
+    
+    /*!
+ * Copyright (c) 2016 by Contributors
+ * \file inplace_addto_detect_pass.cc
+ * \brief Detect whether inplace addto operation is possible for certain op.
+ */
+#include <mxnet/base.h>
+#include <mxnet/operator.h>
+#include <mxnet/op_attr_types.h>
+#include <nnvm/graph_attr_types.h>
+    
+    namespace mxnet {
+namespace io {
+/*!
+ * \brief OpenCV based Image augmenter,
+ *  The augmenter can contain internal temp state.
+ */
+class ImageAugmenter {
+ public:
+  /*!
+   *  \brief Initialize the Operator by setting the parameters
+   *  This function need to be called before all other functions.
+   *  \param kwargs the keyword arguments parameters
+   */
+  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) = 0;
+  /*!
+   * \brief augment src image.
+   *   this function is not thread safe, and will only be called by one thread
+   *   however, it will tries to re-use memory space as much as possible
+   * \param src the source image
+   * \param prnd pointer to random number generator.
+   * \return The processed image.
+   */
+  virtual cv::Mat Process(const cv::Mat &src, std::vector<float> *label,
+                          common::RANDOM_ENGINE *prnd) = 0;
+  // virtual destructor
+  virtual ~ImageAugmenter() {}
+  /*!
+   * \brief factory function
+   * \param name Name of the augmenter
+   * \return The created augmenter.
+   */
+  static ImageAugmenter* Create(const std::string& name);
+};
+    }
     }
     
-                ImGui::Begin('Hello, world!');                          // Create a window called 'Hello, world!' and append into it.
-    
-        // Setup Platform/Renderer bindings
-    ImGui_ImplGlfw_InitForVulkan(window, true);
-    ImGui_ImplVulkan_InitInfo init_info = {};
-    init_info.Instance = g_Instance;
-    init_info.PhysicalDevice = g_PhysicalDevice;
-    init_info.Device = g_Device;
-    init_info.QueueFamily = g_QueueFamily;
-    init_info.Queue = g_Queue;
-    init_info.PipelineCache = g_PipelineCache;
-    init_info.DescriptorPool = g_DescriptorPool;
-    init_info.Allocator = g_Allocator;
-    init_info.CheckVkResultFn = check_vk_result;
-    ImGui_ImplVulkan_Init(&init_info, wd->RenderPass);
-    
-        // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    
-        // Create window with graphics context
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-    SDL_DisplayMode current;
-    SDL_GetCurrentDisplayMode(0, &current);
-    SDL_Window* window = SDL_CreateWindow('Dear ImGui SDL2+OpenGL3 example', SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE);
-    SDL_GLContext gl_context = SDL_GL_CreateContext(window);
-    SDL_GL_SetSwapInterval(1); // Enable vsync
-    
-    static int const                    NUM_BACK_BUFFERS = 3;
-static ID3D12Device*                g_pd3dDevice = NULL;
-static ID3D12DescriptorHeap*        g_pd3dRtvDescHeap = NULL;
-static ID3D12DescriptorHeap*        g_pd3dSrvDescHeap = NULL;
-static ID3D12CommandQueue*          g_pd3dCommandQueue = NULL;
-static ID3D12GraphicsCommandList*   g_pd3dCommandList = NULL;
-static ID3D12Fence*                 g_fence = NULL;
-static HANDLE                       g_fenceEvent = NULL;
-static UINT64                       g_fenceLastSignaledValue = 0;
-static IDXGISwapChain3*             g_pSwapChain = NULL;
-static HANDLE                       g_hSwapChainWaitableObject = NULL;
-static ID3D12Resource*              g_mainRenderTargetResource[NUM_BACK_BUFFERS] = {};
-static D3D12_CPU_DESCRIPTOR_HANDLE  g_mainRenderTargetDescriptor[NUM_BACK_BUFFERS] = {};
-    
-      // 4170 left
-  ASSERT_EQ(static_cast<uint64_t>(0u), controller.GetDelay(&env, 8000u));
-    
-    #pragma once
-    
-    using namespace rocksdb;
-    
-    
-    {    std::vector<std::string> input_file_names;
-    for (auto level : cf_meta.levels) {
-      for (auto file : level.files) {
-        if (file.being_compacted) {
-          return nullptr;
-        }
-        input_file_names.push_back(file.name);
-      }
+    namespace mxnet {
+namespace io {
+/*!
+ * \brief a vector of tensor with various shape
+ *
+ * data are stored in memory continuously
+ */
+template<int dim, typename DType>
+class TensorVector {
+ public:
+  TensorVector(void) {
+    this->Clear();
+  }
+  /*! \brief get the buffer to the i-th tensor */
+  inline mshadow::Tensor<cpu, dim, DType>
+  operator[](size_t i) const {
+    CHECK_LT(i + 1, offset_.size());
+    CHECK_EQ(shape_[i].Size(), offset_[i + 1] - offset_[i]);
+    return mshadow::Tensor<cpu, dim, DType>
+        ((DType*)dmlc::BeginPtr(content_) + offset_[i], shape_[i]);  // NOLINT(*)
+  }
+  inline mshadow::Tensor<cpu, dim, DType> Back() const {
+    return (*this)[Size() - 1];
+  }
+  inline size_t Size(void) const {
+    return shape_.size();
+  }
+  /*! \brief allocate space given the shape (data are copied) */
+  inline void Push(mshadow::Shape<dim> shape) {
+    shape_.push_back(shape);
+    offset_.push_back(offset_.back() + shape.Size());
+    content_.resize(offset_.back());
+  }
+  inline void Clear(void) {
+    offset_.clear();
+    offset_.push_back(0);
+    content_.clear();
+    shape_.clear();
+  }
     }
-    return new CompactionTask(
-        db, this, cf_name, input_file_names,
-        options_.num_levels - 1, compact_options_, false);
+    }
+    }
+    
+    namespace mxnet {
+namespace io {
+// iterator on image recordio
+class PrefetcherIter : public IIterator<DataBatch> {
+ public:
+  explicit PrefetcherIter(IIterator<TBlobBatch>* base)
+      : loader_(base), out_(nullptr) {}
+    }
+    }
+    }
+    
+    const char* Killswitch::killswitch_ = 'killswitch';
+const char* Killswitch::action_ = 'action';
+const char* Killswitch::isEnabled_ = 'isEnabled';
+const char* Killswitch::key_ = 'key';
+const char* Killswitch::refresh_ = 'refresh';
+    
+      const auto table = doc.doc().FindMember('table');
+  if (table == doc.doc().MemberEnd()) {
+    return createError(KillswitchPlugin::ParseMapJSONError::MissingKey,
+                       'Killswitch key table containing map was not found');
+  }
+  if (!table->value.IsObject()) {
+    return createError(KillswitchPlugin::ParseMapJSONError::IncorrectValueType,
+                       'Killswitch table value is not an object');
   }
     
-    // Delete files in multiple ranges at once
-// Delete files in a lot of ranges one at a time can be slow, use this API for
-// better performance in that case.
-Status DeleteFilesInRanges(DB* db, ColumnFamilyHandle* column_family,
-                           const RangePtr* ranges, size_t n,
-                           bool include_end = true);
+    #include <memory>
+#include <new>
+#include <sstream>
+#include <string>
+#include <typeinfo>
     
-      // Insert to page cache
-  //
-  // page_key   Identifier to identify a page uniquely across restarts
-  // data       Page data
-  // size       Size of the page
-  virtual Status Insert(const Slice& key, const char* data,
-                        const size_t size) = 0;
+    GTEST_TEST(ExpectedTest, error_handling_example) {
+  auto failureSource = []() -> Expected<std::vector<int>, TestError> {
+    return createError(TestError::Runtime, 'Test error message ()*+,-.');
+  };
+  auto ret = failureSource();
+  if (ret.isError()) {
+    switch (ret.getErrorCode()) {
+    case TestError::Some:
+    case TestError::Another:
+    case TestError::Semantic:
+    case TestError::Logical:
+      FAIL() << 'There is must be a Runtime type of error';
+    case TestError::Runtime:
+      SUCCEED();
+    }
+  } else {
+    FAIL() << 'There is must be an error';
+  }
+}
     
-      // Submit a fire and forget jobs
-  // This allows to submit the same job multiple times
-  virtual void SubmitJob(const std::function<void()>&) = 0;
-  // This moves the function in for efficiency
-  virtual void SubmitJob(std::function<void()>&&) = 0;
+    class EbpfMapTests : public testing::Test {};
     
-      // Builds an openable snapshot of RocksDB on the same disk, which
-  // accepts an output directory on the same disk, and under the directory
-  // (1) hard-linked SST files pointing to existing live SST files
-  // SST files will be copied if output directory is on a different filesystem
-  // (2) a copied manifest files and other files
-  // The directory should not already exist and will be created by this API.
-  // The directory will be an absolute path
-  // log_size_for_flush: if the total log file size is equal or larger than
-  // this value, then a flush is triggered for all the column families. The
-  // default value is 0, which means flush is always triggered. If you move
-  // away from the default, the checkpoint may not contain up-to-date data
-  // if WAL writing is not always enabled.
-  // Flush will always trigger if it is 2PC.
-  virtual Status CreateCheckpoint(const std::string& checkpoint_dir,
-                                  uint64_t log_size_for_flush = 0);
-    
-    using json = nlohmann::json;
-    
-        // create an array from an array_t value
-    json::array_t array_value = {'one', 'two', 3, 4.5, false};
-    json j_array_t(array_value);
+    namespace osquery {
+namespace tracing {
+    }
+    }
