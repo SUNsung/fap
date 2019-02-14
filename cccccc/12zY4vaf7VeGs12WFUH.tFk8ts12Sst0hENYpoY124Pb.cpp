@@ -1,409 +1,294 @@
 
         
-        class App {
- public:
-  static void Call(const std::string& method,
-                   const base::ListValue& arguments);
-    }
+        using namespace swift;
     
-    namespace content {
-class RenderFrameHost;
-}
-    
-      scoped_ptr<base::Value> value_args(
-      converter->FromV8Value(args, isolate->GetCurrentContext()));
-  if (!value_args.get() ||
-      !value_args->IsType(base::Value::TYPE_LIST))
-    return isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
-        'Unable to convert 'args' passed to CallObjectMethod')));
-    
-    // Call method of an object in browser.
-// function CallObjectMethod(id, type, method, args);
-v8::Handle<v8::Value> CallObjectMethod(int routing_id,
-                                       int object_id,
-                                       const std::string& type,
-                                       const std::string& method,
-                                       v8::Handle<v8::Value> args);
-    
-    
-    {}  // namespace nwapi
-    
-    EventListener::EventListener(int id,
-  const base::WeakPtr<DispatcherHost>& dispatcher_host,
-  const base::DictionaryValue& option) : Base(id, dispatcher_host, option) {
-    }
-    
-    #include 'base/logging.h'
-#include 'base/strings/string16.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-    
-    void MenuItem::SetIconIsTemplate(bool isTemplate) {
-}
-    
-    class NwAppClearCacheFunction : public NWSyncExtensionFunction, public content::BrowsingDataRemover::Observer {
- public:
-  NwAppClearCacheFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-  void OnBrowsingDataRemoverDone() override;
-    }
-    
-        bool ReadHTML(ClipboardData& data) {
-      DCHECK(data.type == TYPE_HTML);
-      base::string16 text;
-      std::string src_url;
-      uint32_t fragment_start, fragment_end;
-      clipboard_->ReadHTML(ui::CLIPBOARD_TYPE_COPY_PASTE, &text, &src_url, &fragment_start, &fragment_end);
-      data.data.reset(new std::string(base::UTF16ToUTF8(text)));
-      return true;
-    }
-    
-     protected:
-  ~NwObjAllocateIdFunction() override;
-    
-    struct OSResults {
-  OSResults() : unicharset(nullptr) {
-    for (int i = 0; i < 4; ++i) {
-      for (int j = 0; j < kMaxNumberOfScripts; ++j)
-        scripts_na[i][j] = 0;
-      orientations[i] = 0;
-    }
+    void PrefixMapKeyPrinter<unsigned char>::print(raw_ostream &out,
+                                               ArrayRef<unsigned char> key) {
+  out << '\'';
+  for (auto byte : key) {
+    if (byte < 16) out << '0';
+    out.write_hex(byte);
   }
-  void update_best_orientation();
-  // Set the estimate of the orientation to the given id.
-  void set_best_orientation(int orientation_id);
-  // Update/Compute the best estimate of the script assuming the given
-  // orientation id.
-  void update_best_script(int orientation_id);
-  // Return the index of the script with the highest score for this orientation.
-  TESS_API int get_best_script(int orientation_id) const;
-  // Accumulate scores with given OSResults instance and update the best script.
-  void accumulate(const OSResults& osr);
-    }
-    
-    #endif  // TESSERACT_CCMAIN_PAGEITERATOR_H_
+  out << '\'';
+}
 
     
-    namespace tesseract {
-    }
-    
-    // The parameters editor enables the user to edit all the parameters used within
-// tesseract. It can be invoked on its own, but is supposed to be invoked by
-// the program editor.
-class ParamsEditor : public SVEventHandler {
- public:
-  // Integrate the parameters editor as popupmenu into the existing scrollview
-  // window (usually the pg editor). If sv == null, create a new empty
-  // empty window and attach the parameter editor to that window (ugly).
-  explicit ParamsEditor(tesseract::Tesseract*, ScrollView* sv = nullptr);
-    }
-    
-    // Parses the given box file string into a page_number, utf8_str, and
-// bounding_box. Returns true on a successful parse.
-bool ParseBoxFileStr(const char* boxfile_str, int* page_number,
-                     STRING* utf8_str, TBOX* bounding_box);
-    
-      BoxWord& operator=(const BoxWord& src);
-    
-    
-    { private:
-  // The collection of images to put in the PDF.
-  Pixa* pixa_;
-  // The fonts used to draw text captions.
-  L_Bmf* fonts_;
-};
-    
-     private:
-  // Saves the given Pix as a PNG-encoded string and destroys it.
-  static void SetPixInternal(Pix* pix, GenericVector<char>* image_data);
-  // Returns the Pix image for the image_data. Must be pixDestroyed after use.
-  static Pix* GetPixInternal(const GenericVector<char>& image_data);
-  // Parses the text string as a box file and adds any discovered boxes that
-  // match the page number. Returns false on error.
-  bool AddBoxes(const char* box_text);
-    
-    	// C-style inteface to the encoder
-	void Encode(float *a_pafSourceRGBA,
-				unsigned int a_uiSourceWidth,
-				unsigned int a_uiSourceHeight,
-				Image::Format a_format,
-				ErrorMetric a_eErrMetric,
-				float a_fEffort,
-				unsigned int a_uiJobs,
-				unsigned int a_uimaxJobs,
-				unsigned char **a_ppaucEncodingBits,
-				unsigned int *a_puiEncodingBitsBytes,
-				unsigned int *a_puiExtendedWidth,
-				unsigned int *a_puiExtendedHeight,
-				int *a_piEncodingTime_ms, bool a_bVerboseOutput = false);
-    
-    		m_pblockParent = a_pblockParent;
-    
-    		typedef struct
-		{
-			unsigned red1b : 2;
-			unsigned detect2 : 1;
-			unsigned red1a : 2;
-			unsigned detect1 : 3;
-			//
-			unsigned blue1 : 4;
-			unsigned green1 : 4;
-			//
-			unsigned green2 : 4;
-			unsigned red2 : 4;
-			//
-			unsigned db : 1;
-			unsigned diff : 1;
-			unsigned da : 2;
-			unsigned blue2 : 4;
-			//
-			unsigned int selectors;
-		} T;
-    
-    #define MIN(a,b) ((a)<(b) ? (a):(b))
-#define MAX(a,b) ((a)>(b) ? (a):(b))
-    
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
-    
-       - Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer.
-    
-    /* (opus_val32)(opus_val16) gives TI compiler a hint that it's 16x16->32 multiply */
-/** 16x16 multiplication where the result fits in 32 bits */
-#define MULT16_16(a,b)     (((opus_val32)(opus_val16)(a))*((opus_val32)(opus_val16)(b)))
-    
-    #define silk_DIV32_16(a32, b16)             ((opus_int32)((a32) / (b16)))
-#define silk_DIV32(a32, b32)                ((opus_int32)((a32) / (b32)))
-    
-    /*!
- * \brief Shape inference function to get the correct shape given source shapes.
- * \param lhs The shape of left operand.
- * \param rhs The shape of right operand.
- * \param env The Environment arguments.
- * \return The inferred result shape.
- */
-typedef TShape (*BinaryShapeFunction)(const TShape& lhs,
-                                      const TShape& rhs,
-                                      const EnvArguments& env);
-/*!
- * \brief Gradient function that takes only output gradient and computes gradient wrt to input.
- *  We support total gradient as a whole to make it easy to combine a few ops.
- * \param out_grad the gradient wrt to output of the function.
- * \param env The Environment arguments.
- * \param lhs_grad The container to store result of lhs gradient.
- * \param rhs_grad The container to store result of lhs gradient.
- * \param req_lhs_grad The requirement to store the lhs_grad
- * \param req_rhs_grad The requirement to store the rhs_grad
- * \param ctx Runtime context to execute the function.
- */
-typedef void (*BinaryGradFunctionT0)(const OutputGrad& out_grad,
-                                     const EnvArguments& env,
-                                     TBlob* lhs_grad,
-                                     TBlob* rhs_grad,
-                                     OpReqType req_lhs_grad,
-                                     OpReqType req_rhs_grad,
-                                     RunContext ctx);
-/*!
- * \brief Gradient function that takes inputs of function anod computes gradient wrt to input.
- * \param out_grad the gradient wrt to output of the function.
- * \param lhs The left operand to the function.
- * \param rhs The right operand to the function.
- * \param env The Environment arguments.
- * \param lhs_grad The container to store result of lhs gradient.
- * \param rhs_grad The container to store result of lhs gradient.
- * \param req_lhs_grad The requirement to store the lhs_grad
- * \param req_rhs_grad The requirement to store the rhs_grad
- * \param ctx Runtime context to execute the function.
- */
-typedef void (*BinaryGradFunctionT1)(const OutputGrad& out_grad,
-                                     const Input0& lhs,
-                                     const Input1& rhs,
-                                     const EnvArguments& env,
-                                     TBlob* lhs_grad,
-                                     TBlob* rhs_grad,
-                                     OpReqType req_lhs_grad,
-                                     OpReqType req_rhs_grad,
-                                     RunContext ctx);
-    
-    /*! \brief Cuda runtime compile module. */
-class CudaModule {
- private:
-  /*! \brief Structure for holding internal info. */
-  struct Chunk {
-    /*!
-     * \brief Constructs cuda module.
-     * \param source cuda source code.
-     * \param exports export symbols before mangling.
-     */
-    Chunk(const char* source,
-          const std::vector<std::string>& options,
-          const std::vector<std::string>& exports);
-    /*! \brief deconstrutor */
-    ~Chunk();
-    /*!
-     * \brief Get handle to cuda kernel from loaded module
-     * \param mangled_name mangled kernel name
-     * \param ctx context to run kernel on
-     * \return loaded function handle
-     */
-    CUfunction GetFunction(const std::string& mangled_name, const Context& ctx);
-    /*! \brief nvrtc program handle. */
-    nvrtcProgram prog_;
-    /*! \brief compiled cuda PTX */
-    char* ptx_;
-    /*! \brief lazily loaded cuda module */
-    std::unordered_map<int, CUmodule> mod_;
-    /*! \brief exported names */
-    std::unordered_set<std::string> exports_;
-  };
-  /*! \brief pointer to Chunk */
-  std::shared_ptr<Chunk> ptr_;
-    }
-    
-    /*!
- * Copyright (c) 2016 by Contributors
- * \file caffe_blob.cc
- * \brief Implementations of SetDataGradToBlob given various device/dimension
- * \author Haoran Wang
-*/
-#include 'caffe_blob.h'
-namespace mxnet {
-namespace op {
-namespace caffe {
-    }
+    StringRef importer::getCFTypeName(
+            const clang::TypedefNameDecl *decl) {
+  if (auto pointee = CFPointeeInfo::classifyTypedef(decl)) {
+    auto name = decl->getName();
+    if (pointee.isRecord() || pointee.isTypedef())
+      if (name.endswith(SWIFT_CFTYPE_SUFFIX))
+        return name.drop_back(strlen(SWIFT_CFTYPE_SUFFIX));
     }
     }
     
-      /*!
-   * \brief Constructor takes function to run.
-   * \param size size of the thread pool.
-   * \param func the function to run on the thread pool.
-   */
-  explicit ThreadPool(size_t size, std::function<void()> func)
-      : worker_threads_(size) {
-    CHECK_GT(size, 0);
-    for (auto& i : worker_threads_) {
-      i = std::thread(func);
-    }
+    void Demangler::dump() {
+  for (unsigned Idx = 0; Idx < NodeStack.size(); ++Idx) {
+    fprintf(stderr, 'NodeStack[%u]:\n', Idx);
+    NodeStack[Idx]->dump();
+    fprintf(stderr, '\n');
   }
-  explicit ThreadPool(size_t size,
-                      std::function<void(std::shared_ptr<dmlc::ManualEvent> ready)> func,
-                      const bool wait)
-      : worker_threads_(size) {
-    CHECK_GT(size, 0);
-    for (auto& i : worker_threads_) {
-      std::shared_ptr<dmlc::ManualEvent> ptr = std::make_shared<dmlc::ManualEvent>();
-      ready_events_.emplace_back(ptr);
-      i = std::thread(func, ptr);
-    }
-    if (wait) {
-      WaitForReady();
-    }
-  }
-  ~ThreadPool() noexcept(false) {
-    for (auto&& i : worker_threads_) {
-      i.join();
-    }
-  }
+  fprintf(stderr, 'Position = %zd:\n%.*s\n%*s\n', Pos,
+          (int)Text.size(), Text.data(), (int)Pos + 1, '^');
+}
     
+        for (size_t i = 0; i < size.height; ++i)
+    {
+        const u8* src = internal::getRowPtr(srcBase, srcStride, i);
+        u8* dst = internal::getRowPtr(dstBase, dstStride, i);
+        size_t j = 0;
+    }
     
+    void blur5x5(const Size2D &size, s32 cn,
+             const u8 * srcBase, ptrdiff_t srcStride,
+             u8 * dstBase, ptrdiff_t dstStride,
+             BORDER_MODE borderType, u8 borderValue)
+{
+    internal::assertSupportedConfiguration(isBlurU8Supported(size, cn, borderType));
+#ifdef CAROTENE_NEON
+#define FLOAT_VARIANT_1_25
+#ifdef FLOAT_VARIANT_1_25
+    float32x4_t v1_25 = vdupq_n_f32 (1.0f/25.0f);
+    float32x4_t v0_5 = vdupq_n_f32 (.5f);
+#else
+    const int16x8_t vScale = vmovq_n_s16(1310);
+#endif
+    size_t colsn = size.width*cn;
+    }
+    
+    ptrdiff_t borderInterpolate(ptrdiff_t _p, size_t _len, BORDER_MODE borderType, size_t startMargin, size_t endMargin)
+{
+    ptrdiff_t p = _p + (ptrdiff_t)startMargin;
+    size_t len = _len + startMargin + endMargin;
+    if( (size_t)p < len )
+        return _p;
+    else if( borderType == BORDER_MODE_REPLICATE )
+        p = p < 0 ? 0 : (ptrdiff_t)len - 1;
+    else if( borderType == BORDER_MODE_REFLECT || borderType == BORDER_MODE_REFLECT101 )
     {
-    {
-    {
-    {
-    {          // Special code for overflow handling
-          if (bc == BranchConditions::Overflow ||
-              bc == BranchConditions::NoOverflow) {
-            a.xor(reg::r0, reg::r0, reg::r0,false);
-            a.mtspr(Assembler::SpecialReg::XER, reg::r0);
-          }
-          a.bc (bp.bo(), bp.bi(), diff);
-          return;
+        s32 delta = borderType == BORDER_MODE_REFLECT101;
+        if( len == 1 )
+            return 0;
+        do
+        {
+            if( p < 0 )
+                p = -p - 1 + delta;
+            else
+                p = (ptrdiff_t)len - 1 - (p - (ptrdiff_t)len) - delta;
         }
-      }
+        while( (size_t)p >= len );
     }
-  }
-  // fallback: use CTR to perform absolute branch up to 64 bits
-  branchFar(a, bc, lr, ImmType::TocOnly, addrMayChange);
+    else if( borderType == BORDER_MODE_WRAP )
+    {
+        if( p < 0 )
+            p -= ((p-(ptrdiff_t)len+1)/(ptrdiff_t)len)*(ptrdiff_t)len;
+        if( p >= (ptrdiff_t)len )
+            p %= (ptrdiff_t)len;
+    }
+    else if( borderType == BORDER_MODE_CONSTANT )
+        p = -1;
+    else
+        internal::assertSupportedConfiguration(false);
+    return p - (ptrdiff_t)startMargin;
 }
     
-    void Config::ParseIniFile(const std::string &filename, IniSettingMap &ini,
-                          const bool constants_only /* = false */,
-                          const bool is_system /* = true */ ) {
-    std::ifstream ifs(filename);
-    std::string str((std::istreambuf_iterator<char>(ifs)),
-                    std::istreambuf_iterator<char>());
-    std::string with_includes;
-    Config::ReplaceIncludesWithIni(filename, str, with_includes);
-    Config::SetParsedIni(ini, with_includes, filename, constants_only,
-                         is_system);
-}
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
+CVTS_FUNC(s32, u8, 8,
+    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
+    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        __asm__ (
+            'vld1.32 {d4-d5}, [%[src1]]                              \n\t'
+            'vld1.32 {d6-d7}, [%[src2]]                              \n\t'
+            'vcvt.f32.s32 q4, q2                                     \n\t'
+            'vcvt.f32.s32 q5, q3                                     \n\t'
+            'vmul.f32 q6, q4, q0                                     \n\t'
+            'vmul.f32 q7, q5, q0                                     \n\t'
+            'vadd.f32 q8, q6, q1                                     \n\t'
+            'vadd.f32 q9, q7, q1                                     \n\t'
+            'vcvt.s32.f32 q10, q8                                    \n\t'
+            'vcvt.s32.f32 q11, q9                                    \n\t'
+            'vqmovun.s32 d24, q10                                    \n\t'
+            'vqmovun.s32 d25, q11                                    \n\t'
+            'vqmovn.u16  d26, q12                                    \n\t'
+            'vst1.8 {d26}, [%[dst]]                                  \n\t'
+            : /*no output*/
+            : [src1] 'r' (_src + i + 0),
+              [src2] 'r' (_src + i + 4),
+              [dst] 'r' (_dst + i),
+              'w'  (vscale), 'w' (vshift)
+            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26'
+        );
+    }
+})
+#else
+CVTS_FUNC(s32, u8, 8,
+    float32x4_t vscale = vdupq_n_f32((f32)alpha);
+    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        int32x4_t vline1_s32 = vld1q_s32(_src + i + 0);
+        int32x4_t vline2_s32 = vld1q_s32(_src + i + 4);
+        float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
+        float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
+        vline1_f32 = vmulq_f32(vline1_f32, vscale);
+        vline2_f32 = vmulq_f32(vline2_f32, vscale);
+        vline1_f32 = vaddq_f32(vline1_f32, vshift);
+        vline2_f32 = vaddq_f32(vline2_f32, vshift);
+        vline1_s32 = vcvtq_s32_f32(vline1_f32);
+        vline2_s32 = vcvtq_s32_f32(vline2_f32);
+        uint16x4_t vRes1 = vqmovun_s32(vline1_s32);
+        uint16x4_t vRes2 = vqmovun_s32(vline2_s32);
+        uint8x8_t vRes = vqmovn_u16(vcombine_u16(vRes1, vRes2));
+        vst1_u8(_dst + i, vRes);
+    }
+})
+#endif
     
-    Variant PlainDirectory::read() {
-  struct dirent entry;
-  struct dirent *result;
-  int ret = readdir_r(m_dir, &entry, &result);
-  if (ret != 0 || !result) {
-    return false;
-  }
-  return String(entry.d_name, CopyString);
-}
-    
-      // only accept paths with the glob:// prefix
-  if (strncmp(path_str, prefix, strlen(prefix)) != 0) {
-    return nullptr;
-  }
-    
-    #include <mutex>
-    
-    #include <osquery/ev2/subscription.h>
-    
-    class TestEvent {
- public:
-  using Id = uint64_t;
-  using Time = std::chrono::system_clock::time_point;
+    void gaussianBlur5x5(const Size2D &size, s32 cn,
+                     const s16 * srcBase, ptrdiff_t srcStride,
+                     s16 * dstBase, ptrdiff_t dstStride,
+                     BORDER_MODE borderType, s16 borderValue, Margin borderMargin)
+{
+    internal::assertSupportedConfiguration(isGaussianBlur5x5Supported(size, cn, borderType));
+#ifdef CAROTENE_NEON
+    size_t colsn = size.width * cn;
     }
     
-    /// Inverse of serializeQueryDataJSON, convert a JSON string to QueryData.
-Status deserializeQueryDataJSON(const std::string& json, QueryData& qd);
+    //////////////////////////////////////////////////////////////////////
     
-    /**
- * @brief Serialize a Row object into a JSON string.
- *
- * @param r the Row to serialize.
- * @param json [output] the output JSON string.
- *
- * @return Status indicating the success or failure of the operation.
- */
-Status serializeRowJSON(const Row& r, std::string& json);
     
-    class ExtensionIf {
- public:
-  virtual ~ExtensionIf() {}
-  virtual void ping(ExtensionStatus& _return) = 0;
-  virtual void call(ExtensionResponse& _return, const std::string& registry, const std::string& item, const ExtensionPluginRequest& request) = 0;
-  virtual void shutdown() = 0;
+    {  /**
+   * Execute a debugger action.
+   */
+  virtual String debuggerVerb(const std::string& /*verb*/,
+                              const std::vector<std::string>& /*args*/) {
+    return String();
+  }
 };
     
-      if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, 'ExtensionManager.extensions', bytes);
-  }
+    Array Directory::getMetaData() {
+  return make_map_array(
+    s_wrapper_type, s_plainfile, // PHP5 compatibility
+    s_stream_type,  s_dir,
+    s_mode,         s_r,
+    s_unread_bytes, 0,
+    s_seekable,     false,
+    s_timed_out,    false,
+    s_blocked,      true,
+    s_eof,          isEof()
+  );
+}
     
-      bool operator == (const ExtensionManager_extensions_args & /* rhs */) const
-  {
-    return true;
-  }
-  bool operator != (const ExtensionManager_extensions_args &rhs) const {
-    return !(*this == rhs);
-  }
+    #endif // HPHP_GLOB_STREAM_WRAPPER_H
+
     
-    int main(int argc, char **argv) {
-  int port = 9090;
-  ::apache::thrift::stdcxx::shared_ptr<ExtensionManagerHandler> handler(new ExtensionManagerHandler());
-  ::apache::thrift::stdcxx::shared_ptr<TProcessor> processor(new ExtensionManagerProcessor(handler));
-  ::apache::thrift::stdcxx::shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
-  ::apache::thrift::stdcxx::shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
-  ::apache::thrift::stdcxx::shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+    namespace HPHP {
     }
+    
+        for (int n = 0; n < 50; n++)
+    {
+        printf('NewFrame() %d\n', n);
+        io.DisplaySize = ImVec2(1920, 1080);
+        io.DeltaTime = 1.0f / 60.0f;
+        ImGui::NewFrame();
+    }
+    
+    // Implemented features:
+//  [X] Renderer: User texture binding. Use 'CIwTexture*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+    
+    {        s3eDeviceYield(0);
+    }
+    
+    #include 'imgui.h'
+#include 'imgui_impl_win32.h'
+#include 'imgui_impl_dx10.h'
+#include <d3d10_1.h>
+#include <d3d10.h>
+#define DIRECTINPUT_VERSION 0x0800
+#include <dinput.h>
+#include <tchar.h>
+    
+            D3D12_RESOURCE_BARRIER barrier = {};
+        barrier.Type                   = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+        barrier.Flags                  = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+        barrier.Transition.pResource   = g_mainRenderTargetResource[backBufferIdx];
+        barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+        barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
+        barrier.Transition.StateAfter  = D3D12_RESOURCE_STATE_RENDER_TARGET;
+    
+    // Called by Init/NewFrame/Shutdown
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateFontsTexture();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyFontsTexture();
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateDeviceObjects();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyDeviceObjects();
+
+    
+    
+    {    InputTextCallback_UserData cb_user_data;
+    cb_user_data.Str = str;
+    cb_user_data.ChainCallback = callback;
+    cb_user_data.ChainCallbackUserData = user_data;
+    return InputText(label, (char*)str->c_str(), str->capacity() + 1, flags, InputTextCallback, &cb_user_data);
+}
+    
+        // You can set those flags on a per font basis in ImFontConfig::RasterizerFlags.
+    // Use the 'extra_flags' parameter of BuildFontAtlas() to force a flag on all your fonts.
+    enum RasterizerFlags
+    {
+        // By default, hinting is enabled and the font's native hinter is preferred over the auto-hinter.
+        NoHinting       = 1 << 0,   // Disable hinting. This generally generates 'blurrier' bitmap glyphs when the glyph are rendered in any of the anti-aliased modes.
+        NoAutoHint      = 1 << 1,   // Disable auto-hinter.
+        ForceAutoHint   = 1 << 2,   // Indicates that the auto-hinter is preferred over the font's native hinter.
+        LightHinting    = 1 << 3,   // A lighter hinting algorithm for gray-level modes. Many generated glyphs are fuzzier but better resemble their original shape. This is achieved by snapping glyphs to the pixel grid only vertically (Y-axis), as is done by Microsoft's ClearType and Adobe's proprietary font renderer. This preserves inter-glyph spacing in horizontal text.
+        MonoHinting     = 1 << 4,   // Strong hinting algorithm that should only be used for monochrome output.
+        Bold            = 1 << 5,   // Styling: Should we artificially embolden the font?
+        Oblique         = 1 << 6    // Styling: Should we slant the font, emulating italic style?
+    };
+    
+            // 3. Show another simple window.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
