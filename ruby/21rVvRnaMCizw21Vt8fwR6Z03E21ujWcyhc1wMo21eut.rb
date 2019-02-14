@@ -1,131 +1,109 @@
 
         
-                        raise Errors::VMNoMatchError if vms.empty?
-              else
-                # String name, just look for a specific VM
-                vms << @env.vms[name.to_sym]
-                raise Errors::VMNotFoundError, name: name if !vms[0]
-              end
-            end
-          else
-            vms = @env.vms_ordered
-          end
-    
-            # Returns the instance variables as a hash of key-value pairs.
-        def instance_variables_hash
-          instance_variables.inject({}) do |acc, iv|
-            acc[iv.to_s[1..-1]] = instance_variable_get(iv)
-            acc
-          end
+          desc 'Run sass-spec tests against the local code.'
+  task :spec do
+    require 'yaml'
+    sass_spec_options = YAML.load_file(scope('test/sass-spec.yml'))
+    enabled = sass_spec_options.delete(:enabled)
+    unless enabled
+      puts 'SassSpec tests are disabled.'
+      next
+    end
+    if ruby_version_at_least?('1.9.2')
+      old_load_path = $:.dup
+      begin
+        $:.unshift(File.join(File.dirname(__FILE__), 'lib'))
+        begin
+          require 'sass_spec'
+        rescue LoadError
+          puts 'You probably forgot to run: bundle exec rake'
+          raise
         end
-    
-            # Registers a callback to be called when a specific action sequence
-        # is run. This allows plugin authors to hook into things like VM
-        # bootup, VM provisioning, etc.
-        #
-        # @param [Symbol] name Name of the action.
-        # @return [Array] List of the hooks for the given action.
-        def self.action_hook(name, &block)
-          # Get the list of hooks for the given hook name
-          data[:action_hooks] ||= {}
-          hooks = data[:action_hooks][name.to_sym] ||= []
-    
-            def initialize(env, config)
-          @env    = env
-          @config = config
-        end
-    
-            # Capture all bad configuration calls and save them for an error
-        # message later during validation.
-        def method_missing(name, *args, &block)
-          return super if @__finalized
-    
-            # Set the name of the plugin. The moment that this is called, the
-        # plugin will be registered and available. Before this is called, a
-        # plugin does not exist. The name must be unique among all installed
-        # plugins.
-        #
-        # @param [String] name Name of the plugin.
-        # @return [String] The name of the plugin.
-        def self.name(name=UNSET_VALUE)
-          # Get or set the value first, so we have a name for logging when
-          # we register.
-          result = get_or_set(:name, name)
-    
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have path in #{expected.inspect} but was #{actual.current_path.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have path in #{expected.inspect} but it had'
+        default_options = {
+          :spec_directory => SassSpec::SPEC_DIR,
+          :engine_adapter => SassEngineAdapter.new,
+          :generate => false,
+          :tap => false,
+          :skip => false,
+          :verbose => false,
+          :filter => '',
+          :limit => -1,
+          :unexpected_pass => false,
+          :nuke => false,
+        }
+        SassSpec::Runner.new(default_options.merge(sass_spec_options)).run || exit(1)
+      ensure
+        $:.replace(old_load_path)
+      end
+    else
+      'Skipping sass-spec on ruby versions less than 1.9.2'
+    end
   end
 end
     
-        it 'should return a dummy value in the json version' do
-      FactoryGirl.create(:notification, recipient: alice, target: post)
-      get :read_all, format: :json
-      expect(response).not_to be_redirect
+        # Wraps the given string in terminal escapes
+    # causing it to have the given color.
+    # If terminal escapes aren't supported on this platform,
+    # just returns the string instead.
+    #
+    # @param color [Symbol] The name of the color to use.
+    #   Can be `:red`, `:green`, or `:yellow`.
+    # @param str [String] The string to wrap in the given color.
+    # @return [String] The wrapped string.
+    def color(color, str)
+      raise '[BUG] Unrecognized color #{color}' unless COLORS[color]
+    
+          if @default_syntax == :sass
+        opts.on('--scss',
+                'Use the CSS-superset SCSS syntax.') do
+          @options[:for_engine][:syntax] = :scss
+        end
+      else
+        opts.on('--sass',
+                'Use the indented Sass syntax.') do
+          @options[:for_engine][:syntax] = :sass
+        end
+      end
+    
+      # fetch data
+  fields = {
+    :authors => `git shortlog -sn`.force_encoding('utf-8').scan(/[^\d\s].*/),
+    :email   => ['mail@zzak.io', 'konstantin.haase@gmail.com'],
+    :files   => %w(License README.md Rakefile Gemfile rack-protection.gemspec) + Dir['lib/**/*']
+  }
+    
+          DIRECTIVES = %i(base_uri child_src connect_src default_src
+                      font_src form_action frame_ancestors frame_src
+                      img_src manifest_src media_src object_src
+                      plugin_types referrer reflected_xss report_to
+                      report_uri require_sri_for sandbox script_src
+                      style_src worker_src).freeze
+    
+        it 'Returns nil when Referer header is invalid' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
+      expect(subject.referrer(env)).to be_nil
     end
   end
 end
 
     
-        shared_examples 'on a visible post' do
-      it 'creates the participation' do
-        post :create, params: {post_id: @post.id}
-        expect(alice.participations.where(:target_id => @post.id)).to exist
-        expect(response.code).to eq('201')
-      end
-    end
+      context 'called with one color' do
+    it 'applies same color to all sides' do
+      rule = 'border-color: #f00'
     
-          it 'keeps invalid params in form' do
-        get :create, params: invalid_params
-        expect(response.body).to match /jdoe@example.com/m
-      end
-    end
-  end
-end
-
+      context 'called with null values' do
+    it 'writes rules for other three' do
+      ruleset = 'border-top-style: inset; ' +
+                'border-right-style: none; ' +
+                'border-left-style: double;'
+      bad_rule = 'border-bottom-style: null;'
     
-            it 'doesn\'t allow the user to reshare the post again' do
-          post_request!
-          expect(response.code).to eq('422')
-          expect(response.body).to eq(I18n.t('reshares.create.error'))
-        end
-      end
+      context 'expands hover buttons' do
+    it 'finds selectors' do
+      list = @buttons_list.map { |input| '#{input}:hover' }
+      list = list.join(', ')
+      ruleset = 'content: #{list};'
     
-            expect(cop.offenses.size).to eq(1)
-        expect(cop.highlights).to eq([close])
-        expect(cop.messages).to eq([described_class::ALWAYS_NEW_LINE_MESSAGE])
-      end
-    
-          # Checks whether any of the key value pairs in the `hash` literal are on
-      # the same line.
-      #
-      # @note A multiline `pair` is considered to be on the same line if it
-      #       shares any of its lines with another `pair`
-      #
-      # @return [Boolean] whether any `pair` nodes are on the same line
-      def pairs_on_same_line?
-        pairs.each_cons(2).any? { |first, second| first.same_line?(second) }
-      end
-    
-          # Custom destructuring method. This is used to normalize the branches
-      # for `pair` and `kwsplat` nodes, to add duck typing to `hash` elements.
-      #
-      # @return [Array<KeywordSplatNode>] the different parts of the `kwsplat`
-      def node_parts
-        [self, self]
-      end
-    end
-  end
-end
-
-    
-          # A shorthand for getting the first argument of the node.
-      # Equivalent to `arguments.first`.
-      #
-      # @return [Node, nil] the first argument of the node,
-      #                     or `nil` if there are no arguments
-      def first_argument
-        arguments[0]
-      end
+      context 'called with one size' do
+    it 'applies same width to all sides' do
+      rule = 'padding: 1px'
