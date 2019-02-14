@@ -1,121 +1,132 @@
 
         
-              self.current_lane = lane.to_sym
-      self.current_platform = (platform ? platform.to_sym : nil)
+        class Devise::SessionsController < DeviseController
+  prepend_before_action :require_no_authentication, only: [:new, :create]
+  prepend_before_action :allow_params_authentication!, only: :create
+  prepend_before_action :verify_signed_out_user, only: :destroy
+  prepend_before_action(only: [:create, :destroy]) { request.env['devise.skip_timeout'] = true }
     
-            cmd << ['-am #{message.shellescape}']
-        cmd << '--force' if options[:force]
-        cmd << '-s' if options[:sign]
-        cmd << tag.shellescape
-        cmd << options[:commit].to_s if options[:commit]
+    module Devise
+  module Controllers
+    # Provide the ability to store a location.
+    # Used to redirect back to a desired path after sign in.
+    # Included by default in all controllers.
+    module StoreLocation
+      # Returns and delete (if it's navigational format) the url stored in the session for
+      # the given scope. Useful for giving redirect backs after sign up:
+      #
+      # Example:
+      #
+      #   redirect_to stored_location_for(:user) || root_path
+      #
+      def stored_location_for(resource_or_scope)
+        session_key = stored_location_key_for(resource_or_scope)
     
-          it 'adds clean_output param to command' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          appledoc(
-            project_name: 'Project Name',
-            project_company: 'Company',
-            input: 'input/dir',
-            clean_output: true
-          )
-        end').runner.execute(:test)
+        unless env['devise.skip_trackable']
+      warden.session(scope)['last_request_at'] = Time.now.utc.to_i
+    end
+  end
+end
+
     
-            expect(result).to \
-          eq('carthage update TestDependency')
+          # Checks if the reset password token sent is within the limit time.
+      # We do this by calculating if the difference between today and the
+      # sending date does not exceed the confirm in time configured.
+      # Returns true if the resource is not responding to reset_password_sent_at at all.
+      # reset_password_within is a model configuration, must always be an integer value.
+      #
+      # Example:
+      #
+      #   # reset_password_within = 1.day and reset_password_sent_at = today
+      #   reset_password_period_valid?   # returns true
+      #
+      #   # reset_password_within = 5.days and reset_password_sent_at = 4.days.ago
+      #   reset_password_period_valid?   # returns true
+      #
+      #   # reset_password_within = 5.days and reset_password_sent_at = 5.days.ago
+      #   reset_password_period_valid?   # returns false
+      #
+      #   # reset_password_within = 0.days
+      #   reset_password_period_valid?   # will always return false
+      #
+      def reset_password_period_valid?
+        reset_password_sent_at && reset_password_sent_at.utc >= self.class.reset_password_within.ago.utc
       end
     
-          it 'yields any error result' do
-        expect_command('ls', '-la', exitstatus: 1)
-        Fastlane::Actions.sh('ls', '-la') do |status, result|
-          expect(status.exitstatus).to eq(1)
-          expect(result).to be_empty
-        end
+          def rememberable_options
+        self.class.rememberable_options
       end
     
-          @key = key
-      @env_name = env_name
-      @description = description
-      @short_option = short_option
-      @default_value = default_value
-      @default_value_dynamic = default_value_dynamic
-      @verify_block = verify_block
-      @is_string = is_string
-      @data_type = type
-      @data_type = String if type == :shell_string
-      @optional = optional
-      @conflicting_options = conflicting_options
-      @conflict_block = conflict_block
-      @deprecated = deprecated
-      @sensitive = sensitive
-      @code_gen_sensitive = code_gen_sensitive || sensitive
-      @allow_shell_conversion = (type == :shell_string)
-      @display_in_shell = display_in_shell
-      @skip_type_validation = skip_type_validation # sometimes we allow multiple types which causes type validation failures, e.g.: export_options in gym
-    
-            if mod
-          if name == 'Index'
-            return slug.split('/')[1..-2].join('/')
-          elsif name == 'Angular'
-            return slug.split('/').last.split('-').first
-          end
-        end
-    
-        it 'generates the contacts_json fixture', :fixture => true do
-      json = bob.contacts.map { |c|
-               ContactPresenter.new(c, bob).full_hash_with_person
-             }.to_json
-      save_fixture(json, 'contacts_json')
-    end
-  end
+      caveats <<~EOS
+    Installation or Uninstallation may fail with Exit Code 19 (Conflicting Processes running) if Browsers, Safari Notification Service or SIMBL Services (e.g. Flashlight) are running or Adobe Creative Cloud or any other Adobe Products are already installed. See Logs in /Library/Logs/Adobe/Installers if Installation or Uninstallation fails, to identifify the conflicting processes.
+  EOS
 end
 
     
-        it 'generates a jasmine fixture', fixture: true do
-      session[:mobile_view] = true
-      get :new, format: :mobile
-      save_fixture(html_for('body'), 'conversations_new_mobile')
-    end
+      failure_message_for_should do |actual|
+    'expected #{actual.inspect} to have path #{expected.inspect} but was #{actual.current_path.inspect}'
+  end
+  failure_message_for_should_not do |actual|
+    'expected #{actual.inspect} to not have path #{expected.inspect} but it had'
   end
 end
-
     
-        it 'generates a jasmine fixture', :fixture => true do
-      contact = alice.contact_for(bob.person)
-      aspect = alice.aspects.create(:name => 'people')
-      contact.aspects << aspect
-      contact.save
-      get :new, params: {person_id: bob.person.id}
-      save_fixture(html_for('body'), 'status_message_new')
+      class PostToService < Base
+    def perform(*_args)
+      # don't post to services in cucumber
     end
   end
-end
-
     
-        it 'supports a limit per_page parameter' do
-      2.times { FactoryGirl.create(:notification, :recipient => alice, :target => @post) }
-      get :index, params: {per_page: 2}
-      expect(assigns[:notifications].count).to eq(2)
-    end
+        context 'on a public post from a stranger' do
+      before do
+        @post = stranger.post :status_message, :text => 'something', :public => true, :to => 'all'
+      end
     
-              expect {
-            get :create, params: valid_params.merge(invite: {token: code.token})
-          }.to change { code.reload.count }.by(-1)
-        end
-    
-          it 'returns an empty array for a post visible to the user' do
-        sign_in(bob, scope: :user)
+          it 'returns reshares without login' do
+        bob.reshare!(@post)
+        sign_out :user
         get :index, params: {post_id: @post.id}, format: :json
-        expect(JSON.parse(response.body)).to eq([])
+        expect(JSON.parse(response.body).map {|h| h['id'] }).to match_array(@post.reshares.map(&:id))
       end
     end
+  end
+end
+
     
-          expect('.border-style-implied-left').to have_rule(rule)
-    end
+    if $0 == __FILE__
+  begin
+    LogStash::PluginManager::Main.run('bin/logstash-plugin', ARGV)
+  rescue LogStash::PluginManager::Error => e
+    $stderr.puts(e.message)
+    exit(1)
+  end
+end
+
+    
+        def initialize(plugins_to_package, target)
+      @plugins_to_package = Array(plugins_to_package)
+      @target = target
+    
+        # any errors will be logged to $stderr by invoke!
+    # Bundler cannot update and clean gems in one operation so we have to call the CLI twice.
+    options = {:update => plugins, :rubygems_source => gemfile.gemset.sources}
+    options[:local] = true if local?
+    output = LogStash::Bundler.invoke!(options)
+    # We currently dont removed unused gems from the logstash installation
+    # see: https://github.com/elastic/logstash/issues/6339
+    # output = LogStash::Bundler.invoke!(:clean => true)
+    display_updated_plugins(previous_gem_specs_map)
+  rescue => exception
+    gemfile.restore!
+    report_exception('Updated Aborted', exception)
+  ensure
+    display_bundler_output(output)
   end
     
-          expect('.margin-all').to have_rule(rule)
+          it 'list the plugin with his version' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
+        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
+      end
     end
   end
-    
-          expect('.padding-alternate').to have_rule(rule)
-    end
-  end
+end
