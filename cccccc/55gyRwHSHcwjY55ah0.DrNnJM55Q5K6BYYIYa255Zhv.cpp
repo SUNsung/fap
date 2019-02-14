@@ -1,425 +1,320 @@
 
         
-        #endif  // ATOM_APP_COMMAND_LINE_ARGS_H_
-
-    
-      // Delegate implementations.
-  void OnError(const std::string& error) override;
-  void OnError(const std::string& message,
-               const int code,
-               const std::string& domain) override;
-  void OnCheckingForUpdate() override;
-  void OnUpdateAvailable() override;
-  void OnUpdateNotAvailable() override;
-  void OnUpdateDownloaded(const std::string& release_notes,
-                          const std::string& release_name,
-                          const base::Time& release_date,
-                          const std::string& update_url) override;
-    
-    
-    {}  // namespace api
-    
-    #endif  // ATOM_BROWSER_API_ATOM_API_SCREEN_H_
-
-    
-    namespace api {
-    }
-    
-    #endif  // ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
-
-    
-    public:
-  /// Form storage for the given generic signature and its replacement
-  /// types and conformances.
-  static Storage *get(GenericSignature *genericSig,
-                      ArrayRef<Type> replacementTypes,
-                      ArrayRef<ProtocolConformanceRef> conformances);
-    
-    DIRECTIONAL_PREPOSITION(above)
-DIRECTIONAL_PREPOSITION(after)
-DIRECTIONAL_PREPOSITION(along)
-DIRECTIONAL_PREPOSITION(alongside)
-DIRECTIONAL_PREPOSITION(as)
-DIRECTIONAL_PREPOSITION(at)
-DIRECTIONAL_PREPOSITION(before)
-DIRECTIONAL_PREPOSITION(below)
-DIRECTIONAL_PREPOSITION(by)
-DIRECTIONAL_PREPOSITION(following)
-DIRECTIONAL_PREPOSITION(for)
-DIRECTIONAL_PREPOSITION(from)
-DIRECTIONAL_PREPOSITION(given)
-DIRECTIONAL_PREPOSITION(in)
-DIRECTIONAL_PREPOSITION(including)
-DIRECTIONAL_PREPOSITION(inside)
-DIRECTIONAL_PREPOSITION(into)
-DIRECTIONAL_PREPOSITION(matching)
-DIRECTIONAL_PREPOSITION(of)
-DIRECTIONAL_PREPOSITION(on)
-DIRECTIONAL_PREPOSITION(passing)
-DIRECTIONAL_PREPOSITION(preceding)
-DIRECTIONAL_PREPOSITION(since)
-DIRECTIONAL_PREPOSITION(to)
-DIRECTIONAL_PREPOSITION(until)
-DIRECTIONAL_PREPOSITION(using)
-DIRECTIONAL_PREPOSITION(via)
-DIRECTIONAL_PREPOSITION(when)
-PREPOSITION(with)
-DIRECTIONAL_PREPOSITION(within)
-    
-      // Determine whether we should drop the preposition.
-  StringRef beforePreposition(baseName.begin(),
-                              preposition.begin() - baseName.begin());
-  StringRef afterPreposition(preposition.end(),
-                             baseName.end() - preposition.end());
-  bool dropPreposition = isVacuousPreposition(beforePreposition,
-                                              preposition,
-                                              afterPreposition,
-                                              paramType);
-    
-    % for start_code_point, end_code_point, value in break_table.property_value_ranges:
-%   if start_code_point == 0:
-  if (C <= ${end_code_point})
-%   else:
-  if (C >= ${start_code_point} && C <= ${end_code_point})
-%   end
-    return GraphemeClusterBreakProperty::${value};
-% end
-    
-    #ifndef SWIFT_IMPORTER_IMPORT_AS_MEMBER_INFERENCE_H
-#define SWIFT_IMPORTER_IMPORT_AS_MEMBER_INFERENCE_H
-    
-    #include 'content/nw/src/api/clipboard/clipboard.h'
-    
-    EventListener::EventListener(int id,
-  const base::WeakPtr<DispatcherHost>& dispatcher_host,
-  const base::DictionaryValue& option) : Base(id, dispatcher_host, option) {
-    }
-    
-    #include 'content/nw/src/api/menu/menu_delegate.h'
-    
-    
-    {}  // namespace nwapi
-    
-    class NwClipboardReadAvailableTypesFunction : public NWSyncExtensionFunction {
- public:
-  NwClipboardReadAvailableTypesFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    
-    {} // namespace extensions
-#endif
-
-    
-        // Helper function to convert display::Display to nwapi::nw__screen::Display
-    std::unique_ptr<nwapi::nw__screen::Display> ConvertGfxDisplay(const display::Display& gfx_display) {
-      std::unique_ptr<nwapi::nw__screen::Display> displayResult(new nwapi::nw__screen::Display);
-    }
-    
-    /**
- * Sets up the internal data for iterating the blobs of a new word, then
- * moves the iterator to the given offset.
- */
-void PageIterator::BeginWord(int offset) {
-  WERD_RES* word_res = it_->word();
-  if (word_res == nullptr) {
-    // This is a non-text block, so there is no word.
-    word_length_ = 0;
-    blob_index_ = 0;
-    word_ = nullptr;
-    return;
-  }
-  if (word_res->best_choice != nullptr) {
-    // Recognition has been done, so we are using the box_word, which
-    // is already baseline denormalized.
-    word_length_ = word_res->best_choice->length();
-    if (word_res->box_word != nullptr) {
-      if (word_res->box_word->length() != word_length_) {
-        tprintf('Corrupted word! best_choice[len=%d] = %s, box_word[len=%d]: ',
-                word_length_, word_res->best_choice->unichar_string().string(),
-                word_res->box_word->length());
-        word_res->box_word->bounding_box().print();
+        void ModelAnalyzer::PrintNodeInfo(const NodeDef* node,
+                                  const GraphProperties& properties, bool debug,
+                                  std::ostream& os) const {
+  os << node->name() << ' [' << node->op() << ']' << std::endl;
+  if (properties.HasOutputProperties(node->name())) {
+    const std::vector<OpInfo::TensorProperties>& props =
+        properties.GetOutputProperties(node->name());
+    for (int i = 0; i < props.size(); ++i) {
+      const OpInfo::TensorProperties& prop = props[i];
+      os << '\t'
+         << 'output ' << i << ' (' << DataTypeString(prop.dtype())
+         << ') has shape ';
+      if (prop.shape().unknown_rank()) {
+        os << '?';
+      } else {
+        os << '[';
+        for (int i = 0; i < prop.shape().dim_size(); ++i) {
+          if (i > 0) {
+            os << ', ';
+          }
+          if (prop.shape().dim(i).size() >= 0) {
+            // Print the actual dimension.
+            os << prop.shape().dim(i).size();
+          } else if (prop.shape().dim(i).size() == -1) {
+            // We don't know anything about the dimension.
+            os << '?';
+          } else {
+            // Symbolic dimension.
+            os << 'x' << -prop.shape().dim(i).size();
+          }
+        }
+        os << ']';
       }
-      ASSERT_HOST(word_res->box_word->length() == word_length_);
+      os << std::endl;
     }
-    word_ = nullptr;
-    // We will be iterating the box_word.
-    delete cblob_it_;
-    cblob_it_ = nullptr;
+  }
+    }
+    
+    namespace tensorflow {
+    }
+    
+    #include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/op_kernel.h'
+    
+      // Support dtype(bfloat16)
+  if (PyDict_SetItemString(PyBfloat16_Type.tp_dict, 'dtype',
+                           reinterpret_cast<PyObject*>(&NPyBfloat16_Descr)) <
+      0) {
+    return false;
+  }
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    PyObject* PyExceptionRegistry::Lookup(TF_Code code) {
+  DCHECK(singleton_ != nullptr) << 'Must call PyExceptionRegistry::Init() '
+                                   'before PyExceptionRegistry::Lookup()';
+  DCHECK_NE(code, TF_OK);
+  DCHECK(singleton_->exc_types_.find(code) != singleton_->exc_types_.end())
+      << 'Unknown error code passed to PyExceptionRegistry::Lookup: ' << code;
+  return singleton_->exc_types_[code];
+}
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    #endif  // TENSORFLOW_PYTHON_LIB_CORE_PY_SEQ_TENSOR_H_
+
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+        if (info.bytes > buf.size()) {
+      llvm::dbgs() << 'AST section too small.\n';
+      return false;
+    }
+    
+    class TreePrinter {
+  llvm::raw_ostream &Out;
+  void (&PrintNodeData)(llvm::raw_ostream &out, void *node);
+  SmallString<40> Indent;
+public:
+  TreePrinter(llvm::raw_ostream &out,
+              void (&printNodeData)(llvm::raw_ostream &out, void *node))
+    : Out(out), PrintNodeData(printNodeData) {}
+    }
+    
+    class LLVM_LIBRARY_VISIBILITY GenericUnix : public ToolChain {
+protected:
+  InvocationInfo constructInvocation(const InterpretJobAction &job,
+                                     const JobContext &context) const override;
+  InvocationInfo constructInvocation(const AutolinkExtractJobAction &job,
+                                     const JobContext &context) const override;
+    }
+    
+    extern 'C' {
+  PyMODINIT_FUNC INITFUNC() {
+#if PY_MAJOR_VERSION >= 3
+    PyObject *module = PyModule_Create(&_module);
+#else
+    PyObject *module = Py_InitModule3(
+        const_cast<char*>(kModuleName),
+        NULL,
+        const_cast<char*>(kModuleDocstring));
+#endif
+    if (module == NULL) {
+      return INITFUNC_ERRORVAL;
+    }
+    }
+    }
+    
+    bool ParseAnyTypeUrl(const string& type_url, string* url_prefix,
+                     string* full_type_name) {
+  size_t pos = type_url.find_last_of('/');
+  if (pos == string::npos || pos + 1 == type_url.size()) {
+    return false;
+  }
+  if (url_prefix) {
+    *url_prefix = type_url.substr(0, pos + 1);
+  }
+  *full_type_name = type_url.substr(pos + 1);
+  return true;
+}
+    
+    // Author: kenton@google.com (Kenton Varda)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+    
+    #include <google/protobuf/compiler/command_line_interface.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/io/printer.h>
+    
+    void FileGenerator::GenerateHeader(io::Printer *printer) {
+  std::set<string> headers;
+  // Generated files bundled with the library get minimal imports, everything
+  // else gets the wrapper so everything is usable.
+  if (is_bundled_proto_) {
+    headers.insert('GPBRootObject.h');
+    headers.insert('GPBMessage.h');
+    headers.insert('GPBDescriptor.h');
   } else {
-    // No recognition yet, so a 'symbol' is a cblob.
-    word_ = word_res->word;
-    ASSERT_HOST(word_->cblob_list() != nullptr);
-    word_length_ = word_->cblob_list()->length();
-    if (cblob_it_ == nullptr) cblob_it_ = new C_BLOB_IT;
-    cblob_it_->set_to_list(word_->cblob_list());
+    headers.insert('GPBProtocolBuffers.h');
   }
-  for (blob_index_ = 0; blob_index_ < offset; ++blob_index_) {
-    if (cblob_it_ != nullptr)
-      cblob_it_->forward();
+  PrintFileRuntimePreamble(printer, headers);
+    }
+    
+    
+    {  input_for_decode =
+      'longFieldNameIsLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong1000';
+  desired_output_for_decode =
+      'long_field_name_is_looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong_1000';
+  expected = string('\x04\xA5\xA4\xA2\xBF\x1F\x0E\x84\x0', 9);
+  result = TextFormatDecodeData::DecodeDataForString(input_for_decode,
+                                                     desired_output_for_decode);
+  EXPECT_EQ(expected, result);
+}
+    
+      char* temp_endptr;
+  double result = strtod(text, &temp_endptr);
+  if (original_endptr != NULL) *original_endptr = temp_endptr;
+  if (*temp_endptr != '.') return result;
+    
+      static void clearData6();
+    
+      void onTimeout(const std::shared_ptr<DHTNode>& node);
+    
+    void DHTRoutingTable::setTaskFactory(DHTTaskFactory* taskFactory)
+{
+  taskFactory_ = taskFactory;
+}
+    
+      Time serializedTime_;
+    
+    namespace aria2 {
+    }
+    
+    std::shared_ptr<DHTTask> DHTTaskFactoryImpl::createReplaceNodeTask(
+    const std::shared_ptr<DHTBucket>& bucket,
+    const std::shared_ptr<DHTNode>& newNode)
+{
+  auto task = std::make_shared<DHTReplaceNodeTask>(bucket, newNode);
+  task->setTimeout(timeout_);
+  setCommonProperty(task);
+  return task;
+}
+    
+    
+    {  int ret = x;
+  return ret;
+}
+    
+    int ObjectExtendedInfo60D::object_id(const std::uint8_t* bytes,
+                                     int32_t length) const {
+  Byte t0(bytes);
+  int32_t x = t0.get_byte(0, 8);
+    }
+    
+    class SpeedLimitTest : public ::testing::Test {
+ public:
+  virtual void SetUp() {
+    speed_limit_.Clear();
+    for (int i = 0; i < 100; ++i) {
+      std::pair<double, double> sp;
+      sp.first = i * 1.0;
+      sp.second = (i % 2 == 0) ? 5.0 : 10.0;
+      speed_limit_.AppendSpeedLimit(sp.first, sp.second);
+    }
   }
+    }
+    
+    // config detail: {'name': 'commanded_value', 'offset': 0.0, 'precision': 0.001,
+// 'len': 16, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 23,
+// 'type': 'double', 'order': 'motorola', 'physical_unit': '%'}
+double Accelrpt68::commanded_value(const std::uint8_t* bytes,
+                                   int32_t length) const {
+  Byte t0(bytes + 2);
+  int32_t x = t0.get_byte(0, 8);
+    }
+    
+    vector<detail::BenchmarkResult> resultsFromFile(const std::string& filename) {
+  string content;
+  readFile(filename.c_str(), content);
+  vector<detail::BenchmarkResult> ret;
+  benchmarkResultsFromDynamic(parseJson(content), ret);
+  return ret;
 }
     
       /**
-   * Returns information about the current paragraph, if available.
-   *
-   *   justification -
-   *     LEFT if ragged right, or fully justified and script is left-to-right.
-   *     RIGHT if ragged left, or fully justified and script is right-to-left.
-   *     unknown if it looks like source code or we have very few lines.
-   *   is_list_item -
-   *     true if we believe this is a member of an ordered or unordered list.
-   *   is_crown -
-   *     true if the first line of the paragraph is aligned with the other
-   *     lines of the paragraph even though subsequent paragraphs have first
-   *     line indents.  This typically indicates that this is the continuation
-   *     of a previous paragraph or that it is the very first paragraph in
-   *     the chapter.
-   *   first_line_indent -
-   *     For LEFT aligned paragraphs, the first text line of paragraphs of
-   *     this kind are indented this many pixels from the left edge of the
-   *     rest of the paragraph.
-   *     for RIGHT aligned paragraphs, the first text line of paragraphs of
-   *     this kind are indented this many pixels from the right edge of the
-   *     rest of the paragraph.
-   *     NOTE 1: This value may be negative.
-   *     NOTE 2: if *is_crown == true, the first line of this paragraph is
-   *             actually flush, and first_line_indent is set to the 'common'
-   *             first_line_indent for subsequent paragraphs in this block
-   *             of text.
+   * Returns a random uint32_t in [0, max) given a specific RNG.
+   * If max == 0, returns 0.
    */
-  void ParagraphInfo(tesseract::ParagraphJustification *justification,
-                     bool *is_list_item,
-                     bool *is_crown,
-                     int *first_line_indent) const;
-    
-      //   The text of a paragraph typically starts with the start of an idea and
-  // ends with the end of an idea.  Here we define paragraph as something that
-  // may have a first line indent and a body indent which may be different.
-  // Typical words that start an idea are:
-  //   1. Words in western scripts that start with
-  //      a capital letter, for example 'The'
-  //   2. Bulleted or numbered list items, for
-  //      example '2.'
-  // Typical words which end an idea are words ending in punctuation marks. In
-  // this vocabulary, each list item is represented as a paragraph.
-  bool lword_indicates_list_item;
-  bool lword_likely_starts_idea;
-  bool lword_likely_ends_idea;
-    
-      // Construct the cartesian product of the best_choices of word(1) and word2.
-  WERD_CHOICE_LIST joined_choices;
-  WERD_CHOICE_IT jc_it(&joined_choices);
-  WERD_CHOICE_IT bc1_it(&word->best_choices);
-  WERD_CHOICE_IT bc2_it(&word2->best_choices);
-  int num_word1_choices = word->best_choices.length();
-  int total_joined_choices = num_word1_choices;
-  // Nota Bene: For the main loop here, we operate only on the 2nd and greater
-  // word2 choices, and put them in the joined_choices list. The 1st word2
-  // choice gets added to the original word1 choices in-place after we have
-  // finished with them.
-  int bc2_index = 1;
-  for (bc2_it.forward(); !bc2_it.at_first(); bc2_it.forward(), ++bc2_index) {
-    if (total_joined_choices >= kTooManyAltChoices &&
-        bc2_index > kAltsPerPiece)
-      break;
-    int bc1_index = 0;
-    for (bc1_it.move_to_first(); bc1_index < num_word1_choices;
-        ++bc1_index, bc1_it.forward()) {
-      if (total_joined_choices >= kTooManyAltChoices &&
-          bc1_index > kAltsPerPiece)
-        break;
-      WERD_CHOICE *wc = new WERD_CHOICE(*bc1_it.data());
-      *wc += *bc2_it.data();
-      jc_it.add_after_then_move(wc);
-      ++total_joined_choices;
-    }
+  template <class RNG = ThreadLocalPRNG, class /* EnableIf */ = ValidRNG<RNG>>
+  static uint32_t rand32(uint32_t max, RNG&& rng) {
+    return rand32(0, max, rng);
   }
-  // Now that we've filled in as many alternates as we want, paste the best
-  // choice for word2 onto the original word alt_choices.
-  bc1_it.move_to_first();
-  bc2_it.move_to_first();
-  for (bc1_it.mark_cycle_pt(); !bc1_it.cycled_list(); bc1_it.forward()) {
-    *bc1_it.data() += *bc2_it.data();
-  }
-  bc1_it.move_to_last();
-  bc1_it.add_list_after(&joined_choices);
     
-    /**********************************************************************
- * read_unlv_file
+    #include <boost/regex/pending/unicode_iterator.hpp>
+    
+    /**
+ * VirtualExecutor implements a light-weight view onto existing Executor.
  *
- * Read a whole unlv zone file to make a list of blocks.
- **********************************************************************/
+ * Multiple VirtualExecutors can be backed by a single Executor.
+ *
+ * VirtualExecutor's destructor blocks until all tasks scheduled through it are
+ * complete. Executor's destructor also blocks until all VirtualExecutors
+ * backed by it are released.
+ */
+class VirtualExecutor : public DefaultKeepAliveExecutor {
+  auto wrapFunc(Func f) {
+    class FuncAndKeepAlive {
+     public:
+      FuncAndKeepAlive(Func&& f, VirtualExecutor* executor)
+          : keepAlive_(getKeepAliveToken(executor)), f_(std::move(f)) {}
+    }
+    }
+    }
     
-    // A CostFunc that takes the variance of step into account in the cost.
-int64_t DPPoint::CostWithVariance(const DPPoint* prev) {
-  if (prev == nullptr || prev == this) {
-    UpdateIfBetter(0, 1, nullptr, 0, 0, 0);
-    return 0;
+    /**
+ * This functions is an extension point when FOLLY_HAVE_WEAK_SYMBOLS is true.
+ * There is a default no-op implementation provided which can be overrided by
+ * linking in a library which provides its own definition.
+ *
+ * @param codecType   The type of the codec for this counter.
+ * @param codecName   The name of the codec for this counter. If the codecName
+ *                    is empty it should be defaulted using the codecType.
+ * @param level       Optionally the level used to construct the codec.
+ * @param key         The key of the counter.
+ * @param counterType The type of the counter.
+ * @returns           A function to increment the counter for the given key and
+ *                    type. It may be an empty folly::Function.
+ */
+folly::Function<void(double)> makeCompressionCounterHandler(
+    folly::io::CodecType codecType,
+    folly::StringPiece codecName,
+    folly::Optional<int> level,
+    CompressionCounterKey key,
+    CompressionCounterType counterType);
+    
+      std::sort(cpus.begin(), cpus.end(), [&](size_t lhs, size_t rhs) -> bool {
+    // sort first by equiv class of cache with highest index,
+    // direction doesn't matter.  If different cpus have
+    // different numbers of caches then this code might produce
+    // a sub-optimal ordering, but it won't crash
+    auto& lhsEquiv = equivClassesByCpu[lhs];
+    auto& rhsEquiv = equivClassesByCpu[rhs];
+    for (ssize_t i = ssize_t(std::min(lhsEquiv.size(), rhsEquiv.size())) - 1;
+         i >= 0;
+         --i) {
+      auto idx = size_t(i);
+      if (lhsEquiv[idx] != rhsEquiv[idx]) {
+        return lhsEquiv[idx] < rhsEquiv[idx];
+      }
+    }
+    }
+    
+    
+    {  T* get() const {
+    return p_;
   }
-    }
-    
-    void b2Triangle::Set(const b2Triangle& toMe) {
-	for (int32 i=0; i<3; ++i) {
-		x[i] = toMe.x[i];
-		y[i] = toMe.y[i];
-	}
-}
-    
-    			return fDRed*fDRed + fDGreen*fDGreen + fDBlue*fDBlue + fDAlpha*fDAlpha;
-		}
-		else if (m_errormetric == ErrorMetric::RGBX)
-		{
-			assert(a_fDecodedAlpha >= 0.0f);
-    
-    #define AF_BLUE_PROPERTY_CJK_TOP    ( 1U << 0 )       /* must have value 1 */
-#define AF_BLUE_PROPERTY_CJK_HORIZ  ( 1U << 1 )       /* must have value 2 */
-#define AF_BLUE_PROPERTY_CJK_RIGHT  AF_BLUE_PROPERTY_CJK_TOP
-    
-      The output buffer must be at least 5% larger than the input buffer
-  and can not be smaller than 66 bytes.
-    
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
-    
-    protected:
-    float _speed;
-    ActionInterval *_innerAction;
-    
-    void OrbitCamera::startWithTarget(Node *target)
-{
-    ActionCamera::startWithTarget(target);
-    }
-    
-    CatmullRomBy* CatmullRomBy::create(float dt, PointArray *points)
-{
-    CatmullRomBy *ret = new (std::nothrow) CatmullRomBy();
-    if (ret)
-    {
-        if (ret->initWithDuration(dt, points))
-        {
-            ret->autorelease();
-        }
-        else 
-        {
-            CC_SAFE_RELEASE_NULL(ret);
-        }
-    }
-    }
-    
-    Ripple3D* Ripple3D::create(float duration, const Size& gridSize, const Vec2& position, float radius, unsigned int waves, float amplitude)
-{
-    Ripple3D *action = new (std::nothrow) Ripple3D();
-    }
-    
-    protected:
-    bool _isNeedCleanUp;
-    
-    void ActionManager::removeAllActionsFromTarget(Node *target)
-{
-    // explicit null handling
-    if (target == nullptr)
-    {
-        return;
-    }
-    }
-    
-        //
-    // Overrides
-    //
-    virtual ProgressFromTo* clone() const override;
-    virtual ProgressFromTo* reverse() const override;
-    virtual void startWithTarget(Node *target) override;
-    virtual void update(float time) override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    ProgressFromTo() {}
-    virtual ~ProgressFromTo() {}
-    
-     ActionTween is an action that lets you update any property of an object.
- For example, if you want to modify the 'width' property of a target from 200 to 300 in 2 seconds, then:
-    
-    
-    {    return true;
-}
-    
-    #include <cmath>
-#include <iosfwd>
-#include <limits>
-#include <string>
-#include <vector>
-    
-        args_.push_back(std::move(tmp));
-    
-    std::string FormatString(const char* msg, va_list args);
-std::string FormatString(const char* msg, ...);
-    
-    // Parses a string for an Int32 flag, in the form of
-// '--flag=value'.
-//
-// On success, stores the value of the flag in *value, and returns
-// true.  On failure, returns false without changing *value.
-bool ParseInt32Flag(const char* str, const char* flag, int32_t* value);
-    
-    
-    {
-    {
-    {  // Native Client does not provide any API to access cycle counter.
-  // Use clock_gettime(CLOCK_MONOTONIC, ...) instead of gettimeofday
-  // because is provides nanosecond resolution (which is noticable at
-  // least for PNaCl modules running on x86 Mac & Linux).
-  // Initialize to always return 0 if clock_gettime fails.
-  struct timespec ts = { 0, 0 };
-  clock_gettime(CLOCK_MONOTONIC, &ts);
-  return static_cast<int64_t>(ts.tv_sec) * 1000000000 + ts.tv_nsec;
-#elif defined(__aarch64__)
-  // System timer of ARMv8 runs at a different frequency than the CPU's.
-  // The frequency is fixed, typically in the range 1-50MHz.  It can be
-  // read at CNTFRQ special register.  We assume the OS has set up
-  // the virtual timer properly.
-  int64_t virtual_timer_value;
-  asm volatile('mrs %0, cntvct_el0' : '=r'(virtual_timer_value));
-  return virtual_timer_value;
-#elif defined(__ARM_ARCH)
-  // V6 is the earliest arch that has a standard cyclecount
-  // Native Client validator doesn't allow MRC instructions.
-#if (__ARM_ARCH >= 6)
-  uint32_t pmccntr;
-  uint32_t pmuseren;
-  uint32_t pmcntenset;
-  // Read the user mode perf monitor counter access permissions.
-  asm volatile('mrc p15, 0, %0, c9, c14, 0' : '=r'(pmuseren));
-  if (pmuseren & 1) {  // Allows reading perfmon counters for user mode code.
-    asm volatile('mrc p15, 0, %0, c9, c12, 1' : '=r'(pmcntenset));
-    if (pmcntenset & 0x80000000ul) {  // Is it counting?
-      asm volatile('mrc p15, 0, %0, c9, c13, 0' : '=r'(pmccntr));
-      // The counter is set up to count every 64th cycle
-      return static_cast<int64_t>(pmccntr) * 64;  // Should optimize to << 6
-    }
+  T* operator->() const {
+    return p_;
   }
-#endif
-  struct timeval tv;
-  gettimeofday(&tv, nullptr);
-  return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
-#elif defined(__mips__)
-  // mips apparently only allows rdtsc for superusers, so we fall
-  // back to gettimeofday.  It's possible clock_gettime would be better.
-  struct timeval tv;
-  gettimeofday(&tv, nullptr);
-  return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
-#else
-// The soft failover to a generic implementation is automatic only for ARM.
-// For other platforms the developer is expected to make an attempt to create
-// a fast implementation and use generic version if nothing better is available.
-#error You need to define CycleTimer for your OS and CPU
-#endif
-}
-}  // end namespace cycleclock
-}  // end namespace benchmark
-    
-    double BenchmarkReporter::Run::GetAdjustedCPUTime() const {
-  double new_time = cpu_accumulated_time * GetTimeUnitMultiplier(time_unit);
-  if (iterations != 0) new_time /= static_cast<double>(iterations);
-  return new_time;
-}
+  explicit operator bool() const {
+    return p_ == nullptr ? false : true;
+  }
+  bool operator==(const counted_ptr<T, Atom>& p) const {
+    return get() == p.get();
+  }
+};
