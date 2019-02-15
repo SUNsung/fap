@@ -1,94 +1,93 @@
 
         
-                  if options['multiple']
-            add_default_name_and_id_for_value(@checked_value, options)
-            options.delete('multiple')
-          else
-            add_default_name_and_id(options)
+        #
+    
+              # WebSockets requests will have a Connection: Upgrade header
+          if parser.http_method != 'GET' || parser.upgrade?
+            super
+          elsif parser.request_url =~ %r!^\/livereload.js!
+            headers = [
+              'HTTP/1.1 200 OK',
+              'Content-Type: application/javascript',
+              'Content-Length: #{reload_size}',
+              '',
+              '',
+            ].join('\r\n')
+            send_data(headers)
+    
+        def no_subcommand(args)
+      unless args.empty? ||
+          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
+        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
+                          Run `jekyll help` to find out more.'
+        abort
+      end
+    end
+    
+    Then(/^the current directory will be a symlink to the release$/) do
+  run_vagrant_command(exists?('e', TestApp.current_path))
+end
+    
+      def vagrant_cli_command(command)
+    puts '[vagrant] #{command}'
+    stdout, stderr, status = Dir.chdir(VAGRANT_ROOT) do
+      Open3.capture3('#{VAGRANT_BIN} #{command}')
+    end
+    
+          # Runs all validation rules registered for the given key against the
+      # user-supplied value for that variable. If no validator raises an
+      # exception, the value is assumed to be valid.
+      def assert_valid_now(key, value)
+        validators[key].each do |validator|
+          validator.call(key, value)
+        end
+      end
+    
+          def fetch_for(key, default, &block)
+        block ? values.fetch(key, &block) : values.fetch(key, default)
+      end
+    
+              it 'returns orders sorted by completed_at' do
+            expect(json_response['data'].count).to eq Spree::Order.count
+            expect(json_response['data'].pluck(:id)).to eq Spree::Order.select('*').order(completed_at: :asc).pluck(:id).map(&:to_s)
           end
-    
-              def render_collection
-            @collection.map do |item|
-              value = value_for_collection(item, @value_method)
-              text  = value_for_collection(item, @text_method)
-              default_html_options = default_html_options_for_collection(item, value)
-              additional_html_options = option_html_attributes(item)
-    
-    module ActionView
-  # This is the main entry point for rendering. It basically delegates
-  # to other objects like TemplateRenderer and PartialRenderer which
-  # actually renders the template.
-  #
-  # The Renderer will parse the options from the +render+ or +render_body+
-  # method and render a partial or a template based on the options. The
-  # +TemplateRenderer+ and +PartialRenderer+ objects are wrappers which do all
-  # the setup and logic necessary to render a view and a new object is created
-  # each time +render+ is called.
-  class Renderer
-    attr_accessor :lookup_context
-    
-            FastlaneCore::CertChecker.installed_identies
-      end
-    
-            it 'should ask using asterisks' do
-          config_item = FastlaneCore::ConfigItem.new(key: :foo,
-                                                     description: 'foo',
-                                                     type: String,
-                                                     is_string: true,
-                                                     optional: false,
-                                                     sensitive: true)
-          config = FastlaneCore::Configuration.create([config_item], {})
-          expect(FastlaneCore::UI).to receive(:password).and_return('password')
-          expect(config[:foo]).to eq('password')
         end
-        it 'should ask using plaintext' do
-          config_item = FastlaneCore::ConfigItem.new(key: :foo,
-                                                     description: 'foo',
-                                                     type: String,
-                                                     is_string: false,
-                                                     optional: false,
-                                                     sensitive: false)
-          config = FastlaneCore::Configuration.create([config_item], {})
-          expect(FastlaneCore::UI).to receive(:input).and_return('plaintext')
-          expect(config[:foo]).to eq('plaintext')
+      end
+    end
+    
+          it 'returns account data with included default billing address' do
+        expect(json_response['included']).to    include(have_type('address'))
+        expect(json_response['included'][0]).to eq(Spree::V2::Storefront::AddressSerializer.new(user.billing_address).as_json['data'])
+      end
+    end
+    
+            it 'completes an order' do
+          expect(order.reload.state).to eq('complete')
+          expect(order.completed_at).not_to be_nil
+          expect(json_response['data']).to have_attribute(:state).with_value('complete')
         end
       end
     
-          if emoji.save
-        log_action :create, emoji
-        flash[:notice] = I18n.t('admin.custom_emojis.copied_msg')
-      else
-        flash[:alert] = I18n.t('admin.custom_emojis.copy_failed_msg')
-      end
-    
-            redirect_to admin_report_path(@report), notice: I18n.t('admin.report_notes.created_msg')
-      else
-        @report_notes = @report.notes.latest
-        @report_history = @report.history
-        @form = Form::StatusBatch.new
-    
-    class Api::SalmonController < Api::BaseController
-  include SignatureVerification
-    
-      def show
-    if subscription.valid?(params['hub.topic'])
-      @account.update(subscription_expires_at: future_expires)
-      render plain: encoded_challenge, status: 200
-    else
-      head 404
+          it_behaves_like 'returns 404 HTTP status'
     end
   end
+end
+
     
-    (allow file-write*
-  (literal
-    '/dev/dtracehelper'
-    '/dev/null'
-  )
-  (regex
-    #'^<%= Pod::Config.instance.project_root %>'
-    #'^<%= Pod::Config.instance.repos_dir %>'
-    #'^/Users/[^.]+/Library/Caches/CocoaPods/*'
-    #'^/dev/tty'
-    #'^/private/var'
-  )
-)
+    desc 'Creates a sandbox application for simulating the Spree code in a deployed Rails app'
+task :sandbox do
+  Bundler.with_clean_env do
+    exec('lib/sandbox.sh')
+  end
+end
+
+    
+    When /^(?:|I )press '([^']*)'$/ do |button|
+  click_button(button)
+end
+    
+    require 'paperclip/railtie' if defined?(Rails::Railtie)
+    
+        def self.definitions_for(klass)
+      instance.definitions_for(klass)
+    end
