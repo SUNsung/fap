@@ -1,77 +1,124 @@
 
         
-          it 'asks to accept conflicts when the scenario was modified' do
-    DefaultScenarioImporter.seed(user)
-    agent = user.agents.where(name: 'Rain Notifier').first
-    agent.options['expected_receive_period_in_days'] = 9001
-    agent.save!
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
-    click_on 'Start Import'
-    expect(page).to have_text('This Scenario already exists in your system.')
-    expect(page).to have_text('9001')
-    check('I confirm that I want to import these Agents.')
-    click_on 'Finish Import'
-    expect(page).to have_text('Import successful!')
-  end
-    
-        stub.any_instance_of(Agents::SchedulerAgent).second_precision_enabled { true }
-    
-          Utils.sort_tuples!(tuples, orders)
-      expect(tuples).to eq expected
+            def as_json
+      { name: name, path: path, type: type }
     end
   end
+end
+
     
-        it 'should raise error when response says unauthorized' do
-      stub(HTTParty).post { {'Response' => 'Not authorized'} }
-      expect { @checker.send_notification({}) }.to raise_error(StandardError, /Not authorized/)
+        def initialize
+      @pages = {}
     end
     
-            if b_length > a_length
-          (b_length - a_length).times { a_split.insert(-2, 0) }
-        elsif a_length > b_length
-          (a_length - b_length).times { b_split.insert(-2, 0) }
+            css('.code-example > h4').each do |node|
+          node['class'] = 'pre-title'
         end
     
-        def url
-      @url ||= URL.parse request.base_url
-    end
+            css('code').each do |node|
+          node.inner_html = node.inner_html.squish
+        end
     
-          max_length = if tag = str.slice!(/ \[.+\]\z/)
-        terminal_width - tag.length
+        # The content passed to this environment. If the content's environment isn't already
+    # read-only, it's made read-only.
+    #
+    # @see BaseEnvironment#content
+    #
+    # @return {[Array<Sass::Tree::Node>, ReadOnlyEnvironment]?} The content nodes and
+    #   the lexical environment of the content block.
+    #   Returns `nil` when there is no content in this environment.
+    def content
+      # Return the cached content from a previous invocation if any
+      return @content if @content_cached
+      # get the content with a read-write environment from the superclass
+      read_write_content = super
+      if read_write_content
+        tree, env = read_write_content
+        # make the content's environment read-only
+        if env && !env.is_a?(ReadOnlyEnvironment)
+          env = ReadOnlyEnvironment.new(env, env.options)
+        end
+        @content_cached = true
+        @content = [tree, env]
       else
-        terminal_width
+        @content_cached = true
+        @content = nil
       end
-    
-            css('pre').each do |node|
-          node.content = node.content.strip
-    
-      it 'raises a TypeError when passed nil' do
-    lambda { sleep(nil)   }.should raise_error(TypeError)
+    end
   end
     
-    script_binding = binding
+    module Sass::Exec
+  # The abstract base class for Sass executables.
+  class Base
+    # @param args [Array<String>] The command-line arguments
+    def initialize(args)
+      @args = args
+      @options = {}
+    end
     
-            def create
-          authorize! :create, StockMovement
-          @stock_movement = scope.new(stock_movement_params)
-          if @stock_movement.save
-            respond_with(@stock_movement, status: 201, default_template: :show)
-          else
-            invalid_resource!(@stock_movement)
-          end
-        end
+      def package(gem, ext='')
+    'pkg/#{gem}-#{source_version}' + ext
+  end
     
-            private
-    
-            def taxon_params
-          if params[:taxon] && !params[:taxon].empty?
-            params.require(:taxon).permit(permitted_taxon_attributes)
-          else
-            {}
-          end
-        end
+          def html?(headers)
+        return false unless header = headers.detect { |k,v| k.downcase == 'content-type' }
+        options[:html_types].include? header.last[/^\w+\/\w+/]
       end
     end
   end
 end
+
+    
+          def escape_string(str)
+        str = @escaper.escape_url(str)        if @url
+        str = @escaper.escape_html(str)       if @html
+        str = @escaper.escape_javascript(str) if @javascript
+        str
+      end
+    end
+  end
+end
+
+    
+        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
+      env = {'HTTP_HOST' => 'foo.com'}
+      subject.options[:allow_empty_referrer] = false
+      expect(subject.referrer(env)).to be_nil
+    end
+    
+          def insert_before(oldklass, newklass, *args)
+        i = entries.index { |entry| entry.klass == newklass }
+        new_entry = i.nil? ? Entry.new(newklass, *args) : entries.delete_at(i)
+        i = entries.index { |entry| entry.klass == oldklass } || 0
+        entries.insert(i, new_entry)
+      end
+    
+      module TestingClient
+    def raw_push(payloads)
+      if Sidekiq::Testing.fake?
+        payloads.each do |job|
+          job = Sidekiq.load_json(Sidekiq.dump_json(job))
+          job.merge!('enqueued_at' => Time.now.to_f) unless job['at']
+          Queues.push(job['queue'], job['class'], job)
+        end
+        true
+      elsif Sidekiq::Testing.inline?
+        payloads.each do |job|
+          klass = Sidekiq::Testing.constantize(job['class'])
+          job['id'] ||= SecureRandom.hex(12)
+          job_hash = Sidekiq.load_json(Sidekiq.dump_json(job))
+          klass.process_job(job_hash)
+        end
+        true
+      else
+        super
+      end
+    end
+  end
+    
+        def watchdog(last_words)
+      yield
+    rescue Exception => ex
+      handle_exception(ex, { context: last_words })
+      raise ex
+    end
