@@ -1,404 +1,384 @@
 
         
-          ~Fork() {
-    if (pid > 0) {
-      kill(pid, SIGKILL);
-      waitpid(pid, nullptr, 0);
-    }
+        using namespace swift::sys;
+using llvm::StringRef;
+    
+    void swift::printOpaquePrefixMap(raw_ostream &out, void *_root,
+                         void (*printNodeData)(raw_ostream &out, void *node)) {
+  auto root = reinterpret_cast<Node*>(_root);
+  if (!root) {
+    out << '(empty)\n';
+    return;
   }
-    
-    REGISTER_CPU_OPERATOR(GivenTensorFill, GivenTensorFillOp<float, CPUContext>);
-REGISTER_CPU_OPERATOR(
-    GivenTensorDoubleFill,
-    GivenTensorFillOp<double, CPUContext>);
-REGISTER_CPU_OPERATOR(GivenTensorBoolFill, GivenTensorFillOp<bool, CPUContext>);
-REGISTER_CPU_OPERATOR(GivenTensorIntFill, GivenTensorFillOp<int, CPUContext>);
-REGISTER_CPU_OPERATOR(
-    GivenTensorInt64Fill,
-    GivenTensorFillOp<int64_t, CPUContext>);
-REGISTER_CPU_OPERATOR(
-    GivenTensorStringFill,
-    GivenTensorFillOp<std::string, CPUContext>);
-    
-    
-    {          return out;
-        })
-    .Input(0, 'X', '4-tensor in NCHW or NHWC.')
-    .Output(
-        0,
-        'Y',
-        '4-tensor. For NCHW: N x (C x kH x kW) x outH x outW.'
-        'For NHWC: N x outH x outW x (kH x kW x C');
-    
-    
-    {}  // namespace tesseract.
-
-    
-      //   The text of a paragraph typically starts with the start of an idea and
-  // ends with the end of an idea.  Here we define paragraph as something that
-  // may have a first line indent and a body indent which may be different.
-  // Typical words that start an idea are:
-  //   1. Words in western scripts that start with
-  //      a capital letter, for example 'The'
-  //   2. Bulleted or numbered list items, for
-  //      example '2.'
-  // Typical words which end an idea are words ending in punctuation marks. In
-  // this vocabulary, each list item is represented as a paragraph.
-  bool lword_indicates_list_item;
-  bool lword_likely_starts_idea;
-  bool lword_likely_ends_idea;
-    
-      // Constructors for the various ParamTypes.
-  ParamContent() = default;
-  explicit ParamContent(tesseract::StringParam* it);
-  explicit ParamContent(tesseract::IntParam* it);
-  explicit ParamContent(tesseract::BoolParam* it);
-  explicit ParamContent(tesseract::DoubleParam* it);
-    
-      // Delete all Added points.
-  void Clear();
-    
-      // Accessors.
-  int total_cost() const {
-    return total_cost_;
-  }
-  int Pathlength() const {
-    return total_steps_;
-  }
-  const DPPoint* best_prev() const {
-    return best_prev_;
-  }
-  void AddLocalCost(int new_cost) {
-    local_cost_ += new_cost;
-  }
-    
-    namespace Etc
-{
-	// ----------------------------------------------------------------------------------------------------
-	// C-style inteface to the encoder
-	//
-	void Encode(float *a_pafSourceRGBA,
-				unsigned int a_uiSourceWidth, 
-				unsigned int a_uiSourceHeight,
-				Image::Format a_format,
-				ErrorMetric a_eErrMetric,
-				float a_fEffort,
-				unsigned int a_uiJobs,
-				unsigned int a_uiMaxJobs,
-				unsigned char **a_ppaucEncodingBits,
-				unsigned int *a_puiEncodingBitsBytes,
-				unsigned int *a_puiExtendedWidth,
-				unsigned int *a_puiExtendedHeight, 
-				int *a_piEncodingTime_ms, bool a_bVerboseOutput)
-	{
-    }
-    }
-    
-    	// C-style inteface to the encoder
-	void Encode(float *a_pafSourceRGBA,
-				unsigned int a_uiSourceWidth,
-				unsigned int a_uiSourceHeight,
-				Image::Format a_format,
-				ErrorMetric a_eErrMetric,
-				float a_fEffort,
-				unsigned int a_uiJobs,
-				unsigned int a_uimaxJobs,
-				unsigned char **a_ppaucEncodingBits,
-				unsigned int *a_puiEncodingBitsBytes,
-				unsigned int *a_puiExtendedWidth,
-				unsigned int *a_puiExtendedHeight,
-				int *a_piEncodingTime_ms, bool a_bVerboseOutput = false);
-    
-    
-    {		for (unsigned int uiPixel = 0; uiPixel < PIXELS; uiPixel++)
-		{
-			m_fError += CalcPixelError(m_afrgbaDecodedColors[uiPixel], m_afDecodedAlphas[uiPixel],
-										m_pafrgbaSource[uiPixel]);
-		}
-		
-	}
-    
-      typedef enum  AF_Blue_Stringset_
-  {
-    AF_BLUE_STRINGSET_ADLM = 0,
-    AF_BLUE_STRINGSET_ARAB = 5,
-    AF_BLUE_STRINGSET_ARMN = 9,
-    AF_BLUE_STRINGSET_AVST = 16,
-    AF_BLUE_STRINGSET_BAMU = 19,
-    AF_BLUE_STRINGSET_BENG = 22,
-    AF_BLUE_STRINGSET_BUHD = 27,
-    AF_BLUE_STRINGSET_CAKM = 32,
-    AF_BLUE_STRINGSET_CANS = 36,
-    AF_BLUE_STRINGSET_CARI = 43,
-    AF_BLUE_STRINGSET_CHER = 46,
-    AF_BLUE_STRINGSET_COPT = 53,
-    AF_BLUE_STRINGSET_CPRT = 58,
-    AF_BLUE_STRINGSET_CYRL = 63,
-    AF_BLUE_STRINGSET_DEVA = 69,
-    AF_BLUE_STRINGSET_DSRT = 75,
-    AF_BLUE_STRINGSET_ETHI = 80,
-    AF_BLUE_STRINGSET_GEOR = 83,
-    AF_BLUE_STRINGSET_GEOK = 90,
-    AF_BLUE_STRINGSET_GLAG = 97,
-    AF_BLUE_STRINGSET_GOTH = 102,
-    AF_BLUE_STRINGSET_GREK = 105,
-    AF_BLUE_STRINGSET_GUJR = 112,
-    AF_BLUE_STRINGSET_GURU = 118,
-    AF_BLUE_STRINGSET_HEBR = 124,
-    AF_BLUE_STRINGSET_KALI = 128,
-    AF_BLUE_STRINGSET_KHMR = 134,
-    AF_BLUE_STRINGSET_KHMS = 140,
-    AF_BLUE_STRINGSET_KNDA = 143,
-    AF_BLUE_STRINGSET_LAO = 146,
-    AF_BLUE_STRINGSET_LATN = 152,
-    AF_BLUE_STRINGSET_LATB = 159,
-    AF_BLUE_STRINGSET_LATP = 166,
-    AF_BLUE_STRINGSET_LISU = 173,
-    AF_BLUE_STRINGSET_MLYM = 176,
-    AF_BLUE_STRINGSET_MYMR = 179,
-    AF_BLUE_STRINGSET_NKOO = 184,
-    AF_BLUE_STRINGSET_NONE = 189,
-    AF_BLUE_STRINGSET_OLCK = 190,
-    AF_BLUE_STRINGSET_ORKH = 193,
-    AF_BLUE_STRINGSET_OSGE = 196,
-    AF_BLUE_STRINGSET_OSMA = 204,
-    AF_BLUE_STRINGSET_SAUR = 207,
-    AF_BLUE_STRINGSET_SHAW = 210,
-    AF_BLUE_STRINGSET_SINH = 216,
-    AF_BLUE_STRINGSET_SUND = 220,
-    AF_BLUE_STRINGSET_TAML = 224,
-    AF_BLUE_STRINGSET_TAVT = 227,
-    AF_BLUE_STRINGSET_TELU = 230,
-    AF_BLUE_STRINGSET_TFNG = 233,
-    AF_BLUE_STRINGSET_THAI = 236,
-    AF_BLUE_STRINGSET_VAII = 244,
-    af_blue_2_1 = 247,
-#ifdef AF_CONFIG_OPTION_CJK
-    AF_BLUE_STRINGSET_HANI = af_blue_2_1 + 0,
-    af_blue_2_1_1 = af_blue_2_1 + 2,
-#ifdef AF_CONFIG_OPTION_CJK_BLUE_HANI_VERT
-    af_blue_2_1_2 = af_blue_2_1_1 + 2,
-#else
-    af_blue_2_1_2 = af_blue_2_1_1 + 0,
-#endif /* AF_CONFIG_OPTION_CJK_BLUE_HANI_VERT */
-    af_blue_2_2 = af_blue_2_1_2 + 1,
-#else
-    af_blue_2_2 = af_blue_2_1 + 0,
-#endif /* AF_CONFIG_OPTION_CJK                */
-    }
-    
-        FT_UInt          width_count;                 /* number of used widths */
-    AF_WidthRec      widths[AF_LATIN_MAX_WIDTHS]; /* widths array          */
-    FT_Pos           edge_distance_threshold;   /* used for creating edges */
-    FT_Pos           standard_width;         /* the default stem thickness */
-    FT_Bool          extra_light;         /* is standard width very light? */
-    
-    #define FASTLZ_VERSION_MAJOR     0
-#define FASTLZ_VERSION_MINOR     0
-#define FASTLZ_VERSION_REVISION  0
-    
-    #endif /* OPUS_HAVE_RTCD */
-    
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
-    
-    
-    {  if (s.ok() && meta->file_size > 0) {
-    // Keep it
-  } else {
-    env->DeleteFile(fname);
-  }
-  return s;
+  TreePrinter(out, *printNodeData).print(root, ChildKind::Root);
 }
     
-    TEST(CorruptionTest, CorruptedDescriptor) {
-  ASSERT_OK(db_->Put(WriteOptions(), 'foo', 'hello'));
-  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
-  dbi->TEST_CompactMemTable();
-  dbi->TEST_CompactRange(0, nullptr, nullptr);
+    void
+swift::trimLeadingWhitespaceFromLines(StringRef RawText,
+                                      unsigned WhitespaceToTrim,
+                                      SmallVectorImpl<StringRef> &OutLines) {
+  SmallVector<StringRef, 8> Lines;
     }
     
+      if (auto subTypedef = type->getAs<clang::TypedefType>()) {
+    if (classifyTypedef(subTypedef->getDecl()))
+      return forTypedef(subTypedef->getDecl());
+    return forInvalid();
+  }
     
-    {}  // namespace leveldb
+    namespace swift {
+namespace importer {
+    }
+    }
+    
+      bool isImportAsMember() const { return bool(effectiveDC); }
+    
+    
+    {
+    {    switch (Bytes) {
+    case 1:
+      OutUTF8.push_back(S);
+      break;
+    case 2: {
+      uint8_t Byte2 = (S | 0x80) & 0xBF;
+      S >>= 6;
+      uint8_t Byte1 = S | 0xC0;
+      OutUTF8.push_back(Byte1);
+      OutUTF8.push_back(Byte2);
+      break;
+    }
+    case 3: {
+      uint8_t Byte3 = (S | 0x80) & 0xBF;
+      S >>= 6;
+      uint8_t Byte2 = (S | 0x80) & 0xBF;
+      S >>= 6;
+      uint8_t Byte1 = S | 0xE0;
+      OutUTF8.push_back(Byte1);
+      OutUTF8.push_back(Byte2);
+      OutUTF8.push_back(Byte3);
+      break;
+    }
+    case 4: {
+      uint8_t Byte4 = (S | 0x80) & 0xBF;
+      S >>= 6;
+      uint8_t Byte3 = (S | 0x80) & 0xBF;
+      S >>= 6;
+      uint8_t Byte2 = (S | 0x80) & 0xBF;
+      S >>= 6;
+      uint8_t Byte1 = S | 0xF0;
+      OutUTF8.push_back(Byte1);
+      OutUTF8.push_back(Byte2);
+      OutUTF8.push_back(Byte3);
+      OutUTF8.push_back(Byte4);
+      break;
+    }
+    }
+  }
+  return true;
+}
+    
+     public:
+  /*! \brief cuda kernel argument descriptor */
+  struct ArgType {
+    /*! \brief whether argument is NDArray */
+    bool is_ndarray;
+    /*! \brief whether argument is constant (input) */
+    bool is_const;
+    /*! \brief data type of argument */
+    mshadow::TypeFlag dtype;
+  };
+  /*! \brief Cuda kernel */
+  class Kernel {
+   public:
+    /*! \brief Launch the kernel */
+    void Launch(const Context& ctx, const std::vector<dmlc::any>& args,
+                uint32_t grid_dim_x, uint32_t grid_dim_y, uint32_t grid_dim_z,
+                uint32_t block_dim_x, uint32_t block_dim_y, uint32_t block_dim_z,
+                uint32_t shared_mem);
+    /*! \brief kernel interface signature */
+    const std::vector<ArgType>& signature() { return signature_; }
+    }
+    
+    /**
+ * \brief The interface to convert mxnet's tensor to caffe's blob
+ * \brief called in caffe_operator_inl.h
+ */
+template<typename Device, typename Dtype>
+void TBlob2CaffeBlob(caffeMemoryTypes memType,
+                     typename std::vector< ::caffe::Blob<Dtype>*>::iterator blob,
+                     typename std::vector<TBlob>::const_iterator tblob,
+                     int n = 1) {
+  for (int i = 0; i < n; ++i, ++blob, ++tblob) {
+    (*blob)->Reshape(TShape2Vector((*tblob).shape_));
+    SetDataGradToBlob<Device, Dtype>(memType, blob, tblob);
+  }
+}
+    
+    template<>
+Operator* CreateOp<cpu>(CaffeOpParam param, int dtype) {
+  Operator *op = NULL;
+  switch (dtype) {
+  case mshadow::kFloat32:
+    op = new CaffeOp<cpu, float>(param);
+    break;
+  case mshadow::kFloat64:
+    op = new CaffeOp<cpu, double>(param);
+    break;
+  case mshadow::kFloat16:
+    LOG(FATAL) << 'float16 layer is not supported by caffe';
+    break;
+  default:
+    LOG(FATAL) << 'Unsupported type ' << dtype;
+  }
+  return op;
+}
+    
+    
+    {
+    {}  // namespace exec
+}  // namespace mxnet
 
     
-      // Create a reader that will return log records from '*file'.
-  // '*file' must remain live while this Reader is in use.
-  //
-  // If 'reporter' is non-null, it is notified whenever some data is
-  // dropped due to a detected corruption.  '*reporter' must remain
-  // live while this Reader is in use.
-  //
-  // If 'checksum' is true, verify checksums if available.
-  //
-  // The Reader will start reading at the first record located at physical
-  // position >= initial_offset within the file.
-  Reader(SequentialFile* file, Reporter* reporter, bool checksum,
-         uint64_t initial_offset);
-    
-        RecordType type;
-    const bool end = (left == fragment_length);
-    if (begin && end) {
-      type = kFullType;
-    } else if (begin) {
-      type = kFirstType;
-    } else if (end) {
-      type = kLastType;
+      virtual void BeforeFirst(void) {
+    if (param_.round_batch == 0 || num_overflow_ == 0) {
+      // otherise, we already called before first
+      base_->BeforeFirst();
     } else {
-      type = kMiddleType;
+      num_overflow_ = 0;
     }
-    
-      ~Repairer() {
-    delete table_cache_;
-    if (owns_info_log_) {
-      delete options_.info_log;
-    }
-    if (owns_cache_) {
-      delete options_.block_cache;
-    }
+    head_ = 1;
   }
     
-      // Return the latest node with a key < key.
-  // Return head_ if there is no such node.
-  Node* FindLessThan(const Key& key) const;
+    void Assembler::mtspr(const SpecialReg spr, const Reg64& rs) {
+  EmitXFXForm(31, rn(rs), spr, 467);
+}
     
-      int64_t num_record_drop_hidden = 0;
-  int64_t num_record_drop_obsolete = 0;
-  int64_t num_record_drop_range_del = 0;
-  int64_t num_range_del_drop_obsolete = 0;
-  // Deletions obsoleted before bottom level due to file gap optimization.
-  int64_t num_optimized_del_drop_obsolete = 0;
-  uint64_t total_filter_time = 0;
     
-    #if !defined(ROCKSDB_LITE) && !defined(OS_WIN)
-    
-      // atomic write
-  WriteBatch batch;
-  batch.Put(handles[0], Slice('key2'), Slice('value2'));
-  batch.Put(handles[1], Slice('key3'), Slice('value3'));
-  batch.Delete(handles[0], Slice('key'));
-  s = db->Write(WriteOptions(), &batch);
-  assert(s.ok());
-    
-      int ret = system('rm -rf /tmp/rocksmergetest');
-  if (ret != 0) {
-    fprintf(stderr, 'Error deleting /tmp/rocksmergetest, code: %d\n', ret);
-    return ret;
-  }
-  rocksdb::Options options;
-  options.create_if_missing = true;
-  options.merge_operator.reset(new MyMerge);
-  options.compaction_filter = &filter;
-  status = rocksdb::DB::Open(options, '/tmp/rocksmergetest', &raw_db);
-  assert(status.ok());
-  std::unique_ptr<rocksdb::DB> db(raw_db);
-    
-      // Attempt to commit transaction
-  s = txn->Commit();
-    
-    std::string kDBPath = '/tmp/rocksdb_options_file_example';
-    
-    // Delete files which are entirely in the given range
-// Could leave some keys in the range which are in files which are not
-// entirely in the range. Also leaves L0 files regardless of whether they're
-// in the range.
-// Snapshots before the delete might not see the data in the given range.
-Status DeleteFilesInRange(DB* db, ColumnFamilyHandle* column_family,
-                          const Slice* begin, const Slice* end,
-                          bool include_end = true);
-    
-    struct DumpOptions {
-  // Database that will be dumped
-  std::string db_path;
-  // File location that will contain dump output
-  std::string dump_location;
-  // Don't include db information header in the dump
-  bool anonymous = false;
+    {private:
+  APCHandle m_handle;
+  APCHandle* m_arrayHandle;
+  CollectionType m_colType;
 };
     
-    // Supported only for Leveled compaction
-Status SuggestCompactRange(DB* db, ColumnFamilyHandle* column_family,
-                           const Slice* begin, const Slice* end);
-Status SuggestCompactRange(DB* db, const Slice* begin, const Slice* end);
-    
-    class Checkpoint {
- public:
-  // Creates a Checkpoint object to be used for creating openable snapshots
-  static Status Create(DB* db, Checkpoint** checkpoint_ptr);
-    }
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    CardinalSplineTo* CardinalSplineTo::create(float duration, PointArray *points, float tension)
-{
-    CardinalSplineTo *ret = new (std::nothrow) CardinalSplineTo();
-    if (ret)
-    {
-        if (ret->initWithDuration(duration, points, tension))
-        {
-            ret->autorelease();
-        }
-        else 
-        {
-            CC_SAFE_RELEASE_NULL(ret);
-        }
-    }
-    }
-    
-    NS_CC_BEGIN
-    
-    // implementation of Liquid
-    
-    CC_CONSTRUCTOR_ACCESS:
-    JumpTo() {}
-    virtual ~JumpTo() {}
-    
-        ccArrayRemoveObjectAtIndex(element->actions, index, true);
-    
-    #ifndef __ACTION_CCACTION_MANAGER_H__
-#define __ACTION_CCACTION_MANAGER_H__
-    
-    
-    {    CC_SAFE_RELEASE(_spriteFrame);
+    void Config::ParseIniFile(const std::string &filename,
+                          const bool is_system /* = true */) {
+  IniSettingMap ini = IniSettingMap();
+  Config::ParseIniFile(filename, ini, false, is_system);
 }
     
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
+    public:
+  static void Add(InfoVec& out, const char* name, const std::string& value);
+  static void AddServerStats(InfoVec& out, const char* name,
+                             const char* statsName = nullptr);
     
-    std::vector<cocos2d::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& start, float threshold)
-{
-    int stepx = 0;
-    int stepy = 0;
-    int prevx = 0;
-    int prevy = 0;
-    int startx = start.x;
-    int starty = start.y;
-    int curx = startx;
-    int cury = starty;
-    unsigned int count = 0;
-    std::vector<int> case9s;
-    std::vector<int> case6s;
-    int i;
-    std::vector<int>::iterator it;
-    std::vector<cocos2d::Vec2> _points;
-    do{
-        int sv = getSquareValue(curx, cury, rect, threshold);
-        switch(sv){
-    }
-    }
+    struct FileStreamWrapper final : Stream::Wrapper {
+  static req::ptr<MemFile> openFromCache(const String& filename,
+                                         const String& mode);
+  req::ptr<File> open(const String& filename, const String& mode, int options,
+                      const req::ptr<StreamContext>& context) override;
+  int access(const String& path, int mode) override {
+    return ::access(File::TranslatePath(path).data(), mode);
+  }
+  int stat(const String& path, struct stat* buf) override {
+    return ::stat(File::TranslatePath(path).data(), buf);
+  }
+  int lstat(const String& path, struct stat* buf) override {
+    return ::lstat(File::TranslatePath(path).data(), buf);
+  }
+  int unlink(const String& path) override;
+  int rename(const String& oldname, const String& newname) override;
+  int mkdir(const String& path, int mode, int options) override;
+  int rmdir(const String& path, int /*options*/) override {
+    ERROR_RAISE_WARNING(::rmdir(File::TranslatePath(path).data()));
+    return ret;
+  }
+  bool isNormalFileStream() const override { return true; }
     }
     
-        int getIndexFromPos(unsigned int x, unsigned int y) { return y*_width+x; }
-    cocos2d::Vec2 getPosFromIndex(unsigned int i) { return cocos2d::Vec2(static_cast<float>(i%_width), static_cast<float>(i/_width)); }
+    
+    {        return const_cast<int8_t*>(DataBuffer<int8_t>());
+    }
+    
+    
+    {            // Determine unpacked shape
+            m_unpackedShape = GetUnpackedShape(sampleShape, sampleDynamicAxes, packedDataLayout);
+        }
+    
+            Dictionary initConfig;
+        initConfig[InitializerTypeAttributeName] = initializerTypeName;
+        initConfig[ScaleAttributeName] = scale;
+        // Initializers are sometimes created as default arguments in python.
+        // If the value for an automatically-selected seed is assigned here, 
+        // subsequent calls to SetFixedRandomSeed will be ignored.
+        initConfig[RandomSeedAttributeName] = (size_t)seed;        
+        return initConfig;
+    }
+    
+    static ParameterInitializer CreateInitializer(const std::wstring& initializerTypeName, double scale, int outputRank, int filterRank, unsigned long seed)
+    {
+        if (scale <= 0)
+            InvalidArgument('CreateInitializer: scale value for initializer '%S' cannot be 0.', 
+                initializerTypeName.c_str());
+    
+                // Validate that each of the dynamic axes are unique
+            std::unordered_set<Axis> uniqueDynamicAxis;
+            for (auto& currentDynamicAxis : dynamicAxes)
+            {
+                auto retVal = uniqueDynamicAxis.insert(currentDynamicAxis);
+                if (!retVal.second)
+                    InvalidArgument('Dynamic axis named %S is specified more than once for Variable '%S'', currentDynamicAxis.Name().c_str(), AsString().c_str());
+            }
+    
+            if (::WaitForSingleObject(m_handle, wait ? INFINITE : 0) != WAIT_OBJECT_0)
+        {
+            // failed to acquire
+            int rc = ::CloseHandle(m_handle);
+            if ((rc == CLOSEHANDLE_ERROR) && !std::uncaught_exception())
+            {
+                RuntimeError('Acquire: Handler close failure with error code %d', ::GetLastError());
+            }
+            m_handle = NULL;
+            return false;
+        }
+    
+    #pragma once
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS // 'secure' CRT not available on all platforms  --add this at the top of all CPP files that give 'function or variable may be unsafe' warnings
+#endif
+#ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif // NOMINMAX
+#pragma comment(lib, 'Dbghelp.lib')
+#else
+#include <execinfo.h>
+#include <cxxabi.h>
+#endif
+    
+    
+    {
+    {            if (map.size() > RAND_MAX * (size_t) RAND_MAX)
+                RuntimeError('RandomOrdering: too large training set: need to change to different random generator!');
+            srand((unsigned int) seed);
+            size_t retries = 0;
+            foreach_index (t, map)
+            {
+                for (int tries = 0; tries < 5; tries++)
+                {
+                    // swap current pos with a random position
+                    // Random positions are limited to t+randomizationrange.
+                    // This ensures some locality suitable for paging with a sliding window.
+                    const size_t tbegin = max((size_t) t, randomizationrange / 2) - randomizationrange / 2; // range of window  --TODO: use bounds() function above
+                    const size_t tend = min(t + randomizationrange / 2, map.size());
+                    assert(tend >= tbegin);                  // (guard against potential numeric-wraparound bug)
+                    const size_t trand = rand(tbegin, tend); // random number within windows
+                    assert((size_t) t <= trand + randomizationrange / 2 && trand < (size_t) t + randomizationrange / 2);
+                    // if range condition is fulfilled then swap
+                    if (trand <= map[t] + randomizationrange / 2 && map[t] < trand + randomizationrange / 2 && (size_t) t <= map[trand] + randomizationrange / 2 && map[trand] < (size_t) t + randomizationrange / 2)
+                    {
+                        std::swap(map[t], map[trand]);
+                        break;
+                    }
+                    // but don't multi-swap stuff out of its range (for swapping positions that have been swapped before)
+                    // instead, try again with a different random number
+                    retries++;
+                }
+            }
+            fprintf(stderr, 'RandomOrdering: %lu retries for %lu elements (%.1f%%) to ensure window condition\n', (unsigned long) retries, (unsigned long) map.size(), 100.0 * retries / map.size());
+            // ensure the window condition
+            foreach_index (t, map)
+                assert((size_t) t <= map[t] + randomizationrange / 2 && map[t] < (size_t) t + randomizationrange / 2);
+#if 0 // and a live check since I don't trust myself here yet
+            foreach_index (t, map) if (!((size_t) t <= map[t] + randomizationrange/2 && map[t] < (size_t) t + randomizationrange/2))
+            {
+                fprintf (stderr, 'RandomOrdering: windowing condition violated %d -> %d\n', t, map[t]);
+                LogicError('RandomOrdering: windowing condition violated');
+            }
+#endif
+#if 0 // test whether it is indeed a unique complete sequence
+            auto map2 = map;
+            ::sort (map2.begin(), map2.end());
+            foreach_index (t, map2) assert (map2[t] == (size_t) t);
+#endif
+            fprintf(stderr, 'RandomOrdering: recached sequence for seed %d: %d, %d, ...\n', (int) seed, (int) map[0], (int) map[1]);
+            currentseed = seed;
+        }
+        return map; // caller can now access it through operator[]
+    }
+    
+    public:
+    ScopeTimer(size_t verbosity, const std::string& message)
+        : m_verbosity(verbosity), m_message(message)
+    {
+        if (m_verbosity > 2)
+        {
+            m_aggregateTimer.Start();
+        }
+    }
+    
+            if (
+            // Test condition 1.
+            (dimsA.size() == 3 && dimsA[0] == 1 && dimsA[1] == 1) &&
+            // Test condition 2.
+            (dimsB.size() == 2 && dimsB[1] == 1) &&
+            (dimsC.size() == 2 && dimsC[1] == 1) &&
+            // Test condition 3. and condition 4.
+            (dimsB[0] == dimsC[0] && dimsB[0] == dimsA[2])
+            )
+        {
+            // for error messages
+            string dimsBstring = string(Input(1)->GetSampleLayout());
+            string dimsCstring = string(Input(2)->GetSampleLayout());
+    }
+    
+    void BENCHFUN(sizeCtor)(int iters, int size) {
+  FOR_EACH_RANGE (i, 0, iters) {
+    VECTOR v(size);
+    doNotOptimizeAway(&v);
+  }
+}
+BENCHMARK_PARAM(BENCHFUN(sizeCtor), 16)
+BENCHMARK_PARAM(BENCHFUN(sizeCtor), 128)
+BENCHMARK_PARAM(BENCHFUN(sizeCtor), 1024)
+    
+    #include <boost/regex/pending/unicode_iterator.hpp>
+    
+    /*
+ * This is an implementation of the std::atomic_shared_ptr TS
+ * http://en.cppreference.com/w/cpp/experimental/atomic_shared_ptr
+ * https://isocpp.org/files/papers/N4162.pdf
+ *
+ * AFAIK, the only other implementation is Anthony Williams from
+ * Just::thread library:
+ *
+ * https://bitbucket.org/anthonyw/atomic_shared_ptr
+ *
+ * implementation details:
+ *
+ * Basically, three things need to be atomically exchanged to make this work:
+ * * the local count
+ * * the pointer to the control block
+ * * the aliased pointer, if any.
+ *
+ * The Williams version does it with DWcas: 32 bits for local count, 64
+ * bits for control block ptr, and he changes the shared_ptr
+ * implementation to also store the aliased pointers using a linked list
+ * like structure, and provides 32-bit index accessors to them (like
+ * IndexedMemPool trick).
+ *
+ * This version instead stores the 48 bits of address, plus 16 bits of
+ * local count in a single 8byte pointer.  This avoids 'lock cmpxchg16b',
+ * which is much slower than 'lock xchg' in the normal 'store' case.  In
+ * the less-common aliased pointer scenaro, we just allocate it in a new
+ * block, and store a pointer to that instead.
+ *
+ * Note that even if we only want to use the 3-bits of pointer alignment,
+ * this trick should still work - Any more than 4 concurrent accesses
+ * will have to go to an external map count instead (slower, but lots of
+ * concurrent access will be slow anyway due to bouncing cachelines).
+ *
+ * As a perf optimization, we currently batch up local count and only
+ * move it global every once in a while.  This means load() is usually
+ * only a single atomic operation, instead of 3.  For this trick to work,
+ * we probably need at least 8 bits to make batching worth it.
+ */
