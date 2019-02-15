@@ -1,324 +1,309 @@
 
         
-        // Extracts the value of a PyBfloat16 object.
-bfloat16 PyBfloat16_Bfloat16(PyObject* object) {
-  return reinterpret_cast<PyBfloat16*>(object)->value;
+        /*!
+ * \brief Gradient function that takes output value of function and computes gradient wrt to input.
+ * \param out_grad the gradient wrt to output of the function.
+ * \param env The Environment arguments.
+ * \param in_grad The container to store result input gradient.
+ * \param req The requirement to store the ret value.
+ * \param ctx Runtime context to execute the function.
+ */
+typedef void (*UnaryGradFunctionT0)(const OutputGrad& out_grad,
+                                    const EnvArguments& env,
+                                    TBlob* in_grad,
+                                    OpReqType req,
+                                    RunContext ctx);
+/*!
+ * \brief Gradient function that takes output value of function and computes gradient wrt to input.
+ * \param out_grad the gradient wrt to output of the function.
+ * \param out_value the value of the function.
+ * \param env The Environment arguments.
+ * \param in_grad The container to store result input gradient.
+ * \param req The requirement to store the ret value.
+ * \param ctx Runtime context to execute the function.
+ */
+typedef void (*UnaryGradFunctionT1)(const OutputGrad& out_grad,
+                                    const OutputValue& out_value,
+                                    const EnvArguments& env,
+                                    TBlob* in_grad,
+                                    OpReqType req,
+                                    RunContext ctx);
+/*!
+ * \brief Gradient function that takes input value of function and computes gradient wrt to input.
+ * \param out_grad the gradient wrt to output of the function.
+ * \param in_data0 the input value of the function.
+ * \param env The Environment arguments.
+ * \param in_grad The container to store result input gradient.
+ * \param req The requirement to store the ret value.
+ * \param ctx Runtime context to execute the function.
+ */
+typedef void (*UnaryGradFunctionT2)(const OutputGrad& out_grad,
+                                    const Input0& in_data0,
+                                    const EnvArguments& env,
+                                    TBlob* in_grad,
+                                    OpReqType req,
+                                    RunContext ctx);
+/*!
+ * \brief Binary function that takes lhs, rhs and save result to ret.
+ *  The result container is pre-allocated with the correct shape.
+ * \param lhs The left operand
+ * \param rhs The right operand
+ * \param env The Environment arguments.
+ * \param ret The containter to store return value.
+ * \param req The requirement to stroe the ret.
+ * \param ctx Runtime context to execute the function.
+ */
+typedef void (*BinaryFunction)(const TBlob& lhs,
+                               const TBlob& rhs,
+                               const EnvArguments& env,
+                               TBlob* ret,
+                               OpReqType req,
+                               RunContext ctx);
+    
+    template<>
+void SetDataGradToBlob<mshadow::cpu, double>(caffeMemoryTypes memType,
+                            std::vector<::caffe::Blob<double>*>::iterator blob,
+                            std::vector<TBlob>::const_iterator itr) {
+  double *data_ptr = reinterpret_cast<double*>((*itr).dptr_);
+  if (memType == Data)
+    (*blob)->set_cpu_data(data_ptr);
+  else
+    MXCAFFEBLOB(*blob, double)->set_cpu_diff(data_ptr);
 }
     
+    /*!
+ * Copyright (c) 2016 by Contributors
+ * \file caffe_blob.h
+ * \brief conversion between tensor and caffeBlob
+ * \author Haoran Wang
+*/
+#ifndef PLUGIN_CAFFE_CAFFE_BLOB_H_
+#define PLUGIN_CAFFE_CAFFE_BLOB_H_
     
-    {}  // namespace tensorflow
-    
-    // Actually dereferences cached numpy arrays. REQUIRES being called while
-// holding the GIL.
-void ClearDecrefCache() {
-  std::vector<void*> cache_copy;
-  {
-    mutex_lock ml(*DelayedDecrefLock());
-    cache_copy.swap(*DecrefCache());
-  }
-  for (void* obj : cache_copy) {
-    Py_DECREF(reinterpret_cast<PyObject*>(obj));
-  }
+    // DO_BIND_DISPATCH comes from static_operator_common.h
+Operator *CaffeLossProp::CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
+                                     std::vector<int> *in_type) const {
+  std::vector<int> out_type, aux_type;
+  std::vector<TShape> out_shape, aux_shape;
+  out_type.resize(this->ListOutputs().size());
+  out_shape.resize(this->ListOutputs().size());
+  aux_type.resize(this->ListAuxiliaryStates().size());
+  aux_shape.resize(this->ListAuxiliaryStates().size());
+  CHECK(InferType(in_type, &out_type, &aux_type));
+  CHECK(InferShape(in_shape, &out_shape, &aux_shape));
+  DO_BIND_DISPATCH(CreateOp, param_, (*in_type)[0]);
 }
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    #include 'tensorflow/core/framework/tensor.h'
-#include 'tensorflow/core/lib/core/status.h'
-    
-    // Returns the kernel class name required to execute <node_def> on the device
-// type of <node_def.device>, or an empty string if the kernel class is not
-// found or the device name is invalid.
-string TryFindKernelClass(const string& serialized_node_def);
-    
-      static const unsigned kMask = 0xf;  // Mask of all available flags.
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    #include <algorithm>
-    
-        void operator() (const uint8x8_t & _v_src0, const uint8x8_t & _v_src1,
-                     uint8x8_t & v_dst) const
-    {
-        uint16x8_t v_src0 = vmovl_u8(_v_src0), v_src1 = vmovl_u8(_v_src1);
+      std::vector<std::string> ListOutputs() const override {
+    if (param_.num_out > 1) {
+      std::vector<std::string> ret;
+      for (int i = 0; i < param_.num_out; ++i)
+        ret.push_back('output' + std::to_string(i));
+      return ret;
+    } else {
+      return {'output'};
     }
+  }
     
-            //left&right borders
-        if (borderType != BORDER_MODE_CONSTANT)
-            for (s32 k = 0; k < cn; ++k)
-            {
-                lanea[-cn+k] = lanea[idx_l + k];
-                lanea[colsn+k] = lanea[idx_r + k];
-                laneb[-cn+k] = laneb[idx_l + k];
-                laneb[colsn+k] = laneb[idx_r + k];
-            }
+      for (uint32_t nid = 0; nid < idx.num_nodes(); ++nid) {
+    const auto& inode = idx[nid];
+    if (inode.source->op() != ewise_plus_op) continue;
+    int sid = storage_id[idx.entry_id(inode.inputs[0])];
+    if (sid != storage_id[idx.entry_id(nid, 0)]) continue;
+    if (idx[inode.inputs[0].node_id].source->is_variable()) continue;
+    if (idx[inode.inputs[1].node_id].source->is_variable()) continue;
+    uint32_t eid_rhs  = idx.entry_id(inode.inputs[1]);
+    if (ref_count[eid_rhs] != 1) continue;
+    if (inode.inputs[0].node_id >= inode.inputs[1].node_id) continue;
+    // TODO(haibin) support inplace addto for Dynamic Storage
+    if (storage_id[eid_rhs] == kDynamicStorageID) continue;
+    CHECK_NE(storage_id[eid_rhs], sid);
+    storage_id[eid_rhs] = sid;
+    addto_entry[eid_rhs] = 1;
+    storage_inplace_index[eid_rhs] = -1;
+    skip_plus_node[nid] = 1;
+  }
     
-    
-    {        for (; i < size.width; ++i)
-            result += s32(src0[i]) * s32(src1[i]);
-    }
-    return result;
-#else
-    (void)_size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    
-        v0k8 = vextq_s16(d8_15, d16_23, 5);
-    ak8 = vminq_s16(ak8, v0k8);
-    bk8 = vmaxq_s16(bk8, v0k8);
-    
-    #include <dmlc/registry.h>
-#include <xgboost/base.h>
-#include <xgboost/data.h>
-#include <functional>
-#include <string>
-#include <utility>
-#include <vector>
-#include '../../src/gbm/gblinear_model.h'
-#include '../../src/common/host_device_vector.h'
-    
-    // Forward declarations
-namespace xgboost {
-class TreeUpdater;
-}
-    
-     private:
-  StreamBufferReader reader_;
-  int tmp_ch;
-  int num_prev;
-  unsigned char buf_prev[2];
-  // whether we need to do strict check
-  static const bool kStrictCheck = false;
-};
-/*! \brief the stream that write to base64, note we take from file pointers */
-class Base64OutStream: public dmlc::Stream {
+    /*!
+ * \brief tblob batch
+ *
+ * data are stored in tblob before going into NDArray
+ */
+struct TBlobBatch {
  public:
-  explicit Base64OutStream(dmlc::Stream *fp) : fp(fp) {
-    buf_top = 0;
+  /*! \brief unique id for instance, can be NULL, sometimes is useful */
+  unsigned *inst_index;
+  /*! \brief number of instance */
+  mshadow::index_t batch_size;
+  /*! \brief number of padding elements in this batch,
+       this is used to indicate the last elements in the batch are only padded up to match the batch, and should be discarded */
+  mshadow::index_t num_batch_padd;
+  /*! \brief content of dense data */
+  std::vector<TBlob> data;
+  /*! \brief extra data to be fed to the network */
+  std::string extra_data;
+  /*! \brief constructor */
+  TBlobBatch(void) {
+    inst_index = NULL;
+    batch_size = 0; num_batch_padd = 0;
   }
-  virtual void Write(const void *ptr, size_t size) {
-    using base64::EncodeTable;
-    size_t tlen = size;
-    const unsigned char *cptr = static_cast<const unsigned char*>(ptr);
-    while (tlen) {
-      while (buf_top < 3  && tlen != 0) {
-        buf[++buf_top] = *cptr++; --tlen;
-      }
-      if (buf_top == 3) {
-        // flush 4 bytes out
-        PutChar(EncodeTable[buf[1] >> 2]);
-        PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
-        PutChar(EncodeTable[((buf[2] << 2) | (buf[3] >> 6)) & 0x3F]);
-        PutChar(EncodeTable[buf[3] & 0x3F]);
-        buf_top = 0;
-      }
-    }
+  /*! \brief destructor */
+  ~TBlobBatch() {
+    delete[] inst_index;
   }
-  virtual size_t Read(void *ptr, size_t size) {
-    LOG(FATAL) << 'Base64OutStream do not support read';
-    return 0;
-  }
-  /*!
-   * \brief finish writing of all current base64 stream, do some post processing
-   * \param endch character to put to end of stream, if it is EOF, then nothing will be done
-   */
-  inline void Finish(char endch = EOF) {
-    using base64::EncodeTable;
-    if (buf_top == 1) {
-      PutChar(EncodeTable[buf[1] >> 2]);
-      PutChar(EncodeTable[(buf[1] << 4) & 0x3F]);
-      PutChar('=');
-      PutChar('=');
-    }
-    if (buf_top == 2) {
-      PutChar(EncodeTable[buf[1] >> 2]);
-      PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
-      PutChar(EncodeTable[(buf[2] << 2) & 0x3F]);
-      PutChar('=');
-    }
-    buf_top = 0;
-    if (endch != EOF) PutChar(endch);
-    this->Flush();
-  }
+};  // struct TBlobBatch
     
-    #endif  // DMLC_ENABLE_STD_THREAD
-
+            template <typename ElementType>
+        static Microsoft::MSR::CNTK::TensorView<ElementType>* GetWritableTensorView(const NDArrayViewPtr& arrayView);
     
-    
+        typedef unsigned int INDEXTYPE; // don't use size_t, as this saves HUGE amounts of RAM
+    std::vector<INDEXTYPE> map;     // [t] -> t' indices in randomized order
+    size_t currentseed;             // seed for current sequence
+    size_t randomizationrange;      // t - randomizationrange/2 <= t' < t + randomizationrange/2 (we support this to enable swapping)
+                                    // special values (randomizeDisable)
+    void Invalidate()
     {
-    {}  // namespace tree
-}  // namespace xgboost
-    
-    
-    {  // default copy constructor
-  {
-    Span<float> s0 (arr);
-    Span<float> s1 (s0);
-    ASSERT_EQ(s0.size(), s1.size());
-    ASSERT_EQ(s0.data(), s1.data());
-  }
-}
-    
-    
-    {    printf('DestroyContext()\n');
-    ImGui::DestroyContext();
-    return 0;
-}
-
-    
-    #pragma once
-    
-        // Render command lists
-    for (int n = 0; n < draw_data->CmdListsCount; n++)
-    {
-        const ImDrawList* cmd_list = draw_data->CmdLists[n];
-        const ImDrawIdx* idx_buffer = cmd_list->IdxBuffer.Data;
-        const int nVert = cmd_list->VtxBuffer.Size;
-        CIwFVec2* pVertStream = IW_GX_ALLOC(CIwFVec2, nVert);
-        CIwFVec2* pUVStream = IW_GX_ALLOC(CIwFVec2, nVert);
-        CIwColour* pColStream = IW_GX_ALLOC(CIwColour, nVert);
+        currentseed = (size_t) -1;
     }
     
-    static bool show_demo_window = true;
-static bool show_another_window = false;
-static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+        double ElapsedSeconds();
     
-        // Main loop
-    while (!glfwWindowShouldClose(window))
+    
+    {            // reshape Input(2)
+            Input(2)->SetDims(TensorShape(dimsA), false);
+            fprintf(stderr, '\n%ls %ls operation: For legacy compatibility, the sample layout of third input (%ls %ls operation) was patched to [%s] (from [%s])\n',
+                NodeName().c_str(), OperationName().c_str(), Input(2)->NodeName().c_str(), Input(2)->OperationName().c_str(), string(Input(2)->GetSampleLayout()).c_str(), dimsCstring.c_str());
+        }
+    
+        virtual void Load(File& fstream, size_t modelVersion) override
     {
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        glfwPollEvents();
+        Base::Load(fstream, modelVersion);
+        fstream >> m_subPen;
+        fstream >> m_delPen;
+        fstream >> m_insPen;
+        fstream >> m_squashInputs;
+        fstream >> m_tokensToIgnore;
     }
     
-        // Initialize OpenGL loader
-#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
-    bool err = gl3wInit() != 0;
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
-    bool err = glewInit() != GLEW_OK;
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
-    bool err = gladLoadGL() == 0;
-#else
-    bool err = false; // If you use IMGUI_IMPL_OPENGL_LOADER_CUSTOM, your loader is likely to requires some form of initialization.
-#endif
-    if (err)
-    {
-        fprintf(stderr, 'Failed to initialize OpenGL loader!\n');
-        return 1;
+    
+//---------------------------------------------------------------------
+//
+//   dump    Output the compiled form of the pattern.
+//           Debugging function only.
+//
+//---------------------------------------------------------------------
+void   RegexPattern::dumpOp(int32_t index) const {
+    (void)index;  // Suppress warnings in non-debug build.
+#if defined(REGEX_DEBUG)
+    static const char * const opNames[] = {URX_OPCODE_NAMES};
+    int32_t op          = fCompiledPat->elementAti(index);
+    int32_t val         = URX_VAL(op);
+    int32_t type        = URX_TYPE(op);
+    int32_t pinnedType  = type;
+    if ((uint32_t)pinnedType >= UPRV_LENGTHOF(opNames)) {
+        pinnedType = 0;
+    }
     }
     
-            // Rendering
-        FrameContext* frameCtxt = WaitForNextFrameResources();
-        UINT backBufferIdx = g_pSwapChain->GetCurrentBackBufferIndex();
-        frameCtxt->CommandAllocator->Reset();
+    UCollationResult
+RuleBasedCollator::doCompare(const uint8_t *left, int32_t leftLength,
+                             const uint8_t *right, int32_t rightLength,
+                             UErrorCode &errorCode) const {
+    // U_FAILURE(errorCode) checked by caller.
+    if(left == right && leftLength == rightLength) {
+        return UCOL_EQUAL;
+    }
+    }
     
-                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    U_NAMESPACE_END
     
-    // DirectX data
-static ID3D11Device*            g_pd3dDevice = NULL;
-static ID3D11DeviceContext*     g_pd3dDeviceContext = NULL;
-static IDXGIFactory*            g_pFactory = NULL;
-static ID3D11Buffer*            g_pVB = NULL;
-static ID3D11Buffer*            g_pIB = NULL;
-static ID3D10Blob*              g_pVertexShaderBlob = NULL;
-static ID3D11VertexShader*      g_pVertexShader = NULL;
-static ID3D11InputLayout*       g_pInputLayout = NULL;
-static ID3D11Buffer*            g_pVertexConstantBuffer = NULL;
-static ID3D10Blob*              g_pPixelShaderBlob = NULL;
-static ID3D11PixelShader*       g_pPixelShader = NULL;
-static ID3D11SamplerState*      g_pFontSampler = NULL;
-static ID3D11ShaderResourceView*g_pFontTextureView = NULL;
-static ID3D11RasterizerState*   g_pRasterizerState = NULL;
-static ID3D11BlendState*        g_pBlendState = NULL;
-static ID3D11DepthStencilState* g_pDepthStencilState = NULL;
-static int                      g_VertexBufferSize = 5000, g_IndexBufferSize = 10000;
-    
-    void ImGui_ImplFreeGLUT_InstallFuncs()
-{
-    glutReshapeFunc(ImGui_ImplFreeGLUT_ReshapeFunc);
-    glutMotionFunc(ImGui_ImplFreeGLUT_MotionFunc);
-    glutPassiveMotionFunc(ImGui_ImplFreeGLUT_MotionFunc);
-    glutMouseFunc(ImGui_ImplFreeGLUT_MouseFunc);
-    glutMouseWheelFunc(ImGui_ImplFreeGLUT_MouseWheelFunc);
-    glutKeyboardFunc(ImGui_ImplFreeGLUT_KeyboardFunc);
-    glutKeyboardUpFunc(ImGui_ImplFreeGLUT_KeyboardUpFunc);
-    glutSpecialFunc(ImGui_ImplFreeGLUT_SpecialFunc);
-    glutSpecialUpFunc(ImGui_ImplFreeGLUT_SpecialUpFunc);
-}
-    
-    // Called by Init/NewFrame/Shutdown
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateFontsTexture();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyFontsTexture();
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateDeviceObjects();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyDeviceObjects();
-
-    
-    void DHTRoutingTable::setTaskFactory(DHTTaskFactory* taskFactory)
-{
-  taskFactory_ = taskFactory;
-}
-    
-    #include 'TimeA2.h'
-    
-    class DHTNode;
-    
-    
-    {  virtual bool finished() = 0;
+    class U_I18N_API SharedPluralRules : public SharedObject {
+public:
+    SharedPluralRules(PluralRules *prToAdopt) : ptr(prToAdopt) { }
+    virtual ~SharedPluralRules();
+    const PluralRules *operator->() const { return ptr; }
+    const PluralRules &operator*() const { return *ptr; }
+private:
+    PluralRules *ptr;
+    SharedPluralRules(const SharedPluralRules &);
+    SharedPluralRules &operator=(const SharedPluralRules &);
 };
     
-    void DHTTaskQueueImpl::executeTask()
+                // In strict mode, this run of whitespace
+            // may have been at the end.
+            if (p >= literal.length()) {
+                break;
+            }
+        }
+        if (t >= text.length() || literal.charAt(p) != text.charAt(t)) {
+            // Ran out of text, or found a non-matching character:
+            // OK in lenient mode, an error in strict mode.
+            if (whitespaceLenient) {
+                if (t == textOffset && text.charAt(t) == 0x2e &&
+                        isAfterNonNumericField(pattern, patternOffset)) {
+                    // Lenient mode and the literal input text begins with a '.' and
+                    // we are after a non-numeric field: We skip the '.'
+                    ++t;
+                    continue;  // Do not update p.
+                }
+                // if it is actual whitespace and we're whitespace lenient it's OK
+    }
+    
+    ExitConstrDeleteAll: // Remove all sets and return error
+    delete fDateIgnorables;  fDateIgnorables = NULL;
+    delete fTimeIgnorables;  fTimeIgnorables = NULL;
+    delete fOtherIgnorables; fOtherIgnorables = NULL;
+    
+    UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CollationKey)
+    
+    UOBJECT_DEFINE_RTTI_IMPLEMENTATION(StringMatcher)
+    
+    //eof
+
+    
+    int main()
 {
-  A2_LOG_DEBUG('Updating periodicTaskQueue1');
-  periodicTaskQueue1_.update();
-  A2_LOG_DEBUG('Updating periodicTaskQueue2');
-  periodicTaskQueue2_.update();
-  A2_LOG_DEBUG('Updating immediateTaskQueue');
-  immediateTaskQueue_.update();
+    // create JSON values
+    json object = {{'one', 1}, {'two', 2}};
+    json null;
+    }
+    
+    // -----------------------------------------------------------------------------
+// ES6 section 19.3 Boolean Objects
+    
+    
+    {  void CallOrConstructWithArrayLike(TNode<Object> target,
+                                    SloppyTNode<Object> new_target,
+                                    TNode<Object> arguments_list,
+                                    TNode<Context> context);
+  void CallOrConstructDoubleVarargs(TNode<Object> target,
+                                    SloppyTNode<Object> new_target,
+                                    TNode<FixedDoubleArray> elements,
+                                    TNode<Int32T> length,
+                                    TNode<Int32T> args_count,
+                                    TNode<Context> context, TNode<Int32T> kind);
+  void CallOrConstructWithSpread(TNode<Object> target, TNode<Object> new_target,
+                                 TNode<Object> spread, TNode<Int32T> args_count,
+                                 TNode<Context> context);
+};
+    
+      CodeStubArguments args(this, ChangeInt32ToIntPtr(argc));
+  BranchIfToBooleanIsTrue(args.AtIndex(0), &out, &runtime);
+  BIND(&out);
+  args.PopAndReturn(UndefinedConstant());
+    
+        // Check if {num} is a HeapNumber.
+    Label if_numisheapnumber(this),
+        if_numisnotheapnumber(this, Label::kDeferred);
+    Branch(IsHeapNumber(num), &if_numisheapnumber, &if_numisnotheapnumber);
+    
+    namespace v8 {
+namespace internal {
+    }
+    }
+    
+    
+    {  // This shouldn't happen, we've already validated the type.
+  BIND(&other);
+  Unreachable();
 }
-    
-    
-    {} // namespace aria2
-
-    
-    
-    {} // namespace aria2
-
-    
-    
-    // exception type_error.304
-    try
-    {
-        // use at() on a non-object type
-        json str = 'I am a string';
-        str.at('the good') = 'Another string';
-    }
-    catch (json::type_error& e)
-    {
-        std::cout << e.what() << '\n';
-    }
-    
-    using json = nlohmann::json;
-    
-        // out_of_range.109
-    try
-    {
-        // try to use an array index that is not a number
-        json::reference ref = j.at('/array/one'_json_pointer);
-    }
-    catch (json::parse_error& e)
-    {
-        std::cout << e.what() << '\n';
-    }
