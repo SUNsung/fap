@@ -1,76 +1,95 @@
 
         
-        
-def how_to_configure(proc, TIMEOUT):
-    proc.sendline(u'fuck')
-    assert proc.expect([TIMEOUT, u'alias isn't configured'])
+            with open('README.md', 'w+') as sorted_file:
+        # Then all of the blocks are sorted individually
+        blocks = [''.join(sorted(block, key=lambda s: s.lower())) for block in blocks]
+        # And the result is written back to README.md
+        sorted_file.write(''.join(blocks))
+    
+        def format_headers(self, headers):
+        '''Return processed `headers`
+    
+    
+def patharg(path):
+    '''
+    Back slashes need to be escaped in ITEM args,
+    even in Windows paths.
+    
+        name = 'config'
+    helpurl = 'https://httpie.org/doc#config'
+    about = 'HTTPie configuration file'
+    
+        xx = np.arange(start_dim, start_dim + n * step, step)
+    plt.subplot(212)
+    plt.title('Learning in high dimensional spaces')
+    plt.plot(xx, scikit_classifier_results, 'g-', label='classification')
+    plt.plot(xx, scikit_regressor_results, 'r-', label='regression')
+    plt.legend(loc='upper left')
+    plt.xlabel('number of dimensions')
+    plt.ylabel('Time (s)')
+    plt.axis('tight')
+    plt.show()
 
     
+    import time
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1.parasite_axes import host_subplot
+from mpl_toolkits.axisartist.axislines import Axes
+from scipy.sparse.csr import csr_matrix
     
-python_3 = (u'thefuck/python3-bash',
-            u'FROM python:3',
-            u'sh')
-    
-    invalid_operation = 'E: Invalid operation {}'.format
-apt_help = b'''apt 1.0.10.2ubuntu1 for amd64 compiled on Oct  5 2015 15:55:05
-Usage: apt [options] command
-    
-    no_match_output = '''
-Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
-Get:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease [89.2 kB]
-Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
-Get:4 http://security.ubuntu.com/ubuntu zesty-security InRelease [89.2 kB]
-Hit:5 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
-Hit:6 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
-Hit:7 https://download.docker.com/linux/ubuntu zesty InRelease
-Get:8 http://us.archive.ubuntu.com/ubuntu zesty-updates/main i386 Packages [232 kB]
-Get:9 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 Packages [235 kB]
-Get:10 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 DEP-11 Metadata [55.2 kB]
-Get:11 http://us.archive.ubuntu.com/ubuntu zesty-updates/main DEP-11 64x64 Icons [32.3 kB]
-Get:12 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 Packages [156 kB]
-Get:13 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe i386 Packages [156 kB]
-Get:14 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 DEP-11 Metadata [175 kB]
-Get:15 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe DEP-11 64x64 Icons [253 kB]
-Get:16 http://us.archive.ubuntu.com/ubuntu zesty-updates/multiverse amd64 DEP-11 Metadata [5,840 B]
-Get:17 http://us.archive.ubuntu.com/ubuntu zesty-backports/universe amd64 DEP-11 Metadata [4,588 B]
-Get:18 http://security.ubuntu.com/ubuntu zesty-security/main amd64 DEP-11 Metadata [12.7 kB]
-Get:19 http://security.ubuntu.com/ubuntu zesty-security/main DEP-11 64x64 Icons [17.6 kB]
-Get:20 http://security.ubuntu.com/ubuntu zesty-security/universe amd64 DEP-11 Metadata [21.6 kB]
-Get:21 http://security.ubuntu.com/ubuntu zesty-security/universe DEP-11 64x64 Icons [47.7 kB]
-Get:22 http://security.ubuntu.com/ubuntu zesty-security/multiverse amd64 DEP-11 Metadata [208 B]
-Fetched 1,673 kB in 0s (1,716 kB/s)
-Reading package lists... Done
-Building dependency tree
-Reading state information... Done
-All packages are up to date.
-'''
+    '''
+print(__doc__)
     
     
-@pytest.mark.parametrize('command, new_command', [
-    (Command('cargo buid', no_such_subcommand_old), 'cargo build'),
-    (Command('cargo buils', no_such_subcommand), 'cargo build')])
-def test_get_new_command(command, new_command):
-    assert get_new_command(command) == new_command
+plt.suptitle('Patches of faces\nTrain time %.1fs on %d patches' %
+             (dt, 8 * len(faces.images)), fontsize=16)
+plt.subplots_adjust(0.08, 0.02, 0.92, 0.85, 0.08, 0.23)
+    
+    def nudge_images(X, y):
+    # Having a larger dataset shows more clearly the behavior of the
+    # methods, but we multiply the size of the dataset only by 2, as the
+    # cost of the hierarchical clustering methods are strongly
+    # super-linear in n_samples
+    shift = lambda x: ndimage.shift(x.reshape((8, 8)),
+                                  .3 * np.random.normal(size=2),
+                                  mode='constant',
+                                  ).ravel()
+    X = np.concatenate([X, np.apply_along_axis(shift, 1, X)])
+    Y = np.concatenate([y, y], axis=0)
+    return X, Y
+    
+    # Part 1: Quantitative evaluation of various init methods
+    
+                tested_methods = conman.tested_methods_from_spidercls(spidercls)
+            if opts.list:
+                for method in tested_methods:
+                    contract_reqs[spidercls.name].append(method)
+            elif tested_methods:
+                self.crawler_process.crawl(spidercls)
+    
+            if self.settings.get('BOT_NAME') == module:
+            print('Cannot create a spider with the same name as your project')
+            return
+    
+        def run(self, args, opts):
+        if opts.verbose:
+            versions = scrapy_components_versions()
+            width = max(len(n) for (n, _) in versions)
+            patt = '%-{}s : %s'.format(width)
+            for name, version in versions:
+                print(patt % (name, version))
+        else:
+            print('Scrapy %s' % scrapy.__version__)
+    
+                with open(md, 'r') as inp:
+                text = inp.readlines()
+    
+            # Adding unique constraint on 'GroupCommitResolution', fields ['group_id', 'commit_id']
+        db.create_unique('sentry_groupcommitresolution', ['group_id', 'commit_id'])
+    
+        complete_apps = ['sentry']
 
-    
-    # A dictionary with options for the search language support, empty by default.
-# Now only 'ja' uses this config value
-#html_search_options = {'type': 'default'}
-    
-        :returns: filename of vhost
-    :rtype: str
-    
-        # NOTE: Only run one test per function otherwise you will have
-    # inf recursion
-    def test_include(self):
-        self.verify_fnmatch('test_fnmatch.?onf')
-    
-                # if multiple releases have files, just rename them
-            # instead of trying to merge
-            if len(releases_with_files) > 1:
-                for release in releases:
-                    update_version(release, orm)
-                continue
     
         models = {
         'sentry.activity': {
@@ -371,7 +390,7 @@ def test_get_new_command(command, new_command):
             }),
             'date_expires': (
                 'django.db.models.fields.DateTimeField', [], {
-                    'default': 'datetime.datetime(2017, 2, 17, 0, 0)',
+                    'default': 'datetime.datetime(2017, 2, 28, 0, 0)',
                     'null': 'True',
                     'blank': 'True'
                 }
@@ -639,7 +658,36 @@ def test_get_new_command(command, new_command):
             'name': ('django.db.models.fields.CharField', [], {
                 'max_length': '64'
             }),
-            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {})
+            'organization_id':
+            ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {}),
+            'project_id': ('sentry.db.models.fields.bounded.BoundedPositiveIntegerField', [], {}),
+            'projects': (
+                'django.db.models.fields.related.ManyToManyField', [], {
+                    'to': 'orm['sentry.Project']',
+                    'through': 'orm['sentry.EnvironmentProject']',
+                    'symmetrical': 'False'
+                }
+            )
+        },
+        'sentry.environmentproject': {
+            'Meta': {
+                'unique_together': '(('project', 'environment'),)',
+                'object_name': 'EnvironmentProject'
+            },
+            'environment': (
+                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
+                    'to': 'orm['sentry.Environment']'
+                }
+            ),
+            'id':
+            ('sentry.db.models.fields.bounded.BoundedBigAutoField', [], {
+                'primary_key': 'True'
+            }),
+            'project': (
+                'sentry.db.models.fields.foreignkey.FlexibleForeignKey', [], {
+                    'to': 'orm['sentry.Project']'
+                }
+            )
         },
         'sentry.event': {
             'Meta': {
@@ -1770,6 +1818,11 @@ def test_get_new_command(command, new_command):
             'first_event': ('django.db.models.fields.DateTimeField', [], {
                 'null': 'True'
             }),
+            'flags':
+            ('django.db.models.fields.BigIntegerField', [], {
+                'default': '0',
+                'null': 'True'
+            }),
             'forced_color': (
                 'django.db.models.fields.CharField', [], {
                     'max_length': '6',
@@ -2521,7 +2574,7 @@ def test_get_new_command(command, new_command):
             ),
             'validation_hash': (
                 'django.db.models.fields.CharField', [], {
-                    'default': 'u'l9fhzfrEFPbM9UG4KizuBO0UapI2lGb9'',
+                    'default': 'u'anEQ7dScDwhgBRwYBZwIFsZpJJDlhixK'',
                     'max_length': '32'
                 }
             )
@@ -2589,20 +2642,24 @@ def test_get_new_command(command, new_command):
         }
     }
     
-            # Adding field 'Environment.organization_id'
-        db.add_column(
-            'sentry_environment',
-            'organization_id',
-            self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(null=True),
-            keep_default=False
-        )
+                try:
+                with transaction.atomic():
+                    orm.EnvironmentProject.objects.filter(
+                        environment__in=from_envs,
+                    ).update(environment=to_env)
+            except IntegrityError:
+                for ep in orm.EnvironmentProject.objects.filter(environment__in=from_envs):
+                    try:
+                        with transaction.atomic():
+                            orm.EnvironmentProject.objects.filter(
+                                id=ep.id,
+                            ).update(environment=to_env)
+                    except IntegrityError:
+                        ep.delete()
     
-            # The following code is provided here to aid in writing a correct migration
-        # Changing field 'ReleaseEnvironment.project_id'
-        db.alter_column(
-            'sentry_environmentrelease', 'project_id',
-            self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()
-        )
+        def backwards(self, orm):
+        'Write your backwards methods here.'
     
-            for user in RangeQuerySetWrapperWithProgressBar(users):
-            orm.UserEmail.objects.get_or_create(user=user, email=user.email)
+        def backwards(self, orm):
+        # Removing unique constraint on 'DSymApp', fields ['project', 'platform', 'app_id']
+        db.delete_unique('sentry_dsymapp', ['project_id', 'platform', 'app_id'])
