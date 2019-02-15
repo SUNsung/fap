@@ -1,122 +1,139 @@
 
         
-          describe 'width' do
-    it 'specifies the minimum number of characters that will be written to the result' do
-      format('%10b', 10).should == '      1010'
-      format('%10B', 10).should == '      1010'
-      format('%10d', 112).should == '       112'
-      format('%10i', 112).should == '       112'
-      format('%10o', 87).should == '       127'
-      format('%10u', 112).should == '       112'
-      format('%10x', 196).should == '        c4'
-      format('%10X', 196).should == '        C4'
-    
-      it 'accepts a Fixnum' do
-    sleep(0).should be_close(0, 2)
+          def prev_page
+    account_outbox_url(@account, page: true, min_id: @statuses.first.id) unless @statuses.empty?
   end
     
-      it 'raises an ArgumentError if there is no catch block for the symbol' do
-    lambda { throw :blah }.should raise_error(ArgumentError)
-  end
+        def index
+      authorize :email_domain_block, :index?
+      @email_domain_blocks = EmailDomainBlock.page(params[:page])
+    end
     
-      it 'is a private method' do
-    Kernel.should have_private_instance_method(:trace_var)
-  end
+        def destroy
+      authorize @report_note, :destroy?
+      @report_note.destroy!
+      redirect_to admin_report_path(@report_note.report_id), notice: I18n.t('admin.report_notes.destroyed_msg')
+    end
     
-      after :each do
-    Object.send :remove_method, :boom
-  end
+        # Mobile devices do not support regular notifications, so we enable push notifications by default
+    alerts_enabled = active_session.detection.device.mobile? || active_session.detection.device.tablet?
     
-      # Specifies the header that your server uses for sending files.
-  # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for apache
-  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
-    
-      def setup
-    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
-    success = Dir.chdir DUMMY_PATH do
-      silence_stdout_if !ENV['VERBOSE'] do
-        system 'node', 'manifest.js', tmp_dir
+          if @user.persisted?
+        sign_in_and_redirect @user, event: :authentication
+        set_flash_message(:notice, :success, kind: provider_id.capitalize) if is_navigational_format?
+      else
+        session['devise.#{provider}_data'] = request.env['omniauth.auth']
+        redirect_to new_user_registration_url
       end
     end
-    assert success, 'Node.js Mincer compilation failed'
-    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
-    css_name = manifest['assets']['application.css']
-    @css = File.read('#{tmp_dir}/#{css_name}')
+  end
+    
+      # Eager load code on boot. This eager loads most of Rails and
+  # your application in memory, allowing both thread web servers
+  # and those relying on copy on write to perform better.
+  # Rake tasks automatically ignore this option for performance.
+  config.eager_load = true
+    
+    @@ layout
+<html>
+  <head>
+    <title>Super Simple Chat with Sinatra</title>
+    <meta charset='utf-8' />
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'></script>
+  </head>
+  <body><%= yield %></body>
+</html>
+    
+            safe?(env) ||
+          valid_token?(session, env['HTTP_X_CSRF_TOKEN']) ||
+          valid_token?(session, Request.new(env).params[options[:authenticity_param]]) ||
+          ( options[:allow_if] && options[:allow_if].call(env) )
+      end
+    
+          def call(env)
+        status, headers, body = @app.call(env)
+        header = options[:report_only] ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'
+        headers[header] ||= csp_policy if html? headers
+        [status, headers, body]
+      end
+    end
   end
 end
 
     
-      def prefixes
-    prefixes = ['/bin', '/usr/bin', '/usr/libexec', xcode_app_path]
-    prefixes << `brew --prefix`.strip unless `which brew`.strip.empty?
+            modes       = Array options[:escape]
+        @escaper    = options[:escaper]
+        @html       = modes.include? :html
+        @javascript = modes.include? :javascript
+        @url        = modes.include? :url
     
-        %w[iOS macOS].each do |platform|
-        abstract_target '#{platform} Pods' do
-            project '#{platform} Modules.xcodeproj'
-    
-        context 'by iso3' do
-      before do
-        get '/api/v2/storefront/countries/#{country.iso3}'
-      end
-    
-    # Requires supporting ruby files with custom matchers and macros, etc,
-# in spec/support/ and its subdirectories.
-Dir[File.dirname(__FILE__) + '/support/**/*.rb'].each { |f| require f }
-    
-          potential_rates_for_zone(order_tax_zone)
-    end
-    
-          def invalid_api_key
-        render 'spree/api/errors/invalid_api_key', status: 401
-      end
-    
-                if handler.error.present?
-              @coupon_message = handler.error
-              respond_with(@order, default_template: 'spree/api/v1/orders/could_not_apply_coupon', status: 422)
-              return true
-            end
-          end
-          false
-        end
-    
-        puts 'successfully created #{output}'
+    # define charCodeAt on String
+class String
+  def charCodeAt(k)
+    # use scan, nil check, and unpack instead of ord for 1.8
+    # 1.9 can simply use self[k].ord
+    # http://stackoverflow.com/questions/7793177/split-utf8-string-regardless-of-ruby-version
+    c = self.scan(/./mu)[k]
+    return nil if c.nil?
+    c.unpack('U')[0]
   end
-ensure
-  # defer cleanup until the end
-  output_packages.each {|p| p.cleanup}
+end
+    
+          def next_link
+      end
+    end
+  end
 end
 
     
-        # write depends lines
-    for dependency in dependencies()
-      pkginfo << 'depend = #{dependency}\n'
+          def title
+        'Home'
+      end
+    
+      test 'clean path without leading slash' do
+    assert_equal '/Mordor', clean_path('Mordor')
+  end
+    
+    #############################################################################
+#
+# Standard tasks
+#
+#############################################################################
+    
+      get(/.+/) do
+    send_sinatra_file(request.path) {404}
+  end
+    
+      # The CategoryIndex class creates a single category page for the specified category.
+  class CategoryIndex < Page
+    
+      if options.respond_to? 'keys'
+    options.each do |k,v|
+      unless v.nil?
+        v = v.join ',' if v.respond_to? 'join'
+        v = v.to_json if v.respond_to? 'keys'
+        output += ' data-#{k.sub'_','-'}='#{v}''
+      end
     end
+  elsif options.respond_to? 'join'
+    output += ' data-value='#{config[key].join(',')}''
+  else
+    output += ' data-value='#{config[key]}''
+  end
+  output += '></#{tag}>'
+end
     
-        self.architecture = control['arch'][0]
+    Liquid::Template.register_tag('render_partial', Jekyll::RenderPartialTag)
+
     
-      # Helper for user lookup
-  def uid2user(uid)
-    begin
-      pwent = Etc.getpwuid(uid)
-      return pwent.name
-    rescue ArgumentError => e
-      # Invalid user id? No user? Return the uid.
-      logger.warn('Failed to find username for uid #{uid}')
-      return uid.to_s
+    Before '@javascript' do
+  Capybara.current_driver = Capybara.javascript_driver
+end
+    
+      context 'with xpath selectors' do
+    it 'should find the first element using the given locator' do
+      el = @session.find(:css, '#first_image')
+      expect(el.ancestor(:xpath, '//p')).to have_text('Lorem ipsum dolor')
+      expect(el.ancestor(:xpath, '//a')[:'aria-label']).to eq('Go to simple')
     end
-  end # def uid2user
-    
-          # TODO(sissel): preinstall/postinstall
-      # strip @prefix, since BASEDIR will set prefix via the pkginfo file
-      IO.popen('pkgproto #{staging_path}/#{@prefix}=').each_line do |line|
-        type, klass, path, mode, user, group = line.split
-    
-      # Output a zipfile.
-  def output(output_path)
-    output_check(output_path)
-    realpath = Pathname.new(output_path).realdirpath.to_s
-    ::Dir.chdir(staging_path) do
-      safesystem('zip', '-9r', realpath, '.')
-    end
-  end # def output
-end # class FPM::Package::Tar
+  end
