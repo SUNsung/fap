@@ -1,415 +1,533 @@
 
         
-        using namespace swift::sys;
-using llvm::StringRef;
-    
-    
-    {      unsigned ID;
-      if (auto *activeDiag = info.dyn_cast<const clang::Diagnostic *>())
-        ID = activeDiag->getID();
-      else
-        ID = info.get<const clang::StoredDiagnostic *>()->getID();
-      return ID == clang::diag::note_module_import_here ||
-             ID == clang::diag::err_module_not_built;
+        namespace google {
+namespace protobuf {
+namespace compiler {
+    }
+    }
     }
     
-    
-    
-    
-    {  // let h = b = the number of basic code points in the input
-  // copy them to the output in order...
-  size_t h = 0;
-  for (auto C : InputCodePoints) {
-    if (C < 0x80) {
-      ++h;
-      OutPunycode.push_back(C);
-    }
-    if (!isValidUnicodeScalar(C)) {
-      OutPunycode.clear();
-      return false;
-    }
-  }
-  size_t b = h;
-  // ...followed by a delimiter if b > 0
-  if (b > 0)
-    OutPunycode.push_back(delimiter);
-  
-  while (h < InputCodePoints.size()) {
-    // let m = the minimum code point >= n in the input
-    uint32_t m = 0x10FFFF;
-    for (auto codePoint : InputCodePoints) {
-      if (codePoint >= n && codePoint < m)
-        m = codePoint;
-    }
-    
-    delta = delta + (m - n) * (h + 1);
-    n = m;
-    for (auto c : InputCodePoints) {
-      if (c < n) ++delta;
-      if (c == n) {
-        int q = delta;
-        for (int k = base; ; k += base) {
-          int t = k <= bias ? tmin
-                : k >= bias + tmax ? tmax
-                : k - bias;
-          
-          if (q < t) break;
-          OutPunycode.push_back(digit_value(t + ((q - t) % (base - t))));
-          q = (q - t) / (base - t);
-        }
-        OutPunycode.push_back(digit_value(q));
-        bias = adapt(delta, h + 1, h == b);
-        delta = 0;
-        ++h;
+    void EnumGenerator::Generate(io::Printer* printer) {
+  WriteEnumDocComment(printer, descriptor_);
+  printer->Print('$access_level$ enum $name$ {\n',
+                 'access_level', class_access_level(),
+                 'name', descriptor_->name());
+  printer->Indent();
+  std::set<string> used_names;
+  std::set<int> used_number;
+  for (int i = 0; i < descriptor_->value_count(); i++) {
+      WriteEnumValueDocComment(printer, descriptor_->value(i));
+      string original_name = descriptor_->value(i)->name();
+      string name = GetEnumValueName(descriptor_->name(), descriptor_->value(i)->name());
+      // Make sure we don't get any duplicate names due to prefix removal.
+      while (!used_names.insert(name).second) {
+        // It's possible we'll end up giving this warning multiple times, but that's better than not at all.
+        GOOGLE_LOG(WARNING) << 'Duplicate enum value ' << name << ' (originally ' << original_name
+          << ') in ' << descriptor_->name() << '; adding underscore to distinguish';
+        name += '_';
       }
-    }
-    ++delta; ++n;
+      int number = descriptor_->value(i)->number();
+      if (!used_number.insert(number).second) {
+          printer->Print('[pbr::OriginalName(\'$original_name$\', PreferredAlias = false)] $name$ = $number$,\n',
+             'original_name', original_name,
+             'name', name,
+             'number', SimpleItoa(number));
+      } else {
+          printer->Print('[pbr::OriginalName(\'$original_name$\')] $name$ = $number$,\n',
+             'original_name', original_name,
+             'name', name,
+             'number', SimpleItoa(number));
+      }
   }
-  return true;
+  printer->Outdent();
+  printer->Print('}\n');
+  printer->Print('\n');
 }
     
+    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
+  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
+  // Identifiers can't start with digits
+  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
+  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
+}
     
-    {    auto newNode = factory.createNode(node->getKind());
-    newNode->addChild(newContext, factory);
-    for (unsigned i = 1, n = node->getNumChildren(); i != n; ++i)
-      newNode->addChild(node->getChild(i), factory);
-    return newNode;
+      // write children: Messages
+  if (file_->message_type_count() > 0) {
+    printer->Print('#region Messages\n');
+    for (int i = 0; i < file_->message_type_count(); i++) {
+      MessageGenerator messageGenerator(file_->message_type(i), this->options());
+      messageGenerator.Generate(printer);
+    }
+    printer->Print('#endregion\n');
+    printer->Print('\n');
   }
-      
-  case Demangle::Node::Kind::Extension: {
-    // Strip generic arguments from the extended type.
-    if (node->getNumChildren() < 2)
-      return node;
     
-    auto newExtended = stripGenericArgsFromContextNode(node->getChild(1),
-                                                       factory);
-    if (newExtended == node->getChild(1)) return node;
+    int ImmutableExtensionLiteGenerator::GenerateNonNestedInitializationCode(
+    io::Printer* printer) {
+  return 0;
+}
     
-    auto newNode = factory.createNode(Node::Kind::Extension);
-    newNode->addChild(node->getChild(0), factory);
-    newNode->addChild(newExtended, factory);
-    if (node->getNumChildren() == 3)
-      newNode->addChild(node->getChild(2), factory);
-    return newNode;
+    namespace mxnet {
+namespace op {
+namespace caffe {
+    }
+    }
+    }
+    
+    namespace mxnet {
+namespace op {
+template<>
+Operator *CreateOp<cpu>(CaffeLossParam param, int dtype) {
+  Operator *op = NULL;
+  switch (dtype) {
+  case mshadow::kFloat32:
+    op = new CaffeLoss<cpu, float>(param);
+    break;
+  case mshadow::kFloat64:
+    op = new CaffeLoss<cpu, double>(param);
+    break;
+  case mshadow::kFloat16:
+    LOG(FATAL) << 'float16 layer is not supported by caffe';
+    break;
+  default:
+    LOG(FATAL) << 'Unsupported type ' << dtype;
   }
+  return op;
+}
+    }
+    }
     
-    /**
-	@author AndreaCatania
-*/
+    // DO_BIND_DISPATCH comes from static_operator_common.h
+Operator *CaffeOpProp::CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
+                                     std::vector<int> *in_type) const {
+  std::vector<int> out_type, aux_type;
+  std::vector<TShape> out_shape, aux_shape;
+  out_type.resize(this->ListOutputs().size());
+  out_shape.resize(this->ListOutputs().size());
+  aux_type.resize(this->ListAuxiliaryStates().size());
+  aux_shape.resize(this->ListAuxiliaryStates().size());
+  CHECK(InferType(in_type, &out_type, &aux_type));
+  CHECK(InferShape(in_shape, &out_shape, &aux_shape));
+  DO_BIND_DISPATCH(CreateOp, param_, (*in_type)[0]);
+}
     
-    
-    {	_FORCE_INLINE_ btTypedConstraint *get_bt_constraint() { return constraint; }
-};
+    MXNET_DLL int MXCVImdecode(const unsigned char *img, const mx_uint len,
+                           const int flag, NDArrayHandle *out) {
+  API_BEGIN();
+  mx_uint dims[3];
+  CHECK_GE(flag, 0) << 'flag must be 0 (grayscale) or 1 (colored).';
+  dims[2] = flag == 0 ? 1 : 3;
+  if (get_jpeg_size(img, len, dims+1, dims)) {
+  } else if (get_png_size(img, len, dims+1, dims)) {
+  } else {
+    LOG(FATAL) << 'Only supports png and jpg.';
+  }
+  NDArray ndout(TShape(dims, dims+3), Context::CPU(), true, mshadow::kUint8);
+  unsigned char *img_cpy = new unsigned char[len];
+  memcpy(img_cpy, img, sizeof(unsigned char)*len);
+  Engine::Get()->PushSync([=](RunContext ctx){
+      ndout.CheckAndAlloc();
+      cv::Mat buf(1, len, CV_8U, img_cpy);
+      cv::Mat dst(dims[0], dims[1], flag == 0 ? CV_8U : CV_8UC3, ndout.data().dptr_);
+#if (CV_MAJOR_VERSION > 3 || (CV_MAJOR_VERSION == 3 && CV_MINOR_VERSION >= 3))
+      cv::imdecode(buf, flag | cv::IMREAD_IGNORE_ORIENTATION, &dst);
+#else
+      cv::imdecode(buf, flag, &dst);
 #endif
+      CHECK(!dst.empty());
+      delete[] img_cpy;
+    }, ndout.ctx(), {}, {ndout.var()});
+  NDArray *tmp = new NDArray();
+  *tmp = ndout;
+  *out = tmp;
+  API_END();
+}
+    
+    class TBlobContainer : public TBlob {
+ public:
+  TBlobContainer(void)
+    : TBlob(), tensor_container_(nullptr) {}
+  ~TBlobContainer() {
+    if (tensor_container_) {
+      release();
+    }
+  }
+  void resize(const TShape &shape, int type_flag) {
+    if (tensor_container_) {
+      CHECK_EQ(this->type_flag_, type_flag);
+      this->shape_ = shape;
+      resize();
+    } else {
+      this->type_flag_ = type_flag;
+      this->shape_ = shape;
+      create();
+    }
+  }
+    }
+    
+    #include <mxnet/io.h>
+#include <mxnet/base.h>
+#include <dmlc/logging.h>
+#include <mshadow/tensor.h>
+#include <utility>
+#include <vector>
+#include <string>
+#include './inst_vector.h'
+#include './image_iter_common.h'
+    
+    
+    {
+    {
+    { private:
+  /*! \brief output data */
+  DataBatch *out_;
+  /*! \brief queue to be recycled */
+  std::queue<DataBatch*> recycle_queue_;
+};
+}  // namespace io
+}  // namespace mxnet
+#endif  // MXNET_IO_ITER_PREFETCHER_H_
 
+    
+    #endif
+
+    
+      inline const char* regname(Reg64 r) {
+    RNAME(r0);  RNAME(r1);  RNAME(r2);  RNAME(r3);  RNAME(r4);  RNAME(r5);
+    RNAME(r6);  RNAME(r7);  RNAME(r8);  RNAME(r9);  RNAME(r10); RNAME(r11);
+    RNAME(r12); RNAME(r13); RNAME(r14); RNAME(r15); RNAME(r16); RNAME(r17);
+    RNAME(r18); RNAME(r19); RNAME(r20); RNAME(r21); RNAME(r22); RNAME(r23);
+    RNAME(r24); RNAME(r25); RNAME(r26); RNAME(r27); RNAME(r28); RNAME(r29);
+    RNAME(r30); RNAME(r31);
+    return nullptr;
+  }
+    
+    #include 'hphp/runtime/base/file.h'
+#include 'hphp/runtime/base/stream-wrapper.h'
+#include 'hphp/runtime/base/stream-wrapper-registry.h'
+    
+    void ArrayDirectory::rewind() {
+  m_it.rewind();
+}
+    
+    #include 'hphp/util/perf-event.h'
     
     /**
-	@author AndreaCatania
-*/
-    
-    #include 'csg_gizmos.h'
-#include 'csg_shape.h'
-    
-    #include 'core/reference.h'
-    
-    void Thread::wait_to_finish(Thread *p_thread) {
-    }
-    
-    
-    {	Pair() {}
-	Pair(F p_first, const S &p_second) :
-			first(p_first),
-			second(p_second) {
-	}
-};
-    
-    
-    {template<typename IndexType, typename DType = real_t>
-Parser<IndexType> *
-CreateDenseLibSVMParser(const std::string& path,
-                        const std::map<std::string, std::string>& args,
-                        unsigned part_index,
-                        unsigned num_parts) {
-  CHECK_NE(args.count('num_col'), 0) << 'expect num_col in dense_libsvm';
-  return new DensifyParser<IndexType>(
-            Parser<IndexType>::Create(path.c_str(), part_index, num_parts, 'libsvm'),
-           uint32_t(atoi(args.at('num_col').c_str())));
-}
-}  // namespace data
-    
-    namespace xgboost {
-namespace gbm {
-/*! \brief model parameters */
-struct GBTreeModelParam : public dmlc::Parameter<GBTreeModelParam> {
-  /*! \brief number of trees */
-  int num_trees;
-  /*! \brief number of roots */
-  int num_roots;
-  /*! \brief number of features to be used by trees */
-  int num_feature;
-  /*! \brief pad this space, for backward compatibility reason.*/
-  int pad_32bit;
-  /*! \brief deprecated padding space. */
-  int64_t num_pbuffer_deprecated;
-  /*!
-   * \brief how many output group a single instance can produce
-   *  this affects the behavior of number of output we have:
-   *    suppose we have n instance and k group, output will be k * n
-   */
-  int num_output_group;
-  /*! \brief size of leaf vector needed in tree */
-  int size_leaf_vector;
-  /*! \brief reserved parameters */
-  int reserved[32];
-  /*! \brief constructor */
-  GBTreeModelParam() {
-    std::memset(this, 0, sizeof(GBTreeModelParam));
-    static_assert(sizeof(GBTreeModelParam) == (4 + 2 + 2 + 32) * sizeof(int),
-                  '64/32 bit compatibility issue');
-  }
-  // declare parameters, only declare those that need to be set.
-  DMLC_DECLARE_PARAMETER(GBTreeModelParam) {
-    DMLC_DECLARE_FIELD(num_output_group)
-        .set_lower_bound(1)
-        .set_default(1)
-        .describe(
-            'Number of output groups to be predicted,'
-            ' used for multi-class classification.');
-    DMLC_DECLARE_FIELD(num_roots).set_lower_bound(1).set_default(1).describe(
-        'Tree updater sequence.');
-    DMLC_DECLARE_FIELD(num_feature)
-        .set_lower_bound(0)
-        .describe('Number of features used for training and prediction.');
-    DMLC_DECLARE_FIELD(size_leaf_vector)
-        .set_lower_bound(0)
-        .set_default(0)
-        .describe('Reserved option for vector tree.');
-  }
-};
-    }
-    }
-    
-    /*!
- * \brief Quantile sketch use WQSummary
- * \tparam DType type of data content
- * \tparam RType type of rank
+ * Factory method
  */
-template<typename DType, typename RType = unsigned>
-class WQuantileSketch :
-      public QuantileSketchTemplate<DType, RType, WQSummary<DType, RType> > {
-};
-    
-    /// Prefix used for posix tar archive.
-const std::string kTestCarveNamePrefix = 'carve_';
-    
-    Schedule::Schedule() {
-  if (RegistryFactory::get().external()) {
-    // Extensions should not restore or save schedule details.
-    return;
-  }
-  // Parse the schedule's query blacklist from backing storage.
-  restoreScheduleBlacklist(blacklist_);
-    }
-    
-    FLAG(string, pack_delimiter, '_', 'Delimiter for pack and query names');
-    
-        // Remove the old table to replace with the new one
-    s = removeATCTables({table_name});
-    if (!s.ok()) {
-      LOG(WARNING) << 'ATC table overrides core table; Refusing registration';
-      continue;
-    }
-    
-    void clearDecorations(const std::string& source) {
-  WriteLock lock(DecoratorsConfigParserPlugin::kDecorationsMutex);
-  DecoratorsConfigParserPlugin::kDecorations[source].clear();
+static Transliterator* RemoveTransliterator_create(const UnicodeString& /*ID*/,
+                                                   Transliterator::Token /*context*/) {
+    /* We don't need the ID or context. We just remove data */
+    return new RemoveTransliterator();
 }
     
+    U_NAMESPACE_BEGIN
     
-    {
-    {  Status update(const std::string& source, const ParserConfig& config) override;
+    int32_t SearchIterator::getMatchedLength() const
+{
+    return m_search_->matchedLength;
+}
+    
+void SearchIterator::getMatchedText(UnicodeString &result) const
+{
+    int32_t matchedindex  = m_search_->matchedIndex;
+    int32_t     matchedlength = m_search_->matchedLength;
+    if (matchedindex != USEARCH_DONE && matchedlength != 0) {
+        result.setTo(m_search_->text + matchedindex, matchedlength); 
+    }
+    else {
+        result.remove();
+    }
+}
+    
+void SearchIterator::setBreakIterator(BreakIterator *breakiter, 
+                                      UErrorCode &status)
+{
+    if (U_SUCCESS(status)) {
+#if 0
+        m_search_->breakIter = NULL;
+        // the c++ breakiterator may not make use of ubreakiterator.
+        // so we'll have to keep track of it ourselves.
+#else
+        // Well, gee... the Constructors that take a BreakIterator
+        // all cast the BreakIterator to a UBreakIterator and
+        // pass it to the corresponding usearch_openFromXXX
+        // routine, so there's no reason not to do this.
+        //
+        // Besides, a UBreakIterator is a BreakIterator, so
+        // any subclass of BreakIterator should work fine here...
+        m_search_->breakIter = (UBreakIterator *) breakiter;
+#endif
+        
+        m_breakiterator_ = breakiter;
+    }
+}
+    
+const BreakIterator * SearchIterator::getBreakIterator(void) const
+{
+    return m_breakiterator_;
+}
+    
+    #if !UCONFIG_NO_BREAK_ITERATION
+    
+    #ifndef __SHARED_DATEFORMATSYMBOLS_H__
+#define __SHARED_DATEFORMATSYMBOLS_H__
+    
+    class U_I18N_API SharedPluralRules : public SharedObject {
+public:
+    SharedPluralRules(PluralRules *prToAdopt) : ptr(prToAdopt) { }
+    virtual ~SharedPluralRules();
+    const PluralRules *operator->() const { return ptr; }
+    const PluralRules &operator*() const { return *ptr; }
+private:
+    PluralRules *ptr;
+    SharedPluralRules(const SharedPluralRules &);
+    SharedPluralRules &operator=(const SharedPluralRules &);
 };
-} // namespace osquery
+    
+        /**
+     * Returns TRUE if this object is equal to rhs.
+     */
+    UBool equals(const SignificantDigitInterval &rhs) const {
+        return ((fMax == rhs.fMax) && (fMin == rhs.fMin));
+    }
+    
+    
+    {    // Always emit at least '0'
+    if (digits == 0) {
+        return appendTo.append((UChar) 0x30);
+    }
+    return appendTo.append(gDigits, ((smallPositiveValue  + 1) << 2) - digits, digits);
+}
+    
+    #endif // #if !UCONFIG_NO_FORMATTING
 
     
-      if (config.count('file_accesses') > 0) {
-    const auto& accesses = config.at('file_accesses').doc();
-    if (accesses.IsArray()) {
-      for (const auto& category : accesses.GetArray()) {
-        if (!category.IsString()) {
-          continue;
-        }
-        std::string path = category.GetString();
-        access_map_[source].push_back(path);
-      }
+    #include 'unicode/sortkey.h'
+#include 'cmemory.h'
+#include 'uelement.h'
+#include 'ustr_imp.h'
+    
+    /**
+ * Implement UnicodeFunctor
+ */
+UnicodeFunctor* StringMatcher::clone() const {
+    return new StringMatcher(*this);
+}
+    
+        /**
+     * Start offset, in the match text, of the <em>rightmost</em>
+     * match.
+     */
+    int32_t matchStart;
+    
+    /**
+ * Construct a StringReplacer that sets the emits the given output
+ * text and does not modify the cursor.
+ * @param theOutput text that will replace input text when the
+ * replace() method is called.  May contain stand-in characters
+ * that represent nested replacers.
+ * @param theData transliterator context object that translates
+ * stand-in characters to UnicodeReplacer objects
+ */
+StringReplacer::StringReplacer(const UnicodeString& theOutput,
+                               const TransliterationRuleData* theData) {
+    output = theOutput;
+    cursorPos = 0;
+    hasCursor = FALSE;
+    data = theData;
+    isComplex = TRUE;
+}
+    
+      /**
+   * \fn  virtual void Predictor::PredictLeaf(DMatrix* dmat,
+   * std::vector<bst_float>* out_preds, const gbm::GBTreeModel& model, unsigned
+   * ntree_limit = 0) = 0;
+   *
+   * \brief predict the leaf index of each tree, the output will be nsample *
+   * ntree vector this is only valid in gbtree predictor.
+   *
+   * \param [in,out]  dmat        The input feature matrix.
+   * \param [in,out]  out_preds   The output preds.
+   * \param           model       Model to make predictions from.
+   * \param           ntree_limit (Optional) The ntree limit.
+   */
+    
+      // stores the row indices in the set
+  std::vector<size_t> row_indices_;
+    
+      for (auto alphabet_size : test_cases) {
+    for (int i = 0; i < repetitions; i++) {
+      std::vector<int> input(num_elements);
+      std::generate(input.begin(), input.end(),
+        [=]() { return rand() % alphabet_size; });
+      CompressedBufferWriter cbw(alphabet_size);
     }
     }
     
-    #include <gtest/gtest.h>
+    SEXP XGDMatrixSaveBinary_R(SEXP handle, SEXP fname, SEXP silent) {
+  R_API_BEGIN();
+  CHECK_CALL(XGDMatrixSaveBinary(R_ExternalPtrAddr(handle),
+                                 CHAR(asChar(fname)),
+                                 asInteger(silent)));
+  R_API_END();
+  return R_NilValue;
+}
     
+      // Compute the weight for a node with the given stats
+  virtual bst_float ComputeWeight(bst_uint parentid, const GradStats& stats)
+      const = 0;
     
-    {    // Construct a config map, the typical output from `Config::genConfig`.
-    config_data_['awesome'] = content_;
-    Config::get().reset();
+      inline static void LimitSizeLevel
+    (size_t maxn, double eps, size_t* out_nlevel, size_t* out_limit_size) {
+    size_t& nlevel = *out_nlevel;
+    size_t& limit_size = *out_limit_size;
+    nlevel = 1;
+    while (true) {
+      limit_size = static_cast<size_t>(ceil(nlevel / eps)) + 1;
+      size_t n = (1ULL << nlevel);
+      if (n * limit_size >= maxn) break;
+      ++nlevel;
+    }
+    // check invariant
+    size_t n = (1ULL << nlevel);
+    CHECK(n * limit_size >= maxn) << 'invalid init parameter';
+    CHECK(nlevel <= limit_size * eps) << 'invalid init parameter';
   }
     
-    TEST_F(ViewsConfigParserPluginTests, test_update_view) {
-  Config c;
-  std::vector<std::string> old_views_vec;
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  old_views_vec.clear();
-  auto s = c.update(getTestConfigMap('view_test2.conf'));
-  EXPECT_TRUE(s.ok());
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  std::string query;
-  getDatabaseValue(kQueries, 'config_views.kernel_hashes_new', query);
-  EXPECT_EQ(query,
-            'select hash.path as binary, version, hash.sha256 as SHA256, '
-            'hash.sha1 as SHA1, hash.md5 as MD5 from (select path || '
-            ''/Contents/MacOS/' as directory, name, version from '
-            'kernel_extensions) join hash using (directory)');
-    }
+    http://www.cocos2d-x.org
     
-    #include <osquery/config/config.h>
-#include <osquery/filesystem/filesystem.h>
-#include <osquery/flags.h>
-#include <osquery/logger.h>
-#include <osquery/registry_factory.h>
-#include <osquery/utils/config/default_paths.h>
-    
-        // Output as Base85 encoded
-    FILE* out = stdout;
-    fprintf(out, '// File: '%s' (%d bytes)\n', filename, (int)data_sz);
-    fprintf(out, '// Exported using binary_to_compressed_c.cpp\n');
-	const char* compressed_str = use_compression ? 'compressed_' : '';
-    if (use_base85_encoding)
-    {
-        fprintf(out, 'static const char %s_%sdata_base85[%d+1] =\n    \'', symbol, compressed_str, (int)((compressed_sz+3)/4)*5);
-        char prev_c = 0;
-        for (int src_i = 0; src_i < compressed_sz; src_i += 4)
-        {
-            // This is made a little more complicated by the fact that ??X sequences are interpreted as trigraphs by old C/C++ compilers. So we need to escape pairs of ??.
-            unsigned int d = *(unsigned int*)(compressed + src_i);
-            for (unsigned int n5 = 0; n5 < 5; n5++, d /= 85)
-            {
-                char c = Encode85Byte(d);
-                fprintf(out, (c == '?' && prev_c == '?') ? '\\%c' : '%c', c);
-                prev_c = c;
-            }
-            if ((src_i % 112) == 112-4)
-                fprintf(out, '\'\n    \'');
-        }
-        fprintf(out, '\';\n\n');
-    }
-    else
-    {
-        fprintf(out, 'static const unsigned int %s_%ssize = %d;\n', symbol, compressed_str, (int)compressed_sz);
-        fprintf(out, 'static const unsigned int %s_%sdata[%d/4] =\n{', symbol, compressed_str, (int)((compressed_sz+3)/4)*4);
-        int column = 0;
-        for (int i = 0; i < compressed_sz; i += 4)
-        {
-            unsigned int d = *(unsigned int*)(compressed + i);
-            if ((column++ % 12) == 0)
-                fprintf(out, '\n    0x%08x, ', d);
-            else
-                fprintf(out, '0x%08x, ', d);
-        }
-        fprintf(out, '\n};\n\n');
-    }
-    
-    
-    {        ImGui::Render();
-    }
-    
-    //---- Use 32-bit vertex indices (default is 16-bit) to allow meshes with more than 64K vertices. Render function needs to support it.
-//#define ImDrawIdx unsigned int
-    
-    // About OpenGL function loaders: 
-// About OpenGL function loaders: modern OpenGL doesn't have a standard header file and requires individual function pointers to be loaded manually. 
-// Helper libraries are often used for this purpose! Here we are supporting a few common ones: gl3w, glew, glad. 
-// You may use another loader/header of your choice (glext, glLoadGen, etc.), or chose to manually implement your own.
-    
-        // Backup DX state that will be modified to restore it afterwards (unfortunately this is very ugly looking and verbose. Close your eyes!)
-    struct BACKUP_DX11_STATE
-    {
-        UINT                        ScissorRectsCount, ViewportsCount;
-        D3D11_RECT                  ScissorRects[D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE];
-        D3D11_VIEWPORT              Viewports[D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE];
-        ID3D11RasterizerState*      RS;
-        ID3D11BlendState*           BlendState;
-        FLOAT                       BlendFactor[4];
-        UINT                        SampleMask;
-        UINT                        StencilRef;
-        ID3D11DepthStencilState*    DepthStencilState;
-        ID3D11ShaderResourceView*   PSShaderResource;
-        ID3D11SamplerState*         PSSampler;
-        ID3D11PixelShader*          PS;
-        ID3D11VertexShader*         VS;
-        UINT                        PSInstancesCount, VSInstancesCount;
-        ID3D11ClassInstance*        PSInstances[256], *VSInstances[256];   // 256 is max according to PSSetShader documentation
-        D3D11_PRIMITIVE_TOPOLOGY    PrimitiveTopology;
-        ID3D11Buffer*               IndexBuffer, *VertexBuffer, *VSConstantBuffer;
-        UINT                        IndexBufferOffset, VertexBufferStride, VertexBufferOffset;
-        DXGI_FORMAT                 IndexBufferFormat;
-        ID3D11InputLayout*          InputLayout;
-    };
-    BACKUP_DX11_STATE old;
-    old.ScissorRectsCount = old.ViewportsCount = D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE;
-    ctx->RSGetScissorRects(&old.ScissorRectsCount, old.ScissorRects);
-    ctx->RSGetViewports(&old.ViewportsCount, old.Viewports);
-    ctx->RSGetState(&old.RS);
-    ctx->OMGetBlendState(&old.BlendState, old.BlendFactor, &old.SampleMask);
-    ctx->OMGetDepthStencilState(&old.DepthStencilState, &old.StencilRef);
-    ctx->PSGetShaderResources(0, 1, &old.PSShaderResource);
-    ctx->PSGetSamplers(0, 1, &old.PSSampler);
-    old.PSInstancesCount = old.VSInstancesCount = 256;
-    ctx->PSGetShader(&old.PS, old.PSInstances, &old.PSInstancesCount);
-    ctx->VSGetShader(&old.VS, old.VSInstances, &old.VSInstancesCount);
-    ctx->VSGetConstantBuffers(0, 1, &old.VSConstantBuffer);
-    ctx->IAGetPrimitiveTopology(&old.PrimitiveTopology);
-    ctx->IAGetIndexBuffer(&old.IndexBuffer, &old.IndexBufferFormat, &old.IndexBufferOffset);
-    ctx->IAGetVertexBuffers(0, 1, &old.VertexBuffer, &old.VertexBufferStride, &old.VertexBufferOffset);
-    ctx->IAGetInputLayout(&old.InputLayout);
-    
-            ID3D12Resource* pTexture = NULL;
-        g_pd3dDevice->CreateCommittedResource(&props, D3D12_HEAP_FLAG_NONE, &desc,
-            D3D12_RESOURCE_STATE_COPY_DEST, NULL, IID_PPV_ARGS(&pTexture));
-    
-    void    ImGui_Marmalade_InvalidateDeviceObjects()
+    void ActionCamera::setEye(const Vec3& eye)
 {
-    if (g_ClipboardText)
-    {
-        delete[] g_ClipboardText;
-        g_ClipboardText = NULL;
-    }
-    }
+    _eye = eye;
+    updateTransform();
+}
     
-        static BOOST_FORCEINLINE storage_type fetch_and(storage_type volatile& storage, storage_type v, memory_order order) BOOST_NOEXCEPT
+        // Overrides
+    OrbitCamera *clone() const override;
+    virtual void startWithTarget(Node *target) override;
+    virtual void update(float time) override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    /**
+     * @js ctor
+     */
+    OrbitCamera();
+    /**
+     * @js NA
+     * @lua NA
+     */
+    virtual ~OrbitCamera();
+    
+    /** Initializes a OrbitCamera action with radius, delta-radius,  z, deltaZ, x, deltaX. */
+    bool initWithDuration(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX);
+    
+        /**
+    @brief Get the amplitude rate of the effect.
+    @return Return the amplitude rate of the effect.
+    */
+    float getAmplitudeRate() const { return _amplitudeRate; }
+    /**
+    @brief Set the amplitude rate of the effect.
+    @param amplitudeRate The value of amplitude rate will be set.
+    */
+    void setAmplitudeRate(float amplitudeRate) { _amplitudeRate = amplitudeRate; }
+    
+    
     {
-        switch (order)
+    {        ccArrayRemoveAllObjects(element->actions);
+        if (_currentTarget == element)
         {
-        case memory_order_relaxed:
-            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_AND8_RELAXED(&storage, v));
-            break;
-        case memory_order_consume:
-        case memory_order_acquire:
-            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_AND8_ACQUIRE(&storage, v));
-            break;
-        case memory_order_release:
-            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_AND8_RELEASE(&storage, v));
-            break;
-        case memory_order_acq_rel:
-        case memory_order_seq_cst:
-        default:
-            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_AND8(&storage, v));
-            break;
+            _currentTargetSalvaged = true;
         }
-        return v;
+        else
+        {
+            deleteHashElement(element);
+        }
+    }
+}
+    
+            if ( (j % 2 ) == 0 )
+        {
+            direction = -1;
+        }
+    
+    struct Tile;
+/**
+@brief ShuffleTiles action.
+@details This action make the target node shuffle with many tiles in random order.
+        You can create the action by these parameters:
+        duration, grid size, the random seed.
+*/
+class CC_DLL ShuffleTiles : public TiledGrid3DAction
+{
+public:
+    /** 
+    * @brief Create the action with grid size, random seed and duration.
+    * @param duration Specify the duration of the ShuffleTiles action. It's a value in seconds.
+    * @param gridSize Specify the size of the grid.
+    * @param seed Specify the random seed.
+    * @return If the creation success, return a pointer of ShuffleTiles action; otherwise, return nil.
+    */
+    static ShuffleTiles* create(float duration, const Size& gridSize, unsigned int seed);
     }
     
-    struct storage128_t
+    ActionTween* ActionTween::create(float duration, const std::string& key, float from, float to)
 {
-    mars_boost::uint64_t data[2];
+    ActionTween* ret = new (std::nothrow) ActionTween();
+    if (ret && ret->initWithDuration(duration, key, from, to))
+    {
+        ret->autorelease();
+        return ret;
     }
+    
+    delete ret;
+    return nullptr;
+}
+    
+    AnimationFrame::~AnimationFrame()
+{    
+    CCLOGINFO( 'deallocing AnimationFrame: %p', this);
+    }
+    
+        /* Creates an animation with an array of SpriteFrame and a delay between frames in seconds.
+     * The frames will be added with one 'delay unit'.
+     * @since v0.99.5
+     * @param arrayOfSpriteFrameNames An array of SpriteFrame.
+     * @param delay A delay between frames in seconds.
+     * @param loops The times the animation is going to loop.
+     */
+    static Animation* createWithSpriteFrames(const Vector<SpriteFrame*>& arrayOfSpriteFrameNames, float delay = 0.0f, unsigned int loops = 1);
+    
+    BOOST_FORCEINLINE void pause() BOOST_NOEXCEPT
+{
+#if defined(_MSC_VER) && (defined(_M_AMD64) || defined(_M_IX86))
+    _mm_pause();
+#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+    __asm__ __volatile__('pause;');
+#endif
+}
+    
+    using atomics::atomic_thread_fence;
+using atomics::atomic_signal_fence;
+    
+      // Return a new built-in function object as defined in
+  // Async Iterator Value Unwrap Functions
+  Node* CreateUnwrapClosure(Node* const native_context, Node* const done);
+    
+    TF_BUILTIN(DatePrototypeGetUTCMinutes, DateBuiltinsAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
+  Generate_DatePrototype_GetField(context, receiver, JSDate::kMinuteUTC);
+}
