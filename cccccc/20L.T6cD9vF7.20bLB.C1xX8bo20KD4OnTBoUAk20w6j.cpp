@@ -1,632 +1,572 @@
 
         
-            const auto* shapes_and_types = c.output_handle_shapes_and_types(i);
-    if (shapes_and_types != nullptr) {
-      auto* out_handle_data = out.mutable_handle_data();
-      out_handle_data->set_is_set(true);
-      for (const auto& p : *shapes_and_types) {
-        auto* out_shape_and_type = out_handle_data->add_shape_and_type();
-        ProtoFromShapeHandle(p.shape, &c, out_shape_and_type->mutable_shape());
-        out_shape_and_type->set_dtype(p.dtype);
+        /* Coin network-specific GUI style information */
+class NetworkStyle
+{
+public:
+    /** Get style associated with provided BIP70 network id, or 0 if not known */
+    static const NetworkStyle *instantiate(const QString &networkId);
+    }
+    
+    #ifndef SECP256K1_MODULE_ECDH_MAIN_H
+#define SECP256K1_MODULE_ECDH_MAIN_H
+    
+    BOOST_AUTO_TEST_CASE(bip173_testvectors_valid)
+{
+    static const std::string CASES[] = {
+        'A12UEL5L',
+        'a12uel5l',
+        'an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1tt5tgs',
+        'abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw',
+        '11qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqc8247j',
+        'split1checkupstagehandshakeupstreamerranterredcaperred2y9e3w',
+        '?1ezyfcl',
+    };
+    for (const std::string& str : CASES) {
+        auto ret = bech32::Decode(str);
+        BOOST_CHECK(!ret.first.empty());
+        std::string recode = bech32::Encode(ret.first, ret.second);
+        BOOST_CHECK(!recode.empty());
+        BOOST_CHECK(CaseInsensitiveEqual(str, recode));
+    }
+}
+    
+    /// Make type-agnostic format list from list of template arguments.
+///
+/// The exact return type of this function is an implementation detail and
+/// shouldn't be relied upon.  Instead it should be stored as a FormatListRef:
+///
+///   FormatListRef formatList = makeFormatList( /*...*/ );
+template<typename... Args>
+detail::FormatListN<sizeof...(Args)> makeFormatList(const Args&... args)
+{
+    return detail::FormatListN<sizeof...(args)>(args...);
+}
+    
+            WriteLE32(c + 0, x0);
+        WriteLE32(c + 4, x1);
+        WriteLE32(c + 8, x2);
+        WriteLE32(c + 12, x3);
+        WriteLE32(c + 16, x4);
+        WriteLE32(c + 20, x5);
+        WriteLE32(c + 24, x6);
+        WriteLE32(c + 28, x7);
+        WriteLE32(c + 32, x8);
+        WriteLE32(c + 36, x9);
+        WriteLE32(c + 40, x10);
+        WriteLE32(c + 44, x11);
+        WriteLE32(c + 48, x12);
+        WriteLE32(c + 52, x13);
+        WriteLE32(c + 56, x14);
+        WriteLE32(c + 60, x15);
+    
+        // Adds the module variable 'api_version'.
+    if (PyModule_AddIntConstant(
+        module,
+        const_cast<char*>(kImplVersionName),
+        kImplVersion))
+#if PY_MAJOR_VERSION < 3
+      return;
+#else
+      { Py_DECREF(module); return NULL; }
+    
+    void FindAnnotationsOnPath(
+    const GeneratedCodeInfo& info, const string& source_file,
+    const std::vector<int>& path,
+    std::vector<const GeneratedCodeInfo::Annotation*>* annotations) {
+  for (int i = 0; i < info.annotation_size(); ++i) {
+    const GeneratedCodeInfo::Annotation* annotation = &info.annotation(i);
+    if (annotation->source_file() != source_file ||
+        annotation->path_size() != path.size()) {
+      continue;
+    }
+    int node = 0;
+    for (; node < path.size(); ++node) {
+      if (annotation->path(node) != path[node]) {
+        break;
       }
     }
-    
-    // hidden_ops should be a list of Op names that should get a leading _
-// in the output. Prints the output to stdout.
-// Optional fourth argument is the name of the original C++ source file
-// where the ops' REGISTER_OP() calls reside.
-void PrintPythonOps(const OpList& ops, const ApiDefMap& api_defs,
-                    const std::vector<string>& hidden_ops, bool require_shapes,
-                    const string& source_file_name = '');
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    namespace stream_executor {
-namespace cuda {
+    if (node == path.size()) {
+      annotations->push_back(annotation);
     }
-    }
-    
-    struct DefaultCache {
-  llvm::sys::Mutex Mux;
-  CacheImpl::CallBacks CBs;
-  llvm::DenseMap<DefaultCacheKey, void *> Entries;
-    }
-    
-    #ifndef DIRECTIONAL_PREPOSITION
-#  define DIRECTIONAL_PREPOSITION(Word) PREPOSITION(Word)
-#endif
-    
-      struct IndentScope {
-    TreePrinter *Printer;
-    size_t OldLength;
-    IndentScope(TreePrinter *printer, StringRef indent)
-        : Printer(printer), OldLength(printer->Indent.size()) {
-      Printer->Indent += indent;
-    }
-    ~IndentScope() { Printer->Indent.resize(OldLength); }
-  };
-    
-      static CFPointeeInfo forInvalid() {
-    CFPointeeInfo info;
-    info.IsValid = false;
-    return info;
   }
-    
-      // Instance members
-  IAMResult(DeclName declName, unsigned selfIdx, EffectiveClangContext dc)
-      : name(declName), selfIndex(selfIdx), effectiveDC(dc) {}
-    
-    
-    {  return encodePunycode(InputCodePoints, OutPunycode);
 }
     
-    const char *Action::getClassName(Kind AC) {
-  switch (AC) {
-  case Kind::Input:  return 'input';
-  case Kind::CompileJob:  return 'compile';
-  case Kind::InterpretJob:  return 'interpret';
-  case Kind::BackendJob:  return 'backend';
-  case Kind::MergeModuleJob:  return 'merge-module';
-  case Kind::ModuleWrapJob:  return 'modulewrap';
-  case Kind::AutolinkExtractJob:  return 'swift-autolink-extract';
-  case Kind::REPLJob:  return 'repl';
-  case Kind::LinkJob:  return 'link';
-  case Kind::GenerateDSYMJob:  return 'generate-dSYM';
-  case Kind::VerifyDebugInfoJob:  return 'verify-debug-info';
-  case Kind::GeneratePCHJob:  return 'generate-pch';
-  }
+    #include <google/protobuf/compiler/csharp/csharp_doc_comment.h>
+#include <google/protobuf/compiler/csharp/csharp_enum.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/compiler/csharp/csharp_options.h>
+    
+    #include <vector>
+    
+      // File descriptor only needed if there are messages to use it.
+  if (message_generators_.size() > 0) {
+    std::map<string, string> vars;
+    vars['root_class_name'] = root_class_name_;
+    vars['package'] = file_->package();
+    vars['objc_prefix'] = FileClassPrefix(file_);
+    switch (file_->syntax()) {
+      case FileDescriptor::SYNTAX_UNKNOWN:
+        vars['syntax'] = 'GPBFileSyntaxUnknown';
+        break;
+      case FileDescriptor::SYNTAX_PROTO2:
+        vars['syntax'] = 'GPBFileSyntaxProto2';
+        break;
+      case FileDescriptor::SYNTAX_PROTO3:
+        vars['syntax'] = 'GPBFileSyntaxProto3';
+        break;
     }
-    
-      bool shouldProvideRPathToLinker() const override;
-    
-    
-    {    QString appName;
-    QIcon appIcon;
-    QIcon trayAndWindowIcon;
-    QString titleAddText;
-};
-    
-    
-    {    /* d += a3 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'movq %%rax,%%rcx\n'
-    'movq %%rdx,%%r15\n'
-    /* d += a2 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d = a0 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c = a4 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += (c & M) * R */
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* t3 (tmp1) = d & M */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    'movq %%rsi,%q1\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* d += a4 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a0 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += c * R */
-    'movq %%r8,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* t4 = d & M (%%rsi) */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* tx = t4 >> 48 (tmp3) */
-    'movq %%rsi,%%rax\n'
-    'shrq $48,%%rax\n'
-    'movq %%rax,%q3\n'
-    /* t4 &= (M >> 4) (tmp2) */
-    'movq $0xffffffffffff,%%rax\n'
-    'andq %%rax,%%rsi\n'
-    'movq %%rsi,%q2\n'
-    /* c = a0 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += a4 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* u0 = d & M (%%rsi) */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* u0 = (u0 << 4) | tx (%%rsi) */
-    'shlq $4,%%rsi\n'
-    'movq %q3,%%rax\n'
-    'orq %%rax,%%rsi\n'
-    /* c += u0 * (R >> 4) */
-    'movq $0x1000003d1,%%rax\n'
-    'mulq %%rsi\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[0] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,0(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += a1 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a0 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d += a4 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c += (d & M) * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* r[1] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,8(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += a2 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a1 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a0 * b2 (last use of %%r10 = a0) */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* fetch t3 (%%r10, overwrites a0), t4 (%%rsi) */
-    'movq %q2,%%rsi\n'
-    'movq %q1,%%r10\n'
-    /* d += a4 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c += (d & M) * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 (%%rcx only) */
-    'shrdq $52,%%r15,%%rcx\n'
-    /* r[2] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,16(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += t3 */
-    'addq %%r10,%%r8\n'
-    /* c += d * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[3] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,24(%%rdi)\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* c += t4 (%%r8 only) */
-    'addq %%rsi,%%r8\n'
-    /* r[4] = c */
-    'movq %%r8,32(%%rdi)\n'
-: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
-: 'b'(b), 'D'(r)
-: '%rax', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
-);
-}
-    
-    static void secp256k1_hmac_sha256_finalize(secp256k1_hmac_sha256_t *hash, unsigned char *out32) {
-    unsigned char temp[32];
-    secp256k1_sha256_finalize(&hash->inner, temp);
-    secp256k1_sha256_write(&hash->outer, temp, 32);
-    memset(temp, 0, 32);
-    secp256k1_sha256_finalize(&hash->outer, out32);
-}
-    
-    #include <boost/test/unit_test.hpp>
-    
-    namespace bech32
-{
-    }
-    
-    #include <crypto/common.h>
-#include <crypto/chacha20.h>
-    
-    void
-RuleBasedCollator::writeIdenticalLevel(const UChar *s, const UChar *limit,
-                                       SortKeyByteSink &sink, UErrorCode &errorCode) const {
-    // NFD quick check
-    const UChar *nfdQCYesLimit = data->nfcImpl.decompose(s, limit, NULL, errorCode);
-    if(U_FAILURE(errorCode)) { return; }
-    sink.Append(Collation::LEVEL_SEPARATOR_BYTE);
-    UChar32 prev = 0;
-    if(nfdQCYesLimit != s) {
-        prev = u_writeIdenticalLevelRun(prev, s, (int32_t)(nfdQCYesLimit - s), sink);
-    }
-    // Is there non-NFD text?
-    int32_t destLengthEstimate;
-    if(limit != NULL) {
-        if(nfdQCYesLimit == limit) { return; }
-        destLengthEstimate = (int32_t)(limit - nfdQCYesLimit);
+    printer->Print(vars,
+        '#pragma mark - $root_class_name$_FileDescriptor\n'
+        '\n'
+        'static GPBFileDescriptor *$root_class_name$_FileDescriptor(void) {\n'
+        '  // This is called by +initialize so there is no need to worry\n'
+        '  // about thread safety of the singleton.\n'
+        '  static GPBFileDescriptor *descriptor = NULL;\n'
+        '  if (!descriptor) {\n'
+        '    GPB_DEBUG_CHECK_RUNTIME_VERSIONS();\n');
+    if (vars['objc_prefix'].size() > 0) {
+      printer->Print(
+          vars,
+          '    descriptor = [[GPBFileDescriptor alloc] initWithPackage:@\'$package$\'\n'
+          '                                                 objcPrefix:@\'$objc_prefix$\'\n'
+          '                                                     syntax:$syntax$];\n');
     } else {
-        // s is NUL-terminated
-        if(*nfdQCYesLimit == 0) { return; }
-        destLengthEstimate = -1;
+      printer->Print(
+          vars,
+          '    descriptor = [[GPBFileDescriptor alloc] initWithPackage:@\'$package$\'\n'
+          '                                                     syntax:$syntax$];\n');
     }
-    UnicodeString nfd;
-    data->nfcImpl.decompose(nfdQCYesLimit, limit, nfd, destLengthEstimate, errorCode);
-    u_writeIdenticalLevelRun(prev, nfd.getBuffer(), nfd.length(), sink);
-}
-    
-    ScientificNumberFormatter::ScientificNumberFormatter(
-        const ScientificNumberFormatter &other)
-        : UObject(other),
-          fPreExponent(other.fPreExponent),
-          fDecimalFormat(NULL),
-          fStyle(NULL),
-          fStaticSets(other.fStaticSets) {
-    fDecimalFormat = static_cast<DecimalFormat *>(
-            other.fDecimalFormat->clone());
-    fStyle = other.fStyle->clone();
-}
-    
-    #if !UCONFIG_NO_FORMATTING
-    
-    class U_I18N_API SharedCalendar : public SharedObject {
-public:
-    SharedCalendar(Calendar *calToAdopt) : ptr(calToAdopt) { }
-    virtual ~SharedCalendar();
-    const Calendar *get() const { return ptr; }
-    const Calendar *operator->() const { return ptr; }
-    const Calendar &operator*() const { return *ptr; }
-private:
-    Calendar *ptr;
-    SharedCalendar(const SharedCalendar &);
-    SharedCalendar &operator=(const SharedCalendar &);
-};
-    
-        /**
-     * Get maximum significant digits. 0 means no minimum.
-     */
-    int32_t getMin() const {
-        return fMin;
-    }
-    
-    #include 'unicode/uobject.h'
-#include 'unicode/utypes.h'
-    
-    int32_t StandardPlural::indexOrNegativeFromString(const UnicodeString &keyword) {
-    switch (keyword.length()) {
-    case 3:
-        if (keyword.compare(gOne, 3) == 0) {
-            return ONE;
-        } else if (keyword.compare(gTwo, 3) == 0) {
-            return TWO;
-        } else if (keyword.compare(gFew, 3) == 0) {
-            return FEW;
-        }
-        break;
-    case 4:
-        if (keyword.compare(gMany, 4) == 0) {
-            return MANY;
-        } else if (keyword.compare(gZero, 4) == 0) {
-            return ZERO;
-        }
-        break;
-    case 5:
-        if (keyword.compare(gOther, 5) == 0) {
-            return OTHER;
-        }
-        break;
-    default:
-        break;
-    }
-    return -1;
-}
-    
-      /**
-   * @brief Get the query invocation counter.
-   *
-   * This method returns query invocation counter. If the query is a new query,
-   * 0 is returned. Otherwise the counter associated with the query is retrieved
-   * from database and incremented by 1.
-   *
-   * @param new_query Whether or not the query is new.
-   *
-   * @return the query invocation counter.
-   */
-  uint64_t getQueryCounter(bool new_query) const;
-    
-    namespace osquery {
-    }
-    
-    /**
- * @brief A single typed row from a database query
- *
- * RowTyped is a simple map where individual column names are keys, which map to
- * the Row's respective type-variant value
- */
-using RowTyped = std::map<std::string, RowDataTyped>;
-    
-    void ExtensionProcessor::process_shutdown(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
-{
-  void* ctx = NULL;
-  if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext('Extension.shutdown', callContext);
+    printer->Print(
+        '  }\n'
+        '  return descriptor;\n'
+        '}\n'
+        '\n');
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, 'Extension.shutdown');
+    
+    TEST(ObjCHelper, TextFormatDecodeData_ByteCodes) {
+  TextFormatDecodeData decode_data;
     }
     
-    // getSerializedQueryData() return an std::pair where pair->first is a string
-// which should serialize to pair->second. pair->second should
-// deserialize to pair->first. getSerializedQueryDataWithColumnOrder
-// returns a pair where pair->second is a tree that has a repeated column and
-// the child nodes are not in alphabetical order
-std::pair<JSON, QueryData> getSerializedQueryData();
-std::pair<JSON, QueryData> getSerializedQueryDataWithColumnOrder();
-std::pair<std::string, QueryData> getSerializedQueryDataJSON();
-    
-    /**
- * @brief Represents a hardware driver type that SMART api can you use to query
- * device information.
- *
- * @param driver name of SMART controller driver
- * @param maxID max ID number of which disks on the controller is monitored
- */
-struct hardwareDriver {
-  std::string driver;
-  size_t maxID;
-};
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_IMPL_API void     ImGui_ImplDX9_InvalidateDeviceObjects();
-IMGUI_IMPL_API bool     ImGui_ImplDX9_CreateDeviceObjects();
-
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-        if (pEvent->m_Pressed == 1)
-    {
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_LEFTMOUSE)
-            g_MousePressed[0] = true;
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_RIGHTMOUSE)
-            g_MousePressed[1] = true;
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_MIDDLEMOUSE)
-            g_MousePressed[2] = true;
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_MOUSEWHEELUP)
-            io.MouseWheel += pEvent->m_y;
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_MOUSEWHEELDOWN)
-            io.MouseWheel += pEvent->m_y;
+    bool ZipWriter::WriteDirectory() {
+  uint16 num_entries = files_.size();
+  uint32 dir_ofs = raw_output_->ByteCount();
     }
     
-        ALLEGRO_MOUSE_STATE mouse;
-    if (keys.display == g_Display)
-    {
-        al_get_mouse_state(&mouse);
-        io.MousePos = ImVec2((float)mouse.x, (float)mouse.y);
-    }
-    else
-    {
-        io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
-    }
-    
-        // Create Framebuffers
-    int w, h;
-    glfwGetFramebufferSize(window, &w, &h);
-    glfwSetFramebufferSizeCallback(window, glfw_resize_callback);
-    ImGui_ImplVulkanH_WindowData* wd = &g_WindowData;
-    SetupVulkanWindowData(wd, surface, w, h);
-    
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
-    
-    extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-    if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
-        return true;
-    }
-    
-    
-    {        // Create texture view
-        D3D10_SHADER_RESOURCE_VIEW_DESC srv_desc;
-        ZeroMemory(&srv_desc, sizeof(srv_desc));
-        srv_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        srv_desc.ViewDimension = D3D10_SRV_DIMENSION_TEXTURE2D;
-        srv_desc.Texture2D.MipLevels = desc.MipLevels;
-        srv_desc.Texture2D.MostDetailedMip = 0;
-        g_pd3dDevice->CreateShaderResourceView(pTexture, &srv_desc, &g_pFontTextureView);
-        pTexture->Release();
-    }
-    
-    
-    {    // Create texture sampler
-    {
-        D3D11_SAMPLER_DESC desc;
-        ZeroMemory(&desc, sizeof(desc));
-        desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-        desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-        desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-        desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-        desc.MipLODBias = 0.f;
-        desc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-        desc.MinLOD = 0.f;
-        desc.MaxLOD = 0.f;
-        g_pd3dDevice->CreateSamplerState(&desc, &g_pFontSampler);
-    }
+    float SafeDoubleToFloat(double value) {
+  if (value > std::numeric_limits<float>::max()) {
+    return std::numeric_limits<float>::infinity();
+  } else if (value < -std::numeric_limits<float>::max()) {
+    return -std::numeric_limits<float>::infinity();
+  } else {
+    return static_cast<float>(value);
+  }
 }
     
-    // GLFW
-#include <GLFW/glfw3.h>
-#ifdef _WIN32
-#undef APIENTRY
-#define GLFW_EXPOSE_NATIVE_WIN32
-#include <GLFW/glfw3native.h>   // for glfwGetWin32Window
-#endif
-#define GLFW_HAS_WINDOW_TOPMOST     (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 >= 3200) // 3.2+ GLFW_FLOATING
-#define GLFW_HAS_WINDOW_HOVERED     (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 >= 3300) // 3.3+ GLFW_HOVERED
-#define GLFW_HAS_WINDOW_ALPHA       (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 >= 3300) // 3.3+ glfwSetWindowOpacity
-#define GLFW_HAS_PER_MONITOR_DPI    (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 >= 3300) // 3.3+ glfwGetMonitorContentScale
-#define GLFW_HAS_VULKAN             (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 >= 3200) // 3.2+ glfwCreateWindowSurface
+    enum GARBAGE_LEVEL
+{
+  G_NEVER_CRUNCH,
+  G_OK,
+  G_DODGY,
+  G_TERRIBLE
+};
     
-    IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_Init();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data);
+    // Getter for the value.
+STRING ParamContent::GetValue() const {
+  STRING result;
+  if (param_type_ == VT_INTEGER) {
+    result.add_str_int('', *iIt);
+  } else if (param_type_ == VT_BOOLEAN) {
+    result.add_str_int('', *bIt);
+  } else if (param_type_ == VT_DOUBLE) {
+    result.add_str_double('', *dIt);
+  } else if (param_type_ == VT_STRING) {
+    if (((STRING) * (sIt)).string() != nullptr) {
+      result = sIt->string();
+    } else {
+      result = 'Null';
+    }
+  }
+  return result;
+}
     
-        // Set OS mouse position if requested (rarely used, only when ImGuiConfigFlags_NavEnableSetMousePos is enabled by user)
-    if (io.WantSetMousePos)
-        SDL_WarpMouseInWindow(g_Window, (int)io.MousePos.x, (int)io.MousePos.y);
-    else
-        io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
+      /// Return true if we are processing the full image.
+  bool IsFullImage() const {
+    return rect_left_ == 0 && rect_top_ == 0 &&
+           rect_width_ == image_width_ && rect_height_ == image_height_;
+  }
+    
+    
+    {  name += UNLV_EXT;              //add extension
+  if ((pdfp = fopen (name.string (), 'rb')) == nullptr) {
+    return false;                //didn't read one
+  } else {
+    while (tfscanf(pdfp, '%d %d %d %d %*s', &x, &y, &width, &height) >= 4) {
+                                 //make rect block
+      block = new BLOCK (name.string (), TRUE, 0, 0,
+                         (int16_t) x, (int16_t) (ysize - y - height),
+                         (int16_t) (x + width), (int16_t) (ysize - y));
+                                 //on end of list
+      block_it.add_to_end (block);
+    }
+    fclose(pdfp);
+  }
+  return true;
+}
+    
+    // A simple class to provide a dynamic programming solution to a class of
+// 1st-order problems in which the cost is dependent only on the current
+// step and the best cost to that step, with a possible special case
+// of using the variance of the steps, and only the top choice is required.
+// Useful for problems such as finding the optimal cut points in a fixed-pitch
+// (vertical or horizontal) situation.
+// Skeletal Example:
+// DPPoint* array = new DPPoint[width];
+// for (int i = 0; i < width; i++) {
+//   array[i].AddLocalCost(cost_at_i)
+// }
+// DPPoint* best_end = DPPoint::Solve(..., array);
+// while (best_end != nullptr) {
+//   int cut_index = best_end - array;
+//   best_end = best_end->best_prev();
+// }
+// delete [] array;
+class DPPoint {
+ public:
+  // The cost function evaluates the total cost at this (excluding this's
+  // local_cost) and if it beats this's total_cost, then
+  // replace the appropriate values in this.
+  typedef int64_t (DPPoint::*CostFunc)(const DPPoint* prev);
+    }
+    
+    namespace leveldb {
+    }
+    
+      // Check for iterator errors
+  Status s = input->status();
+  const uint64_t current_entries = compact->builder->NumEntries();
+  if (s.ok()) {
+    s = compact->builder->Finish();
+  } else {
+    compact->builder->Abandon();
+  }
+  const uint64_t current_bytes = compact->builder->FileSize();
+  compact->current_output()->file_size = current_bytes;
+  compact->total_bytes += current_bytes;
+  delete compact->builder;
+  compact->builder = nullptr;
+    
+      // Per level compaction stats.  stats_[level] stores the stats for
+  // compactions that produced data for the specified 'level'.
+  struct CompactionStats {
+    int64_t micros;
+    int64_t bytes_read;
+    int64_t bytes_written;
+    }
+    
+     private:
+  WritableFile* dest_;
+  int block_offset_;       // Current offset in block
+    
+      // REQUIRES: External synchronization
+  void WriteStep(Random* rnd) {
+    const uint32_t k = rnd->Next() % K;
+    const intptr_t g = current_.Get(k) + 1;
+    const Key key = MakeKey(k, g);
+    list_.Insert(key);
+    current_.Set(k, g);
+  }
+    
+    /*!
+ * \brief The result holder of storage type of each NodeEntry in the graph.
+ * \note Stored under graph.attrs['storage_type'], provided by Pass 'InferStorageType'
+ *
+ * \code
+ *  Graph g = ApplyPass(src_graph, 'InferStorageType');
+ *  const StorageVector& stypes = g.GetAttr<StorageTypeVector>('storage_type');
+ *  // get storage type by entry id
+ *  int entry_type = stypes[g.indexed_graph().entry_id(my_entry)];
+ * \endcode
+ *
+ * \sa FInferStorageType
+ */
+using StorageTypeVector = std::vector<int>;
+    
+    template<typename Dtype>
+void DelCaffeBlobs(std::vector< ::caffe::Blob<Dtype>*>* v, int n_num) {
+  for (index_t i=0; i < n_num; ++i)
+    delete v->at(i);
+}
+    
+    /*!
+ * Copyright (c) 2016 by Contributors
+ * \file caffe_fieldentry.h
+ * \brief Implement FieldEntry<caffe::LayerParameter>
+ * \author Haoran Wang
+ */
+#ifndef PLUGIN_CAFFE_CAFFE_FIELDENTRY_H_
+#define PLUGIN_CAFFE_CAFFE_FIELDENTRY_H_
+    
+    /*!
+ * \brief Thread pool.
+ */
+class ThreadPool {
+ public:
+  /*! \brief Signal event upon destruction, even for exceptions (RAII) */
+  struct SetReadyOnDestroy {
+    explicit inline SetReadyOnDestroy(const std::shared_ptr<dmlc::ManualEvent>& event)
+      : event_(event) {
+    }
+    inline ~SetReadyOnDestroy() {
+      if (event_) {
+        event_->signal();
+      }
+    }
+    std::shared_ptr<dmlc::ManualEvent>  event_;
+  };
+    }
+    
+    Graph DetectInplaceAddTo(Graph g) {
+  nnvm::StorageVector storage_id =
+      g.MoveCopyAttr<nnvm::StorageVector>('storage_id');
+  std::vector<int> storage_inplace_index =
+      g.MoveCopyAttr<std::vector<int> >('storage_inplace_index');
+  static const Op* ewise_plus_op = Op::Get('_grad_add');
+  auto& idx = g.indexed_graph();
+  // reference cont.
+  std::vector<int> ref_count(idx.num_node_entries(), 0);
+  std::vector<int> addto_entry(idx.num_node_entries(), 0);
+  std::vector<int> skip_plus_node(idx.num_nodes(), 0);
+    }
+    
+     private:
+  void create() {
+    CHECK(tensor_container_ == nullptr);
+    CHECK_EQ(this->dev_mask(), mshadow::cpu::kDevMask);
+    MSHADOW_TYPE_SWITCH(this->type_flag_, DType, {
+        auto tensor_container = new mshadow::TensorContainer<mshadow::cpu, 1, DType>(false);
+        tensor_container->Resize(mshadow::Shape1(shape_.Size()));
+        dptr_ = tensor_container->dptr_;
+        tensor_container_ = tensor_container;
+    });
+  }
+  void resize() {
+    MSHADOW_TYPE_SWITCH(this->type_flag_, DType, {
+        auto tensor_container =
+          (mshadow::TensorContainer<mshadow::cpu, 1, DType>*) tensor_container_;
+        tensor_container->Resize(mshadow::Shape1(shape_.Size()));
+    });
+  }
+  void release() {
+    MSHADOW_TYPE_SWITCH(this->type_flag_, DType, {
+        auto tensor_container =
+          (mshadow::TensorContainer<mshadow::cpu, 1, DType>*) tensor_container_;
+        delete tensor_container;
+    });
+  }
+    
+    namespace mxnet {
+namespace io {
+// iterator on image recordio
+class PrefetcherIter : public IIterator<DataBatch> {
+ public:
+  explicit PrefetcherIter(IIterator<TBlobBatch>* base)
+      : loader_(base), out_(nullptr) {}
+    }
+    }
+    }
+    
+      virtual void PredictInteractionContributions(DMatrix* dmat,
+                                   std::vector<bst_float>* out_contribs,
+                                   const gbm::GBTreeModel& model,
+                                   unsigned ntree_limit = 0,
+                                   bool approximate = false) = 0;
+    
+      void InitTreesToUpdate() {
+    if (trees_to_update.size() == 0u) {
+      for (auto & tree : trees) {
+        trees_to_update.push_back(std::move(tree));
+      }
+      trees.clear();
+      param.num_trees = 0;
+      tree_info.clear();
+    }
+  }
+    
+    /*!
+ * \brief Quantile sketch use WQSummary
+ * \tparam DType type of data content
+ * \tparam RType type of rank
+ */
+template<typename DType, typename RType = unsigned>
+class WQuantileSketch :
+      public QuantileSketchTemplate<DType, RType, WQSummary<DType, RType> > {
+};
+    
+      /* Fetch an individual column. This code should be used with XGBOOST_TYPE_SWITCH
+     to determine type of bin id's */
+  inline Column GetColumn(unsigned fid) const {
+    Column c(type_[fid], &index_[boundary_[fid].index_begin], index_base_[fid],
+             &row_ind_[boundary_[fid].row_ind_begin],
+             boundary_[fid].index_end - boundary_[fid].index_begin);
+    return c;
+  }
+    
+    #include <atomic>
+#include <cassert>
+#include <ratio>
+#include 'rocksdb/env.h'
+    
+    
+    {}  // namespace rocksdb
+    
+      // Read a key in this transaction
+  s = txn->Get(read_options, 'abc', &value);
+  assert(s.IsNotFound());
+    
+      {
+    std::string string_val;
+    // If it cannot pin the value, it copies the value to its internal buffer.
+    // The intenral buffer could be set during construction.
+    PinnableSlice pinnable_val(&string_val);
+    db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key2', &pinnable_val);
+    assert(pinnable_val == 'value');
+    // If the value is not pinned, the internal buffer must have the value.
+    assert(pinnable_val.IsPinned() || string_val == 'value');
+  }
+    
+    class LDBCommandExecuteResult {
+public:
+  enum State {
+    EXEC_NOT_STARTED = 0, EXEC_SUCCEED = 1, EXEC_FAILED = 2,
+  };
+    }
+    
+    using json = nlohmann::json;
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    
+    {    return nullptr;
+}
+    
+    protected:
+    /* center position */
+    Vec2 _position;
+    float _radius;
+    unsigned int _waves;
+    float _amplitude;
+    float _amplitudeRate;
+    
+        /** 
+     * Creates the action.
+     *
+     * @param duration Duration time, in seconds.
+     * @param dstAngle In degreesCW.
+     * @return An autoreleased RotateTo object.
+     */
+    static RotateTo* create(float duration, float dstAngle);
+    
+    /**
+ @brief This action simulates a page turn from the bottom right hand corner of the screen.
+ 
+ @details It's not much use by itself but is used by the PageTurnTransition.
+         Based on an original paper by L Hong et al.
+         http://www.parc.com/publication/1638/turning-pages-of-3d-electronic-books.html
+  
+ @since v0.8.2
+ */
+class CC_DLL PageTurn3D : public Grid3DAction
+{
+public:
+    /**
+     * @js NA 
+     */
+    virtual GridBase* getGrid() override;
+    }
+    
+    
+    {private:
+    CC_DISALLOW_COPY_AND_ASSIGN(ProgressTo);
+};
+    
+        /** 
+     * @brief Initializes the action with the number of jumps, the sin amplitude, the grid size and the duration.
+     * @param duration Specify the duration of the JumpTiles3D action. It's a value in seconds.
+     * @param gridSize Specify the size of the grid.
+     * @param numberOfJumps Specify the jump tiles count.
+     * @param amplitude Specify the amplitude of the JumpTiles3D action.
+     * @return If the initialization success, return true; otherwise, return false.
+     */
+    bool initWithDuration(float duration, const Size& gridSize, unsigned int numberOfJumps, float amplitude);
+    
+    ActionTween *ActionTween::clone() const
+{
+    return ActionTween::create(_duration, _key, _from, _to);
+}
+    
+    
+    {    // update duration
+    _totalDelayUnits++;
+}
+    
+        this->updateBlendFunc();
+    this->updateOpacityModifyRGB();
+    
+    
+    {    //turn the result into simply polygon (AKA, fix overlap)
+    
+    //clamp into the specified rect
+    ClipperLib::Clipper cl;
+    cl.StrictlySimple(true);
+    cl.AddPath(p->Contour, ClipperLib::ptSubject, true);
+    //create the clipping rect
+    ClipperLib::Path clamp;
+    clamp.push_back(ClipperLib::IntPoint(0, 0));
+    clamp.push_back(ClipperLib::IntPoint(rect.size.width/_scaleFactor * PRECISION, 0));
+    clamp.push_back(ClipperLib::IntPoint(rect.size.width/_scaleFactor * PRECISION, rect.size.height/_scaleFactor * PRECISION));
+    clamp.push_back(ClipperLib::IntPoint(0, rect.size.height/_scaleFactor * PRECISION));
+    cl.AddPath(clamp, ClipperLib::ptClip, true);
+    cl.Execute(ClipperLib::ctIntersection, out);
+    
+    std::vector<Vec2> outPoints;
+    ClipperLib::PolyNode* p2 = out.GetFirst();
+    while(p2->IsHole()){
+        p2 = p2->GetNext();
+    }
+    for(const auto& pt : p2->Contour)
+    {
+        outPoints.push_back(Vec2(pt.X/PRECISION, pt.Y/PRECISION));
+    }
+    return outPoints;
+}
+    
+    using namespace std;
+    
+            if(index == 0){
+            left = head->next;
+            return head;
+        }
+    
+            stack<Command> stack;
+        stack.push(Command('go', root));
+        while(!stack.empty()){
+            Command command = stack.top();
+            stack.pop();
+    }
+    
+        TreeNode* root = new TreeNode(1);
+    root->right = new TreeNode(2);
+    root->right->left = new TreeNode(3);
+    vector<int> res = Solution().preorderTraversal(root);
+    print_vec(res);
+    
+            while(!output.empty()){
+            res.push_back((output.top())->val);
+            output.pop();
+        }
