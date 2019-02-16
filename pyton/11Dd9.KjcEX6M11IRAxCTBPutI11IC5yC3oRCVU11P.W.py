@@ -1,168 +1,69 @@
 
         
-        if len(sys.argv) > 1:
-    METHOD = 'LIST'
-    LIST = open(sys.argv[1]).read().decode('utf8').strip()
-else:
-    METHOD = 'EURISTIC'
-    
-    EXTRA_ARGS = {
-    'recode-video': ['--arguments', 'mp4 flv ogg webm mkv', '--exclusive'],
-    }
-    
-        with open('supportedsites.html', 'w', encoding='utf-8') as sitesf:
-        sitesf.write(template)
+        
+def test_login(client, auth):
+    # test that viewing the page renders without template errors
+    assert client.get('/auth/login').status_code == 200
     
     
-if __name__ == '__main__':
-    main()
+# context locals
+_request_ctx_stack = LocalStack()
+_app_ctx_stack = LocalStack()
+current_app = LocalProxy(_find_app)
+request = LocalProxy(partial(_lookup_req_object, 'request'))
+session = LocalProxy(partial(_lookup_req_object, 'session'))
+g = LocalProxy(partial(_lookup_app_object, 'g'))
 
     
     
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
-    
-    
-def main():
-    parser = optparse.OptionParser(usage='%prog OUTFILE.md')
-    options, args = parser.parse_args()
-    if len(args) != 1:
-        parser.error('Expected an output filename')
-    
-        diropts = []
-    for opt in opts_dir:
-        if opt._short_opts:
-            diropts.extend(opt._short_opts)
-        if opt._long_opts:
-            diropts.extend(opt._long_opts)
-    
-        def test_add_extra_info(self):
-        test_dict = {
-            'extractor': 'Foo',
-        }
-        extra_info = {
-            'extractor': 'Bar',
-            'playlist': 'funny videos',
-        }
-        YDL.add_extra_info(test_dict, extra_info)
-        self.assertEqual(test_dict['extractor'], 'Foo')
-        self.assertEqual(test_dict['playlist'], 'funny videos')
-    
-    from __future__ import unicode_literals
-    
-        def test_main_exec(self):
-        subprocess.check_call([sys.executable, 'youtube_dl/__main__.py', '--version'], cwd=rootDir, stdout=_DEV_NULL)
-    
-        Validates that the username is not already taken. Hashes the
-    password for security.
-    '''
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        db = get_db()
-        error = None
-    
-    import click
-from flask import current_app, g
-from flask.cli import with_appcontext
-    
-    
-def test_update(client, auth, app):
-    auth.login()
-    assert client.get('/1/update').status_code == 200
-    client.post('/1/update', data={'title': 'updated', 'body': ''})
-    
-        def fake_init_db():
-        Recorder.called = True
-    
-    
-# Core signals.  For usage examples grep the source code or consult
-# the API documentation in docs/api.rst as well as docs/signals.rst
-template_rendered = _signals.signal('template-rendered')
-before_render_template = _signals.signal('before-render-template')
-request_started = _signals.signal('request-started')
-request_finished = _signals.signal('request-finished')
-request_tearing_down = _signals.signal('request-tearing-down')
-got_request_exception = _signals.signal('got-request-exception')
-appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
-appcontext_pushed = _signals.signal('appcontext-pushed')
-appcontext_popped = _signals.signal('appcontext-popped')
-message_flashed = _signals.signal('message-flashed')
+def tojson_filter(obj, **kwargs):
+    return Markup(htmlsafe_dumps(obj, **kwargs))
 
     
-            # push a context so flask.json can use app's json attributes
+        def loads(self, value):
+        '''Load data from a JSON string and deserialized any tagged objects.'''
+        return loads(value, object_hook=self.untag)
+
+    
+        @contextmanager
+    def session_transaction(self, *args, **kwargs):
+        '''When used in combination with a ``with`` statement this opens a
+        session transaction.  This can be used to modify the session that
+        the test client uses.  Once the ``with`` block is left the session is
+        stored back.
+    
+    
+def get_git_tags():
+    return set(
+        Popen(['git', 'tag'], stdout=PIPE).communicate()[0].splitlines()
+    )
+    
         with app.app_context():
-            kwargs['data'] = json_dumps(kwargs.pop('json'))
-    
-        @property
-    def max_content_length(self):
-        '''Read-only view of the ``MAX_CONTENT_LENGTH`` config key.'''
-        if current_app:
-            return current_app.config['MAX_CONTENT_LENGTH']
-    
-        auto_json = args.data and not args.form
-    if args.json or auto_json:
-        default_headers['Accept'] = JSON_ACCEPT
-        if args.json or (auto_json and args.data):
-            default_headers['Content-Type'] = JSON_CONTENT_TYPE
-    
-        @property
-    def content_type(self):
-        '''Return the message content type.'''
-        ct = self._orig.headers.get('Content-Type', '')
-        if not isinstance(ct, str):
-            ct = ct.decode('utf8')
-        return ct
-    
-        message = BINARY_SUPPRESSED_NOTICE
-    
-        def __call__(self, r):
-        '''
-        Override username/password serialization to allow unicode.
+        pass
     
     
-def humanize_bytes(n, precision=2):
-    # Author: Doug Latornell
-    # Licence: MIT
-    # URL: http://code.activestate.com/recipes/577081/
-    '''Return a humanized string representation of a number of bytes.
-    
-    import pytest
-    
-    error_msg = None
-    
-    del sys
+def setup(app):
+    app.add_config_value('edit_on_github_project', '', True)
+    app.add_config_value('edit_on_github_branch', 'master', True)
+    app.add_config_value('edit_on_github_src_path', '', True)  # 'eg' 'docs/'
+    app.connect('html-page-context', html_page_context)
 
     
-        def run(self, args, opts):
-        if len(args) != 1:
-            raise UsageError()
+            devices = {}
+        for lease in leases_result:
+            match = _LEASES_REGEX.search(lease.decode('utf-8'))
+            if match is not None:
+                devices[match.group('ip')] = {
+                    'ip': match.group('ip'),
+                    'mac': match.group('mac').upper(),
+                    'timevalid': int(match.group('timevalid'))
+                    }
+        return devices
+
     
-        def _list_templates(self):
-        print('Available templates:')
-        for filename in sorted(os.listdir(self.templates_dir)):
-            if filename.endswith('.tmpl'):
-                print('  %s' % splitext(filename)[0])
+        return FlockNotificationService(url, session, hass.loop)
     
-        def syntax(self):
-        return '[options]'
-    
-            if self.paused:
-            return
-    
-        def match(self, request: httputil.HTTPServerRequest) -> Optional[Dict[str, Any]]:
-        # Look for default host if not behind load balancer (for debugging)
-        if 'X-Real-Ip' not in request.headers:
-            if self.host_pattern.match(self.application.default_host):
-                return {}
-        return None
-    
-        def generate(self, writer: '_CodeWriter') -> None:
-        writer.write_line('%s:' % self.statement, self.line)
-        with writer.indent():
-            self.body.generate(writer)
-            # Just in case the body was empty
-            writer.write_line('pass', self.line)
+    from homeassistant.components.notify import (
+    PLATFORM_SCHEMA, BaseNotificationService)
+from homeassistant.const import CONF_ACCESS_TOKEN, CONF_USERNAME
+import homeassistant.helpers.config_validation as cv
