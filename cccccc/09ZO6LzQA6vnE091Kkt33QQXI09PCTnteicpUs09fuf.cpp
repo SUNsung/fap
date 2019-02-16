@@ -1,114 +1,173 @@
 
         
-        namespace HPHP { namespace HHBBC {
-    }
+        namespace atom {
     }
     
-    #include <cstdint>
+    namespace IPC {
+class Message;
+}
+    
+    void AutoUpdater::SetDelegate(Delegate* delegate) {
+  delegate_ = delegate;
+}
+    
+    class AutoUpdater {
+ public:
+  typedef std::map<std::string, std::string> HeaderMap;
+    }
+    
+    net::URLRequestJob* AboutProtocolHandler::MaybeCreateJob(
+    net::URLRequest* request,
+    net::NetworkDelegate* network_delegate) const {
+  return new URLRequestAboutJob(request, network_delegate);
+}
+    
+    
+    { private:
+  DISALLOW_COPY_AND_ASSIGN(AboutProtocolHandler);
+};
+    
+    SECP256K1_INLINE static void secp256k1_fe_mul_inner(uint64_t *r, const uint64_t *a, const uint64_t * SECP256K1_RESTRICT b) {
+/**
+ * Registers: rdx:rax = multiplication accumulator
+ *            r9:r8   = c
+ *            r15:rcx = d
+ *            r10-r14 = a0-a4
+ *            rbx     = b
+ *            rdi     = r
+ *            rsi     = a / t?
+ */
+  uint64_t tmp1, tmp2, tmp3;
+__asm__ __volatile__(
+    'movq 0(%%rsi),%%r10\n'
+    'movq 8(%%rsi),%%r11\n'
+    'movq 16(%%rsi),%%r12\n'
+    'movq 24(%%rsi),%%r13\n'
+    'movq 32(%%rsi),%%r14\n'
+    }
+    
+        // C escapes
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar\\nBaz\\t\' Spam=\'\\rEggs\' Octals=\'\\1a\\11\\17\\18\\81\\377\\378\\400\\2222\' Final=Check', {
+            {'Foo', 'Bar\nBaz\t'},
+            {'Spam', '\rEggs'},
+            {'Octals', '\1a\11\17\1' '881\377\37' '8\40' '0\222' '2'},
+            {'Final', 'Check'},
+        });
+    CheckParseTorReplyMapping(
+        'Valid=Mapping Escaped=\'Escape\\\\\'', {
+            {'Valid', 'Mapping'},
+            {'Escaped', 'Escape\\'},
+        });
+    CheckParseTorReplyMapping(
+        'Valid=Mapping Bare=\'Escape\\\'', {});
+    CheckParseTorReplyMapping(
+        'OneOctal=\'OneEnd\\1\' TwoOctal=\'TwoEnd\\11\'', {
+            {'OneOctal', 'OneEnd\1'},
+            {'TwoOctal', 'TwoEnd\11'},
+        });
+    
+    
+    
+    ROTATE_ARGS
+	movdqa	XTMP3, XTMP2	; XTMP3 = W[-2] {BBAA}
+    mov	y0, e		; y0 = e
+    mov	y1, a		; y1 = a
+    ror	y0, (25-11)	; y0 = e >> (25-11)
+	movdqa	XTMP4, XTMP2	; XTMP4 = W[-2] {BBAA}
+    xor	y0, e		; y0 = e ^ (e >> (25-11))
+    ror	y1, (22-13)	; y1 = a >> (22-13)
+    mov	y2, f		; y2 = f
+    xor	y1, a		; y1 = a ^ (a >> (22-13)
+    ror	y0, (11-6)	; y0 = (e >> (11-6)) ^ (e >> (25-6))
+	psrlq	XTMP2, 17	; XTMP2 = W[-2] ror 17 {xBxA}
+    xor	y2, g		; y2 = f^g
+	psrlq	XTMP3, 19	; XTMP3 = W[-2] ror 19 {xBxA}
+    xor	y0, e		; y0 = e ^ (e >> (11-6)) ^ (e >> (25-6))
+    and	y2, e		; y2 = (f^g)&e
+	psrld	XTMP4, 10	; XTMP4 = W[-2] >> 10 {BBAA}
+    ror	y1, (13-2)	; y1 = (a >> (13-2)) ^ (a >> (22-2))
+    xor	y1, a		; y1 = a ^ (a >> (13-2)) ^ (a >> (22-2))
+    xor	y2, g		; y2 = CH = ((f^g)&e)^g
+    ror	y0, 6		; y0 = S1 = (e>>6) & (e>>11) ^ (e>>25)
+	pxor	XTMP2, XTMP3
+    add	y2, y0		; y2 = S1 + CH
+    ror	y1, 2		; y1 = S0 = (a>>2) ^ (a>>13) ^ (a>>22)
+    add	y2, [rsp + _XFER + 2*4]	; y2 = k + w + S1 + CH
+	pxor	XTMP4, XTMP2	; XTMP4 = s1 {xBxA}
+    mov	y0, a		; y0 = a
+    add	h, y2		; h = h + S1 + CH + k + w
+    mov	y2, a		; y2 = a
+	pshufb	XTMP4, SHUF_00BA	; XTMP4 = s1 {00BA}
+    or	y0, c		; y0 = a|c
+    add	d, h		; d = d + h + S1 + CH + k + w
+    and	y2, c		; y2 = a&c
+	paddd	XTMP0, XTMP4	; XTMP0 = {..., ..., W[1], W[0]}
+    and	y0, b		; y0 = (a|c)&b
+    add	h, y1		; h = h + S1 + CH + k + w + S0
+	;; compute high s1
+	pshufd	XTMP2, XTMP0, 01010000b	; XTMP2 = W[-2] {DDCC}
+    or	y0, y2		; y0 = MAJ = (a|c)&b)|(a&c)
+    add	h, y0		; h = h + S1 + CH + k + w + S0 + MAJ
+    
+    using namespace std;
+    
+    
+    {} // namespace folly
+
+    
+    template <class RNG, typename = void>
+struct StateSize {
+  // A sane default.
+  using type = std::integral_constant<size_t, 512>;
+};
+    
+      /**
+   * Returns true 1/n of the time. If n == 0, always returns false
+   */
+  static bool oneIn(uint32_t n) {
+    return oneIn(n, ThreadLocalPRNG());
+  }
+    
+    #include <functional>
 #include <tuple>
     
+        // Test the upper boundary of conversion to int64_t microseconds
+    using usec_i64 = std::chrono::duration<int64_t, std::micro>;
+    ts.tv_sec = 9223372036854LL;
+    ts.tv_nsec = 775807000;
+    EXPECT_EQ(std::numeric_limits<int64_t>::max(), to<usec_i64>(ts).count());
     
-    {    assertx(data == comma || data == semi);
-    // eat parameters, and figure out if we have ';base64'
-    while (semi && (data == semi)) {
-      data++;
-      meta_len--;
-      char* equals = (char*)memchr(data, '=', meta_len);
-      semi = (char*)memchr(data, ';', meta_len);
-      if (!equals || (semi && semi < data)) {
-        // no equals, so either 'base64' or its bad
-        if (meta_len != sizeof('base64') - 1 ||
-            memcmp(data, 'base64', sizeof('base64')-1)) {
-          raise_warning('rfc2396: invalid parameter');
-          return nullptr;
-        }
-        // it's 'base64', we're done
-        base64 = true;
-        meta_len -= sizeof('base64') - 1;
-        data += sizeof('base64') - 1;
-        break;
-      }
-      // there's a parameter
-      if (semi) {
-        meta_len -= semi - data + 1;
-        data = semi;
-      } /* else, we're done with meta */
+    /**
+ * Helper functions for compression codecs.
+ */
+namespace folly {
+namespace io {
+namespace compression {
+namespace detail {
     }
+    }
+    }
+    }
+    
+    
+    {    auto res = CountedDetail::template get_shared_ptr_from_counted_base<T>(
+        p.get(), inc);
+    if (aliased) {
+      auto aliasedp =
+          CountedDetail::template get_shared_ptr_from_counted_base<SharedPtr>(
+              p.get());
+      res = *aliasedp;
+    }
+    return res;
   }
-  data = comma + 1;
-  data_len -= 1;
-  String decoded;
     
-    #endif // HPHP_DATA_STREAM_WRAPPER_H
-
+    using namespace std;
+using namespace folly;
     
-    public:
-  virtual ~IDebuggable() {}
-    
-    template<typename AHM>
-void checkAHMSubMaps(const AHM& map, folly::StringPiece mapName,
-                     std::atomic<bool>& done) {
-  if (LIKELY(map.numSubMaps() == 1) ||
-      done.load(std::memory_order_relaxed) ||
-      done.exchange(true, std::memory_order_relaxed)) {
-    return;
-  }
-    }
-    
-    
-    {    InputTextCallback_UserData cb_user_data;
-    cb_user_data.Str = str;
-    cb_user_data.ChainCallback = callback;
-    cb_user_data.ChainCallbackUserData = user_data;
-    return InputTextMultiline(label, (char*)str->c_str(), str->capacity() + 1, size, flags, InputTextCallback, &cb_user_data);
-}
-
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_IMPL_API void     ImGui_ImplDX10_InvalidateDeviceObjects();
-IMGUI_IMPL_API bool     ImGui_ImplDX10_CreateDeviceObjects();
-
-    
-    IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_Init(const char* glsl_version = NULL);
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data);
-    
-        if (device->QueryInterface(IID_PPV_ARGS(&pDXGIDevice)) == S_OK)
-        if (pDXGIDevice->GetParent(IID_PPV_ARGS(&pDXGIAdapter)) == S_OK)
-            if (pDXGIAdapter->GetParent(IID_PPV_ARGS(&pFactory)) == S_OK)
-            {
-                g_pd3dDevice = device;
-                g_pd3dDeviceContext = device_context;
-                g_pFactory = pFactory;
-            }
-    if (pDXGIDevice) pDXGIDevice->Release();
-    if (pDXGIAdapter) pDXGIAdapter->Release();
-    
-    // InitXXX function with 'install_callbacks=true': install GLFW callbacks. They will call user's previously installed callbacks, if any.
-// InitXXX function with 'install_callbacks=false': do not install GLFW callbacks. You will need to call them yourself from your own GLFW callbacks.
-IMGUI_IMPL_API void     ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
-
-    
-        // Rendering
-    ImGui::Render();
-    ImGuiIO& io = ImGui::GetIO();
-    glViewport(0, 0, (GLsizei)io.DisplaySize.x, (GLsizei)io.DisplaySize.y);
-    glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-    glClear(GL_COLOR_BUFFER_BIT);
-    //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound, but prefer using the GL3+ code.
-    ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-    
-        // Main loop
-    while (!glfwWindowShouldClose(window))
-    {
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        glfwPollEvents();
-    }
+    struct AtForkTask {
+  void* object;
+  folly::Function<bool()> prepare;
+  folly::Function<void()> parent;
+  folly::Function<void()> child;
+};
