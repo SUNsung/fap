@@ -1,412 +1,374 @@
 
         
-          if (clangDiag.getID() == clang::diag::err_module_not_built &&
-      CurrentImport && clangDiag.getArgStdStr(0) == CurrentImport->getName()) {
-    SourceLoc loc = DiagLoc;
-    if (clangDiag.getLocation().isValid())
-      loc = resolveSourceLocation(clangDiag.getSourceManager(),
-                                  clangDiag.getLocation());
+            if (info.bytes > buf.size()) {
+      llvm::dbgs() << 'AST section too small.\n';
+      return false;
     }
     
-      Optional<unsigned> selfIndex = None;
+      // Get the camel-case words in the name and type name.
+  auto nameWords = camel_case::getWords(name);
+  auto typeWords = camel_case::getWords(typeName.Name);
     
-    char Mangle::getStandardTypeSubst(StringRef TypeName) {
-#define STANDARD_TYPE(KIND, MANGLING, TYPENAME)      \
-  if (TypeName == #TYPENAME) {                       \
-    return #MANGLING[0];                             \
+    void Demangler::dump() {
+  for (unsigned Idx = 0; Idx < NodeStack.size(); ++Idx) {
+    fprintf(stderr, 'NodeStack[%u]:\n', Idx);
+    NodeStack[Idx]->dump();
+    fprintf(stderr, '\n');
   }
-    }
-    
-      std::vector<std::thread> workers;
-  for (auto worker = size_t{0}; worker < num_threads; ++worker) {
-    workers.push_back(std::thread([&] {
-      try {
-        hphp_thread_init();
-        hphp_session_init(Treadmill::SessionKind::HHBBC);
-        SCOPE_EXIT {
-          hphp_context_exit();
-          hphp_session_exit();
-          hphp_thread_exit();
-        };
-    }
-    }
-    }
-    
-      bool operator==(SrcLoc o) const {
-    return start == o.start && past == o.past;
-  }
-    
-          I_form_t i_formater {{
-                            lk,
-                            aa,
-                            imm >> 2,
-                            op
-                          }};
-    
-      Object createObject() const;
-    
-    void Config::ParseIniFile(const std::string &filename,
-                          const bool is_system /* = true */) {
-  IniSettingMap ini = IniSettingMap();
-  Config::ParseIniFile(filename, ini, false, is_system);
+  fprintf(stderr, 'Position = %zd:\n%.*s\n%*s\n', Pos,
+          (int)Text.size(), Text.data(), (int)Pos + 1, '^');
 }
     
-    PlainDirectory::PlainDirectory(const String& path) {
-  m_dir = ::opendir(path.data());
+    void AutolinkExtractJobAction::anchor() {}
+    
+    namespace caffe2 {
+    }
+    
+    Example 2 (with KEY):
+DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
+KEY   = [0, 1, 3, 2, 1, 0, 1, 0]
+RANGES = [
+  [
+    [2, 4],
+    [0, 2],
+  ],
+  [
+    [0, 0],
+    [6, 2],
+  ]
+]
+lengths = [4, 2]
+OUTPUT[0] = [[6, 5, 4, 3], [0, 0, 0, 0]]
+OUTPUT[1] = [[1, 2], [8, 7]]
+    
+    )DOC')
+    .Arg(
+        'values',
+        '*(type depends on dtype, Required=True)* The value of the elements to go in the *output* tensor.',
+        true /* required */)
+    .Arg(
+        'dtype',
+        'The data type for the elements of the output tensor. Strictly must be one of the types from DataType enum in TensorProto.')
+    .Arg(
+        'shape',
+        '*(type: [int])* Desired shape of the *output* tensor.')
+    .Arg(
+        'extra_shape',
+        '*(type: [int])* The additional dimensions appended at the end of the *shape* indicated by the input blob. Cannot set the *extra_shape* argument when there is no input blob.')
+    .Arg(
+        'input_as_shape',
+        '*(type: bool; default: False)* set to *True* to use the *input* as shape. First, input must be in CPU context.')
+    .Input(
+        0,
+        'input',
+        '(Optional) 1D tensor specifying the shape of the output. Must be used with *input_as_shape=True*')
+    .Output(
+        0,
+        'output',
+        'Output tensor with desired dimension filled with specified data. If the shape argument is set, this is the shape specified, and if the *input* exists and *input_as_shape=True*, it is the shape specified by the *input* tensor.')
+    .TensorInferenceFunction(FillerTensorInference<>);
+    
+    OPERATOR_SCHEMA(Col2Im).NumInputs(2).NumOutputs(1);
+    
+    TEST(AutoCompactTest, ReadAll) {
+  DoReads(kCount);
 }
     
-    struct FileStreamWrapper final : Stream::Wrapper {
-  static req::ptr<MemFile> openFromCache(const String& filename,
-                                         const String& mode);
-  req::ptr<File> open(const String& filename, const String& mode, int options,
-                      const req::ptr<StreamContext>& context) override;
-  int access(const String& path, int mode) override {
-    return ::access(File::TranslatePath(path).data(), mode);
-  }
-  int stat(const String& path, struct stat* buf) override {
-    return ::stat(File::TranslatePath(path).data(), buf);
-  }
-  int lstat(const String& path, struct stat* buf) override {
-    return ::lstat(File::TranslatePath(path).data(), buf);
-  }
-  int unlink(const String& path) override;
-  int rename(const String& oldname, const String& newname) override;
-  int mkdir(const String& path, int mode, int options) override;
-  int rmdir(const String& path, int /*options*/) override {
-    ERROR_RAISE_WARNING(::rmdir(File::TranslatePath(path).data()));
-    return ret;
-  }
-  bool isNormalFileStream() const override { return true; }
-    }
     
-    #include 'hphp/runtime/base/stream-wrapper.h'
-#include 'hphp/runtime/base/runtime-error.h'
+    {  Corrupt(kTableFile, 100, 1);
+  RepairDB();
+  Reopen();
+  Check(95, 99);
+}
     
-    #include 'hphp/util/stack-trace.h'
+    // If true, do not destroy the existing database.  If you set this
+// flag and also specify a benchmark that wants a fresh database, that
+// benchmark will fail.
+static bool FLAGS_use_existing_db = false;
     
-      size_t BytesRead() const override {
-    return parser_->BytesRead();
-  }
+    // Return a new iterator that converts internal keys (yielded by
+// '*internal_iter') that were live at the specified 'sequence' number
+// into appropriate user keys.
+Iterator* NewDBIterator(DBImpl* db,
+                        const Comparator* user_key_comparator,
+                        Iterator* internal_iter,
+                        SequenceNumber sequence,
+                        uint32_t seed);
     
-    /*! \brief namespace of base64 decoding and encoding table */
-namespace base64 {
-const char DecodeTable[] = {
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  62,  // '+'
-  0, 0, 0,
-  63,  // '/'
-  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
-  0, 0, 0, 0, 0, 0, 0,
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
-  0, 0, 0, 0, 0, 0,
-  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
-  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
-};
-static const char EncodeTable[] =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-}  // namespace base64
-/*! \brief the stream that reads from base64, note we take from file pointers */
-class Base64InStream: public dmlc::Stream {
- public:
-  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
-    reader_.set_stream(fs);
-    num_prev = 0; tmp_ch = 0;
-  }
-  /*!
-   * \brief initialize the stream position to beginning of next base64 stream
-   * call this function before actually start read
-   */
-  inline void InitPosition(void) {
-    // get a character
-    do {
-      tmp_ch = reader_.GetChar();
-    } while (isspace(tmp_ch));
-  }
-  /*! \brief whether current position is end of a base64 stream */
-  inline bool IsEOF(void) const {
-    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
-  }
-  virtual size_t Read(void *ptr, size_t size) {
-    using base64::DecodeTable;
-    if (size == 0) return 0;
-    // use tlen to record left size
-    size_t tlen = size;
-    unsigned char *cptr = static_cast<unsigned char*>(ptr);
-    // if anything left, load from previous buffered result
-    if (num_prev != 0) {
-      if (num_prev == 2) {
-        if (tlen >= 2) {
-          *cptr++ = buf_prev[0];
-          *cptr++ = buf_prev[1];
-          tlen -= 2;
-          num_prev = 0;
-        } else {
-          // assert tlen == 1
-          *cptr++ = buf_prev[0]; --tlen;
-          buf_prev[0] = buf_prev[1];
-          num_prev = 1;
-        }
-      } else {
-        // assert num_prev == 1
-        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
-      }
+    int InternalKeyComparator::Compare(const Slice& akey, const Slice& bkey) const {
+  // Order by:
+  //    increasing user key (according to user-supplied comparator)
+  //    decreasing sequence number
+  //    decreasing type (though sequence# should be enough to disambiguate)
+  int r = user_comparator_->Compare(ExtractUserKey(akey), ExtractUserKey(bkey));
+  if (r == 0) {
+    const uint64_t anum = DecodeFixed64(akey.data() + akey.size() - 8);
+    const uint64_t bnum = DecodeFixed64(bkey.data() + bkey.size() - 8);
+    if (anum > bnum) {
+      r = -1;
+    } else if (anum < bnum) {
+      r = +1;
     }
-    if (tlen == 0) return size;
-    int nvalue;
-    // note: everything goes with 4 bytes in Base64
-    // so we process 4 bytes a unit
-    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
-      // first byte
-      nvalue = DecodeTable[tmp_ch] << 18;
-      {
-        // second byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        nvalue |= DecodeTable[tmp_ch] << 12;
-        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
-        }
-      {
-        // third byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        // handle termination
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == '=') << 'invalid base64 format';
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch] << 6;
-        if (tlen) {
-          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
-        }
-      }
-      {
-        // fourth byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
-            << 'invalid base64 format';
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch];
-        if (tlen) {
-          *cptr++ = nvalue & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev ++] = nvalue & 0xFF;
-        }
-      }
-      // get next char
-      tmp_ch = reader_.GetChar();
-    }
-    if (kStrictCheck) {
-      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
-    }
-    return size - tlen;
   }
-  virtual void Write(const void *ptr, size_t size) {
-    LOG(FATAL) << 'Base64InStream do not support write';
-  }
-    }
+  return r;
+}
     
-    namespace xgboost {
-namespace data {
-/*!
- * \brief Format specification of SparsePage.
+    static std::string MakeFileName(const std::string& dbname, uint64_t number,
+                                const char* suffix) {
+  char buf[100];
+  snprintf(buf, sizeof(buf), '/%06llu.%s',
+           static_cast<unsigned long long>(number),
+           suffix);
+  return dbname + buf;
+}
+    
+    // If filename is a leveldb file, store the type of the file in *type.
+// The number encoded in the filename is stored in *number.  If the
+// filename was successfully parsed, returns true.  Else return false.
+bool ParseFileName(const std::string& filename,
+                   uint64_t* number,
+                   FileType* type);
+    
+      typedef SkipList<const char*, KeyComparator> Table;
+    
+    DHTTaskExecutor::DHTTaskExecutor(int numConcurrent)
+    : numConcurrent_(numConcurrent)
+{
+}
+    
+    #endif // D_DHT_TASK_EXECUTOR_H
+
+    
+    void DHTTaskFactoryImpl::setCommonProperty(
+    const std::shared_ptr<DHTAbstractTask>& task)
+{
+  task->setRoutingTable(routingTable_);
+  task->setMessageDispatcher(dispatcher_);
+  task->setMessageFactory(factory_);
+  task->setTaskQueue(taskQueue_);
+  task->setLocalNode(localNode_);
+}
+    
+    #include 'DHTTaskQueue.h'
+#include 'DHTTaskExecutor.h'
+    
+    public:
+  DHTTokenTracker();
+    
+    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
+                                             std::chrono::seconds interval)
+    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
+{
+}
+    
+      virtual void process() CXX11_OVERRIDE;
+    
+    protected:
+    
+    /*
+ * Update each tick
+ * Time is the percentage of the way through the duration
  */
-class SparsePageFormat {
- public:
-  /*! \brief virtual destructor */
-  virtual ~SparsePageFormat() = default;
-  /*!
-   * \brief Load all the segments into page, advance fi to end of the block.
-   * \param page The data to read page into.
-   * \param fi the input stream of the file
-   * \return true of the loading as successful, false if end of file was reached
-   */
-  virtual bool Read(SparsePage* page, dmlc::SeekStream* fi) = 0;
-  /*!
-   * \brief read only the segments we are interested in, advance fi to end of the block.
-   * \param page The page to load the data into.
-   * \param fi the input stream of the file
-   * \param sorted_index_set sorted index of segments we are interested in
-   * \return true of the loading as successful, false if end of file was reached
-   */
-  virtual bool Read(SparsePage* page,
-                    dmlc::SeekStream* fi,
-                    const std::vector<bst_uint>& sorted_index_set) = 0;
-  /*!
-   * \brief save the data to fo, when a page was written.
-   * \param fo output stream
-   */
-  virtual void Write(const SparsePage& page, dmlc::Stream* fo) = 0;
-  /*!
-   * \brief Create sparse page of format.
-   * \return The created format functors.
-   */
-  static SparsePageFormat* Create(const std::string& name);
-  /*!
-   * \brief decide the format from cache prefix.
-   * \return pair of row format, column format type of the cache prefix.
-   */
-  static std::pair<std::string, std::string> DecideFormat(const std::string& cache_prefix);
-};
+void PageTurn3D::update(float time)
+{
+    float tt = MAX(0, time - 0.25f);
+    float deltaAy = (tt * tt * 500);
+    float ay = -100 - deltaAy;
+    
+    float deltaTheta = sqrtf(time);
+    float theta = deltaTheta > 0.5f ? (float)M_PI_2*deltaTheta : (float)M_PI_2*(1-deltaTheta);
+    
+    float rotateByYAxis = (2-time)* M_PI;
+    
+    float sinTheta = sinf(theta);
+    float cosTheta = cosf(theta);
+    
+    for (int i = 0; i <= _gridSize.width; ++i)
+    {
+        for (int j = 0; j <= _gridSize.height; ++j)
+        {
+            // Get original vertex
+            Vec3 p = getOriginalVertex(Vec2(i ,j));
+            
+            p.x -= getGridRect().origin.x;
+            float R = sqrtf((p.x * p.x) + ((p.y - ay) * (p.y - ay)));
+            float r = R * sinTheta;
+            float alpha = asinf( p.x / R );
+            float beta = alpha / sinTheta;
+            float cosBeta = cosf( beta );
+            
+            // If beta > PI then we've wrapped around the cone
+            // Reduce the radius to stop these points interfering with others
+            if (beta <= M_PI)
+            {
+                p.x = ( r * sinf(beta));
+            }
+            else
+            {
+                // Force X = 0 to stop wrapped
+                // points
+                p.x = 0;
+            }
+    }
     }
     }
     
-      /*!
-   * \brief add an element to a sketch
-   * \param x The element added to the sketch
-   * \param w The weight of the element.
-   */
-  inline void Push(DType x, RType w = 1) {
-    if (w == static_cast<RType>(0)) return;
-    if (inqueue.qtail == inqueue.queue.size()) {
-      // jump from lazy one value to limit_size * 2
-      if (inqueue.queue.size() == 1) {
-        inqueue.queue.resize(limit_size * 2);
-      } else {
-        temp.Reserve(limit_size * 2);
-        inqueue.MakeSummary(&temp);
-        // cleanup queue
-        inqueue.qtail = 0;
-        this->PushTemp();
-      }
-    }
-    inqueue.Push(x, w);
-  }
+    The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
     
-        // want to compute storage boundary for each feature
-    // using variants of prefix sum scan
-    boundary_.resize(nfeature);
-    size_t accum_index_ = 0;
-    size_t accum_row_ind_ = 0;
-    for (bst_uint fid = 0; fid < nfeature; ++fid) {
-      boundary_[fid].index_begin = accum_index_;
-      boundary_[fid].row_ind_begin = accum_row_ind_;
-      if (type_[fid] == kDenseColumn) {
-        accum_index_ += static_cast<size_t>(nrow);
-        accum_row_ind_ += static_cast<size_t>(nrow);
-      } else {
-        accum_index_ += feature_counts_[fid];
-        accum_row_ind_ += feature_counts_[fid];
-      }
-      boundary_[fid].index_end = accum_index_;
-      boundary_[fid].row_ind_end = accum_row_ind_;
+    SplitCols* SplitCols::create(float duration, unsigned int cols)
+{
+    SplitCols *action = new (std::nothrow) SplitCols();
     }
     
-    namespace xgboost {
-/*!
- * \brief interface of gradient boosting model.
+    bool ActionTween::initWithDuration(float duration, const std::string& key, float from, float to)
+{
+    if (ActionInterval::initWithDuration(duration))
+    {
+        _key    = key;
+        _to       = to;
+        _from     = from;
+        return true;
+    }
+    }
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __CC_ANIMATION_CACHE_H__
+#define __CC_ANIMATION_CACHE_H__
+    
+    
+    {};
+    
+    
+/**
+ * AutoPolygon is a helper Object
+ * AutoPolygon's purpose is to process an image into 2d polygon mesh in runtime
+ * It has functions for each step in the process, from tracing all the points, to triangulation
+ * the result can be then passed to Sprite::create() to create a Polygon Sprite
  */
-class GradientBooster {
- public:
-  /*! \brief virtual destructor */
-  virtual ~GradientBooster() = default;
-  /*!
-   * \brief set configuration from pair iterators.
-   * \param begin The beginning iterator.
-   * \param end The end iterator.
-   * \tparam PairIter iterator<std::pair<std::string, std::string> >
-   */
-  template<typename PairIter>
-  inline void Configure(PairIter begin, PairIter end);
-  /*!
-   * \brief Set the configuration of gradient boosting.
-   *  User must call configure once before InitModel and Training.
-   *
-   * \param cfg configurations on both training and model parameters.
-   */
-  virtual void Configure(const std::vector<std::pair<std::string, std::string> >& cfg) = 0;
-  /*!
-   * \brief load model from stream
-   * \param fi input stream.
-   */
-  virtual void Load(dmlc::Stream* fi) = 0;
-  /*!
-   * \brief save model to stream.
-   * \param fo output stream
-   */
-  virtual void Save(dmlc::Stream* fo) const = 0;
-  /*!
-   * \brief whether the model allow lazy checkpoint
-   * return true if model is only updated in DoBoost
-   * after all Allreduce calls
-   */
-  virtual bool AllowLazyCheckPoint() const {
-    return false;
-  }
-  /*!
-   * \brief perform update to the model(boosting)
-   * \param p_fmat feature matrix that provide access to features
-   * \param in_gpair address of the gradient pair statistics of the data
-   * \param obj The objective function, optional, can be nullptr when use customized version
-   * the booster may change content of gpair
-   */
-  virtual void DoBoost(DMatrix* p_fmat,
-                       HostDeviceVector<GradientPair>* in_gpair,
-                       ObjFunction* obj = nullptr) = 0;
-    }
-    }
+class CC_DLL AutoPolygon
+{
+public:
+    /**
+     * create an AutoPolygon and initialize it with an image file
+     * the image must be a 32bit PNG for current version 3.7
+     * @param   filename    a path to image file, e.g., 'scene1/monster.png'.
+     * @return  an AutoPolygon object;
+     */
+    AutoPolygon(const std::string &filename);
     
-        Span<float const> cs (arr, arr + 16);
-    ASSERT_EQ (cs.size(), 16);
-    ASSERT_EQ (cs.data(), arr);
-    ASSERT_EQ (cs.data() + cs.size(), arr + 16);
+    /**
+     * Destructor of AutoPolygon.
+     */
+    ~AutoPolygon();
     
-    namespace osquery {
-namespace table_tests {
-namespace {
+    /**
+     * trace all the points along the outline of the image, 
+     * @warning must create AutoPolygon with filename to use this function
+     * @param   rect    a texture rect for specify an area of the image
+     * @param   threshold   the value when alpha is greater than this value will be counted as opaque, default to 0.0
+     * @return  a vector of vec2 of all the points found in clockwise order
+     * @code
+     * auto ap = AutoPolygon('grossini.png');
+     * auto rect = Rect(100, 100, 200, 200);
+     * std::vector<Vec2> points = ap.trace(rect);//default threshold is 0.0
+     * @endcode
+     */
+     std::vector<Vec2> trace(const cocos2d::Rect& rect, float threshold = 0.0f);
+    
+    /**
+     * reduce the amount of points so its faster for GPU to process and draw
+     * based on Ramer-Douglas-Peucker algorithm
+     * @param   points  a vector of Vec2 points as input
+     * @param   rect    a texture rect for specify an area of the image to avoid over reduction
+     * @param   epsilon the perpendicular distance where points smaller than this value will be discarded
+     * @return  a vector of Vec2 of the remaining points in clockwise order
+     * @code
+     * auto ap = AutoPolygon();
+     * std::vector<Vec2> reduced = ap.reduce(inputPoints, rect);//default epsilon is 2
+     * @endcode
+     */
+    std::vector<Vec2> reduce(const std::vector<Vec2>& points, const Rect& rect, float epsilon = 2.0f);
+    
+    /**
+     * expand the points along their edge, useful after you reduce the points that cuts into the sprite
+     * using ClipperLib
+     * @param   points  a vector of Vec2 points as input
+     * @param   rect    a texture rect for specify an area of the image, the expanded points will be clamped in this rect, ultimately resulting in a quad if the expansion is too great
+     * @param   epsilon the distance which the edges will expand
+     * @return  a vector of Vec2 as the result of the expansion
+     * @code
+     * auto ap = AutoPolygon();
+     * std::vector<Vec2> expanded = ap.expand(inputPoints, rect, 2.0);
+     * @endcode
+     */
+    std::vector<Vec2> expand(const std::vector<Vec2>& points, const Rect& rect, float epsilon);
+    
+    /**
+     * Triangulate the input points into triangles for rendering
+     * using poly2tri
+     * @warning points must be closed loop, cannot have 2 points sharing the same position and cannot intersect itself
+     * @param   points  a vector of vec2 points as input
+     * @return  a Triangles object with points and indices
+     * @code
+     * auto ap = AutoPolygon();
+     * TrianglesCommand::Triangles myPolygons = ap.triangulate(myPoints);
+     * @endcode
+     */
+    TrianglesCommand::Triangles triangulate(const std::vector<Vec2>& points);
+    
+    /**
+     * calculate the UV coordinates for each points based on a texture rect
+     * @warning This method requires the AutoPolygon object to know the texture file dimension
+     * @param   rect    a texture rect to specify where to map the UV
+     * @param   verts   a pointer to the verts array, served both as input and output verts
+     * @param   count   the count for the verts array
+     * @code
+     * auto ap = AutoPolygon('grossini.png');
+     * TrianglesCommand::Triangles myPolygons = ap.triangulate(myPoints);
+     * ap.calculateUV(rect, myPolygons.verts, 20);
+     * @endcode
+     */
+    void calculateUV(const Rect& rect, V3F_C4B_T2F* verts, ssize_t count);
+    
+    /**
+     * a helper function, packing trace, reduce, expand, triangulate and calculate uv in one function
+     * @param   rect    texture rect, use Rect::ZERO for the size of the texture, default is Rect::ZERO
+     * @param   epsilon the value used to reduce and expand, default to 2.0
+     * @param   threshold   the value where bigger than the threshold will be counted as opaque, used in trace
+     * @return  a PolygonInfo, to use with sprite
+     * @code
+     * auto ap = AutoPolygon('grossini.png');
+     * PolygonInfo myInfo = ap.generateTriangles();//use all default values
+     * auto sp1 = Sprite::create(myInfo);
+     * polygonInfo myInfo2 = ap.generateTriangles(Rect::ZERO, 5.0, 0.1);//ap can be reused to generate another set of PolygonInfo with different settings
+     * auto sp2 = Sprite::create(myInfo2);
+     * @endcode
+     */
+    PolygonInfo generateTriangles(const Rect& rect = Rect::ZERO, float epsilon = 2.0f, float threshold = 0.05f);
+    
+    /**
+     * a helper function, packing autoPolygon creation, trace, reduce, expand, triangulate and calculate uv in one function
+     * @warning if you want to repetitively generate polygons, consider create an AutoPolygon object, and use generateTriangles function, as it only reads the file once
+     * @param   filename     A path to image file, e.g., 'scene1/monster.png'.
+     * @param   rect    texture rect, use Rect::ZERO for the size of the texture, default is Rect::ZERO
+     * @param   epsilon the value used to reduce and expand, default to 2.0
+     * @param   threshold   the value where bigger than the threshold will be counted as opaque, used in trace
+     * @return  a PolygonInfo, to use with sprite
+     * @code
+     * auto sp = Sprite::create(AutoPolygon::generatePolygon('grossini.png'));
+     * @endcode
+     */
+    static PolygonInfo generatePolygon(const std::string& filename, const Rect& rect = Rect::ZERO, float epsilon = 2.0f, float threshold = 0.05f);
+protected:
+    Vec2 findFirstNoneTransparentPixel(const Rect& rect, float threshold);
+    std::vector<cocos2d::Vec2> marchSquare(const Rect& rect, const Vec2& first, float threshold);
+    unsigned int getSquareValue(unsigned int x, unsigned int y, const Rect& rect, float threshold);
     }
-    }
-    }
-    
-    TEST_F(SchedulerTests, test_scheduler_reload) {
-  std::string config =
-      '{\'schedule\':{\'1\':{'
-      '\'query\':\'select * from processes\', \'interval\':1}}}';
-  auto backup_reload = FLAGS_schedule_reload;
-    }
-    
-    #include 'row.h'
-    
-    class ExtensionManager_extensions_result {
- public:
-    }
-    
-      void call(ExtensionResponse& _return, const std::string& registry, const std::string& item, const ExtensionPluginRequest& request) {
-    // Your implementation goes here
-    printf('call\n');
-  }
-    
-    QueryData genNFSShares(QueryContext& context) {
-  QueryData results;
-    }
-    
-    #include <osquery/core.h>
-#include <osquery/database.h>
-#include <osquery/filesystem/filesystem.h>
-#include <osquery/logger.h>
-#include <osquery/tables.h>
-    
-      STDMETHODIMP RegisterOutputCallbacks::QueryInterface(
-      THIS_ _In_ REFIID InterfaceId, _Out_ PVOID* Interface) {
-    *Interface = nullptr;
-    if (IsEqualIID(InterfaceId, __uuidof(IUnknown)) ||
-        IsEqualIID(InterfaceId, __uuidof(IDebugOutputCallbacks))) {
-      *Interface = (IDebugOutputCallbacks*)this;
-      AddRef();
-      return S_OK;
-    } else {
-      return E_NOINTERFACE;
-    }
-  }
