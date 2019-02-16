@@ -1,251 +1,207 @@
 
         
-        
-    {}  // namespace api
-    
-    
-    {}  // namespace api
-    
-    namespace api {
-    }
-    
-      gfx::Point GetCursorScreenPoint();
-  display::Display GetPrimaryDisplay();
-  std::vector<display::Display> GetAllDisplays();
-  display::Display GetDisplayNearestPoint(const gfx::Point& point);
-  display::Display GetDisplayMatching(const gfx::Rect& match_rect);
-    
-    class WebRequest : public mate::TrackableObject<WebRequest> {
- public:
-  static mate::Handle<WebRequest> Create(v8::Isolate* isolate,
-                                         AtomBrowserContext* browser_context);
-    }
-    
-      // Pass the sender and message to be replied.
-  void SetSenderAndMessage(content::RenderFrameHost* sender,
-                           IPC::Message* message);
-    
-    bool SavePageHandler::Handle(const base::FilePath& full_path,
-                             const content::SavePageType& save_type) {
-  auto* download_manager = content::BrowserContext::GetDownloadManager(
-      web_contents_->GetBrowserContext());
-  download_manager->AddObserver(this);
-  // Chromium will create a 'foo_files' directory under the directory of saving
-  // page 'foo.html' for holding other resource files of 'foo.html'.
-  base::FilePath saved_main_directory_path = full_path.DirName().Append(
-      full_path.RemoveExtension().BaseName().value() +
-      FILE_PATH_LITERAL('_files'));
-  bool result =
-      web_contents_->SavePage(full_path, saved_main_directory_path, save_type);
-  download_manager->RemoveObserver(this);
-  // If initialization fails which means fail to create |DownloadItem|, we need
-  // to delete the |SavePageHandler| instance to avoid memory-leak.
-  if (!result)
-    delete this;
-  return result;
+        #if defined(__linux)
+static Slice TrimSpace(Slice s) {
+  size_t start = 0;
+  while (start < s.size() && isspace(s[start])) {
+    start++;
+  }
+  size_t limit = s.size();
+  while (limit > start && isspace(s[limit-1])) {
+    limit--;
+  }
+  return Slice(s.data() + start, limit - start);
 }
-    
-    
-    {}  // namespace atom
-    
-     private:
-  void Destroy();
-    
-    namespace atom {
-    }
-    
-    void AutoUpdater::SetFeedURL(mate::Arguments* args) {}
-    
-    namespace in_app_purchase {
-    }
-    
-    #define TEGRA_MUL(src1, sz1, src2, sz2, dst, sz, w, h, scale) \
-( \
-    CAROTENE_NS::isSupportedConfiguration() ? \
-    CAROTENE_NS::mul(CAROTENE_NS::Size2D(w, h), \
-                     src1, sz1, \
-                     src2, sz2, \
-                     dst, sz, \
-                     scale, \
-                     CAROTENE_NS::CONVERT_POLICY_SATURATE), \
-    CV_HAL_ERROR_OK \
-    : CV_HAL_ERROR_NOT_IMPLEMENTED \
-)
-    
-    void assertSupportedConfiguration(bool parametersSupported)
-{
-    if (!isSupportedConfiguration()) {
-        std::cerr << 'internal error: attempted to use an unavailable function' << std::endl;
-        std::abort();
-    }
-    }
-    
-             vline_f32 = vld1q_f32(_src + i + 4);
-    
-                tnext[0] = x0;
-            tnext[1] = x1;
-            tnext[2] = x2;
-    
-    
-    {    return 0;
 #endif
+    
+      // Set of table files to protect from deletion because they are
+  // part of ongoing compactions.
+  std::set<uint64_t> pending_outputs_ GUARDED_BY(mutex_);
+    
+    static std::string IKey(const std::string& user_key,
+                        uint64_t seq,
+                        ValueType vt) {
+  std::string encoded;
+  AppendInternalKey(&encoded, ParsedInternalKey(user_key, seq, vt));
+  return encoded;
 }
     
-                if (mask[0])
-                process(src, j, j + 8, i,
-                        minVal, minLocPtr, minLocCount, minLocCapacity,
-                        maxVal, maxLocPtr, maxLocCount, maxLocCapacity);
-            if (mask[1])
-                process(src, j + 8, j + 16, i,
-                        minVal, minLocPtr, minLocCount, minLocCapacity,
-                        maxVal, maxLocPtr, maxLocCount, maxLocCapacity);
+    // If filename is a leveldb file, store the type of the file in *type.
+// The number encoded in the filename is stored in *number.  If the
+// filename was successfully parsed, returns true.  Else return false.
+bool ParseFileName(const std::string& filename,
+                   uint64_t* number,
+                   FileType* type);
+    
+    class FileNameTest { };
+    
+    bool MemTable::Get(const LookupKey& key, std::string* value, Status* s) {
+  Slice memkey = key.memtable_key();
+  Table::Iterator iter(&table_);
+  iter.Seek(memkey.data());
+  if (iter.Valid()) {
+    // entry format is:
+    //    klength  varint32
+    //    userkey  char[klength]
+    //    tag      uint64
+    //    vlength  varint32
+    //    value    char[vlength]
+    // Check that it belongs to same user key.  We do not check the
+    // sequence number since the Seek() call above should have skipped
+    // all entries with overly large sequence numbers.
+    const char* entry = iter.key();
+    uint32_t key_length;
+    const char* key_ptr = GetVarint32Ptr(entry, entry+5, &key_length);
+    if (comparator_.comparator.user_comparator()->Compare(
+            Slice(key_ptr, key_length - 8),
+            key.user_key()) == 0) {
+      // Correct user key
+      const uint64_t tag = DecodeFixed64(key_ptr + key_length - 8);
+      switch (static_cast<ValueType>(tag & 0xff)) {
+        case kTypeValue: {
+          Slice v = GetLengthPrefixedSlice(key_ptr + key_length);
+          value->assign(v.data(), v.size());
+          return true;
         }
-        for ( ; j < roiw8; j += 8)
-        {
-            uint8x8_t v_src = vld1_u8(src + j);
-    
-    
-    {
-    {        for (jd -= 3; j < size.width; ++j, js += 3, jd -= 3)
-        {
-            dst[jd] = src[js];
-            dst[jd + 1] = src[js + 1];
-            dst[jd + 2] = src[js + 2];
-        }
+        case kTypeDeletion:
+          *s = Status::NotFound(Slice());
+          return true;
+      }
     }
-}
-    
-    namespace CAROTENE_NS {
-    }
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    namespace caffe {
-    }
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of DeConvolutionLayer.
- *        Fallback to DeConvolutionLayer for CPU mode.
- *
- * cuDNN accelerates deconvolution through forward kernels for filtering and
- * bias plus backward kernels for the gradient w.r.t. the filters, biases, and
- * inputs. Caffe + cuDNN further speeds up the computation through forward
- * parallelism across groups and backward parallelism across gradients.
-*/
-template <typename Dtype>
-class CuDNNDeconvolutionLayer : public DeconvolutionLayer<Dtype> {
- public:
-  explicit CuDNNDeconvolutionLayer(const LayerParameter& param)
-    : DeconvolutionLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-                          const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-                       const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNDeconvolutionLayer();
-    }
-    
-    #endif  // CAFFE_CUDNN_LCN_LAYER_HPP_
-
-    
-    
-    {} // namespace caffe2
-
-    
-    namespace caffe2 {
-namespace {
-REGISTER_CPU_OPERATOR(
-    FindDuplicateElements,
-    FindDuplicateElementsOp<CPUContext>);
-    }
-    }
-    
-    
-    {  bool RunOnDevice() override;
-};
-    
-    /**
- * Returns true if the iterator is at the start of an object at the given
- * level. Possible uses include determining if a call to Next(RIL_WORD)
- * moved to the start of a RIL_PARA.
- */
-bool PageIterator::IsAtBeginningOf(PageIteratorLevel level) const {
-  if (it_->block() == nullptr) return false;  // Already at the end!
-  if (it_->word() == nullptr) return true;  // In an image block.
-  switch (level) {
-    case RIL_BLOCK:
-      return blob_index_ == 0 && it_->block() != it_->prev_block();
-    case RIL_PARA:
-      return blob_index_ == 0 &&
-          (it_->block() != it_->prev_block() ||
-           it_->row()->row->para() != it_->prev_row()->row->para());
-    case RIL_TEXTLINE:
-      return blob_index_ == 0 && it_->row() != it_->prev_row();
-    case RIL_WORD:
-      return blob_index_ == 0;
-    case RIL_SYMBOL:
-      return true;
   }
   return false;
 }
     
-      // How many alt choices from each should we try to get?
-  const int kAltsPerPiece = 2;
-  // When do we start throwing away extra alt choices?
-  const int kTooManyAltChoices = 100;
     
-    
-    {}  // namespace tesseract.
-    
-      // This and other putatively are the same, so call the (permanent) callback
-  // for each blob index where the bounding boxes match.
-  // The callback is deleted on completion.
-  void ProcessMatchedBlobs(const TWERD& other, TessCallback1<int>* cb) const;
-    
-    using ::opencensus::stats::MeasureDouble;
-using ::opencensus::stats::MeasureInt64;
-    
-    #undef HEADER_ARG
-#undef HEADER_NONE
-    
-    void Config::SetParsedIni(IniSettingMap &ini, const std::string confStr,
-                          const std::string &filename, bool constants_only,
-                          bool is_system) {
-  // if we are setting constants, we must be setting system settings
-  if (constants_only) {
-    assertx(is_system);
-  }
-  auto parsed_ini = IniSetting::FromStringAsMap(confStr, filename);
-  for (ArrayIter iter(parsed_ini.toArray()); iter; ++iter) {
-    // most likely a string, but just make sure that we are dealing
-    // with something that can be converted to a string
-    assertx(iter.first().isScalar());
-    ini.set(iter.first().toString(), iter.second());
-    if (constants_only) {
-      IniSetting::FillInConstant(iter.first().toString().toCppString(),
-                                 iter.second());
-    } else if (is_system) {
-      IniSetting::SetSystem(iter.first().toString().toCppString(),
-                            iter.second());
+    {
+    {    std::string accelerate_checkins_expire_str = '-1';
+    Status status = getDatabaseValue(kPersistentSettings,
+                                     'distributed_accelerate_checkins_expire',
+                                     accelerate_checkins_expire_str);
+    if (!status.ok() || getUnixTime() > tryTo<unsigned long int>(
+                                            accelerate_checkins_expire_str, 10)
+                                            .takeOr(0ul)) {
+      pause(std::chrono::seconds(FLAGS_distributed_interval));
+    } else {
+      pause(std::chrono::seconds(kDistributedAccelerationInterval));
     }
   }
 }
     
     
-    {}
-    
-    void logAHMSubMapWarning(folly::StringPiece mapName) {
-  StackTrace st;
-  logPerfWarning(
-    'AtomicHashMap overflow',
-    [&](StructuredLogEntry& cols) {
-      cols.setStr('map_name', mapName);
-      cols.setStackTrace('stack', st);
-    }
-  );
+    {  // If the splayed interval was not restored from the database.
+  auto splay = splayValue(interval, FLAGS_schedule_splay_percent);
+  content = std::to_string(interval) + ':' + std::to_string(splay);
+  setDatabaseValue(kPersistentSettings, 'interval.' + name, content);
+  return splay;
 }
     
-    #include 'hphp/runtime/base/type-array.h'
-#include 'hphp/runtime/vm/globals-array.h'
+    #include 'Extension.h'
+#include <thrift/protocol/TBinaryProtocol.h>
+#include <thrift/server/TSimpleServer.h>
+#include <thrift/transport/TServerSocket.h>
+#include <thrift/transport/TBufferTransports.h>
+    
+        // eg.
+    // p..p..p..p..p..p..p
+    // 1..2..3..4..5..6..7
+    // want p to be 1, 2, 3, 4, 5, 6
+    if (time == 1)
+    {
+        p = _points->count() - 1;
+        lt = 1;
+    }
+    else 
+    {
+        p = time / _deltaT;
+        lt = (time - _deltaT * (float)p) / _deltaT;
+    }
+    
+    // Interpolate
+    Vec2 pp0 = _points->getControlPointAtIndex(p-1);
+    Vec2 pp1 = _points->getControlPointAtIndex(p+0);
+    Vec2 pp2 = _points->getControlPointAtIndex(p+1);
+    Vec2 pp3 = _points->getControlPointAtIndex(p+2);
+    
+    bool DeccelAmplitude::initWithAction(Action *action, float duration)
+{
+    if (ActionInterval::initWithDuration(duration))
+    {
+        _rate = 1.0f;
+        _other = (ActionInterval*)(action);
+        action->retain();
+    }
+    }
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __ACTION_CCGRID3D_ACTION_H__
+#define __ACTION_CCGRID3D_ACTION_H__
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    SplitCols* SplitCols::create(float duration, unsigned int cols)
+{
+    SplitCols *action = new (std::nothrow) SplitCols();
+    }
+    
+    struct Tile;
+/**
+@brief ShuffleTiles action.
+@details This action make the target node shuffle with many tiles in random order.
+        You can create the action by these parameters:
+        duration, grid size, the random seed.
+*/
+class CC_DLL ShuffleTiles : public TiledGrid3DAction
+{
+public:
+    /** 
+    * @brief Create the action with grid size, random seed and duration.
+    * @param duration Specify the duration of the ShuffleTiles action. It's a value in seconds.
+    * @param gridSize Specify the size of the grid.
+    * @param seed Specify the random seed.
+    * @return If the creation success, return a pointer of ShuffleTiles action; otherwise, return nil.
+    */
+    static ShuffleTiles* create(float duration, const Size& gridSize, unsigned int seed);
+    }
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+        // Overrides
+    void startWithTarget(Node *target) override;
+    void update(float dt) override;
+    ActionTween* reverse() const override;
+    ActionTween *clone() const override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    /** 
+     * @brief Initializes the action with the property name (key), and the from and to parameters.
+     * @param duration The duration of the ActionTween. It's a value in seconds.
+     * @param key The key of property which should be updated.
+     * @param from The value of the specified property when the action begin.
+     * @param to The value of the specified property when the action end.
+     * @return If the initialization success, return true; otherwise, return false.
+     */
+    bool initWithDuration(float duration, const std::string& key, float from, float to);
+    
+    PolygonInfo AutoPolygon::generatePolygon(const std::string& filename, const Rect& rect, float epsilon, float threshold)
+{
+    AutoPolygon ap(filename);
+    return ap.generateTriangles(rect, epsilon, threshold);
+}
