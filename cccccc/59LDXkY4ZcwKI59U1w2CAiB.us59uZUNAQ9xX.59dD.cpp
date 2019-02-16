@@ -1,192 +1,230 @@
 
         
-        #ifndef NDEBUG
-/// Verify that the types of fields are valid within a given generic signature.
-static void verifyFields(CanGenericSignature Sig, ArrayRef<SILField> Fields) {
-  for (auto &field : Fields) {
-    auto ty = field.getLoweredType();
-    // Layouts should never refer to archetypes, since they represent an
-    // abstract generic type layout.
-    assert(!ty->hasArchetype()
-           && 'SILLayout field cannot have an archetype type');
-    assert(!ty->hasTypeVariable()
-           && 'SILLayout cannot contain constraint system type variables');
-    if (!ty->hasTypeParameter())
-      continue;
-    field.getLoweredType().findIf([Sig](Type t) -> bool {
-      if (auto gpt = t->getAs<GenericTypeParamType>()) {
-        // Check that the generic param exists in the generic signature.
-        assert(Sig && 'generic param in nongeneric layout?');
-        assert(std::find(Sig.getGenericParams().begin(),
-                         Sig.getGenericParams().end(),
-                         gpt->getCanonicalType()) != Sig.getGenericParams().end()
-               && 'generic param not declared in generic signature?!');
-      }
-      return false;
-    });
-  }
-}
-#endif
+        #include 'tensorflow/core/framework/op.h'
     
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    {  /// Profile the substitution map storage, for use with LLVM's FoldingSet.
-  static void Profile(llvm::FoldingSetNodeID &id,
-                      GenericSignature *genericSig,
-                      ArrayRef<Type> replacementTypes,
-                      ArrayRef<ProtocolConformanceRef> conformances);
-};
-    
-    bool CacheImpl::remove(const void *Key) {
-  DefaultCache &DCache = *static_cast<DefaultCache*>(Impl);
-  llvm::sys::ScopedLock L(DCache.Mux);
-    }
-    
-    DIRECTIONAL_PREPOSITION(above)
-DIRECTIONAL_PREPOSITION(after)
-DIRECTIONAL_PREPOSITION(along)
-DIRECTIONAL_PREPOSITION(alongside)
-DIRECTIONAL_PREPOSITION(as)
-DIRECTIONAL_PREPOSITION(at)
-DIRECTIONAL_PREPOSITION(before)
-DIRECTIONAL_PREPOSITION(below)
-DIRECTIONAL_PREPOSITION(by)
-DIRECTIONAL_PREPOSITION(following)
-DIRECTIONAL_PREPOSITION(for)
-DIRECTIONAL_PREPOSITION(from)
-DIRECTIONAL_PREPOSITION(given)
-DIRECTIONAL_PREPOSITION(in)
-DIRECTIONAL_PREPOSITION(including)
-DIRECTIONAL_PREPOSITION(inside)
-DIRECTIONAL_PREPOSITION(into)
-DIRECTIONAL_PREPOSITION(matching)
-DIRECTIONAL_PREPOSITION(of)
-DIRECTIONAL_PREPOSITION(on)
-DIRECTIONAL_PREPOSITION(passing)
-DIRECTIONAL_PREPOSITION(preceding)
-DIRECTIONAL_PREPOSITION(since)
-DIRECTIONAL_PREPOSITION(to)
-DIRECTIONAL_PREPOSITION(until)
-DIRECTIONAL_PREPOSITION(using)
-DIRECTIONAL_PREPOSITION(via)
-DIRECTIONAL_PREPOSITION(when)
-PREPOSITION(with)
-DIRECTIONAL_PREPOSITION(within)
-    
-      // Scan forward until we find the word as a complete word.
-  size_t startingIndex = 0;
-  while (true) {
-    size_t index = string.find(word, startingIndex);
-    if (index == StringRef::npos)
-      return StringRef::npos;
-    }
-    
-    break_table = GraphemeClusterBreakPropertyTable(unicodeGraphemeBreakPropertyFile)
-    
-      bool isGetter() const {
-    return accessorKind == IAMAccessorKind::Getter;
-  }
-    
-    void add(const Size2D &size,
-         const u8 * src0Base, ptrdiff_t src0Stride,
-         const u8 * src1Base, ptrdiff_t src1Stride,
-         u8 *dstBase, ptrdiff_t dstStride,
-         CONVERT_POLICY policy)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    if (policy == CONVERT_POLICY_SATURATE)
-    {
-        internal::vtransform(size,
-                             src0Base, src0Stride,
-                             src1Base, src1Stride,
-                             dstBase, dstStride,
-                             AddSaturate<u8, u16>());
-    }
-    else
-    {
-        internal::vtransform(size,
-                             src0Base, src0Stride,
-                             src1Base, src1Stride,
-                             dstBase, dstStride,
-                             AddWrap<u8, u16>());
-    }
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)policy;
-#endif
-}
-    
-    
-    {                currx = (srow2 ? srow2[x3] : borderValue) + srow1[x3] + (srow0 ? srow0[x3] : borderValue);
-            }
-    
-    #define CVT_FUNC(T1, T2, SIMD_SIZE, CVTINIT, CVTROW)                            \
-    void convert(const Size2D &,                                                \
-                 const T1 *, ptrdiff_t,                                         \
-                 T2 *, ptrdiff_t)                                               \
-    {                                                                           \
-        internal::assertSupportedConfiguration();                               \
-    }
-    
-                for( ; i <= lim; i += 4 )
-            {
-                internal::prefetch(src0 + i);
-                internal::prefetch(src1 + i);
-                v_sum = vmlaq_f32(v_sum, vld1q_f32(src0 + i), vld1q_f32(src1 + i));
-            }
-    
-    inline void vnst(u8* dst, uint8x16_t v1, uint8x16_t v2) { vst1q_u8(dst, v1); vst1q_u8(dst+16, v2); }
-inline void vnst(u8* dst, uint16x8_t v1, uint16x8_t v2) { vst1q_u8(dst, vcombine_u8(vmovn_u16(v1), vmovn_u16(v2))); }
-inline void vnst(u8* dst, uint32x4_t v1, uint32x4_t v2) { vst1_u8(dst, vmovn_u16(vcombine_u16(vmovn_u32(v1), vmovn_u32(v2)))); }
-    
-    TEST(StaticTracepoint, TestArray) {
-  arrayTestFunc();
-    }
-    
-    namespace folly {
-    }
-    
-    #include <string>
-    
-    /**
- * Reads sizeof(T) bytes, and returns false if not enough bytes are available.
- * Returns true if the first n bytes are equal to prefix when interpreted as
- * a little endian T.
- */
-template <typename T>
-typename std::enable_if<std::is_unsigned<T>::value, bool>::type
-dataStartsWithLE(const IOBuf* data, T prefix, uint64_t n = sizeof(T)) {
-  DCHECK_GT(n, 0);
-  DCHECK_LE(n, sizeof(T));
-  T value;
-  Cursor cursor{data};
-  if (!cursor.tryReadLE(value)) {
+      // Support dtype(bfloat16)
+  if (PyDict_SetItemString(PyBfloat16_Type.tp_dict, 'dtype',
+                           reinterpret_cast<PyObject*>(&NPyBfloat16_Descr)) <
+      0) {
     return false;
   }
-  const T mask = n == sizeof(T) ? T(-1) : (T(1) << (8 * n)) - 1;
-  return prefix == (value & mask);
+    
+    
+    {}  // namespace tensorflow
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    #include <Python.h>
+    
+    
+    {  VLOG(2) << 'building executor';
+  port::StatusOr<std::unique_ptr<StreamExecutor>> result = factory();
+  if (!result.ok()) {
+    VLOG(2) << 'failed to get build executor: ' << result.status();
+    // If construction failed, leave the cache Entry around, but with a null
+    // executor.
+    return result.status();
+  }
+  entry->configurations.emplace_back(config, std::move(result.ValueOrDie()));
+  return entry->configurations.back().second.get();
 }
     
-    /**
- * This class creates core-local caches for a given shared_ptr, to
- * mitigate contention when acquiring/releasing it.
- *
- * It has the same thread-safety guarantees as shared_ptr: it is safe
- * to concurrently call get(), but reset()s must be synchronized with
- * reads and other resets().
- *
- * @author Giuseppe Ottaviano <ott@fb.com>
- */
-template <class T, size_t kNumSlots = 64>
-class CoreCachedSharedPtr {
- public:
-  explicit CoreCachedSharedPtr(const std::shared_ptr<T>& p = nullptr) {
-    reset(p);
-  }
+    
+    {}  // namespace api
+    
+      gfx::Point GetCursorScreenPoint();
+  display::Display GetPrimaryDisplay();
+  std::vector<display::Display> GetAllDisplays();
+  display::Display GetDisplayNearestPoint(const gfx::Point& point);
+  display::Display GetDisplayMatching(const gfx::Rect& match_rect);
+    
+    #include <memory>
+#include <string>
+#include <vector>
+    
+    #include 'content/public/browser/web_contents_observer.h'
+#include 'native_mate/handle.h'
+#include 'native_mate/wrappable.h'
+    
+    #ifndef ATOM_BROWSER_API_TRACKABLE_OBJECT_H_
+#define ATOM_BROWSER_API_TRACKABLE_OBJECT_H_
+    
+      // net::URLRequestJobFactory::ProtocolHandler:
+  net::URLRequestJob* MaybeCreateJob(
+      net::URLRequest* request,
+      net::NetworkDelegate* network_delegate) const override;
+  bool IsSafeRedirectTarget(const GURL& location) const override;
+    
+    #include 'base/memory/ref_counted.h'
+#include 'net/url_request/url_request_job_factory.h'
+    
+    
+    {private Q_SLOTS:
+    /* sign message */
+    void on_addressBookButton_SM_clicked();
+    void on_pasteButton_SM_clicked();
+    void on_signMessageButton_SM_clicked();
+    void on_copySignatureButton_SM_clicked();
+    void on_clearButton_SM_clicked();
+    /* verify message */
+    void on_addressBookButton_VM_clicked();
+    void on_verifyMessageButton_VM_clicked();
+    void on_clearButton_VM_clicked();
+};
+    
+    namespace
+{
+static bool ParsePrechecks(const std::string& str)
+{
+    if (str.empty()) // No empty string allowed
+        return false;
+    if (str.size() >= 1 && (json_isspace(str[0]) || json_isspace(str[str.size()-1]))) // No padding allowed
+        return false;
+    if (str.size() != strlen(str.c_str())) // No embedded NUL characters allowed
+        return false;
+    return true;
+}
     }
+    
+    #endif // BITCOIN_CRYPTO_RIPEMD160_H
+
+    
+    #if defined(COMPONENT_BUILD) && defined(WIN32)
+#define NW_HOOK_MAP(type, sym, fn) BASE_EXPORT type fn;
+#else
+#define NW_HOOK_MAP(type, sym, fn) extern type fn;
+#endif
+#include 'content/nw/src/common/node_hooks.h'
+#undef NW_HOOK_MAP
+    
+    namespace remote {
+    }
+    
+    
+#ifndef CONTENT_NW_SRC_API_EVENT_EVENT_H_
+#define CONTENT_NW_SRC_API_EVENT_EVENT_H_
+    
+    #include 'base/files/file_path.h'
+#include 'base/strings/string_util.h'
+#include 'base/strings/utf_string_conversions.h'
+#include 'base/threading/thread_restrictions.h'
+#include 'base/values.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menu/menu.h'
+#include 'content/nw/src/nw_base.h'
+#include 'content/nw/src/nw_content.h'
+#include 'content/nw/src/nw_package.h'
+#include 'ui/base/accelerators/accelerator.h'
+#include 'ui/gfx/image/image_skia_operations.h'
+#include 'ui/events/event_constants.h'//for modifier key code
+#include 'base/logging.h'
+    
+    bool NwAppClearCacheFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  content::BrowsingDataRemover* remover = content::BrowserContext::GetBrowsingDataRemover(
+      Profile::FromBrowserContext(context_));
+    }
+    
+     protected:
+  ~NwAppGetArgvSyncFunction() override;
+    
+    #ifndef B2_POLYGON_H
+#define B2_POLYGON_H
+    
+    			return fDRed*fDRed + fDGreen*fDGreen + fDBlue*fDBlue + fDAlpha*fDAlpha;
+		}
+		else if (m_errormetric == ErrorMetric::REC709)
+		{
+			assert(a_fDecodedAlpha >= 0.0f);
+    
+    #define UNIT_QUANT_SHIFT 2
+#define UNIT_QUANT_FACTOR (1 << UNIT_QUANT_SHIFT)
+    
+    void PolyNode::AddChild(PolyNode& child)
+{
+  unsigned cnt = (unsigned)Childs.size();
+  Childs.push_back(&child);
+  child.Parent = this;
+  child.Index = cnt;
+}
+//------------------------------------------------------------------------------
+    
+    /** 16x32 multiply, followed by a 16-bit shift right and 32-bit add.
+    Result fits in 32 bits. */
+#undef MAC16_32_Q16
+#define MAC16_32_Q16(c, a, b) ADD32(c, MULT16_32_Q16(a, b))
+    
+       - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+    
+    /********************************************************************/
+/*                        INLINE ARM MATH                           */
+/********************************************************************/
+    
+    namespace mxnet {
+    }
+    
+        caffe::TBlob2CaffeBlob<xpu, Dtype>(caffe::Data,
+                                       bot_.begin(),
+                                       in_data.begin(),
+                                       param_.num_data);
+    caffe::TBlob2CaffeBlob<xpu, Dtype>(caffe::Data,
+                                       top_.begin(),
+                                       out_data.begin(),
+                                       param_.num_out);
+    CaffeOpSetup();
+    // Init caffe's weight pointer
+    if (!init_w_) {
+      init_w_ = true;
+      caffe::TBlob2CaffeBlob<xpu, Dtype>(caffe::Data,
+                                         wei_.begin(),
+                                         in_data.begin() + param_.num_data,
+                                         param_.num_weight);
+      caffe::SetOpBlobs(caffeOp_, wei_);
+    }
+    if (ctx.is_train)
+      MXCAFFELAYER(caffeOp_, Dtype)->SetPhase(::caffe::TRAIN);
+    else
+      MXCAFFELAYER(caffeOp_, Dtype)->SetPhase(::caffe::TEST);
+    caffeOp_->Forward(bot_, top_);
+    
+    
+    {  Engine::Get()->PushSync([=](RunContext ctx){
+      ndout.CheckAndAlloc();
+      cv::Mat buf(h, w, c == 3 ? CV_8UC3 : CV_8U, ndsrc.data().dptr_);
+      cv::Mat dst(top+h+bot, left+w+right, c == 3 ? CV_8UC3 : CV_8U, ndout.data().dptr_);
+      cv::copyMakeBorder(buf, dst, top, bot, left, right, type, cv::Scalar(value));
+      CHECK(!dst.empty());
+    }, ndout.ctx(), {ndsrc.var()}, {ndout.var()});
+  NDArray *tmp = new NDArray();
+  *tmp = ndout;
+  *out = tmp;
+  API_END();
+}
+
+    
+      inline TBlob AsIdxBlob(const dmlc::Row<uint64_t>& row) {
+    const uint64_t* ptr = row.index;
+    TShape shape(mshadow::Shape1(row.length));
+    return TBlob((int64_t*) ptr, shape, cpu::kDevMask, mshadow::kInt64);  // NOLINT(*)
+  }
+    
+    
+    {
+    {
+    { private:
+  /*! \brief output data */
+  DataBatch *out_;
+  /*! \brief queue to be recycled */
+  std::queue<DataBatch*> recycle_queue_;
+};
+}  // namespace io
+}  // namespace mxnet
+#endif  // MXNET_IO_ITER_PREFETCHER_H_
