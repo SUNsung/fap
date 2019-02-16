@@ -1,122 +1,129 @@
 
         
-          # GET /resource/sign_in
-  def new
-    self.resource = resource_class.new(sign_in_params)
-    clean_up_passwords(resource)
-    yield resource if block_given?
-    respond_with(resource, serialize_options(resource))
-  end
+                  add_default_name_and_id_for_value(tag_value, name_and_id)
+          options.delete('index')
+          options.delete('namespace')
+          options['for'] = name_and_id['id'] unless options.key?('for')
     
-    begin
-  require 'bundler/inline'
-rescue LoadError => e
-  $stderr.puts 'Bundler version 1.10 or later is required. Please update your Bundler'
-  raise e
-end
-    
-          def remember_me_is_active?(resource)
-        return false unless resource.respond_to?(:remember_me)
-        scope = Devise::Mapping.find_scope!(resource)
-        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
-        resource.remember_me?(token, generated_at)
-      end
-    
-          # Sign out all active users or scopes. This helper is useful for signing out all roles
-      # in one click. This signs out ALL scopes in warden. Returns true if there was at least one logout
-      # and false if there was no user logged in on all scopes.
-      def sign_out_all_scopes(lock=true)
-        users = Devise.mappings.keys.map { |s| warden.user(scope: s, run_callbacks: false) }
-    
-    # Each time a record is set we check whether its session has already timed out
-# or not, based on last request time. If so, the record is logged out and
-# redirected to the sign in page. Also, each time the request comes and the
-# record is set, we set the last request time inside its scoped session to
-# verify timeout in the following request.
-Warden::Manager.after_set_user do |record, warden, options|
-  scope = options[:scope]
-  env   = warden.request.env
-    
-      #
-  # Gets cookies from the Set-Cookie header in a parsed format
-  #
-  def get_cookies_parsed
-    if (self.headers.include?('Set-Cookie'))
-      ret = CGI::Cookie::parse(self.headers['Set-Cookie'])
-    else
-      ret = {}
+          []
     end
-    ret
-  end
     
-      def hangup
-    self.client.send_hangup(self)
-    self.state = :hangup
-    true
-  end
+      context 'as an admin' do
+    before :each do
+      login_as(users(:jane))
+    end
     
-              # Decodes the etype from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_etype(input)
-            input.value[0].value.to_i
+    describe JobsHelper do
+  let(:job) { Delayed::Job.new }
+    
+      describe '#scenario_label' do
+    it 'creates a scenario label with the scenario name' do
+      expect(scenario_label(scenario)).to eq(
+        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Scene</span>'
+      )
+    end
+    
+      describe '#filename' do
+    it 'strips special characters' do
+      expect(AgentsExporter.new(:name => 'ƏfooƐƕƺbar').filename).to eq('foo-bar.json')
+    end
+    
+        stub_request(:get, /trackings/).to_return(
+      :body => File.read(Rails.root.join('spec/data_fixtures/aftership.json')),
+      :status => 200,
+      :headers => {'Content-Type' => 'text/json'}
+    )
+    
+        DOCUMENT_RGX = /\A(?:\s|(?:<!--.*?-->))*<(?:\!doctype|html)/i
+    
+        self.params = {}
+    self.headers = { 'User-Agent' => 'DevDocs' }
+    self.force_gzip = false
+    
+    module Docs
+  class Subscriber < ActiveSupport::Subscriber
+    cattr_accessor :namespace
+    
+              if node['class'] && node['class'].include?('api-heading')
+            node.name = 'h3'
+            node.inner_html = '<code>#{node.inner_html}</code>'
           end
     
-              # Decodes the value from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [String]
-          def decode_value(input)
-            input.value[0].value
+            css('ul.methods', 'ul.properties', 'ul.events').add_class('defs').each do |node|
+          node.css('> li > h3').each do |h3|
+            next if h3.content.present?
+            h3.content = h3.next_element.content
+            h3.next_element.remove
           end
-    
-              # Decodes a Rex::Proto::Kerberos::Model::LastReque from an String
-          #
-          # @param input [String] the input to decode from
-          def decode_string(input)
-            asn1 = OpenSSL::ASN1.decode(input)
-    
-          def header_content
-        has_header && @header.formatted_data
+        end
       end
+    end
+  end
+end
+
     
-      test 'transliteration' do
-    # we transliterate only when adapter is grit
-    return if defined?(Gollum::GIT_ADAPTER) && Gollum::GIT_ADAPTER != 'grit'
+            css('.toplang', '#quickview', '.top').remove
     
-    # --gollum-path wins over ARGV[0]
-gollum_path = ARGV[0] || Dir.pwd
-    
-      it 'ignores implicit hashes' do
-    expect_no_offenses(<<-RUBY.strip_indent)
-      foo(a: 1,
-      b: 2)
-    RUBY
+    # create and write to opml file
+xml = Builder::XmlMarkup.new(indent: 2)
+xml.instruct! :xml, version: '1.0', encoding: 'UTF-8'
+xml.tag!('opml', version: '1.0') do
+  # head
+  xml.tag!('head') do
+    xml.title TITLE
   end
     
-      context 'when arguments to a method' do
-    let(:prefix) { 'bar(' }
-    let(:suffix) { ')' }
-    let(:source) { construct(false, true) }
+    module NavigationHelpers
+  def path_to(page_name)
+    case page_name
+    when /^person_photos page$/
+      person_photos_path(@me.person)
+    when /^the home(?: )?page$/
+      stream_path
+    when /^the mobile path$/
+      force_mobile_path
+    when /^the user applications page$/
+      api_openid_connect_user_applications_path
+    when /^the tag page for '([^\']*)'$/
+      tag_path(Regexp.last_match(1))
+    when /^its ([\w ]+) page$/
+      send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', @it)
+    when /^the mobile ([\w ]+) page$/
+      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', format: 'mobile')
+    when /^the ([\w ]+) page$/
+      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path')
+    when /^my edit profile page$/
+      edit_profile_path
+    when /^my profile page$/
+      person_path(@me.person)
+    when /^my acceptance form page$/
+      invite_code_path(InvitationCode.first)
+    when /^the requestors profile$/
+      person_path(Request.where(recipient_id: @me.person.id).first.sender)
+    when /^'([^\']*)''s page$/
+      p = User.find_by_email(Regexp.last_match(1)).person
+      {path:         person_path(p),
+       # '#diaspora_handle' on desktop, '.description' on mobile
+       special_elem: {selector: '#diaspora_handle, .description', text: p.diaspora_handle}
+      }
+    when /^'([^\']*)''s photos page$/
+      p = User.find_by_email(Regexp.last_match(1)).person
+      person_photos_path p
+    when /^my account settings page$/
+      edit_user_path
+    when /^forgot password page$/
+      new_user_password_path
+    when %r{^'(/.*)'}
+      Regexp.last_match(1)
+    else
+      raise 'Can't find mapping from \'#{page_name}\' to a path.'
+    end
+  end
     
-    module RuboCop
-  module AST
-    # A node extension for `kwsplat` nodes. This will be used in place of a
-    # plain  node when the builder constructs the AST, making its methods
-    # available to all `kwsplat` nodes within RuboCop.
-    class KeywordSplatNode < Node
-      include HashElementNode
-    
-    module RuboCop
-  module AST
-    # A node extension for `when` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `when` nodes within RuboCop.
-    class WhenNode < Node
-      # Returns an array of all the conditions in the `when` branch.
-      #
-      # @return [Array<Node>] an array of condition nodes
-      def conditions
-        node_parts[0...-1]
-      end
+        it 'generates a jasmine fixture', fixture: true do
+      session[:mobile_view] = true
+      get :new, format: :mobile
+      save_fixture(html_for('body'), 'conversations_new_mobile')
+    end
+  end
+end
