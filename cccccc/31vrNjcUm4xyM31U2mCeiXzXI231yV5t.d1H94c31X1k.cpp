@@ -1,136 +1,88 @@
- protected:
-  explicit AutoUpdater(v8::Isolate* isolate);
-  ~AutoUpdater() override;
-    
-    namespace atom {
-    }
-    
-    #ifndef ATOM_BROWSER_API_ATOM_API_NET_H_
-#define ATOM_BROWSER_API_ATOM_API_NET_H_
-    
-    namespace atom {
-    }
-    
-    #include 'atom/browser/render_process_preferences.h'
-#include 'native_mate/handle.h'
-#include 'native_mate/wrappable.h'
-    
-      static void BuildPrototype(v8::Isolate* isolate,
-                             v8::Local<v8::FunctionTemplate> prototype);
-    
-    class AtomBrowserContext;
-    
-     protected:
-  TrackableObject() { weak_map_id_ = ++next_id_; }
-    
-    Delegate* AutoUpdater::delegate_ = nullptr;
-    
-    #ifndef ATOM_BROWSER_MAC_IN_APP_PURCHASE_PRODUCT_H_
-#define ATOM_BROWSER_MAC_IN_APP_PURCHASE_PRODUCT_H_
-    
-    namespace google {
-namespace protobuf {
-namespace python {
-    }
-    }
-    }
-    
-    io::ZeroCopyOutputStream*
-GeneratorContext::OpenForAppend(const string& filename) {
-  return NULL;
-}
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/stubs/strutil.h>
-    
-    #include <google/protobuf/compiler/command_line_interface.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/io/printer.h>
-    
-      // Nested enums
-  if (descriptor->enum_type_count() > 0) {
-      std::vector<std::string> enums;
-      for (int i = 0; i < descriptor->enum_type_count(); i++) {
-          enums.push_back(GetClassName(descriptor->enum_type(i)));
-      }
-      printer->Print('new[]{ typeof($enums$) }, ', 'enums', JoinStrings(enums, '), typeof('));
-  }
-  else {
-      printer->Print('null, ');
-  }
-    
-    #include <google/protobuf/compiler/csharp/csharp_source_generator_base.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/compiler/csharp/csharp_names.h>
-#include <google/protobuf/compiler/csharp/csharp_options.h>
-    
-        // If any indirect dependency provided extensions, it needs to be directly
-    // imported so it can get merged into the root's extensions registry.
-    // See the Note by CollectMinimalFileDepsContainingExtensions before
-    // changing this.
-    for (std::vector<const FileDescriptor *>::iterator iter =
-             deps_with_extensions.begin();
-         iter != deps_with_extensions.end(); ++iter) {
-      if (!IsDirectDependency(*iter, file_)) {
-        import_writer.AddFile(*iter, header_extension);
-      }
-    }
-    
-    OneofGenerator::OneofGenerator(const OneofDescriptor* descriptor)
-    : descriptor_(descriptor) {
-  variables_['enum_name'] = OneofEnumName(descriptor_);
-  variables_['name'] = OneofName(descriptor_);
-  variables_['capitalized_name'] = OneofNameCapitalized(descriptor_);
-  variables_['raw_index'] = SimpleItoa(descriptor_->index());
-  const Descriptor* msg_descriptor = descriptor_->containing_type();
-  variables_['owning_message_class'] = ClassName(msg_descriptor);
-    }
-    
-        unittest::TestAllTypes::descriptor()->file()->CopyTo(&unittest_file);
-    unittest_import::ImportMessage::descriptor()->file()->CopyTo(
-      &unittest_import_file);
-    unittest_import::PublicImportMessage::descriptor()->file()->CopyTo(
-      &unittest_import_public_file);
-    proto2_nofieldpresence_unittest::TestAllTypes::descriptor()->
-        file()->CopyTo(&unittest_no_field_presence_file);
-    
-            {
-      'prev /* ignored */ next',
-    }
-    
-        head = Solution().removeNthFromEnd(head, 2);
-    printLinkedList(head);
-    
-    
-    {    return;
-}
-    
-                int new_level_num = 0;
-            vector<int> level;
-            for(int i = 0; i < level_num; i ++){
-                TreeNode* node = q.front();
-                q.pop();
-                level.push_back(node->val);
-    }
-    
-    
-    {    return 0;
-}
 
+        
+        /**
+ * Changelog:
+ * - March 2013, Diederik Huys:    original version
+ * - November 2014, Pieter Wuille: updated to use Peter Dettman's parallel multiplication algorithm
+ * - December 2014, Pieter Wuille: converted from YASM to GCC inline assembly
+ */
     
-    // Classic Non-Recursive algorithm for preorder traversal
-// Time Complexity: O(n), n is the node number in the tree
-// Space Complexity: O(h), h is the height of the tree
-class Solution {
+    BOOST_AUTO_TEST_CASE(bip173_testvectors_valid)
+{
+    static const std::string CASES[] = {
+        'A12UEL5L',
+        'a12uel5l',
+        'an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1tt5tgs',
+        'abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw',
+        '11qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqc8247j',
+        'split1checkupstagehandshakeupstreamerranterredcaperred2y9e3w',
+        '?1ezyfcl',
+    };
+    for (const std::string& str : CASES) {
+        auto ret = bech32::Decode(str);
+        BOOST_CHECK(!ret.first.empty());
+        std::string recode = bech32::Encode(ret.first, ret.second);
+        BOOST_CHECK(!recode.empty());
+        BOOST_CHECK(CaseInsensitiveEqual(str, recode));
+    }
+}
+    
+    #define TINYFORMAT_VARARGS_1 const T1& v1
+#define TINYFORMAT_VARARGS_2 const T1& v1, const T2& v2
+#define TINYFORMAT_VARARGS_3 const T1& v1, const T2& v2, const T3& v3
+#define TINYFORMAT_VARARGS_4 const T1& v1, const T2& v2, const T3& v3, const T4& v4
+#define TINYFORMAT_VARARGS_5 const T1& v1, const T2& v2, const T3& v3, const T4& v4, const T5& v5
+#define TINYFORMAT_VARARGS_6 const T1& v1, const T2& v2, const T3& v3, const T4& v4, const T5& v5, const T6& v6
+#define TINYFORMAT_VARARGS_7 const T1& v1, const T2& v2, const T3& v3, const T4& v4, const T5& v5, const T6& v6, const T7& v7
+#define TINYFORMAT_VARARGS_8 const T1& v1, const T2& v2, const T3& v3, const T4& v4, const T5& v5, const T6& v6, const T7& v7, const T8& v8
+#define TINYFORMAT_VARARGS_9 const T1& v1, const T2& v2, const T3& v3, const T4& v4, const T5& v5, const T6& v6, const T7& v7, const T8& v8, const T9& v9
+#define TINYFORMAT_VARARGS_10 const T1& v1, const T2& v2, const T3& v3, const T4& v4, const T5& v5, const T6& v6, const T7& v7, const T8& v8, const T9& v9, const T10& v10
+#define TINYFORMAT_VARARGS_11 const T1& v1, const T2& v2, const T3& v3, const T4& v4, const T5& v5, const T6& v6, const T7& v7, const T8& v8, const T9& v9, const T10& v10, const T11& v11
+#define TINYFORMAT_VARARGS_12 const T1& v1, const T2& v2, const T3& v3, const T4& v4, const T5& v5, const T6& v6, const T7& v7, const T8& v8, const T9& v9, const T10& v10, const T11& v11, const T12& v12
+#define TINYFORMAT_VARARGS_13 const T1& v1, const T2& v2, const T3& v3, const T4& v4, const T5& v5, const T6& v6, const T7& v7, const T8& v8, const T9& v9, const T10& v10, const T11& v11, const T12& v12, const T13& v13
+#define TINYFORMAT_VARARGS_14 const T1& v1, const T2& v2, const T3& v3, const T4& v4, const T5& v5, const T6& v6, const T7& v7, const T8& v8, const T9& v9, const T10& v10, const T11& v11, const T12& v12, const T13& v13, const T14& v14
+#define TINYFORMAT_VARARGS_15 const T1& v1, const T2& v2, const T3& v3, const T4& v4, const T5& v5, const T6& v6, const T7& v7, const T8& v8, const T9& v9, const T10& v10, const T11& v11, const T12& v12, const T13& v13, const T14& v14, const T15& v15
+#define TINYFORMAT_VARARGS_16 const T1& v1, const T2& v2, const T3& v3, const T4& v4, const T5& v5, const T6& v6, const T7& v7, const T8& v8, const T9& v9, const T10& v10, const T11& v11, const T12& v12, const T13& v13, const T14& v14, const T15& v15, const T16& v16
+    
+    void ChaCha20::SetKey(const unsigned char* k, size_t keylen)
+{
+    const unsigned char *constants;
     }
     
-    #include <iostream>
-#include <vector>
-#include <stack>
-#include <cassert>
+      // C'tor.  TestPartResult does NOT have a default constructor.
+  // Always use this constructor (with parameters) to create a
+  // TestPartResult object.
+  TestPartResult(Type a_type,
+                 const char* a_file_name,
+                 int a_line_number,
+                 const char* a_message)
+      : type_(a_type),
+        file_name_(a_file_name == NULL ? '' : a_file_name),
+        line_number_(a_line_number),
+        summary_(ExtractSummary(a_message)),
+        message_(a_message) {
+  }
+    
+    template <GTEST_10_TYPENAMES_(T)>
+struct TupleElement<true, 8, GTEST_10_TUPLE_(T) > {
+  typedef T8 type;
+};
+    
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
+    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
+    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
+    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
+    GTEST_TEMPLATE_ T16>
+struct Templates16 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates15<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
+      T15, T16> Tail;
+};
+    
+    #include <algorithm>
+    
+    
+    {  // n has no integer factor in the range (1, n), and thus is prime.
+  return true;
+}
