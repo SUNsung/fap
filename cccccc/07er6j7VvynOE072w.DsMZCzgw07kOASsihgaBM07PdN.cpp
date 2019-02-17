@@ -1,169 +1,256 @@
 
         
-        #include <QComboBox>
-#include <QVariant>
+        
+    {} // namespace caffe2
+
     
+    REGISTER_CPU_OPERATOR(EnforceFinite, EnforceFiniteOp<CPUContext>);
     
-    {private Q_SLOTS:
-    /* sign message */
-    void on_addressBookButton_SM_clicked();
-    void on_pasteButton_SM_clicked();
-    void on_signMessageButton_SM_clicked();
-    void on_copySignatureButton_SM_clicked();
-    void on_clearButton_SM_clicked();
-    /* verify message */
-    void on_addressBookButton_VM_clicked();
-    void on_verifyMessageButton_VM_clicked();
-    void on_clearButton_VM_clicked();
-};
-    
-    SECP256K1_INLINE static void secp256k1_fe_sqr_inner(uint64_t *r, const uint64_t *a) {
-/**
- * Registers: rdx:rax = multiplication accumulator
- *            r9:r8   = c
- *            rcx:rbx = d
- *            r10-r14 = a0-a4
- *            r15     = M (0xfffffffffffff)
- *            rdi     = r
- *            rsi     = a / t?
- */
-  uint64_t tmp1, tmp2, tmp3;
-__asm__ __volatile__(
-    'movq 0(%%rsi),%%r10\n'
-    'movq 8(%%rsi),%%r11\n'
-    'movq 16(%%rsi),%%r12\n'
-    'movq 24(%%rsi),%%r13\n'
-    'movq 32(%%rsi),%%r14\n'
-    'movq $0xfffffffffffff,%%r15\n'
-    }
-    
-        secp256k1_pubkey_load(ctx, &pt, point);
-    secp256k1_scalar_set_b32(&s, scalar, &overflow);
-    if (overflow || secp256k1_scalar_is_zero(&s)) {
-        ret = 0;
-    } else {
-        unsigned char x[32];
-        unsigned char y[1];
-        secp256k1_sha256_t sha;
-    }
-    
-    namespace caffe {
-    }
-    
-    #define REGISTER_LAYER_CLASS(type)                                             \
-  template <typename Dtype>                                                    \
-  shared_ptr<Layer<Dtype> > Creator_##type##Layer(const LayerParameter& param) \
-  {                                                                            \
-    return shared_ptr<Layer<Dtype> >(new type##Layer<Dtype>(param));           \
-  }                                                                            \
-  REGISTER_LAYER_CREATOR(type, Creator_##type##Layer)
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    
-    { private:
-  struct pair_sort_first {
-    bool operator()(const std::pair<int, int> &left,
-                    const std::pair<int, int> &right) {
-      return left.first < right.first;
-    }
-  };
-  void check_batch_reindex(int initial_num, int final_num,
-                           const Dtype* ridx_data);
-};
-    
-    #include 'caffe/layers/lrn_layer.hpp'
-#include 'caffe/layers/power_layer.hpp'
-    
-    #include 'caffe/layers/softmax_layer.hpp'
-    
-    #include 'modules/common/time/time.h'
-#include 'modules/drivers/canbus/common/byte.h'
-#include 'modules/drivers/canbus/common/canbus_consts.h'
-#include 'modules/drivers/radar/conti_radar/protocol/const_vars.h'
-    
-    
-    {  int ret = x;
-  return ret;
-}
-    
-    namespace apollo {
-namespace drivers {
-namespace conti_radar {
-    }
-    }
-    }
-    
-      Byte t1(bytes + 4);
-  int32_t t = t1.get_byte(7, 1);
-    
-    
-    {  int ret = x * 2;
-  return ret;
-}
-    
-    namespace apollo {
-namespace hdmap {
-DEFINE_string(test_map_file,
-              'modules/map/data/sunnyvale_loop/base_map_test.bin',
-              'The test map file');
-DEFINE_string(
-    test_routing_file,
-    'modules/map/pnc_map/testdata/sample_sunnyvale_loop_routing.pb.txt',
-    'The test map file');
-    }
-    }
-    
-    DiscretizedTrajectory BackupTrajectoryGenerator::GenerateTrajectory(
-    const std::vector<PathPoint>& discretized_ref_points) {
-  while (trajectory_pair_pqueue_.size() > 1) {
-    auto top_pair = trajectory_pair_pqueue_.top();
-    trajectory_pair_pqueue_.pop();
-    DiscretizedTrajectory trajectory = TrajectoryCombiner::Combine(
-        discretized_ref_points, *top_pair.first, *top_pair.second,
-        init_relative_time_);
-    if (!ptr_collision_checker_->InCollision(trajectory)) {
-      return trajectory;
-    }
+    class GetIm2ColGradient : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+  vector<OperatorDef> GetGradientDefs() override {
+    return SingleGradientDef(
+        'Col2Im',
+        '',
+        std::vector<string>{GO(0), I(0)},
+        std::vector<string>{GI(0)});
   }
-  auto top_pair = trajectory_pair_pqueue_.top();
-  return TrajectoryCombiner::Combine(
-      discretized_ref_points, *top_pair.first, *top_pair.second,
-      init_relative_time_);
-}
+};
+REGISTER_GRADIENT(Im2Col, GetIm2ColGradient);
     
-    TEST(TestPiecewiseLinearKernel, add_third_order_derivative_matrix) {
-  PiecewiseLinearKernel kernel(10, 0.1);
-  const double init_derivative = 5.0;
-  const double init_second_derivative = 2.0;
+    /*! \brief Cuda runtime compile module. */
+class CudaModule {
+ private:
+  /*! \brief Structure for holding internal info. */
+  struct Chunk {
+    /*!
+     * \brief Constructs cuda module.
+     * \param source cuda source code.
+     * \param exports export symbols before mangling.
+     */
+    Chunk(const char* source,
+          const std::vector<std::string>& options,
+          const std::vector<std::string>& exports);
+    /*! \brief deconstrutor */
+    ~Chunk();
+    /*!
+     * \brief Get handle to cuda kernel from loaded module
+     * \param mangled_name mangled kernel name
+     * \param ctx context to run kernel on
+     * \return loaded function handle
+     */
+    CUfunction GetFunction(const std::string& mangled_name, const Context& ctx);
+    /*! \brief nvrtc program handle. */
+    nvrtcProgram prog_;
+    /*! \brief compiled cuda PTX */
+    char* ptx_;
+    /*! \brief lazily loaded cuda module */
+    std::unordered_map<int, CUmodule> mod_;
+    /*! \brief exported names */
+    std::unordered_set<std::string> exports_;
+  };
+  /*! \brief pointer to Chunk */
+  std::shared_ptr<Chunk> ptr_;
     }
     
-    Spline1dSeg::Spline1dSeg(const std::vector<double>& params) {
-  SetSplineFunc(PolynomialXd(params));
+    
+    {  DMLC_DECLARE_PARAMETER(CaffeLossParam) {
+    DMLC_DECLARE_FIELD(prototxt).set_default('layer{}')
+    .describe('Caffe's layer parameter');
+    DMLC_DECLARE_FIELD(num_data).set_range(0, 100).set_default(2)
+    .describe('Operator input number');
+    DMLC_DECLARE_FIELD(num_out).set_range(0, 100).set_default(1)
+    .describe('Operator output number');
+    DMLC_DECLARE_FIELD(grad_scale)
+    .set_default(1.0f)
+    .describe('Scale the gradient by a float factor (a.k.a weight of this loss).');
+  }
+};
+    
+    namespace mxnet {
+namespace op {
+template<>
+Operator *CreateOp<cpu>(CaffeLossParam param, int dtype) {
+  Operator *op = NULL;
+  switch (dtype) {
+  case mshadow::kFloat32:
+    op = new CaffeLoss<cpu, float>(param);
+    break;
+  case mshadow::kFloat64:
+    op = new CaffeLoss<cpu, double>(param);
+    break;
+  case mshadow::kFloat16:
+    LOG(FATAL) << 'float16 layer is not supported by caffe';
+    break;
+  default:
+    LOG(FATAL) << 'Unsupported type ' << dtype;
+  }
+  return op;
+}
+    }
+    }
+    
+    template<>
+Operator* CreateOp<cpu>(CaffeOpParam param, int dtype) {
+  Operator *op = NULL;
+  switch (dtype) {
+  case mshadow::kFloat32:
+    op = new CaffeOp<cpu, float>(param);
+    break;
+  case mshadow::kFloat64:
+    op = new CaffeOp<cpu, double>(param);
+    break;
+  case mshadow::kFloat16:
+    LOG(FATAL) << 'float16 layer is not supported by caffe';
+    break;
+  default:
+    LOG(FATAL) << 'Unsupported type ' << dtype;
+  }
+  return op;
 }
     
-      const LaneGraph &lane_graph =
-      ObstacleClusters::GetLaneGraph(start_s, length, lane);
-  EXPECT_EQ(1, lane_graph.lane_sequence_size());
-  EXPECT_EQ(3, lane_graph.lane_sequence(0).lane_segment_size());
-  EXPECT_EQ('l9', lane_graph.lane_sequence(0).lane_segment(0).lane_id());
-  EXPECT_EQ('l18', lane_graph.lane_sequence(0).lane_segment(1).lane_id());
-  EXPECT_EQ('l21', lane_graph.lane_sequence(0).lane_segment(2).lane_id());
+    namespace mxnet {
+namespace io {
+/*!
+ * \brief OpenCV based Image augmenter,
+ *  The augmenter can contain internal temp state.
+ */
+class ImageAugmenter {
+ public:
+  /*!
+   *  \brief Initialize the Operator by setting the parameters
+   *  This function need to be called before all other functions.
+   *  \param kwargs the keyword arguments parameters
+   */
+  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) = 0;
+  /*!
+   * \brief augment src image.
+   *   this function is not thread safe, and will only be called by one thread
+   *   however, it will tries to re-use memory space as much as possible
+   * \param src the source image
+   * \param prnd pointer to random number generator.
+   * \return The processed image.
+   */
+  virtual cv::Mat Process(const cv::Mat &src, std::vector<float> *label,
+                          common::RANDOM_ENGINE *prnd) = 0;
+  // virtual destructor
+  virtual ~ImageAugmenter() {}
+  /*!
+   * \brief factory function
+   * \param name Name of the augmenter
+   * \return The created augmenter.
+   */
+  static ImageAugmenter* Create(const std::string& name);
+};
+    }
+    }
     
-    const TopoNode* NodeWithRange::GetTopoNode() const { return topo_node_; }
+    When `label_libsvm` is set to the path to another LibSVM file,
+data is read from `data_libsvm` and label from `label_libsvm`.
+In this case, both data and label are stored in the csr format.
+If the label column in the `data_libsvm` file is ignored.
     
-    TEST_F(GemMessageManagerTest, GetSendProtocols) {
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Accelcmd67::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakecmd6b::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Globalcmd69::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Headlightcmd76::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Horncmd78::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Shiftcmd65::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringcmd6d::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Turncmd63::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Wipercmd90::ID) != nullptr);
+    #include <type_traits>
+    
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////
+    }
+    
+    Variant PlainDirectory::read() {
+  struct dirent entry;
+  struct dirent *result;
+  int ret = readdir_r(m_dir, &entry, &result);
+  if (ret != 0 || !result) {
+    return false;
+  }
+  return String(entry.d_name, CopyString);
 }
+    
+    #define ERROR_RAISE_WARNING(exp)        \
+  int ret = (exp);                      \
+  if (ret != 0) {                       \
+    raise_warning(                      \
+      '%s(): %s',                       \
+      __FUNCTION__,                     \
+      folly::errnoStr(errno).c_str()    \
+    );                                  \
+  }                                     \
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    
+    template<typename F>
+void logLowPriPerfWarning(folly::StringPiece event, F fillCols) {
+  logPerfWarningImpl(event, 0, kDefaultPerfWarningRate, fillCols);
+}
+template<typename F>
+void logLowPriPerfWarning(folly::StringPiece event, int64_t rate, F fillCols) {
+  logPerfWarningImpl(event, 0, rate, fillCols);
+}
+    
+    #include 'hphp/util/stack-trace.h'
+    
+    
+    {}
+    
+    
+    {    file->getData()->m_mode = [mode] {
+      if (mode.empty()) {
+        return 'w+b';
+      }
+      for (auto c : mode.slice()) {
+        switch (c) {
+          case '+':
+          case 'w':
+          case 'a':
+          case 'x':
+          case 'c':
+            return 'w+b';
+          default:
+            break;
+        }
+      }
+      return 'rb';
+    }();
+    return file;
+  }
+    
+        void NDArrayView::SetValue(int16_t value)
+    {
+        if (IsSparse())
+            LogicError('NDArrayView::SetValue: Setting a NDArrayView contents to a scalar is only allowed for objects with dense storage format.');
+    }
+    
+        template <typename T> 
+    inline std::string GetVersionsString(size_t currentVersion, size_t dictVersion)
+    {
+        std::stringstream info;
+        info << 'Current ' << Typename<T>() << ' version = ' << currentVersion 
+             << ', Dictionary version = ' << dictVersion;
+        return info.str();
+    }
+    
+    
+    {            // get the name for the reader we want to use, default to CNTKTextFormatReader
+            GetReaderProc getReaderProc = (GetReaderProc) Plugin::Load(readerType, GetReaderName(precision));
+            m_ioNames.push_back(ioName);
+            assert(getReaderProc != nullptr);
+            getReaderProc(&m_dataReaders[ioName]); // instantiates the reader with the default constructor (no config processed at this point)
+        }
+    }
+    else if (hasDeserializers)
+    {
+        wstring readerType = config(L'readerType', L'Cntk.Composite');
+    
+    #pragma once
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS // 'secure' CRT not available on all platforms  --add this at the top of all CPP files that give 'function or variable may be unsafe' warnings
+#endif
+#ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif // NOMINMAX
+#pragma comment(lib, 'Dbghelp.lib')
+#else
+#include <execinfo.h>
+#include <cxxabi.h>
+#endif
