@@ -1,401 +1,453 @@
-private:
-    NetworkStyle(const QString &appName, const int iconColorHueShift, const int iconColorSaturationReduction, const char *titleAddText);
-    
-    
-    {private Q_SLOTS:
-    /* sign message */
-    void on_addressBookButton_SM_clicked();
-    void on_pasteButton_SM_clicked();
-    void on_signMessageButton_SM_clicked();
-    void on_copySignatureButton_SM_clicked();
-    void on_clearButton_SM_clicked();
-    /* verify message */
-    void on_addressBookButton_VM_clicked();
-    void on_verifyMessageButton_VM_clicked();
-    void on_clearButton_VM_clicked();
+
+        
+        
+    {    Lock& lock;
+    Lock templock;
 };
     
-    namespace Ui {
-    class TransactionDescDialog;
+    
+    {
+    {        /* compute using ECDH function */
+        CHECK(secp256k1_ec_pubkey_create(ctx, &point[0], s_one) == 1);
+        CHECK(secp256k1_ecdh(ctx, output_ecdh, &point[0], s_b32) == 1);
+        /* compute 'explicitly' */
+        CHECK(secp256k1_ec_pubkey_create(ctx, &point[1], s_b32) == 1);
+        CHECK(secp256k1_ec_pubkey_serialize(ctx, point_ser, &point_ser_len, &point[1], SECP256K1_EC_COMPRESSED) == 1);
+        CHECK(point_ser_len == sizeof(point_ser));
+        secp256k1_sha256_initialize(&sha);
+        secp256k1_sha256_write(&sha, point_ser, point_ser_len);
+        secp256k1_sha256_finalize(&sha, output_ser);
+        /* compare */
+        CHECK(memcmp(output_ecdh, output_ser, sizeof(output_ser)) == 0);
+    }
 }
     
-    SECP256K1_INLINE static void secp256k1_fe_sqr_inner(uint64_t *r, const uint64_t *a) {
-/**
- * Registers: rdx:rax = multiplication accumulator
- *            r9:r8   = c
- *            rcx:rbx = d
- *            r10-r14 = a0-a4
- *            r15     = M (0xfffffffffffff)
- *            rdi     = r
- *            rsi     = a / t?
- */
-  uint64_t tmp1, tmp2, tmp3;
-__asm__ __volatile__(
-    'movq 0(%%rsi),%%r10\n'
-    'movq 8(%%rsi),%%r11\n'
-    'movq 16(%%rsi),%%r12\n'
-    'movq 24(%%rsi),%%r13\n'
-    'movq 32(%%rsi),%%r14\n'
-    'movq $0xfffffffffffff,%%r15\n'
-    }
-    
-    static void secp256k1_gej_add_ge_var(secp256k1_gej *r, const secp256k1_gej *a, const secp256k1_ge *b, secp256k1_fe *rzr) {
-    /* 8 mul, 3 sqr, 4 normalize, 12 mul_int/add/negate */
-    secp256k1_fe z12, u1, u2, s1, s2, h, i, i2, h2, h3, t;
-    if (a->infinity) {
-        VERIFY_CHECK(rzr == NULL);
-        secp256k1_gej_set_ge(r, b);
-        return;
-    }
-    if (b->infinity) {
-        if (rzr != NULL) {
-            secp256k1_fe_set_int(rzr, 1);
-        }
-        *r = *a;
-        return;
-    }
-    r->infinity = 0;
-    }
-    
-    #if !defined(TINYFORMAT_USE_VARIADIC_TEMPLATES) && !defined(TINYFORMAT_NO_VARIADIC_TEMPLATES)
-#   ifdef __GXX_EXPERIMENTAL_CXX0X__
-#       define TINYFORMAT_USE_VARIADIC_TEMPLATES
-#   endif
-#endif
-    
-    
-    {} // namespace bech32
-    
-    
-    {        // these are measured in elements
-        size_t left, right, top, bottom;
-    };
-    
-    template <>
-void accumulateSquareConst<0>(const Size2D &size,
-                              const u8 *srcBase, ptrdiff_t srcStride,
-                              s16 *dstBase, ptrdiff_t dstStride)
+    static bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
 {
-    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
+    if (s1.size() != s2.size()) return false;
+    for (size_t i = 0; i < s1.size(); ++i) {
+        char c1 = s1[i];
+        if (c1 >= 'A' && c1 <= 'Z') c1 -= ('A' - 'a');
+        char c2 = s2[i];
+        if (c2 >= 'A' && c2 <= 'Z') c2 -= ('A' - 'a');
+        if (c1 != c2) return false;
     }
-    
-            int32x4_t norml = vmull_s16(vget_low_s16(dx), vget_low_s16(dx));
-        int32x4_t normh = vmull_s16(vget_high_s16(dy), vget_high_s16(dy));
-    
-    #else
-    
-        if (src0Stride == src1Stride && src0Stride == dstStride &&
-        src0Stride == (ptrdiff_t)(size.width * sizeof(type)))
-    {
-        size.width *= size.height;
-        size.height = 1;
-    }
-    
-    bool isSupportedConfiguration()
-{
-#ifdef CAROTENE_NEON
     return true;
-#else
-    return false;
-#endif
 }
     
     
-    {
-    {
-    {                for (; j < size.width; j++)
-                {
-                    dst[j] = src[j] >= 0 ? 0 : 255;
-                }
-            }
-        }
-        else
-        {
-            for (size_t i = 0; i < size.height; ++i)
-            {
-                u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
-                std::memset(dst, 0, sizeof(u8) * size.width);
-            }
-        }
-        return;
-    }
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVTS_FUNC(s32, u16, 8,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.32 {d4-d5}, [%[src1]]                             \n\t'
-            'vld1.32 {d6-d7}, [%[src2]]                             \n\t'
-            'vcvt.f32.s32 q4, q2                                    \n\t'
-            'vcvt.f32.s32 q5, q3                                    \n\t'
-            'vmul.f32 q6, q4, q0                                    \n\t'
-            'vmul.f32 q7, q5, q0                                    \n\t'
-            'vadd.f32 q8, q6, q1                                    \n\t'
-            'vadd.f32 q9, q7, q1                                    \n\t'
-            'vcvt.s32.f32 q10, q8                                   \n\t'
-            'vcvt.s32.f32 q11, q9                                   \n\t'
-            'vqmovun.s32 d24, q10                                   \n\t'
-            'vqmovun.s32 d25, q11                                   \n\t'
-            'vst1.16 {d24-d25}, [%[dst]]                            \n\t'
-            : /*no output*/
-            : [src1] 'r' (_src + i + 0),
-              [src2] 'r' (_src + i + 4),
-              [dst] 'r' (_dst + i),
-              'w'  (vscale), 'w' (vshift)
-            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25'
-        );
-    }
-})
-#else
-CVTS_FUNC(s32, u16, 8,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        int32x4_t vline1_s32 = vld1q_s32(_src + i + 0);
-        int32x4_t vline2_s32 = vld1q_s32(_src + i + 4);
-        float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
-        float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        vline1_s32 = vcvtq_s32_f32(vline1_f32);
-        vline2_s32 = vcvtq_s32_f32(vline2_f32);
-        uint16x4_t vRes1 = vqmovun_s32(vline1_s32);
-        uint16x4_t vRes2 = vqmovun_s32(vline2_s32);
-        vst1q_u16(_dst + i, vcombine_u16(vRes1, vRes2));
-    }
-})
-#endif
-    
-            int32x2_t vs2 = vqneg_s32(vqadd_s32(vget_low_s32(vs), vget_high_s32(vs)));
-    
-    #include 'common.hpp'
-    
-    namespace {
-    }
-    
-            int16x8_t tnext4Old = vmovq_n_s16(0x0);
-        int16x8_t tnext5Old = vmovq_n_s16(0x0);
-        int16x8_t tnext1OldOld = vmovq_n_s16(0x0);
-        int16x8_t tnext2OldOld = vmovq_n_s16(0x0);
-        int16x8_t tnext3OldOld = vmovq_n_s16(0x0);
-        int16x8_t tnext4OldOld = vmovq_n_s16(0x0);
-        int16x8_t tnext5OldOld = vmovq_n_s16(0x0);
-    
-            static float f = 0.0f;
-        ImGui::Text('Hello, world!');
-        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
-        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
-        ImGui::ShowDemoWindow(NULL);
-    
-    // Implemented features:
-//  [X] Platform: Clipboard support.
-//  [X] Platform: Gamepad support. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
-//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
-//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).
-    
-        // Setup inputs
-    ALLEGRO_KEYBOARD_STATE keys;
-    al_get_keyboard_state(&keys);
-    io.KeyCtrl = al_key_down(&keys, ALLEGRO_KEY_LCTRL) || al_key_down(&keys, ALLEGRO_KEY_RCTRL);
-    io.KeyShift = al_key_down(&keys, ALLEGRO_KEY_LSHIFT) || al_key_down(&keys, ALLEGRO_KEY_RSHIFT);
-    io.KeyAlt = al_key_down(&keys, ALLEGRO_KEY_ALT) || al_key_down(&keys, ALLEGRO_KEY_ALTGR);
-    io.KeySuper = al_key_down(&keys, ALLEGRO_KEY_LWIN) || al_key_down(&keys, ALLEGRO_KEY_RWIN);
-    
-    
-    {    // At this point note that we set ImGui::GetIO().Fonts->TexID to be == g_FontTexture, so clear both.
-    ImGuiIO& io = ImGui::GetIO();
-    IM_ASSERT(g_FontTexture == io.Fonts->TexID);
-    if (g_FontTexture)
-        g_FontTexture->Release();
-    g_FontTexture = NULL;
-    io.Fonts->TexID = NULL;
+    {    // These inputs are valid because PROTOCOLINFO accepts an OtherLine that is
+    // just an OptArguments, which enables multiple spaces to be present
+    // between the command and arguments.
+    CheckSplitTorReplyLine('COMMAND  ARGS', 'COMMAND', ' ARGS');
+    CheckSplitTorReplyLine('COMMAND   EVEN+more  ARGS', 'COMMAND', '  EVEN+more  ARGS');
 }
     
-            IwGxSetVertStreamScreenSpace(pVertStream, nVert);
-        IwGxSetUVStream(pUVStream);
-        IwGxSetColStream(pColStream, nVert);
-        IwGxSetNormStream(0);
+    bool RunProtoCompiler(const string& filename,
+                      const string& plugin_specific_args,
+                      CommandLineInterface* cli, FileDescriptorProto* file) {
+  cli->SetInputsAreProtoPathRelative(true);
+    }
     
-        // Overrides
-    OrbitCamera *clone() const override;
-    virtual void startWithTarget(Node *target) override;
-    virtual void update(float time) override;
+    template <typename DescriptorType>
+static void WriteDocCommentBody(
+    io::Printer* printer, const DescriptorType* descriptor) {
+    SourceLocation location;
+    if (descriptor->GetSourceLocation(&location)) {
+        WriteDocCommentBodyImpl(printer, location);
+    }
+}
     
-CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    OrbitCamera();
-    /**
-     * @js NA
-     * @lua NA
-     */
-    virtual ~OrbitCamera();
     
-    /** Initializes a OrbitCamera action with radius, delta-radius,  z, deltaZ, x, deltaX. */
-    bool initWithDuration(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX);
+    {  printer->Print(
+    '\n'
+    '#pragma clang diagnostic pop\n'
+    '\n'
+    '// @@protoc_insertion_point(global_scope)\n');
+}
     
-    //
-// NOTE: Converting these macros into Templates is desirable, but please see
-// issue #16159 [https://github.com/cocos2d/cocos2d-x/pull/16159] for further info
+      string str_with_null_char('ab\0c', 4);
+  EXPECT_EXIT(
+      decode_data.AddString(1, str_with_null_char, 'def'),
+      ::testing::KilledBySignal(SIGABRT),
+      'error: got a null char in a string for making TextFormat data, input:');
+  EXPECT_EXIT(
+      decode_data.AddString(1, 'def', str_with_null_char),
+      ::testing::KilledBySignal(SIGABRT),
+      'error: got a null char in a string for making TextFormat data, input:');
+    
+    // Protocol Buffers - Google's data interchange format
+// Copyright 2008 Google Inc.  All rights reserved.
+// https://developers.google.com/protocol-buffers/
 //
-#define EASEELASTIC_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC, REVERSE_CLASSNAME) \
-CLASSNAME* CLASSNAME::create(cocos2d::ActionInterval *action, float period /* = 0.3f*/) \
-{ \
-    CLASSNAME *ease = new (std::nothrow) CLASSNAME(); \
-    if (ease) \
-    { \
-        if (ease->initWithAction(action, period)) \
-            ease->autorelease(); \
-        else \
-            CC_SAFE_RELEASE_NULL(ease); \
-    } \
-    return ease; \
-} \
-CLASSNAME* CLASSNAME::clone() const \
-{ \
-    if(_inner) return CLASSNAME::create(_inner->clone(), _period); \
-    return nullptr; \
-} \
-void CLASSNAME::update(float time) { \
-    _inner->update(TWEEN_FUNC(time, _period)); \
-} \
-EaseElastic* CLASSNAME::reverse() const { \
-    return REVERSE_CLASSNAME::create(_inner->reverse(), _period); \
-}
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following disclaimer
+// in the documentation and/or other materials provided with the
+// distribution.
+//     * Neither the name of Google Inc. nor the names of its
+// contributors may be used to endorse or promote products derived from
+// this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// 'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     
-    /** @class ActionManager
- @brief ActionManager is a singleton that manages all the actions.
- Normally you won't need to use this singleton directly. 99% of the cases you will use the Node interface,
- which uses this singleton.
- But there are some cases where you might need to use this singleton.
- Examples:
-    - When you want to run an action where the target is different from a Node. 
-    - When you want to pause / resume the actions.
- 
- @since v0.8
- */
-class CC_DLL ActionManager : public Ref
-{
-public:
-    /**
-     * @js ctor
-     */
-    ActionManager();
+      const Dtype* cpu_data() const;
+  void set_cpu_data(Dtype* data);
+  const int* gpu_shape() const;
+  const Dtype* gpu_data() const;
+  void set_gpu_data(Dtype* data);
+  const Dtype* cpu_diff() const;
+  const Dtype* gpu_diff() const;
+  Dtype* mutable_cpu_data();
+  Dtype* mutable_gpu_data();
+  Dtype* mutable_cpu_diff();
+  Dtype* mutable_gpu_diff();
+  void Update();
+  void FromProto(const BlobProto& proto, bool reshape = true);
+  void ToProto(BlobProto* proto, bool write_diff = false) const;
+    
+    // Disable the copy and assignment operator for a class.
+#define DISABLE_COPY_AND_ASSIGN(classname) \
+private:\
+  classname(const classname&);\
+  classname& operator=(const classname&)
+    
+      /**
+   * @brief Adjust the shapes of top blobs and internal buffers to accommodate
+   *        the shapes of the bottom blobs.
+   *
+   * @param bottom the input blobs, with the requested input shapes
+   * @param top the top blobs, which should be reshaped as needed
+   *
+   * This method should reshape top blobs as needed according to the shapes
+   * of the bottom (input) blobs, as well as reshaping any internal buffers
+   * and making any other necessary adjustments so that the layer can
+   * accommodate the bottom blobs.
+   */
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) = 0;
+    
+      int num_kernels_im2col_;
+  int num_kernels_col2im_;
+  int conv_out_channels_;
+  int conv_in_channels_;
+  int conv_out_spatial_dim_;
+  int kernel_dim_;
+  int col_offset_;
+  int output_offset_;
+    
+    
+    { private:
+  struct pair_sort_first {
+    bool operator()(const std::pair<int, int> &left,
+                    const std::pair<int, int> &right) {
+      return left.first < right.first;
     }
+  };
+  void check_batch_reindex(int initial_num, int final_num,
+                           const Dtype* ridx_data);
+};
     
-    NS_CC_END
+     protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #include 'caffe/layers/lrn_layer.hpp'
+    
+    
+    {}  // namespace caffe
+    
+    
+    {	b2PolyNode(b2Vec2& pos);
+	b2PolyNode();
+	void AddConnection(b2PolyNode& toMe);
+	void RemoveConnection(b2PolyNode& fromMe);
+	void RemoveConnectionByIndex(int32 index);
+	bool IsConnectedTo(b2PolyNode& me);
+	b2PolyNode* GetRightestConnection(b2PolyNode* incoming);
+	b2PolyNode* GetRightestConnection(b2Vec2& incomingDir);
+};
+    
+    /* 
+EtcBlock4x4.cpp
+    
+      Note that the compressed data, regardless of the level, can always be
+  decompressed using the function fastlz_decompress above.
+*/
+    
+      THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS'
+  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.*/
+    
+    void opus_fft_neon(const kiss_fft_state *st,
+                   const kiss_fft_cpx *fin,
+                   kiss_fft_cpx *fout);
+    
+    /*Constants used by the entropy encoder/decoder.*/
+    
+    
+opus_int32 silk_inner_prod_aligned_scale(
+    const opus_int16 *const     inVec1,             /*    I input vector 1                                              */
+    const opus_int16 *const     inVec2,             /*    I input vector 2                                              */
+    const opus_int              scale,              /*    I number of bits to shift                                     */
+    const opus_int              len                 /*    I vector lengths                                              */
+);
+    
+    
+    {} // namespace osquery
 
     
-        /**
-    @brief Create an action with duration, grid size.
-    @param duration Specify the duration of the PageTurn3D action. It's a value in seconds.
-    @param gridSize Specify the size of the grid.
-    @return If the creation success, return a pointer of PageTurn3D action; otherwise, return nil.
-    */
-    static PageTurn3D* create(float duration, const Size& gridSize);
+      schedule_.clear();
+  if (!obj.HasMember('queries') || !obj['queries'].IsObject()) {
+    // This pack contained no queries.
+    VLOG(1) << 'No queries defined for pack ' << name;
+    return;
+  }
     
-    protected:
-    float _to;
-    float _from;
+    Status serializeQueryData(const QueryDataTyped& q,
+                          const ColumnNames& cols,
+                          JSON& doc,
+                          rj::Document& arr) {
+  for (const auto& r : q) {
+    auto row_obj = doc.getObject();
+    auto status = serializeRow(r, cols, doc, row_obj);
+    if (!status.ok()) {
+      return status;
+    }
+    doc.push(row_obj, arr);
+  }
+  return Status();
+}
+    
+    uint32_t Extension_ping_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin('Extension_ping_args');
+    }
+    
+    class ExtensionNull : virtual public ExtensionIf {
+ public:
+  virtual ~ExtensionNull() {}
+  void ping(ExtensionStatus& /* _return */) {
+    return;
+  }
+  void call(ExtensionResponse& /* _return */, const std::string& /* registry */, const std::string& /* item */, const ExtensionPluginRequest& /* request */) {
+    return;
+  }
+  void shutdown() {
+    return;
+  }
+};
+    
+    
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_MAP) {
+          {
+            this->success.clear();
+            uint32_t _size48;
+            ::apache::thrift::protocol::TType _ktype49;
+            ::apache::thrift::protocol::TType _vtype50;
+            xfer += iprot->readMapBegin(_ktype49, _vtype50, _size48);
+            uint32_t _i52;
+            for (_i52 = 0; _i52 < _size48; ++_i52)
+            {
+              std::string _key53;
+              xfer += iprot->readString(_key53);
+              InternalOptionInfo& _val54 = this->success[_key53];
+              xfer += _val54.read(iprot);
+            }
+            xfer += iprot->readMapEnd();
+          }
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+    
+    using namespace  ::osquery::extensions;
+    
+    #include <osquery/tables.h>
+    
+      // Then, log the stack frames
+  std::vector<std::string> stackTraces;
+  std::vector<char> name(512, 0x0);
+  std::ostringstream stackTrace;
+  for (unsigned long frame = 0; frame < numFrames; frame++) {
+    unsigned long long offset = 0;
+    }
+    
+    
+    {    return;
+}
+    
+    
+    {    return 0;
+}
+    
+    
+    {    return 0;
+}
+
     
     
     {
     {
+    {            if(curNode->right)
+                stack.push(curNode->right);
+            if(curNode->left)
+                stack.push(curNode->left);
+        }
+        return res;
+    }
+};
+    
+    #include <iostream>
+#include <vector>
+#include <stack>
+#include <cassert>
+    
+    
     {
-    {                if (_shatterZ) 
-                {
-                    coords.bl.z += ( rand() % (_randrange*2) ) - _randrange;
-                    coords.br.z += ( rand() % (_randrange*2) ) - _randrange;                
-                    coords.tl.z += ( rand() % (_randrange*2) ) - _randrange;
-                    coords.tr.z += ( rand() % (_randrange*2) ) - _randrange;
-                }
-                
-                setTile(Vec2(i, j), coords);
+    {
+    {            if(command.s == 'print')
+                res.push_back(command.node->val);
+            else{
+                assert(command.s == 'go');
+                stack.push(Command('print', command.node));
+                if(command.node->right)
+                    stack.push(Command('go',command.node->right));
+                if(command.node->left)
+                    stack.push(Command('go',command.node->left));
             }
         }
-        
-        _once = true;
+        return res;
     }
-}
+};
     
-    NS_CC_BEGIN
-    
-    
-    {// end of sprite_nodes group
-/// @}
-    
-    #include <vector>
-    
-    TEST(ProtocolDataTest, CheckSum) {
-  const uint8_t INPUT[] = {0x00, 0x12, 0x00, 0x13, 0x00, 0xF3, 0x00, 0x00};
-  const uint8_t result =
-      ProtocolData<apollo::canbus::ChassisDetail>::CalculateCheckSum(INPUT, 8);
-  EXPECT_EQ(0xE7, result);
-}
-    
-    int RadarState201::max_dist(const std::uint8_t* bytes, int32_t length) const {
-  Byte t0(bytes + 1);
-  uint32_t x = t0.get_byte(0, 8);
+    public:
+    vector<int> postorderTraversal(TreeNode* root) {
     }
     
-      auto geo_reference_node = header_node->FirstChildElement('geoReference');
-  if (!geo_reference_node) {
-    std::string err_msg = 'Error parsing header geoReoference attributes';
-    return Status(apollo::common::ErrorCode::HDMAP_DATA_ERROR, err_msg);
-  }
-  auto geo_text = geo_reference_node->FirstChild()->ToText();
-  if (!geo_text) {
-    std::string err_msg = 'Error parsing header geoReoference text';
-    return Status(apollo::common::ErrorCode::HDMAP_DATA_ERROR, err_msg);
-  }
+            vector<int> res;
+        if(root == NULL)
+            return res;
     
-    TEST_F(PncMapTest, GetRouteSegments_ChangeLane) {
-  auto lane = hdmap_.GetLaneById(hdmap::MakeMapId('9_1_-2'));
-  ASSERT_TRUE(lane);
-  common::VehicleState state;
-  auto point = lane->GetSmoothPoint(35);  // larger than kMinLaneKeepingDistance
-  state.set_x(point.x());
-  state.set_y(point.y());
-  state.set_z(point.y());
-  state.set_heading(M_PI);
-  std::list<RouteSegments> segments;
-  bool result = pnc_map_->GetRouteSegments(state, 10, 30, &segments);
-  ASSERT_TRUE(result);
-  ASSERT_EQ(2, segments.size());
-  const auto& first = segments.front();
-  const auto& second = segments.back();
-  EXPECT_NEAR(40, RouteLength(first), 1e-4);
-  EXPECT_EQ(routing::LEFT, first.NextAction());
-  EXPECT_TRUE(first.IsOnSegment());
-  EXPECT_NEAR(40, RouteLength(second), 1e-4);
-  EXPECT_EQ(routing::RIGHT, second.NextAction());
-  EXPECT_FALSE(second.IsOnSegment());
+      ProtocolData<::apollo::canbus::ChassisDetail> mpd;
+  SenderMessage<::apollo::canbus::ChassisDetail> msg(1, &mpd);
+  EXPECT_FALSE(sender.NeedSend(msg, 1));
+  EXPECT_EQ(msg.message_id(), 1);
+  int32_t period = msg.curr_period();
+  msg.UpdateCurrPeriod(-50);
+  EXPECT_EQ(msg.curr_period(), period + 50);
+  EXPECT_EQ(msg.CanFrame().id, 1);
+    
+    class MockProtocolData : public ProtocolData<::apollo::canbus::ChassisDetail> {
+ public:
+  static const int32_t ID = 0x111;
+  MockProtocolData() {}
+};
+    
+    
+    {  int ret = x;
+  return ret;
 }
     
-        combined_trajectory.AppendTrajectoryPoint(trajectory_point);
+    int ClusterListStatus600::interface_version(const std::uint8_t* bytes,
+                                            int32_t length) const {
+  Byte t0(bytes + 4);
+  int32_t x = t0.get_byte(4, 4);
+    }
+    
+    
+    {  int ret = x;
+  return ret;
+}
+    
+    int RadarState201::radar_power(const std::uint8_t* bytes,
+                               int32_t length) const {
+  Byte t0(bytes + 3);
+  uint32_t x = t0.get_byte(0, 2);
+    }
+    
+    
+    {  for (auto& lon : lon_trajectories) {
+    for (auto& lat : lat_trajectories) {
+      trajectory_pair_pqueue_.emplace(lon, lat);
+    }
+  }
+}
+    
+    
+    {  // Report Messages
+  AddRecvProtocolData<Accelrpt68, true>();
+  AddRecvProtocolData<Brakemotorrpt170, true>();
+  AddRecvProtocolData<Brakemotorrpt271, true>();
+  AddRecvProtocolData<Brakemotorrpt372, true>();
+  AddRecvProtocolData<Brakerpt6c, true>();
+  AddRecvProtocolData<Datetimerpt83, true>();
+  AddRecvProtocolData<Globalrpt6a, true>();
+  AddRecvProtocolData<Headlightrpt77, true>();
+  AddRecvProtocolData<Hornrpt79, true>();
+  AddRecvProtocolData<Latlonheadingrpt82, true>();
+  AddRecvProtocolData<Parkingbrakestatusrpt80, true>();
+  AddRecvProtocolData<Shiftrpt66, true>();
+  AddRecvProtocolData<Steeringmotorrpt173, true>();
+  AddRecvProtocolData<Steeringmotorrpt274, true>();
+  AddRecvProtocolData<Steeringmotorrpt375, true>();
+  AddRecvProtocolData<Steeringrpt16e, true>();
+  AddRecvProtocolData<Turnrpt64, true>();
+  AddRecvProtocolData<Vehiclespeedrpt6f, true>();
+  AddRecvProtocolData<Wheelspeedrpt7a, true>();
+  AddRecvProtocolData<Wiperrpt91, true>();
+  AddRecvProtocolData<Yawraterpt81, true>();
+}
     
     namespace apollo {
-namespace planning {
+namespace canbus {
+namespace gem {
     }
     }
-    
-    void SplineSegKernel::CalculateDerivative(const uint32_t num_params) {
-  kernel_derivative_ = Eigen::MatrixXd::Zero(num_params, num_params);
-  for (int r = 1; r < kernel_derivative_.rows(); ++r) {
-    for (int c = 1; c < kernel_derivative_.cols(); ++c) {
-      kernel_derivative_(r, c) = r * c / (r + c - 1.0);
     }
-  }
-}
