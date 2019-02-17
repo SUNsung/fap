@@ -1,227 +1,138 @@
 
         
-                  if options['multiple']
-            add_default_name_and_id_for_value(@checked_value, options)
-            options.delete('multiple')
-          else
-            add_default_name_and_id(options)
+              it 'requires the passwords to match when changing them' do
+        visit edit_admin_user_path(users(:bob))
+        fill_in 'Password', with: '12345678'
+        fill_in 'Password confirmation', with: 'no_match'
+        click_on 'Update User'
+        expect(page).to have_text('Password confirmation doesn't match')
+      end
+    end
+    
+        class Agents::DotBar < Agent
+      cannot_be_scheduled!
+    
+        it 'cleans up old logs when there are more than log_length' do
+      stub(AgentLog).log_length { 4 }
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 1')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 2')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 3')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 4')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 4')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 1')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 5')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 5')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 2')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 6')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 6')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 3')
+    end
+    
+      describe 'helpers' do
+    it 'should generate a correct request options hash' do
+      expect(@checker.send(:request_options)).to eq({headers: {'User-Agent' => 'Huginn - https://github.com/huginn/huginn', 'Authorization' => 'Bearer '1234token''}})
+    end
+    
+      describe '#receive' do
+    it 'sends a message' do
+      stub(HTTParty).post { {'id' => 1, 'message' => 'blah', 'title' => 'blah','source_name' => 'Custom Notification'} }
+      @checker.receive([@event])
+    end
+    
+      describe '#switch?' do
+    let(:argv) { ['-ns', '-i', '--bar', '-a-bad-arg'] }
+    
+        it 'returns false if the environment does not contain :std' do
+      expect(env).not_to be_std
+    end
+  end
+    
+      #
+  # Updates the command parts for this specific packet type.
+  #
+  def update_cmd_parts(str)
+    if (md = str.match(/^(.+?)\s+(.+?)\s+HTTP\/(.+?)\r?\n?$/i))
+      self.method  = md[1]
+      self.raw_uri = URI.decode(md[2])
+      self.proto   = md[3]
+    
+              # Encodes a Rex::Proto::Kerberos::Model::Checksum into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            elems = []
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_type], 0, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_checksum], 1, :CONTEXT_SPECIFIC)
+    
+              # Rex::Proto::Kerberos::Model::KdcResponse encoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def encode
+            raise ::NotImplementedError, 'KdcResponse encoding not supported'
           end
     
-                  Time.utc(
-                default[:year], default[:month], default[:day],
-                default[:hour], default[:min], default[:sec]
-              )
-            end
-          end
-      end
-    end
-  end
-end
-
-    
-          unless root?
-        raise Invalid, 'missing name' if !name || name.empty?
-        raise Invalid, 'missing path' if !path || path.empty?
-        raise Invalid, 'missing type' if !type || type.empty?
-      end
+        if processes.stdout.lines.any? { |line| line =~ %r{^\d+\t\d\tcom.apple.SafariNotificationAgent$} }
+      system_command '/usr/bin/killall', args: ['-kill', 'SafariNotificationAgent']
     end
     
-          INDEX = Set.new
+            PluginManager.ui.debug('Looking if package named: #{plugin_name} exists at #{uri}')
     
-      def page_requested?
-    params[:page] == 'true'
+        def execute
+      raise PluginManager::FileNotFoundError, 'Can't file local file #{local_file}' unless ::File.exist?(local_file)
+      raise PluginManager::InvalidPackError, 'Invalid format, the pack must be in zip format' unless valid_format?(local_file)
+    
+        # any errors will be logged to $stderr by invoke!
+    # Bundler cannot update and clean gems in one operation so we have to call the CLI twice.
+    options = {:update => plugins, :rubygems_source => gemfile.gemset.sources}
+    options[:local] = true if local?
+    output = LogStash::Bundler.invoke!(options)
+    # We currently dont removed unused gems from the logstash installation
+    # see: https://github.com/elastic/logstash/issues/6339
+    # output = LogStash::Bundler.invoke!(:clean => true)
+    display_updated_plugins(previous_gem_specs_map)
+  rescue => exception
+    gemfile.restore!
+    report_exception('Updated Aborted', exception)
+  ensure
+    display_bundler_output(output)
   end
     
-            log_action :change_email, @user
+            context 'when fetching a gem from rubygems' do
     
-        def destroy
-      authorize @report_note, :destroy?
-      @report_note.destroy!
-      redirect_to admin_report_path(@report_note.report_id), notice: I18n.t('admin.report_notes.destroyed_msg')
-    end
-    
-      def setting
-    @_setting ||= ::Web::Setting.where(user: current_user).first_or_initialize(user: current_user)
-  end
-end
-
-    
-    puts '\nUnable to find an RSS feed for the following blogs:'
-puts '==================================================='
-unavailable.each do |b|
-  puts '#{b.name} | #{b.web_url}'
-end
-puts '==================================================='
-
-    
-    When /^I (?:sign|log) in manually as '([^']*)' with password '([^']*)'( on the mobile website)?$/ \
-do |username, password, mobile|
-  @me = User.find_by_username(username)
-  @me.password ||= password
-  manual_login
-  confirm_login mobile
-end
-    
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have value #{expected.inspect} but was #{actual.value.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have value #{expected.inspect} but it had'
-  end
-end
-    
-        it 'generates a jasmine fixture', :fixture => true do
-      get :bookmarklet
-      save_fixture(html_for('body'), 'bookmarklet')
-    end
-    
-        describe 'filter notifications' do
-      it 'supports filtering by notification type' do
-        FactoryGirl.create(:notification, :recipient => alice, :type => 'Notifications::StartedSharing')
-        get :index, params: {type: 'started_sharing'}
-        expect(assigns[:notifications].count).to eq(1)
-      end
-    
-    def prev_feature
-  source_version.gsub(/^(\d\.)(\d+)\..*$/) { $1 + ($2.to_i - 1).to_s }
-end
-    
-    get '/' do
-  halt erb(:login) unless params[:user]
-  erb :chat, :locals => { :user => params[:user].gsub(/\W/, '') }
-end
-    
-        if run? && ARGV.any?
-      require 'optparse'
-      OptionParser.new { |op|
-        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
-        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
-        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
-        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
-        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
-        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
-      }.parse!(ARGV.dup)
-    end
-  end
-    
-      task :index do
-    doc = File.read('README.md')
-    file = 'doc/rack-protection-readme.md'
-    Dir.mkdir 'doc' unless File.directory? 'doc'
-    puts 'writing #{file}'
-    File.open(file, 'w') { |f| f << doc }
-  end
-    
-            safe?(env) ||
-          valid_token?(session, env['HTTP_X_CSRF_TOKEN']) ||
-          valid_token?(session, Request.new(env).params[options[:authenticity_param]]) ||
-          ( options[:allow_if] && options[:allow_if].call(env) )
-      end
-    
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   XSS and others
-    # Supported browsers:: Firefox 23+, Safari 7+, Chrome 25+, Opera 15+
-    #
-    # Description:: Content Security Policy, a mechanism web applications
-    #               can use to mitigate a broad class of content injection
-    #               vulnerabilities, such as cross-site scripting (XSS).
-    #               Content Security Policy is a declarative policy that lets
-    #               the authors (or server administrators) of a web application
-    #               inform the client about the sources from which the
-    #               application expects to load resources.
-    #
-    # More info::   W3C CSP Level 1 : https://www.w3.org/TR/CSP1/ (deprecated)
-    #               W3C CSP Level 2 : https://www.w3.org/TR/CSP2/ (current)
-    #               W3C CSP Level 3 : https://www.w3.org/TR/CSP3/ (draft)
-    #               https://developer.mozilla.org/en-US/docs/Web/Security/CSP
-    #               http://caniuse.com/#search=ContentSecurityPolicy
-    #               http://content-security-policy.com/
-    #               https://securityheaders.io
-    #               https://scotthelme.co.uk/csp-cheat-sheet/
-    #               http://www.html5rocks.com/en/tutorials/security/content-security-policy/
-    #
-    # Sets the 'Content-Security-Policy[-Report-Only]' header.
-    #
-    # Options: ContentSecurityPolicy configuration is a complex topic with
-    #          several levels of support that has evolved over time.
-    #          See the W3C documentation and the links in the more info
-    #          section for CSP usage examples and best practices. The
-    #          CSP3 directives in the 'NO_ARG_DIRECTIVES' constant need to be
-    #          presented in the options hash with a boolean 'true' in order
-    #          to be used in a policy.
-    #
-    class ContentSecurityPolicy < Base
-      default_options default_src: :none, script_src: ''self'',
-                      img_src: ''self'', style_src: ''self'',
-                      connect_src: ''self'', report_only: false
-    
-        post('/', {'csrf_param' => token}, 'rack.session' => {:csrf => token})
-    expect(last_response).to be_ok
-  end
-    
-      describe '#referrer' do
-    it 'Reads referrer from Referer header' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/valid'}
-      expect(subject.referrer(env)).to eq('bar.com')
-    end
-    
-        headers = get('/', {}, 'wants' => 'text/html').headers
-    expect(headers['Content-Security-Policy']).to eq('connect-src 'self'; default-src none; img-src 'self'; script-src 'self'; style-src 'self'')
-  end
-    
-      it 'ignores implicit hashes' do
-    expect_no_offenses(<<-RUBY.strip_indent)
-      foo(a: 1,
-      b: 2)
-    RUBY
-  end
-    
-          # Custom destructuring method. This can be used to normalize
-      # destructuring for different variations of the node.
-      #
-      # In this case, the `def` node destructures into:
-      #
-      #   `method_name, arguments, body`
-      #
-      # while the `defs` node destructures into:
-      #
-      #   `receiver, method_name, arguments, body`
-      #
-      # so we reverse the destructured array to get the optional receiver
-      # at the end, where it can be discarded.
-      #
-      # @return [Array] the different parts of the `def` or `defs` node
-      def node_parts
-        to_a.reverse
+          it 'list the plugins with their versions' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose')
+        result.stdout.split('\n').each do |plugin|
+          expect(plugin).to match(/^logstash-\w+-\w+\s\(\d+\.\d+.\d+(.\w+)?\)/)
+        end
       end
     end
-  end
-end
-
     
-          # Checks whether the `hash` node contains any `pair`- or `kwsplat` nodes.
-      #
-      # @return[Boolean] whether the `hash` is empty
-      def empty?
-        children.empty?
+      argument :attachment_names, :required => true, :type => :array, :desc => 'The names of the attachment(s) to add.',
+           :banner => 'attachment_one attachment_two attachment_three ...'
+    
+        def self.clear
+      instance.clear
+    end
+    
+        def type_from_mime_magic
+      @type_from_mime_magic ||= File.open(@filepath) do |file|
+        MimeMagic.by_magic(file).try(:type)
       end
+    end
     
-          # This is used for duck typing with `pair` nodes which also appear as
-      # `hash` elements.
-      #
-      # @return [false]
-      def colon?
-        false
-      end
-    
-      def migration_class_name
-    migration_name.camelize
-  end
-    
-        def raise_if_blank_file
-      if path.blank?
-        raise Errors::NotIdentifiedByImageMagickError.new('Cannot find the geometry of a file with a blank name')
+        # Returns the id of the instance in a split path form. e.g. returns
+    # 000/001/234 for an id of 1234.
+    def id_partition attachment, style_name
+      case id = attachment.instance.id
+      when Integer
+        if id < ID_PARTITION_LIMIT
+          ('%09d'.freeze % id).scan(/\d{3}/).join('/'.freeze)
+        else
+          ('%012d'.freeze % id).scan(/\d{3}/).join('/'.freeze)
+        end
+      when String
+        id.scan(/.{3}/).first(3).join('/'.freeze)
+      else
+        nil
       end
     end
