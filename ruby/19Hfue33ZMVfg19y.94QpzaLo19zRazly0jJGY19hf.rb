@@ -1,77 +1,90 @@
 
         
-              class_reference_from_action_name(alias_found.to_sym)
-    end
+                def initialize(object_name, method_name, template_object, checked_value, unchecked_value, options)
+          @checked_value   = checked_value
+          @unchecked_value = unchecked_value
+          super(object_name, method_name, template_object, options)
+        end
     
-        def run(action_named: nil, action_class_ref: nil, parameter_map: nil)
-      action_return = runner.execute_action(action_named, action_class_ref, [parameter_map], custom_dir: '.')
-      return action_return
-    end
+              # Generate default options for collection helpers, such as :checked and
+          # :disabled.
+          def default_html_options_for_collection(item, value)
+            html_options = @html_options.dup
     
-          it 'adds docset_install_path param to command' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          appledoc(
-            project_name: 'Project Name',
-            project_company: 'Company',
-            input: 'input/dir',
-            docset_install_path: 'docs/install/path'
-          )
-        end').runner.execute(:test)
-    
-            FastlaneCore::CertChecker.wwdr_certificate_installed?
-      end
-    
-      def status_finder
-    StatusFinder.new(params[:url])
-  end
-    
-      def hub_topic
-    params['hub.topic']
-  end
-    
-      def require_enabled_api!
-    head 404 unless Setting.activity_api_enabled
-  end
-end
-
-    
-      def update
-    raise ActiveRecord::RecordNotFound if @web_subscription.nil?
-    
-      before_action :require_user!
-    
-            self.description = <<-DESC
-          Shows the content of the pods cache as a YAML tree output, organized by pod.
-          If `NAME` is given, only the caches for that pod will be included in the output.
-        DESC
-    
-          # This is used for duck typing with `pair` nodes which also appear as
-      # `hash` elements.
-      #
-      # @return [false]
-      def colon?
-        false
-      end
-    
-    desc 'Creates a sandbox application for simulating the Spree code in a deployed Rails app'
-task :sandbox do
-  Bundler.with_clean_env do
-    exec('lib/sandbox.sh')
-  end
-end
-
-    
-            def create
-          authorize! :create, Image
-          @image = scope.images.new(image_params)
-          if @image.save
-            respond_with(@image, status: 201, default_template: :show)
-          else
-            invalid_resource!(@image)
+            def formatted_code_for(source_code, line_counter, indent, output)
+          start_value = (output == :html) ? {} : []
+          source_code.inject(start_value) do |result, line|
+            line_counter += 1
+            if output == :html
+              result.update(line_counter.to_s => '%#{indent}s %s\n' % ['', line])
+            else
+              result << '%#{indent}s: %s' % [line_counter, line]
+            end
           end
         end
+    end
+  end
     
-            def show
-          @stock_item = scope.find(params[:id])
-          respond_with(@stock_item)
+            return_value = run_active_command
+    
+          def self.details
+        list = <<-LIST.markdown_list
+          `grouping` is just to keep your tags organised under one 'folder', defaults to 'builds'
+          `lane` is the name of the current fastlane lane
+          `prefix` is anything you want to stick in front of the version number, e.g. 'v'
+          `postfix` is anything you want to stick at the end of the version number, e.g. '-RC1'
+          `build_number` is the build number, which defaults to the value emitted by the `increment_build_number` action
+        LIST
+    
+          it 'Include merge commits if merge_commit_filtering is include_merges' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          changelog_from_git_commits(merge_commit_filtering: 'include_merges')
+        end').runner.execute(:test)
+    
+            it 'executes the correct git command' do
+          allow(Fastlane::Actions).to receive(:sh).with('git add #{path}', anything).and_return('')
+          result = Fastlane::FastFile.new.parse('lane :test do
+            git_add(path: '#{path}')
+          end').runner.execute(:test)
         end
+      end
+    
+          context 'when specify mode explicitly' do
+        it 'uses lint mode as default' do
+          result = Fastlane::FastFile.new.parse('lane :test do
+            swiftlint
+          end').runner.execute(:test)
+    
+    if git.modified_files.include?('snapshot/lib/assets/SnapshotHelperXcode8.swift')
+  warn('You modified `SnapshotHelperXcode8.swift`, make sure to update the version number at the bottom of the file to notify users about the new helper file.')
+end
+    
+      let(:cop_config) { { 'EnforcedStyle' => 'symmetrical' } }
+    
+    module RuboCop
+  module AST
+    # A node extension for `case` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `case` nodes within RuboCop.
+    class CaseNode < Node
+      include ConditionalNode
+    
+          # Checks whether the `for` node has a `do` keyword.
+      #
+      # @return [Boolean] whether the `for` node has a `do` keyword
+      def do?
+        loc.begin && loc.begin.is?('do')
+      end
+    
+    Vagrant.configure('2') do |config|
+  # All Vagrant configuration is done here. The most common configuration
+  # options are documented and commented below. For a complete reference,
+  # please see the online documentation at vagrantup.com.
+    
+        task(options.name) do |_, task_args|
+      block.call(*[options, task_args].first(block.arity)) if block_given?
+      abort('Must specify args') unless options.respond_to?(:args)
+      @args = options.delete_field(:args)
+      run_cli
+    end
+  end
