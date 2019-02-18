@@ -1,143 +1,148 @@
 
         
-                  def render_component(builder)
-            builder.translation
-          end
-      end
-    end
-  end
-end
-
-    
-            # If no layout is supplied, look for a template named the return
-        # value of this method.
-        #
-        # ==== Returns
-        # * <tt>String</tt> - A template name
-        def _implied_layout_name
-          controller_path
-        end
-    end
-    
-        def exists?(path, prefixes, *args)
-      find_all(path, prefixes, *args).any?
-    end
-    
-        Category.transaction do
-      lounge.group_names = ['trust_level_3']
-      unless lounge.save
-        puts lounge.errors.full_messages
-        raise 'Failed to set permissions on trust level 3 lounge category!'
-      end
-    
-        def did_show_message?
-      file_name = '.did_show_opt_info'
-    
-          it 'adds create_docset param to command' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          appledoc(
-            project_name: 'Project Name',
-            project_company: 'Company',
-            input: 'input/dir',
-            create_docset: true
-          )
-        end').runner.execute(:test)
-    
-            expect(result[3]).to start_with('security set-keychain-settings')
-        expect(result[3]).to include('-t 600')
-        expect(result[3]).to include('-l')
-        expect(result[3]).to include('-u')
-        expect(result[3]).to include('~/Library/Keychains/test.keychain')
-      end
-    end
-  end
-end
-
-    
-          it 'cannot have both path and pathspec parameters' do
-        expect do
-          Fastlane::FastFile.new.parse('lane :test do
-            git_add(path: 'myfile.txt', pathspec: '*.txt')
-          end').runner.execute(:test)
-        end.to raise_error(FastlaneCore::Interface::FastlaneError)
-      end
-    end
-  end
-end
-
-    
-    module CrossplatformShellwords
-  # handle switching between implementations of shellescape
-  def shellescape(str)
-    if FastlaneCore::Helper.windows?
-      WindowsShellwords.shellescape(str)
+          def outbox_presenter
+    if page_requested?
+      ActivityPub::CollectionPresenter.new(
+        id: account_outbox_url(@account, page_params),
+        type: :ordered,
+        part_of: account_outbox_url(@account),
+        prev: prev_page,
+        next: next_page,
+        items: @statuses
+      )
     else
-      # using `escape` instead of expected `shellescape` here
-      # which corresponds to Shellword's `String.shellescape` implementation
-      # https://github.com/ruby/ruby/blob/1cf2bb4b2085758112503e7da7414d1ef52d4f48/lib/shellwords.rb#L216
-      Shellwords.escape(str)
+      ActivityPub::CollectionPresenter.new(
+        id: account_outbox_url(@account),
+        type: :ordered,
+        size: @account.statuses_count,
+        first: account_outbox_url(@account, page: true),
+        last: account_outbox_url(@account, page: true, min_id: 0)
+      )
     end
   end
-  module_function :shellescape
     
-            keychain = 'keychain with spaces.keychain'
-        cmd = %r{curl -f -o (([A-Z]\:)?\/.+) https://developer\.apple\.com/certificationauthority/AppleWWDRCA.cer && security import \1 -k #{Regexp.escape(keychain.shellescape)}}
-        require 'open3'
+          redirect_to admin_account_path(@account.id), notice: I18n.t('admin.accounts.change_email.changed_msg')
+    end
     
-      protected
+          @report_note = current_account.report_notes.new(resource_params)
+      @report = @report_note.report
     
-      def unknown_action!(msg)
-    logger.debug '[Devise] #{msg}' if logger
-    raise AbstractController::ActionNotFound, msg
-  end
-    
-            routes.each do |module_name, actions|
-          [:path, :url].each do |path_or_url|
-            actions.each do |action|
-              action = action ? '#{action}_' : ''
-              method = :'#{action}#{module_name}_#{path_or_url}'
-    
-    # Each time a record is set we check whether its session has already timed out
-# or not, based on last request time. If so, the record is logged out and
-# redirected to the sign in page. Also, each time the request comes and the
-# record is set, we set the last request time inside its scoped session to
-# verify timeout in the following request.
-Warden::Manager.after_set_user do |record, warden, options|
-  scope = options[:scope]
-  env   = warden.request.env
-    
-          if failed_attributes.any?
-        fail Devise::Models::MissingAttribute.new(failed_attributes)
+        def action_from_button
+      if params[:nsfw_on]
+        'nsfw_on'
+      elsif params[:nsfw_off]
+        'nsfw_off'
+      elsif params[:delete]
+        'delete'
       end
     end
     
-            context 'with nested resources' do
-          before { get '/api/v2/storefront/products/#{product.id}?include=option_types,option_types.option_values' }
+        # Mobile devices do not support regular notifications, so we enable push notifications by default
+    alerts_enabled = active_session.detection.device.mobile? || active_session.detection.device.tablet?
     
-          it 'returns account data with included default billing and shipping addresses' do
-        expect(json_response['included']).to    include(have_type('address'))
-        expect(json_response['included'][0]).to eq(Spree::V2::Storefront::AddressSerializer.new(user.billing_address).as_json['data'])
-        expect(json_response['included'][1]).to eq(Spree::V2::Storefront::AddressSerializer.new(user.shipping_address).as_json['data'])
-      end
-    end
+              # Decodes the key from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [EncryptionKey]
+          def decode_key(input)
+            Rex::Proto::Kerberos::Model::EncryptionKey.decode(input.value[0])
+          end
     
-          it_behaves_like 'no current order'
-    end
-  end
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        # This class provides a representation of a Kerberos EncryptionKey data
+        # definition
+        class EncryptionKey < Element
     
-          it_behaves_like 'returns valid cart JSON'
-    end
-    
-      desc 'Install all spree gems'
-  task install: :build do
-    for_each_gem do |gem_path|
-      Bundler.with_clean_env do
-        sh 'gem install #{gem_path}'
-      end
+        def str_to_byte_pos(pos)
+      @s.string.slice(0, pos).bytesize
     end
   end
+end
     
-              if @order.update_from_params(params, permitted_checkout_attributes, request.headers.env)
-            if current_api_user.has_spree_role?('admin') && user_id.present?
-              @order.associate_user!(Spree.user_class.find(user_id))
+        def log_processed(name)
+      puts green '    #{name}'
+    end
+    
+    def blog_url(user, project, source_dir)
+  cname = '#{source_dir}/CNAME'
+  url = if File.exists?(cname)
+    'http://#{IO.read(cname).strip}'
+  else
+    'http://#{user.downcase}.github.io'
+  end
+  url += '/#{project}' unless project == ''
+  url
+end
+    
+      # The CategoryFeed class creates an Atom feed for the specified category.
+  class CategoryFeed < Page
+    
+        def html_output_for(script_url, code)
+      code = CGI.escapeHTML code
+      <<-HTML
+<div><script src='#{script_url}'></script>
+<noscript><pre><code>#{code}</code></pre></noscript></div>
+      HTML
+    end
+    
+    module Jekyll
+    
+            Dir.chdir(includes_dir) do
+          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
+          if choices.include?(file)
+            source = File.read(file)
+            partial = Liquid::Template.parse(source)
+            context.stack do
+              rtn = rtn + partial.render(context)
             end
+          else
+            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
+          end
+        end
+      end
+      rtn
+    end
+  end
+    
+      class IncludeCodeTag < Liquid::Tag
+    def initialize(tag_name, markup, tokens)
+      @title = nil
+      @file = nil
+      if markup.strip =~ /\s*lang:(\S+)/i
+        @filetype = $1
+        markup = markup.strip.sub(/lang:\S+/i,'')
+      end
+      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
+        @title = $1 || nil
+        @file = $3
+      end
+      super
+    end
+    
+    
+    
+    module RailsCommandHelpers
+  def framework_version?(version_string)
+    framework_version =~ /^#{version_string}/
+  end
+    
+      def self.source_root
+    @source_root ||= File.expand_path('../templates', __FILE__)
+  end
+    
+        # Returns the larger of the two dimensions
+    def larger
+      [height, width].max
+    end
+    
+        def path
+      @file.respond_to?(:path) ? @file.path : @file
+    end
+    
+        # Returns the filename, the same way as ':basename.:extension' would.
+    def filename attachment, style_name
+      [ basename(attachment, style_name), extension(attachment, style_name) ].delete_if(&:empty?).join('.'.freeze)
+    end
