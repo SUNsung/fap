@@ -1,325 +1,262 @@
 
         
-        namespace llvm {
-template<> struct DenseMapInfo<DefaultCacheKey> {
-  static inline DefaultCacheKey getEmptyKey() {
-    return { DenseMapInfo<void*>::getEmptyKey(), nullptr };
-  }
-  static inline DefaultCacheKey getTombstoneKey() {
-    return { DenseMapInfo<void*>::getTombstoneKey(), nullptr };
-  }
-  static unsigned getHashValue(const DefaultCacheKey &Val) {
-    uintptr_t Hash = Val.CBs->keyHashCB(Val.Key, nullptr);
-    return DenseMapInfo<uintptr_t>::getHashValue(Hash);
-  }
-  static bool isEqual(const DefaultCacheKey &LHS, const DefaultCacheKey &RHS) {
-    if (LHS.Key == RHS.Key)
-      return true;
-    if (LHS.Key == DenseMapInfo<void*>::getEmptyKey() ||
-        LHS.Key == DenseMapInfo<void*>::getTombstoneKey() ||
-        RHS.Key == DenseMapInfo<void*>::getEmptyKey() ||
-        RHS.Key == DenseMapInfo<void*>::getTombstoneKey())
-      return false;
-    return LHS.CBs->keyIsEqualCB(LHS.Key, RHS.Key, nullptr);
-  }
-};
-} // namespace llvm
-    
-      bool anyMatches = false;
-  auto matched = [&] {
-    if (anyMatches) return;
-    }
-    
-    using namespace swift;
-using namespace importer;
-    
-    
-    {  bool isTypedef() const {
-    assert(isValid());
-    return !Decl.isNull() && Decl.is<const clang::TypedefNameDecl *>();
-  }
-  const clang::TypedefNameDecl *getTypedef() const {
-    assert(isTypedef());
-    return Decl.get<const clang::TypedefNameDecl *>();
-  }
-};
-    
-    
-    {
-    {  } else {
-    assert(clangDiag.hasSourceManager());
-    auto clangCI = ImporterImpl.getClangInstance();
-    ClangDiagRenderer renderer(clangCI->getLangOpts(),
-                               &clangCI->getDiagnosticOpts(), emitDiag);
-    clang::FullSourceLoc clangDiagLoc(clangDiag.getLocation(),
-                                      clangDiag.getSourceManager());
-    renderer.emitDiagnostic(clangDiagLoc, clangDiagLevel, message,
-                            clangDiag.getRanges(), clangDiag.getFixItHints(),
-                            &clangDiag);
-  }
+        
+    {  return '';
 }
 
     
-      bool isGetter() const {
-    return accessorKind == IAMAccessorKind::Getter;
-  }
+      // FIXME: Map over source ranges in the diagnostic.
+  auto emitDiag = [&ctx, this](clang::FullSourceLoc clangNoteLoc,
+                      clang::DiagnosticsEngine::Level clangDiagLevel,
+                      StringRef message) {
+    decltype(diag::error_from_clang) diagKind;
+    switch (clangDiagLevel) {
+    case clang::DiagnosticsEngine::Ignored:
+      return;
+    case clang::DiagnosticsEngine::Note:
+      diagKind = diag::note_from_clang;
+      break;
+    case clang::DiagnosticsEngine::Remark:
+      // FIXME: We don't handle remarks yet.
+      return;
+    case clang::DiagnosticsEngine::Warning:
+      diagKind = diag::warning_from_clang;
+      break;
+    case clang::DiagnosticsEngine::Error:
+    case clang::DiagnosticsEngine::Fatal:
+      // FIXME: What happens after a fatal error in the importer?
+      diagKind = diag::error_from_clang;
+      break;
+    }
+    }
     
-    ]]
-    
-    // Used to print a non-container, non-pointer value when the user
-// doesn't define PrintTo() for it.
-template <typename T>
-void DefaultPrintTo(IsNotContainer /* dummy */,
-                    false_type /* is not a pointer */,
-                    const T& value, ::std::ostream* os) {
-  ::testing_internal::DefaultPrintNonContainerTo(value, os);
+    std::string Demangle::getNodeTreeAsString(NodePointer Root) {
+  DemanglerPrinter Printer;
+  printNode(Printer, Root, 0);
+  return std::move(Printer).str();
 }
     
-    namespace gtest_internal {
+    class LLVM_LIBRARY_VISIBILITY GenericUnix : public ToolChain {
+protected:
+  InvocationInfo constructInvocation(const InterpretJobAction &job,
+                                     const JobContext &context) const override;
+  InvocationInfo constructInvocation(const AutolinkExtractJobAction &job,
+                                     const JobContext &context) const override;
     }
     
-    // A sample program demonstrating using Google C++ testing framework.
-//
-// Author: wan@google.com (Zhanyong Wan)
-    
-        template <typename ElementType>
-    /*static*/ ValuePtr Value::CreateBatch(const NDShape& sampleShape, const std::vector<ElementType>& batchData, const DeviceDescriptor& device, bool readOnly /*= false */)
-    {
-        auto shapeSize = sampleShape.TotalSize();
-        if (batchData.size() % shapeSize != 0)
-            InvalidArgument('The number of elements (%zu) in the vector containing batch data must be a multiple of the size (%zu) of the sample shape '%S'.',
-                            batchData.size(), shapeSize, sampleShape.AsString().c_str());
-    }
-    
-            CNTK_API void SetValueInitialization(const ParameterInitializer& initializationConfig, const DeviceDescriptor& device);
-    
-    class CrossProcessMutex
-{
-    // no-copying
-    CrossProcessMutex(const CrossProcessMutex&);
-    void operator=(const CrossProcessMutex&);
-    }
-    
-    public:
-    ScopeTimer(size_t verbosity, const std::string& message)
-        : m_verbosity(verbosity), m_message(message)
-    {
-        if (m_verbosity > 2)
-        {
-            m_aggregateTimer.Start();
-        }
-    }
-    
-        virtual void /*ComputationNode::*/ ForwardProp(const FrameRange& fr) override
-    {
-        auto sliceInputValue  = InputRef(0).ValueFor(fr);
-        auto sliceOutputValue =           ValueFor(fr); // row vector
-    }
-    
-        // need to feed in pseudo label data, which tells the decoder what is the beginning
-    // and ending output symbol. these symbols will constrain the search space
-    virtual void /*ComputationNodeBase::*/ Validate(bool isFinalValidationPass) override
-    {
-        Base::Validate(isFinalValidationPass);
-        InferMBLayoutFromInputsForStandardCase(isFinalValidationPass);
-    }
-    
-    #include 'unicode/utypes.h'
-    
-    
-    {        if(equalPrefixLength > 0) {
-            if((leftUnit >= 0 && data->isUnsafeBackward(leftUnit, numeric)) ||
-                    (rightUnit >= 0 && data->isUnsafeBackward(rightUnit, numeric))) {
-                // Identical prefix: Back up to the start of a contraction or reordering sequence.
-                do {
-                    --equalPrefixLength;
-                    leftUnit = left.previous(&left);
-                    right.previous(&right);
-                } while(equalPrefixLength > 0 && data->isUnsafeBackward(leftUnit, numeric));
-            }
-            // See the notes in the UTF-16 version.
-        }
-    }
-    
-    #ifndef __SHARED_CALENDAR_H__
-#define __SHARED_CALENDAR_H__
-    
-    //eof
-
-    
-    UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CollationKey)
-    
-    #include 'unicode/utypes.h'
-    
-    
-    {    return outLen;
-}
-    
-    static void Dump(benchmark::State& state, const char* filename, int indent)
-{
-    std::ifstream f(filename);
-    std::string str((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
-    json j = json::parse(str);
-    }
-    
-    #include 'colorprint.h'
-    
-      // The flag must start with '--'.
-  const std::string flag_str = std::string('--') + std::string(flag);
-  const size_t flag_len = flag_str.length();
-  if (strncmp(str, flag_str.c_str(), flag_len) != 0) return nullptr;
-    
-    // Function to return an string for the calculated complexity
-std::string GetBigOString(BigO complexity);
-    
-    namespace benchmark {
-namespace internal {
-    }
-    }
-    
-    namespace benchmark {
-// NOTE: only i386 and x86_64 have been well tested.
-// PPC, sparc, alpha, and ia64 are based on
-//    http://peter.kuscsik.com/wordpress/?p=14
-// with modifications by m3b.  See also
-//    https://setisvn.ssl.berkeley.edu/svn/lib/fftw-3.0.1/kernel/cycle.h
-namespace cycleclock {
-// This should return the number of cycles since power-on.  Thread-safe.
-inline BENCHMARK_ALWAYS_INLINE int64_t Now() {
-#if defined(BENCHMARK_OS_MACOSX)
-  // this goes at the top because we need ALL Macs, regardless of
-  // architecture, to return the number of 'mach time units' that
-  // have passed since startup.  See sysinfo.cc where
-  // InitializeSystemInfo() sets the supposed cpu clock frequency of
-  // macs to the number of mach time units per second, not actual
-  // CPU clock frequency (which can change in the face of CPU
-  // frequency scaling).  Also note that when the Mac sleeps, this
-  // counter pauses; it does not continue counting, nor does it
-  // reset to zero.
-  return mach_absolute_time();
-#elif defined(BENCHMARK_OS_EMSCRIPTEN)
-  // this goes above x86-specific code because old versions of Emscripten
-  // define __x86_64__, although they have nothing to do with it.
-  return static_cast<int64_t>(emscripten_get_now() * 1e+6);
-#elif defined(__i386__)
-  int64_t ret;
-  __asm__ volatile('rdtsc' : '=A'(ret));
-  return ret;
-#elif defined(__x86_64__) || defined(__amd64__)
-  uint64_t low, high;
-  __asm__ volatile('rdtsc' : '=a'(low), '=d'(high));
-  return (high << 32) | low;
-#elif defined(__powerpc__) || defined(__ppc__)
-  // This returns a time-base, which is not always precisely a cycle-count.
-  int64_t tbl, tbu0, tbu1;
-  asm('mftbu %0' : '=r'(tbu0));
-  asm('mftb  %0' : '=r'(tbl));
-  asm('mftbu %0' : '=r'(tbu1));
-  tbl &= -static_cast<int64_t>(tbu0 == tbu1);
-  // high 32 bits in tbu1; low 32 bits in tbl  (tbu0 is garbage)
-  return (tbu1 << 32) | tbl;
-#elif defined(__sparc__)
-  int64_t tick;
-  asm('.byte 0x83, 0x41, 0x00, 0x00');
-  asm('mov   %%g1, %0' : '=r'(tick));
-  return tick;
-#elif defined(__ia64__)
-  int64_t itc;
-  asm('mov %0 = ar.itc' : '=r'(itc));
-  return itc;
-#elif defined(COMPILER_MSVC) && defined(_M_IX86)
-  // Older MSVC compilers (like 7.x) don't seem to support the
-  // __rdtsc intrinsic properly, so I prefer to use _asm instead
-  // when I know it will work.  Otherwise, I'll use __rdtsc and hope
-  // the code is being compiled with a non-ancient compiler.
-  _asm rdtsc
-#elif defined(COMPILER_MSVC)
-  return __rdtsc();
-#elif defined(BENCHMARK_OS_NACL)
-  // Native Client validator on x86/x86-64 allows RDTSC instructions,
-  // and this case is handled above. Native Client validator on ARM
-  // rejects MRC instructions (used in the ARM-specific sequence below),
-  // so we handle it here. Portable Native Client compiles to
-  // architecture-agnostic bytecode, which doesn't provide any
-  // cycle counter access mnemonics.
-    }
-    }
-    }
-    
-    inline bool Regex::Init(const std::string& spec, std::string* error) {
-#ifdef BENCHMARK_HAS_NO_EXCEPTIONS
-  ((void)error); // suppress unused warning
+    // EXPECT_DEATH_IF_SUPPORTED(statement, regex) and
+// ASSERT_DEATH_IF_SUPPORTED(statement, regex) expand to real death tests if
+// death tests are supported; otherwise they just issue a warning.  This is
+// useful when you are combining death test assertions with normal test
+// assertions in one test.
+#if GTEST_HAS_DEATH_TEST
+# define EXPECT_DEATH_IF_SUPPORTED(statement, regex) \
+    EXPECT_DEATH(statement, regex)
+# define ASSERT_DEATH_IF_SUPPORTED(statement, regex) \
+    ASSERT_DEATH(statement, regex)
 #else
-  try {
+# define EXPECT_DEATH_IF_SUPPORTED(statement, regex) \
+    GTEST_UNSUPPORTED_DEATH_TEST_(statement, regex, )
+# define ASSERT_DEATH_IF_SUPPORTED(statement, regex) \
+    GTEST_UNSUPPORTED_DEATH_TEST_(statement, regex, return)
 #endif
-    re_ = std::regex(spec, std::regex_constants::extended);
-    init_ = true;
-#ifndef BENCHMARK_HAS_NO_EXCEPTIONS
-  } catch (const std::regex_error& e) {
-    if (error) {
-      *error = e.what();
-    }
+    
+    # if GTEST_HAS_COMBINE
+// Combine() allows the user to combine two or more sequences to produce
+// values of a Cartesian product of those sequences' elements.
+//
+// Synopsis:
+// Combine(gen1, gen2, ..., genN)
+//   - returns a generator producing sequences with elements coming from
+//     the Cartesian product of elements from the sequences generated by
+//     gen1, gen2, ..., genN. The sequence elements will have a type of
+//     tuple<T1, T2, ..., TN> where T1, T2, ..., TN are the types
+//     of elements from sequences produces by gen1, gen2, ..., genN.
+//
+// Combine can have up to $maxtuple arguments. This number is currently limited
+// by the maximum number of elements in the tuple implementation used by Google
+// Test.
+//
+// Example:
+//
+// This will instantiate tests in test case AnimalTest each one with
+// the parameter values tuple('cat', BLACK), tuple('cat', WHITE),
+// tuple('dog', BLACK), and tuple('dog', WHITE):
+//
+// enum Color { BLACK, GRAY, WHITE };
+// class AnimalTest
+//     : public testing::TestWithParam<tuple<const char*, Color> > {...};
+//
+// TEST_P(AnimalTest, AnimalLooksNice) {...}
+//
+// INSTANTIATE_TEST_CASE_P(AnimalVariations, AnimalTest,
+//                         Combine(Values('cat', 'dog'),
+//                                 Values(BLACK, WHITE)));
+//
+// This will instantiate tests in FlagDependentTest with all variations of two
+// Boolean flags:
+//
+// class FlagDependentTest
+//     : public testing::TestWithParam<tuple<bool, bool> > {
+//   virtual void SetUp() {
+//     // Assigns external_flag_1 and external_flag_2 values from the tuple.
+//     tie(external_flag_1, external_flag_2) = GetParam();
+//   }
+// };
+//
+// TEST_P(FlagDependentTest, TestFeature1) {
+//   // Test your code using external_flag_1 and external_flag_2 here.
+// }
+// INSTANTIATE_TEST_CASE_P(TwoBoolSequence, FlagDependentTest,
+//                         Combine(Bool(), Bool()));
+//
+$range i 2..maxtuple
+$for i [[
+$range j 1..i
+    
+    
+    {  return AssertionFailure() << pred_text << '('
+                            << e1 << ', '
+                            << e2 << ', '
+                            << e3 << ') evaluates to false, where'
+                            << '\n' << e1 << ' evaluates to ' << v1
+                            << '\n' << e2 << ' evaluates to ' << v2
+                            << '\n' << e3 << ' evaluates to ' << v3;
+}
+    
+    // This macro is for implementing ASSERT_DEATH*, EXPECT_DEATH*,
+// ASSERT_EXIT*, and EXPECT_EXIT*.
+# define GTEST_DEATH_TEST_(statement, predicate, regex, fail) \
+  GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
+  if (::testing::internal::AlwaysTrue()) { \
+    const ::testing::internal::RE& gtest_regex = (regex); \
+    ::testing::internal::DeathTest* gtest_dt; \
+    if (!::testing::internal::DeathTest::Create(#statement, &gtest_regex, \
+        __FILE__, __LINE__, &gtest_dt)) { \
+      goto GTEST_CONCAT_TOKEN_(gtest_label_, __LINE__); \
+    } \
+    if (gtest_dt != NULL) { \
+      ::testing::internal::scoped_ptr< ::testing::internal::DeathTest> \
+          gtest_dt_ptr(gtest_dt); \
+      switch (gtest_dt->AssumeRole()) { \
+        case ::testing::internal::DeathTest::OVERSEE_TEST: \
+          if (!gtest_dt->Passed(predicate(gtest_dt->Wait()))) { \
+            goto GTEST_CONCAT_TOKEN_(gtest_label_, __LINE__); \
+          } \
+          break; \
+        case ::testing::internal::DeathTest::EXECUTE_TEST: { \
+          ::testing::internal::DeathTest::ReturnSentinel \
+              gtest_sentinel(gtest_dt); \
+          GTEST_EXECUTE_DEATH_TEST_STATEMENT_(statement, gtest_dt); \
+          gtest_dt->Abort(::testing::internal::DeathTest::TEST_DID_NOT_DIE); \
+          break; \
+        } \
+        default: \
+          break; \
+      } \
+    } \
+  } else \
+    GTEST_CONCAT_TOKEN_(gtest_label_, __LINE__): \
+      fail(::testing::internal::DeathTest::LastMessage())
+// The symbol 'fail' here expands to something into which a message
+// can be streamed.
+    
+    // Gets the content of the stringstream's buffer as an std::string.  Each '\0'
+// character in the buffer is replaced with '\\0'.
+GTEST_API_ std::string StringStreamToString(::std::stringstream* stream);
+    
+    
+]]
+    
+      size_t Length() const {
+    return c_string_ == NULL ? 0 : strlen(c_string_);
   }
-#endif
-  return init_;
-}
     
-    TEST(MessageManagerTest, GetMutableProtocolDataById) {
-  uint8_t mock_data = 1;
-  MockMessageManager manager;
-  manager.Parse(MockProtocolData::ID, &mock_data, 8);
-  manager.ResetSendMessages();
-  EXPECT_TRUE(manager.GetMutableProtocolDataById(MockProtocolData::ID) !=
-              nullptr);
+    		b2Vec2 d;
+		d.x = b2Dot(n1, v) - toiSlop;
+		d.y = b2Dot(n2, v) - toiSlop;
+    
+    	// C-style inteface to the encoder
+	void Encode(float *a_pafSourceRGBA,
+				unsigned int a_uiSourceWidth,
+				unsigned int a_uiSourceHeight,
+				Image::Format a_format,
+				ErrorMetric a_eErrMetric,
+				float a_fEffort,
+				unsigned int a_uiJobs,
+				unsigned int a_uimaxJobs,
+				unsigned char **a_ppaucEncodingBits,
+				unsigned int *a_puiEncodingBitsBytes,
+				unsigned int *a_puiExtendedWidth,
+				unsigned int *a_puiExtendedHeight,
+				int *a_piEncodingTime_ms, bool a_bVerboseOutput = false);
+    
+    		inline Block4x4Encoding * GetEncoding(void)
+		{
+			return m_pencoding;
+		}
+    
+    	// ----------------------------------------------------------------------------------------------------
+	//
+	Block4x4Encoding::Block4x4Encoding(void)
+	{
     }
     
-    #include 'gtest/gtest.h'
-    
-      Byte t1(bytes + 3);
-  uint32_t t = t1.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
-    
-    #include 'glog/logging.h'
-    
-    #include <string>
+    		Block4x4Encoding(void);
+		//virtual ~Block4x4Encoding(void) =0;
+		virtual ~Block4x4Encoding(void) {}
+		virtual void InitFromSource(Block4x4 *a_pblockParent,
+									ColorFloatRGBA *a_pafrgbaSource,
     
     
-    {  MatrixXd bd_golden(20, 1);
-  bd_golden << -100, 1, -100, 1, -100, 1, -100, 1, -100, 1, -100, 1, -100, 1,
-      -100, 1, -100, 1, -100, 1;
-  EXPECT_EQ(bd, bd_golden);
-}
+  /* an auxiliary macro to decode a UTF-8 character -- since we only use */
+  /* hard-coded, self-converted data, no error checking is performed     */
+#define GET_UTF8_CHAR( ch, p )                      \
+          do                                        \
+          {                                         \
+            ch = (unsigned char)*p++;               \
+            if ( ch >= 0x80 )                       \
+            {                                       \
+              FT_UInt  len_;                        \
+                                                    \
+                                                    \
+              if ( ch < 0xE0 )                      \
+              {                                     \
+                len_ = 1;                           \
+                ch  &= 0x1F;                        \
+              }                                     \
+              else if ( ch < 0xF0 )                 \
+              {                                     \
+                len_ = 2;                           \
+                ch  &= 0x0F;                        \
+              }                                     \
+              else                                  \
+              {                                     \
+                len_ = 3;                           \
+                ch  &= 0x07;                        \
+              }                                     \
+                                                    \
+              for ( ; len_ > 0; len_-- )            \
+                ch = ( ch << 6 ) | ( *p++ & 0x3F ); \
+            }                                       \
+          } while ( 0 )
     
-      const LaneGraph &lane_graph =
-      ObstacleClusters::GetLaneGraph(start_s, length, lane);
-  EXPECT_EQ(1, lane_graph.lane_sequence_size());
-  EXPECT_EQ(3, lane_graph.lane_sequence(0).lane_segment_size());
-  EXPECT_EQ('l9', lane_graph.lane_sequence(0).lane_segment(0).lane_id());
-  EXPECT_EQ('l18', lane_graph.lane_sequence(0).lane_segment(1).lane_id());
-  EXPECT_EQ('l21', lane_graph.lane_sequence(0).lane_segment(2).lane_id());
+        /* ignored for horizontal metrics */
+    FT_UInt          blue_count;
+    AF_LatinBlueRec  blues[AF_BLUE_STRINGSET_MAX];
     
+    #if defined(OPUS_ARM_INLINE_EDSP)
+#include 'arm/kiss_fft_armv5e.h'
+#endif
+#if defined(MIPSr1_ASM)
+#include 'mips/kiss_fft_mipsr1.h'
+#endif
     
-    {  // Report Messages
-  AddRecvProtocolData<Accelrpt68, true>();
-  AddRecvProtocolData<Brakemotorrpt170, true>();
-  AddRecvProtocolData<Brakemotorrpt271, true>();
-  AddRecvProtocolData<Brakemotorrpt372, true>();
-  AddRecvProtocolData<Brakerpt6c, true>();
-  AddRecvProtocolData<Datetimerpt83, true>();
-  AddRecvProtocolData<Globalrpt6a, true>();
-  AddRecvProtocolData<Headlightrpt77, true>();
-  AddRecvProtocolData<Hornrpt79, true>();
-  AddRecvProtocolData<Latlonheadingrpt82, true>();
-  AddRecvProtocolData<Parkingbrakestatusrpt80, true>();
-  AddRecvProtocolData<Shiftrpt66, true>();
-  AddRecvProtocolData<Steeringmotorrpt173, true>();
-  AddRecvProtocolData<Steeringmotorrpt274, true>();
-  AddRecvProtocolData<Steeringmotorrpt375, true>();
-  AddRecvProtocolData<Steeringrpt16e, true>();
-  AddRecvProtocolData<Turnrpt64, true>();
-  AddRecvProtocolData<Vehiclespeedrpt6f, true>();
-  AddRecvProtocolData<Wheelspeedrpt7a, true>();
-  AddRecvProtocolData<Wiperrpt91, true>();
-  AddRecvProtocolData<Yawraterpt81, true>();
-}
+    #ifdef FIXED_POINT
+    
+    /** 32x32 multiplication, followed by a 31-bit shift right. Results fits in 32 bits */
+#if OPUS_FAST_INT64
+#define MULT32_32_Q31(a,b) ((opus_val32)SHR((opus_int64)(a)*(opus_int64)(b),31))
+#else
+#define MULT32_32_Q31(a,b) ADD32(ADD32(SHL(MULT16_16(SHR((a),16),SHR((b),16)),1), SHR(MULT16_16SU(SHR((a),16),((b)&0x0000ffff)),15)), SHR(MULT16_16SU(SHR((b),16),((a)&0x0000ffff)),15))
+#endif
