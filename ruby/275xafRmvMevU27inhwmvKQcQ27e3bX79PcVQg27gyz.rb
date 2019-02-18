@@ -1,56 +1,101 @@
 
         
-                  def instantiate_builder(builder_class, item, value, text, html_options)
-            builder_class.new(@template_object, @object_name, @method_name, item,
-                              sanitize_attribute_name(value), text, value, html_options)
+              def parallel?
+        @parallel
+      end
+    
+            def importer_class
+          DiffNoteImporter
+        end
+    
+            attr_reader :attributes
+    
+            # Builds a note from a GitHub API response.
+        #
+        # note - An instance of `Sawyer::Resource` containing the note details.
+        def self.from_api_response(note)
+          matches = note.html_url.match(NOTEABLE_TYPE_REGEX)
+    
+                  # Break so we don't find the next non flag and shift our
+              # main args.
+              break
+            end
           end
     
-            def render(&block)
-          render_collection_for(RadioButtonBuilder, &block)
+            # Merge another configuration object into this one. This assumes that
+        # the other object is the same class as this one. This should not
+        # mutate this object, but instead should return a new, merged object.
+        #
+        # The default implementation will simply iterate over the instance
+        # variables and merge them together, with this object overriding
+        # any conflicting instance variables of the older object. Instance
+        # variables starting with '__' (double underscores) will be ignored.
+        # This lets you set some sort of instance-specific state on your
+        # configuration keys without them being merged together later.
+        #
+        # @param [Object] other The other configuration object to merge from,
+        #   this must be the same type of object as this one.
+        # @return [Object] The merged object.
+        def merge(other)
+          result = self.class.new
+    
+              @commands = Registry.new
+          @configs = Hash.new { |h, k| h[k] = Registry.new }
+          @guests  = Registry.new
+          @guest_capabilities = Hash.new { |h, k| h[k] = Registry.new }
+          @hosts   = Registry.new
+          @host_capabilities = Hash.new { |h, k| h[k] = Registry.new }
+          @providers = Registry.new
+          @provider_capabilities = Hash.new { |h, k| h[k] = Registry.new }
+          @pushes = Registry.new
+          @synced_folders = Registry.new
         end
-    
-          def to_str
-        @string
       end
+    end
+  end
+end
+
     
-          begin
-        Dir.chdir(custom_dir) do # go up from the fastlane folder, to the project folder
-          # If another action is calling this action, we shouldn't show it in the summary
-          # (see https://github.com/fastlane/fastlane/issues/4546)
+        # Like #{merge} but merges into self.
+    def merge!(other)
+      @items.merge!(other.__internal_state[:items])
+      self
+    end
     
-        # An optional block which is called when options conflict happens
-    attr_accessor :conflict_block
+        def require_local_account!
+      redirect_to admin_account_path(@account.id) unless @account.local? && @account.user.present?
+    end
     
-        # An empty argument will be skipped, so return empty quotes.
-    # https://github.com/ruby/ruby/blob/a6413848153e6c37f6b0fea64e3e871460732e34/lib/shellwords.rb#L142-L143
-    return ''''.dup if str.empty?
+      def create
+    @web_subscription&.destroy!
     
-    puts('[WARNING] You are calling #{tool_name} directly. Usage of the tool name without the `fastlane` prefix is deprecated in fastlane 2.0'.yellow)
-puts('Please update your scripts to use `fastlane #{tool_name} #{full_params}` instead.'.yellow)
+      def after_sign_in_path_for(resource)
+    if resource.email_verified?
+      root_path
+    else
+      finish_signup_path
+    end
+  end
+end
+
     
-            c.action do |args, options|
-          Cert.config = FastlaneCore::Configuration.create(Cert::Options.available_options, options.__hash__)
-          Cert::Runner.new.launch
-        end
-      end
-    
-      def down
-    remove_index :share_visibilities, name: :shareable_and_user_id
-    add_index :share_visibilities, %i(shareable_id shareable_type user_id), name: :shareable_and_user_id
+      included do
+    before_action :authenticate_user!
+    before_action :load_export
   end
     
-    Then /^I should have (\d+) nsfw posts$/ do |num_posts|
-  page.should have_css('.nsfw-shield', count: num_posts.to_i)
-end
+    (allow process-exec
+  (literal
+    '<%= pod_bin %>'
+    '<%= ruby_bin %>'
+  )
+  (regex
+<% prefixes.each do |prefix| %>
+    #'^<%= prefix %>/*'
+<% end %>
+  )
+)
     
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
-    
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
-    
-          @conv2 = Conversation.create(hash)
-      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv2.id)
-             .increase_unread(alice)
+          def markdown_podfile
+        UI::ErrorReport.markdown_podfile
+      end
