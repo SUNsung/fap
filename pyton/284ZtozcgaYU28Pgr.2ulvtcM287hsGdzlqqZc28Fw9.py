@@ -1,53 +1,54 @@
 
         
-        
-def setup(app):
-    app.add_config_value('edit_on_github_project', '', True)
-    app.add_config_value('edit_on_github_branch', 'master', True)
-    app.add_config_value('edit_on_github_src_path', '', True)  # 'eg' 'docs/'
-    app.connect('html-page-context', html_page_context)
-
+            while True:
+        more_to_read = select.select([sock], [], [], timeout)[0]
+        if not more_to_read:
+            break
     
-    # List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-# This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = []
+            This should not be called from user code, and is only exposed for use
+        when subclassing the
+        :class:`HTTPAdapter <requests.adapters.HTTPAdapter>`.
     
-    SERVICE_BROWSE_URL_SCHEMA = vol.Schema({
-    # pylint: disable=no-value-for-parameter
-    vol.Required(ATTR_URL, default=ATTR_URL_DEFAULT): vol.Url(),
-})
+    try:
+    from urllib3.contrib import pyopenssl
+except ImportError:
+    pyopenssl = None
+    OpenSSL = None
+    cryptography = None
+else:
+    import OpenSSL
+    import cryptography
     
-    For more details about this platform, please refer to the documentation at
-https://home-assistant.io/components/device_tracker.actiontec/
-'''
-import logging
-import re
-import telnetlib
-from collections import namedtuple
-import voluptuous as vol
     
-        def get_device_name(self, device):
-        '''Return the name (if known) of the device.'''
-        return self.last_results.get(device)
+def test_system_ssl():
+    '''Verify we're actually setting system_ssl when it should be available.'''
+    assert info()['system_ssl']['version'] != ''
     
-    For more details about this component, please refer to the documentation at
-https://home-assistant.io/components/downloader/
-'''
-import logging
-import os
-import re
-import threading
     
-                try:
-                read, _, _ = select.select(
-                    [ssdp_socket], [],
-                    [ssdp_socket], 2)
+def _compute_and_log_stats(roidb):
+    classes = roidb[0]['dataset'].classes
+    char_len = np.max([len(c) for c in classes])
+    hist_bins = np.arange(len(classes) + 1)
     
-    from functools import wraps
-import logging
+    '''RetinaNet model heads and losses. See: https://arxiv.org/abs/1708.02002.'''
     
-    import voluptuous as vol
-    
-    DEFAULT_HOST = '0.0.0.0'
-DEFAULT_PORT = 65432
+    def add_generic_rpn_outputs(model, blob_in, dim_in, spatial_scale_in):
+    '''Add RPN outputs (objectness classification and bounding box regression)
+    to an RPN model. Abstracts away the use of FPN.
+    '''
+    loss_gradients = None
+    if cfg.FPN.FPN_ON:
+        # Delegate to the FPN module
+        FPN.add_fpn_rpn_outputs(model, blob_in, dim_in, spatial_scale_in)
+        if cfg.MODEL.FASTER_RCNN:
+            # CollectAndDistributeFpnRpnProposals also labels proposals when in
+            # training mode
+            model.CollectAndDistributeFpnRpnProposals()
+        if model.train:
+            loss_gradients = FPN.add_fpn_rpn_losses(model)
+    else:
+        # Not using FPN, add RPN to a single scale
+        add_single_scale_rpn_outputs(model, blob_in, dim_in, spatial_scale_in)
+        if model.train:
+            loss_gradients = add_single_scale_rpn_losses(model)
+    return loss_gradients
