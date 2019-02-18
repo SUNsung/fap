@@ -1,346 +1,170 @@
 
         
-        int secp256k1_ecdh(const secp256k1_context* ctx, unsigned char *result, const secp256k1_pubkey *point, const unsigned char *scalar) {
-    int ret = 0;
-    int overflow = 0;
-    secp256k1_gej res;
-    secp256k1_ge pt;
-    secp256k1_scalar s;
-    VERIFY_CHECK(ctx != NULL);
-    ARG_CHECK(result != NULL);
-    ARG_CHECK(point != NULL);
-    ARG_CHECK(scalar != NULL);
+        namespace osquery {
+namespace table_tests {
+namespace {
+    }
+    }
     }
     
-    BOOST_AUTO_TEST_CASE(bip173_testvectors_valid)
-{
-    static const std::string CASES[] = {
-        'A12UEL5L',
-        'a12uel5l',
-        'an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1tt5tgs',
-        'abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw',
-        '11qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqc8247j',
-        'split1checkupstagehandshakeupstreamerranterredcaperred2y9e3w',
-        '?1ezyfcl',
-    };
-    for (const std::string& str : CASES) {
-        auto ret = bech32::Decode(str);
-        BOOST_CHECK(!ret.first.empty());
-        std::string recode = bech32::Encode(ret.first, ret.second);
-        BOOST_CHECK(!recode.empty());
-        BOOST_CHECK(CaseInsensitiveEqual(str, recode));
-    }
-}
     
-    // Convert an arbitrary type to integer.  The version with convertible=false
-// throws an error.
-template<typename T, bool convertible = is_convertible<T,int>::value>
-struct convertToInt
-{
-    static int invoke(const T& /*value*/)
-    {
-        TINYFORMAT_ERROR('tinyformat: Cannot convert from argument type to '
-                         'integer for use as variable width or precision');
-        return 0;
-    }
-};
-// Specialization for convertToInt when conversion is possible
-template<typename T>
-struct convertToInt<T,true>
-{
-    static int invoke(const T& value) { return static_cast<int>(value); }
-};
-    
-    bool ParseInt32(const std::string& str, int32_t *out)
-{
-    if (!ParsePrechecks(str))
-        return false;
-    char *endp = NULL;
-    errno = 0; // strtol will not set errno if valid
-    long int n = strtol(str.c_str(), &endp, 10);
-    if(out) *out = (int32_t)n;
-    // Note that strtol returns a *long int*, so even if strtol doesn't report a over/underflow
-    // we still have to check that the returned value is within the range of an *int32_t*. On 64-bit
-    // platforms the size of these types may be different.
-    return endp && *endp == 0 && !errno &&
-        n >= std::numeric_limits<int32_t>::min() &&
-        n <= std::numeric_limits<int32_t>::max();
-}
-    
-    class ScriptDetector {
- public:
-  ScriptDetector(const GenericVector<int>* allowed_scripts,
-                 OSResults* osr, tesseract::Tesseract* tess);
-  void detect_blob(BLOB_CHOICE_LIST* scores);
-  bool must_stop(int orientation);
- private:
-  OSResults* osr_;
-  static const char* korean_script_;
-  static const char* japanese_script_;
-  static const char* fraktur_script_;
-  int korean_id_;
-  int japanese_id_;
-  int katakana_id_;
-  int hiragana_id_;
-  int han_id_;
-  int hangul_id_;
-  int latin_id_;
-  int fraktur_id_;
-  tesseract::Tesseract* tess_;
-  const GenericVector<int>* allowed_scripts_;
-};
-    
-    /** Returns the polygon outline of the current block. The returned Pta must
- *  be ptaDestroy-ed after use. */
-Pta* PageIterator::BlockPolygon() const {
-  if (it_->block() == nullptr || it_->block()->block == nullptr)
-    return nullptr;  // Already at the end!
-  if (it_->block()->block->pdblk.poly_block() == nullptr)
-    return nullptr;  // No layout analysis used - no polygon.
-  ICOORDELT_IT it(it_->block()->block->pdblk.poly_block()->points());
-  Pta* pta = ptaCreate(it.length());
-  int num_pts = 0;
-  for (it.mark_cycle_pt(); !it.cycled_list(); it.forward(), ++num_pts) {
-    ICOORD* pt = it.data();
-    // Convert to top-down coords within the input image.
-    float x = static_cast<float>(pt->x()) / scale_ + rect_left_;
-    float y = rect_top_ + rect_height_ - static_cast<float>(pt->y()) / scale_;
-    ptaAddPt(pta, x, y);
-  }
-  return pta;
-}
-    
-      // ============= Accessing data ==============.
-  // Coordinate system:
-  // Integer coordinates are at the cracks between the pixels.
-  // The top-left corner of the top-left pixel in the image is at (0,0).
-  // The bottom-right corner of the bottom-right pixel in the image is at
-  // (width, height).
-  // Every bounding box goes from the top-left of the top-left contained
-  // pixel to the bottom-right of the bottom-right contained pixel, so
-  // the bounding box of the single top-left pixel in the image is:
-  // (0,0)->(1,1).
-  // If an image rectangle has been set in the API, then returned coordinates
-  // relate to the original (full) image, rather than the rectangle.
-    
-      //   The text of a paragraph typically starts with the start of an idea and
-  // ends with the end of an idea.  Here we define paragraph as something that
-  // may have a first line indent and a body indent which may be different.
-  // Typical words that start an idea are:
-  //   1. Words in western scripts that start with
-  //      a capital letter, for example 'The'
-  //   2. Bulleted or numbered list items, for
-  //      example '2.'
-  // Typical words which end an idea are words ending in punctuation marks. In
-  // this vocabulary, each list item is represented as a paragraph.
-  bool lword_indicates_list_item;
-  bool lword_likely_starts_idea;
-  bool lword_likely_ends_idea;
-    
-    
-    {  name += UNLV_EXT;              //add extension
-  if ((pdfp = fopen (name.string (), 'rb')) == nullptr) {
-    return false;                //didn't read one
-  } else {
-    while (tfscanf(pdfp, '%d %d %d %d %*s', &x, &y, &width, &height) >= 4) {
-                                 //make rect block
-      block = new BLOCK (name.string (), TRUE, 0, 0,
-                         (int16_t) x, (int16_t) (ysize - y - height),
-                         (int16_t) (x + width), (int16_t) (ysize - y));
-                                 //on end of list
-      block_it.add_to_end (block);
-    }
-    fclose(pdfp);
-  }
-  return true;
-}
-    
-    #endif  // TESSERACT_CCUTIL_BOXREAD_H_
+    {} // namespace osquery
 
     
-     private:
-  void ComputeBoundingBox();
-    
-        for (int inputIdx = 0; inputIdx < def_.input_size() / kNumTensorsPerInput;
-         ++inputIdx) {
-      input_blob_names.push_back(I(inputIdx * kNumTensorsPerInput));
-      input_blob_names.push_back(I(inputIdx * kNumTensorsPerInput + 2));
-      output_blob_names.push_back(GI(inputIdx * kNumTensorsPerInput + 4));
-    }
-    input_blob_names.push_back(GO(4));
-    
-    <summary> <b>Example</b> </summary>
-    
-    template <typename T, class Context>
-class FlexibleTopKGradientOp : public Operator<Context> {
- public:
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
-    }
-    
-    
-    {} // namespace caffe2
-    
-    **Code**
-    
-    namespace caffe2 {
-OPERATOR_SCHEMA(FloatToHalf)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .TensorInferenceFunction(
-        [](const OperatorDef& def, const vector<TensorShape>& in) {
-          vector<TensorShape> out;
-          const TensorShape& X = in[0];
-          out.push_back(X);
-          out[0].set_data_type(TensorProto_DataType_FLOAT16);
-    }
-    }
-    
-              const TensorShape& X = in[0];
-          int N = 0, C = 0, H = 0, W = 0;
-          switch (order) {
-            case StorageOrder::NCHW:
-              N = X.dims(0);
-              C = X.dims(1);
-              H = X.dims(2);
-              W = X.dims(3);
-              break;
-            case StorageOrder::NHWC:
-              N = X.dims(0);
-              H = X.dims(1);
-              W = X.dims(2);
-              C = X.dims(3);
-              break;
-            default:
-              CAFFE_THROW('Unknown storage order: ', order);
-          }
-    
-    /*
- * If Trace::hhbbc_time >= 1, print some stats about the program to a
- * temporary file.  If it's greater than or equal to 2, also dump it
- * to stdout.
+    /**
+ * @brief Deserialize a RowTyped object from a JSON string.
+ *
+ * @param json the input JSON string.
+ * @param r [output] the output Row structure.
+ *
+ * @return Status indicating the success or failure of the operation
  */
-void print_stats(const Index&, const php::Program&);
+Status deserializeRowJSON(const std::string& json, RowTyped& r);
     
     
-    {#define XO2(name, arg3, oe, xop)                                          \
-    EmitXOForm(31, rn(rt), rn(ra), rn(arg3), oe, xop, rc);                \
+    {  sentry.commit();
+  return cseqid;
 }
     
+      void __set_default_value(const std::string& val);
     
-    {      dword(dq_formater.instruction);
-   }
+    // getSerializedDiffResults() return an std::pair where pair->first is a string
+// which should serialize to pair->second. pair->second should
+// deserialize to pair->first
+std::pair<JSON, DiffResults> getSerializedDiffResults();
+std::pair<std::string, DiffResults> getSerializedDiffResultsJSON();
     
-      /*
-   * Create an uncounted array if we can.
-   *
-   * If this collection is an OuterHandle, then we need to do a full check on
-   * this array for things like circularity.  If we're an InnerHandle, someone
-   * already checked that, but we want to check for whether it's uncounted to
-   * use a better representation.  For the OuterHandle case, we just delegate
-   * to APCArray below (which will do the full DataWalker pass).
-   */
-  if (level == APCHandleLevel::Inner && apcExtension::UseUncounted &&
-      !array->empty()) {
-    DataWalker walker(DataWalker::LookupFeature::HasObjectOrResource);
-    auto const features = walker.traverseData(const_cast<ArrayData*>(array));
-    assertx(!features.isCircular);
-    if (!features.hasObjectOrResource) {
-      auto const makeUncounted = [&] () {
-        if (isVectorCollection(obj->collectionType())) {
-          return APCArray::MakeUncountedVec(const_cast<ArrayData*>(array));
-        }
-        return APCArray::MakeUncountedDict(const_cast<ArrayData*>(array));
-      };
-      return WrapArray(
-        { makeUncounted(), getMemSize(array) + sizeof(APCTypedValue) },
-        obj->collectionType()
-      );
-    }
-  }
+      // Allocates an an arguments (either rest, strict or sloppy) together with the
+  // FixedArray elements for the arguments and a parameter map (for sloppy
+  // arguments only). A tuple is returned with pointers to the arguments object,
+  // the elements and parameter map in the form:
+  // <argument object, arguments FixedArray, parameter map or nullptr>
+  std::tuple<Node*, Node*, Node*> AllocateArgumentsObject(
+      Node* map, Node* arguments, Node* mapped_arguments,
+      ParameterMode param_mode, int base_size);
     
+    #endif  // V8_BUILTINS_BUILTINS_ASYNC_GEN_H_
+
     
-    {private:
-  APCHandle m_handle;
-  APCHandle* m_arrayHandle;
-  CollectionType m_colType;
-};
+    #include 'src/builtins/builtins-utils-gen.h'
+#include 'src/builtins/builtins.h'
+#include 'src/code-stub-assembler.h'
     
-      // Parse and process a .hdf string (e.g., -v)
-  static void ParseHdfString(const std::string &hdfStr, Hdf &hdf);
-    
-        bool isPHP = false;
-    const char *p = strrchr(ename, '.');
-    if (p) {
-      isPHP = (strncmp(p + 1, 'php', 3) == 0);
-    } else {
-      try {
-        std::string line;
-        std::ifstream fin(fe.c_str());
-        if (std::getline(fin, line)) {
-          if (line[0] == '#' && line[1] == '!' &&
-              line.find('php') != std::string::npos) {
-            isPHP = true;
-          }
-        }
-      } catch (...) {
-        Logger::Error('FileUtil::find(): unable to read %s', fe.c_str());
-      }
+    class CallOrConstructBuiltinsAssembler : public CodeStubAssembler {
+ public:
+  explicit CallOrConstructBuiltinsAssembler(compiler::CodeAssemblerState* state)
+      : CodeStubAssembler(state) {}
     }
     
-    
-    {///////////////////////////////////////////////////////////////////////////////
+    void Builtins::Generate_InterpreterPushArgsThenCallWithFinalSpread(
+    MacroAssembler* masm) {
+  return Generate_InterpreterPushArgsThenCallImpl(
+      masm, ConvertReceiverMode::kAny,
+      InterpreterPushArgsMode::kWithFinalSpread);
 }
     
-    namespace xgboost {
-/*!
- * \brief interface of gradient boosting model.
- */
-class GradientBooster {
- public:
-  /*! \brief virtual destructor */
-  virtual ~GradientBooster() = default;
-  /*!
-   * \brief set configuration from pair iterators.
-   * \param begin The beginning iterator.
-   * \param end The end iterator.
-   * \tparam PairIter iterator<std::pair<std::string, std::string> >
-   */
-  template<typename PairIter>
-  inline void Configure(PairIter begin, PairIter end);
-  /*!
-   * \brief Set the configuration of gradient boosting.
-   *  User must call configure once before InitModel and Training.
-   *
-   * \param cfg configurations on both training and model parameters.
-   */
-  virtual void Configure(const std::vector<std::pair<std::string, std::string> >& cfg) = 0;
-  /*!
-   * \brief load model from stream
-   * \param fi input stream.
-   */
-  virtual void Load(dmlc::Stream* fi) = 0;
-  /*!
-   * \brief save model to stream.
-   * \param fo output stream
-   */
-  virtual void Save(dmlc::Stream* fo) const = 0;
-  /*!
-   * \brief whether the model allow lazy checkpoint
-   * return true if model is only updated in DoBoost
-   * after all Allreduce calls
-   */
-  virtual bool AllowLazyCheckPoint() const {
-    return false;
+    #ifndef V8_BUILTINS_BUILTINS_LAZY_GEN_H_
+#define V8_BUILTINS_BUILTINS_LAZY_GEN_H_
+    
+    // ES6 #sec-math.max
+TF_BUILTIN(MathMax, MathBuiltinsAssembler) {
+  // TODO(ishell): use constants from Descriptor once the JSFunction linkage
+  // arguments are reordered.
+  Node* context = Parameter(Descriptor::kContext);
+  Node* argc = Parameter(Descriptor::kJSActualArgumentsCount);
+  MathMaxMin(context, argc, &CodeStubAssembler::Float64Max, -1.0 * V8_INFINITY);
+}
+    
+    #if V8_TARGET_ARCH_MIPS || V8_TARGET_ARCH_MIPS64 || V8_TARGET_ARCH_PPC64 || \
+    V8_TARGET_ARCH_PPC || V8_TARGET_ARCH_S390 || V8_TARGET_ARCH_S390X
+  Return(CallRuntime(runtime_function, context, array, index_integer,
+                     value_integer));
+#else
+  Node* index_word = ChangeUint32ToWord(index_word32);
+    
+    
+    {
+    {}  // namespace internal
+}  // namespace v8
+    
+      // NOLINTNEXTLINE(cppcoreguidlines-pro-type-member-init)
+  constexpr erasure(erasure&& right) noexcept
+      : invoke_table_(right.invoke_table_), view_(right.view_) {
   }
-  /*!
-   * \brief perform update to the model(boosting)
-   * \param p_fmat feature matrix that provide access to features
-   * \param in_gpair address of the gradient pair statistics of the data
-   * \param obj The objective function, optional, can be nullptr when use customized version
-   * the booster may change content of gpair
-   */
-  virtual void DoBoost(DMatrix* p_fmat,
-                       HostDeviceVector<GradientPair>* in_gpair,
-                       ObjFunction* obj = nullptr) = 0;
+    
+        int maxChunkSize = 10000;
+    char *paddedBuffer = (char *) malloc(maxChunkSize + 32);
+    
+    
+    {
+    {            char *key = new char[url.length()];
+            memcpy(key, url.data(), url.length());
+            asyncFileReaders[std::string_view(key, url.length())] = new AsyncFileReader(p.path().string());
+        }
     }
+    
+    class WebSocketHandshake {
+    template <int N, typename T>
+    struct static_for {
+        void operator()(uint32_t *a, uint32_t *b) {
+            static_for<N - 1, T>()(a, b);
+            T::template f<N - 1>(a, b);
+        }
+    };
+    }
+    
+    us_listen_socket *token;
+    
+        TemplatedApp &&trace(std::string pattern, fu2::unique_function<void(HttpResponse<SSL> *, HttpRequest *)> &&handler) {
+        httpContext->onHttp('trace', pattern, std::move(handler));
+        return std::move(*this);
+    }
+    
+        /* Checking if we have fully responded and are ready for another request */
+    bool hasResponded() {
+        HttpResponseData<SSL> *httpResponseData = getHttpResponseData();
+    }
+    
+            inflateReset(&inflationStream);
+    
+        void ReadNext(const void *base, uint64_t bit_offset, uint64_t index, uint8_t total_bits, NodeRange &out) const {
+      // Some assertions are commented out because they are expensive.
+      // assert(*offset_begin_ == 0);
+      // std::upper_bound returns the first element that is greater.  Want the
+      // last element that is <= to the index.
+      const uint64_t *begin_it = std::upper_bound(offset_begin_, offset_end_, index) - 1;
+      // Since *offset_begin_ == 0, the position should be in range.
+      // assert(begin_it >= offset_begin_);
+      const uint64_t *end_it;
+      for (end_it = begin_it + 1; (end_it < offset_end_) && (*end_it <= index + 1); ++end_it) {}
+      // assert(end_it == std::upper_bound(offset_begin_, offset_end_, index + 1));
+      --end_it;
+      // assert(end_it >= begin_it);
+      out.begin = ((begin_it - offset_begin_) << next_inline_.bits) |
+        util::ReadInt57(base, bit_offset, next_inline_.bits, next_inline_.mask);
+      out.end = ((end_it - offset_begin_) << next_inline_.bits) |
+        util::ReadInt57(base, bit_offset + total_bits, next_inline_.bits, next_inline_.mask);
+      // If this fails, consider rebuilding your model using KenLM after 1e333d786b748555e8f368d2bbba29a016c98052
+      assert(out.end >= out.begin);
+    }
+    
+    namespace lm {
+namespace ngram {
+    }
+    }
+    
+          if (++streams[current]) break;
+    
+      std::vector<WordIndex> buffer(context.length + 1), query(context.length + 1);
+  std::reverse_copy(context.words, context.words + context.length, query.begin());
+  query[context.length] = word;
+    
+    #endif // LM_COMMON_SPECIAL_H
+
+    
+        std::size_t i = 0;
+    for (; stream; ++stream, ++i) {
+      std::stringstream ss;
+      for (WordIndex *idx = stream->begin(); idx != stream->end(); ++idx)
+        ss << '(' << *idx << ')';
     }
