@@ -1,97 +1,167 @@
 
         
-        #ifndef BENCHMARK_HAS_CXX11
-#define BENCHMARK_DISALLOW_COPY_AND_ASSIGN(TypeName) \
-  TypeName(const TypeName&);                         \
-  TypeName& operator=(const TypeName&)
-#else
-#define BENCHMARK_DISALLOW_COPY_AND_ASSIGN(TypeName) \
-  TypeName(const TypeName&) = delete;                \
-  TypeName& operator=(const TypeName&) = delete
-#endif
+          gfx::Point GetCursorScreenPoint();
+  display::Display GetPrimaryDisplay();
+  std::vector<display::Display> GetAllDisplays();
+  display::Display GetDisplayNearestPoint(const gfx::Point& point);
+  display::Display GetDisplayMatching(const gfx::Rect& match_rect);
     
-      // We need to flush the stream buffers into the console before each
-  // SetConsoleTextAttribute call lest it affect the text that is already
-  // printed but has not yet reached the console.
-  fflush(stdout);
-  SetConsoleTextAttribute(stdout_handle,
-                          GetPlatformColorCode(color) | FOREGROUND_INTENSITY);
-  vprintf(fmt, args);
-    
-    static void IgnoreColorPrint(std::ostream& out, LogColor, const char* fmt,
-                             ...) {
-  va_list args;
-  va_start(args, fmt);
-  out << FormatString(fmt, args);
-  va_end(args);
-}
-    
-     private:
-  Mutex lock_;
-  Condition phase_condition_;
-  int running_threads_;
-    
-    #if defined(HAVE_STD_REGEX)
-    
-      if (info.scaling_enabled) {
-    Out << '***WARNING*** CPU scaling is enabled, the benchmark '
-           'real time measurements may be noisy and will incur extra '
-           'overhead.\n';
-  }
-    
-    exception_wrapper::VTable const exception_wrapper::SharedPtr::ops_{
-    copy_,
-    move_,
-    delete_,
-    throw_,
-    type_,
-    get_exception_,
-    get_exception_ptr_};
-    
-    namespace uri_detail {
+    namespace atom {
     }
     
-    /**
- * Reads sizeof(T) bytes, and returns false if not enough bytes are available.
- * Returns true if the first n bytes are equal to prefix when interpreted as
- * a little endian T.
- */
-template <typename T>
-typename std::enable_if<std::is_unsigned<T>::value, bool>::type
-dataStartsWithLE(const IOBuf* data, T prefix, uint64_t n = sizeof(T)) {
-  DCHECK_GT(n, 0);
-  DCHECK_LE(n, sizeof(T));
-  T value;
-  Cursor cursor{data};
-  if (!cursor.tryReadLE(value)) {
-    return false;
-  }
-  const T mask = n == sizeof(T) ? T(-1) : (T(1) << (8 * n)) - 1;
-  return prefix == (value & mask);
+    
+    {}  // namespace atom
+    
+    void FinishTransactionByDate(const std::string& date);
+    
+      // Downloadable Content Information
+  bool downloadable = false;
+    
+    #include <string>
+    
+    void OffscreenViewProxy::RemoveObserver() {
+  observer_ = nullptr;
 }
     
-    template <template <typename> class Atom = std::atomic>
-class counted_ptr_internals : public counted_ptr_base<Atom> {
- public:
-  template <typename T, typename... Args>
-  static counted_ptr<T, Atom> make_ptr(Args&&... args) {
-    return make_counted<Atom, T>(std::forward<Args...>(args...));
+      // Releases ownership of the object without decrementing the reference count.
+  // The caller now owns the returned reference.
+  PyObjectStruct* release() {
+    PyObject* p = ptr_;
+    ptr_ = NULL;
+    return p;
   }
-  template <typename T>
-  using CountedPtr = counted_ptr<T, Atom>;
-  typedef void counted_base;
+    
+    static void WriteDocCommentBodyForLocation(
+    io::Printer* printer, const SourceLocation& location) {
+  string comments = location.leading_comments.empty() ?
+      location.trailing_comments : location.leading_comments;
+  if (!comments.empty()) {
+    // TODO(kenton):  Ideally we should parse the comment text as Markdown and
+    //   write it back as HTML, but this requires a Markdown parser.  For now
+    //   we just use <pre> to get fixed-width text formatting.
+    }
     }
     
-    TEST_F(SparseByteSetTest, each_random) {
-  mt19937 rng;
-  uniform_int_distribution<uint16_t> dist{lims::min(), lims::max()};
-  set<uint8_t> added;
-  while (added.size() <= lims::max()) {
-    auto c = uint8_t(dist(rng));
-    EXPECT_EQ(added.count(c), s.contains(c));
-    EXPECT_EQ(!added.count(c), s.add(c));
-    added.insert(c);
-    EXPECT_TRUE(added.count(c)); // sanity
-    EXPECT_TRUE(s.contains(c));
-  }
-}
+      desired_output_for_decode = 'ABCD__EfghI_j';
+  expected = string('\x64\x80\xC5\xA1\x0', 5);
+  result = TextFormatDecodeData::DecodeDataForString(input_for_decode,
+                                                     desired_output_for_decode);
+  EXPECT_EQ(expected, result);
+    
+      // Check default values.
+  const Descriptor* descriptor = message->GetDescriptor();
+  const Reflection* reflection = message->GetReflection();
+  EXPECT_EQ(0, reflection->GetInt32(
+      *message, descriptor->FindFieldByName('foo_int')));
+  EXPECT_EQ('', reflection->GetString(
+      *message, descriptor->FindFieldByName('foo_string')));
+  EXPECT_EQ('', reflection->GetString(
+      *message, descriptor->FindFieldByName('foo_cord')));
+  EXPECT_EQ('', reflection->GetString(
+      *message, descriptor->FindFieldByName('foo_string_piece')));
+  EXPECT_EQ('', reflection->GetString(
+      *message, descriptor->FindFieldByName('foo_bytes')));
+  EXPECT_EQ(unittest::TestOneof2::FOO, reflection->GetEnum(
+      *message, descriptor->FindFieldByName('foo_enum'))->number());
+  const Descriptor* nested_descriptor;
+  const Message* nested_prototype;
+  nested_descriptor =
+      pool_.FindMessageTypeByName('protobuf_unittest.TestOneof2.NestedMessage');
+  nested_prototype = factory_.GetPrototype(nested_descriptor);
+  EXPECT_EQ(nested_prototype,
+            &reflection->GetMessage(
+                *message, descriptor->FindFieldByName('foo_message')));
+  const Descriptor* foogroup_descriptor;
+  const Message* foogroup_prototype;
+  foogroup_descriptor =
+      pool_.FindMessageTypeByName('protobuf_unittest.TestOneof2.FooGroup');
+  foogroup_prototype = factory_.GetPrototype(foogroup_descriptor);
+  EXPECT_EQ(foogroup_prototype,
+            &reflection->GetMessage(
+                *message, descriptor->FindFieldByName('foogroup')));
+  EXPECT_NE(foogroup_prototype,
+            &reflection->GetMessage(
+                *message, descriptor->FindFieldByName('foo_lazy_message')));
+  EXPECT_EQ(5, reflection->GetInt32(
+      *message, descriptor->FindFieldByName('bar_int')));
+  EXPECT_EQ('STRING', reflection->GetString(
+      *message, descriptor->FindFieldByName('bar_string')));
+  EXPECT_EQ('CORD', reflection->GetString(
+      *message, descriptor->FindFieldByName('bar_cord')));
+  EXPECT_EQ('SPIECE', reflection->GetString(
+      *message, descriptor->FindFieldByName('bar_string_piece')));
+  EXPECT_EQ('BYTES', reflection->GetString(
+      *message, descriptor->FindFieldByName('bar_bytes')));
+  EXPECT_EQ(unittest::TestOneof2::BAR, reflection->GetEnum(
+      *message, descriptor->FindFieldByName('bar_enum'))->number());
+    
+    const std::string& DHTResponseMessage::getType() const { return R; }
+    
+      virtual std::shared_ptr<DHTTask>
+  createPeerAnnounceTask(const unsigned char* infoHash) = 0;
+    
+    namespace aria2 {
+    }
+    
+    
+    {} // namespace aria2
+    
+        deleteLinkedList(head);
+    
+                    char match;
+                if( s[i] == ')' )
+                    match = '(';
+                else if( s[i] == ']' )
+                    match = '[';
+                else{
+                    assert( s[i] == '}' );
+                    match = '{';
+                }
+    
+        vector<int> vec2 = {2};
+    Solution().sortColors(vec2);
+    printArr(vec2);
+    
+            ListNode* pre = dummyHead;
+        for(int i = 0; i < m - 1; i ++){
+            pre = pre->next
+        }
+    
+    
+    {        vector<int> res;
+        __inorderTraversal(root, res);
+        return res;
+    }
+    
+    private:
+    struct Command{
+        string s;   // go, print
+        TreeNode* node;
+        Command(string s, TreeNode* node): s(s), node(node){}
+    };
+    
+    /// BFS
+/// No need to store level information in the queue :-)
+///
+/// Time Complexity: O(n), where n is the number of nodes in the tree
+/// Space Complexity: O(n)
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+    }
+    }
+    
+    // Recursive
+// Time Complexity: O(n), n is the node number in the tree
+// Space Complexity: O(h), h is the height of the tree
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+    }
+    }
+    
+    // PreOrder Morris Traversal
+// Time Complexity: O(n), n is the node number in the tree
+// Space Complexity: O(1)
+class Solution {
+    }
