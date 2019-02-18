@@ -1,140 +1,97 @@
 
         
-        # Supported
-IAX_SUPPORTED_CODECS  = IAX_CODEC_G711_MULAW | IAX_CODEC_G711_ALAW | IAX_CODEC_LINEAR_PCM
+              it 'updates an existing user' do
+        visit edit_admin_user_path(users(:bob))
+        check 'Admin'
+        click_on 'Update User'
+        expect(page).to have_text('User 'bob' was successfully updated.')
+        visit edit_admin_user_path(users(:bob))
+        expect(page).to have_checked_field('Admin')
+      end
     
+      it 'allows to click on on the agent name in select2 tags' do
+    visit new_agent_path
+    select_agent_type('Website Agent scrapes')
+    select2('SF Weather', from: 'Sources')
+    click_on 'SF Weather'
+    expect(page).to have_content 'Editing your WeatherAgent'
+  end
     
-  # open rmcpplus_request with cipherzero
-  def self.create_ipmi_session_open_cipher_zero_request(console_session_id)
-    head = [
-      0x06, 0x00, 0xff, 0x07,   # RMCP Header
-      0x06,                     # RMCP+ Authentication Type
-      PAYLOAD_RMCPPLUSOPEN_REQ, # Payload Type
-      0x00, 0x00, 0x00, 0x00,   # Session ID
-      0x00, 0x00, 0x00, 0x00    # Sequence Number
-    ].pack('C*')
+      it 'asks to accept conflicts when the scenario was modified' do
+    DefaultScenarioImporter.seed(user)
+    agent = user.agents.where(name: 'Rain Notifier').first
+    agent.options['expected_receive_period_in_days'] = 9001
+    agent.save!
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
+    click_on 'Start Import'
+    expect(page).to have_text('This Scenario already exists in your system.')
+    expect(page).to have_text('9001')
+    check('I confirm that I want to import these Agents.')
+    click_on 'Finish Import'
+    expect(page).to have_text('Import successful!')
+  end
     
-            # Creates a connection through a Rex socket
-        #
-        # @return [Rex::Socket::Tcp]
-        # @raise [RuntimeError] if the connection can not be created
-        def connect
-          return connection if connection
-    
-              # Decodes the pvno from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_pvno(input)
-            input.value[0].value.to_i
-          end
-    
-              # Decodes a Rex::Proto::Kerberos::Model::EncryptionKey from an
-          # OpenSSL::ASN1::Sequence
-          #
-          # @param input [OpenSSL::ASN1::Sequence] the input to decode from
-          def decode_asn1(input)
-            seq_values = input.value
-            self.type = decode_type(seq_values[0])
-            self.value = decode_value(seq_values[1])
-          end
-    
-      if config.log_to.include? 'file'
-    # Configure an appender that will write log events to a file.
-    if AppConfig.environment.logging.logrotate.enable?
-      # The file will be rolled on a daily basis, and the rolled files will be kept
-      # the configured number of days. Older files will be deleted. The default pattern
-      # layout is used when formatting log events into strings.
-      Logging.appenders.rolling_file('file',
-                                     filename:      config.paths['log'].first,
-                                     keep:          AppConfig.environment.logging.logrotate.days.to_i,
-                                     age:           'daily',
-                                     truncate:      false,
-                                     auto_flushing: true,
-                                     layout:        layout
-                                    )
-    else
-      # No file rolling, use logrotate to roll the logfile.
-      Logging.appenders.file('file',
-                             filename:      config.paths['log'].first,
-                             truncate:      false,
-                             auto_flushing: true,
-                             layout:        layout
-                            )
+        it 'works for queued jobs' do
+      expect(status(job)).to eq('<span class='label label-warning'>queued</span>')
     end
   end
     
-        reversible(&method(:up_down))
-  end
-    
-        it 'paginates the notifications' do
-      25.times { FactoryGirl.create(:notification, :recipient => alice, :target => @post) }
-      get :index
-      expect(assigns[:notifications].count).to eq(25)
-      get :index, params: {page: 2}
-      expect(assigns[:notifications].count).to eq(1)
+    describe DefaultScenarioImporter do
+  let(:user) { users(:bob) }
+  describe '.import' do
+    it 'imports a set of agents to get the user going when they are first created' do
+      mock(DefaultScenarioImporter).seed(is_a(User))
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'true' }
+      DefaultScenarioImporter.import(user)
     end
     
-                case platform
-            when 'iOS' then self.platform :ios, '10.0'
-            when 'macOS' then self.platform :macos, '10.10'
-            end
+        describe 'url' do
+      it 'should be invalid with an unreasonable URL' do
+        subject.url = 'foo'
+        expect(subject).not_to be_valid
+        expect(subject).to have(1).error_on(:url)
+        expect(subject.errors[:url]).to include('appears to be invalid')
+      end
     
-    desc 'list of authors'
-task :authors, [:commit_range, :format, :sep] do |t, a|
-  a.with_defaults :format => '%s (%d)', :sep => ', ', :commit_range => '--all'
-  authors = Hash.new(0)
-  blake   = 'Blake Mizerany'
-  overall = 0
-  mapping = {
-    'blake.mizerany@gmail.com' => blake, 'bmizerany' => blake,
-    'a_user@mac.com' => blake, 'ichverstehe' => 'Harry Vangberg',
-    'Wu Jiang (nouse)' => 'Wu Jiang' }
-  `git shortlog -s #{a.commit_range}`.lines.map do |line|
-    line = line.force_encoding 'binary' if line.respond_to? :force_encoding
-    num, name = line.split('\t', 2).map(&:strip)
-    authors[mapping[name] || name] += num.to_i
-    overall += num.to_i
+      describe 'up' do
+    it 'should update extract and template options for an existing WebsiteAgent' do
+      expect(agent.options).to include('extract' => old_extract,
+                                       'template' => old_template)
+      ConvertWebsiteAgentTemplateForMerge.new.up
+      agent.reload
+      expect(agent.options).to include('extract' => new_extract,
+                                       'template' => new_template)
+    end
   end
-  puts '#{overall} commits by #{authors.count} authors:'
-  puts authors.sort_by { |n,c| -c }.map { |e| a.format % e }.join(a.sep)
+    
+    describe AgentLog do
+  describe 'validations' do
+    before do
+      @log = AgentLog.new(:agent => agents(:jane_website_agent), :message => 'The agent did something', :level => 3)
+      expect(@log).to be_valid
+    end
+    
+        it 'should provide the since attribute after the first run' do
+      time = (Time.now-1.minute).iso8601
+      @checker.memory[:last_event] = time
+      @checker.save
+      expect(@checker.reload.send(:query_parameters)).to eq({:query => {:since => time}})
+    end
+  end
+    
+        def create
+      authorize :status, :update?
+    
+      private
+    
+      def require_enabled_api!
+    head 404 unless Setting.activity_api_enabled
+  end
 end
+
     
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   XSS and others
-    # Supported browsers:: Firefox 23+, Safari 7+, Chrome 25+, Opera 15+
-    #
-    # Description:: Content Security Policy, a mechanism web applications
-    #               can use to mitigate a broad class of content injection
-    #               vulnerabilities, such as cross-site scripting (XSS).
-    #               Content Security Policy is a declarative policy that lets
-    #               the authors (or server administrators) of a web application
-    #               inform the client about the sources from which the
-    #               application expects to load resources.
-    #
-    # More info::   W3C CSP Level 1 : https://www.w3.org/TR/CSP1/ (deprecated)
-    #               W3C CSP Level 2 : https://www.w3.org/TR/CSP2/ (current)
-    #               W3C CSP Level 3 : https://www.w3.org/TR/CSP3/ (draft)
-    #               https://developer.mozilla.org/en-US/docs/Web/Security/CSP
-    #               http://caniuse.com/#search=ContentSecurityPolicy
-    #               http://content-security-policy.com/
-    #               https://securityheaders.io
-    #               https://scotthelme.co.uk/csp-cheat-sheet/
-    #               http://www.html5rocks.com/en/tutorials/security/content-security-policy/
-    #
-    # Sets the 'Content-Security-Policy[-Report-Only]' header.
-    #
-    # Options: ContentSecurityPolicy configuration is a complex topic with
-    #          several levels of support that has evolved over time.
-    #          See the W3C documentation and the links in the more info
-    #          section for CSP usage examples and best practices. The
-    #          CSP3 directives in the 'NO_ARG_DIRECTIVES' constant need to be
-    #          presented in the options hash with a boolean 'true' in order
-    #          to be used in a policy.
-    #
-    class ContentSecurityPolicy < Base
-      default_options default_src: :none, script_src: ''self'',
-                      img_src: ''self'', style_src: ''self'',
-                      connect_src: ''self'', report_only: false
+        active_session.update!(web_push_subscription: web_subscription)
+    
+      private
