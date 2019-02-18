@@ -1,36 +1,77 @@
 
         
-        
-class GitHubReleaser(object):
-    _API_URL = 'https://api.github.com/repos/rg3/youtube-dl/releases'
-    _UPLOADS_URL = 'https://uploads.github.com/repos/rg3/youtube-dl/releases/%s/assets?name=%s'
-    _NETRC_MACHINE = 'github.com'
+            for group in opt_parser.option_groups:
+        for option in group.option_list:
+            long_option = option.get_opt_string().strip('-')
+            complete_cmd = ['complete', '--command', 'youtube-dl', '--long-option', long_option]
+            if option._short_opts:
+                complete_cmd += ['--short-option', option._short_opts[0].strip('-')]
+            if option.help != optparse.SUPPRESS_HELP:
+                complete_cmd += ['--description', option.help]
+            complete_cmd.extend(EXTRA_ARGS.get(long_option, []))
+            commands.append(shell_quote(complete_cmd))
     
-    # We must be able to import youtube_dl
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
+    versions_info = json.load(open('update/versions.json'))
+if 'signature' in versions_info:
+    del versions_info['signature']
     
-class TestAgeRestriction(unittest.TestCase):
-    def _assert_restricted(self, url, filename, age, old_age=None):
-        self.assertTrue(_download_restricted(url, filename, old_age))
-        self.assertFalse(_download_restricted(url, filename, age))
-    
-        def test_vimeo_matching(self):
-        self.assertMatch('https://vimeo.com/channels/tributes', ['vimeo:channel'])
-        self.assertMatch('https://vimeo.com/channels/31259', ['vimeo:channel'])
-        self.assertMatch('https://vimeo.com/channels/31259/53576664', ['vimeo'])
-        self.assertMatch('https://vimeo.com/user7108434', ['vimeo:user'])
-        self.assertMatch('https://vimeo.com/user7108434/videos', ['vimeo:user'])
-        self.assertMatch('https://vimeo.com/user21297594/review/75524534/3c257a1b5d', ['vimeo:review'])
-    
-    rootDir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    
-        By default this will get the strings from the blns.txt file
-    
-    
-if __name__ == '__main__':
-    unittest.main()  # pragma: no cover
+    with io.open('update/releases.atom', 'w', encoding='utf-8') as atom_file:
+    atom_file.write(atom_template)
 
+    
+    # List of patterns, relative to source directory, that match files and
+# directories to ignore when looking for source files.
+exclude_patterns = ['_build']
+    
+        def test_encrypt(self):
+        msg = b'message'
+        key = list(range(16))
+        encrypted = aes_encrypt(bytes_to_intlist(msg), key)
+        decrypted = intlist_to_bytes(aes_decrypt(encrypted, key))
+        self.assertEqual(decrypted, msg)
+    
+        def test_youtube_feeds(self):
+        self.assertMatch('https://www.youtube.com/feed/watch_later', ['youtube:watchlater'])
+        self.assertMatch('https://www.youtube.com/feed/subscriptions', ['youtube:subscriptions'])
+        self.assertMatch('https://www.youtube.com/feed/recommended', ['youtube:recommended'])
+        self.assertMatch('https://www.youtube.com/my_favorites', ['youtube:favorites'])
+    
+        def debug(self, msg):
+        pass
+    
+        if not args.session and not args.session_read_only:
+        kwargs = get_requests_kwargs(args)
+        if args.debug:
+            dump_request(kwargs)
+        response = requests_session.request(**kwargs)
+    else:
+        response = sessions.get_response(
+            requests_session=requests_session,
+            args=args,
+            config_dir=config_dir,
+            session_name=args.session or args.session_read_only,
+            read_only=bool(args.session_read_only),
+        )
+    
+            headers = dict(self._orig.headers)
+        if 'Host' not in self._orig.headers:
+            headers['Host'] = url.netloc.split('@')[-1]
+    
+            '''
+        r.headers['Authorization'] = type(self).make_header(
+            self.username, self.password).encode('latin1')
+        return r
+    
+    # TODO: run all these tests in session mode as well
+    
+        def test_print_only_body_when_stdout_redirected_by_default(self, httpbin):
+        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
+        r = http('GET', httpbin.url + '/get', env=env)
+        assert 'HTTP/' not in r
     
         def __init__(self, json_name, value):
         self.value = value
@@ -38,34 +79,8 @@ if __name__ == '__main__':
             json_name=json_name, default=value, omitempty=False)
     
     
-class Signature(jose.Signature):
-    '''ACME-specific Signature. Uses ACME-specific Header for customer fields.'''
-    __slots__ = jose.Signature._orig_slots  # pylint: disable=no-member
-    
-    # Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
-extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.todo',
-    'sphinx.ext.coverage',
-    'sphinx.ext.viewcode',
-]
-    
-        return file_path, '/'.join(reversed(internal_path))
-    
-        def test_view_config_changes_error(self):
-        self.config.reverter.view_config_changes = mock.Mock(
-            side_effect=errors.ReverterError)
-        self.assertRaises(errors.PluginError, self.config.view_config_changes)
-    
-            achall = self.achalls[0]
-        self.sni.add_chall(achall)
-        response = self.achalls[0].response(self.auth_key)
-        mock_setup_cert = mock.MagicMock(return_value=response)
-        # pylint: disable=protected-access
-        self.sni._setup_challenge_cert = mock_setup_cert
+def parse_define_file(filepath, varname):
+    ''' Parses Defines from a variable in configuration file
     
         :param list indices: Meant to hold indices of challenges in a
         larger array. ApacheTlsSni01 is capable of solving many challenges
@@ -75,12 +90,60 @@ extensions = [
         TLS-SNI-01 Challenges belong in the response array.  This is an
         optional utility.
     
-      # Except after an opening paren, or after another opening brace (in case of
-  # an initializer list, for instance), you should have spaces before your
-  # braces when they are delimiting blocks, classes, namespaces etc.
-  # And since you should never have braces at the beginning of a line,
-  # this is an easy test.  Except that braces used for initialization don't
-  # follow the same rule; we often don't want spaces before those.
-  match = Match(r'^(.*[^ ({>]){', line)
-    }
-    }
+    
+def setup_scanner(hass, config, see, discovery_info=None):
+    '''Set up the demo tracker.'''
+    def offset():
+        '''Return random offset.'''
+        return (random.randrange(500, 2000)) / 2e5 * random.choice((-1, 1))
+    
+            from nmap import PortScanner, PortScannerError
+        scanner = PortScanner()
+    
+            devices = {}
+        for device in request.json()['status']:
+            try:
+                devices[device['Key']] = {
+                    'ip': device['IPAddress'],
+                    'mac': device['PhysAddress'],
+                    'host': device['Name'],
+                    'status': device['Active']
+                    }
+            except (KeyError, requests.exceptions.RequestException):
+                pass
+        return devices
+
+    
+    For more details about this platform, please refer to the documentation at
+https://home-assistant.io/components/notify.clickatell/
+'''
+import logging
+    
+    import voluptuous as vol
+    
+            if resp.status_code == 400:
+            _LOGGER.error('At least one parameter is missing')
+        elif resp.status_code == 402:
+            _LOGGER.error('Too much SMS send in a few time')
+        elif resp.status_code == 403:
+            _LOGGER.error('Wrong Username/Password')
+        elif resp.status_code == 500:
+            _LOGGER.error('Server error, try later')
+
+    
+    import homeassistant.helpers.config_validation as cv
+from homeassistant.components.notify import (
+    ATTR_TARGET, ATTR_DATA, PLATFORM_SCHEMA, BaseNotificationService)
+from homeassistant.const import CONF_TOKEN, CONF_HOST, CONF_ROOM
+    
+    
+def get_service(hass, config, discovery_info=None):
+    '''Get the LlamaLab Automate notification service.'''
+    secret = config.get(CONF_API_KEY)
+    recipient = config.get(CONF_TO)
+    device = config.get(CONF_DEVICE)
+    
+        return MessageBirdNotificationService(config.get(CONF_SENDER), client)
+    
+    
+from homeassistant.components.notify import BaseNotificationService
