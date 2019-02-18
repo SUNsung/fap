@@ -1,195 +1,257 @@
 
         
-        for test in gettestcases():
-    if METHOD == 'EURISTIC':
-        try:
-            webpage = compat_urllib_request.urlopen(test['url'], timeout=10).read()
-        except Exception:
-            print('\nFail: {0}'.format(test['name']))
-            continue
+              self.path_lookup = tf.get_variable(
+          name='path_lookup',
+          dtype=tf.float32,
+          trainable=False,
+          shape=self.path_embeddings.shape)
     
-    import json
-import sys
-import hashlib
-import os.path
+    # not the best way to do this but E is small enough
+rates = []
+spikes = []
+for trial in xrange(E):
+  if rnn_to_use[trial] == 0:
+    rates.append(rates_a[trial])
+    spikes.append(spikes_a[trial])
+  else:
+    rates.append(rates_b[trial])
+    spikes.append(spikes_b[trial])
     
+      Returns:
+    loss: Scalar tf.float32 total loss.
+  '''
+  cross_entropy_loss = tf.nn.sparse_softmax_cross_entropy_with_logits(
+      labels=gen_labels, logits=gen_logits)
+  # Maximize the dis_values (minimize the negative)
+  gan_loss = -dis_values
+  loss_matrix = tf.where(is_real_input, cross_entropy_loss, gan_loss)
+  loss = tf.reduce_mean(loss_matrix)
+  return loss
     
-# find the correct sorting and add the required base classes so that sublcasses
-# can be correctly created
-classes = _ALL_CLASSES[:-1]
-ordered_cls = []
-while classes:
-    for c in classes[:]:
-        bases = set(c.__bases__) - set((object, InfoExtractor, SearchInfoExtractor))
-        stop = False
-        for b in bases:
-            if b not in classes and b not in ordered_cls:
-                if b.__name__ == 'GenericIE':
-                    exit()
-                classes.insert(0, b)
-                stop = True
-        if stop:
-            break
-        if all(b in ordered_cls for b in bases):
-            ordered_cls.append(c)
-            classes.remove(c)
-            break
-ordered_cls.append(_ALL_CLASSES[-1])
+      Returns:
+    predictions:  tf.float32 Tensor of predictions of shape [batch_size,
+      sequence_length]
+  '''
+  if FLAGS.discriminator_model == 'cnn':
+    predictions = cnn.discriminator(
+        hparams, sequence, is_training=is_training, reuse=reuse)
+  elif FLAGS.discriminator_model == 'fnn':
+    predictions = feedforward.discriminator(
+        hparams, sequence, is_training=is_training, reuse=reuse)
+  elif FLAGS.discriminator_model == 'rnn':
+    predictions = rnn.discriminator(
+        hparams, sequence, is_training=is_training, reuse=reuse)
+  elif FLAGS.discriminator_model == 'bidirectional':
+    predictions = bidirectional.discriminator(
+        hparams, sequence, is_training=is_training, reuse=reuse)
+  elif FLAGS.discriminator_model == 'bidirectional_zaremba':
+    predictions = bidirectional_zaremba.discriminator(
+        hparams, sequence, is_training=is_training, reuse=reuse)
+  elif FLAGS.discriminator_model == 'seq2seq_vd':
+    predictions = seq2seq_vd.discriminator(
+        hparams,
+        inputs,
+        present,
+        sequence,
+        is_training=is_training,
+        reuse=reuse)
+  elif FLAGS.discriminator_model == 'rnn_zaremba':
+    predictions = rnn_zaremba.discriminator(
+        hparams, sequence, is_training=is_training, reuse=reuse)
+  elif FLAGS.discriminator_model == 'rnn_nas':
+    predictions = rnn_nas.discriminator(
+        hparams, sequence, is_training=is_training, reuse=reuse)
+  elif FLAGS.discriminator_model == 'rnn_vd':
+    predictions = rnn_vd.discriminator(
+        hparams,
+        sequence,
+        is_training=is_training,
+        reuse=reuse,
+        initial_state=initial_state)
+  elif FLAGS.discriminator_model == 'bidirectional_vd':
+    predictions = bidirectional_vd.discriminator(
+        hparams,
+        sequence,
+        is_training=is_training,
+        reuse=reuse,
+        initial_state=initial_state)
+  else:
+    raise NotImplementedError
+  return predictions
     
-        def gen_ies_md(ies):
-        for ie in ies:
-            ie_md = '**{0}**'.format(ie.IE_NAME)
-            ie_desc = getattr(ie, 'IE_DESC', None)
-            if ie_desc is False:
-                continue
-            if ie_desc is not None:
-                ie_md += ': {0}'.format(ie.IE_DESC)
-            if not ie.working():
-                ie_md += ' (Currently broken)'
-            yield ie_md
+        elif (FLAGS.discriminator_model == 'bidirectional_zaremba' or
+          FLAGS.discriminator_model == 'bidirectional_vd'):
+      dis_fwd_variable_maps = variable_mapping.dis_fwd_bidirectional(hparams)
+      dis_bwd_variable_maps = variable_mapping.dis_bwd_bidirectional(hparams)
+      # Savers for the forward/backward Discriminator components.
+      dis_fwd_init_saver = tf.train.Saver(var_list=dis_fwd_variable_maps)
+      dis_bwd_init_saver = tf.train.Saver(var_list=dis_bwd_variable_maps)
+      init_savers['dis_fwd_init_saver'] = dis_fwd_init_saver
+      init_savers['dis_bwd_init_saver'] = dis_bwd_init_saver
     
+    FLAGS = tf.app.flags.FLAGS
     
-def format_size(bytes):
-    return '%s (%d bytes)' % (format_bytes(bytes), bytes)
+    '''
+requests._internal_utils
+~~~~~~~~~~~~~~
     
-    from __future__ import unicode_literals
-    
-    # Allow direct execution
-import os
-import sys
-import unittest
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    
-        def run(self, args, opts):
-        if len(args) < 1:
-            raise UsageError()
-        elif len(args) > 1:
-            raise UsageError('running 'scrapy crawl' with more than one spider is no longer supported')
-        spname = args[0]
-    
-        requires_project = True
-    default_settings = {'LOG_ENABLED': False}
-    
-            spidercls = DefaultSpider
-        spider_loader = self.crawler_process.spider_loader
-        if opts.spider:
-            spidercls = spider_loader.load(opts.spider)
-        else:
-            spidercls = spidercls_for_request(spider_loader, request, spidercls)
-        self.crawler_process.crawl(spidercls, start_requests=lambda: [request])
-        self.crawler_process.start()
-
-    
-        def report_ok(self):
-        self.network_stat = 'OK'
-        self.last_check_time = time.time()
-        self.continue_fail_count = 0
-    
-            elif isinstance(self.input, TreeNodeStream):
-            adaptor = self.input.treeAdaptor
-            return adaptor.getType(self.node)
-    
-    MOD_SSL_CONF_SRC = pkg_resources.resource_filename(
-    'certbot_nginx', 'options-ssl-nginx.conf')
-'''Path to the nginx mod_ssl config file found in the Certbot
-distribution.'''
-    
-        def __init__(self, resource_type, *args, **kwargs):
-        self.resource_type = resource_type
-        super(Resource, self).__init__(
-            'resource', default=resource_type, *args, **kwargs)
-    
-    The JWS implementation in josepy only implements the base JOSE standard. In
-order to support the new header fields defined in ACME, this module defines some
-ACME-specific classes that layer on top of josepy.
-'''
-import josepy as jose
-    
-    
-class JWSTest(unittest.TestCase):
-    '''Tests for acme.jws.JWS.'''
-    
-    # Grouping the document tree into Texinfo files. List of tuples
-# (source start file, target name, title, author,
-#  dir menu entry, description, category)
-texinfo_documents = [
-    (master_doc, 'acme-python', u'acme-python Documentation',
-     author, 'acme-python', 'One line description of project.',
-     'Miscellaneous'),
-]
-    
-            '''
-        # Check for the root of save problems
-        new_errs = self.aug.match('/augeas//error')
-        # logger.error('During Save - %s', mod_conf)
-        logger.error('Unable to save files: %s. Attempted Save Notes: %s',
-                     ', '.join(err[13:len(err) - 6] for err in new_errs
-                               # Only new errors caused by recent save
-                               if err not in ex_errs), self.save_notes)
-    
-    # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
-    
-        if not app.config.edit_on_github_project:
-        warnings.warn('edit_on_github_project not specified')
-        return
-    if not doctree:
-        warnings.warn('doctree is None')
-        return
-    path = os.path.relpath(doctree.get('source'), app.builder.srcdir)
-    show_url = get_github_url(app, 'blob', path)
-    edit_url = get_github_url(app, 'edit', path)
-    
-        @property
-    def should_poll(self):
-        '''No polling needed.'''
-        return False
-    
-            now = dt_util.now()
-        actiontec_data = self.get_actiontec_data()
-        if not actiontec_data:
-            return False
-        self.last_results = [Device(data['mac'], name, now)
-                             for name, data in actiontec_data.items()
-                             if data['timevalid'] > -60]
-        _LOGGER.info('Scan successful')
-        return True
-    
-    
-def _arp(ip_address):
-    '''Get the MAC address for a given IP.'''
-    cmd = ['arp', '-n', ip_address]
-    arp = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    out, _ = arp.communicate()
-    match = re.search(r'(([0-9A-Fa-f]{1,2}\:){5}[0-9A-Fa-f]{1,2})', str(out))
-    if match:
-        return match.group(0)
-    _LOGGER.info('No MAC address found for %s', ip_address)
-    return None
-    
-    DEFAULT_NAME = 'clickatell'
-    
-    
-def get_service(hass, config, discovery_info=None):
-    '''Get the demo notification service.'''
-    return DemoNotificationService(hass)
-    
-            if not targets:
-            _LOGGER.error('At least 1 target is required')
+        def set(self, name, value, **kwargs):
+        '''Dict-like set() that also supports optional domain and path args in
+        order to resolve naming collisions from using one cookie jar over
+        multiple domains.
+        '''
+        # support client code that unsets cookies by assignment of a None value:
+        if value is None:
+            remove_cookie_by_name(self, name, domain=kwargs.get('domain'), path=kwargs.get('path'))
             return
     
-    _LOGGER = logging.getLogger(__name__)
-_RESOURCE = 'https://api.flock.com/hooks/sendMessage/'
+            # Verify we receive an Authorization header in response, then redirect.
+        request_content = consume_socket_content(sock, timeout=0.5)
+        assert expected_digest in request_content
+        sock.send(text_302)
     
-    from homeassistant.components.notify import (
-    PLATFORM_SCHEMA, BaseNotificationService)
-from homeassistant.const import CONF_ACCESS_TOKEN, CONF_USERNAME
-import homeassistant.helpers.config_validation as cv
+        # default settings to be used for this command instead of global defaults
+    default_settings = {}
     
-    PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Optional(CONF_APP_NAME, default=DEFAULT_APP_NAME): cv.string,
-    vol.Optional(CONF_APP_ICON): vol.Url,
-    vol.Optional(CONF_HOSTNAME, default=DEFAULT_HOST): cv.string,
-    vol.Optional(CONF_PASSWORD): cv.string,
-    vol.Optional(CONF_PORT, default=DEFAULT_PORT): cv.port,
-})
+            spider_loader = self.crawler_process.spider_loader
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
+                          help='set spider argument (may be repeated)')
+        parser.add_option('-o', '--output', metavar='FILE',
+                          help='dump scraped items into FILE (use - for stdout)')
+        parser.add_option('-t', '--output-format', metavar='FORMAT',
+                          help='format to use for dumping items with -o')
+    
+    class Command(ScrapyCommand):
+    
+        def syntax(self):
+        return '[-v]'
+    
+            self._signer = None
+        if is_botocore():
+            import botocore.auth
+            import botocore.credentials
+            kw.pop('anon', None)
+            if kw:
+                raise TypeError('Unexpected keyword arguments: %s' % kw)
+            if not self.anon:
+                SignerCls = botocore.auth.AUTH_TYPE_MAPS['s3']
+                self._signer = SignerCls(botocore.credentials.Credentials(
+                    aws_access_key_id, aws_secret_access_key))
+        else:
+            _S3Connection = _get_boto_connection()
+            try:
+                self.conn = _S3Connection(
+                    aws_access_key_id, aws_secret_access_key, **kw)
+            except Exception as ex:
+                raise NotConfigured(str(ex))
+    
+            '''
+        if not isinstance(other, Counter):
+            return NotImplemented
+        result = Counter()
+        for elem, count in self.items():
+            other_count = other[elem]
+            newcount = count if count < other_count else other_count
+            if newcount > 0:
+                result[elem] = newcount
+        return result
+    
+        def test_view_fetch_returns_none(self):
+        db, db_path = init_database()
+        properties = []
+        view = db.OpenView('SELECT Property, Value FROM Property')
+        view.Execute(None)
+        while True:
+            record = view.Fetch()
+            if record is None:
+                break
+            properties.append(record.GetString(1))
+        view.Close()
+        db.Close()
+        self.assertEqual(
+            properties,
+            [
+                'ProductName', 'ProductCode', 'ProductVersion',
+                'Manufacturer', 'ProductLanguage',
+            ]
+        )
+        self.addCleanup(unlink, db_path)
+    
+        The solution on Windows is to use the SO_EXCLUSIVEADDRUSE socket option
+    instead of SO_REUSEADDR, which effectively affords the same semantics as
+    SO_REUSEADDR on Unix.  Given the propensity of Unix developers in the Open
+    Source world compared to Windows ones, this is a common mistake.  A quick
+    look over OpenSSL's 0.9.8g source shows that they use SO_REUSEADDR when
+    openssl.exe is called with the 's_server' option, for example. See
+    http://bugs.python.org/issue2550 for more info.  The following site also
+    has a very thorough description about the implications of both REUSEADDR
+    and EXCLUSIVEADDRUSE on Windows:
+    http://msdn2.microsoft.com/en-us/library/ms740621(VS.85).aspx)
+    
+        def _While(self, t):
+        self.fill('while ')
+        self.dispatch(t.test)
+        self.enter()
+        self.dispatch(t.body)
+        self.leave()
+        if t.orelse:
+            self.fill('else')
+            self.enter()
+            self.dispatch(t.orelse)
+            self.leave()
+    
+    # Same, but for 3.x to 2.x
+REVERSE_IMPORT_MAPPING = dict((v, k) for (k, v) in IMPORT_MAPPING.items())
+assert len(REVERSE_IMPORT_MAPPING) == len(IMPORT_MAPPING)
+REVERSE_NAME_MAPPING = dict((v, k) for (k, v) in NAME_MAPPING.items())
+assert len(REVERSE_NAME_MAPPING) == len(NAME_MAPPING)
+    
+        def test_programatic_function_string_with_start(self):
+        Perm = IntFlag('Perm', 'R W X', start=8)
+        lst = list(Perm)
+        self.assertEqual(len(lst), len(Perm))
+        self.assertEqual(len(Perm), 3, Perm)
+        self.assertEqual(lst, [Perm.R, Perm.W, Perm.X])
+        for i, n in enumerate('R W X'.split()):
+            v = 8<<i
+            e = Perm(v)
+            self.assertEqual(e.value, v)
+            self.assertEqual(type(e.value), int)
+            self.assertEqual(e, v)
+            self.assertEqual(e.name, n)
+            self.assertIn(e, Perm)
+            self.assertIs(type(e), Perm)
+    
+        dotIndex = p.rfind(extsep)
+    if dotIndex > sepIndex:
+        # skip all leading dots
+        filenameIndex = sepIndex + 1
+        while filenameIndex < dotIndex:
+            if p[filenameIndex:filenameIndex+1] != extsep:
+                return p[:dotIndex], p[dotIndex:]
+            filenameIndex += 1
+    
+        def test_no_stderr(self):
+        self._test_no_stdio(['stderr'])
+    
+        def test_bad_params(self):
+        # Test invalid parameter combinations.
+        self.assertRaises(ValueError,
+                          self.open, self.filename, 'wbt')
+        self.assertRaises(ValueError,
+                          self.open, self.filename, 'xbt')
+        self.assertRaises(ValueError,
+                          self.open, self.filename, 'rb', encoding='utf-8')
+        self.assertRaises(ValueError,
+                          self.open, self.filename, 'rb', errors='ignore')
+        self.assertRaises(ValueError,
+                          self.open, self.filename, 'rb', newline='\n')
+    
+    from argparse import ArgumentParser
+    
+    #
+# Functions used by test code
+#
