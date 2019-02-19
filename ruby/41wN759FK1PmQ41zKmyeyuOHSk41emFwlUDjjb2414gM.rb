@@ -1,22 +1,65 @@
 
         
-                  # Make sure we're only working with one VM if single target
-          if options[:single_target] && vms.length != 1
-            vm = @env.primary_vm
-            raise Errors::MultiVMTargetRequired if !vm
-            vms = [vm]
-          end
+        module ActionView #:nodoc:
+  # = Action View Text Template
+  class Template #:nodoc:
+    class Text #:nodoc:
+      attr_accessor :type
     
-              @commands = Registry.new
-          @configs = Hash.new { |h, k| h[k] = Registry.new }
-          @guests  = Registry.new
-          @guest_capabilities = Hash.new { |h, k| h[k] = Registry.new }
-          @hosts   = Registry.new
-          @host_capabilities = Hash.new { |h, k| h[k] = Registry.new }
-          @providers = Registry.new
-          @provider_capabilities = Hash.new { |h, k| h[k] = Registry.new }
-          @pushes = Registry.new
-          @synced_folders = Registry.new
+      it 'raises a TypeError when passed nil' do
+    lambda { srand(nil) }.should raise_error(TypeError)
+  end
+    
+      it 'has no effect on immediate values' do
+    [nil, true, false].each do |v|
+      v.taint
+      v.tainted?.should == false
+    end
+  end
+    
+        it 'returns true when passed ?W if the argument is readable by the real uid' do
+      Kernel.test(?W, @tmp_file).should be_true
+    end
+  end
+    
+        # From asking people, it seems MacPorts does not have a `prefix` command, like
+    # Homebrew does, so make an educated guess:
+    if port_prefix = prefix_from_bin('port')
+      prefixes << port_prefix
+    end
+    
+          expect(new_source)
+        .to eq(construct(false, a, make_multi(safe_heredoc), false))
+    end
+  end
+    
+          # Returns the iteration variable of the `for` loop.
+      #
+      # @return [Node] The iteration variable of the `for` loop
+      def variable
+        node_parts[0]
+      end
+    
+          DOUBLE_SPLAT = '**'.freeze
+    
+      before { ensure_order_totals }
+end
+    
+          expect(json_response['data'][0]).to have_type('credit_card')
+      expect(json_response['data'][0]).to have_relationships(:payment_method)
+      expect(json_response['data'][0]).to have_attribute(:last_digits)
+      expect(json_response['data'][0]).to have_attribute(:month)
+      expect(json_response['data'][0]).to have_attribute(:year)
+      expect(json_response['data'][0]).to have_attribute(:name)
+    end
+  end
+    
+      let!(:user)  { create(:user_with_addresses) }
+  let(:headers) { headers_bearer }
+    
+              def resource_serializer
+            Spree::Api::Dependencies.storefront_cart_serializer.constantize
+          end
         end
       end
     end
@@ -24,51 +67,24 @@
 end
 
     
-        # undo folding, kinda ugly but works for now.
-    header.gsub!(/:\s*\r\n\s+/smni,': ')
+          item.update_column(:pre_tax_amount, pre_tax_amount)
+    end
     
-      #
-  # Initializes an HTTP server as listening on the provided port and
-  # hostname.
-  #
-  def initialize(port = 80, listen_host = '0.0.0.0', ssl = false, context = {},
-                 comm = nil, ssl_cert = nil, ssl_compression = false,
-                 ssl_cipher = nil)
-    self.listen_host     = listen_host
-    self.listen_port     = port
-    self.ssl             = ssl
-    self.context         = context
-    self.comm            = comm
-    self.ssl_cert        = ssl_cert
-    self.ssl_compression = ssl_compression
-    self.ssl_cipher      = ssl_cipher
-    self.listener        = nil
-    self.resources       = {}
-    self.server_name     = DefaultServer
-  end
-    
-        self.itime  = ::Time.now
-    self.queue  = ::Queue.new
-    
-                encoded
-          end
-    
-              # Encodes the type field
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_type
-            bn = OpenSSL::BN.new(type.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
-    
-              # Decodes the e_data from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [String]
-          def decode_e_data(input)
-            input.value[0].value
-          end
-        end
-      end
+    desc 'Generates a dummy app for testing for every Spree engine'
+task :test_app do
+  SPREE_GEMS.each do |gem_name|
+    Dir.chdir('#{File.dirname(__FILE__)}/#{gem_name}') do
+      sh 'rake test_app'
     end
   end
 end
+    
+            def log_state_changes
+          if @order.previous_changes[:state]
+            @order.log_state_changes(
+              state_name: 'order',
+              old_state: @order.previous_changes[:state].first,
+              new_state: @order.previous_changes[:state].last
+            )
+          end
+        end
