@@ -1,307 +1,232 @@
 
         
-                result = block.call(parameters.first || {}) # to always pass a hash
-        self.current_lane = original_lane
-    
-          command_return = ActionCommandReturn.new(
-        return_value: action_return,
-        return_value_type: action_class_ref.return_type,
-        closure_argument_value: closure_argument_value
-      )
-      return command_return
+            def root?
+      path == 'index'
     end
     
-          it 'sets the platform to tvOS' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            carthage(
-              platform: 'tvOS'
-            )
-          end').runner.execute(:test)
+        def format_path(path)
+      path.to_s.remove File.join(File.expand_path('.'), '')
+    end
     
-            expect(result[1]).to start_with('security set-keychain-settings')
-        expect(result[1]).to include('-t 600')
-        expect(result[1]).to include('-l')
-        expect(result[1]).to include('-u')
-        expect(result[1]).to include('~/Library/Keychains/test.keychain')
+              node.remove_attribute('path')
+          node.remove_attribute('region')
+          node.remove_attribute('linenums')
+          node.remove_attribute('title')
+          node.remove_attribute('language')
+          node.remove_attribute('hidecopy')
+          node.remove_attribute('class')
+        end
+    
+            subtitle = at_css('.hero-subtitle').try(:content)
+        breadcrumbs = css('.breadcrumbs li').map(&:content)[2..-2]
+    
+            css('> .section', '#preamble', 'a[href*='dict.html']', 'code var', 'code strong').each do |node|
+          node.before(node.children).remove
+        end
+    
+      def respond_to_on_destroy
+    # We actually need to hardcode this as Rails default responder doesn't
+    # support returning empty response on GET request
+    respond_to do |format|
+      format.all { head :no_content }
+      format.any(*navigational_formats) { redirect_to after_sign_out_path_for(resource_name) }
+    end
+  end
+end
+
+    
+      def resource_params
+    params.fetch(resource_name, {})
+  end
+    
+        def confirmation_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :confirmation_instructions, opts)
+    end
+    
+    gemfile(true) do
+  source 'https://rubygems.org'
+  # Activate the gem you are reporting the issue against.
+  gem 'rails', '~> 4.2.0'
+  gem 'devise', '~> 4.0'
+  gem 'sqlite3'
+  gem 'byebug'
+end
+    
+          # Sign out a given user or scope. This helper is useful for signing out a user
+      # after deleting accounts. Returns true if there was a logout and false if there
+      # is no user logged in on the referred scope
+      #
+      # Examples:
+      #
+      #   sign_out :user     # sign_out(scope)
+      #   sign_out @user     # sign_out(resource)
+      #
+      def sign_out(resource_or_scope=nil)
+        return sign_out_all_scopes unless resource_or_scope
+        scope = Devise::Mapping.find_scope!(resource_or_scope)
+        user = warden.user(scope: scope, run_callbacks: false) # If there is no user
+    
+          def remove_domain_from_uri(uri)
+        [uri.path.sub(/\A\/+/, '/'), uri.query].compact.join('?')
       end
     
-          it 'handles no extension or extensions parameters' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          ensure_no_debug_code(text: 'pry', path: '.')
-        end').runner.execute(:test)
-        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}'')
+    # Each time a record is set we check whether its session has already timed out
+# or not, based on last request time. If so, the record is logged out and
+# redirected to the sign in page. Also, each time the request comes and the
+# record is set, we set the last request time inside its scoped session to
+# verify timeout in the following request.
+Warden::Manager.after_set_user do |record, warden, options|
+  scope = options[:scope]
+  env   = warden.request.env
+    
+          def remember_me!
+        self.remember_token ||= self.class.remember_token if respond_to?(:remember_token)
+        self.remember_created_at ||= Time.now.utc
+        save(validate: false) if self.changed?
       end
     
-          # Verify that value is the type that we're expecting, if we are expecting a type
-      if data_type == Fastlane::Boolean
-        ensure_boolean_type_passes_validation(value)
-      else
-        ensure_generic_type_passes_validation(value)
-      end
+      #
+  # Updates the various parts of the HTTP response command string.
+  #
+  def update_cmd_parts(str)
+    if (md = str.match(/HTTP\/(.+?)\s+(\d+)\s?(.+?)\r?\n?$/))
+      self.message = md[3].gsub(/\r/, '')
+      self.code    = md[2].to_i
+      self.proto   = md[1]
+    else
+      raise RuntimeError, 'Invalid response command string', caller
+    end
     
-            expect(FastlaneCore::CertChecker.install_wwdr_certificate).to be(true)
+    
+end
+end
+end
+
+    
+              res
+        end
       end
     end
   end
 end
 
     
-              config = FastlaneCore::Configuration.create([name, other, platform], {})
-          config.set(:name, 'name1')
-          config.set(:other, 'other')
-          config.pop_values!
+                cipher = OpenSSL::Cipher.new('rc4')
+            cipher.decrypt
+            cipher.key = k3
+            decrypted = cipher.update(data) + cipher.final
     
-    # remove (double and single) quote pairs
-# un-double-double quote resulting string
-def simulate_windows_shell_unwrapping(string)
-  regex = /^('|')(([^'])(\S*)([^']))('|')$/
-  unless string.to_s.match(regex).nil?
-    string = string.to_s.match(regex)[2] # get only part in quotes
-    string.to_s.gsub!('''', ''') # remove double double quotes
-  end
-  return string
-end
+              # Encodes the msg_type field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_msg_type
+            bn = OpenSSL::BN.new(msg_type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
     
-        # See {CapabilityHost#capability}
-    def capability(*args)
-      super
-    rescue Errors::CapabilityNotFound => e
-      raise Errors::GuestCapabilityNotFound,
-        cap: e.extra_data[:cap],
-        guest: name
-    rescue Errors::CapabilityInvalid => e
-      raise Errors::GuestCapabilityInvalid,
-        cap: e.extra_data[:cap],
-        guest: name
-    end
-    
-              # Default opts to a blank optionparser if none is given
-          opts ||= OptionParser.new
-    
-              # Set all of our instance variables on the new class
-          [self, other].each do |obj|
-            obj.instance_variables.each do |key|
-              # Ignore keys that start with a double underscore. This allows
-              # configuration classes to still hold around internal state
-              # that isn't propagated.
-              if !key.to_s.start_with?('@__')
-                result.instance_variable_set(key, obj.instance_variable_get(key))
+              def initialize(options = {})
+            self.class.attributes.each do |attr|
+              if options.has_key?(attr)
+                m = (attr.to_s + '=').to_sym
+                self.send(m, options[attr])
               end
             end
           end
     
-            # This contains all the configuration plugins by scope.
-        #
-        # @return [Hash<Symbol, Registry>]
-        attr_reader :configs
-    
-            # This returns all the registered commands.
-        #
-        # @return [Registry<Symbol, Array<Proc, Hash>>]
-        def commands
-          Registry.new.tap do |result|
-            @registered.each do |plugin|
-              result.merge!(plugin.components.commands)
-            end
-          end
-        end
-    
-      #
-  # Payload types were identified from xCAT-server source code (IPMI.pm)
-  #
-  PAYLOAD_IPMI = 0
-  PAYLOAD_SOL  = 1
-  PAYLOAD_RMCPPLUSOPEN_REQ = 0x10
-  PAYLOAD_RMCPPLUSOPEN_REP = 0x11
-  PAYLOAD_RAKP1 = 0x12
-  PAYLOAD_RAKP2 = 0x13
-  PAYLOAD_RAKP3 = 0x14
-  PAYLOAD_RAKP4 = 0x15
-    
-      def self.create_ipmi_getchannel_probe
-    [   # Get Channel Authentication Capabilities
-      0x06, 0x00, 0xff, 0x07, # RMCP Header
-      0x00, 0x00, 0x00, 0x00,
-      0x00, 0x00, 0x00, 0x00, 0x00, 0x09, 0x20, 0x18,
-      0xc8, 0x81, 0x00, 0x38, 0x8e, 0x04, 0xb5
-    ].pack('C*')
-  end
-    
-              res = decode_kerb_response(data)
-    
-              # Encodes the Rex::Proto::Kerberos::CredentialCache::Principal into an String
+              # Decodes the flags field
           #
-          # @return [String] encoded principal
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_flags(input)
+            input.value[0].value.to_i
+          end
+    
+              # Encodes the Rex::Proto::Kerberos::Model::KdcRequest into an ASN.1 String
+          #
+          # @return [String]
           def encode
-            encoded = ''
-            encoded << encode_name_type
-            encoded << [components.length].pack('N')
-            encoded << encode_realm
-            encoded << encode_components
+            pvno_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_pvno], 1, :CONTEXT_SPECIFIC)
+            msg_type_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_msg_type], 2, :CONTEXT_SPECIFIC)
+            pa_data_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_pa_data], 3, :CONTEXT_SPECIFIC)
+            req_body_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_req_body], 4, :CONTEXT_SPECIFIC)
+            seq = OpenSSL::ASN1::Sequence.new([pvno_asn1, msg_type_asn1, pa_data_asn1, req_body_asn1])
+            seq_asn1 = OpenSSL::ASN1::ASN1Data.new([seq], msg_type, :APPLICATION)
+            seq_asn1.to_der
+          end
     
-    module Rex
-  module Proto
-    module Kerberos
-      module CredentialCache
-        # This class provides a representation of credential times stored in the Kerberos Credential Cache.
-        class Time < Element
-          # @!attribute auth_time
-          #   @return [Integer]
-          attr_accessor :auth_time
-          # @!attribute start_time
-          #   @return [Integer]
-          attr_accessor :start_time
-          # @!attribute end_time
-          #   @return [Integer]
-          attr_accessor :end_time
-          # @!attribute renew_till
-          #   @return [Integer]
-          attr_accessor :renew_till
-    
-                res = ''
-            case etype
-            when RC4_HMAC
-              res = encrypt_rc4_hmac(data, key, 5)
-            else
-              raise ::NotImplementedError, 'EncryptedData schema is not supported'
-            end
-    
-              # Decodes the etype from an OpenSSL::ASN1::ASN1Data
+              # Decodes the msg_type from an OpenSSL::ASN1::ASN1Data
           #
           # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
           # @return [Integer]
-          def decode_etype(input)
+          def decode_msg_type(input)
             input.value[0].value.to_i
           end
     
-              # Decodes the type from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_type(input)
-            input.value[0].value.to_i
-          end
-    
-          def is_create_page
-        true
-      end
-    
-          def sidebar
-        if @sidebar.nil?
-          if page = @page.sidebar
-            @sidebar = page.text_data
-          else
-            @sidebar = false
-          end
-        end
-        @sidebar
-      end
-    
-    context 'Precious::Views::Editing' do
-  include Rack::Test::Methods
-  setup do
-    examples = testpath 'examples'
-    @path    = File.join(examples, 'test.git')
-    Precious::App.set(:gollum_path, @path)
-    FileUtils.cp_r File.join(examples, 'revert.git'), @path, :remove_destination => true
-    @wiki = Gollum::Wiki.new(@path)
-  end
-    
-        assert_equal 'header', header_2.raw_data
-    assert_equal 'footer', foot_2.raw_data
-    assert_equal 'def', foot_2.version.message
-    assert_not_equal foot_1.version.sha, foot_2.version.sha
-    assert_not_equal header_1.version.sha, header_2.version.sha
-    
-    #############################################################################
-#
-# Custom tasks (add your own tasks here)
-#
-#############################################################################
-    
-        class MapGollum
-      def initialize(base_path)
-        @mg = Rack::Builder.new do
-          
-          map '/#{base_path}' do
-            run Precious::App
-          end
-          map '/' do
-            run Proc.new { [302, { 'Location' => '/#{base_path}' }, []] }
-          end
-          map '/*' do
-            run Proc.new { [302, { 'Location' => '/#{base_path}' }, []] }
-          end
-          
+          def question
+        if default.nil?
+          I18n.t(:question, key: key, scope: :capistrano)
+        else
+          I18n.t(:question_default, key: key, default_value: default, scope: :capistrano)
         end
       end
     
-    class PaperclipGenerator < ActiveRecord::Generators::Base
-  desc 'Create a migration to add paperclip-specific fields to your model. ' +
-       'The NAME argument is the name of your model, and the following ' +
-       'arguments are the name of the attachments'
+    http://capistranorb.com/documentation/advanced-features/custom-scm
     
-        def type_from_file_contents
-      type_from_mime_magic || type_from_file_command
-    rescue Errno::ENOENT => e
-      Paperclip.log('Error while determining content type: #{e}')
-      SENSIBLE_DEFAULT
+          attr_reader :locations, :values, :fetched_keys
+    
+            PluginManager.ui.debug('Looking if package named: #{plugin_name} exists at #{uri}')
+    
+          warn_local_gems(plugins_with_path) if plugins_with_path.size > 0
     end
+    update_gems!
+  end
     
-    # enable logging
-FPM::Util.send :module_function, :logger
-FPM::Util.logger.level = :info
-FPM::Util.logger.subscribe STDERR
-    
-        # Short circuit for a `fpm --version` or `fpm -v` short invocation that 
-    # is the user asking us for the version of fpm.
-    if run_args == [ '-v' ] || run_args == [ '--version' ]
-      puts FPM::VERSION
-      return 0
-    end
-    
-      # write all scripts to .scripts (tar and dir)
-  def write_scripts
-    scripts_path = File.join(staging_path, '.scripts')
-    target_scripts = [:before_install, :after_install, :before_remove, :after_remove]
-    if target_scripts.any? {|name| script?(name)}
-      ::Dir.mkdir(scripts_path)
-      target_scripts.each do |name|
-        next unless script?(name)
-        out = File.join(scripts_path, name.to_s)
-        logger.debug('Writing script', :source => name, :target => out)
-        File.write(out, script(name))
-        File.chmod(0755, out)
+            expect(new_source).to eq(['#{prefix}#{open}#{a},',
+                                  '#{b}#{close}',
+                                  suffix].join($RS))
       end
     end
   end
+end
+
     
-        # magic
-    header[TAR_MAGIC_START..TAR_MAGIC_END] = 'ustar\0' + '00'
-    
-      option '--postinstall-action', 'POSTINSTALL_ACTION',
-    'Post-install action provided in package metadata. ' \
-    'Optionally one of '#{POSTINSTALL_ACTIONS.join('', '')}'.' do |value|
-    if !POSTINSTALL_ACTIONS.include?(value)
-      raise ArgumentError, 'osxpkg-postinstall-action value of '#{value}' is invalid. ' \
-        'Must be one of #{POSTINSTALL_ACTIONS.join(', ')}'
+          # Checks whether this case statement has an `else` branch.
+      #
+      # @return [Boolean] whether the `case` statement has an `else` branch
+      def else?
+        loc.else
+      end
     end
-    value
   end
+end
+
     
-      option '--compression', 'COMPRESSION', 'The compression type to use, must ' \
-    'be one of #{COMPRESSION_TYPES.join(', ')}.', :default => 'xz' do |value|
-    if !COMPRESSION_TYPES.include?(value)
-      raise ArgumentError, 'Pacman compression value of '#{value}' is invalid. ' \
-        'Must be one of #{COMPRESSION_TYPES.join(', ')}'
-    end
-    value
-  end
+          # Checks whether this `hash` uses a mix of hash rocket and colon
+      # delimiters for its pairs.
+      #
+      # @return [Boolean] whether the `hash` uses mixed delimiters
+      def mixed_delimiters?
+        pairs.map(&:delimiter).uniq.size > 1
+      end
     
-      def architecture
-    case @architecture
-    when nil, 'native'
-      @architecture = %x{uname -p}.chomp
+    module RuboCop
+  module AST
+    # A node extension for `kwsplat` nodes. This will be used in place of a
+    # plain  node when the builder constructs the AST, making its methods
+    # available to all `kwsplat` nodes within RuboCop.
+    class KeywordSplatNode < Node
+      include HashElementNode
+    
+    # Require things that don't support autoload
+require 'active_admin/engine'
+require 'active_admin/error'
+    
+        # Build a BatchActionForm
+    class BatchActionForm < ActiveAdmin::Component
+      builder_method :batch_action_form
+    
+        def self.controllers_for_filters
+      [SessionsController, PasswordsController, UnlocksController,
+        RegistrationsController, ConfirmationsController
+      ]
     end
-    # 'all' is a valid arch according to
-    # http://www.bolthole.com/solaris/makeapackage.html
