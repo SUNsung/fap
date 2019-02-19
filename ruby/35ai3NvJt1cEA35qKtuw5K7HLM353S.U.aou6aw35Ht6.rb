@@ -1,131 +1,190 @@
 
         
-        module FastlaneCore
-  class AnalyticsSession
-    GA_TRACKING = 'UA-121171860-1'
+            # The category for users with trust level 3 has been created.
+    # Add initial permissions and description. They can be changed later.
     
-            expect(result).to eq('appledoc --project-name \'Project Name\' --project-company \'Company\' --docset-cert-signer \'Some signer\' --exit-threshold \'2\' input/dir')
+        # @param filter_platform: Filter, to only show the lanes of a given platform
+    # @return an array of lanes (platform lane_name) to print them out to the user
+    def available_lanes(filter_platform = nil)
+      all = []
+      lanes.each do |platform, platform_lanes|
+        next if filter_platform && filter_platform.to_s != platform.to_s # skip actions that don't match
+    
+          it 'adds options param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            options: '--use-single-star --keep-intermediate-files --search-undocumented-doc'
+          )
+        end').runner.execute(:test)
+    
+          it 'use custom executable' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            carthage(
+              executable: 'custom_carthage'
+            )
+          end').runner.execute(:test)
+    
+            it 'executes the correct git command' do
+          allow(Fastlane::Actions).to receive(:sh).with('git add #{path[0].shellescape} #{path[1].shellescape}', anything).and_return('')
+          result = Fastlane::FastFile.new.parse('lane :test do
+            git_add(path: #{path})
+          end').runner.execute(:test)
+        end
       end
     
-          it 'works with :path param' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          create_keychain ({
-            path: '/tmp/test.keychain',
-            password: 'testpassword',
-            default_keychain: true,
-            unlock: true,
-            timeout: 600,
-            lock_when_sleeps: true,
-            lock_after_timeout: true,
-            add_to_search_list: false,
-          })
-        end').runner.execute(:test)
-        expect(result.size).to eq(4)
-        expect(result[0]).to eq('security create-keychain -p testpassword /tmp/test.keychain')
+        describe 'shell escaping' do
+      let(:keychain_name) { 'keychain with spaces.keychain' }
+      let(:shell_escaped_name) { keychain_name.shellescape }
+      let(:name_regex) { Regexp.new(Regexp.escape(shell_escaped_name)) }
     
-        # wrap in double quotes if contains space
-    if str =~ /\s/
-      # double quotes have to be doubled if will be quoted
-      str.gsub!(''', '''')
-      return ''' + str + '''
-    else
-      return str
+            it 'doesn't display a deprecation message when loading a config if a deprecated option doesn't have a value' do
+          c = FastlaneCore::ConfigItem.new(key: :foo,
+                                           description: 'foo',
+                                           deprecated: 'replaced by bar')
+          values = {
+            foo: 'something'
+          }
+          expect(FastlaneCore::UI).to receive(:deprecated).with('Using deprecated option: '--foo' (replaced by bar)')
+          config = FastlaneCore::Configuration.create([c], values)
+        end
+    
+      describe '#nav_link' do
+    it 'returns a nav link' do
+      stub(self).current_page?('/things') { false }
+      nav = nav_link('Things', '/things')
+      a = Nokogiri(nav).at('li:not(.active) > a[href='/things']')
+      expect(a.text.strip).to eq('Things')
+    end
+    
+              @bar1 = Agents::DotBar.new(name: 'bar1').tap { |agent|
+            agent.user = users(:bob)
+            agent.sources << @foo
+            agent.save!
+          },
+    
+            it 'adds errors when updated agents are invalid' do
+          scenario_import.merges = {
+            '0' => {
+              'name' => '',
+              'schedule' => 'foo',
+              'keep_events_for' => 2.days.to_i.to_s,
+              'options' => weather_agent_options.merge('api_key' => '').to_json
+            }
+          }
+    
+        it 'warns and returns nil when not parseable' do
+      mock(STDERR).puts('WARNING: Invalid duration format: 'bogus'')
+      expect(Utils.parse_duration('bogus')).to be_nil
     end
   end
-  module_function :shellescape
+    
+    describe ConvertWebsiteAgentTemplateForMerge do
+  let :old_extract do
+    {
+      'url' => { 'css' => '#comic img', 'value' => '@src' },
+      'title' => { 'css' => '#comic img', 'value' => '@alt' },
+      'hovertext' => { 'css' => '#comic img', 'value' => '@title' }
+    }
+  end
+    
+    module LogStash
+  module Environment
+    extend self
+    
+        def self.transform_pattern_into_re(pattern)
+      Regexp.new('^#{pattern.gsub(WILDCARD, WILDCARD_INTO_RE)}$')
+    end
+  end
+    
+      def target_file
+    target_file = File.join(LogStash::Environment::LOGSTASH_HOME, 'plugins_package')
+    '#{target_file}#{file_extension}'
+  end
 end
 
     
-    if git.modified_files.include?('snapshot/lib/assets/SnapshotHelper.swift')
-  warn('You modified `SnapshotHelper.swift`, make sure to update the version number at the bottom of the file to notify users about the new helper file.')
+        while readable_io = IO.select([self_read])
+      signal = readable_io.first[0].gets.strip
+      handle_signal(launcher, signal)
+    end
+  #end
+rescue SystemExit => e
+  #Sidekiq.logger.error('Profiling...')
+  #result = RubyProf.stop
+  #printer = RubyProf::GraphHtmlPrinter.new(result)
+  #printer.print(File.new('output.html', 'w'), :min_percent => 1)
+  # normal
+rescue => e
+  raise e if $DEBUG
+  STDERR.puts e.message
+  STDERR.puts e.backtrace.join('\n')
+  exit 1
+end
+
+    
+        ##
+    # Define client-side middleware:
+    #
+    #   client = Sidekiq::Client.new
+    #   client.middleware do |chain|
+    #     chain.use MyClientMiddleware
+    #   end
+    #   client.push('class' => 'SomeWorker', 'args' => [1,2,3])
+    #
+    # All client instances default to the globally-defined
+    # Sidekiq.client_middleware but you can change as necessary.
+    #
+    def middleware(&block)
+      @chain ||= Sidekiq.client_middleware
+      if block_given?
+        @chain = @chain.dup
+        yield @chain
+      end
+      @chain
+    end
+    
+    
+    
+          def perform(yml)
+        (target, method_name, args) = YAML.load(yml)
+        msg = target.public_send(method_name, *args)
+        # The email method can return nil, which causes ActionMailer to return
+        # an undeliverable empty message.
+        if msg
+          deliver(msg)
+        else
+          raise '#{target.name}##{method_name} returned an undeliverable mail object'
+        end
+      end
+    
+            names.inject(Object) do |constant, name|
+          constant.const_defined?(name) ? constant.const_get(name) : constant.const_missing(name)
+        end
+      end
+    end
+  end
+    
+    require 'sidekiq/web/router'
+require 'sidekiq/web/action'
+require 'sidekiq/web/application'
+    
+    def attach_attachment(name, definition = nil)
+  snippet = 'has_attached_file :#{name}'
+  if definition
+    snippet += ', \n'
+    snippet += definition
+  end
+  snippet += '\ndo_not_validate_attachment_file_type :#{name}\n'
+  cd('.') do
+    transform_file('app/models/user.rb') do |content|
+      content.sub(/end\Z/, '#{snippet}\nend')
+    end
+  end
 end
     
-          def fetch_redirections
-        result = {}
-        with_filters 'apply_base_url', 'container', 'normalize_urls', 'internal_urls' do
-          build_pages do |page|
-            next if page[:response_effective_path] == page[:response_path]
-            result[page[:response_path].downcase] = page[:response_effective_path]
-          end
-        end
-        result
-      end
-    
-            css('.filetree .children').each do |node|
-          node.css('.file').each do |n|
-            n.content = '  #{n.content}'
-          end
-        end
-    
-            # Download a file from the remote machine to the local machine.
-        #
-        # @param [String] from Path of the file on the remote machine.
-        # @param [String] to Path of where to save the file locally.
-        def download(from, to)
-        end
-    
-            # This registers a plugin. This should _NEVER_ be called by the public
-        # and should only be called from within Vagrant. Vagrant will
-        # automatically register V1 plugins when a name is set on the
-        # plugin.
-        def register(plugin)
-          if !@registered.include?(plugin)
-            @logger.info('Registered plugin: #{plugin.name}')
-            @registered << plugin
-          end
-        end
-    
-            # Returns the internal data associated with this plugin. This
-        # should NOT be called by the general public.
-        #
-        # @return [Hash]
-        def self.data
-          @data ||= {}
-        end
-    
-    RSpec.describe RuboCop::Cop::Layout::MultilineArrayBraceLayout, :config do
-  subject(:cop) { described_class.new(config) }
-    
-          # Checks whether the `for` node has a `do` keyword.
-      #
-      # @return [Boolean] whether the `for` node has a `do` keyword
-      def do?
-        loc.begin && loc.begin.is?('do')
-      end
-    
-          # Returns the operator for the `kwsplat` as a string.
-      #
-      # @return [String] the double splat operator
-      def operator
-        DOUBLE_SPLAT
-      end
-    
-          # Checks whether the `when` node has a `then` keyword.
-      #
-      # @return [Boolean] whether the `when` node has a `then` keyword
-      def then?
-        loc.begin && loc.begin.is?('then')
-      end
-    
-          def __set_test_mode(mode)
-        if block_given?
-          current_mode = self.__test_mode
-          begin
-            self.__test_mode = mode
-            yield
-          ensure
-            self.__test_mode = current_mode
-          end
-        else
-          self.__test_mode = mode
-        end
-      end
-    
-          def custom_tabs
-        @custom_tabs ||= {}
-      end
-      alias_method :tabs, :custom_tabs
-    
-            _render { content }
-      end
+        def names_for(klass)
+      @attachments[klass].keys
     end
