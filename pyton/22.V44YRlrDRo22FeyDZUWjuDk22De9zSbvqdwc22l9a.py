@@ -1,277 +1,124 @@
 
         
-        print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
-    try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
-    
-    entry_template = textwrap.dedent('''
-    <entry>
-        <id>https://yt-dl.org/feed/youtube-dl-updates-feed/youtube-dl-@VERSION@</id>
-        <title>New version @VERSION@</title>
-        <link href='http://rg3.github.io/youtube-dl' />
-        <content type='xhtml'>
-            <div xmlns='http://www.w3.org/1999/xhtml'>
-                Downloads available at <a href='https://yt-dl.org/downloads/@VERSION@/'>https://yt-dl.org/downloads/@VERSION@/</a>
-            </div>
-        </content>
-        <author>
-            <name>The youtube-dl maintainers</name>
-        </author>
-        <updated>@TIMESTAMP@</updated>
-    </entry>
-    ''')
+            proc.sendline(u'fuck')
+    assert proc.expect([TIMEOUT, u'echo test'])
+    assert proc.expect([TIMEOUT, u'test'])
     
     
-if __name__ == '__main__':
-    main()
-
+@pytest.mark.functional
+def test_refuse_with_confirmation(proc, TIMEOUT):
+    refuse_with_confirmation(proc, TIMEOUT)
+    history_not_changed(proc, TIMEOUT)
+    
+    no_match_output = '''
+Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
+Get:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease [89.2 kB]
+Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
+Get:4 http://security.ubuntu.com/ubuntu zesty-security InRelease [89.2 kB]
+Hit:5 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
+Hit:6 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
+Hit:7 https://download.docker.com/linux/ubuntu zesty InRelease
+Get:8 http://us.archive.ubuntu.com/ubuntu zesty-updates/main i386 Packages [232 kB]
+Get:9 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 Packages [235 kB]
+Get:10 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 DEP-11 Metadata [55.2 kB]
+Get:11 http://us.archive.ubuntu.com/ubuntu zesty-updates/main DEP-11 64x64 Icons [32.3 kB]
+Get:12 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 Packages [156 kB]
+Get:13 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe i386 Packages [156 kB]
+Get:14 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 DEP-11 Metadata [175 kB]
+Get:15 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe DEP-11 64x64 Icons [253 kB]
+Get:16 http://us.archive.ubuntu.com/ubuntu zesty-updates/multiverse amd64 DEP-11 Metadata [5,840 B]
+Get:17 http://us.archive.ubuntu.com/ubuntu zesty-backports/universe amd64 DEP-11 Metadata [4,588 B]
+Get:18 http://security.ubuntu.com/ubuntu zesty-security/main amd64 DEP-11 Metadata [12.7 kB]
+Get:19 http://security.ubuntu.com/ubuntu zesty-security/main DEP-11 64x64 Icons [17.6 kB]
+Get:20 http://security.ubuntu.com/ubuntu zesty-security/universe amd64 DEP-11 Metadata [21.6 kB]
+Get:21 http://security.ubuntu.com/ubuntu zesty-security/universe DEP-11 64x64 Icons [47.7 kB]
+Get:22 http://security.ubuntu.com/ubuntu zesty-security/multiverse amd64 DEP-11 Metadata [208 B]
+Fetched 1,673 kB in 0s (1,716 kB/s)
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+All packages are up to date.
+'''
     
     
-class TestAgeRestriction(unittest.TestCase):
-    def _assert_restricted(self, url, filename, age, old_age=None):
-        self.assertTrue(_download_restricted(url, filename, old_age))
-        self.assertFalse(_download_restricted(url, filename, age))
-    
-        def test_youtube_matching(self):
-        self.assertTrue(YoutubeIE.suitable('PLtS2H6bU1M'))
-        self.assertFalse(YoutubeIE.suitable('https://www.youtube.com/watch?v=AV6J6_AeFEQ&playnext=1&list=PL4023E734DA416012'))  # 668
-        self.assertMatch('http://youtu.be/BaW_jenozKc', ['youtube'])
-        self.assertMatch('http://www.youtube.com/v/BaW_jenozKc', ['youtube'])
-        self.assertMatch('https://youtube.googleapis.com/v/BaW_jenozKc', ['youtube'])
-        self.assertMatch('http://www.cleanvideosearch.com/media/action/yt/watch?videoId=8v_4O44sfjM', ['youtube'])
+def test_match():
+    assert match(Command('apt list --upgradable', match_output))
+    assert match(Command('sudo apt list --upgradable', match_output))
     
     
-@pytest.fixture(params=[(python_3, False),
-                        (python_3, True),
-                        (python_2, False)])
-def proc(request, spawnu, TIMEOUT):
-    container, instant_mode = request.param
-    proc = spawnu(*container)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(init_zshrc.format(
-        u'--enable-experimental-instant-mode' if instant_mode else ''))
-    proc.sendline(u'zsh')
-    if instant_mode:
-        assert proc.expect([TIMEOUT, u'instant mode ready: True'])
-    return proc
+def plot_feature_errors(all_errors, batch_size, all_components, data):
+    plt.figure()
+    plot_results(all_components, all_errors['pca'], label='PCA')
+    plot_results(all_components, all_errors['ipca'],
+                 label='IncrementalPCA, bsize=%i' % batch_size)
+    plt.legend(loc='lower left')
+    plt.suptitle('Algorithm error vs. n_components\n'
+                 'LFW, size %i x %i' % data.shape)
+    plt.xlabel('Number of components (out of max %i)' % data.shape[1])
+    plt.ylabel('Mean absolute error')
+    
+                gc.collect()
+            print('max_iter', max_iter)
+            print('- benchmarking A-SGD')
+            clf = SGDRegressor(alpha=alpha / n_train, fit_intercept=False,
+                               max_iter=max_iter, learning_rate='invscaling',
+                               eta0=.002, power_t=0.05, tol=1e-3,
+                               average=(max_iter * n_train // 2))
     
     
-@pytest.mark.parametrize('script, output', [
-    ('apt', invalid_operation('saerch')),
-    ('apt-get', invalid_operation('isntall')),
-    ('apt-cache', invalid_operation('rumove'))])
-def test_match(script, output):
-    assert match(Command(script, output))
-    
-        new_command = get_new_command(Command('apt update', match_output))
-    assert new_command == 'apt list --upgradable'
-
-    
-    
-@pytest.mark.parametrize('command, new_command', [
-    (Command('cargo buid', no_such_subcommand_old), 'cargo build'),
-    (Command('cargo buils', no_such_subcommand), 'cargo build')])
-def test_get_new_command(command, new_command):
-    assert get_new_command(command) == new_command
-
-    
-    
-ENTRY_POINT_NAMES = [
-    'httpie.plugins.auth.v1',
-    'httpie.plugins.formatter.v1',
-    'httpie.plugins.converter.v1',
-    'httpie.plugins.transport.v1',
-]
-    
-        >>> humanize_bytes(1)
-    '1 B'
-    >>> humanize_bytes(1024, precision=1)
-    '1.0 kB'
-    >>> humanize_bytes(1024 * 123, precision=1)
-    '123.0 kB'
-    >>> humanize_bytes(1024 * 12342, precision=1)
-    '12.1 MB'
-    >>> humanize_bytes(1024 * 12342, precision=2)
-    '12.05 MB'
-    >>> humanize_bytes(1024 * 1234, precision=2)
-    '1.21 MB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
-    '1.31 GB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
-    '1.3 GB'
-    
-    
-with codecs.open(FILE_PATH, encoding='utf8') as f:
-    # Strip because we don't want new lines in the data so that we can
-    # easily count occurrences also when embedded in JSON (where the new
-    # line would be escaped).
-    FILE_CONTENT = f.read().strip()
-    
-    
-class TestAutoContentTypeAndAcceptHeaders:
-    '''
-    Test that Accept and Content-Type correctly defaults to JSON,
-    but can still be overridden. The same with Content-Type when --form
-    -f is used.
-    
-    
-@pytest.mark.parametrize('follow_flag', ['--follow', '-F'])
-def test_follow_without_all_redirects_hidden(httpbin, follow_flag):
-    r = http(follow_flag, httpbin.url + '/redirect/2')
-    assert r.count('HTTP/1.1') == 1
-    assert HTTP_OK in r
-    
-    
-class TestMultipartFormDataFileUpload:
-    
-        def save(self):
-        self['__meta__'] = {
-            'httpie': __version__
-        }
-        if self.helpurl:
-            self['__meta__']['help'] = self.helpurl
-    
-                if not self.status.total_size:
-                self._status_line = PROGRESS_NO_CONTENT_LENGTH.format(
-                    downloaded=humanize_bytes(downloaded),
-                    speed=humanize_bytes(speed),
-                )
-            else:
-                try:
-                    percentage = downloaded / self.status.total_size * 100
-                except ZeroDivisionError:
-                    percentage = 0
-    
-        n_samples = 2000
-    list_n_features = np.linspace(500, 3000, 5).astype(np.int)
-    lasso_results, lars_lasso_results = compute_bench(alpha, [n_samples],
-                                           list_n_features, precompute=False)
-    plt.subplot(212)
-    plt.plot(list_n_features, lasso_results, 'b-', label='Lasso')
-    plt.plot(list_n_features, lars_lasso_results, 'r-', label='LassoLars')
-    plt.title('%d samples, alpha=%s' % (n_samples, alpha))
-    plt.legend(loc='upper left')
-    plt.xlabel('number of features')
-    plt.ylabel('Time (s)')
-    plt.axis('tight')
-    plt.show()
-
-    
-    
-def fixed_batch_size_comparison(data):
-    all_features = [i.astype(int) for i in np.linspace(data.shape[1] // 10,
-                                                       data.shape[1], num=5)]
-    batch_size = 1000
-    # Compare runtimes and error for fixed batch size
-    all_times = defaultdict(list)
-    all_errors = defaultdict(list)
-    for n_components in all_features:
-        pca = PCA(n_components=n_components)
-        ipca = IncrementalPCA(n_components=n_components, batch_size=batch_size)
-        results_dict = {k: benchmark(est, data) for k, est in [('pca', pca),
-                                                               ('ipca', ipca)]}
-    
-    
-def sparsity_ratio(X):
-    return np.count_nonzero(X) / float(n_samples * n_features)
-    
-        Example: ::
-    
-        # TASK: Build a grid search to find out whether unigrams or bigrams are
-    # more useful.
-    # Fit the pipeline on the training set using grid search for the parameters
-    parameters = {
-        'vect__ngram_range': [(1, 1), (1, 2)],
-    }
-    grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1)
-    grid_search.fit(docs_train, y_train)
-    
-    plt.figure(2)  # 'banana' shape
-plt.title('Outlier detection on a real data set (boston housing)')
-plt.scatter(X2[:, 0], X2[:, 1], color='black')
-plt.xlim((xx2.min(), xx2.max()))
-plt.ylim((yy2.min(), yy2.max()))
-plt.legend((legend2_values_list[0].collections[0],
-            legend2_values_list[1].collections[0],
-            legend2_values_list[2].collections[0]),
-           (legend2_keys_list[0], legend2_keys_list[1], legend2_keys_list[2]),
-           loc='upper center',
-           prop=matplotlib.font_manager.FontProperties(size=12))
-plt.ylabel('% lower status of the population')
-plt.xlabel('average number of rooms per dwelling')
-    
-    plt.matshow(data, cmap=plt.cm.Blues)
-plt.title('Original dataset')
-    
-    plt.show()
-
-    
-    agglo = cluster.FeatureAgglomeration(connectivity=connectivity,
-                                     n_clusters=32)
-    
-    def nudge_images(X, y):
-    # Having a larger dataset shows more clearly the behavior of the
-    # methods, but we multiply the size of the dataset only by 2, as the
-    # cost of the hierarchical clustering methods are strongly
-    # super-linear in n_samples
-    shift = lambda x: ndimage.shift(x.reshape((8, 8)),
-                                  .3 * np.random.normal(size=2),
-                                  mode='constant',
-                                  ).ravel()
-    X = np.concatenate([X, np.apply_along_axis(shift, 1, X)])
-    Y = np.concatenate([y, y], axis=0)
-    return X, Y
-    
-    # Different variance
-X_varied, y_varied = make_blobs(n_samples=n_samples,
-                                cluster_std=[1.0, 2.5, 0.5],
-                                random_state=random_state)
-y_pred = KMeans(n_clusters=3, random_state=random_state).fit_predict(X_varied)
-    
-      Args:
-    filename: The name of the current file.
-    clean_lines: A CleansedLines instance containing the file.
-    linenum: The number of the line to check.
-    error: The function to call with any errors found.
-  '''
-  # Look for closing parenthesis nearby.  We need one to confirm where
-  # the declarator ends and where the virt-specifier starts to avoid
-  # false positives.
-  line = clean_lines.elided[linenum]
-  declarator_end = line.rfind(')')
-  if declarator_end >= 0:
-    fragment = line[declarator_end:]
-  else:
-    if linenum > 1 and clean_lines.elided[linenum - 1].rfind(')') >= 0:
-      fragment = line
+def _make_issue_node(issue_no, config, options=None):
+    options = options or {}
+    if issue_no not in ('-', '0'):
+        if config.issues_uri:
+            ref = config.issues_uri.format(issue=issue_no)
+        elif config.issues_github_path:
+            ref = 'https://github.com/{0}/issues/{1}'.format(
+                config.issues_github_path, issue_no
+            )
+        issue_text = '#{0}'.format(issue_no)
+        link = nodes.reference(text=issue_text, refuri=ref, **options)
     else:
-      return
+        link = None
+    return link
     
-    from pandas.io.msgpack import unpackb
+        input_file = open(os.path.join(exercise_dir, f))
+    output_file = open(os.path.join(skeleton_dir, f), 'w')
     
-    plt.figtext(
-    0.05, 0.2, r'$y_{it} = \beta^{\prime} x_{it} + \mu_{i} + \epsilon_{it}$',
-    size=16, color='#5a89a4')
+    import numpy as np
+from matplotlib import pyplot as plt
     
-            if _executable_exists('xclip'):
-            return init_xclip_clipboard()
-        if _executable_exists('xsel'):
-            return init_xsel_clipboard()
-        if _executable_exists('klipper') and _executable_exists('qdbus'):
-            return init_klipper_clipboard()
     
-            exp = pd.Index([pd.Timestamp('2011-01-01 09:00', tz=tz),
-                        pd.Timestamp('2011-01-01 10:00'),
-                        pd.Timestamp('2011-01-01 11:00', tz=tz)],
-                       dtype=object)
-        tm.assert_index_equal(
-            idx.fillna(pd.Timestamp('2011-01-01 10:00')), exp)
+# Plot the distances
+for index, metric in enumerate(['cosine', 'euclidean', 'cityblock']):
+    avg_dist = np.zeros((n_clusters, n_clusters))
+    plt.figure(figsize=(5, 4.5))
+    for i in range(n_clusters):
+        for j in range(n_clusters):
+            avg_dist[i, j] = pairwise_distances(X[y == i], X[y == j],
+                                                metric=metric).mean()
+    avg_dist /= avg_dist.max()
+    for i in range(n_clusters):
+        for j in range(n_clusters):
+            plt.text(i, j, '%5.3f' % avg_dist[i, j],
+                     verticalalignment='center',
+                     horizontalalignment='center')
+    
+    for name, label in [('Setosa', 0),
+                    ('Versicolour', 1),
+                    ('Virginica', 2)]:
+    ax.text3D(X[y == label, 3].mean(),
+              X[y == label, 0].mean(),
+              X[y == label, 2].mean() + 2, name,
+              horizontalalignment='center',
+              bbox=dict(alpha=.2, edgecolor='w', facecolor='w'))
+# Reorder the labels to have colors matching the cluster results
+y = np.choose(y, [1, 2, 0]).astype(np.float)
+ax.scatter(X[:, 3], X[:, 0], X[:, 2], c=y, edgecolor='k')
+    
+    plt.subplot(3, 4, 10)
+plt.imshow(np.reshape(agglo.labels_, images[0].shape),
+           interpolation='nearest', cmap=plt.cm.nipy_spectral)
+plt.xticks(())
+plt.yticks(())
+plt.title('Labels')
+plt.show()
