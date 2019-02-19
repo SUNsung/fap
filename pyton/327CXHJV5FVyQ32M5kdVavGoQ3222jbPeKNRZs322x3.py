@@ -1,136 +1,97 @@
 
         
-        from requests.structures import CaseInsensitiveDict, LookupDict
+                if any([s_line.startswith(s) for s in ['* [', '- [']]):
+            if indent == last_indent:
+                blocks[-1].append(line)
+            else:
+                blocks.append([line])
+            last_indent = indent
+        else:
+            blocks.append([line])
+            last_indent = None
     
-            self.host = host
-        self.port = port
-        self.requests_to_handle = requests_to_handle
+        def get(self, query):
+        '''Get the stored query result from the cache.
     
-    import pytest
+        def __init__(self, level, row, spot_number, spot_size, vehicle_size):
+        self.level = level
+        self.row = row
+        self.spot_number = spot_number
+        self.spot_size = spot_size
+        self.vehicle_size = vehicle_size
+        self.vehicle = None
     
+        def __init__(self, timestamp, seller, amount):
+        self.timestamp = timestamp
+        self.seller = seller
+        self.amount = amount
     
-@pytest.mark.parametrize(
-    'value, expected', (
-        (
-            'application/xml',
-            ('application/xml', {})
-        ),
-        (
-            'application/json ; charset=utf-8',
-            ('application/json', {'charset': 'utf-8'})
-        ),
-        (
-            'application/json ; Charset=utf-8',
-            ('application/json', {'charset': 'utf-8'})
-        ),
-        (
-            'text/plain',
-            ('text/plain', {})
-        ),
-        (
-            'multipart/form-data; boundary = something ; boundary2=\'something_else\' ; no_equals ',
-            ('multipart/form-data', {'boundary': 'something', 'boundary2': 'something_else', 'no_equals': True})
-        ),
-        (
-                'multipart/form-data; boundary = something ; boundary2='something_else' ; no_equals ',
-                ('multipart/form-data', {'boundary': 'something', 'boundary2': 'something_else', 'no_equals': True})
-        ),
-        (
-            'multipart/form-data; boundary = something ; \'boundary2=something_else\' ; no_equals ',
-            ('multipart/form-data', {'boundary': 'something', 'boundary2': 'something_else', 'no_equals': True})
-        ),
-        (
-            'multipart/form-data; boundary = something ; 'boundary2=something_else' ; no_equals ',
-            ('multipart/form-data', {'boundary': 'something', 'boundary2': 'something_else', 'no_equals': True})
-        ),
-        (
-            'application/json ; ; ',
-            ('application/json', {})
-        )
-    ))
-def test__parse_content_type_header(value, expected):
-    assert _parse_content_type_header(value) == expected
-    
-    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url)
-    title = r1(r'<title>(.*)</title>', html)
-    assert title
-    id = r1(r'flvid\s*=\s*(\d+)', html)
-    assert id
-    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
-    
-            html = get_content(self.url)
-    
-            self.extract(**kwargs)
-    
-        html = get_content(rebuilt_url(url))
-    info = json.loads(match1(html, r'qualities':({.+?}),''))
-    title = match1(html, r''video_title'\s*:\s*'([^']+)'') or \
-            match1(html, r''title'\s*:\s*'([^']+)'')
-    title = unicodize(title)
-    
-    from ..common import *
-    
-    
-'''
-http://open.iqiyi.com/lib/player.html
-'''
-iqiyi_patterns = [r'(?:\'|\')(https?://dispatcher\.video\.qiyi\.com\/disp\/shareplayer\.swf\?.+?)(?:\'|\')',
-                  r'(?:\'|\')(https?://open\.iqiyi\.com\/developer\/player_js\/coopPlayerIndex\.html\?.+?)(?:\'|\')']
-    
-    site_info = 'FC2Video'
-download = fc2video_download
-download_playlist = playlist_not_supported('fc2video')
+        def crawl(self):
+        while True:
+            page = self.data_store.extract_max_priority_page()
+            if page is None:
+                break
+            if self.data_store.crawled_similar(page.signature):
+                self.data_store.reduce_priority_link_to_crawl(page.url)
+            else:
+                self.crawl_page(page)
+            page = self.data_store.extract_max_priority_page()
 
     
-        @classmethod
-    def funshion_decrypt(cls, a_bytes, coeff):
-        res_list = []
-        pos = 0
-        while pos < len(a_bytes):
-            a = a_bytes[pos]
-            if pos == len(a_bytes) - 1:
-                res_list.append(a)
-                pos += 1
-            else:
-                b = a_bytes[pos + 1]
-                m = a * coeff[0] + b * coeff[2]
-                n = a * coeff[1] + b * coeff[3]
-                res_list.append(m & 0xff)
-                res_list.append(n & 0xff)
-                pos += 2
-        return bytes(res_list).decode('utf8')
     
-        print('rm1: {0}'.format(rm1))
-    print('rm2: {0}'.format(rm2))
-    
-        sample_queue.put('yam')
-    with ObjectPool(sample_queue) as obj:
-        print('Inside with: {}'.format(obj))
-    print('Outside with: {}'.format(sample_queue.get()))
-    
-        def get_current_time_as_html_fragment(self):
-        current_time = self.time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
+def without_confirmation(proc, TIMEOUT):
+    '''Ensures that command can be fixed when confirmation disabled.'''
+    _set_confirmation(proc, False)
     
     
-class Standby(Inservice):
-    def __init__(self, HierachicalStateMachine):
-        self._hsm = HierachicalStateMachine
+@pytest.mark.functional
+def test_without_confirmation(proc, TIMEOUT):
+    without_confirmation(proc, TIMEOUT)
+    history_changed(proc, TIMEOUT, u'echo test')
+    
+    no_match_output = '''
+Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
+Get:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease [89.2 kB]
+Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
+Get:4 http://security.ubuntu.com/ubuntu zesty-security InRelease [89.2 kB]
+Hit:5 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
+Hit:6 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
+Hit:7 https://download.docker.com/linux/ubuntu zesty InRelease
+Get:8 http://us.archive.ubuntu.com/ubuntu zesty-updates/main i386 Packages [232 kB]
+Get:9 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 Packages [235 kB]
+Get:10 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 DEP-11 Metadata [55.2 kB]
+Get:11 http://us.archive.ubuntu.com/ubuntu zesty-updates/main DEP-11 64x64 Icons [32.3 kB]
+Get:12 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 Packages [156 kB]
+Get:13 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe i386 Packages [156 kB]
+Get:14 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 DEP-11 Metadata [175 kB]
+Get:15 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe DEP-11 64x64 Icons [253 kB]
+Get:16 http://us.archive.ubuntu.com/ubuntu zesty-updates/multiverse amd64 DEP-11 Metadata [5,840 B]
+Get:17 http://us.archive.ubuntu.com/ubuntu zesty-backports/universe amd64 DEP-11 Metadata [4,588 B]
+Get:18 http://security.ubuntu.com/ubuntu zesty-security/main amd64 DEP-11 Metadata [12.7 kB]
+Get:19 http://security.ubuntu.com/ubuntu zesty-security/main DEP-11 64x64 Icons [17.6 kB]
+Get:20 http://security.ubuntu.com/ubuntu zesty-security/universe amd64 DEP-11 Metadata [21.6 kB]
+Get:21 http://security.ubuntu.com/ubuntu zesty-security/universe DEP-11 64x64 Icons [47.7 kB]
+Get:22 http://security.ubuntu.com/ubuntu zesty-security/multiverse amd64 DEP-11 Metadata [208 B]
+Fetched 1,673 kB in 0s (1,716 kB/s)
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+All packages are up to date.
+'''
     
     
-class Dispatcher(object):
-    def __init__(self):
-        self.mobile_view = MobileView()
-        self.tablet_view = TabletView()
+parametrize_extensions = pytest.mark.parametrize('ext', tar_extensions)
     
-    ### OUTPUT ###
-# Proxy checking for Sales Manager availability
-# Sales Manager ready to talk
-# Proxy checking for Sales Manager availability
-# Sales Manager is busy
-# Proxy checking for Sales Manager availability
-# This Sales Manager will not talk to you whether he/she is busy or not
-# Proxy checking for Sales Manager availability
-# This Sales Manager will not talk to you whether he/she is busy or not
+        def __init__(self, *a, **kw):
+        super(QPSSpider, self).__init__(*a, **kw)
+        if self.qps is not None:
+            self.qps = float(self.qps)
+            self.download_delay = 1 / self.qps
+        elif self.download_delay is not None:
+            self.download_delay = float(self.download_delay)
+    
+    from scrapy.commands import ScrapyCommand
+from scrapy.http import Request
+from scrapy.exceptions import UsageError
+from scrapy.utils.datatypes import SequenceExclude
+from scrapy.utils.spider import spidercls_for_request, DefaultSpider
