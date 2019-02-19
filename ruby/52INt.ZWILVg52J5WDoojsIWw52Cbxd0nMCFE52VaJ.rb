@@ -1,90 +1,76 @@
 
         
-            def reraise_formatted!(e, message)
-      backtrace = FastlaneCore::Env.truthy?('FASTLANE_HIDE_BACKTRACE') ? [] : e.backtrace
-      raise e, '[!] #{message}'.red, backtrace
+            def_delegators :@s, :scan_until, :skip_until, :string
+    
+        while readable_io = IO.select([self_read])
+      signal = readable_io.first[0].gets.strip
+      handle_signal(launcher, signal)
+    end
+  #end
+rescue SystemExit => e
+  #Sidekiq.logger.error('Profiling...')
+  #result = RubyProf.stop
+  #printer = RubyProf::GraphHtmlPrinter.new(result)
+  #printer.print(File.new('output.html', 'w'), :min_percent => 1)
+  # normal
+rescue => e
+  raise e if $DEBUG
+  STDERR.puts e.message
+  STDERR.puts e.backtrace.join('\n')
+  exit 1
+end
+
+    
+        execute 'ensure-sidekiq-is-setup-with-monit' do 
+      command %Q{ 
+        monit reload 
+      } 
     end
     
-            cmd = ['git tag']
+    get '/' do
+  stats = Sidekiq::Stats.new
+  @failed = stats.failed
+  @processed = stats.processed
+  @messages = $redis.lrange('sinkiq-example-messages', 0, -1)
+  erb :index
+end
     
-          it 'Collects logs with specified number of commits' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          changelog_from_git_commits(commits_count: 10)
-        end').runner.execute(:test)
+          arr = Sidekiq.options[:lifecycle_events][event]
+      arr.reverse! if reverse
+      arr.each do |block|
+        begin
+          block.call
+        rescue => ex
+          handle_exception(ex, { context: 'Exception during Sidekiq lifecycle event.', event: event })
+          raise ex if reraise
+        end
+      end
+      arr.clear
+    end
+  end
+end
+
     
-          it 'passes the deprecated pathspec parameter to path parameter' do
-        with_verbose(true) do
-          allow(Fastlane::Actions).to receive(:sh).with(anything, { log: true }).and_return('')
-          result = Fastlane::FastFile.new.parse('lane :test do
-            git_add(pathspec: 'myfile.txt')
-          end').runner.execute(:test)
+        def erb(content, options = {})
+      if content.kind_of? Symbol
+        unless respond_to?(:'_erb_#{content}')
+          src = ERB.new(File.read('#{Web.settings.views}/#{content}.erb')).src
+          WebAction.class_eval('def _erb_#{content}\n#{src}\n end')
         end
       end
     
-          # We need to explicity test against Fastlane::Boolean, TrueClass/FalseClass
-      if value.class != FalseClass && value.class != TrueClass
-        UI.user_error!(''#{self.key}' value must be either `true` or `false`! Found #{value.class} instead.')
-      end
-    end
+        args += ['--bindir', bin_path]
+    ::FileUtils.mkdir_p(bin_path)
+    args << gem_path
+    safesystem(*args)
     
-    puts('[WARNING] You are calling #{tool_name} directly. Usage of the tool name without the `fastlane` prefix is deprecated in fastlane 2.0'.yellow)
-puts('Please update your scripts to use `fastlane #{tool_name} #{full_params}` instead.'.yellow)
+      def unpack_data_to
+    'files'
+  end
     
-        # Returns the specified or detected guest type name.
-    #
-    # @return [Symbol]
-    def name
-      capability_host_chain[0][0]
-    end
-    
-            # Parses the options given an OptionParser instance.
-        #
-        # This is a convenience method that properly handles duping the
-        # originally argv array so that it is not destroyed.
-        #
-        # This method will also automatically detect '-h' and '--help'
-        # and print help. And if any invalid options are detected, the help
-        # will be printed, as well.
-        #
-        # If this method returns `nil`, then you should assume that help
-        # was printed and parsing failed.
-        def parse_options(opts=nil)
-          # Creating a shallow copy of the arguments so the OptionParser
-          # doesn't destroy the originals.
-          argv = @argv.dup
-    
-            # Executes a command on the remote machine with administrative
-        # privileges. See {#execute} for documentation, as the API is the
-        # same.
-        #
-        # @see #execute
-        def sudo(command, opts=nil)
+          if !attributes[:python_setup_py_arguments].nil? and !attributes[:python_setup_py_arguments].empty?
+        # Add optional setup.py arguments
+        attributes[:python_setup_py_arguments].each do |a|
+          flags += [ a ]
         end
-    
-    #{stack}
-#{executable_path}
-### Plugins
-    
-    module RuboCop
-  module AST
-    # A node extension for `kwsplat` nodes. This will be used in place of a
-    # plain  node when the builder constructs the AST, making its methods
-    # available to all `kwsplat` nodes within RuboCop.
-    class KeywordSplatNode < Node
-      include HashElementNode
-    
-      class Blockquote < Liquid::Block
-    FullCiteWithTitle = /(\S.*)\s+(https?:\/\/)(\S+)\s+(.+)/i
-    FullCite = /(\S.*)\s+(https?:\/\/)(\S+)/i
-    AuthorTitle = /([^,]+),([^,]+)/
-    Author =  /(.+)/
-    
-    module Jekyll
-  class GistTag < Liquid::Tag
-    def initialize(tag_name, text, token)
-      super
-      @text           = text
-      @cache_disabled = false
-      @cache_folder   = File.expand_path '../.gist-cache', File.dirname(__FILE__)
-      FileUtils.mkdir_p @cache_folder
-    end
+      end
