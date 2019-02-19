@@ -1,128 +1,77 @@
 
         
-            def handle_unknown_error!(e)
-      # Some spaceship exception classes implement #preferred_error_info in order to share error info
-      # that we'd rather display instead of crashing with a stack trace. However, fastlane_core and
-      # spaceship can not know about each other's classes! To make this information passing work, we
-      # use a bit of Ruby duck-typing to check whether the unknown exception type implements the right
-      # method. If so, we'll present any returned error info in the manner of a user_error!
-      error_info = e.respond_to?(:preferred_error_info) ? e.preferred_error_info : nil
-      should_show_github_issues = e.respond_to?(:show_github_issues) ? e.show_github_issues : true
+        # No trailing slash
+Benchmark.ips do |x|
+  path = '/some/very/very/long/path/to/a/file/i/like'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
+end
     
-            cmd = ['git tag']
+      </body>
+</html>
+HTML
+CONTENT_NOT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
     
-          it 'works with all params' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          create_keychain ({
-            name: 'test.keychain',
-            password: 'testpassword',
-            default_keychain: true,
-            unlock: true,
-            timeout: 600,
-            lock_when_sleeps: true,
-            lock_after_timeout: true,
-            add_to_search_list: false,
-          })
-        end').runner.execute(:test)
+      Jekyll::Command.subclasses.each { |c| c.init_with_program(p) }
     
-          it 'cannot have both path and pathspec parameters' do
-        expect do
-          Fastlane::FastFile.new.parse('lane :test do
-            git_add(path: 'myfile.txt', pathspec: '*.txt')
-          end').runner.execute(:test)
-        end.to raise_error(FastlaneCore::Interface::FastlaneError)
+    #
+    
+                c.action do |args, opts|
+              Jekyll::Commands::NewTheme.process(args, opts)
+            end
+          end
+        end
+    
+            def log_error(error)
+          Jekyll.logger.error 'LiveReload experienced an error. ' \
+            'Run with --trace for more information.'
+          raise error
+        end
       end
     end
   end
 end
 
     
-              # Override the already overridden swiftlint_version method to check
-          # that the correct exectuable is being passed in as a parameter.
-          allow(Fastlane::Actions::SwiftlintAction).to receive(:swiftlint_version) { |params|
-            expect(params[:executable]).to eq(CUSTOM_EXECUTABLE_NAME)
-            swiftlint_gem_version
-          }
+              pipelines.each do |pipeline|
+            self.new(pipeline).tap do |preloader|
+              preloader.preload_commit_authors
+              preloader.preload_pipeline_warnings
+              preloader.preload_stages_warnings
+            end
+          end
+        end
     
-        it 'adds an environment Hash at the beginning' do
-      message = 'A message'
-      command = command_from_args({ 'PATH' => '/usr/local/bin' }, 'git', 'commit', '-m', message)
-      expect(command).to eq('PATH=/usr/local/bin git commit -m #{message.shellescape}')
-    end
+          # Returns true if the given value is present in the set.
+      #
+      # raw_key - The key of the set to check.
+      # value - The value to check for.
+      def self.set_includes?(raw_key, value)
+        key = cache_key_for(raw_key)
     
-    # To avoid 'PR & Runs' for which tests don't pass, we want to make spec errors more visible
-# The code below will run on Circle, parses the results in JSON and posts them to the PR as comment
-containing_dir = ENV['CIRCLE_TEST_REPORTS'] || '.' # for local testing
-file_path = File.join(containing_dir, 'rspec', 'fastlane-junit-results.xml')
+          def action_for_grape(env)
+        endpoint = env[ENDPOINT_KEY]
+        route = endpoint.route rescue nil
     
-    puts('[WARNING] You are calling #{tool_name} directly. Usage of the tool name without the `fastlane` prefix is deprecated in fastlane 2.0'.yellow)
-puts('Please update your scripts to use `fastlane #{tool_name} #{full_params}` instead.'.yellow)
-    
-            FastlaneCore::CommanderGenerator.new.generate(Cert::Options.available_options, command: c)
-    
-        it 'raises Errno::ENOENT when `exception: true` is given and the specified command does not exist' do
-      lambda { @object.system('feature_14386', exception: true) }.should raise_error(Errno::ENOENT)
-    end
+      def self.source_root
+    @source_root ||= File.expand_path('../templates', __FILE__)
   end
     
-      it 'does not append line-end if last character is line-end' do
-    lambda {
-      $VERBOSE = true
-      warn('this is some simple text with line-end\n')
-    }.should output(nil, 'this is some simple text with line-end\n')
-  end
+        private
     
-      gem.add_development_dependency 'danger'
-  gem.add_development_dependency 'mocha'
-  gem.add_development_dependency 'rspec'
-  gem.add_development_dependency 'rubocop', '0.48.1'
-end
-
-    
-        def add_filter(filter=nil, &block)
-      if block
-        raise ArgumentError, 'Both a block and an object were given' if filter
-    
-          def remember_location(key)
-        location = caller.find do |line|
-          IGNORED_LOCATIONS.none? { |i| line.include?(i) }
-        end
-        (locations[key] ||= []) << location
-      end
-    
-    # We use a special :_default_git value so that SCMResolver can tell whether the
-# default has been replaced by the user via `set`.
-set_if_empty :scm, Capistrano::Configuration::SCMResolver::DEFAULT_GIT
-set_if_empty :branch, 'master'
-set_if_empty :deploy_to, -> { '/var/www/#{fetch(:application)}' }
-set_if_empty :tmp_dir, '/tmp'
-    
-    Liquid::Template.register_tag('config_tag', ConfigTag)
-    
-    module Jekyll
-  class GistTag < Liquid::Tag
-    def initialize(tag_name, text, token)
-      super
-      @text           = text
-      @cache_disabled = false
-      @cache_folder   = File.expand_path '../.gist-cache', File.dirname(__FILE__)
-      FileUtils.mkdir_p @cache_folder
-    end
-    
-        def render(context)
-      output = super
-      types = {
-        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
-        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
-        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
-      }
-      if @videos.size > 0
-        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
-        @videos.each do |v|
-          video << '<source src='#{v}' #{types[File.extname(v)]}>'
-        end
-        video += '</video>'
-      else
-        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
-      end
+        def self.plural_cache
+      @plural_cache ||= PluralCache.new
     end
