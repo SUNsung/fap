@@ -1,180 +1,163 @@
 
         
-                a_split.each_with_index { |s, i| a_split[i] = s.to_i unless i == a_length - 1 }
-        b_split.each_with_index { |s, i| b_split[i] = s.to_i unless i == b_length - 1 }
-    
-        def relative_url_string?(str)
-      str !~ SCHEME_RGX && !fragment_url_string?(str) && !data_url_string?(str)
+            def run(action_named: nil, action_class_ref: nil, parameter_map: nil)
+      action_return = runner.execute_action(action_named, action_class_ref, [parameter_map], custom_dir: '.')
+      return action_return
     end
     
-        def document?
-      @content =~ DOCUMENT_RGX
-    end
+        describe 'shell escaping' do
+      let(:keychain_name) { 'keychain with spaces.keychain' }
+      let(:shell_escaped_name) { keychain_name.shellescape }
+      let(:name_regex) { Regexp.new(Regexp.escape(shell_escaped_name)) }
     
-        def effective_path
-      @effective_path ||= effective_url.path
+      it 'raises a TypeError when passed a String' do
+    lambda { sleep('2')   }.should raise_error(TypeError)
+  end
+    
+      it 'is a private method' do
+    Kernel.should have_private_instance_method(:test)
+  end
+    
+          it 'raises TypeError if passed not Integer' do
+        -> { warn '', uplevel: '' }.should raise_error(TypeError)
+        -> { warn '', uplevel: [] }.should raise_error(TypeError)
+        -> { warn '', uplevel: {} }.should raise_error(TypeError)
+        -> { warn '', uplevel: Object.new }.should raise_error(TypeError)
+      end
     end
   end
 end
 
     
-        def root_path
-      self.class.root_path
+    module Sass
+  # This class converts CSS documents into Sass or SCSS templates.
+  # It works by parsing the CSS document into a {Sass::Tree} structure,
+  # and then applying various transformations to the structure
+  # to produce more concise and idiomatic Sass/SCSS.
+  #
+  # Example usage:
+  #
+  #     Sass::CSS.new('p { color: blue }').render(:sass) #=> 'p\n  color: blue'
+  #     Sass::CSS.new('p { color: blue }').render(:scss) #=> 'p {\n  color: blue; }'
+  class CSS
+    # @param template [String] The CSS stylesheet.
+    #   This stylesheet can be encoded using any encoding
+    #   that can be converted to Unicode.
+    #   If the stylesheet contains an `@charset` declaration,
+    #   that overrides the Ruby encoding
+    #   (see {file:SASS_REFERENCE.md#Encodings the encoding documentation})
+    # @option options :old [Boolean] (false)
+    #     Whether or not to output old property syntax
+    #     (`:color blue` as opposed to `color: blue`).
+    #     This is only meaningful when generating Sass code,
+    #     rather than SCSS.
+    # @option options :indent [String] ('  ')
+    #     The string to use for indenting each line. Defaults to two spaces.
+    def initialize(template, options = {})
+      if template.is_a? IO
+        template = template.read
+      end
+    
+        # Adds an entry to the exception's Sass backtrace.
+    #
+    # @param attrs [{Symbol => Object}] The information in the backtrace entry.
+    #   See \{#sass\_backtrace}
+    def add_backtrace(attrs)
+      sass_backtrace << attrs.reject {|_k, v| v.nil?}
     end
     
-              node.before(node.children).remove
-        end
+          if !colon_path?(@args[0]) && probably_dest_dir?(@args[1])
+        flag = @options[:update] ? '--update' : '--watch'
+        err =
+          if !File.exist?(@args[1])
+            'doesn't exist'
+          elsif @args[1] =~ /\.css$/
+            'is a CSS file'
+          end
+        raise <<MSG if err
+File #{@args[1]} #{err}.
+    Did you mean: #{@default_syntax} #{flag} #{@args[0]}:#{@args[1]}
+MSG
+      end
     
-        if authenticated && resource = warden.user(resource_name)
-      flash[:alert] = I18n.t('devise.failure.already_authenticated')
-      redirect_to after_sign_in_path_for(resource)
-    end
+          # Returns the time the given Sass file was last modified.
+      #
+      # If the given file has been deleted or the time can't be accessed
+      # for some other reason, this should return nil.
+      #
+      # @param uri [String] The URI of the file to check.
+      #   Comes from a `:filename` option set on an engine returned by this importer.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` currently being checked.
+      # @return [Time, nil]
+      def mtime(uri, options)
+        Sass::Util.abstract(self)
+      end
+    
+          def lines
+        lines = []
+        @diff.diff.split('\n')[2..-1].each_with_index do |line, line_index|
+          lines << { :line  => line,
+                     :class => line_class(line),
+                     :ldln  => left_diff_line_number(0, line),
+                     :rdln  => right_diff_line_number(0, line) }
+        end if @diff
+        lines
+      end
+    
+    def testpath(path)
+  File.join(TEST_DIR, path)
+end
+    
+        author = page2.version.author
+    assert_equal 'ghi', author.name
+    assert_equal 'jkl', author.email
   end
     
-          def mailer_sender(mapping, sender = :from)
-        default_sender = default_params[sender]
-        if default_sender.present?
-          default_sender.respond_to?(:to_proc) ? instance_eval(&default_sender) : default_sender
-        elsif Devise.mailer_sender.is_a?(Proc)
-          Devise.mailer_sender.call(mapping.name)
-        else
-          Devise.mailer_sender
+        before do
+      allow_any_instance_of(Spree::Api::V2::Storefront::CartController).to receive(:spree_current_order).and_return(order)
+      patch '/api/v2/storefront/cart/empty', headers: headers_bearer
+    end
+    
+          it 'returns account data with included default billing and shipping addresses' do
+        expect(json_response['included']).to    include(have_type('address'))
+        expect(json_response['included'][0]).to eq(Spree::V2::Storefront::AddressSerializer.new(user.billing_address).as_json['data'])
+        expect(json_response['included'][1]).to eq(Spree::V2::Storefront::AddressSerializer.new(user.shipping_address).as_json['data'])
+      end
+    end
+    
+        context 'as a guest user' do
+      include_context 'creates guest order with guest token'
+    
+          it 'returns countries that the current store ships to' do
+        get shippable_url
+        expect(json_response['data'].size).to eq(to_return.size)
+      end
+    
+            it 'returns proper links data' do
+          expect(json_response['links']['self']).to include('/api/v2/storefront/products?page=1&per_page=2')
+          expect(json_response['links']['next']).to include('/api/v2/storefront/products?page=2&per_page=2')
+          expect(json_response['links']['prev']).to include('/api/v2/storefront/products?page=1&per_page=2')
         end
       end
     
-            # Attempt to find a user by its email. If a record is found, send new
-        # password instructions to it. If user is not found, returns a new user
-        # with an email not found error.
-        # Attributes must contain the user's email
-        def send_reset_password_instructions(attributes={})
-          recoverable = find_or_initialize_with_errors(reset_password_keys, attributes, :not_found)
-          recoverable.send_reset_password_instructions if recoverable.persisted?
-          recoverable
-        end
-    
-      #
-  # Dispatches the supplied request for a given connection.
-  #
-  def dispatch_request(cli, request)
-    # Is the client requesting keep-alive?
-    if ((request['Connection']) and
-       (request['Connection'].downcase == 'Keep-Alive'.downcase))
-      cli.keepalive = true
-    end
-    
-    =begin
-   +-------------+---------------+-------------------------------------+
-   | VALUE       | Name          | Description                         |
-   +-------------+---------------+-------------------------------------+
-   | 0x01        | Hangup        | The call has been hungup at the     |
-   |             |               | remote end                          |
-   |             |               |                                     |
-   | 0x02        | Reserved      | Reserved for future use             |
-   |             |               |                                     |
-   | 0x03        | Ringing       | Remote end is ringing (ring-back)   |
-   |             |               |                                     |
-   | 0x04        | Answer        | Remote end has answered             |
-   |             |               |                                     |
-   | 0x05        | Busy          | Remote end is busy                  |
-   |             |               |                                     |
-   | 0x06        | Reserved      | Reserved for future use             |
-   |             |               |                                     |
-   | 0x07        | Reserved      | Reserved for future use             |
-   |             |               |                                     |
-   | 0x08        | Congestion    | The call is congested               |
-   |             |               |                                     |
-   | 0x09        | Flash Hook    | Flash hook                          |
-   |             |               |                                     |
-   | 0x0a        | Reserved      | Reserved for future use             |
-   |             |               |                                     |
-   | 0x0b        | Option        | Device-specific options are being   |
-   |             |               | transmitted                         |
-   |             |               |                                     |
-   | 0x0c        | Key Radio     | Key Radio                           |
-   |             |               |                                     |
-   | 0x0d        | Unkey Radio   | Unkey Radio                         |
-   |             |               |                                     |
-   | 0x0e        | Call Progress | Call is in progress                 |
-   |             |               |                                     |
-   | 0x0f        | Call          | Call is proceeding                  |
-   |             | Proceeding    |                                     |
-   |             |               |                                     |
-   | 0x10        | Hold          | Call is placed on hold              |
-   |             |               |                                     |
-   | 0x11        | Unhold        | Call is taken off hold              |
-   +-------------+---------------+-------------------------------------+
-=end
-    
-      #
-  # Payload types were identified from xCAT-server source code (IPMI.pm)
-  #
-  PAYLOAD_IPMI = 0
-  PAYLOAD_SOL  = 1
-  PAYLOAD_RMCPPLUSOPEN_REQ = 0x10
-  PAYLOAD_RMCPPLUSOPEN_REP = 0x11
-  PAYLOAD_RAKP1 = 0x12
-  PAYLOAD_RAKP2 = 0x13
-  PAYLOAD_RAKP3 = 0x14
-  PAYLOAD_RAKP4 = 0x15
-    
-                encoded
+              def resource_finder
+            Spree::Api::Dependencies.storefront_completed_order_finder.constantize
           end
     
-              # Decodes the key_expiration field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Time]
-          def decode_key_expiration(input)
-            input.value[0].value
-          end
+            quantity = line_item.quantity - unit_count
+        return if quantity.zero?
     
-              # Decodes a Rex::Proto::Kerberos::Model::EncryptedData
-          #
-          # @param input [String, OpenSSL::ASN1::Sequence] the input to decode from
-          # @return [self]
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode(input)
-            case input
-            when String
-              decode_string(input)
-            when OpenSSL::ASN1::Sequence
-              decode_asn1(input)
-            else
-              raise ::RuntimeError, 'Failed to decode EncryptedData Name, invalid input'
-            end
-    
-              # Decodes the type from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_type(input)
-            input.value[0].value.to_i
-          end
-    
-      ArgumentError = Class.new(Error)
-  ContextError = Class.new(Error)
-  FileSystemError = Class.new(Error)
-  StandardError = Class.new(Error)
-  SyntaxError = Class.new(Error)
-  StackLevelError = Class.new(Error)
-  TaintedError = Class.new(Error)
-  MemoryError = Class.new(Error)
-  ZeroDivisionError = Class.new(Error)
-  FloatDomainError = Class.new(Error)
-  UndefinedVariable = Class.new(Error)
-  UndefinedDropMethod = Class.new(Error)
-  UndefinedFilter = Class.new(Error)
-  MethodOverrideError = Class.new(Error)
-  InternalError = Class.new(Error)
-end
-
-    
-        def first
-      @index == 0
+      def for_each_gem
+    SPREE_GEMS.each do |gem_name|
+      yield 'pkg/spree_#{gem_name}-#{version}.gem'
     end
-    
-        def blank?
-      false
-    end
+    yield 'pkg/spree-#{version}.gem'
   end
-end
+    
+              def order_token
+            request.headers['X-Spree-Order-Token'] || params[:order_token]
+          end
+    
+        # Default values
+    set :sessions, true
