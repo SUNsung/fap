@@ -1,96 +1,104 @@
 
         
-                unless post && post.id
-          puts post.errors.full_messages if post
-          puts creator.errors.inspect
-          raise 'Failed to create description for trust level 3 lounge!'
-        end
+            it 'sends escape characters correctly to the backend' do
+      emitter.events << Event.new(payload: {data: 'Line 1\nLine 2\nLine 3'})
+      formatting_agent.sources << emitter
+      formatting_agent.options.merge!('instructions' => {'data' => '{{data | newline_to_br | strip_newlines | split: '<br />' | join: ','}}'})
+      formatting_agent.save!
     
-        Category.transaction do
-      staff.group_names = ['staff']
-      unless staff.save
-        puts staff.errors.full_messages
-        raise 'Failed to set permissions on the Staff category!'
-      end
+        it 'does not output links to other agents outside of the incoming set' do
+      Link.create!(:source_id => agents(:jane_weather_agent).id, :receiver_id => agents(:jane_website_agent).id)
+      Link.create!(:source_id => agents(:jane_website_agent).id, :receiver_id => agents(:jane_rain_notifier_agent).id)
     
-          if @custom_emoji.update(resource_params)
-        log_action :update, @custom_emoji
-        flash[:notice] = I18n.t('admin.custom_emojis.updated_msg')
-      else
-        flash[:alert] =  I18n.t('admin.custom_emojis.update_failed_msg')
-      end
-      redirect_to admin_custom_emojis_path(page: params[:page], **@filter_params)
+      describe '#recursively_interpolate_jsonpaths' do
+    it 'interpolates all string values in a structure' do
+      struct = {
+        :int => 5,
+        :string => 'this <escape $.works>',
+        :array => ['<works>', 'now', '<$.there.world>'],
+        :deep => {
+          :string => 'hello <there.world>',
+          :hello => :world
+        }
+      }
+      data = { :there => { :world => 'WORLD' }, :works => 'should work' }
+      expect(Utils.recursively_interpolate_jsonpaths(struct, data)).to eq({
+        :int => 5,
+        :string => 'this should+work',
+        :array => ['should work', 'now', 'WORLD'],
+        :deep => {
+          :string => 'hello WORLD',
+          :hello => :world
+        }
+      })
     end
-    
-        web_subscription = ::Web::PushSubscription.create!(
-      endpoint: subscription_params[:endpoint],
-      key_p256dh: subscription_params[:keys][:p256dh],
-      key_auth: subscription_params[:keys][:auth],
-      data: data,
-      user_id: active_session.user_id,
-      access_token_id: active_session.access_token_id
-    )
-    
-      gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
-  gem.executables   = %w(cap capify)
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ['lib']
-    
-      class VagrantSSHCommandError < RuntimeError; end
-    
-          def call
-        ask_question
-        value_or_default
-      end
-    
-          # Read each line as a path
-      File.new(exclude_file, 'r').each_line do |line|
-        # Handle each line as if it were an argument
-        input.attributes[:excludes] << line.strip
-      end
-    end
-    
-        #self.name = [attributes[:gem_package_name_prefix], spec.name].join('-')
-    self.license = (spec.license or 'no license listed in #{File.basename(gem_path)}')
-    
-        settings['prefix'] = staging_path(attributes[:prefix])
-    FileUtils.mkdir_p(settings['prefix'])
-    
-      option '--postinstall-action', 'POSTINSTALL_ACTION',
-    'Post-install action provided in package metadata. ' \
-    'Optionally one of '#{POSTINSTALL_ACTIONS.join('', '')}'.' do |value|
-    if !POSTINSTALL_ACTIONS.include?(value)
-      raise ArgumentError, 'osxpkg-postinstall-action value of '#{value}' is invalid. ' \
-        'Must be one of #{POSTINSTALL_ACTIONS.join(', ')}'
-    end
-    value
   end
     
-      option '--publisher', 'PUBLISHER', 
-    'Set the publisher name for the repository',
-    :default => 'FPM'
-    
-        php_bin = attributes[:pear_php_bin] || '/usr/bin/php'
-    logger.info('Setting php_bin', :php_bin => php_bin)
-    safesystem('pear', '-c', config, 'config-set', 'php_bin', php_bin)
-    
-          base = staging_path(File.join(attributes[:prefix], '#{platform.platform}/#{platform.target_version || 'default'}'))
-      target = File.join(base, 'files')
-      actions_script = File.join(base, 'install_actions.sh')
-      ::PleaseRun::Installer.install_files(platform, target, false)
-      ::PleaseRun::Installer.write_actions(platform, actions_script)
+          @log.level = 0
+      expect(@log).to be_valid
     end
+  end
     
-    # Support for self extracting sh files (.sh files)
-#
-# This class only supports output of packages.
-#
-# The sh package is a single sh file with a tar payload concatenated to the end.
-# The script can unpack the tarball to install it and call optional post install scripts.
-class FPM::Package::Sh < FPM::Package
+      describe '#working?' do
+    it 'should not be working until the first event was received' do
+      expect(@checker).not_to be_working
+      @checker.last_receive_at = Time.now
+      expect(@checker).to be_working
+    end
+  end
     
-        # Generate the package 'Prototype' file
-    File.open('#{build_path}/Prototype', 'w') do |prototype|
-      prototype.puts('i pkginfo')
-      prototype.puts('i preinstall') if self.scripts['pre-install']
-      prototype.puts('i postinstall') if self.scripts['post-install']
+    module Docs
+  class Entry
+    class Invalid < StandardError; end
+    
+          max_length = if tag = str.slice!(/ \[.+\]\z/)
+        terminal_width - tag.length
+      else
+        terminal_width
+      end
+    
+            css('h1 + code').each do |node|
+          node.before('<p></p>')
+          while node.next_element.name == 'code'
+            node.previous_element << ' '
+            node.previous_element << node.next_element
+          end
+          node.previous_element.prepend_child(node)
+        end
+    
+    module Sass
+  module CacheStores
+    # A backend for the Sass cache using the filesystem.
+    class Filesystem < Base
+      # The directory where the cached files will be stored.
+      #
+      # @return [String]
+      attr_accessor :cache_location
+    
+        # Parses the command-line arguments and runs the executable.
+    # Calls `Kernel#exit` at the end, so it never returns.
+    #
+    # @see #parse
+    def parse!
+      # rubocop:disable RescueException
+      begin
+        parse
+      rescue Exception => e
+        # Exit code 65 indicates invalid data per
+        # http://www.freebsd.org/cgi/man.cgi?query=sysexits. Setting it via
+        # at_exit is a bit of a hack, but it allows us to rethrow when --trace
+        # is active and get both the built-in exception formatting and the
+        # correct exit code.
+        at_exit {exit Sass::Util.windows? ? 13 : 65} if e.is_a?(Sass::SyntaxError)
+    
+          # Splits a filename into three parts, a directory part, a basename, and an extension
+      # Only the known extensions returned from the extensions method will be recognized as such.
+      def split(name)
+        extension = nil
+        dirname, basename = File.dirname(name), File.basename(name)
+        if basename =~ /^(.*)\.(#{extensions.keys.map {|e| Regexp.escape(e)}.join('|')})$/
+          basename = $1
+          extension = $2
+        end
+        [dirname, basename, extension]
+      end
