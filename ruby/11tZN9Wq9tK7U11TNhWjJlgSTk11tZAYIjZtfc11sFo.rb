@@ -1,99 +1,96 @@
 
         
-              it 'handles the exclude_dirs parameter with no elements correctly' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          ensure_no_debug_code(text: 'pry', path: '.', exclude_dirs: [])
-        end').runner.execute(:test)
-        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}'')
+                unless post && post.id
+          puts post.errors.full_messages if post
+          puts creator.errors.inspect
+          raise 'Failed to create description for trust level 3 lounge!'
+        end
+    
+        Category.transaction do
+      staff.group_names = ['staff']
+      unless staff.save
+        puts staff.errors.full_messages
+        raise 'Failed to set permissions on the Staff category!'
       end
     
-              it 'uses oclint provided' do
-            expect(result).to include(command)
-          end
-        end
+          if @custom_emoji.update(resource_params)
+        log_action :update, @custom_emoji
+        flash[:notice] = I18n.t('admin.custom_emojis.updated_msg')
+      else
+        flash[:alert] =  I18n.t('admin.custom_emojis.update_failed_msg')
+      end
+      redirect_to admin_custom_emojis_path(page: params[:page], **@filter_params)
+    end
+    
+        web_subscription = ::Web::PushSubscription.create!(
+      endpoint: subscription_params[:endpoint],
+      key_p256dh: subscription_params[:keys][:p256dh],
+      key_auth: subscription_params[:keys][:auth],
+      data: data,
+      user_id: active_session.user_id,
+      access_token_id: active_session.access_token_id
+    )
+    
+      gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
+  gem.executables   = %w(cap capify)
+  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.require_paths = ['lib']
+    
+      class VagrantSSHCommandError < RuntimeError; end
+    
+          def call
+        ask_question
+        value_or_default
+      end
+    
+          # Read each line as a path
+      File.new(exclude_file, 'r').each_line do |line|
+        # Handle each line as if it were an argument
+        input.attributes[:excludes] << line.strip
       end
     end
-  end
-end
-
     
-    module FastlaneCore
-  class ConfigItem
-    # [Symbol] the key which is used as command parameters or key in the fastlane tools
-    attr_accessor :key
+        #self.name = [attributes[:gem_package_name_prefix], spec.name].join('-')
+    self.license = (spec.license or 'no license listed in #{File.basename(gem_path)}')
     
-    # Here be monkey patches
+        settings['prefix'] = staging_path(attributes[:prefix])
+    FileUtils.mkdir_p(settings['prefix'])
     
-    puts('[WARNING] You are calling #{tool_name} directly. Usage of the tool name without the `fastlane` prefix is deprecated in fastlane 2.0'.yellow)
-puts('Please update your scripts to use `fastlane #{tool_name} #{full_params}` instead.'.yellow)
-    
-          global_option('--verbose') { FastlaneCore::Globals.verbose = true }
-    
-            # Registers a callback to be called when a specific action sequence
-        # is run. This allows plugin authors to hook into things like VM
-        # bootup, VM provisioning, etc.
-        #
-        # @param [Symbol] name Name of the action.
-        # @return [Array] List of the hooks for the given action.
-        def self.action_hook(name, &block)
-          # Get the list of hooks for the given hook name
-          data[:action_hooks] ||= {}
-          hooks = data[:action_hooks][name.to_sym] ||= []
-    
-            # This contains all the configuration plugins by scope.
-        #
-        # @return [Hash<Symbol, Registry>]
-        attr_reader :configs
-    
-              components.providers.register(name.to_sym) do
-            [block.call, options]
-          end
-    
-      def process_push_request
-    case hub_mode
-    when 'subscribe'
-      Pubsubhubbub::SubscribeService.new.call(account_from_topic, hub_callback, hub_secret, hub_lease_seconds, verified_domain)
-    when 'unsubscribe'
-      Pubsubhubbub::UnsubscribeService.new.call(account_from_topic, hub_callback)
-    else
-      ['Unknown mode: #{hub_mode}', 422]
+      option '--postinstall-action', 'POSTINSTALL_ACTION',
+    'Post-install action provided in package metadata. ' \
+    'Optionally one of '#{POSTINSTALL_ACTIONS.join('', '')}'.' do |value|
+    if !POSTINSTALL_ACTIONS.include?(value)
+      raise ArgumentError, 'osxpkg-postinstall-action value of '#{value}' is invalid. ' \
+        'Must be one of #{POSTINSTALL_ACTIONS.join(', ')}'
     end
+    value
   end
     
-      def create
-    active_session = current_session
+      option '--publisher', 'PUBLISHER', 
+    'Set the publisher name for the repository',
+    :default => 'FPM'
     
-      def pinned_version
-    Keg.new(path.resolved_path).version if pinned?
-  end
-end
-
+        php_bin = attributes[:pear_php_bin] || '/usr/bin/php'
+    logger.info('Setting php_bin', :php_bin => php_bin)
+    safesystem('pear', '-c', config, 'config-set', 'php_bin', php_bin)
     
-    describe BuildEnvironment do
-  alias_matcher :use_userpaths, :be_userpaths
+          base = staging_path(File.join(attributes[:prefix], '#{platform.platform}/#{platform.target_version || 'default'}'))
+      target = File.join(base, 'files')
+      actions_script = File.join(base, 'install_actions.sh')
+      ::PleaseRun::Installer.install_files(platform, target, false)
+      ::PleaseRun::Installer.write_actions(platform, actions_script)
+    end
     
-              def serialize_resource(resource)
-            resource_serializer.new(
-              resource,
-              include: resource_includes,
-              sparse_fields: sparse_fields
-            ).serializable_hash
-          end
+    # Support for self extracting sh files (.sh files)
+#
+# This class only supports output of packages.
+#
+# The sh package is a single sh file with a tar payload concatenated to the end.
+# The script can unpack the tarball to install it and call optional post install scripts.
+class FPM::Package::Sh < FPM::Package
     
-          def invalid_resource!(resource)
-        @resource = resource
-        render 'spree/api/errors/invalid_resource', status: 422
-      end
-    
-            def find_line_item
-          id = params[:id].to_i
-          order.line_items.detect { |line_item| line_item.id == id } or
-            raise ActiveRecord::RecordNotFound
-        end
-    
-            def index
-          @product_properties = @product.product_properties.accessible_by(current_ability, :read).
-                                ransack(params[:q]).result.
-                                page(params[:page]).per(params[:per_page])
-          respond_with(@product_properties)
-        end
+        # Generate the package 'Prototype' file
+    File.open('#{build_path}/Prototype', 'w') do |prototype|
+      prototype.puts('i pkginfo')
+      prototype.puts('i preinstall') if self.scripts['pre-install']
+      prototype.puts('i postinstall') if self.scripts['post-install']
