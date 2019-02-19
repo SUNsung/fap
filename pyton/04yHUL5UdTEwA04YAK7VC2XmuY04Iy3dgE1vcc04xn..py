@@ -1,91 +1,96 @@
 
         
-        def _f(): pass
-FunctionType = type(_f)
-LambdaType = type(lambda: None)         # Same as FunctionType
-CodeType = type(_f.__code__)
-MappingProxyType = type(type.__dict__)
-SimpleNamespace = type(sys.implementation)
+            def load(self):
+        try:
+            session_data = self._cache.get(self.cache_key)
+        except Exception:
+            # Some backends (e.g. memcache) raise an exception on invalid
+            # cache keys. If this happens, reset the session. See #17810.
+            session_data = None
+        if session_data is not None:
+            return session_data
+        self._session_key = None
+        return {}
     
-        def __delitem__(self, elem):
-        'Like dict.__delitem__() but does not raise KeyError for missing values.'
-        if elem in self:
-            super().__delitem__(elem)
+        def get_decoded(self):
+        session_store_class = self.get_session_store_class()
+        return session_store_class().decode(self.session_data)
+
     
+        def inner(*suffix):
+        return urljoin(httpbin_url, '/'.join(suffix))
     
-def _makeLoader(prefix, sortUsing, suiteClass=None, testNamePatterns=None):
-    loader = TestLoader()
-    loader.sortTestMethodsUsing = sortUsing
-    loader.testMethodPrefix = prefix
-    loader.testNamePatterns = testNamePatterns
-    if suiteClass:
-        loader.suiteClass = suiteClass
-    return loader
+    import pytest
     
-    def testdir(a):
-    try:
-        names = [n for n in os.listdir(a) if n.endswith('.py')]
-    except OSError:
-        print('Directory not readable: %s' % a, file=sys.stderr)
-    else:
-        for n in names:
-            fullname = os.path.join(a, n)
-            if os.path.isfile(fullname):
-                output = io.StringIO()
-                print('Testing %s' % fullname)
-                try:
-                    roundtrip(fullname, output)
-                except Exception as e:
-                    print('  Failed to compile, exception is %s' % repr(e))
-            elif os.path.isdir(fullname):
-                testdir(fullname)
+            self.host = host
+        self.port = port
+        self.requests_to_handle = requests_to_handle
     
-    REVERSE_NAME_MAPPING.update({
-    ('_functools', 'reduce'): ('__builtin__', 'reduce'),
-    ('tkinter.filedialog', 'FileDialog'): ('FileDialog', 'FileDialog'),
-    ('tkinter.filedialog', 'LoadFileDialog'): ('FileDialog', 'LoadFileDialog'),
-    ('tkinter.filedialog', 'SaveFileDialog'): ('FileDialog', 'SaveFileDialog'),
-    ('tkinter.simpledialog', 'SimpleDialog'): ('SimpleDialog', 'SimpleDialog'),
-    ('xmlrpc.server', 'ServerHTMLDoc'): ('DocXMLRPCServer', 'ServerHTMLDoc'),
-    ('xmlrpc.server', 'XMLRPCDocGenerator'):
-        ('DocXMLRPCServer', 'XMLRPCDocGenerator'),
-    ('xmlrpc.server', 'DocXMLRPCRequestHandler'):
-        ('DocXMLRPCServer', 'DocXMLRPCRequestHandler'),
-    ('xmlrpc.server', 'DocXMLRPCServer'):
-        ('DocXMLRPCServer', 'DocXMLRPCServer'),
-    ('xmlrpc.server', 'DocCGIXMLRPCRequestHandler'):
-        ('DocXMLRPCServer', 'DocCGIXMLRPCRequestHandler'),
-    ('http.server', 'SimpleHTTPRequestHandler'):
-        ('SimpleHTTPServer', 'SimpleHTTPRequestHandler'),
-    ('http.server', 'CGIHTTPRequestHandler'):
-        ('CGIHTTPServer', 'CGIHTTPRequestHandler'),
-    ('_socket', 'socket'): ('socket', '_socketobject'),
-})
+                prep.headers['Authorization'] = self.build_digest_header(
+                prep.method, prep.url)
+            _r = r.connection.send(prep, **kwargs)
+            _r.history.append(r)
+            _r.request = prep
     
     
-        self.assertIs(NEI.__new__, Enum.__new__)
-        self.assertEqual(repr(NEI.x + NEI.y), 'NamedInt('(the-x + the-y)', 3)')
-        globals()['NamedInt'] = NamedInt
-        globals()['NEI'] = NEI
-        NI5 = NamedInt('test', 5)
-        self.assertEqual(NI5, 5)
-        test_pickle_dump_load(self.assertEqual, NI5, 5)
-        self.assertEqual(NEI.y.value, 2)
-        test_pickle_dump_load(self.assertIs, NEI.y)
-        test_pickle_dump_load(self.assertIs, NEI)
+USER = PASSWORD = '%!*'();:@&=+$,/?#[] '
+ENCODED_USER = compat.quote(USER, '')
+ENCODED_PASSWORD = compat.quote(PASSWORD, '')
     
-        def reopenIfNeeded(self):
-        '''
-        Reopen log file if needed.
     
-        def run_tests_sequential(self):
-        if self.ns.trace:
-            import trace
-            self.tracer = trace.Trace(trace=False, count=True)
+def benchmark(estimator, data):
+    gc.collect()
+    print('Benching %s' % estimator)
+    t0 = time()
+    estimator.fit(data)
+    training_time = time() - t0
+    data_t = estimator.transform(data)
+    data_r = estimator.inverse_transform(data_t)
+    reconstruction_error = np.mean(np.abs(data - data_r))
+    return {'time': training_time, 'error': reconstruction_error}
     
-    # Are two stat buffers (obtained from stat, fstat or lstat)
-# describing the same file?
-def samestat(s1, s2):
-    '''Test whether two stat buffers reference the same file'''
-    return (s1.st_ino == s2.st_ino and
-            s1.st_dev == s2.st_dev)
+    ratio = scikits_time / scipy_time
+    
+        # Print and plot the confusion matrix
+    cm = metrics.confusion_matrix(y_test, y_predicted)
+    print(cm)
+    
+    # Learn a frontier for outlier detection with several classifiers
+xx1, yy1 = np.meshgrid(np.linspace(-8, 28, 500), np.linspace(3, 40, 500))
+xx2, yy2 = np.meshgrid(np.linspace(3, 10, 500), np.linspace(-5, 45, 500))
+for i, (clf_name, clf) in enumerate(classifiers.items()):
+    plt.figure(1)
+    clf.fit(X1)
+    Z1 = clf.decision_function(np.c_[xx1.ravel(), yy1.ravel()])
+    Z1 = Z1.reshape(xx1.shape)
+    legend1[clf_name] = plt.contour(
+        xx1, yy1, Z1, levels=[0], linewidths=2, colors=colors[i])
+    plt.figure(2)
+    clf.fit(X2)
+    Z2 = clf.decision_function(np.c_[xx2.ravel(), yy2.ravel()])
+    Z2 = Z2.reshape(xx2.shape)
+    legend2[clf_name] = plt.contour(
+        xx2, yy2, Z2, levels=[0], linewidths=2, colors=colors[i])
+    
+    # The digits dataset
+digits = datasets.load_digits()
+    
+    This example shows the effect of imposing a connectivity graph to capture
+local structure in the data. The graph is simply the graph of 20 nearest
+neighbors.
+    
+    From the programming standpoint, it is interesting because it shows how
+to use the online API of the scikit-learn to process a very large
+dataset by chunks. The way we proceed is that we load an image at a time
+and extract randomly 50 patches from this image. Once we have accumulated
+500 of these patches (using 10 images), we run the `partial_fit` method
+of the online KMeans object, MiniBatchKMeans.
+    
+    # create an array from labels and values
+face_compressed = np.choose(labels, values)
+face_compressed.shape = face.shape
+    
+    Evaluate the ability of k-means initializations strategies to make
+the algorithm convergence robust as measured by the relative standard
+deviation of the inertia of the clustering (i.e. the sum of squared
+distances to the nearest cluster center).
