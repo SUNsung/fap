@@ -1,100 +1,91 @@
 
         
-            it 'shows all options for agents that can be scheduled, create and receive events' do
-      select_agent_type('Website Agent scrapes')
-      expect(page).not_to have_content('This type of Agent cannot create events.')
-    end
+              it 'works given the path to compile_commands.json' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            oclint(
+              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json'
+            )
+          end').runner.execute(:test)
     
-      it 'imports a scenario that does not exist yet' do
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
-    click_on 'Start Import'
-    expect(page).to have_text('This scenario has a few agents to get you started. Feel free to change them or delete them as you see fit!')
-    expect(page).not_to have_text('This Scenario already exists in your system.')
-    check('I confirm that I want to import these Agents.')
-    click_on 'Finish Import'
-    expect(page).to have_text('Import successful!')
-  end
-    
-      describe '#style_colors' do
-    it 'returns a css style-formated version of the scenario foreground and background colors' do
-      expect(style_colors(scenario)).to eq('color:#AAAAAA;background-color:#000000')
-    end
-    
-        def show
-      authorize @user, :change_email?
-    end
-    
-        def resource_params
-      params.require(:custom_emoji).permit(:shortcode, :image, :visible_in_picker)
-    end
-    
-        def action_from_button
-      if params[:nsfw_on]
-        'nsfw_on'
-      elsif params[:nsfw_off]
-        'nsfw_off'
-      elsif params[:delete]
-        'delete'
-      end
-    end
-    
-        @web_subscription = ::Web::PushSubscription.create!(
-      endpoint: subscription_params[:endpoint],
-      key_p256dh: subscription_params[:keys][:p256dh],
-      key_auth: subscription_params[:keys][:auth],
-      data: data_params,
-      user_id: current_user.id,
-      access_token_id: doorkeeper_token.id
-    )
-    
-          if @user.persisted?
-        sign_in_and_redirect @user, event: :authentication
-        set_flash_message(:notice, :success, kind: provider_id.capitalize) if is_navigational_format?
-      else
-        session['devise.#{provider}_data'] = request.env['omniauth.auth']
-        redirect_to new_user_registration_url
-      end
-    end
-  end
-    
-        t.wakeup
-    t.value.should == 5
-  end
-end
-    
-    # include would include the module in Object
-# extend only extends the `main` object
-extend Sinatra::Delegator
-    
-            elsif masked_token?(token)
-          token = unmask_token(token)
-    
-          def call(env)
-        unless accepts? env
-          instrument env
-          result = react env
-        end
-        result or app.call(env)
+          if description
+        UI.user_error!('Do not let descriptions end with a '.', since it's used for user inputs as well for key :#{key}') if description[-1] == '.'
       end
     
-            # Set these key values to boolean 'true' to include in policy
-        NO_ARG_DIRECTIVES.each do |d|
-          if options.key?(d) && options[d].is_a?(TrueClass)
-            directives << d.to_s.sub(/_/, '-')
+                expect(FastlaneCore::UI).to receive(:input).and_return('val ask')
+            expect(config[:item]).to eq('val ask')
           end
         end
+      end
+    end
+  end
+end
+
     
-          def remove_bad_cookies(request, response)
-        return if bad_cookies.empty?
-        paths = cookie_paths(request.path)
-        bad_cookies.each do |name|
-          paths.each { |path| response.set_cookie name, empty_cookie(request.host, path) }
+    exec_arr = ['fastlane', tool_name] + ARGV
+    
+            c.action do |args, options|
+          Cert.config = FastlaneCore::Configuration.create(Cert::Options.available_options, options.__hash__)
+          Cert::Runner.new.revoke_expired_certs!
         end
       end
     
-      describe '#referrer' do
-    it 'Reads referrer from Referer header' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/valid'}
-      expect(subject.referrer(env)).to eq('bar.com')
+        ['d', 'i', 'u'].each do |f|
+      describe f do
+        it 'converts argument as a decimal number' do
+          format('%#{f}', 112).should == '112'
+          format('%#{f}', -112).should == '-112'
+        end
+    
+      it 'accepts a proc argument instead of a block' do
+    captured = nil
+    
+      it 'returns the method name as symbol' do
+    eval(@code, TOPLEVEL_BINDING).should equal :boom
+  end
+end
+
+    
+    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
+    
+          # Returns the else branch of the `case` statement, if any.
+      #
+      # @return [Node] the else branch node of the `case` statement
+      # @return [nil] if the case statement does not have an else branch.
+      def else_branch
+        node_parts[-1]
+      end
+    
+          # Returns the collection the `for` loop is iterating over.
+      #
+      # @return [Node] The collection the `for` loop is iterating over
+      def collection
+        node_parts[1]
+      end
+    
+          # Whether the last argument of the node is a block pass,
+      # i.e. `&block`.
+      #
+      # @return [Boolean] whether the last argument of the node is a block pass
+      def block_argument?
+        arguments? &&
+          (last_argument.block_pass_type? || last_argument.blockarg_type?)
+      end
     end
+  end
+end
+
+    
+    module RuboCop
+  module AST
+    # A node extension for `when` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `when` nodes within RuboCop.
+    class WhenNode < Node
+      # Returns an array of all the conditions in the `when` branch.
+      #
+      # @return [Array<Node>] an array of condition nodes
+      def conditions
+        node_parts[0...-1]
+      end
