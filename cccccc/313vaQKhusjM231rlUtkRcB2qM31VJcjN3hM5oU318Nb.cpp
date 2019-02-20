@@ -1,128 +1,147 @@
-U_NAMESPACE_BEGIN
-    
-    ScientificNumberFormatter *ScientificNumberFormatter::createMarkupInstance(
-        const Locale &locale,
-        const UnicodeString &beginMarkup,
-        const UnicodeString &endMarkup,
-        UErrorCode &status) {
-    return createInstance(
-            static_cast<DecimalFormat *>(
-                    DecimalFormat::createScientificInstance(locale, status)),
-            new MarkupStyle(beginMarkup, endMarkup),
-            status);
+
+        
+        UBool SearchIterator::operator==(const SearchIterator &that) const
+{
+    if (this == &that) {
+        return TRUE;
+    }
+    return (m_breakiterator_            == that.m_breakiterator_ &&
+            m_search_->isCanonicalMatch == that.m_search_->isCanonicalMatch &&
+            m_search_->isOverlap        == that.m_search_->isOverlap &&
+            m_search_->elementComparisonType == that.m_search_->elementComparisonType &&
+            m_search_->matchedIndex     == that.m_search_->matchedIndex &&
+            m_search_->matchedLength    == that.m_search_->matchedLength &&
+            m_search_->textLength       == that.m_search_->textLength &&
+            getOffset() == that.getOffset() &&
+            (uprv_memcmp(m_search_->text, that.m_search_->text, 
+                              m_search_->textLength * sizeof(UChar)) == 0));
 }
     
-    int32_t ScriptSet::nextSetBit(int32_t fromIndex) const {
-    // TODO: Wants a better implementation.
-    if (fromIndex < 0) {
-        return -1;
-    }
-    UErrorCode status = U_ZERO_ERROR;
-    for (int32_t scriptIndex = fromIndex; scriptIndex < (int32_t)sizeof(bits)*8; scriptIndex++) {
-        if (test((UScriptCode)scriptIndex, status)) {
-            return scriptIndex;
-        }
-    }
-    return -1;
+    SelectFormat::~SelectFormat() {
 }
     
-    //-------------------------------------------------------------------------------
-//
-//  ScriptSet - A bit set representing a set of scripts.
-//
-//              This class was originally used exclusively with script sets appearing
-//              as part of the spoof check whole script confusable binary data. Its
-//              use has since become more general, but the continued use to wrap
-//              prebuilt binary data does constrain the design.
-//
-//-------------------------------------------------------------------------------
-class U_I18N_API ScriptSet: public UMemory {
-  public:
-    ScriptSet();
-    ScriptSet(const ScriptSet &other);
-    ~ScriptSet();
-    }
     
-    #if !UCONFIG_NO_BREAK_ITERATION
-    
-    #ifndef __SHARED_NUMBERFORMAT_H__
-#define __SHARED_NUMBERFORMAT_H__
+    {    BreakIterator *get() const { return ptr; }
+    BreakIterator *operator->() const { return ptr; }
+    BreakIterator &operator*() const { return *ptr; }
+private:
+    BreakIterator *ptr;
+    SharedBreakIterator(const SharedBreakIterator &);
+    SharedBreakIterator &operator=(const SharedBreakIterator &);
+};
     
     U_NAMESPACE_END
     
-    
-    {    /**
-     * Formats positiveValue using the given range of digit counts.
-     * Always uses standard digits '0' through '9'. Formatted value is
-     * left padded with '0' as necessary to achieve minimum digit count.
-     * Does not produce any grouping separators or trailing decimal point.
-     * Calling format to format a value with a particular digit count range
-     * when canFormat indicates that the same value and digit count range
-     * cannot be formatted results in undefined behavior.
-     *
-     * @param positiveValue the value to format
-     * @param range the acceptable range of digit counts.
-     */
-    static UnicodeString &format(
-            int32_t positiveValue,
-            const IntDigitCountRange &range,
-            UnicodeString &appendTo);
-    
-};
-    
-    #include <osquery/config/config.h>
-#include <osquery/config/parsers/feature_vectors.h>
-#include <osquery/registry_factory.h>
-    
-    
-    {/// KafkaTopicsConfigParserPlugin extracts, updates, and parses Kafka topic
-/// configurations from Osquery's configurations.
-class KafkaTopicsConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override;
-  Status update(const std::string& source, const ParserConfig& config) override;
-};
-} // namespace osquery
-
-    
-    
-    {  return Status();
-}
-    
-    std::map<std::string, std::string> getTestConfigMap(const std::string& file) {
-  std::string content;
-  auto const filepath = getTestConfigDirectory() / file;
-  auto status = readFile(filepath, content);
-  EXPECT_TRUE(status.ok())
-      << 'Could not read file: ' << boost::io::quoted(filepath.string())
-      << ', because: ' << status.what();
-  std::map<std::string, std::string> config;
-  config['awesome'] = content;
-  return config;
-}
-    
-    Expected<int32_t, DatabaseError> Database::getInt32(const std::string& domain,
-                                                    const std::string& key) {
-  Expected<std::string, DatabaseError> string_value = getString(domain, key);
-  if (string_value) {
-    auto value = tryTo<int32_t>(*string_value);
-    if (value) {
-      return *value;
-    } else {
-      return createError(DatabaseError::FailToReadData,
-                         'Failed to convert string to int',
-                         value.takeError());
+    UnicodeString &
+SmallIntFormatter::format(
+        int32_t smallPositiveValue,
+        const IntDigitCountRange &range,
+        UnicodeString &appendTo) {
+    int32_t digits = range.pin(gDigitCount[smallPositiveValue]);
     }
-  } else {
-    return string_value.takeError();
-  }
-}
     
+    ExitConstrDeleteAll: // Remove all sets and return error
+    delete fDateIgnorables;  fDateIgnorables = NULL;
+    delete fTimeIgnorables;  fTimeIgnorables = NULL;
+    delete fOtherIgnorables; fOtherIgnorables = NULL;
     
-    {    // Ensure the database results version is up to date before proceeding
-    if (!upgradeDatabase()) {
-      LOG(ERROR) << 'Failed to upgrade database';
-      auto retcode = (isWorker()) ? EXIT_CATASTROPHIC : EXIT_FAILURE;
-      requestShutdown(retcode);
+        static BOOST_FORCEINLINE storage_type exchange(storage_type volatile& storage, storage_type v, memory_order order) BOOST_NOEXCEPT
+    {
+#if defined(__clang__)
+        // Clang cannot allocate eax:edx register pairs but it has sync intrinsics
+        storage_type old_val = storage;
+        while (true)
+        {
+            storage_type val = __sync_val_compare_and_swap(&storage, old_val, v);
+            if (val == old_val)
+                return val;
+            old_val = val;
+        }
+#elif !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+#if defined(__PIC__)
+        uint32_t scratch;
+        __asm__ __volatile__
+        (
+            'movl %%ebx, %[scratch]\n\t'
+            'movl %%eax, %%ebx\n\t'
+            'movl %%edx, %%ecx\n\t'
+            'movl %[dest], %%eax\n\t'
+            'movl 4+%[dest], %%edx\n\t'
+            '.align 16\n\t'
+            '1: lock; cmpxchg8b %[dest]\n\t'
+            'jne 1b\n\t'
+            'movl %[scratch], %%ebx\n\t'
+            : '+A' (v), [scratch] '=m' (scratch), [dest] '+o' (storage)
+            :
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'ecx', 'memory'
+        );
+        return v;
+#else // defined(__PIC__)
+        __asm__ __volatile__
+        (
+            'movl %[dest], %%eax\n\t'
+            'movl 4+%[dest], %%edx\n\t'
+            '.align 16\n\t'
+            '1: lock; cmpxchg8b %[dest]\n\t'
+            'jne 1b\n\t'
+            : '=A' (v), [dest] '+o' (storage)
+            : 'b' ((uint32_t)v), 'c' ((uint32_t)(v >> 32))
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory'
+        );
+        return v;
+#endif // defined(__PIC__)
+#else // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+#if defined(__PIC__)
+        uint32_t scratch;
+        __asm__ __volatile__
+        (
+            'movl %%ebx, %[scratch]\n\t'
+            'movl %%eax, %%ebx\n\t'
+            'movl %%edx, %%ecx\n\t'
+            'movl 0(%[dest]), %%eax\n\t'
+            'movl 4(%[dest]), %%edx\n\t'
+            '.align 16\n\t'
+            '1: lock; cmpxchg8b 0(%[dest])\n\t'
+            'jne 1b\n\t'
+            'movl %[scratch], %%ebx\n\t'
+#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_CONSTRAINT_ALTERNATIVES)
+            : '+A,A' (v), [scratch] '=m,m' (scratch)
+            : [dest] 'D,S' (&storage)
+#else
+            : '+A' (v), [scratch] '=m' (scratch)
+            : [dest] 'D' (&storage)
+#endif
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'ecx', 'memory'
+        );
+        return v;
+#else // defined(__PIC__)
+        __asm__ __volatile__
+        (
+            'movl 0(%[dest]), %%eax\n\t'
+            'movl 4(%[dest]), %%edx\n\t'
+            '.align 16\n\t'
+            '1: lock; cmpxchg8b 0(%[dest])\n\t'
+            'jne 1b\n\t'
+#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_CONSTRAINT_ALTERNATIVES)
+            : '=A,A' (v)
+            : 'b,b' ((uint32_t)v), 'c,c' ((uint32_t)(v >> 32)), [dest] 'D,S' (&storage)
+#else
+            : '=A' (v)
+            : 'b' ((uint32_t)v), 'c' ((uint32_t)(v >> 32)), [dest] 'D' (&storage)
+#endif
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory'
+        );
+        return v;
+#endif // defined(__PIC__)
+#endif
     }
-  }
+    
+        // Intel 64 and IA-32 Architectures Software Developer's Manual, Volume 3A, 8.1.1. Guaranteed Atomic Operations:
+    //
+    // The Pentium processor (and newer processors since) guarantees that the following additional memory operations will always be carried out atomically:
+    // * Reading or writing a quadword aligned on a 64-bit boundary
+    //
+    // Luckily, the memory is almost always 8-byte aligned in our case because atomic<> uses 64 bit native types for storage and dynamic memory allocations
+    // have at least 8 byte alignment. The only unfortunate case is when atomic is placed on the stack and it is not 8-byte aligned (like on 32 bit Windows).
+    
+    #endif // BOOST_ATOMIC_DETAIL_PAUSE_HPP_INCLUDED_
