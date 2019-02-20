@@ -1,101 +1,67 @@
 
         
-                if isinstance(headers, bytes):
-            # Python < 3
-            headers = headers.decode('utf8')
-        return headers
+              # If the batch is too small, add a few other examples
+      if len(batch_indices) < self.hparams.batch_size:
+        batch_indices += [0] * (self.hparams.batch_size-len(batch_indices))
     
-        def get_converter(self, mime):
-        if is_valid_mime(mime):
-            for converter_class in plugin_manager.get_converters():
-                if converter_class.supports(mime):
-                    return converter_class(mime)
+      if use_json:
+    the_file = open(data_fname,'w')
+    json.dump(data_dict, the_file)
+    the_file.close()
+  else:
+    try:
+      with h5py.File(data_fname, 'w') as hf:
+        for k, v in data_dict.items():
+          clean_k = k.replace('/', '_')
+          if clean_k is not k:
+            print('Warning: saving variable with name: ', k, ' as ', clean_k)
+          else:
+            print('Saving variable with name: ', clean_k)
+          hf.create_dataset(clean_k, data=v, compression=compression)
+    except IOError:
+      print('Cannot open %s for writing.', data_fname)
+      raise
     
-        def register(self, *plugins):
-        for plugin in plugins:
-            self._plugins.append(plugin)
+        # Critic loss calculated from the estimated value function \hat{V}(s)
+    # versus the true value function V*(s).
+    critic_loss = create_critic_loss(cumulative_rewards, estimated_values,
+                                     present)
     
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
     
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
-    )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
-
+    from __future__ import absolute_import, division, print_function
+__metaclass__ = type
     
-        def setUp(self):
-        from acme.errors import BadNonce
-        self.error = BadNonce(nonce='xxx', error='error')
+        if not HAS_GOOGLE_CLOUD_SPANNER:
+        module.fail_json(msg='Please install google-cloud-spanner.')
     
-        def encode(self, value):
-        if value != self.value:
-            logger.warning(
-                'Overriding fixed field (%s) with %r', self.json_name, value)
-        return value
-    
-        # TODO: decoder/encoder should accept cls? Otherwise, subclassing
-    # JSONObjectWithFields is tricky...
-    header_cls = Header
-    header = jose.Field(
-        'header', omitempty=True, default=header_cls(),
-        decoder=header_cls.from_json)
-    
-    # General information about the project.
-project = u'acme-python'
-copyright = u'2015-2015, Let\'s Encrypt Project'
-author = u'Let\'s Encrypt Project'
-    
-        :param str vhost_path: Augeas virtual host path
-    
-    MANAGED_COMMENT = 'DO NOT REMOVE - Managed by Certbot'
-MANAGED_COMMENT_ID = MANAGED_COMMENT+', VirtualHost id: {0}'
-'''Managed by Certbot comments and the VirtualHost identification template'''
-
+    from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.vca import VcaError, vca_argument_spec, vca_login
     
     
-class Addr(common.Addr):
-    '''Represents an Apache address.'''
-    
-            self.assertEqual(None, self._call(self.vhosts))
-    
-        def test_nonexistent_generic(self):
-        with mock.patch('certbot.util.get_os_info') as mock_info:
-            mock_info.return_value = ('nonexistent', 'irrelevant')
-            with mock.patch('certbot.util.get_systemd_os_like') as mock_like:
-                mock_like.return_value = ['unknonwn']
-                self.assertEqual(entrypoint.get_configurator(),
-                                 configurator.ApacheConfigurator)
-    
-        def test_conflicts(self):
-        # Note: Defined IP is more important than defined port in match
-        self.assertTrue(self.addr.conflicts(self.addr1))
-        self.assertTrue(self.addr.conflicts(self.addr2))
-        self.assertTrue(self.addr.conflicts(self.addr_defined))
-        self.assertFalse(self.addr.conflicts(self.addr_default))
-    
-            for addr in vhost.addrs:
-            if '_default_' == addr.get_addr():
-                addrs.add(default_addr)
-            else:
-                addrs.add(
-                    addr.get_sni_addr(
-                        self.configurator.config.tls_sni_01_port))
-    
-    def main():
-    print('Making key files...')
-    makeKeyFiles('rsa', 1024)
-    print('Key files generation successful.')
-    
-    class Decision_Tree:
-    def __init__(self, depth = 5, min_leaf_size = 5):
-        self.depth = depth
-        self.decision_boundary = 0
-        self.left = None
-        self.right = None
-        self.min_leaf_size = min_leaf_size
-        self.prediction = None
+DOCUMENTATION = '''
+---
+module: group_by
+short_description: Create Ansible groups based on facts
+description:
+  - Use facts to create ad-hoc groups that can be used later in a playbook.
+  - This module is also supported for Windows targets.
+version_added: '0.9'
+options:
+  key:
+    description:
+    - The variables whose values will be used as groups
+    required: true
+  parents:
+    description:
+    - The list of the parent groups
+    required: false
+    default: 'all'
+    version_added: '2.4'
+author: 'Jeroen Hoekx (@jhoekx)'
+notes:
+  - Spaces in group names are converted to dashes '-'.
+  - This module is also supported for Windows targets.
+'''
