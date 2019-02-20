@@ -1,257 +1,117 @@
 
         
-              self.path_lookup = tf.get_variable(
-          name='path_lookup',
-          dtype=tf.float32,
-          trainable=False,
-          shape=self.path_embeddings.shape)
+        from mrjob.job import MRJob
     
-    # not the best way to do this but E is small enough
-rates = []
-spikes = []
-for trial in xrange(E):
-  if rnn_to_use[trial] == 0:
-    rates.append(rates_a[trial])
-    spikes.append(spikes_a[trial])
-  else:
-    rates.append(rates_b[trial])
-    spikes.append(spikes_b[trial])
     
-      Returns:
-    loss: Scalar tf.float32 total loss.
-  '''
-  cross_entropy_loss = tf.nn.sparse_softmax_cross_entropy_with_logits(
-      labels=gen_labels, logits=gen_logits)
-  # Maximize the dis_values (minimize the negative)
-  gan_loss = -dis_values
-  loss_matrix = tf.where(is_real_input, cross_entropy_loss, gan_loss)
-  loss = tf.reduce_mean(loss_matrix)
-  return loss
+if __name__ == '__main__':
+    RemoveDuplicateUrls.run()
+
     
-      Returns:
-    predictions:  tf.float32 Tensor of predictions of shape [batch_size,
-      sequence_length]
-  '''
-  if FLAGS.discriminator_model == 'cnn':
-    predictions = cnn.discriminator(
-        hparams, sequence, is_training=is_training, reuse=reuse)
-  elif FLAGS.discriminator_model == 'fnn':
-    predictions = feedforward.discriminator(
-        hparams, sequence, is_training=is_training, reuse=reuse)
-  elif FLAGS.discriminator_model == 'rnn':
-    predictions = rnn.discriminator(
-        hparams, sequence, is_training=is_training, reuse=reuse)
-  elif FLAGS.discriminator_model == 'bidirectional':
-    predictions = bidirectional.discriminator(
-        hparams, sequence, is_training=is_training, reuse=reuse)
-  elif FLAGS.discriminator_model == 'bidirectional_zaremba':
-    predictions = bidirectional_zaremba.discriminator(
-        hparams, sequence, is_training=is_training, reuse=reuse)
-  elif FLAGS.discriminator_model == 'seq2seq_vd':
-    predictions = seq2seq_vd.discriminator(
-        hparams,
-        inputs,
-        present,
-        sequence,
-        is_training=is_training,
-        reuse=reuse)
-  elif FLAGS.discriminator_model == 'rnn_zaremba':
-    predictions = rnn_zaremba.discriminator(
-        hparams, sequence, is_training=is_training, reuse=reuse)
-  elif FLAGS.discriminator_model == 'rnn_nas':
-    predictions = rnn_nas.discriminator(
-        hparams, sequence, is_training=is_training, reuse=reuse)
-  elif FLAGS.discriminator_model == 'rnn_vd':
-    predictions = rnn_vd.discriminator(
-        hparams,
-        sequence,
-        is_training=is_training,
-        reuse=reuse,
-        initial_state=initial_state)
-  elif FLAGS.discriminator_model == 'bidirectional_vd':
-    predictions = bidirectional_vd.discriminator(
-        hparams,
-        sequence,
-        is_training=is_training,
-        reuse=reuse,
-        initial_state=initial_state)
-  else:
-    raise NotImplementedError
-  return predictions
-    
-        elif (FLAGS.discriminator_model == 'bidirectional_zaremba' or
-          FLAGS.discriminator_model == 'bidirectional_vd'):
-      dis_fwd_variable_maps = variable_mapping.dis_fwd_bidirectional(hparams)
-      dis_bwd_variable_maps = variable_mapping.dis_bwd_bidirectional(hparams)
-      # Savers for the forward/backward Discriminator components.
-      dis_fwd_init_saver = tf.train.Saver(var_list=dis_fwd_variable_maps)
-      dis_bwd_init_saver = tf.train.Saver(var_list=dis_bwd_variable_maps)
-      init_savers['dis_fwd_init_saver'] = dis_fwd_init_saver
-      init_savers['dis_bwd_init_saver'] = dis_bwd_init_saver
-    
-    FLAGS = tf.app.flags.FLAGS
-    
-    '''
-requests._internal_utils
-~~~~~~~~~~~~~~
-    
-        def set(self, name, value, **kwargs):
-        '''Dict-like set() that also supports optional domain and path args in
-        order to resolve naming collisions from using one cookie jar over
-        multiple domains.
-        '''
-        # support client code that unsets cookies by assignment of a None value:
-        if value is None:
-            remove_cookie_by_name(self, name, domain=kwargs.get('domain'), path=kwargs.get('path'))
-            return
-    
-            # Verify we receive an Authorization header in response, then redirect.
-        request_content = consume_socket_content(sock, timeout=0.5)
-        assert expected_digest in request_content
-        sock.send(text_302)
-    
-        # default settings to be used for this command instead of global defaults
-    default_settings = {}
-    
-            spider_loader = self.crawler_process.spider_loader
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
-                          help='set spider argument (may be repeated)')
-        parser.add_option('-o', '--output', metavar='FILE',
-                          help='dump scraped items into FILE (use - for stdout)')
-        parser.add_option('-t', '--output-format', metavar='FORMAT',
-                          help='format to use for dumping items with -o')
-    
-    class Command(ScrapyCommand):
-    
-        def syntax(self):
-        return '[-v]'
-    
-            self._signer = None
-        if is_botocore():
-            import botocore.auth
-            import botocore.credentials
-            kw.pop('anon', None)
-            if kw:
-                raise TypeError('Unexpected keyword arguments: %s' % kw)
-            if not self.anon:
-                SignerCls = botocore.auth.AUTH_TYPE_MAPS['s3']
-                self._signer = SignerCls(botocore.credentials.Credentials(
-                    aws_access_key_id, aws_secret_access_key))
-        else:
-            _S3Connection = _get_boto_connection()
-            try:
-                self.conn = _S3Connection(
-                    aws_access_key_id, aws_secret_access_key, **kw)
-            except Exception as ex:
-                raise NotConfigured(str(ex))
-    
-            '''
-        if not isinstance(other, Counter):
-            return NotImplemented
-        result = Counter()
-        for elem, count in self.items():
-            other_count = other[elem]
-            newcount = count if count < other_count else other_count
-            if newcount > 0:
-                result[elem] = newcount
-        return result
-    
-        def test_view_fetch_returns_none(self):
-        db, db_path = init_database()
-        properties = []
-        view = db.OpenView('SELECT Property, Value FROM Property')
-        view.Execute(None)
-        while True:
-            record = view.Fetch()
-            if record is None:
-                break
-            properties.append(record.GetString(1))
-        view.Close()
-        db.Close()
-        self.assertEqual(
-            properties,
-            [
-                'ProductName', 'ProductCode', 'ProductVersion',
-                'Manufacturer', 'ProductLanguage',
-            ]
-        )
-        self.addCleanup(unlink, db_path)
-    
-        The solution on Windows is to use the SO_EXCLUSIVEADDRUSE socket option
-    instead of SO_REUSEADDR, which effectively affords the same semantics as
-    SO_REUSEADDR on Unix.  Given the propensity of Unix developers in the Open
-    Source world compared to Windows ones, this is a common mistake.  A quick
-    look over OpenSSL's 0.9.8g source shows that they use SO_REUSEADDR when
-    openssl.exe is called with the 's_server' option, for example. See
-    http://bugs.python.org/issue2550 for more info.  The following site also
-    has a very thorough description about the implications of both REUSEADDR
-    and EXCLUSIVEADDRUSE on Windows:
-    http://msdn2.microsoft.com/en-us/library/ms740621(VS.85).aspx)
-    
-        def _While(self, t):
-        self.fill('while ')
-        self.dispatch(t.test)
-        self.enter()
-        self.dispatch(t.body)
-        self.leave()
-        if t.orelse:
-            self.fill('else')
-            self.enter()
-            self.dispatch(t.orelse)
-            self.leave()
-    
-    # Same, but for 3.x to 2.x
-REVERSE_IMPORT_MAPPING = dict((v, k) for (k, v) in IMPORT_MAPPING.items())
-assert len(REVERSE_IMPORT_MAPPING) == len(IMPORT_MAPPING)
-REVERSE_NAME_MAPPING = dict((v, k) for (k, v) in NAME_MAPPING.items())
-assert len(REVERSE_NAME_MAPPING) == len(NAME_MAPPING)
-    
-        def test_programatic_function_string_with_start(self):
-        Perm = IntFlag('Perm', 'R W X', start=8)
-        lst = list(Perm)
-        self.assertEqual(len(lst), len(Perm))
-        self.assertEqual(len(Perm), 3, Perm)
-        self.assertEqual(lst, [Perm.R, Perm.W, Perm.X])
-        for i, n in enumerate('R W X'.split()):
-            v = 8<<i
-            e = Perm(v)
-            self.assertEqual(e.value, v)
-            self.assertEqual(type(e.value), int)
-            self.assertEqual(e, v)
-            self.assertEqual(e.name, n)
-            self.assertIn(e, Perm)
-            self.assertIs(type(e), Perm)
-    
-        dotIndex = p.rfind(extsep)
-    if dotIndex > sepIndex:
-        # skip all leading dots
-        filenameIndex = sepIndex + 1
-        while filenameIndex < dotIndex:
-            if p[filenameIndex:filenameIndex+1] != extsep:
-                return p[:dotIndex], p[dotIndex:]
-            filenameIndex += 1
-    
-        def test_no_stderr(self):
-        self._test_no_stdio(['stderr'])
-    
-        def test_bad_params(self):
-        # Test invalid parameter combinations.
-        self.assertRaises(ValueError,
-                          self.open, self.filename, 'wbt')
-        self.assertRaises(ValueError,
-                          self.open, self.filename, 'xbt')
-        self.assertRaises(ValueError,
-                          self.open, self.filename, 'rb', encoding='utf-8')
-        self.assertRaises(ValueError,
-                          self.open, self.filename, 'rb', errors='ignore')
-        self.assertRaises(ValueError,
-                          self.open, self.filename, 'rb', newline='\n')
-    
-    from argparse import ArgumentParser
-    
-    #
-# Functions used by test code
+    # begin[licence]
 #
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licensc]
+    
+    
+class ANTLRFileStream(ANTLRStringStream):
+    '''
+    @brief CharStream that opens a file to read the data.
+    
+    This is a char buffer stream that is loaded from a file
+    all at once when you construct the object.
+    '''
+    
+    
+
+    
+            del r1 # Used to crash here
+    
+        def test_return_explain_error(self):
+        self.con.request('EXPLAINERROR', '/')
+        res = self.con.getresponse()
+        self.assertEqual(res.status, 999)
+        self.assertTrue(int(res.getheader('Content-Length')))
+    
+            if host_platform == 'darwin':
+            os_release = int(os.uname()[2].split('.')[0])
+            dep_target = sysconfig.get_config_var('MACOSX_DEPLOYMENT_TARGET')
+            if (dep_target and
+                    (tuple(int(n) for n in dep_target.split('.')[0:2])
+                        < (10, 5) ) ):
+                os_release = 8
+            if os_release < 9:
+                # MacOSX 10.4 has a broken readline. Don't try to build
+                # the readline module unless the user has installed a fixed
+                # readline package
+                if find_file('readline/rlconf.h', inc_dirs, []) is None:
+                    do_readline = False
+        if do_readline:
+            if host_platform == 'darwin' and os_release < 9:
+                # In every directory on the search path search for a dynamic
+                # library and then a static library, instead of first looking
+                # for dynamic libraries on the entire path.
+                # This way a statically linked custom readline gets picked up
+                # before the (possibly broken) dynamic library in /usr/lib.
+                readline_extra_link_args = ('-Wl,-search_paths_first',)
+            else:
+                readline_extra_link_args = ()
+    
+            loader = unittest.TestLoader()
+        suite = loader.loadTestsFromName('return_TestCase', m)
+        self.assertIsInstance(suite, loader.suiteClass)
+        self.assertEqual(list(suite), [testcase_1])
+    
+    
+# Does a path exist?
+# This is false for dangling symbolic links on systems that support them.
+def exists(path):
+    '''Test whether a path exists.  Returns False for broken symbolic links'''
+    try:
+        os.stat(path)
+    except (OSError, ValueError):
+        return False
+    return True
+    
+    
+class BZ2CompressorTest(BaseTest):
+    def testCompress(self):
+        bz2c = BZ2Compressor()
+        self.assertRaises(TypeError, bz2c.compress)
+        data = bz2c.compress(self.TEXT)
+        data += bz2c.flush()
+        self.assertEqual(ext_decompress(data), self.TEXT)
+    
+        def get_current_time_as_html_fragment(self):
+        current_time = self.time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
+'''
+    
+    
+# example of graph usage
+graph = {'A': ['B', 'C'], 'B': ['C', 'D'], 'C': ['D'], 'D': ['C'], 'E': ['F'], 'F': ['C']}
