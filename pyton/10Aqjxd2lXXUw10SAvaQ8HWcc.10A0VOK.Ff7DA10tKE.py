@@ -1,209 +1,151 @@
 
         
-            # Correlation of inferred inputs cost.
-    self.corr_cost = tf.constant(0.0)
-    if hps.co_mean_corr_scale > 0.0:
-      all_sum_corr = []
-      for i in range(hps.co_dim):
-        for j in range(i+1, hps.co_dim):
-          sum_corr_ij = tf.constant(0.0)
-          for t in range(num_steps):
-            u_mean_t = posterior_zs_co[t].mean
-            sum_corr_ij += u_mean_t[:,i]*u_mean_t[:,j]
-          all_sum_corr.append(0.5 * tf.square(sum_corr_ij))
-      self.corr_cost = tf.reduce_mean(all_sum_corr) # div by batch and by n*(n-1)/2 pairs
+        # input image dimensions
+img_rows, img_cols = 28, 28
     
-    def _plot_item(W, name, full_name, nspaces):
-  plt.figure()
-  if W.shape == ():
-    print(name, ': ', W)
-  elif W.shape[0] == 1:
-    plt.stem(W.T)
-    plt.title(full_name)
-  elif W.shape[1] == 1:
-    plt.stem(W)
-    plt.title(full_name)
-  else:
-    plt.imshow(np.abs(W), interpolation='nearest', cmap='jet');
-    plt.colorbar()
-    plt.title(full_name)
+    from ..utils.data_utils import get_file
+import numpy as np
     
-            cur_pos = next_pos
-        cur_stream[i][0] = cur_stream[i][0][how_many:]
-        cur_stream[i][1] = cur_stream[i][1][how_many:]
-        cur_stream[i][2] = cur_stream[i][2][how_many:]
+    # Model creation using tensors from the get_next() graph node.
+inputs, targets = iterator.get_next()
+model_input = layers.Input(tensor=inputs)
+model_output = cnn_layers(model_input)
+train_model = keras.models.Model(inputs=model_input, outputs=model_output)
     
-      Returns:
-    mask1: mask for first sentence
-    mask2: mask for second sentence
-  '''
-  mask1_start, mask2_start = [], []
-  while sent1[0] == sent2[0]:
-    sent1 = sent1[1:]
-    sent2 = sent2[1:]
-    mask1_start.append(0.)
-    mask2_start.append(0.)
+    import keras
+from keras.datasets import mnist
+from keras.models import Sequential
+from keras.layers import Dense, Activation
+from keras.layers import SimpleRNN
+from keras import initializers
+from keras.optimizers import RMSprop
     
-    # Dependency imports
+        if dataset_name == 'SA':
+        lb = LabelBinarizer()
+        x1 = lb.fit_transform(X[:, 1].astype(str))
+        x2 = lb.fit_transform(X[:, 2].astype(str))
+        x3 = lb.fit_transform(X[:, 3].astype(str))
+        X = np.c_[X[:, :1], x1, x2, x3, X[:, 4:]]
+        y = (y != b'normal.').astype(int)
     
-      # Unstack Tensors into lists.
-  rewards_list = tf.unstack(rewards, axis=1)
-  log_probs_list = tf.unstack(log_probs, axis=1)
-  missing = 1. - tf.cast(present, tf.float32)
-  missing_list = tf.unstack(missing, axis=1)
+    n_samples = np.logspace(.5, 3, 9)
+n_features = np.logspace(1, 3.5, 7)
+N_samples, N_features = np.meshgrid(n_samples,
+                                    n_features)
+scikits_time = np.zeros(N_samples.shape)
+scipy_time = np.zeros(N_samples.shape)
     
-    '''
-requests._internal_utils
-~~~~~~~~~~~~~~
+        # start time
+    tstart = datetime.now()
+    clf = DecisionTreeRegressor()
+    clf.fit(X, Y).predict(X)
+    delta = (datetime.now() - tstart)
+    # stop time
     
-        def __repr__(self):
-        return str(dict(self.items()))
+        # TASK: Build a grid search to find out whether unigrams or bigrams are
+    # more useful.
+    # Fit the pipeline on the training set using grid search for the parameters
     
-        possible_keys = pytest.mark.parametrize('key', ('accept', 'ACCEPT', 'aCcEpT', 'Accept'))
+    # Author: Eustache Diemert <eustache@diemert.fr>
+# License: BSD 3 clause
     
+    # Learn a frontier for outlier detection with several classifiers
+xx1, yy1 = np.meshgrid(np.linspace(-8, 28, 500), np.linspace(3, 40, 500))
+xx2, yy2 = np.meshgrid(np.linspace(3, 10, 500), np.linspace(-5, 45, 500))
+for i, (clf_name, clf) in enumerate(classifiers.items()):
+    plt.figure(1)
+    clf.fit(X1)
+    Z1 = clf.decision_function(np.c_[xx1.ravel(), yy1.ravel()])
+    Z1 = Z1.reshape(xx1.shape)
+    legend1[clf_name] = plt.contour(
+        xx1, yy1, Z1, levels=[0], linewidths=2, colors=colors[i])
+    plt.figure(2)
+    clf.fit(X2)
+    Z2 = clf.decision_function(np.c_[xx2.ravel(), yy2.ravel()])
+    Z2 = Z2.reshape(xx2.shape)
+    legend2[clf_name] = plt.contour(
+        xx2, yy2, Z2, levels=[0], linewidths=2, colors=colors[i])
     
-    builtin_str = str
-    bytes = str
-    str = unicode
-    basestring = basestring
-    numeric_types = (int, long, float)
-    integer_types = (int, long)
+                plt.subplots_adjust(bottom=0, top=.89, wspace=0,
+                                left=0, right=1)
+            plt.suptitle('n_cluster=%i, connectivity=%r' %
+                         (n_clusters, connectivity is not None), size=17)
     
-            .. seealso:: itervalues() and iteritems().
-        '''
-        for cookie in iter(self):
-            yield cookie.name
+    # #############################################################################
+# Plot the results
+plt.figure(figsize=(4.2, 4))
+for i, patch in enumerate(kmeans.cluster_centers_):
+    plt.subplot(9, 9, i + 1)
+    plt.imshow(patch.reshape(patch_size), cmap=plt.cm.gray,
+               interpolation='nearest')
+    plt.xticks(())
+    plt.yticks(())
     
-            # if the server thread fails to finish, the test suite will hang
-        # and get killed by the jenkins timeout.
+    # Ignore noisy twisted deprecation warnings
+import warnings
+warnings.filterwarnings('ignore', category=DeprecationWarning, module='twisted')
+del warnings
     
-    # Grouping the document tree into Texinfo files. List of tuples
-# (source start file, target name, title, author,
-#  dir menu entry, description, category)
-texinfo_documents = [
-    (master_doc, 'Requests', u'Requests Documentation',
-     author, 'Requests', 'One line description of project.',
-     'Miscellaneous'),
-]
+            if not aws_access_key_id:
+            aws_access_key_id = settings['AWS_ACCESS_KEY_ID']
+        if not aws_secret_access_key:
+            aws_secret_access_key = settings['AWS_SECRET_ACCESS_KEY']
     
-        It basically works like :func:`parse_set_header` just that items
-    may appear multiple times and case sensitivity is preserved.
+        def __init__(self, request, timeout=180):
+        self._url = urldefrag(request.url)[0]
+        # converting to bytes to comply to Twisted interface
+        self.url = to_bytes(self._url, encoding='ascii')
+        self.method = to_bytes(request.method, encoding='ascii')
+        self.body = request.body or None
+        self.headers = Headers(request.headers)
+        self.response_headers = None
+        self.timeout = request.meta.get('download_timeout') or timeout
+        self.start_time = time()
+        self.deferred = defer.Deferred().addCallback(self._build_response, request)
     
-            if 400 <= self.status_code < 500:
-            http_error_msg = u'%s Client Error: %s for url: %s' % (self.status_code, reason, self.url)
+            def _on_complete(_):
+            slot.nextcall.schedule()
+            return _
     
-        def __str__(self):
-        cls = self.__class__
-        if self._name_ is not None:
-            return '%s.%s' % (cls.__name__, self._name_)
-        members, uncovered = _decompose(cls, self._value_)
-        if len(members) == 1 and members[0]._name_ is None:
-            return '%s.%r' % (cls.__name__, members[0]._value_)
-        else:
-            return '%s.%s' % (
-                    cls.__name__,
-                    '|'.join([str(m._name_ or m._value_) for m in members]),
-                    )
+                # compare date_added
+            date_diff = None
+            dates = [release.date_added for release in releases]
+            if dates:
+                diff = (max(dates) - min(dates)).total_seconds()
+                if date_diff is None or diff > date_diff:
+                    date_diff = diff
     
-            self.assertEqual(partial_sums, [0, 1, 3, 6, 10])
-        self.assertEqual(total, 10)
+            # Deleting model 'GroupCommitResolution'
+        db.delete_table('sentry_groupcommitresolution')
     
-    def handleSlides(slides):
-    for slide in slides:
-        handleSlide(slide)
+        def backwards(self, orm):
+        # Removing unique constraint on 'EnvironmentProject', fields ['project', 'environment']
+        db.delete_unique('sentry_environmentproject', ['project_id', 'environment_id'])
     
-    def print_title(title, pattern = '-'):
-    print('\n'.join(('', title, pattern * len(title)))) 
-    
-            if CLICK_TYPE_DOUBLE in self._ignored_click_types:
-            # Listen to all but double click type events
-            channel.on_button_click_or_hold = self._on_click
-        elif CLICK_TYPE_HOLD in self._ignored_click_types:
-            # Listen to all but hold click type events
-            channel.on_button_single_or_double_click = self._on_click
-        else:
-            # Listen to all click type events
-            channel.on_button_single_or_double_click_or_hold = self._on_click
-    
-    CONFIG_SCHEMA = vol.Schema({
-    DOMAIN: vol.Schema({
-        vol.Required(CONF_NAME): cv.string,
-        vol.Required(CONF_WHITELIST, default=[]):
-            vol.All(cv.ensure_list, [cv.entity_id]),
-    }),
-}, extra=vol.ALLOW_EXTRA)
-    
-        for idx, module_conf in enumerate(remotes):
-        load_module(CONF_REMOTE, idx, module_conf)
-    
-    from homeassistant.const import (
-    EVENT_HOMEASSISTANT_STOP, EVENT_HOMEASSISTANT_START)
-    
-    
-def contains(name):
-    '''Determine if the dataset is in the catalog.'''
-    return name in _DATASETS.keys()
-    
-    
-def add_single_gpu_param_update_ops(model, gpu_id):
-    # Learning rate of 0 is a dummy value to be set properly at the
-    # start of training
-    lr = model.param_init_net.ConstantFill(
-        [], 'lr', shape=[1], value=0.0
-    )
-    one = model.param_init_net.ConstantFill(
-        [], 'one', shape=[1], value=1.0
-    )
-    wd = model.param_init_net.ConstantFill(
-        [], 'wd', shape=[1], value=cfg.SOLVER.WEIGHT_DECAY
-    )
-    # weight decay of GroupNorm's parameters
-    wd_gn = model.param_init_net.ConstantFill(
-        [], 'wd_gn', shape=[1], value=cfg.SOLVER.WEIGHT_DECAY_GN
-    )
-    for param in model.TrainableParams(gpu_id=gpu_id):
-        logger.debug('param ' + str(param) + ' will be updated')
-        param_grad = model.param_to_grad[param]
-        # Initialize momentum vector
-        param_momentum = model.param_init_net.ConstantFill(
-            [param], param + '_momentum', value=0.0
+            # Changing field 'Environment.organization_id'
+        db.alter_column(
+            'sentry_environment',
+            'organization_id',
+            self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(null=True)
         )
-        if param in model.biases:
-            # Special treatment for biases (mainly to match historical impl.
-            # details):
-            # (1) Do not apply weight decay
-            # (2) Use a 2x higher learning rate
-            model.Scale(param_grad, param_grad, scale=2.0)
-        elif param in model.gn_params:
-            # Special treatment for GroupNorm's parameters
-            model.WeightedSum([param_grad, one, param, wd_gn], param_grad)
-        elif cfg.SOLVER.WEIGHT_DECAY > 0:
-            # Apply weight decay to non-bias weights
-            model.WeightedSum([param_grad, one, param, wd], param_grad)
-        # Update param_grad and param_momentum in place
-        model.net.MomentumSGDUpdate(
-            [param_grad, param_momentum, lr, param],
-            [param_grad, param_momentum, param],
-            momentum=cfg.SOLVER.MOMENTUM
+    
+            # The following code is provided here to aid in writing a correct migration
+        # Changing field 'ReleaseEnvironment.project_id'
+        db.alter_column(
+            'sentry_environmentrelease', 'project_id',
+            self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()
         )
-
     
-    '''Construct minibatches for Mask R-CNN training when keypoints are enabled.
-Handles the minibatch blobs that are specific to training Mask R-CNN for
-keypoint detection. Other blobs that are generic to RPN or Fast/er R-CNN are
-handled by their respecitive roi_data modules.
-'''
+            # Adding field 'ApiKey.scope_list'
+        db.add_column(
+            'sentry_apikey',
+            'scope_list',
+            self.gf('sentry.db.models.fields.array.ArrayField')(
+                of=('django.db.models.fields.TextField', [], {})
+            ),
+            keep_default=False
+        )
     
-    
-def main(opts):
-    logger = logging.getLogger(__name__)
-    roidb = combined_roidb_for_training(
-        cfg.TRAIN.DATASETS, cfg.TRAIN.PROPOSAL_FILES)
-    logger.info('{:d} roidb entries'.format(len(roidb)))
-    roi_data_loader = RoIDataLoader(
-        roidb,
-        num_loaders=cfg.DATA_LOADER.NUM_THREADS,
-        minibatch_queue_size=cfg.DATA_LOADER.MINIBATCH_QUEUE_SIZE,
-        blobs_queue_capacity=cfg.DATA_LOADER.BLOBS_QUEUE_CAPACITY
-    )
-    blob_names = roi_data_loader.get_output_names()
+        def backwards(self, orm):
+        # Removing unique constraint on 'UserOption', fields ['user', 'organization', 'key']
+        db.delete_unique('sentry_useroption', ['user_id', 'organization_id', 'key'])
