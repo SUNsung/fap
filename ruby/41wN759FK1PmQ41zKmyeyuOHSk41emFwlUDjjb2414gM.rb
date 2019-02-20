@@ -1,90 +1,83 @@
 
         
-        module ActionView #:nodoc:
-  # = Action View Text Template
-  class Template #:nodoc:
-    class Text #:nodoc:
-      attr_accessor :type
+        module Gitlab
+  module GithubImport
+    module Importer
+      class DiffNotesImporter
+        include ParallelScheduling
     
-      it 'raises a TypeError when passed nil' do
-    lambda { srand(nil) }.should raise_error(TypeError)
-  end
+            def collection_method
+          :issues
+        end
     
-      it 'has no effect on immediate values' do
-    [nil, true, false].each do |v|
-      v.taint
-      v.tainted?.should == false
+                rows << {
+              label_id: label_id,
+              target_id: target_id,
+              target_type: issue.issuable_type,
+              created_at: time,
+              updated_at: time
+            }
+          end
+    
+        # This will detect the proper guest OS for the machine and set up
+    # the class to actually execute capabilities.
+    def detect!
+      guest_name = @machine.config.vm.guest
+      initialize_capabilities!(guest_name, @guests, @capabilities, @machine)
+    rescue Errors::CapabilityHostExplicitNotDetected => e
+      raise Errors::GuestExplicitNotDetected, value: e.extra_data[:value]
+    rescue Errors::CapabilityHostNotDetected
+      raise Errors::GuestNotDetected
     end
-  end
     
-        it 'returns true when passed ?W if the argument is readable by the real uid' do
-      Kernel.test(?W, @tmp_file).should be_true
-    end
-  end
+            # Checks if the target machine is ready for communication. If this
+        # returns true, then all the other methods for communicating with
+        # the machine are expected to be functional.
+        #
+        # @return [Boolean]
+        def ready?
+          false
+        end
     
-        # From asking people, it seems MacPorts does not have a `prefix` command, like
-    # Homebrew does, so make an educated guess:
-    if port_prefix = prefix_from_bin('port')
-      prefixes << port_prefix
-    end
+            # Helper method that will set a value if a value is given, or otherwise
+        # return the already set value.
+        #
+        # @param [Symbol] key Key for the data
+        # @param [Object] value Value to store.
+        # @return [Object] Stored value.
+        def self.get_or_set(key, value=UNSET_VALUE)
+          # If no value is to be set, then return the value we have already set
+          return data[key] if value.eql?(UNSET_VALUE)
     
-          expect(new_source)
-        .to eq(construct(false, a, make_multi(safe_heredoc), false))
-    end
-  end
+            # This contains all the registered guest capabilities.
+        #
+        # @return [Hash<Symbol, Registry>]
+        attr_reader :guest_capabilities
     
-          # Returns the iteration variable of the `for` loop.
+      if rss_url.nil?
+    puts '#{name}: GETTING'
+    rss_check_url = 'http://ajax.googleapis.com/ajax/services/feed/lookup?v=1.0&q=#{web_url}'
+    uri = URI.parse(rss_check_url)
+    response = JSON.parse(Net::HTTP.get(uri))
+    rss_url = response['responseData']['url'] if response['responseData'] && response['responseData'].has_key?('url')
+    
+        context 'and a comment after the last element' do
+      let(:b_comment) { ' # comment b' }
+    
+          # Returns an array of all the when branches in the `case` statement.
       #
-      # @return [Node] The iteration variable of the `for` loop
-      def variable
-        node_parts[0]
+      # @return [Array<WhenNode>] an array of `when` nodes
+      def when_branches
+        node_parts[1...-1]
       end
     
-          DOUBLE_SPLAT = '**'.freeze
     
-      before { ensure_order_totals }
-end
-    
-          expect(json_response['data'][0]).to have_type('credit_card')
-      expect(json_response['data'][0]).to have_relationships(:payment_method)
-      expect(json_response['data'][0]).to have_attribute(:last_digits)
-      expect(json_response['data'][0]).to have_attribute(:month)
-      expect(json_response['data'][0]).to have_attribute(:year)
-      expect(json_response['data'][0]).to have_attribute(:name)
-    end
-  end
-    
-      let!(:user)  { create(:user_with_addresses) }
-  let(:headers) { headers_bearer }
-    
-              def resource_serializer
-            Spree::Api::Dependencies.storefront_cart_serializer.constantize
-          end
-        end
+    {      # Checks whether the `hash` literal is delimited by curly braces.
+      #
+      # @return [Boolean] whether the `hash` literal is enclosed in braces
+      def braces?
+        loc.end && loc.end.is?('}')
       end
     end
   end
 end
-
-    
-          item.update_column(:pre_tax_amount, pre_tax_amount)
-    end
-    
-    desc 'Generates a dummy app for testing for every Spree engine'
-task :test_app do
-  SPREE_GEMS.each do |gem_name|
-    Dir.chdir('#{File.dirname(__FILE__)}/#{gem_name}') do
-      sh 'rake test_app'
-    end
-  end
-end
-    
-            def log_state_changes
-          if @order.previous_changes[:state]
-            @order.log_state_changes(
-              state_name: 'order',
-              old_state: @order.previous_changes[:state].first,
-              new_state: @order.previous_changes[:state].last
-            )
-          end
-        end
