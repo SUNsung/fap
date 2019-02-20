@@ -1,80 +1,38 @@
 
         
-                for i in link_list:
-            self.stream_types.append({'id': str(i[0])})
-            self.streams[i[0]] = {'url': i[1]}
+                Accessing a node updates its position to the front of the LRU list.
+        '''
+        node = self.lookup.get(query)
+        if node is None:
+            return None
+        self.linked_list.move_to_front(node)
+        return node.results
     
-    #----------------------------------------------------------------------
-#helper
-#https://stackoverflow.com/questions/2148119/how-to-convert-an-xml-string-to-a-dictionary-in-python
-def dictify(r,root=True):
-    if root:
-        return {r.tag : dictify(r, False)}
-    d=copy(r.attrib)
-    if r.text:
-        d['_text']=r.text
-    for x in r.findall('./*'):
-        if x.tag not in d:
-            d[x.tag]=[]
-        d[x.tag].append(dictify(x,False))
-    return d
+        def prepare(self, vid = '', title = None, **kwargs):
+        assert vid
     
+    from .theplatform import theplatform_download_by_pid
     
-def download_url(url, merge, output_dir, title, info_only):
-    mime, ext, size = url_info(url)
-    print_info(site_info, title, mime, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge=merge)
+        vids = matchall(content, iqiyi_embed_patterns)
+    for vid in vids:
+        found = True
+        iqiyi_download_by_vid((vid[1], vid[0]), title=title, output_dir=output_dir, merge=merge, info_only=info_only)
     
-        elif 'subject' in url:
-        titles = re.findall(r'data-title='([^']*)'>', html)
-        song_id = re.findall(r'<li class='song-item' id='([^']*)'', html)
-        song_ssid = re.findall(r'data-ssid='([^']*)'', html)
-        get_song_url = 'http://music.douban.com/j/songlist/get_song_url'
+        if title is None:
+      title = url
     
+    tmpl_api_call_video_info = (
+    'https://api.flickr.com/services/rest?'
+    '&format=json&nojsoncallback=1'
+    '&method=flickr.video.getStreamInfo'
+    '&api_key=%s'
+    '&photo_id=%s'
+    '&secret=%s'
+)
     
-def fantasy_download_by_id_channelId(id = 0, channelId = 0, output_dir = '.', merge = True, info_only = False,
-                                     **kwargs):
-    api_url = 'http://www.fantasy.tv/tv/playDetails.action?' \
-              'myChannelId=1&id={id}&channelId={channelId}&t={t}'.format(id = id,
-                                                                         channelId = channelId,
-                                                                         t = str(random.random())
-                                                                         )
-    html = get_content(api_url)
-    html = json.loads(html)
-    
-        type, ext, size = url_info(video_url, headers=fake_headers)
-    
-    
-def ExtractKeywordsFromGroup_KeywordStarts_test():
-  assert_that( syntax_parse._ExtractKeywordsFromGroup(
-                 syntax_parse.SyntaxGroup( '', [
-                   'foo bar',
-                   'contained boo baa',
-                   'zoo goo',
-                 ] ) ),
-               contains_inanyorder( 'foo', 'bar', 'boo', 'baa', 'zoo', 'goo' ) )
-    
-        # For pickling to work, the __module__ variable needs to be set to the frame
-    # where the named tuple is created.  Bypass this step in enviroments where
-    # sys._getframe is not defined (Jython for example).
-    if hasattr(_sys, '_getframe'):
-        result.__module__ = _sys._getframe(1).f_globals.get('__name__', '__main__')
-    
-            for future in as_completed(future_to_url):
-            try:
-                url_to_content[future_to_url[future]] = future.result()
-            except:
-                pass
-        return url_to_content
-    finally:
-        executor.shutdown()
-    
-    PRIMES = [
-    112272535095293,
-    112582705942171,
-    112272535095293,
-    115280095190773,
-    115797848077099,
-    117450548693743,
-    993960000099397]
+                post_url = r1(r''(https://plus.google.com/[^/]+/posts/[^']*)'', html)
+            post_author = r1(r'/\+([^/]+)/posts', post_url)
+            if post_author:
+                post_url = 'https://plus.google.com/+%s/posts/%s' % (parse.quote(post_author), r1(r'posts/(.+)', post_url))
+            post_html = get_html(post_url, faker=True)
+            title = r1(r'<title[^>]*>([^<\n]+)', post_html)
