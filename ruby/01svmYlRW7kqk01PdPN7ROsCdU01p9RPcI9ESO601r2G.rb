@@ -1,80 +1,111 @@
 
         
-          caveats <<~EOS
-    Installation or Uninstallation may fail with Exit Code 19 (Conflicting Processes running) if Browsers, Safari Notification Service or SIMBL Services (e.g. Flashlight) are running or Adobe Creative Cloud or any other Adobe Products are already installed. See Logs in /Library/Logs/Adobe/Installers if Installation or Uninstallation fails, to identifify the conflicting processes.
-  EOS
-end
-
-    
-    RSpec.describe RuboCop::Cop::Layout::MultilineHashBraceLayout, :config do
-  subject(:cop) { described_class.new(config) }
-    
-            expect(new_source).to eq(['#{prefix}#{open}#{a},',
-                                  '#{b}#{close}',
-                                  suffix].join($RS))
+              if @email_domain_block.save
+        log_action :create, @email_domain_block
+        redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.created_msg')
+      else
+        render :new
       end
+    end
+    
+        def set_report
+      @report = Report.find(params[:report_id])
     end
   end
 end
 
     
-    module RuboCop
-  module AST
-    # A node extension for `for` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `for` nodes within RuboCop.
-    class ForNode < Node
-      # Returns the keyword of the `for` statement as a string.
+      def update
+    params.require([:id])
+    
+          if @user.persisted?
+        sign_in_and_redirect @user, event: :authentication
+        set_flash_message(:notice, :success, kind: provider_id.capitalize) if is_navigational_format?
+      else
+        session['devise.#{provider}_data'] = request.env['omniauth.auth']
+        redirect_to new_user_registration_url
+      end
+    end
+  end
+    
+    module ExportControllerConcern
+  extend ActiveSupport::Concern
+    
+        def log_transform(*args, from: caller[1][/`.*'/][1..-2].sub(/^block in /, ''))
+      puts '    #{cyan from}#{cyan ': #{args * ', '}' unless args.empty?}'
+    end
+    
+      # Do not eager load code on boot. This avoids loading your whole application
+  # just for the purpose of running a single test. If you are using a tool that
+  # preloads Rails for running tests, you may have to set it to true.
+  config.eager_load = false
+    
+            line_tab_str = line[/^\s*/]
+        unless line_tab_str.empty?
+          if tab_str.nil?
+            comment_tab_str ||= line_tab_str
+            next if try_comment(line, lines.last, '', comment_tab_str, index)
+            comment_tab_str = nil
+          end
+    
+          # Creates a new filesystem importer that imports files relative to a given path.
       #
-      # @return [String] the keyword of the `until` statement
-      def keyword
-        'for'
+      # @param root [String] The root path.
+      #   This importer will import files relative to this path.
+      def initialize(root)
+        @root = File.expand_path(root)
+        @real_root = Sass::Util.realpath(@root).to_s
+        @same_name_warnings = Set.new
       end
     
-          # Whether the last argument of the node is a block pass,
-      # i.e. `&block`.
+      # fetch data
+  fields = {
+    :authors => `git shortlog -sn`.force_encoding('utf-8').scan(/[^\d\s].*/),
+    :email   => ['mail@zzak.io', 'konstantin.haase@gmail.com'],
+    :files   => %w(License README.md Rakefile Gemfile rack-protection.gemspec) + Dir['lib/**/*']
+  }
+    
+          def accepts?(env)
+        raise NotImplementedError, '#{self.class} implementation pending'
+      end
+    
+          def accepts?(env)
+        cookie_header = env['HTTP_COOKIE']
+        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
+        cookies.each do |k, v|
+          if k == session_key && Array(v).size > 1
+            bad_cookies << k
+          elsif k != session_key && Rack::Utils.unescape(k) == session_key
+            bad_cookies << k
+          end
+        end
+        bad_cookies.empty?
+      end
+    
+      it 'ignores single-line arrays' do
+    expect_no_offenses('[a, b, c]')
+  end
+    
+          it 'does not autocorrect the closing brace' do
+        new_source = autocorrect_source(source)
+        expect(new_source).to eq([source].join($RS))
+      end
+    end
+    
+          # Returns the delta between this element's value and the argument's.
       #
-      # @return [Boolean] whether the last argument of the node is a block pass
-      def block_argument?
-        arguments? &&
-          (last_argument.block_pass_type? || last_argument.blockarg_type?)
-      end
-    end
-  end
-end
-
-    
-      # s.files       = `git ls-files`.split('\n').reject { |f| f.match(/^spec/) && !f.match(/^spec\/fixtures/) }
-  s.require_path = 'lib'
-  s.requirements << 'none'
-    
-          it_behaves_like 'perform complete'
-    end
-  end
-    
-          it 'does not return country second time if it appears in multiple zones' do
-        zone.countries << country
-        shipping_method.zones << zone
-        get shippable_url
-        expect(json_response['data'].size).to eq(to_return.size)
+      # @note Keyword splats always return a delta of 0
+      #
+      # @return [Integer] the delta between the two values
+      def value_delta(other)
+        HashElementDelta.new(self, other).value_delta
       end
     
-      describe '#show' do
-    context 'as a guest user' do
-      before { get '/api/v2/storefront/order_status/#{order.number}' }
-    
-    desc 'Generates a dummy app for testing for every Spree engine'
-task :test_app do
-  SPREE_GEMS.each do |gem_name|
-    Dir.chdir('#{File.dirname(__FILE__)}/#{gem_name}') do
-      sh 'rake test_app'
-    end
-  end
-end
-    
-          def find_product(id)
-        @product = product_scope.friendly.distinct(false).find(id.to_s)
-      rescue ActiveRecord::RecordNotFound
-        @product = product_scope.find_by(id: id)
-        not_found unless @product
+          # A shorthand for getting the last argument of the node.
+      # Equivalent to `arguments.last`.
+      #
+      # @return [Node, nil] the last argument of the node,
+      #                     or `nil` if there are no arguments
+      def last_argument
+        arguments[-1]
       end
