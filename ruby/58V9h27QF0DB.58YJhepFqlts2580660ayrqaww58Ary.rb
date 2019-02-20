@@ -1,146 +1,212 @@
 
         
-        def converted_history(markdown)
-  remove_head_from_history(
-    custom_release_header_anchors(
-      liquid_escape(
-        linkify(
-          normalize_bullets(markdown)
-        )
-      )
-    )
-  )
-end
+              def self.available_options
+        [
+          FastlaneCore::ConfigItem.new(key: :tag,
+                                       env_name: 'FL_GIT_TAG_TAG',
+                                       description: 'Define your own tag text. This will replace all other parameters',
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :grouping,
+                                       env_name: 'FL_GIT_TAG_GROUPING',
+                                       description: 'Is used to keep your tags organised under one 'folder'',
+                                       default_value: 'builds'),
+          FastlaneCore::ConfigItem.new(key: :prefix,
+                                       env_name: 'FL_GIT_TAG_PREFIX',
+                                       description: 'Anything you want to put in front of the version number (e.g. 'v')',
+                                       default_value: ''),
+          FastlaneCore::ConfigItem.new(key: :postfix,
+                                       env_name: 'FL_GIT_TAG_POSTFIX',
+                                       description: 'Anything you want to put at the end of the version number (e.g. '-RC1')',
+                                       default_value: ''),
+          FastlaneCore::ConfigItem.new(key: :build_number,
+                                       env_name: 'FL_GIT_TAG_BUILD_NUMBER',
+                                       description: 'The build number. Defaults to the result of increment_build_number if you\'re using it',
+                                       default_value: Actions.lane_context[Actions::SharedValues::BUILD_NUMBER],
+                                       default_value_dynamic: true,
+                                       is_string: false),
+          FastlaneCore::ConfigItem.new(key: :message,
+                                       env_name: 'FL_GIT_TAG_MESSAGE',
+                                       description: 'The tag message. Defaults to the tag's name',
+                                       default_value_dynamic: true,
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :commit,
+                                       env_name: 'FL_GIT_TAG_COMMIT',
+                                       description: 'The commit or object where the tag will be set. Defaults to the current HEAD',
+                                       default_value_dynamic: true,
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :force,
+                                       env_name: 'FL_GIT_TAG_FORCE',
+                                       description: 'Force adding the tag',
+                                       optional: true,
+                                       is_string: false,
+                                       default_value: false),
+          FastlaneCore::ConfigItem.new(key: :sign,
+                                       env_name: 'FL_GIT_TAG_SIGN',
+                                       description: 'Make a GPG-signed tag, using the default e-mail address's key',
+                                       optional: true,
+                                       is_string: false,
+                                       default_value: false)
+        ]
+      end
     
-    Benchmark.ips do |x|
-  x.report('local-require') { local_require }
-  x.report('global-require') { global_require }
-  x.report('graceful-require') { graceful_require }
-  x.compare!
-end
-
+          it 'adds install_docset param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            install_docset: true
+          )
+        end').runner.execute(:test)
     
-    if pathutil_relative == native_relative
-  Benchmark.ips do |x|
-    x.report('pathutil') { pathutil_relative }
-    x.report('native')   { native_relative }
-    x.compare!
-  end
-else
-  print 'PATHUTIL: '
-  puts pathutil_relative
-  print 'NATIVE:   '
-  puts native_relative
-end
-
+          it 'doesn't add a no-use-binaries flag to command if use_binaries is set to true' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            carthage(
+              use_binaries: true
+            )
+          end').runner.execute(:test)
     
-    # For this pull request, which changes Page#dir
-# https://github.com/jekyll/jekyll/pull/4403
+          it 'Does not include merge commits in the list of commits' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          changelog_from_git_commits(include_merges: false)
+        end').runner.execute(:test)
     
-      p.option 'source', '-s', '--source [DIR]', 'Source directory (defaults to ./)'
-  p.option 'destination', '-d', '--destination [DIR]',
-    'Destination directory (defaults to ./_site)'
-  p.option 'safe', '--safe', 'Safe mode (defaults to false)'
-  p.option 'plugins_dir', '-p', '--plugins PLUGINS_DIR1[,PLUGINS_DIR2[,...]]', Array,
-    'Plugins directory (defaults to ./_plugins)'
-  p.option 'layouts_dir', '--layouts DIR', String,
-    'Layouts directory (defaults to ./_layouts)'
-  p.option 'profile', '--profile', 'Generate a Liquid rendering profile'
+    # To avoid 'PR & Runs' for which tests don't pass, we want to make spec errors more visible
+# The code below will run on Circle, parses the results in JSON and posts them to the PR as comment
+containing_dir = ENV['CIRCLE_TEST_REPORTS'] || '.' # for local testing
+file_path = File.join(containing_dir, 'rspec', 'fastlane-junit-results.xml')
     
-        def process(args)
-      arg_is_present? args, '--server', 'The --server command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--serve', 'The --serve command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--no-server', 'To build Jekyll without launching a server, \
-                          use the 'build' subcommand.'
-      arg_is_present? args, '--auto', 'The switch '--auto' has been replaced with \
-                          '--watch'.'
-      arg_is_present? args, '--no-auto', 'To disable auto-replication, simply leave off \
-                          the '--watch' switch.'
-      arg_is_present? args, '--pygments', 'The 'pygments'settings has been removed in \
-                          favour of 'highlighter'.'
-      arg_is_present? args, '--paginate', 'The 'paginate' setting can only be set in \
-                          your config files.'
-      arg_is_present? args, '--url', 'The 'url' setting can only be set in your \
-                          config files.'
-      no_subcommand(args)
-    end
+    HighLine.track_eof = false
     
-            # Returns the instance variables as a hash of key-value pairs.
-        def instance_variables_hash
-          instance_variables.inject({}) do |acc, iv|
-            acc[iv.to_s[1..-1]] = instance_variable_get(iv)
-            acc
+        self.itime  = ::Time.now
+    self.queue  = ::Queue.new
+    
+      #
+  # Move these into an IPMI stack or mixin at some point
+  #
+    
+            # Creates a TCP connection using Rex::Socket::Tcp
+        #
+        # @return [Rex::Socket::Tcp]
+        def create_tcp_connection
+          self.connection = Rex::Socket::Tcp.create(
+            'PeerHost'   => host,
+            'PeerPort'   => port.to_i,
+            'Context'    => context,
+            'Timeout'    => timeout
+          )
+        end
+    
+              # Rex::Proto::Kerberos::Model::ApReq decoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def decode(input)
+            raise ::NotImplementedError, 'AP-REQ decoding not supported'
+          end
+    
+              # Encodes the checksum field
+          #
+          # @return [OpenSSL::ASN1::OctetString]
+          def encode_checksum
+            OpenSSL::ASN1::OctetString.new(checksum)
           end
         end
+      end
+    end
+  end
+end
     
-            # Mounts a shared folder.
-        #
-        # This method should create, mount, and properly set permissions
-        # on the shared folder. This method should also properly
-        # adhere to any configuration values such as `shared_folder_uid`
-        # on `config.vm`.
-        #
-        # @param [String] name The name of the shared folder.
-        # @param [String] guestpath The path on the machine which the user
-        #   wants the folder mounted.
-        # @param [Hash] options Additional options for the shared folder
-        #   which can be honored.
-        def mount_shared_folder(name, guestpath, options)
-          raise BaseError, _key: :unsupported_shared_folder
-        end
+    # for each blog URL, check if rss URL exists
+matches.each do |match|
+  name = match[0]
+  web_url = match[1]
     
-            # Registers additional provisioners to be available.
-        #
-        # @param [String] name Name of the provisioner.
-        def self.provisioner(name=UNSET_VALUE, &block)
-          data[:provisioners] ||= Registry.new
+      # Configure an appender that will write log events to STDOUT. A colorized
+  # pattern layout is used to format the log events into strings before
+  # writing.
+  Logging.appenders.stdout('stdout',
+                           auto_flushing: true,
+                           layout:        Logging.layouts.pattern(
+                             pattern:      pattern,
+                             color_scheme: 'bright'
+                           )
+                          ) if config.log_to.include? 'stdout'
     
-            # The configuration for this provisioner. This will be an instance of
-        # the `Config` class which is part of the provisioner.
-        attr_reader :config
-    
-            # Defines a capability for the given host. The block should return
-        # a class/module that has a method with the capability name, ready
-        # to be executed. This means that if it is an instance method,
-        # the block should return an instance of the class.
-        #
-        # @param [String] host The name of the host
-        # @param [String] cap The name of the capability
-        def self.host_capability(host, cap, &block)
-          components.host_capabilities[host.to_sym].register(cap.to_sym, &block)
-          nil
-        end
-    
-      it 'raises a TypeError when passed nil' do
-    lambda { sleep(nil)   }.should raise_error(TypeError)
+    class FixPhotosShareVisibilities < ActiveRecord::Migration[4.2]
+  class Photo < ApplicationRecord
   end
     
-      # String arguments should be evaluated in the context of the caller.
-  it 'accepts a String argument instead of a Proc or block' do
-    trace_var :$Kernel_trace_var_global, '$Kernel_trace_var_extra = true'
+      failure_message_for_should do |actual|
+    'expected #{actual.inspect} to have value #{expected.inspect} but was #{actual.value.inspect}'
+  end
+  failure_message_for_should_not do |actual|
+    'expected #{actual.inspect} to not have value #{expected.inspect} but it had'
+  end
+end
     
-        private
+        before do
+      allow_any_instance_of(Spree::Api::V2::Storefront::CartController).to receive(:spree_current_order).and_return(order)
+      patch '/api/v2/storefront/cart/empty', headers: headers_bearer
+    end
     
-      # Eager load code on boot. This eager loads most of Rails and
-  # your application in memory, allowing both thread web servers
-  # and those relying on copy on write to perform better.
-  # Rake tasks automatically ignore this option for performance.
-  config.eager_load = true
+        context 'with specified pagination params' do
+      let!(:order) { create(:order, state: 'complete', user: user, completed_at: Time.current) }
+      let!(:order_1) { create(:order, state: 'complete', user: user, completed_at: Time.current + 1.day) }
+      let!(:order_2) { create(:order, state: 'complete', user: user, completed_at: Time.current + 2.days) }
+      let!(:order_3) { create(:order, state: 'complete', user: user, completed_at: Time.current + 3.days) }
     
-      # The test environment is used exclusively to run your application's
-  # test suite. You never need to work with it otherwise. Remember that
-  # your test database is 'scratch space' for the test suite and is wiped
-  # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
+        it 'return JSON API payload of User and associations (default billing and shipping address)' do
+      expect(json_response['data']).to have_id(user.id.to_s)
+      expect(json_response['data']).to have_type('user')
+      expect(json_response['data']).to have_relationships(:default_shipping_address, :default_billing_address)
     
-          # Checks whether any argument of the node is a splat
-      # argument, i.e. `*splat`.
-      #
-      # @return [Boolean] whether the node is a splat argument
-      def splat_argument?
-        arguments? &&
-          (arguments.any?(&:splat_type?) || arguments.any?(&:restarg_type?))
+          it 'returns taxon by permalink' do
+        expect(json_response['data']).to have_id(Spree::Taxon.first.id.to_s)
+        expect(json_response['data']).to have_attribute(:name).with_value(Spree::Taxon.first.name)
       end
-      alias rest_argument? splat_argument?
+    end
+  end
+end
+
+    
+      config.include JSONAPI::RSpec
+  config.include FactoryBot::Syntax::Methods
+  config.include Spree::Api::TestingSupport::Helpers, type: :controller
+  config.include Spree::Api::TestingSupport::Helpers, type: :request
+  config.extend Spree::Api::TestingSupport::Setup, type: :controller
+  config.include Spree::TestingSupport::Preferences, type: :controller
+  config.include Spree::TestingSupport::ImageHelpers
+    
+          def product_scope
+        if @current_user_roles.include?('admin')
+          scope = Product.with_deleted.accessible_by(current_ability, :read).includes(*product_includes)
+    
+    desc 'Move source to source.old, install source theme updates, replace source/_includes/navigation.html with source.old's navigation'
+task :update_source, :theme do |t, args|
+  theme = args.theme || 'classic'
+  if File.directory?('#{source_dir}.old')
+    puts '## Removed existing #{source_dir}.old directory'
+    rm_r '#{source_dir}.old', :secure=>true
+  end
+  mkdir '#{source_dir}.old'
+  cp_r '#{source_dir}/.', '#{source_dir}.old'
+  puts '## Copied #{source_dir} into #{source_dir}.old/'
+  cp_r '#{themes_dir}/'+theme+'/source/.', source_dir, :remove_destination=>true
+  cp_r '#{source_dir}.old/_includes/custom/.', '#{source_dir}/_includes/custom/', :remove_destination=>true
+  cp '#{source_dir}.old/favicon.png', source_dir
+  mv '#{source_dir}/index.html', '#{blog_index_dir}', :force=>true if blog_index_dir != source_dir
+  cp '#{source_dir}.old/index.html', source_dir if blog_index_dir != source_dir && File.exists?('#{source_dir}.old/index.html')
+  puts '## Updated #{source_dir} ##'
+end
+    
+      class ImageTag < Liquid::Tag
+    @img = nil
+    
+      class IncludeArrayTag < Liquid::Tag
+    Syntax = /(#{Liquid::QuotedFragment}+)/
+    def initialize(tag_name, markup, tokens)
+      if markup =~ Syntax
+        @array_name = $1
+      else
+        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
+      end
