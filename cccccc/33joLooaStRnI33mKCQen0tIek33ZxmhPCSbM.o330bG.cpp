@@ -1,279 +1,299 @@
 
         
-          ~AutoCompactTest() {
-    delete db_;
-    DestroyDB(dbname_, Options());
-    delete tiny_cache_;
-  }
-    
-      void Corrupt(FileType filetype, int offset, int bytes_to_corrupt) {
-    // Pick file to corrupt
-    std::vector<std::string> filenames;
-    ASSERT_OK(env_.GetChildren(dbname_, &filenames));
-    uint64_t number;
-    FileType type;
-    std::string fname;
-    int picked_number = -1;
-    for (size_t i = 0; i < filenames.size(); i++) {
-      if (ParseFileName(filenames[i], &number, &type) &&
-          type == filetype &&
-          int(number) > picked_number) {  // Pick latest file
-        fname = dbname_ + '/' + filenames[i];
-        picked_number = number;
-      }
+            switch(CV_MAT_DEPTH(kernel_type))
+    {
+    case CV_8U:
+        if(CAROTENE_NS::countNonZero(CAROTENE_NS::Size2D(kernel_width, kernel_height), kernel_data, kernel_step) != kernel_width * kernel_height)
+            return CV_HAL_ERROR_NOT_IMPLEMENTED;
+        break;
+    case CV_16U:
+        if(CAROTENE_NS::countNonZero(CAROTENE_NS::Size2D(kernel_width, kernel_height), (uint16_t*)kernel_data, kernel_step) != kernel_width * kernel_height)
+            return CV_HAL_ERROR_NOT_IMPLEMENTED;
+        break;
+    case CV_32S:
+        if(CAROTENE_NS::countNonZero(CAROTENE_NS::Size2D(kernel_width, kernel_height), (int32_t*)kernel_data, kernel_step) != kernel_width * kernel_height)
+            return CV_HAL_ERROR_NOT_IMPLEMENTED;
+        break;
+    case CV_32F:
+        if(CAROTENE_NS::countNonZero(CAROTENE_NS::Size2D(kernel_width, kernel_height), (float*)kernel_data, kernel_step) != kernel_width * kernel_height)
+            return CV_HAL_ERROR_NOT_IMPLEMENTED;
+        break;
+    case CV_64F:
+        if(CAROTENE_NS::countNonZero(CAROTENE_NS::Size2D(kernel_width, kernel_height), (double*)kernel_data, kernel_step) != kernel_width * kernel_height)
+            return CV_HAL_ERROR_NOT_IMPLEMENTED;
+        break;
+    default:
+        return CV_HAL_ERROR_NOT_IMPLEMENTED;
     }
-    ASSERT_TRUE(!fname.empty()) << filetype;
+    
+    struct BitwiseAnd
+{
+    typedef u8 type;
     }
     
-      InternalKey begin_storage, end_storage;
+    typedef void (* rshiftConstFunc)(const Size2D &size,
+                                const s16 * srcBase, ptrdiff_t srcStride,
+                                u8 * dstBase, ptrdiff_t dstStride,
+                                CONVERT_POLICY cpolicy);
     
-    // Return a new iterator that converts internal keys (yielded by
-// '*internal_iter') that were live at the specified 'sequence' number
-// into appropriate user keys.
-Iterator* NewDBIterator(DBImpl* db,
-                        const Comparator* user_key_comparator,
-                        Iterator* internal_iter,
-                        SequenceNumber sequence,
-                        uint32_t seed);
-    
-    
-    {}  // namespace leveldb
-    
-        private:
-    
-            bool IsInfinite() override;
-    
-            static bool IsUDF(const Dictionary& dict);
-    
-            size_t MaskedCount() const override
+            if (i < roiw4)
         {
-            if (m_isPacked)
-                // Compute the number of masked samples after the data will be unpacked
-                return m_packedDataLayout ? ((m_packedDataLayout->GetNumTimeSteps() * m_packedDataLayout->GetNumSequences()) - m_packedDataLayout->GetActualNumSamples()) : 0;
-            else
-                return Value::MaskedCount();
+            internal::prefetch(src + i + 2);
+            uint64x2_t vln1 = vld1q_u64((const u64*)(src + i));
+            uint64x2_t vln2 = vld1q_u64((const u64*)(src + i + 2));
+    }
+    
+                if (mask[0])
+                process(src, j, j + 8, i,
+                        minVal, minLocPtr, minLocCount, minLocCapacity,
+                        maxVal, maxLocPtr, maxLocCount, maxLocCapacity);
+            if (mask[1])
+                process(src, j + 8, j + 16, i,
+                        minVal, minLocPtr, minLocCount, minLocCapacity,
+                        maxVal, maxLocPtr, maxLocCount, maxLocCapacity);
         }
-    
-            std::wstring AsString() const;
-        std::shared_ptr<VariableFields> Clone() const;
-        FunctionPtr Owner() const;
-    
-    using namespace std;
-    
-    public:
-    ScopeTimer(size_t verbosity, const std::string& message)
-        : m_verbosity(verbosity), m_message(message)
-    {
-        if (m_verbosity > 2)
+        for ( ; j < roiw8; j += 8)
         {
-            m_aggregateTimer.Start();
-        }
+            internal::prefetch(src + j);
+            int16x8_t v_src = vld1q_s16(src + j);
+    
+    #ifdef CAROTENE_NEON
+    
+                uint8x8_t el8shr0 = vld1_u8(src + j);
+            uint8x8_t el8shr1 = vreinterpret_u8_u64(vshl_n_u64(vreinterpret_u64_u8(el8shr0), 8));
+            uint8x8_t el8shr2 = vreinterpret_u8_u64(vshl_n_u64(vreinterpret_u64_u8(el8shr0), 16));
+            uint8x8_t el8shr3 = vreinterpret_u8_u64(vshl_n_u64(vreinterpret_u64_u8(el8shr0), 24));
+    
+      /**
+   * @brief Return whether 'anonymous' top blobs are created automatically
+   *        by the layer.
+   *
+   * If this method returns true, Net::Init will create enough 'anonymous' top
+   * blobs to fulfill the requirement specified by ExactNumTopBlobs() or
+   * MinTopBlobs().
+   */
+  virtual inline bool AutoTopBlobs() const { return false; }
+    
+    /**
+ * @brief Abstract base class that factors out the BLAS code common to
+ *        ConvolutionLayer and DeconvolutionLayer.
+ */
+template <typename Dtype>
+class BaseConvolutionLayer : public Layer<Dtype> {
+ public:
+  explicit BaseConvolutionLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-        virtual void BackpropToNonLooping(size_t inputIndex) override
-    {
-        LogicError('The node \'%ls\' can be used in training, but it does not participate in gradient propagation.', OperationName().c_str());
-    }
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-    #include 'DHTAbstractTask.h'
-#include 'a2time.h'
-    
-      virtual void fillMessage(Dict* msgDict) CXX11_OVERRIDE;
-    
-      bool addGoodNode(const std::shared_ptr<DHTNode>& node);
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
     
-    {
-    {    PrefPtr prefEntryPointHost = family == AF_INET ? PREF_DHT_ENTRY_POINT_HOST
-                                                   : PREF_DHT_ENTRY_POINT_HOST6;
-    if (!e->getOption()->get(prefEntryPointHost).empty()) {
-      {
-        PrefPtr prefEntryPointPort = family == AF_INET
-                                         ? PREF_DHT_ENTRY_POINT_PORT
-                                         : PREF_DHT_ENTRY_POINT_PORT6;
-        std::pair<std::string, uint16_t> addr(
-            e->getOption()->get(prefEntryPointHost),
-            e->getOption()->getAsInt(prefEntryPointPort));
-        std::vector<std::pair<std::string, uint16_t>> entryPoints;
-        entryPoints.push_back(addr);
-        auto command = make_unique<DHTEntryPointNameResolveCommand>(
-            e->newCUID(), e, family, entryPoints);
-        command->setBootstrapEnabled(true);
-        command->setTaskQueue(taskQueue.get());
-        command->setTaskFactory(taskFactory.get());
-        command->setRoutingTable(routingTable.get());
-        command->setLocalNode(localNode);
-        tempCommands.push_back(std::move(command));
-      }
-    }
-    else {
-      A2_LOG_INFO('No DHT entry point specified.');
-    }
-    {
-      auto command = make_unique<DHTInteractionCommand>(e->newCUID(), e);
-      command->setMessageDispatcher(dispatcher.get());
-      command->setMessageReceiver(receiver.get());
-      command->setTaskQueue(taskQueue.get());
-      command->setReadCheckSocket(connection->getSocket());
-      command->setConnection(std::move(connection));
-      command->setUDPTrackerClient(udpTrackerClient);
-      tempRoutineCommands.push_back(std::move(command));
-    }
-    {
-      auto command = make_unique<DHTTokenUpdateCommand>(
-          e->newCUID(), e, DHT_TOKEN_UPDATE_INTERVAL);
-      command->setTokenTracker(tokenTracker.get());
-      tempCommands.push_back(std::move(command));
-    }
-    {
-      auto command = make_unique<DHTBucketRefreshCommand>(
-          e->newCUID(), e, DHT_BUCKET_REFRESH_CHECK_INTERVAL);
-      command->setTaskQueue(taskQueue.get());
-      command->setRoutingTable(routingTable.get());
-      command->setTaskFactory(taskFactory.get());
-      tempCommands.push_back(std::move(command));
-    }
-    {
-      auto command = make_unique<DHTPeerAnnounceCommand>(
-          e->newCUID(), e, DHT_PEER_ANNOUNCE_CHECK_INTERVAL);
-      command->setPeerAnnounceStorage(peerAnnounceStorage.get());
-      tempCommands.push_back(std::move(command));
-    }
-    {
-      auto command =
-          make_unique<DHTAutoSaveCommand>(e->newCUID(), e, family, 30_min);
-      command->setLocalNode(localNode);
-      command->setRoutingTable(routingTable.get());
-      tempCommands.push_back(std::move(command));
-    }
-    // add deserialized nodes to routing table
-    auto& desnodes = deserializer.getNodes();
-    for (auto& node : desnodes) {
-      routingTable->addNode(node);
-    }
-    if (!desnodes.empty()) {
-      auto task = std::static_pointer_cast<DHTBucketRefreshTask>(
-          taskFactory->createBucketRefreshTask());
-      task->setForceRefresh(true);
-      taskQueue->addPeriodicTask1(task);
-    }
-    // assign them into DHTRegistry
-    if (family == AF_INET) {
-      DHTRegistry::getMutableData().localNode = localNode;
-      DHTRegistry::getMutableData().routingTable = std::move(routingTable);
-      DHTRegistry::getMutableData().taskQueue = std::move(taskQueue);
-      DHTRegistry::getMutableData().taskFactory = std::move(taskFactory);
-      DHTRegistry::getMutableData().peerAnnounceStorage =
-          std::move(peerAnnounceStorage);
-      DHTRegistry::getMutableData().tokenTracker = std::move(tokenTracker);
-      DHTRegistry::getMutableData().messageDispatcher = std::move(dispatcher);
-      DHTRegistry::getMutableData().messageReceiver = std::move(receiver);
-      DHTRegistry::getMutableData().messageFactory = std::move(factory);
-      e->getBtRegistry()->setUDPTrackerClient(udpTrackerClient);
-      DHTRegistry::setInitialized(true);
-    }
-    else {
-      DHTRegistry::getMutableData6().localNode = localNode;
-      DHTRegistry::getMutableData6().routingTable = std::move(routingTable);
-      DHTRegistry::getMutableData6().taskQueue = std::move(taskQueue);
-      DHTRegistry::getMutableData6().taskFactory = std::move(taskFactory);
-      DHTRegistry::getMutableData6().peerAnnounceStorage =
-          std::move(peerAnnounceStorage);
-      DHTRegistry::getMutableData6().tokenTracker = std::move(tokenTracker);
-      DHTRegistry::getMutableData6().messageDispatcher = std::move(dispatcher);
-      DHTRegistry::getMutableData6().messageReceiver = std::move(receiver);
-      DHTRegistry::getMutableData6().messageFactory = std::move(factory);
-      DHTRegistry::setInitialized6(true);
-    }
-    if (e->getBtRegistry()->getUdpPort() == 0) {
-      // We assign port last so that no exception gets in the way
-      e->getBtRegistry()->setUdpPort(port);
-    }
+    {  bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnTensorDescriptor_t bottom_desc_;
+  cudnnTensorDescriptor_t top_desc_;
+  cudnnActivationDescriptor_t activ_desc_;
+};
+#endif
+    
+      AutoCompactTest() {
+    dbname_ = test::TmpDir() + '/autocompact_test';
+    tiny_cache_ = NewLRUCache(100);
+    options_.block_cache = tiny_cache_;
+    DestroyDB(dbname_, options_);
+    options_.create_if_missing = true;
+    options_.compression = kNoCompression;
+    ASSERT_OK(DB::Open(options_, dbname_, &db_));
   }
-  catch (RecoverableException& ex) {
-    A2_LOG_ERROR_EX(fmt('Exception caught while initializing DHT functionality.'
-                        ' DHT is disabled.'),
-                    ex);
-    tempCommands.clear();
-    tempRoutineCommands.clear();
-    if (family == AF_INET) {
-      DHTRegistry::clearData();
-      e->getBtRegistry()->setUDPTrackerClient(
-          std::shared_ptr<UDPTrackerClient>{});
+    
+    Status BuildTable(const std::string& dbname,
+                  Env* env,
+                  const Options& options,
+                  TableCache* table_cache,
+                  Iterator* iter,
+                  FileMetaData* meta) {
+  Status s;
+  meta->file_size = 0;
+  iter->SeekToFirst();
     }
-    else {
-      DHTRegistry::clearData6();
+    
+    TEST(CorruptionTest, TableFile) {
+  Build(100);
+  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
+  dbi->TEST_CompactMemTable();
+  dbi->TEST_CompactRange(0, nullptr, nullptr);
+  dbi->TEST_CompactRange(1, nullptr, nullptr);
     }
+    
+    #ifndef STORAGE_LEVELDB_DB_DB_ITER_H_
+#define STORAGE_LEVELDB_DB_DB_ITER_H_
+    
+    
+    {  for (int i = 0; i < iters; i++) {
+    VersionEdit vedit;
+    vedit.DeleteFile(2, fnum);
+    InternalKey start(MakeKey(2*fnum), 1, kTypeValue);
+    InternalKey limit(MakeKey(2*fnum+1), 1, kTypeDeletion);
+    vedit.AddFile(2, fnum++, 1 /* file size */, start, limit);
+    vset.LogAndApply(&vedit, &mu);
   }
-  return std::make_pair(std::move(tempCommands),
-                        std::move(tempRoutineCommands));
+  uint64_t stop_micros = env->NowMicros();
+  unsigned int us = stop_micros - start_micros;
+  char buf[16];
+  snprintf(buf, sizeof(buf), '%d', num_base_files);
+  fprintf(stderr,
+          'BM_LogAndApply/%-6s   %8d iters : %9u us (%7.0f us / iter)\n',
+          buf, iters, us, ((float)us) / iters);
 }
     
-      bool validateToken(const std::string& token, const unsigned char* infoHash,
-                     const std::string& ipaddr, uint16_t port) const;
+    void InternalKeyComparator::FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const {
+  // Attempt to shorten the user portion of the key
+  Slice user_start = ExtractUserKey(*start);
+  Slice user_limit = ExtractUserKey(limit);
+  std::string tmp(user_start.data(), user_start.size());
+  user_comparator_->FindShortestSeparator(&tmp, user_limit);
+  if (tmp.size() < user_start.size() &&
+      user_comparator_->Compare(user_start, tmp) < 0) {
+    // User key has become shorter physically, but larger logically.
+    // Tack on the earliest possible number to the shortened user key.
+    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
+    assert(this->Compare(*start, tmp) < 0);
+    assert(this->Compare(tmp, limit) < 0);
+    start->swap(tmp);
+  }
+}
     
-    class DHTTokenTracker;
+    // Modules in this directory should keep internal keys wrapped inside
+// the following class instead of plain strings so that we do not
+// incorrectly use string comparisons instead of an InternalKeyComparator.
+class InternalKey {
+ private:
+  std::string rep_;
+ public:
+  InternalKey() { }   // Leave rep_ as empty to indicate it is invalid
+  InternalKey(const Slice& user_key, SequenceNumber s, ValueType t) {
+    AppendInternalKey(&rep_, ParsedInternalKey(user_key, s, t));
+  }
+    }
+    
+    Writer::Writer(WritableFile* dest)
+    : dest_(dest),
+      block_offset_(0) {
+  InitTypeCrc(type_crc_);
+}
+    
+      // crc32c values for all supported record types.  These are
+  // pre-computed to reduce the overhead of computing the crc of the
+  // record type stored in the header.
+  uint32_t type_crc_[kMaxRecordType + 1];
+    
+    
+    { private:
+  std::string dbname_;
+  Env* env_;
+  DB* db_;
+};
+    
+      Status WriteDescriptor() {
+    std::string tmp = TempFileName(dbname_, 1);
+    WritableFile* file;
+    Status status = env_->NewWritableFile(tmp, &file);
+    if (!status.ok()) {
+      return status;
+    }
+    }
+    
+      // Return the latest node with a key < key.
+  // Return head_ if there is no such node.
+  Node* FindLessThan(const Key& key) const;
+    
+    SparsePageWriter::~SparsePageWriter() {
+  for (auto& queue : qworkers_) {
+    // use nullptr to signal termination.
+    std::shared_ptr<SparsePage> sig(nullptr);
+    queue.Push(std::move(sig));
+  }
+  for (auto& thread : workers_) {
+    thread->join();
+  }
+}
     
     
     {
-    {
-    {}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
-
+    {}  // namespace obj
+}  // namespace xgboost
     
-    TEST(ByteTest, SetValue) {
+        uint32_t max_val = std::numeric_limits<uint32_t>::max();
+    for (bst_uint fid = 0; fid < nfeature; ++fid) {
+      CHECK_LE(gmat.cut.row_ptr[fid + 1] - gmat.cut.row_ptr[fid], max_val);
+    }
+    
+    // implementing configure.
+template<typename PairIter>
+inline void ObjFunction::Configure(PairIter begin, PairIter end) {
+  std::vector<std::pair<std::string, std::string> > vec(begin, end);
+  this->Configure(vec);
+}
+    
+    
+    { private:
+  // default chunk size.
+  static const size_t kChunkSize = 64 << 10UL;
+  // maximum chunk size.
+  static const size_t kMaxChunk = 128;
+  // bool whether use hc
+  bool use_lz4_hc_;
+  // number of threads
+  int nthread_;
+  // number of writing threads
+  int nthread_write_;
+  // raw bytes
+  size_t raw_bytes_, raw_bytes_index_, raw_bytes_value_;
+  // encoded bytes
+  size_t encoded_bytes_index_, encoded_bytes_value_;
+  /*! \brief minimum index value */
+  uint32_t min_index_;
+  /*! \brief external memory column offset */
+  std::vector<size_t> disk_offset_;
+  // internal index
+  CompressArray<StorageIndex> index_;
+  // value set.
+  CompressArray<bst_float> value_;
+};
+    
+    TEST(ByteTest, GetValue) {
   unsigned char byte_value = 0x1A;
   Byte value(&byte_value);
-  value.set_value(0x06, 3, 3);
-  EXPECT_EQ(0x32, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x06, 0, 8);
-  EXPECT_EQ(0x06, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x06, 0, 10);
-  EXPECT_EQ(0x06, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x06, 1, 7);
-  EXPECT_EQ(0x0C, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x07, 1, 1);
-  EXPECT_EQ(0x1A, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x07, -1, 1);
-  EXPECT_EQ(0x1A, value.get_byte());
+  EXPECT_EQ(0x05, value.get_byte(1, 3));
+  EXPECT_EQ(0x01, value.get_byte(1, 1));
+  EXPECT_EQ(0x00, value.get_byte(8, 1));
+  EXPECT_EQ(0x00, value.get_byte(-1, 1));
+  EXPECT_EQ(0x1A, value.get_byte(0, 10));
 }
     
+    #include 'modules/drivers/canbus/common/byte.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
     
-    {  Byte t1(bytes + 5);
-  uint32_t t = t1.get_byte(6, 2);
-  x <<= 2;
-  x |= t;
-  double ret = x * CLUSTER_VREL_RES + CLUSTER_VREL_LONG_MIN;
-  return ret;
-}
+    bool NodeWithRange::IsVirtual() const { return topo_node_->IsVirtual(); }
     
-    namespace apollo {
-namespace drivers {
-namespace conti_radar {
-    }
-    }
-    }
-    
-    namespace apollo {
-namespace drivers {
-namespace conti_radar {
-    }
-    }
-    }
-    
-    TEST_F(ObstacleClustersTest, ObstacleClusters) {
-  auto lane = PredictionMap::LaneById('l9');
-  double start_s = 99.0;
-  double length = 100.0;
-    }
-    
-    NodeWithRange::NodeWithRange(const TopoNode* node, const NodeSRange& range)
-    : NodeSRange(range), topo_node_(node) {}
-    
-        http://www.apache.org/licenses/LICENSE-2.0
+    #include 'modules/canbus/vehicle/gem/protocol/accel_cmd_67.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_cmd_6b.h'
+#include 'modules/canbus/vehicle/gem/protocol/global_cmd_69.h'
+#include 'modules/canbus/vehicle/gem/protocol/headlight_cmd_76.h'
+#include 'modules/canbus/vehicle/gem/protocol/horn_cmd_78.h'
+#include 'modules/canbus/vehicle/gem/protocol/shift_cmd_65.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_cmd_6d.h'
+#include 'modules/canbus/vehicle/gem/protocol/turn_cmd_63.h'
+#include 'modules/canbus/vehicle/gem/protocol/wiper_cmd_90.h'
