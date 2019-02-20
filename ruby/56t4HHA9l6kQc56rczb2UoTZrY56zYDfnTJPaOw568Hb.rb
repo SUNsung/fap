@@ -1,129 +1,98 @@
 
         
-              Actions.lane_context[Actions::SharedValues::PLATFORM_NAME] = current_platform
-      Actions.lane_context[Actions::SharedValues::LANE_NAME] = full_lane_name
+                # Remove some <code> elements
+        css('h1 > code', 'h2 > code', 'h3 > code', 'h4 > code', 'h6 > code').each do |node|
+          node.before(node.content).remove
+        end
     
-          @launch_event_sent = true
-      builder = AnalyticsEventBuilder.new(
-        p_hash: launch_context.p_hash,
-        session_id: session_id,
-        action_name: nil,
-        fastlane_client_language: launch_context.fastlane_client_language
-      )
-    
-            expect(result[1]).to eq('security default-keychain -s ~/Library/Keychains/test.keychain')
-        expect(result[2]).to eq('security unlock-keychain -p testpassword ~/Library/Keychains/test.keychain')
-    
-        def help_default_value
-      return '#{self.default_value} *'.strip if self.default_value_dynamic
-      return '' if self.default_value.nil?
-      return '''' if self.default_value.instance_of?(String) && self.default_value.empty?
-      return ':#{self.default_value}' if self.default_value.instance_of?(Symbol)
-    
-    class String
-  # CrossplatformShellwords
-  def shellescape
-    CrossplatformShellwords.shellescape(self)
-  end
+      desc 'Generate Documentation'
+  task :doc => [:yard, 'doc:add_ids']
+  task :redoc => [:yard, 'doc:add_ids']
+rescue LoadError
+  desc 'Generate Documentation'
+  task :doc => :rdoc
+  task :yard => :rdoc
 end
     
-    describe 'monkey patch of Array.shelljoin (via CrossplatformShellwords)' do
-  describe 'on Windows' do
-    before(:each) do
-      allow(FastlaneCore::Helper).to receive(:windows?).and_return(true)
-    end
-    
-    # Contributors should always provide a changelog when submitting a PR
-if github.pr_body.length < 5
-  warn('Please provide a changelog summary in the Pull Request description @#{github.pr_author}')
-end
-    
-        if successfully_sent?(resource)
-      respond_with({}, location: after_resending_confirmation_instructions_path_for(resource_name))
+      # Compile a file on disk to CSS.
+  #
+  # @raise [Sass::SyntaxError] if there's an error in the document
+  # @raise [Encoding::UndefinedConversionError] if the source encoding
+  #   cannot be converted to UTF-8
+  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
+  #
+  # @overload compile_file(filename, options = {})
+  #   Return the compiled CSS rather than writing it to a file.
+  #
+  #   @param filename [String] The path to the Sass, SCSS, or CSS file on disk.
+  #   @param options [{Symbol => Object}] An options hash;
+  #     see {file:SASS_REFERENCE.md#Options the Sass options documentation}
+  #   @return [String] The compiled CSS.
+  #
+  # @overload compile_file(filename, css_filename, options = {})
+  #   Write the compiled CSS to a file.
+  #
+  #   @param filename [String] The path to the Sass, SCSS, or CSS file on disk.
+  #   @param options [{Symbol => Object}] An options hash;
+  #     see {file:SASS_REFERENCE.md#Options the Sass options documentation}
+  #   @param css_filename [String] The location to which to write the compiled CSS.
+  def self.compile_file(filename, *args)
+    options = args.last.is_a?(Hash) ? args.pop : {}
+    css_filename = args.shift
+    result = Sass::Engine.for_file(filename, options).render
+    if css_filename
+      options[:css_filename] ||= css_filename
+      open(css_filename, 'w') {|css_file| css_file.write(result)}
+      nil
     else
-      respond_with(resource)
-    end
-  end
-    
-        def password_change(record, opts={})
-      devise_mail(record, :password_change, opts)
+      result
     end
   end
 end
-
     
-      before_action :authenticate_user!
-    
-          # Stores the provided location to redirect the user after signing in.
-      # Useful in combination with the `stored_location_for` helper.
-      #
-      # Example:
-      #
-      #   store_location_for(:user, dashboard_path)
-      #   redirect_to user_facebook_omniauth_authorize_path
-      #
-      def store_location_for(resource_or_scope, location)
-        session_key = stored_location_key_for(resource_or_scope)
-        
-        path = extract_path_from_location(location)
-        session[session_key] = path if path
+          # @see Base#\_store
+      def _store(key, version, sha, contents)
+        compiled_filename = path_to(key)
+        FileUtils.mkdir_p(File.dirname(compiled_filename))
+        Sass::Util.atomic_create_and_write_file(compiled_filename) do |f|
+          f.puts(version)
+          f.puts(sha)
+          f.write(contents)
+        end
+      rescue Errno::EACCES
+        # pass
       end
     
-        # Include the chosen devise modules in your model:
+        # Create a {Sass::Selector::CommaSequence} containing only a single
+    # {Sass::Selector::Sequence}.
     #
-    #   devise :database_authenticatable, :confirmable, :recoverable
-    #
-    # You can also give any of the devise configuration values in form of a hash,
-    # with specific values for this model. Please check your Devise initializer
-    # for a complete description on those values.
-    #
-    def devise(*modules)
-      options = modules.extract_options!.dup
-    
-        remove_duplicates
-    remove_index :share_visibilities, name: :shareable_and_user_id
-    add_index :share_visibilities, %i(shareable_id shareable_type user_id), name: :shareable_and_user_id, unique: true
-    
-    When /^I (?:sign|log) in manually as '([^']*)' with password '([^']*)'( on the mobile website)?$/ \
-do |username, password, mobile|
-  @me = User.find_by_username(username)
-  @me.password ||= password
-  manual_login
-  confirm_login mobile
-end
-    
-    When /^I toggle all nsfw posts$/ do
-  all('a.toggle_nsfw_state').each &:click
-end
-    
-      def confirm_on_page(page_name)
-    if page_name == 'my profile page'
-      expect(page).to have_path_in([person_path(@me.person), user_profile_path(@me.username)])
-    else
-      expect(page).to have_path(path_to(page_name))
-    end
-  end
-end
-    
-        it 'generates the contacts_json fixture', :fixture => true do
-      json = bob.contacts.map { |c|
-               ContactPresenter.new(c, bob).full_hash_with_person
-             }.to_json
-      save_fixture(json, 'contacts_json')
-    end
-  end
-end
-
-    
-        it 'paginates the notifications' do
-      25.times { FactoryGirl.create(:notification, :recipient => alice, :target => @post) }
-      get :index
-      expect(assigns[:notifications].count).to eq(25)
-      get :index, params: {page: 2}
-      expect(assigns[:notifications].count).to eq(1)
+    # @param sseqs [Array<Sass::Selector::Sequence, String>]
+    # @return [Sass::Selector::CommaSequence]
+    def make_seq(*sseqs)
+      make_cseq(Sass::Selector::Sequence.new(sseqs))
     end
     
-    require 'mimemagic'
-require 'mimemagic/overlay'
-require 'logger'
-require 'terrapin'
+        def install_plugin(plugin, load_hooks: true, load_immediately: false)
+      installer.install(plugin,
+                        load_hooks: load_hooks,
+                        load_immediately: load_immediately)
+    end
+    
+          private
+    
+          Sidekiq.redis do |conn|
+        conn.pipelined do
+          jobs_to_requeue.each do |queue, jobs|
+            conn.rpush('queue:#{queue}', jobs)
+          end
+        end
+      end
+      Sidekiq.logger.info('Pushed #{inprogress.size} jobs back to Redis')
+    rescue => ex
+      Sidekiq.logger.warn('Failed to requeue #{inprogress.size} jobs: #{ex.message}')
+    end
+    
+          def delete_for(jid, queue, klass)
+        jobs_by_queue[queue.to_s].delete_if { |job| job['jid'] == jid }
+        jobs_by_worker[klass].delete_if { |job| job['jid'] == jid }
+      end
