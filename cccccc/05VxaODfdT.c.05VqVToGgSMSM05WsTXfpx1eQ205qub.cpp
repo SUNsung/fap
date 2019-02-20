@@ -1,90 +1,51 @@
 
         
-        // Returns the incoming data size from the grpc call final info.
-uint64_t GetIncomingDataSize(const grpc_call_final_info* final_info);
+          Byte t1(bytes + 3);
+  uint32_t t = t0.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
     
-    // server hour
-const ViewDescriptor& ServerSentBytesPerRpcHour() {
-  const static ViewDescriptor descriptor =
-      HourDescriptor()
-          .set_name('grpc.io/server/sent_bytes_per_rpc/hour')
-          .set_measure(kRpcServerSentBytesPerRpcMeasureName)
-          .set_aggregation(BytesDistributionAggregation())
-          .add_column(ServerMethodTagKey());
-  return descriptor;
-}
+    using apollo::common::PathPoint;
+using State = std::array<double, 3>;
     
-    #endif  // GRPC_INTERNAL_CPP_DYNAMIC_THREAD_POOL_H
-
+      MatrixXd mat_golden(20, 10);
+  // clang-format off
+  mat_golden <<
+   -1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+    1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+    0, -1,  0,  0,  0,  0,  0,  0,  0,  0,
+    0,  1,  0,  0,  0,  0,  0,  0,  0,  0,
+    0,  0, -1,  0,  0,  0,  0,  0,  0,  0,
+    0,  0,  1,  0,  0,  0,  0,  0,  0,  0,
+    0,  0,  0, -1,  0,  0,  0,  0,  0,  0,
+    0,  0,  0,  1,  0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0, -1,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  1,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0, -1,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  1,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0, -1,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,  1,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,  0, -1,  0,  0,
+    0,  0,  0,  0,  0,  0,  0,  1,  0,  0,
+    0,  0,  0,  0,  0,  0,  0,  0, -1,  0,
+    0,  0,  0,  0,  0,  0,  0,  0,  1,  0,
+    0,  0,  0,  0,  0,  0,  0,  0,  0, -1,
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  1;
+  // clang-format on
+  EXPECT_EQ(mat, mat_golden);
     
-    DHTReplaceNodeTask::DHTReplaceNodeTask(const std::shared_ptr<DHTBucket>& bucket,
-                                       const std::shared_ptr<DHTNode>& newNode)
-    : bucket_(bucket),
-      newNode_(newNode),
-      numRetry_(0),
-      timeout_(DHT_MESSAGE_TIMEOUT)
-{
-}
-    
-      void showBuckets() const;
-    
-    #include 'common.h'
-    
-    void DHTTaskFactoryImpl::setMessageDispatcher(DHTMessageDispatcher* dispatcher)
-{
-  dispatcher_ = dispatcher;
-}
-    
-    void DHTTaskQueueImpl::executeTask()
-{
-  A2_LOG_DEBUG('Updating periodicTaskQueue1');
-  periodicTaskQueue1_.update();
-  A2_LOG_DEBUG('Updating periodicTaskQueue2');
-  periodicTaskQueue2_.update();
-  A2_LOG_DEBUG('Updating immediateTaskQueue');
-  immediateTaskQueue_.update();
-}
-    
-    #include <folly/Benchmark.h>
-#include <folly/FileUtil.h>
-#include <folly/init/Init.h>
-#include <folly/json.h>
-    
-    TEST(StaticTracepoint, TestSemaphoreLocal) {
-  manyArgTypesTestFunc();
-    }
-    
-      /**
-   * Returns a random uint64_t
-   */
-  static uint64_t rand64() {
-    return rand64(ThreadLocalPRNG());
+    Eigen::MatrixXd SplineSegKernel::ThirdOrderDerivativeKernel(
+    const uint32_t num_params, const double accumulated_x) {
+  if (num_params > reserved_order_ + 1) {
+    CalculateThirdOrderDerivative(num_params);
   }
+  Eigen::MatrixXd term_matrix;
+  IntegratedTermMatrix(num_params, accumulated_x, 'third_order', &term_matrix);
+  return (kernel_third_order_derivative_.block(0, 0, num_params, num_params))
+      .cwiseProduct(term_matrix);
+}
     
-    #pragma once
-    
-    // Some utility routines relating to unicode.
-    
-    /**
- * Helper functions for compression codecs.
- */
-namespace folly {
-namespace io {
-namespace compression {
-namespace detail {
-    }
-    }
-    }
-    }
-    
-    
-    {    return newptr;
-  }
-  void init() {
-    PackedPtr data;
-    data.init();
-    ptr_.store(data);
-  }
-    
-    namespace folly {
-    }
+      Byte t1(bytes + 3);
+  int32_t t = t1.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
