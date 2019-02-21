@@ -1,15 +1,41 @@
 
         
-                # Returns the instance variables as a hash of key-value pairs.
-        def instance_variables_hash
-          instance_variables.inject({}) do |acc, iv|
-            acc[iv.to_s[1..-1]] = instance_variable_get(iv)
-            acc
+                      Time.utc(
+                default[:year], default[:month], default[:day],
+                default[:hour], default[:min], default[:sec]
+              )
+            end
+          end
+      end
+    end
+  end
+end
+
+    
+            def formatted_code_for(source_code, line_counter, indent, output)
+          start_value = (output == :html) ? {} : []
+          source_code.inject(start_value) do |result, line|
+            line_counter += 1
+            if output == :html
+              result.update(line_counter.to_s => '%#{indent}s %s\n' % ['', line])
+            else
+              result << '%#{indent}s: %s' % [line_counter, line]
+            end
           end
         end
+    end
+  end
     
-              result
-        end
+          def initialize(string)
+        @string = string.to_s
+        @type = Types[:text]
+      end
+    
+      ruby_version_is '2.5' do
+    describe ':uplevel keyword argument' do
+      before :each do
+        $VERBOSE = true
+      end
     
       # Configure static asset server for tests with Cache-Control for performance.
   if config.respond_to?(:serve_static_files)
@@ -21,90 +47,41 @@
   end
   config.static_cache_control = 'public, max-age=3600'
     
-      class Notification < ApplicationRecord
-  end
-    
-      def confirm_on_page(page_name)
-    if page_name == 'my profile page'
-      expect(page).to have_path_in([person_path(@me.person), user_profile_path(@me.username)])
-    else
-      expect(page).to have_path(path_to(page_name))
-    end
-  end
-end
-    
-      describe '#create' do
-    let(:like_hash) {
-      {post_id: @target.id}
-    }
-    
-          it 'should remove participation' do
-        delete :destroy, params: {post_id: post.id}
-        expect(alice.participations.where(:target_id => post.id)).not_to exist
-        expect(response.code).to eq('200')
-      end
-    end
-    
-          locations = Array.new
-      while (data.code.to_i == 301 || data.code.to_i == 302)
-        data = handle_gist_redirecting(data)
-        break if locations.include? data.header['Location']
-        locations << data.header['Location']
-      end
-    
-      class RenderPartialTag < Liquid::Tag
-    include OctopressFilters
-    def initialize(tag_name, markup, tokens)
-      @file = nil
-      @raw = false
-      if markup =~ /^(\S+)\s?(\w+)?/
-        @file = $1.strip
-        @raw = $2 == 'raw'
-      end
-      super
-    end
-    
-        def render(context)
-      output = super
-      types = {
-        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
-        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
-        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
-      }
-      if @videos.size > 0
-        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
-        @videos.each do |v|
-          video << '<source src='#{v}' #{types[File.extname(v)]}>'
+          # @see Base#\_store
+      def _store(key, version, sha, contents)
+        compiled_filename = path_to(key)
+        FileUtils.mkdir_p(File.dirname(compiled_filename))
+        Sass::Util.atomic_create_and_write_file(compiled_filename) do |f|
+          f.puts(version)
+          f.puts(sha)
+          f.write(contents)
         end
-        video += '</video>'
-      else
-        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
+      rescue Errno::EACCES
+        # pass
       end
-    end
     
-        module PsychAutoload
-      def resolve_class(klass_name)
-        return nil if !klass_name || klass_name.empty?
-        # constantize
-        names = klass_name.split('::')
-        names.shift if names.empty? || names.first.empty?
+          if !@options[:update] && !@options[:watch] &&
+          @args.first && colon_path?(@args.first)
+        if @args.size == 1
+          @args = split_colon_path(@args.first)
+        else
+          @fake_update = true
+          @options[:update] = true
+        end
+      end
+      load_compass if @options[:compass]
+      return interactive if @options[:interactive]
+      return watch_or_update if @options[:watch] || @options[:update]
+      super
     
-    module Sidekiq
-  module Extensions
-    ##
-    # Adds 'delay', 'delay_for' and `delay_until` methods to ActionMailer to offload arbitrary email
-    # delivery to Sidekiq.  Example:
-    #
-    #    UserMailer.delay.send_welcome_email(new_user)
-    #    UserMailer.delay_for(5.days).send_welcome_email(new_user)
-    #    UserMailer.delay_until(5.days.from_now).send_welcome_email(new_user)
-    class DelayedMailer
-      include Sidekiq::Worker
+          # rubocop:disable Security/MarshalLoad
+      def add_role(role, hosts, options={})
+        options_deepcopy = Marshal.dump(options.merge(roles: role))
+        Array(hosts).each { |host| add_host(host, Marshal.load(options_deepcopy)) }
+      end
+      # rubocop:enable Security/MarshalLoad
     
-        def self.with_context(msg)
-      Thread.current[:sidekiq_context] ||= []
-      Thread.current[:sidekiq_context] << msg
-      yield
-    ensure
-      Thread.current[:sidekiq_context].pop
-    end
+          def initialize(variables)
+        super(variables)
+        @validators = {}
+      end
