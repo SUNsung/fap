@@ -1,66 +1,64 @@
 
         
-                  def render_component(builder)
-            builder.radio_button + builder.label
-          end
+            Category.transaction do
+      staff.group_names = ['staff']
+      unless staff.save
+        puts staff.errors.full_messages
+        raise 'Failed to set permissions on the Staff category!'
       end
+    
+    # Include LoggerSilence from ActiveSupport. This is needed to silent assets
+# requests with `config.assets.quiet`, because the default silence method of
+# the logging gem is no-op. See: https://github.com/TwP/logging/issues/11
+Logging::Logger.send :alias_method, :local_level, :level
+Logging::Logger.send :alias_method, :local_level=, :level=
+Logging::Logger.send :include, LoggerSilence
+
+    
+        remove_duplicates
+    remove_index :share_visibilities, name: :shareable_and_user_id
+    add_index :share_visibilities, %i(shareable_id shareable_type user_id), name: :shareable_and_user_id, unique: true
+    
+      class Notification < ApplicationRecord
+  end
+    
+    When /^I toggle all nsfw posts$/ do
+  all('a.toggle_nsfw_state').each &:click
+end
+    
+        it 'generates the contacts_json fixture', :fixture => true do
+      json = bob.contacts.map { |c|
+               ContactPresenter.new(c, bob).full_hash_with_person
+             }.to_json
+      save_fixture(json, 'contacts_json')
     end
   end
 end
 
     
-          # Returns an array of all the when branches in the `case` statement.
-      #
-      # @return [Array<WhenNode>] an array of `when` nodes
-      def when_branches
-        node_parts[1...-1]
-      end
+    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
     
-          # The receiver of the method definition, if any.
-      #
-      # @return [Node, nil] the receiver of the method definition, or `nil`.
-      def receiver
-        node_parts[3]
-      end
-    
-          # Checks whether the `for` node has a `do` keyword.
-      #
-      # @return [Boolean] whether the `for` node has a `do` keyword
-      def do?
-        loc.begin && loc.begin.is?('do')
-      end
-    
-          # Checks whether the `if` node has at least one `elsif` branch. Returns
-      # true if this `if` node itself is an `elsif`.
-      #
-      # @return [Boolean] whether the `if` node has at least one `elsif` branch
-      def elsif_conditional?
-        else_branch && else_branch.if_type? && else_branch.elsif?
-      end
-    
-          # Custom destructuring method. This is used to normalize the branches
-      # for `pair` and `kwsplat` nodes, to add duck typing to `hash` elements.
-      #
-      # @return [Array<KeywordSplatNode>] the different parts of the `kwsplat`
-      def node_parts
-        [self, self]
-      end
-    end
+    Given(/^servers with the roles app and web$/) do
+  begin
+    vagrant_cli_command('up')
+  rescue
+    nil
   end
 end
-
     
-          # Returns the delta between this element's delimiter and the argument's.
-      #
-      # @note Pairs with different delimiter styles return a delta of 0
-      #
-      # @return [Integer] the delta between the two delimiters
-      def delimiter_delta(other)
-        HashElementDelta.new(self, other).delimiter_delta
+        def add_filter(filter=nil, &block)
+      if block
+        raise ArgumentError, 'Both a block and an object were given' if filter
+    
+    # Exit cleanly from an early interrupt
+Signal.trap('INT') { exit 1 }
+    
+        context 'update a specific plugin' do
+      it 'has executed successfully' do
+        cmd = logstash.run_command_in_path('bin/logstash-plugin update --no-verify #{plugin_name}')
+        expect(cmd.stdout).to match(/Updating #{plugin_name}/)
+        expect(logstash).not_to have_installed?(plugin_name, previous_version)
       end
-    
-    
-  # Jekyll hook - the generate method is called by jekyll, and generates all of the category pages.
-  class GenerateCategories < Generator
-    safe true
-    priority :low
+    end
