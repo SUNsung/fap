@@ -1,128 +1,106 @@
 
         
-              if staff.topic_id.nil?
-        creator = PostCreator.new(Discourse.system_user,
-          raw: I18n.t('staff_category_description'),
-          title: I18n.t('category.topic_prefix', category: staff.name),
-          category: staff.name,
-          archetype: Archetype.default
-        )
-        post = creator.create
-    
-    module Vagrant
-  # This class handles guest-OS specific interactions with a machine.
-  # It is primarily responsible for detecting the proper guest OS
-  # implementation and then delegating capabilities.
-  #
-  # Vagrant has many tasks which require specific guest OS knowledge.
-  # These are implemented using a guest/capability system. Various plugins
-  # register as 'guests' which determine the underlying OS of the system.
-  # Then, 'guest capabilities' register themselves for a specific OS (one
-  # or more), and these capabilities are called.
-  #
-  # Example capabilities might be 'mount_virtualbox_shared_folder' or
-  # 'configure_networks'.
-  #
-  # This system allows for maximum flexibility and pluginability for doing
-  # guest OS specific operations.
-  class Guest
-    include CapabilityHost
-    
-            include Vagrant::Util
-    
-            # This is the method called to provision the system. This method
-        # is expected to do whatever necessary to provision the system (create files,
-        # SSH, etc.)
-        def provision!
-        end
-    
-            # Returns the instance variables as a hash of key-value pairs.
-        def instance_variables_hash
-          instance_variables.inject({}) do |acc, iv|
-            acc[iv.to_s[1..-1]] = instance_variable_get(iv)
-            acc
-          end
-        end
-    
-            # Set the name of the plugin. The moment that this is called, the
-        # plugin will be registered and available. Before this is called, a
-        # plugin does not exist. The name must be unique among all installed
-        # plugins.
-        #
-        # @param [String] name Name of the plugin.
-        # @return [String] The name of the plugin.
-        def self.name(name=UNSET_VALUE)
-          # Get or set the value first, so we have a name for logging when
-          # we register.
-          result = get_or_set(:name, name)
-    
-        # Return the number of elements in this registry.
-    #
-    # @return [Integer]
-    def length
-      @items.keys.length
-    end
-    alias_method :size, :length
-    
-        describe 'X' do
-      it 'converts argument as a hexadecimal number with uppercase letters' do
-        format('%X', 196).should == 'C4'
+                expect(path).to have_valid_bash_syntax
       end
-    
-    describe 'Kernel.system' do
-  it_behaves_like :kernel_system, :system, Kernel
+    end
+  end
 end
 
     
-        # Flattens a single rule.
-    #
-    # @param rule [Tree::RuleNode] The candidate for flattening
-    # @see #flatten_rules
-    def flatten_rule(rule)
-      while rule.children.size == 1 && rule.children.first.is_a?(Tree::RuleNode)
-        child = rule.children.first
+      describe '#merge' do
+    it 'returns itself' do
+      expect(env.merge([])).to be env
+    end
+  end
     
-        # Set an option for specifying `Encoding.default_external`.
-    #
-    # @param opts [OptionParser]
-    def encoding_option(opts)
-      encoding_desc = 'Specify the default encoding for input files.'
-      opts.on('-E', '--default-encoding ENCODING', encoding_desc) do |encoding|
-        Encoding.default_external = encoding
+      desc 'Check code against RuboCop rules'
+  task :rubocop do
+    sh 'bundle exec rubocop lib spec Rakefile'
+  end
+    
+    abstract_target 'Abstract Target' do
+    use_modular_headers!
+    
+          def self.options
+        options = []
+        options.concat(super.reject { |option, _| option == '--silent' })
+      end
+    
+    Then(/^the invalid (.+) release is ignored$/) do |filename|
+  test = 'ls -g #{TestApp.releases_path} | grep #{filename}'
+  _, _, status = vagrant_cli_command('ssh -c #{test.shellescape}')
+  expect(status).to be_success
+end
+    
+    World(RemoteCommandHelpers)
+
+    
+          def fetch_for(key, default, &block)
+        block ? values.fetch(key, &block) : values.fetch(key, default)
+      end
+    
+    ::Bundler.with_friendly_errors do
+  ::Bundler::CLI.start(ARGV, :debug => true)
+end
+
+    
+        puts('Packaging plugins for offline usage')
+    
+    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
+  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.windows?
+  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.windows?
+    
+      describe 'on #{logstash.hostname}' do
+    context 'with a direct internet connection' do
+      context 'when the plugin exist' do
+        context 'from a local `.GEM` file' do
+          let(:gem_name) { 'logstash-filter-qatest-0.1.1.gem' }
+          let(:gem_path_on_vagrant) { '/tmp/#{gem_name}' }
+          before(:each) do
+            logstash.download('https://rubygems.org/gems/#{gem_name}', gem_path_on_vagrant)
+          end
+    
+          expect(new_source)
+        .to eq(construct(false, a, make_multi(safe_heredoc), false))
+    end
+  end
+    
+          # Custom destructuring method. This can be used to normalize
+      # destructuring for different variations of the node.
+      #
+      # In this case, the `def` node destructures into:
+      #
+      #   `method_name, arguments, body`
+      #
+      # while the `defs` node destructures into:
+      #
+      #   `receiver, method_name, arguments, body`
+      #
+      # so we reverse the destructured array to get the optional receiver
+      # at the end, where it can be discarded.
+      #
+      # @return [Array] the different parts of the `def` or `defs` node
+      def node_parts
+        to_a.reverse
       end
     end
+  end
+end
+
     
-          @options[:for_engine][:syntax] ||= :scss if input.is_a?(File) && input.path =~ /\.scss$/
-      @options[:for_engine][:syntax] ||= @default_syntax
-      engine =
-        if input.is_a?(File) && !@options[:check_syntax]
-          Sass::Engine.for_file(input.path, @options[:for_engine])
-        else
-          # We don't need to do any special handling of @options[:check_syntax] here,
-          # because the Sass syntax checking happens alongside evaluation
-          # and evaluation doesn't actually evaluate any code anyway.
-          Sass::Engine.new(input.read, @options[:for_engine])
-        end
-    
-          # Returns the time the given Sass file was last modified.
+          # A shorthand for getting the last argument of the node.
+      # Equivalent to `arguments.last`.
       #
-      # If the given file has been deleted or the time can't be accessed
-      # for some other reason, this should return nil.
-      #
-      # @param uri [String] The URI of the file to check.
-      #   Comes from a `:filename` option set on an engine returned by this importer.
-      # @param options [{Symbol => Object}] Options for the Sass file
-      #   containing the `@import` currently being checked.
-      # @return [Time, nil]
-      def mtime(uri, options)
-        Sass::Util.abstract(self)
+      # @return [Node, nil] the last argument of the node,
+      #                     or `nil` if there are no arguments
+      def last_argument
+        arguments[-1]
       end
     
-          # @see Base#find_relative
-      def find_relative(name, base, options)
-        _find(File.dirname(base), name, options)
-      end
-    
-        def set_if_empty(key, value=nil, &block)
-      set(key, value, &block) unless keys.include?(key)
-    end
+          # Calls the given block for each condition node in the `when` branch.
+      # If no block is given, an `Enumerator` is returned.
+      #
+      # @return [self] if a block is given
+      # @return [Enumerator] if no block is given
+      def each_condition
+        return conditions.to_enum(__method__) unless block_given?
