@@ -1,360 +1,371 @@
 
         
         
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
+    {  return cli->Run(5, argv) == 0;
 }
     
-    #ifndef CONTENT_NW_SRC_API_BASE_BASE_H_
-#define CONTENT_NW_SRC_API_BASE_BASE_H_
+    #if LANG_CXX11
+#include <type_traits>
+#endif
     
-    void MenuItem::SetIcon(const std::string& icon) {
-  if (icon.empty()) {
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_), NULL); 
-  } else {
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_),
-                                  gtk_image_new_from_file(icon.c_str()));
-    gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(menu_item_),
-                                              TRUE);
-  }
-}
+    #include <sstream>
+    
+      // For extensions to chain together, the Root gets created even if there
+  // are no extensions.
+  printer->Print(
+      '#pragma mark - $root_class_name$\n'
+      '\n'
+      '/**\n'
+      ' * Exposes the extension registry for this file.\n'
+      ' *\n'
+      ' * The base class provides:\n'
+      ' * @code\n'
+      ' *   + (GPBExtensionRegistry *)extensionRegistry;\n'
+      ' * @endcode\n'
+      ' * which is a @c GPBExtensionRegistry that includes all the extensions defined by\n'
+      ' * this file and all files that it depends on.\n'
+      ' **/\n'
+      '@interface $root_class_name$ : GPBRootObject\n'
+      '@end\n'
+      '\n',
+      'root_class_name', root_class_name_);
+    
+    OneofGenerator::OneofGenerator(const OneofDescriptor* descriptor)
+    : descriptor_(descriptor) {
+  variables_['enum_name'] = OneofEnumName(descriptor_);
+  variables_['name'] = OneofName(descriptor_);
+  variables_['capitalized_name'] = OneofNameCapitalized(descriptor_);
+  variables_['raw_index'] = SimpleItoa(descriptor_->index());
+  const Descriptor* msg_descriptor = descriptor_->containing_type();
+  variables_['owning_message_class'] = ClassName(msg_descriptor);
+    }
+    
+      string error_msg;
+  CodeGeneratorResponse response;
+    
+      // write central directory
+  io::CodedOutputStream output(raw_output_);
+  for (int i = 0; i < num_entries; ++i) {
+    const string &filename = files_[i].name;
+    uint16 filename_size = filename.size();
+    uint32 crc32 = files_[i].crc32;
+    uint32 size = files_[i].size;
+    uint32 offset = files_[i].offset;
+    }
+    
+      } else if (started_with_zero && LookingAt<Digit>()) {
+    // An octal number (had a leading zero).
+    ConsumeZeroOrMore<OctalDigit>();
+    if (LookingAt<Digit>()) {
+      AddError('Numbers starting with leading zero must be in octal.');
+      ConsumeZeroOrMore<Digit>();
+    }
     
     
-    {} // namespace
     
-     protected:
-  ~NwClipboardReadAvailableTypesFunction() override;
+        void convert(const Size2D &_size,
+                 const u8 * srcBase, ptrdiff_t srcStride,
+                 f32 * dstBase, ptrdiff_t dstStride);
     
-    
-    {  nw::ObjectManager* manager = nw::ObjectManager::Get(browser_context());
-  manager->OnCallObjectMethod(render_frame_host(), id, type, method, *arguments);
-  return RespondNow(NoArguments());
-}
-    
-    #endif
-    
-    void Canny3x3L2(const Size2D &size,
-                const u8 * srcBase, ptrdiff_t srcStride,
-                u8 * dstBase, ptrdiff_t dstStride,
-                f64 low_thresh, f64 high_thresh,
-                Margin borderMargin)
+    void add(const Size2D &size,
+         const s32 * src0Base, ptrdiff_t src0Stride,
+         const s32 * src1Base, ptrdiff_t src1Stride,
+         s32 *dstBase, ptrdiff_t dstStride,
+         CONVERT_POLICY policy)
 {
-    internal::assertSupportedConfiguration(isCanny3x3Supported(size));
+    internal::assertSupportedConfiguration();
 #ifdef CAROTENE_NEON
-    Canny3x3<true, false>(size, 1,
-                          srcBase, srcStride,
-                          dstBase, dstStride,
-                          NULL, 0,
-                          NULL, 0,
-                          low_thresh, high_thresh,
-                          borderMargin);
+        if (policy == CONVERT_POLICY_SATURATE)
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddSaturate<s32, s64>());
+    }
+    else
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddWrap<s32, s64>());
+    }
 #else
     (void)size;
-    (void)srcBase;
-    (void)srcStride;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
     (void)dstBase;
     (void)dstStride;
-    (void)low_thresh;
-    (void)high_thresh;
-    (void)borderMargin;
+    (void)policy;
 #endif
 }
     
     
-    {            v_src = vld2q_u8(src + sj + 32);
-            vst1q_u8(dst + dj + 16, v_src.val[coi]);
-        }
-#endif
+    {} // namespace CAROTENE_NS
+
     
-        if (src0Stride == src1Stride && src0Stride == dstStride &&
-        src0Stride == (ptrdiff_t)(size.width * sizeof(type)))
+        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0, const typename internal::VecTraits<T>::vec64 & v_src1,
+              typename internal::VecTraits<T>::unsign::vec64 & v_dst) const
+    {
+        v_dst = internal::vcge(v_src0, v_src1);
+    }
+    
+    void rshift(const Size2D &size,
+            const s16 * srcBase, ptrdiff_t srcStride,
+            u8 * dstBase, ptrdiff_t dstStride,
+            u32 shift, CONVERT_POLICY cpolicy)
+{
+    internal::assertSupportedConfiguration();
+    }
+    
+                    v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t0_16s), kernelBase[2]);
+                v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t1_16s), kernelBase[1]);
+                v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t2_16s), kernelBase[0]);
+    
+    f64 dotProduct(const Size2D &_size,
+               const f32 * src0Base, ptrdiff_t src0Stride,
+               const f32 * src1Base, ptrdiff_t src1Stride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    Size2D size(_size);
+    if (src0Stride == src1Stride &&
+        src0Stride == (ptrdiff_t)(size.width * sizeof(f32)))
     {
         size.width *= size.height;
         size.height = 1;
     }
-    
-    ptrdiff_t borderInterpolate(ptrdiff_t _p, size_t _len, BORDER_MODE borderType, size_t startMargin = 0, size_t endMargin = 0);
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVT_FUNC(u16, s16, 8,
-     register uint16x8_t v32767 asm ('q4') = vmovq_n_u16(0x7FFF);,
-{
-     for (size_t i = 0; i < w; i += 8)
-     {
-         internal::prefetch(_src + i);
-         __asm__ (
-             'vld1.16 {d0-d1}, [%[src]]                              \n\t'
-             'vmin.u16 q1, q0, q4                                    \n\t'
-             'vst1.16 {d2-d3}, [%[dst]]                              \n\t'
-             : /*no output*/
-             : [src] 'r' (_src + i),
-               [dst] 'r' (_dst + i + 0),
-               'w' (v32767)
-             : 'd0','d1','d2','d3'
-         );
-     }
-})
-#else
-CVT_FUNC(u16, s16, 8,
-     uint16x8_t v32767 = vmovq_n_u16(0x7FFF);,
-{
-     for (size_t i = 0; i < w; i += 8)
-     {
-         internal::prefetch(_src + i);
-         uint16x8_t vline_u16 = vld1q_u16(_src + i);
-         vline_u16 = vminq_u16(vline_u16, v32767);
-         vst1q_s16((_dst + i), vreinterpretq_s16_u16(vline_u16));
-     }
-})
-#endif
-    
-            result += (s[0] += s[1]);
-        if (s[0] < 0 || result < 0)//case of overflow ~ 8GB of non-zeros...
-        {
-            return 0x7fFFffFF;
-        }
-    
-                    uint8x16_t v0 = vld1q_u8(ptr);
-                int8x16_t v1 = vreinterpretq_s8_u8(veorq_u8(vqsubq_u8(v0, t), delta));
-                int8x16_t v2 = vreinterpretq_s8_u8(veorq_u8(vqaddq_u8(v0, t), delta));
-    
-        minLocCapacity <<= 1;
-    maxLocCapacity <<= 1;
-    
-                    uint8x8x4_t vRes;
-                vRes.val[0] = vrshrn_n_u16(vSum_0_4, 8);
-                vRes.val[1] = vrshrn_n_u16(vSum_1_5, 8);
-                vRes.val[2] = vrshrn_n_u16(vSum_2_6, 8);
-                vRes.val[3] = vrshrn_n_u16(vSum_3_7, 8);
-    
-    #if defined(__linux)
-static Slice TrimSpace(Slice s) {
-  size_t start = 0;
-  while (start < s.size() && isspace(s[start])) {
-    start++;
-  }
-  size_t limit = s.size();
-  while (limit > start && isspace(s[limit-1])) {
-    limit--;
-  }
-  return Slice(s.data() + start, limit - start);
-}
-#endif
-    
-    std::string InternalKey::DebugString() const {
-  std::string result;
-  ParsedInternalKey parsed;
-  if (ParseInternalKey(rep_, &parsed)) {
-    result = parsed.DebugString();
-  } else {
-    result = '(bad)';
-    result.append(EscapeString(rep_));
-  }
-  return result;
-}
-    
-    // Return a skewed potentially long string
-static std::string RandomSkewedString(int i, Random* rnd) {
-  return BigString(NumberString(i), rnd->Skewed(17));
-}
-    
-      Status Run() {
-    Status status = FindFiles();
-    if (status.ok()) {
-      ConvertLogFilesToTables();
-      ExtractMetaData();
-      status = WriteDescriptor();
     }
-    if (status.ok()) {
-      unsigned long long bytes = 0;
-      for (size_t i = 0; i < tables_.size(); i++) {
-        bytes += tables_[i].meta.file_size;
+    
+    template <typename T>
+void flip3(const Size2D & size,
+           const void * srcBase, ptrdiff_t srcStride,
+           void * dstBase, ptrdiff_t dstStride,
+           FLIP_MODE flipMode)
+{
+    using namespace internal;
+    }
+    
+    namespace {
+    }
+    
+      oprot->writeMessageBegin('ping', ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+    
+      _ExtensionManager_getQueryColumns_result__isset __isset;
+    
+    inline void meta_tables(int nArg, char** azArg) {
+  auto tables = osquery::RegistryFactory::get().names('table');
+  std::sort(tables.begin(), tables.end());
+  for (const auto& table_name : tables) {
+    if (nArg == 1 || table_name.find(azArg[1]) == 0) {
+      printf('  => %s\n', table_name.c_str());
+    }
+  }
+}
+    
+          resp = smartctl.getDevInfo(devname, full_type);
+      if (resp.err != NOERR) {
+        LOG(WARNING) << 'There was an error retrieving drive information with '
+                        'hardware driver: '
+                     << libsmartctl::errStr(resp.err);
+        return;
       }
-      Log(options_.info_log,
-          '**** Repaired leveldb %s; '
-          'recovered %d files; %llu bytes. '
-          'Some data may have been lost. '
-          '****',
-          dbname_.c_str(),
-          static_cast<int>(tables_.size()),
-          bytes);
-    }
-    return status;
-  }
-    
-    #include 'db/skiplist.h'
-#include <set>
-#include 'leveldb/env.h'
-#include 'port/port.h'
-#include 'port/thread_annotations.h'
-#include 'util/arena.h'
-#include 'util/hash.h'
-#include 'util/random.h'
-#include 'util/testharness.h'
-    
-      // Removes a SnapshotImpl from this list.
-  //
-  // The snapshot must have been created by calling New() on this list.
-  //
-  // The snapshot pointer should not be const, because its memory is
-  // deallocated. However, that would force us to change DB::ReleaseSnapshot(),
-  // which is in the API, and currently takes a const Snapshot.
-  void Delete(const SnapshotImpl* snapshot) {
-#if !defined(NDEBUG)
-    assert(snapshot->list_ == this);
-#endif  // !defined(NDEBUG)
-    snapshot->prev_->next_ = snapshot->next_;
-    snapshot->next_->prev_ = snapshot->prev_;
-    delete snapshot;
-  }
+      // Only consider found if no error was returned.
+      found = true;
     
     
-    {        // L2 regularizer
-        if (m_additionalOptions.l2RegularizationWeight > 0)
-        {
-            // multiply by actualMBSize so that it's invariant to minibatch size since learning rate is per sample
-            const auto weight = m_additionalOptions.l2RegularizationWeight * (IsCompatibleMode() ? 1 : actualMBSize);
-            const auto& parameterMatrix = parameterValue->GetWritableMatrix<ElementType>();
-            Matrix<ElementType>::ScaleAndAdd(ElementType(weight), *parameterMatrix, *gradientMatrix);
-        }
-    }
-    
-            const std::unordered_map<StreamInformation, MinibatchData>& GetNextMinibatch(
-            size_t minibatchSizeInSamples,
-            size_t minibatchSizeInSequences,
-            size_t numberOfWorkers,
-            size_t workerRank,
-            const DeviceDescriptor& device = DeviceDescriptor::UseDefaultDevice()) override;
-    
-    #pragma once
-    
-        template <typename ValueType, typename DestType>
-    void Value::CopyVariableValueToImpl(const Variable& outputVariable, std::vector<std::vector<DestType>>& sequences)
     {
-        // PackedValue should be automatically unpacked when accessing Data() and Mask().
-        NDShape inferredVarShape;
-        size_t numOfSequences;
-        size_t maxSequenceLen;
-        // Verify compatibility of 'this' value and outputVariable, get sequence and batch length, and get the inferred shape if the variable has a free dimension.
-        std::tie(maxSequenceLen, numOfSequences) = GetSequenceAndBatchLength(outputVariable, &inferredVarShape);
-    }
-    
-        NDArrayViewPtr Variable::Value() const
-    {
-        if (!IsConstant() && !IsParameter())
-            LogicError('Variable '%S' Value(): Only Variables of kind Parameter and Constant have a Value.', AsString().c_str());
-    }
-    
-    
-    {            if ((m_varKind == VariableKind::Parameter) || (m_varKind == VariableKind::Constant))
-            {
-                if (m_shape.HasFreeDimension())
-                    InvalidArgument('Parameter/Constant '%S' has invalid shape '%S'; it is illegal for a Parameter/Constant to have a FreeDimension.', AsString().c_str(), m_shape.AsString().c_str());
-            }
-        }
-    
-    namespace Microsoft { namespace MSR { namespace CNTK {
-    }
-    }
-    }
-    
-        virtual void UpdateFunctionMBSize() override
-    {
-        UpdateCounts();
-    }
-    
-        virtual void /*ComputationNodeBase::*/ Validate(bool isFinalValidationPass) override
-    {
-        ReadOutVariable(); // read out the value once, with the purpose of validating the variableName
-        Base::Validate(isFinalValidationPass);
-        // this node does not hold mini-batch data
-        m_pMBLayout = nullptr;
-        // for now, anything this node returns is a scalar
-        SetDims(TensorShape(1), false);
-    }
-    
-    namespace osquery {
-    }
-    
-    TEST_F(DecoratorsConfigParserPluginTests, test_decorators_run_load_top_level) {
-  // Re-enable the decorators, then update the config.
-  // The 'load' decorator set should run every time the config is updated.
-  FLAGS_disable_decorators = false;
-  // enable top level decorations for the test
-  FLAGS_decorations_top_level = true;
-  Config::get().update(config_data_);
-    }
-    
-    
-    {  c.reset();
-}
-    
-      Config c;
-  c.addPack('*', '', multi_pack.doc());
-    
-    
-    {void alarm(int /* noop */) {
-  /* This function is a noop. */
-}
+    {} // namespace perf_event_open
 } // namespace osquery
 
     
-    TEST_F(INotifyTests, test_inotify_embedded_wildcards) {
-  // Assume event type is not registered.
-  event_pub_ = std::make_shared<INotifyEventPublisher>(true);
-  EventFactory::registerEventPublisher(event_pub_);
-    }
+    public:
+    int capacity;
+    std::list<std::pair<std::string, jobject>> cacheList;
+    std::unordered_map<std::string, std::list<std::pair<std::string, jobject>>::iterator> posMap;
+    jstring GetString(JNIEnv *env, std::string key);
+    void clearRefCache(JNIEnv *env);
     
-    class ExampleTable : public TablePlugin {
- private:
-  TableColumns columns() const {
-    return {
-        std::make_tuple('example_text', TEXT_TYPE, ColumnOptions::DEFAULT),
-        std::make_tuple(
-            'example_integer', INTEGER_TYPE, ColumnOptions::DEFAULT),
-    };
+    
+    {    RenderObject *Wson2RenderObject(const char *data, const std::string &pageId);
+    std::vector<std::pair<std::string, std::string>> *Wson2Pairs(const char *data);
+}
+    
+      static Garbo garbo;
+    
+    
+    {  return chars;
+}
+    
+      Node* EmitFastNewStrictArguments(Node* context, Node* function);
+  Node* EmitFastNewSloppyArguments(Node* context, Node* function);
+  Node* EmitFastNewRestParameter(Node* context, Node* function);
+    
+    
+    {  Node* EmitFastNewObject(Node* context, Node* target, Node* new_target,
+                          Label* call_runtime);
+};
+    
+    void Builtins::Generate_InterpreterPushArgsThenConstructWithFinalSpread(
+    MacroAssembler* masm) {
+  return Generate_InterpreterPushArgsThenConstructImpl(
+      masm, InterpreterPushArgsMode::kWithFinalSpread);
+}
+    
+    class TestBuiltinsAssembler : public BaseBuiltinsFromDSLAssembler {
+ public:
+  explicit TestBuiltinsAssembler(compiler::CodeAssemblerState* state)
+      : BaseBuiltinsFromDSLAssembler(state) {}
+};
+    
+      grpc::ServerBuilder builder;
+  builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
+  builder.RegisterService(&service);
+  std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
+  std::cerr << 'Server listening on ' << server_address << std::endl;
+    
+      // to ensure it is correct, we now generate text back from the binary,
+  // and compare the two:
+  std::string jsongen;
+  if (!GenerateText(parser, parser.builder_.GetBufferPointer(), &jsongen)) {
+    printf('Couldn't serialize parsed data to JSON!\n');
+    return 1;
   }
-    }
     
-    namespace benchmark {
-namespace internal {
-// The arraysize(arr) macro returns the # of elements in an array arr.
-// The expression is a compile-time constant, and therefore can be
-// used in defining new arrays, for example.  If you use arraysize on
-// a pointer by mistake, you will get a compile-time error.
-//
-    }
-    }
+      grpc::string GetLeadingComments(const grpc::string) const { return ''; }
     
-            if (family->use_manual_time_) {
-          instance.name += '/manual_time';
-        } else if (family->use_real_time_) {
-          instance.name += '/real_time';
+      for (size_t size = struct_def.sortbysize ? sizeof(largest_scalar_t) : 1; size;
+       size /= 2) {
+    // Go through elements in reverse, since we're building the data backwards.
+    for (auto it = field_stack_.rbegin();
+         it != field_stack_.rbegin() + fieldn_outer; ++it) {
+      auto &field_value = it->first;
+      auto field = it->second;
+      if (!struct_def.sortbysize ||
+          size == SizeOf(field_value.type.base_type)) {
+        switch (field_value.type.base_type) {
+          // clang-format off
+          #define FLATBUFFERS_TD(ENUM, IDLTYPE, \
+            CTYPE, JTYPE, GTYPE, NTYPE, PTYPE, RTYPE) \
+            case BASE_TYPE_ ## ENUM: \
+              builder_.Pad(field->padding); \
+              if (struct_def.fixed) { \
+                CTYPE val; \
+                ECHECK(atot(field_value.constant.c_str(), *this, &val)); \
+                builder_.PushElement(val); \
+              } else { \
+                CTYPE val, valdef; \
+                ECHECK(atot(field_value.constant.c_str(), *this, &val)); \
+                ECHECK(atot(field->value.constant.c_str(), *this, &valdef)); \
+                builder_.AddElement(field_value.offset, val, valdef); \
+              } \
+              break;
+            FLATBUFFERS_GEN_TYPES_SCALAR(FLATBUFFERS_TD);
+          #undef FLATBUFFERS_TD
+          #define FLATBUFFERS_TD(ENUM, IDLTYPE, \
+            CTYPE, JTYPE, GTYPE, NTYPE, PTYPE, RTYPE) \
+            case BASE_TYPE_ ## ENUM: \
+              builder_.Pad(field->padding); \
+              if (IsStruct(field->value.type)) { \
+                SerializeStruct(*field->value.type.struct_def, field_value); \
+              } else { \
+                CTYPE val; \
+                ECHECK(atot(field_value.constant.c_str(), *this, &val)); \
+                builder_.AddOffset(field_value.offset, val); \
+              } \
+              break;
+            FLATBUFFERS_GEN_TYPES_POINTER(FLATBUFFERS_TD);
+          #undef FLATBUFFERS_TD
+          // clang-format on
         }
-    
-      if (result.report_big_o) {
-    std::string big_o = GetBigOString(result.complexity);
-    printer(Out, COLOR_YELLOW, '%10.2f %s %10.2f %s ', real_time, big_o.c_str(),
-            cpu_time, big_o.c_str());
-  } else if (result.report_rms) {
-    printer(Out, COLOR_YELLOW, '%10.0f %% %10.0f %% ', real_time * 100,
-            cpu_time * 100);
-  } else {
-    const char* timeLabel = GetTimeUnitString(result.time_unit);
-    printer(Out, COLOR_YELLOW, '%10.0f %s %10.0f %s ', real_time, timeLabel,
-            cpu_time, timeLabel);
+      }
+    }
   }
+  for (size_t i = 0; i < fieldn_outer; i++) field_stack_.pop_back();
     
-    #include 'benchmark/benchmark.h'
-#include 'internal_macros.h'
+    // Get a field's default, if you know it's an integer, and its exact type.
+template<typename T> T GetFieldDefaultI(const reflection::Field &field) {
+  FLATBUFFERS_ASSERT(sizeof(T) == GetTypeSize(field.type()->base_type()));
+  return static_cast<T>(field.default_integer());
+}
     
-    template <class Tp>
-LogType& operator<<(LogType& log, Tp const& value) {
-  if (log.out_) {
-    *log.out_ << value;
-  }
-  return log;
+    inline const char *EnumNameEnumInNestedNS(EnumInNestedNS e) {
+  if (e < EnumInNestedNS_A || e > EnumInNestedNS_C) return '';
+  const size_t index = static_cast<int>(e);
+  return EnumNamesEnumInNestedNS()[index];
+}
+    
+    
+void printMatrix(vector<vector<int> > &matrix)
+{
+    for(int i=0; i<matrix.size(); i++){
+        printf('{');
+        for(int j=0; j< matrix[i].size(); j++) {
+            printf('%3d ', matrix[i][j]) ;
+        }
+        printf('}\n');
+    }
+    cout << endl;
+}
+    
+    #include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#include <vector>
+#include <set>
+#include <algorithm>
+using namespace std;
+    
+    vector<vector<int> > fourSum(vector<int> &num, int target) {
+    vector< vector<int> > result;
+    if (num.size()<4) return result;
+    sort( num.begin(), num.end() );
+    
+    for(int i=0; i<num.size()-3; i++) {
+        //skip the duplication
+        if (i>0 && num[i-1]==num[i]) continue;
+        vector<int> n(num.begin()+i+1, num.end());
+        vector<vector<int> > ret = threeSum(n, target-num[i]);
+        for(int j=0; j<ret.size(); j++){
+            ret[j].insert(ret[j].begin(), num[i]);
+            result.push_back(ret[j]);
+        }
+    }
+    }
+    
+        // Adds a word into the data structure.
+    void addWord(string word) {
+        tree.put(word);
+    }
+    
+    /********************************************************************************** 
+ * 
+ * Given two strings s and t, write a function to determine if t is an anagram of s. 
+ * 
+ * For example,
+ * s = 'anagram', t = 'nagaram', return true.
+ * s = 'rat', t = 'car', return false.
+ * 
+ * Note:
+ * You may assume the string contains only lowercase alphabets.
+ *               
+ **********************************************************************************/
+    
+        cout << '\'' << exp << '\' = ' << calculate(exp) << endl;
+    
+    
+    {    int d[] = {1,2,3,4,0,0,5};
+    p = createTree(d, sizeof(d)/sizeof(int));
+    printTree_level_order(p);
+    vv = levelOrder(p);
+    printMatrix(vv);
+    cout << endl;
+    return 0;
 }
