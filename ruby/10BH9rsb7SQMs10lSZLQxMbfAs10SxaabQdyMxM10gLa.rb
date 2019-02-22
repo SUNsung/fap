@@ -1,91 +1,149 @@
 
         
-              it 'works given the path to compile_commands.json' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            oclint(
-              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json'
-            )
-          end').runner.execute(:test)
+        Benchmark.ips do |x|
+  x.report('local-require') { local_require }
+  x.report('global-require') { global_require }
+  x.report('graceful-require') { graceful_require }
+  x.compare!
+end
+
     
-          if description
-        UI.user_error!('Do not let descriptions end with a '.', since it's used for user inputs as well for key :#{key}') if description[-1] == '.'
+    module Jekyll
+  module Converters
+    class Markdown
+      class KramdownParser
+        CODERAY_DEFAULTS = {
+          'css'               => 'style',
+          'bold_every'        => 10,
+          'line_numbers'      => 'inline',
+          'line_number_start' => 1,
+          'tab_width'         => 4,
+          'wrap'              => 'div',
+        }.freeze
+    
+        def document?
+      @content =~ DOCUMENT_RGX
+    end
+    
+        delegate :puts, :print, :tty?, to: :$stdout
+    
+        if processes.stdout.lines.any? { |line| line =~ %r{^\d+\t\d\tcom.apple.SafariNotificationAgent$} }
+      system_command '/usr/bin/killall', args: ['-kill', 'SafariNotificationAgent']
+    end
+    
+          # The receiver of the method definition, if any.
+      #
+      # @return [Node, nil] the receiver of the method definition, or `nil`.
+      def receiver
+        node_parts[3]
       end
     
-                expect(FastlaneCore::UI).to receive(:input).and_return('val ask')
-            expect(config[:item]).to eq('val ask')
-          end
+          # Calls the given block for each `key` node in the `hash` literal.
+      # If no block is given, an `Enumerator` is returned.
+      #
+      # @return [self] if a block is given
+      # @return [Enumerator] if no block is given
+      def each_key
+        return pairs.map(&:key).to_enum unless block_given?
+    
+          # Returns the delta between this pair's key and the argument pair's.
+      #
+      # @note Keys on the same line always return a delta of 0
+      # @note Keyword splats always return a delta of 0 for right alignment
+      #
+      # @param [Symbol] alignment whether to check the left or right side
+      # @return [Integer] the delta between the two keys
+      def key_delta(other, alignment = :left)
+        HashElementDelta.new(self, other).key_delta(alignment)
+      end
+    
+      node[:applications].each do |app, data|
+    template '/etc/monit.d/sidekiq_#{app}.monitrc' do 
+      owner 'root' 
+      group 'root' 
+      mode 0644 
+      source 'monitrc.conf.erb' 
+      variables({ 
+        :num_workers => worker_count,
+        :app_name => app, 
+        :rails_env => node[:environment][:framework_env] 
+      }) 
+    end
+    
+          # Example usage:
+      #   Sidekiq::Client.enqueue_to_in(:queue_name, 3.minutes, MyWorker, 'foo', 1, :bat => 'bar')
+      #
+      def enqueue_to_in(queue, interval, klass, *args)
+        int = interval.to_f
+        now = Time.now.to_f
+        ts = (int < 1_000_000_000 ? now + int : int)
+    
+          def perform(yml)
+        (target, method_name, args) = YAML.load(yml)
+        msg = target.public_send(method_name, *args)
+        # The email method can return nil, which causes ActionMailer to return
+        # an undeliverable empty message.
+        if msg
+          deliver(msg)
+        else
+          raise '#{target.name}##{method_name} returned an undeliverable mail object'
         end
       end
+    
+        def initialize(options)
+      @strictly_ordered_queues = !!options[:strict]
+      @queues = options[:queues].map { |q| 'queue:#{q}' }
+      if @strictly_ordered_queues
+        @queues = @queues.uniq
+        @queues << TIMEOUT
+      end
+    end
+    
+        def self.job_hash_context(job_hash)
+      # If we're using a wrapper class, like ActiveJob, use the 'wrapped'
+      # attribute to expose the underlying thing.
+      klass = job_hash['wrapped'] || job_hash['class']
+      bid = job_hash['bid']
+      '#{klass} JID-#{job_hash['jid']}#{' BID-#{bid}' if bid}'
+    end
+    
+        DEFAULT_TABS = {
+      'Dashboard' => '',
+      'Busy'      => 'busy',
+      'Queues'    => 'queues',
+      'Retries'   => 'retries',
+      'Scheduled' => 'scheduled',
+      'Dead'      => 'morgue',
+    }
+    
+        attr_accessor :env, :block, :type
+    
+    Given 'I allow the attachment to be submitted' do
+  cd('.') do
+    transform_file('app/controllers/users_controller.rb') do |content|
+      content.gsub('params.require(:user).permit(:name)',
+                   'params.require(:user).permit!')
     end
   end
 end
-
     
-    exec_arr = ['fastlane', tool_name] + ARGV
-    
-            c.action do |args, options|
-          Cert.config = FastlaneCore::Configuration.create(Cert::Options.available_options, options.__hash__)
-          Cert::Runner.new.revoke_expired_certs!
-        end
-      end
-    
-        ['d', 'i', 'u'].each do |f|
-      describe f do
-        it 'converts argument as a decimal number' do
-          format('%#{f}', 112).should == '112'
-          format('%#{f}', -112).should == '-112'
-        end
-    
-      it 'accepts a proc argument instead of a block' do
-    captured = nil
-    
-      it 'returns the method name as symbol' do
-    eval(@code, TOPLEVEL_BINDING).should equal :boom
+    # Use this to fill in an entire form with data from a table. Example:
+#
+#   When I fill in the following:
+#     | Account Number | 5002       |
+#     | Expiry date    | 2009-11-01 |
+#     | Note           | Nice guy   |
+#     | Wants Email?   |            |
+#
+# TODO: Add support for checkbox, select og option
+# based on naming conventions.
+#
+When /^(?:|I )fill in the following:$/ do |fields|
+  fields.rows_hash.each do |name, value|
+    When %{I fill in '#{name}' with '#{value}'}
   end
 end
-
     
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
-    
-          # Returns the else branch of the `case` statement, if any.
-      #
-      # @return [Node] the else branch node of the `case` statement
-      # @return [nil] if the case statement does not have an else branch.
-      def else_branch
-        node_parts[-1]
-      end
-    
-          # Returns the collection the `for` loop is iterating over.
-      #
-      # @return [Node] The collection the `for` loop is iterating over
-      def collection
-        node_parts[1]
-      end
-    
-          # Whether the last argument of the node is a block pass,
-      # i.e. `&block`.
-      #
-      # @return [Boolean] whether the last argument of the node is a block pass
-      def block_argument?
-        arguments? &&
-          (last_argument.block_pass_type? || last_argument.blockarg_type?)
-      end
+        def initialize
+      clear
     end
-  end
-end
-
-    
-    module RuboCop
-  module AST
-    # A node extension for `when` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `when` nodes within RuboCop.
-    class WhenNode < Node
-      # Returns an array of all the conditions in the `when` branch.
-      #
-      # @return [Array<Node>] an array of condition nodes
-      def conditions
-        node_parts[0...-1]
-      end
