@@ -1,149 +1,196 @@
 
         
-            for group in opt_parser.option_groups:
-        for option in group.option_list:
-            long_option = option.get_opt_string().strip('-')
-            complete_cmd = ['complete', '--command', 'youtube-dl', '--long-option', long_option]
-            if option._short_opts:
-                complete_cmd += ['--short-option', option._short_opts[0].strip('-')]
-            if option.help != optparse.SUPPRESS_HELP:
-                complete_cmd += ['--description', option.help]
-            complete_cmd.extend(EXTRA_ARGS.get(long_option, []))
-            commands.append(shell_quote(complete_cmd))
+          Args:
+    records: a record list with TensorFlow examples.
     
-    import os
-import sys
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        if hps.ic_dim > 0:
+      prior_g0_mean = np.zeros([E_to_process, hps.ic_dim])
+      prior_g0_logvar = np.zeros([E_to_process, hps.ic_dim])
+      post_g0_mean = np.zeros([E_to_process, hps.ic_dim])
+      post_g0_logvar = np.zeros([E_to_process, hps.ic_dim])
     
-    versions_info = json.load(open('update/versions.json'))
-if 'signature' in versions_info:
-    del versions_info['signature']
+      prefix = [vocab.word_to_id(w) for w in prefix_words.split()]
+  prefix_char_ids = [vocab.word_to_char_ids(w) for w in prefix_words.split()]
+  for _ in xrange(FLAGS.num_samples):
+    inputs = np.zeros([BATCH_SIZE, NUM_TIMESTEPS], np.int32)
+    char_ids_inputs = np.zeros(
+        [BATCH_SIZE, NUM_TIMESTEPS, vocab.max_word_length], np.int32)
+    samples = prefix[:]
+    char_ids_samples = prefix_char_ids[:]
+    sent = ''
+    while True:
+      inputs[0, 0] = samples[0]
+      char_ids_inputs[0, 0, :] = char_ids_samples[0]
+      samples = samples[1:]
+      char_ids_samples = char_ids_samples[1:]
     
-    with io.open('update/releases.atom', 'w', encoding='utf-8') as atom_file:
-    atom_file.write(atom_template)
+      data_len = len(raw_data)
+  batch_len = data_len // batch_size
+  data = np.full([batch_size, batch_len], EOS_INDEX, dtype=np.int32)
+  for i in range(batch_size):
+    data[i] = raw_data[batch_len * i:batch_len * (i + 1)]
+    
+    
+def write_masked_log(log, id_to_word, sequence_eval, present_eval):
+  indices_arr = np.asarray(sequence_eval)
+  samples = convert_to_human_readable(id_to_word, indices_arr, present_eval,
+                                      FLAGS.batch_size)
+  for sample in samples:
+    log.write(sample + '\n')
+  log.flush()
+  return samples
+    
+    '''Model construction.'''
+    
+        return g.db
+    
+        with app.app_context():
+        db = get_db()
+        count = db.execute('SELECT COUNT(id) FROM post').fetchone()[0]
+        assert count == 2
+    
+    
+@implements_to_string
+class DebugFilesKeyError(KeyError, AssertionError):
+    '''Raised from request.files during debugging.  The idea is that it can
+    provide a better error message than just a generic KeyError/BadRequest.
+    '''
+    
+        The latest JSON standard (:rfc:`8259`) suggests that only UTF-8 is
+    accepted. Older documents allowed 8, 16, or 32. 16 and 32 can be big
+    or little endian. Some editors or libraries may prepend a BOM.
+    
+        class _FakeSignal(object):
+        '''If blinker is unavailable, create a fake class with the same
+        interface that allows sending of signals but will fail with an
+        error on anything else.  Instead of doing anything on send, it
+        will just ignore the arguments and do nothing instead.
+        '''
+    
+                X /= np.sqrt(np.sum(X ** 2, axis=0))  # Normalize data
+    
+    
+def plot_feature_times(all_times, batch_size, all_components, data):
+    plt.figure()
+    plot_results(all_components, all_times['pca'], label='PCA')
+    plot_results(all_components, all_times['ipca'],
+                 label='IncrementalPCA, bsize=%i' % batch_size)
+    plt.legend(loc='upper left')
+    plt.suptitle('Algorithm runtime vs. n_components\n \
+                 LFW, size %i x %i' % data.shape)
+    plt.xlabel('Number of components (out of max %i)' % data.shape[1])
+    plt.ylabel('Time (seconds)')
+    
+                gc.collect()
+            print('- benchmarking SGD')
+            clf = SGDRegressor(alpha=alpha / n_train, fit_intercept=False,
+                               max_iter=max_iter, learning_rate='invscaling',
+                               eta0=.01, power_t=0.25, tol=1e-3)
+    
+        # start time
+    tstart = datetime.now()
+    clf = DecisionTreeClassifier()
+    clf.fit(X, Y).predict(X)
+    delta = (datetime.now() - tstart)
+    # stop time
+    
+        class_name = info['fullname'].split('.')[0]
+    if type(class_name) != str:
+        # Python 2 only
+        class_name = class_name.encode('utf-8')
+    module = __import__(info['module'], fromlist=[class_name])
+    obj = attrgetter(info['fullname'])(module)
+    
+    Copyright 2014 Steven Loria
+    
+    
+def plot_influence(conf, mse_values, prediction_times, complexities):
+    '''
+    Plot influence of model complexity on both accuracy and latency.
+    '''
+    plt.figure(figsize=(12, 6))
+    host = host_subplot(111, axes_class=Axes)
+    plt.subplots_adjust(right=0.75)
+    par1 = host.twinx()
+    host.set_xlabel('Model Complexity (%s)' % conf['complexity_label'])
+    y1_label = conf['prediction_performance_label']
+    y2_label = 'Time (s)'
+    host.set_ylabel(y1_label)
+    par1.set_ylabel(y2_label)
+    p1, = host.plot(complexities, mse_values, 'b-', label='prediction error')
+    p2, = par1.plot(complexities, prediction_times, 'r-',
+                    label='latency')
+    host.legend(loc='upper right')
+    host.axis['left'].label.set_color(p1.get_color())
+    par1.axis['right'].label.set_color(p2.get_color())
+    plt.title('Influence of Model Complexity - %s' % conf['estimator'].__name__)
+    plt.show()
+    
+    # Define 'classifiers' to be used
+classifiers = {
+    'Empirical Covariance': EllipticEnvelope(support_fraction=1.,
+                                             contamination=0.261),
+    'Robust Covariance (Minimum Covariance Determinant)':
+    EllipticEnvelope(contamination=0.261),
+    'OCSVM': OneClassSVM(nu=0.261, gamma=0.05)}
+colors = ['m', 'g', 'b']
+legend1 = {}
+legend2 = {}
+    
+    # Create a graph capturing local connectivity. Larger number of neighbors
+# will give more homogeneous clusters to the cost of computation
+# time. A very large number of neighbors gives more evenly distributed
+# cluster sizes, but may not impose the local manifold structure of
+# the data
+knn_graph = kneighbors_graph(X, 30, include_self=False)
+    
+    This example uses a large dataset of faces to learn a set of 20 x 20
+images patches that constitute faces.
+    
+    plt.subplot(3, 4, 10)
+plt.imshow(np.reshape(agglo.labels_, images[0].shape),
+           interpolation='nearest', cmap=plt.cm.nipy_spectral)
+plt.xticks(())
+plt.yticks(())
+plt.title('Labels')
+plt.show()
 
     
-    # List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-exclude_patterns = ['_build']
     
-        def test_encrypt(self):
-        msg = b'message'
-        key = list(range(16))
-        encrypted = aes_encrypt(bytes_to_intlist(msg), key)
-        decrypted = intlist_to_bytes(aes_decrypt(encrypted, key))
-        self.assertEqual(decrypted, msg)
+#----------------------------------------------------------------------
+# Visualize the clustering
+def plot_clustering(X_red, labels, title=None):
+    x_min, x_max = np.min(X_red, axis=0), np.max(X_red, axis=0)
+    X_red = (X_red - x_min) / (x_max - x_min)
     
-        def test_youtube_feeds(self):
-        self.assertMatch('https://www.youtube.com/feed/watch_later', ['youtube:watchlater'])
-        self.assertMatch('https://www.youtube.com/feed/subscriptions', ['youtube:subscriptions'])
-        self.assertMatch('https://www.youtube.com/feed/recommended', ['youtube:recommended'])
-        self.assertMatch('https://www.youtube.com/my_favorites', ['youtube:favorites'])
-    
-        def debug(self, msg):
-        pass
-    
-        if not args.session and not args.session_read_only:
-        kwargs = get_requests_kwargs(args)
-        if args.debug:
-            dump_request(kwargs)
-        response = requests_session.request(**kwargs)
-    else:
-        response = sessions.get_response(
-            requests_session=requests_session,
-            args=args,
-            config_dir=config_dir,
-            session_name=args.session or args.session_read_only,
-            read_only=bool(args.session_read_only),
-        )
-    
-            headers = dict(self._orig.headers)
-        if 'Host' not in self._orig.headers:
-            headers['Host'] = url.netloc.split('@')[-1]
-    
-            '''
-        r.headers['Authorization'] = type(self).make_header(
-            self.username, self.password).encode('latin1')
-        return r
-    
-    # TODO: run all these tests in session mode as well
-    
-        def test_print_only_body_when_stdout_redirected_by_default(self, httpbin):
-        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
-        r = http('GET', httpbin.url + '/get', env=env)
-        assert 'HTTP/' not in r
-    
-        def __init__(self, json_name, value):
-        self.value = value
-        super(Fixed, self).__init__(
-            json_name=json_name, default=value, omitempty=False)
-    
-    
-def parse_define_file(filepath, varname):
-    ''' Parses Defines from a variable in configuration file
-    
-        :param list indices: Meant to hold indices of challenges in a
-        larger array. ApacheTlsSni01 is capable of solving many challenges
-        at once which causes an indexing issue within ApacheConfigurator
-        who must return all responses in order.  Imagine ApacheConfigurator
-        maintaining state about where all of the http-01 Challenges,
-        TLS-SNI-01 Challenges belong in the response array.  This is an
-        optional utility.
-    
-    
-def setup_scanner(hass, config, see, discovery_info=None):
-    '''Set up the demo tracker.'''
-    def offset():
-        '''Return random offset.'''
-        return (random.randrange(500, 2000)) / 2e5 * random.choice((-1, 1))
-    
-            from nmap import PortScanner, PortScannerError
-        scanner = PortScanner()
-    
-            devices = {}
-        for device in request.json()['status']:
-            try:
-                devices[device['Key']] = {
-                    'ip': device['IPAddress'],
-                    'mac': device['PhysAddress'],
-                    'host': device['Name'],
-                    'status': device['Active']
-                    }
-            except (KeyError, requests.exceptions.RequestException):
-                pass
-        return devices
+    plt.show()
 
     
-    For more details about this platform, please refer to the documentation at
-https://home-assistant.io/components/notify.clickatell/
-'''
-import logging
+        def test_repr(self):
+        self.assertEqual('PollError(exhausted=%s, updated={sentinel.AR: '
+                         'sentinel.AR2})' % repr(set()), repr(self.invalid))
     
-    import voluptuous as vol
+        def setUp(self):
+        self.decoded = datetime.datetime(2015, 3, 27, tzinfo=pytz.utc)
+        self.encoded = '2015-03-27T00:00:00Z'
     
-            if resp.status_code == 400:
-            _LOGGER.error('At least one parameter is missing')
-        elif resp.status_code == 402:
-            _LOGGER.error('Too much SMS send in a few time')
-        elif resp.status_code == 403:
-            _LOGGER.error('Wrong Username/Password')
-        elif resp.status_code == 500:
-            _LOGGER.error('Server error, try later')
+    from acme import test_util
+    
+    # Add any Sphinx extension module names here, as strings. They can be
+# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
+# ones.
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.todo',
+    'sphinx.ext.coverage',
+    'sphinx.ext.viewcode',
+]
+    
+    
+if __name__ == '__main__':
+    unittest.main()  # pragma: no cover
 
     
-    import homeassistant.helpers.config_validation as cv
-from homeassistant.components.notify import (
-    ATTR_TARGET, ATTR_DATA, PLATFORM_SCHEMA, BaseNotificationService)
-from homeassistant.const import CONF_TOKEN, CONF_HOST, CONF_ROOM
-    
-    
-def get_service(hass, config, discovery_info=None):
-    '''Get the LlamaLab Automate notification service.'''
-    secret = config.get(CONF_API_KEY)
-    recipient = config.get(CONF_TO)
-    device = config.get(CONF_DEVICE)
-    
-        return MessageBirdNotificationService(config.get(CONF_SENDER), client)
-    
-    
-from homeassistant.components.notify import BaseNotificationService
+        def _mod_config(self):
+        '''Modifies Apache config files to include challenge vhosts.
