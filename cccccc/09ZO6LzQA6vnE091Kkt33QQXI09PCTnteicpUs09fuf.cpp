@@ -1,173 +1,96 @@
 
         
-        namespace atom {
-    }
-    
-    namespace IPC {
-class Message;
-}
-    
-    void AutoUpdater::SetDelegate(Delegate* delegate) {
-  delegate_ = delegate;
-}
-    
-    class AutoUpdater {
+        // Class to hold an array of bounding boxes for an output word and
+// the bounding box of the whole word.
+class BoxWord {
  public:
-  typedef std::map<std::string, std::string> HeaderMap;
+  BoxWord();
+  explicit BoxWord(const BoxWord& src);
+  ~BoxWord() = default;
     }
     
-    net::URLRequestJob* AboutProtocolHandler::MaybeCreateJob(
-    net::URLRequest* request,
-    net::NetworkDelegate* network_delegate) const {
-  return new URLRequestAboutJob(request, network_delegate);
+      // Fits a line to the points, returning the fitted line as a pair of
+  // points, and the upper quartile error.
+  double Fit(ICOORD* pt1, ICOORD* pt2) {
+    return Fit(0, 0, pt1, pt2);
+  }
+  // Fits a line to the points, ignoring the skip_first initial points and the
+  // skip_last final points, returning the fitted line as a pair of points,
+  // and the upper quartile error.
+  double Fit(int skip_first, int skip_last, ICOORD* pt1, ICOORD* pt2);
+    
+      // Accessors.
+  int total_cost() const {
+    return total_cost_;
+  }
+  int Pathlength() const {
+    return total_steps_;
+  }
+  const DPPoint* best_prev() const {
+    return best_prev_;
+  }
+  void AddLocalCost(int new_cost) {
+    local_cost_ += new_cost;
+  }
+    
+      // Computes the maximum x and y value in the features.
+  static void ComputeSize(const GenericVector<WordFeature>& features,
+                          int* max_x, int* max_y);
+  // Draws the features in the given window.
+  static void Draw(const GenericVector<WordFeature>& features,
+                   ScrollView* window);
+    
+    #include <cstdint>      // for int32_t
+#include 'points.h'     // for FCOORD
+    
+    template <typename Generator1, typename Generator2, typename Generator3,
+    typename Generator4, typename Generator5, typename Generator6>
+internal::CartesianProductHolder6<Generator1, Generator2, Generator3,
+    Generator4, Generator5, Generator6> Combine(
+    const Generator1& g1, const Generator2& g2, const Generator3& g3,
+        const Generator4& g4, const Generator5& g5, const Generator6& g6) {
+  return internal::CartesianProductHolder6<Generator1, Generator2, Generator3,
+      Generator4, Generator5, Generator6>(
+      g1, g2, g3, g4, g5, g6);
+}
+    
+    // First, define a fixture class template.  It should be parameterized
+// by a type.  Remember to derive it from testing::Test.
+template <typename T>
+class FooTest : public testing::Test {
+ public:
+  ...
+  typedef std::list<T> List;
+  static T shared_;
+  T value_;
+};
+    
+    template <GTEST_3_TYPENAMES_(T)>
+struct tuple_size<GTEST_3_TUPLE_(T) > {
+  static const int value = 3;
+};
+    
+    #include <grpcpp/impl/grpc_library.h>
+#include <grpcpp/security/credentials.h>
+    
+    constexpr size_t RpcServerStatsEncoding::kRpcServerStatsSize;
+constexpr size_t RpcServerStatsEncoding::kEncodeDecodeFailure;
+constexpr size_t RpcServerStatsEncoding::kVersionIdSize;
+constexpr size_t RpcServerStatsEncoding::kFieldIdSize;
+constexpr size_t RpcServerStatsEncoding::kVersionIdOffset;
+constexpr size_t RpcServerStatsEncoding::kVersionId;
+    
+    const ViewDescriptor& ClientServerLatencyMinute() {
+  const static ViewDescriptor descriptor =
+      MinuteDescriptor()
+          .set_name('grpc.io/client/server_latency/minute')
+          .set_measure(kRpcClientServerLatencyMeasureName)
+          .set_aggregation(MillisDistributionAggregation())
+          .add_column(ClientMethodTagKey());
+  return descriptor;
 }
     
     
-    { private:
-  DISALLOW_COPY_AND_ASSIGN(AboutProtocolHandler);
-};
-    
-    SECP256K1_INLINE static void secp256k1_fe_mul_inner(uint64_t *r, const uint64_t *a, const uint64_t * SECP256K1_RESTRICT b) {
-/**
- * Registers: rdx:rax = multiplication accumulator
- *            r9:r8   = c
- *            r15:rcx = d
- *            r10-r14 = a0-a4
- *            rbx     = b
- *            rdi     = r
- *            rsi     = a / t?
- */
-  uint64_t tmp1, tmp2, tmp3;
-__asm__ __volatile__(
-    'movq 0(%%rsi),%%r10\n'
-    'movq 8(%%rsi),%%r11\n'
-    'movq 16(%%rsi),%%r12\n'
-    'movq 24(%%rsi),%%r13\n'
-    'movq 32(%%rsi),%%r14\n'
-    }
-    
-        // C escapes
-    CheckParseTorReplyMapping(
-        'Foo=\'Bar\\nBaz\\t\' Spam=\'\\rEggs\' Octals=\'\\1a\\11\\17\\18\\81\\377\\378\\400\\2222\' Final=Check', {
-            {'Foo', 'Bar\nBaz\t'},
-            {'Spam', '\rEggs'},
-            {'Octals', '\1a\11\17\1' '881\377\37' '8\40' '0\222' '2'},
-            {'Final', 'Check'},
-        });
-    CheckParseTorReplyMapping(
-        'Valid=Mapping Escaped=\'Escape\\\\\'', {
-            {'Valid', 'Mapping'},
-            {'Escaped', 'Escape\\'},
-        });
-    CheckParseTorReplyMapping(
-        'Valid=Mapping Bare=\'Escape\\\'', {});
-    CheckParseTorReplyMapping(
-        'OneOctal=\'OneEnd\\1\' TwoOctal=\'TwoEnd\\11\'', {
-            {'OneOctal', 'OneEnd\1'},
-            {'TwoOctal', 'TwoEnd\11'},
-        });
-    
-    
-    
-    ROTATE_ARGS
-	movdqa	XTMP3, XTMP2	; XTMP3 = W[-2] {BBAA}
-    mov	y0, e		; y0 = e
-    mov	y1, a		; y1 = a
-    ror	y0, (25-11)	; y0 = e >> (25-11)
-	movdqa	XTMP4, XTMP2	; XTMP4 = W[-2] {BBAA}
-    xor	y0, e		; y0 = e ^ (e >> (25-11))
-    ror	y1, (22-13)	; y1 = a >> (22-13)
-    mov	y2, f		; y2 = f
-    xor	y1, a		; y1 = a ^ (a >> (22-13)
-    ror	y0, (11-6)	; y0 = (e >> (11-6)) ^ (e >> (25-6))
-	psrlq	XTMP2, 17	; XTMP2 = W[-2] ror 17 {xBxA}
-    xor	y2, g		; y2 = f^g
-	psrlq	XTMP3, 19	; XTMP3 = W[-2] ror 19 {xBxA}
-    xor	y0, e		; y0 = e ^ (e >> (11-6)) ^ (e >> (25-6))
-    and	y2, e		; y2 = (f^g)&e
-	psrld	XTMP4, 10	; XTMP4 = W[-2] >> 10 {BBAA}
-    ror	y1, (13-2)	; y1 = (a >> (13-2)) ^ (a >> (22-2))
-    xor	y1, a		; y1 = a ^ (a >> (13-2)) ^ (a >> (22-2))
-    xor	y2, g		; y2 = CH = ((f^g)&e)^g
-    ror	y0, 6		; y0 = S1 = (e>>6) & (e>>11) ^ (e>>25)
-	pxor	XTMP2, XTMP3
-    add	y2, y0		; y2 = S1 + CH
-    ror	y1, 2		; y1 = S0 = (a>>2) ^ (a>>13) ^ (a>>22)
-    add	y2, [rsp + _XFER + 2*4]	; y2 = k + w + S1 + CH
-	pxor	XTMP4, XTMP2	; XTMP4 = s1 {xBxA}
-    mov	y0, a		; y0 = a
-    add	h, y2		; h = h + S1 + CH + k + w
-    mov	y2, a		; y2 = a
-	pshufb	XTMP4, SHUF_00BA	; XTMP4 = s1 {00BA}
-    or	y0, c		; y0 = a|c
-    add	d, h		; d = d + h + S1 + CH + k + w
-    and	y2, c		; y2 = a&c
-	paddd	XTMP0, XTMP4	; XTMP0 = {..., ..., W[1], W[0]}
-    and	y0, b		; y0 = (a|c)&b
-    add	h, y1		; h = h + S1 + CH + k + w + S0
-	;; compute high s1
-	pshufd	XTMP2, XTMP0, 01010000b	; XTMP2 = W[-2] {DDCC}
-    or	y0, y2		; y0 = MAJ = (a|c)&b)|(a&c)
-    add	h, y0		; h = h + S1 + CH + k + w + S0 + MAJ
-    
-    using namespace std;
-    
-    
-    {} // namespace folly
-
-    
-    template <class RNG, typename = void>
-struct StateSize {
-  // A sane default.
-  using type = std::integral_constant<size_t, 512>;
-};
-    
-      /**
-   * Returns true 1/n of the time. If n == 0, always returns false
-   */
-  static bool oneIn(uint32_t n) {
-    return oneIn(n, ThreadLocalPRNG());
-  }
-    
-    #include <functional>
-#include <tuple>
-    
-        // Test the upper boundary of conversion to int64_t microseconds
-    using usec_i64 = std::chrono::duration<int64_t, std::micro>;
-    ts.tv_sec = 9223372036854LL;
-    ts.tv_nsec = 775807000;
-    EXPECT_EQ(std::numeric_limits<int64_t>::max(), to<usec_i64>(ts).count());
-    
-    /**
- * Helper functions for compression codecs.
- */
-namespace folly {
-namespace io {
-namespace compression {
-namespace detail {
-    }
-    }
-    }
-    }
-    
-    
-    {    auto res = CountedDetail::template get_shared_ptr_from_counted_base<T>(
-        p.get(), inc);
-    if (aliased) {
-      auto aliasedp =
-          CountedDetail::template get_shared_ptr_from_counted_base<SharedPtr>(
-              p.get());
-      res = *aliasedp;
-    }
-    return res;
-  }
-    
-    using namespace std;
-using namespace folly;
-    
-    struct AtForkTask {
-  void* object;
-  folly::Function<bool()> prepare;
-  folly::Function<void()> parent;
-  folly::Function<void()> child;
-};
+    {
+    {}  // namespace load_reporter
+}  // namespace grpc
