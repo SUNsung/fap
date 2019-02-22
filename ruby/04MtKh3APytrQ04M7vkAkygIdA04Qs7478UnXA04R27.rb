@@ -1,78 +1,98 @@
 
         
-                def importer_class
-          DiffNoteImporter
-        end
+                  new_theme_name = args.join('_')
+          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
+          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
     
-            # attributes - A Hash containing the raw note details. The keys of this
-        #              Hash must be Symbols.
-        def initialize(attributes)
-          @attributes = attributes
-        end
+          def string_to_code(string)
+        # sha bytes
+        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
+        # Thanks donpark's IdenticonUtil.java for this.
+        # Match the following Java code
+        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
+        #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
     
-            # Builds a new PR using a Hash that was built from a JSON payload.
-        def self.from_json_hash(raw_hash)
-          hash = Representation.symbolize_hash(raw_hash)
-    
-      # Eager load code on boot. This eager loads most of Rails and
-  # your application in memory, allowing both thread web servers
-  # and those relying on copy on write to perform better.
-  # Rake tasks automatically ignore this option for performance.
-  config.eager_load = true
-    
-      def test_image_helper
-    assert_match %r(url\(['']?/assets/apple-touch-icon-144-precomposed.*png['']?\)), @css
+      teardown do
+    FileUtils.rm_r(File.join(File.dirname(__FILE__), *%w[examples test.git]))
   end
     
-          def page_dir
-        @page_dir
+    opts = OptionParser.new do |opts|
+  # define program name (although this defaults to the name of the file, just in case...)
+  opts.program_name = 'gollum'
+    
+  # set basic info for the '--help' command (options will be appended automatically from the below definitions)
+  opts.banner = '
+  Gollum is a multi-format Wiki Engine/API/Frontend.
+    
+  Usage:
+      gollum [options] [git-repo]
+    
+  Arguments:
+      [git-repo]                     Path to the git repository being served. If not specified, current working directory is used.
+  
+  Notes:
+      Paths for all options are relative to <git-repo> unless absolute.
+      This message is only a basic description. For more information, please visit:
+          https://github.com/gollum/gollum
+  
+  OPTIONS'
+  
+  # define gollum options  
+  opts.separator ''
+  opts.separator '  Major:'
+  
+  opts.on('-h', '--host [HOST]', 'Specify the hostname or IP address to listen on. Default: '0.0.0.0'.') do |host|
+    options[:bind] = host
+  end
+  opts.on('-p', '--port [PORT]', 'Specify the port to bind Gollum with. Default: '4567'.') do |port|
+    begin
+      # don't use 'port.to_i' here... it doesn't raise errors which might result in a nice confusion later on
+      options[:port] = Integer(port)
+    rescue ArgumentError
+      puts 'Error: '#{port}' is not a valid port number.'
+      exit 1
+    end
+  end
+  opts.on('-c', '--config [FILE]', 'Specify path to the Gollum's configuration file.') do |file|
+    options[:config] = file
+  end
+  opts.on('-r', '--ref [REF]', 'Specify the branch to serve. Default: 'master'.') do |ref|
+    wiki_options[:ref] = ref
+  end
+  opts.on('-a', '--adapter [ADAPTER]', 'Launch Gollum using a specific git adapter. Default: 'grit'.') do |adapter|
+    Gollum::GIT_ADAPTER = adapter
+  end
+  opts.on('--bare', 'Declare '<git-repo>' to be bare. This is only necessary when using the grit adapter.') do
+    wiki_options[:repo_is_bare] = true
+  end
+  opts.on('-b', '--base-path [PATH]', 'Specify the leading portion of all Gollum URLs (path info). Default: '/'.',
+    'Example: setting this to '/wiki' will make the wiki accessible under 'http://localhost:4567/wiki/'.') do |base_path|
+      
+    # first trim a leading slash, if any
+    base_path.sub!(/^\/+/, '')
+    
+      node[:applications].each do |app, data|
+    template '/etc/monit.d/sidekiq_#{app}.monitrc' do 
+      owner 'root' 
+      group 'root' 
+      mode 0644 
+      source 'monitrc.conf.erb' 
+      variables({ 
+        :num_workers => worker_count,
+        :app_name => app, 
+        :rails_env => node[:environment][:framework_env] 
+      }) 
+    end
+    
+      <h3>Messages</h3>
+  <% @messages.each do |msg| %>
+    <p><%= msg %></p>
+  <% end %>
+
+    
+          def insert_after(oldklass, newklass, *args)
+        i = entries.index { |entry| entry.klass == newklass }
+        new_entry = i.nil? ? Entry.new(newklass, *args) : entries.delete_at(i)
+        i = entries.index { |entry| entry.klass == oldklass } || entries.count - 1
+        entries.insert(i+1, new_entry)
       end
-    
-      # base path requires 'map' in a config.ru to work correctly.
-  test 'create pages within sub-directories using base path' do
-    Precious::App.set(:wiki_options, { :base_path => 'wiki' })
-    page = 'path'
-    post '/create', :content => '123', :page => page,
-         :path               => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
-    # should be wiki/Mordor/path
-    assert_equal 'http://example.org/Mordor/' + page, last_response.headers['Location']
-    get '/Mordor/' + page
-    assert_match /123/, last_response.body
-    
-      test 'h1 title sanitizes correctly' do
-    title = 'H1'
-    @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert('js')</script>' + '\n # 3', commit_details)
-    page = @wiki.page(title)
-    
-        EMOJI_PATHNAME = Pathname.new(Gemojione.images_path).freeze
-    
-            private
-    
-            def scope
-          @scope ||= if params[:option_type_id]
-                       Spree::OptionType.find(params[:option_type_id]).option_values.accessible_by(current_ability, :read)
-                     else
-                       Spree::OptionValue.accessible_by(current_ability, :read).load
-                     end
-        end
-    
-            def perform_payment_action(action, *args)
-          authorize! action, Payment
-          @payment.send('#{action}!', *args)
-          respond_with(@payment, default_template: :show)
-        end
-    
-            def create
-          authorize! :create, Taxon
-          @taxon = Spree::Taxon.new(taxon_params)
-          @taxon.taxonomy_id = params[:taxonomy_id]
-          taxonomy = Spree::Taxonomy.find_by(id: params[:taxonomy_id])
-    
-      def send_sinatra_file(path, &missing_file_block)
-    file_path = File.join(File.dirname(__FILE__), 'public',  path)
-    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
-    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
-  end
-    
-    require 'pathname'
-require './plugins/octopress_filters'
