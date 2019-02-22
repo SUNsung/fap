@@ -1,499 +1,314 @@
 
         
-        // Generate destructors.
-#include 'ipc/struct_destructor_macros.h'
-#include 'content/nw/src/common/common_message_generator.h'
+                float32x4_t v_dst0f = vmlaq_f32(vmulq_f32(vcvtq_f32_u32(vmovl_u16(vget_low_u16(v_src1))), v_beta),
+                                        v_alpha, vcvtq_f32_u32(vmovl_u16(vget_low_u16(v_src0))));
+        float32x4_t v_dst1f = vmlaq_f32(vmulq_f32(vcvtq_f32_u32(vmovl_u16(vget_high_u16(v_src1))), v_beta),
+                                        v_alpha, vcvtq_f32_u32(vmovl_u16(vget_high_u16(v_src0))));
+        uint16x8_t _v_dst = vcombine_u16(vmovn_u32(vcvtq_u32_f32(v_dst0f)),
+                                        vmovn_u32(vcvtq_u32_f32(v_dst1f)));
     
-    // Get RenderView from current js context (only works under window context).
-content::RenderView* GetCurrentRenderView();
-content::RenderView* GetEnteredRenderView();
-    
-    
-    {  focus_manager_ = NULL;
-}
-    
-    
-    {  if (menu_)
-    menu_->UpdateStates();
-}
-    
-    
-    {  return true;
-}
-    
-        protected:
-      ~NwScreenGetScreensFunction() override {}
-      DECLARE_EXTENSION_FUNCTION('nw.Screen.getScreens', UNKNOWN)
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33>
-internal::ValueArray33<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-    T29, T30, T31, T32, T33> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6,
-    T7 v7, T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15,
-    T16 v16, T17 v17, T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23,
-    T24 v24, T25 v25, T26 v26, T27 v27, T28 v28, T29 v29, T30 v30, T31 v31,
-    T32 v32, T33 v33) {
-  return internal::ValueArray33<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
-      T26, T27, T28, T29, T30, T31, T32, T33>(v1, v2, v3, v4, v5, v6, v7, v8,
-      v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23,
-      v24, v25, v26, v27, v28, v29, v30, v31, v32, v33);
-}
-    
-    // We print a protobuf using its ShortDebugString() when the string
-// doesn't exceed this many characters; otherwise we print it using
-// DebugString() for better readability.
-const size_t kProtobufOneLinerMaxLength = 50;
-    
-      // Same as above, but you can choose the interception scope of this object.
-  ScopedFakeTestPartResultReporter(InterceptMode intercept_mode,
-                                   TestPartResultArray* result);
-    
-      // Gets the summary of the failure message by omitting the stack
-  // trace in it.
-  static std::string ExtractSummary(const char* message);
-    
-    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT4.
-// Don't use this in your code.
-#define GTEST_PRED_FORMAT4_(pred_format, v1, v2, v3, v4, on_failure)\
-  GTEST_ASSERT_(pred_format(#v1, #v2, #v3, #v4, v1, v2, v3, v4), \
-                on_failure)
-    
-    #ifndef GTEST_INCLUDE_GTEST_INTERNAL_GTEST_LINKED_PTR_H_
-#define GTEST_INCLUDE_GTEST_INTERNAL_GTEST_LINKED_PTR_H_
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37, typename T38, typename T39, typename T40,
-    typename T41, typename T42, typename T43, typename T44, typename T45,
-    typename T46, typename T47>
-class ValueArray47 {
- public:
-  ValueArray47(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
-      T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17,
-      T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23, T24 v24, T25 v25,
-      T26 v26, T27 v27, T28 v28, T29 v29, T30 v30, T31 v31, T32 v32, T33 v33,
-      T34 v34, T35 v35, T36 v36, T37 v37, T38 v38, T39 v39, T40 v40, T41 v41,
-      T42 v42, T43 v43, T44 v44, T45 v45, T46 v46, T47 v47) : v1_(v1), v2_(v2),
-      v3_(v3), v4_(v4), v5_(v5), v6_(v6), v7_(v7), v8_(v8), v9_(v9), v10_(v10),
-      v11_(v11), v12_(v12), v13_(v13), v14_(v14), v15_(v15), v16_(v16),
-      v17_(v17), v18_(v18), v19_(v19), v20_(v20), v21_(v21), v22_(v22),
-      v23_(v23), v24_(v24), v25_(v25), v26_(v26), v27_(v27), v28_(v28),
-      v29_(v29), v30_(v30), v31_(v31), v32_(v32), v33_(v33), v34_(v34),
-      v35_(v35), v36_(v36), v37_(v37), v38_(v38), v39_(v39), v40_(v40),
-      v41_(v41), v42_(v42), v43_(v43), v44_(v44), v45_(v45), v46_(v46),
-      v47_(v47) {}
+        void operator() (const typename VecTraits<f32>::vec64 & v_src0,
+                     const typename VecTraits<f32>::vec64 & v_src1,
+                     typename VecTraits<f32>::vec64 & v_dst) const
+    {
+        float32x2_t vs1 = vmla_f32(vget_low(vgamma), v_src0, vget_low(valpha));
+        v_dst = vmla_f32(vs1, v_src1, vget_low(vbeta));
     }
     
-    #include <algorithm>
+            norml = vmlal_s16(norml, vget_low_s16(vy), vget_low_s16(vy));
+        normh = vmlal_s16(normh, vget_high_s16(vx), vget_high_s16(vx));
     
-      // Try to divide n by every odd number i, starting from 3
-  for (int i = 3; ; i += 2) {
-    // We only have to try i up to the squre root of n
-    if (i > n/i) break;
+    void combineYUYV(const Size2D &size,
+                 const u8 * srcyBase, ptrdiff_t srcyStride,
+                 const u8 * srcuBase, ptrdiff_t srcuStride,
+                 const u8 * srcvBase, ptrdiff_t srcvStride,
+                 u8 * dstBase, ptrdiff_t dstStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+#ifndef __ANDROID__
+    size_t roiw32 = size.width >= 31 ? size.width - 31 : 0;
+#endif
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
     }
     
-    			image.m_bVerboseOutput = a_bVerboseOutput;
-			image.Encode(a_format, a_eErrMetric, a_fEffort, a_uiJobs, a_uiMaxJobs);
+        for (size_t i = 0; i < size.height; ++i)
+    {
+        const s16 * src = internal::getRowPtr(srcBase, srcStride, i);
+        u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
+        size_t j = 0;
+    }
     
-    	// C-style inteface to the encoder
-	void Encode(float *a_pafSourceRGBA,
-				unsigned int a_uiSourceWidth,
-				unsigned int a_uiSourceHeight,
-				Image::Format a_format,
-				ErrorMetric a_eErrMetric,
-				float a_fEffort,
-				unsigned int a_uiJobs,
-				unsigned int a_uimaxJobs,
-				unsigned char **a_ppaucEncodingBits,
-				unsigned int *a_puiEncodingBitsBytes,
-				unsigned int *a_puiExtendedWidth,
-				unsigned int *a_puiExtendedHeight,
-				int *a_piEncodingTime_ms, bool a_bVerboseOutput = false);
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
+CVTS_FUNC1(u16, 16,
+    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
+    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        __asm__ (
+            'vld1.16 {d4-d5}, [%[src]]                              \n\t'
+            'vmovl.u16 q3, d4                                       \n\t'
+            'vmovl.u16 q4, d5                                       \n\t'
+            'vcvt.f32.u32 q5, q3                                    \n\t'
+            'vcvt.f32.u32 q6, q4                                    \n\t'
+            'vmul.f32 q7, q5, q0                                    \n\t'
+            'vmul.f32 q8, q6, q0                                    \n\t'
+            'vadd.f32 q9, q7, q1                                    \n\t'
+            'vadd.f32 q10, q8, q1                                   \n\t'
+            'vcvt.s32.f32 q11, q9                                   \n\t'
+            'vcvt.s32.f32 q12, q10                                  \n\t'
+            'vqmovun.s32 d26, q11                                   \n\t'
+            'vqmovun.s32 d27, q12                                   \n\t'
+            'vst1.16 {d26-d27}, [%[dst]]                            \n\t'
+            : /*no output*/
+            : [src] 'r' (_src + i),
+              [dst] 'r' (_dst + i + 0),
+              'w' (vshift), 'w' (vscale)
+            : 'd6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26','d27'
+        );
+    }
+})
+#else
+CVTS_FUNC1(u16, 16,
+    float32x4_t vscale = vdupq_n_f32((f32)alpha);
+    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        uint16x8_t vline = vld1q_u16(_src + i);
+        uint32x4_t vline1_u32 = vmovl_u16(vget_low_u16 (vline));
+        uint32x4_t vline2_u32 = vmovl_u16(vget_high_u16(vline));
+        float32x4_t vline1_f32 = vcvtq_f32_u32(vline1_u32);
+        float32x4_t vline2_f32 = vcvtq_f32_u32(vline2_u32);
+        vline1_f32 = vmulq_f32(vline1_f32, vscale);
+        vline2_f32 = vmulq_f32(vline2_f32, vscale);
+        vline1_f32 = vaddq_f32(vline1_f32, vshift);
+        vline2_f32 = vaddq_f32(vline2_f32, vshift);
+        int32x4_t vline1_s32 = vcvtq_s32_f32(vline1_f32);
+        int32x4_t vline2_s32 = vcvtq_s32_f32(vline2_f32);
+        uint16x4_t vRes1 = vqmovun_s32(vline1_s32);
+        uint16x4_t vRes2 = vqmovun_s32(vline2_s32);
+        vst1q_u16(_dst + i, vcombine_u16(vRes1, vRes2));
+    }
+})
+#endif
     
-    		// the alpha mix for a 4x4 block of pixels
-		enum class SourceAlphaMix
+                // make shift
+            prevx[0] = currx[0];
+            currx[0] = nextx[0];
+    
+            if(i + 8 <= size.width)
+        {
+            uint8x8_t vs1 = vld1_u8(src0 + i);
+            uint8x8_t vs2 = vld1_u8(src1 + i);
+    }
+    
+                uint32x4_t ln042 = vmlaq_u32(ln04, lane2, vc6u32);
+            uint32x4_t lsw = vmlaq_u32(ln042, ln13, vc4u32);
+    
+                uint8x8_t el8shr0 = vld1_u8(src + j);
+            uint8x8_t el8shr1 = vreinterpret_u8_u64(vshl_n_u64(vreinterpret_u64_u8(el8shr0), 8));
+            uint8x8_t el8shr2 = vreinterpret_u8_u64(vshl_n_u64(vreinterpret_u64_u8(el8shr0), 16));
+            uint8x8_t el8shr3 = vreinterpret_u8_u64(vshl_n_u64(vreinterpret_u64_u8(el8shr0), 24));
+    
+                        tprev1 = vextq_s16(tnext1, tnext1, 6);
+                    tprev1 = vsetq_lane_s16(vgetq_lane_s16(tprev1, 2),tprev1, 0);
+                    tprev1 = vsetq_lane_s16(vgetq_lane_s16(tprev1, 2),tprev1, 1);
+                } else if (border == BORDER_MODE_REFLECT) {
+                    tpprev1 = vextq_s16(tnext2, tnext2, 7);
+                    tpprev1 = vsetq_lane_s16(vgetq_lane_s16(tpprev1, 1),tpprev1, 0);
+    
+    
+    {} // namespace caffe2
+
+    
+    </details>
+    
+    #include 'caffe2/utils/math.h'
+    
+    Example 1:
+  DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
+  RANGES = [
+    [
+      [2, 4],
+      [0, 2],
+    ],
+    [
+      [0, 0],
+      [6, 2],
+    ]
+  ]
+  lengths = [4, 2]
+  OUTPUT[0] = [[3, 4, 5, 6], [0, 0, 0, 0]]
+  OUTPUT[1] = [[1, 2], [7, 8]]
+    
+    
+    {} // namespace caffe2
+
+    
+    
+    {          return out;
+        });
+OPERATOR_SCHEMA(Float16ConstantFill)
+    .NumInputs(0)
+    .NumOutputs(1)
+    .TensorInferenceFunction(Float16FillerTensorInference)
+    .Arg('value', 'The value for the elements of the output tensor.')
+    .Arg('shape', 'The shape of the output tensor.')
+    .Output(
+        0,
+        'output',
+        'Output tensor of constant values specified by 'value'');
+    
+    /*
+ * True if line from a0->a1 intersects b0->b1
+ */
+bool intersect(const b2Vec2& a0, const b2Vec2& a1,
+			   const b2Vec2& b0, const b2Vec2& b1) {
+	b2Vec2 myVec(0.0f,0.0f);
+	return intersect(a0, a1, b0, b1, myVec);
+}
+    
+    #include 'EtcConfig.h'
+#include 'EtcImage.h'
+#include 'EtcColor.h'
+#include 'EtcErrorMetric.h'
+#include <memory>
+    
+    	// ----------------------------------------------------------------------------------------------------
+	// calculate the error between the source pixel and the decoded pixel
+	// the error amount is base on the error metric
+	//
+	float Block4x4Encoding::CalcPixelError(ColorFloatRGBA a_frgbaDecodedColor, float a_fDecodedAlpha,
+											ColorFloatRGBA a_frgbaSourcePixel)
+	{
+    }
+    
+    		inline ColorFloatRGBA * GetDecodedColors(void)
 		{
-			UNKNOWN,
+			return m_afrgbaDecodedColors;
+		}
+    
+    		typedef struct
+		{
+			signed dred2 : 3;
+			unsigned red1 : 5;
 			//
-			OPAQUE,			// all 1.0
-			TRANSPARENT,	// all 0.0 or NAN
-			TRANSLUCENT		// not all opaque or transparent
-		};
+			signed dgreen2 : 3;
+			unsigned green1 : 5;
+			//
+			signed dblue2 : 3;
+			unsigned blue1 : 5;
+			//
+			unsigned flip : 1;
+			unsigned diff : 1;
+			unsigned cw2 : 3;
+			unsigned cw1 : 3;
+			//
+			unsigned int selectors;
+		} Differential;
     
-    			float fLuma2 = a_frgbaDecodedColor.fR*0.2126f +
-							a_frgbaDecodedColor.fG*0.7152f +
-							a_frgbaDecodedColor.fB*0.0722f;
-			float fChromaR2 = 0.5f * ((a_frgbaDecodedColor.fR - fLuma2) * (1.0f / (1.0f - 0.2126f)));
-			float fChromaB2 = 0.5f * ((a_frgbaDecodedColor.fB - fLuma2) * (1.0f / (1.0f - 0.0722f)));
+    		m_mode = MODE_ETC1;
+		m_boolDiff = m_pencodingbitsRGB8->individual.diff;
+		m_boolFlip = m_pencodingbitsRGB8->individual.flip;
+		if (m_boolDiff)
+		{
+			int iR2 = (int)(m_pencodingbitsRGB8->differential.red1 + m_pencodingbitsRGB8->differential.dred2);
+			if (iR2 < 0)
+			{
+				iR2 = 0;
+			}
+			else if (iR2 > 31)
+			{
+				iR2 = 31;
+			}
+    }
     
-    #   define S_MUL(a,b) ( (a)*(b) )
-#define C_MUL(m,a,b) \
-    do{ (m).r = (a).r*(b).r - (a).i*(b).i;\
-        (m).i = (a).r*(b).i + (a).i*(b).r; }while(0)
-#define C_MULC(m,a,b) \
-    do{ (m).r = (a).r*(b).r + (a).i*(b).i;\
-        (m).i = (a).i*(b).r - (a).r*(b).i; }while(0)
+    void SimplifyPolygon(const Path &in_poly, Paths &out_polys, PolyFillType fillType = pftEvenOdd);
+void SimplifyPolygons(const Paths &in_polys, Paths &out_polys, PolyFillType fillType = pftEvenOdd);
+void SimplifyPolygons(Paths &polys, PolyFillType fillType = pftEvenOdd);
     
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
+    int fastlz_compress(const void* input, int length, void* output);
     
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
+    #define MULT16_16_Q11_32(a,b)     ((a)*(b))
+#define MULT16_16_Q11(a,b)     ((a)*(b))
+#define MULT16_16_Q13(a,b)     ((a)*(b))
+#define MULT16_16_Q14(a,b)     ((a)*(b))
+#define MULT16_16_Q15(a,b)     ((a)*(b))
+#define MULT16_16_P15(a,b)     ((a)*(b))
+#define MULT16_16_P13(a,b)     ((a)*(b))
+#define MULT16_16_P14(a,b)     ((a)*(b))
+#define MULT16_32_P16(a,b)     ((a)*(b))
     
-    static OPUS_INLINE short MULT16_16_P13(int a, int b)
+    #include 'TimeA2.h'
+    
+    std::pair<std::vector<std::unique_ptr<Command>>,
+          std::vector<std::unique_ptr<Command>>>
+DHTSetup::setup(DownloadEngine* e, int family)
 {
-   opus_int64 res;
-   if (!VERIFY_SHORT(a) || !VERIFY_SHORT(b))
-   {
-      fprintf (stderr, 'MULT16_16_P13: inputs are not short: %d %d\n', a, b);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-   }
-   res = ((opus_int64)a)*b;
-   res += 4096;
-   if (!VERIFY_INT(res))
-   {
-      fprintf (stderr, 'MULT16_16_P13: overflow: %d*%d=%d\n', a, b, (int)res);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-   }
-   res >>= 13;
-   if (!VERIFY_SHORT(res))
-   {
-      fprintf (stderr, 'MULT16_16_P13: output is not short: %d*%d=%d\n', a, b, (int)res);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-   }
-   celt_mips+=4;
-   return res;
-}
-static OPUS_INLINE short MULT16_16_P14(int a, int b)
-{
-   opus_int64 res;
-   if (!VERIFY_SHORT(a) || !VERIFY_SHORT(b))
-   {
-      fprintf (stderr, 'MULT16_16_P14: inputs are not short: %d %d\n', a, b);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-   }
-   res = ((opus_int64)a)*b;
-   res += 8192;
-   if (!VERIFY_INT(res))
-   {
-      fprintf (stderr, 'MULT16_16_P14: overflow: %d*%d=%d\n', a, b, (int)res);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-   }
-   res >>= 14;
-   if (!VERIFY_SHORT(res))
-   {
-      fprintf (stderr, 'MULT16_16_P14: output is not short: %d*%d=%d\n', a, b, (int)res);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-   }
-   celt_mips+=4;
-   return res;
-}
-static OPUS_INLINE short MULT16_16_P15(int a, int b)
-{
-   opus_int64 res;
-   if (!VERIFY_SHORT(a) || !VERIFY_SHORT(b))
-   {
-      fprintf (stderr, 'MULT16_16_P15: inputs are not short: %d %d\n', a, b);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-   }
-   res = ((opus_int64)a)*b;
-   res += 16384;
-   if (!VERIFY_INT(res))
-   {
-      fprintf (stderr, 'MULT16_16_P15: overflow: %d*%d=%d\n', a, b, (int)res);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-   }
-   res >>= 15;
-   if (!VERIFY_SHORT(res))
-   {
-      fprintf (stderr, 'MULT16_16_P15: output is not short: %d*%d=%d\n', a, b, (int)res);
-#ifdef FIXED_DEBUG_ASSERT
-      celt_assert(0);
-#endif
-   }
-   celt_mips+=2;
-   return res;
-}
-    
-    /* Compute Normalized Line Spectral Frequencies (NLSFs) from whitening filter coefficients      */
-/* If not all roots are found, the a_Q16 coefficients are bandwidth expanded until convergence. */
-void silk_A2NLSF(
-    opus_int16                  *NLSF,              /* O    Normalized Line Spectral Frequencies in Q15 (0..2^15-1) [d] */
-    opus_int32                  *a_Q16,             /* I/O  Monic whitening filter coefficients in Q16 [d]              */
-    const opus_int              d                   /* I    Filter order (must be even)                                 */
-);
+  std::vector<std::unique_ptr<Command>> tempCommands;
+  std::vector<std::unique_ptr<Command>> tempRoutineCommands;
+  if ((family != AF_INET && family != AF_INET6) ||
+      (family == AF_INET && DHTRegistry::isInitialized()) ||
+      (family == AF_INET6 && DHTRegistry::isInitialized6())) {
+    return {};
+  }
+  try {
+    // load routing table and localnode id here
+    std::shared_ptr<DHTNode> localNode;
+    }
+    }
     
     
-    {  // Write must fail because of corrupted table
-  std::string tmp1, tmp2;
-  Status s = db_->Put(WriteOptions(), Key(5, &tmp1), Value(5, &tmp2));
-  ASSERT_TRUE(!s.ok()) << 'write did not fail in corrupted paranoid db';
-}
+    {} // namespace aria2
+    
+    class DHTTokenUpdateCommand : public TimeBasedCommand {
+private:
+  DHTTokenTracker* tokenTracker_;
+    }
+    
+    void DHTUnknownMessage::doReceivedAction() {}
+    
+    #include <iostream>
+#include <cassert>
+    
+    #include <iostream>
+#include <vector>
+    
+    using namespace std;
     
     
     {
-    {}  // namespace log
-}  // namespace leveldb
-    
-    Status Writer::AddRecord(const Slice& slice) {
-  const char* ptr = slice.data();
-  size_t left = slice.size();
+    {
+    {            if(cur != NULL){
+                stack.push(cur);
+                cur = cur->left;
+            }
+            else {
+                cur = stack.top();
+                stack.pop();
+                res.push_back(cur->val);
+                cur = cur->right;
+            }
+        }
+        return res;
     }
-    
-    template<typename Key, class Comparator>
-typename SkipList<Key,Comparator>::Node*
-SkipList<Key,Comparator>::FindLessThan(const Key& key) const {
-  Node* x = head_;
-  int level = GetMaxHeight() - 1;
-  while (true) {
-    assert(x == head_ || compare_(x->key, key) < 0);
-    Node* next = x->Next(level);
-    if (next == nullptr || compare_(next->key, key) >= 0) {
-      if (level == 0) {
-        return x;
-      } else {
-        // Switch to next list
-        level--;
-      }
-    } else {
-      x = next;
-    }
-  }
-}
-    
-    struct Comparator {
-  int operator()(const Key& a, const Key& b) const {
-    if (a < b) {
-      return -1;
-    } else if (a > b) {
-      return +1;
-    } else {
-      return 0;
-    }
-  }
 };
     
-        SnapshotImpl* snapshot = new SnapshotImpl(sequence_number);
+            queue<pair<TreeNode*,int>> q;
+        q.push(make_pair(root, 0));
     
-    namespace xgboost {
-namespace common {
-/*! \brief buffer reader of the stream that allows you to get */
-class StreamBufferReader {
- public:
-  explicit StreamBufferReader(size_t buffer_size)
-      :stream_(NULL),
-       read_len_(1), read_ptr_(1) {
-    buffer_.resize(buffer_size);
-  }
-  /*!
-   * \brief set input stream
-   */
-  inline void set_stream(dmlc::Stream *stream) {
-    stream_ = stream;
-    read_len_ = read_ptr_ = 1;
-  }
-  /*!
-   * \brief allows quick read using get char
-   */
-  inline char GetChar(void) {
-    while (true) {
-      if (read_ptr_ < read_len_) {
-        return buffer_[read_ptr_++];
-      } else {
-        read_len_ = stream_->Read(&buffer_[0], buffer_.length());
-        if (read_len_ == 0) return EOF;
-        read_ptr_ = 0;
-      }
-    }
-  }
-  /*! \brief whether we are reaching the end of file */
-  inline bool AtEnd(void) const {
-    return read_len_ == 0;
-  }
-    }
-    }
-    }
+    using namespace std;
     
-    // logistic loss for probability regression task
-struct LogisticRegression {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return common::Sigmoid(x); }
-  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return x >= 0.0f && x <= 1.0f; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    return predt - label;
-  }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    const float eps = 1e-16f;
-    return fmaxf(predt * (1.0f - predt), eps);
-  }
-  template <typename T>
-  static T PredTransform(T x) { return common::Sigmoid(x); }
-  template <typename T>
-  static T FirstOrderGradient(T predt, T label) { return predt - label; }
-  template <typename T>
-  static T SecondOrderGradient(T predt, T label) {
-    const T eps = T(1e-16f);
-    return std::max(predt * (T(1.0f) - predt), eps);
-  }
-  static bst_float ProbToMargin(bst_float base_score) {
-    CHECK(base_score > 0.0f && base_score < 1.0f)
-      << 'base_score must be in (0,1) for logistic loss';
-    return -logf(1.0f / base_score - 1.0f);
-  }
-  static const char* LabelErrorMsg() {
-    return 'label must be in [0,1] for logistic regression';
-  }
-  static const char* DefaultEvalMetric() { return 'rmse'; }
-};
-    
-    /*!
- * \brief Macro to register gradient booster.
- *
- * \code
- * // example of registering a objective ndcg@k
- * XGBOOST_REGISTER_GBM(GBTree, 'gbtree')
- * .describe('Boosting tree ensembles.')
- * .set_body([]() {
- *     return new GradientBooster<TStats>();
- *   });
- * \endcode
- */
-#define XGBOOST_REGISTER_GBM(UniqueId, Name)                            \
-  static DMLC_ATTRIBUTE_UNUSED ::xgboost::GradientBoosterReg &          \
-  __make_ ## GradientBoosterReg ## _ ## UniqueId ## __ =                \
-      ::dmlc::Registry< ::xgboost::GradientBoosterReg>::Get()->__REGISTER__(Name)
-    
-            *j = json::parse(*f);
-    
-    typedef void(AbortHandlerT)();
-    
-    #endif  // BENCHMARK_COLORPRINT_H_
-
-    
-      // Only add label to mean/stddev if it is same for all runs
-  Run rms;
-  big_o.report_label = reports[0].report_label;
-  rms.benchmark_name = benchmark_name + '_RMS';
-  rms.report_label = big_o.report_label;
-  rms.iterations = 0;
-  rms.real_accumulated_time = result_real.rms / multiplier;
-  rms.cpu_accumulated_time = result_cpu.rms / multiplier;
-  rms.report_rms = true;
-  rms.complexity = result_cpu.complexity;
-  // don't forget to keep the time unit, or we won't be able to
-  // recover the correct value.
-  rms.time_unit = reports[0].time_unit;
-    
-    void Increment(UserCounters *l, UserCounters const& r) {
-  // add counters present in both or just in *l
-  for (auto &c : *l) {
-    auto it = r.find(c.first);
-    if (it != r.end()) {
-      c.second.value = c.second + it->second;
-    }
-  }
-  // add counters present in r, but not in *l
-  for (auto const &tc : r) {
-    auto it = l->find(tc.first);
-    if (it == l->end()) {
-      (*l)[tc.first] = tc.second;
-    }
-  }
-}
-    
-    inline LogType& GetErrorLogInstance() {
-  static LogType log(&std::clog);
-  return log;
-}
-    
-    #define REQUIRES(...) \
-  THREAD_ANNOTATION_ATTRIBUTE__(requires_capability(__VA_ARGS__))
-    
-    template <class RNG, typename = void>
-struct StateSize {
-  // A sane default.
-  using type = std::integral_constant<size_t, 512>;
-};
-    
-    template <class String>
-String Uri::toString() const {
-  String str;
-  if (hasAuthority_) {
-    toAppend(scheme_, '://', &str);
-    if (!password_.empty()) {
-      toAppend(username_, ':', password_, '@', &str);
-    } else if (!username_.empty()) {
-      toAppend(username_, '@', &str);
-    }
-    toAppend(host_, &str);
-    if (port_ != 0) {
-      toAppend(':', port_, &str);
-    }
-  } else {
-    toAppend(scheme_, ':', &str);
-  }
-  toAppend(path_, &str);
-  if (!query_.empty()) {
-    toAppend('?', query_, &str);
-  }
-  if (!fragment_.empty()) {
-    toAppend('#', fragment_, &str);
-  }
-  return str;
-}
-    
-    
-    { private:
-  const KeepAlive<> executor_;
-};
-    
-      ~atomic_shared_ptr() {
-    store(SharedPtr(nullptr));
-  }
-  void operator=(SharedPtr desired) /* noexcept */ {
-    store(std::move(desired));
-  }
-  void operator=(const atomic_shared_ptr<T>&) = delete;
-    
-    template <template <typename> class Atom = std::atomic>
-class counted_ptr_internals : public counted_ptr_base<Atom> {
- public:
-  template <typename T, typename... Args>
-  static counted_ptr<T, Atom> make_ptr(Args&&... args) {
-    return make_counted<Atom, T>(std::forward<Args...>(args...));
-  }
-  template <typename T>
-  using CountedPtr = counted_ptr<T, Atom>;
-  typedef void counted_base;
+            stack<TreeNode*> stack;
+        TreeNode* cur = root;
+        while(cur != NULL || !stack.empty()){
+            while(cur != NULL){
+                res.push_back(cur->val);
+                stack.push(cur);
+                cur = cur->left;
+            }
     }
