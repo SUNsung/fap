@@ -1,39 +1,33 @@
 
         
-        
-def test_on_first_run_from_current_shell(usage_tracker_io, shell_pid,
-                                         shell, logs):
-    shell.get_history.return_value = ['fuck']
-    shell_pid.return_value = 12
-    main()
-    _assert_tracker_updated(usage_tracker_io, 12)
-    logs.how_to_configure_alias.assert_called_once()
+                Return the list if successful.
+        '''
+        _LOGGER.info('Refreshing device list')
+        result = _retrieve_list(self.host, self.token)
+        if result:
+            return result
     
-        assert proc.expect([TIMEOUT, u'Aborted'])
+    from homeassistant.components.notify import (
+    PLATFORM_SCHEMA, BaseNotificationService, ATTR_TITLE)
+from homeassistant.const import (CONF_TOKEN)
+import homeassistant.helpers.config_validation as cv
     
+            try:
+            with async_timeout.timeout(10, loop=self._loop):
+                response = await self._session.post(self._url, json=payload)
+                result = await response.json()
     
-@pytest.mark.functional
-def test_how_to_configure_alias(proc, TIMEOUT):
-    proc.sendline('unset -f fuck')
-    how_to_configure(proc, TIMEOUT)
+            if resp.status_code == 400:
+            _LOGGER.error('At least one parameter is missing')
+        elif resp.status_code == 402:
+            _LOGGER.error('Too much SMS send in a few time')
+        elif resp.status_code == 403:
+            _LOGGER.error('Wrong Username/Password')
+        elif resp.status_code == 500:
+            _LOGGER.error('Server error, try later')
 
     
-    
-init_zshrc = u'''echo '
-export SHELL=/usr/bin/zsh
-export HISTFILE=~/.zsh_history
-echo > $HISTFILE
-export SAVEHIST=100
-export HISTSIZE=100
-eval $(thefuck --alias {})
-setopt INC_APPEND_HISTORY
-echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
-' > ~/.zshrc'''
-    
-    
-@pytest.mark.parametrize('command', [
-    Command('apt list --upgradable', no_match_output),
-    Command('sudo apt list --upgradable', no_match_output)
-])
-def test_not_match(command):
-    assert not match(command)
+    For more details about this platform, please refer to the documentation at
+https://home-assistant.io/components/notify.message_bird/
+'''
+import logging
