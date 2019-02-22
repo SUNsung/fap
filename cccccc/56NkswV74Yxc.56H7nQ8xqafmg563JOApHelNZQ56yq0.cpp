@@ -1,313 +1,344 @@
 
         
-        bool CheckCommandLineArguments(int argc, base::CommandLine::CharType** argv) {
-  const base::CommandLine::StringType dashdash(2, '-');
-  bool block_args = false;
-  for (int i = 0; i < argc; ++i) {
-    if (argv[i] == dashdash)
+        
+    {
+    {
+    {}  // namespace python
+}  // namespace protobuf
+}  // namespace google
+
+    
+    bool CodeGenerator::GenerateAll(
+    const std::vector<const FileDescriptor*>& files,
+    const string& parameter,
+    GeneratorContext* generator_context,
+    string* error) const {
+  // Default implemenation is just to call the per file method, and prefix any
+  // error string with the file to provide context.
+  bool succeeded = true;
+  for (int i = 0; i < files.size(); i++) {
+    const FileDescriptor* file = files[i];
+    succeeded = Generate(file, parameter, generator_context, error);
+    if (!succeeded && error && error->empty()) {
+      *error = 'Code generator returned false but provided no error '
+               'description.';
+    }
+    if (error && !error->empty()) {
+      *error = file->name() + ': ' + *error;
       break;
-    if (block_args) {
-      return false;
-    } else if (IsUrlArg(argv[i])) {
-      block_args = true;
+    }
+    if (!succeeded) {
+      break;
     }
   }
-  return true;
+  return succeeded;
 }
     
-      std::map<uv_timer_t*, base::OnceClosure> tasks_;
-    
-    
-    {}  // namespace
-    
-    namespace api {
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+namespace {
+    }
+    }
+    }
+    }
     }
     
-    #include 'atom/browser/render_process_preferences.h'
-#include 'native_mate/handle.h'
-#include 'native_mate/wrappable.h'
+    #include <google/protobuf/compiler/java/java_context.h>
+#include <google/protobuf/compiler/java/java_doc_comment.h>
+#include <google/protobuf/compiler/java/java_helpers.h>
+#include <google/protobuf/compiler/java/java_name_resolver.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/stubs/strutil.h>
     
-    // static
-void Event::BuildPrototype(v8::Isolate* isolate,
-                           v8::Local<v8::FunctionTemplate> prototype) {
-  prototype->SetClassName(mate::StringToV8(isolate, 'Event'));
-  mate::ObjectTemplateBuilder(isolate, prototype->PrototypeTemplate())
-      .SetMethod('preventDefault', &Event::PreventDefault)
-      .SetMethod('sendReply', &Event::SendReply);
+    // Protocol Buffers - Google's data interchange format
+// Copyright 2008 Google Inc.  All rights reserved.
+// https://developers.google.com/protocol-buffers/
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following disclaimer
+// in the documentation and/or other materials provided with the
+// distribution.
+//     * Neither the name of Google Inc. nor the names of its
+// contributors may be used to endorse or promote products derived from
+// this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// 'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+    
+      reflection_tester.SetAllFieldsViaReflection(message);
+  reflection_tester.ExpectAllFieldsSetViaReflection(*message);
+    
+    
+    {  // Now replace the '.' in the input with it.
+  string result;
+  result.reserve(strlen(input) + size - 3);
+  result.append(input, radix_pos);
+  result.append(temp + 1, size - 2);
+  result.append(radix_pos + 1);
+  return result;
 }
     
-    void SavePageHandler::OnDownloadUpdated(download::DownloadItem* item) {
-  if (item->IsDone()) {
-    v8::Isolate* isolate = v8::Isolate::GetCurrent();
-    v8::Locker locker(isolate);
-    v8::HandleScope handle_scope(isolate);
-    if (item->GetState() == download::DownloadItem::COMPLETE) {
-      callback_.Run(v8::Null(isolate));
-    } else {
-      v8::Local<v8::String> error_message =
-          v8::String::NewFromUtf8(isolate, 'Fail to save page');
-      callback_.Run(v8::Exception::Error(error_message));
-    }
-    Destroy(item);
+    #define CHARACTER_CLASS(NAME, EXPRESSION)      \
+  class NAME {                                 \
+   public:                                     \
+    static inline bool InClass(char c) {       \
+      return EXPRESSION;                       \
+    }                                          \
   }
-}
     
-      if (!BrowserThread::PostTask(BrowserThread::UI, FROM_HERE, task)) {
-    // Without a UI thread to post the exit task to, there aren't many
-    // options.  Raise the signal again.  The default handler will pick it up
-    // and cause an ungraceful exit.
-    RAW_LOG(WARNING, 'No UI thread, exiting ungracefully.');
-    kill(getpid(), signal);
+    // This test causes gcc 3.3.5 (and earlier?) to give the cryptic error:
+//   'sorry, unimplemented: `method_call_expr' not supported by dump_expr'
+#if !defined(__GNUC__) || __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3)
+    
+        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0,
+                     const typename internal::VecTraits<T>::vec64 & v_src1,
+                     typename internal::VecTraits<T>::vec64 & v_dst) const
+    {
+        v_dst = internal::vadd(v_src0, v_src1);
     }
     
-    void AutoUpdater::QuitAndInstall() {}
-#endif
-    
-      base::WaitableEvent done(false, false);
-  BrowserThread::PostTask(
-      BrowserThread::IO, FROM_HERE,
-      base::Bind(&SetProxyConfigCallback, &done,
-                 make_scoped_refptr(context_getter), config));
-  done.Wait();
-    
-    class Base {
- public:
-  Base(int id,
-       const base::WeakPtr<ObjectManager>& manager,
-       const base::DictionaryValue& option,
-       const std::string& extension_id);
-  virtual ~Base();
+        for (size_t y = 0; y < size.height; ++y)
+    {
+        const type * src0 = internal::getRowPtr(src0Base, src0Stride, y);
+        const type * src1 = internal::getRowPtr(src1Base, src1Stride, y);
+        u8 * dst = internal::getRowPtr(dstBase, dstStride, y);
+        size_t x = 0;
     }
     
-    void Clipboard::Call(const std::string& method,
-                     const base::ListValue& arguments) {
-  if (method == 'Set') {
-    std::string text, type;
-    arguments.GetString(0, &text);
-    arguments.GetString(1, &type);
-    SetText(text);
-  } else if (method == 'Clear') {
-    Clear();
+    void assertSupportedConfiguration(bool parametersSupported)
+{
+    if (!isSupportedConfiguration()) {
+        std::cerr << 'internal error: attempted to use an unavailable function' << std::endl;
+        std::abort();
+    }
+    }
+    
+            vline1_f32 = vmulq_f32(vline1_f32, vscale);
+        vline2_f32 = vmulq_f32(vline2_f32, vscale);
+        float32x4_t vline1Shifted_f32 = vaddq_f32(vline1_f32, vshift);
+        float32x4_t vline2Shifted_f32 = vaddq_f32(vline2_f32, vshift);
+        uint32x4_t vline1_u32 = vcvtq_u32_f32(vline1Shifted_f32);
+        uint32x4_t vline2_u32 = vcvtq_u32_f32(vline2Shifted_f32);
+        uint32x4_t vline1Mask = vbicq_u32(vmask, vreinterpretq_u32_f32(vline2_f32));
+        uint32x4_t vline2Mask = vbicq_u32(vmask, vreinterpretq_u32_f32(vline1Shifted_f32));
+        vline1Mask = vshrq_n_u32(vline1Mask, 16);
+        vline2Mask = vshrq_n_u32(vline2Mask, 16);
+        vline1_u32 = vqsubq_u32(vline1_u32, vline1Mask);
+        vline2_u32 = vqsubq_u32(vline2_u32, vline2Mask);
+        uint16x4_t vRes1 = vqrshrn_n_u32(vline1_u32, 16);
+        uint16x4_t vRes2 = vqrshrn_n_u32(vline2_u32, 16);
+        uint8x8_t vRes = vqmovn_u16(vcombine_u16(vRes1, vRes2));
+    
+    
+    {
+    {}}
+    
+         // GP Register cannot be greater than 31
+     assert(static_cast<uint32_t>(rt) < 32);
+     assert(static_cast<uint32_t>(ra) < 32);
+     assert(static_cast<uint32_t>(rb) < 32);
+     assert(static_cast<uint32_t>(bc) < 32);
+    
+    
+    {}
+    
+    
+    {  if (base64) {
+    decoded = string_base64_decode(data, data_len, true);
+    if (decoded.isNull()) {
+      raise_warning('unable to decode base64 data');
+      return nullptr;
+    }
   } else {
-    NOTREACHED() << 'Invalid call to Clipboard method:' << method
-                 << ' arguments:' << arguments;
+    decoded = url_decode(data, data_len);
   }
+  return req::make<MemFile>(decoded.data(), decoded.size());
 }
     
-    Menu::Menu(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-           const std::string& extension_id)
-  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
-  Create(option);
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////
+    }
+    
+      bool valid() const { return !isClosed(); }
+    
+    template<typename F>
+void logLowPriPerfWarning(folly::StringPiece event, F fillCols) {
+  logPerfWarningImpl(event, 0, kDefaultPerfWarningRate, fillCols);
+}
+template<typename F>
+void logLowPriPerfWarning(folly::StringPiece event, int64_t rate, F fillCols) {
+  logPerfWarningImpl(event, 0, rate, fillCols);
 }
     
-     private:
-  ObjectManager* object_manager_;
     
+    {    printf('DestroyContext()\n');
+    ImGui::DestroyContext();
+    return 0;
+}
+
     
-    {  // Send event.
-  base::ListValue args;
-  object_manager()->SendEvent(this, 'click', args);
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    IMGUI_IMPL_API bool     ImGui_ImplGlfw_InitForOpenGL(GLFWwindow* window, bool install_callbacks);
+IMGUI_IMPL_API bool     ImGui_ImplGlfw_InitForVulkan(GLFWwindow* window, bool install_callbacks);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_Shutdown();
+IMGUI_IMPL_API void     ImGui_ImplGlfw_NewFrame();
+    
+            // 3. Show another simple window.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
+    
+    static void glfw_error_callback(int error, const char* description)
+{
+    fprintf(stderr, 'Glfw Error %d: %s\n', error, description);
 }
     
-    namespace {
-void SetProxyConfigCallback(
-    base::WaitableEvent* done,
-    const scoped_refptr<net::URLRequestContextGetter>& url_request_context_getter,
-    const net::ProxyConfigWithAnnotation& proxy_config) {
-  net::ProxyResolutionService* proxy_service =
-      url_request_context_getter->GetURLRequestContext()->proxy_resolution_service();
-  proxy_service->ResetConfigService(base::WrapUnique(new net::ProxyConfigServiceFixed(proxy_config)));
-  done->Signal();
+        // Create the D3DDevice
+    if (pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwnd, D3DCREATE_HARDWARE_VERTEXPROCESSING, &g_d3dpp, &g_pd3dDevice) < 0)
+    {
+        pD3D->Release();
+        UnregisterClass(wc.lpszClassName, wc.hInstance);
+        return 0;
+    }
+    
+    
+    {    vkDestroyDevice(g_Device, g_Allocator);
+    vkDestroyInstance(g_Instance, g_Allocator);
 }
-} // namespace
+    
+    int main() {
+    }
     
     
-    {	_FORCE_INLINE_ btTypedConstraint *get_bt_constraint() { return constraint; }
-};
-#endif
+/// Recursive
+/// Time Complexity: O(n)
+/// Space Complexity: O(n)
+    
+    int main() {
+    }
+    
+    #include <iostream>
+#include <vector>
+#include <stack>
+    
+    
+    {    return 0;
+}
 
     
     public:
-	HingeJointBullet(RigidBodyBullet *rbA, RigidBodyBullet *rbB, const Transform &frameA, const Transform &frameB);
-	HingeJointBullet(RigidBodyBullet *rbA, RigidBodyBullet *rbB, const Vector3 &pivotInA, const Vector3 &pivotInB, const Vector3 &axisInA, const Vector3 &axisInB);
-    
-    #ifndef PIN_JOINT_BULLET_H
-#define PIN_JOINT_BULLET_H
-    
-    #ifndef PCK_PACKER_H
-#define PCK_PACKER_H
-    
-    namespace leveldb {
+    vector<int> preorderTraversal(TreeNode* root) {
     }
     
-      void Build(int n) {
-    std::string key_space, value_space;
-    WriteBatch batch;
-    for (int i = 0; i < n; i++) {
-      //if ((i % 100) == 0) fprintf(stderr, '@ %d of %d\n', i, n);
-      Slice key = Key(i, &key_space);
-      batch.Clear();
-      batch.Put(key, Value(i, &value_space));
-      WriteOptions options;
-      // Corrupt() doesn't work without this sync on windows; stat reports 0 for
-      // the file size.
-      if (i == n - 1) {
-        options.sync = true;
-      }
-      ASSERT_OK(db_->Write(options, &batch));
+    
+// My Non-Recursive
+// Time Complexity: O(n), n is the node number in the tree
+// Space Complexity: O(h), h is the height of the tree
+class Solution {
     }
-  }
+    
+      // Input statistics
+  // TODO(noetzli): The stats are incomplete. They are lacking everything
+  // consumed by MergeHelper.
+  uint64_t num_input_records = 0;
+  uint64_t num_input_deletion_records = 0;
+  uint64_t num_input_corrupt_records = 0;
+  uint64_t total_input_raw_key_bytes = 0;
+  uint64_t total_input_raw_value_bytes = 0;
+    
+    #include 'rocksdb/status.h'
+    
+      // put and get from non-default column family
+  s = db->Put(WriteOptions(), handles[1], Slice('key'), Slice('value'));
+  assert(s.ok());
+  std::string value;
+  s = db->Get(ReadOptions(), handles[1], Slice('key'), &value);
+  assert(s.ok());
+    
+    class DbDumpTool {
+ public:
+  bool Run(const DumpOptions& dump_options,
+           rocksdb::Options options = rocksdb::Options());
+};
+    
+    class Slice;
+class BlockBuilder;
+struct Options;
+    
+      const Snapshot* snapshot();
+    
+      // -------------------
+  // Parameters that affect performance
     
     
-    {  if (is_manual) {
-    ManualCompaction* m = manual_compaction_;
-    if (!status.ok()) {
-      m->done = true;
+    {    // exception out_of_range.401
+    try
+    {
+        // try to write at a nonexisting key
+        object.at('the fast') = 'il rapido';
     }
-    if (!m->done) {
-      // We only compacted part of the requested range.  Update *m
-      // to the range that is left to be compacted.
-      m->tmp_storage = manual_end;
-      m->begin = &m->tmp_storage;
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
     }
-    manual_compaction_ = nullptr;
-  }
 }
-    
-    
-    {}  // namespace leveldb
 
     
-    static std::string IKey(const std::string& user_key,
-                        uint64_t seq,
-                        ValueType vt) {
-  std::string encoded;
-  AppendInternalKey(&encoded, ParsedInternalKey(user_key, seq, vt));
-  return encoded;
-}
+        // change element at index 1 (second element) to 'second'
+    array.at(1) = 'second';
     
-    namespace leveldb {
-namespace log {
-    }
-    }
-    
-    template<typename Key, class Comparator>
-void SkipList<Key,Comparator>::Insert(const Key& key) {
-  // TODO(opt): We can use a barrier-free variant of FindGreaterOrEqual()
-  // here since Insert() is externally synchronized.
-  Node* prev[kMaxHeight];
-  Node* x = FindGreaterOrEqual(key, prev);
-    }
-    
-    class SnapshotList {
- public:
-  SnapshotList() : head_(0) {
-    head_.prev_ = &head_;
-    head_.next_ = &head_;
-  }
-    }
-    
-            // Inner state of the underlying reader.
-        // Is set in the RestoreFromCheckpoint call and used in the next GetNextMinibatch
-        // when the reader state is restored after the first StartEpoch call.
-        Internal::Optional<Dictionary> m_state;
-    
-        void NDMask::MarkSectionAs(const std::vector<size_t>& sectionOffset, const NDShape& sectionShape, MaskKind maskKind)
-    {
-        // TODO: Implement batching of masking operation for masks residing on GPUs to avoid making
-        // GPU invocations for each MaskSection call.
-    }
-    
-    static const char* GetReaderName(const string& precision)
+    class async_thread_pool
 {
-    if (precision == 'float')
-        return 'GetReaderF';
-    else if (precision == 'double')
-        return 'GetReaderD';
-    else
-        InvalidArgument('DataReader: The 'precision' parameter must be 'float' or 'double'.');
-}
-    
-    const std::string DHTResponseMessage::R('r');
-    
-    bool DHTRoutingTable::addNode(const std::shared_ptr<DHTNode>& node)
-{
-  return addNode(node, false);
-}
-    
-        peerAnnounceStorage->setTaskQueue(taskQueue.get());
-    peerAnnounceStorage->setTaskFactory(taskFactory.get());
-    
-      void addTask(const std::shared_ptr<DHTTask>& task) { queue_.push_back(task); }
-    
-      ~DHTTokenTracker();
-    
-    #include 'internal_macros.h'
-    
-    void PrintUsageAndExit() {
-  fprintf(stdout,
-          'benchmark'
-          ' [--benchmark_list_tests={true|false}]\n'
-          '          [--benchmark_filter=<regex>]\n'
-          '          [--benchmark_min_time=<min_time>]\n'
-          '          [--benchmark_repetitions=<num_repetitions>]\n'
-          '          [--benchmark_report_aggregates_only={true|false}\n'
-          '          [--benchmark_format=<console|json|csv>]\n'
-          '          [--benchmark_out=<filename>]\n'
-          '          [--benchmark_out_format=<json|console|csv>]\n'
-          '          [--benchmark_color={auto|true|false}]\n'
-          '          [--benchmark_counters_tabular={true|false}]\n'
-          '          [--v=<verbosity>]\n');
-  exit(0);
-}
-    
-    
+public:
+    async_thread_pool(int _min_threads, int _max_threads)
     {
-    {}  // end namespace internal
-}  // end namespace benchmark
-    
-    // Internal function to calculate the different scalability forms
-BigOFunc* FittingCurve(BigO complexity) {
-  switch (complexity) {
-    case oN:
-      return [](int n) -> double { return n; };
-    case oNSquared:
-      return [](int n) -> double { return std::pow(n, 2); };
-    case oNCubed:
-      return [](int n) -> double { return std::pow(n, 3); };
-    case oLogN:
-      return [](int n) { return log2(n); };
-    case oNLogN:
-      return [](int n) { return n * log2(n); };
-    case o1:
-    default:
-      return [](int) { return 1.0; };
-  }
-}
-    
-    #include 'check.h'
-#include 'colorprint.h'
-#include 'commandlineflags.h'
-#include 'internal_macros.h'
-#include 'string_util.h'
-#include 'timers.h'
-    
-    double Finish(Counter const& c, double cpu_time, double num_threads) {
-  double v = c.value;
-  if (c.flags & Counter::kIsRate) {
-    v /= cpu_time;
-  }
-  if (c.flags & Counter::kAvgThreads) {
-    v /= num_threads;
-  }
-  return v;
-}
-    
-    namespace benchmark {
+        n_waiting = 0;
+        running = false;
+        min_threads = _min_threads;
+        max_threads = _max_threads;
+        current_task_id = 0;
+    }
     }
     
-    #ifdef BENCHMARK_OS_EMSCRIPTEN
-#include <emscripten.h>
-#endif
+    TEST(hashmap, string)
+{
+    swHashMap *hm = swHashMap_new(16, NULL);
+    swHashMap_add(hm, (char *) SW_STRL('hello'), (void *) 199);
+    swHashMap_add(hm, (char *) SW_STRL('swoole22'), (void *) 8877);
+    swHashMap_add(hm, (char *) SW_STRL('hello2'), (void *) 200);
+    swHashMap_add(hm, (char *) SW_STRL('willdel'), (void *) 888);
+    swHashMap_add(hm, (char *) SW_STRL('willupadte'), (void *) 9999);
+    swHashMap_add(hm, (char *) SW_STRL('hello3'), (void *) 78978);
+    }
+    
+        SwooleG.main_reactor = (swReactor *) sw_malloc(sizeof(swReactor));
+    swReactor_create(SwooleG.main_reactor, SW_REACTOR_MAXEVENTS);
+    
+    #include <gtest/gtest.h>
+#include <initializer_list>
+#include <utility>
