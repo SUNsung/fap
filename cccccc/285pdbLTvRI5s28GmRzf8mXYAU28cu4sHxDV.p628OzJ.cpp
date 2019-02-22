@@ -1,472 +1,467 @@
-UvTaskRunner::UvTaskRunner(uv_loop_t* loop) : loop_(loop) {}
+
+        
+            ~reverse_lock() {
+        templock.lock();
+        templock.swap(lock);
+    }
     
-     private:
-  display::Screen* screen_;
     
-      static void BuildPrototype(v8::Isolate* isolate,
-                             v8::Local<v8::FunctionTemplate> prototype);
-    
-      // Returns a closure that can destroy the native class.
-  base::OnceClosure GetDestroyClosure();
-    
-        QVariant value() const;
-    void setValue(const QVariant &value);
-    
-    private:
-    void paintPath(QPainterPath &path, QQueue<float> &samples);
-    
-    static void secp256k1_gej_set_ge(secp256k1_gej *r, const secp256k1_ge *a) {
-   r->infinity = a->infinity;
-   r->x = a->x;
-   r->y = a->y;
-   secp256k1_fe_set_int(&r->z, 1);
+    {    /* d += a3 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'movq %%rax,%%rcx\n'
+    'movq %%rdx,%%r15\n'
+    /* d += a2 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d = a0 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c = a4 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += (c & M) * R */
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* t3 (tmp1) = d & M */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    'movq %%rsi,%q1\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* d += a4 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a0 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += c * R */
+    'movq %%r8,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* t4 = d & M (%%rsi) */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* tx = t4 >> 48 (tmp3) */
+    'movq %%rsi,%%rax\n'
+    'shrq $48,%%rax\n'
+    'movq %%rax,%q3\n'
+    /* t4 &= (M >> 4) (tmp2) */
+    'movq $0xffffffffffff,%%rax\n'
+    'andq %%rax,%%rsi\n'
+    'movq %%rsi,%q2\n'
+    /* c = a0 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += a4 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a1 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* u0 = d & M (%%rsi) */
+    'movq %%rcx,%%rsi\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* u0 = (u0 << 4) | tx (%%rsi) */
+    'shlq $4,%%rsi\n'
+    'movq %q3,%%rax\n'
+    'orq %%rax,%%rsi\n'
+    /* c += u0 * (R >> 4) */
+    'movq $0x1000003d1,%%rax\n'
+    'mulq %%rsi\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[0] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,0(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a1 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a0 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a4 * b2 */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a2 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c += (d & M) * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 */
+    'shrdq $52,%%r15,%%rcx\n'
+    'xorq %%r15,%%r15\n'
+    /* r[1] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,8(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a2 * b0 */
+    'movq 0(%%rbx),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a1 * b1 */
+    'movq 8(%%rbx),%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* c += a0 * b2 (last use of %%r10 = a0) */
+    'movq 16(%%rbx),%%rax\n'
+    'mulq %%r10\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* fetch t3 (%%r10, overwrites a0), t4 (%%rsi) */
+    'movq %q2,%%rsi\n'
+    'movq %q1,%%r10\n'
+    /* d += a4 * b3 */
+    'movq 24(%%rbx),%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* d += a3 * b4 */
+    'movq 32(%%rbx),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rcx\n'
+    'adcq %%rdx,%%r15\n'
+    /* c += (d & M) * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 (%%rcx only) */
+    'shrdq $52,%%r15,%%rcx\n'
+    /* r[2] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,16(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += t3 */
+    'addq %%r10,%%r8\n'
+    /* c += d * R */
+    'movq %%rcx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[3] = c & M */
+    'movq %%r8,%%rax\n'
+    'movq $0xfffffffffffff,%%rdx\n'
+    'andq %%rdx,%%rax\n'
+    'movq %%rax,24(%%rdi)\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* c += t4 (%%r8 only) */
+    'addq %%rsi,%%r8\n'
+    /* r[4] = c */
+    'movq %%r8,32(%%rdi)\n'
+: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
+: 'b'(b), 'D'(r)
+: '%rax', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
+);
 }
     
-    #include <map>
-#include <string>
-#include <utility>
+    			if(mip == 0)
+			{
+				pImageData = a_pafSourceRGBA;
+			}
+			else
+			{
+				pMipImage = new float[mipWidth*mipHeight*4];
+				if(FilterTwoPass(a_pafSourceRGBA, a_uiSourceWidth, a_uiSourceHeight, pMipImage, mipWidth, mipHeight, a_uiMipFilterFlags, Etc::FilterLanczos3) )
+				{
+					pImageData = pMipImage;
+				}
+			}
     
     
-    {} // namespace tinyformat
-    
-    void App::ClearCache(content::RenderProcessHost* render_process_host) {
-  render_process_host->Send(new ShellViewMsg_ClearCache());
-  nw::RemoveHttpDiskCache(render_process_host->GetBrowserContext(),
-                          render_process_host->GetID());
+    {    //fixup PolyNode links etc ...
+    polytree.Childs.reserve(m_PolyOuts.size());
+    for (PolyOutList::size_type i = 0; i < m_PolyOuts.size(); i++)
+    {
+        OutRec* outRec = m_PolyOuts[i];
+        if (!outRec->PolyNd) continue;
+        if (outRec->IsOpen) 
+        {
+          outRec->PolyNd->m_IsOpen = true;
+          polytree.AddChild(*outRec->PolyNd);
+        }
+        else if (outRec->FirstLeft && outRec->FirstLeft->PolyNd) 
+          outRec->FirstLeft->PolyNd->AddChild(*outRec->PolyNd);
+        else
+          polytree.AddChild(*outRec->PolyNd);
+    }
 }
+//------------------------------------------------------------------------------
     
-       void Call(const std::string& method,
-                    const base::ListValue& arguments) override;
-   void CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) override;
-    
-    
-    {} // namespace nwapi
+    #endif
 
     
-    namespace nwapi {
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+    
+    TEST(CorruptionTest, Recovery) {
+  Build(100);
+  Check(100, 100);
+  Corrupt(kLogFile, 19, 1);      // WriteBatch tag for first record
+  Corrupt(kLogFile, log::kBlockSize + 1000, 1);  // Somewhere in second block
+  Reopen();
     }
     
-    
-    {}  // namespace nw
-    
-      if (menu_item->submenu_)
-    menu_model_->InsertSubMenuAt(pos, menu_item->id(), menu_item->label_,
-                                 menu_item->submenu_->menu_model_.get());
-  else if (menu_item->type_ == 'normal')
-    menu_model_->InsertItemAt(pos, menu_item->id(), menu_item->label_);
-  else if (menu_item->type_ == 'checkbox')
-    menu_model_->InsertCheckItemAt(pos, menu_item->id(), menu_item->label_);
-  else if (menu_item->type_ == 'separator')
-    menu_model_->InsertSeparatorAt(pos, ui::NORMAL_SEPARATOR);
-    
-    #include <string.h>
-    
-    #include 'extensions/browser/extension_function.h'
+      void MaybeScheduleCompaction() EXCLUSIVE_LOCKS_REQUIRED(mutex_);
+  static void BGWork(void* db);
+  void BackgroundCall();
+  void BackgroundCompaction() EXCLUSIVE_LOCKS_REQUIRED(mutex_);
+  void CleanupCompaction(CompactionState* compact)
+      EXCLUSIVE_LOCKS_REQUIRED(mutex_);
+  Status DoCompactionWork(CompactionState* compact)
+      EXCLUSIVE_LOCKS_REQUIRED(mutex_);
     
     
-    {        vs1 = vmla_f32(vget_low(vgamma), vs1, vget_low(valpha));
-        vs1 = vmla_f32(vs1, vs2, vget_low(vbeta));
-        v_dst = vcvt_u32_f32(vs1);
+// Owned filenames have the form:
+//    dbname/CURRENT
+//    dbname/LOCK
+//    dbname/LOG
+//    dbname/LOG.old
+//    dbname/MANIFEST-[0-9]+
+//    dbname/[0-9]+.(log|sst|ldb)
+bool ParseFileName(const std::string& filename,
+                   uint64_t* number,
+                   FileType* type) {
+  Slice rest(filename);
+  if (rest == 'CURRENT') {
+    *number = 0;
+    *type = kCurrentFile;
+  } else if (rest == 'LOCK') {
+    *number = 0;
+    *type = kDBLockFile;
+  } else if (rest == 'LOG' || rest == 'LOG.old') {
+    *number = 0;
+    *type = kInfoLogFile;
+  } else if (rest.starts_with('MANIFEST-')) {
+    rest.remove_prefix(strlen('MANIFEST-'));
+    uint64_t num;
+    if (!ConsumeDecimalNumber(&rest, &num)) {
+      return false;
     }
-    
-    void bitwiseXor(const Size2D &size,
-                const u8 *src0Base, ptrdiff_t src0Stride,
-                const u8 *src1Base, ptrdiff_t src1Stride,
-                u8 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, BitwiseXor());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
-    
-    
-    {
-    {         vst1q_u16(_dst + i, vcombine_u16(vline1_u16, vline2_u16));
-     }
-})
-#endif
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVTS_FUNC1(s16, 16,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.16 {d4-d5}, [%[src]]                              \n\t'
-            'vmovl.s16 q3, d4                                       \n\t'
-            'vmovl.s16 q4, d5                                       \n\t'
-            'vcvt.f32.s32 q5, q3                                    \n\t'
-            'vcvt.f32.s32 q6, q4                                    \n\t'
-            'vmul.f32 q7, q5, q0                                    \n\t'
-            'vmul.f32 q8, q6, q0                                    \n\t'
-            'vadd.f32 q9, q7, q1                                    \n\t'
-            'vadd.f32 q10, q8, q1                                   \n\t'
-            'vcvt.s32.f32 q11, q9                                   \n\t'
-            'vcvt.s32.f32 q12, q10                                  \n\t'
-            'vqmovn.s32 d26, q11                                    \n\t'
-            'vqmovn.s32 d27, q12                                    \n\t'
-            'vst1.16 {d26-d27}, [%[dst]]                            \n\t'
-            : /*no output*/
-            : [src] 'r' (_src + i),
-              [dst] 'r' (_dst + i + 0),
-              'w' (vshift), 'w' (vscale)
-            : 'd6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26','d27'
-        );
+    if (!rest.empty()) {
+      return false;
     }
-})
-#else
-CVTS_FUNC1(s16, 16,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        int16x8_t vline = vld1q_s16(_src + i);
-        int32x4_t vline1_s32 = vmovl_s16(vget_low_s16 (vline));
-        int32x4_t vline2_s32 = vmovl_s16(vget_high_s16(vline));
-        float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
-        float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        vline1_s32 = vcvtq_s32_f32(vline1_f32);
-        vline2_s32 = vcvtq_s32_f32(vline2_f32);
-        int16x4_t vRes1 = vqmovn_s32(vline1_s32);
-        int16x4_t vRes2 = vqmovn_s32(vline2_s32);
-        vst1q_s16(_dst + i, vcombine_s16(vRes1, vRes2));
-    }
-})
-#endif
-    
-                    int16x8_t t0_16s = vreinterpretq_s16_u16(vmovl_u8(t0));
-                int16x8_t t1_16s = vreinterpretq_s16_u16(vmovl_u8(t1));
-                int16x8_t t2_16s = vreinterpretq_s16_u16(vmovl_u8(t2));
-    
-            for (; js < roiw_base; js += step_base, jd -= step_base)
-        {
-            prefetch(src + js);
-    }
-    
-        if (borderType == BORDER_MODE_CONSTANT)
-        for (s32 k = 0; k < cn; ++k)
-        {
-            lane[-cn+k] = borderValue;
-            lane[-cn-cn+k] = borderValue;
-            lane[colsn+k] = borderValue;
-            lane[colsn+cn+k] = borderValue;
-        }
-    
-    #ifdef _MSC_VER
-#pragma warning(disable:4503)  // disable warning: decorated name length exceeded.
-#endif
-    
-    namespace mxnet {
-namespace op {
-    }
-    }
-    
-        for (int i = 0; i < param_.num_out; ++i)
-      top_blobs.push_back(new Blob<float>());
-    
-    MXNET_DLL int MXCVImdecode(const unsigned char *img, const mx_uint len,
-                           const int flag, NDArrayHandle *out) {
-  API_BEGIN();
-  mx_uint dims[3];
-  CHECK_GE(flag, 0) << 'flag must be 0 (grayscale) or 1 (colored).';
-  dims[2] = flag == 0 ? 1 : 3;
-  if (get_jpeg_size(img, len, dims+1, dims)) {
-  } else if (get_png_size(img, len, dims+1, dims)) {
+    *type = kDescriptorFile;
+    *number = num;
   } else {
-    LOG(FATAL) << 'Only supports png and jpg.';
+    // Avoid strtoull() to keep filename format independent of the
+    // current locale
+    uint64_t num;
+    if (!ConsumeDecimalNumber(&rest, &num)) {
+      return false;
+    }
+    Slice suffix = rest;
+    if (suffix == Slice('.log')) {
+      *type = kLogFile;
+    } else if (suffix == Slice('.sst') || suffix == Slice('.ldb')) {
+      *type = kTableFile;
+    } else if (suffix == Slice('.dbtmp')) {
+      *type = kTempFile;
+    } else {
+      return false;
+    }
+    *number = num;
   }
-  NDArray ndout(TShape(dims, dims+3), Context::CPU(), true, mshadow::kUint8);
-  unsigned char *img_cpy = new unsigned char[len];
-  memcpy(img_cpy, img, sizeof(unsigned char)*len);
-  Engine::Get()->PushSync([=](RunContext ctx){
-      ndout.CheckAndAlloc();
-      cv::Mat buf(1, len, CV_8U, img_cpy);
-      cv::Mat dst(dims[0], dims[1], flag == 0 ? CV_8U : CV_8UC3, ndout.data().dptr_);
-#if (CV_MAJOR_VERSION > 3 || (CV_MAJOR_VERSION == 3 && CV_MINOR_VERSION >= 3))
-      cv::imdecode(buf, flag | cv::IMREAD_IGNORE_ORIENTATION, &dst);
-#else
-      cv::imdecode(buf, flag, &dst);
-#endif
-      CHECK(!dst.empty());
-      delete[] img_cpy;
-    }, ndout.ctx(), {}, {ndout.var()});
-  NDArray *tmp = new NDArray();
-  *tmp = ndout;
-  *out = tmp;
-  API_END();
+  return true;
 }
     
-      /*!
-   * \brief Constructor takes function to run.
-   * \param size size of the thread pool.
-   * \param func the function to run on the thread pool.
-   */
-  explicit ThreadPool(size_t size, std::function<void()> func)
-      : worker_threads_(size) {
-    CHECK_GT(size, 0);
-    for (auto& i : worker_threads_) {
-      i = std::thread(func);
-    }
-  }
-  explicit ThreadPool(size_t size,
-                      std::function<void(std::shared_ptr<dmlc::ManualEvent> ready)> func,
-                      const bool wait)
-      : worker_threads_(size) {
-    CHECK_GT(size, 0);
-    for (auto& i : worker_threads_) {
-      std::shared_ptr<dmlc::ManualEvent> ptr = std::make_shared<dmlc::ManualEvent>();
-      ready_events_.emplace_back(ptr);
-      i = std::thread(func, ptr);
-    }
-    if (wait) {
-      WaitForReady();
-    }
-  }
-  ~ThreadPool() noexcept(false) {
-    for (auto&& i : worker_threads_) {
-      i.join();
-    }
-  }
+      fname = TableFileName('bar', 200);
+  ASSERT_EQ('bar/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(200, number);
+  ASSERT_EQ(kTableFile, type);
     
-     protected:
-  void PushToExecute(OprBlock *opr_block, bool pusher_thread) override {
-    if (opr_block->opr->prop == FnProperty::kAsync && pusher_thread) {
-      DoExecute(opr_block);
-    } else {
-      DoPushToQueue(opr_block);
-    }
-  }
+    TEST(LogTest, ReadFourthMiddleBlock) {
+  CheckInitialOffsetRecord(log::kBlockSize + 1, 3);
+}
     
-    #ifdef _DEBUG
-            if (HasNan(smoothedGradientValue, 'TrainOneEpoch/UpdateWeights/Learner::Update(): '))
-                LogicError('%ls has NaNs in smoothedGradient.', parameter.Uid().c_str());
-#endif
-    
-                    if (accumulatedMetric)
-                {
-                    m_metric.second = accumulatedMetric->AsScalar<double>();
-                }
-    
-            static Dictionary Serialize(const FunctionPtr& f);
-    
-                // The assumption here is that a sequence always start at 0 (no invaid mark at the beginning),
-            // and ends at the first invalid mask. 
-            // Therefore, no need to check NDMask again.
-            // And the sequences has been resized to match the number of sequences and the length of each sequence in the Value object.
-    
-            VariableFields(const NDShape& shape, VariableKind varType, ::CNTK::DataType type, const std::weak_ptr<Function>& ownerFunction, const NDArrayViewPtr& value, bool needsGradient, const std::vector<Axis>& dynamicAxes, bool isSparse, const std::wstring& name, const std::wstring& uid)
-            : m_shape(shape), m_varKind(varType), m_dataType(type), m_ownerFunction(ownerFunction), m_value(value), m_needsGradient(needsGradient), m_dynamicAxes(dynamicAxes), m_isSparse(isSparse), m_name(name), m_uid(uid), m_valueTimeStamp(0)
-        {
-            if (value && (type != value->GetDataType()))
-                InvalidArgument('The DataType of the Parameter/Constant Variable '%S' does not match the DataType of the associated Value', AsString().c_str());
-    }
-    
-    public:
-    CrossProcessMutex(const std::string& name)
-        : m_handle(NULL),
-          m_name('Global\\' + name)
-    {
-    }
-    
-    namespace Microsoft { namespace MSR { namespace CNTK {
-    }
-    }
-    }
-    
-    
-    {
-    {
-    {}}}
-
-    
-        // replace if requested
-    // This happens for model editing.
-    // workList operates on mapped nodes.
-    size_t numRelinked = 0;
-    for (auto& nodeRef : workList)
-    {
-        let iter = replacements.find(nodeRef);
-        if (iter != replacements.end())
-        {
-            assert(nodeRef->GetEnvironmentPtr()); // must be in some network if mapped
-            nodeRef = iter->second; // nodeRef is a reference, so this patches the workList in-place
-            numRelinked++;
-        }
-    }
-    
-    
-    {
-    {            node->m_queryUrls = m_queryUrls;
-            node->m_urlSorter = m_urlSorter;
-            node->m_logWeights = m_logWeights;
-        }
-    }
-    
-      XGBOOST_DEVICE GradientPairInternal<T> operator+(
-      const GradientPairInternal<T> &rhs) const {
-    GradientPairInternal<T> g;
-    g.grad_ = grad_ + rhs.grad_;
-    g.hess_ = hess_ + rhs.hess_;
-    return g;
-  }
-    
-    namespace xgboost {
-/*!
- * \brief interface of tree update module, that performs update of a tree.
- */
-class TreeUpdater {
+    class Writer {
  public:
-  /*! \brief virtual destructor */
-  virtual ~TreeUpdater() = default;
-  /*!
-   * \brief Initialize the updater with given arguments.
-   * \param args arguments to the objective function.
-   */
-  virtual void Init(const std::vector<std::pair<std::string, std::string> >& args) = 0;
-  /*!
-   * \brief perform update to the tree models
-   * \param gpair the gradient pair statistics of the data
-   * \param data The data matrix passed to the updater.
-   * \param trees references the trees to be updated, updater will change the content of trees
-   *   note: all the trees in the vector are updated, with the same statistics,
-   *         but maybe different random seeds, usually one tree is passed in at a time,
-   *         there can be multiple trees when we train random forest style model
-   */
-  virtual void Update(HostDeviceVector<GradientPair>* gpair,
-                      DMatrix* data,
-                      const std::vector<RegTree*>& trees) = 0;
-    }
+  // Create a writer that will append data to '*dest'.
+  // '*dest' must be initially empty.
+  // '*dest' must remain live while this Writer is in use.
+  explicit Writer(WritableFile* dest);
     }
     
-    // logistic loss for probability regression task
-struct LogisticRegression {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return common::Sigmoid(x); }
-  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return x >= 0.0f && x <= 1.0f; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    return predt - label;
-  }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    const float eps = 1e-16f;
-    return fmaxf(predt * (1.0f - predt), eps);
-  }
-  template <typename T>
-  static T PredTransform(T x) { return common::Sigmoid(x); }
-  template <typename T>
-  static T FirstOrderGradient(T predt, T label) { return predt - label; }
-  template <typename T>
-  static T SecondOrderGradient(T predt, T label) {
-    const T eps = T(1e-16f);
-    return std::max(predt * (T(1.0f) - predt), eps);
-  }
-  static bst_float ProbToMargin(bst_float base_score) {
-    CHECK(base_score > 0.0f && base_score < 1.0f)
-      << 'base_score must be in (0,1) for logistic loss';
-    return -logf(1.0f / base_score - 1.0f);
-  }
-  static const char* LabelErrorMsg() {
-    return 'label must be in [0,1] for logistic regression';
-  }
-  static const char* DefaultEvalMetric() { return 'rmse'; }
-};
+      Key const key;
     
-      // Resets the SplitEvaluator to the state it was in after the Init was called
-  virtual void Reset();
+            if(_rightBoundary < _leftBoundary)
+        {
+            // screen width is larger than world's boundary width
+            //set both in the middle of the world
+            _rightBoundary = _leftBoundary = (_leftBoundary + _rightBoundary) / 2;
+        }
+        if(_topBoundary < _bottomBoundary)
+        {
+            // screen width is larger than world's boundary width
+            //set both in the middle of the world
+            _topBoundary = _bottomBoundary = (_topBoundary + _bottomBoundary) / 2;
+        }
     
-            static float f = 0.0f;
-        ImGui::Text('Hello, world!');
-        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
-        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
-        ImGui::ShowDemoWindow(NULL);
-    
-    //---- Define constructor and implicit cast operators to convert back<>forth between your math types and ImVec2/ImVec4.
-// This will be inlined as part of ImVec2 and ImVec4 class declarations.
-/*
-#define IM_VEC2_CLASS_EXTRA                                                 \
-        ImVec2(const MyVec2& f) { x = f.x; y = f.y; }                       \
-        operator MyVec2() const { return MyVec2(x,y); }
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_IMPL_API void     ImGui_ImplDX9_InvalidateDeviceObjects();
-IMGUI_IMPL_API bool     ImGui_ImplDX9_CreateDeviceObjects();
-
-    
-    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
-// You can also handle inputs yourself and use those as a reference.
-IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
-
-    
-            D3DCompile(vertexShader, strlen(vertexShader), NULL, NULL, NULL, 'main', 'vs_4_0', 0, 0, &g_pVertexShaderBlob, NULL);
-        if (g_pVertexShaderBlob == NULL) // NB: Pass ID3D10Blob* pErrorBlob to D3DCompile() to get error showing in (const char*)pErrorBlob->GetBufferPointer(). Make sure to Release() the blob!
-            return false;
-        if (g_pd3dDevice->CreateVertexShader((DWORD*)g_pVertexShaderBlob->GetBufferPointer(), g_pVertexShaderBlob->GetBufferSize(), NULL, &g_pVertexShader) != S_OK)
-            return false;
-    
-        // Upload texture to graphics system
-    {
-        D3D12_HEAP_PROPERTIES props;
-        memset(&props, 0, sizeof(D3D12_HEAP_PROPERTIES));
-        props.Type = D3D12_HEAP_TYPE_DEFAULT;
-        props.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-        props.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+    /** 
+ * @brief Base class for Action objects.
+ */
+class CC_DLL Action : public Ref, public Clonable
+{
+public:
+    /** Default tag used for all the actions. */
+    static const int INVALID_TAG = -1;
+    /**
+     * @js NA
+     * @lua NA
+     */
+    virtual std::string description() const;
     }
     
-        // Decide GL+GLSL versions
-#if __APPLE__
-    // GL 3.2 Core + GLSL 150
-    const char* glsl_version = '#version 150';
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG); // Always required on Mac
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-#else
-    // GL 3.0 + GLSL 130
-    const char* glsl_version = '#version 130';
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-#endif
-    
-        p = -p;
-    reverse->insertControlPoint(p, 0);
-    
-    
+        // eg.
+    // p..p..p..p..p..p..p
+    // 1..2..3..4..5..6..7
+    // want p to be 1, 2, 3, 4, 5, 6
+    if (time == 1)
     {
+        p = _points->count() - 1;
+        lt = 1;
+    }
+    else 
     {
-    {            if (action->getTag() == (int)tag && action->getOriginalTarget() == target)
-            {
-                removeActionAtIndex(i, element);
-                break;
-            }
+        p = time / _deltaT;
+        lt = (time - _deltaT * (float)p) / _deltaT;
+    }
+    
+    // Interpolate
+    Vec2 pp0 = _points->getControlPointAtIndex(p-1);
+    Vec2 pp1 = _points->getControlPointAtIndex(p+0);
+    Vec2 pp2 = _points->getControlPointAtIndex(p+1);
+    Vec2 pp3 = _points->getControlPointAtIndex(p+2);
+    
+        if (action)
+    {
+        if (action->initWithDuration(duration, gridSize, position, radius, waves, amplitude))
+        {
+            action->autorelease();
+        }
+        else
+        {
+            CC_SAFE_RELEASE_NULL(action);
         }
     }
+    
+    
+    {    CC_SAFE_DELETE(ret);
+    return nullptr;
 }
     
     THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
@@ -477,6 +472,59 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#include '2d/CCActionPageTurn3D.h'
-#include '2d/CCGrid.h'
-#include '2d/CCNodeGrid.h'
+    
+        /** Resumes the target. All queued actions will be resumed.
+     *
+     * @param target    A certain target.
+     */
+    virtual void resumeTarget(Node *target);
+    
+    /** Pauses all running actions, returning a list of targets whose actions were paused.
+     *
+     * @return  A list of targets whose actions were paused.
+     */
+    virtual Vector<Node*> pauseAllRunningActions();
+    
+    /** Resume a set of targets (convenience function to reverse a pauseAllRunningActions call).
+     *
+     * @param targetsToResume   A set of targets need to be resumed.
+     */
+    virtual void resumeTargets(const Vector<Node*>& targetsToResume);
+    
+    /** Main loop of ActionManager.
+     * @param dt    In seconds.
+     */
+    virtual void update(float dt);
+    
+protected:
+    // declared in ActionManager.m
+    
+        /**
+    @brief Get the amplitude rate of the effect.
+    @return Return the amplitude rate of the effect.
+    */
+    float getAmplitudeRate() const { return _amplitudeRate; }
+    /**
+    @brief Set the amplitude rate of the effect.
+    @param amplitudeRate The value of amplitude rate will be set.
+    */
+    void setAmplitudeRate(float amplitudeRate) { _amplitudeRate = amplitudeRate; }
+    
+     @since v0.99.2
+ */
+class CC_DLL ActionTween : public ActionInterval
+{
+public:
+    /** 
+     * @brief Create and initializes the action with the property name (key), and the from and to parameters.
+     * @param duration The duration of the ActionTween. It's a value in seconds.
+     * @param key The key of property which should be updated.
+     * @param from The value of the specified property when the action begin.
+     * @param to The value of the specified property when the action end.
+     * @return If the creation success, return a pointer of ActionTween; otherwise, return nil.
+     */
+    static ActionTween* create(float duration, const std::string& key, float from, float to);
+    }
+    
+        _colorUnmodified = Color3B::WHITE;
+    _isOpacityModifyRGB = true;
