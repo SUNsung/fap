@@ -1,110 +1,62 @@
 
         
-        
-@pytest.fixture(params=[(python_3, False),
-                        (python_3, True),
-                        (python_2, False)])
-def proc(request, spawnu, TIMEOUT):
-    container, instant_mode = request.param
-    proc = spawnu(*container)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(init_zshrc.format(
-        u'--enable-experimental-instant-mode' if instant_mode else ''))
-    proc.sendline(u'zsh')
-    if instant_mode:
-        assert proc.expect([TIMEOUT, u'instant mode ready: True'])
-    return proc
+            def load(self):
+        try:
+            data = self._cache.get(self.cache_key)
+        except Exception:
+            # Some backends (e.g. memcache) raise an exception on invalid
+            # cache keys. If this happens, reset the session. See #17810.
+            data = None
     
-    match_output = '''
-Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
-Hit:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease
-Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
-Hit:4 http://security.ubuntu.com/ubuntu zesty-security InRelease
-Hit:5 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
-Hit:6 https://download.docker.com/linux/ubuntu zesty InRelease
-Hit:7 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
-Fetched 89.2 kB in 0s (122 kB/s)
-Reading package lists... Done
-Building dependency tree
-Reading state information... Done
-8 packages can be upgraded. Run 'apt list --upgradable' to see them.
-'''
+    from django.contrib.sessions.backends.base import (
+    CreateError, SessionBase, UpdateError,
+)
+from django.core.exceptions import SuspiciousOperation
+from django.db import DatabaseError, IntegrityError, router, transaction
+from django.utils import timezone
+from django.utils.functional import cached_property
     
-                gc.collect()
-            print('max_iter', max_iter)
-            print('- benchmarking A-SGD')
-            clf = SGDRegressor(alpha=alpha / n_train, fit_intercept=False,
-                               max_iter=max_iter, learning_rate='invscaling',
-                               eta0=.002, power_t=0.05, tol=1e-3,
-                               average=(max_iter * n_train // 2))
-    
-        package is the name of the root module of the package
-    
-    The goal of this exercise is to train a linear classifier on text features
-that represent sequences of up to 3 consecutive characters so as to be
-recognize natural languages by using the frequencies of short character
-sequences as 'fingerprints'.
-    
-    # TASK: Build a vectorizer / classifier pipeline using the previous analyzer
-# the pipeline instance should stored in a variable named clf
-clf = Pipeline([
-    ('vec', vectorizer),
-    ('clf', Perceptron(tol=1e-3)),
-])
-    
-    # Now predict the value of the digit on the second half:
-expected = digits.target[n_samples // 2:]
-predicted = classifier.predict(data[n_samples // 2:])
-    
-    agglo = cluster.FeatureAgglomeration(connectivity=connectivity,
-                                     n_clusters=32)
-    
-            cert.sign(CertUtil.ca_privatekey, CertUtil.ca_digest)
-    
-    EVENT_NAME = 'flic_click'
-EVENT_DATA_NAME = 'button_name'
-EVENT_DATA_ADDRESS = 'button_address'
-EVENT_DATA_TYPE = 'click_type'
-EVENT_DATA_QUEUED_TIME = 'queued_time'
-    
-        def random_see(dev_id, name):
-        '''Randomize a sighting.'''
-        see(
-            dev_id=dev_id,
-            host_name=name,
-            gps=(hass.config.latitude + offset(),
-                 hass.config.longitude + offset()),
-            gps_accuracy=random.randrange(50, 150),
-            battery=random.randrange(10, 90)
+        def _get_session_key(self):
+        '''
+        Instead of generating a random string, generate a secure url-safe
+        base64-encoded string of data as our session key.
+        '''
+        return signing.dumps(
+            self._session, compress=True,
+            salt='django.contrib.sessions.backends.signed_cookies',
+            serializer=self.serializer,
         )
     
-    _LOGGER = logging.getLogger(__name__)
     
-    import homeassistant.helpers.config_validation as cv
-from homeassistant.components import http
-from homeassistant.core import callback
-from homeassistant.helpers.entity import Entity
-from homeassistant.helpers.entity_component import EntityComponent
-from homeassistant.util import Throttle
-    
-        return EventHandler(patterns, hass)
+def load_data(label_mode='fine'):
+    '''Loads CIFAR100 dataset.
     
     
-    # Display the results
-    for (top, right, bottom, left), name in zip(face_locations, face_names):
-        # Scale back up face locations since the frame we detected in was scaled to 1/4 size
-        top *= 4
-        right *= 4
-        bottom *= 4
-        left *= 4
+def test_boston_housing():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = boston_housing.load_data()
+        assert len(x_train) == len(y_train)
+        assert len(x_test) == len(y_test)
     
-    # Load a second sample picture and learn how to recognize it.
-biden_image = face_recognition.load_image_file('biden.jpg')
-biden_face_encoding = face_recognition.face_encodings(biden_image)[0]
+    model = Sequential()
+model.add(Conv2D(32, kernel_size=(3, 3),
+                 activation='relu',
+                 input_shape=input_shape))
+model.add(Conv2D(64, (3, 3), activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
+model.add(Flatten())
+model.add(Dense(128, activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(num_classes, activation='softmax'))
     
+    Reaches 0.93 train/test accuracy after 900 epochs
+(which roughly corresponds to 1687500 steps in the original paper.)
+'''
     
-import unittest
-import os
-import numpy as np
-from click.testing import CliRunner
+    model.compile(loss='categorical_crossentropy',
+              optimizer=RMSprop(),
+              metrics=['accuracy'])
