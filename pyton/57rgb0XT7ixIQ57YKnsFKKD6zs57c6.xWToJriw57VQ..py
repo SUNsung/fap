@@ -1,187 +1,101 @@
 
         
-        # TODO: ensure that history changes.
-
-    
-    containers = (('thefuck/python3-tcsh',
-               u'''FROM python:3
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'),
-              ('thefuck/python2-tcsh',
-               u'''FROM python:2
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'))
-    
-    Commands:
-   update - Retrieve new lists of packages
-   upgrade - Perform an upgrade
-   install - Install new packages (pkg is libc6 not libc6.deb)
-   remove - Remove packages
-   autoremove - Remove automatically all unused packages
-   purge - Remove packages and config files
-   source - Download source archives
-   build-dep - Configure build-dependencies for source packages
-   dist-upgrade - Distribution upgrade, see apt-get(8)
-   dselect-upgrade - Follow dselect selections
-   clean - Erase downloaded archive files
-   autoclean - Erase old downloaded archive files
-   check - Verify that there are no broken dependencies
-   changelog - Download and display the changelog for the given package
-   download - Download the binary package into the current directory
-    
-    match_output = '''
-Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
-Hit:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease
-Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
-Hit:4 http://security.ubuntu.com/ubuntu zesty-security InRelease
-Hit:5 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
-Hit:6 https://download.docker.com/linux/ubuntu zesty InRelease
-Hit:7 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
-Fetched 89.2 kB in 0s (122 kB/s)
-Reading package lists... Done
-Building dependency tree
-Reading state information... Done
-8 packages can be upgraded. Run 'apt list --upgradable' to see them.
-'''
-    
-      aws help
-  aws <command> help
-  aws <command> <subcommand> help
-aws: error: argument operation: Invalid choice, valid choices are:
-    
-        def __init__(self):
-        self.name = 'pg_trgm'
-    
-        def __init__(self, session_key=None):
-        self._cache = caches[settings.SESSION_CACHE_ALIAS]
-        super().__init__(session_key)
-    
-        data_train = fetch_20newsgroups_vectorized(subset='train')
-    data_test = fetch_20newsgroups_vectorized(subset='test')
-    X_train = check_array(data_train.data, dtype=np.float32,
-                          accept_sparse='csc')
-    X_test = check_array(data_test.data, dtype=np.float32, accept_sparse='csr')
-    y_train = data_train.target
-    y_test = data_test.target
-    
-                gc.collect()
-            print('benchmarking lars_path (with Gram):', end='')
-            sys.stdout.flush()
-            tstart = time()
-            G = np.dot(X.T, X)  # precomputed Gram matrix
-            Xy = np.dot(X.T, y)
-            lars_path(X, y, Xy=Xy, Gram=G, max_iter=n_informative)
-            delta = time() - tstart
-            print('%0.3fs' % delta)
-            lars_gram[i_f, i_s] = delta
-    
-        label = 'scikit-learn singular value decomposition benchmark results'
-    fig = plt.figure(label)
-    ax = fig.gca(projection='3d')
-    for c, (label, timings) in zip('rbg', sorted(six.iteritems(results))):
-        X, Y = np.meshgrid(samples_range, features_range)
-        Z = np.asarray(timings).reshape(samples_range.shape[0],
-                                        features_range.shape[0])
-        # plot the actual surface
-        ax.plot_surface(X, Y, Z, rstride=8, cstride=8, alpha=0.3,
-                        color=c)
-        # dummy point plot to stick the legend to since surface plot do not
-        # support legends (yet?)
-        ax.plot([1], [1], [1], color=c, label=label)
-    
-    for i, n in enumerate(n_samples):
-    for j, p in enumerate(n_features):
-        X = np.random.normal(size=(n, p))
-        t0 = time.time()
-        ward.fit(X)
-        scikits_time[j, i] = time.time() - t0
-        t0 = time.time()
-        hierarchy.ward(X)
-        scipy_time[j, i] = time.time() - t0
-    
-                gc.collect()
-            print('- benchmarking RidgeRegression')
-            clf = Ridge(alpha=alpha, fit_intercept=False)
-            tstart = time()
-            clf.fit(X_train, y_train)
-            ridge_results[i, j, 0] = mean_squared_error(clf.predict(X_test),
-                                                        y_test)
-            ridge_results[i, j, 1] = time() - tstart
-    
-        opener = build_opener()
-    html_filename = os.path.join(html_folder, lang + '.html')
-    if not os.path.exists(html_filename):
-        print('Downloading %s' % page)
-        request = Request(page)
-        # change the User Agent to avoid being blocked by Wikipedia
-        # downloading a couple of articles should not be considered abusive
-        request.add_header('User-Agent', 'OpenAnything/1.0')
-        html_content = opener.open(request).read()
-        open(html_filename, 'wb').write(html_content)
-    
-        if not os.path.exists(ARCHIVE_NAME):
-        print('Downloading dataset from %s (3 MB)' % URL)
-        opener = urlopen(URL)
-        with open(ARCHIVE_NAME, 'wb') as archive:
-            archive.write(opener.read())
-    
-        if not os.path.exists(ARCHIVE_NAME):
-        print('Downloading dataset from %s (14 MB)' % URL)
-        opener = urlopen(URL)
-        with open(ARCHIVE_NAME, 'wb') as archive:
-            archive.write(opener.read())
+            def __repr__(self):
+        return str(dict(self.items()))
     
     
-# Is a path a directory?
-# This follows symbolic links, so both islink() and isdir()
-# can be true for the same path on systems that support symlinks
-def isdir(s):
-    '''Return true if the pathname refers to an existing directory.'''
+def prepare_url(value):
+    # Issue #1483: Make sure the URL always has a trailing slash
+    httpbin_url = value.url.rstrip('/') + '/'
+    
+        def is_unverifiable(self):
+        return True
+    
+    
+def test_idna_without_version_attribute(mocker):
+    '''Older versions of IDNA don't provide a __version__ attribute, verify
+    that if we have such a package, we don't blow up.
+    '''
+    mocker.patch('requests.help.idna', new=None)
+    assert info()['idna'] == {'version': ''}
+    
+    
+@pytest.mark.parametrize('var,scheme', _proxy_combos)
+def test_use_proxy_from_environment(httpbin, var, scheme):
+    url = '{}://httpbin.org'.format(scheme)
+    fake_proxy = Server()  # do nothing with the requests; just close the socket
+    with fake_proxy as (host, port):
+        proxy_url = 'socks5://{}:{}'.format(host, port)
+        kwargs = {var: proxy_url}
+        with override_environ(**kwargs):
+            # fake proxy's lack of response will cause a ConnectionError
+            with pytest.raises(requests.exceptions.ConnectionError):
+                requests.get(url)
+    
+            return resp
+    
+                if length:
+                self.headers['Content-Length'] = builtin_str(length)
+            else:
+                self.headers['Transfer-Encoding'] = 'chunked'
+        else:
+            # Multi-part file uploads.
+            if files:
+                (body, content_type) = self._encode_files(files, data)
+            else:
+                if data:
+                    body = self._encode_params(data)
+                    if isinstance(data, basestring) or hasattr(data, 'read'):
+                        content_type = None
+                    else:
+                        content_type = 'application/x-www-form-urlencoded'
+    
+    
+def rmse(a, b):
+    return np.sqrt(np.mean((a - b) ** 2))
+    
+    from scipy.sparse.csr import csr_matrix
+import numpy as np
+from sklearn.linear_model.stochastic_gradient import SGDRegressor
+from sklearn.metrics import r2_score
+    
+        xx = range(0, n * step, step)
+    plt.figure('scikit-learn tree benchmark results')
+    plt.subplot(211)
+    plt.title('Learning with varying number of samples')
+    plt.plot(xx, scikit_classifier_results, 'g-', label='classification')
+    plt.plot(xx, scikit_regressor_results, 'r-', label='regression')
+    plt.legend(loc='upper left')
+    plt.xlabel('number of samples')
+    plt.ylabel('Time (s)')
+    
+    
+def _get_git_revision():
     try:
-        st = os.stat(s)
-    except (OSError, ValueError):
-        return False
-    return stat.S_ISDIR(st.st_mode)
+        revision = subprocess.check_output(REVISION_CMD.split()).strip()
+    except (subprocess.CalledProcessError, OSError):
+        print('Failed to execute git to get revision')
+        return None
+    return revision.decode('utf-8')
     
-    from email.message import EmailMessage
-from email.policy import SMTP
+        print('Generating skeleton for %s' % f)
     
-    # If we want to print a preview of the message content, we can extract whatever
-# the least formatted payload is and print the first three lines.  Of course,
-# if the message has no plain text part printing the first three lines of html
-# is probably useless, but this is just a conceptual example.
-simplest = msg.get_body(preferencelist=('plain', 'html'))
-print()
-print(''.join(simplest.get_content().splitlines(keepends=True)[:3]))
+    fit_data = data[np.argsort(model.row_labels_)]
+fit_data = fit_data[:, np.argsort(model.column_labels_)]
     
-    ##
+    # Import datasets, classifiers and performance metrics
+from sklearn import datasets, svm, metrics
     
-    def convert_point(s):
-    x, y = list(map(float, s.split(b';')))
-    return Point(x, y)
+    digits = datasets.load_digits()
+images = digits.images
+X = np.reshape(images, (len(images), -1))
+connectivity = grid_to_graph(*images[0].shape)
     
-    DB_FILE = 'mydb'
-    
-    # If false, no module index is generated.
-#
-# texinfo_domain_indices = True
-    
-        def observe(call=None):
-        '''Observe three entities.'''
-        random_see('demo_paulus', 'Paulus')
-        random_see('demo_anne_therese', 'Anne Therese')
-    
-    For more details about this platform, please refer to the documentation at
-https://home-assistant.io/components/device_tracker.swisscom/
-'''
-import logging
-    
-            self.username = config[CONF_USERNAME]
-        self.password = config[CONF_PASSWORD]
-    
-                    overwrite = service.data.get(ATTR_OVERWRITE)
+        # Gloss the lips
+    d.polygon(face_landmarks['top_lip'], fill=(150, 0, 0, 128))
+    d.polygon(face_landmarks['bottom_lip'], fill=(150, 0, 0, 128))
+    d.line(face_landmarks['top_lip'], fill=(150, 0, 0, 64), width=8)
+    d.line(face_landmarks['bottom_lip'], fill=(150, 0, 0, 64), width=8)
     
         # You can access the actual face itself like this:
     face_image = image[top:bottom, left:right]
@@ -189,52 +103,17 @@ import logging
     pil_image.show()
 
     
-        # If no valid image file was uploaded, show the file upload form:
-    return '''
-    <!doctype html>
-    <title>Is this a picture of Obama?</title>
-    <h1>Upload a picture and see if it's a picture of Obama!</h1>
-    <form method='POST' enctype='multipart/form-data'>
-      <input type='file' name='file'>
-      <input type='submit' value='Upload'>
-    </form>
-    '''
+    # Find all the faces in the image using a pre-trained convolutional neural network.
+# This method is more accurate than the default HOG model, but it's slower
+# unless you have an nvidia GPU and dlib compiled with CUDA extensions. But if you do,
+# this will use GPU acceleration and perform well.
+# See also: find_faces_in_picture.py
+face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=0, model='cnn')
     
-            # Draw a label with a name below the face
-        cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
-        font = cv2.FONT_HERSHEY_DUPLEX
-        cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
     
-        # Scale down image if it's giant so things run a little faster
-    if max(unknown_image.shape) > 1600:
-        pil_img = PIL.Image.fromarray(unknown_image)
-        pil_img.thumbnail((1600, 1600), PIL.Image.LANCZOS)
-        unknown_image = np.array(pil_img)
-    
-        # Print the location of each facial feature in this image
-    for facial_feature in face_landmarks.keys():
-        print('The {} in this face has the following points: {}'.format(facial_feature, face_landmarks[facial_feature]))
-    
-        # 将每一个人脸与已知样本图片比对
-    for face_encoding in face_encodings:
-        # 看是否属于奥巴马或者拜登
-        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
-        name = '<Unknown Person>'
-    
-        if len(unknown_face_encodings) > 0:
-        face_found = True
-        # 看看图片中的第一张脸是不是奥巴马
-        match_results = face_recognition.compare_faces([known_face_encoding], unknown_face_encodings[0])
-        if match_results[0]:
-            is_obama = True
-    
-            release.delete()
-    
-            for environment in RangeQuerySetWrapperWithProgressBar(orm.Environment.objects.all()):
-            try:
-                with transaction.atomic():
-                    orm.EnvironmentProject.objects.create(
-                        environment=environment, project_id=environment.project_id
-                    )
-            except IntegrityError:
-                pass
+@app.route('/', methods=['GET', 'POST'])
+def upload_image():
+    # Check if a valid image file was uploaded
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return redirect(request.url)
