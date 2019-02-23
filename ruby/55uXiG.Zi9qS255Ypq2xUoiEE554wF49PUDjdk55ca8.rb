@@ -1,56 +1,67 @@
 
         
-                cmd << ['-am #{message.shellescape}']
-        cmd << '--force' if options[:force]
-        cmd << '-s' if options[:sign]
-        cmd << tag.shellescape
-        cmd << options[:commit].to_s if options[:commit]
+            pod 'ObjCPod', path: 'ObjCPod'
+    pod 'SwiftPod', path: 'SwiftPod'
+    pod 'MixedPod', path: 'MixedPod'
+    pod 'CustomModuleMapPod', path: 'CustomModuleMapPod'
     
-          it 'works with keychain-settings and name and password' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          create_keychain ({
-            name: 'test.keychain',
-            password: 'testpassword',
-            timeout: 600,
-            lock_when_sleeps: true,
-            lock_after_timeout: true,
-          })
-        end').runner.execute(:test)
-    
-      describe 'on other OSs (macOS, Linux)' do
-    before(:each) do
-      allow(FastlaneCore::Helper).to receive(:windows?).and_return(false)
+            # Prints the list of specs & pod cache dirs for a single pod name.
+        #
+        # This output is valid YAML so it can be parsed with 3rd party tools
+        #
+        # @param [Array<Hash>] cache_descriptors
+        #        The various infos about a pod cache. Keys are
+        #        :spec_file, :version, :release and :slug
+        #
+        def print_pod_cache_infos(pod_name, cache_descriptors)
+          UI.puts '#{pod_name}:'
+          cache_descriptors.each do |desc|
+            if @short_output
+              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
+            end
+            UI.puts('  - Version: #{desc[:version]}')
+            UI.puts('    Type:    #{pod_type(desc)}')
+            UI.puts('    Spec:    #{desc[:spec_file]}')
+            UI.puts('    Pod:     #{desc[:slug]}')
+          end
+        end
+      end
     end
+  end
+end
+
     
-          # project - An instance of `Project`.
-      # object - The object to look up or set a database ID for.
-      def initialize(project, object)
-        @project = project
-        @object = object
+        it 'is able to sort the orders listing' do
+      # default is completed_at desc
+      within_row(1) { expect(page).to have_content('R100') }
+      within_row(2) { expect(page).to have_content('R200') }
+    
+          within('.table') do
+        expect(page).to have_content('19.99')
+        expect(page).to have_content('black')
+        expect(page).to have_content('A100')
+      end
+    end
+  end
+end
+
+    
+              def order_token
+            request.headers['X-Spree-Order-Token'] || params[:order_token]
+          end
+    
+          def current_ability
+        Spree::Dependencies.ability_class.constantize.new(current_api_user)
       end
     
-              # Handle the case that argv was empty or didn't contain any subcommand
-          main_args = argv.dup if main_args.nil?
-    
-            # Defines a capability for the given provider. The block should return
-        # a class/module that has a method with the capability name, ready
-        # to be executed. This means that if it is an instance method,
-        # the block should return an instance of the class.
-        #
-        # @param [String] provider The name of the provider
-        # @param [String] cap The name of the capability
-        def self.provider_capability(provider, cap, &block)
-          components.provider_capabilities[provider.to_sym].register(cap.to_sym, &block)
-          nil
+            def scope
+          if params[:product_id]
+            Spree::Product.friendly.find(params[:product_id])
+          elsif params[:variant_id]
+            Spree::Variant.find(params[:variant_id])
+          end
         end
-    
-        def self.job_hash_context(job_hash)
-      # If we're using a wrapper class, like ActiveJob, use the 'wrapped'
-      # attribute to expose the underlying thing.
-      klass = job_hash['wrapped'] || job_hash['class']
-      bid = job_hash['bid']
-      '#{klass} JID-#{job_hash['jid']}#{' BID-#{bid}' if bid}'
+      end
     end
-    
-      Sidekiq::WebAction.class_eval 'def _render\n#{ERB.new(File.read(Web::LAYOUT)).src}\nend'
+  end
 end
