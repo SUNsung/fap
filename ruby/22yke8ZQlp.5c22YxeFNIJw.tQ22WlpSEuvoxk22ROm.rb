@@ -1,96 +1,162 @@
 
         
-              File.open('bower.json', 'w') do |f|
-        f.puts JSON.pretty_generate(spec)
+          def test_returns_success
+    Warden.test_mode!
+    
+          def mailer_from(mapping)
+        mailer_sender(mapping, :from)
       end
+    
+            self.devise_modules |= selected_modules
+        options.each { |key, value| send(:'#{key}=', value) }
+      end
+    end
+    
+      def show
+    render json: outbox_presenter, serializer: ActivityPub::OutboxSerializer, adapter: ActivityPub::Adapter, content_type: 'application/activity+json'
+  end
+    
+        def index
+      authorize :email_domain_block, :index?
+      @email_domain_blocks = EmailDomainBlock.page(params[:page])
+    end
+    
+        def set_report_note
+      @report_note = ReportNote.find(params[:id])
     end
   end
 end
 
     
-      # Disable request forgery protection in test environment.
-  config.action_controller.allow_forgery_protection = false
+      def subscription_params
+    params.require(:subscription).permit(:endpoint, keys: [:auth, :p256dh])
+  end
     
-    Then(/^the default stage files are created$/) do
-  staging = TestApp.test_app_path.join('config/deploy/staging.rb')
-  production = TestApp.test_app_path.join('config/deploy/production.rb')
-  expect(File.exist?(staging)).to be true
-  expect(File.exist?(production)).to be true
-end
+    class Api::Web::SettingsController < Api::Web::BaseController
+  respond_to :json
     
-          def trace_set(key)
-        return unless fetch(:print_config_variables, false)
-        puts 'Config variable set: #{key.inspect} => #{values[key].inspect}'
-      end
+      def after_sign_in_path_for(resource)
+    if resource.email_verified?
+      root_path
+    else
+      finish_signup_path
     end
   end
 end
 
     
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
-      end
-      super
-    end
+    namespace :bower do
     
-        # Outputs a single category as an <a> link.
-    #
-    #  +category+ is a category string to format as an <a> link
-    #
-    # Returns string
-    #
-    def category_link(category)
-      dir = @context.registers[:site].config['category_dir']
-      '<a class='category' href='/#{dir}/#{category.to_url}/'>#{category}</a>'
-    end
+    class NodeMincerTest < Minitest::Test
+  DUMMY_PATH = 'test/dummy_node_mincer'
     
-      if options.respond_to? 'keys'
-    options.each do |k,v|
-      unless v.nil?
-        v = v.join ',' if v.respond_to? 'join'
-        v = v.to_json if v.respond_to? 'keys'
-        output += ' data-#{k.sub'_','-'}='#{v}''
-      end
+      s.add_development_dependency 'appraisal'
+  s.add_development_dependency 'awesome_print'
+  s.add_development_dependency 'capybara'
+  s.add_development_dependency 'capybara-screenshot'
+  s.add_development_dependency 'chromedriver-helper'
+  s.add_development_dependency 'coffee-rails'
+  s.add_development_dependency 'database_cleaner'
+  s.add_development_dependency 'factory_bot', '~> 4.7'
+  s.add_development_dependency 'ffaker'
+  s.add_development_dependency 'mysql2'
+  s.add_development_dependency 'pg'
+  s.add_development_dependency 'pry'
+  s.add_development_dependency 'rspec-rails'
+  s.add_development_dependency 'sass-rails'
+  s.add_development_dependency 'selenium-webdriver'
+  s.add_development_dependency 'simplecov'
+  s.add_development_dependency 'sqlite3'
+end
+
+    
+      shared_examples 'nested requested resources' do
+    it 'are returned' do
+      expect(json_response['included']).to be_present
+      expect(json_response['included']).not_to include(have_type('variant').and have_id(default_variant.id.to_s))
+      expect(json_response['included']).to include(have_type('option_type'))
+      expect(json_response['included']).to include(have_type('option_value'))
     end
-  elsif options.respond_to? 'join'
-    output += ' data-value='#{config[key].join(',')}''
-  else
-    output += ' data-value='#{config[key]}''
   end
-  output += '></#{tag}>'
+    
+    module RailsCommandHelpers
+  def framework_version?(version_string)
+    framework_version =~ /^#{version_string}/
+  end
+    
+    begin
+  # Use mime/types/columnar if available, for reduced memory usage
+  require 'mime/types/columnar'
+rescue LoadError
+  require 'mime/types'
 end
     
-          get_web_content(redirected_url)
+        # Hash assignment of interpolations. Included only for compatibility,
+    # and is not intended for normal use.
+    def self.[]= name, block
+      define_method(name, &block)
+      @interpolators_cache = nil
     end
     
-          super
-    end
+    # Set some attributes
+package.name = 'my-service'
+package.version = '1.0'
     
-    module OctopressFilters
-  def self.pre_filter(page)
-    if page.ext.match('html|textile|markdown|md|haml|slim|xml')
-      input = BacktickCodeBlock::render_code_block(page.content)
-      page.content = input.gsub /(<figure.+?>.+?<\/figure>)/m do
-        TemplateWrapper::safe_wrap($1)
+        return @name
+  end
+    
+          if File.directory?(origin) && origin[-1,1] == '/'
+        chdir = chdir == '.' ? origin : File.join(chdir, origin)
+        source = '.'
+      else
+        origin_dir = File.dirname(origin)
+        chdir = chdir == '.' ? origin_dir : File.join(chdir, origin_dir)
+        source = File.basename(origin)
       end
+    else
+      source, destination = path, '/'
     end
+    
+      def set_default_prefix
+    attributes[:prefix] = self.class.default_prefix
+    attributes[:prefix_given?] = true
   end
-  def self.post_filter(page)
-    if page.ext.match('html|textile|markdown|md|haml|slim|xml')
-      page.output = TemplateWrapper::unwrap(page.output)
+    
+        # Publish the package.
+    repo_path = build_path('#{name}_repo')
+    safesystem('pkgrepo', 'create', repo_path)
+    safesystem('pkgrepo', 'set', '-s', repo_path, 'publisher/prefix=#{attributes[:p5p_publisher]}')
+    safesystem('pkgsend', '-s', repo_path,
+      'publish', '-d', '#{staging_path}', '#{build_path}/#{name}.p5m')
+    safesystem('pkgrecv', '-s', repo_path, '-a',
+      '-d', build_path('#{name}.p5p'), name)
+    
+        # Remove the stuff we don't want
+    delete_these = ['.depdb', '.depdblock', '.filemap', '.lock', '.channel', 'cache', 'temp', 'download', '.channels', '.registry']
+    Find.find(staging_path) do |path|
+      if File.file?(path)
+        logger.info('replacing staging_path in file', :replace_in => path, :staging_path => staging_path)
+        begin
+          content = File.read(path).gsub(/#{Regexp.escape(staging_path)}/, '')
+          File.write(path, content)
+        rescue ArgumentError => e
+          logger.warn('error replacing staging_path in file', :replace_in => path, :error => e)
+        end
+      end
+      FileUtils.rm_r(path) if delete_these.include?(File.basename(path))
     end
-  end
+    
+        if File.exists?(params[:output])
+      # TODO(sissel): Allow folks to choose output?
+      logger.error('Puppet module directory '#{params[:output]}' already ' \
+                    'exists. Delete it or choose another output (-p flag)')
+    end
+    
+        # use dir to set stuff up properly, mainly so I don't have to reimplement
+    # the chdir/prefix stuff special for tar.
+    dir = convert(FPM::Package::Dir)
+    if attributes[:chdir]
+      dir.attributes[:chdir] = File.join(build_path, attributes[:chdir])
+    else
+      dir.attributes[:chdir] = build_path
+    end
