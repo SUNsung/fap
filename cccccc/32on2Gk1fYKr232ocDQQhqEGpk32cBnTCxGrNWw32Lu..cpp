@@ -1,172 +1,136 @@
 
         
-        /*
- * Call a function that produces a return value for each element of
- * `inputs' in parallel, and collect the results.
- *
- * Requires: the type returned from the function call must be
- * DefaultConstructible, and either MoveAssignable or Assignable.
- *
- * If `func' throws an exception, the results of the output vector
- * will contain some default-constructed values.
- */
-template<class Func, class Items>
-auto map(Items&& inputs, Func func) -> std::vector<decltype(func(inputs[0]))> {
-  std::vector<decltype(func(inputs[0]))> retVec(inputs.size());
-  auto const retMem = &retVec[0];
+        class CensusChannelData : public ChannelData {
+ public:
+  grpc_error* Init(grpc_channel_element* elem,
+                   grpc_channel_element_args* args) override;
+};
+    
+    #include 'src/cpp/ext/filters/census/grpc_plugin.h'
+    
+     private:
+  Status ListService(ServerContext* context,
+                     reflection::v1alpha::ListServiceResponse* response);
+    
+    namespace grpc {
+    }
+    
+    #endif  // GRPC_INTERNAL_CPP_DYNAMIC_THREAD_POOL_H
+
+    
+    #include 'modules/drivers/canbus/proto/can_card_parameter.pb.h'
+    
+    void ClusterGeneralInfo701::Parse(const std::uint8_t* bytes, int32_t length,
+                                  ContiRadar* conti_radar) const {
+  auto obs = conti_radar->add_contiobs();
+  obs->set_clusterortrack(true);
+  obs->set_obstacle_id(obstacle_id(bytes, length));
+  obs->set_longitude_dist(longitude_dist(bytes, length));
+  obs->set_lateral_dist(lateral_dist(bytes, length));
+  obs->set_longitude_vel(longitude_vel(bytes, length));
+  obs->set_lateral_vel(lateral_vel(bytes, length));
+  obs->set_rcs(rcs(bytes, length));
+  obs->set_dynprop(dynprop(bytes, length));
+  double timestamp = apollo::common::time::Clock::NowInSeconds();
+  auto header = obs->mutable_header();
+  header->CopyFrom(conti_radar->header());
+  header->set_timestamp_sec(timestamp);
+}
+    
+    
+    {  int ret = x;
+  return ret;
+}
+    
+    #include 'modules/canbus/vehicle/gem/protocol/accel_cmd_67.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_cmd_6b.h'
+#include 'modules/canbus/vehicle/gem/protocol/global_cmd_69.h'
+#include 'modules/canbus/vehicle/gem/protocol/headlight_cmd_76.h'
+#include 'modules/canbus/vehicle/gem/protocol/horn_cmd_78.h'
+#include 'modules/canbus/vehicle/gem/protocol/shift_cmd_65.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_cmd_6d.h'
+#include 'modules/canbus/vehicle/gem/protocol/turn_cmd_63.h'
+#include 'modules/canbus/vehicle/gem/protocol/wiper_cmd_90.h'
+    
+    namespace apollo {
+namespace canbus {
+namespace gem {
+    }
+    }
+    }
+    
+      Byte t3(bytes + 7);
+  t = t3.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
+    
+    // config detail: {'name': 'torque_input', 'offset': 0.0, 'precision': 0.001,
+// 'len': 32, 'is_signed_var': True, 'physical_range':
+// '[-2147483.648|2147483.647]', 'bit': 39, 'type': 'double', 'order':
+// 'motorola', 'physical_unit': 'N-m'}
+double Brakemotorrpt372::torque_input(const std::uint8_t* bytes,
+                                      int32_t length) const {
+  Byte t0(bytes + 4);
+  int32_t x = t0.get_byte(0, 8);
     }
     
     
     {
-    {    RNAME(v16); RNAME(v17); RNAME(v18); RNAME(v19); RNAME(v20); RNAME(v21);
-    RNAME(v22); RNAME(v23); RNAME(v24); RNAME(v25); RNAME(v26); RNAME(v27);
-    RNAME(v28); RNAME(v29);
-    return nullptr;
-  }
- inline const char* regname(RegSF) {
-    return 'cr0';
- }
-#undef RNAME
+    {
+    {            // make sure that after testing the children that the index doesn't change.
+            QModelIndex newerIndex = model->index ( r, c, parent );
+            QVERIFY( index == newerIndex );
+        }
+    }
 }
     
-    void Config::Bind(HackStrictOption& loc, const IniSettingMap& ini,
-                  const Hdf& config, const std::string& name /* = '' */,
-                  HackStrictOption def) {
-  // Currently this doens't bind to ini_get since it is hard to thread through
-  // an enum
-  loc = GetHackStrictOption(ini, config, name, def);
-}
+      m_keyValues =
+      QSharedPointer<ValueEditor::TabsModel>(new ValueEditor::TabsModel(
+          keyFactory.staticCast<ValueEditor::AbstractKeyFactory>()));
     
-      /**
-   * Prefer the Bind() over the GetFoo() as it makes ini_get() work too.
-   * These Bind()s should be used for ini settings. Specifically, they
-   * should be used when the bound setting is needed before the main ini
-   * processing pass. Unlike IniSetting::Bind, these bindings will fetch the
-   * value in an ini setting if it is set otherwise it will use the defValue.
-   */
-  static void Bind(bool& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const bool defValue = false,
-                   const bool prepend_hhvm = true);
-  static void Bind(const char*& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const char *defValue = nullptr,
-                   const bool prepend_hhvm = true);
-  static void Bind(std::string& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const std::string defValue = '',
-                   const bool prepend_hhvm = true);
-  static void Bind(char& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const char defValue = 0, const bool prepend_hhvm = true);
-  static void Bind(unsigned char& loc,const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const unsigned char defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(int16_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const int16_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(uint16_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const uint16_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(int32_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const int32_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(uint32_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const uint32_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(int64_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const int64_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(uint64_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const uint64_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(double& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const double defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(HackStrictOption& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name,
-                   HackStrictOption def);
-  static void
-  Bind(std::vector<uint32_t>& loc, const IniSettingMap& ini,
-       const Hdf& config, const std::string& name = '',
-       const std::vector<uint32_t>& defValue = std::vector<uint32_t>(),
-       const bool prepend_hhvm = true);
-  static void
-  Bind(std::vector<std::string>& loc, const IniSettingMap& ini,
-       const Hdf& config, const std::string& name = '',
-       const std::vector<std::string>& defValue = std::vector<std::string>(),
-       const bool prepend_hhvm = true);
-  static void
-  Bind(std::unordered_map<std::string, int>& loc,
-       const IniSettingMap& ini, const Hdf& config,
-       const std::string& name = '',
-       const std::unordered_map<std::string, int>& defValue =
-         std::unordered_map<std::string, int>{},
-       const bool prepend_hhvm = true);
-  static void Bind(ConfigMap& loc, const IniSettingMap& ini, const Hdf& config,
-                   const std::string& name = '',
-                   const ConfigMap& defValue = ConfigMap(),
-                   const bool prepend_hhvm = true);
-  static void Bind(ConfigMapC& loc, const IniSettingMap& ini, const Hdf& config,
-                   const std::string& name = '',
-                   const ConfigMapC& defValue = ConfigMapC(),
-                   const bool prepend_hhvm = true);
-  static void Bind(ConfigSet& loc, const IniSettingMap& ini, const Hdf& config,
-                   const std::string& name = '',
-                   const ConfigSet& defValue = ConfigSet(),
-                   const bool prepend_hhvm = true);
-  static void Bind(ConfigSetC& loc, const IniSettingMap& ini, const Hdf& config,
-                   const std::string& name = '',
-                   const ConfigSetC& defValue = ConfigSetC(),
-                   const bool prepend_hhvm = true);
-  static void Bind(ConfigIMap& loc, const IniSettingMap& ini, const Hdf& config,
-                   const std::string& name = '',
-                   const ConfigIMap& defValue = ConfigIMap(),
-                   const bool prepend_hhvm = true);
-  static void Bind(ConfigFlatSet& loc, const IniSettingMap& ini,
-                   const Hdf& config, const std::string& name = '',
-                   const ConfigFlatSet& defValue = ConfigFlatSet(),
-                   const bool prepend_hhvm = true);
     
-    #endif // incl_HPHP_DEBUGGABLE_H_
+    { private:
+  QQmlApplicationEngine m_engine;
+  QSharedPointer<QmlUtils> m_qmlUtils;
+  QSharedPointer<Events> m_events;
+  QSharedPointer<ConnectionsManager> m_connections;
+  QSharedPointer<Updater> m_updater;
+  QSharedPointer<ValueEditor::TabsModel> m_keyValues;
+  QSharedPointer<ValueEditor::FormattersManager> m_formattersManager;
+  QSharedPointer<BulkOperations::Manager> m_bulkOperations;
+  QSharedPointer<TabViewModel> m_consoleModel;
+  QSharedPointer<TabViewModel> m_serverStatsModel;
+  QSharedPointer<Console::AutocompleteModel> m_consoleAutocompleteModel;
+  QString m_settingsDir;
+  QString m_formattersDir;
+  QString m_renderingBackend;
+};
 
     
-      req::ptr<Directory> opendir(const String& path) override;
-    
-    #include 'hphp/runtime/base/glob-stream-wrapper.h'
-    
-      void IncInitialized() {
-    num_initialized_++;
-  }
-    
-      // Read a key OUTSIDE this transaction. Does not affect txn.
-  s = db->Get(read_options, 'abc', &value);
-    
-    using namespace rocksdb;
-    
-    std::string kDBPath = '/tmp/rocksdb_simple_example';
+    QStringList HashKeyModel::getColumnNames() {
+  return QStringList() << 'row'
+                       << 'key'
+                       << 'value';
+}
     
     
-    {  // checks that each file exists and that the size of the file matches our
-  // expectations. it does not check file checksum.
-  //
-  // If this BackupEngine created the backup, it compares the files' current
-  // sizes against the number of bytes written to them during creation.
-  // Otherwise, it compares the files' current sizes against their sizes when
-  // the BackupEngine was opened.
-  //
-  // Returns Status::OK() if all checks are good
-  virtual Status VerifyBackup(BackupID backup_id) = 0;
+    {  addListRow(row['value'].toByteArray());
+  m_rowCount++;
+}
+    
+    class CacheRange : public QPair<RowIndex, RowIndex>
+{
+public:
+    CacheRange(const RowIndex& f = -1, const RowIndex& s = -1)
+        : QPair<RowIndex, RowIndex>(f, s)
+    {
+    }
+    }
+    
+      QByteArray value = m_rowsCache[i];
+  deleteSetRow(value);
+    
+    
+    {    bool addSortedSetRow(const QByteArray &value, QByteArray score);
+    void deleteSortedSetRow(const QByteArray& value);
 };
-    
-      static LDBCommandExecuteResult Succeed(std::string msg) {
-    return LDBCommandExecuteResult(EXEC_SUCCEED, msg);
-  }
