@@ -1,175 +1,224 @@
 
         
-        
-def load_word_embeddings(word_embeddings_dir, word_embeddings_file):
-  '''Loads pretrained word embeddings from a binary file and returns the matrix.
+            # Set the random seed
+    if hparams.random_seed > 0:
+      tf.set_random_seed(hparams.random_seed)
     
-      T, N = vals_txn.shape
-  if n_to_plot > N:
-    n_to_plot = N
+        Args:
+      train_name: The key into the datasets, to set the tf.case statement for
+        the proper readin / readout matrices.
+      data_bxtxd: The data tensor
+      ext_input_bxtxi (optional): The external input tensor
+      keep_prob: The drop out keep probability.
     
+    # The combined recurrent and input weights of the encoder and
+# controller cells are by default set to scale at ws/sqrt(#inputs),
+# with ws=1.0.  You can change this scaling with this parameter.
+flags.DEFINE_float('cell_weight_scale', CELL_WEIGHT_SCALE,
+                     'Input scaling for input weights in generator.')
     
-def read_data(data_fname):
-  ''' Read saved data in HDF5 format.
+    # unroll RNN for T timesteps
+outputs_t = []
+states_t = []
     
-    import numpy as np
+    from synthetic_data_utils import generate_data, generate_rnn
+from synthetic_data_utils import get_train_n_valid_inds
+from synthetic_data_utils import nparray_and_transpose
+from synthetic_data_utils import spikify_data, split_list_by_inds
 import tensorflow as tf
+from utils import write_datasets
     
-        self._id_to_word = []
-    self._word_to_id = {}
-    self._unk = -1
-    self._bos = -1
-    self._eos = -1
+      return (w, b)
     
-          if len(example) > num_steps:
-        final_x = example[:num_steps]
-        final_y = example[1:(num_steps + 1)]
-        w[i] = 1
+        batch_size, num_timesteps = self.shape
+    softmax = softmax.reshape((num_timesteps, batch_size, -1))
+    softmax = np.transpose(softmax, [1, 0, 2])
+    probs = np.array([[softmax[row, col, target_ids[row, col]]
+                       for col in range(num_timesteps)]
+                      for row in range(batch_size)])
+    print(probs)
+    return probs
     
-      samples = []
-  for sequence_id in xrange(min(len(arr), max_num_to_print)):
-    sample = []
-    for i, index in enumerate(arr[sequence_id, :]):
-      if p[sequence_id, i] == 1:
-        sample.append(str(id_to_word[index]))
-      else:
-        sample.append('*' + str(id_to_word[index]))
-    buffer_str = ' '.join(sample)
-    samples.append(buffer_str)
-  return samples
+    np.set_printoptions(precision=3)
+np.set_printoptions(suppress=True)
     
-        # rnn_vd derived from the same code base as rnn_zaremba.
-    elif (FLAGS.discriminator_model == 'rnn_zaremba' or
-          FLAGS.discriminator_model == 'rnn_vd'):
-      dis_variable_maps = variable_mapping.rnn_zaremba(hparams, model='dis')
-      dis_init_saver = tf.train.Saver(var_list=dis_variable_maps)
-      init_savers['dis_init_saver'] = dis_init_saver
+      Args:
+    attention_states: hidden states to attend over.
+    attention_option: how to compute attention, either 'luong' or 'bahdanau'.
+    num_units: hidden state dimension.
+    reuse: whether to reuse variable scope.
     
     
-DOCUMENTATION = '''
----
-module: elasticache_snapshot
-short_description: Manage cache snapshots in Amazon Elasticache.
-description:
-  - Manage cache snapshots in Amazon Elasticache.
-  - Returns information about the specified snapshot.
-version_added: '2.3'
-author: 'Sloane Hertel (@s-hertel)'
-extends_documentation_fragment:
-  - aws
-  - ec2
-requirements: [ boto3, botocore ]
-options:
-  name:
-    description:
-      - The name of the snapshot we want to create, copy, delete
-    required: yes
-  state:
-    description:
-      - Actions that will create, destroy, or copy a snapshot.
-    choices: ['present', 'absent', 'copy']
-  replication_id:
-    description:
-      - The name of the existing replication group to make the snapshot.
-  cluster_id:
-    description:
-      - The name of an existing cache cluster in the replication group to make the snapshot.
-  target:
-    description:
-      - The name of a snapshot copy
-  bucket:
-    description:
-      - The s3 bucket to which the snapshot is exported
-'''
+class RedirectFallbackMiddleware(MiddlewareMixin):
+    # Defined as class-level attributes to be subclassing-friendly.
+    response_gone_class = HttpResponseGone
+    response_redirect_class = HttpResponsePermanentRedirect
     
-            elif desired_state == 'offline':
-            if current_state == HOST_ABSENT:
-                self.fail(msg='absent host cannot be placed in offline state')
-            elif current_state in [HOST_STATES.MONITORED, HOST_STATES.DISABLED]:
-                if one.host.status(host.ID, HOST_STATUS.OFFLINE):
-                    self.wait_for_host_state(host, [HOST_STATES.OFFLINE])
-                    result['changed'] = True
-                else:
-                    self.fail(msg='could not set host offline')
-            elif current_state in [HOST_STATES.OFFLINE]:
-                pass
+            if data is None:
+            s = self._get_session_from_db()
+            if s:
+                data = self.decode(s.session_data)
+                self._cache.set(self.cache_key, data, self.get_expiry_age(expiry=s.expire_date))
             else:
-                self.fail(msg='unknown host state %s, cowardly refusing to change state to offline' % current_state_name)
+                data = {}
+        return data
     
-        def hbacrule_mod(self, name, item):
-        return self._post_json(method='hbacrule_mod', name=name, item=item)
-    
-        module = AnsibleModule(
-        argument_spec=dict(
-            component=dict(required=True, aliases=['name']),
-            version=dict(required=True),
-            token=dict(required=True, no_log=True),
-            state=dict(required=True, choices=['started', 'finished', 'failed']),
-            hosts=dict(required=False, default=[socket.gethostname()], aliases=['host']),
-            env=dict(required=False),
-            owner=dict(required=False),
-            description=dict(required=False),
-            message=dict(required=False),
-            source_system=dict(required=False, default='ansible'),
-            validate_certs=dict(default='yes', type='bool'),
-            url=dict(required=False, default='https://api.bigpanda.io'),
-        ),
-        supports_check_mode=True,
-    )
-    
-    from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.six.moves.urllib.parse import urlencode
-from ansible.module_utils._text import to_native
-from ansible.module_utils.urls import fetch_url
-    
-    # Apply monkey patches to fix issues in external libraries
-from . import _monkeypatches
-del _monkeypatches
-    
-        def long_desc(self):
-        '''A long description of the command. Return short description when not
-        available. It cannot contain newlines, since contents will be formatted
-        by optparser which removes newlines and wraps text.
-        '''
-        return self.short_desc()
-    
-            spidercls = DefaultSpider
-        spider_loader = self.crawler_process.spider_loader
-        if opts.spider:
-            spidercls = spider_loader.load(opts.spider)
+            # Broken links can't be fixed and
+        # I am not sure what do with the local ones.
+        if errortype.lower() in ['broken', 'local']:
+            print('Not Fixed: ' + line)
         else:
-            spidercls = spidercls_for_request(spider_loader, request, spidercls)
-        self.crawler_process.crawl(spidercls, start_requests=lambda: [request])
-        self.crawler_process.start()
-
+            # If this is a new file
+            if newfilename != _filename:
     
-        def test_simple(self):
-        def f(p):
-            pass
-        f_ident = ident(f)
-        self.check_events(f, [(1, 'call', f_ident),
-                              (1, 'return', f_ident),
-                              ])
+    from scrapy.spiders import Spider
+from scrapy.http import Request
+    
+            if opts.pidfile:
+            with open(opts.pidfile, 'w') as f:
+                f.write(str(os.getpid()) + os.linesep)
     
     
-def _check_location(package):
-    if package.__spec__.origin is None or not package.__spec__.has_location:
-        raise FileNotFoundError(f'Package has no location {package!r}')
+class _BenchSpider(scrapy.Spider):
+    '''A spider that follows all links'''
+    name = 'follow'
+    total = 10000
+    show = 20
+    baseurl = 'http://localhost:8998'
+    link_extractor = LinkExtractor()
     
-    import os
-import email
-import mimetypes
+        def run(self, args, opts):
+        if len(args) != 1:
+            raise UsageError()
     
-    # register the Foo class; make `g()` and `_h()` accessible via proxy
-MyManager.register('Foo2', Foo, exposed=('g', '_h'))
+    import scrapy
+from scrapy.commands import ScrapyCommand
+from scrapy.utils.versions import scrapy_components_versions
     
-    def worker(input, output):
-    for func, args in iter(input.get, 'STOP'):
-        result = calculate(func, args)
-        output.put(result)
     
-            #Creating directory title page for current directory
-        with open('dir_title.html', 'w') as os_html:
-            os_html.write(header + dir_title)
-        
-        group.append(HTML('dir_title.html').render())
+    @implementer(IPolicyForHTTPS)
+    class BrowserLikeContextFactory(ScrapyClientContextFactory):
+        '''
+        Twisted-recommended context factory for web clients.
+    
+        class _v20_S3Connection(S3Connection):
+        '''A dummy S3Connection wrapper that doesn't do any synchronous download'''
+        def _mexe(self, http_request, *args, **kwargs):
+            http_request.authorize(connection=self)
+            return http_request.headers
+    
+        def _build_response(self, body, request):
+        request.meta['download_latency'] = self.headers_time-self.start_time
+        status = int(self.status)
+        headers = Headers(self.response_headers)
+        respcls = responsetypes.from_args(headers=headers, url=self._url)
+        return respcls(url=self._url, status=status, headers=headers, body=body)
+    
+            nd = ndarray(list(range(12)), shape=[3, 4],
+                     flags=ND_WRITABLE|ND_FORTRAN)
+        for order in ['F', 'A']:
+            m = get_contiguous(nd, PyBUF_WRITE, order)
+            self.assertEqual(ndarray(m).tolist(), nd.tolist())
+    
+        '''
+    inner = outer = 1
+    for i in reversed(range(n.bit_length())):
+        inner *= partial_product((n >> i + 1) + 1 | 1, (n >> i) + 1 | 1)
+        outer *= inner
+    return outer << (n - count_set_bits(n))
+    
+        def _Tuple(self, t):
+        self.write('(')
+        if len(t.elts) == 1:
+            elt = t.elts[0]
+            self.dispatch(elt)
+            self.write(',')
+        else:
+            interleave(lambda: self.write(', '), self.dispatch, t.elts)
+        self.write(')')
+    
+    # Non-mutual mappings.
+    
+        def test_cookie_second_line_commented_first_line(self):
+        lines = (
+            b'#print('\xc2\xa3')\n',
+            b'# vim: set fileencoding=iso8859-15 :\n',
+            b'print('\xe2\x82\xac')\n'
+        )
+        encoding, consumed_lines = detect_encoding(self.get_readline(lines))
+        self.assertEqual(encoding, 'iso8859-15')
+        expected = [b'#print('\xc2\xa3')\n', b'# vim: set fileencoding=iso8859-15 :\n']
+        self.assertEqual(consumed_lines, expected)
+    
+            with self.subTest('GE when equal'):
+            a = ComparatorNotImplemented(8)
+            b = ComparatorNotImplemented(8)
+            self.assertEqual(a, b)
+            with self.assertRaises(TypeError):
+                a >= b
+    
+        def __contains__(cls, member):
+        if not isinstance(member, Enum):
+            raise TypeError(
+                'unsupported operand type(s) for 'in': '%s' and '%s'' % (
+                    type(member).__qualname__, cls.__class__.__qualname__))
+        return isinstance(member, cls) and member._name_ in cls._member_map_
+    
+        def test_programatic_function_string_with_start(self):
+        Perm = Flag('Perm', 'R W X', start=8)
+        lst = list(Perm)
+        self.assertEqual(len(lst), len(Perm))
+        self.assertEqual(len(Perm), 3, Perm)
+        self.assertEqual(lst, [Perm.R, Perm.W, Perm.X])
+        for i, n in enumerate('R W X'.split()):
+            v = 8<<i
+            e = Perm(v)
+            self.assertEqual(e.value, v)
+            self.assertEqual(type(e.value), int)
+            self.assertEqual(e.name, n)
+            self.assertIn(e, Perm)
+            self.assertIs(type(e), Perm)
+    
+    
+def _get_resource_reader(
+        package: ModuleType) -> Optional[resources_abc.ResourceReader]:
+    # Return the package's loader if it's a ResourceReader.  We can't use
+    # a issubclass() check here because apparently abc.'s __subclasscheck__()
+    # hook wants to create a weak reference to the object, but
+    # zipimport.zipimporter does not support weak references, resulting in a
+    # TypeError.  That seems terrible.
+    spec = package.__spec__
+    if hasattr(spec.loader, 'get_resource_reader'):
+        return cast(resources_abc.ResourceReader,
+                    spec.loader.get_resource_reader(spec.name))
+    return None
+    
+    
+class YourBorg(Borg):
+    pass
+    
+        def build_size(self):
+        self.size = 'Big'
+    
+    
+class lazy_property(object):
+    def __init__(self, function):
+        self.function = function
+        functools.update_wrapper(self, function)
+    
+        products = {
+        'milk': {'price': 1.50, 'quantity': 10},
+        'eggs': {'price': 0.20, 'quantity': 100},
+        'cheese': {'price': 2.00, 'quantity': 10},
+    }
+    
+    *References:
+https://sourcemaking.com/design_patterns/facade
+https://fkromer.github.io/python-pattern-references/design/#facade
+http://python-3-patterns-idioms-test.readthedocs.io/en/latest/ChangeInterface.html#facade
+    
+        def test_am_station_overflow_after_scan(self):
+        self.radio.scan()
+        station = self.radio.state.stations[self.radio.state.pos]
+        expected_station = '1250'
+        self.assertEqual(station, expected_station)
