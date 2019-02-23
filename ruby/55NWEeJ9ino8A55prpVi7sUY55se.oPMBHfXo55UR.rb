@@ -1,208 +1,100 @@
 
         
-        def content_for(file)
-  contents = File.read(file)
-  case file
-  when 'History.markdown'
-    converted_history(contents)
-  else
-    contents.gsub(%r!\A# .*\n\n?!, '')
-  end
-end
-    
-    # No trailing slash
-Benchmark.ips do |x|
-  path = '/some/very/very/long/path/to/a/file/i/like'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
-    
-      </body>
-</html>
-HTML
-CONTENT_NOT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
-    
-    AfterConfiguration do |config|
-  f = Jekyll::Cucumber::Formatter.new(nil, $stdout, {})
-    
-      def self.output_file; test_dir.join('jekyll_output.txt'); end
-    
-            def start(opts)
-          @thread = Thread.new do
-            # Use epoll if the kernel supports it
-            EM.epoll
-            EM.run do
-              EM.error_handler { |e| log_error(e) }
-    
-        def defaults_deprecate_type(old, current)
-      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
-      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
-                        'type: #{current}'.'
+            it 'returns a label 'No' if a given agent is not working' do
+      stub(@agent).working? { false }
+      label = working(@agent)
+      expect(label).to be_html_safe
+      expect(Nokogiri(label).text).to eq 'No'
     end
   end
-end
-
     
-    module Rex
-module Proto
-module Http
-    
-        # Search for the resource handler for the requested URL.  This is pretty
-    # inefficient right now, but we can spruce it up later.
-    p    = nil
-    len  = 0
-    root = nil
-    
-      def self.checksum(data)
-    sum = 0
-    data.unpack('C*').each {|c| sum += c }
-    sum = ~sum + 1
-    sum & 0xff
-  end
-    
-              # Encodes the Rex::Proto::Kerberos::CredentialCache::Time into an String
-          #
-          # @return [String] encoded time
-          def encode
-            encoded = ''
-            encoded << encode_auth_time
-            encoded << encode_start_time
-            encoded << encode_end_time
-            encoded << encode_renew_time
-    
-              # Rex::Proto::Kerberos::Model::ApReq decoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def decode(input)
-            raise ::NotImplementedError, 'AP-REQ decoding not supported'
-          end
-    
-              # Decodes a Rex::Proto::Kerberos::Model::LastReque from an String
-          #
-          # @param input [String] the input to decode from
-          def decode_string(input)
-            asn1 = OpenSSL::ASN1.decode(input)
-    
-    desc 'Runs all tests in all Spree engines'
-task test: :test_app do
-  SPREE_GEMS.each do |gem_name|
-    Dir.chdir('#{File.dirname(__FILE__)}/#{gem_name}') do
-      sh 'rspec'
-    end
-  end
-end
-    
-              inventory_unit.transaction do
-            if inventory_unit.update_attributes(inventory_unit_params)
-              fire
-              render :show, status: 200
-            else
-              invalid_resource!(inventory_unit)
-            end
-          end
-        end
-    
-            private
-    
-                authorize! :read, @product_property
-          end
-        end
-    
-            def show
-          authorize! :admin, ReturnAuthorization
-          @return_authorization = order.return_authorizations.accessible_by(current_ability, :read).find(params[:id])
-          respond_with(@return_authorization)
-        end
-    
-            def stock_location
-          render 'spree/api/v1/shared/stock_location_required', status: 422 and return unless params[:stock_location_id]
-          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:stock_location_id])
-        end
-    
-          check_class_collision suffix: 'Worker'
-    
-            begin
-          File.open(fp.path, 'a') { |tmpfp| fp.reopen(tmpfp) }
-          fp.sync = true
-          nr += 1
-        rescue IOError, Errno::EBADF
-          # not much we can do...
-        end
-      end
-      nr
-    rescue RuntimeError => ex
-      # RuntimeError: ObjectSpace is disabled; each_object will only work with Class, pass -X+O to enable
-      puts 'Unable to reopen logs: #{ex.message}'
+          expect(data[:agents][guid_order(agent_list, :jane_weather_agent)]).not_to have_key(:propagate_immediately) # can't receive events
+      expect(data[:agents][guid_order(agent_list, :jane_rain_notifier_agent)]).not_to have_key(:schedule) # can't be scheduled
     end
     
-          def insert_before(oldklass, newklass, *args)
-        i = entries.index { |entry| entry.klass == newklass }
-        new_entry = i.nil? ? Entry.new(newklass, *args) : entries.delete_at(i)
-        i = entries.index { |entry| entry.klass == oldklass } || 0
-        entries.insert(i, new_entry)
-      end
-    
-          arr = Sidekiq.options[:lifecycle_events][event]
-      arr.reverse! if reverse
-      arr.each do |block|
-        begin
-          block.call
-        rescue => ex
-          handle_exception(ex, { context: 'Exception during Sidekiq lifecycle event.', event: event })
-          raise ex if reraise
-        end
-      end
-      arr.clear
+        it 'should raise error when response says unauthorized' do
+      stub(HTTParty).post { {'Response' => 'Not authorized'} }
+      expect { @checker.send_notification({}) }.to raise_error(StandardError, /Not authorized/)
     end
-  end
+    
+    # Returns whether or not the repository, or specific files,
+# has/have changed since a given revision.
+#
+# @param rev [String] The revision to check against
+# @param files [Array<String>] The files to check.
+#   If this is empty, checks the entire repository
+def changed_since?(rev, *files)
+  IO.popen('git diff --exit-code #{rev} #{files.join(' ')}') {}
+  return !$?.success?
 end
-
     
-        # Default values
-    set :sessions, true
-    
-      option '--source-date-epoch-from-changelog', :flag,
-    'Use release date from changelog as timestamp on generated files to reduce nondeterminism. ' \
-    'Experimental; only implemented for gem so far. ',
-    :default => false
-    
-          if File.directory?(origin) && origin[-1,1] == '/'
-        chdir = chdir == '.' ? origin : File.join(chdir, origin)
-        source = '.'
-      else
-        origin_dir = File.dirname(origin)
-        chdir = chdir == '.' ? origin_dir : File.join(chdir, origin_dir)
-        source = File.basename(origin)
-      end
+      # Compile a file on disk to CSS.
+  #
+  # @raise [Sass::SyntaxError] if there's an error in the document
+  # @raise [Encoding::UndefinedConversionError] if the source encoding
+  #   cannot be converted to UTF-8
+  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
+  #
+  # @overload compile_file(filename, options = {})
+  #   Return the compiled CSS rather than writing it to a file.
+  #
+  #   @param filename [String] The path to the Sass, SCSS, or CSS file on disk.
+  #   @param options [{Symbol => Object}] An options hash;
+  #     see {file:SASS_REFERENCE.md#Options the Sass options documentation}
+  #   @return [String] The compiled CSS.
+  #
+  # @overload compile_file(filename, css_filename, options = {})
+  #   Write the compiled CSS to a file.
+  #
+  #   @param filename [String] The path to the Sass, SCSS, or CSS file on disk.
+  #   @param options [{Symbol => Object}] An options hash;
+  #     see {file:SASS_REFERENCE.md#Options the Sass options documentation}
+  #   @param css_filename [String] The location to which to write the compiled CSS.
+  def self.compile_file(filename, *args)
+    options = args.last.is_a?(Hash) ? args.pop : {}
+    css_filename = args.shift
+    result = Sass::Engine.for_file(filename, options).render
+    if css_filename
+      options[:css_filename] ||= css_filename
+      open(css_filename, 'w') {|css_file| css_file.write(result)}
+      nil
     else
-      source, destination = path, '/'
+      result
     end
+  end
+end
     
-        temp_info = pkginfo_template_path
+            parser = Sass::SCSS::Parser.new(value,
+          @options[:filename], @options[:importer],
+          @line, to_parser_offset(@offset))
+        parsed_value = parser.parse_declaration_value
+        end_offset = start_offset + value.length
+      elsif value.strip.empty?
+        parsed_value = [Sass::Script::Tree::Literal.new(Sass::Script::Value::String.new(''))]
+        end_offset = start_offset
+      else
+        expr = parse_script(value, :offset => to_parser_offset(start_offset))
+        end_offset = expr.source_range.end_pos.offset - 1
+        parsed_value = [expr]
+      end
+      node = Tree::PropNode.new(parse_interp(name), parsed_value, prop)
+      node.value_source_range = Sass::Source::Range.new(
+        Sass::Source::Position.new(line.index, to_parser_offset(start_offset)),
+        Sass::Source::Position.new(line.index, to_parser_offset(end_offset)),
+        @options[:filename], @options[:importer])
+      if !node.custom_property? && value.strip.empty? && line.children.empty?
+        raise SyntaxError.new(
+          'Invalid property: \'#{node.declaration}\' (no value).' +
+          node.pseudo_class_selector_message)
+      end
     
-        # do channel-update if requested
-    if attributes[:pear_channel_update?]
-      channel = attributes[:pear_channel] || 'pear'
-      logger.info('Updating the channel', :channel => channel)
-      safesystem('pear', '-c', config, 'channel-update', channel)
-    end
-    
-      # This method is used by the puppet manifest template
-  def puppetsort(hash)
-    # TODO(sissel): Implement sorting that follows the puppet style guide
-    # Such as, 'ensure' goes first, etc.
-    return hash.to_a
-  end # def puppetsort
+    module Sass
+  # The abstract base class for lexical environments for SassScript.
+  class BaseEnvironment
+    class << self
+      # Note: when updating this,
+      # update sass/yard/inherited_hash.rb as well.
+      def inherited_hash_accessor(name)
+        inherited_hash_reader(name)
+        inherited_hash_writer(name)
+      end
