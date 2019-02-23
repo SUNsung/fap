@@ -1,216 +1,109 @@
 
         
-        namespace tensorflow {
-namespace swig {
+          // Run shape inference.
+  tensorflow::shape_inference::InferenceContext c(
+      graph_def_version, &node, op_reg_data->op_def, input_shapes,
+      input_tensors, input_tensor_as_shapes_protos,
+      input_handle_shapes_and_types);
+  TF_RETURN_IF_ERROR(c.construction_status());
+    
+    namespace tensorflow {
     }
-    }
     
-    void GenerateLowerCaseOpName(const string& str, string* result);
-    
-    #include 'tensorflow/c/c_api.h'
-#include 'tensorflow/c/tf_status_helper.h'
-#include 'tensorflow/core/framework/tensor.h'
-#include 'tensorflow/python/lib/core/safe_ptr.h'
-    
-    // Mutex used to serialize accesses to cached vector of pointers to python
-// arrays to be dereferenced.
-static mutex* DelayedDecrefLock() {
-  static mutex* decref_lock = new mutex;
-  return decref_lock;
+    PyObject* NPyBfloat16_GetItem(void* data, void* arr) {
+  bfloat16 x;
+  memcpy(&x, data, sizeof(bfloat16));
+  return PyBfloat16_FromBfloat16(x).release();
 }
     
-    #include 'tensorflow/c/c_api.h'
-#include 'tensorflow/core/platform/logging.h'
+        http://www.apache.org/licenses/LICENSE-2.0
     
-      // Close the underlying file and release its resources.
-  void Close();
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    #include 'base/logging.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/api_messages.h'
-#include 'content/public/renderer/render_view.h'
-#include 'content/public/renderer/render_thread.h'
-#include 'content/public/renderer/v8_value_converter.h'
-#include 'third_party/WebKit/public/web/WebView.h'
-#include 'third_party/WebKit/public/web/WebLocalFrame.h'
-#include 'ui/base/resource/resource_bundle.h'
-    
-    bool NwAppSetProxyConfigFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  net::ProxyConfigWithAnnotation config;
-  std::unique_ptr<nwapi::nw__app::SetProxyConfig::Params> params(
-      nwapi::nw__app::SetProxyConfig::Params::Create(*args_));
-  EXTENSION_FUNCTION_VALIDATE(params.get());
-    }
-    
-    namespace caffe2 {
-    }
+        http://www.apache.org/licenses/LICENSE-2.0
     
     
-    { private:
-  const int kNumTensorsPerInput = 3;
-};
+    {
+    {}  // namespace cuda
+}  // namespace stream_executor
     
     
-<details>
+    {    // Vector of cached {config, executor} pairs.
+    std::vector<
+        std::pair<StreamExecutorConfig, std::unique_ptr<StreamExecutor>>>
+        configurations GUARDED_BY(configurations_mutex);
+  };
     
+    //////////////////////////////////////////////////////////////////////
     
-    {  bool RunOnDevice() override;
-};
+    //////////////////////////////////////////////////////////////////////
     
-    workspace.ResetWorkspace()
+      // The HHIRLICM runtime option is all capitals, so separation
+  // cannot be determined. Special case it.
+  boost::replace_first(out, 'hhirlicm', 'hhir_licm');
+  // The HHVM ini option becomes the standard PHP option.
+  boost::replace_first(out,
+                       'hhvm.server.upload.max_file_uploads',
+                       'max_file_uploads');
+  // Make sure IPv6 or IPv4 are handled correctly
+  boost::replace_first(out, '_i_pv', '_ipv');
+  boost::replace_first(out, '.i_pv', '.ipv');
+  // urls are special too. Let's not have 'ur_ls'
+  boost::replace_first(out, '_ur_ls', '_urls');
+  boost::replace_first(out, '.ur_ls', '.urls');
+  // No use of Eval in our ini strings
+  boost::replace_first(out, '.eval.', '.');
+  boost::replace_first(out, '.my_sql.', '.mysql.');
+  boost::replace_first(out, '.enable_hip_hop_syntax', '.force_hh');
     
-    Missing features (represented by empty ranges) filled with default_value.
-    
-    OPERATOR_SCHEMA(GivenTensorDoubleFill)
-    .NumInputs(0, 1)
-    .NumOutputs(1)
-    .AllowInplace({{0, 0}})
-    .Arg(
-        'values',
-        'The value for the elements of the output tensor.',
-        true /* required */)
-    .Arg(
-        'shape',
-        'The shape of the output tensor.'
-        'Cannot set the shape argument and pass in an input at the same time.')
-    .Arg(
-        'extra_shape',
-        'The additional dimensions appended at the end of the shape indicated'
-        'by the input blob.'
-        'Cannot set the extra_shape argument when there is no input blob.')
-    .Arg(
-        'input_as_shape',
-        '1D tensor containing the desired output shape. First input must be in CPU context.')
-    .TensorInferenceFunction(
-        FillerTensorInference<TensorProto_DataType_DOUBLE>);
-    
-    	FAIL_ON_ERROR(RegSetValue(command, L'', REG_SZ, commandStr, NULL));
-    
-    #if !UCONFIG_NO_TRANSLITERATION
-    
-    ScriptSet &ScriptSet::intersect(const ScriptSet &other) {
-    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
-        bits[i] &= other.bits[i];
-    }
-    return *this;
-}
-    
-    #include 'unicode/messagepattern.h'
-#include 'unicode/rbnf.h'
-#include 'unicode/selfmt.h'
-#include 'unicode/uchar.h'
-#include 'unicode/ucnv_err.h'
-#include 'unicode/umsg.h'
-#include 'unicode/ustring.h'
-#include 'unicode/utypes.h'
-#include 'cmemory.h'
-#include 'messageimpl.h'
-#include 'patternprops.h'
-#include 'selfmtimpl.h'
-#include 'uassert.h'
-#include 'ustrfmt.h'
-#include 'util.h'
-#include 'uvector.h'
-    
-    #ifndef SMPDTFST_H
-#define SMPDTFST_H
-    
-    U_NAMESPACE_END
-    
-      static Data& getMutableData() { return data_; }
-    
-    const std::string& DHTResponseMessage::getType() const { return R; }
-    
-      virtual std::string toString() const CXX11_OVERRIDE;
-    
-        auto node = std::make_shared<DHTNode>(buf);
-    node->setIPAddress(peer.first);
-    node->setPort(peer.second);
-    // 4bytes reserved
-    readBytes(fp, buf, buf.size(), 4);
-    
-    #endif // D_DHT_ROUTING_TABLE_SERIALIZER_H
+    #endif // HPHP_GLOB_STREAM_WRAPPER_H
 
     
-    #include 'LogFactory.h'
-#include 'Logger.h'
-#include 'util.h'
-#include 'DHTNode.h'
-#include 'DHTConnectionImpl.h'
-#include 'DHTRoutingTable.h'
-#include 'DHTMessageFactoryImpl.h'
-#include 'DHTMessageTracker.h'
-#include 'DHTMessageDispatcherImpl.h'
-#include 'DHTMessageReceiver.h'
-#include 'DHTTaskQueueImpl.h'
-#include 'DHTTaskFactoryImpl.h'
-#include 'DHTPeerAnnounceStorage.h'
-#include 'DHTTokenTracker.h'
-#include 'DHTInteractionCommand.h'
-#include 'DHTTokenUpdateCommand.h'
-#include 'DHTBucketRefreshCommand.h'
-#include 'DHTPeerAnnounceCommand.h'
-#include 'DHTEntryPointNameResolveCommand.h'
-#include 'DHTAutoSaveCommand.h'
-#include 'DHTTask.h'
-#include 'DHTRoutingTableDeserializer.h'
-#include 'DHTRegistry.h'
-#include 'DHTBucketRefreshTask.h'
-#include 'DHTMessageCallback.h'
-#include 'DHTMessageTrackerEntry.h'
-#include 'DHTMessageEntry.h'
-#include 'UDPTrackerClient.h'
-#include 'BtRegistry.h'
-#include 'prefs.h'
-#include 'Option.h'
-#include 'SocketCore.h'
-#include 'DlAbortEx.h'
-#include 'RecoverableException.h'
-#include 'a2functional.h'
-#include 'DownloadEngine.h'
-#include 'fmt.h'
+      // implementing File
+  bool open(const String& filename, const String& mode) override;
+  bool close() override;
+  int64_t readImpl(char *buffer, int64_t length) override;
+  int getc() override;
+  int64_t writeImpl(const char *buffer, int64_t length) override;
+  bool seek(int64_t offset, int whence = SEEK_SET) override;
+  int64_t tell() override;
+  bool eof() override;
+  bool rewind() override;
+  bool flush() override;
+  bool truncate(int64_t size) override;
     
-    #include <algorithm>
     
-    #include <vector>
-#include <deque>
-#include <memory>
+    {    }
     
-    std::shared_ptr<DHTTask>
-DHTTaskFactoryImpl::createPingTask(const std::shared_ptr<DHTNode>& remoteNode,
-                                   int numRetry)
+    namespace swoole
 {
-  auto task = std::make_shared<DHTPingTask>(remoteNode, numRetry);
-  task->setTimeout(timeout_);
-  setCommonProperty(task);
-  return task;
+/**
+ * This cache isn't thread safe
+ */
+class LRUCache
+{
+private:
+    typedef std::pair<time_t, std::shared_ptr<void>> cache_node_t;
+    typedef std::list<std::pair<std::string, cache_node_t>> cache_list_t;
+    }
+    }
+    
+    bool type_eof()
+{
+    char eof[] = SW_DATA_EOF;
+    printf('SW_DATA_STREAM_EOF = %s\n', eof);
+    return 0;
 }
     
-    DHTTaskQueueImpl::~DHTTaskQueueImpl() = default;
-    
-      // do nothing
-  virtual void doReceivedAction() CXX11_OVERRIDE;
-    
-    void DNSCache::markBad(const std::string& hostname, const std::string& ipaddr,
-                       uint16_t port)
+    TEST(coroutine_socket, connect_with_dns)
 {
-  auto target = std::make_shared<CacheEntry>(hostname, port);
-  auto i = entries_.find(target);
-  if (i != entries_.end()) {
-    (*i)->markBad(ipaddr);
-  }
+    coro_test([](void *arg)
+    {
+        Socket sock(SW_SOCK_TCP);
+        bool retval = sock.connect('www.baidu.com', 80, 0.5);
+        ASSERT_EQ(retval, true);
+        ASSERT_EQ(sock.errCode, 0);
+    });
+}
+    
+    
+    {    coro_test_wait(&complete_num, args.size());
 }
