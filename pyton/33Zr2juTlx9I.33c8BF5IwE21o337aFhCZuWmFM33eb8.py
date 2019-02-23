@@ -1,104 +1,205 @@
 
         
-            def __init__(self):
-        self.head = None
-        self.tail = None
+        flags.DEFINE_integer('ci_enc_dim', CI_ENC_DIM,
+                     'Cell hidden size, encoder of control inputs')
+flags.DEFINE_integer('con_dim', CON_DIM,
+                     'Cell hidden size, controller')
     
-        def is_available(self):
-        return True if self.vehicle is None else False
+    import numpy as np
+import tensorflow as tf
     
-        def override_category_budget(self, category, amount):
-        self.categories_to_budget_map[category] = amount
-
+    import os
+import pickle as pkl
+import numpy as np
+import tensorflow as tf
+import utils
     
-    from mrjob.job import MRJob
+      Returns:
+    Tuple of the (sequence, logits, log_probs) of the Generator.   Sequence
+      and logits have shape [batch_size, sequence_length, vocab_size].  The
+      log_probs will have shape [batch_size, sequence_length].  Log_probs
+      corresponds to the log probability of selecting the words.
+  '''
+  if FLAGS.generator_model == 'rnn':
+    (sequence, logits, log_probs, initial_state, final_state) = rnn.generator(
+        hparams,
+        inputs,
+        targets,
+        present,
+        is_training=is_training,
+        is_validating=is_validating,
+        reuse=reuse)
+  elif FLAGS.generator_model == 'rnn_zaremba':
+    (sequence, logits, log_probs, initial_state,
+     final_state) = rnn_zaremba.generator(
+         hparams,
+         inputs,
+         targets,
+         present,
+         is_training=is_training,
+         is_validating=is_validating,
+         reuse=reuse)
+  elif FLAGS.generator_model == 'seq2seq':
+    (sequence, logits, log_probs, initial_state,
+     final_state) = seq2seq.generator(
+         hparams,
+         inputs,
+         targets,
+         present,
+         is_training=is_training,
+         is_validating=is_validating,
+         reuse=reuse)
+  elif FLAGS.generator_model == 'seq2seq_zaremba':
+    (sequence, logits, log_probs, initial_state,
+     final_state) = seq2seq_zaremba.generator(
+         hparams,
+         inputs,
+         targets,
+         present,
+         is_training=is_training,
+         is_validating=is_validating,
+         reuse=reuse)
+  elif FLAGS.generator_model == 'rnn_nas':
+    (sequence, logits, log_probs, initial_state,
+     final_state) = rnn_nas.generator(
+         hparams,
+         inputs,
+         targets,
+         present,
+         is_training=is_training,
+         is_validating=is_validating,
+         reuse=reuse)
+  elif FLAGS.generator_model == 'seq2seq_nas':
+    (sequence, logits, log_probs, initial_state,
+     final_state) = seq2seq_nas.generator(
+         hparams,
+         inputs,
+         targets,
+         present,
+         is_training=is_training,
+         is_validating=is_validating,
+         reuse=reuse)
+  elif FLAGS.generator_model == 'seq2seq_vd':
+    (sequence, logits, log_probs, initial_state, final_state,
+     encoder_states) = seq2seq_vd.generator(
+         hparams,
+         inputs,
+         targets,
+         present,
+         is_training=is_training,
+         is_validating=is_validating,
+         reuse=reuse)
+  else:
+    raise NotImplementedError
+  return (sequence, logits, log_probs, initial_state, final_state,
+          encoder_states)
+    
+          for s in xrange(t, FLAGS.sequence_length):
+        cum_advantage += missing_list[s] * np.power(gamma,
+                                                    (s - t)) * rewards_list[s]
+      cum_advantage -= baselines[t]
+      # Clip advantages.
+      cum_advantage = tf.clip_by_value(cum_advantage, -FLAGS.advantage_clipping,
+                                       FLAGS.advantage_clipping)
+      advantages.append(missing_list[t] * cum_advantage)
+      final_gen_objective += tf.multiply(
+          log_probability, missing_list[t] * tf.stop_gradient(cum_advantage))
     
     
-class PagesDataStore(object):
+def gen_encoder_seq2seq(hparams):
+  '''Returns the PTB Variable name to MaskGAN Variable
+  dictionary mapping.  This is a highly restrictive function just for testing.
+  This is foe the *unidirecitional* seq2seq_zaremba encoder.
     
-        def iter_body(self, chunk_size):
-        '''Return an iterator over the body.'''
-        raise NotImplementedError()
-    
-        def format_headers(self, headers):
-        for p in self.enabled_plugins:
-            headers = p.format_headers(headers)
-        return headers
-    
-        def get_formatters_grouped(self):
-        groups = {}
-        for group_name, group in groupby(
-                self.get_formatters(),
-                key=lambda p: getattr(p, 'group_name', 'format')):
-            groups[group_name] = list(group)
-        return groups
-    
-        plugin_manager.register(Plugin)
-    try:
-        r = http(
-            httpbin + BASIC_AUTH_URL,
-            '--auth-type',
-            Plugin.auth_type,
-        )
-        assert HTTP_OK in r
-        assert r.json == AUTH_OK
-    finally:
-        plugin_manager.unregister(Plugin)
+        if check_author and post['author_id'] != g.user['id']:
+        abort(403)
     
     
-def has_docutils():
-    try:
-        # noinspection PyUnresolvedReferences
-        import docutils
-        return True
-    except ImportError:
-        return False
+@pytest.fixture
+def app():
+    '''Create and configure a new app instance for each test.'''
+    # create a temporary file to isolate the database for each test
+    db_fd, db_path = tempfile.mkstemp()
+    # create the app with common test config
+    app = create_app({
+        'TESTING': True,
+        'DATABASE': db_path,
+    })
+    
+        # test that successful registration redirects to the login page
+    response = client.post(
+        '/auth/register', data={'username': 'a', 'password': 'a'}
+    )
+    assert 'http://localhost/auth/login' == response.headers['Location']
+    
+        :copyright: © 2010 by the Pallets team.
+    :license: BSD, see LICENSE for more details.
+'''
+    
+            from .debughelpers import explain_template_loading_attempts
+        explain_template_loading_attempts(self.app, template, attempts)
     
     
-def test_follow_all_redirects_shown(httpbin):
-    r = http('--follow', '--all', httpbin.url + '/redirect/2')
-    assert r.count('HTTP/1.1') == 3
-    assert r.count('HTTP/1.1 302 FOUND', 2)
-    assert HTTP_OK in r
+def build():
+    cmd = [sys.executable, 'setup.py', 'sdist', 'bdist_wheel']
+    Popen(cmd).wait()
     
-    def os_constant(key):
-    # XXX TODO: In the future, this could return different constants
-    #           based on what OS we are running under.  To see an
-    #           approach to how to handle different OSes, see the
-    #           apache version of this file.  Currently, we do not
-    #           actually have any OS-specific constants on Nginx.
+    
+@pytest.fixture(scope='session', autouse=True)
+def _standard_os_environ():
+    '''Set up ``os.environ`` at the start of the test session to have
+    standard values. Returns a list of operations that is used by
+    :func:`._reset_os_environ` after each test.
     '''
-    Get a constant value for operating system
+    mp = monkeypatch.MonkeyPatch()
+    out = (
+        (os.environ, 'FLASK_APP', monkeypatch.notset),
+        (os.environ, 'FLASK_ENV', monkeypatch.notset),
+        (os.environ, 'FLASK_DEBUG', monkeypatch.notset),
+        (os.environ, 'FLASK_RUN_FROM_CLI', monkeypatch.notset),
+        (os.environ, 'WERKZEUG_RUN_MAIN', monkeypatch.notset),
+    )
     
-        @classmethod
-    # pylint: disable=arguments-differ,too-many-arguments
-    def sign(cls, payload, key, alg, nonce, url=None, kid=None):
-        # Per ACME spec, jwk and kid are mutually exclusive, so only include a
-        # jwk field if kid is not provided.
-        include_jwk = kid is None
-        return super(JWS, cls).sign(payload, key=key, alg=alg,
-                                    protect=frozenset(['nonce', 'url', 'kid', 'jwk', 'alg']),
-                                    nonce=nonce, url=url, kid=kid,
-                                    include_jwk=include_jwk)
-
+        try:
+        region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module, boto3=True)
+        iam = boto3_conn(module, conn_type='client', resource='iam', region=region, endpoint=ec2_url, **aws_connect_kwargs)
+    except botocore.exceptions.ClientError as e:
+        module.fail_json(msg='Boto3 Client Error - ' + str(e.msg))
+    
+            heroku_app = client.apps()[app]
+    
+        for (index, rule) in enumerate(desired_rules):
+        try:
+            if rule != current_rules[index]:
+                updates.append((index, rule))
+        except IndexError:
+            additions.append(rule)
     
     
 if __name__ == '__main__':
-    unittest.main()  # pragma: no cover
+    main()
 
     
+    ### OUTPUT ###
+# Floor: One | Size: Big
+# Floor: More than One | Size: Small
+# Floor: One | Size: Big and fancy
+
     
-class ComplexParserTest(util.ParserTest):
-    '''Apache Parser Test.'''
+    production code which is untestable:
     
-    from certbot_apache.display_ops import select_vhost_multiple
-from certbot_apache.tests import util
     
-        def test_perform2(self):
-        # Avoid load module
-        self.sni.configurator.parser.modules.add('ssl_module')
-        self.sni.configurator.parser.modules.add('socache_shmcb_module')
-        acme_responses = []
-        for achall in self.achalls:
-            self.sni.add_chall(achall)
-            acme_responses.append(achall.response(self.auth_key))
+class Inservice(Unit):
+    def __init__(self, HierachicalStateMachine):
+        self._hsm = HierachicalStateMachine
+    
+        def show_items(self):
+        items = list(self.model)
+        item_type = self.model.item_type
+        self.view.show_item_list(item_type, items)
+    
+        def test_am_station_overflow_after_scan(self):
+        self.radio.scan()
+        station = self.radio.state.stations[self.radio.state.pos]
+        expected_station = '1250'
+        self.assertEqual(station, expected_station)
