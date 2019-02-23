@@ -1,82 +1,223 @@
-template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36>
-internal::ValueArray36<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-    T29, T30, T31, T32, T33, T34, T35, T36> Values(T1 v1, T2 v2, T3 v3, T4 v4,
-    T5 v5, T6 v6, T7 v7, T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13,
-    T14 v14, T15 v15, T16 v16, T17 v17, T18 v18, T19 v19, T20 v20, T21 v21,
-    T22 v22, T23 v23, T24 v24, T25 v25, T26 v26, T27 v27, T28 v28, T29 v29,
-    T30 v30, T31 v31, T32 v32, T33 v33, T34 v34, T35 v35, T36 v36) {
-  return internal::ValueArray36<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
-      T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36>(v1, v2, v3, v4,
-      v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19,
-      v20, v21, v22, v23, v24, v25, v26, v27, v28, v29, v30, v31, v32, v33,
-      v34, v35, v36);
+
+        
+        // Must be included first
+#include 'tensorflow/python/lib/core/numpy.h'
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    // Global registry mapping C API error codes to the corresponding custom Python
+// exception type. This is used to expose the exception types to C extension
+// code (i.e. so we can raise custom exceptions via SWIG).
+//
+// Init() must be called exactly once at the beginning of the process before
+// Lookup() can be used.
+//
+// Example usage:
+//   TF_Status* status = TF_NewStatus();
+//   TF_Foo(..., status);
+//
+//   if (TF_GetCode(status) != TF_OK) {
+//     PyObject* exc_type = PyExceptionRegistry::Lookup(TF_GetCode(status));
+//     // Arguments to OpError base class. Set `node_def` and `op` to None.
+//     PyObject* args =
+//       Py_BuildValue('sss', nullptr, nullptr, TF_Message(status));
+//     PyErr_SetObject(exc_type, args);
+//     Py_DECREF(args);
+//     TF_DeleteStatus(status);
+//     return NULL;
+//   }
+class PyExceptionRegistry {
+ public:
+  // Initializes the process-wide registry. Should be called exactly once near
+  // the beginning of the process. The arguments are the various Python
+  // exception types (e.g. `cancelled_exc` corresponds to
+  // errors.CancelledError).
+  static void Init(PyObject* code_to_exc_type_map);
+    }
+    
+    #include <Python.h>
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+#include 'tensorflow/python/util/kernel_registry.h'
+    
+    void CensusClientCallData::Destroy(grpc_call_element* elem,
+                                   const grpc_call_final_info* final_info,
+                                   grpc_closure* then_call_closure) {
+  const uint64_t request_size = GetOutgoingDataSize(final_info);
+  const uint64_t response_size = GetIncomingDataSize(final_info);
+  double latency_ms = absl::ToDoubleMilliseconds(absl::Now() - start_time_);
+  ::opencensus::stats::Record(
+      {{RpcClientSentBytesPerRpc(), static_cast<double>(request_size)},
+       {RpcClientReceivedBytesPerRpc(), static_cast<double>(response_size)},
+       {RpcClientRoundtripLatency(), latency_ms},
+       {RpcClientServerLatency(),
+        ToDoubleMilliseconds(absl::Nanoseconds(elapsed_time_))},
+       {RpcClientSentMessagesPerRpc(), sent_message_count_},
+       {RpcClientReceivedMessagesPerRpc(), recv_message_count_}},
+      {{ClientMethodTagKey(), method_},
+       {ClientStatusTagKey(), StatusCodeToString(final_info->final_status)}});
+  grpc_slice_unref_internal(path_);
+  context_.EndSpan();
 }
     
-      // C'tor.  TestPartResult does NOT have a default constructor.
-  // Always use this constructor (with parameters) to create a
-  // TestPartResult object.
-  TestPartResult(Type a_type,
-                 const char* a_file_name,
-                 int a_line_number,
-                 const char* a_message)
-      : type_(a_type),
-        file_name_(a_file_name == NULL ? '' : a_file_name),
-        line_number_(a_line_number),
-        summary_(ExtractSummary(a_message)),
-        message_(a_message) {
+    constexpr size_t TraceContextEncoding::kGrpcTraceContextSize;
+constexpr size_t TraceContextEncoding::kEncodeDecodeFailure;
+constexpr size_t TraceContextEncoding::kVersionIdSize;
+constexpr size_t TraceContextEncoding::kFieldIdSize;
+constexpr size_t TraceContextEncoding::kVersionIdOffset;
+constexpr size_t TraceContextEncoding::kVersionId;
+    
+     private:
+  Status ListService(ServerContext* context,
+                     reflection::v1alpha::ListServiceResponse* response);
+    
+    namespace grpc {
+    }
+    
+    #if !defined(GPR_LINUX) && !defined(GPR_WINDOWS) && !defined(GPR_APPLE)
+    
+      // Delete everything
+  for (int i = 0; i < kCount; i++) {
+    ASSERT_OK(db_->Delete(WriteOptions(), Key(i)));
   }
+  ASSERT_OK(dbi->TEST_CompactMemTable());
     
-      template <typename T>
-  operator ParamGenerator<T>() const {
-    const T array[] = {static_cast<T>(v1_), static_cast<T>(v2_),
-        static_cast<T>(v3_), static_cast<T>(v4_), static_cast<T>(v5_),
-        static_cast<T>(v6_), static_cast<T>(v7_), static_cast<T>(v8_),
-        static_cast<T>(v9_), static_cast<T>(v10_), static_cast<T>(v11_),
-        static_cast<T>(v12_), static_cast<T>(v13_), static_cast<T>(v14_),
-        static_cast<T>(v15_), static_cast<T>(v16_), static_cast<T>(v17_),
-        static_cast<T>(v18_), static_cast<T>(v19_), static_cast<T>(v20_),
-        static_cast<T>(v21_), static_cast<T>(v22_), static_cast<T>(v23_),
-        static_cast<T>(v24_), static_cast<T>(v25_), static_cast<T>(v26_),
-        static_cast<T>(v27_), static_cast<T>(v28_), static_cast<T>(v29_),
-        static_cast<T>(v30_), static_cast<T>(v31_), static_cast<T>(v32_),
-        static_cast<T>(v33_), static_cast<T>(v34_), static_cast<T>(v35_)};
-    return ValuesIn(array);
-  }
+    TEST(CorruptionTest, CompactionInputErrorParanoid) {
+  options_.paranoid_checks = true;
+  options_.write_buffer_size = 512 << 10;
+  Reopen();
+  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
+    }
     
-      // Compares two C strings, ignoring case.  Returns true iff they
-  // have the same content.
-  //
-  // Unlike strcasecmp(), this function can handle NULL argument(s).
-  // A NULL C string is considered different to any non-NULL C string,
-  // including the empty string.
-  static bool CaseInsensitiveCStringEquals(const char* lhs,
-                                           const char* rhs);
+      uint64_t total_bytes;
     
-    template <typename T1, typename T2, typename T3>
-struct Types3 {
-  typedef T1 Head;
-  typedef Types2<T2, T3> Tail;
+    enum FileType {
+  kLogFile,
+  kDBLockFile,
+  kTableFile,
+  kDescriptorFile,
+  kCurrentFile,
+  kTempFile,
+  kInfoLogFile  // Either the current one, or an old one
 };
     
-    $range i 1..n
-template <$for i, [[GTEST_TEMPLATE_ T$i = NoneT]]>
-struct Templates {
-  typedef Templates$n<$for i, [[T$i]]> type;
-};
+    TEST(LogTest, AlignedEof) {
+  const int n = kBlockSize - 2*kHeaderSize + 4;
+  Write(BigString('foo', n));
+  ASSERT_EQ(kBlockSize - kHeaderSize + 4, WrittenBytes());
+  ASSERT_EQ(BigString('foo', n), Read());
+  ASSERT_EQ('EOF', Read());
+}
     
-      // operator new and operator delete help us control water allocation.
-  void* operator new(size_t allocation_size) {
-    allocated_++;
-    return malloc(allocation_size);
-  }
     
-    // In this example, we test the MyString class (a simple string).
+    {
+    {    s = EmitPhysicalRecord(type, ptr, fragment_length);
+    ptr += fragment_length;
+    left -= fragment_length;
+    begin = false;
+  } while (s.ok() && left > 0);
+  return s;
+}
+    
+    void MemTable::Add(SequenceNumber s, ValueType type,
+                   const Slice& key,
+                   const Slice& value) {
+  // Format of an entry is concatenation of:
+  //  key_size     : varint32 of internal_key.size()
+  //  key bytes    : char[internal_key.size()]
+  //  value_size   : varint32 of value.size()
+  //  value bytes  : char[value.size()]
+  size_t key_size = key.size();
+  size_t val_size = value.size();
+  size_t internal_key_size = key_size + 8;
+  const size_t encoded_len =
+      VarintLength(internal_key_size) + internal_key_size +
+      VarintLength(val_size) + val_size;
+  char* buf = arena_.Allocate(encoded_len);
+  char* p = EncodeVarint32(buf, internal_key_size);
+  memcpy(p, key.data(), key_size);
+  p += key_size;
+  EncodeFixed64(p, (s << 8) | type);
+  p += 8;
+  p = EncodeVarint32(p, val_size);
+  memcpy(p, value.data(), val_size);
+  assert(p + val_size == buf + encoded_len);
+  table_.Insert(buf);
+}
+    
+    void ExampleQt::run() {
+    }
+    
+        if (unlikely(!swReactor_handle_isset(reactor, SW_FD_ARES)))
+    {
+        reactor->setHandle(reactor, SW_FD_ARES | SW_EVENT_READ, ares_event_read);
+        reactor->setHandle(reactor, SW_FD_ARES | SW_EVENT_WRITE, ares_event_write);
+        reactor->setHandle(reactor, SW_FD_ARES | SW_EVENT_ERROR, ares_event_error);
+    }
+    
+    
+    {
+    {
+    {                _error: while (true)
+                {
+                    SwooleAIO.lock.lock(&SwooleAIO.lock);
+                    int ret = write(_pipe_write, &event, sizeof(event));
+                    SwooleAIO.lock.unlock(&SwooleAIO.lock);
+                    if (ret < 0)
+                    {
+                        if (errno == EAGAIN)
+                        {
+                            swSocket_wait(_pipe_write, 1000, SW_EVENT_WRITE);
+                            continue;
+                        }
+                        else if (errno == EINTR)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            swSysError('sendto swoole_aio_pipe_write failed.');
+                        }
+                    }
+                    break;
+                }
+                //exit
+                if (_flag)
+                {
+                    return;
+                }
+            }
+            else
+            {
+                unique_lock<mutex> lock(_mutex);
+                if (running)
+                {
+                    ++n_waiting;
+                    _cv.wait(lock);
+                    --n_waiting;
+                }
+            }
+            if (running)
+            {
+                goto _accept;
+            }
+        });
+        threads[i] = unique_ptr<thread>(_thread);
+    }
+    
+        int ret2 = (int) (long) swHashMap_find(hm, (char *) SW_STRL('hello2'));
+    ASSERT_GT(ret2, 0);
+    
+        for (const auto &arg : args)
+    {
+        coro_test_create(arg, nullptr, &complete_num);
+    }
