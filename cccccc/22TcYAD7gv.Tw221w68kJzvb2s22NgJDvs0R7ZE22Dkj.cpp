@@ -1,144 +1,185 @@
 
         
-          // base::SingleThreadTaskRunner:
-  bool PostDelayedTask(const base::Location& from_here,
-                       base::OnceClosure task,
-                       base::TimeDelta delay) override;
-  bool RunsTasksInCurrentSequence() const override;
-  bool PostNonNestableDelayedTask(const base::Location& from_here,
-                                  base::OnceClosure task,
-                                  base::TimeDelta delay) override;
-    
-    
-    { private:
-  DISALLOW_COPY_AND_ASSIGN(InAppPurchase);
-};
-    
-     protected:
-  explicit Net(v8::Isolate* isolate);
-  ~Net() override;
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(WebRequest);
-};
-    
-    #ifndef ATOM_BROWSER_API_EVENT_H_
-#define ATOM_BROWSER_API_EVENT_H_
-    
-    void SavePageHandler::OnDownloadUpdated(download::DownloadItem* item) {
-  if (item->IsDone()) {
-    v8::Isolate* isolate = v8::Isolate::GetCurrent();
-    v8::Locker locker(isolate);
-    v8::HandleScope handle_scope(isolate);
-    if (item->GetState() == download::DownloadItem::COMPLETE) {
-      callback_.Run(v8::Null(isolate));
-    } else {
-      v8::Local<v8::String> error_message =
-          v8::String::NewFromUtf8(isolate, 'Fail to save page');
-      callback_.Run(v8::Exception::Error(error_message));
-    }
-    Destroy(item);
-  }
-}
-    
-      // content::DownloadManager::Observer:
-  void OnDownloadCreated(content::DownloadManager* manager,
-                         download::DownloadItem* item) override;
-    
-      bool IsDestroyed() {
-    v8::Local<v8::Object> wrapper = Wrappable<T>::GetWrapper();
-    return wrapper->InternalFieldCount() == 0 ||
-           wrapper->GetAlignedPointerFromInternalField(0) == nullptr;
-  }
-    
-    class AtomJavaScriptDialogManager : public content::JavaScriptDialogManager {
+        /**
+ * Virtual class encapsulate boost::thread for use in base class
+ * The child class will acquire the ability to run a single thread,
+ * by reimplementing the virtual function InternalThreadEntry.
+ */
+class InternalThread {
  public:
-  explicit AtomJavaScriptDialogManager(api::WebContents* api_web_contents);
-  ~AtomJavaScriptDialogManager() override;
+  InternalThread() : thread_() {}
+  virtual ~InternalThread();
     }
     
-    Delegate* AutoUpdater::delegate_ = nullptr;
-    
-    Base::~Base() {
-}
-    
-    namespace remote {
+    /**
+ * @brief Index into the input blob along its first axis.
+ *
+ * This layer can be used to select, reorder, and even replicate examples in a
+ * batch.  The second blob is cast to int and treated as an index into the
+ * first axis of the first blob.
+ */
+template <typename Dtype>
+class BatchReindexLayer : public Layer<Dtype> {
+ public:
+  explicit BatchReindexLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
     
-    {} // namespace extensions
-#endif
+    {}  // namespace caffe
+    
+    #include 'caffe/layers/neuron_layer.hpp'
+#include 'caffe/layers/relu_layer.hpp'
+    
+    
+    {}  // namespace caffe
+    
+    
+    {		*a_ppaucEncodingBits = image.GetEncodingBits();
+		*a_puiEncodingBitsBytes = image.GetEncodingBitsBytes();
+		*a_puiExtendedWidth = image.GetExtendedWidth();
+		*a_puiExtendedHeight = image.GetExtendedHeight();
+		*a_piEncodingTime_ms = image.GetEncodingTimeMs();
+	}
+    
+    					if (imageformat == Image::Format::RG11 ||
+						imageformat == Image::Format::SIGNED_RG11)
+					{
+						m_afrgbaSource[uiPixel].fA = 1.0f;
+						m_afrgbaSource[uiPixel].fB = 0.0f;
+					}
+    
+    	// ----------------------------------------------------------------------------------------------------
+	// calculate source pixel averages for each 2x2 quadrant in a 4x4 block
+	// these are used to determine the averages for each of the 4 different halves (left, right, top, bottom)
+	// ignore pixels that have alpha == NAN (these are border pixels outside of the source image)
+	// weight the averages based on a pixel's alpha
+	//
+	void Block4x4Encoding_ETC1::CalculateSourceAverages(void)
+	{
+		static const bool DEBUG_PRINT = false;
+    }
+    
+    // Constants and Macros used by all idct/dct functions
+#define DCT_CONST_BITS 14
+#define DCT_CONST_ROUNDING  (1 << (DCT_CONST_BITS - 1))
+    
+    #define CLIPPER_VERSION '6.4.2'
+    
+    #endif /* KISS_FFT_GUTS_H */
 
     
-    #include 'extensions/browser/extension_function.h'
+    #endif /* OPUS_ARM_INLINE_MEDIA */
     
-      bool NwScreenIsMonitorStartedFunction::RunNWSync(base::ListValue* response, std::string* error) {
-    response->AppendBoolean(NwDesktopCaptureMonitor::GetInstance()->IsStarted());
-    return true;
-  }
+    #endif
+
     
-    namespace extensions {
+    #include 'stdafx.h'
+#include 'CNTKLibrary.h'
+#include 'Utils.h'
+#include 'ReaderShim.h'
+#include 'DataReader.h'
+    
+            // (start, end) values in the current window to be reported.
+        std::pair<double, double> m_loss;
+        std::pair<double, double> m_metric;
+        std::pair<size_t, size_t> m_samples;
+        std::pair<size_t, size_t> m_updates;
+    
+    
+    {
+    {        return version;
+    }
+}
+
+    
+    #include 'stdafx.h'
+#include 'CNTKLibrary.h'
+#include <fstream>
+    
+        double ElapsedSeconds();
+    
+        virtual void /*ComputationNodeBase::*/ Validate(bool isFinalValidationPass) override
+    {
+        Base::Validate(isFinalValidationPass);
+        InferMBLayoutFromInputsForStandardCase(isFinalValidationPass);
     }
     
-    REGISTER_CPU_OPERATOR(
-    MergeSingleMapFeatureTensorsGradient,
-    MergeSingleListOrMapFeatureTensorsGradientOp<CPUContext>);
-OPERATOR_SCHEMA(MergeSingleMapFeatureTensorsGradient)
-    .SetDoc(
-        'Explode given multi-feature tensors with map features into '
-        'multiple single-feature tensor.' +
-        doc)
-    .NumInputs([](int n) { return n >= 3 && n % 2 == 1; })
-    .NumOutputs([](int n) { return n >= 1; })
-    .Input(0, 'in1_lengths', '.lengths')
-    .Input(1, 'in1_presence', '.presence')
-    .Input(2, 'out_values_values_grad', '.values.values_grad')
-    .Output(0, 'in1_values_grad', '.values_grad');
-REGISTER_GRADIENT(
-    MergeSingleMapFeatureTensors,
-    GetMergeSingleMapFeatureTensorsGradient);
-    
-    OPERATOR_SCHEMA(FindDuplicateElements)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .SetDoc(R'DOC(
-The *FindDuplicateElements* op takes a single 1-D tensor *data* as input and returns a single 1-D output tensor *indices*. The output tensor contains the indices of the duplicate elements of the input, excluding the first occurrences. If all elements of *data* are unique, *indices* will be empty.
-    
-    template <typename T, class Context>
-class FlexibleTopKOp : public Operator<Context> {
- public:
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
+        for (i = 1; i < 1024; i++)
+    {
+        uint32_t key = ((rand() % 19999) + 1) * 37;
+        int ret = (int) (long) swRbtree_find(tree, key);
+        ASSERT_GT(ret, 0);
+        lists.insert(key);
     }
     
-    namespace caffe2 {
+    Context::Context(size_t stack_size, coroutine_func_t fn, void* private_data) :
+        fn_(fn), stack_size_(stack_size), private_data_(private_data)
+{
+    if (-1 == getcontext(&ctx_))
+    {
+        swoole_throw_error(SW_ERROR_CO_GETCONTEXT_FAILED);
+        return;
+    }
     }
     
-    namespace caffe2 {
-    }
+                    active_sock[i] = sock[i];
+                auto sw_conn = swReactor_get(reactor, sock[i]);
+                sw_conn->object = &task;
+                sw_conn->removed = 0;
+            }
+            else if (ARES_GETSOCK_READABLE(bitmap, i))
+            {
+                // only readable
+                if (unlikely(reactor->add(reactor, sock[i], SW_FD_ARES | SW_EVENT_READ) < 0))
+                {
+                    return '';
+                }
     
-        // create an array from std::list
-    std::list<bool> c_list {true, true, false, true};
-    json j_list(c_list);
     
-    exception_wrapper::exception_wrapper(std::exception_ptr ptr) noexcept
-    : exception_wrapper{} {
-  if (ptr) {
-    if (auto e = get_std_exception_(ptr)) {
-      LOG(DFATAL)
-          << 'Performance error: Please construct exception_wrapper with a '
-             'reference to the std::exception along with the '
-             'std::exception_ptr.';
-      *this = exception_wrapper{std::move(ptr), *e};
-    } else {
-      Unknown uk;
-      *this = exception_wrapper{ptr, uk};
-    }
-  }
+    {    cache.clear();
+    ASSERT_EQ(dtor_num, 4);
 }
     
-    SimpleAllocator::~SimpleAllocator() {
-  std::lock_guard<std::mutex> g(m_);
-  for (auto& block : blocks_) {
-    folly::aligned_free(block);
-  }
+    #include <unordered_map>
+#include <list>
+#include <utility>
+#include <memory>
+#include <time.h>
+    
+        inline bool is_full()
+    {
+        return data_queue.size() == capacity;
+    }
+    
+            // flow control
+        client->recv_window -= length;
+        stream->recv_window -= length;
+        if (length > 0)
+        {
+            if (client->recv_window < (SW_HTTP2_MAX_WINDOW_SIZE / 4))
+            {
+                http2_server_send_window_update(fd, 0, SW_HTTP2_MAX_WINDOW_SIZE - client->recv_window);
+                client->recv_window = SW_HTTP2_MAX_WINDOW_SIZE;
+            }
+            if (stream->recv_window < (SW_HTTP2_MAX_WINDOW_SIZE / 4))
+            {
+                http2_server_send_window_update(fd, stream_id, SW_HTTP2_MAX_WINDOW_SIZE - stream->recv_window);
+                stream->recv_window = SW_HTTP2_MAX_WINDOW_SIZE;
+            }
+        }
+    
+        pid_t server_pid = create_server();
+    
+    static int thread_onTask(swThreadPool *pool, void *task, int task_len)
+{
+    sw_atomic_long_t *n = (sw_atomic_long_t *) task;
+    sw_atomic_fetch_add(n, 1);
+    if (*n == N - 1)
+    {
+        write(_pipe, (void*) n, sizeof(long));
+    }
+    return SW_OK;
 }
