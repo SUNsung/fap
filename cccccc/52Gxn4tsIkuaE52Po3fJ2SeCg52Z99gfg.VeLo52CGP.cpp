@@ -1,670 +1,331 @@
-bool IsUrlArg(const base::CommandLine::CharType* arg) {
-  // the first character must be a letter for this to be a URL
-  auto c = *arg;
-  if (('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z')) {
-    for (auto* p = arg + 1; *p; ++p) {
-      c = *p;
-    }
-    }
-    }
+
+        
+        // Add a _ to the end of s if necessary to avoid a Python keyword or built-in.
+string AvoidPythonReserved(const string& s);
     
-    #include 'base/command_line.h'
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    #ifndef ATOM_APP_UV_TASK_RUNNER_H_
-#define ATOM_APP_UV_TASK_RUNNER_H_
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    #include <string>
+    // Must be included first.
+#include 'tensorflow/python/lib/core/numpy.h'
     
-    #include 'atom/browser/api/atom_api_browser_window.h'
-    
-    #ifndef ATOM_BROWSER_API_ATOM_API_NET_H_
-#define ATOM_BROWSER_API_ATOM_API_NET_H_
-    
-    namespace api {
-    }
-    
-    #ifndef ATOM_BROWSER_API_EVENT_H_
-#define ATOM_BROWSER_API_EVENT_H_
-    
-      // content::JavaScriptDialogManager implementations.
-  void RunJavaScriptDialog(content::WebContents* web_contents,
-                           content::RenderFrameHost* rfh,
-                           content::JavaScriptDialogType dialog_type,
-                           const base::string16& message_text,
-                           const base::string16& default_prompt_text,
-                           DialogClosedCallback callback,
-                           bool* did_suppress_message) override;
-  void RunBeforeUnloadDialog(content::WebContents* web_contents,
-                             content::RenderFrameHost* rfh,
-                             bool is_reload,
-                             DialogClosedCallback callback) override;
-  void CancelDialogs(content::WebContents* web_contents,
-                     bool reset_state) override;
-    
-    namespace auto_updater {
-    }
-    
-    #if defined(OS_LINUX)
-typedef PowerObserverLinux PowerObserver;
-#else
-typedef base::PowerObserver PowerObserver;
-#endif  // defined(OS_LINUX)
-    
-    void GeneratorContext::GetCompilerVersion(Version* version) const {
-  version->set_major(GOOGLE_PROTOBUF_VERSION / 1000000);
-  version->set_minor(GOOGLE_PROTOBUF_VERSION / 1000 % 1000);
-  version->set_patch(GOOGLE_PROTOBUF_VERSION % 1000);
-  version->set_suffix(GOOGLE_PROTOBUF_VERSION_SUFFIX);
-}
-    
-    #include <google/protobuf/compiler/csharp/csharp_source_generator_base.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/compiler/csharp/csharp_names.h>
-#include <google/protobuf/compiler/csharp/csharp_options.h>
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
     
-    {  WriteFieldDocComment(printer, descriptor_);
-  if (descriptor_->is_repeated()) {
-    printer->Print(
-        vars,
-        'public static final\n'
-        '  com.google.protobuf.GeneratedMessageLite.GeneratedExtension<\n'
-        '    $containing_type$,\n'
-        '    $type$> $name$ = com.google.protobuf.GeneratedMessageLite\n'
-        '        .newRepeatedGeneratedExtension(\n'
-        '      $containing_type$.getDefaultInstance(),\n'
-        '      $prototype$,\n'
-        '      $enum_map$,\n'
-        '      $number$,\n'
-        '      com.google.protobuf.WireFormat.FieldType.$type_constant$,\n'
-        '      $packed$,\n'
-        '      $singular_type$.class);\n');
-  } else {
-    printer->Print(
-        vars,
-        'public static final\n'
-        '  com.google.protobuf.GeneratedMessageLite.GeneratedExtension<\n'
-        '    $containing_type$,\n'
-        '    $type$> $name$ = com.google.protobuf.GeneratedMessageLite\n'
-        '        .newSingularGeneratedExtension(\n'
-        '      $containing_type$.getDefaultInstance(),\n'
-        '      $default$,\n'
-        '      $prototype$,\n'
-        '      $enum_map$,\n'
-        '      $number$,\n'
-        '      com.google.protobuf.WireFormat.FieldType.$type_constant$,\n'
-        '      $singular_type$.class);\n');
-  }
-  printer->Annotate('name', descriptor_);
-}
-    
-    ExtensionGenerator* ImmutableGeneratorFactory::NewExtensionGenerator(
-    const FieldDescriptor* descriptor) const {
-  if (HasDescriptorMethods(descriptor->file(), context_->EnforceLite())) {
-    return new ImmutableExtensionGenerator(descriptor, context_);
-  } else {
-    return new ImmutableExtensionLiteGenerator(descriptor, context_);
+    {  DCHECK(PyDict_Check(code_to_exc_type_map));
+  PyObject* key;
+  PyObject* value;
+  Py_ssize_t pos = 0;
+  while (PyDict_Next(code_to_exc_type_map, &pos, &key, &value)) {
+    TF_Code code = static_cast<TF_Code>(PyLong_AsLong(key));
+    singleton_->exc_types_[code] = value;
+    // The exception classes should also have the lifetime of the process, but
+    // incref just in case.
+    Py_INCREF(value);
   }
 }
     
-      uint8 expected_data[] = {
-      0x5,
-      // All as is (00 op)
-      0x1,  0x0A, 0x0,
-      // Underscore, upper + 9 (10 op)
-      0x3,  0xCA, 0x0,
-      //  Upper + 3 (10 op), underscore, upper + 5 (10 op)
-      0x2,  0x44, 0xC6, 0x0,
-      // All Upper for 4 (11 op), underscore, underscore, upper + 5 (10 op),
-      // underscore, lower + 0 (01 op)
-      0x4,  0x64, 0x80, 0xC5, 0xA1, 0x0,
-      // 2 byte key: as is + 3 (00 op), underscore, lower + 4 (01 op),
-      //   underscore, lower + 3 (01 op), underscore, lower + 1 (01 op),
-      //   underscore, lower + 30 (01 op), as is + 30 (00 op), as is + 13 (00
-      //   op),
-      //   underscore, as is + 3 (00 op)
-      0xE8, 0x07, 0x04, 0xA5, 0xA4, 0xA2, 0xBF, 0x1F, 0x0E, 0x84, 0x0,
-  };
-  string expected((const char*)expected_data, sizeof(expected_data));
-    
-    void OneofGenerator::GenerateCaseEnum(io::Printer* printer) {
-  printer->Print(
-      variables_,
-      'typedef GPB_ENUM($enum_name$) {\n');
-  printer->Indent();
-  printer->Print(
-      variables_,
-      '$enum_name$_GPBUnsetOneOfCase = 0,\n');
-  string enum_name = variables_['enum_name'];
-  for (int j = 0; j < descriptor_->field_count(); j++) {
-    const FieldDescriptor* field = descriptor_->field(j);
-    string field_name = FieldNameCapitalized(field);
-    printer->Print(
-        '$enum_name$_$field_name$ = $field_number$,\n',
-        'enum_name', enum_name,
-        'field_name', field_name,
-        'field_number', SimpleItoa(field->number()));
-  }
-  printer->Outdent();
-  printer->Print(
-      '};\n'
-      '\n');
-}
-    
-    
-    {  return output.HadError();
-}
-    
-    // implements ZeroCopyOutputStream ---------------------------------
-bool GzipOutputStream::Next(void** data, int* size) {
-  if ((zerror_ != Z_OK) && (zerror_ != Z_BUF_ERROR)) {
-    return false;
-  }
-  if (zcontext_.avail_in != 0) {
-    zerror_ = Deflate(Z_NO_FLUSH);
-    if (zerror_ != Z_OK) {
-      return false;
-    }
-  }
-  if (zcontext_.avail_in == 0) {
-    // all input was consumed. reset the buffer.
-    zcontext_.next_in = static_cast<Bytef*>(input_buffer_);
-    zcontext_.avail_in = input_buffer_length_;
-    *data = input_buffer_;
-    *size = input_buffer_length_;
-  } else {
-    // The loop in Deflate should consume all avail_in
-    GOOGLE_LOG(DFATAL) << 'Deflate left bytes unconsumed';
-  }
-  return true;
-}
-void GzipOutputStream::BackUp(int count) {
-  GOOGLE_CHECK_GE(zcontext_.avail_in, count);
-  zcontext_.avail_in -= count;
-}
-int64 GzipOutputStream::ByteCount() const {
-  return zcontext_.total_in + zcontext_.avail_in;
-}
-    
-      // Parsing halted on a '.'.  Perhaps we're in a different locale?  Let's
-  // try to replace the '.' with a locale-specific radix character and
-  // try again.
-  string localized = LocalizeRadix(text, temp_endptr);
-  const char* localized_cstr = localized.c_str();
-  char* localized_endptr;
-  result = strtod(localized_cstr, &localized_endptr);
-  if ((localized_endptr - localized_cstr) >
-      (temp_endptr - text)) {
-    // This attempt got further, so replacing the decimal must have helped.
-    // Update original_endptr to point at the right location.
-    if (original_endptr != NULL) {
-      // size_diff is non-zero if the localized radix has multiple bytes.
-      int size_diff = localized.size() - strlen(text);
-      // const_cast is necessary to match the strtod() interface.
-      *original_endptr = const_cast<char*>(
-        text + (localized_endptr - localized_cstr - size_diff));
-    }
-  }
-    
-    // Helper class for collecting comments and putting them in the right places.
+    // Global registry mapping C API error codes to the corresponding custom Python
+// exception type. This is used to expose the exception types to C extension
+// code (i.e. so we can raise custom exceptions via SWIG).
 //
-// This basically just buffers the most recent comment until it can be decided
-// exactly where that comment should be placed.  When Flush() is called, the
-// current comment goes into either prev_trailing_comments or detached_comments.
-// When the CommentCollector is destroyed, the last buffered comment goes into
-// next_leading_comments.
-class CommentCollector {
+// Init() must be called exactly once at the beginning of the process before
+// Lookup() can be used.
+//
+// Example usage:
+//   TF_Status* status = TF_NewStatus();
+//   TF_Foo(..., status);
+//
+//   if (TF_GetCode(status) != TF_OK) {
+//     PyObject* exc_type = PyExceptionRegistry::Lookup(TF_GetCode(status));
+//     // Arguments to OpError base class. Set `node_def` and `op` to None.
+//     PyObject* args =
+//       Py_BuildValue('sss', nullptr, nullptr, TF_Message(status));
+//     PyErr_SetObject(exc_type, args);
+//     Py_DECREF(args);
+//     TF_DeleteStatus(status);
+//     return NULL;
+//   }
+class PyExceptionRegistry {
  public:
-  CommentCollector(string* prev_trailing_comments,
-                   std::vector<string>* detached_comments,
-                   string* next_leading_comments)
-      : prev_trailing_comments_(prev_trailing_comments),
-        detached_comments_(detached_comments),
-        next_leading_comments_(next_leading_comments),
-        has_comment_(false),
-        is_line_comment_(false),
-        can_attach_to_prev_(true) {
-    if (prev_trailing_comments != NULL) prev_trailing_comments->clear();
-    if (detached_comments != NULL) detached_comments->clear();
-    if (next_leading_comments != NULL) next_leading_comments->clear();
+  // Initializes the process-wide registry. Should be called exactly once near
+  // the beginning of the process. The arguments are the various Python
+  // exception types (e.g. `cancelled_exc` corresponds to
+  // errors.CancelledError).
+  static void Init(PyObject* code_to_exc_type_map);
+    }
+    
+    // Given an numpy ndarray object 'obj', creates a corresponding tf
+// Tensor in '*ret'.
+Status ConvertNdarrayToTensor(PyObject* obj, Tensor* ret);
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    #include 'tensorflow/stream_executor/platform.h'
+    
+    port::StatusOr<StreamExecutor*> ExecutorCache::GetOrCreate(
+    const StreamExecutorConfig& config,
+    const std::function<ExecutorFactory>& factory) {
+  // In the fast path case, the cache already has an entry and we can just
+  // return after Get() which only takes a shared lock and not a unique lock.
+  // If we need to create, we take a unique lock on cache_.
+  auto fast_result = Get(config);
+  if (fast_result.ok()) {
+    return fast_result;
   }
     }
     
-      // Before Next() is called, the initial token should always be TYPE_START.
-  EXPECT_EQ(Tokenizer::TYPE_START, tokenizer.current().type);
-  EXPECT_EQ('', tokenizer.current().text);
-  EXPECT_EQ(0, tokenizer.current().line);
-  EXPECT_EQ(0, tokenizer.current().column);
-  EXPECT_EQ(0, tokenizer.current().end_column);
-    
-    #include <cstdint>      // for int32_t
-    
-    template <class T> class GENERIC_2D_ARRAY;
-template <typename T> class GenericVector;
-    
-    #ifndef TESSERACT_CCMAIN_OSDETECT_H_
-#define TESSERACT_CCMAIN_OSDETECT_H_
-    
-    namespace tesseract {
+    // TaskRunner implementation that posts tasks into libuv's default loop.
+class UvTaskRunner : public base::SingleThreadTaskRunner {
+ public:
+  explicit UvTaskRunner(uv_loop_t* loop);
     }
     
-    namespace tesseract {
-  class BoolParam;
-  class DoubleParam;
-  class IntParam;
-  class StringParam;
-  class Tesseract;
-}
+    #ifndef ATOM_BROWSER_API_ATOM_API_AUTO_UPDATER_H_
+#define ATOM_BROWSER_API_ATOM_API_AUTO_UPDATER_H_
     
+    namespace gfx {
+class Point;
+class Rect;
+class Screen;
+}  // namespace gfx
     
-    {  name += UNLV_EXT;              //add extension
-  if ((pdfp = fopen (name.string (), 'rb')) == nullptr) {
-    return false;                //didn't read one
-  } else {
-    while (tfscanf(pdfp, '%d %d %d %d %*s', &x, &y, &width, &height) >= 4) {
-                                 //make rect block
-      block = new BLOCK (name.string (), TRUE, 0, 0,
-                         (int16_t) x, (int16_t) (ysize - y - height),
-                         (int16_t) (x + width), (int16_t) (ysize - y));
-                                 //on end of list
-      block_it.add_to_end (block);
-    }
-    fclose(pdfp);
-  }
-  return true;
-}
+      // TrayIconObserver:
+  void OnClicked(const gfx::Rect& bounds,
+                 const gfx::Point& location,
+                 int modifiers) override;
+  void OnDoubleClicked(const gfx::Rect& bounds, int modifiers) override;
+  void OnRightClicked(const gfx::Rect& bounds, int modifiers) override;
+  void OnBalloonShow() override;
+  void OnBalloonClicked() override;
+  void OnBalloonClosed() override;
+  void OnDrop() override;
+  void OnDropFiles(const std::vector<std::string>& files) override;
+  void OnDropText(const std::string& text) override;
+  void OnDragEntered() override;
+  void OnDragExited() override;
+  void OnDragEnded() override;
+  void OnMouseEntered(const gfx::Point& location, int modifiers) override;
+  void OnMouseExited(const gfx::Point& location, int modifiers) override;
+  void OnMouseMoved(const gfx::Point& location, int modifiers) override;
     
-      // Adds a new point. Takes a copy - the pt doesn't need to stay in scope.
-  // Add must be called on points in sequence along the line.
-  void Add(const ICOORD& pt);
-  // Associates a half-width with the given point if a point overlaps the
-  // previous point by more than half the width, and its distance is further
-  // than the previous point, then the more distant point is ignored in the
-  // distance calculation. Useful for ignoring i dots and other diacritics.
-  void Add(const ICOORD& pt, int halfwidth);
+    Event::~Event() {}
     
-    namespace tesseract {
-    }
+     private:
+  void OnMessageBoxCallback(DialogClosedCallback callback,
+                            const std::string& origin,
+                            int code,
+                            bool checkbox_checked);
     
-            if (parameter.GetDataType() == DataType::Float16)
-        {
-            // convert fp32 parameter to fp16 after update
-            auto sg = smoothedGradientValue->GetWritableMatrix<float>();
-            auto pv16 = parameterValue->GetWritableMatrix<half>();
-            size_t factor = sg->GetNumCols() / pv16->GetNumCols();
-            auto pv = sg->ColumnSlice(pv16->GetNumCols() * (factor - 1), pv16->GetNumCols());
-            pv16->CastAssignValuesOf(pv);
-        }
-    
-    
-    {
-    {        return version;
-    }
-}
+    #endif  // ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
 
     
-    
-    {            return unpackedShape;
-        }
-    
-            bool isSparse = dict[isSparseKey].Value<bool>();
-        std::wstring name = L'';
-        if (dict.Contains(nameKey))
-            name = dict[nameKey].Value<std::wstring>();
-        bool needsGradient = dict[needsGradientKey].Value<bool>();
-        const auto& shape = dict[shapeKey].Value<NDShape>();
-    
-            CNTK_API void SetValueInitialization(const ParameterInitializer& initializationConfig, const DeviceDescriptor& device);
-    
-    #pragma once
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS // 'secure' CRT not available on all platforms  --add this at the top of all CPP files that give 'function or variable may be unsafe' warnings
-#endif
-#ifdef _WIN32
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif // NOMINMAX
-#pragma comment(lib, 'Dbghelp.lib')
-#else
-#include <execinfo.h>
-#include <cxxabi.h>
-#endif
-    
-        double ElapsedSeconds();
-    
-        virtual void CopyTo(ComputationNodeBasePtr nodeP, const std::wstring& newName, const CopyNodeFlags flags) const override
-    {
-        Base::CopyTo(nodeP, newName, flags);
-        if (flags & CopyNodeFlags::copyNodeValue)
-        {
-            auto node = dynamic_pointer_cast<DiagTimesNode<ElemType>>(nodeP);
-            node->m_innerproduct->SetValue(*m_innerproduct);
-            node->m_rightGradient->SetValue(*m_rightGradient);
-        }
-    }
-    // request matrices that are needed for gradient computation
-    virtual void RequestMatricesBeforeBackprop(MatrixPool& matrixPool)
-    {
-        Base::RequestMatricesBeforeBackprop(matrixPool);
-        RequestMatrixFromPool(m_innerproduct, matrixPool);
-        RequestMatrixFromPool(m_rightGradient, matrixPool);
-    }
-    
-    /*!
- * \brief Macro to register linear updater.
- */
-#define XGBOOST_REGISTER_LINEAR_UPDATER(UniqueId, Name)                        \
-  static DMLC_ATTRIBUTE_UNUSED ::xgboost::LinearUpdaterReg&                    \
-      __make_##LinearUpdaterReg##_##UniqueId##__ =                             \
-          ::dmlc::Registry< ::xgboost::LinearUpdaterReg>::Get()->__REGISTER__( \
-              Name)
-    
-    /*! \brief namespace of base64 decoding and encoding table */
-namespace base64 {
-const char DecodeTable[] = {
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  62,  // '+'
-  0, 0, 0,
-  63,  // '/'
-  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
-  0, 0, 0, 0, 0, 0, 0,
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
-  0, 0, 0, 0, 0, 0,
-  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
-  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
-};
-static const char EncodeTable[] =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-}  // namespace base64
-/*! \brief the stream that reads from base64, note we take from file pointers */
-class Base64InStream: public dmlc::Stream {
- public:
-  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
-    reader_.set_stream(fs);
-    num_prev = 0; tmp_ch = 0;
-  }
-  /*!
-   * \brief initialize the stream position to beginning of next base64 stream
-   * call this function before actually start read
-   */
-  inline void InitPosition(void) {
-    // get a character
-    do {
-      tmp_ch = reader_.GetChar();
-    } while (isspace(tmp_ch));
-  }
-  /*! \brief whether current position is end of a base64 stream */
-  inline bool IsEOF(void) const {
-    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
-  }
-  virtual size_t Read(void *ptr, size_t size) {
-    using base64::DecodeTable;
-    if (size == 0) return 0;
-    // use tlen to record left size
-    size_t tlen = size;
-    unsigned char *cptr = static_cast<unsigned char*>(ptr);
-    // if anything left, load from previous buffered result
-    if (num_prev != 0) {
-      if (num_prev == 2) {
-        if (tlen >= 2) {
-          *cptr++ = buf_prev[0];
-          *cptr++ = buf_prev[1];
-          tlen -= 2;
-          num_prev = 0;
-        } else {
-          // assert tlen == 1
-          *cptr++ = buf_prev[0]; --tlen;
-          buf_prev[0] = buf_prev[1];
-          num_prev = 1;
-        }
-      } else {
-        // assert num_prev == 1
-        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
-      }
-    }
-    if (tlen == 0) return size;
-    int nvalue;
-    // note: everything goes with 4 bytes in Base64
-    // so we process 4 bytes a unit
-    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
-      // first byte
-      nvalue = DecodeTable[tmp_ch] << 18;
-      {
-        // second byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        nvalue |= DecodeTable[tmp_ch] << 12;
-        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
-        }
-      {
-        // third byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        // handle termination
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == '=') << 'invalid base64 format';
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch] << 6;
-        if (tlen) {
-          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
-        }
-      }
-      {
-        // fourth byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
-            << 'invalid base64 format';
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch];
-        if (tlen) {
-          *cptr++ = nvalue & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev ++] = nvalue & 0xFF;
-        }
-      }
-      // get next char
-      tmp_ch = reader_.GetChar();
-    }
-    if (kStrictCheck) {
-      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
-    }
-    return size - tlen;
-  }
-  virtual void Write(const void *ptr, size_t size) {
-    LOG(FATAL) << 'Base64InStream do not support write';
-  }
-    }
-    
-    #if DMLC_ENABLE_STD_THREAD
-/*!
- * \brief A threaded writer to write sparse batch page to sharded files.
- */
-class SparsePageWriter {
- public:
-  /*!
-   * \brief constructor
-   * \param name_shards name of shard files.
-   * \param format_shards format of each shard.
-   * \param extra_buffer_capacity Extra buffer capacity before block.
-   */
-  explicit SparsePageWriter(
-      const std::vector<std::string>& name_shards,
-      const std::vector<std::string>& format_shards,
-      size_t extra_buffer_capacity);
-  /*! \brief destructor, will close the files automatically */
-  ~SparsePageWriter();
-  /*!
-   * \brief Push a write job to the writer.
-   * This function won't block,
-   * writing is done by another thread inside writer.
-   * \param page The page to be written
-   */
-  void PushWrite(std::shared_ptr<SparsePage>&& page);
-  /*!
-   * \brief Allocate a page to store results.
-   *  This function can block when the writer is too slow and buffer pages
-   *  have not yet been recycled.
-   * \param out_page Used to store the allocated pages.
-   */
-  void Alloc(std::shared_ptr<SparsePage>* out_page);
-    }
-    
-    // common regressions
-// linear regression
-struct LinearSquareLoss {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
-  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return true; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    return predt - label;
-  }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    return 1.0f;
-  }
-  template <typename T>
-  static T PredTransform(T x) { return x; }
-  template <typename T>
-  static T FirstOrderGradient(T predt, T label) { return predt - label; }
-  template <typename T>
-  static T SecondOrderGradient(T predt, T label) { return T(1.0f); }
-  static bst_float ProbToMargin(bst_float base_score) { return base_score; }
-  static const char* LabelErrorMsg() { return ''; }
-  static const char* DefaultEvalMetric() { return 'rmse'; }
-};
-    
-    /*!
- * \brief Macro to register tree split evaluator.
- *
- * \code
- * // example of registering a split evaluator
- * XGBOOST_REGISTER_SPLIT_EVALUATOR(SplitEval, 'splitEval')
- * .describe('Some split evaluator')
- * .set_body([]() {
- *     return new SplitEval();
- *   });
- * \endcode
- */
-#define XGBOOST_REGISTER_SPLIT_EVALUATOR(UniqueID, Name) \
-  static DMLC_ATTRIBUTE_UNUSED ::xgboost::tree::SplitEvaluatorReg& \
-  __make_ ## SplitEvaluatorReg ## _ ## UniqueID ## __ = \
-      ::dmlc::Registry< ::xgboost::tree::SplitEvaluatorReg>::Get()->__REGISTER__(Name)  //NOLINT
-    
-      template <typename IterT>
-  void Write(CompressedByteT *buffer, IterT input_begin, IterT input_end) {
-    uint64_t tmp = 0;
-    size_t stored_bits = 0;
-    const size_t max_stored_bits = 64 - symbol_bits_;
-    size_t buffer_position = detail::kPadding;
-    const size_t num_symbols = input_end - input_begin;
-    for (size_t i = 0; i < num_symbols; i++) {
-      typename std::iterator_traits<IterT>::value_type symbol = input_begin[i];
-      if (stored_bits > max_stored_bits) {
-        // Eject only full bytes
-        size_t tmp_bytes = stored_bits / 8;
-        for (size_t j = 0; j < tmp_bytes; j++) {
-          buffer[buffer_position] = static_cast<CompressedByteT>(
-              tmp >> (stored_bits - (j + 1) * 8));
-          buffer_position++;
-        }
-        stored_bits -= tmp_bytes * 8;
-        tmp &= (1 << stored_bits) - 1;
-      }
-      // Store symbol
-      tmp <<= symbol_bits_;
-      tmp |= symbol;
-      stored_bits += symbol_bits_;
-    }
-    }
-    
-    void ActionCamera::setUp(const Vec3& up)
-{
-    _up = up;
-    updateTransform();
-}
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-    
-        /** Get the value of a controlPoint at a given index.
-     *
-     * @js NA
-     * @param index Get the point in index.
-     * @return A Vec2.
-     */
-    const Vec2& getControlPointAtIndex(ssize_t index) const;
-    
-    NS_CC_END
+    #endif  // ATOM_BROWSER_AUTO_UPDATER_H_
 
     
-    void ActionInstant::update(float /*time*/)
-{
-    _done = true;
+    void OffScreenOutputDevice::OnPaint(const gfx::Rect& damage_rect) {
+  gfx::Rect rect = damage_rect;
+  if (!pending_damage_rect_.IsEmpty()) {
+    rect.Union(pending_damage_rect_);
+    pending_damage_rect_.SetRect(0, 0, 0, 0);
+  }
+    }
+    
+    void OffscreenViewProxy::OnEvent(ui::Event* event) {
+  if (view_) {
+    view_->OnEvent(event);
+  }
 }
     
-        /** Creates the action with the callback.
     
-        /** Removes an action given its tag and the target.
-     *
-     * @param tag       The action's tag.
-     * @param target    A certain target.
-     */
-    virtual void removeActionByTag(int tag, Node *target);
     
-    /** Removes all actions given its tag and the target.
-     *
-     * @param tag       The actions' tag.
-     * @param target    A certain target.
-     * @js NA
-     */
-    virtual void removeAllActionsByTag(int tag, Node *target);
+    /// The list of known CF types.  We use 'constexpr' to verify that this is
+/// emitted as a constant.  Note that this is expected to be sorted in
+/// quasi-lexicographic order.
+static constexpr const llvm::StringLiteral KnownCFTypes[] = {
+#define CF_TYPE(NAME) #NAME,
+#define NON_CF_TYPE(NAME)
+#include 'SortedCFDatabase.def'
+};
+const size_t NumKnownCFTypes = sizeof(KnownCFTypes) / sizeof(*KnownCFTypes);
     
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+      public:
+    ClangDiagRenderer(const clang::LangOptions &langOpts,
+                      clang::DiagnosticOptions *diagOpts,
+                      decltype(callback) fn)
+       : DiagnosticNoteRenderer(langOpts, diagOpts),
+         callback(fn) {}
     
-    #include '2d/CCActionTween.h'
     
-        /** updates the Atlas (indexed vertex array).
-    * Shall be overridden in subclasses.
-    */
-    virtual void updateAtlasValues();
+    {  return 0;
+}
     
-    /** Set an buffer manager of the texture vertex. */
-    void setTextureAtlas(TextureAtlas* textureAtlas);
+    #include 'swift/Demangling/Punycode.h'
+#include 'swift/Demangling/ManglingUtils.h'
+#include <vector>
+#include <cstdint>
     
-    /** Return the buffer manager of the texture vertex. 
-     *
-     * @return Return A TextureAtlas.
-     */
-    TextureAtlas* getTextureAtlas() const;
+    class LLVM_LIBRARY_VISIBILITY GenericUnix : public ToolChain {
+protected:
+  InvocationInfo constructInvocation(const InterpretJobAction &job,
+                                     const JobContext &context) const override;
+  InvocationInfo constructInvocation(const AutolinkExtractJobAction &job,
+                                     const JobContext &context) const override;
+    }
     
-    void setQuadsToDraw(ssize_t quadsToDraw);
-    ssize_t getQuadsToDraw() const;
+    OPERATOR_SCHEMA(HalfToFloat)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .TensorInferenceFunction(
+        [](const OperatorDef& def, const vector<TensorShape>& in) {
+          vector<TensorShape> out;
+          const TensorShape& X = in[0];
+          out.push_back(X);
+          out[0].set_data_type(TensorProto_DataType_FLOAT);
+    }
     
-            count++;
-        prevx = stepx;
-        prevy = stepy;
+    template <typename T, class Context>
+class BernoulliJSDOp final : public Operator<Context> {
+ public:
+  USE_SIMPLE_CTOR_DTOR(BernoulliJSDOp);
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  bool RunOnDevice() override;
+};
+    
+        Matrix<char>* NDMask::GetMatrix() const
+    {
+        return m_matrixView.get();
+    }
+    
+            static FunctionPtr Deserialize(const Dictionary& dictionary,
+            const std::unordered_map<std::wstring, Variable>& uidToVariableMap,
+            const CNTK::DeviceDescriptor& device);
+    
+        //
+    // Create NDMask for the 'sequences' if the 'sequences' do not have the same length.
+    // It returns null if all the 'sequences' have the same length.
+    //
+    template <typename T>
+    static NDMaskPtr CreateMask(size_t numElementsPerSample, const std::vector<std::vector<T>>& sequences, const std::vector<bool>& sequenceStartFlags, const DeviceDescriptor& device)
+    {
+        size_t numSequences = sequences.size();
+        std::vector<size_t> sequenceLengths(numSequences);
+        for (size_t i = 0; i < numSequences; ++i)
+            sequenceLengths[i] = sequences[i].size() / numElementsPerSample;
+    }
+    
+        Parameter::Parameter(const NDShape& shape, DataType dataType, const ParameterInitializer& initializer, const DeviceDescriptor& device, const std::wstring& name)
+        : Variable(shape, VariableKind::Parameter, dataType, nullptr, true, {}, name, Internal::GenerateUid(VariableKind::Parameter))
+    {
+    }
+    
+    // base class that we can catch, independent of the type parameter
+struct /*interface*/ IExceptionWithCallStackBase
+{
+    virtual const char * CallStack() const = 0;
+    virtual ~IExceptionWithCallStackBase() noexcept = default;
+};
+    
+    static inline size_t rand(const size_t begin, const size_t end)
+{
+    const size_t randno = ::rand() * RAND_MAX + ::rand(); // BUGBUG: still only covers 32-bit range
+    return begin + randno % (end - begin);
+}
+    
+    
+    {    ~ScopeTimer()
+    {
+        if (m_verbosity > 2)
+        {
+            m_aggregateTimer.Stop();
+            double time = m_aggregateTimer.ElapsedSeconds();
+            fprintf(stderr, m_message.c_str(), time);
+        }
+    }
+};
+    
+                // replace input if needed
+            let iter = replacements.find(input);
+            if (iter != replacements.end())
+            {
+                assert(input->GetEnvironmentPtr()); // must be in some network if mapped
+                input = iter->second;
+                numRelinked++;
+                node->SetInput(i, input);
+            }
+    
+        virtual void UpdateFunctionMBSize() override
+    {
+        UpdateCounts();
+    }
+    
+    //---- Tip: You can add extra functions within the ImGui:: namespace, here or in your own headers files.
+/*
+namespace ImGui
+{
+    void MyFunction(const char* name, const MyMatrix44& v);
+}
+*/
+
+    
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_IMPL_API void     ImGui_ImplDX9_InvalidateDeviceObjects();
+IMGUI_IMPL_API bool     ImGui_ImplDX9_CreateDeviceObjects();
+
+    
+            // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
+        {
+            static float f = 0.0f;
+            static int counter = 0;
+    }
+    
+    static void FrameRender(ImGui_ImplVulkanH_WindowData* wd)
+{
+	VkResult err;
+    }
+    
+            // Rendering
+        ImGui::Render();
+        IwGxSetColClear(clear_color.x * 255, clear_color.y * 255, clear_color.z * 255, clear_color.w * 255);
+        IwGxClear();
+        ImGui_Marmalade_RenderDrawData(ImGui::GetDrawData());
+        IwGxSwapBuffers();
+    
+    bool ImGui::InputText(const char* label, std::string* str, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
+{
+    IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
+    flags |= ImGuiInputTextFlags_CallbackResize;
+    }
+    
+        // Cleanup
+    ImGui_ImplOpenGL2_Shutdown();
+    ImGui_ImplSDL2_Shutdown();
+    ImGui::DestroyContext();
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
