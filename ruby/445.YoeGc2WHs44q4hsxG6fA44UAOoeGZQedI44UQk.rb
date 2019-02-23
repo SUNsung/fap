@@ -1,93 +1,209 @@
 
         
-                val ? true : false
+              verify_supported_os(method_sym, class_ref)
+    
+        def action_completed(action_name, status: nil, exception: nil)
+      # https://github.com/fastlane/fastlane/issues/11913
+      # if exception.nil? || exception.fastlane_should_report_metrics?
+      #   action_completion_context = FastlaneCore::ActionCompletionContext.context_for_action_name(action_name, args: ARGV, status: status)
+      #   FastlaneCore.session.action_completed(completion_context: action_completion_context)
+      # end
+    end
+    
+            [
+          'This will automatically tag your build with the following format: `<grouping>/<lane>/<prefix><build_number>`, where:'.markdown_preserve_newlines,
+          list,
+          'For example, for build 1234 in the 'appstore' lane, it will tag the commit with `builds/appstore/1234`.'
+        ].join('\n')
       end
     
-    module Gitlab
-  module GithubImport
-    module Importer
-      class IssuesImporter
-        include ParallelScheduling
+            message = '#{tag} (fastlane)'
+        expect(result).to eq('git tag -am #{message.shellescape} #{tag.shellescape}')
+      end
     
-            def collection_method
-          :lfs_objects
-        end
+          it 'adds options param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            options: '--use-single-star --keep-intermediate-files --search-undocumented-doc'
+          )
+        end').runner.execute(:test)
     
-            # attributes - A Hash containing the raw note details. The keys of this
-        #              Hash must be Symbols.
-        def initialize(attributes)
-          @attributes = attributes
-        end
+          it 'handles the extensions parameter with no elements correctly' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', extensions: [])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}'')
+      end
     
-        context 'multiple arguments' do
-      before do
-        subject.instance_eval do
-          env :userpaths, :std
+          context 'with valid path to compile_commands.json' do
+        context 'with no path to oclint' do
+          let(:result) do
+            Fastlane::FastFile.new.parse('lane :test do
+              oclint( compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json' )
+            end').runner.execute(:test)
+          end
+          let(:command) { 'cd #{File.expand_path('.').shellescape} && oclint -report-type=html -o=oclint_report.html' }
+    
+            c.action do |args, options|
+          Cert.config = FastlaneCore::Configuration.create(Cert::Options.available_options, options.__hash__)
+          Cert::Runner.new.revoke_expired_certs!
         end
       end
     
-        execute 'INSERT INTO share_visibilities (user_id, shareable_id, shareable_type) ' \
-            'SELECT post_visibility.user_id, photos.id, 'Photo' FROM photos ' \
-            'INNER JOIN posts ON posts.guid = photos.status_message_guid AND posts.type = 'StatusMessage' ' \
-            'LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = photos.id ' \
-            'INNER JOIN share_visibilities AS post_visibility ON post_visibility.shareable_id = posts.id ' \
-            'WHERE photos.public = false AND share_visibilities.shareable_id IS NULL ' \
-            'AND post_visibility.shareable_type = 'Post''
+            redirect_to admin_report_path(@report), notice: I18n.t('admin.report_notes.created_msg')
+      else
+        @report_notes = @report.notes.latest
+        @report_history = @report.history
+        @form = Form::StatusBatch.new
+    
+      def payload
+    @_payload ||= request.body.read
   end
     
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have path #{expected.inspect} but was #{actual.current_path.inspect}'
+      private
+    
+        render_empty
   end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have path #{expected.inspect} but it had'
+    
+    Gem::Specification.new do |gem|
+  gem.name          = 'capistrano'
+  gem.version       = Capistrano::VERSION
+  gem.authors       = ['Tom Clements', 'Lee Hambley']
+  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
+  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
+  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
+  gem.homepage      = 'http://capistranorb.com/'
+    
+    Then(/^directories referenced in :linked_files are created in shared$/) do
+  dirs = TestApp.linked_files.map { |path| TestApp.shared_path.join(path).dirname }
+  dirs.each do |dir|
+    run_vagrant_command(test_dir_exists(dir))
   end
 end
     
-      class FetchWebfinger < Base
-    def perform(*_args)
-      # don't do real discovery in cucumber
+        def append(key, *values)
+      set(key, Array(fetch(key)).concat(values))
+    end
+    
+          def trace_set(key)
+        return unless fetch(:print_config_variables, false)
+        puts 'Config variable set: #{key.inspect} => #{values[key].inspect}'
+      end
     end
   end
 end
 
     
-    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
-#   licensed under the Affero General Public License version 3 or later.  See
-#   the COPYRIGHT file.
+        def initialize(plugins_to_package, target)
+      @plugins_to_package = Array(plugins_to_package)
+      @target = target
     
-        it 'paginates the notifications' do
-      25.times { FactoryGirl.create(:notification, :recipient => alice, :target => @post) }
-      get :index
-      expect(assigns[:notifications].count).to eq(25)
-      get :index, params: {page: 2}
-      expect(assigns[:notifications].count).to eq(1)
+    class LogStash::PluginManager::Pack < LogStash::PluginManager::PackCommand
+  option '--tgz', :flag, 'compress package as a tar.gz file', :default => !LogStash::Environment.windows?
+  option '--zip', :flag, 'compress package as a zip file', :default => LogStash::Environment.windows?
+  option '--[no-]clean', :flag, 'clean up the generated dump of plugins', :default => true
+  option '--overwrite', :flag, 'Overwrite a previously generated package file', :default => false
+    
+          PluginManager.ui.info('Installing file: #{local_file}')
+      uncompressed_path = uncompress(local_file)
+      PluginManager.ui.debug('Pack uncompressed to #{uncompressed_path}')
+      pack = LogStash::PluginManager::PackInstaller::Pack.new(uncompressed_path)
+      raise PluginManager::InvalidPackError, 'The pack must contains at least one plugin' unless pack.valid?
+    
+        puts('Updating #{filtered_plugins.collect(&:name).join(', ')}') unless filtered_plugins.empty?
+    
+      namespace :acceptance do
+    desc 'Run all acceptance'
+    task :all do
+      exit(RSpec::Core::Runner.run([Rake::FileList['acceptance/spec/lib/**/*_spec.rb']]))
     end
     
-      # Compile a Sass or SCSS string to CSS.
-  # Defaults to SCSS.
-  #
-  # @param contents [String] The contents of the Sass file.
-  # @param options [{Symbol => Object}] An options hash;
-  #   see {file:SASS_REFERENCE.md#Options the Sass options documentation}
-  # @raise [Sass::SyntaxError] if there's an error in the document
-  # @raise [Encoding::UndefinedConversionError] if the source encoding
-  #   cannot be converted to UTF-8
-  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
-  def self.compile(contents, options = {})
-    options[:syntax] ||= :scss
-    Engine.new(contents, options).to_css
+              it 'successfully install the plugin' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install #{gem_path_on_vagrant}')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-dns')
+          end
+        end
+    
+          def versions
+        i = @versions.size + 1
+        @versions.map do |v|
+          i -= 1
+          { :id        => v.id,
+            :id7       => v.id[0..6],
+            :num       => i,
+            :selected  => @page.version.id == v.id,
+            :author    => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
+            :message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
+            :date      => v.authored_date.strftime('%B %d, %Y'),
+            :gravatar  => Digest::MD5.hexdigest(v.author.email.strip.downcase),
+            :identicon => self._identicon_code(v.author.email),
+            :date_full => v.authored_date,
+          }
+        end
+      end
+    
+          def versions
+        i = @versions.size + 1
+        @versions.map do |v|
+          i -= 1
+          { :id        => v.id,
+            :id7       => v.id[0..6],
+            :num       => i,
+            :author    => v.author.name.respond_to?(:force_encoding) ? v.author.name.force_encoding('UTF-8') : v.author.name,
+            :message   => v.message.respond_to?(:force_encoding) ? v.message.force_encoding('UTF-8') : v.message,
+            :date      => v.authored_date.strftime('%B %d, %Y'),
+            :gravatar  => Digest::MD5.hexdigest(v.author.email.strip.downcase),
+            :identicon => self._identicon_code(v.author.email),
+            :date_full => v.authored_date,
+            :files     => v.stats.files.map { |f,*rest|
+              page_path = extract_renamed_path_destination(f)
+              page_path = remove_page_extentions(page_path)
+              { :file => f,
+                :link => '#{page_path}/#{v.id}'
+              }
+            }
+          }
+        end
+      end
+    
+          def has_path
+        !@path.nil?
+      end
+    
+    # Commit file to wiki, overwriting previous versions of that file
+def commit_test_file(wiki, dir, filename, ext, content)
+  committer = Gollum::Committer.new(wiki, :message => 'Added testfile', :parent  => wiki.repo.head.commit)
+  committer.add_to_index(dir, filename, ext, content, true)
+    committer.after_commit do |committer, sha|
+      wiki.clear_cache
+      committer.update_working_dir(dir, filename, ext)
+    end
+  committer.commit
+end
+
+    
+        get '/pages'
+    
+      teardown do
+    FileUtils.rm_rf(@path)
   end
+end
+
     
-        # Return the first {Sass::Selector::SimpleSequence} in a
-    # {Sass::Tree::RuleNode}.
-    #
-    # @param rule [Sass::Tree::RuleNode]
-    # @return [Sass::Selector::SimpleSequence, String]
-    def first_sseq(rule)
-      first_seq(rule).members.first
+      test 'h1 title sanitizes correctly' do
+    title = 'H1'
+    @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert('js')</script>' + '\n # 3', commit_details)
+    page = @wiki.page(title)
+    
+        # Extract the path string that Gollum::Wiki expects
+    def extract_path(file_path)
+      return nil if file_path.nil?
+      last_slash = file_path.rindex('/')
+      if last_slash
+        file_path[0, last_slash]
+      end
     end
-    
-              options = { variants_attrs: variants_params, options_attrs: option_types_params }
-          @product = Core::Importer::Product.new(@product, product_params, options).update
-    
-          include Grape::DSL::Configuration
