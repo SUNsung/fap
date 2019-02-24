@@ -1,215 +1,232 @@
 
         
-            def remaining_cards(self):
-        return len(self.cards) - self.deal_index
+                full_path = request.get_full_path()
+        current_site = get_current_site(request)
     
-        def __init__(self, first_user, second_user):
-        super(PrivateChat, self).__init__()
-        self.users.append(first_user)
-        self.users.append(second_user)
-    
-        def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer),
-            self.mr(mapper=self.mapper_sort,
-                    reducer=self.reducer_identity),
-        ]
+        def create_model_instance(self, data):
+        '''
+        Return a new instance of the session model object, which represents the
+        current session state. Intended to be used for saving the session data
+        to the database.
+        '''
+        return self.model(
+            session_key=self._get_or_create_session_key(),
+            session_data=self.encode(data),
+            expire_date=self.get_expiry_date(),
+        )
     
     
-class PersonServer(object):
+class SessionManager(BaseSessionManager):
+    use_in_migrations = True
     
-        def get(self, key):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                return item.value
-        raise KeyError('Key not found')
-    
-    
-class Page(object):
+        print('duration: %0.3fs' % delta)
+    print('rmse: %f' % rmse(Y_test, clf.predict(X_test)))
+    print('mean coef abs diff: %f' % abs(ref_coef - clf.coef_.ravel()).mean())
+    return delta
     
     
-def init_app(app):
-    '''Register database functions with the Flask app. This is called by
-    the application factory.
+def bench_scikit_tree_classifier(X, Y):
+    '''Benchmark with scikit-learn decision tree classifier'''
+    
+        if revision is None:
+        return
+    if domain not in ('py', 'pyx'):
+        return
+    if not info.get('module') or not info.get('fullname'):
+        return
+    
+    
+def plot_influence(conf, mse_values, prediction_times, complexities):
     '''
-    app.teardown_appcontext(close_db)
-    app.cli.add_command(init_db_command)
+    Plot influence of model complexity on both accuracy and latency.
+    '''
+    plt.figure(figsize=(12, 6))
+    host = host_subplot(111, axes_class=Axes)
+    plt.subplots_adjust(right=0.75)
+    par1 = host.twinx()
+    host.set_xlabel('Model Complexity (%s)' % conf['complexity_label'])
+    y1_label = conf['prediction_performance_label']
+    y2_label = 'Time (s)'
+    host.set_ylabel(y1_label)
+    par1.set_ylabel(y2_label)
+    p1, = host.plot(complexities, mse_values, 'b-', label='prediction error')
+    p2, = par1.plot(complexities, prediction_times, 'r-',
+                    label='latency')
+    host.legend(loc='upper right')
+    host.axis['left'].label.set_color(p1.get_color())
+    par1.axis['right'].label.set_color(p2.get_color())
+    plt.title('Influence of Model Complexity - %s' % conf['estimator'].__name__)
+    plt.show()
+    
+    The dataset is generated using the ``make_biclusters`` function, which
+creates a matrix of small values and implants bicluster with large
+values. The rows and columns are then shuffled and passed to the
+Spectral Co-Clustering algorithm. Rearranging the shuffled matrix to
+make biclusters contiguous shows how accurately the algorithm found
+the biclusters.
+    
+    import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+    
+        def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        '''
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        '''
+        if self._closed:
+            self._raise_closed()
+        return io.open(self, mode, buffering, encoding, errors, newline,
+                       opener=self._opener)
+    
+    from email.message import EmailMessage
+from email.headerregistry import Address
+from email.utils import make_msgid
+    
+    
+def main():
+    parser = ArgumentParser(description='''\
+Send the contents of a directory as a MIME message.
+Unless the -o option is given, the email is sent by forwarding to your local
+SMTP server, which then does the normal delivery process.  Your local machine
+must be running an SMTP server.
+''')
+    parser.add_argument('-d', '--directory',
+                        help='''Mail the contents of the specified directory,
+                        otherwise use the current directory.  Only the regular
+                        files in the directory are sent, and we don't recurse to
+                        subdirectories.''')
+    parser.add_argument('-o', '--output',
+                        metavar='FILE',
+                        help='''Print the composed message to FILE instead of
+                        sending the message to the SMTP server.''')
+    parser.add_argument('-s', '--sender', required=True,
+                        help='The value of the From: header (required)')
+    parser.add_argument('-r', '--recipient', required=True,
+                        action='append', metavar='RECIPIENT',
+                        default=[], dest='recipients',
+                        help='A To: header value (at least one required)')
+    args = parser.parse_args()
+    directory = args.directory
+    if not directory:
+        directory = '.'
+    # Create the message
+    msg = EmailMessage()
+    msg['Subject'] = 'Contents of directory %s' % os.path.abspath(directory)
+    msg['To'] = ', '.join(args.recipients)
+    msg['From'] = args.sender
+    msg.preamble = 'You will not see this in a MIME-aware mail reader.\n'
+    
+            try:
+            print(list(pool.imap(f, list(range(10)))))
+        except ZeroDivisionError:
+            print('\tGot ZeroDivisionError as expected from list(pool.imap())')
+        else:
+            raise AssertionError('expected ZeroDivisionError')
+    
+        def __new__(cls, name, bases, attrs):
+        new_cls = type.__new__(cls, name, bases, attrs)
+        '''
+            Here the name of the class is used as key but it could be any class
+            parameter.
+        '''
+        cls.REGISTRY[new_cls.__name__] = new_cls
+        return new_cls
+    
+    *What does this example do?
+In this example queue.Queue is used to create the pool (wrapped in a
+custom ObjectPool object to use with the with statement), and it is
+populated with strings.
+As we can see, the first string object put in 'yam' is USED by the
+with statement. But because it is released back into the pool
+afterwards it is reused by the explicit call to sample_queue.get().
+Same thing happens with 'sam', when the ObjectPool created insided the
+function is deleted (by the GC) and the object is returned.
+    
+    
+# example of graph usage
+graph = {'A': ['B', 'C'], 'B': ['C', 'D'], 'C': ['D'], 'D': ['C'], 'E': ['F'], 'F': ['C']}
+    
+    
+class MobileView(object):
+    def show_index_page(self):
+        print('Displaying mobile index page')
+    
+    '''Various network 'heads' for classification and bounding box prediction.
+    
+    
+def add_single_gpu_param_update_ops(model, gpu_id):
+    # Learning rate of 0 is a dummy value to be set properly at the
+    # start of training
+    lr = model.param_init_net.ConstantFill(
+        [], 'lr', shape=[1], value=0.0
+    )
+    one = model.param_init_net.ConstantFill(
+        [], 'one', shape=[1], value=1.0
+    )
+    wd = model.param_init_net.ConstantFill(
+        [], 'wd', shape=[1], value=cfg.SOLVER.WEIGHT_DECAY
+    )
+    # weight decay of GroupNorm's parameters
+    wd_gn = model.param_init_net.ConstantFill(
+        [], 'wd_gn', shape=[1], value=cfg.SOLVER.WEIGHT_DECAY_GN
+    )
+    for param in model.TrainableParams(gpu_id=gpu_id):
+        logger.debug('param ' + str(param) + ' will be updated')
+        param_grad = model.param_to_grad[param]
+        # Initialize momentum vector
+        param_momentum = model.param_init_net.ConstantFill(
+            [param], param + '_momentum', value=0.0
+        )
+        if param in model.biases:
+            # Special treatment for biases (mainly to match historical impl.
+            # details):
+            # (1) Do not apply weight decay
+            # (2) Use a 2x higher learning rate
+            model.Scale(param_grad, param_grad, scale=2.0)
+        elif param in model.gn_params:
+            # Special treatment for GroupNorm's parameters
+            model.WeightedSum([param_grad, one, param, wd_gn], param_grad)
+        elif cfg.SOLVER.WEIGHT_DECAY > 0:
+            # Apply weight decay to non-bias weights
+            model.WeightedSum([param_grad, one, param, wd], param_grad)
+        # Update param_grad and param_momentum in place
+        model.net.MomentumSGDUpdate(
+            [param_grad, param_momentum, lr, param],
+            [param_grad, param_momentum, param],
+            momentum=cfg.SOLVER.MOMENTUM
+        )
 
     
     
-class JSONDecoder(_json.JSONDecoder):
-    '''The default JSON decoder.  This one does not change the behavior from
-    the default simplejson decoder.  Consult the :mod:`json` documentation
-    for more information.  This decoder is not only used for the load
-    functions of this module but also :attr:`~flask.Request`.
+def add_fpn_retinanet_outputs(model, blobs_in, dim_in, spatial_scales):
+    '''RetinaNet head. For classification and box regression, we can chose to
+    have the same conv tower or a separate tower. 'bl_feat_list' stores the list
+    of feature blobs for bbox prediction. These blobs can be shared cls feature
+    blobs if we share the tower or else are independent blobs.
     '''
+    dim_out = dim_in
+    k_max = cfg.FPN.RPN_MAX_LEVEL  # coarsest level of pyramid
+    k_min = cfg.FPN.RPN_MIN_LEVEL  # finest level of pyramid
+    A = len(cfg.RETINANET.ASPECT_RATIOS) * cfg.RETINANET.SCALES_PER_OCTAVE
     
-            # on exit we want to clean up earlier.  Normally the request context
-        # stays preserved until the next request in the same thread comes
-        # in.  See RequestGlobals.push() for the general behavior.
-        top = _request_ctx_stack.top
-        if top is not None and top.preserved:
-            top.pop()
-    
-                c_bar = plt.bar(xvals, build_time[alg] - bottom,
-                            width, bottom, color='r')
-            q_bar = plt.bar(xvals, query_time[alg],
-                            width, build_time[alg], color='b')
-    
-        max_it = len(samples_range) * len(features_range)
-    for i_s, n_samples in enumerate(samples_range):
-        for i_f, n_features in enumerate(features_range):
-            it += 1
-            n_informative = n_features / 10
-            print('====================')
-            print('Iteration %03d of %03d' % (it, max_it))
-            print('====================')
-            # dataset_kwargs = {
-            #     'n_train_samples': n_samples,
-            #     'n_test_samples': 2,
-            #     'n_features': n_features,
-            #     'n_informative': n_informative,
-            #     'effective_rank': min(n_samples, n_features) / 10,
-            #     #'effective_rank': None,
-            #     'bias': 0.0,
-            # }
-            dataset_kwargs = {
-                'n_samples': 1,
-                'n_components': n_features,
-                'n_features': n_samples,
-                'n_nonzero_coefs': n_informative,
-                'random_state': 0
-            }
-            print('n_samples: %d' % n_samples)
-            print('n_features: %d' % n_features)
-            y, X, _ = make_sparse_coded_signal(**dataset_kwargs)
-            X = np.asfortranarray(X)
-    
-                gc.collect()
-            print('benchmarking scipy svd: ')
-            tstart = time()
-            svd(X, full_matrices=False)
-            results['scipy svd'].append(time() - tstart)
-    
-        print('Transformer performance:')
-    print('===========================')
-    print('Results are averaged over %s repetition(s).' % opts.n_times)
-    print('')
-    print('%s | %s | %s' % ('Transformer'.ljust(30),
-                            'fit'.center(12),
-                            'transform'.center(12)))
-    print(31 * '-' + ('|' + '-' * 14) * 2)
-    
-    Does two benchmarks
-    
-    
-# Symlinks should have same data as target
-for src, dst in symlinks.items():
-    if dst in dirs:
-        dirs[src] = dirs[dst]
-    
-        target = utils.unescape(target).strip()
-    title = utils.unescape(title).strip()
-    config = inliner.document.settings.env.app.config
-    if config.issues_user_uri:
-        ref = config.issues_user_uri.format(user=target)
+        if len(data.shape) == 1:
+        ret = np.empty((count, ), dtype=data.dtype)
+        ret.fill(fill)
+        ret[inds] = data
     else:
-        ref = 'https://github.com/{0}'.format(target)
-    if has_explicit_title:
-        text = title
-    else:
-        text = '@{0}'.format(target)
+        ret = np.empty((count, ) + data.shape[1:], dtype=data.dtype)
+        ret.fill(fill)
+        ret[inds, :] = data
+    return ret
     
+    from detectron.core.config import cfg
+import detectron.roi_data.fast_rcnn as fast_rcnn_roi_data
+import detectron.roi_data.retinanet as retinanet_roi_data
+import detectron.roi_data.rpn as rpn_roi_data
+import detectron.utils.blob as blob_utils
     
-if not os.path.exists(DATA_FOLDER):
-    
-        print('Generating e that is relatively prime to (p - 1) * (q - 1)...')
-    while True:
-        e = random.randrange(2 ** (keySize - 1), 2 ** (keySize))
-        if cryptoMath.gcd(e, (p - 1) * (q - 1)) == 1:
-            break
-    
-        def __hash_double_function(self, key, data, increment):
-        return (increment * self.__hash_function_2(key, data)) % self.size_table
-    
-        def __init__(self, arr):
-        # we need a list not a string, so do something to change the type
-        self.array = arr.split(',')
-        print(('the input array is:', self.array))
-    
-    	for m in getBlock(bs):
-		A = a0 
-		B = b0
-		C = c0
-		D = d0
-		for i in range(64):
-			if i <= 15:
-				#f = (B & C) | (not32(B) & D)
-				f = D ^ (B & (C ^ D))
-				g = i
-			elif i<= 31:
-				#f = (D & B) | (not32(D) & C)
-				f = C ^ (D & (B ^ C))
-				g = (5*i+1) % 16
-			elif i <= 47:
-				f = B ^ C ^ D
-				g = (3*i+5) % 16
-			else:
-				f = C ^ (B | not32(D))
-				g = (7*i) % 16
-			dtemp = D
-			D = C
-			C = B
-			B = sum32(B,leftrot32((A + f + tvals[i] + m[g]) % 2**32, s[i]))
-			A = dtemp
-		a0 = sum32(a0, A)
-		b0 = sum32(b0, B)
-		c0 = sum32(c0, C)
-		d0 = sum32(d0, D)
-    
-    
-        '''
-        loop over all possible splits for the decision tree. find the best split.
-        if no split exists that is less than 2 * error for the entire array
-        then the data set is not split and the average for the entire array is used as the predictor
-        '''
-        for i in range(len(X)):
-            if len(X[:i]) < self.min_leaf_size:
-                continue
-            elif len(X[i:]) < self.min_leaf_size:
-                continue
-            else:
-                error_left = self.mean_squared_error(X[:i], np.mean(y[:i]))
-                error_right = self.mean_squared_error(X[i:], np.mean(y[i:]))
-                error = error_left + error_right
-                if error < min_error:
-                    best_split = i
-                    min_error = error
-    
-      3. find centroids and clusters using kmeans function.
-  
-        centroids, cluster_assignment = kmeans(
-            X, 
-            k, 
-            initial_centroids, 
-            maxiter=400,
-            record_heterogeneity=heterogeneity, 
-            verbose=True # whether to print logs in console or not.(default=False)
-            )
-  
-  
-  4. Plot the loss function, hetrogeneity values for every iteration saved in hetrogeneity list.
-        plot_heterogeneity(
-            heterogeneity, 
-            k
-        )
-  
-  5. Have fun..
-  
-'''
-from __future__ import print_function
-from sklearn.metrics import pairwise_distances
-import numpy as np
+        # Map up to original set of anchors
+    labels = data_utils.unmap(labels, total_anchors, inds_inside, fill=-1)
+    bbox_targets = data_utils.unmap(bbox_targets, total_anchors, inds_inside, fill=0)
