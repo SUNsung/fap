@@ -1,101 +1,106 @@
 
         
-              # Converts the array to a comma-separated sentence where the last element is
-      # joined by the connector word. This is the html_safe-aware version of
-      # ActiveSupport's {Array#to_sentence}[http://api.rubyonrails.org/classes/Array.html#method-i-to_sentence].
-      #
-      def to_sentence(array, options = {})
-        options.assert_valid_keys(:words_connector, :two_words_connector, :last_word_connector, :locale)
+          # GET /resource/unlock/new
+  def new
+    self.resource = resource_class.new
+  end
     
-                  if block_given?
-                @template_object.capture(builder, &block)
-              else
-                render_component(builder)
-              end
-            end
-    
-          def initialize(template)
-        super($!.message)
-        set_backtrace($!.backtrace)
-        @cause = $!
-        @template, @sub_templates = template, nil
-      end
-    
-    module ActionView
-  class Template #:nodoc:
-    class Types
-      class Type
-        SET = Struct.new(:symbols).new([ :html, :text, :js, :css, :xml, :json ])
-    
-      # Check if there is no signed in user before doing the sign out.
-  #
-  # If there is no signed in user, it will set the flash message and redirect
-  # to the after_sign_out path.
-  def verify_signed_out_user
-    if all_signed_out?
-      set_flash_message! :notice, :already_signed_out
-    
-        if successfully_sent?(resource)
-      respond_with({}, location: after_sending_unlock_instructions_path_for(resource))
-    else
-      respond_with(resource)
+        if authenticated && resource = warden.user(resource_name)
+      flash[:alert] = I18n.t('devise.failure.already_authenticated')
+      redirect_to after_sign_in_path_for(resource)
     end
   end
     
-          # Sign out a given user or scope. This helper is useful for signing out a user
-      # after deleting accounts. Returns true if there was a logout and false if there
-      # is no user logged in on the referred scope
-      #
-      # Examples:
-      #
-      #   sign_out :user     # sign_out(scope)
-      #   sign_out @user     # sign_out(resource)
-      #
-      def sign_out(resource_or_scope=nil)
-        return sign_out_all_scopes unless resource_or_scope
-        scope = Devise::Mapping.find_scope!(resource_or_scope)
-        user = warden.user(scope: scope, run_callbacks: false) # If there is no user
+        def password_change(record, opts={})
+      devise_mail(record, :password_change, opts)
+    end
+  end
+end
+
     
-          if options.has_key?(:only)
-        @used_routes = self.routes & Array(options[:only]).map(&singularizer)
-      elsif options[:skip] == :all
-        @used_routes = []
+          def remember_me_is_active?(resource)
+        return false unless resource.respond_to?(:remember_me)
+        scope = Devise::Mapping.find_scope!(resource)
+        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
+        resource.remember_me?(token, generated_at)
+      end
+    
+          def self.generate_helpers!(routes=nil)
+        routes ||= begin
+          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
+          Devise::URL_HELPERS.slice(*mappings)
+        end
+    
+        def fullpath
+      '/#{@path_prefix}/#{@path}'.squeeze('/')
+    end
+    
+              if mod.const_defined?('ClassMethods')
+            class_mod = mod.const_get('ClassMethods')
+            extend class_mod
+    
+      it 'has no effect on immediate values' do
+    [nil, true, false].each do |v|
+      v.taint
+      v.tainted?.should == false
+    end
+  end
+    
+      def xcode_app_path
+    File.expand_path('../..', developer_prefix)
+  end
+    
+    Given(/^file '(.*?)' exists in shared path$/) do |file|
+  file_shared_path = TestApp.shared_path.join(file)
+  run_vagrant_command('mkdir -p #{file_shared_path.dirname}')
+  run_vagrant_command('touch #{file_shared_path}')
+end
+    
+      def test_symlink_exists(path)
+    exists?('L', path)
+  end
+    
+        # allows the `cap install` task to load without a capfile
+    def find_rakefile_location
+      if (location = super).nil?
+        [capfile, Dir.pwd]
       else
-        @used_routes = self.routes - Array(options[:skip]).map(&singularizer)
+        location
       end
     end
     
-          private
+          def role_properties_for(rolenames)
+        roles = rolenames.to_set
+        rps = Set.new unless block_given?
+        roles_for(rolenames).each do |host|
+          host.roles.intersection(roles).each do |role|
+            [host.properties.fetch(role)].flatten(1).each do |props|
+              if block_given?
+                yield host, role, props
+              else
+                rps << (props || {}).merge(role: role, hostname: host.hostname)
+              end
+            end
+          end
+        end
+        block_given? ? nil : rps
+      end
     
-    module Devise
-  module Models
-    # Timeoutable takes care of verifying whether a user session has already
-    # expired or not. When a session expires after the configured time, the user
-    # will be asked for credentials again, it means, they will be redirected
-    # to the sign in page.
-    #
-    # == Options
-    #
-    # Timeoutable adds the following options to devise_for:
-    #
-    #   * +timeout_in+: the interval to timeout the user session without activity.
-    #
-    # == Examples
-    #
-    #   user.timedout?(30.minutes.ago)
-    #
-    module Timeoutable
-      extend ActiveSupport::Concern
+          # Given a callable that provides a value, wrap the callable with another
+      # object that responds to `call`. This new object will perform validation
+      # and then return the original callable's value.
+      #
+      # If the callable is a `Question`, the object returned by this method will
+      # also be a `Question` (a `ValidatedQuestion`, to be precise). This
+      # ensures that `is_a?(Question)` remains true even after the validation
+      # wrapper is applied. This is needed so that `Configuration#is_question?`
+      # works as expected.
+      #
+      def assert_valid_later(key, callable)
+        validation_callback = lambda do
+          value = callable.call
+          assert_valid_now(key, value)
+          value
+        end
     
-            input_html_options[:required]        = input_html_required_option
-        input_html_options[:'aria-required'] = input_html_aria_required_option
-    
-            if method.arity.zero?
-          ActiveSupport::Deprecation.warn(SimpleForm::CUSTOM_INPUT_DEPRECATION_WARN % { name: namespace })
-    
-        def error_message
-      (@message || translate_error_notification).html_safe
-    end
-    
-          def action_validator_match?(validator)
-        return true unless validator.options.include?(:on)
+    set_if_empty :pty, false
