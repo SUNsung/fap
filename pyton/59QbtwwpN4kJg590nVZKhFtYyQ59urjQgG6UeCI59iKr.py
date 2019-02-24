@@ -1,225 +1,167 @@
 
         
-        import os
-import sys
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            y_train = np.reshape(y_train, (len(y_train), 1))
+    y_test = np.reshape(y_test, (len(y_test), 1))
     
-    filenames = {
-    'bin': 'youtube-dl',
-    'exe': 'youtube-dl.exe',
-    'tar': 'youtube-dl-%s.tar.gz' % version}
-build_dir = os.path.join('..', '..', 'build', version)
-for key, filename in filenames.items():
-    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
-    fn = os.path.join(build_dir, filename)
-    with open(fn, 'rb') as f:
-        data = f.read()
-    if not data:
-        raise ValueError('File %s is empty!' % fn)
-    sha256sum = hashlib.sha256(data).hexdigest()
-    new_version[key] = (url, sha256sum)
+        # Returns
+        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
     
-    header = oldreadme[:oldreadme.index('# OPTIONS')]
-footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
+        # Place a copy of the model on each GPU,
+    # each getting a slice of the inputs.
+    for i, gpu_id in enumerate(target_gpu_ids):
+        with tf.device('/gpu:%d' % gpu_id):
+            with tf.name_scope('replica_%d' % gpu_id):
+                inputs = []
+                # Retrieve a slice of the input.
+                for x in model.inputs:
+                    # In-place input splitting which is not only
+                    # 5% ~ 12% faster but also less GPU memory
+                    # duplication.
+                    with tf.device(x.device):
+                        input_shape = K.int_shape(x)[1:]
+                        slice_i = Lambda(get_slice,
+                                         output_shape=input_shape,
+                                         arguments={'i': i,
+                                                    'parts': num_gpus})(x)
+                        inputs.append(slice_i)
     
+            i = self.recurrent_activation(x_i + h_i)
+        f = self.recurrent_activation(x_f + h_f)
+        c = f * c_tm1 + i * self.activation(x_c + h_c)
+        o = self.recurrent_activation(x_o + h_o)
+        h = o * self.activation(c)
     
-def create_app(test_config=None):
-    '''Create and configure an instance of the Flask application.'''
-    app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        # a default secret that should be overridden by instance config
-        SECRET_KEY='dev',
-        # store the database in the instance folder
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
-    )
+    x_train = x_train.astype('float32')
+x_test = x_test.astype('float32')
+x_train /= 255
+x_test /= 255
+print('x_train shape:', x_train.shape)
+print(x_train.shape[0], 'train samples')
+print(x_test.shape[0], 'test samples')
     
+    # Model creation using tensors from the get_next() graph node.
+inputs, targets = iterator.get_next()
+model_input = layers.Input(tensor=inputs)
+model_output = cnn_layers(model_input)
+train_model = keras.models.Model(inputs=model_input, outputs=model_output)
     
-@click.command('init-db')
-@with_appcontext
-def init_db_command():
-    '''Clear existing data and create new tables.'''
-    init_db()
-    click.echo('Initialized the database.')
-    
-        This makes it safe to embed such strings in any place in HTML with the
-    notable exception of double quoted attributes.  In that case single
-    quote your attributes or HTML escape it in addition.
-    
-            def __init__(self, name, doc=None):
-            self.name = name
-            self.__doc__ = doc
-        def _fail(self, *args, **kwargs):
-            raise RuntimeError('signalling support is unavailable '
-                               'because the blinker library is '
-                               'not installed.')
-        send = lambda *a, **kw: None
-        connect = disconnect = has_receivers_for = receivers_for = \
-            temporarily_connected_to = connected_to = _fail
-        del _fail
-    
-            :param cli: Command object to invoke. Default is the app's
-            :attr:`~flask.app.Flask.cli` group.
-        :param args: List of strings to invoke the command with.
-    
-    
-@pytest.fixture(params=[(python_3, False),
-                        (python_3, True),
-                        (python_2, False)])
-def proc(request, spawnu, TIMEOUT):
-    container, instant_mode = request.param
-    proc = spawnu(*container)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(init_zshrc.format(
-        u'--enable-experimental-instant-mode' if instant_mode else ''))
-    proc.sendline(u'zsh')
-    if instant_mode:
-        assert proc.expect([TIMEOUT, u'instant mode ready: True'])
-    return proc
-    
-        assert match(command)
-    
-    no_match_output = '''
-Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
-Get:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease [89.2 kB]
-Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
-Get:4 http://security.ubuntu.com/ubuntu zesty-security InRelease [89.2 kB]
-Hit:5 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
-Hit:6 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
-Hit:7 https://download.docker.com/linux/ubuntu zesty InRelease
-Get:8 http://us.archive.ubuntu.com/ubuntu zesty-updates/main i386 Packages [232 kB]
-Get:9 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 Packages [235 kB]
-Get:10 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 DEP-11 Metadata [55.2 kB]
-Get:11 http://us.archive.ubuntu.com/ubuntu zesty-updates/main DEP-11 64x64 Icons [32.3 kB]
-Get:12 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 Packages [156 kB]
-Get:13 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe i386 Packages [156 kB]
-Get:14 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 DEP-11 Metadata [175 kB]
-Get:15 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe DEP-11 64x64 Icons [253 kB]
-Get:16 http://us.archive.ubuntu.com/ubuntu zesty-updates/multiverse amd64 DEP-11 Metadata [5,840 B]
-Get:17 http://us.archive.ubuntu.com/ubuntu zesty-backports/universe amd64 DEP-11 Metadata [4,588 B]
-Get:18 http://security.ubuntu.com/ubuntu zesty-security/main amd64 DEP-11 Metadata [12.7 kB]
-Get:19 http://security.ubuntu.com/ubuntu zesty-security/main DEP-11 64x64 Icons [17.6 kB]
-Get:20 http://security.ubuntu.com/ubuntu zesty-security/universe amd64 DEP-11 Metadata [21.6 kB]
-Get:21 http://security.ubuntu.com/ubuntu zesty-security/universe DEP-11 64x64 Icons [47.7 kB]
-Get:22 http://security.ubuntu.com/ubuntu zesty-security/multiverse amd64 DEP-11 Metadata [208 B]
-Fetched 1,673 kB in 0s (1,716 kB/s)
-Reading package lists... Done
-Building dependency tree
-Reading state information... Done
-All packages are up to date.
+    - Klambauer, G., Unterthiner, T., Mayr, A., & Hochreiter, S. (2017).
+  Self-Normalizing Neural Networks. arXiv preprint arXiv:1706.02515.
+  https://arxiv.org/abs/1706.02515
 '''
+from __future__ import print_function
+    
+            # Create flat baselines to compare the variation over batch size
+        all_times['pca'].extend([results_dict['pca']['time']] *
+                                len(batch_sizes))
+        all_errors['pca'].extend([results_dict['pca']['error']] *
+                                 len(batch_sizes))
+        all_times['rpca'].extend([results_dict['rpca']['time']] *
+                                 len(batch_sizes))
+        all_errors['rpca'].extend([results_dict['rpca']['error']] *
+                                  len(batch_sizes))
+        for batch_size in batch_sizes:
+            ipca = IncrementalPCA(n_components=n_components,
+                                  batch_size=batch_size)
+            results_dict = {k: benchmark(est, data) for k, est in [('ipca',
+                                                                   ipca)]}
+            all_times['ipca'].append(results_dict['ipca']['time'])
+            all_errors['ipca'].append(results_dict['ipca']['error'])
+    
+    Invoke with
+-----------
     
     
-def test_get_new_command():
-    new_command = get_new_command(Command('apt list --upgradable', match_output))
-    assert new_command == 'apt upgrade'
+def bench_scikit_tree_regressor(X, Y):
+    '''Benchmark with scikit-learn decision tree regressor'''
     
+    # Plot the results (= shape of the data points cloud)
+plt.figure(1)  # two clusters
+plt.title('Outlier detection on a real data set (boston housing)')
+plt.scatter(X1[:, 0], X1[:, 1], color='black')
+bbox_args = dict(boxstyle='round', fc='0.8')
+arrow_args = dict(arrowstyle='->')
+plt.annotate('several confounded points', xy=(24, 19),
+             xycoords='data', textcoords='data',
+             xytext=(13, 10), bbox=bbox_args, arrowprops=arrow_args)
+plt.xlim((xx1.min(), xx1.max()))
+plt.ylim((yy1.min(), yy1.max()))
+plt.legend((legend1_values_list[0].collections[0],
+            legend1_values_list[1].collections[0],
+            legend1_values_list[2].collections[0]),
+           (legend1_keys_list[0], legend1_keys_list[1], legend1_keys_list[2]),
+           loc='upper center',
+           prop=matplotlib.font_manager.FontProperties(size=12))
+plt.ylabel('accessibility to radial highways')
+plt.xlabel('pupil-teacher ratio by town')
     
-no_suggestions = '''\
-usage: aws [options] <command> <subcommand> [<subcommand> ...] [parameters]
-To see help text, you can run:
+    # The online learning part: cycle over the whole dataset 6 times
+index = 0
+for _ in range(6):
+    for img in faces.images:
+        data = extract_patches_2d(img, patch_size, max_patches=50,
+                                  random_state=rng)
+        data = np.reshape(data, (len(data), -1))
+        buffer.append(data)
+        index += 1
+        if index % 10 == 0:
+            data = np.concatenate(buffer, axis=0)
+            data -= np.mean(data, axis=0)
+            data /= np.std(data, axis=0)
+            kmeans.partial_fit(data)
+            buffer = []
+        if index % 100 == 0:
+            print('Partial fit of %4i out of %i'
+                  % (index, 6 * len(faces.images)))
     
+    def isPrime(num):
+    if (num < 2):
+        return False
     
-@parametrize_extensions
-@parametrize_filename
-@parametrize_script
-def test_get_new_command(ext, tar_error, filename, unquoted, quoted, script, fixed):
-    tar_error(unquoted.format(ext))
-    assert (get_new_command(Command(script.format(filename.format(ext)), ''))
-            == fixed.format(dir=quoted.format(''), filename=filename.format(ext)))
-
+    def generateKey(keySize):
+    print('Generating prime p...')
+    p = rabinMiller.generateLargePrime(keySize)
+    print('Generating prime q...')
+    q = rabinMiller.generateLargePrime(keySize)
+    n = p * q
     
-            # because special names such as Name.Class, Name.Function, etc.
-        # are not recognized as such later in the parsing, we choose them
-        # to look the same as ordinary variables.
-        Name:                      '#000000',        # class: 'n'
-        Name.Attribute:            '#c4a000',        # class: 'na' - to be revised
-        Name.Builtin:              '#004461',        # class: 'nb'
-        Name.Builtin.Pseudo:       '#3465a4',        # class: 'bp'
-        Name.Class:                '#000000',        # class: 'nc' - to be revised
-        Name.Constant:             '#000000',        # class: 'no' - to be revised
-        Name.Decorator:            '#888',           # class: 'nd' - to be revised
-        Name.Entity:               '#ce5c00',        # class: 'ni'
-        Name.Exception:            'bold #cc0000',   # class: 'ne'
-        Name.Function:             '#000000',        # class: 'nf'
-        Name.Property:             '#000000',        # class: 'py'
-        Name.Label:                '#f57900',        # class: 'nl'
-        Name.Namespace:            '#000000',        # class: 'nn' - to be revised
-        Name.Other:                '#000000',        # class: 'nx'
-        Name.Tag:                  'bold #004461',   # class: 'nt' - like a keyword
-        Name.Variable:             '#000000',        # class: 'nv' - to be revised
-        Name.Variable.Class:       '#000000',        # class: 'vc' - to be revised
-        Name.Variable.Global:      '#000000',        # class: 'vg' - to be revised
-        Name.Variable.Instance:    '#000000',        # class: 'vi' - to be revised
+    	TEMPORARY_ARRAY = [ element for element in ARRAY[1:] if element >= PIVOT ]
+	TEMPORARY_ARRAY = [PIVOT] + longestSub(TEMPORARY_ARRAY)
+	if ( len(TEMPORARY_ARRAY) > len(LONGEST_SUB) ):
+		return TEMPORARY_ARRAY
+	else:
+		return LONGEST_SUB
     
-        Usage::
+    	currPos = 0
+	while currPos < len(bitString):
+		currPart = bitString[currPos:currPos+512]
+		mySplits = []
+		for i in range(16):
+			mySplits.append(int(rearrange(currPart[32*i:32*i+32]),2))
+		yield mySplits
+		currPos += 512
     
+        # Find all the faces and face encodings in the current frame of video
+    face_locations = face_recognition.face_locations(rgb_frame)
+    face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
     
-def test_set_environ_raises_exception():
-    '''Tests set_environ will raise exceptions in context when the
-    value parameter is None.'''
-    with pytest.raises(Exception) as exception:
-        with set_environ('test1', None):
-            raise Exception('Expected exception')
+    # Load a sample picture and learn how to recognize it.
+print('Loading known face image(s)')
+obama_image = face_recognition.load_image_file('obama_small.jpg')
+obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
     
-        if not app.config.edit_on_github_project:
-        warnings.warn('edit_on_github_project not specified')
-        return
-    if not doctree:
-        warnings.warn('doctree is None')
-        return
-    path = os.path.relpath(doctree.get('source'), app.builder.srcdir)
-    show_url = get_github_url(app, 'blob', path)
-    edit_url = get_github_url(app, 'edit', path)
+        if os.path.isdir(image_to_check):
+        if cpus == 1:
+            [test_image(image_file, known_names, known_face_encodings, tolerance, show_distance) for image_file in image_files_in_folder(image_to_check)]
+        else:
+            process_images_in_process_pool(image_files_in_folder(image_to_check), known_names, known_face_encodings, cpus, tolerance, show_distance)
+    else:
+        test_image(image_to_check, known_names, known_face_encodings, tolerance, show_distance)
     
-                if item.get(CONF_DISPLAY_URL) is not None:
-                if isinstance(item.get(CONF_DISPLAY_URL),
-                              template.Template):
-                    output[ATTR_REDIRECTION_URL] = \
-                        item[CONF_DISPLAY_URL].async_render()
-                else:
-                    output[ATTR_REDIRECTION_URL] = item.get(CONF_DISPLAY_URL)
+            self.assertEqual(len(detected_faces), 1)
+        self.assertAlmostEqual(detected_faces[0].rect.top(), 144, delta=25)
+        self.assertAlmostEqual(detected_faces[0].rect.bottom(), 389, delta=25)
     
-    import homeassistant.helpers.config_validation as cv
-import homeassistant.util.dt as dt_util
-from homeassistant.components.device_tracker import (
-    DOMAIN, PLATFORM_SCHEMA, DeviceScanner)
-from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_USERNAME
-    
-        def get_extra_attributes(self, device):
-        '''Return the IP of the given device.'''
-        filter_ip = next((
-            result.ip for result in self.last_results
-            if result.mac == device), None)
-        return {'ip': filter_ip}
-    
-    
-class SwisscomDeviceScanner(DeviceScanner):
-    '''This class queries a router running Swisscom Internet-Box firmware.'''
-    
-        def __init__(self, config):
-        '''Initialize the scanner.'''
-        self.host = config[CONF_HOST]
-        self.username = config[CONF_USERNAME]
-        self.password = config[CONF_PASSWORD]
-        self.last_results = {}
-    
-            for order in target_orders:
-            order.place()
-    
-            for entity_id in whitelist:
-            state = hass.states.get(entity_id)
-    
-                try:
-                kwargs['data'] = self._schema(data)
-            except vol.Invalid as err:
-                _LOGGER.error('Data does not match schema: %s', err)
-                return view.json_message(
-                    'Message format incorrect: {}'.format(err), 400)
-    
-    REMOTE_SCHEMA = vol.Schema({
-    vol.Optional(CONF_NAME, default=DOMAIN):
-        vol.Exclusive(cv.string, 'remotes'),
-    vol.Required(CONF_HOST): cv.string,
-    vol.Optional(CONF_PORT, default=DEFAULT_PORT): cv.port,
-})
+        # Let's trace out each facial feature in the image with a line!
+    for facial_feature in face_landmarks.keys():
+        d.line(face_landmarks[facial_feature], width=5)
