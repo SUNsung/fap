@@ -1,236 +1,226 @@
 
         
-                if not any(os.path.isfile('%s/certutil' % x) for x in os.environ['PATH'].split(os.pathsep)):
-            xlog.warn('please install *libnss3-tools* package to import GoAgent root ca')
-            return False
+                print('benchmarking scikit-learn: ')
+        scikit_results.append(bench(ScikitLasso, X, Y, X_test, Y_test, coef_))
+        print('benchmarking glmnet: ')
+        glmnet_results.append(bench(GlmnetLasso, X, Y, X_test, Y_test, coef_))
     
-        def _test_host(self, url):
-        try:
-            header = {
-                'user-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Safari/537.36',
-                'accept': 'application/json, text/javascript, */*; q=0.01',
-                'accept-encoding': 'gzip, deflate, sdch',
-                'accept-language': 'en-US,en;q=0.8,ja;q=0.6,zh-CN;q=0.4,zh;q=0.2',
-                'connection': 'keep-alive'
-                }
-            response = self.http_client.request('HEAD', url, header, '', read_payload=False)
-            if response:
-                return True
-        except Exception as e:
-            if __name__ == '__main__':
-                xlog.exception('test %s e:%r', url, e)
-    
-        fetchmethod = getattr(urlfetch, method, None)
-    if not fetchmethod:
-        start_response('405 Method Not Allowed', [('Content-Type', 'text/html')])
-        yield message_html('405 Method Not Allowed', 'Method Not Allowed: %r' % method, detail='Method Not Allowed URL=%r' % url)
-        raise StopIteration
-    
-    - RecognitionException
-  - MismatchedRangeException
-  - MismatchedSetException
-    - MismatchedNotSetException
-    .
-  - MismatchedTokenException
-  - MismatchedTreeNodeException
-  - NoViableAltException
-  - EarlyExitException
-  - FailedPredicateException
-  .
-.
-    
-            sys.stdout.write('\n')
-    
-        def __init__(self, resource_type, *args, **kwargs):
-        self.resource_type = resource_type
-        super(Resource, self).__init__(
-            'resource', default=resource_type, *args, **kwargs)
-    
-        '''
-    return_vars = {}
-    # Get list of words in the variable
-    a_opts = util.get_var_from_file(varname, filepath).split()
-    for i, v in enumerate(a_opts):
-        # Handle Define statements and make sure it has an argument
-        if v == '-D' and len(a_opts) >= i+2:
-            var_parts = a_opts[i+1].partition('=')
-            return_vars[var_parts[0]] = var_parts[2]
-        elif len(v) > 2 and v.startswith('-D'):
-            # Found var with no whitespace separator
-            var_parts = v[2:].partition('=')
-            return_vars[var_parts[0]] = var_parts[2]
-    return return_vars
-    
-    
-if __name__ == '__main__':
-    unittest.main()  # pragma: no cover
+    plt.figure('scikit-learn Ward's method benchmark results')
+plt.imshow(np.log(ratio), aspect='auto', origin='lower')
+plt.colorbar()
+plt.contour(ratio, levels=[1, ], colors='k')
+plt.yticks(range(len(n_features)), n_features.astype(np.int))
+plt.ylabel('N features')
+plt.xticks(range(len(n_samples)), n_samples.astype(np.int))
+plt.xlabel('N samples')
+plt.title('Scikit's time, in units of scipy time (log)')
+plt.show()
 
     
     
-class ApacheTlsSni01(common.TLSSNI01):
-    '''Class that performs TLS-SNI-01 challenges within the Apache configurator
+def issue_role(name, rawtext, text, lineno,
+               inliner, options=None, content=None):
+    '''Sphinx role for linking to an issue. Must have
+    `issues_uri` or `issues_github_path` configured in ``conf.py``.
     
-    # If true, show URL addresses after external links.
-#man_show_urls = False
+    First example
+-------------
+The first example illustrates how robust covariance estimation can help
+concentrating on a relevant cluster when another one exists. Here, many
+observations are confounded into one and break down the empirical covariance
+estimation.
+Of course, some screening tools would have pointed out the presence of two
+clusters (Support Vector Machines, Gaussian Mixture Models, univariate
+outlier detection, ...). But had it been a high-dimensional example, none
+of these could be applied that easily.
     
-        for quality in ['1080','720','480','380','240','144','auto']:
-        try:
-            real_url = info[quality][1]['url']
-            if real_url:
-                break
-        except KeyError:
-            pass
-    
-        if re.match(r'https?://movie', url):
-        title = match1(html, 'name='description' content='([^']+)')
-        tid = match1(url, 'trailer/(\d+)')
-        real_url = 'https://movie.douban.com/trailer/video_url?tid=%s' % tid
-        type, ext, size = url_info(real_url)
+    model = SpectralCoclustering(n_clusters=5, random_state=0)
+model.fit(data)
+score = consensus_score(model.biclusters_,
+                        (rows[:, row_idx], columns[:, col_idx]))
     
     
-site_info = 'fantasy.tv'
-download = fantasy_download
-download_playlist = playlist_not_supported('fantasy.tv')
+plt.show()
 
     
-            for (i, real_url) in enumerate(real_urls):
-            title_i = '%s[%s]' % (title, i) if len(real_urls) > 1 else title
-            type, ext, size = url_info(real_url)
-            if ext is None: ext = 'mp4'
+    We generate data from three groups of waveforms. Two of the waveforms
+(waveform 1 and waveform 2) are proportional one to the other. The cosine
+distance is invariant to a scaling of the data, as a result, it cannot
+distinguish these two waveforms. Thus even with no noise, clustering
+using this distance will not separate out waveform 1 and 2.
+    
+    fig.show()
+
     
     
-def evaluate_masks(
-    json_dataset,
-    all_boxes,
-    all_segms,
-    output_dir,
-    use_salt=True,
-    cleanup=False
-):
-    if cfg.CLUSTER.ON_CLUSTER:
-        # On the cluster avoid saving these files in the job directory
-        output_dir = '/tmp'
-    res_file = os.path.join(
-        output_dir, 'segmentations_' + json_dataset.name + '_results')
-    if use_salt:
-        res_file += '_{}'.format(str(uuid.uuid4()))
-    res_file += '.json'
+#----------------------------------------------------------------------
+# Visualize the clustering
+def plot_clustering(X_red, labels, title=None):
+    x_min, x_max = np.min(X_red, axis=0), np.max(X_red, axis=0)
+    X_red = (X_red - x_min) / (x_max - x_min)
     
-        'Flipping' an entry means that that image and associated metadata (e.g.,
-    ground truth boxes and object proposals) are horizontally flipped.
+    This example is meant to illustrate situations where k-means will produce
+unintuitive and possibly unexpected clusters. In the first three plots, the
+input data does not conform to some implicit assumption that k-means makes and
+undesirable clusters are produced as a result. In the last plot, k-means
+returns intuitive clusters despite unevenly sized blobs.
+'''
+print(__doc__)
+    
+      # Next, check comments
+  next_line_start = 0
+  if linenum + 1 < clean_lines.NumLines():
+    next_line = raw[linenum + 1]
+    next_line_start = len(next_line) - len(next_line.lstrip())
+  CheckComment(line, filename, linenum, next_line_start, error)
+    
+        What it should do it take a markdown file, and split it into more files. A targetfile should have the same
+    number of lines as the original, with source code snippets and markdown non-words removed, for spell-checking.
+    
+    
+def im_detect_keypoints_hflip(model, im, target_scale, target_max_size, boxes):
+    '''Computes keypoint predictions on the horizontally flipped image.
+    Function signature is the same as for im_detect_keypoints_aug.
     '''
-    flipped_roidb = []
-    for entry in roidb:
-        width = entry['width']
-        boxes = entry['boxes'].copy()
-        oldx1 = boxes[:, 0].copy()
-        oldx2 = boxes[:, 2].copy()
-        boxes[:, 0] = width - oldx2 - 1
-        boxes[:, 2] = width - oldx1 - 1
-        assert (boxes[:, 2] >= boxes[:, 0]).all()
-        flipped_entry = {}
-        dont_copy = ('boxes', 'segms', 'gt_keypoints', 'flipped')
-        for k, v in entry.items():
-            if k not in dont_copy:
-                flipped_entry[k] = v
-        flipped_entry['boxes'] = boxes
-        flipped_entry['segms'] = segm_utils.flip_segms(
-            entry['segms'], entry['height'], entry['width']
-        )
-        if dataset.keypoints is not None:
-            flipped_entry['gt_keypoints'] = keypoint_utils.flip_keypoints(
-                dataset.keypoints, dataset.keypoint_flip_map,
-                entry['gt_keypoints'], entry['width']
-            )
-        flipped_entry['flipped'] = True
-        flipped_roidb.append(flipped_entry)
-    roidb.extend(flipped_roidb)
+    # Compute keypoints for the flipped image
+    im_hf = im[:, ::-1, :]
+    boxes_hf = box_utils.flip_boxes(boxes, im.shape[1])
+    
+            basename = os.path.splitext(os.path.basename(im_name))[0]
+        txtname = os.path.join(output_dir, basename + 'pred.txt')
+        with open(txtname, 'w') as fid_txt:
+            if i % 10 == 0:
+                logger.info('i: {}: {}'.format(i, basename))
+            for j in range(1, len(all_segms)):
+                clss = json_dataset.classes[j]
+                clss_id = cityscapes_eval.name2label[clss].id
+                segms = all_segms[j][i]
+                boxes = all_boxes[j][i]
+                if segms == []:
+                    continue
+                masks = mask_util.decode(segms)
     
     
-def _do_python_eval(json_dataset, salt, output_dir='output'):
+def get_raw_dir(name):
+    '''Retrieve the raw dir for the dataset.'''
+    return _DATASETS[name][_RAW_DIR]
+
+    
+    
+def _do_matlab_eval(json_dataset, salt, output_dir='output'):
+    import subprocess
+    logger.info('-----------------------------------------------------')
+    logger.info('Computing results with the official MATLAB eval code.')
+    logger.info('-----------------------------------------------------')
     info = voc_info(json_dataset)
-    year = info['year']
-    anno_path = info['anno_path']
-    image_set_path = info['image_set_path']
-    devkit_path = info['devkit_path']
-    cachedir = os.path.join(devkit_path, 'annotations_cache')
-    aps = []
-    # The PASCAL VOC metric changed in 2010
-    use_07_metric = True if int(year) < 2010 else False
-    logger.info('VOC07 metric? ' + ('Yes' if use_07_metric else 'No'))
-    if not os.path.isdir(output_dir):
-        os.mkdir(output_dir)
-    for _, cls in enumerate(json_dataset.classes):
-        if cls == '__background__':
-            continue
-        filename = _get_voc_results_file_template(
-            json_dataset, salt).format(cls)
-        rec, prec, ap = voc_eval(
-            filename, anno_path, image_set_path, cls, cachedir, ovthresh=0.5,
-            use_07_metric=use_07_metric)
-        aps += [ap]
-        logger.info('AP for {} = {:.4f}'.format(cls, ap))
-        res_file = os.path.join(output_dir, cls + '_pr.pkl')
-        save_object({'rec': rec, 'prec': prec, 'ap': ap}, res_file)
-    logger.info('Mean AP = {:.4f}'.format(np.mean(aps)))
-    logger.info('~~~~~~~~')
-    logger.info('Results:')
-    for ap in aps:
-        logger.info('{:.3f}'.format(ap))
-    logger.info('{:.3f}'.format(np.mean(aps)))
-    logger.info('~~~~~~~~')
-    logger.info('')
-    logger.info('----------------------------------------------------------')
-    logger.info('Results computed with the **unofficial** Python eval code.')
-    logger.info('Results should be very close to the official MATLAB code.')
-    logger.info('Use `./tools/reval.py --matlab ...` for your paper.')
-    logger.info('-- Thanks, The Management')
-    logger.info('----------------------------------------------------------')
-    
-        k_max = cfg.FPN.RPN_MAX_LEVEL  # coarsest level of pyramid
-    k_min = cfg.FPN.RPN_MIN_LEVEL  # finest level of pyramid
-    assert len(blobs_in) == k_max - k_min + 1
-    for lvl in range(k_min, k_max + 1):
-        bl_in = blobs_in[k_max - lvl]  # blobs_in is in reversed order
-        sc = spatial_scales[k_max - lvl]  # in reversed order
-        slvl = str(lvl)
+    path = os.path.join(
+        cfg.ROOT_DIR, 'detectron', 'datasets', 'VOCdevkit-matlab-wrapper')
+    cmd = 'cd {} && '.format(path)
+    cmd += '{:s} -nodisplay -nodesktop '.format(cfg.MATLAB)
+    cmd += '-r 'dbstop if error; '
+    cmd += 'voc_eval(\'{:s}\',\'{:s}\',\'{:s}\',\'{:s}\'); quit;'' \
+       .format(info['devkit_path'], 'comp4' + salt, info['image_set'],
+               output_dir)
+    logger.info('Running:\n{}'.format(cmd))
+    subprocess.call(cmd, shell=True)
     
     
-# ---------------------------------------------------------------------------- #
-# Keypoint heads
-# ---------------------------------------------------------------------------- #
-    
-    def add_generic_rpn_outputs(model, blob_in, dim_in, spatial_scale_in):
-    '''Add RPN outputs (objectness classification and bounding box regression)
-    to an RPN model. Abstracts away the use of FPN.
+def _generate_anchors(base_size, scales, aspect_ratios):
+    '''Generate anchor (reference) windows by enumerating aspect ratios X
+    scales wrt a reference (0, 0, base_size - 1, base_size - 1) window.
     '''
-    loss_gradients = None
-    if cfg.FPN.FPN_ON:
-        # Delegate to the FPN module
-        FPN.add_fpn_rpn_outputs(model, blob_in, dim_in, spatial_scale_in)
-        if cfg.MODEL.FASTER_RCNN:
-            # CollectAndDistributeFpnRpnProposals also labels proposals when in
-            # training mode
-            model.CollectAndDistributeFpnRpnProposals()
-        if model.train:
-            loss_gradients = FPN.add_fpn_rpn_losses(model)
+    anchor = np.array([1, 1, base_size, base_size], dtype=np.float) - 1
+    anchors = _ratio_enum(anchor, aspect_ratios)
+    anchors = np.vstack(
+        [_scale_enum(anchors[i, :], scales) for i in range(anchors.shape[0])]
+    )
+    return anchors
+    
+    
+def add_single_gpu_param_update_ops(model, gpu_id):
+    # Learning rate of 0 is a dummy value to be set properly at the
+    # start of training
+    lr = model.param_init_net.ConstantFill(
+        [], 'lr', shape=[1], value=0.0
+    )
+    one = model.param_init_net.ConstantFill(
+        [], 'one', shape=[1], value=1.0
+    )
+    wd = model.param_init_net.ConstantFill(
+        [], 'wd', shape=[1], value=cfg.SOLVER.WEIGHT_DECAY
+    )
+    # weight decay of GroupNorm's parameters
+    wd_gn = model.param_init_net.ConstantFill(
+        [], 'wd_gn', shape=[1], value=cfg.SOLVER.WEIGHT_DECAY_GN
+    )
+    for param in model.TrainableParams(gpu_id=gpu_id):
+        logger.debug('param ' + str(param) + ' will be updated')
+        param_grad = model.param_to_grad[param]
+        # Initialize momentum vector
+        param_momentum = model.param_init_net.ConstantFill(
+            [param], param + '_momentum', value=0.0
+        )
+        if param in model.biases:
+            # Special treatment for biases (mainly to match historical impl.
+            # details):
+            # (1) Do not apply weight decay
+            # (2) Use a 2x higher learning rate
+            model.Scale(param_grad, param_grad, scale=2.0)
+        elif param in model.gn_params:
+            # Special treatment for GroupNorm's parameters
+            model.WeightedSum([param_grad, one, param, wd_gn], param_grad)
+        elif cfg.SOLVER.WEIGHT_DECAY > 0:
+            # Apply weight decay to non-bias weights
+            model.WeightedSum([param_grad, one, param, wd], param_grad)
+        # Update param_grad and param_momentum in place
+        model.net.MomentumSGDUpdate(
+            [param_grad, param_momentum, lr, param],
+            [param_grad, param_momentum, param],
+            momentum=cfg.SOLVER.MOMENTUM
+        )
+
+    
+    
+def add_fpn_retinanet_losses(model):
+    loss_gradients = {}
+    gradients, losses = [], []
+    
+        def forward(self, inputs, outputs):
+        '''See modeling.detector.GenerateProposalLabels for inputs/outputs
+        documentation.
+        '''
+        # During training we reuse the data loader code. We populate roidb
+        # entries on the fly using the rois generated by RPN.
+        # im_info: [[im_height, im_width, im_scale], ...]
+        rois = inputs[0].data
+        roidb = blob_utils.deserialize(inputs[1].data)
+        im_info = inputs[2].data
+        im_scales = im_info[:, 2]
+        output_blob_names = fast_rcnn_roi_data.get_fast_rcnn_blob_names()
+        # For historical consistency with the original Faster R-CNN
+        # implementation we are *not* filtering crowd proposals.
+        # This choice should be investigated in the future (it likely does
+        # not matter).
+        json_dataset.add_proposals(roidb, rois, im_scales, crowd_thresh=0)
+        roidb_utils.add_bbox_regression_targets(roidb)
+        blobs = {k: [] for k in output_blob_names}
+        fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
+        for i, k in enumerate(output_blob_names):
+            blob_utils.py_op_copy_blob(blobs[k], outputs[i])
+
+    
+        if len(data.shape) == 1:
+        ret = np.empty((count, ), dtype=data.dtype)
+        ret.fill(fill)
+        ret[inds] = data
     else:
-        # Not using FPN, add RPN to a single scale
-        add_single_scale_rpn_outputs(model, blob_in, dim_in, spatial_scale_in)
-        if model.train:
-            loss_gradients = add_single_scale_rpn_losses(model)
-    return loss_gradients
+        ret = np.empty((count, ) + data.shape[1:], dtype=data.dtype)
+        ret.fill(fill)
+        ret[inds, :] = data
+    return ret
     
-        points: Nx2xK
-    boxes: Nx4
-    output: NxK
-    '''
-    x_within = np.logical_and(
-        points[:, 0, :] >= np.expand_dims(boxes[:, 0], axis=1),
-        points[:, 0, :] <= np.expand_dims(boxes[:, 2], axis=1)
-    )
-    y_within = np.logical_and(
-        points[:, 1, :] >= np.expand_dims(boxes[:, 1], axis=1),
-        points[:, 1, :] <= np.expand_dims(boxes[:, 3], axis=1)
-    )
-    return np.logical_and(x_within, y_within)
+    from detectron.core.config import cfg
+import detectron.roi_data.fast_rcnn as fast_rcnn_roi_data
+import detectron.roi_data.retinanet as retinanet_roi_data
+import detectron.roi_data.rpn as rpn_roi_data
+import detectron.utils.blob as blob_utils
