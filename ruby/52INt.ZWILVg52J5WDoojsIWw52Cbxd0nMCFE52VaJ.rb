@@ -1,75 +1,115 @@
 
         
-        describe Admin::UsersController do
-  it 'requires to be signed in as an admin' do
-    login_as(users(:bob))
-    visit admin_users_path
-    expect(page).to have_text('Admin access required to view that page.')
+        module Gitlab
+  module GithubImport
+    module Caching
+      # The default timeout of the cache keys.
+      TIMEOUT = 24.hours.to_i
+    
+          def cache_key
+        CACHE_KEY % {
+          project: project.id,
+          type: cache_key_type,
+          iid: cache_key_iid
+        }
+      end
+    
+            retval
+      end
+    
+        def sort_fn(a, b)
+      if (a.getbyte(0) >= 49 && a.getbyte(0) <= 57) || (b.getbyte(0) >= 49 && b.getbyte(0) <= 57)
+        a_split = a.split(SPLIT_INTS)
+        b_split = b.split(SPLIT_INTS)
+    
+        attr_reader :filters
+    
+        self.initial_paths = []
+    self.options = {}
+    self.stubs = {}
+    
+            css('*[layout]').remove_attr('layout')
+        css('*[layout-xs]').remove_attr('layout-xs')
+        css('*[flex]').remove_attr('flex')
+        css('*[flex-xs]').remove_attr('flex-xs')
+        css('*[ng-class]').remove_attr('ng-class')
+        css('*[align]').remove_attr('align')
+        css('h1, h2, h3').remove_attr('class')
+    
+          private
+    
+    RSpec::Matchers.define :have_path do |expected|
+  match do |actual|
+    await_condition { actual.current_path == expected }
   end
     
-              @bar2 = Agents::DotBar.new(name: 'bar2').tap { |agent|
-            agent.user = users(:bob)
-            agent.sources << @foo
-            agent.propagate_immediately = true
-            agent.disabled = true
-            agent.save!
-          },
-    
-        it 'respects an environment variable that specifies a path or URL to a different scenario' do
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('DEFAULT_SCENARIO_FILE') { File.join(Rails.root, 'spec', 'fixtures', 'test_default_scenario.json') }
-      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(3)
+          get :index, params: {conversation_id: @conv1.id}
+      save_fixture(html_for('body'), 'conversations_read')
     end
-    
-          @agent2.delete
-    
-        it 'should convert the 'escape' method correctly' do
-      expect(LiquidMigrator.convert_string('Escaped: <escape $.content.name>\nNot escaped: <$.content.name>')).to eq(
-                                    'Escaped: {{content.name | uri_escape}}\nNot escaped: {{content.name}}'
-      )
-    end
-    
-          expect(Utils.unindent('Hello\n  I am indented')).to eq('Hello\n  I am indented')
-    
-        it 'should require the basecamp project_id' do
-      @checker.options['project_id'] = nil
-      expect(@checker).not_to be_valid
-    end
-    
-        it { is_expected.to have_valid_bash_syntax }
   end
     
-          rtn = ''
-      (context.environments.first['site'][@array_name] || []).each do |file|
-        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
-          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
+    describe StatusMessagesController, :type => :controller do
+  describe '#bookmarklet' do
+    before do
+      sign_in bob, scope: :user
+    end
+    
+        it 'redirects #create to the login page' do
+      post :create, params: valid_params
+      expect(flash[:error]).to eq(I18n.t('registrations.closed'))
+      expect(response).to redirect_to new_user_session_path
+    end
+    
+      describe '#index' do
+    context 'with a private post' do
+      before do
+        @alices_aspect = alice.aspects.where(name: 'generic').first
+        @post = alice.post(:status_message, text: 'hey', to: @alices_aspect.id)
+      end
+    
+          def remove_page_extentions(page_path)
+        Gollum::Markup.formats.values.each do |format|
+          page_path = page_path.gsub(/\.#{format[:regexp]}$/, '')
         end
+        return page_path
+      end
     
-    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
-
+          def escaped_name
+        CGI.escape(@name)
+      end
     
-        attr_writer :sessions
+      test 'extracting paths from URLs' do
+    assert_nil extract_path('Eye-Of-Sauron')
+    assert_equal 'Mordor', extract_path('Mordor/Sauron')
+    assert_equal 'Mordor/Sauron', extract_path('Mordor/Sauron/Evil')
+  end
     
-          help = '(#{type} only) #{help}'
-      @options << [flag, param, help, options, block]
-    end # def options
+    context 'Precious::Views::LatestChanges' do
+  include Rack::Test::Methods
+  
+  def app
+    Precious::App
+  end
+  
+  setup do
+    @path = cloned_testpath('examples/lotr.git')
+    @wiki = Gollum::Wiki.new(@path)
+    Precious::App.set(:gollum_path, @path)
+    Precious::App.set(:wiki_options, {:latest_changes_count => 10})
+  end
     
-        # data tar.
-    tar_path(staging_path(''), datatar_path)
+        @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+    @view.instance_variable_set :@content, page.formatted_data
+    @view.instance_variable_set :@h1_title, true
     
-        safesystem(*install_args)
+      s.name              = 'gollum'
+  s.version           = '4.1.4'
+  s.date              = '2018-10-01'
+  s.rubyforge_project = 'gollum'
+  s.license           = 'MIT'
     
-        # do channel-update if requested
-    if attributes[:pear_channel_update?]
-      channel = attributes[:pear_channel] || 'pear'
-      logger.info('Updating the channel', :channel => channel)
-      safesystem('pear', '-c', config, 'channel-update', channel)
-    end
-    
-    require 'pleaserun/cli'
-    
-        if File.exists?(params[:output])
-      # TODO(sissel): Allow folks to choose output?
-      logger.error('Puppet module directory '#{params[:output]}' already ' \
-                    'exists. Delete it or choose another output (-p flag)')
-    end
+      class DuplicatePageError < Error
+    attr_accessor :dir
+    attr_accessor :existing_path
+    attr_accessor :attempted_path
