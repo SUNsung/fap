@@ -1,178 +1,130 @@
 
         
-        #include 'base/stl_util.h'
+            GURL guest_url = embedded_test_server()->GetURL(guest_path);
+    guest_url = guest_url.ReplaceComponents(replace_host);
     
-    bool Event::SendReply(const base::ListValue& result) {
-  if (message_ == nullptr || sender_ == nullptr)
-    return false;
+    namespace nw {
     }
     
-      // Pass the sender and message to be replied.
-  void SetSenderAndMessage(content::RenderFrameHost* sender,
-                           IPC::Message* message);
+      bool delay_destruction() { return delay_destruction_; }
+  void set_delay_destruction(bool val) { delay_destruction_ = val; }
+  bool pending_destruction() { return pending_destruction_; }
+  void set_pending_destruction (bool val) { pending_destruction_ = val; }
+ protected:
+  int id_;
+  bool delay_destruction_;
+  bool pending_destruction_;
+  base::WeakPtr<ObjectManager> object_manager_;
     
-    namespace auto_updater {
+    #include 'base/values.h'
+#include 'base/strings/utf_string_conversions.h'
+#include 'base/strings/string16.h'
+#include 'content/nw/src/api/dispatcher_host.h'
+#include 'ui/base/clipboard/clipboard.h'
+    
+    #include 'base/compiler_specific.h'
+#include 'content/nw/src/api/base/base.h'
+    
+    
+    {}
+    
+    public:
+  EventListener(int id,
+                const base::WeakPtr<DispatcherHost>& dispatcher_host,
+                const base::DictionaryValue& option);
+    
+    namespace {
     }
-    
-    void URLRequestAboutJob::Start() {
-  base::ThreadTaskRunnerHandle::Get()->PostTask(
-      FROM_HERE, base::BindOnce(&URLRequestAboutJob::StartAsync,
-                                weak_ptr_factory_.GetWeakPtr()));
-}
     
     /*!
- * \brief The result holder of storage type of each NodeEntry in the graph.
- * \note Stored under graph.attrs['storage_type'], provided by Pass 'InferStorageType'
- *
- * \code
- *  Graph g = ApplyPass(src_graph, 'InferStorageType');
- *  const StorageVector& stypes = g.GetAttr<StorageTypeVector>('storage_type');
- *  // get storage type by entry id
- *  int entry_type = stypes[g.indexed_graph().entry_id(my_entry)];
- * \endcode
- *
- * \sa FInferStorageType
- */
-using StorageTypeVector = std::vector<int>;
+ * Copyright (c) 2016 by Contributors
+ * \file caffe_blob.h
+ * \brief conversion between tensor and caffeBlob
+ * \author Haoran Wang
+*/
+#ifndef PLUGIN_CAFFE_CAFFE_BLOB_H_
+#define PLUGIN_CAFFE_CAFFE_BLOB_H_
     
-    #include <dmlc/base.h>
-#include <dmlc/json.h>
-#include <dmlc/logging.h>
-#include <dmlc/registry.h>
-#include <nnvm/node.h>
-#include <vector>
-#include <map>
-#include <string>
-#include <utility>
-#include './base.h'
-#include './resource.h'
-#include './op_attr_types.h'
+    // Initialization funciton called by caffeOp & caffeLoss
+template<typename Dtype>
+void InitCaffeBlobs(std::vector< ::caffe::Blob<Dtype>*>* v, int n_num) {
+  for (index_t i=0; i < n_num; ++i)
+    v->push_back(new ::caffe::Blob<Dtype>());
+}
     
-    
-    {
-    {
-    {}  // namespace caffe
-}  // namespace op
-}  // namespace mxnet
-    
-        caffe::TBlob2CaffeBlob<xpu, Dtype>(caffe::Grad,
-                                      bot_.begin(),
-                                      in_grad.begin(),
-                                      param_.num_data);
-    // Pass grad scale to caffe blob
-    MXCAFFEBLOB(top_[0], Dtype)->set_cpu_diff(&grad_scale_);
-    
-      for (uint32_t nid = 0; nid < idx.num_nodes(); ++nid) {
-    const auto& inode = idx[nid];
-    if (inode.source->op() != ewise_plus_op) continue;
-    int sid = storage_id[idx.entry_id(inode.inputs[0])];
-    if (sid != storage_id[idx.entry_id(nid, 0)]) continue;
-    if (idx[inode.inputs[0].node_id].source->is_variable()) continue;
-    if (idx[inode.inputs[1].node_id].source->is_variable()) continue;
-    uint32_t eid_rhs  = idx.entry_id(inode.inputs[1]);
-    if (ref_count[eid_rhs] != 1) continue;
-    if (inode.inputs[0].node_id >= inode.inputs[1].node_id) continue;
-    // TODO(haibin) support inplace addto for Dynamic Storage
-    if (storage_id[eid_rhs] == kDynamicStorageID) continue;
-    CHECK_NE(storage_id[eid_rhs], sid);
-    storage_id[eid_rhs] = sid;
-    addto_entry[eid_rhs] = 1;
-    storage_inplace_index[eid_rhs] = -1;
-    skip_plus_node[nid] = 1;
+    class CaffeDataIterWrapper : public PrefetcherIter {
+ public:
+  CaffeDataIterWrapper() : PrefetcherIter(NULL), next_time_(0) {}
+  virtual ~CaffeDataIterWrapper() {
+    IF_CHECK_TIMING(
+      if (next_time_.load() > 0) {
+        LOG(WARNING) << 'Caffe data loader was blocked for '
+                     << next_time_.load()
+                     << ' ms waiting for incoming data';
+      }
+    )
   }
+  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) {
+    // We need to init prefetcher args in order to get dtype
+    this->param_.InitAllowUnknown(kwargs);
+    if (!this->param_.dtype) this->param_.dtype = mshadow::kFloat32;
+    switch (this->param_.dtype.value()) {
+      case mshadow::kFloat32:
+        this->loader_.reset(new CaffeDataIter<float>(this->param_.dtype.value()));
+        break;
+      case mshadow::kFloat64:
+        this->loader_.reset(new CaffeDataIter<double>(this->param_.dtype.value()));
+        break;
+      case mshadow::kFloat16:
+        LOG(FATAL) << 'float16 layer is not supported by caffe';
+        return;
+      default:
+        LOG(FATAL) << 'Unsupported type ' << this->param_.dtype.value();
+        return;
+    }
+    PrefetcherIter::Init(kwargs);
+    this->param_.prefetch_buffer = 1;
+  }
+  virtual void BeforeFirst(void) {
+    return PrefetcherIter::BeforeFirst();
+  }
+  virtual bool Next(void) {
+    IF_CHECK_TIMING(
+      const uint64_t start_time = GetTickCountMS();
+    )
+    const bool rc = PrefetcherIter::Next();
+    IF_CHECK_TIMING(
+      const uint64_t diff_time  = GetTickCountMS() - start_time;
+      next_time_.fetch_add(diff_time);
+    )
+    return rc;
+  }
+    }
     
-    #include '../common/utils.h'
+    namespace mxnet {
+namespace io {
+/*! \return the parameter of default augmenter */
+std::vector<dmlc::ParamFieldInfo> ListDefaultAugParams();
+std::vector<dmlc::ParamFieldInfo> ListDefaultDetAugParams();
+}  // namespace io
+}  // namespace mxnet
+#endif  // MXNET_IO_IMAGE_AUGMENTER_H_
+
     
     /*!
  *  Copyright (c) 2015 by Contributors
- * \file inst_vector.h
- * \brief holder of a sequence of DataInst in CPU
- *        that are not necessarily of same shape
+ * \file iter_batchloader.h
+ * \brief define a batch adapter to create tblob batch
  */
+#ifndef MXNET_IO_ITER_BATCHLOADER_H_
+#define MXNET_IO_ITER_BATCHLOADER_H_
     
-    The input data is stored in a format similar to LibSVM file format, except that the **indices
-are expected to be zero-based instead of one-based, and the column indices for each row are
-expected to be sorted in ascending order**. Details of the LibSVM format are available
-`here. <https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/>`_
-    
-    /*!
- * \brief Iterator that normalize a image.
- *  It also applies a few augmention before normalization.
- */
-class ImageNormalizeIter : public IIterator<DataInst> {
- public:
-  explicit ImageNormalizeIter(IIterator<DataInst> *base)
-      : base_(base), meanfile_ready_(false) {
-  }
-    }
-    
-    namespace aria2 {
-    }
-    
-    class DHTMessageCallback;
-    
-    std::shared_ptr<DHTBucket>
-DHTRoutingTable::getBucketFor(const unsigned char* nodeID) const
-{
-  return dht::findBucketFor(root_.get(), nodeID);
-}
-    
-      // localnode
-  // 8bytes reserved
-  readBytes(fp, buf, buf.size(), 8);
-  // localnode ID
-  readBytes(fp, buf, buf.size(), DHT_ID_LENGTH);
-  auto localNode = std::make_shared<DHTNode>(buf);
-  // 4bytes reserved
-  readBytes(fp, buf, buf.size(), 4);
-    
-    class DHTSetup {
-public:
-  DHTSetup();
-    }
-    
-    #include <algorithm>
-    
-    std::shared_ptr<DHTTask>
-DHTTaskFactoryImpl::createPingTask(const std::shared_ptr<DHTNode>& remoteNode,
-                                   int numRetry)
-{
-  auto task = std::make_shared<DHTPingTask>(remoteNode, numRetry);
-  task->setTimeout(timeout_);
-  setCommonProperty(task);
-  return task;
-}
-    
-    namespace aria2 {
-    }
-    
-    bool DHTTokenTracker::validateToken(const std::string& token,
-                                    const unsigned char* infoHash,
-                                    const std::string& ipaddr,
-                                    uint16_t port) const
-{
-  for (auto& elem : secret_) {
-    if (generateToken(infoHash, ipaddr, port, elem) == token) {
-      return true;
-    }
-  }
-  return false;
-}
-    
-    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
-                                             std::chrono::seconds interval)
-    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
-{
-}
-    
-      virtual ~DHTTokenUpdateCommand();
-    
-    const std::string& DNSCache::CacheEntry::getGoodAddr() const
-{
-  for (auto& elem : addrEntries_) {
-    if (elem.good_) {
-      return (elem).addr_;
-    }
-  }
-  return A2STR::NIL;
-}
+    )code' ADD_FILELINE)
+.add_arguments(LibSVMIterParam::__FIELDS__())
+.add_arguments(BatchParam::__FIELDS__())
+.add_arguments(PrefetcherParam::__FIELDS__())
+.set_body([]() {
+    return new SparsePrefetcherIter(
+        new SparseBatchLoader(
+            new LibSVMIter()));
+  });
