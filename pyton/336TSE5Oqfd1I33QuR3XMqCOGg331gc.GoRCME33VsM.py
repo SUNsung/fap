@@ -1,290 +1,193 @@
 
         
-        
-def add_error(line_num, message):
-    '''adds an error to the dynamic error list'''
-    err = '(L{:03d}) {}'.format(line_num + 1, message)
-    errors.append(err)
+            # make url_for('index') == url_for('blog.index')
+    # in another app, you might define a separate main index here with
+    # app.route, while giving the blog blueprint a url_prefix, but for
+    # the tutorial the blog will be the main index
+    app.add_url_rule('/', endpoint='index')
     
     
-HandlerEx = ctypes.WINFUNCTYPE(
-    ctypes.c_int,     # return
-    ctypes.c_int,     # dwControl
-    ctypes.c_int,     # dwEventType
-    ctypes.c_void_p,  # lpEventData,
-    ctypes.c_void_p,  # lpContext,
-)
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-    module_contents.append(
-    '_ALL_CLASSES = [{0}]'.format(', '.join(names)))
-    
-        def test_cbc_encrypt(self):
-        data = bytes_to_intlist(self.secret_msg)
-        encrypted = intlist_to_bytes(aes_cbc_encrypt(data, self.key, self.iv))
-        self.assertEqual(
-            encrypted,
-            b'\x97\x92+\xe5\x0b\xc3\x18\x91ky9m&\xb3\xb5@\xe6'\xc2\x96.\xc8u\x88\xab9-[\x9e|\xf1\xcd')
-    
-        def matching_ies(self, url):
-        return [ie.IE_NAME for ie in self.ies if ie.suitable(url) and ie.IE_NAME != 'generic']
-    
-                if 'playlist_mincount' in test_case:
-                assertGreaterEqual(
-                    self,
-                    len(res_dict['entries']),
-                    test_case['playlist_mincount'],
-                    'Expected at least %d in playlist %s, but got only %d' % (
-                        test_case['playlist_mincount'], test_case['url'],
-                        len(res_dict['entries'])))
-            if 'playlist_count' in test_case:
-                self.assertEqual(
-                    len(res_dict['entries']),
-                    test_case['playlist_count'],
-                    'Expected %d entries in playlist %s, but got %d.' % (
-                        test_case['playlist_count'],
-                        test_case['url'],
-                        len(res_dict['entries']),
-                    ))
-            if 'playlist_duration_sum' in test_case:
-                got_duration = sum(e['duration'] for e in res_dict['entries'])
-                self.assertEqual(
-                    test_case['playlist_duration_sum'], got_duration)
-    
-        for i in range(1, 6):
-        fpath = os.path.join(path, 'data_batch_' + str(i))
-        (x_train[(i - 1) * 10000: i * 10000, :, :, :],
-         y_train[(i - 1) * 10000: i * 10000]) = load_batch(fpath)
-    
-        ```python
-    # Consider an array of 5 labels out of a set of 3 classes {0, 1, 2}:
-    > labels
-    array([0, 2, 1, 2, 0])
-    # `to_categorical` converts this into a matrix with as many
-    # columns as there are classes. The number of rows
-    # stays the same.
-    > to_categorical(labels)
-    array([[ 1.,  0.,  0.],
-           [ 0.,  0.,  1.],
-           [ 0.,  1.,  0.],
-           [ 0.,  0.,  1.],
-           [ 1.,  0.,  0.]], dtype=float32)
-    ```
+def get_db():
+    '''Connect to the application's configured database. The connection
+    is unique for each request and will be reused if this is called
+    again.
     '''
-    
-    # Vectorize the data.  We use the same approach as the training script.
-# NOTE: the data must be identical, in order for the character -> integer
-# mappings to be consistent.
-# We omit encoding target_texts since they are not needed.
-input_texts = []
-target_texts = []
-input_characters = set()
-target_characters = set()
-with open(data_path, 'r', encoding='utf-8') as f:
-    lines = f.read().split('\n')
-for line in lines[: min(num_samples, len(lines) - 1)]:
-    input_text, target_text = line.split('\t')
-    # We use 'tab' as the 'start sequence' character
-    # for the targets, and '\n' as 'end sequence' character.
-    target_text = '\t' + target_text + '\n'
-    input_texts.append(input_text)
-    target_texts.append(target_text)
-    for char in input_text:
-        if char not in input_characters:
-            input_characters.add(char)
-    for char in target_text:
-        if char not in target_characters:
-            target_characters.add(char)
-    
-    # Clean up the TF session.
-K.clear_session()
+    if 'db' not in g:
+        g.db = sqlite3.connect(
+            current_app.config['DATABASE'],
+            detect_types=sqlite3.PARSE_DECLTYPES
+        )
+        g.db.row_factory = sqlite3.Row
     
     
-def create_network(n_dense=6,
-                   dense_units=16,
-                   activation='selu',
-                   dropout=AlphaDropout,
-                   dropout_rate=0.1,
-                   kernel_initializer='lecun_normal',
-                   optimizer='adam',
-                   num_classes=1,
-                   max_words=max_words):
-    '''Generic function to create a fully-connected neural network.
+def test_author_required(app, client, auth):
+    # change the post author to another user
+    with app.app_context():
+        db = get_db()
+        db.execute('UPDATE post SET author_id = 2 WHERE id = 1')
+        db.commit()
     
+            for srcobj, loader in self._iter_loaders(template):
+            try:
+                rv = loader.get_source(environment, template)
+                if trv is None:
+                    trv = rv
+            except TemplateNotFound:
+                rv = None
+            attempts.append((loader, srcobj, rv))
     
-def plot_feature_times(all_times, batch_size, all_components, data):
-    plt.figure()
-    plot_results(all_components, all_times['pca'], label='PCA')
-    plot_results(all_components, all_times['ipca'],
-                 label='IncrementalPCA, bsize=%i' % batch_size)
-    plt.legend(loc='upper left')
-    plt.suptitle('Algorithm runtime vs. n_components\n \
-                 LFW, size %i x %i' % data.shape)
-    plt.xlabel('Number of components (out of max %i)' % data.shape[1])
-    plt.ylabel('Time (seconds)')
+                if match is None:
+                continue
     
-    The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+    def rabinMiller(num):
+    s = num - 1
+    t = 0
     
-    legend2_values_list = list(legend2.values())
-legend2_keys_list = list(legend2.keys())
+        context['show_on_github_url'] = show_url
+    context['edit_on_github_url'] = edit_url
     
-    model = SpectralBiclustering(n_clusters=n_clusters, method='log',
-                             random_state=0)
-model.fit(data)
-score = consensus_score(model.biclusters_,
-                        (rows[:, row_idx], columns[:, col_idx]))
+    For more details about this platform, please refer to the documentation at
+https://home-assistant.io/components/notify.clickatell/
+'''
+import logging
     
+    For more details about this platform, please refer to the documentation at
+https://home-assistant.io/components/notify.file/
+'''
+import logging
+import os
     
-plt.show()
+            _LOGGER.debug('Attempting to call Flock at %s', self._url)
+    
+    REQUIREMENTS = ['freesms==0.1.2']
+    
+            if method not in ATTR_METHOD_ALLOWED:
+            _LOGGER.error('Unknown method %s', method)
+            return
+    
+        def feed(self, byte_str):
+        for i in range(len(byte_str)):
+            coding_state = self.coding_sm.next_state(byte_str[i])
+            if coding_state == MachineState.ERROR:
+                self.logger.debug('%s %s prober hit error at byte %s',
+                                  self.charset_name, self.language, i)
+                self._state = ProbingState.NOT_ME
+                break
+            elif coding_state == MachineState.ITS_ME:
+                self._state = ProbingState.FOUND_IT
+                break
+            elif coding_state == MachineState.START:
+                char_len = self.coding_sm.get_current_charlen()
+                if i == 0:
+                    self._last_char[1] = byte_str[0]
+                    self.distribution_analyzer.feed(self._last_char, char_len)
+                else:
+                    self.distribution_analyzer.feed(byte_str[i - 1:i + 1],
+                                                    char_len)
+    
+            return self.state
+    
+    EUCTW_CHAR_LEN_TABLE = (0, 0, 1, 2, 2, 2, 3)
+    
+    EUCKR_SM_MODEL = {'class_table': EUCKR_CLS,
+                'class_factor': 4,
+                'state_table': EUCKR_ST,
+                'char_len_table': EUCKR_CHAR_LEN_TABLE,
+                'name': 'EUC-KR'}
+    
+        def __init__(self, model, reversed=False, name_prober=None):
+        super(SingleByteCharSetProber, self).__init__()
+        self._model = model
+        # TRUE if we need to reverse every pair in the model lookup
+        self._reversed = reversed
+        # Optional auxiliary prober for name decision
+        self._name_prober = name_prober
+        self._last_order = None
+        self._seq_counters = None
+        self._total_seqs = None
+        self._total_char = None
+        self._freq_char = None
+        self.reset()
+    
+    from .mbcharsetprober import MultiByteCharSetProber
+from .codingstatemachine import CodingStateMachine
+from .chardistribution import SJISDistributionAnalysis
+from .jpcntx import SJISContextAnalysis
+from .mbcssm import SJIS_SM_MODEL
+from .enums import ProbingState, MachineState
+    
+            # If we've seen escape sequences, use the EscCharSetProber, which
+        # uses a simple state machine to check for known escape sequences in
+        # HZ and ISO-2022 encodings, since those are the only encodings that
+        # use such sequences.
+        if self._input_state == InputState.ESC_ASCII:
+            if not self._esc_charset_prober:
+                self._esc_charset_prober = EscCharSetProber(self.lang_filter)
+            if self._esc_charset_prober.feed(byte_str) == ProbingState.FOUND_IT:
+                self.result = {'encoding':
+                               self._esc_charset_prober.charset_name,
+                               'confidence':
+                               self._esc_charset_prober.get_confidence(),
+                               'language':
+                               self._esc_charset_prober.language}
+                self.done = True
+        # If we've seen high bytes (i.e., those with values greater than 127),
+        # we need to do more complicated checks using all our multi-byte and
+        # single-byte probers that are left.  The single-byte probers
+        # use character bigram distributions to determine the encoding, whereas
+        # the multi-byte probers use a combination of character unigram and
+        # bigram distributions.
+        elif self._input_state == InputState.HIGH_BYTE:
+            if not self._charset_probers:
+                self._charset_probers = [MBCSGroupProber(self.lang_filter)]
+                # If we're checking non-CJK encodings, use single-byte prober
+                if self.lang_filter & LanguageFilter.NON_CJK:
+                    self._charset_probers.append(SBCSGroupProber())
+                self._charset_probers.append(Latin1Prober())
+            for prober in self._charset_probers:
+                if prober.feed(byte_str) == ProbingState.FOUND_IT:
+                    self.result = {'encoding': prober.charset_name,
+                                   'confidence': prober.get_confidence(),
+                                   'language': prober.language}
+                    self.done = True
+                    break
+            if self.WIN_BYTE_DETECTOR.search(byte_str):
+                self._has_win_bytes = True
+    
+        def __init__(self):
+        super(UTF8Prober, self).__init__()
+        self.coding_sm = CodingStateMachine(UTF8_SM_MODEL)
+        self._num_mb_chars = None
+        self.reset()
+    
+        nonce = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(9))
+    filename = topic_name.replace('/', '.') + '.' + nonce
+    filename = os.path.join(PATH_CHEAT_SHEETS_SPOOL, filename)
+    
+    if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
 
     
-        ax.scatter(X[:, 3], X[:, 0], X[:, 2],
-               c=labels.astype(np.float), edgecolor='k')
+    PALETTES = {
+    0: {
+        1: Fore.WHITE,
+        2: Style.DIM,
+    },
+    1: {
+        1: Fore.CYAN,
+        2: Fore.GREEN,
+        3: colored.fg('orange_3'),
+        4: Style.DIM,
+        5: Style.DIM,
+    },
+    2: {
+        1: Fore.RED,
+        2: Style.DIM,
+    },
+}
     
-    
-# Code source: Gaël Varoquaux
-# Modified for documentation by Jaques Grobler
-# License: BSD 3 clause
-    
-    plt.figure(figsize=(12, 12))
-    
-        if not hasattr(env, 'scrapy_all_settings'):
-        env.scrapy_all_settings = []
-    
-    def _get_commands_dict(settings, inproject):
-    cmds = _get_commands_from_module('scrapy.commands', inproject)
-    cmds.update(_get_commands_from_entry_points(inproject))
-    cmds_module = settings['COMMANDS_MODULE']
-    if cmds_module:
-        cmds.update(_get_commands_from_module(cmds_module, inproject))
-    return cmds
-    
-    from scrapy.commands import ScrapyCommand
-from scrapy.settings import BaseSettings
-    
-    from . import Contract
-    
-        class ScrapyClientContextFactory(ClientContextFactory):
-        'A SSL context factory which is more permissive against SSL bugs.'
-        # see https://github.com/scrapy/scrapy/issues/82
-        # and https://github.com/scrapy/scrapy/issues/26
-        # and https://github.com/scrapy/scrapy/issues/981
-    
-            self._download_http = httpdownloadhandler(settings).download_request
-    
-            self.factory.noPage(\
-                defer.TimeoutError('Getting %s took longer than %s seconds.' % \
-                (self.factory.url, self.factory.timeout)))
-    
-        if __hostsdeny__ and netloc.endswith(__hostsdeny__):
-        start_response('403 Forbidden', [('Content-Type', 'text/html')])
-        yield message_html('403 Hosts Deny', 'Hosts Deny(%r)' % netloc, detail='共用appid因为资源有限，限制观看视频和文件下载等消耗资源过多的访问，请使用自己的appid <a href=' https://github.com/XX-net/XX-Net/wiki/Register-Google-appid' target='_blank'>帮助</a> ')
-        raise StopIteration
-    
-    EOF = -1
-    
-            raise NotImplementedError
-    
-              name, _, val = line.partition('=')
-          name = name.strip()
-          val = val.strip()
-          if name == 'set noparent':
-            keep_looking = False
-          elif name == 'filter':
-            cfg_filters.append(val)
-          elif name == 'exclude_files':
-            # When matching exclude_files pattern, use the base_name of
-            # the current file name or the directory name we are processing.
-            # For example, if we are checking for lint errors in /foo/bar/baz.cc
-            # and we found the .cfg file at /foo/CPPLINT.cfg, then the config
-            # file's 'exclude_files' filter is meant to be checked against 'bar'
-            # and not 'baz' nor 'bar/baz.cc'.
-            if base_name:
-              pattern = re.compile(val)
-              if pattern.match(base_name):
-                _cpplint_state.PrintInfo('Ignoring '%s': file excluded by '
-                    ''%s'. File path component '%s' matches pattern '%s'\n' %
-                    (filename, cfg_file, base_name, val))
-                return False
-          elif name == 'linelength':
-            global _line_length
-            try:
-                _line_length = int(val)
-            except ValueError:
-                _cpplint_state.PrintError('Line length must be numeric.')
-          elif name == 'extensions':
-              global _valid_extensions
-              try:
-                  extensions = [ext.strip() for ext in val.split(',')]
-                  _valid_extensions = set(extensions)
-              except ValueError:
-                  sys.stderr.write('Extensions should be a comma-separated list of values;'
-                                   'for example: extensions=hpp,cpp\n'
-                                   'This could not be parsed: '%s'' % (val,))
-          elif name == 'headers':
-              global _header_extensions
-              try:
-                  extensions = [ext.strip() for ext in val.split(',')]
-                  _header_extensions = set(extensions)
-              except ValueError:
-                  sys.stderr.write('Extensions should be a comma-separated list of values;'
-                                   'for example: extensions=hpp,cpp\n'
-                                   'This could not be parsed: '%s'' % (val,))
-          elif name == 'root':
-            global _root
-            _root = val
-          else:
-            _cpplint_state.PrintError(
-                'Invalid configuration option (%s) in file %s\n' %
-                (name, cfg_file))
-    
-    '''Collection of available datasets.'''
-    
-    
-def evaluate_boxes(
-    json_dataset,
-    all_boxes,
-    output_dir,
-    use_salt=True,
-    cleanup=True,
-    use_matlab=False
-):
-    salt = '_{}'.format(str(uuid.uuid4())) if use_salt else ''
-    filenames = _write_voc_results_files(json_dataset, all_boxes, salt)
-    _do_python_eval(json_dataset, salt, output_dir)
-    if use_matlab:
-        _do_matlab_eval(json_dataset, salt, output_dir)
-    if cleanup:
-        for filename in filenames:
-            shutil.copy(filename, output_dir)
-            os.remove(filename)
-    return None
-    
-        # rois are in [[batch_idx, x0, y0, x1, y2], ...] format
-    # Combine predictions across all levels and retain the top scoring
-    rois = np.concatenate([blob.data for blob in roi_inputs])
-    scores = np.concatenate([blob.data for blob in score_inputs]).squeeze()
-    inds = np.argsort(-scores)[:post_nms_topN]
-    rois = rois[inds, :]
-    return rois
-    
-        if len(data.shape) == 1:
-        ret = np.empty((count, ), dtype=data.dtype)
-        ret.fill(fill)
-        ret[inds] = data
-    else:
-        ret = np.empty((count, ) + data.shape[1:], dtype=data.dtype)
-        ret.fill(fill)
-        ret[inds, :] = data
-    return ret
-    
-    '''Construct minibatches for Mask R-CNN training when keypoints are enabled.
-Handles the minibatch blobs that are specific to training Mask R-CNN for
-keypoint detection. Other blobs that are generic to RPN or Fast/er R-CNN are
-handled by their respecitive roi_data modules.
-'''
+    if os.environ.get('REDIS_HOST', '').lower() != 'none':
+    _REDIS = redis.StrictRedis(host=REDISHOST, port=6379, db=0)
+else:
+    _REDIS = None
