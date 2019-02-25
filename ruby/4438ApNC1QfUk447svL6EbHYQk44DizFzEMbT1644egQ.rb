@@ -1,81 +1,95 @@
 
         
-          def process_bootstrap
-    log_status 'Convert Bootstrap LESS to Sass'
-    puts ' repo   : #@repo_url'
-    puts ' branch : #@branch_sha #@repo_url/tree/#@branch'
-    puts ' save to: #{@save_to.to_json}'
-    puts ' twbs cache: #{@cache_path}'
-    puts '-' * 60
+          def send_sinatra_file(path, &missing_file_block)
+    file_path = File.join(File.dirname(__FILE__), 'public',  path)
+    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
+    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
+  end
     
-    (allow file-read-metadata)
-(allow file-read*
-  ; This is currenly only added because using `xcodebuild` to build a resource
-  ; bundle target starts a FSEvents stream on `/`. No idea why that would be
-  ; needed, but for now it doesn’t seem like a real problem.
-  (literal '/')
-  (regex
-    ; TODO see if we can restrict this more, but it's going to be hard
-    #'^/Users/[^.]+/*'
-    ;#'^/Users/[^.]+/.netrc'
-    ;#'^/Users/[^.]+/.gemrc'
-    ;#'^/Users/[^.]+/.gem/*'
-    ;#'^/Users/[^.]+/Library/.*'
-    #'^/Library/*'
-    #'^/System/Library/*'
-    #'^/usr/lib/*'
-    #'^/usr/share/*'
-    #'^/private/*'
-    #'^/dev/*'
-    #'^<%= ruby_prefix %>'
-    #'^<%= pod_prefix %>'
-    #'^<%= xcode_app_path %>'
-    #'^<%= Pod::Config.instance.repos_dir %>'
-<% prefixes.each do |prefix| %>
-    #'^<%= prefix %>/*'
-<% end %>
-  )
-)
+      class Blockquote < Liquid::Block
+    FullCiteWithTitle = /(\S.*)\s+(https?:\/\/)(\S+)\s+(.+)/i
+    FullCite = /(\S.*)\s+(https?:\/\/)(\S+)/i
+    AuthorTitle = /([^,]+),([^,]+)/
+    Author =  /(.+)/
     
-    ENV['COCOAPODS_DISABLE_STATS'] = 'true'
-
+        # Initializes a new CategoryIndex.
+    #
+    #  +base+         is the String path to the <source>.
+    #  +category_dir+ is the String path between <source> and the category folder.
+    #  +category+     is the category currently being processed.
+    def initialize(site, base, category_dir, category)
+      @site = site
+      @base = base
+      @dir  = category_dir
+      @name = 'index.html'
+      self.process(@name)
+      # Read the YAML data from the layout page.
+      self.read_yaml(File.join(base, '_layouts'), 'category_index.html')
+      self.data['category']    = category
+      # Set the title for this page.
+      title_prefix             = site.config['category_title_prefix'] || 'Category: '
+      self.data['title']       = '#{title_prefix}#{category}'
+      # Set the meta-description for this page.
+      meta_description_prefix  = site.config['category_meta_description_prefix'] || 'Category: '
+      self.data['description'] = '#{meta_description_prefix}#{category}'
+    end
     
-    class LogStash::PluginManager::Update < LogStash::PluginManager::Command
-  REJECTED_OPTIONS = [:path, :git, :github]
-  # These are local gems used by LS and needs to be filtered out of other plugin gems
-  NON_PLUGIN_LOCAL_GEMS = ['logstash-core', 'logstash-core-plugin-api']
+        def get_cache_file_for(gist, file)
+      bad_chars = /[^a-zA-Z0-9\-_.]/
+      gist      = gist.gsub bad_chars, ''
+      file      = file.gsub bad_chars, ''
+      md5       = Digest::MD5.hexdigest '#{gist}-#{file}'
+      File.join @cache_folder, '#{gist}-#{file}-#{md5}.cache'
+    end
     
-          it 'list the plugin with his version' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
-      end
+    def attach_attachment(name, definition = nil)
+  snippet = 'has_attached_file :#{name}'
+  if definition
+    snippet += ', \n'
+    snippet += definition
+  end
+  snippet += '\ndo_not_validate_attachment_file_type :#{name}\n'
+  cd('.') do
+    transform_file('app/models/user.rb') do |content|
+      content.sub(/end\Z/, '#{snippet}\nend')
     end
   end
 end
-
     
-          def deliver(msg)
-        if msg.respond_to?(:deliver_now)
-          # Rails 4.2/5.0
-          msg.deliver_now
-        else
-          # Rails 3.2/4.0/4.1
-          msg.deliver
-        end
-      end
-    end
-    
-          def make_new
-        @klass.new(*@args)
-      end
-    end
+      def generate_migration
+    migration_template('paperclip_migration.rb.erb',
+                       'db/migrate/#{migration_file_name}',
+                       migration_version: migration_version)
   end
-end
-
     
-          def disable!(&block)
-        __set_test_mode(:disable, &block)
+      # Provides configurability to Paperclip. The options available are:
+  # * whiny: Will raise an error if Paperclip cannot process thumbnails of
+  #   an uploaded image. Defaults to true.
+  # * log: Logs progress to the Rails log. Uses ActiveRecord's logger, so honors
+  #   log levels, etc. Defaults to true.
+  # * command_path: Defines the path at which to find the command line
+  #   programs if they are not visible to Rails the system's search path. Defaults to
+  #   nil, which uses the first executable found in the user's search path.
+  # * use_exif_orientation: Whether to inspect EXIF data to determine an
+  #   image's orientation. Defaults to true.
+  def self.options
+    @options ||= {
+      command_path: nil,
+      content_type_mappings: {},
+      log: true,
+      log_command: true,
+      read_timeout: nil,
+      swallow_stderr: true,
+      use_exif_orientation: true,
+      whiny: true,
+      is_windows: Gem.win_platform?
+    }
+  end
+    
+        # Swaps the height and width if necessary
+    def auto_orient
+      if EXIF_ROTATED_ORIENTATION_VALUES.include?(@orientation)
+        @height, @width = @width, @height
+        @orientation -= 4
       end
-    
-        def route(method, path, &block)
-      @routes ||= { GET => [], POST => [], PUT => [], PATCH => [], DELETE => [], HEAD => [] }
+    end
