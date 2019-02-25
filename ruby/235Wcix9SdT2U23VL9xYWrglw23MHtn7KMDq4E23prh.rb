@@ -1,180 +1,80 @@
 
         
-        WITH_LIQUID = <<-LIQUID.freeze
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce auctor libero at
-pharetra tempus. {{ author }} et metus fermentum, eu cursus lorem
-mattis. Curabitur vel dui et lacus rutrum suscipit et eget neque.
+              path_to_use = FastlaneCore::FastlaneFolder.path || Dir.pwd
+      parameters ||= {}
+      begin
+        Dir.chdir(path_to_use) do # the file is located in the fastlane folder
+          execute_flow_block(before_all_blocks, current_platform, current_lane, parameters)
+          execute_flow_block(before_each_blocks, current_platform, current_lane, parameters)
     
-          def after_feature_element(feature_element)
-        @timings[feature_element_timing_key(feature_element)] = Time.now - @timings[feature_element_timing_key(feature_element)]
-        @io.print ' (#{@timings[feature_element_timing_key(feature_element)]}s)'
-      end
-    
-                # stream_file_data would free us from keeping livereload.js in memory
-            # but JRuby blocks on that call and never returns
-            send_data(reload_body)
-            close_connection_after_writing
-          else
-            body = 'This port only serves livereload.js over HTTP.\n'
-            headers = [
-              'HTTP/1.1 400 Bad Request',
-              'Content-Type: text/plain',
-              'Content-Length: #{body.bytesize}',
-              '',
-              '',
-            ].join('\r\n')
-            send_data(headers)
-            send_data(body)
-            close_connection_after_writing
-          end
-        end
-        # rubocop:enable Metrics/MethodLength
-      end
+        def initialize(analytics_ingester_client: AnalyticsIngesterClient.new(GA_TRACKING))
+      require 'securerandom'
+      @session_id = SecureRandom.uuid
+      @client = analytics_ingester_client
+      @threads = []
+      @launch_event_sent = false
     end
-  end
-end
-
     
-        def defaults_deprecate_type(old, current)
-      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
-      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
-                        'type: #{current}'.'
-    end
-  end
-end
-
+            cmd = ['git tag']
     
-        delegate :empty?, :blank?, to: :pages
+          it 'adds verbose param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            verbose: '1'
+          )
+        end').runner.execute(:test)
     
-    module Docs
-  class Subscriber < ActiveSupport::Subscriber
-    cattr_accessor :namespace
+            inner_command = 'git describe --tags `git rev-list --tags --max-count=1`'
+        pseudocommand = 'git log --pretty=\'%B\' #{inner_command.shellescape}...HEAD'
+        expect(result).to eq(pseudocommand)
+      end
     
-    # ECMA-262, section 15.1.3
-    def Encode(uri, unescape)
-      uriLength = uri.length;
-      # We are going to pass result to %StringFromCharCodeArray
-      # which does not expect any getters/setters installed
-      # on the incoming array.
-      result    = Array.new(uriLength);
-      index = 0;
-      k = -1;
-      while ((k+=1) < uriLength) do
-        cc1 = uri.charCodeAt(k);
-        next if cc1.nil?
-        if (self.send(unescape, cc1))
-          result[index] = cc1;
-          index += 1
-        else
-          if (cc1 >= 0xDC00 && cc1 <= 0xDFFF);
-            throw('URI malformed')
+          context 'with valid path to compile_commands.json' do
+        context 'with no path to oclint' do
+          let(:result) do
+            Fastlane::FastFile.new.parse('lane :test do
+              oclint( compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json' )
+            end').runner.execute(:test)
           end
-          if (cc1 < 0xD800 || cc1 > 0xDBFF)
-            index = URIEncodeSingle(cc1, result, index);
-          else
-            k+=1;
-            if (k == uriLength);
-              throw('URI malformed')
-            end
-            cc2 = uri.charCodeAt(k);
-            if (cc2 < 0xDC00 || cc2 > 0xDFFF);
-              throw('URI malformed')
-            end
-            index = URIEncodePair(cc1, cc2, result, index);
-          end
-        end
-      end
-      # use .compact to get rid of nils from charCodeAt
-      # return %StringFromCharCodeArray(result);
-      # 'c' = 8 bit signed char
-      # http://www.ruby-doc.org/core-1.9.3/Array.html#method-i-pack
-      return result.compact.pack 'c*'
+          let(:command) { 'cd #{File.expand_path('.').shellescape} && oclint -report-type=html -o=oclint_report.html' }
+    
+          context 'when specify quiet option' do
+        it 'adds quiet option' do
+          result = Fastlane::FastFile.new.parse('lane :test do
+            swiftlint(
+              quiet: true
+            )
+          end').runner.execute(:test)
+    
+        context 'external commands are failed' do
+      context 'with error_callback' do
+        it 'doesn't raise shell_error' do
+          allow(FastlaneCore::UI).to receive(:error)
+          called = false
+          expect_command('exit 1', exitstatus: 1)
+          Fastlane::Actions.sh('exit 1', error_callback: ->(_) { called = true })
+    
+            expect(Open3).to receive(:capture3).with(cmd).and_return('')
+        expect(FastlaneCore::CertChecker).to receive(:wwdr_keychain).and_return(keychain_name)
+    
+    # confirms that the escaped string that is generated actually
+# gets turned back into the source string by the actual shell.
+# abuses a `grep` (or `find`) error message because that should be cross platform
+def confirm_shell_unescapes_string_correctly(string, escaped)
+  compare_string = string.to_s.dup
+    
+    module Cert
+  class CommandsGenerator
+    include Commander::Methods
+    
+        # advance scanner to pos after the next match of pattern and return the match
+    def scan_next(pattern)
+      return unless @s.scan_until(pattern)
+      @s.matched
     end
-  end # class << self
-end # module
-
     
-    # Silence locale validation warning
-require 'i18n'
-I18n.enforce_available_locales = false
-    
-        follow_redirect!
-    assert_equal '/create/foo/Home', last_request.fullpath
-    assert last_response.ok?
-  end
-    
-      test 'h1 title sanitizes correctly' do
-    title = 'H1'
-    @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert('js')</script>' + '\n # 3', commit_details)
-    page = @wiki.page(title)
-    
-      if wiki_options[:plantuml_url]
-    Gollum::Filter::PlantUML.configure do |config|
-      puts 'Using #{wiki_options[:plantuml_url]} as PlantUML endpoint'
-      config.url = wiki_options[:plantuml_url]
-    end
-  end
-    
-      class Error < StandardError;
-  end
-    
-        context 'opening brace on separate line from first element' do
-      it 'allows closing brace on same line as last element' do
-        expect_no_offenses(construct(true, false))
-      end
-    
-        context 'but no comment after the last element' do
-      it 'autocorrects the closing brace' do
-        new_source = autocorrect_source(source)
-    
-          # Returns the iteration variable of the `for` loop.
-      #
-      # @return [Node] The iteration variable of the `for` loop
-      def variable
-        node_parts[0]
-      end
-    
-          # Checks whether this `hash` uses a mix of hash rocket and colon
-      # delimiters for its pairs.
-      #
-      # @return [Boolean] whether the `hash` uses mixed delimiters
-      def mixed_delimiters?
-        pairs.map(&:delimiter).uniq.size > 1
-      end
-    
-    module RuboCop
-  module AST
-    # A node extension for `kwsplat` nodes. This will be used in place of a
-    # plain  node when the builder constructs the AST, making its methods
-    # available to all `kwsplat` nodes within RuboCop.
-    class KeywordSplatNode < Node
-      include HashElementNode
-    
-            def scope
-          if params[:product_id]
-            Spree::Product.friendly.find(params[:product_id])
-          elsif params[:variant_id]
-            Spree::Variant.find(params[:variant_id])
-          end
-        end
-      end
-    end
-  end
-end
-
-    
-              inventory_unit.transaction do
-            if inventory_unit.update_attributes(inventory_unit_params)
-              fire
-              render :show, status: 200
-            else
-              invalid_resource!(inventory_unit)
-            end
-          end
-        end
-    
-            def destroy
-          @option_type = Spree::OptionType.accessible_by(current_ability, :destroy).find(params[:id])
-          @option_type.destroy
-          render plain: nil, status: 204
-        end
+      # Raise exceptions instead of rendering exception templates.
+  config.action_dispatch.show_exceptions = false
