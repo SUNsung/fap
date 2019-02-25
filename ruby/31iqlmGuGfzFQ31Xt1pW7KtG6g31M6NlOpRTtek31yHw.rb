@@ -1,139 +1,155 @@
 
         
-          def prev_page
-    account_outbox_url(@account, page: true, min_id: @statuses.first.id) unless @statuses.empty?
+          before_action :set_account
+  before_action :set_statuses
+    
+      def hub_topic_uri
+    @_hub_topic_uri ||= Addressable::URI.parse(hub_topic).normalize
   end
     
-        def index
-      authorize :email_domain_block, :index?
-      @email_domain_blocks = EmailDomainBlock.page(params[:page])
-    end
-    
-        def destroy
-      authorize @report_note, :destroy?
-      @report_note.destroy!
-      redirect_to admin_report_path(@report_note.report_id), notice: I18n.t('admin.report_notes.destroyed_msg')
-    end
-    
-        # Mobile devices do not support regular notifications, so we enable push notifications by default
-    alerts_enabled = active_session.detection.device.mobile? || active_session.detection.device.tablet?
-    
-          if @user.persisted?
-        sign_in_and_redirect @user, event: :authentication
-        set_flash_message(:notice, :success, kind: provider_id.capitalize) if is_navigational_format?
-      else
-        session['devise.#{provider}_data'] = request.env['omniauth.auth']
-        redirect_to new_user_registration_url
-      end
-    end
+        weeks
   end
     
-      # Eager load code on boot. This eager loads most of Rails and
-  # your application in memory, allowing both thread web servers
-  # and those relying on copy on write to perform better.
-  # Rake tasks automatically ignore this option for performance.
-  config.eager_load = true
+        data.deep_merge!(data_params) if params[:data]
     
-    @@ layout
-<html>
-  <head>
-    <title>Super Simple Chat with Sinatra</title>
-    <meta charset='utf-8' />
-    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'></script>
-  </head>
-  <body><%= yield %></body>
-</html>
+        define_method provider do
+      @user = User.find_for_oauth(request.env['omniauth.auth'], current_user)
     
-            safe?(env) ||
-          valid_token?(session, env['HTTP_X_CSRF_TOKEN']) ||
-          valid_token?(session, Request.new(env).params[options[:authenticity_param]]) ||
-          ( options[:allow_if] && options[:allow_if].call(env) )
+      def export_data
+    raise 'Override in controller'
+  end
+    
+      class Mention < ApplicationRecord
+  end
+    
+    describe ConversationsController, :type => :controller do
+  describe '#index' do
+    before do
+      @person = alice.contacts.first.person
+      hash = {
+        :author => @person,
+        :participant_ids => [alice.person.id, @person.id],
+        :subject => 'not spam',
+        :messages_attributes => [ {:author => @person, :text => 'cool stuff'} ]
+      }
+      @conv1 = Conversation.create(hash)
+      Message.create(:author => @person, :created_at => Time.now + 100, :text => 'message', :conversation_id => @conv1.id)
+             .increase_unread(alice)
+      Message.create(:author => @person, :created_at => Time.now + 200, :text => 'another message', :conversation_id => @conv1.id)
+             .increase_unread(alice)
+    
+        context 'on a post you partecipate to' do
+      before { alice.participate! post }
+    
+        it 'redirects #create to the login page' do
+      post :create, params: valid_params
+      expect(flash[:error]).to eq(I18n.t('registrations.closed'))
+      expect(response).to redirect_to new_user_session_path
+    end
+    
+          it 'returns an array of reshares for a post' do
+        bob.reshare!(@post)
+        get :index, params: {post_id: @post.id}, format: :json
+        expect(JSON.parse(response.body).map {|h| h['id'] }).to eq(@post.reshares.map(&:id))
       end
     
-          def call(env)
-        status, headers, body = @app.call(env)
-        header = options[:report_only] ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'
-        headers[header] ||= csp_policy if html? headers
-        [status, headers, body]
+        %w[iOS macOS].each do |platform|
+        abstract_target '#{platform} Pods' do
+            project '#{platform} Modules.xcodeproj'
+    
+            # Prints the list of specs & pod cache dirs for a single pod name.
+        #
+        # This output is valid YAML so it can be parsed with 3rd party tools
+        #
+        # @param [Array<Hash>] cache_descriptors
+        #        The various infos about a pod cache. Keys are
+        #        :spec_file, :version, :release and :slug
+        #
+        def print_pod_cache_infos(pod_name, cache_descriptors)
+          UI.puts '#{pod_name}:'
+          cache_descriptors.each do |desc|
+            if @short_output
+              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
+            end
+            UI.puts('  - Version: #{desc[:version]}')
+            UI.puts('    Type:    #{pod_type(desc)}')
+            UI.puts('    Spec:    #{desc[:spec_file]}')
+            UI.puts('    Pod:     #{desc[:slug]}')
+          end
+        end
       end
     end
   end
 end
 
     
-            modes       = Array options[:escape]
-        @escaper    = options[:escaper]
-        @html       = modes.include? :html
-        @javascript = modes.include? :javascript
-        @url        = modes.include? :url
+          # The body of the method definition.
+      #
+      # @note this can be either a `begin` node, if the method body contains
+      #       multiple expressions, or any other node, if it contains a single
+      #       expression.
+      #
+      # @return [Node] the body of the method definition
+      def body
+        node_parts[0]
+      end
     
-    # define charCodeAt on String
-class String
-  def charCodeAt(k)
-    # use scan, nil check, and unpack instead of ord for 1.8
-    # 1.9 can simply use self[k].ord
-    # http://stackoverflow.com/questions/7793177/split-utf8-string-regardless-of-ruby-version
-    c = self.scan(/./mu)[k]
-    return nil if c.nil?
-    c.unpack('U')[0]
-  end
-end
+          # Calls the given block for each `pair` node in the `hash` literal.
+      # If no block is given, an `Enumerator` is returned.
+      #
+      # @return [self] if a block is given
+      # @return [Enumerator] if no block is given
+      def each_pair
+        return each_child_node(:pair).to_enum unless block_given?
     
-          def next_link
+          # Returns the body of the `when` node.
+      #
+      # @return [Node, nil] the body of the `when` node
+      def body
+        node_parts[-1]
       end
     end
   end
 end
 
     
-          def title
-        'Home'
-      end
+        rc_args = []
     
-      test 'clean path without leading slash' do
-    assert_equal '/Mordor', clean_path('Mordor')
-  end
-    
-    #############################################################################
-#
-# Standard tasks
-#
-#############################################################################
-    
-      get(/.+/) do
-    send_sinatra_file(request.path) {404}
-  end
-    
-      # The CategoryIndex class creates a single category page for the specified category.
-  class CategoryIndex < Page
-    
-      if options.respond_to? 'keys'
-    options.each do |k,v|
-      unless v.nil?
-        v = v.join ',' if v.respond_to? 'join'
-        v = v.to_json if v.respond_to? 'keys'
-        output += ' data-#{k.sub'_','-'}='#{v}''
-      end
-    end
-  elsif options.respond_to? 'join'
-    output += ' data-value='#{config[key].join(',')}''
-  else
-    output += ' data-value='#{config[key]}''
-  end
-  output += '></#{tag}>'
-end
-    
-    Liquid::Template.register_tag('render_partial', Jekyll::RenderPartialTag)
+      public(:input, :output)
+end # class FPM::Package::Dir
 
     
-    Before '@javascript' do
-  Capybara.current_driver = Capybara.javascript_driver
-end
-    
-      context 'with xpath selectors' do
-    it 'should find the first element using the given locator' do
-      el = @session.find(:css, '#first_image')
-      expect(el.ancestor(:xpath, '//p')).to have_text('Lorem ipsum dolor')
-      expect(el.ancestor(:xpath, '//a')[:'aria-label']).to eq('Go to simple')
+          scripts_path(filename).tap do |pkgscript|
+        logger.info('Writing pkg script', :source => filename, :target => pkgscript)
+        File.write(pkgscript, script(scriptname))
+        # scripts are required to be executable
+        File.chmod(0755, pkgscript)
+      end
     end
-  end
+  end # def write_scripts
+    
+        # Execute the transmogrification on the manifest
+    pkg_mogrify = safesystemout('pkgmogrify', manifest_fn)
+    File.write(build_path('#{name}.p5m.2'), pkg_mogrify)
+    safesystem('cp', build_path('#{name}.p5m.2'), manifest_fn)
+    
+      # Helper for user lookup
+  def uid2user(uid)
+    begin
+      pwent = Etc.getpwuid(uid)
+      return pwent.name
+    rescue ArgumentError => e
+      # Invalid user id? No user? Return the uid.
+      logger.warn('Failed to find username for uid #{uid}')
+      return uid.to_s
+    end
+  end # def uid2user
+    
+        # use dir to set stuff up properly, mainly so I don't have to reimplement
+    # the chdir/prefix stuff special for zip.
+    dir = convert(FPM::Package::Dir)
+    if attributes[:chdir]
+      dir.attributes[:chdir] = File.join(build_path, attributes[:chdir])
+    else
+      dir.attributes[:chdir] = build_path
+    end
