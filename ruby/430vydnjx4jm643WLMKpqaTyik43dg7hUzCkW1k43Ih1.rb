@@ -1,171 +1,300 @@
 
         
-        # Just a slash
-Benchmark.ips do |x|
-  path = '/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
+          smoke_user = User.seed do |u|
+    u.id = 0
+    u.name = 'smoke_user'
+    u.username = 'smoke_user'
+    u.username_lower = 'smoke_user'
+    u.password = 'P4ssw0rd'
+    u.active = true
+    u.approved = true
+    u.approved_at = Time.now
+    u.trust_level = TrustLevel[3]
+  end.first
     
-    def global_require
-  JSON.pretty_generate(DATA)
-end
+            result = Fastlane::FastFile.new.parse('lane :test do
+          add_git_tag ({
+            tag: '#{tag}',
+            grouping: 'grouping',
+            build_number: 'build_number',
+            prefix: 'prefix',
+          })
+        end').runner.execute(:test)
     
-            include ::EachBatch
+            expect(result).to include(''fastlane/spec/fixtures/oclint/src/AppDelegate.m'')
       end
     
-            def preload_stages_warnings
-          # This preloads the number of warnings for every stage, ensuring
-          # that Ci::Stage#has_warnings? doesn't execute any additional
-          # queries.
-          @pipeline.stages.each { |stage| stage.number_of_warnings }
-        end
+          # We need to explicity test against Fastlane::Boolean, TrueClass/FalseClass
+      if value.class != FalseClass && value.class != TrueClass
+        UI.user_error!(''#{self.key}' value must be either `true` or `false`! Found #{value.class} instead.')
       end
     end
-  end
-end
-
     
-          # Adds a value to a set.
+          it 'should shell escape keychain names when checking for installation' do
+        expect(FastlaneCore::CertChecker).to receive(:wwdr_keychain).and_return(keychain_name)
+        expect(FastlaneCore::Helper).to receive(:backticks).with(name_regex, anything).and_return('')
+    
+            it 'does not auto convert Array values to Strings if not allowed' do
+          config_item = FastlaneCore::ConfigItem.new(key: :xcargs,
+                                                     description: 'xcargs',
+                                                     type: String)
+    
+    shellescape_testcases = [
+  # baseline
+  {
+    'it' => '(#1) on simple string',
+    'it_result' => {
+      'windows' => 'doesn't change it',
+      'other'   => 'doesn't change it'
+    },
+    'str' => 'normal_string_without_spaces',
+    'expect' => {
+      'windows' => 'normal_string_without_spaces',
+      'other'   => 'normal_string_without_spaces'
+    }
+  },
+  {
+    'it' => '(#2) on empty string',
+    'it_result' => {
+      'windows' => 'wraps it in double quotes',
+      'other'   => 'wraps it in single quotes'
+    },
+    'str' => '',
+    'expect' => {
+      'windows' => '''',
+      'other'   => '\'\''
+    }
+  },
+  # spaces
+  {
+    'it' => '(#3) on string with spaces',
+    'it_result' => {
+      'windows' => 'wraps it in double quotes',
+      'other'   => 'escapes spaces with <backslash>'
+    },
+    'str' => 'string with spaces',
+    'expect' => {
+      'windows' => ''string with spaces'',
+      'other'   => 'string\ with\ spaces'
+    }
+  },
+  # double quotes
+  {
+    'it' => '(#4) on simple string that is already wrapped in double quotes',
+    'it_result' => {
+      'windows' => 'doesn't touch it',
+      'other'   => 'escapes the double quotes with <backslash>'
+    },
+    'str' => ''normal_string_without_spaces'',
+    'expect' => {
+      'windows' => ''normal_string_without_spaces'',
+      'other'   => '\'normal_string_without_spaces\''
+    }
+  },
+  {
+    'it' => '(#5) on string with spaces that is already wrapped in double quotes',
+    'it_result' => {
+      'windows' => 'wraps in double quotes and duplicates existing double quotes',
+      'other'   => 'escapes the double quotes and spaces with <backslash>'
+    },
+    'str' => ''string with spaces already wrapped in double quotes'',
+    'expect' => {
+      'windows' => ''''string with spaces already wrapped in double quotes'''',
+      'other'   => '\'string\ with\ spaces\ already\ wrapped\ in\ double\ quotes\''
+    }
+  },
+  {
+    'it' => '(#6) on string with spaces and double quotes',
+    'it_result' => {
+      'windows' => 'wraps in double quotes and duplicates existing double quotes',
+      'other'   => 'escapes the double quotes and spaces with <backslash>'
+    },
+    'str' => 'string with spaces and 'double' quotes',
+    'expect' => {
+      'windows' => ''string with spaces and ''double'' quotes'',
+      'other'   => 'string\ with\ spaces\ and\ \'double\'\ quotes'
+    }
+  },
+  # https://github.com/ruby/ruby/blob/ac543abe91d7325ace7254f635f34e71e1faaf2e/test/test_shellwords.rb#L64-L65
+  {
+    'it' => '(#7) on simple int',
+    'it_result' => {
+      'windows' => 'doesn't change it',
+      'other'   => 'doesn't change it'
+    },
+    'str' => 3,
+    'expect' => {
+      'windows' => '3',
+      'other'   => '3'
+    }
+  },
+  # single quotes
+  {
+    'it' => '(#8) on simple string that is already wrapped in single quotes',
+    'it_result' => {
+      'windows' => 'doesn't touch it',
+      'other'   => 'escapes the single quotes with <backslash>'
+    },
+    'str' => ''normal_string_without_spaces'',
+    'expect' => {
+      'windows' => ''normal_string_without_spaces'',
+      'other'   => '\\'normal_string_without_spaces\\''
+    }
+  },
+  {
+    'it' => '(#9) on string with spaces that is already wrapped in single quotes',
+    'it_result' => {
+      'windows' => 'wraps in double quotes',
+      'other'   => 'escapes the single quotes and spaces with <backslash>'
+    },
+    'str' => ''string with spaces already wrapped in single quotes'',
+    'expect' => {
+      'windows' => '\''string with spaces already wrapped in single quotes'\'',
+      'other'   => '\\'string\\ with\\ spaces\\ already\\ wrapped\\ in\\ single\\ quotes\\''
+    }
+  },
+  {
+    'it' => '(#10) string with spaces and single quotes',
+    'it_result' => {
+      'windows' => 'wraps in double quotes and leaves single quotes',
+      'other'   => 'escapes the single quotes and spaces with <backslash>'
+    },
+    'str' => 'string with spaces and 'single' quotes',
+    'expect' => {
+      'windows' => '\'string with spaces and 'single' quotes\'',
+      'other'   => 'string\ with\ spaces\ and\ \\\'single\\\'\ quotes'
+    }
+  },
+  {
+    'it' => '(#11) string with spaces and <backslash>',
+    'it_result' => {
+      'windows' => 'wraps in double quotes and escapes the backslash with backslash',
+      'other'   => 'escapes the spaces and the backslash (which in results in quite a lot of them)'
+    },
+    'str' => 'string with spaces and \\ in it',
+    'expect' => {
+      'windows' => '\'string with spaces and \\ in it\'',
+      'other'   => 'string\\ with\\ spaces\\ and\\ \\\\\\ in\\ it'
+    }
+  },
+  {
+    'it' => '(#12) string with spaces and <slash>',
+    'it_result' => {
+      'windows' => 'wraps in double quotes',
+      'other'   => 'escapes the spaces'
+    },
+    'str' => 'string with spaces and / in it',
+    'expect' => {
+      'windows' =>  '\'string with spaces and / in it\'',
+      'other'   => 'string\\ with\\ spaces\\ and\\ /\\ in\\ it'
+    }
+  },
+  {
+    'it' => '(#13) string with spaces and parens',
+    'it_result' => {
+      'windows' => 'wraps in double quotes',
+      'other'   => 'escapes the spaces and parens'
+    },
+    'str' => 'string with spaces and (parens) in it',
+    'expect' => {
+      'windows' => '\'string with spaces and (parens) in it\'',
+      'other'   => 'string\\ with\\ spaces\\ and\\ \\(parens\\)\\ in\\ it'
+    }
+  },
+  {
+    'it' => '(#14) string with spaces, single quotes and parens',
+    'it_result' => {
+      'windows' => 'wraps in double quotes',
+      'other'   => 'escapes the spaces, single quotes and parens'
+    },
+    'str' => 'string with spaces and 'quotes' (and parens) in it',
+    'expect' => {
+      'windows' => '\'string with spaces and 'quotes' (and parens) in it\'',
+      'other'   => 'string\\ with\\ spaces\\ and\\ \\'quotes\\'\\ \\(and\\ parens\\)\\ in\\ it'
+    }
+  }
+]
+    
+        def email_changed(record, opts={})
+      devise_mail(record, :email_changed, opts)
+    end
+    
+      private
+    
+          # Sign in a user bypassing the warden callbacks and stores the user
+      # straight in session. This option is useful in cases the user is already
+      # signed in, but we want to refresh the credentials in session.
       #
-      # raw_key - The key of the set to add the value to.
-      # value - The value to add to the set.
-      # timeout - The new timeout of the key.
-      def self.set_add(raw_key, value, timeout: TIMEOUT)
-        key = cache_key_for(raw_key)
-    
-            def id_for_already_imported_cache(note)
-          note.id
-        end
-      end
-    end
-  end
-end
-
-    
-            def collection_method
-          :issues_comments
-        end
-    
-          # Associates the given database ID with the current object.
+      # Examples:
       #
-      # database_id - The ID of the corresponding database row.
-      def cache_database_id(database_id)
-        Caching.write(cache_key, database_id)
+      #   bypass_sign_in @user, scope: :user
+      #   bypass_sign_in @user
+      def bypass_sign_in(resource, scope: nil)
+        scope ||= Devise::Mapping.find_scope!(resource)
+        expire_data_after_sign_in!
+        warden.session_serializer.store(resource, scope)
       end
     
-            # Once we have completed all work we can remove our 'already exists'
-        # cache so we don't put too much pressure on Redis.
-        #
-        # We don't immediately remove it since it's technically possible for
-        # other instances of this job to still run, instead we set the
-        # expiration time to a lower value. This prevents the other jobs from
-        # still scheduling duplicates while. Since all work has already been
-        # completed those jobs will just cycle through any remaining pages while
-        # not scheduling anything.
-        Caching.expire(already_imported_cache_key, 15.minutes.to_i)
+    # Each time a record is set we check whether its session has already timed out
+# or not, based on last request time. If so, the record is logged out and
+# redirected to the sign in page. Also, each time the request comes and the
+# record is set, we set the last request time inside its scoped session to
+# verify timeout in the following request.
+Warden::Manager.after_set_user do |record, warden, options|
+  scope = options[:scope]
+  env   = warden.request.env
     
-            expose_attribute :id, :login
+          if options.has_key?(:only)
+        @used_routes = self.routes & Array(options[:only]).map(&singularizer)
+      elsif options[:skip] == :all
+        @used_routes = []
+      else
+        @used_routes = self.routes - Array(options[:skip]).map(&singularizer)
+      end
+    end
     
-            if b_length > a_length
-          (b_length - a_length).times { a_split.insert(-2, 0) }
-        elsif a_length > b_length
-          (a_length - b_length).times { b_split.insert(-2, 0) }
+          def remember_me?(token, generated_at)
+        # TODO: Normalize the JSON type coercion along with the Timeoutable hook
+        # in a single place https://github.com/plataformatec/devise/blob/ffe9d6d406e79108cf32a2c6a1d0b3828849c40b/lib/devise/hooks/timeoutable.rb#L14-L18
+        if generated_at.is_a?(String)
+          generated_at = time_from_json(generated_at)
         end
     
-        def replace(index, name)
-      @filters[assert_index(index)] = filter_const(name)
-    end
+    module Admin
+  class EmailDomainBlocksController < BaseController
+    before_action :set_email_domain_block, only: [:show, :destroy]
     
-        def as_json
-      { name: name, path: path, type: type }
-    end
+          if @report_note.save
+        if params[:create_and_resolve]
+          @report.resolve!(current_account)
+          log_action :resolve, @report
+    
+      private
+    
+        render_empty
   end
-end
-
     
-            css('.filetree .children').each do |node|
-          node.css('.file').each do |n|
-            n.content = '  #{n.content}'
-          end
+    def config_tag(config, key, tag=nil, classname=nil)
+  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
+  tag       ||= 'div'
+  classname ||= key.sub(/_/, '-').sub(/\./, '-')
+  output      = '<#{tag} class='#{classname}''
+    
+          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
+        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
+        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
+          @img['title']  = title
+          @img['alt']    = alt
+        else
+          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
         end
+        @img['class'].gsub!(/'/, '') if @img['class']
+      end
+      super
+    end
     
-            title = at_css('h1').content.strip
-        if root_page?
-          at_css('h1').content = 'Angular 2 Documentation'
-        elsif title == 'Index'
-          at_css('h1').content = result[:entries].first.name
-        elsif title == 'Angular'
-          at_css('h1').content = slug.split('/').last.gsub('-', ' ')
-        elsif at_css('.breadcrumbs') && title != result[:entries].first.name
-          at_css('h1').content = result[:entries].first.name
+          rtn = ''
+      (context.environments.first['site'][@array_name] || []).each do |file|
+        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
+          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
         end
-    
-          def mod
-        return @mod if defined?(@mod)
-        @mod = slug[/api\/([\w\-\.]+)\//, 1]
-        @mod.remove! 'angular2.' if @mod
-        @mod
-      end
-    end
-  end
-end
-
-    
-              # Setup the options hash
-          options ||= {}
-    
-              # Register a new host class only if a name was given
-          data[:hosts].register(name.to_sym, &block) if name != UNSET_VALUE
-    
-            # Set the name of the plugin. The moment that this is called, the
-        # plugin will be registered and available. Before this is called, a
-        # plugin does not exist. The name must be unique among all installed
-        # plugins.
-        #
-        # @param [String] name Name of the plugin.
-        # @return [String] The name of the plugin.
-        def self.name(name=UNSET_VALUE)
-          # Get or set the value first, so we have a name for logging when
-          # we register.
-          result = get_or_set(:name, name)
-    
-        # Converts this registry to a hash
-    def to_hash
-      result = {}
-      self.each do |key, value|
-        result[key] = value
-      end
-    
-      context 'brew' do
-    subject { HOMEBREW_LIBRARY_PATH.parent.parent/'bin/brew' }
-    
-    When /^I reset Bundler environment variable$/ do
-  BUNDLE_ENV_VARS.each do |key|
-    ENV[key] = nil
-  end
-end
-    
-        def definitions_for(klass)
-      parent_classes = klass.ancestors.reverse
-      parent_classes.each_with_object({}) do |ancestor, inherited_definitions|
-        inherited_definitions.deep_merge! @attachments[ancestor]
-      end
-    end
-  end
-end
-
-    
-          [ scale_geometry, crop_geometry ]
-    end
-    
-        def add_required_validations
-      options = Paperclip::Attachment.default_options.deep_merge(@options)
-      if options[:validate_media_type] != false
-        name = @name
-        @klass.validates_media_type_spoof_detection name,
-          :if => ->(instance){ instance.send(name).dirty? }
-      end
-    end
