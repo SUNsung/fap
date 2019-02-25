@@ -1,190 +1,121 @@
 
         
-            # The category for users with trust level 3 has been created.
-    # Add initial permissions and description. They can be changed later.
+            def to_a
+      @filters.dup
+    end
     
-        # @param filter_platform: Filter, to only show the lanes of a given platform
-    # @return an array of lanes (platform lane_name) to print them out to the user
-    def available_lanes(filter_platform = nil)
-      all = []
-      lanes.each do |platform, platform_lanes|
-        next if filter_platform && filter_platform.to_s != platform.to_s # skip actions that don't match
-    
-          it 'adds options param to command' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          appledoc(
-            project_name: 'Project Name',
-            project_company: 'Company',
-            input: 'input/dir',
-            options: '--use-single-star --keep-intermediate-files --search-undocumented-doc'
-          )
-        end').runner.execute(:test)
-    
-          it 'use custom executable' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            carthage(
-              executable: 'custom_carthage'
-            )
-          end').runner.execute(:test)
-    
-            it 'executes the correct git command' do
-          allow(Fastlane::Actions).to receive(:sh).with('git add #{path[0].shellescape} #{path[1].shellescape}', anything).and_return('')
-          result = Fastlane::FastFile.new.parse('lane :test do
-            git_add(path: #{path})
-          end').runner.execute(:test)
+            css('> .section', '#preamble', 'a[href*='dict.html']', 'code var', 'code strong').each do |node|
+          node.before(node.children).remove
         end
+    
+          if @email_domain_block.save
+        log_action :create, @email_domain_block
+        redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.created_msg')
+      else
+        render :new
       end
-    
-        describe 'shell escaping' do
-      let(:keychain_name) { 'keychain with spaces.keychain' }
-      let(:shell_escaped_name) { keychain_name.shellescape }
-      let(:name_regex) { Regexp.new(Regexp.escape(shell_escaped_name)) }
-    
-            it 'doesn't display a deprecation message when loading a config if a deprecated option doesn't have a value' do
-          c = FastlaneCore::ConfigItem.new(key: :foo,
-                                           description: 'foo',
-                                           deprecated: 'replaced by bar')
-          values = {
-            foo: 'something'
-          }
-          expect(FastlaneCore::UI).to receive(:deprecated).with('Using deprecated option: '--foo' (replaced by bar)')
-          config = FastlaneCore::Configuration.create([c], values)
-        end
-    
-      describe '#nav_link' do
-    it 'returns a nav link' do
-      stub(self).current_page?('/things') { false }
-      nav = nav_link('Things', '/things')
-      a = Nokogiri(nav).at('li:not(.active) > a[href='/things']')
-      expect(a.text.strip).to eq('Things')
     end
     
-              @bar1 = Agents::DotBar.new(name: 'bar1').tap { |agent|
-            agent.user = users(:bob)
-            agent.sources << @foo
-            agent.save!
-          },
-    
-            it 'adds errors when updated agents are invalid' do
-          scenario_import.merges = {
-            '0' => {
-              'name' => '',
-              'schedule' => 'foo',
-              'keep_events_for' => 2.days.to_i.to_s,
-              'options' => weather_agent_options.merge('api_key' => '').to_json
-            }
-          }
-    
-        it 'warns and returns nil when not parseable' do
-      mock(STDERR).puts('WARNING: Invalid duration format: 'bogus'')
-      expect(Utils.parse_duration('bogus')).to be_nil
-    end
+      def account_feed_path?
+    hub_topic_params[:controller] == 'accounts' && hub_topic_params[:action] == 'show' && hub_topic_params[:format] == 'atom'
   end
+end
+
     
-    describe ConvertWebsiteAgentTemplateForMerge do
-  let :old_extract do
+      before_action :set_account
+  respond_to :txt
+    
+    desc 'Run all tests'
+task :test do
+  test_cases = [
     {
-      'url' => { 'css' => '#comic img', 'value' => '@src' },
-      'title' => { 'css' => '#comic img', 'value' => '@alt' },
-      'hovertext' => { 'css' => '#comic img', 'value' => '@title' }
+      'env'   => {'MATHN' => 'true'},
+      'tasks' => ['test:ruby', 'test:spec', :rubocop]
+    },
+    {
+      'env'   => {'MATHN' => 'false'},
+      'tasks' => ['test:ruby']
     }
-  end
+  ]
     
-    module LogStash
-  module Environment
-    extend self
-    
-        def self.transform_pattern_into_re(pattern)
-      Regexp.new('^#{pattern.gsub(WILDCARD, WILDCARD_INTO_RE)}$')
-    end
-  end
-    
-      def target_file
-    target_file = File.join(LogStash::Environment::LOGSTASH_HOME, 'plugins_package')
-    '#{target_file}#{file_extension}'
-  end
-end
-
-    
-        while readable_io = IO.select([self_read])
-      signal = readable_io.first[0].gets.strip
-      handle_signal(launcher, signal)
-    end
-  #end
-rescue SystemExit => e
-  #Sidekiq.logger.error('Profiling...')
-  #result = RubyProf.stop
-  #printer = RubyProf::GraphHtmlPrinter.new(result)
-  #printer.print(File.new('output.html', 'w'), :min_percent => 1)
-  # normal
-rescue => e
-  raise e if $DEBUG
-  STDERR.puts e.message
-  STDERR.puts e.backtrace.join('\n')
-  exit 1
-end
-
-    
-        ##
-    # Define client-side middleware:
+        # Dump all the parsed {Sass::Tree::RuleNode} selectors to strings.
     #
-    #   client = Sidekiq::Client.new
-    #   client.middleware do |chain|
-    #     chain.use MyClientMiddleware
-    #   end
-    #   client.push('class' => 'SomeWorker', 'args' => [1,2,3])
-    #
-    # All client instances default to the globally-defined
-    # Sidekiq.client_middleware but you can change as necessary.
-    #
-    def middleware(&block)
-      @chain ||= Sidekiq.client_middleware
-      if block_given?
-        @chain = @chain.dup
-        yield @chain
+    # @param root [Tree::Node] The parent node
+    def dump_selectors(root)
+      root.children.each do |child|
+        next dump_selectors(child) if child.is_a?(Tree::DirectiveNode)
+        next unless child.is_a?(Tree::RuleNode)
+        child.rule = [child.parsed_rules.to_s]
+        dump_selectors(child)
       end
-      @chain
     end
     
-    
-    
-          def perform(yml)
-        (target, method_name, args) = YAML.load(yml)
-        msg = target.public_send(method_name, *args)
-        # The email method can return nil, which causes ActionMailer to return
-        # an undeliverable empty message.
-        if msg
-          deliver(msg)
+            if scanner.eos?
+          end_pos = str.source_range.end_pos
+          node = Tree::CssImportNode.new(str)
         else
-          raise '#{target.name}##{method_name} returned an undeliverable mail object'
-        end
+          supports_parser = Sass::SCSS::Parser.new(scanner,
+            @options[:filename], @options[:importer],
+            @line, str.source_range.end_pos.offset)
+          supports_condition = supports_parser.parse_supports_clause
+    
+    module Sass
+  # The abstract base class for lexical environments for SassScript.
+  class BaseEnvironment
+    class << self
+      # Note: when updating this,
+      # update sass/yard/inherited_hash.rb as well.
+      def inherited_hash_accessor(name)
+        inherited_hash_reader(name)
+        inherited_hash_writer(name)
       end
     
-            names.inject(Object) do |constant, name|
-          constant.const_defined?(name) ? constant.const_get(name) : constant.const_missing(name)
-        end
-      end
+    module Sass::Exec
+  # The abstract base class for Sass executables.
+  class Base
+    # @param args [Array<String>] The command-line arguments
+    def initialize(args)
+      @args = args
+      @options = {}
     end
-  end
     
-    require 'sidekiq/web/router'
-require 'sidekiq/web/action'
-require 'sidekiq/web/application'
+          had_error = false
+      Sass::Plugin.on_creating_directory {|dirname| puts_action :directory, :green, dirname}
+      Sass::Plugin.on_deleting_css {|filename| puts_action :delete, :yellow, filename}
+      Sass::Plugin.on_deleting_sourcemap {|filename| puts_action :delete, :yellow, filename}
+      Sass::Plugin.on_compilation_error do |error, _, _|
+        if error.is_a?(SystemCallError) && !@options[:stop_on_error]
+          had_error = true
+          puts_action :error, :red, error.message
+          STDOUT.flush
+          next
+        end
     
-    def attach_attachment(name, definition = nil)
-  snippet = 'has_attached_file :#{name}'
-  if definition
-    snippet += ', \n'
-    snippet += definition
-  end
-  snippet += '\ndo_not_validate_attachment_file_type :#{name}\n'
-  cd('.') do
-    transform_file('app/models/user.rb') do |content|
-      content.sub(/end\Z/, '#{snippet}\nend')
+          # A string representation of the importer.
+      # Should be overridden by subclasses.
+      #
+      # This is used to help debugging,
+      # and should usually just show the load path encapsulated by this importer.
+      #
+      # @return [String]
+      def to_s
+        Sass::Util.abstract(self)
+      end
+    
+        class Main < Clamp::Command
+      subcommand 'list', 'List all installed Logstash plugins', LogStash::PluginManager::List
+      subcommand 'install', 'Install a Logstash plugin', LogStash::PluginManager::Install
+      subcommand 'remove', 'Remove a Logstash plugin', LogStash::PluginManager::Remove
+      subcommand 'update', 'Update a plugin', LogStash::PluginManager::Update
+      subcommand 'pack', 'Package currently installed plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Pack
+      subcommand 'unpack', 'Unpack packaged plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Unpack
+      subcommand 'generate', 'Create the foundation for a new plugin', LogStash::PluginManager::Generate
+      subcommand 'uninstall', 'Uninstall a plugin. Deprecated: Please use remove instead', LogStash::PluginManager::Remove
+      subcommand 'prepare-offline-pack', 'Create an archive of specified plugins to use for offline installation', LogStash::PluginManager::PrepareOfflinePack
     end
   end
 end
     
-        def names_for(klass)
-      @attachments[klass].keys
+        def initialize(local_file)
+      @local_file = local_file
     end
