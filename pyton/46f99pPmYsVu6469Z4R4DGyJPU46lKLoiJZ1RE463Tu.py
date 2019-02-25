@@ -1,94 +1,129 @@
 
         
-        
-init_bashrc = u'''echo '
-export SHELL=/bin/bash
-export PS1='$ '
-echo > $HISTFILE
-eval $(thefuck --alias {})
-echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
-' > ~/.bashrc'''
+        from .cifar import load_batch
+from ..utils.data_utils import get_file
+from .. import backend as K
+import numpy as np
+import os
     
+        # Test single image
+    x = np.random.uniform(0, 255, (10, 10, 3))
+    inputs = Input(shape=x.shape)
+    outputs = Lambda(utils.preprocess_input, output_shape=x.shape)(inputs)
+    model = Model(inputs, outputs)
+    assert model.predict(x[np.newaxis])[0].shape == x.shape
     
-@pytest.fixture(params=containers)
-def proc(request, spawnu, TIMEOUT):
-    proc = spawnu(*request.param)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(u'thefuck --alias > ~/.config/fish/config.fish')
-    proc.sendline(u'fish')
-    return proc
-    
-    
-@pytest.mark.functional
-def test_select_command_with_arrows(proc, TIMEOUT):
-    select_command_with_arrows(proc, TIMEOUT)
-    
-    HEADER_ARGS = {'Strict-Transport-Security': HSTS_ARGS}
+    model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=epochs,
+          verbose=1,
+          validation_data=(x_test, y_test))
+score = model.evaluate(x_test, y_test, verbose=0)
+print('Test loss:', score[0])
+print('Test accuracy:', score[1])
 
     
-        def test_repr(self):
-        self.assertEqual('PollError(exhausted=%s, updated={sentinel.AR: '
-                         'sentinel.AR2})' % repr(set()), repr(self.invalid))
+    autoencoder.compile(loss='mse', optimizer='adam')
     
-        def test_decode_bad(self):
-        self.assertRaises(jose.DeserializationError, self.field.decode, 'y')
+    from ycm.client.base_request import BaseRequest, BuildRequestData
     
-    # If true, the current module name will be prepended to all description
-# unit titles (such as .. function::).
-#add_module_names = True
     
-    csr = OpenSSL.crypto.load_certificate_request(
-    OpenSSL.crypto.FILETYPE_ASN1, pkg_resources.resource_string(
-        'acme', os.path.join('testdata', 'csr.der')))
-try:
-    acme.request_issuance(jose.util.ComparableX509(csr), (authzr,))
-except messages.Error as error:
-    print ('This script is doomed to fail as no authorization '
-           'challenges are ever solved. Error from server: {0}'.format(error))
+def _HandlePollResponse( response, diagnostics_handler ):
+  if isinstance( response, list ):
+    for notification in response:
+      if 'message' in notification:
+        PostVimMessage( notification[ 'message' ],
+                        warning = False,
+                        truncate = True )
+      elif 'diagnostics' in notification:
+        diagnostics_handler.UpdateWithNewDiagnosticsForFile(
+          notification[ 'filepath' ],
+          notification[ 'diagnostics' ] )
+  elif response is False:
+    # Don't keep polling for this file
+    return False
+  # else any truthy response means 'nothing to see here; poll again in a
+  # while'
+    
+      try:
+    filepath = os.path.join( DIR_OF_YCMD, 'PYTHON_USED_DURING_BUILDING' )
+    return utils.ReadFile( filepath ).strip()
+  # We need to check for IOError for Python2 and OSError for Python3
+  except ( IOError, OSError ):
+    return None
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+      _assert_rejects( f, 'This is a Taco' )
+  _assert_accepts( f, 'This is a Burrito' )
 
     
-        .. note:: This does not need to be accurate in order for the client to
-        run.  This simply keeps things clean if the user decides to revert
-        changes.
-    .. warning:: If all deps are not included, it may cause incorrect parsing
-        behavior, due to enable_mod's shortcut for updating the parser's
-        currently defined modules (`.ApacheParser.add_mod`)
-        This would only present a major problem in extremely atypical
-        configs that use ifmod for the missing deps.
+    _STATE_TO_DESCRIPTION_MAP = {
+    PENDING: 'pending',
+    RUNNING: 'running',
+    CANCELLED: 'cancelled',
+    CANCELLED_AND_NOTIFIED: 'cancelled',
+    FINISHED: 'finished'
+}
     
-        def ensure_augeas_state(self):
-        '''Makes sure that all Augeas dom changes are written to files to avoid
-        loss of configuration directives when doing additional augeas parsing,
-        causing a possible augeas.load() resulting dom reset
-        '''
+        # Create and fill-in the class template
+    numfields = len(field_names)
+    argtxt = repr(field_names).replace(''', '')[1:-1]   # tuple repr without parens or quotes
+    reprtxt = ', '.join('%s=%%r' % name for name in field_names)
+    dicttxt = ', '.join('%r: t[%d]' % (name, pos) for pos, name in enumerate(field_names))
+    template = '''class %(typename)s(tuple):
+        '%(typename)s(%(argtxt)s)' \n
+        __slots__ = () \n
+        _fields = %(field_names)r \n
+        def __new__(_cls, %(argtxt)s):
+            return _tuple.__new__(_cls, (%(argtxt)s)) \n
+        @classmethod
+        def _make(cls, iterable, new=tuple.__new__, len=len):
+            'Make a new %(typename)s object from a sequence or iterable'
+            result = new(cls, iterable)
+            if len(result) != %(numfields)d:
+                raise TypeError('Expected %(numfields)d arguments, got %%d' %% len(result))
+            return result \n
+        def __repr__(self):
+            return '%(typename)s(%(reprtxt)s)' %% self \n
+        def _asdict(t):
+            'Return a new dict which maps field names to their values'
+            return {%(dicttxt)s} \n
+        def _replace(_self, **kwds):
+            'Return a new %(typename)s object replacing specified fields with new values'
+            result = _self._make(map(kwds.pop, %(field_names)r, _self))
+            if kwds:
+                raise ValueError('Got unexpected field names: %%r' %% kwds.keys())
+            return result \n
+        def __getnewargs__(self):
+            return tuple(self) \n\n''' % locals()
+    for i, name in enumerate(field_names):
+        template += '        %s = _property(_itemgetter(%d))\n' % (name, i)
     
-    HEADER_ARGS = {'Strict-Transport-Security': HSTS_ARGS,
-               'Upgrade-Insecure-Requests': UIR_ARGS}
+    # A shorter title for the navigation bar.  Default is the same as html_title.
+#html_short_title = None
     
-        '''
-    # ?: is used for not returning enclosed characters
-    strip_name = re.compile(r'^(?:.+://)?([^ :$]*)')
+    if __name__ == '__main__':
+    main()
+
     
-        def test_bad_save_finalize_checkpoint(self):
-        self.config.reverter.finalize_checkpoint = mock.Mock(
-            side_effect=errors.ReverterError)
-        self.config.parser.add_dir(
-            self.vh_truth[0].path, 'Test', 'bad_save_ckpt')
-        self.assertRaises(errors.PluginError, self.config.save, 'Title')
+    UDF = 0  # undefined
+OTH = 1  # other
+ASC = 2  # ascii capital letter
+ASS = 3  # ascii small letter
+ACV = 4  # accent capital vowel
+ACO = 5  # accent capital other
+ASV = 6  # accent small vowel
+ASO = 7  # accent small other
+CLASS_NUM = 8  # total classes
     
-        def test_nonexistent_like(self):
-        with mock.patch('certbot.util.get_os_info') as mock_info:
-            mock_info.return_value = ('nonexistent', 'irrelevant')
-            with mock.patch('certbot.util.get_systemd_os_like') as mock_like:
-                for like in entrypoint.OVERRIDE_CLASSES.keys():
-                    mock_like.return_value = [like]
-                    self.assertEqual(entrypoint.get_configurator(),
-                                     entrypoint.OVERRIDE_CLASSES[like])
-    
-    
-class AddrTest(unittest.TestCase):
-    '''Test obj.Addr.'''
-    def setUp(self):
-        from certbot_apache.obj import Addr
-        self.addr = Addr.fromstring('*:443')
+    EUCKR_SM_MODEL = {'class_table': EUCKR_CLS,
+                'class_factor': 4,
+                'state_table': EUCKR_ST,
+                'char_len_table': EUCKR_CHAR_LEN_TABLE,
+                'name': 'EUC-KR'}
