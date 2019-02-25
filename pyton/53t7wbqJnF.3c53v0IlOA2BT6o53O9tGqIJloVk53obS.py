@@ -1,393 +1,190 @@
 
         
-          def logp(self, z=None):
-    '''Compute the log-likelihood under the distribution.
+        
+def test_objective_shapes_3d():
+    y_a = K.variable(np.random.random((5, 6, 7)))
+    y_b = K.variable(np.random.random((5, 6, 7)))
+    for obj in allobj:
+        objective_output = obj(y_a, y_b)
+        assert K.eval(objective_output).shape == (5, 6)
     
-      Returns:
-    The dataset structures, with the field alignment_matrix_cxf added.
-    This is # channels x npcs dimension
-'''
-  nchannels_all = 0
-  channel_idxs = {}
-  conditions_all = {}
-  nconditions_all = 0
-  for name, dataset in datasets.items():
-    cidxs = np.where(dataset['P_sxn'])[1] # non-zero entries in columns
-    channel_idxs[name] = [cidxs[0], cidxs[-1]+1]
-    nchannels_all += cidxs[-1]+1 - cidxs[0]
-    conditions_all[name] = np.unique(dataset['condition_labels_train'])
+    # Create the dataset and its associated one-shot iterator.
+dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train))
+dataset = dataset.repeat()
+dataset = dataset.shuffle(buffer_size)
+dataset = dataset.batch(batch_size)
+iterator = dataset.make_one_shot_iterator()
     
-      dataset_dict = {}
-  fnames = os.listdir(data_path)
-    
-    
-# For saving demo resources, use batch size 1 and step 1.
-BATCH_SIZE = 1
-NUM_TIMESTEPS = 1
-MAX_WORD_LEN = 50
-    
-      # Question is correctly answered only if
-  # all predictions of the same question_id is correct
-  num_correct_answer = 0
-  previous_qid = None
-  correctly_answered = False
-  for predict, qid in zip(prediction_correctness, question_ids):
-    if qid != previous_qid:
-      previous_qid = qid
-      num_correct_answer += int(correctly_answered)
-      correctly_answered = True
-    correctly_answered = correctly_answered and predict
-  num_correct_answer += int(correctly_answered)
-    
-      for _, value in gen_ngrams_dict.iteritems():
-    total_ngrams_produced += value
-    
-      ## Encoder variables.
-  encoder_lstm_w_0 = [
-      v for v in tf.trainable_variables() if v.op.name ==
-      'dis/encoder/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/kernel'
-  ][0]
-  encoder_lstm_b_0 = [
-      v for v in tf.trainable_variables() if v.op.name ==
-      'dis/encoder/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/bias'
-  ][0]
-  encoder_lstm_w_1 = [
-      v for v in tf.trainable_variables() if v.op.name ==
-      'dis/encoder/rnn/multi_rnn_cell/cell_1/basic_lstm_cell/kernel'
-  ][0]
-  encoder_lstm_b_1 = [
-      v for v in tf.trainable_variables() if v.op.name ==
-      'dis/encoder/rnn/multi_rnn_cell/cell_1/basic_lstm_cell/bias'
-  ][0]
+    model.compile(loss='categorical_crossentropy',
+              optimizer='adam',
+              metrics=['accuracy'])
     
     
-class BtreeGinExtension(CreateExtension):
+def get_github_url(app, view, path):
+    github_fmt = 'https://github.com/{}/{}/{}/{}{}'
+    return (
+        github_fmt.format(app.config.edit_on_github_project, view,
+                          app.config.edit_on_github_branch,
+                          app.config.edit_on_github_src_path, path))
     
-            # No redirect was found. Return the response.
-        return response
-
+            if self.home_interval:
+            boundary = dt_util.now() - self.home_interval
+            last_results = [device for device in self.last_results
+                            if device.last_update > boundary]
+            if last_results:
+                exclude_hosts = self.exclude + [device.ip for device
+                                                in last_results]
+            else:
+                exclude_hosts = self.exclude
+        else:
+            last_results = []
+            exclude_hosts = self.exclude
+        if exclude_hosts:
+            options += ' --exclude {}'.format(','.join(exclude_hosts))
     
-        def load(self):
-        '''
-        Load the data from the key itself instead of fetching from some
-        external data store. Opposite of _get_session_key(), raise BadSignature
-        if signature fails.
-        '''
+        def get_device_name(self, device):
+        '''Return the name of the given device or None if we don't know.'''
+        if not self.last_results:
+            return None
+        for client in self.last_results:
+            if client['mac'] == device:
+                return client['host']
+        return None
+    
+    CONF_ROOMID = 'roomid'
+    
+        def __init__(self, app_name, app_icon, hostname, password, port):
+        '''Initialize the service.'''
+        import gntp.notifier
+        import gntp.errors
+        self.gntp = gntp.notifier.GrowlNotifier(
+            applicationName=app_name,
+            notifications=['Notification'],
+            applicationIcon=app_icon,
+            hostname=hostname,
+            password=password,
+            port=port
+        )
         try:
-            return signing.loads(
-                self.session_key,
-                serializer=self.serializer,
-                # This doesn't handle non-default expiry dates, see #19201
-                max_age=settings.SESSION_COOKIE_AGE,
-                salt='django.contrib.sessions.backends.signed_cookies',
-            )
-        except Exception:
-            # BadSignature, ValueError, or unpickling exceptions. If any of
-            # these happen, reset the session.
-            self.create()
-        return {}
+            self.gntp.register()
+        except gntp.errors.NetworkError:
+            _LOGGER.error('Unable to register with the GNTP host')
+            return
+    
+    DEFAULT_PORT = 1035
     
     
-def deserialize(config, custom_objects=None):
-    return deserialize_keras_object(config,
-                                    module_objects=globals(),
-                                    custom_objects=custom_objects,
-                                    printable_module_name='regularizer')
+def im_detect_bbox(model, im, target_scale, target_max_size, boxes=None):
+    '''Bounding box object detection for an image with given box proposals.
+    
+        def AddMetrics(self, metrics):
+        if not isinstance(metrics, list):
+            metrics = [metrics]
+        self.metrics = list(set(self.metrics + metrics))
+    
+    # Verify that we compute the same anchors as Shaoqing's matlab implementation:
+#
+#    >> load output/rpn_cachedir/faster_rcnn_VOC2007_ZF_stage1_rpn/anchors.mat
+#    >> anchors
+#
+#    anchors =
+#
+#       -83   -39   100    56
+#      -175   -87   192   104
+#      -359  -183   376   200
+#       -55   -55    72    72
+#      -119  -119   136   136
+#      -247  -247   264   264
+#       -35   -79    52    96
+#       -79  -167    96   184
+#      -167  -343   184   360
+    
+        sampled_fg_rois = roidb['boxes'][kp_fg_inds]
+    box_to_gt_ind_map = roidb['box_to_gt_ind_map'][kp_fg_inds]
     
     
-def test_mnist():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = mnist.load_data()
-        assert len(x_train) == len(y_train) == 60000
-        assert len(x_test) == len(y_test) == 10000
+def get_minibatch_blob_names(is_training=True):
+    '''Return blob names in the order in which they are read by the data loader.
+    '''
+    # data blob: holds a batch of N images, each with 3 channels
+    blob_names = ['data']
+    if cfg.RPN.RPN_ON:
+        # RPN-only or end-to-end Faster R-CNN
+        blob_names += rpn_roi_data.get_rpn_blob_names(is_training=is_training)
+    elif cfg.RETINANET.RETINANET_ON:
+        blob_names += retinanet_roi_data.get_retinanet_blob_names(
+            is_training=is_training
+        )
+    else:
+        # Fast R-CNN like models trained on precomputed proposals
+        blob_names += fast_rcnn_roi_data.get_fast_rcnn_blob_names(
+            is_training=is_training
+        )
+    return blob_names
     
-            if 0 < self.dropout + self.recurrent_dropout:
-            if training is None:
-                h._uses_learning_phase = True
+        # get anchors from all levels for all scales/aspect ratios
+    foas = []
+    for lvl in range(k_min, k_max + 1):
+        stride = 2. ** lvl
+        for octave in range(scales_per_octave):
+            octave_scale = 2 ** (octave / float(scales_per_octave))
+            for idx in range(num_aspect_ratios):
+                anchor_sizes = (stride * octave_scale * anchor_scale, )
+                anchor_aspect_ratios = (aspect_ratios[idx], )
+                foa = data_utils.get_field_of_anchors(
+                    stride, anchor_sizes, anchor_aspect_ratios, octave, idx)
+                foas.append(foa)
+    all_anchors = np.concatenate([f.field_of_anchors for f in foas])
+    
+    import random
+import signal
+import subprocess
+    
+    define('num', default=10000, help='number of iterations')
     
     
-for seq_index in range(100):
-    # Take one sequence (part of the training set)
-    # for trying out decoding.
-    input_seq = encoder_input_data[seq_index: seq_index + 1]
-    decoded_sentence = decode_sequence(input_seq)
-    print('-')
-    print('Input sentence:', input_texts[seq_index])
-    print('Decoded sentence:', decoded_sentence)
-
+class FixFutureImports(fixer_base.BaseFix):
+    BM_compatible = True
     
-    
-def cnn_layers(inputs):
-    x = layers.Conv2D(32, (3, 3),
-                      activation='relu', padding='valid')(inputs)
-    x = layers.MaxPooling2D(pool_size=(2, 2))(x)
-    x = layers.Conv2D(64, (3, 3), activation='relu')(x)
-    x = layers.MaxPooling2D(pool_size=(2, 2))(x)
-    x = layers.Flatten()(x)
-    x = layers.Dense(512, activation='relu')(x)
-    x = layers.Dropout(0.5)(x)
-    predictions = layers.Dense(num_classes,
-                               activation='softmax',
-                               name='x_train_out')(x)
-    return predictions
-    
+        .. versionchanged:: 5.0
+       The ``io_loop`` argument (deprecated since version 4.1) has been removed.
     '''
     
-    DOCUMENTATION = '''
----
-module: oneandone_monitoring_policy
-short_description: Configure 1&1 monitoring policy.
-description:
-     - Create, remove, update monitoring policies
-       (and add/remove ports, processes, and servers).
-       This module has a dependency on 1and1 >= 1.0
-version_added: '2.5'
-options:
-  state:
-    description:
-      - Define a monitoring policy's state to create, remove, update.
-    required: false
-    default: present
-    choices: [ 'present', 'absent', 'update' ]
-  auth_token:
-    description:
-      - Authenticating API token provided by 1&1.
-    required: true
-  api_url:
-    description:
-      - Custom API URL. Overrides the
-        ONEANDONE_API_URL environement variable.
-    required: false
-  name:
-    description:
-      - Monitoring policy name used with present state. Used as identifier (id or name) when used with absent state. maxLength=128
-    required: true
-  monitoring_policy:
-    description:
-      - The identifier (id or name) of the monitoring policy used with update state.
-    required: true
-  agent:
-    description:
-      - Set true for using agent.
-    required: true
-  email:
-    description:
-      - User's email. maxLength=128
-    required: true
-  description:
-    description:
-      - Monitoring policy description. maxLength=256
-    required: false
-  thresholds:
-    description:
-      - Monitoring policy thresholds. Each of the suboptions have warning and critical,
-        which both have alert and value suboptions. Warning is used to set limits for
-        warning alerts, critical is used to set critical alerts. alert enables alert,
-        and value is used to advise when the value is exceeded.
-    required: true
-    suboptions:
-      cpu:
-        description:
-          - Consumption limits of CPU.
-        required: true
-      ram:
-        description:
-          - Consumption limits of RAM.
-        required: true
-      disk:
-        description:
-          - Consumption limits of hard disk.
-        required: true
-      internal_ping:
-        description:
-          - Response limits of internal ping.
-        required: true
-      transfer:
-        description:
-          - Consumption limits for transfer.
-        required: true
-  ports:
-    description:
-      - Array of ports that will be monitoring.
-    required: true
-    suboptions:
-      protocol:
-        description:
-          - Internet protocol.
-        choices: [ 'TCP', 'UDP' ]
-        required: true
-      port:
-        description:
-          - Port number. minimum=1, maximum=65535
-        required: true
-      alert_if:
-        description:
-          - Case of alert.
-        choices: [ 'RESPONDING', 'NOT_RESPONDING' ]
-        required: true
-      email_notification:
-        description:
-          - Set true for sending e-mail notifications.
-        required: true
-  processes:
-    description:
-      - Array of processes that will be monitoring.
-    required: true
-    suboptions:
-      process:
-        description:
-          - Name of the process. maxLength=50
-        required: true
-      alert_if:
-        description:
-          - Case of alert.
-        choices: [ 'RUNNING', 'NOT_RUNNING' ]
-        required: true
-  add_ports:
-    description:
-      - Ports to add to the monitoring policy.
-    required: false
-  add_processes:
-    description:
-      - Processes to add to the monitoring policy.
-    required: false
-  add_servers:
-    description:
-      - Servers to add to the monitoring policy.
-    required: false
-  remove_ports:
-    description:
-      - Ports to remove from the monitoring policy.
-    required: false
-  remove_processes:
-    description:
-      - Processes to remove from the monitoring policy.
-    required: false
-  remove_servers:
-    description:
-      - Servers to remove from the monitoring policy.
-    required: false
-  update_ports:
-    description:
-      - Ports to be updated on the monitoring policy.
-    required: false
-  update_processes:
-    description:
-      - Processes to be updated on the monitoring policy.
-    required: false
-  wait:
-    description:
-      - wait for the instance to be in state 'running' before returning
-    required: false
-    default: 'yes'
-    type: bool
-  wait_timeout:
-    description:
-      - how long before wait gives up, in seconds
-    default: 600
-  wait_interval:
-    description:
-      - Defines the number of seconds to wait when using the _wait_for methods
-    default: 5
+        def run_policy_test(self, accessor, expected_type):
+        # With the default policy, non-main threads don't get an event
+        # loop.
+        self.assertRaises(
+            (RuntimeError, AssertionError), self.executor.submit(accessor).result
+        )
+        # Set the policy and we can get a loop.
+        asyncio.set_event_loop_policy(AnyThreadEventLoopPolicy())
+        self.assertIsInstance(self.executor.submit(accessor).result(), expected_type)
+        # Clean up to silence leak warnings. Always use asyncio since
+        # IOLoop doesn't (currently) close the underlying loop.
+        self.executor.submit(lambda: asyncio.get_event_loop().close()).result()
     
-    RETURN = '''
-zone:
-  description: DNS zone as returned by IPA API.
-  returned: always
-  type: dict
-'''
-    
-        def role_add_host(self, name, item):
-        return self.role_add_member(name=name, item={'host': item})
-    
-        if module.params['environment']:
-        params['deploy[rails_env]'] = module.params['environment']
-    
-        module = AnsibleModule(
-        argument_spec=dict(
-            token=dict(required=True, no_log=True),
-            environment=dict(required=True),
-            user=dict(required=False),
-            repo=dict(required=False),
-            revision=dict(required=False),
-            url=dict(required=False, default='https://api.honeybadger.io/v1/deploys'),
-            validate_certs=dict(default='yes', type='bool'),
-        ),
-        supports_check_mode=True
-    )
+        def set_idf_path(self, idf_path):
+        new_abs_path = _get_abs_path(idf_path)
+        if not os.path.isfile(new_abs_path):
+            raise Exception('jieba: file does not exist: ' + new_abs_path)
+        self.idf_loader.set_new_path(new_abs_path)
+        self.idf_freq, self.median_idf = self.idf_loader.get_idf()
     
     
-def main():
-    module = AnsibleModule(
-        argument_spec=dict(
-            path=dict(required=True),
-            state=dict(default='present', choices=['present', 'followed', 'absent', 'unfollowed']),
-            name=dict(required=False, default=None, type='str'),
-            logtype=dict(required=False, default=None, type='str', aliases=['type'])
-        ),
-        supports_check_mode=True
-    )
+PrevStatus = {
+    'B': 'ES',
+    'M': 'MB',
+    'S': 'SE',
+    'E': 'BM'
+}
     
-        def __init__(self, arr):
-        # we need a list not a string, so do something to change the type
-        self.array = arr.split(',')
-        print(('the input array is:', self.array))
+        def encode(self, arg):
+        return self.__unicode__().encode(arg)
     
-    def compute_heterogeneity(data, k, centroids, cluster_assignment):
+    print('='*40)
+print('4. 词性标注')
+print('-'*40)
     
-    heterogeneity = 0.0
-    for i in range(k):
-        
-        # Select all data points that belong to cluster i. Fill in the blank (RHS only)
-        member_data_points = data[cluster_assignment==i, :]
-        
-        if member_data_points.shape[0] > 0: # check if i-th cluster is non-empty
-            # Compute distances from centroid to data points (RHS only)
-            distances = pairwise_distances(member_data_points, [centroids[i]], metric='euclidean')
-            squared_distances = distances**2
-            heterogeneity += np.sum(squared_distances)
-        
-    return heterogeneity
+    USAGE = 'usage:    python extract_tags_stop_words.py [file name] -k [top k]'
     
-    # Find all the faces in the image using a pre-trained convolutional neural network.
-# This method is more accurate than the default HOG model, but it's slower
-# unless you have an nvidia GPU and dlib compiled with CUDA extensions. But if you do,
-# this will use GPU acceleration and perform well.
-# See also: find_faces_in_picture.py
-face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=0, model='cnn')
-    
-    # Release handle to the webcam
-video_capture.release()
-cv2.destroyAllWindows()
-
-    
-    # Load a sample picture and learn how to recognize it.
-print('Loading known face image(s)')
-obama_image = face_recognition.load_image_file('obama_small.jpg')
-obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
-    
-            if len(encodings) == 0:
-            click.echo('WARNING: No faces found in {}. Ignoring file.'.format(file))
-        else:
-            known_names.append(basename)
-            known_face_encodings.append(encodings[0])
-    
-            faces_to_compare = [
-            face_encoding_a2,
-            face_encoding_a3,
-            face_encoding_b1]
-    
-        # Print the location of each facial feature in this image
-    for facial_feature in face_landmarks.keys():
-        print('The {} in this face has the following points: {}'.format(facial_feature, face_landmarks[facial_feature]))
-    
-    requirements = [
-    'face_recognition_models>=0.3.0',
-    'Click>=6.0',
-    'dlib>=19.7',
-    'numpy',
-    'Pillow'
-]
+    print('speed' , len(content)/tm_cost, ' bytes/second')
