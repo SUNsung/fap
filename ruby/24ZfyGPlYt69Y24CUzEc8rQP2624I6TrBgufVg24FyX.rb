@@ -1,64 +1,57 @@
 
         
-                # Reset topic count because we don't count the description topic
-        DB.exec 'UPDATE categories SET topic_count = 0 WHERE id = #{staff.id}'
-      end
+          platform_is :windows do
+    it 'runs commands starting with any number of @ using shell' do
+      `#{ruby_cmd('p system 'does_not_exist'')} 2>NUL`.chomp.should == 'nil'
+      @object.system('@does_not_exist 2>NUL').should == false
+      @object.system('@@@#{ruby_cmd('exit 0')}').should == true
     end
   end
 end
-
-    
-            def representation_class
-          Representation::Issue
-        end
-    
-                rows << {
-              label_id: label_id,
-              target_id: target_id,
-              target_type: issue.issuable_type,
-              created_at: time,
-              updated_at: time
-            }
-          end
-    
-      it 'truncates message to a reasonable length' do
-    log = AgentLog.new(:agent => agents(:jane_website_agent), :level => 3)
-    log.message = 'a' * 11_000
-    log.save!
-    expect(log.message.length).to eq(10_000)
-  end
-    
-        it 'should generate the correct specific tracking url' do
-      @checker.options['path'] = 'trackings/usps/9361289878905919630610'
-      expect(@checker.send(:event_url)).to eq('https://api.aftership.com/v4/trackings/usps/9361289878905919630610')
-    end
-    
-      it 'raises a TypeError when passed nil' do
-    lambda { sleep(nil)   }.should raise_error(TypeError)
-  end
-    
-      it 'raises ArgumentError if no block or proc is provided' do
-    lambda do
-      trace_var :$Kernel_trace_var_global
-    end.should raise_error(ArgumentError)
-  end
-end
-
     
       it 'creates a public method in TOPLEVEL_BINDING' do
     eval @code, TOPLEVEL_BINDING
     Object.should have_method :boom
   end
     
-          def react(env)
-        result = send(options[:reaction], env)
-        result if Array === result and result.size == 3
+                encoded
+          end
+    
+              # Decodes the Rex::Proto::Kerberos::Model::EncKdcResponse from an input
+          #
+          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::ASN1Data
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode EncKdcResponse, invalid input'
+            end
+    
+                elems << OpenSSL::ASN1::ASN1Data.new([encode_options], 0, :CONTEXT_SPECIFIC) if options
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_cname], 1, :CONTEXT_SPECIFIC) if cname
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_realm], 2, :CONTEXT_SPECIFIC) if realm
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_sname], 3, :CONTEXT_SPECIFIC) if sname
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_from], 4, :CONTEXT_SPECIFIC) if from
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_till], 5, :CONTEXT_SPECIFIC) if till
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_rtime], 6, :CONTEXT_SPECIFIC) if rtime
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_nonce], 7, :CONTEXT_SPECIFIC) if nonce
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_etype], 8, :CONTEXT_SPECIFIC) if etype
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_enc_auth_data], 10, :CONTEXT_SPECIFIC) if enc_auth_data
+    
+                it 'detects closing brace on separate line from last element' do
+              inspect_source(source)
+    
+            self
       end
     
-          def csp_policy
-        directives = []
-    
-      it 'accepts post form requests with masked authenticity_token field' do
-    post('/', {'authenticity_token' => masked_token}, 'rack.session' => session)
-    expect(last_response).to be_ok
-  end
+          # The name of the defined method as a symbol.
+      #
+      # @return [Symbol] the name of the defined method
+      def method_name
+        node_parts[2]
+      end
