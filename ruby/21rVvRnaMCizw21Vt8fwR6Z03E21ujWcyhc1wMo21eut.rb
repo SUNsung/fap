@@ -1,109 +1,75 @@
 
         
-          desc 'Run sass-spec tests against the local code.'
-  task :spec do
-    require 'yaml'
-    sass_spec_options = YAML.load_file(scope('test/sass-spec.yml'))
-    enabled = sass_spec_options.delete(:enabled)
-    unless enabled
-      puts 'SassSpec tests are disabled.'
-      next
-    end
-    if ruby_version_at_least?('1.9.2')
-      old_load_path = $:.dup
-      begin
-        $:.unshift(File.join(File.dirname(__FILE__), 'lib'))
-        begin
-          require 'sass_spec'
-        rescue LoadError
-          puts 'You probably forgot to run: bundle exec rake'
-          raise
-        end
-        default_options = {
-          :spec_directory => SassSpec::SPEC_DIR,
-          :engine_adapter => SassEngineAdapter.new,
-          :generate => false,
-          :tap => false,
-          :skip => false,
-          :verbose => false,
-          :filter => '',
-          :limit => -1,
-          :unexpected_pass => false,
-          :nuke => false,
-        }
-        SassSpec::Runner.new(default_options.merge(sass_spec_options)).run || exit(1)
-      ensure
-        $:.replace(old_load_path)
-      end
-    else
-      'Skipping sass-spec on ruby versions less than 1.9.2'
-    end
-  end
+        User.seed do |u|
+  u.id = -1
+  u.name = 'system'
+  u.username = 'system'
+  u.username_lower = 'system'
+  u.password = SecureRandom.hex
+  u.active = true
+  u.admin = true
+  u.moderator = true
+  u.approved = true
+  u.trust_level = TrustLevel[4]
 end
     
-        # Wraps the given string in terminal escapes
-    # causing it to have the given color.
-    # If terminal escapes aren't supported on this platform,
-    # just returns the string instead.
-    #
-    # @param color [Symbol] The name of the color to use.
-    #   Can be `:red`, `:green`, or `:yellow`.
-    # @param str [String] The string to wrap in the given color.
-    # @return [String] The wrapped string.
-    def color(color, str)
-      raise '[BUG] Unrecognized color #{color}' unless COLORS[color]
+      # DELETE /resource/sign_out
+  def destroy
+    signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
+    set_flash_message! :notice, :signed_out if signed_out
+    yield if block_given?
+    respond_to_on_destroy
+  end
     
-          if @default_syntax == :sass
-        opts.on('--scss',
-                'Use the CSS-superset SCSS syntax.') do
-          @options[:for_engine][:syntax] = :scss
+        def reset_password_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :reset_password_instructions, opts)
+    end
+    
+          def extract_path_from_location(location)
+        uri = parse_uri(location)
+    
+                authentication_keys_changed || encrypted_password_changed
+          end
         end
-      else
-        opts.on('--sass',
-                'Use the indented Sass syntax.') do
-          @options[:for_engine][:syntax] = :sass
-        end
+    
+      private
+    
+      THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+=end
+    
+          def string_to_code(string)
+        # sha bytes
+        b = [Digest::SHA1.hexdigest(string)[0, 20]].pack('H*').bytes.to_a
+        # Thanks donpark's IdenticonUtil.java for this.
+        # Match the following Java code
+        # ((b[0] & 0xFF) << 24) | ((b[1] & 0xFF) << 16) |
+        #	 ((b[2] & 0xFF) << 8) | (b[3] & 0xFF)
+    
+          def page_dir
+        @page_dir
       end
     
-      # fetch data
-  fields = {
-    :authors => `git shortlog -sn`.force_encoding('utf-8').scan(/[^\d\s].*/),
-    :email   => ['mail@zzak.io', 'konstantin.haase@gmail.com'],
-    :files   => %w(License README.md Rakefile Gemfile rack-protection.gemspec) + Dir['lib/**/*']
-  }
-    
-          DIRECTIVES = %i(base_uri child_src connect_src default_src
-                      font_src form_action frame_ancestors frame_src
-                      img_src manifest_src media_src object_src
-                      plugin_types referrer reflected_xss report_to
-                      report_uri require_sri_for sandbox script_src
-                      style_src worker_src).freeze
-    
-        it 'Returns nil when Referer header is invalid' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
-      expect(subject.referrer(env)).to be_nil
-    end
+        assert_no_match /Edit Page/,             last_response.body, ''Edit Page' link not blocked in compare template'
+    assert_no_match /Revert Changes/,        last_response.body, ''Revert Changes' link not blocked in compare template'
   end
-end
-
     
-      context 'called with one color' do
-    it 'applies same color to all sides' do
-      rule = 'border-color: #f00'
-    
-      context 'called with null values' do
-    it 'writes rules for other three' do
-      ruleset = 'border-top-style: inset; ' +
-                'border-right-style: none; ' +
-                'border-left-style: double;'
-      bad_rule = 'border-bottom-style: null;'
-    
-      context 'expands hover buttons' do
-    it 'finds selectors' do
-      list = @buttons_list.map { |input| '#{input}:hover' }
-      list = list.join(', ')
-      ruleset = 'content: #{list};'
-    
-      context 'called with one size' do
-    it 'applies same width to all sides' do
-      rule = 'padding: 1px'
+      test 'edit returns nil for non-existant page' do
+    # post '/edit' fails. post '/edit/' works.
+    page = 'not-real-page'
+    path = '/'
+    post '/edit/', :content => 'edit_msg',
+         :page              => page, :path => path, :message => ''
+    page_e = @wiki.paged(page, path)
+    assert_equal nil, page_e
+  end
