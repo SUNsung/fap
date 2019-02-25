@@ -1,33 +1,6 @@
 
         
-            # make url_for('index') == url_for('blog.index')
-    # in another app, you might define a separate main index here with
-    # app.route, while giving the blog blueprint a url_prefix, but for
-    # the tutorial the blog will be the main index
-    app.add_url_rule('/', endpoint='index')
-    
-    
-def get_db():
-    '''Connect to the application's configured database. The connection
-    is unique for each request and will be reused if this is called
-    again.
-    '''
-    if 'db' not in g:
-        g.db = sqlite3.connect(
-            current_app.config['DATABASE'],
-            detect_types=sqlite3.PARSE_DECLTYPES
-        )
-        g.db.row_factory = sqlite3.Row
-    
-    
-def test_author_required(app, client, auth):
-    # change the post author to another user
-    with app.app_context():
-        db = get_db()
-        db.execute('UPDATE post SET author_id = 2 WHERE id = 1')
-        db.commit()
-    
-            for srcobj, loader in self._iter_loaders(template):
+                for srcobj, loader in self._iter_loaders(template):
             try:
                 rv = loader.get_source(environment, template)
                 if trv is None:
@@ -36,158 +9,241 @@ def test_author_required(app, client, auth):
                 rv = None
             attempts.append((loader, srcobj, rv))
     
-                if match is None:
-                continue
+        def on_json_loading_failed(self, e):
+        '''Called if :meth:`get_json` parsing fails and isn't silenced. If
+        this method returns a value, it is used as the return value for
+        :meth:`get_json`. The default implementation raises a
+        :class:`BadRequest` exception.
     
-    def rabinMiller(num):
-    s = num - 1
-    t = 0
+        if version in tags:
+        fail('Version '%s' is already tagged', version)
     
-        context['show_on_github_url'] = show_url
-    context['edit_on_github_url'] = edit_url
     
-    For more details about this platform, please refer to the documentation at
-https://home-assistant.io/components/notify.clickatell/
-'''
-import logging
+@pytest.fixture
+def modules_tmpdir(tmpdir, monkeypatch):
+    '''A tmpdir added to sys.path.'''
+    rv = tmpdir.mkdir('modules_tmpdir')
+    monkeypatch.syspath_prepend(str(rv))
+    return rv
     
-    For more details about this platform, please refer to the documentation at
-https://home-assistant.io/components/notify.file/
-'''
-import logging
-import os
+        def _ClassDef(self, t):
+        self.write('\n')
+        for deco in t.decorator_list:
+            self.fill('@')
+            self.dispatch(deco)
+        self.fill('class '+t.name)
+        self.write('(')
+        comma = False
+        for e in t.bases:
+            if comma: self.write(', ')
+            else: comma = True
+            self.dispatch(e)
+        for e in t.keywords:
+            if comma: self.write(', ')
+            else: comma = True
+            self.dispatch(e)
+        self.write(')')
     
-            _LOGGER.debug('Attempting to call Flock at %s', self._url)
+    try:
+    WindowsError
+except NameError:
+    pass
+else:
+    PYTHON2_EXCEPTIONS += ('WindowsError',)
     
-    REQUIREMENTS = ['freesms==0.1.2']
+    __all__ = ['commonprefix', 'exists', 'getatime', 'getctime', 'getmtime',
+           'getsize', 'isdir', 'isfile', 'samefile', 'sameopenfile',
+           'samestat']
     
-            if method not in ATTR_METHOD_ALLOWED:
-            _LOGGER.error('Unknown method %s', method)
-            return
+    def handleSlideTitle(title):
+    print('<h2>%s</h2>' % getText(title.childNodes))
     
-        def feed(self, byte_str):
-        for i in range(len(byte_str)):
-            coding_state = self.coding_sm.next_state(byte_str[i])
-            if coding_state == MachineState.ERROR:
-                self.logger.debug('%s %s prober hit error at byte %s',
-                                  self.charset_name, self.language, i)
-                self._state = ProbingState.NOT_ME
-                break
-            elif coding_state == MachineState.ITS_ME:
-                self._state = ProbingState.FOUND_IT
-                break
-            elif coding_state == MachineState.START:
-                char_len = self.coding_sm.get_current_charlen()
-                if i == 0:
-                    self._last_char[1] = byte_str[0]
-                    self.distribution_analyzer.feed(self._last_char, char_len)
-                else:
-                    self.distribution_analyzer.feed(byte_str[i - 1:i + 1],
-                                                    char_len)
+        # Get and print some more results
+    for i in range(len(TASKS2)):
+        print('\t', done_queue.get())
     
-            return self.state
+    setup_end_to_end = '''
+import face_recognition
     
-    EUCTW_CHAR_LEN_TABLE = (0, 0, 1, 2, 2, 2, 3)
+        # Hit 'q' on the keyboard to quit!
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
     
-    EUCKR_SM_MODEL = {'class_table': EUCKR_CLS,
-                'class_factor': 4,
-                'state_table': EUCKR_ST,
-                'char_len_table': EUCKR_CHAR_LEN_TABLE,
-                'name': 'EUC-KR'}
+            # Draw a box around the face
+        cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
     
-        def __init__(self, model, reversed=False, name_prober=None):
-        super(SingleByteCharSetProber, self).__init__()
-        self._model = model
-        # TRUE if we need to reverse every pair in the model lookup
-        self._reversed = reversed
-        # Optional auxiliary prober for name decision
-        self._name_prober = name_prober
-        self._last_order = None
-        self._seq_counters = None
-        self._total_seqs = None
-        self._total_char = None
-        self._freq_char = None
-        self.reset()
+    # Initialize some variables
+face_locations = []
+face_encodings = []
     
-    from .mbcharsetprober import MultiByteCharSetProber
-from .codingstatemachine import CodingStateMachine
-from .chardistribution import SJISDistributionAnalysis
-from .jpcntx import SJISContextAnalysis
-from .mbcssm import SJIS_SM_MODEL
-from .enums import ProbingState, MachineState
+    # This code finds all faces in a list of images using the CNN model.
+#
+# This demo is for the _special case_ when you need to find faces in LOTS of images very quickly and all the images
+# are the exact same size. This is common in video processing applications where you have lots of video frames
+# to process.
+#
+# If you are processing a lot of images and using a GPU with CUDA, batch processing can be ~3x faster then processing
+# single images at a time. But if you aren't using a GPU, then batch processing isn't going to be very helpful.
+#
+# PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read the video file.
+# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
+# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
     
-            # If we've seen escape sequences, use the EscCharSetProber, which
-        # uses a simple state machine to check for known escape sequences in
-        # HZ and ISO-2022 encodings, since those are the only encodings that
-        # use such sequences.
-        if self._input_state == InputState.ESC_ASCII:
-            if not self._esc_charset_prober:
-                self._esc_charset_prober = EscCharSetProber(self.lang_filter)
-            if self._esc_charset_prober.feed(byte_str) == ProbingState.FOUND_IT:
-                self.result = {'encoding':
-                               self._esc_charset_prober.charset_name,
-                               'confidence':
-                               self._esc_charset_prober.get_confidence(),
-                               'language':
-                               self._esc_charset_prober.language}
-                self.done = True
-        # If we've seen high bytes (i.e., those with values greater than 127),
-        # we need to do more complicated checks using all our multi-byte and
-        # single-byte probers that are left.  The single-byte probers
-        # use character bigram distributions to determine the encoding, whereas
-        # the multi-byte probers use a combination of character unigram and
-        # bigram distributions.
-        elif self._input_state == InputState.HIGH_BYTE:
-            if not self._charset_probers:
-                self._charset_probers = [MBCSGroupProber(self.lang_filter)]
-                # If we're checking non-CJK encodings, use single-byte prober
-                if self.lang_filter & LanguageFilter.NON_CJK:
-                    self._charset_probers.append(SBCSGroupProber())
-                self._charset_probers.append(Latin1Prober())
-            for prober in self._charset_probers:
-                if prober.feed(byte_str) == ProbingState.FOUND_IT:
-                    self.result = {'encoding': prober.charset_name,
-                                   'confidence': prober.get_confidence(),
-                                   'language': prober.language}
-                    self.done = True
-                    break
-            if self.WIN_BYTE_DETECTOR.search(byte_str):
-                self._has_win_bytes = True
+    print('I found {} face(s) in this photograph.'.format(len(face_landmarks_list)))
     
-        def __init__(self):
-        super(UTF8Prober, self).__init__()
-        self.coding_sm = CodingStateMachine(UTF8_SM_MODEL)
-        self._num_mb_chars = None
-        self.reset()
+        # 图片上传失败，输出以下html代码
+    return '''
+    <!doctype html>
+    <title>Is this a picture of Obama?</title>
+    <h1>Upload a picture and see if it's a picture of Obama!</h1>
+    <form method='POST' enctype='multipart/form-data'>
+      <input type='file' name='file'>
+      <input type='submit' value='Upload'>
+    </form>
+    '''
     
-        nonce = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(9))
-    filename = topic_name.replace('/', '.') + '.' + nonce
-    filename = os.path.join(PATH_CHEAT_SHEETS_SPOOL, filename)
     
-    if __name__ == '__main__':
-    import doctest
-    doctest.testmod()
+def cityscapes_to_coco(cityscapes_id):
+    lookup = {
+        0: 0,  # ... background
+        1: 2,  # bicycle
+        2: 3,  # car
+        3: 1,  # person
+        4: 7,  # train
+        5: 8,  # truck
+        6: 4,  # motorcycle
+        7: 6,  # bus
+        8: -1,  # rider (-1 means rand init)
+    }
+    return lookup[cityscapes_id]
+    
+    
+def voc_info(json_dataset):
+    year = json_dataset.name[4:8]
+    image_set = json_dataset.name[9:]
+    devkit_path = get_devkit_dir(json_dataset.name)
+    assert os.path.exists(devkit_path), \
+        'Devkit directory {} not found'.format(devkit_path)
+    anno_path = os.path.join(
+        devkit_path, 'VOC' + year, 'Annotations', '{:s}.xml')
+    image_set_path = os.path.join(
+        devkit_path, 'VOC' + year, 'ImageSets', 'Main', image_set + '.txt')
+    return dict(
+        year=year,
+        image_set=image_set,
+        devkit_path=devkit_path,
+        anno_path=anno_path,
+        image_set_path=image_set_path)
 
     
-    PALETTES = {
-    0: {
-        1: Fore.WHITE,
-        2: Style.DIM,
-    },
-    1: {
-        1: Fore.CYAN,
-        2: Fore.GREEN,
-        3: colored.fg('orange_3'),
-        4: Style.DIM,
-        5: Style.DIM,
-    },
-    2: {
-        1: Fore.RED,
-        2: Style.DIM,
-    },
-}
     
-    if os.environ.get('REDIS_HOST', '').lower() != 'none':
-    _REDIS = redis.StrictRedis(host=REDISHOST, port=6379, db=0)
-else:
-    _REDIS = None
+def get_retinanet_bias_init(model):
+    '''Initialize the biases for the conv ops that predict class probabilities.
+    Initialization is performed such that at the start of training, all
+    locations are predicted to be background with high probability
+    (e.g., ~0.99 = 1 - cfg.RETINANET.PRIOR_PROB). See the Focal Loss paper for
+    details.
+    '''
+    prior_prob = cfg.RETINANET.PRIOR_PROB
+    scales_per_octave = cfg.RETINANET.SCALES_PER_OCTAVE
+    aspect_ratios = len(cfg.RETINANET.ASPECT_RATIOS)
+    if cfg.RETINANET.SOFTMAX:
+        # Multiclass softmax case
+        bias = np.zeros((model.num_classes, 1), dtype=np.float32)
+        bias[0] = np.log(
+            (model.num_classes - 1) * (1 - prior_prob) / (prior_prob)
+        )
+        bias = np.vstack(
+            [bias for _ in range(scales_per_octave * aspect_ratios)]
+        )
+        bias_init = (
+            'GivenTensorFill', {
+                'values': bias.astype(dtype=np.float32)
+            }
+        )
+    else:
+        # Per-class sigmoid (binary classification) case
+        bias_init = (
+            'ConstantFill', {
+                'value': -np.log((1 - prior_prob) / prior_prob)
+            }
+        )
+    return bias_init
+    
+        def forward(self, inputs, outputs):
+        '''See modeling.detector.GenerateProposalLabels for inputs/outputs
+        documentation.
+        '''
+        # During training we reuse the data loader code. We populate roidb
+        # entries on the fly using the rois generated by RPN.
+        # im_info: [[im_height, im_width, im_scale], ...]
+        rois = inputs[0].data
+        roidb = blob_utils.deserialize(inputs[1].data)
+        im_info = inputs[2].data
+        im_scales = im_info[:, 2]
+        output_blob_names = fast_rcnn_roi_data.get_fast_rcnn_blob_names()
+        # For historical consistency with the original Faster R-CNN
+        # implementation we are *not* filtering crowd proposals.
+        # This choice should be investigated in the future (it likely does
+        # not matter).
+        json_dataset.add_proposals(roidb, rois, im_scales, crowd_thresh=0)
+        roidb_utils.add_bbox_regression_targets(roidb)
+        blobs = {k: [] for k in output_blob_names}
+        fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
+        for i, k in enumerate(output_blob_names):
+            blob_utils.py_op_copy_blob(blobs[k], outputs[i])
+
+    
+    
+if __name__ == '__main__':
+    workspace.GlobalInit(['caffe2', '--caffe2_log_level=0'])
+    logger = setup_logging(__name__)
+    logger.setLevel(logging.DEBUG)
+    logging.getLogger('detectron.roi_data.loader').setLevel(logging.INFO)
+    np.random.seed(cfg.RNG_SEED)
+    args = parse_args()
+    logger.info('Called with args:')
+    logger.info(args)
+    if args.cfg_file is not None:
+        merge_cfg_from_file(args.cfg_file)
+    if args.opts is not None:
+        merge_cfg_from_list(args.opts)
+    assert_and_infer_cfg()
+    logger.info('Running with config:')
+    logger.info(pprint.pformat(cfg))
+    main(args)
+
+    
+    
+def testUnsignedInt():
+    check(b'\x99\xcc\x00\xcc\x80\xcc\xff\xcd\x00\x00\xcd\x80\x00'
+          b'\xcd\xff\xff\xce\x00\x00\x00\x00\xce\x80\x00\x00\x00'
+          b'\xce\xff\xff\xff\xff',
+          (0,
+           128,
+           255,
+           0,
+           32768,
+           65535,
+           0,
+           2147483648,
+           4294967295, ), )
+    
+    import platform
+import os
+import subprocess
+from .clipboards import (init_osx_clipboard,
+                         init_gtk_clipboard, init_qt_clipboard,
+                         init_xclip_clipboard, init_xsel_clipboard,
+                         init_klipper_clipboard, init_no_clipboard)
+from .windows import init_windows_clipboard
+    
+    
+def pack(o, stream, **kwargs):
+    '''
+    Pack object `o` and write it to `stream`
+    
+            exp4 = ('0   1 days\n'
+                '1   2 days\n'
+                '2   3 days\n'
+                'dtype: timedelta64[ns]')
