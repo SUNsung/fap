@@ -1,92 +1,238 @@
 
         
-        bool CacheImpl::getAndRetain(const void *Key, void **Value_out) {
-  int Ret = cache_get_and_retain(static_cast<cache_t*>(Impl),
-                                 const_cast<void*>(Key), Value_out);
-  return Ret == 0;
+        using namespace swift::sys;
+using llvm::StringRef;
+    
+    void CacheImpl::removeAll() {
+  cache_remove_all(static_cast<cache_t*>(Impl));
 }
     
-      struct IndentScope {
-    TreePrinter *Printer;
-    size_t OldLength;
-    IndentScope(TreePrinter *printer, StringRef indent)
-        : Printer(printer), OldLength(printer->Indent.size()) {
-      Printer->Indent += indent;
+    %# Ignore the following admonition; it applies to the resulting .cpp file only
+//// Automatically Generated From UnicodeExtendedGraphemeClusters.cpp.gyb.
+//// Do Not Edit Directly!
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2017 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+    
+      clangLoc = clangSrcMgr.getFileLoc(clangLoc);
+  auto decomposedLoc = clangSrcMgr.getDecomposedLoc(clangLoc);
+  if (decomposedLoc.first.isInvalid())
+    return loc;
+    
+        unsigned Bytes = 0;
+    if (S < 0x80)
+      Bytes = 1;
+    else if (S < 0x800)
+      Bytes = 2;
+    else if (S < 0x10000)
+      Bytes = 3;
+    else
+      Bytes = 4;
+    
+    /**
+ * An RAII-style reverse lock. Unlocks on construction and locks on destruction.
+ */
+template<typename Lock>
+class reverse_lock
+{
+public:
     }
-    ~IndentScope() { Printer->Indent.resize(OldLength); }
-  };
     
-    % for start_code_point, end_code_point, value in break_table.property_value_ranges:
-%   if start_code_point == 0:
-  if (C <= ${end_code_point})
-%   else:
-  if (C >= ${start_code_point} && C <= ${end_code_point})
-%   end
-    return GraphemeClusterBreakProperty::${value};
-% end
     
-      using SourceManagerRef = llvm::IntrusiveRefCntPtr<const clang::SourceManager>;
-  auto iter = std::lower_bound(sourceManagersWithDiagnostics.begin(),
-                               sourceManagersWithDiagnostics.end(),
-                               &clangSrcMgr,
-                               [](const SourceManagerRef &inArray,
-                                  const clang::SourceManager *toInsert) {
-    return std::less<const clang::SourceManager *>()(inArray.get(), toInsert);
-  });
-  if (iter == sourceManagersWithDiagnostics.end() ||
-      iter->get() != &clangSrcMgr) {
-    sourceManagersWithDiagnostics.insert(iter, &clangSrcMgr);
+    {    secp256k1_sha256_initialize(&hash->inner);
+    for (n = 0; n < 64; n++) {
+        rkey[n] ^= 0x5c ^ 0x36;
+    }
+    secp256k1_sha256_write(&hash->inner, rkey, 64);
+    memset(rkey, 0, 64);
+}
+    
+    BOOST_AUTO_TEST_SUITE_END()
+
+    
+    BOOST_AUTO_TEST_CASE(util_SplitTorReplyLine)
+{
+    // Data we should receive during normal usage
+    CheckSplitTorReplyLine(
+        'PROTOCOLINFO PIVERSION',
+        'PROTOCOLINFO', 'PIVERSION');
+    CheckSplitTorReplyLine(
+        'AUTH METHODS=COOKIE,SAFECOOKIE COOKIEFILE=\'/home/x/.tor/control_auth_cookie\'',
+        'AUTH', 'METHODS=COOKIE,SAFECOOKIE COOKIEFILE=\'/home/x/.tor/control_auth_cookie\'');
+    CheckSplitTorReplyLine(
+        'AUTH METHODS=NULL',
+        'AUTH', 'METHODS=NULL');
+    CheckSplitTorReplyLine(
+        'AUTH METHODS=HASHEDPASSWORD',
+        'AUTH', 'METHODS=HASHEDPASSWORD');
+    CheckSplitTorReplyLine(
+        'VERSION Tor=\'0.2.9.8 (git-a0df013ea241b026)\'',
+        'VERSION', 'Tor=\'0.2.9.8 (git-a0df013ea241b026)\'');
+    CheckSplitTorReplyLine(
+        'AUTHCHALLENGE SERVERHASH=aaaa SERVERNONCE=bbbb',
+        'AUTHCHALLENGE', 'SERVERHASH=aaaa SERVERNONCE=bbbb');
+    }
+    
+    /** Decode a Bech32 string. Returns (hrp, data). Empty hrp means failure. */
+std::pair<std::string, std::vector<uint8_t>> Decode(const std::string& str);
+    
+    
+    {    input[4] = ReadLE32(k + 0);
+    input[5] = ReadLE32(k + 4);
+    input[6] = ReadLE32(k + 8);
+    input[7] = ReadLE32(k + 12);
+    if (keylen == 32) { /* recommended */
+        k += 16;
+        constants = sigma;
+    } else { /* keylen == 16 */
+        constants = tau;
+    }
+    input[8] = ReadLE32(k + 0);
+    input[9] = ReadLE32(k + 4);
+    input[10] = ReadLE32(k + 8);
+    input[11] = ReadLE32(k + 12);
+    input[0] = ReadLE32(constants + 0);
+    input[1] = ReadLE32(constants + 4);
+    input[2] = ReadLE32(constants + 8);
+    input[3] = ReadLE32(constants + 12);
+    input[12] = 0;
+    input[13] = 0;
+    input[14] = 0;
+    input[15] = 0;
+}
+    
+    #endif // BITCOIN_CRYPTO_RIPEMD160_H
+
+    
+      inline const shared_ptr<SyncedMemory>& data() const {
+    CHECK(data_);
+    return data_;
   }
     
-    void PageIterator::ParagraphInfo(tesseract::ParagraphJustification *just,
-                                 bool *is_list_item,
-                                 bool *is_crown,
-                                 int *first_line_indent) const {
-  *just = tesseract::JUSTIFICATION_UNKNOWN;
-  if (!it_->row() || !it_->row()->row || !it_->row()->row->para() ||
-      !it_->row()->row->para()->model)
-    return;
+     protected:
+  /// @copydoc AbsValLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    /**
+ * @brief Compute the index of the @f$ K @f$ max values for each datum across
+ *        all dimensions @f$ (C \times H \times W) @f$.
+ *
+ * Intended for use after a classification layer to produce a prediction.
+ * If parameter out_max_val is set to true, output is a vector of pairs
+ * (max_ind, max_val) for each image. The axis parameter specifies an axis
+ * along which to maximise.
+ *
+ * NOTE: does not implement Backwards operation.
+ */
+template <typename Dtype>
+class ArgMaxLayer : public Layer<Dtype> {
+ public:
+  /**
+   * @param param provides ArgMaxParameter argmax_param,
+   *     with ArgMaxLayer options:
+   *   - top_k (\b optional uint, default 1).
+   *     the number @f$ K @f$ of maximal items to output.
+   *   - out_max_val (\b optional bool, default false).
+   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
+   *     output max_val along the specified axis.
+   *   - axis (\b optional int).
+   *     if set, maximise along the specified axis else maximise the flattened
+   *     trailing dimensions for each index of the first / num dimension.
+   */
+  explicit ArgMaxLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-    bool read_unlv_file(                    //print list of sides
-                     STRING name,        //basename of file
-                     int32_t xsize,        //image size
-                     int32_t ysize,        //image size
-                     BLOCK_LIST *blocks  //output list
-                    ) {
-  FILE *pdfp;                    //file pointer
-  BLOCK *block;                  //current block
-  int x;                         //current top-down coords
-  int y;
-  int width;                     //of current block
-  int height;
-  BLOCK_IT block_it = blocks;    //block iterator
+     protected:
+  /**
+   * @param bottom input Blob vector (length 2+)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_1 @f$
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_2 @f$
+   *   -# ...
+   *   - K @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_K @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
+   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
+   *      the concatenated output @f$
+   *        y = [\begin{array}{cccc} x_1 & x_2 & ... & x_K \end{array}]
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+     protected:
+  /// @copydoc ContrastiveLossLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    namespace caffe {
     }
     
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-    {}  // namespace tesseract.
     
-    #include 'rocksdb/db.h'
-#include 'rocksdb/slice.h'
-#include 'rocksdb/options.h'
+    {}  // namespace caffe
     
-      {
-    PinnableSlice pinnable_val;
-    db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key2', &pinnable_val);
-    assert(pinnable_val == 'value');
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+      CorruptionTest() {
+    tiny_cache_ = NewLRUCache(100);
+    options_.env = &env_;
+    options_.block_cache = tiny_cache_;
+    dbname_ = test::TmpDir() + '/corruption_test';
+    DestroyDB(dbname_, options_);
+    }
+    
+    #endif  // STORAGE_LEVELDB_DB_DB_ITER_H_
+
+    
+    void InternalFilterPolicy::CreateFilter(const Slice* keys, int n,
+                                        std::string* dst) const {
+  // We rely on the fact that the code in table.cc does not mind us
+  // adjusting keys[].
+  Slice* mkey = const_cast<Slice*>(keys);
+  for (int i = 0; i < n; i++) {
+    mkey[i] = ExtractUserKey(keys[i]);
+    // TODO(sanjay): Suppress dups?
   }
+  user_policy_->CreateFilter(keys, n, dst);
+}
     
-    // Move all L0 files to target_level skipping compaction.
-// This operation succeeds only if the files in L0 have disjoint ranges; this
-// is guaranteed to happen, for instance, if keys are inserted in sorted
-// order. Furthermore, all levels between 1 and target_level must be empty.
-// If any of the above condition is violated, InvalidArgument will be
-// returned.
-Status PromoteL0(DB* db, ColumnFamilyHandle* column_family,
-                 int target_level = 1);
+      Slice user_key() const { return ExtractUserKey(rep_); }
     
-      // Translate the 'i'th property of the specified operation given
-  // a property value.
-  static std::map<std::string, uint64_t>
-      InterpretOperationProperties(
-          OperationType op_type, const uint64_t* op_properties);
+    enum RecordType {
+  // Zero is reserved for preallocated files
+  kZeroType = 0,
+    }
+    
+      // Make a bunch of uncompacted log files.
+  uint64_t old_log = FirstLogFile();
+  MakeLogFile(old_log+1, 1000, 'hello', 'world');
+  MakeLogFile(old_log+2, 1001, 'hi', 'there');
+  MakeLogFile(old_log+3, 1002, 'foo', 'bar2');
