@@ -1,322 +1,250 @@
 
         
-            with open(FISH_COMPLETION_TEMPLATE) as f:
-        template = f.read()
-    filled_template = template.replace('{{commands}}', '\n'.join(commands))
-    with open(FISH_COMPLETION_FILE, 'w') as f:
-        f.write(filled_template)
-    
-    password = key + 16 * [0]
-new_key = aes_encrypt(password, key_expansion(password)) * (32 // 16)
-r = openssl_encode('aes-256-ctr', new_key, iv)
-print('aes_decrypt_text 32')
-print(repr(r))
-
-    
-    filenames = {
-    'bin': 'youtube-dl',
-    'exe': 'youtube-dl.exe',
-    'tar': 'youtube-dl-%s.tar.gz' % version}
-build_dir = os.path.join('..', '..', 'build', version)
-for key, filename in filenames.items():
-    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
-    fn = os.path.join(build_dir, filename)
-    with open(fn, 'rb') as f:
-        data = f.read()
-    if not data:
-        raise ValueError('File %s is empty!' % fn)
-    sha256sum = hashlib.sha256(data).hexdigest()
-    new_version[key] = (url, sha256sum)
-    
-    
-# Import youtube_dl
-ROOT_DIR = os.path.join(os.path.dirname(__file__), '..')
-sys.path.insert(0, ROOT_DIR)
-import youtube_dl
-    
-    import os
-from os.path import dirname as dirn
-import sys
-    
-    # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
-    
-        def test_youporn(self):
-        self._assert_restricted(
-            'http://www.youporn.com/watch/505835/sex-ed-is-it-safe-to-masturbate-daily/',
-            '505835.mp4', 2, old_age=25)
-    
-    
-class TestDownload(unittest.TestCase):
-    # Parallel testing in nosetests. See
-    # http://nose.readthedocs.org/en/latest/doc_tests/test_multiprocess/multiprocess.html
-    _multiprocess_shared_ = True
-    
-        @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
-    
-    import click
-from flask import current_app, g
-from flask.cli import with_appcontext
-    
-            :param name: the optional name of the test, otherwise the
-                     function name will be used.
-        '''
-        def decorator(f):
-            self.add_app_template_test(f, name=name)
-            return f
-        return decorator
-    
-    
-def git_is_clean():
-    return Popen(['git', 'diff', '--quiet']).wait() == 0
-    
-        # make sure we're not leaking a request context since we are
-    # testing flask internally in debug mode in a few cases
-    leaks = []
-    while flask._request_ctx_stack.top is not None:
-        leaks.append(flask._request_ctx_stack.pop())
-    assert leaks == []
-    
-    
-def to_native_string(string, encoding='ascii'):
-    '''Given a string object, regardless of type, returns a representation of
-    that string in the native string type, encoding and decoding where
-    necessary. This assumes ASCII unless told otherwise.
+        
+def get_db():
+    '''Connect to the application's configured database. The connection
+    is unique for each request and will be reused if this is called
+    again.
     '''
-    if isinstance(string, builtin_str):
-        out = string
+    if 'db' not in g:
+        g.db = sqlite3.connect(
+            current_app.config['DATABASE'],
+            detect_types=sqlite3.PARSE_DECLTYPES
+        )
+        g.db.row_factory = sqlite3.Row
+    
+        def add_app_template_test(self, f, name=None):
+        '''Register a custom template test, available application wide.  Like
+        :meth:`Flask.add_template_test` but for a blueprint.  Works exactly
+        like the :meth:`app_template_test` decorator.
+    
+        Implements signals based on blinker if available, otherwise
+    falls silently back to a noop.
+    
+        def list_templates(self):
+        result = set()
+        loader = self.app.jinja_loader
+        if loader is not None:
+            result.update(loader.list_templates())
+    
+            url = url_parse(path)
+        base_url = '{scheme}://{netloc}/{path}'.format(
+            scheme=url.scheme or url_scheme,
+            netloc=url.netloc or http_host,
+            path=app_root.lstrip('/')
+        )
+        path = url.path
+    
+                # If we have no method at all in there we don't want to add a
+            # method list. This is for instance the case for the base class
+            # or another subclass of a base method view that does not introduce
+            # new methods.
+            if methods:
+                cls.methods = methods
+    
+        if K.image_data_format() == 'channels_last':
+        x_train = x_train.transpose(0, 2, 3, 1)
+        x_test = x_test.transpose(0, 2, 3, 1)
+    
+        fpath = os.path.join(path, 'train')
+    x_train, y_train = load_batch(fpath, label_key=label_mode + '_labels')
+    
+        # Test single image
+    x = np.random.uniform(0, 255, (10, 10, 3))
+    xint = x.astype('int32')
+    assert utils.preprocess_input(x).shape == x.shape
+    assert utils.preprocess_input(xint).shape == xint.shape
+    
+    
+def test_boston_housing():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = boston_housing.load_data()
+        assert len(x_train) == len(y_train)
+        assert len(x_test) == len(y_test)
+    
+        To save the multi-gpu model, use `.save(fname)` or `.save_weights(fname)`
+    with the template model (the argument you passed to `multi_gpu_model`),
+    rather than the model returned by `multi_gpu_model`.
+    '''
+    if K.backend() != 'tensorflow':
+        raise ValueError('`multi_gpu_model` is only available '
+                         'with the TensorFlow backend.')
+    
+    
+def train_model(model, train, test, num_classes):
+    x_train = train[0].reshape((train[0].shape[0],) + input_shape)
+    x_test = test[0].reshape((test[0].shape[0],) + input_shape)
+    x_train = x_train.astype('float32')
+    x_test = x_test.astype('float32')
+    x_train /= 255
+    x_test /= 255
+    print('x_train shape:', x_train.shape)
+    print(x_train.shape[0], 'train samples')
+    print(x_test.shape[0], 'test samples')
+    
+    import numpy as np
+import keras
+from keras.datasets import reuters
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation
+from keras.preprocessing.text import Tokenizer
+    
+        # Raises
+        ValueError if unknown identifier.
+    '''
+    if identifier is None:
+        return None
+    if isinstance(identifier, six.string_types):
+        identifier = str(identifier)
+        return deserialize(identifier)
+    if isinstance(identifier, dict):
+        return deserialize(identifier)
+    elif callable(identifier):
+        return identifier
     else:
-        if is_py2:
-            out = string.encode(encoding)
-        else:
-            out = string.decode(encoding)
-    
-        def __init__(self, *args, **kwargs):
-        '''Initialize RequestException with `request` and `response` objects.'''
-        response = kwargs.pop('response', None)
-        self.response = response
-        self.request = kwargs.pop('request', None)
-        if (response is not None and not self.request and
-                hasattr(response, 'request')):
-            self.request = self.response.request
-        super(RequestException, self).__init__(*args, **kwargs)
-    
-    Available hooks:
-    
-    
-def test_idna_with_version_attribute(mocker):
-    '''Verify we're actually setting idna version when it should be available.'''
-    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
-    assert info()['idna'] == {'version': '2.6'}
+        raise ValueError('Could not interpret '
+                         'loss function identifier:', identifier)
 
     
-        @pytest.mark.parametrize(
-        'path', (
-            '/',
-            __file__,
-            pytest.__file__,
-            '/etc/invalid/location',
-        ))
-    def test_unzipped_paths_unchanged(self, path):
-        assert path == extract_zipped_paths(path)
+        def _remote_state(self):
+        '''Returns the remote state from AWS'''
+        description = self.rule.describe()
+        if not description:
+            return
+        return description['state']
     
-    # If true, `todo` and `todoList` produce output, else they produce nothing.
-todo_include_todos = True
+        except botocore.exceptions.ClientError:
+        pass
     
-        return merge_setting(request_hooks, session_hooks, dict_class)
-    
-        By default this will get the strings from the blns.txt file
-    
-    
-ALL_SSL_OPTIONS_HASHES = [
-    '0f81093a1465e3d4eaa8b0c14e77b2a2e93568b0fc1351c2b87893a95f0de87c',
-    '9a7b32c49001fed4cff8ad24353329472a50e86ade1ef9b2b9e43566a619612e',
-    'a6d9f1c7d6b36749b52ba061fff1421f9a0a3d2cfdafbd63c05d06f65b990937',
-    '7f95624dd95cf5afc708b9f967ee83a24b8025dc7c8d9df2b556bbc64256b3ff',
-    '394732f2bbe3e5e637c3fb5c6e980a1f1b90b01e2e8d6b7cff41dde16e2a756d',
-    '4b16fec2bcbcd8a2f3296d886f17f9953ffdcc0af54582452ca1e52f5f776f16',
-]
-'''SHA256 hashes of the contents of all versions of MOD_SSL_CONF_SRC'''
-    
-        def setUp(self):
-        from acme.errors import BadNonce
-        self.error = BadNonce(nonce='xxx', error='error')
-    
-        def test_default_decoder_raises_deserialization_error(self):
-        from acme.fields import RFC3339Field
-        self.assertRaises(
-            jose.DeserializationError, RFC3339Field.default_decoder, '')
-    
-            :param str title: The title of the save. If a title is given, the
-            configuration will be saved as a new checkpoint and put in a
-            timestamped directory.
-    
-    HSTS_ARGS = ['always', 'set', 'Strict-Transport-Security',
-             '\'max-age=31536000\'']
-'''Apache header arguments for HSTS'''
-    
-        :ivar str filep: file path of VH
-    :ivar str path: Augeas path to virtual host
-    :ivar set addrs: Virtual Host addresses (:class:`set` of
-        :class:`common.Addr`)
-    :ivar str name: ServerName of VHost
-    :ivar list aliases: Server aliases of vhost
-        (:class:`list` of :class:`str`)
-    
-        def test_eq(self):
-        self.assertTrue(self.vhost1b == self.vhost1)
-        self.assertFalse(self.vhost1 == self.vhost2)
-        self.assertEqual(str(self.vhost1b), str(self.vhost1))
-        self.assertFalse(self.vhost1b == 1234)
+        creds, params = get_google_cloud_credentials(module)
+    spanner_client = spanner.Client(project=params['project_id'],
+                                    credentials=creds,
+                                    user_agent=CLOUD_CLIENT_USER_AGENT)
+    changed = False
+    json_output = {}
     
     
->>> import weakref
->>> _id2obj_dict = weakref.WeakValueDictionary()
->>> def remember(obj):
-...     oid = id(obj)
-...     _id2obj_dict[oid] = obj
-...     return oid
-...
->>> def id2obj(oid):
-...     return _id2obj_dict[oid]
-...
->>> a = A()             # from here, just testing
->>> a_id = remember(a)
->>> id2obj(a_id) is a
-True
->>> del a
->>> try:
-...     id2obj(a_id)
-... except KeyError:
-...     print('OK')
-... else:
-...     print('WeakValueDictionary error')
-OK
-    
-    def _cell_factory():
-    a = 1
-    def f():
-        nonlocal a
-    return f.__closure__[0]
-CellType = type(_cell_factory())
-    
-            if len(words) >= 3:  # Enough to determine protocol version
-            version = words[-1]
-            try:
-                if not version.startswith('HTTP/'):
-                    raise ValueError
-                base_version_number = version.split('/', 1)[1]
-                version_number = base_version_number.split('.')
-                # RFC 2145 section 3.1 says there can be only one '.' and
-                #   - major and minor numbers MUST be treated as
-                #      separate integers;
-                #   - HTTP/2.4 is a lower version than HTTP/2.13, which in
-                #      turn is lower than HTTP/12.3;
-                #   - Leading zeros MUST be ignored by recipients.
-                if len(version_number) != 2:
-                    raise ValueError
-                version_number = int(version_number[0]), int(version_number[1])
-            except (ValueError, IndexError):
-                self.send_error(
-                    HTTPStatus.BAD_REQUEST,
-                    'Bad request version (%r)' % version)
-                return False
-            if version_number >= (1, 1) and self.protocol_version >= 'HTTP/1.1':
-                self.close_connection = False
-            if version_number >= (2, 0):
-                self.send_error(
-                    HTTPStatus.HTTP_VERSION_NOT_SUPPORTED,
-                    'Invalid HTTP version (%s)' % base_version_number)
-                return False
-            self.request_version = version
-    
-        # 'The specifier name is a ``dotted name'' that may resolve ... to
-    # ... a callable object which returns a TestCase ... instance'
-    def test_loadTestsFromName__callable__TestCase_instance(self):
-        m = types.ModuleType('m')
-        testcase_1 = unittest.FunctionTestCase(lambda: None)
-        def return_TestCase():
-            return testcase_1
-        m.return_TestCase = return_TestCase
-    
-    
-__all__ = [
-        'EnumMeta',
-        'Enum', 'IntEnum', 'Flag', 'IntFlag',
-        'auto', 'unique',
-        ]
-    
-        This handler is not appropriate for use under Windows, because
-    under Windows open files cannot be moved or renamed - logging
-    opens the files with exclusive locks - and so there is no need
-    for such a handler. Furthermore, ST_INO is not supported under
-    Windows; stat always returns zero for this value.
-    
-        Directories are *not* resources.
-    '''
-    package = _get_package(package)
-    _normalize_path(name)
-    reader = _get_resource_reader(package)
-    if reader is not None:
-        return reader.is_resource(name)
-    try:
-        package_contents = set(contents(package))
-    except (NotADirectoryError, FileNotFoundError):
-        return False
-    if name not in package_contents:
-        return False
-    # Just because the given file_name lives as an entry in the package's
-    # contents doesn't necessarily mean it's a resource.  Directories are not
-    # resources, so let's try to find out if it's a directory or not.
-    path = Path(package.__spec__.origin).parent / name
-    return path.is_file()
-    
-            proc = subprocess.run(args, stdout=subprocess.PIPE,
-                              universal_newlines=True, env=env)
-        self.assertEqual(proc.stdout.rstrip(), 'False')
-        self.assertEqual(proc.returncode, 0, proc)
-    
-    # If true, SmartyPants will be used to convert quotes and dashes to
-# typographically correct entities.
-#html_use_smartypants = True
-    
-    test_face_landmarks = '''
-landmarks = face_recognition.face_landmarks(image, face_locations=face_locations)[0]
+DOCUMENTATION = '''
+---
+module: ipa_dnszone
+author: Fran Fitzpatrick (@fxfitz)
+short_description: Manage FreeIPA DNS Zones
+description:
+- Add and delete an IPA DNS Zones using IPA API
+options:
+  zone_name:
+    description:
+    - The DNS zone name to which needs to be managed.
+    required: true
+  state:
+    description: State to ensure
+    required: false
+    default: present
+    choices: ['present', 'absent']
+extends_documentation_fragment: ipa.documentation
+version_added: '2.5'
 '''
     
-    for face_landmarks in face_landmarks_list:
-    pil_image = Image.fromarray(image)
-    d = ImageDraw.Draw(pil_image, 'RGBA')
+    ALL_SSL_OPTIONS_HASHES = [
+    '2086bca02db48daf93468332543c60ac6acdb6f0b58c7bfdf578a5d47092f82a',
+    '4844d36c9a0f587172d9fa10f4f1c9518e3bcfa1947379f155e16a70a728c21a',
+    '5a922826719981c0a234b1fbcd495f3213e49d2519e845ea0748ba513044b65b',
+    '4066b90268c03c9ba0201068eaa39abbc02acf9558bb45a788b630eb85dadf27',
+    'f175e2e7c673bd88d0aff8220735f385f916142c44aa83b09f1df88dd4767a88',
+    'cfdd7c18d2025836ea3307399f509cfb1ebf2612c87dd600a65da2a8e2f2797b',
+    '80720bd171ccdc2e6b917ded340defae66919e4624962396b992b7218a561791',
+    'c0c022ea6b8a51ecc8f1003d0a04af6c3f2bc1c3ce506b3c2dfc1f11ef931082',
+]
+'''SHA256 hashes of the contents of previous versions of all versions of MOD_SSL_CONF_SRC'''
     
-         Structure:
-        <train_dir>/
-        ├── <person1>/
-        │   ├── <somename1>.jpeg
-        │   ├── <somename2>.jpeg
-        │   ├── ...
-        ├── <person2>/
-        │   ├── <somename1>.jpeg
-        │   └── <somename2>.jpeg
-        └── ...
+        def test_rollback_error(self):
+        self.config.reverter.rollback_checkpoints = mock.Mock(
+            side_effect=errors.ReverterError)
+        self.assertRaises(errors.PluginError, self.config.rollback_checkpoints)
     
-        if len(unknown_face_encodings) > 0:
-        face_found = True
-        # See if the first face in the uploaded image matches the known face of Obama
-        match_results = face_recognition.compare_faces([known_face_encoding], unknown_face_encodings[0])
-        if match_results[0]:
-            is_obama = True
+    # If true, show URL addresses after external links.
+#latex_show_urls = False
     
-        :param img: A list of images (each as a numpy array)
-    :param number_of_times_to_upsample: How many times to upsample the image looking for faces. Higher numbers find smaller faces.
-    :return: A list of dlib 'rect' objects of found face locations
-    '''
-    return cnn_face_detector(images, number_of_times_to_upsample, batch_size=batch_size)
+    # If true, 'Created using Sphinx' is shown in the HTML footer.
+# Default is True.
+#html_show_sphinx = True
     
+    image = face_recognition.load_image_file('{}')
+face_locations = face_recognition.face_locations(image)
+'''
     
-def print_result(filename, name, distance, show_distance=False):
-    if show_distance:
-        print('{},{},{}'.format(filename, name, distance))
+            if file and allowed_file(file.filename):
+            # The image file seems valid! Detect faces and return the result.
+            return detect_faces_in_image(file)
+    
+        if os.path.isdir(image_to_check):
+        if cpus == 1:
+            [test_image(image_file, model) for image_file in image_files_in_folder(image_to_check)]
+        else:
+            process_images_in_process_pool(image_files_in_folder(image_to_check), cpus, model)
     else:
-        print('{},{}'.format(filename, name))
+        test_image(image_to_check, model)
+    
+    # To run this, you need a Raspberry Pi 2 (or greater) with face_recognition and
+# the picamera[array] module installed.
+# You can follow this installation instructions to get your RPi set up:
+# https://gist.github.com/ageitgey/1ac8dbe8572f3f533df6269dab35df65
+    
+    # This code finds all faces in a list of images using the CNN model.
+#
+# This demo is for the _special case_ when you need to find faces in LOTS of images very quickly and all the images
+# are the exact same size. This is common in video processing applications where you have lots of video frames
+# to process.
+#
+# If you are processing a lot of images and using a GPU with CUDA, batch processing can be ~3x faster then processing
+# single images at a time. But if you aren't using a GPU, then batch processing isn't going to be very helpful.
+#
+# PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read the video file.
+# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
+# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
+    
+            if True in result:
+            [print_result(image_to_check, name, distance, show_distance) for is_match, name, distance in zip(result, known_names, distances) if is_match]
+        else:
+            print_result(image_to_check, 'unknown_person', None, show_distance)
+    
+        # 图片上传失败，输出以下html代码
+    return '''
+    <!doctype html>
+    <title>Is this a picture of Obama?</title>
+    <h1>Upload a picture and see if it's a picture of Obama!</h1>
+    <form method='POST' enctype='multipart/form-data'>
+      <input type='file' name='file'>
+      <input type='submit' value='Upload'>
+    </form>
+    '''
+    
+    
+class Migration(DataMigration):
+    def forwards(self, orm):
+        db.commit_transaction()
+        try:
+            self._forwards(orm)
+        except Exception:
+            # Explicitly resume the transaction because
+            # South is going to try and roll it back, but when
+            # it can't find one, it'll error itself, masking
+            # the actual exception being raised
+            #
+            # See https://github.com/getsentry/sentry/issues/5035
+            db.start_transaction()
+            raise
+        db.start_transaction()
+    
+            # Adding field 'ReleaseFile.dist'
+        db.add_column(
+            'sentry_releasefile',
+            'dist',
+            self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                to=orm['sentry.Distribution'], null=True
+            ),
+            keep_default=False
+        )
