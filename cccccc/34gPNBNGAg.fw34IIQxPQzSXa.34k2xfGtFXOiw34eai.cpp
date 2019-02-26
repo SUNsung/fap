@@ -1,77 +1,112 @@
 
         
-        namespace base {
-class DictionaryValue;
-class ListValue;
+        #include <QIcon>
+#include <QPixmap>
+#include <QString>
+    
+    
+    {
+    {        /* compute using ECDH function */
+        CHECK(secp256k1_ec_pubkey_create(ctx, &point[0], s_one) == 1);
+        CHECK(secp256k1_ecdh(ctx, output_ecdh, &point[0], s_b32) == 1);
+        /* compute 'explicitly' */
+        CHECK(secp256k1_ec_pubkey_create(ctx, &point[1], s_b32) == 1);
+        CHECK(secp256k1_ec_pubkey_serialize(ctx, point_ser, &point_ser_len, &point[1], SECP256K1_EC_COMPRESSED) == 1);
+        CHECK(point_ser_len == sizeof(point_ser));
+        secp256k1_sha256_initialize(&sha);
+        secp256k1_sha256_write(&sha, point_ser, point_ser_len);
+        secp256k1_sha256_finalize(&sha, output_ser);
+        /* compare */
+        CHECK(memcmp(output_ecdh, output_ser, sizeof(output_ser)) == 0);
+    }
 }
     
-    namespace nwapi {
+    int64_t UniValue::get_int64() const
+{
+    if (typ != VNUM)
+        throw std::runtime_error('JSON value is not an integer as expected');
+    int64_t retval;
+    if (!ParseInt64(getValStr(), &retval))
+        throw std::runtime_error('JSON integer out of range');
+    return retval;
+}
+    
+    
+    {
+    {        : '+r'(s), '+r'(chunk), '+r'(blocks), '=r'(a), '=r'(b), '=r'(c), '=r'(d), /* e = chunk */ '=r'(f), '=r'(g), '=r'(h), '=r'(y0), '=r'(y1), '=r'(y2), '=r'(tbl), '+m'(inp_end), '+m'(inp), '+m'(xfer)
+        : 'm'(K256), 'm'(FLIP_MASK), 'm'(SHUF_00BA), 'm'(SHUF_DC00)
+        : 'cc', 'memory', 'xmm0', 'xmm1', 'xmm2', 'xmm3', 'xmm4', 'xmm5', 'xmm6', 'xmm7', 'xmm8', 'xmm9', 'xmm10', 'xmm11', 'xmm12'
+   );
+}
+}
+    
+    class FakeDesktopMediaPickerFactory :
+    public extensions::DesktopCaptureChooseDesktopMediaFunction::PickerFactory {
+ public:
+  FakeDesktopMediaPickerFactory() {}
+  ~FakeDesktopMediaPickerFactory() override {}
+    }
+    
+    // Generate param traits log methods.
+#include 'ipc/param_traits_log_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
+
+    
+    #endif  // CONTENT_NW_SRC_API_BASE_BASE_H_
+
+    
+    void Clipboard::SetText(std::string& text) {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  ui::Clipboard::ObjectMap map;
+  map[ui::Clipboard::CBF_TEXT].push_back(
+      std::vector<char>(text.begin(), text.end()));
+  clipboard->WriteObjects(ui::CLIPBOARD_TYPE_COPY_PASTE, map);
+}
+    
+    EventListener::~EventListener() {
+  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
+    delete i->second;
+  }
+}
+    
+    class EventListener : public Base {
+  std::map<int, BaseEvent*> listerners_;
+    }
+    
+    namespace nw {
     }
     
     
     {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  return item->is_checked_;
+  if (!item)
+    return false;
+  return item->is_modified_;
 }
     
-    void Menu::Create(const base::DictionaryValue& option) {
-  gtk_accel_group = NULL;
-  std::string type;
-  if (option.GetString('type', &type) && type == 'menubar')
-    menu_ = gtk_menu_bar_new();
-  else
-    menu_ = gtk_menu_new();
+    namespace nw {
     }
     
-    void MenuItem::Call(const std::string& method,
-                    const base::ListValue& arguments,
-                    content::RenderFrameHost* rvh) {
-  if (method == 'SetLabel') {
-    std::string label;
-    arguments.GetString(0, &label);
-    SetLabel(label);
-  } else if (method == 'SetIcon') {
-    std::string icon;
-    arguments.GetString(0, &icon);
-    SetIcon(icon);
-  } else if (method == 'SetIconIsTemplate') {
-    bool isTemplate;
-    arguments.GetBoolean(0, &isTemplate);
-    SetIconIsTemplate(isTemplate);
-  } else if (method == 'SetTooltip') {
-    std::string tooltip;
-    arguments.GetString(0, &tooltip);
-    SetTooltip(tooltip);
-  } else if (method == 'SetEnabled') {
-    bool enabled = true;
-    arguments.GetBoolean(0, &enabled);
-    SetEnabled(enabled);
-  } else if (method == 'SetChecked') {
-    bool checked = false;
-    arguments.GetBoolean(0, &checked);
-    SetChecked(checked);
-  } else if (method == 'SetSubmenu') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    SetSubmenu(object_manager()->GetApiObject<Menu>(object_id));
-#if defined(OS_MACOSX)
-  } else if (method == 'SetKey') {
-    std::string key;
-    arguments.GetString(0, &key);
-    SetKey(key);
-  } else if (method == 'SetModifiers') {
-    std::string mod;
-    arguments.GetString(0, &mod);
-    SetModifiers(mod);
-#endif
-  } else {
-    NOTREACHED() << 'Invalid call to MenuItem method:' << method
-                 << ' arguments:' << arguments;
+      for(auto* item: menu_items_) {
+    item->RemoveKeys();
   }
+    
+    MenuItem::MenuItem(int id,
+                   const base::WeakPtr<ObjectManager>& object_manager,
+                   const base::DictionaryValue& option,
+                   const std::string& extension_id)
+  : Base(id, object_manager, option, extension_id) {
+  Create(option);
 }
     
-        bool WriteImage(ClipboardData& data) {
-      DCHECK(data.type == TYPE_PNG || data.type == TYPE_JPEG);
-      std::string content = *(data.data);
+      private:
+    bool ReadText(ClipboardData& data) {
+      DCHECK(data.type == TYPE_TEXT);
+      base::string16 text;
+      clipboard_->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
+      data.data.reset(new std::string(base::UTF16ToUTF8(text)));
+      return true;
     }
     
     class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
@@ -87,212 +122,105 @@ class ListValue;
   DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
 };
     
+    bool NwObjCreateFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  base::DictionaryValue* options = nullptr;
+  int id = 0;
+  std::string type;
+  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetDictionary(2, &options));
+    }
     
-    {  nw::ObjectManager* manager = nw::ObjectManager::Get(browser_context());
-  manager->OnCallObjectMethod(render_frame_host(), id, type, method, *arguments);
-  return RespondNow(NoArguments());
+    //////////////////////////////////////////////////////////////////////
+    
+    struct ObjectData;
+struct Object;
+    
+    
+    {  if (base64) {
+    decoded = string_base64_decode(data, data_len, true);
+    if (decoded.isNull()) {
+      raise_warning('unable to decode base64 data');
+      return nullptr;
+    }
+  } else {
+    decoded = url_decode(data, data_len);
+  }
+  return req::make<MemFile>(decoded.data(), decoded.size());
 }
     
+    public:
+  static void Add(InfoVec& out, const char* name, const std::string& value);
+  static void AddServerStats(InfoVec& out, const char* name,
+                             const char* statsName = nullptr);
     
- protected:
-  /** The protobuf that stores the layer parameters */
-  LayerParameter layer_param_;
-  /** The phase: TRAIN or TEST */
-  Phase phase_;
-  /** The vector that stores the learnable parameters as a set of blobs. */
-  vector<shared_ptr<Blob<Dtype> > > blobs_;
-  /** Vector indicating whether to compute the diff of each param blob. */
-  vector<bool> param_propagate_down_;
+    ///////////////////////////////////////////////////////////////////////////////
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #ifndef CPU_ONLY
-  void forward_gpu_gemm(const Dtype* col_input, const Dtype* weights,
-      Dtype* output, bool skip_im2col = false);
-  void forward_gpu_bias(Dtype* output, const Dtype* bias);
-  void backward_gpu_gemm(const Dtype* input, const Dtype* weights,
-      Dtype* col_output);
-  void weight_gpu_gemm(const Dtype* col_input, const Dtype* output, Dtype*
-      weights);
-  void backward_gpu_bias(Dtype* bias, const Dtype* input);
-#endif
-    
-    #endif  // CAFFE_BNLL_LAYER_HPP_
-
-    
-    #include <vector>
-    
-    
-    {		*a_ppaucEncodingBits = image.GetEncodingBits();
-		*a_puiEncodingBitsBytes = image.GetEncodingBitsBytes();
-		*a_puiExtendedWidth = image.GetExtendedWidth();
-		*a_puiExtendedHeight = image.GetExtendedHeight();
-		*a_piEncodingTime_ms = image.GetEncodingTimeMs();
-	}
-    
-    	// ----------------------------------------------------------------------------------------------------
-	// calculate the error for the block by summing the pixel errors
-	//
-	void Block4x4Encoding::CalcBlockError(void)
-	{
-		m_fError = 0.0f;
-    }
-    
-    /*The number of bits to output at a time.*/
-# define EC_SYM_BITS   (8)
-/*The total number of bits in each of the state registers.*/
-# define EC_CODE_BITS  (32)
-/*The maximum symbol value.*/
-# define EC_SYM_MAX    ((1U<<EC_SYM_BITS)-1)
-/*Bits to shift by to move a symbol into the high-order position.*/
-# define EC_CODE_SHIFT (EC_CODE_BITS-EC_SYM_BITS-1)
-/*Carry bit of the high-order range symbol.*/
-# define EC_CODE_TOP   (((opus_uint32)1U)<<(EC_CODE_BITS-1))
-/*Low-order bit of the high-order range symbol.*/
-# define EC_CODE_BOT   (EC_CODE_TOP>>EC_SYM_BITS)
-/*The number of bits available for the last, partial symbol in the code field.*/
-# define EC_CODE_EXTRA ((EC_CODE_BITS-2)%EC_SYM_BITS+1)
-#endif
-
-    
-    /*!
- * \brief Macro to register linear updater.
- */
-#define XGBOOST_REGISTER_LINEAR_UPDATER(UniqueId, Name)                        \
-  static DMLC_ATTRIBUTE_UNUSED ::xgboost::LinearUpdaterReg&                    \
-      __make_##LinearUpdaterReg##_##UniqueId##__ =                             \
-          ::dmlc::Registry< ::xgboost::LinearUpdaterReg>::Get()->__REGISTER__( \
-              Name)
-    
-      /*!
-   * \brief determines whether updater has enough knowledge about a given dataset
-   *        to quickly update prediction cache its training data and performs the
-   *        update if possible.
-   * \param data: data matrix
-   * \param out_preds: prediction cache to be updated
-   * \return boolean indicating whether updater has capability to update
-   *         the prediction cache. If true, the prediction cache will have been
-   *         updated by the time this function returns.
-   */
-  virtual bool UpdatePredictionCache(const DMatrix* data,
-                                     HostDeviceVector<bst_float>* out_preds) {
-    return false;
+    static req::ptr<File>
+phpStreamOpenFilter(const char* sFilter,
+                    const String& modestr,
+                    int options,
+                    const req::ptr<StreamContext>& context) {
+  const char *mode = modestr.c_str();
+  int rwMode = 0;
+  if (strchr(mode, 'r') || strchr(mode, '+')) {
+    rwMode |= k_STREAM_FILTER_READ;
   }
-    
-        if (left_node_id >= elem_of_each_node_.size()) {
-      elem_of_each_node_.resize(left_node_id + 1, Elem(nullptr, nullptr, -1));
-    }
-    if (right_node_id >= elem_of_each_node_.size()) {
-      elem_of_each_node_.resize(right_node_id + 1, Elem(nullptr, nullptr, -1));
+  if (strchr(mode, 'w') || strchr(mode, '+') || strchr(mode, 'a')) {
+    rwMode |= k_STREAM_FILTER_WRITE;
+  }
     }
     
     /*!
- * \brief Macro to register sparse page format.
- *
- * \code
- * // example of registering a objective
- * XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(raw)
- * .describe('Raw binary data format.')
- * .set_body([]() {
- *     return new RawFormat();
- *   });
- * \endcode
+ * \brief Registry entry for linear updater.
  */
-#define XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(Name)                       \
-  DMLC_REGISTRY_REGISTER(::xgboost::data::SparsePageFormatReg, SparsePageFormat, Name)
+struct LinearUpdaterReg
+    : public dmlc::FunctionRegEntryBase<LinearUpdaterReg,
+                                        std::function<LinearUpdater*()> > {};
     
-    #include 'modules/canbus/proto/chassis_detail.pb.h'
-#include 'modules/common/proto/error_code.pb.h'
-#include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
-#include 'modules/drivers/canbus/can_comm/protocol_data.h'
     
-    TEST(ByteTest, SetBit) {
-  unsigned char byte_value = 0xFF;
-  Byte value(&byte_value);
-  value.set_bit_0(1);
-  EXPECT_EQ(0xFD, value.get_byte());
-  value.set_bit_0(7);
-  EXPECT_EQ(0x7D, value.get_byte());
-  value.set_bit_1(7);
-  EXPECT_EQ(0xFD, value.get_byte());
-  value.set_value(0x77);
-  value.set_bit_1(0);
-  EXPECT_EQ(0x77, value.get_byte());
+    {
+    {
+    {  inline void PutChar(char ch) {
+    out_buf += ch;
+    if (out_buf.length() >= kBufferSize) Flush();
+  }
+  inline void Flush(void) {
+    if (out_buf.length() != 0) {
+      fp->Write(&out_buf[0], out_buf.length());
+      out_buf.clear();
     }
+  }
+};
+}  // namespace common
+}  // namespace xgboost
+#endif  // XGBOOST_COMMON_BASE64_H_
+
     
-    
-    {  int ret = x;
+    SEXP XGDMatrixGetInfo_R(SEXP handle, SEXP field) {
+  SEXP ret;
+  R_API_BEGIN();
+  bst_ulong olen;
+  const float *res;
+  CHECK_CALL(XGDMatrixGetFloatInfo(R_ExternalPtrAddr(handle),
+                                   CHAR(asChar(field)),
+                                 &olen,
+                                 &res));
+  ret = PROTECT(allocVector(REALSXP, olen));
+  for (size_t i = 0; i < olen; ++i) {
+    REAL(ret)[i] = res[i];
+  }
+  R_API_END();
+  UNPROTECT(1);
   return ret;
 }
     
-    int ObjectQualityInfo60C::longitude_vel_rms(const std::uint8_t* bytes,
-                                            int32_t length) const {
-  Byte t0(bytes + 2);
-  int32_t x = t0.get_byte(1, 5);
-    }
-    
-    
-    {  switch (x) {
-    case 0x0:
-      return OUTPUT_TYPE_NONE;
-    case 0x1:
-      return OUTPUT_TYPE_OBJECTS;
-    case 0x2:
-      return OUTPUT_TYPE_CLUSTERS;
-    default:
-      return OUTPUT_TYPE_ERROR;
-  }
-}
-    
-    /**
- * @file
- **/
-    
-    namespace apollo {
-namespace planning {
-    }
-    }
-    
-    
-    {
-    {}  // namespace planning
-}  // namespace apollo
-
-    
-    
-    {
-    {}  // namespace prediction
-}  // namespace apollo
-
-    
-    NodeWithRange::~NodeWithRange() {}
-    
-    
-    {        return success;
-#else // defined(BOOST_ATOMIC_DETAIL_NO_ASM_RAX_RDX_PAIRS)
-        uint64_t const* p_desired = (uint64_t const*)&desired;
-        bool success;
-        __asm__ __volatile__
-        (
-            'lock; cmpxchg16b %[dest]\n\t'
-            'sete %[success]\n\t'
-#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_CONSTRAINT_ALTERNATIVES)
-            : '+A,A' (expected), [dest] '+m,m' (storage), [success] '=q,m' (success)
-            : 'b,b' (p_desired[0]), 'c,c' (p_desired[1])
-#else
-            : '+A' (expected), [dest] '+m' (storage), [success] '=q' (success)
-            : 'b' (p_desired[0]), 'c' (p_desired[1])
-#endif
-            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory'
-        );
-        return success;
-#endif
-    }
-    
-    template< >
-struct make_storage_type< 16u, false >
-{
-    typedef mars_boost::uint128_type type;
-    }
+    /*!
+ * \brief Quantile sketch use WQSummary
+ * \tparam DType type of data content
+ * \tparam RType type of rank
+ */
+template<typename DType, typename RType = unsigned>
+class WQuantileSketch :
+      public QuantileSketchTemplate<DType, RType, WQSummary<DType, RType> > {
+};
