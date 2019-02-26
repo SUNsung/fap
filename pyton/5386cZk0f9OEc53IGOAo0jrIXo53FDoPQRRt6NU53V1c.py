@@ -1,194 +1,176 @@
 
         
-            auth.login()
-    response = client.get('/')
-    assert b'test title' in response.data
-    assert b'by test on 2018-01-01' in response.data
-    assert b'test\nbody' in response.data
-    assert b'href='/1/update'' in response.data
+        def _plot_item(W, name, full_name, nspaces):
+  plt.figure()
+  if W.shape == ():
+    print(name, ': ', W)
+  elif W.shape[0] == 1:
+    plt.stem(W.T)
+    plt.title(full_name)
+  elif W.shape[1] == 1:
+    plt.stem(W)
+    plt.title(full_name)
+  else:
+    plt.imshow(np.abs(W), interpolation='nearest', cmap='jet');
+    plt.colorbar()
+    plt.title(full_name)
     
-        If you configure your own :class:`logging.StreamHandler`, you may want to
-    use this for the stream. If you are using file or dict configuration and
-    can't import this directly, you can refer to it as
-    ``ext://flask.logging.wsgi_errors_stream``.
-    '''
-    return request.environ['wsgi.errors'] if request else sys.stderr
+      # First generate all firing rates. in the next loop, generate all
+  # replications this allows the random state for rate generation to be
+  # independent of n_replications.
+  dataset_name = 'dataset_N' + str(N) + '_S' + str(S)
+  if S < N:
+    dataset_name += '_n' + str(n+1)
+    
+      Args:
+    real_values: Value given by the Wasserstein Discriminator to real data.
+    fake_values: Value given by the Wasserstein Discriminator to fake data.
+    
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+    
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+    
+        '''
+    # Serialize JSON data, if needed.
+    data = args.data
+    auto_json = data and not args.form
+    if (args.json or auto_json) and isinstance(data, dict):
+        if data:
+            data = json.dumps(data)
+        else:
+            # We need to set data to an empty string to prevent requests
+            # from assigning an empty list to `response.request.data`.
+            data = ''
+    
+            # Keyword arguments > stream.encoding > default utf8
+        if self.stdin_encoding is None:
+            self.stdin_encoding = getattr(
+                self.stdin, 'encoding', None) or 'utf8'
+        if self.stdout_encoding is None:
+            actual_stdout = self.stdout
+            if is_windows:
+                # noinspection PyUnresolvedReferences
+                from colorama import AnsiToWin32
+                if isinstance(self.stdout, AnsiToWin32):
+                    actual_stdout = self.stdout.wrapped
+            self.stdout_encoding = getattr(
+                actual_stdout, 'encoding', None) or 'utf8'
+    
+            if isinstance(headers, bytes):
+            # Python < 3
+            headers = headers.decode('utf8')
+        return headers
+    
+            '''
+        available_plugins = plugin_manager.get_formatters_grouped()
+        self.enabled_plugins = []
+        for group in groups:
+            for cls in available_plugins[group]:
+                p = cls(env=env, **kwargs)
+                if p.enabled:
+                    self.enabled_plugins.append(p)
     
     
-class NullSession(SecureCookieSession):
-    '''Class used to generate nicer error messages if sessions are not
-    available.  Will still allow read-only access to the empty session
-    but fail on setting.
-    '''
+def test_default_options(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http(httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['form'] == {'foo': 'bar'}
     
-    
-# Core signals.  For usage examples grep the source code or consult
-# the API documentation in docs/api.rst as well as docs/signals.rst
-template_rendered = _signals.signal('template-rendered')
-before_render_template = _signals.signal('before-render-template')
-request_started = _signals.signal('request-started')
-request_finished = _signals.signal('request-finished')
-request_tearing_down = _signals.signal('request-tearing-down')
-got_request_exception = _signals.signal('got-request-exception')
-appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
-appcontext_pushed = _signals.signal('appcontext-pushed')
-appcontext_popped = _signals.signal('appcontext-popped')
-message_flashed = _signals.signal('message-flashed')
+        @auth.setter
+    def auth(self, auth):
+        assert set(['type', 'raw_auth']) == set(auth.keys())
+        self['auth'] = auth
 
     
-        def _get_source_fast(self, environment, template):
-        for srcobj, loader in self._iter_loaders(template):
-            try:
-                return loader.get_source(environment, template)
-            except TemplateNotFound:
-                continue
-        raise TemplateNotFound(template)
+        def chunk_downloaded(self, size):
+        assert self.time_finished is None
+        self.downloaded += size
     
-    from sklearn.dummy import DummyClassifier
     
-    import numpy as np
-import gc
-from datetime import datetime
-from sklearn.isotonic import isotonic_regression
-from sklearn.utils.bench import total_seconds
-import matplotlib.pyplot as plt
-import argparse
+class CreateExtension(Operation):
+    reversible = True
     
-        results = benchmark([METRICS[k] for k in args.metrics],
-                        [FORMATS[k] for k in args.formats],
-                        args.samples, args.classes, args.density,
-                        args.n_times)
+        def load(self):
+        try:
+            data = self._cache.get(self.cache_key)
+        except Exception:
+            # Some backends (e.g. memcache) raise an exception on invalid
+            # cache keys. If this happens, reset the session. See #17810.
+            data = None
     
-    fixed_batch_size_comparison(X)
-variable_batch_size_comparison(X)
-plt.show()
+        def load(self):
+        '''
+        Load the data from the key itself instead of fetching from some
+        external data store. Opposite of _get_session_key(), raise BadSignature
+        if signature fails.
+        '''
+        try:
+            return signing.loads(
+                self.session_key,
+                serializer=self.serializer,
+                # This doesn't handle non-default expiry dates, see #19201
+                max_age=settings.SESSION_COOKIE_AGE,
+                salt='django.contrib.sessions.backends.signed_cookies',
+            )
+        except Exception:
+            # BadSignature, ValueError, or unpickling exceptions. If any of
+            # these happen, reset the session.
+            self.create()
+        return {}
+    
+        def start_requests(self):
+        url = self.benchurl
+        if self.latency is not None:
+            url += '?latency={0}'.format(self.latency)
+    
+        def _find_template(self, template):
+        template_file = join(self.templates_dir, '%s.tmpl' % template)
+        if exists(template_file):
+            return template_file
+        print('Unable to find template: %s\n' % template)
+        print('Use 'scrapy genspider --list' to see all available templates.')
+    
+            def _identityVerifyingInfoCallback(self, connection, where, ret):
+            if where & SSL_CB_HANDSHAKE_START:
+                set_tlsext_host_name(connection, self._hostnameBytes)
+            elif where & SSL_CB_HANDSHAKE_DONE:
+                try:
+                    verifyHostname(connection, self._hostnameASCII)
+                except verification_errors as e:
+                    logger.warning(
+                        'Remote certificate is not valid for hostname '{}'; {}'.format(
+                            self._hostnameASCII, e))
+    
+    logger = logging.getLogger(__name__)
+    
+    For more details about this platform, please refer to the documentation at
+https://home-assistant.io/components/notify.command_line/
+'''
+import logging
+import subprocess
+    
+        _LOGGER.error(
+        'Error %s : %s (Code %s)', response.status_code, error_message,
+        error_code)
 
     
+    from homeassistant.components.notify import (
+    ATTR_TITLE, ATTR_TITLE_DEFAULT, PLATFORM_SCHEMA, BaseNotificationService)
+from homeassistant.const import CONF_PASSWORD, CONF_PORT
+import homeassistant.helpers.config_validation as cv
     
-def user_role(name, rawtext, text, lineno,
-              inliner, options=None, content=None):
-    '''Sphinx role for linking to a user profile. Defaults to linking to
-    GitHub profiles, but the profile URIS can be configured via the
-    ``issues_user_uri`` config value.
+            self._rooms = {}
+        self._get_room(self._default_room)
     
-        print('Decompressing %s' % ARCHIVE_NAME)
-    with closing(tarfile.open(ARCHIVE_NAME, 'r:gz')) as archive:
-        archive.extractall(path='.')
-    os.remove(ARCHIVE_NAME)
-
-    
-    # Split the dataset in training and test set:
-docs_train, docs_test, y_train, y_test = train_test_split(
-    dataset.data, dataset.target, test_size=0.5)
-    
-    from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import Perceptron
-from sklearn.pipeline import Pipeline
-from sklearn.datasets import load_files
-from sklearn.model_selection import train_test_split
-from sklearn import metrics
-    
-    Demonstrate how model complexity influences both prediction accuracy and
-computational performance.
-    
-    
-@callback
-def async_setup(hass, flash_briefing_config):
-    '''Activate Alexa component.'''
-    hass.http.register_view(
-        AlexaFlashBriefingView(hass, flash_briefing_config))
-    
-        @property
-    def name(self):
-        '''Return the orders name.'''
-        return self._name
-    
-    import homeassistant.helpers.config_validation as cv
-from homeassistant.const import (
-    CONF_API_KEY, CONF_WHITELIST, CONF_URL, STATE_UNKNOWN, STATE_UNAVAILABLE,
-    CONF_SCAN_INTERVAL)
-from homeassistant.helpers import state as state_helper
-from homeassistant.helpers.event import track_point_in_time
-from homeassistant.util import dt as dt_util
-    
-            resp_text = xml_template.format(
-            self.config.advertise_ip, self.config.advertise_port)
-    
-    	if len(sys.argv) == 1:
-		try:
-			n = int(raw_input('Enter a number: '))
-			print(partition(n))
-		except ValueError:
-			print('Please enter a number.')
-	else:
-		try:
-			n = int(sys.argv[1])
-			print(partition(n))
-		except ValueError:
-			print('Please pass a number.')
-    
-    def kmeans(data, k, initial_centroids, maxiter=500, record_heterogeneity=None, verbose=False):
-    '''This function runs k-means on given data and initial set of centroids.
-       maxiter: maximum number of iterations to run.(default=500)
-       record_heterogeneity: (optional) a list, to store the history of heterogeneity as function of iterations
-                             if None, do not store the history.
-       verbose: if True, print how many data points changed their cluster labels in each iteration'''
-    centroids = initial_centroids[:]
-    prev_cluster_assignment = None
-    
-    for itr in range(maxiter):        
-        if verbose:
-            print(itr, end='')
-        
-        # 1. Make cluster assignments using nearest centroids
-        cluster_assignment = assign_clusters(data,centroids)
-            
-        # 2. Compute a new centroid for each of the k clusters, averaging all data points assigned to that cluster.
-        centroids = revise_centroids(data,k, cluster_assignment)
-            
-        # Check for convergence: if none of the assignments changed, stop
-        if prev_cluster_assignment is not None and \
-          (prev_cluster_assignment==cluster_assignment).all():
-            break
-        
-        # Print number of new assignments 
-        if prev_cluster_assignment is not None:
-            num_changed = np.sum(prev_cluster_assignment!=cluster_assignment)
-            if verbose:
-                print('    {0:5d} elements changed their cluster assignment.'.format(num_changed))   
-        
-        # Record heterogeneity convergence metric
-        if record_heterogeneity is not None:
-            # YOUR CODE HERE
-            score = compute_heterogeneity(data,k,centroids,cluster_assignment)
-            record_heterogeneity.append(score)
-        
-        prev_cluster_assignment = cluster_assignment[:]
-        
-    return centroids, cluster_assignment
-    
-            a *= a
-        b >>= 1
-    
-        # You can access the actual face itself like this:
-    face_image = image[top:bottom, left:right]
-    pil_image = Image.fromarray(face_image)
-    pil_image.show()
-
-    
-        # Print the location of each face in this image
-    top, right, bottom, left = face_location
-    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
-    
-    # PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
-# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
-# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
-    
-        # Find all the faces and face encodings in the current frame of video
-    face_locations = face_recognition.face_locations(output)
-    print('Found {} faces in image.'.format(len(face_locations)))
-    face_encodings = face_recognition.face_encodings(output, face_locations)
-    
-    # Create a PIL imagedraw object so we can draw on the picture
-pil_image = Image.fromarray(image)
-d = ImageDraw.Draw(pil_image)
+            text = message
+        mycroft = MycroftAPI(self.mycroft_ip)
+        if mycroft is not None:
+            mycroft.speak_text(text)
+        else:
+            _LOGGER.log('Could not reach this instance of mycroft')
