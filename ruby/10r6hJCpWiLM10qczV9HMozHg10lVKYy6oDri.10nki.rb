@@ -1,125 +1,123 @@
 
         
-              # Converts the array to a comma-separated sentence where the last element is
-      # joined by the connector word. This is the html_safe-aware version of
-      # ActiveSupport's {Array#to_sentence}[http://api.rubyonrails.org/classes/Array.html#method-i-to_sentence].
-      #
-      def to_sentence(array, options = {})
-        options.assert_valid_keys(:words_connector, :two_words_connector, :last_word_connector, :locale)
+            group.remove(moderator)
+    group.save
     
-                  if accept
-                html_options[option] = true
-              elsif option == :checked
-                html_options[option] = false
-              end
-            end
+            unless post && post.id
+          puts post.errors.full_messages if post
+          puts creator.errors.inspect
+          raise 'Failed to create description for trust level 3 lounge!'
+        end
     
-              def field_type
-            self.class.field_type
-          end
+          it 'activates an existing user' do
+        users(:bob).deactivate!
+        visit admin_users_path
+        find(:css, 'a[href='/admin/users/#{users(:bob).id}/activate']').click
+        expect(page).to have_no_text('inactive')
+        users(:bob).reload
+        expect(users(:bob)).to be_active
       end
     end
   end
 end
 
     
-          if staff.topic_id.nil?
-        creator = PostCreator.new(Discourse.system_user,
-          raw: I18n.t('staff_category_description'),
-          title: I18n.t('category.topic_prefix', category: staff.name),
-          category: staff.name,
-          archetype: Archetype.default
-        )
-        post = creator.create
+        let!(:bob_formatting_agent) {
+      agents(:bob_formatting_agent).tap { |agent|
+        # Make this valid
+        agent.options['instructions']['foo'] = 'bar'
+        agent.save!
+      }
+    }
     
-        def new
-      authorize :custom_emoji, :create?
-      @custom_emoji = CustomEmoji.new
+        it 'creates a scenario label with the given text' do
+      expect(scenario_label(scenario, 'Other')).to eq(
+        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Other</span>'
+      )
     end
-    
-          @email_domain_block = EmailDomainBlock.new(resource_params)
-    
-    class Api::OEmbedController < Api::BaseController
-  respond_to :json
-    
-      before_action :set_account
-  respond_to :txt
-    
-      def body
-    @_body ||= request.body.read
   end
     
-        12.times do |i|
-      day     = i.weeks.ago.to_date
-      week_id = day.cweek
-      week    = Date.commercial(day.cwyear, week_id)
-    
-      def data_params
-    return {} if params[:data].blank?
-    params.require(:data).permit(alerts: [:follow, :favourite, :reblog, :mention])
+        it 'can not be turned off' do
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'true' }
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
+    end
   end
 end
 
     
-    module Rex
-  module Proto
-    module Kerberos
-      module CredentialCache
-        # This class provides a representation of credential times stored in the Kerberos Credential Cache.
-        class Time < Element
-          # @!attribute auth_time
-          #   @return [Integer]
-          attr_accessor :auth_time
-          # @!attribute start_time
-          #   @return [Integer]
-          attr_accessor :start_time
-          # @!attribute end_time
-          #   @return [Integer]
-          attr_accessor :end_time
-          # @!attribute renew_till
-          #   @return [Integer]
-          attr_accessor :renew_till
+    describe AgentRunner do
+  context 'without traps' do
+    before do
+      stub.instance_of(Rufus::Scheduler).every
+      stub.instance_of(AgentRunner).set_traps
+      @agent_runner = AgentRunner.new
+    end
     
-              # Encrypts the cipher using RC4-HMAC schema
-          #
-          # @param data [String] the data to encrypt
-          # @param key [String] the key to encrypt
-          # @param msg_type [Integer] the message type
-          # @return [String] the encrypted data
-          def encrypt_rc4_hmac(data, key, msg_type)
-            k1 = OpenSSL::HMAC.digest('MD5', key, [msg_type].pack('V'))
+        it 'has a default when the result is empty' do
+      expect(AgentsExporter.new(:name => '').filename).to eq('exported-agents.json')
+      expect(AgentsExporter.new(:name => 'Ə').filename).to eq('exported-agents.json')
+      expect(AgentsExporter.new(:name => '-').filename).to eq('exported-agents.json')
+      expect(AgentsExporter.new(:name => ',,').filename).to eq('exported-agents.json')
+    end
+  end
     
-              # Encodes the type field
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_type
-            bn = OpenSSL::BN.new(type.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
+        @scheduler = Rufus::Scheduler.new
     
-              # Decodes the end_time field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Time]
-          def decode_end_time(input)
-            input.value[0].value
-          end
+        it 'should provide the since attribute after the first run' do
+      time = (Time.now-1.minute).iso8601
+      @checker.memory[:last_event] = time
+      @checker.save
+      expect(@checker.reload.send(:query_parameters)).to eq({:query => {:since => time}})
+    end
+  end
     
-              # @!attribute key
-          #   @return [Integer] The type of encryption key
-          attr_accessor :type
-          # @!attribute value
-          #   @return [String] the key itself
-          attr_accessor :value
+    describe Agents::BoxcarAgent do
+  before(:each) do
+  @valid_params = {
+                    'user_credentials' => 'access_token',
+                    'title' => 'Sample Title',
+                    'body' => 'Sample Body'
+                  }
+  @checker = Agents::BoxcarAgent.new(:name => 'boxcartest', :options => @valid_params)
+  @checker.user = users(:bob)
+  @checker.save!
     
-              # Decodes the req_body from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Rex::Proto::Kerberos::Model::KdcRequestBody]
-          def decode_asn1_req_body(input)
-            Rex::Proto::Kerberos::Model::KdcRequestBody.decode(input.value[0])
+            def update
+          @image = scope.images.accessible_by(current_ability, :update).find(params[:id])
+          if @image.update_attributes(image_params)
+            respond_with(@image, default_template: :show)
+          else
+            invalid_resource!(@image)
           end
         end
+    
+          check_class_collision suffix: 'Worker'
+    
+          normed = normalize_item(items)
+      payloads = items['args'].map do |args|
+        copy = normed.merge('args' => args, 'jid' => SecureRandom.hex(12), 'enqueued_at' => Time.now.to_f)
+        result = process_single(items['class'], copy)
+        result ? result : nil
+      end.compact
+    
+        def self.with_context(msg)
+      Thread.current[:sidekiq_context] ||= []
+      Thread.current[:sidekiq_context] << msg
+      yield
+    ensure
+      Thread.current[:sidekiq_context].pop
+    end
+    
+        def safe_thread(name, &block)
+      Thread.new do
+        Thread.current['sidekiq_label'] = name
+        watchdog(name, &block)
       end
     end
-  end
-end
+    
+          if @_erb
+        _erb(content, options[:locals])
+      else
+        @_erb = true
+        content = _erb(content, options[:locals])
