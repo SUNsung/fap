@@ -1,101 +1,126 @@
 
         
-        # write out the dataset
-write_datasets(FLAGS.save_dir, FLAGS.datafile_name, datasets)
-print ('Saved to ', os.path.join(FLAGS.save_dir,
-                                 FLAGS.datafile_name + '_' + dataset_name))
+        
+class RequestStatus(Enum):
+    
+    
+class Bus(Vehicle):
+    
+            status_line = 'HTTP/{version} {status} {reason}'.format(
+            version=version,
+            status=original.status,
+            reason=original.reason
+        )
+        headers = [status_line]
+        try:
+            # `original.msg` is a `http.client.HTTPMessage` on Python 3
+            # `_headers` is a 2-tuple
+            headers.extend(
+                '%s: %s' % header for header in original.msg._headers)
+        except AttributeError:
+            # and a `httplib.HTTPMessage` on Python 2.x
+            # `headers` is a list of `name: val<CRLF>`.
+            headers.extend(h.strip() for h in original.msg.headers)
+    
+    
+def is_valid_mime(mime):
+    return mime and MIME_RE.match(mime)
+    
+    
+with codecs.open(FILE_PATH, encoding='utf8') as f:
+    # Strip because we don't want new lines in the data so that we can
+    # easily count occurrences also when embedded in JSON (where the new
+    # line would be escaped).
+    FILE_CONTENT = f.read().strip()
+    
+    
+def test_default_options(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http(httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['form'] == {'foo': 'bar'}
+    
+        exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR
+    assert error_msg == (
+        'ConnectionError: '
+        'Connection aborted while doing GET request to URL: '
+        'http://www.google.com')
+    
+        def _migrate_implicit_content_type(self):
+        '''Migrate the removed implicit_content_type config option'''
+        try:
+            implicit_content_type = self.pop('implicit_content_type')
+        except KeyError:
+            self.save()
+        else:
+            if implicit_content_type == 'form':
+                self['default_options'].insert(0, '--form')
+            self.save()
+            self.load()
 
     
-      train_path = os.path.join(data_path, 'train_lm.tfrecords')
-  valid_path = os.path.join(data_path, 'test_lm.tfrecords')
-    
-      samples = []
-  for sequence_id in xrange(min(len(arr), max_num_to_print)):
-    buffer_str = ' '.join(
-        [str(id_to_word[index]) for index in arr[sequence_id, :]])
-    samples.append(buffer_str)
-  return samples
-    
-      Args:
-    hparams:  Hyperparameters for the MaskGAN.
-    sequence:  tf.int32 Tensor sequence of shape [batch_size, sequence_length]
-    is_training:  Whether the model is training.
-    reuse (Optional):  Whether to reuse the model.
-    
-      if FLAGS.dis_share_embedding:
-    assert hparams.dis_rnn_size == hparams.gen_rnn_size, (
-        'If you wish to share Discriminator/Generator embeddings, they must be'
-        ' same dimension.')
-    with tf.variable_scope('gen/rnn', reuse=True):
-      embedding = tf.get_variable('embedding',
-                                  [FLAGS.vocab_size, hparams.gen_rnn_size])
-    
-    
-class Server(threading.Thread):
-    '''Dummy server using for unit testing'''
-    WAIT_EVENT_TIMEOUT = 5
-    
-            for attr, value in state.items():
-            setattr(self, attr, value)
-    
-    import sys
-    
-        If 'value' is None, do nothing'''
-    value_changed = value is not None
-    if value_changed:
-        old_value = os.environ.get(env_name)
-        os.environ[env_name] = value
-    try:
-        yield
-    finally:
-        if value_changed:
-            if old_value is None:
-                del os.environ[env_name]
-            else:
-                os.environ[env_name] = old_value
-    
-        def _colision_resolution(self, key, data=None):
-        new_key = self.hash_function(key + 1)
-    
-    from matplotlib import pyplot as plt
-def plot_heterogeneity(heterogeneity, k):
-    plt.figure(figsize=(7,4))
-    plt.plot(heterogeneity, linewidth=4)
-    plt.xlabel('# Iterations')
-    plt.ylabel('Heterogeneity')
-    plt.title('Heterogeneity of clustering over time, K={0:d}'.format(k))
-    plt.rcParams.update({'font.size': 16})
-    plt.show()
-    
-        log_predict = np.log(predict+1)
-    log_actual = np.log(actual+1)
-    
-    ### OUTPUT ###
-# Floor: One | Size: Big
-# Floor: More than One | Size: Small
-# Floor: One | Size: Big and fancy
+            _LOGGER.info('Request successful')
+        return True
 
     
-    *References:
-http://ginstrom.com/scribbles/2007/10/08/design-patterns-python-style/
-https://fkromer.github.io/python-pattern-references/design/#factory-method
-https://sourcemaking.com/design_patterns/factory_method
     
-        def contribute(self):
-        self.blackboard.common_state['problems'] += random.randint(10, 20)
-        self.blackboard.common_state['suggestions'] += random.randint(10, 20)
-        self.blackboard.common_state['contributions'] += [self.__class__.__name__]
-        self.blackboard.common_state['progress'] += random.randint(10, 30)
+def log_error(response):
+    '''Log error message.'''
+    obj = response.json()
+    error_message = obj['error']['message']
+    error_code = obj['error']['code']
     
     
-class Unit(object):
-    def __init__(self, HierachicalStateMachine):
-        self.hsm = HierachicalStateMachine
+def get_service(hass, config, discovery_info=None):
+    '''Get the Free Mobile SMS notification service.'''
+    return FreeSMSNotificationService(
+        config[CONF_USERNAME], config[CONF_ACCESS_TOKEN])
+    
+    import voluptuous as vol
+    
+    _LOGGER = logging.getLogger(__name__)
+    
+        Returns:
     
     
-class BusinessLogic(object):
-    ''' Business logic holding data store instances '''
+def dense(x, n_unit, act_fn=relu, name=None, reuse=None):
+    '''全连接层
+    Input shape:  [batch_size, n_input]
+    Output shape: [batch_size, n_unit]
     
-    *TL;DR80
-Provides a simpler unified interface to a complex system.
+        name = name or 'highway_conv2d'
+    for i, kz in enumerate(kernel_size):
+        x = highway_conv2d(x, kz, act_fn, strides, padding, carry_bias, name='{}-{}'.format(name, i))
+    
+        with tf.variable_scope(name or 'attention_flow', reuse=reuse):
+        h_expand = tf.tile(tf.expand_dims(h, axis=2), [1, 1, J, 1])  # [N, T, J, d]
+        u_expand = tf.tile(tf.expand_dims(u, axis=1), [1, T, 1, 1])  # [N, T, J, d]
+        hu = tf.multiply(h_expand, u_expand)  # [N, T, J, d]
+        h_u_hu = tf.concat([h_expand, u_expand, hu], axis=-1)  # [N, T, J, 3d]
+        W_s = get_w([3 * d, 1])  # [3d, 1]
+    
+    sum_ngrams = 0
+for s in sentences:
+    for w in s:
+        w = w.lower()
+        # from gensim.models._utils_any2vec import compute_ngrams
+        ret = compute_ngrams(w, min_ngrams, max_ngrams)
+        print(ret)
+        sum_ngrams += len(ret)
 '''
+['<h', 'he', 'el', 'll', 'lo', 'o>', '<he', 'hel', 'ell', 'llo', 'lo>', '<hel', 'hell', 'ello', 'llo>']
+['<w', 'wo', 'or', 'rl', 'ld', 'd>', '<wo', 'wor', 'orl', 'rld', 'ld>', '<wor', 'worl', 'orld', 'rld>']
+['<!', '!>', '<!>']
+['<i', 'i>', '<i>']
+['<a', 'am', 'm>', '<am', 'am>', '<am>']
+['<h', 'hu', 'ua', 'ay', 'y>', '<hu', 'hua', 'uay', 'ay>', '<hua', 'huay', 'uay>']
+['<.', '.>', '<.>']
+'''
+assert sum_ngrams == len(model.wv.vectors_ngrams)
+print(sum_ngrams)  # 57
+print()
