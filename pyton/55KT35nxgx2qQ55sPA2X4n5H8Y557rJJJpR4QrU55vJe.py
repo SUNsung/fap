@@ -1,180 +1,137 @@
 
         
-            auth.login()
-    # current user can't modify other user's post
-    assert client.post('/1/update').status_code == 403
-    assert client.post('/1/delete').status_code == 403
-    # current user doesn't see edit link
-    assert b'href='/1/update'' not in client.get('/').data
+            with gzip.open(paths[0], 'rb') as lbpath:
+        y_train = np.frombuffer(lbpath.read(), np.uint8, offset=8)
     
-        def __init__(self, request, key):
-        form_matches = request.form.getlist(key)
-        buf = ['You tried to access the file '%s' in the request.files '
-               'dictionary but it does not exist.  The mimetype for the request '
-               'is '%s' instead of 'multipart/form-data' which means that no '
-               'file contents were transmitted.  To fix this error you should '
-               'provide enctype='multipart/form-data' in your form.' %
-               (key, request.mimetype)]
-        if form_matches:
-            buf.append('\n\nThe browser instead transmitted some file names. '
-                       'This was submitted: %s' % ', '.join(''%s'' % x
-                            for x in form_matches))
-        self.msg = ''.join(buf)
+        with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
+        loaded_model = keras.models.load_model(model_filename)
+        loaded_model.predict(np.random.rand(128, 2))
     
-    This typically means that you attempted to use functionality that needed
-an active HTTP request.  Consult the documentation on testing for
-information about how to avoid this problem.\
+    from keras.models import Sequential, Model
+from keras.layers import Dense, Input, Average
+from keras.utils import np_utils
+from keras.utils import test_utils
+from keras import regularizers
+from keras import backend as K
+    
+    Gets to 99.25% test accuracy after 12 epochs
+(there is still a lot of margin for parameter tuning).
+16 seconds per epoch on a GRID K520 GPU.
 '''
-_app_ctx_err_msg = '''\
-Working outside of application context.
     
-        def _get_source_explained(self, environment, template):
-        attempts = []
-        trv = None
-    
-    
-class MethodView(with_metaclass(MethodViewType, View)):
-    '''A class-based view that dispatches request methods to the corresponding
-    class methods. For example, if you implement a ``get`` method, it will be
-    used to handle ``GET`` requests. ::
-    
-        class LimitedLoader(object):
-        def __init__(self, loader):
-            self.loader = loader
-    
-            return new_key
+    loss, acc = test_model.evaluate(x_test, y_test, num_classes)
+print('\nTest accuracy: {0}'.format(acc))
 
     
     
-class QuadraticProbing(HashTable):
-    '''
-        Basic Hash Table example with open addressing using Quadratic Probing 
-    '''
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-    
-    def longestSub(ARRAY): 			#This function is recursive
-	
-	ARRAY_LENGTH = len(ARRAY)
-	if(ARRAY_LENGTH <= 1):  	#If the array contains only one element, we return it (it's the stop condition of recursion)
-		return ARRAY
-								#Else
-	PIVOT=ARRAY[0]
-	isFound=False
-	i=1
-	LONGEST_SUB=[]
-	while(not isFound and i<ARRAY_LENGTH):
-		if (ARRAY[i] < PIVOT):
-			isFound=True
-			TEMPORARY_ARRAY = [ element for element in ARRAY[i:] if element >= ARRAY[i] ]
-			TEMPORARY_ARRAY = longestSub(TEMPORARY_ARRAY)
-			if ( len(TEMPORARY_ARRAY) > len(LONGEST_SUB) ):
-				LONGEST_SUB = TEMPORARY_ARRAY
-		else:
-			i+=1
-    
-    The problem is  :
-Given an array, to find the longest and continuous sub array and get the max sum of the sub array in the given array.
-'''
-from __future__ import print_function
-    
-    	currPos = 0
-	while currPos < len(bitString):
-		currPart = bitString[currPos:currPos+512]
-		mySplits = []
-		for i in range(16):
-			mySplits.append(int(rearrange(currPart[32*i:32*i+32]),2))
-		yield mySplits
-		currPos += 512
-    
-        freqPairs = list(freqToLetter.items())
-    freqPairs.sort(key = getItemAtIndexZero, reverse = True)
-    
-        # Max pooling is performed prior to the first stage (which is uniquely
-    # distinguished by dim_in = 64), thus we keep stride = 1 for the first stage
-    stride = stride_init if (
-        dim_in != dim_out and dim_in != 64 and dilation == 1
-    ) else 1
-    
-        def AddLosses(self, losses):
-        if not isinstance(losses, list):
-            losses = [losses]
-        # Conversion to str allows losses to include BlobReferences
-        losses = [c2_utils.UnscopeName(str(l)) for l in losses]
-        self.losses = list(set(self.losses + losses))
-    
-            if model.train:
-            loss_gradients = {}
-            for lg in head_loss_gradients.values():
-                if lg is not None:
-                    loss_gradients.update(lg)
-            return loss_gradients
-        else:
-            return None
+def binary_crossentropy(y_true, y_pred):
+    return K.mean(K.binary_crossentropy(y_true, y_pred), axis=-1)
     
     
-# ---------------------------------------------------------------------------- #
-# RPN and Faster R-CNN outputs and losses
-# ---------------------------------------------------------------------------- #
+def get_cloudwatchevents_client(module):
+    '''Returns a boto3 client for accessing CloudWatch Events'''
+    region, ec2_url, aws_conn_kwargs = get_aws_connection_info(module, boto3=True)
+    return boto3_conn(module, conn_type='client',
+                      resource='events',
+                      region=region, endpoint=ec2_url,
+                      **aws_conn_kwargs)
     
-        def forward(self, inputs, outputs):
-        '''See modeling.detector.GenerateProposalLabels for inputs/outputs
-        documentation.
-        '''
-        # During training we reuse the data loader code. We populate roidb
-        # entries on the fly using the rois generated by RPN.
-        # im_info: [[im_height, im_width, im_scale], ...]
-        rois = inputs[0].data
-        roidb = blob_utils.deserialize(inputs[1].data)
-        im_info = inputs[2].data
-        im_scales = im_info[:, 2]
-        output_blob_names = fast_rcnn_roi_data.get_fast_rcnn_blob_names()
-        # For historical consistency with the original Faster R-CNN
-        # implementation we are *not* filtering crowd proposals.
-        # This choice should be investigated in the future (it likely does
-        # not matter).
-        json_dataset.add_proposals(roidb, rois, im_scales, crowd_thresh=0)
-        roidb_utils.add_bbox_regression_targets(roidb)
-        blobs = {k: [] for k in output_blob_names}
-        fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
-        for i, k in enumerate(output_blob_names):
-            blob_utils.py_op_copy_blob(blobs[k], outputs[i])
+        if not region:
+        module.fail_json(msg=str('Either region or AWS_REGION or EC2_REGION environment variable or boto config aws_region or ec2_region must be set.'))
+    
+        fw_rules = module.params.get('fw_rules')
+    gateway_name = module.params.get('gateway_name')
+    vdc_name = module.params['vdc_name']
+    
+            if service is not None:
+            changed = client.modify_if_diff(name, ipa_hbacrule.get('memberservice_hbacsvc', []), service,
+                                            client.hbacrule_add_service,
+                                            client.hbacrule_remove_service, 'hbacsvc') or changed
+    
+            if hostgroup is not None:
+            changed = client.modify_if_diff(name, ipa_role.get('member_hostgroup', []), hostgroup,
+                                            client.role_add_hostgroup,
+                                            client.role_remove_hostgroup) or changed
+    
+        params['api_key'] = module.params['token']
+    
+    # Add any paths that contain custom themes here, relative to this directory.
+#html_theme_path = []
+    
+    
+def run_test(setup, test, iterations_per_test=5, tests_to_run=10):
+    fastest_execution = min(timeit.Timer(test, setup=setup).repeat(tests_to_run, iterations_per_test))
+    execution_time = fastest_execution / iterations_per_test
+    fps = 1.0 / execution_time
+    return execution_time, fps
+    
+    if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5001, debug=True)
 
     
+    # Create an output movie file (make sure resolution/frame rate matches input video!)
+fourcc = cv2.VideoWriter_fourcc(*'XVID')
+output_movie = cv2.VideoWriter('output.avi', fourcc, 29.97, (640, 360))
     
-def test_match():
-    cases = [
-        (None, b'\xc0'),
-        (False, b'\xc2'),
-        (True, b'\xc3'),
-        (0, b'\x00'),
-        (127, b'\x7f'),
-        (128, b'\xcc\x80'),
-        (256, b'\xcd\x01\x00'),
-        (-1, b'\xff'),
-        (-33, b'\xd0\xdf'),
-        (-129, b'\xd1\xff\x7f'),
-        ({1: 1}, b'\x81\x01\x01'),
-        (1.0, b'\xcb\x3f\xf0\x00\x00\x00\x00\x00\x00'),
-        ((), b'\x90'),
-        (tuple(range(15)), (b'\x9f\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09'
-                            b'\x0a\x0b\x0c\x0d\x0e')),
-        (tuple(range(16)), (b'\xdc\x00\x10\x00\x01\x02\x03\x04\x05\x06\x07'
-                            b'\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f')),
-        ({}, b'\x80'),
-        ({x: x for x in range(15)},
-         (b'\x8f\x00\x00\x01\x01\x02\x02\x03\x03\x04\x04\x05\x05\x06\x06\x07'
-          b'\x07\x08\x08\t\t\n\n\x0b\x0b\x0c\x0c\r\r\x0e\x0e')),
-        ({x: x for x in range(16)},
-         (b'\xde\x00\x10\x00\x00\x01\x01\x02\x02\x03\x03\x04\x04\x05\x05\x06'
-          b'\x06\x07\x07\x08\x08\t\t\n\n\x0b\x0b\x0c\x0c\r\r\x0e\x0e'
-          b'\x0f\x0f')),
-    ]
     
-            # object
-        exp = pd.Index([pd.Timestamp('2011-01-01 09:00'), 'x',
-                        pd.Timestamp('2011-01-01 11:00')], dtype=object)
-        tm.assert_index_equal(idx.fillna('x'), exp)
+@click.command()
+@click.argument('known_people_folder')
+@click.argument('image_to_check')
+@click.option('--cpus', default=1, help='number of CPU cores to use in parallel (can speed up processing lots of images). -1 means 'use all in system'')
+@click.option('--tolerance', default=0.6, help='Tolerance for face comparisons. Default is 0.6. Lower this if you get multiple matches for the same person.')
+@click.option('--show-distance', default=False, type=bool, help='Output face distance. Useful for tweaking tolerance setting.')
+def main(known_people_folder, image_to_check, cpus, tolerance, show_distance):
+    known_names, known_face_encodings = scan_known_people(known_people_folder)
     
-            exp2 = ('0   1 days\n'
-                'dtype: timedelta64[ns]')
+        def test_cnn_raw_face_locations(self):
+        img = api.load_image_file(os.path.join(os.path.dirname(__file__), 'test_images', 'obama.jpg'))
+        detected_faces = api._raw_face_locations(img, model='cnn')
+    
+    setup(
+    name='face_recognition',
+    version='1.2.3',
+    description='Recognize faces from Python or from the command line',
+    long_description=readme + '\n\n' + history,
+    author='Adam Geitgey',
+    author_email='ageitgey@gmail.com',
+    url='https://github.com/ageitgey/face_recognition',
+    packages=[
+        'face_recognition',
+    ],
+    package_dir={'face_recognition': 'face_recognition'},
+    package_data={
+        'face_recognition': ['models/*.dat']
+    },
+    entry_points={
+        'console_scripts': [
+            'face_recognition=face_recognition.face_recognition_cli:main',
+            'face_detection=face_recognition.face_detection_cli:main'
+        ]
+    },
+    install_requires=requirements,
+    license='MIT license',
+    zip_safe=False,
+    keywords='face_recognition',
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+    ],
+    test_suite='tests',
+    tests_require=test_requirements
+)
+
+    
+    # 你需要在sudo raspi-config中把camera功能打开
+camera = picamera.PiCamera()
+camera.resolution = (320, 240)
+output = np.empty((240, 320, 3), dtype=np.uint8)
