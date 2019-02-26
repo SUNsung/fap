@@ -1,7 +1,15 @@
 
         
-        #endif  // TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
-
+        REGISTER_KERNEL_BUILDER(Name('Ackermann').Device(DEVICE_CPU), AckermannOp);
+    
+    REGISTER_OP('Invalid')
+    .Attr('invalid attr: int32')  // invalid since the name has a space.
+    .Doc(R'doc(
+An op to test that invalid ops do not successfully generate invalid python code.
+)doc');
+    
+    #ifndef TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_H_
+#define TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_H_
     
     Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an 'AS IS' BASIS,
@@ -10,211 +18,159 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
     
-    #endif  // TENSORFLOW_PYTHON_LIB_CORE_BFLOAT16_H_
+    // Converts TF_DataType to the corresponding numpy type.
+Status TF_DataType_to_PyArray_TYPE(TF_DataType tf_datatype,
+                                   int* out_pyarray_type);
+    
+    namespace tensorflow {
+    }
+    
+    #endif  // TENSORFLOW_PYTHON_LIB_CORE_PY_SEQ_TENSOR_H_
 
     
     
     {}  // namespace tensorflow
 
     
-    void add(const Size2D &size,
-         const u8 * src0Base, ptrdiff_t src0Stride,
-         const s16 * src1Base, ptrdiff_t src1Stride,
-         s16 *dstBase, ptrdiff_t dstStride,
-         CONVERT_POLICY policy)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
-    }
-    
-            const s32* ln0 = idx_rm1 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rm1) : tmp;
-        const s32* ln1 = internal::getRowPtr(srcBase, srcStride, i);
-        const s32* ln2 = internal::getRowPtr(srcBase, srcStride, i + 1);
-        const s32* ln3 = idx_rp2 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rp2) : tmp;
-    
-    template <bool L2gradient, bool externalSobel>
-inline void Canny3x3(const Size2D &size, s32 cn,
-                     const u8 * srcBase, ptrdiff_t srcStride,
-                     u8 * dstBase, ptrdiff_t dstStride,
-                     s16 * dxBase, ptrdiff_t dxStride,
-                     s16 * dyBase, ptrdiff_t dyStride,
-                     f64 low_thresh, f64 high_thresh,
-                     Margin borderMargin)
-{
-    s32 low, high;
-    prepareThresh<L2gradient>(low_thresh, high_thresh, low, high);
-    }
-    
-        for (size_t y = 0; y < size.height; ++y)
-    {
-        const type * src0 = internal::getRowPtr(src0Base, src0Stride, y);
-        const type * src1 = internal::getRowPtr(src1Base, src1Stride, y);
-        u8 * dst = internal::getRowPtr(dstBase, dstStride, y);
-        size_t x = 0;
-    }
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
-CVT_FUNC(f32, s16, 8,
-     register float32x4_t vhalf asm ('q0') = vdupq_n_f32(0.5f);,
-{
-     for (size_t i = 0; i < w; i += 8)
-     {
-         internal::prefetch(_src + i);
-         __asm__ (
-             'vld1.32 {d2-d3}, [%[src]]                               \n\t'
-             'vadd.f32 q2, q1, q0                                     \n\t'
-             'vcvt.s32.f32 q3, q2                                     \n\t'
-             'vqmovn.s32 d8, q3                                       \n\t'
-             'vst1.16 {d8}, [%[dst]]                                  \n\t'
-             : /*no output*/
-             : [src] 'r' (_src + i),
-               [dst] 'r' (_dst + i),
-               'w' (vhalf)
-             : 'd2','d3','d4','d5','d6','d7','d8'
-         );
-         __asm__ (
-             'vld1.32 {d2-d3}, [%[src]]                               \n\t'
-             'vadd.f32 q2, q1, q0                                     \n\t'
-             'vcvt.s32.f32 q3, q2                                     \n\t'
-             'vqmovn.s32 d8, q3                                       \n\t'
-             'vst1.16 {d8}, [%[dst]]                                  \n\t'
-             : /*no output*/
-             : [src] 'r' (_src + i + 4),
-               [dst] 'r' (_dst + i + 4),
-               'w' (vhalf)
-             : 'd2','d3','d4','d5','d6','d7','d8'
-         );
-     }
-})
-#else
-CVT_FUNC(f32, s16, 8,
-     float32x4_t vhalf = vdupq_n_f32(0.5f);,
-{
-     for (size_t i = 0; i < w; i += 8)
-     {
-         internal::prefetch(_src + i);
-         float32x4_t vline_f32 = vld1q_f32(_src + i);
+    namespace tensorflow {
+namespace swig {
     }
     }
     
-                v_dst.val[0] = vcombine(vget_high(v_src.val[0]), vget_low(v_src.val[0]));
-            v_dst.val[1] = vcombine(vget_high(v_src.val[1]), vget_low(v_src.val[1]));
-            v_dst.val[2] = vcombine(vget_high(v_src.val[2]), vget_low(v_src.val[2]));
-    
-    static UBool copyAsSuperscript(
-        const UnicodeString &s,
-        int32_t beginIndex,
-        int32_t endIndex,
-        UnicodeString &result,
-        UErrorCode &status) {
-    if (U_FAILURE(status)) {
-        return FALSE;
+        {
+      MutexLock l(shared->GetMutex());
+      shared->IncInitialized();
+      if (shared->AllInitialized()) {
+        shared->GetCondVar()->SignalAll();
+      }
+      while (!shared->Started()) {
+        shared->GetCondVar()->Wait();
+      }
     }
-    for (int32_t i = beginIndex; i < endIndex;) {
-        UChar32 c = s.char32At(i);
-        int32_t digit = u_charDigitValue(c);
-        if (digit < 0) {
-            status = U_INVALID_CHAR_FOUND;
-            return FALSE;
+    thread->shared->GetCacheBench()->OperateCache(thread);
+    
+    #pragma once
+    
+      uint64_t sleep_debt = 0;
+  uint64_t time_since_last_refill = 0;
+  if (last_refill_time_ != 0) {
+    if (last_refill_time_ > time_now) {
+      sleep_debt = last_refill_time_ - time_now;
+    } else {
+      time_since_last_refill = time_now - last_refill_time_;
+      bytes_left_ +=
+          static_cast<uint64_t>(static_cast<double>(time_since_last_refill) /
+                                kMicrosPerSecond * delayed_write_rate_);
+      if (time_since_last_refill >= kRefillInterval &&
+          bytes_left_ > num_bytes) {
+        // If refill interval already passed and we have enough bytes
+        // return without extra sleeping.
+        last_refill_time_ = time_now;
+        bytes_left_ -= num_bytes;
+        return 0;
+      }
+    }
+  }
+    
+    // Returns an Env that translates paths such that the root directory appears to
+// be chroot_dir. chroot_dir should refer to an existing directory.
+Env* NewChrootEnv(Env* base_env, const std::string& chroot_dir);
+    
+    
+    {#if defined(OS_LINUX) || defined(OS_MACOSX) || defined(OS_AIX)
+  virtual size_t GetUniqueId(char* id, size_t max_size) const override;
+#endif
+  virtual void Hint(AccessPattern pattern) override;
+  virtual Status InvalidateCache(size_t offset, size_t length) override;
+  virtual bool use_direct_io() const override { return use_direct_io_; }
+  virtual size_t GetRequiredBufferAlignment() const override {
+    return logical_sector_size_;
+  }
+};
+    
+    
+    {    std::vector<std::string> input_file_names;
+    for (auto level : cf_meta.levels) {
+      for (auto file : level.files) {
+        if (file.being_compacted) {
+          return nullptr;
         }
-        result.append(kSuperscriptDigits[digit]);
-        i += U16_LENGTH(c);
+        input_file_names.push_back(file.name);
+      }
     }
-    return TRUE;
-}
+    return new CompactionTask(
+        db, this, cf_name, input_file_names,
+        options_.num_levels - 1, compact_options_, false);
+  }
     
-    ScriptSet &ScriptSet::parseScripts(const UnicodeString &scriptString, UErrorCode &status) {
-    resetAll();
-    if (U_FAILURE(status)) {
-        return *this;
-    }
-    UnicodeString oneScriptName;
-    for (int32_t i=0; i<scriptString.length();) {
-        UChar32 c = scriptString.char32At(i);
-        i = scriptString.moveIndex32(i, 1);
-        if (!u_isUWhiteSpace(c)) {
-            oneScriptName.append(c);
-            if (i < scriptString.length()) {
-                continue;
-            }
-        }
-        if (oneScriptName.length() > 0) {
-            char buf[40];
-            oneScriptName.extract(0, oneScriptName.length(), buf, sizeof(buf)-1, US_INV);
-            buf[sizeof(buf)-1] = 0;
-            int32_t sc = u_getPropertyValueEnum(UCHAR_SCRIPT, buf);
-            if (sc == UCHAR_INVALID_CODE) {
-                status = U_ILLEGAL_ARGUMENT_ERROR;
-            } else {
-                this->set((UScriptCode)sc, status);
-            }
-            if (U_FAILURE(status)) {
-                return *this;
-            }
-            oneScriptName.remove();
-        }
-    }
-    return *this;
-}
+      int ret = system('rm -rf /tmp/rocksmergetest');
+  if (ret != 0) {
+    fprintf(stderr, 'Error deleting /tmp/rocksmergetest, code: %d\n', ret);
+    return ret;
+  }
+  rocksdb::Options options;
+  options.create_if_missing = true;
+  options.merge_operator.reset(new MyMerge);
+  options.compaction_filter = &filter;
+  status = rocksdb::DB::Open(options, '/tmp/rocksmergetest', &raw_db);
+  assert(status.ok());
+  std::unique_ptr<rocksdb::DB> db(raw_db);
     
-        UBool      test(UScriptCode script, UErrorCode &status) const;
-    ScriptSet &Union(const ScriptSet &other);
-    ScriptSet &set(UScriptCode script, UErrorCode &status);
-    ScriptSet &reset(UScriptCode script, UErrorCode &status);
-    ScriptSet &intersect(const ScriptSet &other);
-    ScriptSet &intersect(UScriptCode script, UErrorCode &status);
-    UBool      intersects(const ScriptSet &other) const;  // Sets contain at least one script in commmon.
-    UBool      contains(const ScriptSet &other) const;    // All set bits in other are also set in this.
-    
-    void SearchIterator::setMatchLength(int32_t length)
-{
-    m_search_->matchedLength = length;
-}
-    
-    U_NAMESPACE_BEGIN
-    
-    #include 'unicode/utypes.h'
-#include 'sharedobject.h'
-    
-    #include 'unicode/utypes.h'
-#include 'sharedobject.h'
-    
-    UnicodeSet *SimpleDateFormatStaticSets::getIgnorables(UDateFormatField fieldIndex)
-{
-    UErrorCode status = U_ZERO_ERROR;
-    umtx_initOnce(gSimpleDateFormatStaticSetsInitOnce, &smpdtfmt_initSets, status);
-    if (U_FAILURE(status)) {
-        return NULL;
+    int main() {
+  DB* db;
+  Options options;
+  // Optimize RocksDB. This is the easiest way to get RocksDB to perform well
+  options.IncreaseParallelism();
+  options.OptimizeLevelStyleCompaction();
+  // create the DB if it's not already present
+  options.create_if_missing = true;
     }
     
-    switch (fieldIndex) {
-        case UDAT_YEAR_FIELD:
-        case UDAT_MONTH_FIELD:
-        case UDAT_DATE_FIELD:
-        case UDAT_STANDALONE_DAY_FIELD:
-        case UDAT_STANDALONE_MONTH_FIELD:
-            return gStaticSets->fDateIgnorables;
-            
-        case UDAT_HOUR_OF_DAY1_FIELD:
-        case UDAT_HOUR_OF_DAY0_FIELD:
-        case UDAT_MINUTE_FIELD:
-        case UDAT_SECOND_FIELD:
-        case UDAT_HOUR1_FIELD:
-        case UDAT_HOUR0_FIELD:
-            return gStaticSets->fTimeIgnorables;
-            
-        default:
-            return gStaticSets->fOtherIgnorables;
+    struct DumpOptions {
+  // Database that will be dumped
+  std::string db_path;
+  // File location that will contain dump output
+  std::string dump_location;
+  // Don't include db information header in the dump
+  bool anonymous = false;
+};
+    
+    #include 'rocksdb/db.h'
+#include 'rocksdb/status.h'
+    
+    class FlushBlockBySizePolicyFactory : public FlushBlockPolicyFactory {
+ public:
+  FlushBlockBySizePolicyFactory() {}
     }
-}
     
-    #endif  // !UCONFIG_NO_FORMATTING
-
+    class DB;
     
-    /**
- * Destructor
- */
-StringMatcher::~StringMatcher() {
-}
+      // Call this from another thread if you want to stop the backup
+  // that is currently happening. It will return immediatelly, will
+  // not wait for the backup to stop.
+  // The backup will stop ASAP and the call to CreateNewBackup will
+  // return Status::Incomplete(). It will not clean up after itself, but
+  // the state will remain consistent. The state will be cleaned up
+  // next time you create BackupableDB or RestoreBackupableDB.
+  virtual void StopBackup() = 0;
+    
+    #pragma once
+#ifndef ROCKSDB_LITE
+    
+    namespace rocksdb {
+    }
+    
+    #pragma once
+    
+        /** Replace the interior action.
+     *
+     * @param action The new action, it will replace the running action.
+     */
+    void setInnerAction(ActionInterval *action);
+    /** Return the interior action.
+     *
+     * @return The interior action.
+     */
+    ActionInterval* getInnerAction() const { return _innerAction; }
+    
+    NS_CC_BEGIN
