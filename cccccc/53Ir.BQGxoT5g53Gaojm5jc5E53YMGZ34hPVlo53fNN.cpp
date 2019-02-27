@@ -1,398 +1,324 @@
 
         
-        #endif
-
+        // Generate param traits write methods.
+#include 'ipc/param_traits_write_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
     
-                NormCanny<L2gradient>(size.width*cn, _dx, _dy, _norm);
-    
-    #define SPLIT(sgn,bits,n) void split##n(const Size2D &size,                                          \
-                                    const sgn##bits * srcBase, ptrdiff_t srcStride                   \
-                                    FILL_LINES##n(FARG, sgn##bits) )                                 \
-{                                                                                                    \
-    internal::assertSupportedConfiguration();                                                        \
-    (void)size;                                                                                      \
-    (void)srcBase;                                                                                   \
-    (void)srcStride;                                                                                 \
-    FILL_LINES##n(VOID, sgn##bits)                                                                   \
+    void Base::CallSync(const std::string& method,
+                    const base::ListValue& arguments,
+                    base::ListValue* result) {
+  NOTREACHED() << 'Uncatched callAsync in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
 }
     
-    template <typename T>
-inline T *getRowPtr(T *base, ptrdiff_t stride, size_t row)
-{
-    char *baseRaw = const_cast<char *>(reinterpret_cast<const char *>(base));
-    return reinterpret_cast<T *>(baseRaw + ptrdiff_t(row) * stride);
+    #ifndef CONTENT_NW_SRC_API_BASE_BASE_H_
+#define CONTENT_NW_SRC_API_BASE_BASE_H_
+    
+    #include 'content/nw/src/api/menu/menu.h'
+    
+    bool MenuDelegate::GetIconForCommandId(int command_id,
+                                       gfx::Image* icon) const {
+  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
+  if (item->icon_.IsEmpty())
+    return false;
+    }
+    
+    ExtensionFunction::ResponseAction
+NwAppQuitFunction::Run() {
+  ExtensionService* service =
+    ExtensionSystem::Get(browser_context())->extension_service();
+  base::MessageLoopCurrent::Get()->task_runner()->PostTask(
+        FROM_HERE,
+        base::Bind(&NwAppQuitFunction::DoJob,
+                   service,
+                   extension_id()));
+  return RespondNow(NoArguments());
 }
     
-    
-    {
-    {
-    {                for (; j < size.width; j++)
-                {
-                    dst[j] = src[j] >= 0 ? 0 : 255;
-                }
-            }
-        }
-        else
-        {
-            for (size_t i = 0; i < size.height; ++i)
-            {
-                u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
-                std::memset(dst, 0, sizeof(u8) * size.width);
-            }
-        }
-        return;
-    }
-    
-            while(i + 16 <= size.width)
-        {
-            size_t lim = std::min(i + DOT_UINT_BLOCKSIZE, size.width) - 16;
-    }
-    
-    
-    {
-    {
-    {                    for( k = 0; k < N; k++ )
-                    {
-                        s32 x = ptr[pixel[k]];
-                        if(x > vt)
-                        {
-                            if( ++count > K )
-                            {
-                                cornerpos[ncorners++] = j;
-                                if(nonmax_suppression)
-                                    curr[j] = cornerScore(ptr, pixel);
-                                break;
-                            }
-                        }
-                        else
-                            count = 0;
-                    }
-                }
-            }
-        }
-    
-                uint32x2_t el2l = vadd_u32(vget_low_u32(el8shr01l), vget_high_u32(el8shr01l));
-            uint32x2_t el2hl = vadd_u32(vget_low_u32(el4h), vget_high_u32(el8shr01l));
-            uint32x2_t el2hh = vadd_u32(vget_low_u32(el4h), vget_high_u32(el4h));
-    
-    #include <condition_variable>
-#include <mutex>
-#include <string>
-#include <system_error>
-#include <vector>
-    
-    template <typename T, class Context>
-class FlexibleTopKOp : public Operator<Context> {
+    class NwAppSetProxyConfigFunction : public NWSyncExtensionFunction {
  public:
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  NwAppSetProxyConfigFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
     }
     
-    
-    {          return out;
-        });
-OPERATOR_SCHEMA(Float16ConstantFill)
-    .NumInputs(0)
-    .NumOutputs(1)
-    .TensorInferenceFunction(Float16FillerTensorInference)
-    .Arg('value', 'The value for the elements of the output tensor.')
-    .Arg('shape', 'The shape of the output tensor.')
-    .Output(
-        0,
-        'output',
-        'Output tensor of constant values specified by 'value'');
-    
-    #endif
-
-    
-    
-    {  UNICHARSET* unicharset;
-  OSBestResult best_result;
-};
-    
-      // Count the # of entries starting with a specific prefix.
-  for (vc_it.mark_cycle_pt(); !vc_it.cycled_list(); vc_it.forward()) {
-    ParamContent* vc = vc_it.data();
-    STRING tag;
-    STRING tag2;
-    STRING tag3;
-    }
-    
-      const UNICHARSET &unicharset = *word->uch_set;
-  word->ClearResults();
-  word2->ClearResults();
-  word->chopped_word = chopped;
-  word2->chopped_word = chopped2;
-  word->SetupBasicsFromChoppedWord(unicharset);
-  word2->SetupBasicsFromChoppedWord(unicharset);
-    
-      /// Return true if the source image is color.
-  bool IsColor() const {
-    return pix_channels_ >= 3;
-  }
-    
-    #ifndef TESSERACT_CSTRUCT_BOXWORD_H_
-#define TESSERACT_CSTRUCT_BOXWORD_H_
-    
-      // Returns true if there were enough points at the last call to Fit or
-  // ConstrainedFit for the fitted points to be used on a badly fitted line.
-  bool SufficientPointsForIndependentFit() const;
-    
-      // Returns a pathname for a file that does not currently exist. The pathname
-  // will be directory/base_name.extension or
-  // directory/base_name_<number>.extension if directory/base_name.extension
-  // already exists. The number will be incremented until a pathname is found
-  // that does not already exist.
-  // Examples: 'dir/foo_test.xml' or 'dir/foo_test_1.xml'.
-  // There could be a race condition if two or more processes are calling this
-  // function at the same time -- they could both pick the same filename.
-  static FilePath GenerateUniqueFileName(const FilePath& directory,
-                                         const FilePath& base_name,
-                                         const char* extension);
-    
-    // Anything in namespace gtest_internal is Google Test's INTERNAL
-// IMPLEMENTATION DETAIL and MUST NOT BE USED DIRECTLY in user code.
-namespace gtest_internal {
-    }
-    
-    template <typename T>
-struct TypeList {
-  typedef Types1<T> type;
-};
-    
-    
-    {  EXPECT_FALSE(IsPrime(-1));
-  EXPECT_FALSE(IsPrime(-2));
-  EXPECT_FALSE(IsPrime(INT_MIN));
+    NwClipboardSetListSyncFunction::~NwClipboardSetListSyncFunction() {
 }
     
-    // Sets the 0-terminated C string this MyString object
-// represents.
-void MyString::Set(const char* a_c_string) {
-  // Makes sure this works when c_string == c_string_
-  const char* const temp = MyString::CloneCString(a_c_string);
-  delete[] c_string_;
-  c_string_ = temp;
-}
-
+      // Open leveldb
+  leveldb::DB* db;
+  leveldb::Options options;
+  options.create_if_missing = true;
+  options.error_if_exists = true;
+  leveldb::Status status = leveldb::DB::Open(
+      options, db_filename, &db);
+  CHECK(status.ok()) << 'Failed to open leveldb ' << db_filename
+      << '. Is it already existing?';
     
-    const char kHelloString[] = 'Hello, world!';
-    
-      // Fill database
-  for (int i = 0; i < kCount; i++) {
-    ASSERT_OK(db_->Put(WriteOptions(), Key(i), value));
-  }
-  ASSERT_OK(dbi->TEST_CompactMemTable());
-    
-    // Size of each value
-static int FLAGS_value_size = 100;
-    
-    #include <stdint.h>
-#include 'leveldb/db.h'
-#include 'db/dbformat.h'
-    
-    void InternalKeyComparator::FindShortSuccessor(std::string* key) const {
-  Slice user_key = ExtractUserKey(*key);
-  std::string tmp(user_key.data(), user_key.size());
-  user_comparator_->FindShortSuccessor(&tmp);
-  if (tmp.size() < user_key.size() &&
-      user_comparator_->Compare(user_key, tmp) < 0) {
-    // User key has become shorter physically, but larger logically.
-    // Tack on the earliest possible number to the shortened user key.
-    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
-    assert(this->Compare(*key, tmp) < 0);
-    key->swap(tmp);
-  }
-}
-    
-    #include 'db/dbformat.h'
-#include 'port/port.h'
-#include 'util/logging.h'
-#include 'util/testharness.h'
-    
-    class StdoutPrinter : public WritableFile {
- public:
-  virtual Status Append(const Slice& data) {
-    fwrite(data.data(), 1, data.size(), stdout);
-    return Status::OK();
-  }
-  virtual Status Close() { return Status::OK(); }
-  virtual Status Flush() { return Status::OK(); }
-  virtual Status Sync() { return Status::OK(); }
-};
-    
-        if (resyncing_) {
-      if (record_type == kMiddleType) {
-        continue;
-      } else if (record_type == kLastType) {
-        resyncing_ = false;
-        continue;
-      } else {
-        resyncing_ = false;
-      }
-    }
-    
-      // Read the next record into *record.  Returns true if read
-  // successfully, false if we hit end of the input.  May use
-  // '*scratch' as temporary storage.  The contents filled in *record
-  // will only be valid until the next mutating operation on this
-  // reader or the next mutation to *scratch.
-  bool ReadRecord(Slice* record, std::string* scratch);
-    
-    TEST(LogTest, UnexpectedFullType) {
-  Write('foo');
-  Write('bar');
-  SetByte(6, kFirstType);
-  FixChecksum(0, 3);
-  ASSERT_EQ('bar', Read());
-  ASSERT_EQ('EOF', Read());
-  ASSERT_EQ(3, DroppedBytes());
-  ASSERT_EQ('OK', MatchError('partial record without end'));
-}
-    
-    
-    {
-    {    s = EmitPhysicalRecord(type, ptr, fragment_length);
-    ptr += fragment_length;
-    left -= fragment_length;
-    begin = false;
-  } while (s.ok() && left > 0);
-  return s;
-}
-    
-    #endif  // STORAGE_LEVELDB_DB_LOG_WRITER_H_
-
-    
-      // Return an iterator that yields the contents of the memtable.
-  //
-  // The caller must ensure that the underlying MemTable remains live
-  // while the returned iterator is live.  The keys returned by this
-  // iterator are internal keys encoded by AppendInternalKey in the
-  // db/format.{h,cc} module.
-  Iterator* NewIterator();
-    
-    class Repairer {
- public:
-  Repairer(const std::string& dbname, const Options& options)
-      : dbname_(dbname),
-        env_(options.env),
-        icmp_(options.comparator),
-        ipolicy_(options.filter_policy),
-        options_(SanitizeOptions(dbname, &icmp_, &ipolicy_, options)),
-        owns_info_log_(options_.info_log != options.info_log),
-        owns_cache_(options_.block_cache != options.block_cache),
-        next_file_number_(1) {
-    // TableCache can be small since we expect each table to be opened once.
-    table_cache_ = new TableCache(dbname_, options_, 10);
-  }
-    }
-    
-    
-    { private:
-  port::Mutex mu_;
-  ReaderState state_ GUARDED_BY(mu_);
-  port::CondVar state_cv_ GUARDED_BY(mu_);
-};
-    
-    template<>
-void SetDataGradToBlob<mshadow::cpu, double>(caffeMemoryTypes memType,
-                            std::vector<::caffe::Blob<double>*>::iterator blob,
-                            std::vector<TBlob>::const_iterator itr) {
-  double *data_ptr = reinterpret_cast<double*>((*itr).dptr_);
-  if (memType == Data)
-    (*blob)->set_cpu_data(data_ptr);
-  else
-    MXCAFFEBLOB(*blob, double)->set_cpu_diff(data_ptr);
-}
-    
-    MXNET_REGISTER_IO_ITER(CaffeDataIter)
-.describe('Create MxNet iterator for a Caffe data layer.')
-.add_arguments(CaffeDataParam::__FIELDS__())
-.add_arguments(PrefetcherParam::__FIELDS__())
-.set_body([]() {
-    return new CaffeDataIterWrapper();
-});
-    
-    // DO_BIND_DISPATCH comes from static_operator_common.h
-Operator *CaffeOpProp::CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
-                                     std::vector<int> *in_type) const {
-  std::vector<int> out_type, aux_type;
-  std::vector<TShape> out_shape, aux_shape;
-  out_type.resize(this->ListOutputs().size());
-  out_shape.resize(this->ListOutputs().size());
-  aux_type.resize(this->ListAuxiliaryStates().size());
-  aux_shape.resize(this->ListAuxiliaryStates().size());
-  CHECK(InferType(in_type, &out_type, &aux_type));
-  CHECK(InferShape(in_shape, &out_shape, &aux_shape));
-  DO_BIND_DISPATCH(CreateOp, param_, (*in_type)[0]);
-}
-    
-      /*!
-   * \brief Constructor takes function to run.
-   * \param size size of the thread pool.
-   * \param func the function to run on the thread pool.
+      /**
+   * @brief Applies the transformation defined in the data layer's
+   * transform_param block to a cv::Mat
+   *
+   * @param cv_img
+   *    cv::Mat containing the data to be transformed.
+   * @param transformed_blob
+   *    This is destination blob. It can be part of top blob's data if
+   *    set_cpu_data() is used. See image_data_layer.cpp for an example.
    */
-  explicit ThreadPool(size_t size, std::function<void()> func)
-      : worker_threads_(size) {
-    CHECK_GT(size, 0);
-    for (auto& i : worker_threads_) {
-      i = std::thread(func);
-    }
-  }
-  explicit ThreadPool(size_t size,
-                      std::function<void(std::shared_ptr<dmlc::ManualEvent> ready)> func,
-                      const bool wait)
-      : worker_threads_(size) {
-    CHECK_GT(size, 0);
-    for (auto& i : worker_threads_) {
-      std::shared_ptr<dmlc::ManualEvent> ptr = std::make_shared<dmlc::ManualEvent>();
-      ready_events_.emplace_back(ptr);
-      i = std::thread(func, ptr);
-    }
-    if (wait) {
-      WaitForReady();
-    }
-  }
-  ~ThreadPool() noexcept(false) {
-    for (auto&& i : worker_threads_) {
-      i.join();
-    }
-  }
+  void Transform(const cv::Mat& cv_img, Blob<Dtype>* transformed_blob);
+#endif  // USE_OPENCV
     
-    Graph DetectInplaceAddTo(Graph g) {
-  nnvm::StorageVector storage_id =
-      g.MoveCopyAttr<nnvm::StorageVector>('storage_id');
-  std::vector<int> storage_inplace_index =
-      g.MoveCopyAttr<std::vector<int> >('storage_inplace_index');
-  static const Op* ewise_plus_op = Op::Get('_grad_add');
-  auto& idx = g.indexed_graph();
-  // reference cont.
-  std::vector<int> ref_count(idx.num_node_entries(), 0);
-  std::vector<int> addto_entry(idx.num_node_entries(), 0);
-  std::vector<int> skip_plus_node(idx.num_nodes(), 0);
-    }
+      /**
+   * @brief Computes the error gradient w.r.t. the reordered input.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient
+   *        with respect to the outputs
+   *   -# @f$ (M \times ...) @f$:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2):
+   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
+   *     required) back to the input x_1
+   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
+   *     false.
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    #if MXNET_USE_OPENCV
-#include <opencv2/opencv.hpp>
-#include <vector>  // NOLINT(*)
-#include <utility> // NOLINT(*)
-#include <string> // NOLINT(*)
+    #include <vector>
     
-    /*!
- *  Copyright (c) 2015 by Contributors
- * \file inst_vector.h
- * \brief holder of a sequence of DataInst in CPU
- *        that are not necessarily of same shape
+    #endif  // CAFFE_CONV_LAYER_HPP_
+
+    
+      int size_, pre_pad_;
+  Dtype alpha_, beta_, k_;
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #ifdef USE_CUDNN
+/**
+ * @brief cuDNN implementation of SoftmaxLayer.
+ *        Fallback to SoftmaxLayer for CPU mode.
  */
+template <typename Dtype>
+class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
+ public:
+  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
+      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNSoftmaxLayer();
+    }
     
-    #include <mxnet/base.h>
-#include <mxnet/io.h>
-#include <mxnet/ndarray.h>
-#include <dmlc/logging.h>
-#include <dmlc/parameter.h>
-#include <dmlc/timer.h>
-#include <mshadow/tensor.h>
-#include <utility>
-#include <string>
+    
+    {		case Image::Format::R11:
+		case Image::Format::SIGNED_R11:
+			m_pencoding = new Block4x4Encoding_R11;
+			break;
+		case Image::Format::RG11:
+		case Image::Format::SIGNED_RG11:
+			m_pencoding = new Block4x4Encoding_RG11;
+			break;
+		default:
+			assert(0);
+			break;
+		}
+    
+    
+  typedef struct  AF_LatinMetricsRec_
+  {
+    AF_StyleMetricsRec  root;
+    FT_UInt             units_per_em;
+    AF_LatinAxisRec     axis[AF_DIMENSION_MAX];
+    }
+    
+    // Constants:
+//  for (int i = 1; i< 32; ++i)
+//    printf('static const int cospi_%d_64 = %.0f;\n', i,
+//           round(16384 * cos(i*M_PI/64)));
+// Note: sin(k*Pi/64) = cos((32-k)*Pi/64)
+static const tran_high_t cospi_1_64  = 16364;
+static const tran_high_t cospi_2_64  = 16305;
+static const tran_high_t cospi_3_64  = 16207;
+static const tran_high_t cospi_4_64  = 16069;
+static const tran_high_t cospi_5_64  = 15893;
+static const tran_high_t cospi_6_64  = 15679;
+static const tran_high_t cospi_7_64  = 15426;
+static const tran_high_t cospi_8_64  = 15137;
+static const tran_high_t cospi_9_64  = 14811;
+static const tran_high_t cospi_10_64 = 14449;
+static const tran_high_t cospi_11_64 = 14053;
+static const tran_high_t cospi_12_64 = 13623;
+static const tran_high_t cospi_13_64 = 13160;
+static const tran_high_t cospi_14_64 = 12665;
+static const tran_high_t cospi_15_64 = 12140;
+static const tran_high_t cospi_16_64 = 11585;
+static const tran_high_t cospi_17_64 = 11003;
+static const tran_high_t cospi_18_64 = 10394;
+static const tran_high_t cospi_19_64 = 9760;
+static const tran_high_t cospi_20_64 = 9102;
+static const tran_high_t cospi_21_64 = 8423;
+static const tran_high_t cospi_22_64 = 7723;
+static const tran_high_t cospi_23_64 = 7005;
+static const tran_high_t cospi_24_64 = 6270;
+static const tran_high_t cospi_25_64 = 5520;
+static const tran_high_t cospi_26_64 = 4756;
+static const tran_high_t cospi_27_64 = 3981;
+static const tran_high_t cospi_28_64 = 3196;
+static const tran_high_t cospi_29_64 = 2404;
+static const tran_high_t cospi_30_64 = 1606;
+static const tran_high_t cospi_31_64 = 804;
+    
+    namespace ClipperLib {
+    }
+    
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+    
+       - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+    
+        TableBuilder* builder = new TableBuilder(options, file);
+    meta->smallest.DecodeFrom(iter->key());
+    for (; iter->Valid(); iter->Next()) {
+      Slice key = iter->key();
+      meta->largest.DecodeFrom(key);
+      builder->Add(key, iter->value());
+    }
+    
+    TEST(FormatTest, InternalKeyShortSeparator) {
+  // When user keys are same
+  ASSERT_EQ(IKey('foo', 100, kTypeValue),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('foo', 99, kTypeValue)));
+  ASSERT_EQ(IKey('foo', 100, kTypeValue),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('foo', 101, kTypeValue)));
+  ASSERT_EQ(IKey('foo', 100, kTypeValue),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('foo', 100, kTypeValue)));
+  ASSERT_EQ(IKey('foo', 100, kTypeValue),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('foo', 100, kTypeDeletion)));
+    }
+    
+    static void InitTypeCrc(uint32_t* type_crc) {
+  for (int i = 0; i <= kMaxRecordType; i++) {
+    char t = static_cast<char>(i);
+    type_crc[i] = crc32c::Value(&t, 1);
+  }
+}
+    
+    
+    {}  // namespace leveldb
+
+    
+    
+    {#if !defined(NDEBUG)
+  SnapshotList* list_ = nullptr;
+#endif  // !defined(NDEBUG)
+};
+    
+        ListNode* head = new ListNode(arr[0]);
+    ListNode* curNode = head;
+    for(int i = 1 ; i < n ; i ++){
+        curNode->next = new ListNode(arr[i]);
+        curNode = curNode->next;
+    }
+    
+            vector<int> res;
+        if( root == NULL )
+            return res;
+    
+    int main() {
+    }
+    
+    
+    {
+    {                if(prev->right == NULL){
+                    prev->right = cur;
+                    cur = cur->left;
+                }
+                else{
+                    prev->right = NULL;
+                    res.push_back(cur->val);
+                    cur = cur->right;
+                }
+            }
+        }
+    
+            queue<TreeNode*> q;
+        q.push(root);
+        int level_num = 1;
+    
+    // Recursive
+// Time Complexity: O(n), n is the node number in the tree
+// Space Complexity: O(h), h is the height of the tree
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+    }
+    }
+    
+    private:
+    struct Command{
+        string s;   // go, print
+        TreeNode* node;
+        Command(string s, TreeNode* node): s(s), node(node){}
+    };
+    
+            vector<int> res;
+        if(root == NULL)
+            return res;
+    
+    public:
+    vector<int> postorderTraversal(TreeNode* root) {
+    }
+    
+            stack<TagNode> stack;
+        TreeNode* cur = root;
+        while(cur != NULL || !stack.empty()){
+    }
+    
+    #include <iostream>
 #include <vector>
-#include '../common/utils.h'
-#include './image_iter_common.h'
+#include <stack>
+    
+        // out_of_range.403
+    try
+    {
+        // try to use a JSON pointer to an nonexistent object key
+        json::const_reference ref = j.at('/foo'_json_pointer);
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+    
+        // the following call will not add an object, because there is already
+    // a value stored at key 'B'
+    auto res2 = null.emplace('B', 'c');
