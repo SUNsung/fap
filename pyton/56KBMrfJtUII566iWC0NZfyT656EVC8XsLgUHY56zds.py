@@ -1,143 +1,68 @@
 
         
-            def __init__(self, query, results):
-        self.query = query
-        self.results = results
+                r = None
+        try:
+            r = Redirect.objects.get(site=current_site, old_path=full_path)
+        except Redirect.DoesNotExist:
+            pass
+        if r is None and settings.APPEND_SLASH and not request.path.endswith('/'):
+            try:
+                r = Redirect.objects.get(
+                    site=current_site,
+                    old_path=request.get_full_path(force_append_slash=True),
+                )
+            except Redirect.DoesNotExist:
+                pass
+        if r is not None:
+            if r.new_path == '':
+                return self.response_gone_class()
+            return self.response_redirect_class(r.new_path)
     
-    sys.path.insert(0, os.path.dirname(os.path.dirname((os.path.abspath(__file__)))))
-from youtube_dl.compat import (
-    compat_input,
-    compat_http_server,
-    compat_str,
-    compat_urlparse,
-)
-    
-    with open('update/versions.json', 'w') as jsonf:
-    json.dump(versions_info, jsonf, indent=4, sort_keys=True)
-
-    
-    import rsa
-import json
-from binascii import hexlify
-    
-    
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
+        req_protocol = request.scheme
+    req_site = get_current_site(request)
     
     
-# Import youtube_dl
-ROOT_DIR = os.path.join(os.path.dirname(__file__), '..')
-sys.path.insert(0, ROOT_DIR)
-import youtube_dl
+class CloudWatchEventRule(object):
+    def __init__(self, module, name, client, schedule_expression=None,
+                 event_pattern=None, description=None, role_arn=None):
+        self.name = name
+        self.client = client
+        self.changed = False
+        self.schedule_expression = schedule_expression
+        self.event_pattern = event_pattern
+        self.description = description
+        self.role_arn = role_arn
+        self.module = module
     
-        fileopts = []
-    for opt in opts_file:
-        if opt._short_opts:
-            fileopts.extend(opt._short_opts)
-        if opt._long_opts:
-            fileopts.extend(opt._long_opts)
+    # Ensure rule with certain limitations
+- ipa_hbacrule:
+    name: allow_all_developers_access_to_db
+    description: Allow all developers to access any database from any host
+    hostgroup:
+    - db-server
+    usergroup:
+    - developers
+    state: present
+    ipa_host: ipa.example.com
+    ipa_user: admin
+    ipa_pass: topsecret
     
-    # Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
-extensions = [
-    'sphinx.ext.autodoc',
-]
+    # Create nested groups
+- group_by:
+    key: el{{ ansible_distribution_major_version }}-{{ ansible_architecture }}
+    parents:
+      - el{{ ansible_distribution_major_version }}
     
-        def test_keywords(self):
-        self.assertMatch(':ytsubs', ['youtube:subscriptions'])
-        self.assertMatch(':ytsubscriptions', ['youtube:subscriptions'])
-        self.assertMatch(':ythistory', ['youtube:history'])
+        module.exit_json(changed=False, msg='logs(s) already unfollowed')
     
-        def debug(self, msg):
-        pass
-    
-        def _get_session_key(self):
-        '''
-        Instead of generating a random string, generate a secure url-safe
-        base64-encoded string of data as our session key.
-        '''
-        return signing.dumps(
-            self._session, compress=True,
-            salt='django.contrib.sessions.backends.signed_cookies',
-            serializer=self.serializer,
-        )
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-    
-        # conv 1x1 -> BN -> ReLU
-    cur = model.ConvAffine(
-        blob_in,
-        prefix + '_branch2a',
-        dim_in,
-        dim_inner,
-        kernel=1,
-        stride=str1x1,
-        pad=0,
-        inplace=True
-    )
-    cur = model.Relu(cur, cur)
-    
-    The keypoint head produces a feature representation of the RoI for the purpose
-of keypoint prediction. The keypoint output module converts the feature
-representation into keypoint heatmaps.
-'''
-    
-    
-def distribute(rois, label_blobs, outputs, train):
-    '''To understand the output blob order see return value of
-    detectron.roi_data.fast_rcnn.get_fast_rcnn_blob_names(is_training=False)
-    '''
-    lvl_min = cfg.FPN.ROI_MIN_LEVEL
-    lvl_max = cfg.FPN.ROI_MAX_LEVEL
-    lvls = fpn.map_rois_to_fpn_levels(rois[:, 1:5], lvl_min, lvl_max)
-    
-        def forward(self, inputs, outputs):
-        '''See modeling.detector.GenerateProposalLabels for inputs/outputs
-        documentation.
-        '''
-        # During training we reuse the data loader code. We populate roidb
-        # entries on the fly using the rois generated by RPN.
-        # im_info: [[im_height, im_width, im_scale], ...]
-        rois = inputs[0].data
-        roidb = blob_utils.deserialize(inputs[1].data)
-        im_info = inputs[2].data
-        im_scales = im_info[:, 2]
-        output_blob_names = fast_rcnn_roi_data.get_fast_rcnn_blob_names()
-        # For historical consistency with the original Faster R-CNN
-        # implementation we are *not* filtering crowd proposals.
-        # This choice should be investigated in the future (it likely does
-        # not matter).
-        json_dataset.add_proposals(roidb, rois, im_scales, crowd_thresh=0)
-        roidb_utils.add_bbox_regression_targets(roidb)
-        blobs = {k: [] for k in output_blob_names}
-        fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
-        for i, k in enumerate(output_blob_names):
-            blob_utils.py_op_copy_blob(blobs[k], outputs[i])
-
-    
-    
-def get_minibatch_blob_names(is_training=True):
-    '''Return blob names in the order in which they are read by the data loader.
-    '''
-    # data blob: holds a batch of N images, each with 3 channels
-    blob_names = ['data']
-    if cfg.RPN.RPN_ON:
-        # RPN-only or end-to-end Faster R-CNN
-        blob_names += rpn_roi_data.get_rpn_blob_names(is_training=is_training)
-    elif cfg.RETINANET.RETINANET_ON:
-        blob_names += retinanet_roi_data.get_retinanet_blob_names(
-            is_training=is_training
-        )
-    else:
-        # Fast R-CNN like models trained on precomputed proposals
-        blob_names += fast_rcnn_roi_data.get_fast_rcnn_blob_names(
-            is_training=is_training
-        )
-    return blob_names
+    EXAMPLES = '''
+- name: Add device to CA Spectrum
+  local_action:
+    module: spectrum_device
+    device: '{{ ansible_host }}'
+    community: secret
+    landscape: '0x100000'
+    oneclick_url: http://oneclick.example.com:8080
+    oneclick_user: username
+    oneclick_password: password
+    state: present
