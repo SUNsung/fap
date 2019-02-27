@@ -1,58 +1,75 @@
 
         
-            def limit_reached_for(user_id, date)
-      GivenDailyLike.find_for(user_id, date).pluck(:limit_reached)[0] || false
+          def serialize_options(resource)
+    methods = resource_class.authentication_keys.dup
+    methods = methods.keys if methods.is_a?(Hash)
+    methods << :password if resource.respond_to?(:password)
+    { methods: methods, only: [:password] }
+  end
+    
+      # Helper for use after calling send_*_instructions methods on a resource.
+  # If we are in paranoid mode, we always act as if the resource was valid
+  # and instructions were sent.
+  def successfully_sent?(resource)
+    notice = if Devise.paranoid
+      resource.errors.clear
+      :send_paranoid_instructions
+    elsif resource.errors.empty?
+      :send_instructions
     end
     
-              pipelines.each do |pipeline|
-            self.new(pipeline).tap do |preloader|
-              preloader.preload_commit_authors
-              preloader.preload_pipeline_warnings
-              preloader.preload_stages_warnings
+    end
+    
+          # Forgets the given resource by deleting a cookie
+      def forget_me(resource)
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.forget_me!
+        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
+      end
+    
+          def expire_data_after_sign_in!
+        # session.keys will return an empty array if the session is not yet loaded.
+        # This is a bug in both Rack and Rails.
+        # A call to #empty? forces the session to be loaded.
+        session.empty?
+        session.keys.grep(/^devise\./).each { |k| session.delete(k) }
+      end
+    
+        if record.timedout?(last_request_at) &&
+        !env['devise.skip_timeout'] &&
+        !proxy.remember_me_is_active?(record)
+      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
+      throw :warden, scope: scope, message: :timeout
+    end
+    
+        def default_used_helpers(options)
+      singularizer = lambda { |s| s.to_s.singularize.to_sym }
+    
+                if class_mod.respond_to?(:available_configs)
+              available_configs = class_mod.available_configs
+              available_configs.each do |config|
+                next unless options.key?(config)
+                send(:'#{config}=', options.delete(config))
+              end
             end
           end
-        end
     
-              def action_icon
-            'cancel'
+              if recoverable.persisted?
+            if recoverable.reset_password_period_valid?
+              recoverable.reset_password(attributes[:password], attributes[:password_confirmation])
+            else
+              recoverable.errors.add(:reset_password_token, :expired)
+            end
           end
     
-              def action_icon
-            'retry'
-          end
+      private
     
-          @account_moderation_note = current_account.account_moderation_notes.new(resource_params)
-    
-          new_email = resource_params.fetch(:unconfirmed_email)
-    
-        def set_user
-      @user = Account.find(params[:account_id]).user || raise(ActiveRecord::RecordNotFound)
-    end
-    
-        helper_method :paginated_instances
-    
-      def show
-    @status = status_finder.status
-    render json: @status, serializer: OEmbedSerializer, width: maxwidth_or_default, height: maxheight_or_default
+      def hub_secret
+    params['hub.secret']
   end
     
-      def encoded_challenge
-    HTMLEntities.new.encode(params['hub.challenge'])
-  end
+      private
     
-              # Encodes the options field
-          #
-          # @return [OpenSSL::ASN1::BitString]
-          def encode_options
-            OpenSSL::ASN1::BitString.new([options].pack('N'))
-          end
+      before_action :require_user!
     
-            if echo?
-          $stdin.gets
-        else
-          $stdin.noecho(&:gets).tap { $stdout.print '\n' }
-        end
-      rescue Errno::EIO
-        # when stdio gets closed
-        return
-      end
+      private
