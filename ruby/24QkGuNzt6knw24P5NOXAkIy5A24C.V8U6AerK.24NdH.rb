@@ -1,95 +1,74 @@
 
         
-              # This method returns an HTML safe string similar to what <tt>Array#join</tt>
-      # would return. The array is flattened, and all items, including
-      # the supplied separator, are HTML escaped unless they are HTML
-      # safe, and the returned string is marked as HTML safe.
-      #
-      #   safe_join([raw('<p>foo</p>'), '<p>bar</p>'], '<br />')
-      #   # => '<p>foo</p>&lt;br /&gt;&lt;p&gt;bar&lt;/p&gt;'
-      #
-      #   safe_join([raw('<p>foo</p>'), raw('<p>bar</p>')], raw('<br />'))
-      #   # => '<p>foo</p><br /><p>bar</p>'
-      #
-      def safe_join(array, sep = $,)
-        sep = ERB::Util.unwrapped_html_escape(sep)
+                def running?
+          EM.reactor_running?
+        end
     
-        # Direct access to partial rendering.
-    def render_partial(context, options, &block) #:nodoc:
-      PartialRenderer.new(@lookup_context).render(context, options, block)
+        def defaults_deprecate_type(old, current)
+      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
+      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
+                        'type: #{current}'.'
     end
-    
-              it 'cuts excessive digits in fractional part and keeps only 4 ones' do
-            format('%#{f}', 12.12341111).should == '12.1234'
-            format('%#{f}', -12.12341111).should == '-12.1234'
-          end
-    
-      it_behaves_like :kernel_system, :system, KernelSpecs::Method.new
+  end
 end
+
     
-    describe 'main#define_method' do
-  before :each do
-    @code = 'define_method(:boom) { :bam }'
+      def failed_strategy
+    request.respond_to?(:get_header) ? request.get_header('omniauth.error.strategy') : request.env['omniauth.error.strategy']
   end
     
-      desc 'update main and version in bower.json'
-  task :generate do
-    require 'bootstrap-sass'
-    Dir.chdir Bootstrap.gem_path do
-      spec       = JSON.parse(File.read 'bower.json')
+      protected
     
-        def initialize(*args)
-      @s = StringScanner.new(*args)
-    end
+    if defined?(ActionMailer)
+  class Devise::Mailer < Devise.parent_mailer.constantize
+    include Devise::Mailers::Helpers
     
-        def log_http_get_files(files, from, cached = false)
-      return if files.empty?
-      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
+          def self.generate_helpers!(routes=nil)
+        routes ||= begin
+          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
+          Devise::URL_HELPERS.slice(*mappings)
+        end
+    
+          accessors.each do |accessor|
+        mod.class_eval <<-METHOD, __FILE__, __LINE__ + 1
+          def #{accessor}
+            if defined?(@#{accessor})
+              @#{accessor}
+            elsif superclass.respond_to?(:#{accessor})
+              superclass.#{accessor}
+            else
+              Devise.#{accessor}
+            end
+          end
+    
+          # Update password saving the record and clearing token. Returns true if
+      # the passwords are valid and the record was saved, false otherwise.
+      def reset_password(new_password, new_password_confirmation)
+        if new_password.present?
+          self.password = new_password
+          self.password_confirmation = new_password_confirmation
+          save
+        else
+          errors.add(:password, :blank)
+          false
+        end
       end
-    end
     
-      config.active_support.test_order = :random
-    
-          def initialize(argv)
-        super
-        config.silent = false
+          def self.required_fields(klass)
+        []
       end
     
+      def maxheight_or_default
+    params[:maxheight].present? ? params[:maxheight].to_i : nil
+  end
+end
+
     
-  class << self
-    # This method is invoked when subclass occurs.
-    #
-    # Lets us track all known FPM::Package subclasses
-    def inherited(klass)
-      @subclasses ||= {}
-      @subclasses[klass.name.gsub(/.*:/, '').downcase] = klass
-    end # def self.inherited
+      def local_domain?
+    TagManager.instance.web_domain?(hub_topic_domain)
+  end
     
-      option '--lint' , :flag, 'Check manifest with pkglint',
-    :default => true
-    
-        # Copy all files from staging to BUILD dir
-    Find.find(staging_path) do |path|
-      src = path.gsub(/^#{staging_path}/, '')
-      dst = build_path(src)
-      copy_entry(path, dst, preserve=true, remove_destination=true)
-      copy_metadata(path, dst)
-    end
-    
-      def build!(params)
-    # TODO(sissel): Support these somehow, perhaps with execs and files.
-    self.scripts.each do |name, path|
-      case name
-        when 'pre-install'
-        when 'post-install'
-        when 'pre-uninstall'
-        when 'post-uninstall'
-      end # case name
-    end # self.scripts.each
-    
-        safesystem('tar', *args)
-  end # def output
+      def export_filename
+    '#{controller_name}.csv'
+  end
+end
