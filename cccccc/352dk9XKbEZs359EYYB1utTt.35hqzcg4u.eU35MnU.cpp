@@ -1,283 +1,403 @@
 
         
-        
-    {  DISALLOW_COPY_AND_ASSIGN(UvTaskRunner);
+        // Parses a set of comma-delimited name/value pairs.
+void ParseGeneratorParameter(const string& text,
+                             std::vector<std::pair<string, string> >* output) {
+  std::vector<string> parts = Split(text, ',', true);
+    }
+    
+      auto* message1_on_arena =
+      Arena::CreateMessage<protobuf_unittest::TestAllTypes>(&arena);
+  TestUtil::SetAllFields(message1_on_arena);
+  const auto* nested = &message1_on_arena->optional_nested_message();
+    
+    void WriteDocCommentBodyImpl(io::Printer* printer, SourceLocation location) {
+    string comments = location.leading_comments.empty() ?
+        location.trailing_comments : location.leading_comments;
+    if (comments.empty()) {
+        return;
+    }
+    // XML escaping... no need for apostrophes etc as the whole text is going to be a child
+    // node of a summary element, not part of an attribute.
+    comments = StringReplace(comments, '&', '&amp;', true);
+    comments = StringReplace(comments, '<', '&lt;', true);
+    std::vector<string> lines = Split(comments, '\n', false /* skip_empty */);
+    // TODO: We really should work out which part to put in the summary and which to put in the remarks...
+    // but that needs to be part of a bigger effort to understand the markdown better anyway.
+    printer->Print('/// <summary>\n');
+    bool last_was_empty = false;
+    // We squash multiple blank lines down to one, and remove any trailing blank lines. We need
+    // to preserve the blank lines themselves, as this is relevant in the markdown.
+    // Note that we can't remove leading or trailing whitespace as *that's* relevant in markdown too.
+    // (We don't skip 'just whitespace' lines, either.)
+    for (std::vector<string>::iterator it = lines.begin(); it != lines.end(); ++it) {
+        string line = *it;
+        if (line.empty()) {
+            last_was_empty = true;
+        } else {
+            if (last_was_empty) {
+                printer->Print('///\n');
+            }
+            last_was_empty = false;
+            printer->Print('///$line$\n', 'line', *it);
+        }
+    }
+    printer->Print('/// </summary>\n');
+}
+    
+    EnumGenerator::EnumGenerator(const EnumDescriptor* descriptor, const Options* options) :
+    SourceGeneratorBase(descriptor->file(), options),
+    descriptor_(descriptor) {
+}
+    
+      desired_output_for_decode = 'abcdefghIJ';
+  expected = string('\x0A\x0', 2);
+  result = TextFormatDecodeData::DecodeDataForString(input_for_decode,
+                                                     desired_output_for_decode);
+  EXPECT_EQ(expected, result);
+    
+    bool GzipOutputStream::Flush() {
+  zerror_ = Deflate(Z_FULL_FLUSH);
+  // Return true if the flush succeeded or if it was a no-op.
+  return  (zerror_ == Z_OK) ||
+      (zerror_ == Z_BUF_ERROR && zcontext_.avail_in == 0 &&
+       zcontext_.avail_out != 0);
+}
+    
+      // Before Next() is called, the initial token should always be TYPE_START.
+  EXPECT_EQ(Tokenizer::TYPE_START, tokenizer.current().type);
+  EXPECT_EQ('', tokenizer.current().text);
+  EXPECT_EQ(0, tokenizer.current().line);
+  EXPECT_EQ(0, tokenizer.current().column);
+  EXPECT_EQ(0, tokenizer.current().end_column);
+    
+    SHOULD_NOT_DO_GRADIENT(EnforceFinite);
+    
+    ```
+    
+    template <typename T, class Context>
+class BernoulliJSDGradientOp final : public Operator<Context> {
+ public:
+  USE_SIMPLE_CTOR_DTOR(BernoulliJSDGradientOp);
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  bool RunOnDevice() override;
 };
     
-      static void BuildPrototype(v8::Isolate* isolate,
-                             v8::Local<v8::FunctionTemplate> prototype);
+      // Array holding scores for each orientation id [0,3].
+  // Orientation ids [0..3] map to [0, 270, 180, 90] degree orientations of the
+  // page respectively, where the values refer to the amount of clockwise
+  // rotation to be applied to the page for the text to be upright and readable.
+  float orientations[4];
+  // Script confidence scores for each of 4 possible orientations.
+  float scripts_na[4][kMaxNumberOfScripts];
     
-    #endif  // ATOM_BROWSER_API_ATOM_API_NET_H_
+    void Tesseract::PrerecAllWordsPar(const GenericVector<WordData>& words) {
+  // Prepare all the blobs.
+  GenericVector<BlobData> blobs;
+  for (int w = 0; w < words.size(); ++w) {
+    if (words[w].word->ratings != nullptr &&
+        words[w].word->ratings->get(0, 0) == nullptr) {
+      for (int s = 0; s < words[w].lang_words.size(); ++s) {
+        Tesseract* sub = s < sub_langs_.size() ? sub_langs_[s] : this;
+        const WERD_RES& word = *words[w].lang_words[s];
+        for (int b = 0; b < word.chopped_word->NumBlobs(); ++b) {
+          blobs.push_back(BlobData(b, sub, word));
+        }
+      }
+    }
+  }
+  // Pre-classify all the blobs.
+  if (tessedit_parallelize > 1) {
+#ifdef _OPENMP
+#pragma omp parallel for num_threads(10)
+#endif  // _OPENMP
+    for (int b = 0; b < blobs.size(); ++b) {
+      *blobs[b].choices =
+          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
+    }
+  } else {
+    // TODO(AMD) parallelize this.
+    for (int b = 0; b < blobs.size(); ++b) {
+      *blobs[b].choices =
+          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
+    }
+  }
+}
+    
+    #include 'paramsd.h'
+#include <cstdio>            // for fclose, fopen, fprintf, sprintf, FILE
+#include <cstdlib>           // for atoi, strtod
+#include <cstring>           // for strcmp, strcspn, strlen, strncpy
+#include <map>               // for map, _Rb_tree_iterator, map<>::iterator
+#include <memory>            // for unique_ptr
+#include <utility>           // for pair
+#include 'genericvector.h'   // for GenericVector
+#include 'params.h'          // for ParamsVectors, StringParam, BoolParam
+#include 'scrollview.h'      // for SVEvent, ScrollView, SVET_POPUP
+#include 'svmnode.h'         // for SVMenuNode
+#include 'tesseractclass.h'  // for Tesseract
+    
+      // Inserts a new box before the given index.
+  // Recomputes the bounding box.
+  void InsertBox(int index, const TBOX& box);
+    
+      // Accessors.
+  int total_cost() const {
+    return total_cost_;
+  }
+  int Pathlength() const {
+    return total_steps_;
+  }
+  const DPPoint* best_prev() const {
+    return best_prev_;
+  }
+  void AddLocalCost(int new_cost) {
+    local_cost_ += new_cost;
+  }
+    
+      // Returns the direction of the fitted line as a unit vector, using the
+  // least mean squared perpendicular distance. The line runs through the
+  // mean_point, i.e. a point p on the line is given by:
+  // p = mean_point() + lambda * vector_fit() for some real number lambda.
+  // Note that the result (0<=x<=1, -1<=y<=-1) is directionally ambiguous
+  // and may be negated without changing its meaning, since a line is only
+  // unique to a range of pi radians.
+  // Modernists prefer to think of this as an Eigenvalue problem, but
+  // Pearson had the simple solution in 1901.
+  //
+  // Note that this is equivalent to returning the Principal Component in PCA,
+  // or the eigenvector corresponding to the largest eigenvalue in the
+  // covariance matrix.
+  FCOORD vector_fit() const;
+    
+     private:
+  // Free allocated memory and clear pointers.
+  void Clear();
+  // Setup default values.
+  void Init();
+    
+    
+    {
+    {
+    {			}
+			if (decomposed[i].IsUsable()){
+				decomposed[i].AddTo(*toAdd);
+				
+				bd->CreateFixture((const b2FixtureDef*)toAdd);
+			} else if (B2_POLYGON_REPORT_ERRORS){
+				printf('Didn't add unusable polygon.  Dumping vertices:\n');
+				decomposed[i].print();
+			}
+Skip:
+			;
+        }
+		delete[] pdarray;
+        delete[] decomposed;
+		return;// pdarray; //needs to be deleted after body is created
+}
+    
+    		Image image(a_pafSourceRGBA, a_uiSourceWidth,
+					a_uiSourceHeight,
+					a_eErrMetric);
+		image.m_bVerboseOutput = a_bVerboseOutput;
+		image.Encode(a_format, a_eErrMetric, a_fEffort, a_uiJobs, a_uiMaxJobs);
+    
+    		// if a border pixel
+		if (isnan(a_frgbaSourcePixel.fA))
+		{
+			return 0.0f;
+		}
+    
+    
+#endif /* AFBLUE_H_ */
+    
+    #define SAMP_MIN -SAMP_MAX
+    
+       - Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+    
+       - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+    
+    
+    {
+    {
+    {}  // namespace caffe
+}  // namespace op
+}  // namespace mxnet
 
     
-    #include 'atom/browser/api/trackable_object.h'
-#include 'atom/browser/lib/power_observer.h'
-#include 'base/compiler_specific.h'
-#include 'native_mate/handle.h'
-#include 'ui/base/idle/idle.h'
     
-    class Tray : public mate::TrackableObject<Tray>, public TrayIconObserver {
- public:
-  static mate::WrappableBase* New(mate::Handle<NativeImage> image,
-                                  mate::Arguments* args);
+    {  /*! \brief MNISTCass iter params */
+  CaffeDataParam param_;
+  /*! \brief Shape scalar values */
+  index_t batch_size_, channels_, width_, height_;
+  /*! \brief Caffe data layer */
+  boost::shared_ptr<caffe::Layer<Dtype> >  caffe_data_layer_;
+  /*! \brief batch data blob */
+  mxnet::TBlob batch_data_;
+  /*! \brief batch label blob */
+  mxnet::TBlob batch_label_;
+  /*! \brief Output blob data for this iteration */
+  TBlobBatch out_;
+  /*! \brief Bottom and top connection-point blob data */
+  std::vector<::caffe::Blob<Dtype>*> bottom_, top_;
+  /*! \brief Cleanup these blobs on exit */
+  std::list<std::unique_ptr<::caffe::Blob<Dtype>>> cleanup_blobs_;
+  /*! \brief type flag of the tensor blob */
+  const int type_flag_;
+  /*! \brief Blobs done so far */
+  std::atomic<size_t>  loc_;
+};  // class CaffeDataIter
+    
+      void HandleOpReq(mshadow::Stream<xpu>*s, OpReqType req, const TBlob& in_g) {
+    if ((req == kWriteInplace) || (req == kWriteTo)) {
+      mshadow::Tensor<xpu, 2, Dtype> grad = in_g.FlatTo2D<xpu, Dtype>(s);
+      grad = 0;
     }
+  }
     
-    #include 'atom/browser/api/save_page_handler.h'
-    
-    #include 'content/public/browser/quota_permission_context.h'
-#include 'content/public/common/storage_quota_params.h'
-    
-    // --------------------------- Typedefs ---------------------------
-    
-    
-    {    struct KeypointStore {
-        virtual void push(f32 kpX, f32 kpY, f32 kpSize, f32 kpAngle=-1, f32 kpResponse=0, s32 kpOctave=0, s32 kpClass_id=-1) = 0;
-        virtual ~KeypointStore() {};
-    };
-}
-    
-    #ifdef CAROTENE_NEON
-    // this ugly contruction is needed to avoid:
-    // /usr/lib/gcc/arm-linux-gnueabihf/4.8/include/arm_neon.h:3581:59: error: argument must be a constant
-    // return (int16x8_t)__builtin_neon_vshr_nv8hi (__a, __b, 1);
-    
-        void operator() (const typename VecTraits<s32>::vec64 & v_src0,
-                     const typename VecTraits<s32>::vec64 & v_src1,
-                     typename VecTraits<s32>::vec64 & v_dst) const
-    {
-        float32x2_t vs1 = vcvt_f32_s32(v_src0);
-        float32x2_t vs2 = vcvt_f32_s32(v_src1);
-    }
-    
-    #ifndef __ANDROID__
-        for (; sj < roiw32; sj += 32, syj += 64, dj += 128)
-        {
-            internal::prefetch(srcy + syj);
-            internal::prefetch(srcu + sj);
-            internal::prefetch(srcv + sj);
-    }
-    
-    ptrdiff_t borderInterpolate(ptrdiff_t _p, size_t _len, BORDER_MODE borderType, size_t startMargin, size_t endMargin)
-{
-    ptrdiff_t p = _p + (ptrdiff_t)startMargin;
-    size_t len = _len + startMargin + endMargin;
-    if( (size_t)p < len )
-        return _p;
-    else if( borderType == BORDER_MODE_REPLICATE )
-        p = p < 0 ? 0 : (ptrdiff_t)len - 1;
-    else if( borderType == BORDER_MODE_REFLECT || borderType == BORDER_MODE_REFLECT101 )
-    {
-        s32 delta = borderType == BORDER_MODE_REFLECT101;
-        if( len == 1 )
-            return 0;
-        do
-        {
-            if( p < 0 )
-                p = -p - 1 + delta;
-            else
-                p = (ptrdiff_t)len - 1 - (p - (ptrdiff_t)len) - delta;
-        }
-        while( (size_t)p >= len );
-    }
-    else if( borderType == BORDER_MODE_WRAP )
-    {
-        if( p < 0 )
-            p -= ((p-(ptrdiff_t)len+1)/(ptrdiff_t)len)*(ptrdiff_t)len;
-        if( p >= (ptrdiff_t)len )
-            p %= (ptrdiff_t)len;
-    }
-    else if( borderType == BORDER_MODE_CONSTANT )
-        p = -1;
-    else
-        internal::assertSupportedConfiguration(false);
-    return p - (ptrdiff_t)startMargin;
-}
-    
-    #define CVTS_FUNC(T1, T2, SIMD_SIZE, CVTINIT, CVTROW)                            \
-    void convertScale(const Size2D &,                                            \
-                      const T1 *, ptrdiff_t,                                     \
-                      T2 *, ptrdiff_t,                                           \
-                      f64, f64)                                                  \
-    {                                                                            \
-        internal::assertSupportedConfiguration();                                \
-    }
-    
-    
-    {
-    {
-    {            prevx[2] = currx[2];
-            currx[2] = nextx[2];
-        }
-    }
-#else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)border;
-    (void)borderValue;
-    (void)ksize;
-    (void)kernelBase;
-    (void)scale;
-#endif
-}
-    
-    
-    {    return 0;
-#endif
-}
-    
-        for(size_t j = 0; j < size.height; ++j)
-    {
-        const T *  src = internal::getRowPtr( srcBase,  srcStride, j);
-        const T * rng1 = internal::getRowPtr(rng1Base, rng1Stride, j);
-        const T * rng2 = internal::getRowPtr(rng2Base, rng2Stride, j);
-             u8 *  dst = internal::getRowPtr( dstBase,  dstStride, j);
-        size_t i = 0;
-        for( ; i < width; i += 32/sizeof(T) )
-        {
-            internal::prefetch(src + i);
-            internal::prefetch(rng1 + i);
-            internal::prefetch(rng2 + i);
-    }
-    }
-    
-      const Dtype* cpu_data() const;
-  void set_cpu_data(Dtype* data);
-  const int* gpu_shape() const;
-  const Dtype* gpu_data() const;
-  void set_gpu_data(Dtype* data);
-  const Dtype* cpu_diff() const;
-  const Dtype* gpu_diff() const;
-  Dtype* mutable_cpu_data();
-  Dtype* mutable_gpu_data();
-  Dtype* mutable_cpu_diff();
-  Dtype* mutable_gpu_diff();
-  void Update();
-  void FromProto(const BlobProto& proto, bool reshape = true);
-  void ToProto(BlobProto* proto, bool write_diff = false) const;
-    
-    /**
- * @brief Applies common transformations to the input data, such as
- * scaling, mirroring, substracting the image mean...
+    namespace mxnet {
+namespace io {
+/*!
+ * \brief OpenCV based Image augmenter,
+ *  The augmenter can contain internal temp state.
  */
-template <typename Dtype>
-class DataTransformer {
+class ImageAugmenter {
  public:
-  explicit DataTransformer(const TransformationParameter& param, Phase phase);
-  virtual ~DataTransformer() {}
+  /*!
+   *  \brief Initialize the Operator by setting the parameters
+   *  This function need to be called before all other functions.
+   *  \param kwargs the keyword arguments parameters
+   */
+  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) = 0;
+  /*!
+   * \brief augment src image.
+   *   this function is not thread safe, and will only be called by one thread
+   *   however, it will tries to re-use memory space as much as possible
+   * \param src the source image
+   * \param prnd pointer to random number generator.
+   * \return The processed image.
+   */
+  virtual cv::Mat Process(const cv::Mat &src, std::vector<float> *label,
+                          common::RANDOM_ENGINE *prnd) = 0;
+  // virtual destructor
+  virtual ~ImageAugmenter() {}
+  /*!
+   * \brief factory function
+   * \param name Name of the augmenter
+   * \return The created augmenter.
+   */
+  static ImageAugmenter* Create(const std::string& name);
+};
+    }
     }
     
-    namespace caffe {
+        if (param_.mean_r > 0.0f || param_.mean_g > 0.0f ||
+        param_.mean_b > 0.0f || param_.mean_a > 0.0f) {
+      // subtract mean per channel
+      data[0] -= param_.mean_r;
+      if (data.shape_[0] >= 3) {
+        data[1] -= param_.mean_g;
+        data[2] -= param_.mean_b;
+      }
+      if (data.shape_[0] == 4) {
+        data[3] -= param_.mean_a;
+      }
+    } else if (!meanfile_ready_ || param_.mean_img.length() == 0) {
+      // do not subtract anything
+    } else {
+      CHECK(meanfile_ready_);
+      data -= meanimg_;
     }
     
-    #endif  // CAFFE_ABSVAL_LAYER_HPP_
+    /*
+ * Before using the parallel module, you can configure these to change
+ * how much parallelism is used.
+ */
+extern size_t num_threads;
+extern size_t work_chunk;
+    
+    
+    {
+    {
+    {  inline void PutChar(char ch) {
+    out_buf += ch;
+    if (out_buf.length() >= kBufferSize) Flush();
+  }
+  inline void Flush(void) {
+    if (out_buf.length() != 0) {
+      fp->Write(&out_buf[0], out_buf.length());
+      out_buf.clear();
+    }
+  }
+};
+}  // namespace common
+}  // namespace xgboost
+#endif  // XGBOOST_COMMON_BASE64_H_
 
     
-    #endif  // CAFFE_CROP_LAYER_HPP_
-
-    
-      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
-  cudnnTensorDescriptor_t    bias_desc_;
-  cudnnFilterDescriptor_t      filter_desc_;
-  vector<cudnnConvolutionDescriptor_t> conv_descs_;
-  int bottom_offset_, top_offset_, bias_offset_;
-    
-    #include 'caffe/layers/lrn_layer.hpp'
-#include 'caffe/layers/power_layer.hpp'
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    void *AlignTo8(void *from) {
-  uint8_t *val = reinterpret_cast<uint8_t*>(from);
-  std::size_t remainder = reinterpret_cast<std::size_t>(val) & 7;
-  if (!remainder) return val;
-  return val + 8 - remainder;
-}
-    
-    #include 'lm/lm_exception.hh'
-#include 'util/file.hh'
-#include 'util/file_piece.hh'
-    
-        // Reading a binary file:
-    // Takes ownership of fd
-    void InitializeBinary(int fd, ModelType model_type, unsigned int search_version, Parameters &params);
-    // Used to read parts of the file to update the config object before figuring out full size.
-    void ReadForConfig(void *to, std::size_t amount, uint64_t offset_excluding_header) const;
-    // Actually load the binary file and return a pointer to the beginning of the search area.
-    void *LoadBinary(std::size_t size);
-    
-    // This compiles down nicely.
-inline bool HasExtension(const float &backoff) {
-  typedef union { float f; uint32_t i; } UnionValue;
-  UnionValue compare, interpret;
-  compare.f = kNoExtensionBackoff;
-  interpret.f = backoff;
-  return compare.i != interpret.i;
-}
-    
-    namespace lm { namespace {
-    }
-    }
-    
-    
-    {    const Payload &Value() const { return *reinterpret_cast<const Payload *>(end()); }
-    Payload &Value() { return *reinterpret_cast<Payload *>(end()); }
+    // logistic loss, but predict un-transformed margin
+struct LogisticRaw : public LogisticRegression {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    predt = common::Sigmoid(predt);
+    return predt - label;
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    const float eps = 1e-16f;
+    predt = common::Sigmoid(predt);
+    return fmaxf(predt * (1.0f - predt), eps);
+  }
+  template <typename T>
+    static T PredTransform(T x) { return x; }
+  template <typename T>
+    static T FirstOrderGradient(T predt, T label) {
+    predt = common::Sigmoid(predt);
+    return predt - label;
+  }
+  template <typename T>
+    static T SecondOrderGradient(T predt, T label) {
+    const T eps = T(1e-16f);
+    predt = common::Sigmoid(predt);
+    return std::max(predt * (T(1.0f) - predt), eps);
+  }
+  static const char* DefaultEvalMetric() { return 'auc'; }
 };
     
-    #include <sstream>
-#include <cstring>
+    // implementing configure.
+template<typename PairIter>
+inline void GradientBooster::Configure(PairIter begin, PairIter end) {
+  std::vector<std::pair<std::string, std::string> > vec(begin, end);
+  this->Configure(vec);
+}
     
-        void operator()(const std::string &from) {
-      behind_ = util::ParseSize(from);
+      /*! \return the default evaluation metric for the objective */
+  virtual const char* DefaultEvalMetric() const = 0;
+  // the following functions are optional, most of time default implementation is good enough
+  /*!
+   * \brief transform prediction values, this is only called when Prediction is called
+   * \param io_preds prediction values, saves to this vector as well
+   */
+  virtual void PredTransform(HostDeviceVector<bst_float> *io_preds) {}
+    
+      bool Read(SparsePage* page,
+            dmlc::SeekStream* fi,
+            const std::vector<bst_uint>& sorted_index_set) override {
+    if (!fi->Read(&disk_offset_)) return false;
+    this->LoadIndexValue(fi);
+    auto& offset_vec = page->offset.HostVector();
+    auto& data_vec = page->data.HostVector();
+    offset_vec.clear();
+    offset_vec.push_back(0);
+    for (bst_uint cid : sorted_index_set) {
+      offset_vec.push_back(
+          offset_vec.back() + disk_offset_[cid + 1] - disk_offset_[cid]);
     }
-    
-    class SpecialVocab {
-  public:
-    SpecialVocab(WordIndex bos, WordIndex eos) : bos_(bos), eos_(eos) {}
+    data_vec.resize(offset_vec.back());
+    CHECK_EQ(index_.data.size(), value_.data.size());
+    CHECK_EQ(index_.data.size(), disk_offset_.back());
     }
-    
-    #endif // LM_INTERPOLATE_BACKOFF_MATRIX_H
-
-    
-    /********************************************************************************** 
- * 
- * Design a data structure that supports the following two operations:
- * 
- * void addWord(word)
- * bool search(word)
- * 
- * search(word) can search a literal word or a regular expression string containing only letters `a-z` or `.`
- * A `.` means it can represent any one letter.
- * 
- * For example:
- * 
- *   addWord('bad')
- *   addWord('dad')
- *   addWord('mad')
- *   search('pad') -> false
- *   search('bad') -> true
- *   search('.ad') -> true
- *   search('b..') -> true
- * 
- * Note:
- * You may assume that all words are consist of lowercase letters a-z.
- * 
- * click to show hint.
- * 
- * You should be familiar with how a Trie works. If not, please work on this problem: Implement Trie (Prefix Tree) first.
- * 
- *               
- **********************************************************************************/
-#include <string.h>
-#include <iostream>
-#include <string>
-using namespace std;
-    
-    
-    {        }
