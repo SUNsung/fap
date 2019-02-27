@@ -1,331 +1,404 @@
 
         
-        // Add a _ to the end of s if necessary to avoid a Python keyword or built-in.
-string AvoidPythonReserved(const string& s);
+          // Finally, add the generic parameters from the requirement.
+  for (auto genericParam : reqSig->getGenericParams().slice(1)) {
+    // The only depth that makes sense is depth == 1, the generic parameters
+    // of the requirement itself. Anything else is from invalid code.
+    if (genericParam->getDepth() != 1) {
+      return;
+    }
+    }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // Must be included first.
-#include 'tensorflow/python/lib/core/numpy.h'
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    
-    {  DCHECK(PyDict_Check(code_to_exc_type_map));
-  PyObject* key;
-  PyObject* value;
-  Py_ssize_t pos = 0;
-  while (PyDict_Next(code_to_exc_type_map, &pos, &key, &value)) {
-    TF_Code code = static_cast<TF_Code>(PyLong_AsLong(key));
-    singleton_->exc_types_[code] = value;
-    // The exception classes should also have the lifetime of the process, but
-    // incref just in case.
-    Py_INCREF(value);
+    #ifndef NDEBUG
+/// Verify that the types of fields are valid within a given generic signature.
+static void verifyFields(CanGenericSignature Sig, ArrayRef<SILField> Fields) {
+  for (auto &field : Fields) {
+    auto ty = field.getLoweredType();
+    // Layouts should never refer to archetypes, since they represent an
+    // abstract generic type layout.
+    assert(!ty->hasArchetype()
+           && 'SILLayout field cannot have an archetype type');
+    assert(!ty->hasTypeVariable()
+           && 'SILLayout cannot contain constraint system type variables');
+    if (!ty->hasTypeParameter())
+      continue;
+    field.getLoweredType().findIf([Sig](Type t) -> bool {
+      if (auto gpt = t->getAs<GenericTypeParamType>()) {
+        // Check that the generic param exists in the generic signature.
+        assert(Sig && 'generic param in nongeneric layout?');
+        assert(std::find(Sig.getGenericParams().begin(),
+                         Sig.getGenericParams().end(),
+                         gpt->getCanonicalType()) != Sig.getGenericParams().end()
+               && 'generic param not declared in generic signature?!');
+      }
+      return false;
+    });
   }
 }
+#endif
     
-    // Global registry mapping C API error codes to the corresponding custom Python
-// exception type. This is used to expose the exception types to C extension
-// code (i.e. so we can raise custom exceptions via SWIG).
-//
-// Init() must be called exactly once at the beginning of the process before
-// Lookup() can be used.
-//
-// Example usage:
-//   TF_Status* status = TF_NewStatus();
-//   TF_Foo(..., status);
-//
-//   if (TF_GetCode(status) != TF_OK) {
-//     PyObject* exc_type = PyExceptionRegistry::Lookup(TF_GetCode(status));
-//     // Arguments to OpError base class. Set `node_def` and `op` to None.
-//     PyObject* args =
-//       Py_BuildValue('sss', nullptr, nullptr, TF_Message(status));
-//     PyErr_SetObject(exc_type, args);
-//     Py_DECREF(args);
-//     TF_DeleteStatus(status);
-//     return NULL;
-//   }
-class PyExceptionRegistry {
- public:
-  // Initializes the process-wide registry. Should be called exactly once near
-  // the beginning of the process. The arguments are the various Python
-  // exception types (e.g. `cancelled_exc` corresponds to
-  // errors.CancelledError).
-  static void Init(PyObject* code_to_exc_type_map);
+    void
+swift::trimLeadingWhitespaceFromLines(StringRef RawText,
+                                      unsigned WhitespaceToTrim,
+                                      SmallVectorImpl<StringRef> &OutLines) {
+  SmallVector<StringRef, 8> Lines;
     }
     
-    // Given an numpy ndarray object 'obj', creates a corresponding tf
-// Tensor in '*ret'.
-Status ConvertNdarrayToTensor(PyObject* obj, Tensor* ret);
+    // Import As Member -- attempt to import C global functions and variables as
+// members on types or instances.
     
-        http://www.apache.org/licenses/LICENSE-2.0
     
-    #include 'tensorflow/stream_executor/platform.h'
-    
-    port::StatusOr<StreamExecutor*> ExecutorCache::GetOrCreate(
-    const StreamExecutorConfig& config,
-    const std::function<ExecutorFactory>& factory) {
-  // In the fast path case, the cache already has an entry and we can just
-  // return after Get() which only takes a shared lock and not a unique lock.
-  // If we need to create, we take a unique lock on cache_.
-  auto fast_result = Get(config);
-  if (fast_result.ok()) {
-    return fast_result;
+    {    if (waiting_for_decision_) {
+      EXPECT_EQ(expect_allow_, allow);
+      if (message_loop_runner_.get())
+        message_loop_runner_->Quit();
+      callback.Run(allow);
+      return;
+    }
+    last_download_allowed_ = allow;
+    callback.Run(allow);
   }
-    }
     
-    // TaskRunner implementation that posts tasks into libuv's default loop.
-class UvTaskRunner : public base::SingleThreadTaskRunner {
- public:
-  explicit UvTaskRunner(uv_loop_t* loop);
-    }
+    void KickNextTick() {
+  v8::MicrotasksScope microtasks(v8::Isolate::GetCurrent(), v8::MicrotasksScope::kDoNotRunMicrotasks);
+  void* env = g_get_node_env_fn();
+  if (env)
+    g_call_tick_callback_fn(env);
+}
     
-    #ifndef ATOM_BROWSER_API_ATOM_API_AUTO_UPDATER_H_
-#define ATOM_BROWSER_API_ATOM_API_AUTO_UPDATER_H_
+    void Base::CallSync(const std::string& method,
+                    const base::ListValue& arguments,
+                    base::ListValue* result) {
+  NOTREACHED() << 'Uncatched callAsync in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
+}
     
-    namespace gfx {
-class Point;
-class Rect;
-class Screen;
-}  // namespace gfx
-    
-      // TrayIconObserver:
-  void OnClicked(const gfx::Rect& bounds,
-                 const gfx::Point& location,
-                 int modifiers) override;
-  void OnDoubleClicked(const gfx::Rect& bounds, int modifiers) override;
-  void OnRightClicked(const gfx::Rect& bounds, int modifiers) override;
-  void OnBalloonShow() override;
-  void OnBalloonClicked() override;
-  void OnBalloonClosed() override;
-  void OnDrop() override;
-  void OnDropFiles(const std::vector<std::string>& files) override;
-  void OnDropText(const std::string& text) override;
-  void OnDragEntered() override;
-  void OnDragExited() override;
-  void OnDragEnded() override;
-  void OnMouseEntered(const gfx::Point& location, int modifiers) override;
-  void OnMouseExited(const gfx::Point& location, int modifiers) override;
-  void OnMouseMoved(const gfx::Point& location, int modifiers) override;
-    
-    Event::~Event() {}
-    
-     private:
-  void OnMessageBoxCallback(DialogClosedCallback callback,
-                            const std::string& origin,
-                            int code,
-                            bool checkbox_checked);
-    
-    #endif  // ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
-
-    
-    #endif  // ATOM_BROWSER_AUTO_UPDATER_H_
-
-    
-    void OffScreenOutputDevice::OnPaint(const gfx::Rect& damage_rect) {
-  gfx::Rect rect = damage_rect;
-  if (!pending_damage_rect_.IsEmpty()) {
-    rect.Union(pending_damage_rect_);
-    pending_damage_rect_.SetRect(0, 0, 0, 0);
+      static int getUID() {
+    static int id = 0;
+    return ++id;
   }
-    }
     
-    void OffscreenViewProxy::OnEvent(ui::Event* event) {
-  if (view_) {
-    view_->OnEvent(event);
-  }
+       bool HasIcon(int command_id) override;
+    
+      if (menu_item->submenu_)
+    menu_model_->InsertSubMenuAt(pos, menu_item->id(), menu_item->label_,
+                                 menu_item->submenu_->menu_model_.get());
+  else if (menu_item->type_ == 'normal')
+    menu_model_->InsertItemAt(pos, menu_item->id(), menu_item->label_);
+  else if (menu_item->type_ == 'checkbox')
+    menu_model_->InsertCheckItemAt(pos, menu_item->id(), menu_item->label_);
+  else if (menu_item->type_ == 'separator')
+    menu_model_->InsertSeparatorAt(pos, ui::NORMAL_SEPARATOR);
+    
+    
+    {      }
+      keyval = gdk_keyval_from_name(key.c_str());
+    
+    NwObjCallObjectMethodAsyncFunction::~NwObjCallObjectMethodAsyncFunction() {
 }
     
     
-    
-    /// The list of known CF types.  We use 'constexpr' to verify that this is
-/// emitted as a constant.  Note that this is expected to be sorted in
-/// quasi-lexicographic order.
-static constexpr const llvm::StringLiteral KnownCFTypes[] = {
-#define CF_TYPE(NAME) #NAME,
-#define NON_CF_TYPE(NAME)
-#include 'SortedCFDatabase.def'
-};
-const size_t NumKnownCFTypes = sizeof(KnownCFTypes) / sizeof(*KnownCFTypes);
-    
-      public:
-    ClangDiagRenderer(const clang::LangOptions &langOpts,
-                      clang::DiagnosticOptions *diagOpts,
-                      decltype(callback) fn)
-       : DiagnosticNoteRenderer(langOpts, diagOpts),
-         callback(fn) {}
-    
-    
-    {  return 0;
-}
-    
-    #include 'swift/Demangling/Punycode.h'
-#include 'swift/Demangling/ManglingUtils.h'
-#include <vector>
-#include <cstdint>
-    
-    class LLVM_LIBRARY_VISIBILITY GenericUnix : public ToolChain {
-protected:
-  InvocationInfo constructInvocation(const InterpretJobAction &job,
-                                     const JobContext &context) const override;
-  InvocationInfo constructInvocation(const AutolinkExtractJobAction &job,
-                                     const JobContext &context) const override;
+    {        return handlePrev(offset, status);
     }
     
-    OPERATOR_SCHEMA(HalfToFloat)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .TensorInferenceFunction(
-        [](const OperatorDef& def, const vector<TensorShape>& in) {
-          vector<TensorShape> out;
-          const TensorShape& X = in[0];
-          out.push_back(X);
-          out[0].set_data_type(TensorProto_DataType_FLOAT);
-    }
+    #define LOW_A             ((UChar)0x0061)
+#define LOW_B             ((UChar)0x0062)
+#define LOW_C             ((UChar)0x0063)
+#define LOW_D             ((UChar)0x0064)
+#define LOW_E             ((UChar)0x0065)
+#define LOW_F             ((UChar)0x0066)
+#define LOW_G             ((UChar)0x0067)
+#define LOW_H             ((UChar)0x0068)
+#define LOW_I             ((UChar)0x0069)
+#define LOW_J             ((UChar)0x006a)
+#define LOW_K             ((UChar)0x006B)
+#define LOW_L             ((UChar)0x006C)
+#define LOW_M             ((UChar)0x006D)
+#define LOW_N             ((UChar)0x006E)
+#define LOW_O             ((UChar)0x006F)
+#define LOW_P             ((UChar)0x0070)
+#define LOW_Q             ((UChar)0x0071)
+#define LOW_R             ((UChar)0x0072)
+#define LOW_S             ((UChar)0x0073)
+#define LOW_T             ((UChar)0x0074)
+#define LOW_U             ((UChar)0x0075)
+#define LOW_V             ((UChar)0x0076)
+#define LOW_W             ((UChar)0x0077)
+#define LOW_X             ((UChar)0x0078)
+#define LOW_Y             ((UChar)0x0079)
+#define LOW_Z             ((UChar)0x007A)
     
-    template <typename T, class Context>
-class BernoulliJSDOp final : public Operator<Context> {
- public:
-  USE_SIMPLE_CTOR_DTOR(BernoulliJSDOp);
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
-  bool RunOnDevice() override;
+    #ifndef __SHARED_CALENDAR_H__
+#define __SHARED_CALENDAR_H__
+    
+    
+class U_I18N_API SharedDateFormatSymbols : public SharedObject {
+public:
+    SharedDateFormatSymbols(
+            const Locale &loc, const char *type, UErrorCode &status)
+            : dfs(loc, type, status) { }
+    virtual ~SharedDateFormatSymbols();
+    const DateFormatSymbols &get() const { return dfs; }
+private:
+    DateFormatSymbols dfs;
+    SharedDateFormatSymbols(const SharedDateFormatSymbols &);
+    SharedDateFormatSymbols &operator=(const SharedDateFormatSymbols &);
 };
     
-        Matrix<char>* NDMask::GetMatrix() const
-    {
-        return m_matrixView.get();
-    }
     
-            static FunctionPtr Deserialize(const Dictionary& dictionary,
-            const std::unordered_map<std::wstring, Variable>& uidToVariableMap,
-            const CNTK::DeviceDescriptor& device);
-    
-        //
-    // Create NDMask for the 'sequences' if the 'sequences' do not have the same length.
-    // It returns null if all the 'sequences' have the same length.
-    //
-    template <typename T>
-    static NDMaskPtr CreateMask(size_t numElementsPerSample, const std::vector<std::vector<T>>& sequences, const std::vector<bool>& sequenceStartFlags, const DeviceDescriptor& device)
-    {
-        size_t numSequences = sequences.size();
-        std::vector<size_t> sequenceLengths(numSequences);
-        for (size_t i = 0; i < numSequences; ++i)
-            sequenceLengths[i] = sequences[i].size() / numElementsPerSample;
-    }
-    
-        Parameter::Parameter(const NDShape& shape, DataType dataType, const ParameterInitializer& initializer, const DeviceDescriptor& device, const std::wstring& name)
-        : Variable(shape, VariableKind::Parameter, dataType, nullptr, true, {}, name, Internal::GenerateUid(VariableKind::Parameter))
-    {
-    }
-    
-    // base class that we can catch, independent of the type parameter
-struct /*interface*/ IExceptionWithCallStackBase
-{
-    virtual const char * CallStack() const = 0;
-    virtual ~IExceptionWithCallStackBase() noexcept = default;
+    {private:
+    int32_t fMax;
+    int32_t fMin;
 };
     
-    static inline size_t rand(const size_t begin, const size_t end)
-{
-    const size_t randno = ::rand() * RAND_MAX + ::rand(); // BUGBUG: still only covers 32-bit range
-    return begin + randno % (end - begin);
-}
-    
-    
-    {    ~ScopeTimer()
-    {
-        if (m_verbosity > 2)
+        case UDAT_TIMEZONE_FIELD: // 'z'
         {
-            m_aggregateTimer.Stop();
-            double time = m_aggregateTimer.ElapsedSeconds();
-            fprintf(stderr, m_message.c_str(), time);
-        }
-    }
-};
-    
-                // replace input if needed
-            let iter = replacements.find(input);
-            if (iter != replacements.end())
-            {
-                assert(input->GetEnvironmentPtr()); // must be in some network if mapped
-                input = iter->second;
-                numRelinked++;
-                node->SetInput(i, input);
+            UTimeZoneFormatStyle style = (count < 4) ? UTZFMT_STYLE_SPECIFIC_SHORT : UTZFMT_STYLE_SPECIFIC_LONG;
+            TimeZone *tz  = tzFormat()->parse(style, text, pos, tzTimeType);
+            if (tz != NULL) {
+                cal.adoptTimeZone(tz);
+                return pos.getIndex();
             }
-    
-        virtual void UpdateFunctionMBSize() override
-    {
-        UpdateCounts();
-    }
-    
-    //---- Tip: You can add extra functions within the ImGui:: namespace, here or in your own headers files.
-/*
-namespace ImGui
-{
-    void MyFunction(const char* name, const MyMatrix44& v);
-}
-*/
-
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_IMPL_API void     ImGui_ImplDX9_InvalidateDeviceObjects();
-IMGUI_IMPL_API bool     ImGui_ImplDX9_CreateDeviceObjects();
-
-    
-            // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
+        }
+        break;
+    case UDAT_TIMEZONE_RFC_FIELD: // 'Z'
         {
-            static float f = 0.0f;
-            static int counter = 0;
+            UTimeZoneFormatStyle style = (count < 4) ?
+                UTZFMT_STYLE_ISO_BASIC_LOCAL_FULL : ((count == 5) ? UTZFMT_STYLE_ISO_EXTENDED_FULL: UTZFMT_STYLE_LOCALIZED_GMT);
+            TimeZone *tz  = tzFormat()->parse(style, text, pos, tzTimeType);
+            if (tz != NULL) {
+                cal.adoptTimeZone(tz);
+                return pos.getIndex();
+            }
+            return -start;
+        }
+    case UDAT_TIMEZONE_GENERIC_FIELD: // 'v'
+        {
+            UTimeZoneFormatStyle style = (count < 4) ? UTZFMT_STYLE_GENERIC_SHORT : UTZFMT_STYLE_GENERIC_LONG;
+            TimeZone *tz  = tzFormat()->parse(style, text, pos, tzTimeType);
+            if (tz != NULL) {
+                cal.adoptTimeZone(tz);
+                return pos.getIndex();
+            }
+            return -start;
+        }
+    case UDAT_TIMEZONE_SPECIAL_FIELD: // 'V'
+        {
+            UTimeZoneFormatStyle style;
+            switch (count) {
+            case 1:
+                style = UTZFMT_STYLE_ZONE_ID_SHORT;
+                break;
+            case 2:
+                style = UTZFMT_STYLE_ZONE_ID;
+                break;
+            case 3:
+                style = UTZFMT_STYLE_EXEMPLAR_LOCATION;
+                break;
+            default:
+                style = UTZFMT_STYLE_GENERIC_LOCATION;
+                break;
+            }
+            TimeZone *tz  = tzFormat()->parse(style, text, pos, tzTimeType);
+            if (tz != NULL) {
+                cal.adoptTimeZone(tz);
+                return pos.getIndex();
+            }
+            return -start;
+        }
+    case UDAT_TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD: // 'O'
+        {
+            UTimeZoneFormatStyle style = (count < 4) ? UTZFMT_STYLE_LOCALIZED_GMT_SHORT : UTZFMT_STYLE_LOCALIZED_GMT;
+            TimeZone *tz  = tzFormat()->parse(style, text, pos, tzTimeType);
+            if (tz != NULL) {
+                cal.adoptTimeZone(tz);
+                return pos.getIndex();
+            }
+            return -start;
+        }
+    case UDAT_TIMEZONE_ISO_FIELD: // 'X'
+        {
+            UTimeZoneFormatStyle style;
+            switch (count) {
+            case 1:
+                style = UTZFMT_STYLE_ISO_BASIC_SHORT;
+                break;
+            case 2:
+                style = UTZFMT_STYLE_ISO_BASIC_FIXED;
+                break;
+            case 3:
+                style = UTZFMT_STYLE_ISO_EXTENDED_FIXED;
+                break;
+            case 4:
+                style = UTZFMT_STYLE_ISO_BASIC_FULL;
+                break;
+            default:
+                style = UTZFMT_STYLE_ISO_EXTENDED_FULL;
+                break;
+            }
+            TimeZone *tz  = tzFormat()->parse(style, text, pos, tzTimeType);
+            if (tz != NULL) {
+                cal.adoptTimeZone(tz);
+                return pos.getIndex();
+            }
+            return -start;
+        }
+    case UDAT_TIMEZONE_ISO_LOCAL_FIELD: // 'x'
+        {
+            UTimeZoneFormatStyle style;
+            switch (count) {
+            case 1:
+                style = UTZFMT_STYLE_ISO_BASIC_LOCAL_SHORT;
+                break;
+            case 2:
+                style = UTZFMT_STYLE_ISO_BASIC_LOCAL_FIXED;
+                break;
+            case 3:
+                style = UTZFMT_STYLE_ISO_EXTENDED_LOCAL_FIXED;
+                break;
+            case 4:
+                style = UTZFMT_STYLE_ISO_BASIC_LOCAL_FULL;
+                break;
+            default:
+                style = UTZFMT_STYLE_ISO_EXTENDED_LOCAL_FULL;
+                break;
+            }
+            TimeZone *tz  = tzFormat()->parse(style, text, pos, tzTimeType);
+            if (tz != NULL) {
+                cal.adoptTimeZone(tz);
+                return pos.getIndex();
+            }
+            return -start;
+        }
+    // currently no pattern character is defined for UDAT_TIME_SEPARATOR_FIELD
+    // so we should not get here. Leave support in for future definition.
+    case UDAT_TIME_SEPARATOR_FIELD:
+        {
+            static const UChar def_sep = DateFormatSymbols::DEFAULT_TIME_SEPARATOR;
+            static const UChar alt_sep = DateFormatSymbols::ALTERNATE_TIME_SEPARATOR;
     }
     
-    static void FrameRender(ImGui_ImplVulkanH_WindowData* wd)
+    ExitConstrDeleteAll: // Remove all sets and return error
+    delete fDateIgnorables;  fDateIgnorables = NULL;
+    delete fTimeIgnorables;  fTimeIgnorables = NULL;
+    delete fOtherIgnorables; fOtherIgnorables = NULL;
+    
+    CollationKey::~CollationKey()
 {
-	VkResult err;
+    if(fFlagAndLength < 0) { uprv_free(fUnion.fFields.fBytes); }
+}
+    
+    class TransliterationRuleData;
+    
+            // The temporary buffer starts at tempStart, and extends
+        // to destLimit.  The start of the buffer has a single
+        // character from before the key.  This provides style
+        // data when addition characters are filled into the
+        // temporary buffer.  If there is nothing to the left, use
+        // the non-character U+FFFF, which Replaceable subclasses
+        // should treat specially as a 'no-style character.'
+        // destStart points to the point after the style context
+        // character, so it is tempStart+1 or tempStart+2.
+        int32_t tempStart = text.length(); // start of temp buffer
+        int32_t destStart = tempStart; // copy new text to here
+        if (start > 0) {
+            int32_t len = U16_LENGTH(text.char32At(start-1));
+            text.copy(start-len, start, tempStart);
+            destStart += len;
+        } else {
+            UnicodeString str((UChar) 0xFFFF);
+            text.handleReplaceBetween(tempStart, tempStart, str);
+            destStart++;
+        }
+        int32_t destLimit = destStart;
+    
+      bool operator < (const Extension_call_args & ) const;
+    
+    int main(int argc, char **argv) {
+  int port = 9090;
+  ::apache::thrift::stdcxx::shared_ptr<ExtensionManagerHandler> handler(new ExtensionManagerHandler());
+  ::apache::thrift::stdcxx::shared_ptr<TProcessor> processor(new ExtensionManagerProcessor(handler));
+  ::apache::thrift::stdcxx::shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
+  ::apache::thrift::stdcxx::shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
+  ::apache::thrift::stdcxx::shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
     }
     
-            // Rendering
-        ImGui::Render();
-        IwGxSetColClear(clear_color.x * 255, clear_color.y * 255, clear_color.z * 255, clear_color.w * 255);
-        IwGxClear();
-        ImGui_Marmalade_RenderDrawData(ImGui::GetDrawData());
-        IwGxSwapBuffers();
+      xfer += oprot->writeFieldBegin('name', ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->name);
+  xfer += oprot->writeFieldEnd();
     
-    bool ImGui::InputText(const char* label, std::string* str, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
-{
-    IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
-    flags |= ImGuiInputTextFlags_CallbackResize;
+    typedef struct _InternalExtensionInfo__isset {
+  _InternalExtensionInfo__isset() : name(false), version(false), sdk_version(false), min_sdk_version(false) {}
+  bool name :1;
+  bool version :1;
+  bool sdk_version :1;
+  bool min_sdk_version :1;
+} _InternalExtensionInfo__isset;
+    
+    /**
+ * @brief Represents a hardware driver type that SMART api can you use to query
+ * device information.
+ *
+ * @param driver name of SMART controller driver
+ * @param maxID max ID number of which disks on the controller is monitored
+ */
+struct hardwareDriver {
+  std::string driver;
+  size_t maxID;
+};
+    
+    #include <osquery/core.h>
+#include <osquery/database.h>
+#include <osquery/filesystem/filesystem.h>
+#include <osquery/logger.h>
+#include <osquery/tables.h>
+    
+    Status logProcessUptime(IDebugSystemObjects2* system, Row& r) {
+  unsigned long uptime = 0;
+  if (system->GetCurrentProcessUpTime(&uptime) == S_OK) {
+    r['process_uptime'] = BIGINT(uptime);
+    return Status();
+  }
+  return Status(1);
+}
+    
+      // Join results..
+  for (auto& entry : hw_info) {
+    bool matched = false;
+    for (auto& row : results) {
+      auto serial = row.find('serial_number');
+      if (serial == row.end()) {
+        continue;
+      }
+    }
     }
     
-        // Cleanup
-    ImGui_ImplOpenGL2_Shutdown();
-    ImGui_ImplSDL2_Shutdown();
-    ImGui::DestroyContext();
     
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
+    {
+    {struct mei_version {
+  uint32_t important_details[7];
+  uint16_t major;
+  uint16_t minor;
+  uint16_t hotfix;
+  uint16_t build;
+  uint16_t r_major;
+  uint16_t r_minor;
+  uint16_t r_hotfix;
+  uint16_t r_build;
+  uint16_t codes[6];
+};
+}
+}
+
+    
+    
+    {
+    {} // namespace perf_event_open
+} // namespace osquery
+
+    
+    
+    {
+    {} // namespace perf_event_open
+} // namespace osquery
