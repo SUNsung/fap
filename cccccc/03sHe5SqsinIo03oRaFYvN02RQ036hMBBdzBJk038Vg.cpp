@@ -1,192 +1,233 @@
-    /** Colorize an image (given filename) with the icon color */
-    QImage SingleColorImage(const QString& filename) const;
+
+        
+            void minMaxLoc(const Size2D &size,
+                   const s16 * srcBase, ptrdiff_t srcStride,
+                   s16 &minVal, size_t &minCol, size_t &minRow,
+                   s16 &maxVal, size_t &maxCol, size_t &maxRow);
     
-    /* QComboBox that can be used with QDataWidgetMapper to select ordinal values from a model. */
-class QValueComboBox : public QComboBox
+        enum COLOR_SPACE
+    {
+        COLOR_SPACE_BT601,
+        COLOR_SPACE_BT709
+    };
+    
+    #endif
+    
+    void combineUYVY(const Size2D &size,
+                 const u8 * srcyBase, ptrdiff_t srcyStride,
+                 const u8 * srcuBase, ptrdiff_t srcuStride,
+                 const u8 * srcvBase, ptrdiff_t srcvStride,
+                 u8 * dstBase, ptrdiff_t dstStride)
 {
-    Q_OBJECT
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+#ifndef __ANDROID__
+    size_t roiw32 = size.width >= 31 ? size.width - 31 : 0;
+#endif
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
     }
     
-        explicit reverse_lock(Lock& _lock) : lock(_lock) {
-        _lock.unlock();
-        _lock.swap(templock);
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
+CVT_FUNC(s32, u8, 8,
+,
+{
+     for (size_t i = 0; i < w; i += 8)
+     {
+         internal::prefetch(_src + i);
+         __asm__ (
+             'vld1.32 {d0-d1}, [%[src1]]                              \n\t'
+             'vld1.32 {d2-d3}, [%[src2]]                              \n\t'
+             'vqmovun.s32 d4, q0                                      \n\t'
+             'vqmovun.s32 d5, q1                                      \n\t'
+             'vqmovn.u16  d6, q2                                      \n\t'
+             'vst1.8 {d6}, [%[dst]]                                   \n\t'
+             : /*no output*/
+             : [src1] 'r' (_src + i + 0),
+               [src2] 'r' (_src + i + 4),
+               [dst] 'r' (_dst + i)
+             : 'd0','d1','d2','d3','d4','d5','d6'
+         );
+     }
+})
+#else
+CVT_FUNC(s32, u8, 8,
+,
+{
+     for (size_t i = 0; i < w; i += 8)
+     {
+         internal::prefetch(_src + i);
+         int32x4_t vline1_s32 = vld1q_s32(_src + i);
+         int32x4_t vline2_s32 = vld1q_s32(_src + i + 4);
+    }
     }
     
-        // Special handling for null case
-    // (needed because string comparison reads the null as end-of-string)
-    BOOST_TEST_MESSAGE(std::string('CheckParseTorReplyMapping(Null=\'\\0\')'));
-    auto ret = ParseTorReplyMapping('Null=\'\\0\'');
-    BOOST_CHECK_EQUAL(ret.size(), 1U);
-    auto r_it = ret.begin();
-    BOOST_CHECK_EQUAL(r_it->first, 'Null');
-    BOOST_CHECK_EQUAL(r_it->second.size(), 1U);
-    BOOST_CHECK_EQUAL(r_it->second[0], '\0');
+            for (; j < roiw_tail; j += step_tail, js += step_tail3, jd -= step_tail3)
+        {
+            vec64 v_src = vld3(src + js), v_dst;
+            v_dst.val[0] = vrev64(v_src.val[0]);
+            v_dst.val[1] = vrev64(v_src.val[1]);
+            v_dst.val[2] = vrev64(v_src.val[2]);
+    }
     
-    SparsePageWriter::SparsePageWriter(
-    const std::vector<std::string>& name_shards,
-    const std::vector<std::string>& format_shards,
-    size_t extra_buffer_capacity)
-    : num_free_buffer_(extra_buffer_capacity + name_shards.size()),
-      clock_ptr_(0),
-      workers_(name_shards.size()),
-      qworkers_(name_shards.size()) {
-  CHECK_EQ(name_shards.size(), format_shards.size());
-  // start writer threads
-  for (size_t i = 0; i < name_shards.size(); ++i) {
-    std::string name_shard = name_shards[i];
-    std::string format_shard = format_shards[i];
-    auto* wqueue = &qworkers_[i];
-    workers_[i].reset(new std::thread(
-        [this, name_shard, format_shard, wqueue] () {
-          std::unique_ptr<dmlc::Stream> fo(
-              dmlc::Stream::Create(name_shard.c_str(), 'w'));
-          std::unique_ptr<SparsePageFormat> fmt(
-              SparsePageFormat::Create(format_shard));
-          fo->Write(format_shard);
-          std::shared_ptr<SparsePage> page;
-          while (wqueue->Pop(&page)) {
-            if (page == nullptr) break;
-            fmt->Write(*page, fo.get());
-            qrecycle_.Push(std::move(page));
-          }
-          fo.reset(nullptr);
-          LOG(CONSOLE) << 'SparsePage::Writer Finished writing to ' << name_shard;
-        }));
-  }
+    #define INRANGEFUNC(T)                                       \
+void inRange(const Size2D &_size,                            \
+             const T * srcBase, ptrdiff_t srcStride,         \
+             const T * rng1Base, ptrdiff_t rng1Stride,       \
+             const T * rng2Base, ptrdiff_t rng2Stride,       \
+             u8 * dstBase, ptrdiff_t dstStride)              \
+{                                                            \
+    internal::assertSupportedConfiguration();                \
+    inRangeCheck(_size, srcBase, srcStride,                  \
+                 rng1Base, rng1Stride, rng2Base, rng2Stride, \
+                 dstBase, dstStride);                        \
+}
+#else
+#define INRANGEFUNC(T)                                       \
+void inRange(const Size2D &,                                 \
+             const T *, ptrdiff_t,                           \
+             const T *, ptrdiff_t,                           \
+             const T *, ptrdiff_t,                           \
+             u8 *, ptrdiff_t)                                \
+{                                                            \
+    internal::assertSupportedConfiguration();                \
+}
+#endif
+    
+        // the others
+    for (size_t i = 1; i < size.height ; ++i)
+    {
+        src = internal::getRowPtr(srcBase, srcStride, i);
+        f64 * prevSqSum = internal::getRowPtr(sqsumBase, sqsumStride, i - 1);
+        sqsum = internal::getRowPtr(sqsumBase, sqsumStride, i);
+    }
+    
+    namespace tesseract {
+class Tesseract;
 }
     
-    // logistic loss for probability regression task
-struct LogisticRegression {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return common::Sigmoid(x); }
-  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return x >= 0.0f && x <= 1.0f; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    return predt - label;
-  }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    const float eps = 1e-16f;
-    return fmaxf(predt * (1.0f - predt), eps);
-  }
-  template <typename T>
-  static T PredTransform(T x) { return common::Sigmoid(x); }
-  template <typename T>
-  static T FirstOrderGradient(T predt, T label) { return predt - label; }
-  template <typename T>
-  static T SecondOrderGradient(T predt, T label) {
-    const T eps = T(1e-16f);
-    return std::max(predt * (T(1.0f) - predt), eps);
-  }
-  static bst_float ProbToMargin(bst_float base_score) {
-    CHECK(base_score > 0.0f && base_score < 1.0f)
-      << 'base_score must be in (0,1) for logistic loss';
-    return -logf(1.0f / base_score - 1.0f);
-  }
-  static const char* LabelErrorMsg() {
-    return 'label must be in [0,1] for logistic regression';
-  }
-  static const char* DefaultEvalMetric() { return 'rmse'; }
-};
-    
-    namespace xgboost {
-namespace common {
-    }
-    }
-    
-    
-    {    // loop over all rows and fill column entries
-    // num_nonzeros[fid] = how many nonzeros have this feature accumulated so far?
-    std::vector<size_t> num_nonzeros;
-    num_nonzeros.resize(nfeature);
-    std::fill(num_nonzeros.begin(), num_nonzeros.end(), 0);
-    for (size_t rid = 0; rid < nrow; ++rid) {
-      const size_t ibegin = gmat.row_ptr[rid];
-      const size_t iend = gmat.row_ptr[rid + 1];
-      size_t fid = 0;
-      for (size_t i = ibegin; i < iend; ++i) {
-        const uint32_t bin_id = gmat.index[i];
-        while (bin_id >= gmat.cut.row_ptr[fid + 1]) {
-          ++fid;
-        }
-        if (type_[fid] == kDenseColumn) {
-          uint32_t* begin = &index_[boundary_[fid].index_begin];
-          begin[rid] = bin_id - index_base_[fid];
-        } else {
-          uint32_t* begin = &index_[boundary_[fid].index_begin];
-          begin[num_nonzeros[fid]] = bin_id - index_base_[fid];
-          row_ind_[boundary_[fid].row_ind_begin + num_nonzeros[fid]] = rid;
-          ++num_nonzeros[fid];
+    void Tesseract::PrerecAllWordsPar(const GenericVector<WordData>& words) {
+  // Prepare all the blobs.
+  GenericVector<BlobData> blobs;
+  for (int w = 0; w < words.size(); ++w) {
+    if (words[w].word->ratings != nullptr &&
+        words[w].word->ratings->get(0, 0) == nullptr) {
+      for (int s = 0; s < words[w].lang_words.size(); ++s) {
+        Tesseract* sub = s < sub_langs_.size() ? sub_langs_[s] : this;
+        const WERD_RES& word = *words[w].lang_words[s];
+        for (int b = 0; b < word.chopped_word->NumBlobs(); ++b) {
+          blobs.push_back(BlobData(b, sub, word));
         }
       }
     }
   }
-    
-    namespace {
-void readBytes(BufferedFile& fp, unsigned char* buf, size_t buflen,
-               size_t readlen)
-{
-  assert(readlen <= buflen);
-  READ_CHECK(fp, buf, readlen);
-}
-} // namespace
-    
-    DHTTaskExecutor::~DHTTaskExecutor() = default;
-    
-      int getNumConcurrent() const { return numConcurrent_; }
-    
-    
-    {} // namespace aria2
-    
-    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
-                                           const std::string& ipaddr,
-                                           uint16_t port) const
-{
-  return generateToken(infoHash, ipaddr, port, secret_[0]);
-}
-    
-    const std::string& DNSCache::find(const std::string& hostname,
-                                  uint16_t port) const
-{
-  auto target = std::make_shared<CacheEntry>(hostname, port);
-  auto i = entries_.find(target);
-  if (i == entries_.end()) {
-    return A2STR::NIL;
-  }
-  else {
-    return (*i)->getGoodAddr();
+  // Pre-classify all the blobs.
+  if (tessedit_parallelize > 1) {
+#ifdef _OPENMP
+#pragma omp parallel for num_threads(10)
+#endif  // _OPENMP
+    for (int b = 0; b < blobs.size(); ++b) {
+      *blobs[b].choices =
+          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
+    }
+  } else {
+    // TODO(AMD) parallelize this.
+    for (int b = 0; b < blobs.size(); ++b) {
+      *blobs[b].choices =
+          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
+    }
   }
 }
     
-        while (state.KeepRunning())
-    {
-        state.PauseTiming();
-        auto* j = new json();
-        state.ResumeTiming();
+      // blow away the copied chopped_word, as we want to work with
+  // the blobs from the input chopped_word so seam_arrays can be merged.
+  TWERD *chopped = word->chopped_word;
+  TWERD *chopped2 = new TWERD;
+  chopped2->blobs.reserve(chopped->NumBlobs() - split_pt);
+  for (int i = split_pt; i < chopped->NumBlobs(); ++i) {
+    chopped2->blobs.push_back(chopped->blobs[i]);
+  }
+  chopped->blobs.truncate(split_pt);
+  word->chopped_word = nullptr;
+  delete word2->chopped_word;
+  word2->chopped_word = nullptr;
+    
+      // Merges the boxes from start to end, not including end, and deletes
+  // the boxes between start and end.
+  void MergeBoxes(int start, int end);
+    
+    // A CostFunc that takes the variance of step into account in the cost.
+int64_t DPPoint::CostWithVariance(const DPPoint* prev) {
+  if (prev == nullptr || prev == this) {
+    UpdateIfBetter(0, 1, nullptr, 0, 0, 0);
+    return 0;
+  }
     }
     
     
-If a benchmark runs a few milliseconds it may be hard to visually compare the
-measured times, since the output data is given in nanoseconds per default. In
-order to manually set the time unit, you can specify it manually:
+    { private:
+  double total_weight;         // no of elements or sum of weights.
+  double sigx;                 // sum of x
+  double sigy;                 // sum of y
+  double sigxx;                // sum x squared
+  double sigxy;                // sum of xy
+  double sigyy;                // sum y squared
+};
+    
+    # define INSTANTIATE_TEST_CASE_P(prefix, test_case_name, generator) \
+  ::testing::internal::ParamGenerator<test_case_name::ParamType> \
+      gtest_##prefix##test_case_name##_EvalGenerator_() { return generator; } \
+  int gtest_##prefix##test_case_name##_dummy_ = \
+      ::testing::UnitTest::GetInstance()->parameterized_test_registry(). \
+          GetTestCasePatternHolder<test_case_name>(\
+              #test_case_name, __FILE__, __LINE__)->AddTestCaseInstantiation(\
+                  #prefix, \
+                  &gtest_##prefix##test_case_name##_EvalGenerator_, \
+                  __FILE__, __LINE__)
+    
+      // C'tor.  TestPartResult does NOT have a default constructor.
+  // Always use this constructor (with parameters) to create a
+  // TestPartResult object.
+  TestPartResult(Type a_type,
+                 const char* a_file_name,
+                 int a_line_number,
+                 const char* a_message)
+      : type_(a_type),
+        file_name_(a_file_name == NULL ? '' : a_file_name),
+        line_number_(a_line_number),
+        summary_(ExtractSummary(a_message)),
+        message_(a_message) {
+  }
+    
+    #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_FILEPATH_H_
+
+    
+      const size_t len = strlen(a_c_string);
+  char* const clone = new char[ len + 1 ];
+  memcpy(clone, a_c_string, len + 1);
     
     
-    {
-    {}  // end namespace internal
-}  // end namespace benchmark
+    {  if (s.ok() && meta->file_size > 0) {
+    // Keep it
+  } else {
+    env->DeleteFile(fname);
+  }
+  return s;
+}
     
-    ConsoleReporter::OutputOptions GetOutputOptions(bool force_no_color = false);
+    #ifndef STORAGE_LEVELDB_DB_DB_ITER_H_
+#define STORAGE_LEVELDB_DB_DB_ITER_H_
     
-      const CPUInfo &info = context.cpu_info;
-  Out << 'Run on (' << info.num_cpus << ' X '
-      << (info.cycles_per_second / 1000000.0) << ' MHz CPU '
-      << ((info.num_cpus > 1) ? 's' : '') << ')\n';
-  if (info.caches.size() != 0) {
-    Out << 'CPU Caches:\n';
-    for (auto &CInfo : info.caches) {
-      Out << '  L' << CInfo.level << ' ' << CInfo.type << ' '
-          << (CInfo.size / 1000) << 'K';
-      if (CInfo.num_sharing != 0)
-        Out << ' (x' << (info.num_cpus / CInfo.num_sharing) << ')';
-      Out << '\n';
+    // Return the name of the sstable with the specified number
+// in the db named by 'dbname'.  The result will be prefixed with
+// 'dbname'.
+std::string TableFileName(const std::string& dbname, uint64_t number);
+    
+    namespace leveldb {
+namespace log {
     }
+    }
+    
+      void StartReadingAt(uint64_t initial_offset) {
+    delete reader_;
+    reader_ = new Reader(&source_, &report_, true/*checksum*/, initial_offset);
   }
