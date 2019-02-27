@@ -1,69 +1,77 @@
 
         
-            group.add(moderator)
-    group.save
+        class Api::V1::Instances::ActivityController < Api::BaseController
+  before_action :require_enabled_api!
     
-              pipelines.each do |pipeline|
-            self.new(pipeline).tap do |preloader|
-              preloader.preload_commit_authors
-              preloader.preload_pipeline_warnings
-              preloader.preload_stages_warnings
-            end
+        render json: @web_subscription, serializer: REST::WebPushSubscriptionSerializer
+  end
+    
+        data = {
+      alerts: {
+        follow: alerts_enabled,
+        favourite: alerts_enabled,
+        reblog: alerts_enabled,
+        mention: alerts_enabled,
+      },
+    }
+    
+            self.description = <<-DESC
+          Shows the content of the pods cache as a YAML tree output, organized by pod.
+          If `NAME` is given, only the caches for that pod will be included in the output.
+        DESC
+    
+          def self.options
+        options = []
+        options.concat(super.reject { |option, _| option == '--silent' })
+      end
+    
+    shared_examples 'no current order' do
+  context 'order doesn't exist' do
+    before do
+      order.destroy
+      execute
+    end
+    
+        it 'returns proper error message' do
+      expect(json_response['error']).to eq('The resource you were looking for could not be found.')
+    end
+  end
+    
+      shared_examples 'nested requested resources' do
+    it 'are returned' do
+      expect(json_response['included']).to be_present
+      expect(json_response['included']).not_to include(have_type('variant').and have_id(default_variant.id.to_s))
+      expect(json_response['included']).to include(have_type('option_type'))
+      expect(json_response['included']).to include(have_type('option_value'))
+    end
+  end
+    
+        context 'with shipping country filtering' do
+      let!(:new_country) { create(:country) }
+      let!(:zone) { create(:zone) }
+      let!(:shipping_method) { create(:shipping_method) }
+      let!(:shippable_url) { '/api/v2/storefront/countries?filter[shippable]=true' }
+      let!(:to_return) { shipping_method.zones.reduce([]) { |collection, zone| collection + zone.country_list } }
+    
+            variant = line_item.variant
+        display_name = variant.name.to_s
+        display_name += ' (#{variant.options_text})' unless variant.options_text.blank?
+    
+          def gateway_error(exception)
+        @order.errors.add(:base, exception.message)
+        invalid_resource!(@order)
+      end
+    
+            def find_address
+          if @order.bill_address_id == params[:id].to_i
+            @order.bill_address
+          elsif @order.ship_address_id == params[:id].to_i
+            @order.ship_address
+          else
+            raise CanCan::AccessDenied
           end
         end
-    
-              hash = {
-            iid: issue.number,
-            title: issue.title,
-            description: issue.body,
-            milestone_number: issue.milestone&.number,
-            state: issue.state == 'open' ? :opened : :closed,
-            assignees: issue.assignees.map do |u|
-              Representation::User.from_api_response(u)
-            end,
-            label_names: issue.labels.map(&:name),
-            author: user,
-            created_at: issue.created_at,
-            updated_at: issue.updated_at,
-            pull_request: issue.pull_request ? true : false
-          }
-    
-    class PolymorphicMentions < ActiveRecord::Migration[4.2]
-  def change
-    remove_index :mentions, column: %i(post_id)
-    remove_index :mentions, column: %i(person_id post_id), unique: true
-    rename_column :mentions, :post_id, :mentions_container_id
-    add_column :mentions, :mentions_container_type, :string
-    add_index :mentions,
-              %i(mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_mc_id_and_mc_type',
-              length: {mentions_container_type: 191}
-    add_index :mentions,
-              %i(person_id mentions_container_id mentions_container_type),
-              name:   'index_mentions_on_person_and_mc_id_and_mc_type',
-              length: {mentions_container_type: 191},
-              unique: true
-    
-    Then /^I should see an image in the publisher$/ do
-  photo_in_publisher.should be_present
-end
-    
-        it 'generates a jasmine fixture', fixture: true do
-      session[:mobile_view] = true
-      get :new, format: :mobile
-      save_fixture(html_for('body'), 'conversations_new_mobile')
+      end
     end
   end
 end
-
-    
-      describe '#check_registrations_open_or_valid_invite!' do
-    before do
-      AppConfig.settings.enable_registrations = false
-    end
-    
-        desc 'Run the functional specs'
-    task :functional, [:spec] => 'fixture_tarballs:unpack' do |_t, args|
-      args.with_defaults(:spec => '**/*')
-      sh 'bundle exec bacon #{specs('functional/#{args[:spec]}')}'
-    end
