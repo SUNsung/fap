@@ -1,99 +1,99 @@
 
         
-            # Print the location of each face in this image
-    top, right, bottom, left = face_location
-    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+        
+def main():
+    if len(sys.argv) < 2:
+        print('No file passed (file should contain Markdown table syntax)')
+        sys.exit(1)
+    check_format(sys.argv[1])
+    if len(errors) > 0:
+        for err in errors:
+            print(err)
+        sys.exit(1)
     
-    # PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
-# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
-# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
+    password = key
+new_key = aes_encrypt(password, key_expansion(password))
+r = openssl_encode('aes-128-ctr', new_key, iv)
+print('aes_decrypt_text 16')
+print(repr(r))
     
-            if match[0]:
-            name = 'Barack Obama'
+    import youtube_dl
     
-    # Create a PIL imagedraw object so we can draw on the picture
-pil_image = Image.fromarray(image)
-d = ImageDraw.Draw(pil_image)
+    with io.open(README_FILE, encoding='utf-8') as f:
+    oldreadme = f.read()
     
-    with open('HISTORY.rst') as history_file:
-    history = history_file.read()
+        with io.open(outfile, 'w', encoding='utf-8') as outf:
+        outf.write(out)
     
-        # 获得所有人脸的位置以及它们的编码
-    face_locations = face_recognition.face_locations(output)
-    print('Found {} faces in image.'.format(len(face_locations)))
-    face_encodings = face_recognition.face_encodings(output, face_locations)
+            if in_options:
+            if line.lstrip().startswith('-'):
+                split = re.split(r'\s{2,}', line.lstrip())
+                # Description string may start with `-` as well. If there is
+                # only one piece then it's a description bit not an option.
+                if len(split) > 1:
+                    option, description = split
+                    split_option = option.split(' ')
     
-        # 讲识别结果以json键值对的数据结构输出
-    result = {
-        'face_found_in_image': face_found,
-        'is_picture_of_obama': is_obama
-    }
-    return jsonify(result)
+    # Add any paths that contain custom static files (such as style sheets) here,
+# relative to this directory. They are copied after the builtin static files,
+# so a file named 'default.css' will overwrite the builtin 'default.css'.
+html_static_path = ['_static']
     
-    # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+        def test_decrypt_text(self):
+        password = intlist_to_bytes(self.key).decode('utf-8')
+        encrypted = base64.b64encode(
+            intlist_to_bytes(self.iv[:8]) +
+            b'\x17\x15\x93\xab\x8d\x80V\xcdV\xe0\t\xcdo\xc2\xa5\xd8ksM\r\xe27N\xae'
+        ).decode('utf-8')
+        decrypted = (aes_decrypt_text(encrypted, password, 16))
+        self.assertEqual(decrypted, self.secret_msg)
     
-            briefing = []
+            add_ie = getattr(self, self._testMethodName).add_ie
+        return '%s (%s)%s:' % (self._testMethodName,
+                               strclass(self.__class__),
+                               ' [%s]' % add_ie if add_ie else '')
     
     
-def setup(hass, config):
-    '''Listen for browse_url events.'''
-    import webbrowser
-    
-        return True
-
+def ten_percent_discount(order):
+    return order.price * 0.10
     
     
-def _arp(ip_address):
-    '''Get the MAC address for a given IP.'''
-    cmd = ['arp', '-n', ip_address]
-    arp = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    out, _ = arp.communicate()
-    match = re.search(r'(([0-9A-Fa-f]{1,2}\:){5}[0-9A-Fa-f]{1,2})', str(out))
-    if match:
-        return match.group(0)
-    _LOGGER.info('No MAC address found for %s', ip_address)
-    return None
+class Dog(object):
+    def speak(self):
+        return 'woof'
     
-            # If there's a home_id, we need a different API URL
-        if self.home_id is None:
-            self.tadoapiurl = 'https://my.tado.com/api/v2/me'
-        else:
-            self.tadoapiurl = 'https://my.tado.com/api/v2' \
-                              '/homes/{home_id}/mobileDevices'
     
-            return False
+class ComplexHouse(ComplexBuilding):
+    def build_floor(self):
+        self.floor = 'One'
     
+    
+if __name__ == '__main__':
+    # Create our localizers
+    e, g = get_localizer(language='English'), get_localizer(language='Greek')
+    # Localize some text
+    for msgid in 'dog parrot cat bear'.split():
+        print(e.get(msgid), g.get(msgid))
+    
+    *Where is the pattern used practically?
+    
+    
+class ProductionCodeTimeProvider(object):
+    '''
+    Production code version of the time provider (just a wrapper for formatting
+    datetime for this example).
     '''
     
-    CONF_FOLDER = 'folder'
-CONF_PATTERNS = 'patterns'
-DEFAULT_PATTERN = '*'
-DOMAIN = 'folder_watcher'
-    
-        complete_apps = ['sentry']
-    symmetrical = True
+    ### OUTPUT ###
+# ['A', 'B', 'C', 'D']
+# [['A', 'B', 'C', 'D'], ['A', 'B', 'D'], ['A', 'C', 'D']]
+# ['A', 'B', 'D']
 
     
-    from sentry.utils.db import is_postgres
     
-            for renv in dupe_release_envs:
-            release_id = renv['release_id']
-            organization_id = renv['organization_id']
-            environment_id = renv['environment_id']
-            renvs = list(
-                orm.ReleaseEnvironment.objects.filter(
-                    release_id=release_id,
-                    organization_id=organization_id,
-                    environment_id=environment_id,
-                ).order_by('first_seen')
-            )
-            to_renv = renvs[0]
-            from_renvs = renvs[1:]
-            last_seen = max([re.last_seen for re in renvs])
-            orm.ReleaseEnvironment.objects.filter(
-                id=to_renv.id,
-            ).update(last_seen=last_seen)
-            orm.ReleaseEnvironment.objects.filter(
-                id__in=[re.id for re in from_renvs],
-            ).delete()
+class RadioTest(unittest.TestCase):
+    '''
+    Attention: Test case results depend on test case execution. The test cases
+    in this integration test class should be executed in an explicit order:
+    http://stackoverflow.com/questions/5387299/python-unittest-testcase-execution-order
+    '''
