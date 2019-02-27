@@ -1,111 +1,79 @@
 
         
-            Category.transaction do
-      staff.group_names = ['staff']
-      unless staff.save
-        puts staff.errors.full_messages
-        raise 'Failed to set permissions on the Staff category!'
+                  def hidden_field_name
+            '#{tag_name(false, @options[:index])}'
+          end
       end
-    
-          class MergeRequest < ActiveRecord::Base
-        self.table_name = 'merge_requests'
-    
-          # Sets a cache key to the given value.
-      #
-      # key - The cache key to write.
-      # value - The value to set.
-      # timeout - The time after which the cache key should expire.
-      def self.write(raw_key, value, timeout: TIMEOUT)
-        key = cache_key_for(raw_key)
-    
-            attr_reader :attributes
-    
-            attr_reader :attributes
-    
-      def page_params
-    { page: true, max_id: params[:max_id], min_id: params[:min_id] }.compact
+    end
   end
 end
 
     
-        def new
-      authorize :email_domain_block, :create?
-      @email_domain_block = EmailDomainBlock.new
-    end
+              if name_and_id['for']
+            name_and_id['id'] = name_and_id['for']
+          else
+            name_and_id.delete('id')
+          end
     
-      def hub_mode
-    params['hub.mode']
+    module ActionView
+  module Helpers
+    module Tags # :nodoc:
+      class TextField < Base # :nodoc:
+        include Placeholderable
+    
+    module Sass
+  module CacheStores
+    # A backend for the Sass cache using the filesystem.
+    class Filesystem < Base
+      # The directory where the cached files will be stored.
+      #
+      # @return [String]
+      attr_accessor :cache_location
+    
+        # @comment
+    #   rubocop:disable MethodLength
+    def watch_or_update
+      require 'sass/plugin'
+      Sass::Plugin.options.merge! @options[:for_engine]
+      Sass::Plugin.options[:unix_newlines] = @options[:unix_newlines]
+      Sass::Plugin.options[:poll] = @options[:poll]
+      Sass::Plugin.options[:sourcemap] = @options[:sourcemap]
+    
+    end
+
+    
+      before_action { @server = organization.servers.present.find_by_permalink!(params[:server_id]) }
+  before_action { params[:id] && @credential = @server.credentials.find_by_key!(params[:id]) }
+    
+      def new
+    @ip_pool = IPPool.new
   end
     
-      private
+              options[:where][:rcpt_to] = qs[:to] if qs[:to]
+          options[:where][:mail_from] = qs[:from] if qs[:from]
+          options[:where][:status] = qs[:status] if qs[:status]
+          options[:where][:token] = qs[:token] if qs[:token]
     
-      describe '#std?' do
-    it 'returns true if the environment contains :std' do
-      env << :std
-      expect(env).to be_std
-    end
-    
-          it 'raises ArgumentError exception when absolute and relative argument numbers are mixed' do
-        -> () {
-          format('%1$d %d', 1, 2)
-        }.should raise_error(ArgumentError)
+      def index
+    if current_user.admin?
+      @organizations = Organization.present.order(:name).to_a
+    else
+      @organizations = current_user.organizations.present.order(:name).to_a
+      if @organizations.size == 1 && params[:nrd].nil?
+        redirect_to organization_root_path(@organizations.first)
       end
     end
-    
-      it 'raises a TypeError when passed nil' do
-    lambda { srand(nil) }.should raise_error(TypeError)
   end
     
-      platform_is :windows do
-    it 'does expand shell variables when given multiples arguments' do
-      # See https://bugs.ruby-lang.org/issues/12231
-      lambda { @object.system('echo', @shell_var) }.should output_to_fd('foo\n')
-    end
-  end
-    
-      platform_is_not :windows do
-    it 'returns true when passed ?l if the argument is a symlink' do
-      link = tmp('file_symlink.lnk')
-      File.symlink(@file, link)
-      begin
-        Kernel.test(?l, link).should be_true
-      ensure
-        rm_r link
+      def domain_options_for_select(server, selected_domain = nil, options = {})
+    String.new.tap do |s|
+      s << '<option></option>'
+      server_domains = server.domains.verified.order(:name)
+      unless server_domains.empty?
+        s << '<optgroup label='Server Domains'>'
+        for domain in server_domains
+          selected = domain == selected_domain ? 'selected='selected'' : ''
+          s << '<option value='#{domain.id}' #{selected}>#{domain.name}</option>'
+        end
+        s << '</optgroup>'
       end
-    end
-  end
-    
-    Then /^'([^']*)' should be post (\d+)$/ do |post_text, position|
-  stream_element_numbers_content(position).should have_content(post_text)
-end
-    
-      def post_path_by_content(text)
-    p = Post.find_by_text(text)
-    post_path(p)
-  end
-    
-    # Add a script to run after install (should be in the current directory):
-package.scripts[:after_install] = 'my_after_install_script.sh'
-    
-          # Capture the output, which will be JSON metadata describing this python
-      # package. See fpm/lib/fpm/package/pyfpm/get_metadata.py for more
-      # details.
-      logger.info('fetching package metadata', :setup_cmd => setup_cmd)
-    
-        cleanup_staging
-    # Tell 'dir' to input '.' and chdir/prefix will help it figure out the
-    # rest.
-    dir.input('.')
-    @staging_path = dir.staging_path
-    dir.cleanup_build
-  end # def input
-    
-      # Output a zipfile.
-  def output(output_path)
-    output_check(output_path)
-    realpath = Pathname.new(output_path).realdirpath.to_s
-    ::Dir.chdir(staging_path) do
-      safesystem('zip', '-9r', realpath, '.')
-    end
-  end # def output
-end # class FPM::Package::Tar
