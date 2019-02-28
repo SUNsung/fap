@@ -1,115 +1,115 @@
 
         
-                super(DownloadBuilder, self).__init__(**kwargs)
+        
+def check_entry(line_num, segments):
+    # START Title
+    raw_title = segments[index_title]
+    title_re_match = link_re.match(raw_title)
+    # url should be wrapped in '[TITLE](LINK)' Markdown syntax
+    if not title_re_match:
+        add_error(line_num, 'Title syntax should be '[TITLE](LINK)'')
+    else:
+        # do not allow '... API' in the entry title
+        title = title_re_match.group(1)
+        if title.upper().endswith(' API'):
+            add_error(line_num, 'Title should not end with '... API'. Every entry is an API here!')
+        # do not allow duplicate links
+        link = title_re_match.group(2)
+        if link in previous_links:
+            add_error(line_num, 'Duplicate link - entries should only be included in one section')
+        else:
+            previous_links.append(link)
+    # END Title
+    # START Description
+    # first character should be capitalized
+    char = segments[index_desc][0]
+    if char.upper() != char:
+        add_error(line_num, 'first character of description is not capitalized')
+    # last character should not punctuation
+    char = segments[index_desc][-1]
+    if char in punctuation:
+        add_error(line_num, 'description should not end with {}'.format(char))
+    desc_length = len(segments[index_desc])
+    if desc_length > 100:
+        add_error(line_num, 'description should not exceed 100 characters (currently {})'.format(desc_length))
+    # END Description
+    # START Auth
+    # values should conform to valid options only
+    auth = segments[index_auth]
+    if auth != 'No' and (not auth.startswith('`') or not auth.endswith('`')):
+        add_error(line_num, 'auth value is not enclosed with `backticks`')
+    if auth.replace('`', '') not in auth_keys:
+        add_error(line_num, '{} is not a valid Auth option'.format(auth))
+    # END Auth
+    # START HTTPS
+    # values should conform to valid options only
+    https = segments[index_https]
+    if https not in https_keys:
+        add_error(line_num, '{} is not a valid HTTPS option'.format(https))
+    # END HTTPS
+    # START CORS
+    # values should conform to valid options only
+    cors = segments[index_cors]
+    if cors not in cors_keys:
+        add_error(line_num, '{} is not a valid CORS option'.format(cors))
+    # END CORS
     
-    import codecs
-import subprocess
     
-    new_version = {}
-    
-    # We must be able to import youtube_dl
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    
-    ie_template = '''
-class {name}({bases}):
-    _VALID_URL = {valid_url!r}
-    _module = '{module}'
-'''
-    
-    options = helptext[helptext.index('  General Options:') + 19:]
-options = re.sub(r'(?m)^  (\w.+)$', r'## \1', options)
-options = '# OPTIONS\n' + options + '\n'
-    
-        readme = re.sub(r'(?s)^.*?(?=# DESCRIPTION)', '', readme)
-    readme = re.sub(r'\s+youtube-dl \[OPTIONS\] URL \[URL\.\.\.\]', '', readme)
-    readme = PREFIX + readme
-    
-        fileopts = []
-    for opt in opts_file:
-        if opt._short_opts:
-            fileopts.extend(opt._short_opts)
-        if opt._long_opts:
-            fileopts.extend(opt._long_opts)
-    
-    # the encrypted data can be generate with 'devscripts/generate_aes_testdata.py'
+@pytest.fixture(autouse=True)
+def usage_tracker_io(usage_tracker):
+    io = StringIO()
+    usage_tracker.return_value \
+                 .open.return_value \
+                 .__enter__.return_value = io
+    return io
     
     
-if __name__ == '__main__':
-    unittest.main()
+def how_to_configure(proc, TIMEOUT):
+    proc.sendline(u'fuck')
+    assert proc.expect([TIMEOUT, u'alias isn't configured'])
 
     
-            return view(**kwargs)
+    
+@pytest.mark.functional
+def test_refuse_with_confirmation(proc, TIMEOUT):
+    refuse_with_confirmation(proc, TIMEOUT)
+    
+    
+@pytest.mark.parametrize('command, new_command, packages', [
+    (Command('vim', ''), 'sudo apt-get install vim && vim',
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('convert', ''), 'sudo apt-get install imagemagick && convert',
+     [('imagemagick', 'main'),
+      ('graphicsmagick-imagemagick-compat', 'universe')]),
+    (Command('sudo vim', ''), 'sudo apt-get install vim && sudo vim',
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('sudo convert', ''), 'sudo apt-get install imagemagick && sudo convert',
+     [('imagemagick', 'main'),
+      ('graphicsmagick-imagemagick-compat', 'universe')])])
+def test_get_new_command(mocker, command, new_command, packages):
+    mocker.patch('thefuck.rules.apt_get._get_packages',
+                 create=True, return_value=packages)
+    
+    
+def test_match():
+    command = Command('brew install sshfs', output)
+    assert match(command)
     
     
 @pytest.fixture
-def app():
-    '''Create and configure a new app instance for each test.'''
-    # create a temporary file to isolate the database for each test
-    db_fd, db_path = tempfile.mkstemp()
-    # create the app with common test config
-    app = create_app({
-        'TESTING': True,
-        'DATABASE': db_path,
-    })
+def brew_install_no_argument():
+    return '''This command requires a formula argument'''
     
-            url_prefix = self.options.get('url_prefix')
-        if url_prefix is None:
-            url_prefix = self.blueprint.url_prefix
-        #: The prefix that should be used for all URLs defined on the
-        #: blueprint.
-        self.url_prefix = url_prefix
-    
-    This typically means that you attempted to use functionality that needed
-to interface with the current application object in some way. To solve
-this, set up an application context with app.app_context().  See the
-documentation for more information.\
-'''
-    
-        The following characters are escaped in strings:
-    
-        def to_json(self, value):
-        return [self.serializer.tag(item) for item in value]
-    
-            egg_setup = base.join('setup.py')
-        egg_setup.write(textwrap.dedent('''
-        from setuptools import setup
-        setup(name='{0}',
-              version='1.0',
-              packages=['site_egg'],
-              zip_safe=True)
-        '''.format(name)))
-    
-        return roidb
-    
-    $ find . -name '*.yaml' -exec sed -i -e \
-   's/head_builder\.add_roi_2mlp_head/fast_rcnn_heads.add_roi_2mlp_head/g' {} \;
+            # Adding unique constraint on 'GroupCommitResolution', fields ['group_id', 'commit_id']
+        db.create_unique('sentry_groupcommitresolution', ['group_id', 'commit_id'])
     
     
-def collect(inputs, is_training):
-    cfg_key = 'TRAIN' if is_training else 'TEST'
-    post_nms_topN = cfg[cfg_key].RPN_POST_NMS_TOP_N
-    k_max = cfg.FPN.RPN_MAX_LEVEL
-    k_min = cfg.FPN.RPN_MIN_LEVEL
-    num_lvls = k_max - k_min + 1
-    roi_inputs = inputs[:num_lvls]
-    score_inputs = inputs[num_lvls:]
-    if is_training:
-        score_inputs = score_inputs[:-2]
-    
-        # Scale rois_fg and format as (batch_idx, x1, y1, x2, y2)
-    rois_fg *= im_scale
-    repeated_batch_idx = batch_idx * blob_utils.ones((rois_fg.shape[0], 1))
-    rois_fg = np.hstack((repeated_batch_idx, rois_fg))
-    
-        # Compute anchor labels:
-    # label=1 is positive, 0 is negative, -1 is don't care (ignore)
-    labels = np.empty((num_inside, ), dtype=np.float32)
-    labels.fill(-1)
-    if len(gt_boxes) > 0:
-        # Compute overlaps between the anchors and the gt boxes overlaps
-        anchor_by_gt_overlap = box_utils.bbox_overlaps(anchors, gt_boxes)
-        # Map from anchor to gt box that has highest overlap
-        anchor_to_gt_argmax = anchor_by_gt_overlap.argmax(axis=1)
-        # For each anchor, amount of overlap with most overlapping gt box
-        anchor_to_gt_max = anchor_by_gt_overlap[
-            np.arange(num_inside), anchor_to_gt_argmax]
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding field 'CommitAuthor.external_id'
+        db.add_column(
+            'sentry_commitauthor',
+            'external_id',
+            self.gf('django.db.models.fields.CharField')(max_length=164, null=True),
+            keep_default=False
+        )
