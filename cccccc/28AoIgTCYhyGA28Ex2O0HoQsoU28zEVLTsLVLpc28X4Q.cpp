@@ -1,347 +1,259 @@
 
         
-        // Version constant.
-// This is either 0 for python, 1 for CPP V1, 2 for CPP V2.
-//
-// 0 is default and is equivalent to
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
-//
-// 1 is set with -DPYTHON_PROTO2_CPP_IMPL_V1 and is equivalent to
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
-// and
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=1
-//
-// 2 is set with -DPYTHON_PROTO2_CPP_IMPL_V2 and is equivalent to
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
-// and
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
-#ifdef PYTHON_PROTO2_CPP_IMPL_V1
-#error 'PYTHON_PROTO2_CPP_IMPL_V1 is no longer supported.'
-#else
-#ifdef PYTHON_PROTO2_CPP_IMPL_V2
-static int kImplVersion = 2;
-#else
-#ifdef PYTHON_PROTO2_PYTHON_IMPL
-static int kImplVersion = 0;
-#else
-    
-    // This is initialized with a default, stub implementation.
-// If python-google.protobuf.cc is loaded, the function pointer is overridden
-// with a full implementation.
-const Message* (*GetCProtoInsidePyProtoPtr)(PyObject* msg) =
-    GetCProtoInsidePyProtoStub;
-Message* (*MutableCProtoInsidePyProtoPtr)(PyObject* msg) =
-    MutableCProtoInsidePyProtoStub;
+        #include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
     
     
-    {  WriteFieldDocComment(printer, descriptor_);
-  if (descriptor_->is_repeated()) {
-    printer->Print(
-        vars,
-        'public static final\n'
-        '  com.google.protobuf.GeneratedMessageLite.GeneratedExtension<\n'
-        '    $containing_type$,\n'
-        '    $type$> $name$ = com.google.protobuf.GeneratedMessageLite\n'
-        '        .newRepeatedGeneratedExtension(\n'
-        '      $containing_type$.getDefaultInstance(),\n'
-        '      $prototype$,\n'
-        '      $enum_map$,\n'
-        '      $number$,\n'
-        '      com.google.protobuf.WireFormat.FieldType.$type_constant$,\n'
-        '      $packed$,\n'
-        '      $singular_type$.class);\n');
-  } else {
-    printer->Print(
-        vars,
-        'public static final\n'
-        '  com.google.protobuf.GeneratedMessageLite.GeneratedExtension<\n'
-        '    $containing_type$,\n'
-        '    $type$> $name$ = com.google.protobuf.GeneratedMessageLite\n'
-        '        .newSingularGeneratedExtension(\n'
-        '      $containing_type$.getDefaultInstance(),\n'
-        '      $default$,\n'
-        '      $prototype$,\n'
-        '      $enum_map$,\n'
-        '      $number$,\n'
-        '      com.google.protobuf.WireFormat.FieldType.$type_constant$,\n'
-        '      $singular_type$.class);\n');
-  }
-  printer->Annotate('name', descriptor_);
+    {} // namespace caffe2
+    
+    
+    {  // The 64 records in the first two log blocks are completely lost.
+  Check(36, 36);
 }
     
     
-    {  zcontext_.zalloc = Z_NULL;
-  zcontext_.zfree = Z_NULL;
-  zcontext_.opaque = Z_NULL;
-  zcontext_.next_out = NULL;
-  zcontext_.avail_out = 0;
-  zcontext_.total_out = 0;
-  zcontext_.next_in = NULL;
-  zcontext_.avail_in = 0;
-  zcontext_.total_in = 0;
-  zcontext_.msg = NULL;
-  // default to GZIP format
-  int windowBitsFormat = 16;
-  if (options.format == ZLIB) {
-    windowBitsFormat = 0;
+    {    // Just keep the messages from one thread
+    if (message_.empty()) message_ = other.message_;
   }
-  zerror_ = deflateInit2(
-      &zcontext_,
-      options.compression_level,
-      Z_DEFLATED,
-      /* windowBits */15 | windowBitsFormat,
-      /* memLevel (default) */8,
-      options.compression_strategy);
+    
+    #include <stdint.h>
+#include 'leveldb/db.h'
+#include 'db/dbformat.h'
+    
+            Reopen();
+        ASSERT_TRUE(CompareIterators(step, &model, db_, nullptr, nullptr));
+    
+      ASSERT_TRUE(ParseInternalKey(in, &decoded));
+  ASSERT_EQ(key, decoded.user_key.ToString());
+  ASSERT_EQ(seq, decoded.sequence);
+  ASSERT_EQ(vt, decoded.type);
+    
+    std::string LockFileName(const std::string& dbname) {
+  return dbname + '/LOCK';
 }
     
-    // ----------------------------------------------------------------------
-// NoLocaleStrtod()
-//   This code will make you cry.
-// ----------------------------------------------------------------------
+    #ifndef STORAGE_LEVELDB_DB_LOG_FORMAT_H_
+#define STORAGE_LEVELDB_DB_LOG_FORMAT_H_
     
-    // Author: kenton@google.com (Kenton Varda)
-//  Based on original Protocol Buffers design by
-//  Sanjay Ghemawat, Jeff Dean, and others.
-//
-// Here we have a hand-written lexer.  At first you might ask yourself,
-// 'Hand-written text processing?  Is Kenton crazy?!'  Well, first of all,
-// yes I am crazy, but that's beside the point.  There are actually reasons
-// why I ended up writing this this way.
-//
-// The traditional approach to lexing is to use lex to generate a lexer for
-// you.  Unfortunately, lex's output is ridiculously ugly and difficult to
-// integrate cleanly with C++ code, especially abstract code or code meant
-// as a library.  Better parser-generators exist but would add dependencies
-// which most users won't already have, which we'd like to avoid.  (GNU flex
-// has a C++ output option, but it's still ridiculously ugly, non-abstract,
-// and not library-friendly.)
-//
-// The next approach that any good software engineer should look at is to
-// use regular expressions.  And, indeed, I did.  I have code which
-// implements this same class using regular expressions.  It's about 200
-// lines shorter.  However:
-// - Rather than error messages telling you 'This string has an invalid
-//   escape sequence at line 5, column 45', you get error messages like
-//   'Parse error on line 5'.  Giving more precise errors requires adding
-//   a lot of code that ends up basically as complex as the hand-coded
-//   version anyway.
-// - The regular expression to match a string literal looks like this:
-//     kString  = new RE('(\'([^\'\\\\]|'              // non-escaped
-//                       '\\\\[abfnrtv?\''\\\\0-7]|'   // normal escape
-//                       '\\\\x[0-9a-fA-F])*\'|'       // hex escape
-//                       '\'([^\'\\\\]|'        // Also support single-quotes.
-//                       '\\\\[abfnrtv?\''\\\\0-7]|'
-//                       '\\\\x[0-9a-fA-F])*\')');
-//   Verifying the correctness of this line noise is actually harder than
-//   verifying the correctness of ConsumeString(), defined below.  I'm not
-//   even confident that the above is correct, after staring at it for some
-//   time.
-// - PCRE is fast, but there's still more overhead involved than the code
-//   below.
-// - Sadly, regular expressions are not part of the C standard library, so
-//   using them would require depending on some other library.  For the
-//   open source release, this could be really annoying.  Nobody likes
-//   downloading one piece of software just to find that they need to
-//   download something else to make it work, and in all likelihood
-//   people downloading Protocol Buffers will already be doing so just
-//   to make something else work.  We could include a copy of PCRE with
-//   our code, but that obligates us to keep it up-to-date and just seems
-//   like a big waste just to save 200 lines of code.
-//
-// On a similar but unrelated note, I'm even scared to use ctype.h.
-// Apparently functions like isalpha() are locale-dependent.  So, if we used
-// that, then if this code is being called from some program that doesn't
-// have its locale set to 'C', it would behave strangely.  We can't just set
-// the locale to 'C' ourselves since we might break the calling program that
-// way, particularly if it is multi-threaded.  WTF?  Someone please let me
-// (Kenton) know if I'm missing something here...
-//
-// I'd love to hear about other alternatives, though, as this code isn't
-// exactly pretty.
+    size_t LogTest::initial_offset_record_sizes_[] =
+    {10000,  // Two sizable records in first block
+     10000,
+     2 * log::kBlockSize - 1000,  // Span three blocks
+     1,
+     13716,  // Consume all but two bytes of block 3.
+     log::kBlockSize - kHeaderSize, // Consume the entirety of block 4.
+    };
     
-        void div(const Size2D &size,
-             const f32 * src0Base, ptrdiff_t src0Stride,
-             const f32 * src1Base, ptrdiff_t src1Stride,
-             f32 * dstBase, ptrdiff_t dstStride,
-             f32 scale);
+        const size_t avail = kBlockSize - block_offset_ - kHeaderSize;
+    const size_t fragment_length = (left < avail) ? left : avail;
     
-        void operator() (const typename internal::VecTraits<T>::vec128 & v_src0,
-                     const typename internal::VecTraits<T>::vec128 & v_src1,
-                     typename internal::VecTraits<T>::vec128 & v_dst) const
-    {
-        typename internal::VecTraits<T>::vec128 v_min = internal::vminq(v_src0, v_src1);
-        typename internal::VecTraits<T>::vec128 v_max = internal::vmaxq(v_src0, v_src1);
-        v_dst = internal::vqsubq(v_max, v_min);
+     private:
+  MemTable::Table::Iterator iter_;
+  std::string tmp_;       // For passing to EncodeKey
+    
+      void ScanTable(uint64_t number) {
+    TableInfo t;
+    t.meta.number = number;
+    std::string fname = TableFileName(dbname_, number);
+    Status status = env_->GetFileSize(fname, &t.meta.file_size);
+    if (!status.ok()) {
+      // Try alternate file name.
+      fname = SSTTableFileName(dbname_, number);
+      Status s2 = env_->GetFileSize(fname, &t.meta.file_size);
+      if (s2.ok()) {
+        status = Status::OK();
+      }
+    }
+    if (!status.ok()) {
+      ArchiveFile(TableFileName(dbname_, number));
+      ArchiveFile(SSTTableFileName(dbname_, number));
+      Log(options_.info_log, 'Table #%llu: dropped: %s',
+          (unsigned long long) t.meta.number,
+          status.ToString().c_str());
+      return;
+    }
     }
     
-            for (; j < roiw32; j += 32)
-        {
-            internal::prefetch(src + j);
-            uint8x16_t v_src0 = vld1q_u8(src + j), v_src1 = vld1q_u8(src + j + 16);
-            uint8x16_t v_dst0 = vmvnq_u8(v_src0), v_dst1 = vmvnq_u8(v_src1);
-            vst1q_u8(dst + j, v_dst0);
-            vst1q_u8(dst + j + 16, v_dst1);
+    
+    {        // Advance to next key in the valid key space
+        if (key(pos) < key(current)) {
+          pos = MakeKey(key(pos) + 1, 0);
+        } else {
+          pos = MakeKey(key(pos), gen(pos) + 1);
         }
-        for (; j < roiw8; j += 8)
-        {
-            uint8x8_t v_src = vld1_u8(src + j);
-            uint8x8_t v_dst = vmvn_u8(v_src);
-            vst1_u8(dst + j, v_dst);
-        }
+      }
     
-                op(v_src00, v_src10, v_dst0);
-            op(v_src01, v_src11, v_dst1);
+    //---- Include imgui_user.h at the end of imgui.h as a convenience
+//#define IMGUI_INCLUDE_IMGUI_USER_H
     
-    
-    {            vec128 v_src = vld1q(src + js);
-            vec128 v_dst = vrev64q(v_src);
-            v_dst = vcombine(vget_high(v_dst), vget_low(v_dst));
-            vst1q(dst + jd - step_base, v_dst);
-        }
-        for (; js < roiw_tail; js += step_tail, jd -= step_tail)
-        {
-            vec64 v_src = vld1(src + js);
-            vst1(dst + jd - step_tail, vrev64(v_src));
-        }
-    
-    void read_image(std::ifstream* image_file, std::ifstream* label_file,
-        uint32_t index, uint32_t rows, uint32_t cols,
-        char* pixels, char* label) {
-  image_file->seekg(index * rows * cols + 16);
-  image_file->read(pixels, rows * cols);
-  label_file->seekg(index + 8);
-  label_file->read(label, 1);
-}
-    
-      bool is_started() const;
-    
-    
-    {  /// Whether to ignore instances with a certain label.
-  bool has_ignore_label_;
-  /// The label indicating that an instance should be ignored.
-  int ignore_label_;
-  /// Keeps counts of the number of samples per class.
-  Blob<Dtype> nums_buffer_;
-};
-    
-    namespace caffe {
-    }
-    
-    #endif  // CAFFE_CUDNN_LCN_LAYER_HPP_
+    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
 
     
-    #ifdef USE_CUDNN
-template <typename Dtype>
-class CuDNNLRNLayer : public LRNLayer<Dtype> {
- public:
-  explicit CuDNNLRNLayer(const LayerParameter& param)
-      : LRNLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNLRNLayer();
+        glutMainLoop();
+    
+    
+    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+            ImGui::End();
+        }
+    
+        // You can set those flags on a per font basis in ImFontConfig::RasterizerFlags.
+    // Use the 'extra_flags' parameter of BuildFontAtlas() to force a flag on all your fonts.
+    enum RasterizerFlags
+    {
+        // By default, hinting is enabled and the font's native hinter is preferred over the auto-hinter.
+        NoHinting       = 1 << 0,   // Disable hinting. This generally generates 'blurrier' bitmap glyphs when the glyph are rendered in any of the anti-aliased modes.
+        NoAutoHint      = 1 << 1,   // Disable auto-hinter.
+        ForceAutoHint   = 1 << 2,   // Indicates that the auto-hinter is preferred over the font's native hinter.
+        LightHinting    = 1 << 3,   // A lighter hinting algorithm for gray-level modes. Many generated glyphs are fuzzier but better resemble their original shape. This is achieved by snapping glyphs to the pixel grid only vertically (Y-axis), as is done by Microsoft's ClearType and Adobe's proprietary font renderer. This preserves inter-glyph spacing in horizontal text.
+        MonoHinting     = 1 << 4,   // Strong hinting algorithm that should only be used for monochrome output.
+        Bold            = 1 << 5,   // Styling: Should we artificially embolden the font?
+        Oblique         = 1 << 6    // Styling: Should we slant the font, emulating italic style?
+    };
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+    
+      int64_t num_record_drop_hidden = 0;
+  int64_t num_record_drop_obsolete = 0;
+  int64_t num_record_drop_range_del = 0;
+  int64_t num_range_del_drop_obsolete = 0;
+  // Deletions obsoleted before bottom level due to file gap optimization.
+  int64_t num_optimized_del_drop_obsolete = 0;
+  uint64_t total_filter_time = 0;
+    
+      PinnableSlice pinnable_val;
+  db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key1', &pinnable_val);
+  assert(s.IsNotFound());
+  // Reset PinnableSlice after each use and before each reuse
+  pinnable_val.Reset();
+  db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key2', &pinnable_val);
+  assert(pinnable_val == 'value');
+  pinnable_val.Reset();
+  // The Slice pointed by pinnable_val is not valid after this point
+    
+    #pragma once
+#ifndef ROCKSDB_LITE
+    
+    TEST(ProtocolDataTest, CheckSum) {
+  const uint8_t INPUT[] = {0x00, 0x12, 0x00, 0x13, 0x00, 0xF3, 0x00, 0x00};
+  const uint8_t result =
+      ProtocolData<apollo::canbus::ChassisDetail>::CalculateCheckSum(INPUT, 8);
+  EXPECT_EQ(0xE7, result);
+}
+    
+    TEST(ByteTest, CopyConstructor) {
+  unsigned char byte_value = 0xFF;
+  Byte value(&byte_value);
+  Byte another_value(value);
+  EXPECT_EQ(another_value.to_hex_string(), value.to_hex_string());
+  EXPECT_EQ(another_value.to_binary_string(), value.to_binary_string());
+}
+    
+    /**
+ * @file : spline_1d_seg.cc
+ * @brief: polynomial smoothing spline segment
+ **/
+    
+    GemMessageManager::GemMessageManager() {
+  // Control Messages
+  AddSendProtocolData<Accelcmd67, true>();
+  AddSendProtocolData<Brakecmd6b, true>();
+  AddSendProtocolData<Globalcmd69, true>();
+  AddSendProtocolData<Headlightcmd76, true>();
+  AddSendProtocolData<Horncmd78, true>();
+  AddSendProtocolData<Shiftcmd65, true>();
+  AddSendProtocolData<Steeringcmd6d, true>();
+  AddSendProtocolData<Turncmd63, true>();
+  AddSendProtocolData<Wipercmd90, true>();
     }
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include <vector>
-    
-      xfer += iprot->readStructBegin(fname);
-    
-    typedef struct _Extension_call_args__isset {
-  _Extension_call_args__isset() : registry(false), item(false), request(false) {}
-  bool registry :1;
-  bool item :1;
-  bool request :1;
-} _Extension_call_args__isset;
+    TEST_F(GemMessageManagerTest, GetSendProtocols) {
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Accelcmd67::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakecmd6b::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Globalcmd69::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Headlightcmd76::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Horncmd78::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Shiftcmd65::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringcmd6d::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Turncmd63::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Wipercmd90::ID) != nullptr);
+}
     
     
-    {    ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin('query', ::apache::thrift::protocol::T_EXCEPTION, seqid);
-    x.write(oprot);
-    oprot->writeMessageEnd();
-    oprot->getTransport()->writeEnd();
-    oprot->getTransport()->flush();
-    return;
-  }
+    {  double ret = x * 0.001000;
+  return ret;
+}
     
-    #include 'osquery_types.h'
+    #include 'modules/canbus/vehicle/gem/protocol/accel_rpt_68.h'
     
-      virtual ~ExtensionStatus() throw();
-  int32_t code;
-  std::string message;
-  ExtensionRouteUUID uuid;
+    using ::apollo::drivers::canbus::Byte;
     
-    // getSerializedQueryLogItem() return an std::pair where pair->first
-// is a string which should serialize to pair->second. pair->second
-// should deserialize to pair->first
-std::pair<JSON, QueryLogItem> getSerializedQueryLogItem();
-std::pair<std::string, QueryLogItem> getSerializedQueryLogItemJSON();
-    
-    #include <boost/core/ignore_unused.hpp>
-#include <boost/filesystem.hpp>
-    
-    template <typename... TemplateArgs>
-struct IsMap<std::map<TemplateArgs...>> : std::true_type {};
-    
-    #include <osquery/utils/expected/expected.h>
-    
-    #include <iostream>
-#include <vector>
-#include <cassert>
-#include <unordered_map>
-    
-        int arr[] = {1, 2, 3, 4, 5};
-    int n = sizeof(arr)/sizeof(int);
-    
-    
-    {private:
-    int nextDifferentCharacterIndex(const vector<int> &nums, int p){
-        for( ; p < nums.size() ; p ++ )
-            if( nums[p] != nums[p - 1] )
-                break;
-        return p;
+    // config detail: {'name': 'brake_on_off', 'enum': {0: 'BRAKE_ON_OFF_OFF', 1:
+// 'BRAKE_ON_OFF_ON'}, 'precision': 1.0, 'len': 1, 'is_signed_var': False,
+// 'offset': 0.0, 'physical_range': '[0|1]', 'bit': 48, 'type': 'enum', 'order':
+// 'motorola', 'physical_unit': ''}
+Brake_rpt_6c::Brake_on_offType Brakerpt6c::brake_on_off(
+    const std::uint8_t* bytes, int32_t length) const {
+  Byte t0(bytes + 6);
+  int32_t x = t0.get_byte(0, 1);
     }
+    
+    #define SIZE    100
+    
+        for (i = 1; i < 1024; i++)
+    {
+        uint32_t key = (rand() % (20000 * 37));
+        if (key % 37 == 0)
+        {
+            continue;
+        }
+        int ret = (int) (long) swRbtree_find(tree, key);
+        ASSERT_EQ(ret, 0);
+    }
+    
+            int setContext(redisAsyncContext * ac) {
+            if (ac->ev.data != NULL) {
+                return REDIS_ERR;
+            }
+            m_ctx = ac;
+            m_ctx->ev.data = this;
+            m_ctx->ev.addRead = RedisQtAddRead;
+            m_ctx->ev.delRead = RedisQtDelRead;
+            m_ctx->ev.addWrite = RedisQtAddWrite;
+            m_ctx->ev.delWrite = RedisQtDelWrite;
+            m_ctx->ev.cleanup = RedisQtCleanup;
+            return REDIS_OK;
+        }
+    
+    
+    {    friend
+    void getCallback(redisAsyncContext *, void *, void *);
 };
     
-                cur = stack.top();
-            stack.pop();
-            res.push_back(cur->val);
-            cur = cur->right;
+        _pipe = eventfd(0, 0);
     
-    int main() {
-    }
+    using namespace swoole;
     
-    
-int main() {
-    }
-    
-    #include <iostream>
-#include <vector>
-#include <stack>
-#include <cassert>
-    
-    /// Definition for a binary tree node.
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-    
-    public:
-    vector<int> preorderTraversal(TreeNode* root) {
-    }
-    
-    /// Definition for a binary tree node.
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
+                wait_task *task = nullptr;
+            if (waitpid_map.find(__pid) != waitpid_map.end())
+            {
+                task = waitpid_map[__pid];
+                waitpid_map.erase(__pid);
+            }
+            else if (!wait_list.empty())
+            {
+                task = wait_list.front();
+                wait_list.pop();
+            }
+            else
+            {
+                child_processes[__pid] = __stat_loc;
+            }
