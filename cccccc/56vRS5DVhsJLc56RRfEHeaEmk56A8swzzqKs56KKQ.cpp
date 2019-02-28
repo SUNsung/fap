@@ -1,249 +1,283 @@
 
         
         
-    {
-    {SHOULD_NOT_DO_GRADIENT(FindDuplicateElements);
-} // namespace
-} // namespace caffe2
-
+    { private:
+  RowBlock<IndexType> out_;
+  std::unique_ptr<Parser<IndexType> > parser_;
+  uint32_t num_col_;
+  std::vector<size_t> offset_;
+  std::vector<IndexType> dense_index_;
+  std::vector<xgboost::bst_float> dense_value_;
+};
     
-    <summary> <b>Example</b> </summary>
-    
-      /**
-   * Returns the baseline of the current object at the given level.
-   * The baseline is the line that passes through (x1, y1) and (x2, y2).
-   * WARNING: with vertical text, baselines may be vertical!
-   * Returns false if there is no baseline at the current position.
-   */
-  bool Baseline(PageIteratorLevel level,
-                int* x1, int* y1, int* x2, int* y2) const;
-    
-    
-    {  name += UNLV_EXT;              //add extension
-  if ((pdfp = fopen (name.string (), 'rb')) == nullptr) {
-    return false;                //didn't read one
-  } else {
-    while (tfscanf(pdfp, '%d %d %d %d %*s', &x, &y, &width, &height) >= 4) {
-                                 //make rect block
-      block = new BLOCK (name.string (), TRUE, 0, 0,
-                         (int16_t) x, (int16_t) (ysize - y - height),
-                         (int16_t) (x + width), (int16_t) (ysize - y));
-                                 //on end of list
-      block_it.add_to_end (block);
-    }
-    fclose(pdfp);
+    SparsePageWriter::SparsePageWriter(
+    const std::vector<std::string>& name_shards,
+    const std::vector<std::string>& format_shards,
+    size_t extra_buffer_capacity)
+    : num_free_buffer_(extra_buffer_capacity + name_shards.size()),
+      clock_ptr_(0),
+      workers_(name_shards.size()),
+      qworkers_(name_shards.size()) {
+  CHECK_EQ(name_shards.size(), format_shards.size());
+  // start writer threads
+  for (size_t i = 0; i < name_shards.size(); ++i) {
+    std::string name_shard = name_shards[i];
+    std::string format_shard = format_shards[i];
+    auto* wqueue = &qworkers_[i];
+    workers_[i].reset(new std::thread(
+        [this, name_shard, format_shard, wqueue] () {
+          std::unique_ptr<dmlc::Stream> fo(
+              dmlc::Stream::Create(name_shard.c_str(), 'w'));
+          std::unique_ptr<SparsePageFormat> fmt(
+              SparsePageFormat::Create(format_shard));
+          fo->Write(format_shard);
+          std::shared_ptr<SparsePage> page;
+          while (wqueue->Pop(&page)) {
+            if (page == nullptr) break;
+            fmt->Write(*page, fo.get());
+            qrecycle_.Push(std::move(page));
+          }
+          fo.reset(nullptr);
+          LOG(CONSOLE) << 'SparsePage::Writer Finished writing to ' << name_shard;
+        }));
   }
-  return true;
 }
     
-      // Clean up the bounding boxes from the polygonal approximation by
-  // expanding slightly, then clipping to the blobs from the original_word
-  // that overlap. If not null, the block provides the inverse rotation.
-  void ClipToOriginalWord(const BLOCK* block, WERD* original_word);
+    #endif  // XGBOOST_OBJECTIVE_REGRESSION_LOSS_H_
+
     
-    // Class to hold a Pixa collection of debug images with captions and save them
-// to a PDF file.
-class DebugPixa {
+    
+    {    // loop over all rows and fill column entries
+    // num_nonzeros[fid] = how many nonzeros have this feature accumulated so far?
+    std::vector<size_t> num_nonzeros;
+    num_nonzeros.resize(nfeature);
+    std::fill(num_nonzeros.begin(), num_nonzeros.end(), 0);
+    for (size_t rid = 0; rid < nrow; ++rid) {
+      const size_t ibegin = gmat.row_ptr[rid];
+      const size_t iend = gmat.row_ptr[rid + 1];
+      size_t fid = 0;
+      for (size_t i = ibegin; i < iend; ++i) {
+        const uint32_t bin_id = gmat.index[i];
+        while (bin_id >= gmat.cut.row_ptr[fid + 1]) {
+          ++fid;
+        }
+        if (type_[fid] == kDenseColumn) {
+          uint32_t* begin = &index_[boundary_[fid].index_begin];
+          begin[rid] = bin_id - index_base_[fid];
+        } else {
+          uint32_t* begin = &index_[boundary_[fid].index_begin];
+          begin[num_nonzeros[fid]] = bin_id - index_base_[fid];
+          row_ind_[boundary_[fid].row_ind_begin + num_nonzeros[fid]] = rid;
+          ++num_nonzeros[fid];
+        }
+      }
+    }
+  }
+    
+    namespace xgboost {
+/*!
+ * \brief interface of gradient boosting model.
+ */
+class GradientBooster {
  public:
-  // TODO(rays) add another constructor with size control.
-  DebugPixa() {
-    pixa_ = pixaCreate(0);
-    fonts_ = bmfCreate(nullptr, 14);
+  /*! \brief virtual destructor */
+  virtual ~GradientBooster() = default;
+  /*!
+   * \brief set configuration from pair iterators.
+   * \param begin The beginning iterator.
+   * \param end The end iterator.
+   * \tparam PairIter iterator<std::pair<std::string, std::string> >
+   */
+  template<typename PairIter>
+  inline void Configure(PairIter begin, PairIter end);
+  /*!
+   * \brief Set the configuration of gradient boosting.
+   *  User must call configure once before InitModel and Training.
+   *
+   * \param cfg configurations on both training and model parameters.
+   */
+  virtual void Configure(const std::vector<std::pair<std::string, std::string> >& cfg) = 0;
+  /*!
+   * \brief load model from stream
+   * \param fi input stream.
+   */
+  virtual void Load(dmlc::Stream* fi) = 0;
+  /*!
+   * \brief save model to stream.
+   * \param fo output stream
+   */
+  virtual void Save(dmlc::Stream* fo) const = 0;
+  /*!
+   * \brief whether the model allow lazy checkpoint
+   * return true if model is only updated in DoBoost
+   * after all Allreduce calls
+   */
+  virtual bool AllowLazyCheckPoint() const {
+    return false;
   }
-  // If the filename_ has been set and there are any debug images, they are
-  // written to the set filename_.
-  ~DebugPixa() {
-    pixaDestroy(&pixa_);
-    bmfDestroy(&fonts_);
-  }
+  /*!
+   * \brief perform update to the model(boosting)
+   * \param p_fmat feature matrix that provide access to features
+   * \param in_gpair address of the gradient pair statistics of the data
+   * \param obj The objective function, optional, can be nullptr when use customized version
+   * the booster may change content of gpair
+   */
+  virtual void DoBoost(DMatrix* p_fmat,
+                       HostDeviceVector<GradientPair>* in_gpair,
+                       ObjFunction* obj = nullptr) = 0;
+    }
     }
     
-    /*! \brief registry entry to register simple operators via functions. */
-class SimpleOpRegEntry {
- public:
-  /*! \brief declare self type */
-  typedef SimpleOpRegEntry TSelf;
-  /*! \brief name of the operator */
-  std::string name;
-  /*!
-   * \brief set a seperate name for symbol
-   *  This must be called before set_function.
-   *  Default: this is set to be same as the name of operator.
-   * \param symbol_name the name of symbolic operator.
-   */
-  virtual TSelf& set_symbol_op_name(char const* symbol_name) = 0;
-  /*!
-   * \brief set number of scalar arguments needed to be passed in env
-   *  A function cannot have both kwargs and scalar arguments.
-   *  Default: this is set to false
-   * \param enable_scalar whether to enable scalar argument
-   * \param type_mask the position of the scalar argument.
-   */
-  virtual TSelf& set_enable_scalar(
-      bool enable_scalar,
-      SimpleOpScalarOption type_mask = kArrayBeforeScalar) = 0;
-  /*!
-   * \brief set whether to enable kwargs
-   *  A function cannot have both kwargs and scalar arguments.
-   *  Default: this is set to false
-   * \param enable_kwargs whether to enable kwargs
-   */
-  virtual TSelf& set_enable_kwargs(bool enable_kwargs) = 0;
-  /*!
-   * \brief set resource request
-   *  By default there is no resource request.
-   *  The resource will be presented in both forward and backward.
-   * \param reqs the request.
-   */
-  virtual TSelf& set_resource_request(
-      const std::vector<ResourceRequest>& reqs) = 0;
-  /*!
-   * \brief set resource request
-   *  By default there is no resource request.
-   *  The resource will be presented in both forward and backward.
-   * \param req the request.
-   */
-  virtual TSelf& set_resource_request(ResourceRequest req) = 0;
-  /*!
-   * \brief set source inference function.
-   * \param fshapeinfer The source function that peforms the operation.
-   */
-  virtual TSelf& set_shape_function(SourceShapeFunction fshapeinfer) = 0;
-  /*!
-   * \brief set shape inference function.
-   *  Default: out_shape = in_shape
-   * \param fshapeinfer The unary function that peforms the operation.
-   */
-  virtual TSelf& set_shape_function(UnaryShapeFunction fshapeinfer) = 0;
-  /*!
-   * \brief set shape inference function to be the binary inference function
-   *  Default: out_shape = lhs_shape, and lhs_shape must equal rhs_shape.
-   * \param fshapeinfer The binary function that peforms the operation.
-   */
-  virtual TSelf& set_shape_function(BinaryShapeFunction fshapeinfer) = 0;
-  /*!
-   * \brief set function of the function to be fsource
-   * \param dev_mask The device mask of the function can act on.
-   * \param fsource The unary function that peforms the operation.
-   * \param register_symbolic Whether register a symbolic operator as well.
-   */
-  virtual TSelf& set_function(
-      int dev_mask,
-      SourceFunction fsource,
-      SimpleOpRegOption register_symbolic = kRegisterSymbolic) = 0;
-  /*!
-   * \brief set function of the function to be funary
-   * \param dev_mask The device mask of the function can act on.
-   * \param funary The unary function that peforms the operation.
-   * \param inplace_in_out Whether do inplace optimization on in and out.
-   * \param register_symbolic Whether register a symbolic operator as well.
-   */
-  virtual TSelf& set_function(
-      int dev_mask,
-      UnaryFunction funary,
-      SimpleOpInplaceOption inplace_in_out,
-      SimpleOpRegOption register_symbolic = kRegisterSymbolic) = 0;
-  /*!
-   * \brief set function of the function to be funary
-   * \param dev_mask The device mask of the function can act on.
-   * \param fbinary The binary function that peforms the operation.
-   * \param inplace_lhs_out Whether do inplace optimization on lhs and out.
-   * \param register_symbolic Whether register a symbolic operator as well.
-   */
-  virtual TSelf& set_function(
-      int dev_mask,
-      BinaryFunction fbinary,
-      SimpleOpInplaceOption inplace_lhs_out,
-      SimpleOpRegOption register_symbolic = kRegisterSymbolic) = 0;
-  /*!
-   * \brief set gradient of the function of this function.
-   * \param dev_mask The device mask of the function can act on.
-   * \param fgrad The gradient function to be set.
-   * \param inplace_out_in_grad whether out_grad and in_grad can share memory.
-   */
-  virtual TSelf& set_gradient(int dev_mask,
-                              UnaryGradFunctionT0 fgrad,
-                              SimpleOpInplaceOption inplace_out_in_grad) = 0;
-  /*!
-   * \brief set gradient of the function of this function.
-   * \param dev_mask The device mask of the function can act on.
-   * \param fgrad The gradient function to be set.
-   * \param inplace_out_in_grad whether out_grad and in_grad can share memory.
-   */
-  virtual TSelf& set_gradient(int dev_mask,
-                              UnaryGradFunctionT1 fgrad,
-                              SimpleOpInplaceOption inplace_out_in_grad) = 0;
-  /*!
-   * \brief set gradient of the function of this function.
-   * \param dev_mask The device mask of the function can act on.
-   * \param fgrad The gradient function to be set.
-   * \param inplace_out_in_grad whether out_grad and in_grad can share memory.
-   */
-  virtual TSelf& set_gradient(int dev_mask,
-                              UnaryGradFunctionT2 fgrad,
-                              SimpleOpInplaceOption inplace_out_in_grad) = 0;
-  /*!
-   * \brief set gradient of the function of this function.
-   * \param dev_mask The device mask of the function can act on.
-   * \param fgrad The gradient function to be set.
-   * \param inplace_out_lhs_grad whether out_grad and lhs_grad can share memory.
-   */
-  virtual TSelf& set_gradient(int dev_mask,
-                              BinaryGradFunctionT0 fgrad,
-                              SimpleOpInplaceOption inplace_out_lhs_grad) = 0;
-  /*!
-   * \brief set gradient of the function of this function.
-   * \param dev_mask The device mask of the function can act on.
-   * \param fgrad The gradient function to be set.
-   * \param inplace_out_lhs_grad whether out_grad and lhs_grad can share memory.
-   */
-  virtual TSelf& set_gradient(int dev_mask,
-                              BinaryGradFunctionT1 fgrad,
-                              SimpleOpInplaceOption inplace_out_lhs_grad) = 0;
-  /*!
-   * \brief Describe the function.
-   * \param description The description of the function.
-   * \return reference to self.
-   */
-  virtual TSelf& describe(const std::string &description) = 0;
-  /*!
-   * \brief Describe the function.
-   * \param args argument information.
-   *  Add additional arguments to the function.
-   * \return reference to self.
-   */
-  virtual TSelf& add_arguments(const std::vector<dmlc::ParamFieldInfo> &args) = 0;
-  /*! \brief virtual destructor */
-  virtual ~SimpleOpRegEntry() {}
-};
     
-    TShape Vector2TShape(const std::vector<int> &vec_int);
-std::vector<int> TShape2Vector(const TShape &tshape);
-    
-    MXNET_REGISTER_OP_PROPERTY(CaffeLoss, CaffeLossProp)
-.describe('Caffe loss layer')
-.add_arguments(CaffeLossParam::__FIELDS__());
-    
-    
-    {
-    {
     {  /*!
-   * \brief Worker threads.
+   * \brief transform prediction values, this is only called when Eval is called,
+   *  usually it redirect to PredTransform
+   * \param io_preds prediction values, saves to this vector as well
    */
-  std::vector<std::thread> worker_threads_;
+  virtual void EvalTransform(HostDeviceVector<bst_float> *io_preds) {
+    this->PredTransform(io_preds);
+  }
   /*!
-   * \brief Startup synchronization objects
+   * \brief transform probability value back to margin
+   * this is used to transform user-set base_score back to margin
+   * used by gradient boosting
+   * \return transformed value
    */
-  std::list<std::shared_ptr<dmlc::ManualEvent>> ready_events_;
+  virtual bst_float ProbToMargin(bst_float base_score) const {
+    return base_score;
+  }
   /*!
-   * \brief Disallow default construction.
+   * \brief Create an objective function according to name.
+   * \param name Name of the objective.
    */
-  ThreadPool() = delete;
-  /*!
-   * \brief Disallow copy construction and assignment.
-   */
-  DISALLOW_COPY_AND_ASSIGN(ThreadPool);
+  static ObjFunction* Create(const std::string& name);
 };
-}  // namespace engine
-}  // namespace mxnet
-#endif  // MXNET_ENGINE_THREAD_POOL_H_
+    
+    template<typename DType>
+inline void CompressArray<DType>::Write(dmlc::Stream* fo) {
+  encoded_chunks_.clear();
+  encoded_chunks_.push_back(0);
+  for (size_t i = 0; i < out_buffer_.size(); ++i) {
+    encoded_chunks_.push_back(encoded_chunks_.back() + out_buffer_[i].length());
+  }
+  fo->Write(raw_chunks_);
+  fo->Write(encoded_chunks_);
+  for (const std::string& buf : out_buffer_) {
+    fo->Write(dmlc::BeginPtr(buf), buf.length());
+  }
+}
+    
+    
+    {};
+    
+    void swap(InternalExtensionInfo &a, InternalExtensionInfo &b) {
+  using ::std::swap;
+  swap(a.name, b.name);
+  swap(a.version, b.version);
+  swap(a.sdk_version, b.sdk_version);
+  swap(a.min_sdk_version, b.min_sdk_version);
+  swap(a.__isset, b.__isset);
+}
+    
+    
+    {
+    {  ASSERT_EQ(kEnrollHostDetails.count('osquery_info'), 1U);
+  auto osquery_info = SQL::selectAllFrom('osquery_info');
+  ASSERT_EQ(osquery_info.size(), 1U);
+  ASSERT_EQ(osquery_info[0].count('uuid'), 1U);
+  ASSERT_TRUE(obj.HasMember('host_details'));
+  ASSERT_TRUE(obj['host_details'].HasMember('osquery_info'));
+  ASSERT_TRUE(obj['host_details']['osquery_info'].HasMember('uuid'));
+  ASSERT_TRUE(obj['host_details']['osquery_info']['uuid'].IsString());
+  value = obj['host_details']['osquery_info']['uuid'].GetString();
+  EXPECT_EQ(osquery_info[0]['uuid'], value);
+}
+}
+
+    
+    
+    {
+    {} // namespace events
+} // namespace osquery
+
+    
+    TEST_F(PerfOutputTests, assigning_constructor) {
+  auto buf = std::array<char, 8>{};
+  auto from_obj = ebpf::PerfOutput<TestMessage>{};
+  from_obj.size_ = buf.size();
+  from_obj.fd_ = 42;
+  from_obj.data_ptr_ = static_cast<void*>(buf.data());
+    }
+    
+    
+    {}  //  namespace rocksdb
+
+    
+      uint64_t single_refill_amount =
+      delayed_write_rate_ * kRefillInterval / kMicrosPerSecond;
+  if (bytes_left_ + single_refill_amount >= num_bytes) {
+    // Wait until a refill interval
+    // Never trigger expire for less than one refill interval to avoid to get
+    // time.
+    bytes_left_ = bytes_left_ + single_refill_amount - num_bytes;
+    last_refill_time_ = time_now + kRefillInterval;
+    return kRefillInterval + sleep_debt;
+  }
+    
+    #include <string>
+    
+    // For non linux platform, the following macros are used only as place
+// holder.
+#if !(defined OS_LINUX) && !(defined CYGWIN) && !(defined OS_AIX)
+#define POSIX_FADV_NORMAL 0     /* [MC1] no further special treatment */
+#define POSIX_FADV_RANDOM 1     /* [MC1] expect random page refs */
+#define POSIX_FADV_SEQUENTIAL 2 /* [MC1] expect sequential page refs */
+#define POSIX_FADV_WILLNEED 3   /* [MC1] will need these pages */
+#define POSIX_FADV_DONTNEED 4   /* [MC1] dont need these pages */
+#endif
+    
+      int ret = system('rm -rf /tmp/rocksmergetest');
+  if (ret != 0) {
+    fprintf(stderr, 'Error deleting /tmp/rocksmergetest, code: %d\n', ret);
+    return ret;
+  }
+  rocksdb::Options options;
+  options.create_if_missing = true;
+  options.merge_operator.reset(new MyMerge);
+  options.compaction_filter = &filter;
+  status = rocksdb::DB::Open(options, '/tmp/rocksmergetest', &raw_db);
+  assert(status.ok());
+  std::unique_ptr<rocksdb::DB> db(raw_db);
+    
+      delete txn;
+  // Clear snapshot from read options since it is no longer valid
+  read_options.snapshot = nullptr;
+  snapshot = nullptr;
+    
+      // A list of properties that describe some details about the current
+  // operation.  Same field in op_properties[] might have different
+  // meanings for different operations.
+  uint64_t op_properties[kNumOperationProperties];
+    
+    
+    { protected:
+  explicit DBWithTTL(DB* db) : StackableDB(db) {}
+};
+    
+    void AccelAmplitude::startWithTarget(Node *target)
+{
+    ActionInterval::startWithTarget(target);
+    _other->startWithTarget(target);
+}
+    
+        //
+    // Overrides
+    //
+    virtual CallFuncN* clone() const override;
+    virtual void execute() override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    CallFuncN():_functionN(nullptr){}
+    virtual ~CallFuncN(){}
+    
+    #endif /* __CCACTIONTWEEN_H__ */
