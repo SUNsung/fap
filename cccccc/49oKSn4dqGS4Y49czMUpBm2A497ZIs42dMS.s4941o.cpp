@@ -1,259 +1,342 @@
 
         
-        
-    {    if (!ok) {
-      thread->stats.AddMessage('(snappy failure)');
-    } else {
-      char buf[100];
-      snprintf(buf, sizeof(buf), '(output: %.1f%%)',
-               (produced * 100.0) / bytes);
-      thread->stats.AddMessage(buf);
-      thread->stats.AddBytes(bytes);
-    }
-  }
+        #include 'atom/browser/api/event_emitter.h'
+#include 'atom/browser/mac/in_app_purchase.h'
+#include 'atom/browser/mac/in_app_purchase_observer.h'
+#include 'atom/browser/mac/in_app_purchase_product.h'
+#include 'native_mate/handle.h'
     
-      Status OpenCompactionOutputFile(CompactionState* compact);
-  Status FinishCompactionOutputFile(CompactionState* compact, Iterator* input);
-  Status InstallCompactionResults(CompactionState* compact)
-      EXCLUSIVE_LOCKS_REQUIRED(mutex_);
+    #ifndef ATOM_BROWSER_API_ATOM_API_NET_H_
+#define ATOM_BROWSER_API_ATOM_API_NET_H_
     
-        Iterator* iterator2 = db_->NewIterator(read_options);
-    iterator2->SeekToFirst();
-    ASSERT_TRUE(!iterator2->Valid());
-    delete iterator2;
+      // Wrap TrackableObject into a class that SupportsUserData.
+  void AttachAsUserData(base::SupportsUserData* wrapped);
     
-    Status DumpTable(Env* env, const std::string& fname, WritableFile* dst) {
-  uint64_t file_size;
-  RandomAccessFile* file = nullptr;
-  Table* table = nullptr;
-  Status s = env->GetFileSize(fname, &file_size);
-  if (s.ok()) {
-    s = env->NewRandomAccessFile(fname, &file);
-  }
-  if (s.ok()) {
-    // We use the default comparator, which may or may not match the
-    // comparator used in this database. However this should not cause
-    // problems since we only use Table operations that do not require
-    // any comparisons.  In particular, we do not call Seek or Prev.
-    s = Table::Open(Options(), file, file_size, &table);
-  }
-  if (!s.ok()) {
-    delete table;
-    delete file;
-    return s;
-  }
+    namespace atom {
     }
     
-      // Returns the physical offset of the last record returned by ReadRecord.
-  //
-  // Undefined before the first call to ReadRecord.
-  uint64_t LastRecordOffset();
+      // content::QuotaPermissionContext:
+  void RequestQuotaPermission(const content::StorageQuotaParams& params,
+                              int render_process_id,
+                              const PermissionCallback& callback) override;
     
-      std::string ManifestFileName() {
-    std::string current;
-    ASSERT_OK(ReadFileToString(env_, CurrentFileName(dbname_), &current));
-    size_t len = current.size();
-    if (len > 0 && current[len-1] == '\n') {
-      current.resize(len - 1);
-    }
-    return dbname_ + '/' + current;
+    Delegate* AutoUpdater::delegate_ = nullptr;
+    
+    #if defined(OS_LINUX)
+#include 'atom/browser/lib/power_observer_linux.h'
+#else
+#include 'base/power_monitor/power_observer.h'
+#endif  // defined(OS_LINUX)
+    
+    #ifndef ATOM_BROWSER_MAC_IN_APP_PURCHASE_PRODUCT_H_
+#define ATOM_BROWSER_MAC_IN_APP_PURCHASE_PRODUCT_H_
+    
+    void OffscreenViewProxy::OnEvent(ui::Event* event) {
+  if (view_) {
+    view_->OnEvent(event);
   }
-    
-    TEST(SkipTest, Concurrent1) { RunConcurrent(1); }
-TEST(SkipTest, Concurrent2) { RunConcurrent(2); }
-TEST(SkipTest, Concurrent3) { RunConcurrent(3); }
-TEST(SkipTest, Concurrent4) { RunConcurrent(4); }
-TEST(SkipTest, Concurrent5) { RunConcurrent(5); }
-    
-    /*!
-+ * \brief The result holder of dispatch mode of each Node in the graph.
-+ * \note Stored under graph.attrs['dispatch_mode'], provided by Pass 'InferStorageType'
-+ *
-+ * \code
-+ *  Graph g = ApplyPass(src_graph, 'InferStorageType');
-+ *  const DispatchModeVector& dispatch_modes = g.GetAttr<DispatchModeVector>('dispatch_mode');
-+ *  // get dispatch mode by entry node id
-+ *  int node_type = dispatch_modes[nid];
-+ * \endcode
-+ *
-+ * \sa FInferStorageType
-+ */
-using DispatchModeVector = std::vector<DispatchMode>;
-    
-    
-    {  g.attrs['storage_id'] = std::make_shared<nnvm::any>(std::move(storage_id));
-  g.attrs['storage_inplace_index'] = std::make_shared<nnvm::any>(
-      std::move(storage_inplace_index));
-  g.attrs['addto_entry'] = std::make_shared<nnvm::any>(std::move(addto_entry));
-  g.attrs['skip_plus_node'] = std::make_shared<nnvm::any>(std::move(skip_plus_node));
-  return g;
 }
     
-    /*! \brief create a batch iterator from single instance iterator */
-class BatchLoader : public IIterator<TBlobBatch> {
- public:
-  explicit BatchLoader(IIterator<DataInst> *base):
-    head_(1), num_overflow_(0), base_(base) {
-  }
+    inline void vnst(u8* dst, uint8x16_t v1, uint8x16_t v2) { vst1q_u8(dst, v1); vst1q_u8(dst+16, v2); }
+inline void vnst(u8* dst, uint16x8_t v1, uint16x8_t v2) { vst1q_u8(dst, vcombine_u8(vmovn_u16(v1), vmovn_u16(v2))); }
+inline void vnst(u8* dst, uint32x4_t v1, uint32x4_t v2) { vst1_u8(dst, vmovn_u16(vcombine_u16(vmovn_u32(v1), vmovn_u32(v2)))); }
+    
+    namespace internal {
     }
     
-    When `label_libsvm` is set to the path to another LibSVM file,
-data is read from `data_libsvm` and label from `label_libsvm`.
-In this case, both data and label are stored in the csr format.
-If the label column in the `data_libsvm` file is ignored.
-    
-      ~PrefetcherIter() {
-    while (recycle_queue_.size() != 0) {
-      DataBatch *batch = recycle_queue_.front();
-      recycle_queue_.pop();
-      delete batch;
-    }
-    delete out_;
-    iter.Destroy();
-  }
-    
-    
-    {    RegexMatcher  m(this);
-    int32_t r = 0;
-    // Check m's status to make sure all is ok.
-    if (U_SUCCESS(m.fDeferredStatus)) {
-    	r = m.split(input, dest, destCapacity, status);
-    }
-    return r;
-}
-    
-    SearchIterator::SearchIterator(const UnicodeString &text, 
-                                     BreakIterator *breakiter) :
-                                     m_breakiterator_(breakiter),
-                                     m_text_(text)
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
+CVT_FUNC(f32, s16, 8,
+     register float32x4_t vhalf asm ('q0') = vdupq_n_f32(0.5f);,
 {
-    m_search_                     = (USearch *)uprv_malloc(sizeof(USearch));
-    m_search_->breakIter          = NULL;
-    m_search_->isOverlap          = FALSE;
-    m_search_->isCanonicalMatch   = FALSE;
-    m_search_->elementComparisonType = 0;
-    m_search_->isForwardSearching = TRUE;
-    m_search_->reset              = TRUE;
-    m_search_->matchedIndex       = USEARCH_DONE;
-    m_search_->matchedLength      = 0;
-    m_search_->text               = m_text_.getBuffer();
-    m_search_->textLength         = text.length();
-}
+     for (size_t i = 0; i < w; i += 8)
+     {
+         internal::prefetch(_src + i);
+         __asm__ (
+             'vld1.32 {d2-d3}, [%[src]]                               \n\t'
+             'vadd.f32 q2, q1, q0                                     \n\t'
+             'vcvt.s32.f32 q3, q2                                     \n\t'
+             'vqmovn.s32 d8, q3                                       \n\t'
+             'vst1.16 {d8}, [%[dst]]                                  \n\t'
+             : /*no output*/
+             : [src] 'r' (_src + i),
+               [dst] 'r' (_dst + i),
+               'w' (vhalf)
+             : 'd2','d3','d4','d5','d6','d7','d8'
+         );
+         __asm__ (
+             'vld1.32 {d2-d3}, [%[src]]                               \n\t'
+             'vadd.f32 q2, q1, q0                                     \n\t'
+             'vcvt.s32.f32 q3, q2                                     \n\t'
+             'vqmovn.s32 d8, q3                                       \n\t'
+             'vst1.16 {d8}, [%[dst]]                                  \n\t'
+             : /*no output*/
+             : [src] 'r' (_src + i + 4),
+               [dst] 'r' (_dst + i + 4),
+               'w' (vhalf)
+             : 'd2','d3','d4','d5','d6','d7','d8'
+         );
+     }
+})
+#else
+CVT_FUNC(f32, s16, 8,
+     float32x4_t vhalf = vdupq_n_f32(0.5f);,
+{
+     for (size_t i = 0; i < w; i += 8)
+     {
+         internal::prefetch(_src + i);
+         float32x4_t vline_f32 = vld1q_f32(_src + i);
+    }
+    }
     
-    #include 'unicode/messagepattern.h'
-#include 'unicode/rbnf.h'
-#include 'unicode/selfmt.h'
-#include 'unicode/uchar.h'
-#include 'unicode/ucnv_err.h'
-#include 'unicode/umsg.h'
-#include 'unicode/ustring.h'
-#include 'unicode/utypes.h'
-#include 'cmemory.h'
-#include 'messageimpl.h'
-#include 'patternprops.h'
-#include 'selfmtimpl.h'
-#include 'uassert.h'
-#include 'ustrfmt.h'
-#include 'util.h'
-#include 'uvector.h'
+    template <>
+void rshiftConst<0>(const Size2D &size,
+                    const s16 * srcBase, ptrdiff_t srcStride,
+                    u8 * dstBase, ptrdiff_t dstStride,
+                    CONVERT_POLICY cpolicy)
+{
+    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
+    }
     
-    #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
+            if (i < roiw4)
+        {
+            internal::prefetch(src + i + 2);
+            uint64x2_t vln1 = vld1q_u64((const u64*)(src + i));
+            uint64x2_t vln2 = vld1q_u64((const u64*)(src + i + 2));
+    }
+    
+    
+    {}
+    
+    #include <arm_neon.h>
+    
+                if(!x) {
+                tcurr = tnext;
+                tc = tcnext;
+    }
+    
+    #endif
 
     
-    #include 'unicode/unistr.h'
+    struct OSResults {
+  OSResults() : unicharset(nullptr) {
+    for (int i = 0; i < 4; ++i) {
+      for (int j = 0; j < kMaxNumberOfScripts; ++j)
+        scripts_na[i][j] = 0;
+      orientations[i] = 0;
+    }
+  }
+  void update_best_orientation();
+  // Set the estimate of the orientation to the given id.
+  void set_best_orientation(int orientation_id);
+  // Update/Compute the best estimate of the script assuming the given
+  // orientation id.
+  void update_best_script(int orientation_id);
+  // Return the index of the script with the highest score for this orientation.
+  TESS_API int get_best_script(int orientation_id) const;
+  // Accumulate scores with given OSResults instance and update the best script.
+  void accumulate(const OSResults& osr);
+    }
     
-            int32_t nsNameHash = nsName.hashCode();
-        // See if the numbering system is in the override list, if not, then add it.
-        NSOverride *cur = overrideList;
-        const SharedNumberFormat *snf = NULL;
-        UBool found = FALSE;
-        while ( cur && !found ) {
-            if ( cur->hash == nsNameHash ) {
-                snf = cur->snf;
-                found = TRUE;
-            }
-            cur = cur->next;
+      /**
+   * Controls what to include in a bounding box. Bounding boxes of all levels
+   * between RIL_WORD and RIL_BLOCK can include or exclude potential diacritics.
+   * Between layout analysis and recognition, it isn't known where all
+   * diacritics belong, so this control is used to include or exclude some
+   * diacritics that are above or below the main body of the word. In most cases
+   * where the placement is obvious, and after recognition, it doesn't make as
+   * much difference, as the diacritics will already be included in the word.
+   */
+  void SetBoundingBoxComponents(bool include_upper_dots,
+                                bool include_lower_dots) {
+    include_upper_dots_ = include_upper_dots;
+    include_lower_dots_ = include_lower_dots;
+  }
+    
+    // Clip output boxes to input blob boxes for bounds that are within this
+// tolerance. Otherwise, the blob may be chopped and we have to just use
+// the word bounding box.
+const int kBoxClipTolerance = 2;
+    
+    // Class to hold a Pixa collection of debug images with captions and save them
+// to a PDF file.
+class DebugPixa {
+ public:
+  // TODO(rays) add another constructor with size control.
+  DebugPixa() {
+    pixa_ = pixaCreate(0);
+    fonts_ = bmfCreate(nullptr, 14);
+  }
+  // If the filename_ has been set and there are any debug images, they are
+  // written to the set filename_.
+  ~DebugPixa() {
+    pixaDestroy(&pixa_);
+    bmfDestroy(&fonts_);
+  }
+    }
+    
+      const dmlc::RowBlock<IndexType>& Value() const override {
+    return out_;
+  }
+    
+      for (auto alphabet_size : test_cases) {
+    for (int i = 0; i < repetitions; i++) {
+      std::vector<int> input(num_elements);
+      std::generate(input.begin(), input.end(),
+        [=]() { return rand() % alphabet_size; });
+      CompressedBufferWriter cbw(alphabet_size);
+    }
+    }
+    
+    SEXP XGDMatrixSetInfo_R(SEXP handle, SEXP field, SEXP array) {
+  R_API_BEGIN();
+  int len = length(array);
+  const char *name = CHAR(asChar(field));
+  if (!strcmp('group', name)) {
+    std::vector<unsigned> vec(len);
+    #pragma omp parallel for schedule(static)
+    for (int i = 0; i < len; ++i) {
+      vec[i] = static_cast<unsigned>(INTEGER(array)[i]);
+    }
+    CHECK_CALL(XGDMatrixSetGroup(R_ExternalPtrAddr(handle), BeginPtr(vec), len));
+  } else {
+    std::vector<float> vec(len);
+    #pragma omp parallel for schedule(static)
+    for (int i = 0; i < len; ++i) {
+      vec[i] = REAL(array)[i];
+    }
+    CHECK_CALL(XGDMatrixSetFloatInfo(R_ExternalPtrAddr(handle),
+                                   CHAR(asChar(field)),
+                                   BeginPtr(vec), len));
+  }
+  R_API_END();
+  return R_NilValue;
+}
+    
+    
+    { private:
+  ColumnType type_;
+  const uint32_t* index_;
+  uint32_t index_base_;
+  const size_t* row_ind_;
+  const size_t len_;
+};
+    
+    // Define a customized logistic regression objective in C++.
+// Implement the interface.
+class MyLogistic : public ObjFunction {
+ public:
+  void Configure(const std::vector<std::pair<std::string, std::string> >& args) override {
+    param_.InitAllowUnknown(args);
+  }
+  void GetGradient(const HostDeviceVector<bst_float> &preds,
+                   const MetaInfo &info,
+                   int iter,
+                   HostDeviceVector<GradientPair> *out_gpair) override {
+    out_gpair->Resize(preds.Size());
+    const std::vector<bst_float>& preds_h = preds.HostVector();
+    std::vector<GradientPair>& out_gpair_h = out_gpair->HostVector();
+    const std::vector<bst_float>& labels_h = info.labels_.HostVector();
+    for (size_t i = 0; i < preds_h.size(); ++i) {
+      bst_float w = info.GetWeight(i);
+      // scale the negative examples!
+      if (labels_h[i] == 0.0f) w *= param_.scale_neg_weight;
+      // logistic transformation
+      bst_float p = 1.0f / (1.0f + std::exp(-preds_h[i]));
+      // this is the gradient
+      bst_float grad = (p - labels_h[i]) * w;
+      // this is the second order gradient
+      bst_float hess = p * (1.0f - p) * w;
+      out_gpair_h.at(i) = GradientPair(grad, hess);
+    }
+  }
+  const char* DefaultEvalMetric() const override {
+    return 'error';
+  }
+  void PredTransform(HostDeviceVector<bst_float> *io_preds) override {
+    // transform margin value to probability.
+    std::vector<bst_float> &preds = io_preds->HostVector();
+    for (size_t i = 0; i < preds.size(); ++i) {
+      preds[i] = 1.0f / (1.0f + std::exp(-preds[i]));
+    }
+  }
+  bst_float ProbToMargin(bst_float base_score) const override {
+    // transform probability to margin value
+    return -std::log(1.0f / base_score - 1.0f);
+  }
+    }
+    
+    
+    {    // exception out_of_range.401
+    try
+    {
+        // try to write at a nonexisting key
+        object.at('the fast') = 'il rapido';
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+}
+
+    
+        for (int i=0; i<n-2; i++) {
+        //skip the duplication
+        if (i>0 && num[i-1]==num[i]) continue;
+        int a = num[i];
+        int low = i+1;
+        int high = n-1;
+        //convert the 3sum to 2sum problem
+        while ( low < high ) {
+            int b = num[low];
+            int c = num[high];
+            int sum = a+b+c;
+            if (sum - target == 0) {
+                //got the final soultion
+                return target;
+            } else {
+    }
+    }
+    }
+    
+    void printTree(TreeNode *root)
+{
+    if (root == NULL){
+        printf('# ');
+        return;
+    }
+    printf('%d ', root->val );
+    }
+    
+    vector<int> preorderTraversal1(TreeNode *root) {
+    vector<int> v;
+    vector<TreeNode*> stack;
+    if (root) {
+        stack.push_back(root);
+    }
+    while (stack.size()>0){
+        TreeNode* n = stack.back();
+        v.push_back(n->val);
+        stack.pop_back();
+        if (n->right){
+            stack.push_back(n->right);
         }
-    
-    #endif   // #if !UCONFIG_NO_FORMATTING
-#endif   // SMPDTFST_H
-
-    
-        /** Initializes a Catmull Rom config with a capacity hint.
-     *
-     * @js NA
-     * @param capacity The size of the array.
-     * @return True.
-     */
-    bool initWithCapacity(ssize_t capacity);
-    
-    //
-// NOTE: Converting these macros into Templates is desirable, but please see
-// issue #16159 [https://github.com/cocos2d/cocos2d-x/pull/16159] for further info
-//
-#define EASERATE_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC) \
-CLASSNAME* CLASSNAME::create(cocos2d::ActionInterval *action, float rate) \
-{ \
-    CLASSNAME *ease = new (std::nothrow) CLASSNAME(); \
-    if (ease) \
-    { \
-        if (ease->initWithAction(action, rate)) \
-            ease->autorelease(); \
-        else \
-            CC_SAFE_RELEASE_NULL(ease); \
-    } \
-    return ease; \
-} \
-CLASSNAME* CLASSNAME::clone() const \
-{ \
-    if(_inner) return CLASSNAME::create(_inner->clone(), _rate); \
-    return nullptr; \
-} \
-void CLASSNAME::update(float time) { \
-    _inner->update(TWEEN_FUNC(time, _rate)); \
-} \
-EaseRateAction* CLASSNAME::reverse() const { \
-    return CLASSNAME::create(_inner->reverse(), 1.f / _rate); \
+        if (n->left){
+            stack.push_back(n->left);
+        }
+    }
+    return v;
 }
     
+    inline void LogFormattedMessage(
+    napa::providers::LoggingProvider& logger,
+    const char* section,
+    napa::providers::LoggingProvider::Verboseness level,
+    const char* traceId,
+    const char* file,
+    int line,
+    const char* format, ...) {
+    }
     
-    /** Returns the numbers of actions that are running in a
-     *  certain target with a specific tag.
-     * Like getNumberOfRunningActionsInTarget Composable actions
-     * are counted as 1 action. Example:
-     * - If you are running 1 Sequence of 7 actions, it will return 1.
-     * - If you are running 7 Sequences of 2 actions, it will return 7.
-     *
-     * @param target    A certain target.
-     * @param tag       Tag that will be searched.
-     * @return  The numbers of actions that are running in a certain target
-     *          with a specific tag.
-     * @see getNumberOfRunningActionsInTarget
-     * @js NA
-     */
-    virtual size_t getNumberOfRunningActionsInTargetByTag(const Node *target, int tag);
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#ifndef __CC_ANIMATION_CACHE_H__
-#define __CC_ANIMATION_CACHE_H__
-    
-    #include '2d/CCAtlasNode.h'
-#include 'renderer/CCTextureAtlas.h'
-#include 'base/CCDirector.h'
-#include 'renderer/CCTextureCache.h'
-#include 'renderer/CCRenderer.h'
-#include 'renderer/CCGLProgram.h'
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+            CHECK_ARG(isolate, args.Length() == 0, 'class \'%s\' doesn't accept any arguments in constructor.'', WrapType::exportName);
+        JS_ENSURE(isolate, args.IsConstructCall(), 'class \'%s\' allows constructor call only.', WrapType::exportName);
