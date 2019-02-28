@@ -1,278 +1,378 @@
 
         
-        namespace nwapi {
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    struct Bfloat16EqFunctor {
+  npy_bool operator()(bfloat16 a, bfloat16 b) { return a == b; }
+};
+struct Bfloat16NeFunctor {
+  npy_bool operator()(bfloat16 a, bfloat16 b) { return a != b; }
+};
+struct Bfloat16LtFunctor {
+  npy_bool operator()(bfloat16 a, bfloat16 b) { return a < b; }
+};
+struct Bfloat16GtFunctor {
+  npy_bool operator()(bfloat16 a, bfloat16 b) { return a > b; }
+};
+struct Bfloat16LeFunctor {
+  npy_bool operator()(bfloat16 a, bfloat16 b) { return a <= b; }
+};
+struct Bfloat16GeFunctor {
+  npy_bool operator()(bfloat16 a, bfloat16 b) { return a >= b; }
+};
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    #ifndef TENSORFLOW_PYTHON_LIB_CORE_SAFE_PTR_H_
+#define TENSORFLOW_PYTHON_LIB_CORE_SAFE_PTR_H_
+    
+    #include 'tensorflow/c/c_api.h'
+#include 'tensorflow/core/lib/core/stringpiece.h'
+#include 'tensorflow/core/platform/macros.h'
+#include 'tensorflow/core/platform/types.h'
+    
+    #include 'tensorflow/core/framework/graph.pb.h'
+#include 'tensorflow/core/platform/types.h'
+    
+    Each feature has fixed lengths which are passed as lengths argument and a
+separate tensor will be produced for each feature.
+i.e. DATA.dim(1) = len(lengths) = NumOuptuts.
+    
+      // Iterate over the blobs inside to_block, and set the blobs that we want to
+  // process to BSTT_NONE. (By default, they should be BSTT_SKIP). The function
+  // returns 0 upon success.
+  int LabelSpecialText(TO_BLOCK* to_block);
+    
+    class TESS_API PageIterator {
+ public:
+  /**
+   * page_res and tesseract come directly from the BaseAPI.
+   * The rectangle parameters are copied indirectly from the Thresholder,
+   * via the BaseAPI. They represent the coordinates of some rectangle in an
+   * original image (in top-left-origin coordinates) and therefore the top-left
+   * needs to be added to any output boxes in order to specify coordinates
+   * in the original image. See TessBaseAPI::SetRectangle.
+   * The scale and scaled_yres are in case the Thresholder scaled the image
+   * rectangle prior to thresholding. Any coordinates in tesseract's image
+   * must be divided by scale before adding (rect_left, rect_top).
+   * The scaled_yres indicates the effective resolution of the binary image
+   * that tesseract has been given by the Thresholder.
+   * After the constructor, Begin has already been called.
+   */
+  PageIterator(PAGE_RES* page_res, Tesseract* tesseract,
+               int scale, int scaled_yres,
+               int rect_left, int rect_top,
+               int rect_width, int rect_height);
+  virtual ~PageIterator();
     }
     
-    class BaseEvent {
-  friend class EventListener;
-  DISALLOW_COPY_AND_ASSIGN(BaseEvent);
-    }
+      SVMenuNode* std_menu = svMenuRoot->AddChild ('Build Config File');
     
-    
-    {
-    {    if (zoom_controller) {
-      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
-      if (zoom_factor > content::kMaximumZoomFactor) {
-        zoom_factor = content::kMaximumZoomFactor;
-      }
-      if (zoom_factor < content::kMinimumZoomFactor) {
-        zoom_factor = content::kMinimumZoomFactor;
-      }
-      x *= zoom_factor;
-      y *= zoom_factor;
-    }
-    
-    Popup(x, y, rvh);
-  } else if (method == 'EnableShowEvent') {
-    arguments.GetBoolean(0, &enable_show_event_);
-  } else {
-    NOTREACHED() << 'Invalid call to Menu method:' << method
-                 << ' arguments:' << arguments;
+    // Update the other members if the cost is lower.
+void DPPoint::UpdateIfBetter(int64_t cost, int32_t steps, const DPPoint* prev,
+                             int32_t n, int32_t sig_x, int64_t sig_xsq) {
+  if (cost < total_cost_) {
+    total_cost_ = cost;
+    total_steps_ = steps;
+    best_prev_ = prev;
+    n_ = n;
+    sig_x_ = sig_x;
+    sig_xsq_ = sig_xsq;
   }
 }
     
     
-    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
+    {    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin('call', ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
     return;
-  item->OnClick();
+  }
+    
+    
+    {};
+    
+      using ::apache::thrift::protocol::TProtocolException;
+    
+    typedef struct _ExtensionManager_getQueryColumns_presult__isset {
+  _ExtensionManager_getQueryColumns_presult__isset() : success(false) {}
+  bool success :1;
+} _ExtensionManager_getQueryColumns_presult__isset;
+    
+    
+    {};
+    
+      // Get an integral value, 0 or 1, for whether a syscall table pointer is modified.
+  auto f1 = osquery::readFile(kKernelSyscallAddrModifiedPath, content);
+  if (f1.ok()) {
+    boost::trim(content);
+    syscall_addr_modified = content;
+  } else {
+    VLOG(1) << 'Cannot read file: ' << kKernelSyscallAddrModifiedPath;
+    return results;
+  }
+    
+     private:
+  bool isNewCodeEnabled(const std::string& key);
+    
+      PerfOutput(PerfOutput const&) = delete;
+  PerfOutput& operator=(PerfOutput const&) = delete;
+    
+    
+    {
+    {} // namespace perf_event_open
+} // namespace osquery
+
+    
+    #include <osquery/utils/system/linux/ebpf/perf_output.h>
+    
+        const int nums[] = {0,4,3,0};
+    vector<int> nums_vec( nums, nums + sizeof(nums)/sizeof(int) );
+    int target = 0;
+    printVec(Solution().twoSum(nums_vec, target));
+    
+    using namespace std;
+    
+    
+    {
+    {        return res;
+    }
+};
+    
+    /// BFS
+/// No need to store level information in the queue :-)
+///
+/// Time Complexity: O(n), where n is the number of nodes in the tree
+/// Space Complexity: O(n)
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+    }
+    }
+    
+    #include <iostream>
+#include <vector>
+    
+    // My Non-Recursive
+// Time Complexity: O(n), n is the node number in the tree
+// Space Complexity: O(h), h is the height of the tree
+class Solution {
+    }
+    
+    int main() {
+    }
+    
+    namespace {
+const int MAX_RETRY = 2;
+} // namespace
+    
+    std::string DHTResponseMessage::toString() const
+{
+  return fmt('dht response %s TransactionID=%s Remote:%s(%u), id=%s, v=%s, %s',
+             getMessageType().c_str(), util::toHex(getTransactionID()).c_str(),
+             getRemoteNode()->getIPAddress().c_str(),
+             getRemoteNode()->getPort(),
+             util::toHex(getRemoteNode()->getID(), DHT_ID_LENGTH).c_str(),
+             util::torrentPercentEncode(getVersion()).c_str(),
+             toStringOptional().c_str());
 }
     
-      // Map point from document to screen.
-  gfx::Point screen_point(x, y);
     
-    ui::KeyboardCode GetKeycodeFromText(std::string text){
-  ui::KeyboardCode retval = ui::VKEY_UNKNOWN;
-  if (text.size() != 0){
-    std::string upperText = base::ToUpperASCII(text);
-    std::string keyName = text;
-    bool found = false;
-    if (upperText.size() == 1){
-      char key = upperText[0];
-      if (key>='0' && key<='9'){//handle digital
-        keyName = 'Digit' + upperText;
-        found = true;
-      } else if (key>='A'&&key<='Z'){//handle alphabet
-        keyName = 'Key' + upperText;
-        found = true;
+    {  static const std::string R;
+};
+    
+    namespace aria2 {
+    }
+    
+    void DHTRoutingTableSerializer::serialize(const std::string& filename)
+{
+  A2_LOG_INFO(fmt('Saving DHT routing table to %s.', filename.c_str()));
+  std::string filenameTemp = filename;
+  filenameTemp += '__temp';
+  BufferedFile fp(filenameTemp.c_str(), BufferedFile::WRITE);
+  if (!fp) {
+    throw DL_ABORT_EX(
+        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
+  }
+  char header[8];
+  memset(header, 0, sizeof(header));
+  // magic
+  header[0] = 0xa1u;
+  header[1] = 0xa2u;
+  // format ID
+  header[2] = 0x02u;
+  // version
+  header[6] = 0;
+  header[7] = 0x03u;
+    }
+    
+    namespace aria2 {
+    }
+    
+    #include <algorithm>
+    
+      void addTask(const std::shared_ptr<DHTTask>& task) { queue_.push_back(task); }
+    
+    class DHTTokenUpdateCommand : public TimeBasedCommand {
+private:
+  DHTTokenTracker* tokenTracker_;
+    }
+    
+     private:
+  uint64_t NowMicrosMonotonic(Env* env);
+    
+    /*
+ * ThreadPool is a component that will spawn N background threads that will
+ * be used to execute scheduled work, The number of background threads could
+ * be modified by calling SetBackgroundThreads().
+ * */
+class ThreadPool {
+ public:
+  virtual ~ThreadPool() {}
+    }
+    
+      // Restore rate limiter. Used to control transfer speed during restore. If
+  // this is not null, restore_rate_limit is ignored.
+  // Default: nullptr
+  std::shared_ptr<RateLimiter> restore_rate_limiter{nullptr};
+    
+      // Builds an openable snapshot of RocksDB on the same disk, which
+  // accepts an output directory on the same disk, and under the directory
+  // (1) hard-linked SST files pointing to existing live SST files
+  // SST files will be copied if output directory is on a different filesystem
+  // (2) a copied manifest files and other files
+  // The directory should not already exist and will be created by this API.
+  // The directory will be an absolute path
+  // log_size_for_flush: if the total log file size is equal or larger than
+  // this value, then a flush is triggered for all the column families. The
+  // default value is 0, which means flush is always triggered. If you move
+  // away from the default, the checkpoint may not contain up-to-date data
+  // if WAL writing is not always enabled.
+  // Flush will always trigger if it is 2PC.
+  virtual Status CreateCheckpoint(const std::string& checkpoint_dir,
+                                  uint64_t log_size_for_flush = 0);
+    
+    #include 'gtest/gtest.h'
+    
+      sender.AddMessage(1, &mpd);
+  EXPECT_EQ(sender.Start(), common::ErrorCode::OK);
+  EXPECT_TRUE(sender.IsRunning());
+  EXPECT_TRUE(sender.enable_log());
+    
+    #include 'gtest/gtest.h'
+    
+    TEST(ByteTest, SetValue) {
+  unsigned char byte_value = 0x1A;
+  Byte value(&byte_value);
+  value.set_value(0x06, 3, 3);
+  EXPECT_EQ(0x32, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x06, 0, 8);
+  EXPECT_EQ(0x06, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x06, 0, 10);
+  EXPECT_EQ(0x06, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x06, 1, 7);
+  EXPECT_EQ(0x0C, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x07, 1, 1);
+  EXPECT_EQ(0x1A, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x07, -1, 1);
+  EXPECT_EQ(0x1A, value.get_byte());
+}
+    
+    double ClusterGeneralInfo701::longitude_dist(const std::uint8_t* bytes,
+                                             int32_t length) const {
+  Byte t0(bytes + 1);
+  uint32_t x = t0.get_byte(0, 8);
+    }
+    
+    #include 'modules/drivers/canbus/common/byte.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
+    
+    
+    {
+    {  } else {
+    for (uint32_t r = 3; r < num_params; ++r) {
+      for (uint32_t c = 3; c < num_params; ++c) {
+        (*term_matrix)(r, c) = x_pow[r + c - 5];
       }
     }
-    }
-    }
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.readAvailableTypes', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwClipboardReadAvailableTypesFunction);
-};
-    
-    
-    {  nw::ObjectManager* manager = nw::ObjectManager::Get(browser_context());
-  manager->OnDeallocateObject(id);
-  return true;
+    (*term_matrix).block(0, 0, num_params, 3) =
+        Eigen::MatrixXd::Zero(num_params, 3);
+    (*term_matrix).block(0, 0, 3, num_params) =
+        Eigen::MatrixXd::Zero(3, num_params);
+  }
 }
     
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.callObjectMethodSync', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwObjCallObjectMethodSyncFunction);
-};
-    
-    bool b2Triangle::IsInside(float32 _x, float32 _y){
-	if (_x < x[0] && _x < x[1] && _x < x[2]) return false;
-	if (_x > x[0] && _x > x[1] && _x > x[2]) return false;
-	if (_y < y[0] && _y < y[1] && _y < y[2]) return false;
-	if (_y > y[0] && _y > y[1] && _y > y[2]) return false;
-		
-		float32 vx2 = _x-x[0]; float32 vy2 = _y-y[0];
-		float32 vx1 = x[1]-x[0]; float32 vy1 = y[1]-y[0];
-		float32 vx0 = x[2]-x[0]; float32 vy0 = y[2]-y[0];
-		
-		float32 dot00 = vx0*vx0+vy0*vy0;
-		float32 dot01 = vx0*vx1+vy0*vy1;
-		float32 dot02 = vx0*vx2+vy0*vy2;
-		float32 dot11 = vx1*vx1+vy1*vy1;
-		float32 dot12 = vx1*vx2+vy1*vy2;
-		float32 invDenom = 1.0f / (dot00*dot11 - dot01*dot01);
-		float32 u = (dot11*dot02 - dot01*dot12)*invDenom;
-		float32 v = (dot00*dot12 - dot01*dot02)*invDenom;
-		
-		return ((u>=0)&&(v>=0)&&(u+v<=1));    
+    TEST_F(GemMessageManagerTest, GetRecvProtocols) {
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Accelrpt68::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt170::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt271::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt372::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakerpt6c::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Datetimerpt83::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Globalrpt6a::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Headlightrpt77::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Hornrpt79::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Latlonheadingrpt82::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(
+                  Parkingbrakestatusrpt80::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Shiftrpt66::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt173::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt274::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt375::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringrpt16e::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Turnrpt64::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Vehiclespeedrpt6f::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Wheelspeedrpt7a::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Wiperrpt91::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Yawraterpt81::ID) != nullptr);
 }
     
-    class b2Triangle{
-public:
-	float* x;
-    float* y;
-	b2Triangle();
-	b2Triangle(float32 x1, float32 y1, float32 x2, float32 y2, float32 x3, float32 y3);
-	~b2Triangle();
-	bool IsInside(float32 _x, float32 _y);
-	void Set(const b2Triangle& toMe);
+    namespace apollo {
+namespace canbus {
+    }
     }
     
-    	// ----------------------------------------------------------------------------------------------------
-	// try version 1 of the degenerate search
-	// degenerate encodings use basecolor movement and a subset of the selectors to find useful encodings
-	// each subsequent version of the degenerate search uses more basecolor movement and is less likely to
-	//		be successfull
-	//
-	void Block4x4Encoding_ETC1::TryDegenerates1(void)
-	{
-    }
     
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-    
-    /* Compute Normalized Line Spectral Frequencies (NLSFs) from whitening filter coefficients      */
-/* If not all roots are found, the a_Q16 coefficients are bandwidth expanded until convergence. */
-void silk_A2NLSF(
-    opus_int16                  *NLSF,              /* O    Normalized Line Spectral Frequencies in Q15 (0..2^15-1) [d] */
-    opus_int32                  *a_Q16,             /* I/O  Monic whitening filter coefficients in Q16 [d]              */
-    const opus_int              d                   /* I    Filter order (must be even)                                 */
-);
-    
-    Speed* Speed::create(ActionInterval* action, float speed)
-{
-    Speed *ret = new (std::nothrow) Speed();
-    if (ret && ret->initWithAction(action, speed))
     {
-        ret->autorelease();
-        return ret;
-    }
-    CC_SAFE_DELETE(ret);
-    return nullptr;
-}
-    
-         * For example:
-     * - 0 Means that the action just started.
-     * - 0.5 Means that the action is in the middle.
-     * - 1 Means that the action is over.
-     *
-     * @param time A value between 0 and 1.
-     */
-    virtual void update(float time);
-    /** Return certain target.
-     *
-     * @return A certain target.
-     */
-    Node* getTarget() const { return _target; }
-    /** The action will modify the target properties. 
-     *
-     * @param target A certain target.
-     */
-    void setTarget(Node *target) { _target = target; }
-    /** Return a original Target. 
-     *
-     * @return A original Target.
-     */
-    Node* getOriginalTarget() const { return _originalTarget; }
-    /** 
-     * Set the original target, since target can be nil.
-     * Is the target that were used to run the action. Unless you are doing something complex, like ActionManager, you should NOT call this method.
-     * The target is 'assigned', it is not 'retained'.
-     * @since v0.8.2
-     *
-     * @param originalTarget Is 'assigned', it is not 'retained'.
-     */
-    void setOriginalTarget(Node *originalTarget) { _originalTarget = originalTarget; }
-    /** Returns a tag that is used to identify the action easily. 
-     *
-     * @return A tag.
-     */
-    int getTag() const { return _tag; }
-    /** Changes the tag that is used to identify the action easily. 
-     *
-     * @param tag Used to identify the action easily.
-     */
-    void setTag(int tag) { _tag = tag; }
-    /** Returns a flag field that is used to group the actions easily.
-     *
-     * @return A tag.
-     */
-    unsigned int getFlags() const { return _flags; }
-    /** Changes the flag field that is used to group the actions easily.
-     *
-     * @param flags Used to group the actions easily.
-     */
-    void setFlags(unsigned int flags) { _flags = flags; }
-    
-        float x = _eye.x - _center.x;
-    float y = _eye.y - _center.y;
-    float z = _eye.z - _center.z;
-    
-    void AccelAmplitude::update(float time)
-{
-    ((AccelAmplitude*)(_other))->setAmplitudeRate(powf(time, _rate));
-    _other->update(time);
-}
-    
-    bool __CCCallFuncND::initWithTarget(Ref* selectorTarget, SEL_CallFuncND selector, void* d)
-{
-    if (CallFunc::initWithTarget(selectorTarget))
     {
-        _data = d;
-        _callFuncND = selector;
-        return true;
-    }
-    
-    return false;
-}
-    
-    // FIXME: Passing 'const O *' instead of 'const O&' because HASH_FIND_IT requires the address of a pointer
-// and, it is not possible to get the address of a reference
-ssize_t ActionManager::getNumberOfRunningActionsInTarget(const Node *target) const
-{
-    tHashElement *element = nullptr;
-    HASH_FIND_PTR(_targets, &target, element);
-    if (element)
     {
-        return element->actions ? element->actions->num : 0;
-    }
-    }
+    {  double ret = x * 0.001000;
+  return ret;
+}
+}  // namespace gem
+}  // namespace canbus
+}  // namespace apollo
+
     
-        /**
-    @brief Create an action with duration, grid size.
-    @param duration Specify the duration of the PageTurn3D action. It's a value in seconds.
-    @param gridSize Specify the size of the grid.
-    @return If the creation success, return a pointer of PageTurn3D action; otherwise, return nil.
-    */
-    static PageTurn3D* create(float duration, const Size& gridSize);
+      Byte t2(bytes + 2);
+  t = t2.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
     
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#ifndef __ACTION_CCTILEDGRID_ACTION_H__
-#define __ACTION_CCTILEDGRID_ACTION_H__
-    
-    PolygonInfo::PolygonInfo(const PolygonInfo& other)
-: triangles()
-, _isVertsOwner(true)
-, _rect()
-{
-    _filename = other._filename;
-    _isVertsOwner = true;
-    _rect = other._rect;
-    triangles.verts = new (std::nothrow) V3F_C4B_T2F[other.triangles.vertCount];
-    triangles.indices = new (std::nothrow) unsigned short[other.triangles.indexCount];
-    CCASSERT(triangles.verts && triangles.indices, 'not enough memory');
-    triangles.vertCount = other.triangles.vertCount;
-    triangles.indexCount = other.triangles.indexCount;
-    memcpy(triangles.verts, other.triangles.verts, other.triangles.vertCount * sizeof(other.triangles.verts[0]));
-    memcpy(triangles.indices, other.triangles.indices, other.triangles.indexCount * sizeof(other.triangles.indices[0]));
-};
+    using ::apollo::drivers::canbus::Byte;
