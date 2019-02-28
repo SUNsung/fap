@@ -1,129 +1,133 @@
 
         
-              def perform(start_id, stop_id)
-        update = '
-          latest_merge_request_diff_id = (
-            SELECT MAX(id)
-            FROM merge_request_diffs
-            WHERE merge_requests.id = merge_request_diffs.merge_request_id
-          )'.squish
+        describe GroupUser do
     
-    module Gitlab
-  module GithubImport
-    module Importer
-      class IssuesImporter
-        include ParallelScheduling
-    
-            attr_reader :attributes
-    
-            expose_attribute :iid, :title, :description, :source_branch,
-                         :source_branch_sha, :target_branch, :target_branch_sha,
-                         :milestone_number, :author, :assignee, :created_at,
-                         :updated_at, :merged_at, :source_repository_id,
-                         :target_repository_id, :source_repository_owner
-    
-            attr_reader :attributes
-    
-      it 'expands shell variables when given a single string argument' do
-    lambda { @object.system('echo #{@shell_var}') }.should output_to_fd('foo\n')
+      it 'requires a URL or file uplaod' do
+    visit new_scenario_imports_path
+    click_on 'Start Import'
+    expect(page).to have_text('Please provide either a Scenario JSON File or a Public Scenario URL.')
   end
     
-      it 'returns true when passed ?r if the argument is readable by the effective uid' do
-    Kernel.test(?r, @file).should be_true
-  end
-    
-      it 'raises ArgumentError if no block or proc is provided' do
-    lambda do
-      trace_var :$Kernel_trace_var_global
-    end.should raise_error(ArgumentError)
-  end
-end
-
-    
-      task :index do
-    doc = File.read('README.md')
-    file = 'doc/rack-protection-readme.md'
-    Dir.mkdir 'doc' unless File.directory? 'doc'
-    puts 'writing #{file}'
-    File.open(file, 'w') { |f| f << doc }
-  end
-    
-          def referrer(env)
-        ref = env['HTTP_REFERER'].to_s
-        return if !options[:allow_empty_referrer] and ref.empty?
-        URI.parse(ref).host || Request.new(env).host
-      rescue URI::InvalidURIError
-      end
-    
-          def session_key
-        @session_key ||= options[:session_key]
-      end
+        it 'returns a label 'No' if a given agent is not working' do
+      stub(@agent).working? { false }
+      label = working(@agent)
+      expect(label).to be_html_safe
+      expect(Nokogiri(label).text).to eq 'No'
     end
   end
-end
-
     
-    RSpec.describe RuboCop::Cop::Layout::MultilineArrayBraceLayout, :config do
-  subject(:cop) { described_class.new(config) }
+      describe '#status' do
+    it 'works for failed jobs' do
+      job.failed_at = Time.now
+      expect(status(job)).to eq('<span class='label label-danger'>failed</span>')
+    end
     
-          # The body of the method definition.
-      #
-      # @note this can be either a `begin` node, if the method body contains
-      #       multiple expressions, or any other node, if it contains a single
-      #       expression.
-      #
-      # @return [Node] the body of the method definition
-      def body
-        node_parts[0]
-      end
-    
-          # Whether the last argument of the node is a block pass,
-      # i.e. `&block`.
-      #
-      # @return [Boolean] whether the last argument of the node is a block pass
-      def block_argument?
-        arguments? &&
-          (last_argument.block_pass_type? || last_argument.blockarg_type?)
-      end
+        it 'has a default when the result is empty' do
+      expect(AgentsExporter.new(:name => '').filename).to eq('exported-agents.json')
+      expect(AgentsExporter.new(:name => 'Ə').filename).to eq('exported-agents.json')
+      expect(AgentsExporter.new(:name => '-').filename).to eq('exported-agents.json')
+      expect(AgentsExporter.new(:name => ',,').filename).to eq('exported-agents.json')
     end
   end
-end
-
     
-      if options.respond_to? 'keys'
-    options.each do |k,v|
-      unless v.nil?
-        v = v.join ',' if v.respond_to? 'join'
-        v = v.to_json if v.respond_to? 'keys'
-        output += ' data-#{k.sub'_','-'}='#{v}''
-      end
+        it 'should work' do
+      LiquidMigrator.convert_all_agent_options(@agent)
+      expect(@agent.reload.options).to eq({'auth_token' => 'token', 'color' => 'yellow', 'notify' => false, 'room_name' => 'test', 'username' => '{{username}}', 'message' => '{{message}}'})
     end
-  elsif options.respond_to? 'join'
-    output += ' data-value='#{config[key].join(',')}''
-  else
-    output += ' data-value='#{config[key]}''
+    
+      describe '#pretty_jsonify' do
+    it 'escapes </script> tags in the output JSON' do
+      cleaned_json = Utils.pretty_jsonify(:foo => 'bar', :xss => '</script><script>alert('oh no!')</script>')
+      expect(cleaned_json).not_to include('</script>')
+      expect(cleaned_json).to include('<\\/script>')
+    end
   end
-  output += '></#{tag}>'
-end
     
-          if File.symlink?(code_path)
-        return 'Code directory '#{code_path}' cannot be a symlink'
-      end
+      describe '#log_for_agent' do
+    it 'creates AgentLogs' do
+      log = AgentLog.log_for_agent(agents(:jane_website_agent), 'some message', :level => 4, :outbound_event => events(:jane_website_agent_event))
+      expect(log).not_to be_new_record
+      expect(log.agent).to eq(agents(:jane_website_agent))
+      expect(log.outbound_event).to eq(events(:jane_website_agent_event))
+      expect(log.message).to eq('some message')
+      expect(log.level).to eq(4)
+    end
     
-        def render(context)
-      output = super
-      types = {
-        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
-        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
-        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
-      }
-      if @videos.size > 0
-        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
-        @videos.each do |v|
-          video << '<source src='#{v}' #{types[File.extname(v)]}>'
+      describe '#receive' do
+    it 'sends a message' do
+      stub(HTTParty).post { {'id' => 1, 'message' => 'blah', 'title' => 'blah','source_name' => 'Custom Notification'} }
+      @checker.receive([@event])
+    end
+    
+            # Allows setting options from a hash. By default this simply calls
+        # the `#{key}=` method on the config class with the value, which is
+        # the expected behavior most of the time.
+        #
+        # This is expected to mutate itself.
+        #
+        # @param [Hash] options A hash of options to set on this configuration
+        #   key.
+        def set_options(options)
+          options.each do |key, value|
+            send('#{key}=', value)
+          end
         end
-        video += '</video>'
-      else
-        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
+    
+            # Set the name of the plugin. The moment that this is called, the
+        # plugin will be registered and available. Before this is called, a
+        # plugin does not exist. The name must be unique among all installed
+        # plugins.
+        #
+        # @param [String] name Name of the plugin.
+        # @return [String] The name of the plugin.
+        def self.name(name=UNSET_VALUE)
+          # Get or set the value first, so we have a name for logging when
+          # we register.
+          result = get_or_set(:name, name)
+    
+              @commands = Registry.new
+          @configs = Hash.new { |h, k| h[k] = Registry.new }
+          @guests  = Registry.new
+          @guest_capabilities = Hash.new { |h, k| h[k] = Registry.new }
+          @hosts   = Registry.new
+          @host_capabilities = Hash.new { |h, k| h[k] = Registry.new }
+          @providers = Registry.new
+          @provider_capabilities = Hash.new { |h, k| h[k] = Registry.new }
+          @pushes = Registry.new
+          @synced_folders = Registry.new
+        end
       end
     end
+  end
+end
+
+    
+          # @see Base#\_retrieve
+      def _retrieve(key, version, sha)
+        return unless File.readable?(path_to(key))
+        begin
+          File.open(path_to(key), 'rb') do |f|
+            if f.readline('\n').strip == version && f.readline('\n').strip == sha
+              return f.read
+            end
+          end
+          File.unlink path_to(key)
+        rescue Errno::ENOENT
+          # Already deleted. Race condition?
+        end
+        nil
+      rescue EOFError, TypeError, ArgumentError => e
+        Sass::Util.sass_warn 'Warning. Error encountered while reading cache #{path_to(key)}: #{e}'
+      end
+    
+            last_simple_subject = rest.empty? && sseq.subject?
+        if current_rule.nil? || first_sseq(current_rule).members != firsts ||
+            !!first_sseq(current_rule).subject? != !!last_simple_subject
+          current_rule = Tree::RuleNode.new([])
+          current_rule.parsed_rules = make_sseq(last_simple_subject, *firsts)
+        end
+    
+          # @see Base#find_relative
+      def find_relative(name, base, options)
+        _find(File.dirname(base), name, options)
+      end
