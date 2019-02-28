@@ -1,187 +1,124 @@
 
         
-                    int16x4_t v_srclo = vget_low_s16(v_src0), v_srchi = vget_high_s16(v_src0);
-            v_dst0 = vcombine_s16(vqmovn_s32(vaddw_s16(vmull_s16(v_srclo, v_srclo), vget_low_s16(v_dst0))),
-                                  vqmovn_s32(vaddw_s16(vmull_s16(v_srchi, v_srchi), vget_high_s16(v_dst0))));
-    
-    void blur3x3(const Size2D &size, s32 cn,
-             const u8 * srcBase, ptrdiff_t srcStride,
-             u8 * dstBase, ptrdiff_t dstStride,
-             BORDER_MODE borderType, u8 borderValue)
-{
-    internal::assertSupportedConfiguration(isBlurU8Supported(size, cn, borderType));
-#ifdef CAROTENE_NEON
-//#define FLOAT_VARIANT_1_9
-#ifdef FLOAT_VARIANT_1_9
-    float32x4_t v1_9 = vdupq_n_f32 (1.0/9.0);
-    float32x4_t v0_5 = vdupq_n_f32 (.5);
-#else
-    const int16x8_t vScale = vmovq_n_s16(3640);
-#endif
-    }
-    
-                int16x8_t l02 = vreinterpretq_s16_u16(vaddl_u8(l2, l0));
-            int16x8_t ldx = vreinterpretq_s16_u16(vsubl_u8(l2, l0));
-            int16x8_t ldy = vaddq_s16(l02, l1x2);
+        #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H
+#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H
     
     
-    {            v_y = vld2q_u8(srcy + syj + 32);
-            v_dst.val[0] = vld1q_u8(srcu + sj + 16);
-            v_dst.val[1] = v_y.val[0];
-            v_dst.val[2] = vld1q_u8(srcv + sj + 16);
-            v_dst.val[3] = v_y.val[1];
-            vst4q_u8(dst + dj + 64, v_dst);
-        }
-#endif
-    
-            x -= 8;
-        if (x == width)
-            --x;
-    
-    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-    
-                uint16x8_t v_mask0 = vorrq_u16(vceqq_u16(v_src0, v_maxval8), vceqq_u16(v_src0, v_minval8));
-            uint16x8_t v_mask1 = vorrq_u16(vceqq_u16(v_src1, v_maxval8), vceqq_u16(v_src1, v_minval8));
-    
-    
-    {
-    {} }
-    
-    void Laplacian3x3(const Size2D &size,
-                  const u8 * srcBase, ptrdiff_t srcStride,
-                  u8 * dstBase, ptrdiff_t dstStride,
-                  BORDER_MODE border, u8 borderValue)
-{
-    internal::assertSupportedConfiguration(isLaplacian3x3Supported(size, border));
-#ifdef CAROTENE_NEON
-    const uint16x8_t v_border_x3 = vdupq_n_u16(borderValue * 3);
-    const uint16x8_t v_zero = vdupq_n_u16(0);
-    const uint8x8_t v_border = vdup_n_u8(borderValue);
-    }
-    
-    int16_t word_blob_quality(WERD_RES *word, ROW *row);
-void reject_whole_page(PAGE_RES_IT &page_res_it);
-    
-    namespace tesseract {
-  class BoolParam;
-  class DoubleParam;
-  class IntParam;
-  class StringParam;
-  class Tesseract;
+    {  if (op->send_message() != nullptr) {
+    ++sent_message_count_;
+  }
+  if (op->recv_message() != nullptr) {
+    recv_message_ = op->op()->payload->recv_message.recv_message;
+    initial_on_done_recv_message_ =
+        op->op()->payload->recv_message.recv_message_ready;
+    op->op()->payload->recv_message.recv_message_ready = &on_done_recv_message_;
+  }
+  if (op->recv_trailing_metadata() != nullptr) {
+    recv_trailing_metadata_ = op->recv_trailing_metadata()->batch();
+    initial_on_done_recv_trailing_metadata_ =
+        op->op()->payload->recv_trailing_metadata.recv_trailing_metadata_ready;
+    op->op()->payload->recv_trailing_metadata.recv_trailing_metadata_ready =
+        &on_done_recv_trailing_metadata_;
+  }
+  // Call next op.
+  grpc_call_next_op(elem, op->op());
 }
     
-    // Clip output boxes to input blob boxes for bounds that are within this
-// tolerance. Otherwise, the blob may be chopped and we have to just use
-// the word bounding box.
-const int kBoxClipTolerance = 2;
+    constexpr size_t TraceContextEncoding::kGrpcTraceContextSize;
+constexpr size_t TraceContextEncoding::kEncodeDecodeFailure;
+constexpr size_t TraceContextEncoding::kVersionIdSize;
+constexpr size_t TraceContextEncoding::kFieldIdSize;
+constexpr size_t TraceContextEncoding::kVersionIdOffset;
+constexpr size_t TraceContextEncoding::kVersionId;
     
-    // A simple class to provide a dynamic programming solution to a class of
-// 1st-order problems in which the cost is dependent only on the current
-// step and the best cost to that step, with a possible special case
-// of using the variance of the steps, and only the top choice is required.
-// Useful for problems such as finding the optimal cut points in a fixed-pitch
-// (vertical or horizontal) situation.
-// Skeletal Example:
-// DPPoint* array = new DPPoint[width];
-// for (int i = 0; i < width; i++) {
-//   array[i].AddLocalCost(cost_at_i)
-// }
-// DPPoint* best_end = DPPoint::Solve(..., array);
-// while (best_end != nullptr) {
-//   int cut_index = best_end - array;
-//   best_end = best_end->best_prev();
-// }
-// delete [] array;
-class DPPoint {
- public:
-  // The cost function evaluates the total cost at this (excluding this's
-  // local_cost) and if it beats this's total_cost, then
-  // replace the appropriate values in this.
-  typedef int64_t (DPPoint::*CostFunc)(const DPPoint* prev);
-    }
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    /*
- * If Trace::hhbbc_time >= 1, print some stats about the program to a
- * temporary file.  If it's greater than or equal to 2, also dump it
- * to stdout.
- */
-void print_stats(const Index&, const php::Program&);
-    
-        // GP Register cannot be greater than 31
-    assert(static_cast<uint32_t>(rs) < 32);
-    
-      if (ignore_default_configs) {
-    // Appending empty file to -c options to avoid loading defaults
-    ini_fd = get_tempfile_if_not_exists(ini_fd, ini_path);
-  } else {
-    // Should only include this default if not explicitly ignored.
-#ifdef PHP_DEFAULT_HDF
-    newargv.push_back('-c');
-    newargv.push_back(PHP_DEFAULT_HDF);
-#endif
-    }
-    
-      for (unsigned i = 0; i < iter; ++i) {
-    FB_LOG_EVERY_MS(INFO, 1000) << 'every 1s';
-  }
-    
-    template <class RNG, class /* EnableIf */>
-void Random::seed(RNG& rng) {
-  detail::SeedData<RNG> sd;
-  std::seed_seq s(std::begin(sd.seedData), std::end(sd.seedData));
-  rng.seed(s);
+    const ViewDescriptor& ServerSentMessagesPerRpcHour() {
+  const static ViewDescriptor descriptor =
+      HourDescriptor()
+          .set_name('grpc.io/server/sent_messages_per_rpc/hour')
+          .set_measure(kRpcServerSentMessagesPerRpcMeasureName)
+          .set_aggregation(CountDistributionAggregation())
+          .add_column(ServerMethodTagKey());
+  return descriptor;
 }
     
-    #include <folly/Range.h>
+    DynamicThreadPool::DynamicThread::DynamicThread(DynamicThreadPool* pool)
+    : pool_(pool),
+      thd_('grpcpp_dynamic_pool',
+           [](void* th) {
+             static_cast<DynamicThreadPool::DynamicThread*>(th)->ThreadFunc();
+           },
+           this) {
+  thd_.Start();
+}
+DynamicThreadPool::DynamicThread::~DynamicThread() { thd_.Join(); }
     
-      void add_external(BasePtr* res, int64_t c = 0) const {
-    assert(res);
-    CountedDetail::inc_shared_count(res, EXTERNAL_OFFSET + c);
-  }
-  void release_external(PackedPtr& res, int64_t c = 0) const {
-    if (!res.get()) {
-      return;
+    #include 'src/cpp/server/load_reporter/get_cpu_stats.h'
+    
+    // This utility works with Box2d version 2.0 (or higher), and not with 1.4.3
+    
+    		void Init(Block4x4 *a_pblockParent,
+					ColorFloatRGBA *a_pafrgbaSource,
+    
+       - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+    
+    /** 16x32 multiply, followed by a 16-bit shift right and 32-bit add.
+    Result fits in 32 bits. */
+#undef MAC16_32_Q16
+static OPUS_INLINE opus_val32 MAC16_32_Q16_armv5e(opus_val32 c, opus_val16 a,
+ opus_val32 b)
+{
+  int res;
+  __asm__(
+      '#MAC16_32_Q16\n\t'
+      'smlawb %0, %1, %2, %3;\n'
+      : '=r'(res)
+      : 'r'(b), 'r'(a), 'r'(c)
+  );
+  return res;
+}
+#define MAC16_32_Q16(c, a, b) (MAC16_32_Q16_armv5e(c, a, b))
+    
+       - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+    
+    /* silk_min() versions with typecast in the function call */
+static OPUS_INLINE opus_int silk_min_int(opus_int a, opus_int b)
+{
+    return (((a) < (b)) ? (a) : (b));
+}
+static OPUS_INLINE opus_int16 silk_min_16(opus_int16 a, opus_int16 b)
+{
+    return (((a) < (b)) ? (a) : (b));
+}
+static OPUS_INLINE opus_int32 silk_min_32(opus_int32 a, opus_int32 b)
+{
+    return (((a) < (b)) ? (a) : (b));
+}
+static OPUS_INLINE opus_int64 silk_min_64(opus_int64 a, opus_int64 b)
+{
+    return (((a) < (b)) ? (a) : (b));
+}
+    
+    using apollo::common::ErrorCode;
+    
+    TEST(MessageManagerTest, GetMutableProtocolDataById) {
+  uint8_t mock_data = 1;
+  MockMessageManager manager;
+  manager.Parse(MockProtocolData::ID, &mock_data, 8);
+  manager.ResetSendMessages();
+  EXPECT_TRUE(manager.GetMutableProtocolDataById(MockProtocolData::ID) !=
+              nullptr);
     }
-    int64_t count = get_local_count(res) + c;
-    int64_t diff = EXTERNAL_OFFSET - count;
-    assert(diff >= 0);
-    CountedDetail::template release_shared<T>(res.get(), diff);
-  }
-  PackedPtr get_newptr(const SharedPtr& n) const {
-    BasePtr* newval;
-    unsigned count = 0;
-    if (!n) {
-      newval = nullptr;
-    } else {
-      newval = CountedDetail::get_counted_base(n);
-      if (n.get() != CountedDetail::template get_shared_ptr<T>(newval)) {
-        // This is an aliased sharedptr.  Make an un-aliased one
-        // by wrapping in *another* shared_ptr.
-        auto data = CountedDetail::template make_ptr<SharedPtr>(n);
-        newval = CountedDetail::get_counted_base(data);
-        count = ALIASED_PTR;
-        // (add external must happen before data goes out of scope)
-        add_external(newval);
-      } else {
-        add_external(newval);
-      }
+    
+    namespace apollo {
+namespace drivers {
+namespace canbus {
+    }
     }
     }
     
-    #include <cstdint>
-#include <limits>
-#include <random>
-#include <set>
+      x <<= 4;
+  x |= t;
