@@ -1,120 +1,170 @@
 
         
-              it 'requires the passwords to match' do
-        visit new_admin_user_path
-        fill_in 'Email', with: 'test@test.com'
-        fill_in 'Username', with: 'usertest'
-        fill_in 'Password', with: '12345678'
-        fill_in 'Password confirmation', with: 'no_match'
-        click_on 'Create User'
-        expect(page).to have_text('Password confirmation doesn't match')
-      end
+            class RespondToActionController < AbstractController::Base
+      def index() self.response_body = 'success' end
+    
+        def to_json
+      JSON.generate(as_json)
     end
     
-          it 'generates a DOT script' do
-        expect(agents_dot(@agents)).to match(%r{
-          \A
-          digraph \x20 'Agent \x20 Event \x20 Flow' \{
-            node \[ [^\]]+ \];
-            edge \[ [^\]]+ \];
-            (?<foo>\w+) \[label=foo\];
-            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
-            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
-            \k<bar1> \[label=bar1\];
-            \k<bar2> \[label=bar2,style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
-            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
-            \k<bar3> \[label=bar3\];
-          \}
-          \z
-        }x)
-      end
-    
-        it 'works for queued jobs' do
-      expect(status(job)).to eq('<span class='label label-warning'>queued</span>')
-    end
-  end
-    
-        it 'has a default when the result is empty' do
-      expect(AgentsExporter.new(:name => '').filename).to eq('exported-agents.json')
-      expect(AgentsExporter.new(:name => 'Ə').filename).to eq('exported-agents.json')
-      expect(AgentsExporter.new(:name => '-').filename).to eq('exported-agents.json')
-      expect(AgentsExporter.new(:name => ',,').filename).to eq('exported-agents.json')
-    end
-  end
-    
-      it 'schould register the schedules with the rufus scheduler and run' do
-    mock(@rufus_scheduler).join
-    scheduler = HuginnScheduler.new
-    scheduler.setup!(@rufus_scheduler, Mutex.new)
-    scheduler.run
-  end
-    
-      describe '#sort_tuples!' do
-    let(:tuples) {
-      time = Time.now
-      [
-        [2, 'a', time - 1],  # 0
-        [2, 'b', time - 1],  # 1
-        [1, 'b', time - 1],  # 2
-        [1, 'b', time],      # 3
-        [1, 'a', time],      # 4
-        [2, 'a', time + 1],  # 5
-        [2, 'a', time],      # 6
-      ]
-    }
-    
-            # Yields a VM for each target VM for the command.
-        #
-        # This is a convenience method for easily implementing methods that
-        # take a target VM (in the case of multi-VM) or every VM if no
-        # specific VM name is specified.
-        #
-        # @param [String] name The name of the VM. Nil if every VM.
-        # @param [Boolean] single_target If true, then an exception will be
-        #   raised if more than one target is found.
-        def with_target_vms(names=nil, options=nil)
-          # Using VMs requires a Vagrant environment to be properly setup
-          raise Errors::NoEnvironmentError if !@env.root_path
-    
-              # First determine the proper array of VMs.
-          machines = []
-          if names.length > 0
-            names.each do |name|
-              if pattern = name[/^\/(.+?)\/$/, 1]
-                @logger.debug('Finding machines that match regex: #{pattern}')
-    
-    module Vagrant
-  module Plugin
-    module V2
-      # This is the superclass for all V2 plugins.
-      class Plugin
-        # Special marker that can be used for action hooks that matches
-        # all action sequences.
-        ALL_ACTIONS = :__all_actions__
-    
-        def set_account
-      @account = Account.find(params[:account_id])
-      @user = @account.user
+        def replace(index, name)
+      @filters[assert_index(index)] = filter_const(name)
     end
     
-    module Admin
-  class CustomEmojisController < BaseController
-    before_action :set_custom_emoji, except: [:index, :new, :create]
-    before_action :set_filter_params
+        def blank?
+      body.blank?
+    end
     
-          @form         = Form::StatusBatch.new(form_status_batch_params.merge(current_account: current_account, action: action_from_button))
-      flash[:alert] = I18n.t('admin.statuses.failed_to_execute') unless @form.save
+    module Docs
+  class Subscriber < ActiveSupport::Subscriber
+    cattr_accessor :namespace
     
-      def set_account
-    @account = Account.find(params[:id])
-  end
-end
-
+        def destroy
+      authorize @email_domain_block, :destroy?
+      @email_domain_block.destroy!
+      log_action :destroy, @email_domain_block
+      redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.destroyed_msg')
+    end
     
-      respond_to :json
+        def resource_params
+      params.require(:report_note).permit(
+        :content,
+        :report_id
+      )
+    end
     
-        render json: web_subscription, serializer: REST::WebPushSubscriptionSerializer
+      def lease_seconds_or_default
+    (params['hub.lease_seconds'] || 1.day).to_i.seconds
   end
     
     class Api::Web::SettingsController < Api::Web::BaseController
   respond_to :json
+    
+      def send_export_file
+    respond_to do |format|
+      format.csv { send_data export_data, filename: export_filename }
+    end
+  end
+    
+      def preferred_locale
+    http_accept_language.preferred_language_from(available_locales)
+  end
+    
+      def existing
+    existing_path = select(&File.method(:directory?))
+    # return nil instead of empty PATH, to unset environment variables
+    existing_path unless existing_path.empty?
+  end
+    
+          @actual = [file, stderr]
+    
+    def prev_version
+  return prev_feature + '.0' if source_version.end_with? '.0'
+  source_version.gsub(/\d+$/) { |s| s.to_i - 1 }
+end
+    
+        if run? && ARGV.any?
+      require 'optparse'
+      OptionParser.new { |op|
+        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
+        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
+        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
+        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
+        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
+        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
+      }.parse!(ARGV.dup)
+    end
+  end
+    
+        <div id='cookies'>
+      <h3 id='cookie-info'>COOKIES</h3>
+      <% unless req.cookies.empty? %>
+        <table class='req'>
+          <tr>
+            <th>Variable</th>
+            <th>Value</th>
+          </tr>
+          <% req.cookies.each { |key, val| %>
+            <tr>
+              <td><%=h key %></td>
+              <td class='code'><div><%=h val.inspect %></div></td>
+            </tr>
+          <% } %>
+        </table>
+      <% else %>
+        <p class='no-data'>No cookie data.</p>
+      <% end %>
+      <div class='clear'></div>
+    </div> <!-- /COOKIES -->
+    
+            DIRECTIVES.each do |d|
+          if options.key?(d)
+            directives << '#{d.to_s.sub(/_/, '-')} #{options[d]}'
+          end
+        end
+    
+          def has_vector?(request, headers)
+        return false if request.xhr?
+        return false if options[:allow_if] && options[:allow_if].call(request.env)
+        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
+        origin(request.env).nil? and referrer(request.env) != request.host
+      end
+    
+    desc 'copy dot files for deployment'
+task :copydot, :source, :dest do |t, args|
+  FileList['#{args.source}/**/.*'].exclude('**/.', '**/..', '**/.DS_Store', '**/._*').each do |file|
+    cp_r file, file.gsub(/#{args.source}/, '#{args.dest}') unless File.directory?(file)
+  end
+end
+    
+      get(/.+/) do
+    send_sinatra_file(request.path) {404}
+  end
+    
+    Liquid::Template.register_tag('blockquote', Jekyll::Blockquote)
+
+    
+    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
+
+    
+      # Extracts raw content DIV from template, used for page description as {{ content }}
+  # contains complete sub-template code on main page level
+  def raw_content(input)
+    /<div class='entry-content'>(?<content>[\s\S]*?)<\/div>\s*<(footer|\/article)>/ =~ input
+    return (content.nil?) ? input : content
+  end
+    
+      class RenderPartialTag < Liquid::Tag
+    include OctopressFilters
+    def initialize(tag_name, markup, tokens)
+      @file = nil
+      @raw = false
+      if markup =~ /^(\S+)\s?(\w+)?/
+        @file = $1.strip
+        @raw = $2 == 'raw'
+      end
+      super
+    end
+    
+        # npm installs dependencies in the module itself, so if you do
+    # 'npm install express' it installs dependencies (like 'connect')
+    # to: node_modules/express/node_modules/connect/...
+    #
+    # To that end, I don't think we necessarily need to include
+    # any automatic dependency information since every 'npm install'
+    # is fully self-contained. That's why you don't see any bother, yet,
+    # to include the package's dependencies in here.
+    #
+    # It's possible someone will want to decouple that in the future,
+    # but I will wait for that feature request.
+  end
+    
+    require 'pleaserun/cli'
+    
+        cleanup_staging
+    # Tell 'dir' to input '.' and chdir/prefix will help it figure out the
+    # rest.
+    dir.input('.')
+    @staging_path = dir.staging_path
+    dir.cleanup_build
+  end # def input
