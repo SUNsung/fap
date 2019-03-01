@@ -1,196 +1,304 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // Creates a numpy array with shapes specified by dim_size and dims and content
-// in data. The array does not own the memory, and destructor will be called to
-// release it. If the status is not ok the caller is responsible for releasing
-// the memory.
-Status ArrayFromMemory(int dim_size, npy_intp* dims, void* data, DataType dtype,
-                       std::function<void()> destructor, PyObject** result);
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // Must be included first
-#include 'tensorflow/python/lib/core/numpy.h'
-    
-    namespace stream_executor {
-namespace cuda {
-    }
-    }
-    
-    void PrefixMapKeyPrinter<unsigned char>::print(raw_ostream &out,
-                                               ArrayRef<unsigned char> key) {
-  out << '\'';
-  for (auto byte : key) {
-    if (byte < 16) out << '0';
-    out.write_hex(byte);
-  }
-  out << '\'';
-}
+        
+    {}  // namespace atom
 
     
-      bool IsFirstLine = true;
-    
-    from GYBUnicodeDataUtils import GraphemeClusterBreakPropertyTable, get_extended_grapheme_cluster_rules_matrix
-    
-    
-    {
-    {/// Determine the imported CF type for the given typedef-name, or the empty
-/// string if this is not an imported CF type name.
-llvm::StringRef getCFTypeName(const clang::TypedefNameDecl *decl);
-}
-}
-    
-      // Static members
-  IAMResult(DeclName declName, EffectiveClangContext dc)
-      : name(declName), effectiveDC(dc) {}
-    
-    
-    {  // -- Build the decoded string as UTF32 first because we need random access.
-  uint32_t n = initial_n;
-  int i = 0;
-  int bias = initial_bias;
-  /// let output = an empty string indexed from 0
-  // consume all code points before the last delimiter (if there is one)
-  //  and copy them to output,
-  size_t lastDelimiter = InputPunycode.find_last_of(delimiter);
-  if (lastDelimiter != StringRef::npos) {
-    for (char c : InputPunycode.slice(0, lastDelimiter)) {
-      // fail on any non-basic code point
-      if (static_cast<unsigned char>(c) > 0x7f)
-        return true;
-      OutCodePoints.push_back(c);
-    }
-    // if more than zero code points were consumed then consume one more
-    //  (which will be the last delimiter)
-    InputPunycode =
-        InputPunycode.slice(lastDelimiter + 1, InputPunycode.size());
-  }
-  
-  while (!InputPunycode.empty()) {
-    int oldi = i;
-    int w = 1;
-    for (int k = base; ; k += base) {
-      // consume a code point, or fail if there was none to consume
-      if (InputPunycode.empty())
-        return true;
-      char codePoint = InputPunycode.front();
-      InputPunycode = InputPunycode.slice(1, InputPunycode.size());
-      // let digit = the code point's digit-value, fail if it has none
-      int digit = digit_index(codePoint);
-      if (digit < 0)
-        return true;
-      
-      i = i + digit * w;
-      int t = k <= bias ? tmin
-            : k >= bias + tmax ? tmax
-            : k - bias;
-      if (digit < t)
-        break;
-      w = w * (base - t);
-    }
-    bias = adapt(i - oldi, OutCodePoints.size() + 1, oldi == 0);
-    n = n + i / (OutCodePoints.size() + 1);
-    i = i % (OutCodePoints.size() + 1);
-    // if n is a basic code point then fail
-    if (n < 0x80)
-      return true;
-    // insert n into output at position i
-    OutCodePoints.insert(OutCodePoints.begin() + i, n);
-    i++;
-  }
-  
-  return true;
-}
-    
-    
-    {  // Moving from a message on the arena should lead to a copy.
-  message2 = std::move(*message1_on_arena);
-  EXPECT_NE(nested, &message2.optional_nested_message());
-  TestUtil::ExpectAllFieldsSet(*message1_on_arena);
-  TestUtil::ExpectAllFieldsSet(message2);
-}
-    
-    // Functions to create C# XML documentation comments.
-// Currently this only includes documentation comments containing text specified as comments
-// in the .proto file; documentation comments generated just from field/message/enum/proto names
-// is inlined in the relevant code. If more control is required, that code can be moved here.
-    
-    
-    {
-    {    printer->Print(' * <pre>\n');
-    for (int i = 0; i < lines.size(); i++) {
-      // Most lines should start with a space.  Watch out for lines that start
-      // with a /, since putting that right after the leading asterisk will
-      // close the comment.
-      if (!lines[i].empty() && lines[i][0] == '/') {
-        printer->Print(' * $line$\n', 'line', lines[i]);
-      } else {
-        printer->Print(' *$line$\n', 'line', lines[i]);
-      }
-    }
-    printer->Print(
-        ' * </pre>\n'
-        ' *\n');
-  }
-}
-    
-    ImmutableGeneratorFactory::ImmutableGeneratorFactory(
-    Context* context) : context_(context) {
-}
-ImmutableGeneratorFactory::~ImmutableGeneratorFactory() {}
-    
-    string OneofGenerator::HasIndexAsString(void) const {
-  return variables_.find('index')->second;
-}
-    
-      // write central directory
-  io::CodedOutputStream output(raw_output_);
-  for (int i = 0; i < num_entries; ++i) {
-    const string &filename = files_[i].name;
-    uint16 filename_size = filename.size();
-    uint32 crc32 = files_[i].crc32;
-    uint32 size = files_[i].size;
-    uint32 offset = files_[i].offset;
-    }
-    
-    #endif // D_DHT_RESPONSE_MESSAGE_H
+    #endif  // ATOM_BROWSER_API_ATOM_API_IN_APP_PURCHASE_H_
 
     
-    void DHTRoutingTable::getClosestKNodes(
-    std::vector<std::shared_ptr<DHTNode>>& nodes,
-    const unsigned char* key) const
+    #ifndef ATOM_BROWSER_API_ATOM_API_NET_H_
+#define ATOM_BROWSER_API_ATOM_API_NET_H_
+    
+    class Menu;
+class NativeImage;
+    
+      // C++ can not distinguish overloaded member function.
+  template <AtomNetworkDelegate::SimpleEvent type>
+  void SetSimpleListener(mate::Arguments* args);
+  template <AtomNetworkDelegate::ResponseEvent type>
+  void SetResponseListener(mate::Arguments* args);
+  template <typename Listener, typename Method, typename Event>
+  void SetListener(Method method, Event type, mate::Arguments* args);
+    
+    AtomQuotaPermissionContext::AtomQuotaPermissionContext() {}
+    
+    namespace in_app_purchase {
+    }
+    
+    void OffScreenOutputDevice::OnPaint(const gfx::Rect& damage_rect) {
+  gfx::Rect rect = damage_rect;
+  if (!pending_damage_rect_.IsEmpty()) {
+    rect.Union(pending_damage_rect_);
+    pending_damage_rect_.SetRect(0, 0, 0, 0);
+  }
+    }
+    
+    #endif // BITCOIN_QT_NETWORKSTYLE_H
+
+    
+        QString getURI();
+    
+    #ifndef BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
+#define BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
+    
+    /**
+ * Changelog:
+ * - March 2013, Diederik Huys:    original version
+ * - November 2014, Pieter Wuille: updated to use Peter Dettman's parallel multiplication algorithm
+ * - December 2014, Pieter Wuille: converted from YASM to GCC inline assembly
+ */
+    
+    static void secp256k1_gej_set_ge(secp256k1_gej *r, const secp256k1_ge *a) {
+   r->infinity = a->infinity;
+   r->x = a->x;
+   r->y = a->y;
+   secp256k1_fe_set_int(&r->z, 1);
+}
+    
+    
+    {    secp256k1_ecdsa_recoverable_signature_load(ctx, &r, &s, &recid, signature);
+    VERIFY_CHECK(recid >= 0 && recid < 4);  /* should have been caught in parse_compact */
+    secp256k1_scalar_set_b32(&m, msg32, NULL);
+    if (secp256k1_ecdsa_sig_recover(&ctx->ecmult_ctx, &r, &s, &q, &m, recid)) {
+        secp256k1_pubkey_save(pubkey, &q);
+        return 1;
+    } else {
+        memset(pubkey, 0, sizeof(*pubkey));
+        return 0;
+    }
+}
+    
+    static bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
 {
-  dht::findClosestKNodes(nodes, root_.get(), key);
+    if (s1.size() != s2.size()) return false;
+    for (size_t i = 0; i < s1.size(); ++i) {
+        char c1 = s1[i];
+        if (c1 >= 'A' && c1 <= 'Z') c1 -= ('A' - 'a');
+        char c2 = s2[i];
+        if (c2 >= 'A' && c2 <= 'Z') c2 -= ('A' - 'a');
+        if (c1 != c2) return false;
+    }
+    return true;
 }
     
-    #include 'DHTNode.h'
-#include 'DlAbortEx.h'
-#include 'DHTConstants.h'
-#include 'bittorrent_helper.h'
-#include 'Logger.h'
-#include 'a2netcompat.h'
-#include 'util.h'
-#include 'TimeA2.h'
-#include 'fmt.h'
-#include 'File.h'
-#include 'LogFactory.h'
-#include 'BufferedFile.h'
+        // A more complex valid grammar. PROTOCOLINFO accepts a VersionLine that
+    // takes a key=value pair followed by an OptArguments, making this valid.
+    // Because an OptArguments contains no semantic data, there is no point in
+    // parsing it.
+    CheckParseTorReplyMapping(
+        'SOME=args,here MORE optional=arguments  here', {
+            {'SOME', 'args,here'},
+        });
+    
+    inline void printfln(const char* fmt)
+{
+    format(std::cout, fmt);
+    std::cout << '\n';
+}
+    
+    const std::vector<std::string>& UniValue::getKeys() const
+{
+    if (typ != VOBJ)
+        throw std::runtime_error('JSON value is not an object as expected');
+    return keys;
+}
+    
+        BOOST_CHECK_EQUAL(v[0].getValStr(), '1.10000000');
+    
+    #ifndef BITCOIN_BECH32_H
+#define BITCOIN_BECH32_H
+    
+    #if defined(OS_WIN)
+#define _USE_MATH_DEFINES
+#include <math.h>
+#endif
+    
+    // static
+void App::EmitReopenEvent() {
+  std::set<RenderProcessHost*> rphs;
+  std::set<RenderProcessHost*>::iterator it;
+    }
+    
+    // Tell browser to delete a object.
+// function DeallocateObject(id);
+v8::Handle<v8::Value> DeallocateObject(int routing_id,
+                                       int object_id);
+    
+    #include 'ui/base/models/simple_menu_model.h'
     
     
-    {  void serialize(const std::string& filename);
+    {  *y = CalculateMenuYPosition(&screen_rect, &menu_req, NULL, *y);
+}
+    
+    MenuItem::~MenuItem() {
+  Destroy();
+}
+    
+    	wchar_t commandStr[MAX_PATH + 20] = { 0 };
+	wchar_t baseCommandStr[MAX_PATH + 20] = { 0 };
+	if (!single) {
+		swprintf_s(baseCommandStr, L'\'%s\'', exePath);
+	}
+	else {
+		swprintf_s(baseCommandStr, L'\'%s\' /single', exePath);
+	}
+    
+    
+    {                UTEXT_SETNATIVEINDEX(fInputText, fp->fInputIdx);
+                UChar32 c = UTEXT_NEXT32(fInputText);
+                if (c < 256) {
+                    Regex8BitSet *s8 = &fPattern->fStaticSets8[opValue];
+                    if (s8->contains(c)) {
+                        success = !success;
+                    }
+                } else {
+                    const UnicodeSet *s = fPattern->fStaticSets[opValue];
+                    if (s->contains(c)) {
+                        success = !success;
+                    }
+                }
+                if (success) {
+                    fp->fInputIdx = UTEXT_GETNATIVEINDEX(fInputText);
+                } else {
+                    // the character wasn't in the set.
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
+                }
+            }
+            break;
+    
+    int32_t ScriptSet::countMembers() const {
+    // This bit counter is good for sparse numbers of '1's, which is
+    //  very much the case that we will usually have.
+    int32_t count = 0;
+    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
+        uint32_t x = bits[i];
+        while (x > 0) {
+            count++;
+            x &= (x - 1);    // and off the least significant one bit.
+        }
+    }
+    return count;
+}
+    
+    int32_t SearchIterator::getMatchedLength() const
+{
+    return m_search_->matchedLength;
+}
+    
+void SearchIterator::getMatchedText(UnicodeString &result) const
+{
+    int32_t matchedindex  = m_search_->matchedIndex;
+    int32_t     matchedlength = m_search_->matchedLength;
+    if (matchedindex != USEARCH_DONE && matchedlength != 0) {
+        result.setTo(m_search_->text + matchedindex, matchedlength); 
+    }
+    else {
+        result.remove();
+    }
+}
+    
+void SearchIterator::setBreakIterator(BreakIterator *breakiter, 
+                                      UErrorCode &status)
+{
+    if (U_SUCCESS(status)) {
+#if 0
+        m_search_->breakIter = NULL;
+        // the c++ breakiterator may not make use of ubreakiterator.
+        // so we'll have to keep track of it ourselves.
+#else
+        // Well, gee... the Constructors that take a BreakIterator
+        // all cast the BreakIterator to a UBreakIterator and
+        // pass it to the corresponding usearch_openFromXXX
+        // routine, so there's no reason not to do this.
+        //
+        // Besides, a UBreakIterator is a BreakIterator, so
+        // any subclass of BreakIterator should work fine here...
+        m_search_->breakIter = (UBreakIterator *) breakiter;
+#endif
+        
+        m_breakiterator_ = breakiter;
+    }
+}
+    
+const BreakIterator * SearchIterator::getBreakIterator(void) const
+{
+    return m_breakiterator_;
+}
+    
+    // SharedBreakIterator encapsulates a shared BreakIterator. Because
+// BreakIterator has mutable semantics, clients must ensure that all uses
+// of a particular shared BreakIterator is protected by the same mutex
+// ensuring that only one thread at a time gets access to that shared
+// BreakIterator. Clients can accomplish this by creating a mutex for all
+// uses of break iterator within a particular class. Then objects of that
+// class may then freely share break iterators among themselves. However,
+// these shared break iterators must never be exposed outside of that class.
+class U_I18N_API SharedBreakIterator : public SharedObject {
+public:
+    SharedBreakIterator(BreakIterator *biToAdopt);
+    virtual ~SharedBreakIterator();
+    }
+    
+    U_NAMESPACE_BEGIN
+    
+    #include 'unicode/utypes.h'
+#include 'sharedobject.h'
+    
+    class U_I18N_API SharedPluralRules : public SharedObject {
+public:
+    SharedPluralRules(PluralRules *prToAdopt) : ptr(prToAdopt) { }
+    virtual ~SharedPluralRules();
+    const PluralRules *operator->() const { return ptr; }
+    const PluralRules &operator*() const { return *ptr; }
+private:
+    PluralRules *ptr;
+    SharedPluralRules(const SharedPluralRules &);
+    SharedPluralRules &operator=(const SharedPluralRules &);
 };
+    
+    #endif  // __SIGNIFICANTDIGITINTERVAL_H__
+
+    
+    void 
+SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfMonth, 
+                           int32_t time, TimeMode mode, UErrorCode& status)
+{
+    setEndRule(month, dayOfMonth, 0, time, mode, status);
+}
+    
+    #include 'unicode/utypes.h'
+    
+    /**
+ * UnicodeFunctor API.  Cast 'this' to a UnicodeReplacer* pointer
+ * and return the pointer.
+ */
+UnicodeReplacer* StringMatcher::toReplacer() const {
+  StringMatcher  *nonconst_this = const_cast<StringMatcher *>(this);
+  UnicodeReplacer *nonconst_base = static_cast<UnicodeReplacer *>(nonconst_this);
+  
+  return nonconst_base;
+}
+    
+    #include 'DHTAbstractTask.h'
+#include 'a2time.h'
+    
+    bool DHTResponseMessage::isReply() const { return true; }
+    
+    DHTRoutingTable::DHTRoutingTable(const std::shared_ptr<DHTNode>& localNode)
+    : localNode_(localNode),
+      root_(make_unique<DHTBucketTreeNode>(
+          std::make_shared<DHTBucket>(localNode_))),
+      numBucket_(1),
+      taskQueue_{nullptr},
+      taskFactory_{nullptr}
+{
+}
+    
+    DHTRoutingTableSerializer::DHTRoutingTableSerializer(int family)
+    : family_(family)
+{
+}
     
     
     {  // Returns two vector of Commands.  First one contains regular
@@ -201,7 +309,78 @@ ImmutableGeneratorFactory::~ImmutableGeneratorFactory() {}
   setup(DownloadEngine* e, int family);
 };
     
+    std::shared_ptr<DHTTask>
+DHTTaskFactoryImpl::createPingTask(const std::shared_ptr<DHTNode>& remoteNode,
+                                   int numRetry)
+{
+  auto task = std::make_shared<DHTPingTask>(remoteNode, numRetry);
+  task->setTimeout(timeout_);
+  setCommonProperty(task);
+  return task;
+}
+    
     
     {} // namespace aria2
     
-    void DHTUnknownMessage::doReceivedAction() {}
+      unsigned char secret_[2][SECRET_SIZE];
+    
+    #endif /* !__HIREDIS_QT_H__ */
+
+    
+    
+    {
+    {        if (msg.timer)
+        {
+            swTimer_del(&SwooleG.timer, msg.timer);
+        }
+        if (msg.error || closed)
+        {
+            return nullptr;
+        }
+    }
+    /**
+     * pop data
+     */
+    void *data = data_queue.front();
+    data_queue.pop();
+    /**
+     * notify producer
+     */
+    if (!producer_queue.empty())
+    {
+        Coroutine *co = pop_coroutine(PRODUCER);
+        co->resume();
+    }
+    return data;
+}
+    
+    TEST(coroutine_socket, recv_success)
+{
+    coro_test([](void *arg)
+    {
+        Socket sock(SW_SOCK_TCP);
+        bool retval = sock.connect('127.0.0.1', 9501, -1);
+        ASSERT_EQ(retval, true);
+        ASSERT_EQ(sock.errCode, 0);
+        sock.send('echo', 5);
+        char buf[128];
+        int n = sock.recv(buf, sizeof(buf));
+        ASSERT_EQ(strcmp(buf, 'hello world\n'), 0);
+    });
+}
+    
+    
+    {    ASSERT_EQ(swThreadPool_free(&pool), SW_OK);
+    ASSERT_EQ(result, N);
+}
+
+    
+    
+    {    return retval;
+}
+
+    
+        _socket->object = NULL;
+    _socket->active = 0;
+    efree(object);
+    swoole_set_object(zobject, NULL);
