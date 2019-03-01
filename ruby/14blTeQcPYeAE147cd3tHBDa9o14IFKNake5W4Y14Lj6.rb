@@ -1,108 +1,97 @@
 
         
-        module Sass
-  module CacheStores
-    # A backend for the Sass cache using the filesystem.
-    class Filesystem < Base
-      # The directory where the cached files will be stored.
-      #
-      # @return [String]
-      attr_accessor :cache_location
+            gu = GroupUser.find_by(user_id: moderator.id, group_id: group.id)
+    expect(gu.notification_level).to eq(NotificationLevels.all[:watching])
     
-        # Make rules use parent refs so that
-    #
-    #     foo
-    #       color: green
-    #     foo.bar
-    #       color: blue
-    #
-    # becomes
-    #
-    #     foo
-    #       color: green
-    #       &.bar
-    #         color: blue
-    #
-    # @param root [Tree::Node] The parent node
-    def parent_ref_rules(root)
-      current_rule = nil
-      root.children.map! do |child|
-        unless child.is_a?(Tree::RuleNode)
-          parent_ref_rules(child) if child.is_a?(Tree::DirectiveNode)
-          next child
+          resources :variants do
+        resources :images
+      end
+    
+    namespace :gem do
+  def version
+    require 'spree/core/version'
+    Spree.version
+  end
+    
+            def user_id
+          params[:order][:user_id] if params[:order]
         end
     
-    abstract_target 'Abstract Target' do
-    use_modular_headers!
+            def line_items_attributes
+          { line_items_attributes: {
+            id: params[:id],
+            quantity: params[:line_item][:quantity],
+            options: line_item_params[:options] || {}
+          } }
+        end
     
-    class LogStash::PluginManager::Pack < LogStash::PluginManager::PackCommand
-  option '--tgz', :flag, 'compress package as a tar.gz file', :default => !LogStash::Environment.windows?
-  option '--zip', :flag, 'compress package as a zip file', :default => LogStash::Environment.windows?
-  option '--[no-]clean', :flag, 'clean up the generated dump of plugins', :default => true
-  option '--overwrite', :flag, 'Overwrite a previously generated package file', :default => false
-    
-        desc 'Run one single machine acceptance test'
-    task :single, :machine do |t, args|
-      ENV['LS_VAGRANT_HOST']  = args[:machine]
-      exit(RSpec::Core::Runner.run([Rake::FileList['acceptance/spec/lib/**/**/*_spec.rb']]))
-    end
-  end
-end
-
-    
-    end
-    
-        def render(context)
-      quote = paragraphize(super)
-      author = '<strong>#{@by.strip}</strong>' if @by
-      if @source
-        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
-        parts = []
-        url.each do |part|
-          if (parts + [part]).join('/').length < 32
-            parts << part
+            def create
+          authorize! :create, Spree::OptionValue
+          @option_value = scope.new(option_value_params)
+          if @option_value.save
+            render :show, status: 201
+          else
+            invalid_resource!(@option_value)
           end
         end
-        source = parts.join('/')
-        source << '/&hellip;' unless source == @source
-      end
-      if !@source.nil?
-        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
-      elsif !@title.nil?
-        cite = ' <cite>#{@title}</cite>'
-      end
-      blockquote = if @by.nil?
-        quote
-      elsif cite
-        '#{quote}<footer>#{author + cite}</footer>'
+    
+            def create
+          @order.validate_payments_attributes([payment_params])
+          @payment = @order.payments.build(payment_params)
+          if @payment.save
+            respond_with(@payment, status: 201, default_template: :show)
+          else
+            invalid_resource!(@payment)
+          end
+        end
+    
+    $redis = Redis.new
+    
+    module Sidekiq
+  module Extensions
+    ##
+    # Adds 'delay', 'delay_for' and `delay_until` methods to ActionMailer to offload arbitrary email
+    # delivery to Sidekiq.  Example:
+    #
+    #    UserMailer.delay.send_welcome_email(new_user)
+    #    UserMailer.delay_for(5.days).send_welcome_email(new_user)
+    #    UserMailer.delay_until(5.days.from_now).send_welcome_email(new_user)
+    class DelayedMailer
+      include Sidekiq::Worker
+    
+        def self.logger
+      defined?(@logger) ? @logger : initialize_logger
+    end
+    
+        scripts = register_script('post-install',   :after_install,   scripts)
+    scripts = register_script('pre-install',   :before_install,  scripts)
+    scripts = register_script('pre-upgrade',   :before_upgrade,  scripts)
+    scripts = register_script('post-upgrade',   :after_upgrade,  scripts)
+    scripts = register_script('pre-deinstall',  :before_remove,   scripts)
+    scripts = register_script('post-deinstall', :after_remove,    scripts)
+    
+      dont_obsolete_paths = []
+  option '--dont-obsolete', 'DONT_OBSOLETE_PATH',
+    'A file path for which to 'dont-obsolete' in the built PackageInfo. ' \
+    'Can be specified multiple times.' do |path|
+      dont_obsolete_paths << path
+    end
+    
+        files = []
+    Find.find('.') do |path|
+      stat = File.lstat(path)
+      next unless stat.symlink? or stat.file?
+      files << path
+    end
+    ::Dir.chdir(cwd)
+    
+        # Copy 'files' from builddir to :output/files
+    Find.find('files', 'manifests') do |path|
+      logger.info('Copying path: #{path}')
+      if File.directory?(path)
+        ::Dir.mkdir(File.join(params[:output], path))
       else
-        '#{quote}<footer>#{author}</footer>'
+        FileUtils.cp(path, File.join(params[:output], path))
       end
-      '<blockquote>#{blockquote}</blockquote>'
     end
-    
-          unless file.file?
-        return 'File #{file} could not be found'
-      end
-    
-    # Create two output packages!
-output_packages = []
-output_packages << pleaserun.convert(FPM::Package::RPM)
-output_packages << pleaserun.convert(FPM::Package::Deb)
-    
-        # Add necessary metadata to the generated manifest.
-    metadata_template = template('p5p_metadata.erb').result(binding)
-    File.write(build_path('#{name}.mog'), metadata_template)
-    
-      option '--data-dir', 'DATA_DIR',
-    'Specify php dir relative to prefix if differs from pear default (pear/data)'
-    
-        scripts[:after_install] = template(File.join('pleaserun', 'scripts', 'after-install.sh')).result(binding)
-    scripts[:before_remove] = template(File.join('pleaserun', 'scripts', 'before-remove.sh')).result(binding)
-  end # def input
-    
-        unless safesystem(*args)
-      raise 'Command failed while creating payload tar: #{args}'
-    end
-    payload_tar
-  end
+  end # def build!
