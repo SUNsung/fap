@@ -1,87 +1,66 @@
 
         
-          # POST /resource/sign_in
-  def create
-    self.resource = warden.authenticate!(auth_options)
-    set_flash_message!(:notice, :signed_in)
-    sign_in(resource_name, resource)
-    yield resource if block_given?
-    respond_with resource, location: after_sign_in_path_for(resource)
-  end
-    
-        def unlock_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :unlock_instructions, opts)
+            def log_processing(name)
+      puts yellow '  #{File.basename(name)}'
     end
     
-            warden.logout
-        expire_data_after_sign_out!
-        warden.clear_strategies_cache!
-        warden.lock! if lock
-    
-    require 'uri'
-    
-          def _devise_route_context
-        @_devise_route_context ||= send(Devise.available_router_name)
-      end
-    end
-  end
+      # Use default logging formatter so that PID and timestamp are not suppressed.
+  config.log_formatter = ::Logger::Formatter.new
 end
 
     
-            def create
-          authorize! :create, ProductProperty
-          @product_property = @product.product_properties.new(product_property_params)
-          if @product_property.save
-            respond_with(@product_property, status: 201, default_template: :show)
-          else
-            invalid_resource!(@product_property)
-          end
-        end
+    Then /^I should see an image in the publisher$/ do
+  photo_in_publisher.should be_present
+end
     
-            def variants_params
-          variants_key = if params[:product].key? :variants
-                           :variants
-                         else
-                           :variants_attributes
-                         end
-    
-            def index
-          authorize! :admin, ReturnAuthorization
-          @return_authorizations = order.return_authorizations.accessible_by(current_ability, :read).
-                                   ransack(params[:q]).result.
-                                   page(params[:page]).per(params[:per_page])
-          respond_with(@return_authorizations)
-        end
-    
-          def create_worker_spec
-        template_file = File.join(
-            'spec/workers',
-            class_path,
-            '#{file_name}_worker_spec.rb'
-        )
-        template 'worker_spec.rb.erb', template_file
+        context 'on a post from a contact' do
+      before do
+        @target = bob.post(:status_message, text: 'AWESOME', to: @bobs_aspect.id)
       end
     
-    module Sidekiq
-  module Extensions
-    ##
-    # Adds 'delay', 'delay_for' and `delay_until` methods to ActionMailer to offload arbitrary email
-    # delivery to Sidekiq.  Example:
-    #
-    #    UserMailer.delay.send_welcome_email(new_user)
-    #    UserMailer.delay_for(5.days).send_welcome_email(new_user)
-    #    UserMailer.delay_until(5.days.from_now).send_welcome_email(new_user)
-    class DelayedMailer
-      include Sidekiq::Worker
+          FactoryGirl.create(:notification, :recipient => alice)
+      note = FactoryGirl.create(:notification, :recipient => user2)
     
-          Sidekiq.logger.debug { 'Re-queueing terminated jobs' }
-      jobs_to_requeue = {}
-      inprogress.each do |unit_of_work|
-        jobs_to_requeue[unit_of_work.queue_name] ||= []
-        jobs_to_requeue[unit_of_work.queue_name] << unit_of_work.job
-      end
+    shared_examples 'no current order' do
+  context 'order doesn't exist' do
+    before do
+      order.destroy
+      execute
+    end
     
-            middlewares.unshift [[::Rack::Session::Cookie, options], nil]
+        context 'with params include=default_billing_address,default_shipping_address' do
+      before { get '/api/v2/storefront/account?include=default_billing_address,default_shipping_address', headers: headers }
+    
+          it 'returns taxons by ids' do
+        expect(json_response['data'].size).to            eq(2)
+        expect(json_response['data'].pluck(:id).sort).to eq(taxons.map(&:id).sort.map(&:to_s))
       end
+    end
+    
+              def resource
+            resource = resource_finder.new(number: params[:number], token: order_token).execute.take
+            raise ActiveRecord::RecordNotFound if resource.nil?
+    
+            variant = line_item.variant
+        display_name = variant.name.to_s
+        display_name += ' (#{variant.options_text})' unless variant.options_text.blank?
+    
+      node[:applications].each do |app, data|
+    template '/etc/monit.d/sidekiq_#{app}.monitrc' do 
+      owner 'root' 
+      group 'root' 
+      mode 0644 
+      source 'monitrc.conf.erb' 
+      variables({ 
+        :num_workers => worker_count,
+        :app_name => app, 
+        :rails_env => node[:environment][:framework_env] 
+      }) 
+    end
+    
+        def self.inherited(child)
+      child.app_url = self.app_url
+      child.session_secret = self.session_secret
+      child.redis_pool = self.redis_pool
+      child.sessions = self.sessions
     end
