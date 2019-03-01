@@ -1,226 +1,339 @@
 
         
-        REGISTER_CPU_OPERATOR(
-    MergeSingleScalarFeatureTensors,
-    MergeSingleScalarFeatureTensorsOp<CPUContext>);
-OPERATOR_SCHEMA(MergeSingleScalarFeatureTensors)
-    .SetDoc(
-        'Merge given single-feature tensors with scalar features into one '
-        'multi-feature tensor.' +
-        doc)
-    .NumInputs([](int n) { return n >= 2 && n % 2 == 0; })
-    .NumOutputs(3)
-    .Input(0, 'in1', '')
-    .Input(1, 'in1_presence', '.presence')
-    .Output(0, 'out_lengths', '.lengths')
-    .Output(1, 'out_keys', '.keys')
-    .Output(2, 'out_values', '.values')
-    .Arg('feature_ids', 'feature ids');
-    
-    REGISTER_CPU_OPERATOR(Floor, FloorOp<float, CPUContext>);
-    
-    Example 2 (with KEY):
-DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
-KEY   = [0, 1, 3, 2, 1, 0, 1, 0]
-RANGES = [
-  [
-    [2, 4],
-    [0, 2],
-  ],
-  [
-    [0, 0],
-    [6, 2],
-  ]
-]
-lengths = [4, 2]
-OUTPUT[0] = [[6, 5, 4, 3], [0, 0, 0, 0]]
-OUTPUT[1] = [[1, 2], [8, 7]]
-    
-    ScientificNumberFormatter *ScientificNumberFormatter::createMarkupInstance(
-        const Locale &locale,
-        const UnicodeString &beginMarkup,
-        const UnicodeString &endMarkup,
-        UErrorCode &status) {
-    return createInstance(
-            static_cast<DecimalFormat *>(
-                    DecimalFormat::createScientificInstance(locale, status)),
-            new MarkupStyle(beginMarkup, endMarkup),
-            status);
-}
-    
-    //----------------------------------------------------------------------------
-//
-//  ScriptSet implementation
-//
-//----------------------------------------------------------------------------
-ScriptSet::ScriptSet() {
-    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
-        bits[i] = 0;
+        namespace {
     }
+    
+    bool CheckCommandLineArguments(int argc, base::CommandLine::CharType** argv);
+    
+      // TransactionObserver:
+  void OnTransactionsUpdated(
+      const std::vector<in_app_purchase::Transaction>& transactions) override;
+    
+    
+    {}  // namespace api
+    
+    
+    {  DISALLOW_COPY_AND_ASSIGN(TrackableObject);
+};
+    
+    #include 'atom/browser/atom_quota_permission_context.h'
+    
+      // content::QuotaPermissionContext:
+  void RequestQuotaPermission(const content::StorageQuotaParams& params,
+                              int render_process_id,
+                              const PermissionCallback& callback) override;
+    
+    
+    { protected:
+  virtual ~Delegate() {}
+};
+    
+    struct Product {
+  // Product Identifier
+  std::string productIdentifier;
+    }
+    
+    bool AboutProtocolHandler::IsSafeRedirectTarget(const GURL& location) const {
+  return false;
 }
+    
+      // Build a substitution map to replace the protocol's \c Self and the type
+  // parameters of the requirement into a combined context that provides the
+  // type parameters of the conformance context and the parameters of the
+  // requirement.
+  auto selfType = cast<GenericTypeParamType>(
+      proto->getSelfInterfaceType()->getCanonicalType());
+    
+    #include 'swift/ASTSectionImporter/ASTSectionImporter.h'
+#include 'swift/Basic/Dwarf.h'
+#include 'swift/Serialization/SerializedModuleLoader.h'
+#include 'swift/Serialization/Validation.h'
+#include 'llvm/Support/Debug.h'
+#include 'llvm/Support/raw_ostream.h'
+    
+    void CacheImpl::removeAll() {
+  cache_remove_all(static_cast<cache_t*>(Impl));
+}
+    
+    bool Mangle::needsPunycodeEncoding(StringRef str) {
+  for (unsigned char c : str) {
+    if (!isValidSymbolChar(c))
+      return true;
+  }
+  return false;
+}
+    
+    static int digit_index(char value) {
+  if (value >= 'a' && value <= 'z')
+    return value - 'a';
+  if (value >= 'A' && value <= 'J')
+    return value - 'A' + 26;
+  return -1;
+}
+    
+      /// The target to be passed to the compiler invocation. By default, this
+  /// is the target triple, but this may be overridden to accommodate some
+  /// platforms.
+  virtual std::string getTargetForLinker() const;
+    
+    #include 'content/nw/src/api/base/base.h'
+    
+    v8::Handle<v8::Value> DeallocateObject(int routing_id,
+                                       int object_id) {
+  RenderThread::Get()->Send(new ShellViewHostMsg_Deallocate_Object(
+      routing_id, object_id));
+  v8::Isolate* isolate = v8::Isolate::GetCurrent();
+  return v8::Undefined(isolate);
+}
+    
+    #include 'content/nw/src/api/clipboard/clipboard.h'
+    
+    
+#include 'content/nw/src/api/event/event.h'
+#include 'base/values.h'
+#include 'content/nw/src/api/dispatcher_host.h'
+#include 'ui/gfx/screen.h'
+    
+       bool IsCommandIdChecked(int command_id) const override;
+   bool IsCommandIdEnabled(int command_id) const override;
+    
+    aura::Window* Menu::GetActiveNativeView(content::RenderFrameHost* rfh) {
+  content::WebContents* web_contents =
+    content::WebContents::FromRenderFrameHost(rfh);
+  if (!web_contents) {
+    LOG(ERROR) << 'Menu: couldn't find WebContents';
+    return NULL;
+  }
+  return web_contents->GetFullscreenRenderWidgetHostView()
+             ? web_contents->GetFullscreenRenderWidgetHostView()
+                   ->GetNativeView()
+             : web_contents->GetNativeView();
+}
+    
+    void MenuItem::Destroy() {
+  gtk_widget_destroy(menu_item_);
+  g_object_unref(G_OBJECT(menu_item_));
+}
+    
+    class NwClipboardReadAvailableTypesFunction : public NWSyncExtensionFunction {
+ public:
+  NwClipboardReadAvailableTypesFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
+ public:
+  NwMenuGetNSStringFWithFixupFunction() {}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    
+ protected:
+  ~NwMenuGetNSStringFWithFixupFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
+};
+    
+    bool NwObjCallObjectMethodFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  base::ListValue* arguments = nullptr;
+  int id = 0;
+  std::string type, method;
+  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(2, &method));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetList(3, &arguments));
+    }
+    
+    #include 'extensions/browser/extension_function.h'
+    
+    
+    {    retMatcher = new RegexMatcher(this);
+    if (retMatcher == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+    return retMatcher;
+}
+    
+    //eof
+
+    
+    #include 'unicode/format.h'
+#include 'unicode/locid.h'
+#include 'unicode/parseerr.h'
+#include 'unicode/utypes.h'
+#include 'uvector.h'
+#include 'hash.h'
+    
+    #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
+
+    
+    
+    {    BreakIterator *get() const { return ptr; }
+    BreakIterator *operator->() const { return ptr; }
+    BreakIterator &operator*() const { return *ptr; }
+private:
+    BreakIterator *ptr;
+    SharedBreakIterator(const SharedBreakIterator &);
+    SharedBreakIterator &operator=(const SharedBreakIterator &);
+};
+    
+    #include 'unicode/utypes.h'
+#include 'sharedobject.h'
+    
+    class U_I18N_API SharedNumberFormat : public SharedObject {
+public:
+    SharedNumberFormat(NumberFormat *nfToAdopt) : ptr(nfToAdopt) { }
+    virtual ~SharedNumberFormat();
+    const NumberFormat *get() const { return ptr; }
+    const NumberFormat *operator->() const { return ptr; }
+    const NumberFormat &operator*() const { return *ptr; }
+private:
+    NumberFormat *ptr;
+    SharedNumberFormat(const SharedNumberFormat &);
+    SharedNumberFormat &operator=(const SharedNumberFormat &);
+};
+    
+    #include 'gregoimp.h'
+#include 'umutex.h'
     
     U_NAMESPACE_BEGIN
-    
-    
-class U_I18N_API SharedDateFormatSymbols : public SharedObject {
-public:
-    SharedDateFormatSymbols(
-            const Locale &loc, const char *type, UErrorCode &status)
-            : dfs(loc, type, status) { }
-    virtual ~SharedDateFormatSymbols();
-    const DateFormatSymbols &get() const { return dfs; }
-private:
-    DateFormatSymbols dfs;
-    SharedDateFormatSymbols(const SharedDateFormatSymbols &);
-    SharedDateFormatSymbols &operator=(const SharedDateFormatSymbols &);
-};
-    
-    class U_I18N_API SharedPluralRules : public SharedObject {
-public:
-    SharedPluralRules(PluralRules *prToAdopt) : ptr(prToAdopt) { }
-    virtual ~SharedPluralRules();
-    const PluralRules *operator->() const { return ptr; }
-    const PluralRules &operator*() const { return *ptr; }
-private:
-    PluralRules *ptr;
-    SharedPluralRules(const SharedPluralRules &);
-    SharedPluralRules &operator=(const SharedPluralRules &);
-};
-    
-    /**
- * An interval of allowed significant digit counts.
- */
-class U_I18N_API SignificantDigitInterval : public UMemory {
-public:
-    }
-    
-    #if !UCONFIG_NO_FORMATTING
-    
-    U_CDECL_END
     
     #endif   // #if !UCONFIG_NO_FORMATTING
 #endif   // SMPDTFST_H
 
     
-        /**
-     * Copy constructor
-     * @param o  the object to be copied.
-     */
-    StringMatcher(const StringMatcher& o);
-        
     /**
-     * Destructor
-     */
-    virtual ~StringMatcher();
-    
-    bool Follow::initWithTarget(Node *followedNode, const Rect& rect /*= Rect::ZERO*/){
-    
-    return initWithTargetAndOffset(followedNode, 0.0, 0.0,rect);
-    
+ * Implement UnicodeMatcher
+ */
+UBool StringMatcher::matchesIndexValue(uint8_t v) const {
+    if (pattern.length() == 0) {
+        return TRUE;
+    }
+    UChar32 c = pattern.char32At(0);
+    const UnicodeMatcher *m = data->lookupMatcher(c);
+    return (m == 0) ? ((c & 0xFF) == v) : m->matchesIndexValue(v);
 }
-void Follow::step(float /*dt*/)
-{
-    if(_boundarySet)
+    
+    
+    {    for (size_t i = 0; i < batch.size; ++i) {
+      offset_[i + 1] = (i + 1) * num_col_;
+      Row<IndexType> row = batch[i];
+      for (uint32_t j = 0; j < num_col_; ++j) {
+        dense_index_[i * num_col_ + j] = j;
+      }
+      for (unsigned k = 0; k < row.length; ++k) {
+        uint32_t index = row.get_index(k);
+        CHECK_LT(index, num_col_)
+            << 'Featuere index larger than num_col';
+        dense_value_[i * num_col_ + index]  = row.get_value(k);
+      }
+    }
+    out_ = batch;
+    out_.index = dmlc::BeginPtr(dense_index_);
+    out_.value = dmlc::BeginPtr(dense_value_);
+    out_.offset = dmlc::BeginPtr(offset_);
+    return true;
+  }
+    
+    SEXP XGDMatrixSetInfo_R(SEXP handle, SEXP field, SEXP array) {
+  R_API_BEGIN();
+  int len = length(array);
+  const char *name = CHAR(asChar(field));
+  if (!strcmp('group', name)) {
+    std::vector<unsigned> vec(len);
+    #pragma omp parallel for schedule(static)
+    for (int i = 0; i < len; ++i) {
+      vec[i] = static_cast<unsigned>(INTEGER(array)[i]);
+    }
+    CHECK_CALL(XGDMatrixSetGroup(R_ExternalPtrAddr(handle), BeginPtr(vec), len));
+  } else {
+    std::vector<float> vec(len);
+    #pragma omp parallel for schedule(static)
+    for (int i = 0; i < len; ++i) {
+      vec[i] = REAL(array)[i];
+    }
+    CHECK_CALL(XGDMatrixSetFloatInfo(R_ExternalPtrAddr(handle),
+                                   CHAR(asChar(field)),
+                                   BeginPtr(vec), len));
+  }
+  R_API_END();
+  return R_NilValue;
+}
+    
+        index_.resize(boundary_[nfeature - 1].index_end);
+    row_ind_.resize(boundary_[nfeature - 1].row_ind_end);
+    
+        std::map<int, int> _map;
+    
+    
+    {    uint32_t protect_page = get_protect_stack_page();
+    if (protect_page)
     {
-        // whole map fits inside a single screen, no need to modify the position - unless map boundaries are increased
-        if(_boundaryFullyCovered)
+        if (protect_stack(stack_, stack_size_, protect_page))
         {
-            return;
+            protect_page_ = protect_page;
         }
     }
-    }
-    
-    CC_CONSTRUCTOR_ACCESS:
-    /**
-     * @js ctor
-     */
-    Follow()
-    : _followedNode(nullptr)
-    , _boundarySet(false)
-    , _boundaryFullyCovered(false)
-    , _leftBoundary(0.0)
-    , _rightBoundary(0.0)
-    , _topBoundary(0.0)
-    , _bottomBoundary(0.0)
-    , _offsetX(0.0)
-    , _offsetY(0.0)
-    , _worldRect(Rect::ZERO)
-    {}
-    /**
-     * @js NA
-     * @lua NA
-     */
-    virtual ~Follow();
-    
-    /**
-     * Initializes the action with a set boundary or with no boundary.
-     *
-     * @param followedNode  The node to be followed.
-     * @param rect  The boundary. If \p rect is equal to Rect::ZERO, it'll work
-     *              with no boundary.
-    */
-    bool initWithTarget(Node *followedNode, const Rect& rect = Rect::ZERO);
-    
-    
-    /**
-     * Initializes the action with a set boundary or with no boundary with offsets.
-     *
-     * @param followedNode  The node to be followed.
-     * @param rect  The boundary. If \p rect is equal to Rect::ZERO, it'll work
-     *              with no boundary.
-     * @param xOffset The horizontal offset from the center of the screen from which the
-     *                node  is to be followed.It can be positive,negative or zero.If
-     *                set to zero the node will be horizontally centered followed.
-     * @param yOffset The vertical offset from the center of the screen from which the
-     *                node is to be followed.It can be positive,negative or zero.
-     *                If set to zero the node will be vertically centered followed.
-     *   If both xOffset and yOffset are set to zero,then the node will be horizontally and vertically centered followed.
-    
-    void ActionInstant::step(float /*dt*/)
-{
-    float updateDt = 1;
-#if CC_ENABLE_SCRIPT_BINDING
-    if (_scriptType == kScriptTypeJavascript)
-    {
-        if (ScriptEngineManager::sendActionEventToJS(this, kActionUpdate, (void *)&updateDt))
-            return;
-    }
-#endif
-    update(updateDt);
 }
     
-        /**
-     * @brief Initializes the action with a duration, a 'from' percentage and a 'to' percentage.
-     * @param duration Specify the duration of the ProgressFromTo action. It's a value in seconds.
-     * @param fromPercentage Specify the source percentage.
-     * @param toPercentage Specify the destination percentage.
-     * @return If the creation success, return true; otherwise, return false.
-     */
-    bool initWithDuration(float duration, float fromPercentage, float toPercentage);
+        signals:
+        void finished();
+    
+        ret = swPipeBase_create(&p, 1);
+    ASSERT_EQ(ret, 0);
+    ret = p.write(&p, (void *) SW_STRL('hello world\n'));
+    ASSERT_GT(ret, 0);
+    ret = p.write(&p, (void *) SW_STRL('你好中国。\n'));
+    ASSERT_GT(ret, 0);
     
     
-    {private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TurnOffTiles);
+    {    ~lru_cache_test_class()
+    {
+        ++dtor_num;
+    }
 };
     
-    /// BFS
-/// No need to store level information in the queue :-)
-///
-/// Time Complexity: O(n), where n is the number of nodes in the tree
-/// Space Complexity: O(n)
-class Solution {
-public:
-    vector<vector<int>> levelOrder(TreeNode* root) {
+    protected:
+    size_t capacity = 1;
+    bool closed = false;
+    std::list<Coroutine *> producer_queue;
+    std::list<Coroutine *> consumer_queue;
+    std::queue<void *> data_queue;
+    
+        pool = new async_thread_pool(SwooleAIO.min_thread_count, SwooleAIO.min_thread_count);
+    pool->start();
+    SwooleAIO.init = 1;
+    
+    int main(int argc, char **argv)
+{
+    swoole_init();
+    }
+    
+    
+    {            ASSERT_EQ(addr1, addr3);
+            ASSERT_EQ(addr2, addr4);
+        }
+    
+    pid_t swoole_coroutine_wait(int *__stat_loc)
+{
+    if (unlikely(SwooleG.main_reactor == nullptr || !Coroutine::get_current()))
+    {
+        return wait( __stat_loc);
     }
     }
     
-    using namespace std;
-    
-    
-    {    return 0;
-}
-
-    
-            vector<int> res;
-        if(root == NULL)
-            return res;
+    /* {{{ php_pgsql_result2array
+ */
+int swoole_pgsql_result2array(PGresult *pg_result, zval *ret_array, long result_type)
+{
+    zval row;
+    char *field_name;
+    size_t num_fields;
+    int pg_numrows, pg_row;
+    uint32_t i;
+    assert(Z_TYPE_P(ret_array) == IS_ARRAY);
+    }
+    }
+    }
+    }
