@@ -1,196 +1,271 @@
 
         
-          Args:
-    records: a record list with TensorFlow examples.
+            def reducer(self, key, values):
+        '''Sum values for each key.
     
-        if hps.ic_dim > 0:
-      prior_g0_mean = np.zeros([E_to_process, hps.ic_dim])
-      prior_g0_logvar = np.zeros([E_to_process, hps.ic_dim])
-      post_g0_mean = np.zeros([E_to_process, hps.ic_dim])
-      post_g0_logvar = np.zeros([E_to_process, hps.ic_dim])
+        def __init__(self, seller_category_map, seller_category_overrides_map):
+        self.seller_category_map = seller_category_map
+        self.seller_category_overrides_map = seller_category_overrides_map
     
-      prefix = [vocab.word_to_id(w) for w in prefix_words.split()]
-  prefix_char_ids = [vocab.word_to_char_ids(w) for w in prefix_words.split()]
-  for _ in xrange(FLAGS.num_samples):
-    inputs = np.zeros([BATCH_SIZE, NUM_TIMESTEPS], np.int32)
-    char_ids_inputs = np.zeros(
-        [BATCH_SIZE, NUM_TIMESTEPS, vocab.max_word_length], np.int32)
-    samples = prefix[:]
-    char_ids_samples = prefix_char_ids[:]
-    sent = ''
-    while True:
-      inputs[0, 0] = samples[0]
-      char_ids_inputs[0, 0, :] = char_ids_samples[0]
-      samples = samples[1:]
-      char_ids_samples = char_ids_samples[1:]
+        def extract_year_month(self, line):
+        '''Return the year and month portions of the timestamp.'''
+        pass
     
-      data_len = len(raw_data)
-  batch_len = data_len // batch_size
-  data = np.full([batch_size, batch_len], EOS_INDEX, dtype=np.int32)
-  for i in range(batch_size):
-    data[i] = raw_data[batch_len * i:batch_len * (i + 1)]
-    
-    
-def write_masked_log(log, id_to_word, sequence_eval, present_eval):
-  indices_arr = np.asarray(sequence_eval)
-  samples = convert_to_human_readable(id_to_word, indices_arr, present_eval,
-                                      FLAGS.batch_size)
-  for sample in samples:
-    log.write(sample + '\n')
-  log.flush()
-  return samples
-    
-    '''Model construction.'''
-    
-        return g.db
-    
-        with app.app_context():
-        db = get_db()
-        count = db.execute('SELECT COUNT(id) FROM post').fetchone()[0]
-        assert count == 2
-    
-    
-@implements_to_string
-class DebugFilesKeyError(KeyError, AssertionError):
-    '''Raised from request.files during debugging.  The idea is that it can
-    provide a better error message than just a generic KeyError/BadRequest.
-    '''
-    
-        The latest JSON standard (:rfc:`8259`) suggests that only UTF-8 is
-    accepted. Older documents allowed 8, 16, or 32. 16 and 32 can be big
-    or little endian. Some editors or libraries may prepend a BOM.
-    
-        class _FakeSignal(object):
-        '''If blinker is unavailable, create a fake class with the same
-        interface that allows sending of signals but will fail with an
-        error on anything else.  Instead of doing anything on send, it
-        will just ignore the arguments and do nothing instead.
+            Accessing a node updates its position to the front of the LRU list.
         '''
-    
-                X /= np.sqrt(np.sum(X ** 2, axis=0))  # Normalize data
-    
-    
-def plot_feature_times(all_times, batch_size, all_components, data):
-    plt.figure()
-    plot_results(all_components, all_times['pca'], label='PCA')
-    plot_results(all_components, all_times['ipca'],
-                 label='IncrementalPCA, bsize=%i' % batch_size)
-    plt.legend(loc='upper left')
-    plt.suptitle('Algorithm runtime vs. n_components\n \
-                 LFW, size %i x %i' % data.shape)
-    plt.xlabel('Number of components (out of max %i)' % data.shape[1])
-    plt.ylabel('Time (seconds)')
-    
-                gc.collect()
-            print('- benchmarking SGD')
-            clf = SGDRegressor(alpha=alpha / n_train, fit_intercept=False,
-                               max_iter=max_iter, learning_rate='invscaling',
-                               eta0=.01, power_t=0.25, tol=1e-3)
-    
-        # start time
-    tstart = datetime.now()
-    clf = DecisionTreeClassifier()
-    clf.fit(X, Y).predict(X)
-    delta = (datetime.now() - tstart)
-    # stop time
-    
-        class_name = info['fullname'].split('.')[0]
-    if type(class_name) != str:
-        # Python 2 only
-        class_name = class_name.encode('utf-8')
-    module = __import__(info['module'], fromlist=[class_name])
-    obj = attrgetter(info['fullname'])(module)
-    
-    Copyright 2014 Steven Loria
+        node = self.lookup[query]
+        if node is None:
+            return None
+        self.linked_list.move_to_front(node)
+        return node.results
     
     
-def plot_influence(conf, mse_values, prediction_times, complexities):
-    '''
-    Plot influence of model complexity on both accuracy and latency.
-    '''
-    plt.figure(figsize=(12, 6))
-    host = host_subplot(111, axes_class=Axes)
-    plt.subplots_adjust(right=0.75)
-    par1 = host.twinx()
-    host.set_xlabel('Model Complexity (%s)' % conf['complexity_label'])
-    y1_label = conf['prediction_performance_label']
-    y2_label = 'Time (s)'
-    host.set_ylabel(y1_label)
-    par1.set_ylabel(y2_label)
-    p1, = host.plot(complexities, mse_values, 'b-', label='prediction error')
-    p2, = par1.plot(complexities, prediction_times, 'r-',
-                    label='latency')
-    host.legend(loc='upper right')
-    host.axis['left'].label.set_color(p1.get_color())
-    par1.axis['right'].label.set_color(p2.get_color())
-    plt.title('Influence of Model Complexity - %s' % conf['estimator'].__name__)
-    plt.show()
+def GAN_loss_matrix(dis_predictions):
+  '''Computes the cross entropy loss for G.
     
-    # Define 'classifiers' to be used
-classifiers = {
-    'Empirical Covariance': EllipticEnvelope(support_fraction=1.,
-                                             contamination=0.261),
-    'Robust Covariance (Minimum Covariance Determinant)':
-    EllipticEnvelope(contamination=0.261),
-    'OCSVM': OneClassSVM(nu=0.261, gamma=0.05)}
-colors = ['m', 'g', 'b']
-legend1 = {}
-legend2 = {}
+      Args:
+    init_savers:  Dictionary of init_savers.  'init_saver_name': init_saver.
+    sess:  tf.Session.
+  '''
+  ## Load Generator weights from MaskGAN checkpoint.
+  if FLAGS.maskgan_ckpt:
+    print('Restoring Generator from %s.' % FLAGS.maskgan_ckpt)
+    tf.logging.info('Restoring Generator from %s.' % FLAGS.maskgan_ckpt)
+    print('Asserting Generator is a seq2seq-variant.')
+    tf.logging.info('Asserting Generator is a seq2seq-variant.')
+    assert FLAGS.generator_model.startswith('seq2seq')
+    init_saver = init_savers['init_saver']
+    init_saver.restore(sess, FLAGS.maskgan_ckpt)
     
-    # Create a graph capturing local connectivity. Larger number of neighbors
-# will give more homogeneous clusters to the cost of computation
-# time. A very large number of neighbors gives more evenly distributed
-# cluster sizes, but may not impose the local manifold structure of
-# the data
-knn_graph = kneighbors_graph(X, 30, include_self=False)
+    faces = fetch_lfw_people(resize=.2, min_faces_per_person=5)
+# limit dataset to 5000 people (don't care who they are!)
+X = faces.data[:5000]
+n_samples, h, w = faces.images.shape
+n_features = X.shape[1]
     
-    This example uses a large dataset of faces to learn a set of 20 x 20
-images patches that constitute faces.
+        input_file = open(os.path.join(exercise_dir, f))
+    output_file = open(os.path.join(skeleton_dir, f), 'w')
     
-    plt.subplot(3, 4, 10)
-plt.imshow(np.reshape(agglo.labels_, images[0].shape),
-           interpolation='nearest', cmap=plt.cm.nipy_spectral)
-plt.xticks(())
+    plt.axis('tight')
+plt.axis('off')
+plt.suptitle('Ground truth', size=20)
+    
+    # histogram
+plt.figure(4, figsize=(3, 2.2))
+plt.clf()
+plt.axes([.01, .01, .98, .98])
+plt.hist(X, bins=256, color='.5', edgecolor='.5')
 plt.yticks(())
-plt.title('Labels')
-plt.show()
-
-    
-    
-#----------------------------------------------------------------------
-# Visualize the clustering
-def plot_clustering(X_red, labels, title=None):
-    x_min, x_max = np.min(X_red, axis=0), np.max(X_red, axis=0)
-    X_red = (X_red - x_min) / (x_max - x_min)
+plt.xticks(regular_values)
+values = np.sort(values)
+for center_1, center_2 in zip(values[:-1], values[1:]):
+    plt.axvline(.5 * (center_1 + center_2), color='b')
     
     plt.show()
 
     
-        def test_repr(self):
-        self.assertEqual('PollError(exhausted=%s, updated={sentinel.AR: '
-                         'sentinel.AR2})' % repr(set()), repr(self.invalid))
+        :param key: name of cli constant
+    :return: value of constant for active os
+    '''
+    return CLI_DEFAULTS[key]
     
-        def setUp(self):
-        self.decoded = datetime.datetime(2015, 3, 27, tzinfo=pytz.utc)
-        self.encoded = '2015-03-27T00:00:00Z'
+        Handles decoding/encoding between RFC3339 strings and aware (not
+    naive) `datetime.datetime` objects
+    (e.g. ``datetime.datetime.now(pytz.utc)``).
     
-    from acme import test_util
+    # Add any paths that contain custom static files (such as style sheets) here,
+# relative to this directory. They are copied after the builtin static files,
+# so a file named 'default.css' will overwrite the builtin 'default.css'.
+html_static_path = ['_static']
     
-    # Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
-extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.todo',
-    'sphinx.ext.coverage',
-    'sphinx.ext.viewcode',
-]
+            The first argument, FORMAT, is a format string for the
+        message to be logged.  If the format string contains
+        any % escapes requiring parameters, they should be
+        specified as subsequent arguments (it's just like
+        printf!).
+    
+            The method optionally resolves the names relative to a given module.
+        '''
+        parts = name.split('.')
+        error_case, error_message = None, None
+        if module is None:
+            parts_copy = parts[:]
+            while parts_copy:
+                try:
+                    module_name = '.'.join(parts_copy)
+                    module = __import__(module_name)
+                    break
+                except ImportError:
+                    next_attribute = parts_copy.pop()
+                    # Last error so we can give it to the user if needed.
+                    error_case, error_message = _make_failed_import_test(
+                        next_attribute, self.suiteClass)
+                    if not parts_copy:
+                        # Even the top level import failed: report that error.
+                        self.errors.append(error_message)
+                        return error_case
+            parts = parts[1:]
+        obj = module
+        for part in parts:
+            try:
+                parent, obj = obj, getattr(obj, part)
+            except AttributeError as e:
+                # We can't traverse some part of the name.
+                if (getattr(obj, '__path__', None) is not None
+                    and error_case is not None):
+                    # This is a package (no __path__ per importlib docs), and we
+                    # encountered an error importing something. We cannot tell
+                    # the difference between package.WrongNameTestClass and
+                    # package.wrong_module_name so we just report the
+                    # ImportError - it is more informative.
+                    self.errors.append(error_message)
+                    return error_case
+                else:
+                    # Otherwise, we signal that an AttributeError has occurred.
+                    error_case, error_message = _make_failed_test(
+                        part, e, self.suiteClass,
+                        'Failed to access attribute:\n%s' % (
+                            traceback.format_exc(),))
+                    self.errors.append(error_message)
+                    return error_case
+    
+        def list_cases(self):
+        support.verbose = False
+        support.set_match_tests(self.ns.match_tests)
     
     
-if __name__ == '__main__':
-    unittest.main()  # pragma: no cover
-
+SYMBOL_FILE              = support.findfile('symbol.py')
+GEN_SYMBOL_FILE          = os.path.join(os.path.dirname(__file__),
+                                        '..', '..', 'Tools', 'scripts',
+                                        'generate_symbol_py.py')
+GRAMMAR_FILE             = os.path.join(os.path.dirname(__file__),
+                                        '..', '..', 'Include', 'graminit.h')
+TEST_PY_FILE             = 'symbol_test.py'
     
-        def _mod_config(self):
-        '''Modifies Apache config files to include challenge vhosts.
+        # Test an invalid call (bpo-34125)
+    def test_unbound_method_invalid_args(self):
+        kwargs = {}
+        def f(p):
+            dict.get(print, 42, **kwargs)
+        f_ident = ident(f)
+        self.check_events(f, [(1, 'call', f_ident),
+                              (1, 'return', f_ident)])
+    
+        def test_run_module_bug1764407(self):
+        # -m and -i need to play well together
+        # Runs the timeit module and checks the __main__
+        # namespace has been populated appropriately
+        p = spawn_python('-i', '-m', 'timeit', '-n', '1')
+        p.stdin.write(b'Timer\n')
+        p.stdin.write(b'exit()\n')
+        data = kill_python(p)
+        self.assertTrue(data.find(b'1 loop') != -1)
+        self.assertTrue(data.find(b'__main__.Timer') != -1)
+    
+    '''Send the contents of a directory as a MIME message.'''
+    
+    # Now the header items can be accessed as a dictionary, and any non-ASCII will
+# be converted to unicode:
+print('To:', msg['to'])
+print('From:', msg['from'])
+print('Subject:', msg['subject'])
+    
+    
+__licence__ = 'BSD (3 clause)'
+    
+        see(
+        dev_id='demo_home_boy',
+        host_name='Home Boy',
+        gps=[hass.config.latitude - 0.00002, hass.config.longitude + 0.00002],
+        gps_accuracy=20,
+        battery=53
+    )
+    
+            # Check if the access point is accessible
+        response = self._make_request()
+        if not response.status_code == 200:
+            raise ConnectionError('Cannot connect to Linksys Access Point')
+    
+    import homeassistant.helpers.config_validation as cv
+import homeassistant.util.dt as dt_util
+from homeassistant.components.device_tracker import (
+    DOMAIN, PLATFORM_SCHEMA, DeviceScanner)
+from homeassistant.const import CONF_HOSTS
+    
+    import homeassistant.helpers.config_validation as cv
+from homeassistant.const import (CONF_API_KEY, CONF_RECIPIENT)
+from homeassistant.components.notify import (
+    PLATFORM_SCHEMA, BaseNotificationService)
+    
+                resp = requests.post(CREATE_BROADCAST_URL,
+                                 data=json.dumps(broadcast_create_body),
+                                 params=payload,
+                                 headers={CONTENT_TYPE: CONTENT_TYPE_JSON},
+                                 timeout=10)
+            _LOGGER.debug('FB Messager broadcast id %s : ', resp.json())
+    
+                # Check response
+            buffer = sock.recv(1024)
+            if buffer != b'LANnouncer: OK':
+                _LOGGER.error('Error sending data to Lannnouncer: %s',
+                              buffer.decode())
+    
+    
+def get_service(hass, config, discovery_info=None):
+    '''Get the Mycroft notification service.'''
+    return MycroftNotificationService(
+        hass.data['mycroft'])
+    
+                    for line in text:
+                    if re.match(r'^>', line):
+                        line = line[:0] + '####' + line[1:]
+                    html = markdown.markdown(line)
+                    out.write(html)
+                out.write(footer)
+    
+        # Find which gt ROI each ex ROI has max overlap with:
+    # this will be the ex ROI's gt target
+    gt_assignment = ex_gt_overlaps.argmax(axis=1)
+    gt_rois = rois[gt_inds[gt_assignment], :]
+    ex_rois = rois[ex_inds, :]
+    # Use class '1' for all boxes if using class_agnostic_bbox_reg
+    targets[ex_inds, 0] = (
+        1 if cfg.MODEL.CLS_AGNOSTIC_BBOX_REG else labels[ex_inds])
+    targets[ex_inds, 1:] = box_utils.bbox_transform_inv(
+        ex_rois, gt_rois, cfg.MODEL.BBOX_REG_WEIGHTS)
+    return targets
+    
+    
+def _get_voc_results_file_template(json_dataset, salt):
+    info = voc_info(json_dataset)
+    year = info['year']
+    image_set = info['image_set']
+    devkit_path = info['devkit_path']
+    # VOCdevkit/results/VOC2007/Main/<comp_id>_det_test_aeroplane.txt
+    filename = 'comp4' + salt + '_det_' + image_set + '_{:s}.txt'
+    return os.path.join(devkit_path, 'results', 'VOC' + year, 'Main', filename)
+    
+        dim = 64
+    p = model.Conv(data, 'conv1', 3, dim, 7, pad=3, stride=2, no_bias=1)
+    p = model.AffineChannel(p, 'res_conv1_bn', dim=dim, inplace=True)
+    p = model.Relu(p, p)
+    p = model.MaxPool(p, 'pool1', kernel=3, pad=1, stride=2)
+    return p, dim
+    
+    
+# ---------------------------------------------------------------------------- #
+# Fast R-CNN outputs and losses
+# ---------------------------------------------------------------------------- #
+    
+        # Create new roi blobs for each FPN level
+    # (See: modeling.FPN.add_multilevel_roi_blobs which is similar but annoying
+    # to generalize to support this particular case.)
+    rois_idx_order = np.empty((0, ))
+    for output_idx, lvl in enumerate(range(lvl_min, lvl_max + 1)):
+        idx_lvl = np.where(lvls == lvl)[0]
+        blob_roi_level = rois[idx_lvl, :]
+        outputs[output_idx + 1].reshape(blob_roi_level.shape)
+        outputs[output_idx + 1].data[...] = blob_roi_level
+        rois_idx_order = np.concatenate((rois_idx_order, idx_lvl))
+    rois_idx_restore = np.argsort(rois_idx_order)
+    blob_utils.py_op_copy_blob(rois_idx_restore.astype(np.int32), outputs[-1])
