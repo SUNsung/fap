@@ -1,156 +1,166 @@
 
         
-        
-@pytest.mark.parametrize('command, packages', [
-    (Command('vim', 'vim: command not found'),
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('sudo vim', 'vim: command not found'),
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('vim', 'The program 'vim' is currently not installed. You can install it by typing: sudo apt install vim'),
-     [('vim', 'main'), ('vim-tiny', 'main')])])
-def test_match(mocker, command, packages):
-    mocker.patch('thefuck.rules.apt_get.which', return_value=None)
-    mocker.patch('thefuck.rules.apt_get._get_packages',
-                 create=True, return_value=packages)
+        CLI for apt.
+Basic commands:
+ list - list packages based on package names
+ search - search in package descriptions
+ show - show package details
+    
+    model = Sequential()
+model.add(Conv2D(32, kernel_size=(3, 3),
+                 activation='relu',
+                 input_shape=input_shape))
+model.add(Conv2D(64, (3, 3), activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
+model.add(Flatten())
+model.add(Dense(128, activation='relu', name='features'))
+model.add(Dropout(0.5))
+model.add(Dense(num_classes, activation='softmax'))
+    
+    from ..utils.data_utils import get_file
+import numpy as np
     
     
-def test_match():
-    assert match(Command('apt list --upgradable', match_output))
-    assert match(Command('sudo apt list --upgradable', match_output))
+def test_boston_housing():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = boston_housing.load_data()
+        assert len(x_train) == len(y_train)
+        assert len(x_test) == len(y_test)
     
     
-def test_match():
-    command = Command('brew install sshfs', output)
-    assert match(command)
+if K.backend() != 'tensorflow':
+    raise RuntimeError('This example can only run with the TensorFlow backend,'
+                       ' because it requires the Datset API, which is not'
+                       ' supported on other platforms.')
     
+    # convert class vectors to binary class matrices
+y_train = keras.utils.to_categorical(y_train, num_classes)
+y_test = keras.utils.to_categorical(y_test, num_classes)
     
-@pytest.mark.skipif(_is_not_okay_to_test(),
-                    reason='No need to run if there\'s no formula')
-def test_get_new_command(brew_no_available_formula):
-    assert get_new_command(Command('brew install elsticsearch',
-                                   brew_no_available_formula))\
-        == 'brew install elasticsearch'
+    history = model.fit(x_train, y_train,
+                    batch_size=batch_size,
+                    epochs=epochs,
+                    verbose=1,
+                    validation_split=0.1)
+score = model.evaluate(x_test, y_test,
+                       batch_size=batch_size, verbose=1)
+print('Test score:', score[0])
+print('Test accuracy:', score[1])
+
     
-    import keras
-from keras.callbacks import TensorBoard
-from keras.datasets import mnist
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten
-from keras.layers import Conv2D, MaxPooling2D
-from keras import backend as K
-    
-        def process_appid_not_exist(self, appid, ip):
-        ret = self.check_api(ip, 'xxnet-1')
-        if ret and ret.ok:
-            self.set_appid_not_exist(appid)
-        else:
-            self.logger.warn('process_appid_not_exist, remove ip:%s', ip)
-    
-            import_command = 'security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain ../../../../data/gae_proxy/CA.crt'# % certfile.decode('utf-8')
-        if exist_ca_sha1:
-            delete_ca_command = 'security delete-certificate -Z %s' % exist_ca_sha1
-            exec_command = '%s;%s' % (delete_ca_command, import_command)
-        else:
-            exec_command = import_command
-    
-    
-    def skip(self):
-        '''
-        Instruct the lexer to skip creating a token for current lexer rule
-        and look for another token.  nextToken() knows to keep looking when
-        a lexer rule finishes with token set to SKIP_TOKEN.  Recall that
-        if token==null at end of any token rule, it creates one for you
-        and emits it.
-        '''
-        
-        self._state.token = SKIP_TOKEN
-    
-        If a name, the module is imported.  If the passed or imported module
-    object is not a package, raise an exception.
+        # Returns
+        Tensor with one scalar loss entry per sample.
     '''
-    if hasattr(package, '__spec__'):
-        if package.__spec__.submodule_search_locations is None:
-            raise TypeError('{!r} is not a package'.format(
-                package.__spec__.name))
-        else:
-            return package
-    else:
-        module = import_module(package)
-        if module.__spec__.submodule_search_locations is None:
-            raise TypeError('{!r} is not a package'.format(package))
-        else:
-            return module
+    def _logcosh(x):
+        return x + K.softplus(-2. * x) - K.log(2.)
+    return K.mean(_logcosh(y_pred - y_true), axis=-1)
     
-            proc = subprocess.run(args, stdout=subprocess.PIPE,
-                              universal_newlines=True, env=env)
-        self.assertEqual(proc.stdout.rstrip(), 'False')
-        self.assertEqual(proc.returncode, 0, proc)
+            # Arguments
+            node_index: Integer, index of the node
+                from which to retrieve the attribute.
+                E.g. `node_index=0` will correspond to the
+                first time the layer was called.
     
-        counter = 1
-    for part in msg.walk():
-        # multipart/* are just containers
-        if part.get_content_maintype() == 'multipart':
-            continue
-        # Applications should really sanitize the given filename so that an
-        # email message can't be used to overwrite important files
-        filename = part.get_filename()
-        if not filename:
-            ext = mimetypes.guess_extension(part.get_content_type())
-            if not ext:
-                # Use a generic bag-of-bits extension
-                ext = '.bin'
-            filename = 'part-%03d%s' % (counter, ext)
-        counter += 1
-        with open(os.path.join(args.directory, filename), 'wb') as fp:
-            fp.write(part.get_payload(decode=True))
+    # If true, an OpenSearch description file will be output, and all pages will
+# contain a <link> tag referring to it.  The value of this option must be the
+# base URL from which the finished HTML is served.
+#
+# html_use_opensearch = ''
     
-    def handlePoints(points):
-    print('<ul>')
-    for point in points:
-        handlePoint(point)
-    print('</ul>')
+            self.mac2name = None
+        self.success_init = self.token is not None
     
-    def test():
-    PROCESSES = 4
-    print('Creating pool with %d processes\n' % PROCESSES)
+        def __init__(self, hass, filename, add_timestamp):
+        '''Initialize the service.'''
+        self.filepath = os.path.join(hass.config.config_dir, filename)
+        self.add_timestamp = add_timestamp
     
-            if self.flash_briefings.get(briefing_id) is None:
-            err = 'No configured Alexa flash briefing was found for: %s'
-            _LOGGER.error(err, briefing_id)
-            return b'', 404
+    from homeassistant.components.notify import (
+    PLATFORM_SCHEMA, BaseNotificationService)
+from homeassistant.const import CONF_ACCESS_TOKEN
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
+import homeassistant.helpers.config_validation as cv
     
-            Return boolean if scanning successful.
-        '''
-        if not self.success_init:
-            return False
+        roidb = json_dataset.get_roidb()
+    for i, entry in enumerate(roidb):
+        im_name = entry['image']
     
-    CONFIG_SCHEMA = vol.Schema({
-    DOMAIN: vol.Schema({
-        vol.Required(CONF_DOWNLOAD_DIR): cv.string,
-    }),
-}, extra=vol.ALLOW_EXTRA)
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
     
-        _interrupted = False
     
-        entities = []
-    core = None
-    heating = None
-    hotwater = None
-    light = None
-    sensor = None
-    switch = None
-    weather = None
-    attributes = None
+def add_roi_Xconv1fc_gn_head(model, blob_in, dim_in, spatial_scale):
+    '''Add a X conv + 1fc head, with GroupNorm'''
+    hidden_dim = cfg.FAST_RCNN.CONV_HEAD_DIM
+    roi_size = cfg.FAST_RCNN.ROI_XFORM_RESOLUTION
+    roi_feat = model.RoIFeatureTransform(
+        blob_in, 'roi_feat',
+        blob_rois='rois',
+        method=cfg.FAST_RCNN.ROI_XFORM_METHOD,
+        resolution=roi_size,
+        sampling_ratio=cfg.FAST_RCNN.ROI_XFORM_SAMPLING_RATIO,
+        spatial_scale=spatial_scale
+    )
     
-    import voluptuous as vol
+        for i in range(cfg.KRCNN.NUM_STACKED_CONVS):
+        current = model.Conv(
+            current,
+            'conv_fcn' + str(i + 1),
+            dim_in,
+            hidden_dim,
+            kernel_size,
+            stride=1,
+            pad=pad_size,
+            weight_init=(cfg.KRCNN.CONV_INIT, {'std': 0.01}),
+            bias_init=('ConstantFill', {'value': 0.})
+        )
+        current = model.Relu(current, current)
+        dim_in = hidden_dim
     
-    DEFAULT_HOST = '0.0.0.0'
-DEFAULT_PORT = 65432
     
-        # Gloss the lips
-    d.polygon(face_landmarks['top_lip'], fill=(150, 0, 0, 128))
-    d.polygon(face_landmarks['bottom_lip'], fill=(150, 0, 0, 128))
-    d.line(face_landmarks['top_lip'], fill=(150, 0, 0, 64), width=8)
-    d.line(face_landmarks['bottom_lip'], fill=(150, 0, 0, 64), width=8)
+def keypoint_rcnn(model):
+    logger.warn(
+        'Deprecated: use `MODEL.TYPE: generalized_rcnn` with '
+        '`MODEL.KEYPOINTS_ON: True`'
+    )
+    return generalized_rcnn(model)
     
-    * This implementation uses a weighted vote, such that the votes of closer-neighbors are weighted more heavily.
+    
+# ---------------------------------------------------------------------------- #
+# RPN and Faster R-CNN outputs and losses
+# ---------------------------------------------------------------------------- #
+    
+        def _distribute_rois_over_fpn_levels(rois_blob_name):
+        '''Distribute rois over the different FPN levels.'''
+        # Get target level for each roi
+        # Recall blob rois are in (batch_idx, x1, y1, x2, y2) format, hence take
+        # the box coordinates from columns 1:5
+        target_lvls = fpn.map_rois_to_fpn_levels(
+            blobs[rois_blob_name][:, 1:5], lvl_min, lvl_max
+        )
+        # Add per FPN level roi blobs named like: <rois_blob_name>_fpn<lvl>
+        fpn.add_multilevel_roi_blobs(
+            blobs, rois_blob_name, blobs[rois_blob_name], target_lvls, lvl_min,
+            lvl_max
+        )
+    
+    
+def add_mask_rcnn_blobs(blobs, sampled_boxes, roidb, im_scale, batch_idx):
+    '''Add Mask R-CNN specific blobs to the input blob dictionary.'''
+    # Prepare the mask targets by associating one gt mask to each training roi
+    # that has a fg (non-bg) class label.
+    M = cfg.MRCNN.RESOLUTION
+    polys_gt_inds = np.where(
+        (roidb['gt_classes'] > 0) & (roidb['is_crowd'] == 0)
+    )[0]
+    polys_gt = [roidb['segms'][i] for i in polys_gt_inds]
+    boxes_from_polys = segm_utils.polys_to_boxes(polys_gt)
+    fg_inds = np.where(blobs['labels_int32'] > 0)[0]
+    roi_has_mask = blobs['labels_int32'].copy()
+    roi_has_mask[roi_has_mask > 0] = 1
