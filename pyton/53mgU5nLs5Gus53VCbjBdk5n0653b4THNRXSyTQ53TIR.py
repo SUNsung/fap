@@ -1,176 +1,226 @@
 
         
-        
-class Categorizer(object):
+            def _find_available_spot(self, vehicle):
+        '''Find an available spot where vehicle can fit, or return None'''
+        pass
     
-    
-class Unaccent(Transform):
-    bilateral = True
-    lookup_name = 'unaccent'
-    function = 'UNACCENT'
-    
-    
-class ArrayMaxLengthValidator(MaxLengthValidator):
-    message = ngettext_lazy(
-        'List contains %(show_value)d item, it should contain no more than %(limit_value)d.',
-        'List contains %(show_value)d items, it should contain no more than %(limit_value)d.',
-        'limit_value')
-    
-    from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import ExtraTreesClassifier
-from sklearn.ensemble import AdaBoostClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.naive_bayes import MultinomialNB
-    
-        if dataset_name == 'forestcover':
-        dataset = fetch_covtype()
-        X = dataset.data
-        y = dataset.target
-        # normal data are those with attribute 2
-        # abnormal those with attribute 4
-        s = (y == 2) + (y == 4)
-        X = X[s, :]
-        y = y[s]
-        y = (y != 2).astype(int)
-    
-            for k in sorted(results_dict.keys()):
-            all_times[k].append(results_dict[k]['time'])
-            all_errors[k].append(results_dict[k]['error'])
-    
-    n_samples = np.logspace(.5, 3, 9)
-n_features = np.logspace(1, 3.5, 7)
-N_samples, N_features = np.meshgrid(n_samples,
-                                    n_features)
-scikits_time = np.zeros(N_samples.shape)
-scipy_time = np.zeros(N_samples.shape)
-    
-    np.random.seed(42)
-    
-        n = 10
-    step = 10000
-    n_samples = 10000
-    dim = 10
-    n_classes = 10
-    for i in range(n):
-        print('============================================')
-        print('Entering iteration %s of %s' % (i, n))
-        print('============================================')
-        n_samples += step
-        X = np.random.randn(n_samples, dim)
-        Y = np.random.randint(0, n_classes, (n_samples,))
-        bench_scikit_tree_classifier(X, Y)
-        Y = np.random.randn(n_samples)
-        bench_scikit_tree_regressor(X, Y)
-    
-    for lang, page in pages.items():
-    
-        print('Decompressing %s' % ARCHIVE_NAME)
-    with closing(tarfile.open(ARCHIVE_NAME, 'r:gz')) as archive:
-        archive.extractall(path='.')
-    os.remove(ARCHIVE_NAME)
+            When updating an entry, updates its position to the front of the LRU list.
+        If the entry is new and the cache is at capacity, removes the oldest entry
+        before the new entry is added.
+        '''
+        node = self.map[query]
+        if node is not None:
+            # Key exists in cache, update the value
+            node.results = results
+            self.linked_list.move_to_front(node)
+        else:
+            # Key does not exist in cache
+            if self.size == self.MAX_SIZE:
+                # Remove the oldest entry from the linked list and lookup
+                self.lookup.pop(self.linked_list.tail.query, None)
+                self.linked_list.remove_from_tail()
+            else:
+                self.size += 1
+            # Add the new key and value
+            new_node = Node(query, results)
+            self.linked_list.append_to_front(new_node)
+            self.lookup[query] = new_node
 
     
     
-if not os.path.exists(TRAIN_FOLDER) or not os.path.exists(TEST_FOLDER):
+class Page(object):
     
-    The goal of this exercise is to train a linear classifier on text features
-that represent sequences of up to 3 consecutive characters so as to be
-recognize natural languages by using the frequencies of short character
-sequences as 'fingerprints'.
-    
-    Sentiment analysis can be casted as a binary text classification problem,
-that is fitting a linear classifier on features extracted from the text
-of the user messages so as to guess wether the opinion of the author is
-positive or negative.
-    
-    # Plot the results (= shape of the data points cloud)
-plt.figure(1)  # two clusters
-plt.title('Outlier detection on a real data set (boston housing)')
-plt.scatter(X1[:, 0], X1[:, 1], color='black')
-bbox_args = dict(boxstyle='round', fc='0.8')
-arrow_args = dict(arrowstyle='->')
-plt.annotate('several confounded points', xy=(24, 19),
-             xycoords='data', textcoords='data',
-             xytext=(13, 10), bbox=bbox_args, arrowprops=arrow_args)
-plt.xlim((xx1.min(), xx1.max()))
-plt.ylim((yy1.min(), yy1.max()))
-plt.legend((legend1_values_list[0].collections[0],
-            legend1_values_list[1].collections[0],
-            legend1_values_list[2].collections[0]),
-           (legend1_keys_list[0], legend1_keys_list[1], legend1_keys_list[2]),
-           loc='upper center',
-           prop=matplotlib.font_manager.FontProperties(size=12))
-plt.ylabel('accessibility to radial highways')
-plt.xlabel('pupil-teacher ratio by town')
+            flash(error)
     
     
-def _generate_center_coordinates(l_x):
-    X, Y = np.mgrid[:l_x, :l_x].astype(np.float64)
-    center = l_x / 2.
-    X += 0.5 - center
-    Y += 0.5 - center
-    return X, Y
+@bp.route('/')
+def index():
+    '''Show all the posts, most recent first.'''
+    db = get_db()
+    posts = db.execute(
+        'SELECT p.id, title, body, created, author_id, username'
+        ' FROM post p JOIN user u ON p.author_id = u.id'
+        ' ORDER BY created DESC'
+    ).fetchall()
+    return render_template('blog/index.html', posts=posts)
     
-        :param known_face_encodings: A list of known face encodings
-    :param face_encoding_to_check: A single face encoding to compare against the list
-    :param tolerance: How much distance between faces to consider it a match. Lower is more strict. 0.6 is typical best performance.
-    :return: A list of True/False values indicating which known_face_encodings match the face encoding to check
+        .. versionchanged:: 0.10
+       This function's return value is now always safe for HTML usage, even
+       if outside of script tags or if used in XHTML.  This rule does not
+       hold true when using this function in HTML attributes that are double
+       quoted.  Always single quote attributes if you use the ``|tojson``
+       filter.  Alternatively use ``|tojson|forceescape``.
     '''
-    return list(face_distance(known_face_encodings, face_encoding_to_check) <= tolerance)
+    rv = dumps(obj, **kwargs) \
+        .replace(u'<', u'\\u003c') \
+        .replace(u'>', u'\\u003e') \
+        .replace(u'&', u'\\u0026') \
+        .replace(u''', u'\\u0027')
+    if not _slash_escape:
+        rv = rv.replace('\\/', '/')
+    return rv
+    
+            # If the request method is HEAD and we don't have a handler for it
+        # retry with GET.
+        if meth is None and request.method == 'HEAD':
+            meth = getattr(self, 'get', None)
+    
+        rv = parse_changelog()
+    
+    
+def test_request_context_means_app_context(app):
+    with app.test_request_context():
+        assert flask.current_app._get_current_object() == app
+    assert flask._app_ctx_stack.top is None
+    
+        def render(self, request):
+        now = time()
+        delta = now - self.lasttime
+    
+        # Max concurrency is limited by global CONCURRENT_REQUESTS setting
+    max_concurrent_requests = 8
+    # Requests per second goal
+    qps = None # same as: 1 / download_delay
+    download_delay = None
+    # time in seconds to delay server responses
+    latency = None
+    # number of slots to create
+    slots = 1
+    
+        def __enter__(self):
+        from scrapy.utils.test import get_testenv
+        pargs = [sys.executable, '-u', '-m', 'scrapy.utils.benchserver']
+        self.proc = subprocess.Popen(pargs, stdout=subprocess.PIPE,
+                                     env=get_testenv())
+        self.proc.stdout.readline()
+    
+            try:
+            spidercls = self.crawler_process.spider_loader.load(name)
+        except KeyError:
+            pass
+        else:
+            # if spider already exists and not --force then halt
+            if not opts.force:
+                print('Spider %r already exists in module:' % name)
+                print('  %s' % spidercls.__module__)
+                return
+        template_file = self._find_template(opts.template)
+        if template_file:
+            self._genspider(module, name, domain, opts.template, template_file)
+            if opts.edit:
+                self.exitcode = os.system('scrapy edit '%s'' % name)
+    
+    
+class ReturnsContract(Contract):
+    ''' Contract to check the output of a callback
+    
+    # This is the file name suffix for HTML files (e.g. '.xhtml').
+# html_file_suffix = None
+    
+            resp = requests.get(BASE_API_URL, params=data, timeout=5)
+        if (resp.status_code != 200) or (resp.status_code != 201):
+            _LOGGER.error('Error %s : %s', resp.status_code, resp.text)
 
     
-    al_image = face_recognition.load_image_file('alex-lacamoire.png')
-al_face_encoding = face_recognition.face_encodings(al_image)[0]
+    CONF_COLOR = 'color'
+CONF_NOTIFY = 'notify'
+CONF_FORMAT = 'format'
+    
+    # There are two options for replacing |today|: either, you set today to
+# some non-false value, then it is used:
+#today = ''
+# Else, today_fmt is used as the format for a strftime call.
+#today_fmt = '%B %d, %Y'
+    
+    # PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
+# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
+# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
     
     
-import unittest
-import os
-import numpy as np
-from click.testing import CliRunner
+@app.route('/', methods=['GET', 'POST'])
+def upload_image():
+    # Check if a valid image file was uploaded
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return redirect(request.url)
     
-        # Let's trace out each facial feature in the image with a line!
-    for facial_feature in face_landmarks.keys():
-        d.line(face_landmarks[facial_feature], width=5)
+    # PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
+# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
+# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
     
-    setup(
-    name='face_recognition',
-    version='1.2.3',
-    description='Recognize faces from Python or from the command line',
-    long_description=readme + '\n\n' + history,
-    author='Adam Geitgey',
-    author_email='ageitgey@gmail.com',
-    url='https://github.com/ageitgey/face_recognition',
-    packages=[
-        'face_recognition',
-    ],
-    package_dir={'face_recognition': 'face_recognition'},
-    package_data={
-        'face_recognition': ['models/*.dat']
-    },
-    entry_points={
-        'console_scripts': [
-            'face_recognition=face_recognition.face_recognition_cli:main',
-            'face_detection=face_recognition.face_detection_cli:main'
-        ]
-    },
-    install_requires=requirements,
-    license='MIT license',
-    zip_safe=False,
-    keywords='face_recognition',
-    classifiers=[
-        'Development Status :: 4 - Beta',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
-        'Natural Language :: English',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-    ],
-    test_suite='tests',
-    tests_require=test_requirements
-)
+    # Convert the image to a PIL-format image so that we can draw on top of it with the Pillow library
+# See http://pillow.readthedocs.io/ for more about PIL/Pillow
+pil_image = Image.fromarray(unknown_image)
+# Create a Pillow ImageDraw Draw instance to draw with
+draw = ImageDraw.Draw(pil_image)
+    
+            self.assertEqual(result.exit_code, 0)
+        self.assertTrue(target_string in result.output)
+    
+        # 将每一个人脸与已知样本图片比对
+    for face_encoding in face_encodings:
+        # 看是否属于奥巴马或者拜登
+        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
+        name = '<Unknown Person>'
+    
+            if file and allowed_file(file.filename):
+            # 图片上传成功，检测图片中的人脸
+            return detect_faces_in_image(file)
+    
+        def __new__(cls, name, bases, attrs):
+        new_cls = type.__new__(cls, name, bases, attrs)
+        '''
+            Here the name of the class is used as key but it could be any class
+            parameter.
+        '''
+        cls.REGISTRY[new_cls.__name__] = new_cls
+        return new_cls
+    
+        '''A simple localizer a la gettext'''
+    
+        def contribute(self):
+        self.blackboard.common_state['problems'] += random.randint(1, 10)
+        self.blackboard.common_state['suggestions'] += random.randint(1, 10)
+        self.blackboard.common_state['contributions'] += [self.__class__.__name__]
+        self.blackboard.common_state['progress'] += random.randint(1, 2)
+    
+    *References:
+https://sourcemaking.com/design_patterns/facade
+https://fkromer.github.io/python-pattern-references/design/#facade
+http://python-3-patterns-idioms-test.readthedocs.io/en/latest/ChangeInterface.html#facade
+    
+    
+class TestData(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.dec_obs = DecimalViewer()
+        cls.hex_obs = HexViewer()
+        cls.sub = Data('Data')
+        # inherited behavior already tested with TestSubject
+        cls.sub.attach(cls.dec_obs)
+        cls.sub.attach(cls.hex_obs)
+    
+    
+if __name__ == '__main__':
+    main()
+
+    
+    # These benchmarks are delicate.  They hit various fast-paths in the gen
+# machinery in order to stay synchronous so we don't need an IOLoop.
+# This removes noise from the results, but it's easy to change things
+# in a way that completely invalidates the results.
+    
+        for i in range(1, num_tests + 1):
+        logging.info('running test case %d', i)
+        url = options.url + '/runCase?case=%d&agent=%s' % (i, options.name)
+        test_ws = yield websocket_connect(url, None, compression_options={})
+        while True:
+            message = yield test_ws.read_message()
+            if message is None:
+                break
+            test_ws.write_message(message, binary=isinstance(message, bytes))
+    
+                with mock.patch.object(options.mockable(), 'name', value):
+                assert options.name == value
+        '''
+        return _Mockable(self)
