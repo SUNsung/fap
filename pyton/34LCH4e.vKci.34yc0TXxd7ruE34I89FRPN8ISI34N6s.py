@@ -1,140 +1,70 @@
 
         
-        
-def history_not_changed(proc, TIMEOUT):
-    '''Ensures that history not changed.'''
-    proc.send('\033[A')
-    assert proc.expect([TIMEOUT, u'fuck'])
+            def __init__(self, operators, supervisors, directors):
+        self.operators = operators
+        self.supervisors = supervisors
+        self.directors = directors
+        self.queued_calls = deque()
     
     
-@pytest.fixture(params=[(python_3, False),
-                        (python_3, True),
-                        (python_2, False)])
-def proc(request, spawnu, TIMEOUT):
-    container, instant_mode = request.param
-    proc = spawnu(*container)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(init_bashrc.format(
-        u'--enable-experimental-instant-mode' if instant_mode else ''))
-    proc.sendline(u'bash')
-    if instant_mode:
-        assert proc.expect([TIMEOUT, u'instant mode ready: True'])
-    return proc
+class Motorcycle(Vehicle):
     
-        new_command = get_new_command(Command('apt update', match_output))
-    assert new_command == 'apt list --upgradable'
+        def remove(self, key):
+        hash_index = self._hash_function(key)
+        for index, item in enumerate(self.table[hash_index]):
+            if item.key == key:
+                del self.table[hash_index][index]
+                return
+        raise KeyError('Key not found')
 
     
+        if not app.config.edit_on_github_project:
+        warnings.warn('edit_on_github_project not specified')
+        return
+    if not doctree:
+        warnings.warn('doctree is None')
+        return
+    path = os.path.relpath(doctree.get('source'), app.builder.srcdir)
+    show_url = get_github_url(app, 'blob', path)
+    edit_url = get_github_url(app, 'edit', path)
     
-@parametrize_extensions
-@parametrize_filename
-@parametrize_script
-def test_match(ext, tar_error, filename, unquoted, quoted, script, fixed):
-    tar_error(unquoted.format(ext))
-    assert match(Command(script.format(filename.format(ext)), ''))
+            self._channel = self._create_channel()
+        client.add_connection_channel(self._channel)
     
-        @property
-    def cache_key(self):
-        return self.cache_key_prefix + self._get_or_create_session_key()
+            # parsing response
+        for info in result:
+            mac = info['macAddr']
+            name = info['hostName']
+            # No address = no item :)
+            if mac is None:
+                continue
     
-        n_samples = 2000
-    list_n_features = np.linspace(500, 3000, 5).astype(np.int)
-    lasso_results, lars_lasso_results = compute_bench(alpha, [n_samples],
-                                           list_n_features, precompute=False)
-    plt.subplot(212)
-    plt.plot(list_n_features, lasso_results, 'b-', label='Lasso')
-    plt.plot(list_n_features, lars_lasso_results, 'r-', label='LassoLars')
-    plt.title('%d samples, alpha=%s' % (n_samples, alpha))
-    plt.legend(loc='upper left')
-    plt.xlabel('number of features')
-    plt.ylabel('Time (s)')
-    plt.axis('tight')
-    plt.show()
-
+        def _update_info(self):
+        '''Ensure the information from the Swisscom router is up to date.
     
-    ratio = scikits_time / scipy_time
     
-    File: sparsity_benchmark.py
-Function: benchmark_sparse_predict at line 56
-Total time: 0.39274 s
+class DemoNotificationService(BaseNotificationService):
+    '''Implement demo notification service.'''
     
-        # TASK: print the mean and std for each candidate along with the parameter
-    # settings for all the candidates explored by grid search.
-    n_candidates = len(grid_search.cv_results_['params'])
-    for i in range(n_candidates):
-        print(i, 'params - %s; mean - %0.2f; std - %0.2f'
-                 % (grid_search.cv_results_['params'][i],
-                    grid_search.cv_results_['mean_test_score'][i],
-                    grid_search.cv_results_['std_test_score'][i]))
+    REQUIREMENTS = ['freesms==0.1.2']
     
-    # #############################################################################
-# Main code
-regression_data = generate_data('regression')
-classification_data = generate_data('classification', sparse=True)
-configurations = [
-    {'estimator': SGDClassifier,
-     'tuned_params': {'penalty': 'elasticnet', 'alpha': 0.001, 'loss':
-                      'modified_huber', 'fit_intercept': True, 'tol': 1e-3},
-     'changing_param': 'l1_ratio',
-     'changing_param_values': [0.25, 0.5, 0.75, 0.9],
-     'complexity_label': 'non_zero coefficients',
-     'complexity_computer': _count_nonzero_coefficients,
-     'prediction_performance_computer': hamming_loss,
-     'prediction_performance_label': 'Hamming Loss (Misclassification Ratio)',
-     'postfit_hook': lambda x: x.sparsify(),
-     'data': classification_data,
-     'n_samples': 30},
-    {'estimator': NuSVR,
-     'tuned_params': {'C': 1e3, 'gamma': 2 ** -15},
-     'changing_param': 'nu',
-     'changing_param_values': [0.1, 0.25, 0.5, 0.75, 0.9],
-     'complexity_label': 'n_support_vectors',
-     'complexity_computer': lambda x: len(x.support_vectors_),
-     'data': regression_data,
-     'postfit_hook': lambda x: x,
-     'prediction_performance_computer': mean_squared_error,
-     'prediction_performance_label': 'MSE',
-     'n_samples': 30},
-    {'estimator': GradientBoostingRegressor,
-     'tuned_params': {'loss': 'ls'},
-     'changing_param': 'n_estimators',
-     'changing_param_values': [10, 50, 100, 200, 500],
-     'complexity_label': 'n_trees',
-     'complexity_computer': lambda x: x.n_estimators,
-     'data': regression_data,
-     'postfit_hook': lambda x: x,
-     'prediction_performance_computer': mean_squared_error,
-     'prediction_performance_label': 'MSE',
-     'n_samples': 30},
-]
-for conf in configurations:
-    prediction_performances, prediction_times, complexities = \
-        benchmark_influence(conf)
-    plot_influence(conf, prediction_performances, prediction_times,
-                   complexities)
-
+            if method not in ATTR_METHOD_ALLOWED:
+            _LOGGER.error('Unknown method %s', method)
+            return
     
-    import numpy as np
-from sklearn.covariance import EllipticEnvelope
-from sklearn.svm import OneClassSVM
-import matplotlib.pyplot as plt
-import matplotlib.font_manager
-from sklearn.datasets import load_boston
+    # Note: This isn't exactly the same as a 'percent match'. The scale isn't linear. But you can assume that images with a
+# smaller distance are more similar to each other than ones with a larger distance.
     
-    # Now predict the value of the digit on the second half:
-expected = digits.target[n_samples // 2:]
-predicted = classifier.predict(data[n_samples // 2:])
+    # This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
+# other example, but it includes some basic performance tweaks to make things run a lot faster:
+#   1. Process each video frame at 1/4 resolution (though still display it at full resolution)
+#   2. Only detect faces in every other frame of video.
     
-    X = list()
-y = list()
-for i, (phi, a) in enumerate([(.5, .15), (.5, .6), (.3, .2)]):
-    for _ in range(30):
-        phase_noise = .01 * np.random.normal()
-        amplitude_noise = .04 * np.random.normal()
-        additional_noise = 1 - 2 * np.random.rand(n_features)
-        # Make the noise sparse
-        additional_noise[np.abs(additional_noise) < .997] = 0
+    # Load a sample picture and learn how to recognize it.
+print('Loading known face image(s)')
+obama_image = face_recognition.load_image_file('obama_small.jpg')
+obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
     
-    # Author: Phil Roth <mr.phil.roth@gmail.com>
-# License: BSD 3 clause
+    
+def image_files_in_folder(folder):
+    return [os.path.join(folder, f) for f in os.listdir(folder) if re.match(r'.*\.(jpg|jpeg|png)', f, flags=re.I)]
