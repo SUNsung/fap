@@ -1,245 +1,127 @@
 
         
-        
-@pytest.fixture
-def auth(client):
-    return AuthActions(client)
-
+            def add_card(self, card):
+        self.cards.append(card)
+    
+        def move_to_front(self, node):
+        pass
+    
+            Transform key and value to the form:
+    
+        def move_to_front(self, node):
+        ...
+    
+        def create_signature(self):
+        # Create signature based on url and contents
+        pass
     
     
-def test_get_close_db(app):
-    with app.app_context():
-        db = get_db()
-        assert db is get_db()
+class ArrayMaxLengthValidator(MaxLengthValidator):
+    message = ngettext_lazy(
+        'List contains %(show_value)d item, it should contain no more than %(limit_value)d.',
+        'List contains %(show_value)d items, it should contain no more than %(limit_value)d.',
+        'limit_value')
     
+        def load(self):
+        try:
+            data = self._cache.get(self.cache_key)
+        except Exception:
+            # Some backends (e.g. memcache) raise an exception on invalid
+            # cache keys. If this happens, reset the session. See #17810.
+            data = None
     
-def _dump_loader_info(loader):
-    yield 'class: %s.%s' % (type(loader).__module__, type(loader).__name__)
-    for key, value in sorted(loader.__dict__.items()):
-        if key.startswith('_'):
-            continue
-        if isinstance(value, (tuple, list)):
-            if not all(isinstance(x, (str, text_type)) for x in value):
-                continue
-            yield '%s:' % key
-            for item in value:
-                yield '  - %s' % item
-            continue
-        elif not isinstance(value, (str, text_type, int, float, bool)):
-            continue
-        yield '%s: %r' % (key, value)
+        def save(self, session_key, session_dict, expire_date):
+        s = self.model(session_key, self.encode(session_dict), expire_date)
+        if session_dict:
+            s.save()
+        else:
+            s.delete()  # Clear sessions with no data.
+        return s
     
+        @classmethod
+    def get_session_store_class(cls):
+        from django.contrib.sessions.backends.db import SessionStore
+        return SessionStore
     
-def htmlsafe_dump(obj, fp, **kwargs):
-    '''Like :func:`htmlsafe_dumps` but writes into a file object.'''
-    fp.write(text_type(htmlsafe_dumps(obj, **kwargs)))
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
     
-        def to_json(self, value):
-        return b64encode(value).decode('ascii')
+        for line in input_file:
+        linestrip = line.strip()
+        if len(linestrip) == 0:
+            in_exercise_region = False
+        elif linestrip.startswith('# TASK:'):
+            in_exercise_region = True
     
-    from click.testing import CliRunner
-from flask.cli import ScriptInfo
-from werkzeug.test import Client, EnvironBuilder
-from flask import _request_ctx_stack
-from flask.json import dumps as json_dumps
-from werkzeug.urls import url_parse
+    # Plot the results (= shape of the data points cloud)
+plt.figure(1)  # two clusters
+plt.title('Outlier detection on a real data set (boston housing)')
+plt.scatter(X1[:, 0], X1[:, 1], color='black')
+bbox_args = dict(boxstyle='round', fc='0.8')
+arrow_args = dict(arrowstyle='->')
+plt.annotate('several confounded points', xy=(24, 19),
+             xycoords='data', textcoords='data',
+             xytext=(13, 10), bbox=bbox_args, arrowprops=arrow_args)
+plt.xlim((xx1.min(), xx1.max()))
+plt.ylim((yy1.min(), yy1.max()))
+plt.legend((legend1_values_list[0].collections[0],
+            legend1_values_list[1].collections[0],
+            legend1_values_list[2].collections[0]),
+           (legend1_keys_list[0], legend1_keys_list[1], legend1_keys_list[2]),
+           loc='upper center',
+           prop=matplotlib.font_manager.FontProperties(size=12))
+plt.ylabel('accessibility to radial highways')
+plt.xlabel('pupil-teacher ratio by town')
     
-        if release_date.date() != date.today():
-        fail(
-            'Release date is not today (%s != %s)',
-            release_date.date(), date.today()
-        )
+        plt.imshow(avg_dist, interpolation='nearest', cmap=plt.cm.gnuplot2,
+               vmin=0)
+    plt.xticks(range(n_clusters), labels, rotation=45)
+    plt.yticks(range(n_clusters), labels)
+    plt.colorbar()
+    plt.suptitle('Interclass %s distances' % metric, size=18)
+    plt.tight_layout()
     
-        @app.teardown_appcontext
-    def teardown_app(error=None):
-        called.append('app')
+        if cfg.MODEL.FASTER_RCNN:
+        if model.train:
+            # Add op that generates training labels for in-network RPN proposals
+            model.GenerateProposalLabels(['rpn_rois', 'roidb', 'im_info'])
+        else:
+            # Alias rois to rpn_rois for inference
+            model.net.Alias('rpn_rois', 'rois')
     
-    
-def serialize(regularizer):
-    return serialize_keras_object(regularizer)
-    
-        with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
-        loss = MSE_MAE_loss(0.3)
-        inputs = keras.layers.Input((2,))
-        outputs = keras.layers.Dense(1, name='model_output')(inputs)
-        model = keras.models.Model(inputs, outputs)
-        model.compile(optimizer='sgd', loss={'model_output': loss})
-        model.fit(np.random.rand(256, 2), np.random.rand(256, 1))
-        model.save(model_filename)
-    
-            kwargs = {}
-        if has_arg(self.cell.call, 'training'):
-            kwargs['training'] = training
-    
-    print('Pad sequences (samples x time)')
-x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
-x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
-print('x_train shape:', x_train.shape)
-print('x_test shape:', x_test.shape)
-y_train = np.array(y_train)
-y_test = np.array(y_test)
-    
-        def __iter__(self):
-        return (casedkey for casedkey, mappedvalue in self._store.values())
-    
-    
-@pytest.fixture
-def httpbin_secure(httpbin_secure):
-    return prepare_url(httpbin_secure)
-
-    
-    '''
-Requests HTTP Library
-~~~~~~~~~~~~~~~~~~~~~
-    
-            return 'Digest %s' % (base)
-    
-        def list_domains(self):
-        '''Utility method to list all the domains in the jar.'''
-        domains = []
-        for cookie in iter(self):
-            if cookie.domain not in domains:
-                domains.append(cookie.domain)
-        return domains
-    
-    # TODO: response is the only one
-    
-            # Verify we receive an Authorization header in response, then
-        # challenge again.
-        request_content = consume_socket_content(sock, timeout=0.5)
-        assert expected_digest in request_content
-        sock.send(text_401)
-    
-            The encoding of the response content is determined based solely on HTTP
-        headers, following RFC 2616 to the letter. If you can take advantage of
-        non-HTTP knowledge to make a better guess at the encoding, you should
-        set ``r.encoding`` appropriately before accessing this property.
+        def forward(self, inputs, outputs):
+        '''See modeling.detector.GenerateProposalLabels for inputs/outputs
+        documentation.
         '''
+        # During training we reuse the data loader code. We populate roidb
+        # entries on the fly using the rois generated by RPN.
+        # im_info: [[im_height, im_width, im_scale], ...]
+        rois = inputs[0].data
+        roidb = blob_utils.deserialize(inputs[1].data)
+        im_info = inputs[2].data
+        im_scales = im_info[:, 2]
+        output_blob_names = fast_rcnn_roi_data.get_fast_rcnn_blob_names()
+        # For historical consistency with the original Faster R-CNN
+        # implementation we are *not* filtering crowd proposals.
+        # This choice should be investigated in the future (it likely does
+        # not matter).
+        json_dataset.add_proposals(roidb, rois, im_scales, crowd_thresh=0)
+        roidb_utils.add_bbox_regression_targets(roidb)
+        blobs = {k: [] for k in output_blob_names}
+        fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
+        for i, k in enumerate(output_blob_names):
+            blob_utils.py_op_copy_blob(blobs[k], outputs[i])
+
     
-    
-def main():
-    argument_spec = ec2_argument_spec()
-    argument_spec.update(dict(
-        name=dict(type='str'),
-    ))
-    
-        json_output['changed'] = False
-    json_output.update(mod_params)
-    module.exit_json(**json_output)
-    
-    
-VALID_RULE_KEYS = ['rule_type', 'original_ip', 'original_port',
-                   'translated_ip', 'translated_port', 'protocol']
-    
-        if state in ['present', 'enabled']:
-        ipaenabledflag = 'TRUE'
-    else:
-        ipaenabledflag = 'FALSE'
-    
-        if module.params['repo']:
-        params['deploy[repository]'] = module.params['repo']
-    
-    
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-    
-        if running and state == 'unmonitored':
-        if module.check_mode:
-            module.exit_json(changed=True)
-        status = run_command('unmonitor')
-        if status in ['not monitored'] or 'unmonitor pending' in status:
-            module.exit_json(changed=True, name=name, state=state)
-        module.fail_json(msg='%s process not unmonitored' % name, status=status)
-    
-        def __init__(self):
-        ca_certs = os.path.join(current_path, 'cacert.pem')
-        openssl_context = SSLContext(
-            logger, ca_certs=ca_certs,
-            cipher_suites=['ALL', '!RC4-SHA', '!ECDHE-RSA-RC4-SHA', '!ECDHE-RSA-AES128-GCM-SHA256',
-                           '!AES128-GCM-SHA256', '!ECDHE-RSA-AES128-SHA', '!AES128-SHA']
-        )
-        host_manager = HostManagerBase()
-        connect_creator = ConnectCreator(logger, config, openssl_context, host_manager,
-                                         debug=True)
-        self.check_ip = CheckIp(logger, config, connect_creator)
-    
-                if fail or self.network_stat != 'OK':
-                # Fail or unknown
-                if time_now - self.last_check_time < 3:
-                    return
-            else:
-                if time_now - self.last_check_time < 10:
-                    return
-    
-    from xlog import getLogger
-xlog = getLogger('gae_proxy')
-    
-    # begin[licence]
-#
-# [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-# end[licence]
-    
-    
-class BacktrackingFailed(Exception):
-    '''@brief Raised to signal failed backtrack attempt'''
-    
-    
-    def matchRange(self, a, b):
-        if self.input.LA(1) < a or self.input.LA(1) > b:
-            if self._state.backtracking > 0:
-                raise BacktrackingFailed
-    
-        # Get (branch, commit) if running from a git repo.
-    head = git.get_head(kwargs['repo_path'])
-    
-        def prepare(self, **kwargs):
-    
-    from ..common import *
-from ..extractor import VideoExtractor
-import xml.etree.ElementTree as ET
-    
-    import json
-import re
-    
-    
-def get_file_path(merge, output_dir, title, url):
-    mime, ext, size = url_info(url)
-    file_name = get_output_filename([], title, ext, output_dir, merge)
-    file_path = os.path.join(output_dir, file_name)
-    return file_name, file_path
-    
-    def dailymotion_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    '''Downloads Dailymotion videos by URL.
-    '''
-    
-    from ..common import *
-    
-                print_info(site_info, title_i, ext, size)
-            if not info_only:
-                download_urls([real_url], title_i, ext, size, output_dir, merge = merge)
+    # Example usage:
+# data_loader_benchmark.par \
+#   NUM_GPUS 2 \
+#   TRAIN.DATASETS '('voc_2007_trainval',)' \
+#   TRAIN.PROPOSAL_FILES /path/to/voc_2007_trainval/proposals.pkl \
+#   DATA_LOADER.NUM_THREADS 4 \
+#   DATA_LOADER.MINIBATCH_QUEUE_SIZE 64 \
+#   DATA_LOADER.BLOBS_QUEUE_CAPACITY 8
