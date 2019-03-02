@@ -1,113 +1,253 @@
 
         
-            # now do a benchmark where the number of points is fixed
-    # and the variable is the number of features
+          path_counts = tf.to_float(features['counts'])
+  seq_lengths = features['pathlens']
     
-        plt.figure('scikit-learn LASSO benchmark results')
-    plt.subplot(211)
-    plt.plot(list_n_samples, lasso_results, 'b-',
-                            label='Lasso')
-    plt.plot(list_n_samples, lars_lasso_results, 'r-',
-                            label='LassoLars')
-    plt.title('precomputed Gram matrix, %d features, alpha=%s' % (n_features,
-                            alpha))
-    plt.legend(loc='upper left')
-    plt.xlabel('number of samples')
-    plt.ylabel('Time (s)')
-    plt.axis('tight')
+      if bidx is not None:
+    data_nxt = data_bxtxn[bidx,:,:].T
+    params_nxt = model_vals['output_dist_params'][bidx,:,:].T
+  else:
+    data_nxt = np.mean(data_bxtxn, axis=0).T
+    params_nxt = np.mean(model_vals['output_dist_params'], axis=0).T
+  if output_dist == 'poisson':
+    means_nxt = params_nxt
+  elif output_dist == 'gaussian': # (means+vars) x time
+    means_nxt = np.vsplit(params_nxt,2)[0] # get means
+  else:
+    assert 'NIY'
     
-        # Plot results
-    i = 0
-    m = len(list_n_features)
-    plt.figure('scikit-learn SGD regression benchmark results',
-               figsize=(5 * 2, 4 * m))
-    for j in range(m):
-        plt.subplot(m, 2, i + 1)
-        plt.plot(list_n_samples, np.sqrt(elnet_results[:, j, 0]),
-                 label='ElasticNet')
-        plt.plot(list_n_samples, np.sqrt(sgd_results[:, j, 0]),
-                 label='SGDRegressor')
-        plt.plot(list_n_samples, np.sqrt(asgd_results[:, j, 0]),
-                 label='A-SGDRegressor')
-        plt.plot(list_n_samples, np.sqrt(ridge_results[:, j, 0]),
-                 label='Ridge')
-        plt.legend(prop={'size': 10})
-        plt.xlabel('n_train')
-        plt.ylabel('RMSE')
-        plt.title('Test error - %d features' % list_n_features[j])
-        i += 1
     
-    Sentiment analysis can be casted as a binary text classification problem,
-that is fitting a linear classifier on features extracted from the text
-of the user messages so as to guess wether the opinion of the author is
-positive or negative.
+def normalize_rates(data_e, E, S):
+  # Normalization, made more complex because of the P matrices.
+  # Normalize by min and max in each channel.  This normalization will
+  # cause offset differences between identical rnn runs, but different
+  # t hits.
+  for e in range(E):
+    r_sxt = data_e[e]
+    for i in range(S):
+      rmin = np.min(r_sxt[i,:])
+      rmax = np.max(r_sxt[i,:])
+      assert rmax - rmin != 0, 'Something wrong'
+      r_sxt[i,:] = (r_sxt[i,:] - rmin)/(rmax-rmin)
+    data_e[e] = r_sxt
+  return data_e
     
-    import numpy as np
-from sklearn.covariance import EllipticEnvelope
-from sklearn.svm import OneClassSVM
-import matplotlib.pyplot as plt
-import matplotlib.font_manager
-from sklearn.datasets import load_boston
     
-    # Author: Kemal Eren <kemal@kemaleren.com>
-# License: BSD 3 clause
+def recursive_length(item):
+  '''Recursively determine the total number of elements in nested list.'''
+  if type(item) == list:
+    return sum(recursive_length(subitem) for subitem in item)
+  else:
+    return 1.
     
-    These images how similar features are merged together using
-feature agglomeration.
+      Returns:
+    predictions:  tf.float32 Tensor of predictions of shape [batch_size,
+      sequence_length]
+  '''
+  if FLAGS.discriminator_model == 'cnn':
+    predictions = cnn.discriminator(
+        hparams, sequence, is_training=is_training, reuse=reuse)
+  elif FLAGS.discriminator_model == 'fnn':
+    predictions = feedforward.discriminator(
+        hparams, sequence, is_training=is_training, reuse=reuse)
+  elif FLAGS.discriminator_model == 'rnn':
+    predictions = rnn.discriminator(
+        hparams, sequence, is_training=is_training, reuse=reuse)
+  elif FLAGS.discriminator_model == 'bidirectional':
+    predictions = bidirectional.discriminator(
+        hparams, sequence, is_training=is_training, reuse=reuse)
+  elif FLAGS.discriminator_model == 'bidirectional_zaremba':
+    predictions = bidirectional_zaremba.discriminator(
+        hparams, sequence, is_training=is_training, reuse=reuse)
+  elif FLAGS.discriminator_model == 'seq2seq_vd':
+    predictions = seq2seq_vd.discriminator(
+        hparams,
+        inputs,
+        present,
+        sequence,
+        is_training=is_training,
+        reuse=reuse)
+  elif FLAGS.discriminator_model == 'rnn_zaremba':
+    predictions = rnn_zaremba.discriminator(
+        hparams, sequence, is_training=is_training, reuse=reuse)
+  elif FLAGS.discriminator_model == 'rnn_nas':
+    predictions = rnn_nas.discriminator(
+        hparams, sequence, is_training=is_training, reuse=reuse)
+  elif FLAGS.discriminator_model == 'rnn_vd':
+    predictions = rnn_vd.discriminator(
+        hparams,
+        sequence,
+        is_training=is_training,
+        reuse=reuse,
+        initial_state=initial_state)
+  elif FLAGS.discriminator_model == 'bidirectional_vd':
+    predictions = bidirectional_vd.discriminator(
+        hparams,
+        sequence,
+        is_training=is_training,
+        reuse=reuse,
+        initial_state=initial_state)
+  else:
+    raise NotImplementedError
+  return predictions
+    
+      Returns:
+    final_gen_objective:  Final REINFORCE objective for the sequence.
+    rewards:  tf.float32 Tensor of rewards for sequence of shape [batch_size,
+      sequence_length]
+    advantages: tf.float32 Tensor of advantages for sequence of shape
+      [batch_size, sequence_length]
+    baselines:  tf.float32 Tensor of baselines for sequence of shape
+      [batch_size, sequence_length]
+    maintain_averages_op:  ExponentialMovingAverage apply average op to
+      maintain the baseline.
+  '''
+  # Final Generator objective.
+  final_gen_objective = 0.
+  gamma = hparams.rl_discount_rate
+  eps = 1e-7
+    
+      for key, _ in gen_ngrams_dict.iteritems():
+    if key in train_ngrams_dict:
+      unique_ngrams_in_train += 1
+  return float(unique_ngrams_in_train) / float(total_ngrams_produced)
+
+    
+      variable_mapping = {
+      'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel': bw_lstm_w_0,
+      'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias': bw_lstm_b_0,
+      'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/kernel': bw_lstm_w_1,
+      'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/bias': bw_lstm_b_1
+  }
+  return variable_mapping
+    
+      if FLAGS.dis_share_embedding:
+    assert hparams.dis_rnn_size == hparams.gen_rnn_size, (
+        'If you wish to share Discriminator/Generator embeddings, they must be'
+        ' same dimension.')
+    with tf.variable_scope('gen/rnn', reuse=True):
+      embedding = tf.get_variable('embedding',
+                                  [FLAGS.vocab_size, hparams.gen_rnn_size])
+    
+    # Create a snapshot only if the most recent one is older than 1 hour
+- local_action:
+    module: ec2_snapshot
+    volume_id: vol-abcdef12
+    last_snapshot_min_age: 60
 '''
-print(__doc__)
     
-    for linkage in ('ward', 'average', 'complete', 'single'):
-    clustering = AgglomerativeClustering(linkage=linkage, n_clusters=10)
-    t0 = time()
-    clustering.fit(X_red)
-    print('%s :\t%.2fs' % (linkage, time() - t0))
+    EXAMPLES = '''
+# Note: None of these examples set aws_access_key, aws_secret_key, or region.
+# It is assumed that their matching environment variables are set.
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: 'Create a snapshot'
+      elasticache_snapshot:
+        name: 'test-snapshot'
+        state: 'present'
+        cluster_id: '{{ cluster }}'
+        replication_id: '{{ replication }}'
+'''
     
-        # Print the location of each face in this image
-    top, right, bottom, left = face_location
-    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+        has_changed, msg = add_or_delete_heroku_collaborator(module, client)
+    module.exit_json(changed=has_changed, msg=msg)
     
-    import face_recognition
-from flask import Flask, jsonify, request, redirect
+    EXAMPLES = '''
+# Create groups based on the machine architecture
+- group_by:
+    key: machine_{{ ansible_machine }}
     
-        :param known_face_encodings: A list of known face encodings
-    :param face_encoding_to_check: A single face encoding to compare against the list
-    :param tolerance: How much distance between faces to consider it a match. Lower is more strict. 0.6 is typical best performance.
-    :return: A list of True/False values indicating which known_face_encodings match the face encoding to check
-    '''
-    return list(face_distance(known_face_encodings, face_encoding_to_check) <= tolerance)
-
+        @certbot_util.patch_get_utility()
+    def test_select_cancel(self, mock_util):
+        mock_util().checklist.return_value = (display_util.CANCEL, 'whatever')
+        vhs = select_vhost_multiple([self.vhosts[2], self.vhosts[3]])
+        self.assertFalse(vhs)
     
-        # macOS will crash due to a bug in libdispatch if you don't use 'forkserver'
-    context = multiprocessing
-    if 'forkserver' in multiprocessing.get_all_start_methods():
-        context = multiprocessing.get_context('forkserver')
+            :returns: All TLS-SNI-01 addresses used
+        :rtype: set
     
-            print('I see someone named {}!'.format(name))
-
+    # Output file base name for HTML help builder.
+htmlhelp_basename = 'certbot-apachedoc'
     
-            # 0.6 is the default face distance match threshold. So we'll spot-check that the numbers returned
-        # are above or below that based on if they should match (since the exact numbers could vary).
-        self.assertEqual(type(distance_results), np.ndarray)
-        self.assertLessEqual(distance_results[0], 0.6)
-        self.assertLessEqual(distance_results[1], 0.6)
-        self.assertGreater(distance_results[2], 0.6)
+    def slice_shape(lst, slices):
+    '''Get the shape of lst after slicing: slices is a list of slice
+       objects.'''
+    if atomp(lst):
+        return []
+    return [len(lst[slices[0]])] + slice_shape(lst[0], slices[1:])
     
+        def _Try(self, t):
+        self.fill('try')
+        self.enter()
+        self.dispatch(t.body)
+        self.leave()
+        for ex in t.handlers:
+            self.dispatch(ex)
+        if t.orelse:
+            self.fill('else')
+            self.enter()
+            self.dispatch(t.orelse)
+            self.leave()
+        if t.finalbody:
+            self.fill('finally')
+            self.enter()
+            self.dispatch(t.finalbody)
+            self.leave()
     
-class OutOfData(UnpackException):
-    pass
+        def check_tokenize(self, s, expected):
+        # Format the tokens in s in a table format.
+        # The ENDMARKER and final NEWLINE are omitted.
+        f = BytesIO(s.encode('utf-8'))
+        result = stringify_tokens_from_source(tokenize(f.readline), s)
     
-    ax = fig.add_axes((0.63 + 0.18, 0.1, 0.16, 0.8))
-y = np.row_stack((fnx(), fnx(), fnx()))
-x = np.arange(10)
-y1, y2, y3 = fnx(), fnx(), fnx()
-ax.stackplot(x, y1, y2, y3)
-ax.set_xticks([])
-ax.set_yticks([])
+    def plus(a, b):
+    time.sleep(0.5*random.random())
+    return a + b
     
-    from collections import namedtuple
+    Loosely based on https://github.com/astropy/astropy/pull/347
+'''
     
-            exp5 = ('0   1 days 00:00:01\n'
-                '1   2 days 00:00:00\n'
-                '2   3 days 00:00:00\n'
-                'dtype: timedelta64[ns]')
+            now = dt_util.now()
+        for ipv4, info in result['scan'].items():
+            if info['status']['state'] != 'up':
+                continue
+            name = info['hostnames'][0]['name'] if info['hostnames'] else ipv4
+            # Mac address only returned if nmap ran as root
+            mac = info['addresses'].get('mac') or _arp(ipv4)
+            if mac is None:
+                continue
+            last_results.append(Device(mac.upper(), name, ipv4, now))
+    
+    DEFAULT_IP = '192.168.1.1'
+    
+            _LOGGER.info('Checking ARP')
+        data = self.get_thomson_data()
+        if not data:
+            return False
+    
+    _LOGGER = logging.getLogger(__name__)
+    
+        def __init__(self, hass, filename, add_timestamp):
+        '''Initialize the service.'''
+        self.filepath = os.path.join(hass.config.config_dir, filename)
+        self.add_timestamp = add_timestamp
+    
+        return GNTPNotificationService(config.get(CONF_APP_NAME),
+                                   app_icon,
+                                   config.get(CONF_HOSTNAME),
+                                   config.get(CONF_PASSWORD),
+                                   config.get(CONF_PORT))
+    
+            self._rooms = {}
+        self._get_room(self._default_room)
+    
+        return MessageBirdNotificationService(config.get(CONF_SENDER), client)
+    
+            text = message
+        mycroft = MycroftAPI(self.mycroft_ip)
+        if mycroft is not None:
+            mycroft.speak_text(text)
+        else:
+            _LOGGER.log('Could not reach this instance of mycroft')
