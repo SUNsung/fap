@@ -1,179 +1,152 @@
 
         
-            # Returns
-        x (tensor): tensor as input to the next layer
-    '''
-    conv = Conv2D(num_filters,
-                  kernel_size=kernel_size,
-                  strides=strides,
-                  padding='same',
-                  kernel_initializer='he_normal',
-                  kernel_regularizer=l2(1e-4))
+        
+@pytest.fixture(params=[(python_3, False),
+                        (python_3, True),
+                        (python_2, False)])
+def proc(request, spawnu, TIMEOUT):
+    container, instant_mode = request.param
+    proc = spawnu(*container)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(init_bashrc.format(
+        u'--enable-experimental-instant-mode' if instant_mode else ''))
+    proc.sendline(u'bash')
+    if instant_mode:
+        assert proc.expect([TIMEOUT, u'instant mode ready: True'])
+    return proc
     
-    tensorboard = TensorBoard(batch_size=batch_size,
-                          embeddings_freq=1,
-                          embeddings_layer_names=['features'],
-                          embeddings_metadata='metadata.tsv',
-                          embeddings_data=x_test)
+        assert not match(command)
     
-        return (x_train, y_train), (x_test, y_test)
-
-    
-    When lahead >= tsteps, both the stateful and stateless LSTM converge.
+    match_output = '''
+Listing... Done
+heroku/stable 6.15.2-1 amd64 [upgradable from: 6.14.43-1]
+resolvconf/zesty-updates,zesty-updates 1.79ubuntu4.1 all [upgradable from: 1.79ubuntu4]
+squashfs-tools/zesty-updates 1:4.3-3ubuntu2.17.04.1 amd64 [upgradable from: 1:4.3-3ubuntu2]
+unattended-upgrades/zesty-updates,zesty-updates 0.93.1ubuntu2.4 all [upgradable from: 0.93.1ubuntu2.3]
 '''
-from __future__ import print_function
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
-from keras.models import Sequential
-from keras.layers import Dense, LSTM
     
-    import tensorflow as tf
     
-        # start time
-    tstart = time()
-    clf = factory(alpha=alpha).fit(X, Y)
-    delta = (time() - tstart)
-    # stop time
+@pytest.mark.parametrize('script, output', [
+    ('brew link sshfs', output),
+    ('cat output', output),
+    ('brew install sshfs', '')])
+def test_not_match(script, output):
+    command = Command(script, output)
+    assert not match(command)
     
-        if dataset_name == 'SA':
-        lb = LabelBinarizer()
-        x1 = lb.fit_transform(X[:, 1].astype(str))
-        x2 = lb.fit_transform(X[:, 2].astype(str))
-        x3 = lb.fit_transform(X[:, 3].astype(str))
-        X = np.c_[X[:, :1], x1, x2, x3, X[:, 4:]]
-        y = (y != b'normal.').astype(int)
+    no_such_subcommand = '''error: no such subcommand
     
-        if args.plot is not None:
-        max_val = getattr(args, args.plot)
-        if args.plot in ('classes', 'samples'):
-            min_val = 2
+    
+class AbstractBaseSession(models.Model):
+    session_key = models.CharField(_('session key'), max_length=40, primary_key=True)
+    session_data = models.TextField(_('session data'))
+    expire_date = models.DateTimeField(_('expire date'), db_index=True)
+    
+        The Django sessions framework is entirely cookie-based. It does
+    not fall back to putting session IDs in URLs. This is an intentional
+    design decision. Not only does that behavior make URLs ugly, it makes
+    your site vulnerable to session-ID theft via the 'Referer' header.
+    
+        def __init__(self, path):
+        # We don't store the instance to avoid reference cycles
+        self._pathcls = type(path)
+        self._drv = path._drv
+        self._root = path._root
+        self._parts = path._parts
+    
+        def test_memoryview_cast_zero_strides(self):
+        # Casts are undefined if strides contains zeros. These arrays are
+        # (sometimes!) regarded as C-contiguous by Numpy, but not by
+        # PyBuffer_GetContiguous().
+        ex = ndarray([1,2,3], shape=[3], strides=[0])
+        self.assertFalse(ex.c_contiguous)
+        msrc = memoryview(ex)
+        self.assertRaises(TypeError, msrc.cast, 'c')
+    
+            def msum(iterable):
+            '''Full precision summation.  Compute sum(iterable) without any
+            intermediate accumulation of error.  Based on the 'lsum' function
+            at http://code.activestate.com/recipes/393090/
+    
+        def test_raise_reraise(self):
+        def f(p):
+            try: 1/0
+            except: raise
+        f_ident = ident(f)
+        self.check_events(f, [(1, 'call', f_ident),
+                              (1, 'return', f_ident),
+                              ])
+    
+    def _check_arg_types(funcname, *args):
+    hasstr = hasbytes = False
+    for s in args:
+        if isinstance(s, str):
+            hasstr = True
+        elif isinstance(s, bytes):
+            hasbytes = True
         else:
-            min_val = 0
-        steps = np.linspace(min_val, max_val, num=args.n_steps + 1)[1:]
-        if args.plot in ('classes', 'samples'):
-            steps = np.unique(np.round(steps).astype(int))
-        setattr(args, args.plot, steps)
-    
-        if not os.path.exists(ARCHIVE_NAME):
-        print('Downloading dataset from %s (14 MB)' % URL)
-        opener = urlopen(URL)
-        with open(ARCHIVE_NAME, 'wb') as archive:
-            archive.write(opener.read())
-    
-        Code is a simple port of what is already in the /scripts directory
-    
-        def parse(self, response):
-        pass
+            raise TypeError('%s() argument must be str or bytes, not %r' %
+                            (funcname, s.__class__.__name__)) from None
+    if hasstr and hasbytes:
+        raise TypeError('Can't mix strings and bytes in path components') from None
 
     
-        def run(self, args, opts):
-        if len(args) != 1 or not is_url(args[0]):
-            raise UsageError()
-        cb = lambda x: self._print_response(x, opts)
-        request = Request(args[0], callback=cb, dont_filter=True)
-        # by default, let the framework handle redirects,
-        # i.e. command handles all codes expect 3xx
-        if not opts.no_redirect:
-            request.meta['handle_httpstatus_list'] = SequenceExclude(range(300, 400))
+        Directories are *not* resources.
+    '''
+    package = _get_package(package)
+    _normalize_path(name)
+    reader = _get_resource_reader(package)
+    if reader is not None:
+        return reader.is_resource(name)
+    try:
+        package_contents = set(contents(package))
+    except (NotADirectoryError, FileNotFoundError):
+        return False
+    if name not in package_contents:
+        return False
+    # Just because the given file_name lives as an entry in the package's
+    # contents doesn't necessarily mean it's a resource.  Directories are not
+    # resources, so let's try to find out if it's a directory or not.
+    path = Path(package.__spec__.origin).parent / name
+    return path.is_file()
+    
+        def __init__(self, file, connection):
+        super().__init__(file)
+        self.connection = connection
+    
+    def handlePoint(point):
+    print('<li>%s</li>' % getText(point.childNodes))
+    
+            #
+        # Testing timeouts
+        #
+    
+    def mul(a, b):
+    time.sleep(0.5*random.random())
+    return a * b
+    
+    def cbs_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    '''Downloads CBS videos by URL.
+    '''
+    
+    site_info = 'Dailymotion.com'
+download = dailymotion_download
+download_playlist = playlist_not_supported('dailymotion')
+
+    
+        @classmethod
+    def dec_playinfo(cls, info, coeff):
+        res = None
+        clear = cls.funshion_decrypt_str(info['infohash'], coeff)
+        if cls.checksum(clear):
+            res = dict(hashid=clear[:40], token=cls.funshion_decrypt_str(info['token'], coeff))
         else:
-            request.meta['handle_httpstatus_all'] = True
+            clear = cls.funshion_decrypt_str(info['infohash_prev'], coeff)
+            if cls.checksum(clear):
+                res = dict(hashid=clear[:40], token=cls.funshion_decrypt_str(info['token_prev'], coeff))
+        return res
     
-        def set_spidercls(self, url, opts):
-        spider_loader = self.crawler_process.spider_loader
-        if opts.spider:
-            try:
-                self.spidercls = spider_loader.load(opts.spider)
-            except KeyError:
-                logger.error('Unable to find spider: %(spider)s',
-                             {'spider': opts.spider})
-        else:
-            self.spidercls = spidercls_for_request(spider_loader, Request(url))
-            if not self.spidercls:
-                logger.error('Unable to find spider for: %(url)s',
-                             {'url': url})
+    __all__ = ['giphy_download']
     
-    from scrapy.commands import ScrapyCommand
-from scrapy.settings import BaseSettings
-    
-        class _v19_S3Connection(S3Connection):
-        '''A dummy S3Connection wrapper that doesn't do any synchronous download'''
-        def _mexe(self, method, bucket, key, headers, *args, **kwargs):
-            return headers
-    
-        def _set_connection_attributes(self, request):
-        parsed = urlparse_cached(request)
-        self.scheme, self.netloc, self.host, self.port, self.path = _parsed_url_args(parsed)
-        proxy = request.meta.get('proxy')
-        if proxy:
-            self.scheme, _, self.host, self.port, _ = _parse(proxy)
-            self.path = self.url
-    
-    
-class Migration(SchemaMigration):
-    def forwards(self, orm):
-        # Adding model 'EnvironmentProject'
-        db.create_table(
-            'sentry_environmentproject', (
-                (
-                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
-                        primary_key=True
-                    )
-                ), (
-                    'project', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.Project']
-                    )
-                ), (
-                    'environment', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.Environment']
-                    )
-                ),
-            )
-        )
-        db.send_create_signal('sentry', ['EnvironmentProject'])
-    
-            for environment in RangeQuerySetWrapperWithProgressBar(orm.Environment.objects.all()):
-            try:
-                with transaction.atomic():
-                    orm.EnvironmentProject.objects.create(
-                        environment=environment, project_id=environment.project_id
-                    )
-            except IntegrityError:
-                pass
-    
-                from_env_ids = [e.id for e in from_envs]
-            try:
-                with transaction.atomic():
-                    orm.ReleaseEnvironment.objects.filter(
-                        environment_id__in=from_env_ids,
-                    ).update(environment_id=to_env.id)
-            except IntegrityError:
-                for re in orm.ReleaseEnvironment.objects.filter(environment_id__in=from_env_ids):
-                    try:
-                        with transaction.atomic():
-                            orm.ReleaseEnvironment.objects.filter(
-                                id=re.id,
-                            ).update(environment_id=to_env.id)
-                    except IntegrityError:
-                        re.delete()
-    
-    
-class Migration(SchemaMigration):
-    def forwards(self, orm):
-        # Adding field 'ApiGrant.scope_list'
-        db.add_column(
-            'sentry_apigrant',
-            'scope_list',
-            self.gf('sentry.db.models.fields.array.ArrayField')(
-                of=('django.db.models.fields.TextField', [], {})
-            ),
-            keep_default=False
-        )
-    
-            users = orm.User.objects.exclude(
-            email__in=orm.UserEmail.objects.all().values_list('email', flat=True)
-        )
-    
-        def backwards(self, orm):
-        # Removing unique constraint on 'CommitAuthor', fields ['organization_id', 'external_id']
-        db.delete_unique('sentry_commitauthor', ['organization_id', 'external_id'])
+    __all__ = ['huomaotv_download']
