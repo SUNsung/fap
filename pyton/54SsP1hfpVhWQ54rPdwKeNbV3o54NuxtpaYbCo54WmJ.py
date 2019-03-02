@@ -1,214 +1,163 @@
 
         
-                if error is not None:
-            flash(error)
-        else:
-            db = get_db()
-            db.execute(
-                'INSERT INTO post (title, body, author_id)'
-                ' VALUES (?, ?, ?)',
-                (title, body, g.user['id'])
-            )
-            db.commit()
-            return redirect(url_for('blog.index'))
+            def append_to_front(self, node):
+        pass
     
-            buf.append('  Make sure to directly send your %s-request to this URL '
-                   'since we can\'t make browsers or HTTP clients redirect '
-                   'with form data reliably or without user interaction.' %
-                   request.method)
-        buf.append('\n\nNote: this exception is only raised in debug mode')
-        AssertionError.__init__(self, ''.join(buf).encode('utf-8'))
+        def __init__(self, vehicle_size, license_plate, spot_size):
+        self.vehicle_size = vehicle_size
+        self.license_plate = license_plate
+        self.spot_size
+        self.spots_taken = []
     
+        def bfs(self, source, dest):
+        if source is None:
+            return False
+        queue = deque()
+        queue.append(source)
+        source.visit_state = State.visited
+        while queue:
+            node = queue.popleft()
+            print(node)
+            if dest is node:
+                return True
+            for adjacent_node in node.adj_nodes.values():
+                if adjacent_node.visit_state == State.unvisited:
+                    queue.append(adjacent_node)
+                    adjacent_node.visit_state = State.visited
+        return False
     
-class TagMarkup(JSONTag):
-    '''Serialize anything matching the :class:`~flask.Markup` API by
-    having a ``__html__`` method to the result of that method. Always
-    deserializes to an instance of :class:`~flask.Markup`.'''
+    import scrapy
+from scrapy.crawler import CrawlerProcess
+from scrapy.commands import ScrapyCommand
+from scrapy.exceptions import UsageError
+from scrapy.utils.misc import walk_modules
+from scrapy.utils.project import inside_project, get_project_settings
+from scrapy.utils.python import garbage_collect
+from scrapy.settings.deprecated import check_deprecated_settings
     
-    from .globals import request
+        def start_requests(self):
+        qargs = {'total': self.total, 'show': self.show}
+        url = '{}?{}'.format(self.baseurl, urlencode(qargs, doseq=1))
+        return [scrapy.Request(url, dont_filter=True)]
     
-                # If we have no method at all in there we don't want to add a
-            # method list. This is for instance the case for the base class
-            # or another subclass of a base method view that does not introduce
-            # new methods.
-            if methods:
-                cls.methods = methods
-    
-        def __getitem__(self, key):
-        return self._store[key.lower()][1]
-    
-        @pytest.fixture(autouse=True)
-    def setup(self):
-        '''LookupDict instance with 'bad_gateway' attribute.'''
-        self.lookup_dict = LookupDict('test')
-        self.lookup_dict.bad_gateway = 502
-    
-            Comment:                   'italic #8f5902', # class: 'c'
-        Comment.Preproc:           'noitalic',       # class: 'cp'
-    
-    ... or POST:
-    
-            This should not be called from user code, and is only exposed for use
-        when subclassing the
-        :class:`HTTPAdapter <requests.adapters.HTTPAdapter>`.
-    
-                self._thread_local.num_401_calls += 1
-            pat = re.compile(r'digest ', flags=re.IGNORECASE)
-            self._thread_local.chal = parse_dict_header(pat.sub('', s_auth, count=1))
-    
-        def response_handler(sock):
-        consume_socket_content(sock, timeout=0.5)
-        sock.send(
-            b'HTTP/1.1 302 FOUND\r\n'
-            b'Content-Length: 0\r\n'
-            b'Location: /get#relevant-section\r\n\r\n'
-        )
-        consume_socket_content(sock, timeout=0.5)
-        sock.send(
-            b'HTTP/1.1 302 FOUND\r\n'
-            b'Content-Length: 0\r\n'
-            b'Location: /final-url/\r\n\r\n'
-        )
-        consume_socket_content(sock, timeout=0.5)
-        sock.send(
-            b'HTTP/1.1 200 OK\r\n\r\n'
-        )
-    
-    
-@pytest.mark.parametrize(
-    'value, expected', (
-        (
-            '<http:/.../front.jpeg>; rel=front; type='image/jpeg'',
-            [{'url': 'http:/.../front.jpeg', 'rel': 'front', 'type': 'image/jpeg'}]
-        ),
-        (
-            '<http:/.../front.jpeg>',
-            [{'url': 'http:/.../front.jpeg'}]
-        ),
-        (
-            '<http:/.../front.jpeg>;',
-            [{'url': 'http:/.../front.jpeg'}]
-        ),
-        (
-            '<http:/.../front.jpeg>; type='image/jpeg',<http://.../back.jpeg>;',
-            [
-                {'url': 'http:/.../front.jpeg', 'type': 'image/jpeg'},
-                {'url': 'http://.../back.jpeg'}
-            ]
-        ),
-        (
-            '',
-            []
-        ),
-    ))
-def test_parse_header_links(value, expected):
-    assert parse_header_links(value) == expected
-    
-    
-    {    # Server Error.
-    500: ('internal_server_error', 'server_error', '/o\\', '✗'),
-    501: ('not_implemented',),
-    502: ('bad_gateway',),
-    503: ('service_unavailable', 'unavailable'),
-    504: ('gateway_timeout',),
-    505: ('http_version_not_supported', 'http_version'),
-    506: ('variant_also_negotiates',),
-    507: ('insufficient_storage',),
-    509: ('bandwidth_limit_exceeded', 'bandwidth'),
-    510: ('not_extended',),
-    511: ('network_authentication_required', 'network_auth', 'network_authentication'),
-}
-    
-    
-def guess_filename(obj):
-    '''Tries to guess the filename of the given object.'''
-    name = getattr(obj, 'name', None)
-    if (name and isinstance(name, basestring) and name[0] != '<' and
-            name[-1] != '>'):
-        return os.path.basename(name)
-    
-            descr_string = descr_string[:-2]
-    
-    for i, n in enumerate(n_samples):
-    for j, p in enumerate(n_features):
-        X = np.random.normal(size=(n, p))
-        t0 = time.time()
-        ward.fit(X)
-        scikits_time[j, i] = time.time() - t0
-        t0 = time.time()
-        hierarchy.ward(X)
-        scipy_time[j, i] = time.time() - t0
-    
-        n = 10
-    step = 10000
-    n_samples = 10000
-    dim = 10
-    n_classes = 10
-    for i in range(n):
-        print('============================================')
-        print('Entering iteration %s of %s' % (i, n))
-        print('============================================')
-        n_samples += step
-        X = np.random.randn(n_samples, dim)
-        Y = np.random.randint(0, n_classes, (n_samples,))
-        bench_scikit_tree_classifier(X, Y)
-        Y = np.random.randn(n_samples)
-        bench_scikit_tree_regressor(X, Y)
-    
-        print('Decompressing %s' % ARCHIVE_NAME)
-    with closing(tarfile.open(ARCHIVE_NAME, 'r:gz')) as archive:
-        archive.extractall(path='.')
-    os.remove(ARCHIVE_NAME)
+            sfile = sys.modules[spidercls.__module__].__file__
+        sfile = sfile.replace('.pyc', '.py')
+        self.exitcode = os.system('%s '%s'' % (editor, sfile))
 
     
-        # the training data folder must be passed as first argument
-    movie_reviews_data_folder = sys.argv[1]
-    dataset = load_files(movie_reviews_data_folder, shuffle=False)
-    print('n_samples: %d' % len(dataset.data))
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('--spider', dest='spider',
+            help='use this spider')
+        parser.add_option('--headers', dest='headers', action='store_true', \
+            help='print response HTTP headers instead of body')
+        parser.add_option('--no-redirect', dest='no_redirect', action='store_true', \
+            default=False, help='do not handle HTTP 3xx status codes and print response as-is')
     
-    import time
-import numpy as np
-import matplotlib.pyplot as plt
-from mpl_toolkits.axes_grid1.parasite_axes import host_subplot
-from mpl_toolkits.axisartist.axislines import Axes
-from scipy.sparse.csr import csr_matrix
+    from importlib import import_module
+from os.path import join, dirname, abspath, exists, splitext
     
-    Second example
---------------
-The second example shows the ability of the Minimum Covariance Determinant
-robust estimator of covariance to concentrate on the main mode of the data
-distribution: the location seems to be well estimated, although the covariance
-is hard to estimate due to the banana-shaped distribution. Anyway, we can
-get rid of some outlying observations.
-The One-Class SVM is able to capture the real data structure, but the
-difficulty is to adjust its kernel bandwidth parameter so as to obtain
-a good compromise between the shape of the data scatter matrix and the
-risk of over-fitting the data.
+            if not aws_access_key_id:
+            aws_access_key_id = settings['AWS_ACCESS_KEY_ID']
+        if not aws_secret_access_key:
+            aws_secret_access_key = settings['AWS_SECRET_ACCESS_KEY']
     
-    The reconstruction with L1 penalization gives a result with zero error
-(all pixels are successfully labeled with 0 or 1), even if noise was
-added to the projections. In comparison, an L2 penalization
-(:class:`sklearn.linear_model.Ridge`) produces a large number of labeling
-errors for the pixels. Important artifacts are observed on the
-reconstructed image, contrary to the L1 penalization. Note in particular
-the circular artifact separating the pixels in the corners, that have
-contributed to fewer projections than the central disk.
-'''
-from __future__ import division
+            dfd.addBoth(lambda _: slot.scheduler.close(reason))
+        dfd.addErrback(log_failure('Scheduler close failure'))
+    
+        theplatform_download_by_pid(pid, title, output_dir=output_dir, merge=merge, info_only=info_only)
+    
+    site_info = 'FC2Video'
+download = fc2video_download
+download_playlist = playlist_not_supported('fc2video')
+
+    
+    def get_api_key(page):
+    match = match1(page, pattern_inline_api_key)
+    # this happens only when the url points to a gallery page
+    # that contains no inline api_key(and never makes xhr api calls)
+    # in fact this might be a better approch for getting a temporary api key
+    # since there's no place for a user to add custom infomation that may
+    # misguide the regex in the homepage
+    if not match:
+        return match1(get_html('https://flickr.com'), pattern_inline_api_key)
+    return match
+    
+        print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls(url, title, ext, size, output_dir, merge=False)
+    
+    # YouTube media encoding options, in descending quality order.
+# taken from http://en.wikipedia.org/wiki/YouTube#Quality_and_codecs, 3/22/2013.
+youtube_codecs = [
+    {'itag': 38, 'container': 'MP4', 'video_resolution': '3072p', 'video_encoding': 'H.264', 'video_profile': 'High', 'video_bitrate': '3.5-5', 'audio_encoding': 'AAC', 'audio_bitrate': '192'},
+    {'itag': 46, 'container': 'WebM', 'video_resolution': '1080p', 'video_encoding': 'VP8', 'video_profile': '', 'video_bitrate': '', 'audio_encoding': 'Vorbis', 'audio_bitrate': '192'},
+    {'itag': 37, 'container': 'MP4', 'video_resolution': '1080p', 'video_encoding': 'H.264', 'video_profile': 'High', 'video_bitrate': '3-4.3', 'audio_encoding': 'AAC', 'audio_bitrate': '192'},
+    {'itag': 102, 'container': 'WebM', 'video_resolution': '720p', 'video_encoding': 'VP8', 'video_profile': '3D', 'video_bitrate': '2', 'audio_encoding': 'Vorbis', 'audio_bitrate': '192'},
+    {'itag': 45, 'container': 'WebM', 'video_resolution': '720p', 'video_encoding': '', 'video_profile': '', 'video_bitrate': '', 'audio_encoding': '', 'audio_bitrate': ''},
+    {'itag': 22, 'container': 'MP4', 'video_resolution': '720p', 'video_encoding': 'H.264', 'video_profile': 'High', 'video_bitrate': '2-2.9', 'audio_encoding': 'AAC', 'audio_bitrate': '192'},
+    {'itag': 84, 'container': 'MP4', 'video_resolution': '720p', 'video_encoding': 'H.264', 'video_profile': '3D', 'video_bitrate': '2-2.9', 'audio_encoding': 'AAC', 'audio_bitrate': '152'},
+    {'itag': 120, 'container': 'FLV', 'video_resolution': '720p', 'video_encoding': 'AVC', 'video_profile': 'Main@L3.1', 'video_bitrate': '2', 'audio_encoding': 'AAC', 'audio_bitrate': '128'},
+    {'itag': 85, 'container': 'MP4', 'video_resolution': '520p', 'video_encoding': 'H.264', 'video_profile': '3D', 'video_bitrate': '2-2.9', 'audio_encoding': 'AAC', 'audio_bitrate': '152'},
+    {'itag': 44, 'container': 'WebM', 'video_resolution': '480p', 'video_encoding': 'VP8', 'video_profile': '', 'video_bitrate': '1', 'audio_encoding': 'Vorbis', 'audio_bitrate': '128'},
+    {'itag': 35, 'container': 'FLV', 'video_resolution': '480p', 'video_encoding': 'H.264', 'video_profile': 'Main', 'video_bitrate': '0.8-1', 'audio_encoding': 'AAC', 'audio_bitrate': '128'},
+    {'itag': 101, 'container': 'WebM', 'video_resolution': '360p', 'video_encoding': 'VP8', 'video_profile': '3D', 'video_bitrate': '', 'audio_encoding': 'Vorbis', 'audio_bitrate': '192'},
+    {'itag': 100, 'container': 'WebM', 'video_resolution': '360p', 'video_encoding': 'VP8', 'video_profile': '3D', 'video_bitrate': '', 'audio_encoding': 'Vorbis', 'audio_bitrate': '128'},
+    {'itag': 43, 'container': 'WebM', 'video_resolution': '360p', 'video_encoding': 'VP8', 'video_profile': '', 'video_bitrate': '0.5', 'audio_encoding': 'Vorbis', 'audio_bitrate': '128'},
+    {'itag': 34, 'container': 'FLV', 'video_resolution': '360p', 'video_encoding': 'H.264', 'video_profile': 'Main', 'video_bitrate': '0.5', 'audio_encoding': 'AAC', 'audio_bitrate': '128'},
+    {'itag': 82, 'container': 'MP4', 'video_resolution': '360p', 'video_encoding': 'H.264', 'video_profile': '3D', 'video_bitrate': '0.5', 'audio_encoding': 'AAC', 'audio_bitrate': '96'},
+    {'itag': 18, 'container': 'MP4', 'video_resolution': '270p/360p', 'video_encoding': 'H.264', 'video_profile': 'Baseline', 'video_bitrate': '0.5', 'audio_encoding': 'AAC', 'audio_bitrate': '96'},
+    {'itag': 6, 'container': 'FLV', 'video_resolution': '270p', 'video_encoding': 'Sorenson H.263', 'video_profile': '', 'video_bitrate': '0.8', 'audio_encoding': 'MP3', 'audio_bitrate': '64'},
+    {'itag': 83, 'container': 'MP4', 'video_resolution': '240p', 'video_encoding': 'H.264', 'video_profile': '3D', 'video_bitrate': '0.5', 'audio_encoding': 'AAC', 'audio_bitrate': '96'},
+    {'itag': 13, 'container': '3GP', 'video_resolution': '', 'video_encoding': 'MPEG-4 Visual', 'video_profile': '', 'video_bitrate': '0.5', 'audio_encoding': 'AAC', 'audio_bitrate': ''},
+    {'itag': 5, 'container': 'FLV', 'video_resolution': '240p', 'video_encoding': 'Sorenson H.263', 'video_profile': '', 'video_bitrate': '0.25', 'audio_encoding': 'MP3', 'audio_bitrate': '64'},
+    {'itag': 36, 'container': '3GP', 'video_resolution': '240p', 'video_encoding': 'MPEG-4 Visual', 'video_profile': 'Simple', 'video_bitrate': '0.17', 'audio_encoding': 'AAC', 'audio_bitrate': '38'},
+    {'itag': 17, 'container': '3GP', 'video_resolution': '144p', 'video_encoding': 'MPEG-4 Visual', 'video_profile': 'Simple', 'video_bitrate': '0.05', 'audio_encoding': 'AAC', 'audio_bitrate': '24'},
+]
+fmt_level = dict(
+    zip(
+        [str(codec['itag'])
+            for codec in
+                youtube_codecs],
+        range(len(youtube_codecs))))
+    
+    if args.quiet:
+    jieba.setLogLevel(60)
+if args.pos:
+    import jieba.posseg
+    posdelim = args.pos
+    def cutfunc(sentence, _, HMM=True):
+        for w, f in jieba.posseg.cut(sentence, HMM):
+            yield w + posdelim + f
+else:
+    cutfunc = jieba.cut
     
     
-def RemoveMultiLineCommentsFromRange(lines, begin, end):
-  '''Clears a range of lines for multi-line comments.'''
-  # Having // dummy comments makes the lines non-empty, so we will not get
-  # unnecessary blank line warnings later in the code.
-  for i in range(begin, end):
-    lines[i] = '/**/'
+class ChineseTokenizer(Tokenizer):
     
-        for url in urls:
-        if not url.startswith('http'):
-            print('markdown file name: ' + url)
-            continue
-        if check_live_url(url):
-            print(url)
-        else:
-            print(url, file=sys.stderr)
+    print('-'*40)
+print(' 搜索模式')
+print('-'*40)
+    
+    USAGE = 'usage:    python extract_tags_idfpath.py [file name] -k [top k]'
+    
+    while True:
+    line = sys.stdin.readline()
+    if line=='':
+        break
+    line = line.strip()
+    for word in jieba.cut(line):
+        print(word)
+    
+    ACTION_HEADER_PREFIX = 'DynamoDBStreams_20120810'
+    
+    # sender thread and queue
+SENDER_THREAD = None
+EVENT_QUEUE = queue.Queue()
+    
+        kinesis = aws_stack.connect_to_service('kinesis')
+    aws_stack.create_kinesis_stream(TEST_STREAM_NAME)
+    
+        @property
+    def running(self):
+        return not self._stop_event.is_set()
