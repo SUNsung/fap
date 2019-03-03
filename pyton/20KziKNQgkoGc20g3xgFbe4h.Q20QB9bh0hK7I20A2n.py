@@ -1,248 +1,219 @@
 
         
-            with open(FISH_COMPLETION_TEMPLATE) as f:
-        template = f.read()
-    filled_template = template.replace('{{commands}}', '\n'.join(commands))
-    with open(FISH_COMPLETION_FILE, 'w') as f:
-        f.write(filled_template)
+            def __hash_double_function(self, key, data, increment):
+        return (increment * self.__hash_function_2(key, data)) % self.size_table
     
-    versions_info = json.load(open('update/versions.json'))
-if 'signature' in versions_info:
-    del versions_info['signature']
+        def keys(self):
+        return self._keys
     
-        bug_text = re.search(
-        r'(?s)#\s*BUGS\s*[^\n]*\s*(.*?)#\s*COPYRIGHT', readme).group(1)
-    dev_text = re.search(
-        r'(?s)(#\s*DEVELOPER INSTRUCTIONS.*?)#\s*EMBEDDING YOUTUBE-DL',
-        readme).group(1)
+    The problem is  :
+Given an ARRAY, to find the longest and increasing sub ARRAY in that given ARRAY and return it.
+Example: [10, 22, 9, 33, 21, 50, 41, 60, 80] as input will return [10, 22, 33, 41, 60, 80] as output
+'''
+from __future__ import print_function
+    
+        dp = [[False for x in range(s+1)]for y in range(n+1)]
+    
+    # A dictionary with options for the search language support, empty by default.
+# 'ja' uses this config value.
+# 'zh' user can custom change `jieba` dictionary path.
+#
+# html_search_options = {'type': 'default'}
+    
+        def __init__(self, hass, client, address, timeout, ignored_click_types):
+        '''Initialize the flic button.'''
+        import pyflic
+    
+            try:
+            data = [
+                ('user', self._username),
+                (self._type, self._password),
+            ]
+            res = requests.post(self._loginurl, data=data, timeout=10)
+        except requests.exceptions.Timeout:
+            _LOGGER.error(
+                'Connection to the router timed out at URL %s', self._url)
+            return False
+        if res.status_code != 200:
+            _LOGGER.error(
+                'Connection failed with http code %s', res.status_code)
+            return False
+        try:
+            self._userid = res.cookies['userid']
+            return True
+        except KeyError:
+            _LOGGER.error('Failed to log in to router')
+            return False
+    
+        return scanner if scanner.success_init else None
+    
+        def __init__(self, config):
+        '''Initialize the scanner.'''
+        self.host = config[CONF_HOST]
+        self.username = config[CONF_USERNAME]
+        self.password = config[CONF_PASSWORD]
+        self.last_results = {}
+    
+    PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
+    vol.Required(CONF_API_KEY): cv.string,
+    vol.Required(CONF_RECIPIENT): cv.string,
+})
     
     
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
+class CommandLineNotificationService(BaseNotificationService):
+    '''Implement the notification service for the Command Line service.'''
     
-    header = oldreadme[:oldreadme.index('# OPTIONS')]
-footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
+        def send_message(self, message='', **kwargs):
+        '''Send a message to a user.'''
+        kwargs['message'] = message
+        self.hass.bus.fire(EVENT_NOTIFY, kwargs)
+
     
-        diropts = []
-    for opt in opts_dir:
-        if opt._short_opts:
-            diropts.extend(opt._short_opts)
-        if opt._long_opts:
-            diropts.extend(opt._long_opts)
+        def __init__(self, hass, filename, add_timestamp):
+        '''Initialize the service.'''
+        self.filepath = os.path.join(hass.config.config_dir, filename)
+        self.add_timestamp = add_timestamp
     
-        def test_module_exec(self):
-        if sys.version_info >= (2, 7):  # Python 2.6 doesn't support package execution
-            subprocess.check_call([sys.executable, '-m', 'youtube_dl', '--version'], cwd=rootDir, stdout=_DEV_NULL)
+        async def async_send_message(self, message, **kwargs):
+        '''Send the message to the user.'''
+        payload = {'text': message}
     
-        def convert(self, content_bytes):
-        raise NotImplementedError
+        def send_message(self, message='', **kwargs):
+        '''Send a message to a user.'''
+        _LOGGER.debug('Sending to: %s, %s', self._recipient, str(self._device))
+        data = {
+            'secret': self._secret,
+            'to': self._recipient,
+            'device': self._device,
+            'payload': message,
+        }
     
-        '''
-    abbrevs = [
-        (1 << 50, 'PB'),
-        (1 << 40, 'TB'),
-        (1 << 30, 'GB'),
-        (1 << 20, 'MB'),
-        (1 << 10, 'kB'),
-        (1, 'B')
-    ]
     
-    USERNAME = 'user'
-PASSWORD = 'password'
-# Basic auth encoded `USERNAME` and `PASSWORD`
-# noinspection SpellCheckingInspection
-BASIC_AUTH_HEADER_VALUE = 'Basic dXNlcjpwYXNzd29yZA=='
-BASIC_AUTH_URL = '/basic-auth/{0}/{1}'.format(USERNAME, PASSWORD)
-AUTH_OK = {'authenticated': True, 'user': USERNAME}
+from homeassistant.components.notify import BaseNotificationService
     
-    from httpie.input import ParseError
-from utils import MockEnvironment, http, HTTP_OK
-from fixtures import FILE_PATH_ARG, FILE_PATH, FILE_CONTENT
+        def backwards(self, orm):
     
-    \note Please be warned that the line numbers in the API documentation do not
-match the real locations in the source code of the package. This is an
-unintended artifact of doxygen, which I could only convince to use the
-correct module names by concatenating all files from the package into a single
-module file...
+            # User chose to not deal with backwards NULL issues for 'Environment.project_id'
+        raise RuntimeError(
+            'Cannot reverse this migration. 'Environment.project_id' and its values cannot be restored.'
+        )
     
-                    if self.accept[s] >= 1:
-                    #print 'accept state for alt %d' % self.accept[s]
-                    return self.accept[s]
+            for release_project in RangeQuerySetWrapperWithProgressBar(
+            orm.ReleaseProject.objects.all()
+        ):
+            orm.ReleaseProject.objects.filter(id=release_project.id).update(
+                new_groups=orm.Group.objects.filter(
+                    project_id=release_project.project_id,
+                    first_release_id=release_project.release_id,
+                ).count()
+            )
     
-    # Initialize some variables
-face_locations = []
+            # Deleting field 'ApiToken.application'
+        db.delete_column('sentry_apitoken', 'application_id')
     
-        # Apply some eyeliner
-    d.line(face_landmarks['left_eye'] + [face_landmarks['left_eye'][0]], fill=(0, 0, 0, 110), width=6)
-    d.line(face_landmarks['right_eye'] + [face_landmarks['right_eye'][0]], fill=(0, 0, 0, 110), width=6)
     
-        # STEP 2: Using the trained classifier, make predictions for unknown images
-    for image_file in os.listdir('knn_examples/test'):
-        full_file_path = os.path.join('knn_examples/test', image_file)
+def evaluate_masks(
+    json_dataset,
+    all_boxes,
+    all_segms,
+    output_dir,
+    use_salt=True,
+    cleanup=False
+):
+    if cfg.CLUSTER.ON_CLUSTER:
+        # On the cluster avoid saving these files in the job directory
+        output_dir = '/tmp'
+    res_file = os.path.join(
+        output_dir, 'segmentations_' + json_dataset.name + '_results')
+    if use_salt:
+        res_file += '_{}'.format(str(uuid.uuid4()))
+    res_file += '.json'
     
-    # Find all the faces in the image using the default HOG-based model.
-# This method is fairly accurate, but not as accurate as the CNN model and not GPU accelerated.
-# See also: find_faces_in_picture_cnn.py
-face_locations = face_recognition.face_locations(image)
     
-    # Find all the faces in the image using a pre-trained convolutional neural network.
-# This method is more accurate than the default HOG model, but it's slower
-# unless you have an nvidia GPU and dlib compiled with CUDA extensions. But if you do,
-# this will use GPU acceleration and perform well.
-# See also: find_faces_in_picture.py
-face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=0, model='cnn')
+def get_devkit_dir(name):
+    '''Retrieve the devkit dir for the dataset.'''
+    return _DATASETS[name][_DEVKIT_DIR]
     
-        # Print the location of each facial feature in this image
-    for facial_feature in face_landmarks.keys():
-        print('The {} in this face has the following points: {}'.format(facial_feature, face_landmarks[facial_feature]))
     
-    setup(
-    name='face_recognition',
-    version='1.2.3',
-    description='Recognize faces from Python or from the command line',
-    long_description=readme + '\n\n' + history,
-    author='Adam Geitgey',
-    author_email='ageitgey@gmail.com',
-    url='https://github.com/ageitgey/face_recognition',
-    packages=[
-        'face_recognition',
-    ],
-    package_dir={'face_recognition': 'face_recognition'},
-    package_data={
-        'face_recognition': ['models/*.dat']
-    },
-    entry_points={
-        'console_scripts': [
-            'face_recognition=face_recognition.face_recognition_cli:main',
-            'face_detection=face_recognition.face_detection_cli:main'
-        ]
-    },
-    install_requires=requirements,
-    license='MIT license',
-    zip_safe=False,
-    keywords='face_recognition',
-    classifiers=[
-        'Development Status :: 4 - Beta',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
-        'Natural Language :: English',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-    ],
-    test_suite='tests',
-    tests_require=test_requirements
-)
+# ---------------------------------------------------------------------------- #
+# Box heads
+# ---------------------------------------------------------------------------- #
+    
+    
+def add_single_scale_rpn_losses(model):
+    '''Add losses for a single scale RPN model (i.e., no FPN).'''
+    # Spatially narrow the full-sized RPN label arrays to match the feature map
+    # shape
+    model.net.SpatialNarrowAs(
+        ['rpn_labels_int32_wide', 'rpn_cls_logits'], 'rpn_labels_int32'
+    )
+    for key in ('targets', 'inside_weights', 'outside_weights'):
+        model.net.SpatialNarrowAs(
+            ['rpn_bbox_' + key + '_wide', 'rpn_bbox_pred'], 'rpn_bbox_' + key
+        )
+    loss_rpn_cls = model.net.SigmoidCrossEntropyLoss(
+        ['rpn_cls_logits', 'rpn_labels_int32'],
+        'loss_rpn_cls',
+        scale=model.GetLossScale()
+    )
+    loss_rpn_bbox = model.net.SmoothL1Loss(
+        [
+            'rpn_bbox_pred', 'rpn_bbox_targets', 'rpn_bbox_inside_weights',
+            'rpn_bbox_outside_weights'
+        ],
+        'loss_rpn_bbox',
+        beta=1. / 9.,
+        scale=model.GetLossScale()
+    )
+    loss_gradients = blob_utils.get_loss_gradients(
+        model, [loss_rpn_cls, loss_rpn_bbox]
+    )
+    model.AddLosses(['loss_rpn_cls', 'loss_rpn_bbox'])
+    return loss_gradients
 
     
     
-class Migration(DataMigration):
-    def forwards(self, orm):
-        'Write your forwards methods here.'
-        db.commit_transaction()
+# octave and aspect fields are only used on RetinaNet. Octave corresponds to the
+# scale of the anchor and aspect denotes which aspect ratio is used in the range
+# of aspect ratios
+FieldOfAnchors = namedtuple(
+    'FieldOfAnchors', [
+        'field_of_anchors', 'num_cell_anchors', 'stride', 'field_size',
+        'octave', 'aspect'
+    ]
+)
     
-            # Adding unique constraint on 'ProcessingIssue', fields ['project', 'checksum', 'type']
-        db.create_unique('sentry_processingissue', ['project_id', 'checksum', 'type'])
+    '''Construct minibatches for Mask R-CNN training when keypoints are enabled.
+Handles the minibatch blobs that are specific to training Mask R-CNN for
+keypoint detection. Other blobs that are generic to RPN or Fast/er R-CNN are
+handled by their respecitive roi_data modules.
+'''
     
-            # Adding model 'ApiAuthorization'
-        db.create_table(
-            'sentry_apiauthorization', (
-                (
-                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
-                        primary_key=True
-                    )
-                ), (
-                    'application', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.ApiApplication'], null=True
-                    )
-                ), (
-                    'user', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.User']
-                    )
-                ), ('scopes', self.gf('django.db.models.fields.BigIntegerField')(default=None)), (
-                    'date_added',
-                    self.gf('django.db.models.fields.DateTimeField')()
-                ),
-            )
+    
+def get_minibatch_blob_names(is_training=True):
+    '''Return blob names in the order in which they are read by the data loader.
+    '''
+    # data blob: holds a batch of N images, each with 3 channels
+    blob_names = ['data']
+    if cfg.RPN.RPN_ON:
+        # RPN-only or end-to-end Faster R-CNN
+        blob_names += rpn_roi_data.get_rpn_blob_names(is_training=is_training)
+    elif cfg.RETINANET.RETINANET_ON:
+        blob_names += retinanet_roi_data.get_retinanet_blob_names(
+            is_training=is_training
         )
-        db.send_create_signal('sentry', ['ApiAuthorization'])
+    else:
+        # Fast R-CNN like models trained on precomputed proposals
+        blob_names += fast_rcnn_roi_data.get_fast_rcnn_blob_names(
+            is_training=is_training
+        )
+    return blob_names
     
-    
-class Migration(DataMigration):
-    def forwards(self, orm):
-        from sentry.utils.query import RangeQuerySetWrapperWithProgressBar
-    
-        def _forwards(self, orm):
-        'Write your forwards methods here.'
-    
-    *What does this example do?
-The example implements a graphic class，which can be either an ellipse
-or a composition of several graphics. Every graphic can be printed.
-    
-    
-class Delegator(object):
-    '''
-    >>> delegator = Delegator(Delegate())
-    >>> delegator.p1
-    123
-    >>> delegator.p2
-    Traceback (most recent call last):
-    ...
-    AttributeError: 'Delegate' object has no attribute 'p2'
-    >>> delegator.do_something('nothing')
-    'Doing nothing'
-    >>> delegator.do_anything()
-    Traceback (most recent call last):
-    ...
-    AttributeError: 'Delegate' object has no attribute 'do_anything'
-    '''
-    
-    '''
-*What is this pattern about?
-This pattern aims to decouple the senders of a request from its
-receivers. It does this by allowing a request to move through chained
-objects until it is handled by an appropriate receiver.
-    
-        def rename(self, src, dest):
-        print(u'renaming %s to %s' % (src, dest))
-        os.rename(src, dest)
-    
-        print(u'Setting Data 1 = 10')
-    data1.data = 10
-    print(u'Setting Data 2 = 15')
-    data2.data = 15
-    print(u'Setting Data 1 = 3')
-    data1.data = 3
-    print(u'Setting Data 2 = 5')
-    data2.data = 5
-    print(u'Detach HexViewer from data1 and data2.')
-    data1.detach(view2)
-    data2.detach(view2)
-    print(u'Setting Data 1 = 10')
-    data1.data = 10
-    print(u'Setting Data 2 = 15')
-    data2.data = 15
-    
-    '''
-*What is this pattern about?
-This pattern aims to encapsulate each algorithm and allow them to be
-interchangeable. Separating algorithms allows the client to scale
-with larger and more complex algorithms, since the client and the
-strategies are kept independent of each other.
-    
-            path.append(start)
-        if start == end:
-            return path
-        for node in self.graph.get(start, []):
-            if node not in path:
-                newpath = self.find_path(node, end, path[:])
-                if newpath:
-                    return newpath
+    # Example usage:
+# data_loader_benchmark.par \
+#   NUM_GPUS 2 \
+#   TRAIN.DATASETS '('voc_2007_trainval',)' \
+#   TRAIN.PROPOSAL_FILES /path/to/voc_2007_trainval/proposals.pkl \
+#   DATA_LOADER.NUM_THREADS 4 \
+#   DATA_LOADER.MINIBATCH_QUEUE_SIZE 64 \
+#   DATA_LOADER.BLOBS_QUEUE_CAPACITY 8
