@@ -1,123 +1,125 @@
 
         
-        module Vagrant
-  # This class handles guest-OS specific interactions with a machine.
-  # It is primarily responsible for detecting the proper guest OS
-  # implementation and then delegating capabilities.
-  #
-  # Vagrant has many tasks which require specific guest OS knowledge.
-  # These are implemented using a guest/capability system. Various plugins
-  # register as 'guests' which determine the underlying OS of the system.
-  # Then, 'guest capabilities' register themselves for a specific OS (one
-  # or more), and these capabilities are called.
-  #
-  # Example capabilities might be 'mount_virtualbox_shared_folder' or
-  # 'configure_networks'.
-  #
-  # This system allows for maximum flexibility and pluginability for doing
-  # guest OS specific operations.
-  class Guest
-    include CapabilityHost
-    
-            # Get the machine
-        machine = nil
-        begin
-          machine = env.machine(self.name.to_sym, self.provider.to_sym)
-        rescue Errors::MachineNotFound
-          return false
-        end
-    
-            # This is what is called on the class to actually execute it. Any
-        # subclasses should implement this method and do any option parsing
-        # and validation here.
-        def execute
-        end
-    
-            # Executes a command and returns true if the command succeeded,
-        # and false otherwise. By default, this executes as a normal user,
-        # and it is up to the communicator implementation if they expose an
-        # option for running tests as an administrator.
-        #
-        # @see #execute
-        def test(command, opts=nil)
-        end
+              @terminal_width = if !tty?
+        nil
+      elsif ENV['COLUMNS']
+        ENV['COLUMNS'].to_i
+      else
+        `stty size`.scan(/\d+/).last.to_i
       end
+    rescue
+      @terminal_width = nil
     end
   end
 end
 
     
-            # Merge another configuration object into this one. This assumes that
-        # the other object is the same class as this one. This should not
-        # mutate this object, but instead should return a new, merged object.
-        #
-        # The default implementation will simply iterate over the instance
-        # variables and merge them together, with this object overriding
-        # any conflicting instance variables of the older object. Instance
-        # variables starting with '__' (double underscores) will be ignored.
-        # This lets you set some sort of instance-specific state on your
-        # configuration keys without them being merged together later.
-        #
-        # @param [Object] other The other configuration object to merge from,
-        #   this must be the same type of object as this one.
-        # @return [Object] The merged object.
-        def merge(other)
-          result = self.class.new
-    
-            # Mounts a shared folder via NFS. This assumes that the exports
-        # via the host are already done.
-        def mount_nfs(ip, folders)
-          raise BaseError, _key: :unsupported_nfs
-        end
-    
-            # Defines additional command line commands available by key. The key
-        # becomes the subcommand, so if you register a command 'foo' then
-        # 'vagrant foo' becomes available.
-        #
-        # @param [String] name Subcommand key.
-        def self.command(name=UNSET_VALUE, &block)
-          data[:command] ||= Registry.new
-    
-                    if provider_to_use && provider_to_use != active_provider
-                  # We found an active machine with a provider that doesn't
-                  # match the requested provider. Show an error.
-                  raise Errors::ActiveMachineWithDifferentProvider,
-                    name: active_name.to_s,
-                    active_provider: active_provider.to_s,
-                    requested_provider: provider_to_use.to_s
-                else
-                  # Use this provider and exit out of the loop. One of the
-                  # invariants [for now] is that there shouldn't be machines
-                  # with multiple providers.
-                  @logger.info('Active machine found with name #{active_name}. ' +
-                               'Using provider: #{active_provider}')
-                  provider_to_use = active_provider
-                  break
-                end
-              end
-            end
-    
-            # Returns the internal data associated with this plugin. This
-        # should NOT be called by the general public.
-        #
-        # @return [Hash]
-        def self.data
-          @data ||= {}
-        end
-    
-      def set_statuses
-    return unless page_requested?
-    
-        head 200
+    class FormulaPin
+  def initialize(f)
+    @f = f
   end
     
-          weeks << {
-        week: week.to_time.to_i.to_s,
-        statuses: Redis.current.get('activity:statuses:local:#{week_id}') || '0',
-        logins: Redis.current.pfcount('activity:logins:#{week_id}').to_s,
-        registrations: Redis.current.get('activity:accounts:local:#{week_id}') || '0',
-      }
-    end
+      describe '#value' do
+    let(:argv) { ['--foo=', '--bar=ab'] }
     
-    class Auth::OmniauthCallbacksController < Devise::OmniauthCallbacksController
-  skip_before_action :verify_authenticity_token
+    <style type='text/css' media='screen'>
+  *                   {margin: 0; padding: 0; border: 0; outline: 0;}
+  div.clear           {clear: both;}
+  body                {background: #EEEEEE; margin: 0; padding: 0;
+                       font-family: 'Lucida Grande', 'Lucida Sans Unicode',
+                       'Garuda';}
+  code                {font-family: 'Lucida Console', monospace;
+                       font-size: 12px;}
+  li                  {height: 18px;}
+  ul                  {list-style: none; margin: 0; padding: 0;}
+  ol:hover            {cursor: pointer;}
+  ol li               {white-space: pre;}
+  #explanation        {font-size: 12px; color: #666666;
+                       margin: 20px 0 0 100px;}
+/* WRAP */
+  #wrap               {width: 1000px; background: #FFFFFF; margin: 0 auto;
+                       padding: 30px 50px 20px 50px;
+                       border-left: 1px solid #DDDDDD;
+                       border-right: 1px solid #DDDDDD;}
+/* HEADER */
+  #header             {margin: 0 auto 25px auto;}
+  #header img         {float: left;}
+  #header #summary    {float: left; margin: 12px 0 0 20px; width:660px;
+                       font-family: 'Lucida Grande', 'Lucida Sans Unicode';}
+  h1                  {margin: 0; font-size: 36px; color: #981919;}
+  h2                  {margin: 0; font-size: 22px; color: #333333;}
+  #header ul          {margin: 0; font-size: 12px; color: #666666;}
+  #header ul li strong{color: #444444;}
+  #header ul li       {display: inline; padding: 0 10px;}
+  #header ul li.first {padding-left: 0;}
+  #header ul li.last  {border: 0; padding-right: 0;}
+/* BODY */
+  #backtrace,
+  #get,
+  #post,
+  #cookies,
+  #rack               {width: 980px; margin: 0 auto 10px auto;}
+  p#nav               {float: right; font-size: 14px;}
+/* BACKTRACE */
+  a#expando           {float: left; padding-left: 5px; color: #666666;
+                      font-size: 14px; text-decoration: none; cursor: pointer;}
+  a#expando:hover     {text-decoration: underline;}
+  h3                  {float: left; width: 100px; margin-bottom: 10px;
+                       color: #981919; font-size: 14px; font-weight: bold;}
+  #nav a              {color: #666666; text-decoration: none; padding: 0 5px;}
+  #backtrace li.frame-info {background: #f7f7f7; padding-left: 10px;
+                           font-size: 12px; color: #333333;}
+  #backtrace ul       {list-style-position: outside; border: 1px solid #E9E9E9;
+                       border-bottom: 0;}
+  #backtrace ol       {width: 920px; margin-left: 50px;
+                       font: 10px 'Lucida Console', monospace; color: #666666;}
+  #backtrace ol li    {border: 0; border-left: 1px solid #E9E9E9;
+                       padding: 2px 0;}
+  #backtrace ol code  {font-size: 10px; color: #555555; padding-left: 5px;}
+  #backtrace-ul li    {border-bottom: 1px solid #E9E9E9; height: auto;
+                       padding: 3px 0;}
+  #backtrace-ul .code {padding: 6px 0 4px 0;}
+  #backtrace.condensed .system,
+  #backtrace.condensed .framework {display:none;}
+/* REQUEST DATA */
+  p.no-data           {padding-top: 2px; font-size: 12px; color: #666666;}
+  table.req           {width: 980px; text-align: left; font-size: 12px;
+                       color: #666666; padding: 0; border-spacing: 0;
+                       border: 1px solid #EEEEEE; border-bottom: 0;
+                       border-left: 0;
+                       clear:both}
+  table.req tr th     {padding: 2px 10px; font-weight: bold;
+                       background: #F7F7F7; border-bottom: 1px solid #EEEEEE;
+                       border-left: 1px solid #EEEEEE;}
+  table.req tr td     {padding: 2px 20px 2px 10px;
+                       border-bottom: 1px solid #EEEEEE;
+                       border-left: 1px solid #EEEEEE;}
+/* HIDE PRE/POST CODE AT START */
+  .pre-context,
+  .post-context       {display: none;}
+    
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   CSRF
+    # Supported browsers:: all
+    # More infos::         http://flask.pocoo.org/docs/0.10/security/#json-security
+    #                      http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx
+    #
+    # JSON GET APIs are vulnerable to being embedded as JavaScript when the
+    # Array prototype has been patched to track data. Checks the referrer
+    # even on GET requests if the content type is JSON.
+    #
+    # If request includes Origin HTTP header, defers to HttpOrigin to determine
+    # if the request is safe. Please refer to the documentation for more info.
+    #
+    # The `:allow_if` option can be set to a proc to use custom allow/deny logic.
+    class JsonCsrf < Base
+      default_options :allow_if => nil
+    
+      describe '.random_token' do
+    it 'generates a base64 encoded 32 character string' do
+      expect(Base64.strict_decode64(token).length).to eq(32)
+    end
+  end
+end
