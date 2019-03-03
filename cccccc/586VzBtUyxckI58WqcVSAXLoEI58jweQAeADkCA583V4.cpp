@@ -1,180 +1,368 @@
 
         
-        #include 'swift/ASTSectionImporter/ASTSectionImporter.h'
-#include 'swift/Basic/Dwarf.h'
-#include 'swift/Serialization/SerializedModuleLoader.h'
-#include 'swift/Serialization/Validation.h'
-#include 'llvm/Support/Debug.h'
-#include 'llvm/Support/raw_ostream.h'
+        
+    {    QString appName;
+    QIcon appIcon;
+    QIcon trayAndWindowIcon;
+    QString titleAddText;
+};
     
-    DIRECTIONAL_PREPOSITION(above)
-DIRECTIONAL_PREPOSITION(after)
-DIRECTIONAL_PREPOSITION(along)
-DIRECTIONAL_PREPOSITION(alongside)
-DIRECTIONAL_PREPOSITION(as)
-DIRECTIONAL_PREPOSITION(at)
-DIRECTIONAL_PREPOSITION(before)
-DIRECTIONAL_PREPOSITION(below)
-DIRECTIONAL_PREPOSITION(by)
-DIRECTIONAL_PREPOSITION(following)
-DIRECTIONAL_PREPOSITION(for)
-DIRECTIONAL_PREPOSITION(from)
-DIRECTIONAL_PREPOSITION(given)
-DIRECTIONAL_PREPOSITION(in)
-DIRECTIONAL_PREPOSITION(including)
-DIRECTIONAL_PREPOSITION(inside)
-DIRECTIONAL_PREPOSITION(into)
-DIRECTIONAL_PREPOSITION(matching)
-DIRECTIONAL_PREPOSITION(of)
-DIRECTIONAL_PREPOSITION(on)
-DIRECTIONAL_PREPOSITION(passing)
-DIRECTIONAL_PREPOSITION(preceding)
-DIRECTIONAL_PREPOSITION(since)
-DIRECTIONAL_PREPOSITION(to)
-DIRECTIONAL_PREPOSITION(until)
-DIRECTIONAL_PREPOSITION(using)
-DIRECTIONAL_PREPOSITION(via)
-DIRECTIONAL_PREPOSITION(when)
-PREPOSITION(with)
-DIRECTIONAL_PREPOSITION(within)
-    
-      switch (role) {
-  case NameRole::BaseName:
-  case NameRole::BaseNameSelf:
-  case NameRole::Property:
-    // If we ended up with something that can't be a member name, do nothing.
-    // do nothing.
-    if (!canBeMemberName(name))
-      return origName;
+    SECP256K1_INLINE static void secp256k1_fe_sqr_inner(uint64_t *r, const uint64_t *a) {
+/**
+ * Registers: rdx:rax = multiplication accumulator
+ *            r9:r8   = c
+ *            rcx:rbx = d
+ *            r10-r14 = a0-a4
+ *            r15     = M (0xfffffffffffff)
+ *            rdi     = r
+ *            rsi     = a / t?
+ */
+  uint64_t tmp1, tmp2, tmp3;
+__asm__ __volatile__(
+    'movq 0(%%rsi),%%r10\n'
+    'movq 8(%%rsi),%%r11\n'
+    'movq 16(%%rsi),%%r12\n'
+    'movq 24(%%rsi),%%r13\n'
+    'movq 32(%%rsi),%%r14\n'
+    'movq $0xfffffffffffff,%%r15\n'
     }
     
-    #include 'swift/Basic/Unicode.h'
+            secp256k1_ecmult_const(&res, &pt, &s);
+        secp256k1_ge_set_gej(&pt, &res);
+        /* Compute a hash of the point in compressed form
+         * Note we cannot use secp256k1_eckey_pubkey_serialize here since it does not
+         * expect its output to be secret and has a timing sidechannel. */
+        secp256k1_fe_normalize(&pt.x);
+        secp256k1_fe_normalize(&pt.y);
+        secp256k1_fe_get_b32(x, &pt.x);
+        y[0] = 0x02 | secp256k1_fe_is_odd(&pt.y);
     
-    /// The list of known CF types.  We use 'constexpr' to verify that this is
-/// emitted as a constant.  Note that this is expected to be sorted in
-/// quasi-lexicographic order.
-static constexpr const llvm::StringLiteral KnownCFTypes[] = {
-#define CF_TYPE(NAME) #NAME,
-#define NON_CF_TYPE(NAME)
-#include 'SortedCFDatabase.def'
+        // A more complex valid grammar. PROTOCOLINFO accepts a VersionLine that
+    // takes a key=value pair followed by an OptArguments, making this valid.
+    // Because an OptArguments contains no semantic data, there is no point in
+    // parsing it.
+    CheckParseTorReplyMapping(
+        'SOME=args,here MORE optional=arguments  here', {
+            {'SOME', 'args,here'},
+        });
+    
+    ; ROTATE_ARGS
+; Rotate values of symbols a...h
+%macro ROTATE_ARGS 0
+%xdefine TMP_ h
+%xdefine h g
+%xdefine g f
+%xdefine f e
+%xdefine e d
+%xdefine d c
+%xdefine c b
+%xdefine b a
+%xdefine a TMP_
+%endm
+    
+      static void ClearCache(content::RenderProcessHost* render_view_host);
+  static void SetProxyConfig(content::RenderProcessHost* render_process_host,
+                             const std::string& proxy_config);
+    
+    
+    {  DISALLOW_COPY_AND_ASSIGN(Clipboard);
 };
-const size_t NumKnownCFTypes = sizeof(KnownCFTypes) / sizeof(*KnownCFTypes);
     
-      static CFPointeeInfo forVoid() {
-    CFPointeeInfo info;
-    info.IsValid = true;
-    info.IsConst = false;
-    info.Decl = nullptr;
-    return info;
+      content::RenderProcessHost* render_process_host = GetSenderWebContents()->GetMainFrame()->GetProcess();
+  net::URLRequestContextGetter* context_getter =
+    render_process_host->GetStoragePartition()->GetURLRequestContext();
+    
+      private:
+    bool ReadText(ClipboardData& data) {
+      DCHECK(data.type == TYPE_TEXT);
+      base::string16 text;
+      clipboard_->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
+      data.data.reset(new std::string(base::UTF16ToUTF8(text)));
+      return true;
+    }
+    
+    
+    {
+  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.getListSync', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwClipboardGetListSyncFunction);
+};
+    
+      // implement nw.Screen.initEventListeners()
+  class NwScreenInitEventListenersFunction: public NWSyncExtensionFunction {
+    public:
+      NwScreenInitEventListenersFunction();
+      bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    # define INSTANTIATE_TEST_CASE_P(prefix, test_case_name, generator) \
+  ::testing::internal::ParamGenerator<test_case_name::ParamType> \
+      gtest_##prefix##test_case_name##_EvalGenerator_() { return generator; } \
+  int gtest_##prefix##test_case_name##_dummy_ = \
+      ::testing::UnitTest::GetInstance()->parameterized_test_registry(). \
+          GetTestCasePatternHolder<test_case_name>(\
+              #test_case_name, __FILE__, __LINE__)->AddTestCaseInstantiation(\
+                  #prefix, \
+                  &gtest_##prefix##test_case_name##_EvalGenerator_, \
+                  __FILE__, __LINE__)
+    
+      // Same as above, but you can choose the interception scope of this object.
+  ScopedFakeTestPartResultReporter(InterceptMode intercept_mode,
+                                   TestPartResultArray* result);
+    
+      // Verifies that registered_tests match the test names in
+  // defined_test_names_; returns registered_tests if successful, or
+  // aborts the program otherwise.
+  const char* VerifyRegisteredTestNames(
+      const char* file, int line, const char* registered_tests);
+    
+      // Copy an existing linked_ptr<>, adding ourselves to the list of references.
+  template <typename U> linked_ptr(linked_ptr<U> const& ptr) { copy(&ptr); }
+  linked_ptr(linked_ptr const& ptr) {  // NOLINT
+    assert(&ptr != this);
+    copy(&ptr);
   }
     
-    #include 'llvm/ADT/Optional.h'
-#include 'llvm/ADT/StringRef.h'
     
-      const auto& X = in[0];
-  const auto& W = in[1];
-  const auto& b = in[2];
-  auto axis = helper.GetSingleArgument<int32_t>('axis', 1);
-  const auto canonical_axis = canonical_axis_index_(axis, in[0].dims().size());
-  const int M = size_to_dim_(canonical_axis, GetDimsVector(in[0]));
-  const int K = size_from_dim_(canonical_axis, GetDimsVector(in[0]));
-  auto axis_w = helper.GetSingleArgument<int32_t>('axis_w', 1);
-  const int canonical_axis_w =
-      canonical_axis_index_(axis_w, in[1].dims().size());
-  const int N = size_to_dim_(canonical_axis_w, GetDimsVector(in[1]));
+template <typename T1, typename T2, typename T3, typename T4, typename T5>
+class CartesianProductGenerator5
+    : public ParamGeneratorInterface< ::std::tr1::tuple<T1, T2, T3, T4, T5> > {
+ public:
+  typedef ::std::tr1::tuple<T1, T2, T3, T4, T5> ParamType;
+    }
     
-    Github Links:
+      // Asserts that s.c_string() returns NULL.
+  //
+  // <TechnicalDetails>
+  //
+  // If we write NULL instead of
+  //
+  //   static_cast<const char *>(NULL)
+  //
+  // in this assertion, it will generate a warning on gcc 3.4.  The
+  // reason is that EXPECT_EQ needs to know the types of its
+  // arguments in order to print them when it fails.  Since NULL is
+  // #defined as 0, the compiler will use the formatter function for
+  // int to print it.  However, gcc thinks that NULL should be used as
+  // a pointer, not an int, and therefore complains.
+  //
+  // The root of the problem is C++'s lack of distinction between the
+  // integer number 0 and the null pointer constant.  Unfortunately,
+  // we have to live with this fact.
+  //
+  // </TechnicalDetails>
+  EXPECT_STREQ(NULL, s.c_string());
+    
+            bool IsInfinite() override;
+    
+        template <>
+    /*static*/ NDArrayViewPtr NDArrayView::RandomUniform<int16_t>(const NDShape& shape, double rangeBegin, double rangeEnd, unsigned long seed, const DeviceDescriptor& device)
+    {
+        return NDArrayView::_RandomUniform<int16_t, short>(shape, rangeBegin, rangeEnd, seed, device);
+    }
+    
+        // Make sure that the dictionary contains all required keys, and if it does, return version value
+    // from the dictionary.
+    template <typename T>
+    inline size_t ValidateDictionary(const Dictionary& dict, const std::vector<std::wstring>& requiredKeys, const std::wstring& typeValue, size_t currentVersion)
+    { 
+        const auto& version = GetVersion(dict);
+    }
+    
+            std::vector<size_t> sequenceLengths(numSequences);
+        size_t maxSequenceLength = 0;
+        auto dataType = sequences[0]->GetDataType();
+        auto storageFormat = sequences[0]->GetStorageFormat();
+        NDShape fullyDefinedSampleShape = sampleShape;
+        for (size_t i = 0; i < numSequences; ++i)
+        {
+            auto currentSequenceData = sequences[i];
+            if (currentSequenceData->GetDataType() != dataType)
+                InvalidArgument('Value::Create: The data for all sequences/samples must have the same data type');
+    }
+    
+        const NDShape& Variable::Shape() const
+    {
+        return m_dataFields->m_shape; 
+    }
     
     
-    {} // namespace caffe2
-    
-    
-    {} // namespace caffe2
+    {
+    {    private:
+        // Disallow copy and move construction and assignment
+        VariableFields(const VariableFields&) = delete; VariableFields& operator=(const VariableFields& other) = delete; VariableFields(VariableFields&&) = delete; VariableFields& operator=(VariableFields&&) = delete;
+    };
+}
 
     
-    Speed* Speed::create(ActionInterval* action, float speed)
+    // GetData - Gets metadata from the specified section (into CPU memory)
+// sectionName - section name to retrieve data from
+// numRecords - number of records to read
+// data - pointer to data buffer, if NULL, dataBufferSize will be set to size of required buffer to accomidate request
+// dataBufferSize - [in] size of the databuffer in bytes
+//                  [out] size of buffer filled with data
+// recordStart - record to start reading from, defaults to zero (start of data)
+// returns: true if data remains to be read, false if the end of data was reached
+bool DataReader::GetData(const std::wstring& sectionName, size_t numRecords, void* data, size_t& dataBufferSize, size_t recordStart)
 {
-    Speed *ret = new (std::nothrow) Speed();
-    if (ret && ret->initWithAction(action, speed))
+    bool bRet = true;
+    for (size_t i = 0; i < m_ioNames.size(); i++)
+        bRet &= m_dataReaders[m_ioNames[i]]->GetData(sectionName, numRecords, data, dataBufferSize, recordStart);
+    return bRet;
+}
+    
+    
+    {    ~ScopeTimer()
+    {
+        if (m_verbosity > 2)
+        {
+            m_aggregateTimer.Stop();
+            double time = m_aggregateTimer.ElapsedSeconds();
+            fprintf(stderr, m_message.c_str(), time);
+        }
+    }
+};
+    
+        // initialize by reading a matrix from a text file
+    void InitFromFile(const std::wstring& initFromFilePath);
+    
+    ScientificNumberFormatter *ScientificNumberFormatter::createSuperscriptInstance(
+            DecimalFormat *fmtToAdopt, UErrorCode &status) {
+    return createInstance(fmtToAdopt, new SuperscriptStyle(), status);
+}
+    
+    UnicodeString&
+SelectFormat::format(const Formattable& obj,
+                   UnicodeString& appendTo,
+                   FieldPosition& pos,
+                   UErrorCode& status) const
+{
+    if (U_FAILURE(status)) {
+        return appendTo;
+    }
+    if (obj.getType() == Formattable::kString) {
+        return format(obj.getString(status), appendTo, pos, status);
+    } else {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return appendTo;
+    }
+}
+    
+    #ifndef __SHARED_CALENDAR_H__
+#define __SHARED_CALENDAR_H__
+    
+    class NumberFormat;
+    
+            // Determine day period.
+        DayPeriodRules::DayPeriod periodType;
+        if (hour == 0 && minute == 0 && second == 0 && ruleSet->hasMidnight()) {
+            periodType = DayPeriodRules::DAYPERIOD_MIDNIGHT;
+        } else if (hour == 12 && minute == 0 && second == 0 && ruleSet->hasNoon()) {
+            periodType = DayPeriodRules::DAYPERIOD_NOON;
+        } else {
+            periodType = ruleSet->getDayPeriodForHour(hour);
+        }
+    
+        // Handle a cursor preceding the output
+    if (hasCursor && cursor < 0) {
+        while (cursor++ < 0) {
+            ICU_Utility::appendToRule(rule, (UChar)0x0040 /*@*/, TRUE, escapeUnprintable, quoteBuf);
+        }
+        // Fall through and append '|' below
+    }
+    
+    // finish.
+void assembly_builder::visit(func_def_syntax &node)
+{
+	in_global = false;
+	
+	// check if multiple definition.
+	if (functions.count(node.name)) {
+		err.error(node.line, node.pos, 'Function '' + node.name + '' multiply defined. Skipping.');
+		error_flag = true;
+		return;
+	}
+	
+	FunctionType *FT = FunctionType::get(Type::getVoidTy(context), {}, false);
+	current_function = Function::Create(FT, GlobalValue::LinkageTypes::ExternalLinkage, node.name, module.get());
+	functions.emplace(node.name, current_function);
+    }
+    
+        input_func = Function::Create(FunctionType::get(Type::getVoidTy(module->getContext()), {}, false),
+                                  GlobalValue::LinkageTypes::ExternalLinkage,
+                                  'input',
+                                  module);
+    builder.SetInsertPoint(BasicBlock::Create(module->getContext(), 'entry', input_func));
+    builder.CreateCall(input_impl, {input_var});
+    builder.CreateRetVoid();
+    
+    
+    
+        rapidjson::StringBuffer s;
+    rapidjson::PrettyWriter<decltype(s)> writer(s);
+    c1_recognizer::syntax_tree::syntax_tree_serializer<decltype(writer)> serializer(writer);
+    serializer.serialize(*ast);
+    
+    PointArray* PointArray::create(ssize_t capacity)
+{
+    PointArray* pointArray = new (std::nothrow) PointArray();
+    if (pointArray && pointArray->initWithCapacity(capacity))
+    {
+        pointArray->autorelease();
+        return pointArray;
+    }
+    }
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    __CCCallFuncND * __CCCallFuncND::create(Ref* selectorTarget, SEL_CallFuncND selector, void* d)
+{
+    __CCCallFuncND* ret = new (std::nothrow) __CCCallFuncND();
+    
+    if (ret && ret->initWithTarget(selectorTarget, selector, d))
     {
         ret->autorelease();
         return ret;
     }
+    
     CC_SAFE_DELETE(ret);
     return nullptr;
 }
     
-    /** Returns the Cardinal Spline position for a given set of control points, tension and time */
-extern CC_DLL Vec2 ccCardinalSplineAt(const Vec2 &p0, const Vec2 &p1, const Vec2 &p2, const Vec2 &p3, float tension, float t);
-    
-        /** Creates the action with the callback
-    
-        //
-    // Overrides
-    //
-    /**
-     * @param time In seconds.
-     */
-    virtual void update(float time) override;
-    virtual DelayTime* reverse() const override;
-    virtual DelayTime* clone() const override;
-    
-    protected:
-    float _to;
-    float _from;
-    
-    The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-    
-      env.now_micros_ += 200u;  // sleep credit 300
-  // One refill, credit 4480 balance + 3000 credit + 10240 refill
-  // Use 8000, 9720 left
-  ASSERT_EQ(static_cast<uint64_t>(1024u), controller.GetDelay(&env, 8000u));
-    
-      const char* Name() const override { return 'MyFilter'; }
+    // FIXME: Passing 'const O *' instead of 'const O&' because HASH_FIND_IT requires the address of a pointer
+// and, it is not possible to get the address of a reference
+size_t ActionManager::getNumberOfRunningActionsInTargetByTag(const Node *target,
+                                                             int tag)
+{
+    CCASSERT(tag != Action::INVALID_TAG, 'Invalid tag value!');
+    }
     
     
-    {  // Cleanup
-  delete txn_db;
-  DestroyDB(kDBPath, options);
-  return 0;
+    {    delete action;
+    return nullptr;
 }
     
-    // A thread local context for gathering io-stats efficiently and transparently.
-// Use SetPerfLevel(PerfLevel::kEnableTime) to enable time stats.
-    
-    
-    {// Factor method to create a new persistent cache
-Status NewPersistentCache(Env* const env, const std::string& path,
-                          const uint64_t size,
-                          const std::shared_ptr<Logger>& log,
-                          const bool optimized_for_nvm,
-                          std::shared_ptr<PersistentCache>* cache);
-}  // namespace rocksdb
-
-    
-      ThreadStatus(const uint64_t _id,
-               const ThreadType _thread_type,
-               const std::string& _db_name,
-               const std::string& _cf_name,
-               const OperationType _operation_type,
-               const uint64_t _op_elapsed_micros,
-               const OperationStage _operation_stage,
-               const uint64_t _op_props[],
-               const StateType _state_type) :
-      thread_id(_id), thread_type(_thread_type),
-      db_name(_db_name),
-      cf_name(_cf_name),
-      operation_type(_operation_type),
-      op_elapsed_micros(_op_elapsed_micros),
-      operation_stage(_operation_stage),
-      state_type(_state_type) {
-    for (int i = 0; i < kNumOperationProperties; ++i) {
-      op_properties[i] = _op_props[i];
+    /**
+ @brief This action simulates a page turn from the bottom right hand corner of the screen.
+ 
+ @details It's not much use by itself but is used by the PageTurnTransition.
+         Based on an original paper by L Hong et al.
+         http://www.parc.com/publication/1638/turning-pages-of-3d-electronic-books.html
+  
+ @since v0.8.2
+ */
+class CC_DLL PageTurn3D : public Grid3DAction
+{
+public:
+    /**
+     * @js NA 
+     */
+    virtual GridBase* getGrid() override;
     }
-  }
     
-      // Set the number of background threads that will be executing the
-  // scheduled jobs.
-  virtual void SetBackgroundThreads(int num) = 0;
-  virtual int GetBackgroundThreads() = 0;
+    
