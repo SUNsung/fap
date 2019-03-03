@@ -1,165 +1,165 @@
 
         
-          protected
+        module Gitlab
+  module BackgroundMigration
+    class PopulateMergeRequestsLatestMergeRequestDiffId
+      BATCH_SIZE = 1_000
     
-          # Forgets the given resource by deleting a cookie
-      def forget_me(resource)
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.forget_me!
-        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
+    module Gitlab
+  module Ci
+    module Pipeline
+      # Class for preloading data associated with pipelines such as commit
+      # authors.
+      class Preloader
+        def self.preload!(pipelines)
+          ##
+          # This preloads all commits at once, because `Ci::Pipeline#commit` is
+          # using a lazy batch loading, what results in only one batched Gitaly
+          # call.
+          #
+          pipelines.each(&:commit)
+    
+          # Reads a cache key.
+      #
+      # If the key exists and has a non-empty value its TTL is refreshed
+      # automatically.
+      #
+      # raw_key - The cache key to read.
+      # timeout - The new timeout of the key if the key is to be refreshed.
+      def self.read(raw_key, timeout: TIMEOUT)
+        key = cache_key_for(raw_key)
+        value = Redis::Cache.with { |redis| redis.get(key) }
+    
+            def representation_class
+          Representation::Issue
+        end
+    
+            def collection_method
+          :lfs_objects
+        end
+    
+          # Associates the given database ID with the current object.
+      #
+      # database_id - The ID of the corresponding database row.
+      def cache_database_id(database_id)
+        Caching.write(cache_key, database_id)
       end
     
-          generate_helpers!(Devise::URL_HELPERS)
+          # Imports all the objects in sequence in the current thread.
+      def sequential_import
+        each_object_to_import do |object|
+          repr = representation_class.from_api_response(object)
     
-          def initialize_from_record(record)
-        @scope_name = Devise::Mapping.find_scope!(record)
-        @resource   = instance_variable_set('@#{devise_mapping.name}', record)
+              new(hash)
+        end
+    
+          def parse_uri(location)
+        location && URI.parse(location)
+      rescue URI::InvalidURIError
+        nil
       end
     
-            selected_modules.each do |m|
-          mod = Devise::Models.const_get(m.to_s.classify)
+        def initialize(name, options) #:nodoc:
+      @scoped_path = options[:as] ? '#{options[:as]}/#{name}' : name.to_s
+      @singular = (options[:singular] || @scoped_path.tr('/', '_').singularize).to_sym
     
-    require 'devise/strategies/rememberable'
-require 'devise/hooks/rememberable'
-require 'devise/hooks/forgetable'
-    
-          # Checks whether the user session has expired based on configured time.
-      def timedout?(last_access)
-        !timeout_in.nil? && last_access && last_access <= timeout_in.ago
-      end
-    
-      # staged_path not available in Installer/Uninstall Stanza, workaround by nesting with preflight/postflight
-  # see https://github.com/Homebrew/homebrew-cask/pull/8887
-  # and https://github.com/Homebrew/homebrew-cask-versions/pull/296
-    
-        # Adds an entry to the exception's Sass backtrace.
-    #
-    # @param attrs [{Symbol => Object}] The information in the backtrace entry.
-    #   See \{#sass\_backtrace}
-    def add_backtrace(attrs)
-      sass_backtrace << attrs.reject {|_k, v| v.nil?}
+        def pos
+      byte_to_str_pos @s.pos
     end
     
-        # Finds the line of the source template
-    # on which an exception was raised.
-    #
-    # @param exception [Exception] The exception
-    # @return [String] The line number
-    def get_line(exception)
-      # SyntaxErrors have weird line reporting
-      # when there's trailing whitespace
-      if exception.is_a?(::SyntaxError)
-        return (exception.message.scan(/:(\d+)/).first || ['??']).first
-      end
-      (exception.backtrace[0].scan(/:(\d+)/).first || ['??']).first
+        def log_file_info(s)
+      puts '    #{magenta s}'
     end
     
-          opts.on('-v', '--version', 'Print the Sass version.') do
-        puts('Ruby Sass #{Sass.version[:string]}')
-        exit
-      end
-    end
-    
-    def commit_details
-  { :message => 'Did something at #{Time.now}',
-    :name    => 'Tom Preston-Werner',
-    :email   => 'tom@github.com' }
-end
-    
-      test 'extracting paths from URLs' do
-    assert_nil extract_path('Eye-Of-Sauron')
-    assert_equal 'Mordor', extract_path('Mordor/Sauron')
-    assert_equal 'Mordor/Sauron', extract_path('Mordor/Sauron/Evil')
-  end
-    
-      test 'remove page extentions' do
-    view = Precious::Views::LatestChanges.new
-    assert_equal 'page', view.remove_page_extentions('page.wiki')
-    assert_equal 'page-wiki', view.remove_page_extentions('page-wiki.md')
-    assert_equal 'file.any_extention', view.remove_page_extentions('file.any_extention')
-  end
-    
-    #############################################################################
-#
-# Helper functions
-#
-#############################################################################
-    
-    if options[:irb]
-  require 'irb'
-  # http://jameskilton.com/2009/04/02/embedding-irb-into-your-ruby-application/
-  module IRB # :nodoc:
-    def self.start_session(binding)
-      unless @__initialized
-        args = ARGV
-        ARGV.replace(ARGV.dup)
-        IRB.setup(nil)
-        ARGV.replace(args)
-        @__initialized = true
+          # Install the gems to make them available locally when bundler does his local resolution
+      post_install_messages = []
+      pack.gems.each do |packed_gem|
+        PluginManager.ui.debug('Installing, #{packed_gem.name}, version: #{packed_gem.version} file: #{packed_gem.file}')
+        post_install_messages << LogStash::PluginManager::GemInstaller::install(packed_gem.file, packed_gem.plugin?)
       end
     
-        # Extract the path string that Gollum::Wiki expects
-    def extract_path(file_path)
-      return nil if file_path.nil?
-      last_slash = file_path.rindex('/')
-      if last_slash
-        file_path[0, last_slash]
+        context 'update a specific plugin' do
+      it 'has executed successfully' do
+        cmd = logstash.run_command_in_path('bin/logstash-plugin update --no-verify #{plugin_name}')
+        expect(cmd.stdout).to match(/Updating #{plugin_name}/)
+        expect(logstash).not_to have_installed?(plugin_name, previous_version)
       end
     end
     
-    # The base module that gets included in ActiveRecord::Base. See the
-# documentation for Paperclip::ClassMethods for more useful information.
-module Paperclip
-  extend Helpers
-  extend Logger
-  extend ProcessorHelpers
+          # Returns the collection the `for` loop is iterating over.
+      #
+      # @return [Node] The collection the `for` loop is iterating over
+      def collection
+        node_parts[1]
+      end
     
-        # Build the packaging metadata files.
-    checksums = {}
-    self.files.each do |f|
-      path = staging_path(f)
-      if File.symlink?(path)
-        checksums[f] = '-'
-      elsif File.file?(path)
-        checksums[f] = Digest::SHA256.file(path).hexdigest
+          # Custom destructuring method. This is used to normalize the branches
+      # for `pair` and `kwsplat` nodes, to add duck typing to `hash` elements.
+      #
+      # @return [Array<KeywordSplatNode>] the different parts of the `kwsplat`
+      def node_parts
+        [self, self]
       end
     end
-    
-        self.url = control['url'][0]
-    # Groups could include more than one.
-    # Speaking of just taking the first entry of the field:
-    # A crude thing to do, but I suppose it's better than nothing.
-    # -- Daniel Haskin, 3/24/2015
-    self.category = control['group'] && control['group'][0] || self.category
-    
-      def iteration
-    return @iteration ? @iteration : 1
-  end
-    
-      def build!(params)
-    # TODO(sissel): Support these somehow, perhaps with execs and files.
-    self.scripts.each do |name, path|
-      case name
-        when 'pre-install'
-        when 'post-install'
-        when 'pre-uninstall'
-        when 'post-uninstall'
-      end # case name
-    end # self.scripts.each
-    
-      # Where we keep metadata and post install scripts and such
-  def fpm_meta_path
-    @fpm_meta_path ||= begin
-                         path = File.join(staging_path, '.fpm')
-                         FileUtils.mkdir_p(path)
-                         path
-                       end
   end
 end
 
     
-        # Generate the package 'Prototype' file
-    File.open('#{build_path}/Prototype', 'w') do |prototype|
-      prototype.puts('i pkginfo')
-      prototype.puts('i preinstall') if self.scripts['pre-install']
-      prototype.puts('i postinstall') if self.scripts['post-install']
+    module RuboCop
+  module AST
+    # Common functionality for nodes that can be used as hash elements:
+    # `pair`, `kwsplat`
+    module HashElementNode
+      # Returns the key of this `hash` element.
+      #
+      # @note For keyword splats, this returns the whole node
+      #
+      # @return [Node] the key of the hash element
+      def key
+        node_parts[0]
+      end
+    
+        def extra_enabled_comments
+      extra_enabled_comments_with_names([], {})
+    end
+    
+      s.add_dependency 'bootstrap',       '~> 4.1.3'
+  s.add_dependency 'glyphicons',      '~> 1.0.2'
+  s.add_dependency 'jquery-rails',    '~> 4.3'
+  s.add_dependency 'jquery-ui-rails', '~> 6.0.1'
+  s.add_dependency 'select2-rails',   '3.5.9.1' # 3.5.9.2 breaks several specs
+end
+
+    
+          def authenticate_user
+        return if @current_api_user
+    
+            def address_params
+          params.require(:address).permit(permitted_address_attributes)
+        end
+    
+            def advance
+          authorize! :update, @order, order_token
+          while @order.next; end
+          respond_with(@order, default_template: 'spree/api/v1/orders/show', status: 200)
+        end
+    
+        worker_count.times do |count|
+      template '/data/#{app}/shared/config/sidekiq_#{count}.yml' do
+        owner node[:owner_name]
+        group node[:owner_name]
+        mode 0644
+        source 'sidekiq.yml.erb'
+        variables({
+          :require => '/data/#{app}/current'
+        })
+      end
+    end
+    
+    
+    # By leaving this as a class method, it can be pluggable and used by the Manager actor. Making it
+    # an instance method will make it async to the Fetcher actor
+    def self.bulk_requeue(inprogress, options)
+      return if inprogress.empty?
+    
+        private
