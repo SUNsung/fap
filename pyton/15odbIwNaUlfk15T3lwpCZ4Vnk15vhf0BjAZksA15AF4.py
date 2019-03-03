@@ -1,121 +1,80 @@
 
         
-        
-def get_setting_name_and_refid(node):
-    '''Extract setting name from directive index node'''
-    entry_type, info, refid = node['entries'][0][:3]
-    return info.replace('; setting', ''), refid
+        import keras
+from keras.callbacks import TensorBoard
+from keras.datasets import mnist
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Flatten
+from keras.layers import Conv2D, MaxPooling2D
+from keras import backend as K
     
-            self.tail.appendleft(delta)
-        self.lasttime = now
-        self.concurrent += 1
     
-    '''
+def test_regularization_shared_model():
+    dense_layer = Dense(num_classes,
+                        kernel_regularizer=regularizers.l1(),
+                        activity_regularizer=regularizers.l1())
     
-    def _print_commands(settings, inproject):
-    _print_header(settings, inproject)
-    print('Usage:')
-    print('  scrapy <command> [options] [args]\n')
-    print('Available commands:')
-    cmds = _get_commands_dict(settings, inproject)
-    for cmdname, cmdclass in sorted(cmds.items()):
-        print('  %-13s %s' % (cmdname, cmdclass.short_desc()))
-    if not inproject:
-        print()
-        print('  [ more ]      More commands available when run from project directory')
-    print()
-    print('Use 'scrapy <command> -h' to see more info about a command')
+        ```python
+        import tensorflow as tf
+        from keras.applications import Xception
+        from keras.utils import multi_gpu_model
+        import numpy as np
     
-        def help(self):
-        '''An extensive help for the command. It will be shown when using the
-        'help' command. It can contain newlines, since not post-formatting will
-        be applied to its contents.
-        '''
-        return self.long_desc()
+    # Model creation using tensors from the get_next() graph node.
+inputs, targets = iterator.get_next()
+model_input = layers.Input(tensor=inputs)
+model_output = cnn_layers(model_input)
+train_model = keras.models.Model(inputs=model_input, outputs=model_output)
     
-        requires_project = True
-    
-        def run(self, args, opts):
-        settings = self.crawler_process.settings
-        if opts.get:
-            s = settings.get(opts.get)
-            if isinstance(s, BaseSettings):
-                print(json.dumps(s.copy_to_dict()))
-            else:
-                print(s)
-        elif opts.getbool:
-            print(settings.getbool(opts.getbool))
-        elif opts.getint:
-            print(settings.getint(opts.getint))
-        elif opts.getfloat:
-            print(settings.getfloat(opts.getfloat))
-        elif opts.getlist:
-            print(settings.getlist(opts.getlist))
+    # Display the 1st 8 corrupted and denoised images
+rows, cols = 10, 30
+num = rows * cols
+imgs = np.concatenate([x_test[:num], x_test_noisy[:num], x_decoded[:num]])
+imgs = imgs.reshape((rows * 3, cols, image_size, image_size))
+imgs = np.vstack(np.split(imgs, rows, axis=1))
+imgs = imgs.reshape((rows * 3, -1, image_size, image_size))
+imgs = np.vstack([np.hstack(i) for i in imgs])
+imgs = (imgs * 255).astype(np.uint8)
+plt.figure()
+plt.axis('off')
+plt.title('Original images: top rows, '
+          'Corrupted Input: middle rows, '
+          'Denoised Input:  third rows')
+plt.imshow(imgs, interpolation='none', cmap='gray')
+Image.fromarray(imgs).save('corrupted_and_denoised.png')
+plt.show()
 
     
-            def getCertificateOptions(self):
-            # setting verify=True will require you to provide CAs
-            # to verify against; in other words: it's not that simple
+    from __future__ import print_function
     
-            def _identityVerifyingInfoCallback(self, connection, where, ret):
-            if where & SSL_CB_HANDSHAKE_START:
-                set_tlsext_host_name(connection, self._hostnameBytes)
-            elif where & SSL_CB_HANDSHAKE_DONE:
-                try:
-                    verifyHostname(connection, self._hostnameASCII)
-                except verification_errors as e:
-                    logger.warning(
-                        'Remote certificate is not valid for hostname '{}'; {}'.format(
-                            self._hostnameASCII, e))
+    x_train_gte5 = x_train[y_train >= 5]
+y_train_gte5 = y_train[y_train >= 5] - 5
+x_test_gte5 = x_test[y_test >= 5]
+y_test_gte5 = y_test[y_test >= 5] - 5
     
-        @staticmethod
-    def import_windows_ca(certfile):
-        xlog.debug('Begin to import Windows CA')
-        with open(certfile, 'rb') as fp:
-            certdata = fp.read()
-            if certdata.startswith(b'-----'):
-                begin = b'-----BEGIN CERTIFICATE-----'
-                end = b'-----END CERTIFICATE-----'
-                certdata = base64.b64decode(b''.join(certdata[certdata.find(begin)+len(begin):certdata.find(end)].strip().splitlines()))
-        try:
-            common_name = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_ASN1, certdata).get_subject().CN
-        except Exception as e:
-            logging.error('load_certificate(certfile=%r) 失败：%s', certfile, e)
-            return -1
+            html = get_content(endpoint, headers= fake_header_id)
+        html_json = json.loads(html)
     
-            Python does not have any size restrictions, but the compilation of
-        such large source files seems to be pretty memory hungry. The memory
-        consumption of the python process grew to >1.5GB when importing a
-        15MB lexer, eating all my swap space and I was to impacient to see,
-        if it could finish at all. With packed initializers that are unpacked
-        at import time of the lexer module, everything works like a charm.
-        
-        '''
-        
-        ret = []
-        for i in range(len(string) / 2):
-            (n, v) = ord(string[i*2]), ord(string[i*2+1])
+        CNTV().download_by_vid(rid, **kwargs)
     
-        
-    def getTree(self):
-        '''Has a value potentially if output=AST.'''
-        return None
+        if re.match(r'https?://movie', url):
+        title = match1(html, 'name='description' content='([^']+)')
+        tid = match1(url, 'trailer/(\d+)')
+        real_url = 'https://movie.douban.com/trailer/video_url?tid=%s' % tid
+        type, ext, size = url_info(real_url)
     
-            Don't actually delete; make op null in list. Easier to walk list.
-        Later we can throw as we add to index -> op map.
+    from .bilibili import bilibili_download
+from .dailymotion import dailymotion_download
+from .iqiyi import iqiyi_download_by_vid
+from .le import letvcloud_download_by_vu
+from .netease import netease_download
+from .qq import qq_download_by_vid
+from .sina import sina_download_by_vid
+from .tudou import tudou_download_by_id
+from .vimeo import vimeo_download_by_id
+from .yinyuetai import yinyuetai_download_by_id
+from .youku import youku_download_by_vid
+from . import iqiyi
+from . import bokecc
     
-            try:
-            value = state_helper.state_as_number(state)
-        except ValueError:
-            _LOGGER.debug(
-                'Error sending %s: %s (tags: %s)', metric, state.state, tags)
-            return
-    
-            if payload_dict:
-            payload = '{%s}' % ','.join('{}:{}'.format(key, val)
-                                        for key, val in
-                                        payload_dict.items())
-    
-    
-class DescriptionXmlView(HomeAssistantView):
-    '''Handles requests for the description.xml file.'''
+        m3u8_url = get_m3u8_url(stream_id)
