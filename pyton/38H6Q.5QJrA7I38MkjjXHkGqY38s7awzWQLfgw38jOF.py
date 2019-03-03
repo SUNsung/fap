@@ -1,27 +1,42 @@
 
         
-            return out
+            # Look for > that is not surrounded by spaces.  Similar to the
+    # above, we only trigger if both sides are missing spaces to avoid
+    # false positives with shifts.
+    match = Match(r'^(.*[^-\s>])>[^\s=>,]', line)
+    if match:
+      (_, _, start_pos) = ReverseCloseExpression(
+          clean_lines, linenum, len(match.group(1)))
+      if start_pos <= -1:
+        error(filename, linenum, 'whitespace/operators', 3,
+              'Missing spaces around >')
     
+    import random
     
-    {        Generic:                   '#000000',        # class: 'g'
-        Generic.Deleted:           '#a40000',        # class: 'gd'
-        Generic.Emph:              'italic #000000', # class: 'ge'
-        Generic.Error:             '#ef2929',        # class: 'gr'
-        Generic.Heading:           'bold #000080',   # class: 'gh'
-        Generic.Inserted:          '#00A000',        # class: 'gi'
-        Generic.Output:            '#888',           # class: 'go'
-        Generic.Prompt:            '#745334',        # class: 'gp'
-        Generic.Strong:            'bold #000000',   # class: 'gs'
-        Generic.Subheading:        'bold #800080',   # class: 'gu'
-        Generic.Traceback:         'bold #a40000',   # class: 'gt'
-    }
-
+    *What does this example do?
+To understand the implementation of this pattern in Python, it is
+important to know that, in Python, instance attributes are stored in a
+attribute dictionary called __dict__. Usually, each instance will have
+its own dictionary, but the Borg pattern modifies this so that all
+instances have the same dictionary.
+In this example, the __shared_state attribute will be the dictionary
+shared between all instances, and this is ensured by assigining
+__shared_state to the __dict__ variable when initializing a new
+instance (i.e., in the __init__ method). Other attributes are usually
+added to the instance's attribute dictionary, but, since the attribute
+dictionary itself is shared (which is __shared_state), all other
+attributes will also be shared.
+For this reason, when the attribute self.state is modified using
+instance rm2, the value of self.state in instance rm1 also changes. The
+same happens if self.state is modified using rm3, which is an
+instance from a subclass.
+Notice that even though they share attributes, the instances are not
+the same, as seen by their ids.
     
-            _, name = os.path.splitdrive(__file__)
-        zipped_path = os.path.join(zipped_py.strpath, name.lstrip(r'\/'))
-        extracted_path = extract_zipped_paths(zipped_path)
-    
-            #: File-like object representation of response (for advanced usage).
-        #: Use of ``raw`` requires that ``stream=True`` be set on the request.
-        # This requirement does not apply for use internally to Requests.
-        self.raw = None
+        def test_data_change_shall_notify_all_observers_once(cls):
+        with patch.object(cls.dec_obs, 'update') as mock_dec_obs_update, patch.object(
+            cls.hex_obs, 'update'
+        ) as mock_hex_obs_update:
+            cls.sub.data = 10
+            cls.assertEqual(mock_dec_obs_update.call_count, 1)
+            cls.assertEqual(mock_hex_obs_update.call_count, 1)
