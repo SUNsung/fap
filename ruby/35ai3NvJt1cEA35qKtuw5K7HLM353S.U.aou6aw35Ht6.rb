@@ -1,121 +1,155 @@
 
         
-            def to_a
-      @filters.dup
+          include Proto
+    
+    =begin
+      +------+-----------+-----------------------------------------+
+      | Hex  | Name      | Description                             |
+      +------+-----------+-----------------------------------------+
+      | 0x01 | NEW       | Initiate a new call                     |
+      |      |           |                                         |
+      | 0x02 | PING      | Ping request                            |
+      |      |           |                                         |
+      | 0x03 | PONG      | Ping or poke reply                      |
+      |      |           |                                         |
+      | 0x04 | ACK       | Explicit acknowledgment                 |
+      |      |           |                                         |
+      | 0x05 | HANGUP    | Initiate call tear-down                 |
+      |      |           |                                         |
+      | 0x06 | REJECT    | Reject a call                           |
+      |      |           |                                         |
+      | 0x07 | ACCEPT    | Accept a call                           |
+      |      |           |                                         |
+      | 0x08 | AUTHREQ   | Authentication request                  |
+      |      |           |                                         |
+      | 0x09 | AUTHREP   | Authentication reply                    |
+      |      |           |                                         |
+      | 0x0a | INVAL     | Invalid message                         |
+      |      |           |                                         |
+      | 0x0b | LAGRQ     | Lag request                             |
+      |      |           |                                         |
+      | 0x0c | LAGRP     | Lag reply                               |
+      |      |           |                                         |
+      | 0x0d | REGREQ    | Registration request                    |
+      |      |           |                                         |
+      | 0x0e | REGAUTH   | Registration authentication             |
+      |      |           |                                         |
+      | 0x0f | REGACK    | Registration acknowledgement            |
+      |      |           |                                         |
+      | 0x10 | REGREJ    | Registration reject                     |
+      |      |           |                                         |
+      | 0x11 | REGREL    | Registration release                    |
+      |      |           |                                         |
+      | 0x12 | VNAK      | Video/Voice retransmit request          |
+      |      |           |                                         |
+      | 0x13 | DPREQ     | Dialplan request                        |
+      |      |           |                                         |
+      | 0x14 | DPREP     | Dialplan reply                          |
+      |      |           |                                         |
+      | 0x15 | DIAL      | Dial                                    |
+      |      |           |                                         |
+      | 0x16 | TXREQ     | Transfer request                        |
+      |      |           |                                         |
+      | 0x17 | TXCNT     | Transfer connect                        |
+      |      |           |                                         |
+      | 0x18 | TXACC     | Transfer accept                         |
+      |      |           |                                         |
+      | 0x19 | TXREADY   | Transfer ready                          |
+      |      |           |                                         |
+      | 0x1a | TXREL     | Transfer release                        |
+      |      |           |                                         |
+      | 0x1b | TXREJ     | Transfer reject                         |
+      |      |           |                                         |
+      | 0x1c | QUELCH    | Halt audio/video [media] transmission   |
+      |      |           |                                         |
+      | 0x1d | UNQUELCH  | Resume audio/video [media] transmission |
+      |      |           |                                         |
+      | 0x1e | POKE      | Poke request                            |
+      |      |           |                                         |
+      | 0x1f | Reserved  | Reserved for future use                 |
+      |      |           |                                         |
+      | 0x20 | MWI       | Message waiting indication              |
+      |      |           |                                         |
+      | 0x21 | UNSUPPORT | Unsupported message                     |
+      |      |           |                                         |
+      | 0x22 | TRANSFER  | Remote transfer request                 |
+      |      |           |                                         |
+      | 0x23 | Reserved  | Reserved for future use                 |
+      |      |           |                                         |
+      | 0x24 | Reserved  | Reserved for future use                 |
+      |      |           |                                         |
+      | 0x25 | Reserved  | Reserved for future use                 |
+      +------+-----------+-----------------------------------------+
+=end
+    
+              # Encodes the pvno field
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_pvno
+            bn = OpenSSL::BN.new(pvno.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+              # Decodes the Rex::Proto::Kerberos::Model::Element from the input. This
+          # method has been designed to be overridden by subclasses.
+          #
+          # @raise [NoMethodError]
+          def decode(input)
+            raise ::NoMethodError, 'Method designed to be overridden'
+          end
+    
+                res = ''
+            case etype
+            when RSA_MD5
+              res = checksum_rsa_md5(data)
+            else
+              raise ::NotImplementedError, 'EncryptedData schema is not supported'
+            end
+    
+      namespace :package do
+    GEMS_AND_ROOT_DIRECTORIES.each do |gem, directory|
+      desc 'Build #{gem} packages'
+      task gem => %w[.gem .tar.gz].map { |e| package(gem, e) }
     end
     
-            css('> .section', '#preamble', 'a[href*='dict.html']', 'code var', 'code strong').each do |node|
-          node.before(node.children).remove
-        end
-    
-          if @email_domain_block.save
-        log_action :create, @email_domain_block
-        redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.created_msg')
-      else
-        render :new
-      end
-    end
-    
-      def account_feed_path?
-    hub_topic_params[:controller] == 'accounts' && hub_topic_params[:action] == 'show' && hub_topic_params[:format] == 'atom'
-  end
+    get '/' do
+  halt erb(:login) unless params[:user]
+  erb :chat, :locals => { :user => params[:user].gsub(/\W/, '') }
 end
-
     
-      before_action :set_account
-  respond_to :txt
     
-    desc 'Run all tests'
-task :test do
-  test_cases = [
-    {
-      'env'   => {'MATHN' => 'true'},
-      'tasks' => ['test:ruby', 'test:spec', :rubocop]
-    },
-    {
-      'env'   => {'MATHN' => 'false'},
-      'tasks' => ['test:ruby']
+    {    if (pre.style.display == 'block') {
+      pre.style.display = 'none';
+      post.style.display = 'none';
+      context.style.background = 'none';
+    } else {
+      pre.style.display = 'block';
+      post.style.display = 'block';
+      context.style.background = '#fffed9';
     }
-  ]
+  }
     
-        # Dump all the parsed {Sass::Tree::RuleNode} selectors to strings.
-    #
-    # @param root [Tree::Node] The parent node
-    def dump_selectors(root)
-      root.children.each do |child|
-        next dump_selectors(child) if child.is_a?(Tree::DirectiveNode)
-        next unless child.is_a?(Tree::RuleNode)
-        child.rule = [child.parsed_rules.to_s]
-        dump_selectors(child)
-      end
-    end
-    
-            if scanner.eos?
-          end_pos = str.source_range.end_pos
-          node = Tree::CssImportNode.new(str)
-        else
-          supports_parser = Sass::SCSS::Parser.new(scanner,
-            @options[:filename], @options[:importer],
-            @line, str.source_range.end_pos.offset)
-          supports_condition = supports_parser.parse_supports_clause
-    
-    module Sass
-  # The abstract base class for lexical environments for SassScript.
-  class BaseEnvironment
-    class << self
-      # Note: when updating this,
-      # update sass/yard/inherited_hash.rb as well.
-      def inherited_hash_accessor(name)
-        inherited_hash_reader(name)
-        inherited_hash_writer(name)
-      end
-    
-    module Sass::Exec
-  # The abstract base class for Sass executables.
-  class Base
-    # @param args [Array<String>] The command-line arguments
-    def initialize(args)
-      @args = args
-      @options = {}
-    end
-    
-          had_error = false
-      Sass::Plugin.on_creating_directory {|dirname| puts_action :directory, :green, dirname}
-      Sass::Plugin.on_deleting_css {|filename| puts_action :delete, :yellow, filename}
-      Sass::Plugin.on_deleting_sourcemap {|filename| puts_action :delete, :yellow, filename}
-      Sass::Plugin.on_compilation_error do |error, _, _|
-        if error.is_a?(SystemCallError) && !@options[:stop_on_error]
-          had_error = true
-          puts_action :error, :red, error.message
-          STDOUT.flush
-          next
+            # Set these key values to boolean 'true' to include in policy
+        NO_ARG_DIRECTIVES.each do |d|
+          if options.key?(d) && options[d].is_a?(TrueClass)
+            directives << d.to_s.sub(/_/, '-')
+          end
         end
     
-          # A string representation of the importer.
-      # Should be overridden by subclasses.
-      #
-      # This is used to help debugging,
-      # and should usually just show the load path encapsulated by this importer.
-      #
-      # @return [String]
-      def to_s
-        Sass::Util.abstract(self)
+          def escape(object)
+        case object
+        when Hash   then escape_hash(object)
+        when Array  then object.map { |o| escape(o) }
+        when String then escape_string(object)
+        when Tempfile then object
+        else nil
+        end
       end
     
-        class Main < Clamp::Command
-      subcommand 'list', 'List all installed Logstash plugins', LogStash::PluginManager::List
-      subcommand 'install', 'Install a Logstash plugin', LogStash::PluginManager::Install
-      subcommand 'remove', 'Remove a Logstash plugin', LogStash::PluginManager::Remove
-      subcommand 'update', 'Update a plugin', LogStash::PluginManager::Update
-      subcommand 'pack', 'Package currently installed plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Pack
-      subcommand 'unpack', 'Unpack packaged plugins, Deprecated: Please use prepare-offline-pack instead', LogStash::PluginManager::Unpack
-      subcommand 'generate', 'Create the foundation for a new plugin', LogStash::PluginManager::Generate
-      subcommand 'uninstall', 'Uninstall a plugin. Deprecated: Please use remove instead', LogStash::PluginManager::Remove
-      subcommand 'prepare-offline-pack', 'Create an archive of specified plugins to use for offline installation', LogStash::PluginManager::PrepareOfflinePack
-    end
-  end
-end
-    
-        def initialize(local_file)
-      @local_file = local_file
-    end
+          if simple_current_order.nil? || simple_current_order.item_count.zero?
+        text = '<span class='glyphicon glyphicon-shopping-cart'></span> #{text}: (#{Spree.t('empty')})'
+        css_class = 'empty'
+      else
+        text = '<span class='glyphicon glyphicon-shopping-cart'></span> #{text}: (#{simple_current_order.item_count})
+                <span class='amount'>#{simple_current_order.display_total.to_html}</span>'
+        css_class = 'full'
+      end
