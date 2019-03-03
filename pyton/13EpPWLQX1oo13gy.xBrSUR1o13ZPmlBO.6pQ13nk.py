@@ -1,203 +1,179 @@
-    # Returns
-        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
-    '''
-    dirname = 'cifar-10-batches-py'
-    origin = 'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
-    path = get_file(dirname, origin=origin, untar=True)
+
+        
+          labels = tf.squeeze(curr_features['rel_id'], [-1])
+  return labels
     
-        model = create_multi_input_model_from(*models)
-    model.compile(loss='categorical_crossentropy', optimizer='sgd')
-    assert len(model.losses) == 8
+      # Save the path embeddings
+  path_vector_filename = os.path.join(
+      embeddings_base_path, '%d_path_vectors' % model.lstm_output_dim)
+  with open(path_vector_filename, 'w') as f_out:
+    np.save(f_out, path_matrix)
     
-        def describe(self):
-        '''Returns the existing details of the rule in AWS'''
-        try:
-            rule_info = self.client.describe_rule(Name=self.name)
-        except botocore.exceptions.ClientError as e:
-            error_code = e.response.get('Error', {}).get('Code')
-            if error_code == 'ResourceNotFoundException':
-                return {}
-            self.module.fail_json_aws(e, msg='Could not describe rule %s' % self.name)
-        except botocore.exceptions.BotoCoreError as e:
-            self.module.fail_json_aws(e, msg='Could not describe rule %s' % self.name)
-        return self._snakify(rule_info)
+      # Visualize this in the morning.
+  all_data_nxtc = np.zeros([nchannels_all, ntime * nconditions_all])
+  for name, dataset in datasets.items():
+    cidx_s = channel_idxs[name][0]
+    cidx_f = channel_idxs[name][1]
+    for cname in conditions_all[name]:
+      cidxs = np.argwhere(all_conditions_list == cname)
+      if cidxs.shape[0] > 0:
+        cidx = cidxs[0][0]
+        all_tidxs = np.arange(0, ntime+1) + cidx*ntime
+        all_data_nxtc[cidx_s:cidx_f, all_tidxs[0]:all_tidxs[-1]] = \
+            avg_data_all[name][cname].T
     
-    options:
-  query:
-    description:
-      - Specifies the resource type for which to gather facts.  Leave blank to retrieve all facts.
-    required: true
-    choices: [ 'aliases', 'all', 'config', 'mappings', 'policy', 'versions' ]
-    default: 'all'
-  function_name:
-    description:
-      - The name of the lambda function for which facts are requested.
-    aliases: [ 'function', 'name']
-  event_source_arn:
-    description:
-      - For query type 'mappings', this is the Amazon Resource Name (ARN) of the Amazon Kinesis or DynamoDB stream.
-author: Pierre Jodouin (@pjodouin)
-requirements:
-    - boto3
-extends_documentation_fragment:
-  - aws
-  - ec2
-'''
+      Returns:
+    In the equation, y = x W + b, returns the pair (W, b).
+  '''
     
-        def hbacrule_add(self, name, item):
-        return self._post_json(method='hbacrule_add', name=name, item=item)
+      def encode_chars(self, sentence):
+    chars_ids = [self.word_to_char_ids(cur_word)
+                 for cur_word in sentence.split()]
+    return np.vstack([self.bos_chars] + chars_ids + [self.eos_chars])
     
-    usage:
+      for batch in range(num_batches):
+    x = np.zeros([batch_size, num_steps], dtype=np.int32)
+    y = np.zeros([batch_size, num_steps], dtype=np.int32)
+    w = np.zeros([batch_size, num_steps], dtype=np.float)
     
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
-                          help='set spider argument (may be repeated)')
-        parser.add_option('-o', '--output', metavar='FILE',
-                          help='dump scraped items into FILE (use - for stdout)')
-        parser.add_option('-t', '--output-format', metavar='FORMAT',
-                          help='format to use for dumping items with -o')
     
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('--verbose', '-v', dest='verbose', action='store_true',
-            help='also display twisted/python/platform info (useful for bug reports)')
+def wasserstein_discriminator_loss(real_values, fake_values):
+  '''Wasserstein discriminator loss.
     
-            # kept for old-style HTTP/1.0 downloader context twisted calls,
-        # e.g. connectSSL()
-        def getContext(self, hostname=None, port=None):
-            return self.getCertificateOptions().getContext()
+      And the policy for Generator G is the log-probability of taking action x2
+  given the past context.
     
-        def report_out_of_quota(self, appid):
-        self.logger.warn('report_out_of_quota:%s', appid)
-        with self.lock:
-            if appid not in self.out_of_quota_appids:
-                self.out_of_quota_appids.append(appid)
-            try:
-                self.working_appid_list.remove(appid)
-            except:
-                pass
     
-                try:
-                res = self.check_ip.check_ip(ip)
-            except Exception as e:
-                xlog.warn('check except:%r', e)
-                continue
+class HTTPieHTTPAdapter(HTTPAdapter):
     
-    - RecognitionException
-  - MismatchedRangeException
-  - MismatchedSetException
-    - MismatchedNotSetException
-    .
-  - MismatchedTokenException
-  - MismatchedTreeNodeException
-  - NoViableAltException
-  - EarlyExitException
-  - FailedPredicateException
-  .
-.
+        def __str__(self):
+        defaults = dict(type(self).__dict__)
+        actual = dict(defaults)
+        actual.update(self.__dict__)
+        actual['config'] = self.config
+        return repr_dict_nice(dict(
+            (key, value)
+            for key, value in actual.items()
+            if not key.startswith('_'))
+        )
     
-    ## All tokens go to the parser (unless skip() is called in that rule)
-# on a particular 'channel'.  The parser tunes to a particular channel
-# so that whitespace etc... can go to the parser on a 'hidden' channel.
-DEFAULT_CHANNEL = 0
     
-        Validation of predicates
-    occurs when normally parsing the alternative just like matching a token.
-    Disambiguating predicate evaluation occurs when we hoist a predicate into
-    a prediction decision.
-    '''
+def get_stream_type(env, args):
+    '''Pick the right stream type based on `env` and `args`.
+    Wrap it in a partial with the type-specific args so that
+    we don't need to think what stream we are dealing with.
     
-        def __init__(self, file, encoding=None):
+        def get_auth(self, username=None, password=None):
         '''
-        @param file A file-like object holding your input. Only the read()
-           method must be implemented.
-    
-    CLI_DEFAULTS = dict(
-    server_root=server_root_tmp,
-    ctl='nginx',
-)
-'''CLI defaults.'''
-    
-        def setUp(self):
-        from acme.errors import PollError
-        self.timeout = PollError(
-            exhausted=set([mock.sentinel.AR]),
-            updated={})
-        self.invalid = PollError(exhausted=set(), updated={
-            mock.sentinel.AR: mock.sentinel.AR2})
-    
-    The JWS implementation in josepy only implements the base JOSE standard. In
-order to support the new header fields defined in ACME, this module defines some
-ACME-specific classes that layer on top of josepy.
-'''
-import josepy as jose
-    
-            self.assertRaises(
-            jose.DeserializationError, nonce_field.decode, self.wrong_nonce)
-        self.assertEqual(b'foo', nonce_field.decode(self.good_nonce))
-    
-        def test_recovery_routine_error(self):
-        self.config.reverter.recovery_routine = mock.Mock(
-            side_effect=errors.ReverterError)
-    
-        def test_get_addrs_no_vhost_found(self):
-        self.sni.configurator.choose_vhost = mock.Mock(
-            side_effect=errors.MissingCommandlineFlag(
-                'Failed to run Apache plugin non-interactively'))
-    
-    REVERSE_IMPORT_MAPPING.update({
-    '_bz2': 'bz2',
-    '_dbm': 'dbm',
-    '_functools': 'functools',
-    '_gdbm': 'gdbm',
-    '_pickle': 'pickle',
-})
+        If `auth_parse` is set to `True`, then `username`
+        and `password` contain the parsed credentials.
     
     
-        def _posix_spawn(self, args, executable, env, restore_signals,
-                         p2cread, p2cwrite,
-                         c2pread, c2pwrite,
-                         errread, errwrite):
-            '''Execute program using os.posix_spawn().'''
-            if env is None:
-                env = os.environ
+ENTRY_POINT_NAMES = [
+    'httpie.plugins.auth.v1',
+    'httpie.plugins.formatter.v1',
+    'httpie.plugins.converter.v1',
+    'httpie.plugins.transport.v1',
+]
     
-        @classmethod
-    def setUpClass(cls):
-        requires('gui')
-        cls.root = Tk()
-        cls.root.withdraw()
-        cls.dialog = About(cls.root, 'About IDLE', _utest=True)
+        def test_POST_no_data_no_auto_headers(self, httpbin):
+        # JSON headers shouldn't be automatically set for POST with no data.
+        r = http('POST', httpbin.url + '/post')
+        assert HTTP_OK in r
+        assert ''Accept': '*/*'' in r
+        assert ''Content-Type': 'application/json' not in r
     
-        if ns.include_underpth:
-        yield PYTHON_PTH_NAME, ns.temp / PYTHON_PTH_NAME
+        exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR
+    assert error_msg == (
+        'ConnectionError: '
+        'Connection aborted while doing GET request to URL: '
+        'http://www.google.com')
     
-        def test_simple(self):
-        def f(p):
-            pass
-        f_ident = ident(f)
-        self.check_events(f, [(1, 'call', f_ident),
-                              (1, 'return', f_ident),
-                              ])
     
-        Directories are *not* resources.
-    '''
-    package = _get_package(package)
-    _normalize_path(name)
-    reader = _get_resource_reader(package)
-    if reader is not None:
-        return reader.is_resource(name)
-    try:
-        package_contents = set(contents(package))
-    except (NotADirectoryError, FileNotFoundError):
-        return False
-    if name not in package_contents:
-        return False
-    # Just because the given file_name lives as an entry in the package's
-    # contents doesn't necessarily mean it's a resource.  Directories are not
-    # resources, so let's try to find out if it's a directory or not.
-    path = Path(package.__spec__.origin).parent / name
-    return path.is_file()
+def test_follow_all_output_options_used_for_redirects(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 3
+    assert HTTP_OK not in r
     
-    '''Send the contents of a directory as a MIME message.'''
+        def run(self):
+        while not self._should_stop.is_set():
+            if self.status.has_finished:
+                self.sum_up()
+                break
+    
+                    _filename = newfilename
+    
+    
+root = Root()
+factory = Site(root)
+reactor.listenTCP(8880, factory)
+reactor.run()
+
+    
+            if opts.loglevel:
+            self.settings.set('LOG_ENABLED', True, priority='cmdline')
+            self.settings.set('LOG_LEVEL', opts.loglevel, priority='cmdline')
+    
+                        if not cb:
+                        logger.error('Cannot find a rule that matches %(url)r in spider: %(spider)s',
+                                 {'url': response.url, 'spider': spider.name})
+                        return
+                else:
+                    cb = 'parse'
+    
+    
+class ReturnsContract(Contract):
+    ''' Contract to check the output of a callback
+    
+            self._signer = None
+        if is_botocore():
+            import botocore.auth
+            import botocore.credentials
+            kw.pop('anon', None)
+            if kw:
+                raise TypeError('Unexpected keyword arguments: %s' % kw)
+            if not self.anon:
+                SignerCls = botocore.auth.AUTH_TYPE_MAPS['s3']
+                self._signer = SignerCls(botocore.credentials.Credentials(
+                    aws_access_key_id, aws_secret_access_key))
+        else:
+            _S3Connection = _get_boto_connection()
+            try:
+                self.conn = _S3Connection(
+                    aws_access_key_id, aws_secret_access_key, **kw)
+            except Exception as ex:
+                raise NotConfigured(str(ex))
+    
+        # Gloss the lips
+    d.polygon(face_landmarks['top_lip'], fill=(150, 0, 0, 128))
+    d.polygon(face_landmarks['bottom_lip'], fill=(150, 0, 0, 128))
+    d.line(face_landmarks['top_lip'], fill=(150, 0, 0, 64), width=8)
+    d.line(face_landmarks['bottom_lip'], fill=(150, 0, 0, 64), width=8)
+    
+        # Hit 'q' on the keyboard to quit!
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+    
+    # Convert the image to a PIL-format image so that we can draw on top of it with the Pillow library
+# See http://pillow.readthedocs.io/ for more about PIL/Pillow
+pil_image = Image.fromarray(unknown_image)
+# Create a Pillow ImageDraw Draw instance to draw with
+draw = ImageDraw.Draw(pil_image)
+    
+    test_requirements = [
+    'tox',
+    'flake8==2.6.0'
+]
+    
+    # 你需要一个2代以上的树莓派，并在树莓派上安装face_recognition，并连接上picamera摄像头
+# 并确保picamera这个模块已经安装（树莓派一般会内置安装）
+# 你可以参考这个教程配制你的树莓派：
+# https://gist.github.com/ageitgey/1ac8dbe8572f3f533df6269dab35df65
