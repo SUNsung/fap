@@ -1,132 +1,156 @@
 
         
         
-@pytest.fixture
-def runner(app):
-    '''A test runner for the app's Click commands.'''
-    return app.test_cli_runner()
-    
-        with client:
-        auth.logout()
-        assert 'user_id' not in session
-
-    
-            for line in _dump_loader_info(loader):
-            info.append('       %s' % line)
+def test_default_options_overwrite(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http('--json', httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['json'] == {'foo': 'bar'}
     
     
-def _render(template, context, app):
-    '''Renders the template and fires the signal'''
-    
-            :param force: Ignore the mimetype and always try to parse JSON.
-        :param silent: Silence parsing errors and return ``None``
-            instead.
-        :param cache: Store the parsed JSON to return for subsequent
-            calls.
-        '''
-        if cache and self._cached_json[silent] is not Ellipsis:
-            return self._cached_json[silent]
-    
-        set_init_version(version)
-    make_git_commit('Bump version number to %s', version)
-    make_git_tag(version)
-    build()
-    set_init_version(dev_version)
-    
-        try:
-        r = http(
-            httpbin + BASIC_AUTH_URL,
-            '--auth-type',
-            Plugin.auth_type,
-            '--auth',
-            USERNAME,
-        )
-        assert HTTP_OK in r
-        assert r.json == AUTH_OK
-    finally:
-        plugin_manager.unregister(Plugin)
-
-    
-    
-class TestAutoContentTypeAndAcceptHeaders:
-    '''
-    Test that Accept and Content-Type correctly defaults to JSON,
-    but can still be overridden. The same with Content-Type when --form
-    -f is used.
-    
-    
-class Response(object):
-    # noinspection PyDefaultArgument
-    def __init__(self, url, headers={}, status_code=200):
-        self.url = url
-        self.headers = CaseInsensitiveDict(headers)
-        self.status_code = status_code
-    
-    
-class AlexaFlashBriefingView(http.HomeAssistantView):
-    '''Handle Alexa Flash Briefing skill requests.'''
-    
-    
-def get_scanner(hass, config):
-    '''Validate the configuration and return an Actiontec scanner.'''
-    scanner = ActiontecDeviceScanner(config[DOMAIN])
-    return scanner if scanner.success_init else None
-    
-            # doing a request
-        try:
-            res = requests.get(self._url, timeout=10, cookies={
-                'userid': self._userid
-            })
-        except requests.exceptions.Timeout:
-            _LOGGER.error(
-                'Connection to the router timed out at URL %s', self._url)
-            return False
-        if res.status_code != 200:
-            _LOGGER.error(
-                'Connection failed with http code %s', res.status_code)
-            return False
-        try:
-            result = res.json()
-        except ValueError:
-            # If json decoder could not parse the response
-            _LOGGER.error('Failed to parse response from router')
-            return False
-    
-        def __init__(self, config):
-        '''Initialize the scanner.'''
-        self.host = config[CONF_HOST]
-        self.last_results = {}
-    
-    _DEVICES_REGEX = re.compile(
-    r'(?P<mac>(([0-9a-f]{2}[:-]){5}([0-9a-f]{2})))\s'
-    r'(?P<ip>([0-9]{1,3}[\.]){3}[0-9]{1,3})\s+'
-    r'(?P<status>([^\s]+))\s+'
-    r'(?P<type>([^\s]+))\s+'
-    r'(?P<intf>([^\s]+))\s+'
-    r'(?P<hwintf>([^\s]+))\s+'
-    r'(?P<host>([^\s]+))')
-    
-            # Note that the double newline at the end of
-        # this string is required per the SSDP spec
-        resp_template = '''HTTP/1.1 200 OK
-CACHE-CONTROL: max-age=60
-EXT:
-LOCATION: http://{0}:{1}/description.xml
-SERVER: FreeRTOS/6.0.5, UPnP/1.0, IpBridge/0.1
-hue-bridgeid: 1234
-ST: urn:schemas-upnp-org:device:basic:1
-USN: uuid:Socket-1_0-221438K0100073::urn:schemas-upnp-org:device:basic:1
-    
-    REQUIREMENTS = ['watchdog==0.8.3']
-_LOGGER = logging.getLogger(__name__)
-    
-            hass.data[DOMAIN][platform][module_name] = module
-        for code in codes:
-            code_tuple = (code.get(CONF_NAME),
-                          code.get(CONF_DEVICE, STATE_UNKNOWN))
-            module.registerCode(code_tuple, code.get(CONF_CODE))
-    
-    This is the base platform to support LaMetric components:
-Notify, Light, Mediaplayer
-    
+def has_docutils():
+    try:
+        # noinspection PyUnresolvedReferences
+        import docutils
         return True
+    except ImportError:
+        return False
+    
+    
+@mock.patch('httpie.core.get_response')
+def test_error(get_response):
+    def error(msg, *args, **kwargs):
+        global error_msg
+        error_msg = msg % args
+    
+    
+def test_follow_all_output_options_used_for_redirects(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 3
+    assert HTTP_OK not in r
+    
+    
+class Config(BaseConfigDict):
+    
+            def get_exist_ca_sha1():
+            args = ['security', 'find-certificate', '-Z', '-a', '-c', commonname]
+            output = subprocess.check_output(args)
+            for line in output.splitlines(True):
+                if len(line) == 53 and line.startswith('SHA-1 hash:'):
+                    sha1_hash = line[12:52]
+                    return sha1_hash
+    
+        if __hostsdeny__ and netloc.endswith(__hostsdeny__):
+        start_response('403 Forbidden', [('Content-Type', 'text/html')])
+        yield message_html('403 Hosts Deny', 'Hosts Deny(%r)' % netloc, detail='共用appid因为资源有限，限制观看视频和文件下载等消耗资源过多的访问，请使用自己的appid <a href=' https://github.com/XX-net/XX-Net/wiki/Register-Google-appid' target='_blank'>帮助</a> ')
+        raise StopIteration
+    
+        Any state that has a semantic predicate edge is special; those states
+    are generated with if-then-else structures in a specialStateTransition()
+    which is generated by cyclicDFA template.
+    
+    '''
+    
+    def __init__(
+        self,
+        recognizer, decisionNumber,
+        eot, eof, min, max, accept, special, transition
+        ):
+        ## Which recognizer encloses this DFA?  Needed to check backtracking
+        self.recognizer = recognizer
+    
+                if isinstance(self.input, TokenStream):
+                self.token = self.input.LT(1)
+                self.line = self.token.line
+                self.charPositionInLine = self.token.charPositionInLine
+    
+            # The index into the input stream where the last error occurred.
+        # This is used to prevent infinite loops where an error is found
+        # but no token is consumed during recovery...another error is found,
+        # ad naseum.  This is a failsafe mechanism to guarantee that at least
+        # one token/tree node is consumed for two errors.
+        self.lastErrorIndex = -1
+    
+        This is an abstract class that must be implemented by a subclass.
+    
+    '''
+    
+    # pylint does not realize that this is an interface, too
+    #pylint: disable-msg=W0223
+    
+    def LT(self, k):
+        '''
+        Get Token at current input pointer + i ahead where i=1 is next Token.
+        i<0 indicates tokens in the past.  So -1 is previous token and -2 is
+        two tokens ago. LT(0) is undefined.  For i>=n, return Token.EOFToken.
+        Return null for LT(0) and any index that results in an absolute address
+        that is negative.
+	'''
+    
+    def isPrime(num):
+    if (num < 2):
+        return False
+    
+    ''' Here I implemented the scoring functions.
+    MAE, MSE, RMSE, RMSLE are included.
+    
+            a *= a
+        b >>= 1
+    
+    if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
+
+    
+    '''
+Port of the Java example of 'Parameter Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
+http://xunitpatterns.com/Dependency%20Injection.html.
+    
+        def find_all_path(self, start, end, path=None):
+        path = path or []
+        path.append(start)
+        if start == end:
+            return [path]
+        paths = []
+        for node in self.graph.get(start, []):
+            if node not in path:
+                newpaths = self.find_all_path(node, end, path[:])
+                paths.extend(newpaths)
+        return paths
+    
+    
+class ConsoleView(View):
+    def show_item_list(self, item_type, item_list):
+        print(item_type.upper() + ' LIST:')
+        for item in item_list:
+            print(item)
+        print('')
+    
+        def test_data_value_shall_be_changeable(cls):
+        cls.sub.data = 20
+        cls.assertEqual(cls.sub._data, 20)
+    
+        def test_shall_toggle_from_fm_to_am(self):
+        self.radio.toggle_amfm()
+        state = self.radio.state.name
+        expected_state_name = 'AM'
+        self.assertEqual(state, expected_state_name)
+
+    
+    try:
+    # compatible for python2
+    from urllib2 import urlopen
+    from urllib2 import HTTPError
+    from urllib2 import URLError
+except ImportError:
+    # compatible for python3
+    from urllib.request import urlopen
+    from urllib.error import HTTPError
+    from urllib.error import URLError
