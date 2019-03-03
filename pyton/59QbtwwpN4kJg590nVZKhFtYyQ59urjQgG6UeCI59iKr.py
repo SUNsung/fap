@@ -1,167 +1,445 @@
 
         
-            y_train = np.reshape(y_train, (len(y_train), 1))
-    y_test = np.reshape(y_test, (len(y_test), 1))
+          Returns:
+    The word pairs
+  '''
+  curr_features = tf.parse_example(records, {
+      'pair': tf.FixedLenFeature([1], dtype=tf.string)
+  })
     
-        # Returns
-        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
+        paths_filename = os.path.join(save_dir, '%s.paths' % relation)
+    with open(paths_filename, 'w') as f_out:
+      for index, score in relation_paths:
+        print('\t'.join([index_to_path[index], str(score)]), file=f_out)
+
     
-        # Place a copy of the model on each GPU,
-    # each getting a slice of the inputs.
-    for i, gpu_id in enumerate(target_gpu_ids):
-        with tf.device('/gpu:%d' % gpu_id):
-            with tf.name_scope('replica_%d' % gpu_id):
-                inputs = []
-                # Retrieve a slice of the input.
-                for x in model.inputs:
-                    # In-place input splitting which is not only
-                    # 5% ~ 12% faster but also less GPU memory
-                    # duplication.
-                    with tf.device(x.device):
-                        input_shape = K.int_shape(x)[1:]
-                        slice_i = Lambda(get_slice,
-                                         output_shape=input_shape,
-                                         arguments={'i': i,
-                                                    'parts': num_gpus})(x)
-                        inputs.append(slice_i)
+    from synthetic_data_utils import generate_data, generate_rnn
+from synthetic_data_utils import get_train_n_valid_inds
+from synthetic_data_utils import nparray_and_transpose
+from synthetic_data_utils import spikify_data, split_list_by_inds
+import tensorflow as tf
+from utils import write_datasets
     
-            i = self.recurrent_activation(x_i + h_i)
-        f = self.recurrent_activation(x_f + h_f)
-        c = f * c_tm1 + i * self.activation(x_c + h_c)
-        o = self.recurrent_activation(x_o + h_o)
-        h = o * self.activation(c)
+      Args:
+    data_fname: The filename of the file from which to read the data.
+  Returns:
+    A dictionary whose keys will vary depending on dataset (but should
+    always contain the keys 'train_data' and 'valid_data') and whose
+    values are numpy arrays.
+  '''
     
-    x_train = x_train.astype('float32')
-x_test = x_test.astype('float32')
-x_train /= 255
-x_test /= 255
-print('x_train shape:', x_train.shape)
-print(x_train.shape[0], 'train samples')
-print(x_test.shape[0], 'test samples')
+      def __init__(self, test_data_name='wsc273'):
+    vocab_file = os.path.join(FLAGS.data_dir, 'vocab.txt')
+    self.vocab = utils.CharsVocabulary(vocab_file, 50)
+    assert test_data_name in ['pdp60', 'wsc273'], (
+        'Test data must be pdp60 or wsc273, got {}'.format(test_data_name))
+    self.test_data_name = test_data_name
     
-    # Model creation using tensors from the get_next() graph node.
-inputs, targets = iterator.get_next()
-model_input = layers.Input(tensor=inputs)
-model_output = cnn_layers(model_input)
-train_model = keras.models.Model(inputs=model_input, outputs=model_output)
+        # Split special chars at the end of word
+    special_end_tokens = []
+    will_split = True
+    while will_split:
+      will_split = False
+      for char in _SPECIAL_CHARS:
+        if word.endswith(char):
+          special_end_tokens = [char] + special_end_tokens
+          word = word[:-len(char)]
+          will_split = True
     
-    - Klambauer, G., Unterthiner, T., Mayr, A., & Hochreiter, S. (2017).
-  Self-Normalizing Neural Networks. arXiv preprint arXiv:1706.02515.
-  https://arxiv.org/abs/1706.02515
-'''
-from __future__ import print_function
+      Args:
+    hparams:  Hyperparameters for the MaskGAN.
+    sequence:  tf.int32 Tensor sequence of shape [batch_size, sequence_length]
+    is_training:  Whether the model is training.
+    reuse (Optional):  Whether to reuse the model.
     
-            # Create flat baselines to compare the variation over batch size
-        all_times['pca'].extend([results_dict['pca']['time']] *
-                                len(batch_sizes))
-        all_errors['pca'].extend([results_dict['pca']['error']] *
-                                 len(batch_sizes))
-        all_times['rpca'].extend([results_dict['rpca']['time']] *
-                                 len(batch_sizes))
-        all_errors['rpca'].extend([results_dict['rpca']['error']] *
-                                  len(batch_sizes))
-        for batch_size in batch_sizes:
-            ipca = IncrementalPCA(n_components=n_components,
-                                  batch_size=batch_size)
-            results_dict = {k: benchmark(est, data) for k, est in [('ipca',
-                                                                   ipca)]}
-            all_times['ipca'].append(results_dict['ipca']['time'])
-            all_errors['ipca'].append(results_dict['ipca']['error'])
+    FLAGS = tf.app.flags.FLAGS
     
-    Invoke with
------------
+    from six.moves import xrange
     
     
-def bench_scikit_tree_regressor(X, Y):
-    '''Benchmark with scikit-learn decision tree regressor'''
+def gen_encoder_seq2seq_nas(hparams):
+  '''Returns the NAS Variable name to MaskGAN Variable
+  dictionary mapping.  This is a highly restrictive function just for testing.
+  This is for the *unidirecitional* seq2seq_nas encoder.
     
-    # Plot the results (= shape of the data points cloud)
-plt.figure(1)  # two clusters
-plt.title('Outlier detection on a real data set (boston housing)')
-plt.scatter(X1[:, 0], X1[:, 1], color='black')
-bbox_args = dict(boxstyle='round', fc='0.8')
-arrow_args = dict(arrowstyle='->')
-plt.annotate('several confounded points', xy=(24, 19),
-             xycoords='data', textcoords='data',
-             xytext=(13, 10), bbox=bbox_args, arrowprops=arrow_args)
-plt.xlim((xx1.min(), xx1.max()))
-plt.ylim((yy1.min(), yy1.max()))
-plt.legend((legend1_values_list[0].collections[0],
-            legend1_values_list[1].collections[0],
-            legend1_values_list[2].collections[0]),
-           (legend1_keys_list[0], legend1_keys_list[1], legend1_keys_list[2]),
-           loc='upper center',
-           prop=matplotlib.font_manager.FontProperties(size=12))
-plt.ylabel('accessibility to radial highways')
-plt.xlabel('pupil-teacher ratio by town')
     
-    # The online learning part: cycle over the whole dataset 6 times
-index = 0
-for _ in range(6):
-    for img in faces.images:
-        data = extract_patches_2d(img, patch_size, max_patches=50,
-                                  random_state=rng)
-        data = np.reshape(data, (len(data), -1))
-        buffer.append(data)
-        index += 1
-        if index % 10 == 0:
-            data = np.concatenate(buffer, axis=0)
-            data -= np.mean(data, axis=0)
-            data /= np.std(data, axis=0)
-            kmeans.partial_fit(data)
-            buffer = []
-        if index % 100 == 0:
-            print('Partial fit of %4i out of %i'
-                  % (index, 6 * len(faces.images)))
+def test_imdb():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = imdb.load_data()
+        (x_train, y_train), (x_test, y_test) = imdb.load_data(maxlen=40)
+        assert len(x_train) == len(y_train)
+        assert len(x_test) == len(y_test)
+        word_index = imdb.get_word_index()
+        assert isinstance(word_index, dict)
     
-    def isPrime(num):
-    if (num < 2):
-        return False
     
-    def generateKey(keySize):
-    print('Generating prime p...')
-    p = rabinMiller.generateLargePrime(keySize)
-    print('Generating prime q...')
-    q = rabinMiller.generateLargePrime(keySize)
-    n = p * q
+def test_categorical_hinge():
+    y_pred = K.variable(np.array([[0.3, 0.2, 0.1],
+                                  [0.1, 0.2, 0.7]]))
+    y_true = K.variable(np.array([[0, 1, 0],
+                                  [1, 0, 0]]))
+    expected_loss = ((0.3 - 0.2 + 1) + (0.7 - 0.1 + 1)) / 2.0
+    loss = K.eval(losses.categorical_hinge(y_true, y_pred))
+    assert np.isclose(expected_loss, np.mean(loss))
     
-    	TEMPORARY_ARRAY = [ element for element in ARRAY[1:] if element >= PIVOT ]
-	TEMPORARY_ARRAY = [PIVOT] + longestSub(TEMPORARY_ARRAY)
-	if ( len(TEMPORARY_ARRAY) > len(LONGEST_SUB) ):
-		return TEMPORARY_ARRAY
-	else:
-		return LONGEST_SUB
+    # Create the dataset and its associated one-shot iterator.
+dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train))
+dataset = dataset.repeat()
+dataset = dataset.shuffle(buffer_size)
+dataset = dataset.batch(batch_size)
+iterator = dataset.make_one_shot_iterator()
     
-    	currPos = 0
-	while currPos < len(bitString):
-		currPart = bitString[currPos:currPos+512]
-		mySplits = []
-		for i in range(16):
-			mySplits.append(int(rearrange(currPart[32*i:32*i+32]),2))
-		yield mySplits
-		currPos += 512
+    batch_size = 32
+num_classes = 10
+epochs = 200
+hidden_units = 100
     
-        # Find all the faces and face encodings in the current frame of video
-    face_locations = face_recognition.face_locations(rgb_frame)
-    face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
+    history = model.fit(x_train, y_train,
+                    batch_size=batch_size,
+                    epochs=epochs,
+                    verbose=1,
+                    validation_data=(x_test, y_test))
+score = model.evaluate(x_test, y_test, verbose=0)
+print('Test loss:', score[0])
+print('Test accuracy:', score[1])
+
     
-    # Load a sample picture and learn how to recognize it.
-print('Loading known face image(s)')
-obama_image = face_recognition.load_image_file('obama_small.jpg')
-obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
-    
-        if os.path.isdir(image_to_check):
-        if cpus == 1:
-            [test_image(image_file, known_names, known_face_encodings, tolerance, show_distance) for image_file in image_files_in_folder(image_to_check)]
+            # Raises
+            AttributeError: if the layer is connected to
+            more than one incoming layers.
+        '''
+        if not self._inbound_nodes:
+            raise AttributeError('The layer has never been called '
+                                 'and thus has no defined input shape.')
+        all_input_shapes = set(
+            [str(node.input_shapes) for node in self._inbound_nodes])
+        if len(all_input_shapes) == 1:
+            input_shapes = self._inbound_nodes[0].input_shapes
+            return unpack_singleton(input_shapes)
         else:
-            process_images_in_process_pool(image_files_in_folder(image_to_check), known_names, known_face_encodings, cpus, tolerance, show_distance)
-    else:
-        test_image(image_to_check, known_names, known_face_encodings, tolerance, show_distance)
+            raise AttributeError('The layer '' + str(self.name) +
+                                 ' has multiple inbound nodes, '
+                                 'with different input shapes. Hence '
+                                 'the notion of 'input shape' is '
+                                 'ill-defined for the layer. '
+                                 'Use `get_input_shape_at(node_index)` '
+                                 'instead.')
     
-            self.assertEqual(len(detected_faces), 1)
-        self.assertAlmostEqual(detected_faces[0].rect.top(), 144, delta=25)
-        self.assertAlmostEqual(detected_faces[0].rect.bottom(), 389, delta=25)
     
-        # Let's trace out each facial feature in the image with a line!
-    for facial_feature in face_landmarks.keys():
-        d.line(face_landmarks[facial_feature], width=5)
+def plot_feature_errors(all_errors, batch_size, all_components, data):
+    plt.figure()
+    plot_results(all_components, all_errors['pca'], label='PCA')
+    plot_results(all_components, all_errors['ipca'],
+                 label='IncrementalPCA, bsize=%i' % batch_size)
+    plt.legend(loc='lower left')
+    plt.suptitle('Algorithm error vs. n_components\n'
+                 'LFW, size %i x %i' % data.shape)
+    plt.xlabel('Number of components (out of max %i)' % data.shape[1])
+    plt.ylabel('Mean absolute error')
+    
+    This example demonstrates how to generate a checkerboard dataset and
+bicluster it using the Spectral Biclustering algorithm.
+    
+    
+plt.show()
+
+    
+    digits = datasets.load_digits()
+images = digits.images
+X = np.reshape(images, (len(images), -1))
+connectivity = grid_to_graph(*images[0].shape)
+    
+    from sklearn import cluster
+    
+    plt.subplot(223)
+plt.scatter(X_varied[:, 0], X_varied[:, 1], c=y_pred)
+plt.title('Unequal Variance')
+    
+        def bulk_insert(self, values):
+        i = 1
+        self.__aux_list = values
+        for value in values:
+            self.insert_data(value)
+            self._step_by_step(i)
+            i += 1
+    
+        return diff
+
+    
+            self.title = match1(html, r'<meta property='og:title' content='([^']*)'')
+    
+    	xml = get_html('http://www.ehow.com/services/video/series.xml?demand_ehow_videoid=%s' % vid)
+    
+	from xml.dom.minidom import parseString
+	doc = parseString(xml)
+	tab = doc.getElementsByTagName('related')[0].firstChild
+    
+    #A Python script to generate a single PDF document with all the tldr pages. It works by generating 
+#intermediate HTML files from existing md files using Python-markdown, applying desired formatting 
+#through CSS, and finally rendering them as PDF. There is no LaTeX dependency for generating the PDF.
+    
+        print('rm1 id: {0}'.format(id(rm1)))
+    print('rm2 id: {0}'.format(id(rm2)))
+    
+        def find_path(self, start, end, path=None):
+        path = path or []
+    
+    
+if __name__ == '__main__':
+    main()
+    
+    *References:
+https://sourcemaking.com/design_patterns/facade
+https://fkromer.github.io/python-pattern-references/design/#facade
+http://python-3-patterns-idioms-test.readthedocs.io/en/latest/ChangeInterface.html#facade
+    
+        def __init__(self):
+        self.dispatcher = Dispatcher()
+    
+    
+### OUTPUT ###
+# PRODUCT LIST:
+# cheese
+# eggs
+# milk
+#
+# PRODUCT INFORMATION:
+# Name: Cheese, Price: 2.00, Quantity: 10
+#
+# PRODUCT INFORMATION:
+# Name: Eggs, Price: 0.20, Quantity: 100
+#
+# PRODUCT INFORMATION:
+# Name: Milk, Price: 1.50, Quantity: 10
+#
+# That product 'arepas' does not exist in the records
+
+    
+    
+class TestData(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.dec_obs = DecimalViewer()
+        cls.hex_obs = HexViewer()
+        cls.sub = Data('Data')
+        # inherited behavior already tested with TestSubject
+        cls.sub.attach(cls.dec_obs)
+        cls.sub.attach(cls.hex_obs)
+    
+        def test_subscriber_shall_be_attachable_to_subscriptions(cls):
+        subscription = 'sub msg'
+        pro = Provider()
+        cls.assertEqual(len(pro.subscribers), 0)
+        sub = Subscriber('sub name', pro)
+        sub.subscribe(subscription)
+        cls.assertEqual(len(pro.subscribers[subscription]), 1)
+    
+        def test_am_station_overflow_after_scan(self):
+        self.radio.scan()
+        station = self.radio.state.stations[self.radio.state.pos]
+        expected_station = '1250'
+        self.assertEqual(station, expected_station)
+    
+        os.environ['CITYSCAPES_DATASET'] = get_raw_dir(json_dataset.name)
+    os.environ['CITYSCAPES_RESULTS'] = output_dir
+    
+    # Available datasets
+_DATASETS = {
+    'cityscapes_fine_instanceonly_seg_train': {
+        _IM_DIR:
+            _DATA_DIR + '/cityscapes/images',
+        _ANN_FN:
+            _DATA_DIR + '/cityscapes/annotations/instancesonly_gtFine_train.json',
+        _RAW_DIR:
+            _DATA_DIR + '/cityscapes/raw'
+    },
+    'cityscapes_fine_instanceonly_seg_val': {
+        _IM_DIR:
+            _DATA_DIR + '/cityscapes/images',
+        # use filtered validation as there is an issue converting contours
+        _ANN_FN:
+            _DATA_DIR + '/cityscapes/annotations/instancesonly_filtered_gtFine_val.json',
+        _RAW_DIR:
+            _DATA_DIR + '/cityscapes/raw'
+    },
+    'cityscapes_fine_instanceonly_seg_test': {
+        _IM_DIR:
+            _DATA_DIR + '/cityscapes/images',
+        _ANN_FN:
+            _DATA_DIR + '/cityscapes/annotations/instancesonly_gtFine_test.json',
+        _RAW_DIR:
+            _DATA_DIR + '/cityscapes/raw'
+    },
+    'coco_2014_train': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_train2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/instances_train2014.json'
+    },
+    'coco_2014_val': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/instances_val2014.json'
+    },
+    'coco_2014_minival': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/instances_minival2014.json'
+    },
+    'coco_2014_valminusminival': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/instances_valminusminival2014.json'
+    },
+    'coco_2015_test': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test2015.json'
+    },
+    'coco_2015_test-dev': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test-dev2015.json'
+    },
+    'coco_2017_test': {  # 2017 test uses 2015 test images
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test2017.json',
+        _IM_PREFIX:
+            'COCO_test2015_'
+    },
+    'coco_2017_test-dev': {  # 2017 test-dev uses 2015 test images
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test-dev2017.json',
+        _IM_PREFIX:
+            'COCO_test2015_'
+    },
+    'coco_stuff_train': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_train2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/coco_stuff_train.json'
+    },
+    'coco_stuff_val': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/coco_stuff_val.json'
+    },
+    'keypoints_coco_2014_train': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_train2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/person_keypoints_train2014.json'
+    },
+    'keypoints_coco_2014_val': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/person_keypoints_val2014.json'
+    },
+    'keypoints_coco_2014_minival': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/person_keypoints_minival2014.json'
+    },
+    'keypoints_coco_2014_valminusminival': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_val2014',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/person_keypoints_valminusminival2014.json'
+    },
+    'keypoints_coco_2015_test': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test2015.json'
+    },
+    'keypoints_coco_2015_test-dev': {
+        _IM_DIR:
+            _DATA_DIR + '/coco/coco_test2015',
+        _ANN_FN:
+            _DATA_DIR + '/coco/annotations/image_info_test-dev2015.json'
+    },
+    'voc_2007_train': {
+        _IM_DIR:
+            _DATA_DIR + '/VOC2007/JPEGImages',
+        _ANN_FN:
+            _DATA_DIR + '/VOC2007/annotations/voc_2007_train.json',
+        _DEVKIT_DIR:
+            _DATA_DIR + '/VOC2007/VOCdevkit2007'
+    },
+    'voc_2007_val': {
+        _IM_DIR:
+            _DATA_DIR + '/VOC2007/JPEGImages',
+        _ANN_FN:
+            _DATA_DIR + '/VOC2007/annotations/voc_2007_val.json',
+        _DEVKIT_DIR:
+            _DATA_DIR + '/VOC2007/VOCdevkit2007'
+    },
+    'voc_2007_test': {
+        _IM_DIR:
+            _DATA_DIR + '/VOC2007/JPEGImages',
+        _ANN_FN:
+            _DATA_DIR + '/VOC2007/annotations/voc_2007_test.json',
+        _DEVKIT_DIR:
+            _DATA_DIR + '/VOC2007/VOCdevkit2007'
+    },
+    'voc_2012_train': {
+        _IM_DIR:
+            _DATA_DIR + '/VOC2012/JPEGImages',
+        _ANN_FN:
+            _DATA_DIR + '/VOC2012/annotations/voc_2012_train.json',
+        _DEVKIT_DIR:
+            _DATA_DIR + '/VOC2012/VOCdevkit2012'
+    },
+    'voc_2012_val': {
+        _IM_DIR:
+            _DATA_DIR + '/VOC2012/JPEGImages',
+        _ANN_FN:
+            _DATA_DIR + '/VOC2012/annotations/voc_2012_val.json',
+        _DEVKIT_DIR:
+            _DATA_DIR + '/VOC2012/VOCdevkit2012'
+    }
+}
+    
+    
+def _do_matlab_eval(json_dataset, salt, output_dir='output'):
+    import subprocess
+    logger.info('-----------------------------------------------------')
+    logger.info('Computing results with the official MATLAB eval code.')
+    logger.info('-----------------------------------------------------')
+    info = voc_info(json_dataset)
+    path = os.path.join(
+        cfg.ROOT_DIR, 'detectron', 'datasets', 'VOCdevkit-matlab-wrapper')
+    cmd = 'cd {} && '.format(path)
+    cmd += '{:s} -nodisplay -nodesktop '.format(cfg.MATLAB)
+    cmd += '-r 'dbstop if error; '
+    cmd += 'voc_eval(\'{:s}\',\'{:s}\',\'{:s}\',\'{:s}\'); quit;'' \
+       .format(info['devkit_path'], 'comp4' + salt, info['image_set'],
+               output_dir)
+    logger.info('Running:\n{}'.format(cmd))
+    subprocess.call(cmd, shell=True)
+    
+        # Anchors at a single feature cell
+    cell_anchors = generate_anchors(
+        stride=stride, sizes=anchor_sizes, aspect_ratios=anchor_aspect_ratios
+    )
+    num_cell_anchors = cell_anchors.shape[0]
+    
+        if fg_inds.shape[0] > 0:
+        # Class labels for the foreground rois
+        mask_class_labels = blobs['labels_int32'][fg_inds]
+        masks = blob_utils.zeros((fg_inds.shape[0], M**2), int32=True)
