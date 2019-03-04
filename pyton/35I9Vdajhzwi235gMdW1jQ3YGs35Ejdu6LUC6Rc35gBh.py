@@ -1,159 +1,172 @@
 
         
-        Available hooks:
+          # Predict all the paths
+  for index in range(len(path_index)):
+    curr_path_vector = path_vectors[index]
     
-        def test_super_len_correctly_calculates_len_of_partially_read_file(self):
-        '''Ensure that we handle partially consumed file like objects.'''
-        s = StringIO.StringIO()
-        s.write('foobarbogus')
-        assert super_len(s) == 0
-    
-        # Client Error.
-    400: ('bad_request', 'bad'),
-    401: ('unauthorized',),
-    402: ('payment_required', 'payment'),
-    403: ('forbidden',),
-    404: ('not_found', '-o-'),
-    405: ('method_not_allowed', 'not_allowed'),
-    406: ('not_acceptable',),
-    407: ('proxy_authentication_required', 'proxy_auth', 'proxy_authentication'),
-    408: ('request_timeout', 'timeout'),
-    409: ('conflict',),
-    410: ('gone',),
-    411: ('length_required',),
-    412: ('precondition_failed', 'precondition'),
-    413: ('request_entity_too_large',),
-    414: ('request_uri_too_large',),
-    415: ('unsupported_media_type', 'unsupported_media', 'media_type'),
-    416: ('requested_range_not_satisfiable', 'requested_range', 'range_not_satisfiable'),
-    417: ('expectation_failed',),
-    418: ('im_a_teapot', 'teapot', 'i_am_a_teapot'),
-    421: ('misdirected_request',),
-    422: ('unprocessable_entity', 'unprocessable'),
-    423: ('locked',),
-    424: ('failed_dependency', 'dependency'),
-    425: ('unordered_collection', 'unordered'),
-    426: ('upgrade_required', 'upgrade'),
-    428: ('precondition_required', 'precondition'),
-    429: ('too_many_requests', 'too_many'),
-    431: ('header_fields_too_large', 'fields_too_large'),
-    444: ('no_response', 'none'),
-    449: ('retry_with', 'retry'),
-    450: ('blocked_by_windows_parental_controls', 'parental_controls'),
-    451: ('unavailable_for_legal_reasons', 'legal_reasons'),
-    499: ('client_closed_request',),
+      Args:
+    hps: The dictionary of hyperparameters.
+    datasets: A dictionary of data dictionaries.  The dataset dict is simply a
+      name(string)-> data dictionary mapping (See top of lfads.py).
+  '''
+  model = build_model(hps, kind='train', datasets=datasets)
+  if hps.do_reset_learning_rate:
+    sess = tf.get_default_session()
+    sess.run(model.learning_rate.initializer)
     
     
-if __name__ == '__main__':
-    main()
+def flatten(list_of_lists):
+  '''Takes a list of lists and returns a list of the elements.
+    
+    FLAGS = tf.flags.FLAGS
+# General flags.
+tf.flags.DEFINE_string('mode', 'eval',
+                       'One of [sample, eval, dump_emb, dump_lstm_emb]. '
+                       ''sample' mode samples future word predictions, using '
+                       'FLAGS.prefix as prefix (prefix could be left empty). '
+                       ''eval' mode calculates perplexity of the '
+                       'FLAGS.input_data. '
+                       ''dump_emb' mode dumps word and softmax embeddings to '
+                       'FLAGS.save_dir. embeddings are dumped in the same '
+                       'order as words in vocabulary. All words in vocabulary '
+                       'are dumped.'
+                       'dump_lstm_emb dumps lstm embeddings of FLAGS.sentence '
+                       'to FLAGS.save_dir.')
+tf.flags.DEFINE_string('pbtxt', '',
+                       'GraphDef proto text file used to construct model '
+                       'structure.')
+tf.flags.DEFINE_string('ckpt', '',
+                       'Checkpoint directory used to fill model values.')
+tf.flags.DEFINE_string('vocab_file', '', 'Vocabulary file.')
+tf.flags.DEFINE_string('save_dir', '',
+                       'Used for 'dump_emb' mode to save word embeddings.')
+# sample mode flags.
+tf.flags.DEFINE_string('prefix', '',
+                       'Used for 'sample' mode to predict next words.')
+tf.flags.DEFINE_integer('max_sample_words', 100,
+                        'Sampling stops either when </S> is met or this number '
+                        'of steps has passed.')
+tf.flags.DEFINE_integer('num_samples', 3,
+                        'Number of samples to generate for the prefix.')
+# dump_lstm_emb mode flags.
+tf.flags.DEFINE_string('sentence', '',
+                       'Used as input for 'dump_lstm_emb' mode.')
+# eval mode flags.
+tf.flags.DEFINE_string('input_data', '',
+                       'Input data files for eval model.')
+tf.flags.DEFINE_integer('max_eval_steps', 1000000,
+                        'Maximum mumber of steps to run 'eval' mode.')
+    
+      def evaluate(self):
+    '''Evaluate the current ensemble.'''
+    # Attach word probabilities and correctness label to each substitution
+    ensembled_probs = sum(self.all_probs) / len(self.all_probs)
+    scorings = []
+    for i, sentence in enumerate(self.sentences):
+      correctness = self.labels[i]
+      word_probs = ensembled_probs[i, :len(sentence)]
+      joint_prob = np.prod(word_probs, dtype=np.float64)
+    
+      for batch in range(num_batches):
+    x = np.zeros([batch_size, num_steps], dtype=np.int32)
+    y = np.zeros([batch_size, num_steps], dtype=np.int32)
+    w = np.zeros([batch_size, num_steps], dtype=np.float)
+    
+          predictions = tf.transpose(predictions, [1, 0, 2])
+      return tf.squeeze(predictions, axis=2)
 
     
+    import base64
+import io
+import json
+import mimetypes
+import netrc
+import optparse
+import os
+import re
+import sys
     
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
+    entries_str = textwrap.indent(''.join(entries), '\t')
+atom_template = atom_template.replace('@ENTRIES@', entries_str)
     
-                # the cluster
-            if host.CLUSTER_ID != self.get_parameter('cluster_id'):
-                if one.cluster.addhost(self.get_parameter('cluster_id'), host.ID):
-                    result['changed'] = True
-                else:
-                    self.fail(msg='failed to update the host cluster')
+    import youtube_dl
     
     
 def main():
-    argument_spec = vca_argument_spec()
-    argument_spec.update(
-        dict(
-            nat_rules=dict(type='list', default=[]),
-            gateway_name=dict(default='gateway'),
-            purge_rules=dict(default=False, type='bool'),
-            state=dict(default='present', choices=['present', 'absent'])
-        )
-    )
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
     
-        changed = False
+    header = oldreadme[:oldreadme.index('# OPTIONS')]
+footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
     
-    import traceback
+    # the encrypted data can be generate with 'devscripts/generate_aes_testdata.py'
     
-    # If outside servers aren't reachable from your machine, use delegate_to and override hosts:
-- bigpanda:
-    component: myapp
-    version: '1.3'
-    token: '{{ bigpanda_token }}'
-    hosts: '{{ ansible_hostname }}'
-    state: started
-  delegate_to: localhost
-  register: deployment
+                handler_result = self.handler(sock)
     
-      For example following function:
-  void increment_counter(int* count) {
-    *count++;
-  }
-  is invalid, because it effectively does count++, moving pointer, and should
-  be replaced with ++*count, (*count)++ or *count += 1.
     
-    def stripped(line):
-    # Remove well-formed html tags, fixing mistakes by legitimate users
-    sline = TAG_REGEX.sub('', line)
-    sline = re.sub('[()\[\]#*]', ' ', line)
-    return sline
+    {        Generic:                   '#000000',        # class: 'g'
+        Generic.Deleted:           '#a40000',        # class: 'gd'
+        Generic.Emph:              'italic #000000', # class: 'ge'
+        Generic.Error:             '#ef2929',        # class: 'gr'
+        Generic.Heading:           'bold #000080',   # class: 'gh'
+        Generic.Inserted:          '#00A000',        # class: 'gi'
+        Generic.Output:            '#888',           # class: 'go'
+        Generic.Prompt:            '#745334',        # class: 'gp'
+        Generic.Strong:            'bold #000000',   # class: 'gs'
+        Generic.Subheading:        'bold #800080',   # class: 'gu'
+        Generic.Traceback:         'bold #a40000',   # class: 'gt'
+    }
+
     
-            else:
-            colision_resolution = self._colision_resolution(key, data)
-            if colision_resolution is not None:
-                self._set_value(colision_resolution, data)
-            else:
-                self.rehashing()
-                self.insert_data(data)
+    #: Python 2.x?
+is_py2 = (_ver[0] == 2)
     
-    from .hash_table import HashTable
+    This module provides the capabilities for the Requests hooks system.
     
-            print('Enter the second string: ', end='')
-        S2 = raw_input().strip()
+            # .netrc might have more auth for us on our new host.
+        new_auth = get_netrc_auth(url) if self.trust_env else None
+        if new_auth is not None:
+            prepared_request.prepare_auth(new_auth)
     
-    This is a pure Python implementation of Dynamic Programming solution to the longest increasing subsequence of a given sequence.
+            if self._content_consumed and isinstance(self._content, bool):
+            raise StreamConsumedError()
+        elif chunk_size is not None and not isinstance(chunk_size, int):
+            raise TypeError('chunk_size must be an int, it is instead a %s.' % type(chunk_size))
+        # simulate reading small chunks of the content
+        reused_chunks = iter_slices(self._content, chunk_size)
     
-    def rearrange(bitString32):
-	'''[summary]
-	Regroups the given binary string.
-	
-	Arguments:
-		bitString32 {[string]} -- [32 bit binary]
-	
-	Raises:
-		ValueError -- [if the given string not are 32 bit binary string]
-	
-	Returns:
-		[string] -- [32 bit binary string]
-	'''
     
-        def mean_squared_error(self, labels, prediction):
-        '''
-        mean_squared_error:
-        @param labels: a one dimensional numpy array 
-        @param prediction: a floating point value
-        return value: mean_squared_error calculates the error if prediction is used to estimate the labels
-        '''
-        if labels.ndim != 1:
-            print('Error: Input labels must be one dimensional')
+class FlicButton(BinarySensorDevice):
+    '''Representation of a flic button.'''
     
-            self._hass = hass
-        self._address = address
-        self._timeout = timeout
-        self._is_down = False
-        self._ignored_click_types = ignored_click_types or []
-        self._hass_click_types = {
-            pyflic.ClickType.ButtonClick: CLICK_TYPE_SINGLE,
-            pyflic.ClickType.ButtonSingleClick: CLICK_TYPE_SINGLE,
-            pyflic.ClickType.ButtonDoubleClick: CLICK_TYPE_DOUBLE,
-            pyflic.ClickType.ButtonHold: CLICK_TYPE_HOLD,
-        }
+        return CommandLineNotificationService(command)
     
-        hass.services.register(DOMAIN, 'icloud_set_interval', setinterval,
-                           schema=SERVICE_SCHEMA)
     
-                    final_path = None
+def get_service(hass, config, discovery_info=None):
+    '''Get the demo notification service.'''
+    return DemoNotificationService(hass)
     
-            for entity_id in whitelist:
-            state = hass.states.get(entity_id)
+    CONF_PAGE_ACCESS_TOKEN = 'page_access_token'
+BASE_URL = 'https://graph.facebook.com/v2.6/me/messages'
+CREATE_BROADCAST_URL = 'https://graph.facebook.com/v2.11/me/message_creatives'
+SEND_BROADCAST_URL = 'https://graph.facebook.com/v2.11/me/broadcast_messages'
+    
+            if resp.status_code == 400:
+            _LOGGER.error('At least one parameter is missing')
+        elif resp.status_code == 402:
+            _LOGGER.error('Too much SMS send in a few time')
+        elif resp.status_code == 403:
+            _LOGGER.error('Wrong Username/Password')
+        elif resp.status_code == 500:
+            _LOGGER.error('Server error, try later')
+
+    
+                # Check response
+            buffer = sock.recv(1024)
+            if buffer != b'LANnouncer: OK':
+                _LOGGER.error('Error sending data to Lannnouncer: %s',
+                              buffer.decode())
+    
+        return AutomateNotificationService(secret, recipient, device)
