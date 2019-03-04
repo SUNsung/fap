@@ -1,267 +1,197 @@
 
         
-          // Format the Op's descriptions so that it can be a Python docstring.
-  void AddDocStringDescription();
-    
-    void ModelAnalyzer::PrintNodeInfo(const NodeDef* node,
-                                  const GraphProperties& properties, bool debug,
-                                  std::ostream& os) const {
-  os << node->name() << ' [' << node->op() << ']' << std::endl;
-  if (properties.HasOutputProperties(node->name())) {
-    const std::vector<OpInfo::TensorProperties>& props =
-        properties.GetOutputProperties(node->name());
-    for (int i = 0; i < props.size(); ++i) {
-      const OpInfo::TensorProperties& prop = props[i];
-      os << '\t'
-         << 'output ' << i << ' (' << DataTypeString(prop.dtype())
-         << ') has shape ';
-      if (prop.shape().unknown_rank()) {
-        os << '?';
-      } else {
-        os << '[';
-        for (int i = 0; i < prop.shape().dim_size(); ++i) {
-          if (i > 0) {
-            os << ', ';
-          }
-          if (prop.shape().dim(i).size() >= 0) {
-            // Print the actual dimension.
-            os << prop.shape().dim(i).size();
-          } else if (prop.shape().dim(i).size() == -1) {
-            // We don't know anything about the dimension.
-            os << '?';
-          } else {
-            // Symbolic dimension.
-            os << 'x' << -prop.shape().dim(i).size();
-          }
-        }
-        os << ']';
-      }
-      os << std::endl;
+          // Get a layer using a LayerParameter.
+  static shared_ptr<Layer<Dtype> > CreateLayer(const LayerParameter& param) {
+    if (Caffe::root_solver()) {
+      LOG(INFO) << 'Creating layer ' << param.name();
     }
+    const string& type = param.type();
+    CreatorRegistry& registry = Registry();
+    CHECK_EQ(registry.count(type), 1) << 'Unknown layer type: ' << type
+        << ' (known types: ' << LayerTypeListString() << ')';
+    return registry[type](param);
   }
-    }
     
-    namespace tensorflow {
-    }
+    #include 'caffe/layers/neuron_layer.hpp'
     
-    int Bfloat16NumpyType() {
-  CHECK_GE(npy_bfloat16_, 0);
-  return npy_bfloat16_;
-}
+      /// @brief The spatial dimensions of a filter kernel.
+  Blob<int> kernel_shape_;
+  /// @brief The spatial dimensions of the stride.
+  Blob<int> stride_;
+  /// @brief The spatial dimensions of the padding.
+  Blob<int> pad_;
+  /// @brief The spatial dimensions of the dilation.
+  Blob<int> dilation_;
+  /// @brief The spatial dimensions of the convolution input.
+  Blob<int> conv_input_shape_;
+  /// @brief The spatial dimensions of the col_buffer.
+  vector<int> col_buffer_shape_;
+  /// @brief The spatial dimensions of the output.
+  vector<int> output_shape_;
+  const vector<int>* bottom_shape_;
     
-        http://www.apache.org/licenses/LICENSE-2.0
+      vector<shared_ptr<Batch<Dtype> > > prefetch_;
+  BlockingQueue<Batch<Dtype>*> prefetch_free_;
+  BlockingQueue<Batch<Dtype>*> prefetch_full_;
+  Batch<Dtype>* prefetch_current_;
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+      virtual inline const char* type() const { return 'BNLL'; }
     
-    #include 'tensorflow/core/framework/node_def.pb.h'
-#include 'tensorflow/core/framework/node_def_util.h'
-#include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/op_kernel.h'
-#include 'tensorflow/core/framework/types.h'
-#include 'tensorflow/core/lib/core/status.h'
-#include 'tensorflow/core/util/device_name_utils.h'
+      virtual inline int ExactNumBottomBlobs() const { return 3; }
+  virtual inline const char* type() const { return 'ContrastiveLoss'; }
+  /**
+   * Unlike most loss layers, in the ContrastiveLossLayer we can backpropagate
+   * to the first two inputs.
+   */
+  virtual inline bool AllowForceBackward(const int bottom_index) const {
+    return bottom_index != 2;
+  }
     
-    
-    {  // The underlying CUDA event element.
-  CUevent cuda_event_;
-};
-    
-    #ifndef TENSORFLOW_STREAM_EXECUTOR_CUDA_CUDA_FFT_H_
-#define TENSORFLOW_STREAM_EXECUTOR_CUDA_CUDA_FFT_H_
-    
-    namespace atom {
-    }
-    
-    void AutoUpdater::QuitAndInstall() {
-  Emit('before-quit-for-update');
-    }
-    
-    
-    {}  // namespace api
-    
-      // event.PreventDefault().
-  void PreventDefault(v8::Isolate* isolate);
-    
-      ~TrackableObject() override { RemoveFromWeakMap(); }
-    
-    #if defined(OS_LINUX)
-#include 'atom/browser/lib/power_observer_linux.h'
-#else
-#include 'base/power_monitor/power_observer.h'
-#endif  // defined(OS_LINUX)
-    
-    /**
- * @brief Computes @f$ y = |x| @f$
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$ y = |x| @f$
- */
-template <typename Dtype>
-class AbsValLayer : public NeuronLayer<Dtype> {
- public:
-  explicit AbsValLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+    namespace caffe {
     }
     
     #include <vector>
     
-      virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+     protected:
   virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
   virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    #include 'caffe/layers/neuron_layer.hpp'
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #include 'caffe/layers/lrn_layer.hpp'
-    
-    #endif  // CAFFE_CUDNN_POOLING_LAYER_HPP_
-
-    
-    
-    {}  // namespace caffe
-    
-    #include 'caffe/layers/softmax_layer.hpp'
-    
-    	for (int i = 1; i < argCount; i++)
-	{
+    namespace caffe {
     }
     
-      auto weapon_two_name = builder.CreateString('Axe');
-  short weapon_two_damage = 5;
-    
-      // here, parser.builder_ contains a binary buffer that is the parsed data.
-    
-      flatbuffers::NamedHashFunction<uint16_t>::HashFunction hash_function16 =
-      flatbuffers::FindHashFunction16(hash_algorithm);
-  flatbuffers::NamedHashFunction<uint32_t>::HashFunction hash_function32 =
-      flatbuffers::FindHashFunction32(hash_algorithm);
-  flatbuffers::NamedHashFunction<uint64_t>::HashFunction hash_function64 =
-      flatbuffers::FindHashFunction64(hash_algorithm);
+        pq = swHeap_new(SIZE, SW_MAX_HEAP);
+    ASSERT_NE(pq, nullptr);
     
     
-    { private:
-  const reflection::Schema &schema_;
-  uint8_t *startptr_;
-  int delta_;
-  std::vector<uint8_t> &buf_;
-  std::vector<uint8_t> dag_check_;
-};
-    
-    
-    {  flatbuffers::grpc::Message<Monster> response;
-  auto stream = stub->Retrieve(&context, request);
-  while (stream->Read(&response)) {
-    auto resp = response.GetRoot()->name();
-    std::cout << 'RPC Streaming response: ' << resp->str() << std::endl;
-  }
-}
-    
-      virtual uint8_t *reallocate_downward(uint8_t *old_p, size_t old_size,
-                                       size_t new_size, size_t in_use_back,
-                                       size_t in_use_front) override {
-    FLATBUFFERS_ASSERT(old_p == GRPC_SLICE_START_PTR(slice_));
-    FLATBUFFERS_ASSERT(old_size == GRPC_SLICE_LENGTH(slice_));
-    FLATBUFFERS_ASSERT(new_size > old_size);
-    grpc_slice old_slice = slice_;
-    grpc_slice new_slice = grpc_slice_malloc(new_size);
-    uint8_t *new_p = GRPC_SLICE_START_PTR(new_slice);
-    memcpy_downward(old_p, old_size, new_p, new_size, in_use_back,
-                    in_use_front);
-    slice_ = new_slice;
-    grpc_slice_unref(old_slice);
-    return new_p;
-  }
-    
-    // This class simulates flatbuffers::grpc::detail::SliceAllocatorMember
-struct AllocatorMember {
-  flatbuffers::DefaultAllocator member_allocator_;
-};
-    
-    	//! Convert GUID to string in the valid format.
-	//! The valid format for a GUID is {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX} where X is a hex digit. 
-	inline const char* ToString(REFGUID guid)
-	{
-		static char guidString[64];
-		//unsigned short Data4 = *((unsigned short*)guid.Data4);
-		//unsigned long Data5 = *((unsigned long*)&guid.Data4[2]);
-		//unsigned short Data6 = *((unsigned short*)&guid.Data4[6]);
-		sprintf(guidString, '{%.8X-%.4X-%.4X-%.2X%.2X-%.2X%.2X%.2X%.2X%.2X%.2X}', guid.Data1, guid.Data2, guid.Data3, guid.Data4[0], guid.Data4[1],
-			guid.Data4[2], guid.Data4[3], guid.Data4[4], guid.Data4[5], guid.Data4[6], guid.Data4[7]);
-		return guidString;
-	}
-    
-    
-    {		closeNode(name, false);
-	}
-	else{
-		if(size > 0)
-			do 
-				ser(*this, '', '');
-				while (ser.next());
-	}
-    
-    	virtual ~ClassFactoryBase() {}
-    
-    #endif  // I18N_PHONENUMBERS_BASE_BASICTYPES_H_
-
-    
-    #if !defined(IGNORE_UNUSED)
-#define IGNORE_UNUSED(X) (void)(X)
-#endif 
-    
-    #include 'phonenumbers/base/logging.h'
-    
-    
-    {  for (size_type i = std::min(pos, length_ - 1); ; --i) {
-    if (ptr_[i] == c)
-      return i;
-    if (i == 0)
-      break;
-  }
-  return npos;
-}
-    
-    template <typename R, typename A1, typename A2, typename A3, typename A4>
-ResultCallback4<R, A1, A2, A3, A4>* NewPermanentCallback(
-    R (*function)(A1, A2, A3, A4)) {
-  return new FunctionCallback4<R, A1, A2, A3, A4>(function);
-}
-    
-    #endif  // I18N_PHONENUMBERS_ENCODING_UTILS_H_
-
-    
-     private:
-  // Does a binary search for value in the provided array from start to end
-  // (inclusive). Returns the position if {@code value} is found; otherwise,
-  // returns the position which has the largest value that is less than value.
-  // This means if value is the smallest, -1 will be returned.
-  int BinarySearch(int start, int end, int64 value) const;
-    
-    // Default area code map storage strategy that is used for data not
-// containing description duplications. It is mainly intended to avoid
-// the overhead of the string table management when it is actually
-// unnecessary (i.e no string duplication).
-class DefaultMapStorage {
- public:
-  DefaultMapStorage();
-  virtual ~DefaultMapStorage();
+    {    //1
+    ret = p.read(&p, buf, sizeof(buf));
+    if (ret < 0)
+    {
+        swSysError('read() failed.');
     }
+    ASSERT_GT(ret, 0);
+    ASSERT_EQ(strcmp('hello world1', buf), 0);
+    //2
+    ret = p.read(&p, buf, sizeof(buf));
+    ASSERT_GT(ret, 0);
+    ASSERT_EQ(strcmp('hello world2', buf), 0);
+    //3
+    ret = p.read(&p, buf, sizeof(buf));
+    ASSERT_GT(ret, 0);
+    ASSERT_EQ(strcmp('hello world3', buf), 0);
+}
+    
+    TEST(coroutine_socket, connect_with_dns)
+{
+    coro_test([](void *arg)
+    {
+        Socket sock(SW_SOCK_TCP);
+        bool retval = sock.connect('www.baidu.com', 80, 0.5);
+        ASSERT_EQ(retval, true);
+        ASSERT_EQ(sock.errCode, 0);
+    });
+}
+    
+    static inline void coro_test(std::initializer_list<std::pair<coroutine_func_t, void*>> args)
+{
+    int complete_num = 0;
+    }
+    
+    TEST(coroutine_base, get_current)
+{
+    long _cid;
+    long cid = Coroutine::create([](void *arg)
+    {
+        auto co = Coroutine::get_current();
+        *(long *) arg = co->get_cid();
+    }, &_cid);
+    }
+    
+        static BOOST_FORCEINLINE bool compare_exchange_strong(
+        storage_type volatile& storage, storage_type& expected, storage_type desired, memory_order success_order, memory_order) BOOST_NOEXCEPT
+    {
+        base_type::fence_before(success_order);
+        bool success;
+        __asm
+        {
+            mov esi, expected
+            mov edi, storage
+            movzx eax, word ptr [esi]
+            movzx edx, desired
+            lock cmpxchg word ptr [edi], dx
+            mov word ptr [esi], ax
+            sete success
+        };
+        // The success and failure fences are equivalent anyway
+        base_type::fence_after(success_order);
+        return success;
+    }
+    
+    #include <string>
+    
+    #endif  // CORE_RENDER_NODE_FACTORY_RENDER_CREATOR_H_
+
+    
+    	// Where the last (currently read) token has started.
+	const char *tokenStart_ = nullptr;
+    
+    #include <QtCore/QString>
+#include <QtCore/QByteArray>
+#include <QtCore/QVector>
+    
+    	bool read() {
+		if (!file_.read()) {
+			return false;
+		}
+		pos_ = file_.data();
+		end_ = file_.end();
+		return true;
+	}
+	bool atEnd() const {
+		return (pos_ == end_);
+	}
+	char currentChar() const {
+		return atEnd() ? 0 : *pos_;
+	}
+	bool skipChar() {
+		if (atEnd()) {
+			return false;
+		}
+		++pos_;
+		return true;
+	}
+	const char *currentPtr() const {
+		return pos_;
+	}
+	int charsLeft() const {
+		return (end_ - pos_);
+	}
+    
+    	bool finalize();
+    
+    static constexpr int kErrorInternal = 666;
+    
+    For license and copyright information please follow this link:
+https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
+*/
+#include 'codegen/emoji/options.h'
+    
+    
+    {
+    {} // namespace lang
+} // namespace codegen
+
+    
+    bool Processor::write(const LangPack &langpack) const {
+	bool forceReGenerate = false;
+	QDir dir(options_.outputPath);
+	if (!dir.mkpath('.')) {
+		common::logError(kErrorCantWritePath, 'Command Line') << 'can not open path for writing: ' << dir.absolutePath().toStdString();
+		return false;
+	}
+    }
+    
+    
+    {};
