@@ -1,941 +1,470 @@
 
         
-          Begin = new char[capacity];
-  EndOfAllocation = Begin + capacity;
-  End = Begin + oldSize + needed;
-  std::memcpy(Begin, oldBegin, oldSize);
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    VERB(abbreviate)
-VERB(accept)
-VERB(activate)
-VERB(add)
-VERB(adjust)
-VERB(admire)
-VERB(admit)
-VERB(advise)
-VERB(afford)
-VERB(agree)
-VERB(alert)
-VERB(allow)
-VERB(alter)
-VERB(amuse)
-VERB(analyse)
-VERB(analyze)
-VERB(animate)
-VERB(announce)
-VERB(annoy)
-VERB(answer)
-VERB(apologise)
-VERB(appear)
-VERB(append)
-VERB(applaud)
-VERB(apply)
-VERB(apportion)
-VERB(appreciate)
-VERB(approve)
-VERB(argue)
-VERB(arrange)
-VERB(arrest)
-VERB(arrive)
-VERB(ask)
-VERB(assign)
-VERB(attach)
-VERB(attack)
-VERB(attempt)
-VERB(attend)
-VERB(attract)
-VERB(avoid)
-VERB(awake)
-VERB(back)
-VERB(bake)
-VERB(balance)
-VERB(ban)
-VERB(bang)
-VERB(bare)
-VERB(bat)
-VERB(bathe)
-VERB(battle)
-VERB(be)
-VERB(beat)
-VERB(become)
-VERB(beg)
-VERB(begin)
-VERB(behave)
-VERB(belong)
-VERB(bend)
-VERB(bet)
-VERB(bid)
-VERB(bite)
-VERB(bleach)
-VERB(bless)
-VERB(blind)
-VERB(blink)
-VERB(blot)
-VERB(blow)
-VERB(blush)
-VERB(boast)
-VERB(boil)
-VERB(bolt)
-VERB(bomb)
-VERB(book)
-VERB(bore)
-VERB(borrow)
-VERB(bounce)
-VERB(bow)
-VERB(box)
-VERB(brake)
-VERB(branch)
-VERB(break)
-VERB(breathe)
-VERB(bring)
-VERB(broadcast)
-VERB(bruise)
-VERB(brush)
-VERB(bubble)
-VERB(build)
-VERB(bump)
-VERB(burn)
-VERB(bury)
-VERB(buy)
-VERB(buzz)
-VERB(calculate)
-VERB(call)
-VERB(camp)
-VERB(cancel)
-VERB(capture)
-VERB(care)
-VERB(carry)
-VERB(carve)
-VERB(cast)
-VERB(catch)
-VERB(cause)
-VERB(center)
-VERB(challenge)
-VERB(change)
-VERB(charge)
-VERB(chase)
-VERB(cheat)
-VERB(check)
-VERB(cheer)
-VERB(chew)
-VERB(choke)
-VERB(choose)
-VERB(chop)
-VERB(claim)
-VERB(clap)
-VERB(clean)
-VERB(clear)
-VERB(click)
-VERB(close)
-VERB(coach)
-VERB(coil)
-VERB(collect)
-VERB(collapse)
-VERB(colour)
-VERB(comb)
-VERB(come)
-VERB(command)
-VERB(commit)
-VERB(communicate)
-VERB(compare)
-VERB(compete)
-VERB(complain)
-VERB(complete)
-VERB(concentrate)
-VERB(concern)
-VERB(confess)
-VERB(confuse)
-VERB(connect)
-VERB(consider)
-VERB(consist)
-VERB(contain)
-VERB(contains)
-VERB(continue)
-VERB(convert)
-VERB(copy)
-VERB(correct)
-VERB(cough)
-VERB(cost)
-VERB(count)
-VERB(cover)
-VERB(crack)
-VERB(crash)
-VERB(crawl)
-VERB(cross)
-VERB(crush)
-VERB(cry)
-VERB(cure)
-VERB(curl)
-VERB(curve)
-VERB(customize)
-VERB(cut)
-VERB(cycle)
-VERB(dam)
-VERB(damage)
-VERB(dance)
-VERB(dare)
-VERB(decay)
-VERB(deceive)
-VERB(decide)
-VERB(decode)
-VERB(decorate)
-VERB(defer)
-VERB(define)
-VERB(delay)
-VERB(delete)
-VERB(delight)
-VERB(deliver)
-VERB(depend)
-VERB(describe)
-VERB(deselect)
-VERB(desert)
-VERB(deserve)
-VERB(destroy)
-VERB(detach)
-VERB(detect)
-VERB(develop)
-VERB(dig)
-VERB(dim)
-VERB(disagree)
-VERB(disappear)
-VERB(disapprove)
-VERB(disarm)
-VERB(discover)
-VERB(dislike)
-VERB(dismiss)
-VERB(display)
-VERB(divide)
-VERB(do)
-VERB(double)
-VERB(doubt)
-VERB(drag)
-VERB(drain)
-VERB(draw)
-VERB(dream)
-VERB(dress)
-VERB(drink)
-VERB(drip)
-VERB(drive)
-VERB(drop)
-VERB(drown)
-VERB(drum)
-VERB(dry)
-VERB(duplicate)
-VERB(dust)
-VERB(earn)
-VERB(eat)
-VERB(echo)
-VERB(edit)
-VERB(educate)
-VERB(embarrass)
-VERB(employ)
-VERB(empty)
-VERB(enable)
-VERB(encode)
-VERB(encourage)
-VERB(end)
-VERB(enjoy)
-VERB(enter)
-VERB(entertain)
-VERB(enumerate)
-VERB(enqueue)
-VERB(escape)
-VERB(examine)
-VERB(excite)
-VERB(excuse)
-VERB(execute)
-VERB(exercise)
-VERB(exist)
-VERB(expand)
-VERB(expect)
-VERB(explain)
-VERB(explode)
-VERB(export)
-VERB(extend)
-VERB(face)
-VERB(fade)
-VERB(fail)
-VERB(fancy)
-VERB(fasten)
-VERB(fax)
-VERB(fear)
-VERB(feel)
-VERB(fence)
-VERB(fetch)
-VERB(fight)
-VERB(fill)
-VERB(film)
-VERB(find)
-VERB(finish)
-VERB(fire)
-VERB(fit)
-VERB(fix)
-VERB(flap)
-VERB(flash)
-VERB(flatten)
-VERB(flip)
-VERB(float)
-VERB(flood)
-VERB(flow)
-VERB(flower)
-VERB(fly)
-VERB(focus)
-VERB(fold)
-VERB(follow)
-VERB(fool)
-VERB(force)
-VERB(forget)
-VERB(forgive)
-VERB(form)
-VERB(found)
-VERB(freeze)
-VERB(frighten)
-VERB(fry)
-VERB(gain)
-VERB(gather)
-VERB(gaze)
-VERB(generate)
-VERB(get)
-VERB(give)
-VERB(glow)
-VERB(glue)
-VERB(go)
-VERB(grab)
-VERB(grate)
-VERB(grease)
-VERB(greet)
-VERB(grin)
-VERB(grip)
-VERB(groan)
-VERB(grow)
-VERB(guarantee)
-VERB(guard)
-VERB(guess)
-VERB(guide)
-VERB(hammer)
-VERB(hand)
-VERB(handle)
-VERB(hang)
-VERB(happen)
-VERB(harass)
-VERB(harm)
-VERB(hate)
-VERB(haunt)
-VERB(head)
-VERB(heal)
-VERB(heap)
-VERB(hear)
-VERB(heat)
-VERB(help)
-VERB(hide)
-VERB(highlight)
-VERB(hit)
-VERB(hold)
-VERB(hook)
-VERB(hop)
-VERB(hope)
-VERB(hover)
-VERB(hug)
-VERB(hum)
-VERB(hunt)
-VERB(hurry)
-VERB(hurt)
-VERB(identify)
-VERB(ignore)
-VERB(imagine)
-VERB(import)
-VERB(impress)
-VERB(improve)
-VERB(include)
-VERB(increase)
-VERB(influence)
-VERB(inform)
-VERB(inject)
-VERB(injure)
-VERB(insert)
-VERB(instruct)
-VERB(intend)
-VERB(interest)
-VERB(interfere)
-VERB(interrupt)
-VERB(intersect)
-VERB(intersects)
-VERB(introduce)
-VERB(invent)
-VERB(invite)
-VERB(irritate)
-VERB(itch)
-VERB(jail)
-VERB(jam)
-VERB(jog)
-VERB(join)
-VERB(joke)
-VERB(judge)
-VERB(juggle)
-VERB(jump)
-VERB(keep)
-VERB(kick)
-VERB(kill)
-VERB(kiss)
-VERB(kneel)
-VERB(knit)
-VERB(knock)
-VERB(knot)
-VERB(know)
-VERB(label)
-VERB(land)
-VERB(last)
-VERB(laugh)
-VERB(launch)
-VERB(lay)
-VERB(lead)
-VERB(learn)
-VERB(leave)
-VERB(lend)
-VERB(let)
-VERB(level)
-VERB(license)
-VERB(lick)
-VERB(lie)
-VERB(lighten)
-VERB(like)
-VERB(listen)
-VERB(live)
-VERB(load)
-VERB(localize)
-VERB(lock)
-VERB(long)
-VERB(look)
-VERB(lose)
-VERB(love)
-VERB(maintain)
-VERB(make)
-VERB(man)
-VERB(manage)
-VERB(march)
-VERB(mark)
-VERB(marry)
-VERB(match)
-VERB(mate)
-VERB(matter)
-VERB(mean)
-VERB(measure)
-VERB(meddle)
-VERB(meet)
-VERB(melt)
-VERB(memorise)
-VERB(mend)
-VERB(merge)
-VERB(mess)
-VERB(milk)
-VERB(mine)
-VERB(miss)
-VERB(minus)
-VERB(mix)
-VERB(moan)
-VERB(moor)
-VERB(mourn)
-VERB(move)
-VERB(muddle)
-VERB(mug)
-VERB(multiply)
-VERB(murder)
-VERB(nail)
-VERB(nest)
-VERB(nod)
-VERB(normalize)
-VERB(note)
-VERB(notice)
-VERB(notify)
-VERB(number)
-VERB(obey)
-VERB(observe)
-VERB(obtain)
-VERB(occur)
-VERB(offend)
-VERB(offer)
-VERB(open)
-VERB(order)
-VERB(overflow)
-VERB(owe)
-VERB(own)
-VERB(pack)
-VERB(paddle)
-VERB(paint)
-VERB(park)
-VERB(part)
-VERB(pass)
-VERB(paste)
-VERB(pat)
-VERB(pause)
-VERB(pay)
-VERB(peck)
-VERB(pedal)
-VERB(peel)
-VERB(peep)
-VERB(perform)
-VERB(permit)
-VERB(phone)
-VERB(pick)
-VERB(pinch)
-VERB(pine)
-VERB(place)
-VERB(plan)
-VERB(plant)
-VERB(play)
-VERB(please)
-VERB(plug)
-VERB(poke)
-VERB(polish)
-VERB(pop)
-VERB(possess)
-VERB(post)
-VERB(pour)
-VERB(practice)
-VERB(practise)
-VERB(pray)
-VERB(preach)
-VERB(precede)
-VERB(prefer)
-VERB(preload)
-VERB(prepare)
-VERB(prepend)
-VERB(present)
-VERB(preserve)
-VERB(press)
-VERB(pretend)
-VERB(prevent)
-VERB(prick)
-VERB(print)
-VERB(produce)
-VERB(program)
-VERB(promise)
-VERB(protect)
-VERB(provide)
-VERB(pull)
-VERB(pump)
-VERB(punch)
-VERB(puncture)
-VERB(punish)
-VERB(push)
-VERB(put)
-VERB(question)
-VERB(queue)
-VERB(race)
-VERB(radiate)
-VERB(rain)
-VERB(raise)
-VERB(reach)
-VERB(read)
-VERB(realise)
-VERB(receive)
-VERB(recognise)
-VERB(record)
-VERB(reduce)
-VERB(reflect)
-VERB(refuse)
-VERB(register)
-VERB(regret)
-VERB(reign)
-VERB(reject)
-VERB(rejoice)
-VERB(relax)
-VERB(release)
-VERB(rely)
-VERB(remain)
-VERB(remember)
-VERB(remind)
-VERB(remove)
-VERB(repair)
-VERB(repeat)
-VERB(replace)
-VERB(reply)
-VERB(report)
-VERB(request)
-VERB(require)
-VERB(resize)
-VERB(rescue)
-VERB(resolve)
-VERB(retain)
-VERB(retire)
-VERB(return)
-VERB(reverse)
-VERB(review)
-VERB(rhyme)
-VERB(ride)
-VERB(ring)
-VERB(rinse)
-VERB(rise)
-VERB(risk)
-VERB(rob)
-VERB(rock)
-VERB(roll)
-VERB(rot)
-VERB(rub)
-VERB(ruin)
-VERB(rule)
-VERB(run)
-VERB(rush)
-VERB(sack)
-VERB(sail)
-VERB(satisfy)
-VERB(save)
-VERB(saw)
-VERB(say)
-VERB(scale)
-VERB(scare)
-VERB(scatter)
-VERB(scold)
-VERB(scorch)
-VERB(scrape)
-VERB(scratch)
-VERB(scream)
-VERB(screw)
-VERB(scribble)
-VERB(scroll)
-VERB(scrub)
-VERB(seal)
-VERB(search)
-VERB(see)
-VERB(select)
-VERB(sell)
-VERB(send)
-VERB(separate)
-VERB(serve)
-VERB(settle)
-VERB(shade)
-VERB(share)
-VERB(shave)
-VERB(shelter)
-VERB(shiver)
-VERB(shock)
-VERB(shop)
-VERB(show)
-VERB(shrug)
-VERB(shut)
-VERB(sigh)
-VERB(sign)
-VERB(signal)
-VERB(sin)
-VERB(sing)
-VERB(sip)
-VERB(sit)
-VERB(ski)
-VERB(skip)
-VERB(slap)
-VERB(sleep)
-VERB(slip)
-VERB(slow)
-VERB(smash)
-VERB(smell)
-VERB(smile)
-VERB(smoke)
-VERB(snatch)
-VERB(sneeze)
-VERB(sniff)
-VERB(snore)
-VERB(snow)
-VERB(soak)
-VERB(soothe)
-VERB(sound)
-VERB(spare)
-VERB(spark)
-VERB(sparkle)
-VERB(speak)
-VERB(spell)
-VERB(spend)
-VERB(spill)
-VERB(spoil)
-VERB(spot)
-VERB(spray)
-VERB(sprout)
-VERB(squash)
-VERB(squeak)
-VERB(squeal)
-VERB(squeeze)
-VERB(stain)
-VERB(stamp)
-VERB(stand)
-VERB(standardise)
-VERB(standardize)
-VERB(stare)
-VERB(start)
-VERB(stay)
-VERB(steer)
-VERB(step)
-VERB(stir)
-VERB(stitch)
-VERB(stop)
-VERB(store)
-VERB(strap)
-VERB(strengthen)
-VERB(stretch)
-VERB(strip)
-VERB(stroke)
-VERB(stuff)
-VERB(subtract)
-VERB(succeed)
-VERB(suck)
-VERB(suffer)
-VERB(suggest)
-VERB(suit)
-VERB(supply)
-VERB(support)
-VERB(suppose)
-VERB(suppress)
-VERB(surprise)
-VERB(surround)
-VERB(suspect)
-VERB(suspend)
-VERB(swim)
-VERB(switch)
-VERB(take)
-VERB(talk)
-VERB(tame)
-VERB(tap)
-VERB(taste)
-VERB(teach)
-VERB(tear)
-VERB(tease)
-VERB(telephone)
-VERB(tell)
-VERB(tempt)
-VERB(terrify)
-VERB(test)
-VERB(thank)
-VERB(thaw)
-VERB(think)
-VERB(throw)
-VERB(tick)
-VERB(tickle)
-VERB(tie)
-VERB(time)
-VERB(tip)
-VERB(tire)
-VERB(toggle)
-VERB(touch)
-VERB(tour)
-VERB(tow)
-VERB(trace)
-VERB(trade)
-VERB(train)
-VERB(translate)
-VERB(transform)
-VERB(transport)
-VERB(trap)
-VERB(travel)
-VERB(traverse)
-VERB(treat)
-VERB(tremble)
-VERB(trick)
-VERB(trip)
-VERB(trot)
-VERB(trouble)
-VERB(truncate)
-VERB(trust)
-VERB(try)
-VERB(tug)
-VERB(tumble)
-VERB(turn)
-VERB(twist)
-VERB(understand)
-VERB(undress)
-VERB(unfasten)
-VERB(union)
-VERB(unite)
-VERB(unload)
-VERB(unlock)
-VERB(unpack)
-VERB(untidy)
-VERB(up)
-VERB(update)
-VERB(use)
-VERB(validate)
-VERB(vanish)
-VERB(visit)
-VERB(wail)
-VERB(wait)
-VERB(wake)
-VERB(walk)
-VERB(wander)
-VERB(want)
-VERB(warm)
-VERB(warn)
-VERB(wash)
-VERB(waste)
-VERB(watch)
-VERB(water)
-VERB(wave)
-VERB(wear)
-VERB(weigh)
-VERB(welcome)
-VERB(whine)
-VERB(whip)
-VERB(whirl)
-VERB(whisper)
-VERB(whistle)
-VERB(win)
-VERB(wink)
-VERB(wipe)
-VERB(wish)
-VERB(wobble)
-VERB(wonder)
-VERB(work)
-VERB(worry)
-VERB(wrap)
-VERB(wreck)
-VERB(wrestle)
-VERB(wriggle)
-VERB(write)
-VERB(yawn)
-VERB(yell)
-VERB(zip)
-VERB(zoom)
     
-      bool isRecord() const {
-    assert(isValid());
-    return !Decl.isNull() && Decl.is<const clang::RecordDecl *>();
-  }
-  const clang::RecordDecl *getRecord() const {
-    assert(isRecord());
-    return Decl.get<const clang::RecordDecl *>();
-  }
+    {}  // end namespace tensorflow
     
-      // If this is a getter/setter, the other accessor
-  const clang::FunctionDecl *pairedAccessor = nullptr;
-    
-    #include 'swift/Demangling/ManglingUtils.h'
-    
-    static bool isValidUnicodeScalar(uint32_t S) {
-  // Also accept the range of 0xD800 - 0xD880, which is used for non-symbol
-  // ASCII characters.
-  return (S < 0xD880) || (S >= 0xE000 && S <= 0x1FFFFF);
+    Safe_TF_TensorPtr make_safe(TF_Tensor* tensor) {
+  return Safe_TF_TensorPtr(tensor);
 }
     
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    {    return 0;
-}
+    port::StatusOr<StreamExecutor*> ExecutorCache::GetOrCreate(
+    const StreamExecutorConfig& config,
+    const std::function<ExecutorFactory>& factory) {
+  // In the fast path case, the cache already has an entry and we can just
+  // return after Get() which only takes a shared lock and not a unique lock.
+  // If we need to create, we take a unique lock on cache_.
+  auto fast_result = Get(config);
+  if (fast_result.ok()) {
+    return fast_result;
+  }
+    }
+    
+    
+    {    // Vector of cached {config, executor} pairs.
+    std::vector<
+        std::pair<StreamExecutorConfig, std::unique_ptr<StreamExecutor>>>
+        configurations GUARDED_BY(configurations_mutex);
+  };
+    
+     private:
+  // Replaces multiple consecutive separators with a single separator.
+  // For example, 'bar///foo' becomes 'bar/foo'. Does not eliminate other
+  // redundancies that might be in a pathname involving '.' or '..'.
+  //
+  // A pathname with multiple consecutive separators may occur either through
+  // user error or as a result of some scripts or APIs that generate a pathname
+  // with a trailing separator. On other platforms the same API or script
+  // may NOT generate a pathname with a trailing '/'. Then elsewhere that
+  // pathname may have another '/' and pathname components added to it,
+  // without checking for the separator already being there.
+  // The script language and operating system may allow paths like 'foo//bar'
+  // but some of the functions in FilePath will not handle that correctly. In
+  // particular, RemoveTrailingPathSeparator() only removes one separator, and
+  // it is called in CreateDirectoriesRecursively() assuming that it will change
+  // a pathname from directory syntax (trailing separator) to filename syntax.
+  //
+  // On Windows this method also replaces the alternate path separator '/' with
+  // the primary path separator '\\', so that for example 'bar\\/\\foo' becomes
+  // 'bar\\foo'.
+    
+      // Compares two wide C strings.  Returns true iff they have the same
+  // content.
+  //
+  // Unlike wcscmp(), this function can handle NULL argument(s).  A
+  // NULL C string is considered different to any non-NULL C string,
+  // including the empty string.
+  static bool WideCStringEquals(const wchar_t* lhs, const wchar_t* rhs);
+    
+    // Implementation #2 pre-calculates the primes and stores the result
+// in an array.
+class PreCalculatedPrimeTable : public PrimeTable {
+ public:
+  // 'max' specifies the maximum number the prime table holds.
+  explicit PreCalculatedPrimeTable(int max)
+      : is_prime_size_(max + 1), is_prime_(new bool[max + 1]) {
+    CalculatePrimesUpTo(max);
+  }
+  virtual ~PreCalculatedPrimeTable() { delete[] is_prime_; }
+    }
+    
+    namespace xgboost {
+namespace common {
+/*! \brief buffer reader of the stream that allows you to get */
+class StreamBufferReader {
+ public:
+  explicit StreamBufferReader(size_t buffer_size)
+      :stream_(NULL),
+       read_len_(1), read_ptr_(1) {
+    buffer_.resize(buffer_size);
+  }
+  /*!
+   * \brief set input stream
+   */
+  inline void set_stream(dmlc::Stream *stream) {
+    stream_ = stream;
+    read_len_ = read_ptr_ = 1;
+  }
+  /*!
+   * \brief allows quick read using get char
+   */
+  inline char GetChar(void) {
+    while (true) {
+      if (read_ptr_ < read_len_) {
+        return buffer_[read_ptr_++];
+      } else {
+        read_len_ = stream_->Read(&buffer_[0], buffer_.length());
+        if (read_len_ == 0) return EOF;
+        read_ptr_ = 0;
+      }
+    }
+  }
+  /*! \brief whether we are reaching the end of file */
+  inline bool AtEnd(void) const {
+    return read_len_ == 0;
+  }
+    }
+    }
+    }
+    
+        size_t* it = begin;
+    for (bst_omp_uint tid = 0; tid < nthread; ++tid) {
+      std::copy(row_split_tloc[tid].left.begin(), row_split_tloc[tid].left.end(), it);
+      it += row_split_tloc[tid].left.size();
+    }
+    size_t* split_pt = it;
+    for (bst_omp_uint tid = 0; tid < nthread; ++tid) {
+      std::copy(row_split_tloc[tid].right.begin(), row_split_tloc[tid].right.end(), it);
+      it += row_split_tloc[tid].right.size();
+    }
+    
+    #endif  // DMLC_ENABLE_STD_THREAD
 
     
-        // Setup Platform/Renderer bindings
-    ImGui_Marmalade_Init(true);
+    namespace xgboost {
+namespace common {
+TEST(CompressedIterator, Test) {
+  ASSERT_TRUE(detail::SymbolBits(256) == 8);
+  ASSERT_TRUE(detail::SymbolBits(150) == 8);
+  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
+  int num_elements = 1000;
+  int repetitions = 1000;
+  srand(9);
+    }
+    }
+    }
     
-        bool show_demo_window = true;
-    bool show_another_window = false;
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    
+    {  /*!
+   * \brief transform prediction values, this is only called when Eval is called,
+   *  usually it redirect to PredTransform
+   * \param io_preds prediction values, saves to this vector as well
+   */
+  virtual void EvalTransform(HostDeviceVector<bst_float> *io_preds) {
+    this->PredTransform(io_preds);
+  }
+  /*!
+   * \brief transform probability value back to margin
+   * this is used to transform user-set base_score back to margin
+   * used by gradient boosting
+   * \return transformed value
+   */
+  virtual bst_float ProbToMargin(bst_float base_score) const {
+    return base_score;
+  }
+  /*!
+   * \brief Create an objective function according to name.
+   * \param name Name of the objective.
+   */
+  static ObjFunction* Create(const std::string& name);
+};
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    // Implemented features:
+//  [X] Platform: Clipboard support.
+//  [X] Platform: Gamepad support. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
+//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
+//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).
     
                 if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
                 counter++;
             ImGui::SameLine();
             ImGui::Text('counter = %d', counter);
     
-        // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
     
-    void ImGui_ImplDX10_NewFrame()
-{
-    if (!g_pFontSampler)
-        ImGui_ImplDX10_CreateDeviceObjects();
+    {    glutSwapBuffers();
+    glutPostRedisplay();
 }
-
     
-    void ImGui_ImplFreeGLUT_MouseFunc(int glut_button, int state, int x, int y)
+    void ImGui_ImplFreeGLUT_KeyboardUpFunc(unsigned char c, int x, int y)
 {
+    //printf('char_up_func %d '%c'\n', c, c);
     ImGuiIO& io = ImGui::GetIO();
-    io.MousePos = ImVec2((float)x, (float)y);
-    int button = -1;
-    if (glut_button == GLUT_LEFT_BUTTON) button = 0;
-    if (glut_button == GLUT_RIGHT_BUTTON) button = 1;
-    if (glut_button == GLUT_MIDDLE_BUTTON) button = 2;
-    if (button != -1 && state == GLUT_DOWN)
-        io.MouseDown[button] = true;
-    if (button != -1 && state == GLUT_UP)
-        io.MouseDown[button] = false;
+    if (c >= 1 && c <= 26)
+        io.KeysDown[c] = io.KeysDown[c - 1 + 'a'] = io.KeysDown[c - 1 + 'A'] = false;
+    else if (c >= 'a' && c <= 'z')
+        io.KeysDown[c] = io.KeysDown[c - 'a' + 'A'] = false;
+    else if (c >= 'A' && c <= 'Z')
+        io.KeysDown[c] = io.KeysDown[c - 'A' + 'a'] = false;
+    else
+        io.KeysDown[c] = false;
+    ImGui_ImplFreeGLUT_UpdateKeyboardMods();
+    (void)x; (void)y; // Unused
 }
+    
+            VkSubmitInfo end_info = {};
+        end_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        end_info.commandBufferCount = 1;
+        end_info.pCommandBuffers = &command_buffer;
+        err = vkEndCommandBuffer(command_buffer);
+        check_vk_result(err);
+        err = vkQueueSubmit(g_Queue, 1, &end_info, VK_NULL_HANDLE);
+        check_vk_result(err);
+    
+    
+    {};
+    
+    
+ExtensionException::~ExtensionException() throw() {
+}
+    
+      for (const auto& iter : line) {
+    options_index++;
+    if (iter[0] == '/') {
+      line_exports.push_back(iter);
+    } else {
+      break;
+    }
+  }
+    
+      /* Parse the input line into tokens.
+   */
+  while ((zLine[i] != 0) && nArg < ArraySize(azArg)) {
+    while (IsSpace(zLine[i])) {
+      i++;
+    }
+    if (zLine[i] == 0) {
+      break;
+    }
+    if (zLine[i] == '\'' || zLine[i] == ''') {
+      int delim = zLine[i++];
+      azArg[nArg++] = &zLine[i];
+      while ((zLine[i] != 0) && zLine[i] != delim) {
+        if (zLine[i] == '\\' && delim == ''' && zLine[i + 1] != 0) {
+          i++;
+        }
+        i++;
+      }
+      if (zLine[i] == delim) {
+        zLine[i++] = 0;
+      }
+      if (delim == ''') {
+        resolve_backslashes(azArg[nArg - 1]);
+      }
+    } else {
+      azArg[nArg++] = &zLine[i];
+      while ((zLine[i] != 0) && !IsSpace(zLine[i])) {
+        i++;
+      }
+      if (zLine[i] != 0) {
+        zLine[i++] = 0;
+      }
+      resolve_backslashes(azArg[nArg - 1]);
+    }
+  }
+    
+      // Join results..
+  for (auto& entry : hw_info) {
+    bool matched = false;
+    for (auto& row : results) {
+      auto serial = row.find('serial_number');
+      if (serial == row.end()) {
+        continue;
+      }
+    }
+    }
+    
+    #pragma once
+    
+     private:
+  explicit PerfOutput() = default;
+  ExpectedSuccess<PerfOutputError> unload();
+    
+    Expected<int, PosixError> syscall(struct perf_event_attr* attr,
+                                  pid_t pid,
+                                  int cpu,
+                                  int group_fd,
+                                  unsigned long const flags);
+    
+    
+    {  // to prevent closing non existing file descriptor
+  to_obj.fd_ = -1;
+}
+    
+    #include <osquery/utils/expected/expected.h>
+    
+    boost::optional<Event> EnterExitJoiner::join(Event in_event) {
+  ++counter_;
+  if (counter_ > kCounterLimit) {
+    drop_stuck_events();
+    counter_ = 0;
+  }
+  auto const inv_key =
+      createKey(flipEventType(in_event.type), in_event.pid, in_event.tgid);
+    }
+    
+    constexpr bool isEventTypeEnter(EventType const type) noexcept {
+  return 0 < static_cast<std::underlying_type<EventType>::type>(type);
+}
+    
+    
+    {  // return true if writes with this callback can be batched with other writes
+  virtual bool AllowWriteBatching() = 0;
+};
+    
+      uint64_t sleep_debt = 0;
+  uint64_t time_since_last_refill = 0;
+  if (last_refill_time_ != 0) {
+    if (last_refill_time_ > time_now) {
+      sleep_debt = last_refill_time_ - time_now;
+    } else {
+      time_since_last_refill = time_now - last_refill_time_;
+      bytes_left_ +=
+          static_cast<uint64_t>(static_cast<double>(time_since_last_refill) /
+                                kMicrosPerSecond * delayed_write_rate_);
+      if (time_since_last_refill >= kRefillInterval &&
+          bytes_left_ > num_bytes) {
+        // If refill interval already passed and we have enough bytes
+        // return without extra sleeping.
+        last_refill_time_ = time_now;
+        bytes_left_ -= num_bytes;
+        return 0;
+      }
+    }
+  }
+    
+      // open DB with two column families
+  std::vector<ColumnFamilyDescriptor> column_families;
+  // have to open default column family
+  column_families.push_back(ColumnFamilyDescriptor(
+      kDefaultColumnFamilyName, ColumnFamilyOptions()));
+  // open the new one, too
+  column_families.push_back(ColumnFamilyDescriptor(
+      'new_cf', ColumnFamilyOptions()));
+  std::vector<ColumnFamilyHandle*> handles;
+  s = DB::Open(DBOptions(), kDBPath, column_families, &handles, &db);
+  assert(s.ok());
+    
+    // This is an example interface of external-compaction algorithm.
+// Compaction algorithm can be implemented outside the core-RocksDB
+// code by using the pluggable compaction APIs that RocksDb provides.
+class Compactor : public EventListener {
+ public:
+  // Picks and returns a compaction task given the specified DB
+  // and column family.  It is the caller's responsibility to
+  // destroy the returned CompactionTask.  Returns 'nullptr'
+  // if it cannot find a proper compaction task.
+  virtual CompactionTask* PickCompaction(
+      DB* db, const std::string& cf_name) = 0;
+    }
+    
+    
+    {  // Cleanup
+  delete txn_db;
+  DestroyDB(kDBPath, options);
+  return 0;
+}
+    
+    #include <string>
     
     namespace rocksdb {
+namespace experimental {
+    }
     }
     
-    class PosixWritableFile : public WritableFile {
- protected:
-  const std::string filename_;
-  const bool use_direct_io_;
-  int fd_;
-  uint64_t filesize_;
-  size_t logical_sector_size_;
-#ifdef ROCKSDB_FALLOCATE_PRESENT
-  bool allow_fallocate_;
-  bool fallocate_with_keep_size_;
-#endif
-    }
-    
-      // Read a key using the snapshot
-  read_options.snapshot = snapshot;
-  s = txn->GetForUpdate(read_options, 'abc', &value);
-  assert(value == 'def');
+    #include <stdint.h>
+#include <memory>
+#include <string>
     
     
     {}  // namespace rocksdb
 
     
-            for(int i = 0 ; i < nums.size() ; i ++){
-            unordered_map<int,int>::iterator iter = record.find(target - nums[i]);
-            if(iter != record.end() && iter->second != i){
-                int res[] = {i, iter->second};
-                return vector<int>(res, res + 2);
-            }
-        }
+    bool Follow::initWithTarget(Node *followedNode, const Rect& rect /*= Rect::ZERO*/){
     
+    return initWithTargetAndOffset(followedNode, 0.0, 0.0,rect);
     
-    {
-    {        ListNode* retNode = dummyHead->next;
-        delete dummyHead;
-        return retNode;
-    }
-};
-    
-    
-int main() {
-    }
-    
-    
-/// Definition for a binary tree node.
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-    
-            vector<int> res;
-        if( root == NULL )
-            return res;
-    
-    
-    {    return 0;
 }
-
-    
-    // Classic Non-Recursive algorithm for preorder traversal
-// Time Complexity: O(n), n is the node number in the tree
-// Space Complexity: O(h), h is the height of the tree
-class Solution {
-    }
-    
-    #include <iostream>
-#include <vector>
-#include <stack>
-#include <cassert>
-    
-    
+void Follow::step(float /*dt*/)
+{
+    if(_boundarySet)
     {
-    {        if( node ){
-            __postorderTraversal(node->left, res);
-            __postorderTraversal(node->right, res);
-            res.push_back(node->val);
+        // whole map fits inside a single screen, no need to modify the position - unless map boundaries are increased
+        if(_boundaryFullyCovered)
+        {
+            return;
         }
     }
-};
+    }
+    
+    protected:
+    float _to;
+    float _from;
+    
+     @since v0.99.2
+ */
+class CC_DLL ActionTween : public ActionInterval
+{
+public:
+    /** 
+     * @brief Create and initializes the action with the property name (key), and the from and to parameters.
+     * @param duration The duration of the ActionTween. It's a value in seconds.
+     * @param key The key of property which should be updated.
+     * @param from The value of the specified property when the action begin.
+     * @param to The value of the specified property when the action end.
+     * @return If the creation success, return a pointer of ActionTween; otherwise, return nil.
+     */
+    static ActionTween* create(float duration, const std::string& key, float from, float to);
+    }
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+        /* Creates an animation with an array of AnimationFrame, the delay per units in seconds and how many times it should be executed.
+     * @since v2.0
+     * @param arrayOfAnimationFrameNames An animation with an array of AnimationFrame.
+     * @param delayPerUnit The delay per units in seconds and how many times it should be executed.
+     * @param loops The times the animation is going to loop.
+     */
+    static Animation* create(const Vector<AnimationFrame*>& arrayOfAnimationFrameNames, float delayPerUnit, unsigned int loops = 1);
+    
+    unsigned int AutoPolygon::getSquareValue(unsigned int x, unsigned int y, const Rect& rect, float threshold)
+{
+    /*
+     checking the 2x2 pixel grid, assigning these values to each pixel, if not transparent
+     +---+---+
+     | 1 | 2 |
+     +---+---+
+     | 4 | 8 | <- current pixel (curx,cury)
+     +---+---+
+     */
+    unsigned int sv = 0;
+    //NOTE: due to the way we pick points from texture, rect needs to be smaller, otherwise it goes outside 1 pixel
+    auto fixedRect = Rect(rect.origin, rect.size-Size(2,2));
+    
+    Vec2 tl = Vec2(x-1, y-1);
+    sv += (fixedRect.containsPoint(tl) && getAlphaByPos(tl) > threshold)? 1 : 0;
+    Vec2 tr = Vec2(x, y-1);
+    sv += (fixedRect.containsPoint(tr) && getAlphaByPos(tr) > threshold)? 2 : 0;
+    Vec2 bl = Vec2(x-1, y);
+    sv += (fixedRect.containsPoint(bl) && getAlphaByPos(bl) > threshold)? 4 : 0;
+    Vec2 br = Vec2(x, y);
+    sv += (fixedRect.containsPoint(br) && getAlphaByPos(br) > threshold)? 8 : 0;
+    CCASSERT(sv != 0 && sv != 15, 'square value should not be 0, or 15');
+    return sv;
+}
+    
+    protected:
+    bool _isVertsOwner;
+    Rect _rect;
+    std::string _filename;
