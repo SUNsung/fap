@@ -1,108 +1,131 @@
 
         
-            if dataset_name == 'forestcover':
-        dataset = fetch_covtype()
-        X = dataset.data
-        y = dataset.target
-        # normal data are those with attribute 2
-        # abnormal those with attribute 4
-        s = (y == 2) + (y == 4)
-        X = X[s, :]
-        y = y[s]
-        y = (y != 2).astype(int)
+            def __init__(self, handler=None, host='localhost', port=0, requests_to_handle=1, wait_to_close_event=None):
+        super(Server, self).__init__()
     
-            # Create flat baselines to compare the variation over batch size
-        all_times['pca'].extend([results_dict['pca']['time']] *
-                                len(batch_sizes))
-        all_errors['pca'].extend([results_dict['pca']['error']] *
-                                 len(batch_sizes))
-        all_times['rpca'].extend([results_dict['rpca']['time']] *
-                                 len(batch_sizes))
-        all_errors['rpca'].extend([results_dict['rpca']['error']] *
-                                  len(batch_sizes))
-        for batch_size in batch_sizes:
-            ipca = IncrementalPCA(n_components=n_components,
-                                  batch_size=batch_size)
-            results_dict = {k: benchmark(est, data) for k, est in [('ipca',
-                                                                   ipca)]}
-            all_times['ipca'].append(results_dict['ipca']['time'])
-            all_errors['ipca'].append(results_dict['ipca']['error'])
+        @pytest.mark.parametrize(
+        'value, expected_type', (
+            (b'value', compat.bytes),
+            (b'value'.decode('utf-8'), compat.str)
+        ))
+    def test_guess_filename_valid(self, value, expected_type):
+        obj = type('Fake', (object,), {'name': value})()
+        result = guess_filename(obj)
+        assert result == value
+        assert isinstance(result, expected_type)
     
-            plt.subplot(m, 2, i + 1)
-        plt.plot(list_n_samples, np.sqrt(elnet_results[:, j, 1]),
-                 label='ElasticNet')
-        plt.plot(list_n_samples, np.sqrt(sgd_results[:, j, 1]),
-                 label='SGDRegressor')
-        plt.plot(list_n_samples, np.sqrt(asgd_results[:, j, 1]),
-                 label='A-SGDRegressor')
-        plt.plot(list_n_samples, np.sqrt(ridge_results[:, j, 1]),
-                 label='Ridge')
-        plt.legend(prop={'size': 10})
-        plt.xlabel('n_train')
-        plt.ylabel('Time [sec]')
-        plt.title('Training time - %d features' % list_n_features[j])
-        i += 1
+            # .netrc might have more auth for us on our new host.
+        new_auth = get_netrc_auth(url) if self.trust_env else None
+        if new_auth is not None:
+            prepared_request.prepare_auth(new_auth)
     
-    ###############################################################################
-clf = SGDRegressor(penalty='l1', alpha=.2, fit_intercept=True, max_iter=2000,
-                   tol=None)
-clf.fit(X_train, y_train)
-print('model sparsity: %f' % sparsity_ratio(clf.coef_))
+            pemfile = '/etc/ssl/certs/CA.pem'
+        new_certfile = '/usr/local/share/ca-certificates/CA.crt'
+        if not os.path.exists(pemfile) or not CertUtil.file_is_same(certfile, new_certfile):
+            if os.system('cp '%s' '%s' && update-ca-certificates' % (certfile, new_certfile)) != 0:
+                xlog.warning('install root certificate failed, Please run as administrator/root/sudo')
     
-            print('step {0}'.format(step_ord))
-        print([i for i in range(len(self.values))])
-        print(self.values)
+            if network_ok:
+            self.last_check_time = time.time()
+            self.report_ok()
+            xlog.debug('network %s is ok, cost:%d ms', self.type, 1000 * (time.time() - time_now))
+        else:
+            xlog.warn('network %s fail', self.type)
+            self.network_stat = 'Fail'
+            self.last_check_time = time.time()
     
-    The problem is  :
-Given an array, to find the longest and continuous sub array and get the max sum of the sub array in the given array.
-'''
-from __future__ import print_function
+    	# Track the line at which the error occurred in case this is
+	# generated from a lexer.  We need to track this since the
+        # unexpected char doesn't carry the line info.
+        self.line = None
     
-        return diff
+        Note text is not an actual property of the return value, it is computed
+    from start and stop using the input stream's toString() method.  I
+    could add a ctor to this so that we can pass in and store the input
+    stream, but I'm not sure we want to do that.  It would seem to be undefined
+    to get the .text property anyway if the rule matches tokens from multiple
+    input streams.
+    
+            return new_key
 
+    
+    This is a pure Python implementation of Dynamic Programming solution to the longest increasing subsequence of a given sequence.
+    
+        score = float(numerator) / denumerator * 100
     
     * @author chinmoy159
 * @version 1.0 dated 10/08/2017
 '''
     
+        # Sparkle the eyes
+    d.polygon(face_landmarks['left_eye'], fill=(255, 255, 255, 30))
+    d.polygon(face_landmarks['right_eye'], fill=(255, 255, 255, 30))
     
-class Migration(DataMigration):
-    def forwards(self, orm):
-        'Write your forwards methods here.'
-        db.commit_transaction()
+        # Print the location of each face in this image
+    top, right, bottom, left = face_location
+    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+    
+    # Find all the faces in the image using a pre-trained convolutional neural network.
+# This method is more accurate than the default HOG model, but it's slower
+# unless you have an nvidia GPU and dlib compiled with CUDA extensions. But if you do,
+# this will use GPU acceleration and perform well.
+# See also: find_faces_in_picture.py
+face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=0, model='cnn')
+    
+    try:
+    import face_recognition_models
+except Exception:
+    print('Please install `face_recognition_models` with this command before using `face_recognition`:\n')
+    print('pip install git+https://github.com/ageitgey/face_recognition_models')
+    quit()
+    
+    while True:
+    # Grab a single frame of video
+    ret, frame = video_capture.read()
+    
+        def test_fd_command_line_interface_hog_model(self):
+        target_string = 'obama.jpg'
+        runner = CliRunner()
+        image_file = os.path.join(os.path.dirname(__file__), 'test_images', 'obama.jpg')
+    
+    # Find all facial features in all the faces in the image
+face_landmarks_list = face_recognition.face_landmarks(image)
     
     
-class Migration(DataMigration):
-    def forwards(self, orm):
-        from sentry.utils.query import RangeQuerySetWrapperWithProgressBar
+@app.route('/', methods=['GET', 'POST'])
+def upload_image():
+    # 检测图片是否上传成功
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return redirect(request.url)
+    
+    '''*What is this pattern about?
+The Factory Method pattern can be used to create an interface for a
+method, leaving the implementation to the class that gets
+instantiated.
+    
+        def get_current_time_as_html_fragment(self):
+        current_time = self.time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
+'''
     
     
-class Migration(SchemaMigration):
-    def forwards(self, orm):
-        # Adding model 'ReleaseHeadCommit'
-        db.create_table(
-            'sentry_releaseheadcommit', (
-                (
-                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
-                        primary_key=True
-                    )
-                ), (
-                    'organization_id',
-                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(
-                        db_index=True
-                    )
-                ), (
-                    'repository_id',
-                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()
-                ), (
-                    'release', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.Release']
-                    )
-                ), (
-                    'commit', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.Commit']
-                    )
-                ),
-            )
-        )
-        db.send_create_signal('sentry', ['ReleaseHeadCommit'])
+# Refined Abstraction
+class CircleShape(object):
+    def __init__(self, x, y, radius, drawing_api):
+        self._x = x
+        self._y = y
+        self._radius = radius
+        self._drawing_api = drawing_api
+    
+    
+class TestData(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.dec_obs = DecimalViewer()
+        cls.hex_obs = HexViewer()
+        cls.sub = Data('Data')
+        # inherited behavior already tested with TestSubject
+        cls.sub.attach(cls.dec_obs)
+        cls.sub.attach(cls.hex_obs)
