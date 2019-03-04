@@ -1,222 +1,185 @@
 
         
-        bool swift::parseASTSection(SerializedModuleLoader *SML, StringRef buf,
-                            SmallVectorImpl<std::string> &foundModules) {
-  if (!serialization::isSerializedAST(buf))
-    return false;
+        #include 'b2Triangle.h'
+    
+    			a_pMipmapImages[mip].paucEncodingBits = std::shared_ptr<unsigned char>(image.GetEncodingBits(), [](unsigned char *p) { delete[] p; });
+			a_pMipmapImages[mip].uiEncodingBitsBytes = image.GetEncodingBitsBytes();
+			a_pMipmapImages[mip].uiExtendedWidth = image.GetExtendedWidth();
+			a_pMipmapImages[mip].uiExtendedHeight = image.GetExtendedHeight();
+    
+    	void EncodeMipmaps(float *a_pafSourceRGBA,
+		unsigned int a_uiSourceWidth,
+		unsigned int a_uiSourceHeight,
+		Image::Format a_format,
+		ErrorMetric a_eErrMetric,
+		float a_fEffort,
+		unsigned int a_uiJobs,
+		unsigned int a_uiMaxJobs,
+		unsigned int a_uiMaxMipmaps,
+		unsigned int a_uiMipFilterFlags,
+		RawImage* a_pMipmaps,
+		int *a_piEncodingTime_ms, bool a_bVerboseOutput = false);
+    
+    		m_sourcealphamix = SourceAlphaMix::UNKNOWN;
+		m_boolBorderPixels = false;
+		m_boolPunchThroughPixels = false;
+    
+    
+    {	};
+    
+    
+  /* an auxiliary macro to decode a UTF-8 character -- since we only use */
+  /* hard-coded, self-converted data, no error checking is performed     */
+#define GET_UTF8_CHAR( ch, p )                      \
+          do                                        \
+          {                                         \
+            ch = (unsigned char)*p++;               \
+            if ( ch >= 0x80 )                       \
+            {                                       \
+              FT_UInt  len_;                        \
+                                                    \
+                                                    \
+              if ( ch < 0xE0 )                      \
+              {                                     \
+                len_ = 1;                           \
+                ch  &= 0x1F;                        \
+              }                                     \
+              else if ( ch < 0xF0 )                 \
+              {                                     \
+                len_ = 2;                           \
+                ch  &= 0x0F;                        \
+              }                                     \
+              else                                  \
+              {                                     \
+                len_ = 3;                           \
+                ch  &= 0x07;                        \
+              }                                     \
+                                                    \
+              for ( ; len_ > 0; len_-- )            \
+                ch = ( ch << 6 ) | ( *p++ & 0x3F ); \
+            }                                       \
+          } while ( 0 )
+    
+            if (m_UsingPolyTree) FixupFirstLefts2(outRec2, outRec1);
+    
+    
+    {  friend inline bool operator== (const IntPoint& a, const IntPoint& b)
+  {
+    return a.X == b.X && a.Y == b.Y;
+  }
+  friend inline bool operator!= (const IntPoint& a, const IntPoint& b)
+  {
+    return a.X != b.X  || a.Y != b.Y; 
+  }
+};
+//------------------------------------------------------------------------------
+    
+    int opus_fft_alloc_arm_neon(kiss_fft_state *st);
+void opus_fft_free_arm_neon(kiss_fft_state *st);
+    
+    /** 16x32 multiply, followed by a 16-bit shift right and 32-bit add.
+    Result fits in 32 bits. */
+#undef MAC16_32_Q16
+#define MAC16_32_Q16(c, a, b) ADD32(c, MULT16_32_Q16(a, b))
+    
+    #endif /* OPUS_ARM_INLINE_MEDIA */
+    
+    /** Add two 16-bit values */
+#define ADD16(a,b) ((opus_val16)((opus_val16)(a)+(opus_val16)(b)))
+/** Subtract two 16-bit values */
+#define SUB16(a,b) ((opus_val16)(a)-(opus_val16)(b))
+/** Add two 32-bit values */
+#define ADD32(a,b) ((opus_val32)(a)+(opus_val32)(b))
+/** Subtract two 32-bit values */
+#define SUB32(a,b) ((opus_val32)(a)-(opus_val32)(b))
+    
+    /*!
+ * Initialize/reset the resampler state for a given pair of input/output sampling rates
+*/
+opus_int silk_resampler_init(
+    silk_resampler_state_struct *S,                 /* I/O  Resampler state                                             */
+    opus_int32                  Fs_Hz_in,           /* I    Input sampling rate (Hz)                                    */
+    opus_int32                  Fs_Hz_out,          /* I    Output sampling rate (Hz)                                   */
+    opus_int                    forEnc              /* I    If 1: encoder; if 0: decoder                                */
+);
+    
+    /*!
+ * \brief Macro to register linear updater.
+ */
+#define XGBOOST_REGISTER_LINEAR_UPDATER(UniqueId, Name)                        \
+  static DMLC_ATTRIBUTE_UNUSED ::xgboost::LinearUpdaterReg&                    \
+      __make_##LinearUpdaterReg##_##UniqueId##__ =                             \
+          ::dmlc::Registry< ::xgboost::LinearUpdaterReg>::Get()->__REGISTER__( \
+              Name)
+    
+    
+    { private:
+  // default chunk size.
+  static const size_t kChunkSize = 64 << 10UL;
+  // maximum chunk size.
+  static const size_t kMaxChunk = 128;
+  // bool whether use hc
+  bool use_lz4_hc_;
+  // number of threads
+  int nthread_;
+  // number of writing threads
+  int nthread_write_;
+  // raw bytes
+  size_t raw_bytes_, raw_bytes_index_, raw_bytes_value_;
+  // encoded bytes
+  size_t encoded_bytes_index_, encoded_bytes_value_;
+  /*! \brief minimum index value */
+  uint32_t min_index_;
+  /*! \brief external memory column offset */
+  std::vector<size_t> disk_offset_;
+  // internal index
+  CompressArray<StorageIndex> index_;
+  // value set.
+  CompressArray<bst_float> value_;
+};
+    
+    using namespace std;
+    
+    using namespace std;
+    
+    // Time Complexity: O(n)
+// Space Complexity: O(1)
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head) {
+    }
     }
     
-    
-    {    RawText = RawText.drop_front(Pos);
-    unsigned NewlineBytes = measureNewline(RawText);
-    RawText = RawText.drop_front(NewlineBytes);
-  }
-    
-      static CFPointeeInfo forVoid() {
-    CFPointeeInfo info;
-    info.IsValid = true;
-    info.IsConst = false;
-    info.Decl = nullptr;
-    return info;
-  }
-    
-    #include 'llvm/ADT/Optional.h'
-#include 'llvm/ADT/StringRef.h'
-    
-    bool Mangle::needsPunycodeEncoding(StringRef str) {
-  for (unsigned char c : str) {
-    if (!isValidSymbolChar(c))
-      return true;
-  }
-  return false;
-}
-    
-    Base::Base(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-	   const std::string& extension_id)
-    : extension_id_(extension_id),
-      id_(id),
-      delay_destruction_(false),
-      pending_destruction_(false),
-      object_manager_(object_manager) {
-}
-    
-    namespace nw {
-    }
-    
-    v8::Handle<v8::Value> AllocateId(int routing_id);
-    
-    Menu::Menu(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-           const std::string& extension_id)
-  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
-  Create(option);
-}
+    #include <iostream>
+#include <vector>
+#include <cassert>
     
     
-    {  ignore_result(menu_items_.empty());
-}
-    
-    static KeyMap keymap = {
-  {'`'    , 'Backquote'},
-  {'\\'   , 'Backslash'},
-  {'['    , 'BracketLeft'},
-  {']'    , 'BracketRight'},
-  {','    , 'Comma'},
-  {'='    , 'Equal'},
-  {'-'    , 'Minus'},
-  {'.'    , 'Period'},
-  {'''    , 'Quote'},
-  {';'    , 'Semicolon'},
-  {'/'    , 'Slash'},
-  {'\n'   , 'Enter'},
-  {'\t'   , 'Tab'},
-  {'UP'   , 'ArrowUp'},
-  {'DOWN' , 'ArrowDown'},
-  {'LEFT' , 'ArrowLeft'},
-  {'RIGHT', 'ArrowRight'},
-  {'ESC'  , 'Escape'},
-  {'MEDIANEXTTRACK', 'MediaTrackNext'},
-  {'MEDIAPREVTRACK', 'MediaTrackPrevious'}
-};
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.readAvailableTypes', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwClipboardReadAvailableTypesFunction);
-};
-    
-    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
- public:
-  NwMenuGetNSStringWithFixupFunction(){}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    
- protected:
-  ~NwMenuGetNSStringWithFixupFunction() override {}
-    
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
-};
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.callObjectMethodAsync', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwObjCallObjectMethodAsyncFunction);
-};
-    
-      // implement nw.Screen.initEventListeners()
-  class NwScreenInitEventListenersFunction: public NWSyncExtensionFunction {
-    public:
-      NwScreenInitEventListenersFunction();
-      bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    #endif  // CAFFE_COMMON_HPP_
-
-    
-    
-    {  /**
-   * @brief Computes the error gradient w.r.t. the absolute value inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x} =
-   *            \mathrm{sign}(x) \frac{\partial E}{\partial y}
-   *      @f$ if propagate_down[0]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-};
-    
-      virtual inline const char* type() const { return 'Convolution'; }
+    {            res[level].push_back(node->val);
+            if(node->left)
+                q.push(make_pair(node->left, level + 1 ));
+            if(node->right)
+                q.push(make_pair(node->right, level + 1 ));
+        }
     
     
     {
-    {  // Recursive copy function: this is similar to crop_copy() but loops over all
-  // but the last two dimensions to allow for ND cropping while still relying on
-  // a CUDA kernel for the innermost two dimensions for performance reasons.  An
-  // alterantive implementation could rely on the kernel more by passing
-  // offsets, but this is problematic because of its variable length.
-  // Since in the standard (N,C,W,H) case N,C are usually not cropped a speedup
-  // could be achieved by not looping the application of the copy_kernel around
-  // these dimensions.
-  void crop_copy_gpu(const vector<Blob<Dtype>*>& bottom,
-                const vector<Blob<Dtype>*>& top,
-                const vector<int>& offsets,
-                vector<int> indices,
-                int cur_dim,
-                const Dtype* src_data,
-                Dtype* dest_data,
-                bool is_forward);
+    {
+    {            if(command.s == 'print')
+                res.push_back(command.node->val);
+            else{
+                assert(command.s == 'go');
+                if(command.node->right)
+                    stack.push(Command('go',command.node->right));
+                if(command.node->left)
+                    stack.push(Command('go',command.node->left));
+                stack.push(Command('print', command.node));
+            }
+        }
+        return res;
+    }
 };
-}  // namespace caffe
     
-    #ifdef USE_CUDNN
-template <typename Dtype>
-class CuDNNLCNLayer : public LRNLayer<Dtype> {
- public:
-  explicit CuDNNLCNLayer(const LayerParameter& param)
-      : LRNLayer<Dtype>(param), handles_setup_(false), tempDataSize(0),
-        tempData1(NULL), tempData2(NULL) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNLCNLayer();
-    }
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include <string>
-    
-      static void CompactFiles(void* arg) {
-    std::unique_ptr<CompactionTask> task(
-        reinterpret_cast<CompactionTask*>(arg));
-    assert(task);
-    assert(task->db);
-    Status s = task->db->CompactFiles(
-        task->compact_options,
-        task->input_file_names,
-        task->output_level);
-    printf('CompactFiles() finished with status %s\n', s.ToString().c_str());
-    if (!s.ok() && !s.IsIOError() && task->retry_on_fail) {
-      // If a compaction task with its retry_on_fail=true failed,
-      // try to schedule another compaction in case the reason
-      // is not an IO error.
-      CompactionTask* new_task = task->compactor->PickCompaction(
-          task->db, task->column_family_name);
-      task->compactor->ScheduleCompaction(new_task);
-    }
-  }
-    
-      // destroy and open DB
-  DB* db;
-  Status s = DestroyDB(kDBPath, Options(db_opt, cf_descs[0].options));
-  assert(s.ok());
-  s = DB::Open(Options(db_opt, cf_descs[0].options), kDBPath, &db);
-  assert(s.ok());
-    
-      // Comparator used to define the order of keys in the table.
-  // Default: a comparator that uses lexicographic byte-wise ordering
-  //
-  // REQUIRES: The client must ensure that the comparator supplied
-  // here has the same name and orders keys *exactly* the same as the
-  // comparator provided to previous open calls on the same DB.
-  const Comparator* comparator;
+            vector<int> res;
+        if(root == NULL)
+            return res;
