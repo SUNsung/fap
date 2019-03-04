@@ -1,103 +1,76 @@
 
         
-            def to_a
-      @filters.dup
-    end
+                result = Fastlane::FastFile.new.parse('lane :test do
+          add_git_tag ({
+            grouping: '#{grouping}',
+            build_number: #{specified_build_number},
+          })
+        end').runner.execute(:test)
     
-        def build_page(path)
-      response = request_one url_for(path)
-      result = handle_response(response)
-      yield result if block_given?
-      result
-    end
-    
-        def log(msg)
-      puts '\r' + justify(msg)
-    end
-    
-          def is_edit_page
-        true
+            expect(result).to eq('appledoc --project-name \'Project Name\' --project-company \'Company\' --exit-threshold \'2\' #{input_dir.shellescape}')
       end
     
-    # test/spec/mini 3
-# http://gist.github.com/25455
-# chris@ozmm.org
-# file:lib/test/spec/mini.rb
-def context(*args, &block)
-  return super unless (name = args.first) && block
-  require 'test/unit'
-  klass = Class.new(defined?(ActiveSupport::TestCase) ? ActiveSupport::TestCase : Test::Unit::TestCase) do
-    def self.test(name, &block)
-      define_method('test_#{name.gsub(/\W/, '_')}', &block) if block
-    end
+            context 'when command is archive' do
+          it 'adds one framework' do
+            result = Fastlane::FastFile.new.parse('lane :test do
+                carthage(command: '#{command}', frameworks: ['myframework'])
+              end').runner.execute(:test)
+            expect(result).to eq('carthage archive myframework')
+          end
     
-      teardown do
-    FileUtils.rm_rf(@path)
-  end
-    
-      # piece file back together and write
-  manifest = '  s.files = %w[\n#{files}\n  ]\n'
-  spec = [head, manifest, tail].join('  # = MANIFEST =\n')
-  File.open(gemspec_file, 'w') { |io| io.write(spec) }
-  puts 'Updated #{gemspec_file}'
-end
-    
-      action :raw do
-    title 'Send a raw RFC2882 message'
-    description 'This action allows you to send us a raw RFC2822 formatted message along with the recipients that it should be sent to. This is similar to sending a message through our SMTP service.'
-    param :mail_from, 'The address that should be logged as sending the message', :type => String, :required => true
-    param :rcpt_to, 'The addresses this message should be sent to', :type => Array, :required => true
-    param :data, 'A base64 encoded RFC2822 message to send', :type => String, :required => true
-    param :bounce, 'Is this message a bounce?', :type => :boolean
-    returns Hash
-    error 'UnauthenticatedFromAddress', 'The From address is not authorised to send mail from this server'
-    action do
-      # Decode the raw message
-      raw_message = Base64.decode64(params.data)
-    
-      extend ActiveSupport::Concern
-    
-      def update
-    if @credential.update(params.require(:credential).permit(:name, :hold))
-      redirect_to_with_json [organization, @server, :credentials]
-    else
-      render_form_errors 'edit', @credential
-    end
-  end
-    
-      before_action do
-    if params[:server_id]
-      @server = organization.servers.present.find_by_permalink!(params[:server_id])
-      params[:id] && @domain = @server.domains.find_by_uuid!(params[:id])
-    else
-      params[:id] && @domain = organization.domains.find_by_uuid!(params[:id])
-    end
-  end
-    
-      def create
-    @http_endpoint = @server.http_endpoints.build(safe_params)
-    if @http_endpoint.save
-      flash[:notice] = params[:return_notice] if params[:return_notice].present?
-      redirect_to_with_json [:return_to, [organization, @server, :http_endpoints]]
-    else
-      render_form_errors 'new', @http_endpoint
-    end
-  end
-    
-      def new
-    @ip_pool = IPPool.new
-  end
-    
-      def style_width(width, options = {})
-    width = 100 if width > 100.0
-    width = 0 if width < 0.0
-    style = 'width:#{width}%;'
-    if options[:color]
-      if width >= 100
-        style += ' background-color:#e2383a;'
-      elsif width >= 90
-        style += ' background-color:#e8581f;'
+          it 'handles the exclude_dirs parameter with a single element correctly' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', exclude_dirs: ['.bundle'])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --exclude-dir .bundle')
       end
+    
+        describe 'shell escaping' do
+      let(:keychain_name) { 'keychain with spaces.keychain' }
+      let(:shell_escaped_name) { keychain_name.shellescape }
+      let(:name_regex) { Regexp.new(Regexp.escape(shell_escaped_name)) }
+    
+    module Docs
+  class Filter < ::HTML::Pipeline::Filter
+    def css(*args)
+      doc.css(*args)
     end
-    style
+    
+        alias_method :insert_before, :insert
+    
+        def error?
+      code == 0 || code != 404 && code != 403 && code >= 400 && code <= 599
+    end
+    
+            # Remove root-level <div>
+        while div = at_css('h1 + div')
+          div.before(div.children)
+          div.remove
+        end
+    
+      # GET /resource/sign_in
+  def new
+    self.resource = resource_class.new(sign_in_params)
+    clean_up_passwords(resource)
+    yield resource if block_given?
+    respond_with(resource, serialize_options(resource))
   end
+    
+          def remove_domain_from_uri(uri)
+        [uri.path.sub(/\A\/+/, '/'), uri.query].compact.join('?')
+      end
+    
+          module ClassMethods
+        # Create the cookie key using the record id and remember_token
+        def serialize_into_cookie(record)
+          [record.to_key, record.rememberable_value, Time.now.utc.to_f.to_s]
+        end
+    
+    require 'devise/hooks/timeoutable'
+    
+          # Returns the operator for the `kwsplat` as a string.
+      #
+      # @return [String] the double splat operator
+      def operator
+        DOUBLE_SPLAT
+      end
