@@ -1,407 +1,329 @@
 
         
-            Validates that the username is not already taken. Hashes the
-    password for security.
-    '''
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        db = get_db()
-        error = None
+                flash(error)
     
     
-@pytest.fixture
-def client(app):
-    '''A test client for the app.'''
-    return app.test_client()
+def init_db():
+    '''Clear existing data and create new tables.'''
+    db = get_db()
     
+        def app_context_processor(self, f):
+        '''Like :meth:`Flask.context_processor` but for a blueprint.  Such a
+        function is executed each request, even if outside of the blueprint.
+        '''
+        self.record_once(lambda s: s.app.template_context_processors
+            .setdefault(None, []).append(f))
+        return f
     
-def test_author_required(app, client, auth):
-    # change the post author to another user
-    with app.app_context():
-        db = get_db()
-        db.execute('UPDATE post SET author_id = 2 WHERE id = 1')
-        db.commit()
-    
-    
-def load(fp, **kwargs):
-    '''Like :func:`loads` but reads from a file object.
-    '''
-    _load_arg_defaults(kwargs)
-    if not PY2:
-        fp = _wrap_reader_for_text(fp, kwargs.pop('encoding', None) or 'utf-8')
-    return _json.load(fp, **kwargs)
-    
-        def to_python(self, value):
-        return parse_date(value)
-    
-    
-class Request(RequestBase, JSONMixin):
-    '''The request object used by default in Flask.  Remembers the
-    matched endpoint and view arguments.
-    
-    
-def lr_schedule(epoch):
-    '''Learning Rate Schedule
-    
-        # Returns
-        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
-    '''
-    dirname = 'cifar-10-batches-py'
-    origin = 'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
-    path = get_file(dirname, origin=origin, untar=True)
-    
-    
-def test_fashion_mnist():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
-        assert len(x_train) == len(y_train) == 60000
-        assert len(x_test) == len(y_test) == 10000
-    
-    from keras.models import Sequential, Model
-from keras.layers import Dense, Input, Average
-from keras.utils import np_utils
-from keras.utils import test_utils
-from keras import regularizers
-from keras import backend as K
-    
-        ```python
-    # Consider an array of 5 labels out of a set of 3 classes {0, 1, 2}:
-    > labels
-    array([0, 2, 1, 2, 0])
-    # `to_categorical` converts this into a matrix with as many
-    # columns as there are classes. The number of rows
-    # stays the same.
-    > to_categorical(labels)
-    array([[ 1.,  0.,  0.],
-           [ 0.,  0.,  1.],
-           [ 0.,  1.,  0.],
-           [ 0.,  0.,  1.],
-           [ 1.,  0.,  0.]], dtype=float32)
-    ```
-    '''
-    
-                additional_specs += self.state_spec
-        if constants is not None:
-            kwargs['constants'] = constants
-            additional_inputs += constants
-            self.constants_spec = [InputSpec(shape=K.int_shape(constant))
-                                   for constant in constants]
-            self._num_constants = len(constants)
-            additional_specs += self.constants_spec
-        # at this point additional_inputs cannot be empty
-        for tensor in additional_inputs:
-            if K.is_keras_tensor(tensor) != K.is_keras_tensor(additional_inputs[0]):
-                raise ValueError('The initial state or constants of an RNN'
-                                 ' layer cannot be specified with a mix of'
-                                 ' Keras tensors and non-Keras tensors')
-    
-    Settings: horizontal_flip = True
-----------------------------------------------------------------------------
-Epoch     | ImageGenerator | ImageGenerator | AugmentLayer  | Augment Layer
-Number    | %Accuracy      | Performance    | %Accuracy     | Performance
-----------------------------------------------------------------------------
-1         | 44.84          | 15ms/step      | 45.54         | 358us/step
-2         | 52.34          |  8ms/step      | 50.55         | 285us/step
-8         | 65.45          |  8ms/step      | 65.59         | 281us/step
-25        | 76.74          |  8ms/step      | 76.17         | 280us/step
-100       | 78.81          |  8ms/step      | 78.70         | 285us/step
----------------------------------------------------------------------------
-    
-    When lahead >= tsteps, both the stateful and stateless LSTM converge.
-'''
-from __future__ import print_function
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
-from keras.models import Sequential
-from keras.layers import Dense, LSTM
-    
-        Code is a simple port of what is already in the /scripts directory
-    
-            load_tests = getattr(module, 'load_tests', None)
-        tests = self.suiteClass(tests)
-        if load_tests is not None:
-            try:
-                return load_tests(self, tests, pattern)
-            except Exception as e:
-                error_case, error_message = _make_failed_load_tests(
-                    module.__name__, e, self.suiteClass)
-                self.errors.append(error_message)
-                return error_case
-        return tests
-    
-        def _Starred(self, t):
-        self.write('*')
-        self.dispatch(t.value)
-    
-        def test_implicit_newline(self):
-        # Make sure that the tokenizer puts in an implicit NEWLINE
-        # when the input lacks a trailing new line.
-        f = BytesIO('x'.encode('utf-8'))
-        tokens = list(tokenize(f.readline))
-        self.assertEqual(tokens[-2].type, NEWLINE)
-        self.assertEqual(tokens[-1].type, ENDMARKER)
-    
-    
-def capture_events(callable, p=None):
-    if p is None:
-        p = HookWatcher()
-    # Disable the garbage collector. This prevents __del__s from showing up in
-    # traces.
-    old_gc = gc.isenabled()
-    gc.disable()
-    try:
-        sys.setprofile(p.callback)
-        protect(callable, p)
-        sys.setprofile(None)
-    finally:
-        if old_gc:
-            gc.enable()
-    return p.get_events()[1:-1]
-    
-        # On Windows, pass bytes to subprocess doesn't test how Python decodes the
-    # command line, but how subprocess does decode bytes to unicode. Python
-    # doesn't decode the command line because Windows provides directly the
-    # arguments as unicode (using wmain() instead of main()).
-    @unittest.skipIf(sys.platform == 'win32',
-                     'Windows has a native unicode API')
-    def test_undecodable_code(self):
-        undecodable = b'\xff'
-        env = os.environ.copy()
-        # Use C locale to get ascii for the locale encoding
-        env['LC_ALL'] = 'C'
-        env['PYTHONCOERCECLOCALE'] = '0'
-        code = (
-            b'import locale; '
-            b'print(ascii('' + undecodable + b''), '
-                b'locale.getpreferredencoding())')
-        p = subprocess.Popen(
-            [sys.executable, '-c', code],
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-            env=env)
-        stdout, stderr = p.communicate()
-        if p.returncode == 1:
-            # _Py_char2wchar() decoded b'\xff' as '\udcff' (b'\xff' is not
-            # decodable from ASCII) and run_command() failed on
-            # PyUnicode_AsUTF8String(). This is the expected behaviour on
-            # Linux.
-            pattern = b'Unable to decode the command from the command line:'
-        elif p.returncode == 0:
-            # _Py_char2wchar() decoded b'\xff' as '\xff' even if the locale is
-            # C and the locale encoding is ASCII. It occurs on FreeBSD, Solaris
-            # and Mac OS X.
-            pattern = b''\\xff' '
-            # The output is followed by the encoding name, an alias to ASCII.
-            # Examples: 'US-ASCII' or '646' (ISO 646, on Solaris).
+            if index is None:
+            self.order.append(tag)
         else:
-            raise AssertionError('Unknown exit code: %s, output=%a' % (p.returncode, stdout))
-        if not stdout.startswith(pattern):
-            raise AssertionError('%a doesn't start with %a' % (stdout, pattern))
+            self.order.insert(index, tag)
     
-    def handleSlideTitle(title):
-    print('<h2>%s</h2>' % getText(title.childNodes))
+    from werkzeug.local import LocalProxy
     
-        print('-' * 20)
     
-    site_info = 'baomihua.com'
-download = baomihua_download
-download_playlist = playlist_not_supported('baomihua')
+# Core signals.  For usage examples grep the source code or consult
+# the API documentation in docs/api.rst as well as docs/signals.rst
+template_rendered = _signals.signal('template-rendered')
+before_render_template = _signals.signal('before-render-template')
+request_started = _signals.signal('request-started')
+request_finished = _signals.signal('request-finished')
+request_tearing_down = _signals.signal('request-tearing-down')
+got_request_exception = _signals.signal('got-request-exception')
+appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
+appcontext_pushed = _signals.signal('appcontext-pushed')
+appcontext_popped = _signals.signal('appcontext-popped')
+message_flashed = _signals.signal('message-flashed')
 
     
-    #----------------------------------------------------------------------
-def ckplayer_download_by_xml(ckinfo, output_dir = '.', merge = False, info_only = False, **kwargs):
-    #Info XML
-    video_info = ckplayer_get_info_by_xml(ckinfo)
+        :param template_name_or_list: the name of the template to be
+                                  rendered, or an iterable with template names
+                                  the first one existing will be rendered
+    :param context: the variables that should be available in the
+                    context of the template.
+    '''
+    ctx = _app_ctx_stack.top
+    ctx.app.update_template_context(context)
+    return _render(ctx.app.jinja_env.get_or_select_template(template_name_or_list),
+                   context, ctx.app)
     
+        @contextmanager
+    def session_transaction(self, *args, **kwargs):
+        '''When used in combination with a ``with`` statement this opens a
+        session transaction.  This can be used to modify the session that
+        the test client uses.  Once the ``with`` block is left the session is
+        stored back.
+    
+            if cls.decorators:
+            view.__name__ = name
+            view.__module__ = cls.__module__
+            for decorator in cls.decorators:
+                view = decorator(view)
+    
+    
+def test_basic_url_generation(app):
+    app.config['SERVER_NAME'] = 'localhost'
+    app.config['PREFERRED_URL_SCHEME'] = 'https'
+    
+        def __init__(self, get_response=None):
+        if not apps.is_installed('django.contrib.sites'):
+            raise ImproperlyConfigured(
+                'You cannot use RedirectFallbackMiddleware when '
+                'django.contrib.sites is not installed.'
+            )
+        super().__init__(get_response)
+    
+            if data is None:
+            s = self._get_session_from_db()
+            if s:
+                data = self.decode(s.session_data)
+                self._cache.set(self.cache_key, data, self.get_expiry_age(expiry=s.expire_date))
+            else:
+                data = {}
+        return data
+    
+        def save(self, must_create=False):
+        '''
+        To save, get the session key as a securely signed string and then set
+        the modified flag so that the cookie is set on the client for the
+        current request.
+        '''
+        self._session_key = self._get_session_key()
+        self.modified = True
+    
+        For complete documentation on using Sessions in your code, consult
+    the sessions documentation that is shipped with Django (also available
+    on the Django Web site).
+    '''
+    objects = SessionManager()
+    
+        def enable(self):
+        '''Enables the rule in AWS'''
+        try:
+            response = self.client.enable_rule(Name=self.name)
+        except (botocore.exceptions.BotoCoreError, botocore.exceptions.ClientError) as e:
+            self.module.fail_json_aws(e, msg='Could not enable rule %s' % self.name)
+        self.changed = True
+        return response
+    
+    
+def main():
+    argument_spec = ec2_argument_spec()
+    argument_spec.update(dict(
+        name=dict(type='str'),
+    ))
+    
+    
+def _delete_monitoring_policy_process(module, oneandone_conn, monitoring_policy_id, process_id):
+    '''
+    Removes a process from a monitoring policy.
+    '''
     try:
-        title = kwargs['title']
-    except:
-        title = ''
-    type_ = ''
-    size = 0
+        if module.check_mode:
+            process = oneandone_conn.get_monitoring_policy_process(
+                monitoring_policy_id=monitoring_policy_id,
+                process_id=process_id
+            )
+            if process:
+                return True
+            return False
     
-    if len(video_info['links']) > 0:  #has link
-        type_, _ext, size = url_info(video_info['links'][0])  #use 1st to determine type, ext
+            '''
+        if not self.one.host.allocate(self.get_parameter('name'),
+                                      self.get_parameter('vmm_mad_name'),
+                                      self.get_parameter('im_mad_name'),
+                                      self.get_parameter('cluster_id')):
+            self.fail(msg='could not allocate host')
+        else:
+            self.result['changed'] = True
+        return True
     
-    if 'size' in video_info:
-        size = int(video_info['size'])
-    else:
-        for i in video_info['links'][1:]:  #save 1st one
-            size += url_info(i)[2]
+    EXAMPLES = '''
+# Create groups based on the machine architecture
+- group_by:
+    key: machine_{{ ansible_machine }}
     
-    print_info(site_info, title, type_, size)
-    if not info_only:
-        download_urls(video_info['links'], title, _ext, size, output_dir=output_dir, merge=merge)
+    # If outside servers aren't reachable from your machine, use delegate_to and override hosts:
+- bigpanda:
+    component: myapp
+    version: '1.3'
+    token: '{{ bigpanda_token }}'
+    hosts: '{{ ansible_hostname }}'
+    state: started
+  delegate_to: localhost
+  register: deployment
     
-        print_info(site_info, title, mime, size)
-    if not info_only:
-        download_urls([real_url], title, ext, size, output_dir=output_dir, merge=merge)
+            change_applied = False
+        if self.state == 'present':
+            if rc != 0:
+                self.module.fail_json(msg='Failed to %s feature %s.'
+                                          ' icinga2 command returned %s' % (feature_enable_str,
+                                                                            self.feature_name,
+                                                                            out))
     
-    __all__ = ['dilidili_download']
-    
-    #----------------------------------------------------------------------
-def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    '''wrapper'''
-    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
-    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
-    hostname = urlparse(url).hostname
-    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
-        return False
-    upid = match1(url, r'.+/content/(\w+)')
-    
-        url = list(set([
-        unicodize(str.replace(i, '\\/', '/'))
-        for i in re.findall(r'<meta property='og:video:secure_url' content='(.*?)'>', html)
-    ]))
-    
-                if title is None:
-                response = request.urlopen(request.Request(real_url))
-                if response.headers['content-disposition']:
-                    filename = parse.unquote(r1(r'filename='?(.+)'?', response.headers['content-disposition'])).split('.')
-                    title = ''.join(filename[:-1])
-        except: pass
-    
-        hass.services.register(DOMAIN, 'demo', observe)
-    
-            def on_deleted(self, event):
-            '''File deleted.'''
-            self.process(event)
-    
-                try:
-                kwargs['data'] = self._schema(data)
-            except vol.Invalid as err:
-                _LOGGER.error('Data does not match schema: %s', err)
-                return view.json_message(
-                    'Message format incorrect: {}'.format(err), 400)
-    
-            # Adding unique constraint on 'EnvironmentProject', fields ['project', 'environment']
-        db.create_unique('sentry_environmentproject', ['project_id', 'environment_id'])
-    
-            # Adding unique constraint on 'ProcessingIssue', fields ['project', 'checksum', 'type']
-        db.create_unique('sentry_processingissue', ['project_id', 'checksum', 'type'])
-    
-    from sentry.utils.query import RangeQuerySetWrapperWithProgressBar
-    
-        return heatmaps_c
-    
-    
-def datasets():
-    '''Retrieve the list of available dataset names.'''
-    return _DATASETS.keys()
-    
-    
-def add_bbox_regression_targets(roidb):
-    '''Add information needed to train bounding-box regressors.'''
-    for entry in roidb:
-        entry['bbox_targets'] = compute_bbox_regression_targets(entry)
-    
-    def add_fast_rcnn_outputs(model, blob_in, dim):
-    '''Add RoI classification and bounding box regression output ops.'''
-    # Box classification layer
-    model.FC(
-        blob_in,
-        'cls_score',
-        dim,
-        model.num_classes,
-        weight_init=gauss_fill(0.01),
-        bias_init=const_fill(0.0)
-    )
-    if not model.train:  # == if test
-        # Only add softmax when testing; during training the softmax is combined
-        # with the label cross entropy loss for numerical stability
-        model.Softmax('cls_score', 'cls_prob', engine='CUDNN')
-    # Box regression layer
-    num_bbox_reg_classes = (
-        2 if cfg.MODEL.CLS_AGNOSTIC_BBOX_REG else model.num_classes
-    )
-    model.FC(
-        blob_in,
-        'bbox_pred',
-        dim,
-        num_bbox_reg_classes * 4,
-        weight_init=gauss_fill(0.001),
-        bias_init=const_fill(0.0)
+        module = AnsibleModule(
+        argument_spec=dict(
+            key=dict(required=True),
+            event=dict(required=True, choices=['deploy', 'annotation']),
+            msg=dict(),
+            revision_id=dict(),
+            annotated_by=dict(default='Ansible'),
+            level=dict(default='INFO', choices=['INFO', 'WARN', 'ERROR']),
+            instance_id=dict(),
+            event_epoch=dict(),
+            deployed_by=dict(default='Ansible'),
+            deployed_to=dict(),
+            repository=dict(),
+        ),
+        supports_check_mode=True
     )
     
+        def set_appid_not_exist(self, appid):
+        self.logger.warn('APPID_manager, set_appid_not_exist %s', appid)
+        with self.lock:
+            if appid not in self.not_exist_appids:
+                self.not_exist_appids.append(appid)
+            try:
+                self.config.GAE_APPIDS.remove(appid)
+            except:
+                pass
     
-def _narrow_to_fpn_roi_levels(blobs, spatial_scales):
-    '''Return only the blobs and spatial scales that will be used for RoI heads.
-    Inputs `blobs` and `spatial_scales` may include extra blobs and scales that
-    are used for RPN proposals, but not for RoI heads.
-    '''
-    # Code only supports case when RPN and ROI min levels are the same
-    assert cfg.FPN.RPN_MIN_LEVEL == cfg.FPN.ROI_MIN_LEVEL
-    # RPN max level can be >= to ROI max level
-    assert cfg.FPN.RPN_MAX_LEVEL >= cfg.FPN.ROI_MAX_LEVEL
-    # FPN RPN max level might be > FPN ROI max level in which case we
-    # need to discard some leading conv blobs (blobs are ordered from
-    # max/coarsest level to min/finest level)
-    num_roi_levels = cfg.FPN.ROI_MAX_LEVEL - cfg.FPN.ROI_MIN_LEVEL + 1
-    return blobs[-num_roi_levels:], spatial_scales[-num_roi_levels:]
+        @staticmethod
+    def create_ca():
+        key = OpenSSL.crypto.PKey()
+        key.generate_key(OpenSSL.crypto.TYPE_RSA, 2048)
+        ca = OpenSSL.crypto.X509()
+        ca.set_version(2)
+        ca.set_serial_number(0)
+        subj = ca.get_subject()
+        subj.countryName = 'CN'
+        subj.stateOrProvinceName = 'Internet'
+        subj.localityName = 'Cernet'
+        subj.organizationName = CertUtil.ca_vendor
+        # Log generated time.
+        subj.organizationalUnitName = '%s Root - %d' % (CertUtil.ca_vendor, int(time.time()))
+        subj.commonName = '%s XX-Net' % CertUtil.ca_vendor
+        ca.gmtime_adj_notBefore(- 3600 * 24)
+        ca.gmtime_adj_notAfter(CertUtil.ca_validity - 3600 * 24)
+        ca.set_issuer(subj)
+        ca.set_subject(subj)
+        ca.set_pubkey(key)
+        ca.add_extensions([
+            OpenSSL.crypto.X509Extension(
+                'basicConstraints', False, 'CA:TRUE', subject=ca, issuer=ca)
+            ])
+        ca.sign(key, CertUtil.ca_digest)
+        #xlog.debug('CA key:%s', key)
+        xlog.info('create CA')
+        return key, ca
     
-    $ find . -name '*.yaml' -exec sed -i -e \
-   's/head_builder\.add_roi_2mlp_head/fast_rcnn_heads.add_roi_2mlp_head/g' {} \;
+    import time
+import threading
     
+    - ANTLRStringStream: Reads from a string objects. The input should be a unicode
+  object, or ANTLR3 will have trouble decoding non-ascii data.
+- ANTLRFileStream: Opens a file and read the contents, with optional character
+  decoding.
+- ANTLRInputStream: Reads the date from a file-like object, with optional
+  character decoding.
     
-def build_data_parallel_model(model, single_gpu_build_func):
-    '''Build a data parallel model given a function that builds the model on a
-    single GPU.
-    '''
-    if model.only_build_forward_pass:
-        single_gpu_build_func(model)
-    elif model.train:
-        all_loss_gradients = _build_forward_graph(model, single_gpu_build_func)
-        # Add backward pass on all GPUs
-        model.AddGradientOperators(all_loss_gradients)
-        if cfg.NUM_GPUS > 1:
-            _add_allreduce_graph(model)
-        for gpu_id in range(cfg.NUM_GPUS):
-            # After allreduce, all GPUs perform SGD updates on their identical
-            # params and gradients in parallel
-            with c2_utils.NamedCudaScope(gpu_id):
-                add_single_gpu_param_update_ops(model, gpu_id)
-    else:
-        # Test-time network operates on single GPU
-        # Test-time parallelism is implemented through multiprocessing
-        with c2_utils.NamedCudaScope(model.target_gpu_id):
-            single_gpu_build_func(model)
+                sum_info.SetProperty(msilib.PID_TITLE, 'a' * 1001)
+            title = sum_info.GetProperty(msilib.PID_TITLE)
+            self.assertEqual(title, b'a' * 1001)
+        finally:
+            db = None
+            sum_info = None
+            os.unlink(db_path)
     
-    def add_generic_rpn_outputs(model, blob_in, dim_in, spatial_scale_in):
-    '''Add RPN outputs (objectness classification and bounding box regression)
-    to an RPN model. Abstracts away the use of FPN.
-    '''
-    loss_gradients = None
-    if cfg.FPN.FPN_ON:
-        # Delegate to the FPN module
-        FPN.add_fpn_rpn_outputs(model, blob_in, dim_in, spatial_scale_in)
-        if cfg.MODEL.FASTER_RCNN:
-            # CollectAndDistributeFpnRpnProposals also labels proposals when in
-            # training mode
-            model.CollectAndDistributeFpnRpnProposals()
-        if model.train:
-            loss_gradients = FPN.add_fpn_rpn_losses(model)
-    else:
-        # Not using FPN, add RPN to a single scale
-        add_single_scale_rpn_outputs(model, blob_in, dim_in, spatial_scale_in)
-        if model.train:
-            loss_gradients = add_single_scale_rpn_losses(model)
-    return loss_gradients
+        def testCosh(self):
+        self.assertRaises(TypeError, math.cosh)
+        self.ftest('cosh(0)', math.cosh(0), 1)
+        self.ftest('cosh(2)-2*cosh(1)**2', math.cosh(2)-2*math.cosh(1)**2, -1) # Thanks to Lambert
+        self.assertEqual(math.cosh(INF), INF)
+        self.assertEqual(math.cosh(NINF), INF)
+        self.assertTrue(math.isnan(math.cosh(NAN)))
     
-    import cv2
-import logging
-import numpy as np
+    PYTHON2_EXCEPTIONS = (
+    'ArithmeticError',
+    'AssertionError',
+    'AttributeError',
+    'BaseException',
+    'BufferError',
+    'BytesWarning',
+    'DeprecationWarning',
+    'EOFError',
+    'EnvironmentError',
+    'Exception',
+    'FloatingPointError',
+    'FutureWarning',
+    'GeneratorExit',
+    'IOError',
+    'ImportError',
+    'ImportWarning',
+    'IndentationError',
+    'IndexError',
+    'KeyError',
+    'KeyboardInterrupt',
+    'LookupError',
+    'MemoryError',
+    'NameError',
+    'NotImplementedError',
+    'OSError',
+    'OverflowError',
+    'PendingDeprecationWarning',
+    'ReferenceError',
+    'RuntimeError',
+    'RuntimeWarning',
+    # StandardError is gone in Python 3, so we map it to Exception
+    'StopIteration',
+    'SyntaxError',
+    'SyntaxWarning',
+    'SystemError',
+    'SystemExit',
+    'TabError',
+    'TargetScopeError',
+    'TypeError',
+    'UnboundLocalError',
+    'UnicodeDecodeError',
+    'UnicodeEncodeError',
+    'UnicodeError',
+    'UnicodeTranslateError',
+    'UnicodeWarning',
+    'UserWarning',
+    'ValueError',
+    'Warning',
+    'ZeroDivisionError',
+)
     
-            # Fg label: for each gt use anchors with highest overlap
-        # (including ties)
-        gt_inds = anchor_to_gt_argmax[anchors_with_max_overlap]
-        labels[anchors_with_max_overlap] = gt_classes[gt_inds]
-        # Fg label: above threshold IOU
-        inds = anchor_to_gt_max >= cfg.RETINANET.POSITIVE_OVERLAP
-        gt_inds = anchor_to_gt_argmax[inds]
-        labels[inds] = gt_classes[gt_inds]
+        def __init__(self, file, connection):
+        super().__init__(file)
+        self.connection = connection
+    
+    ans = input('View full message?')
+if ans.lower()[0] == 'n':
+    sys.exit()
+    
+    def handleSlideshow(slideshow):
+    print('<html>')
+    handleSlideshowTitle(slideshow.getElementsByTagName('title')[0])
+    slides = slideshow.getElementsByTagName('slide')
+    handleToc(slides)
+    handleSlides(slides)
+    print('</html>')
+    
+    def clean_text(text, replacements = {':': '_', ' ': '_', '/': '_', '.': '', ''': ''}):
+    for key, rep in replacements.items():
+        text = text.replace(key, rep)
+    return text    
+    
+    *References:
+https://fkromer.github.io/python-pattern-references/design/#singleton
+    
+    *TL;DR80
+Creates objects without having to specify the exact class.
+'''
+    
+        def find_shortest_path(self, start, end, path=None):
+        path = path or []
+        path.append(start)
