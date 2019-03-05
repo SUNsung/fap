@@ -1,90 +1,84 @@
 
         
-        # No trailing slash
-Benchmark.ips do |x|
-  path = '/some/very/very/long/path/to/a/file/i/like/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
-
-    
-    def global_require
-  JSON.pretty_generate(DATA)
-end
-    
-      </body>
-</html>
-HTML
-CONTENT_NOT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
-    
-      def set_account
-    @account = Account.find(params[:id])
-  end
-end
-
-    
-        render json: @web_subscription, serializer: REST::WebPushSubscriptionSerializer
+        describe Admin::UsersController do
+  it 'requires to be signed in as an admin' do
+    login_as(users(:bob))
+    visit admin_users_path
+    expect(page).to have_text('Admin access required to view that page.')
   end
     
-      def update
-    setting.data = params[:data]
-    setting.save!
+          open_dry_run_modal(agent)
+      find('.dry-run-event-sample').click
+      within(:css, '.modal .builder') do
+        expect(page).to have_text('http://xkcd.com/')
+      end
+      click_on('Dry Run')
+      expect(page).to have_text('Biologists play reverse')
+      expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabEvents']')
+    end
     
-      def after_sign_in_path_for(resource)
-    if resource.email_verified?
-      root_path
-    else
-      finish_signup_path
+      it 'asks to accept conflicts when the scenario was modified' do
+    DefaultScenarioImporter.seed(user)
+    agent = user.agents.where(name: 'Rain Notifier').first
+    agent.options['expected_receive_period_in_days'] = 9001
+    agent.save!
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
+    click_on 'Start Import'
+    expect(page).to have_text('This Scenario already exists in your system.')
+    expect(page).to have_text('9001')
+    check('I confirm that I want to import these Agents.')
+    click_on 'Finish Import'
+    expect(page).to have_text('Import successful!')
+  end
+    
+          it 'generates a richer DOT script' do
+        expect(agents_dot(@agents, rich: true)).to match(%r{
+          \A
+          digraph \x20 'Agent \x20 Event \x20 Flow' \{
+            (graph \[ [^\]]+ \];)?
+            node \[ [^\]]+ \];
+            edge \[ [^\]]+ \];
+            (?<foo>\w+) \[label=foo,tooltip='Dot \x20 Foo',URL='#{Regexp.quote(agent_path(@foo))}'\];
+            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
+            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
+            \k<bar1> \[label=bar1,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar1))}'\];
+            \k<bar2> \[label=bar2,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar2))}',style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
+            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
+            \k<bar3> \[label=bar3,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar3))}'\];
+          \}
+          \z
+        }x)
+      end
+    end
+  end
+    
+        it 'defauls foreground and background colors' do
+      scenario.tag_fg_color = nil
+      scenario.tag_bg_color = nil
+      expect(style_colors(scenario)).to eq('color:#FFFFFF;background-color:#5BC0DE')
+    end
+  end
+    
+        it 'does not output links to other agents outside of the incoming set' do
+      Link.create!(:source_id => agents(:jane_weather_agent).id, :receiver_id => agents(:jane_website_agent).id)
+      Link.create!(:source_id => agents(:jane_website_agent).id, :receiver_id => agents(:jane_rain_notifier_agent).id)
+    
+        it 'should raise error when response has an error' do
+      stub(HTTParty).post { {'error' => {'message' => 'Sample error'}} }
+      expect { @checker.send_notification({}) }.to raise_error(StandardError, /Sample error/)
     end
   end
 end
 
     
-      auto_updates true
-  depends_on cask: 'homebrew/cask-versions/adobe-photoshop-lightroom600'
+    ## -- Misc Configs -- ##
     
-    def prev_feature
-  source_version.gsub(/^(\d\.)(\d+)\..*$/) { $1 + ($2.to_i - 1).to_s }
-end
-    
-      # insert data
-  fields.each do |field, values|
-    updated = '  s.#{field} = ['
-    updated << values.map { |v| '\n    %p' % v }.join(',')
-    updated << '\n  ]'
-    content.sub!(/  s\.#{field} = \[\n(    .*\n)*  \]/, updated)
+      # Summary is used on the Archive pages to return the first block of content from a post.
+  def summary(input)
+    if input.index(/\n\n/)
+      input.split(/\n\n/)[0]
+    else
+      input
+    end
   end
-    
-          def remove_bad_cookies(request, response)
-        return if bad_cookies.empty?
-        paths = cookie_paths(request.path)
-        bad_cookies.each do |name|
-          paths.each { |path| response.set_cookie name, empty_cookie(request.host, path) }
-        end
-      end
-    
-    shared_examples_for 'multiline literal brace layout method argument' do
-  include MultilineLiteralBraceHelper
-    
-            self
-      end
-    
-          # Returns the index of the `when` branch within the `case` statement.
-      #
-      # @return [Integer] the index of the `when` branch
-      def branch_index
-        parent.when_branches.index(self)
-      end
