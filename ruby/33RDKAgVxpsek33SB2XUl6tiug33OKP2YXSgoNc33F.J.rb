@@ -1,77 +1,118 @@
 
         
-        class Api::V1::Instances::ActivityController < Api::BaseController
-  before_action :require_enabled_api!
-    
-        render json: @web_subscription, serializer: REST::WebPushSubscriptionSerializer
-  end
-    
-        data = {
-      alerts: {
-        follow: alerts_enabled,
-        favourite: alerts_enabled,
-        reblog: alerts_enabled,
-        mention: alerts_enabled,
-      },
-    }
-    
-            self.description = <<-DESC
-          Shows the content of the pods cache as a YAML tree output, organized by pod.
-          If `NAME` is given, only the caches for that pod will be included in the output.
-        DESC
-    
-          def self.options
-        options = []
-        options.concat(super.reject { |option, _| option == '--silent' })
-      end
-    
-    shared_examples 'no current order' do
-  context 'order doesn't exist' do
-    before do
-      order.destroy
-      execute
-    end
-    
-        it 'returns proper error message' do
-      expect(json_response['error']).to eq('The resource you were looking for could not be found.')
+            def password_change(record, opts={})
+      devise_mail(record, :password_change, opts)
     end
   end
+end
+
     
-      shared_examples 'nested requested resources' do
-    it 'are returned' do
-      expect(json_response['included']).to be_present
-      expect(json_response['included']).not_to include(have_type('variant').and have_id(default_variant.id.to_s))
-      expect(json_response['included']).to include(have_type('option_type'))
-      expect(json_response['included']).to include(have_type('option_value'))
-    end
-  end
-    
-        context 'with shipping country filtering' do
-      let!(:new_country) { create(:country) }
-      let!(:zone) { create(:zone) }
-      let!(:shipping_method) { create(:shipping_method) }
-      let!(:shippable_url) { '/api/v2/storefront/countries?filter[shippable]=true' }
-      let!(:to_return) { shipping_method.zones.reduce([]) { |collection, zone| collection + zone.country_list } }
-    
-            variant = line_item.variant
-        display_name = variant.name.to_s
-        display_name += ' (#{variant.options_text})' unless variant.options_text.blank?
-    
-          def gateway_error(exception)
-        @order.errors.add(:base, exception.message)
-        invalid_resource!(@order)
-      end
-    
-            def find_address
-          if @order.bill_address_id == params[:id].to_i
-            @order.bill_address
-          elsif @order.ship_address_id == params[:id].to_i
-            @order.ship_address
-          else
-            raise CanCan::AccessDenied
-          end
+    module Devise
+  module Controllers
+    # Provide sign in and sign out functionality.
+    # Included by default in all controllers.
+    module SignInOut
+      # Return true if the given scope is signed in session. If no scope given, return
+      # true if any scope is signed in. This will run authentication hooks, which may
+      # cause exceptions to be thrown from this method; if you simply want to check
+      # if a scope has already previously been authenticated without running
+      # authentication hooks, you can directly call `warden.authenticated?(scope: scope)`
+      def signed_in?(scope=nil)
+        [scope || Devise.mappings.keys].flatten.any? do |_scope|
+          warden.authenticate?(scope: _scope)
         end
+      end
+    
+          def add_fragment_back_to_path(uri, path)
+        [path, uri.fragment].compact.join('#')
       end
     end
   end
 end
+
+    
+    module Devise
+  module Mailers
+    module Helpers
+      extend ActiveSupport::Concern
+    
+          accessors.each do |accessor|
+        mod.class_eval <<-METHOD, __FILE__, __LINE__ + 1
+          def #{accessor}
+            if defined?(@#{accessor})
+              @#{accessor}
+            elsif superclass.respond_to?(:#{accessor})
+              superclass.#{accessor}
+            else
+              Devise.#{accessor}
+            end
+          end
+    
+        def log_status(status)
+      puts bold status
+    end
+    
+      # Do not fallback to assets pipeline if a precompiled asset is missed.
+  config.assets.compile = false
+    
+          # Returns the body of the `for` loop.
+      #
+      # @return [Node, nil] The body of the `for` loop.
+      def body
+        node_parts[2]
+      end
+    end
+  end
+end
+
+    
+          # Calls the given block for each `value` node in the `hash` literal.
+      # If no block is given, an `Enumerator` is returned.
+      #
+      # @return [self] if a block is given
+      # @return [Enumerator] if no block is given
+      def each_value
+        return pairs.map(&:value).to_enum unless block_given?
+    
+          # Calls the given block for each condition node in the `when` branch.
+      # If no block is given, an `Enumerator` is returned.
+      #
+      # @return [self] if a block is given
+      # @return [Enumerator] if no block is given
+      def each_condition
+        return conditions.to_enum(__method__) unless block_given?
+    
+          # the per_page_dropdown is used on index pages like orders, products, promotions etc.
+      # this method generates the select_tag
+      def per_page_dropdown
+        # there is a config setting for admin_products_per_page, only for the orders page
+        if @products && per_page_default = Spree::Config.admin_products_per_page
+          per_page_options = []
+          5.times do |amount|
+            per_page_options << (amount + 1) * Spree::Config.admin_products_per_page
+          end
+        else
+          per_page_default = Spree::Config.admin_orders_per_page
+          per_page_options = %w{15 30 45 60}
+        end
+    
+      s.add_development_dependency 'capybara-accessible'
+end
+
+    
+      def for_each_gem
+    SPREE_GEMS.each do |gem_name|
+      yield 'pkg/spree_#{gem_name}-#{version}.gem'
+    end
+    yield 'pkg/spree-#{version}.gem'
+  end
+    
+              inventory_unit.transaction do
+            if inventory_unit.update_attributes(inventory_unit_params)
+              fire
+              render :show, status: 200
+            else
+              invalid_resource!(inventory_unit)
+            end
+          end
+        end
