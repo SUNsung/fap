@@ -1,190 +1,140 @@
 
         
-        Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+            // Adds the module variable 'api_version'.
+    if (PyModule_AddIntConstant(
+        module,
+        const_cast<char*>(kImplVersionName),
+        kImplVersion))
+#if PY_MAJOR_VERSION < 3
+      return;
+#else
+      { Py_DECREF(module); return NULL; }
     
-    // Unlike test_ops.cc, these are built with the 'require_shapes' option in the
-// BUILD file.
-    
-    namespace stream_executor {
-namespace cuda {
+    bool CodeGenerator::GenerateAll(
+    const std::vector<const FileDescriptor*>& files,
+    const string& parameter,
+    GeneratorContext* generator_context,
+    string* error) const {
+  // Default implemenation is just to call the per file method, and prefix any
+  // error string with the file to provide context.
+  bool succeeded = true;
+  for (int i = 0; i < files.size(); i++) {
+    const FileDescriptor* file = files[i];
+    succeeded = Generate(file, parameter, generator_context, error);
+    if (!succeeded && error && error->empty()) {
+      *error = 'Code generator returned false but provided no error '
+               'description.';
     }
+    if (error && !error->empty()) {
+      *error = file->name() + ': ' + *error;
+      break;
     }
-    
-      // The following options refer to synchronization options when
-  // using SynchronizeStream or SynchronizeContext.
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(TrackableObject);
-};
-    
-    #ifndef ATOM_BROWSER_ATOM_JAVASCRIPT_DIALOG_MANAGER_H_
-#define ATOM_BROWSER_ATOM_JAVASCRIPT_DIALOG_MANAGER_H_
-    
-    #include <map>
-#include <string>
-    
-    #ifndef BITCOIN_QT_NETWORKSTYLE_H
-#define BITCOIN_QT_NETWORKSTYLE_H
-    
-    #ifndef BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
-#define BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
-    
-        /** In:
-     *    Eric Brier and Marc Joye, Weierstrass Elliptic Curves and Side-Channel Attacks.
-     *    In D. Naccache and P. Paillier, Eds., Public Key Cryptography, vol. 2274 of Lecture Notes in Computer Science, pages 335-345. Springer-Verlag, 2002.
-     *  we find as solution for a unified addition/doubling formula:
-     *    lambda = ((x1 + x2)^2 - x1 * x2 + a) / (y1 + y2), with a = 0 for secp256k1's curve equation.
-     *    x3 = lambda^2 - (x1 + x2)
-     *    2*y3 = lambda * (x1 + x2 - 2 * x3) - (y1 + y2).
-     *
-     *  Substituting x_i = Xi / Zi^2 and yi = Yi / Zi^3, for i=1,2,3, gives:
-     *    U1 = X1*Z2^2, U2 = X2*Z1^2
-     *    S1 = Y1*Z2^3, S2 = Y2*Z1^3
-     *    Z = Z1*Z2
-     *    T = U1+U2
-     *    M = S1+S2
-     *    Q = T*M^2
-     *    R = T^2-U1*U2
-     *    X3 = 4*(R^2-Q)
-     *    Y3 = 4*(R*(3*Q-2*R^2)-M^4)
-     *    Z3 = 2*M*Z
-     *  (Note that the paper uses xi = Xi / Zi and yi = Yi / Zi instead.)
-     *
-     *  This formula has the benefit of being the same for both addition
-     *  of distinct points and doubling. However, it breaks down in the
-     *  case that either point is infinity, or that y1 = -y2. We handle
-     *  these cases in the following ways:
-     *
-     *    - If b is infinity we simply bail by means of a VERIFY_CHECK.
-     *
-     *    - If a is infinity, we detect this, and at the end of the
-     *      computation replace the result (which will be meaningless,
-     *      but we compute to be constant-time) with b.x : b.y : 1.
-     *
-     *    - If a = -b, we have y1 = -y2, which is a degenerate case.
-     *      But here the answer is infinity, so we simply set the
-     *      infinity flag of the result, overriding the computed values
-     *      without even needing to cmov.
-     *
-     *    - If y1 = -y2 but x1 != x2, which does occur thanks to certain
-     *      properties of our curve (specifically, 1 has nontrivial cube
-     *      roots in our field, and the curve equation has no x coefficient)
-     *      then the answer is not infinity but also not given by the above
-     *      equation. In this case, we cmov in place an alternate expression
-     *      for lambda. Specifically (y1 - y2)/(x1 - x2). Where both these
-     *      expressions for lambda are defined, they are equal, and can be
-     *      obtained from each other by multiplication by (y1 + y2)/(y1 + y2)
-     *      then substitution of x^3 + 7 for y^2 (using the curve equation).
-     *      For all pairs of nonzero points (a, b) at least one is defined,
-     *      so this covers everything.
-     */
-    
-    int secp256k1_ecdh(const secp256k1_context* ctx, unsigned char *result, const secp256k1_pubkey *point, const unsigned char *scalar) {
-    int ret = 0;
-    int overflow = 0;
-    secp256k1_gej res;
-    secp256k1_ge pt;
-    secp256k1_scalar s;
-    VERIFY_CHECK(ctx != NULL);
-    ARG_CHECK(result != NULL);
-    ARG_CHECK(point != NULL);
-    ARG_CHECK(scalar != NULL);
+    if (!succeeded) {
+      break;
     }
+  }
+  return succeeded;
+}
     
-    /* Tests several edge cases. */
-void test_ecdsa_recovery_edge_cases(void) {
-    const unsigned char msg32[32] = {
-        'T', 'h', 'i', 's', ' ', 'i', 's', ' ',
-        'a', ' ', 'v', 'e', 'r', 'y', ' ', 's',
-        'e', 'c', 'r', 'e', 't', ' ', 'm', 'e',
-        's', 's', 'a', 'g', 'e', '.', '.', '.'
-    };
-    const unsigned char sig64[64] = {
-        /* Generated by signing the above message with nonce 'This is the nonce we will use...'
-         * and secret key 0 (which is not valid), resulting in recid 0. */
-        0x67, 0xCB, 0x28, 0x5F, 0x9C, 0xD1, 0x94, 0xE8,
-        0x40, 0xD6, 0x29, 0x39, 0x7A, 0xF5, 0x56, 0x96,
-        0x62, 0xFD, 0xE4, 0x46, 0x49, 0x99, 0x59, 0x63,
-        0x17, 0x9A, 0x7D, 0xD1, 0x7B, 0xD2, 0x35, 0x32,
-        0x4B, 0x1B, 0x7D, 0xF3, 0x4C, 0xE1, 0xF6, 0x8E,
-        0x69, 0x4F, 0xF6, 0xF1, 0x1A, 0xC7, 0x51, 0xDD,
-        0x7D, 0xD7, 0x3E, 0x38, 0x7E, 0xE4, 0xFC, 0x86,
-        0x6E, 0x1B, 0xE8, 0xEC, 0xC7, 0xDD, 0x95, 0x57
-    };
-    secp256k1_pubkey pubkey;
-    /* signature (r,s) = (4,4), which can be recovered with all 4 recids. */
-    const unsigned char sigb64[64] = {
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04,
-    };
-    secp256k1_pubkey pubkeyb;
-    secp256k1_ecdsa_recoverable_signature rsig;
-    secp256k1_ecdsa_signature sig;
-    int recid;
+    template <typename DescriptorType>
+static void WriteDocCommentBody(
+    io::Printer* printer, const DescriptorType* descriptor) {
+    SourceLocation location;
+    if (descriptor->GetSourceLocation(&location)) {
+        WriteDocCommentBodyImpl(printer, location);
     }
+}
     
-    BOOST_AUTO_TEST_SUITE_END()
+    #include <google/protobuf/compiler/command_line_interface.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/io/printer.h>
+    
+    #include <gtest/gtest.h>
+    
+    
+    {
+    {
+    {
+    {}  // namespace java
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
 
     
-    #define TINYFORMAT_MAKE_FORMAT_FUNCS(n)                                   \
-                                                                          \
-template<TINYFORMAT_ARGTYPES(n)>                                          \
-void format(std::ostream& out, const char* fmt, TINYFORMAT_VARARGS(n))    \
-{                                                                         \
-    vformat(out, fmt, makeFormatList(TINYFORMAT_PASSARGS(n)));            \
-}                                                                         \
-                                                                          \
-template<TINYFORMAT_ARGTYPES(n)>                                          \
-std::string format(const char* fmt, TINYFORMAT_VARARGS(n))                \
-{                                                                         \
-    std::ostringstream oss;                                               \
-    format(oss, fmt, TINYFORMAT_PASSARGS(n));                             \
-    return oss.str();                                                     \
-}                                                                         \
-                                                                          \
-template<TINYFORMAT_ARGTYPES(n)>                                          \
-void printf(const char* fmt, TINYFORMAT_VARARGS(n))                       \
-{                                                                         \
-    format(std::cout, fmt, TINYFORMAT_PASSARGS(n));                       \
-}                                                                         \
-                                                                          \
-template<TINYFORMAT_ARGTYPES(n)>                                          \
-void printfln(const char* fmt, TINYFORMAT_VARARGS(n))                     \
-{                                                                         \
-    format(std::cout, fmt, TINYFORMAT_PASSARGS(n));                       \
-    std::cout << '\n';                                                    \
+    // Author: liujisi@google.com (Pherl Liu)
+    
+      desired_output_for_decode = 'zbcdefghIJ';
+  expected = string('\0zbcdefghIJ\0', 12);
+  result = TextFormatDecodeData::DecodeDataForString(input_for_decode,
+                                                     desired_output_for_decode);
+  EXPECT_EQ(expected, result);
+    
+    GzipOutputStream::GzipOutputStream(ZeroCopyOutputStream* sub_stream,
+                                   const Options& options) {
+  Init(sub_stream, options);
 }
     
-    namespace HPHP { namespace HHBBC {
+    TEST_2D(TokenizerTest, SimpleTokens, kSimpleTokenCases, kBlockSizes) {
+  // Set up the tokenizer.
+  TestInputStream input(kSimpleTokenCases_case.input.data(),
+                        kSimpleTokenCases_case.input.size(),
+                        kBlockSizes_case);
+  TestErrorCollector error_collector;
+  Tokenizer tokenizer(&input, &error_collector);
+    }
+    
+    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H */
+
+    
+    
+    {  RpcServerStatsEncoding() = delete;
+  RpcServerStatsEncoding(const RpcServerStatsEncoding&) = delete;
+  RpcServerStatsEncoding(RpcServerStatsEncoding&&) = delete;
+  RpcServerStatsEncoding operator=(const RpcServerStatsEncoding&) = delete;
+  RpcServerStatsEncoding operator=(RpcServerStatsEncoding&&) = delete;
+};
+    
+    const ViewDescriptor& ClientReceivedBytesPerRpcMinute() {
+  const static ViewDescriptor descriptor =
+      MinuteDescriptor()
+          .set_name('grpc.io/client/received_bytes_per_rpc/minute')
+          .set_measure(kRpcClientReceivedBytesPerRpcMeasureName)
+          .set_aggregation(BytesDistributionAggregation())
+          .add_column(ClientMethodTagKey());
+  return descriptor;
+}
+    
+    
+    {}  // namespace grpc
+
+    
+    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
+    const grpc::string& name, const grpc::string& value) {
+  class StringOption final : public ServerBuilderOption {
+   public:
+    StringOption(const grpc::string& name, const grpc::string& value)
+        : name_(name), value_(value) {}
     }
     }
     
-    void Assembler::oris(const Reg64& ra, const Reg64& rs, Immed imm) {
-  assert(imm.fits(HPHP::sz::word) && 'Immediate is too big');
-  EmitDForm(25, rn(rs), rn(ra), imm.w());
-}
     
-      static const APCCollection* fromHandle(const APCHandle* handle) {
-    assertx(handle->checkInvariants());
-    assertx(handle->kind() == APCKind::SharedCollection);
-    static_assert(offsetof(APCCollection, m_handle) == 0, '');
-    return reinterpret_cast<const APCCollection*>(handle);
-  }
+    {   private:
+    DynamicThreadPool* pool_;
+    grpc_core::Thread thd_;
+    void ThreadFunc();
+  };
+  std::mutex mu_;
+  std::condition_variable cv_;
+  std::condition_variable shutdown_cv_;
+  bool shutdown_;
+  std::queue<std::function<void()>> callbacks_;
+  int reserve_threads_;
+  int nthreads_;
+  int threads_waiting_;
+  std::list<DynamicThread*> dead_threads_;
     
-    CachedDirectory::CachedDirectory(const String& path) {
-  assertx(File::IsVirtualDirectory(path));
-  m_files = StaticContentCache::TheFileCache->readDirectory(path.c_str());
-}
-    
-    #ifndef incl_HPHP_PERF_EVENT_H_
-#define incl_HPHP_PERF_EVENT_H_
-    
-    #include <folly/Range.h>
+    namespace grpc {
+namespace load_reporter {
+    }
+    }
