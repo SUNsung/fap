@@ -1,233 +1,162 @@
 
         
+        versions_info = json.load(open('update/versions.json'))
+if 'signature' in versions_info:
+    del versions_info['signature']
+    
+    versions_info['signature'] = signature
+with open('update/versions.json', 'w') as versionsf:
+    json.dump(versions_info, versionsf, indent=4, sort_keys=True)
+
+    
+    entry_template = textwrap.dedent('''
+    <entry>
+        <id>https://yt-dl.org/feed/youtube-dl-updates-feed/youtube-dl-@VERSION@</id>
+        <title>New version @VERSION@</title>
+        <link href='http://rg3.github.io/youtube-dl' />
+        <content type='xhtml'>
+            <div xmlns='http://www.w3.org/1999/xhtml'>
+                Downloads available at <a href='https://yt-dl.org/downloads/@VERSION@/'>https://yt-dl.org/downloads/@VERSION@/</a>
+            </div>
+        </content>
+        <author>
+            <name>The youtube-dl maintainers</name>
+        </author>
+        <updated>@TIMESTAMP@</updated>
+    </entry>
+    ''')
+    
+    
+if __name__ == '__main__':
+    main()
+
+    
+    # The theme to use for HTML and HTML Help pages.  See the documentation for
+# a list of builtin themes.
+html_theme = 'default'
+    
+    # Allow direct execution
+import os
+import sys
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    
+    
+def get_db():
+    '''Connect to the application's configured database. The connection
+    is unique for each request and will be reused if this is called
+    again.
+    '''
+    if 'db' not in g:
+        g.db = sqlite3.connect(
+            current_app.config['DATABASE'],
+            detect_types=sqlite3.PARSE_DECLTYPES
+        )
+        g.db.row_factory = sqlite3.Row
+    
+    
+def test_create(client, auth, app):
+    auth.login()
+    assert client.get('/create').status_code == 200
+    client.post('/create', data={'title': 'created', 'body': ''})
+    
+    # Use the same json implementation as itsdangerous on which we
+# depend anyways.
+from itsdangerous import json as _json
+    
+            def __init__(self, name, doc=None):
+            self.name = name
+            self.__doc__ = doc
+        def _fail(self, *args, **kwargs):
+            raise RuntimeError('signalling support is unavailable '
+                               'because the blinker library is '
+                               'not installed.')
+        send = lambda *a, **kw: None
+        connect = disconnect = has_receivers_for = receivers_for = \
+            temporarily_connected_to = connected_to = _fail
+        del _fail
+    
+        monkeypatch.setattr(pkgutil, 'get_loader', get_loader)
+    
+        with app.app_context():
+        pass
+    
+            if row1 == row2:
+            plaintext += table[row1*5+(col1-1)%5]
+            plaintext += table[row2*5+(col2-1)%5]
+        elif col1 == col2:
+            plaintext += table[((row1-1)%5)*5+col1]
+            plaintext += table[((row2-1)%5)*5+col2]
+        else: # rectangle
+            plaintext += table[row1*5+col2]
+            plaintext += table[row2*5+col1]
+    
+    	for n in xrange(m+1):
+		for k in xrange(1, m):
+			memo[n][k] += memo[n][k-1]
+			if n-k > 0:
+				memo[n][k] += memo[n-k-1][k]
+    
+        Using log and roots can be perceived as tools for penalizing big
+    erors. However, using appropriate metrics depends on the situations,
+    and types of data
+'''
+    
+            self.prepare(vid = vid, title = title, **kwargs)
+    
+    #----------------------------------------------------------------------
+def ckplayer_download(url, output_dir = '.', merge = False, info_only = False, is_xml = True, **kwargs):
+    if is_xml:  #URL is XML URL
+        try:
+            title = kwargs['title']
+        except:
+            title = ''
+        try:
+            headers = kwargs['headers']  #headers provided
+            ckinfo = get_content(url, headers = headers)
+        except NameError:
+            ckinfo = get_content(url)
         
-def main():
-    import os
-    import re
-    import shutil
-    import sys
-    dests = sys.argv[1:] or ['.']
-    filename = re.sub('\.pyc$', '.py', __file__)
+        ckplayer_download_by_xml(ckinfo, output_dir, merge, 
+                                info_only, title = title)
     
-        proc.sendline(u'fuck')
-    assert proc.expect([TIMEOUT, u'git show'])
-    proc.send('\033[B')
-    assert proc.expect([TIMEOUT, u'git push'])
-    proc.send('\033[B')
-    assert proc.expect([TIMEOUT, u'git help'])
-    proc.send('\033[A')
-    assert proc.expect([TIMEOUT, u'git push'])
-    proc.send('\033[B')
-    assert proc.expect([TIMEOUT, u'git help'])
-    proc.send('\n')
-    
-    
-@pytest.mark.parametrize('command, new_command, packages', [
-    (Command('vim', ''), 'sudo apt-get install vim && vim',
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('convert', ''), 'sudo apt-get install imagemagick && convert',
-     [('imagemagick', 'main'),
-      ('graphicsmagick-imagemagick-compat', 'universe')]),
-    (Command('sudo vim', ''), 'sudo apt-get install vim && sudo vim',
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('sudo convert', ''), 'sudo apt-get install imagemagick && sudo convert',
-     [('imagemagick', 'main'),
-      ('graphicsmagick-imagemagick-compat', 'universe')])])
-def test_get_new_command(mocker, command, new_command, packages):
-    mocker.patch('thefuck.rules.apt_get._get_packages',
-                 create=True, return_value=packages)
-    
-        new_command = get_new_command(Command('sudo apt list --upgradable', match_output))
-    assert new_command == 'sudo apt upgrade'
+    site_info = 'Facebook.com'
+download = facebook_download
+download_playlist = playlist_not_supported('facebook')
 
     
-            try:
-            response = self.client.delete_rule(Name=self.name)
-        except (botocore.exceptions.BotoCoreError, botocore.exceptions.ClientError) as e:
-            self.module.fail_json_aws(e, msg='Could not delete rule %s' % self.name)
-        self.changed = True
-        return response
+        video_url = match1(html, r'filepath=(.+)&sec')
+    video_url = video_url.replace('&mid', '?mid')
+    
+            if page_navi_vars is None:  # type 2 shared course
+            video_list = icourses_playlist_new(url, course_page)
+        else:  # type 1 shared course
+            sec_page = get_content(ep.format(page_navi_vars.group(2), page_navi_vars.group(1)))
+            video_list = re.findall(resid_courseid_patt, sec_page)
+    elif 'viewCharacterDetail.action' in url or 'changeforVideo.action' in url:
+        page = get_content(url)
+        video_list = re.findall(resid_courseid_patt, page)
+    
+      # Don't use 'elided' lines here, otherwise we can't check commented lines.
+  # Don't want to use 'raw' either, because we don't want to check inside C++11
+  # raw strings,
+  raw_lines = clean_lines.lines_without_raw_strings
+  line = raw_lines[linenum]
+  prev = raw_lines[linenum - 1] if linenum > 0 else ''
     
     
-def delete(module, connection, name):
-    ''' Delete an Elasticache backup. '''
-    try:
-        response = connection.delete_snapshot(SnapshotName=name)
-        changed = True
-    except botocore.exceptions.ClientError as e:
-        if e.response['Error']['Code'] == 'SnapshotNotFoundFault':
-            response = {}
-            changed = False
-        elif e.response['Error']['Code'] == 'InvalidSnapshotState':
-            module.fail_json(msg='Error: InvalidSnapshotState. The snapshot is not in an available state or failed state to allow deletion.'
-                             'You may need to wait a few minutes.')
-        else:
-            module.fail_json(msg='Unable to delete the snapshot.', exception=traceback.format_exc())
-    return response, changed
+if len(args) < 1:
+    print(USAGE)
+    sys.exit(1)
     
-    RETURN = '''
-server_certificate_id:
-    description: The 21 character certificate id
-    returned: success
-    type: str
-    sample: 'ADWAJXWTZAXIPIMQHMJPO'
-certificate_body:
-    description: The asn1der encoded PEM string
-    returned: success
-    type: str
-    sample: '-----BEGIN CERTIFICATE-----\nbunch of random data\n-----END CERTIFICATE-----'
-server_certificate_name:
-    description: The name of the server certificate
-    returned: success
-    type: str
-    sample: 'server-cert-name'
-arn:
-    description: The Amazon resource name of the server certificate
-    returned: success
-    type: str
-    sample: 'arn:aws:iam::911277865346:server-certificate/server-cert-name'
-path:
-    description: The path of the server certificate
-    returned: success
-    type: str
-    sample: '/'
-expiration:
-    description: The date and time this server certificate will expire, in ISO 8601 format.
-    returned: success
-    type: str
-    sample: '2017-06-15T12:00:00+00:00'
-upload_date:
-    description: The date and time this server certificate was uploaded, in ISO 8601 format.
-    returned: success
-    type: str
-    sample: '2015-04-25T00:36:40+00:00'
-'''
+    for f_name in glob.glob(pattern):
+    with open(f_name) as f:
+        print('read file:', f_name)
+        for line in f: #one line as a document
+            words = ' '.join(jieba.cut(line))
+            docs.append(words)
     
-    # Ensure role is absent
-- ipa_role:
-    name: dba
-    state: absent
-    ipa_host: ipa.example.com
-    ipa_user: admin
-    ipa_pass: topsecret
-'''
-    
-        # If we're in check mode, just exit pretending like we succeeded
-    if module.check_mode:
-        module.exit_json(changed=True)
-    
-    import re
-from ansible.module_utils.basic import AnsibleModule
-    
-    
-def main():
-    arg_spec = dict(
-        name=dict(required=True),
-        timeout=dict(default=300, type='int'),
-        state=dict(required=True, choices=['present', 'started', 'restarted', 'stopped', 'monitored', 'unmonitored', 'reloaded'])
-    )
-    
-        print()
-
-    
-        xx = np.arange(100, 100 + n * step, step)
-    plt.figure('scikit-learn vs. glmnet benchmark results')
-    plt.title('Regression in high dimensional spaces (%d samples)' % n_samples)
-    plt.plot(xx, scikit_results, 'b-', label='scikit-learn')
-    plt.plot(xx, glmnet_results, 'r-', label='glmnet')
-    plt.legend()
-    plt.xlabel('number of features')
-    plt.ylabel('Time (s)')
-    plt.axis('tight')
-    plt.show()
-
-    
-        max_it = len(samples_range) * len(features_range)
-    for n_samples in samples_range:
-        for n_features in features_range:
-            it += 1
-            print('====================')
-            print('Iteration %03d of %03d' % (it, max_it))
-            print('====================')
-            X = make_low_rank_matrix(n_samples, n_features,
-                                  effective_rank=rank,
-                                  tail_strength=0.2)
-    
-    for i, n in enumerate(n_samples):
-    for j, p in enumerate(n_features):
-        X = np.random.normal(size=(n, p))
-        t0 = time.time()
-        ward.fit(X)
-        scikits_time[j, i] = time.time() - t0
-        t0 = time.time()
-        hierarchy.ward(X)
-        scipy_time[j, i] = time.time() - t0
-    
-    n_samples, n_features = 5000, 300
-X = np.random.randn(n_samples, n_features)
-inds = np.arange(n_samples)
-np.random.shuffle(inds)
-X[inds[int(n_features / 1.2):]] = 0  # sparsify input
-print('input data sparsity: %f' % sparsity_ratio(X))
-coef = 3 * np.random.randn(n_features)
-inds = np.arange(n_features)
-np.random.shuffle(inds)
-coef[inds[n_features // 2:]] = 0  # sparsify coef
-print('true coef sparsity: %f' % sparsity_ratio(coef))
-y = np.dot(X, coef)
-    
-        xx = np.arange(start_dim, start_dim + n * step, step)
-    plt.subplot(212)
-    plt.title('Learning in high dimensional spaces')
-    plt.plot(xx, scikit_classifier_results, 'g-', label='classification')
-    plt.plot(xx, scikit_regressor_results, 'r-', label='regression')
-    plt.legend(loc='upper left')
-    plt.xlabel('number of dimensions')
-    plt.ylabel('Time (s)')
-    plt.axis('tight')
-    plt.show()
-
-    
-            for item in self.flash_briefings.get(briefing_id, []):
-            output = {}
-            if item.get(CONF_TITLE) is not None:
-                if isinstance(item.get(CONF_TITLE), template.Template):
-                    output[ATTR_TITLE_TEXT] = item[CONF_TITLE].async_render()
-                else:
-                    output[ATTR_TITLE_TEXT] = item.get(CONF_TITLE)
-    
-    PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Optional(CONF_HOST, default=DEFAULT_HOST): cv.string,
-    vol.Optional(CONF_PORT, default=DEFAULT_PORT): cv.port,
-    vol.Optional(CONF_DISCOVERY, default=True): cv.boolean,
-    vol.Optional(CONF_TIMEOUT, default=DEFAULT_TIMEOUT): cv.positive_int,
-    vol.Optional(CONF_IGNORED_CLICK_TYPES):
-        vol.All(cv.ensure_list, [vol.In(CLICK_TYPES)])
-})
-    
-        def get_device_name(self, device):
-        '''Return the name of the given device or None if we don't know.'''
-        if not self.last_results:
-            return None
-        for client in self.last_results:
-            if client.mac == device:
-                return client.ip
-        return None
-    
-    import requests
-import voluptuous as vol
-    
-        def get_swisscom_data(self):
-        '''Retrieve data from Swisscom and return parsed result.'''
-        url = 'http://{}/ws'.format(self.host)
-        headers = {CONTENT_TYPE: 'application/x-sah-ws-4-call+json'}
-        data = '''
-        {'service':'Devices', 'method':'get',
-        'parameters':{'expression':'lan and not self'}}'''
-    
-        def __init__(self, config):
-        '''Initialize the scanner.'''
-        self.host = config[CONF_HOST]
-        self.username = config[CONF_USERNAME]
-        self.password = config[CONF_PASSWORD]
-        self.last_results = {}
+    url = sys.argv[1]
+content = open(url,'rb').read()
+t1 = time.time()
+words = '/ '.join(jieba.cut(content))
