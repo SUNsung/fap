@@ -1,123 +1,147 @@
 
         
-              # Iterates over all of the objects for the given method (e.g. `:labels`).
-      #
-      # method - The method to send to Octokit for querying data.
-      # args - Any arguments to pass to the Octokit method.
-      def each_object(method, *args, &block)
-        return to_enum(__method__, method, *args) unless block_given?
+            str << '\r\n'
     
-    module Gitlab
-  module GithubImport
-    module Importer
-      class IssuesImporter
-        include ParallelScheduling
+    ###
+#
+# HTTP request class.
+#
+###
+class Request < Packet
     
-          # The base cache key to use for storing/retrieving issuable IDs.
-      CACHE_KEY = 'github-import/issuable-finder/%{project}/%{type}/%{iid}'.freeze
+    require 'rex/proto/ipmi/utils'
     
-            expose_attribute :iid, :title, :description, :source_branch,
-                         :source_branch_sha, :target_branch, :target_branch_sha,
-                         :milestone_number, :author, :assignee, :created_at,
-                         :updated_at, :merged_at, :source_repository_id,
-                         :target_repository_id, :source_repository_owner
+        data =
+    [   # Maximum access
+      0x00, 0x00,
+      # Reserved
+      0x00, 0x00
+    ].pack('C*') +
+    console_session_id +
+    [
+      0x00, 0x00, 0x00, 0x08,
+      # Cipher 0
+      0x00, 0x00, 0x00, 0x00,
+      0x01, 0x00, 0x00, 0x08,
+      # Cipher 0
+      0x00, 0x00, 0x00, 0x00,
+      0x02, 0x00, 0x00, 0x08,
+      # No Encryption
+      0x00, 0x00, 0x00, 0x00
+    ].pack('C*')
     
-        it 'does not send previously configured control targets when the current agent does not support them' do
-      select_agent_type('Commander Agent')
-      select2('SF Weather', from: 'Control targets')
-      select_agent_type('Webhook Agent')
-      fill_in(:agent_name, with: 'No control targets')
-      click_on 'Save'
-      expect(page).to have_content('No control targets')
-      agent = Agent.find_by(name: 'No control targets')
-      expect(agent.control_targets).to eq([])
-    end
+              # Encodes the Rex::Proto::Kerberos::CredentialCache::Principal into an String
+          #
+          # @return [String] encoded principal
+          def encode
+            encoded = ''
+            encoded << encode_name_type
+            encoded << [components.length].pack('N')
+            encoded << encode_realm
+            encoded << encode_components
     
-      describe '#status' do
-    it 'works for failed jobs' do
-      job.failed_at = Time.now
-      expect(status(job)).to eq('<span class='label label-danger'>failed</span>')
-    end
+    module Rex
+  module Proto
+    module Kerberos
+      module CredentialCache
+        # This class provides a representation of credential times stored in the Kerberos Credential Cache.
+        class Time < Element
+          # @!attribute auth_time
+          #   @return [Integer]
+          attr_accessor :auth_time
+          # @!attribute start_time
+          #   @return [Integer]
+          attr_accessor :start_time
+          # @!attribute end_time
+          #   @return [Integer]
+          attr_accessor :end_time
+          # @!attribute renew_till
+          #   @return [Integer]
+          attr_accessor :renew_till
     
-        it 'creates a scenario label with the given text' do
-      expect(scenario_label(scenario, 'Other')).to eq(
-        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Other</span>'
-      )
-    end
-  end
-    
-        it 'should ignore strings which just contain a JSONPath' do
-      expect(LiquidMigrator.convert_string('$.data')).to eq('$.data')
-      expect(LiquidMigrator.convert_string('$first_title')).to eq('$first_title')
-      expect(LiquidMigrator.convert_string(' $.data', true)).to eq(' $.data')
-      expect(LiquidMigrator.convert_string('lorem $.data', true)).to eq('lorem $.data')
-    end
-    it 'should raise an exception when encountering complex JSONPaths' do
-      expect { LiquidMigrator.convert_string('$.data.test.*', true) }.
-        to raise_error('JSONPath '$.data.test.*' is too complex, please check your migration.')
-    end
-  end
-    
-        def log_file_info(s)
-      puts '    #{magenta s}'
-    end
-    
-      GEMS_AND_ROOT_DIRECTORIES.each do |gem, directory|
-    file package(gem, '.gem') => ['pkg/', '#{directory + '/' + gem}.gemspec'] do |f|
-      sh 'cd #{directory} && gem build #{gem}.gemspec'
-      mv directory + '/' + File.basename(f.name), f.name
-    end
-    
-            # Set these key values to boolean 'true' to include in policy
-        NO_ARG_DIRECTIVES.each do |d|
-          if options.key?(d) && options[d].is_a?(TrueClass)
-            directives << d.to_s.sub(/_/, '-')
+                decrypted
           end
-        end
     
-          def escape_hash(hash)
-        hash = hash.dup
-        hash.each { |k,v| hash[k] = escape(v) }
-        hash
+                seq_asn1 = OpenSSL::ASN1::ASN1Data.new([seq], AP_REQ, :APPLICATION)
+    
+              # Decodes the Rex::Proto::Kerberos::Model::Element from the input. This
+          # method has been designed to be overridden by subclasses.
+          #
+          # @raise [NoMethodError]
+          def decode(input)
+            raise ::NoMethodError, 'Method designed to be overridden'
+          end
+    
+              # Encodes the nonce
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_nonce
+            bn = OpenSSL::BN.new(nonce.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+              # Rex::Proto::Kerberos::Model::KrbError encoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def encode
+            raise ::NotImplementedError, 'KrbError encoding not supported'
+          end
+    
+              # Rex::Proto::Kerberos::Model::LastRequest encoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def encode
+            raise ::NotImplementedError, 'LastRequest encoding not supported'
+          end
+    
+    get '/' do
+  halt erb(:login) unless params[:user]
+  erb :chat, :locals => { :user => params[:user].gsub(/\W/, '') }
+end
+    
+          def unmasked_token?(token)
+        token.length == TOKEN_LENGTH
       end
     
-    require 'stringex'
-    
-        def sizes
-      attrs = 'width='#{@sizes[0]}'' if @sizes[0]
-      attrs += ' height='#{@sizes[1]}'' if @sizes[1]
-      attrs
+      it 'allows for a custom authenticity token param' do
+    mock_app do
+      use Rack::Protection::AuthenticityToken, :authenticity_param => 'csrf_param'
+      run proc { |e| [200, {'Content-Type' => 'text/plain'}, ['hi']] }
     end
+    
+        def validate_plugins!
+      @plugins_to_package.each do |plugin_name|
+        if INVALID_PLUGINS_TO_EXPLICIT_PACK.any? { |invalid_name| plugin_name =~ invalid_name }
+          raise UnpackablePluginError, 'Cannot explicitly pack `#{plugin_name}` for offline installation'
+        end
+      end
+    end
+    
+        FileUtils.rm_rf(LogStash::Environment::CACHE_PATH)
+    validate_cache_location
+    archive_manager.extract(package_file, LogStash::Environment::CACHE_PATH)
+    puts('Unpacked at #{LogStash::Environment::CACHE_PATH}')
+    puts('The unpacked plugins can now be installed in local-only mode using bin/logstash-plugin install --local [plugin name]')
   end
-end
     
-    Before do
-  gemfile = ENV['BUNDLE_GEMFILE'].to_s
-  ENV['BUNDLE_GEMFILE'] = File.join(Dir.pwd, gemfile) unless gemfile.start_with?(Dir.pwd)
-  @framework_version = nil
-end
+        # remove 'system' local gems used by LS
+    local_gems = gemfile.locally_installed_gems.map(&:name) - NON_PLUGIN_LOCAL_GEMS
     
-      def migration_class_name
-    migration_name.camelize
-  end
+        not_matching_pipeline = described_class.new(source, pipeline_id, [], settings)
+    expect(subject).not_to eq(not_matching_pipeline)
     
-        # The aspect ratio of the dimensions.
-    def aspect
-      width / height
-    end
+    platforms = PlatformConfig.new
     
-        def make
-      geometry = GeometryParser.new(geometry_string.strip).make
-      geometry || raise(Errors::NotIdentifiedByImageMagickError.new)
-    end
+              it 'allow to install a specific version' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version 0.1.0 logstash-filter-qatest')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-qatest', '0.1.0')
+          end
+        end
+      end
     
-        def define
-      define_flush_errors
-      define_getters
-      define_setter
-      define_query
-      register_new_attachment
-      add_active_record_callbacks
-      add_paperclip_callbacks
-      add_required_validations
-    end
+        context 'with a specific plugin' do
+      let(:plugin_name) { 'logstash-input-stdin' }
+      it 'list the plugin and display the plugin name' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list #{plugin_name}')
+        expect(result).to run_successfully_and_output(/^#{plugin_name}$/)
+      end
