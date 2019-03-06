@@ -1,77 +1,85 @@
 
         
-                unless post && post.id
-          puts post.errors.full_messages if post
-          puts creator.errors.inspect
-          raise 'Failed to create description for trust level 3 lounge!'
-        end
-    
-      # Override prefixes to consider the scoped view.
-  # Notice we need to check for the request due to a bug in
-  # Action Controller tests that forces _prefixes to be
-  # loaded before even having a request object.
-  #
-  # This method should be public as it is in ActionPack
-  # itself. Changing its visibility may break other gems.
-  def _prefixes #:nodoc:
-    @_prefixes ||= if self.class.scoped_views? && request && devise_mapping
-      ['#{devise_mapping.scoped_path}/#{controller_name}'] + super
-    else
-      super
-    end
-  end
-    
-        def password_change(record, opts={})
-      devise_mail(record, :password_change, opts)
-    end
-  end
-end
-
-    
-      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
-     options[:store] != false && !env['devise.skip_timeoutable']
-    last_request_at = warden.session(scope)['last_request_at']
-    
-          # If the record is persisted, remove the remember token (but only if
-      # it exists), and save the record without validations.
-      def forget_me!
-        return unless persisted?
-        self.remember_token = nil if respond_to?(:remember_token)
-        self.remember_created_at = nil if self.class.expire_all_remember_me_on_sign_out
-        save(validate: false)
-      end
-    
-            # This is what is called on the class to actually execute it. Any
-        # subclasses should implement this method and do any option parsing
-        # and validation here.
-        def execute
-        end
-    
-            # Executes a command on the remote machine with administrative
-        # privileges. See {#execute} for documentation, as the API is the
-        # same.
-        #
-        # @see #execute
-        def sudo(command, opts=nil)
-        end
-    
-              return [main_args, sub_command, sub_args]
-        end
-      end
-    end
-  end
-end
-
-    
-            # This unregisters a plugin so that its components will no longer
-        # be used. Note that this should only be used for testing purposes.
-        def unregister(plugin)
-          if @registered.include?(plugin)
-            @logger.info('Unregistered: #{plugin.name}')
-            @registered.delete(plugin)
+                  def hidden_field_for_checkbox(options)
+            @unchecked_value ? tag('input', options.slice('name', 'disabled', 'form').merge!('type' => 'hidden', 'value' => @unchecked_value)) : ''.html_safe
           end
-        end
       end
     end
   end
 end
+
+    
+                # Prepend a hidden field to make sure something will be sent back to the
+            # server if all radio buttons are unchecked.
+            if options.fetch('include_hidden', true)
+              hidden_field + rendered_collection
+            else
+              rendered_collection
+            end
+          end
+    
+              builder = LabelBuilder.new(@template_object, @object_name, @method_name, @object, tag_value)
+    
+        def find_file(path, prefixes = [], *args)
+      _find_all(path, prefixes, args, true).first || raise(MissingTemplate.new(self, path, prefixes, *args))
+    end
+    
+    class Api::OEmbedController < Api::BaseController
+  respond_to :json
+    
+    class Api::Web::PushSubscriptionsController < Api::Web::BaseController
+  respond_to :json
+    
+      def set_rate_limit_headers
+    apply_header_limit
+    apply_header_remaining
+    apply_header_reset
+  end
+    
+      # This class is raised when a file already exists when trying to write.
+  class FileAlreadyExists < StandardError
+    # Get a human-readable error message
+    def to_s
+      return 'File already exists, refusing to continue: #{super}'
+    end # def to_s
+  end # class FileAlreadyExists
+    
+        return @name
+  end
+    
+        # npm installs dependencies in the module itself, so if you do
+    # 'npm install express' it installs dependencies (like 'connect')
+    # to: node_modules/express/node_modules/connect/...
+    #
+    # To that end, I don't think we necessarily need to include
+    # any automatic dependency information since every 'npm install'
+    # is fully self-contained. That's why you don't see any bother, yet,
+    # to include the package's dependencies in here.
+    #
+    # It's possible someone will want to decouple that in the future,
+    # but I will wait for that feature request.
+  end
+    
+        ::Dir.mkdir(File.join(builddir, 'manifests'))
+    manifests.each do |manifest|
+      dir = File.join(builddir, 'manifests', File.dirname(manifest))
+      logger.info('manifests targeting: #{dir}')
+      ::Dir.mkdir(dir) if !File.directory?(dir)
+    
+      # Sanitize package name.
+  # Some PyPI packages can be named 'python-foo', so we don't want to end up
+  # with a package named 'python-python-foo'.
+  # But we want packages named like 'pythonweb' to be suffixed
+  # 'python-pythonweb'.
+  def fix_name(name)
+    if name.start_with?('python')
+      # If the python package is called 'python-foo' strip the 'python-' part while
+      # prepending the package name prefix.
+      return [attributes[:python_package_name_prefix], name.gsub(/^python-/, '')].join('-')
+    else
+      return [attributes[:python_package_name_prefix], name].join('-')
+    end
+  end # def fix_name
+    
+        # FIXME: don't assume current directory writeable
+    FileUtils.touch(['fpm-dummy.tmp'])
