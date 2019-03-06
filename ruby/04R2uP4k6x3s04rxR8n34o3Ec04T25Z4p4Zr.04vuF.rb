@@ -1,35 +1,67 @@
 
         
-          it 'accepts a Bignum as a seed' do
-    srand(0x12345678901234567890)
-    srand.should == 0x12345678901234567890
-  end
+            def execute(command: nil, target_object: nil)
+      action_name = command.method_name
+      action_class_ref = class_ref_for_action(named: action_name)
+      parameter_map = {}
+      closure_argument_value = nil
     
-      ruby_version_is '2.6' do
-    it 'raises RuntimeError when `exception: true` is given and the command exits with a non-zero exit status' do
-      lambda { @object.system(ruby_cmd('exit 1'), exception: true) }.should raise_error(RuntimeError)
+          File.write(new_path, '1')
+      false
     end
     
-      caveats <<~EOS
-    Installation or Uninstallation may fail with Exit Code 19 (Conflicting Processes running) if Browsers, Safari Notification Service or SIMBL Services (e.g. Flashlight) are running or Adobe Creative Cloud or any other Adobe Products are already installed. See Logs in /Library/Logs/Adobe/Installers if Installation or Uninstallation fails, to identifify the conflicting processes.
-  EOS
-end
-
+        def rescue_file_error(e)
+      # We're also printing the new-lines, as otherwise the message is not very visible in-between the error and the stack trace
+      puts('')
+      FastlaneCore::UI.important('Error accessing file, this might be due to fastlane's directory handling')
+      FastlaneCore::UI.important('Check out https://docs.fastlane.tools/advanced/#directory-behavior for more details')
+      puts('')
+      raise e
+    end
     
-      desc 'update main and version in bower.json'
-  task :generate do
-    require 'bootstrap-sass'
-    Dir.chdir Bootstrap.gem_path do
-      spec       = JSON.parse(File.read 'bower.json')
+            expect(result).to eq('appledoc --project-name \'Project Name\' --project-company \'Company\' --use-single-star --keep-intermediate-files --search-undocumented-doc --exit-threshold \'2\' input/dir')
+      end
     
-      test 'edit pages within sub-directories' do
-    post '/create', :content => 'big smelly creatures', :page => 'Orc',
-         :path               => 'Mordor', :format => 'markdown', :message => 'oooh, scary'
+            inner_command = 'git describe --tags `git rev-list --tags --max-count=1`'
+        pseudocommand = 'git log --pretty=\'%B\' #{inner_command.shellescape}...HEAD --no-merges'
+        expect(result).to eq(pseudocommand)
+      end
     
-      s.test_files = s.files.select { |path| path =~ /^test\/test_.*\.rb/ }
-end
-
+          it 'handles the extensions parameter with a single element correctly' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', extensions: ['m'])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --include=\\*.m')
+      end
     
-    # Set ruby to UTF-8 mode
-# This is required for Ruby 1.8.7 which gollum still supports.
-$KCODE = 'U' if RUBY_VERSION[0, 3] == '1.8'
+          context 'when specify list of files to process' do
+        it 'adds use script input files option and environment variables' do
+          result = Fastlane::FastFile.new.parse('lane :test do
+            swiftlint(
+              files: ['AppDelegate.swift', 'path/to/project/src/Model.swift', 'path/to/project/test/Test.swift']
+            )
+          end').runner.execute(:test)
+    
+      it 'has no effect on immediate values' do
+    [nil, true, false].each do |v|
+      v.taint
+      v.tainted?.should == false
+    end
+  end
+    
+      platform_is_not :windows do
+    it 'returns true when passed ?l if the argument is a symlink' do
+      link = tmp('file_symlink.lnk')
+      File.symlink(@file, link)
+      begin
+        Kernel.test(?l, link).should be_true
+      ensure
+        rm_r link
+      end
+    end
+  end
+    
+        pod 'ObjCPod', path: 'ObjCPod'
+    pod 'SwiftPod', path: 'SwiftPod'
+    pod 'MixedPod', path: 'MixedPod'
+    pod 'CustomModuleMapPod', path: 'CustomModuleMapPod'
