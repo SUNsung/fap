@@ -1,33 +1,62 @@
 
         
-        # Exit cleanly from an early interrupt
-Signal.trap('INT') { exit 1 }
+        Gem::Specification.new do |gem|
+  gem.name          = 'capistrano'
+  gem.version       = Capistrano::VERSION
+  gem.authors       = ['Tom Clements', 'Lee Hambley']
+  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
+  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
+  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
+  gem.homepage      = 'http://capistranorb.com/'
     
-        def explicitly_declared_plugins_specs
-      @plugins_to_package.collect do |plugin_pattern|
-        specs = SpecificationHelpers.find_by_name_with_wildcards(plugin_pattern)
+        def print_config_variables
+      ['--print-config-variables', '-p',
+       'Display the defined config variables before starting the deployment tasks.',
+       lambda do |_value|
+         Configuration.env.set(:print_config_variables, true)
+       end]
+    end
+  end
+end
+
     
-      it 'records when the config was read' do
-    expect(subject.read_at).to be <= Time.now
+    module RailsCommandHelpers
+  def framework_version?(version_string)
+    framework_version =~ /^#{version_string}/
   end
     
-              it 'successfully install the plugin' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install #{gem_path_on_vagrant}')
-            expect(command).to install_successfully
-            expect(logstash).to have_installed?('logstash-filter-dns')
-          end
-        end
+        # Returns a String describing the file's content type
+    def detect
+      if blank_name?
+        SENSIBLE_DEFAULT
+      elsif empty_file?
+        EMPTY_TYPE
+      elsif calculated_type_matches.any?
+        calculated_type_matches.first
+      else
+        type_from_file_contents || SENSIBLE_DEFAULT
+      end.to_s
+    end
     
-        context 'update a specific plugin' do
-      it 'has executed successfully' do
-        cmd = logstash.run_command_in_path('bin/logstash-plugin update --no-verify #{plugin_name}')
-        expect(cmd.stdout).to match(/Updating #{plugin_name}/)
-        expect(logstash).not_to have_installed?(plugin_name, previous_version)
+        # Same as to_s
+    def inspect
+      to_s
+    end
+    
+        def add_active_record_callbacks
+      name = @name
+      @klass.send(:after_save) { send(name).send(:save) }
+      @klass.send(:before_destroy) { send(name).send(:queue_all_for_delete) }
+      if @klass.respond_to?(:after_commit)
+        @klass.send(:after_commit, on: :destroy) do
+          send(name).send(:flush_deletes)
+        end
+      else
+        @klass.send(:after_destroy) { send(name).send(:flush_deletes) }
       end
     end
     
-                it 'does not autocorrect the closing brace' do
-              new_source = autocorrect_source(source)
-              expect(new_source).to eq(source)
-            end
-          end
+        # Returns the Rails.env constant.
+    def rails_env attachment, style_name
+      Rails.env
+    end
