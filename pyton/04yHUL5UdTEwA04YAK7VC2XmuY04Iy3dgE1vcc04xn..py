@@ -1,96 +1,147 @@
 
         
-            def load(self):
-        try:
-            session_data = self._cache.get(self.cache_key)
-        except Exception:
-            # Some backends (e.g. memcache) raise an exception on invalid
-            # cache keys. If this happens, reset the session. See #17810.
-            session_data = None
-        if session_data is not None:
-            return session_data
-        self._session_key = None
-        return {}
+            vlevel: The level of errors to report.  Every error of confidence
+    >= verbose_level will be reported.  0 is a good default.
     
-        def get_decoded(self):
-        session_store_class = self.get_session_store_class()
-        return session_store_class().decode(self.session_data)
+    
+def _add_multilevel_rois_for_test(blobs, name):
+    '''Distributes a set of RoIs across FPN pyramid levels by creating new level
+    specific RoI blobs.
+    
+    
+def evaluate_masks(
+    json_dataset,
+    all_boxes,
+    all_segms,
+    output_dir,
+    use_salt=True,
+    cleanup=False
+):
+    if cfg.CLUSTER.ON_CLUSTER:
+        # On the cluster avoid saving these files in the job directory
+        output_dir = '/tmp'
+    res_file = os.path.join(
+        output_dir, 'segmentations_' + json_dataset.name + '_results')
+    if use_salt:
+        res_file += '_{}'.format(str(uuid.uuid4()))
+    res_file += '.json'
+    
+    
+def cityscapes_to_coco(cityscapes_id):
+    lookup = {
+        0: 0,  # ... background
+        1: 2,  # bicycle
+        2: 3,  # car
+        3: 1,  # person
+        4: 7,  # train
+        5: 8,  # truck
+        6: 4,  # motorcycle
+        7: 6,  # bus
+        8: -1,  # rider (-1 means rand init)
+    }
+    return lookup[cityscapes_id]
+    
+    '''Functions for using a Feature Pyramid Network (FPN).'''
+    
+    
+def _ratio_enum(anchor, ratios):
+    '''Enumerate a set of anchors for each aspect ratio wrt an anchor.'''
+    w, h, x_ctr, y_ctr = _whctrs(anchor)
+    size = w * h
+    size_ratios = size / ratios
+    ws = np.round(np.sqrt(size_ratios))
+    hs = np.round(ws * ratios)
+    anchors = _mkanchors(ws, hs, x_ctr, y_ctr)
+    return anchors
+    
+    
+def fpn_rpn(model):
+    logger.warn(
+        'Deprecated: use `MODEL.TYPE: generalized_rcnn` with '
+        '`MODEL.RPN_ONLY: True` and FPN enabled via configs'
+    )
+    return generalized_rcnn(model)
+    
+    '''Handle mapping from old network building function names to new names.
+    
+    
+def _build_forward_graph(model, single_gpu_build_func):
+    '''Construct the forward graph on each GPU.'''
+    all_loss_gradients = {}  # Will include loss gradients from all GPUs
+    # Build the model on each GPU with correct name and device scoping
+    for gpu_id in range(cfg.NUM_GPUS):
+        with c2_utils.NamedCudaScope(gpu_id):
+            all_loss_gradients.update(single_gpu_build_func(model))
+    return all_loss_gradients
+    
+    
+def add_single_scale_rpn_losses(model):
+    '''Add losses for a single scale RPN model (i.e., no FPN).'''
+    # Spatially narrow the full-sized RPN label arrays to match the feature map
+    # shape
+    model.net.SpatialNarrowAs(
+        ['rpn_labels_int32_wide', 'rpn_cls_logits'], 'rpn_labels_int32'
+    )
+    for key in ('targets', 'inside_weights', 'outside_weights'):
+        model.net.SpatialNarrowAs(
+            ['rpn_bbox_' + key + '_wide', 'rpn_bbox_pred'], 'rpn_bbox_' + key
+        )
+    loss_rpn_cls = model.net.SigmoidCrossEntropyLoss(
+        ['rpn_cls_logits', 'rpn_labels_int32'],
+        'loss_rpn_cls',
+        scale=model.GetLossScale()
+    )
+    loss_rpn_bbox = model.net.SmoothL1Loss(
+        [
+            'rpn_bbox_pred', 'rpn_bbox_targets', 'rpn_bbox_inside_weights',
+            'rpn_bbox_outside_weights'
+        ],
+        'loss_rpn_bbox',
+        beta=1. / 9.,
+        scale=model.GetLossScale()
+    )
+    loss_gradients = blob_utils.get_loss_gradients(
+        model, [loss_rpn_cls, loss_rpn_bbox]
+    )
+    model.AddLosses(['loss_rpn_cls', 'loss_rpn_bbox'])
+    return loss_gradients
 
     
-        def inner(*suffix):
-        return urljoin(httpbin_url, '/'.join(suffix))
+    from detectron.datasets import json_dataset
+from detectron.datasets import roidb as roidb_utils
+from detectron.utils import blob as blob_utils
+import detectron.roi_data.fast_rcnn as fast_rcnn_roi_data
     
-    import pytest
-    
-            self.host = host
-        self.port = port
-        self.requests_to_handle = requests_to_handle
-    
-                prep.headers['Authorization'] = self.build_digest_header(
-                prep.method, prep.url)
-            _r = r.connection.send(prep, **kwargs)
-            _r.history.append(r)
-            _r.request = prep
+        # Target values of -1 are 'don't care' / ignore labels
+    mask_targets = -blob_utils.ones(
+        (masks.shape[0], cfg.MODEL.NUM_CLASSES * M**2), int32=True
+    )
     
     
-USER = PASSWORD = '%!*'();:@&=+$,/?#[] '
-ENCODED_USER = compat.quote(USER, '')
-ENCODED_PASSWORD = compat.quote(PASSWORD, '')
+def elu(x):
+    '''指数线性单元'''
+    return tf.nn.elu(x)
+    
+    tf_float = tf.float32
+zeros = tf.initializers.zeros
+truncated_normal = tf.initializers.truncated_normal
+    
+    word_unk = 'aam'
+ngrams = compute_ngrams(word_unk, min_ngrams, max_ngrams)  # min_ngrams, max_ngrams = 2, 4
+word_vec = np.zeros(model.vector_size, dtype=np.float32)
+ngrams_found = 0
+for ngram in ngrams:
+    ngram_hash = ft_hash(ngram) % model.bucket
+    if ngram_hash in model.wv.hash2index:
+        word_vec += model.wv.vectors_ngrams[model.wv.hash2index[ngram_hash]]
+        ngrams_found += 1
     
     
-def benchmark(estimator, data):
-    gc.collect()
-    print('Benching %s' % estimator)
-    t0 = time()
-    estimator.fit(data)
-    training_time = time() - t0
-    data_t = estimator.transform(data)
-    data_r = estimator.inverse_transform(data_t)
-    reconstruction_error = np.mean(np.abs(data - data_r))
-    return {'time': training_time, 'error': reconstruction_error}
+def test_3():
+    for o in [1 << 8, (1 << 16) - 1, -((1 << 7) + 1), -(1 << 15)]:
+        check(3, o)
     
-    ratio = scikits_time / scipy_time
-    
-        # Print and plot the confusion matrix
-    cm = metrics.confusion_matrix(y_test, y_predicted)
-    print(cm)
-    
-    # Learn a frontier for outlier detection with several classifiers
-xx1, yy1 = np.meshgrid(np.linspace(-8, 28, 500), np.linspace(3, 40, 500))
-xx2, yy2 = np.meshgrid(np.linspace(3, 10, 500), np.linspace(-5, 45, 500))
-for i, (clf_name, clf) in enumerate(classifiers.items()):
-    plt.figure(1)
-    clf.fit(X1)
-    Z1 = clf.decision_function(np.c_[xx1.ravel(), yy1.ravel()])
-    Z1 = Z1.reshape(xx1.shape)
-    legend1[clf_name] = plt.contour(
-        xx1, yy1, Z1, levels=[0], linewidths=2, colors=colors[i])
-    plt.figure(2)
-    clf.fit(X2)
-    Z2 = clf.decision_function(np.c_[xx2.ravel(), yy2.ravel()])
-    Z2 = Z2.reshape(xx2.shape)
-    legend2[clf_name] = plt.contour(
-        xx2, yy2, Z2, levels=[0], linewidths=2, colors=colors[i])
-    
-    # The digits dataset
-digits = datasets.load_digits()
-    
-    This example shows the effect of imposing a connectivity graph to capture
-local structure in the data. The graph is simply the graph of 20 nearest
-neighbors.
-    
-    From the programming standpoint, it is interesting because it shows how
-to use the online API of the scikit-learn to process a very large
-dataset by chunks. The way we proceed is that we load an image at a time
-and extract randomly 50 patches from this image. Once we have accumulated
-500 of these patches (using 10 images), we run the `partial_fit` method
-of the online KMeans object, MiniBatchKMeans.
-    
-    # create an array from labels and values
-face_compressed = np.choose(labels, values)
-face_compressed.shape = face.shape
-    
-    Evaluate the ability of k-means initializations strategies to make
-the algorithm convergence robust as measured by the relative standard
-deviation of the inertia of the clustering (i.e. the sum of squared
-distances to the nearest cluster center).
+            for idx, expected in zip([idx1, idx2, idx3, idx4, idx5],
+                                 [exp1, exp2, exp3, exp4, exp5]):
+            result = idx._summary()
+            assert result == expected
