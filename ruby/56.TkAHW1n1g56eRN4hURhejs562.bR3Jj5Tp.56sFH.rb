@@ -1,68 +1,52 @@
 
         
-            it 'returns a correct icon tag for GitHub' do
-      icon = omniauth_provider_icon(:github)
-      expect(icon).to be_html_safe
-      elem = Nokogiri(icon).at('i.fa.fa-github')
-      expect(elem).to be_a Nokogiri::XML::Element
-    end
+                return return_val
+      rescue => ex
+        Dir.chdir(path_to_use) do
+          # Provide error block exception without color code
+          begin
+            error_blocks[current_platform].call(current_lane, ex, parameters) if current_platform && error_blocks[current_platform]
+            error_blocks[nil].call(current_lane, ex, parameters) if error_blocks[nil]
+          rescue => error_block_exception
+            UI.error('An error occurred while executing the `error` block:')
+            UI.error(error_block_exception.to_s)
+            raise ex # raise the original error message
+          end
+        end
     
-              weather_agent = scenario_import.scenario.agents.find_by(:guid => 'a-weather-agent')
-          trigger_agent = scenario_import.scenario.agents.find_by(:guid => 'a-trigger-agent')
+        def did_show_message?
+      file_name = '.did_show_opt_info'
     
-      it 'replaces invalid byte sequences in a message' do
-    log = AgentLog.new(:agent => agents(:jane_website_agent), level: 3)
-    log.message = '\u{3042}\xffA\x95'
-    expect { log.save! }.not_to raise_error
-    expect(log.message).to eq('\u{3042}<ff>A\<95>')
-  end
+            expect(result).to eq('git tag -am #{message.shellescape} #{tag.shellescape} #{commit}')
+      end
     
-        @opts = {
-      'api_key' => '800deeaf-e285-9d62-bc90-j999c1973cc9',
-      'path' => 'trackings'
-    }
+            inner_command = 'git describe --tags `git rev-list --tags --max-count=1`'
+        # this is not really the command that would have been executed, but a 'fabricated' representation for tests (by Actions.sh) that includes both command that would have been run
+        pseudocommand = 'git log --pretty=\'%B\' #{inner_command.shellescape}...HEAD'
+        expect(result).to eq(pseudocommand)
+      end
     
-      @event = Event.new
-  @event.agent = agents(:bob_weather_agent)
-  @event.payload = { :body => 'Sample message' }
-  @event.save!
-  end
+          context 'when specify mode explicitly' do
+        it 'uses lint mode as default' do
+          result = Fastlane::FastFile.new.parse('lane :test do
+            swiftlint
+          end').runner.execute(:test)
     
-      respond_to :json
+          it 'should shell escape keychain names when checking for installation' do
+        expect(FastlaneCore::CertChecker).to receive(:wwdr_keychain).and_return(keychain_name)
+        expect(FastlaneCore::Helper).to receive(:backticks).with(name_regex, anything).and_return('')
     
-      def update
-    raise ActiveRecord::RecordNotFound if @web_subscription.nil?
+              expected = 'FOO\\ BAR=I\\\'m\\ foo\\ bar BAZ=And\\ I\\\'m\\ baz'
+          expected = '\'FOO BAR\'=\'I'm foo bar\' BAZ=\'And I'm baz\'' if FastlaneCore::Helper.windows?
+          expect(value).to eq(expected)
+        end
     
-      def subscription_params
-    @subscription_params ||= params.require(:subscription).permit(:endpoint, keys: [:auth, :p256dh])
-  end
-    
-    # Exit cleanly from an early interrupt
-Signal.trap('INT') { exit 1 }
-    
-        def generate_temporary_path
-      Stud::Temporary.pathname
-    end
-    
-      # retrieve only the latest spec for all locally installed plugins
-  # @return [Hash] result hash {plugin_name.downcase => plugin_spec}
-  def find_latest_gem_specs
-    LogStash::PluginManager.all_installed_plugins_gem_specs(gemfile).inject({}) do |result, spec|
-      previous = result[spec.name.downcase]
-      result[spec.name.downcase] = previous ? [previous, spec].max_by{|s| s.version} : spec
-      result
-    end
-  end
+    if git.modified_files.include?('snapshot/lib/assets/SnapshotHelperXcode8.swift')
+  warn('You modified `SnapshotHelperXcode8.swift`, make sure to update the version number at the bottom of the file to notify users about the new helper file.')
 end
-
     
-        # Extracts the Geometry from a file (or path to a file)
-    def self.from_file(file)
-      GeometryDetector.new(file).make
-    end
-    
-        def raise_because_imagemagick_missing
-      raise Errors::CommandNotFoundError.new('Could not run the `identify` command. Please install ImageMagick.')
-    end
-  end
-end
+            c.action do |args, options|
+          Cert.config = FastlaneCore::Configuration.create(Cert::Options.available_options, options.__hash__)
+          Cert::Runner.new.launch
+        end
+      end
