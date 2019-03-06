@@ -1,97 +1,155 @@
 
         
-          smoke_user = User.seed do |u|
-    u.id = 0
-    u.name = 'smoke_user'
-    u.username = 'smoke_user'
-    u.username_lower = 'smoke_user'
-    u.password = 'P4ssw0rd'
-    u.active = true
-    u.approved = true
-    u.approved_at = Time.now
-    u.trust_level = TrustLevel[3]
-  end.first
+                # Parses the options given an OptionParser instance.
+        #
+        # This is a convenience method that properly handles duping the
+        # originally argv array so that it is not destroyed.
+        #
+        # This method will also automatically detect '-h' and '--help'
+        # and print help. And if any invalid options are detected, the help
+        # will be printed, as well.
+        #
+        # If this method returns `nil`, then you should assume that help
+        # was printed and parsing failed.
+        def parse_options(opts=nil)
+          # Creating a shallow copy of the arguments so the OptionParser
+          # doesn't destroy the originals.
+          argv = @argv.dup
     
-          if @actions_requiring_special_handling.include?(action_name)
-        command_return = run_action_requiring_special_handling(
-          command: command,
-          parameter_map: parameter_map,
-          action_return_type: action_class_ref.return_type
-        )
-        return command_return
-      end
-    
-          it 'Collects logs with specified number of commits' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          changelog_from_git_commits(commits_count: 10)
-        end').runner.execute(:test)
-    
-            it 'executes the correct git command' do
-          allow(Fastlane::Actions).to receive(:sh).with('git add #{path[0].shellescape} #{path[1].shellescape}', anything).and_return('')
-          result = Fastlane::FastFile.new.parse('lane :test do
-            git_add(path: #{path})
-          end').runner.execute(:test)
+            # Initializes the communicator with the machine that we will be
+        # communicating with. This base method does nothing (it doesn't
+        # even store the machine in an instance variable for you), so you're
+        # expected to override this and do something with the machine if
+        # you care about it.
+        #
+        # @param [Machine] machine The machine this instance is expected to
+        #   communicate with.
+        def initialize(machine)
         end
-      end
     
-          old_name = name
-      old_path = path
-      old_remote = path.git_origin
+            def initialize
+          @logger = Log4r::Logger.new('vagrant::plugin::v1::manager')
+          @registered = []
+        end
     
-        describe '%{name} style' do
-      it 'uses value passed in a hash argument' do
-        format('%{foo}', foo: 123).should == '123'
-      end
+              nil
+        end
     
-      platform_is_not :windows do
-    it 'returns true when passed ?l if the argument is a symlink' do
-      link = tmp('file_symlink.lnk')
-      File.symlink(@file, link)
-      begin
-        Kernel.test(?l, link).should be_true
-      ensure
-        rm_r link
-      end
+            # This method is called if the underlying machine ID changes. Providers
+        # can use this method to load in new data for the actual backing
+        # machine or to realize that the machine is now gone (the ID can
+        # become `nil`). No parameters are given, since the underlying machine
+        # is simply the machine instance given to this object. And no
+        # return value is necessary.
+        def machine_id_changed
+        end
+    
+    Then /^I should have (\d+) nsfw posts$/ do |num_posts|
+  page.should have_css('.nsfw-shield', count: num_posts.to_i)
+end
+    
+      class FetchWebfinger < Base
+    def perform(*_args)
+      # don't do real discovery in cucumber
     end
-  end
-    
-    describe 'Kernel.throw' do
-  it 'transfers control to the end of the active catch block waiting for symbol' do
-    catch(:blah) do
-      :value
-      throw :blah
-      fail('throw didn't transfer the control')
-    end.should be_nil
-  end
-    
-      it 'calls #write on $stderr if $VERBOSE is false' do
-    lambda {
-      $VERBOSE = false
-      warn('this is some simple text')
-    }.should output(nil, 'this is some simple text\n')
-  end
-    
-      it 'returns the method name as symbol' do
-    eval(@code, TOPLEVEL_BINDING).should equal :boom
   end
 end
 
     
-    group :development do
-  cp_gem 'claide',                'CLAide'
-  cp_gem 'cocoapods-core',        'Core'
-  cp_gem 'cocoapods-deintegrate', 'cocoapods-deintegrate'
-  cp_gem 'cocoapods-downloader',  'cocoapods-downloader'
-  cp_gem 'cocoapods-plugins',     'cocoapods-plugins'
-  cp_gem 'cocoapods-search',      'cocoapods-search'
-  cp_gem 'cocoapods-stats',       'cocoapods-stats'
-  cp_gem 'cocoapods-trunk',       'cocoapods-trunk'
-  cp_gem 'cocoapods-try',         'cocoapods-try'
-  cp_gem 'molinillo',             'Molinillo'
-  cp_gem 'nanaimo',               'Nanaimo'
-  cp_gem 'xcodeproj',             'Xcodeproj'
-    
-    class Profile
-  def pod_bin
-    File.expand_path('../pod', __FILE__)
+        it 'generates the contacts_json fixture', :fixture => true do
+      json = bob.contacts.map { |c|
+               ContactPresenter.new(c, bob).full_hash_with_person
+             }.to_json
+      save_fixture(json, 'contacts_json')
+    end
   end
+end
+
+    
+          it 'succeeds' do
+        expect(response).to be_success
+        post_request!
+      end
+    
+    ENV['GEM_HOME'] = ENV['GEM_PATH'] = LogStash::Environment.logstash_gem_home
+Gem.use_paths(LogStash::Environment.logstash_gem_home)
+    
+        def execute
+      raise PluginManager::FileNotFoundError, 'Can't file local file #{local_file}' unless ::File.exist?(local_file)
+      raise PluginManager::InvalidPackError, 'Invalid format, the pack must be in zip format' unless valid_format?(local_file)
+    
+      # We compare the before the update and after the update
+  def display_updated_plugins(previous_gem_specs_map)
+    update_count = 0
+    find_latest_gem_specs.values.each do |spec|
+      name = spec.name.downcase
+      if previous_gem_specs_map.has_key?(name)
+        if spec.version != previous_gem_specs_map[name].version
+          puts('Updated #{spec.name} #{previous_gem_specs_map[name].version.to_s} to #{spec.version.to_s}')
+          update_count += 1
+        end
+      else
+        puts('Installed #{spec.name} #{spec.version.to_s}')
+        update_count += 1
+      end
+    end
+    
+      describe '#system?' do
+    context 'when the pipeline is a system pipeline' do
+      let(:settings) { mock_settings({ 'pipeline.system' => true })}
+    
+              def serialize_resource(resource)
+            resource_serializer.new(
+              resource,
+              include: resource_includes,
+              sparse_fields: sparse_fields
+            ).serializable_hash
+          end
+    
+        SPREE_GEMS.each do |gem_name|
+      Dir.chdir(gem_name) do
+        sh 'gem build spree_#{gem_name}.gemspec'
+        mv 'spree_#{gem_name}-#{version}.gem', pkgdir
+      end
+    end
+    
+              def find_spree_current_order
+            Spree::Api::Dependencies.storefront_current_order_finder.constantize.new.execute(
+              store: spree_current_store,
+              user: spree_current_user,
+              token: order_token,
+              currency: current_currency
+            )
+          end
+    
+            def create
+          authorize! :create, Image
+          @image = scope.images.new(image_params)
+          if @image.save
+            respond_with(@image, status: 201, default_template: :show)
+          else
+            invalid_resource!(@image)
+          end
+        end
+    
+            def option_type_params
+          params.require(:option_type).permit(permitted_option_type_attributes)
+        end
+      end
+    end
+  end
+end
+
+    
+                import_params = if @current_user_roles.include?('admin')
+                              params[:order].present? ? params[:order].permit! : {}
+                            else
+                              order_params
+                            end
+    
+    module Jekyll
+    
+      class PageFilters < Octopress::Hooks::Page
+    def pre_render(page)
+      OctopressFilters::pre_filter(page)
+    end
