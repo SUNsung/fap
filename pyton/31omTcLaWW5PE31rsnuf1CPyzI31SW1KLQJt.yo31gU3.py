@@ -1,16 +1,20 @@
 
         
-            result['delete_rule'] = list()
-    result['delete_rule_rc'] = list()
-    for rule in current_rules:
-        if rule not in desired_rules:
-            deletions += 1
-            if not module.check_mode:
-                result['delete_rule'].append(rule)
-                rc = gateway.del_nat_rule(**rule)
-                result['delete_rule_rc'].append(rc)
-            result['changed'] = True
-    result['rules_deleted'] = deletions
+        
+def main():
+    print('Making key files...')
+    makeKeyFiles('elgamal', 2048)
+    print('Key files generation successful')
     
+        return clean
     
-if __name__ == '__main__':
+    def generateLargePrime(keysize = 1024):
+    while True:
+        num = random.randrange(2 ** (keysize - 1), 2 ** (keysize))
+        if isPrime(num):
+            return num
+    
+    from .hash_table import HashTable
+from number_theory.prime_numbers import next_prime, check_prime
+    
+        return res
