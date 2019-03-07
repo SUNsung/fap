@@ -1,94 +1,109 @@
 
         
-        require 'clamp'
-require 'pluginmanager/util'
-require 'pluginmanager/gemfile'
-require 'pluginmanager/install'
-require 'pluginmanager/remove'
-require 'pluginmanager/list'
-require 'pluginmanager/update'
-require 'pluginmanager/pack'
-require 'pluginmanager/unpack'
-require 'pluginmanager/generate'
-require 'pluginmanager/prepare_offline_pack'
-require 'pluginmanager/proxy_support'
-configure_proxy
+                  def instantiate_builder(builder_class, item, value, text, html_options)
+            builder_class.new(@template_object, @object_name, @method_name, item,
+                              sanitize_attribute_name(value), text, value, html_options)
+          end
     
-            if specs.size > 0
-          specs
-        else
-          raise LogStash::PluginManager::PluginNotFoundError, 'Cannot find plugins matching: `#{plugin_pattern}`'
+              super(object_name, method_name, template_object, options)
         end
-      end.flatten
+    
+    require 'action_view/helpers/tags/placeholderable'
+    
+        @statuses = @account.statuses.permitted_for(@account, signed_request_account)
+    @statuses = params[:min_id].present? ? @statuses.paginate_by_min_id(LIMIT, params[:min_id]).reverse : @statuses.paginate_by_max_id(LIMIT, params[:max_id])
+    @statuses = cache_collection(@statuses, Status)
+  end
+    
+        def create
+      authorize ReportNote, :create?
+    
+      def show
+    @status = status_finder.status
+    render json: @status, serializer: OEmbedSerializer, width: maxwidth_or_default, height: maxheight_or_default
+  end
+    
+    class Api::SubscriptionsController < Api::BaseController
+  before_action :set_account
+  respond_to :txt
+    
+        12.times do |i|
+      day     = i.weeks.ago.to_date
+      week_id = day.cweek
+      week    = Date.commercial(day.cwyear, week_id)
+    
+        unless active_session.web_push_subscription.nil?
+      active_session.web_push_subscription.destroy!
+      active_session.update!(web_push_subscription: nil)
     end
     
-            if Utils::HttpClient.remote_file_exist?(uri)
-          PluginManager.ui.debug('Found package at: #{uri}')
-          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
-        else
-          PluginManager.ui.debug('Package not found at: #{uri}')
-          return nil
-        end
-      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
-        # This probably means there is a firewall in place of the proxy is not correctly configured.
-        # So lets skip this strategy but log a meaningful errors.
-        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
+      def update
+    setting.data = params[:data]
+    setting.save!
     
-        puts('Unpacking #{package_file}')
+    if $0 == __FILE__
+  $:.unshift File.expand_path('../../lib', __FILE__)
+end
     
-      # retrieve only the latest spec for all locally installed plugins
-  # @return [Hash] result hash {plugin_name.downcase => plugin_spec}
-  def find_latest_gem_specs
-    LogStash::PluginManager.all_installed_plugins_gem_specs(gemfile).inject({}) do |result, spec|
-      previous = result[spec.name.downcase]
-      result[spec.name.downcase] = previous ? [previous, spec].max_by{|s| s.version} : spec
-      result
+        %w[iOS macOS].each do |platform|
+        abstract_target '#{platform} Pods' do
+            project '#{platform} Modules.xcodeproj'
+    
+          # This double assignment is to prevent an 'unused variable' warning on
+      # Ruby 1.9.3.  Yes, it is dumb, but I don't like Ruby yelling at me.
+      frames = frames = exception.backtrace.map { |line|
+        frame = OpenStruct.new
+        if line =~ /(.*?):(\d+)(:in `(.*)')?/
+          frame.filename = $1
+          frame.lineno = $2.to_i
+          frame.function = $4
+    }
+    
+          def session_key
+        @session_key ||= options[:session_key]
+      end
     end
   end
 end
 
     
-      it 'returns the pipeline id' do
-    expect(subject.pipeline_id).to eq(pipeline_id)
-  end
+        it 'returns both complete and incomplete orders when only complete orders is not checked' do
+      Spree::Order.create! email: 'incomplete@example.com', completed_at: nil, state: 'cart'
+      click_on 'Filter'
+      uncheck 'q_completed_at_not_null'
+      click_on 'Filter Results'
     
-      def send_sinatra_file(path, &missing_file_block)
-    file_path = File.join(File.dirname(__FILE__), 'public',  path)
-    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
-    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
-  end
+      s.add_dependency 'spree_api', s.version
+  s.add_dependency 'spree_core', s.version
     
-        def render(context)
-      quote = paragraphize(super)
-      author = '<strong>#{@by.strip}</strong>' if @by
-      if @source
-        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
-        parts = []
-        url.each do |part|
-          if (parts + [part]).join('/').length < 32
-            parts << part
+      s.add_dependency 'spree_api', s.version
+  s.add_dependency 'spree_core', s.version
+    
+          def product_scope
+        if @current_user_roles.include?('admin')
+          scope = Product.with_deleted.accessible_by(current_ability, :read).includes(*product_includes)
+    
+            def find_address
+          if @order.bill_address_id == params[:id].to_i
+            @order.bill_address
+          elsif @order.ship_address_id == params[:id].to_i
+            @order.ship_address
+          else
+            raise CanCan::AccessDenied
           end
         end
-        source = parts.join('/')
-        source << '/&hellip;' unless source == @source
       end
-      if !@source.nil?
-        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
-      elsif !@title.nil?
-        cite = ' <cite>#{@title}</cite>'
-      end
-      blockquote = if @by.nil?
-        quote
-      elsif cite
-        '#{quote}<footer>#{author + cite}</footer>'
-      else
-        '#{quote}<footer>#{author}</footer>'
-      end
-      '<blockquote>#{blockquote}</blockquote>'
     end
+  end
+end
+
     
-        def handle_gist_redirecting(data)
-      redirected_url = data.header['Location']
-      if redirected_url.nil? || redirected_url.empty?
-        raise ArgumentError, 'GitHub replied with a 302 but didn't provide a location in the response headers.'
-      end
+            def create
+          authorize! :create, Image
+          @image = scope.images.new(image_params)
+          if @image.save
+            respond_with(@image, status: 201, default_template: :show)
+          else
+            invalid_resource!(@image)
+          end
+        end
