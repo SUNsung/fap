@@ -1,168 +1,210 @@
 
         
-                # This contains all the provider plugins by name, and returns
-        # the provider class and options.
-        #
-        # @return [Hash<Symbol, Registry>]
-        attr_reader :providers
-    
-              # Set all of our instance variables on the new class
-          [self, other].each do |obj|
-            obj.instance_variables.each do |key|
-              # Ignore keys that start with a double underscore. This allows
-              # configuration classes to still hold around internal state
-              # that isn't propagated.
-              if !key.to_s.start_with?('@__')
-                # Don't set the value if it is the unset value, either.
-                value = obj.instance_variable_get(key)
-                result.instance_variable_set(key, value) if value != UNSET_VALUE
-              end
-            end
-          end
-    
-        odie 'Unknown command: #{cmd}' unless path
-    puts path
-  end
-end
-
-    
-      def process_bootstrap
-    log_status 'Convert Bootstrap LESS to Sass'
-    puts ' repo   : #@repo_url'
-    puts ' branch : #@branch_sha #@repo_url/tree/#@branch'
-    puts ' save to: #{@save_to.to_json}'
-    puts ' twbs cache: #{@cache_path}'
-    puts '-' * 60
-    
-    
-    # We need to keep a list of shared mixin names in order to convert the includes correctly
-    # Before doing any processing we read shared mixins from a file
-    # If a mixin is nested, it gets prefixed in the list (e.g. #gradient > .horizontal to 'gradient-horizontal')
-    def read_mixins(mixins_file, nested: {})
-      mixins = get_mixin_names(mixins_file, silent: true)
-      nested.each do |selector, prefix|
-        # we use replace_rules without replacing anything just to use the parsing algorithm
-        replace_rules(mixins_file, selector) { |rule|
-          mixins += get_mixin_names(unindent(unwrap_rule_block(rule)), silent: true).map { |name| '#{prefix}-#{name}' }
-          rule
-        }
-      end
-      mixins.uniq!
-      mixins.sort!
-      log_file_info 'mixins: #{mixins * ', '}' unless mixins.empty?
-      mixins
-    end
-    
-        alias log puts
-    
-        # get sha of the branch (= the latest commit)
-    def get_branch_sha
-      @branch_sha ||= begin
-        if @branch + '\n' == %x[git rev-parse #@branch]
-          @branch
-        else
-          cmd = 'git ls-remote #{Shellwords.escape 'https://github.com/#@repo'} #@branch'
-          log cmd
-          result = %x[#{cmd}]
-          raise 'Could not get branch sha!' unless $?.success? && !result.empty?
-          result.split(/\s+/).first
+                def preload_stages_warnings
+          # This preloads the number of warnings for every stage, ensuring
+          # that Ci::Stage#has_warnings? doesn't execute any additional
+          # queries.
+          @pipeline.stages.each { |stage| stage.number_of_warnings }
         end
       end
     end
-    
-      # Do not eager load code on boot. This avoids loading your whole application
-  # just for the purpose of running a single test. If you are using a tool that
-  # preloads Rails for running tests, you may have to set it to true.
-  config.eager_load = false
-    
-      gem.add_development_dependency 'danger'
-  gem.add_development_dependency 'mocha'
-  gem.add_development_dependency 'rspec'
-  gem.add_development_dependency 'rubocop', '0.48.1'
+  end
 end
 
     
-      def test_file_exists(path)
-    exists?('f', path)
+          def default_api_endpoint
+        OmniAuth::Strategies::GitHub.default_options[:client_options][:site]
+      end
+    
+            # issue - An instance of `Gitlab::GithubImport::Representation::Issue`
+        # project - An instance of `Project`
+        # client - An instance of `Gitlab::GithubImport::Client`
+        def initialize(issue, project, client)
+          @issue = issue
+          @project = project
+          @client = client
+          @label_finder = LabelFinder.new(project)
+        end
+    
+              new(hash)
+        end
+    
+            # attributes - A Hash containing the raw note details. The keys of this
+        #              Hash must be Symbols.
+        def initialize(attributes)
+          @attributes = attributes
+        end
+    
+            # attributes - A Hash containing the user details. The keys of this
+        #              Hash (and any nested hashes) must be symbols.
+        def initialize(attributes)
+          @attributes = attributes
+        end
+      end
+    end
+  end
+end
+
+    
+      if respond_to?(:helper)
+    helper DeviseHelper
   end
     
-      at_exit do
-    if ENV['KEEP_RUNNING']
-      puts 'Vagrant vm will be left up because KEEP_RUNNING is set.'
-      puts 'Rerun without KEEP_RUNNING set to cleanup the vm.'
+          def remember_me_is_active?(resource)
+        return false unless resource.respond_to?(:remember_me)
+        scope = Devise::Mapping.find_scope!(resource)
+        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
+        resource.remember_me?(token, generated_at)
+      end
+    
+          # Sign in a user that already was authenticated. This helper is useful for logging
+      # users in after sign up. All options given to sign_in is passed forward
+      # to the set_user method in warden.
+      # If you are using a custom warden strategy and the timeoutable module, you have to
+      # set `env['devise.skip_timeout'] = true` in the request to use this method, like we do
+      # in the sessions controller: https://github.com/plataformatec/devise/blob/master/app/controllers/devise/sessions_controller.rb#L7
+      #
+      # Examples:
+      #
+      #   sign_in :user, @user                      # sign_in(scope, resource)
+      #   sign_in @user                             # sign_in(resource)
+      #   sign_in @user, event: :authentication     # sign_in(resource, options)
+      #   sign_in @user, store: false               # sign_in(resource, options)
+      #
+      def sign_in(resource_or_scope, *args)
+        options  = args.extract_options!
+        scope    = Devise::Mapping.find_scope!(resource_or_scope)
+        resource = args.last || resource_or_scope
+    
+          def stored_location_key_for(resource_or_scope)
+        scope = Devise::Mapping.find_scope!(resource_or_scope)
+        '#{scope}_return_to'
+      end
+    
+          # Checks if the reset password token sent is within the limit time.
+      # We do this by calculating if the difference between today and the
+      # sending date does not exceed the confirm in time configured.
+      # Returns true if the resource is not responding to reset_password_sent_at at all.
+      # reset_password_within is a model configuration, must always be an integer value.
+      #
+      # Example:
+      #
+      #   # reset_password_within = 1.day and reset_password_sent_at = today
+      #   reset_password_period_valid?   # returns true
+      #
+      #   # reset_password_within = 5.days and reset_password_sent_at = 4.days.ago
+      #   reset_password_period_valid?   # returns true
+      #
+      #   # reset_password_within = 5.days and reset_password_sent_at = 5.days.ago
+      #   reset_password_period_valid?   # returns false
+      #
+      #   # reset_password_within = 0.days
+      #   reset_password_period_valid?   # will always return false
+      #
+      def reset_password_period_valid?
+        reset_password_sent_at && reset_password_sent_at.utc >= self.class.reset_password_within.ago.utc
+      end
+    
+        # use Feedbag as a backup to Google Feeds Api
+    if rss_url.nil?
+      rss_url = Feedbag.find(web_url).first
+      if rss_url.nil?
+        suggested_paths = ['/rss', '/feed', '/feeds', '/atom.xml', '/feed.xml', '/rss.xml', '.atom']
+        suggested_paths.each do |suggested_path|
+          rss_url = Feedbag.find('#{web_url.chomp('/')}#{suggested_path}').first
+          break if rss_url
+        end
+      end
+    end
+  end
+    
+      # Configure an appender that will write log events to STDOUT. A colorized
+  # pattern layout is used to format the log events into strings before
+  # writing.
+  Logging.appenders.stdout('stdout',
+                           auto_flushing: true,
+                           layout:        Logging.layouts.pattern(
+                             pattern:      pattern,
+                             color_scheme: 'bright'
+                           )
+                          ) if config.log_to.include? 'stdout'
+    
+      def remove_duplicates
+    where = 'WHERE s1.user_id = s2.user_id AND s1.shareable_id = s2.shareable_id AND '\
+      's1.shareable_type = s2.shareable_type AND s1.id > s2.id'
+    if AppConfig.postgres?
+      execute('DELETE FROM share_visibilities AS s1 USING share_visibilities AS s2 #{where}')
     else
-      vagrant_cli_command('destroy -f')
-    end
-  end
-    
-        def version
-      ['--version', '-V',
-       'Display the program version.',
-       lambda do |_value|
-         puts 'Capistrano Version: #{Capistrano::VERSION} (Rake Version: #{Rake::VERSION})'
-         exit
-       end]
-    end
-    
-        def paragraphize(input)
-      '<p>#{input.lstrip.rstrip.gsub(/\n\n/, '</p><p>').gsub(/\n/, '<br/>')}</p>'
+      execute('DELETE s1 FROM share_visibilities s1, share_visibilities s2 #{where}')
     end
   end
 end
+
     
-        def get_cache_file_for(gist, file)
-      bad_chars = /[^a-zA-Z0-9\-_.]/
-      gist      = gist.gsub bad_chars, ''
-      file      = file.gsub bad_chars, ''
-      md5       = Digest::MD5.hexdigest '#{gist}-#{file}'
-      File.join @cache_folder, '#{gist}-#{file}-#{md5}.cache'
-    end
+    Then /^I should see an image in the publisher$/ do
+  photo_in_publisher.should be_present
+end
     
-      class IncludeArrayTag < Liquid::Tag
-    Syntax = /(#{Liquid::QuotedFragment}+)/
-    def initialize(tag_name, markup, tokens)
-      if markup =~ Syntax
-        @array_name = $1
-      else
-        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
+        it 'lets a user destroy their like' do
+      current_user = controller.send(:current_user)
+      expect(current_user).to receive(:retract).with(@like)
+    
+          # Returns the iteration variable of the `for` loop.
+      #
+      # @return [Node] The iteration variable of the `for` loop
+      def variable
+        node_parts[0]
       end
     
-          def product_scope
-        if @current_user_roles.include?('admin')
-          scope = Product.with_deleted.accessible_by(current_ability, :read).includes(*product_includes)
-    
-            def log_state_changes
-          if @order.previous_changes[:state]
-            @order.log_state_changes(
-              state_name: 'order',
-              old_state: @order.previous_changes[:state].first,
-              new_state: @order.previous_changes[:state].last
-            )
-          end
+            pairs.map(&:value).each do |value|
+          yield value
         end
     
-            def destroy
-          if @property
-            authorize! :destroy, @property
-            @property.destroy
-            respond_with(@property, status: 204)
-          else
-            invalid_resource!(@property)
+          # Returns the index of the `when` branch within the `case` statement.
+      #
+      # @return [Integer] the index of the `when` branch
+      def branch_index
+        parent.when_branches.index(self)
+      end
+    
+              def resource_finder
+            Spree::Api::Dependencies.storefront_completed_order_finder.constantize
           end
+    
+            def new; end
+    
+            def remove_coupon_code
+          find_order(true)
+          authorize! :update, @order, order_token
+          @handler = Spree::PromotionHandler::Coupon.new(@order).remove(params[:coupon_code])
+          status = @handler.successful? ? 200 : 404
+          render 'spree/api/v1/promotions/handler', status: status
         end
     
-            def update
-          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
-          if @return_authorization.update_attributes(return_authorization_params)
-            respond_with(@return_authorization, default_template: :show)
-          else
-            invalid_resource!(@return_authorization)
-          end
+            def authorize
+          perform_payment_action(:authorize)
         end
     
-            def create
-          @order = Spree::Order.find_by!(number: params.fetch(:shipment).fetch(:order_id))
-          authorize! :read, @order
-          authorize! :create, Shipment
-          quantity = params[:quantity].to_i
-          @shipment = @order.shipments.create(stock_location_id: params.fetch(:stock_location_id))
+    When /^I configure the application to use '([^\']+)' from this project$/ do |name|
+  append_to_gemfile 'gem '#{name}', :path => '#{PROJECT_ROOT}''
+  steps %{And I successfully run `bundle install --local`}
+end
+    
+        def each_definition
+      @attachments.each do |klass, attachments|
+        attachments.each do |name, options|
+          yield klass, name, options
+        end
+      end
+    end
+    
+        def type_from_file_contents
+      type_from_mime_magic || type_from_file_command
+    rescue Errno::ENOENT => e
+      Paperclip.log('Error while determining content type: #{e}')
+      SENSIBLE_DEFAULT
+    end
+    
+          @klass.send :define_method, @name do |*args|
+        ivar = '@attachment_#{name}'
+        attachment = instance_variable_get(ivar)
