@@ -1,325 +1,200 @@
 
         
-        
-class HStoreExtension(CreateExtension):
+                    gc.collect()
+            print('- benchmarking Lasso')
+            clf = Lasso(alpha=alpha, fit_intercept=False,
+                        precompute=precompute)
+            tstart = time()
+            clf.fit(X, Y)
+            lasso_results.append(time() - tstart)
     
-        def flush(self):
-        '''
-        Remove the current session data from the database and regenerate the
-        key.
-        '''
-        self.clear()
-        self.delete(self.session_key)
-        self._session_key = None
+        for n_components in [i.astype(int) for i in
+                         np.linspace(data.shape[1] // 10,
+                                     data.shape[1], num=4)]:
+        all_times = defaultdict(list)
+        all_errors = defaultdict(list)
+        pca = PCA(n_components=n_components)
+        rpca = PCA(n_components=n_components, svd_solver='randomized',
+                   random_state=1999)
+        results_dict = {k: benchmark(est, data) for k, est in [('pca', pca),
+                                                               ('rpca', rpca)]}
+    
+    
+def rbf_kernels(X, n_jobs):
+    return pairwise_kernels(X, metric='rbf', n_jobs=n_jobs, gamma=0.1)
+    
+        xx = range(0, n * step, step)
+    plt.figure('scikit-learn tree benchmark results')
+    plt.subplot(211)
+    plt.title('Learning with varying number of samples')
+    plt.plot(xx, scikit_classifier_results, 'g-', label='classification')
+    plt.plot(xx, scikit_regressor_results, 'r-', label='regression')
+    plt.legend(loc='upper left')
+    plt.xlabel('number of samples')
+    plt.ylabel('Time (s)')
+    
+    
+if __name__ == '__main__':
+    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
+    # block to be able to use a multi-core grid search that also works under
+    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
+    # The multiprocessing module is used as the backend of joblib.Parallel
+    # that is used when n_jobs != 1 in GridSearchCV
+    
+    from sklearn.cluster import AgglomerativeClustering
+from sklearn.neighbors import kneighbors_graph
+    
+    These images how similar features are merged together using
+feature agglomeration.
+'''
+print(__doc__)
+    
+    #----------------------------------------------------------------------
+# 2D embedding of the digits dataset
+print('Computing embedding')
+X_red = manifold.SpectralEmbedding(n_components=2).fit_transform(X)
+print('Done.')
+    
+        publicKey, privateKey = generateKey(keySize)
+    print('\nWriting public key to file %s_pubkey.txt...' % name)
+    with open('%s_pubkey.txt' % name, 'w') as fo:
+        fo.write('%d,%d,%d,%d' % (publicKey[0], publicKey[1], publicKey[2], publicKey[3]))
+    
+            while self.values[new_key] is not None \
+                and self.values[new_key] != key:
+            i += 1
+            new_key = self.hash_function(key + i*i) if not \
+                self.balanced_factor() >= self.lim_charge else None
+    
+    
+class SubArray:
+    
+    	currPos = 0
+	while currPos < len(bitString):
+		currPart = bitString[currPos:currPos+512]
+		mySplits = []
+		for i in range(16):
+			mySplits.append(int(rearrange(currPart[32*i:32*i+32]),2))
+		yield mySplits
+		currPos += 512
+    
+    def main():
+    '''
+    In this demonstration we're generating a sample data set from the sin function in numpy.
+    We then train a decision tree on the data set and use the decision tree to predict the
+    label of 10 different test values. Then the mean squared error over this test is displayed.
+    '''
+    X = np.arange(-1., 1., 0.005)
+    y = np.sin(X)
+    
+    Requirements:
+  - sklearn
+  - numpy
+  - matplotlib
+    
+    '''
+* Wondering how this method works !
+* It's pretty simple.
+* Let's say you need to calculate a ^ b
+* RULE 1 : a ^ b = (a*a) ^ (b/2) ---- example : 4 ^ 4 = (4*4) ^ (4/2) = 16 ^ 2
+* RULE 2 : IF b is ODD, then ---- a ^ b = a * (a ^ (b - 1)) :: where (b - 1) is even.
+* Once b is even, repeat the process to get a ^ b
+* Repeat the process till b = 1 OR b = 0, because a^1 = a AND a^0 = 1
+*
+* As far as the modulo is concerned,
+* the fact : (a*b) % c = ((a%c) * (b%c)) % c
+* Now apply RULE 1 OR 2 whichever is required.
+'''
 
     
-    from django.contrib.sessions.backends.base import (
-    CreateError, SessionBase, UpdateError,
-)
-from django.core.exceptions import SuspiciousOperation
-from django.db import DatabaseError, IntegrityError, router, transaction
-from django.utils import timezone
-from django.utils.functional import cached_property
     
-    '''
-requests._internal_utils
-~~~~~~~~~~~~~~
+def random_letters(ctbi, i):
+  pass  # Put your code here...
     
-    import pytest
-from requests.compat import urljoin
-    
-            Currently, this closes the PoolManager and any active ProxyManager,
-        which closes any pooled connections.
-        '''
-        self.poolmanager.clear()
-        for proxy in self.proxy_manager.values():
-            proxy.clear()
-    
-            if algorithm is None:
-            _algorithm = 'MD5'
-        else:
-            _algorithm = algorithm.upper()
-        # lambdas assume digest modules are imported at the top level
-        if _algorithm == 'MD5' or _algorithm == 'MD5-SESS':
-            def md5_utf8(x):
-                if isinstance(x, str):
-                    x = x.encode('utf-8')
-                return hashlib.md5(x).hexdigest()
-            hash_utf8 = md5_utf8
-        elif _algorithm == 'SHA':
-            def sha_utf8(x):
-                if isinstance(x, str):
-                    x = x.encode('utf-8')
-                return hashlib.sha1(x).hexdigest()
-            hash_utf8 = sha_utf8
-        elif _algorithm == 'SHA-256':
-            def sha256_utf8(x):
-                if isinstance(x, str):
-                    x = x.encode('utf-8')
-                return hashlib.sha256(x).hexdigest()
-            hash_utf8 = sha256_utf8
-        elif _algorithm == 'SHA-512':
-            def sha512_utf8(x):
-                if isinstance(x, str):
-                    x = x.encode('utf-8')
-                return hashlib.sha512(x).hexdigest()
-            hash_utf8 = sha512_utf8
-    
-    # The scheme of the identifier. Typical schemes are ISBN or URL.
-#epub_scheme = ''
-    
-    
-def session():
-    '''
-    Returns a :class:`Session` for context-management.
-    
-    
-def default_headers():
-    '''
-    :rtype: requests.structures.CaseInsensitiveDict
-    '''
-    return CaseInsensitiveDict({
-        'User-Agent': default_user_agent(),
-        'Accept-Encoding': ', '.join(('gzip', 'deflate')),
-        'Accept': '*/*',
-        'Connection': 'keep-alive',
-    })
-    
-        def ensure_absent(self):
-        '''Ensures the rule and targets are absent'''
-        rule_description = self.rule.describe()
-        if not rule_description:
-            # Rule doesn't exist so don't need to delete
-            return
-        self.rule.delete()
-    
-    - debug: msg='{{ my_vm_eips.addresses | json_query(\'[?private_ip_address=='10.0.0.5']\') }}'
-    
-        if state == 'present':
-        for required in ['name', 'description', 'subnets']:
-            if not module.params.get(required):
-                module.fail_json(msg=str('Parameter %s required for state='present'' % required))
-    else:
-        for not_allowed in ['description', 'subnets']:
-            if module.params.get(not_allowed):
-                module.fail_json(msg=str('Parameter %s not allowed for state='absent'' % not_allowed))
-    
-            _check_mode(module, True)
-        firewall_policy = oneandone_conn.create_firewall_policy(
-            firewall_policy=firewall_policy_obj,
-            firewall_policy_rules=firewall_rules
-        )
-    
-            _thresholds = []
-        for treshold in thresholds:
-            key = treshold.keys()[0]
-            if key in threshold_entities:
-                _threshold = oneandone.client.Threshold(
-                    entity=key,
-                    warning_value=treshold[key]['warning']['value'],
-                    warning_alert=str(treshold[key]['warning']['alert']).lower(),
-                    critical_value=treshold[key]['critical']['value'],
-                    critical_alert=str(treshold[key]['critical']['alert']).lower())
-                _thresholds.append(_threshold)
-    
-            elif desired_state == 'offline':
-            if current_state == HOST_ABSENT:
-                self.fail(msg='absent host cannot be placed in offline state')
-            elif current_state in [HOST_STATES.MONITORED, HOST_STATES.DISABLED]:
-                if one.host.status(host.ID, HOST_STATUS.OFFLINE):
-                    self.wait_for_host_state(host, [HOST_STATES.OFFLINE])
-                    result['changed'] = True
-                else:
-                    self.fail(msg='could not set host offline')
-            elif current_state in [HOST_STATES.OFFLINE]:
-                pass
+                load_tests = None
+            tests = None
+            name = self._get_name_from_path(full_path)
+            try:
+                package = self._get_module_from_name(name)
+            except case.SkipTest as e:
+                return _make_skipped_test(name, e, self.suiteClass), False
+            except:
+                error_case, error_message = \
+                    _make_failed_import_test(name, self.suiteClass)
+                self.errors.append(error_message)
+                return error_case, False
             else:
-                self.fail(msg='unknown host state %s, cowardly refusing to change state to offline' % current_state_name)
+                load_tests = getattr(package, 'load_tests', None)
+                # Mark this package as being in load_tests (possibly ;))
+                self._loading_packages.add(name)
+                try:
+                    tests = self.loadTestsFromModule(package, pattern=pattern)
+                    if load_tests is not None:
+                        # loadTestsFromModule(package) has loaded tests for us.
+                        return tests, False
+                    return tests, True
+                finally:
+                    self._loading_packages.discard(name)
+        else:
+            return None, False
     
-    #example for a DNAT
-- hosts: localhost
-  connection: local
-  tasks:
-   - vca_nat:
-       instance_id: 'b15ff1e5-1024-4f55-889f-ea0209726282'
-       vdc_name: 'benz_ansible'
-       state: 'present'
-       nat_rules:
-         - rule_type: DNAT
-           original_ip: 203.0.113.23
-           original_port: 22
-           translated_ip: 192.0.2.42
-           translated_port: 22
-    
-    
-DOCUMENTATION = '''
----
-module: ipa_dnszone
-author: Fran Fitzpatrick (@fxfitz)
-short_description: Manage FreeIPA DNS Zones
-description:
-- Add and delete an IPA DNS Zones using IPA API
-options:
-  zone_name:
-    description:
-    - The DNS zone name to which needs to be managed.
-    required: true
-  state:
-    description: State to ensure
-    required: false
-    default: present
-    choices: ['present', 'absent']
-extends_documentation_fragment: ipa.documentation
-version_added: '2.5'
-'''
-    
-    # Create nested groups
-- group_by:
-    key: el{{ ansible_distribution_major_version }}-{{ ansible_architecture }}
-    parents:
-      - el{{ ansible_distribution_major_version }}
-    
-    - bigpanda:
-    component: '{{ deployment.component }}'
-    version: '{{ deployment.version }}'
-    token: '{{ deployment.token }}'
-    state: finished
-  delegate_to: localhost
-'''
-    
-        def test_default_encoder(self):
-        from acme.fields import RFC3339Field
-        self.assertEqual(
-            self.encoded, RFC3339Field.default_encoder(self.decoded))
-    
-        @classmethod
-    # pylint: disable=arguments-differ,too-many-arguments
-    def sign(cls, payload, key, alg, nonce, url=None, kid=None):
-        # Per ACME spec, jwk and kid are mutually exclusive, so only include a
-        # jwk field if kid is not provided.
-        include_jwk = kid is None
-        return super(JWS, cls).sign(payload, key=key, alg=alg,
-                                    protect=frozenset(['nonce', 'url', 'kid', 'jwk', 'alg']),
-                                    nonce=nonce, url=url, kid=kid,
-                                    include_jwk=include_jwk)
-
+    PYTHON3_OSERROR_EXCEPTIONS = (
+    'BrokenPipeError',
+    'ChildProcessError',
+    'ConnectionAbortedError',
+    'ConnectionError',
+    'ConnectionRefusedError',
+    'ConnectionResetError',
+    'FileExistsError',
+    'FileNotFoundError',
+    'InterruptedError',
+    'IsADirectoryError',
+    'NotADirectoryError',
+    'PermissionError',
+    'ProcessLookupError',
+    'TimeoutError',
+)
     
     
-class JWSTest(unittest.TestCase):
-    '''Tests for acme.jws.JWS.'''
+def open_binary(package: Package, resource: Resource) -> BinaryIO:
+    '''Return a file-like object opened for binary reading of the resource.'''
+    resource = _normalize_path(resource)
+    package = _get_package(package)
+    reader = _get_resource_reader(package)
+    if reader is not None:
+        return reader.open_resource(resource)
+    _check_location(package)
+    absolute_package_path = os.path.abspath(package.__spec__.origin)
+    package_path = os.path.dirname(absolute_package_path)
+    full_path = os.path.join(package_path, resource)
+    try:
+        return open(full_path, mode='rb')
+    except OSError:
+        # Just assume the loader is a resource loader; all the relevant
+        # importlib.machinery loaders are and an AttributeError for
+        # get_data() will make it clear what is needed from the loader.
+        loader = cast(ResourceLoader, package.__spec__.loader)
+        data = None
+        if hasattr(package.__spec__.loader, 'get_data'):
+            with suppress(OSError):
+                data = loader.get_data(full_path)
+        if data is None:
+            package_name = package.__spec__.name
+            message = '{!r} resource not found in {!r}'.format(
+                resource, package_name)
+            raise FileNotFoundError(message)
+        else:
+            return BytesIO(data)
     
-    # Documents to append as an appendix to all manuals.
-#texinfo_appendices = []
-    
-            '''
-        error_files = self.aug.match('/augeas//error')
-    
-            self.assertEqual(len(matches), 1)
-        self.assertEqual(self.parser.get_arg(matches[0]), '1234')
-    
-        def test_nonexistent_generic(self):
-        with mock.patch('certbot.util.get_os_info') as mock_info:
-            mock_info.return_value = ('nonexistent', 'irrelevant')
-            with mock.patch('certbot.util.get_systemd_os_like') as mock_like:
-                mock_like.return_value = ['unknonwn']
-                self.assertEqual(entrypoint.get_configurator(),
-                                 configurator.ApacheConfigurator)
-    
-    
-class Migration(DataMigration):
-    def forwards(self, orm):
-        db.commit_transaction()
-        try:
-            self._forwards(orm)
-        except Exception:
-            # Explicitly resume the transaction because
-            # South is going to try and roll it back, but when
-            # it can't find one, it'll error itself, masking
-            # the actual exception being raised
-            #
-            # See https://github.com/getsentry/sentry/issues/5035
-            db.start_transaction()
-            raise
-        db.start_transaction()
-    
-            # Deleting model 'EnvironmentProject'
-        db.delete_table('sentry_environmentproject')
-    
-            # Adding field 'ApiToken.application'
-        db.add_column(
-            'sentry_apitoken',
-            'application',
-            self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                to=orm['sentry.ApiApplication'], null=True
-            ),
-            keep_default=False
-        )
+    # Create the base text message.
+msg = EmailMessage()
+msg['Subject'] = 'Ayons asperges pour le déjeuner'
+msg['From'] = Address('Pepé Le Pew', 'pepe', 'example.com')
+msg['To'] = (Address('Penelope Pussycat', 'penelope', 'example.com'),
+             Address('Fabrette Pussycat', 'fabrette', 'example.com'))
+msg.set_content('''\
+Salut!
     
     
-class Migration(DataMigration):
-    def forwards(self, orm):
-        db.commit_transaction()
-        try:
-            self._forwards(orm)
-        except Exception:
-            # Explicitly resume the transaction because
-            # South is going to try and roll it back, but when
-            # it can't find one, it'll error itself, masking
-            # the actual exception being raised
-            #
-            # See https://github.com/getsentry/sentry/issues/5035
-            db.start_transaction()
-            raise
-        db.start_transaction()
-    
-        def backwards(self, orm):
-        # Removing unique constraint on 'UserOption', fields ['user', 'organization', 'key']
-        db.delete_unique('sentry_useroption', ['user_id', 'organization_id', 'key'])
-    
-    
-def contains(name):
-    '''Determine if the dataset is in the catalog.'''
-    return name in _DATASETS.keys()
-    
-            return self.net.Conv(
-            blobs_in, blob_out, kernel=kernel, order=self.order, **kwargs
-        )
-    
-    
-def _add_fast_rcnn_head(
-    model, add_roi_box_head_func, blob_in, dim_in, spatial_scale_in
-):
-    '''Add a Fast R-CNN head to the model.'''
-    blob_frcn, dim_frcn = add_roi_box_head_func(
-        model, blob_in, dim_in, spatial_scale_in
-    )
-    fast_rcnn_heads.add_fast_rcnn_outputs(model, blob_frcn, dim_frcn)
-    if model.train:
-        loss_gradients = fast_rcnn_heads.add_fast_rcnn_losses(model)
-    else:
-        loss_gradients = None
-    return loss_gradients
-    
-    from detectron.datasets import json_dataset
-from detectron.datasets import roidb as roidb_utils
-from detectron.utils import blob as blob_utils
-import detectron.roi_data.fast_rcnn as fast_rcnn_roi_data
-    
-    
-def compute_targets(ex_rois, gt_rois, weights=(1.0, 1.0, 1.0, 1.0)):
-    '''Compute bounding-box regression targets for an image.'''
-    return box_utils.bbox_transform_inv(ex_rois, gt_rois, weights).astype(
-        np.float32, copy=False
-    )
-
-    
-    
-def add_keypoint_rcnn_blobs(
-    blobs, roidb, fg_rois_per_image, fg_inds, im_scale, batch_idx
-):
-    '''Add Mask R-CNN keypoint specific blobs to the given blobs dictionary.'''
-    # Note: gt_inds must match how they're computed in
-    # datasets.json_dataset._merge_proposal_boxes_into_roidb
-    gt_inds = np.where(roidb['gt_classes'] > 0)[0]
-    max_overlaps = roidb['max_overlaps']
-    gt_keypoints = roidb['gt_keypoints']
+if __name__ == '__main__':
+    main()
