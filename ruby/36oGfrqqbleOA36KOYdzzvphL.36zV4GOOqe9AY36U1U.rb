@@ -1,48 +1,29 @@
 
         
-            def confirmation_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :confirmation_instructions, opts)
+            group = Group.create!(name: 'bob')
+    group.add(moderator)
+    group.save
+    
+        def current_url
+      context[:url]
     end
     
-          def forget_cookie_values(resource)
-        Devise::Controllers::Rememberable.cookie_values.merge!(resource.rememberable_options)
+          def process_url?(url)
+        base_urls.any? { |base_url| base_url.contains?(url) }
       end
     
-          # Sign out all active users or scopes. This helper is useful for signing out all roles
-      # in one click. This signs out ALL scopes in warden. Returns true if there was at least one logout
-      # and false if there was no user logged in on all scopes.
-      def sign_out_all_scopes(lock=true)
-        users = Devise.mappings.keys.map { |s| warden.user(scope: s, run_callbacks: false) }
-    
-        def default_constraints(options)
-      @constraints = Hash.new
-      @constraints.merge!(options[:constraints]) if options[:constraints]
+      describe '#casks' do
+    it 'returns an empty array if there is no match' do
+      expect(subject.casks).to eq []
     end
-    
-          # Resets reset password token and send reset password instructions by email.
-      # Returns the token sent in the e-mail.
-      def send_reset_password_instructions
-        token = set_reset_password_token
-        send_reset_password_instructions_notification(token)
-    
-          def self.required_fields(klass)
-        []
-      end
-    
-      if rss_url && rss_url.length > 0
-    blogs.push(Struct::Blog.new(name, web_url, rss_url))
-  else
-    unavailable.push(Struct::Blog.new(name, web_url, rss_url))
   end
-end
     
-        # From asking people, it seems MacPorts does not have a `prefix` command, like
-    # Homebrew does, so make an educated guess:
-    if port_prefix = prefix_from_bin('port')
-      prefixes << port_prefix
-    end
+      it 'accepts and uses a seed of 0' do
+    srand(0)
+    srand.should == 0
+  end
     
-    #{stack}
-#{executable_path}
-### Plugins
+    describe 'Kernel#system' do
+  it 'is a private method' do
+    Kernel.should have_private_instance_method(:system)
+  end
