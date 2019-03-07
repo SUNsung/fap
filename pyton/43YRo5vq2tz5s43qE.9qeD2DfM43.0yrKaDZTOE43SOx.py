@@ -1,137 +1,212 @@
 
         
-            :param id: id of post to get
-    :param check_author: require the current user to be the author
-    :return: the post with author information
-    :raise 404: if a post with the given id doesn't exist
-    :raise 403: if the current user isn't the author
-    '''
-    post = get_db().execute(
-        'SELECT p.id, title, body, created, author_id, username'
-        ' FROM post p JOIN user u ON p.author_id = u.id'
-        ' WHERE p.id = ?',
-        (id,)
-    ).fetchone()
+        
+class CallState(Enum):
     
+        def deal_card(self):
+        try:
+            card = self.cards[self.deal_index]
+            card.is_available = False
+            self.deal_index += 1
+        except IndexError:
+            return None
+        return card
     
-def init_app(app):
-    '''Register database functions with the Flask app. This is called by
-    the application factory.
-    '''
-    app.teardown_appcontext(close_db)
-    app.cli.add_command(init_db_command)
-
+        def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer)
+        ]
     
-            .. versionadded:: 0.11
+            (2016-01, url0), 1
+        (2016-01, url0), 1
+        (2016-01, url1), 1
         '''
-        mappings = []
-        if len(mapping) == 1:
-            if hasattr(mapping[0], 'items'):
-                mappings.append(mapping[0].items())
-            else:
-                mappings.append(mapping[0])
-        elif len(mapping) > 1:
-            raise TypeError(
-                'expected at most 1 positional argument, got %d' % len(mapping)
-            )
-        mappings.append(kwargs.items())
-        for mapping in mappings:
-            for (key, value) in mapping:
-                if key.isupper():
-                    self[key] = value
-        return True
+        url = self.extract_url(line)
+        period = self.extract_year_month(line)
+        yield (period, url), 1
     
-        :param data: Bytes in unknown UTF encoding.
-    :return: UTF encoding name
+    
+class LookupService(object):
+    
+    
+class Page(object):
+    
+          # And finally, divide pair_path_embeddings by num_paths element-wise.
+      self.pair_path_embeddings = tf.div(
+          self.pair_path_embeddings, self.num_paths)
+      vec_inputs.append(self.pair_path_embeddings)
+    
+      if output_dist == 'poisson':
+    rates = means = conversion_factor * model_vals['output_dist_params']
+    plot_time_series(rates, bidx, n_to_plot=n_to_plot, scale=scale,
+                     title=col_title + ' rates (LFADS - red, Truth - black)')
+  elif output_dist == 'gaussian':
+    means_vars = model_vals['output_dist_params']
+    means, vars = np.split(means_vars,2, axis=2) # bxtxn
+    stds = np.sqrt(vars)
+    plot_time_series(means, bidx, n_to_plot=n_to_plot, scale=scale,
+                     title=col_title + ' means (LFADS - red, Truth - black)')
+    plot_time_series(means+stds, bidx, n_to_plot=n_to_plot, scale=scale,
+                     color='c')
+    plot_time_series(means-stds, bidx, n_to_plot=n_to_plot, scale=scale,
+                     color='c')
+  else:
+    assert 'NIY'
+    
+      Args:
+    sentence: Sentence words.
+    vocab: Vocabulary. Contains max word chard id length and converts between
+        words and ids.
+  '''
+  targets = np.zeros([BATCH_SIZE, NUM_TIMESTEPS], np.int32)
+  weights = np.ones([BATCH_SIZE, NUM_TIMESTEPS], np.float32)
+    
+      Args:
+    values: Value given by the Wasserstein Discriminator of shape [batch_size,
+      sequence_length] to an imputed batch (real and fake).
+    is_real_input: tf.bool Tensor of shape [batch_size, sequence_length]. If
+      true, it indicates that the label is known.
+    
+    
+def zip_seq_pred_crossent(id_to_word, sequences, predictions, cross_entropy):
+  '''Zip together the sequences, predictions, cross entropy.'''
+  indices = convert_to_indices(sequences)
+    
+      # Unstack Tensors into lists.
+  rewards_list = tf.unstack(rewards, axis=1)
+  log_probs_list = tf.unstack(log_probs, axis=1)
+  missing = 1. - tf.cast(present, tf.float32)
+  missing_list = tf.unstack(missing, axis=1)
+    
+        # Maximize reward.
+    gen_grads = tf.gradients(-final_gen_reward, gen_vars)
+    gen_grads_clipped, _ = tf.clip_by_global_norm(gen_grads,
+                                                  FLAGS.grad_clipping)
+    maximize_op = gen_optimizer.apply_gradients(
+        zip(gen_grads_clipped, gen_vars), global_step=global_step)
+    
+            if row1 == row2:
+            plaintext += table[row1*5+(col1-1)%5]
+            plaintext += table[row2*5+(col2-1)%5]
+        elif col1 == col2:
+            plaintext += table[((row1-1)%5)*5+col1]
+            plaintext += table[((row2-1)%5)*5+col2]
+        else: # rectangle
+            plaintext += table[row1*5+col2]
+            plaintext += table[row2*5+col1]
+    
+    	if len(sys.argv) == 1:
+		try:
+			n = int(raw_input('Enter a number: '))
+			print(partition(n))
+		except ValueError:
+			print('Please enter a number.')
+	else:
+		try:
+			n = int(sys.argv[1])
+			print(partition(n))
+		except ValueError:
+			print('Please pass a number.')
+    
+            if self.depth == 1:
+            self.prediction = np.mean(y)
+            return
+    
+        log_predict = np.log(predict+1)
+    log_actual = np.log(actual+1)
+    
     '''
-    head = data[:4]
-    
-        def to_json(self, value):
-        return value.hex
-    
-            url = url_parse(path)
-        base_url = '{scheme}://{netloc}/{path}'.format(
-            scheme=url.scheme or url_scheme,
-            netloc=url.netloc or http_host,
-            path=app_root.lstrip('/')
-        )
-        path = url.path
-    
-        def iter_lines(self, chunk_size):
-        yield self.body, b''
-    
-            '''
-        available_plugins = plugin_manager.get_formatters_grouped()
-        self.enabled_plugins = []
-        for group in groups:
-            for cls in available_plugins[group]:
-                p = cls(env=env, **kwargs)
-                if p.enabled:
-                    self.enabled_plugins.append(p)
-    
-        if 'win32' in str(sys.platform).lower():
-        # Terminal colors for Windows
-        install_requires.append('colorama>=0.2.4')
-    
-    
-def test_credentials_in_url_auth_flag_has_priority(httpbin_both):
-    '''When credentials are passed in URL and via -a at the same time,
-     then the ones from -a are used.'''
-    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
-                   auth='user:wrong')
-    r = http('--auth=user:password', 'GET', url)
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
-    
-    
-def test_max_redirects(httpbin):
-    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
-             error_exit_ok=True)
-    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
+* Wondering how this method works !
+* It's pretty simple.
+* Let's say you need to calculate a ^ b
+* RULE 1 : a ^ b = (a*a) ^ (b/2) ---- example : 4 ^ 4 = (4*4) ^ (4/2) = 16 ^ 2
+* RULE 2 : IF b is ODD, then ---- a ^ b = a * (a ^ (b - 1)) :: where (b - 1) is even.
+* Once b is even, repeat the process to get a ^ b
+* Repeat the process till b = 1 OR b = 0, because a^1 = a AND a^0 = 1
+*
+* As far as the modulo is concerned,
+* the fact : (a*b) % c = ((a%c) * (b%c)) % c
+* Now apply RULE 1 OR 2 whichever is required.
+'''
 
     
-    
-def test_unicode_json_item_verbose(httpbin):
-    r = http('--verbose', '--json',
-             'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
-    assert HTTP_OK in r
-    assert UNICODE in r
+        freqOrder = []
+    for freqPair in freqPairs:
+        freqOrder.append(freqPair[1])
     
     
-def calibration(prob,outcome,n_bins=10):
-    '''Calibration measurement for a set of predictions.
+def get_scanner(hass, config):
+    '''Return the Swisscom device scanner.'''
+    scanner = SwisscomDeviceScanner(config[DOMAIN])
     
-    fare_bracket_size = 10
-number_of_price_brackets = fare_ceiling / fare_bracket_size
-number_of_classes = 3                             # I know there were 1st, 2nd and 3rd classes on board.
-number_of_classes = len(np.unique(data[0::,2]))   # But it's better practice to calculate this from the Pclass directly:
-                                                  # just take the length of an array of UNIQUE values in column index 2
+                if self.add_timestamp:
+                text = '{} {}\n'.format(dt_util.utcnow().isoformat(), message)
+            else:
+                text = '{}\n'.format(message)
+            file.write(text)
+
     
-    '''
-Example: compute A^n + B^n on 2 GPUs
-Results on 8 cores with 2 GTX-980:
- * Single GPU computation time: 0:00:11.277449
- * Multi GPU computation time: 0:00:07.131701
-'''
-#Create random large matrix
-A = np.random.rand(1e4, 1e4).astype('float32')
-B = np.random.rand(1e4, 1e4).astype('float32')
+        def _get_room(self, room):
+        '''Get Room object, creating it if necessary.'''
+        from hipnotify import Room
+        if room not in self._rooms:
+            self._rooms[room] = Room(
+                token=self._token, room_id=room, endpoint_url=self._host)
+        return self._rooms[room]
     
-        LOGPATS  = r'(\S+) (\S+) \[(.*?)\] (\S+) (\S+) ' \
-               r'(\S+) (\S+) (\S+) ('([^']+)'|-) ' \
-               r'(\S+) (\S+) (\S+) (\S+) (\S+) (\S+) ' \
-               r'('([^']+)'|-) ('([^']+)'|-)'
-    NUM_ENTRIES_PER_LINE = 17
-    logpat = re.compile(LOGPATS)
+    _LOGGER = logging.getLogger(__name__)
     
-            def is_prime(num):
-            if num == 2:
-                return True
-            for i in range(2, int(num ** 0.5) + 1):
-                if num % i == 0:
-                    return False
-            return True
+        def assert_same_dict(self, data, expected_data, prefix=None):
+        prefix = prefix or []
+        for k in set(data.keys() + expected_data.keys()):
+            current_prefix = prefix + [k]
+            want = expected_data.get(k)
+            got = data.get(k)
+            if isinstance(want, dict) and isinstance(got, dict):
+                self.assert_same_dict(got, want, prefix=current_prefix)
+            else:
+                self.assertEqual(
+                    got, want,
+                    'Mismatch for %s: %r != %r' % (
+                        '.'.join(current_prefix), got, want
+                    )
+                )
     
-            for i in range(row_begin, row_end+1):
-            res.append(matrix[i][col_end])
-        col_end -= 1
+            get_or_create_customer_profile(self.user)
+    
+    
+class TestModule(js.Module):
+    def get_default_source(self, source):
+        return TestFileSource(source)
+    
+            perm_set = TestPermissionSet()
+        self.assertTrue(perm_set.is_valid())
+        perm_set['x'] = True
+        self.assertTrue(perm_set.is_valid())
+        perm_set[perm_set.ALL] = True
+        self.assertTrue(perm_set.is_valid())
+        perm_set['z'] = True
+        self.assertFalse(perm_set.is_valid())
+    
+        def test_no_resize(self):
+        image = dict(url='http://s3.amazonaws.com/a.jpg', width=1200,
+                      height=800)
+        url = self.provider.resize_image(image)
+        self.assertEqual(url, 'http://s3.amazonaws.com/a.jpg')
+    
+        def test_narwhal_detector(self):
+        user_agent = 'narwhal-iOS/2306 by det0ur'
+        outs = detect(user_agent)
+        self.assertEqual(outs['browser']['name'],
+                         NarwhalForRedditDetector.name)
+    
+        def assert_invalid(self, body, header, error, **expected):
+        expected.setdefault('global_version', -1)
+        expected.setdefault('version', -1)
+        expected.setdefault('platform', None)
+        expected.setdefault('has_mac', False)
+        expected['success'] = False
+        expected['error'] = error
+        return self._assert_validity(body, header, **expected)
