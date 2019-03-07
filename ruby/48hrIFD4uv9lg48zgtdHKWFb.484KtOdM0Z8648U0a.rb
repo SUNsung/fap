@@ -1,116 +1,150 @@
 
         
-        require 'benchmark/ips'
-require 'jekyll'
-require 'json'
-    
-    CONTENT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
-    
-      Jekyll::External.require_if_present(Jekyll::External.blessed_gems) do |g, ver_constraint|
-    cmd = g.split('-').last
-    p.command(cmd.to_sym) do |c|
-      c.syntax cmd
-      c.action do
-        Jekyll.logger.abort_with 'You must install the '#{g}' gem' \
-          ' version #{ver_constraint} to use the 'jekyll #{cmd}' command.'
-      end
-    end
-  end
-    
-    module Jekyll
-  module Commands
-    class Serve
-      # The LiveReload protocol requires the server to serve livereload.js over HTTP
-      # despite the fact that the protocol itself uses WebSockets.  This custom connection
-      # class addresses the dual protocols that the server needs to understand.
-      class HttpAwareConnection < EventMachine::WebSocket::Connection
-        attr_reader :reload_body, :reload_size
-    
-            def strip_coderay_prefix(hash)
-          hash.each_with_object({}) do |(key, val), hsh|
-            cleaned_key = key.to_s.gsub(%r!\Acoderay_!, '')
-    
-        def deprecation_message(message)
-      Jekyll.logger.warn 'Deprecation:', message
-    end
-    
-        it 'correctly finds visible notifications' do
-      pm
-      expect(Notification.visible.count).to eq(1)
-      post.topic.trash!
-      expect(Notification.visible.count).to eq(0)
-    end
-    
-        Category.transaction do
-      lounge.group_names = ['trust_level_3']
-      unless lounge.save
-        puts lounge.errors.full_messages
-        raise 'Failed to set permissions on trust level 3 lounge category!'
-      end
-    
-      #
-  # Initializes an HTTP packet header class that inherits from a Hash base
-  # class.
-  #
-  def initialize
-    self.dcase_hash = {}
-    
-              # Encodes a Rex::Proto::Kerberos::Model::Checksum into an ASN.1 String
           #
-          # @return [String]
-          def encode
-            elems = []
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_type], 0, :CONTEXT_SPECIFIC)
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_checksum], 1, :CONTEXT_SPECIFIC)
+  # More advanced [] that does downcase comparison.
+  #
+  def [](key)
+    begin
+      rv = self.fetch(key)
+    rescue IndexError
+      rv = nil
+    end
+    if (rv == nil)
+      begin
+        rv = self.dcase_hash[key.downcase]
+      rescue IndexError
+        rv = nil
+      end
+    end
     
-              # Decodes the start_time field
+        data =
+    [   # Maximum access
+      0x00, 0x00,
+      # Reserved
+      0x00, 0x00
+    ].pack('C*') +
+    console_session_id +
+    [
+      0x00, 0x00, 0x00, 0x08,
+      0x01, 0x00, 0x00, 0x00,
+      0x01, 0x00, 0x00, 0x08,
+      # HMAC-SHA1
+      0x01, 0x00, 0x00, 0x00,
+      0x02, 0x00, 0x00, 0x08,
+      # AES Encryption
+      0x01, 0x00, 0x00, 0x00
+    ].pack('C*')
+    
+              # Decodes the error_code field
           #
           # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Time]
-          def decode_start_time(input)
-            input.value[0].value
+          # @return [Integer]
+          def decode_error_code(input)
+            input.value[0].value.to_i
           end
     
-              # Rex::Proto::Kerberos::Model::KdcResponse encoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def encode
-            raise ::NotImplementedError, 'KdcResponse encoding not supported'
-          end
-    
-    # Use this to fill in an entire form with data from a table. Example:
+    # The module that contains everything Sass-related:
 #
-#   When I fill in the following:
-#     | Account Number | 5002       |
-#     | Expiry date    | 2009-11-01 |
-#     | Note           | Nice guy   |
-#     | Wants Email?   |            |
+# * {Sass::Engine} is the class used to render Sass/SCSS within Ruby code.
+# * {Sass::Plugin} is interfaces with web frameworks (Rails and Merb in particular).
+# * {Sass::SyntaxError} is raised when Sass encounters an error.
+# * {Sass::CSS} handles conversion of CSS to Sass.
 #
-# TODO: Add support for checkbox, select og option
-# based on naming conventions.
-#
-When /^(?:|I )fill in the following:$/ do |fields|
-  fields.rows_hash.each do |name, value|
-    When %{I fill in '#{name}' with '#{value}'}
+# Also see the {file:SASS_REFERENCE.md full Sass reference}.
+module Sass
+  class << self
+    # @private
+    attr_accessor :tests_running
   end
-end
     
-        def definitions_for(klass)
-      parent_classes = klass.ancestors.reverse
-      parent_classes.each_with_object({}) do |ancestor, inherited_definitions|
-        inherited_definitions.deep_merge! @attachments[ancestor]
+        # The name of the mixin in which the error occurred.
+    # This could be `nil` if the error occurred outside a mixin.
+    #
+    # @return [String]
+    def sass_mixin
+      sass_backtrace.first[:mixin]
+    end
+    
+          if output_path
+        @options[:to] ||=
+          case output_path
+          when /\.scss$/; :scss
+          when /\.sass$/; :sass
+          end
       end
+    
+          Sass::Plugin.on_template_modified do |template|
+        puts '>>> Change detected to: #{template}'
+        STDOUT.flush
+      end
+      Sass::Plugin.on_template_created do |template|
+        puts '>>> New template detected: #{template}'
+        STDOUT.flush
+      end
+      Sass::Plugin.on_template_deleted do |template|
+        puts '>>> Deleted template detected: #{template}'
+        STDOUT.flush
+      end
+    
+    
+    
+              compare_with_real_token token, session
+    
+          def csp_policy
+        directives = []
+    
+        it 'Returns nil when Referer header is invalid' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
+      expect(subject.referrer(env)).to be_nil
     end
   end
 end
+
+    
+              it 'does not allow a shipment to split stock to itself' do
+            within_row(1) { click_icon 'split' }
+            targetted_select2 order.shipments.first.number, from: '#s2id_item_stock_location'
+            fill_in 'item_quantity', with: 1
+    
+        it 'can still be displayed' do
+      expect { visit spree.edit_admin_order_path(order) }.not_to raise_error
+    end
+  end
+    
+      context 'editing variant option types' do
+    it 'allows an admin to create option types for a variant' do
+      within_row(1) { click_icon :edit }
+    
+          link_to text.html_safe, spree.cart_path, class: 'cart-info nav-link #{css_class}'
+    end
+    
+            private
+    
+              @line_item = Spree::Dependencies.cart_add_item_service.constantize.call(order: order,
+                                                                                  variant: variant,
+                                                                                  quantity: params[:line_item][:quantity],
+                                                                                  options: line_item_params[:options]).value
+          if @line_item.errors.empty?
+            respond_with(@line_item, status: 201, default_template: :show)
+          else
+            invalid_resource!(@line_item)
+          end
+        end
+    
+      <h3>Messages</h3>
+  <% @messages.each do |msg| %>
+    <p><%= msg %></p>
+  <% end %>
+
+    
+    
+    
+      end
+end
+
+    
+        def using?(middleware)
+      middlewares.any? do |(m,_)|
+        m.kind_of?(Array) && (m[0] == middleware || m[0].kind_of?(middleware))
+      end
+    end
