@@ -1,95 +1,137 @@
 
         
-            print('LocalOutlierFactor processing...')
-    model = LocalOutlierFactor(n_neighbors=20)
-    tstart = time()
-    model.fit(X)
-    fit_time = time() - tstart
-    scoring = -model.negative_outlier_factor_  # the lower, the more normal
-    fpr, tpr, thresholds = roc_curve(y, scoring)
-    AUC = auc(fpr, tpr)
-    plt.plot(fpr, tpr, lw=1,
-             label=('ROC for %s (area = %0.3f, train-time: %0.2fs)'
-                    % (dataset_name, AUC, fit_time)))
+        filenames = {
+    'bin': 'youtube-dl',
+    'exe': 'youtube-dl.exe',
+    'tar': 'youtube-dl-%s.tar.gz' % version}
+build_dir = os.path.join('..', '..', 'build', version)
+for key, filename in filenames.items():
+    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
+    fn = os.path.join(build_dir, filename)
+    with open(fn, 'rb') as f:
+        data = f.read()
+    if not data:
+        raise ValueError('File %s is empty!' % fn)
+    sha256sum = hashlib.sha256(data).hexdigest()
+    new_version[key] = (url, sha256sum)
     
-    plt.figure('scikit-learn Ward's method benchmark results')
-plt.imshow(np.log(ratio), aspect='auto', origin='lower')
-plt.colorbar()
-plt.contour(ratio, levels=[1, ], colors='k')
-plt.yticks(range(len(n_features)), n_features.astype(np.int))
-plt.ylabel('N features')
-plt.xticks(range(len(n_samples)), n_samples.astype(np.int))
-plt.xlabel('N samples')
-plt.title('Scikit's time, in units of scipy time (log)')
-plt.show()
+        flags = [opt.get_opt_string() for opt in opts]
+    
+        def test_cbc_decrypt(self):
+        data = bytes_to_intlist(
+            b'\x97\x92+\xe5\x0b\xc3\x18\x91ky9m&\xb3\xb5@\xe6'\xc2\x96.\xc8u\x88\xab9-[\x9e|\xf1\xcd'
+        )
+        decrypted = intlist_to_bytes(aes_cbc_decrypt(data, self.key, self.iv))
+        self.assertEqual(decrypted.rstrip(b'\x08'), self.secret_msg)
+    
+        def tearDown(self):
+        if os.path.exists(self.test_dir):
+            shutil.rmtree(self.test_dir)
+    
+    
+if __name__ == '__main__':
+    unittest.main()
 
     
-                tstart = time()
-            clf.fit(X_train, y_train)
-            sgd_results[i, j, 0] = mean_squared_error(clf.predict(X_test),
-                                                      y_test)
-            sgd_results[i, j, 1] = time() - tstart
+                    mapping = KBaseMapping(base=int(base))
+                sym_to_name = {}
+                for no in range(int(size), 0, -1):
+                    no_in_base = mapping.mapping(no)
+                    val = names[no] if no < len(names) and names[no] else no_in_base
+                    sym_to_name[no_in_base] = val
     
+    # Add any paths that contain custom static files (such as style sheets)
+# here, relative to this directory. They are copied after the builtin
+# static files, so a file named 'default.css' will overwrite the builtin
+# 'default.css'.
+html_static_path = ['_static']
     
-def sparsity_ratio(X):
-    return np.count_nonzero(X) / float(n_samples * n_features)
-    
-        if revision is None:
-        return
-    if domain not in ('py', 'pyx'):
-        return
-    if not info.get('module') or not info.get('fullname'):
-        return
-    
-        Examples: ::
-    
-    # Define 'classifiers' to be used
-classifiers = {
-    'Empirical Covariance': EllipticEnvelope(support_fraction=1.,
-                                             contamination=0.261),
-    'Robust Covariance (Minimum Covariance Determinant)':
-    EllipticEnvelope(contamination=0.261),
-    'OCSVM': OneClassSVM(nu=0.261, gamma=0.05)}
-colors = ['m', 'g', 'b']
-legend1 = {}
-legend2 = {}
-    
-    fit_data = data[np.argsort(model.row_labels_)]
-fit_data = fit_data[:, np.argsort(model.column_labels_)]
-    
-    An example showing how the scikit-learn can be used to recognize images of
-hand-written digits.
-    
-    
-#----------------------------------------------------------------------
-# Visualize the clustering
-def plot_clustering(X_red, labels, title=None):
-    x_min, x_max = np.min(X_red, axis=0), np.max(X_red, axis=0)
-    X_red = (X_red - x_min) / (x_max - x_min)
+        # Apply some eyeliner
+    d.line(face_landmarks['left_eye'] + [face_landmarks['left_eye'][0]], fill=(0, 0, 0, 110), width=6)
+    d.line(face_landmarks['right_eye'] + [face_landmarks['right_eye'][0]], fill=(0, 0, 0, 110), width=6)
     
     # See how far apart the test image is from the known faces
 face_distances = face_recognition.face_distance(known_encodings, image_to_test_encoding)
     
-        # macOS will crash due to a bug in libdispatch if you don't use 'forkserver'
-    context = multiprocessing
-    if 'forkserver' in multiprocessing.get_all_start_methods():
-        context = multiprocessing.get_context('forkserver')
+        # Print the location of each face in this image
+    top, right, bottom, left = face_location
+    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
     
-        # Display the resulting image
-    cv2.imshow('Video', frame)
+        # Print the location of each face in this image
+    top, right, bottom, left = face_location
+    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
     
-        # Loop over each face found in the frame to see if it's someone we know.
-    for face_encoding in face_encodings:
-        # See if the face is a match for the known face(s)
-        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
-        name = '<Unknown Person>'
     
-    for face_landmarks in face_landmarks_list:
+@click.command()
+@click.argument('image_to_check')
+@click.option('--cpus', default=1, help='number of CPU cores to use in parallel. -1 means 'use all in system'')
+@click.option('--model', default='hog', help='Which face detection model to use. Options are 'hog' or 'cnn'.')
+def main(image_to_check, cpus, model):
+    # Multi-core processing only supported on Python 3.4 or greater
+    if (sys.version_info < (3, 4)) and cpus != 1:
+        click.echo('WARNING: Multi-processing support requires Python 3.4 or greater. Falling back to single-threaded processing!')
+        cpus = 1
     
-    requirements = [
-    'face_recognition_models>=0.3.0',
-    'Click>=6.0',
-    'dlib>=19.7',
-    'numpy',
-    'Pillow'
+    # Create arrays of known face encodings and their names
+known_face_encodings = [
+    obama_face_encoding,
+    biden_face_encoding
 ]
+known_face_names = [
+    'Barack Obama',
+    'Joe Biden'
+]
+    
+    # Convert the image to a PIL-format image so that we can draw on top of it with the Pillow library
+# See http://pillow.readthedocs.io/ for more about PIL/Pillow
+pil_image = Image.fromarray(unknown_image)
+# Create a Pillow ImageDraw Draw instance to draw with
+draw = ImageDraw.Draw(pil_image)
+    
+            # Changing field 'Environment.organization_id'
+        db.alter_column(
+            'sentry_environment',
+            'organization_id',
+            self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(null=True)
+        )
+    
+    
+class Migration(DataMigration):
+    def forwards(self, orm):
+        db.commit_transaction()
+        try:
+            self._forwards(orm)
+        except Exception:
+            # Explicitly resume the transaction because
+            # South is going to try and roll it back, but when
+            # it can't find one, it'll error itself, masking
+            # the actual exception being raised
+            #
+            # See https://github.com/getsentry/sentry/issues/5035
+            db.start_transaction()
+            raise
+        db.start_transaction()
+    
+            # Adding field 'ApiKey.scope_list'
+        db.add_column(
+            'sentry_apikey',
+            'scope_list',
+            self.gf('sentry.db.models.fields.array.ArrayField')(
+                of=('django.db.models.fields.TextField', [], {})
+            ),
+            keep_default=False
+        )
+    
+            # Adding field 'ReleaseFile.dist'
+        db.add_column(
+            'sentry_releasefile',
+            'dist',
+            self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                to=orm['sentry.Distribution'], null=True
+            ),
+            keep_default=False
+        )
+    
+        def backwards(self, orm):
+        # Removing unique constraint on 'UserOption', fields ['user', 'organization', 'key']
+        db.delete_unique('sentry_useroption', ['user_id', 'organization_id', 'key'])
