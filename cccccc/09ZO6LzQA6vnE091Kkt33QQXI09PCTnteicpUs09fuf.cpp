@@ -1,83 +1,203 @@
 
         
-        #include 'blobbox.h'             // for BLOBNBOX (ptr only), BlobSpecialText...
-#include 'equationdetectbase.h'  // for EquationDetectBase
-#include 'genericvector.h'       // for GenericVector
-#include 'tesseractclass.h'      // for Tesseract
-#include 'unichar.h'             // for UNICHAR_ID
+        
+    {                if (success) {
+                    fp->fInputIdx += stringLen;
+                } else {
+                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
+                }
+            }
+            break;
+    
+    void RemoveTransliterator::handleTransliterate(Replaceable& text, UTransPosition& index,
+                                               UBool /*isIncremental*/) const {
+    // Our caller (filteredTransliterate) has already narrowed us
+    // to an unfiltered run.  Delete it.
+    UnicodeString empty;
+    text.handleReplaceBetween(index.start, index.limit, empty);
+    int32_t len = index.limit - index.start;
+    index.contextLimit -= len;
+    index.limit -= len;
+}
+U_NAMESPACE_END
+    
+    #include 'unicode/utypes.h'
+    
+    ScientificNumberFormatter::ScientificNumberFormatter(
+        const ScientificNumberFormatter &other)
+        : UObject(other),
+          fPreExponent(other.fPreExponent),
+          fDecimalFormat(NULL),
+          fStyle(NULL),
+          fStaticSets(other.fStaticSets) {
+    fDecimalFormat = static_cast<DecimalFormat *>(
+            other.fDecimalFormat->clone());
+    fStyle = other.fStyle->clone();
+}
+    
+    U_CAPI UBool U_EXPORT2
+uhash_equalsScriptSet(const UElement key1, const UElement key2) {
+    icu::ScriptSet *s1 = static_cast<icu::ScriptSet *>(key1.pointer);
+    icu::ScriptSet *s2 = static_cast<icu::ScriptSet *>(key2.pointer);
+    return (*s1 == *s2);
+}
+    
+    int32_t SearchIterator::first(UErrorCode &status)
+{
+    if (U_FAILURE(status)) {
+        return USEARCH_DONE;
+    }
+    setOffset(0, status);
+    return handleNext(0, status);
+}
+    
+    #include 'unicode/messagepattern.h'
+#include 'unicode/rbnf.h'
+#include 'unicode/selfmt.h'
+#include 'unicode/uchar.h'
+#include 'unicode/ucnv_err.h'
+#include 'unicode/umsg.h'
+#include 'unicode/ustring.h'
+#include 'unicode/utypes.h'
+#include 'cmemory.h'
+#include 'messageimpl.h'
+#include 'patternprops.h'
+#include 'selfmtimpl.h'
+#include 'uassert.h'
+#include 'ustrfmt.h'
+#include 'util.h'
+#include 'uvector.h'
     
     
-    {}  // namespace tesseract.
+#ifndef SELFMTIMPL
+#define SELFMTIMPL
+    
+    static int32_t
+computeHashCode(const uint8_t *key, int32_t  length) {
+    const char *s = reinterpret_cast<const char *>(key);
+    int32_t hash;
+    if (s == NULL || length == 0) {
+        hash = kEmptyHashCode;
+    } else {
+        hash = ustr_hashCharsN(s, length);
+        if (hash == kInvalidHashCode || hash == kBogusHashCode) {
+            hash = kEmptyHashCode;
+        }
+    }
+    return hash;
+}
+    
+        /**
+     * @return the lowercase CLDR keyword string for the plural form
+     */
+    static const char *getKeyword(Form p);
+    
+        cout << endl;
+    
+    using namespace std;
+    
+    #include <iostream>
+#include <stack>
+#include <cassert>
+    
+    
+void printArr(const vector<int>& vec){
+    for(int e: vec)
+        cout << e << ' ';
+    cout << endl;
+}
+    
+    
+int main() {
+    }
+    
+    
+/// Definition for a binary tree node.
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+    
+    
+    {    return 0;
+}
 
     
-    class MutableIterator;
+    #include <iostream>
+#include <vector>
+#include <stack>
+#include <cassert>
     
-    // Update the other members if the cost is lower.
-void DPPoint::UpdateIfBetter(int64_t cost, int32_t steps, const DPPoint* prev,
-                             int32_t n, int32_t sig_x, int64_t sig_xsq) {
-  if (cost < total_cost_) {
-    total_cost_ = cost;
-    total_steps_ = steps;
-    best_prev_ = prev;
-    n_ = n;
-    sig_x_ = sig_x;
-    sig_xsq_ = sig_xsq;
-  }
+    // Recursive
+// Time Complexity: O(n), n is the node number in the tree
+// Space Complexity: O(h), h is the height of the tree
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+    }
+    }
+    
+        int i;
+    for (i = 0; i < SIZE - 1; i++)
+    {
+        int pri = swoole_system_random(10000, 99999);
+        ns = (node_t*) malloc(sizeof(node_t));
+        ns->val = i;
+        ns->pri = pri;
+        swHeap_push(pq, pri, ns);
+        _map[i] = pri;
+    }
+    
+    
+    {    return app.exec();
+}
+
+    
+        ret = swPipeBase_create(&p, 1);
+    ASSERT_EQ(ret, 0);
+    ret = p.write(&p, (void *) SW_STRL('hello world\n'));
+    ASSERT_GT(ret, 0);
+    ret = p.write(&p, (void *) SW_STRL('你好中国。\n'));
+    ASSERT_GT(ret, 0);
+    
+    
+    {    cache.clear();
+    ASSERT_EQ(cache.get('test'), nullptr);
 }
     
-     private:
-  // Code common to different cost functions.
+        int ret1 = (int) (long) swHashMap_find(hm, (char *) SW_STRL('hello'));
+    ASSERT_GT(ret1, 0);
     
-    #define MODULUS       128        /*range of directions */
-#define DIRBITS       7          //no of bits used
-#define DIRSCALE      1000       //length of vector
-    
-    #define SIZE    100
-    
-            void delRead() {
-            if (!m_read) return;
-            delete m_read;
-            m_read = 0;
-        }
-    
-        m_ctx = redisAsyncConnect('localhost', 6379);
-    
-        shared_ptr<string> val_str = make_shared<string>('hello');
-    cache.set('test1', val_str); // update test1 and will del test2
-    ASSERT_EQ(cache.get('test1').get(), val_str.get());
-    ASSERT_EQ(dtor_num, 2);
-    
-        inline void set(const std::string &key, const std::shared_ptr<void> &val, time_t expire = 0)
+        if (SwooleG.enable_coroutine)
     {
-        time_t expire_time;
-    }
-    
-    bool Channel::push(void *data, double timeout)
-{
-    if (closed)
-    {
-        return false;
-    }
-    if (is_full() || !producer_queue.empty())
-    {
-        timer_msg_t msg;
-        msg.error = false;
-        msg.timer = NULL;
-        if (timeout > 0)
+        if (PHPCoroutine::create(fci_cache, 2, args) < 0)
         {
-            long msec = (long) (timeout * 1000);
-            msg.chan = this;
-            msg.type = PRODUCER;
-            msg.co = Coroutine::get_current();
-            msg.timer = swTimer_add(&SwooleG.timer, msec, 0, &msg, timer_callback);
+            swoole_php_error(E_WARNING, 'create Http2 onRequest coroutine error.');
+            serv->factory.end(&serv->factory, fd);
         }
     }
+    else
+    {
+        zval _retval, *retval = &_retval;
+        if (sw_call_user_function_fast_ex(NULL, fci_cache, retval, 2, args) == FAILURE)
+        {
+            swoole_php_error(E_WARNING, 'Http2 onRequest handler error.');
+        }
+        zval_ptr_dtor(retval);
     }
     
-    void my_onConnect(swServer *serv, swDataHead *info)
-{
-    printf('PID=%d\tConnect fd=%d|from_id=%d\n', getpid(), info->fd, info->from_id);
-}
+        php_coro_context *context = (php_coro_context *) swoole_get_property(getThis(), 0);
+    if (!context)
+    {
+        context = (php_coro_context *) emalloc(sizeof(php_coro_context));
+        swoole_set_property(getThis(), 0, context);
+    }
+    context->state = SW_CORO_CONTEXT_RUNNING;
+    context->coro_params = *getThis();
     
-        swHashMap_del(hm, (char *) SW_STRL('willdel'));
-    swHashMap_update(hm, (char *) SW_STRL('willupadte'), (void *) (9999 * 5555));
+    TEST(coroutine_channel, push_yield)
+{
+    Channel chan(1);
+    }
