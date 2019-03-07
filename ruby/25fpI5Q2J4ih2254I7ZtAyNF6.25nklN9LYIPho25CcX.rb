@@ -1,132 +1,128 @@
 
         
-        class Devise::SessionsController < DeviseController
-  prepend_before_action :require_no_authentication, only: [:new, :create]
-  prepend_before_action :allow_params_authentication!, only: :create
-  prepend_before_action :verify_signed_out_user, only: :destroy
-  prepend_before_action(only: [:create, :destroy]) { request.env['devise.skip_timeout'] = true }
+          smoke_user = User.seed do |u|
+    u.id = 0
+    u.name = 'smoke_user'
+    u.username = 'smoke_user'
+    u.username_lower = 'smoke_user'
+    u.password = 'P4ssw0rd'
+    u.active = true
+    u.approved = true
+    u.approved_at = Time.now
+    u.trust_level = TrustLevel[3]
+  end.first
     
-    module Devise
-  module Controllers
-    # Provide the ability to store a location.
-    # Used to redirect back to a desired path after sign in.
-    # Included by default in all controllers.
-    module StoreLocation
-      # Returns and delete (if it's navigational format) the url stored in the session for
-      # the given scope. Useful for giving redirect backs after sign up:
-      #
-      # Example:
-      #
-      #   redirect_to stored_location_for(:user) || root_path
-      #
-      def stored_location_for(resource_or_scope)
-        session_key = stored_location_key_for(resource_or_scope)
-    
-        unless env['devise.skip_trackable']
-      warden.session(scope)['last_request_at'] = Time.now.utc.to_i
-    end
-  end
-end
-
-    
-          # Checks if the reset password token sent is within the limit time.
-      # We do this by calculating if the difference between today and the
-      # sending date does not exceed the confirm in time configured.
-      # Returns true if the resource is not responding to reset_password_sent_at at all.
-      # reset_password_within is a model configuration, must always be an integer value.
-      #
-      # Example:
-      #
-      #   # reset_password_within = 1.day and reset_password_sent_at = today
-      #   reset_password_period_valid?   # returns true
-      #
-      #   # reset_password_within = 5.days and reset_password_sent_at = 4.days.ago
-      #   reset_password_period_valid?   # returns true
-      #
-      #   # reset_password_within = 5.days and reset_password_sent_at = 5.days.ago
-      #   reset_password_period_valid?   # returns false
-      #
-      #   # reset_password_within = 0.days
-      #   reset_password_period_valid?   # will always return false
-      #
-      def reset_password_period_valid?
-        reset_password_sent_at && reset_password_sent_at.utc >= self.class.reset_password_within.ago.utc
-      end
-    
-          def rememberable_options
-        self.class.rememberable_options
-      end
-    
-      caveats <<~EOS
-    Installation or Uninstallation may fail with Exit Code 19 (Conflicting Processes running) if Browsers, Safari Notification Service or SIMBL Services (e.g. Flashlight) are running or Adobe Creative Cloud or any other Adobe Products are already installed. See Logs in /Library/Logs/Adobe/Installers if Installation or Uninstallation fails, to identifify the conflicting processes.
-  EOS
-end
-
-    
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have path #{expected.inspect} but was #{actual.current_path.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have path #{expected.inspect} but it had'
-  end
-end
-    
-      class PostToService < Base
-    def perform(*_args)
-      # don't post to services in cucumber
-    end
-  end
-    
-        context 'on a public post from a stranger' do
-      before do
-        @post = stranger.post :status_message, :text => 'something', :public => true, :to => 'all'
-      end
-    
-          it 'returns reshares without login' do
-        bob.reshare!(@post)
-        sign_out :user
-        get :index, params: {post_id: @post.id}, format: :json
-        expect(JSON.parse(response.body).map {|h| h['id'] }).to match_array(@post.reshares.map(&:id))
+        it 'returns true if the given string is a switch' do
+      %w[n s i].each do |s|
+        expect(subject.switch?(s)).to be true
       end
     end
+    
+      context 'every `.sh` file' do
+    it 'has valid bash syntax' do
+      Pathname.glob('#{HOMEBREW_LIBRARY_PATH}/**/*.sh').each do |path|
+        relative_path = path.relative_path_from(HOMEBREW_LIBRARY_PATH)
+        next if relative_path.to_s.start_with?('shims/', 'test/', 'vendor/')
+    
+      # insert data
+  fields.each do |field, values|
+    updated = '  s.#{field} = ['
+    updated << values.map { |v| '\n    %p' % v }.join(',')
+    updated << '\n  ]'
+    content.sub!(/  s\.#{field} = \[\n(    .*\n)*  \]/, updated)
   end
+    
+    module Rack
+  module Protection
+    class Base
+      DEFAULT_OPTIONS = {
+        :reaction    => :default_reaction, :logging   => true,
+        :message     => 'Forbidden',       :encryptor => Digest::SHA1,
+        :session_key => 'rack.session',    :status    => 403,
+        :allow_empty_referrer => true,
+        :report_key           => 'protection.failed',
+        :html_types           => %w[text/html application/xhtml text/xml application/xml]
+      }
+    
+    When /^(?:|I )fill in '([^']*)' for '([^']*)'$/ do |value, field|
+  fill_in(field, :with => value)
 end
-
     
-    if $0 == __FILE__
-  begin
-    LogStash::PluginManager::Main.run('bin/logstash-plugin', ARGV)
-  rescue LogStash::PluginManager::Error => e
-    $stderr.puts(e.message)
-    exit(1)
-  end
-end
-
+    require 'erb'
+require 'digest'
+require 'tempfile'
+require 'paperclip/version'
+require 'paperclip/geometry_parser_factory'
+require 'paperclip/geometry_detector_factory'
+require 'paperclip/geometry'
+require 'paperclip/processor'
+require 'paperclip/processor_helpers'
+require 'paperclip/tempfile'
+require 'paperclip/thumbnail'
+require 'paperclip/interpolations/plural_cache'
+require 'paperclip/interpolations'
+require 'paperclip/tempfile_factory'
+require 'paperclip/style'
+require 'paperclip/attachment'
+require 'paperclip/storage'
+require 'paperclip/callbacks'
+require 'paperclip/file_command_content_type_detector'
+require 'paperclip/media_type_spoof_detector'
+require 'paperclip/content_type_detector'
+require 'paperclip/glue'
+require 'paperclip/errors'
+require 'paperclip/missing_attachment_styles'
+require 'paperclip/validators'
+require 'paperclip/logger'
+require 'paperclip/helpers'
+require 'paperclip/has_attached_file'
+require 'paperclip/attachment_registry'
+require 'paperclip/filename_cleaner'
+require 'paperclip/rails_environment'
     
-        def initialize(plugins_to_package, target)
-      @plugins_to_package = Array(plugins_to_package)
-      @target = target
-    
-        # any errors will be logged to $stderr by invoke!
-    # Bundler cannot update and clean gems in one operation so we have to call the CLI twice.
-    options = {:update => plugins, :rubygems_source => gemfile.gemset.sources}
-    options[:local] = true if local?
-    output = LogStash::Bundler.invoke!(options)
-    # We currently dont removed unused gems from the logstash installation
-    # see: https://github.com/elastic/logstash/issues/6339
-    # output = LogStash::Bundler.invoke!(:clean => true)
-    display_updated_plugins(previous_gem_specs_map)
-  rescue => exception
-    gemfile.restore!
-    report_exception('Updated Aborted', exception)
-  ensure
-    display_bundler_output(output)
-  end
-    
-          it 'list the plugin with his version' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
-      end
+        # Returns the timestamp as defined by the <attachment>_updated_at field
+    # in the server default time zone unless :use_global_time_zone is set
+    # to false.  Note that a Rails.config.time_zone change will still
+    # invalidate any path or URL that uses :timestamp.  For a
+    # time_zone-agnostic timestamp, use #updated_at.
+    def timestamp attachment, style_name
+      attachment.instance_read(:updated_at).in_time_zone(attachment.time_zone).to_s
     end
-  end
-end
+    
+    # Add a script to run after install (should be in the current directory):
+package.scripts[:after_install] = 'my_after_install_script.sh'
+    
+        setscript.call(:before_install)
+    setscript.call(:after_install)
+    setscript.call(:before_remove)
+    setscript.call(:after_remove)
+    setscript.call(:before_upgrade)
+    setscript.call(:after_upgrade)
+    
+        # Query details about our now-installed package.
+    # We do this by using 'npm ls' with json + long enabled to query details
+    # about the installed package.
+    npm_ls_out = safesystemout(attributes[:npm_bin], 'ls', '--json', '--long', *npm_flags)
+    npm_ls = JSON.parse(npm_ls_out)
+    name, info = npm_ls['dependencies'].first
+    
+    # Use an OS X pkg built with pkgbuild.
+#
+# Supports input and output. Requires pkgbuild and (for input) pkgutil, part of a
+# standard OS X install in 10.7 and higher.
+class FPM::Package::OSXpkg < FPM::Package
+    
+      end
+    
+      def default_output
+    v = version
+    v = '#{epoch}:#{v}' if epoch
+    if iteration
+      '#{name}_#{v}-#{iteration}_#{architecture}.#{type}'
+    else
+      '#{name}_#{v}_#{architecture}.#{type}'
+    end
+  end # def default_output
+end # class FPM::Deb
+    
+        process.wait if process.alive?
