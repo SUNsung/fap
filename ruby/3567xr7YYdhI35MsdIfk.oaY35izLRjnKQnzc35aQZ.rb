@@ -1,155 +1,150 @@
 
         
-                # Parses the options given an OptionParser instance.
-        #
-        # This is a convenience method that properly handles duping the
-        # originally argv array so that it is not destroyed.
-        #
-        # This method will also automatically detect '-h' and '--help'
-        # and print help. And if any invalid options are detected, the help
-        # will be printed, as well.
-        #
-        # If this method returns `nil`, then you should assume that help
-        # was printed and parsing failed.
-        def parse_options(opts=nil)
-          # Creating a shallow copy of the arguments so the OptionParser
-          # doesn't destroy the originals.
-          argv = @argv.dup
+              it 'requires the passwords to match when changing them' do
+        visit edit_admin_user_path(users(:bob))
+        fill_in 'Password', with: '12345678'
+        fill_in 'Password confirmation', with: 'no_match'
+        click_on 'Update User'
+        expect(page).to have_text('Password confirmation doesn't match')
+      end
+    end
     
-            # Initializes the communicator with the machine that we will be
-        # communicating with. This base method does nothing (it doesn't
-        # even store the machine in an instance variable for you), so you're
-        # expected to override this and do something with the machine if
-        # you care about it.
+      context 'clearing unsupported fields of agents' do
+    before do
+      visit new_agent_path
+    end
+    
+        it 'shows the dry run pop up without previous events and selects the events tab when a event was created' do
+      open_dry_run_modal(agent)
+      click_on('Dry Run')
+      expect(page).to have_text('Biologists play reverse')
+      expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabEvents']')
+    end
+    
+          it 'generates a DOT script' do
+        expect(agents_dot(@agents)).to match(%r{
+          \A
+          digraph \x20 'Agent \x20 Event \x20 Flow' \{
+            node \[ [^\]]+ \];
+            edge \[ [^\]]+ \];
+            (?<foo>\w+) \[label=foo\];
+            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
+            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
+            \k<bar1> \[label=bar1\];
+            \k<bar2> \[label=bar2,style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
+            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
+            \k<bar3> \[label=bar3\];
+          \}
+          \z
+        }x)
+      end
+    
+            # This returns all the config classes for the various pushes.
         #
-        # @param [Machine] machine The machine this instance is expected to
-        #   communicate with.
-        def initialize(machine)
+        # @return [Registry]
+        def push_configs
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.configs[:push])
+            end
+          end
         end
     
-            def initialize
-          @logger = Log4r::Logger.new('vagrant::plugin::v1::manager')
-          @registered = []
+            # This is called early, before a machine is instantiated, to check
+        # if this provider is usable. This should return true or false.
+        #
+        # If raise_error is true, then instead of returning false, this
+        # should raise an error with a helpful message about why this
+        # provider cannot be used.
+        #
+        # @param [Boolean] raise_error If true, raise exception if not usable.
+        # @return [Boolean]
+        def self.usable?(raise_error=false)
+          # Return true by default for backwards compat since this was
+          # introduced long after providers were being written.
+          true
         end
     
-              nil
+        # Register a key with a lazy-loaded value.
+    #
+    # If a key with the given name already exists, it is overwritten.
+    def register(key, &block)
+      raise ArgumentError, 'block required' if !block_given?
+      @items[key] = block
+    end
+    
+      def outbox_presenter
+    if page_requested?
+      ActivityPub::CollectionPresenter.new(
+        id: account_outbox_url(@account, page_params),
+        type: :ordered,
+        part_of: account_outbox_url(@account),
+        prev: prev_page,
+        next: next_page,
+        items: @statuses
+      )
+    else
+      ActivityPub::CollectionPresenter.new(
+        id: account_outbox_url(@account),
+        type: :ordered,
+        size: @account.statuses_count,
+        first: account_outbox_url(@account, page: true),
+        last: account_outbox_url(@account, page: true, min_id: 0)
+      )
+    end
+  end
+    
+            if params[:create_and_unresolve]
+          @report.unresolve!
+          log_action :reopen, @report
         end
     
-            # This method is called if the underlying machine ID changes. Providers
-        # can use this method to load in new data for the actual backing
-        # machine or to realize that the machine is now gone (the ID can
-        # become `nil`). No parameters are given, since the underlying machine
-        # is simply the machine instance given to this object. And no
-        # return value is necessary.
-        def machine_id_changed
-        end
+      before_action :set_account
+  respond_to :txt
     
-    Then /^I should have (\d+) nsfw posts$/ do |num_posts|
-  page.should have_css('.nsfw-shield', count: num_posts.to_i)
+        weeks
+  end
+    
+        active_session.update!(web_push_subscription: web_subscription)
+    
+      def load_export
+    @export = Export.new(current_account)
+  end
+    
+      def available_locales
+    I18n.available_locales.reverse
+  end
 end
+
     
-      class FetchWebfinger < Base
-    def perform(*_args)
-      # don't do real discovery in cucumber
+      describe '#flag?' do
+    let(:argv) { ['--foo', '-bq', '--bar'] }
+    
+        def puts(*args)
+      STDERR.puts *args unless @silence
+    end
+    
+      # Show full error reports and disable caching.
+  config.consider_all_requests_local       = true
+  config.action_controller.perform_caching = false
+    
+          # Custom destructuring method. This is used to normalize the branches
+      # for `pair` and `kwsplat` nodes, to add duck typing to `hash` elements.
+      #
+      # @return [Array<KeywordSplatNode>] the different parts of the `kwsplat`
+      def node_parts
+        [self, self]
+      end
     end
   end
 end
 
     
-        it 'generates the contacts_json fixture', :fixture => true do
-      json = bob.contacts.map { |c|
-               ContactPresenter.new(c, bob).full_hash_with_person
-             }.to_json
-      save_fixture(json, 'contacts_json')
-    end
-  end
-end
-
-    
-          it 'succeeds' do
-        expect(response).to be_success
-        post_request!
+          # Returns the delta between this element's value and the argument's.
+      #
+      # @note Keyword splats always return a delta of 0
+      #
+      # @return [Integer] the delta between the two values
+      def value_delta(other)
+        HashElementDelta.new(self, other).value_delta
       end
-    
-    ENV['GEM_HOME'] = ENV['GEM_PATH'] = LogStash::Environment.logstash_gem_home
-Gem.use_paths(LogStash::Environment.logstash_gem_home)
-    
-        def execute
-      raise PluginManager::FileNotFoundError, 'Can't file local file #{local_file}' unless ::File.exist?(local_file)
-      raise PluginManager::InvalidPackError, 'Invalid format, the pack must be in zip format' unless valid_format?(local_file)
-    
-      # We compare the before the update and after the update
-  def display_updated_plugins(previous_gem_specs_map)
-    update_count = 0
-    find_latest_gem_specs.values.each do |spec|
-      name = spec.name.downcase
-      if previous_gem_specs_map.has_key?(name)
-        if spec.version != previous_gem_specs_map[name].version
-          puts('Updated #{spec.name} #{previous_gem_specs_map[name].version.to_s} to #{spec.version.to_s}')
-          update_count += 1
-        end
-      else
-        puts('Installed #{spec.name} #{spec.version.to_s}')
-        update_count += 1
-      end
-    end
-    
-      describe '#system?' do
-    context 'when the pipeline is a system pipeline' do
-      let(:settings) { mock_settings({ 'pipeline.system' => true })}
-    
-              def serialize_resource(resource)
-            resource_serializer.new(
-              resource,
-              include: resource_includes,
-              sparse_fields: sparse_fields
-            ).serializable_hash
-          end
-    
-        SPREE_GEMS.each do |gem_name|
-      Dir.chdir(gem_name) do
-        sh 'gem build spree_#{gem_name}.gemspec'
-        mv 'spree_#{gem_name}-#{version}.gem', pkgdir
-      end
-    end
-    
-              def find_spree_current_order
-            Spree::Api::Dependencies.storefront_current_order_finder.constantize.new.execute(
-              store: spree_current_store,
-              user: spree_current_user,
-              token: order_token,
-              currency: current_currency
-            )
-          end
-    
-            def create
-          authorize! :create, Image
-          @image = scope.images.new(image_params)
-          if @image.save
-            respond_with(@image, status: 201, default_template: :show)
-          else
-            invalid_resource!(@image)
-          end
-        end
-    
-            def option_type_params
-          params.require(:option_type).permit(permitted_option_type_attributes)
-        end
-      end
-    end
-  end
-end
-
-    
-                import_params = if @current_user_roles.include?('admin')
-                              params[:order].present? ? params[:order].permit! : {}
-                            else
-                              order_params
-                            end
-    
-    module Jekyll
-    
-      class PageFilters < Octopress::Hooks::Page
-    def pre_render(page)
-      OctopressFilters::pre_filter(page)
-    end
