@@ -1,114 +1,60 @@
 
         
-              def self.available_options
-        [
-          FastlaneCore::ConfigItem.new(key: :tag,
-                                       env_name: 'FL_GIT_TAG_TAG',
-                                       description: 'Define your own tag text. This will replace all other parameters',
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :grouping,
-                                       env_name: 'FL_GIT_TAG_GROUPING',
-                                       description: 'Is used to keep your tags organised under one 'folder'',
-                                       default_value: 'builds'),
-          FastlaneCore::ConfigItem.new(key: :prefix,
-                                       env_name: 'FL_GIT_TAG_PREFIX',
-                                       description: 'Anything you want to put in front of the version number (e.g. 'v')',
-                                       default_value: ''),
-          FastlaneCore::ConfigItem.new(key: :postfix,
-                                       env_name: 'FL_GIT_TAG_POSTFIX',
-                                       description: 'Anything you want to put at the end of the version number (e.g. '-RC1')',
-                                       default_value: ''),
-          FastlaneCore::ConfigItem.new(key: :build_number,
-                                       env_name: 'FL_GIT_TAG_BUILD_NUMBER',
-                                       description: 'The build number. Defaults to the result of increment_build_number if you\'re using it',
-                                       default_value: Actions.lane_context[Actions::SharedValues::BUILD_NUMBER],
-                                       default_value_dynamic: true,
-                                       is_string: false),
-          FastlaneCore::ConfigItem.new(key: :message,
-                                       env_name: 'FL_GIT_TAG_MESSAGE',
-                                       description: 'The tag message. Defaults to the tag's name',
-                                       default_value_dynamic: true,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :commit,
-                                       env_name: 'FL_GIT_TAG_COMMIT',
-                                       description: 'The commit or object where the tag will be set. Defaults to the current HEAD',
-                                       default_value_dynamic: true,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :force,
-                                       env_name: 'FL_GIT_TAG_FORCE',
-                                       description: 'Force adding the tag',
-                                       optional: true,
-                                       is_string: false,
-                                       default_value: false),
-          FastlaneCore::ConfigItem.new(key: :sign,
-                                       env_name: 'FL_GIT_TAG_SIGN',
-                                       description: 'Make a GPG-signed tag, using the default e-mail address's key',
-                                       optional: true,
-                                       is_string: false,
-                                       default_value: false)
-        ]
-      end
+          #
+  # Initializes an HTTP packet header class that inherits from a Hash base
+  # class.
+  #
+  def initialize
+    self.dcase_hash = {}
     
-          it 'adds install_docset param to command' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          appledoc(
-            project_name: 'Project Name',
-            project_company: 'Company',
-            input: 'input/dir',
-            install_docset: true
-          )
-        end').runner.execute(:test)
-    
-          it 'doesn't add a no-use-binaries flag to command if use_binaries is set to true' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            carthage(
-              use_binaries: true
-            )
-          end').runner.execute(:test)
-    
-          it 'Does not include merge commits in the list of commits' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          changelog_from_git_commits(include_merges: false)
-        end').runner.execute(:test)
-    
-    # To avoid 'PR & Runs' for which tests don't pass, we want to make spec errors more visible
-# The code below will run on Circle, parses the results in JSON and posts them to the PR as comment
-containing_dir = ENV['CIRCLE_TEST_REPORTS'] || '.' # for local testing
-file_path = File.join(containing_dir, 'rspec', 'fastlane-junit-results.xml')
-    
-    HighLine.track_eof = false
-    
-        self.itime  = ::Time.now
-    self.queue  = ::Queue.new
+        self.method    = method
+    self.raw_uri   = uri
+    self.uri_parts = {}
+    self.proto     = proto || DefaultProtocol
+    self.chunk_min_size = 1
+    self.chunk_max_size = 10
+    self.uri_encode_mode = 'hex-normal'
     
       #
-  # Move these into an IPMI stack or mixin at some point
+  # Dispatches the supplied request for a given connection.
   #
+  def dispatch_request(cli, request)
+    # Is the client requesting keep-alive?
+    if ((request['Connection']) and
+       (request['Connection'].downcase == 'Keep-Alive'.downcase))
+      cli.keepalive = true
+    end
     
-            # Creates a TCP connection using Rex::Socket::Tcp
+      #
+  # Payload types were identified from xCAT-server source code (IPMI.pm)
+  #
+  PAYLOAD_IPMI = 0
+  PAYLOAD_SOL  = 1
+  PAYLOAD_RMCPPLUSOPEN_REQ = 0x10
+  PAYLOAD_RMCPPLUSOPEN_REP = 0x11
+  PAYLOAD_RAKP1 = 0x12
+  PAYLOAD_RAKP2 = 0x13
+  PAYLOAD_RAKP3 = 0x14
+  PAYLOAD_RAKP4 = 0x15
+    
+            # UDP isn't supported
         #
-        # @return [Rex::Socket::Tcp]
-        def create_tcp_connection
-          self.connection = Rex::Socket::Tcp.create(
-            'PeerHost'   => host,
-            'PeerPort'   => port.to_i,
-            'Context'    => context,
-            'Timeout'    => timeout
-          )
+        # @raise [NotImplementedError]
+        def recv_response_udp
+          raise ::NotImplementedError, 'Kerberos Client: UDP unsupported'
         end
     
-              # Rex::Proto::Kerberos::Model::ApReq decoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def decode(input)
-            raise ::NotImplementedError, 'AP-REQ decoding not supported'
-          end
+                cipher = OpenSSL::Cipher.new('rc4')
+            cipher.decrypt
+            cipher.key = k3
+            decrypted = cipher.update(data) + cipher.final
     
-              # Encodes the checksum field
+              # Decodes the sname field
           #
-          # @return [OpenSSL::ASN1::OctetString]
-          def encode_checksum
-            OpenSSL::ASN1::OctetString.new(checksum)
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Rex::Proto::Kerberos::Type::PrincipalName]
+          def decode_sname(input)
+            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
           end
         end
       end
@@ -116,97 +62,117 @@ file_path = File.join(containing_dir, 'rspec', 'fastlane-junit-results.xml')
   end
 end
     
-    # for each blog URL, check if rss URL exists
-matches.each do |match|
-  name = match[0]
-  web_url = match[1]
+              # Decodes the Rex::Proto::Kerberos::Model::KrbError from an input
+          #
+          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::ASN1Data
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode KrbError, invalid input'
+            end
     
-      # Configure an appender that will write log events to STDOUT. A colorized
-  # pattern layout is used to format the log events into strings before
-  # writing.
-  Logging.appenders.stdout('stdout',
-                           auto_flushing: true,
-                           layout:        Logging.layouts.pattern(
-                             pattern:      pattern,
-                             color_scheme: 'bright'
-                           )
-                          ) if config.log_to.include? 'stdout'
-    
-    class FixPhotosShareVisibilities < ActiveRecord::Migration[4.2]
-  class Photo < ApplicationRecord
-  end
-    
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have value #{expected.inspect} but was #{actual.value.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have value #{expected.inspect} but it had'
-  end
-end
-    
-        before do
-      allow_any_instance_of(Spree::Api::V2::Storefront::CartController).to receive(:spree_current_order).and_return(order)
-      patch '/api/v2/storefront/cart/empty', headers: headers_bearer
+        file package(gem, '.tar.gz') => ['pkg/'] do |f|
+      sh <<-SH
+        git archive \
+          --prefix=#{gem}-#{source_version}/ \
+          --format=tar \
+          HEAD -- #{directory} | gzip > #{f.name}
+      SH
     end
+  end
     
-        context 'with specified pagination params' do
-      let!(:order) { create(:order, state: 'complete', user: user, completed_at: Time.current) }
-      let!(:order_1) { create(:order, state: 'complete', user: user, completed_at: Time.current + 1.day) }
-      let!(:order_2) { create(:order, state: 'complete', user: user, completed_at: Time.current + 2.days) }
-      let!(:order_3) { create(:order, state: 'complete', user: user, completed_at: Time.current + 3.days) }
-    
-        it 'return JSON API payload of User and associations (default billing and shipping address)' do
-      expect(json_response['data']).to have_id(user.id.to_s)
-      expect(json_response['data']).to have_type('user')
-      expect(json_response['data']).to have_relationships(:default_shipping_address, :default_billing_address)
-    
-          it 'returns taxon by permalink' do
-        expect(json_response['data']).to have_id(Spree::Taxon.first.id.to_s)
-        expect(json_response['data']).to have_attribute(:name).with_value(Spree::Taxon.first.name)
+          def html?(headers)
+        return false unless header = headers.detect { |k,v| k.downcase == 'content-type' }
+        options[:html_types].include? header.last[/^\w+\/\w+/]
       end
     end
   end
 end
 
     
-      config.include JSONAPI::RSpec
-  config.include FactoryBot::Syntax::Methods
-  config.include Spree::Api::TestingSupport::Helpers, type: :controller
-  config.include Spree::Api::TestingSupport::Helpers, type: :request
-  config.extend Spree::Api::TestingSupport::Setup, type: :controller
-  config.include Spree::TestingSupport::Preferences, type: :controller
-  config.include Spree::TestingSupport::ImageHelpers
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   XSS and others
+    # Supported browsers:: Firefox 23+, Safari 7+, Chrome 25+, Opera 15+
+    #
+    # Description:: Content Security Policy, a mechanism web applications
+    #               can use to mitigate a broad class of content injection
+    #               vulnerabilities, such as cross-site scripting (XSS).
+    #               Content Security Policy is a declarative policy that lets
+    #               the authors (or server administrators) of a web application
+    #               inform the client about the sources from which the
+    #               application expects to load resources.
+    #
+    # More info::   W3C CSP Level 1 : https://www.w3.org/TR/CSP1/ (deprecated)
+    #               W3C CSP Level 2 : https://www.w3.org/TR/CSP2/ (current)
+    #               W3C CSP Level 3 : https://www.w3.org/TR/CSP3/ (draft)
+    #               https://developer.mozilla.org/en-US/docs/Web/Security/CSP
+    #               http://caniuse.com/#search=ContentSecurityPolicy
+    #               http://content-security-policy.com/
+    #               https://securityheaders.io
+    #               https://scotthelme.co.uk/csp-cheat-sheet/
+    #               http://www.html5rocks.com/en/tutorials/security/content-security-policy/
+    #
+    # Sets the 'Content-Security-Policy[-Report-Only]' header.
+    #
+    # Options: ContentSecurityPolicy configuration is a complex topic with
+    #          several levels of support that has evolved over time.
+    #          See the W3C documentation and the links in the more info
+    #          section for CSP usage examples and best practices. The
+    #          CSP3 directives in the 'NO_ARG_DIRECTIVES' constant need to be
+    #          presented in the options hash with a boolean 'true' in order
+    #          to be used in a policy.
+    #
+    class ContentSecurityPolicy < Base
+      default_options default_src: :none, script_src: ''self'',
+                      img_src: ''self'', style_src: ''self'',
+                      connect_src: ''self'', report_only: false
     
-          def product_scope
-        if @current_user_roles.include?('admin')
-          scope = Product.with_deleted.accessible_by(current_ability, :read).includes(*product_includes)
-    
-    desc 'Move source to source.old, install source theme updates, replace source/_includes/navigation.html with source.old's navigation'
-task :update_source, :theme do |t, args|
-  theme = args.theme || 'classic'
-  if File.directory?('#{source_dir}.old')
-    puts '## Removed existing #{source_dir}.old directory'
-    rm_r '#{source_dir}.old', :secure=>true
+      it 'accepts post form requests with correct authenticity_token field' do
+    post('/', {'authenticity_token' => token}, 'rack.session' => session)
+    expect(last_response).to be_ok
   end
-  mkdir '#{source_dir}.old'
-  cp_r '#{source_dir}/.', '#{source_dir}.old'
-  puts '## Copied #{source_dir} into #{source_dir}.old/'
-  cp_r '#{themes_dir}/'+theme+'/source/.', source_dir, :remove_destination=>true
-  cp_r '#{source_dir}.old/_includes/custom/.', '#{source_dir}/_includes/custom/', :remove_destination=>true
-  cp '#{source_dir}.old/favicon.png', source_dir
-  mv '#{source_dir}/index.html', '#{blog_index_dir}', :force=>true if blog_index_dir != source_dir
-  cp '#{source_dir}.old/index.html', source_dir if blog_index_dir != source_dir && File.exists?('#{source_dir}.old/index.html')
-  puts '## Updated #{source_dir} ##'
+    
+      def validate_target_file
+    if File.exist?(target_file)
+      if  delete_target_file?
+        File.delete(target_file)
+      else
+        signal_error('Package creation cancelled, a previously generated package exist at location: #{target_file}, move this file to safe place and run the command again')
+      end
+    end
+  end
+    
+      namespace :vm do
+    
+            names.inject(Object) do |constant, name|
+          constant.const_defined?(name) ? constant.const_get(name) : constant.const_missing(name)
+        end
+      rescue NameError
+        super
+      end
+    end
+  end
 end
     
-      class ImageTag < Liquid::Tag
-    @img = nil
+          def insert_before(oldklass, newklass, *args)
+        i = entries.index { |entry| entry.klass == newklass }
+        new_entry = i.nil? ? Entry.new(newklass, *args) : entries.delete_at(i)
+        i = entries.index { |entry| entry.klass == oldklass } || 0
+        entries.insert(i, new_entry)
+      end
     
-      class IncludeArrayTag < Liquid::Tag
-    Syntax = /(#{Liquid::QuotedFragment}+)/
-    def initialize(tag_name, markup, tokens)
-      if markup =~ Syntax
-        @array_name = $1
-      else
-        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
+        def erb(content, options = {})
+      if content.kind_of? Symbol
+        unless respond_to?(:'_erb_#{content}')
+          src = ERB.new(File.read('#{Web.settings.views}/#{content}.erb')).src
+          WebAction.class_eval('def _erb_#{content}\n#{src}\n end')
+        end
       end
