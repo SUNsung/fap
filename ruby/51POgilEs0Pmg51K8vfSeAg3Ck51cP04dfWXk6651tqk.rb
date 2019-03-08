@@ -1,101 +1,62 @@
 
         
-              GivenDailyLike.increment_for(user.id)
-      expect(value_for(user.id, dt)).to eq(2)
-      expect(limit_reached_for(user.id, dt)).to eq(true)
-    
-    UserEmail.seed do |ue|
-  ue.id = -1
-  ue.email = 'no_email'
-  ue.primary = true
-  ue.user_id = -1
-end
-    
-            include ::EachBatch
-      end
-    
-            def preload_stages_warnings
-          # This preloads the number of warnings for every stage, ensuring
-          # that Ci::Stage#has_warnings? doesn't execute any additional
-          # queries.
-          @pipeline.stages.each { |stage| stage.number_of_warnings }
         end
-      end
-    end
-  end
-end
 
     
-          # Returns true if the given value is present in the set.
-      #
-      # raw_key - The key of the set to check.
-      # value - The value to check for.
-      def self.set_includes?(raw_key, value)
-        key = cache_key_for(raw_key)
+          if staff.topic_id.nil?
+        creator = PostCreator.new(Discourse.system_user,
+          raw: I18n.t('staff_category_description'),
+          title: I18n.t('category.topic_prefix', category: staff.name),
+          category: staff.name,
+          archetype: Archetype.default
+        )
+        post = creator.create
     
-          def milestones(*args)
-        each_object(:milestones, *args)
-      end
-    
-            # issue - An instance of `Gitlab::GithubImport::Representation::Issue`
-        # project - An instance of `Project`
-        # client - An instance of `Gitlab::GithubImport::Client`
-        def initialize(issue, project, client)
-          @issue = issue
-          @project = project
-          @client = client
-          @label_finder = LabelFinder.new(project)
-        end
-    
-              waiter.jobs_remaining += 1
-        end
-    
-          private
-    
-                platform = target.platform_name
-            case platform
-            when :osx
-              execute_command 'xcodebuild -workspace '#{workspace_path}' -scheme '#{scheme_name}' clean build'
-            when :ios
-              test_flag = (scheme_name.start_with? 'Test') ? 'test' : ''
-    
-          def plugins_string
-        UI::ErrorReport.plugins_string
-      end
-    
-    Then(/^the release is created$/) do
-  run_vagrant_command('ls -g #{TestApp.releases_path}')
-end
-    
-    Given(/^I make (\d+) deployments$/) do |count|
-  step 'all linked files exists in shared path'
-    
-      def run_vagrant_command(command)
-    stdout, stderr, status = vagrant_cli_command('ssh -c #{command.inspect}')
-    return [stdout, stderr] if status.success?
-    raise VagrantSSHCommandError, status
-  end
-end
-    
-        def append(key, *values)
-      set(key, Array(fetch(key)).concat(values))
+        def role_properties_for(names, &block)
+      servers.role_properties_for(names, &block)
     end
     
-          def self.[](host)
-        host.is_a?(Server) ? host : new(host)
-      end
+            # rubocop:disable Style/MethodMissing
+        def method_missing(key, value=nil)
+          if value
+            set(lvalue(key), value)
+          else
+            fetch(key)
+          end
+        end
+        # rubocop:enable Style/MethodMissing
     
-    set_if_empty :format, :airbrussh
-set_if_empty :log_level, :debug
+          attr_reader :locations, :values, :fetched_keys
     
-          # Checks whether the `when` node has a `then` keyword.
-      #
-      # @return [Boolean] whether the `when` node has a `then` keyword
-      def then?
-        loc.begin && loc.begin.is?('then')
-      end
+    # We use a special :_default_git value so that SCMResolver can tell whether the
+# default has been replaced by the user via `set`.
+set_if_empty :scm, Capistrano::Configuration::SCMResolver::DEFAULT_GIT
+set_if_empty :branch, 'master'
+set_if_empty :deploy_to, -> { '/var/www/#{fetch(:application)}' }
+set_if_empty :tmp_dir, '/tmp'
     
-        def cop_enabled_at_line?(cop, line_number)
-      cop = cop.cop_name if cop.respond_to?(:cop_name)
-      disabled_line_ranges = cop_disabled_line_ranges[cop]
-      return true unless disabled_line_ranges
+    if defined?(Gem)
+  GEMS_AND_ROOT_DIRECTORIES = {
+    'sinatra' => '.',
+    'sinatra-contrib' => './sinatra-contrib',
+    'rack-protection' => './rack-protection'
+  }
+    
+        if run? && ARGV.any?
+      require 'optparse'
+      OptionParser.new { |op|
+        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
+        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
+        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
+        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
+        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
+        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
+      }.parse!(ARGV.dup)
+    end
+  end
+    
+      it 'allows for a custom authenticity token param' do
+    mock_app do
+      use Rack::Protection::AuthenticityToken, :authenticity_param => 'csrf_param'
+      run proc { |e| [200, {'Content-Type' => 'text/plain'}, ['hi']] }
+    end
