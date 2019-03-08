@@ -1,312 +1,307 @@
 
         
-        #include 'base/values.h'
-#include 'base/strings/utf_string_conversions.h'
-#include 'base/strings/string16.h'
-#include 'content/nw/src/api/dispatcher_host.h'
-#include 'ui/base/clipboard/clipboard.h'
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(Clipboard);
-};
-    
-    
-bool MenuDelegate::GetAcceleratorForCommandId(
-      int command_id,
-      ui::Accelerator* accelerator) const {
-  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-    }
-    
-    static KeyMap keymap = {
-  {'`'    , 'Backquote'},
-  {'\\'   , 'Backslash'},
-  {'['    , 'BracketLeft'},
-  {']'    , 'BracketRight'},
-  {','    , 'Comma'},
-  {'='    , 'Equal'},
-  {'-'    , 'Minus'},
-  {'.'    , 'Period'},
-  {'''    , 'Quote'},
-  {';'    , 'Semicolon'},
-  {'/'    , 'Slash'},
-  {'\n'   , 'Enter'},
-  {'\t'   , 'Tab'},
-  {'UP'   , 'ArrowUp'},
-  {'DOWN' , 'ArrowDown'},
-  {'LEFT' , 'ArrowLeft'},
-  {'RIGHT', 'ArrowRight'},
-  {'ESC'  , 'Escape'},
-  {'MEDIANEXTTRACK', 'MediaTrackNext'},
-  {'MEDIAPREVTRACK', 'MediaTrackPrevious'}
-};
-    
-    void MenuItem::SetSubmenu(Menu* sub_menu) {
-  submenu_ = sub_menu;
-  if (GTK_IS_ACCEL_GROUP(gtk_accel_group)){
-    sub_menu->UpdateKeys(gtk_accel_group);
+        #ifndef NDEBUG
+/// Verify that the types of fields are valid within a given generic signature.
+static void verifyFields(CanGenericSignature Sig, ArrayRef<SILField> Fields) {
+  for (auto &field : Fields) {
+    auto ty = field.getLoweredType();
+    // Layouts should never refer to archetypes, since they represent an
+    // abstract generic type layout.
+    assert(!ty->hasArchetype()
+           && 'SILLayout field cannot have an archetype type');
+    assert(!ty->hasTypeVariable()
+           && 'SILLayout cannot contain constraint system type variables');
+    if (!ty->hasTypeParameter())
+      continue;
+    field.getLoweredType().findIf([Sig](Type t) -> bool {
+      if (auto gpt = t->getAs<GenericTypeParamType>()) {
+        // Check that the generic param exists in the generic signature.
+        assert(Sig && 'generic param in nongeneric layout?');
+        assert(std::find(Sig.getGenericParams().begin(),
+                         Sig.getGenericParams().end(),
+                         gpt->getCanonicalType()) != Sig.getGenericParams().end()
+               && 'generic param not declared in generic signature?!');
+      }
+      return false;
+    });
   }
-  if (sub_menu == NULL)
-    gtk_menu_item_remove_submenu(GTK_MENU_ITEM(menu_item_));
-  else
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_item_), sub_menu->menu_);
+}
+#endif
+    
+    bool CacheImpl::remove(const void *Key) {
+  DefaultCache &DCache = *static_cast<DefaultCache*>(Impl);
+  llvm::sys::ScopedLock L(DCache.Mux);
+    }
+    
+    
+    
+      if (clangDiag.getID() == clang::diag::err_module_not_built &&
+      CurrentImport && clangDiag.getArgStdStr(0) == CurrentImport->getName()) {
+    SourceLoc loc = DiagLoc;
+    if (clangDiag.getLocation().isValid())
+      loc = resolveSourceLocation(clangDiag.getSourceManager(),
+                                  clangDiag.getLocation());
+    }
+    
+    void Demangler::dump() {
+  for (unsigned Idx = 0; Idx < NodeStack.size(); ++Idx) {
+    fprintf(stderr, 'NodeStack[%u]:\n', Idx);
+    NodeStack[Idx]->dump();
+    fprintf(stderr, '\n');
+  }
+  fprintf(stderr, 'Position = %zd:\n%.*s\n%*s\n', Pos,
+          (int)Text.size(), Text.data(), (int)Pos + 1, '^');
 }
     
-          std::string encoded_image_base64;
-      std::string encoded_image_str(encoded_image.data(), encoded_image.data() + encoded_image.size());
-      base::Base64Encode(encoded_image_str, &encoded_image_base64);
+    #define TEGRA_CVT2PYUVTOBGR(src_data, src_step, dst_data, dst_step, dst_width, dst_height, dcn, swapBlue, uIdx) \
+( \
+    CAROTENE_NS::isSupportedConfiguration() ? \
+        dcn == 3 ? \
+            uIdx == 0 ? \
+                (swapBlue ? \
+                    CAROTENE_NS::yuv420i2rgb(CAROTENE_NS::Size2D(dst_width, dst_height), \
+                                             src_data, src_step, \
+                                             src_data + src_step * dst_height, src_step, \
+                                             dst_data, dst_step) : \
+                    CAROTENE_NS::yuv420i2bgr(CAROTENE_NS::Size2D(dst_width, dst_height), \
+                                             src_data, src_step, \
+                                             src_data + src_step * dst_height, src_step, \
+                                             dst_data, dst_step)), \
+                CV_HAL_ERROR_OK : \
+            uIdx == 1 ? \
+                (swapBlue ? \
+                    CAROTENE_NS::yuv420sp2rgb(CAROTENE_NS::Size2D(dst_width, dst_height), \
+                                              src_data, src_step, \
+                                              src_data + src_step * dst_height, src_step, \
+                                              dst_data, dst_step) : \
+                    CAROTENE_NS::yuv420sp2bgr(CAROTENE_NS::Size2D(dst_width, dst_height), \
+                                              src_data, src_step, \
+                                              src_data + src_step * dst_height, src_step, \
+                                              dst_data, dst_step)), \
+                CV_HAL_ERROR_OK : \
+            CV_HAL_ERROR_NOT_IMPLEMENTED : \
+        dcn == 4 ? \
+            uIdx == 0 ? \
+                (swapBlue ? \
+                    CAROTENE_NS::yuv420i2rgbx(CAROTENE_NS::Size2D(dst_width, dst_height), \
+                                              src_data, src_step, \
+                                              src_data + src_step * dst_height, src_step, \
+                                              dst_data, dst_step) : \
+                    CAROTENE_NS::yuv420i2bgrx(CAROTENE_NS::Size2D(dst_width, dst_height), \
+                                              src_data, src_step, \
+                                              src_data + src_step * dst_height, src_step, \
+                                              dst_data, dst_step)), \
+                CV_HAL_ERROR_OK : \
+            uIdx == 1 ? \
+                (swapBlue ? \
+                    CAROTENE_NS::yuv420sp2rgbx(CAROTENE_NS::Size2D(dst_width, dst_height), \
+                                               src_data, src_step, \
+                                               src_data + src_step * dst_height, src_step, \
+                                               dst_data, dst_step) : \
+                    CAROTENE_NS::yuv420sp2bgrx(CAROTENE_NS::Size2D(dst_width, dst_height), \
+                                               src_data, src_step, \
+                                               src_data + src_step * dst_height, src_step, \
+                                               dst_data, dst_step)), \
+                CV_HAL_ERROR_OK : \
+            CV_HAL_ERROR_NOT_IMPLEMENTED : \
+        CV_HAL_ERROR_NOT_IMPLEMENTED \
+    : CV_HAL_ERROR_NOT_IMPLEMENTED \
+)
     
-    bool GodotCollisionDispatcher::needsResponse(const btCollisionObject *body0, const btCollisionObject *body1) {
-	if (body0->getUserIndex() == CASTED_TYPE_AREA || body1->getUserIndex() == CASTED_TYPE_AREA) {
-		// Avoide area narrow phase
-		return false;
-	}
-	return btCollisionDispatcher::needsResponse(body0, body1);
-}
-
+        void operator() (const uint8x16_t & v_src0, const uint8x16_t & v_src1,
+                     uint8x16_t & v_dst) const
+    {
+        uint16x8_t v_src0_p = vmovl_u8(vget_low_u8(v_src0));
+        uint16x8_t v_src1_p = vmovl_u8(vget_low_u8(v_src1));
+        float32x4_t v_dst0f = vmlaq_f32(vmulq_f32(vcvtq_f32_u32(vmovl_u16(vget_low_u16(v_src1_p))), v_beta),
+                                        v_alpha, vcvtq_f32_u32(vmovl_u16(vget_low_u16(v_src0_p))));
+        float32x4_t v_dst1f = vmlaq_f32(vmulq_f32(vcvtq_f32_u32(vmovl_u16(vget_high_u16(v_src1_p))), v_beta),
+                                        v_alpha, vcvtq_f32_u32(vmovl_u16(vget_high_u16(v_src0_p))));
+        uint16x8_t v_dst0 = vcombine_u16(vmovn_u32(vcvtq_u32_f32(v_dst0f)),
+                                         vmovn_u32(vcvtq_u32_f32(v_dst1f)));
+    }
     
+    void add(const Size2D &size,
+         const u8 * src0Base, ptrdiff_t src0Stride,
+         const s16 * src1Base, ptrdiff_t src1Stride,
+         s16 *dstBase, ptrdiff_t dstStride,
+         CONVERT_POLICY policy)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
+    }
     
-    {		virtual btCollisionAlgorithm *CreateCollisionAlgorithm(btCollisionAlgorithmConstructionInfo &ci, const btCollisionObjectWrapper *body0Wrap, const btCollisionObjectWrapper *body1Wrap) {
-			void *mem = ci.m_dispatcher1->allocateCollisionAlgorithm(sizeof(GodotRayWorldAlgorithm));
-			return new (mem) GodotRayWorldAlgorithm(m_world, ci.m_manifold, ci, body0Wrap, body1Wrap, false);
-		}
-	};
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
+CVT_FUNC(s16, s8, 16,
+,
+{
+     for (size_t i = 0; i < w; i += 16)
+     {
+         internal::prefetch(_src + i);
+         __asm__ (
+             'vld1.8 {d0-d1}, [%[src1]]                             \n\t'
+             'vld1.8 {d2-d3}, [%[src2]]                             \n\t'
+             'vqmovn.s16 d4, q0                                     \n\t'
+             'vqmovn.s16 d5, q1                                     \n\t'
+             'vst1.8 {d4-d5}, [%[dst]]                              \n\t'
+             : /*no output*/
+             : [src1] 'r' (_src + i),
+               [src2] 'r' (_src + i + 8),
+               [dst] 'r' (_dst + i + 0)
+             : 'd0','d1','d2','d3','d4','d5'
+         );
+     }
+})
+#else
+CVT_FUNC(s16, s8, 16,
+,
+{
+     for (size_t i = 0; i < w; i += 16)
+     {
+         internal::prefetch(_src + i);
+         int16x8_t vline1_s16 = vld1q_s16(_src + i);
+         int16x8_t vline2_s16 = vld1q_s16(_src + i + 8);
+    }
+    }
     
-    class RigidBodyBullet;
+            for ( ; j < roiw16; j += 16)
+        {
+            internal::prefetch(src + j);
+            int16x8_t v_src0 = vld1q_s16(src + j), v_src1 = vld1q_s16(src + j + 8);
+    }
     
+    void flip(const Size2D &size,
+          const u8 * srcBase, ptrdiff_t srcStride,
+          u8 * dstBase, ptrdiff_t dstStride,
+          FLIP_MODE flipMode, u32 elemSize)
+{
+    internal::assertSupportedConfiguration(isFlipSupported(flipMode, elemSize));
+#ifdef CAROTENE_NEON
+    }
     
-    {	PCKPacker();
-	~PCKPacker();
+    template <typename T, int elsize> struct vtail
+{
+    static inline void inRange(const T *, const T *, const T *,
+                               u8 *, size_t &, size_t)
+    {
+        //do nothing since there couldn't be enough data
+    }
+};
+template <typename T> struct vtail<T, 2>
+{
+    static inline void inRange(const T * src, const T * rng1, const T * rng2,
+                               u8 * dst, size_t &x, size_t width)
+    {
+        typedef typename internal::VecTraits<T>::vec128 vec128;
+        typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
+        //There no more than 15 elements in the tail, so we could handle 8 element vector only once
+        if( x + 8 < width)
+        {
+             vec128  vs = internal::vld1q( src + x);
+             vec128 vr1 = internal::vld1q(rng1 + x);
+             vec128 vr2 = internal::vld1q(rng2 + x);
+            uvec128  vd = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
+            internal::vst1(dst + x, internal::vmovn(vd));
+            x+=8;
+        }
+    }
+};
+template <typename T> struct vtail<T, 1>
+{
+    static inline void inRange(const T * src, const T * rng1, const T * rng2,
+                               u8 * dst, size_t &x, size_t width)
+    {
+        typedef typename internal::VecTraits<T>::vec128 vec128;
+        typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
+        typedef typename internal::VecTraits<T>::vec64 vec64;
+        typedef typename internal::VecTraits<T>::unsign::vec64 uvec64;
+        //There no more than 31 elements in the tail, so we could handle once 16+8 or 16 or 8 elements
+        if( x + 16 < width)
+        {
+             vec128  vs = internal::vld1q( src + x);
+             vec128 vr1 = internal::vld1q(rng1 + x);
+             vec128 vr2 = internal::vld1q(rng2 + x);
+            uvec128  vd = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
+            internal::vst1q(dst + x, vd);
+            x+=16;
+        }
+        if( x + 8 < width)
+        {
+             vec64  vs = internal::vld1( src + x);
+             vec64 vr1 = internal::vld1(rng1 + x);
+             vec64 vr2 = internal::vld1(rng2 + x);
+            uvec64  vd = internal::vand(internal::vcge(vs, vr1), internal::vcge(vr2, vs));
+            internal::vst1(dst + x, vd);
+            x+=8;
+        }
+    }
 };
     
-    Shell *Shell::get_singleton() {
+      InternalKey begin_storage, end_storage;
+    
+    TEST(FormatTest, InternalKey_EncodeDecode) {
+  const char* keys[] = { '', 'k', 'hello', 'longggggggggggggggggggggg' };
+  const uint64_t seq[] = {
+    1, 2, 3,
+    (1ull << 8) - 1, 1ull << 8, (1ull << 8) + 1,
+    (1ull << 16) - 1, 1ull << 16, (1ull << 16) + 1,
+    (1ull << 32) - 1, 1ull << 32, (1ull << 32) + 1
+  };
+  for (int k = 0; k < sizeof(keys) / sizeof(keys[0]); k++) {
+    for (int s = 0; s < sizeof(seq) / sizeof(seq[0]); s++) {
+      TestKey(keys[k], seq[s], kTypeValue);
+      TestKey('hello', 1, kTypeDeletion);
     }
-    
-    const StaticString s_slash('/');
-    
-    #include 'hphp/runtime/base/perf-warning-inl.h'
-    
-    namespace 
-{
-    // Glyph metrics:
-    // --------------
-    //
-    //                       xmin                     xmax
-    //                        |                         |
-    //                        |<-------- width -------->|
-    //                        |                         |
-    //              |         +-------------------------+----------------- ymax
-    //              |         |    ggggggggg   ggggg    |     ^        ^
-    //              |         |   g:::::::::ggg::::g    |     |        |
-    //              |         |  g:::::::::::::::::g    |     |        |
-    //              |         | g::::::ggggg::::::gg    |     |        |
-    //              |         | g:::::g     g:::::g     |     |        |
-    //    offsetX  -|-------->| g:::::g     g:::::g     |  offsetY     |
-    //              |         | g:::::g     g:::::g     |     |        |
-    //              |         | g::::::g    g:::::g     |     |        |
-    //              |         | g:::::::ggggg:::::g     |     |        |
-    //              |         |  g::::::::::::::::g     |     |      height
-    //              |         |   gg::::::::::::::g     |     |        |
-    //  baseline ---*---------|---- gggggggg::::::g-----*--------      |
-    //            / |         |             g:::::g     |              |
-    //     origin   |         | gggggg      g:::::g     |              |
-    //              |         | g:::::gg   gg:::::g     |              |
-    //              |         |  g::::::ggg:::::::g     |              |
-    //              |         |   gg:::::::::::::g      |              |
-    //              |         |     ggg::::::ggg        |              |
-    //              |         |         gggggg          |              v
-    //              |         +-------------------------+----------------- ymin
-    //              |                                   |
-    //              |------------- advanceX ----------->|
-    }
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-        // Copy and convert all vertices into a single contiguous buffer
-    ImDrawVert* vtx_dst = NULL;
-    ImDrawIdx* idx_dst = NULL;
-    g_pVB->Map(D3D10_MAP_WRITE_DISCARD, 0, (void**)&vtx_dst);
-    g_pIB->Map(D3D10_MAP_WRITE_DISCARD, 0, (void**)&idx_dst);
-    for (int n = 0; n < draw_data->CmdListsCount; n++)
-    {
-        const ImDrawList* cmd_list = draw_data->CmdLists[n];
-        memcpy(vtx_dst, cmd_list->VtxBuffer.Data, cmd_list->VtxBuffer.Size * sizeof(ImDrawVert));
-        memcpy(idx_dst, cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx));
-        vtx_dst += cmd_list->VtxBuffer.Size;
-        idx_dst += cmd_list->IdxBuffer.Size;
-    }
-    g_pVB->Unmap();
-    g_pIB->Unmap();
-    
-        // Create texture
-    int flags = al_get_new_bitmap_flags();
-    int fmt = al_get_new_bitmap_format();
-    al_set_new_bitmap_flags(ALLEGRO_MEMORY_BITMAP|ALLEGRO_MIN_LINEAR|ALLEGRO_MAG_LINEAR);
-    al_set_new_bitmap_format(ALLEGRO_PIXEL_FORMAT_ABGR_8888_LE);
-    ALLEGRO_BITMAP* img = al_create_bitmap(width, height);
-    al_set_new_bitmap_flags(flags);
-    al_set_new_bitmap_format(fmt);
-    if (!img)
-        return false;
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-        // Create the Upload Buffer:
-    {
-        VkBufferCreateInfo buffer_info = {};
-        buffer_info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-        buffer_info.size = upload_size;
-        buffer_info.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
-        buffer_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-        err = vkCreateBuffer(g_Device, &buffer_info, g_Allocator, &g_UploadBuffer);
-        check_vk_result(err);
-        VkMemoryRequirements req;
-        vkGetBufferMemoryRequirements(g_Device, g_UploadBuffer, &req);
-        g_BufferMemoryAlignment = (g_BufferMemoryAlignment > req.alignment) ? g_BufferMemoryAlignment : req.alignment;
-        VkMemoryAllocateInfo alloc_info = {};
-        alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-        alloc_info.allocationSize = req.size;
-        alloc_info.memoryTypeIndex = ImGui_ImplVulkan_MemoryType(VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, req.memoryTypeBits);
-        err = vkAllocateMemory(g_Device, &alloc_info, g_Allocator, &g_UploadBufferMemory);
-        check_vk_result(err);
-        err = vkBindBufferMemory(g_Device, g_UploadBuffer, g_UploadBufferMemory, 0);
-        check_vk_result(err);
-    }
-    
-            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-        ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
-    
-    int main(int, char**)
-{
-    // Setup window
-    glfwSetErrorCallback(glfw_error_callback);
-    if (!glfwInit())
-        return 1;
-    GLFWwindow* window = glfwCreateWindow(1280, 720, 'Dear ImGui GLFW+OpenGL2 example', NULL, NULL);
-    if (window == NULL)
-        return 1;
-    glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // Enable vsync
-    }
-    
-    bool Follow::initWithTargetAndOffset(Node *followedNode, float xOffset,float yOffset,const Rect& rect)
-{
-    CCASSERT(followedNode != nullptr, 'FollowedNode can't be NULL');
-    if(followedNode == nullptr)
-    {
-        log('Follow::initWithTarget error: followedNode is nullptr!');
-        return false;
-    }
- 
-    followedNode->retain();
-    _followedNode = followedNode;
-    _worldRect = rect;
-    _boundarySet = !rect.equals(Rect::ZERO);
-    _boundaryFullyCovered = false;
-    }
-    
-    /** @class OrbitCamera
- *
- * @brief OrbitCamera action.
- * Orbits the camera around the center of the screen using spherical coordinates.
- * @ingroup Actions
- */
-class CC_DLL OrbitCamera : public ActionCamera
-{
-public:
-    /** Creates a OrbitCamera action with radius, delta-radius,  z, deltaZ, x, deltaX. 
-     *
-     * @param t Duration in seconds.
-     * @param radius The start radius.
-     * @param deltaRadius The delta radius.
-     * @param angleZ The start angle in Z.
-     * @param deltaAngleZ The delta angle in Z.
-     * @param angleX The start angle in X.
-     * @param deltaAngleX The delta angle in X.
-     * @return An OrbitCamera.
-     */
-    static OrbitCamera* create(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX);
-    
-    /** Positions the camera according to spherical coordinates. 
-     *
-     * @param r The spherical radius.
-     * @param zenith The spherical zenith.
-     * @param azimuth The spherical azimuth.
-     */
-    void sphericalRadius(float *r, float *zenith, float *azimuth);
-    }
-    
-        // Overrides
-    virtual CardinalSplineTo *clone() const override;
-    virtual CardinalSplineTo* reverse() const override;
-    virtual void startWithTarget(Node *target) override;
-    
-    /**
-     * @param time In seconds.
-     */
-    virtual void update(float time) override;
-    
-    //
-// NOTE: Converting these macros into Templates is desirable, but please see
-// issue #16159 [https://github.com/cocos2d/cocos2d-x/pull/16159] for further info
-//
-#define EASEELASTIC_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC, REVERSE_CLASSNAME) \
-CLASSNAME* CLASSNAME::create(cocos2d::ActionInterval *action, float period /* = 0.3f*/) \
-{ \
-    CLASSNAME *ease = new (std::nothrow) CLASSNAME(); \
-    if (ease) \
-    { \
-        if (ease->initWithAction(action, period)) \
-            ease->autorelease(); \
-        else \
-            CC_SAFE_RELEASE_NULL(ease); \
-    } \
-    return ease; \
-} \
-CLASSNAME* CLASSNAME::clone() const \
-{ \
-    if(_inner) return CLASSNAME::create(_inner->clone(), _period); \
-    return nullptr; \
-} \
-void CLASSNAME::update(float time) { \
-    _inner->update(TWEEN_FUNC(time, _period)); \
-} \
-EaseElastic* CLASSNAME::reverse() const { \
-    return REVERSE_CLASSNAME::create(_inner->reverse(), _period); \
+  }
 }
     
-        /**
-    @brief Calculate the percentage a tile should be shown.
-    @param pos The position index of the tile.
-    @param time The current percentage of the action.
-    @return Return the percentage the tile should be shown.
-    */
-    virtual float testFunc(const Size& pos, float time);
+    std::string InfoLogFileName(const std::string& dbname) {
+  return dbname + '/LOG';
+}
     
-    TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& points)
-{
-    // if there are less than 3 points, then we can't triangulate
-    if(points.size()<3)
-    {
-        log('AUTOPOLYGON: cannot triangulate %s with less than 3 points', _filename.c_str());
-        return TrianglesCommand::Triangles();
-    }
-    std::vector<p2t::Point*> p2points;
-    for(const auto& pt : points)
-    {
-        p2t::Point * p = new (std::nothrow) p2t::Point(pt.x, pt.y);
-        p2points.push_back(p);
-    }
-    p2t::CDT cdt(p2points);
-    cdt.Triangulate();
-    std::vector<p2t::Triangle*> tris = cdt.GetTriangles();
+    // Return the name of a temporary file owned by the db named 'dbname'.
+// The result will be prefixed with 'dbname'.
+std::string TempFileName(const std::string& dbname, uint64_t number);
     
-    // we won't know the size of verts and indices until we process all of the triangles!
-    std::vector<V3F_C4B_T2F> verts;
-    std::vector<unsigned short> indices;
+    bool HandleDumpCommand(Env* env, char** files, int num) {
+  StdoutPrinter printer;
+  bool ok = true;
+  for (int i = 0; i < num; i++) {
+    Status s = DumpFile(env, files[i], &printer);
+    if (!s.ok()) {
+      fprintf(stderr, '%s\n', s.ToString().c_str());
+      ok = false;
     }
+  }
+  return ok;
+}
+    
+          case kFirstType:
+        if (in_fragmented_record) {
+          // Handle bug in earlier versions of log::Writer where
+          // it could emit an empty kFirstType record at the tail end
+          // of a block followed by a kFullType or kFirstType record
+          // at the beginning of the next block.
+          if (!scratch->empty()) {
+            ReportCorruption(scratch->size(), 'partial record without end(2)');
+          }
+        }
+        prospective_record_offset = physical_record_offset;
+        scratch->assign(fragment.data(), fragment.size());
+        in_fragmented_record = true;
+        break;
+    
+    #ifndef STORAGE_LEVELDB_DB_MEMTABLE_H_
+#define STORAGE_LEVELDB_DB_MEMTABLE_H_
+    
+      ~Repairer() {
+    delete table_cache_;
+    if (owns_info_log_) {
+      delete options_.info_log;
+    }
+    if (owns_cache_) {
+      delete options_.block_cache;
+    }
+  }
