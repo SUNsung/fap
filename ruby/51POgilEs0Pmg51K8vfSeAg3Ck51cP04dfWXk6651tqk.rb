@@ -1,62 +1,101 @@
 
         
+                result = Fastlane::FastFile.new.parse('lane :test do
+          add_git_tag ({
+            tag: '#{tag}',
+          })
+        end').runner.execute(:test)
+    
+          it 'raises an exception when the default compile_commands.json is not present' do
+        expect do
+          Fastlane::FastFile.new.parse('lane :test do
+            oclint
+          end').runner.execute(:test)
+        end.to raise_error('Could not find json compilation database at path 'compile_commands.json'')
+      end
+    
+        # An optional block which is called when a new value is set.
+    #   Check value is valid. This could be type checks or if a folder/file exists
+    #   You have to raise a specific exception if something goes wrong. Use `user_error!` for the message: UI.user_error!('your message')
+    attr_accessor :verify_block
+    
+          def perform(start_id, stop_id)
+        update = '
+          latest_merge_request_diff_id = (
+            SELECT MAX(id)
+            FROM merge_request_diffs
+            WHERE merge_requests.id = merge_request_diffs.merge_request_id
+          )'.squish
+    
+            def id_for_already_imported_cache(note)
+          note.id
         end
+      end
+    end
+  end
+end
 
     
-          if staff.topic_id.nil?
-        creator = PostCreator.new(Discourse.system_user,
-          raw: I18n.t('staff_category_description'),
-          title: I18n.t('category.topic_prefix', category: staff.name),
-          category: staff.name,
-          archetype: Archetype.default
-        )
-        post = creator.create
+            attr_reader :attributes
     
-        def role_properties_for(names, &block)
-      servers.role_properties_for(names, &block)
-    end
+            attr_reader :attributes
     
-            # rubocop:disable Style/MethodMissing
-        def method_missing(key, value=nil)
-          if value
-            set(lvalue(key), value)
-          else
-            fetch(key)
-          end
-        end
-        # rubocop:enable Style/MethodMissing
+    module Gitlab
+  module QueryLimiting
+    # Middleware for reporting (or raising) when a request performs more than a
+    # certain amount of database queries.
+    class Middleware
+      CONTROLLER_KEY = 'action_controller.instance'.freeze
+      ENDPOINT_KEY = 'api.endpoint'.freeze
     
-          attr_reader :locations, :values, :fetched_keys
-    
-    # We use a special :_default_git value so that SCMResolver can tell whether the
-# default has been replaced by the user via `set`.
-set_if_empty :scm, Capistrano::Configuration::SCMResolver::DEFAULT_GIT
-set_if_empty :branch, 'master'
-set_if_empty :deploy_to, -> { '/var/www/#{fetch(:application)}' }
-set_if_empty :tmp_dir, '/tmp'
-    
-    if defined?(Gem)
-  GEMS_AND_ROOT_DIRECTORIES = {
-    'sinatra' => '.',
-    'sinatra-contrib' => './sinatra-contrib',
-    'rack-protection' => './rack-protection'
-  }
-    
-        if run? && ARGV.any?
-      require 'optparse'
-      OptionParser.new { |op|
-        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
-        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
-        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
-        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
-        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
-        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
-      }.parse!(ARGV.dup)
+        if resource.errors.empty?
+      set_flash_message! :notice, :unlocked
+      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
+    else
+      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
     end
   end
     
-      it 'allows for a custom authenticity token param' do
-    mock_app do
-      use Rack::Protection::AuthenticityToken, :authenticity_param => 'csrf_param'
-      run proc { |e| [200, {'Content-Type' => 'text/plain'}, ['hi']] }
+      # Helper for use after calling send_*_instructions methods on a resource.
+  # If we are in paranoid mode, we always act as if the resource was valid
+  # and instructions were sent.
+  def successfully_sent?(resource)
+    notice = if Devise.paranoid
+      resource.errors.clear
+      :send_paranoid_instructions
+    elsif resource.errors.empty?
+      :send_instructions
     end
+    
+    module Devise
+  module Controllers
+    # A module that may be optionally included in a controller in order
+    # to provide remember me behavior. Useful when signing in is done
+    # through a callback, like in OmniAuth.
+    module Rememberable
+      # Return default cookie values retrieved from session options.
+      def self.cookie_values
+        Rails.configuration.session_options.slice(:path, :domain, :secure)
+      end
+    
+          def _devise_route_context
+        @_devise_route_context ||= send(Devise.available_router_name)
+      end
+    end
+  end
+end
+
+    
+        # Outputs the post.date as formatted html, with hooks for CSS styling.
+    #
+    #  +date+ is the date object to format as HTML.
+    #
+    # Returns string
+    def date_to_html_string(date)
+      result = '<span class='month'>' + date.strftime('%b').upcase + '</span> '
+      result << date.strftime('<span class='day'>%d</span> ')
+      result << date.strftime('<span class='year'>%Y</span> ')
+      result
+    end
+    
+    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
