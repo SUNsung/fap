@@ -1,67 +1,96 @@
 
         
-            classifiers = proj_info['classifiers'],
+            # test that the user was inserted into the database
+    with app.app_context():
+        assert get_db().execute(
+            'select * from user where username = 'a'',
+        ).fetchone() is not None
     
-            return link_list
     
-        def prepare(self, vid = '', title = None, **kwargs):
-        assert vid
+@LocalProxy
+def wsgi_errors_stream():
+    '''Find the most appropriate error stream for the application. If a request
+    is active, log to ``wsgi.errors``, otherwise use ``sys.stderr``.
     
-        try:
-        json_data = get_coub_data(html)
-        title, video_url, audio_url = get_title_and_urls(json_data)
-        video_file_name, video_file_path = get_file_path(merge, output_dir, title, video_url)
-        audio_file_name, audio_file_path = get_file_path(merge, output_dir, title, audio_url)
-        download_url(audio_url, merge, output_dir, title, info_only)
-        download_url(video_url, merge, output_dir, title, info_only)
-        if not info_only:
+                # Since we have to open a new request context for the session
+            # handling we want to make sure that we hide out own context
+            # from the caller.  By pushing the original request context
+            # (or None) on top of this and popping it we get exactly that
+            # behavior.  It's important to not use the push and pop
+            # methods of the actual request context object since that would
+            # mean that cleanup handlers are called
+            _request_ctx_stack.push(outer_reqctx)
             try:
-                fix_coub_video_file(video_file_path)
-                audio_duration = float(ffmpeg.ffprobe_get_media_duration(audio_file_path))
-                video_duration = float(ffmpeg.ffprobe_get_media_duration(video_file_path))
-                loop_file_path = get_loop_file_path(title, output_dir)
-                single_file_path = audio_file_path
-                if audio_duration > video_duration:
-                    write_loop_file(int(audio_duration / video_duration), loop_file_path, video_file_name)
-                else:
-                    single_file_path = audio_file_path
-                    write_loop_file(int(video_duration / audio_duration), loop_file_path, audio_file_name)
+                yield sess
+            finally:
+                _request_ctx_stack.pop()
     
-        mime, ext, size = url_info(real_url)
+            # return Werkzeug's default when not in an app context
+        return super(Response, self).max_cookie_size
+
     
-    __all__ = ['facebook_download']
+        def save(self, must_create=False):
+        '''
+        To save, get the session key as a securely signed string and then set
+        the modified flag so that the cookie is set on the client for the
+        current request.
+        '''
+        self._session_key = self._get_session_key()
+        self.modified = True
     
-    _LOGGER = logging.getLogger(__name__)
+        For complete documentation on using Sessions in your code, consult
+    the sessions documentation that is shipped with Django (also available
+    on the Django Web site).
+    '''
+    objects = SessionManager()
     
-    image = face_recognition.load_image_file('{}')
-face_locations = face_recognition.face_locations(image)
-'''
-    
-    3. Call 'predict' and pass in your trained model to recognize the people in an unknown image.
-    
-        # Load the uploaded image file
-    img = face_recognition.load_image_file(file_stream)
-    # Get face encodings for any faces in the uploaded image
-    unknown_face_encodings = face_recognition.face_encodings(img)
-    
-    # This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
-# other example, but it includes some basic performance tweaks to make things run a lot faster:
-#   1. Process each video frame at 1/4 resolution (though still display it at full resolution)
-#   2. Only detect faces in every other frame of video.
-    
-    from setuptools import setup
-    
-    # 你需要一个2代以上的树莓派，并在树莓派上安装face_recognition，并连接上picamera摄像头
-# 并确保picamera这个模块已经安装（树莓派一般会内置安装）
-# 你可以参考这个教程配制你的树莓派：
-# https://gist.github.com/ageitgey/1ac8dbe8572f3f533df6269dab35df65
-    
-        if len(unknown_face_encodings) > 0:
-        face_found = True
-        # 看看图片中的第一张脸是不是奥巴马
-        match_results = face_recognition.compare_faces([known_face_encoding], unknown_face_encodings[0])
-        if match_results[0]:
-            is_obama = True
+    def clean_pdf_link(link):
+    if 'arxiv' in link:
+        link = link.replace('abs', 'pdf')   
+        if not(link.endswith('.pdf')):
+            link = '.'.join((link, 'pdf'))
     
     
-def main(path):
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding model 'EnvironmentProject'
+        db.create_table(
+            'sentry_environmentproject', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'project', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.Project']
+                    )
+                ), (
+                    'environment', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.Environment']
+                    )
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['EnvironmentProject'])
+    
+    
+class Migration(DataMigration):
+    def forwards(self, orm):
+        'Write your forwards methods here.'
+        db.commit_transaction()
+    
+            # Removing unique constraint on 'ReprocessingReport', fields ['project', 'event_id']
+        db.delete_unique('sentry_reprocessingreport', ['project_id', 'event_id'])
+    
+    
+class Migration(SchemaMigration):
+    def forwards(self, orm):
+        # Adding field 'UserOption.organization'
+        db.add_column(
+            'sentry_useroption',
+            'organization',
+            self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                to=orm['sentry.Organization'], null=True
+            ),
+            keep_default=False
+        )
