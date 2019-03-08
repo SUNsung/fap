@@ -1,241 +1,203 @@
 
         
-        #endif  // ATOM_BROWSER_API_ATOM_API_RENDER_PROCESS_PREFERENCES_H_
-
+        #include <string>
     
-    namespace gfx {
-class Point;
-class Rect;
-class Screen;
-}  // namespace gfx
-    
-      canvas_.reset();
-  bitmap_.reset(new SkBitmap);
-  bitmap_->allocN32Pixels(viewport_pixel_size_.width(),
-                          viewport_pixel_size_.height(), !transparent_);
-  if (bitmap_->drawsNothing()) {
-    NOTREACHED();
-    bitmap_.reset();
-    return;
-  }
-    
-      /// @brief Compute the sum of absolute values (L1 norm) of the data.
-  Dtype asum_data() const;
-  /// @brief Compute the sum of absolute values (L1 norm) of the diff.
-  Dtype asum_diff() const;
-  /// @brief Compute the sum of squares (L2 norm squared) of the data.
-  Dtype sumsq_data() const;
-  /// @brief Compute the sum of squares (L2 norm squared) of the diff.
-  Dtype sumsq_diff() const;
-    
-    /**
- * Virtual class encapsulate boost::thread for use in base class
- * The child class will acquire the ability to run a single thread,
- * by reimplementing the virtual function InternalThreadEntry.
- */
-class InternalThread {
- public:
-  InternalThread() : thread_() {}
-  virtual ~InternalThread();
-    }
-    
-    #include 'caffe/common.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
+    // Tell browser to allocate a new object.
+// function AllocateObject(id, name, options);
+v8::Handle<v8::Value> AllocateObject(int routing_id,
+                                     int object_id,
+                                     const std::string& type,
+                                     v8::Handle<v8::Value> options);
     
     
-  /// @brief Not implemented -- AccuracyLayer cannot be used as a loss.
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
-    for (int i = 0; i < propagate_down.size(); ++i) {
-      if (propagate_down[i]) { NOT_IMPLEMENTED; }
-    }
-  }
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    { protected:
-  /**
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
-   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
-   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
-   *      the computed outputs @f$
-   *       y_n = \arg\max\limits_i x_{ni}
-   *      @f$ (for @f$ K = 1 @f$).
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  /// @brief Not implemented (non-differentiable function)
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
-    NOT_IMPLEMENTED;
-  }
-  bool out_max_val_;
-  size_t top_k_;
-  bool has_axis_;
-  int axis_;
+    {  DISALLOW_COPY_AND_ASSIGN(MenuDelegate);
 };
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-#include 'caffe/util/im2col.hpp'
-    
-    
-    {  // extra temporarary variables is used to carry out sums/broadcasting
-  // using BLAS
-  Blob<Dtype> batch_sum_multiplier_;
-  Blob<Dtype> num_by_chans_;
-  Blob<Dtype> spatial_sum_multiplier_;
-};
-    
-    
-    { private:
-  struct pair_sort_first {
-    bool operator()(const std::pair<int, int> &left,
-                    const std::pair<int, int> &right) {
-      return left.first < right.first;
-    }
-  };
-  void check_batch_reindex(int initial_num, int final_num,
-                           const Dtype* ridx_data);
-};
-    
-      virtual inline const char* type() const { return 'Convolution'; }
-    
-    /**
- * @brief Takes a Blob and crop it, to the shape specified by the second input
- *  Blob, across all dimensions after the specified axis.
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-    
-    #include <vector>
-    
-      bool handles_setup_;
-  cudnnHandle_t* handle_;
-  cudaStream_t*  stream_;
-    
-    namespace caffe {
+    void Menu::Create(const base::DictionaryValue& option) {
+  gtk_accel_group = NULL;
+  std::string type;
+  if (option.GetString('type', &type) && type == 'menubar')
+    menu_ = gtk_menu_bar_new();
+  else
+    menu_ = gtk_menu_new();
     }
     
-      for (auto alphabet_size : test_cases) {
-    for (int i = 0; i < repetitions; i++) {
-      std::vector<int> input(num_elements);
-      std::generate(input.begin(), input.end(),
-        [=]() { return rand() % alphabet_size; });
-      CompressedBufferWriter cbw(alphabet_size);
-    }
+    namespace extensions {
     }
     
-        // pre-fill index_ for dense columns
-    for (bst_uint fid = 0; fid < nfeature; ++fid) {
-      if (type_[fid] == kDenseColumn) {
-        const size_t ibegin = boundary_[fid].index_begin;
-        uint32_t* begin = &index_[ibegin];
-        uint32_t* end = begin + nrow;
-        std::fill(begin, end, std::numeric_limits<uint32_t>::max());
-        // max() indicates missing values
+    
+    {  // Verify that the size of the key space not touched by the reads
+  // is pretty much unchanged.
+  const int64_t final_other_size = Size(Key(n), Key(kCount));
+  ASSERT_LE(final_other_size, initial_other_size + 1048576);
+  ASSERT_GE(final_other_size, initial_other_size/5 - 1048576);
+}
+    
+    #include <deque>
+#include <set>
+#include 'db/dbformat.h'
+#include 'db/log_writer.h'
+#include 'db/snapshot.h'
+#include 'leveldb/db.h'
+#include 'leveldb/env.h'
+#include 'port/port.h'
+#include 'port/thread_annotations.h'
+    
+    std::string InternalKey::DebugString() const {
+  std::string result;
+  ParsedInternalKey parsed;
+  if (ParseInternalKey(rep_, &parsed)) {
+    result = parsed.DebugString();
+  } else {
+    result = '(bad)';
+    result.append(EscapeString(rep_));
+  }
+  return result;
+}
+    
+    #include 'db/dbformat.h'
+#include 'db/filename.h'
+#include 'db/log_reader.h'
+#include 'db/version_edit.h'
+#include 'db/write_batch_internal.h'
+#include 'leveldb/env.h'
+#include 'leveldb/iterator.h'
+#include 'leveldb/options.h'
+#include 'leveldb/status.h'
+#include 'leveldb/table.h'
+#include 'leveldb/write_batch.h'
+#include 'util/logging.h'
+    
+      void ReopenForAppend() {
+    delete writer_;
+    writer_ = new Writer(&dest_, dest_.contents_.size());
+  }
+    
+      // Drop reference count.  Delete if no more references exist.
+  void Unref() {
+    --refs_;
+    assert(refs_ >= 0);
+    if (refs_ <= 0) {
+      delete this;
+    }
+  }
+    
+    
+    {    uint64_t number;
+    FileType type;
+    for (size_t i = 0; i < filenames.size(); i++) {
+      if (ParseFileName(filenames[i], &number, &type)) {
+        if (type == kDescriptorFile) {
+          manifests_.push_back(filenames[i]);
+        } else {
+          if (number + 1 > next_file_number_) {
+            next_file_number_ = number + 1;
+          }
+          if (type == kLogFile) {
+            logs_.push_back(number);
+          } else if (type == kTableFile) {
+            table_numbers_.push_back(number);
+          } else {
+            // Ignore other files
+          }
+        }
       }
     }
-    
-    void ActionEase::startWithTarget(Node *target)
-{
-    if (target && _inner)
-    {
-        ActionInterval::startWithTarget(target);
-        _inner->startWithTarget(_target);
-    }
-    else
-    {
-        log('ActionEase::startWithTarget error: target or _inner is nullptr!');
-    }
-}
-    
-    void AccelAmplitude::update(float time)
-{
-    ((AccelAmplitude*)(_other))->setAmplitudeRate(powf(time, _rate));
-    _other->update(time);
-}
-    
-    bool Lens3D::initWithDuration(float duration, const Size& gridSize, const Vec2& position, float radius)
-{
-    if (Grid3DAction::initWithDuration(duration, gridSize))
-    {
-        _position.set(-1.0f, -1.0f);
-        setPosition(position);
-        _radius = radius;
-        _lensEffect = 0.7f;
-        _concave = false;
-        _dirty = true;
-    }
-    }
+    return status;
+  }
     
     
-    {
-    {
-    {            if ((action->getFlags() & flags) != 0 && action->getOriginalTarget() == target)
-            {
-                removeActionAtIndex(i, element);
-                --limit;
-            }
-            else
-            {
-                ++i;
-            }
+    {        // Advance to next key in the valid key space
+        if (key(pos) < key(current)) {
+          pos = MakeKey(key(pos) + 1, 0);
+        } else {
+          pos = MakeKey(key(pos), gen(pos) + 1);
         }
-    }
+      }
+    
+    TableCache::TableCache(const std::string& dbname,
+                       const Options& options,
+                       int entries)
+    : env_(options.env),
+      dbname_(dbname),
+      options_(options),
+      cache_(NewLRUCache(entries)) {
 }
     
-        /** Removes all actions matching at least one bit in flags and the target.
-     *
-     * @param flags     The flag field to match the actions' flags based on bitwise AND.
-     * @param target    A certain target.
-     * @js NA
-     */
-    virtual void removeActionsByFlags(unsigned int flags, Node *target);
+        head = Solution().removeNthFromEnd(head, 2);
+    printLinkedList(head);
     
     
-    {
-    {
-    {            p.z = (r * ( 1 - cosBeta ) * cosTheta);// '100' didn't work for
-            p.x = p.z * sinf(rotateByYAxis) + p.x * cosf(rotateByYAxis);
-            p.z = p.z * cosf(rotateByYAxis) - p.x * sinf(rotateByYAxis);
-            p.z/=7;
-            //    Stop z coord from dropping beneath underlying page in a transition
-            // issue #751
-            if( p.z < 0.5f )
-            {
-                p.z = 0.5f;
-            }
-            
-            // Set new coords
-            p.x += getGridRect().origin.x;
-            setVertex(Vec2(i, j), p);
-            
-        }
+    {private:
+    int nextDifferentCharacterIndex(const vector<int> &nums, int p){
+        for( ; p < nums.size() ; p ++ )
+            if( nums[p] != nums[p - 1] )
+                break;
+        return p;
     }
+};
+    
+    
+void printArr(const vector<int>& vec){
+    for(int e: vec)
+        cout << e << ' ';
+    cout << endl;
 }
     
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#ifndef __CC_ANIMATION_H__
-#define __CC_ANIMATION_H__
     
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+    {    return 0;
+}
+
+    
+                int new_level_num = 0;
+            vector<int> level;
+            for(int i = 0; i < level_num; i ++){
+                TreeNode* node = q.front();
+                q.pop();
+                level.push_back(node->val);
+    }
+    
+    private:
+    void __postorderTraversal(TreeNode* node, vector<int> &res){
+    }
+    
+    /// Utility function for traversing system devices.
+void walkBlkDevices(
+    std::function<void(const std::string& devname, hardwareDriver* type)>
+        handle_device_func) {
+  if (getuid() != 0 || geteuid() != 0) {
+    LOG(WARNING) << 'Need root access for smart information';
+    return;
+  }
+    }
+    
+    #include <osquery/logger.h>
+    
+        {BPF_ALU64 | BPF_X | BPF_MOV , BPF_REG_1, BPF_REG_10,    0,  0}, // r1 = r10
+    {BPF_ALU64 | BPF_K | BPF_ADD , BPF_REG_1,          0,    0,  -28}, // r1 += -36
+    {BPF_ALU64 | BPF_K | BPF_MOV , BPF_REG_2,          0,    0, syscall::kCommSize},   // r2 = SyscallEvent::kCommSize
+    {BPF_JMP | BPF_K | BPF_CALL  ,         0,          0,    0, BPF_FUNC_get_current_comm}, // call
+    
+    int main()
+{
+    // create JSON object
+    json object =
+    {
+        {'the good', 'il buono'},
+        {'the bad', 'il cattivo'},
+        {'the ugly', 'il brutto'}
+    };
+    }
+    
+        // serialize the JSON arrays
+    std::cout << j_array_t << '\n';
+    std::cout << j_vec << '\n';
+    std::cout << j_valarray << '\n';
+    std::cout << j_deque << '\n';
+    std::cout << j_list << '\n';
+    std::cout << j_flist << '\n';
+    std::cout << j_array << '\n';
+    std::cout << j_set << '\n';
+    std::cout << j_uset << '\n';
+    std::cout << j_mset << '\n';
+    std::cout << j_umset << '\n\n';
