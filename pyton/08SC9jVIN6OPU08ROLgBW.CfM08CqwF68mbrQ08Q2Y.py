@@ -1,185 +1,172 @@
 
         
-            This could be extended by having nested blocks, sorting them recursively
-    and flattening the end structure into a list of lines. Revision 2 maybe ^.^.
+        DEPLABEL_TO_ID = {label: lid for lid, label in enumerate(DEPLABELS)}
+    
+    def _plot_item(W, name, full_name, nspaces):
+  plt.figure()
+  if W.shape == ():
+    print(name, ': ', W)
+  elif W.shape[0] == 1:
+    plt.stem(W.T)
+    plt.title(full_name)
+  elif W.shape[1] == 1:
+    plt.stem(W)
+    plt.title(full_name)
+  else:
+    plt.imshow(np.abs(W), interpolation='nearest', cmap='jet');
+    plt.colorbar()
+    plt.title(full_name)
+    
+      Yields:
+    Pairs of the batched data, each a matrix of shape [batch_size, num_steps].
+    The second element of the tuple is the same data time-shifted to the
+    right by one. The third is a set of weights with 1 indicating a word was
+    present and 0 not.
+    
+      for sequence in sequences:
+    indices = []
+    for embedding in sequence:
+      indices.append(np.argmax(embedding))
+    batch_of_indices.append(indices)
+  return batch_of_indices
+    
+      Args:
+    hparams:  Hyperparameters for the MaskGAN.
+    sequence:  tf.int32 Tensor sequence of shape [batch_size, sequence_length]
+    is_training:  Whether the model is training.
+    reuse (Optional):  Whether to reuse the model.
+    
+    
+def create_dis_train_op(hparams, dis_loss, global_step):
+  '''Create Discriminator train op.'''
+  with tf.name_scope('train_discriminator'):
+    dis_optimizer = tf.train.AdamOptimizer(hparams.dis_learning_rate)
+    dis_vars = [
+        v for v in tf.trainable_variables() if v.op.name.startswith('dis')
+    ]
+    if FLAGS.dis_update_share_embedding and FLAGS.dis_share_embedding:
+      shared_embedding = [
+          v for v in tf.trainable_variables()
+          if v.op.name == 'gen/decoder/rnn/embedding'
+      ][0]
+      dis_vars.append(shared_embedding)
+    print('\nOptimizing Discriminator vars:')
+    for v in dis_vars:
+      print(v)
+    dis_grads = tf.gradients(dis_loss, dis_vars)
+    dis_grads_clipped, _ = tf.clip_by_global_norm(dis_grads,
+                                                  FLAGS.grad_clipping)
+    dis_train_op = dis_optimizer.apply_gradients(
+        zip(dis_grads_clipped, dis_vars), global_step=global_step)
+    return dis_train_op, dis_grads_clipped, dis_vars
+    
+        elif FLAGS.discriminator_model == 'seq2seq_vd':
+      load_ckpt = tf.train.latest_checkpoint(FLAGS.language_model_ckpt_dir)
+      print('Restoring Discriminator from %s.' % load_ckpt)
+      tf.logging.info('Restoring Discriminator from %s.' % load_ckpt)
+      dis_encoder_init_saver = init_savers['dis_encoder_init_saver']
+      dis_decoder_init_saver = init_savers['dis_decoder_init_saver']
+      dis_encoder_init_saver.restore(sess, load_ckpt)
+      dis_decoder_init_saver.restore(sess, load_ckpt)
+    
+        with tf.variable_scope('rnn') as vs:
+      outputs, _, _ = tf.contrib.rnn.static_bidirectional_rnn(
+          cell_fwd, cell_bwd, rnn_inputs, state_fwd, state_bwd, scope=vs)
+    
+        def __init__(self, debuglevel=0):
+        self._init_github_account()
+        https_handler = make_HTTPS_handler({}, debuglevel=debuglevel)
+        self._opener = compat_urllib_request.build_opener(https_handler)
+    
+    
+def openssl_encode(algo, key, iv):
+    cmd = ['openssl', 'enc', '-e', '-' + algo, '-K', hex_str(key), '-iv', hex_str(iv)]
+    prog = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+    out, _ = prog.communicate(secret_msg)
+    return out
+    
+    new_version = {}
+    
+    
+class TestIqiyiSDKInterpreter(unittest.TestCase):
+    def test_iqiyi_sdk_interpreter(self):
+        '''
+        Test the functionality of IqiyiSDKInterpreter by trying to log in
+    
+      * dynamodb
 '''
     
     
-class Formatting(object):
-    '''A delegate class that invokes the actual processors.'''
-    
-        name = 'Digest HTTP auth'
-    auth_type = 'digest'
+def test_match():
+    command = Command('brew install sshfs', output)
+    assert match(command)
     
     
-def humanize_bytes(n, precision=2):
-    # Author: Doug Latornell
-    # Licence: MIT
-    # URL: http://code.activestate.com/recipes/577081/
-    '''Return a humanized string representation of a number of bytes.
+def _is_not_okay_to_test():
+    return 'elasticsearch' not in _get_formulas()
     
+        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
+    plt.plot(sample_sizes, one_core, label='one core')
+    plt.plot(sample_sizes, multi_core, label='multi core')
+    plt.xlabel('n_samples')
+    plt.ylabel('Time (s)')
+    plt.title('Parallel %s' % func.__name__)
+    plt.legend()
     
-@mock.patch('httpie.core.get_response')
-def test_timeout(get_response):
-    def error(msg, *args, **kwargs):
-        global error_msg
-        error_msg = msg % args
+        gc.collect()
     
+        class_name = info['fullname'].split('.')[0]
+    if type(class_name) != str:
+        # Python 2 only
+        class_name = class_name.encode('utf-8')
+    module = __import__(info['module'], fromlist=[class_name])
+    obj = attrgetter(info['fullname'])(module)
     
-class BaseConfigDict(dict):
+        for line in input_file:
+        linestrip = line.strip()
+        if len(linestrip) == 0:
+            in_exercise_region = False
+        elif linestrip.startswith('# TASK:'):
+            in_exercise_region = True
     
-        # https://en.wikipedia.org/wiki/Playfair_cipher#Description
-    for char1, char2 in chunker(ciphertext, 2):
-        row1, col1 = divmod(table.index(char1), 5)
-        row2, col2 = divmod(table.index(char2), 5)
+    from sklearn.datasets import make_checkerboard
+from sklearn.datasets import samples_generator as sg
+from sklearn.cluster.bicluster import SpectralBiclustering
+from sklearn.metrics import consensus_score
     
-    def generateKey(keySize):
-    print('Generating prime p...')
-    p = rabinMiller.generateLargePrime(keySize)
-    print('Generating prime q...')
-    q = rabinMiller.generateLargePrime(keySize)
-    n = p * q
+    from sklearn.cluster import AgglomerativeClustering
+from sklearn.metrics import pairwise_distances
     
-            while self.values[new_key] is not None and self.values[new_key] != key:
-            new_key = self.__hash_double_function(key, data, i) if \
-                self.balanced_factor() >= self.lim_charge else None
-            if new_key is None: break 
-            else: i += 1
+        def report_out_of_quota(self, appid):
+        self.logger.warn('report_out_of_quota:%s', appid)
+        with self.lock:
+            if appid not in self.out_of_quota_appids:
+                self.out_of_quota_appids.append(appid)
+            try:
+                self.working_appid_list.remove(appid)
+            except:
+                pass
     
-    	s = [7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22,  7, 12, 17, 22, \
-		5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20,  5,  9, 14, 20, \
-		4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23,  4, 11, 16, 23, \
-		6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21 ]
+            if not any(os.path.isfile('%s/certutil' % x) for x in os.environ['PATH'].split(os.pathsep)):
+            xlog.warn('please install *libnss3-tools* package to import GoAgent root ca')
+            return False
     
+        def __init__(self, input=None):
+        Exception.__init__(self)
+    
+        if len(unknown_face_encodings) > 0:
+        face_found = True
+        # See if the first face in the uploaded image matches the known face of Obama
+        match_results = face_recognition.compare_faces([known_face_encoding], unknown_face_encodings[0])
+        if match_results[0]:
+            is_obama = True
+    
+        :param css:  plain tuple representation of the rect in (top, right, bottom, left) order
+    :param image_shape: numpy shape of the image array
+    :return: a trimmed plain tuple representation of the rect in (top, right, bottom, left) order
     '''
-* Wondering how this method works !
-* It's pretty simple.
-* Let's say you need to calculate a ^ b
-* RULE 1 : a ^ b = (a*a) ^ (b/2) ---- example : 4 ^ 4 = (4*4) ^ (4/2) = 16 ^ 2
-* RULE 2 : IF b is ODD, then ---- a ^ b = a * (a ^ (b - 1)) :: where (b - 1) is even.
-* Once b is even, repeat the process to get a ^ b
-* Repeat the process till b = 1 OR b = 0, because a^1 = a AND a^0 = 1
-*
-* As far as the modulo is concerned,
-* the fact : (a*b) % c = ((a%c) * (b%c)) % c
-* Now apply RULE 1 OR 2 whichever is required.
-'''
-
+    return max(css[0], 0), min(css[1], image_shape[1]), min(css[2], image_shape[0]), max(css[3], 0)
     
-    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url)
-    title = r1(r'<title>(.*)</title>', html)
-    assert title
-    id = r1(r'flvid\s*=\s*(\d+)', html)
-    assert id
-    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
-    
-        html = get_content(url)
-    pid = match1(html, r'video\.settings\.pid\s*=\s*\'([^\']+)\'')
-    title = match1(html, r'video\.settings\.title\s*=\s*\'([^\']+)\'')
-    
-    # If true, an OpenSearch description file will be output, and all pages will
-# contain a <link> tag referring to it.  The value of this option must be the
-# base URL from which the finished HTML is served.
-#
-# html_use_opensearch = ''
-    
-        def _queued_event_check(self, click_type, time_diff):
-        '''Generate a log message and returns true if timeout exceeded.'''
-        time_string = '{:d} {}'.format(
-            time_diff, 'second' if time_diff == 1 else 'seconds')
-    
-        def __init__(self, config):
-        '''Initialize the scanner.'''
-        self.host = config[CONF_HOST]
-        self.username = config[CONF_USERNAME]
-        self.password = config[CONF_PASSWORD]
-        self.last_results = []
-        data = self.get_actiontec_data()
-        self.success_init = data is not None
-        _LOGGER.info('canner initialized')
-    
-            return [device.mac for device in self.last_results]
-    
-    from homeassistant.components.device_tracker import (
-    DOMAIN, PLATFORM_SCHEMA, DeviceScanner)
-from homeassistant.const import CONF_HOST
-import homeassistant.helpers.config_validation as cv
-    
-    For more details about this platform, please refer to the documentation at
-https://home-assistant.io/components/notify.command_line/
-'''
-import logging
-import subprocess
-    
-    CONF_TO = 'to'
-    
-        def send_message(self, message=None, **kwargs):
-        '''Send a message to a specified target.'''
-        from messagebird.client import ErrorException
-    
-    
-def get_service(hass, config, discovery_info=None):
-    '''Get the Mycroft notification service.'''
-    return MycroftNotificationService(
-        hass.data['mycroft'])
-    
-        # Display the resulting image
-    cv2.imshow('Video', frame)
-    
-    known_encodings = [
-    obama_face_encoding,
-    biden_face_encoding
-]
-    
-        # Print the location of each face in this image
-    top, right, bottom, left = face_location
-    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
-    
-        :param img: An image (as a numpy array)
-    :param number_of_times_to_upsample: How many times to upsample the image looking for faces. Higher numbers find smaller faces.
-    :param model: Which face detection model to use. 'hog' is less accurate but faster on CPUs. 'cnn' is a more accurate
-                  deep-learning model which is GPU/CUDA accelerated (if available). The default is 'hog'.
-    :return: A list of tuples of found face locations in css (top, right, bottom, left) order
-    '''
-    if model == 'cnn':
-        return [_trim_css_to_bounds(_rect_to_css(face.rect), img.shape) for face in _raw_face_locations(img, number_of_times_to_upsample, 'cnn')]
-    else:
-        return [_trim_css_to_bounds(_rect_to_css(face), img.shape) for face in _raw_face_locations(img, number_of_times_to_upsample, model)]
-    
-    # This is an example of running face recognition on a single image
-# and drawing a box around each person that was identified.
-    
-    
-def print_result(filename, name, distance, show_distance=False):
-    if show_distance:
-        print('{},{},{}'.format(filename, name, distance))
-    else:
-        print('{},{}'.format(filename, name))
-    
-            self.assertEqual(
-            set(face_landmarks[0].keys()),
-            set(['chin', 'left_eyebrow', 'right_eyebrow', 'nose_bridge',
-                 'nose_tip', 'left_eye', 'right_eye', 'top_lip',
-                 'bottom_lip']))
-        self.assertEqual(
-            face_landmarks[0]['chin'],
-            [(369, 220), (372, 254), (378, 289), (384, 322), (395, 353),
-             (414, 382), (437, 407), (464, 424), (495, 428), (527, 420),
-             (552, 399), (576, 372), (594, 344), (604, 314), (610, 282),
-             (613, 250), (615, 219)])
-    
-    import face_recognition
-import picamera
-import numpy as np
-    
-        # 图片上传失败，输出以下html代码
-    return '''
-    <!doctype html>
-    <title>Is this a picture of Obama?</title>
-    <h1>Upload a picture and see if it's a picture of Obama!</h1>
-    <form method='POST' enctype='multipart/form-data'>
-      <input type='file' name='file'>
-      <input type='submit' value='Upload'>
-    </form>
-    '''
+    # Create a PIL imagedraw object so we can draw on the picture
+pil_image = Image.fromarray(image)
+d = ImageDraw.Draw(pil_image)
