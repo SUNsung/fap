@@ -1,154 +1,72 @@
 
         
-        Provides utility functions that are consumed internally by Requests
-which depend on extremely few external helpers (such as compat)
-'''
+        
+class MissingNonceTest(unittest.TestCase):
+    '''Tests for acme.errors.MissingNonce.'''
     
-        def __delitem__(self, key):
-        del self._store[key.lower()]
+        :returns: filename of vhost
+    :rtype: str
     
-    
-@pytest.fixture
-def httpbin_secure(httpbin_secure):
-    return prepare_url(httpbin_secure)
-
-    
-    import threading
-import socket
-import select
-    
-        def init_per_thread_state(self):
-        # Ensure state is initialized just once per-thread
-        if not hasattr(self._thread_local, 'init'):
-            self._thread_local.init = True
-            self._thread_local.last_nonce = ''
-            self._thread_local.nonce_count = 0
-            self._thread_local.chal = {}
-            self._thread_local.pos = None
-            self._thread_local.num_401_calls = None
-    
-            :param name: a string containing name of cookie
-        :param domain: (optional) string containing domain of cookie
-        :param path: (optional) string containing path of cookie
-        :raises KeyError: if cookie is not found
-        :raises CookieConflictError: if there are multiple cookies
-            that match name and optionally domain and path
-        :return: cookie.value
+            :returns: `set` of unsaved files
         '''
-        toReturn = None
-        for cookie in iter(self):
-            if cookie.name == name:
-                if domain is None or cookie.domain == domain:
-                    if path is None or cookie.path == path:
-                        if toReturn is not None:  # if there are multiple cookies that meet passed in criteria
-                            raise CookieConflictError('There are multiple cookies with name, %r' % (name))
-                        toReturn = cookie.value  # we will eventually return this as long as no cookie conflict
+        save_state = self.aug.get('/augeas/save')
+        self.aug.set('/augeas/save', 'noop')
+        # Existing Errors
+        ex_errs = self.aug.match('/augeas//error')
+        try:
+            # This is a noop save
+            self.aug.save()
+        except (RuntimeError, IOError):
+            self._log_save_errors(ex_errs)
+            # Erase Save Notes
+            self.save_notes = ''
+            raise errors.PluginError(
+                'Error saving files, check logs for more info.')
     
-        if implementation == 'CPython':
-        implementation_version = platform.python_version()
-    elif implementation == 'PyPy':
-        implementation_version = '%s.%s.%s' % (sys.pypy_version_info.major,
-                                               sys.pypy_version_info.minor,
-                                               sys.pypy_version_info.micro)
-        if sys.pypy_version_info.releaselevel != 'final':
-            implementation_version = ''.join([
-                implementation_version, sys.pypy_version_info.releaselevel
-            ])
-    elif implementation == 'Jython':
-        implementation_version = platform.python_version()  # Complete Guess
-    elif implementation == 'IronPython':
-        implementation_version = platform.python_version()  # Complete Guess
-    else:
-        implementation_version = 'Unknown'
+    AUTOHSTS_PERMANENT = 31536000
+'''Value for the last max-age of HSTS'''
     
-            assert super_len(NoLenBoomFile()) == 0
+            with mock.patch('certbot.util.get_os_info') as mock_info:
+            for distro in entrypoint.OVERRIDE_CLASSES.keys():
+                mock_info.return_value = (distro, 'whatever')
+                self.assertEqual(entrypoint.get_configurator(),
+                                 entrypoint.OVERRIDE_CLASSES[distro])
     
-        # Informational.
-    100: ('continue',),
-    101: ('switching_protocols',),
-    102: ('processing',),
-    103: ('checkpoint',),
-    122: ('uri_too_long', 'request_uri_too_long'),
-    200: ('ok', 'okay', 'all_ok', 'all_okay', 'all_good', '\\o/', '✓'),
-    201: ('created',),
-    202: ('accepted',),
-    203: ('non_authoritative_info', 'non_authoritative_information'),
-    204: ('no_content',),
-    205: ('reset_content', 'reset'),
-    206: ('partial_content', 'partial'),
-    207: ('multi_status', 'multiple_status', 'multi_stati', 'multiple_stati'),
-    208: ('already_reported',),
-    226: ('im_used',),
+            self.sni._mod_config()  # pylint: disable=protected-access
+        self.sni.configurator.save()
     
     
-def default_headers():
-    '''
-    :rtype: requests.structures.CaseInsensitiveDict
-    '''
-    return CaseInsensitiveDict({
-        'User-Agent': default_user_agent(),
-        'Accept-Encoding': ', '.join(('gzip', 'deflate')),
-        'Accept': '*/*',
-        'Connection': 'keep-alive',
-    })
-    
-    This module contains the primary objects that power Requests.
-'''
-    
-    from ..common import *
-import json
-import random
-from urllib.parse import urlparse, parse_qs
-    
-        roidb = json_dataset.get_roidb()
-    for i, entry in enumerate(roidb):
-        im_name = entry['image']
-    
-        # Histogram of ground-truth objects
-    gt_hist = np.zeros((len(classes)), dtype=np.int)
-    for entry in roidb:
-        gt_inds = np.where(
-            (entry['gt_classes'] > 0) & (entry['is_crowd'] == 0))[0]
-        gt_classes = entry['gt_classes'][gt_inds]
-        gt_hist += np.histogram(gt_classes, bins=hist_bins)[0]
-    logger.debug('Ground-truth class histogram:')
-    for i, v in enumerate(gt_hist):
-        logger.debug(
-            '{:d}{:s}: {:d}'.format(
-                i, classes[i].rjust(char_len), v))
-    logger.debug('-' * char_len)
-    logger.debug(
-        '{:s}: {:d}'.format(
-            'total'.rjust(char_len), np.sum(gt_hist)))
-
+  def Start( self ):
+    request_data = BuildRequestData()
+    request_data.update( { 'filetypes': self.filetypes } )
+    self._response = self.PostDataToHandler( request_data,
+                                             'semantic_completion_available' )
     
     
-def voc_info(json_dataset):
-    year = json_dataset.name[4:8]
-    image_set = json_dataset.name[9:]
-    devkit_path = get_devkit_dir(json_dataset.name)
-    assert os.path.exists(devkit_path), \
-        'Devkit directory {} not found'.format(devkit_path)
-    anno_path = os.path.join(
-        devkit_path, 'VOC' + year, 'Annotations', '{:s}.xml')
-    image_set_path = os.path.join(
-        devkit_path, 'VOC' + year, 'ImageSets', 'Main', image_set + '.txt')
-    return dict(
-        year=year,
-        image_set=image_set,
-        devkit_path=devkit_path,
-        anno_path=anno_path,
-        image_set_path=image_set_path)
-
+  def Start( self ):
+    request_data = BuildRequestData()
+    if self._extra_data:
+      request_data.update( self._extra_data )
+    self._response = self.PostDataToHandler( request_data,
+                                             'debug_info',
+                                             display_message = False )
     
+    def main():
+    for name, fn in [('sequential',
+                      functools.partial(download_urls_sequential, URLS)),
+                     ('processes',
+                      functools.partial(download_urls_with_executor,
+                                        URLS,
+                                        ProcessPoolExecutor(10))),
+                     ('threads',
+                      functools.partial(download_urls_with_executor,
+                                        URLS,
+                                        ThreadPoolExecutor(10)))]:
+        sys.stdout.write('%s: ' % name.ljust(12))
+        start = time.time()
+        url_map = fn()
+        sys.stdout.write('%.2f seconds (%d of %d downloaded)\n' %
+                         (time.time() - start, len(url_map), len(URLS)))
     
-# ---------------------------------------------------------------------------- #
-# RPN with an FPN backbone
-# ---------------------------------------------------------------------------- #
-    
-    
-def fpn_rpn_frozen_features(model):
-    logger.warn('Deprecated: use `TRAIN.FREEZE_CONV_BODY: True` instead')
-    return build_generic_detection_model(
-        model, get_func(cfg.MODEL.CONV_BODY), freeze_conv_body=True
-    )
+    # Add any paths that contain custom themes here, relative to this directory.
+#html_theme_path = []
