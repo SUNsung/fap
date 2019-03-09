@@ -1,261 +1,261 @@
 
         
-        // Generate destructors.
-#include 'ipc/struct_destructor_macros.h'
-#include 'content/nw/src/common/common_message_generator.h'
+          // Quit the whole app.
+  static void Quit(content::RenderProcessHost* rph = NULL);
     
-      static void Call(content::Shell* shell,
-                   const std::string& method,
-                   const base::ListValue& arguments,
-                   base::ListValue* result,
-                   DispatcherHost* dispatcher_host);
+    v8::Handle<v8::Value> AllocateId(int routing_id);
     
-    #include 'base/strings/string_piece.h'
-#include 'v8/include/v8.h'
-    
-    EventListener::EventListener(int id,
-  const base::WeakPtr<DispatcherHost>& dispatcher_host,
-  const base::DictionaryValue& option) : Base(id, dispatcher_host, option) {
-    }
-    
-    
-    {} // namespace nwapi
-    
-    void Menu::Create(const base::DictionaryValue& option) {
-  is_menu_modified_ = true;
-  menu_delegate_.reset(new MenuDelegate(object_manager()));
-  menu_model_.reset(new ui::NwMenuModel(menu_delegate_.get()));
-    }
-    
-    bool NwAppClearCacheFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  content::BrowsingDataRemover* remover = content::BrowserContext::GetBrowsingDataRemover(
-      Profile::FromBrowserContext(context_));
-    }
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.App.clearAppCache', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwAppClearAppCacheFunction);
-};
-    
-          // strip off data uri header if raw is set
-      if (!(data.raw.get() && *(data.raw))) {
-        if (data.type == TYPE_PNG && base::StartsWith(content, kPNGDataUriPrefix, base::CompareCase::INSENSITIVE_ASCII)) {
-          content = content.substr(strlen(kPNGDataUriPrefix));
-        } else if (data.type == TYPE_JPEG && base::StartsWith(content, kJPEGDataUriPrefix, base::CompareCase::INSENSITIVE_ASCII)) {
-          content = content.substr(strlen(kJPEGDataUriPrefix));
-        } else {
-          error_ = base::StringPrintf('Invalid data URI. Only \'%s\' or \'%s\' is accepted.', kPNGDataUriPrefix, kJPEGDataUriPrefix);
-          return false;
-        }
-      }
-    
-    class NwObjCreateFunction : public NWSyncExtensionFunction {
- public:
-  NwObjCreateFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-      // implement nw.Screen.initEventListeners()
-  class NwScreenInitEventListenersFunction: public NWSyncExtensionFunction {
-    public:
-      NwScreenInitEventListenersFunction();
-      bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    // Finally, you can use INSTANTIATE_TEST_CASE_P to instantiate the test
-// case with any set of parameters you want. Google Test defines a number
-// of functions for generating test parameters. They return what we call
-// (surprise!) parameter generators. Here is a  summary of them, which
-// are all in the testing namespace:
-//
-//
-//  Range(begin, end [, step]) - Yields values {begin, begin+step,
-//                               begin+step+step, ...}. The values do not
-//                               include end. step defaults to 1.
-//  Values(v1, v2, ..., vN)    - Yields values {v1, v2, ..., vN}.
-//  ValuesIn(container)        - Yields values from a C-style array, an STL
-//  ValuesIn(begin,end)          container, or an iterator range [begin, end).
-//  Bool()                     - Yields sequence {false, true}.
-//  Combine(g1, g2, ..., gN)   - Yields all combinations (the Cartesian product
-//                               for the math savvy) of the values generated
-//                               by the N generators.
-//
-// For more details, see comments at the definitions of these functions below
-// in this file.
-//
-// The following statement will instantiate tests from the FooTest test case
-// each with parameter values 'meeny', 'miny', and 'moe'.
-    
-    // Then, use the TEST_P macro to define as many parameterized tests
-// for this fixture as you want. The _P suffix is for 'parameterized'
-// or 'pattern', whichever you prefer to think.
-    
-        // First, registers the first type-parameterized test in the type
-    // list.
-    MakeAndRegisterTestInfo(
-        (std::string(prefix) + (prefix[0] == '\0' ? '' : '/') + case_name + '/'
-         + StreamableToString(index)).c_str(),
-        GetPrefixUntilComma(test_names).c_str(),
-        GetTypeName<Type>().c_str(),
-        NULL,  // No value parameter.
-        GetTypeId<FixtureClass>(),
-        TestClass::SetUpTestCase,
-        TestClass::TearDownTestCase,
-        new TestFactoryImpl<TestClass>);
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37, typename T38, typename T39, typename T40,
-    typename T41, typename T42, typename T43, typename T44, typename T45>
-struct Types45 {
-  typedef T1 Head;
-  typedef Types44<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
-      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
-      T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43,
-      T44, T45> Tail;
-};
-    
-    // Type utilities needed for implementing typed and type-parameterized
-// tests.  This file is generated by a SCRIPT.  DO NOT EDIT BY HAND!
-//
-// Currently we support at most $n types in a list, and at most $n
-// type-parameterized tests in one type-parameterized test case.
-// Please contact googletestframework@googlegroups.com if you need
-// more.
-    
-    // Implementation #1 calculates the primes on-the-fly.
-class OnTheFlyPrimeTable : public PrimeTable {
- public:
-  virtual bool IsPrime(int n) const {
-    if (n <= 1) return false;
-    }
-    }
-    
-    // Sets the 0-terminated C string this MyString object
-// represents.
-void MyString::Set(const char* a_c_string) {
-  // Makes sure this works when c_string == c_string_
-  const char* const temp = MyString::CloneCString(a_c_string);
-  delete[] c_string_;
-  c_string_ = temp;
+    EventListener::~EventListener() {
+  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
+    delete i->second;
+  }
 }
-
     
-      // Constructs a MyString by cloning a 0-terminated C string.
-  explicit MyString(const char* a_c_string) : c_string_(NULL) {
-    Set(a_c_string);
-  }
+    base::string16 MenuDelegate::GetLabelForCommandId(int command_id) const {
+  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  return item->label_;
+}
     
-    // QueueNode is a node in a Queue, which consists of an element of
-// type E and a pointer to the next node.
-template <typename E>  // E is the element type
-class QueueNode {
-  friend class Queue<E>;
+    
+    {  DISALLOW_COPY_AND_ASSIGN(MenuDelegate);
+};
+    
+    ExtensionFunction::ResponseAction
+NwAppCloseAllWindowsFunction::Run() {
+  AppWindowRegistry* registry = AppWindowRegistry::Get(browser_context());
+  if (!registry)
+    return RespondNow(Error(''));
+  base::MessageLoopCurrent::Get()->task_runner()->PostTask(
+        FROM_HERE,
+        base::Bind(&NwAppCloseAllWindowsFunction::DoJob, registry, extension()->id()));
     }
     
-      /**
-   * \fn  virtual void Predictor::UpdatePredictionCache( const gbm::GBTreeModel
-   * &model, std::vector<std::unique_ptr<TreeUpdater> >* updaters, int
-   * num_new_trees) = 0;
-   *
-   * \brief Update the internal prediction cache using newly added trees. Will
-   * use the tree updater to do this if possible. Should be called as a part of
-   * the tree boosting process to facilitate the look up of predictions
-   * at a later time.
-   *
-   * \param           model         The model.
-   * \param [in,out]  updaters      The updater sequence for gradient boosting.
-   * \param           num_new_trees Number of new trees.
-   */
+    #include 'base/lazy_instance.h'
+#include 'base/values.h'
+#include 'content/nw/src/api/nw_screen.h'
+#include 'extensions/browser/extensions_browser_client.h'
+#include 'ui/display/display_observer.h'
+#include 'ui/display/display.h'
+#include 'ui/display/screen.h'
+    
+      protected:
+    ~NwScreenRegisterStreamFunction() override {}
+    DECLARE_EXTENSION_FUNCTION('nw.Screen.registerStream', UNKNOWN)
+    
+    struct BlobData {
+  BlobData() : blob(nullptr), choices(nullptr) {}
+  BlobData(int index, Tesseract* tess, const WERD_RES& word)
+    : blob(word.chopped_word->blobs[index]),
+      tesseract(tess),
+      choices(&(*word.ratings)(index, index)) {}
+    }
+    
+    // Main entry point for Paragraph Detection Algorithm.
+//
+// Given a set of equally spaced textlines (described by row_infos),
+// Split them into paragraphs.  See http://goto/paragraphstalk
+//
+// Output:
+//   row_owners - one pointer for each row, to the paragraph it belongs to.
+//   paragraphs - this is the actual list of PARA objects.
+//   models - the list of paragraph models referenced by the PARA objects.
+//            caller is responsible for deleting the models.
+void DetectParagraphs(int debug_level,
+                      GenericVector<RowInfo> *row_infos,
+                      GenericVector<PARA *> *row_owners,
+                      PARA_LIST *paragraphs,
+                      GenericVector<ParagraphModel *> *models);
+    
+    // Deletes the box with the given index, and shuffles up the rest.
+// Recomputes the bounding box.
+void BoxWord::DeleteBox(int index) {
+  ASSERT_HOST(0 <= index && index < length_);
+  boxes_.remove(index);
+  --length_;
+  ComputeBoundingBox();
+}
+    
+      // Reads all the pages in the given lstmf filename to the cache. The reader
+  // is used to read the file.
+  bool LoadDocument(const char* filename, int start_page, int64_t max_memory,
+                    FileReader reader);
+  // Sets up the document, without actually loading it.
+  void SetDocument(const char* filename, int64_t max_memory, FileReader reader);
+  // Writes all the pages to the given filename. Returns false on error.
+  bool SaveDocument(const char* filename, FileWriter writer);
+  bool SaveToBuffer(GenericVector<char>* buffer);
     
     
-    {}  // namespace xgboost
-#endif  // XGBOOST_TREE_UPDATER_H_
-
+    { private:
+  double total_weight;         // no of elements or sum of weights.
+  double sigx;                 // sum of x
+  double sigy;                 // sum of y
+  double sigxx;                // sum x squared
+  double sigxy;                // sum of xy
+  double sigyy;                // sum y squared
+};
     
-    SEXP XGDMatrixGetInfo_R(SEXP handle, SEXP field) {
-  SEXP ret;
-  R_API_BEGIN();
-  bst_ulong olen;
-  const float *res;
-  CHECK_CALL(XGDMatrixGetFloatInfo(R_ExternalPtrAddr(handle),
-                                   CHAR(asChar(field)),
-                                 &olen,
-                                 &res));
-  ret = PROTECT(allocVector(REALSXP, olen));
-  for (size_t i = 0; i < olen; ++i) {
-    REAL(ret)[i] = res[i];
-  }
-  R_API_END();
-  UNPROTECT(1);
+        // out_of_range.402
+    try
+    {
+        // try to use the array index '-'
+        json::reference ref = j.at('/array/-'_json_pointer);
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+    
+    /** @class Speed
+ * @brief Changes the speed of an action, making it take longer (speed>1)
+ * or shorter (speed<1) time.
+ * Useful to simulate 'slow motion' or 'fast forward' effect.
+ * @warning This action can't be Sequenceable because it is not an IntervalAction.
+ */
+class CC_DLL Speed : public Action
+{
+public:
+    /** Create the action and set the speed.
+     *
+     * @param action An action.
+     * @param speed The action speed.
+     */
+    static Speed* create(ActionInterval* action, float speed);
+    /** Return the speed.
+     *
+     * @return The action speed.
+     */
+    float getSpeed() const { return _speed; }
+    /** Alter the speed of the inner function in runtime. 
+     *
+     * @param speed Alter the speed of the inner function in runtime.
+     */
+    void setSpeed(float speed) { _speed = speed; }
+    }
+    
+    void PointArray::reverseInline()
+{
+    const size_t l = _controlPoints.size();
+    Vec2 *p1 = nullptr;
+    Vec2 *p2 = nullptr;
+    float x, y;
+    for (size_t i = 0; i < l/2; ++i)
+    {
+        p1 = &_controlPoints.at(i);
+        p2 = &_controlPoints.at(l-i-1);
+        
+        x = p1->x;
+        y = p1->y;
+        
+        p1->x = p2->x;
+        p1->y = p2->y;
+        
+        p2->x = x;
+        p2->y = y;
+    }
+}
+    
+    bool AccelAmplitude::initWithAction(Action *action, float duration)
+{
+    if (ActionInterval::initWithDuration(duration))
+    {
+        _rate = 1.0f;
+        _other = (ActionInterval*)(action);
+        action->retain();
+    }
+    }
+    
+    CallFuncN * CallFuncN::create(const std::function<void(Node*)> &func)
+{
+    auto ret = new (std::nothrow) CallFuncN();
+    }
+    
+    http://www.cocos2d-x.org
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    /**
+@brief WavesTiles3D action.
+@details This action wave the target node with many tiles.
+*/
+class CC_DLL WavesTiles3D : public TiledGrid3DAction
+{
+public:
+    /** 
+     * @brief Create the action with a number of waves, the waves amplitude, the grid size and the duration.
+     * @param duration Specify the duration of the WavesTiles3D action. It's a value in seconds.
+     * @param gridSize Specify the size of the grid.
+     * @param waves Specify the waves count of the WavesTiles3D action.
+     * @param amplitude Specify the amplitude of the WavesTiles3D action.
+     * @return If the creation success, return a pointer of WavesTiles3D action; otherwise, return nil.
+     */
+    static WavesTiles3D* create(float duration, const Size& gridSize, unsigned int waves, float amplitude);
+    }
+    
+    AnimationFrame* AnimationFrame::clone() const
+{
+    // no copy constructor
+    auto frame = new (std::nothrow) AnimationFrame();
+    frame->initWithSpriteFrame(_spriteFrame->clone(),
+                               _delayUnits,
+                               _userInfo);
+    }
+    
+    PolygonInfo AutoPolygon::generateTriangles(const Rect& rect, float epsilon, float threshold)
+{
+    Rect realRect = getRealRect(rect);
+    auto p = trace(realRect, threshold);
+    p = reduce(p, realRect, epsilon);
+    p = expand(p, realRect, epsilon);
+    auto tri = triangulate(p);
+    calculateUV(realRect, tri.verts, tri.vertCount);
+    PolygonInfo ret;
+    ret.triangles = tri;
+    ret.setFilename(_filename);
+    ret.setRect(realRect);
+    return ret;
+}
+    
+    #include <vector>
+    
+    
+    {  int ret = x;
   return ret;
 }
     
-     private:
-  struct ColumnBoundary {
-    // indicate where each column's index and row_ind is stored.
-    // index_begin and index_end are logical offsets, so they should be converted to
-    // actual offsets by scaling with packing_factor_
-    size_t index_begin;
-    size_t index_end;
-    size_t row_ind_begin;
-    size_t row_ind_end;
-  };
-    
-            unordered_map<int,int> record;
-        for(int i = 0 ; i < nums.size() ; i ++)
-            record[nums[i]] = i;
-    
-    
-    {    return 0;
+    void RadarState201::Parse(const std::uint8_t* bytes, int32_t length,
+                          ContiRadar* conti_radar) const {
+  auto state = conti_radar->mutable_radar_state();
+  state->set_max_distance(max_dist(bytes, length));
+  state->set_output_type(output_type(bytes, length));
+  state->set_rcs_threshold(rcs_threshold(bytes, length));
+  state->set_radar_power(radar_power(bytes, length));
+  state->set_send_quality(send_quality(bytes, length));
+  state->set_send_ext_info(send_ext_info(bytes, length));
 }
     
-            for(ListNode* cur = head ; cur != NULL ;){
-            if(cur->val < x){
-                prev1->next = cur;
-                cur = cur->next;
-                prev1 = prev1->next;
-                prev1->next = NULL;
-            }
-            else{
-                prev2->next = cur;
-                cur = cur->next;
-                prev2 = prev2->next;
-                prev2->next = NULL;
-            }
-        }
+    void SplineSegKernel::CalculateThirdOrderDerivative(const uint32_t num_params) {
+  kernel_third_order_derivative_ =
+      Eigen::MatrixXd::Zero(num_params, num_params);
+  for (int r = 3; r < kernel_third_order_derivative_.rows(); ++r) {
+    for (int c = 3; c < kernel_third_order_derivative_.cols(); ++c) {
+      kernel_third_order_derivative_(r, c) =
+          (r * r - r) * (r - 2) * (c * c - c) * (c - 2) / (r + c - 5.0);
+    }
+  }
+}
     
-    #include <iostream>
-#include <vector>
-    
-    #include <iostream>
-#include <vector>
-#include <stack>
-    
-    
-    {            res[level].push_back(node->val);
-            if(node->left)
-                q.push(make_pair(node->left, level + 1 ));
-            if(node->right)
-                q.push(make_pair(node->right, level + 1 ));
-        }
-    
-            TreeNode* p = root;
-        while(p != NULL || !stack.empty()){
-            if(p != NULL){
-                stack.push(p);
-                output.push(p);
-                p = p->right;
-            }
-            else{
-                p = stack.top();
-                stack.pop();
-                p = p->left;
-            }
-        }
+    // config detail: {'name': 'brake_on_off', 'enum': {0: 'BRAKE_ON_OFF_OFF', 1:
+// 'BRAKE_ON_OFF_ON'}, 'precision': 1.0, 'len': 1, 'is_signed_var': False,
+// 'offset': 0.0, 'physical_range': '[0|1]', 'bit': 48, 'type': 'enum', 'order':
+// 'motorola', 'physical_unit': ''}
+Brake_rpt_6c::Brake_on_offType Brakerpt6c::brake_on_off(
+    const std::uint8_t* bytes, int32_t length) const {
+  Byte t0(bytes + 6);
+  int32_t x = t0.get_byte(0, 1);
+    }
