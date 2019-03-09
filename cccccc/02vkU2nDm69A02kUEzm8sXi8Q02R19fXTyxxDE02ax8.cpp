@@ -1,377 +1,250 @@
 
         
-        void CacheImpl::destroy() {
-  removeAll();
-  delete static_cast<DefaultCache*>(Impl);
-}
-    
-        StringRef Line = RawText.substr(0, Pos);
-    Lines.push_back(Line);
-    if (!IsFirstLine) {
-      size_t NonWhitespacePos = RawText.find_first_not_of(' ');
-      if (NonWhitespacePos != StringRef::npos)
-        WhitespaceToTrim =
-            std::min(WhitespaceToTrim,
-                     static_cast<unsigned>(NonWhitespacePos));
-    }
-    IsFirstLine = false;
-    
-    %# Ignore the following admonition; it applies to the resulting .cpp file only
-//// Automatically Generated From UnicodeExtendedGraphemeClusters.cpp.gyb.
-//// Do Not Edit Directly!
-//===----------------------------------------------------------------------===//
-//
-// This source file is part of the Swift.org open source project
-//
-// Copyright (c) 2014 - 2017 Apple Inc. and the Swift project authors
-// Licensed under Apache License v2.0 with Runtime Library Exception
-//
-// See https://swift.org/LICENSE.txt for license information
-// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
-//
-//===----------------------------------------------------------------------===//
-    
-    /// Classify a potential CF typedef.
-CFPointeeInfo
-CFPointeeInfo::classifyTypedef(const clang::TypedefNameDecl *typedefDecl) {
-  clang::QualType type = typedefDecl->getUnderlyingType();
-    }
-    
-      private:
-    /// Is this a diagnostic that doesn't do the user any good to show if it
-    /// is located in one of Swift's synthetic buffers? If so, returns true to
-    /// suppress it.
-    static bool shouldSuppressDiagInSwiftBuffers(clang::DiagOrStoredDiag info) {
-      if (info.isNull())
-        return false;
-    }
-    
-    
-    {  llvm_unreachable('invalid class');
-}
-    
-      // Handles |request| by serving cache-able response.
-  static std::unique_ptr<net::test_server::HttpResponse>
-  CacheControlResponseHandler(const std::string& path,
-                              const net::test_server::HttpRequest& request) {
-    if (!base::StartsWith(path, request.relative_url,
-                          base::CompareCase::SENSITIVE))
-      return std::unique_ptr<net::test_server::HttpResponse>();
-    }
-    
-    // Generate constructors.
-#include 'ipc/struct_constructor_macros.h'
-#include 'content/nw/src/common/common_message_generator.h'
-    
-    
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-       bool IsCommandIdChecked(int command_id) const override;
-   bool IsCommandIdEnabled(int command_id) const override;
-    
-    void MenuItem::SetIcon(const std::string& icon) {
-  if (icon.empty()) {
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_), NULL); 
-  } else {
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_),
-                                  gtk_image_new_from_file(icon.c_str()));
-    gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(menu_item_),
-                                              TRUE);
+          virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) {
+    InitParams(kwargs);
+    // use the kwarg to init batch loader
+    loader_->Init(kwargs);
+    iter.Init([this](DataBatch **dptr) {
+        if (!loader_->Next()) return false;
+        const TBlobBatch& batch = loader_->Value();
+        if (*dptr == nullptr) {
+          // allocate databatch
+          *dptr = new DataBatch();
+          (*dptr)->num_batch_padd = batch.num_batch_padd;
+          (*dptr)->data.resize(batch.data.size());
+          (*dptr)->index.resize(batch.batch_size);
+          for (size_t i = 0; i < batch.data.size(); ++i) {
+            auto dtype = param_.dtype
+                             ? param_.dtype.value()
+                             : batch.data[i].type_flag_;
+            (*dptr)->data.at(i) = NDArray(batch.data[i].shape_,
+                                          Context::CPU(), false,
+                                          dtype);
+          }
+        }
+        CHECK(batch.data.size() == (*dptr)->data.size());
+        // copy data over
+        for (size_t i = 0; i < batch.data.size(); ++i) {
+          CHECK_EQ((*dptr)->data.at(i).shape(), batch.data[i].shape_);
+          MSHADOW_TYPE_SWITCH(batch.data[i].type_flag_, DType, {
+              mshadow::Copy(((*dptr)->data)[i].data().FlatTo2D<cpu, DType>(),
+                        batch.data[i].FlatTo2D<cpu, DType>());
+          });
+          (*dptr)->num_batch_padd = batch.num_batch_padd;
+        }
+        if (batch.inst_index) {
+          std::copy(batch.inst_index,
+                    batch.inst_index + batch.batch_size,
+                    (*dptr)->index.begin());
+        }
+       return true;
+      },
+      [this]() { loader_->BeforeFirst(); });
   }
+    
+    /*!
+ *  Copyright (c) 2015 by Contributors
+ * \file ndarray_function-inl.h
+ * \brief The real implementation of NDArray functions.
+ */
+#ifndef MXNET_NDARRAY_NDARRAY_FUNCTION_INL_H_
+#define MXNET_NDARRAY_NDARRAY_FUNCTION_INL_H_
+    
+    /*!
+ * \brief Async functor object
+ *  calling argument of the function.
+ */
+class TVMFunctor {
+ public:
+  // constructor
+  explicit TVMFunctor(PackedFunc func, PackedFunc fset_stream)
+      : func_(func), fset_stream_(fset_stream) {}
+    }
+    
+     private:
+  inline void Init(mshadow::Stream<gpu> *s,
+                   const std::vector<TBlob> &in_data,
+                   const std::vector<TBlob> &out_data) {
+    using namespace mshadow;
+    #if CUDNN_MAJOR >= 5
+    format_ = CUDNN_TENSOR_NCHW;
+    #endif
+    CHECK_EQ(in_data.size(), 2U);
+    CHECK_EQ(out_data.size(), 2U);
+    if (!init_cudnn_) {
+      init_cudnn_ = true;
+      Tensor<gpu, 4, DType> data = in_data[bs::kData].get<gpu, 4, DType>(s);
+      Tensor<gpu, 4, DType> out = out_data[bs::kOut].get<gpu, 4, DType>(s);
+      CUDNN_CALL(cudnnCreateSpatialTransformerDescriptor(&st_desc_));
+      CUDNN_CALL(cudnnCreateTensorDescriptor(&in_desc_));
+      CUDNN_CALL(cudnnCreateTensorDescriptor(&out_desc_));
+      CUDNN_CALL(cudnnSetTensor4dDescriptor(in_desc_,
+                                            format_,
+                                            dtype_,
+                                            data.size(0),
+                                            data.size(1),
+                                            data.size(2),
+                                            data.size(3)));
+      CUDNN_CALL(cudnnSetTensor4dDescriptor(out_desc_,
+                                            format_,
+                                            dtype_,
+                                            out.size(0),
+                                            out.size(1),
+                                            out.size(2),
+                                            out.size(3)));
+      int dim[] = {static_cast<int>(out.size(0)), static_cast<int>(out.size(1)),
+                   static_cast<int>(out.size(2)), static_cast<int>(out.size(3))};
+      CUDNN_CALL(cudnnSetSpatialTransformerNdDescriptor(st_desc_,
+                                                        sampler_,
+                                                        dtype_,
+                                                        4,
+                                                        dim));
+    }
+  }
+    
+    
+    {        return newMask;
+    }
+    
+            for (const auto& key : requiredKeys)
+        {
+            if (!dict.Contains(key))
+            {
+                 LogicError('Required key '%ls' is not found in the dictionary (%s).',
+                            key.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
+            }
+        }
+    
+    template<class ElemType>
+void OptimizedRNNStackNode<ElemType>::TransposeHelper(const MatrixBasePtr matX, const TensorShape &shapeX, MatrixBasePtr matY, TensorShape &shapeY)
+{
+    // This function transposes the second and third axes of the input (X), creating a transposed copy in the output (Y).
+    //
+    // In 'frame mode', CNTK will present the data with the final two axes being the recurrent axis followed by the 
+    // 'minibatch axis'. CUDNN expects these to be in the reverse order, which is accomplished by TransposeHelper().
+    }
+    
+    
+    {};
+    
+    #include <vector>
+#include <string>
+    
+    Expected<int, PosixError> syscall(struct perf_event_attr* attr,
+                                  pid_t const pid,
+                                  int const cpu,
+                                  int const group_fd,
+                                  unsigned long const flags) {
+  auto ret = ::syscall(__NR_perf_event_open, attr, pid, cpu, group_fd, flags);
+  if (ret < 0) {
+    return createError(to<PosixError>(errno), 'syscall perf_event_open failed ')
+           << boost::io::quoted(strerror(errno));
+  }
+  return ret;
+}
+    
+    #pragma once
+    
+      enum class Error {
+    Unknown = 1,
+    SystemError = 2,
+  };
+    
+    
+    {  auto dst = std::vector<TestMessage>{};
+  auto status =
+      ebpf::impl::consumeWrappedMessagesFromCircularBuffer<WrappedMessage>(
+          &buf[0], tail, head, buf.size(), dst);
+  ASSERT_FALSE(status.isError()) << status.getError().getMessage();
+  ASSERT_EQ(dst.size(), test_size);
+  for (std::size_t i = 0; i < test_size; ++i) {
+    EXPECT_EQ(dst[i].c_, 't');
+    EXPECT_EQ(dst[i].d_, 'i');
+  }
+  EXPECT_EQ(dst[0].a_, 1);
+  EXPECT_EQ(dst[0].b_, 2);
+  EXPECT_EQ(dst[1].a_, 3);
+  EXPECT_EQ(dst[1].b_, 4);
+  EXPECT_EQ(dst[2].a_, 5);
+  EXPECT_EQ(dst[2].b_, 6);
+}
+    
+    namespace {
+    }
+    
+    DEFINE_string(adapter_config_filename, 'modules/canbus/conf/adapter.conf',
+              'The adapter config file');
+    
+    
+    {  double ret = x * OBJECT_ORIENTATION_ANGEL_RES + OBJECT_ORIENTATION_ANGEL_MIN;
+  return ret;
 }
     
     
-    {  // ExtensionFunction:
-  ResponseAction Run() override;
-  DECLARE_EXTENSION_FUNCTION('nw.App.crashBrowser', UNKNOWN)
+    {  x <<= 2;
+  x |= t;
+  double ret = x * OBJECT_VREL_RES + OBJECT_VREL_LONG_MIN;
+  return ret;
+}
+    
+    unsigned int BaseMapMatrix::GetBinarySize() const { return 0; }
+    
+      const double init_derivative = 0.1;
+  constraint.AddSecondDerivativeBoundary(init_derivative, index_list,
+                                         lower_bound, upper_bound);
+  const auto mat = constraint.inequality_constraint_matrix();
+  const auto bd = constraint.inequality_constraint_boundary();
+    
+    const PolynomialXd& Spline1dSeg::ThirdOrderDerivative() const {
+  return third_order_derivative_;
+}
+    
+    TEST_F(GemMessageManagerTest, GetRecvProtocols) {
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Accelrpt68::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt170::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt271::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt372::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakerpt6c::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Datetimerpt83::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Globalrpt6a::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Headlightrpt77::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Hornrpt79::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Latlonheadingrpt82::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(
+                  Parkingbrakestatusrpt80::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Shiftrpt66::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt173::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt274::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt375::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringrpt16e::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Turnrpt64::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Vehiclespeedrpt6f::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Wheelspeedrpt7a::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Wiperrpt91::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Yawraterpt81::ID) != nullptr);
+}
+    
+    class Accelrpt68Test : public ::testing::Test {
+ public:
+  virtual void SetUp() {}
 };
     
-    
-    {} // namespace extensions
-#endif
-
-    
-    class NwObjDestroyFunction : public NWSyncExtensionFunction {
- public:
-  NwObjDestroyFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    /*
- * If Trace::hhbbc_time >= 1, print some stats about the program to a
- * temporary file.  If it's greater than or equal to 2, also dump it
- * to stdout.
- */
-void print_stats(const Index&, const php::Program&);
-    
-    #include 'hphp/ppc64-asm/branch-ppc64.h'
-#include 'hphp/ppc64-asm/decoded-instr-ppc64.h'
-#include 'hphp/ppc64-asm/isa-ppc64.h'
-    
-      /**
-   * Prefer the Bind() over the GetFoo() as it makes ini_get() work too.
-   * These Bind()s should be used for ini settings. Specifically, they
-   * should be used when the bound setting is needed before the main ini
-   * processing pass. Unlike IniSetting::Bind, these bindings will fetch the
-   * value in an ini setting if it is set otherwise it will use the defValue.
-   */
-  static void Bind(bool& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const bool defValue = false,
-                   const bool prepend_hhvm = true);
-  static void Bind(const char*& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const char *defValue = nullptr,
-                   const bool prepend_hhvm = true);
-  static void Bind(std::string& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const std::string defValue = '',
-                   const bool prepend_hhvm = true);
-  static void Bind(char& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const char defValue = 0, const bool prepend_hhvm = true);
-  static void Bind(unsigned char& loc,const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const unsigned char defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(int16_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const int16_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(uint16_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const uint16_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(int32_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const int32_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(uint32_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const uint32_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(int64_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const int64_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(uint64_t& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const uint64_t defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(double& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name = '',
-                   const double defValue = 0,
-                   const bool prepend_hhvm = true);
-  static void Bind(HackStrictOption& loc, const IniSettingMap &ini,
-                   const Hdf& config, const std::string& name,
-                   HackStrictOption def);
-  static void
-  Bind(std::vector<uint32_t>& loc, const IniSettingMap& ini,
-       const Hdf& config, const std::string& name = '',
-       const std::vector<uint32_t>& defValue = std::vector<uint32_t>(),
-       const bool prepend_hhvm = true);
-  static void
-  Bind(std::vector<std::string>& loc, const IniSettingMap& ini,
-       const Hdf& config, const std::string& name = '',
-       const std::vector<std::string>& defValue = std::vector<std::string>(),
-       const bool prepend_hhvm = true);
-  static void
-  Bind(std::unordered_map<std::string, int>& loc,
-       const IniSettingMap& ini, const Hdf& config,
-       const std::string& name = '',
-       const std::unordered_map<std::string, int>& defValue =
-         std::unordered_map<std::string, int>{},
-       const bool prepend_hhvm = true);
-  static void Bind(ConfigMap& loc, const IniSettingMap& ini, const Hdf& config,
-                   const std::string& name = '',
-                   const ConfigMap& defValue = ConfigMap(),
-                   const bool prepend_hhvm = true);
-  static void Bind(ConfigMapC& loc, const IniSettingMap& ini, const Hdf& config,
-                   const std::string& name = '',
-                   const ConfigMapC& defValue = ConfigMapC(),
-                   const bool prepend_hhvm = true);
-  static void Bind(ConfigSet& loc, const IniSettingMap& ini, const Hdf& config,
-                   const std::string& name = '',
-                   const ConfigSet& defValue = ConfigSet(),
-                   const bool prepend_hhvm = true);
-  static void Bind(ConfigSetC& loc, const IniSettingMap& ini, const Hdf& config,
-                   const std::string& name = '',
-                   const ConfigSetC& defValue = ConfigSetC(),
-                   const bool prepend_hhvm = true);
-  static void Bind(ConfigIMap& loc, const IniSettingMap& ini, const Hdf& config,
-                   const std::string& name = '',
-                   const ConfigIMap& defValue = ConfigIMap(),
-                   const bool prepend_hhvm = true);
-  static void Bind(ConfigFlatSet& loc, const IniSettingMap& ini,
-                   const Hdf& config, const std::string& name = '',
-                   const ConfigFlatSet& defValue = ConfigFlatSet(),
-                   const bool prepend_hhvm = true);
-    
-    
-    {
-    {      write(ini_fd, line.c_str(), line.length());
-      write(ini_fd, '\n', 1);
-      cnt += 2;
-      continue;
-    }
-    if (argv[cnt][0] != '-') {
-      if (show) {
-        newargv.push_back('-w');
-      } else {
-        newargv.push_back(lint ? '-l' : '-f');
-      }
-      newargv.push_back(argv[cnt++]);
-      need_file = false;
-      break;
-    }
-    if (strcmp(argv[cnt], '--') == 0) {
-      break;
-    }
-    cnt++; // skip unknown options
-  }
-    
-      // implementing File
-  bool open(const String& filename, const String& mode) override;
-  bool close() override;
-  int64_t readImpl(char *buffer, int64_t length) override;
-  int getc() override;
-  int64_t writeImpl(const char *buffer, int64_t length) override;
-  bool seek(int64_t offset, int whence = SEEK_SET) override;
-  int64_t tell() override;
-  bool eof() override;
-  bool rewind() override;
-  bool flush() override;
-  bool truncate(int64_t size) override;
-    
-    template<typename F>
-void logPerfWarning(folly::StringPiece event, F fillCols) {
-  logPerfWarningImpl(event, 1, kDefaultPerfWarningRate, fillCols);
+    void Brakemotorrpt372::Parse(const std::uint8_t* bytes, int32_t length,
+                             ChassisDetail* chassis) const {
+  chassis->mutable_gem()->mutable_brake_motor_rpt_3_72()->set_torque_output(
+      torque_output(bytes, length));
+  chassis->mutable_gem()->mutable_brake_motor_rpt_3_72()->set_torque_input(
+      torque_input(bytes, length));
 }
-template<typename F>
-void logPerfWarning(folly::StringPiece event, int64_t rate, F fillCols) {
-  logPerfWarningImpl(event, 1, rate, fillCols);
-}
-    
-    Array php_globals_as_array() {
-  return Array(get_global_variables()->asArrayData());
-}
-    
-    SQLInternal monitor(const std::string& name, const ScheduledQuery& query) {
-  if (FLAGS_enable_numeric_monitoring) {
-    CodeProfiler profiler(
-        {(boost::format('scheduler.pack.%s') % query.pack_name).str(),
-         (boost::format('scheduler.query.%s.%s') % query.pack_name % query.name)
-             .str()});
-    return SQLInternal(query.query, true);
-  } else {
-    // Snapshot the performance and times for the worker before running.
-    auto pid = std::to_string(PlatformProcess::getCurrentPid());
-    auto r0 = SQL::selectFrom({'resident_size', 'user_time', 'system_time'},
-                              'processes',
-                              'pid',
-                              EQUALS,
-                              pid);
-    auto t0 = getUnixTime();
-    Config::get().recordQueryStart(name);
-    SQLInternal sql(query.query, true);
-    // Snapshot the performance after, and compare.
-    auto t1 = getUnixTime();
-    auto r1 = SQL::selectFrom({'resident_size', 'user_time', 'system_time'},
-                              'processes',
-                              'pid',
-                              EQUALS,
-                              pid);
-    if (r0.size() > 0 && r1.size() > 0) {
-      // Always called while processes table is working.
-      Config::get().recordQueryPerformance(name, t1 - t0, r0[0], r1[0]);
-    }
-    return sql;
-  }
-}
-    
-    #include <osquery/database.h>
-#include <osquery/distributed.h>
-#include <osquery/flags.h>
-#include <osquery/system.h>
-    
-      ScheduledQuery(const std::string& pack_name,
-                 const std::string& name,
-                 const std::string& query)
-      : pack_name(pack_name), name(name), query(query) {}
-  ScheduledQuery() = default;
-  ScheduledQuery(ScheduledQuery&&) = default;
-  ScheduledQuery& operator=(ScheduledQuery&&) = default;
-    
-      void TearDown() override {
-    FLAGS_disable_logging = logging_;
-    Config::get().reset();
-  }
-    
-    Status deserializeQueryData(const rj::Value& v, QueryDataSet& qd) {
-  if (!v.IsArray()) {
-    return Status(1, 'JSON object was not an array');
-  }
-    }
-    
-      virtual ExtensionManagerIf* getHandler(const ::apache::thrift::TConnectionInfo&) {
-    return iface_.get();
-  }
-  virtual void releaseHandler(ExtensionIf* /* handler */) {}
-    
-    // getSerializedRowColumnNames returns a vector of test column names that
-// are in alphabetical order. If unordered_and_repeated is true, the
-// vector includes a repeated column name and is in non-alphabetical order
-ColumnNames getSerializedRowColumnNames(bool unordered_and_repeated);
-    
-    double ClusterGeneralInfo701::lateral_dist(const std::uint8_t* bytes,
-                                           int32_t length) const {
-  Byte t0(bytes + 2);
-  uint32_t x = t0.get_byte(0, 2);
-    }
-    
-    int ObjectExtendedInfo60D::object_id(const std::uint8_t* bytes,
-                                     int32_t length) const {
-  Byte t0(bytes);
-  int32_t x = t0.get_byte(0, 8);
-    }
-    
-    #include 'modules/drivers/canbus/common/byte.h'
-#include 'modules/drivers/canbus/common/canbus_consts.h'
-    
-      MatrixXd mat_golden(10, 10);
-  // clang-format off
-  mat_golden <<
-   1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-  -1,  1,  0,  0,  0,  0,  0,  0,  0,  0,
-   0, -1,  1,  0,  0,  0,  0,  0,  0,  0,
-   0,  0, -1,  1,  0,  0,  0,  0,  0,  0,
-   0,  0,  0, -1,  1,  0,  0,  0,  0,  0,
-   0,  0,  0,  0, -1,  1,  0,  0,  0,  0,
-   0,  0,  0,  0,  0, -1,  1,  0,  0,  0,
-   0,  0,  0,  0,  0,  0, -1,  1,  0,  0,
-   0,  0,  0,  0,  0,  0,  0, -1,  1,  0,
-   0,  0,  0,  0,  0,  0,  0,  0, -1,  1;
-  // clang-format on
-  EXPECT_EQ(mat, mat_golden);
-    
-      std::vector<uint32_t> index_list;
-  std::vector<double> pos_list;
-  for (int i = 0; i < 10; ++i) {
-    index_list.push_back(i);
-    pos_list.push_back(i * 2);
-  }
-    
-    NodeWithRange::NodeWithRange(const TopoNode* node, const NodeSRange& range)
-    : NodeSRange(range), topo_node_(node) {}
-    
-    
-    {
-    {
-    {}  // namespace gem
-}  // namespace canbus
-}  // namespace apollo
