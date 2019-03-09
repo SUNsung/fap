@@ -1,134 +1,91 @@
 
         
         
-    {REGISTER_INTERNAL(FeatureVectorsConfigParserPlugin,
-                  'config_parser',
-                  'feature_vectors');
-} // namespace osquery
-
-    
-    
-    { private:
-  static const std::string kLoggerKey;
+    {    QString appName;
+    QIcon appIcon;
+    QIcon trayAndWindowIcon;
+    QString titleAddText;
 };
     
-    TEST_F(DecoratorsConfigParserPluginTests, test_decorators_list) {
-  // Assume the decorators are disabled.
-  Config::get().update(config_data_);
-  auto parser = Config::getParser('decorators');
-  EXPECT_NE(parser, nullptr);
+    private:
+    reverse_lock(reverse_lock const&);
+    reverse_lock& operator=(reverse_lock const&);
+    
+    
+    {    secp256k1_ecdsa_recoverable_signature_load(ctx, &r, &s, &recid, sigin);
+    secp256k1_ecdsa_signature_save(sig, &r, &s);
+    return 1;
+}
+    
+    #define SRC_ARG1 ST * src1_data_, size_t src1_step_,
+#define SRC_STORE1 src1_data(src1_data_), src1_step(src1_step_),
+#define SRC_VAR1 ST * src1_data; \
+                 size_t src1_step;
+#define SRC_ARG2 ST * src1_data_, size_t src1_step_, \
+                 ST * src2_data_, size_t src2_step_,
+#define SRC_STORE2 src1_data(src1_data_), src1_step(src1_step_), \
+                   src2_data(src2_data_), src2_step(src2_step_),
+#define SRC_VAR2 ST * src1_data; \
+                 size_t src1_step; \
+                 ST * src2_data; \
+                 size_t src2_step;
+    
+    #else
+    
+        size_t i = 0;
+    f32* dsta = internal::getRowPtr(dstBase, dstStride, 0);
+    for (; i < size.height-1; i+=2)
+    {
+        //vertical convolution
+        ptrdiff_t idx_rm1 = internal::borderInterpolate(i - 1, size.height, borderType, borderMargin.top, borderMargin.bottom);
+        ptrdiff_t idx_rp2 = internal::borderInterpolate(i + 2, size.height, borderType, borderMargin.top, borderMargin.bottom);
+    }
+    
+    void combineYUYV(const Size2D &size,
+                 const u8 * srcyBase, ptrdiff_t srcyStride,
+                 const u8 * srcuBase, ptrdiff_t srcuStride,
+                 const u8 * srcvBase, ptrdiff_t srcvStride,
+                 u8 * dstBase, ptrdiff_t dstStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+#ifndef __ANDROID__
+    size_t roiw32 = size.width >= 31 ? size.width - 31 : 0;
+#endif
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
+    }
+    
+        void operator() (const typename internal::VecTraits<T>::vec128 & v_src0, const typename internal::VecTraits<T>::vec128 & v_src1,
+              typename internal::VecTraits<T>::unsign::vec128 & v_dst) const
+    {
+        v_dst = internal::vcgtq(v_src0, v_src1);
     }
     
     
-    {    // Construct a config map, the typical output from `Config::genConfig`.
-    config_data_['awesome'] = content_;
-    Config::get().reset();
-  }
+    {                v_dst1 = vmlal_n_s16(v_dst1, vget_high_s16(t0_16s), kernelBase[2]);
+                v_dst1 = vmlal_n_s16(v_dst1, vget_high_s16(t1_16s), kernelBase[1]);
+                v_dst1 = vmlal_n_s16(v_dst1, vget_high_s16(t2_16s), kernelBase[0]);
+            }
     
+                vst1_u8((u8 *)&mask, vmovn_u16(vcombine_u16(vmovn_u32(v_mask0), vmovn_u32(v_mask1))));
     
-    {
-    {  c.reset();
-}
-}
-
-    
-    class TLSConfigPlugin;
-    
-    void InMemoryDatabase::close() {
-  VLOG(1) << 'Closing db... ';
-  debug_only::verifyTrue(is_open_, 'database is not open');
-  is_open_ = false;
-  auto status = destroyDB();
-  debug_only::verifyTrue(status.isValue(),
-                         'InMemoryDatabase::destroyDB couldn't fail');
-}
-    
-    
-    {  EXPECT_TRUE(db->putString(kPersistentSettings, 'test_key_string', 'string'));
-  auto string_value = db->getString(kPersistentSettings, 'test_key_string');
-  EXPECT_TRUE(string_value);
-  EXPECT_EQ(string_value.take(), 'string');
-}
-    
-    TEST_F(RocksdbDatabaseTest, test_unknown_key) {
-  auto db = std::make_unique<RocksdbDatabase>('test', path_);
-  ASSERT_TRUE(db->open());
-  EXPECT_TRUE(db->putInt32(kPersistentSettings, 'key', 12));
-  auto result = db->getInt32(kPersistentSettings, 'key_');
-  EXPECT_FALSE(result);
-  EXPECT_EQ(result.takeError(), DatabaseError::KeyNotFound);
-}
-    
-    BENCHMARK_PARAM(BENCHFUN(pushBack), 16)
-BENCHMARK_PARAM(BENCHFUN(pushBack), 128)
-BENCHMARK_PARAM(BENCHFUN(pushBack), 1024)
-BENCHMARK_PARAM(BENCHFUN(pushBack), 10240)
-BENCHMARK_PARAM(BENCHFUN(pushBack), 102400)
-BENCHMARK_PARAM(BENCHFUN(pushBack), 1024000)
-
-    
-    BENCHMARK_RELATIVE(sformat_long_string_unsafe, iters) {
-  BenchmarkSuspender suspender;
-  auto const& longString = getLongString();
-  while (iters--) {
-    std::string out;
-    suspender.dismissing([&] { out = sformat(longString); });
-  }
-}
-    
-      for (unsigned i = 0; i < iter; ++i) {
-    FB_LOG_EVERY_MS(INFO, -1) << 'every -1ms';
-  }
-    
-    template <class UIntType, UIntType a, UIntType c, UIntType m>
-struct StateSize<std::linear_congruential_engine<UIntType, a, c, m>> {
-  // From the standard [rand.eng.lcong], this is ceil(log2(m) / 32) + 3,
-  // which is the same as ceil(ceil(log2(m) / 32) + 3, and
-  // ceil(log2(m)) <= std::numeric_limits<UIntType>::digits
-  using type = std::integral_constant<
-      size_t,
-      (std::numeric_limits<UIntType>::digits + 31) / 32 + 3>;
-};
-    
-    /*
- * Decode a single unicode code point from UTF-8 byte sequence.
- */
-char32_t utf8ToCodePoint(
-    const unsigned char*& p,
-    const unsigned char* const e,
-    bool skipOnError);
-    
-      // Try converting fractional hours
-  tv = to<struct timeval>(duration<double, std::ratio<3600>>{3.456789});
-  EXPECT_EQ(12444, tv.tv_sec);
-  // The usec field is generally off-by-one due to
-  // floating point rounding error
-  EXPECT_NEAR(440400, tv.tv_usec, 1);
-  tv = to<struct timeval>(duration<double, std::ratio<3600>>{-3.456789});
-  EXPECT_EQ(-12445, tv.tv_sec);
-  EXPECT_NEAR(559600, tv.tv_usec, 1);
-    
-    
-    {
-    {
-    {
-    {} // namespace detail
-} // namespace compression
-} // namespace io
-} // namespace folly
-
-    
-    template <class T, size_t kNumSlots = 64>
-class CoreCachedWeakPtr {
- public:
-  explicit CoreCachedWeakPtr(const CoreCachedSharedPtr<T, kNumSlots>& p) {
-    for (auto slot : folly::enumerate(slots_)) {
-      *slot = p.slots_[slot.index];
-    }
-  }
-    }
-    
-    #include <cstdint>
-#include <limits>
-#include <random>
-#include <set>
+                if(x) {
+                xx0 = xx1;
+                xx1 = xx2;
+            } else {
+                xx1 = x1;
+                // make border
+                    if (border == BORDER_MODE_REPLICATE || border == BORDER_MODE_REFLECT)
+                    {
+                        xx1 = vset_lane_u8(vget_lane_u8(x1, 0),x1, 7);
+                    }
+                    else if (border == BORDER_MODE_CONSTANT)
+                    {
+                        xx1 = vset_lane_u8(borderValue, x1, 7);
+                    }
+                    else if (border == BORDER_MODE_REFLECT101)
+                    {
+                        xx1 = vset_lane_u8(vget_lane_u8(x1, 1),x1, 7);
+                    }
+            }
+            xx2 = x1;
