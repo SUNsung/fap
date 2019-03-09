@@ -1,118 +1,89 @@
 
-class Cache(object):
-    
-            (2016-01, shopping), 25
-        (2016-01, shopping), 100
-        (2016-01, gas), 50
-        '''
-        timestamp, category, amount = line.split('\t')
-        period = self. extract_year_month(timestamp)
-        if period == self.current_year_month():
-            yield (period, category), amount
-    
-            (2016-01, url0), 1
-        (2016-01, url0), 1
-        (2016-01, url1), 1
-        '''
-        url = self.extract_url(line)
-        period = self.extract_year_month(line)
-        yield (period, url), 1
-    
-            (category1, 1), product4
-        (category1, 2), product1
-        (category1, 3), product2
-        (category2, 3), product1
-        (category2, 7), product3
-        '''
-        category, product_id = key
-        quantity = value
-        yield (category, quantity), product_id
-    
-        def get_people(self, ids):
-        results = []
-        for id in ids:
-            if id in self.people:
-                results.append(self.people[id])
-        return results
-    
-        def insert_crawled_link(self, url, signature):
-        '''Add the given link to `crawled_links`.'''
-        pass
+        
+            return _set_text
     
     
-def plot_batch_errors(all_errors, n_features, all_batch_sizes, data):
-    plt.figure()
-    plot_results(all_batch_sizes, all_errors['pca'], label='PCA')
-    plot_results(all_batch_sizes, all_errors['ipca'], label='IncrementalPCA')
-    plt.legend(loc='lower left')
-    plt.suptitle('Algorithm error vs. batch_size for n_components %i\n \
-                 LFW, size %i x %i' % (
-                 n_features, data.shape[0], data.shape[1]))
-    plt.xlabel('Batch size')
-    plt.ylabel('Mean absolute error')
+@pytest.mark.parametrize('command, result', [
+    (Command('aws dynamdb scan', misspelled_command),
+     ['aws dynamodb scan']),
+    (Command('aws dynamodb scn', misspelled_subcommand),
+     ['aws dynamodb scan']),
+    (Command('aws dynamodb t-item',
+             misspelled_subcommand_with_multiple_options),
+     ['aws dynamodb put-item', 'aws dynamodb get-item'])])
+def test_get_new_command(command, result):
+    assert get_new_command(command) == result
+
     
-        if not os.path.exists(ARCHIVE_NAME):
-        print('Downloading dataset from %s (14 MB)' % URL)
-        opener = urlopen(URL)
-        with open(ARCHIVE_NAME, 'wb') as archive:
-            archive.write(opener.read())
+    # For every line, fix the respective file
+for line in output_lines:
+    match = re.match(line_re, line)
     
-        # TASK: Build a grid search to find out whether unigrams or bigrams are
-    # more useful.
-    # Fit the pipeline on the training set using grid search for the parameters
-    parameters = {
-        'vect__ngram_range': [(1, 1), (1, 2)],
-    }
-    grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1)
-    grid_search.fit(docs_train, y_train)
+    # Check minimum required Python version
+import sys
+if sys.version_info < (2, 7):
+    print('Scrapy %s requires Python 2.7' % __version__)
+    sys.exit(1)
     
-    --Pepé
-''')
+    from scrapy.commands import ScrapyCommand
+from scrapy.exceptions import UsageError
     
-    # We can extract the richest alternative in order to display it:
-richest = msg.get_body()
-partfiles = {}
-if richest['content-type'].maintype == 'text':
-    if richest['content-type'].subtype == 'plain':
-        for line in richest.get_content().splitlines():
-            print(line)
-        sys.exit()
-    elif richest['content-type'].subtype == 'html':
-        body = richest
-    else:
-        print('Don't know how to display {}'.format(richest.get_content_type()))
-        sys.exit()
-elif richest['content-type'].content_type == 'multipart/related':
-    body = richest.get_body(preferencelist=('html'))
-    for part in richest.iter_attachments():
-        fn = part.get_filename()
-        if fn:
-            extension = os.path.splitext(part.get_filename())[1]
+        def set_spidercls(self, url, opts):
+        spider_loader = self.crawler_process.spider_loader
+        if opts.spider:
+            try:
+                self.spidercls = spider_loader.load(opts.spider)
+            except KeyError:
+                logger.error('Unable to find spider: %(spider)s',
+                             {'spider': opts.spider})
         else:
-            extension = mimetypes.guess_extension(part.get_content_type())
-        with tempfile.NamedTemporaryFile(suffix=extension, delete=False) as f:
-            f.write(part.get_content())
-            # again strip the <> to go from email form of cid to html form.
-            partfiles[part['content-id'][1:-1]] = f.name
-else:
-    print('Don't know how to display {}'.format(richest.get_content_type()))
-    sys.exit()
-with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
-    # The magic_html_parser has to rewrite the href='cid:....' attributes to
-    # point to the filenames in partfiles.  It also has to do a safety-sanitize
-    # of the html.  It could be written using html.parser.
-    f.write(magic_html_parser(body.get_content(), partfiles))
-webbrowser.open(f.name)
-os.remove(f.name)
-for fn in partfiles.values():
-    os.remove(fn)
+            self.spidercls = spidercls_for_request(spider_loader, Request(url))
+            if not self.spidercls:
+                logger.error('Unable to find spider for: %(url)s',
+                             {'url': url})
     
-    while True:
-    line = input()
-    if line == '':
-        break
-    buffer += line
-    if sqlite3.complete_statement(buffer):
+    
+class Command(ScrapyCommand):
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('--get', dest='get', metavar='SETTING',
+            help='print raw setting value')
+        parser.add_option('--getbool', dest='getbool', metavar='SETTING',
+            help='print setting value, interpreted as a boolean')
+        parser.add_option('--getint', dest='getint', metavar='SETTING',
+            help='print setting value, interpreted as an integer')
+        parser.add_option('--getfloat', dest='getfloat', metavar='SETTING',
+            help='print setting value, interpreted as a float')
+        parser.add_option('--getlist', dest='getlist', metavar='SETTING',
+            help='print setting value, interpreted as a list')
+    
+            self._signer = None
+        if is_botocore():
+            import botocore.auth
+            import botocore.credentials
+            kw.pop('anon', None)
+            if kw:
+                raise TypeError('Unexpected keyword arguments: %s' % kw)
+            if not self.anon:
+                SignerCls = botocore.auth.AUTH_TYPE_MAPS['s3']
+                self._signer = SignerCls(botocore.credentials.Credentials(
+                    aws_access_key_id, aws_secret_access_key))
+        else:
+            _S3Connection = _get_boto_connection()
+            try:
+                self.conn = _S3Connection(
+                    aws_access_key_id, aws_secret_access_key, **kw)
+            except Exception as ex:
+                raise NotConfigured(str(ex))
+    
         try:
-            buffer = buffer.strip()
-            cur.execute(buffer)
+        # XXX: this try-except is not needed in Twisted 17.0.0+ because
+        # it requires pyOpenSSL 0.16+.
+        from OpenSSL.SSL import SSL_CB_HANDSHAKE_DONE, SSL_CB_HANDSHAKE_START
+    except ImportError:
+        SSL_CB_HANDSHAKE_START = 0x10
+        SSL_CB_HANDSHAKE_DONE = 0x20
+    
+            # set Host header based on url
+        self.headers.setdefault('Host', self.netloc)
