@@ -1,128 +1,150 @@
 
         
-          smoke_user = User.seed do |u|
-    u.id = 0
-    u.name = 'smoke_user'
-    u.username = 'smoke_user'
-    u.username_lower = 'smoke_user'
-    u.password = 'P4ssw0rd'
-    u.active = true
-    u.approved = true
-    u.approved_at = Time.now
-    u.trust_level = TrustLevel[3]
-  end.first
-    
-        it 'returns true if the given string is a switch' do
-      %w[n s i].each do |s|
-        expect(subject.switch?(s)).to be true
-      end
-    end
-    
-      context 'every `.sh` file' do
-    it 'has valid bash syntax' do
-      Pathname.glob('#{HOMEBREW_LIBRARY_PATH}/**/*.sh').each do |path|
-        relative_path = path.relative_path_from(HOMEBREW_LIBRARY_PATH)
-        next if relative_path.to_s.start_with?('shims/', 'test/', 'vendor/')
-    
-      # insert data
-  fields.each do |field, values|
-    updated = '  s.#{field} = ['
-    updated << values.map { |v| '\n    %p' % v }.join(',')
-    updated << '\n  ]'
-    content.sub!(/  s\.#{field} = \[\n(    .*\n)*  \]/, updated)
-  end
-    
-    module Rack
-  module Protection
-    class Base
-      DEFAULT_OPTIONS = {
-        :reaction    => :default_reaction, :logging   => true,
-        :message     => 'Forbidden',       :encryptor => Digest::SHA1,
-        :session_key => 'rack.session',    :status    => 403,
-        :allow_empty_referrer => true,
-        :report_key           => 'protection.failed',
-        :html_types           => %w[text/html application/xhtml text/xml application/xml]
-      }
-    
-    When /^(?:|I )fill in '([^']*)' for '([^']*)'$/ do |value, field|
-  fill_in(field, :with => value)
+        # Just a slash
+Benchmark.ips do |x|
+  path = '/'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
 end
     
-    require 'erb'
-require 'digest'
-require 'tempfile'
-require 'paperclip/version'
-require 'paperclip/geometry_parser_factory'
-require 'paperclip/geometry_detector_factory'
-require 'paperclip/geometry'
-require 'paperclip/processor'
-require 'paperclip/processor_helpers'
-require 'paperclip/tempfile'
-require 'paperclip/thumbnail'
-require 'paperclip/interpolations/plural_cache'
-require 'paperclip/interpolations'
-require 'paperclip/tempfile_factory'
-require 'paperclip/style'
-require 'paperclip/attachment'
-require 'paperclip/storage'
-require 'paperclip/callbacks'
-require 'paperclip/file_command_content_type_detector'
-require 'paperclip/media_type_spoof_detector'
-require 'paperclip/content_type_detector'
-require 'paperclip/glue'
-require 'paperclip/errors'
-require 'paperclip/missing_attachment_styles'
-require 'paperclip/validators'
-require 'paperclip/logger'
-require 'paperclip/helpers'
-require 'paperclip/has_attached_file'
-require 'paperclip/attachment_registry'
-require 'paperclip/filename_cleaner'
-require 'paperclip/rails_environment'
+    Benchmark.ips do |x|
+  x.report('no body include?') { CONTENT_NOT_CONTAINING.include?('<body') }
+  x.report('no body regexp')   { CONTENT_NOT_CONTAINING =~ /<\s*body/ }
+  x.compare!
+end
     
-        # Returns the timestamp as defined by the <attachment>_updated_at field
-    # in the server default time zone unless :use_global_time_zone is set
-    # to false.  Note that a Rails.config.time_zone change will still
-    # invalidate any path or URL that uses :timestamp.  For a
-    # time_zone-agnostic timestamp, use #updated_at.
-    def timestamp attachment, style_name
-      attachment.instance_read(:updated_at).in_time_zone(attachment.time_zone).to_s
-    end
+    module Jekyll
+  module Commands
+    class NewTheme < Jekyll::Command
+      class << self
+        def init_with_program(prog)
+          prog.command(:'new-theme') do |c|
+            c.syntax 'new-theme NAME'
+            c.description 'Creates a new Jekyll theme scaffold'
+            c.option 'code_of_conduct', \
+                     '-c', '--code-of-conduct', \
+                     'Include a Code of Conduct. (defaults to false)'
     
-    # Add a script to run after install (should be in the current directory):
-package.scripts[:after_install] = 'my_after_install_script.sh'
+            def connect(websocket, handshake)
+          @connections_count += 1
+          if @connections_count == 1
+            message = 'Browser connected'
+            message += ' over SSL/TLS' if handshake.secure?
+            Jekyll.logger.info 'LiveReload:', message
+          end
+          websocket.send(
+            JSON.dump(
+              :command    => 'hello',
+              :protocols  => ['http://livereload.com/protocols/official-7'],
+              :serverName => 'jekyll'
+            )
+          )
     
-        setscript.call(:before_install)
-    setscript.call(:after_install)
-    setscript.call(:before_remove)
-    setscript.call(:after_remove)
-    setscript.call(:before_upgrade)
-    setscript.call(:after_upgrade)
-    
-        # Query details about our now-installed package.
-    # We do this by using 'npm ls' with json + long enabled to query details
-    # about the installed package.
-    npm_ls_out = safesystemout(attributes[:npm_bin], 'ls', '--json', '--long', *npm_flags)
-    npm_ls = JSON.parse(npm_ls_out)
-    name, info = npm_ls['dependencies'].first
-    
-    # Use an OS X pkg built with pkgbuild.
-#
-# Supports input and output. Requires pkgbuild and (for input) pkgutil, part of a
-# standard OS X install in 10.7 and higher.
-class FPM::Package::OSXpkg < FPM::Package
-    
+          def milestones(*args)
+        each_object(:milestones, *args)
       end
     
-      def default_output
-    v = version
-    v = '#{epoch}:#{v}' if epoch
-    if iteration
-      '#{name}_#{v}-#{iteration}_#{architecture}.#{type}'
-    else
-      '#{name}_#{v}_#{architecture}.#{type}'
-    end
-  end # def default_output
-end # class FPM::Deb
+    module Gitlab
+  module GithubImport
+    module Importer
+      class DiffNotesImporter
+        include ParallelScheduling
     
-        process.wait if process.alive?
+            # issue - An instance of `Gitlab::GithubImport::Representation::Issue`
+        # project - An instance of `Project`
+        # client - An instance of `Gitlab::GithubImport::Client`
+        def initialize(issue, project, client)
+          @issue = issue
+          @project = project
+          @client = client
+          @label_finder = LabelFinder.new(project)
+        end
+    
+              lfs_objects.each do |object|
+            yield object
+          end
+        rescue StandardError => e
+          Rails.logger.error('The Lfs import process failed. #{e.message}')
+        end
+      end
+    end
+  end
+end
+
+    
+            def sidekiq_worker_class
+          ImportNoteWorker
+        end
+    
+              hash = {
+            iid: issue.number,
+            title: issue.title,
+            description: issue.body,
+            milestone_number: issue.milestone&.number,
+            state: issue.state == 'open' ? :opened : :closed,
+            assignees: issue.assignees.map do |u|
+              Representation::User.from_api_response(u)
+            end,
+            label_names: issue.labels.map(&:name),
+            author: user,
+            created_at: issue.created_at,
+            updated_at: issue.updated_at,
+            pull_request: issue.pull_request ? true : false
+          }
+    
+      describe 'integer formats' do
+    it 'converts argument into Integer with to_int' do
+      obj = Object.new
+      def obj.to_i; 10; end
+      def obj.to_int; 10; end
+    
+      it 'pauses execution indefinitely if not given a duration' do
+    running = false
+    t = Thread.new do
+      running = true
+      sleep
+      5
+    end
+    
+        $Kernel_trace_var_global = 'foo'
+    
+      find_files = ->(path) {
+    Find.find(Pathname.new(path).relative_path_from(Pathname.new Dir.pwd).to_s).map do |path|
+      path if File.file?(path)
+    end.compact
+  }
+    
+        alias log puts
+    
+    Gem::Specification.new do |gem|
+  gem.name          = 'capistrano'
+  gem.version       = Capistrano::VERSION
+  gem.authors       = ['Tom Clements', 'Lee Hambley']
+  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
+  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
+  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
+  gem.homepage      = 'http://capistranorb.com/'
+    
+    Then(/^git wrapper permissions are 0700$/) do
+  permissions_test = %Q([ $(stat -c '%a' #{TestApp.git_wrapper_path.shellescape}) == '700' ])
+  _stdout, _stderr, status = vagrant_cli_command('ssh -c #{permissions_test.shellescape}')
+    
+        [stdout, stderr, status]
+  end
+    
+        def print_config_variables
+      ['--print-config-variables', '-p',
+       'Display the defined config variables before starting the deployment tasks.',
+       lambda do |_value|
+         Configuration.env.set(:print_config_variables, true)
+       end]
+    end
+  end
+end
+
+    
+        def timestamp
+      @timestamp ||= Time.now.utc
+    end
