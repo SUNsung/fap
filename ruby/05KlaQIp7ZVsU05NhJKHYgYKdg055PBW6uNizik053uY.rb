@@ -1,83 +1,78 @@
 
         
-        # Test https://github.com/jekyll/jekyll/pull/6735#discussion_r165499868
-# ------------------------------------------------------------------------
-def check_with_regex(content)
-  !content.to_s.match?(%r!{[{%]!)
-end
-    }
-    }
-    
-    def graceful_require
-  Jekyll::External.require_with_graceful_fail('json')
-  JSON.pretty_generate(DATA)
-end
-    
-          def print_feature_element_name(feature_element)
-        @io.print '\n#{feature_element.location}  Scenario: #{feature_element.name} '
-        @io.flush
-      end
-    
-            def disconnect(websocket)
-          @websockets.delete(websocket)
-        end
-    
-    module Jekyll
-  module Commands
-    class Serve
-      # The LiveReload protocol requires the server to serve livereload.js over HTTP
-      # despite the fact that the protocol itself uses WebSockets.  This custom connection
-      # class addresses the dual protocols that the server needs to understand.
-      class HttpAwareConnection < EventMachine::WebSocket::Connection
-        attr_reader :reload_body, :reload_size
-    
-                @config['syntax_highlighter_opts'] = begin
-              strip_coderay_prefix(
-                @config['syntax_highlighter_opts'] \
-                  .merge(CODERAY_DEFAULTS) \
-                  .merge(@config['coderay'])
-              )
-            end
-          end
-        end
-      end
+            def resource_params
+      params.require(:user).permit(
+        :unconfirmed_email
+      )
     end
   end
 end
 
     
-        def no_subcommand(args)
-      unless args.empty? ||
-          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
-        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
-                          Run `jekyll help` to find out more.'
-        abort
+        # Mobile devices do not support regular notifications, so we enable push notifications by default
+    alerts_enabled = active_session.detection.device.mobile? || active_session.detection.device.tablet?
+    
+      Devise.omniauth_configs.each_key do |provider|
+    provides_callback_for provider
+  end
+    
+      def request_locale
+    preferred_locale || compatible_locale
+  end
+    
+      def rate_limited_request?
+    !request.env['rack.attack.throttle_data'].nil?
+  end
+    
+        str << '\r\n'
+    
+        # Call the caller-provided hook if its exists
+    if self.audio_hook
+      self.audio_buff(buff)
+    # Otherwise append the frame to the buffer
+    else
+      self.audio_buff << buff
+    end
+  end
+    
+              # Decodes the Rex::Proto::Kerberos::Model::EncKdcResponse from an input
+          #
+          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::ASN1Data
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode EncKdcResponse, invalid input'
+            end
+    
+              # Decodes the sname field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Rex::Proto::Kerberos::Model::PrincipalName]
+          def decode_sname(input)
+            Rex::Proto::Kerberos::Model::PrincipalName.decode(input.value[0])
+          end
+    
+          def title
+        'Latest Changes (Globally)'
       end
-    end
     
-        args += ['--bindir', bin_path]
-    ::FileUtils.mkdir_p(bin_path)
-    args << gem_path
-    safesystem(*args)
+          def js # custom js
+        @js
+      end
     
-        pear_cmd = 'pear -c #{config} remote-info #{input_package}'
-    logger.info('Fetching package information', :package => input_package, :command => pear_cmd)
-    name = %x{#{pear_cmd} | sed -ne '/^Package\s*/s/^Package\s*//p'}.chomp
-    self.name = '#{attributes[:pear_package_name_prefix]}-#{name}'
-    self.version = %x{#{pear_cmd} | sed -ne '/^Installed\s*/s/^Installed\s*//p'}.chomp
-    self.description  = %x{#{pear_cmd} | sed -ne '/^Summary\s*/s/^Summary\s*//p'}.chomp
-    logger.debug('Package info', :name => self.name, :version => self.version,
-                  :description => self.description)
+        assert_no_match /Edit Page/,             last_response.body, ''Edit Page' link not blocked in compare template'
+    assert_no_match /Revert Changes/,        last_response.body, ''Revert Changes' link not blocked in compare template'
+  end
     
-        # Generate the package 'Prototype' file
-    File.open('#{build_path}/Prototype', 'w') do |prototype|
-      prototype.puts('i pkginfo')
-      prototype.puts('i preinstall') if self.scripts['pre-install']
-      prototype.puts('i postinstall') if self.scripts['post-install']
+      test 'clean path with double leading slash' do
+    assert_equal '/Mordor', clean_path('//Mordor')
+  end
+end
     
-        # Unpack the tarball to the staging path
-    args = ['-cf', output_path, '-C', staging_path]
-    tar_compression_flag(output_path).tap do |flag|
-      args << flag unless flag.nil?
-    end
-    args << '.'
+      s.require_paths = %w[lib]
