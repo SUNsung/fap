@@ -1,153 +1,94 @@
 
         
-                if datasets and 'alignment_bias_c' in datasets[name].keys():
-          dataset = datasets[name]
-          align_bias_c = dataset['alignment_bias_c'].astype(np.float32)
-          align_bias_1xc = np.expand_dims(align_bias_c, axis=0)
-    
-      # Convert from figure to an numpy array width x height x 3 (last for RGB)
-  f.canvas.draw()
-  data = np.fromstring(f.canvas.tostring_rgb(), dtype=np.uint8, sep='')
-  data_wxhx3 = data.reshape(f.canvas.get_width_height()[::-1] + (3,))
-  plt.close()
-    
-    # CONTROLLER
-# This parameter critically controls whether or not there is a controller
-# (along with controller encoders placed into the LFADS graph.  If CO_DIM >
-# 1, that means there is a 1 dimensional controller outputs, if equal to 0,
-# then no controller.
-flags.DEFINE_integer('co_dim', CO_DIM,
-    'Number of control net outputs (>0 builds that graph).')
-    
-      Args:
-    dataset: LM1BDataset object.
-  '''
-  sess, t = _LoadModel(FLAGS.pbtxt, FLAGS.ckpt)
-    
-    
-def _substitution_mask(sent1, sent2):
-  '''Binary mask identifying substituted part in two sentences.
-    
-    
-def create_dis_loss(fake_predictions, real_predictions, targets_present):
-  '''Compute Discriminator loss across real/fake.'''
-    
-    import tensorflow as tf
-    
-    
-class Environment(object):
+            # Returns
+        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
     '''
-    Information about the execution context
-    (standard streams, config directory, etc).
+    dirname = 'cifar-10-batches-py'
+    origin = 'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
+    path = get_file(dirname, origin=origin, untar=True)
     
-        '''
-    color = b'\x1b['
-    encoding = outfile.encoding
-    for chunk in stream:
-        if color in chunk:
-            outfile.write(chunk.decode(encoding))
-        else:
-            outfile.buffer.write(chunk)
-        if flush:
-            outfile.flush()
-    
-    
-with codecs.open(FILE_PATH, encoding='utf8') as f:
-    # Strip because we don't want new lines in the data so that we can
-    # easily count occurrences also when embedded in JSON (where the new
-    # line would be escaped).
-    FILE_CONTENT = f.read().strip()
-    
-        return inner
-    
-    
-@mock.patch('httpie.core.get_response')
-def test_error_traceback(get_response):
-    exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    with raises(ConnectionError):
-        main(['--ignore-stdin', '--traceback', 'www.google.com'])
-    
-    
-def test_max_redirects(httpbin):
-    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
-             error_exit_ok=True)
-    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
-
-    
-    
-def _get_most_recent_snapshot(snapshots, max_snapshot_age_secs=None, now=None):
+        # Raises
+        ValueError: in case of invalid `label_mode`.
     '''
-    Gets the most recently created snapshot and optionally filters the result
-    if the snapshot is too old
-    :param snapshots: list of snapshots to search
-    :param max_snapshot_age_secs: filter the result if its older than this
-    :param now: simulate time -- used for unit testing
-    :return:
-    '''
-    if len(snapshots) == 0:
-        return None
+    if label_mode not in ['fine', 'coarse']:
+        raise ValueError('`label_mode` must be one of `'fine'`, `'coarse'`.')
     
-        if module.params['repo']:
-        params['deploy[repository]'] = module.params['repo']
+    import gzip
+import os
+    
+        def __call__(self, x):
+        regularization = 0.
+        if self.l1:
+            regularization += K.sum(self.l1 * K.abs(x))
+        if self.l2:
+            regularization += K.sum(self.l2 * K.square(x))
+        return regularization
     
     
-def follow_log(module, le_path, logs, name=None, logtype=None):
-    ''' Follows one or more logs if not already followed. '''
+def test_objective_shapes_3d():
+    y_a = K.variable(np.random.random((5, 6, 7)))
+    y_b = K.variable(np.random.random((5, 6, 7)))
+    for obj in allobj:
+        objective_output = obj(y_a, y_b)
+        assert K.eval(objective_output).shape == (5, 6)
     
-                sum_info.SetProperty(msilib.PID_TITLE, 'a' * 1000)
-            title = sum_info.GetProperty(msilib.PID_TITLE)
-            self.assertEqual(title, b'a' * 1000)
+        y = np.array(y, dtype='int')
+    input_shape = y.shape
+    if input_shape and input_shape[-1] == 1 and len(input_shape) > 1:
+        input_shape = tuple(input_shape[:-1])
+    y = y.ravel()
+    if not num_classes:
+        num_classes = np.max(y) + 1
+    n = y.shape[0]
+    categorical = np.zeros((n, num_classes), dtype=dtype)
+    categorical[np.arange(n), y] = 1
+    output_shape = input_shape + (num_classes,)
+    categorical = np.reshape(categorical, output_shape)
+    return categorical
     
-        def test_distant_exception(self):
-        def f():
-            1/0
-        def g():
-            f()
-        def h():
-            g()
-        def i():
-            h()
-        def j(p):
-            i()
-        f_ident = ident(f)
-        g_ident = ident(g)
-        h_ident = ident(h)
-        i_ident = ident(i)
-        j_ident = ident(j)
-        self.check_events(j, [(1, 'call', j_ident),
-                              (2, 'call', i_ident),
-                              (3, 'call', h_ident),
-                              (4, 'call', g_ident),
-                              (5, 'call', f_ident),
-                              (5, 'return', f_ident),
-                              (4, 'return', g_ident),
-                              (3, 'return', h_ident),
-                              (2, 'return', i_ident),
-                              (1, 'return', j_ident),
-                              ])
+    def _print_commands(settings, inproject):
+    _print_header(settings, inproject)
+    print('Usage:')
+    print('  scrapy <command> [options] [args]\n')
+    print('Available commands:')
+    cmds = _get_commands_dict(settings, inproject)
+    for cmdname, cmdclass in sorted(cmds.items()):
+        print('  %-13s %s' % (cmdname, cmdclass.short_desc()))
+    if not inproject:
+        print()
+        print('  [ more ]      More commands available when run from project directory')
+    print()
+    print('Use 'scrapy <command> -h' to see more info about a command')
     
-        If a name, the module is imported.  If the passed or imported module
-    object is not a package, raise an exception.
-    '''
-    if hasattr(package, '__spec__'):
-        if package.__spec__.submodule_search_locations is None:
-            raise TypeError('{!r} is not a package'.format(
-                package.__spec__.name))
-        else:
-            return package
-    else:
-        module = import_module(package)
-        if module.__spec__.submodule_search_locations is None:
-            raise TypeError('{!r} is not a package'.format(package))
-        else:
-            return module
+        def process_options(self, args, opts):
+        try:
+            self.settings.setdict(arglist_to_dict(opts.set),
+                                  priority='cmdline')
+        except ValueError:
+            raise UsageError('Invalid -s value, use -s NAME=VALUE', print_help=False)
     
-    # Now the header items can be accessed as a dictionary, and any non-ASCII will
-# be converted to unicode:
-print('To:', msg['to'])
-print('From:', msg['from'])
-print('Subject:', msg['subject'])
+            general form:
+        @returns request(s)/item(s) [min=1 [max]]
     
-    '''Unpack a MIME message into a directory of files.'''
+            for i in link_list:
+            self.stream_types.append({'id': str(i[0])})
+            self.streams[i[0]] = {'url': i[1]}
+    
+    from .theplatform import theplatform_download_by_pid
+    
+        elif 'subject' in url:
+        titles = re.findall(r'data-title='([^']*)'>', html)
+        song_id = re.findall(r'<li class='song-item' id='([^']*)'', html)
+        song_ssid = re.findall(r'data-ssid='([^']*)'', html)
+        get_song_url = 'http://music.douban.com/j/songlist/get_song_url'
+    
+        title = match1(html, r'&title=([^&]+)')
+    
+        def get_sign(self, media_url):
+        media_host = parse.urlparse(media_url).netloc
+        ran = random.randint(0, 9999999)
+        ssl_callback = get_content('http://{}/ssl/ssl.shtml?r={}'.format(media_host, ran)).split(',')
+        ssl_ts = int(datetime.datetime.strptime(ssl_callback[1], '%b %d %H:%M:%S %Y').timestamp() + int(ssl_callback[0]))
+        sign_this = self.__class__.ENCRYPT_SALT + parse.urlparse(media_url).path + str(ssl_ts)
+        arg_h = base64.b64encode(hashlib.md5(bytes(sign_this, 'utf-8')).digest(), altchars=b'-_')
+        return ssl_ts, arg_h.decode('utf-8').strip('=')
