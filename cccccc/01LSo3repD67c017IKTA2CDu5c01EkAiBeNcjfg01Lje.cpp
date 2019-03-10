@@ -1,177 +1,180 @@
- private:
-  /*! \brief indexes into top_ */
-  enum { DATA = 0, LABEL, NR_SUPPORTED_TOP_ITEMS };
+
+        
+            private:
+        static Microsoft::MSR::CNTK::InputStreamDescription GetInputStreamDescription(const StreamInformation& s, const DeviceDescriptor& device)
+        {
+            assert(s.m_storageFormat == StorageFormat::Dense || s.m_storageFormat == StorageFormat::SparseCSC);
+            auto CNTKdeviceId = AsCNTKImplDeviceId(device);
+            auto CNTKMatrixType = s.m_storageFormat == StorageFormat::Dense ? Microsoft::MSR::CNTK::MatrixType::DENSE : Microsoft::MSR::CNTK::MatrixType::SPARSE;
+            auto CNTKMatrixFormat = AsCNTKImplMatrixFormat(s.m_storageFormat);
+            return Microsoft::MSR::CNTK::InputStreamDescription(s.m_name, CNTKdeviceId, CNTKMatrixType, CNTKMatrixFormat);
+        }
     
-    namespace mxnet {
-namespace op {
-template<>
-Operator *CreateOp<cpu>(CaffeLossParam param, int dtype) {
-  Operator *op = NULL;
-  switch (dtype) {
-  case mshadow::kFloat32:
-    op = new CaffeLoss<cpu, float>(param);
-    break;
-  case mshadow::kFloat64:
-    op = new CaffeLoss<cpu, double>(param);
-    break;
-  case mshadow::kFloat16:
-    LOG(FATAL) << 'float16 layer is not supported by caffe';
-    break;
-  default:
-    LOG(FATAL) << 'Unsupported type ' << dtype;
-  }
-  return op;
-}
-    }
+    namespace CNTK
+{
+    Trainer::Trainer(const FunctionPtr& model, const FunctionPtr& lossFunction,
+                     const std::vector<LearnerPtr>& parameterLearners,
+                     const std::vector<ProgressWriterPtr>& progressWriters)
+        : Trainer(model, lossFunction, nullptr, parameterLearners, progressWriters)
+    {}
     }
     
-    // DO_BIND_DISPATCH comes from static_operator_common.h
-Operator *CaffeOpProp::CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
-                                     std::vector<int> *in_type) const {
-  std::vector<int> out_type, aux_type;
-  std::vector<TShape> out_shape, aux_shape;
-  out_type.resize(this->ListOutputs().size());
-  out_shape.resize(this->ListOutputs().size());
-  aux_type.resize(this->ListAuxiliaryStates().size());
-  aux_shape.resize(this->ListAuxiliaryStates().size());
-  CHECK(InferType(in_type, &out_type, &aux_type));
-  CHECK(InferShape(in_shape, &out_shape, &aux_shape));
-  DO_BIND_DISPATCH(CreateOp, param_, (*in_type)[0]);
-}
+    // -----------------------------------------------------------------------
+// EpochAccumulatorNode calculates mean values of all samples used in forward pass.
+// -----------------------------------------------------------------------
     
-    /*!
- * \brief a list of (label, example) pairs, examples can have various shape
- */
-template<typename DType = real_t>
-class InstVector {
- public:
-  /*! \brief return the number of (label, example) pairs */
-  inline size_t Size(void) const {
-    return index_.size();
-  }
-  // get index
-  inline unsigned Index(unsigned i) const {
-    return index_[i];
-  }
-  // instance
-  /* \brief get the i-th (label, example) pair */
-  inline DataInst operator[](size_t i) const {
-    DataInst inst;
-    inst.index = index_[i];
-    // ImageRecordIter depends on data vector
-    // here having size 2. If you want to
-    // change this assumption here, change it
-    // in there as well (InitBatch section)!
-    inst.data.push_back(TBlob(data_[i]));
-    inst.data.push_back(TBlob(label_[i]));
-    return inst;
-  }
-  /* \brief get the last (label, example) pair */
-  inline DataInst Back() const {
-    return (*this)[Size() - 1];
-  }
-  inline void Clear(void) {
-    index_.clear();
-    data_.Clear();
-    label_.Clear();
-  }
-  /*
-   * \brief push a (label, example) pair
-   * only reserved the space, while the data is not copied
-   */
-  inline void Push(unsigned index,
-                   mshadow::Shape<3> dshape,
-                   mshadow::Shape<1> lshape) {
-    index_.push_back(index);
-    data_.Push(dshape);
-    label_.Push(lshape);
-  }
-  /*! \return the data content */
-  inline const TensorVector<3, DType>& data() const {
-    return data_;
-  }
-  /*! \return the label content */
-  inline const TensorVector<1, real_t>& label() const {
-    return label_;
-  }
-    }
-    
-    /*!
- * \file iter_libsvm.cc
- * \brief define a LibSVM Reader to read in arrays
- */
-#include <mxnet/io.h>
-#include <dmlc/base.h>
-#include <dmlc/logging.h>
-#include <dmlc/parameter.h>
-#include <dmlc/data.h>
-#include './iter_sparse_prefetcher.h'
-#include './iter_sparse_batchloader.h'
+      // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
     
     
-    {  // creat mean image.
-  inline void CreateMeanImg(void) {
-    if (param_.verbose) {
-      LOG(INFO) << 'Cannot find ' << param_.mean_img
-                << ': create mean image, this will take some time...';
-    }
-    double start = dmlc::GetTime();
-    size_t imcnt = 1;  // NOLINT(*)
-    CHECK(this->Next_()) << 'input iterator failed.';
-    meanimg_.Resize(outimg_.shape_);
-    mshadow::Copy(meanimg_, outimg_);
-    while (this->Next_()) {
-      meanimg_ += outimg_;
-      imcnt += 1;
-      double elapsed = dmlc::GetTime() - start;
-      if (imcnt % 10000L == 0 && param_.verbose) {
-        LOG(INFO) << imcnt << ' images processed, ' << elapsed << ' sec elapsed';
-      }
-    }
-    meanimg_ *= (1.0f / imcnt);
-    // save as mxnet python compatible format.
-    TBlob tmp = meanimg_;
     {
-      std::unique_ptr<dmlc::Stream> fo(dmlc::Stream::Create(param_.mean_img.c_str(), 'w'));
-      NDArray::Save(fo.get(),
-                    {NDArray(tmp, 0)},
-                    {'mean_img'});
+    {}} // namespace
+    
+      fprintf(p->out,
+          '%13.13s: %s\n',
+          'Distributed',
+          osquery::FLAGS_distributed_plugin.c_str());
+    
+    
+    {
+    {    // If we don't find a serial_number match, we assume this drive information
+    // can only be retrieved by explicitly passing driver information.
+    if (!matched) {
+      results.push_back(std::move(entry.second));
     }
-    if (param_.verbose) {
-      LOG(INFO) << 'Save mean image to ' << param_.mean_img << '..';
-    }
-    meanfile_ready_ = true;
-    this->BeforeFirst();
   }
-};
-    
-    
-struct Config {
-  /*
-   * Normalizes hdf string names to their ini counterparts
-   *
-   * We have special handling for a few hdf strings such as those containing
-   * MySQL, Eval, IPv[4|6] and EnableHipHopSyntax
-   */
-  static std::string IniName(const Hdf& config,
-                             const bool prepend_hhvm = true);
-  static std::string IniName(const std::string& config,
-                             const bool prepend_hhvm = true);
-    }
-    
-    Variant PlainDirectory::read() {
-  struct dirent entry;
-  struct dirent *result;
-  int ret = readdir_r(m_dir, &entry, &result);
-  if (ret != 0 || !result) {
-    return false;
-  }
-  return String(entry.d_name, CopyString);
 }
     
-      req::ptr<Directory> opendir(const String& path) override;
+    #include <linux/hw_breakpoint.h>
+#include <linux/perf_event.h>
     
-    constexpr int64_t kDefaultPerfWarningRate = 100;
+    #include <linux/perf_event.h>
     
-    #include 'hphp/runtime/base/type-array.h'
-#include 'hphp/runtime/vm/globals-array.h'
+        receiver->setMessageFactory(factory.get());
+    receiver->setRoutingTable(routingTable.get());
+    
+    
+    {} // namespace aria2
+    
+      virtual std::shared_ptr<DHTTask>
+  createPeerAnnounceTask(const unsigned char* infoHash) = 0;
+    
+      void setMessageDispatcher(DHTMessageDispatcher* dispatcher);
+    
+    bool DNSCache::CacheEntry::add(const std::string& addr)
+{
+  for (std::vector<AddrEntry>::const_iterator i = addrEntries_.begin(),
+                                              eoi = addrEntries_.end();
+       i != eoi; ++i) {
+    if ((*i).addr_ == addr) {
+      return false;
+    }
+  }
+  addrEntries_.push_back(AddrEntry(addr));
+  return true;
+}
+    
+    #endif // D_DNS_CACHE_H
+
+    
+    Shaky3D* Shaky3D::clone() const
+{
+    // no copy constructor
+    auto a = new (std::nothrow) Shaky3D();
+    a->initWithDuration(_duration, _gridSize, _randrange, _shakeZ);
+    a->autorelease();
+    return a;
+}
+    
+        /** Returns the numbers of actions that are running in a certain target. 
+     * Composable actions are counted as 1 action. Example:
+     * - If you are running 1 Sequence of 7 actions, it will return 1.
+     * - If you are running 7 Sequences of 2 actions, it will return 7.
+     *
+     * @param target    A certain target.
+     * @return  The numbers of actions that are running in a certain target.
+     * @js NA
+     */
+    virtual ssize_t getNumberOfRunningActionsInTarget(const Node *target) const;
+    
+    /** Returns the numbers of actions that are running in all targets.
+     * @return  The numbers of actions that are running in all target.
+     * @js NA
+     */
+    virtual ssize_t getNumberOfRunningActions() const;
+    
+            Then once you running ActionTween on the node, the method updateTweenAction will be invoked.
+*/
+class CC_DLL ActionTweenDelegate
+{
+public:
+    /**
+     * @js NA
+     * @lua NA
+     */
+    virtual ~ActionTweenDelegate() {}
+    }
+    
+        /** Returns a Animation that was previously added.
+     * If the name is not found it will return nil.
+     * You should retain the returned copy if you are going to use it.
+     *
+     * @return A Animation that was previously added. If the name is not found it will return nil.
+     */
+    Animation* getAnimation(const std::string& name);
+    /**
+     * @deprecated. Use getAnimation() instead
+     * @js NA
+     * @lua NA
+     */
+    CC_DEPRECATED_ATTRIBUTE Animation* animationByName(const std::string& name){ return getAnimation(name); }
+    
+    std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const cocos2d::Rect &rect, float epsilon)
+{
+    auto size = points.size();
+    // if there are less than 3 points, then we have nothing
+    if(size<3)
+    {
+        log('AUTOPOLYGON: cannot expand points for %s with less than 3 points, e: %f', _filename.c_str(), epsilon);
+        return std::vector<Vec2>();
+    }
+    ClipperLib::Path subj;
+    ClipperLib::PolyTree solution;
+    ClipperLib::PolyTree out;
+    for(const auto& pt : points)
+    {
+        subj << ClipperLib::IntPoint(pt.x* PRECISION, pt.y * PRECISION);
+    }
+    ClipperLib::ClipperOffset co;
+    co.AddPath(subj, ClipperLib::jtMiter, ClipperLib::etClosedPolygon);
+    co.Execute(solution, epsilon * PRECISION);
+    
+    ClipperLib::PolyNode* p = solution.GetFirst();
+    if(!p)
+    {
+        log('AUTOPOLYGON: Clipper failed to expand the points');
+        return points;
+    }
+    while(p->IsHole()){
+        p = p->GetNext();
+    }
+    }
+    
+    /**
+ * PolygonInfo is an object holding the required data to display Sprites.
+ * It can be a simple as a triangle, or as complex as a whole 3D mesh
+ */
+class CC_DLL PolygonInfo
+{
+public:
+    /// @name Creators
+    /// @{
+    /**
+     * Creates an empty Polygon info
+     * @memberof PolygonInfo
+     * @return PolygonInfo object
+     */
+    PolygonInfo();
+    }
+    }
