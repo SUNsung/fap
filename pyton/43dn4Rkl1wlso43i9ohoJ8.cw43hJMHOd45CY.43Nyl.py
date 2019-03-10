@@ -1,233 +1,139 @@
 
         
-          Args:
-    hps: The dictionary of hyperparameters.
-    datasets: A dictionary of data dictionaries.  The dataset dict is simply a
-      name(string)-> data dictionary mapping (See top of lfads.py).
-    output_fname (optional): output filename stem to write the model runs.
-    push_mean: if False (default), generates batch_size samples for each trial
-      and averages the results. if True, runs each trial once without noise,
-      pushing the posterior mean initial conditions and control inputs through
-      the trained model. False is used for posterior_sample_and_average, True
-      is used for posterior_push_mean.
-  '''
-  model = build_model(hps, kind=hps.kind, datasets=datasets)
-  model.write_model_runs(datasets, output_fname, push_mean)
+        # pick which RNN is used on each trial
+rnn_to_use = rng.randint(2, size=E)
+ext_input = np.repeat(np.expand_dims(rnn_to_use, axis=1), ntimesteps, axis=1)
+ext_input = np.expand_dims(ext_input, axis=2)  # these are 'a's' in the paper
     
-      def word_to_char_ids(self, word):
-    if word in self._word_to_id:
-      return self._word_char_ids[self._word_to_id[word]]
-    else:
-      return self._convert_word_to_char_ids(word)
+      def decode(self, cur_ids):
+    '''Convert a list of ids to a sentence, with space inserted.'''
+    return ' '.join([self.id_to_word(cur_id) for cur_id in cur_ids])
     
     
-def _LoadModel(gd_file, ckpt_file):
-  '''Load the model from GraphDef and Checkpoint.
+def gen_encoder_seq2seq_nas(hparams):
+  '''Returns the NAS Variable name to MaskGAN Variable
+  dictionary mapping.  This is a highly restrictive function just for testing.
+  This is for the *unidirecitional* seq2seq_nas encoder.
     
+    containers = (('thefuck/python3-tcsh',
+               u'''FROM python:3
+                   RUN apt-get update
+                   RUN apt-get install -yy tcsh''',
+               u'tcsh'),
+              ('thefuck/python2-tcsh',
+               u'''FROM python:2
+                   RUN apt-get update
+                   RUN apt-get install -yy tcsh''',
+               u'tcsh'))
     
-def cross_entropy_loss_matrix(gen_labels, gen_logits):
-  '''Computes the cross entropy loss for G.
-    
-      # Unstack Tensors into lists.
-  rewards_list = tf.unstack(rewards, axis=1)
-  log_probs_list = tf.unstack(log_probs, axis=1)
-  missing = 1. - tf.cast(present, tf.float32)
-  missing_list = tf.unstack(missing, axis=1)
-    
-            if error is None:
-            # the name is available, store it in the database and go to
-            # the login page
-            db.execute(
-                'INSERT INTO user (username, password) VALUES (?, ?)',
-                (username, generate_password_hash(password))
-            )
-            db.commit()
-            return redirect(url_for('auth.login'))
-    
-        def add_url_rule(self, rule, endpoint=None, view_func=None, **options):
-        '''Like :meth:`Flask.add_url_rule` but for a blueprint.  The endpoint for
-        the :func:`url_for` function is prefixed with the name of the blueprint.
-        '''
-        if endpoint:
-            assert '.' not in endpoint, 'Blueprint endpoints should not contain dots'
-        if view_func and hasattr(view_func, '__name__'):
-            assert '.' not in view_func.__name__, 'Blueprint view function name should not contain dots'
-        self.record(lambda s:
-            s.add_url_rule(rule, endpoint, view_func, **options))
-    
-    
-# context locals
-_request_ctx_stack = LocalStack()
-_app_ctx_stack = LocalStack()
-current_app = LocalProxy(_find_app)
-request = LocalProxy(partial(_lookup_req_object, 'request'))
-session = LocalProxy(partial(_lookup_req_object, 'session'))
-g = LocalProxy(partial(_lookup_app_object, 'g'))
-
-    
-    _date_strip_re = re.compile(r'(?<=\d)(st|nd|rd|th)')
-    
-        # Arguments
-        l1: Float; L1 regularization factor.
-        l2: Float; L2 regularization factor.
-    '''
-    
-    
-def test_cifar():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = cifar10.load_data()
-        assert len(x_train) == len(y_train) == 50000
-        assert len(x_test) == len(y_test) == 10000
-        (x_train, y_train), (x_test, y_test) = cifar100.load_data('fine')
-        assert len(x_train) == len(y_train) == 50000
-        assert len(x_test) == len(y_test) == 10000
-        (x_train, y_train), (x_test, y_test) = cifar100.load_data('coarse')
-        assert len(x_train) == len(y_train) == 50000
-        assert len(x_test) == len(y_test) == 10000
-    
-    
-def test_sparse_categorical_crossentropy_4d():
-    y_pred = K.variable(np.array([[[[0.7, 0.1, 0.2],
-                                    [0.0, 0.3, 0.7],
-                                    [0.1, 0.1, 0.8]],
-                                   [[0.3, 0.7, 0.0],
-                                    [0.3, 0.4, 0.3],
-                                    [0.2, 0.5, 0.3]],
-                                   [[0.8, 0.1, 0.1],
-                                    [1.0, 0.0, 0.0],
-                                    [0.4, 0.3, 0.3]]]]))
-    y_true = K.variable(np.array([[[0, 1, 0],
-                                   [2, 1, 0],
-                                   [2, 2, 1]]]))
-    expected_loss = - (np.log(0.7) + np.log(0.3) + np.log(0.1) +
-                       np.log(K.epsilon()) + np.log(0.4) + np.log(0.2) +
-                       np.log(0.1) + np.log(K.epsilon()) + np.log(0.3)) / 9
-    loss = K.eval(losses.sparse_categorical_crossentropy(y_true, y_pred))
-    assert np.isclose(expected_loss, np.mean(loss))
-    
-    To use this with Keras, we make a dataset out of elements
-of the form (input batch, output batch). From there, we
-create a one-shot iterator and a graph node corresponding
-to its get_next() method. Its components are then provided
-to the network's Input layer and the Model.compile() method,
-respectively.
-    
-    
-class UnrewindableBodyError(RequestException):
-    '''Requests encountered an error when trying to rewind a body'''
-    
-        def __eq__(self, other):
-        if isinstance(other, Mapping):
-            other = CaseInsensitiveDict(other)
-        else:
-            return NotImplemented
-        # Compare insensitively
-        return dict(self.lower_items()) == dict(other.lower_items())
-    
-        @possible_keys
-    def test_delitem(self, key):
-        del self.case_insensitive_dict[key]
-        assert key not in self.case_insensitive_dict
-    
-            Operator:                  '#582800',   # class: 'o'
-        Operator.Word:             'bold #004461',   # class: 'ow' - like keywords
-    
-       >>> import requests
-   >>> r = requests.get('https://www.python.org')
-   >>> r.status_code
-   200
-   >>> 'Python is a programming language' in r.content
-   True
-    
-        def list_domains(self):
-        '''Utility method to list all the domains in the jar.'''
-        domains = []
-        for cookie in iter(self):
-            if cookie.domain not in domains:
-                domains.append(cookie.domain)
-        return domains
-    
-    
-def dispatch_hook(key, hooks, hook_data, **kwargs):
-    '''Dispatches a hook dictionary on a given piece of data.'''
-    hooks = hooks or {}
-    hooks = hooks.get(key)
-    if hooks:
-        if hasattr(hooks, '__call__'):
-            hooks = [hooks]
-        for hook in hooks:
-            _hook_data = hook(hook_data, **kwargs)
-            if _hook_data is not None:
-                hook_data = _hook_data
-    return hook_data
-
-    
-        with server as (host, port):
-        url = u'http://{}:{}'.format(host, port)
-        r = requests.get(url=url, allow_redirects=True)
-        assert r.status_code == 200
-        assert len(r.history) == 1
-        assert r.history[0].status_code == 301
-        assert redirect_request[0].startswith(b'GET /' + expected_path + b' HTTP/1.1')
-        assert r.url == u'{}/{}'.format(url, expected_path.decode('ascii'))
-    
-    
-@pytest.mark.parametrize(
-    'url, expected', (
-            ('http://192.168.0.1:5000/', True),
-            ('http://192.168.0.1/', True),
-            ('http://172.16.1.1/', True),
-            ('http://172.16.1.1:5000/', True),
-            ('http://localhost.localdomain:5000/v1.0/', True),
-            ('http://172.16.1.12/', False),
-            ('http://172.16.1.12:5000/', False),
-            ('http://google.com:5000/v1.0/', False),
-    ))
-def test_should_bypass_proxies_no_proxy(
-        url, expected, monkeypatch):
-    '''Tests for function should_bypass_proxies to check if proxy
-    can be bypassed or not using the 'no_proxy' argument
-    '''
-    no_proxy = '192.168.0.0/24,127.0.0.1,localhost.localdomain,172.16.1.1'
-    # Test 'no_proxy' argument
-    assert should_bypass_proxies(url, no_proxy=no_proxy) == expected
-    
-            Will successfully encode files when passed as a dict or a list of
-        tuples. Order is retained if data is a list of tuples but arbitrary
-        if parameters are supplied as a dict.
-        The tuples may be 2-tuples (filename, fileobj), 3-tuples (filename, fileobj, contentype)
-        or 4-tuples (filename, fileobj, contentype, custom_headers).
-        '''
-        if (not files):
-            raise ValueError('Files must be provided.')
-        elif isinstance(data, basestring):
-            raise ValueError('Data must not be a string.')
-    
-        zip_file = zipfile.ZipFile(archive)
-    if member not in zip_file.namelist():
-        return path
-    
-        Code is a simple port of what is already in the /scripts directory
-    
-    try:
-	raw_input		#Python 2
-except NameError:
-	raw_input = input	#Python 3
-    
-    The problem is  :
-Given an array, to find the longest and continuous sub array and get the max sum of the sub array in the given array.
+    no_match_output = '''
+Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
+Get:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease [89.2 kB]
+Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
+Get:4 http://security.ubuntu.com/ubuntu zesty-security InRelease [89.2 kB]
+Hit:5 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
+Hit:6 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
+Hit:7 https://download.docker.com/linux/ubuntu zesty InRelease
+Get:8 http://us.archive.ubuntu.com/ubuntu zesty-updates/main i386 Packages [232 kB]
+Get:9 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 Packages [235 kB]
+Get:10 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 DEP-11 Metadata [55.2 kB]
+Get:11 http://us.archive.ubuntu.com/ubuntu zesty-updates/main DEP-11 64x64 Icons [32.3 kB]
+Get:12 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 Packages [156 kB]
+Get:13 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe i386 Packages [156 kB]
+Get:14 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 DEP-11 Metadata [175 kB]
+Get:15 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe DEP-11 64x64 Icons [253 kB]
+Get:16 http://us.archive.ubuntu.com/ubuntu zesty-updates/multiverse amd64 DEP-11 Metadata [5,840 B]
+Get:17 http://us.archive.ubuntu.com/ubuntu zesty-backports/universe amd64 DEP-11 Metadata [4,588 B]
+Get:18 http://security.ubuntu.com/ubuntu zesty-security/main amd64 DEP-11 Metadata [12.7 kB]
+Get:19 http://security.ubuntu.com/ubuntu zesty-security/main DEP-11 64x64 Icons [17.6 kB]
+Get:20 http://security.ubuntu.com/ubuntu zesty-security/universe amd64 DEP-11 Metadata [21.6 kB]
+Get:21 http://security.ubuntu.com/ubuntu zesty-security/universe DEP-11 64x64 Icons [47.7 kB]
+Get:22 http://security.ubuntu.com/ubuntu zesty-security/multiverse amd64 DEP-11 Metadata [208 B]
+Fetched 1,673 kB in 0s (1,716 kB/s)
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+All packages are up to date.
 '''
-from __future__ import print_function
     
-    Usage:
-  1. define 'k' value, 'X' features array and 'hetrogeneity' empty list
-  
-  2. create initial_centroids,
-        initial_centroids = get_initial_centroids(
-            X, 
-            k, 
-            seed=0 # seed value for initial centroid generation, None for randomness(default=None)
-            )
+    
+misspelled_subcommand = '''\
+usage: aws [options] <command> <subcommand> [<subcommand> ...] [parameters]
+To see help text, you can run:
+    
+    
+@pytest.mark.parametrize('command, new_command', [
+    (Command('cargo buid', no_such_subcommand_old), 'cargo build'),
+    (Command('cargo buils', no_such_subcommand), 'cargo build')])
+def test_get_new_command(command, new_command):
+    assert get_new_command(command) == new_command
+
+    
+    # (filename as typed by the user, unquoted filename, quoted filename as per shells.quote)
+parametrize_filename = pytest.mark.parametrize('filename, unquoted, quoted', [
+    ('foo{}', 'foo{}', 'foo{}'),
+    (''foo bar{}'', 'foo bar{}', ''foo bar{}'')])
+    
+    
+if __name__ == '__main__':
+    from glmnet.elastic_net import Lasso as GlmnetLasso
+    from sklearn.linear_model import Lasso as ScikitLasso
+    # Delayed import of matplotlib.pyplot
+    import matplotlib.pyplot as plt
+    
+                gc.collect()
+            print('- benchmarking LassoLars')
+            clf = LassoLars(alpha=alpha, fit_intercept=False,
+                            normalize=False, precompute=precompute)
+            tstart = time()
+            clf.fit(X, Y)
+            lars_lasso_results.append(time() - tstart)
+    
+    plt.figure('scikit-learn Ward's method benchmark results')
+plt.imshow(np.log(ratio), aspect='auto', origin='lower')
+plt.colorbar()
+plt.contour(ratio, levels=[1, ], colors='k')
+plt.yticks(range(len(n_features)), n_features.astype(np.int))
+plt.ylabel('N features')
+plt.xticks(range(len(n_samples)), n_samples.astype(np.int))
+plt.xlabel('N samples')
+plt.title('Scikit's time, in units of scipy time (log)')
+plt.show()
+
+    
+            :issue:`123`
+        :issue:`42,45`
+    '''
+    options = options or {}
+    content = content or []
+    issue_nos = [each.strip() for each in utils.unescape(text).split(',')]
+    config = inliner.document.settings.env.app.config
+    ret = []
+    for i, issue_no in enumerate(issue_nos):
+        node = _make_issue_node(issue_no, config, options=options)
+        ret.append(node)
+        if i != len(issue_nos) - 1:
+            sep = nodes.raw(text=', ', format='html')
+            ret.append(sep)
+    return ret, []
+    
+        # import matplotlib.pyplot as plt
+    # plt.matshow(cm)
+    # plt.show()
+
+    
+        print('Generating skeleton for %s' % f)
+    
+    We add observation noise to these waveforms. We generate very sparse
+noise: only 6% of the time points contain noise. As a result, the
+l1 norm of this noise (ie 'cityblock' distance) is much smaller than it's
+l2 norm ('euclidean' distance). This can be seen on the inter-class
+distance matrices: the values on the diagonal, that characterize the
+spread of the class, are much bigger for the Euclidean distance than for
+the cityblock distance.
+    
+    # Different variance
+X_varied, y_varied = make_blobs(n_samples=n_samples,
+                                cluster_std=[1.0, 2.5, 0.5],
+                                random_state=random_state)
+y_pred = KMeans(n_clusters=3, random_state=random_state).fit_predict(X_varied)
