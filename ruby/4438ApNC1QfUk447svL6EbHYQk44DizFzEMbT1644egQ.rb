@@ -1,99 +1,142 @@
 
         
-                case array.length
-        when 0
-          ''.html_safe
-        when 1
-          ERB::Util.html_escape(array[0])
-        when 2
-          safe_join([array[0], array[1]], options[:two_words_connector])
-        else
-          safe_join([safe_join(array[0...-1], options[:words_connector]), options[:last_word_connector], array[-1]], nil)
+        module Devise
+  module Controllers
+    # Provide the ability to store a location.
+    # Used to redirect back to a desired path after sign in.
+    # Included by default in all controllers.
+    module StoreLocation
+      # Returns and delete (if it's navigational format) the url stored in the session for
+      # the given scope. Useful for giving redirect backs after sign up:
+      #
+      # Example:
+      #
+      #   redirect_to stored_location_for(:user) || root_path
+      #
+      def stored_location_for(resource_or_scope)
+        session_key = stored_location_key_for(resource_or_scope)
+    
+        # Create magic predicates for verifying what module is activated by this map.
+    # Example:
+    #
+    #   def confirmable?
+    #     self.modules.include?(:confirmable)
+    #   end
+    #
+    def self.add_module(m)
+      class_eval <<-METHOD, __FILE__, __LINE__ + 1
+        def #{m}?
+          self.modules.include?(:#{m})
         end
+      METHOD
+    end
+    
+          def self.required_fields(klass)
+        []
+      end
+    
+          it 'displays Float::NAN as NaN' do
+        format('%A', Float::NAN).should == 'NaN'
+        format('%A', -Float::NAN).should == 'NaN'
       end
     end
   end
-end
-
     
-                  accept = if current_value.respond_to?(:call)
-                current_value.call(item)
-              else
-                Array(current_value).map(&:to_s).include?(value.to_s)
-              end
-    
-            class << self
-          def field_type
-            @field_type ||= name.split('::').last.sub('Field', '').downcase
-          end
-        end
-    
-        def initialize_copy(other)
-      @paths = other.paths.dup
-      self
+      it 'has no effect on immediate values' do
+    [nil, true, false].each do |v|
+      v.taint
+      v.tainted?.should == false
     end
+  end
     
-    class ActivityPub::OutboxesController < Api::BaseController
-  LIMIT = 20
-    
-        def set_email_domain_block
-      @email_domain_block = EmailDomainBlock.find(params[:id])
-    end
-    
-              redirect_to admin_reports_path, notice: I18n.t('admin.reports.resolved_msg')
-          return
-        end
-    
-      respond_to :json
-    
-      def setting
-    @_setting ||= ::Web::Setting.where(user: current_user).first_or_initialize(user: current_user)
+      it 'raises ArgumentError if no block or proc is provided' do
+    lambda do
+      trace_var :$Kernel_trace_var_global
+    end.should raise_error(ArgumentError)
   end
 end
 
     
-      Devise.omniauth_configs.each_key do |provider|
-    provides_callback_for provider
-  end
+    group :debugging do
+  gem 'cocoapods_debug'
     
-      def set_rate_limit_headers
-    apply_header_limit
-    apply_header_remaining
-    apply_header_reset
-  end
+        pod 'ObjCPod', path: 'ObjCPod'
+    pod 'SwiftPod', path: 'SwiftPod'
+    pod 'MixedPod', path: 'MixedPod'
+    pod 'CustomModuleMapPod', path: 'CustomModuleMapPod'
     
-    describe 'Kernel#sleep' do
-  it 'is a private method' do
-    Kernel.should have_private_instance_method(:sleep)
-  end
+      gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
+  gem.executables   = %w(cap capify)
+  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.require_paths = ['lib']
     
-      it 'calls #to_path on second argument when passed ?e and a filename' do
-    p = mock('path')
-    p.should_receive(:to_path).and_return @file
-    Kernel.test(?e, p)
-  end
+          # Given a callable that provides a value, wrap the callable with another
+      # object that responds to `call`. This new object will perform validation
+      # and then return the original callable's value.
+      #
+      # If the callable is a `Question`, the object returned by this method will
+      # also be a `Question` (a `ValidatedQuestion`, to be precise). This
+      # ensures that `is_a?(Question)` remains true even after the validation
+      # wrapper is applied. This is needed so that `Configuration#is_question?`
+      # works as expected.
+      #
+      def assert_valid_later(key, callable)
+        validation_callback = lambda do
+          value = callable.call
+          assert_valid_now(key, value)
+          value
+        end
     
-    describe 'main#define_method' do
-  before :each do
-    @code = 'define_method(:boom) { :bam }'
+    # define charCodeAt on String
+class String
+  def charCodeAt(k)
+    # use scan, nil check, and unpack instead of ord for 1.8
+    # 1.9 can simply use self[k].ord
+    # http://stackoverflow.com/questions/7793177/split-utf8-string-regardless-of-ruby-version
+    c = self.scan(/./mu)[k]
+    return nil if c.nil?
+    c.unpack('U')[0]
   end
-    
-    Before do
-  gemfile = ENV['BUNDLE_GEMFILE'].to_s
-  ENV['BUNDLE_GEMFILE'] = File.join(Dir.pwd, gemfile) unless gemfile.start_with?(Dir.pwd)
-  @framework_version = nil
 end
     
-      def migration_name
-    'add_attachment_#{attachment_names.join('_')}_to_#{name.underscore.pluralize}'
+          def upload_dest
+        @upload_dest
+      end
+    
+          def footer_content
+        has_footer && @footer.formatted_data
+      end
+    
+        assert_match /Delete this Page/, last_response.body, ''Delete this Page' link is blocked in page template'
+    assert_match /New/,              last_response.body, ''New' button is blocked in page template'
+    assert_match /Upload/,           last_response.body, ''Upload' link is blocked in page template'
+    assert_match /Rename/,           last_response.body, ''Rename' link is blocked in page template'
+    assert_match /Edit/,             last_response.body, ''Edit' link is blocked in page template'
+    
+      test 'clean path without leading slash' do
+    assert_equal '/Mordor', clean_path('Mordor')
   end
     
-    begin
-  # Use mime/types/columnar if available, for reduced memory usage
-  require 'mime/types/columnar'
-rescue LoadError
-  require 'mime/types'
-end
+      test 'h1 title sanitizes correctly' do
+    title = 'H1'
+    @wiki.write_page(title, :markdown, '# 1 & 2 <script>alert('js')</script>' + '\n # 3', commit_details)
+    page = @wiki.page(title)
     
-        EMPTY_TYPE = 'inode/x-empty'
-    SENSIBLE_DEFAULT = 'application/octet-stream'
+      test 'transliteration' do
+    # we transliterate only when adapter is grit
+    return if defined?(Gollum::GIT_ADAPTER) && Gollum::GIT_ADAPTER != 'grit'
+    
+          def call(env)
+        @mg.call(env)
+      end
+    end
+    
+    # Rack::Handler does not work with Ctrl + C. Use Rack::Server instead.
+    Rack::Server.new(:app => MapGollum.new(base_path), :Port => options[:port], :Host => options[:bind]).start
+  end
+end
+
+    
+      def self.assets_path
+    ::File.expand_path('gollum/public', ::File.dirname(__FILE__))
+  end
