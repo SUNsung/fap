@@ -1,78 +1,132 @@
 
         
-            process_font_assets
-    process_stylesheet_assets
-    process_javascript_assets
-    store_version
+          it 'asks to accept conflicts when the scenario was modified' do
+    DefaultScenarioImporter.seed(user)
+    agent = user.agents.where(name: 'Rain Notifier').first
+    agent.options['expected_receive_period_in_days'] = 9001
+    agent.save!
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
+    click_on 'Start Import'
+    expect(page).to have_text('This Scenario already exists in your system.')
+    expect(page).to have_text('9001')
+    check('I confirm that I want to import these Agents.')
+    click_on 'Finish Import'
+    expect(page).to have_text('Import successful!')
   end
     
-      # Raise exceptions instead of rendering exception templates.
-  config.action_dispatch.show_exceptions = false
+              @bar3 = Agents::DotBar.new(name: 'bar3').tap { |agent|
+            agent.user = users(:bob)
+            agent.sources << @bar2
+            agent.save!
+          },
+        ]
+        @foo.reload
+        @bar2.reload
     
-      # The global load paths for Sass files. This is meant for plugins and
-  # libraries to register the paths to their Sass stylesheets to that they may
-  # be `@imported`. This load path is used by every instance of {Sass::Engine}.
-  # They are lower-precedence than any load paths passed in via the
-  # {file:SASS_REFERENCE.md#load_paths-option `:load_paths` option}.
-  #
-  # If the `SASS_PATH` environment variable is set,
-  # the initial value of `load_paths` will be initialized based on that.
-  # The variable should be a colon-separated list of path names
-  # (semicolon-separated on Windows).
-  #
-  # Note that files on the global load path are never compiled to CSS
-  # themselves, even if they aren't partials. They exist only to be imported.
-  #
-  # @example
-  #   Sass.load_paths << File.dirname(__FILE__ + '/sass')
-  # @return [Array<String, Pathname, Sass::Importers::Base>]
-  def self.load_paths
-    @load_paths ||= if ENV['SASS_PATH']
-                      ENV['SASS_PATH'].split(Sass::Util.windows? ? ';' : ':')
-                    else
-                      []
-                    end
-  end
+          context '#restart_dead_workers' do
+        before do
+          mock.instance_of(HuginnScheduler).run!
+          mock.instance_of(DelayedJobWorker).run!
+          @agent_runner.send(:run_workers)
     
-          offset = line.offset + line.text.size - arg_string.size
-      args, splat = Script::Parser.new(arg_string.strip, @line, to_parser_offset(offset), @options).
-        parse_function_definition_arglist
-      Tree::FunctionNode.new(name, args, splat)
+          expect(Utils.unindent('Hello\n  I am indented')).to eq('Hello\n  I am indented')
+    
+      describe '#receive' do
+    it 'sends a message' do
+      stub(HTTParty).post { {'id' => 1, 'message' => 'blah', 'title' => 'blah','source_name' => 'Custom Notification'} }
+      @checker.receive([@event])
     end
     
-      # An environment that can write to in-scope global variables, but doesn't
-  # create new variables in the global scope. Useful for top-level control
-  # directives.
-  class SemiGlobalEnvironment < Environment
-    def try_set_var(name, value)
-      @vars ||= {}
-      if @vars.include?(name)
-        @vars[name] = value
-        true
-      elsif @parent
-        @parent.try_set_var(name, value)
-      else
-        false
-      end
+        def insert(index, *names)
+      @filters.insert assert_index(index), *filter_const(names)
+    end
+    
+        def add(path, content)
+      @pages[path] = content
+    end
+    
+        def parse_as_fragment
+      Nokogiri::HTML.fragment @content, 'UTF-8'
     end
   end
 end
 
     
-        # The line of the Sass template on which the error occurred.
-    #
-    # @return [Integer]
-    def sass_line
-      sass_backtrace.first[:line]
+      context 'brew' do
+    subject { HOMEBREW_LIBRARY_PATH.parent.parent/'bin/brew' }
+    
+      describe '#merge' do
+    it 'returns itself' do
+      expect(env.merge([])).to be env
+    end
+  end
+    
+      caveats <<~EOS
+    Installation or Uninstallation may fail with Exit Code 19 (Conflicting Processes running) if Browsers, Safari Notification Service or SIMBL Services (e.g. Flashlight) are running or Adobe Creative Cloud or any other Adobe Products are already installed. See Logs in /Library/Logs/Adobe/Installers if Installation or Uninstallation fails, to identifify the conflicting processes.
+  EOS
+end
+
+    
+          spec['main'] =
+          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
+          find_files.(Bootstrap.fonts_path) +
+          %w(assets/javascripts/bootstrap.js)
+    
+      # Eager load code on boot. This eager loads most of Rails and
+  # your application in memory, allowing both thread web servers
+  # and those relying on copy on write to perform better.
+  # Rake tasks automatically ignore this option for performance.
+  config.eager_load = true
+    
+      GEMS_AND_ROOT_DIRECTORIES.each do |gem, directory|
+    file package(gem, '.gem') => ['pkg/', '#{directory + '/' + gem}.gemspec'] do |f|
+      sh 'cd #{directory} && gem build #{gem}.gemspec'
+      mv directory + '/' + File.basename(f.name), f.name
     end
     
-          # A string representation of the importer.
-      # Should be overridden by subclasses.
-      #
-      # This is used to help debugging,
-      # and should usually just show the load path encapsulated by this importer.
-      #
-      # @return [String]
-      def to_s
-        Sass::Util.abstract(self)
+        # we assume that the first file that requires 'sinatra' is the
+    # app_file. all other path related options are calculated based
+    # on this path by default.
+    set :app_file, caller_files.first || $0
+    
+      # fetch data
+  fields = {
+    :authors => `git shortlog -sn`.force_encoding('utf-8').scan(/[^\d\s].*/),
+    :email   => ['mail@zzak.io', 'konstantin.haase@gmail.com'],
+    :files   => %w(License README.md Rakefile Gemfile rack-protection.gemspec) + Dir['lib/**/*']
+  }
+    
+          def escape(object)
+        case object
+        when Hash   then escape_hash(object)
+        when Array  then object.map { |o| escape(o) }
+        when String then escape_string(object)
+        when Tempfile then object
+        else nil
+        end
       end
+    
+          # Ensure that the other order doesn't show up
+      within('table#listing_orders') { expect(page).not_to have_content('R200') }
+    end
+    
+    describe 'Product Variants', type: :feature, js: true do
+  stub_authorization!
+    
+          attr_accessor :current_api_user
+    
+                if @order.completed? || @order.next
+              state_callback(:after)
+              respond_with(@order, default_template: 'spree/api/v1/orders/show')
+            else
+              respond_with(@order, default_template: 'spree/api/v1/orders/could_not_transition', status: 422)
+            end
+          else
+            invalid_resource!(@order)
+          end
+        end
+    
+            def fire
+          inventory_unit.send('#{@event}!') if @event
+        end
