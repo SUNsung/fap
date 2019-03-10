@@ -1,257 +1,219 @@
 
         
-        // This is initialized with a default, stub implementation.
-// If python-google.protobuf.cc is loaded, the function pointer is overridden
-// with a full implementation.
-const Message* (*GetCProtoInsidePyProtoPtr)(PyObject* msg) =
-    GetCProtoInsidePyProtoStub;
-Message* (*MutableCProtoInsidePyProtoPtr)(PyObject* msg) =
-    MutableCProtoInsidePyProtoStub;
+        	// Set path to vendored ConEmu config file
+	PathCombine(cfgPath, exeDir, L'vendor\\conemu-maximus5\\ConEmu.xml');
     
-      // -----------------------------------------------------------------
-  // Invoke InternalBuildGeneratedFileFrom() to build the file.
-  printer->Print(
-      'descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,\n');
-  printer->Print('    new pbr::FileDescriptor[] { ');
-  for (int i = 0; i < file_->dependency_count(); i++) {
-    // descriptor.proto is special: we don't allow access to the generated code, but there's
-    // a separately-exposed property to get at the file descriptor, specifically to allow this
-    // kind of dependency.
-    if (IsDescriptorProto(file_->dependency(i))) {
-      printer->Print('pbr::FileDescriptor.DescriptorProtoFileDescriptor, ');
-    } else {
-      printer->Print(
-      '$full_reflection_class_name$.Descriptor, ',
-      'full_reflection_class_name',
-      GetReflectionClassName(file_->dependency(i)));
-    }
-  }
-  printer->Print('},\n'
-      '    new pbr::GeneratedClrTypeInfo(');
-  // Specify all the generated code information, recursively.
-  if (file_->enum_type_count() > 0) {
-      printer->Print('new[] {');
-      for (int i = 0; i < file_->enum_type_count(); i++) {
-          printer->Print('typeof($type_name$), ', 'type_name', GetClassName(file_->enum_type(i)));
-      }
-      printer->Print('}, ');
-  }
-  else {
-      printer->Print('null, ');
-  }
-  if (file_->message_type_count() > 0) {
-      printer->Print('new pbr::GeneratedClrTypeInfo[] {\n');
-      printer->Indent();
-      printer->Indent();
-      printer->Indent();
-      for (int i = 0; i < file_->message_type_count(); i++) {
-          WriteGeneratedCodeInfo(file_->message_type(i), printer, i == file_->message_type_count() - 1);
-      }
-      printer->Outdent();
-      printer->Print('\n}));\n');
-      printer->Outdent();
-      printer->Outdent();
-  }
-  else {
-      printer->Print('null));\n');
-  }
+    namespace php { struct Unit; struct Program; }
     
-    std::string SourceGeneratorBase::class_access_level() {
-  return (IsDescriptorProto(descriptor_) || this->options()->internal_access) ? 'internal' : 'public';
-}
+    /*
+ * If Trace::hhbbc_time >= 1, print some stats about the program to a
+ * temporary file.  If it's greater than or equal to 2, also dump it
+ * to stdout.
+ */
+void print_stats(const Index&, const php::Program&);
+    
+    private:
+  APCCollection();
+  ~APCCollection();
+  static APCHandle::Pair WrapArray(APCHandle::Pair, CollectionType);
     
     
-    {  WriteFieldDocComment(printer, descriptor_);
-  if (descriptor_->is_repeated()) {
-    printer->Print(
-        vars,
-        'public static final\n'
-        '  com.google.protobuf.GeneratedMessageLite.GeneratedExtension<\n'
-        '    $containing_type$,\n'
-        '    $type$> $name$ = com.google.protobuf.GeneratedMessageLite\n'
-        '        .newRepeatedGeneratedExtension(\n'
-        '      $containing_type$.getDefaultInstance(),\n'
-        '      $prototype$,\n'
-        '      $enum_map$,\n'
-        '      $number$,\n'
-        '      com.google.protobuf.WireFormat.FieldType.$type_constant$,\n'
-        '      $packed$,\n'
-        '      $singular_type$.class);\n');
-  } else {
-    printer->Print(
-        vars,
-        'public static final\n'
-        '  com.google.protobuf.GeneratedMessageLite.GeneratedExtension<\n'
-        '    $containing_type$,\n'
-        '    $type$> $name$ = com.google.protobuf.GeneratedMessageLite\n'
-        '        .newSingularGeneratedExtension(\n'
-        '      $containing_type$.getDefaultInstance(),\n'
-        '      $default$,\n'
-        '      $prototype$,\n'
-        '      $enum_map$,\n'
-        '      $number$,\n'
-        '      com.google.protobuf.WireFormat.FieldType.$type_constant$,\n'
-        '      $singular_type$.class);\n');
-  }
-  printer->Annotate('name', descriptor_);
-}
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace java {
-    }
-    }
-    }
+struct Config {
+  /*
+   * Normalizes hdf string names to their ini counterparts
+   *
+   * We have special handling for a few hdf strings such as those containing
+   * MySQL, Eval, IPv[4|6] and EnableHipHopSyntax
+   */
+  static std::string IniName(const Hdf& config,
+                             const bool prepend_hhvm = true);
+  static std::string IniName(const std::string& config,
+                             const bool prepend_hhvm = true);
     }
     
-    #include <google/protobuf/compiler/objectivec/objectivec_helpers.h>
-#include <google/protobuf/testing/googletest.h>
-#include <gtest/gtest.h>
-    
-      virtual io::ZeroCopyOutputStream* OpenForInsert(
-      const string& filename, const string& insertion_point) {
-    CodeGeneratorResponse::File* file = response_->add_file();
-    file->set_name(filename);
-    file->set_insertion_point(insertion_point);
-    return new io::StringOutputStream(file->mutable_content());
-  }
-    
-    bool GzipOutputStream::Close() {
-  if ((zerror_ != Z_OK) && (zerror_ != Z_BUF_ERROR)) {
+    Variant PlainDirectory::read() {
+  struct dirent entry;
+  struct dirent *result;
+  int ret = readdir_r(m_dir, &entry, &result);
+  if (ret != 0 || !result) {
     return false;
   }
-  do {
-    zerror_ = Deflate(Z_FINISH);
-  } while (zerror_ == Z_OK);
-  zerror_ = deflateEnd(&zcontext_);
-  bool ok = zerror_ == Z_OK;
-  zerror_ = Z_STREAM_END;
-  return ok;
+  return String(entry.d_name, CopyString);
 }
     
-    CallCredentials::CallCredentials() { g_gli_initializer.summon(); }
     
-    ::opencensus::stats::MeasureInt64 RpcClientSentMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientSentBytesPerRpc();
-::opencensus::stats::MeasureInt64 RpcClientReceivedMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientReceivedBytesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientRoundtripLatency();
-::opencensus::stats::MeasureDouble RpcClientServerLatency();
-::opencensus::stats::MeasureInt64 RpcClientCompletedRpcs();
+    {  auto glob = HHVM_FN(glob)(String(path_str, path_len, CopyString));
+  if (!glob.isArray()) {
+    return nullptr;
+  }
+  return req::make<ArrayDirectory>(glob.toArray());
+}
     
-      // Fixed Field ID values:
-  enum FieldIdValue {
-    kTraceIdField = 0,
-    kSpanIdField = 1,
-    kTraceOptionsField = 2,
-  };
+    #endif
+
+    
+    U_NAMESPACE_BEGIN
+    
+        /**
+     * Implements {@link Transliterator#handleTransliterate}.
+     * @param text          the buffer holding transliterated and
+     *                      untransliterated text
+     * @param offset        the start and limit of the text, the position
+     *                      of the cursor, and the start and limit of transliteration.
+     * @param incremental   if true, assume more text may be coming after
+     *                      pos.contextLimit. Otherwise, assume the text is complete.
+     */
+    virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
+                                     UBool isIncremental) const;
+    
+    #if !UCONFIG_NO_FORMATTING
+    
+    UBool SearchIterator::operator==(const SearchIterator &that) const
+{
+    if (this == &that) {
+        return TRUE;
+    }
+    return (m_breakiterator_            == that.m_breakiterator_ &&
+            m_search_->isCanonicalMatch == that.m_search_->isCanonicalMatch &&
+            m_search_->isOverlap        == that.m_search_->isOverlap &&
+            m_search_->elementComparisonType == that.m_search_->elementComparisonType &&
+            m_search_->matchedIndex     == that.m_search_->matchedIndex &&
+            m_search_->matchedLength    == that.m_search_->matchedLength &&
+            m_search_->textLength       == that.m_search_->textLength &&
+            getOffset() == that.getOffset() &&
+            (uprv_memcmp(m_search_->text, that.m_search_->text, 
+                              m_search_->textLength * sizeof(UChar)) == 0));
+}
+    
+    UnicodeString&
+SelectFormat::format(const Formattable& obj,
+                   UnicodeString& appendTo,
+                   FieldPosition& pos,
+                   UErrorCode& status) const
+{
+    if (U_FAILURE(status)) {
+        return appendTo;
+    }
+    if (obj.getType() == Formattable::kString) {
+        return format(obj.getString(status), appendTo, pos, status);
+    } else {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return appendTo;
+    }
+}
+    
+    
+/**
+ * A formatter for small, positive integers.
+ */
+class U_I18N_API SmallIntFormatter : public UMemory {
+public:
+    /**
+     * Estimates the actual digit count needed to format positiveValue
+     * using the given range of digit counts.
+     * Returns a value that is at least the actual digit count needed.
+     *
+     * @param positiveValue the value to format
+     * @param range the acceptable range of digit counts.
+     */
+    static int32_t estimateDigitCount(
+            int32_t positiveValue, const IntDigitCountRange &range);
+    }
+    
+    
+    {    status = U_MEMORY_ALLOCATION_ERROR;
+}
+    
+    
+class SimpleDateFormatStaticSets : public UMemory
+{
+public:
+    SimpleDateFormatStaticSets(UErrorCode &status);
+    ~SimpleDateFormatStaticSets();
+    
+    static void    initSets(UErrorCode *status);
+    static UBool   cleanup();
+    
+    static UnicodeSet *getIgnorables(UDateFormatField fieldIndex);
+    
+private:
+    UnicodeSet *fDateIgnorables;
+    UnicodeSet *fTimeIgnorables;
+    UnicodeSet *fOtherIgnorables;
+};
+    
+    #endif /* #if !UCONFIG_NO_TRANSLITERATION */
+    
+     public:
+    
+        for (int32_t i=0; i<output.length(); ++i) {
+        if (hasCursor && i == cursor) {
+            ICU_Utility::appendToRule(rule, (UChar)0x007C /*|*/, TRUE, escapeUnprintable, quoteBuf);
+        }
+        UChar c = output.charAt(i); // Ok to use 16-bits here
+    }
+    
+    
+    {};
+    
+    void ExtensionException::__set_uuid(const ExtensionRouteUUID val) {
+  this->uuid = val;
+}
+std::ostream& operator<<(std::ostream& out, const ExtensionException& obj)
+{
+  obj.printTo(out);
+  return out;
+}
     
     
     {
-    {   private:
-    const grpc::string name_;
-    const grpc::string value_;
-  };
-  return std::unique_ptr<ServerBuilderOption>(new StringOption(name, value));
-}
+    {}} // namespace
     
-    void DynamicThreadPool::DynamicThread::ThreadFunc() {
-  pool_->ThreadFunc();
-  // Now that we have killed ourselves, we should reduce the thread count
-  std::unique_lock<std::mutex> lock(pool_->mu_);
-  pool_->nthreads_--;
-  // Move ourselves to dead list
-  pool_->dead_threads_.push_back(this);
+      // Start looping through starting at the first options
+  // (so skip the exports)
+  for (auto iter = line.begin() + options_index; iter != line.end(); ++iter) {
+    if (iter->compare('-ro') == 0 || iter->compare('-o') == 0) {
+      readonly = 1;
     }
-    
-    // Per-thread state for concurrent executions of the same benchmark.
-struct ThreadState {
-  int tid;             // 0..n-1 when running in n threads
-  Random rand;         // Has different seeds for different threads
-  Stats stats;
-  SharedState* shared;
-    }
-    
-    void InternalKeyComparator::FindShortSuccessor(std::string* key) const {
-  Slice user_key = ExtractUserKey(*key);
-  std::string tmp(user_key.data(), user_key.size());
-  user_comparator_->FindShortSuccessor(&tmp);
-  if (tmp.size() < user_key.size() &&
-      user_comparator_->Compare(user_key, tmp) < 0) {
-    // User key has become shorter physically, but larger logically.
-    // Tack on the earliest possible number to the shortened user key.
-    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
-    assert(this->Compare(*key, tmp) < 0);
-    key->swap(tmp);
-  }
-}
-    
-      ASSERT_TRUE(ParseInternalKey(in, &decoded));
-  ASSERT_EQ(key, decoded.user_key.ToString());
-  ASSERT_EQ(seq, decoded.sequence);
-  ASSERT_EQ(vt, decoded.type);
-    
-      size_t WrittenBytes() const {
-    return dest_.contents_.size();
   }
     
-    // Encode a suitable internal key target for 'target' and return it.
-// Uses *scratch as scratch space, and the returned pointer will point
-// into this scratch space.
-static const char* EncodeKey(std::string* scratch, const Slice& target) {
-  scratch->clear();
-  PutVarint32(scratch, target.size());
-  scratch->append(target.data(), target.size());
-  return scratch->data();
-}
-    
-    #include 'guetzli/stats.h'
-    
-    inline int Log2FloorNonZero(uint32_t n) {
-#ifdef __GNUC__
-  return 31 ^ __builtin_clz(n);
-#else
-  unsigned int result = 0;
-  while (n >>= 1) result++;
-  return result;
-#endif
-}
-    
-      if (setjmp(png_jmpbuf(png_ptr)) != 0) {
-    // Ok we are here because of the setjmp.
-    png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
-    return false;
-  }
-    
-    // Saves the COM marker segment as a string to *jpg.
-bool ProcessCOM(const uint8_t* data, const size_t len, size_t* pos,
-                JPEGData* jpg) {
-  VERIFY_LEN(2);
-  size_t marker_len = ReadUint16(data, pos);
-  VERIFY_INPUT(marker_len, 2, 65535, MARKER_LEN);
-  VERIFY_LEN(marker_len - 2);
-  std::string com_str(reinterpret_cast<const char*>(
-      &data[*pos - 2]), marker_len);
-  *pos += marker_len - 2;
-  jpg->com_data.push_back(com_str);
-  return true;
-}
-    
-    bool WriteJpeg(const JPEGData& jpg, bool strip_metadata, JPEGOutput out) {
-  static const uint8_t kSOIMarker[2] = { 0xff, 0xd8 };
-  static const uint8_t kEOIMarker[2] = { 0xff, 0xd9 };
-  std::vector<HuffmanCodeTable> dc_codes;
-  std::vector<HuffmanCodeTable> ac_codes;
-  return (JPEGWrite(out, kSOIMarker, sizeof(kSOIMarker)) &&
-          EncodeMetadata(jpg, strip_metadata, out) &&
-          EncodeDQT(jpg.quant, out) &&
-          EncodeSOF(jpg, out) &&
-          BuildAndEncodeHuffmanCodes(jpg, out, &dc_codes, &ac_codes) &&
-          EncodeScan(jpg, dc_codes, ac_codes, out) &&
-          JPEGWrite(out, kEOIMarker, sizeof(kEOIMarker)) &&
-          (strip_metadata || JPEGWrite(out, jpg.tail_data)));
-}
-    
-    namespace guetzli {
+    QueryData genKernelIntegrity(QueryContext &context) {
+  QueryData results;
+  Row r;
+  std::string content;
+  std::string text_segment_hash;
+  std::string syscall_addr_modified;
     }
+    
+      Status refresh();
+    
+    Expected<int, PosixError> syscall(struct perf_event_attr* attr,
+                                  pid_t pid,
+                                  int cpu,
+                                  int group_fd,
+                                  unsigned long const flags);
+    
+    
+    {  auto dst = std::vector<TestMessage>{};
+  auto status =
+      ebpf::impl::consumeWrappedMessagesFromCircularBuffer<WrappedMessage>(
+          &buf[0], tail, head, buf.size(), dst);
+  ASSERT_FALSE(status.isError()) << status.getError().getMessage();
+  ASSERT_EQ(dst.size(), test_size);
+  for (std::size_t i = 0; i < test_size; ++i) {
+    EXPECT_EQ(dst[i].c_, 't');
+    EXPECT_EQ(dst[i].d_, 'i');
+  }
+  EXPECT_EQ(dst[0].a_, 1);
+  EXPECT_EQ(dst[0].b_, 2);
+  EXPECT_EQ(dst[1].a_, 3);
+  EXPECT_EQ(dst[1].b_, 4);
+  EXPECT_EQ(dst[2].a_, 5);
+  EXPECT_EQ(dst[2].b_, 6);
+}
+    
+    LinuxProbesControl::LinuxProbesControl(
+    PerfEventCpuMap cpu_to_perf_output_map,
+    ebpf::PerfOutputsPoll<events::syscall::Event> output_poll)
+    : cpu_to_perf_output_map_(std::move(cpu_to_perf_output_map)),
+      output_poll_(std::move(output_poll)) {}
