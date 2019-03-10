@@ -1,190 +1,207 @@
 
         
-            @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
+        
+class HStoreExtension(CreateExtension):
+    
+        def exists(self, session_key):
+        return session_key and (self.cache_key_prefix + session_key) in self._cache or super().exists(session_key)
+    
+        objects = BaseSessionManager()
+    
+    In the second benchmark, we increase the number of dimensions of the
+training set, classify a sample and plot the time taken as a function
+of the number of dimensions.
+'''
+import numpy as np
+import matplotlib.pyplot as plt
+import gc
+from datetime import datetime
+    
+        in_exercise_region = False
+    
+    import numpy as np
+from sklearn.covariance import EllipticEnvelope
+from sklearn.svm import OneClassSVM
+import matplotlib.pyplot as plt
+import matplotlib.font_manager
+from sklearn.datasets import load_boston
+    
+    fit_data = data[np.argsort(model.row_labels_)]
+fit_data = fit_data[:, np.argsort(model.column_labels_)]
+    
+        # Resize frame of video to 1/4 size for faster face detection processing
+    small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+    
+        # Print the location of each face in this image
+    top, right, bottom, left = face_location
+    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+    
+        # Print the location of each face in this image
+    top, right, bottom, left = face_location
+    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+    
+    # Load some sample pictures and learn how to recognize them.
+lmm_image = face_recognition.load_image_file('lin-manuel-miranda.png')
+lmm_face_encoding = face_recognition.face_encodings(lmm_image)[0]
     
     
-def init_app(app):
-    '''Register database functions with the Flask app. This is called by
-    the application factory.
-    '''
-    app.teardown_appcontext(close_db)
-    app.cli.add_command(init_db_command)
-
-    
-        auth.login()
-    response = client.get('/')
-    assert b'test title' in response.data
-    assert b'by test on 2018-01-01' in response.data
-    assert b'test\nbody' in response.data
-    assert b'href='/1/update'' in response.data
-    
-    
-def _lookup_req_object(name):
-    top = _request_ctx_stack.top
-    if top is None:
-        raise RuntimeError(_request_ctx_err_msg)
-    return getattr(top, name)
-    
-        def to_json(self, value):
-        # JSON objects may only have string keys, so don't bother tagging the
-        # key here.
-        return dict((k, self.serializer.tag(v)) for k, v in iteritems(value))
-    
-        if not has_level_handler(logger):
-        logger.addHandler(default_handler)
-    
-            from .debughelpers import explain_template_loading_attempts
-        explain_template_loading_attempts(self.app, template, attempts)
-    
-    
-def set_filename_version(filename, version_number, pattern):
-    changed = []
-    
-        @property
-    def cache_key(self):
-        return self.cache_key_prefix + self._get_or_create_session_key()
-    
-        def save(self, must_create=False):
-        '''
-        Save the current session data to the database. If 'must_create' is
-        True, raise a database error if the saving operation doesn't create a
-        new entry (as opposed to possibly updating an existing entry).
-        '''
-        if self.session_key is None:
-            return self.create()
-        data = self._get_session(no_load=must_create)
-        obj = self.create_model_instance(data)
-        using = router.db_for_write(self.model, instance=obj)
-        try:
-            with transaction.atomic(using=using):
-                obj.save(force_insert=must_create, force_update=not must_create, using=using)
-        except IntegrityError:
-            if must_create:
-                raise CreateError
-            raise
-        except DatabaseError:
-            if not must_create:
-                raise UpdateError
-            raise
-    
-    
-class BaseSessionManager(models.Manager):
-    def encode(self, session_dict):
-        '''
-        Return the given session dictionary serialized and encoded as a string.
-        '''
-        session_store_class = self.model.get_session_store_class()
-        return session_store_class().encode(session_dict)
-    
-        def _test_host(self, url):
-        try:
-            header = {
-                'user-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Safari/537.36',
-                'accept': 'application/json, text/javascript, */*; q=0.01',
-                'accept-encoding': 'gzip, deflate, sdch',
-                'accept-language': 'en-US,en;q=0.8,ja;q=0.6,zh-CN;q=0.4,zh;q=0.2',
-                'connection': 'keep-alive'
-                }
-            response = self.http_client.request('HEAD', url, header, '', read_payload=False)
-            if response:
-                return True
-        except Exception as e:
-            if __name__ == '__main__':
-                xlog.exception('test %s e:%r', url, e)
-    
-        global pteredor_is_running
-    pteredor_is_running = True
-    server_list = prober.eval_servers()
-    pteredor_is_running = False
-    
-    Each recognizer pulls its input from one of the stream classes below. Streams
-handle stuff like buffering, look-ahead and seeking.
-    
-    	# A list of CharStreamState objects that tracks the stream state
-        # values line, charPositionInLine, and p that can change as you
-        # move through the input stream.  Indexed from 0..markDepth-1.
-        self._markers = [ ]
-        self.lastMarker = None
-        self.markDepth = 0
-    
-            Using setter/getter methods is deprecated. Use o.channel instead.'''
-    
-            for i in html_json['sources']:
-            if 'src' in i:  #to avoid KeyError
-                if i['src'].startswith('https'):
-                    link_list.append((str(i['height']), i['src']))
-    
-        for quality in ['1080','720','480','380','240','144','auto']:
-        try:
-            real_url = info[quality][1]['url']
-            if real_url:
-                break
-        except KeyError:
-            pass
-    
-        vids = matchall(content, yinyuetai_embed_patterns)
-    for vid in vids:
-        found = True
-        yinyuetai_download_by_id(vid, title=title, output_dir=output_dir, merge=merge, info_only=info_only)
-    
-    
-def huomaotv_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    room_id_pattern = r'huomao.com/(\d+)'
-    room_id = match1(url, room_id_pattern)
-    html = get_content(get_mobile_room_url(room_id))
-    
-        point = readme_soup.find_all('h1')[1]
-    
-        # Display the results
-    for top, right, bottom, left in face_locations:
+    # Display the results
+    for (top, right, bottom, left), name in zip(face_locations, face_names):
         # Scale back up face locations since the frame we detected in was scaled to 1/4 size
         top *= 4
         right *= 4
         bottom *= 4
         left *= 4
     
+    # To run this, you need a Raspberry Pi 2 (or greater) with face_recognition and
+# the picamera[array] module installed.
+# You can follow this installation instructions to get your RPi set up:
+# https://gist.github.com/ageitgey/1ac8dbe8572f3f533df6269dab35df65
     
-def print_result(filename, location):
-    top, right, bottom, left = location
-    print('{},{},{},{},{}'.format(filename, top, right, bottom, left))
+    # Load an image with an unknown face
+unknown_image = face_recognition.load_image_file('two_people.jpg')
     
-            # Draw a box around the face
-        cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
-    
-    while True:
-    print('Capturing image.')
-    # Grab a single frame of video from the RPi camera as a numpy array
-    camera.capture(output, format='rgb')
-    
-    # This code finds all faces in a list of images using the CNN model.
-#
-# This demo is for the _special case_ when you need to find faces in LOTS of images very quickly and all the images
-# are the exact same size. This is common in video processing applications where you have lots of video frames
-# to process.
-#
-# If you are processing a lot of images and using a GPU with CUDA, batch processing can be ~3x faster then processing
-# single images at a time. But if you aren't using a GPU, then batch processing isn't going to be very helpful.
-#
-# PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read the video file.
-# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
-# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
-    
-        name = 'Unknown'
-    
-        if os.path.isdir(image_to_check):
-        if cpus == 1:
-            [test_image(image_file, known_names, known_face_encodings, tolerance, show_distance) for image_file in image_files_in_folder(image_to_check)]
-        else:
-            process_images_in_process_pool(image_files_in_folder(image_to_check), known_names, known_face_encodings, cpus, tolerance, show_distance)
-    else:
-        test_image(image_to_check, known_names, known_face_encodings, tolerance, show_distance)
-    
-        def test_fd_command_line_interface_cnn_model(self):
-        target_string = 'obama.jpg'
+        def test_command_line_interface_options(self):
+        target_string = 'Show this message and exit.'
         runner = CliRunner()
-        image_file = os.path.join(os.path.dirname(__file__), 'test_images', 'obama.jpg')
+        help_result = runner.invoke(face_recognition_cli.main, ['--help'])
+        self.assertEqual(help_result.exit_code, 0)
+        self.assertTrue(target_string in help_result.output)
     
-    # Load the jpg file into a numpy array
-image = face_recognition.load_image_file('two_people.jpg')
+    print('I found {} face(s) in this photograph.'.format(len(face_landmarks_list)))
+    
+    setup(
+    name='face_recognition',
+    version='1.2.3',
+    description='Recognize faces from Python or from the command line',
+    long_description=readme + '\n\n' + history,
+    author='Adam Geitgey',
+    author_email='ageitgey@gmail.com',
+    url='https://github.com/ageitgey/face_recognition',
+    packages=[
+        'face_recognition',
+    ],
+    package_dir={'face_recognition': 'face_recognition'},
+    package_data={
+        'face_recognition': ['models/*.dat']
+    },
+    entry_points={
+        'console_scripts': [
+            'face_recognition=face_recognition.face_recognition_cli:main',
+            'face_detection=face_recognition.face_detection_cli:main'
+        ]
+    },
+    install_requires=requirements,
+    license='MIT license',
+    zip_safe=False,
+    keywords='face_recognition',
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+    ],
+    test_suite='tests',
+    tests_require=test_requirements
+)
+
+    
+        # 将每一个人脸与已知样本图片比对
+    for face_encoding in face_encodings:
+        # 看是否属于奥巴马或者拜登
+        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
+        name = '<Unknown Person>'
+    
+            if file.filename == '':
+            return redirect(request.url)
+    
+    
+def cityscapes_to_coco_with_rider(cityscapes_id):
+    lookup = {
+        0: 0,  # ... background
+        1: 2,  # bicycle
+        2: 3,  # car
+        3: 1,  # person
+        4: 7,  # train
+        5: 8,  # truck
+        6: 4,  # motorcycle
+        7: 6,  # bus
+        8: 1,  # rider ('person', *rider has human right!*)
+    }
+    return lookup[cityscapes_id]
+    
+            if model.train:
+            loss_gradients = {}
+            for lg in head_loss_gradients.values():
+                if lg is not None:
+                    loss_gradients.update(lg)
+            return loss_gradients
+        else:
+            return None
+    
+        # ==========================================================================
+    # cls loss - depends on softmax/sigmoid outputs
+    # ==========================================================================
+    for lvl in range(k_min, k_max + 1):
+        suffix = 'fpn{}'.format(lvl)
+        cls_lvl_logits = 'retnet_cls_pred_' + suffix
+        if not cfg.RETINANET.SOFTMAX:
+            cls_focal_loss = model.net.SigmoidFocalLoss(
+                [
+                    cls_lvl_logits, 'retnet_cls_labels_' + suffix,
+                    'retnet_fg_num'
+                ],
+                ['fl_{}'.format(suffix)],
+                gamma=cfg.RETINANET.LOSS_GAMMA,
+                alpha=cfg.RETINANET.LOSS_ALPHA,
+                scale=model.GetLossScale(),
+                num_classes=model.num_classes - 1
+            )
+            gradients.append(cls_focal_loss)
+            losses.append('fl_{}'.format(suffix))
+        else:
+            cls_focal_loss, gated_prob = model.net.SoftmaxFocalLoss(
+                [
+                    cls_lvl_logits, 'retnet_cls_labels_' + suffix,
+                    'retnet_fg_num'
+                ],
+                ['fl_{}'.format(suffix), 'retnet_prob_{}'.format(suffix)],
+                gamma=cfg.RETINANET.LOSS_GAMMA,
+                alpha=cfg.RETINANET.LOSS_ALPHA,
+                scale=model.GetLossScale(),
+                num_classes=model.num_classes
+            )
+            gradients.append(cls_focal_loss)
+            losses.append('fl_{}'.format(suffix))
+    
+        points: Nx2xK
+    boxes: Nx4
+    output: NxK
+    '''
+    x_within = np.logical_and(
+        points[:, 0, :] >= np.expand_dims(boxes[:, 0], axis=1),
+        points[:, 0, :] <= np.expand_dims(boxes[:, 2], axis=1)
+    )
+    y_within = np.logical_and(
+        points[:, 1, :] >= np.expand_dims(boxes[:, 1], axis=1),
+        points[:, 1, :] <= np.expand_dims(boxes[:, 3], axis=1)
+    )
+    return np.logical_and(x_within, y_within)
+
+    
+            # Fg label: for each gt use anchors with highest overlap
+        # (including ties)
+        gt_inds = anchor_to_gt_argmax[anchors_with_max_overlap]
+        labels[anchors_with_max_overlap] = gt_classes[gt_inds]
+        # Fg label: above threshold IOU
+        inds = anchor_to_gt_max >= cfg.RETINANET.POSITIVE_OVERLAP
+        gt_inds = anchor_to_gt_argmax[inds]
+        labels[inds] = gt_classes[gt_inds]
