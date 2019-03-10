@@ -1,468 +1,380 @@
 
         
-            ~reverse_lock() {
-        templock.lock();
-        templock.swap(lock);
-    }
-    
-    
-    {    /* d += a3 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'movq %%rax,%%rcx\n'
-    'movq %%rdx,%%r15\n'
-    /* d += a2 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d = a0 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c = a4 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += (c & M) * R */
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* t3 (tmp1) = d & M */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    'movq %%rsi,%q1\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* d += a4 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a0 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += c * R */
-    'movq %%r8,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* t4 = d & M (%%rsi) */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* tx = t4 >> 48 (tmp3) */
-    'movq %%rsi,%%rax\n'
-    'shrq $48,%%rax\n'
-    'movq %%rax,%q3\n'
-    /* t4 &= (M >> 4) (tmp2) */
-    'movq $0xffffffffffff,%%rax\n'
-    'andq %%rax,%%rsi\n'
-    'movq %%rsi,%q2\n'
-    /* c = a0 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'movq %%rax,%%r8\n'
-    'movq %%rdx,%%r9\n'
-    /* d += a4 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a1 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* u0 = d & M (%%rsi) */
-    'movq %%rcx,%%rsi\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rsi\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* u0 = (u0 << 4) | tx (%%rsi) */
-    'shlq $4,%%rsi\n'
-    'movq %q3,%%rax\n'
-    'orq %%rax,%%rsi\n'
-    /* c += u0 * (R >> 4) */
-    'movq $0x1000003d1,%%rax\n'
-    'mulq %%rsi\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[0] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,0(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += a1 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a0 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d += a4 * b2 */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a2 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c += (d & M) * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 */
-    'shrdq $52,%%r15,%%rcx\n'
-    'xorq %%r15,%%r15\n'
-    /* r[1] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,8(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += a2 * b0 */
-    'movq 0(%%rbx),%%rax\n'
-    'mulq %%r12\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a1 * b1 */
-    'movq 8(%%rbx),%%rax\n'
-    'mulq %%r11\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* c += a0 * b2 (last use of %%r10 = a0) */
-    'movq 16(%%rbx),%%rax\n'
-    'mulq %%r10\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* fetch t3 (%%r10, overwrites a0), t4 (%%rsi) */
-    'movq %q2,%%rsi\n'
-    'movq %q1,%%r10\n'
-    /* d += a4 * b3 */
-    'movq 24(%%rbx),%%rax\n'
-    'mulq %%r14\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* d += a3 * b4 */
-    'movq 32(%%rbx),%%rax\n'
-    'mulq %%r13\n'
-    'addq %%rax,%%rcx\n'
-    'adcq %%rdx,%%r15\n'
-    /* c += (d & M) * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* d >>= 52 (%%rcx only) */
-    'shrdq $52,%%r15,%%rcx\n'
-    /* r[2] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,16(%%rdi)\n'
-    /* c >>= 52 */
-    'shrdq $52,%%r9,%%r8\n'
-    'xorq %%r9,%%r9\n'
-    /* c += t3 */
-    'addq %%r10,%%r8\n'
-    /* c += d * R */
-    'movq %%rcx,%%rax\n'
-    'movq $0x1000003d10,%%rdx\n'
-    'mulq %%rdx\n'
-    'addq %%rax,%%r8\n'
-    'adcq %%rdx,%%r9\n'
-    /* r[3] = c & M */
-    'movq %%r8,%%rax\n'
-    'movq $0xfffffffffffff,%%rdx\n'
-    'andq %%rdx,%%rax\n'
-    'movq %%rax,24(%%rdi)\n'
-    /* c >>= 52 (%%r8 only) */
-    'shrdq $52,%%r9,%%r8\n'
-    /* c += t4 (%%r8 only) */
-    'addq %%rsi,%%r8\n'
-    /* r[4] = c */
-    'movq %%r8,32(%%rdi)\n'
-: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
-: 'b'(b), 'D'(r)
-: '%rax', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
-);
-}
-    
-    			if(mip == 0)
-			{
-				pImageData = a_pafSourceRGBA;
-			}
-			else
-			{
-				pMipImage = new float[mipWidth*mipHeight*4];
-				if(FilterTwoPass(a_pafSourceRGBA, a_uiSourceWidth, a_uiSourceHeight, pMipImage, mipWidth, mipHeight, a_uiMipFilterFlags, Etc::FilterLanczos3) )
-				{
-					pImageData = pMipImage;
-				}
-			}
-    
-    
-    {    //fixup PolyNode links etc ...
-    polytree.Childs.reserve(m_PolyOuts.size());
-    for (PolyOutList::size_type i = 0; i < m_PolyOuts.size(); i++)
+        
     {
-        OutRec* outRec = m_PolyOuts[i];
-        if (!outRec->PolyNd) continue;
-        if (outRec->IsOpen) 
-        {
-          outRec->PolyNd->m_IsOpen = true;
-          polytree.AddChild(*outRec->PolyNd);
+    {
+    {            for (; j < size.width; j++)
+                dst[j] = (s16)((s32)src0[j] + (s32)src1[j]);
         }
-        else if (outRec->FirstLeft && outRec->FirstLeft->PolyNd) 
-          outRec->FirstLeft->PolyNd->AddChild(*outRec->PolyNd);
-        else
-          polytree.AddChild(*outRec->PolyNd);
     }
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)policy;
+#endif
 }
-//------------------------------------------------------------------------------
     
-    #endif
+    
+    {} // namespace CAROTENE_NS
 
     
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+                vst1q_s32(_norm + j + 0, norml);
+            vst1q_s32(_norm + j + 4, normh);
     
-    TEST(CorruptionTest, Recovery) {
-  Build(100);
-  Check(100, 100);
-  Corrupt(kLogFile, 19, 1);      // WriteBatch tag for first record
-  Corrupt(kLogFile, log::kBlockSize + 1000, 1);  // Somewhere in second block
-  Reopen();
-    }
-    
-      void MaybeScheduleCompaction() EXCLUSIVE_LOCKS_REQUIRED(mutex_);
-  static void BGWork(void* db);
-  void BackgroundCall();
-  void BackgroundCompaction() EXCLUSIVE_LOCKS_REQUIRED(mutex_);
-  void CleanupCompaction(CompactionState* compact)
-      EXCLUSIVE_LOCKS_REQUIRED(mutex_);
-  Status DoCompactionWork(CompactionState* compact)
-      EXCLUSIVE_LOCKS_REQUIRED(mutex_);
-    
-    
-// Owned filenames have the form:
-//    dbname/CURRENT
-//    dbname/LOCK
-//    dbname/LOG
-//    dbname/LOG.old
-//    dbname/MANIFEST-[0-9]+
-//    dbname/[0-9]+.(log|sst|ldb)
-bool ParseFileName(const std::string& filename,
-                   uint64_t* number,
-                   FileType* type) {
-  Slice rest(filename);
-  if (rest == 'CURRENT') {
-    *number = 0;
-    *type = kCurrentFile;
-  } else if (rest == 'LOCK') {
-    *number = 0;
-    *type = kDBLockFile;
-  } else if (rest == 'LOG' || rest == 'LOG.old') {
-    *number = 0;
-    *type = kInfoLogFile;
-  } else if (rest.starts_with('MANIFEST-')) {
-    rest.remove_prefix(strlen('MANIFEST-'));
-    uint64_t num;
-    if (!ConsumeDecimalNumber(&rest, &num)) {
-      return false;
-    }
-    if (!rest.empty()) {
-      return false;
-    }
-    *type = kDescriptorFile;
-    *number = num;
-  } else {
-    // Avoid strtoull() to keep filename format independent of the
-    // current locale
-    uint64_t num;
-    if (!ConsumeDecimalNumber(&rest, &num)) {
-      return false;
-    }
-    Slice suffix = rest;
-    if (suffix == Slice('.log')) {
-      *type = kLogFile;
-    } else if (suffix == Slice('.sst') || suffix == Slice('.ldb')) {
-      *type = kTableFile;
-    } else if (suffix == Slice('.dbtmp')) {
-      *type = kTempFile;
-    } else {
-      return false;
-    }
-    *number = num;
-  }
-  return true;
-}
-    
-      fname = TableFileName('bar', 200);
-  ASSERT_EQ('bar/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(200, number);
-  ASSERT_EQ(kTableFile, type);
-    
-    TEST(LogTest, ReadFourthMiddleBlock) {
-  CheckInitialOffsetRecord(log::kBlockSize + 1, 3);
-}
-    
-    class Writer {
- public:
-  // Create a writer that will append data to '*dest'.
-  // '*dest' must be initially empty.
-  // '*dest' must remain live while this Writer is in use.
-  explicit Writer(WritableFile* dest);
-    }
-    
-      Key const key;
-    
-            if(_rightBoundary < _leftBoundary)
-        {
-            // screen width is larger than world's boundary width
-            //set both in the middle of the world
-            _rightBoundary = _leftBoundary = (_leftBoundary + _rightBoundary) / 2;
-        }
-        if(_topBoundary < _bottomBoundary)
-        {
-            // screen width is larger than world's boundary width
-            //set both in the middle of the world
-            _topBoundary = _bottomBoundary = (_topBoundary + _bottomBoundary) / 2;
-        }
-    
-    /** 
- * @brief Base class for Action objects.
- */
-class CC_DLL Action : public Ref, public Clonable
+    void combineYUYV(const Size2D &size,
+                 const u8 * srcyBase, ptrdiff_t srcyStride,
+                 const u8 * srcuBase, ptrdiff_t srcuStride,
+                 const u8 * srcvBase, ptrdiff_t srcvStride,
+                 u8 * dstBase, ptrdiff_t dstStride)
 {
-public:
-    /** Default tag used for all the actions. */
-    static const int INVALID_TAG = -1;
-    /**
-     * @js NA
-     * @lua NA
-     */
-    virtual std::string description() const;
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+#ifndef __ANDROID__
+    size_t roiw32 = size.width >= 31 ? size.width - 31 : 0;
+#endif
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
     }
     
-        // eg.
-    // p..p..p..p..p..p..p
-    // 1..2..3..4..5..6..7
-    // want p to be 1, 2, 3, 4, 5, 6
-    if (time == 1)
+        if (src0Stride == src1Stride && src0Stride == dstStride &&
+        src0Stride == (ptrdiff_t)(size.width * sizeof(type)))
     {
-        p = _points->count() - 1;
-        lt = 1;
+        size.width *= size.height;
+        size.height = 1;
     }
-    else 
+    
+             int16x4_t vline1_s16 = vqmovn_s32(vline1_s32);
+         int16x4_t vline2_s16 = vqmovn_s32(vline2_s32);
+    
+    
+    {} // namespace CAROTENE_NS
+
+    
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
+CVTS_FUNC(s16, f32, 8,
+    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
+    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta);,
+{
+    for (size_t i = 0; i < w; i += 8)
     {
-        p = time / _deltaT;
-        lt = (time - _deltaT * (float)p) / _deltaT;
+        internal::prefetch(_src + i);
+        __asm__ (
+            'vld1.16 {d4-d5}, [%[src]]                              \n\t'
+            'vmovl.s16 q3, d4                                       \n\t'
+            'vmovl.s16 q4, d5                                       \n\t'
+            'vcvt.f32.s32 q5, q3                                    \n\t'
+            'vcvt.f32.s32 q6, q4                                    \n\t'
+            'vmul.f32 q7, q5, q0                                    \n\t'
+            'vmul.f32 q8, q6, q0                                    \n\t'
+            'vadd.f32 q9, q7, q1                                     \n\t'
+            'vadd.f32 q10, q8, q1                                     \n\t'
+            'vst1.32 {d18-d19}, [%[dst1]]                             \n\t'
+            'vst1.32 {d20-d21}, [%[dst2]]                             \n\t'
+            : /*no output*/
+            : [src] 'r' (_src + i),
+              [dst1] 'r' (_dst + i + 0),
+              [dst2] 'r' (_dst + i + 4),
+              'w'  (vscale), 'w' (vshift)
+            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21'
+        );
     }
-    
-    // Interpolate
-    Vec2 pp0 = _points->getControlPointAtIndex(p-1);
-    Vec2 pp1 = _points->getControlPointAtIndex(p+0);
-    Vec2 pp2 = _points->getControlPointAtIndex(p+1);
-    Vec2 pp3 = _points->getControlPointAtIndex(p+2);
-    
-        if (action)
+})
+#else
+CVTS_FUNC(s16, f32, 8,
+    float32x4_t vscale = vdupq_n_f32((f32)alpha);
+    float32x4_t vshift = vdupq_n_f32((f32)beta);,
+{
+    for (size_t i = 0; i < w; i += 8)
     {
-        if (action->initWithDuration(duration, gridSize, position, radius, waves, amplitude))
-        {
-            action->autorelease();
-        }
-        else
-        {
-            CC_SAFE_RELEASE_NULL(action);
-        }
+        internal::prefetch(_src + i);
+        int16x8_t vline = vld1q_s16(_src + i);
+        int32x4_t vline1_s32 = vmovl_s16(vget_low_s16 (vline));
+        int32x4_t vline2_s32 = vmovl_s16(vget_high_s16(vline));
+        float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
+        float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
+        vline1_f32 = vmulq_f32(vline1_f32, vscale);
+        vline2_f32 = vmulq_f32(vline2_f32, vscale);
+        vline1_f32 = vaddq_f32(vline1_f32, vshift);
+        vline2_f32 = vaddq_f32(vline2_f32, vshift);
+        vst1q_f32(_dst + i + 0, vline1_f32);
+        vst1q_f32(_dst + i + 4, vline2_f32);
     }
+})
+#endif
     
     
-    {    CC_SAFE_DELETE(ret);
-    return nullptr;
+    {    return 0;
+#endif
 }
+    
+    
+    {}  // namespace grpc
+
+    
+    void CensusClientCallData::StartTransportStreamOpBatch(
+    grpc_call_element* elem, TransportStreamOpBatch* op) {
+  if (op->send_initial_metadata() != nullptr) {
+    census_context* ctxt = op->get_census_context();
+    GenerateClientContext(
+        qualified_method_, &context_,
+        (ctxt == nullptr) ? nullptr : reinterpret_cast<CensusContext*>(ctxt));
+    size_t tracing_len = TraceContextSerialize(context_.Context(), tracing_buf_,
+                                               kMaxTraceContextLen);
+    if (tracing_len > 0) {
+      GRPC_LOG_IF_ERROR(
+          'census grpc_filter',
+          grpc_metadata_batch_add_tail(
+              op->send_initial_metadata()->batch(), &tracing_bin_,
+              grpc_mdelem_from_slices(
+                  GRPC_MDSTR_GRPC_TRACE_BIN,
+                  grpc_slice_from_copied_buffer(tracing_buf_, tracing_len))));
+    }
+    grpc_slice tags = grpc_empty_slice();
+    // TODO: Add in tagging serialization.
+    size_t encoded_tags_len = StatsContextSerialize(kMaxTagsLen, &tags);
+    if (encoded_tags_len > 0) {
+      GRPC_LOG_IF_ERROR(
+          'census grpc_filter',
+          grpc_metadata_batch_add_tail(
+              op->send_initial_metadata()->batch(), &stats_bin_,
+              grpc_mdelem_from_slices(GRPC_MDSTR_GRPC_TAGS_BIN, tags)));
+    }
+  }
+    }
+    
+    // These helper functions return the SpanContext and Span, respectively
+// associated with the census_context* stored by grpc. The user will need to
+// call this for manual propagation of tracing data.
+::opencensus::trace::SpanContext SpanContextFromCensusContext(
+    const census_context* ctxt);
+::opencensus::trace::Span SpanFromCensusContext(const census_context* ctxt);
+    
+    constexpr size_t TraceContextEncoding::kGrpcTraceContextSize;
+constexpr size_t TraceContextEncoding::kEncodeDecodeFailure;
+constexpr size_t TraceContextEncoding::kVersionIdSize;
+constexpr size_t TraceContextEncoding::kFieldIdSize;
+constexpr size_t TraceContextEncoding::kVersionIdOffset;
+constexpr size_t TraceContextEncoding::kVersionId;
+    
+    #ifndef GRPC_INTERNAL_CPP_EXT_PROTO_SERVER_REFLECTION_H
+#define GRPC_INTERNAL_CPP_EXT_PROTO_SERVER_REFLECTION_H
+    
+    static std::unique_ptr< ::grpc::ServerBuilderPlugin> CreateProtoReflection() {
+  return std::unique_ptr< ::grpc::ServerBuilderPlugin>(
+      new ProtoServerReflectionPlugin());
+}
+    
+        virtual void UpdateArguments(ChannelArguments* args) override {
+      args->SetInt(name_, value_);
+    }
+    virtual void UpdatePlugins(
+        std::vector<std::unique_ptr<ServerBuilderPlugin>>* plugins) override {}
+    
+    #include <windows.h>
+#include <cstdint>
+    
+            if (sectionOffset.size() > m_maskShape.Rank())
+            LogicError('NDMask::MaskSection: The sectionOffset dimensionality (%d) must be <= rank (%d) of 'this' mask.', (int)sectionOffset.size(), (int)m_maskShape.Rank());
+    
+    
+    {
+    {                valueData = MakeSharedObject<NDArrayView>(dataType, valueDataShape, colStarts.data(), rowIndices.data(), (void*)nonZeroValues.data(), totalNumNonZeroValues, device, readOnly);
+            }
+            else
+            {
+                valueData = MakeSharedObject<NDArrayView>(dataType, valueDataShape, DeviceDescriptor::CPUDevice());
+                auto maxSequenceSizeInElements = fullyDefinedSampleShape.TotalSize() * maxSequenceLength;
+                switch (dataType)
+                {
+                case DataType::Float:
+                {
+                    float* dataBuffer = valueData->WritableDataBuffer<float>();
+                    for (size_t i = 0; i < numSequences; ++i)
+                    {
+                        const float* currentSequenceBuffer = sequences[i]->DataBuffer<float>();
+                        auto currentSequenceSizeInElements = sequences[i]->Shape().TotalSize();
+                        std::copy(currentSequenceBuffer, currentSequenceBuffer + currentSequenceSizeInElements, dataBuffer + (maxSequenceSizeInElements * i));
+                    }
+                    break;
+                }
+                case DataType::Double:
+                {
+                    double* dataBuffer = valueData->WritableDataBuffer<double>();
+                    for (size_t i = 0; i < numSequences; ++i)
+                    {
+                        const double* currentSequenceBuffer = sequences[i]->DataBuffer<double>();
+                        auto currentSequenceSizeInElements = sequences[i]->Shape().TotalSize();
+                        std::copy(currentSequenceBuffer, currentSequenceBuffer + currentSequenceSizeInElements, dataBuffer + (maxSequenceSizeInElements * i));
+                    }
+                    break;
+                }
+                default:
+                    NOT_IMPLEMENTED;
+                }
+            }
+        }
+    
+    
+    {            if ((m_varKind == VariableKind::Parameter) || (m_varKind == VariableKind::Constant))
+            {
+                if (m_shape.HasFreeDimension())
+                    InvalidArgument('Parameter/Constant '%S' has invalid shape '%S'; it is illegal for a Parameter/Constant to have a FreeDimension.', AsString().c_str(), m_shape.AsString().c_str());
+            }
+        }
+    
+    
+    {    return false;
+}
+    
+    #include <string>
+    
+    template <class ElemType>
+void EpochAccumulatorNode<ElemType>::Validate(bool isFinalValidationPass)
+{
+    Base::Validate(isFinalValidationPass);
+    SetDims(Input(0)->GetSampleLayout(), HasMBLayout());
+}
+    
+    
+    {    return 0;
+}
+    
+            ListNode* delNode = p->next;
+        p->next = delNode->next;
+        delete delNode;
+    
+    using namespace std;
+    
+    
+    {    return 0;
+}
+
+    
+    #include <iostream>
+#include <vector>
+#include <queue>
+#include <cassert>
+    
+        TreeNode* root = new TreeNode(1);
+    root->right = new TreeNode(2);
+    root->right->left = new TreeNode(3);
+    vector<int> res = Solution().preorderTraversal(root);
+    print_vec(res);
+    
+    
+    {    return 0;
+}
+    
+    
+    {    return 0;
+}
+    
+    
+    {  rocksdb::CacheBench bench;
+  if (FLAGS_populate_cache) {
+    bench.PopulateCache();
+  }
+  if (bench.Run()) {
+    return 0;
+  } else {
+    return 1;
+  }
+}
+    
+      std::atomic<int> total_stopped_;
+  std::atomic<int> total_delayed_;
+  std::atomic<int> total_compaction_pressure_;
+  uint64_t bytes_left_;
+  uint64_t last_refill_time_;
+  // write rate set when initialization or by `DBImpl::SetDBOptions`
+  uint64_t max_delayed_write_rate_;
+  // current write rate
+  uint64_t delayed_write_rate_;
+    
+      // Read a key using the snapshot
+  read_options.snapshot = snapshot;
+  s = txn->GetForUpdate(read_options, 'abc', &value);
+  assert(value == 'def');
+    
+      // open DB
+  Status s = DB::Open(options, kDBPath, &db);
+  assert(s.ok());
+    
+    #ifndef ROCKSDB_LITE
+// The following set of functions provide a way to construct RocksDB Options
+// from a string or a string-to-string map.  Here're the general rule of
+// setting option values from strings by type.  Some RocksDB types are also
+// supported in these APIs.  Please refer to the comment of the function itself
+// to find more information about how to config those RocksDB types.
+//
+// * Strings:
+//   Strings will be used as values directly without any truncating or
+//   trimming.
+//
+// * Booleans:
+//   - 'true' or '1' => true
+//   - 'false' or '0' => false.
+//   [Example]:
+//   - {'optimize_filters_for_hits', '1'} in GetColumnFamilyOptionsFromMap, or
+//   - 'optimize_filters_for_hits=true' in GetColumnFamilyOptionsFromString.
+//
+// * Integers:
+//   Integers are converted directly from string, in addition to the following
+//   units that we support:
+//   - 'k' or 'K' => 2^10
+//   - 'm' or 'M' => 2^20
+//   - 'g' or 'G' => 2^30
+//   - 't' or 'T' => 2^40  // only for unsigned int with sufficient bits.
+//   [Example]:
+//   - {'arena_block_size', '19G'} in GetColumnFamilyOptionsFromMap, or
+//   - 'arena_block_size=19G' in GetColumnFamilyOptionsFromString.
+//
+// * Doubles / Floating Points:
+//   Doubles / Floating Points are converted directly from string.  Note that
+//   currently we do not support units.
+//   [Example]:
+//   - {'hard_rate_limit', '2.1'} in GetColumnFamilyOptionsFromMap, or
+//   - 'hard_rate_limit=2.1' in GetColumnFamilyOptionsFromString.
+// * Array / Vectors:
+//   An array is specified by a list of values, where ':' is used as
+//   the delimiter to separate each value.
+//   [Example]:
+//   - {'compression_per_level', 'kNoCompression:kSnappyCompression'}
+//     in GetColumnFamilyOptionsFromMap, or
+//   - 'compression_per_level=kNoCompression:kSnappyCompression' in
+//     GetColumnFamilyOptionsFromMapString
+// * Enums:
+//   The valid values of each enum are identical to the names of its constants.
+//   [Example]:
+//   - CompressionType: valid values are 'kNoCompression',
+//     'kSnappyCompression', 'kZlibCompression', 'kBZip2Compression', ...
+//   - CompactionStyle: valid values are 'kCompactionStyleLevel',
+//     'kCompactionStyleUniversal', 'kCompactionStyleFIFO', and
+//     'kCompactionStyleNone'.
+//
+    
+    struct UndumpOptions {
+  // Database that we will load the dumped file into
+  std::string db_path;
+  // File location of the dumped file that will be loaded
+  std::string dump_location;
+  // Compact the db after loading the dumped file
+  bool compact_db = false;
+};
+    
+    #include 'rocksdb/db.h'
+#include 'rocksdb/status.h'
+    
+    #ifdef FAILED
+#undef FAILED
+#endif
+    
+    #endif //__CCCAMERA_ACTION_H__
+
     
     THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -472,59 +384,43 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
+#include '2d/CCActionGrid3D.h'
+#include 'base/CCDirector.h'
     
-        /** Resumes the target. All queued actions will be resumed.
+    protected:
+    Vec2 _position;
+    
+        // actions
+    
+    /** Adds an action with a target. 
+     If the target is already present, then the action will be added to the existing target.
+     If the target is not present, a new instance of this target will be created either paused or not, and the action will be added to the newly created target.
+     When the target is paused, the queued actions won't be 'ticked'.
      *
-     * @param target    A certain target.
+     * @param action    A certain action.
+     * @param target    The target which need to be added an action.
+     * @param paused    Is the target paused or not.
      */
-    virtual void resumeTarget(Node *target);
+    virtual void addAction(Action *action, Node *target, bool paused);
     
-    /** Pauses all running actions, returning a list of targets whose actions were paused.
-     *
-     * @return  A list of targets whose actions were paused.
+    NS_CC_END
+    
+        /** Adds a frame with a texture and a rect. Internally it will create a SpriteFrame and it will add it.
+     * The frame will be added with one 'delay unit'.
+     * Added to facilitate the migration from v0.8 to v0.9.
+     * @param pobTexture A frame with a texture.
+     * @param rect The Texture of rect.
      */
-    virtual Vector<Node*> pauseAllRunningActions();
+    void addSpriteFrameWithTexture(Texture2D* pobTexture, const Rect& rect);
     
-    /** Resume a set of targets (convenience function to reverse a pauseAllRunningActions call).
-     *
-     * @param targetsToResume   A set of targets need to be resumed.
-     */
-    virtual void resumeTargets(const Vector<Node*>& targetsToResume);
-    
-    /** Main loop of ActionManager.
-     * @param dt    In seconds.
-     */
-    virtual void update(float dt);
-    
-protected:
-    // declared in ActionManager.m
-    
-        /**
-    @brief Get the amplitude rate of the effect.
-    @return Return the amplitude rate of the effect.
-    */
-    float getAmplitudeRate() const { return _amplitudeRate; }
-    /**
-    @brief Set the amplitude rate of the effect.
-    @param amplitudeRate The value of amplitude rate will be set.
-    */
-    void setAmplitudeRate(float amplitudeRate) { _amplitudeRate = amplitudeRate; }
-    
-     @since v0.99.2
- */
-class CC_DLL ActionTween : public ActionInterval
-{
-public:
-    /** 
-     * @brief Create and initializes the action with the property name (key), and the from and to parameters.
-     * @param duration The duration of the ActionTween. It's a value in seconds.
-     * @param key The key of property which should be updated.
-     * @param from The value of the specified property when the action begin.
-     * @param to The value of the specified property when the action end.
-     * @return If the creation success, return a pointer of ActionTween; otherwise, return nil.
-     */
-    static ActionTween* create(float duration, const std::string& key, float from, float to);
-    }
-    
-        _colorUnmodified = Color3B::WHITE;
-    _isOpacityModifyRGB = true;
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#include '2d/CCAnimationCache.h'
+#include '2d/CCSpriteFrameCache.h'
+#include 'platform/CCFileUtils.h'
