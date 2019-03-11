@@ -1,96 +1,76 @@
 
         
-            # test that the user was inserted into the database
-    with app.app_context():
-        assert get_db().execute(
-            'select * from user where username = 'a'',
-        ).fetchone() is not None
+            # now do a benchmark where the number of points is fixed
+    # and the variable is the number of features
     
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+'''
     
-@LocalProxy
-def wsgi_errors_stream():
-    '''Find the most appropriate error stream for the application. If a request
-    is active, log to ``wsgi.errors``, otherwise use ``sys.stderr``.
-    
-                # Since we have to open a new request context for the session
-            # handling we want to make sure that we hide out own context
-            # from the caller.  By pushing the original request context
-            # (or None) on top of this and popping it we get exactly that
-            # behavior.  It's important to not use the push and pop
-            # methods of the actual request context object since that would
-            # mean that cleanup handlers are called
-            _request_ctx_stack.push(outer_reqctx)
-            try:
-                yield sess
-            finally:
-                _request_ctx_stack.pop()
-    
-            # return Werkzeug's default when not in an app context
-        return super(Response, self).max_cookie_size
-
-    
-        def save(self, must_create=False):
-        '''
-        To save, get the session key as a securely signed string and then set
-        the modified flag so that the cookie is set on the client for the
-        current request.
-        '''
-        self._session_key = self._get_session_key()
-        self.modified = True
-    
-        For complete documentation on using Sessions in your code, consult
-    the sessions documentation that is shipped with Django (also available
-    on the Django Web site).
     '''
-    objects = SessionManager()
+print(__doc__)
     
-    def clean_pdf_link(link):
-    if 'arxiv' in link:
-        link = link.replace('abs', 'pdf')   
-        if not(link.endswith('.pdf')):
-            link = '.'.join((link, 'pdf'))
+                plt.subplots_adjust(bottom=0, top=.89, wspace=0,
+                                left=0, right=1)
+            plt.suptitle('n_cluster=%i, connectivity=%r' %
+                         (n_clusters, connectivity is not None), size=17)
+    
+    These images how similar features are merged together using
+feature agglomeration.
+'''
+print(__doc__)
+    
+        def getChild(self, request, name):
+        return self
+    
+        # Max concurrency is limited by global CONCURRENT_REQUESTS setting
+    max_concurrent_requests = 8
+    # Requests per second goal
+    qps = None # same as: 1 / download_delay
+    download_delay = None
+    # time in seconds to delay server responses
+    latency = None
+    # number of slots to create
+    slots = 1
+    
+    def _iter_command_classes(module_name):
+    # TODO: add `name` attribute to commands and and merge this function with
+    # scrapy.utils.spider.iter_spider_classes
+    for module in walk_modules(module_name):
+        for obj in vars(module).values():
+            if inspect.isclass(obj) and \
+                    issubclass(obj, ScrapyCommand) and \
+                    obj.__module__ == module.__name__ and \
+                    not obj == ScrapyCommand:
+                yield obj
+    
+        def short_desc(self):
+        return 'Get settings values'
     
     
-class Migration(SchemaMigration):
-    def forwards(self, orm):
-        # Adding model 'EnvironmentProject'
-        db.create_table(
-            'sentry_environmentproject', (
-                (
-                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
-                        primary_key=True
-                    )
-                ), (
-                    'project', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.Project']
-                    )
-                ), (
-                    'environment', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.Environment']
-                    )
-                ),
-            )
-        )
-        db.send_create_signal('sentry', ['EnvironmentProject'])
+# contracts
+class UrlContract(Contract):
+    ''' Contract to set the url of the request (mandatory)
+        @url http://scrapy.org
+    '''
+    
+    openssl_methods = {
+    METHOD_TLS:    SSL.SSLv23_METHOD,                   # protocol negotiation (recommended)
+    METHOD_SSLv3:  SSL.SSLv3_METHOD,                    # SSL 3 (NOT recommended)
+    METHOD_TLSv10: SSL.TLSv1_METHOD,                    # TLS 1.0 only
+    METHOD_TLSv11: getattr(SSL, 'TLSv1_1_METHOD', 5),   # TLS 1.1 only
+    METHOD_TLSv12: getattr(SSL, 'TLSv1_2_METHOD', 6),   # TLS 1.2 only
+}
+    
+        def _downloaded(self, response, slot, request, spider):
+        slot.remove_request(request)
+        return self.download(response, spider) \
+                if isinstance(response, Request) else response
     
     
-class Migration(DataMigration):
-    def forwards(self, orm):
-        'Write your forwards methods here.'
-        db.commit_transaction()
-    
-            # Removing unique constraint on 'ReprocessingReport', fields ['project', 'event_id']
-        db.delete_unique('sentry_reprocessingreport', ['project_id', 'event_id'])
-    
-    
-class Migration(SchemaMigration):
-    def forwards(self, orm):
-        # Adding field 'UserOption.organization'
-        db.add_column(
-            'sentry_useroption',
-            'organization',
-            self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                to=orm['sentry.Organization'], null=True
-            ),
-            keep_default=False
-        )
+if __name__ == '__main__':
