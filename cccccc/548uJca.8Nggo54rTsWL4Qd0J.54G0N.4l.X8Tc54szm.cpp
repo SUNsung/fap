@@ -1,132 +1,164 @@
 
         
-          static void Call(content::Shell* shell,
-                   const std::string& method,
-                   const base::ListValue& arguments,
-                   base::ListValue* result,
-                   DispatcherHost* dispatcher_host);
+        // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
     
-    base::StringPiece GetStringResource(int resource_id) {
-  return ResourceBundle::GetSharedInstance().GetRawDataResource(resource_id);
-}
+    #include <google/protobuf/compiler/java/java_context.h>
+#include <google/protobuf/compiler/java/java_enum_field.h>
+#include <google/protobuf/compiler/java/java_extension.h>
+#include <google/protobuf/compiler/java/java_extension_lite.h>
+#include <google/protobuf/compiler/java/java_field.h>
+#include <google/protobuf/compiler/java/java_helpers.h>
+#include <google/protobuf/compiler/java/java_message.h>
+#include <google/protobuf/compiler/java/java_message_lite.h>
+#include <google/protobuf/compiler/java/java_service.h>
     
-    #include 'base/strings/string_piece.h'
-#include 'v8/include/v8.h'
-    
-    void Clipboard::CallSync(const std::string& method,
-                         const base::ListValue& arguments,
-                         base::ListValue* result) {
-  if (method == 'Get') {
-    result->AppendString(GetText());
-  } else {
-    NOTREACHED() << 'Invalid call to Clipboard method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-    #endif //CONTENT_NW_SRC_API_EVENT_EVENT_H_
-
-    
-    #include 'content/nw/src/api/menu/menu_delegate.h'
-    
-    #include 'extensions/browser/extension_function.h'
-    
-      namespace {
+        for (std::vector<ExtensionGenerator *>::iterator iter =
+             extension_generators_.begin();
+         iter != extension_generators_.end(); ++iter) {
+      (*iter)->GenerateMembersHeader(printer);
     }
     
-      //   The text of a paragraph typically starts with the start of an idea and
-  // ends with the end of an idea.  Here we define paragraph as something that
-  // may have a first line indent and a body indent which may be different.
-  // Typical words that start an idea are:
-  //   1. Words in western scripts that start with
-  //      a capital letter, for example 'The'
-  //   2. Bulleted or numbered list items, for
-  //      example '2.'
-  // Typical words which end an idea are words ending in punctuation marks. In
-  // this vocabulary, each list item is represented as a paragraph.
-  bool lword_indicates_list_item;
-  bool lword_likely_starts_idea;
-  bool lword_likely_ends_idea;
+    const Status Status::OK = Status();
+const Status Status::CANCELLED = Status(error::CANCELLED, '');
+const Status Status::UNKNOWN = Status(error::UNKNOWN, '');
     
-    /**********************************************************************
- * read_unlv_file
- *
- * Read a whole unlv zone file to make a list of blocks.
- **********************************************************************/
     
-    // ReadNextBox factors out the code to interpret a line of a box
-// file so that applybox and unicharset_extractor interpret the same way.
-// This function returns the next valid box file utf8 string and coords
-// and returns true, or false on eof (and closes the file).
-// It ignores the utf8 file signature ByteOrderMark (U+FEFF=EF BB BF), checks
-// for valid utf-8 and allows space or tab between fields.
-// utf8_str is set with the unichar string, and bounding box with the box.
-// If there are page numbers in the file, it reads them all.
-bool ReadNextBox(int *line_number, FILE* box_file,
-                 STRING* utf8_str, TBOX* bounding_box);
-// As ReadNextBox above, but get a specific page number. (0-based)
-// Use -1 to read any page number. Files without page number all
-// read as if they are page 0.
-bool ReadNextBox(int target_page, int *line_number, FILE* box_file,
-                 STRING* utf8_str, TBOX* bounding_box);
+    {///////////////////////////////////////////////////////////////////////////////
+}
     
-    // Class to hold a Pixa collection of debug images with captions and save them
-// to a PDF file.
-class DebugPixa {
- public:
-  // TODO(rays) add another constructor with size control.
-  DebugPixa() {
-    pixa_ = pixaCreate(0);
-    fonts_ = bmfCreate(nullptr, 14);
-  }
-  // If the filename_ has been set and there are any debug images, they are
-  // written to the set filename_.
-  ~DebugPixa() {
-    pixaDestroy(&pixa_);
-    bmfDestroy(&fonts_);
-  }
+    #include <sys/types.h>
+#include <tuple>
+    
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////
     }
     
-      // Backwards compatible constrained fit with a supplied gradient.
-  // Deprecated. Use ConstrainedFit(const FCOORD& direction) where possible
-  // to avoid potential difficulties with infinite gradients.
-  double ConstrainedFit(double m, float* c);
+    // This is a helpful data structure to define parameters
+// You do not have to use it.
+// see http://dmlc-core.readthedocs.org/en/latest/parameter.html
+// for introduction of this module.
+struct MyLogisticParam : public dmlc::Parameter<MyLogisticParam> {
+  float scale_neg_weight;
+  // declare parameters
+  DMLC_DECLARE_PARAMETER(MyLogisticParam) {
+    DMLC_DECLARE_FIELD(scale_neg_weight).set_default(1.0f).set_lower_bound(0.0f)
+        .describe('Scale the weight of negative examples by this factor');
+  }
+};
     
-      // Accessors.
-  int total_cost() const {
-    return total_cost_;
-  }
-  int Pathlength() const {
-    return total_steps_;
-  }
-  const DPPoint* best_prev() const {
-    return best_prev_;
-  }
-  void AddLocalCost(int new_cost) {
-    local_cost_ += new_cost;
-  }
+        const auto ngroup = static_cast<bst_omp_uint>(gptr.size() - 1);
+    #pragma omp parallel
+    {
+      // parall construct, declare random number generator here, so that each
+      // thread use its own random number generator, seed by thread id and current iteration
+      common::RandomEngine rnd(iter * 1111 + omp_get_thread_num());
+    }
     
-    #ifndef TESSERACT_CCSTRUCT_LINLSQ_H_
-#define TESSERACT_CCSTRUCT_LINLSQ_H_
+    public:
+    vector<int> inorderTraversal(TreeNode* root) {
+    }
     
-            for(int i = 0 ; i < nums.size() ; i ++){
-            unordered_map<int,int>::iterator iter = record.find(target - nums[i]);
-            if(iter != record.end() && iter->second != i){
-                int res[] = {i, iter->second};
-                return vector<int>(res, res + 2);
+    
+    {
+    {
+    {            if(cur != NULL){
+                stack.push(cur);
+                cur = cur->left;
+            }
+            else {
+                cur = stack.top();
+                stack.pop();
+                res.push_back(cur->val);
+                cur = cur->right;
             }
         }
-    
-            ListNode* retNode = dummyHead->next;
-        delete dummyHead;
-    
-    private:
-    void __inorderTraversal(TreeNode* node, vector<int> &res){
+        return res;
     }
+};
     
-    int main() {
-    }
+    #include <iostream>
+#include <vector>
+#include <stack>
+    
+            queue<pair<TreeNode*,int>> q;
+        q.push(make_pair(root, 0));
     
     
-    {    return 0;
+    {                if(node->left){
+                    q.push(node->left);
+                    new_level_num ++;
+                }
+                if(node->right){
+                    q.push(node->right);
+                    new_level_num ++;
+                }
+            }
+    
+    
+void print_vec(const vector<int>& vec){
+    for(int e: vec)
+        cout << e << ' ';
+    cout << endl;
 }
+    
+            TreeNode* cur = root;
+        while(cur != NULL){
+            if(cur->left == NULL){
+                res.push_back(cur->val);
+                cur = cur->right;
+            }
+            else{
+                TreeNode* prev = cur->left;
+                while(prev->right != NULL && prev->right != cur)
+                    prev = prev->right;
+    }
+    }
+    
+    /**
+@brief SplitCols action.
+@details Split the target node in many columns.
+        Then move out some columns from top, move out the other columns from bottom.
+*/
+class CC_DLL SplitCols : public TiledGrid3DAction
+{
+public:
+    
+    /** 
+     * @brief Create the action with the number of columns and the duration.
+     * @param duration Specify the duration of the SplitCols action. It's a value in seconds.
+     * @param cols Specify the columns count should be split.
+     * @return If the creation success, return a pointer of SplitCols action; otherwise, return nil.
+     */
+    static SplitCols* create(float duration, unsigned int cols);
+    }
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+                case 1:
+            case 5:
+            case 13:
+                /* going UP with these cases:
+                 1          5           13
+                 +---+---+  +---+---+  +---+---+ 
+                 | 1 |   |  | 1 |   |  | 1 |   | 
+                 +---+---+  +---+---+  +---+---+ 
+                 |   |   |  | 4 |   |  | 4 | 8 | 
+                 +---+---+  +---+---+  +---+---+
+                 */
+                stepx = 0;
+                stepy = -1;
+                break;
