@@ -1,319 +1,378 @@
 
         
-        FileGenerator::FileGenerator(const FileDescriptor *file, const Options& options)
-    : file_(file),
-      root_class_name_(FileClassName(file)),
-      is_bundled_proto_(IsProtobufLibraryBundledProtoFile(file)),
-      options_(options) {
-  for (int i = 0; i < file_->enum_type_count(); i++) {
-    EnumGenerator *generator = new EnumGenerator(file_->enum_type(i));
-    enum_generators_.push_back(generator);
-  }
-  for (int i = 0; i < file_->message_type_count(); i++) {
-    MessageGenerator *generator =
-        new MessageGenerator(root_class_name_, file_->message_type(i), options_);
-    message_generators_.push_back(generator);
-  }
-  for (int i = 0; i < file_->extension_count(); i++) {
-    ExtensionGenerator *generator =
-        new ExtensionGenerator(root_class_name_, file_->extension(i));
-    extension_generators_.push_back(generator);
-  }
-}
+        #if GTEST_HAS_PARAM_TEST
     
-    template<typename A>
-struct type_equals_<A, A> : public true_ {
+    
+    {}  // namespace testing_internal
+    
+    #define EXPECT_FATAL_FAILURE_ON_ALL_THREADS(statement, substr) \
+  do { \
+    class GTestExpectFatalFailureHelper {\
+     public:\
+      static void Execute() { statement; }\
+    };\
+    ::testing::TestPartResultArray gtest_failures;\
+    ::testing::internal::SingleFailureChecker gtest_checker(\
+        &gtest_failures, ::testing::TestPartResult::kFatalFailure, (substr));\
+    {\
+      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
+          ::testing::ScopedFakeTestPartResultReporter:: \
+          INTERCEPT_ALL_THREADS, &gtest_failures);\
+      GTestExpectFatalFailureHelper::Execute();\
+    }\
+  } while (::testing::internal::AlwaysFalse())
+    
+    // This macro is for implementing ASSERT_DEATH*, EXPECT_DEATH*,
+// ASSERT_EXIT*, and EXPECT_EXIT*.
+# define GTEST_DEATH_TEST_(statement, predicate, regex, fail) \
+  GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
+  if (::testing::internal::AlwaysTrue()) { \
+    const ::testing::internal::RE& gtest_regex = (regex); \
+    ::testing::internal::DeathTest* gtest_dt; \
+    if (!::testing::internal::DeathTest::Create(#statement, &gtest_regex, \
+        __FILE__, __LINE__, &gtest_dt)) { \
+      goto GTEST_CONCAT_TOKEN_(gtest_label_, __LINE__); \
+    } \
+    if (gtest_dt != NULL) { \
+      ::testing::internal::scoped_ptr< ::testing::internal::DeathTest> \
+          gtest_dt_ptr(gtest_dt); \
+      switch (gtest_dt->AssumeRole()) { \
+        case ::testing::internal::DeathTest::OVERSEE_TEST: \
+          if (!gtest_dt->Passed(predicate(gtest_dt->Wait()))) { \
+            goto GTEST_CONCAT_TOKEN_(gtest_label_, __LINE__); \
+          } \
+          break; \
+        case ::testing::internal::DeathTest::EXECUTE_TEST: { \
+          ::testing::internal::DeathTest::ReturnSentinel \
+              gtest_sentinel(gtest_dt); \
+          GTEST_EXECUTE_DEATH_TEST_STATEMENT_(statement, gtest_dt); \
+          gtest_dt->Abort(::testing::internal::DeathTest::TEST_DID_NOT_DIE); \
+          break; \
+        } \
+        default: \
+          break; \
+      } \
+    } \
+  } else \
+    GTEST_CONCAT_TOKEN_(gtest_label_, __LINE__): \
+      fail(::testing::internal::DeathTest::LastMessage())
+// The symbol 'fail' here expands to something into which a message
+// can be streamed.
+    
+    // ArrayEq() compares two k-dimensional native arrays using the
+// elements' operator==, where k can be any integer >= 0.  When k is
+// 0, ArrayEq() degenerates into comparing a single pair of values.
+    
+      bool operator==(T* p) const { return value_ == p; }
+  bool operator!=(T* p) const { return value_ != p; }
+  template <typename U>
+  bool operator==(linked_ptr<U> const& ptr) const {
+    return value_ == ptr.get();
+  }
+  template <typename U>
+  bool operator!=(linked_ptr<U> const& ptr) const {
+    return value_ != ptr.get();
+  }
+    
+    
+    {  const T1 v1_;
+  const T2 v2_;
+  const T3 v3_;
+  const T4 v4_;
+  const T5 v5_;
+  const T6 v6_;
+  const T7 v7_;
+  const T8 v8_;
+  const T9 v9_;
+  const T10 v10_;
+  const T11 v11_;
+  const T12 v12_;
+  const T13 v13_;
+  const T14 v14_;
+  const T15 v15_;
+  const T16 v16_;
 };
     
-            // Inner state of the underlying reader.
-        // Is set in the RestoreFromCheckpoint call and used in the next GetNextMinibatch
-        // when the reader state is restored after the first StartEpoch call.
-        Internal::Optional<Dictionary> m_state;
+    // A sample program demonstrating using Google C++ testing framework.
+//
+// Author: wan@google.com (Zhanyong Wan)
     
-            auto dimension = sampleShape[0];
-        auto numElementsPerSample = sampleShape.SubShape(1).TotalSize();
-        NDMaskPtr deviceValueMask = CreateMask(numElementsPerSample, oneHotSequences, sequenceStartFlags, DeviceDescriptor::CPUDevice());
-        // If deviceValueMask is null, all the sequences have the same length.
-        size_t maxSequenceLength = (deviceValueMask == nullptr) ? (oneHotSequences[0].size() / numElementsPerSample) : deviceValueMask->Shape()[0];
-        size_t maxSequenceNumCols = maxSequenceLength * numElementsPerSample;
+    // Tests the default c'tor.
+TEST(MyString, DefaultConstructor) {
+  const MyString s;
+    }
     
-    
-    {            if ((m_varKind == VariableKind::Parameter) || (m_varKind == VariableKind::Constant))
-            {
-                if (m_shape.HasFreeDimension())
-                    InvalidArgument('Parameter/Constant '%S' has invalid shape '%S'; it is illegal for a Parameter/Constant to have a FreeDimension.', AsString().c_str(), m_shape.AsString().c_str());
+    ScriptSet &ScriptSet::parseScripts(const UnicodeString &scriptString, UErrorCode &status) {
+    resetAll();
+    if (U_FAILURE(status)) {
+        return *this;
+    }
+    UnicodeString oneScriptName;
+    for (int32_t i=0; i<scriptString.length();) {
+        UChar32 c = scriptString.char32At(i);
+        i = scriptString.moveIndex32(i, 1);
+        if (!u_isUWhiteSpace(c)) {
+            oneScriptName.append(c);
+            if (i < scriptString.length()) {
+                continue;
             }
         }
-    
-    
-    {        AliasInfo(size_t total = 0)
-            : pMatrixPtr(nullptr), totalCount(total), releaseCount(0)
-        {
-        }
-    };
-    unordered_map<AliasNodePtr, AliasInfo> m_aliasGroups;
-    unordered_map<AliasNodePtr, AliasNodePtr> m_aliasLookup;
-    
-    
-    {
-    {
-    {            UChar *inputChars = (UChar *)uprv_malloc(sizeof(UChar)*(len16));
-            if (inputChars == NULL) {
-                fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
+        if (oneScriptName.length() > 0) {
+            char buf[40];
+            oneScriptName.extract(0, oneScriptName.length(), buf, sizeof(buf)-1, US_INV);
+            buf[sizeof(buf)-1] = 0;
+            int32_t sc = u_getPropertyValueEnum(UCHAR_SCRIPT, buf);
+            if (sc == UCHAR_INVALID_CODE) {
+                status = U_ILLEGAL_ARGUMENT_ERROR;
             } else {
-                utext_extract(fInputText, fAppendPosition, fInputLength, inputChars, len16, &status); // unterminated
-                int64_t destLen = utext_nativeLength(dest);
-                utext_replace(dest, destLen, destLen, inputChars, len16, &status);
-                uprv_free(inputChars);
+                this->set((UScriptCode)sc, status);
             }
+            if (U_FAILURE(status)) {
+                return *this;
+            }
+            oneScriptName.remove();
         }
     }
-    return dest;
+    return *this;
 }
     
+        UBool operator == (const ScriptSet &other) const;
+    ScriptSet & operator = (const ScriptSet &other);
     
-    {    Transliterator::_registerSpecialInverse(UNICODE_STRING_SIMPLE('Remove'),
-                                            UNICODE_STRING_SIMPLE('Null'), FALSE);
-}
+    #define DOT               ((UChar)0x002E)
+#define SINGLE_QUOTE      ((UChar)0x0027)
+#define SLASH             ((UChar)0x002F)
+#define BACKSLASH         ((UChar)0x005C)
+#define SPACE             ((UChar)0x0020)
+#define TAB               ((UChar)0x0009)
+#define QUOTATION_MARK    ((UChar)0x0022)
+#define ASTERISK          ((UChar)0x002A)
+#define COMMA             ((UChar)0x002C)
+#define HYPHEN            ((UChar)0x002D)
+#define U_ZERO            ((UChar)0x0030)
+#define U_ONE             ((UChar)0x0031)
+#define U_TWO             ((UChar)0x0032)
+#define U_THREE           ((UChar)0x0033)
+#define U_FOUR            ((UChar)0x0034)
+#define U_FIVE            ((UChar)0x0035)
+#define U_SIX             ((UChar)0x0036)
+#define U_SEVEN           ((UChar)0x0037)
+#define U_EIGHT           ((UChar)0x0038)
+#define U_NINE            ((UChar)0x0039)
+#define COLON             ((UChar)0x003A)
+#define SEMI_COLON        ((UChar)0x003B)
+#define CAP_A             ((UChar)0x0041)
+#define CAP_B             ((UChar)0x0042)
+#define CAP_R             ((UChar)0x0052)
+#define CAP_Z             ((UChar)0x005A)
+#define LOWLINE           ((UChar)0x005F)
+#define LEFTBRACE         ((UChar)0x007B)
+#define RIGHTBRACE        ((UChar)0x007D)
     
-    CollationKey &
-RuleBasedCollator::getCollationKey(const UChar *s, int32_t length, CollationKey& key,
-                                   UErrorCode &errorCode) const {
-    if(U_FAILURE(errorCode)) {
-        return key.setToBogus();
-    }
-    if(s == NULL && length != 0) {
-        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return key.setToBogus();
-    }
-    key.reset();  // resets the 'bogus' state
-    CollationKeyByteSink sink(key);
-    writeSortKey(s, length, sink, errorCode);
-    if(U_FAILURE(errorCode)) {
-        key.setToBogus();
-    } else if(key.isBogus()) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    } else {
-        key.setLength(sink.NumberOfBytesAppended());
-    }
-    return key;
-}
+    #ifndef __SHARED_DATEFORMATSYMBOLS_H__
+#define __SHARED_DATEFORMATSYMBOLS_H__
     
-    #if !UCONFIG_NO_FORMATTING
-    
-    #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
-
-    
-    #include 'unicode/utypes.h'
-#include 'sharedobject.h'
-    
-      virtual void Update(HostDeviceVector<GradientPair>* in_gpair, DMatrix* data,
-                      gbm::GBLinearModel* model,
-                      double sum_instance_weight) = 0;
-    
-    
-    {    inline size_t Size() const {
-      return end - begin;
-    }
-  };
-  /* \brief specifies how to split a rowset into two */
-  struct Split {
-    std::vector<size_t> left;
-    std::vector<size_t> right;
-  };
-    
-    // functions related to booster
-void _BoosterFinalizer(SEXP ext) {
-  if (R_ExternalPtrAddr(ext) == NULL) return;
-  CHECK_CALL(XGBoosterFree(R_ExternalPtrAddr(ext)));
-  R_ClearExternalPtr(ext);
-}
-    
-    /*! \brief interface of objective function */
-class ObjFunction {
- public:
-  /*! \brief virtual destructor */
-  virtual ~ObjFunction() = default;
-  /*!
-   * \brief set configuration from pair iterators.
-   * \param begin The beginning iterator.
-   * \param end The end iterator.
-   * \tparam PairIter iterator<std::pair<std::string, std::string> >
-   */
-  template<typename PairIter>
-  inline void Configure(PairIter begin, PairIter end);
-  /*!
-   * \brief Configure the objective with the specified parameters.
-   * \param args arguments to the objective function.
-   */
-  virtual void Configure(const std::vector<std::pair<std::string, std::string> >& args) = 0;
-  /*!
-   * \brief Get gradient over each of predictions, given existing information.
-   * \param preds prediction of current round
-   * \param info information about labels, weights, groups in rank
-   * \param iteration current iteration number.
-   * \param out_gpair output of get gradient, saves gradient and second order gradient in
-   */
-  virtual void GetGradient(const HostDeviceVector<bst_float>& preds,
-                           const MetaInfo& info,
-                           int iteration,
-                           HostDeviceVector<GradientPair>* out_gpair) = 0;
-    }
-    
-        vector<int> vec2 = {2};
-    Solution().sortColors(vec2);
-    printArr(vec2);
-    
-    private:
-    struct Command{
-        string s;   // go, print
-        TreeNode* node;
-        Command(string s, TreeNode* node): s(s), node(node){}
-    };
-    
-                if(cur->left == NULL){
-                res.push_back(cur->val);
-                cur = cur->right;
+        case UDAT_FRACTIONAL_SECOND_FIELD:
+        // Fractional seconds left-justify
+        i = pos.getIndex() - start;
+        if (i < 3) {
+            while (i < 3) {
+                value *= 10;
+                i++;
             }
-            else{
-                TreeNode* prev = cur->left;
-                while(prev->right != NULL && prev->right != cur)
-                    prev = prev->right;
-    }
-    
-    using namespace std;
-    
-    
-    {                if(node->left){
-                    q.push(node->left);
-                    new_level_num ++;
-                }
-                if(node->right){
-                    q.push(node->right);
-                    new_level_num ++;
-                }
+        } else {
+            int32_t a = 1;
+            while (i > 3) {
+                a *= 10;
+                i--;
             }
-    
-    /// Definition for a binary tree node.
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-    
-    
-    {    printf('DestroyContext()\n');
-    ImGui::DestroyContext();
-    return 0;
-}
-
-    
-    IMGUI_IMPL_API bool     ImGui_Marmalade_Init(bool install_callbacks);
-IMGUI_IMPL_API void     ImGui_Marmalade_Shutdown();
-IMGUI_IMPL_API void     ImGui_Marmalade_NewFrame();
-IMGUI_IMPL_API void     ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data);
-    
-    // About GLSL version:
-// The 'glsl_version' initialization parameter defaults to '#version 150' if NULL.
-// Only override if your GL version doesn't handle this GLSL version. Keep NULL if unsure!
-    
-        // Main loop
-    bool running = true;
-    while (running)
-    {
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        ALLEGRO_EVENT ev;
-        while (al_get_next_event(queue, &ev))
-        {
-            ImGui_ImplAllegro5_ProcessEvent(&ev);
-            if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-                running = false;
-            if (ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE)
-            {
-                ImGui_ImplAllegro5_InvalidateDeviceObjects();
-                al_acknowledge_resize(display);
-                ImGui_ImplAllegro5_CreateDeviceObjects();
-            }
+            value /= a;
         }
-    }
+        cal.set(UCAL_MILLISECOND, value);
+        return pos.getIndex();
     
-    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-// Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+    #include 'unicode/sortkey.h'
+#include 'cmemory.h'
+#include 'uelement.h'
+#include 'ustr_imp.h'
     
-        // Upload Fonts
-    {
-        // Use any command queue
-        VkCommandPool command_pool = wd->Frames[wd->FrameIndex].CommandPool;
-        VkCommandBuffer command_buffer = wd->Frames[wd->FrameIndex].CommandBuffer;
-    }
-    
-    #define SDL_HAS_CAPTURE_AND_GLOBAL_MOUSE    SDL_VERSION_ATLEAST(2,0,4)
-#define SDL_HAS_VULKAN                      SDL_VERSION_ATLEAST(2,0,6)
-#if !SDL_HAS_VULKAN
-static const Uint32 SDL_WINDOW_VULKAN = 0x10000000;
-#endif
-    
-    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
-// **Prefer using the code in the example_glfw_opengl2/ folder**
-// See imgui_impl_glfw.cpp for details.
-    
-            ImGui_ImplVulkan_CreateFontsTexture(command_buffer);
-    
-    void ImGui_ImplOpenGL2_DestroyFontsTexture()
+    /**
+ * Implement UnicodeMatcher
+ */
+UnicodeString& StringMatcher::toPattern(UnicodeString& result,
+                                        UBool escapeUnprintable) const
 {
-    if (g_FontTexture)
+    result.truncate(0);
+    UnicodeString str, quoteBuf;
+    if (segmentNumber > 0) {
+        result.append((UChar)40); /*(*/
+    }
+    for (int32_t i=0; i<pattern.length(); ++i) {
+        UChar keyChar = pattern.charAt(i);
+        const UnicodeMatcher* m = data->lookupMatcher(keyChar);
+        if (m == 0) {
+            ICU_Utility::appendToRule(result, keyChar, FALSE, escapeUnprintable, quoteBuf);
+        } else {
+            ICU_Utility::appendToRule(result, m->toPattern(str, escapeUnprintable),
+                         TRUE, escapeUnprintable, quoteBuf);
+        }
+    }
+    if (segmentNumber > 0) {
+        result.append((UChar)41); /*)*/
+    }
+    // Flush quoteBuf out to result
+    ICU_Utility::appendToRule(result, -1,
+                              TRUE, escapeUnprintable, quoteBuf);
+    return result;
+}
+    
+    int main(int, char**)
+{
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    }
+    
+    
+    {        // Rendering
+        ImGui::Render();
+        al_clear_to_color(al_map_rgba_f(clear_color.x, clear_color.y, clear_color.z, clear_color.w));
+        ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
+        al_flip_display();
+    }
+    
+    void glut_display_func()
+{
+    // Start the Dear ImGui frame
+    ImGui_ImplOpenGL2_NewFrame();
+    ImGui_ImplFreeGLUT_NewFrame();
+    }
+    
+        // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
+    
+        // Glut has 1 function for characters and one for 'special keys'. We map the characters in the 0..255 range and the keys above.
+    io.KeyMap[ImGuiKey_Tab]         = '\t'; // == 9 == CTRL+I
+    io.KeyMap[ImGuiKey_LeftArrow]   = 256 + GLUT_KEY_LEFT;
+    io.KeyMap[ImGuiKey_RightArrow]  = 256 + GLUT_KEY_RIGHT;
+    io.KeyMap[ImGuiKey_UpArrow]     = 256 + GLUT_KEY_UP;
+    io.KeyMap[ImGuiKey_DownArrow]   = 256 + GLUT_KEY_DOWN;
+    io.KeyMap[ImGuiKey_PageUp]      = 256 + GLUT_KEY_PAGE_UP;
+    io.KeyMap[ImGuiKey_PageDown]    = 256 + GLUT_KEY_PAGE_DOWN;
+    io.KeyMap[ImGuiKey_Home]        = 256 + GLUT_KEY_HOME;
+    io.KeyMap[ImGuiKey_End]         = 256 + GLUT_KEY_END;
+    io.KeyMap[ImGuiKey_Insert]      = 256 + GLUT_KEY_INSERT;
+    io.KeyMap[ImGuiKey_Delete]      = 127;
+    io.KeyMap[ImGuiKey_Backspace]   = 8;  // == CTRL+H
+    io.KeyMap[ImGuiKey_Space]       = ' ';
+    io.KeyMap[ImGuiKey_Enter]       = 13; // == CTRL+M
+    io.KeyMap[ImGuiKey_Escape]      = 27;
+    io.KeyMap[ImGuiKey_A]           = 'A';
+    io.KeyMap[ImGuiKey_C]           = 'C';
+    io.KeyMap[ImGuiKey_V]           = 'V';
+    io.KeyMap[ImGuiKey_X]           = 'X';
+    io.KeyMap[ImGuiKey_Y]           = 'Y';
+    io.KeyMap[ImGuiKey_Z]           = 'Z';
+    
+    
+    {    // SDL_CaptureMouse() let the OS know e.g. that our imgui drag outside the SDL window boundaries shouldn't e.g. trigger the OS window resize cursor.
+    // The function is only supported from SDL 2.0.4 (released Jan 2016)
+    bool any_mouse_button_down = ImGui::IsAnyMouseDown();
+    SDL_CaptureMouse(any_mouse_button_down ? SDL_TRUE : SDL_FALSE);
+#else
+    if (SDL_GetWindowFlags(g_Window) & SDL_WINDOW_INPUT_FOCUS)
+        io.MousePos = ImVec2((float)mx, (float)my);
+#endif
+}
+    
+            // 3. Show another simple window.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
+    
+    
+    {        // Create the constant buffer
+        {
+            D3D11_BUFFER_DESC desc;
+            desc.ByteWidth = sizeof(VERTEX_CONSTANT_BUFFER);
+            desc.Usage = D3D11_USAGE_DYNAMIC;
+            desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+            desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+            desc.MiscFlags = 0;
+            g_pd3dDevice->CreateBuffer(&desc, NULL, &g_pVertexConstantBuffer);
+        }
+    }
+    
+    void ImGui_ImplVulkanH_DestroyWindowData(VkInstance instance, VkDevice device, ImGui_ImplVulkanH_WindowData* wd, const VkAllocationCallbacks* allocator)
+{
+    vkDeviceWaitIdle(device); // FIXME: We could wait on the Queue if we had the queue in wd-> (otherwise VulkanH functions can't use globals)
+    //vkQueueWaitIdle(g_Queue);
+    }
+    
+        // out_of_range.403
+    try
     {
-        ImGuiIO& io = ImGui::GetIO();
-        glDeleteTextures(1, &g_FontTexture);
-        io.Fonts->TexID = 0;
-        g_FontTexture = 0;
+        // try to use a JSON pointer to an nonexistent object key
+        json::const_reference ref = j.at('/foo'_json_pointer);
     }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+    
+    CatmullRomBy* CatmullRomBy::create(float dt, PointArray *points)
+{
+    CatmullRomBy *ret = new (std::nothrow) CatmullRomBy();
+    if (ret)
+    {
+        if (ret->initWithDuration(dt, points))
+        {
+            ret->autorelease();
+        }
+        else 
+        {
+            CC_SAFE_RELEASE_NULL(ret);
+        }
+    }
+    }
+    
+    void GridAction::startWithTarget(Node *target)
+{
+    ActionInterval::startWithTarget(target);
+    cacheTargetAsGridNode();
+    }
+    
+    FlipY * FlipY::clone() const
+{
+    // no copy constructor
+    return FlipY::create(_flipY);
 }
     
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
     
-    {  ::apollo::canbus::ChassisDetail chassis_detail;
-  chassis_detail.set_car_type(::apollo::canbus::ChassisDetail::QIRUI_EQ_15);
-  EXPECT_EQ(manager.GetSensorData(&chassis_detail), ErrorCode::OK);
-  EXPECT_EQ(manager.GetSensorData(nullptr), ErrorCode::CANBUS_ERROR);
+    
+    {    return false;
 }
     
-    TEST(ByteTest, SetBit) {
-  unsigned char byte_value = 0xFF;
-  Byte value(&byte_value);
-  value.set_bit_0(1);
-  EXPECT_EQ(0xFD, value.get_byte());
-  value.set_bit_0(7);
-  EXPECT_EQ(0x7D, value.get_byte());
-  value.set_bit_1(7);
-  EXPECT_EQ(0xFD, value.get_byte());
-  value.set_value(0x77);
-  value.set_bit_1(0);
-  EXPECT_EQ(0x77, value.get_byte());
-    }
-    
-    namespace apollo {
-namespace drivers {
-namespace conti_radar {
-    }
-    }
-    }
-    
-    #include <vector>
-    
-    // config detail: {'name': 'angular_speed', 'offset': 0.0, 'precision': 0.001,
-// 'len': 32, 'is_signed_var': False, 'physical_range': '[0|4294967.295]',
-// 'bit': 39, 'type': 'double', 'order': 'motorola', 'physical_unit': 'rev/s'}
-double Brakemotorrpt271::angular_speed(const std::uint8_t* bytes,
-                                       int32_t length) const {
-  Byte t0(bytes + 4);
-  int32_t x = t0.get_byte(0, 8);
-    }
-    
-    #include 'glog/logging.h'
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
