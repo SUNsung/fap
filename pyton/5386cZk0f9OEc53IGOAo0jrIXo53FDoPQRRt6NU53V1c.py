@@ -1,176 +1,116 @@
 
         
-        def _plot_item(W, name, full_name, nspaces):
-  plt.figure()
-  if W.shape == ():
-    print(name, ': ', W)
-  elif W.shape[0] == 1:
-    plt.stem(W.T)
-    plt.title(full_name)
-  elif W.shape[1] == 1:
-    plt.stem(W)
-    plt.title(full_name)
-  else:
-    plt.imshow(np.abs(W), interpolation='nearest', cmap='jet');
-    plt.colorbar()
-    plt.title(full_name)
+            @property
+    def encoding(self):
+        return 'utf8'
     
-      # First generate all firing rates. in the next loop, generate all
-  # replications this allows the random state for rate generation to be
-  # independent of n_replications.
-  dataset_name = 'dataset_N' + str(N) + '_S' + str(S)
-  if S < N:
-    dataset_name += '_n' + str(n+1)
     
-      Args:
-    real_values: Value given by the Wasserstein Discriminator to real data.
-    fake_values: Value given by the Wasserstein Discriminator to fake data.
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+def repr_dict_nice(d):
+    def prepare_dict(d):
+        for k, v in d.items():
+            if isinstance(v, dict):
+                v = dict(prepare_dict(v))
+            elif isinstance(v, bytes):
+                v = v.decode('utf8')
+            elif not isinstance(v, (int, str)):
+                v = repr(v)
+            yield k, v
+    return json.dumps(
+        dict(prepare_dict(d)),
+        indent=4, sort_keys=True,
+    )
     
         '''
-    # Serialize JSON data, if needed.
-    data = args.data
-    auto_json = data and not args.form
-    if (args.json or auto_json) and isinstance(data, dict):
-        if data:
-            data = json.dumps(data)
-        else:
-            # We need to set data to an empty string to prevent requests
-            # from assigning an empty list to `response.request.data`.
-            data = ''
-    
-            # Keyword arguments > stream.encoding > default utf8
-        if self.stdin_encoding is None:
-            self.stdin_encoding = getattr(
-                self.stdin, 'encoding', None) or 'utf8'
-        if self.stdout_encoding is None:
-            actual_stdout = self.stdout
-            if is_windows:
-                # noinspection PyUnresolvedReferences
-                from colorama import AnsiToWin32
-                if isinstance(self.stdout, AnsiToWin32):
-                    actual_stdout = self.stdout.wrapped
-            self.stdout_encoding = getattr(
-                actual_stdout, 'encoding', None) or 'utf8'
-    
-            if isinstance(headers, bytes):
-            # Python < 3
-            headers = headers.decode('utf8')
-        return headers
-    
-            '''
-        available_plugins = plugin_manager.get_formatters_grouped()
-        self.enabled_plugins = []
-        for group in groups:
-            for cls in available_plugins[group]:
-                p = cls(env=env, **kwargs)
-                if p.enabled:
-                    self.enabled_plugins.append(p)
     
     
-def test_default_options(httpbin):
-    env = MockEnvironment()
-    env.config['default_options'] = ['--form']
-    env.config.save()
-    r = http(httpbin.url + '/post', 'foo=bar', env=env)
-    assert r.json['form'] == {'foo': 'bar'}
-    
-        @auth.setter
-    def auth(self, auth):
-        assert set(['type', 'raw_auth']) == set(auth.keys())
-        self['auth'] = auth
+def test_unicode_digest_auth(httpbin):
+    # it doesn't really authenticate us because httpbin
+    # doesn't interpret the utf8-encoded auth
+    http('--auth-type=digest',
+         '--auth', u'test:%s' % UNICODE,
+         httpbin.url + u'/digest-auth/auth/test/' + UNICODE)
 
     
-        def chunk_downloaded(self, size):
-        assert self.time_finished is None
-        self.downloaded += size
+    from httpie import __version__
+from httpie.compat import is_windows
+    
+                    if not speed:
+                    eta = '-:--:--'
+                else:
+                    s = int((self.status.total_size - downloaded) / speed)
+                    h, s = divmod(s, 60 * 60)
+                    m, s = divmod(s, 60)
+                    eta = '{0}:{1:0>2}:{2:0>2}'.format(h, m, s)
+    
+        for node in doctree.traverse(settingslist_node):
+        settings_list = nodes.bullet_list()
+        settings_list.extend([make_setting_element(d, app, fromdocname)
+                              for d in sorted(env.scrapy_all_settings,
+                                              key=itemgetter('setting_name'))
+                              if fromdocname != d['docname']])
+        node.replace_self(settings_list)
+    
+    # Ignore noisy twisted deprecation warnings
+import warnings
+warnings.filterwarnings('ignore', category=DeprecationWarning, module='twisted')
+del warnings
+    
+            if opts.nolog:
+            self.settings.set('LOG_ENABLED', False, priority='cmdline')
+    
+                tested_methods = conman.tested_methods_from_spidercls(spidercls)
+            if opts.list:
+                for method in tested_methods:
+                    contract_reqs[spidercls.name].append(method)
+            elif tested_methods:
+                self.crawler_process.crawl(spidercls)
+    
+            self.crawler_process.crawl(spname, **opts.spargs)
+        self.crawler_process.start()
+    
+        requires_project = True
+    default_settings = {'LOG_ENABLED': False}
+    
+            general form:
+        @returns request(s)/item(s) [min=1 [max]]
     
     
-class CreateExtension(Operation):
-    reversible = True
+class S3DownloadHandler(object):
     
-        def load(self):
-        try:
-            data = self._cache.get(self.cache_key)
-        except Exception:
-            # Some backends (e.g. memcache) raise an exception on invalid
-            # cache keys. If this happens, reset the session. See #17810.
-            data = None
-    
-        def load(self):
-        '''
-        Load the data from the key itself instead of fetching from some
-        external data store. Opposite of _get_session_key(), raise BadSignature
-        if signature fails.
-        '''
-        try:
-            return signing.loads(
-                self.session_key,
-                serializer=self.serializer,
-                # This doesn't handle non-default expiry dates, see #19201
-                max_age=settings.SESSION_COOKIE_AGE,
-                salt='django.contrib.sessions.backends.signed_cookies',
-            )
-        except Exception:
-            # BadSignature, ValueError, or unpickling exceptions. If any of
-            # these happen, reset the session.
-            self.create()
-        return {}
-    
-        def start_requests(self):
-        url = self.benchurl
-        if self.latency is not None:
-            url += '?latency={0}'.format(self.latency)
-    
-        def _find_template(self, template):
-        template_file = join(self.templates_dir, '%s.tmpl' % template)
-        if exists(template_file):
-            return template_file
-        print('Unable to find template: %s\n' % template)
-        print('Use 'scrapy genspider --list' to see all available templates.')
-    
-            def _identityVerifyingInfoCallback(self, connection, where, ret):
-            if where & SSL_CB_HANDSHAKE_START:
-                set_tlsext_host_name(connection, self._hostnameBytes)
-            elif where & SSL_CB_HANDSHAKE_DONE:
-                try:
-                    verifyHostname(connection, self._hostnameASCII)
-                except verification_errors as e:
-                    logger.warning(
-                        'Remote certificate is not valid for hostname '{}'; {}'.format(
-                            self._hostnameASCII, e))
-    
-    logger = logging.getLogger(__name__)
-    
-    For more details about this platform, please refer to the documentation at
-https://home-assistant.io/components/notify.command_line/
+    image = face_recognition.load_image_file('{}')
 '''
-import logging
-import subprocess
     
-        _LOGGER.error(
-        'Error %s : %s (Code %s)', response.status_code, error_message,
-        error_code)
-
+    # Find all the faces in the image using the default HOG-based model.
+# This method is fairly accurate, but not as accurate as the CNN model and not GPU accelerated.
+# See also: find_faces_in_picture_cnn.py
+face_locations = face_recognition.face_locations(image)
     
-    from homeassistant.components.notify import (
-    ATTR_TITLE, ATTR_TITLE_DEFAULT, PLATFORM_SCHEMA, BaseNotificationService)
-from homeassistant.const import CONF_PASSWORD, CONF_PORT
-import homeassistant.helpers.config_validation as cv
+        # If no valid image file was uploaded, show the file upload form:
+    return '''
+    <!doctype html>
+    <title>Is this a picture of Obama?</title>
+    <h1>Upload a picture and see if it's a picture of Obama!</h1>
+    <form method='POST' enctype='multipart/form-data'>
+      <input type='file' name='file'>
+      <input type='submit' value='Upload'>
+    </form>
+    '''
     
-            self._rooms = {}
-        self._get_room(self._default_room)
+                face_names.append(name)
     
-            text = message
-        mycroft = MycroftAPI(self.mycroft_ip)
-        if mycroft is not None:
-            mycroft.speak_text(text)
-        else:
-            _LOGGER.log('Could not reach this instance of mycroft')
+        # Find all the faces and face encodings in the current frame of video
+    face_locations = face_recognition.face_locations(output)
+    print('Found {} faces in image.'.format(len(face_locations)))
+    face_encodings = face_recognition.face_encodings(output, face_locations)
+    
+            self.assertEqual(
+            set(face_landmarks[0].keys()),
+            set(['chin', 'left_eyebrow', 'right_eyebrow', 'nose_bridge',
+                 'nose_tip', 'left_eye', 'right_eye', 'top_lip',
+                 'bottom_lip']))
+        self.assertEqual(
+            face_landmarks[0]['chin'],
+            [(369, 220), (372, 254), (378, 289), (384, 322), (395, 353),
+             (414, 382), (437, 407), (464, 424), (495, 428), (527, 420),
+             (552, 399), (576, 372), (594, 344), (604, 314), (610, 282),
+             (613, 250), (615, 219)])
