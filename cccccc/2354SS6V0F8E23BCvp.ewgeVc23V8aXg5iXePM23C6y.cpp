@@ -1,258 +1,486 @@
 
         
-        int main(int argc, char** argv) {
-  if (argc > 1 && std::string(argv[1]) == '--benchmark') {
-    leveldb::BM_LogAndApply(1000, 1);
-    leveldb::BM_LogAndApply(1000, 100);
-    leveldb::BM_LogAndApply(1000, 10000);
-    leveldb::BM_LogAndApply(100, 100000);
-    return 0;
-  }
-    }
+          /**
+   * Returns true if the iterator is at the start of an object at the given
+   * level.
+   *
+   * For instance, suppose an iterator it is pointed to the first symbol of the
+   * first word of the third line of the second paragraph of the first block in
+   * a page, then:
+   *   it.IsAtBeginningOf(RIL_BLOCK) = false
+   *   it.IsAtBeginningOf(RIL_PARA) = false
+   *   it.IsAtBeginningOf(RIL_TEXTLINE) = true
+   *   it.IsAtBeginningOf(RIL_WORD) = true
+   *   it.IsAtBeginningOf(RIL_SYMBOL) = true
+   */
+  virtual bool IsAtBeginningOf(PageIteratorLevel level) const;
     
-    void AppendInternalKey(std::string* result, const ParsedInternalKey& key) {
-  result->append(key.user_key.data(), key.user_key.size());
-  PutFixed64(result, PackSequenceAndType(key.sequence, key.type));
-}
+      int GetId() { return my_id_; }
+  bool HasChanged() { return changed_; }
     
-    // Print contents of a log file. (*func)() is called on every record.
-Status PrintLogContents(Env* env, const std::string& fname,
-                        void (*func)(uint64_t, Slice, WritableFile*),
-                        WritableFile* dst) {
-  SequentialFile* file;
-  Status s = env->NewSequentialFile(fname, &file);
-  if (!s.ok()) {
-    return s;
-  }
-  CorruptionReporter reporter;
-  reporter.dst_ = dst;
-  log::Reader reader(file, &reporter, true, 0);
-  Slice record;
-  std::string scratch;
-  while (reader.ReadRecord(&record, &scratch)) {
-    (*func)(reader.LastRecordOffset(), record, dst);
-  }
-  delete file;
-  return Status::OK();
-}
+      WERD_RES *word2 = nullptr;
+  BlamerBundle *orig_bb = nullptr;
+  split_word(word, split_index, &word2, &orig_bb);
     
-      fname = TempFileName('tmp', 999);
-  ASSERT_EQ('tmp/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(999, number);
-  ASSERT_EQ(kTempFile, type);
+    #define UNLV_EXT  '.uzn'  // unlv zone file
     
-    bool HandleDumpCommand(Env* env, char** files, int num) {
-  StdoutPrinter printer;
-  bool ok = true;
-  for (int i = 0; i < num; i++) {
-    Status s = DumpFile(env, files[i], &printer);
-    if (!s.ok()) {
-      fprintf(stderr, '%s\n', s.ToString().c_str());
-      ok = false;
-    }
-  }
-  return ok;
-}
-    
-    #ifndef STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-#define STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-    
-      ~Reader();
-    
-    bool MemTable::Get(const LookupKey& key, std::string* value, Status* s) {
-  Slice memkey = key.memtable_key();
-  Table::Iterator iter(&table_);
-  iter.Seek(memkey.data());
-  if (iter.Valid()) {
-    // entry format is:
-    //    klength  varint32
-    //    userkey  char[klength]
-    //    tag      uint64
-    //    vlength  varint32
-    //    value    char[vlength]
-    // Check that it belongs to same user key.  We do not check the
-    // sequence number since the Seek() call above should have skipped
-    // all entries with overly large sequence numbers.
-    const char* entry = iter.key();
-    uint32_t key_length;
-    const char* key_ptr = GetVarint32Ptr(entry, entry+5, &key_length);
-    if (comparator_.comparator.user_comparator()->Compare(
-            Slice(key_ptr, key_length - 8),
-            key.user_key()) == 0) {
-      // Correct user key
-      const uint64_t tag = DecodeFixed64(key_ptr + key_length - 8);
-      switch (static_cast<ValueType>(tag & 0xff)) {
-        case kTypeValue: {
-          Slice v = GetLengthPrefixedSlice(key_ptr + key_length);
-          value->assign(v.data(), v.size());
-          return true;
-        }
-        case kTypeDeletion:
-          *s = Status::NotFound(Slice());
-          return true;
-      }
-    }
-  }
-  return false;
-}
-    
-      // Immutable after construction
-  Comparator const compare_;
-  Arena* const arena_;    // Arena used for allocations of nodes
-    
-    
-    {        // Advance to next key in the valid key space
-        if (key(pos) < key(current)) {
-          pos = MakeKey(key(pos) + 1, 0);
-        } else {
-          pos = MakeKey(key(pos), gen(pos) + 1);
-        }
-      }
-    
-    
-    {
-    {
-    {
-    {          std::transform(
-            begin(inputs) + start, begin(inputs) + stop,
-            retMem + start,
-            func
-          );
-        }
-      } catch (const std::runtime_error& e) {
-        std::fprintf(stderr,
-          'worker thread exited with exception: %s\n', e.what());
-        failed = true;
-      }
-    }));
-  }
-    
-    namespace php {
-    }
-    
-    
-    {
-    {}}
-    
-      void branchAuto(Label& l,
-                  BranchConditions bc = BranchConditions::Always,
-                  LinkReg lr = LinkReg::DoNotTouch,
-                  bool addrMayChange = false) {
-    l.branch(*this, bc, lr, addrMayChange);
-  }
-    
-    void Config::ParseConfigFile(const std::string &filename, IniSettingMap &ini,
-                             Hdf &hdf, const bool is_system /* = true */) {
-  // We don't allow a filename of just '.ini'
-  if (boost::ends_with(filename, '.ini') && filename.length() > 4) {
-    Config::ParseIniFile(filename, ini, false, is_system);
-  } else {
-    // For now, assume anything else is an hdf file
-    // TODO(#5151773): Have a non-invasive warning if HDF file does not end
-    // .hdf
-    Config::ParseHdfFile(filename, hdf);
-  }
-}
-    
-    #include <folly/ScopeGuard.h>
-    
-    
-    {  auto ret = m_it.second();
-  assertx(ret.isString());
-  ++m_it;
-  return Variant(HHVM_FN(basename)(ret.toString()));
-}
-    
-    #define ERROR_RAISE_WARNING(exp)        \
-  int ret = (exp);                      \
-  if (ret != 0) {                       \
-    raise_warning(                      \
-      '%s(): %s',                       \
-      __FUNCTION__,                     \
-      folly::errnoStr(errno).c_str()    \
-    );                                  \
-  }                                     \
-    
-    
-    {  auto glob = HHVM_FN(glob)(String(path_str, path_len, CopyString));
-  if (!glob.isArray()) {
-    return nullptr;
-  }
-  return req::make<ArrayDirectory>(glob.toArray());
-}
-    
-    #ifndef incl_HPHP_OUTPUT_FILE_H_
-#define incl_HPHP_OUTPUT_FILE_H_
-    
-    // Canbus gflags
-DEFINE_double(sensor_freq, 100,
-              'Sensor feedback timer frequency -- 0 means event trigger.');
-    
-    #include 'modules/drivers/radar/conti_radar/protocol/object_list_status_60a.h'
-    
-    namespace apollo {
-namespace localization {
-namespace msf {
-    }
-    }
-    }
-    
-    #include 'gtest/gtest.h'
-    
-    
-    {  MatrixXd bd_golden(20, 1);
-  bd_golden << -0.03, -0.03, -0.02, -0.04, -0.02, -0.04, -0.02, -0.04, -0.02,
-      -0.04, -0.02, -0.04, -0.02, -0.04, -0.02, -0.04, -0.02, -0.04, -0.02,
-      -0.04;
-  EXPECT_EQ(bd.rows(), 20);
-  EXPECT_EQ(bd.cols(), 1);
-  for (uint32_t i = 0; i < bd.rows(); ++i) {
-    EXPECT_DOUBLE_EQ(bd(i, 0), bd_golden(i, 0));
-  }
-}
-    
-    #include 'modules/prediction/common/kml_map_based_test.h'
-#include 'modules/prediction/common/prediction_map.h'
-    
-    BENCHMARK(BENCHFUN(zzInitRNG)) {
-  srand(seed);
-}
-    
-    BENCHMARK_RELATIVE(sformat_short_string_unsafe, iters) {
-  BenchmarkSuspender suspender;
-  auto const& shortString = getShortString();
-  while (iters--) {
-    std::string out;
-    suspender.dismissing([&] { out = sformat(shortString); });
-  }
-}
-    
-      for (unsigned i = 0; i < iter; ++i) {
-    FB_LOG_EVERY_MS(INFO, -1) << 'every -1ms';
-  }
-    
-    void compareBenchmarkResults(const std::string& base, const std::string& test) {
-  printResultComparison(resultsFromFile(base), resultsFromFile(test));
-}
-    
-    namespace folly {
-    }
-    
-    template <class RNG, typename = void>
-struct StateSize {
-  // A sane default.
-  using type = std::integral_constant<size_t, 512>;
+    // Possible normalization methods. Use NEGATIVE values as these also
+// double up as markers for the last sub-classifier.
+enum NormalizationMode {
+  NM_BASELINE = -3,         // The original BL normalization mode.
+  NM_CHAR_ISOTROPIC = -2,   // Character normalization but isotropic.
+  NM_CHAR_ANISOTROPIC = -1  // The original CN normalization mode.
 };
     
-    #include <string>
+    # if GTEST_HAS_COMBINE
+// Combine() allows the user to combine two or more sequences to produce
+// values of a Cartesian product of those sequences' elements.
+//
+// Synopsis:
+// Combine(gen1, gen2, ..., genN)
+//   - returns a generator producing sequences with elements coming from
+//     the Cartesian product of elements from the sequences generated by
+//     gen1, gen2, ..., genN. The sequence elements will have a type of
+//     tuple<T1, T2, ..., TN> where T1, T2, ..., TN are the types
+//     of elements from sequences produces by gen1, gen2, ..., genN.
+//
+// Combine can have up to 10 arguments. This number is currently limited
+// by the maximum number of elements in the tuple implementation used by Google
+// Test.
+//
+// Example:
+//
+// This will instantiate tests in test case AnimalTest each one with
+// the parameter values tuple('cat', BLACK), tuple('cat', WHITE),
+// tuple('dog', BLACK), and tuple('dog', WHITE):
+//
+// enum Color { BLACK, GRAY, WHITE };
+// class AnimalTest
+//     : public testing::TestWithParam<tuple<const char*, Color> > {...};
+//
+// TEST_P(AnimalTest, AnimalLooksNice) {...}
+//
+// INSTANTIATE_TEST_CASE_P(AnimalVariations, AnimalTest,
+//                         Combine(Values('cat', 'dog'),
+//                                 Values(BLACK, WHITE)));
+//
+// This will instantiate tests in FlagDependentTest with all variations of two
+// Boolean flags:
+//
+// class FlagDependentTest
+//     : public testing::TestWithParam<tuple<bool, bool> > {
+//   virtual void SetUp() {
+//     // Assigns external_flag_1 and external_flag_2 values from the tuple.
+//     tie(external_flag_1, external_flag_2) = GetParam();
+//   }
+// };
+//
+// TEST_P(FlagDependentTest, TestFeature1) {
+//   // Test your code using external_flag_1 and external_flag_2 here.
+// }
+// INSTANTIATE_TEST_CASE_P(TwoBoolSequence, FlagDependentTest,
+//                         Combine(Bool(), Bool()));
+//
+template <typename Generator1, typename Generator2>
+internal::CartesianProductHolder2<Generator1, Generator2> Combine(
+    const Generator1& g1, const Generator2& g2) {
+  return internal::CartesianProductHolder2<Generator1, Generator2>(
+      g1, g2);
+}
     
-      static void inc_shared_count(counted_base* base, int64_t count) {
-    counted_ptr_base<Atom>::getRef(base)->add_ref(count);
+     private:
+  std::vector<TestPartResult> array_;
+    
+    #define GTEST_ASSERT_(expression, on_failure) \
+  GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
+  if (const ::testing::AssertionResult gtest_ar = (expression)) \
+    ; \
+  else \
+    on_failure(gtest_ar.failure_message())
+    
+    // This helper reduces code bloat.  If we instead put its logic inside
+// the previous ArrayEq() function, arrays with different sizes would
+// lead to different copies of the template code.
+template <typename T, typename U>
+bool ArrayEq(const T* lhs, size_t size, const U* rhs) {
+  for (size_t i = 0; i != size; i++) {
+    if (!internal::ArrayEq(lhs[i], rhs[i]))
+      return false;
+  }
+  return true;
+}
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24>
+class ValueArray24 {
+ public:
+  ValueArray24(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
+      T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17,
+      T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23, T24 v24) : v1_(v1),
+      v2_(v2), v3_(v3), v4_(v4), v5_(v5), v6_(v6), v7_(v7), v8_(v8), v9_(v9),
+      v10_(v10), v11_(v11), v12_(v12), v13_(v13), v14_(v14), v15_(v15),
+      v16_(v16), v17_(v17), v18_(v18), v19_(v19), v20_(v20), v21_(v21),
+      v22_(v22), v23_(v23), v24_(v24) {}
+    }
+    
+    // SameSizeTuplePrefixComparator<k, k>::Eq(t1, t2) returns true if the
+// first k fields of t1 equals the first k fields of t2.
+// SameSizeTuplePrefixComparator(k1, k2) would be a compiler error if
+// k1 != k2.
+template <int kSize1, int kSize2>
+struct SameSizeTuplePrefixComparator;
+    
+    #include <limits.h>
+#include 'sample1.h'
+#include 'gtest/gtest.h'
+    
+    
+    {    return element;
   }
     
-    class SparseByteSetTest : public testing::Test {
- protected:
-  using lims = numeric_limits<uint8_t>;
-  SparseByteSet s;
+    
+    {        return std::tuple<ElementType *, SparseIndexType *, SparseIndexType *, size_t>(reinterpret_cast<ElementType*>(nonZeroValues), colStarts, rowIndices, numNonZeroValues);
+    }
+    
+            // (start, end) values in the current window to be reported.
+        std::pair<double, double> m_loss;
+        std::pair<double, double> m_metric;
+        std::pair<size_t, size_t> m_samples;
+        std::pair<size_t, size_t> m_updates;
+    
+            for (const auto& key : requiredKeys)
+        {
+            if (!dict.Contains(key))
+            {
+                 LogicError('Required key '%ls' is not found in the dictionary (%s).',
+                            key.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
+            }
+        }
+    
+            if (evaluationFunction)
+        {
+            auto evalArgs = GetCombinedEvalFunctionArgs();
+            combinedFunctionArgs.insert(combinedFunctionArgs.end(), evalArgs.begin(), evalArgs.end());
+    }
+    
+            const ElementType *currentp = source;
+        const ElementType *lastp = source + sampleCount * sampleSize;
+        size_t destIndex = 0;
+        while (currentp < lastp)
+        {
+            size_t index = sampleSize;
+            bool found = false;
+            for (size_t i = 0; i < sampleSize; i++)
+            {
+                if (*currentp == (ElementType)1)
+                {
+                    if (found)
+                        RuntimeError('CopyDenseToOneHot: Cannot convert to onehot vector; more than one non-zero value in the sample.');
+    }
+    }
+    }
+    
+    
+    {
+    {
+    {}}}
+
+    
+    public:
+    ScopeTimer(size_t verbosity, const std::string& message)
+        : m_verbosity(verbosity), m_message(message)
+    {
+        if (m_verbosity > 2)
+        {
+            m_aggregateTimer.Start();
+        }
+    }
+    
+            if (Input(1)->HasMBLayout())
+        {
+            // infer rows1 as rows0
+            Input(1)->ValidateInferInputDimsFrom(TensorShape(rows0));
+            SetDims(TensorShape(rows0), true);
+        }
+        else // multiplying two straight matrices
+        {
+            size_t cols1 = Input(1)->GetAsMatrixNumCols();
+            // infer rows1 as rows0
+            Input(1)->ValidateInferInputDimsFrom(TensorShape(rows0, cols1));
+            SetDims(TensorShape(rows0, cols1), false);
+        }
+    
+        // get tensor shapes
+    let& shapeA = Input(0)->GetSampleLayout(); // parameters
+    let& shapeB = Input(1)->GetSampleLayout(); // data
+    auto dimsA = shapeA.GetDims();
+    auto dimsB = shapeB.GetDims();
+    
+    
+ScriptSet &ScriptSet::set(UScriptCode script, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return *this;
+    }
+    if (script < 0 || script >= (int32_t)sizeof(bits) * 8) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return *this;
+    }
+    uint32_t index = script / 32;
+    uint32_t bit   = 1 << (script & 31);
+    bits[index] |= bit;
+    return *this;
+}
+    
+    #ifndef __SCRIPTSET_H__
+#define __SCRIPTSET_H__
+    
+    SharedBreakIterator::~SharedBreakIterator() {
+  delete ptr;
+}
+    
+    U_NAMESPACE_BEGIN
+    
+            ListNode* dummyHead = new ListNode(0);
+        dummyHead->next = head;
+    
+        head = Solution().swapPairs(head);
+    printLinkedList(head);
+    
+    using namespace std;
+    
+            prev1->next = dummyHead2->next;
+        ListNode* ret = dummyHead1->next;
+    
+    
+    {            res[level].push_back(node->val);
+            if(node->left)
+                q.push(make_pair(node->left, level + 1 ));
+            if(node->right)
+                q.push(make_pair(node->right, level + 1 ));
+        }
+    
+    
+    {    return 0;
+}
+    
+    
+    {
+    {
+    {            if(command.s == 'print')
+                res.push_back(command.node->val);
+            else{
+                assert(command.s == 'go');
+                if(command.node->right)
+                    stack.push(Command('go',command.node->right));
+                if(command.node->left)
+                    stack.push(Command('go',command.node->left));
+                stack.push(Command('print', command.node));
+            }
+        }
+        return res;
+    }
 };
+    
+    
+    {    return 0;
+}
+
+    
+            vector<int> res;
+        if(root == NULL)
+            return res;
+    
+    
+    
+    
+  virtual ~Extension_ping_presult() throw();
+  ExtensionStatus* success;
+    
+    void swap(ExtensionResponse &a, ExtensionResponse &b) {
+  using ::std::swap;
+  swap(a.status, b.status);
+  swap(a.response, b.response);
+  swap(a.__isset, b.__isset);
+}
+    
+    #include <osquery/utils/expected/expected.h>
+#include <osquery/utils/system/linux/perf_event/perf_event.h>
+    
+    EbpfTracepoint& EbpfTracepoint::operator=(EbpfTracepoint&& other) {
+  std::swap(system_event_, other.system_event_);
+  std::swap(program_, other.program_);
+  std::swap(fd_, other.fd_);
+  return *this;
+}
+    
+    
+    {  if (isEventTypeExit(in_event.type)) {
+    auto enter = std::move(it->second);
+    enter.return_value = in_event.body.exit.ret;
+    table_.erase(it);
+    return enter;
+  }
+  in_event.return_value = it->second.body.exit.ret;
+  table_.erase(it);
+  return in_event;
+}
+    
+    enum class EventType : __s32 {
+  Unknown = 0,
+  KillEnter = 1,
+  KillExit = -KillEnter,
+  SetuidEnter = 2,
+  SetuidExit = -SetuidEnter,
+};
+    
+        {BPF_ALU64 | BPF_X | BPF_MOV , BPF_REG_1, BPF_REG_10,    0,  0}, // r1 = r10
+    {BPF_ALU64 | BPF_K | BPF_ADD , BPF_REG_1,          0,    0,  -28}, // r1 += -36
+    {BPF_ALU64 | BPF_K | BPF_MOV , BPF_REG_2,          0,    0, syscall::kCommSize},   // r2 = SyscallEvent::kCommSize
+    {BPF_JMP | BPF_K | BPF_CALL  ,         0,          0,    0, BPF_FUNC_get_current_comm}, // call
+    
+    namespace rocksdb {
+    }
+    
+    // Returns an Env that translates paths such that the root directory appears to
+// be chroot_dir. chroot_dir should refer to an existing directory.
+Env* NewChrootEnv(Env* base_env, const std::string& chroot_dir);
+    
+    // Take a default PlainTableOptions 'table_options' in addition to a
+// map 'opts_map' of option name to option value to construct the new
+// PlainTableOptions 'new_table_options'.
+//
+// @param table_options the default options of the output 'new_table_options'.
+// @param opts_map an option name to value map for specifying how
+//     'new_table_options' should be set.
+// @param new_table_options the resulting options based on 'table_options'
+//     with the change specified in 'opts_map'.
+// @param input_strings_escaped when set to true, each escaped characters
+//     prefixed by '\' in the values of the opts_map will be further converted
+//     back to the raw string before assigning to the associated options.
+// @param ignore_unknown_options when set to true, unknown options are ignored
+//     instead of resulting in an unknown-option error.
+// @return Status::OK() on success.  Otherwise, a non-ok status indicating
+//     error will be returned, and 'new_table_options' will be set to
+//     'table_options'.
+Status GetPlainTableOptionsFromMap(
+    const PlainTableOptions& table_options,
+    const std::unordered_map<std::string, std::string>& opts_map,
+    PlainTableOptions* new_table_options, bool input_strings_escaped = false,
+    bool ignore_unknown_options = false);
+    
+    // Supported only for Leveled compaction
+Status SuggestCompactRange(DB* db, ColumnFamilyHandle* column_family,
+                           const Slice* begin, const Slice* end);
+Status SuggestCompactRange(DB* db, const Slice* begin, const Slice* end);
+    
+    class DB;
+    
+      static Status Open(const Options& options, const std::string& dbname,
+                     DBWithTTL** dbptr, int32_t ttl = 0,
+                     bool read_only = false);
+    
+      // Any internal progress/error information generated by the db will
+  // be written to info_log if it is non-NULL, or to a file stored
+  // in the same directory as the DB contents if info_log is NULL.
+  // Default: NULL
+  Logger* info_log;
+    
+    TEST(ByteTest, SetBit) {
+  unsigned char byte_value = 0xFF;
+  Byte value(&byte_value);
+  value.set_bit_0(1);
+  EXPECT_EQ(0xFD, value.get_byte());
+  value.set_bit_0(7);
+  EXPECT_EQ(0x7D, value.get_byte());
+  value.set_bit_1(7);
+  EXPECT_EQ(0xFD, value.get_byte());
+  value.set_value(0x77);
+  value.set_bit_1(0);
+  EXPECT_EQ(0x77, value.get_byte());
+    }
+    
+    TEST(TestPiecewiseLinearConstraint, add_derivative_boundary) {
+  PiecewiseLinearConstraint constraint(10, 0.1);
+  std::vector<uint32_t> index_list;
+  std::vector<double> lower_bound;
+  std::vector<double> upper_bound;
+  for (uint32_t i = 0; i < 10; ++i) {
+    index_list.push_back(i);
+    lower_bound.push_back(1.0);
+    upper_bound.push_back(100.0);
+  }
+    }
+    
+    void SplineSegKernel::IntegratedTermMatrix(const uint32_t num_params,
+                                           const double x,
+                                           const std::string& type,
+                                           Eigen::MatrixXd* term_matrix) const {
+  if (term_matrix->rows() != term_matrix->cols() ||
+      term_matrix->rows() != static_cast<int>(num_params)) {
+    term_matrix->resize(num_params, num_params);
+  }
+    }
+    
+    
+    {  double length_2 = 50.0;
+  const LaneGraph &lane_graph_2 =
+      ObstacleClusters::GetLaneGraph(start_s, length_2, lane);
+  EXPECT_EQ(1, lane_graph_2.lane_sequence_size());
+  EXPECT_EQ(3, lane_graph_2.lane_sequence(0).lane_segment_size());
+  EXPECT_EQ('l9', lane_graph_2.lane_sequence(0).lane_segment(0).lane_id());
+  EXPECT_EQ('l18', lane_graph_2.lane_sequence(0).lane_segment(1).lane_id());
+  EXPECT_EQ('l21', lane_graph_2.lane_sequence(0).lane_segment(2).lane_id());
+}
+    
+        int i;
+    for (i = 0; i < SIZE - 1; i++)
+    {
+        int pri = swoole_system_random(10000, 99999);
+        ns = (node_t*) malloc(sizeof(node_t));
+        ns->val = i;
+        ns->pri = pri;
+        swHeap_push(pq, pri, ns);
+        _map[i] = pri;
+    }
+    
+    
+    {    for (auto i = lists.begin(); i != lists.end(); i++)
+    {
+        int ret = (int) (long) swRbtree_find(tree, *i);
+        ASSERT_EQ(ret, 0);
+    }
+}
+
+    
+        shared_ptr<string> val_str = make_shared<string>('hello');
+    cache.set('test1', val_str); // update test1 and will del test2
+    ASSERT_EQ(cache.get('test1').get(), val_str.get());
+    ASSERT_EQ(dtor_num, 2);
+    
+            if (expire <= 0)
+        {
+            expire_time = 0;
+        }
+        else
+        {
+            expire_time = time(nullptr) + expire;
+        }
+    
+    
+    {        SwooleG.main_reactor = (swReactor *) malloc(sizeof(swReactor));
+        if (SwooleG.main_reactor == NULL)
+        {
+            swWarn('malloc failed.');
+        }
+        if (swReactor_create(SwooleG.main_reactor, SW_REACTOR_MAXEVENTS) < 0)
+        {
+            swWarn('create reactor failed.');
+        }
+        //client, swoole_event_exit will set swoole_running = 0
+        SwooleWG.in_client = 1;
+        SwooleWG.reactor_wait_onexit = 1;
+        SwooleWG.reactor_ready = 0;
+    }
