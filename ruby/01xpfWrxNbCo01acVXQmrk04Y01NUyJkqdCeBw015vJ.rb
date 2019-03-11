@@ -1,183 +1,169 @@
 
         
-              it 'sets the project directory to other and the toolchain to Swift_2_3' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          carthage(toolchain: 'com.apple.dt.toolchain.Swift_2_3', project_directory: 'other')
-        end').runner.execute(:test)
+                  def initialize(template_object, object_name, method_name, object,
+                         sanitized_attribute_name, text, value, input_html_options)
+            @template_object = template_object
+            @object_name = object_name
+            @method_name = method_name
+            @object = object
+            @sanitized_attribute_name = sanitized_attribute_name
+            @text = text
+            @value = value
+            @input_html_options = input_html_options
+          end
     
-          it 'raises an exception when the default compile_commands.json is not present' do
-        expect do
-          Fastlane::FastFile.new.parse('lane :test do
-            oclint
-          end').runner.execute(:test)
-        end.to raise_error('Could not find json compilation database at path 'compile_commands.json'')
+              super(object_name, method_name, template_object, options)
+        end
+    
+            def render
+          options = @options.stringify_keys
+          options['size'] = options['maxlength'] unless options.key?('size')
+          options['type'] ||= field_type
+          options['value'] = options.fetch('value') { value_before_type_cast } unless field_type == 'file'
+          add_default_name_and_id(options)
+          tag('input', options)
+        end
+    
+          test 'when specify an :except option which does not match current action name' do
+        controller = WithExceptConditional.new
+        controller.process(:index)
+        assert_equal 'Overwrite Hello index!', controller.response_body
       end
     
-          context 'the `ignore_exit_status` option' do
-        context 'by default' do
-          it 'should raise if swiftlint completes with a non-zero exit status' do
-            allow(FastlaneCore::UI).to receive(:important)
-            expect(FastlaneCore::UI).to receive(:important).with(/If you want fastlane to continue anyway/)
-            # This is simulating the exception raised if the return code is non-zero
-            expect(Fastlane::Actions).to receive(:sh).and_raise('fake error')
-            expect(FastlaneCore::UI).to receive(:user_error!).with(/SwiftLint finished with errors/).and_call_original
+    def liquid_escape(markdown)
+  markdown.gsub(%r!(`{[{%].+[}%]}`)!, '{% raw %}\\1{% endraw %}')
+end
     
-        describe 'shell escaping' do
-      let(:keychain_name) { 'keychain with spaces.keychain' }
-      let(:shell_escaped_name) { keychain_name.shellescape }
-      let(:name_regex) { Regexp.new(Regexp.escape(shell_escaped_name)) }
+    def envygeeks(url)
+  return url if url.end_with?(FORWARD_SLASH) || url == FORWARD_SLASH
     
-    # The * turns the array into a parameter list
-# This is using the form of exec which takes a variable parameter list, e.g. `exec(command, param1, param2, ...)`
-# We need to use that, because otherwise invocations like
-# `spaceauth -u user@fastlane.tools` would recognize '-u user@fastlane.tools' as a single parameter and throw errors
-exec(*exec_arr)
+    if pathutil_relative == native_relative
+  Benchmark.ips do |x|
+    x.report('pathutil') { pathutil_relative }
+    x.report('native')   { native_relative }
+    x.compare!
+  end
+else
+  print 'PATHUTIL: '
+  puts pathutil_relative
+  print 'NATIVE:   '
+  puts native_relative
+end
 
     
-      describe '#nav_link' do
-    it 'returns a nav link' do
-      stub(self).current_page?('/things') { false }
-      nav = nav_link('Things', '/things')
-      a = Nokogiri(nav).at('li:not(.active) > a[href='/things']')
-      expect(a.text.strip).to eq('Things')
-    end
+            # rubocop:disable Metrics/AbcSize
+        def process(args, opts)
+          if !args || args.empty?
+            raise Jekyll::Errors::InvalidThemeName, 'You must specify a theme name.'
+          end
     
-        describe '#agents_dot' do
-      before do
-        @agents = [
-          @foo = Agents::DotFoo.new(name: 'foo').tap { |agent|
-            agent.user = users(:bob)
-            agent.save!
-          },
-    
-    describe AgentRunner do
-  context 'without traps' do
-    before do
-      stub.instance_of(Rufus::Scheduler).every
-      stub.instance_of(AgentRunner).set_traps
-      @agent_runner = AgentRunner.new
-    end
-    
-        it 'should provide the since attribute after the first run' do
-      time = (Time.now-1.minute).iso8601
-      @checker.memory[:last_event] = time
-      @checker.save
-      expect(@checker.reload.send(:query_parameters)).to eq({:query => {:since => time}})
-    end
-  end
-    
-        it 'should raise error when response says unauthorized' do
-      stub(HTTParty).post { {'Response' => 'Not authorized'} }
-      expect { @checker.send_notification({}) }.to raise_error(StandardError, /Not authorized/)
-    end
-    
-      # log-levels from the diaspora.yml for SQL and federation debug-logging
-  Logging.logger[ActionView::Base].level = Rails.env.development? ? :debug : :warn
-  Logging.logger[ActiveRecord::Base].level = AppConfig.environment.logging.debug.sql? ? :debug : :info
-  Logging.logger[DiasporaFederation::Salmon::MagicEnvelope].level =
-    AppConfig.environment.logging.debug.federation? ? :debug : :info
-    
-        remove_duplicates
-    remove_index :share_visibilities, name: :shareable_and_user_id
-    add_index :share_visibilities, %i(shareable_id shareable_type user_id), name: :shareable_and_user_id, unique: true
-    
-      class SendPublic < Base
-    def perform(*_args)
-      # don't federate in cucumber
-    end
-  end
-    
-        context 'on my own post' do
-      it 'succeeds' do
-        @target = alice.post :status_message, text: 'AWESOME', to: @alices_aspect.id
-        post :create, params: like_hash, format: :json
-        expect(response.code).to eq('201')
-      end
-    end
-    
-    require 'sass/version'
-    
-          out =
-        Sass::Util.silence_sass_warnings do
-          if @options[:from] == :css
-            require 'sass/css'
-            Sass::CSS.new(read(input), @options[:for_tree]).render(@options[:to])
+                # stream_file_data would free us from keeping livereload.js in memory
+            # but JRuby blocks on that call and never returns
+            send_data(reload_body)
+            close_connection_after_writing
           else
-            if input_path
-              Sass::Engine.for_file(input_path, @options[:for_engine])
-            else
-              Sass::Engine.new(read(input), @options[:for_engine])
-            end.to_tree.send('to_#{@options[:to]}', @options[:for_tree])
+            body = 'This port only serves livereload.js over HTTP.\n'
+            headers = [
+              'HTTP/1.1 400 Bad Request',
+              'Content-Type: text/plain',
+              'Content-Length: #{body.bytesize}',
+              '',
+              '',
+            ].join('\r\n')
+            send_data(headers)
+            send_data(body)
+            close_connection_after_writing
           end
         end
-    
-    abstract_target 'Abstract Target' do
-    use_modular_headers!
-    
-            expect(new_source)
-          .to eq('#{prefix}#{open}#{a}, # a\n#{b}#{close} # b\n#{suffix}')
-      end
-    
-          # A shorthand for getting the last argument of the node.
-      # Equivalent to `arguments.last`.
-      #
-      # @return [Node, nil] the last argument of the node,
-      #                     or `nil` if there are no arguments
-      def last_argument
-        arguments[-1]
-      end
-    
-            self
-      end
-    
-              unless inventory_unit.respond_to?(can_event) &&
-              inventory_unit.send(can_event)
-            render plain: { exception: 'cannot transition to #{@event}' }.to_json,
-                   status: 200
-            false
-          end
-        end
-    
-            def scope
-          @scope ||= if params[:option_type_id]
-                       Spree::OptionType.find(params[:option_type_id]).option_values.accessible_by(current_ability, :read)
-                     else
-                       Spree::OptionValue.accessible_by(current_ability, :read).load
-                     end
-        end
-    
-              @properties = if params[:ids]
-                          @properties.where(id: params[:ids].split(',').flatten)
-                        else
-                          @properties.ransack(params[:q]).result
-                        end
-    
-            def load_transfer_params
-          @original_shipment         = Spree::Shipment.find_by!(number: params[:original_shipment_number])
-          @variant                   = Spree::Variant.find(params[:variant_id])
-          @quantity                  = params[:quantity].to_i
-          authorize! :read, @original_shipment
-          authorize! :create, Shipment
-        end
-    
-            def scope
-          if params[:country_id]
-            @country = Country.accessible_by(current_ability, :read).find(params[:country_id])
-            @country.states.accessible_by(current_ability, :read).order('name ASC')
-          else
-            State.accessible_by(current_ability, :read).order('name ASC')
-          end
-        end
+        # rubocop:enable Metrics/MethodLength
       end
     end
   end
 end
 
     
-            private
+            is_swift = FastlaneCore::FastlaneFolder.swift?
+        fastlane_client_language = is_swift ? :swift : :ruby
+        action_launch_context = FastlaneCore::ActionLaunchContext.context_for_action_name(@program[:name], fastlane_client_language: fastlane_client_language, args: ARGV)
+        FastlaneCore.session.action_launched(launch_context: action_launch_context)
     
-              @users = @users.result.page(params[:page]).per(params[:per_page])
-          expires_in 15.minutes, public: true
-          headers['Surrogate-Control'] = 'max-age=#{15.minutes}'
-          respond_with(@users)
+          it 'allows you to specify a prefix' do
+        prefix = '16309-'
+    
+          it 'works with exclude regex' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            oclint(
+              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
+              exclude_regex: /Test/
+            )
+          end').runner.execute(:test)
+    
+          if conflicting_options
+        conflicting_options.each do |conflicting_option_key|
+          UI.user_error!('Conflicting option key must be a symbol') unless conflicting_option_key.kind_of?(Symbol)
         end
+      end
+    
+          it 'should shell escape keychain names when checking for installation' do
+        expect(FastlaneCore::CertChecker).to receive(:wwdr_keychain).and_return(keychain_name)
+        expect(FastlaneCore::Helper).to receive(:backticks).with(name_regex, anything).and_return('')
+    
+        os = 'windows'
+    shelljoin_testcases.each do |testcase|
+      it testcase['it'] + ': ' + testcase['it_result'][os] do
+        array = testcase['input']
+        expect_correct_implementation_to_be_called(array, :shelljoin, os)
+        joined = array.shelljoin
+        expect(joined).to eq(testcase['expect'][os])
+      end
+    end
+  end
+    
+          spec['main'] =
+          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
+          find_files.(Bootstrap.fonts_path) +
+          %w(assets/javascripts/bootstrap.js)
+    
+        def silence_log
+      @silence = true
+      yield
+    ensure
+      @silence = false
+    end
+  end
+end
+
+    
+        def bubble_subject(root)
+      root.children.each do |child|
+        bubble_subject(child) if child.is_a?(Tree::RuleNode) || child.is_a?(Tree::DirectiveNode)
+        next unless child.is_a?(Tree::RuleNode) && !child.children.empty?
+        next unless child.children.all? do |c|
+          next unless c.is_a?(Tree::RuleNode)
+          first_simple_sel(c).is_a?(Sass::Selector::Parent) && first_sseq(c).subject?
+        end
+        first_sseq(child).subject = true
+        child.children.each {|c| first_sseq(c).subject = false}
+      end
+    end
+    
+        # The options for the Sass engine.
+    # See {file:SASS_REFERENCE.md#Options the Sass options documentation}.
+    #
+    # @return [{Symbol => Object}]
+    attr_reader :options
+    
+            @options[:sourcemap] = (type || :auto).to_sym
+      end
+    
+          REDUNDANT_DIRECTORY = /#{Regexp.escape(File::SEPARATOR)}\.#{Regexp.escape(File::SEPARATOR)}/
+      # Given a base directory and an `@import`ed name,
+      # finds an existent file that matches the name.
+      #
+      # @param dir [String] The directory relative to which to search.
+      # @param name [String] The filename to search for.
+      # @return [(String, Symbol)] A filename-syntax pair.
+      def find_real_file(dir, name, options)
+        # On windows 'dir' or 'name' can be in native File::ALT_SEPARATOR form.
+        dir = dir.gsub(File::ALT_SEPARATOR, File::SEPARATOR) unless File::ALT_SEPARATOR.nil?
+        name = name.gsub(File::ALT_SEPARATOR, File::SEPARATOR) unless File::ALT_SEPARATOR.nil?
