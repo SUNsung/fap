@@ -1,185 +1,292 @@
 
         
-        #include 'b2Triangle.h'
+            const QString &getAppName() const { return appName; }
+    const QIcon &getAppIcon() const { return appIcon; }
+    const QIcon &getTrayAndWindowIcon() const { return trayAndWindowIcon; }
+    const QString &getTitleAddText() const { return titleAddText; }
     
-    			a_pMipmapImages[mip].paucEncodingBits = std::shared_ptr<unsigned char>(image.GetEncodingBits(), [](unsigned char *p) { delete[] p; });
-			a_pMipmapImages[mip].uiEncodingBitsBytes = image.GetEncodingBitsBytes();
-			a_pMipmapImages[mip].uiExtendedWidth = image.GetExtendedWidth();
-			a_pMipmapImages[mip].uiExtendedHeight = image.GetExtendedHeight();
+        ~reverse_lock() {
+        templock.lock();
+        templock.swap(lock);
+    }
     
-    	void EncodeMipmaps(float *a_pafSourceRGBA,
-		unsigned int a_uiSourceWidth,
-		unsigned int a_uiSourceHeight,
-		Image::Format a_format,
-		ErrorMetric a_eErrMetric,
-		float a_fEffort,
-		unsigned int a_uiJobs,
-		unsigned int a_uiMaxJobs,
-		unsigned int a_uiMaxMipmaps,
-		unsigned int a_uiMipFilterFlags,
-		RawImage* a_pMipmaps,
-		int *a_piEncodingTime_ms, bool a_bVerboseOutput = false);
+    /** Perform one SHA-256 transformation, processing 16 big endian 32-bit words. */
+static void secp256k1_sha256_transform(uint32_t* s, const uint32_t* chunk) {
+    uint32_t a = s[0], b = s[1], c = s[2], d = s[3], e = s[4], f = s[5], g = s[6], h = s[7];
+    uint32_t w0, w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w11, w12, w13, w14, w15;
+    }
     
-    		m_sourcealphamix = SourceAlphaMix::UNKNOWN;
-		m_boolBorderPixels = false;
-		m_boolPunchThroughPixels = false;
+    #include 'include/secp256k1_ecdh.h'
+#include 'ecmult_const_impl.h'
     
     
-    {	};
+    {    /* cleanup */
+    secp256k1_context_destroy(none);
+    secp256k1_context_destroy(sign);
+    secp256k1_context_destroy(vrfy);
+    secp256k1_context_destroy(both);
+}
+    
+    // Based on the public domain implementation 'merged' by D. J. Bernstein
+// See https://cr.yp.to/chacha.html.
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the predictions @f$ x @f$, a Blob with values in
+   *      @f$ [-\infty, +\infty] @f$ indicating the predicted score for each of
+   *      the @f$ K = CHW @f$ classes. Each @f$ x_n @f$ is mapped to a predicted
+   *      label @f$ \hat{l}_n @f$ given by its maximal index:
+   *      @f$ \hat{l}_n = \arg\max\limits_k x_{nk} @f$
+   *   -# @f$ (N \times 1 \times 1 \times 1) @f$
+   *      the labels @f$ l @f$, an integer-valued Blob with values
+   *      @f$ l_n \in [0, 1, 2, ..., K - 1] @f$
+   *      indicating the correct class label among the @f$ K @f$ classes
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
+   *      the computed accuracy: @f$
+   *        \frac{1}{N} \sum\limits_{n=1}^N \delta\{ \hat{l}_n = l_n \}
+   *      @f$, where @f$
+   *      \delta\{\mathrm{condition}\} = \left\{
+   *         \begin{array}{lr}
+   *            1 & \mbox{if condition} \\
+   *            0 & \mbox{otherwise}
+   *         \end{array} \right.
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    #include <vector>
     
     
-  /* an auxiliary macro to decode a UTF-8 character -- since we only use */
-  /* hard-coded, self-converted data, no error checking is performed     */
-#define GET_UTF8_CHAR( ch, p )                      \
-          do                                        \
-          {                                         \
-            ch = (unsigned char)*p++;               \
-            if ( ch >= 0x80 )                       \
-            {                                       \
-              FT_UInt  len_;                        \
-                                                    \
-                                                    \
-              if ( ch < 0xE0 )                      \
-              {                                     \
-                len_ = 1;                           \
-                ch  &= 0x1F;                        \
-              }                                     \
-              else if ( ch < 0xF0 )                 \
-              {                                     \
-                len_ = 2;                           \
-                ch  &= 0x0F;                        \
-              }                                     \
-              else                                  \
-              {                                     \
-                len_ = 3;                           \
-                ch  &= 0x07;                        \
-              }                                     \
-                                                    \
-              for ( ; len_ > 0; len_-- )            \
-                ch = ( ch << 6 ) | ( *p++ & 0x3F ); \
-            }                                       \
-          } while ( 0 )
+    {}  // namespace caffe
     
-            if (m_UsingPolyTree) FixupFirstLefts2(outRec2, outRec1);
+    #endif  // CAFFE_CONCAT_LAYER_HPP_
+
     
     
-    {  friend inline bool operator== (const IntPoint& a, const IntPoint& b)
-  {
-    return a.X == b.X && a.Y == b.Y;
+    {} // namespace caffe2
+
+    
+    namespace caffe2 {
+    }
+    
+    const AuthProperty AuthPropertyIterator::operator*() {
+  return std::pair<grpc::string_ref, grpc::string_ref>(
+      property_->name,
+      grpc::string_ref(property_->value, property_->value_length));
+}
+    
+    grpc::string ChannelArguments::GetSslTargetNameOverride() const {
+  for (unsigned int i = 0; i < args_.size(); i++) {
+    if (grpc::string(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG) == args_[i].key) {
+      return args_[i].value.string;
+    }
   }
-  friend inline bool operator!= (const IntPoint& a, const IntPoint& b)
-  {
-    return a.X != b.X  || a.Y != b.Y; 
+  return '';
+}
+    
+    bool ProtoServerReflectionPlugin::has_async_methods() const {
+  if (reflection_service_) {
+    return reflection_service_->has_async_methods();
   }
-};
-//------------------------------------------------------------------------------
-    
-    int opus_fft_alloc_arm_neon(kiss_fft_state *st);
-void opus_fft_free_arm_neon(kiss_fft_state *st);
-    
-    /** 16x32 multiply, followed by a 16-bit shift right and 32-bit add.
-    Result fits in 32 bits. */
-#undef MAC16_32_Q16
-#define MAC16_32_Q16(c, a, b) ADD32(c, MULT16_32_Q16(a, b))
-    
-    #endif /* OPUS_ARM_INLINE_MEDIA */
-    
-    /** Add two 16-bit values */
-#define ADD16(a,b) ((opus_val16)((opus_val16)(a)+(opus_val16)(b)))
-/** Subtract two 16-bit values */
-#define SUB16(a,b) ((opus_val16)(a)-(opus_val16)(b))
-/** Add two 32-bit values */
-#define ADD32(a,b) ((opus_val32)(a)+(opus_val32)(b))
-/** Subtract two 32-bit values */
-#define SUB32(a,b) ((opus_val32)(a)-(opus_val32)(b))
-    
-    /*!
- * Initialize/reset the resampler state for a given pair of input/output sampling rates
-*/
-opus_int silk_resampler_init(
-    silk_resampler_state_struct *S,                 /* I/O  Resampler state                                             */
-    opus_int32                  Fs_Hz_in,           /* I    Input sampling rate (Hz)                                    */
-    opus_int32                  Fs_Hz_out,          /* I    Output sampling rate (Hz)                                   */
-    opus_int                    forEnc              /* I    If 1: encoder; if 0: decoder                                */
-);
-    
-    /*!
- * \brief Macro to register linear updater.
- */
-#define XGBOOST_REGISTER_LINEAR_UPDATER(UniqueId, Name)                        \
-  static DMLC_ATTRIBUTE_UNUSED ::xgboost::LinearUpdaterReg&                    \
-      __make_##LinearUpdaterReg##_##UniqueId##__ =                             \
-          ::dmlc::Registry< ::xgboost::LinearUpdaterReg>::Get()->__REGISTER__( \
-              Name)
+  return false;
+}
     
     
-    { private:
-  // default chunk size.
-  static const size_t kChunkSize = 64 << 10UL;
-  // maximum chunk size.
-  static const size_t kMaxChunk = 128;
-  // bool whether use hc
-  bool use_lz4_hc_;
-  // number of threads
-  int nthread_;
-  // number of writing threads
-  int nthread_write_;
-  // raw bytes
-  size_t raw_bytes_, raw_bytes_index_, raw_bytes_value_;
-  // encoded bytes
-  size_t encoded_bytes_index_, encoded_bytes_value_;
-  /*! \brief minimum index value */
-  uint32_t min_index_;
-  /*! \brief external memory column offset */
-  std::vector<size_t> disk_offset_;
-  // internal index
-  CompressArray<StorageIndex> index_;
-  // value set.
-  CompressArray<bst_float> value_;
-};
+    {}  // namespace grpc
     
-    using namespace std;
+    #include <grpc/support/log.h>
     
-    using namespace std;
-    
-    // Time Complexity: O(n)
-// Space Complexity: O(1)
-class Solution {
-public:
-    ListNode* swapPairs(ListNode* head) {
+    namespace grpc {
+namespace load_reporter {
     }
     }
     
-    #include <iostream>
-#include <vector>
-#include <cassert>
+    // Read through the first n keys repeatedly and check that they get
+// compacted (verified by checking the size of the key space).
+void AutoCompactTest::DoReads(int n) {
+  std::string value(kValueSize, 'x');
+  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
+    }
+    
+    #ifndef STORAGE_LEVELDB_DB_DB_ITER_H_
+#define STORAGE_LEVELDB_DB_DB_ITER_H_
+    
+    void InternalKeyComparator::FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const {
+  // Attempt to shorten the user portion of the key
+  Slice user_start = ExtractUserKey(*start);
+  Slice user_limit = ExtractUserKey(limit);
+  std::string tmp(user_start.data(), user_start.size());
+  user_comparator_->FindShortestSeparator(&tmp, user_limit);
+  if (tmp.size() < user_start.size() &&
+      user_comparator_->Compare(user_start, tmp) < 0) {
+    // User key has become shorter physically, but larger logically.
+    // Tack on the earliest possible number to the shortened user key.
+    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
+    assert(this->Compare(*start, tmp) < 0);
+    assert(this->Compare(tmp, limit) < 0);
+    start->swap(tmp);
+  }
+}
+    
+    // Filter policy wrapper that converts from internal keys to user keys
+class InternalFilterPolicy : public FilterPolicy {
+ private:
+  const FilterPolicy* const user_policy_;
+ public:
+  explicit InternalFilterPolicy(const FilterPolicy* p) : user_policy_(p) { }
+  virtual const char* Name() const;
+  virtual void CreateFilter(const Slice* keys, int n, std::string* dst) const;
+  virtual bool KeyMayMatch(const Slice& key, const Slice& filter) const;
+};
+    
+    // Header is checksum (4 bytes), length (2 bytes), type (1 byte).
+static const int kHeaderSize = 4 + 2 + 1;
     
     
-    {            res[level].push_back(node->val);
-            if(node->left)
-                q.push(make_pair(node->left, level + 1 ));
-            if(node->right)
-                q.push(make_pair(node->right, level + 1 ));
-        }
+    {  // Write the header and the payload
+  Status s = dest_->Append(Slice(buf, kHeaderSize));
+  if (s.ok()) {
+    s = dest_->Append(Slice(ptr, n));
+    if (s.ok()) {
+      s = dest_->Flush();
+    }
+  }
+  block_offset_ += kHeaderSize + n;
+  return s;
+}
+    
+      void SetComparatorName(const Slice& name) {
+    has_comparator_ = true;
+    comparator_ = name.ToString();
+  }
+  void SetLogNumber(uint64_t num) {
+    has_log_number_ = true;
+    log_number_ = num;
+  }
+  void SetPrevLogNumber(uint64_t num) {
+    has_prev_log_number_ = true;
+    prev_log_number_ = num;
+  }
+  void SetNextFile(uint64_t num) {
+    has_next_file_number_ = true;
+    next_file_number_ = num;
+  }
+  void SetLastSequence(SequenceNumber seq) {
+    has_last_sequence_ = true;
+    last_sequence_ = seq;
+  }
+  void SetCompactPointer(int level, const InternalKey& key) {
+    compact_pointers_.push_back(std::make_pair(level, key));
+  }
+    
+    int main(int argc, char** argv) {
+  return leveldb::test::RunAllTests();
+}
+
+    
+    
+#endif  // STORAGE_LEVELDB_DB_WRITE_BATCH_INTERNAL_H_
+
+    
+    public:
+    vector<int> preorderTraversal(TreeNode* root) {
+    }
+    
+    
+    // exception type_error.304
+    try
+    {
+        // use at() on a non-object type
+        json str = 'I am a string';
+        str.at('the good') = 'Another string';
+    }
+    catch (json::type_error& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+    
+        /* Sets the Eye value of the Camera. 
+     * 
+     * @param eye The Eye value of the Camera.
+     * @js NA
+     */
+    void setEye(const Vec3 &eye);
+    void setEye(float x, float y, float z);
+    /* Returns the Eye value of the Camera. 
+     *
+     * @return The Eye value of the Camera.
+     * @js NA
+     */
+    const Vec3& getEye() const { return _eye; }
+    /* Sets the Center value of the Camera. 
+     *
+     * @param center The Center value of the Camera.
+     * @js NA
+     */
+    void setCenter(const Vec3 &center);
+    /* Returns the Center value of the Camera. 
+     *
+     * @return The Center value of the Camera.
+     * @js NA
+     */
+    const Vec3& getCenter() const { return _center; }
+    /* Sets the Up value of the Camera. 
+     *
+     * @param up The Up value of the Camera.
+     * @js NA
+     */
+    void setUp(const Vec3 &up);
+    /* Returns the Up value of the Camera. 
+     *
+     * @return The Up value of the Camera.
+     * @js NA
+     */
+    const Vec3& getUp() const { return _up; }
+    
+    
+    {        p = current;
+    }
+    
+    CallFunc * CallFunc::reverse() const
+{
+    // no reverse here, just return a clone
+    return this->clone();
+}
     
     
     {
     {
-    {            if(command.s == 'print')
-                res.push_back(command.node->val);
-            else{
-                assert(command.s == 'go');
-                if(command.node->right)
-                    stack.push(Command('go',command.node->right));
-                if(command.node->left)
-                    stack.push(Command('go',command.node->left));
-                stack.push(Command('print', command.node));
+    {            if ((action->getFlags() & flags) != 0 && action->getOriginalTarget() == target)
+            {
+                removeActionAtIndex(i, element);
+                --limit;
+            }
+            else
+            {
+                ++i;
             }
         }
-        return res;
     }
-};
+}
     
-            vector<int> res;
-        if(root == NULL)
-            return res;
+        /** Gets an action given its tag an a target.
+     *
+     * @param tag       The action's tag.
+     * @param target    A certain target.
+     * @return  The Action the with the given tag.
+     */
+    virtual Action* getActionByTag(int tag, const Node *target) const;
+    
+                p.y = ( R + ay - ( r * (1 - cosBeta) * sinTheta));
+    
+        _tiles = (struct Tile *)new Tile[_tilesCount];
+    Tile *tileArray = (Tile*) _tiles;
