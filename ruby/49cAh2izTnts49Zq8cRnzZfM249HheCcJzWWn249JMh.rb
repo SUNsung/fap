@@ -1,72 +1,123 @@
 
         
-              dt = Date.today
-      freeze_time dt
-    
-    UserOption.where(user_id: -1).update_all(
-  email_private_messages: false,
-  email_direct: false
-)
-    
-            last_simple_subject = rest.empty? && sseq.subject?
-        if current_rule.nil? || first_sseq(current_rule).members != firsts ||
-            !!first_sseq(current_rule).subject? != !!last_simple_subject
-          current_rule = Tree::RuleNode.new([])
-          current_rule.parsed_rules = make_sseq(last_simple_subject, *firsts)
+                def importer_class
+          DiffNoteImporter
         end
     
-          files.map! do |from, to|
-        to ||= from.gsub(/\.[^.]*?$/, '.css')
-        sourcemap = Sass::Util.sourcemap_name(to) if @options[:sourcemap]
-        [from, to, sourcemap]
-      end
-      dirs.map! {|from, to| [from, to || from]}
-      Sass::Plugin.options[:template_location] = dirs
+            def sidekiq_worker_class
+          ImportIssueWorker
+        end
     
-          # If this importer is based on files on the local filesystem This method
-      # should return true if the file, when changed, should trigger a
-      # recompile.
-      #
-      # It is acceptable for non-sass files to be watched and trigger a recompile.
-      #
-      # @param filename [String] The absolute filename for a file that has changed.
-      # @return [Boolean] When the file changed should cause a recompile.
-      def watched_file?(filename)
-        false
+                rows << {
+              label_id: label_id,
+              target_id: target_id,
+              target_type: issue.issuable_type,
+              created_at: time,
+              updated_at: time
+            }
+          end
+    
+            def sidekiq_worker_class
+          ImportNoteWorker
+        end
+    
+          # The base cache key to use for storing/retrieving issuable IDs.
+      CACHE_KEY = 'github-import/issuable-finder/%{project}/%{type}/%{iid}'.freeze
+    
+              result
+        end
+    
+    module Vagrant
+  module Plugin
+    module V1
+      # This is the superclass for all V1 plugins.
+      class Plugin
+        # Special marker that can be used for action hooks that matches
+        # all action sequences.
+        ALL_ACTIONS = :__all_actions__
+    
+                # If we have this machine in our index, load that.
+            entry = @env.machine_index.get(name.to_s)
+            if entry
+              @env.machine_index.release(entry)
+    
+            # This contains all the synced folder implementations by name.
+        #
+        # @return [Registry<Symbol, Array<Class, Integer>>]
+        attr_reader :synced_folders
+    
+            # This should return an action callable for the given name.
+        #
+        # @param [Symbol] name Name of the action.
+        # @return [Object] A callable action sequence object, whether it
+        #   is a proc, object, etc.
+        def action(name)
+          nil
+        end
+    
+      context 'every shim script' do
+    it 'has valid bash syntax' do
+      # These have no file extension, but can be identified by their shebang.
+      (HOMEBREW_LIBRARY_PATH/'shims').find do |path|
+        next if path.directory?
+        next if path.symlink?
+        next unless path.executable?
+        next unless path.read(12) == '#!/bin/bash\n'
+    
+        def log_processed(name)
+      puts green '    #{name}'
+    end
+    
+      gem 'rb-fsevent'
+  gem 'kicker'
+  gem 'awesome_print'
+  gem 'ruby-prof', :platforms => [:ruby]
+end
+
+    
+        pod 'ObjCPod', path: 'ObjCPod'
+    pod 'SwiftPod', path: 'SwiftPod'
+    pod 'MixedPod', path: 'MixedPod'
+    pod 'CustomModuleMapPod', path: 'CustomModuleMapPod'
+    
+          def response
+        return @response if defined? @response
+    
+          # Internal use only.
+      def peek(key, default=nil, &block)
+        value = fetch_for(key, default, &block)
+        while callable_without_parameters?(value)
+          value = (values[key] = value.call)
+        end
+        value
+      end
+    
+          def right_diff_line_number(id, line)
+        if line =~ /^@@/
+          m, ri                   = *line.match(/\+(\d+)/)
+          @right_diff_line_number = ri.to_i
+          @current_line_number    = @right_diff_line_number
+          ret                     = '...'
+        elsif line[0] == ?-
+          ret = ' '
+        elsif line[0] == ?+
+          ret                     = @right_diff_line_number.to_s
+          @right_diff_line_number += 1
+          @current_line_number    = @right_diff_line_number - 1
+        else
+          ret                     = @right_diff_line_number.to_s
+          @right_diff_line_number += 1
+          @current_line_number    = @right_diff_line_number - 1
+        end
+        ret
       end
     end
   end
 end
 
     
-            sourcemap_pathname = Sass::Util.cleanpath(sourcemap_directory)
-        begin
-          Sass::Util.file_uri_from_path(
-            Sass::Util.relative_path_from(file_pathname, sourcemap_pathname))
-        rescue ArgumentError # when a relative path cannot be constructed
-          Sass::Util.file_uri_from_path(file_pathname)
-        end
+          def title
+        'Latest Changes (Globally)'
       end
     
-    Gem::Specification.new do |gem|
-  gem.name          = 'capistrano'
-  gem.version       = Capistrano::VERSION
-  gem.authors       = ['Tom Clements', 'Lee Hambley']
-  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
-  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
-  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
-  gem.homepage      = 'http://capistranorb.com/'
-    
-    Given(/^file '(.*?)' does not exist in shared path$/) do |file|
-  file_shared_path = TestApp.shared_path.join(file)
-  run_vagrant_command('mkdir -p #{TestApp.shared_path}')
-  run_vagrant_command('touch #{file_shared_path} && rm #{file_shared_path}')
-end
-    
-      def test_symlink_exists(path)
-    exists?('L', path)
-  end
-    
-          def has_role?(role)
-        roles.include? role.to_sym
-      end
+        assert_no_match /New/, last_response.body, ''New' link not blocked in pages template'
