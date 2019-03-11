@@ -1,265 +1,212 @@
 
         
-        module Fastlane
-  # Handles receiving commands from the socket server, finding the Action to be invoked,
-  # invoking it, and returning any return values
-  class SocketServerActionCommandExecutor < CommandExecutor
-    attr_accessor :runner
-    attr_accessor :actions_requiring_special_handling
+                unless post && post.id
+          puts post.errors.full_messages if post
+          puts creator.errors.inspect
+          raise 'Failed to create description for trust level 3 lounge!'
+        end
     
-            result = Fastlane::FastFile.new.parse('lane :test do
-          add_git_tag ({
-            tag: '#{tag}',
-            message: '#{message}',
-            commit: '#{commit}'
-          })
-        end').runner.execute(:test)
+        # Add permissions and a description to the Staff category.
     
-            expect(result).to eq('carthage bootstrap')
+            @parallel = parallel
       end
     
-            inner_command = 'git describe `git rev-list --tags --max-count=1`'
-        pseudocommand = 'git log --pretty=\'%B\' #{inner_command.shellescape}...HEAD'
-        expect(result).to eq(pseudocommand)
-      end
+            def collection_method
+          :lfs_objects
+        end
     
-            it 'executes the correct git command' do
-          allow(Fastlane::Actions).to receive(:sh).with('git add *.h *.m', anything).and_return('')
-          result = Fastlane::FastFile.new.parse('lane :test do
-            git_add(path: #{path}, shell_escape: false)
-          end').runner.execute(:test)
+            def labels?
+          label_names && label_names.any?
+        end
+    
+          def action_for_grape(env)
+        endpoint = env[ENDPOINT_KEY]
+        route = endpoint.route rescue nil
+    
+              # Rex::Proto::Kerberos::Model::ApReq decoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def decode(input)
+            raise ::NotImplementedError, 'AP-REQ decoding not supported'
+          end
+    
+              # Encodes the type
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_type(type)
+            bn = OpenSSL::BN.new(type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+              # Decodes the value from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [String]
+          def decode_value(input)
+            input.value[0].value
+          end
+    
+              # Decodes the e_data from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [String]
+          def decode_e_data(input)
+            input.value[0].value
+          end
         end
       end
-    
-          context 'when specify output_file options' do
-        it 'adds redirect file to command' do
-          result = Fastlane::FastFile.new.parse('lane :test do
-            swiftlint(
-              output_file: '#{output_file}'
-            )
-          end').runner.execute(:test)
-    
-          it 'uses the correct command to import it' do
-        # We have to execute *something* using ` since otherwise we set expectations to `nil`, which is not healthy
-        `ls`
-    
-    describe 'monkey patch of Array.shelljoin (via CrossplatformShellwords)' do
-  describe 'on Windows' do
-    before(:each) do
-      allow(FastlaneCore::Helper).to receive(:windows?).and_return(true)
-    end
-    
-    if File.exist?(file_path)
-  junit.parse(file_path)
-  junit.headers = [:name, :file]
-  junit.report
-else
-  puts('Couldn't find any test artifacts in path #{file_path}')
-end
-
-    
-        it 'understands hl=-2' do
-      stub(params).[](:hl) { '-2' }
-      expect((1..10).select { |i| highlighted?(i) }).to eq [1, 2]
-    end
-    
-        describe '#agents_dot' do
-      before do
-        @agents = [
-          @foo = Agents::DotFoo.new(name: 'foo').tap { |agent|
-            agent.user = users(:bob)
-            agent.save!
-          },
-    
-      describe '#style_colors' do
-    it 'returns a css style-formated version of the scenario foreground and background colors' do
-      expect(style_colors(scenario)).to eq('color:#AAAAAA;background-color:#000000')
-    end
-    
-        it 'can be turned off' do
-      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'false' }
-      DefaultScenarioImporter.import(user)
-    end
-    
-    describe ScenarioImport do
-  let(:user) { users(:bob) }
-  let(:guid) { 'somescenarioguid' }
-  let(:tag_fg_color) { '#ffffff' }
-  let(:tag_bg_color) { '#000000' }
-  let(:icon) { 'Star' }
-  let(:description) { 'This is a cool Huginn Scenario that does something useful!' }
-  let(:name) { 'A useful Scenario' }
-  let(:source_url) { 'http://example.com/scenarios/2/export.json' }
-  let(:weather_agent_options) {
-    {
-      'api_key' => 'some-api-key',
-      'location' => '12345'
-    }
-  }
-  let(:trigger_agent_options) {
-    {
-      'expected_receive_period_in_days' => 2,
-      'rules' => [{
-                    'type' => 'regex',
-                    'value' => 'rain|storm',
-                    'path' => 'conditions',
-                  }],
-      'message' => 'Looks like rain!'
-    }
-  }
-  let(:valid_parsed_weather_agent_data) do
-    {
-      :type => 'Agents::WeatherAgent',
-      :name => 'a weather agent',
-      :schedule => '5pm',
-      :keep_events_for => 14.days,
-      :disabled => true,
-      :guid => 'a-weather-agent',
-      :options => weather_agent_options
-    }
-  end
-  let(:valid_parsed_trigger_agent_data) do
-    {
-      :type => 'Agents::TriggerAgent',
-      :name => 'listen for weather',
-      :keep_events_for => 0,
-      :propagate_immediately => true,
-      :disabled => false,
-      :guid => 'a-trigger-agent',
-      :options => trigger_agent_options
-    }
-  end
-  let(:valid_parsed_basecamp_agent_data) do
-    {
-      :type => 'Agents::BasecampAgent',
-      :name => 'Basecamp test',
-      :schedule => 'every_2m',
-      :keep_events_for => 0,
-      :propagate_immediately => true,
-      :disabled => false,
-      :guid => 'a-basecamp-agent',
-      :options => {project_id: 12345}
-    }
-  end
-  let(:valid_parsed_data) do
-    {
-      schema_version: 1,
-      name: name,
-      description: description,
-      guid: guid,
-      tag_fg_color: tag_fg_color,
-      tag_bg_color: tag_bg_color,
-      icon: icon,
-      source_url: source_url,
-      exported_at: 2.days.ago.utc.iso8601,
-      agents: [
-        valid_parsed_weather_agent_data,
-        valid_parsed_trigger_agent_data
-      ],
-      links: [
-        { :source => 0, :receiver => 1 }
-      ],
-      control_links: []
-    }
-  end
-  let(:valid_data) { valid_parsed_data.to_json }
-  let(:invalid_data) { { :name => 'some scenario missing a guid' }.to_json }
-    
-      describe 'migrating an actual agent' do
-    before do
-      valid_params = {
-                        'auth_token' => 'token',
-                        'room_name' => 'test',
-                        'room_name_path' => '',
-                        'username' => 'Huginn',
-                        'username_path' => '$.username',
-                        'message' => 'Hello from Huginn!',
-                        'message_path' => '$.message',
-                        'notify' => false,
-                        'notify_path' => '',
-                        'color' => 'yellow',
-                        'color_path' => '',
-                      }
-    
-      describe '#value_at' do
-    it 'returns the value at a JSON path' do
-      expect(Utils.value_at({ :foo => { :bar => :baz }}.to_json, 'foo.bar')).to eq('baz')
-      expect(Utils.value_at({ :foo => { :bar => { :bing => 2 } }}, 'foo.bar.bing')).to eq(2)
-      expect(Utils.value_at({ :foo => { :bar => { :bing => 2 } }}, 'foo.bar[?(@.bing == 2)].bing')).to eq(2)
-    end
-    
-      private
-    
-      # Get message for given
-  def find_message(kind, options = {})
-    options[:scope] ||= translation_scope
-    options[:default] = Array(options[:default]).unshift(kind.to_sym)
-    options[:resource_name] = resource_name
-    options = devise_i18n_options(options)
-    I18n.t('#{options[:resource_name]}.#{kind}', options)
-  end
-    
-    Devise.setup do |config|
-  require 'devise/orm/active_record'
-  config.secret_key = 'secret_key_base'
-end
-    
-    module Devise
-  module Controllers
-    # Provide the ability to store a location.
-    # Used to redirect back to a desired path after sign in.
-    # Included by default in all controllers.
-    module StoreLocation
-      # Returns and delete (if it's navigational format) the url stored in the session for
-      # the given scope. Useful for giving redirect backs after sign up:
-      #
-      # Example:
-      #
-      #   redirect_to stored_location_for(:user) || root_path
-      #
-      def stored_location_for(resource_or_scope)
-        session_key = stored_location_key_for(resource_or_scope)
-    
-            routes.each do |module_name, actions|
-          [:path, :url].each do |path_or_url|
-            actions.each do |action|
-              action = action ? '#{action}_' : ''
-              method = :'#{action}#{module_name}_#{path_or_url}'
-    
-        change.down do
-      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
-      Mention.where(mentions_container_type: 'Comment').destroy_all
-      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
     end
   end
 end
-
     
-          get :index, params: {a_id: @aspect.id, page: '1'}, format: :json
-      save_fixture(response.body, 'aspects_manage_contacts_json')
-    end
+              # Decodes a Rex::Proto::Kerberos::Model::LastRequest
+          #
+          # @param input [String, OpenSSL::ASN1::Sequence] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::Sequence
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode LastRequest, invalid input'
+            end
     
-        it 'returns a 401 for a private post when logged out' do
-      bob.like!(@message)
-      sign_out :user
-      get :index, params: {post_id: @message.id}, format: :json
-      expect(response.status).to eq(401)
-    end
+        system_command '#{staged_path}/AdobePatchInstaller.app/Contents/MacOS/AdobePatchInstaller',
+                   args: [
+                           '--mode=silent',
+                         ],
+                   sudo: true
   end
     
-          it 'succeeds on mobile' do
-        eve.share_with(alice.person, eve.aspects.first)
-        get :index, format: :mobile
-        expect(response).to be_success
+      # Compile a Sass or SCSS string to CSS.
+  # Defaults to SCSS.
+  #
+  # @param contents [String] The contents of the Sass file.
+  # @param options [{Symbol => Object}] An options hash;
+  #   see {file:SASS_REFERENCE.md#Options the Sass options documentation}
+  # @raise [Sass::SyntaxError] if there's an error in the document
+  # @raise [Encoding::UndefinedConversionError] if the source encoding
+  #   cannot be converted to UTF-8
+  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
+  def self.compile(contents, options = {})
+    options[:syntax] ||= :scss
+    Engine.new(contents, options).to_css
+  end
+    
+        # Modify the top Sass backtrace entries
+    # (that is, the most deeply nested ones)
+    # to have the given attributes.
+    #
+    # Specifically, this goes through the backtrace entries
+    # from most deeply nested to least,
+    # setting the given attributes for each entry.
+    # If an entry already has one of the given attributes set,
+    # the pre-existing attribute takes precedence
+    # and is not used for less deeply-nested entries
+    # (even if they don't have that attribute set).
+    #
+    # @param attrs [{Symbol => Object}] The information to add to the backtrace entry.
+    #   See \{#sass\_backtrace}
+    def modify_backtrace(attrs)
+      attrs = attrs.reject {|_k, v| v.nil?}
+      # Move backwards through the backtrace
+      (0...sass_backtrace.size).to_a.reverse_each do |i|
+        entry = sass_backtrace[i]
+        sass_backtrace[i] = attrs.merge(entry)
+        attrs.reject! {|k, _v| entry.include?(k)}
+        break if attrs.empty?
       end
     end
     
-              compare_with_real_token token, session
+        # Prints a status message about performing the given action,
+    # colored using the given color (via terminal escapes) if possible.
+    #
+    # @param name [#to_s] A short name for the action being performed.
+    #   Shouldn't be longer than 11 characters.
+    # @param color [Symbol] The name of the color to use for this action.
+    #   Can be `:red`, `:green`, or `:yellow`.
+    def puts_action(name, color, arg)
+      return if @options[:for_engine][:quiet]
+      printf color(color, '%11s %s\n'), name, arg
+      STDOUT.flush
+    end
     
-      it 'should not override the header if already set' do
-    mock_app with_headers('Content-Security-Policy' => 'default-src: none')
-    expect(get('/', {}, 'wants' => 'text/html').headers['Content-Security-Policy']).to eq('default-src: none')
+          # Find a Sass file, if it exists.
+      #
+      # This is the primary entry point of the Importer.
+      # It corresponds directly to an `@import` statement in Sass.
+      # It should do three basic things:
+      #
+      # * Determine if the URI is in this importer's format.
+      #   If not, return nil.
+      # * Determine if the file indicated by the URI actually exists and is readable.
+      #   If not, return nil.
+      # * Read the file and place the contents in a {Sass::Engine}.
+      #   Return that engine.
+      #
+      # If this importer's format allows for file extensions,
+      # it should treat them the same way as the default {Filesystem} importer.
+      # If the URI explicitly has a `.sass` or `.scss` filename,
+      # the importer should look for that exact file
+      # and import it as the syntax indicated.
+      # If it doesn't exist, the importer should return nil.
+      #
+      # If the URI doesn't have either of these extensions,
+      # the importer should look for files with the extensions.
+      # If no such files exist, it should return nil.
+      #
+      # The {Sass::Engine} to be returned should be passed `options`,
+      # with a few modifications. `:syntax` should be set appropriately,
+      # `:filename` should be set to `uri`,
+      # and `:importer` should be set to this importer.
+      #
+      # @param uri [String] The URI to import.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` that's currently being resolved.
+      #   This is safe for subclasses to modify destructively.
+      #   Callers should only pass in a value they don't mind being destructively modified.
+      # @return [Sass::Engine, nil] An Engine containing the imported file,
+      #   or nil if it couldn't be found or was in the wrong format.
+      def find(uri, options)
+        Sass::Util.abstract(self)
+      end
+    
+      # Copy a path.
+  #
+  # Files will be hardlinked if possible, but copied otherwise.
+  # Symlinks should be copied as symlinks.
+  def copy(source, destination)
+    logger.debug('Copying path', :source => source, :destination => destination)
+    directory = File.dirname(destination)
+    # lstat to follow symlinks
+    dstat = File.stat(directory) rescue nil
+    if dstat.nil?
+      FileUtils.mkdir_p(directory, :mode => 0755)
+    elsif dstat.directory?
+      # do nothing, it's already a directory!
+    else
+      # It exists and is not a directory. This is probably a user error or a bug.
+      readable_path = directory.gsub(staging_path, '')
+      logger.error('You wanted to copy a file into a directory, but that's not a directory, it's a file!', :path => readable_path, :stat => dstat)
+      raise FPM::InvalidPackageConfiguration, 'Tried to treat #{readable_path} like a directory, but it's a file!'
+    end
+    
+      def output(output_path)
+    output_check(output_path)
+    
+      def install_script
+    path = build_path('installer.sh')
+    File.open(path, 'w') do |file|
+      file.write template('sh.erb').result(binding)
+    end
+    path
   end
-end
+    
+        if !success
+      raise ProcessFailed.new('#{program} failed (exit code #{exit_code})' \
+                              '. Full command was:#{args.inspect}')
+    end
+    return stdout_r_str
+  end # def safesystemout
