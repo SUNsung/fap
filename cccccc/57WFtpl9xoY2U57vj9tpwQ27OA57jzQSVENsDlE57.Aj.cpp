@@ -1,194 +1,202 @@
 
         
-        
-    {    return GenericTypeParamType::get(genericParam->getDepth(),
-                                     genericParam->getIndex(), ctx);
-  };
-  auto conformanceToSyntheticConformanceFn =
-      MakeAbstractConformanceForGenericType();
+        namespace Ui {
+    class OpenURIDialog;
+}
+    
+      scoped_ptr<V8ValueConverter> converter(V8ValueConverter::create());
+  converter->SetStripNullFromObjects(true);
+    
+    
+    {}  // namespace nwapi
+
+    
+    static KeyMap keymap = {
+  {'`'    , 'Backquote'},
+  {'\\'   , 'Backslash'},
+  {'['    , 'BracketLeft'},
+  {']'    , 'BracketRight'},
+  {','    , 'Comma'},
+  {'='    , 'Equal'},
+  {'-'    , 'Minus'},
+  {'.'    , 'Period'},
+  {'''    , 'Quote'},
+  {';'    , 'Semicolon'},
+  {'/'    , 'Slash'},
+  {'\n'   , 'Enter'},
+  {'\t'   , 'Tab'},
+  {'UP'   , 'ArrowUp'},
+  {'DOWN' , 'ArrowDown'},
+  {'LEFT' , 'ArrowLeft'},
+  {'RIGHT', 'ArrowRight'},
+  {'ESC'  , 'Escape'},
+  {'MEDIANEXTTRACK', 'MediaTrackNext'},
+  {'MEDIAPREVTRACK', 'MediaTrackPrevious'}
+};
+    
+    
+
+    
+    void NwAppClearCacheFunction::OnBrowsingDataRemoverDone() {
+  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
+  run_loop_.Quit();
+}
     
     
     {}
     
+          displayResult->id = gfx_display.id();
+      displayResult->scale_factor = gfx_display.device_scale_factor();
+      displayResult->is_built_in = gfx_display.IsInternal();
+      displayResult->rotation = gfx_display.RotationAsDegree();
+      displayResult->touch_support = (int)gfx_display.touch_support();
     
-    {  DefaultCacheKey CKey(const_cast<void*>(Key), &DCache.CBs);
-  auto Entry = DCache.Entries.find(CKey);
-  if (Entry != DCache.Entries.end()) {
-    // FIXME: Not thread-safe! It should avoid deleting the value until
-    // 'releaseValue is called on it.
-    *Value_out = Entry->second;
-    return true;
+    static const char* kModuleName = '_api_implementation';
+static const char kModuleDocstring[] =
+'_api_implementation is a module that exposes compile-time constants that\n'
+'determine the default API implementation to use for Python proto2.\n'
+'\n'
+'It complements api_implementation.py by setting defaults using compile-time\n'
+'constants defined in C, such that one can set defaults at compilation\n'
+'(e.g. with blaze flag --copt=-DPYTHON_PROTO2_CPP_IMPL_V2).';
+    
+      for (std::vector<MessageGenerator *>::iterator iter = message_generators_.begin();
+       iter != message_generators_.end(); ++iter) {
+    (*iter)->GenerateEnumHeader(printer);
   }
-  return false;
-}
     
-    void PrefixMapKeyPrinter<unsigned char>::print(raw_ostream &out,
-                                               ArrayRef<unsigned char> key) {
-  out << '\'';
-  for (auto byte : key) {
-    if (byte < 16) out << '0';
-    out.write_hex(byte);
-  }
-  out << '\'';
-}
-
-    
-      IsFirstLine = true;
-  for (auto &Line : Lines) {
-    if (!IsFirstLine) {
-      Line = Line.drop_front(WhitespaceToTrim);
+    namespace google {
+namespace protobuf {
+namespace io {
     }
-    IsFirstLine = false;
-  }
-    
-    bool importer::isCFTypeDecl(
-       const clang::TypedefNameDecl *Decl) {
-  if (CFPointeeInfo::classifyTypedef(Decl))
-    return true;
-  return false;
-}
+    }
+    }
     
     
     {
-    {    switch (Bytes) {
-    case 1:
-      OutUTF8.push_back(S);
-      break;
-    case 2: {
-      uint8_t Byte2 = (S | 0x80) & 0xBF;
-      S >>= 6;
-      uint8_t Byte1 = S | 0xC0;
-      OutUTF8.push_back(Byte1);
-      OutUTF8.push_back(Byte2);
+    {#undef DEF_COMMON_LIMITS
+#undef DEF_SIGNED_INT_LIMITS
+#undef DEF_UNSIGNED_INT_LIMITS
+#undef DEF_FP_LIMITS
+#undef DEF_PRECISION_LIMITS
+}  // namespace protobuf
+}  // namespace google
+
+    
+    namespace google {
+namespace protobuf {
+namespace util {
+namespace error {
+inline string CodeEnumToString(error::Code code) {
+  switch (code) {
+    case OK:
+      return 'OK';
+    case CANCELLED:
+      return 'CANCELLED';
+    case UNKNOWN:
+      return 'UNKNOWN';
+    case INVALID_ARGUMENT:
+      return 'INVALID_ARGUMENT';
+    case DEADLINE_EXCEEDED:
+      return 'DEADLINE_EXCEEDED';
+    case NOT_FOUND:
+      return 'NOT_FOUND';
+    case ALREADY_EXISTS:
+      return 'ALREADY_EXISTS';
+    case PERMISSION_DENIED:
+      return 'PERMISSION_DENIED';
+    case UNAUTHENTICATED:
+      return 'UNAUTHENTICATED';
+    case RESOURCE_EXHAUSTED:
+      return 'RESOURCE_EXHAUSTED';
+    case FAILED_PRECONDITION:
+      return 'FAILED_PRECONDITION';
+    case ABORTED:
+      return 'ABORTED';
+    case OUT_OF_RANGE:
+      return 'OUT_OF_RANGE';
+    case UNIMPLEMENTED:
+      return 'UNIMPLEMENTED';
+    case INTERNAL:
+      return 'INTERNAL';
+    case UNAVAILABLE:
+      return 'UNAVAILABLE';
+    case DATA_LOSS:
+      return 'DATA_LOSS';
+  }
+    }
+    }
+    }
+    }
+    }
+    
+    namespace google {
+namespace protobuf {
+namespace internal {
+    }
+    }
+    }
+    
+    
+    {  return 0;
+}
+
+    
+      while (true) {
+    void* outptr;
+    int outlen;
+    bool ok;
+    do {
+      ok = out.Next(&outptr, &outlen);
+      if (!ok) {
+        break;
+      }
+    } while (outlen <= 0);
+    readlen = read(STDIN_FILENO, outptr, outlen);
+    if (readlen <= 0) {
+      out.BackUp(outlen);
       break;
     }
-    case 3: {
-      uint8_t Byte3 = (S | 0x80) & 0xBF;
-      S >>= 6;
-      uint8_t Byte2 = (S | 0x80) & 0xBF;
-      S >>= 6;
-      uint8_t Byte1 = S | 0xE0;
-      OutUTF8.push_back(Byte1);
-      OutUTF8.push_back(Byte2);
-      OutUTF8.push_back(Byte3);
-      break;
-    }
-    case 4: {
-      uint8_t Byte4 = (S | 0x80) & 0xBF;
-      S >>= 6;
-      uint8_t Byte3 = (S | 0x80) & 0xBF;
-      S >>= 6;
-      uint8_t Byte2 = (S | 0x80) & 0xBF;
-      S >>= 6;
-      uint8_t Byte1 = S | 0xF0;
-      OutUTF8.push_back(Byte1);
-      OutUTF8.push_back(Byte2);
-      OutUTF8.push_back(Byte3);
-      OutUTF8.push_back(Byte4);
-      break;
-    }
+    if (readlen < outlen) {
+      out.BackUp(outlen - readlen);
     }
   }
-  return true;
-}
     
-    void bitwiseAnd(const Size2D &size,
-                const u8 *src0Base, ptrdiff_t src0Stride,
-                const u8 *src1Base, ptrdiff_t src1Stride,
-                u8 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, BitwiseAnd());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
+    OPERATOR_SCHEMA(GatherRangesToDense)
+    .NumInputs(2, 3)
+    .NumOutputs(1, INT_MAX)
+    .SetDoc(R'DOC(
+Given DATA tensor of rank 1, and RANGES tensor of rank 3, gather values
+corresponding to each range into a separate output tensor. If the optional input
+KEY tensor is also given, the output will be sorted by KEY for each example.
     
-        for (size_t i = 0; i < size.height; ++i)
-    {
-        const u8 * src = internal::getRowPtr(srcBase, srcStride, i);
-        s16 * dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t j = 0;
-    }
+    OPERATOR_SCHEMA(GivenTensorIntFill)
+    .NumInputs(0, 1)
+    .NumOutputs(1)
+    .AllowInplace({{0, 0}})
+    .Arg(
+        'values',
+        'The value for the elements of the output tensor.',
+        true /* required */)
+    .Arg(
+        'shape',
+        'The shape of the output tensor.'
+        'Cannot set the shape argument and pass in an input at the same time.')
+    .Arg(
+        'extra_shape',
+        'The additional dimensions appended at the end of the shape indicated'
+        'by the input blob.'
+        'Cannot set the extra_shape argument when there is no input blob.')
+    .Arg(
+        'input_as_shape',
+        '1D tensor containing the desired output shape. First input must be in CPU context.')
+    .TensorInferenceFunction(FillerTensorInference<TensorProto_DataType_INT32>);
     
-                    v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t0_16s), kernelBase[2]);
-                v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t1_16s), kernelBase[1]);
-                v_dst0 = vmlal_n_s16(v_dst0, vget_low_s16(t2_16s), kernelBase[0]);
+    #include 'rocksdb/status.h'
     
+    #pragma once
     
-    {    minLocCount >>= 1;
-    maxLocCount >>= 1;
-#else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)minVal;
-    (void)minLocPtr;
-    (void)minLocCount;
-    (void)minLocCapacity;
-    (void)maxVal;
-    (void)maxLocPtr;
-    (void)maxLocCount;
-    (void)maxLocCapacity;
-#endif
-}
-    
-    									unsigned char *a_paucEncodingBits, ErrorMetric a_errormetric) = 0;
-    
-    #define UNIT_QUANT_SHIFT 2
-#define UNIT_QUANT_FACTOR (1 << UNIT_QUANT_SHIFT)
-    
-      All rights reserved.
-    
-    
-/** 16x32 multiply, followed by a 15-bit shift right and 32-bit add.
-    b must fit in 31 bits.
-    Result fits in 32 bits. */
-#undef MAC16_32_Q15
-#define MAC16_32_Q15(c, a, b) ADD32(c, MULT16_32_Q15(a, b))
-    
-       - Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer.
-    
-    void silk_insertion_sort_increasing_all_values_int16(
-     opus_int16                 *a,                 /* I/O   Unsorted / Sorted vector                                   */
-     const opus_int             L                   /* I     Vector length                                              */
-);
-    
-    
-    {/// Clear decorations for a source when it updates.
-void clearDecorations(const std::string& source);
-}
-
-    
-    
-    {REGISTER_INTERNAL(KafkaTopicsConfigParserPlugin,
-                  'config_parser',
-                  'kafka_topics');
-} // namespace osquery
-
-    
-    ExpectedSuccess<DatabaseError> Database::putInt32(const std::string& domain,
-                                                  const std::string& key,
-                                                  const int32_t value) {
-  std::string buffer = std::to_string(value);
-  return putString(domain, key, buffer);
-}
-    
-    Expected<std::string, DatabaseError> InMemoryDatabase::getString(
-    const std::string& domain, const std::string& key) {
-  return getValue<std::string>(domain, key);
-}
-    
-    /// The saved exit code from a thread's request to stop the process.
-volatile std::sig_atomic_t kExitCode{0};
+      WriteOptions write_options;
+  ReadOptions read_options;
+  OptimisticTransactionOptions txn_options;
+  std::string value;
