@@ -1,226 +1,157 @@
 
         
-                      yield item, value, text, default_html_options.merge(additional_html_options)
-            end.join.html_safe
+                  def render_collection
+            @collection.map do |item|
+              value = value_for_collection(item, @value_method)
+              text  = value_for_collection(item, @text_method)
+              default_html_options = default_html_options_for_collection(item, value)
+              additional_html_options = option_html_attributes(item)
+    
+    require 'action_view/helpers/tags/placeholderable'
+    
+          cattr_accessor :type_klass
+    
+        class ClearHelpersTest < ActiveSupport::TestCase
+      def setup
+        @controller = HelperyTestController.new
+      end
+    
+    
+  #
+  # Payload types were copied from xCAT-server source code (IPMI.pm)
+  #
+  RMCP_ERRORS = {
+    1 => 'Insufficient resources to create new session (wait for existing sessions to timeout)',
+    2 => 'Invalid Session ID', #this shouldn't occur...
+    3 => 'Invalid payload type',#shouldn't occur..
+    4 => 'Invalid authentication algorithm', #if this happens, we need to enhance our mechanism for detecting supported auth algorithms
+    5 => 'Invalid integrity algorithm', #same as above
+    6 => 'No matching authentication payload',
+    7 => 'No matching integrity payload',
+    8 => 'Inactive Session ID', #this suggests the session was timed out while trying to negotiate, shouldn't happen
+    9 => 'Invalid role',
+    0xa => 'Unauthorised role or privilege level requested',
+    0xb => 'Insufficient resources to create a session at the requested role',
+    0xc => 'Invalid username length',
+    0xd => 'Unauthorized name',
+    0xe => 'Unauthorized GUID',
+    0xf => 'Invalid integrity check value',
+    0x10 => 'Invalid confidentiality algorithm',
+    0x11 => 'No cipher suite match with proposed security algorithms',
+    0x12 => 'Illegal or unrecognized parameter', #have never observed this, would most likely mean a bug in xCAT or IPMI device
+  }
+    
+              # Encodes the auth_time field
+          #
+          # @return [String]
+          def encode_auth_time
+            [auth_time].pack('N')
           end
     
-    module ActionView
-  module Helpers
-    module Tags # :nodoc:
-      class TextField < Base # :nodoc:
-        include Placeholderable
+                checksum = cipher[0, 16]
+            data = cipher[16, cipher.length - 1]
     
-        def exists?(path, prefixes, *args)
-      find_all(path, prefixes, *args).any?
-    end
-    
-          private
-        def self.layout(formats)
-          find_template(name.underscore, { formats: formats }, { _prefixes: ['layouts'] })
-        rescue ActionView::MissingTemplate
-          begin
-            find_template('application', { formats: formats }, { _prefixes: ['layouts'] })
-          rescue ActionView::MissingTemplate
-          end
-        end
-    
-                if Fastlane::Actions.is_deprecated?(class_ref)
-              puts('=========================================='.deprecated)
-              puts('This action (#{method_sym}) is deprecated'.deprecated)
-              puts(class_ref.deprecated_notes.to_s.deprecated) if class_ref.deprecated_notes
-              puts('==========================================\n'.deprecated)
+              # Decodes the pa_data from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Array<Rex::Proto::Kerberos::Model::PreAuthData>]
+          def decode_asn1_pa_data(input)
+            pre_auth = []
+            input.value[0].value.each do |pre_auth_data|
+              pre_auth << Rex::Proto::Kerberos::Model::PreAuthData.decode(pre_auth_data)
             end
-            class_ref.runner = self # needed to call another action form an action
-            return class_ref.run(arguments)
+    
+              # Decodes the till field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_till(input)
+            input.value[0].value
+          end
+    
+          def link_to_with_icon(icon_name, text, url, options = {})
+        options[:class] = (options[:class].to_s + ' icon-link with-tip action-#{icon_name}').strip
+        options[:title] = text if options[:no_text]
+        text = options[:no_text] ? '' : content_tag(:span, text, class: 'text')
+        options.delete(:no_text)
+        if icon_name
+          icon = content_tag(:span, '', class: '#{'mr-2' unless text.empty?} icon icon-#{icon_name}')
+          text.insert(0, icon + ' ')
+        end
+        link_to(text.html_safe, url, options)
+      end
+    
+                it 'adds variant to order just fine' do
+              select2_search tote.name, from: Spree.t(:name_or_sku)
+              within('table.stock-levels') do
+                fill_in 'stock_item_quantity', with: 1
+                click_icon :add
+              end
+    
+    describe 'Shipments', type: :feature do
+  stub_authorization!
+    
+              def render_order(result)
+            if result.success?
+              render_serialized_payload { serialized_current_order }
+            else
+              render_error_payload(result.error)
+            end
+          end
+    
+            def address_params
+          params.require(:address).permit(permitted_address_attributes)
+        end
+    
+                if @order.completed? || @order.next
+              state_callback(:after)
+              respond_with(@order, default_template: 'spree/api/v1/orders/show')
+            else
+              respond_with(@order, default_template: 'spree/api/v1/orders/could_not_transition', status: 422)
+            end
+          else
+            invalid_resource!(@order)
           end
         end
-      rescue Interrupt => e
-        raise e # reraise the interruption to avoid logging this as a crash
-      rescue FastlaneCore::Interface::FastlaneCommonException => e # these are exceptions that we dont count as crashes
-        raise e
-      rescue FastlaneCore::Interface::FastlaneError => e # user_error!
-        action_completed(method_sym.to_s, status: FastlaneCore::ActionCompletionStatus::USER_ERROR, exception: e)
-        raise e
-      rescue Exception => e # rubocop:disable Lint/RescueException
-        # high chance this is actually FastlaneCore::Interface::FastlaneCrash, but can be anything else
-        # Catches all exceptions, since some plugins might use system exits to get out
-        action_completed(method_sym.to_s, status: FastlaneCore::ActionCompletionStatus::FAILED, exception: e)
-        raise e
-      end
-    end
     
-            is_swift = FastlaneCore::FastlaneFolder.swift?
-        fastlane_client_language = is_swift ? :swift : :ruby
-        action_launch_context = FastlaneCore::ActionLaunchContext.context_for_action_name(@program[:name], fastlane_client_language: fastlane_client_language, args: ARGV)
-        FastlaneCore.session.action_launched(launch_context: action_launch_context)
-    
-            expect(result).to eq('appledoc --project-name \'Project Name\' --project-company \'Company\' --docset-copyright \'DocSet copyright\' --exit-threshold \'2\' input/dir')
-      end
-    
-            context 'when command is bootstrap' do
-          let(:command) { 'bootstrap' }
-    
-          it 'logs the command if verbose' do
-        with_verbose(true) do
-          allow(Fastlane::Actions).to receive(:sh).with(anything, { log: true }).and_return('')
-          result = Fastlane::FastFile.new.parse('lane :test do
-            git_add(path: 'foo.bar')
-          end').runner.execute(:test)
-        end
-      end
-    
-            it 'escapes spaces in list of files to process' do
-          file = 'path/to/my project/source code/AppDelegate.swift'
-          result = Fastlane::FastFile.new.parse('lane :test do
-            swiftlint(
-                files: ['#{file}']
-            )
-          end').runner.execute(:test)
-    
-          it 'uses the correct command to import it' do
-        # We have to execute *something* using ` since otherwise we set expectations to `nil`, which is not healthy
-        `ls`
-    
-    describe 'Creating a new agent', js: true do
-  before(:each) do
-    login_as(users(:bob))
-  end
-    
-          it 'generates a richer DOT script' do
-        expect(agents_dot(@agents, rich: true)).to match(%r{
-          \A
-          digraph \x20 'Agent \x20 Event \x20 Flow' \{
-            (graph \[ [^\]]+ \];)?
-            node \[ [^\]]+ \];
-            edge \[ [^\]]+ \];
-            (?<foo>\w+) \[label=foo,tooltip='Dot \x20 Foo',URL='#{Regexp.quote(agent_path(@foo))}'\];
-            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
-            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
-            \k<bar1> \[label=bar1,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar1))}'\];
-            \k<bar2> \[label=bar2,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar2))}',style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
-            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
-            \k<bar3> \[label=bar3,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar3))}'\];
-          \}
-          \z
-        }x)
-      end
-    end
-  end
-    
-        describe 'url' do
-      it 'should be invalid with an unreasonable URL' do
-        subject.url = 'foo'
-        expect(subject).not_to be_valid
-        expect(subject).to have(1).error_on(:url)
-        expect(subject.errors[:url]).to include('appears to be invalid')
-      end
-    
-    class ActivityPub::OutboxesController < Api::BaseController
-  LIMIT = 20
-    
-          weeks << {
-        week: week.to_time.to_i.to_s,
-        statuses: Redis.current.get('activity:statuses:local:#{week_id}') || '0',
-        logins: Redis.current.pfcount('activity:logins:#{week_id}').to_s,
-        registrations: Redis.current.get('activity:accounts:local:#{week_id}') || '0',
-      }
-    end
-    
-      def after_sign_in_path_for(resource)
-    if resource.email_verified?
-      root_path
-    else
-      finish_signup_path
-    end
-  end
-end
+    run SinatraStaticServer
 
     
-      def available_locales
-    I18n.available_locales.reverse
-  end
-end
-
-    
-      let(:env) { described_class.new }
-    
-    Rake::TestTask.new(:'test:core') do |t|
-  core_tests = %w[base delegator encoding extensions filter
-     helpers mapped_error middleware radius rdoc
-     readme request response result route_added_hook
-     routing server settings sinatra static templates]
-  t.test_files = core_tests.map {|n| 'test/#{n}_test.rb'}
-  t.ruby_opts = ['-r rubygems'] if defined? Gem
-  t.ruby_opts << '-I.'
-  t.warning = true
-end
-    
-    
-    
-          def real_token(session)
-        decode_token(session[:csrf])
-      end
-    
-          def accepts?(env)
-        cookie_header = env['HTTP_COOKIE']
-        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
-        cookies.each do |k, v|
-          if k == session_key && Array(v).size > 1
-            bad_cookies << k
-          elsif k != session_key && Rack::Utils.unescape(k) == session_key
-            bad_cookies << k
-          end
-        end
-        bad_cookies.empty?
-      end
-    
-          def escape_string(str)
-        str = @escaper.escape_url(str)        if @url
-        str = @escaper.escape_html(str)       if @html
-        str = @escaper.escape_javascript(str) if @javascript
-        str
-      end
-    end
-  end
-end
-
-    
-        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
-      env = {'HTTP_HOST' => 'foo.com'}
-      subject.options[:allow_empty_referrer] = false
-      expect(subject.referrer(env)).to be_nil
+        # Outputs a single category as an <a> link.
+    #
+    #  +category+ is a category string to format as an <a> link
+    #
+    # Returns string
+    #
+    def category_link(category)
+      dir = @context.registers[:site].config['category_dir']
+      '<a class='category' href='/#{dir}/#{category.to_url}/'>#{category}</a>'
     end
     
-      it 'should set the Content Security Policy' do
-    expect(
-      get('/', {}, 'wants' => 'text/html').headers['Content-Security-Policy']
-    ).to eq('connect-src 'self'; default-src none; img-src 'self'; script-src 'self'; style-src 'self'')
-  end
+        def html_output_for(script_url, code)
+      code = CGI.escapeHTML code
+      <<-HTML
+<div><script src='#{script_url}'></script>
+<noscript><pre><code>#{code}</code></pre></noscript></div>
+      HTML
+    end
     
-          private
+        def self.clear
+      instance.clear
+    end
     
-          def perform(yml)
-        (target, method_name, args) = YAML.load(yml)
-        msg = target.public_send(method_name, *args)
-        # The email method can return nil, which causes ActionMailer to return
-        # an undeliverable empty message.
-        if msg
-          deliver(msg)
-        else
-          raise '#{target.name}##{method_name} returned an undeliverable mail object'
-        end
+          original_extension = extension(attachment, style_name)
+      style = attachment.styles[style_name.to_s.to_sym]
+      if style && style[:format]
+        style[:format].to_s
+      elsif extensions_for_mime_type.include? original_extension
+        original_extension
+      elsif !extensions_for_mime_type.empty?
+        extensions_for_mime_type.first
+      else
+        # It's possible, though unlikely, that the mime type is not in the
+        # database, so just use the part after the '/' in the mime type as the
+        # extension.
+        %r{/([^/]*)\z}.match(attachment.content_type)[1]
       end
-    
-          Sidekiq.logger.debug { 'Re-queueing terminated jobs' }
-      jobs_to_requeue = {}
-      inprogress.each do |unit_of_work|
-        jobs_to_requeue[unit_of_work.queue_name] ||= []
-        jobs_to_requeue[unit_of_work.queue_name] << unit_of_work.job
-      end
-    
-          def disabled?
-        self.__test_mode == :disable
-      end
-    
-      class WebRoute
-    attr_accessor :request_method, :pattern, :block, :name
+    end
