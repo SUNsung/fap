@@ -1,54 +1,69 @@
 
         
-          protected
+          describe '#style_colors' do
+    it 'returns a css style-formated version of the scenario foreground and background colors' do
+      expect(style_colors(scenario)).to eq('color:#AAAAAA;background-color:#000000')
+    end
     
-    2) You are testing a Devise controller bypassing the router.
-   If so, you can explicitly tell Devise which mapping to use:
+    # This is basically a copy of the original bundler 'bundle' shim
+# with the addition of the loading of our Bundler patches that
+# modify Bundler's caching behaviour.
     
-    # Each time a record is set we check whether its session has already timed out
-# or not, based on last request time. If so, the record is logged out and
-# redirected to the sign in page. Also, each time the request comes and the
-# record is set, we set the last request time inside its scoped session to
-# verify timeout in the following request.
-Warden::Manager.after_set_user do |record, warden, options|
-  scope = options[:scope]
-  env   = warden.request.env
-    
-        alias :name :singular
-    
-            # Attempt to find a user by its reset_password_token to reset its
-        # password. If a user is found and token is still valid, reset its password and automatically
-        # try saving the record. If not user is found, returns a new user
-        # containing an error in reset_password_token attribute.
-        # Attributes must contain reset_password_token, password and confirmation
-        def reset_password_by_token(attributes={})
-          original_token       = attributes[:reset_password_token]
-          reset_password_token = Devise.token_generator.digest(self, :reset_password_token, original_token)
-    
-    require 'devise/hooks/timeoutable'
-    
-    module Admin
-  class ChangeEmailsController < BaseController
-    before_action :set_account
-    before_action :require_local_account!
-    
-      def update
-    response, status = process_push_request
-    render plain: response, status: status
-  end
-    
-      def encoded_challenge
-    HTMLEntities.new.encode(params['hub.challenge'])
-  end
-    
-      private
-    
-      before_action :require_user!
-    
-      def default_locale
-    if ENV['DEFAULT_LOCALE'].present?
-      I18n.default_locale
-    else
-      request_locale || I18n.default_locale
+            return nil
+      end
     end
   end
+end end end
+
+    
+          PluginManager.ui.info('Install successful')
+    rescue ::Bundler::BundlerError => e
+      raise PluginManager::InstallError.new(e), 'An error occurred went installing plugins'
+    ensure
+      FileUtils.rm_rf(uncompressed_path) if uncompressed_path && Dir.exist?(uncompressed_path)
+    end
+    
+      def validate_cache_location
+    cache_location = LogStash::Environment::CACHE_PATH
+    if File.exist?(cache_location)
+      puts('Directory #{cache_location} is going to be overwritten, do you want to continue? (Y/N)')
+      override = ( 'y' == STDIN.gets.strip.downcase ? true : false)
+      if override
+        FileUtils.rm_rf(cache_location)
+      else
+        puts('Unpack cancelled: file #{cache_location} already exists, please delete or move it')
+        exit
+      end
+    end
+  end
+end
+
+    
+          it 'display a list of installed plugins' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list --installed')
+        expect(result.stdout.split('\n').size).to be > 1
+      end
+    
+            def content_type
+          Spree::Api::Config[:api_v2_content_type]
+        end
+    
+            def find_order
+          @order = Spree::Order.find_by!(number: order_id)
+        end
+    
+            def fire
+          inventory_unit.send('#{@event}!') if @event
+        end
+    
+            def create
+          authorize! :create, Spree::OptionType
+          @option_type = Spree::OptionType.new(option_type_params)
+          if @option_type.save
+            render :show, status: 201
+          else
+            invalid_resource!(@option_type)
+          end
+        end
+    
+            before_action :find_order, except: [:create, :mine, :current, :index, :update, :remove_coupon_code]
