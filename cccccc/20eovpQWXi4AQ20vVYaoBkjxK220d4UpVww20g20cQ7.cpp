@@ -1,8 +1,10 @@
 
         
-        Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+        // Get the python wrappers for a list of ops in a OpList.
+// `op_list_buf` should be a pointer to a buffer containing
+// the binary encoded OpList proto, and `op_list_len` should be the
+// length of that buffer.
+string GetPythonWrappers(const char* op_list_buf, size_t op_list_len);
     
     Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an 'AS IS' BASIS,
@@ -11,862 +13,339 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
     
-    // Destructor passed to TF_NewTensor when it reuses a numpy buffer. Stores a
-// pointer to the pyobj in a buffer to be dereferenced later when we're actually
-// holding the GIL.
-void DelayedNumpyDecref(void* data, size_t len, void* obj) {
-  mutex_lock ml(*DelayedDecrefLock());
-  DecrefCache()->push_back(obj);
-}
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    #ifndef TENSORFLOW_STREAM_EXECUTOR_CUDA_CUDA_PLATFORM_ID_H_
-#define TENSORFLOW_STREAM_EXECUTOR_CUDA_CUDA_PLATFORM_ID_H_
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-      // Build a substitution map to replace the protocol's \c Self and the type
-  // parameters of the requirement into a combined context that provides the
-  // type parameters of the conformance context and the parameters of the
-  // requirement.
-  auto selfType = cast<GenericTypeParamType>(
-      proto->getSelfInterfaceType()->getCanonicalType());
+        http://www.apache.org/licenses/LICENSE-2.0
     
-      // An AST section consists of one or more AST modules, optionally with
-  // headers. Iterate over all AST modules.
-  while (!buf.empty()) {
-    auto info = serialization::validateSerializedAST(buf);
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    namespace tensorflow {
     }
     
-    VERB(abbreviate)
-VERB(accept)
-VERB(activate)
-VERB(add)
-VERB(adjust)
-VERB(admire)
-VERB(admit)
-VERB(advise)
-VERB(afford)
-VERB(agree)
-VERB(alert)
-VERB(allow)
-VERB(alter)
-VERB(amuse)
-VERB(analyse)
-VERB(analyze)
-VERB(animate)
-VERB(announce)
-VERB(annoy)
-VERB(answer)
-VERB(apologise)
-VERB(appear)
-VERB(append)
-VERB(applaud)
-VERB(apply)
-VERB(apportion)
-VERB(appreciate)
-VERB(approve)
-VERB(argue)
-VERB(arrange)
-VERB(arrest)
-VERB(arrive)
-VERB(ask)
-VERB(assign)
-VERB(attach)
-VERB(attack)
-VERB(attempt)
-VERB(attend)
-VERB(attract)
-VERB(avoid)
-VERB(awake)
-VERB(back)
-VERB(bake)
-VERB(balance)
-VERB(ban)
-VERB(bang)
-VERB(bare)
-VERB(bat)
-VERB(bathe)
-VERB(battle)
-VERB(be)
-VERB(beat)
-VERB(become)
-VERB(beg)
-VERB(begin)
-VERB(behave)
-VERB(belong)
-VERB(bend)
-VERB(bet)
-VERB(bid)
-VERB(bite)
-VERB(bleach)
-VERB(bless)
-VERB(blind)
-VERB(blink)
-VERB(blot)
-VERB(blow)
-VERB(blush)
-VERB(boast)
-VERB(boil)
-VERB(bolt)
-VERB(bomb)
-VERB(book)
-VERB(bore)
-VERB(borrow)
-VERB(bounce)
-VERB(bow)
-VERB(box)
-VERB(brake)
-VERB(branch)
-VERB(break)
-VERB(breathe)
-VERB(bring)
-VERB(broadcast)
-VERB(bruise)
-VERB(brush)
-VERB(bubble)
-VERB(build)
-VERB(bump)
-VERB(burn)
-VERB(bury)
-VERB(buy)
-VERB(buzz)
-VERB(calculate)
-VERB(call)
-VERB(camp)
-VERB(cancel)
-VERB(capture)
-VERB(care)
-VERB(carry)
-VERB(carve)
-VERB(cast)
-VERB(catch)
-VERB(cause)
-VERB(center)
-VERB(challenge)
-VERB(change)
-VERB(charge)
-VERB(chase)
-VERB(cheat)
-VERB(check)
-VERB(cheer)
-VERB(chew)
-VERB(choke)
-VERB(choose)
-VERB(chop)
-VERB(claim)
-VERB(clap)
-VERB(clean)
-VERB(clear)
-VERB(click)
-VERB(close)
-VERB(coach)
-VERB(coil)
-VERB(collect)
-VERB(collapse)
-VERB(colour)
-VERB(comb)
-VERB(come)
-VERB(command)
-VERB(commit)
-VERB(communicate)
-VERB(compare)
-VERB(compete)
-VERB(complain)
-VERB(complete)
-VERB(concentrate)
-VERB(concern)
-VERB(confess)
-VERB(confuse)
-VERB(connect)
-VERB(consider)
-VERB(consist)
-VERB(contain)
-VERB(contains)
-VERB(continue)
-VERB(convert)
-VERB(copy)
-VERB(correct)
-VERB(cough)
-VERB(cost)
-VERB(count)
-VERB(cover)
-VERB(crack)
-VERB(crash)
-VERB(crawl)
-VERB(cross)
-VERB(crush)
-VERB(cry)
-VERB(cure)
-VERB(curl)
-VERB(curve)
-VERB(customize)
-VERB(cut)
-VERB(cycle)
-VERB(dam)
-VERB(damage)
-VERB(dance)
-VERB(dare)
-VERB(decay)
-VERB(deceive)
-VERB(decide)
-VERB(decode)
-VERB(decorate)
-VERB(defer)
-VERB(define)
-VERB(delay)
-VERB(delete)
-VERB(delight)
-VERB(deliver)
-VERB(depend)
-VERB(describe)
-VERB(deselect)
-VERB(desert)
-VERB(deserve)
-VERB(destroy)
-VERB(detach)
-VERB(detect)
-VERB(develop)
-VERB(dig)
-VERB(dim)
-VERB(disagree)
-VERB(disappear)
-VERB(disapprove)
-VERB(disarm)
-VERB(discover)
-VERB(dislike)
-VERB(dismiss)
-VERB(display)
-VERB(divide)
-VERB(do)
-VERB(double)
-VERB(doubt)
-VERB(drag)
-VERB(drain)
-VERB(draw)
-VERB(dream)
-VERB(dress)
-VERB(drink)
-VERB(drip)
-VERB(drive)
-VERB(drop)
-VERB(drown)
-VERB(drum)
-VERB(dry)
-VERB(duplicate)
-VERB(dust)
-VERB(earn)
-VERB(eat)
-VERB(echo)
-VERB(edit)
-VERB(educate)
-VERB(embarrass)
-VERB(employ)
-VERB(empty)
-VERB(enable)
-VERB(encode)
-VERB(encourage)
-VERB(end)
-VERB(enjoy)
-VERB(enter)
-VERB(entertain)
-VERB(enumerate)
-VERB(enqueue)
-VERB(escape)
-VERB(examine)
-VERB(excite)
-VERB(excuse)
-VERB(execute)
-VERB(exercise)
-VERB(exist)
-VERB(expand)
-VERB(expect)
-VERB(explain)
-VERB(explode)
-VERB(export)
-VERB(extend)
-VERB(face)
-VERB(fade)
-VERB(fail)
-VERB(fancy)
-VERB(fasten)
-VERB(fax)
-VERB(fear)
-VERB(feel)
-VERB(fence)
-VERB(fetch)
-VERB(fight)
-VERB(fill)
-VERB(film)
-VERB(find)
-VERB(finish)
-VERB(fire)
-VERB(fit)
-VERB(fix)
-VERB(flap)
-VERB(flash)
-VERB(flatten)
-VERB(flip)
-VERB(float)
-VERB(flood)
-VERB(flow)
-VERB(flower)
-VERB(fly)
-VERB(focus)
-VERB(fold)
-VERB(follow)
-VERB(fool)
-VERB(force)
-VERB(forget)
-VERB(forgive)
-VERB(form)
-VERB(found)
-VERB(freeze)
-VERB(frighten)
-VERB(fry)
-VERB(gain)
-VERB(gather)
-VERB(gaze)
-VERB(generate)
-VERB(get)
-VERB(give)
-VERB(glow)
-VERB(glue)
-VERB(go)
-VERB(grab)
-VERB(grate)
-VERB(grease)
-VERB(greet)
-VERB(grin)
-VERB(grip)
-VERB(groan)
-VERB(grow)
-VERB(guarantee)
-VERB(guard)
-VERB(guess)
-VERB(guide)
-VERB(hammer)
-VERB(hand)
-VERB(handle)
-VERB(hang)
-VERB(happen)
-VERB(harass)
-VERB(harm)
-VERB(hate)
-VERB(haunt)
-VERB(head)
-VERB(heal)
-VERB(heap)
-VERB(hear)
-VERB(heat)
-VERB(help)
-VERB(hide)
-VERB(highlight)
-VERB(hit)
-VERB(hold)
-VERB(hook)
-VERB(hop)
-VERB(hope)
-VERB(hover)
-VERB(hug)
-VERB(hum)
-VERB(hunt)
-VERB(hurry)
-VERB(hurt)
-VERB(identify)
-VERB(ignore)
-VERB(imagine)
-VERB(import)
-VERB(impress)
-VERB(improve)
-VERB(include)
-VERB(increase)
-VERB(influence)
-VERB(inform)
-VERB(inject)
-VERB(injure)
-VERB(insert)
-VERB(instruct)
-VERB(intend)
-VERB(interest)
-VERB(interfere)
-VERB(interrupt)
-VERB(intersect)
-VERB(intersects)
-VERB(introduce)
-VERB(invent)
-VERB(invite)
-VERB(irritate)
-VERB(itch)
-VERB(jail)
-VERB(jam)
-VERB(jog)
-VERB(join)
-VERB(joke)
-VERB(judge)
-VERB(juggle)
-VERB(jump)
-VERB(keep)
-VERB(kick)
-VERB(kill)
-VERB(kiss)
-VERB(kneel)
-VERB(knit)
-VERB(knock)
-VERB(knot)
-VERB(know)
-VERB(label)
-VERB(land)
-VERB(last)
-VERB(laugh)
-VERB(launch)
-VERB(lay)
-VERB(lead)
-VERB(learn)
-VERB(leave)
-VERB(lend)
-VERB(let)
-VERB(level)
-VERB(license)
-VERB(lick)
-VERB(lie)
-VERB(lighten)
-VERB(like)
-VERB(listen)
-VERB(live)
-VERB(load)
-VERB(localize)
-VERB(lock)
-VERB(long)
-VERB(look)
-VERB(lose)
-VERB(love)
-VERB(maintain)
-VERB(make)
-VERB(man)
-VERB(manage)
-VERB(march)
-VERB(mark)
-VERB(marry)
-VERB(match)
-VERB(mate)
-VERB(matter)
-VERB(mean)
-VERB(measure)
-VERB(meddle)
-VERB(meet)
-VERB(melt)
-VERB(memorise)
-VERB(mend)
-VERB(merge)
-VERB(mess)
-VERB(milk)
-VERB(mine)
-VERB(miss)
-VERB(minus)
-VERB(mix)
-VERB(moan)
-VERB(moor)
-VERB(mourn)
-VERB(move)
-VERB(muddle)
-VERB(mug)
-VERB(multiply)
-VERB(murder)
-VERB(nail)
-VERB(nest)
-VERB(nod)
-VERB(normalize)
-VERB(note)
-VERB(notice)
-VERB(notify)
-VERB(number)
-VERB(obey)
-VERB(observe)
-VERB(obtain)
-VERB(occur)
-VERB(offend)
-VERB(offer)
-VERB(open)
-VERB(order)
-VERB(overflow)
-VERB(owe)
-VERB(own)
-VERB(pack)
-VERB(paddle)
-VERB(paint)
-VERB(park)
-VERB(part)
-VERB(pass)
-VERB(paste)
-VERB(pat)
-VERB(pause)
-VERB(pay)
-VERB(peck)
-VERB(pedal)
-VERB(peel)
-VERB(peep)
-VERB(perform)
-VERB(permit)
-VERB(phone)
-VERB(pick)
-VERB(pinch)
-VERB(pine)
-VERB(place)
-VERB(plan)
-VERB(plant)
-VERB(play)
-VERB(please)
-VERB(plug)
-VERB(poke)
-VERB(polish)
-VERB(pop)
-VERB(possess)
-VERB(post)
-VERB(pour)
-VERB(practice)
-VERB(practise)
-VERB(pray)
-VERB(preach)
-VERB(precede)
-VERB(prefer)
-VERB(preload)
-VERB(prepare)
-VERB(prepend)
-VERB(present)
-VERB(preserve)
-VERB(press)
-VERB(pretend)
-VERB(prevent)
-VERB(prick)
-VERB(print)
-VERB(produce)
-VERB(program)
-VERB(promise)
-VERB(protect)
-VERB(provide)
-VERB(pull)
-VERB(pump)
-VERB(punch)
-VERB(puncture)
-VERB(punish)
-VERB(push)
-VERB(put)
-VERB(question)
-VERB(queue)
-VERB(race)
-VERB(radiate)
-VERB(rain)
-VERB(raise)
-VERB(reach)
-VERB(read)
-VERB(realise)
-VERB(receive)
-VERB(recognise)
-VERB(record)
-VERB(reduce)
-VERB(reflect)
-VERB(refuse)
-VERB(register)
-VERB(regret)
-VERB(reign)
-VERB(reject)
-VERB(rejoice)
-VERB(relax)
-VERB(release)
-VERB(rely)
-VERB(remain)
-VERB(remember)
-VERB(remind)
-VERB(remove)
-VERB(repair)
-VERB(repeat)
-VERB(replace)
-VERB(reply)
-VERB(report)
-VERB(request)
-VERB(require)
-VERB(resize)
-VERB(rescue)
-VERB(resolve)
-VERB(retain)
-VERB(retire)
-VERB(return)
-VERB(reverse)
-VERB(review)
-VERB(rhyme)
-VERB(ride)
-VERB(ring)
-VERB(rinse)
-VERB(rise)
-VERB(risk)
-VERB(rob)
-VERB(rock)
-VERB(roll)
-VERB(rot)
-VERB(rub)
-VERB(ruin)
-VERB(rule)
-VERB(run)
-VERB(rush)
-VERB(sack)
-VERB(sail)
-VERB(satisfy)
-VERB(save)
-VERB(saw)
-VERB(say)
-VERB(scale)
-VERB(scare)
-VERB(scatter)
-VERB(scold)
-VERB(scorch)
-VERB(scrape)
-VERB(scratch)
-VERB(scream)
-VERB(screw)
-VERB(scribble)
-VERB(scroll)
-VERB(scrub)
-VERB(seal)
-VERB(search)
-VERB(see)
-VERB(select)
-VERB(sell)
-VERB(send)
-VERB(separate)
-VERB(serve)
-VERB(settle)
-VERB(shade)
-VERB(share)
-VERB(shave)
-VERB(shelter)
-VERB(shiver)
-VERB(shock)
-VERB(shop)
-VERB(show)
-VERB(shrug)
-VERB(shut)
-VERB(sigh)
-VERB(sign)
-VERB(signal)
-VERB(sin)
-VERB(sing)
-VERB(sip)
-VERB(sit)
-VERB(ski)
-VERB(skip)
-VERB(slap)
-VERB(sleep)
-VERB(slip)
-VERB(slow)
-VERB(smash)
-VERB(smell)
-VERB(smile)
-VERB(smoke)
-VERB(snatch)
-VERB(sneeze)
-VERB(sniff)
-VERB(snore)
-VERB(snow)
-VERB(soak)
-VERB(soothe)
-VERB(sound)
-VERB(spare)
-VERB(spark)
-VERB(sparkle)
-VERB(speak)
-VERB(spell)
-VERB(spend)
-VERB(spill)
-VERB(spoil)
-VERB(spot)
-VERB(spray)
-VERB(sprout)
-VERB(squash)
-VERB(squeak)
-VERB(squeal)
-VERB(squeeze)
-VERB(stain)
-VERB(stamp)
-VERB(stand)
-VERB(standardise)
-VERB(standardize)
-VERB(stare)
-VERB(start)
-VERB(stay)
-VERB(steer)
-VERB(step)
-VERB(stir)
-VERB(stitch)
-VERB(stop)
-VERB(store)
-VERB(strap)
-VERB(strengthen)
-VERB(stretch)
-VERB(strip)
-VERB(stroke)
-VERB(stuff)
-VERB(subtract)
-VERB(succeed)
-VERB(suck)
-VERB(suffer)
-VERB(suggest)
-VERB(suit)
-VERB(supply)
-VERB(support)
-VERB(suppose)
-VERB(suppress)
-VERB(surprise)
-VERB(surround)
-VERB(suspect)
-VERB(suspend)
-VERB(swim)
-VERB(switch)
-VERB(take)
-VERB(talk)
-VERB(tame)
-VERB(tap)
-VERB(taste)
-VERB(teach)
-VERB(tear)
-VERB(tease)
-VERB(telephone)
-VERB(tell)
-VERB(tempt)
-VERB(terrify)
-VERB(test)
-VERB(thank)
-VERB(thaw)
-VERB(think)
-VERB(throw)
-VERB(tick)
-VERB(tickle)
-VERB(tie)
-VERB(time)
-VERB(tip)
-VERB(tire)
-VERB(toggle)
-VERB(touch)
-VERB(tour)
-VERB(tow)
-VERB(trace)
-VERB(trade)
-VERB(train)
-VERB(translate)
-VERB(transform)
-VERB(transport)
-VERB(trap)
-VERB(travel)
-VERB(traverse)
-VERB(treat)
-VERB(tremble)
-VERB(trick)
-VERB(trip)
-VERB(trot)
-VERB(trouble)
-VERB(truncate)
-VERB(trust)
-VERB(try)
-VERB(tug)
-VERB(tumble)
-VERB(turn)
-VERB(twist)
-VERB(understand)
-VERB(undress)
-VERB(unfasten)
-VERB(union)
-VERB(unite)
-VERB(unload)
-VERB(unlock)
-VERB(unpack)
-VERB(untidy)
-VERB(up)
-VERB(update)
-VERB(use)
-VERB(validate)
-VERB(vanish)
-VERB(visit)
-VERB(wail)
-VERB(wait)
-VERB(wake)
-VERB(walk)
-VERB(wander)
-VERB(want)
-VERB(warm)
-VERB(warn)
-VERB(wash)
-VERB(waste)
-VERB(watch)
-VERB(water)
-VERB(wave)
-VERB(wear)
-VERB(weigh)
-VERB(welcome)
-VERB(whine)
-VERB(whip)
-VERB(whirl)
-VERB(whisper)
-VERB(whistle)
-VERB(win)
-VERB(wink)
-VERB(wipe)
-VERB(wish)
-VERB(wobble)
-VERB(wonder)
-VERB(work)
-VERB(worry)
-VERB(wrap)
-VERB(wreck)
-VERB(wrestle)
-VERB(wriggle)
-VERB(write)
-VERB(yawn)
-VERB(yell)
-VERB(zip)
-VERB(zoom)
+    // Converts Python object `obj` representing a rectangular array of
+// Python values (a scalar, a sequence of scalars, a sequence of
+// sequences, etc.) into a C++ TensorFlow Tensor and stores it in
+// *ret.  If dtype is not None it should by a Python integer
+// representing the desired dtype of the resulting Tensor.
+// This is used only as a hint, *ret may not have that dtype on
+// success and may require a cast.
+Status PySeqToTensor(PyObject* obj, PyObject* dtype, Tensor* ret);
     
-        // If we ended up with a vacuous name like 'get' or 'set', do nothing.
-    if (isVacuousName(name))
-      return origName;
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    
-    class LLVM_LIBRARY_VISIBILITY Windows : public ToolChain {
-protected:
-  InvocationInfo constructInvocation(const LinkJobAction &job,
-                                     const JobContext &context) const override;
-    }
-    
-      base::WaitableEvent done(false, false);
-  BrowserThread::PostTask(
-      BrowserThread::IO, FROM_HERE,
-      base::Bind(&SetProxyConfigCallback, &done,
-                 make_scoped_refptr(context_getter), config));
-  done.Wait();
-    
-    
-    {}  // namespace nw
+    #endif  // TENSORFLOW_STREAM_EXECUTOR_CUDA_CUDA_PLATFORM_ID_H_
 
     
-    void Menu::Append(MenuItem* menu_item) {
-  menu_items.push_back(menu_item);
-  if (GTK_IS_ACCEL_GROUP(gtk_accel_group)){
-    menu_item->UpdateKeys(gtk_accel_group);
-  }
-  gtk_menu_shell_append(GTK_MENU_SHELL(menu_), menu_item->menu_item_);
-}
+      static const unsigned kMask = 0xf;  // Mask of all available flags.
     
-        if (!found) {
-      KeyMap::iterator it = keymap.find(upperText);
-      if (it != keymap.end()) {
-        keyName = it->second;
-        found = true;
+      // Creates a 2d FFT plan.
+  virtual std::unique_ptr<Plan> Create2dPlan(Stream *stream, uint64 num_x,
+                                             uint64 num_y, Type type,
+                                             bool in_place_fft) = 0;
+    
+    #include <algorithm>
+#include <string>
+#include <vector>
+    
+    #define INSTANTIATE_LAYER_GPU_FORWARD(classname) \
+  template void classname<float>::Forward_gpu( \
+      const std::vector<Blob<float>*>& bottom, \
+      const std::vector<Blob<float>*>& top); \
+  template void classname<double>::Forward_gpu( \
+      const std::vector<Blob<double>*>& bottom, \
+      const std::vector<Blob<double>*>& top);
+    
+      /**
+   * @brief Applies the transformation defined in the data layer's
+   * transform_param block to a cv::Mat
+   *
+   * @param cv_img
+   *    cv::Mat containing the data to be transformed.
+   * @param transformed_blob
+   *    This is destination blob. It can be part of top blob's data if
+   *    set_cpu_data() is used. See image_data_layer.cpp for an example.
+   */
+  void Transform(const cv::Mat& cv_img, Blob<Dtype>* transformed_blob);
+#endif  // USE_OPENCV
+    
+    /// @brief Fills a Blob with Gaussian-distributed values @f$ x = a @f$.
+template <typename Dtype>
+class GaussianFiller : public Filler<Dtype> {
+ public:
+  explicit GaussianFiller(const FillerParameter& param)
+      : Filler<Dtype>(param) {}
+  virtual void Fill(Blob<Dtype>* blob) {
+    Dtype* data = blob->mutable_cpu_data();
+    CHECK(blob->count());
+    caffe_rng_gaussian<Dtype>(blob->count(), Dtype(this->filler_param_.mean()),
+        Dtype(this->filler_param_.std()), blob->mutable_cpu_data());
+    int sparse = this->filler_param_.sparse();
+    CHECK_GE(sparse, -1);
+    if (sparse >= 0) {
+      // Sparse initialization is implemented for 'weight' blobs; i.e. matrices.
+      // These have num == channels == 1; width is number of inputs; height is
+      // number of outputs.  The 'sparse' variable specifies the mean number
+      // of non-zero input weights for a given output.
+      CHECK_GE(blob->num_axes(), 1);
+      const int num_outputs = blob->shape(0);
+      Dtype non_zero_probability = Dtype(sparse) / Dtype(num_outputs);
+      rand_vec_.reset(new SyncedMemory(blob->count() * sizeof(int)));
+      int* mask = reinterpret_cast<int*>(rand_vec_->mutable_cpu_data());
+      caffe_rng_bernoulli(blob->count(), non_zero_probability, mask);
+      for (int i = 0; i < blob->count(); ++i) {
+        data[i] *= mask[i];
       }
     }
+  }
+    }
     
-    ExtensionFunction::ResponseAction
-NwAppCloseAllWindowsFunction::Run() {
-  AppWindowRegistry* registry = AppWindowRegistry::Get(browser_context());
-  if (!registry)
-    return RespondNow(Error(''));
-  base::MessageLoopCurrent::Get()->task_runner()->PostTask(
-        FROM_HERE,
-        base::Bind(&NwAppCloseAllWindowsFunction::DoJob, registry, extension()->id()));
+    /**
+ * @brief Abstract base class that factors out the BLAS code common to
+ *        ConvolutionLayer and DeconvolutionLayer.
+ */
+template <typename Dtype>
+class BaseConvolutionLayer : public Layer<Dtype> {
+ public:
+  explicit BaseConvolutionLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    template <typename Dtype>
+class BasePrefetchingDataLayer :
+    public BaseDataLayer<Dtype>, public InternalThread {
+ public:
+  explicit BasePrefetchingDataLayer(const LayerParameter& param);
+  // LayerSetUp: implements common data layer setup functionality, and calls
+  // DataLayerSetUp to do special data layer setup for individual layer types.
+  // This method may not be overridden.
+  void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+      virtual inline const char* type() const { return 'BatchReindex'; }
+  virtual inline int ExactNumBottomBlobs() const { return 2; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
+    
+      virtual inline const char* type() const { return 'Bias'; }
+  virtual inline int MinBottomBlobs() const { return 1; }
+  virtual inline int MaxBottomBlobs() const { return 2; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
+    
+    #include <vector>
+    
+    namespace caffe {
+    }
+    
+    #endif  // CAFFE_CUDNN_DECONV_LAYER_HPP_
+
+    
+    #include <vector>
+    
+        void Trainer::Save(const std::wstring& modelFilePath, const std::vector<DictionaryValue>& learnerState, const Dictionary& externalState, const Dictionary& distributedState)
+    {
+        std::wstring tempModelFile = modelFilePath + L'.tmp';
+        Dictionary state;
+        state[versionPropertyName] = trainerCheckpointVersion;
+        state[learnersPropertyName] = learnerState;
+        state[externalStatePropertyName] = externalState;
+        state[distributedStatePropertyName] = distributedState;
+    }
+    
+        /*virtual*/ ValuePtr Value::DeepClone(bool readOnly/* = false*/) const
+    {
+        // TODO: Check if this is a derived type and throw an exception in that case
+        return MakeSharedObject<Value>(Data()->DeepClone(readOnly), (Mask() != nullptr) ? Mask()->DeepClone() : nullptr);
+    }
+    
+    #else // --- Linux version
+    
+            // take the chance to validate inputNodes
+        let allInputsSet = set<ComputationNodeBasePtr>(allInputs.begin(), allInputs.end());
+        for (let& input : inputNodes)
+            if (allInputsSet.find(input) == allInputsSet.end())
+                InvalidArgument('CloneFunction: No specified output depends on the specified input %ls.', input->NodeDescription().c_str());
+        // TODO: Is this really always an error? Are there valid cases where one would over-specify possible input nodes, even if they are not used/needed?
+    
+    int main() {
+    }
+    
+    
+    {
+    {                if(prev->right == NULL){
+                    prev->right = cur;
+                    cur = cur->left;
+                }
+                else{
+                    prev->right = NULL;
+                    res.push_back(cur->val);
+                    cur = cur->right;
+                }
+            }
+        }
+    
+            while(!q.empty()){
+    }
+    
+            queue<TreeNode*> q;
+        q.push(root);
+        int level_num = 1;
+    
+    #include <iostream>
+#include <vector>
+#include <stack>
+#include <cassert>
+    
+    private:
+    struct Command{
+        string s;   // go, print
+        TreeNode* node;
+        Command(string s, TreeNode* node): s(s), node(node){}
+    };
+    
+    class DHTMessageCallback;
+    
+    
+    {  virtual bool finished() = 0;
+};
+    
+    std::shared_ptr<DHTTask> DHTTaskFactoryImpl::createPeerLookupTask(
+    const std::shared_ptr<DownloadContext>& ctx, uint16_t tcpPort,
+    const std::shared_ptr<PeerStorage>& peerStorage)
+{
+  auto task = std::make_shared<DHTPeerLookupTask>(ctx, tcpPort);
+  // TODO this may be not freed by RequestGroup::releaseRuntimeResource()
+  task->setPeerStorage(peerStorage);
+  setCommonProperty(task);
+  return task;
+}
+    
+      DHTMessageDispatcher* dispatcher_;
+    
+    
+    {} // namespace aria2
+    
+    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
+                                           const std::string& ipaddr,
+                                           uint16_t port,
+                                           const unsigned char* secret) const
+{
+  unsigned char src[DHT_ID_LENGTH + COMPACT_LEN_IPV6 + SECRET_SIZE];
+  memset(src, 0, sizeof(src));
+  int compactlen = bittorrent::packcompact(src + DHT_ID_LENGTH, ipaddr, port);
+  if (compactlen == 0) {
+    throw DL_ABORT_EX(fmt('Token generation failed: ipaddr=%s, port=%u',
+                          ipaddr.c_str(), port));
+  }
+  memcpy(src, infoHash, DHT_ID_LENGTH);
+  memcpy(src + DHT_ID_LENGTH + COMPACT_LEN_IPV6, secret, SECRET_SIZE);
+  unsigned char md[20];
+  message_digest::digest(md, sizeof(md), MessageDigest::sha1().get(), src,
+                         sizeof(src));
+  return std::string(&md[0], &md[sizeof(md)]);
+}
+    
+    AccelDeccelAmplitude* AccelDeccelAmplitude::create(Action *action, float duration)
+{
+    AccelDeccelAmplitude *ret = new (std::nothrow) AccelDeccelAmplitude();
+    if (ret && ret->initWithAction(action, duration))
+    {
+        ret->autorelease();
+        return ret;
+    }
+    }
+    
+        /**
+    @brief Initializes the action with center position, radius, number of waves, amplitude, a grid size and duration.
+    @param duration Specify the duration of the Ripple3D action. It's a value in seconds.
+    @param gridSize Specify the size of the grid.
+    @param position Specify the center position of the ripple effect.
+    @param radius Specify the radius of the ripple effect.
+    @param waves Specify the waves count of the ripple effect.
+    @param amplitude Specify the amplitude of the ripple effect.
+    @return If the initialization success, return true; otherwise, return false.
+     */
+    bool initWithDuration(float duration, const Size& gridSize, const Vec2& position, float radius, unsigned int waves, float amplitude);
+    
+    PageTurn3D* PageTurn3D::create(float duration, const Size& gridSize)
+{
+    PageTurn3D *action = new (std::nothrow) PageTurn3D();
+    }
+    
+    bool ActionTween::initWithDuration(float duration, const std::string& key, float from, float to)
+{
+    if (ActionInterval::initWithDuration(duration))
+    {
+        _key    = key;
+        _to       = to;
+        _from     = from;
+        return true;
+    }
+    }
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    /**
+ * @addtogroup _2d
+ * @{
+ */
+    }
+    
+    void ExampleQt::run() {
+    }
+    
+        ret = p.write(&p, (void*) SW_STRS('hello world1'));
+    ASSERT_GT(ret, 0);
+    ret = p.write(&p, (void*) SW_STRS('hello world2'));
+    ASSERT_GT(ret, 0);
+    ret = p.write(&p, (void*) SW_STRS('hello world3'));
+    ASSERT_GT(ret, 0);
+    
+        cache.set('test2', val2);
+    ASSERT_EQ(cache.get('test2').get(), val2.get());
+    val2.reset();
+    ASSERT_EQ(dtor_num, 1);
+    ASSERT_EQ(cache.get('test'), nullptr);
+    
+        inline void set(const std::string &key, const std::shared_ptr<void> &val, time_t expire = 0)
+    {
+        time_t expire_time;
+    }
+    
+        void copy(void *_data, size_t _length)
+    {
+        alloc(_length);
+        memcpy(buffer, _data, _length);
     }
