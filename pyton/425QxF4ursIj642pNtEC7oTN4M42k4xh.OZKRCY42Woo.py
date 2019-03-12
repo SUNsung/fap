@@ -1,117 +1,169 @@
 
         
-        from mrjob.job import MRJob
+        P_nxn = rng.randn(N, N) / np.sqrt(N)
+    
+      Args:
+    gd_file: GraphDef proto text file.
+    ckpt_file: TensorFlow Checkpoint file.
+    
+      Returns:
+    predictions:  tf.float32 Tensor of predictions of shape [batch_size,
+      sequence_length]
+  '''
+  if FLAGS.discriminator_model == 'cnn':
+    predictions = cnn.discriminator(
+        hparams, sequence, is_training=is_training, reuse=reuse)
+  elif FLAGS.discriminator_model == 'fnn':
+    predictions = feedforward.discriminator(
+        hparams, sequence, is_training=is_training, reuse=reuse)
+  elif FLAGS.discriminator_model == 'rnn':
+    predictions = rnn.discriminator(
+        hparams, sequence, is_training=is_training, reuse=reuse)
+  elif FLAGS.discriminator_model == 'bidirectional':
+    predictions = bidirectional.discriminator(
+        hparams, sequence, is_training=is_training, reuse=reuse)
+  elif FLAGS.discriminator_model == 'bidirectional_zaremba':
+    predictions = bidirectional_zaremba.discriminator(
+        hparams, sequence, is_training=is_training, reuse=reuse)
+  elif FLAGS.discriminator_model == 'seq2seq_vd':
+    predictions = seq2seq_vd.discriminator(
+        hparams,
+        inputs,
+        present,
+        sequence,
+        is_training=is_training,
+        reuse=reuse)
+  elif FLAGS.discriminator_model == 'rnn_zaremba':
+    predictions = rnn_zaremba.discriminator(
+        hparams, sequence, is_training=is_training, reuse=reuse)
+  elif FLAGS.discriminator_model == 'rnn_nas':
+    predictions = rnn_nas.discriminator(
+        hparams, sequence, is_training=is_training, reuse=reuse)
+  elif FLAGS.discriminator_model == 'rnn_vd':
+    predictions = rnn_vd.discriminator(
+        hparams,
+        sequence,
+        is_training=is_training,
+        reuse=reuse,
+        initial_state=initial_state)
+  elif FLAGS.discriminator_model == 'bidirectional_vd':
+    predictions = bidirectional_vd.discriminator(
+        hparams,
+        sequence,
+        is_training=is_training,
+        reuse=reuse,
+        initial_state=initial_state)
+  else:
+    raise NotImplementedError
+  return predictions
+    
+    from httpie.compat import is_windows
+from httpie.config import DEFAULT_CONFIG_DIR, Config
+    
+        def get_converter(self, mime):
+        if is_valid_mime(mime):
+            for converter_class in plugin_manager.get_converters():
+                if converter_class.supports(mime):
+                    return converter_class(mime)
+    
+            Use `self.raw_auth` to access the raw value passed through
+        `--auth, -a`.
+    
+        '''
+    return path.replace('\\', '\\\\\\')
     
     
-if __name__ == '__main__':
-    RemoveDuplicateUrls.run()
-
-    
-    # begin[licence]
-#
-# [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-# end[licensc]
-    
-    
-class ANTLRFileStream(ANTLRStringStream):
-    '''
-    @brief CharStream that opens a file to read the data.
-    
-    This is a char buffer stream that is loaded from a file
-    all at once when you construct the object.
-    '''
-    
-    
-
-    
-            del r1 # Used to crash here
-    
-        def test_return_explain_error(self):
-        self.con.request('EXPLAINERROR', '/')
-        res = self.con.getresponse()
-        self.assertEqual(res.status, 999)
-        self.assertTrue(int(res.getheader('Content-Length')))
-    
-            if host_platform == 'darwin':
-            os_release = int(os.uname()[2].split('.')[0])
-            dep_target = sysconfig.get_config_var('MACOSX_DEPLOYMENT_TARGET')
-            if (dep_target and
-                    (tuple(int(n) for n in dep_target.split('.')[0:2])
-                        < (10, 5) ) ):
-                os_release = 8
-            if os_release < 9:
-                # MacOSX 10.4 has a broken readline. Don't try to build
-                # the readline module unless the user has installed a fixed
-                # readline package
-                if find_file('readline/rlconf.h', inc_dirs, []) is None:
-                    do_readline = False
-        if do_readline:
-            if host_platform == 'darwin' and os_release < 9:
-                # In every directory on the search path search for a dynamic
-                # library and then a static library, instead of first looking
-                # for dynamic libraries on the entire path.
-                # This way a statically linked custom readline gets picked up
-                # before the (possibly broken) dynamic library in /usr/lib.
-                readline_extra_link_args = ('-Wl,-search_paths_first',)
-            else:
-                readline_extra_link_args = ()
-    
-            loader = unittest.TestLoader()
-        suite = loader.loadTestsFromName('return_TestCase', m)
-        self.assertIsInstance(suite, loader.suiteClass)
-        self.assertEqual(list(suite), [testcase_1])
-    
-    
-# Does a path exist?
-# This is false for dangling symbolic links on systems that support them.
-def exists(path):
-    '''Test whether a path exists.  Returns False for broken symbolic links'''
+def has_docutils():
     try:
-        os.stat(path)
-    except (OSError, ValueError):
+        # noinspection PyUnresolvedReferences
+        import docutils
+        return True
+    except ImportError:
         return False
-    return True
     
     
-class BZ2CompressorTest(BaseTest):
-    def testCompress(self):
-        bz2c = BZ2Compressor()
-        self.assertRaises(TypeError, bz2c.compress)
-        data = bz2c.compress(self.TEXT)
-        data += bz2c.flush()
-        self.assertEqual(ext_decompress(data), self.TEXT)
+def test_unicode_basic_auth(httpbin):
+    # it doesn't really authenticate us because httpbin
+    # doesn't interpret the utf8-encoded auth
+    http('--verbose', '--auth', u'test:%s' % UNICODE,
+         httpbin.url + u'/basic-auth/test/' + UNICODE)
     
-        def get_current_time_as_html_fragment(self):
-        current_time = self.time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
-'''
+        def test_upload_ok(self, httpbin):
+        r = http('--form', '--verbose', 'POST', httpbin.url + '/post',
+                 'test-file@%s' % FILE_PATH_ARG, 'foo=bar')
+        assert HTTP_OK in r
+        assert 'Content-Disposition: form-data; name='foo'' in r
+        assert 'Content-Disposition: form-data; name='test-file';' \
+               ' filename='%s'' % os.path.basename(FILE_PATH) in r
+        assert FILE_CONTENT in r
+        assert ''foo': 'bar'' in r
+        assert 'Content-Type: text/plain' in r
+    
+                value = value.decode('utf8')
+            if name == 'User-Agent' and value.startswith('HTTPie/'):
+                continue
+    
+        def __init__(self, get_response=None):
+        if not apps.is_installed('django.contrib.sites'):
+            raise ImproperlyConfigured(
+                'You cannot use RedirectFallbackMiddleware when '
+                'django.contrib.sites is not installed.'
+            )
+        super().__init__(get_response)
+    
+        def save(self, must_create=False):
+        '''
+        To save, get the session key as a securely signed string and then set
+        the modified flag so that the cookie is set on the client for the
+        current request.
+        '''
+        self._session_key = self._get_session_key()
+        self.modified = True
+    
+        lastmod = None
+    all_sites_lastmod = True
+    urls = []
+    for site in maps:
+        try:
+            if callable(site):
+                site = site()
+            urls.extend(site.get_urls(page=page, site=req_site,
+                                      protocol=req_protocol))
+            if all_sites_lastmod:
+                site_lastmod = getattr(site, 'latest_lastmod', None)
+                if site_lastmod is not None:
+                    site_lastmod = (
+                        site_lastmod.utctimetuple() if isinstance(site_lastmod, datetime.datetime)
+                        else site_lastmod.timetuple()
+                    )
+                    lastmod = site_lastmod if lastmod is None else max(lastmod, site_lastmod)
+                else:
+                    all_sites_lastmod = False
+        except EmptyPage:
+            raise Http404('Page %s empty' % page)
+        except PageNotAnInteger:
+            raise Http404('No page '%s'' % page)
+    response = TemplateResponse(request, template_name, {'urlset': urls},
+                                content_type=content_type)
+    if all_sites_lastmod and lastmod is not None:
+        # if lastmod is defined for all sites, set header so as
+        # ConditionalGetMiddleware is able to send 304 NOT MODIFIED
+        response['Last-Modified'] = http_date(timegm(lastmod))
+    return response
+
+    
+        def run(self, args, opts):
+        # load contracts
+        contracts = build_component_list(self.settings.getwithbase('SPIDER_CONTRACTS'))
+        conman = ContractsManager(load_object(c) for c in contracts)
+        runner = TextTestRunner(verbosity=2 if opts.verbose else 1)
+        result = TextTestResult(runner.stream, runner.descriptions, runner.verbosity)
+    
+        def short_desc(self):
+        return 'Run a spider'
+    
+        def short_desc(self):
+        return 'Edit spider'
     
     
-# example of graph usage
-graph = {'A': ['B', 'C'], 'B': ['C', 'D'], 'C': ['D'], 'D': ['C'], 'E': ['F'], 'F': ['C']}
+class Command(ScrapyCommand):
