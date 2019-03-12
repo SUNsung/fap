@@ -1,339 +1,207 @@
 
         
-        namespace {
+        namespace google {
+namespace protobuf {
+namespace compiler {
+namespace java {
+namespace {
+    }
+    }
+    }
+    }
     }
     
-    bool CheckCommandLineArguments(int argc, base::CommandLine::CharType** argv);
     
-      // TransactionObserver:
-  void OnTransactionsUpdated(
-      const std::vector<in_app_purchase::Transaction>& transactions) override;
+    {  typedef integral_constant<int, 1> one_type;
+  EXPECT_EQ(1, one_type::value);
+}
     
-    
-    {}  // namespace api
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(TrackableObject);
-};
-    
-    #include 'atom/browser/atom_quota_permission_context.h'
-    
-      // content::QuotaPermissionContext:
-  void RequestQuotaPermission(const content::StorageQuotaParams& params,
-                              int render_process_id,
-                              const PermissionCallback& callback) override;
-    
-    
-    { protected:
-  virtual ~Delegate() {}
-};
-    
-    struct Product {
-  // Product Identifier
-  std::string productIdentifier;
+      while (true) {
+    const void* inptr;
+    int inlen;
+    bool ok;
+    ok = in.Next(&inptr, &inlen);
+    if (!ok) {
+      break;
     }
-    
-    bool AboutProtocolHandler::IsSafeRedirectTarget(const GURL& location) const {
-  return false;
-}
-    
-      // Build a substitution map to replace the protocol's \c Self and the type
-  // parameters of the requirement into a combined context that provides the
-  // type parameters of the conformance context and the parameters of the
-  // requirement.
-  auto selfType = cast<GenericTypeParamType>(
-      proto->getSelfInterfaceType()->getCanonicalType());
-    
-    #include 'swift/ASTSectionImporter/ASTSectionImporter.h'
-#include 'swift/Basic/Dwarf.h'
-#include 'swift/Serialization/SerializedModuleLoader.h'
-#include 'swift/Serialization/Validation.h'
-#include 'llvm/Support/Debug.h'
-#include 'llvm/Support/raw_ostream.h'
-    
-    void CacheImpl::removeAll() {
-  cache_remove_all(static_cast<cache_t*>(Impl));
-}
-    
-    bool Mangle::needsPunycodeEncoding(StringRef str) {
-  for (unsigned char c : str) {
-    if (!isValidSymbolChar(c))
-      return true;
+    if (inlen > 0) {
+      int err = write(STDOUT_FILENO, inptr, inlen);
+      if (err != inlen) {
+        fprintf(stderr, 'write unexpectedly returned %d.\n', err);
+        return 1;
+      }
+    }
   }
-  return false;
-}
     
-    static int digit_index(char value) {
-  if (value >= 'a' && value <= 'z')
-    return value - 'a';
-  if (value >= 'A' && value <= 'J')
-    return value - 'A' + 26;
-  return -1;
-}
-    
-      /// The target to be passed to the compiler invocation. By default, this
-  /// is the target triple, but this may be overridden to accommodate some
-  /// platforms.
-  virtual std::string getTargetForLinker() const;
-    
-    #include 'content/nw/src/api/base/base.h'
-    
-    v8::Handle<v8::Value> DeallocateObject(int routing_id,
-                                       int object_id) {
-  RenderThread::Get()->Send(new ShellViewHostMsg_Deallocate_Object(
-      routing_id, object_id));
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  return v8::Undefined(isolate);
-}
-    
-    #include 'content/nw/src/api/clipboard/clipboard.h'
-    
-    
-#include 'content/nw/src/api/event/event.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/dispatcher_host.h'
-#include 'ui/gfx/screen.h'
-    
-       bool IsCommandIdChecked(int command_id) const override;
-   bool IsCommandIdEnabled(int command_id) const override;
-    
-    aura::Window* Menu::GetActiveNativeView(content::RenderFrameHost* rfh) {
-  content::WebContents* web_contents =
-    content::WebContents::FromRenderFrameHost(rfh);
-  if (!web_contents) {
-    LOG(ERROR) << 'Menu: couldn't find WebContents';
-    return NULL;
-  }
-  return web_contents->GetFullscreenRenderWidgetHostView()
-             ? web_contents->GetFullscreenRenderWidgetHostView()
-                   ->GetNativeView()
-             : web_contents->GetNativeView();
-}
-    
-    void MenuItem::Destroy() {
-  gtk_widget_destroy(menu_item_);
-  g_object_unref(G_OBJECT(menu_item_));
-}
-    
-    class NwClipboardReadAvailableTypesFunction : public NWSyncExtensionFunction {
- public:
-  NwClipboardReadAvailableTypesFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    namespace google {
+namespace protobuf {
+namespace util {
+    }
+    }
     }
     
-    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
- public:
-  NwMenuGetNSStringFWithFixupFunction() {}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    
- protected:
-  ~NwMenuGetNSStringFWithFixupFunction() override {}
-    
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
-};
-    
-    bool NwObjCallObjectMethodFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  base::ListValue* arguments = nullptr;
-  int id = 0;
-  std::string type, method;
-  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(2, &method));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetList(3, &arguments));
-    }
-    
-    #include 'extensions/browser/extension_function.h'
-    
-    
-    {    retMatcher = new RegexMatcher(this);
-    if (retMatcher == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
-    }
-    return retMatcher;
-}
-    
-    //eof
-
-    
-    #include 'unicode/format.h'
-#include 'unicode/locid.h'
-#include 'unicode/parseerr.h'
-#include 'unicode/utypes.h'
-#include 'uvector.h'
-#include 'hash.h'
-    
-    #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
+    #endif  // CAFFE_INTERNAL_THREAD_HPP_
 
     
     
-    {    BreakIterator *get() const { return ptr; }
-    BreakIterator *operator->() const { return ptr; }
-    BreakIterator &operator*() const { return *ptr; }
-private:
-    BreakIterator *ptr;
-    SharedBreakIterator(const SharedBreakIterator &);
-    SharedBreakIterator &operator=(const SharedBreakIterator &);
+    {  /// Whether to ignore instances with a certain label.
+  bool has_ignore_label_;
+  /// The label indicating that an instance should be ignored.
+  int ignore_label_;
+  /// Keeps counts of the number of samples per class.
+  Blob<Dtype> nums_buffer_;
 };
-    
-    #include 'unicode/utypes.h'
-#include 'sharedobject.h'
-    
-    class U_I18N_API SharedNumberFormat : public SharedObject {
-public:
-    SharedNumberFormat(NumberFormat *nfToAdopt) : ptr(nfToAdopt) { }
-    virtual ~SharedNumberFormat();
-    const NumberFormat *get() const { return ptr; }
-    const NumberFormat *operator->() const { return ptr; }
-    const NumberFormat &operator*() const { return *ptr; }
-private:
-    NumberFormat *ptr;
-    SharedNumberFormat(const SharedNumberFormat &);
-    SharedNumberFormat &operator=(const SharedNumberFormat &);
-};
-    
-    #include 'gregoimp.h'
-#include 'umutex.h'
-    
-    U_NAMESPACE_BEGIN
-    
-    #endif   // #if !UCONFIG_NO_FORMATTING
-#endif   // SMPDTFST_H
-
     
     /**
- * Implement UnicodeMatcher
+ * @brief Provides base for data layers that feed blobs to the Net.
+ *
+ * TODO(dox): thorough documentation for Forward and proto params.
  */
-UBool StringMatcher::matchesIndexValue(uint8_t v) const {
-    if (pattern.length() == 0) {
-        return TRUE;
+template <typename Dtype>
+class BaseDataLayer : public Layer<Dtype> {
+ public:
+  explicit BaseDataLayer(const LayerParameter& param);
+  // LayerSetUp: implements common data layer setup functionality, and calls
+  // DataLayerSetUp to do special data layer setup for individual layer types.
+  // This method may not be overridden except by the BasePrefetchingDataLayer.
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void DataLayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) {}
+  // Data layers have no bottoms, so reshaping is trivial.
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) {}
     }
-    UChar32 c = pattern.char32At(0);
-    const UnicodeMatcher *m = data->lookupMatcher(c);
-    return (m == 0) ? ((c & 0xFF) == v) : m->matchesIndexValue(v);
-}
     
     
-    {    for (size_t i = 0; i < batch.size; ++i) {
-      offset_[i + 1] = (i + 1) * num_col_;
-      Row<IndexType> row = batch[i];
-      for (uint32_t j = 0; j < num_col_; ++j) {
-        dense_index_[i * num_col_ + j] = j;
-      }
-      for (unsigned k = 0; k < row.length; ++k) {
-        uint32_t index = row.get_index(k);
-        CHECK_LT(index, num_col_)
-            << 'Featuere index larger than num_col';
-        dense_value_[i * num_col_ + index]  = row.get_value(k);
-      }
-    }
-    out_ = batch;
-    out_.index = dmlc::BeginPtr(dense_index_);
-    out_.value = dmlc::BeginPtr(dense_value_);
-    out_.offset = dmlc::BeginPtr(offset_);
-    return true;
-  }
-    
-    SEXP XGDMatrixSetInfo_R(SEXP handle, SEXP field, SEXP array) {
-  R_API_BEGIN();
-  int len = length(array);
-  const char *name = CHAR(asChar(field));
-  if (!strcmp('group', name)) {
-    std::vector<unsigned> vec(len);
-    #pragma omp parallel for schedule(static)
-    for (int i = 0; i < len; ++i) {
-      vec[i] = static_cast<unsigned>(INTEGER(array)[i]);
-    }
-    CHECK_CALL(XGDMatrixSetGroup(R_ExternalPtrAddr(handle), BeginPtr(vec), len));
-  } else {
-    std::vector<float> vec(len);
-    #pragma omp parallel for schedule(static)
-    for (int i = 0; i < len; ++i) {
-      vec[i] = REAL(array)[i];
-    }
-    CHECK_CALL(XGDMatrixSetFloatInfo(R_ExternalPtrAddr(handle),
-                                   CHAR(asChar(field)),
-                                   BeginPtr(vec), len));
-  }
-  R_API_END();
-  return R_NilValue;
-}
-    
-        index_.resize(boundary_[nfeature - 1].index_end);
-    row_ind_.resize(boundary_[nfeature - 1].row_ind_end);
-    
-        std::map<int, int> _map;
-    
-    
-    {    uint32_t protect_page = get_protect_stack_page();
-    if (protect_page)
-    {
-        if (protect_stack(stack_, stack_size_, protect_page))
-        {
-            protect_page_ = protect_page;
-        }
-    }
-}
-    
-        signals:
-        void finished();
-    
-        ret = swPipeBase_create(&p, 1);
-    ASSERT_EQ(ret, 0);
-    ret = p.write(&p, (void *) SW_STRL('hello world\n'));
-    ASSERT_GT(ret, 0);
-    ret = p.write(&p, (void *) SW_STRL('你好中国。\n'));
-    ASSERT_GT(ret, 0);
-    
-    
-    {    ~lru_cache_test_class()
-    {
-        ++dtor_num;
-    }
+    {  // extra temporarary variables is used to carry out sums/broadcasting
+  // using BLAS
+  Blob<Dtype> batch_sum_multiplier_;
+  Blob<Dtype> num_by_chans_;
+  Blob<Dtype> spatial_sum_multiplier_;
 };
     
-    protected:
-    size_t capacity = 1;
-    bool closed = false;
-    std::list<Coroutine *> producer_queue;
-    std::list<Coroutine *> consumer_queue;
-    std::queue<void *> data_queue;
     
-        pool = new async_thread_pool(SwooleAIO.min_thread_count, SwooleAIO.min_thread_count);
-    pool->start();
-    SwooleAIO.init = 1;
+    { private:
+  Blob<Dtype> bias_multiplier_;
+  int outer_dim_, bias_dim_, inner_dim_, dim_;
+};
     
-    int main(int argc, char **argv)
-{
-    swoole_init();
+     protected:
+  /**
+   * @param bottom input Blob vector (length 2+)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_1 @f$
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_2 @f$
+   *   -# ...
+   *   - K @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_K @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
+   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
+   *      the concatenated output @f$
+   *        y = [\begin{array}{cccc} x_1 & x_2 & ... & x_K \end{array}]
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    namespace caffe {
     }
     
+     private:
+  // Recursive copy function.
+  void crop_copy(const vector<Blob<Dtype>*>& bottom,
+               const vector<Blob<Dtype>*>& top,
+               const int* offsets,
+               vector<int> indices,
+               int cur_dim,
+               const Dtype* src_data,
+               Dtype* dest_data,
+               bool is_forward);
     
-    {            ASSERT_EQ(addr1, addr3);
-            ASSERT_EQ(addr2, addr4);
-        }
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    pid_t swoole_coroutine_wait(int *__stat_loc)
-{
-    if (unlikely(SwooleG.main_reactor == nullptr || !Coroutine::get_current()))
-    {
-        return wait( __stat_loc);
-    }
+    #ifdef USE_CUDNN
+/*
+ * @brief cuDNN implementation of PoolingLayer.
+ *        Fallback to PoolingLayer for CPU mode.
+*/
+template <typename Dtype>
+class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
+ public:
+  explicit CuDNNPoolingLayer(const LayerParameter& param)
+      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNPoolingLayer();
+  // Currently, cuDNN does not support the extra top blob.
+  virtual inline int MinTopBlobs() const { return -1; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
     }
     
-    /* {{{ php_pgsql_result2array
- */
-int swoole_pgsql_result2array(PGresult *pg_result, zval *ret_array, long result_type)
-{
-    zval row;
-    char *field_name;
-    size_t num_fields;
-    int pg_numrows, pg_row;
-    uint32_t i;
-    assert(Z_TYPE_P(ret_array) == IS_ARRAY);
-    }
-    }
-    }
-    }
+      // Same as above, but you can choose the interception scope of this object.
+  ScopedFakeTestPartResultReporter(InterceptMode intercept_mode,
+                                   TestPartResultArray* result);
+    
+    #endif  // GTEST_INCLUDE_GTEST_GTEST_TYPED_TEST_H_
+
+    
+      // Returns true if FilePath ends with a path separator, which indicates that
+  // it is intended to represent a directory. Returns false otherwise.
+  // This does NOT check that a directory (or file) actually exists.
+  bool IsDirectory() const;
+    
+    #if defined(_MSC_VER) && _MSC_VER < 1400
+// This is the only specialization that allows VC++ 7.1 to remove const in
+// 'const int[3] and 'const int[3][4]'.  However, it causes trouble with GCC
+// and thus needs to be conditionally compiled.
+template <typename T, size_t N>
+struct RemoveConst<T[N]> {
+  typedef typename RemoveConst<T>::type type[N];
+};
+#endif
+    
+      template <typename T>
+  operator ParamGenerator<T>() const {
+    const T array[] = {static_cast<T>(v1_), static_cast<T>(v2_),
+        static_cast<T>(v3_), static_cast<T>(v4_), static_cast<T>(v5_),
+        static_cast<T>(v6_), static_cast<T>(v7_), static_cast<T>(v8_),
+        static_cast<T>(v9_), static_cast<T>(v10_), static_cast<T>(v11_),
+        static_cast<T>(v12_), static_cast<T>(v13_), static_cast<T>(v14_),
+        static_cast<T>(v15_), static_cast<T>(v16_), static_cast<T>(v17_),
+        static_cast<T>(v18_), static_cast<T>(v19_), static_cast<T>(v20_),
+        static_cast<T>(v21_), static_cast<T>(v22_), static_cast<T>(v23_),
+        static_cast<T>(v24_), static_cast<T>(v25_), static_cast<T>(v26_),
+        static_cast<T>(v27_), static_cast<T>(v28_)};
+    return ValuesIn(array);
+  }
+    
+      // Clones a 0-terminated C string, allocating memory using new.  The
+  // caller is responsible for deleting the return value using
+  // delete[].  Returns the cloned string, or NULL if the input is
+  // NULL.
+  //
+  // This is different from strdup() in string.h, which allocates
+  // memory using malloc().
+  static const char* CloneCString(const char* c_str);
+    
+    // This provides interface PrimeTable that determines whether a number is a
+// prime and determines a next prime number. This interface is used
+// in Google Test samples demonstrating use of parameterized tests.
+    
+    // Tests the copy c'tor.
+TEST(MyString, CopyConstructor) {
+  const MyString s1(kHelloString);
+  const MyString s2 = s1;
+  EXPECT_EQ(0, strcmp(s2.c_string(), kHelloString));
+}
