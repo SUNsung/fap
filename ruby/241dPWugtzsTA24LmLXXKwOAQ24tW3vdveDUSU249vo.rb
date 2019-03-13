@@ -1,200 +1,127 @@
 
         
-                unless post && post.id
-          puts post.errors.full_messages if post
-          puts creator.errors.inspect
-          raise 'Failed to create description for trust level 3 lounge!'
-        end
+            def rescue_connection_failed_error(e)
+      if e.message.include?('Connection reset by peer - SSL_connect')
+        handle_tls_error!(e)
+      else
+        handle_unknown_error!(e)
+      end
+    end
     
-        Category.transaction do
-      staff.group_names = ['staff']
-      unless staff.save
-        puts staff.errors.full_messages
-        raise 'Failed to set permissions on the Staff category!'
+            expect(result).to include(''fastlane/spec/fixtures/oclint/src/AppDelegate.m'')
       end
     
-          case command.method_name
-      when 'sh'
-        error_callback = proc { |string_value| closure_argument_value = string_value }
-        command_param = parameter_map[:command]
-        log_param = parameter_map[:log]
-        action_return = Fastlane::FastFile.sh(command_param, log: log_param, error_callback: error_callback)
+    # Here be helper
+    
+    # The * turns the array into a parameter list
+# This is using the form of exec which takes a variable parameter list, e.g. `exec(command, param1, param2, ...)`
+# We need to use that, because otherwise invocations like
+# `spaceauth -u user@fastlane.tools` would recognize '-u user@fastlane.tools' as a single parameter and throw errors
+exec(*exec_arr)
+
+    
+        def empty?
+      @entries.empty?
+    end
+    
+        def root_page?
+      subpath.blank? || subpath == '/' || subpath == root_path
+    end
+    
+        DOCUMENT_RGX = /\A(?:\s|(?:<!--.*?-->))*<(?:\!doctype|html)/i
+    
+            css('img[style]').each do |node|
+          node['align'] ||= node['style'][/float:\s*(left|right)/, 1]
+          node['style'] = node['style'].split(';').map(&:strip).select { |s| s =~ /\Awidth|height/ }.join(';')
+        end
+    
+      def prev_page
+    account_outbox_url(@account, page: true, min_id: @statuses.first.id) unless @statuses.empty?
+  end
+    
+            redirect_to admin_report_path(@report), notice: I18n.t('admin.report_notes.created_msg')
+      else
+        @report_notes = @report.notes.latest
+        @report_history = @report.history
+        @form = Form::StatusBatch.new
+    
+      private
+    
+          if @user.persisted?
+        sign_in_and_redirect @user, event: :authentication
+        set_flash_message(:notice, :success, kind: provider_id.capitalize) if is_navigational_format?
+      else
+        session['devise.#{provider}_data'] = request.env['omniauth.auth']
+        redirect_to new_user_registration_url
       end
-    
-            [
-          'This will automatically tag your build with the following format: `<grouping>/<lane>/<prefix><build_number>`, where:'.markdown_preserve_newlines,
-          list,
-          'For example, for build 1234 in the 'appstore' lane, it will tag the commit with `builds/appstore/1234`.'
-        ].join('\n')
-      end
-    
-          it 'adds docset_feed_url param to command' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          appledoc(
-            project_name: 'Project Name',
-            project_company: 'Company',
-            input: 'input/dir',
-            docset_feed_url: 'http://docset-feed-url.com'
-          )
-        end').runner.execute(:test)
-    
-            context 'with given path to oclint' do
-          let(:result) do
-            Fastlane::FastFile.new.parse('lane :test do
-              oclint(
-                compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
-                oclint_path: 'test/bin/oclint'
-              )
-            end').runner.execute(:test)
-          end
-          let(:command) { 'cd #{File.expand_path('.').shellescape} && test/bin/oclint -report-type=html -o=oclint_report.html' }
-    
-            if b_length > a_length
-          (b_length - a_length).times { a_split.insert(-2, 0) }
-        elsif a_length > b_length
-          (a_length - b_length).times { b_split.insert(-2, 0) }
-        end
-    
-          private
-    
-        delegate :puts, :print, :tty?, to: :$stdout
-    
-            css('.file').each do |node|
-          node.content = node.content.strip
-        end
-    
-          private
-    
-            css('.nav-index-section').each do |node|
-          node.content = node.content
-        end
-    
-      def process_push_request
-    case hub_mode
-    when 'subscribe'
-      Pubsubhubbub::SubscribeService.new.call(account_from_topic, hub_callback, hub_secret, hub_lease_seconds, verified_domain)
-    when 'unsubscribe'
-      Pubsubhubbub::UnsubscribeService.new.call(account_from_topic, hub_callback)
-    else
-      ['Unknown mode: #{hub_mode}', 422]
     end
   end
     
-    class Api::Web::SettingsController < Api::Web::BaseController
-  respond_to :json
-    
-        $?.should be_an_instance_of Process::Status
-    $?.success?.should == true
-    $?.exitstatus.should == 0
+      def request_locale
+    preferred_locale || compatible_locale
   end
     
-        trace_var :$Kernel_trace_var_global do |value|
-      captured = value
-    end
-    
-    gemspec
-    
-      task :check_submodules do
-    title 'Ensuring submodules are initialized'
-    submodule_help_msg = 'Run git submodule update --init --recursive to ensure submodules are initialized'
-    raise submodule_help_msg if `git submodule status`.split('\n').any? do |line|
-      line.start_with? '-'
-    end
+      included do
+    before_action :set_rate_limit_headers, if: :rate_limited_request?
   end
     
-        # From asking people, it seems MacPorts does not have a `prefix` command, like
-    # Homebrew does, so make an educated guess:
-    if port_prefix = prefix_from_bin('port')
-      prefixes << port_prefix
+              format('%#o', 0).should == '0'
+    
+      it 'no raises error on fixnum values' do
+    [1].each do |v|
+      lambda { v.taint }.should_not raise_error(RuntimeError)
+      v.tainted?.should == false
     end
+  end
+end
+
     
-          def response
-        return @response if defined? @response
+          attr_reader :key, :default, :options
     
-            # rubocop:disable Style/MethodMissing
-        def method_missing(key, value=nil)
-          if value
-            set(lvalue(key), value)
-          else
-            fetch(key)
-          end
-        end
-        # rubocop:enable Style/MethodMissing
+          def with(properties)
+        properties.each { |key, value| add_property(key, value) }
+        self
+      end
     
-          private
-    
-    module Capistrano
-  class Configuration
-    # Decorates a Variables object to additionally perform an optional set of
-    # user-supplied validation rules. Each rule for a given key is invoked
-    # immediately whenever `set` is called with a value for that key.
-    #
-    # If `set` is called with a callable value or a block, validation is not
-    # performed immediately. Instead, the validation rules are invoked the first
-    # time `fetch` is used to access the value.
-    #
-    # A rule is simply a block that accepts two arguments: key and value. It is
-    # up to the rule to raise an exception when it deems the value is invalid
-    # (or just print a warning).
-    #
-    # Rules can be registered using the DSL like this:
-    #
-    #   validate(:my_key) do |key, value|
-    #     # rule goes here
-    #   end
-    #
-    class ValidatedVariables < SimpleDelegator
-      include Capistrano::ProcHelpers
-    
-    set_if_empty :pty, false
-    
-          def preference_field_tag(name, value, options)
-        case options[:type]
-        when :integer
-          text_field_tag(name, value, preference_field_options(options))
-        when :boolean
-          hidden_field_tag(name, 0, id: '#{name}_hidden') +
-            check_box_tag(name, 1, value, preference_field_options(options))
-        when :string
-          text_field_tag(name, value, preference_field_options(options))
-        when :password
-          password_field_tag(name, value, preference_field_options(options))
-        when :text
-          text_area_tag(name, value, preference_field_options(options))
+          def add_host(host, properties={})
+        new_host = Server[host]
+        new_host.port = properties[:port] if properties.key?(:port)
+        # This matching logic must stay in sync with `Server#matches?`.
+        key = ServerKey.new(new_host.hostname, new_host.port)
+        existing = servers_by_key[key]
+        if existing
+          existing.user = new_host.user if new_host.user
+          existing.with(properties)
         else
-          text_field_tag(name, value, preference_field_options(options))
+          servers_by_key[key] = new_host.with(properties)
         end
       end
     
-            def show
-          @inventory_unit = inventory_unit
-          respond_with(@inventory_unit)
-        end
+          def link_to_clone(resource, options = {})
+        options[:data] = { action: 'clone', 'original-title': Spree.t(:clone) }
+        options[:class] = 'btn btn-primary btn-sm with-tip'
+        options[:method] = :post
+        options[:icon] = :clone
+        button_link_to '', clone_object_url(resource), options
+      end
     
-            def create
-          authorize! :create, Spree::OptionValue
-          @option_value = scope.new(option_value_params)
-          if @option_value.save
-            render :show, status: 201
-          else
-            invalid_resource!(@option_value)
+    desc 'Generates a dummy app for testing for every Spree engine'
+task :test_app do
+  SPREE_GEMS.each do |gem_name|
+    Dir.chdir('#{File.dirname(__FILE__)}/#{gem_name}') do
+      sh 'rake test_app'
+    end
+  end
+end
+    
+            def update
+          authorize! :update, @order, order_token
+          @address = find_address
+    
+              unless inventory_unit.respond_to?(can_event) &&
+              inventory_unit.send(can_event)
+            render plain: { exception: 'cannot transition to #{@event}' }.to_json,
+                   status: 200
+            false
           end
         end
-    
-          def insert_before(oldklass, newklass, *args)
-        i = entries.index { |entry| entry.klass == newklass }
-        new_entry = i.nil? ? Entry.new(newklass, *args) : entries.delete_at(i)
-        i = entries.index { |entry| entry.klass == oldklass } || 0
-        entries.insert(i, new_entry)
-      end
-    
-        def identity
-      @@identity ||= '#{hostname}:#{$$}:#{process_nonce}'
-    end
-    
-    require 'rack/builder'
-require 'rack/file'
-require 'rack/session/cookie'
-    
-          indifferent_hash
-    end
