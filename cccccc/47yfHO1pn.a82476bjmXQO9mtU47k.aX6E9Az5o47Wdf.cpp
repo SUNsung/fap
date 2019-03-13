@@ -1,312 +1,249 @@
 
         
-        ModelAnalyzer::ModelAnalyzer(const GrapplerItem& item) : item_(item) {}
+          // Create template
+  std::vector<char> tmp(256);
+  auto len = snprintf(tmp.data(), tmp.size(), '%s/testXXXXXX', tmpdir);
+  tmp.resize(len);
     
-    // Must be included first.
-#include 'tensorflow/python/lib/core/numpy.h'
+    X before running op:
+[[ 3.813361   -1.319647    5.2089314  -4.931328    0.6218652 ]
+ [ 7.2757645   5.5552588   5.785643   -2.4790506  -0.41400087]
+ [ 1.1541046  -6.933266    3.3754056   1.6569928  -1.7670316 ]
+ [-3.4932013   4.891472    1.5530115  -3.2443287  -4.605099  ]
+ [-4.574543   -7.360948    5.91305    -8.196495   -5.357458  ]]
+X after running op:
+[[ 3. -2.  5. -5.  0.]
+ [ 7.  5.  5. -3. -1.]
+ [ 1. -7.  3.  1. -2.]
+ [-4.  4.  1. -4. -5.]
+ [-5. -8.  5. -9. -6.]]
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
-    
-    // Returns the kernel class name required to execute <node_def> on the device
-// type of <node_def.device>, or an empty string if the kernel class is not
-// found or the device name is invalid.
-string TryFindKernelClass(const string& serialized_node_def);
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    io::ZeroCopyOutputStream* GeneratorContext::OpenForInsert(
-    const string& filename, const string& insertion_point) {
-  GOOGLE_LOG(FATAL) << 'This GeneratorContext does not support insertion.';
-  return NULL;  // make compiler happy
-}
-    
-    // Author: kenton@google.com (Kenton Varda)
-//  Based on original Protocol Buffers design by
-//  Sanjay Ghemawat, Jeff Dean, and others.
-#include <google/protobuf/compiler/csharp/csharp_doc_comment.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/stubs/strutil.h>
-    
-    EnumGenerator::~EnumGenerator() {
-}
-    
-    #include <sstream>
-    
-    #include <gtest/gtest.h>
-    
-    #include <google/protobuf/compiler/java/java_context.h>
-#include <google/protobuf/compiler/java/java_doc_comment.h>
-#include <google/protobuf/compiler/java/java_helpers.h>
-#include <google/protobuf/compiler/java/java_name_resolver.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/stubs/strutil.h>
-    
-    ExtensionGenerator* ImmutableGeneratorFactory::NewExtensionGenerator(
-    const FieldDescriptor* descriptor) const {
-  if (HasDescriptorMethods(descriptor->file(), context_->EnforceLite())) {
-    return new ImmutableExtensionGenerator(descriptor, context_);
-  } else {
-    return new ImmutableExtensionLiteGenerator(descriptor, context_);
+    class GetIm2ColGradient : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+  vector<OperatorDef> GetGradientDefs() override {
+    return SingleGradientDef(
+        'Col2Im',
+        '',
+        std::vector<string>{GO(0), I(0)},
+        std::vector<string>{GI(0)});
   }
-}
+};
+REGISTER_GRADIENT(Im2Col, GetIm2ColGradient);
     
-      printer->Print(
-    'java.lang.String[] descriptorData = {\n');
-  printer->Indent();
+    int InternalKeyComparator::Compare(const Slice& akey, const Slice& bkey) const {
+  // Order by:
+  //    increasing user key (according to user-supplied comparator)
+  //    decreasing sequence number
+  //    decreasing type (though sequence# should be enough to disambiguate)
+  int r = user_comparator_->Compare(ExtractUserKey(akey), ExtractUserKey(bkey));
+  if (r == 0) {
+    const uint64_t anum = DecodeFixed64(akey.data() + akey.size() - 8);
+    const uint64_t bnum = DecodeFixed64(bkey.data() + bkey.size() - 8);
+    if (anum > bnum) {
+      r = -1;
+    } else if (anum < bnum) {
+      r = +1;
     }
-    
-    void OneofGenerator::GeneratePublicCasePropertyDeclaration(
-    io::Printer* printer) {
-  printer->Print(
-      variables_,
-      '$comments$'
-      '@property(nonatomic, readonly) $enum_name$ $name$OneOfCase;\n'
-      '\n');
-}
-    
-    
-    {  return output.HadError();
-}
-    
-    int main(int argc, char** argv) {
-  if (argc != 4) {
-    printf('This script converts the MNIST dataset to the leveldb format used\n'
-           'by caffe to train a siamese network.\n'
-           'Usage:\n'
-           '    convert_mnist_data input_image_file input_label_file '
-           'output_db_file\n'
-           'The MNIST dataset could be downloaded at\n'
-           '    http://yann.lecun.com/exdb/mnist/\n'
-           'You should gunzip them after downloading.\n');
-  } else {
-    google::InitGoogleLogging(argv[0]);
-    convert_dataset(argv[1], argv[2], argv[3]);
   }
-  return 0;
+  return r;
 }
-#else
-int main(int argc, char** argv) {
-  LOG(FATAL) << 'This example requires LevelDB; compile with USE_LEVELDB.';
-}
-#endif  // USE_LEVELDB
-
     
-    
-    {  shared_ptr<boost::thread> thread_;
+    enum FileType {
+  kLogFile,
+  kDBLockFile,
+  kTableFile,
+  kDescriptorFile,
+  kCurrentFile,
+  kTempFile,
+  kInfoLogFile  // Either the current one, or an old one
 };
     
+      // Create a reader that will return log records from '*file'.
+  // '*file' must remain live while this Reader is in use.
+  //
+  // If 'reporter' is non-null, it is notified whenever some data is
+  // dropped due to a detected corruption.  '*reporter' must remain
+  // live while this Reader is in use.
+  //
+  // If 'checksum' is true, verify checksums if available.
+  //
+  // The Reader will start reading at the first record located at physical
+  // position >= initial_offset within the file.
+  Reader(SequentialFile* file, Reporter* reporter, bool checksum,
+         uint64_t initial_offset);
     
- protected:
-  /** The protobuf that stores the layer parameters */
-  LayerParameter layer_param_;
-  /** The phase: TRAIN or TEST */
-  Phase phase_;
-  /** The vector that stores the learnable parameters as a set of blobs. */
-  vector<shared_ptr<Blob<Dtype> > > blobs_;
-  /** Vector indicating whether to compute the diff of each param blob. */
-  vector<bool> param_propagate_down_;
+    #include 'db/version_edit.h'
+    
+      void SetComparatorName(const Slice& name) {
+    has_comparator_ = true;
+    comparator_ = name.ToString();
+  }
+  void SetLogNumber(uint64_t num) {
+    has_log_number_ = true;
+    log_number_ = num;
+  }
+  void SetPrevLogNumber(uint64_t num) {
+    has_prev_log_number_ = true;
+    prev_log_number_ = num;
+  }
+  void SetNextFile(uint64_t num) {
+    has_next_file_number_ = true;
+    next_file_number_ = num;
+  }
+  void SetLastSequence(SequenceNumber seq) {
+    has_last_sequence_ = true;
+    last_sequence_ = seq;
+  }
+  void SetCompactPointer(int level, const InternalKey& key) {
+    compact_pointers_.push_back(std::make_pair(level, key));
+  }
+    
+        void ProgressWriter::UpdateTest(size_t samples, const ValuePtr& accumulatedMetric)
+    {
+        m_test->Update(samples, nullptr, accumulatedMetric,
+            [this](const std::pair<size_t, size_t> samples, std::pair<size_t, size_t> updates,
+                   const std::pair<double, double> /*aggregateLoss*/, std::pair<double, double> aggregateMetric)
+            {
+                OnWriteTestUpdate(samples, updates, aggregateMetric);
+            });
+    }
+    
+            if (::WaitForSingleObject(m_handle, wait ? INFINITE : 0) != WAIT_OBJECT_0)
+        {
+            // failed to acquire
+            int rc = ::CloseHandle(m_handle);
+            if ((rc == CLOSEHANDLE_ERROR) && !std::uncaught_exception())
+            {
+                RuntimeError('Acquire: Handler close failure with error code %d', ::GetLastError());
+            }
+            m_handle = NULL;
+            return false;
+        }
+    
+        virtual void /*ComputationNode::*/ ForwardProp(const FrameRange& fr) override
+    {
+        size_t rank = DetermineElementwiseTensorRank();
+        auto output    =           ValueTensorFor(rank, fr);
+        auto input     = InputRef(0).ValueTensorFor(rank, fr);
+        auto mean      = Input(1)->ValueTensorFor(rank, fr.AllowBroadcast());
+        auto invStdDev = Input(2)->ValueTensorFor(rank, fr.AllowBroadcast());
+    }
+    
+        // Overrides
+    virtual CardinalSplineTo *clone() const override;
+    virtual CardinalSplineTo* reverse() const override;
+    virtual void startWithTarget(Node *target) override;
     
     /**
- * @brief Takes a Blob and crop it, to the shape specified by the second input
- *  Blob, across all dimensions after the specified axis.
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
+     * @param time In seconds.
+     */
+    virtual void update(float time) override;
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
-    const grpc::string& name, const grpc::string& value) {
-  class StringOption final : public ServerBuilderOption {
-   public:
-    StringOption(const grpc::string& name, const grpc::string& value)
-        : name_(name), value_(value) {}
-    }
-    }
-    
-    
-    {   private:
-    DynamicThreadPool* pool_;
-    grpc_core::Thread thd_;
-    void ThreadFunc();
-  };
-  std::mutex mu_;
-  std::condition_variable cv_;
-  std::condition_variable shutdown_cv_;
-  bool shutdown_;
-  std::queue<std::function<void()>> callbacks_;
-  int reserve_threads_;
-  int nthreads_;
-  int threads_waiting_;
-  std::list<DynamicThread*> dead_threads_;
-    
-    #include <vector>
-#include <memory>
-    
-      void fcfids(const RegXMM& frt, const RegXMM& frb, bool rc = 0) {
-    EmitXForm(59, rn(frt), rn(0), rn(frb), 846, rc);
-  }
-  void fcmpo(const RegSF& sf, const RegXMM& fra, const RegXMM& frb) {
-    EmitXForm(63, rn(int(sf) << 2), rn(fra), rn(frb), 32);
-  }
-  void fcmpu(const RegSF& sf, const RegXMM& fra, const RegXMM& frb) {
-    EmitXForm(63, rn(int(sf) << 2), rn(fra), rn(frb), 0);
-  }
-  void fctid(const RegXMM& frt, const RegXMM& frb, bool rc = 0) {
-    EmitXForm(63, rn(frt), rn(0), rn(frb), 814, rc);
-  }
-  void fctidz(const RegXMM& frt, const RegXMM& frb, bool rc = 0) {
-    EmitXForm(63, rn(frt), rn(0), rn(frb), 815, rc);
-  }
-  void fmr(const RegXMM& frt, const RegXMM& frb, bool rc = 0) {
-    EmitXForm(63, rn(frt), rn(0), rn(frb), 72, rc);
-  }
-  //TODO(rcardoso); check default for EH bit
-  void ldarx(const Reg64& rt, MemoryRef m, bool eh = 1) {
-    assertx(!m.r.disp);  // doesn't support immediate displacement
-    EmitXForm(31, rn(rt), rn(m.r.base), rn(m.r.index), 84, eh);
-  }
-  void lfd(const RegXMM& frt, MemoryRef m) {
-    assertx(Reg64(-1) == m.r.index);  // doesn't support base+index
-    EmitDForm(50, rn(frt), rn(m.r.base), m.r.disp);
-  }
-  void lfdx(const RegXMM& rt, MemoryRef m) {
-    assertx(!m.r.disp);  // doesn't support immediate displacement
-    EmitXForm(31, rn(rt), rn(m.r.base), rn(m.r.index), 599);
-  }
-  void mcrfs(uint8_t bf, uint8_t bfa) {
-    EmitXForm(63, (bf << 2), (bfa << 2), 0, 64);
-  }
-  void mfcr(const Reg64& rt) {
-    EmitXFXForm(31, rn(rt), static_cast<SpecialReg>(0), 19);
-  }
-  void mfvsrd(const Reg64& ra, const RegXMM& xs) {
-   EmitXX1Form(31, rn(xs), rn(ra), rn(0) /* reserved */, 51, 0);
-  }
-  void mtcrf(uint16_t fxm, const Reg64& ra) {
-    EmitXFXForm(31, rn(ra), (fxm << 1), 144);
-  }
-  void mtocrf(uint16_t fxm, const Reg64& rt)          {
-    EmitXFXForm(31, rn(rt), ( ((fxm << 1) & 0x1fe) |0x200), 144);
-  }
-  void mtfsb0(uint8_t bt) { EmitXForm(63, bt, 0 , 0, 70); }
-  void mtvsrd(const RegXMM& xt, const Reg64& ra) {
-   EmitXX1Form(31, rn(xt), rn(ra), rn(0) /* reserved */, 179, 0);
-  }
-  void sradi(const Reg64& ra, const Reg64& rs, uint8_t sh, bool rc = 0);
-  void stdcx(const Reg64& rt, MemoryRef m) {
-    assertx(!m.r.disp);  // doesn't support immediate displacement
-    EmitXForm(31, rn(rt), rn(m.r.base), rn(m.r.index), 214, 1);
-  }
-  void stfd(const RegXMM& frt, MemoryRef m) {
-    assertx(Reg64(-1) == m.r.index);  // doesn't support base+index
-    EmitDForm(54, rn(frt), rn(m.r.base), m.r.disp);
-  }
-  void stfdx(const RegXMM& rt, MemoryRef m) {
-    assertx(!m.r.disp);  // doesn't support immediate displacement
-    EmitXForm(31, rn(rt), rn(m.r.base), rn(m.r.index), 727);
-  }
-  void xscvdpsxds(const RegXMM& xt, const RegXMM& xb) {
-   EmitXX2Form(60, rn(xt), 0, rn(xb), 344, 0, 0);
-  }
-  void xscvsxddp(const RegXMM& xt, const RegXMM& xb) {
-   EmitXX2Form(60, rn(xt), 0, rn(xb), 376, 0, 0);
-  }
-  void xsrdpi(const RegXMM& xt, const RegXMM& xb) {
-   EmitXX2Form(60, rn(xt), 0, rn(xb), 73, 0, 0);
-  }
-  void xssqrtdp(const RegXMM& xt, const RegXMM& xb) {
-   EmitXX2Form(60, rn(xt), 0, rn(xb), 75, 0, 0);
-  }
-  void xvcvspsxds(const RegXMM& xt, const RegXMM& xb) {
-   EmitXX2Form(60, rn(xt), 0, rn(xb), 408, 0, 0);
-  }
-  void xvcvspsxws(const RegXMM& xt, const RegXMM& xb) {
-   EmitXX2Form(60, rn(xt), 0, rn(xb), 152, 0, 0);
-  }
-  void xxlxor(const RegXMM& xt, const RegXMM& xa, const RegXMM& xb) {
-   EmitXX3Form(60, rn(xt), rn(xa), rn(xb), 154, 0, 0, 0);
-  }
-  void xxpermdi(const RegXMM& tx, const RegXMM& xa, const RegXMM& xb) {
-   EmitXX3Form(60, rn(tx), rn(xa), rn(xb),  10, 0, 0, 0);
-   // Note that I decided to hardcode DM bit as 0
-   // (xo field = 10), because it's sufficent for now.
-   // However, I might not be the case in the future
-  }
-    
-    bool PlainDirectory::isValid() const {
-  return m_dir;
+    //
+// NOTE: Converting these macros into Templates is desirable, but please see
+// issue #16159 [https://github.com/cocos2d/cocos2d-x/pull/16159] for further info
+//
+#define EASEELASTIC_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC, REVERSE_CLASSNAME) \
+CLASSNAME* CLASSNAME::create(cocos2d::ActionInterval *action, float period /* = 0.3f*/) \
+{ \
+    CLASSNAME *ease = new (std::nothrow) CLASSNAME(); \
+    if (ease) \
+    { \
+        if (ease->initWithAction(action, period)) \
+            ease->autorelease(); \
+        else \
+            CC_SAFE_RELEASE_NULL(ease); \
+    } \
+    return ease; \
+} \
+CLASSNAME* CLASSNAME::clone() const \
+{ \
+    if(_inner) return CLASSNAME::create(_inner->clone(), _period); \
+    return nullptr; \
+} \
+void CLASSNAME::update(float time) { \
+    _inner->update(TWEEN_FUNC(time, _period)); \
+} \
+EaseElastic* CLASSNAME::reverse() const { \
+    return REVERSE_CLASSNAME::create(_inner->reverse(), _period); \
 }
     
-    #define ERROR_RAISE_WARNING(exp)        \
-  int ret = (exp);                      \
-  if (ret != 0) {                       \
-    raise_warning(                      \
-      '%s(): %s',                       \
-      __FUNCTION__,                     \
-      folly::errnoStr(errno).c_str()    \
-    );                                  \
-  }                                     \
+    void CallFunc::update(float time)
+{
+    ActionInstant::update(time);
+    this->execute();
+}
     
-    req::ptr<File>
-GlobStreamWrapper::open(const String& filename, const String& /*mode*/,
-                        int /*options*/,
-                        const req::ptr<StreamContext>& /*context*/) {
-  // Can't open a glob as a file, it's meant to be opened as a directory
+    The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+    
+    protected:
+    void calculateMaxItems();
+    void updateBlendFunc();
+    void updateOpacityModifyRGB();
+    
+        stack_ = (char*) sw_malloc(stack_size);
+    swTraceLog(SW_TRACE_COROUTINE, 'alloc stack: size=%lu, ptr=%p', stack_size, stack_);
+    
+        QObject::connect(&example, SIGNAL(finished()), &app, SLOT(quit()));
+    QTimer::singleShot(0, &example, SLOT(run()));
+    
+    
+    {    //1
+    ret = p.read(&p, buf, sizeof(buf));
+    if (ret < 0)
+    {
+        swSysError('read() failed.');
+    }
+    ASSERT_GT(ret, 0);
+    ASSERT_EQ(strcmp('hello world1', buf), 0);
+    //2
+    ret = p.read(&p, buf, sizeof(buf));
+    ASSERT_GT(ret, 0);
+    ASSERT_EQ(strcmp('hello world2', buf), 0);
+    //3
+    ret = p.read(&p, buf, sizeof(buf));
+    ASSERT_GT(ret, 0);
+    ASSERT_EQ(strcmp('hello world3', buf), 0);
+}
+    
+    TEST(hashmap, string)
+{
+    swHashMap *hm = swHashMap_new(16, NULL);
+    swHashMap_add(hm, (char *) SW_STRL('hello'), (void *) 199);
+    swHashMap_add(hm, (char *) SW_STRL('swoole22'), (void *) 8877);
+    swHashMap_add(hm, (char *) SW_STRL('hello2'), (void *) 200);
+    swHashMap_add(hm, (char *) SW_STRL('willdel'), (void *) 888);
+    swHashMap_add(hm, (char *) SW_STRL('willupadte'), (void *) 9999);
+    swHashMap_add(hm, (char *) SW_STRL('hello3'), (void *) 78978);
     }
     
-    //////////////////////////////////////////////////////////////////////
+        for (i = 0; i < READ_THREAD_N; i++)
+    {
+        int ret = swPipeUnsock_create(&threads[i].pipe, 1, SOCK_DGRAM);
+        ASSERT_EQ(ret, 0);
+        threads[i].thread = new std::thread(thread_read, i);
+    }
+    
+            pid_t pid = fork();
+        ASSERT_NE(pid, -1);
     
     
-    {        switch (gradientValue->GetDataType())
+    {        SwooleG.main_reactor = (swReactor *) malloc(sizeof(swReactor));
+        if (SwooleG.main_reactor == NULL)
         {
-        case DataType::Float:
-            Update<float>(parameter, gradientValue, smoothedGradientValue, trainingSampleCount);
-            break;
-        case DataType::Double:
-            Update<double>(parameter, gradientValue, smoothedGradientValue, trainingSampleCount);
-            break;
-        case DataType::Float16:
-            UpdateHalf(parameter, gradientValue, smoothedGradientValue, trainingSampleCount);
-            break;
-        default:
-            NOT_IMPLEMENTED;
+            swWarn('malloc failed.');
         }
+        if (swReactor_create(SwooleG.main_reactor, SW_REACTOR_MAXEVENTS) < 0)
+        {
+            swWarn('create reactor failed.');
+        }
+        //client, swoole_event_exit will set swoole_running = 0
+        SwooleWG.in_client = 1;
+        SwooleWG.reactor_wait_onexit = 1;
+        SwooleWG.reactor_ready = 0;
     }
     
-    private:
-    // -----------------------------------------------------------------------
-    // the cloning operation itself
-    // -----------------------------------------------------------------------
+    #include 'api.h'
+#include 'wrapper/base.hpp'
+#include 'server.h'
