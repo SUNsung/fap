@@ -1,521 +1,281 @@
 
         
-        public:
-  /// Form storage for the given generic signature and its replacement
-  /// types and conformances.
-  static Storage *get(GenericSignature *genericSig,
-                      ArrayRef<Type> replacementTypes,
-                      ArrayRef<ProtocolConformanceRef> conformances);
-    
-    using namespace swift;
-    
-      if (!wasInline) delete[] oldBegin;
+        #include <algorithm>
     
     
-    {  bool isTypedef() const {
-    assert(isValid());
-    return !Decl.isNull() && Decl.is<const clang::TypedefNameDecl *>();
-  }
-  const clang::TypedefNameDecl *getTypedef() const {
-    assert(isTypedef());
-    return Decl.get<const clang::TypedefNameDecl *>();
-  }
-};
-    
-    /// The result of out inference system
-struct IAMResult {
-  // The name to import as
-  DeclName name = {};
-    }
-    
-    void REPLJobAction::anchor() {}
-    
-    
-    {}  // namespace caffe
-    
-    /// @brief Fills a Blob with constant or randomly-generated data.
-template <typename Dtype>
-class Filler {
- public:
-  explicit Filler(const FillerParameter& param) : filler_param_(param) {}
-  virtual ~Filler() {}
-  virtual void Fill(Blob<Dtype>* blob) = 0;
- protected:
-  FillerParameter filler_param_;
-};  // class Filler
-    
-    /**
- * @brief Takes a Blob and crop it, to the shape specified by the second input
- *  Blob, across all dimensions after the specified axis.
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-    
-    
-    {  size_t *workspace_fwd_sizes_;
-  size_t *workspace_bwd_data_sizes_;
-  size_t *workspace_bwd_filter_sizes_;
-  size_t workspaceSizeInBytes;  // size of underlying storage
-  void *workspaceData;  // underlying storage
-  void **workspace;  // aliases into workspaceData
-};
-#endif
-    
-    
-    {  ~TemporaryFile() {
-    unlink(path.c_str());
-  }
-};
-    
-    REGISTER_CPU_OPERATOR(
-    MergeSingleListFeatureTensorsGradient,
-    MergeSingleListOrMapFeatureTensorsGradientOp<CPUContext>);
-OPERATOR_SCHEMA(MergeSingleListFeatureTensorsGradient)
-    .SetDoc(
-        'Explode multi-feature tensors with list features into '
-        'single-feature tensors.' +
-        doc)
-    .NumInputs([](int n) { return n >= 3 && n % 2 == 1; })
-    .NumOutputs([](int n) { return n >= 1; })
-    .Input(0, 'in1_lengths', '.lengths')
-    .Input(1, 'in1_presence', '.presence')
-    .Input(2, 'out_values_values', '.values.values_grad')
-    .Output(0, 'out1_values', '.values_grad');
-REGISTER_GRADIENT(
-    MergeSingleListFeatureTensors,
-    GetMergeSingleListFeatureTensorsGradient);
-    
-    OPERATOR_SCHEMA(FindDuplicateElements)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .SetDoc(R'DOC(
-The *FindDuplicateElements* op takes a single 1-D tensor *data* as input and returns a single 1-D output tensor *indices*. The output tensor contains the indices of the duplicate elements of the input, excluding the first occurrences. If all elements of *data* are unique, *indices* will be empty.
-    
-    #include 'caffe2/core/context.h'
-#include 'caffe2/core/operator.h'
-    
-    /**
- * Returns the bounding rectangle of the current object at the given level in
- * the coordinates of the working image that is pix_binary().
- * See comment on coordinate system above.
- * Returns false if there is no such object at the current position.
- */
-bool PageIterator::BoundingBoxInternal(PageIteratorLevel level,
-                                       int* left, int* top,
-                                       int* right, int* bottom) const {
-  if (Empty(level))
-    return false;
-  TBOX box;
-  PARA *para = nullptr;
-  switch (level) {
-    case RIL_BLOCK:
-      box = it_->block()->block->restricted_bounding_box(include_upper_dots_,
-                                                         include_lower_dots_);
-      break;
-    case RIL_PARA:
-      para = it_->row()->row->para();
-      // explicit fall-through.
-    case RIL_TEXTLINE:
-      box = it_->row()->row->restricted_bounding_box(include_upper_dots_,
-                                                     include_lower_dots_);
-      break;
-    case RIL_WORD:
-      box = it_->word()->word->restricted_bounding_box(include_upper_dots_,
-                                                       include_lower_dots_);
-      break;
-    case RIL_SYMBOL:
-      if (cblob_it_ == nullptr)
-        box = it_->word()->box_word->BlobBox(blob_index_);
-      else
-        box = cblob_it_->data()->bounding_box();
-  }
-  if (level == RIL_PARA) {
-    PageIterator other = *this;
-    other.Begin();
-    do {
-      if (other.it_->block() &&
-          other.it_->block()->block == it_->block()->block &&
-          other.it_->row() && other.it_->row()->row &&
-          other.it_->row()->row->para() == para) {
-        box = box.bounding_union(other.it_->row()->row->bounding_box());
-      }
-    } while (other.Next(RIL_TEXTLINE));
-  }
-  if (level != RIL_SYMBOL || cblob_it_ != nullptr)
-    box.rotate(it_->block()->block->re_rotation());
-  // Now we have a box in tesseract coordinates relative to the image rectangle,
-  // we have to convert the coords to a top-down system.
-  const int pix_height = pixGetHeight(tesseract_->pix_binary());
-  const int pix_width = pixGetWidth(tesseract_->pix_binary());
-  *left = ClipToRange(static_cast<int>(box.left()), 0, pix_width);
-  *top = ClipToRange(pix_height - box.top(), 0, pix_height);
-  *right = ClipToRange(static_cast<int>(box.right()), *left, pix_width);
-  *bottom = ClipToRange(pix_height - box.bottom(), *top, pix_height);
-  return true;
-}
-    
-      STRING lword_text;   // the UTF-8 text of the leftmost werd
-  STRING rword_text;   // the UTF-8 text of the rightmost werd
-    
-    // Getter for the description.
-const char* ParamContent::GetDescription() const {
-  if (param_type_ == VT_INTEGER) { return iIt->info_str(); }
-  else if (param_type_ == VT_BOOLEAN) { return bIt->info_str(); }
-  else if (param_type_ == VT_DOUBLE) { return dIt->info_str(); }
-  else if (param_type_ == VT_STRING) { return sIt->info_str(); }
-  else return nullptr;
-}
-    
-    // Creates a box file string from a unichar string, TBOX and page number.
-void MakeBoxFileStr(const char* unichar_str, const TBOX& box, int page_num,
-                    STRING* box_str);
-    
-    // Solve the dynamic programming problem for the given array of points, with
-// the given size and cost function.
-// Steps backwards are limited to being between min_step and max_step
-// inclusive.
-// The return value is the tail of the best path.
-DPPoint* DPPoint::Solve(int min_step, int max_step, bool debug,
-                        CostFunc cost_func, int size, DPPoint* points) {
-  if (size <= 0 || max_step < min_step || min_step >= size)
-    return nullptr;  // Degenerate, but not necessarily an error.
-  ASSERT_HOST(min_step > 0);  // Infinite loop possible if this is not true.
-  if (debug)
-    tprintf('min = %d, max=%d\n',
-            min_step, max_step);
-  // Evaluate the total cost at each point.
-  for (int i = 0; i < size; ++i) {
-    for (int offset = min_step; offset <= max_step; ++offset) {
-      DPPoint* prev = offset <= i ? points + i - offset : nullptr;
-      int64_t new_cost = (points[i].*cost_func)(prev);
-      if (points[i].best_prev_ != nullptr && offset > min_step * 2 &&
-          new_cost > points[i].total_cost_)
-        break;  // Find only the first minimum if going over twice the min.
-    }
-    points[i].total_cost_ += points[i].local_cost_;
-    if (debug) {
-      tprintf('At point %d, local cost=%d, total_cost=%d, steps=%d\n',
-              i, points[i].local_cost_, points[i].total_cost_,
-              points[i].total_steps_);
-    }
-  }
-  // Now find the end of the best path and return it.
-  int best_cost = points[size - 1].total_cost_;
-  int best_end = size - 1;
-  for (int end = best_end - 1; end >= size - min_step; --end) {
-    int cost = points[end].total_cost_;
-    if (cost < best_cost) {
-      best_cost = cost;
-      best_end = end;
-    }
-  }
-  return points + best_end;
-}
-    
-     private:
-  // Saves the given Pix as a PNG-encoded string and destroys it.
-  static void SetPixInternal(Pix* pix, GenericVector<char>* image_data);
-  // Returns the Pix image for the image_data. Must be pixDestroyed after use.
-  static Pix* GetPixInternal(const GenericVector<char>& image_data);
-  // Parses the text string as a box file and adds any discovered boxes that
-  // match the page number. Returns false on error.
-  bool AddBoxes(const char* box_text);
-    
-      // Adds an element with a weight of 1.
-  void add(double x, double y);
-  // Adds an element with a specified weight.
-  void add(double x, double y, double weight);
-  // Adds a whole LLSQ.
-  void add(const LLSQ& other);
-  // Deletes an element with a weight of 1.
-  void remove(double x, double y);
-  int32_t count() const {  // no of elements
-    return static_cast<int>(total_weight + 0.5);
-  }
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    // Data
-static double       g_Time = 0.0f;
-static bool         g_MousePressed[3] = { false, false, false };
-static CIwTexture*  g_FontTexture = NULL;
-static char*        g_ClipboardText = NULL;
-static bool         g_osdKeyboardEnabled = false;
-    
-                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
-    
-        // By using D3DCompile() from <d3dcompiler.h> / d3dcompiler.lib, we introduce a dependency to a given version of d3dcompiler_XX.dll (see D3DCOMPILER_DLL_A)
-    // If you would like to use this DX11 sample code but remove this dependency you can:
-    //  1) compile once, save the compiled shader blobs into a file or source code and pass them to CreateVertexShader()/CreatePixelShader() [preferred solution]
-    //  2) use code to detect any version of the DLL and grab a pointer to D3DCompile from the DLL.
-    // See https://github.com/ocornut/imgui/pull/638 for sources and details.
-    
-    void ImGui_ImplFreeGLUT_NewFrame()
-{
-    // Setup time step
-    ImGuiIO& io = ImGui::GetIO();
-    int current_time = glutGet(GLUT_ELAPSED_TIME);
-    io.DeltaTime = (current_time - g_Time) / 1000.0f;
-    g_Time = current_time;
-    }
-    
-        /** 
-     * Creates the action with X Y Z factor.
-     * @param duration Duration time, in seconds.
-     * @param sx Scale factor of x.
-     * @param sy Scale factor of y.
-     * @param sz Scale factor of z.
-     * @return An autoreleased ScaleTo object.
-     */
-    static ScaleTo* create(float duration, float sx, float sy, float sz);
-    
-        int count = 0;
-    auto limit = element->actions->num;
-    for(int i = 0; i < limit; ++i)
     {
-        auto action = static_cast<Action*>(element->actions->arr[i]);
-        if(action->getTag() == tag)
-            ++count;
+    {        for (; j < size.width; j++)
+        {
+            dst[j] = ~src[j];
+        }
     }
+#else
+    (void)size;
+    (void)srcBase;
+    (void)srcStride;
+    (void)dstBase;
+    (void)dstStride;
+#endif
+}
     
-            Then once you running ActionTween on the node, the method updateTweenAction will be invoked.
-*/
-class CC_DLL ActionTweenDelegate
+                uint8x8_t x0 = !srow0 ? v_border : vld1_u8(srow0 + x);
+            uint8x8_t x1 = vld1_u8(srow1 + x);
+            uint8x8_t x2 = !srow2 ? v_border : vld1_u8(srow2 + x);
+    
+    ptrdiff_t borderInterpolate(ptrdiff_t _p, size_t _len, BORDER_MODE borderType, size_t startMargin, size_t endMargin)
 {
-public:
-    /**
-     * @js NA
-     * @lua NA
-     */
-    virtual ~ActionTweenDelegate() {}
+    ptrdiff_t p = _p + (ptrdiff_t)startMargin;
+    size_t len = _len + startMargin + endMargin;
+    if( (size_t)p < len )
+        return _p;
+    else if( borderType == BORDER_MODE_REPLICATE )
+        p = p < 0 ? 0 : (ptrdiff_t)len - 1;
+    else if( borderType == BORDER_MODE_REFLECT || borderType == BORDER_MODE_REFLECT101 )
+    {
+        s32 delta = borderType == BORDER_MODE_REFLECT101;
+        if( len == 1 )
+            return 0;
+        do
+        {
+            if( p < 0 )
+                p = -p - 1 + delta;
+            else
+                p = (ptrdiff_t)len - 1 - (p - (ptrdiff_t)len) - delta;
+        }
+        while( (size_t)p >= len );
     }
-    
-    
-    {                
-            case 4:
-            case 12:
-            case 14:
-                /* going LEFT with these cases:
-                 4          12          14
-                 +---+---+  +---+---+   +---+---+
-                 |   |   |  |   |   |   |   | 2 |
-                 +---+---+  +---+---+   +---+---+
-                 | 4 |   |  | 4 | 8 |   | 4 | 8 |
-                 +---+---+  +---+---+  	+---+---+
-                 */
-                stepx = -1;
-                stepy = 0;
-                break;
-                
-                
-            case 2 :
-            case 3 :
-            case 7 :
-                /* going RIGHT with these cases:
-                 2          3           7        
-                 +---+---+  +---+---+   +---+---+
-                 |   | 2 |  | 1 | 2 |   | 1 | 2 |
-                 +---+---+  +---+---+   +---+---+
-                 |   |   |  |   |   |   | 4 |   |
-                 +---+---+  +---+---+  	+---+---+
-                 */
-                stepx=1;
-                stepy=0;
-                break;
-            case 9 :
-                /*
-                 +---+---+
-                 | 1 |   |
-                 +---+---+
-                 |   | 8 |
-                 +---+---+
-                 this should normally go UP, but if we already been here, we go down
-                */
-                //find index from xy;
-                i = getIndexFromPos(curx, cury);
-                it = find (case9s.begin(), case9s.end(), i);
-                if (it != case9s.end())
-                {
-                    //found, so we go down, and delete from case9s;
-                    stepx = 0;
-                    stepy = 1;
-                    case9s.erase(it);
-                }
-                else
-                {
-                    //not found, we go up, and add to case9s;
-                    stepx = 0;
-                    stepy = -1;
-                    case9s.push_back(i);
-                }
-                break;
-            case 6 :
-                /*
-                 6
-                 +---+---+
-                 |   | 2 |
-                 +---+---+
-                 | 4 |   |
-                 +---+---+
-                 this normally go RIGHT, but if its coming from UP, it should go LEFT
-                 */
-                i = getIndexFromPos(curx, cury);
-                it = find (case6s.begin(), case6s.end(), i);
-                if (it != case6s.end())
-                {
-                    //found, so we go down, and delete from case9s;
-                    stepx = -1;
-                    stepy = 0;
-                    case6s.erase(it);
-                }
-                else{
-                    //not found, we go up, and add to case9s;
-                    stepx = 1;
-                    stepy = 0;
-                    case6s.push_back(i);
-                }
-                break;
-            default:
-                CCLOG('this shouldn't happen.');
-        }
-        //little optimization
-        // if previous direction is same as current direction,
-        // then we should modify the last vec to current
-        curx += stepx;
-        cury += stepy;
-        if(stepx == prevx && stepy == prevy)
-        {
-            _points.back().x = (float)(curx-rect.origin.x) / _scaleFactor;
-            _points.back().y = (float)(rect.size.height - cury + rect.origin.y) / _scaleFactor;
-        }
-        else
-        {
-            _points.push_back(Vec2((float)(curx - rect.origin.x) / _scaleFactor, (float)(rect.size.height - cury + rect.origin.y) / _scaleFactor));
-        }
-    
-    
-    {    return 0;
+    else if( borderType == BORDER_MODE_WRAP )
+    {
+        if( p < 0 )
+            p -= ((p-(ptrdiff_t)len+1)/(ptrdiff_t)len)*(ptrdiff_t)len;
+        if( p >= (ptrdiff_t)len )
+            p %= (ptrdiff_t)len;
+    }
+    else if( borderType == BORDER_MODE_CONSTANT )
+        p = -1;
+    else
+        internal::assertSupportedConfiguration(false);
+    return p - (ptrdiff_t)startMargin;
 }
     
-        ListNode* curNode = head;
-    while(curNode != NULL){
-        ListNode* delNode = curNode;
-        curNode = curNode->next;
-        delete delNode;
+            for (; j < roiw16; j += 16)
+        {
+            internal::prefetch(src + j);
+            uint8x16_t v_src = vld1q_u8(src + j);
+            int16x8_t v_dst0 = vreinterpretq_s16_u16(vmovl_u8(vget_low_u8(v_src)));
+            int16x8_t v_dst1 = vreinterpretq_s16_u16(vmovl_u8(vget_high_u8(v_src)));
     }
     
-    // Recursive
-// Time Complexity: O(n), n is the node number in the tree
-// Space Complexity: O(h), h is the height of the tree
-class Solution {
-public:
-    vector<int> inorderTraversal(TreeNode* root) {
+     *Redistributions in binary form must reproduce the above copyright
+  notice, this list of conditions and the following disclaimer in the
+  documentation and/or other materials provided with the distribution.
+    
+        ptrdiff_t idx_l1 = internal::borderInterpolate(-1, size.width, borderType, borderMargin.left, borderMargin.right) * cn;
+    ptrdiff_t idx_l2 = internal::borderInterpolate(-2, size.width, borderType, borderMargin.left, borderMargin.right) * cn;
+    ptrdiff_t idx_r1 = internal::borderInterpolate(size.width + 0, size.width, borderType, borderMargin.left, borderMargin.right) * cn;
+    ptrdiff_t idx_r2 = internal::borderInterpolate(size.width + 1, size.width, borderType, borderMargin.left, borderMargin.right) * cn;
+    
+    INRANGEFUNC(u8)
+INRANGEFUNC(s8)
+INRANGEFUNC(u16)
+INRANGEFUNC(s16)
+INRANGEFUNC(s32)
+INRANGEFUNC(f32)
+    
+    
+    {
+    {} }
+    
+    /*
+ * Check if the lines a0->a1 and b0->b1 cross.
+ * If they do, intersectionPoint will be filled
+ * with the point of crossing.
+ *
+ * Grazing lines should not return true.
+ */
+bool intersect(const b2Vec2& a0, const b2Vec2& a1,
+			   const b2Vec2& b0, const b2Vec2& b1, 
+			   b2Vec2& intersectionPoint) {
     }
+    
+    	// ----------------------------------------------------------------------------------------------------
+	//
+	Block4x4::Block4x4(void)
+	{
+		m_pimageSource = nullptr;
+		m_uiSourceH = 0;
+		m_uiSourceV = 0;
     }
     
-    #include <iostream>
-#include <vector>
+    		void SetSourcePixels(void);
     
     
-    {    return 0;
+#if !defined(FFT_ARM_H)
+#define FFT_ARM_H
+    
+    
+/** 16x32 multiply, followed by a 15-bit shift right and 32-bit add.
+    b must fit in 31 bits.
+    Result fits in 32 bits. */
+#undef MAC16_32_Q15
+#define MAC16_32_Q15(c, a, b) ADD32(c, MULT16_32_Q15(a, b))
+    
+    /** 16x16 multiply-add where the result fits in 32 bits */
+#undef MAC16_16
+static OPUS_INLINE opus_val32 MAC16_16_armv5e(opus_val32 c, opus_val16 a,
+ opus_val16 b)
+{
+  int res;
+  __asm__(
+      '#MAC16_16\n\t'
+      'smlabb %0, %1, %2, %3;\n'
+      : '=r'(res)
+      : 'r'(a), 'r'(b), 'r'(c)
+  );
+  return res;
 }
-
+#define MAC16_16(c, a, b) (MAC16_16_armv5e(c, a, b))
     
-            TreeNode* cur = root;
-        while(cur != NULL){
-            if(cur->left == NULL){
-                res.push_back(cur->val);
-                cur = cur->right;
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+    
+    /* Compute number of bits to right shift the sum of squares of a vector    */
+/* of int16s to make it fit in an int32                                    */
+void silk_sum_sqr_shift(
+    opus_int32                  *energy,            /* O   Energy of x, after shifting to the right                     */
+    opus_int                    *shift,             /* O   Number of bits right shift applied to energy                 */
+    const opus_int16            *x,                 /* I   Input vector                                                 */
+    opus_int                    len                 /* I   Length of input vector                                       */
+);
+    
+    namespace CNTK
+{
+    static Matrix<char>* AllocateMatrix(const NDShape& viewShape, const DeviceDescriptor& device)
+    {
+        auto matrixDims = GetMatrixDimensions(viewShape);
+        return new Matrix<char>(matrixDims.first, matrixDims.second, AsCNTKImplDeviceId(device));
+    }
+    }
+    
+            template<typename OnWriteSummaryFunc>
+        void WriteSummary(const ValuePtr& accumulatedLoss, const ValuePtr& accumulatedMetric,
+                          OnWriteSummaryFunc callback)
+        {
+            if (accumulatedLoss && m_samples.second > 0)
+            {
+                m_loss.second = accumulatedLoss->AsScalar<double>();
             }
-            else{
-                TreeNode* prev = cur->left;
-                while(prev->right != NULL && prev->right != cur)
-                    prev = prev->right;
+    }
+    
+        template <typename T>
+    inline void ValidateType(const Dictionary& dict, const std::wstring& typeValue, size_t currentVersion)
+    {
+        if (!dict.Contains(typeKey))
+        {
+            const auto& version = GetVersion(dict);
+            LogicError('Required key '%ls' is not found in the dictionary (%s).',
+                       typeKey.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
+        } 
+    }
+    
+            bool alreadySet = false;
+        if (m_dataFields->m_initValueFlag)
+        {
+            // In the case of lazy initialization, try to avoid the redundant call to the initializer. 
+            std::call_once(*m_dataFields->m_initValueFlag, [=, &value, &alreadySet] {
+                // If the variable hasn't been initialized yet, clone the content of the supplied value and delete the initializer.
+                m_dataFields->m_value = value->DeepClone(*m_dataFields->m_valueInitializationDevice, false);
+                m_dataFields->m_valueInitializer = nullptr;
+                m_dataFields->m_valueInitializationDevice = nullptr;
+                alreadySet = true;
+            });
+        }
+    
+        bool UnitTest()
+    {
+        try
+        {
+            size_t nInput = 2;
+            size_t nHidden = 3;
+            size_t nOutput = 3;
     }
     }
     
+    template <class ElemType>
+struct MemRequestInfo
+{
+    DEVICEID_TYPE deviceId;                     // which device to allocate data 
+    std::vector<shared_ptr<Matrix<ElemType>>*> pMatrixPtrs;    // memory pointers 
+    size_t matrixSize;                          // memory size 
+    bool mbScale;                               // whether the memory shall be scaled by minibatch size 
+    bool isWorkSpace;                           // workspace memory or not, by workspace we indicate whether a memory space will be released very shortly after allocation 
+    int allocStep;                              // at what step counter memory allocation is requested 
+    int releaseStep;                            // at what step counter memory release is requested  
+    int memoryId;                               // integer indexing the memory buffer ID 
+    MemRequestInfo(DEVICEID_TYPE deviceId, shared_ptr<Matrix<ElemType>>*pMatrixPtr, size_t matrixSize, bool mbScale, bool isWorkSpace, int allocStep)
+        :deviceId(deviceId), matrixSize(matrixSize), mbScale(mbScale), isWorkSpace(isWorkSpace), allocStep(allocStep), releaseStep(INT_MAX), memoryId(-1)
+    {
+        pMatrixPtrs.push_back(pMatrixPtr);
+    }
+    void SetReleaseStep(int step) { releaseStep = step; }
+    void SetMemoryId(int id) { memoryId = id;  }
+};
     
+    typedef struct node_t
+{
+    int pri;
+    int val;
+} node_t;
     
+    Context::Context(size_t stack_size, coroutine_func_t fn, void* private_data) :
+        fn_(fn), stack_size_(stack_size), private_data_(private_data)
+{
+    BOOST_ASSERT(boost::context::stack_traits::minimum_size() <= stack_size_);
+    BOOST_ASSERT(
+            boost::context::stack_traits::is_unbounded()
+                    || (boost::context::stack_traits::maximum_size() >= stack_size_));
+    }
     
+            size_t size = cache_list.size();
+        if (size == cache_capacity && size > 0)
+        {
+            auto del = cache_list.back();
+            cache_map.erase(del.first);
+            cache_list.pop_back();
+        }
     
-    using ::apollo::canbus::ChassisDetail;
+        inline void producer_remove(Coroutine *co)
+    {
+        producer_queue.remove(co);
+    }
     
-    unsigned int BaseMapMatrix::LoadBinary(unsigned char* buf) { return 0; }
+        ::testing::InitGoogleTest(&argc, argv);
+    int retval = RUN_ALL_TESTS();
+    kill(server_pid, SIGTERM);
+    int status = 0;
+    wait(&status);
     
-    #include 'modules/map/pnc_map/route_segments.h'
-    
-    
-    {  MatrixXd bd_golden(20, 1);
-  bd_golden << -0.03, -0.03, -0.02, -0.04, -0.02, -0.04, -0.02, -0.04, -0.02,
-      -0.04, -0.02, -0.04, -0.02, -0.04, -0.02, -0.04, -0.02, -0.04, -0.02,
-      -0.04;
-  EXPECT_EQ(bd.rows(), 20);
-  EXPECT_EQ(bd.cols(), 1);
-  for (uint32_t i = 0; i < bd.rows(); ++i) {
-    EXPECT_DOUBLE_EQ(bd(i, 0), bd_golden(i, 0));
-  }
-}
-    
-    #include 'modules/routing/graph/node_with_range.h'
-    
-    #include 'modules/canbus/vehicle/gem/protocol/accel_rpt_68.h'
-#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_1_70.h'
-#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_2_71.h'
-#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_3_72.h'
-#include 'modules/canbus/vehicle/gem/protocol/brake_rpt_6c.h'
-#include 'modules/canbus/vehicle/gem/protocol/date_time_rpt_83.h'
-#include 'modules/canbus/vehicle/gem/protocol/global_rpt_6a.h'
-#include 'modules/canbus/vehicle/gem/protocol/headlight_rpt_77.h'
-#include 'modules/canbus/vehicle/gem/protocol/horn_rpt_79.h'
-#include 'modules/canbus/vehicle/gem/protocol/lat_lon_heading_rpt_82.h'
-#include 'modules/canbus/vehicle/gem/protocol/parking_brake_status_rpt_80.h'
-#include 'modules/canbus/vehicle/gem/protocol/shift_rpt_66.h'
-#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_1_73.h'
-#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_2_74.h'
-#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_3_75.h'
-#include 'modules/canbus/vehicle/gem/protocol/steering_rpt_1_6e.h'
-#include 'modules/canbus/vehicle/gem/protocol/turn_rpt_64.h'
-#include 'modules/canbus/vehicle/gem/protocol/vehicle_speed_rpt_6f.h'
-#include 'modules/canbus/vehicle/gem/protocol/wheel_speed_rpt_7a.h'
-#include 'modules/canbus/vehicle/gem/protocol/wiper_rpt_91.h'
-#include 'modules/canbus/vehicle/gem/protocol/yaw_rate_rpt_81.h'
-    
-    TEST_F(GemMessageManagerTest, GetRecvProtocols) {
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Accelrpt68::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt170::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt271::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt372::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakerpt6c::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Datetimerpt83::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Globalrpt6a::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Headlightrpt77::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Hornrpt79::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Latlonheadingrpt82::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(
-                  Parkingbrakestatusrpt80::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Shiftrpt66::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt173::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt274::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt375::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringrpt16e::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Turnrpt64::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Vehiclespeedrpt6f::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Wheelspeedrpt7a::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Wiperrpt91::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Yawraterpt81::ID) != nullptr);
+    TEST(coroutine_socket, recv_fail)
+{
+    coro_test([](void *arg)
+    {
+        Socket sock(SW_SOCK_TCP);
+        bool retval = sock.connect('127.0.0.1', 9501, -1);
+        ASSERT_EQ(retval, true);
+        ASSERT_EQ(sock.errCode, 0);
+        sock.send('close', 6);
+        char buf[128];
+        int n = sock.recv(buf, sizeof(buf));
+        ASSERT_EQ(n, 0);
+    });
 }
