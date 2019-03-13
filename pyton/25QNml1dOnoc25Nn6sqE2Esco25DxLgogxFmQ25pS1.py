@@ -1,89 +1,82 @@
 
         
-            return _set_text
+          # Sample neuron subsets.  The assumption is the PC axes of the RNN
+  # are not unit aligned, so sampling units is adequate to sample all
+  # the high-variance PCs.
+  P_sxn = np.eye(S,N)
+  for m in range(n):
+    P_sxn = np.roll(P_sxn, S, axis=1)
+    
+        self.bos_chars = self._convert_word_to_char_ids(self.bos_char)
+    self.eos_chars = self._convert_word_to_char_ids(self.eos_char)
+    
+        test_data = utils.parse_commonsense_reasoning_test(test_data_name)
+    self.question_ids, self.sentences, self.labels = test_data
+    self.all_probs = []  # aggregate single-model prediction here.
     
     
-@pytest.mark.parametrize('command, result', [
-    (Command('aws dynamdb scan', misspelled_command),
-     ['aws dynamodb scan']),
-    (Command('aws dynamodb scn', misspelled_subcommand),
-     ['aws dynamodb scan']),
-    (Command('aws dynamodb t-item',
-             misspelled_subcommand_with_multiple_options),
-     ['aws dynamodb put-item', 'aws dynamodb get-item'])])
-def test_get_new_command(command, result):
-    assert get_new_command(command) == result
+if __name__ == '__main__':
+  tf.app.run()
 
     
-    # For every line, fix the respective file
-for line in output_lines:
-    match = re.match(line_re, line)
+      decoder_embedding = [
+      v for v in tf.trainable_variables()
+      if v.op.name == 'gen/decoder/rnn/embedding'
+  ][0]
+  decoder_lstm_w_0 = [
+      v for v in tf.trainable_variables() if v.op.name ==
+      'gen/decoder/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/kernel'
+  ][0]
+  decoder_lstm_b_0 = [
+      v for v in tf.trainable_variables() if v.op.name ==
+      'gen/decoder/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/bias'
+  ][0]
+  decoder_lstm_w_1 = [
+      v for v in tf.trainable_variables() if v.op.name ==
+      'gen/decoder/rnn/multi_rnn_cell/cell_1/basic_lstm_cell/kernel'
+  ][0]
+  decoder_lstm_b_1 = [
+      v for v in tf.trainable_variables() if v.op.name ==
+      'gen/decoder/rnn/multi_rnn_cell/cell_1/basic_lstm_cell/bias'
+  ][0]
+  decoder_softmax_b = [
+      v for v in tf.trainable_variables()
+      if v.op.name == 'gen/decoder/rnn/softmax_b'
+  ][0]
     
-    # Check minimum required Python version
-import sys
-if sys.version_info < (2, 7):
-    print('Scrapy %s requires Python 2.7' % __version__)
-    sys.exit(1)
-    
-    from scrapy.commands import ScrapyCommand
-from scrapy.exceptions import UsageError
-    
-        def set_spidercls(self, url, opts):
-        spider_loader = self.crawler_process.spider_loader
-        if opts.spider:
-            try:
-                self.spidercls = spider_loader.load(opts.spider)
-            except KeyError:
-                logger.error('Unable to find spider: %(spider)s',
-                             {'spider': opts.spider})
-        else:
-            self.spidercls = spidercls_for_request(spider_loader, Request(url))
-            if not self.spidercls:
-                logger.error('Unable to find spider for: %(url)s',
-                             {'url': url})
+    PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
+    vol.Required(CONF_HOST): cv.string,
+    vol.Required(CONF_USERNAME, default='admin'): cv.string,
+    vol.Required(CONF_PASSWORD): cv.string
+})
     
     
-class Command(ScrapyCommand):
+def get_service(hass, config, discovery_info=None):
+    '''Get the CiscoSpark notification service.'''
+    return CiscoSparkNotificationService(
+        config.get(CONF_TOKEN),
+        config.get(CONF_ROOMID))
     
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('--get', dest='get', metavar='SETTING',
-            help='print raw setting value')
-        parser.add_option('--getbool', dest='getbool', metavar='SETTING',
-            help='print setting value, interpreted as a boolean')
-        parser.add_option('--getint', dest='getint', metavar='SETTING',
-            help='print setting value, interpreted as an integer')
-        parser.add_option('--getfloat', dest='getfloat', metavar='SETTING',
-            help='print setting value, interpreted as a float')
-        parser.add_option('--getlist', dest='getlist', metavar='SETTING',
-            help='print setting value, interpreted as a list')
     
-            self._signer = None
-        if is_botocore():
-            import botocore.auth
-            import botocore.credentials
-            kw.pop('anon', None)
-            if kw:
-                raise TypeError('Unexpected keyword arguments: %s' % kw)
-            if not self.anon:
-                SignerCls = botocore.auth.AUTH_TYPE_MAPS['s3']
-                self._signer = SignerCls(botocore.credentials.Credentials(
-                    aws_access_key_id, aws_secret_access_key))
-        else:
-            _S3Connection = _get_boto_connection()
-            try:
-                self.conn = _S3Connection(
-                    aws_access_key_id, aws_secret_access_key, **kw)
-            except Exception as ex:
-                raise NotConfigured(str(ex))
+class CommandLineNotificationService(BaseNotificationService):
+    '''Implement the notification service for the Command Line service.'''
     
-        try:
-        # XXX: this try-except is not needed in Twisted 17.0.0+ because
-        # it requires pyOpenSSL 0.16+.
-        from OpenSSL.SSL import SSL_CB_HANDSHAKE_DONE, SSL_CB_HANDSHAKE_START
-    except ImportError:
-        SSL_CB_HANDSHAKE_START = 0x10
-        SSL_CB_HANDSHAKE_DONE = 0x20
+                if self.add_timestamp:
+                text = '{} {}\n'.format(dt_util.utcnow().isoformat(), message)
+            else:
+                text = '{}\n'.format(message)
+            file.write(text)
+
     
-            # set Host header based on url
-        self.headers.setdefault('Host', self.netloc)
+            if resp.status_code == 400:
+            _LOGGER.error('At least one parameter is missing')
+        elif resp.status_code == 402:
+            _LOGGER.error('Too much SMS send in a few time')
+        elif resp.status_code == 403:
+            _LOGGER.error('Wrong Username/Password')
+        elif resp.status_code == 500:
+            _LOGGER.error('Server error, try later')
+
+    
+    VALID_COLORS = {'yellow', 'green', 'red', 'purple', 'gray', 'random'}
+VALID_FORMATS = {'text', 'html'}
