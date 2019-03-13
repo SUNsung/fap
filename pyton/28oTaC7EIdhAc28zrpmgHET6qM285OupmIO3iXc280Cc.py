@@ -1,221 +1,236 @@
 
         
-            def approve_friend_request(self, from_user_id, to_user_id):
-        pass
-    
-            Emit key value pairs of the form:
-    
-        def extract_year_month(self, line):
-        '''Return the year and month portions of the timestamp.'''
-        pass
-    
-        for chunk in xrange(0, len(test_pred), self.hparams.batch_size):
-    
-    
-def plot_lfads_timeseries(data_bxtxn, model_vals, ext_input_bxtxi=None,
-                          truth_bxtxn=None, bidx=None, output_dist='poisson',
-                          conversion_factor=1.0, subplot_cidx=0,
-                          col_title=None):
-    
-    data_train_truth = nparray_and_transpose(data_train_truth)
-data_valid_truth = nparray_and_transpose(data_valid_truth)
-data_train_spiking = nparray_and_transpose(data_train_spiking)
-data_valid_spiking = nparray_and_transpose(data_valid_spiking)
-    
-        if no_more_data and np.sum(weights) == 0:
-      # There is no more data and this is an empty batch. Done!
-      break
-    yield inputs, char_inputs, global_word_ids, targets, weights
-    
-    
-if __name__ == '__main__':
-  tf.app.run()
-
-    
-      def evaluate(self):
-    '''Evaluate the current ensemble.'''
-    # Attach word probabilities and correctness label to each substitution
-    ensembled_probs = sum(self.all_probs) / len(self.all_probs)
-    scorings = []
-    for i, sentence in enumerate(self.sentences):
-      correctness = self.labels[i]
-      word_probs = ensembled_probs[i, :len(sentence)]
-      joint_prob = np.prod(word_probs, dtype=np.float64)
-    
-    from models import bidirectional_zaremba
-from models import cnn
-from models import critic_vd
-from models import feedforward
-from models import rnn
-from models import rnn_nas
-from models import rnn_vd
-from models import rnn_zaremba
-from models import seq2seq
-from models import seq2seq_nas
-from models import seq2seq_vd
-from models import seq2seq_zaremba
-    
-      Args:
-    session:  Current tf.Session.
-    percent_real_update: tf.assign operation.
-    new_rate: tf.placeholder for the new rate.
-    current_rate: Percent of tokens that are currently real.  Fake tokens
-      are the ones being imputed by the Generator.
+          Args:
+    cm: The confusion matrix.
+    labels: The class names.
   '''
-  session.run(percent_real_update, feed_dict={new_rate: current_rate})
+  columnwidth = 10
+  empty_cell = ' ' * columnwidth
+  short_labels = [label[:12].rjust(10, ' ') for label in labels]
     
-      decoder_embedding = [
+          x[i] = final_x
+      y[i] = final_y
+    
+      # If there are no real or fake entries in the batch, we assign an average
+  # value of zero.
+  real_avg = tf.where(tf.equal(real_count, 0), zero_tensor, real_avg)
+  fake_avg = tf.where(tf.equal(fake_count, 0), zero_tensor, fake_avg)
+    
+      # Backward Discriminator Elements.
+  bw_lstm_w_0 = [
       v for v in tf.trainable_variables()
-      if v.op.name == 'gen/decoder/rnn/embedding'
+      if v.op.name == 'dis/rnn/bw/multi_rnn_cell/cell_0/basic_lstm_cell/kernel'
   ][0]
-  decoder_lstm_w_0 = [
-      v for v in tf.trainable_variables() if v.op.name ==
-      'gen/decoder/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/kernel'
-  ][0]
-  decoder_lstm_b_0 = [
-      v for v in tf.trainable_variables() if v.op.name ==
-      'gen/decoder/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/bias'
-  ][0]
-  decoder_lstm_w_1 = [
-      v for v in tf.trainable_variables() if v.op.name ==
-      'gen/decoder/rnn/multi_rnn_cell/cell_1/basic_lstm_cell/kernel'
-  ][0]
-  decoder_lstm_b_1 = [
-      v for v in tf.trainable_variables() if v.op.name ==
-      'gen/decoder/rnn/multi_rnn_cell/cell_1/basic_lstm_cell/bias'
-  ][0]
-  decoder_softmax_b = [
+  bw_lstm_b_0 = [
       v for v in tf.trainable_variables()
-      if v.op.name == 'gen/decoder/rnn/softmax_b'
+      if v.op.name == 'dis/rnn/bw/multi_rnn_cell/cell_0/basic_lstm_cell/bias'
+  ][0]
+  bw_lstm_w_1 = [
+      v for v in tf.trainable_variables()
+      if v.op.name == 'dis/rnn/bw/multi_rnn_cell/cell_1/basic_lstm_cell/kernel'
+  ][0]
+  bw_lstm_b_1 = [
+      v for v in tf.trainable_variables()
+      if v.op.name == 'dis/rnn/bw/multi_rnn_cell/cell_1/basic_lstm_cell/bias'
   ][0]
     
-          # combine cell_input and attention
-      next_input = tf.concat([cell_input, attention], 1)
+          # if time > maxlen, return all true vector
+      done = tf.cond(
+          tf.greater(time, maximum_length),
+          lambda: tf.ones([
+              batch_size,], dtype=tf.bool), lambda: done)
+      return (done, cell_state, next_input, cell_output, context_state)
     
-            start = time.time()
-        func(X, n_jobs=1)
-        one_core.append(time.time() - start)
-    
-            :issue:`123`
-        :issue:`42,45`
+        :param id: id of post to get
+    :param check_author: require the current user to be the author
+    :return: the post with author information
+    :raise 404: if a post with the given id doesn't exist
+    :raise 403: if the current user isn't the author
     '''
-    options = options or {}
-    content = content or []
-    issue_nos = [each.strip() for each in utils.unescape(text).split(',')]
-    config = inliner.document.settings.env.app.config
-    ret = []
-    for i, issue_no in enumerate(issue_nos):
-        node = _make_issue_node(issue_no, config, options=options)
-        ret.append(node)
-        if i != len(issue_nos) - 1:
-            sep = nodes.raw(text=', ', format='html')
-            ret.append(sep)
-    return ret, []
+    post = get_db().execute(
+        'SELECT p.id, title, body, created, author_id, username'
+        ' FROM post p JOIN user u ON p.author_id = u.id'
+        ' WHERE p.id = ?',
+        (id,)
+    ).fetchone()
     
-        # TASK: Predict the outcome on the testing set and store it in a variable
-    # named y_predicted
     
-        # TASK: print the mean and std for each candidate along with the parameter
-    # settings for all the candidates explored by grid search.
-    n_candidates = len(grid_search.cv_results_['params'])
-    for i in range(n_candidates):
-        print(i, 'params - %s; mean - %0.2f; std - %0.2f'
-                 % (grid_search.cv_results_['params'][i],
-                    grid_search.cv_results_['mean_test_score'][i],
-                    grid_search.cv_results_['std_test_score'][i]))
+def _wrap_reader_for_text(fp, encoding):
+    if isinstance(fp.read(0), bytes):
+        fp = io.TextIOWrapper(io.BufferedReader(fp), encoding)
+    return fp
     
-        input_file = open(os.path.join(exercise_dir, f))
-    output_file = open(os.path.join(skeleton_dir, f), 'w')
+        return False
     
-    import matplotlib.pyplot as plt
-import numpy as np
     
-    ######################################################################
-# Run the clustering and plot
-    
-    # #############################################################################
-# Plot result
-import matplotlib.pyplot as plt
-from itertools import cycle
-    
-        def owner(self):
-        raise NotImplementedError('Path.owner() is unsupported on this system')
-    
-        def test_summaryinfo_getproperty_issue1104(self):
-        db, db_path = init_database()
-        try:
-            sum_info = db.GetSummaryInformation(99)
-            title = sum_info.GetProperty(msilib.PID_TITLE)
-            self.assertEqual(title, b'Installation Database')
-    
-        def __FunctionDef_helper(self, t, fill_suffix):
-        self.write('\n')
-        for deco in t.decorator_list:
-            self.fill('@')
-            self.dispatch(deco)
-        def_str = fill_suffix+' '+t.name + '('
-        self.fill(def_str)
-        self.dispatch(t.args)
-        self.write(')')
-        if t.returns:
-            self.write(' -> ')
-            self.dispatch(t.returns)
-        self.enter()
-        self.dispatch(t.body)
-        self.leave()
-    
-    NAME_MAPPING.update({
-    ('__builtin__', 'basestring'): ('builtins', 'str'),
-    ('exceptions', 'StandardError'): ('builtins', 'Exception'),
-    ('UserDict', 'UserDict'): ('collections', 'UserDict'),
-    ('socket', '_socketobject'): ('socket', 'SocketType'),
-})
-    
-        def test_async(self):
-        # Async/await extension:
-        self.check_tokenize('async = 1', '''\
-    NAME       'async'       (1, 0) (1, 5)
-    OP         '='           (1, 6) (1, 7)
-    NUMBER     '1'           (1, 8) (1, 9)
-    ''')
-    
-    import pickle
-import sqlite3
-from collections import namedtuple
-    
-    def noop(x):
-    pass
-    
-        return res
-    
-            # parsing response
-        for info in result:
-            mac = info['macAddr']
-            name = info['hostName']
-            # No address = no item :)
-            if mac is None:
-                continue
-    
-    PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Required(CONF_HOST): cv.string,
-    vol.Required(CONF_PASSWORD): cv.string,
-    vol.Required(CONF_USERNAME): cv.string
-})
-    
-    PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Required(CONF_COMMAND): cv.string,
-    vol.Optional(CONF_NAME): cv.string,
-})
-    
-        def send_message(self, message='', **kwargs):
-        '''Send a message to a user.'''
-        self.gntp.notify(noteType='Notification',
-                         title=kwargs.get(ATTR_TITLE, ATTR_TITLE_DEFAULT),
-                         description=message)
+# Core signals.  For usage examples grep the source code or consult
+# the API documentation in docs/api.rst as well as docs/signals.rst
+template_rendered = _signals.signal('template-rendered')
+before_render_template = _signals.signal('before-render-template')
+request_started = _signals.signal('request-started')
+request_finished = _signals.signal('request-finished')
+request_tearing_down = _signals.signal('request-tearing-down')
+got_request_exception = _signals.signal('got-request-exception')
+appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
+appcontext_pushed = _signals.signal('appcontext-pushed')
+appcontext_popped = _signals.signal('appcontext-popped')
+message_flashed = _signals.signal('message-flashed')
 
     
+            for srcobj, loader in self._iter_loaders(template):
+            try:
+                rv = loader.get_source(environment, template)
+                if trv is None:
+                    trv = rv
+            except TemplateNotFound:
+                rv = None
+            attempts.append((loader, srcobj, rv))
     
-def get_service(hass, config, discovery_info=None):
-    '''Get the Lannouncer notification service.'''
-    host = config.get(CONF_HOST)
-    port = config.get(CONF_PORT)
+        #: The canonical way to decorate class-based views is to decorate the
+    #: return value of as_view().  However since this moves parts of the
+    #: logic from the class declaration to the place where it's hooked
+    #: into the routing system.
+    #:
+    #: You can place one or more decorators in this list and whenever the
+    #: view function is created the result is automatically decorated.
+    #:
+    #: .. versionadded:: 0.8
+    decorators = ()
+    
+    import flask
+from flask import Flask as _Flask
+    
+    
+def main():
+    argument_spec = ec2_argument_spec()
+    argument_spec.update(
+        dict(
+            name=dict(required=True),
+            schedule_expression=dict(),
+            event_pattern=dict(),
+            state=dict(choices=['present', 'disabled', 'absent'],
+                       default='present'),
+            description=dict(),
+            role_arn=dict(),
+            targets=dict(type='list', default=[]),
+        )
+    )
+    module = AnsibleAWSModule(argument_spec=argument_spec)
+    
+    
+def main():
+    argument_spec = ec2_argument_spec()
+    argument_spec.update(dict(
+        state=dict(required=True, choices=['present', 'absent']),
+        name=dict(required=True),
+        description=dict(required=False),
+        subnets=dict(required=False, type='list'),
+    )
+    )
+    module = AnsibleModule(argument_spec=argument_spec)
+    
+    try:
+    from google.cloud import pubsub
+    HAS_GOOGLE_CLOUD_PUBSUB = True
+except ImportError as e:
+    HAS_GOOGLE_CLOUD_PUBSUB = False
+    
+        changed = False
+    if state == 'present':
+        if not ipa_dnszone:
+            changed = True
+            if not module.check_mode:
+                client.dnszone_add(zone_name=zone_name)
+        else:
+            changed = False
+    else:
+        if ipa_dnszone:
+            changed = True
+            if not module.check_mode:
+                client.dnszone_del(zone_name=zone_name)
+    
+    # Copyright (c) 2016, Loic Blot <loic.blot@unix-experience.fr>
+# Copyright (c) 2018, Ansible Project
+# Sponsored by Infopro Digital. http://www.infopro-digital.com/
+# Sponsored by E.T.A.I. http://www.etai.fr/
+#
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+    
+    # Stop tracking nginx logs
+- logentries:
+    path: /var/log/nginx/error.log
+    state: absent
+'''
+    
+        model_handle = model.get('mh')
+    model_landscape = '0x%x' % int(int(model_handle, 16) // 0x100000 * 0x100000)
+    
+    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
+    host = r1(r'host=([^&]*)', html)
+    assert host
+    type = r1(r'videofiletype=([^&]*)', html)
+    assert type
+    vid = r1(r'&stream_name=([^&]*)', html)
+    assert vid
+    dir_str = r1(r'&dir=([^&]*)', html).strip()
+    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
+    _, ext, size = url_info(url)
+    print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir, merge = merge)
+    
+                if stream_id not in self.streams:
+                log.e('[Error] Invalid video format.')
+                log.e('Run \'-i\' command with no specific video format to view all available formats.')
+                exit(2)
+        else:
+            # Extract stream with the best quality
+            stream_id = self.streams_sorted[0]['id']
+            _, s['container'], s['size'] = url_info(s['url'])
+            s['src'] = [s['url']]
+    
+    	type, ext, size = url_info(url)
+	print_info(site_info, title, type, size)
+	
+	if not info_only:
+		download_urls([url], title, ext, size, output_dir, merge = merge)
+    
+    iqiyi_embed_patterns = [ 'player\.video\.qiyi\.com/([^/]+)/[^/]+/[^/]+/[^/]+\.swf[^']+tvId=(\d+)' ]
+    
+    #----------------------------------------------------------------------
+def fc2video_download_by_upid(upid, output_dir = '.', merge = True, info_only = False, **kwargs):
+    ''''''
+    fake_headers = {
+        'DNT': '1',
+        'Accept-Encoding': 'gzip, deflate, sdch',
+        'Accept-Language': 'en-CA,en;q=0.8,en-US;q=0.6,zh-CN;q=0.4,zh;q=0.2',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.58 Safari/537.36',
+        'Accept': '*/*',
+        'X-Requested-With': 'ShockwaveFlash/19.0.0.245',
+        'Connection': 'keep-alive',
+    }
+    api_base = 'http://video.fc2.com/ginfo.php?upid={upid}&mimi={mimi}'.format(upid = upid, mimi = makeMimi(upid))
+    html = get_content(api_base, headers=fake_headers)
+    
+        url = list(set([
+        unicodize(str.replace(i, '\\/', '/'))
+        for i in re.findall(r'<meta property='og:video:secure_url' content='(.*?)'>', html)
+    ]))
+    
+    def ifeng_download_by_id(id, title = None, output_dir = '.', merge = True, info_only = False):
+    assert r1(r'([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', id), id
+    url = 'http://vxml.ifengimg.com/video_info_new/%s/%s/%s.xml' % (id[-2], id[-2:], id)
+    xml = get_html(url, 'utf-8')
+    title = r1(r'Name='([^']+)'', xml)
+    title = unescape_html(title)
+    url = r1(r'VideoPlayUrl='([^']+)'', xml)
+    from random import randint
+    r = randint(10, 19)
+    url = url.replace('http://wideo.ifeng.com/', 'http://ips.ifeng.com/wideo.ifeng.com/')
+    type, ext, size = url_info(url)
+    
+    args = parser.parse_args()
+    
+    
+class ChineseTokenizer(Tokenizer):
