@@ -1,191 +1,109 @@
 
         
-        #include 'atom/app/uv_task_runner.h'
+        ModelAnalyzer::ModelAnalyzer(const GrapplerItem& item) : item_(item) {}
     
-    #include 'atom/browser/api/event_emitter.h'
-#include 'atom/browser/auto_updater.h'
-#include 'atom/browser/window_list_observer.h'
-#include 'native_mate/arguments.h'
-#include 'native_mate/handle.h'
+    #include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/op_kernel.h'
     
-    
-    {}  // namespace api
-    
-    #ifndef ATOM_BROWSER_NET_ABOUT_PROTOCOL_HANDLER_H_
-#define ATOM_BROWSER_NET_ABOUT_PROTOCOL_HANDLER_H_
-    
-      // net::URLRequestJobFactory::ProtocolHandler:
-  net::URLRequestJob* MaybeCreateJob(
-      net::URLRequest* request,
-      net::NetworkDelegate* network_delegate) const override;
-  bool IsSafeRedirectTarget(const GURL& location) const override;
-    
-    void OffScreenOutputDevice::Resize(const gfx::Size& pixel_size,
-                                   float scale_factor) {
-  if (viewport_pixel_size_ == pixel_size)
-    return;
-  viewport_pixel_size_ = pixel_size;
-    }
-    
-    // Generate param traits write methods.
-#include 'ipc/param_traits_write_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
-    
-    void App::SetProxyConfig(content::RenderProcessHost* render_process_host,
-                         const std::string& proxy_config) {
-  net::ProxyConfig config;
-  config.proxy_rules().ParseFromString(proxy_config);
-  net::URLRequestContextGetter* context_getter =
-    render_process_host->GetBrowserContext()->
-    GetRequestContextForRenderProcess(render_process_host->GetID());
-    }
-    
-    
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
+    bool TfPyInt_Check(PyObject* object) {
+  if (!PyLong_Check(object)) {
+    return 0;
+  }
+  int overflow = 0;
+  PyLong_AsLongAndOverflow(object, &overflow);
+  return (overflow == 0);
 }
     
-      int id() const { return id_; }
-  std::string extension_id_;
-  ObjectManager* object_manager() const { return object_manager_.get(); }
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    // Get RenderView from current js context (only works under window context).
-content::RenderView* GetCurrentRenderView();
-content::RenderView* GetEnteredRenderView();
+    // Returns the kernel class name required to execute <node_def> on the device
+// type of <node_def.device>, or an empty string if the kernel class is not
+// found or the device name is invalid.
+string TryFindKernelClass(const string& serialized_node_def);
     
-    #ifndef CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
-#define CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
+      // Computes real-to-complex FFT in forward direction.
+  virtual bool DoFft(Stream *stream, Plan *plan,
+                     const DeviceMemory<float> &input,
+                     DeviceMemory<std::complex<float>> *output) = 0;
+  virtual bool DoFft(Stream *stream, Plan *plan,
+                     const DeviceMemory<double> &input,
+                     DeviceMemory<std::complex<double>> *output) = 0;
     
-      if (type == 'separator') {
-    menu_item_ = gtk_separator_menu_item_new();
-  } else {
-    if (type == 'checkbox') {
-      menu_item_ = gtk_check_menu_item_new();
-      bool checked;
-      if (option.GetBoolean('checked', &checked))
-        SetChecked(checked);
-    } else {
-      menu_item_ = gtk_image_menu_item_new();
-      std::string icon;
-      if (option.GetString('icon', &icon))
-        SetIcon(icon);
-    }
-    }
-    
-      void extensions(InternalExtensionList& _return) {
-    // Your implementation goes here
-    printf('extensions\n');
-  }
-    
-    
-    {
-    {    std::ostringstream oss;
-    std::copy(line.begin() + options_index,
-              line.end(),
-              std::ostream_iterator<std::string>(oss, ' '));
-    r['options'] = oss.str();
-    results.push_back(r);
-  }
+    bool AuthPropertyIterator::operator!=(const AuthPropertyIterator& rhs) const {
+  return !operator==(rhs);
 }
     
+    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H
+#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H
     
-    {
-    {    // If we don't find a serial_number match, we assume this drive information
-    // can only be retrieved by explicitly passing driver information.
-    if (!matched) {
-      results.push_back(std::move(entry.second));
+    // Serializes the outgoing stats context.  Field IDs are 1 byte followed by
+// field data. A 1 byte version ID is always encoded first. Tags are directly
+// serialized into the given grpc_slice.
+size_t StatsContextSerialize(size_t max_tags_len, grpc_slice* tags);
+    
+    #include 'opencensus/stats/stats.h'
+#include 'src/cpp/ext/filters/census/grpc_plugin.h'
+    
+      static void OnDoneRecvMessageCb(void* user_data, grpc_error* error);
+    
+    #include 'src/cpp/ext/proto_server_reflection.h'
+    
+    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
+    const grpc::string& name, const grpc::string& value) {
+  class StringOption final : public ServerBuilderOption {
+   public:
+    StringOption(const grpc::string& name, const grpc::string& value)
+        : name_(name), value_(value) {}
+    }
+    }
+    
+    // Reads the CPU stats (in a pair of busy and total numbers) from the system.
+// The units of the stats should be the same.
+std::pair<uint64_t, uint64_t> GetCpuStatsImpl();
+    
+    // Per-thread state for concurrent executions of the same benchmark.
+struct ThreadState {
+  uint32_t tid;
+  Random rnd;
+  SharedState* shared;
+    }
+    
+      // When flush happens, it determines whether to trigger compaction. If
+  // triggered_writes_stop is true, it will also set the retry flag of
+  // compaction-task to true.
+  void OnFlushCompleted(
+      DB* db, const FlushJobInfo& info) override {
+    CompactionTask* task = PickCompaction(db, info.cf_name);
+    if (task != nullptr) {
+      if (info.triggered_writes_stop) {
+        task->retry_on_fail = true;
+      }
+      // Schedule compaction in a different thread.
+      ScheduleCompaction(task);
     }
   }
-}
     
-    #include <osquery/utils/expected/expected.h>
-#include <osquery/utils/system/posix/errno.h>
+      // In this example, we set the snapshot multiple times.  This is probably
+  // only necessary if you have very strict isolation requirements to
+  // implement.
     
-    #include <osquery/config/config.h>
-#include <osquery/database.h>
-#include <osquery/flags.h>
-#include <osquery/sql.h>
-#include <osquery/system.h>
-#include <osquery/registry_factory.h>
-    
-      ~EbpfTracepoint();
+    #include 'rocksdb/db.h'
     
     
-    {    private:
-        redisAsyncContext * m_ctx;
-        QSocketNotifier * m_read;
-        QSocketNotifier * m_write;
+    { protected:
+  virtual ~Snapshot();
 };
     
-    
-    {    //1
-    ret = p.read(&p, buf, sizeof(buf));
-    if (ret < 0)
-    {
-        swSysError('read() failed.');
-    }
-    ASSERT_GT(ret, 0);
-    ASSERT_EQ(strcmp('hello world1', buf), 0);
-    //2
-    ret = p.read(&p, buf, sizeof(buf));
-    ASSERT_GT(ret, 0);
-    ASSERT_EQ(strcmp('hello world2', buf), 0);
-    //3
-    ret = p.read(&p, buf, sizeof(buf));
-    ASSERT_GT(ret, 0);
-    ASSERT_EQ(strcmp('hello world3', buf), 0);
-}
-    
-    TEST(lru_cache, memory_free)
-{
-    shared_ptr<lru_cache_test_class> val = make_shared<lru_cache_test_class>();
-    cache.set('test', val);
-    ASSERT_EQ(cache.get('test').get(), val.get());
-    val.reset();
-    ASSERT_EQ(dtor_num, 0);
-    cache.clear();
-    ASSERT_EQ(dtor_num, 1);
-}
-    
-            if (!deflater)
-        {
-            ret = nghttp2_hd_deflate_new(&deflater, SW_HTTP2_DEFAULT_HEADER_TABLE_SIZE);
-            if (ret != 0)
-            {
-                swoole_php_error(E_WARNING, 'nghttp2_hd_deflate_init() failed with error: %s\n', nghttp2_strerror(ret));
-                return SW_ERR;
-            }
-            client->deflater = deflater;
-        }
-    
-    TEST(cares, resolve_inet6)
-{
-    coro_test([](void *arg)
-    {
-        auto result = CAres::resolve('ipv6.sjtu.edu.cn', AF_INET6, 5);
-        ASSERT_EQ(result, '2001:da8:8000:1::80');
-    });
-}
-    
-        for (int i = 0; i < 1000; ++i)
-    {
-        auto ret = swAio_dispatch2(&event);
-        ASSERT_EQ(ret->object, event.object);
-        ASSERT_NE(ret->task_id, event.task_id);
+    /*
+ * ThreadPool is a component that will spawn N background threads that will
+ * be used to execute scheduled work, The number of background threads could
+ * be modified by calling SetBackgroundThreads().
+ * */
+class ThreadPool {
+ public:
+  virtual ~ThreadPool() {}
     }
     
-        int ret3 = (int) (long) swHashMap_find(hm, (char *) SW_STRL('notfound'));
-    ASSERT_EQ(ret3, 0);
-    
-            memcpy(&tmp, (char*) recv_pkg.ptr + recv_pkg.size - 4, sizeof(tmp));
-        ASSERT_EQ(tmp, recv_pkg.serial_num);
-    
-    TEST(coroutine_channel, push_yield)
-{
-    Channel chan(1);
-    }
+      static LDBCommandExecuteResult Failed(std::string msg) {
+    return LDBCommandExecuteResult(EXEC_FAILED, msg);
+  }
