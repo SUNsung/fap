@@ -1,78 +1,102 @@
 
         
-              launch_event = builder.new_event(:launch)
-      post_thread = client.post_event(launch_event)
-      unless post_thread.nil?
-        @threads << post_thread
-      end
-    end
+        # No trailing slash
+Benchmark.ips do |x|
+  path = '/some/very/very/long/path/to/a/file/i/like/'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
+end
+
     
-            [
-          'This will automatically tag your build with the following format: `<grouping>/<lane>/<prefix><build_number>`, where:'.markdown_preserve_newlines,
-          list,
-          'For example, for build 1234 in the 'appstore' lane, it will tag the commit with `builds/appstore/1234`.'
-        ].join('\n')
-      end
+    def file_content_from_hash(input_hash)
+  matter_hash = input_hash.reject { |k, _v| k == 'content' }
+  matter = matter_hash.map do |k, v|
+    '#{k}: #{v}\n'
+  end
     
-            expect(result).to eq('git tag -am #{message.shellescape} #{tag.shellescape}')
-      end
-    
-          it 'works with both select and exclude regex' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            oclint(
-              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
-              select_regex: /\.*m/,
-              exclude_regex: /Test/
+            # For a description of the protocol see
+        # http://feedback.livereload.com/knowledgebase/articles/86174-livereload-protocol
+        def reload(pages)
+          pages.each do |p|
+            json_message = JSON.dump(
+              :command => 'reload',
+              :path    => p.url,
+              :liveCSS => true
             )
-          end').runner.execute(:test)
     
-          it 'yields command output' do
-        expect_command('ls', '-la', exitstatus: 1, output: 'Heeeelp! Something went wrong.')
-        Fastlane::Actions.sh('ls', '-la') do |status, result|
-          expect(status.exitstatus).to eq(1)
-          expect(result).to eq('Heeeelp! Something went wrong.')
-        end
-      end
-    
-          new_email = resource_params.fetch(:unconfirmed_email)
-    
-            redirect_to admin_report_path(@report), notice: I18n.t('admin.report_notes.created_msg')
-      else
-        @report_notes = @report.notes.latest
-        @report_history = @report.history
-        @form = Form::StatusBatch.new
-    
-      def require_enabled_api!
-    head 404 unless Setting.activity_api_enabled
+        def defaults_deprecate_type(old, current)
+      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
+      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
+                        'type: #{current}'.'
+    end
   end
 end
 
     
-      def create
-    @web_subscription&.destroy!
+      protected
     
-        def_delegators :@s, :scan_until, :skip_until, :string
-    
-      def test_font_helper_with_suffix_sharp
-    assert_match %r(url\(['']?/assets/.*svg#.+['']?\)), @css
+      def serialize_options(resource)
+    methods = resource_class.authentication_keys.dup
+    methods = methods.keys if methods.is_a?(Hash)
+    methods << :password if resource.respond_to?(:password)
+    { methods: methods, only: [:password] }
   end
     
-    include Sidekiq::Util
-    
-          def requeue
-        Sidekiq.redis do |conn|
-          conn.rpush('queue:#{queue_name}', job)
-        end
+          # Remembers the given resource by setting up a cookie
+      def remember_me(resource)
+        return if request.env['devise.skip_storage']
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.remember_me!
+        cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
       end
+    
+          def self.generate_helpers!(routes=nil)
+        routes ||= begin
+          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
+          Devise::URL_HELPERS.slice(*mappings)
+        end
+    
+        if record.timedout?(last_request_at) &&
+        !env['devise.skip_timeout'] &&
+        !proxy.remember_me_is_active?(record)
+      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
+      throw :warden, scope: scope, message: :timeout
     end
     
-    module Sidekiq
-  ##
-  # This module is part of Sidekiq core and not intended for extensions.
-  #
-  module Util
-    include ExceptionHandler
+          def self.required_fields(klass)
+        []
+      end
     
-        def settings
-      Web.settings
-    end
+    World(VagrantHelpers)
+
+    
+          def load_built_in_scm
+        require 'capistrano/scm/#{scm_name}'
+        scm_class = Object.const_get(built_in_scm_plugin_class_name)
+        # We use :load_immediately because we are initializing the SCM plugin
+        # late in the load process and therefore can't use the standard
+        # load:defaults technique.
+        install_plugin(scm_class, load_immediately: true)
+      end
+    
+          def select?(options)
+        options.each do |k, v|
+          callable = v.respond_to?(:call) ? v : ->(server) { server.fetch(v) }
+          result = \
+            case k
+            when :filter, :select
+              callable.call(self)
+            when :exclude
+              !callable.call(self)
+            else
+              fetch(k) == v
+            end
+          return false unless result
+        end
+    
+          def fetch_primary(role)
+        hosts = roles_for([role])
+        hosts.find(&:primary) || hosts.first
+      end
