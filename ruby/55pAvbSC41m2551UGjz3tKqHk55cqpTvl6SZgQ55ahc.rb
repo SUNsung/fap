@@ -1,115 +1,123 @@
 
         
-            def replace(index, name)
-      @filters[assert_index(index)] = filter_const(name)
-    end
-    
-          def process_response(response)
-        super.merge! response_effective_path: response.effective_path, response_path: response.path
+                message = '#{tag} (fastlane)'
+        expect(result).to eq('git tag -am #{message.shellescape} #{tag.shellescape}')
       end
     
-            title = at_css('h1').content.strip
-        if root_page?
-          at_css('h1').content = 'Angular 2 Documentation'
-        elsif title == 'Index'
-          at_css('h1').content = result[:entries].first.name
-        elsif title == 'Angular'
-          at_css('h1').content = slug.split('/').last.gsub('-', ' ')
-        elsif at_css('.breadcrumbs') && title != result[:entries].first.name
-          at_css('h1').content = result[:entries].first.name
+              it 'raises an exception' do
+            expect do
+              Fastlane::FastFile.new.parse('lane :test do
+                  carthage(command: '#{command}', frameworks: ['myframework', 'myframework2'])
+                end').runner.execute(:test)
+            end.to raise_error('Frameworks option is available only for 'archive' command.')
+          end
         end
     
-            name = name.split(':').first
+        context 'with a postfix block' do
+      it 'yields the status, result and command' do
+        expect_command('ls', '-la')
+        Fastlane::Actions.sh('ls', '-la') do |status, result, command|
+          expect(status.exitstatus).to eq(0)
+          expect(result).to be_empty
+          expect(command).to eq('ls -la')
+        end
+      end
     
-        Thread.pass until running
-    Thread.pass while t.status and t.status != 'sleep'
+            it 'deprecated boolean changes the description' do
+          config_item = FastlaneCore::ConfigItem.new(key: :foo,
+                                                     description: 'foo. use bar instead',
+                                                     deprecated: true)
+          expect(config_item.description).to eq('**DEPRECATED!** foo. use bar instead')
+        end
     
-      it 'no raises a RuntimeError on symbols' do
-    v = :sym
-    lambda { v.taint }.should_not raise_error(RuntimeError)
-    v.tainted?.should == false
-  end
+    exec_arr = ['fastlane', tool_name] + ARGV
     
-    module LogStash
-  module PluginManager
-  end
-end
+        def initial_page?
+      root_page? || context[:initial_paths].include?(subpath)
+    end
     
-          PluginManager.ui.info('Installing file: #{local_file}')
-      uncompressed_path = uncompress(local_file)
-      PluginManager.ui.debug('Pack uncompressed to #{uncompressed_path}')
-      pack = LogStash::PluginManager::PackInstaller::Pack.new(uncompressed_path)
-      raise PluginManager::InvalidPackError, 'The pack must contains at least one plugin' unless pack.valid?
+        def initialize
+      @pages = {}
+    end
     
-      def validate_cache_location
-    cache_location = LogStash::Environment::CACHE_PATH
-    if File.exist?(cache_location)
-      puts('Directory #{cache_location} is going to be overwritten, do you want to continue? (Y/N)')
-      override = ( 'y' == STDIN.gets.strip.downcase ? true : false)
-      if override
-        FileUtils.rm_rf(cache_location)
+        def effective_url
+      @effective_url ||= URL.parse super
+    end
+    
+    # This is basically a copy of the original bundler 'bundle' shim
+# with the addition of the loading of our Bundler patches that
+# modify Bundler's caching behaviour.
+    
+          puts user_feedback_string_for('halting', args[:platform], machines, {'experimental' => experimental})
+      options = {:debug => ENV['LS_QA_DEBUG']}
+    
+        context 'update a specific plugin' do
+      it 'has executed successfully' do
+        cmd = logstash.run_command_in_path('bin/logstash-plugin update --no-verify #{plugin_name}')
+        expect(cmd.stdout).to match(/Updating #{plugin_name}/)
+        expect(logstash).not_to have_installed?(plugin_name, previous_version)
+      end
+    end
+    
+    __END__
+    
+        def self.enable_delay!
+      if defined?(::ActiveSupport)
+        require 'sidekiq/extensions/active_record'
+        require 'sidekiq/extensions/action_mailer'
+    
+        # Creating the Redis#brpop command takes into account any
+    # configured queue weights. By default Redis#brpop returns
+    # data from the first queue that has pending elements. We
+    # recreate the queue command each time we invoke Redis#brpop
+    # to honor weights and avoid queue starvation.
+    def queues_cmd
+      if @strictly_ordered_queues
+        @queues
       else
-        puts('Unpack cancelled: file #{cache_location} already exists, please delete or move it')
-        exit
-      end
-    end
-  end
-end
-
-    
-      def update_gems!
-    # If any error is raise inside the block the Gemfile will restore a backup of the Gemfile
-    previous_gem_specs_map = find_latest_gem_specs
-    
-      namespace :acceptance do
-    desc 'Run all acceptance'
-    task :all do
-      exit(RSpec::Core::Runner.run([Rake::FileList['acceptance/spec/lib/**/*_spec.rb']]))
-    end
-    
-    When /^I configure the application to use '([^\']+)' from this project$/ do |name|
-  append_to_gemfile 'gem '#{name}', :path => '#{PROJECT_ROOT}''
-  steps %{And I successfully run `bundle install --local`}
-end
-    
-      def migration_version
-    if Rails.version.start_with? '5'
-      '[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]'
-    end
-  end
-end
-
-    
-        def self.definitions_for(klass)
-      instance.definitions_for(klass)
-    end
-    
-        def calculated_type_matches
-      possible_types.select do |content_type|
-        content_type == type_from_file_contents
+        queues = @queues.shuffle.uniq
+        queues << TIMEOUT
+        queues
       end
     end
     
-              typeflag = header[TAR_TYPEFLAG_OFFSET]
-          ascii_length = header[TAR_LENGTH_OFFSET_START..TAR_LENGTH_OFFSET_END]
+        def self.with_job_hash_context(job_hash, &block)
+      with_context(job_hash_context(job_hash), &block)
+    end
     
-    class FPM::Package::NPM < FPM::Package
-  class << self
-    include FPM::Util
-  end
-  # Flags '--foo' will be accessable  as attributes[:npm_foo]
-  option '--bin', 'NPM_EXECUTABLE',
-    'The path to the npm executable you wish to run.', :default => 'npm'
+        def identity
+      @@identity ||= '#{hostname}:#{$$}:#{process_nonce}'
+    end
     
-      option '--lint' , :flag, 'Check manifest with pkglint',
-    :default => true
+        # Set attribute defaults based on flags
+    # This allows you to define command line options with default values
+    # that also are obeyed if fpm is used programmatically.
+    self.class.default_attributes do |attribute, value|
+      attributes[attribute] = value
+    end
     
-      option '--php-dir', 'PHP_DIR',
-    'Specify php dir relative to prefix if differs from pear default (pear/php)'
+      option '--group', 'GROUP',
+    'Set the group to GROUP in the prototype file.',
+    :default => 'root'
     
-          if !attributes[:python_install_bin].nil?
-        flags += [ '--install-scripts', File.join(prefix, attributes[:python_install_bin]) ]
-      elsif !attributes[:prefix].nil?
-        # prefix given, but not python_install_bin, assume PREFIX/bin
-        flags += [ '--install-scripts', File.join(prefix, 'bin') ]
+        scripts[:after_install] = template(File.join('pleaserun', 'scripts', 'after-install.sh')).result(binding)
+    scripts[:before_remove] = template(File.join('pleaserun', 'scripts', 'before-remove.sh')).result(binding)
+  end # def input
+    
+          File.open(File.join(builddir, 'manifests', manifest), 'w') do |f|
+        logger.info('manifest: #{f.path}')
+        template = template(File.join('puppet', '#{manifest}.erb'))
+        ::Dir.chdir(fileroot) do
+          f.puts template.result(binding)
+        end
       end
+    end
+  end # def generate_specfile
+    
+      def install_script
+    path = build_path('installer.sh')
+    File.open(path, 'w') do |file|
+      file.write template('sh.erb').result(binding)
+    end
+    path
+  end
