@@ -1,194 +1,242 @@
 
         
-            if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
-    else:
-        # load the test config if passed in
-        app.config.update(test_config)
+        
+class Deck(object):
     
     
-def init_app(app):
-    '''Register database functions with the Flask app. This is called by
-    the application factory.
+class VehicleSize(Enum):
+    
+            (2016-01, url0), 1
+        (2016-01, url0), 1
+        (2016-01, url1), 1
+        '''
+        url = self.extract_url(line)
+        period = self.extract_year_month(line)
+        yield (period, url), 1
+    
+    # The encoding of source files.
+#source_encoding = 'utf-8-sig'
+    
+    print('Benchmarks (Note: All benchmarks are only using a single CPU core)')
+print()
+    
+        # Display the results
+    for top, right, bottom, left in face_locations:
+        # Scale back up face locations since the frame we detected in was scaled to 1/4 size
+        top *= 4
+        right *= 4
+        bottom *= 4
+        left *= 4
+    
+    
+def show_prediction_labels_on_image(img_path, predictions):
     '''
-    app.teardown_appcontext(close_db)
-    app.cli.add_command(init_db_command)
+    Shows the face recognition results visually.
+    
+        # Print the location of each face in this image
+    top, right, bottom, left = face_location
+    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+    
+                # If a match was found in known_face_encodings, just use the first one.
+            if True in matches:
+                first_match_index = matches.index(True)
+                name = known_face_names[first_match_index]
+    
+        # Loop over each face found in the frame to see if it's someone we know.
+    for face_encoding in face_encodings:
+        # See if the face is a match for the known face(s)
+        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
+        name = '<Unknown Person>'
+    
+        # Print the location of each facial feature in this image
+    for facial_feature in face_landmarks.keys():
+        print('The {} in this face has the following points: {}'.format(facial_feature, face_landmarks[facial_feature]))
+    
+    setup(
+    name='face_recognition',
+    version='1.2.3',
+    description='Recognize faces from Python or from the command line',
+    long_description=readme + '\n\n' + history,
+    author='Adam Geitgey',
+    author_email='ageitgey@gmail.com',
+    url='https://github.com/ageitgey/face_recognition',
+    packages=[
+        'face_recognition',
+    ],
+    package_dir={'face_recognition': 'face_recognition'},
+    package_data={
+        'face_recognition': ['models/*.dat']
+    },
+    entry_points={
+        'console_scripts': [
+            'face_recognition=face_recognition.face_recognition_cli:main',
+            'face_detection=face_recognition.face_detection_cli:main'
+        ]
+    },
+    install_requires=requirements,
+    license='MIT license',
+    zip_safe=False,
+    keywords='face_recognition',
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+    ],
+    test_suite='tests',
+    tests_require=test_requirements
+)
 
     
-        auth.login()
-    response = client.get('/')
-    assert b'test title' in response.data
-    assert b'by test on 2018-01-01' in response.data
-    assert b'test\nbody' in response.data
-    assert b'href='/1/update'' in response.data
+    while True:
+    print('Capturing image.')
+    # 以numpy array的数据结构从picamera摄像头中获取一帧图片
+    camera.capture(output, format='rgb')
     
+    from caffe2.python import cnn
+from caffe2.python import core
+from caffe2.python import workspace
+from caffe2.python.modeling import initializers
+from caffe2.python.modeling.parameter_info import ParameterTags
     
-def test_init_db_command(runner, monkeypatch):
-    class Recorder(object):
-        called = False
+    def add_fast_rcnn_outputs(model, blob_in, dim):
+    '''Add RoI classification and bounding box regression output ops.'''
+    # Box classification layer
+    model.FC(
+        blob_in,
+        'cls_score',
+        dim,
+        model.num_classes,
+        weight_init=gauss_fill(0.01),
+        bias_init=const_fill(0.0)
+    )
+    if not model.train:  # == if test
+        # Only add softmax when testing; during training the softmax is combined
+        # with the label cross entropy loss for numerical stability
+        model.Softmax('cls_score', 'cls_prob', engine='CUDNN')
+    # Box regression layer
+    num_bbox_reg_classes = (
+        2 if cfg.MODEL.CLS_AGNOSTIC_BBOX_REG else model.num_classes
+    )
+    model.FC(
+        blob_in,
+        'bbox_pred',
+        dim,
+        num_bbox_reg_classes * 4,
+        weight_init=gauss_fill(0.001),
+        bias_init=const_fill(0.0)
+    )
     
-        def to_python(self, value):
-        return UUID(value)
+    import logging
     
-            # We attach the view class to the view function for two reasons:
-        # first of all it allows us to easily figure out what class-based
-        # view this thing came from, secondly it's also used for instantiating
-        # the view class so you can actually replace it with something else
-        # for testing purposes and debugging.
-        view.view_class = cls
-        view.__name__ = name
-        view.__doc__ = cls.__doc__
-        view.__module__ = cls.__module__
-        view.methods = cls.methods
-        view.provide_automatic_options = cls.provide_automatic_options
-        return view
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
     
-            # In debug mode we're replacing the files multidict with an ad-hoc
-        # subclass that raises a different error for key errors.
-        if (
-            current_app
-            and current_app.debug
-            and self.mimetype != 'multipart/form-data'
-            and not self.files
-        ):
-            from .debughelpers import attach_enctype_error_multidict
-            attach_enctype_error_multidict(self)
-    
-        if version in tags:
-        fail('Version '%s' is already tagged', version)
-    
-    from time import time
-    
-    First, we fix a training set, increase the number of
-samples to classify and plot number of classified samples as a
-function of time.
-    
-        class_name = info['fullname'].split('.')[0]
-    if type(class_name) != str:
-        # Python 2 only
-        class_name = class_name.encode('utf-8')
-    module = __import__(info['module'], fromlist=[class_name])
-    obj = attrgetter(info['fullname'])(module)
-    
-    plt.figure(2)  # 'banana' shape
-plt.title('Outlier detection on a real data set (boston housing)')
-plt.scatter(X2[:, 0], X2[:, 1], color='black')
-plt.xlim((xx2.min(), xx2.max()))
-plt.ylim((yy2.min(), yy2.max()))
-plt.legend((legend2_values_list[0].collections[0],
-            legend2_values_list[1].collections[0],
-            legend2_values_list[2].collections[0]),
-           (legend2_keys_list[0], legend2_keys_list[1], legend2_keys_list[2]),
-           loc='upper center',
-           prop=matplotlib.font_manager.FontProperties(size=12))
-plt.ylabel('% lower status of the population')
-plt.xlabel('average number of rooms per dwelling')
-    
-    data, rows, columns = make_biclusters(
-    shape=(300, 300), n_clusters=5, noise=5,
-    shuffle=False, random_state=0)
-    
-    labels = ('Waveform 1', 'Waveform 2', 'Waveform 3')
-    
-    # Anisotropicly distributed data
-transformation = [[0.60834549, -0.63667341], [-0.40887718, 0.85253229]]
-X_aniso = np.dot(X, transformation)
-y_pred = KMeans(n_clusters=3, random_state=random_state).fit_predict(X_aniso)
-    
-    - single linkage is fast, and can perform well on
-  non-globular data, but it performs poorly in the
-  presence of noise.
-- average and complete linkage perform well on
-  cleanly separated globular clusters, but have mixed
-  results otherwise.
-- Ward is the most effective method for noisy data.
-    
-            # return its order if it is hiragana
-        if len(byte_str) > 1:
-            second_char = byte_str[1]
-            if (first_char == 202) and (0x9F <= second_char <= 0xF1):
-                return second_char - 0x9F, char_len
-    
-    EUCKR_ST = (
-    MachineState.ERROR,MachineState.START,     3,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,MachineState.ERROR,#00-07
-    MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ITS_ME,MachineState.ERROR,MachineState.ERROR,MachineState.START,MachineState.START #08-0f
-)
-    
-        def feed(self, byte_str):
-        if not self._model['keep_english_letter']:
-            byte_str = self.filter_international_words(byte_str)
-        if not byte_str:
-            return self.state
-        char_to_order_map = self._model['char_to_order_map']
-        for i, c in enumerate(byte_str):
-            # XXX: Order is in range 1-64, so one would think we want 0-63 here,
-            #      but that leads to 27 more test failures than before.
-            order = char_to_order_map[c]
-            # XXX: This was SYMBOL_CAT_ORDER before, with a value of 250, but
-            #      CharacterCategory.SYMBOL is actually 253, so we use CONTROL
-            #      to make it closer to the original intent. The only difference
-            #      is whether or not we count digits and control characters for
-            #      _total_char purposes.
-            if order < CharacterCategory.CONTROL:
-                self._total_char += 1
-            if order < self.SAMPLE_SIZE:
-                self._freq_char += 1
-                if self._last_order < self.SAMPLE_SIZE:
-                    self._total_seqs += 1
-                    if not self._reversed:
-                        i = (self._last_order * self.SAMPLE_SIZE) + order
-                        model = self._model['precedence_matrix'][i]
-                    else:  # reverse the order of the letters in the lookup
-                        i = (order * self.SAMPLE_SIZE) + self._last_order
-                        model = self._model['precedence_matrix'][i]
-                    self._seq_counters[model] += 1
-            self._last_order = order
-    
-        def reset(self):
-        super(SingleByteCharSetProber, self).reset()
-        # char order of last character
-        self._last_order = 255
-        self._seq_counters = [0] * SequenceLikelihood.get_num_categories()
-        self._total_seqs = 0
-        self._total_char = 0
-        # characters that fall in our sampling range
-        self._freq_char = 0
-    
-        def feed(self, byte_str):
-        for i in range(len(byte_str)):
-            coding_state = self.coding_sm.next_state(byte_str[i])
-            if coding_state == MachineState.ERROR:
-                self.logger.debug('%s %s prober hit error at byte %s',
-                                  self.charset_name, self.language, i)
-                self._state = ProbingState.NOT_ME
-                break
-            elif coding_state == MachineState.ITS_ME:
-                self._state = ProbingState.FOUND_IT
-                break
-            elif coding_state == MachineState.START:
-                char_len = self.coding_sm.get_current_charlen()
-                if i == 0:
-                    self._last_char[1] = byte_str[0]
-                    self.context_analyzer.feed(self._last_char[2 - char_len:],
-                                               char_len)
-                    self.distribution_analyzer.feed(self._last_char, char_len)
-                else:
-                    self.context_analyzer.feed(byte_str[i + 1 - char_len:i + 3
-                                                        - char_len], char_len)
-                    self.distribution_analyzer.feed(byte_str[i - 1:i + 1],
-                                                    char_len)
-    
-            :returns:  The ``result`` attribute, a ``dict`` with the keys
-                   `encoding`, `confidence`, and `language`.
+        def forward(self, inputs, outputs):
+        '''See modeling.detector.GenerateProposalLabels for inputs/outputs
+        documentation.
         '''
-        # Don't bother with checks if we're already done
-        if self.done:
-            return self.result
-        self.done = True
+        # During training we reuse the data loader code. We populate roidb
+        # entries on the fly using the rois generated by RPN.
+        # im_info: [[im_height, im_width, im_scale], ...]
+        rois = inputs[0].data
+        roidb = blob_utils.deserialize(inputs[1].data)
+        im_info = inputs[2].data
+        im_scales = im_info[:, 2]
+        output_blob_names = fast_rcnn_roi_data.get_fast_rcnn_blob_names()
+        # For historical consistency with the original Faster R-CNN
+        # implementation we are *not* filtering crowd proposals.
+        # This choice should be investigated in the future (it likely does
+        # not matter).
+        json_dataset.add_proposals(roidb, rois, im_scales, crowd_thresh=0)
+        roidb_utils.add_bbox_regression_targets(roidb)
+        blobs = {k: [] for k in output_blob_names}
+        fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
+        for i, k in enumerate(output_blob_names):
+            blob_utils.py_op_copy_blob(blobs[k], outputs[i])
+
     
-        def __init__(self):
-        super(UTF8Prober, self).__init__()
-        self.coding_sm = CodingStateMachine(UTF8_SM_MODEL)
-        self._num_mb_chars = None
-        self.reset()
+    
+def get_fast_rcnn_blob_names(is_training=True):
+    '''Fast R-CNN blob names.'''
+    # rois blob: holds R regions of interest, each is a 5-tuple
+    # (batch_idx, x1, y1, x2, y2) specifying an image batch index and a
+    # rectangle (x1, y1, x2, y2)
+    blob_names = ['rois']
+    if is_training:
+        # labels_int32 blob: R categorical labels in [0, ..., K] for K
+        # foreground classes plus background
+        blob_names += ['labels_int32']
+    if is_training:
+        # bbox_targets blob: R bounding-box regression targets with 4
+        # targets per class
+        blob_names += ['bbox_targets']
+        # bbox_inside_weights blob: At most 4 targets per roi are active
+        # this binary vector sepcifies the subset of active targets
+        blob_names += ['bbox_inside_weights']
+        blob_names += ['bbox_outside_weights']
+    if is_training and cfg.MODEL.MASK_ON:
+        # 'mask_rois': RoIs sampled for training the mask prediction branch.
+        # Shape is (#masks, 5) in format (batch_idx, x1, y1, x2, y2).
+        blob_names += ['mask_rois']
+        # 'roi_has_mask': binary labels for the RoIs specified in 'rois'
+        # indicating if each RoI has a mask or not. Note that in some cases
+        # a *bg* RoI will have an all -1 (ignore) mask associated with it in
+        # the case that no fg RoIs can be sampled. Shape is (batchsize).
+        blob_names += ['roi_has_mask_int32']
+        # 'masks_int32' holds binary masks for the RoIs specified in
+        # 'mask_rois'. Shape is (#fg, M * M) where M is the ground truth
+        # mask size.
+        blob_names += ['masks_int32']
+    if is_training and cfg.MODEL.KEYPOINTS_ON:
+        # 'keypoint_rois': RoIs sampled for training the keypoint prediction
+        # branch. Shape is (#instances, 5) in format (batch_idx, x1, y1, x2,
+        # y2).
+        blob_names += ['keypoint_rois']
+        # 'keypoint_locations_int32': index of keypoint in
+        # KRCNN.HEATMAP_SIZE**2 sized array. Shape is (#instances). Used in
+        # SoftmaxWithLoss.
+        blob_names += ['keypoint_locations_int32']
+        # 'keypoint_weights': weight assigned to each target in
+        # 'keypoint_locations_int32'. Shape is (#instances). Used in
+        # SoftmaxWithLoss.
+        blob_names += ['keypoint_weights']
+        # 'keypoint_loss_normalizer': optional normalization factor to use if
+        # cfg.KRCNN.NORMALIZE_BY_VISIBLE_KEYPOINTS is False.
+        blob_names += ['keypoint_loss_normalizer']
+    if cfg.FPN.FPN_ON and cfg.FPN.MULTILEVEL_ROIS:
+        # Support for FPN multi-level rois without bbox reg isn't
+        # implemented (... and may never be implemented)
+        k_max = cfg.FPN.ROI_MAX_LEVEL
+        k_min = cfg.FPN.ROI_MIN_LEVEL
+        # Same format as rois blob, but one per FPN level
+        for lvl in range(k_min, k_max + 1):
+            blob_names += ['rois_fpn' + str(lvl)]
+        blob_names += ['rois_idx_restore_int32']
+        if is_training:
+            if cfg.MODEL.MASK_ON:
+                for lvl in range(k_min, k_max + 1):
+                    blob_names += ['mask_rois_fpn' + str(lvl)]
+                blob_names += ['mask_rois_idx_restore_int32']
+            if cfg.MODEL.KEYPOINTS_ON:
+                for lvl in range(k_min, k_max + 1):
+                    blob_names += ['keypoint_rois_fpn' + str(lvl)]
+                blob_names += ['keypoint_rois_idx_restore_int32']
+    return blob_names
+    
+        # Scale rois_fg and format as (batch_idx, x1, y1, x2, y2)
+    rois_fg *= im_scale
+    repeated_batch_idx = batch_idx * blob_utils.ones((rois_fg.shape[0], 1))
+    rois_fg = np.hstack((repeated_batch_idx, rois_fg))
+    
+        return blob, im_scales
