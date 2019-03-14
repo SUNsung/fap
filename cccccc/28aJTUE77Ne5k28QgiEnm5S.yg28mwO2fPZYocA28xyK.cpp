@@ -1,386 +1,300 @@
 
         
-        
+         private:
+  std::string GetFeedURL();
+  void SetFeedURL(mate::Arguments* args);
+  void QuitAndInstall();
+    
+    namespace api {
+    }
+    
+    
     {}  // namespace atom
-
     
-    #endif  // ATOM_BROWSER_API_ATOM_API_IN_APP_PURCHASE_H_
-
+    void Event::PreventDefault(v8::Isolate* isolate) {
+  GetWrapper()->Set(StringToV8(isolate, 'defaultPrevented'), v8::True(isolate));
+}
     
-    #ifndef ATOM_BROWSER_API_ATOM_API_NET_H_
-#define ATOM_BROWSER_API_ATOM_API_NET_H_
+    #ifndef ATOM_BROWSER_AUTO_UPDATER_H_
+#define ATOM_BROWSER_AUTO_UPDATER_H_
     
-    class Menu;
-class NativeImage;
-    
-      // C++ can not distinguish overloaded member function.
-  template <AtomNetworkDelegate::SimpleEvent type>
-  void SetSimpleListener(mate::Arguments* args);
-  template <AtomNetworkDelegate::ResponseEvent type>
-  void SetResponseListener(mate::Arguments* args);
-  template <typename Listener, typename Method, typename Event>
-  void SetListener(Method method, Event type, mate::Arguments* args);
-    
-    AtomQuotaPermissionContext::AtomQuotaPermissionContext() {}
-    
-    namespace in_app_purchase {
-    }
-    
-    void OffScreenOutputDevice::OnPaint(const gfx::Rect& damage_rect) {
-  gfx::Rect rect = damage_rect;
-  if (!pending_damage_rect_.IsEmpty()) {
-    rect.Union(pending_damage_rect_);
-    pending_damage_rect_.SetRect(0, 0, 0, 0);
-  }
-    }
-    
-    #endif // BITCOIN_QT_NETWORKSTYLE_H
-
-    
-        QString getURI();
-    
-    #ifndef BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
-#define BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
-    
-    /**
- * Changelog:
- * - March 2013, Diederik Huys:    original version
- * - November 2014, Pieter Wuille: updated to use Peter Dettman's parallel multiplication algorithm
- * - December 2014, Pieter Wuille: converted from YASM to GCC inline assembly
- */
-    
-    static void secp256k1_gej_set_ge(secp256k1_gej *r, const secp256k1_ge *a) {
-   r->infinity = a->infinity;
-   r->x = a->x;
-   r->y = a->y;
-   secp256k1_fe_set_int(&r->z, 1);
+    void URLRequestAboutJob::Kill() {
+  weak_ptr_factory_.InvalidateWeakPtrs();
+  URLRequestJob::Kill();
 }
     
     
-    {    secp256k1_ecdsa_recoverable_signature_load(ctx, &r, &s, &recid, signature);
-    VERIFY_CHECK(recid >= 0 && recid < 4);  /* should have been caught in parse_compact */
-    secp256k1_scalar_set_b32(&m, msg32, NULL);
-    if (secp256k1_ecdsa_sig_recover(&ctx->ecmult_ctx, &r, &s, &q, &m, recid)) {
-        secp256k1_pubkey_save(pubkey, &q);
-        return 1;
-    } else {
-        memset(pubkey, 0, sizeof(*pubkey));
-        return 0;
-    }
+    {}  // namespace nwapi
+    
+    Base::~Base() {
 }
     
-    static bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
-{
-    if (s1.size() != s2.size()) return false;
-    for (size_t i = 0; i < s1.size(); ++i) {
-        char c1 = s1[i];
-        if (c1 >= 'A' && c1 <= 'Z') c1 -= ('A' - 'a');
-        char c2 = s2[i];
-        if (c2 >= 'A' && c2 <= 'Z') c2 -= ('A' - 'a');
-        if (c1 != c2) return false;
-    }
-    return true;
+    
+    {  RenderThread::Get()->Send(new ShellViewHostMsg_Call_Object_Method(
+      routing_id,
+      object_id,
+      type,
+      method,
+      *static_cast<base::ListValue*>(value_args.get())));
+  return v8::Undefined(isolate);
 }
     
-        // A more complex valid grammar. PROTOCOLINFO accepts a VersionLine that
-    // takes a key=value pair followed by an OptArguments, making this valid.
-    // Because an OptArguments contains no semantic data, there is no point in
-    // parsing it.
-    CheckParseTorReplyMapping(
-        'SOME=args,here MORE optional=arguments  here', {
-            {'SOME', 'args,here'},
-        });
-    
-    inline void printfln(const char* fmt)
-{
-    format(std::cout, fmt);
-    std::cout << '\n';
-}
-    
-    const std::vector<std::string>& UniValue::getKeys() const
-{
-    if (typ != VOBJ)
-        throw std::runtime_error('JSON value is not an object as expected');
-    return keys;
-}
-    
-        BOOST_CHECK_EQUAL(v[0].getValStr(), '1.10000000');
-    
-    #ifndef BITCOIN_BECH32_H
-#define BITCOIN_BECH32_H
-    
-    #if defined(OS_WIN)
-#define _USE_MATH_DEFINES
-#include <math.h>
-#endif
-    
-    // static
-void App::EmitReopenEvent() {
-  std::set<RenderProcessHost*> rphs;
-  std::set<RenderProcessHost*>::iterator it;
-    }
-    
-    // Tell browser to delete a object.
-// function DeallocateObject(id);
-v8::Handle<v8::Value> DeallocateObject(int routing_id,
-                                       int object_id);
+       void Call(const std::string& method,
+                    const base::ListValue& arguments) override;
+   void CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result) override;
     
     #include 'ui/base/models/simple_menu_model.h'
     
+      image_file.read(reinterpret_cast<char*>(&magic), 4);
+  magic = swap_endian(magic);
+  CHECK_EQ(magic, 2051) << 'Incorrect image file magic.';
+  label_file.read(reinterpret_cast<char*>(&magic), 4);
+  magic = swap_endian(magic);
+  CHECK_EQ(magic, 2049) << 'Incorrect label file magic.';
+  image_file.read(reinterpret_cast<char*>(&num_items), 4);
+  num_items = swap_endian(num_items);
+  label_file.read(reinterpret_cast<char*>(&num_labels), 4);
+  num_labels = swap_endian(num_labels);
+  CHECK_EQ(num_items, num_labels);
+  image_file.read(reinterpret_cast<char*>(&rows), 4);
+  rows = swap_endian(rows);
+  image_file.read(reinterpret_cast<char*>(&cols), 4);
+  cols = swap_endian(cols);
     
-    {  *y = CalculateMenuYPosition(&screen_rect, &menu_req, NULL, *y);
-}
     
-    MenuItem::~MenuItem() {
-  Destroy();
-}
+    {  /**
+   * @brief Computes the error gradient w.r.t. the BNLL inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x}
+   *      @f$ if propagate_down[0]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+};
     
-    	wchar_t commandStr[MAX_PATH + 20] = { 0 };
-	wchar_t baseCommandStr[MAX_PATH + 20] = { 0 };
-	if (!single) {
-		swprintf_s(baseCommandStr, L'\'%s\'', exePath);
-	}
-	else {
-		swprintf_s(baseCommandStr, L'\'%s\' /single', exePath);
-	}
+    namespace caffe {
+    }
     
+     private:
+  // Recursive copy function.
+  void crop_copy(const vector<Blob<Dtype>*>& bottom,
+               const vector<Blob<Dtype>*>& top,
+               const int* offsets,
+               vector<int> indices,
+               int cur_dim,
+               const Dtype* src_data,
+               Dtype* dest_data,
+               bool is_forward);
     
-    {                UTEXT_SETNATIVEINDEX(fInputText, fp->fInputIdx);
-                UChar32 c = UTEXT_NEXT32(fInputText);
-                if (c < 256) {
-                    Regex8BitSet *s8 = &fPattern->fStaticSets8[opValue];
-                    if (s8->contains(c)) {
-                        success = !success;
-                    }
-                } else {
-                    const UnicodeSet *s = fPattern->fStaticSets[opValue];
-                    if (s->contains(c)) {
-                        success = !success;
-                    }
-                }
-                if (success) {
-                    fp->fInputIdx = UTEXT_GETNATIVEINDEX(fInputText);
-                } else {
-                    // the character wasn't in the set.
-                    fp = (REStackFrame *)fStack->popFrame(fFrameSize);
-                }
+    #ifdef USE_CUDNN
+/*
+ * @brief cuDNN implementation of ConvolutionLayer.
+ *        Fallback to ConvolutionLayer for CPU mode.
+ *
+ * cuDNN accelerates convolution through forward kernels for filtering and bias
+ * plus backward kernels for the gradient w.r.t. the filters, biases, and
+ * inputs. Caffe + cuDNN further speeds up the computation through forward
+ * parallelism across groups and backward parallelism across gradients.
+ *
+ * The CUDNN engine does not have memory overhead for matrix buffers. For many
+ * input and filter regimes the CUDNN engine is faster than the CAFFE engine,
+ * but for fully-convolutional models and large inputs the CAFFE engine can be
+ * faster as long as it fits in memory.
+*/
+template <typename Dtype>
+class CuDNNConvolutionLayer : public ConvolutionLayer<Dtype> {
+ public:
+  explicit CuDNNConvolutionLayer(const LayerParameter& param)
+      : ConvolutionLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNConvolutionLayer();
+    }
+    
+            for(int i = 0 ; i < nums.size() ; i ++){
+            unordered_map<int,int>::iterator iter = record.find(target - nums[i]);
+            if(iter != record.end() && iter->second != i){
+                int res[] = {i, iter->second};
+                return vector<int>(res, res + 2);
             }
-            break;
-    
-    int32_t ScriptSet::countMembers() const {
-    // This bit counter is good for sparse numbers of '1's, which is
-    //  very much the case that we will usually have.
-    int32_t count = 0;
-    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
-        uint32_t x = bits[i];
-        while (x > 0) {
-            count++;
-            x &= (x - 1);    // and off the least significant one bit.
         }
-    }
-    return count;
-}
     
-    int32_t SearchIterator::getMatchedLength() const
-{
-    return m_search_->matchedLength;
-}
+        vector<int> vec2 = {2};
+    Solution().sortColors(vec2);
+    printArr(vec2);
     
-void SearchIterator::getMatchedText(UnicodeString &result) const
-{
-    int32_t matchedindex  = m_search_->matchedIndex;
-    int32_t     matchedlength = m_search_->matchedLength;
-    if (matchedindex != USEARCH_DONE && matchedlength != 0) {
-        result.setTo(m_search_->text + matchedindex, matchedlength); 
-    }
-    else {
-        result.remove();
-    }
-}
-    
-void SearchIterator::setBreakIterator(BreakIterator *breakiter, 
-                                      UErrorCode &status)
-{
-    if (U_SUCCESS(status)) {
-#if 0
-        m_search_->breakIter = NULL;
-        // the c++ breakiterator may not make use of ubreakiterator.
-        // so we'll have to keep track of it ourselves.
-#else
-        // Well, gee... the Constructors that take a BreakIterator
-        // all cast the BreakIterator to a UBreakIterator and
-        // pass it to the corresponding usearch_openFromXXX
-        // routine, so there's no reason not to do this.
-        //
-        // Besides, a UBreakIterator is a BreakIterator, so
-        // any subclass of BreakIterator should work fine here...
-        m_search_->breakIter = (UBreakIterator *) breakiter;
-#endif
-        
-        m_breakiterator_ = breakiter;
-    }
-}
-    
-const BreakIterator * SearchIterator::getBreakIterator(void) const
-{
-    return m_breakiterator_;
-}
-    
-    // SharedBreakIterator encapsulates a shared BreakIterator. Because
-// BreakIterator has mutable semantics, clients must ensure that all uses
-// of a particular shared BreakIterator is protected by the same mutex
-// ensuring that only one thread at a time gets access to that shared
-// BreakIterator. Clients can accomplish this by creating a mutex for all
-// uses of break iterator within a particular class. Then objects of that
-// class may then freely share break iterators among themselves. However,
-// these shared break iterators must never be exposed outside of that class.
-class U_I18N_API SharedBreakIterator : public SharedObject {
+    /// Linear Scan
+/// Time Complexity: O(n)
+/// Space Complexity: O(1)
+class Solution {
 public:
-    SharedBreakIterator(BreakIterator *biToAdopt);
-    virtual ~SharedBreakIterator();
+    ListNode* partition(ListNode* head, int x) {
+    }
     }
     
-    U_NAMESPACE_BEGIN
+    using namespace std;
     
-    #include 'unicode/utypes.h'
-#include 'sharedobject.h'
     
-    class U_I18N_API SharedPluralRules : public SharedObject {
-public:
-    SharedPluralRules(PluralRules *prToAdopt) : ptr(prToAdopt) { }
-    virtual ~SharedPluralRules();
-    const PluralRules *operator->() const { return ptr; }
-    const PluralRules &operator*() const { return *ptr; }
-private:
-    PluralRules *ptr;
-    SharedPluralRules(const SharedPluralRules &);
-    SharedPluralRules &operator=(const SharedPluralRules &);
+    {
+    {
+    {            if(command.s == 'print')
+                res.push_back(command.node->val);
+            else{
+                assert(command.s == 'go');
+                if(command.node->right)
+                    stack.push(Command('go',command.node->right));
+                stack.push(Command('print', command.node));
+                if(command.node->left)
+                    stack.push(Command('go',command.node->left));
+            }
+        }
+        return res;
+    }
 };
     
-    #endif  // __SIGNIFICANTDIGITINTERVAL_H__
-
+            stack<TreeNode*> stack;
+        TreeNode* cur = root;
+        while(cur != NULL || !stack.empty()){
+    }
     
-    void 
-SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfMonth, 
-                           int32_t time, TimeMode mode, UErrorCode& status)
-{
-    setEndRule(month, dayOfMonth, 0, time, mode, status);
-}
+    // Recursive
+// Time Complexity: O(n), n is the node number in the tree
+// Space Complexity: O(h), h is the height of the tree
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+    }
+    }
     
-    #include 'unicode/utypes.h'
+    public:
+    vector<int> preorderTraversal(TreeNode* root) {
+    }
     
-    /**
- * UnicodeFunctor API.  Cast 'this' to a UnicodeReplacer* pointer
- * and return the pointer.
- */
-UnicodeReplacer* StringMatcher::toReplacer() const {
-  StringMatcher  *nonconst_this = const_cast<StringMatcher *>(this);
-  UnicodeReplacer *nonconst_base = static_cast<UnicodeReplacer *>(nonconst_this);
-  
-  return nonconst_base;
-}
-    
-    #include 'DHTAbstractTask.h'
-#include 'a2time.h'
-    
-    bool DHTResponseMessage::isReply() const { return true; }
-    
-    DHTRoutingTable::DHTRoutingTable(const std::shared_ptr<DHTNode>& localNode)
-    : localNode_(localNode),
-      root_(make_unique<DHTBucketTreeNode>(
-          std::make_shared<DHTBucket>(localNode_))),
-      numBucket_(1),
-      taskQueue_{nullptr},
-      taskFactory_{nullptr}
-{
-}
-    
-    DHTRoutingTableSerializer::DHTRoutingTableSerializer(int family)
-    : family_(family)
-{
-}
+    using namespace std;
     
     
-    {  // Returns two vector of Commands.  First one contains regular
-  // commands.  Secod one contains so called routine commands, which
-  // executed once per event poll returns.
-  std::pair<std::vector<std::unique_ptr<Command>>,
-            std::vector<std::unique_ptr<Command>>>
-  setup(DownloadEngine* e, int family);
+    {
+    {        return res;
+    }
 };
     
-    std::shared_ptr<DHTTask>
-DHTTaskFactoryImpl::createPingTask(const std::shared_ptr<DHTNode>& remoteNode,
-                                   int numRetry)
-{
-  auto task = std::make_shared<DHTPingTask>(remoteNode, numRetry);
-  task->setTimeout(timeout_);
-  setCommonProperty(task);
-  return task;
-}
-    
-    
-    {} // namespace aria2
-    
-      unsigned char secret_[2][SECRET_SIZE];
-    
-    #endif /* !__HIREDIS_QT_H__ */
-
+            vector<int> res;
+        if(root == NULL)
+            return res;
     
     
     {
-    {        if (msg.timer)
-        {
-            swTimer_del(&SwooleG.timer, msg.timer);
+    {
+    {            TagNode tagNode = stack.top();
+            stack.pop();
+            cur = tagNode.node;
+            if(tagNode.isFirst == false){
+                tagNode.isFirst = true;
+                stack.push(tagNode);
+                cur = cur->right;
+            }
+            else{
+                res.push_back(cur->val);
+                cur = NULL;
+            };
         }
-        if (msg.error || closed)
-        {
-            return nullptr;
-        }
+        return res;
     }
-    /**
-     * pop data
-     */
-    void *data = data_queue.front();
-    data_queue.pop();
-    /**
-     * notify producer
-     */
-    if (!producer_queue.empty())
-    {
-        Coroutine *co = pop_coroutine(PRODUCER);
-        co->resume();
+};
+    
+    class CacheBench {
+ public:
+  CacheBench() : num_threads_(FLAGS_threads) {
+    if (FLAGS_use_clock_cache) {
+      cache_ = NewClockCache(FLAGS_cache_size, FLAGS_num_shard_bits);
+      if (!cache_) {
+        fprintf(stderr, 'Clock cache not supported.\n');
+        exit(1);
+      }
+    } else {
+      cache_ = NewLRUCache(FLAGS_cache_size, FLAGS_num_shard_bits);
     }
-    return data;
-}
+  }
+    }
     
-    TEST(coroutine_socket, recv_success)
-{
-    coro_test([](void *arg)
-    {
-        Socket sock(SW_SOCK_TCP);
-        bool retval = sock.connect('127.0.0.1', 9501, -1);
-        ASSERT_EQ(retval, true);
-        ASSERT_EQ(sock.errCode, 0);
-        sock.send('echo', 5);
-        char buf[128];
-        int n = sock.recv(buf, sizeof(buf));
-        ASSERT_EQ(strcmp(buf, 'hello world\n'), 0);
-    });
-}
+    using namespace rocksdb;
+    
+      int ret = system('rm -rf /tmp/rocksmergetest');
+  if (ret != 0) {
+    fprintf(stderr, 'Error deleting /tmp/rocksmergetest, code: %d\n', ret);
+    return ret;
+  }
+  rocksdb::Options options;
+  options.create_if_missing = true;
+  options.merge_operator.reset(new MyMerge);
+  options.compaction_filter = &filter;
+  status = rocksdb::DB::Open(options, '/tmp/rocksmergetest', &raw_db);
+  assert(status.ok());
+  std::unique_ptr<rocksdb::DB> db(raw_db);
+    
+      // reopen the db using the loaded options.
+  std::vector<ColumnFamilyHandle*> handles;
+  s = DB::Open(loaded_db_opt, kDBPath, loaded_cf_descs, &handles, &db);
+  assert(s.ok());
+    
+    #include 'rocksdb/db.h'
+#include 'rocksdb/slice.h'
+#include 'rocksdb/options.h'
+    
+    struct DumpOptions {
+  // Database that will be dumped
+  std::string db_path;
+  // File location that will contain dump output
+  std::string dump_location;
+  // Don't include db information header in the dump
+  bool anonymous = false;
+};
+    
+      // Return stats as map of {string, double} per-tier
+  //
+  // Persistent cache can be initialized as a tier of caches. The stats are per
+  // tire top-down
+  virtual StatsType Stats() = 0;
+    
+    class DBWithTTL : public StackableDB {
+ public:
+  virtual Status CreateColumnFamilyWithTtl(
+      const ColumnFamilyOptions& options, const std::string& column_family_name,
+      ColumnFamilyHandle** handle, int ttl) = 0;
+    }
+    
+      std::string ToString() {
+    std::string ret;
+    switch (state_) {
+    case EXEC_SUCCEED:
+      break;
+    case EXEC_FAILED:
+      ret.append('Failed: ');
+      break;
+    case EXEC_NOT_STARTED:
+      ret.append('Not started: ');
+    }
+    if (!message_.empty()) {
+      ret.append(message_);
+    }
+    return ret;
+  }
     
     
-    {    ASSERT_EQ(swThreadPool_free(&pool), SW_OK);
-    ASSERT_EQ(result, N);
-}
-
-    
-    
-    {    return retval;
-}
-
-    
-        _socket->object = NULL;
-    _socket->active = 0;
-    efree(object);
-    swoole_set_object(zobject, NULL);
+    {}  // namespace rocksdb
