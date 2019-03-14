@@ -1,344 +1,301 @@
 
         
-        
-    {
-    {
-    {}  // namespace python
-}  // namespace protobuf
-}  // namespace google
-
+            void convert(const Size2D &_size,
+                 const s16 * srcBase, ptrdiff_t srcStride,
+                 u16 * dstBase, ptrdiff_t dstStride);
     
-    bool CodeGenerator::GenerateAll(
-    const std::vector<const FileDescriptor*>& files,
-    const string& parameter,
-    GeneratorContext* generator_context,
-    string* error) const {
-  // Default implemenation is just to call the per file method, and prefix any
-  // error string with the file to provide context.
-  bool succeeded = true;
-  for (int i = 0; i < files.size(); i++) {
-    const FileDescriptor* file = files[i];
-    succeeded = Generate(file, parameter, generator_context, error);
-    if (!succeeded && error && error->empty()) {
-      *error = 'Code generator returned false but provided no error '
-               'description.';
-    }
-    if (error && !error->empty()) {
-      *error = file->name() + ': ' + *error;
-      break;
-    }
-    if (!succeeded) {
-      break;
-    }
-  }
-  return succeeded;
-}
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-namespace {
-    }
-    }
-    }
-    }
-    }
-    
-    #include <google/protobuf/compiler/java/java_context.h>
-#include <google/protobuf/compiler/java/java_doc_comment.h>
-#include <google/protobuf/compiler/java/java_helpers.h>
-#include <google/protobuf/compiler/java/java_name_resolver.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/stubs/strutil.h>
-    
-    // Protocol Buffers - Google's data interchange format
-// Copyright 2008 Google Inc.  All rights reserved.
-// https://developers.google.com/protocol-buffers/
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are
-// met:
-//
-//     * Redistributions of source code must retain the above copyright
-// notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above
-// copyright notice, this list of conditions and the following disclaimer
-// in the documentation and/or other materials provided with the
-// distribution.
-//     * Neither the name of Google Inc. nor the names of its
-// contributors may be used to endorse or promote products derived from
-// this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// 'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-    
-      reflection_tester.SetAllFieldsViaReflection(message);
-  reflection_tester.ExpectAllFieldsSetViaReflection(*message);
-    
-    
-    {  // Now replace the '.' in the input with it.
-  string result;
-  result.reserve(strlen(input) + size - 3);
-  result.append(input, radix_pos);
-  result.append(temp + 1, size - 2);
-  result.append(radix_pos + 1);
-  return result;
-}
-    
-    #define CHARACTER_CLASS(NAME, EXPRESSION)      \
-  class NAME {                                 \
-   public:                                     \
-    static inline bool InClass(char c) {       \
-      return EXPRESSION;                       \
-    }                                          \
-  }
-    
-    // This test causes gcc 3.3.5 (and earlier?) to give the cryptic error:
-//   'sorry, unimplemented: `method_call_expr' not supported by dump_expr'
-#if !defined(__GNUC__) || __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3)
-    
-        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0,
-                     const typename internal::VecTraits<T>::vec64 & v_src1,
-                     typename internal::VecTraits<T>::vec64 & v_dst) const
-    {
-        v_dst = internal::vadd(v_src0, v_src1);
-    }
-    
-        for (size_t y = 0; y < size.height; ++y)
-    {
-        const type * src0 = internal::getRowPtr(src0Base, src0Stride, y);
-        const type * src1 = internal::getRowPtr(src1Base, src1Stride, y);
-        u8 * dst = internal::getRowPtr(dstBase, dstStride, y);
-        size_t x = 0;
-    }
-    
-    void assertSupportedConfiguration(bool parametersSupported)
+    void blur3x3(const Size2D &size, s32 cn,
+             const f32 * srcBase, ptrdiff_t srcStride,
+             f32 * dstBase, ptrdiff_t dstStride,
+             BORDER_MODE borderType, f32 borderValue, Margin borderMargin)
 {
-    if (!isSupportedConfiguration()) {
-        std::cerr << 'internal error: attempted to use an unavailable function' << std::endl;
-        std::abort();
+    internal::assertSupportedConfiguration(isBlurF32Supported(size, cn, borderType));
+#ifdef CAROTENE_NEON
+    size_t colsn = size.width * cn;
     }
-    }
-    
-            vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        float32x4_t vline1Shifted_f32 = vaddq_f32(vline1_f32, vshift);
-        float32x4_t vline2Shifted_f32 = vaddq_f32(vline2_f32, vshift);
-        uint32x4_t vline1_u32 = vcvtq_u32_f32(vline1Shifted_f32);
-        uint32x4_t vline2_u32 = vcvtq_u32_f32(vline2Shifted_f32);
-        uint32x4_t vline1Mask = vbicq_u32(vmask, vreinterpretq_u32_f32(vline2_f32));
-        uint32x4_t vline2Mask = vbicq_u32(vmask, vreinterpretq_u32_f32(vline1Shifted_f32));
-        vline1Mask = vshrq_n_u32(vline1Mask, 16);
-        vline2Mask = vshrq_n_u32(vline2Mask, 16);
-        vline1_u32 = vqsubq_u32(vline1_u32, vline1Mask);
-        vline2_u32 = vqsubq_u32(vline2_u32, vline2Mask);
-        uint16x4_t vRes1 = vqrshrn_n_u32(vline1_u32, 16);
-        uint16x4_t vRes2 = vqrshrn_n_u32(vline2_u32, 16);
-        uint8x8_t vRes = vqmovn_u16(vcombine_u16(vRes1, vRes2));
     
     
+    {    // the final pass, form the final image
+    uint8x16_t v2 = vmovq_n_u8(2);
+    const u8* ptrmap = map + mapstep + 1;
+    for (size_t i = 0; i < size.height; i++, ptrmap += mapstep)
     {
-    {}}
-    
-         // GP Register cannot be greater than 31
-     assert(static_cast<uint32_t>(rt) < 32);
-     assert(static_cast<uint32_t>(ra) < 32);
-     assert(static_cast<uint32_t>(rb) < 32);
-     assert(static_cast<uint32_t>(bc) < 32);
-    
-    
-    {}
-    
-    
-    {  if (base64) {
-    decoded = string_base64_decode(data, data_len, true);
-    if (decoded.isNull()) {
-      raise_warning('unable to decode base64 data');
-      return nullptr;
-    }
-  } else {
-    decoded = url_decode(data, data_len);
-  }
-  return req::make<MemFile>(decoded.data(), decoded.size());
-}
-    
-    namespace HPHP {
-///////////////////////////////////////////////////////////////////////////////
-    }
-    
-      bool valid() const { return !isClosed(); }
-    
-    template<typename F>
-void logLowPriPerfWarning(folly::StringPiece event, F fillCols) {
-  logPerfWarningImpl(event, 0, kDefaultPerfWarningRate, fillCols);
-}
-template<typename F>
-void logLowPriPerfWarning(folly::StringPiece event, int64_t rate, F fillCols) {
-  logPerfWarningImpl(event, 0, rate, fillCols);
-}
-    
-    
-    {    printf('DestroyContext()\n');
-    ImGui::DestroyContext();
-    return 0;
-}
-
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    IMGUI_IMPL_API bool     ImGui_ImplGlfw_InitForOpenGL(GLFWwindow* window, bool install_callbacks);
-IMGUI_IMPL_API bool     ImGui_ImplGlfw_InitForVulkan(GLFWwindow* window, bool install_callbacks);
-IMGUI_IMPL_API void     ImGui_ImplGlfw_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplGlfw_NewFrame();
-    
-            // 3. Show another simple window.
-        if (show_another_window)
+        u8* _dst = internal::getRowPtr(dstBase, dstStride, i);
+        ptrdiff_t j = 0;
+        for (; j < (ptrdiff_t)size.width - 16; j += 16)
         {
-            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
+            internal::prefetch(ptrmap);
+            uint8x16_t vmap = vld1q_u8(ptrmap + j);
+            uint8x16_t vdst = vceqq_u8(vmap, v2);
+            vst1q_u8(_dst+j, vdst);
         }
-    
-    static void glfw_error_callback(int error, const char* description)
-{
-    fprintf(stderr, 'Glfw Error %d: %s\n', error, description);
+        for (; j < (ptrdiff_t)size.width; j++)
+            _dst[j] = (u8)-(ptrmap[j] >> 1);
+    }
 }
     
-        // Create the D3DDevice
-    if (pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwnd, D3DCREATE_HARDWARE_VERTEXPROCESSING, &g_d3dpp, &g_pd3dDevice) < 0)
+                uint8x16x2_t v_src = vld2q_u8(src + sj);
+            vst1q_u8(dst + dj, v_src.val[coi]);
+    
+    #define MERGE_QUAD(sgn, bits, n) { \
+                                     vec128 v_dst; \
+                                     /*FILL_LINES##n(PREF, sgn##bits) \
+                                     FILL_LINES##n(VLD1Q, sgn##bits)*/ \
+                                     FILL_LINES##n(PRLD, sgn##bits) \
+                                     vst##n##q_##sgn##bits(dst + dj, v_dst); \
+                                 }
+    
+    
+    {    void operator() (const T * src0, const T * src1, u8 * dst) const
     {
-        pD3D->Release();
-        UnregisterClass(wc.lpszClassName, wc.hInstance);
-        return 0;
+        dst[0] = src0[0] > src1[0] ? 255 : 0;
     }
-    
-    
-    {    vkDestroyDevice(g_Device, g_Allocator);
-    vkDestroyInstance(g_Instance, g_Allocator);
-}
-    
-    int main() {
-    }
-    
-    
-/// Recursive
-/// Time Complexity: O(n)
-/// Space Complexity: O(n)
-    
-    int main() {
-    }
-    
-    #include <iostream>
-#include <vector>
-#include <stack>
-    
-    
-    {    return 0;
-}
-
-    
-    public:
-    vector<int> preorderTraversal(TreeNode* root) {
-    }
-    
-    
-// My Non-Recursive
-// Time Complexity: O(n), n is the node number in the tree
-// Space Complexity: O(h), h is the height of the tree
-class Solution {
-    }
-    
-      // Input statistics
-  // TODO(noetzli): The stats are incomplete. They are lacking everything
-  // consumed by MergeHelper.
-  uint64_t num_input_records = 0;
-  uint64_t num_input_deletion_records = 0;
-  uint64_t num_input_corrupt_records = 0;
-  uint64_t total_input_raw_key_bytes = 0;
-  uint64_t total_input_raw_value_bytes = 0;
-    
-    #include 'rocksdb/status.h'
-    
-      // put and get from non-default column family
-  s = db->Put(WriteOptions(), handles[1], Slice('key'), Slice('value'));
-  assert(s.ok());
-  std::string value;
-  s = db->Get(ReadOptions(), handles[1], Slice('key'), &value);
-  assert(s.ok());
-    
-    class DbDumpTool {
- public:
-  bool Run(const DumpOptions& dump_options,
-           rocksdb::Options options = rocksdb::Options());
 };
     
-    class Slice;
-class BlockBuilder;
-struct Options;
     
-      const Snapshot* snapshot();
+    {            vst1q_s16(dst + j, vshlq_n_s16(v_dst0, shift));
+            vst1q_s16(dst + j + 8, vshlq_n_s16(v_dst1, shift));
+        }
+        for (; j < roiw8; j += 8)
+        {
+            int16x8_t v_dst = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(src + j)));
+            vst1q_s16(dst + j, vshlq_n_s16(v_dst, shift));
+        }
     
-      // -------------------
-  // Parameters that affect performance
-    
-    
-    {    // exception out_of_range.401
-    try
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
+CVTS_FUNC(s16, s32, 8,
+    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
+    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 8)
     {
-        // try to write at a nonexisting key
-        object.at('the fast') = 'il rapido';
+        internal::prefetch(_src + i);
+        __asm__ (
+            'vld1.16 {d4-d5}, [%[src]]                              \n\t'
+            'vmovl.s16 q3, d4                                       \n\t'
+            'vmovl.s16 q4, d5                                       \n\t'
+            'vcvt.f32.s32 q5, q3                                    \n\t'
+            'vcvt.f32.s32 q6, q4                                    \n\t'
+            'vmul.f32 q7, q5, q0                                    \n\t'
+            'vmul.f32 q8, q6, q0                                    \n\t'
+            'vadd.f32 q9, q7, q1                                    \n\t'
+            'vadd.f32 q10, q8, q1                                   \n\t'
+            'vcvt.s32.f32 q11, q9                                   \n\t'
+            'vcvt.s32.f32 q12, q10                                  \n\t'
+            'vst1.32 {d22-d23}, [%[dst1]]                           \n\t'
+            'vst1.32 {d24-d25}, [%[dst2]]                           \n\t'
+            : /*no output*/
+            : [src] 'r' (_src + i),
+              [dst1] 'r' (_dst + i + 0),
+              [dst2] 'r' (_dst + i + 4),
+              'w'  (vscale), 'w' (vshift)
+            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25'
+        );
     }
-    catch (json::out_of_range& e)
+})
+#else
+CVTS_FUNC(s16, s32, 8,
+    float32x4_t vscale = vdupq_n_f32((f32)alpha);
+    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 8)
     {
-        std::cout << e.what() << '\n';
+        internal::prefetch(_src + i);
+        int16x8_t vline = vld1q_s16(_src + i);
+        int32x4_t vline1_s32 = vmovl_s16(vget_low_s16 (vline));
+        int32x4_t vline2_s32 = vmovl_s16(vget_high_s16(vline));
+        float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
+        float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
+        vline1_f32 = vmulq_f32(vline1_f32, vscale);
+        vline2_f32 = vmulq_f32(vline2_f32, vscale);
+        vline1_f32 = vaddq_f32(vline1_f32, vshift);
+        vline2_f32 = vaddq_f32(vline2_f32, vshift);
+        vline1_s32 = vcvtq_s32_f32(vline1_f32);
+        vline2_s32 = vcvtq_s32_f32(vline2_f32);
+        vst1q_s32(_dst + i + 0, vline1_s32);
+        vst1q_s32(_dst + i + 4, vline2_s32);
+    }
+})
+#endif
+    
+    s32 countNonZero(const Size2D &_size,
+                 const u16 * srcBase, ptrdiff_t srcStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    Size2D size(_size);
+    if (srcStride == (ptrdiff_t)(size.width))
+    {
+        size.width *= size.height;
+        size.height = 1;
+    }
+    size_t roiw8 = size.width & ~7u;
+    s32 result = 0;
+    for(size_t k = 0; k < size.height; ++k)
+    {
+        const u16* src = internal::getRowPtr( srcBase,  srcStride, k);
+        size_t i = 0;
+    }
+    }
+    
+    
+    {
+    {        for (--jd; js < size.width; ++js, --jd)
+            dst[jd] = src[js];
     }
 }
-
     
-        // change element at index 1 (second element) to 'second'
-    array.at(1) = 'second';
+    struct OSBestResult {
+  OSBestResult() : orientation_id(0), script_id(0), sconfidence(0.0),
+                   oconfidence(0.0) {}
+  int orientation_id;
+  int script_id;
+  float sconfidence;
+  float oconfidence;
+};
     
-    class async_thread_pool
+      /**
+   * Returns the bounding rectangle of the current object at the given level.
+   * See comment on coordinate system above.
+   * Returns false if there is no such object at the current position.
+   * The returned bounding box is guaranteed to match the size and position
+   * of the image returned by GetBinaryImage, but may clip foreground pixels
+   * from a grey image. The padding argument to GetImage can be used to expand
+   * the image to include more foreground pixels. See GetImage below.
+   */
+  bool BoundingBox(PageIteratorLevel level,
+                   int* left, int* top, int* right, int* bottom) const;
+  bool BoundingBox(PageIteratorLevel level, const int padding,
+                   int* left, int* top, int* right, int* bottom) const;
+  /**
+   * Returns the bounding rectangle of the object in a coordinate system of the
+   * working image rectangle having its origin at (rect_left_, rect_top_) with
+   * respect to the original image and is scaled by a factor scale_.
+   */
+  bool BoundingBoxInternal(PageIteratorLevel level,
+                           int* left, int* top, int* right, int* bottom) const;
+    
+      vclist.sort(ParamContent::Compare);  // Sort the list alphabetically.
+    
+      // Try to adjust the blamer bundle.
+  if (orig_bb != nullptr) {
+    // TODO(rays) Looks like a leak to me.
+    // orig_bb should take, rather than copy.
+    word->blamer_bundle = new BlamerBundle();
+    word2->blamer_bundle = new BlamerBundle();
+    orig_bb->SplitBundle(chopped->blobs.back()->bounding_box().right(),
+                         word2->chopped_word->blobs[0]->bounding_box().left(),
+                         wordrec_debug_blamer,
+                         word->blamer_bundle, word2->blamer_bundle);
+  }
+    
+    /**********************************************************************
+ * read_unlv_file
+ *
+ * Read a whole unlv zone file to make a list of blocks.
+ **********************************************************************/
+    
+    // ReadNextBox factors out the code to interpret a line of a box
+// file so that applybox and unicharset_extractor interpret the same way.
+// This function returns the next valid box file utf8 string and coords
+// and returns true, or false on eof (and closes the file).
+// It ignores the utf8 file signature ByteOrderMark (U+FEFF=EF BB BF), checks
+// for valid utf-8 and allows space or tab between fields.
+// utf8_str is set with the unichar string, and bounding box with the box.
+// If there are page numbers in the file, it reads them all.
+bool ReadNextBox(int *line_number, FILE* box_file,
+                 STRING* utf8_str, TBOX* bounding_box);
+// As ReadNextBox above, but get a specific page number. (0-based)
+// Use -1 to read any page number. Files without page number all
+// read as if they are page 0.
+bool ReadNextBox(int target_page, int *line_number, FILE* box_file,
+                 STRING* utf8_str, TBOX* bounding_box);
+    
+    
+    {  int delta = this - prev;
+  int32_t n = prev->n_ + 1;
+  int32_t sig_x = prev->sig_x_ + delta;
+  int64_t sig_xsq = prev->sig_xsq_ + delta * delta;
+  int64_t cost = (sig_xsq - sig_x * sig_x / n) / n;
+  cost += prev->total_cost_;
+  UpdateIfBetter(cost, prev->total_steps_ + 1, prev, n, sig_x, sig_xsq);
+  return cost;
+}
+    
+      // Adds the supplied boxes and transcriptions that correspond to the correct
+  // page number.
+  void AddBoxes(const GenericVector<TBOX>& boxes,
+                const GenericVector<STRING>& texts,
+                const GenericVector<int>& box_pages);
+    
+    
+    {	}
+    
+    
+    {	};
+    
+    void ClipperBase::SwapPositionsInAEL(TEdge *Edge1, TEdge *Edge2)
 {
-public:
-    async_thread_pool(int _min_threads, int _max_threads)
-    {
-        n_waiting = 0;
-        running = false;
-        min_threads = _min_threads;
-        max_threads = _max_threads;
-        current_task_id = 0;
-    }
+  //check that one or other edge hasn't already been removed from AEL ...
+  if (Edge1->NextInAEL == Edge1->PrevInAEL ||
+    Edge2->NextInAEL == Edge2->PrevInAEL) return;
     }
     
-    TEST(hashmap, string)
-{
-    swHashMap *hm = swHashMap_new(16, NULL);
-    swHashMap_add(hm, (char *) SW_STRL('hello'), (void *) 199);
-    swHashMap_add(hm, (char *) SW_STRL('swoole22'), (void *) 8877);
-    swHashMap_add(hm, (char *) SW_STRL('hello2'), (void *) 200);
-    swHashMap_add(hm, (char *) SW_STRL('willdel'), (void *) 888);
-    swHashMap_add(hm, (char *) SW_STRL('willupadte'), (void *) 9999);
-    swHashMap_add(hm, (char *) SW_STRL('hello3'), (void *) 78978);
-    }
+    void SimplifyPolygon(const Path &in_poly, Paths &out_polys, PolyFillType fillType = pftEvenOdd);
+void SimplifyPolygons(const Paths &in_polys, Paths &out_polys, PolyFillType fillType = pftEvenOdd);
+void SimplifyPolygons(Paths &polys, PolyFillType fillType = pftEvenOdd);
     
-        SwooleG.main_reactor = (swReactor *) sw_malloc(sizeof(swReactor));
-    swReactor_create(SwooleG.main_reactor, SW_REACTOR_MAXEVENTS);
     
-    #include <gtest/gtest.h>
-#include <initializer_list>
-#include <utility>
+    {#if defined (__cplusplus)
+}
+#endif
+    
+    /*!
+ * \brief Registry entry for linear updater.
+ */
+struct LinearUpdaterReg
+    : public dmlc::FunctionRegEntryBase<LinearUpdaterReg,
+                                        std::function<LinearUpdater*()> > {};
+    
+    
+    { private:
+  RowBlock<IndexType> out_;
+  std::unique_ptr<Parser<IndexType> > parser_;
+  uint32_t num_col_;
+  std::vector<size_t> offset_;
+  std::vector<IndexType> dense_index_;
+  std::vector<xgboost::bst_float> dense_value_;
+};
+    
+    // logistic loss for probability regression task
+struct LogisticRegression {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return common::Sigmoid(x); }
+  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return x >= 0.0f && x <= 1.0f; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    return predt - label;
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    const float eps = 1e-16f;
+    return fmaxf(predt * (1.0f - predt), eps);
+  }
+  template <typename T>
+  static T PredTransform(T x) { return common::Sigmoid(x); }
+  template <typename T>
+  static T FirstOrderGradient(T predt, T label) { return predt - label; }
+  template <typename T>
+  static T SecondOrderGradient(T predt, T label) {
+    const T eps = T(1e-16f);
+    return std::max(predt * (T(1.0f) - predt), eps);
+  }
+  static bst_float ProbToMargin(bst_float base_score) {
+    CHECK(base_score > 0.0f && base_score < 1.0f)
+      << 'base_score must be in (0,1) for logistic loss';
+    return -logf(1.0f / base_score - 1.0f);
+  }
+  static const char* LabelErrorMsg() {
+    return 'label must be in [0,1] for logistic regression';
+  }
+  static const char* DefaultEvalMetric() { return 'rmse'; }
+};
