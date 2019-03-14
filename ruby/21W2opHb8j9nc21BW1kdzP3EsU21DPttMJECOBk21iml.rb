@@ -1,108 +1,102 @@
 
         
-        User.seed do |u|
-  u.id = -1
-  u.name = 'system'
-  u.username = 'system'
-  u.username_lower = 'system'
-  u.password = SecureRandom.hex
-  u.active = true
-  u.admin = true
-  u.moderator = true
-  u.approved = true
-  u.trust_level = TrustLevel[4]
-end
-    
-        Category.transaction do
-      staff.group_names = ['staff']
-      unless staff.save
-        puts staff.errors.full_messages
-        raise 'Failed to set permissions on the Staff category!'
-      end
-    
-          unless root?
-        raise Invalid, 'missing name' if !name || name.empty?
-        raise Invalid, 'missing path' if !path || path.empty?
-        raise Invalid, 'missing type' if !type || type.empty?
-      end
+            def initialize_copy(other)
+      @paths = other.paths.dup
+      self
     end
     
-        private
+          def test_controller_raise_error_about_missing_helper
+        e = assert_raise(AbstractController::Helpers::MissingHelperError) { AbstractInvalidHelpers.helper(:missing) }
+        assert_equal 'Missing helper file helpers/missing_helper.rb', e.message
+      end
     
-            css('th h3').each do |node|
-          node.name = 'span'
-        end
-    
-            css('.multi-line-signature').each do |node|
-          node.name = 'pre'
-          node.content = node.content.strip
-        end
-    
-        # The path used after resending confirmation instructions.
-    def after_resending_confirmation_instructions_path_for(resource_name)
-      is_navigational_format? ? new_session_path(resource_name) : '/'
+        # This returns whether the guest is ready to work. If this returns
+    # `false`, then {#detect!} should be called in order to detect the
+    # guest OS.
+    #
+    # @return [Boolean]
+    def ready?
+      !!capability_host_chain
     end
-    
-      def translation_scope
-    'devise.omniauth_callbacks'
   end
 end
 
     
-    class Devise::SessionsController < DeviseController
-  prepend_before_action :require_no_authentication, only: [:new, :create]
-  prepend_before_action :allow_params_authentication!, only: :create
-  prepend_before_action :verify_signed_out_user, only: :destroy
-  prepend_before_action(only: [:create, :destroy]) { request.env['devise.skip_timeout'] = true }
-    
-        def unlock_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :unlock_instructions, opts)
-    end
-    
-          def remember_cookie_values(resource)
-        options = { httponly: true }
-        options.merge!(forget_cookie_values(resource))
-        options.merge!(
-          value: resource.class.serialize_into_cookie(resource),
-          expires: resource.remember_expires_at
-        )
-      end
-    
-          included do
-        include Devise::Controllers::ScopedViews
-      end
-    
-          # Checks whether the user session has expired based on configured time.
-      def timedout?(last_access)
-        !timeout_in.nil? && last_access && last_access <= timeout_in.ago
-      end
-    
-      gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
-  gem.executables   = %w(cap capify)
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ['lib']
-    
-        def backend
-      @backend ||= SSHKit
-    end
-    
-        def vendor_path(path)
-      return ::File.join(LOGSTASH_HOME, 'vendor', path)
-    end
-    
-            if Utils::HttpClient.remote_file_exist?(uri)
-          PluginManager.ui.debug('Found package at: #{uri}')
-          return LogStash::PluginManager::PackInstaller::Remote.new(uri)
-        else
-          PluginManager.ui.debug('Package not found at: #{uri}')
-          return nil
+            # Execute a command on the remote machine. The exact semantics
+        # of this method are up to the implementor, but in general the
+        # users of this class will expect this to be a shell.
+        #
+        # This method gives you no way to write data back to the remote
+        # machine, so only execute commands that don't expect input.
+        #
+        # @param [String] command Command to execute.
+        # @yield [type, data] Realtime output of the command being executed.
+        # @yieldparam [String] type Type of the output. This can be
+        #   `:stdout`, `:stderr`, etc. The exact types are up to the
+        #   implementor.
+        # @yieldparam [String] data Data for the given output.
+        # @return [Integer] Exit code of the command.
+        def execute(command, opts=nil)
         end
-      rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH => e
-        # This probably means there is a firewall in place of the proxy is not correctly configured.
-        # So lets skip this strategy but log a meaningful errors.
-        PluginManager.ui.debug('Network error, skipping Elastic pack, exception: #{e}')
     
-      it 'does object equality on config_hash and pipeline_id' do
-    another_exact_pipeline = described_class.new(source, pipeline_id, ordered_config_parts, settings)
-    expect(subject).to eq(another_exact_pipeline)
+            # Helper method that will set a value if a value is given, or otherwise
+        # return the already set value.
+        #
+        # @param [Symbol] key Key for the data
+        # @param [Object] value Value to store.
+        # @return [Object] Stored value.
+        def self.get_or_set(key, value=UNSET_VALUE)
+          # If no value is to be set, then return the value we have already set
+          return data[key] if value.eql?(UNSET_VALUE)
+    
+            # This method is expected to return a class that is used for
+        # configuring the provisioner. This return value is expected to be
+        # a subclass of {Config}.
+        #
+        # @return [Config]
+        def self.config_class
+        end
+    
+              # Make sure we're only working with one VM if single target
+          if options[:single_target] && machines.length != 1
+            @logger.debug('Using primary machine since single target')
+            primary_name = @env.primary_machine_name
+            raise Errors::MultiVMTargetRequired if !primary_name
+            machines = [get_machine.call(primary_name)]
+          end
+    
+            format('%{foo}', foo: obj).should == '42'
+      end
+    end
+  end
+    
+        $?.should be_an_instance_of Process::Status
+    $?.pid.should be_kind_of(Integer)
+    $?.exitstatus.should == 127
+  end
+    
+      it 'has no effect on immediate values' do
+    [nil, true, false].each do |v|
+      v.taint
+      v.tainted?.should == false
+    end
+  end
+    
+        def dry_run
+      ['--dry-run', '-n',
+       'Do a dry run without executing actions',
+       lambda do |_value|
+         Configuration.env.set(:sshkit_backend, SSHKit::Backend::Printer)
+       end]
+    end
+    
+          def untrusted_keys
+        keys - @trusted_keys
+      end
+    
+    # We use a special :_default_git value so that SCMResolver can tell whether the
+# default has been replaced by the user via `set`.
+set_if_empty :scm, Capistrano::Configuration::SCMResolver::DEFAULT_GIT
+set_if_empty :branch, 'master'
+set_if_empty :deploy_to, -> { '/var/www/#{fetch(:application)}' }
+set_if_empty :tmp_dir, '/tmp'
