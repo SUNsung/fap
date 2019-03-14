@@ -1,60 +1,89 @@
 
         
-                return True
+                e.g.:
+        @returns request
+        @returns request 2
+        @returns request 2 10
+        @returns request 0 10
+    '''
     
-        data = response.content
-    response_headers = response.headers
-    if 'content-encoding' not in response_headers and len(response.content) < URLFETCH_DEFLATE_MAXSIZE and response_headers.get('content-type', '').startswith(('text/', 'application/json', 'application/javascript')):
-        if 'gzip' in accept_encoding:
-            response_headers['Content-Encoding'] = 'gzip'
-            compressobj = zlib.compressobj(zlib.Z_DEFAULT_COMPRESSION, zlib.DEFLATED, -zlib.MAX_WBITS, zlib.DEF_MEM_LEVEL, 0)
-            dataio = BytesIO()
-            dataio.write('\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff')
-            dataio.write(compressobj.compress(data))
-            dataio.write(compressobj.flush())
-            dataio.write(struct.pack('<LL', zlib.crc32(data) & 0xFFFFFFFFL, len(data) & 0xFFFFFFFFL))
-            data = dataio.getvalue()
-        elif 'deflate' in accept_encoding:
-            response_headers['Content-Encoding'] = 'deflate'
-            data = zlib.compress(data)[2:-4]
-    if data:
-         response_headers['Content-Length'] = str(len(data))
-    response_headers_data = zlib.compress('\n'.join('%s:%s' % (k.title(), v) for k, v in response_headers.items() if not k.startswith('x-google-')))[2:-4]
-    if 'rc4' not in options:
-        start_response('200 OK', [('Content-Type', __content_type__)])
-        yield struct.pack('!hh', int(response.status_code), len(response_headers_data))+response_headers_data
-        yield data
-    else:
-        start_response('200 OK', [('Content-Type', __content_type__), ('X-GOA-Options', 'rc4')])
-        yield struct.pack('!hh', int(response.status_code), len(response_headers_data))
-        yield rc4crypt(response_headers_data, __password__)
-        yield rc4crypt(data, __password__)
+            def getContext(self, hostname=None, port=None):
+            ctx = ClientContextFactory.getContext(self)
+            # Enable all workarounds to SSL bugs as documented by
+            # https://www.openssl.org/docs/manmaster/man3/SSL_CTX_set_options.html
+            ctx.set_options(SSL.OP_ALL)
+            return ctx
+
+    
+        delimiter = b'\n'
     
     
+def _FormatYcmdDebugInfo( ycmd ):
+  python = ycmd[ 'python' ]
+  clang = ycmd[ 'clang' ]
+  message = ( 'Server Python interpreter: {0}\n'
+              'Server Python version: {1}\n'
+              'Server has Clang support compiled in: {2}\n'
+              'Clang version: {3}\n'.format( python[ 'executable' ],
+                                             python[ 'version' ],
+                                             clang[ 'has_support' ],
+                                             clang[ 'version' ] ) )
+  extra_conf = ycmd[ 'extra_conf' ]
+  extra_conf_path = extra_conf[ 'path' ]
+  if not extra_conf_path:
+    message += 'No extra configuration file found\n'
+  elif not extra_conf[ 'is_loaded' ]:
+    message += ( 'Extra configuration file found but not loaded\n'
+                 'Extra configuration path: {0}\n'.format( extra_conf_path ) )
+  else:
+    message += ( 'Extra configuration file found and loaded\n'
+                 'Extra configuration path: {0}\n'.format( extra_conf_path ) )
+  return message
     
-    *TL;DR80
-Describes a group of objects that is treated as a single instance.
-'''
+    from ycm.client.base_request import BaseRequest
     
     
-class ConcreteHandler2(Handler):
-    def _handle(self, request):
-        if 10 < request <= 20:
-            print('request {} handled in handler 2'.format(request))
-            return True
+from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+      _assert_rejects( f, 'This is a Taco' )
+  _assert_rejects( f, 'This is a Burrito' )
+    
+    Local worker thread:
+- reads work ids from the 'Work Ids' queue and looks up the corresponding
+  WorkItem from the 'Work Items' dict: if the work item has been cancelled then
+  it is simply removed from the dict, otherwise it is repackaged as a
+  _CallItem and put in the 'Call Q'. New _CallItems are put in the 'Call Q'
+  until 'Call Q' is full. NOTE: the size of the 'Call Q' is kept small because
+  calls placed in the 'Call Q' can no longer be cancelled with Future.cancel().
+- reads _ResultItems from 'Result Q', updates the future stored in the
+  'Work Items' dict and deletes the dict entry
+    
+        return '{0:.3g} {1}'.format(
+        size / float(1 << (order * 10)),
+        suffixes[order]
+    )
     
     
-class Person(object):
-    def __init__(self, name, action):
-        self.name = name
-        self.action = action
+def rewrite_build(service):
+    if 'dockerfile' in service:
+        service['build'] = {
+            'context': service.pop('build'),
+            'dockerfile': service.pop('dockerfile'),
+        }
     
-        @abstractmethod
-    def is_satisfied_by(self, candidate):
-        pass
+        @pytest.mark.skipif(IS_WINDOWS_PLATFORM, reason='posix separator')
+    def test_multiple_path_from_env(self):
+        with mock.patch.dict(os.environ):
+            os.environ['COMPOSE_FILE'] = 'one.yml:two.yml'
+            environment = Environment.from_env_file('.')
+            assert get_config_path_from_options(
+                '.', {}, environment
+            ) == ['one.yml', 'two.yml']
     
-    The first example achieves this by using an abstract base
-class for a building, where the initializer (__init__ method) specifies the
-steps needed, and the concrete subclasses implement these steps.
-    
-    class TimeDisplay(object):
+            _, args, _ = mock_logging.error.mock_calls[0]
+        assert 'Windows named pipe error: I use weird characters \xe9 (code: 9999)' == args[0]
