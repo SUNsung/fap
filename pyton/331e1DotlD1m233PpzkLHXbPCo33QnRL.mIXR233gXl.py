@@ -1,69 +1,69 @@
 
         
-        
-class Formatting(object):
-    '''A delegate class that invokes the actual processors.'''
+        try:
+    input = raw_input
+except NameError:
+    pass
     
-        if req:
-        output.append(Stream(
-            msg=HTTPRequest(request),
-            with_headers=req_h,
-            with_body=req_b))
+        ie_htmls = []
+    for ie in youtube_dl.list_extractors(age_limit=None):
+        ie_html = '<b>{}</b>'.format(ie.IE_NAME)
+        ie_desc = getattr(ie, 'IE_DESC', None)
+        if ie_desc is False:
+            continue
+        elif ie_desc is not None:
+            ie_html += ': {}'.format(ie.IE_DESC)
+        if not ie.working():
+            ie_html += ' (Currently broken)'
+        ie_htmls.append('<li>{}</li>'.format(ie_html))
     
-        class Plugin(AuthPlugin):
-        auth_type = 'test-parse-false'
-        auth_parse = False
+    # The suffix of source filenames.
+source_suffix = '.rst'
     
+            If `sign` is incorrect, /validate call throws an HTTP 556 error
+        '''
+        logger = WarningLogger()
+        ie = IqiyiIEWithCredentials(FakeYDL({'logger': logger}))
+        ie._login()
+        self.assertTrue('unable to log in:' in logger.messages[0])
     
-def test_default_options_overwrite(httpbin):
-    env = MockEnvironment()
-    env.config['default_options'] = ['--form']
-    env.config.save()
-    r = http('--json', httpbin.url + '/post', 'foo=bar', env=env)
-    assert r.json['json'] == {'foo': 'bar'}
+            jsi = JSInterpreter('function x3(){return 42;}')
+        self.assertEqual(jsi.call_function('x3'), 42)
     
-        def load(self):
-        super(Config, self).load()
-        self._migrate_implicit_content_type()
+        try:
+        fn = inspect.getsourcefile(obj)
+    except Exception:
+        fn = None
+    if not fn:
+        try:
+            fn = inspect.getsourcefile(sys.modules[obj.__module__])
+        except Exception:
+            fn = None
+    if not fn:
+        return
     
-        xx = np.arange(100, 100 + n * step, step)
-    plt.figure('scikit-learn vs. glmnet benchmark results')
-    plt.title('Regression in high dimensional spaces (%d samples)' % n_samples)
-    plt.plot(xx, scikit_results, 'b-', label='scikit-learn')
-    plt.plot(xx, glmnet_results, 'r-', label='glmnet')
-    plt.legend()
-    plt.xlabel('number of features')
-    plt.ylabel('Time (s)')
-    plt.axis('tight')
-    plt.show()
-
+    import sys
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.svm import LinearSVC
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import GridSearchCV
+from sklearn.datasets import load_files
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
     
-        # TASK: Build a grid search to find out whether unigrams or bigrams are
-    # more useful.
-    # Fit the pipeline on the training set using grid search for the parameters
-    parameters = {
-        'vect__ngram_range': [(1, 1), (1, 2)],
-    }
-    grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1)
-    grid_search.fit(docs_train, y_train)
+    plt.figure(2)  # 'banana' shape
+plt.title('Outlier detection on a real data set (boston housing)')
+plt.scatter(X2[:, 0], X2[:, 1], color='black')
+plt.xlim((xx2.min(), xx2.max()))
+plt.ylim((yy2.min(), yy2.max()))
+plt.legend((legend2_values_list[0].collections[0],
+            legend2_values_list[1].collections[0],
+            legend2_values_list[2].collections[0]),
+           (legend2_keys_list[0], legend2_keys_list[1], legend2_keys_list[2]),
+           loc='upper center',
+           prop=matplotlib.font_manager.FontProperties(size=12))
+plt.ylabel('% lower status of the population')
+plt.xlabel('average number of rooms per dwelling')
     
-    # The digits dataset
-digits = datasets.load_digits()
-    
-                plt.subplots_adjust(bottom=0, top=.89, wspace=0,
-                                left=0, right=1)
-            plt.suptitle('n_cluster=%i, connectivity=%r' %
-                         (n_clusters, connectivity is not None), size=17)
-    
-    # Authors: Gael Varoquaux
-# License: BSD 3 clause (C) INRIA 2014
-    
-            # catch warnings related to kneighbors_graph
-        with warnings.catch_warnings():
-            warnings.filterwarnings(
-                'ignore',
-                message='the number of connected components of the ' +
-                'connectivity matrix is [0-9]{1,2}' +
-                ' > 1. Completing it to avoid stopping the tree early.',
-                category=UserWarning)
-            algorithm.fit(X)
+    plt.matshow(data, cmap=plt.cm.Blues)
+plt.title('Original dataset')
