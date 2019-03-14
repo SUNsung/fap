@@ -1,86 +1,109 @@
 
         
-                full_path = request.get_full_path()
-        current_site = get_current_site(request)
+                if not title:
+            error = 'Title is required.'
     
-        def delete(self, session_key=None):
-        super().delete(session_key)
-        if session_key is None:
-            if self.session_key is None:
-                return
-            session_key = self.session_key
-        self._cache.delete(self.cache_key_prefix + session_key)
     
-        def create(self):
-        while True:
-            self._session_key = self._get_new_session_key()
-            try:
-                # Save immediately to ensure we have a unique entry in the
-                # database.
-                self.save(must_create=True)
-            except CreateError:
-                # Key wasn't unique. Try again.
-                continue
-            self.modified = True
-            return
+@click.command('init-db')
+@with_appcontext
+def init_db_command():
+    '''Clear existing data and create new tables.'''
+    init_db()
+    click.echo('Initialized the database.')
     
-        def load(self):
-        '''
-        Load the data from the key itself instead of fetching from some
-        external data store. Opposite of _get_session_key(), raise BadSignature
-        if signature fails.
-        '''
+        with app.app_context():
+        db = get_db()
+        post = db.execute('SELECT * FROM post WHERE id = 1').fetchone()
+        assert post['title'] == 'updated'
+    
+    
+class FormDataRoutingRedirect(AssertionError):
+    '''This exception is raised by Flask in debug mode if it detects a
+    redirect caused by the routing system when the request method is not
+    GET, HEAD or OPTIONS.  Reasoning: form data will be dropped.
+    '''
+    
+        def check(self, value):
+        return isinstance(value, list)
+    
+    
+def create_logger(app):
+    '''Get the ``'flask.app'`` logger and configure it if needed.
+    
+        :param source: the source code of the template to be
+                   rendered
+    :param context: the variables that should be available in the
+                    context of the template.
+    '''
+    ctx = _app_ctx_stack.top
+    ctx.app.update_template_context(context)
+    return _render(ctx.app.jinja_env.from_string(source),
+                   context, ctx.app)
+
+    
+        with app.app_context():
         try:
-            return signing.loads(
-                self.session_key,
-                serializer=self.serializer,
-                # This doesn't handle non-default expiry dates, see #19201
-                max_age=settings.SESSION_COOKIE_AGE,
-                salt='django.contrib.sessions.backends.signed_cookies',
-            )
+            raise Exception('dummy')
         except Exception:
-            # BadSignature, ValueError, or unpickling exceptions. If any of
-            # these happen, reset the session.
-            self.create()
-        return {}
+            pass
     
+        :param filepath: Optional filepath the the blns.txt file
+    :returns: The list of naughty strings
+    '''
     
-@x_robots_tag
-def sitemap(request, sitemaps, section=None,
-            template_name='sitemap.xml', content_type='application/xml'):
-    
-    
-def voc_info(json_dataset):
-    year = json_dataset.name[4:8]
-    image_set = json_dataset.name[9:]
-    devkit_path = get_devkit_dir(json_dataset.name)
-    assert os.path.exists(devkit_path), \
-        'Devkit directory {} not found'.format(devkit_path)
-    anno_path = os.path.join(
-        devkit_path, 'VOC' + year, 'Annotations', '{:s}.xml')
-    image_set_path = os.path.join(
-        devkit_path, 'VOC' + year, 'ImageSets', 'Main', image_set + '.txt')
-    return dict(
-        year=year,
-        image_set=image_set,
-        devkit_path=devkit_path,
-        anno_path=anno_path,
-        image_set_path=image_set_path)
+        print('Done!')
+    if failures:
+        print('Some downloads have failed:')
+        for fail in failures:
+            print('> ' + fail)
 
     
+        # Determine how many neighbors to use for weighting in the KNN classifier
+    if n_neighbors is None:
+        n_neighbors = int(round(math.sqrt(len(X))))
+        if verbose:
+            print('Chose n_neighbors automatically:', n_neighbors)
     
-def fpn_level_info_ResNet152_conv5():
-    return FpnLevelInfo(
-        blobs=('res5_2_sum', 'res4_35_sum', 'res3_7_sum', 'res2_2_sum'),
-        dims=(2048, 1024, 512, 256),
-        spatial_scales=(1. / 32., 1. / 16., 1. / 8., 1. / 4.)
-    )
+    # PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
+# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
+# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
+    
+    # Loop through each face found in the unknown image
+for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
+    # See if the face is a match for the known face(s)
+    matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+    
+    with open('README.rst') as readme_file:
+    readme = readme_file.read()
+    
+    
+class OutOfData(UnpackException):
+    pass
+    
+    sas_datetime_formats = ('DATETIME', 'DTWKDATX',
+                        'B8601DN', 'B8601DT', 'B8601DX', 'B8601DZ', 'B8601LX',
+                        'E8601DN', 'E8601DT', 'E8601DX', 'E8601DZ', 'E8601LX',
+                        'DATEAMPM', 'DTDATE', 'DTMONYY', 'DTMONYY', 'DTWKDATX',
+                        'DTYEAR', 'TOD', 'MDYAMPM')
 
     
-        # rois are in [[batch_idx, x0, y0, x1, y2], ...] format
-    # Combine predictions across all levels and retain the top scoring
-    rois = np.concatenate([blob.data for blob in roi_inputs])
-    scores = np.concatenate([blob.data for blob in score_inputs]).squeeze()
-    inds = np.argsort(-scores)[:post_nms_topN]
-    rois = rois[inds, :]
-    return rois
+        for v, p in cases:
+        match(v, p)
+    
+            Returns
+        -------
+        props : dict
+            Atomic CSS 2.2 properties
+    
+        @pytest.mark.parametrize('tz', ['US/Eastern', 'Asia/Tokyo'])
+    def test_fillna_datetime64(self, tz):
+        # GH 11343
+        idx = pd.DatetimeIndex(['2011-01-01 09:00', pd.NaT,
+                                '2011-01-01 11:00'])
+    
+        def test_representation_to_series(self):
+        idx1 = TimedeltaIndex([], freq='D')
+        idx2 = TimedeltaIndex(['1 days'], freq='D')
+        idx3 = TimedeltaIndex(['1 days', '2 days'], freq='D')
+        idx4 = TimedeltaIndex(['1 days', '2 days', '3 days'], freq='D')
+        idx5 = TimedeltaIndex(['1 days 00:00:01', '2 days', '3 days'])
