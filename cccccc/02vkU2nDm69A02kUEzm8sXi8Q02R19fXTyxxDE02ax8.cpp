@@ -1,250 +1,343 @@
 
         
-          virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) {
-    InitParams(kwargs);
-    // use the kwarg to init batch loader
-    loader_->Init(kwargs);
-    iter.Init([this](DataBatch **dptr) {
-        if (!loader_->Next()) return false;
-        const TBlobBatch& batch = loader_->Value();
-        if (*dptr == nullptr) {
-          // allocate databatch
-          *dptr = new DataBatch();
-          (*dptr)->num_batch_padd = batch.num_batch_padd;
-          (*dptr)->data.resize(batch.data.size());
-          (*dptr)->index.resize(batch.batch_size);
-          for (size_t i = 0; i < batch.data.size(); ++i) {
-            auto dtype = param_.dtype
-                             ? param_.dtype.value()
-                             : batch.data[i].type_flag_;
-            (*dptr)->data.at(i) = NDArray(batch.data[i].shape_,
-                                          Context::CPU(), false,
-                                          dtype);
-          }
-        }
-        CHECK(batch.data.size() == (*dptr)->data.size());
-        // copy data over
-        for (size_t i = 0; i < batch.data.size(); ++i) {
-          CHECK_EQ((*dptr)->data.at(i).shape(), batch.data[i].shape_);
-          MSHADOW_TYPE_SWITCH(batch.data[i].type_flag_, DType, {
-              mshadow::Copy(((*dptr)->data)[i].data().FlatTo2D<cpu, DType>(),
-                        batch.data[i].FlatTo2D<cpu, DType>());
-          });
-          (*dptr)->num_batch_padd = batch.num_batch_padd;
-        }
-        if (batch.inst_index) {
-          std::copy(batch.inst_index,
-                    batch.inst_index + batch.batch_size,
-                    (*dptr)->index.begin());
-        }
-       return true;
-      },
-      [this]() { loader_->BeforeFirst(); });
-  }
+        
+    {}  // namespace
     
-    /*!
- *  Copyright (c) 2015 by Contributors
- * \file ndarray_function-inl.h
- * \brief The real implementation of NDArray functions.
- */
-#ifndef MXNET_NDARRAY_NDARRAY_FUNCTION_INL_H_
-#define MXNET_NDARRAY_NDARRAY_FUNCTION_INL_H_
-    
-    /*!
- * \brief Async functor object
- *  calling argument of the function.
- */
-class TVMFunctor {
+    class GenPythonOp {
  public:
-  // constructor
-  explicit TVMFunctor(PackedFunc func, PackedFunc fset_stream)
-      : func_(func), fset_stream_(fset_stream) {}
+  GenPythonOp(const OpDef& op_def, const ApiDef& api_def,
+              const string& function_name);
+  virtual ~GenPythonOp();
     }
     
-     private:
-  inline void Init(mshadow::Stream<gpu> *s,
-                   const std::vector<TBlob> &in_data,
-                   const std::vector<TBlob> &out_data) {
-    using namespace mshadow;
-    #if CUDNN_MAJOR >= 5
-    format_ = CUDNN_TENSOR_NCHW;
-    #endif
-    CHECK_EQ(in_data.size(), 2U);
-    CHECK_EQ(out_data.size(), 2U);
-    if (!init_cudnn_) {
-      init_cudnn_ = true;
-      Tensor<gpu, 4, DType> data = in_data[bs::kData].get<gpu, 4, DType>(s);
-      Tensor<gpu, 4, DType> out = out_data[bs::kOut].get<gpu, 4, DType>(s);
-      CUDNN_CALL(cudnnCreateSpatialTransformerDescriptor(&st_desc_));
-      CUDNN_CALL(cudnnCreateTensorDescriptor(&in_desc_));
-      CUDNN_CALL(cudnnCreateTensorDescriptor(&out_desc_));
-      CUDNN_CALL(cudnnSetTensor4dDescriptor(in_desc_,
-                                            format_,
-                                            dtype_,
-                                            data.size(0),
-                                            data.size(1),
-                                            data.size(2),
-                                            data.size(3)));
-      CUDNN_CALL(cudnnSetTensor4dDescriptor(out_desc_,
-                                            format_,
-                                            dtype_,
-                                            out.size(0),
-                                            out.size(1),
-                                            out.size(2),
-                                            out.size(3)));
-      int dim[] = {static_cast<int>(out.size(0)), static_cast<int>(out.size(1)),
-                   static_cast<int>(out.size(2)), static_cast<int>(out.size(3))};
-      CUDNN_CALL(cudnnSetSpatialTransformerNdDescriptor(st_desc_,
-                                                        sampler_,
-                                                        dtype_,
-                                                        4,
-                                                        dim));
-    }
+      for (const auto& node : item_.MainOpsFanin()) {
+    PrintNodeInfo(node, properties, debug, os);
+  }
+  for (const auto& node : item_.EnqueueOpsFanin()) {
+    PrintNodeInfo(node, properties, debug, os);
   }
     
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    {        return newMask;
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    #ifndef TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_H_
+#define TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_H_
+    
+    // We define the PY_ARRAY_UNIQUE_SYMBOL in this .cc file and provide an
+// ImportNumpy function to populate it.
+#define TF_IMPORT_NUMPY
+    
+    namespace tensorflow {
+namespace detail {
+    }
     }
     
-            for (const auto& key : requiredKeys)
-        {
-            if (!dict.Contains(key))
+      const tensorflow::OpRegistrationData* op_reg_data;
+  auto status =
+      tensorflow::OpRegistry::Global()->LookUp(node_def.op(), &op_reg_data);
+  if (!status.ok()) {
+    LOG(WARNING) << 'Op ' << node_def.op() << ' not found: ' << status;
+    return '';
+  }
+  AddDefaultsToNodeDef(op_reg_data->op_def, &node_def);
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    namespace stream_executor {
+    }
+    
+            size_t width;
+        size_t height;
+    
+    template <typename T>
+struct AbsDiff
+{
+    typedef T type;
+    }
+    
+        for (size_t i = 0; i < size.height; ++i)
+    {
+        const u8* src = internal::getRowPtr(srcBase, srcStride, i);
+        u8* dst = internal::getRowPtr(dstBase, dstStride, i);
+        size_t j = 0;
+    }
+    
+                    if(cn==2)
+                    t2 = vextq_u16(tcurr, tnext, 2);
+                else if(cn==3)
+                    t2 = vextq_u16(tcurr, tnext, 3);
+                else if(cn==4)
+                    t2 = vextq_u16(tcurr, tnext, 4);
+    
+    #define FILL_LINES2(macro,type) \
+            macro##_LINE(type,0) \
+            macro##_LINE(type,1)
+#define FILL_LINES3(macro,type) \
+            FILL_LINES2(macro,type) \
+            macro##_LINE(type,2)
+#define FILL_LINES4(macro,type) \
+            FILL_LINES3(macro,type) \
+            macro##_LINE(type,3)
+    
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
+CVT_FUNC(f32, u8, 8,
+    register float32x4_t vmult asm ('q0') = vdupq_n_f32((float)(1 << 16));
+    register uint32x4_t  vmask asm ('q1') = vdupq_n_u32(1<<16);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        __asm__ (
+            'vld1.32 {d4-d5}, [%[src1]]                              \n\t'
+            'vld1.32 {d6-d7}, [%[src2]]                              \n\t'
+            'vmul.f32 q4, q2, q0                                     \n\t'
+            'vmul.f32 q5, q3, q0                                     \n\t'
+            'vcvt.u32.f32 q6, q4                                     \n\t'
+            'vcvt.u32.f32 q7, q5                                     \n\t'
+            'vbic q8, q1, q6                                         \n\t'
+            'vbic q9, q1, q7                                         \n\t'
+            'vshr.u32 q10, q8, #16                                   \n\t'
+            'vshr.u32 q11, q9, #16                                   \n\t'
+            'vqsub.u32 q12, q6, q10                                  \n\t'
+            'vqsub.u32 q13, q7, q11                                  \n\t'
+            'vqrshrn.u32 d28, q12, #16                               \n\t'
+            'vqrshrn.u32 d29, q13, #16                               \n\t'
+            'vqmovn.u16 d30, q14                                     \n\t'
+            'vst1.8 {d30}, [%[dst]]                                  \n\t'
+            : /*no output*/
+            : [src1] 'r' (_src + i + 0),
+              [src2] 'r' (_src + i + 4),
+              [dst] 'r' (_dst + i),
+              'w' (vmult), 'w' (vmask)
+            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26','d27','d28','d29','d30'
+        );
+     }
+})
+#else
+CVT_FUNC(f32, u8, 8,
+    float32x4_t vmult = vdupq_n_f32((float)(1 << 16));
+    uint32x4_t  vmask = vdupq_n_u32(1<<16);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        float32x4_t vline1_f32 = vld1q_f32(_src + i);
+        float32x4_t vline2_f32 = vld1q_f32(_src + i + 4);
+    }
+    }
+    
+    
+    {
+    {
+    {            for (; j < size.width; j++)
             {
-                 LogicError('Required key '%ls' is not found in the dictionary (%s).',
-                            key.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
+                dst[j] = (u8)src[j];
             }
         }
-    
-    template<class ElemType>
-void OptimizedRNNStackNode<ElemType>::TransposeHelper(const MatrixBasePtr matX, const TensorShape &shapeX, MatrixBasePtr matY, TensorShape &shapeY)
-{
-    // This function transposes the second and third axes of the input (X), creating a transposed copy in the output (Y).
-    //
-    // In 'frame mode', CNTK will present the data with the final two axes being the recurrent axis followed by the 
-    // 'minibatch axis'. CUDNN expects these to be in the reverse order, which is accomplished by TransposeHelper().
     }
+}
+    
+    f64 dotProduct(const Size2D &_size,
+               const u8 * src0Base, ptrdiff_t src0Stride,
+               const u8 * src1Base, ptrdiff_t src1Stride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    Size2D size(_size);
+    if (src0Stride == src1Stride &&
+        src0Stride == (ptrdiff_t)(size.width))
+    {
+        size.width *= size.height;
+        size.height = 1;
+    }
+    }
+    
+      /**
+   * Returns the baseline of the current object at the given level.
+   * The baseline is the line that passes through (x1, y1) and (x2, y2).
+   * WARNING: with vertical text, baselines may be vertical!
+   * Returns false if there is no baseline at the current position.
+   */
+  bool Baseline(PageIteratorLevel level,
+                int* x1, int* y1, int* x2, int* y2) const;
+    
+    // Compare two VC objects by their name.
+int ParamContent::Compare(const void* v1, const void* v2) {
+  const ParamContent* one = *static_cast<const ParamContent* const*>(v1);
+  const ParamContent* two = *static_cast<const ParamContent* const*>(v2);
+  return strcmp(one->GetName(), two->GetName());
+}
+    
+     private:
+  // The unique ID of this VC object.
+  int my_id_;
+  // Whether the parameter was changed_ and thus needs to be rewritten.
+  bool changed_;
+  // The actual ParamType of this VC object.
+  ParamType param_type_;
+    
+      WERD_RES *word2 = nullptr;
+  BlamerBundle *orig_bb = nullptr;
+  split_word(word, split_index, &word2, &orig_bb);
+    
+    
+    {  name += UNLV_EXT;              //add extension
+  if ((pdfp = fopen (name.string (), 'rb')) == nullptr) {
+    return false;                //didn't read one
+  } else {
+    while (tfscanf(pdfp, '%d %d %d %d %*s', &x, &y, &width, &height) >= 4) {
+                                 //make rect block
+      block = new BLOCK (name.string (), TRUE, 0, 0,
+                         (int16_t) x, (int16_t) (ysize - y - height),
+                         (int16_t) (x + width), (int16_t) (ysize - y));
+                                 //on end of list
+      block_it.add_to_end (block);
+    }
+    fclose(pdfp);
+  }
+  return true;
+}
+    
+    // ReadNextBox factors out the code to interpret a line of a box
+// file so that applybox and unicharset_extractor interpret the same way.
+// This function returns the next valid box file utf8 string and coords
+// and returns true, or false on eof (and closes the file).
+// It ignores the utf8 file signature ByteOrderMark (U+FEFF=EF BB BF), checks
+// for valid utf-8 and allows space or tab between fields.
+// utf8_str is set with the unichar string, and bounding box with the box.
+// If there are page numbers in the file, it reads them all.
+bool ReadNextBox(int *line_number, FILE* box_file,
+                 STRING* utf8_str, TBOX* bounding_box);
+// As ReadNextBox above, but get a specific page number. (0-based)
+// Use -1 to read any page number. Files without page number all
+// read as if they are page 0.
+bool ReadNextBox(int target_page, int *line_number, FILE* box_file,
+                 STRING* utf8_str, TBOX* bounding_box);
+    
+    // Clip output boxes to input blob boxes for bounds that are within this
+// tolerance. Otherwise, the blob may be chopped and we have to just use
+// the word bounding box.
+const int kBoxClipTolerance = 2;
+    
+      // Returns the direction of the fitted line as a unit vector, using the
+  // least mean squared perpendicular distance. The line runs through the
+  // mean_point, i.e. a point p on the line is given by:
+  // p = mean_point() + lambda * vector_fit() for some real number lambda.
+  // Note that the result (0<=x<=1, -1<=y<=-1) is directionally ambiguous
+  // and may be negated without changing its meaning, since a line is only
+  // unique to a range of pi radians.
+  // Modernists prefer to think of this as an Eigenvalue problem, but
+  // Pearson had the simple solution in 1901.
+  //
+  // Note that this is equivalent to returning the Principal Component in PCA,
+  // or the eigenvector corresponding to the largest eigenvalue in the
+  // covariance matrix.
+  FCOORD vector_fit() const;
+    
+    class DLLSYM DIR128
+{
+  public:
+    DIR128() = default;
+    }
+    
+      // Fills in the x-height range accepted by the given unichar_id in blob
+  // coordinates, given its bounding box in the usual baseline-normalized
+  // coordinates, with some initial crude x-height estimate (such as word
+  // size) and this denoting the transformation that was used.
+  // Also returns the amount the character must have shifted up or down.
+  void XHeightRange(int unichar_id, const UNICHARSET& unicharset,
+                    const TBOX& bbox,
+                    float* min_xht,
+                    float* max_xht,
+                    float* yshift) const;
+    
+    
+    {    return 0;
+}
+
+    
+        vector<int> vec1 = {2, 2, 2, 1, 1, 0};
+    Solution().sortColors(vec1);
+    printArr(vec1);
+    
+    #include <iostream>
+    
+            vector<int> res;
+        if( root == NULL )
+            return res;
+    
+    using namespace std;
+    
+      int64_t num_record_drop_hidden = 0;
+  int64_t num_record_drop_obsolete = 0;
+  int64_t num_record_drop_range_del = 0;
+  int64_t num_range_del_drop_obsolete = 0;
+  // Deletions obsoleted before bottom level due to file gap optimization.
+  int64_t num_optimized_del_drop_obsolete = 0;
+  uint64_t total_filter_time = 0;
+    
+    #include <string>
+    
+    using namespace rocksdb;
+    
+    Status GetStringFromCompressionType(std::string* compression_str,
+                                    CompressionType compression_type);
     
     
     {};
     
-    #include <vector>
-#include <string>
+    class DB;
     
-    Expected<int, PosixError> syscall(struct perf_event_attr* attr,
-                                  pid_t const pid,
-                                  int const cpu,
-                                  int const group_fd,
-                                  unsigned long const flags) {
-  auto ret = ::syscall(__NR_perf_event_open, attr, pid, cpu, group_fd, flags);
-  if (ret < 0) {
-    return createError(to<PosixError>(errno), 'syscall perf_event_open failed ')
-           << boost::io::quoted(strerror(errno));
-  }
-  return ret;
+    #include 'rocksdb/utilities/stackable_db.h'
+#include 'rocksdb/db.h'
+    
+    EaseBezierAction* EaseBezierAction::reverse() const
+{
+    EaseBezierAction* reverseAction = EaseBezierAction::create(_inner->reverse());
+    reverseAction->setBezierParamer(_p3,_p2,_p1,_p0);
+    return reverseAction;
 }
     
-    #pragma once
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#include '2d/CCActionPageTurn3D.h'
+#include '2d/CCGrid.h'
+#include '2d/CCNodeGrid.h'
     
-      enum class Error {
-    Unknown = 1,
-    SystemError = 2,
-  };
-    
-    
-    {  auto dst = std::vector<TestMessage>{};
-  auto status =
-      ebpf::impl::consumeWrappedMessagesFromCircularBuffer<WrappedMessage>(
-          &buf[0], tail, head, buf.size(), dst);
-  ASSERT_FALSE(status.isError()) << status.getError().getMessage();
-  ASSERT_EQ(dst.size(), test_size);
-  for (std::size_t i = 0; i < test_size; ++i) {
-    EXPECT_EQ(dst[i].c_, 't');
-    EXPECT_EQ(dst[i].d_, 'i');
-  }
-  EXPECT_EQ(dst[0].a_, 1);
-  EXPECT_EQ(dst[0].b_, 2);
-  EXPECT_EQ(dst[1].a_, 3);
-  EXPECT_EQ(dst[1].b_, 4);
-  EXPECT_EQ(dst[2].a_, 5);
-  EXPECT_EQ(dst[2].b_, 6);
-}
-    
-    namespace {
+    /**
+ * @addtogroup actions
+ * @{
+ */
     }
     
-    DEFINE_string(adapter_config_filename, 'modules/canbus/conf/adapter.conf',
-              'The adapter config file');
+    #include '2d/CCActionInterval.h'
     
+    Animation::Animation()
+: _totalDelayUnits(0.0f)
+, _delayPerUnit(0.0f)
+, _duration(0.0f)
+, _restoreOriginalFrame(false)
+, _loops(0)
+{
+    }
     
-    {  double ret = x * OBJECT_ORIENTATION_ANGEL_RES + OBJECT_ORIENTATION_ANGEL_MIN;
-  return ret;
-}
-    
-    
-    {  x <<= 2;
-  x |= t;
-  double ret = x * OBJECT_VREL_RES + OBJECT_VREL_LONG_MIN;
-  return ret;
-}
-    
-    unsigned int BaseMapMatrix::GetBinarySize() const { return 0; }
-    
-      const double init_derivative = 0.1;
-  constraint.AddSecondDerivativeBoundary(init_derivative, index_list,
-                                         lower_bound, upper_bound);
-  const auto mat = constraint.inequality_constraint_matrix();
-  const auto bd = constraint.inequality_constraint_boundary();
-    
-    const PolynomialXd& Spline1dSeg::ThirdOrderDerivative() const {
-  return third_order_derivative_;
-}
-    
-    TEST_F(GemMessageManagerTest, GetRecvProtocols) {
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Accelrpt68::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt170::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt271::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt372::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakerpt6c::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Datetimerpt83::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Globalrpt6a::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Headlightrpt77::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Hornrpt79::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Latlonheadingrpt82::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(
-                  Parkingbrakestatusrpt80::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Shiftrpt66::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt173::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt274::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt375::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringrpt16e::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Turnrpt64::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Vehiclespeedrpt6f::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Wheelspeedrpt7a::ID) !=
-              nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Wiperrpt91::ID) != nullptr);
-  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Yawraterpt81::ID) != nullptr);
-}
-    
-    class Accelrpt68Test : public ::testing::Test {
- public:
-  virtual void SetUp() {}
-};
-    
-    void Brakemotorrpt372::Parse(const std::uint8_t* bytes, int32_t length,
-                             ChassisDetail* chassis) const {
-  chassis->mutable_gem()->mutable_brake_motor_rpt_3_72()->set_torque_output(
-      torque_output(bytes, length));
-  chassis->mutable_gem()->mutable_brake_motor_rpt_3_72()->set_torque_input(
-      torque_input(bytes, length));
-}
+        _textureAtlas = new (std::nothrow) TextureAtlas();
