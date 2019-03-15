@@ -1,133 +1,92 @@
 
         
-        describe GroupUser do
+        Dir.glob('rake/**.rake').each { |f| import f }
     
-      it 'requires a URL or file uplaod' do
-    visit new_scenario_imports_path
-    click_on 'Start Import'
-    expect(page).to have_text('Please provide either a Scenario JSON File or a Public Scenario URL.')
-  end
+    Nullam luctus fermentum est id blandit. Phasellus consectetur ullamcorper
+ligula, at finibus eros laoreet id. Etiam sit amet est in libero efficitur.
+tristique. Ut nec magna augue. {{ author }} Quisque ut fringilla lacus
+Aliquam vel ornare mauris. Suspendisse ornare diam tempor nulla facilisis
+aliquet. Sed ultrices placerat ultricies.
+LIQUID
     
-        it 'returns a label 'No' if a given agent is not working' do
-      stub(@agent).working? { false }
-      label = working(@agent)
-      expect(label).to be_html_safe
-      expect(Nokogiri(label).text).to eq 'No'
-    end
-  end
+    module Jekyll
+  module Commands
+    class Serve
+      # The LiveReload protocol requires the server to serve livereload.js over HTTP
+      # despite the fact that the protocol itself uses WebSockets.  This custom connection
+      # class addresses the dual protocols that the server needs to understand.
+      class HttpAwareConnection < EventMachine::WebSocket::Connection
+        attr_reader :reload_body, :reload_size
     
-      describe '#status' do
-    it 'works for failed jobs' do
-      job.failed_at = Time.now
-      expect(status(job)).to eq('<span class='label label-danger'>failed</span>')
-    end
-    
-        it 'has a default when the result is empty' do
-      expect(AgentsExporter.new(:name => '').filename).to eq('exported-agents.json')
-      expect(AgentsExporter.new(:name => 'Ə').filename).to eq('exported-agents.json')
-      expect(AgentsExporter.new(:name => '-').filename).to eq('exported-agents.json')
-      expect(AgentsExporter.new(:name => ',,').filename).to eq('exported-agents.json')
-    end
-  end
-    
-        it 'should work' do
-      LiquidMigrator.convert_all_agent_options(@agent)
-      expect(@agent.reload.options).to eq({'auth_token' => 'token', 'color' => 'yellow', 'notify' => false, 'room_name' => 'test', 'username' => '{{username}}', 'message' => '{{message}}'})
-    end
-    
-      describe '#pretty_jsonify' do
-    it 'escapes </script> tags in the output JSON' do
-      cleaned_json = Utils.pretty_jsonify(:foo => 'bar', :xss => '</script><script>alert('oh no!')</script>')
-      expect(cleaned_json).not_to include('</script>')
-      expect(cleaned_json).to include('<\\/script>')
-    end
-  end
-    
-      describe '#log_for_agent' do
-    it 'creates AgentLogs' do
-      log = AgentLog.log_for_agent(agents(:jane_website_agent), 'some message', :level => 4, :outbound_event => events(:jane_website_agent_event))
-      expect(log).not_to be_new_record
-      expect(log.agent).to eq(agents(:jane_website_agent))
-      expect(log.outbound_event).to eq(events(:jane_website_agent_event))
-      expect(log.message).to eq('some message')
-      expect(log.level).to eq(4)
-    end
-    
-      describe '#receive' do
-    it 'sends a message' do
-      stub(HTTParty).post { {'id' => 1, 'message' => 'blah', 'title' => 'blah','source_name' => 'Custom Notification'} }
-      @checker.receive([@event])
-    end
-    
-            # Allows setting options from a hash. By default this simply calls
-        # the `#{key}=` method on the config class with the value, which is
-        # the expected behavior most of the time.
-        #
-        # This is expected to mutate itself.
-        #
-        # @param [Hash] options A hash of options to set on this configuration
-        #   key.
-        def set_options(options)
-          options.each do |key, value|
-            send('#{key}=', value)
-          end
-        end
-    
-            # Set the name of the plugin. The moment that this is called, the
-        # plugin will be registered and available. Before this is called, a
-        # plugin does not exist. The name must be unique among all installed
-        # plugins.
-        #
-        # @param [String] name Name of the plugin.
-        # @return [String] The name of the plugin.
-        def self.name(name=UNSET_VALUE)
-          # Get or set the value first, so we have a name for logging when
-          # we register.
-          result = get_or_set(:name, name)
-    
-              @commands = Registry.new
-          @configs = Hash.new { |h, k| h[k] = Registry.new }
-          @guests  = Registry.new
-          @guest_capabilities = Hash.new { |h, k| h[k] = Registry.new }
-          @hosts   = Registry.new
-          @host_capabilities = Hash.new { |h, k| h[k] = Registry.new }
-          @providers = Registry.new
-          @provider_capabilities = Hash.new { |h, k| h[k] = Registry.new }
-          @pushes = Registry.new
-          @synced_folders = Registry.new
-        end
-      end
+        def as_json
+      { name: name, path: path, type: type }
     end
   end
 end
 
     
-          # @see Base#\_retrieve
-      def _retrieve(key, version, sha)
-        return unless File.readable?(path_to(key))
-        begin
-          File.open(path_to(key), 'rb') do |f|
-            if f.readline('\n').strip == version && f.readline('\n').strip == sha
-              return f.read
-            end
-          end
-          File.unlink path_to(key)
-        rescue Errno::ENOENT
-          # Already deleted. Race condition?
-        end
-        nil
-      rescue EOFError, TypeError, ArgumentError => e
-        Sass::Util.sass_warn 'Warning. Error encountered while reading cache #{path_to(key)}: #{e}'
-      end
+        def html?
+      mime_type.include? 'html'
+    end
     
-            last_simple_subject = rest.empty? && sseq.subject?
-        if current_rule.nil? || first_sseq(current_rule).members != firsts ||
-            !!first_sseq(current_rule).subject? != !!last_simple_subject
-          current_rule = Tree::RuleNode.new([])
-          current_rule.parsed_rules = make_sseq(last_simple_subject, *firsts)
+          Requester.run urls, request_options: request_options, &block
+    end
+    
+            css('br', 'hr', '.material-icons', '.header-link', '.breadcrumb').remove
+    
+            css('.example-title + pre').each do |node|
+          node['name'] = node.previous_element.content.strip
+          node.previous_element.remove
         end
     
-          # @see Base#find_relative
-      def find_relative(name, base, options)
-        _find(File.dirname(base), name, options)
+      def initialize(repo: 'twbs/bootstrap', branch: 'master', save_to: {}, cache_path: 'tmp/converter-cache-bootstrap')
+    @logger     = Logger.new
+    @repo       = repo
+    @branch     = branch || 'master'
+    @branch_sha = get_branch_sha
+    @cache_path = cache_path
+    @repo_url   = 'https://github.com/#@repo'
+    @save_to    = {
+        js:    'assets/javascripts/bootstrap',
+        scss:  'assets/stylesheets/bootstrap',
+        fonts: 'assets/fonts/bootstrap'}.merge(save_to)
+  end
+    
+      gem.add_development_dependency 'danger'
+  gem.add_development_dependency 'mocha'
+  gem.add_development_dependency 'rspec'
+  gem.add_development_dependency 'rubocop', '0.48.1'
+end
+
+    
+    Given(/^servers with the roles app and web$/) do
+  begin
+    vagrant_cli_command('up')
+  rescue
+    nil
+  end
+end
+    
+        def server(name, properties={})
+      servers.add_host(name, properties)
+    end
+    
+        puts('Generated at #{target_file}')
+  end
+    
+    module LogStash module PluginManager module PackFetchStrategy
+  class Repository
+    DEFAULT_PACK_URL = 'https://artifacts.elastic.co/downloads/logstash-plugins'
+    PACK_EXTENSION = 'zip'
+    
+      def execute
+    # Turn off any jar dependencies lookup when running with `--local`
+    ENV['JARS_SKIP'] = 'true' if local?
+    
+          puts user_feedback_string_for('halting', args[:platform], machines, {'experimental' => experimental})
+      options = {:debug => ENV['LS_QA_DEBUG']}
+    
+          it 'display a list of installed plugins' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list --installed')
+        expect(result.stdout.split('\n').size).to be > 1
       end
