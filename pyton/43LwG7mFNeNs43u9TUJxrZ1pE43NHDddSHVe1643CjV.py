@@ -1,140 +1,102 @@
 
         
-        import os
-import sys
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            def __init__(self, config, logger):
+        self.config = config
+        self.logger = logger
+        self.check_api = None
+        self.ip_manager = None
     
-    print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
-    try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
+            self.in_fd = open('ipv6_list.txt', 'r')
+        self.out_fd = open(
+            os.path.join(module_data_path, 'ipv6_list.txt'),
+            'w'
+        )
     
-    atom_template = atom_template.replace('@TIMESTAMP@', now_iso)
-    
-    
-class TestAgeRestriction(unittest.TestCase):
-    def _assert_restricted(self, url, filename, age, old_age=None):
-        self.assertTrue(_download_restricted(url, filename, old_age))
-        self.assertFalse(_download_restricted(url, filename, age))
-    
-            self.extract(**kwargs)
-    
+    def message_html(title, banner, detail=''):
+    MESSAGE_TEMPLATE = '''
+    <html><head>
+    <meta http-equiv='content-type' content='text/html;charset=utf-8'>
+    <title>$title</title>
+    <style><!--
+    body {font-family: arial,sans-serif}
+    div.nav {margin-top: 1ex}
+    div.nav A {font-size: 10pt; font-family: arial,sans-serif}
+    span.nav {font-size: 10pt; font-family: arial,sans-serif; font-weight: bold}
+    div.nav A,span.big {font-size: 12pt; color: #0000cc}
+    div.nav A {font-size: 10pt; color: black}
+    A.l:link {color: #6f6f6f}
+    A.u:link {color: green}
+    //--></style>
+    </head>
+    <body text=#000000 bgcolor=#ffffff>
+    <table border=0 cellpadding=2 cellspacing=0 width=100%>
+    <tr><td bgcolor=#3366cc><font face=arial,sans-serif color=#ffffff><b>Message</b></td></tr>
+    <tr><td> </td></tr></table>
+    <blockquote>
+    <H1>$banner</H1>
+    $detail
+    <p>
+    </blockquote>
+    <table width=100% cellpadding=0 cellspacing=0><tr><td bgcolor=#3366cc><img alt='' width=1 height=4></td></tr></table>
+    </body></html>
     '''
-http://www.tudou.com/programs/view/html5embed.action?type=0&amp;code=3LS_URGvl54&amp;lcode=&amp;resourceId=0_06_05_99
-'''
-tudou_embed_patterns = [ 'tudou\.com[a-zA-Z0-9\/\?=\&\.\;]+code=([a-zA-Z0-9_-]+)\&',
-                         'www\.tudou\.com/v/([a-zA-Z0-9_-]+)/[^']*v\.swf'
-                       ]
+    return string.Template(MESSAGE_TEMPLATE).substitute(title=title, banner=banner, detail=detail)
     
-        type, ext, size = url_info(urls[0], True)
-    size = urls_size(urls)
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licence]
     
-    #----------------------------------------------------------------------
-def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    '''wrapper'''
-    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
-    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
-    hostname = urlparse(url).hostname
-    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
-        return False
-    upid = match1(url, r'.+/content/(\w+)')
+                 => ID '=' '(' INT ')' ('+' atom)* ';'
+                                ^
+        match() will see that ';' doesn't match ')' and report a
+        mismatched token error.  To recover, it sees that LA(1)==';'
+        is in the set of tokens that can follow the ')' token
+        reference in rule atom.  It can assume that you forgot the ')'.
+        '''
     
-            if 'title' not in kwargs:
-            url = 'http://pv.funshion.com/v5/video/profile/?id={}&cl=mweb&uc=111'.format(self.vid)
-            meta = json.loads(get_content(url))
-            self.title = meta['name']
-        else:
-            self.title = kwargs['title']
+        def test_str(self):
+        self.assertEqual('Invalid nonce ('xxx'): error', str(self.error))
     
-        def scan_completed_callback(scan_wizard, result, address, name):
-        '''Restart scan wizard to constantly check for new buttons.'''
-        if result == pyflic.ScanWizardResult.WizardSuccess:
-            _LOGGER.info('Found new button %s', address)
-        elif result != pyflic.ScanWizardResult.WizardFailedTimeout:
-            _LOGGER.warning(
-                'Failed to connect to button %s. Reason: %s', address, result)
+        def decode(self, value):
+        if value != self.resource_type:
+            raise jose.DeserializationError(
+                'Wrong resource type: {0} instead of {1}'.format(
+                    value, self.resource_type))
+        return value
+
     
+    logger = logging.getLogger(__name__)
     
-def get_scanner(hass, config):
-    '''Validate the configuration and return an Actiontec scanner.'''
-    scanner = ActiontecDeviceScanner(config[DOMAIN])
-    return scanner if scanner.success_init else None
+        def test_view_config_changes(self):
+        self.config.view_config_changes()
     
-            self.last_results = {}
-        response = self._make_request()
-        if response.status_code != 200:
-            _LOGGER.error(
-                'Got HTTP status code %d when getting device list',
-                response.status_code)
-            return False
-        try:
-            data = response.json()
-            result = data['responses'][0]
-            devices = result['output']['devices']
-            for device in devices:
-                macs = device['knownMACAddresses']
-                if not macs:
-                    _LOGGER.warning(
-                        'Skipping device without known MAC address')
-                    continue
-                mac = macs[-1]
-                connections = device['connections']
-                if not connections:
-                    _LOGGER.debug('Device %s is not connected', mac)
-                    continue
+            self.assertEqual(len(matches), 1)
+        self.assertEqual(self.parser.get_arg(matches[0]), '1234')
     
-        def get_thomson_data(self):
-        '''Retrieve data from THOMSON and return parsed result.'''
-        try:
-            telnet = telnetlib.Telnet(self.host)
-            telnet.read_until(b'Username : ')
-            telnet.write((self.username + '\r\n').encode('ascii'))
-            telnet.read_until(b'Password : ')
-            telnet.write((self.password + '\r\n').encode('ascii'))
-            telnet.read_until(b'=>')
-            telnet.write(('hostmgr list\r\n').encode('ascii'))
-            devices_result = telnet.read_until(b'=>').split(b'\r\n')
-            telnet.write('exit\r\n'.encode('ascii'))
-        except EOFError:
-            _LOGGER.exception('Unexpected response from router')
-            return
-        except ConnectionRefusedError:
-            _LOGGER.exception(
-                'Connection refused by router. Telnet enabled?')
-            return
-    
-    CONF_PAGE_ACCESS_TOKEN = 'page_access_token'
-BASE_URL = 'https://graph.facebook.com/v2.6/me/messages'
-CREATE_BROADCAST_URL = 'https://graph.facebook.com/v2.11/me/message_creatives'
-SEND_BROADCAST_URL = 'https://graph.facebook.com/v2.11/me/broadcast_messages'
-    
-        def __init__(self, hass, filename, add_timestamp):
-        '''Initialize the service.'''
-        self.filepath = os.path.join(hass.config.config_dir, filename)
-        self.add_timestamp = add_timestamp
-    
-    
-async def get_service(hass, config, discovery_info=None):
-    '''Get the Flock notification service.'''
-    access_token = config.get(CONF_ACCESS_TOKEN)
-    url = '{}{}'.format(_RESOURCE, access_token)
-    session = async_get_clientsession(hass)
-    
-                # Check response
-            buffer = sock.recv(1024)
-            if buffer != b'LANnouncer: OK':
-                _LOGGER.error('Error sending data to Lannnouncer: %s',
-                              buffer.decode())
-    
-    
-class MycroftNotificationService(BaseNotificationService):
-    '''The Mycroft Notification Service.'''
+    import mock
