@@ -1,88 +1,211 @@
 
         
-        #include <QWidget>
-#include <QQueue>
+        std::string Clipboard::GetText() {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  base::string16 text;
+  clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
+  return base::UTF16ToUTF8(text);
+}
     
-    #endif /* SECP256K1_GROUP_IMPL_H */
+    #include 'base/compiler_specific.h'
+#include 'content/nw/src/api/base/base.h'
+    
+    #include 'base/values.h'
+#include 'components/zoom/zoom_controller.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/common/page_zoom.h'
+#include 'ui/views/controls/menu/menu_runner.h'
+    
+      if (menu_item->submenu_)
+    menu_model_->InsertSubMenuAt(pos, menu_item->id(), menu_item->label_,
+                                 menu_item->submenu_->menu_model_.get());
+  else if (menu_item->type_ == 'normal')
+    menu_model_->InsertItemAt(pos, menu_item->id(), menu_item->label_);
+  else if (menu_item->type_ == 'checkbox')
+    menu_model_->InsertCheckItemAt(pos, menu_item->id(), menu_item->label_);
+  else if (menu_item->type_ == 'separator')
+    menu_model_->InsertSeparatorAt(pos, ui::NORMAL_SEPARATOR);
+    
+    MenuItem::MenuItem(int id,
+                   const base::WeakPtr<ObjectManager>& object_manager,
+                   const base::DictionaryValue& option,
+                   const std::string& extension_id)
+  : Base(id, object_manager, option, extension_id) {
+  Create(option);
+}
+    
+        int menu_id;
+    if (option.GetInteger('submenu', &menu_id))
+      SetSubmenu(dispatcher_host()->GetApiObject<Menu>(menu_id));
+    std::string key;
+    if (option.GetString('key',&key)){
+      enable_shortcut = true;
+      std::string modifiers = '';
+      option.GetString('modifiers',&modifiers);
+      modifiers_mask = GdkModifierType(0);
+      if (modifiers.size() != 0){
+        if (modifiers.find('ctrl') != std::string::npos){
+          modifiers_mask = GdkModifierType(modifiers_mask|GDK_CONTROL_MASK);
+        }
+        if (modifiers.find('alt') != std::string::npos){
+          modifiers_mask = GdkModifierType(modifiers_mask|GDK_MOD1_MASK);
+        }
+        if (modifiers.find('super') != std::string::npos){
+          modifiers_mask = GdkModifierType(modifiers_mask|GDK_SUPER_MASK);
+        }
+        if (modifiers.find('meta') != std::string::npos){
+          modifiers_mask = GdkModifierType(modifiers_mask|GDK_META_MASK);
+        }
+        
+        if (modifiers.find('shift') != std::string::npos){
+          modifiers_mask = GdkModifierType(modifiers_mask|GDK_SHIFT_MASK);
+        }
+    }
+    }
+    
+      std::string icon;
+  if (option.GetString('icon', &icon) && !icon.empty())
+    SetIcon(icon);
+    
+    
+    {
+  DECLARE_EXTENSION_FUNCTION('nw.App.setProxyConfig', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwAppSetProxyConfigFunction);
+};
+    
+    class NwClipboardGetListSyncFunction : public NWSyncExtensionFunction {
+ public:
+  NwClipboardGetListSyncFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    
+    {} // namespace extensions
+#endif
 
     
-        secp256k1_pubkey_load(ctx, &pt, point);
-    secp256k1_scalar_set_b32(&s, scalar, &overflow);
-    if (overflow || secp256k1_scalar_is_zero(&s)) {
-        ret = 0;
-    } else {
-        unsigned char x[32];
-        unsigned char y[1];
-        secp256k1_sha256_t sha;
-    }
-    
-    
-    {    secp256k1_scalar_get_b32(brx, sigr);
-    r = secp256k1_fe_set_b32(&fx, brx);
-    (void)r;
-    VERIFY_CHECK(r); /* brx comes from a scalar, so is less than the order; certainly less than p */
-    if (recid & 2) {
-        if (secp256k1_fe_cmp_var(&fx, &secp256k1_ecdsa_const_p_minus_order) >= 0) {
-            return 0;
-        }
-        secp256k1_fe_add(&fx, &secp256k1_ecdsa_const_order_as_fe);
-    }
-    if (!secp256k1_ge_set_xo_var(&x, &fx, recid & 1)) {
-        return 0;
-    }
-    secp256k1_gej_set_ge(&xj, &x);
-    secp256k1_scalar_inverse_var(&rn, sigr);
-    secp256k1_scalar_mul(&u1, &rn, message);
-    secp256k1_scalar_negate(&u1, &u1);
-    secp256k1_scalar_mul(&u2, &rn, sigs);
-    secp256k1_ecmult(ctx, &qj, &xj, &u2, &u1);
-    secp256k1_ge_set_gej_var(pubkey, &qj);
-    return !secp256k1_gej_is_infinity(&qj);
+    NwObjAllocateIdFunction::NwObjAllocateIdFunction() {
 }
     
     
-    {    /* Test r/s equal to zero */
+    {  private:
+    DISALLOW_COPY_AND_ASSIGN(NwScreenIsMonitorStartedFunction);
+  };
+    
+      // Add all parameters to a list.
+  int v, i;
+  int num_iterations = (tess->params() == nullptr) ? 1 : 2;
+  for (v = 0; v < num_iterations; ++v) {
+    tesseract::ParamsVectors *vec = (v == 0) ? GlobalParams() : tess->params();
+    for (i = 0; i < vec->int_params.size(); ++i) {
+      vc_it.add_after_then_move(new ParamContent(vec->int_params[i]));
+    }
+    for (i = 0; i < vec->bool_params.size(); ++i) {
+      vc_it.add_after_then_move(new ParamContent(vec->bool_params[i]));
+    }
+    for (i = 0; i < vec->string_params.size(); ++i) {
+      vc_it.add_after_then_move(new ParamContent(vec->string_params[i]));
+    }
+    for (i = 0; i < vec->double_params.size(); ++i) {
+      vc_it.add_after_then_move(new ParamContent(vec->double_params[i]));
+    }
+  }
+    
+    // Reads all boxes from the string. Otherwise, as ReadAllBoxes.
+// continue_on_failure allows reading to continue even if an invalid box is
+// encountered and will return true if it succeeds in reading some boxes.
+// It otherwise gives up and returns false on encountering an invalid box.
+bool ReadMemBoxes(int target_page, bool skip_blanks, const char* box_data,
+                  bool continue_on_failure,
+                  GenericVector<TBOX>* boxes,
+                  GenericVector<STRING>* texts,
+                  GenericVector<STRING>* box_texts,
+                  GenericVector<int>* pages);
+    
+      // Changes the box at the given index to the new box.
+  // Recomputes the bounding box.
+  void ChangeBox(int index, const TBOX& box);
+    
+    // Class to hold a Pixa collection of debug images with captions and save them
+// to a PDF file.
+class DebugPixa {
+ public:
+  // TODO(rays) add another constructor with size control.
+  DebugPixa() {
+    pixa_ = pixaCreate(0);
+    fonts_ = bmfCreate(nullptr, 14);
+  }
+  // If the filename_ has been set and there are any debug images, they are
+  // written to the set filename_.
+  ~DebugPixa() {
+    pixaDestroy(&pixa_);
+    bmfDestroy(&fonts_);
+  }
+    }
+    
+    
+    {  // Stores all the source points in the order they were given and their
+  // halfwidths, if any.
+  GenericVector<PointWidth> pts_;
+  // Stores the computed perpendicular distances of (some of) the pts_ from a
+  // given vector (assuming it goes through the origin, making it a line).
+  // Since the distances may be a subset of the input points, and get
+  // re-ordered by the nth_item function, the original point is stored
+  // along side the distance.
+  GenericVector<DistPointPair> distances_;  // Distances of points.
+  // The squared length of the vector used to compute distances_.
+  double square_length_;
+};
+    
+      // Builds and returns an ImageData from the basic data. Note that imagedata,
+  // truth_text, and box_text are all the actual file data, NOT filenames.
+  static ImageData* Build(const char* name, int page_number, const char* lang,
+                          const char* imagedata, int imagedatasize,
+                          const char* truth_text, const char* box_text);
+    
+    
+    {			mipWidth >>= 1;
+			mipHeight >>= 1;
+		}
+    
+    #define UNIT_QUANT_SHIFT 2
+#define UNIT_QUANT_FACTOR (1 << UNIT_QUANT_SHIFT)
+    
+      The input buffer and the output buffer can not overlap.
+*/
+    
+    
     {
-        /* (1,1) encoded in DER. */
-        unsigned char sigcder[8] = {0x30, 0x06, 0x02, 0x01, 0x01, 0x02, 0x01, 0x01};
-        unsigned char sigc64[64] = {
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,
-        };
-        secp256k1_pubkey pubkeyc;
-        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigc64, 0) == 1);
-        CHECK(secp256k1_ecdsa_recover(ctx, &pubkeyc, &rsig, msg32) == 1);
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder, sizeof(sigcder)) == 1);
-        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyc) == 1);
-        sigcder[4] = 0;
-        sigc64[31] = 0;
-        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigc64, 0) == 1);
-        CHECK(secp256k1_ecdsa_recover(ctx, &pubkeyb, &rsig, msg32) == 0);
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder, sizeof(sigcder)) == 1);
-        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyc) == 0);
-        sigcder[4] = 1;
-        sigcder[7] = 0;
-        sigc64[31] = 1;
-        sigc64[63] = 0;
-        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigc64, 0) == 1);
-        CHECK(secp256k1_ecdsa_recover(ctx, &pubkeyb, &rsig, msg32) == 0);
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder, sizeof(sigcder)) == 1);
-        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyc) == 0);
-    }
+    {void SparsePageWriter::Alloc(std::shared_ptr<SparsePage>* out_page) {
+  CHECK(*out_page == nullptr);
+  if (num_free_buffer_ != 0) {
+    out_page->reset(new SparsePage());
+    --num_free_buffer_;
+  } else {
+    CHECK(qrecycle_.Pop(out_page));
+  }
+}
+}  // namespace data
+}  // namespace xgboost
+    
+    SEXP XGBoosterSetAttr_R(SEXP handle, SEXP name, SEXP val) {
+  R_API_BEGIN();
+  const char *v = isNull(val) ? nullptr : CHAR(asChar(val));
+  CHECK_CALL(XGBoosterSetAttr(R_ExternalPtrAddr(handle),
+                              CHAR(asChar(name)), v));
+  R_API_END();
+  return R_NilValue;
 }
     
-    int UniValue::get_int() const
-{
-    if (typ != VNUM)
-        throw std::runtime_error('JSON value is not an integer as expected');
-    int32_t retval;
-    if (!ParseInt32(getValStr(), &retval))
-        throw std::runtime_error('JSON integer out of range');
-    return retval;
-}
+    
+    {    data_vec.resize(offset_vec.back());
+    CHECK_EQ(index_.data.size(), value_.data.size());
+    CHECK_EQ(index_.data.size(), data_vec.size());
+    for (size_t i = 0; i < data_vec.size(); ++i) {
+      data_vec[i] = Entry(index_.data[i] + min_index_, value_.data[i]);
+    }
+    return true;
+  }
