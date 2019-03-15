@@ -1,344 +1,247 @@
 
         
-        #endif  // TENSORFLOW_PYTHON_FRAMEWORK_CPP_SHAPE_INFERENCE_H_
-
+          uv_loop_t* loop_;
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    #ifndef ATOM_BROWSER_API_ATOM_API_SCREEN_H_
+#define ATOM_BROWSER_API_ATOM_API_SCREEN_H_
     
+      // content::QuotaPermissionContext:
+  void RequestQuotaPermission(const content::StorageQuotaParams& params,
+                              int render_process_id,
+                              const PermissionCallback& callback) override;
     
-    {}  // namespace tensorflow
-
-    
-    // Registered numpy type ID. Global variable populated by the registration code.
-int npy_bfloat16_ = -1;
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#ifndef TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
-    
-    // We define the PY_ARRAY_UNIQUE_SYMBOL in this .cc file and provide an
-// ImportNumpy function to populate it.
-#define TF_IMPORT_NUMPY
-    
-    
-    {
-    {}  // namespace swig
-}  // namespace tensorflow
-
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    
-    {    // Vector of cached {config, executor} pairs.
-    std::vector<
-        std::pair<StreamExecutorConfig, std::unique_ptr<StreamExecutor>>>
-        configurations GUARDED_BY(configurations_mutex);
-  };
-    
-    // Exposes the family of FFT routines as pre-canned high performance calls for
-// use in conjunction with the StreamExecutor abstraction.
-//
-// Note that this interface is optionally supported by platforms; see
-// StreamExecutor::SupportsFft() for details.
-//
-// This abstraction makes it simple to entrain FFT operations on GPU data into
-// a Stream -- users typically will not use this API directly, but will use the
-// Stream builder methods to entrain these operations 'under the hood'. For
-// example:
-//
-//  DeviceMemory<std::complex<float>> x =
-//    stream_exec->AllocateArray<std::complex<float>>(1024);
-//  DeviceMemory<std::complex<float>> y =
-//    stream_exec->AllocateArray<std::complex<float>>(1024);
-//  // ... populate x and y ...
-//  Stream stream{stream_exec};
-//  std::unique_ptr<Plan> plan =
-//     stream_exec.AsFft()->Create1dPlan(&stream, 1024, Type::kC2CForward);
-//  stream
-//    .Init()
-//    .ThenFft(plan.get(), x, &y);
-//  SE_CHECK_OK(stream.BlockHostUntilDone());
-//
-// By using stream operations in this manner the user can easily intermix custom
-// kernel launches (via StreamExecutor::ThenLaunch()) with these pre-canned FFT
-// routines.
-    
-    void Base::CallSync(const std::string& method,
-                    const base::ListValue& arguments,
-                    base::ListValue* result) {
-  NOTREACHED() << 'Uncatched callAsync in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    v8::Handle<v8::Value> CallObjectMethodSync(int routing_id,
-                                           int object_id,
-                                           const std::string& type,
-                                           const std::string& method,
-                                           v8::Handle<v8::Value> args) {
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  scoped_ptr<V8ValueConverter> converter(V8ValueConverter::create());
-    }
-    
-    // Get RenderView from current js context (only works under window context).
-content::RenderView* GetCurrentRenderView();
-content::RenderView* GetEnteredRenderView();
-    
-       void Call(const std::string& method,
-                    const base::ListValue& arguments) override;
-   void CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) override;
-    
-    #include 'content/nw/src/api/base/base.h'
-#include 'ui/gfx/display_observer.h'
-    
-    
-    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-  return item->is_enabled_;
-}
-    
-      keyval = GetKeycodeFromText(key);
-  if (keyval == ui::VKEY_UNKNOWN){
-    enable_shortcut_ = false;
-  } else {
-    enable_shortcut_ = true;
-    //only code for ctrl, shift, alt, super and meta modifiers
-    int modifiers_value = ui::EF_NONE;
-    modifiers = base::ToLowerASCII(modifiers);
-    if (modifiers.find('ctrl')!=std::string::npos){
-      modifiers_value |= ui::EF_CONTROL_DOWN;
-    }
-    if (modifiers.find('shift')!=std::string::npos){
-      modifiers_value |= ui::EF_SHIFT_DOWN ;
-    }
-    if (modifiers.find('alt')!=std::string::npos){
-      modifiers_value |= ui::EF_ALT_DOWN;
-    }
-    if (modifiers.find('super')!=std::string::npos
-     || modifiers.find('cmd')!=std::string::npos
-     || modifiers.find('command')!=std::string::npos){
-      modifiers_value |= ui::EF_COMMAND_DOWN;
-    }
-    if (modifiers.find('meta')!=std::string::npos){
-      meta_down_flag_ = true;
-    }
-    accelerator_ = ui::Accelerator(keyval,modifiers_value);
-  }
-    
-    extern 'C' {
-  PyMODINIT_FUNC INITFUNC() {
-#if PY_MAJOR_VERSION >= 3
-    PyObject *module = PyModule_Create(&_module);
+    #if defined(OS_LINUX)
+typedef PowerObserverLinux PowerObserver;
 #else
-    PyObject *module = Py_InitModule3(
-        const_cast<char*>(kModuleName),
-        NULL,
-        const_cast<char*>(kModuleDocstring));
-#endif
-    if (module == NULL) {
-      return INITFUNC_ERRORVAL;
+typedef base::PowerObserver PowerObserver;
+#endif  // defined(OS_LINUX)
+    
+    class TreePrinter {
+  llvm::raw_ostream &Out;
+  void (&PrintNodeData)(llvm::raw_ostream &out, void *node);
+  SmallString<40> Indent;
+public:
+  TreePrinter(llvm::raw_ostream &out,
+              void (&printNodeData)(llvm::raw_ostream &out, void *node))
+    : Out(out), PrintNodeData(printNodeData) {}
     }
+    
+      bool isGetter() const {
+    return accessorKind == IAMAccessorKind::Getter;
+  }
+    
+    UBool
+RuleBasedCollator::operator==(const Collator& other) const {
+    if(this == &other) { return TRUE; }
+    if(!Collator::operator==(other)) { return FALSE; }
+    const RuleBasedCollator &o = static_cast<const RuleBasedCollator &>(other);
+    if(*settings != *o.settings) { return FALSE; }
+    if(data == o.data) { return TRUE; }
+    UBool thisIsRoot = data->base == NULL;
+    UBool otherIsRoot = o.data->base == NULL;
+    U_ASSERT(!thisIsRoot || !otherIsRoot);  // otherwise their data pointers should be ==
+    if(thisIsRoot != otherIsRoot) { return FALSE; }
+    if((thisIsRoot || !tailoring->rules.isEmpty()) &&
+            (otherIsRoot || !o.tailoring->rules.isEmpty())) {
+        // Shortcut: If both collators have valid rule strings, then compare those.
+        if(tailoring->rules == o.tailoring->rules) { return TRUE; }
     }
+    // Different rule strings can result in the same or equivalent tailoring.
+    // The rule strings are optional in ICU resource bundles, although included by default.
+    // cloneBinary() drops the rule string.
+    UErrorCode errorCode = U_ZERO_ERROR;
+    LocalPointer<UnicodeSet> thisTailored(getTailoredSet(errorCode));
+    LocalPointer<UnicodeSet> otherTailored(o.getTailoredSet(errorCode));
+    if(U_FAILURE(errorCode)) { return FALSE; }
+    if(*thisTailored != *otherTailored) { return FALSE; }
+    // For completeness, we should compare all of the mappings;
+    // or we should create a list of strings, sort it with one collator,
+    // and check if both collators compare adjacent strings the same
+    // (order & strength, down to quaternary); or similar.
+    // Testing equality of collators seems unusual.
+    return TRUE;
+}
+    
+    void SearchIterator::setText(const UnicodeString &text, UErrorCode &status)
+{
+    if (U_SUCCESS(status)) {
+        if (text.length() == 0) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+        }
+        else {
+            m_text_        = text;
+            m_search_->text = m_text_.getBuffer();
+            m_search_->textLength = m_text_.length();
+        }
+    }
+}
+    
+        /**
+     * Sets maximum significant digits. 0 or negative means no maximum.
+     */
+    void setMax(int32_t count) {
+        fMax = count <= 0 ? INT32_MAX : count;
     }
     
     
-    {  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ScopedPythonPtr);
-};
+    {    useDaylight = (UBool)((startDay != 0) && (endDay != 0) ? TRUE : FALSE);
+    if (useDaylight && dstSavings == 0) {
+        dstSavings = U_MILLIS_PER_HOUR;
+    }
+    if (startDay != 0) {
+        if (startMonth < UCAL_JANUARY || startMonth > UCAL_DECEMBER) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
+        if (startTime < 0 || startTime > U_MILLIS_PER_DAY ||
+            startTimeMode < WALL_TIME || startTimeMode > UTC_TIME) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
+        if (startDayOfWeek == 0) {
+            startMode = DOM_MODE;
+        } else {
+            if (startDayOfWeek > 0) {
+                startMode = DOW_IN_MONTH_MODE;
+            } else {
+                startDayOfWeek = (int8_t)-startDayOfWeek;
+                if (startDay > 0) {
+                    startMode = DOW_GE_DOM_MODE;
+                } else {
+                    startDay = (int8_t)-startDay;
+                    startMode = DOW_LE_DOM_MODE;
+                }
+            }
+            if (startDayOfWeek > UCAL_SATURDAY) {
+                status = U_ILLEGAL_ARGUMENT_ERROR;
+                return;
+            }
+        }
+        if (startMode == DOW_IN_MONTH_MODE) {
+            if (startDay < -5 || startDay > 5) {
+                status = U_ILLEGAL_ARGUMENT_ERROR;
+                return;
+            }
+        } else if (startDay<1 || startDay > STATICMONTHLENGTH[startMonth]) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
+    }
+}
     
-      protobuf_unittest::TestAllTypes message2;
-  message2 = std::move(message1);
-  TestUtil::ExpectAllFieldsSet(message2);
+    int32_t ExtensionConcurrentClient::send_ping()
+{
+  int32_t cseqid = this->sync_.generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
+  oprot_->writeMessageBegin('ping', ::apache::thrift::protocol::T_CALL, cseqid);
+    }
     
-    // Strip package name from a descriptor's full name.
-// For example:
-//   Full name   : foo.Bar.Baz
-//   Package name: foo
-//   After strip : Bar.Baz
-string StripPackageName(const string& full_name,
-                        const FileDescriptor* file) {
-  if (file->package().empty()) {
-    return full_name;
+    QueryData genNFSShares(QueryContext& context) {
+  QueryData results;
+    }
+    
+      // Get an integral value, 0 or 1, for whether a syscall table pointer is modified.
+  auto f1 = osquery::readFile(kKernelSyscallAddrModifiedPath, content);
+  if (f1.ok()) {
+    boost::trim(content);
+    syscall_addr_modified = content;
   } else {
-    // Strip package name
-    return full_name.substr(file->package().size() + 1);
+    VLOG(1) << 'Cannot read file: ' << kKernelSyscallAddrModifiedPath;
+    return results;
   }
+    
+    /*
+** Do C-language style dequoting.
+**
+**    \t    -> tab
+**    \n    -> newline
+**    \r    -> carriage return
+**    \'    -> '
+**    \NNN  -> ascii character NNN in octal
+**    \\    -> backslash
+*/
+static void resolve_backslashes(char* z) {
+  int i, j;
+  char c;
+  for (i = j = 0; (c = z[i]) != 0; i++, j++) {
+    if (c == '\\') {
+      c = z[++i];
+      if (c == 'n') {
+        c = '\n';
+      } else if (c == 't') {
+        c = '\t';
+      } else if (c == 'r') {
+        c = '\r';
+      } else if (c == '\\') {
+        c = '\\';
+      } else if (c >= '0' && c <= '7') {
+        c -= '0';
+        if (z[i + 1] >= '0' && z[i + 1] <= '7') {
+          i++;
+          c = (c << 3) + z[i] - '0';
+          if (z[i + 1] >= '0' && z[i + 1] <= '7') {
+            i++;
+            c = (c << 3) + z[i] - '0';
+          }
+        }
+      }
+    }
+    z[j] = c;
+  }
+  z[j] = 0;
 }
     
-      // -----------------------------------------------------------------
-  // Invoke internalBuildGeneratedFileFrom() to build the file.
-  printer->Print(
-    'com.google.protobuf.Descriptors.FileDescriptor\n'
-    '  .internalBuildGeneratedFileFrom(descriptorData,\n');
-  printer->Print(
-    '    new com.google.protobuf.Descriptors.FileDescriptor[] {\n');
+      // Flag for indicating found state utilizing hardware driver info.
+  bool found = false;
+  walk_func([&](const std::string& devname, hardwareDriver* type) {
+    // Get autodetected info..
+    auto resp = smartctl.getDevInfo(devname, '');
+    if (resp.err != NOERR) {
+      LOG(INFO) << 'There was an error retrieving drive information: '
+                << libsmartctl::errStr(resp.err);
+      // Don't return here, keep searching with fulltype.
+    } else {
+      resp.content['device_name'] = devname;
+      results.push_back(std::move(resp.content));
+    }
     }
     
-    void OneofGenerator::GenerateClearFunctionImplementation(io::Printer* printer) {
-  printer->Print(
-      variables_,
-      'void $owning_message_class$_Clear$capitalized_name$OneOfCase($owning_message_class$ *message) {\n'
-      '  GPBDescriptor *descriptor = [message descriptor];\n'
-      '  GPBOneofDescriptor *oneof = [descriptor.oneofs objectAtIndex:$raw_index$];\n'
-      '  GPBMaybeClearOneof(message, oneof, $index$, 0);\n'
-      '}\n');
-}
-    
-    
-    {  return output.HadError();
-}
-    
-    
-    {  zcontext_.zalloc = Z_NULL;
-  zcontext_.zfree = Z_NULL;
-  zcontext_.opaque = Z_NULL;
-  zcontext_.next_out = NULL;
-  zcontext_.avail_out = 0;
-  zcontext_.total_out = 0;
-  zcontext_.next_in = NULL;
-  zcontext_.avail_in = 0;
-  zcontext_.total_in = 0;
-  zcontext_.msg = NULL;
-  // default to GZIP format
-  int windowBitsFormat = 16;
-  if (options.format == ZLIB) {
-    windowBitsFormat = 0;
-  }
-  zerror_ = deflateInit2(
-      &zcontext_,
-      options.compression_level,
-      Z_DEFLATED,
-      /* windowBits */15 | windowBitsFormat,
-      /* memLevel (default) */8,
-      options.compression_strategy);
-}
-    
-      // After Next() returns false, the token should have type TYPE_END.
-  EXPECT_EQ(Tokenizer::TYPE_END, tokenizer.current().type);
-  EXPECT_EQ('', tokenizer.current().text);
-  EXPECT_EQ(0, tokenizer.current().line);
-  EXPECT_EQ(kSimpleTokenCases_case.input.size(), tokenizer.current().column);
-  EXPECT_EQ(kSimpleTokenCases_case.input.size(),
-            tokenizer.current().end_column);
-    
-    
-bool ZeroCopyOutputStream::WriteAliasedRaw(const void* /* data */,
-                                           int /* size */) {
-  GOOGLE_LOG(FATAL) << 'This ZeroCopyOutputStream doesn't support aliasing. '
-                'Reaching here usually means a ZeroCopyOutputStream '
-                'implementation bug.';
-  return false;
-}
-    
-    
-    {  // Check that getting embedded messages returns the objects created during
-  // SetAllFields() rather than default instances.
-  EXPECT_NE(&unittest::TestAllTypes::OptionalGroup::default_instance(),
-            &message.optionalgroup());
-  EXPECT_NE(&unittest::TestAllTypes::NestedMessage::default_instance(),
-            &message.optional_nested_message());
-  EXPECT_NE(&unittest::ForeignMessage::default_instance(),
-            &message.optional_foreign_message());
-  EXPECT_NE(&unittest_import::ImportMessage::default_instance(),
-            &message.optional_import_message());
-}
-    
-    #endif
-
-    
-    struct OSBestResult {
-  OSBestResult() : orientation_id(0), script_id(0), sconfidence(0.0),
-                   oconfidence(0.0) {}
-  int orientation_id;
-  int script_id;
-  float sconfidence;
-  float oconfidence;
-};
-    
-    // This structure captures all information needed about a text line for the
-// purposes of paragraph detection.  It is meant to be exceedingly light-weight
-// so that we can easily test paragraph detection independent of the rest of
-// Tesseract.
-class RowInfo {
- public:
-  // Constant data derived from Tesseract output.
-  STRING text;        // the full UTF-8 text of the line.
-  bool ltr;           // whether the majority of the text is left-to-right
-                      // TODO(eger) make this more fine-grained.
-    }
-    
-    // Update the other members if the cost is lower.
-void DPPoint::UpdateIfBetter(int64_t cost, int32_t steps, const DPPoint* prev,
-                             int32_t n, int32_t sig_x, int64_t sig_xsq) {
-  if (cost < total_cost_) {
-    total_cost_ = cost;
-    total_steps_ = steps;
-    best_prev_ = prev;
-    n_ = n;
-    sig_x_ = sig_x;
-    sig_xsq_ = sig_xsq;
-  }
-}
-    
-      // Returns the x,y means as an FCOORD.
-  FCOORD mean_point() const;
-    
-      // Prints the content of the DENORM for debug purposes.
-  void Print() const;
-    
-    
-    {  if (op->send_message() != nullptr) {
-    ++sent_message_count_;
-  }
-  if (op->recv_message() != nullptr) {
-    recv_message_ = op->op()->payload->recv_message.recv_message;
-    initial_on_done_recv_message_ =
-        op->op()->payload->recv_message.recv_message_ready;
-    op->op()->payload->recv_message.recv_message_ready = &on_done_recv_message_;
-  }
-  if (op->recv_trailing_metadata() != nullptr) {
-    recv_trailing_metadata_ = op->recv_trailing_metadata()->batch();
-    initial_on_done_recv_trailing_metadata_ =
-        op->op()->payload->recv_trailing_metadata.recv_trailing_metadata_ready;
-    op->op()->payload->recv_trailing_metadata.recv_trailing_metadata_ready =
-        &on_done_recv_trailing_metadata_;
-  }
-  // Call next op.
-  grpc_call_next_op(elem, op->op());
-}
-    
-    #include <grpc/support/port_platform.h>
-    
-    #include <unordered_set>
-#include <vector>
+    Expected<int, PosixError> syscall(struct perf_event_attr* attr,
+                                  pid_t pid,
+                                  int cpu,
+                                  int group_fd,
+                                  unsigned long const flags);
     
     
     {
-    {}  // namespace load_reporter
-}  // namespace grpc
+    {} // namespace events
+} // namespace osquery
+
     
-    #include <grpc/support/port_platform.h>
+    boost::optional<Event> EnterExitJoiner::join(Event in_event) {
+  ++counter_;
+  if (counter_ > kCounterLimit) {
+    drop_stuck_events();
+    counter_ = 0;
+  }
+  auto const inv_key =
+      createKey(flipEventType(in_event.type), in_event.pid, in_event.tgid);
+    }
+    
+      bool isEmpty() const;
+    
+        // We should have a property tree of pack content mimicking embedded
+    // configuration packs, ready to parse as a string.
+    std::ostringstream output;
+    pt::write_json(output, multi_pack, false);
+    pack = output.str();
+    if (pack.empty()) {
+      return Status(1, 'Multi-pack content empty');
+    }
+    
+    
+    {
+    { private:
+  friend class TLSConfigTests;
+};
+} // namespace osquery
