@@ -1,101 +1,52 @@
 
         
-              def parallel?
-        @parallel
+              def is_create_page
+        false
       end
     
-            def importer_class
-          DiffNoteImporter
-        end
-    
-            attr_reader :attributes
-    
-            # Builds a note from a GitHub API response.
-        #
-        # note - An instance of `Sawyer::Resource` containing the note details.
-        def self.from_api_response(note)
-          matches = note.html_url.match(NOTEABLE_TYPE_REGEX)
-    
-                  # Break so we don't find the next non flag and shift our
-              # main args.
-              break
-            end
-          end
-    
-            # Merge another configuration object into this one. This assumes that
-        # the other object is the same class as this one. This should not
-        # mutate this object, but instead should return a new, merged object.
-        #
-        # The default implementation will simply iterate over the instance
-        # variables and merge them together, with this object overriding
-        # any conflicting instance variables of the older object. Instance
-        # variables starting with '__' (double underscores) will be ignored.
-        # This lets you set some sort of instance-specific state on your
-        # configuration keys without them being merged together later.
-        #
-        # @param [Object] other The other configuration object to merge from,
-        #   this must be the same type of object as this one.
-        # @return [Object] The merged object.
-        def merge(other)
-          result = self.class.new
-    
-              @commands = Registry.new
-          @configs = Hash.new { |h, k| h[k] = Registry.new }
-          @guests  = Registry.new
-          @guest_capabilities = Hash.new { |h, k| h[k] = Registry.new }
-          @hosts   = Registry.new
-          @host_capabilities = Hash.new { |h, k| h[k] = Registry.new }
-          @providers = Registry.new
-          @provider_capabilities = Hash.new { |h, k| h[k] = Registry.new }
-          @pushes = Registry.new
-          @synced_folders = Registry.new
-        end
-      end
-    end
-  end
+    desc 'Build and install'
+task :install => :build do
+  sh 'gem install --local --no-ri --no-rdoc pkg/#{name}-#{version}.gem'
 end
-
     
-        # Like #{merge} but merges into self.
-    def merge!(other)
-      @items.merge!(other.__internal_state[:items])
-      self
-    end
+        COP_NAME_PATTERN = '([A-Z]\w+/)?(?:[A-Z]\w+)'.freeze
+    COP_NAMES_PATTERN = '(?:#{COP_NAME_PATTERN} , )*#{COP_NAME_PATTERN}'.freeze
+    COPS_PATTERN = '(all|#{COP_NAMES_PATTERN})'.freeze
     
-        def require_local_account!
-      redirect_to admin_account_path(@account.id) unless @account.local? && @account.user.present?
-    end
+    # Create two output packages!
+output_packages = []
+output_packages << pleaserun.convert(FPM::Package::RPM)
+output_packages << pleaserun.convert(FPM::Package::Deb)
     
-      def create
-    @web_subscription&.destroy!
+        # The only way to get npm to respect the 'prefix' setting appears to
+    # be to set the --global flag.
+    #install_args << '--global'
+    install_args += npm_flags
     
-      def after_sign_in_path_for(resource)
-    if resource.email_verified?
-      root_path
-    else
-      finish_signup_path
-    end
-  end
-end
-
+      option '--bin-dir', 'BIN_DIR',
+    'Directory to put binaries in'
     
-      included do
-    before_action :authenticate_user!
-    before_action :load_export
-  end
+      private
+  def input(command)
+    platforms = [
+      ::PleaseRun::Platform::Systemd.new('default'), # RHEL 7, Fedora 19+, Debian 8, Ubuntu 16.04
+      ::PleaseRun::Platform::Upstart.new('1.5'), # Recent Ubuntus
+      ::PleaseRun::Platform::Upstart.new('0.6.5'), # CentOS 6
+      ::PleaseRun::Platform::Launchd.new('10.9'), # OS X
+      ::PleaseRun::Platform::SYSV.new('lsb-3.1') # Ancient stuff
+    ]
+    pleaserun_attributes = [ 'chdir', 'user', 'group', 'umask', 'chroot', 'nice', 'limit_coredump',
+                             'limit_cputime', 'limit_data', 'limit_file_size', 'limit_locked_memory',
+                             'limit_open_files', 'limit_user_processes', 'limit_physical_memory', 'limit_stack_size',
+                             'log_directory', 'log_file_stderr', 'log_file_stdout']
     
-    (allow process-exec
-  (literal
-    '<%= pod_bin %>'
-    '<%= ruby_bin %>'
-  )
-  (regex
-<% prefixes.each do |prefix| %>
-    #'^<%= prefix %>/*'
-<% end %>
-  )
-)
-    
-          def markdown_podfile
-        UI::ErrorReport.markdown_podfile
-      end
+      def build!(params)
+    # TODO(sissel): Support these somehow, perhaps with execs and files.
+    self.scripts.each do |name, path|
+      case name
+        when 'pre-install'
+        when 'post-install'
+        when 'pre-uninstall'
+        when 'post-uninstall'
+      end # case name
+    end # self.scripts.each
