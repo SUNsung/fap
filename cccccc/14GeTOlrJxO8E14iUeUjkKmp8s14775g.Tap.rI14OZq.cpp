@@ -1,69 +1,128 @@
-bool UvTaskRunner::RunsTasksInCurrentSequence() const {
-  return true;
+
+        
+        
+    {}
+    
+    namespace HPHP {
+    }
+    
+    #include <sys/types.h>
+    
+    #include <iostream>
+    
+            while(!q.empty()){
+    }
+    
+    #include <iostream>
+#include <vector>
+    
+            stack<TreeNode*> stack;
+        TreeNode* cur = root;
+        while(cur != NULL || !stack.empty()){
+            while(cur != NULL){
+                res.push_back(cur->val);
+                stack.push(cur);
+                cur = cur->left;
+            }
+    }
+    
+    
+    {
+    {        return res;
+    }
+};
+    
+    #ifndef __STDC_FORMAT_MACROS
+#define __STDC_FORMAT_MACROS
+#endif
+#ifndef GFLAGS
+#include <cstdio>
+int main() {
+  fprintf(stderr, 'Please install gflags to run rocksdb tools\n');
+  return 1;
 }
+#else
     
-    namespace atom {
-    }
     
-    class AtomQuotaPermissionContext : public content::QuotaPermissionContext {
+    {  // Single-Delete diagnostics for exceptional situations
+  uint64_t num_single_del_fallthru = 0;
+  uint64_t num_single_del_mismatch = 0;
+};
+
+    
+      // create column family
+  ColumnFamilyHandle* cf;
+  s = db->CreateColumnFamily(ColumnFamilyOptions(), 'new_cf', &cf);
+  assert(s.ok());
+    
+    // This is an example interface of external-compaction algorithm.
+// Compaction algorithm can be implemented outside the core-RocksDB
+// code by using the pluggable compaction APIs that RocksDb provides.
+class Compactor : public EventListener {
  public:
-  typedef content::QuotaPermissionContext::QuotaPermissionResponse response;
+  // Picks and returns a compaction task given the specified DB
+  // and column family.  It is the caller's responsibility to
+  // destroy the returned CompactionTask.  Returns 'nullptr'
+  // if it cannot find a proper compaction task.
+  virtual CompactionTask* PickCompaction(
+      DB* db, const std::string& cf_name) = 0;
     }
     
-    void AutoUpdater::SetFeedURL(mate::Arguments* args) {}
+      int ret = system('rm -rf /tmp/rocksmergetest');
+  if (ret != 0) {
+    fprintf(stderr, 'Error deleting /tmp/rocksmergetest, code: %d\n', ret);
+    return ret;
+  }
+  rocksdb::Options options;
+  options.create_if_missing = true;
+  options.merge_operator.reset(new MyMerge);
+  options.compaction_filter = &filter;
+  status = rocksdb::DB::Open(options, '/tmp/rocksmergetest', &raw_db);
+  assert(status.ok());
+  std::unique_ptr<rocksdb::DB> db(raw_db);
     
-    #ifndef ATOM_BROWSER_NET_ABOUT_PROTOCOL_HANDLER_H_
-#define ATOM_BROWSER_NET_ABOUT_PROTOCOL_HANDLER_H_
+      // Commit.  Since the snapshot was advanced, the write done outside of the
+  // transaction does not prevent this transaction from Committing.
+  s = txn->Commit();
+  assert(s.ok());
+  delete txn;
+  // Clear snapshot from read options since it is no longer valid
+  read_options.snapshot = nullptr;
     
-    #include 'base/memory/ref_counted.h'
-#include 'net/url_request/url_request_job_factory.h'
+      {
+    std::string string_val;
+    // If it cannot pin the value, it copies the value to its internal buffer.
+    // The intenral buffer could be set during construction.
+    PinnableSlice pinnable_val(&string_val);
+    db->Get(ReadOptions(), db->DefaultColumnFamily(), 'key2', &pinnable_val);
+    assert(pinnable_val == 'value');
+    // If the value is not pinned, the internal buffer must have the value.
+    assert(pinnable_val.IsPinned() || string_val == 'value');
+  }
     
-    	void EncodeMipmaps(float *a_pafSourceRGBA,
-		unsigned int a_uiSourceWidth,
-		unsigned int a_uiSourceHeight,
-		Image::Format a_format,
-		ErrorMetric a_eErrMetric,
-		float a_fEffort,
-		unsigned int a_uiJobs,
-		unsigned int a_uiMaxJobs,
-		unsigned int a_uiMaxMipmaps,
-		unsigned int a_uiMipFilterFlags,
-		RawImage* a_pMipmaps,
-		int *a_piEncodingTime_ms, bool a_bVerboseOutput = false);
     
-    		if (encodingTry.m_fError < m_fError)
-		{
-			m_mode = MODE_ETC1;
-			m_boolDiff = true;
-			m_boolFlip = encodingTry.m_boolFlip;
-			m_frgbaColor1 = ColorFloatRGBA::ConvertFromRGB5((unsigned char)ptryBest1->m_iRed, (unsigned char)ptryBest1->m_iGreen, (unsigned char)ptryBest1->m_iBlue);
-			m_frgbaColor2 = ColorFloatRGBA::ConvertFromRGB5((unsigned char)ptryBest2->m_iRed, (unsigned char)ptryBest2->m_iGreen, (unsigned char)ptryBest2->m_iBlue);
-			m_uiCW1 = ptryBest1->m_uiCW;
-			m_uiCW2 = ptryBest2->m_uiCW;
+    {  virtual ~FlushBlockPolicy() { }
+};
+    
+      // Translate the 'i'th property of the specified operation given
+  // a property value.
+  static std::map<std::string, uint64_t>
+      InterpretOperationProperties(
+          OperationType op_type, const uint64_t* op_properties);
+    
+    struct RestoreOptions {
+  // If true, restore won't overwrite the existing log files in wal_dir. It will
+  // also move all log files from archive directory to wal_dir. Use this option
+  // in combination with BackupableDBOptions::backup_log_files = false for
+  // persisting in-memory databases.
+  // Default: false
+  bool keep_log_files;
     }
     
-    /***************************************************************************/
-/*                                                                         */
-/*  afblue.h                                                               */
-/*                                                                         */
-/*    Auto-fitter data for blue strings (specification).                   */
-/*                                                                         */
-/*  Copyright 2013-2018 by                                                 */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+    namespace rocksdb {
+    }
     
-      FT_LOCAL( void )
-  af_latin_hints_link_segments( AF_GlyphHints  hints,
-                                FT_UInt        width_count,
-                                AF_WidthRec*   widths,
-                                AF_Dimension   dim );
-    
-    #ifndef FIXED_ARMv5E_H
-#define FIXED_ARMv5E_H
+      // If non-NULL, use the specified cache for blocks.
+  // If NULL, leveldb will automatically create and use an 8MB internal cache.
+  // Default: NULL
+  Cache* block_cache;
