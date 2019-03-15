@@ -1,142 +1,125 @@
 
         
-            def __init__(self):
-        self.people = {}  # key: person_id, value: person
-    
-        def __init__(self, query, results):
-        self.query = query
-        self.results = results
-    
-    # pick which RNN is used on each trial
-rnn_to_use = rng.randint(2, size=E)
-ext_input = np.repeat(np.expand_dims(rnn_to_use, axis=1), ntimesteps, axis=1)
-ext_input = np.expand_dims(ext_input, axis=2)  # these are 'a's' in the paper
-    
-            if pad:
-          break
-    
-      def __init__(self, vocab, model_name='lm01'):
-    self.vocab = vocab
-    self.log_dir = os.path.join(FLAGS.data_dir, model_name)
-    
-    from models import bidirectional_zaremba
-from models import cnn
-from models import critic_vd
-from models import feedforward
-from models import rnn
-from models import rnn_nas
-from models import rnn_vd
-from models import rnn_zaremba
-from models import seq2seq
-from models import seq2seq_nas
-from models import seq2seq_vd
-from models import seq2seq_zaremba
+          def load_labels(self, session, instances):
+    '''Loads the labels for these instances.
     
     
-def create_gen_train_op(hparams, learning_rate, gen_loss, global_step, mode):
-  '''Create Generator train op.'''
-  del hparams
-  with tf.name_scope('train_generator'):
-    if FLAGS.generator_optimizer == 'sgd':
-      gen_optimizer = tf.train.GradientDescentOptimizer(learning_rate)
-    elif FLAGS.generator_optimizer == 'adam':
-      gen_optimizer = tf.train.AdamOptimizer(learning_rate)
-    else:
-      raise NotImplementedError
-    gen_vars = [
-        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
-    ]
-    print('Optimizing Generator vars.')
-    for v in gen_vars:
-      print(v)
-    if mode == 'MINIMIZE':
-      gen_grads = tf.gradients(gen_loss, gen_vars)
-    elif mode == 'MAXIMIZE':
-      gen_grads = tf.gradients(-gen_loss, gen_vars)
-    else:
-      raise ValueError('Must be one of 'MINIMIZE' or 'MAXIMIZE'')
-    gen_grads_clipped, _ = tf.clip_by_global_norm(gen_grads,
-                                                  FLAGS.grad_clipping)
-    gen_train_op = gen_optimizer.apply_gradients(
-        zip(gen_grads_clipped, gen_vars), global_step=global_step)
-    return gen_train_op, gen_grads_clipped, gen_vars
+# Initial condition generation, and condition label generation.  This
+# happens outside of the dataset loop, so that all datasets have the
+# same conditions, which is similar to a neurophys setup.
+condition_number = 0
+x0s = []
+condition_labels = []
+for c in range(C):
+  x0 = FLAGS.x0_std * rng.randn(N, 1)
+  x0s.append(np.tile(x0, nreplications)) # replicate x0 nreplications times
+  # replicate the condition label nreplications times
+  for ns in range(nreplications):
+    condition_labels.append(condition_number)
+  condition_number += 1
+x0s = np.concatenate(x0s, axis=1)
     
-      with tf.variable_scope('dis', reuse=reuse):
-    cell_fwd = tf.contrib.rnn.LayerNormBasicLSTMCell(
-        hparams.dis_rnn_size, forget_bias=1.0, reuse=reuse)
-    cell_bwd = tf.contrib.rnn.LayerNormBasicLSTMCell(
-        hparams.dis_rnn_size, forget_bias=1.0, reuse=reuse)
-    if FLAGS.zoneout_drop_prob > 0.0:
-      cell_fwd = zoneout.ZoneoutWrapper(
-          cell_fwd,
-          zoneout_drop_prob=FLAGS.zoneout_drop_prob,
-          is_training=is_training)
-      cell_bwd = zoneout.ZoneoutWrapper(
-          cell_bwd,
-          zoneout_drop_prob=FLAGS.zoneout_drop_prob,
-          is_training=is_training)
+      def encode(self, sentence):
+    '''Convert a sentence to a list of ids, with special tokens added.'''
+    word_ids = [self.word_to_id(cur_word) for cur_word in sentence.split()]
+    return np.array([self.bos] + word_ids + [self.eos], dtype=np.int32)
     
-            _thresholds = None
+    import os
+import pickle as pkl
+import numpy as np
+import tensorflow as tf
+import utils
     
-        ipa_dnszone = client.dnszone_find(zone_name)
+        ## Calculate the Advantages, A(s,a) = Q(s,a) - \hat{V}(s).
+    advantages = []
+    for t in xrange(FLAGS.sequence_length):
+      log_probability = log_probs_list[t]
+      cum_advantage = tf.zeros(shape=[FLAGS.batch_size / 2])
     
-        def role_remove_member(self, name, item):
-        return self._post_json(method='role_remove_member', name=name, item=item)
+            r = None
+        try:
+            r = Redirect.objects.get(site=current_site, old_path=full_path)
+        except Redirect.DoesNotExist:
+            pass
+        if r is None and settings.APPEND_SLASH and not request.path.endswith('/'):
+            try:
+                r = Redirect.objects.get(
+                    site=current_site,
+                    old_path=request.get_full_path(force_append_slash=True),
+                )
+            except Redirect.DoesNotExist:
+                pass
+        if r is not None:
+            if r.new_path == '':
+                return self.response_gone_class()
+            return self.response_redirect_class(r.new_path)
     
-        # Build the deployment object we return
-    deployment = dict(token=token, url=url)
-    deployment.update(body)
-    if 'errorMessage' in deployment:
-        message = deployment.pop('errorMessage')
-        deployment['message'] = message
+        def __init__(self, session_key=None):
+        self._cache = caches[settings.SESSION_CACHE_ALIAS]
+        super().__init__(session_key)
     
-        return strings
-
     
-    For more details about this platform, please refer to the documentation at
-https://home-assistant.io/components/binary_sensor.flic/
+class AbstractBaseSession(models.Model):
+    session_key = models.CharField(_('session key'), max_length=40, primary_key=True)
+    session_data = models.TextField(_('session data'))
+    expire_date = models.DateTimeField(_('expire date'), db_index=True)
+    
+    In both cases, only 10% of the features are informative.
 '''
-import logging
-import threading
+import numpy as np
+import gc
+from time import time
+from sklearn.datasets.samples_generator import make_regression
     
-        def __init__(self, config):
-        '''Initialize the scanner.'''
-        self.host = config[CONF_HOST]
-        self.username = config[CONF_USERNAME]
-        self.password = config[CONF_PASSWORD]
-        self.last_results = []
-        data = self.get_actiontec_data()
-        self.success_init = data is not None
-        _LOGGER.info('canner initialized')
     
-        def _make_request(self):
-        # Weirdly enough, this doesn't seem to require authentication
-        data = [{
-            'request': {
-                'sinceRevision': 0
-            },
-            'action': 'http://linksys.com/jnap/devicelist/GetDevices'
-        }]
-        headers = {'X-JNAP-Action': 'http://linksys.com/jnap/core/Transaction'}
-        return requests.post('http://{}/JNAP/'.format(self.host),
-                             timeout=DEFAULT_TIMEOUT,
-                             headers=headers,
-                             json=data)
+def euclidean_distances(X, n_jobs):
+    return pairwise_distances(X, metric='euclidean', n_jobs=n_jobs)
+    
+    plt.figure('scikit-learn Ward's method benchmark results')
+plt.imshow(np.log(ratio), aspect='auto', origin='lower')
+plt.colorbar()
+plt.contour(ratio, levels=[1, ], colors='k')
+plt.yticks(range(len(n_features)), n_features.astype(np.int))
+plt.ylabel('N features')
+plt.xticks(range(len(n_samples)), n_samples.astype(np.int))
+plt.xlabel('N samples')
+plt.title('Scikit's time, in units of scipy time (log)')
+plt.show()
 
     
-    DEFAULT_NAME = 'clickatell'
+        n = 10
+    step = 10000
+    n_samples = 10000
+    dim = 10
+    n_classes = 10
+    for i in range(n):
+        print('============================================')
+        print('Entering iteration %s of %s' % (i, n))
+        print('============================================')
+        n_samples += step
+        X = np.random.randn(n_samples, dim)
+        Y = np.random.randint(0, n_classes, (n_samples,))
+        bench_scikit_tree_classifier(X, Y)
+        Y = np.random.randn(n_samples)
+        bench_scikit_tree_regressor(X, Y)
     
-    from homeassistant.components.notify import (
-    ATTR_DATA, ATTR_TARGET, PLATFORM_SCHEMA, BaseNotificationService)
-from homeassistant.const import CONTENT_TYPE_JSON
-import homeassistant.helpers.config_validation as cv
+    solutions = os.listdir(exercise_dir)
     
-        def send_message(self, message='', **kwargs):
-        '''Send a message to a file.'''
-        with open(self.filepath, 'a') as file:
-            if os.stat(self.filepath).st_size == 0:
-                title = '{} notifications (Log started: {})\n{}\n'.format(
-                    kwargs.get(ATTR_TITLE, ATTR_TITLE_DEFAULT),
-                    dt_util.utcnow().isoformat(),
-                    '-' * 80)
-                file.write(title)
+    data, row_idx, col_idx = sg._shuffle(data, random_state=0)
+plt.matshow(data, cmap=plt.cm.Blues)
+plt.title('Shuffled dataset')
+    
+    This example shows the effect of imposing a connectivity graph to capture
+local structure in the data. The graph is simply the graph of 20 nearest
+neighbors.
+    
+    # Code source: Gaël Varoquaux
+# Modified for documentation by Jaques Grobler
+# License: BSD 3 clause
+    
+    
+#----------------------------------------------------------------------
+# Visualize the clustering
+def plot_clustering(X_red, labels, title=None):
+    x_min, x_max = np.min(X_red, axis=0), np.max(X_red, axis=0)
+    X_red = (X_red - x_min) / (x_max - x_min)
