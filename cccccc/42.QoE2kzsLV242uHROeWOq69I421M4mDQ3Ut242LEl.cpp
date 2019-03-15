@@ -1,263 +1,288 @@
-  /// Profile the substitution map storage, for use with LLVM's FoldingSet.
-  void Profile(llvm::FoldingSetNodeID &id) const {
-    Profile(id, getGenericSignature(), getReplacementTypes(),
-            getConformances());
-  }
-    
-    #if !defined(PREPOSITION) && !defined(VERB)
-#  error define one or more of PREPOSITION, VERB
-#endif
-    
-        {
-      Out << Indent;
-      if (childKind == ChildKind::Root) {
-        Out << '+- ';
-      } else if (childKind == ChildKind::Left) {
-        Out << '/- ';
-      } else if (childKind == ChildKind::Right) {
-        Out << '\\- ';
-      } else if (childKind == ChildKind::Further) {
-        Out << '\\-> ';
-      }
-      PrintNodeData(Out, node);
-      Out << '\n';
-    }
-    
-      bool IsFirstLine = true;
-    
-    %# Ignore the following admonition; it applies to the resulting .cpp file only
-//// Automatically Generated From UnicodeExtendedGraphemeClusters.cpp.gyb.
-//// Do Not Edit Directly!
-//===----------------------------------------------------------------------===//
-//
-// This source file is part of the Swift.org open source project
-//
-// Copyright (c) 2014 - 2017 Apple Inc. and the Swift project authors
-// Licensed under Apache License v2.0 with Runtime Library Exception
-//
-// See https://swift.org/LICENSE.txt for license information
-// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
-//
-//===----------------------------------------------------------------------===//
-    
-    namespace {
-  // Quasi-lexicographic order: string length first, then string data.
-  // Since we don't care about the actual length, we can use this, which
-  // lets us ignore the string data a larger proportion of the time.
-  struct SortByLengthComparator {
-    bool operator()(StringRef lhs, StringRef rhs) const {
-      return (lhs.size() < rhs.size() ||
-              (lhs.size() == rhs.size() && lhs < rhs));
-    }
-  };
-} // end anonymous namespace
-    
-      auto mirrorIter = mirroredBuffers.find(buffer);
-  if (mirrorIter != mirroredBuffers.end()) {
-    mirrorID = mirrorIter->second;
-  } else {
-    std::unique_ptr<llvm::MemoryBuffer> mirrorBuffer{
-      llvm::MemoryBuffer::getMemBuffer(buffer->getBuffer(),
-                                       buffer->getBufferIdentifier(),
-                                       /*RequiresNullTerminator=*/true)
-    };
-    mirrorID = swiftSrcMgr.addNewSourceBuffer(std::move(mirrorBuffer));
-    mirroredBuffers[buffer] = mirrorID;
-  }
-  loc = swiftSrcMgr.getLocForOffset(mirrorID, decomposedLoc.second);
-    
-    static bool encodeToUTF8(const std::vector<uint32_t> &Scalars,
-                         std::string &OutUTF8) {
-  for (auto S : Scalars) {
-    if (!isValidUnicodeScalar(S)) {
-      OutUTF8.clear();
-      return false;
-    }
-    if (S >= 0xD800 && S < 0xD880)
-      S -= 0xD800;
-    }
-    }
-    
-    
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    std::string Clipboard::GetText() {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  base::string16 text;
-  clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
-  return base::UTF16ToUTF8(text);
-}
-    
-    
-namespace nwapi {
-    }
-    
-    
-    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-  return item->is_modified_;
-}
-    
-    typedef std::map<std::string,std::string> KeyMap;
-    
-    
-    {    } else {
-      enable_shortcut = false;
-    }
-    
-    
-    {} // namespace extensions
-#endif
 
+        
+        namespace grpc {
+    }
     
-    NwObjDestroyFunction::NwObjDestroyFunction() {
-}
     
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37, typename T38, typename T39, typename T40,
-    typename T41, typename T42, typename T43>
-internal::ValueArray43<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-    T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42,
-    T43> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
-    T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17,
-    T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23, T24 v24, T25 v25,
-    T26 v26, T27 v27, T28 v28, T29 v29, T30 v30, T31 v31, T32 v32, T33 v33,
-    T34 v34, T35 v35, T36 v36, T37 v37, T38 v38, T39 v39, T40 v40, T41 v41,
-    T42 v42, T43 v43) {
-  return internal::ValueArray43<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
-      T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39,
-      T40, T41, T42, T43>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12,
-      v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23, v24, v25, v26,
-      v27, v28, v29, v30, v31, v32, v33, v34, v35, v36, v37, v38, v39, v40,
-      v41, v42, v43);
-}
-    
-      // Many linked_ptr operations may change p.link_ for some linked_ptr
-  // variable p in the same circle as this object.  Therefore we need
-  // to prevent two such operations from occurring concurrently.
-  //
-  // Note that different types of linked_ptr objects can coexist in a
-  // circle (e.g. linked_ptr<Base>, linked_ptr<Derived1>, and
-  // linked_ptr<Derived2>).  Therefore we must use a single mutex to
-  // protect all linked_ptr objects.  This can create serious
-  // contention in production code, but is acceptable in a testing
-  // framework.
-    
-     private:
-  // No implementation - assignment is unsupported.
-  void operator=(const ValueArray41& other);
-    
-    #include <string.h>
-#include <string>
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32>
-struct Types32 {
-  typedef T1 Head;
-  typedef Types31<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
-      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
-      T30, T31, T32> Tail;
+    { private:
+  CensusContext context_;
+  // server method
+  absl::string_view method_;
+  std::string qualified_method_;
+  grpc_slice path_;
+  // Pointer to the grpc_call element
+  grpc_call* gc_;
+  // Authorization context for the call.
+  grpc_auth_context* auth_context_;
+  // Metadata element for census stats.
+  grpc_linked_mdelem census_bin_;
+  // recv callback
+  grpc_metadata_batch* recv_initial_metadata_;
+  grpc_closure* initial_on_done_recv_initial_metadata_;
+  grpc_closure on_done_recv_initial_metadata_;
+  // recv message
+  grpc_closure* initial_on_done_recv_message_;
+  grpc_closure on_done_recv_message_;
+  absl::Time start_time_;
+  absl::Duration elapsed_time_;
+  grpc_core::OrphanablePtr<grpc_core::ByteStream>* recv_message_;
+  uint64_t recv_message_count_;
+  uint64_t sent_message_count_;
+  // Buffer needed for grpc_slice to reference it when adding metatdata to
+  // response.
+  char stats_buf_[kMaxServerStatsLen];
 };
     
-    
-    {
-    {      // Marks all multiples of i (except i itself) as non-prime.
-      for (int j = 2*i; j <= max; j += i) {
-        is_prime_[j] = false;
-      }
-    }
-  }
-    
-      // Now, we have that n is odd and n >= 3.
-    
-    
-    {  // <TechnicalDetails>
-  //
-  // EXPECT_EQ(expected, actual) is the same as
-  //
-  //   EXPECT_TRUE((expected) == (actual))
-  //
-  // except that it will print both the expected value and the actual
-  // value when the assertion fails.  This is very helpful for
-  // debugging.  Therefore in this case EXPECT_EQ is preferred.
-  //
-  // On the other hand, EXPECT_TRUE accepts any Boolean expression,
-  // and is thus more general.
-  //
-  // </TechnicalDetails>
-}
-    
-    
-    {}  // namespace grpc
-    
-    // Deserialize the incoming SpanContext and generate a new server context based
-// on that. This new span will never be a root span. This should only be called
-// with a blank CensusContext as it overwrites it.
-void GenerateServerContext(absl::string_view tracing, absl::string_view stats,
-                           absl::string_view primary_role,
-                           absl::string_view method, CensusContext* context);
-    
-    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H */
-
-    
-    namespace grpc {
-    }
-    
-      ::opencensus::trace::SpanContext ToSpanContext() const {
-    return ::opencensus::trace::SpanContext(
-        ::opencensus::trace::TraceId(trace_id),
-        ::opencensus::trace::SpanId(span_id),
-        ::opencensus::trace::TraceOptions(trace_options));
-  }
-    
-    const ViewDescriptor& ClientReceivedBytesPerRpcHour() {
-  const static ViewDescriptor descriptor =
-      HourDescriptor()
-          .set_name('grpc.io/client/received_bytes_per_rpc/hour')
-          .set_measure(kRpcClientReceivedBytesPerRpcMeasureName)
-          .set_aggregation(BytesDistributionAggregation())
-          .add_column(ClientMethodTagKey());
-  return descriptor;
+    void InitProtoReflectionServerBuilderPlugin() {
+  static bool already_here = false;
+  if (already_here) return;
+  already_here = true;
+  ::grpc::ServerBuilder::InternalAddPluginFactory(&CreateProtoReflection);
 }
     
         virtual void UpdateArguments(ChannelArguments* args) override {
-      args->SetInt(name_, value_);
+      args->SetString(name_, value_);
     }
     virtual void UpdatePlugins(
         std::vector<std::unique_ptr<ServerBuilderPlugin>>* plugins) override {}
     
-                // Since scalar samples can be rank=1 with dim=1, we automatically pad the sequence data shape with a leading axis 
-            // of dim=1 if the sequence data shape's leading axis's dimensionality is not 1
-            if ((fullyDefinedSampleShape.Rank() == 1) && !fullyDefinedSampleShape.HasUnboundDimension() && (fullyDefinedSampleShape.TotalSize() == 1) && (currentSequenceDataShape.Rank() > 0) && (currentSequenceDataShape[0] != 1))
-                currentSequenceDataShape = NDShape(1, 1).AppendShape(currentSequenceDataShape);
     
-    protected:
-    void CalculateAxisOffset()
+    {  if ((pool_->shutdown_) && (pool_->nthreads_ == 0)) {
+    pool_->shutdown_cv_.notify_one();
+  }
+}
+    
+    static bool B2_POLYGON_REPORT_ERRORS = false;
+    
+    
+    {			mipWidth >>= 1;
+			mipHeight >>= 1;
+		}
+    
+    
     {
-        if (m_offset < 0)
-        {
-            const auto& inputSampleLayout = Input(0)->GetSampleLayout();
-            const auto& inputDims = inputSampleLayout.GetDims();
-            size_t len = inputDims.size();
-            m_offset = m_axis < 0 ? (len + 1 + m_axis) % (len + 1) : m_axis % (len + 1);
-        }
+    {				uiPixel += 1;
+			}
+		}
+    
+    		TryDifferential(!m_boolMostLikelyFlip, 1, -2, 0);
+		TryDifferential(!m_boolMostLikelyFlip, 1, 2, 0);
+		TryDifferential(!m_boolMostLikelyFlip, 1, 0, 2);
+		TryDifferential(!m_boolMostLikelyFlip, 1, 0, -2);
+    
+    
+#define AF_LATIN_BLUE_ACTIVE      ( 1U << 0 ) /* zone height is <= 3/4px   */
+#define AF_LATIN_BLUE_TOP         ( 1U << 1 ) /* we have a top blue zone   */
+#define AF_LATIN_BLUE_SUB_TOP     ( 1U << 2 ) /* we have a subscript top   */
+                                              /* blue zone                 */
+#define AF_LATIN_BLUE_NEUTRAL     ( 1U << 3 ) /* we have neutral blue zone */
+#define AF_LATIN_BLUE_ADJUSTMENT  ( 1U << 4 ) /* used for scale adjustment */
+                                              /* optimization              */
+    
+    #endif  // VPX_DSP_TXFM_COMMON_H_
+
+    
+    enum ClipType { ctIntersection, ctUnion, ctDifference, ctXor };
+enum PolyType { ptSubject, ptClip };
+//By far the most widely used winding rules for polygon filling are
+//EvenOdd & NonZero (GDI, GDI+, XLib, OpenGL, Cairo, AGG, Quartz, SVG, Gr32)
+//Others rules include Positive, Negative and ABS_GTR_EQ_TWO (only in OpenGL)
+//see http://glprogramming.com/red/chapter11.html
+enum PolyFillType { pftEvenOdd, pftNonZero, pftPositive, pftNegative };
+    
+    #endif /* FASTLZ_H */
+
+    
+    
+/** 16x32 multiplication, followed by a 15-bit shift right. Results fits in 32 bits */
+#undef MULT16_32_Q15
+static OPUS_INLINE opus_val32 MULT16_32_Q15_armv5e(opus_val16 a, opus_val32 b)
+{
+  int res;
+  __asm__(
+      '#MULT16_32_Q15\n\t'
+      'smulwb %0, %1, %2\n\t'
+      : '=r'(res)
+      : 'r'(b), 'r'(a)
+  );
+  return res<<1;
+}
+#define MULT16_32_Q15(a, b) (MULT16_32_Q15_armv5e(a, b))
+    
+    DMLC_REGISTER_PARAMETER(CaffeDataParam);
+    
+    
+    {    CHECK_EQ(net_param.layer_size(), 1) << 'Prototxt' << value <<' more than a layer';
+    caffe::LayerParameter *layer_param = new caffe::LayerParameter(net_param.layer(0));
+    this->Get(head) = (*layer_param);
+  }
+    
+    // relu
+MXNET_OPERATOR_REGISTER_UNARY(_contrib_div_sqrt_dim)
+.describe(R'code(Rescale the input by the square root of the channel dimension.
+    
+     private:
+  inline void Init(mshadow::Stream<gpu> *s,
+                   const std::vector<TBlob> &in_data,
+                   const std::vector<TBlob> &out_data) {
+    using namespace mshadow;
+    #if CUDNN_MAJOR >= 5
+    format_ = CUDNN_TENSOR_NCHW;
+    #endif
+    CHECK_EQ(in_data.size(), 2U);
+    CHECK_EQ(out_data.size(), 2U);
+    if (!init_cudnn_) {
+      init_cudnn_ = true;
+      Tensor<gpu, 4, DType> data = in_data[bs::kData].get<gpu, 4, DType>(s);
+      Tensor<gpu, 4, DType> out = out_data[bs::kOut].get<gpu, 4, DType>(s);
+      CUDNN_CALL(cudnnCreateSpatialTransformerDescriptor(&st_desc_));
+      CUDNN_CALL(cudnnCreateTensorDescriptor(&in_desc_));
+      CUDNN_CALL(cudnnCreateTensorDescriptor(&out_desc_));
+      CUDNN_CALL(cudnnSetTensor4dDescriptor(in_desc_,
+                                            format_,
+                                            dtype_,
+                                            data.size(0),
+                                            data.size(1),
+                                            data.size(2),
+                                            data.size(3)));
+      CUDNN_CALL(cudnnSetTensor4dDescriptor(out_desc_,
+                                            format_,
+                                            dtype_,
+                                            out.size(0),
+                                            out.size(1),
+                                            out.size(2),
+                                            out.size(3)));
+      int dim[] = {static_cast<int>(out.size(0)), static_cast<int>(out.size(1)),
+                   static_cast<int>(out.size(2)), static_cast<int>(out.size(3))};
+      CUDNN_CALL(cudnnSetSpatialTransformerNdDescriptor(st_desc_,
+                                                        sampler_,
+                                                        dtype_,
+                                                        4,
+                                                        dim));
+    }
+  }
+    
+    template<typename xpu>
+void NDArrayOp<xpu>::Forward(const OpContext &ctx,
+                   const std::vector<TBlob> &in_data,
+                   const std::vector<OpReqType> &req,
+                   const std::vector<TBlob> &out_data,
+                   const std::vector<TBlob> &aux_args) {
+  using namespace mshadow;
+  Context ndctx = get_ctx();
+  std::vector<void*> ptrs;
+  std::vector<Engine::VarHandle> ndvar;
+  std::vector<int> tags;
+  for (auto& i : req) CHECK_NE(i, kAddTo);
+    }
+    
+        private:
+        std::unordered_set<StreamInformation> m_streamInfos;
+        bool m_epochEndReached;
+        size_t m_numWorkers;
+        size_t m_workerRank;
+        size_t m_prevMinibatchSize;
+        size_t m_maxNumSamplesToRead;
+        size_t m_maxNumSweepsToRead;
+        size_t m_truncationLength;
+        size_t m_maxErrors;
+        std::unordered_map<StreamInformation, MinibatchData> m_minibatchData;
+    
+            if (bufferSizeInBytes < (viewShape.TotalSize() * sizeof(V1ElemType)))
+            InvalidArgument('Size (%d) of the specified buffer for creating the NDArrayView is smaller than the specified view shape '%S'.',
+                            (int)bufferSizeInBytes, viewShape.AsString().c_str());
+    
+        Parameter::Parameter(const NDShape& shape, DataType dataType, const ParameterInitializer& initializer, const DeviceDescriptor& device, const std::wstring& name)
+        : Variable(shape, VariableKind::Parameter, dataType, nullptr, true, {}, name, Internal::GenerateUid(VariableKind::Parameter))
+    {
+    }
+    
+                // Validate that each of the dynamic axes are unique
+            std::unordered_set<Axis> uniqueDynamicAxis;
+            for (auto& currentDynamicAxis : dynamicAxes)
+            {
+                auto retVal = uniqueDynamicAxis.insert(currentDynamicAxis);
+                if (!retVal.second)
+                    InvalidArgument('Dynamic axis named %S is specified more than once for Variable '%S'', currentDynamicAxis.Name().c_str(), AsString().c_str());
+            }
+    
+    #pragma once
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS // 'secure' CRT not available on all platforms  --add this at the top of all CPP files that give 'function or variable may be unsafe' warnings
+#endif
+#ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif // NOMINMAX
+#pragma comment(lib, 'Dbghelp.lib')
+#else
+#include <execinfo.h>
+#include <cxxabi.h>
+#endif
+    
+        void Start();
+    void Stop();
+    void Restart();
+    
+    
+    {        // ensure none of the specified inputs reference back into the cloned set
+        // The function we extract must be separable.
+        for (let& input : inputNodes)
+            for (let& node : ComputationNodeBase::EnumerateNodes(vector<ComputationNodeBasePtr>{input})) // check all indirect inputs of each specified input
+            {
+                let iter = dependentSet.find(input);
+                if (iter != dependentSet.end() && *iter != input)
+                    InvalidArgument('CloneFunction: specified function input %ls recursively depends on %ls inside the function.', input->NodeDescription().c_str(), node->NodeDescription().c_str());
+            }
+    }
+    
+    DHTResponseMessage::~DHTResponseMessage() = default;
+    
+    class DHTResponseMessage : public DHTAbstractMessage {
+protected:
+  virtual std::string toStringOptional() const { return A2STR::NIL; }
+    }
+    
+        taskFactory->setLocalNode(localNode);
+    taskFactory->setRoutingTable(routingTable.get());
+    taskFactory->setMessageDispatcher(dispatcher.get());
+    taskFactory->setMessageFactory(factory.get());
+    taskFactory->setTaskQueue(taskQueue.get());
+    taskFactory->setTimeout(std::chrono::seconds(messageTimeout));
+    
+    class DHTTaskExecutor {
+private:
+  int numConcurrent_;
+  std::vector<std::shared_ptr<DHTTask>> execTasks_;
+  std::deque<std::shared_ptr<DHTTask>> queue_;
+    }
+    
+      std::chrono::seconds timeout_;
+    
+    namespace aria2 {
+    }
+    
+      virtual void preProcess() CXX11_OVERRIDE;
+    
+    
+    {protected:
+    /** Array of control points */
+    PointArray *_points;
+    float _deltaT;
+    float _tension;
+    Vec2 _previousPosition;
+    Vec2 _accumulatedDiff;
+};
+    
+    PageTurn3D* PageTurn3D::create(float duration, const Size& gridSize)
+{
+    PageTurn3D *action = new (std::nothrow) PageTurn3D();
+    }
+    
+    NS_CC_BEGIN
+    
+    /**
+ * @addtogroup _2d
+ * @{
+ */
     }
