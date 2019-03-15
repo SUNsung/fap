@@ -1,170 +1,173 @@
 
         
-              def feature_element_timing_key(feature_element)
-        '\'#{feature_element.name}\' (#{feature_element.location})'
-      end
-    
-              theme.create!
-          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
-                             ' is ready for you in #{theme.path.to_s.cyan}!'
-          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
-        end
-        # rubocop:enable Metrics/AbcSize
-      end
-    end
-  end
-end
-
-    
-            def start(opts)
-          @thread = Thread.new do
-            # Use epoll if the kernel supports it
-            EM.epoll
-            EM.run do
-              EM.error_handler { |e| log_error(e) }
-    
-    module Jekyll
-  module Commands
-    class Serve
-      # The LiveReload protocol requires the server to serve livereload.js over HTTP
-      # despite the fact that the protocol itself uses WebSockets.  This custom connection
-      # class addresses the dual protocols that the server needs to understand.
-      class HttpAwareConnection < EventMachine::WebSocket::Connection
-        attr_reader :reload_body, :reload_size
-    
-        def lanes
-      @lanes ||= {}
-    end
-    
-          context 'when specify log_path' do
-        context 'when command is archive' do
-          let(:command) { 'archive' }
-          it '--log-path option is not present' do
-            expect do
-              Fastlane::FastFile.new.parse('lane :test do
-                carthage(command: '#{command}', log_path: 'bla.log')
-              end').runner.execute(:test)
-            end.to raise_error('Log path option is available only for 'build', 'bootstrap', and 'update' command.')
+                    @template_object.label(@object_name, @sanitized_attribute_name, @text, html_options, &block)
           end
         end
     
-          it 'Does not include merge commits in the list of commits' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          changelog_from_git_commits(include_merges: false)
-        end').runner.execute(:test)
+              def datetime_selector(options, html_options)
+            datetime = options.fetch(:selected) { value || default_datetime(options) }
+            @auto_index ||= nil
     
-          context 'as string with wildcards' do
-        it 'executes the correct git command' do
-          allow(Fastlane::Actions).to receive(:sh).with('git add *.txt', anything).and_return('')
-          result = Fastlane::FastFile.new.parse('lane :test do
-            git_add(path: '*.txt', shell_escape: false)
-          end').runner.execute(:test)
+        %w(<< concat push insert unshift).each do |method|
+      class_eval <<-METHOD, __FILE__, __LINE__ + 1
+        def #{method}(*args)
+          paths.#{method}(*typecast(args))
         end
-      end
+      METHOD
+    end
     
-              # Override the already overridden swiftlint_version method to check
-          # that the correct exectuable is being passed in as a parameter.
-          allow(Fastlane::Actions::SwiftlintAction).to receive(:swiftlint_version) { |params|
-            expect(params[:executable]).to eq(CUSTOM_EXECUTABLE_NAME)
-            swiftlint_gem_version
-          }
-    
-    if git.modified_files.include?('snapshot/lib/assets/SnapshotHelper.swift')
-  warn('You modified `SnapshotHelper.swift`, make sure to update the version number at the bottom of the file to notify users about the new helper file.')
+    User.seed do |u|
+  u.id = -1
+  u.name = 'system'
+  u.username = 'system'
+  u.username_lower = 'system'
+  u.password = SecureRandom.hex
+  u.active = true
+  u.admin = true
+  u.moderator = true
+  u.approved = true
+  u.trust_level = TrustLevel[4]
 end
     
-          def check
-        create_event :payload => {}
-      end
-    end
-    
-          expect(data[:agents][guid_order(agent_list, :jane_weather_agent)]).not_to have_key(:propagate_immediately) # can't receive events
-      expect(data[:agents][guid_order(agent_list, :jane_rain_notifier_agent)]).not_to have_key(:schedule) # can't be scheduled
-    end
-    
-        def length
-      @entries.length
-    end
-    
-        def add(path, content)
-      @pages[path] = content
-    end
-    
-        def blank?
-      body.blank?
-    end
-    
-            doc
+            # Reset topic count because we don't count the description topic
+        DB.exec 'UPDATE categories SET topic_count = 0 WHERE id = #{staff.id}'
       end
     end
   end
 end
 
     
-              node.before(node.children).remove
+              relation.update_all(update)
+        end
+      end
+    end
+  end
+end
+
+    
+          # Reads a cache key.
+      #
+      # If the key exists and has a non-empty value its TTL is refreshed
+      # automatically.
+      #
+      # raw_key - The cache key to read.
+      # timeout - The new timeout of the key if the key is to be refreshed.
+      def self.read(raw_key, timeout: TIMEOUT)
+        key = cache_key_for(raw_key)
+        value = Redis::Cache.with { |redis| redis.get(key) }
+    
+            def find_target_id
+          GithubImport::IssuableFinder.new(project, issue).database_id
+        end
+      end
+    end
+  end
+end
+
+    
+            def collection_method
+          :lfs_objects
         end
     
-            css('h2:not([id]) a[id]:not([href])').each do |node|
-          node.parent['id'] = node['id']
-          node.before(node.children).remove
+    module Gitlab
+  module GithubImport
+    # IssuableFinder can be used for caching and retrieving database IDs for
+    # issuable objects such as issues and pull requests. By caching these IDs we
+    # remove the need for running a lot of database queries when importing
+    # GitHub projects.
+    class IssuableFinder
+      attr_reader :project, :object
+    
+            # attributes - A Hash containing the raw note details. The keys of this
+        #              Hash must be Symbols.
+        def initialize(attributes)
+          @attributes = attributes
         end
     
-          def instrument(env)
-        return unless i = options[:instrumenter]
-        env['rack.protection.attack'] = self.class.name.split('::').last.downcase
-        i.instrument('rack.protection', env)
+    module Gitlab
+  module GithubImport
+    module Representation
+      class Issue
+        include ToHash
+        include ExposeAttribute
+    
+            if controller.content_type == 'text/html'
+          action
+        else
+          '#{action} (#{controller.content_type})'
+        end
       end
     
-            directives.compact.sort.join('; ')
+          def self.generate_helpers!(routes=nil)
+        routes ||= begin
+          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
+          Devise::URL_HELPERS.slice(*mappings)
+        end
+    
+          def mailer_sender(mapping, sender = :from)
+        default_sender = default_params[sender]
+        if default_sender.present?
+          default_sender.respond_to?(:to_proc) ? instance_eval(&default_sender) : default_sender
+        elsif Devise.mailer_sender.is_a?(Proc)
+          Devise.mailer_sender.call(mapping.name)
+        else
+          Devise.mailer_sender
+        end
       end
     
-          def cookie_paths(path)
-        path = '/' if path.to_s.empty?
-        paths = []
-        Pathname.new(path).descend { |p| paths << p.to_s }
-        paths
+              def #{accessor}=(value)
+            @#{accessor} = value
+          end
+        METHOD
+      end
+    end
+    
+    module Devise
+  module Models
+    # Timeoutable takes care of verifying whether a user session has already
+    # expired or not. When a session expires after the configured time, the user
+    # will be asked for credentials again, it means, they will be redirected
+    # to the sign in page.
+    #
+    # == Options
+    #
+    # Timeoutable adds the following options to devise_for:
+    #
+    #   * +timeout_in+: the interval to timeout the user session without activity.
+    #
+    # == Examples
+    #
+    #   user.timedout?(30.minutes.ago)
+    #
+    module Timeoutable
+      extend ActiveSupport::Concern
+    
+        # function
+    # Sass::Callable
+    inherited_hash_reader :function
+    
+            if e.is_a?(Sass::SyntaxError)
+          $stderr.puts e.sass_backtrace_str('standard input')
+        else
+          $stderr.print '#{e.class}: ' unless e.class == RuntimeError
+          $stderr.puts e.message.to_s
+        end
+        $stderr.puts '  Use --trace for backtrace.'
+    
+          opts.on(
+        '--indent NUM',
+        'How many spaces to use for each level of indentation. Defaults to 2.',
+        ''t' means use hard tabs.'
+      ) do |indent|
+        if indent == 't'
+          @options[:for_tree][:indent] = '\t'
+        else
+          @options[:for_tree][:indent] = ' ' * indent.to_i
+        end
       end
     
-      def execute
-    signal_deprecation_warning_for_pack
-    
-          # Install the gems to make them available locally when bundler does his local resolution
-      post_install_messages = []
-      pack.gems.each do |packed_gem|
-        PluginManager.ui.debug('Installing, #{packed_gem.name}, version: #{packed_gem.version} file: #{packed_gem.file}')
-        post_install_messages << LogStash::PluginManager::GemInstaller::install(packed_gem.file, packed_gem.plugin?)
-      end
-    
-      it 'does object equality on config_hash and pipeline_id' do
-    another_exact_pipeline = described_class.new(source, pipeline_id, ordered_config_parts, settings)
-    expect(subject).to eq(another_exact_pipeline)
-    
-          # Returns the keyword of the `case` statement as a string.
-      #
-      # @return [String] the keyword of the `case` statement
-      def keyword
-        'case'
-      end
-    
-    module RuboCop
-  module AST
-    # A node extension for `hash` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `hash` nodes within RuboCop.
-    class HashNode < Node
-      # Returns an array of all the key value pairs in the `hash` literal.
-      #
-      # @return [Array<PairNode>] an array of `pair` nodes
-      def pairs
-        each_pair.to_a
-      end
-    
-          # Checks whether any argument of the node is a splat
-      # argument, i.e. `*splat`.
-      #
-      # @return [Boolean] whether the node is a splat argument
-      def splat_argument?
-        arguments? &&
-          (arguments.any?(&:splat_type?) || arguments.any?(&:restarg_type?))
-      end
-      alias rest_argument? splat_argument?
+    # This class is the parent of all packages.
+# If you want to implement an FPM package type, you'll inherit from this.
+class FPM::Package
+  include FPM::Util
+  include Cabin::Inspectable
