@@ -1,80 +1,122 @@
 
         
-              path_to_use = FastlaneCore::FastlaneFolder.path || Dir.pwd
-      parameters ||= {}
-      begin
-        Dir.chdir(path_to_use) do # the file is located in the fastlane folder
-          execute_flow_block(before_all_blocks, current_platform, current_lane, parameters)
-          execute_flow_block(before_each_blocks, current_platform, current_lane, parameters)
+                  def hidden_field
+            hidden_name = @html_options[:name] || hidden_field_name
+            @template_object.hidden_field_tag(hidden_name, '', id: nil)
+          end
     
-        def initialize(analytics_ingester_client: AnalyticsIngesterClient.new(GA_TRACKING))
-      require 'securerandom'
-      @session_id = SecureRandom.uuid
-      @client = analytics_ingester_client
-      @threads = []
-      @launch_event_sent = false
+            private
+    
+              def datetime_selector(options, html_options)
+            datetime = options.fetch(:selected) { value || default_datetime(options) }
+            @auto_index ||= nil
+    
+                content
+          end
+        end
+    
+        def exists?(path, prefixes, *args)
+      find_all(path, prefixes, *args).any?
     end
     
-            cmd = ['git tag']
+          # token - The GitHub API token to use.
+      #
+      # per_page - The number of objects that should be displayed per page.
+      #
+      # parallel - When set to true hitting the rate limit will result in a
+      #            dedicated error being raised. When set to `false` we will
+      #            instead just `sleep()` until the rate limit is reset. Setting
+      #            this value to `true` for parallel importing is crucial as
+      #            otherwise hitting the rate limit will result in a thread
+      #            being blocked in a `sleep()` call for up to an hour.
+      def initialize(token, per_page: 100, parallel: true)
+        @octokit = Octokit::Client.new(
+          access_token: token,
+          per_page: per_page,
+          api_endpoint: api_endpoint
+        )
     
-          it 'adds verbose param to command' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          appledoc(
-            project_name: 'Project Name',
-            project_company: 'Company',
-            input: 'input/dir',
-            verbose: '1'
-          )
-        end').runner.execute(:test)
+            def representation_class
+          Representation::DiffNote
+        end
     
-            inner_command = 'git describe --tags `git rev-list --tags --max-count=1`'
-        pseudocommand = 'git log --pretty=\'%B\' #{inner_command.shellescape}...HEAD'
-        expect(result).to eq(pseudocommand)
+          private
+    
+            # Returns a Hash that can be used to populate `notes.st_diff`, removing
+        # the need for requesting Git data for every diff note.
+        def diff_hash
+          {
+            diff: diff_hunk,
+            new_path: file_path,
+            old_path: file_path,
+    }
+    
+              hash[:author] &&= Representation::User.from_json_hash(hash[:author])
+    
+      def maxheight_or_default
+    params[:maxheight].present? ? params[:maxheight].to_i : nil
+  end
+end
+
+    
+          def ask_question
+        $stdout.print question
+        $stdout.flush
       end
     
-          context 'with valid path to compile_commands.json' do
-        context 'with no path to oclint' do
-          let(:result) do
-            Fastlane::FastFile.new.parse('lane :test do
-              oclint( compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json' )
-            end').runner.execute(:test)
-          end
-          let(:command) { 'cd #{File.expand_path('.').shellescape} && oclint -report-type=html -o=oclint_report.html' }
+    ##############
+# Deploying  #
+##############
     
-          context 'when specify quiet option' do
-        it 'adds quiet option' do
-          result = Fastlane::FastFile.new.parse('lane :test do
-            swiftlint(
-              quiet: true
-            )
-          end').runner.execute(:test)
-    
-        context 'external commands are failed' do
-      context 'with error_callback' do
-        it 'doesn't raise shell_error' do
-          allow(FastlaneCore::UI).to receive(:error)
-          called = false
-          expect_command('exit 1', exitstatus: 1)
-          Fastlane::Actions.sh('exit 1', error_callback: ->(_) { called = true })
-    
-            expect(Open3).to receive(:capture3).with(cmd).and_return('')
-        expect(FastlaneCore::CertChecker).to receive(:wwdr_keychain).and_return(keychain_name)
-    
-    # confirms that the escaped string that is generated actually
-# gets turned back into the source string by the actual shell.
-# abuses a `grep` (or `find`) error message because that should be cross platform
-def confirm_shell_unescapes_string_correctly(string, escaped)
-  compare_string = string.to_s.dup
-    
-    module Cert
-  class CommandsGenerator
-    include Commander::Methods
-    
-        # advance scanner to pos after the next match of pattern and return the match
-    def scan_next(pattern)
-      return unless @s.scan_until(pattern)
-      @s.matched
+        def initialize(tag_name, markup, tokens)
+      @by = nil
+      @source = nil
+      @title = nil
+      if markup =~ FullCiteWithTitle
+        @by = $1
+        @source = $2 + $3
+        @title = $4.titlecase.strip
+      elsif markup =~ FullCite
+        @by = $1
+        @source = $2 + $3
+      elsif markup =~ AuthorTitle
+        @by = $1
+        @title = $2.titlecase.strip
+      elsif markup =~ Author
+        @by = $1
+      end
+      super
     end
     
-      # Raise exceptions instead of rendering exception templates.
-  config.action_dispatch.show_exceptions = false
+    def config_tag(config, key, tag=nil, classname=nil)
+  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
+  tag       ||= 'div'
+  classname ||= key.sub(/_/, '-').sub(/\./, '-')
+  output      = '<#{tag} class='#{classname}''
+    
+          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
+        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
+        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
+          @img['title']  = title
+          @img['alt']    = alt
+        else
+          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
+        end
+        @img['class'].gsub!(/'/, '') if @img['class']
+      end
+      super
+    end
+    
+      class IncludeArrayTag < Liquid::Tag
+    Syntax = /(#{Liquid::QuotedFragment}+)/
+    def initialize(tag_name, markup, tokens)
+      if markup =~ Syntax
+        @array_name = $1
+      else
+        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
+      end
+    
+        def render(context)
+      file_dir = (context.registers[:site].source || 'source')
+      file_path = Pathname.new(file_dir).expand_path
+      file = file_path + @file
