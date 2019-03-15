@@ -1,100 +1,73 @@
 
         
-        module Vagrant
-  # This class handles guest-OS specific interactions with a machine.
-  # It is primarily responsible for detecting the proper guest OS
-  # implementation and then delegating capabilities.
-  #
-  # Vagrant has many tasks which require specific guest OS knowledge.
-  # These are implemented using a guest/capability system. Various plugins
-  # register as 'guests' which determine the underlying OS of the system.
-  # Then, 'guest capabilities' register themselves for a specific OS (one
-  # or more), and these capabilities are called.
-  #
-  # Example capabilities might be 'mount_virtualbox_shared_folder' or
-  # 'configure_networks'.
-  #
-  # This system allows for maximum flexibility and pluginability for doing
-  # guest OS specific operations.
-  class Guest
-    include CapabilityHost
+            class << self
+      # Returns an error report for an exception in CSS format.
+      #
+      # @param e [Exception]
+      # @param line_offset [Integer] The number of the first line of the Sass template.
+      # @return [String] The error report
+      # @raise [Exception] `e`, if the
+      #   {file:SASS_REFERENCE.md#full_exception-option `:full_exception`} option
+      #   is set to false.
+      def exception_to_css(e, line_offset = 1)
+        header = header_string(e, line_offset)
     
-            # This is called as a last-minute hook that allows the configuration
-        # object to finalize itself before it will be put into use. This is
-        # a useful place to do some defaults in the case the user didn't
-        # configure something or so on.
-        #
-        # An example of where this sort of thing is used or has been used:
-        # the 'vm' configuration key uses this to make sure that at least
-        # one sub-VM has been defined: the default VM.
-        #
-        # The configuration object is expected to mutate itself.
-        def finalize!
-          # Default implementation is to do nothing.
-        end
+      gem.licenses      = ['MIT']
     
-              providers
-        end
+          # Decorate Variables#set to add validation behavior.
+      def set(key, value=nil, &block)
+        assert_value_or_block_not_both(value, block)
     
-            # This contains all the configuration plugins by scope.
-        #
-        # @return [Hash<Symbol, Registry>]
-        attr_reader :configs
-    
-      # Precompile additional assets.
-  # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
-  # config.assets.precompile += %w( search.js )
-    
-    # Lazily initialized.
-    @@hexCharCodeArray = 0;
-    
-          def allow_uploads
-        @allow_uploads
+          def keys
+        values.keys
       end
     
-          def footer
-        if @footer.nil?
-          if page = @page.footer
-            @footer = page.text_data
-          else
-            @footer = false
-          end
-        end
-        @footer
+          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
+      def left_shift int, shift
+        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
+        # 1>>31, 2**32
+        (r & 2147483648) == 0 ? r : r - 4294967296
       end
     
-          def previous_link
-        label = '&laquo; Previous'
-        if @page_num == 1
-          %(<span class='disabled'>#{label}</span>)
-        else
-          link = url('/history/#{@page.name}?page=#{@page_num-1}')
-          %(<a href='#{link}' hotkey='h'>#{label}</a>)
-        end
-      end
-    
-          def has_header
-        if @header
-          @header.formatted_data.strip.empty? ? false : true
-        else
-          @header = (@page.header || false)
-          !!@header
-        end
-      end
-    
-      s.add_development_dependency 'rack-test', '~> 0.6.2'
-  s.add_development_dependency 'shoulda', '~> 3.5.0'
-  s.add_development_dependency 'minitest-reporters', '~> 0.14.16'
-  s.add_development_dependency 'twitter_cldr', '~> 3.2.0'
-  s.add_development_dependency 'mocha', '~> 1.1.0'
-  s.add_development_dependency 'test-unit', '~> 3.1.0'
-  s.add_development_dependency 'webrick', '~> 1.3.1'
-    
-        def initialize(dir, existing, attempted, message = nil)
-      @dir            = dir
-      @existing_path  = existing
-      @attempted_path = attempted
-      super(message || 'Cannot write #{@dir}/#{@attempted_path}, found #{@dir}/#{@existing_path}.')
-    end
+      test 'extracting paths from URLs' do
+    assert_nil extract_path('Eye-Of-Sauron')
+    assert_equal 'Mordor', extract_path('Mordor/Sauron')
+    assert_equal 'Mordor/Sauron', extract_path('Mordor/Sauron/Evil')
   end
-end
+    
+    if options[:irb]
+  require 'irb'
+  # http://jameskilton.com/2009/04/02/embedding-irb-into-your-ruby-application/
+  module IRB # :nodoc:
+    def self.start_session(binding)
+      unless @__initialized
+        args = ARGV
+        ARGV.replace(ARGV.dup)
+        IRB.setup(nil)
+        ARGV.replace(args)
+        @__initialized = true
+      end
+    
+      s.executables = ['gollum']
+    
+          def error_message_on(object, method, _options = {})
+        object = convert_to_model(object)
+        obj = object.respond_to?(:errors) ? object : instance_variable_get('@#{object}')
+    
+          content_tag :div, class: 'list-group' do
+        taxons = root_taxon.children.map do |taxon|
+          css_class = current_taxon&.self_and_ancestors&.include?(taxon) ? 'list-group-item list-group-item-action active' : 'list-group-item list-group-item-action'
+          link_to(taxon.name, seo_url(taxon), class: css_class) + taxons_tree(taxon, current_taxon, max_level - 1)
+        end
+        safe_join(taxons, '\n')
+      end
+    end
+    
+            def option_types_params
+          params[:product].fetch(:option_types, [])
+        end
+    
+            def show
+          @state = scope.find(params[:id])
+          respond_with(@state)
+        end
