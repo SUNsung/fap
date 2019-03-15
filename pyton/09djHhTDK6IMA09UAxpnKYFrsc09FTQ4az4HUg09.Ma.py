@@ -1,81 +1,73 @@
 
         
         
-@functools.lru_cache()
-def get_citext_oids(connection_alias):
-    '''Return citext array OIDs.'''
-    with connections[connection_alias].cursor() as cursor:
-        cursor.execute('SELECT typarray FROM pg_type WHERE typname = 'citext'')
-        return tuple(row[0] for row in cursor)
+    {    # Options that need a file parameter
+    'download-archive': ['--require-parameter'],
+    'cookies': ['--require-parameter'],
+    'load-info': ['--require-parameter'],
+    'batch-file': ['--require-parameter'],
+}
     
-    KEY_PREFIX = 'django.contrib.sessions.cache'
+        # Get the version from youtube_dl/version.py without importing the package
+    exec(compile(open('youtube_dl/version.py').read(),
+                 'youtube_dl/version.py', 'exec'))
     
-        def _get_session_from_db(self):
+    
+class TestAES(unittest.TestCase):
+    def setUp(self):
+        self.key = self.iv = [0x20, 0x15] + 14 * [0]
+        self.secret_msg = b'Secret message goes here'
+    
+    
+class TestExecution(unittest.TestCase):
+    def test_import(self):
+        subprocess.check_call([sys.executable, '-c', 'import youtube_dl'], cwd=rootDir)
+    
+    # Allow direct execution
+import os
+import sys
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    
+        if not HAS_BOTO3:
+        module.fail_json(msg='boto3 required for this module')
+    
+    try:
+    from pyvcloud.schema.vcd.v1_5.schemas.vcloud.networkType import FirewallRuleType
+    from pyvcloud.schema.vcd.v1_5.schemas.vcloud.networkType import ProtocolsType
+except ImportError:
+    # normally set a flag here but it will be caught when testing for
+    # the existence of pyvcloud (see module_utils/vca.py).  This just
+    # protects against generating an exception at runtime
+    pass
+    
+        module_hbacrule = get_hbacrule_dict(description=module.params['description'],
+                                        hostcategory=hostcategory,
+                                        ipaenabledflag=ipaenabledflag,
+                                        servicecategory=servicecategory,
+                                        sourcehostcategory=sourcehostcategory,
+                                        usercategory=usercategory)
+    ipa_hbacrule = client.hbacrule_find(name=name)
+    
+    
+if __name__ == '__main__':
+    main()
+
+    
+    # Stop tracking nginx logs
+- logentries:
+    path: /var/log/nginx/error.log
+    state: absent
+'''
+    
+    from __future__ import absolute_import, division, print_function
+__metaclass__ = type
+    
+        if event == 'annotation':
+        if not msg:
+            module.fail_json(msg='msg required for annotation events')
         try:
-            return self.model.objects.get(
-                session_key=self.session_key,
-                expire_date__gt=timezone.now()
-            )
-        except (self.model.DoesNotExist, SuspiciousOperation) as e:
-            if isinstance(e, SuspiciousOperation):
-                logger = logging.getLogger('django.security.%s' % e.__class__.__name__)
-                logger.warning(str(e))
-            self._session_key = None
-    
-    
-class BaseSessionManager(models.Manager):
-    def encode(self, session_dict):
-        '''
-        Return the given session dictionary serialized and encoded as a string.
-        '''
-        session_store_class = self.model.get_session_store_class()
-        return session_store_class().encode(session_dict)
-    
-      # include_dict is modified during iteration, so we iterate over a copy of
-  # the keys.
-  header_keys = list(include_dict.keys())
-  for header in header_keys:
-    (same_module, common_path) = FilesBelongToSameModule(abs_filename, header)
-    fullpath = common_path + header
-    if same_module and UpdateIncludeState(fullpath, include_dict, io):
-      header_found = True
-    
-            _LOGGER.info('Scanner initialized')
-    
-            devices = {}
-        for device in request.json()['status']:
-            try:
-                devices[device['Key']] = {
-                    'ip': device['IPAddress'],
-                    'mac': device['PhysAddress'],
-                    'host': device['Name'],
-                    'status': device['Active']
-                    }
-            except (KeyError, requests.exceptions.RequestException):
-                pass
-        return devices
-
-    
-    import voluptuous as vol
-    
-        def __init__(self, token, default_room, default_color, default_notify,
-                 default_format, host):
-        '''Initialize the service.'''
-        self._token = token
-        self._default_room = default_room
-        self._default_color = default_color
-        self._default_notify = default_notify
-        self._default_format = default_format
-        self._host = host
-    
-        def backwards(self, orm):
-        'Write your backwards methods here.'
-    
-        complete_apps = ['sentry']
-    symmetrical = True
-
-    
-            # Adding unique constraint on 'CommitAuthor', fields ['organization_id', 'external_id']
-        db.create_unique('sentry_commitauthor', ['organization_id', 'external_id'])
-    
-        complete_apps = ['sentry']
+            send_annotation_event(module, key, msg, annotated_by, level, instance_id, event_epoch)
+        except Exception as e:
+            module.fail_json(msg='unable to sent annotation event: %s' % to_native(e),
+                             exception=traceback.format_exc())
