@@ -1,380 +1,204 @@
 
         
-        namespace tensorflow {
-namespace python_op_gen_internal {
+        // TaskRunner implementation that posts tasks into libuv's default loop.
+class UvTaskRunner : public base::SingleThreadTaskRunner {
+ public:
+  explicit UvTaskRunner(uv_loop_t* loop);
     }
-    }
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+    void BrowserWindow::UpdateDraggableRegions(
+    content::RenderFrameHost* rfh,
+    const std::vector<DraggableRegion>& regions) {
+  if (window_->has_frame())
+    return;
+  static_cast<NativeWindowViews*>(window_.get())
+      ->UpdateDraggableRegions(DraggableRegionsToSkRegion(regions));
+}
     
-    #include <array>
     
-    
-    {}  // namespace tensorflow
-    
-    
-    {}  // namespace tensorflow
-    
-    #endif  // TENSORFLOW_STREAM_EXECUTOR_DEVICE_OPTIONS_H_
+    {}  // namespace atom
 
     
-    port::StatusOr<StreamExecutor*> ExecutorCache::Get(
-    const StreamExecutorConfig& config) {
-  Entry* entry = nullptr;
-  {
-    tf_shared_lock lock{mutex_};
-    auto it = cache_.find(config.ordinal);
-    if (it != cache_.end()) {
-      entry = &it->second;
-    } else {
-      return port::Status(port::error::NOT_FOUND,
-                          port::Printf('No executors registered for ordinal %d',
-                                       config.ordinal));
+    #include 'net/url_request/url_request_job_factory.h'
+    
+    // Relaunches the application using the helper application associated with the
+// currently running instance of Chrome in the parent browser process as the
+// executable for the relauncher process. |args| is an argv-style vector of
+// command line arguments of the form normally passed to execv. args[0] is
+// also the path to the relaunched process. Because the relauncher process
+// will ultimately launch the relaunched process via Launch Services, args[0]
+// may be either a pathname to an executable file or a pathname to an .app
+// bundle directory. The caller should exit soon after RelaunchApp returns
+// successfully. Returns true on success, although some failures can occur
+// after this function returns true if, for example, they occur within the
+// relauncher process. Returns false when the relaunch definitely failed.
+bool RelaunchApp(const StringVector& argv);
+    
+    
+    {} // namespace
+    
+    
+    {                    // make border
+                        if (borderType == BORDER_MODE_CONSTANT)
+                        {
+                            tcurr = vsetq_lane_u16(borderValue, tcurr, 7);
+                        }
+                        else if (borderType == BORDER_MODE_REFLECT101)
+                        {
+                            tcurr = vsetq_lane_u16(vgetq_lane_u16(tcurr, 1),tcurr, 7);
+                        }
+                        else // borderType == BORDER_MODE_REFLECT || borderType == BORDER_MODE_REPLICATE
+                        {
+                            tcurr = vsetq_lane_u16(vgetq_lane_u16(tcurr, 0),tcurr, 7);
+                        }
+                    continue;
+                }
+    
+            mag_buf[1][0] = mag_buf[1][size.width+1] = 0;
+        if (borderyt == 0)
+        {
+            //sobelH row #-1
+            _src = internal::getRowPtr(srcBase, srcStride, -1);
+            sobelRow(_src, ((s16*)mag_buf[2]) + shxOffset, ((s16*)mag_buf[2]) + shyOffset, size.width);
     }
-  }
-  tf_shared_lock lock{entry->configurations_mutex};
-  if (entry->configurations.empty()) {
-    return port::Status(
-        port::error::NOT_FOUND,
-        port::Printf('No executors registered for ordinal %d', config.ordinal));
-  }
-  for (const auto& iter : entry->configurations) {
-    if (iter.first.plugin_config == config.plugin_config &&
-        iter.first.device_options == config.device_options) {
-      VLOG(2) << 'hit in cache for device ordinal ' << config.ordinal;
-      return iter.second.get();
-    }
-  }
-  return port::Status(port::error::NOT_FOUND,
-                      'No executor found with a matching config.');
-}
-    
-    // Macro used to quickly declare overrides for abstract virtuals in the
-// fft::FftSupport base class. Assumes that it's emitted somewhere inside the
-// ::stream_executor namespace.
-#define TENSORFLOW_STREAM_EXECUTOR_GPU_FFT_SUPPORT_OVERRIDES                   \
-  std::unique_ptr<fft::Plan> Create1dPlan(Stream *stream, uint64 num_x,        \
-                                          fft::Type type, bool in_place_fft)   \
-      override;                                                                \
-  std::unique_ptr<fft::Plan> Create2dPlan(Stream *stream, uint64 num_x,        \
-                                          uint64 num_y, fft::Type type,        \
-                                          bool in_place_fft) override;         \
-  std::unique_ptr<fft::Plan> Create3dPlan(                                     \
-      Stream *stream, uint64 num_x, uint64 num_y, uint64 num_z,                \
-      fft::Type type, bool in_place_fft) override;                             \
-  std::unique_ptr<fft::Plan> Create1dPlanWithScratchAllocator(                 \
-      Stream *stream, uint64 num_x, fft::Type type, bool in_place_fft,         \
-      ScratchAllocator *scratch_allocator) override;                           \
-  std::unique_ptr<fft::Plan> Create2dPlanWithScratchAllocator(                 \
-      Stream *stream, uint64 num_x, uint64 num_y, fft::Type type,              \
-      bool in_place_fft, ScratchAllocator *scratch_allocator) override;        \
-  std::unique_ptr<fft::Plan> Create3dPlanWithScratchAllocator(                 \
-      Stream *stream, uint64 num_x, uint64 num_y, uint64 num_z,                \
-      fft::Type type, bool in_place_fft, ScratchAllocator *scratch_allocator)  \
-      override;                                                                \
-  std::unique_ptr<fft::Plan> CreateBatchedPlan(                                \
-      Stream *stream, int rank, uint64 *elem_count, uint64 *input_embed,       \
-      uint64 input_stride, uint64 input_distance, uint64 *output_embed,        \
-      uint64 output_stride, uint64 output_distance, fft::Type type,            \
-      bool in_place_fft, int batch_count) override;                            \
-  std::unique_ptr<fft::Plan> CreateBatchedPlanWithScratchAllocator(            \
-      Stream *stream, int rank, uint64 *elem_count, uint64 *input_embed,       \
-      uint64 input_stride, uint64 input_distance, uint64 *output_embed,        \
-      uint64 output_stride, uint64 output_distance, fft::Type type,            \
-      bool in_place_fft, int batch_count, ScratchAllocator *scratch_allocator) \
-      override;                                                                \
-  void UpdatePlanWithScratchAllocator(Stream *stream, fft::Plan *plan,         \
-                                      ScratchAllocator *scratch_allocator)     \
-      override;                                                                \
-  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
-             const DeviceMemory<std::complex<float>> &input,                   \
-             DeviceMemory<std::complex<float>> *output) override;              \
-  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
-             const DeviceMemory<std::complex<double>> &input,                  \
-             DeviceMemory<std::complex<double>> *output) override;             \
-  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
-             const DeviceMemory<float> &input,                                 \
-             DeviceMemory<std::complex<float>> *output) override;              \
-  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
-             const DeviceMemory<double> &input,                                \
-             DeviceMemory<std::complex<double>> *output) override;             \
-  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
-             const DeviceMemory<std::complex<float>> &input,                   \
-             DeviceMemory<float> *output) override;                            \
-  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
-             const DeviceMemory<std::complex<double>> &input,                  \
-             DeviceMemory<double> *output) override;
-    
-    #ifndef BITCOIN_QT_NETWORKSTYLE_H
-#define BITCOIN_QT_NETWORKSTYLE_H
-    
-            secp256k1_ecmult_const(&res, &pt, &s);
-        secp256k1_ge_set_gej(&pt, &res);
-        /* Compute a hash of the point in compressed form
-         * Note we cannot use secp256k1_eckey_pubkey_serialize here since it does not
-         * expect its output to be secret and has a timing sidechannel. */
-        secp256k1_fe_normalize(&pt.x);
-        secp256k1_fe_normalize(&pt.y);
-        secp256k1_fe_get_b32(x, &pt.x);
-        y[0] = 0x02 | secp256k1_fe_is_odd(&pt.y);
     
     
-    {    /* Test r/s equal to zero */
     {
-        /* (1,1) encoded in DER. */
-        unsigned char sigcder[8] = {0x30, 0x06, 0x02, 0x01, 0x01, 0x02, 0x01, 0x01};
-        unsigned char sigc64[64] = {
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,
-        };
-        secp256k1_pubkey pubkeyc;
-        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigc64, 0) == 1);
-        CHECK(secp256k1_ecdsa_recover(ctx, &pubkeyc, &rsig, msg32) == 1);
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder, sizeof(sigcder)) == 1);
-        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyc) == 1);
-        sigcder[4] = 0;
-        sigc64[31] = 0;
-        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigc64, 0) == 1);
-        CHECK(secp256k1_ecdsa_recover(ctx, &pubkeyb, &rsig, msg32) == 0);
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder, sizeof(sigcder)) == 1);
-        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyc) == 0);
-        sigcder[4] = 1;
-        sigcder[7] = 0;
-        sigc64[31] = 1;
-        sigc64[63] = 0;
-        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigc64, 0) == 1);
-        CHECK(secp256k1_ecdsa_recover(ctx, &pubkeyb, &rsig, msg32) == 0);
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder, sizeof(sigcder)) == 1);
-        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyc) == 0);
+    {} }
+    
+    #if GTEST_HAS_PARAM_TEST
+    
+    namespace testing {
+namespace internal {
     }
-}
+    }
     
-        // A more complex valid grammar. PROTOCOLINFO accepts a VersionLine that
-    // takes a key=value pair followed by an OptArguments, making this valid.
-    // Because an OptArguments contains no semantic data, there is no point in
-    // parsing it.
-    CheckParseTorReplyMapping(
-        'SOME=args,here MORE optional=arguments  here', {
-            {'SOME', 'args,here'},
-        });
-    
-        BOOST_CHECK_EQUAL(arr[0].getValStr(), '1023');
-    BOOST_CHECK_EQUAL(arr[1].getValStr(), 'zippy');
-    BOOST_CHECK_EQUAL(arr[2].getValStr(), 'pippy');
-    BOOST_CHECK_EQUAL(arr[3].getValStr(), 'boing');
-    BOOST_CHECK_EQUAL(arr[4].getValStr(), 'going');
-    BOOST_CHECK_EQUAL(arr[5].getValStr(), '400');
-    BOOST_CHECK_EQUAL(arr[6].getValStr(), '-400');
-    BOOST_CHECK_EQUAL(arr[7].getValStr(), '-401');
-    BOOST_CHECK_EQUAL(arr[8].getValStr(), '-40.1');
-    
-    // Based on the public domain implementation 'merged' by D. J. Bernstein
-// See https://cr.yp.to/chacha.html.
+    // Adapts a native array to a read-only STL-style container.  Instead
+// of the complete STL container concept, this adaptor only implements
+// members useful for Google Mock's container matchers.  New members
+// should be added as needed.  To simplify the implementation, we only
+// support Element being a raw type (i.e. having no top-level const or
+// reference modifier).  It's the client's responsibility to satisfy
+// this requirement.  Element can be an array type itself (hence
+// multi-dimensional arrays are supported).
+template <typename Element>
+class NativeArray {
+ public:
+  // STL-style container typedefs.
+  typedef Element value_type;
+  typedef Element* iterator;
+  typedef const Element* const_iterator;
+    }
     
     
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
+// Step 1. Include necessary header files such that the stuff your
+// test logic needs is declared.
+//
+// Don't forget gtest.h, which declares the testing framework.
     
-       void Call(const std::string& method,
-                    const base::ListValue& arguments) override;
-   void CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) override;
-    
-    
-    {} // namespace nwapi
+    // InitXXX function with 'install_callbacks=true': install GLFW callbacks. They will call user's previously installed callbacks, if any.
+// InitXXX function with 'install_callbacks=false': do not install GLFW callbacks. You will need to call them yourself from your own GLFW callbacks.
+IMGUI_IMPL_API void     ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
 
     
-    #include 'content/nw/src/api/menu/menu_delegate.h'
+                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
+            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
+            ImGui::Checkbox('Another Window', &show_another_window);
     
-        std::string tooltip;
-    if (option.GetString('tooltip', &tooltip))
-      SetTooltip(tooltip);
+        // if we didn't get all the way, add the rest to literals
+    if (q-start < length)
+        q = start+length;
     
-    bool NwClipboardSetListSyncFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  std::unique_ptr<SetListSync::Params> params(SetListSync::Params::Create(*args_));
-  EXTENSION_FUNCTION_VALIDATE(params.get());
-  std::unique_ptr<ClipboardWriter> writer(new ClipboardWriter());
-    }
-    
-    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
- public:
-  NwMenuGetNSStringWithFixupFunction(){}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    
- protected:
-  ~NwMenuGetNSStringWithFixupFunction() override {}
-    
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
-};
-    
-    A common use case is with the DeconvolutionLayer acting as upsampling.
-You can upsample a feature map with shape of (B, C, H, W) by any integer factor
-using the following proto.
-\code
-layer {
-  name: 'upsample', type: 'Deconvolution'
-  bottom: '{{bottom_name}}' top: '{{top_name}}'
-  convolution_param {
-    kernel_size: {{2 * factor - factor % 2}} stride: {{factor}}
-    num_output: {{C}} group: {{C}}
-    pad: {{ceil((factor - 1) / 2.)}}
-    weight_filler: { type: 'bilinear' } bias_term: false
-  }
-  param { lr_mult: 0 decay_mult: 0 }
-}
-\endcode
-Please use this by replacing `{{}}` with your values. By specifying
-`num_output: {{C}} group: {{C}}`, it behaves as
-channel-wise convolution. The filter shape of this deconvolution layer will be
-(C, 1, K, K) where K is `kernel_size`, and this filler will set a (K, K)
-interpolation kernel for every channel of the filter identically. The resulting
-shape of the top feature map will be (B, C, factor * H, factor * W).
-Note that the learning rate and the
-weight decay are set to 0 in order to keep coefficient values of bilinear
-interpolation unchanged during training. If you apply this to an image, this
-operation is equivalent to the following call in Python with Scikit.Image.
-\code{.py}
-out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
-\endcode
- */
-template <typename Dtype>
-class BilinearFiller : public Filler<Dtype> {
- public:
-  explicit BilinearFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    CHECK_EQ(blob->num_axes(), 4) << 'Blob must be 4 dim.';
-    CHECK_EQ(blob->width(), blob->height()) << 'Filter must be square';
-    Dtype* data = blob->mutable_cpu_data();
-    int f = ceil(blob->width() / 2.);
-    Dtype c = (blob->width() - 1) / (2. * f);
-    for (int i = 0; i < blob->count(); ++i) {
-      Dtype x = i % blob->width();
-      Dtype y = (i / blob->width()) % blob->height();
-      data[i] = (1 - fabs(x / f - c)) * (1 - fabs(y / f - c));
-    }
-    CHECK_EQ(this->filler_param_.sparse(), -1)
-         << 'Sparsity not supported by this Filler.';
-  }
-};
-    
-      /**
-   * @brief Given the top blob error gradients, compute the bottom blob error
-   *        gradients.
-   *
-   * @param top
-   *     the output blobs, whose diff fields store the gradient of the error
-   *     with respect to themselves
-   * @param propagate_down
-   *     a vector with equal length to bottom, with each index indicating
-   *     whether to propagate the error gradients down to the bottom blob at
-   *     the corresponding index
-   * @param bottom
-   *     the input blobs, whose diff fields will store the gradient of the error
-   *     with respect to themselves after Backward is run
-   *
-   * The Backward wrapper calls the relevant device wrapper function
-   * (Backward_cpu or Backward_gpu) to compute the bottom blob diffs given the
-   * top blob diffs.
-   *
-   * Your layer should implement Backward_cpu and (optionally) Backward_gpu.
-   */
-  inline void Backward(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down,
-      const vector<Blob<Dtype>*>& bottom);
-    
-      /// @brief The spatial dimensions of a filter kernel.
-  Blob<int> kernel_shape_;
-  /// @brief The spatial dimensions of the stride.
-  Blob<int> stride_;
-  /// @brief The spatial dimensions of the padding.
-  Blob<int> pad_;
-  /// @brief The spatial dimensions of the dilation.
-  Blob<int> dilation_;
-  /// @brief The spatial dimensions of the convolution input.
-  Blob<int> conv_input_shape_;
-  /// @brief The spatial dimensions of the col_buffer.
-  vector<int> col_buffer_shape_;
-  /// @brief The spatial dimensions of the output.
-  vector<int> output_shape_;
-  const vector<int>* bottom_shape_;
-    
-    #include 'caffe/layers/neuron_layer.hpp'
-    
-    #include 'caffe/layers/loss_layer.hpp'
-    
-      virtual inline const char* type() const { return 'Convolution'; }
-    
-      static void setInitialized(bool f) { data_.initialized = f; }
-    
-    
-    {} // namespace aria2
-    
-    #include <cstring>
-    
-    class DHTNode;
-class DHTBucket;
-class DHTTaskQueue;
-class DHTTaskFactory;
-class DHTBucketTreeNode;
-    
-    void DHTRoutingTableSerializer::serialize(const std::string& filename)
+    static bool ImGui_ImplDX9_CreateFontsTexture()
 {
-  A2_LOG_INFO(fmt('Saving DHT routing table to %s.', filename.c_str()));
-  std::string filenameTemp = filename;
-  filenameTemp += '__temp';
-  BufferedFile fp(filenameTemp.c_str(), BufferedFile::WRITE);
-  if (!fp) {
-    throw DL_ABORT_EX(
-        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
-  }
-  char header[8];
-  memset(header, 0, sizeof(header));
-  // magic
-  header[0] = 0xa1u;
-  header[1] = 0xa2u;
-  // format ID
-  header[2] = 0x02u;
-  // version
-  header[6] = 0;
-  header[7] = 0x03u;
+    // Build texture atlas
+    ImGuiIO& io = ImGui::GetIO();
+    unsigned char* pixels;
+    int width, height, bytes_per_pixel;
+    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height, &bytes_per_pixel);
     }
     
-    DHTTaskExecutor::DHTTaskExecutor(int numConcurrent)
-    : numConcurrent_(numConcurrent)
-{
-}
-    
-    namespace aria2 {
-    }
-    
-    namespace aria2 {
-    }
-    
-    using json = nlohmann::json;
-    
-        // out_of_range.403
-    try
+        // Create the Image:
     {
-        // try to use a JSON pointer to an nonexistent object key
-        json::const_reference ref = j.at('/foo'_json_pointer);
+        VkImageCreateInfo info = {};
+        info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+        info.imageType = VK_IMAGE_TYPE_2D;
+        info.format = VK_FORMAT_R8G8B8A8_UNORM;
+        info.extent.width = width;
+        info.extent.height = height;
+        info.extent.depth = 1;
+        info.mipLevels = 1;
+        info.arrayLayers = 1;
+        info.samples = VK_SAMPLE_COUNT_1_BIT;
+        info.tiling = VK_IMAGE_TILING_OPTIMAL;
+        info.usage = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+        info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+        info.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        err = vkCreateImage(g_Device, &info, g_Allocator, &g_FontImage);
+        check_vk_result(err);
+        VkMemoryRequirements req;
+        vkGetImageMemoryRequirements(g_Device, g_FontImage, &req);
+        VkMemoryAllocateInfo alloc_info = {};
+        alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+        alloc_info.allocationSize = req.size;
+        alloc_info.memoryTypeIndex = ImGui_ImplVulkan_MemoryType(VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, req.memoryTypeBits);
+        err = vkAllocateMemory(g_Device, &alloc_info, g_Allocator, &g_FontMemory);
+        check_vk_result(err);
+        err = vkBindImageMemory(g_Device, g_FontImage, g_FontMemory, 0);
+        check_vk_result(err);
     }
-    catch (json::out_of_range& e)
+    
+    int main() {
+  DBOptions db_opt;
+  db_opt.create_if_missing = true;
+    }
+    
+    #include <stdint.h>
+#include <memory>
+#include <string>
+    
+      // Waits for all jobs to complete those
+  // that already started running and those that did not
+  // start yet. This ensures that everything that was thrown
+  // on the TP runs even though
+  // we may not have specified enough threads for the amount
+  // of jobs
+  virtual void WaitForJobsAndJoinAllThreads() = 0;
+    
+    private:
+  State state_;
+  std::string message_;
+    
+    
+    // ============
+    // number types
+    // ============
+    
+    TEST(EsdCanClientTest, simple_test) {
+  CANCardParameter param;
+  param.set_brand(CANCardParameter::ESD_CAN);
+  param.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
+    }
+    
+    using apollo::common::ErrorCode;
+    
+    
     {
-        std::cout << e.what() << '\n';
+    {
+    {}  // namespace gem
+}  // namespace canbus
+}  // namespace apollo
+
+    
+    // config detail: {'name': 'torque_output', 'offset': 0.0, 'precision': 0.001,
+// 'len': 32, 'is_signed_var': True, 'physical_range':
+// '[-2147483.648|2147483.647]', 'bit': 7, 'type': 'double', 'order':
+// 'motorola', 'physical_unit': 'N-m'}
+double Brakemotorrpt372::torque_output(const std::uint8_t* bytes,
+                                       int32_t length) const {
+  Byte t0(bytes + 0);
+  int32_t x = t0.get_byte(0, 8);
     }
