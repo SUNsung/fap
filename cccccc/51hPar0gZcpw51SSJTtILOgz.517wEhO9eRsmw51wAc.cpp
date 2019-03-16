@@ -1,207 +1,189 @@
 
         
-        namespace google {
-namespace protobuf {
-namespace compiler {
-namespace java {
-namespace {
-    }
-    }
-    }
-    }
-    }
-    
-    
-    {  typedef integral_constant<int, 1> one_type;
-  EXPECT_EQ(1, one_type::value);
-}
-    
-      while (true) {
-    const void* inptr;
-    int inlen;
-    bool ok;
-    ok = in.Next(&inptr, &inlen);
-    if (!ok) {
-      break;
-    }
-    if (inlen > 0) {
-      int err = write(STDOUT_FILENO, inptr, inlen);
-      if (err != inlen) {
-        fprintf(stderr, 'write unexpectedly returned %d.\n', err);
-        return 1;
-      }
-    }
-  }
-    
-    namespace google {
-namespace protobuf {
-namespace util {
-    }
-    }
-    }
-    
-    #endif  // CAFFE_INTERNAL_THREAD_HPP_
-
-    
-    
-    {  /// Whether to ignore instances with a certain label.
-  bool has_ignore_label_;
-  /// The label indicating that an instance should be ignored.
-  int ignore_label_;
-  /// Keeps counts of the number of samples per class.
-  Blob<Dtype> nums_buffer_;
-};
-    
-    /**
- * @brief Provides base for data layers that feed blobs to the Net.
- *
- * TODO(dox): thorough documentation for Forward and proto params.
+        /**
+ * \brief The class sets caffe's mode before doing forward/backward
+ * \tparam xpu The device that the op will be executed on.
  */
-template <typename Dtype>
-class BaseDataLayer : public Layer<Dtype> {
+class CaffeMode {
  public:
-  explicit BaseDataLayer(const LayerParameter& param);
-  // LayerSetUp: implements common data layer setup functionality, and calls
-  // DataLayerSetUp to do special data layer setup for individual layer types.
-  // This method may not be overridden except by the BasePrefetchingDataLayer.
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void DataLayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top) {}
-  // Data layers have no bottoms, so reshaping is trivial.
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top) {}
-    }
-    
-    
-    {  // extra temporarary variables is used to carry out sums/broadcasting
-  // using BLAS
-  Blob<Dtype> batch_sum_multiplier_;
-  Blob<Dtype> num_by_chans_;
-  Blob<Dtype> spatial_sum_multiplier_;
+  template<typename xpu> static void SetMode();
 };
     
     
-    { private:
-  Blob<Dtype> bias_multiplier_;
-  int outer_dim_, bias_dim_, inner_dim_, dim_;
-};
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 2+)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_1 @f$
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_2 @f$
-   *   -# ...
-   *   - K @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_K @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
-   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
-   *      the concatenated output @f$
-   *        y = [\begin{array}{cccc} x_1 & x_2 & ... & x_K \end{array}]
-   *      @f$
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    namespace caffe {
+    {    // one-liner channel-wise normalization
+    switch (data.shape_[0]) {
+      case 4:
+        if (meanfile_ready_ && flip) {
+          outimg_[3] = mirror((data[3] - meanimg_[3]) * contrast + illumination)
+            * param_.scale / param_.std_a;
+        } else if (meanfile_ready_ && (!flip)) {
+          outimg_[3] = ((data[3] - meanimg_[3]) * contrast + illumination)
+            * param_.scale / param_.std_a;
+        } else if (!meanfile_ready_ && flip) {
+          outimg_[3] = mirror((data[3] - param_.mean_a) * contrast + illumination)
+            * param_.scale / param_.std_a;
+        } else {
+          outimg_[3] = ((data[3] - param_.mean_a) * contrast + illumination)
+            * param_.scale / param_.std_a;
+        }
+      case 3:
+        if (meanfile_ready_ && flip) {
+          outimg_[2] = mirror((data[2] - meanimg_[2]) * contrast + illumination)
+            * param_.scale / param_.std_b;
+        } else if (meanfile_ready_ && (!flip)) {
+          outimg_[2] = ((data[2] - meanimg_[2]) * contrast + illumination)
+            * param_.scale / param_.std_b;
+        } else if (!meanfile_ready_ && flip) {
+          outimg_[2] = mirror((data[2] - param_.mean_b) * contrast + illumination)
+            * param_.scale / param_.std_b;
+        } else {
+          outimg_[2] = ((data[2] - param_.mean_b) * contrast + illumination)
+            * param_.scale / param_.std_b;
+        }
+      case 2:
+        if (meanfile_ready_ && flip) {
+          outimg_[1] = mirror((data[1] - meanimg_[1]) * contrast + illumination)
+            * param_.scale / param_.std_g;
+        } else if (meanfile_ready_ && (!flip)) {
+          outimg_[1] = ((data[1] - meanimg_[1]) * contrast + illumination)
+            * param_.scale / param_.std_g;
+        } else if (!meanfile_ready_ && flip) {
+          outimg_[1] = mirror((data[1] - param_.mean_g) * contrast + illumination)
+            * param_.scale / param_.std_g;
+        } else {
+          outimg_[1] = ((data[1] - param_.mean_g) * contrast + illumination)
+            * param_.scale / param_.std_g;
+        }
+      case 1:
+        if (meanfile_ready_ && flip) {
+          outimg_[0] = mirror((data[0] - meanimg_[0]) * contrast + illumination)
+            * param_.scale / param_.std_r;
+        } else if (meanfile_ready_ && (!flip)) {
+          outimg_[0] = ((data[0] - meanimg_[0]) * contrast + illumination)
+            * param_.scale / param_.std_r;
+        } else if (!meanfile_ready_ && flip) {
+          outimg_[0] = mirror((data[0] - param_.mean_r) * contrast + illumination)
+            * param_.scale / param_.std_r;
+        } else {
+          outimg_[0] = ((data[0] - param_.mean_r) * contrast + illumination)
+            * param_.scale / param_.std_r;
+        }
+        break;
+      default:
+        LOG(FATAL) << 'Expected image channels range 1-4, got ' << data.shape_[0];
     }
-    
-     private:
-  // Recursive copy function.
-  void crop_copy(const vector<Blob<Dtype>*>& bottom,
-               const vector<Blob<Dtype>*>& top,
-               const int* offsets,
-               vector<int> indices,
-               int cur_dim,
-               const Dtype* src_data,
-               Dtype* dest_data,
-               bool is_forward);
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of PoolingLayer.
- *        Fallback to PoolingLayer for CPU mode.
-*/
-template <typename Dtype>
-class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
- public:
-  explicit CuDNNPoolingLayer(const LayerParameter& param)
-      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNPoolingLayer();
-  // Currently, cuDNN does not support the extra top blob.
-  virtual inline int MinTopBlobs() const { return -1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    }
-    
-      // Same as above, but you can choose the interception scope of this object.
-  ScopedFakeTestPartResultReporter(InterceptMode intercept_mode,
-                                   TestPartResultArray* result);
-    
-    #endif  // GTEST_INCLUDE_GTEST_GTEST_TYPED_TEST_H_
-
-    
-      // Returns true if FilePath ends with a path separator, which indicates that
-  // it is intended to represent a directory. Returns false otherwise.
-  // This does NOT check that a directory (or file) actually exists.
-  bool IsDirectory() const;
-    
-    #if defined(_MSC_VER) && _MSC_VER < 1400
-// This is the only specialization that allows VC++ 7.1 to remove const in
-// 'const int[3] and 'const int[3][4]'.  However, it causes trouble with GCC
-// and thus needs to be conditionally compiled.
-template <typename T, size_t N>
-struct RemoveConst<T[N]> {
-  typedef typename RemoveConst<T>::type type[N];
-};
-#endif
-    
-      template <typename T>
-  operator ParamGenerator<T>() const {
-    const T array[] = {static_cast<T>(v1_), static_cast<T>(v2_),
-        static_cast<T>(v3_), static_cast<T>(v4_), static_cast<T>(v5_),
-        static_cast<T>(v6_), static_cast<T>(v7_), static_cast<T>(v8_),
-        static_cast<T>(v9_), static_cast<T>(v10_), static_cast<T>(v11_),
-        static_cast<T>(v12_), static_cast<T>(v13_), static_cast<T>(v14_),
-        static_cast<T>(v15_), static_cast<T>(v16_), static_cast<T>(v17_),
-        static_cast<T>(v18_), static_cast<T>(v19_), static_cast<T>(v20_),
-        static_cast<T>(v21_), static_cast<T>(v22_), static_cast<T>(v23_),
-        static_cast<T>(v24_), static_cast<T>(v25_), static_cast<T>(v26_),
-        static_cast<T>(v27_), static_cast<T>(v28_)};
-    return ValuesIn(array);
   }
     
-      // Clones a 0-terminated C string, allocating memory using new.  The
-  // caller is responsible for deleting the return value using
-  // delete[].  Returns the cloned string, or NULL if the input is
-  // NULL.
-  //
-  // This is different from strdup() in string.h, which allocates
-  // memory using malloc().
-  static const char* CloneCString(const char* c_str);
+      virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) {
+    InitParams(kwargs);
+    // use the kwarg to init batch loader
+    loader_->Init(kwargs);
+    iter.Init([this](DataBatch **dptr) {
+        if (!loader_->Next()) return false;
+        const TBlobBatch& batch = loader_->Value();
+        if (*dptr == nullptr) {
+          // allocate databatch
+          *dptr = new DataBatch();
+          (*dptr)->num_batch_padd = batch.num_batch_padd;
+          (*dptr)->data.resize(batch.data.size());
+          (*dptr)->index.resize(batch.batch_size);
+          for (size_t i = 0; i < batch.data.size(); ++i) {
+            auto dtype = param_.dtype
+                             ? param_.dtype.value()
+                             : batch.data[i].type_flag_;
+            (*dptr)->data.at(i) = NDArray(batch.data[i].shape_,
+                                          Context::CPU(), false,
+                                          dtype);
+          }
+        }
+        CHECK(batch.data.size() == (*dptr)->data.size());
+        // copy data over
+        for (size_t i = 0; i < batch.data.size(); ++i) {
+          CHECK_EQ((*dptr)->data.at(i).shape(), batch.data[i].shape_);
+          MSHADOW_TYPE_SWITCH(batch.data[i].type_flag_, DType, {
+              mshadow::Copy(((*dptr)->data)[i].data().FlatTo2D<cpu, DType>(),
+                        batch.data[i].FlatTo2D<cpu, DType>());
+          });
+          (*dptr)->num_batch_padd = batch.num_batch_padd;
+        }
+        if (batch.inst_index) {
+          std::copy(batch.inst_index,
+                    batch.inst_index + batch.batch_size,
+                    (*dptr)->index.begin());
+        }
+       return true;
+      },
+      [this]() { loader_->BeforeFirst(); });
+  }
     
-    // This provides interface PrimeTable that determines whether a number is a
-// prime and determines a next prime number. This interface is used
-// in Google Test samples demonstrating use of parameterized tests.
+      virtual ~GradientCompression() {}
     
-    // Tests the copy c'tor.
-TEST(MyString, CopyConstructor) {
-  const MyString s1(kHelloString);
-  const MyString s2 = s1;
-  EXPECT_EQ(0, strcmp(s2.c_string(), kHelloString));
+      virtual void Forward(const OpContext &ctx,
+                       const std::vector<TBlob> &in_data,
+                       const std::vector<OpReqType> &req,
+                       const std::vector<TBlob> &out_data,
+                       const std::vector<TBlob> &aux_args) {
+    using namespace mshadow;
+    CHECK_EQ(in_data.size(), 2U);
+    CHECK_EQ(out_data.size(), 3U);
+    Stream<gpu> *s = ctx.get_stream<gpu>();
+    Tensor<gpu, 4, DType> data = in_data[st::kData].get<gpu, 4, DType>(s);
+    Tensor<gpu, 4, DType> out = out_data[st::kOut].get<gpu, 4, DType>(s);
+    Shape<3> loc_shape = Shape3(data.size(0), 2, 3);
+    Shape<4> grid_shape = Shape4(out.size(0), out.size(2), out.size(3), 2);
+    Tensor<gpu, 3, DType> loc = in_data[st::kLoc].get_with_shape<gpu, 3, DType>(loc_shape, s);
+    Tensor<gpu, 4, DType> grid = out_data[st::kGridSrc]
+                                .get_with_shape<gpu, 4, DType>(grid_shape, s);
+    if (!init_cudnn_) {
+     Init(s, in_data, out_data);
+    }
+    CHECK_EQ(data.CheckContiguous(), true);
+    CHECK_EQ(out.CheckContiguous(), true);
+    typename DataType<DType>::ScaleType alpha = 1.0f;
+    typename DataType<DType>::ScaleType beta = 0.0f;
+    if (param_.transform_type == st::kAffine) {
+      CUDNN_CALL(cudnnSpatialTfGridGeneratorForward(s->dnn_handle_,
+                                                    st_desc_,
+                                                    loc.dptr_,
+                                                    grid.dptr_));
+    }
+    CUDNN_CALL(cudnnSpatialTfSamplerForward(s->dnn_handle_,
+                                            st_desc_,
+                                            &alpha,
+                                            in_desc_,
+                                            data.dptr_,
+                                            grid.dptr_,
+                                            &beta,
+                                            out_desc_,
+                                            out.dptr_));
+  }
+    
+    void deleteLinkedList(ListNode* head){
+    }
+    
+    
+    {    return head;
 }
+    
+    int main() {
+    }
+    
+            vector<int> res;
+        if(root == NULL)
+            return res;
+    
+    // Recursive
+// Time Complexity: O(n), n is the node number in the tree
+// Space Complexity: O(h), h is the height of the tree
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+    }
+    }
+    
+    
+    {    return 0;
+}
+    
+    int main() {
+    }
