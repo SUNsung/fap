@@ -1,101 +1,74 @@
 
         
-        require 'action_view/helpers/tags/placeholderable'
+              def after_features(features)
+        @io.puts
+        print_worst_offenders
+        print_summary(features)
+      end
     
-    def normalize_bullets(markdown)
-  markdown.gsub(%r!\n\s{2}\*{1}!, '\n-')
-end
-    
-    # Mimic how Jekyll's LiquidRenderer would process a non-static file, with
-# some dummy payload
-def always_liquid(content)
-  Liquid::Template.error_mode = :warn
-  Liquid::Template.parse(content, :line_numbers => true).render(
-    'author' => 'John Doe',
-    'title'  => 'FooBar'
-  )
-end
-    
-    CONTENT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
-    
-          def after_tags(tags); end
-    
-    module Jekyll
-  module Deprecator
-    extend self
+          # Returns true if the given value is present in the set.
+      #
+      # raw_key - The key of the set to check.
+      # value - The value to check for.
+      def self.set_includes?(raw_key, value)
+        key = cache_key_for(raw_key)
     
             def importer_class
           DiffNoteImporter
         end
     
-            def collection_method
-          :issues
-        end
+            # Returns a Hash that can be used to populate `notes.st_diff`, removing
+        # the need for requesting Git data for every diff note.
+        def diff_hash
+          {
+            diff: diff_hunk,
+            new_path: file_path,
+            old_path: file_path,
+    }
     
-        # The path used after resending confirmation instructions.
-    def after_resending_confirmation_instructions_path_for(resource_name)
-      is_navigational_format? ? new_session_path(resource_name) : '/'
-    end
+            attr_reader :attributes
     
-          # Sign out a given user or scope. This helper is useful for signing out a user
-      # after deleting accounts. Returns true if there was a logout and false if there
-      # is no user logged in on the referred scope
-      #
-      # Examples:
-      #
-      #   sign_out :user     # sign_out(scope)
-      #   sign_out @user     # sign_out(resource)
-      #
-      def sign_out(resource_or_scope=nil)
-        return sign_out_all_scopes unless resource_or_scope
-        scope = Devise::Mapping.find_scope!(resource_or_scope)
-        user = warden.user(scope: scope, run_callbacks: false) # If there is no user
-    
-        if record.timedout?(last_request_at) &&
-        !env['devise.skip_timeout'] &&
-        !proxy.remember_me_is_active?(record)
-      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
-      throw :warden, scope: scope, message: :timeout
-    end
-    
-            # Yields a VM for each target VM for the command.
-        #
-        # This is a convenience method for easily implementing methods that
-        # take a target VM (in the case of multi-VM) or every VM if no
-        # specific VM name is specified.
-        #
-        # @param [String] name The name of the VM. Nil if every VM.
-        # @param [Boolean] single_target If true, then an exception will be
-        #   raised if more than one target is found.
-        def with_target_vms(names=nil, options=nil)
-          # Using VMs requires a Vagrant environment to be properly setup
-          raise Errors::NoEnvironmentError if !@env.root_path
-    
-              # Register a new provisioner class only if a name was given
-          data[:provisioners].register(name.to_sym, &block) if name != UNSET_VALUE
-    
-            # This is the method called to when the system is being destroyed
-        # and allows the provisioners to engage in any cleanup tasks necessary.
-        def cleanup
+          def action_name(env)
+        if env[CONTROLLER_KEY]
+          action_for_rails(env)
+        elsif env[ENDPOINT_KEY]
+          action_for_grape(env)
         end
       end
-    end
+    
+    LogStash::Bundler.setup!
+    
+    if $0 == __FILE__
+  begin
+    LogStash::PluginManager::Main.run('bin/logstash-plugin', ARGV)
+  rescue LogStash::PluginManager::Error => e
+    $stderr.puts(e.message)
+    exit(1)
   end
 end
 
     
-            # This contains all the registered host capabilities.
-        #
-        # @return [Hash<Symbol, Registry>]
-        attr_reader :host_capabilities
+    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
+  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.windows?
+  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.windows?
+    
+        if local_gems.size > 0
+      if update_all?
+        plugins_with_path = local_gems
+      else
+        plugins_with_path = plugins_arg & local_gems
+      end
+    
+        context 'without a specific plugin' do
+      it 'display a list of plugins' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list')
+        expect(result.stdout.split('\n').size).to be > 1
+      end
+    
+        context 'update a specific plugin' do
+      it 'has executed successfully' do
+        cmd = logstash.run_command_in_path('bin/logstash-plugin update --no-verify #{plugin_name}')
+        expect(cmd.stdout).to match(/Updating #{plugin_name}/)
+        expect(logstash).not_to have_installed?(plugin_name, previous_version)
+      end
+    end
