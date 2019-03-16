@@ -1,326 +1,221 @@
-#if PY_MAJOR_VERSION >= 3
-static struct PyModuleDef _module = {
-  PyModuleDef_HEAD_INIT,
-  kModuleName,
-  kModuleDocstring,
-  -1,
-  NULL,
-  NULL,
-  NULL,
-  NULL,
-  NULL
-};
-#define INITFUNC PyInit__api_implementation
-#define INITFUNC_ERRORVAL NULL
-#else
-#define INITFUNC init_api_implementation
-#define INITFUNC_ERRORVAL
-#endif
+
+        
+            typedef ptrdiff_t  stride_t;
     
-    #include <gtest/gtest.h>
-    
-    GeneratorFactory::GeneratorFactory() {}
-GeneratorFactory::~GeneratorFactory() {}
-    
-    
-bool ZeroCopyOutputStream::WriteAliasedRaw(const void* /* data */,
-                                           int /* size */) {
-  GOOGLE_LOG(FATAL) << 'This ZeroCopyOutputStream doesn't support aliasing. '
-                'Reaching here usually means a ZeroCopyOutputStream '
-                'implementation bug.';
-  return false;
-}
-    
-    // The following are *not* casts!
-DEF_SIGNED_INT_LIMITS(int8)
-DEF_SIGNED_INT_LIMITS(int16)  // NOLINT(readability/casting)
-DEF_SIGNED_INT_LIMITS(int32)  // NOLINT(readability/casting)
-DEF_SIGNED_INT_LIMITS(int64)  // NOLINT(readability/casting)
-DEF_UNSIGNED_INT_LIMITS(uint8)
-DEF_UNSIGNED_INT_LIMITS(uint16)  // NOLINT(readability/casting)
-DEF_UNSIGNED_INT_LIMITS(uint32)  // NOLINT(readability/casting)
-DEF_UNSIGNED_INT_LIMITS(uint64)  // NOLINT(readability/casting)
-    
-    #ifdef _WIN32
-#ifndef STDIN_FILENO
-#define STDIN_FILENO 0
-#endif
-#ifndef STDOUT_FILENO
-#define STDOUT_FILENO 1
-#endif
-#endif
-    
-      EXPECT_TRUE(one_nano == one_nano);
-  EXPECT_FALSE(one_nano == one_second);
-    
-    #define TEGRA_CVT2PYUVTOBGR(src_data, src_step, dst_data, dst_step, dst_width, dst_height, dcn, swapBlue, uIdx) \
-( \
-    CAROTENE_NS::isSupportedConfiguration() ? \
-        dcn == 3 ? \
-            uIdx == 0 ? \
-                (swapBlue ? \
-                    CAROTENE_NS::yuv420i2rgb(CAROTENE_NS::Size2D(dst_width, dst_height), \
-                                             src_data, src_step, \
-                                             src_data + src_step * dst_height, src_step, \
-                                             dst_data, dst_step) : \
-                    CAROTENE_NS::yuv420i2bgr(CAROTENE_NS::Size2D(dst_width, dst_height), \
-                                             src_data, src_step, \
-                                             src_data + src_step * dst_height, src_step, \
-                                             dst_data, dst_step)), \
-                CV_HAL_ERROR_OK : \
-            uIdx == 1 ? \
-                (swapBlue ? \
-                    CAROTENE_NS::yuv420sp2rgb(CAROTENE_NS::Size2D(dst_width, dst_height), \
-                                              src_data, src_step, \
-                                              src_data + src_step * dst_height, src_step, \
-                                              dst_data, dst_step) : \
-                    CAROTENE_NS::yuv420sp2bgr(CAROTENE_NS::Size2D(dst_width, dst_height), \
-                                              src_data, src_step, \
-                                              src_data + src_step * dst_height, src_step, \
-                                              dst_data, dst_step)), \
-                CV_HAL_ERROR_OK : \
-            CV_HAL_ERROR_NOT_IMPLEMENTED : \
-        dcn == 4 ? \
-            uIdx == 0 ? \
-                (swapBlue ? \
-                    CAROTENE_NS::yuv420i2rgbx(CAROTENE_NS::Size2D(dst_width, dst_height), \
-                                              src_data, src_step, \
-                                              src_data + src_step * dst_height, src_step, \
-                                              dst_data, dst_step) : \
-                    CAROTENE_NS::yuv420i2bgrx(CAROTENE_NS::Size2D(dst_width, dst_height), \
-                                              src_data, src_step, \
-                                              src_data + src_step * dst_height, src_step, \
-                                              dst_data, dst_step)), \
-                CV_HAL_ERROR_OK : \
-            uIdx == 1 ? \
-                (swapBlue ? \
-                    CAROTENE_NS::yuv420sp2rgbx(CAROTENE_NS::Size2D(dst_width, dst_height), \
-                                               src_data, src_step, \
-                                               src_data + src_step * dst_height, src_step, \
-                                               dst_data, dst_step) : \
-                    CAROTENE_NS::yuv420sp2bgrx(CAROTENE_NS::Size2D(dst_width, dst_height), \
-                                               src_data, src_step, \
-                                               src_data + src_step * dst_height, src_step, \
-                                               dst_data, dst_step)), \
-                CV_HAL_ERROR_OK : \
-            CV_HAL_ERROR_NOT_IMPLEMENTED : \
-        CV_HAL_ERROR_NOT_IMPLEMENTED \
-    : CV_HAL_ERROR_NOT_IMPLEMENTED \
-)
-    
-    #ifdef CAROTENE_NEON
-    
-        ptrdiff_t idx_l = internal::borderInterpolate(-1, size.width, borderType, borderMargin.left, borderMargin.right) * cn;
-    ptrdiff_t idx_r = internal::borderInterpolate(size.width, size.width, borderType, borderMargin.left, borderMargin.right) * cn;
-    
-        ptrdiff_t mapstep;
-    s32* mag_buf[3];
-    u8* map;
-    _normEstimator<L2gradient, externalSobel> normEstimator(size, cn, borderMargin, mapstep, mag_buf, map);
-    
-    
-    {                v_dst1 = vmlal_n_s16(v_dst1, vget_high_s16(t0_16s), kernelBase[5]);
-                v_dst1 = vmlal_n_s16(v_dst1, vget_high_s16(t1_16s), kernelBase[4]);
-                v_dst1 = vmlal_n_s16(v_dst1, vget_high_s16(t2_16s), kernelBase[3]);
-            }
-    
-            for (; i < roiw8; i += 8 )
-        {
-            internal::prefetch(src + i + 6);
-            uint64x2_t vln1 = vld1q_u64((const u64*)(src + i));
-            uint64x2_t vln2 = vld1q_u64((const u64*)(src + i + 2));
-            uint64x2_t vln3 = vld1q_u64((const u64*)(src + i + 4));
-            uint64x2_t vln4 = vld1q_u64((const u64*)(src + i + 6));
-    }
-    
-        for(size_t j = 0; j < size.height; ++j)
-    {
-        const T *  src = internal::getRowPtr( srcBase,  srcStride, j);
-        const T * rng1 = internal::getRowPtr(rng1Base, rng1Stride, j);
-        const T * rng2 = internal::getRowPtr(rng2Base, rng2Stride, j);
-             u8 *  dst = internal::getRowPtr( dstBase,  dstStride, j);
-        size_t i = 0;
-        for( ; i < width; i += 32/sizeof(T) )
-        {
-            internal::prefetch(src + i);
-            internal::prefetch(rng1 + i);
-            internal::prefetch(rng2 + i);
-    }
-    }
-    
-    // table lookup with the table in a 128-bit register
-    
-    bool isLaplacianOpenCVSupported(const Size2D &size, BORDER_MODE border)
+    bool isBlur3x3Supported(const Size2D &size, BORDER_MODE border)
 {
-    return isSupportedConfiguration() &&
-        size.width >= 8 && size.height >= 1 &&
-        (border == BORDER_MODE_CONSTANT   ||
-         border == BORDER_MODE_REFLECT    ||
-         border == BORDER_MODE_REFLECT101 ||
-         border == BORDER_MODE_REPLICATE);
+    return isSupportedConfiguration() && size.width >= 8 &&
+        (border == BORDER_MODE_CONSTANT ||
+            border == BORDER_MODE_REPLICATE);
 }
     
-    namespace grpc {
-    }
     
-    
-    { private:
-  CensusContext context_;
-  // Metadata elements for tracing and census stats data.
-  grpc_linked_mdelem stats_bin_;
-  grpc_linked_mdelem tracing_bin_;
-  // Client method.
-  absl::string_view method_;
-  std::string qualified_method_;
-  grpc_slice path_;
-  // The recv trailing metadata callbacks.
-  grpc_metadata_batch* recv_trailing_metadata_;
-  grpc_closure* initial_on_done_recv_trailing_metadata_;
-  grpc_closure on_done_recv_trailing_metadata_;
-  // recv message
-  grpc_closure* initial_on_done_recv_message_;
-  grpc_closure on_done_recv_message_;
-  // Start time (for measuring latency).
-  absl::Time start_time_;
-  // Server elapsed time in nanoseconds.
-  uint64_t elapsed_time_;
-  // The received message--may be null.
-  grpc_core::OrphanablePtr<grpc_core::ByteStream>* recv_message_;
-  // Number of messages in this RPC.
-  uint64_t recv_message_count_;
-  uint64_t sent_message_count_;
-  // Buffer needed for grpc_slice to reference when adding trace context
-  // metatdata to outgoing message.
-  char tracing_buf_[kMaxTraceContextLen];
-};
-    
-    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H
-#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H
-    
-      // Add the full names of registered services
-  void SetServiceList(const std::vector<grpc::string>* services);
-    
-    #ifndef GRPC_CUSTOM_DEFAULT_THREAD_POOL
-    
-    #ifndef GRPC_SRC_CPP_SERVER_LOAD_REPORTER_GET_CPU_STATS_H
-#define GRPC_SRC_CPP_SERVER_LOAD_REPORTER_GET_CPU_STATS_H
-    
-    #include 'b2Triangle.h'
-#include 'stdio.h'
-#include <string.h>
-#include <limits.h>
-namespace b2ConvexDecomp {
-    }
-    
-    	void EncodeMipmaps(float *a_pafSourceRGBA,
-		unsigned int a_uiSourceWidth,
-		unsigned int a_uiSourceHeight,
-		Image::Format a_format,
-		ErrorMetric a_eErrMetric,
-		float a_fEffort,
-		unsigned int a_uiJobs,
-		unsigned int a_uiMaxJobs,
-		unsigned int a_uiMaxMipmaps,
-		unsigned int a_uiMipFilterFlags,
-		RawImage* a_pMipmapImages,
-		int *a_piEncodingTime_ms, 
-		bool a_bVerboseOutput)
-	{
-		auto mipWidth = a_uiSourceWidth;
-		auto mipHeight = a_uiSourceHeight;
-		int totalEncodingTime = 0;
-		for(unsigned int mip = 0; mip < a_uiMaxMipmaps && mipWidth >= 1 && mipHeight >= 1; mip++)
-		{
-			float* pImageData = nullptr;
-			float* pMipImage = nullptr;
-    }
-    }
-    
-    		inline unsigned int GetSourceH(void)
-		{
-			return m_uiSourceH;
-		}
-    
-    	// ----------------------------------------------------------------------------------------------------
-	//
-    
-    		typedef enum
-		{
-			MODE_UNKNOWN,
-			//
-			MODE_ETC1,
-			MODE_T,
-			MODE_H,
-			MODE_PLANAR,
-			MODE_R11,
-			MODE_RG11,
-			//
-			MODES
-		} Mode;
-    
-    
-    {  } AF_LatinAxisRec, *AF_LatinAxis;
-    
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
-    
-    
-/** 16x32 multiply, followed by a 15-bit shift right and 32-bit add.
-    b must fit in 31 bits.
-    Result fits in 32 bits. */
-#undef MAC16_32_Q15
-static OPUS_INLINE opus_val32 MAC16_32_Q15_armv5e(opus_val32 c, opus_val16 a,
- opus_val32 b)
-{
-  int res;
-  __asm__(
-      '#MAC16_32_Q15\n\t'
-      'smlawb %0, %1, %2, %3;\n'
-      : '=r'(res)
-      : 'r'(b<<1), 'r'(a), 'r'(c)
-  );
-  return res;
-}
-#define MAC16_32_Q15(c, a, b) (MAC16_32_Q15_armv5e(c, a, b))
-    
-        NDMaskPtr NDMask::DeepClone(const DeviceDescriptor& device) const
     {
-        NDMaskPtr newMask = MakeSharedObject<NDMask>(this->Shape(), device);
-        newMask->CopyFrom(*this);
-    }
-    
-    
-    {        const auto& type = dict[typeKey].Value<std::wstring>();
-        if (type != typeValue) 
+    {        for (; dj < size.width; sj += 3, ++dj)
         {
-            const auto& version = GetVersion(dict);
-            LogicError('Unexpected '%ls':'%ls' in place of '%ls':'%ls' (%s).',
-                       typeKey.c_str(), type.c_str(), typeKey.c_str(), typeValue.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
+            dst[dj] = src[sj + coi];
         }
     }
+#else
+    (void)size;
+    (void)srcBase;
+    (void)srcStride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)coi;
+#endif
+}
     
+    #else
     
-    {        colStarts[numCSCCols - 1] = (SparseIndexType)(nonZeroValues.size());
-        NDArrayViewPtr deviceValueData = MakeSharedObject<NDArrayView>(AsDataType<ElementType>(), valueDataShape, colStarts.data(), rowIndices.data(), nonZeroValues.data(), nonZeroValues.size(), device, readOnly);
-        return MakeSharedObject<Value>(deviceValueData, deviceValueMask);
+                vec128 v_src00 = internal::vld1q(src0 + x), v_src01 = internal::vld1q(src0 + x + 16 / sizeof(type));
+            vec128 v_src10 = internal::vld1q(src1 + x), v_src11 = internal::vld1q(src1 + x + 16 / sizeof(type));
+            uvec128 v_dst0;
+            uvec128 v_dst1;
+    
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
+CVTS_FUNC(f32, u8, 8,
+    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)((1 << 16)*alpha));
+    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)((1 << 16)*beta));
+    register uint32x4_t  vmask  asm ('q2') = vdupq_n_u32(1<<16);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        __asm__ (
+            'vld1.32 {d6-d7}, [%[src1]]                              \n\t'
+            'vld1.32 {d8-d9}, [%[src2]]                              \n\t'
+            'vmul.f32 q5, q3, q0                                     \n\t'
+            'vmul.f32 q6, q4, q0                                     \n\t'
+            'vadd.f32 q7, q5, q1                                     \n\t'
+            'vadd.f32 q8, q6, q1                                     \n\t'
+            'vcvt.u32.f32 q9, q7                                     \n\t'
+            'vcvt.u32.f32 q10, q8                                    \n\t'
+            'vbic q11, q2, q6                                        \n\t'
+            'vbic q12, q2, q7                                        \n\t'
+            'vshr.u32 q13, q11, #16                                  \n\t'
+            'vshr.u32 q14, q12, #16                                  \n\t'
+            'vqsub.u32 q7, q9, q13                                   \n\t'
+            'vqsub.u32 q8, q10, q14                                  \n\t'
+            'vqrshrn.u32 d22, q7, #16                                \n\t'
+            'vqrshrn.u32 d23, q8, #16                                \n\t'
+            'vqmovn.u16 d30, q11                                     \n\t'
+            'vst1.8 {d30}, [%[dst]]                                  \n\t'
+            : /*no output*/
+            : [src1] 'r' (_src + i + 0),
+              [src2] 'r' (_src + i + 4),
+              [dst] 'r' (_dst + i),
+              'w' (vscale), 'w' (vshift), 'w' (vmask)
+            : 'd6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26','d27','d28','d29','d30'
+        );
+    }
+})
+#else
+CVTS_FUNC(f32, u8, 8,
+    float32x4_t vscale = vdupq_n_f32((f32)((1 << 16)*alpha));
+    float32x4_t vshift = vdupq_n_f32((f32)((1 << 16)*beta));
+    uint32x4_t  vmask  = vdupq_n_u32(1<<16);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        float32x4_t vline1_f32 = vld1q_f32(_src + i + 0);
+        float32x4_t vline2_f32 = vld1q_f32(_src + i + 4);
+    }
     }
     
-    // base class that we can catch, independent of the type parameter
-struct /*interface*/ IExceptionWithCallStackBase
+    s32 countNonZero(const Size2D &_size,
+                 const f64 * srcBase, ptrdiff_t srcStride)
 {
-    virtual const char * CallStack() const = 0;
-    virtual ~IExceptionWithCallStackBase() noexcept = default;
-};
-    
-    class RandomOrdering // note: NOT thread-safe at all
-{
-    // constants for randomization
-    const static size_t randomizeDisable = 0;
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    Size2D size(_size);
+    if (srcStride == (ptrdiff_t)(size.width))
+    {
+        size.width *= size.height;
+        size.height = 1;
+    }
+    size_t roiw8 = size.width & ~7u;
+    size_t roiw4 = size.width & ~3u;
+    size_t roiw2 = size.width & ~1u;
+    uint64x2_t vmask1 = vdupq_n_u64(0x7fFFffFFffFFffFFULL); //will treat denormals as non-zero
+    uint32x4_t vc0 = vmovq_n_u32(0);
     }
     
-    // -----------------------------------------------------------------------
-// EpochAccumulatorNode calculates mean values of all samples used in forward pass.
-// -----------------------------------------------------------------------
+                for( ; j < (s32)size.width - 3; j++, ptr++ )
+            {
+                s32 v = ptr[0];
+                const u8* tab = &threshold_tab[0] - v + 255;
+                s32 d = tab[ptr[pixel[0]]] | tab[ptr[pixel[8]]];
+    }
     
-    using json = nlohmann::json;
+        for (size_t i = 0; i < size.height; ++i)
+    {
+        const s16 * src = internal::getRowPtr(srcBase, srcStride, i);
+        size_t j = 0;
+    }
+    
+    #ifndef __ANDROID__
+    u32 step_base = 16 / sizeof(T), step_base3 = step_base * 3;
+    size_t roiw_base = size.width >= (step_base - 1) ? size.width - step_base + 1 : 0;
+#endif
+    u32 step_tail = 8 / sizeof(T), step_tail3 = step_tail * 3;
+    size_t roiw_tail = size.width >= (step_tail - 1) ? size.width - step_tail + 1 : 0;
+    
+        ptrdiff_t idx_l1 = internal::borderInterpolate(-1, size.width, borderType, borderMargin.left, borderMargin.right) * cn;
+    ptrdiff_t idx_l2 = internal::borderInterpolate(-2, size.width, borderType, borderMargin.left, borderMargin.right) * cn;
+    ptrdiff_t idx_r1 = internal::borderInterpolate(size.width + 0, size.width, borderType, borderMargin.left, borderMargin.right) * cn;
+    ptrdiff_t idx_r2 = internal::borderInterpolate(size.width + 1, size.width, borderType, borderMargin.left, borderMargin.right) * cn;
+    
+    std::string tmppath() {
+  // TMPFILE is for manual test execution during which the user will specify
+  // the full temp file path using the environmental variable TMPFILE
+  const char* tmpfile = getenv('TMPFILE');
+  if (tmpfile) {
+    return std::string(tmpfile);
+  }
+    }
+    
+    OPERATOR_SCHEMA(Glu)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .SetDoc(R'DOC(
+Applies gated linear unit to the input Tensor X. The output Y is half the size
+of the input X, so if the shape of X is [d1, d2, ..., N] shape of Y will be
+[d1, d2, ..., dn/2] and Y(:dn-1, i) = GLU(X(:dn-1, i), X(:dn-1, i+N/2)) =
+X(dn-1, i) * sigmoid(X(dn-1, i+N/2))
+)DOC')
+    .Input(0, 'X', '1D input tensor')
+    .Output(0, 'Y', '1D output tensor');
+    
+    #endif  // MXNET_GRAPH_ATTR_TYPES_H_
+
+    
+    .. note:: `Crop` is deprecated. Use `slice` instead.
+    
+      for (auto& blob : in_data) {
+    ptrs.push_back(reinterpret_cast<void*>(new NDArray(blob, ndctx.dev_id)));
+    tags.push_back(0);
+  }
+  for (auto& blob : out_data) {
+    ptrs.push_back(reinterpret_cast<void*>(new NDArray(blob, ndctx.dev_id)));
+    tags.push_back(1);
+  }
+  for (auto& blob : in_grad) {
+    NDArray* nd = new NDArray(blob, ndctx.dev_id);
+    ptrs.push_back(reinterpret_cast<void*>(nd));
+    ndvar.push_back(nd->var());
+    tags.push_back(2);
+  }
+  std::sort(ndvar.begin(), ndvar.end());
+  ndvar.resize(std::unique(ndvar.begin(), ndvar.end()) - ndvar.begin());
+  for (auto& blob : out_grad) {
+    ptrs.push_back(reinterpret_cast<void*>(new NDArray(blob, ndctx.dev_id)));
+    tags.push_back(3);
+  }
+    
+    void Node::unsetMeasureFunc(void)
+{
+    m_measureFunc.reset(nullptr);
+    }
+    
+        Value getFlexBasis(void) const;
+    double getFlexGrow(void) const;
+    double getFlexShrink(void) const;
+    
+        method(setExperimentalFeatureEnabled);
+    method(setPointScaleFactor);
+    
+    YG_ENUM_SEQ_DECL(
+    YGDirection,
+    YGDirectionInherit,
+    YGDirectionLTR,
+    YGDirectionRTL)
+    
+        static void destroy(Config * config);
+    
+        double width;
+    double height;
+    
+    void assertInternal(const char* formatstr ...) {
+    va_list va_args;
+    va_start(va_args, formatstr);
+    vsnprintf(sAssertBuf, sizeof(sAssertBuf), formatstr, va_args);
+    va_end(va_args);
+    if (gAssertHandler != NULL) {
+        gAssertHandler(sAssertBuf);
+    }
+    FBLOG(LOG_FATAL, 'fbassert', '%s', sAssertBuf);
+    // crash at this specific address so that we can find our crashes easier
+    *(int*)0xdeadb00c = 0;
+    // let the compiler know we won't reach the end of the function
+     __builtin_unreachable();
+}
+    
+      bool hasOnlyOneRef() const {
+    return m_refcount == 1;
+  }
+    
+    #include <fb/assert.h>
+    
+    /// @cond INTERNAL
