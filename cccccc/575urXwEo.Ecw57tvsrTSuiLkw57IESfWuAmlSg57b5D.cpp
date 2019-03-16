@@ -1,524 +1,519 @@
 
         
-            enum FLIP_MODE
-    {
-        FLIP_HORIZONTAL_MODE = 1,
-        FLIP_VERTICAL_MODE = 2,
-        FLIP_BOTH_MODE = FLIP_HORIZONTAL_MODE | FLIP_VERTICAL_MODE
-    };
+        
+    {}  // namespace atom
+
     
-    void absDiff(const Size2D &size,
-             const s32 *src0Base, ptrdiff_t src0Stride,
-             const s32 *src1Base, ptrdiff_t src1Stride,
-             s32 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, AbsDiffSigned<s32>());
+    
+    {}  // namespace api
+    
+    
+    {}  // namespace api
+    
+    void Event::RenderFrameHostChanged(content::RenderFrameHost* old_rfh,
+                                   content::RenderFrameHost* new_rfh) {
+  if (sender_ && sender_ == old_rfh)
+    sender_ = new_rfh;
+}
+    
+    #endif  // ATOM_BROWSER_API_EVENT_H_
+
+    
+    Delegate* AutoUpdater::delegate_ = nullptr;
+    
+    bool AboutProtocolHandler::IsSafeRedirectTarget(const GURL& location) const {
+  return false;
+}
+    
+    namespace atom {
+    }
+    
+    #ifndef ATOM_BROWSER_NET_URL_REQUEST_ABOUT_JOB_H_
+#define ATOM_BROWSER_NET_URL_REQUEST_ABOUT_JOB_H_
+    
+    // The argument separating arguments intended for the relauncher process from
+// those intended for the relaunched process. '---' is chosen instead of '--'
+// because CommandLine interprets '--' as meaning 'end of switches', but
+// for many purposes, the relauncher process' CommandLine ought to interpret
+// arguments intended for the relaunched process, to get the correct settings
+// for such things as logging and the user-data-dir in case it affects crash
+// reporting.
+extern const CharType* kRelauncherArgSeparator;
+    
+      struct kevent change = {0};
+  EV_SET(&change, parent_pid, EVFILT_PROC, EV_ADD, NOTE_EXIT, 0, NULL);
+  if (kevent(kq.get(), &change, 1, nullptr, 0, nullptr) == -1) {
+    PLOG(ERROR) << 'kevent (add)';
+    return;
+  }
+    
+      /**
+   * Returns the baseline of the current object at the given level.
+   * The baseline is the line that passes through (x1, y1) and (x2, y2).
+   * WARNING: with vertical text, baselines may be vertical!
+   * Returns false if there is no baseline at the current position.
+   */
+  bool Baseline(PageIteratorLevel level,
+                int* x1, int* y1, int* x2, int* y2) const;
+    
+      // Constructors for the various ParamTypes.
+  ParamContent() = default;
+  explicit ParamContent(tesseract::StringParam* it);
+  explicit ParamContent(tesseract::IntParam* it);
+  explicit ParamContent(tesseract::BoolParam* it);
+  explicit ParamContent(tesseract::DoubleParam* it);
+    
+    /**********************************************************************
+ * read_unlv_file
+ *
+ * Read a whole unlv zone file to make a list of blocks.
+ **********************************************************************/
+    
+    // This and other putatively are the same, so call the (permanent) callback
+// for each blob index where the bounding boxes match.
+// The callback is deleted on completion.
+void BoxWord::ProcessMatchedBlobs(const TWERD& other,
+                                  TessCallback1<int>* cb) const {
+  for (int i = 0; i < length_ && i < other.NumBlobs(); ++i) {
+    TBOX blob_box = other.blobs[i]->bounding_box();
+    if (blob_box == boxes_[i])
+      cb->Run(i);
+  }
+  delete cb;
+}
+    
+    
+    { private:
+  double total_weight;         // no of elements or sum of weights.
+  double sigx;                 // sum of x
+  double sigy;                 // sum of y
+  double sigxx;                // sum x squared
+  double sigxy;                // sum of xy
+  double sigyy;                // sum y squared
+};
+    
+    	void EncodeMipmaps(float *a_pafSourceRGBA,
+		unsigned int a_uiSourceWidth,
+		unsigned int a_uiSourceHeight,
+		Image::Format a_format,
+		ErrorMetric a_eErrMetric,
+		float a_fEffort,
+		unsigned int a_uiJobs,
+		unsigned int a_uiMaxJobs,
+		unsigned int a_uiMaxMipmaps,
+		unsigned int a_uiMipFilterFlags,
+		RawImage* a_pMipmaps,
+		int *a_piEncodingTime_ms, bool a_bVerboseOutput = false);
+    
+    	// ----------------------------------------------------------------------------------------------------
+	// initialization of encoding state from a prior encoding using encoding bits
+	// [a_uiSourceH,a_uiSourceV] is the location of the block in a_pimageSource
+	// a_paucEncodingBits is the place to read the prior encoding
+	// a_imageformat is used to determine how to interpret a_paucEncodingBits
+	// a_errormetric was used for the prior encoding
+	//
+	void Block4x4::InitFromEtcEncodingBits(Image::Format a_imageformat,
+											unsigned int a_uiSourceH, unsigned int a_uiSourceV,
+											unsigned char *a_paucEncodingBits,
+											Image *a_pimageSource,
+											ErrorMetric a_errormetric)
+	{
+		Block4x4();
+    }
+    
+    	class Block4x4
+	{
+	public:
+    }
+    
+    	// ----------------------------------------------------------------------------------------------------
+	//
+	Block4x4Encoding::Block4x4Encoding(void)
+	{
+    }
+    
+    	// ----------------------------------------------------------------------------------------------------
+	// try an ETC1 differential mode encoding for a half of a 4x4 block
+	// vary the basecolor components using a radius
+	//
+	void Block4x4Encoding_ETC1::TryDifferentialHalf(DifferentialTrys::Half *a_phalf)
+	{
+    }
+    
+      typedef enum  AF_Blue_String_
+  {
+    AF_BLUE_STRING_ADLAM_CAPITAL_TOP = 0,
+    AF_BLUE_STRING_ADLAM_CAPITAL_BOTTOM = 30,
+    AF_BLUE_STRING_ADLAM_SMALL_TOP = 40,
+    AF_BLUE_STRING_ADLAM_SMALL_BOTTOM = 65,
+    AF_BLUE_STRING_ARABIC_TOP = 105,
+    AF_BLUE_STRING_ARABIC_BOTTOM = 123,
+    AF_BLUE_STRING_ARABIC_JOIN = 138,
+    AF_BLUE_STRING_ARMENIAN_CAPITAL_TOP = 141,
+    AF_BLUE_STRING_ARMENIAN_CAPITAL_BOTTOM = 165,
+    AF_BLUE_STRING_ARMENIAN_SMALL_ASCENDER = 189,
+    AF_BLUE_STRING_ARMENIAN_SMALL_TOP = 210,
+    AF_BLUE_STRING_ARMENIAN_SMALL_BOTTOM = 234,
+    AF_BLUE_STRING_ARMENIAN_SMALL_DESCENDER = 258,
+    AF_BLUE_STRING_AVESTAN_TOP = 282,
+    AF_BLUE_STRING_AVESTAN_BOTTOM = 302,
+    AF_BLUE_STRING_BAMUM_TOP = 312,
+    AF_BLUE_STRING_BAMUM_BOTTOM = 344,
+    AF_BLUE_STRING_BENGALI_BASE = 376,
+    AF_BLUE_STRING_BENGALI_TOP = 408,
+    AF_BLUE_STRING_BENGALI_HEAD = 436,
+    AF_BLUE_STRING_BUHID_TOP = 468,
+    AF_BLUE_STRING_BUHID_LARGE = 476,
+    AF_BLUE_STRING_BUHID_SMALL = 488,
+    AF_BLUE_STRING_BUHID_BOTTOM = 504,
+    AF_BLUE_STRING_CANADIAN_SYLLABICS_TOP = 532,
+    AF_BLUE_STRING_CANADIAN_SYLLABICS_BOTTOM = 564,
+    AF_BLUE_STRING_CANADIAN_SYLLABICS_SMALL_TOP = 596,
+    AF_BLUE_STRING_CANADIAN_SYLLABICS_SMALL_BOTTOM = 628,
+    AF_BLUE_STRING_CANADIAN_SYLLABICS_SUPS_TOP = 660,
+    AF_BLUE_STRING_CANADIAN_SYLLABICS_SUPS_BOTTOM = 688,
+    AF_BLUE_STRING_CARIAN_TOP = 720,
+    AF_BLUE_STRING_CARIAN_BOTTOM = 760,
+    AF_BLUE_STRING_CHAKMA_TOP = 795,
+    AF_BLUE_STRING_CHAKMA_BOTTOM = 820,
+    AF_BLUE_STRING_CHAKMA_DESCENDER = 845,
+    AF_BLUE_STRING_CHEROKEE_CAPITAL = 910,
+    AF_BLUE_STRING_CHEROKEE_SMALL_ASCENDER = 942,
+    AF_BLUE_STRING_CHEROKEE_SMALL = 974,
+    AF_BLUE_STRING_CHEROKEE_SMALL_DESCENDER = 1006,
+    AF_BLUE_STRING_COPTIC_CAPITAL_TOP = 1022,
+    AF_BLUE_STRING_COPTIC_CAPITAL_BOTTOM = 1054,
+    AF_BLUE_STRING_COPTIC_SMALL_TOP = 1086,
+    AF_BLUE_STRING_COPTIC_SMALL_BOTTOM = 1118,
+    AF_BLUE_STRING_CYPRIOT_TOP = 1150,
+    AF_BLUE_STRING_CYPRIOT_BOTTOM = 1190,
+    AF_BLUE_STRING_CYPRIOT_SMALL = 1225,
+    AF_BLUE_STRING_CYRILLIC_CAPITAL_TOP = 1240,
+    AF_BLUE_STRING_CYRILLIC_CAPITAL_BOTTOM = 1264,
+    AF_BLUE_STRING_CYRILLIC_SMALL = 1288,
+    AF_BLUE_STRING_CYRILLIC_SMALL_DESCENDER = 1312,
+    AF_BLUE_STRING_DESERET_CAPITAL_TOP = 1321,
+    AF_BLUE_STRING_DESERET_CAPITAL_BOTTOM = 1346,
+    AF_BLUE_STRING_DESERET_SMALL_TOP = 1371,
+    AF_BLUE_STRING_DESERET_SMALL_BOTTOM = 1396,
+    AF_BLUE_STRING_DEVANAGARI_BASE = 1421,
+    AF_BLUE_STRING_DEVANAGARI_TOP = 1453,
+    AF_BLUE_STRING_DEVANAGARI_HEAD = 1485,
+    AF_BLUE_STRING_DEVANAGARI_BOTTOM = 1517,
+    AF_BLUE_STRING_ETHIOPIC_TOP = 1525,
+    AF_BLUE_STRING_ETHIOPIC_BOTTOM = 1557,
+    AF_BLUE_STRING_GEORGIAN_MKHEDRULI_TOP = 1589,
+    AF_BLUE_STRING_GEORGIAN_MKHEDRULI_BOTTOM = 1621,
+    AF_BLUE_STRING_GEORGIAN_MKHEDRULI_ASCENDER = 1653,
+    AF_BLUE_STRING_GEORGIAN_MKHEDRULI_DESCENDER = 1685,
+    AF_BLUE_STRING_GEORGIAN_ASOMTAVRULI_TOP = 1717,
+    AF_BLUE_STRING_GEORGIAN_ASOMTAVRULI_BOTTOM = 1749,
+    AF_BLUE_STRING_GEORGIAN_NUSKHURI_TOP = 1781,
+    AF_BLUE_STRING_GEORGIAN_NUSKHURI_BOTTOM = 1813,
+    AF_BLUE_STRING_GEORGIAN_NUSKHURI_ASCENDER = 1845,
+    AF_BLUE_STRING_GEORGIAN_NUSKHURI_DESCENDER = 1877,
+    AF_BLUE_STRING_GEORGIAN_MTAVRULI_TOP = 1909,
+    AF_BLUE_STRING_GEORGIAN_MTAVRULI_BOTTOM = 1941,
+    AF_BLUE_STRING_GLAGOLITIC_CAPITAL_TOP = 1973,
+    AF_BLUE_STRING_GLAGOLITIC_CAPITAL_BOTTOM = 2005,
+    AF_BLUE_STRING_GLAGOLITIC_SMALL_TOP = 2037,
+    AF_BLUE_STRING_GLAGOLITIC_SMALL_BOTTOM = 2069,
+    AF_BLUE_STRING_GOTHIC_TOP = 2101,
+    AF_BLUE_STRING_GOTHIC_BOTTOM = 2141,
+    AF_BLUE_STRING_GREEK_CAPITAL_TOP = 2161,
+    AF_BLUE_STRING_GREEK_CAPITAL_BOTTOM = 2182,
+    AF_BLUE_STRING_GREEK_SMALL_BETA_TOP = 2200,
+    AF_BLUE_STRING_GREEK_SMALL = 2218,
+    AF_BLUE_STRING_GREEK_SMALL_DESCENDER = 2242,
+    AF_BLUE_STRING_GUJARATI_TOP = 2266,
+    AF_BLUE_STRING_GUJARATI_BOTTOM = 2298,
+    AF_BLUE_STRING_GUJARATI_ASCENDER = 2330,
+    AF_BLUE_STRING_GUJARATI_DESCENDER = 2380,
+    AF_BLUE_STRING_GUJARATI_DIGIT_TOP = 2413,
+    AF_BLUE_STRING_GURMUKHI_BASE = 2433,
+    AF_BLUE_STRING_GURMUKHI_HEAD = 2465,
+    AF_BLUE_STRING_GURMUKHI_TOP = 2497,
+    AF_BLUE_STRING_GURMUKHI_BOTTOM = 2529,
+    AF_BLUE_STRING_GURMUKHI_DIGIT_TOP = 2561,
+    AF_BLUE_STRING_HEBREW_TOP = 2581,
+    AF_BLUE_STRING_HEBREW_BOTTOM = 2605,
+    AF_BLUE_STRING_HEBREW_DESCENDER = 2623,
+    AF_BLUE_STRING_KANNADA_TOP = 2638,
+    AF_BLUE_STRING_KANNADA_BOTTOM = 2682,
+    AF_BLUE_STRING_KAYAH_LI_TOP = 2714,
+    AF_BLUE_STRING_KAYAH_LI_BOTTOM = 2738,
+    AF_BLUE_STRING_KAYAH_LI_ASCENDER = 2758,
+    AF_BLUE_STRING_KAYAH_LI_DESCENDER = 2766,
+    AF_BLUE_STRING_KAYAH_LI_LARGE_DESCENDER = 2778,
+    AF_BLUE_STRING_KHMER_TOP = 2799,
+    AF_BLUE_STRING_KHMER_SUBSCRIPT_TOP = 2823,
+    AF_BLUE_STRING_KHMER_BOTTOM = 2863,
+    AF_BLUE_STRING_KHMER_DESCENDER = 2895,
+    AF_BLUE_STRING_KHMER_LARGE_DESCENDER = 2929,
+    AF_BLUE_STRING_KHMER_SYMBOLS_WAXING_TOP = 3016,
+    AF_BLUE_STRING_KHMER_SYMBOLS_WANING_BOTTOM = 3024,
+    AF_BLUE_STRING_LAO_TOP = 3032,
+    AF_BLUE_STRING_LAO_BOTTOM = 3064,
+    AF_BLUE_STRING_LAO_ASCENDER = 3096,
+    AF_BLUE_STRING_LAO_LARGE_ASCENDER = 3112,
+    AF_BLUE_STRING_LAO_DESCENDER = 3124,
+    AF_BLUE_STRING_LATIN_CAPITAL_TOP = 3148,
+    AF_BLUE_STRING_LATIN_CAPITAL_BOTTOM = 3164,
+    AF_BLUE_STRING_LATIN_SMALL_F_TOP = 3180,
+    AF_BLUE_STRING_LATIN_SMALL_TOP = 3194,
+    AF_BLUE_STRING_LATIN_SMALL_BOTTOM = 3210,
+    AF_BLUE_STRING_LATIN_SMALL_DESCENDER = 3226,
+    AF_BLUE_STRING_LATIN_SUBS_CAPITAL_TOP = 3236,
+    AF_BLUE_STRING_LATIN_SUBS_CAPITAL_BOTTOM = 3256,
+    AF_BLUE_STRING_LATIN_SUBS_SMALL_F_TOP = 3276,
+    AF_BLUE_STRING_LATIN_SUBS_SMALL = 3296,
+    AF_BLUE_STRING_LATIN_SUBS_SMALL_DESCENDER = 3332,
+    AF_BLUE_STRING_LATIN_SUPS_CAPITAL_TOP = 3352,
+    AF_BLUE_STRING_LATIN_SUPS_CAPITAL_BOTTOM = 3383,
+    AF_BLUE_STRING_LATIN_SUPS_SMALL_F_TOP = 3412,
+    AF_BLUE_STRING_LATIN_SUPS_SMALL = 3438,
+    AF_BLUE_STRING_LATIN_SUPS_SMALL_DESCENDER = 3463,
+    AF_BLUE_STRING_LISU_TOP = 3474,
+    AF_BLUE_STRING_LISU_BOTTOM = 3506,
+    AF_BLUE_STRING_MALAYALAM_TOP = 3538,
+    AF_BLUE_STRING_MALAYALAM_BOTTOM = 3582,
+    AF_BLUE_STRING_MYANMAR_TOP = 3614,
+    AF_BLUE_STRING_MYANMAR_BOTTOM = 3646,
+    AF_BLUE_STRING_MYANMAR_ASCENDER = 3678,
+    AF_BLUE_STRING_MYANMAR_DESCENDER = 3706,
+    AF_BLUE_STRING_NKO_TOP = 3738,
+    AF_BLUE_STRING_NKO_BOTTOM = 3762,
+    AF_BLUE_STRING_NKO_SMALL_TOP = 3777,
+    AF_BLUE_STRING_NKO_SMALL_BOTTOM = 3786,
+    AF_BLUE_STRING_OL_CHIKI = 3798,
+    AF_BLUE_STRING_OLD_TURKIC_TOP = 3822,
+    AF_BLUE_STRING_OLD_TURKIC_BOTTOM = 3837,
+    AF_BLUE_STRING_OSAGE_CAPITAL_TOP = 3857,
+    AF_BLUE_STRING_OSAGE_CAPITAL_BOTTOM = 3897,
+    AF_BLUE_STRING_OSAGE_CAPITAL_DESCENDER = 3927,
+    AF_BLUE_STRING_OSAGE_SMALL_TOP = 3942,
+    AF_BLUE_STRING_OSAGE_SMALL_BOTTOM = 3982,
+    AF_BLUE_STRING_OSAGE_SMALL_ASCENDER = 4022,
+    AF_BLUE_STRING_OSAGE_SMALL_DESCENDER = 4047,
+    AF_BLUE_STRING_OSMANYA_TOP = 4062,
+    AF_BLUE_STRING_OSMANYA_BOTTOM = 4102,
+    AF_BLUE_STRING_SAURASHTRA_TOP = 4142,
+    AF_BLUE_STRING_SAURASHTRA_BOTTOM = 4174,
+    AF_BLUE_STRING_SHAVIAN_TOP = 4194,
+    AF_BLUE_STRING_SHAVIAN_BOTTOM = 4204,
+    AF_BLUE_STRING_SHAVIAN_DESCENDER = 4229,
+    AF_BLUE_STRING_SHAVIAN_SMALL_TOP = 4239,
+    AF_BLUE_STRING_SHAVIAN_SMALL_BOTTOM = 4274,
+    AF_BLUE_STRING_SINHALA_TOP = 4289,
+    AF_BLUE_STRING_SINHALA_BOTTOM = 4321,
+    AF_BLUE_STRING_SINHALA_DESCENDER = 4353,
+    AF_BLUE_STRING_SUNDANESE_TOP = 4397,
+    AF_BLUE_STRING_SUNDANESE_BOTTOM = 4421,
+    AF_BLUE_STRING_SUNDANESE_DESCENDER = 4453,
+    AF_BLUE_STRING_TAI_VIET_TOP = 4461,
+    AF_BLUE_STRING_TAI_VIET_BOTTOM = 4481,
+    AF_BLUE_STRING_TAMIL_TOP = 4493,
+    AF_BLUE_STRING_TAMIL_BOTTOM = 4525,
+    AF_BLUE_STRING_TELUGU_TOP = 4557,
+    AF_BLUE_STRING_TELUGU_BOTTOM = 4585,
+    AF_BLUE_STRING_THAI_TOP = 4613,
+    AF_BLUE_STRING_THAI_BOTTOM = 4637,
+    AF_BLUE_STRING_THAI_ASCENDER = 4665,
+    AF_BLUE_STRING_THAI_LARGE_ASCENDER = 4677,
+    AF_BLUE_STRING_THAI_DESCENDER = 4689,
+    AF_BLUE_STRING_THAI_LARGE_DESCENDER = 4705,
+    AF_BLUE_STRING_THAI_DIGIT_TOP = 4713,
+    AF_BLUE_STRING_TIFINAGH = 4725,
+    AF_BLUE_STRING_VAI_TOP = 4757,
+    AF_BLUE_STRING_VAI_BOTTOM = 4789,
+    af_blue_1_1 = 4820,
+#ifdef AF_CONFIG_OPTION_CJK
+    AF_BLUE_STRING_CJK_TOP = af_blue_1_1 + 1,
+    AF_BLUE_STRING_CJK_BOTTOM = af_blue_1_1 + 203,
+    af_blue_1_1_1 = af_blue_1_1 + 404,
+#ifdef AF_CONFIG_OPTION_CJK_BLUE_HANI_VERT
+    AF_BLUE_STRING_CJK_LEFT = af_blue_1_1_1 + 1,
+    AF_BLUE_STRING_CJK_RIGHT = af_blue_1_1_1 + 204,
+    af_blue_1_1_2 = af_blue_1_1_1 + 405,
 #else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
-    
-        void operator() (const typename VecTraits<f32>::vec64 & v_src0,
-                     const typename VecTraits<f32>::vec64 & v_src1,
-                     typename VecTraits<f32>::vec64 & v_dst) const
-    {
-        float32x2_t vs1 = vmla_f32(vget_low(vgamma), v_src0, vget_low(valpha));
-        v_dst = vmla_f32(vs1, v_src1, vget_low(vbeta));
+    af_blue_1_1_2 = af_blue_1_1_1 + 0,
+#endif /* AF_CONFIG_OPTION_CJK_BLUE_HANI_VERT */
+    af_blue_1_2 = af_blue_1_1_2 + 0,
+#else
+    af_blue_1_2 = af_blue_1_1 + 0,
+#endif /* AF_CONFIG_OPTION_CJK                */
     }
     
-    template <typename Op>
-void vcompare(Size2D size,
-              const typename Op::type * src0Base, ptrdiff_t src0Stride,
-              const typename Op::type * src1Base, ptrdiff_t src1Stride,
-              u8 * dstBase, ptrdiff_t dstStride, const Op & op)
-{
-    typedef typename Op::type type;
-    typedef typename internal::VecTraits<type>::vec128 vec128;
-    typedef typename internal::VecTraits<type>::unsign::vec128 uvec128;
-    }
     
-    bool isConvolutionSupported(const Size2D &size, const Size2D &ksize,
-                            BORDER_MODE border)
-{
-    return isSupportedConfiguration() && size.width >= 8 &&
-        (border == BORDER_MODE_CONSTANT ||
-            border == BORDER_MODE_REPLICATE) &&
-        (ksize.width == 3) && (ksize.height == 3);
-}
-    
-    inline float32x2_t vrsqrt_f32(float32x2_t val)
-{
-    float32x2_t e = vrsqrte_f32(val);
-    e = vmul_f32(vrsqrts_f32(vmul_f32(e, e), val), e);
-    e = vmul_f32(vrsqrts_f32(vmul_f32(e, e), val), e);
-    return e;
-}
-    
-    void Laplacian3x3(const Size2D &size,
-                  const u8 * srcBase, ptrdiff_t srcStride,
-                  u8 * dstBase, ptrdiff_t dstStride,
-                  BORDER_MODE border, u8 borderValue)
-{
-    internal::assertSupportedConfiguration(isLaplacian3x3Supported(size, border));
-#ifdef CAROTENE_NEON
-    const uint16x8_t v_border_x3 = vdupq_n_u16(borderValue * 3);
-    const uint16x8_t v_zero = vdupq_n_u16(0);
-    const uint8x8_t v_border = vdup_n_u8(borderValue);
-    }
-    
-      FlexibleTopKGradientOp(const OperatorDef& operator_def, Workspace* ws)
-      : Operator<Context>(operator_def, ws) {}
-    
-    /*!
- * \brief The result holder of storage type of each NodeEntry in the graph.
- * \note Stored under graph.attrs['storage_type'], provided by Pass 'InferStorageType'
- *
- * \code
- *  Graph g = ApplyPass(src_graph, 'InferStorageType');
- *  const StorageVector& stypes = g.GetAttr<StorageTypeVector>('storage_type');
- *  // get storage type by entry id
- *  int entry_type = stypes[g.indexed_graph().entry_id(my_entry)];
- * \endcode
- *
- * \sa FInferStorageType
- */
-using StorageTypeVector = std::vector<int>;
-    
-    
-    {
-    {}  // namespace rtc
-}  // namespace mxnet
-    
-        std::string type = param_.prototxt.type();
-    caffe_data_layer_ = caffe::LayerRegistry<Dtype>::CreateLayer(param_.prototxt);
-    CHECK(caffe_data_layer_ != nullptr) << 'Failed creating caffe data layer';
-    const size_t top_size = param_.prototxt.top_size();
-    if (top_size > 0) {
-      if (top_size > NR_SUPPORTED_TOP_ITEMS) {
-        LOG(WARNING)
-          << 'Too may \'top\' items, only two (one data, one label) are currently supported';
-      }
-      top_.reserve(top_size);
-      for (size_t x = 0; x < top_size; ++x) {
-        ::caffe::Blob<Dtype> *blob = new ::caffe::Blob<Dtype>();
-        cleanup_blobs_.push_back(std::unique_ptr<::caffe::Blob<Dtype>>(blob));
-        top_.push_back(blob);
-      }
-      caffe_data_layer_->SetUp(bottom_, top_);
-      const std::vector<int> &shape = top_[DATA]->shape();
-      const size_t shapeDimCount = shape.size();
-      if (shapeDimCount > 0) {
-        batch_size_ = shape[0];
-        if (shapeDimCount > 1) {
-          channels_ = shape[1];
-          if (shapeDimCount > 2) {
-            width_ = shape[2];
-            if (shapeDimCount > 3) {
-              height_ = shape[3];
-            }
-          }
-        }
-      }
-    }
-    
-    // DO_BIND_DISPATCH comes from static_operator_common.h
-Operator *CaffeLossProp::CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
-                                     std::vector<int> *in_type) const {
-  std::vector<int> out_type, aux_type;
-  std::vector<TShape> out_shape, aux_shape;
-  out_type.resize(this->ListOutputs().size());
-  out_shape.resize(this->ListOutputs().size());
-  aux_type.resize(this->ListAuxiliaryStates().size());
-  aux_shape.resize(this->ListAuxiliaryStates().size());
-  CHECK(InferType(in_type, &out_type, &aux_type));
-  CHECK(InferShape(in_shape, &out_shape, &aux_shape));
-  DO_BIND_DISPATCH(CreateOp, param_, (*in_type)[0]);
-}
-    
-    
-    {  Engine::Get()->PushSync([=](RunContext ctx){
-      ndout.CheckAndAlloc();
-      cv::Mat buf(ndsrc.shape()[0], ndsrc.shape()[1],
-                  dims[2] == 3 ? CV_8UC3 : CV_8U, ndsrc.data().dptr_);
-      cv::Mat dst(h, w, dims[2] == 3 ? CV_8UC3 : CV_8U, ndout.data().dptr_);
-      cv::resize(buf, dst, cv::Size(w, h), 0, 0, interpolation);
-      CHECK(!dst.empty());
-    }, ndout.ctx(), {ndsrc.var()}, {ndout.var()});
-  NDArray *tmp = new NDArray();
-  *tmp = ndout;
-  *out = tmp;
-  API_END();
-}
-    
-     private:
-  /*!
-   * \brief Wait for all started threads to signal that they're ready
+  /*
+   *  The following declarations could be embedded in the file `aflatin.c';
+   *  they have been made semi-public to allow alternate writing system
+   *  hinters to re-use some of them.
    */
-  void WaitForReady() {
-    for (const std::shared_ptr<dmlc::ManualEvent>& ptr : ready_events_) {
-      ptr->wait();
-    }
-  }
     
-    /*!
- * Copyright (c) 2016 by Contributors
- * \file inplace_addto_detect_pass.cc
- * \brief Detect whether inplace addto operation is possible for certain op.
- */
-#include <mxnet/base.h>
-#include <mxnet/operator.h>
-#include <mxnet/op_attr_types.h>
-#include <nnvm/graph_attr_types.h>
+    #define SIG_SHIFT 12
     
-    
-    {    while (base_->Next()) {
-      const DataInst& d = base_->Value();
-      out_.inst_index[top] = d.index;
-      if (data_.size() == 0) {
-        this->InitData(d);
-      }
-      for (size_t i = 0; i < d.data.size(); ++i) {
-        CHECK_EQ(unit_size_[i], d.data[i].Size());
-        MSHADOW_TYPE_SWITCH(data_[i].type_flag_, DType, {
-            mshadow::Copy(
-              data_[i].get<cpu, 1, DType>().Slice(top * unit_size_[i],
-                                                  (top + 1) * unit_size_[i]),
-              d.data[i].get_with_shape<cpu, 1, DType>(mshadow::Shape1(unit_size_[i])));
-          });
-      }
-      if (++top >= param_.batch_size) {
-        return true;
-      }
-    }
-    if (top != 0) {
-      if (param_.round_batch != 0) {
-        num_overflow_ = 0;
-        base_->BeforeFirst();
-        for (; top < param_.batch_size; ++top, ++num_overflow_) {
-          CHECK(base_->Next()) << 'number of input must be bigger than batch size';
-          const DataInst& d = base_->Value();
-          out_.inst_index[top] = d.index;
-          // copy data
-          for (size_t i = 0; i < d.data.size(); ++i) {
-            CHECK_EQ(unit_size_[i], d.data[i].Size());
-            MSHADOW_TYPE_SWITCH(data_[i].type_flag_, DType, {
-                mshadow::Copy(
-                  data_[i].get<cpu, 1, DType>().Slice(top * unit_size_[i],
-                                                      (top + 1) * unit_size_[i]),
-                  d.data[i].get_with_shape<cpu, 1, DType>(mshadow::Shape1(unit_size_[i])));
-              });
-          }
-        }
-        out_.num_batch_padd = num_overflow_;
-      } else {
-        out_.num_batch_padd = param_.batch_size - top;
-      }
-      return true;
-    }
-    return false;
-  }
-  virtual const TBlobBatch &Value(void) const {
-    return out_;
-  }
-    
-     private:
-  inline TBlob AsDataBlob(const dmlc::Row<uint64_t>& row) {
-    const real_t* ptr = row.value;
-    TShape shape(mshadow::Shape1(row.length));
-    return TBlob((real_t*) ptr, shape, cpu::kDevMask);  // NOLINT(*)
-  }
-    
-      virtual void BeforeFirst(void) {
-    base_->BeforeFirst();
-  }
-    
-    namespace xgboost {
-namespace gbm {
-/*! \brief model parameters */
-struct GBTreeModelParam : public dmlc::Parameter<GBTreeModelParam> {
-  /*! \brief number of trees */
-  int num_trees;
-  /*! \brief number of roots */
-  int num_roots;
-  /*! \brief number of features to be used by trees */
-  int num_feature;
-  /*! \brief pad this space, for backward compatibility reason.*/
-  int pad_32bit;
-  /*! \brief deprecated padding space. */
-  int64_t num_pbuffer_deprecated;
-  /*!
-   * \brief how many output group a single instance can produce
-   *  this affects the behavior of number of output we have:
-   *    suppose we have n instance and k group, output will be k * n
-   */
-  int num_output_group;
-  /*! \brief size of leaf vector needed in tree */
-  int size_leaf_vector;
-  /*! \brief reserved parameters */
-  int reserved[32];
-  /*! \brief constructor */
-  GBTreeModelParam() {
-    std::memset(this, 0, sizeof(GBTreeModelParam));
-    static_assert(sizeof(GBTreeModelParam) == (4 + 2 + 2 + 32) * sizeof(int),
-                  '64/32 bit compatibility issue');
-  }
-  // declare parameters, only declare those that need to be set.
-  DMLC_DECLARE_PARAMETER(GBTreeModelParam) {
-    DMLC_DECLARE_FIELD(num_output_group)
-        .set_lower_bound(1)
-        .set_default(1)
-        .describe(
-            'Number of output groups to be predicted,'
-            ' used for multi-class classification.');
-    DMLC_DECLARE_FIELD(num_roots).set_lower_bound(1).set_default(1).describe(
-        'Tree updater sequence.');
-    DMLC_DECLARE_FIELD(num_feature)
-        .set_lower_bound(0)
-        .describe('Number of features used for training and prediction.');
-    DMLC_DECLARE_FIELD(size_leaf_vector)
-        .set_lower_bound(0)
-        .set_default(0)
-        .describe('Reserved option for vector tree.');
-  }
-};
-    }
-    }
-    
-        void TestBuildHist(int nid,
-                       const GHistIndexMatrix& gmat,
-                       const DMatrix& fmat,
-                       const RegTree& tree) {
-      std::vector<GradientPair> gpair =
-          { {0.23f, 0.24f}, {0.24f, 0.25f}, {0.26f, 0.27f}, {0.27f, 0.28f},
-            {0.27f, 0.29f}, {0.37f, 0.39f}, {0.47f, 0.49f}, {0.57f, 0.59f} };
-      RealImpl::InitData(gmat, gpair, fmat, tree);
-      GHistIndexBlockMatrix quantile_index_block;
-      hist_.AddHistRow(nid);
-      BuildHist(gpair, row_set_collection_[nid],
-                gmat, quantile_index_block, hist_[nid], false);
-      std::vector<GradientPairPrecise> solution {
-        {0.27f, 0.29f}, {0.27f, 0.29f}, {0.47f, 0.49f},
-        {0.27f, 0.29f}, {0.57f, 0.59f}, {0.26f, 0.27f},
-        {0.37f, 0.39f}, {0.23f, 0.24f}, {0.37f, 0.39f},
-        {0.27f, 0.28f}, {0.27f, 0.29f}, {0.37f, 0.39f},
-        {0.26f, 0.27f}, {0.23f, 0.24f}, {0.57f, 0.59f},
-        {0.47f, 0.49f}, {0.47f, 0.49f}, {0.37f, 0.39f},
-        {0.26f, 0.27f}, {0.23f, 0.24f}, {0.27f, 0.28f},
-        {0.57f, 0.59f}, {0.23f, 0.24f}, {0.47f, 0.49f}};
-    }
-    
-            static float f = 0.0f;
-        ImGui::Text('Hello, world!');
-        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
-        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
-        ImGui::ShowDemoWindow(NULL);
-    
-        // Upload Fonts
-    {
-        // Use any command queue
-        VkCommandPool command_pool = wd->Frames[wd->FrameIndex].CommandPool;
-        VkCommandBuffer command_buffer = wd->Frames[wd->FrameIndex].CommandBuffer;
-    }
-    
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-    
-    IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_Init();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data);
-    
-        g_MouseCursors[ImGuiMouseCursor_Arrow] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW);
-    g_MouseCursors[ImGuiMouseCursor_TextInput] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_IBEAM);
-    g_MouseCursors[ImGuiMouseCursor_ResizeAll] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEALL);
-    g_MouseCursors[ImGuiMouseCursor_ResizeNS] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZENS);
-    g_MouseCursors[ImGuiMouseCursor_ResizeEW] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEWE);
-    g_MouseCursors[ImGuiMouseCursor_ResizeNESW] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZENESW);
-    g_MouseCursors[ImGuiMouseCursor_ResizeNWSE] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZENWSE);
-    g_MouseCursors[ImGuiMouseCursor_Hand] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
-    
-    static int InputTextCallback(ImGuiInputTextCallbackData* data)
-{
-    InputTextCallback_UserData* user_data = (InputTextCallback_UserData*)data->UserData;
-    if (data->EventFlag == ImGuiInputTextFlags_CallbackResize)
-    {
-        // Resize string callback
-        // If for some reason we refuse the new length (BufTextLen) and/or capacity (BufSize) we need to set them back to what we want.
-        std::string* str = user_data->Str;
-        IM_ASSERT(data->Buf == str->c_str());
-        str->resize(data->BufTextLen);
-        data->Buf = (char*)str->c_str();
-    }
-    else if (user_data->ChainCallback)
-    {
-        // Forward to user callback, if any
-        data->UserData = user_data->ChainCallbackUserData;
-        return user_data->ChainCallback(data);
-    }
-    return 0;
-}
-    
-    void Action::update(float /*time*/)
-{
-    CCLOG('[Action update]. override me');
-}
-    
-    CardinalSplineTo* CardinalSplineTo::create(float duration, PointArray *points, float tension)
-{
-    CardinalSplineTo *ret = new (std::nothrow) CardinalSplineTo();
-    if (ret)
-    {
-        if (ret->initWithDuration(duration, points, tension))
-        {
-            ret->autorelease();
-        }
-        else 
-        {
-            CC_SAFE_RELEASE_NULL(ret);
-        }
-    }
-    }
-    
-    void ActionEase::update(float time)
-{
-    _inner->update(time);
-}
-    
-    Waves* Waves::clone() const
-{
-    // no copy constructor
-    auto a = new (std::nothrow) Waves();
-    a->initWithDuration(_duration, _gridSize, _waves, _amplitude, _horizontal, _vertical);
-    a->autorelease();
-    return a;
-}
-    
-    /** @class Hide
-* @brief Hide the node.
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-class CC_DLL Hide : public ActionInstant
+    
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+    
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+    
+    
+    {  // Verify that the size of the key space not touched by the reads
+  // is pretty much unchanged.
+  const int64_t final_other_size = Size(Key(n), Key(kCount));
+  ASSERT_LE(final_other_size, initial_other_size + 1048576);
+  ASSERT_GE(final_other_size, initial_other_size/5 - 1048576);
+}
+    
+    std::string InternalKey::DebugString() const {
+  std::string result;
+  ParsedInternalKey parsed;
+  if (ParseInternalKey(rep_, &parsed)) {
+    result = parsed.DebugString();
+  } else {
+    result = '(bad)';
+    result.append(EscapeString(rep_));
+  }
+  return result;
+}
+    
+    
+    {  // Errors
+  static const char* errors[] = {
+    '',
+    'foo',
+    'foo-dx-100.log',
+    '.log',
+    '',
+    'manifest',
+    'CURREN',
+    'CURRENTX',
+    'MANIFES',
+    'MANIFEST',
+    'MANIFEST-',
+    'XMANIFEST-3',
+    'MANIFEST-3x',
+    'LOC',
+    'LOCKx',
+    'LO',
+    'LOGx',
+    '18446744073709551616.log',
+    '184467440737095516150.log',
+    '100',
+    '100.',
+    '100.lop'
+  };
+  for (int i = 0; i < sizeof(errors) / sizeof(errors[0]); i++) {
+    std::string f = errors[i];
+    ASSERT_TRUE(!ParseFileName(f, &number, &type)) << f;
+  }
+}
+    
+    bool HandleDumpCommand(Env* env, char** files, int num) {
+  StdoutPrinter printer;
+  bool ok = true;
+  for (int i = 0; i < num; i++) {
+    Status s = DumpFile(env, files[i], &printer);
+    if (!s.ok()) {
+      fprintf(stderr, '%s\n', s.ToString().c_str());
+      ok = false;
+    }
+  }
+  return ok;
+}
+    
+    
+    {
+    {}  // namespace log
+}  // namespace leveldb
+
+    
+    #ifndef STORAGE_LEVELDB_DB_LOG_READER_H_
+#define STORAGE_LEVELDB_DB_LOG_READER_H_
+    
+      // Create a writer that will append data to '*dest'.
+  // '*dest' must have initial length 'dest_length'.
+  // '*dest' must remain live while this Writer is in use.
+  Writer(WritableFile* dest, uint64_t dest_length);
+    
+      struct KeyComparator {
+    const InternalKeyComparator comparator;
+    explicit KeyComparator(const InternalKeyComparator& c) : comparator(c) { }
+    int operator()(const char* a, const char* b) const;
+  };
+  friend class MemTableIterator;
+  friend class MemTableBackwardIterator;
+    
+    void ApplicationViewModel::SetMenuCategories()
 {
-public:
-    /** Allocates and initializes the action.
-     *
-     * @return An autoreleased Hide object.
-     */
-    static Hide * create();
+    // Use the Categories property instead of the backing variable
+    // because we want to take advantage of binding updates and
+    // property setter logic.
+    Categories = NavCategoryGroup::CreateMenuOptions();
+}
+
+    
+    
+    {    auto opndCmds = opndCmd.GetCommands();
+    unsigned int opndCmdSize;
+    opndCmds->GetSize(&opndCmdSize);
+    m_dataWriter->WriteUInt32(opndCmdSize);
+    for (unsigned int j = 0; j < opndCmdSize; ++j)
+    {
+        int eachOpndcmd;
+        opndCmds->GetAt(j, &eachOpndcmd);
+        m_dataWriter->WriteInt32(eachOpndcmd);
+    }
+}
+    
+    
+    {
+    {            wstring token = tokenItem.first;
+            accExpression << LocalizationService::GetNarratorReadableToken(StringReference(token.c_str()))->Data();
+        }
     }
     
-        shuffle(_tilesOrder, _tilesCount);
     
-    /**
-@brief FadeOutDownTiles action.
-@details Fades out the target node with many tiles from top to bottom.
- */
-class CC_DLL FadeOutDownTiles : public FadeOutUpTiles
-{
-public:
-    /** 
-    * @brief Create the action with the grid size and the duration.
-    * @param duration Specify the duration of the FadeOutDownTiles action. It's a value in seconds.
-    * @param gridSize Specify the size of the grid.
-    * @return If the creation success, return a pointer of FadeOutDownTiles action; otherwise, return nil.
-    */
-    static FadeOutDownTiles* create(float duration, const Size& gridSize);
+    {    // When the user clears the history list in the overlay view and presses enter, the clickedItem is nullptr
+    if (clickedItem != nullptr)
+    {
+        historyVM->ShowItem(clickedItem);
     }
-    
-        /* Creates an animation with an array of AnimationFrame, the delay per units in seconds and how many times it should be executed.
-     * @since v2.0
-     * @param arrayOfAnimationFrameNames An animation with an array of AnimationFrame.
-     * @param delayPerUnit The delay per units in seconds and how many times it should be executed.
-     * @param loops The times the animation is going to loop.
-     */
-    static Animation* create(const Vector<AnimationFrame*>& arrayOfAnimationFrameNames, float delayPerUnit, unsigned int loops = 1);
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    BENCHMARK_DRAW_LINE();
-    
-    vector<detail::BenchmarkResult> resultsFromFile(const std::string& filename) {
-  string content;
-  readFile(filename.c_str(), content);
-  vector<detail::BenchmarkResult> ret;
-  benchmarkResultsFromDynamic(parseJson(content), ret);
-  return ret;
 }
     
     #pragma once
-#define FOLLY_RANDOM_H_
-    
-    #pragma once
-    
-    #include <type_traits>
-    
-    
-    {    return false;
-  }
-  bool compare_exchange_strong(
-      SharedPtr& expected,
-      SharedPtr&& desired,
-      std::memory_order mo = std::memory_order_seq_cst) noexcept {
-    return compare_exchange_strong(
-        expected, desired, mo, detail::default_failure_memory_order(mo));
-  }
-  bool compare_exchange_strong(
-      SharedPtr& expected,
-      SharedPtr&& desired,
-      std::memory_order success,
-      std::memory_order failure) /* noexcept */ {
-    return compare_exchange_strong(expected, desired, success, failure);
-  }
-    
-    
-    {      if (equiv == cpu) {
-        // we only want to count the equiv classes once, so we do it when
-        // we first encounter them
-        while (numCachesByLevel.size() <= level) {
-          numCachesByLevel.push_back(0);
-        }
-        numCachesByLevel[level]++;
-      }
-    }
-    
-    
-    {  T* get() const {
-    return p_;
-  }
-  T* operator->() const {
-    return p_;
-  }
-  explicit operator bool() const {
-    return p_ == nullptr ? false : true;
-  }
-  bool operator==(const counted_ptr<T, Atom>& p) const {
-    return get() == p.get();
-  }
-};
