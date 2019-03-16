@@ -1,305 +1,196 @@
 
         
-          // Run shape inference.
-  tensorflow::shape_inference::InferenceContext c(
-      graph_def_version, &node, op_reg_data->op_def, input_shapes,
-      input_tensors, input_tensor_as_shapes_protos,
-      input_handle_shapes_and_types);
-  TF_RETURN_IF_ERROR(c.construction_status());
+        namespace atom {
+    }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+     private:
+  v8::Global<v8::Object> menu_;
+  std::unique_ptr<TrayIcon> tray_icon_;
     
-        http://www.apache.org/licenses/LICENSE-2.0
+    URLRequestAboutJob::URLRequestAboutJob(net::URLRequest* request,
+                                       net::NetworkDelegate* network_delegate)
+    : net::URLRequestJob(request, network_delegate), weak_ptr_factory_(this) {}
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+    namespace atom {
+    }
     
-    // Creates a numpy array in 'ret' and copies the content of tensor 't'
-// into 'ret'.
-Status ConvertTensorToNdarray(const Tensor& t, PyObject** ret);
+    namespace atom {
+    }
     
-    // Macro used to quickly declare overrides for abstract virtuals in the
-// fft::FftSupport base class. Assumes that it's emitted somewhere inside the
-// ::stream_executor namespace.
-#define TENSORFLOW_STREAM_EXECUTOR_GPU_FFT_SUPPORT_OVERRIDES                   \
-  std::unique_ptr<fft::Plan> Create1dPlan(Stream *stream, uint64 num_x,        \
-                                          fft::Type type, bool in_place_fft)   \
-      override;                                                                \
-  std::unique_ptr<fft::Plan> Create2dPlan(Stream *stream, uint64 num_x,        \
-                                          uint64 num_y, fft::Type type,        \
-                                          bool in_place_fft) override;         \
-  std::unique_ptr<fft::Plan> Create3dPlan(                                     \
-      Stream *stream, uint64 num_x, uint64 num_y, uint64 num_z,                \
-      fft::Type type, bool in_place_fft) override;                             \
-  std::unique_ptr<fft::Plan> Create1dPlanWithScratchAllocator(                 \
-      Stream *stream, uint64 num_x, fft::Type type, bool in_place_fft,         \
-      ScratchAllocator *scratch_allocator) override;                           \
-  std::unique_ptr<fft::Plan> Create2dPlanWithScratchAllocator(                 \
-      Stream *stream, uint64 num_x, uint64 num_y, fft::Type type,              \
-      bool in_place_fft, ScratchAllocator *scratch_allocator) override;        \
-  std::unique_ptr<fft::Plan> Create3dPlanWithScratchAllocator(                 \
-      Stream *stream, uint64 num_x, uint64 num_y, uint64 num_z,                \
-      fft::Type type, bool in_place_fft, ScratchAllocator *scratch_allocator)  \
-      override;                                                                \
-  std::unique_ptr<fft::Plan> CreateBatchedPlan(                                \
-      Stream *stream, int rank, uint64 *elem_count, uint64 *input_embed,       \
-      uint64 input_stride, uint64 input_distance, uint64 *output_embed,        \
-      uint64 output_stride, uint64 output_distance, fft::Type type,            \
-      bool in_place_fft, int batch_count) override;                            \
-  std::unique_ptr<fft::Plan> CreateBatchedPlanWithScratchAllocator(            \
-      Stream *stream, int rank, uint64 *elem_count, uint64 *input_embed,       \
-      uint64 input_stride, uint64 input_distance, uint64 *output_embed,        \
-      uint64 output_stride, uint64 output_distance, fft::Type type,            \
-      bool in_place_fft, int batch_count, ScratchAllocator *scratch_allocator) \
-      override;                                                                \
-  void UpdatePlanWithScratchAllocator(Stream *stream, fft::Plan *plan,         \
-                                      ScratchAllocator *scratch_allocator)     \
-      override;                                                                \
-  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
-             const DeviceMemory<std::complex<float>> &input,                   \
-             DeviceMemory<std::complex<float>> *output) override;              \
-  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
-             const DeviceMemory<std::complex<double>> &input,                  \
-             DeviceMemory<std::complex<double>> *output) override;             \
-  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
-             const DeviceMemory<float> &input,                                 \
-             DeviceMemory<std::complex<float>> *output) override;              \
-  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
-             const DeviceMemory<double> &input,                                \
-             DeviceMemory<std::complex<double>> *output) override;             \
-  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
-             const DeviceMemory<std::complex<float>> &input,                   \
-             DeviceMemory<float> *output) override;                            \
-  bool DoFft(Stream *stream, fft::Plan *plan,                                  \
-             const DeviceMemory<std::complex<double>> &input,                  \
-             DeviceMemory<double> *output) override;
+    static const int kValueSize = 200 * 1024;
+static const int kTotalSize = 100 * 1024 * 1024;
+static const int kCount = kTotalSize / kValueSize;
     
-    #include <algorithm>
-#include <string>
-#include <vector>
-    
-    #include 'caffe/layers/neuron_layer.hpp'
-    
-    #include <utility>
-#include <vector>
-    
-    
-    {}  // namespace caffe
-    
-      explicit GrpcTraceContext(const ::opencensus::trace::SpanContext& ctx) {
-    ctx.trace_id().CopyTo(trace_id);
-    ctx.span_id().CopyTo(span_id);
-    ctx.trace_options().CopyTo(trace_options);
+    // Print contents of a log file. (*func)() is called on every record.
+Status PrintLogContents(Env* env, const std::string& fname,
+                        void (*func)(uint64_t, Slice, WritableFile*),
+                        WritableFile* dst) {
+  SequentialFile* file;
+  Status s = env->NewSequentialFile(fname, &file);
+  if (!s.ok()) {
+    return s;
   }
-    
-    #include <grpc/support/port_platform.h>
-    
-      void FillErrorResponse(const Status& status,
-                         reflection::v1alpha::ErrorResponse* error_response);
-    
-    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
-  uint64_t busy = 0, total = 0;
-  host_cpu_load_info_data_t cpuinfo;
-  mach_msg_type_number_t count = HOST_CPU_LOAD_INFO_COUNT;
-  if (host_statistics(mach_host_self(), HOST_CPU_LOAD_INFO,
-                      (host_info_t)&cpuinfo, &count) == KERN_SUCCESS) {
-    for (int i = 0; i < CPU_STATE_MAX; i++) total += cpuinfo.cpu_ticks[i];
-    busy = total - cpuinfo.cpu_ticks[CPU_STATE_IDLE];
+  CorruptionReporter reporter;
+  reporter.dst_ = dst;
+  log::Reader reader(file, &reporter, true, 0);
+  Slice record;
+  std::string scratch;
+  while (reader.ReadRecord(&record, &scratch)) {
+    (*func)(reader.LastRecordOffset(), record, dst);
   }
-  return std::make_pair(busy, total);
+  delete file;
+  return Status::OK();
 }
     
-    QueryData genKernelIntegrity(QueryContext &context) {
-  QueryData results;
-  Row r;
-  std::string content;
-  std::string text_segment_hash;
-  std::string syscall_addr_modified;
-    }
-    
-    #pragma once
-    
-    #include <osquery/utils/system/linux/perf_event/perf_event.h>
-    
-    template <typename MessageType>
-ExpectedSuccess<PerfOutputError> PerfOutput<MessageType>::read(
-    MessageBatchType& dst) {
-  static_assert(std::is_trivial<MessageType>::value,
-                'message type must be trivial, because it comes from ASM code '
-                'at the end');
-  if (fd_ < 0) {
-    return createError(PerfOutputError::LogicError,
-                       'Attept to read from not loaded perf output');
-  }
-  auto header = static_cast<struct perf_event_mmap_page*>(data_ptr_);
-  if (header->data_head == header->data_tail) {
-    return Success{};
-  }
-  auto status = impl::consumeWrappedMessagesFromCircularBuffer<WrappedMessage>(
-      (impl::ByteType const*)data() + header->data_offset,
-      header->data_tail,
-      header->data_head,
-      header->data_size,
-      dst);
-  header->data_tail = header->data_head;
-  return status;
+    std::string TempFileName(const std::string& dbname, uint64_t number) {
+  assert(number > 0);
+  return MakeFileName(dbname, number, 'dbtmp');
 }
     
-    #include <vector>
-#include <memory>
-    
-    #include 'common.h'
-    
-    class DHTTokenTracker;
-    
-    bool DNSCache::CacheEntry::add(const std::string& addr)
-{
-  for (std::vector<AddrEntry>::const_iterator i = addrEntries_.begin(),
-                                              eoi = addrEntries_.end();
-       i != eoi; ++i) {
-    if ((*i).addr_ == addr) {
-      return false;
-    }
-  }
-  addrEntries_.push_back(AddrEntry(addr));
-  return true;
-}
-    
-    /// Get the total length and remove the nth node
-/// Two Pass Algorithm
-///
-/// Time Complexity: O(n)
-/// Space Complexity: O(1)
-class Solution {
-public:
-    ListNode* removeNthFromEnd(ListNode* head, int n) {
-    }
-    }
-    
-        vector<int> vec1 = {2, 2, 2, 1, 1, 0};
-    Solution().sortColors(vec1);
-    printArr(vec1);
-    
-    // Recursive
-// Time Complexity: O(n), n is the node number in the tree
-// Space Complexity: O(h), h is the height of the tree
-class Solution {
-public:
-    vector<int> inorderTraversal(TreeNode* root) {
-    }
-    }
-    
-    using namespace std;
-    
-            stack<TreeNode*> stack;
-        TreeNode* cur = root;
-        while(cur != NULL || !stack.empty()){
-            while(cur != NULL){
-                res.push_back(cur->val);
-                stack.push(cur);
-                cur = cur->left;
-            }
-    }
-    
-    using namespace std;
-    
-    using namespace std;
-    
-        // create values of different floating-point types
-    json::number_float_t v_ok = 3.141592653589793;
-    json::number_float_t v_nan = NAN;
-    json::number_float_t v_infinity = INFINITY;
-    
-    
-    {  double ret = x * OBJECT_WIDTH_RES;
-  return ret;
-}
-    
-    GemMessageManager::GemMessageManager() {
-  // Control Messages
-  AddSendProtocolData<Accelcmd67, true>();
-  AddSendProtocolData<Brakecmd6b, true>();
-  AddSendProtocolData<Globalcmd69, true>();
-  AddSendProtocolData<Headlightcmd76, true>();
-  AddSendProtocolData<Horncmd78, true>();
-  AddSendProtocolData<Shiftcmd65, true>();
-  AddSendProtocolData<Steeringcmd6d, true>();
-  AddSendProtocolData<Turncmd63, true>();
-  AddSendProtocolData<Wipercmd90, true>();
-    }
+    static const int kBlockSize = 32768;
     
     
     {
-    {}  // namespace canbus
-}  // namespace apollo
+    {
+    {      default: {
+        char buf[40];
+        snprintf(buf, sizeof(buf), 'unknown record type %u', record_type);
+        ReportCorruption(
+            (fragment.size() + (in_fragmented_record ? scratch->size() : 0)),
+            buf);
+        in_fragmented_record = false;
+        scratch->clear();
+        break;
+      }
+    }
+  }
+  return false;
+}
+    
+    
+    {
+    {      // Install new manifest
+      status = env_->RenameFile(tmp, DescriptorFileName(dbname_, 1));
+      if (status.ok()) {
+        status = SetCurrentFile(env_, dbname_, 1);
+      } else {
+        env_->DeleteFile(tmp);
+      }
+    }
+    return status;
+  }
+    
+    Iterator* TableCache::NewIterator(const ReadOptions& options,
+                                  uint64_t file_number,
+                                  uint64_t file_size,
+                                  Table** tableptr) {
+  if (tableptr != nullptr) {
+    *tableptr = nullptr;
+  }
+    }
+    
+    struct FileMetaData {
+  int refs;
+  int allowed_seeks;          // Seeks allowed until compaction
+  uint64_t number;
+  uint64_t file_size;         // File size in bytes
+  InternalKey smallest;       // Smallest internal key served by table
+  InternalKey largest;        // Largest internal key served by table
+    }
+    
+    static void TestEncodeDecode(const VersionEdit& edit) {
+  std::string encoded, encoded2;
+  edit.EncodeTo(&encoded);
+  VersionEdit parsed;
+  Status s = parsed.DecodeFrom(encoded);
+  ASSERT_TRUE(s.ok()) << s.ToString();
+  parsed.EncodeTo(&encoded2);
+  ASSERT_EQ(encoded, encoded2);
+}
+    
+    #endif  // PLUGIN_CAFFE_CAFFE_COMMON_H_
 
     
-    void Brakemotorrpt271::Parse(const std::uint8_t* bytes, int32_t length,
-                             ChassisDetail* chassis) const {
-  chassis->mutable_gem()
-      ->mutable_brake_motor_rpt_2_71()
-      ->set_encoder_temperature(encoder_temperature(bytes, length));
-  chassis->mutable_gem()->mutable_brake_motor_rpt_2_71()->set_motor_temperature(
-      motor_temperature(bytes, length));
-  chassis->mutable_gem()->mutable_brake_motor_rpt_2_71()->set_angular_speed(
-      angular_speed(bytes, length));
+    Graph DetectInplaceAddTo(Graph g) {
+  nnvm::StorageVector storage_id =
+      g.MoveCopyAttr<nnvm::StorageVector>('storage_id');
+  std::vector<int> storage_inplace_index =
+      g.MoveCopyAttr<std::vector<int> >('storage_inplace_index');
+  static const Op* ewise_plus_op = Op::Get('_grad_add');
+  auto& idx = g.indexed_graph();
+  // reference cont.
+  std::vector<int> ref_count(idx.num_node_entries(), 0);
+  std::vector<int> addto_entry(idx.num_node_entries(), 0);
+  std::vector<int> skip_plus_node(idx.num_nodes(), 0);
+    }
+    
+    template<typename xpu>
+void Dequantize2BitKernelLaunch(mshadow::Stream<xpu> *s, const std::vector<mxnet::TBlob> &inputs,
+                                const float threshold) {
+  mxnet::op::mxnet_op::Kernel<dequantize_2bit, xpu>
+  ::Launch(s,
+          inputs[1].Size(),         // original size
+          inputs[1].dptr<float>(),  // out array
+          inputs[0].dptr<float>(),  // compressed array
+          -1 *threshold,            // negative threshold
+          threshold);               // positive threshold
 }
     
+    // relu
+MXNET_OPERATOR_REGISTER_UNARY(_contrib_div_sqrt_dim)
+.describe(R'code(Rescale the input by the square root of the channel dimension.
+    
+    MXNET_REGISTER_OP_PROPERTY(Crop, CropProp)
+.describe(R'code(
+    
     
     {
     {
+    {  bool init_cudnn_;
+  cudnnDataType_t dtype_;
+  cudnnSpatialTransformerDescriptor_t st_desc_;
+  cudnnTensorDescriptor_t in_desc_;
+  cudnnTensorDescriptor_t out_desc_;
+  cudnnSamplerType_t sampler_;
+  #if CUDNN_MAJOR >= 5
+  cudnnTensorFormat_t format_;
+  #endif
+  BilinearSamplerParam param_;
+};
+#endif  // __CUDACC__ && CUDNN
+}  // namespace op
+}  // namespace mxnet
+    
+        void NDMask::MarkSectionAs(const std::vector<size_t>& sectionOffset, const NDShape& sectionShape, MaskKind maskKind)
     {
-    {  Brake_rpt_6c::Brake_on_offType ret =
-      static_cast<Brake_rpt_6c::Brake_on_offType>(x);
-  return ret;
-}
-}  // namespace gem
-}  // namespace canbus
-}  // namespace apollo
-
+        // TODO: Implement batching of masking operation for masks residing on GPUs to avoid making
+        // GPU invocations for each MaskSection call.
+    }
     
-        for (i = 1; i < 1024; i++)
+        std::pair<size_t, size_t> Value::GetSequenceAndBatchLength(const Variable& outputVariable, NDShape* inferredVarShape)
     {
-        uint32_t key = ((rand() % 19999) + 1) * 37;
-        int ret = (int) (long) swRbtree_find(tree, key);
-        ASSERT_GT(ret, 0);
-        lists.insert(key);
+        Utils::VerifyVariableValueCompatibility(outputVariable, shared_from_this(), inferredVarShape);
     }
     
-    using namespace swoole;
-    
-        public slots:
-        void run();
+        deque<ComputationNodeBasePtr> workList;
     
     
-    {    bzero(data, 256);
-    ret = p.read(&p, data, 255);
-    ASSERT_GT(ret, 0);
-    ASSERT_EQ(strcmp('hello world\n你好中国。\n', data), 0);
-}
-
-    
-        for (int i = 0; i < 1000; ++i)
+    // out_of_range.106
+    try
     {
-        auto ret = swAio_dispatch2(&event);
-        ASSERT_EQ(ret->object, event.object);
-        ASSERT_NE(ret->task_id, event.task_id);
+        // try to use an array index with leading '0'
+        json::reference ref = j.at('/array/01'_json_pointer);
+    }
+    catch (json::parse_error& e)
+    {
+        std::cout << e.what() << '\n';
     }
     
-    static inline void coro_test(std::initializer_list<std::pair<coroutine_func_t, void*>> args)
-{
-    int complete_num = 0;
-    }
     
-        coro_test({
-        make_pair([](void *arg)
-        {
-            auto chan = (Channel *) arg;
-    }
-    }
+    // ===========
+    // array types
+    // ===========
+    
+        // print values
+    std::cout << object << '\n';
+    std::cout << *res1.first << ' ' << std::boolalpha << res1.second << '\n';
