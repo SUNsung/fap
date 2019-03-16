@@ -1,186 +1,126 @@
 
         
-            # start time
-    tstart = time()
-    clf = factory(alpha=alpha).fit(X, Y)
-    delta = (time() - tstart)
-    # stop time
-    
-        for ns in n_samples:
-        for nf in n_features:
-            it += 1
-            print('==================')
-            print('Iteration %s of %s' % (it, max(len(n_samples),
-                                          len(n_features))))
-            print('==================')
-            n_informative = nf // 10
-            X, Y, coef_ = make_regression(n_samples=ns, n_features=nf,
-                                          n_informative=n_informative,
-                                          noise=0.1, coef=True)
+            # register the database commands
+    from flaskr import db
+    db.init_app(app)
     
     
-def compute_bench_2(chunks):
-    results = defaultdict(lambda: [])
-    n_features = 50000
-    means = np.array([[1, 1], [-1, -1], [1, -1], [-1, 1],
-                      [0.5, 0.5], [0.75, -0.5], [-1, 0.75], [1, 0]])
-    X = np.empty((0, 2))
-    for i in range(8):
-        X = np.r_[X, means[i] + 0.8 * np.random.randn(n_features, 2)]
-    max_it = len(chunks)
-    it = 0
-    for chunk in chunks:
-        it += 1
-        print('==============================')
-        print('Iteration %03d of %03d' % (it, max_it))
-        print('==============================')
-        print()
+def test_index(client, auth):
+    response = client.get('/')
+    assert b'Log In' in response.data
+    assert b'Register' in response.data
     
-        max_it = len(samples_range) * len(features_range)
-    for i_s, n_samples in enumerate(samples_range):
-        for i_f, n_features in enumerate(features_range):
-            it += 1
-            n_informative = n_features / 10
-            print('====================')
-            print('Iteration %03d of %03d' % (it, max_it))
-            print('====================')
-            # dataset_kwargs = {
-            #     'n_train_samples': n_samples,
-            #     'n_test_samples': 2,
-            #     'n_features': n_features,
-            #     'n_informative': n_informative,
-            #     'effective_rank': min(n_samples, n_features) / 10,
-            #     #'effective_rank': None,
-            #     'bias': 0.0,
-            # }
-            dataset_kwargs = {
-                'n_samples': 1,
-                'n_components': n_features,
-                'n_features': n_samples,
-                'n_nonzero_coefs': n_informative,
-                'random_state': 0
-            }
-            print('n_samples: %d' % n_samples)
-            print('n_features: %d' % n_features)
-            y, X, _ = make_sparse_coded_signal(**dataset_kwargs)
-            X = np.asfortranarray(X)
+        :copyright: © 2010 by the Pallets team.
+    :license: BSD, see LICENSE for more details.
+'''
     
-                gc.collect()
-            print('benchmarking scikit-learn randomized_svd: n_iter=0')
-            tstart = time()
-            randomized_svd(X, rank, n_iter=0)
-            results['scikit-learn randomized_svd (n_iter=0)'].append(
-                time() - tstart)
+        Implements signals based on blinker if available, otherwise
+    falls silently back to a noop.
     
-    plt.figure('scikit-learn Ward's method benchmark results')
-plt.imshow(np.log(ratio), aspect='auto', origin='lower')
-plt.colorbar()
-plt.contour(ratio, levels=[1, ], colors='k')
-plt.yticks(range(len(n_features)), n_features.astype(np.int))
-plt.ylabel('N features')
-plt.xticks(range(len(n_samples)), n_samples.astype(np.int))
-plt.xlabel('N samples')
-plt.title('Scikit's time, in units of scipy time (log)')
-plt.show()
+            for blueprint in self.app.iter_blueprints():
+            loader = blueprint.jinja_loader
+            if loader is not None:
+                yield blueprint, loader
+    
+        def on_json_loading_failed(self, e):
+        '''Called if :meth:`get_json` parsing fails and isn't silenced. If
+        this method returns a value, it is used as the return value for
+        :meth:`get_json`. The default implementation raises a
+        :class:`BadRequest` exception.
+    
+                if next(lineiter).count('-') != len(match.group(0)):
+                continue
+    
+        if len(sys.argv) > 1:
+        ip = sys.argv[1]
+    else:
+        ip = '46.134.208.94'
+        ip = '2001:ee0:3203:a::12'
+        print('Usage: check_ip.py [ip] [top_domain] [wait_time=0]')
+    print('test ip:%s' % ip)
+    
+    
+    def setText(self, text):
+        '''
+        Override the text for this token.  getText() will return this text
+        rather than pulling from the buffer.  Note that this does not mean
+        that start/stop indexes are not valid.  It means that that input
+        was converted to a new string in the token object.
+	'''
+        self._text = text
+    
+        def clone(self, **attrs):
+        '''Clone a prototype and update inner attributes dictionary'''
+        # Python in Practice, Mark Summerfield
+        obj = self.__class__()
+        obj.__dict__.update(attrs)
+        return obj
+    
+    ### OUTPUT ###
+# PRODUCT LIST:
+# (Fetching from Data Store)
+# cheese
+# eggs
+# milk
+#
+# (Fetching from Data Store)
+# PRODUCT INFORMATION:
+# Name: Cheese, Price: 2.00, Quantity: 10
+# (Fetching from Data Store)
+# PRODUCT INFORMATION:
+# Name: Eggs, Price: 0.20, Quantity: 100
+# (Fetching from Data Store)
+# PRODUCT INFORMATION:
+# Name: Milk, Price: 1.50, Quantity: 10
+# (Fetching from Data Store)
+# That product 'arepas' does not exist in the records
 
     
-        fig = plt.figure('scikit-learn sample w/o replacement benchmark results')
-    plt.title('n_population = %s, n_times = %s' %
-              (opts.n_population, opts.n_times))
-    ax = fig.add_subplot(111)
-    for name in sampling_algorithm:
-        ax.plot(ratio, time[name], label=name)
     
-        # start time
-    tstart = datetime.now()
-    clf = DecisionTreeClassifier()
-    clf.fit(X, Y).predict(X)
-    delta = (datetime.now() - tstart)
-    # stop time
+if __name__ == '__main__':
+    main()
     
-            text_filename = os.path.join(text_lang_folder,
-                                     '%s_%04d.txt' % (lang, i))
-        print('Writing %s' % text_filename)
-        open(text_filename, 'wb').write(content.encode('utf-8', 'ignore'))
-        i += 1
+        graphic.add(graphic1)
+    graphic.add(graphic2)
     
-    URL = ('http://people.csail.mit.edu/jrennie/'
-       '20Newsgroups/20news-bydate.tar.gz')
     
-    # TASK: Fit the pipeline on the training set
+if __name__ == '__main__':
+    front_controller = RequestController()
+    front_controller.dispatch_request(Request('mobile'))
+    front_controller.dispatch_request(Request('tablet'))
     
-    import urllib
+            def __str__(self):
+            return '{:.2f}'.format(self)
     
-            for i in html_json['sources']:
-            if 'src' in i:  #to avoid KeyError
-                if i['src'].startswith('https'):
-                    link_list.append((str(i['height']), i['src']))
     
-    __all__ = ['cntv_download', 'cntv_download_by_id']
+class TestProvider(unittest.TestCase):
+    '''
+    Integration tests ~ provider class with as little mocking as possible.
+    '''
     
-            #type_, ext, size = url_info(url)
-        #print_info(site_info, title, type_, size)
-        #if not info_only:
-            #download_urls([url], title, ext, total_size=None, output_dir=output_dir, merge=merge)
+        def test_3rd_am_station_after_scan(self):
+        self.radio.scan()
+        station = self.radio.state.stations[self.radio.state.pos]
+        expected_station = '1510'
+        self.assertEqual(station, expected_station)
     
-    #----------------------------------------------------------------------
-def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    '''wrapper'''
-    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
-    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
-    hostname = urlparse(url).hostname
-    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
-        return False
-    upid = match1(url, r'.+/content/(\w+)')
+        '''def test_object(queue):
+           queue_object = QueueObject(queue, True)
+           print('Inside func: {}'.format(queue_object.object))'''
     
-            real_url = 'https://docs.google.com/uc?export=download&confirm=no_antivirus&id=%s' % docid
-        redirected_url = get_location(real_url)
-        if real_url != redirected_url:
-# tiny file - get real url here
-            type, ext, size = url_info(redirected_url)
-            real_url = redirected_url
-        else:
-# huge file - the real_url is a confirm page and real url is in it
-            confirm_page = get_content(real_url)
-            hrefs = re.findall(r'href='(.+?)'', confirm_page)
-            for u in hrefs:
-                if u.startswith('/uc?export=download'):
-                    rel = unescape_html(u)
-            confirm_url = 'https://docs.google.com' + rel
-            real_url = get_location(confirm_url)
-            _, ext, size = url_info(real_url, headers=fake_headers)
-            if size is None:
-                size = 0
+        with tf.variable_scope(name, reuse=reuse):
+        alpha = get_w(alpha_shape, w_initializer=alpha_init, name='alpha')
+        # o = relu(x) + 0.5 * tf.multiply(alpha, x - tf.abs(x))  # TFLearn
+        o = leaky_relu(x, alpha)  # TensorLayer / <Deep Learning>
     
-        def _queued_event_check(self, click_type, time_diff):
-        '''Generate a log message and returns true if timeout exceeded.'''
-        time_string = '{:d} {}'.format(
-            time_diff, 'second' if time_diff == 1 else 'seconds')
+        Args:
+        x(tf.Tensor):
+        kernel_size(int or list of int):
+        out_channels(int):
+        act_fn(function):
+        strides(int or list of int):
+        padding(str):
+        name(str):
+        reuse(bool):
     
-        hass.services.register(DOMAIN, SERVICE_BROWSE_URL,
-                           lambda service:
-                           webbrowser.open(service.data[ATTR_URL]),
-                           schema=SERVICE_BROWSE_URL_SCHEMA)
     
-        return True
-
-    
-    PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Required(CONF_HOST): cv.string,
-    vol.Required(CONF_USERNAME): cv.string,
-    vol.Required(CONF_PASSWORD): cv.string,
-    vol.Optional(CONF_TYPE, default=DEFAULT_TYPE): cv.string,
-})
-    
-        for order_info in conf.get(ATTR_ORDERS):
-        order = DominosOrder(order_info, dominos)
-        entities.append(order)
-    
-        for ha_type, hive_type in DEVICETYPES.items():
-        for key, devices in devicelist.items():
-            if key == hive_type:
-                for hivedevice in devices:
-                    load_platform(hass, ha_type, DOMAIN, hivedevice, config)
-    return True
