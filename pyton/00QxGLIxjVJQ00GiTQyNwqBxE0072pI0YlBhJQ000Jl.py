@@ -1,47 +1,143 @@
 
         
-        Provides utility functions that are consumed internally by Requests
-which depend on extremely few external helpers (such as compat)
+        
+@pytest.mark.functional
+def test_select_command_with_arrows(proc, TIMEOUT):
+    select_command_with_arrows(proc, TIMEOUT)
+    history_changed(proc, TIMEOUT, u'git help')
+    
+    
+@pytest.mark.parametrize('command, new_command, packages', [
+    (Command('vim', ''), 'sudo apt-get install vim && vim',
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('convert', ''), 'sudo apt-get install imagemagick && convert',
+     [('imagemagick', 'main'),
+      ('graphicsmagick-imagemagick-compat', 'universe')]),
+    (Command('sudo vim', ''), 'sudo apt-get install vim && sudo vim',
+     [('vim', 'main'), ('vim-tiny', 'main')]),
+    (Command('sudo convert', ''), 'sudo apt-get install imagemagick && sudo convert',
+     [('imagemagick', 'main'),
+      ('graphicsmagick-imagemagick-compat', 'universe')])])
+def test_get_new_command(mocker, command, new_command, packages):
+    mocker.patch('thefuck.rules.apt_get._get_packages',
+                 create=True, return_value=packages)
+    
+    no_match_output = '''
+Listing... Done
 '''
     
-        def inner(*suffix):
-        return urljoin(httpbin_url, '/'.join(suffix))
     
-        def test_copy(self):
-        copy = self.case_insensitive_dict.copy()
-        assert copy is not self.case_insensitive_dict
-        assert copy == self.case_insensitive_dict
+def test_match():
+    command = Command('brew install sshfs', output)
+    assert match(command)
     
-    
-def test_idna_with_version_attribute(mocker):
-    '''Verify we're actually setting idna version when it should be available.'''
-    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
-    assert info()['idna'] == {'version': '2.6'}
+        # Histogram of ground-truth objects
+    gt_hist = np.zeros((len(classes)), dtype=np.int)
+    for entry in roidb:
+        gt_inds = np.where(
+            (entry['gt_classes'] > 0) & (entry['is_crowd'] == 0))[0]
+        gt_classes = entry['gt_classes'][gt_inds]
+        gt_hist += np.histogram(gt_classes, bins=hist_bins)[0]
+    logger.debug('Ground-truth class histogram:')
+    for i, v in enumerate(gt_hist):
+        logger.debug(
+            '{:d}{:s}: {:d}'.format(
+                i, classes[i].rjust(char_len), v))
+    logger.debug('-' * char_len)
+    logger.debug(
+        '{:s}: {:d}'.format(
+            'total'.rjust(char_len), np.sum(gt_hist)))
 
     
-        def test_super_len_with_no__len__(self):
-        class LenFile(object):
-            def __init__(self):
-                self.len = 5
-    
-        def should_strip_auth(self, old_url, new_url):
-        '''Decide whether Authorization header should be removed when redirecting'''
-        old_parsed = urlparse(old_url)
-        new_parsed = urlparse(new_url)
-        if old_parsed.hostname != new_parsed.hostname:
-            return True
-        # Special case: allow http -> https redirect when using the standard
-        # ports. This isn't specified by RFC 7235, but is kept to avoid
-        # breaking backwards compatibility with older versions of requests
-        # that allowed any redirects on the same host.
-        if (old_parsed.scheme == 'http' and old_parsed.port in (80, None)
-                and new_parsed.scheme == 'https' and new_parsed.port in (443, None)):
-            return False
+    '''Handle mapping from old network building function names to new names.
     
     
-def urldefragauth(url):
+def build_data_parallel_model(model, single_gpu_build_func):
+    '''Build a data parallel model given a function that builds the model on a
+    single GPU.
     '''
-    Given a url remove the fragment and the authentication part.
+    if model.only_build_forward_pass:
+        single_gpu_build_func(model)
+    elif model.train:
+        all_loss_gradients = _build_forward_graph(model, single_gpu_build_func)
+        # Add backward pass on all GPUs
+        model.AddGradientOperators(all_loss_gradients)
+        if cfg.NUM_GPUS > 1:
+            _add_allreduce_graph(model)
+        for gpu_id in range(cfg.NUM_GPUS):
+            # After allreduce, all GPUs perform SGD updates on their identical
+            # params and gradients in parallel
+            with c2_utils.NamedCudaScope(gpu_id):
+                add_single_gpu_param_update_ops(model, gpu_id)
+    else:
+        # Test-time network operates on single GPU
+        # Test-time parallelism is implemented through multiprocessing
+        with c2_utils.NamedCudaScope(model.target_gpu_id):
+            single_gpu_build_func(model)
     
-            .. note:: This method is not reentrant safe.
+        def forward(self, inputs, outputs):
+        '''See modeling.detector.CollectAndDistributeFpnRpnProposals for
+        inputs/outputs documentation.
         '''
+        # inputs is
+        # [rpn_rois_fpn2, ..., rpn_rois_fpn6,
+        #  rpn_roi_probs_fpn2, ..., rpn_roi_probs_fpn6]
+        # If training with Faster R-CNN, then inputs will additionally include
+        #  + [roidb, im_info]
+        rois = collect(inputs, self._train)
+        if self._train:
+            # During training we reuse the data loader code. We populate roidb
+            # entries on the fly using the rois generated by RPN.
+            # im_info: [[im_height, im_width, im_scale], ...]
+            im_info = inputs[-1].data
+            im_scales = im_info[:, 2]
+            roidb = blob_utils.deserialize(inputs[-2].data)
+            # For historical consistency with the original Faster R-CNN
+            # implementation we are *not* filtering crowd proposals.
+            # This choice should be investigated in the future (it likely does
+            # not matter).
+            json_dataset.add_proposals(roidb, rois, im_scales, crowd_thresh=0)
+            roidb_utils.add_bbox_regression_targets(roidb)
+            # Compute training labels for the RPN proposals; also handles
+            # distributing the proposals over FPN levels
+            output_blob_names = fast_rcnn_roi_data.get_fast_rcnn_blob_names()
+            blobs = {k: [] for k in output_blob_names}
+            fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
+            for i, k in enumerate(output_blob_names):
+                blob_utils.py_op_copy_blob(blobs[k], outputs[i])
+        else:
+            # For inference we have a special code path that avoids some data
+            # loader overhead
+            distribute(rois, None, outputs, self._train)
+    
+        if len(data.shape) == 1:
+        ret = np.empty((count, ), dtype=data.dtype)
+        ret.fill(fill)
+        ret[inds] = data
+    else:
+        ret = np.empty((count, ) + data.shape[1:], dtype=data.dtype)
+        ret.fill(fill)
+        ret[inds, :] = data
+    return ret
+    
+    logger = logging.getLogger(__name__)
+    
+    
+if __name__ == '__main__':
+    sys.exit(main())
+
+    
+        # The string 'Closes #%s' string is required for GitHub to correctly close
+    # the PR
+    merge_message_flags += [
+        '-m',
+        'Closes #%s from %s and squashes the following commits:'
+        % (pr_num, pr_repo_desc)]
+    for c in commits:
+        merge_message_flags += ['-m', c]
+    
+        def size_to_pt(self, in_val, em_pt=None, conversions=UNIT_RATIOS):
+        def _error():
+            warnings.warn('Unhandled size: {val!r}'.format(val=in_val),
+                          CSSWarning)
+            return self.size_to_pt('1!!default', conversions=conversions)
