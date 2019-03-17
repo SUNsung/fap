@@ -1,90 +1,85 @@
 
         
-            See :class:`Packer` for options.
-    '''
-    packer = Packer(**kwargs)
-    stream.write(packer.pack(o))
+            context['show_on_github_url'] = show_url
+    context['edit_on_github_url'] = edit_url
     
-            exp = pd.DatetimeIndex(['2011-01-01 09:00', '2011-01-01 10:00',
-                                '2011-01-01 11:00'], tz=tz)
-        tm.assert_index_equal(
-            idx.fillna(pd.Timestamp('2011-01-01 10:00', tz=tz)), exp)
     
-            self.reloadtask = None
-        if reload:
-            self.reloadtask = asyncio.ensure_future(self.watcher())
-        else:
-            self.loadscript()
+def setup_button(hass, config, add_entities, client, address):
+    '''Set up a single button device.'''
+    timeout = config.get(CONF_TIMEOUT)
+    ignored_click_types = config.get(CONF_IGNORED_CLICK_TYPES)
+    button = FlicButton(hass, client, address, timeout, ignored_click_types)
+    _LOGGER.info('Connected to button %s', address)
     
-        def run(self, f, is_request):
-        if self.max_size:
-            r = f.request if is_request else f.response
-            try:
-                expected_size = http1.expected_http_body_size(
-                    f.request, f.response if not is_request else None
-                )
-            except exceptions.HttpException:
-                f.reply.kill()
-                return
-            if expected_size and not r.raw_content and not (0 <= expected_size <= self.max_size):
-                # r.stream may already be a callable, which we want to preserve.
-                r.stream = r.stream or True
-                ctx.log.info('Streaming {} {}'.format('response from' if not is_request else 'request to', f.request.host))
+            # Check if the access point is accessible
+        response = self._make_request()
+        if not response.status_code == 200:
+            raise ConnectionError('Cannot connect to Linksys Access Point')
     
-            if log.log_tier(ctx.options.termlog_verbosity) >= log.log_tier(e.level):
-            click.secho(
-                e.msg,
-                file=outfile,
-                fg=dict(error='red', warn='yellow',
-                        alert='magenta').get(e.level),
-                dim=(e.level == 'debug'),
-                err=(e.level == 'error')
+    import voluptuous as vol
+    
+        def __init__(self, app_name, app_icon, hostname, password, port):
+        '''Initialize the service.'''
+        import gntp.notifier
+        import gntp.errors
+        self.gntp = gntp.notifier.GrowlNotifier(
+            applicationName=app_name,
+            notifications=['Notification'],
+            applicationIcon=app_icon,
+            hostname=hostname,
+            password=password,
+            port=port
+        )
+        try:
+            self.gntp.register()
+        except gntp.errors.NetworkError:
+            _LOGGER.error('Unable to register with the GNTP host')
+            return
+    
+            if send_test_msg:
+            self.send_message('Home Assistant started')
+    
+            # Adding unique constraint on 'GroupCommitResolution', fields ['group_id', 'commit_id']
+        db.create_unique('sentry_groupcommitresolution', ['group_id', 'commit_id'])
+    
+            # Adding model 'RawEvent'
+        db.create_table(
+            'sentry_rawevent', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'project', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.Project']
+                    )
+                ), (
+                    'event_id',
+                    self.gf('django.db.models.fields.CharField')(max_length=32, null=True)
+                ), (
+                    'datetime',
+                    self.gf('django.db.models.fields.DateTimeField')()
+                ),
+                ('data', self.gf('sentry.db.models.fields.node.NodeField')(null=True, blank=True)),
             )
-
+        )
+        db.send_create_signal('sentry', ['RawEvent'])
     
+        def backwards(self, orm):
+        # Removing unique constraint on 'Distribution', fields ['release', 'name']
+        db.delete_unique('sentry_distribution', ['release_id', 'name'])
     
-    class TextChunk(KaitaiStruct):
-        def __init__(self, _io, _parent=None, _root=None):
-            self._io = _io
-            self._parent = _parent
-            self._root = _root if _root else self
-            self.keyword = (self._io.read_bytes_term(0, False, True, True)).decode(u'iso8859-1')
-            self.text = (self._io.read_bytes_full()).decode(u'iso8859-1')
+        '''
+    for k, v in ret.items():
+        tokens = list(k)
+        print(tokens)
+        if v:
+            for t in v:
+                print('\t', t)
+        else:
+            print('\t', '---')
     
-    		page.addToken(0x05, 'UmCallerID')
-		page.addToken(0x06, 'UmUserNotes')
-		page.addToken(0x07, 'UmAttDuration')
-		page.addToken(0x08, 'UmAttOrder')
-		page.addToken(0x09, 'ConversationId')
-		page.addToken(0x0A, 'ConversationIndex')
-		page.addToken(0x0B, 'LastVerbExecuted')
-		page.addToken(0x0C, 'LastVerbExecutionTime')
-		page.addToken(0x0D, 'ReceivedAsBcc')
-		page.addToken(0x0E, 'Sender')
-		page.addToken(0x0F, 'CalendarType')
-		page.addToken(0x10, 'IsLeapMonth')
-		page.addToken(0x11, 'AccountId')
-		page.addToken(0x12, 'FirstDayOfWeek')
-		page.addToken(0x13, 'MeetingMessageType')
-		self.codePages.append(page)
-		# endregion
+        Returns:
     
-    @pytest.mark.usefixtures('resetSettings')
-@pytest.mark.usefixtures('resetTempSettings')
-class TestAnnounce:
-    def testSenderInfo(self, announcer):
-        sender_info = announcer.sender_info
-        assert sender_info['port'] > 0
-        assert len(sender_info['peer_id']) == 20
-        assert sender_info['rev'] > 0
-    
-    
-def toOpensslPublickey(publickey):
-    publickey_bin = btctools.encode_pubkey(publickey, 'bin')
-    publickey_bin = publickey_bin[1:]
-    publickey_openssl = '\x02\xca\x00 ' + publickey_bin[:32] + '\x00 ' + publickey_bin[32:]
-    return publickey_openssl
-
-    
-        def tell(self):
-        return self.pos
+    import tensorflow as tf
+import keras.backend as K
