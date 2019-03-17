@@ -1,66 +1,107 @@
 
         
-          describe 'converting escaped JSONPath strings' do
-    it 'should work' do
-      expect(LiquidMigrator.convert_string('Weather looks like <$.conditions> according to the forecast at <$.pretty_date.time>')).to eq(
-                                    'Weather looks like {{conditions}} according to the forecast at {{pretty_date.time}}'
-      )
-    end
+              it 'left-justifies the result if specified with $ argument is negative' do
+        format('%1$*2$b', 10, -10).should == '1010      '
+        format('%1$*2$B', 10, -10).should == '1010      '
+        format('%1$*2$d', 112, -10).should == '112       '
+        format('%1$*2$i', 112, -10).should == '112       '
+        format('%1$*2$o', 87, -10).should == '127       '
+        format('%1$*2$u', 112, -10).should == '112       '
+        format('%1$*2$x', 196, -10).should == 'c4        '
+        format('%1$*2$X', 196, -10).should == 'C4        '
     
-        it 'should generate the correct last checkpoint url' do
-      @checker.options['path'] = 'last_checkpoint/usps/9361289878905919630610'
-      expect(@checker.send(:event_url)).to eq('https://api.aftership.com/v4/last_checkpoint/usps/9361289878905919630610')
-    end
+      it 'raises #{frozen_error_class} on an untainted, frozen object' do
+    o = Object.new.freeze
+    lambda { o.taint }.should raise_error(frozen_error_class)
   end
     
-        it 'should raise error when response has an error' do
-      stub(HTTParty).post { {'error' => {'message' => 'Sample error'}} }
-      expect { @checker.send_notification({}) }.to raise_error(StandardError, /Sample error/)
-    end
+      after :each do
+    Object.send :remove_method, :boom
   end
+    
+          def inherited_hash_reader(name)
+        class_eval <<-RUBY, __FILE__, __LINE__ + 1
+          def #{name}(name)
+            _#{name}(name.tr('_', '-'))
+          end
+    
+        # Adds an entry to the exception's Sass backtrace.
+    #
+    # @param attrs [{Symbol => Object}] The information in the backtrace entry.
+    #   See \{#sass\_backtrace}
+    def add_backtrace(attrs)
+      sass_backtrace << attrs.reject {|_k, v| v.nil?}
+    end
+    
+    post '/' do
+  connections.each { |out| out << 'data: #{params[:msg]}\n\n' }
+  204 # response without entity body
 end
-
     
-        private
+            elsif masked_token?(token)
+          token = unmask_token(token)
     
-      respond_to :json
-    
-      def rate_limit_limit
-    api_throttle_data[:limit].to_s
-  end
-    
-    desc 'Generate jekyll site'
-task :generate do
-  raise '### You haven't set anything up yet. First run `rake install` to set up an Octopress theme.' unless File.directory?(source_dir)
-  puts '## Generating Site with Jekyll'
-  system 'compass compile --css-dir #{source_dir}/stylesheets'
-  system 'jekyll build'
-end
-    
-      if options.respond_to? 'keys'
-    options.each do |k,v|
-      unless v.nil?
-        v = v.join ',' if v.respond_to? 'join'
-        v = v.to_json if v.respond_to? 'keys'
-        output += ' data-#{k.sub'_','-'}='#{v}''
+          def redirect(env)
+        request = Request.new(env)
+        warn env, 'attack prevented by #{self.class}'
+        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
       end
+    
+            modes       = Array options[:escape]
+        @escaper    = options[:escaper]
+        @html       = modes.include? :html
+        @javascript = modes.include? :javascript
+        @url        = modes.include? :url
+    
+          def has_vector?(request, headers)
+        return false if request.xhr?
+        return false if options[:allow_if] && options[:allow_if].call(request.env)
+        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
+        origin(request.env).nil? and referrer(request.env) != request.host
+      end
+    
+      describe '#random_string' do
+    it 'outputs a string of 32 characters' do
+      expect(subject.random_string.length).to eq(32)
     end
-  elsif options.respond_to? 'join'
-    output += ' data-value='#{config[key].join(',')}''
-  else
-    output += ' data-value='#{config[key]}''
   end
-  output += '></#{tag}>'
-end
     
-          rtn = ''
-      (context.environments.first['site'][@array_name] || []).each do |file|
-        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
-          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
-        end
+      def migration_name
+    'add_attachment_#{attachment_names.join('_')}_to_#{name.underscore.pluralize}'
+  end
     
-      class VideoTag < Liquid::Tag
-    @video = nil
-    @poster = ''
-    @height = ''
-    @width = ''
+    require 'erb'
+require 'digest'
+require 'tempfile'
+require 'paperclip/version'
+require 'paperclip/geometry_parser_factory'
+require 'paperclip/geometry_detector_factory'
+require 'paperclip/geometry'
+require 'paperclip/processor'
+require 'paperclip/processor_helpers'
+require 'paperclip/tempfile'
+require 'paperclip/thumbnail'
+require 'paperclip/interpolations/plural_cache'
+require 'paperclip/interpolations'
+require 'paperclip/tempfile_factory'
+require 'paperclip/style'
+require 'paperclip/attachment'
+require 'paperclip/storage'
+require 'paperclip/callbacks'
+require 'paperclip/file_command_content_type_detector'
+require 'paperclip/media_type_spoof_detector'
+require 'paperclip/content_type_detector'
+require 'paperclip/glue'
+require 'paperclip/errors'
+require 'paperclip/missing_attachment_styles'
+require 'paperclip/validators'
+require 'paperclip/logger'
+require 'paperclip/helpers'
+require 'paperclip/has_attached_file'
+require 'paperclip/attachment_registry'
+require 'paperclip/filename_cleaner'
+require 'paperclip/rails_environment'
+    
+        def self.clear
+      instance.clear
+    end
