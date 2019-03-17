@@ -1,73 +1,72 @@
 
         
-        
-    {    # Options that need a file parameter
-    'download-archive': ['--require-parameter'],
-    'cookies': ['--require-parameter'],
-    'load-info': ['--require-parameter'],
-    'batch-file': ['--require-parameter'],
-}
+            dp = [[False for x in range(s+1)]for y in range(n+1)]
     
-        # Get the version from youtube_dl/version.py without importing the package
-    exec(compile(open('youtube_dl/version.py').read(),
-                 'youtube_dl/version.py', 'exec'))
+    def reformatHex(i):
+	'''[summary]
+	Converts the given integer into 8-digit hex number.
     
     
-class TestAES(unittest.TestCase):
-    def setUp(self):
-        self.key = self.iv = [0x20, 0x15] + 14 * [0]
-        self.secret_msg = b'Secret message goes here'
-    
-    
-class TestExecution(unittest.TestCase):
-    def test_import(self):
-        subprocess.check_call([sys.executable, '-c', 'import youtube_dl'], cwd=rootDir)
-    
-    # Allow direct execution
-import os
-import sys
-import unittest
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    
-        if not HAS_BOTO3:
-        module.fail_json(msg='boto3 required for this module')
-    
-    try:
-    from pyvcloud.schema.vcd.v1_5.schemas.vcloud.networkType import FirewallRuleType
-    from pyvcloud.schema.vcd.v1_5.schemas.vcloud.networkType import ProtocolsType
-except ImportError:
-    # normally set a flag here but it will be caught when testing for
-    # the existence of pyvcloud (see module_utils/vca.py).  This just
-    # protects against generating an exception at runtime
-    pass
-    
-        module_hbacrule = get_hbacrule_dict(description=module.params['description'],
-                                        hostcategory=hostcategory,
-                                        ipaenabledflag=ipaenabledflag,
-                                        servicecategory=servicecategory,
-                                        sourcehostcategory=sourcehostcategory,
-                                        usercategory=usercategory)
-    ipa_hbacrule = client.hbacrule_find(name=name)
-    
-    
-if __name__ == '__main__':
-    main()
+'''
+* Wondering how this method works !
+* It's pretty simple.
+* Let's say you need to calculate a ^ b
+* RULE 1 : a * b = (a+a) * (b/2) ---- example : 4 * 4 = (4+4) * (4/2) = 8 * 2
+* RULE 2 : IF b is ODD, then ---- a * b = a + (a * (b - 1)) :: where (b - 1) is even.
+* Once b is even, repeat the process to get a * b
+* Repeat the process till b = 1 OR b = 0, because a*1 = a AND a*0 = 0
+*
+* As far as the modulo is concerned,
+* the fact : (a+b) % c = ((a%c) + (b%c)) % c
+* Now apply RULE 1 OR 2, whichever is required.
+'''
 
     
-    # Stop tracking nginx logs
-- logentries:
-    path: /var/log/nginx/error.log
-    state: absent
-'''
+    letters = [letter for letter in string.ascii_letters]
+digits = [digit for digit in string.digits]
+symbols = [symbol for symbol in string.punctuation]
+chars = letters + digits + symbols
+random.shuffle(chars)
     
-    from __future__ import absolute_import, division, print_function
-__metaclass__ = type
     
-        if event == 'annotation':
-        if not msg:
-            module.fail_json(msg='msg required for annotation events')
-        try:
-            send_annotation_event(module, key, msg, annotated_by, level, instance_id, event_epoch)
-        except Exception as e:
-            module.fail_json(msg='unable to sent annotation event: %s' % to_native(e),
-                             exception=traceback.format_exc())
+# ---------------------------------------------------------------------------- #
+# Functions for bolting FPN onto a backbone architectures
+# ---------------------------------------------------------------------------- #
+    
+        return model.Relu(s, s)
+    
+            Output blobs: [rois_fpn<min>, ..., rois_rpn<max>, rois,
+                       rois_idx_restore]
+          - rois_fpn<i> are the RPN proposals for FPN level i
+          - rois_idx_restore is a permutation on the concatenation of all
+            rois_fpn<i>, i=min...max, such that when applied the RPN RoIs are
+            restored to their original order in the input blobs.
+    
+    import numpy as np
+    
+    def add_generic_rpn_outputs(model, blob_in, dim_in, spatial_scale_in):
+    '''Add RPN outputs (objectness classification and bounding box regression)
+    to an RPN model. Abstracts away the use of FPN.
+    '''
+    loss_gradients = None
+    if cfg.FPN.FPN_ON:
+        # Delegate to the FPN module
+        FPN.add_fpn_rpn_outputs(model, blob_in, dim_in, spatial_scale_in)
+        if cfg.MODEL.FASTER_RCNN:
+            # CollectAndDistributeFpnRpnProposals also labels proposals when in
+            # training mode
+            model.CollectAndDistributeFpnRpnProposals()
+        if model.train:
+            loss_gradients = FPN.add_fpn_rpn_losses(model)
+    else:
+        # Not using FPN, add RPN to a single scale
+        add_single_scale_rpn_outputs(model, blob_in, dim_in, spatial_scale_in)
+        if model.train:
+            loss_gradients = add_single_scale_rpn_losses(model)
+    return loss_gradients
+    
+        sampled_fg_rois *= im_scale
+    repeated_batch_idx = batch_idx * blob_utils.ones(
+        (sampled_fg_rois.shape[0], 1)
+    )
+    sampled_fg_rois = np.hstack((repeated_batch_idx, sampled_fg_rois))
