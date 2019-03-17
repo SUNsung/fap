@@ -1,21 +1,97 @@
 
         
-                def initialize(object_name, method_name, template_object, checked_value, unchecked_value, options)
-          @checked_value   = checked_value
-          @unchecked_value = unchecked_value
-          super(object_name, method_name, template_object, options)
+                unless post && post.id
+          puts post.errors.full_messages if post
+          puts creator.errors.inspect
+          raise 'Failed to create description for Staff category!'
         end
     
-            class RadioButtonBuilder < Builder # :nodoc:
-          def radio_button(extra_html_options = {})
-            html_options = extra_html_options.merge(@input_html_options)
-            html_options[:skip_default_ids] = false
-            @template_object.radio_button(@object_name, @method_name, @value, html_options)
+          # Returns the identifier to use for cache keys.
+      #
+      # For issues and pull requests this will be 'Issue' or 'MergeRequest'
+      # respectively. For diff notes this will return 'MergeRequest', for
+      # regular notes it will either return 'Issue' or 'MergeRequest' depending
+      # on what type of object the note belongs to.
+      def cache_key_type
+        if object.respond_to?(:issuable_type)
+          object.issuable_type
+        elsif object.respond_to?(:noteable_type)
+          object.noteable_type
+        else
+          raise(
+            TypeError,
+            'Instances of #{object.class} are not supported'
+          )
+        end
+      end
+    
+          # Returns the path to a file for the given key.
+      #
+      # @param key [String]
+      # @return [String] The path to the cache file.
+      def path_to(key)
+        key = key.gsub(/[<>:\\|?*%]/) {|c| '%%%03d' % c.ord}
+        File.join(cache_location, key)
+      end
+    end
+  end
+end
+
+    
+          if @options[:syntax] == :scss
+        root = Sass::SCSS::Parser.new(@template, @options[:filename], @options[:importer]).parse
+      else
+        root = Tree::RootNode.new(@template)
+        append_children(root, tree(tabulate(@template)).first, true)
+      end
+    
+        # The text of the template where this error was raised.
+    #
+    # @return [String]
+    attr_accessor :sass_template
+    
+            # Takes besides the products attributes either an array of variants or
+        # an array of option types.
+        #
+        # By submitting an array of variants the option types will be created
+        # using the *name* key in options hash. e.g
+        #
+        #   product: {
+        #     ...
+        #     variants: {
+        #       price: 19.99,
+        #       sku: 'hey_you',
+        #       options: [
+        #         { name: 'size', value: 'small' },
+        #         { name: 'color', value: 'black' }
+        #       ]
+        #     }
+        #   }
+        #
+        # Or just pass in the option types hash:
+        #
+        #   product: {
+        #     ...
+        #     option_types: ['size', 'color']
+        #   }
+        #
+        # By passing the shipping category name you can fetch or create that
+        # shipping category on the fly. e.g.
+        #
+        #   product: {
+        #     ...
+        #     shipping_category: 'Free Shipping Items'
+        #   }
+        #
+        def new; end
+    
+            def scope
+          if params[:country_id]
+            @country = Country.accessible_by(current_ability, :read).find(params[:country_id])
+            @country.states.accessible_by(current_ability, :read).order('name ASC')
+          else
+            State.accessible_by(current_ability, :read).order('name ASC')
           end
-        end
-    
-            def collection_options
-          { state: 'all', sort: 'created', direction: 'asc' }
         end
       end
     end
@@ -23,51 +99,6 @@
 end
 
     
-              issue.label_names.each do |label_name|
-            # Although unlikely it's technically possible for an issue to be
-            # given a label that was created and assigned after we imported all
-            # the project's labels.
-            next unless (label_id = label_finder.id_for(label_name))
-    
-              new(hash)
-        end
-    
-    namespace :bower do
-    
-        def log_http_get_file(url, cached = false)
-      s = '  #{'CACHED ' if cached}GET #{url}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
-      end
-    end
-    
-      # Do not eager load code on boot. This avoids loading your whole application
-  # just for the purpose of running a single test. If you are using a tool that
-  # preloads Rails for running tests, you may have to set it to true.
-  config.eager_load = false
-    
-        sh 'gem build spree.gemspec'
-    mv 'spree-#{version}.gem', pkgdir
-  end
-    
-            def create
-          authorize! :create, Image
-          @image = scope.images.new(image_params)
-          if @image.save
-            respond_with(@image, status: 201, default_template: :show)
-          else
-            invalid_resource!(@image)
+              def payment_methods
+            render_serialized_payload { serialize_payment_methods(spree_current_order.available_payment_methods) }
           end
-        end
-    
-            def create
-          authorize! :create, Spree::OptionType
-          @option_type = Spree::OptionType.new(option_type_params)
-          if @option_type.save
-            render :show, status: 201
-          else
-            invalid_resource!(@option_type)
-          end
-        end
