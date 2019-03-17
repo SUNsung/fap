@@ -1,202 +1,91 @@
 
         
-        namespace Ui {
-    class OpenURIDialog;
+         private:
+  scoped_refptr<AtomBrowserContext> browser_context_;
+    
+    void Event::SetSenderAndMessage(content::RenderFrameHost* sender,
+                                IPC::Message* message) {
+  DCHECK(!sender_);
+  DCHECK(!message_);
+  sender_ = sender;
+  message_ = message;
+    }
+    
+     private:
+  // Replyer for the synchronous messages.
+  content::RenderFrameHost* sender_ = nullptr;
+  IPC::Message* message_ = nullptr;
+    
+     private:
+  void OnMessageBoxCallback(DialogClosedCallback callback,
+                            const std::string& origin,
+                            int code,
+                            bool checkbox_checked);
+    
+    namespace auto_updater {
+    }
+    
+    #include 'base/macros.h'
+    
+    net::URLRequestJob* AboutProtocolHandler::MaybeCreateJob(
+    net::URLRequest* request,
+    net::NetworkDelegate* network_delegate) const {
+  return new URLRequestAboutJob(request, network_delegate);
 }
     
-      scoped_ptr<V8ValueConverter> converter(V8ValueConverter::create());
-  converter->SetStripNullFromObjects(true);
+    URLRequestAboutJob::URLRequestAboutJob(net::URLRequest* request,
+                                       net::NetworkDelegate* network_delegate)
+    : net::URLRequestJob(request, network_delegate), weak_ptr_factory_(this) {}
+    
+    // The argument separating arguments intended for the relauncher process from
+// those intended for the relaunched process. '---' is chosen instead of '--'
+// because CommandLine interprets '--' as meaning 'end of switches', but
+// for many purposes, the relauncher process' CommandLine ought to interpret
+// arguments intended for the relaunched process, to get the correct settings
+// for such things as logging and the user-data-dir in case it affects crash
+// reporting.
+extern const CharType* kRelauncherArgSeparator;
+    
+    Github Links:
+    
+    REGISTER_CUDA_OPERATOR(LC1D, LocallyConnectedOp<float, CUDAContext>);
+REGISTER_CUDA_OPERATOR(
+    LC1DGradient,
+    LocallyConnectedGradientOp<float, CUDAContext>);
     
     
-    {}  // namespace nwapi
-
-    
-    static KeyMap keymap = {
-  {'`'    , 'Backquote'},
-  {'\\'   , 'Backslash'},
-  {'['    , 'BracketLeft'},
-  {']'    , 'BracketRight'},
-  {','    , 'Comma'},
-  {'='    , 'Equal'},
-  {'-'    , 'Minus'},
-  {'.'    , 'Period'},
-  {'''    , 'Quote'},
-  {';'    , 'Semicolon'},
-  {'/'    , 'Slash'},
-  {'\n'   , 'Enter'},
-  {'\t'   , 'Tab'},
-  {'UP'   , 'ArrowUp'},
-  {'DOWN' , 'ArrowDown'},
-  {'LEFT' , 'ArrowLeft'},
-  {'RIGHT', 'ArrowRight'},
-  {'ESC'  , 'Escape'},
-  {'MEDIANEXTTRACK', 'MediaTrackNext'},
-  {'MEDIAPREVTRACK', 'MediaTrackPrevious'}
-};
-    
-    
-
-    
-    void NwAppClearCacheFunction::OnBrowsingDataRemoverDone() {
-  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
-  run_loop_.Quit();
-}
-    
-    
-    {}
-    
-          displayResult->id = gfx_display.id();
-      displayResult->scale_factor = gfx_display.device_scale_factor();
-      displayResult->is_built_in = gfx_display.IsInternal();
-      displayResult->rotation = gfx_display.RotationAsDegree();
-      displayResult->touch_support = (int)gfx_display.touch_support();
-    
-    static const char* kModuleName = '_api_implementation';
-static const char kModuleDocstring[] =
-'_api_implementation is a module that exposes compile-time constants that\n'
-'determine the default API implementation to use for Python proto2.\n'
-'\n'
-'It complements api_implementation.py by setting defaults using compile-time\n'
-'constants defined in C, such that one can set defaults at compilation\n'
-'(e.g. with blaze flag --copt=-DPYTHON_PROTO2_CPP_IMPL_V2).';
-    
-      for (std::vector<MessageGenerator *>::iterator iter = message_generators_.begin();
-       iter != message_generators_.end(); ++iter) {
-    (*iter)->GenerateEnumHeader(printer);
+    {    if (!status.ok()) {
+      FillErrorResponse(status, response.mutable_error_response());
+    }
+    response.set_valid_host(request.host());
+    response.set_allocated_original_request(
+        new ServerReflectionRequest(request));
+    stream->Write(response);
   }
     
-    namespace google {
-namespace protobuf {
-namespace io {
-    }
+      // Add the full names of registered services
+  void SetServiceList(const std::vector<grpc::string>* services);
+    
+    namespace grpc {
+namespace load_reporter {
     }
     }
     
     
+    {    auto opndCmds = opndCmd.GetCommands();
+    unsigned int opndCmdSize;
+    opndCmds->GetSize(&opndCmdSize);
+    m_dataWriter->WriteUInt32(opndCmdSize);
+    for (unsigned int j = 0; j < opndCmdSize; ++j)
     {
-    {#undef DEF_COMMON_LIMITS
-#undef DEF_SIGNED_INT_LIMITS
-#undef DEF_UNSIGNED_INT_LIMITS
-#undef DEF_FP_LIMITS
-#undef DEF_PRECISION_LIMITS
-}  // namespace protobuf
-}  // namespace google
-
-    
-    namespace google {
-namespace protobuf {
-namespace util {
-namespace error {
-inline string CodeEnumToString(error::Code code) {
-  switch (code) {
-    case OK:
-      return 'OK';
-    case CANCELLED:
-      return 'CANCELLED';
-    case UNKNOWN:
-      return 'UNKNOWN';
-    case INVALID_ARGUMENT:
-      return 'INVALID_ARGUMENT';
-    case DEADLINE_EXCEEDED:
-      return 'DEADLINE_EXCEEDED';
-    case NOT_FOUND:
-      return 'NOT_FOUND';
-    case ALREADY_EXISTS:
-      return 'ALREADY_EXISTS';
-    case PERMISSION_DENIED:
-      return 'PERMISSION_DENIED';
-    case UNAUTHENTICATED:
-      return 'UNAUTHENTICATED';
-    case RESOURCE_EXHAUSTED:
-      return 'RESOURCE_EXHAUSTED';
-    case FAILED_PRECONDITION:
-      return 'FAILED_PRECONDITION';
-    case ABORTED:
-      return 'ABORTED';
-    case OUT_OF_RANGE:
-      return 'OUT_OF_RANGE';
-    case UNIMPLEMENTED:
-      return 'UNIMPLEMENTED';
-    case INTERNAL:
-      return 'INTERNAL';
-    case UNAVAILABLE:
-      return 'UNAVAILABLE';
-    case DATA_LOSS:
-      return 'DATA_LOSS';
-  }
+        int eachOpndcmd;
+        opndCmds->GetAt(j, &eachOpndcmd);
+        m_dataWriter->WriteInt32(eachOpndcmd);
     }
-    }
-    }
-    }
-    }
-    
-    namespace google {
-namespace protobuf {
-namespace internal {
-    }
-    }
-    }
-    
-    
-    {  return 0;
 }
-
     
-      while (true) {
-    void* outptr;
-    int outlen;
-    bool ok;
-    do {
-      ok = out.Next(&outptr, &outlen);
-      if (!ok) {
-        break;
-      }
-    } while (outlen <= 0);
-    readlen = read(STDIN_FILENO, outptr, outlen);
-    if (readlen <= 0) {
-      out.BackUp(outlen);
-      break;
-    }
-    if (readlen < outlen) {
-      out.BackUp(outlen - readlen);
-    }
-  }
-    
-    OPERATOR_SCHEMA(GatherRangesToDense)
-    .NumInputs(2, 3)
-    .NumOutputs(1, INT_MAX)
-    .SetDoc(R'DOC(
-Given DATA tensor of rank 1, and RANGES tensor of rank 3, gather values
-corresponding to each range into a separate output tensor. If the optional input
-KEY tensor is also given, the output will be sorted by KEY for each example.
-    
-    OPERATOR_SCHEMA(GivenTensorIntFill)
-    .NumInputs(0, 1)
-    .NumOutputs(1)
-    .AllowInplace({{0, 0}})
-    .Arg(
-        'values',
-        'The value for the elements of the output tensor.',
-        true /* required */)
-    .Arg(
-        'shape',
-        'The shape of the output tensor.'
-        'Cannot set the shape argument and pass in an input at the same time.')
-    .Arg(
-        'extra_shape',
-        'The additional dimensions appended at the end of the shape indicated'
-        'by the input blob.'
-        'Cannot set the extra_shape argument when there is no input blob.')
-    .Arg(
-        'input_as_shape',
-        '1D tensor containing the desired output shape. First input must be in CPU context.')
-    .TensorInferenceFunction(FillerTensorInference<TensorProto_DataType_INT32>);
-    
-    #include 'rocksdb/status.h'
-    
-    #pragma once
-    
-      WriteOptions write_options;
-  ReadOptions read_options;
-  OptimisticTransactionOptions txn_options;
-  std::string value;
+            property bool IsErrorVisualState
+        {
+            bool get();
+            void set(bool value);
+        }
