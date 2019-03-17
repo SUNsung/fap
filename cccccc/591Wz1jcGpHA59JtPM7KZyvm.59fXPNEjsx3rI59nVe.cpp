@@ -1,254 +1,41 @@
 
-    {}  // namespace nwapi
+        
+        // Generate destructors.
+#include 'ipc/struct_destructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
     
-    class Base {
- public:
-  Base(int id,
-       const base::WeakPtr<ObjectManager>& manager,
-       const base::DictionaryValue& option,
-       const std::string& extension_id);
-  virtual ~Base();
-    }
+    Menu::Menu(int id,
+           const base::WeakPtr<ObjectManager>& object_manager,
+           const base::DictionaryValue& option,
+           const std::string& extension_id)
+  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
+  Create(option);
+}
     
-    void Clipboard::Call(const std::string& method,
-                     const base::ListValue& arguments) {
-  if (method == 'Set') {
-    std::string text, type;
-    arguments.GetString(0, &text);
-    arguments.GetString(1, &type);
-    SetText(text);
-  } else if (method == 'Clear') {
-    Clear();
+      std::string pac_url = params->pac_url.get() ? *params->pac_url : '';
+  if (!pac_url.empty()) {
+    if (pac_url == '<direct>')
+      config = net::ProxyConfigWithAnnotation::CreateDirect();
+    else if (pac_url == '<auto>')
+      config = net::ProxyConfigWithAnnotation(net::ProxyConfig::CreateAutoDetect(), TRAFFIC_ANNOTATION_FOR_TESTS);
+    else
+      config = net::ProxyConfigWithAnnotation(net::ProxyConfig::CreateFromCustomPacURL(GURL(pac_url)), TRAFFIC_ANNOTATION_FOR_TESTS);
   } else {
-    NOTREACHED() << 'Invalid call to Clipboard method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-    EventListener::~EventListener() {
-  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
-    delete i->second;
-  }
-}
-    
-      static int getUID() {
-    static int id = 0;
-    return ++id;
+    std::string proxy_config;
+    net::ProxyConfig pc;
+    EXTENSION_FUNCTION_VALIDATE(args_->GetString(0, &proxy_config));
+    pc.proxy_rules().ParseFromString(proxy_config);
+    config = net::ProxyConfigWithAnnotation(pc, TRAFFIC_ANNOTATION_FOR_TESTS);
   }
     
-        ~ClipboardWriter() {
-      scw_.reset();
-    }
     
-        typedef int8_t   s8;
-    typedef uint8_t  u8;
-    typedef int16_t  s16;
-    typedef uint16_t u16;
-    typedef int32_t  s32;
-    typedef uint32_t u32;
-    typedef float    f32;
-    typedef int64_t  s64;
-    typedef uint64_t u64;
-    typedef double   f64;
+    {  DECLARE_EXTENSION_FUNCTION('nw.App.clearAppCache', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwAppClearAppCacheFunction);
+};
     
-    void bitwiseXor(const Size2D &size,
-                const u8 *src0Base, ptrdiff_t src0Stride,
-                const u8 *src1Base, ptrdiff_t src1Stride,
-                u8 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, BitwiseXor());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
-    
-    
-    {
-    {        for (; dj < size.width; sj += 3, ++dj)
-        {
-            dst[dj] = src[sj + coi];
-        }
-    }
-#else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)coi;
-#endif
-}
-    
-            for( ; x < roiw_base; x += step_base )
-        {
-            internal::prefetch(src0 + x);
-            internal::prefetch(src1 + x);
-    }
-    
-    namespace internal {
-    }
-    
-    /*!
- *  Aligns pointer by the certain number of bytes
- *
- *  This small inline function aligns the pointer by the certain number of bytes by shifting
- *  it forward by 0 or a positive offset.
- */
-template<typename T> inline T* alignPtr(T* ptr, size_t n=sizeof(T))
-{
-    return (T*)(((size_t)ptr + n-1) & -n);
-}
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVT_FUNC(s8, u16, 16,
-     register uint8x16_t zero0 asm ('q1') = vmovq_n_u8(0);,
-{
-     for (size_t i = 0; i < w; i += 16)
-     {
-         internal::prefetch(_src + i);
-         __asm__ (
-             'vld1.8 {d0-d1}, [%[src]]                              \n\t'
-             'vmax.s8 q0, q1                                        \n\t'
-             'vst2.8 {d0,d2}, [%[dst1]]                             \n\t'
-             'vst2.8 {d1,d3}, [%[dst2]]                             \n\t'
-             : /*no output*/
-             : [src] 'r' (_src + i),
-               [dst1] 'r' (_dst + i + 0),
-               [dst2] 'r' (_dst + i + 8),
-               'w' (zero0)
-             : 'd0','d1'
-         );
-     }
-})
-#else
-CVT_FUNC(s8, u16, 16,
-     int8x16x2_t vline_s8;
-     vline_s8.val[1] = vmovq_n_s8(0);,
-{
-     for (size_t i = 0; i < w; i += 16)
-     {
-         internal::prefetch(_src + i);
-         vline_s8.val[0] = vld1q_s8(_src + i);
-         vline_s8.val[0] = vmaxq_s8(vline_s8.val[0], vline_s8.val[1]);
-         vst2q_s8((int8_t*)(_dst + i), vline_s8);
-     }
-})
-#endif
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && defined(__arm__)
-CVTS_FUNC1(s8, 16,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 16)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.8 {d4-d5}, [%[src]]                              \n\t'
-            'vmovl.s8 q3, d4                                       \n\t'
-            'vmovl.s8 q4, d5                                       \n\t'
-            'vmovl.s16 q5, d6                                      \n\t'
-            'vmovl.s16 q6, d7                                      \n\t'
-            'vmovl.s16 q7, d8                                      \n\t'
-            'vmovl.s16 q8, d9                                      \n\t'
-            'vcvt.f32.s32 q9, q5                                   \n\t'
-            'vcvt.f32.s32 q10, q6                                  \n\t'
-            'vcvt.f32.s32 q11, q7                                  \n\t'
-            'vcvt.f32.s32 q12, q8                                  \n\t'
-            'vmul.f32 q13, q9, q0                                  \n\t'
-            'vmul.f32 q14, q10, q0                                 \n\t'
-            'vmul.f32 q15, q11, q0                                 \n\t'
-            'vmul.f32 q2, q12, q0                                  \n\t'
-            'vadd.f32 q3, q13, q1                                  \n\t'
-            'vadd.f32 q4, q14, q1                                  \n\t'
-            'vadd.f32 q5, q15, q1                                  \n\t'
-            'vadd.f32 q6, q2, q1                                   \n\t'
-            'vcvt.s32.f32 q7, q3                                   \n\t'
-            'vcvt.s32.f32 q8, q4                                   \n\t'
-            'vcvt.s32.f32 q9, q5                                   \n\t'
-            'vcvt.s32.f32 q10, q6                                  \n\t'
-            'vqmovn.s32 d22, q7                                    \n\t'
-            'vqmovn.s32 d23, q8                                    \n\t'
-            'vqmovn.s32 d24, q9                                    \n\t'
-            'vqmovn.s32 d25, q10                                   \n\t'
-            'vqmovn.s16 d26, q11                                   \n\t'
-            'vqmovn.s16 d27, q12                                   \n\t'
-            'vst1.8 {d26-d27}, [%[dst1]]                           \n\t'
-            : /*no output*/
-            : [src] 'r' (_src + i),
-              [dst1] 'r' (_dst + i + 0),
-              'w'  (vscale), 'w' (vshift)
-            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26','d27','d28','d29','d30','d31'
-        );
-    }
-})
-#else
-CVTS_FUNC1(s8, 16,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 16)
-    {
-        internal::prefetch(_src + i);
-        int8x16_t vline = vld1q_s8(_src + i);
-        int16x8_t vline1_s16 = vmovl_s8(vget_low_s8 (vline));
-        int16x8_t vline2_s16 = vmovl_s8(vget_high_s8(vline));
-        int32x4_t vline1_s32 = vmovl_s16(vget_low_s16 (vline1_s16));
-        int32x4_t vline2_s32 = vmovl_s16(vget_high_s16(vline1_s16));
-        int32x4_t vline3_s32 = vmovl_s16(vget_low_s16 (vline2_s16));
-        int32x4_t vline4_s32 = vmovl_s16(vget_high_s16(vline2_s16));
-        float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
-        float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
-        float32x4_t vline3_f32 = vcvtq_f32_s32(vline3_s32);
-        float32x4_t vline4_f32 = vcvtq_f32_s32(vline4_s32);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline3_f32 = vmulq_f32(vline3_f32, vscale);
-        vline4_f32 = vmulq_f32(vline4_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        vline3_f32 = vaddq_f32(vline3_f32, vshift);
-        vline4_f32 = vaddq_f32(vline4_f32, vshift);
-        vline1_s32 = vcvtq_s32_f32(vline1_f32);
-        vline2_s32 = vcvtq_s32_f32(vline2_f32);
-        vline3_s32 = vcvtq_s32_f32(vline3_f32);
-        vline4_s32 = vcvtq_s32_f32(vline4_f32);
-        int16x8_t vRes1_s16 = vcombine_s16(vqmovn_s32(vline1_s32), vqmovn_s32(vline2_s32));
-        int16x8_t vRes2_s16 = vcombine_s16(vqmovn_s32(vline3_s32), vqmovn_s32(vline4_s32));
-        vst1q_s8(_dst + i, vcombine_s8(vqmovn_s16(vRes1_s16), vqmovn_s16(vRes2_s16)));
-    }
-})
-#endif
-    
-    
-    {        for (; i < size.width; ++i)
-            result += src0[i] * src1[i];
-    }
-    return result;
-#else
-    (void)_size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    
-    
-    {} // namespace CAROTENE_NS
-
-    
-    #endif
-
+     protected:
+  ~NwObjDestroyFunction() override;
     
     void convert_dataset(const char* image_filename, const char* label_filename,
         const char* db_filename) {
@@ -265,150 +52,501 @@ CVTS_FUNC1(s8, 16,
   uint32_t cols;
     }
     
-    #endif  // CAFFE_LAYER_FACTORY_H_
-
+    // gflags 2.1 issue: namespace google was changed to gflags without warning.
+// Luckily we will be able to use GFLAGS_GFLAGS_H_ to detect if it is version
+// 2.1. If yes, we will add a temporary solution to redirect the namespace.
+// TODO(Yangqing): Once gflags solves the problem in a more elegant way, let's
+// remove the following hack.
+#ifndef GFLAGS_GFLAGS_H_
+namespace gflags = google;
+#endif  // GFLAGS_GFLAGS_H_
     
+    /*!
+@brief Fills a Blob with coefficients for bilinear interpolation.
     
-    { protected:
-  /**
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
-   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
-   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
-   *      the computed outputs @f$
-   *       y_n = \arg\max\limits_i x_{ni}
-   *      @f$ (for @f$ K = 1 @f$).
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  /// @brief Not implemented (non-differentiable function)
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
-    NOT_IMPLEMENTED;
-  }
-  bool out_max_val_;
-  size_t top_k_;
-  bool has_axis_;
-  int axis_;
-};
+    #include 'caffe/layers/softmax_layer.hpp'
     
-    /**
- * @brief Computes a sum of two input Blobs, with the shape of the latter Blob
- *        'broadcast' to match the shape of the former. Equivalent to tiling
- *        the latter Blob, then computing the elementwise sum.
- *
- * The second input may be omitted, in which case it's learned as a parameter
- * of the layer. Note: in case bias and scaling are desired, both operations can
- * be handled by `ScaleLayer` configured with `bias_term: true`.
- */
-template <typename Dtype>
-class BiasLayer : public Layer<Dtype> {
- public:
-  explicit BiasLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+    		static const unsigned int ROWS = 4;
+		static const unsigned int COLUMNS = 4;
+		static const unsigned int PIXELS = ROWS * COLUMNS;
+    
+    			float fDeltaL = a_frgbaSourcePixel.fA * fLuma1 - a_fDecodedAlpha * fLuma2;
+			float fDeltaCr = a_frgbaSourcePixel.fA * fChromaR1 - a_fDecodedAlpha * fChromaR2;
+			float fDeltaCb = a_frgbaSourcePixel.fA * fChromaB1 - a_fDecodedAlpha * fChromaB2;
+    
+    						// pre-compute decoded pixels for each selector
+						ColorFloatRGBA afrgbaSelectors[SELECTORS];
+						assert(SELECTORS == 4);
+						afrgbaSelectors[0] = (frgbaColor + s_aafCwTable[uiCW][0]).ClampRGB();
+						afrgbaSelectors[1] = (frgbaColor + s_aafCwTable[uiCW][1]).ClampRGB();
+						afrgbaSelectors[2] = (frgbaColor + s_aafCwTable[uiCW][2]).ClampRGB();
+						afrgbaSelectors[3] = (frgbaColor + s_aafCwTable[uiCW][3]).ClampRGB();
+    
+      typedef enum  AF_Blue_Stringset_
+  {
+    AF_BLUE_STRINGSET_ADLM = 0,
+    AF_BLUE_STRINGSET_ARAB = 5,
+    AF_BLUE_STRINGSET_ARMN = 9,
+    AF_BLUE_STRINGSET_AVST = 16,
+    AF_BLUE_STRINGSET_BAMU = 19,
+    AF_BLUE_STRINGSET_BENG = 22,
+    AF_BLUE_STRINGSET_BUHD = 27,
+    AF_BLUE_STRINGSET_CAKM = 32,
+    AF_BLUE_STRINGSET_CANS = 36,
+    AF_BLUE_STRINGSET_CARI = 43,
+    AF_BLUE_STRINGSET_CHER = 46,
+    AF_BLUE_STRINGSET_COPT = 53,
+    AF_BLUE_STRINGSET_CPRT = 58,
+    AF_BLUE_STRINGSET_CYRL = 63,
+    AF_BLUE_STRINGSET_DEVA = 69,
+    AF_BLUE_STRINGSET_DSRT = 75,
+    AF_BLUE_STRINGSET_ETHI = 80,
+    AF_BLUE_STRINGSET_GEOR = 83,
+    AF_BLUE_STRINGSET_GEOK = 90,
+    AF_BLUE_STRINGSET_GLAG = 97,
+    AF_BLUE_STRINGSET_GOTH = 102,
+    AF_BLUE_STRINGSET_GREK = 105,
+    AF_BLUE_STRINGSET_GUJR = 112,
+    AF_BLUE_STRINGSET_GURU = 118,
+    AF_BLUE_STRINGSET_HEBR = 124,
+    AF_BLUE_STRINGSET_KALI = 128,
+    AF_BLUE_STRINGSET_KHMR = 134,
+    AF_BLUE_STRINGSET_KHMS = 140,
+    AF_BLUE_STRINGSET_KNDA = 143,
+    AF_BLUE_STRINGSET_LAO = 146,
+    AF_BLUE_STRINGSET_LATN = 152,
+    AF_BLUE_STRINGSET_LATB = 159,
+    AF_BLUE_STRINGSET_LATP = 166,
+    AF_BLUE_STRINGSET_LISU = 173,
+    AF_BLUE_STRINGSET_MLYM = 176,
+    AF_BLUE_STRINGSET_MYMR = 179,
+    AF_BLUE_STRINGSET_NKOO = 184,
+    AF_BLUE_STRINGSET_NONE = 189,
+    AF_BLUE_STRINGSET_OLCK = 190,
+    AF_BLUE_STRINGSET_ORKH = 193,
+    AF_BLUE_STRINGSET_OSGE = 196,
+    AF_BLUE_STRINGSET_OSMA = 204,
+    AF_BLUE_STRINGSET_SAUR = 207,
+    AF_BLUE_STRINGSET_SHAW = 210,
+    AF_BLUE_STRINGSET_SINH = 216,
+    AF_BLUE_STRINGSET_SUND = 220,
+    AF_BLUE_STRINGSET_TAML = 224,
+    AF_BLUE_STRINGSET_TAVT = 227,
+    AF_BLUE_STRINGSET_TELU = 230,
+    AF_BLUE_STRINGSET_TFNG = 233,
+    AF_BLUE_STRINGSET_THAI = 236,
+    AF_BLUE_STRINGSET_VAII = 244,
+    af_blue_2_1 = 247,
+#ifdef AF_CONFIG_OPTION_CJK
+    AF_BLUE_STRINGSET_HANI = af_blue_2_1 + 0,
+    af_blue_2_1_1 = af_blue_2_1 + 2,
+#ifdef AF_CONFIG_OPTION_CJK_BLUE_HANI_VERT
+    af_blue_2_1_2 = af_blue_2_1_1 + 2,
+#else
+    af_blue_2_1_2 = af_blue_2_1_1 + 0,
+#endif /* AF_CONFIG_OPTION_CJK_BLUE_HANI_VERT */
+    af_blue_2_2 = af_blue_2_1_2 + 1,
+#else
+    af_blue_2_2 = af_blue_2_1 + 0,
+#endif /* AF_CONFIG_OPTION_CJK                */
     }
     
+    #ifndef VPX_DSP_TXFM_COMMON_H_
+#define VPX_DSP_TXFM_COMMON_H_
     
-    { protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual inline bool reverse_dimensions() { return false; }
-  virtual void compute_output_shape();
-};
-    
-    
-    {  int size_;
-  Dtype alpha_, beta_, k_;
-};
-#endif
-    
-    
+      if (Dir2 == dLeftToRight)
+  {
+    while (op2->Next->Pt.X <= Pt.X && 
+      op2->Next->Pt.X >= op2->Pt.X && op2->Next->Pt.Y == Pt.Y)
+        op2 = op2->Next;
+    if (DiscardLeft && (op2->Pt.X != Pt.X)) op2 = op2->Next;
+    op2b = DupOutPt(op2, !DiscardLeft);
+    if (op2b->Pt != Pt)
     {
-    {}}
+      op2 = op2b;
+      op2->Pt = Pt;
+      op2b = DupOutPt(op2, !DiscardLeft);
+    };
+  } else
+  {
+    while (op2->Next->Pt.X >= Pt.X && 
+      op2->Next->Pt.X <= op2->Pt.X && op2->Next->Pt.Y == Pt.Y) 
+        op2 = op2->Next;
+    if (!DiscardLeft && (op2->Pt.X != Pt.X)) op2 = op2->Next;
+    op2b = DupOutPt(op2, DiscardLeft);
+    if (op2b->Pt != Pt)
+    {
+      op2 = op2b;
+      op2->Pt = Pt;
+      op2b = DupOutPt(op2, DiscardLeft);
+    };
+  };
     
-    struct SrcPos {
-  bool operator==(SrcPos o) const {
-    return line == o.line && col == o.col;
-  }
-  bool operator!=(SrcPos o) const { return !(*this == o); }
+    #define FASTLZ_VERSION_MAJOR     0
+#define FASTLZ_VERSION_MINOR     0
+#define FASTLZ_VERSION_REVISION  0
+    
+    #define MIN16(a,b) ((a) < (b) ? (a) : (b))   /**< Minimum 16-bit value.   */
+#define MAX16(a,b) ((a) > (b) ? (a) : (b))   /**< Maximum 16-bit value.   */
+#define MIN32(a,b) ((a) < (b) ? (a) : (b))   /**< Minimum 32-bit value.   */
+#define MAX32(a,b) ((a) > (b) ? (a) : (b))   /**< Maximum 32-bit value.   */
+#define IMIN(a,b) ((a) < (b) ? (a) : (b))   /**< Minimum int value.   */
+#define IMAX(a,b) ((a) > (b) ? (a) : (b))   /**< Maximum int value.   */
+#define UADD32(a,b) ((a)+(b))
+#define USUB32(a,b) ((a)-(b))
+    
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+    
+    namespace xgboost {
+/*!
+ * \brief interface of tree update module, that performs update of a tree.
+ */
+class TreeUpdater {
+ public:
+  /*! \brief virtual destructor */
+  virtual ~TreeUpdater() = default;
+  /*!
+   * \brief Initialize the updater with given arguments.
+   * \param args arguments to the objective function.
+   */
+  virtual void Init(const std::vector<std::pair<std::string, std::string> >& args) = 0;
+  /*!
+   * \brief perform update to the tree models
+   * \param gpair the gradient pair statistics of the data
+   * \param data The data matrix passed to the updater.
+   * \param trees references the trees to be updated, updater will change the content of trees
+   *   note: all the trees in the vector are updated, with the same statistics,
+   *         but maybe different random seeds, usually one tree is passed in at a time,
+   *         there can be multiple trees when we train random forest style model
+   */
+  virtual void Update(HostDeviceVector<GradientPair>* gpair,
+                      DMatrix* data,
+                      const std::vector<RegTree*>& trees) = 0;
+    }
     }
     
-    
-    {///////////////////////////////////////////////////////////////////////////////
+    SEXP XGBoosterBoostOneIter_R(SEXP handle, SEXP dtrain, SEXP grad, SEXP hess) {
+  R_API_BEGIN();
+  CHECK_EQ(length(grad), length(hess))
+      << 'gradient and hess must have same length';
+  int len = length(grad);
+  std::vector<float> tgrad(len), thess(len);
+  #pragma omp parallel for schedule(static)
+  for (int j = 0; j < len; ++j) {
+    tgrad[j] = REAL(grad)[j];
+    thess[j] = REAL(hess)[j];
+  }
+  CHECK_CALL(XGBoosterBoostOneIter(R_ExternalPtrAddr(handle),
+                                 R_ExternalPtrAddr(dtrain),
+                                 BeginPtr(tgrad), BeginPtr(thess),
+                                 len));
+  R_API_END();
+  return R_NilValue;
 }
     
-    ///////////////////////////////////////////////////////////////////////////////
+    namespace xgboost {
+namespace common {
+/*!
+ * \brief experimental wsummary
+ * \tparam DType type of data content
+ * \tparam RType type of rank
+ */
+template<typename DType, typename RType>
+struct WQSummary {
+  /*! \brief an entry in the sketch summary */
+  struct Entry {
+    /*! \brief minimum rank */
+    RType rmin;
+    /*! \brief maximum rank */
+    RType rmax;
+    /*! \brief maximum weight */
+    RType wmin;
+    /*! \brief the value of data */
+    DType value;
+    // constructor
+    XGBOOST_DEVICE Entry() {}  // NOLINT
+    // constructor
+    XGBOOST_DEVICE Entry(RType rmin, RType rmax, RType wmin, DType value)
+        : rmin(rmin), rmax(rmax), wmin(wmin), value(value) {}
+    /*!
+     * \brief debug function,  check Valid
+     * \param eps the tolerate level for violating the relation
+     */
+    inline void CheckValid(RType eps = 0) const {
+      CHECK(rmin >= 0 && rmax >= 0 && wmin >= 0) << 'nonneg constraint';
+      CHECK(rmax- rmin - wmin > -eps) <<  'relation constraint: min/max';
+    }
+    /*! \return rmin estimation for v strictly bigger than value */
+    XGBOOST_DEVICE inline RType RMinNext() const {
+      return rmin + wmin;
+    }
+    /*! \return rmax estimation for v strictly smaller than value */
+    XGBOOST_DEVICE inline RType RMaxPrev() const {
+      return rmax - wmin;
+    }
+  };
+  /*! \brief input data queue before entering the summary */
+  struct Queue {
+    // entry in the queue
+    struct QEntry {
+      // value of the instance
+      DType value;
+      // weight of instance
+      RType weight;
+      // default constructor
+      QEntry() = default;
+      // constructor
+      QEntry(DType value, RType weight)
+          : value(value), weight(weight) {}
+      // comparator on value
+      inline bool operator<(const QEntry &b) const {
+        return value < b.value;
+      }
+    };
+    // the input queue
+    std::vector<QEntry> queue;
+    // end of the queue
+    size_t qtail;
+    // push data to the queue
+    inline void Push(DType x, RType w) {
+      if (qtail == 0 || queue[qtail - 1].value != x) {
+        queue[qtail++] = QEntry(x, w);
+      } else {
+        queue[qtail - 1].weight += w;
+      }
+    }
+    inline void MakeSummary(WQSummary *out) {
+      std::sort(queue.begin(), queue.begin() + qtail);
+      out->size = 0;
+      // start update sketch
+      RType wsum = 0;
+      // construct data with unique weights
+      for (size_t i = 0; i < qtail;) {
+        size_t j = i + 1;
+        RType w = queue[i].weight;
+        while (j < qtail && queue[j].value == queue[i].value) {
+          w += queue[j].weight; ++j;
+        }
+        out->data[out->size++] = Entry(wsum, wsum + w, w, queue[i].value);
+        wsum += w; i = j;
+      }
+    }
+  };
+  /*! \brief data field */
+  Entry *data;
+  /*! \brief number of elements in the summary */
+  size_t size;
+  // constructor
+  WQSummary(Entry *data, size_t size)
+      : data(data), size(size) {}
+  /*!
+   * \return the maximum error of the Summary
+   */
+  inline RType MaxError() const {
+    RType res = data[0].rmax - data[0].rmin - data[0].wmin;
+    for (size_t i = 1; i < size; ++i) {
+      res = std::max(data[i].RMaxPrev() - data[i - 1].RMinNext(), res);
+      res = std::max(data[i].rmax - data[i].rmin - data[i].wmin, res);
+    }
+    return res;
+  }
+  /*!
+   * \brief query qvalue, start from istart
+   * \param qvalue the value we query for
+   * \param istart starting position
+   */
+  inline Entry Query(DType qvalue, size_t &istart) const { // NOLINT(*)
+    while (istart < size && qvalue > data[istart].value) {
+      ++istart;
+    }
+    if (istart == size) {
+      RType rmax = data[size - 1].rmax;
+      return Entry(rmax, rmax, 0.0f, qvalue);
+    }
+    if (qvalue == data[istart].value) {
+      return data[istart];
+    } else {
+      if (istart == 0) {
+        return Entry(0.0f, 0.0f, 0.0f, qvalue);
+      } else {
+        return Entry(data[istart - 1].RMinNext(),
+                     data[istart].RMaxPrev(),
+                     0.0f, qvalue);
+      }
+    }
+  }
+  /*! \return maximum rank in the summary */
+  inline RType MaxRank() const {
+    return data[size - 1].rmax;
+  }
+  /*!
+   * \brief copy content from src
+   * \param src source sketch
+   */
+  inline void CopyFrom(const WQSummary &src) {
+    size = src.size;
+    std::memcpy(data, src.data, sizeof(Entry) * size);
+  }
+  inline void MakeFromSorted(const Entry* entries, size_t n) {
+    size = 0;
+    for (size_t i = 0; i < n;) {
+      size_t j = i + 1;
+      // ignore repeated values
+      for (; j < n && entries[j].value == entries[i].value; ++j) {}
+      data[size++] = Entry(entries[i].rmin, entries[i].rmax, entries[i].wmin,
+                           entries[i].value);
+      i = j;
+    }
+  }
+  /*!
+   * \brief debug function, validate whether the summary
+   *  run consistency check to check if it is a valid summary
+   * \param eps the tolerate error level, used when RType is floating point and
+   *        some inconsistency could occur due to rounding error
+   */
+  inline void CheckValid(RType eps) const {
+    for (size_t i = 0; i < size; ++i) {
+      data[i].CheckValid(eps);
+      if (i != 0) {
+        CHECK(data[i].rmin >= data[i - 1].rmin + data[i - 1].wmin) << 'rmin range constraint';
+        CHECK(data[i].rmax >= data[i - 1].rmax + data[i].wmin) << 'rmax range constraint';
+      }
+    }
+  }
+  /*!
+   * \brief set current summary to be pruned summary of src
+   *        assume data field is already allocated to be at least maxsize
+   * \param src source summary
+   * \param maxsize size we can afford in the pruned sketch
+   */
+    }
+    }
+    }
     
-      virtual void PredictBatch(DMatrix* dmat, HostDeviceVector<bst_float>* out_preds,
-                            const gbm::GBTreeModel& model, int tree_begin,
-                            unsigned ntree_limit = 0) = 0;
+    namespace xgboost {
+/*!
+ * \brief interface of gradient boosting model.
+ */
+class GradientBooster {
+ public:
+  /*! \brief virtual destructor */
+  virtual ~GradientBooster() = default;
+  /*!
+   * \brief set configuration from pair iterators.
+   * \param begin The beginning iterator.
+   * \param end The end iterator.
+   * \tparam PairIter iterator<std::pair<std::string, std::string> >
+   */
+  template<typename PairIter>
+  inline void Configure(PairIter begin, PairIter end);
+  /*!
+   * \brief Set the configuration of gradient boosting.
+   *  User must call configure once before InitModel and Training.
+   *
+   * \param cfg configurations on both training and model parameters.
+   */
+  virtual void Configure(const std::vector<std::pair<std::string, std::string> >& cfg) = 0;
+  /*!
+   * \brief load model from stream
+   * \param fi input stream.
+   */
+  virtual void Load(dmlc::Stream* fi) = 0;
+  /*!
+   * \brief save model to stream.
+   * \param fo output stream
+   */
+  virtual void Save(dmlc::Stream* fo) const = 0;
+  /*!
+   * \brief whether the model allow lazy checkpoint
+   * return true if model is only updated in DoBoost
+   * after all Allreduce calls
+   */
+  virtual bool AllowLazyCheckPoint() const {
+    return false;
+  }
+  /*!
+   * \brief perform update to the model(boosting)
+   * \param p_fmat feature matrix that provide access to features
+   * \param in_gpair address of the gradient pair statistics of the data
+   * \param obj The objective function, optional, can be nullptr when use customized version
+   * the booster may change content of gpair
+   */
+  virtual void DoBoost(DMatrix* p_fmat,
+                       HostDeviceVector<GradientPair>* in_gpair,
+                       ObjFunction* obj = nullptr) = 0;
+    }
+    }
     
     
-    {
-    {
-    {  // base margin
-  bst_float base_margin;
-  // model parameter
-  GBTreeModelParam param;
-  /*! \brief vector of trees stored in the model */
-  std::vector<std::unique_ptr<RegTree> > trees;
-  /*! \brief for the update process, a place to keep the initial trees */
-  std::vector<std::unique_ptr<RegTree> > trees_to_update;
-  /*! \brief some information indicator of the tree, reserved */
-  std::vector<int> tree_info;
+    {  /*!
+   * \brief transform prediction values, this is only called when Eval is called,
+   *  usually it redirect to PredTransform
+   * \param io_preds prediction values, saves to this vector as well
+   */
+  virtual void EvalTransform(HostDeviceVector<bst_float> *io_preds) {
+    this->PredTransform(io_preds);
+  }
+  /*!
+   * \brief transform probability value back to margin
+   * this is used to transform user-set base_score back to margin
+   * used by gradient boosting
+   * \return transformed value
+   */
+  virtual bst_float ProbToMargin(bst_float base_score) const {
+    return base_score;
+  }
+  /*!
+   * \brief Create an objective function according to name.
+   * \param name Name of the objective.
+   */
+  static ObjFunction* Create(const std::string& name);
 };
-}  // namespace gbm
+    
+    template<typename DType>
+inline void CompressArray<DType>::Write(dmlc::Stream* fo) {
+  encoded_chunks_.clear();
+  encoded_chunks_.push_back(0);
+  for (size_t i = 0; i < out_buffer_.size(); ++i) {
+    encoded_chunks_.push_back(encoded_chunks_.back() + out_buffer_[i].length());
+  }
+  fo->Write(raw_chunks_);
+  fo->Write(encoded_chunks_);
+  for (const std::string& buf : out_buffer_) {
+    fo->Write(dmlc::BeginPtr(buf), buf.length());
+  }
+}
+    
+    XGBOOST_REGISTER_OBJECTIVE(PairwiseRankObj, 'rank:pairwise')
+.describe('Pairwise rank objective.')
+.set_body([]() { return new PairwiseRankObj(); });
+    
+    
+    {
+    {bool SimpleDMatrix::SingleColBlock() const { return true; }
+}  // namespace data
 }  // namespace xgboost
 
     
-      for (auto alphabet_size : test_cases) {
-    for (int i = 0; i < repetitions; i++) {
-      std::vector<int> input(num_elements);
-      std::generate(input.begin(), input.end(),
-        [=]() { return rand() % alphabet_size; });
-      CompressedBufferWriter cbw(alphabet_size);
+    
+    {    // exception out_of_range.401
+    try
+    {
+        // try to write beyond the array limit
+        array.at(5) = 'sixth';
     }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
     }
-    
-      virtual bst_float ComputeSplitScore(bst_uint nodeid,
-                                      bst_uint featureid,
-                                      const GradStats& left_stats,
-                                      const GradStats& right_stats) const;
-    
-      ~DHTSetup();
-    
-    #endif // D_DHT_TASK_EXECUTOR_H
-
-    
-    
-    {} // namespace aria2
-
-    
-    public:
-  DHTTaskQueueImpl();
-    
-    bool DNSCache::CacheEntry::add(const std::string& addr)
-{
-  for (std::vector<AddrEntry>::const_iterator i = addrEntries_.begin(),
-                                              eoi = addrEntries_.end();
-       i != eoi; ++i) {
-    if ((*i).addr_ == addr) {
-      return false;
-    }
-  }
-  addrEntries_.push_back(AddrEntry(addr));
-  return true;
 }
