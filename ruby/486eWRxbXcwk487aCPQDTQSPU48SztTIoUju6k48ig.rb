@@ -1,79 +1,99 @@
 
         
-        def linkify(markdown)
-  linkify_prs(markdown)
-end
+          # Controllers inheriting DeviseController are advised to override this
+  # method so that other controllers inheriting from them would use
+  # existing translations.
+  def translation_scope
+    'devise.#{controller_name}'
+  end
     
-    def graceful_require
-  Jekyll::External.require_with_graceful_fail('json')
-  JSON.pretty_generate(DATA)
-end
+          # Forgets the given resource by deleting a cookie
+      def forget_me(resource)
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.forget_me!
+        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
+      end
     
-            # rubocop:disable Metrics/AbcSize
-        def process(args, opts)
-          if !args || args.empty?
-            raise Jekyll::Errors::InvalidThemeName, 'You must specify a theme name.'
-          end
+        def initialize(name, options) #:nodoc:
+      @scoped_path = options[:as] ? '#{options[:as]}/#{name}' : name.to_s
+      @singular = (options[:singular] || @scoped_path.tr('/', '_').singularize).to_sym
     
-      # if rss_url already in existing opml file, use that; otherwise, do a lookup
-  rss_url = nil
-  if File.exist?(OUTPUT_FILENAME)
-    xml = Nokogiri::XML(File.open(OUTPUT_FILENAME))
-    existing_blog = xml.xpath('//outline[@htmlUrl='#{web_url}']').first
-    if existing_blog
-      rss_url = existing_blog.attr('xmlUrl')
-      puts '#{name}: ALREADY HAVE'
+    module Admin
+  class ChangeEmailsController < BaseController
+    before_action :set_account
+    before_action :require_local_account!
+    
+        def destroy
+      authorize @email_domain_block, :destroy?
+      @email_domain_block.destroy!
+      log_action :destroy, @email_domain_block
+      redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.destroyed_msg')
+    end
+    
+        # Mobile devices do not support regular notifications, so we enable push notifications by default
+    alerts_enabled = active_session.detection.device.mobile? || active_session.detection.device.tablet?
+    
+      def pinnable?
+    !@f.installed_prefixes.empty?
+  end
+    
+        it 'returns nil if there is no matching argument' do
+      expect(subject.value('baz')).to be nil
     end
   end
     
-          # Throw an exception if the layout couldn't be found.
-      else
-        raise <<-ERR
-    
-          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
-        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
-        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
-          @img['title']  = title
-          @img['alt']    = alt
-        else
-          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
-        end
-        @img['class'].gsub!(/'/, '') if @img['class']
-      end
-      super
+      platform_is :windows do
+    it 'runs commands starting with any number of @ using shell' do
+      `#{ruby_cmd('p system 'does_not_exist'')} 2>NUL`.chomp.should == 'nil'
+      @object.system('@does_not_exist 2>NUL').should == false
+      @object.system('@@@#{ruby_cmd('exit 0')}').should == true
     end
+  end
+end
     
-    module Jekyll
+    describe 'Kernel#taint' do
+  it 'returns self' do
+    o = Object.new
+    o.taint.should equal(o)
+  end
     
-          def create_worker_file
-        template 'worker.rb.erb', File.join('app/workers', class_path, '#{file_name}_worker.rb')
-      end
+        trace_var :$Kernel_trace_var_global, proc {|value| captured = value}
     
-          def perform(yml)
-        (target, method_name, args) = YAML.load(yml)
-        msg = target.public_send(method_name, *args)
-        # The email method can return nil, which causes ActionMailer to return
-        # an undeliverable empty message.
-        if msg
-          deliver(msg)
-        else
-          raise '#{target.name}##{method_name} returned an undeliverable mail object'
-        end
-      end
+          spec['main'] =
+          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
+          find_files.(Bootstrap.fonts_path) +
+          %w(assets/javascripts/bootstrap.js)
     
-          def invoke(*args)
-        chain = retrieve.dup
-        traverse_chain = lambda do
-          if chain.empty?
-            yield
-          else
-            chain.shift.call(*args, &traverse_chain)
+        <p id='explanation'>You're seeing this error because you have
+enabled the <code>show_exceptions</code> setting.</p>
+  </div> <!-- /WRAP -->
+  </body>
+</html>
+HTML
+  end
+end
+
+    
+          def accepts?(env)
+        cookie_header = env['HTTP_COOKIE']
+        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
+        cookies.each do |k, v|
+          if k == session_key && Array(v).size > 1
+            bad_cookies << k
+          elsif k != session_key && Rack::Utils.unescape(k) == session_key
+            bad_cookies << k
           end
         end
-        traverse_chain.call
+        bad_cookies.empty?
       end
-    end
     
-        def redis(&block)
-      Sidekiq.redis(&block)
-    end
+          def has_vector?(request, headers)
+        return false if request.xhr?
+        return false if options[:allow_if] && options[:allow_if].call(request.env)
+        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
+        origin(request.env).nil? and referrer(request.env) != request.host
+      end
+    
+      it 'should allow changing the protection settings' do
+    mock_app do
+      use Rack::Protection::ContentSecurityPolicy, :default_src => 'none', :script_src => 'https://cdn.mybank.net', :style_src => 'https://cdn.mybank.net', :img_src => 'https://cdn.mybank.net', :connect_src => 'https://api.mybank.com', :frame_src => 'self', :font_src => 'https://cdn.mybank.net', :object_src => 'https://cdn.mybank.net', :media_src => 'https://cdn.mybank.net', :report_uri => '/my_amazing_csp_report_parser', :sandbox => 'allow-scripts'
