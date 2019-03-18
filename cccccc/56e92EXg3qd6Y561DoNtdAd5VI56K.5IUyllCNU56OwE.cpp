@@ -1,201 +1,247 @@
 
         
-        REGISTER_GRADIENT(Sub, GetSubGradient);
+        
+    {}  // namespace remote
     
-    REGISTER_CPU_OPERATOR(
-    MergeMultiScalarFeatureTensors,
-    MergeMultiScalarFeatureTensorsOp<CPUContext>);
-OPERATOR_SCHEMA(MergeMultiScalarFeatureTensors)
-    .SetDoc(
-        'Merge given multi-feature tensors with scalar features into one.' +
-        doc)
-    .NumInputs([](int n) { return n >= 3 && n % 3 == 0; })
-    .NumOutputs(3)
-    .Input(0, 'in1_lengths', '.lengths')
-    .Input(1, 'in1_keys', '.keys')
-    .Input(2, 'in1_values', '.values')
-    .Output(0, 'out_lengths', '.lengths')
-    .Output(1, 'out_keys', '.keys')
-    .Output(2, 'out_values', '.values');
+    #ifndef CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
+#define CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
     
-    template <typename T, class Context>
-class BernoulliJSDOp final : public Operator<Context> {
- public:
-  USE_SIMPLE_CTOR_DTOR(BernoulliJSDOp);
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
-  bool RunOnDevice() override;
-};
     
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
-}
+    {}  // namespace nwapi
 
     
-        TableBuilder* builder = new TableBuilder(options, file);
-    meta->smallest.DecodeFrom(iter->key());
-    for (; iter->Valid(); iter->Next()) {
-      Slice key = iter->key();
-      meta->largest.DecodeFrom(key);
-      builder->Add(key, iter->value());
+    void Menu::UpdateKeys(GtkAccelGroup *gtk_accel_group){
+  this->gtk_accel_group = gtk_accel_group;
+  if (!GTK_IS_ACCEL_GROUP(gtk_accel_group)){
+    return ;
+  } else {
+    std::vector<MenuItem*>::iterator menu_item_iterator = menu_items.begin();
+    std::vector<MenuItem*>::iterator menu_item_end = menu_items.end();
+    while (menu_item_iterator != menu_item_end){
+      MenuItem *menu_item = *menu_item_iterator;
+      if (menu_item!=NULL && GTK_IS_MENU_ITEM(menu_item->menu_item_)){
+        menu_item->UpdateKeys(gtk_accel_group);
+      }
+      ++menu_item_iterator;
+    }
+  }
+}
+    
+    void Menu::Create(const base::DictionaryValue& option) {
+  is_menu_modified_ = true;
+  menu_delegate_.reset(new MenuDelegate(object_manager()));
+  menu_model_.reset(new ui::NwMenuModel(menu_delegate_.get()));
+    }
+    
+    bool MenuItem::CanHandleAccelerators() const {
+  return enable_shortcut_ && is_enabled_;
+}
+    
+    class NwAppQuitFunction : public UIThreadExtensionFunction {
+ public:
+  NwAppQuitFunction();
+    }
+    
+    class NwClipboardReadAvailableTypesFunction : public NWSyncExtensionFunction {
+ public:
+  NwClipboardReadAvailableTypesFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
     }
     
     
-    {  std::string tmp1, tmp2;
-  ASSERT_OK(db_->Put(WriteOptions(), Key(1000, &tmp1), Value(1000, &tmp2)));
-  std::string v;
-  ASSERT_OK(db_->Get(ReadOptions(), Key(1000, &tmp1), &v));
-  ASSERT_EQ(Value(1000, &tmp2).ToString(), v);
-  dbi->TEST_CompactMemTable();
-  ASSERT_OK(db_->Get(ReadOptions(), Key(1000, &tmp1), &v));
-  ASSERT_EQ(Value(1000, &tmp2).ToString(), v);
-}
-    
-      mutex_.Lock();
-  stats_[compact->compaction->level() + 1].Add(stats);
-    
-    #endif  // STORAGE_LEVELDB_DB_FILENAME_H_
+    {} // namespace caffe2
 
     
-      fname = LogFileName('foo', 192);
-  ASSERT_EQ('foo/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(192, number);
-  ASSERT_EQ(kLogFile, type);
+              const TensorShape& X = in[0];
+          int N = 0, C = 0, H = 0, W = 0;
+          switch (order) {
+            case StorageOrder::NCHW:
+              N = X.dims(0);
+              C = X.dims(1);
+              H = X.dims(2);
+              W = X.dims(3);
+              break;
+            case StorageOrder::NHWC:
+              N = X.dims(0);
+              H = X.dims(1);
+              W = X.dims(2);
+              C = X.dims(3);
+              break;
+            default:
+              CAFFE_THROW('Unknown storage order: ', order);
+          }
     
-     private:
-  SequentialFile* const file_;
-  Reporter* const reporter_;
-  bool const checksum_;
-  char* const backing_store_;
-  Slice buffer_;
-  bool eof_;   // Last Read() indicated EOF by returning < kBlockSize
-    
-    TEST(LogTest, Fragmentation) {
-  Write('small');
-  Write(BigString('medium', 50000));
-  Write(BigString('large', 100000));
-  ASSERT_EQ('small', Read());
-  ASSERT_EQ(BigString('medium', 50000), Read());
-  ASSERT_EQ(BigString('large', 100000), Read());
-  ASSERT_EQ('EOF', Read());
-}
-    
-    
-    {
-    {    s = EmitPhysicalRecord(type, ptr, fragment_length);
-    ptr += fragment_length;
-    left -= fragment_length;
-    begin = false;
-  } while (s.ok() && left > 0);
-  return s;
-}
-    
-    class Writer {
- public:
-  // Create a writer that will append data to '*dest'.
-  // '*dest' must be initially empty.
-  // '*dest' must remain live while this Writer is in use.
-  explicit Writer(WritableFile* dest);
-    }
-    
-      size_t DeleteLogFiles() {
-    std::vector<uint64_t> logs = GetFiles(kLogFile);
-    for (size_t i = 0; i < logs.size(); i++) {
-      ASSERT_OK(env_->DeleteFile(LogName(logs[i]))) << LogName(logs[i]);
-    }
-    return logs.size();
+      ~AutoCompactTest() {
+    delete db_;
+    DestroyDB(dbname_, Options());
+    delete tiny_cache_;
   }
     
-        // Read all the records and add to a memtable
-    std::string scratch;
-    Slice record;
-    WriteBatch batch;
-    MemTable* mem = new MemTable(icmp_);
-    mem->Ref();
+        // Finish and check for builder errors
+    s = builder->Finish();
+    if (s.ok()) {
+      meta->file_size = builder->FileSize();
+      assert(meta->file_size > 0);
+    }
+    delete builder;
+    
+    #include <stdio.h>
+#include 'leveldb/comparator.h'
+#include 'leveldb/db.h'
+#include 'leveldb/filter_policy.h'
+#include 'leveldb/slice.h'
+#include 'leveldb/table_builder.h'
+#include 'util/coding.h'
+#include 'util/logging.h'
+    
+    
+    {}  // namespace
+    
+    #include <ctype.h>
+#include <stdio.h>
+#include 'db/filename.h'
+#include 'db/dbformat.h'
+#include 'leveldb/env.h'
+#include 'util/logging.h'
+    
+    namespace leveldb {
+namespace {
+    }
+    }
+    
+      // Extend record types with the following special values
+  enum {
+    kEof = kMaxRecordType + 1,
+    // Returned whenever we find an invalid physical record.
+    // Currently there are three situations in which this happens:
+    // * The record has an invalid CRC (ReadPhysicalRecord reports a drop)
+    // * The record is a 0-length record (No drop is reported)
+    // * The record is below constructor's initial_offset (No drop is reported)
+    kBadRecord = kMaxRecordType + 2
+  };
+    
+    Status Writer::AddRecord(const Slice& slice) {
+  const char* ptr = slice.data();
+  size_t left = slice.size();
+    }
+    
+    class MemTable {
+ public:
+  // MemTables are reference counted.  The initial reference count
+  // is zero and the caller must call Ref() at least once.
+  explicit MemTable(const InternalKeyComparator& comparator);
+    }
+    
+        // Extract metadata by scanning through table.
     int counter = 0;
-    while (reader.ReadRecord(&record, &scratch)) {
-      if (record.size() < 12) {
-        reporter.Corruption(
-            record.size(), Status::Corruption('log record too small'));
+    Iterator* iter = NewTableIterator(t.meta);
+    bool empty = true;
+    ParsedInternalKey parsed;
+    t.max_sequence = 0;
+    for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
+      Slice key = iter->key();
+      if (!ParseInternalKey(key, &parsed)) {
+        Log(options_.info_log, 'Table #%llu: unparsable key %s',
+            (unsigned long long) t.meta.number,
+            EscapeString(key).c_str());
         continue;
       }
-      WriteBatchInternal::SetContents(&batch, record);
-      status = WriteBatchInternal::InsertInto(&batch, mem);
-      if (status.ok()) {
-        counter += WriteBatchInternal::Count(&batch);
-      } else {
-        Log(options_.info_log, 'Log #%llu: ignoring %s',
-            (unsigned long long) log,
-            status.ToString().c_str());
-        status = Status::OK();  // Keep going with rest of file
-      }
     }
-    delete lfile;
     
-    class DHTNode;
-class DHTBucket;
-class DHTTaskQueue;
-class DHTTaskFactory;
-class DHTBucketTreeNode;
+    Iterator* TableCache::NewIterator(const ReadOptions& options,
+                                  uint64_t file_number,
+                                  uint64_t file_size,
+                                  Table** tableptr) {
+  if (tableptr != nullptr) {
+    *tableptr = nullptr;
+  }
+    }
     
-    class DHTNode;
+          case kDeletedFile:
+        if (GetLevel(&input, &level) &&
+            GetVarint64(&input, &number)) {
+          deleted_files_.insert(std::make_pair(level, number));
+        } else {
+          msg = 'deleted file';
+        }
+        break;
     
-    #include 'common.h'
     
-    
-    {} // namespace aria2
+    {    // exception out_of_range.401
+    try
+    {
+        // try to write beyond the array limit
+        array.at(5) = 'sixth';
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+}
 
     
-    namespace aria2 {
-    }
     
-        bool add(const std::string& addr);
-    
-    TEST(MessageManagerTest, GetMutableProtocolDataById) {
-  uint8_t mock_data = 1;
-  MockMessageManager manager;
-  manager.Parse(MockProtocolData::ID, &mock_data, 8);
-  manager.ResetSendMessages();
-  EXPECT_TRUE(manager.GetMutableProtocolDataById(MockProtocolData::ID) !=
-              nullptr);
-    }
-    
-    int ObjectGeneralInfo60B::dynprop(const std::uint8_t* bytes,
-                                  int32_t length) const {
-  Byte t0(bytes + 6);
-  int32_t x = t0.get_byte(0, 3);
-    }
-    
-    BaseMapMatrix::~BaseMapMatrix() {}
-    
-    
-    {  MatrixXd bd_golden(20, 1);
-  bd_golden << -0.03, -0.03, -0.02, -0.04, -0.02, -0.04, -0.02, -0.04, -0.02,
-      -0.04, -0.02, -0.04, -0.02, -0.04, -0.02, -0.04, -0.02, -0.04, -0.02,
-      -0.04;
-  EXPECT_EQ(bd.rows(), 20);
-  EXPECT_EQ(bd.cols(), 1);
-  for (uint32_t i = 0; i < bd.rows(); ++i) {
-    EXPECT_DOUBLE_EQ(bd(i, 0), bd_golden(i, 0));
-  }
-}
-    
-    
-    { protected:
-  GemMessageManager manager_;
+    {    Vec3 _center;
+    Vec3 _eye;
+    Vec3 _up;
 };
     
+    AccelAmplitude* AccelAmplitude::create(Action *action, float duration)
+{
+    AccelAmplitude *ret = new (std::nothrow) AccelAmplitude();
+    if (ret && ret->initWithAction(action, duration))
+    {
+        ret->autorelease();
+        return ret;
+    }
+    }
     
-    {
-    {
-    {
-    {  double ret = x * 0.001000;
-  return ret;
+        /** @deprecated Use getNumberOfRunningActionsInTarget() instead.
+     */
+    CC_DEPRECATED_ATTRIBUTE ssize_t numberOfRunningActionsInTarget(Node *target) const { return getNumberOfRunningActionsInTarget(target); }
+    
+    /**
+@brief Progress to percentage.
+@details This action show the target node from current percentage to the specified percentage.
+        You should specify the destination percentage when creating the action.
+@since v0.99.1
+*/
+class CC_DLL ProgressTo : public ActionInterval
+{
+public:
+    /** 
+     * @brief Create and initializes with a duration and a destination percentage.
+     * @param duration Specify the duration of the ProgressTo action. It's a value in seconds.
+     * @param percent Specify the destination percentage.
+     * @return If the creation success, return a pointer of ProgressTo action; otherwise, return nil.
+     */
+    static ProgressTo* create(float duration, float percent);
+    }
+    
+    
+    {    return TiledGrid3DAction::initWithDuration(duration, Size(1, rows));
 }
-}  // namespace gem
-}  // namespace canbus
-}  // namespace apollo
-
     
-    #include 'modules/drivers/canbus/common/byte.h'
-#include 'modules/drivers/canbus/common/canbus_consts.h'
+        /** 
+    @brief Initializes the action with a range, shatter Z vertices, grid size and duration.
+    @param duration Specify the duration of the ShatteredTiles3D action. It's a value in seconds.
+    @param gridSize Specify the size of the grid.
+    @param range Specify the range of the shatter effect.
+    @param shatterZ Specify whether shake on the z axis.
+    @return If the Initialization success, return true; otherwise, return false.
+    */
+    bool initWithDuration(float duration, const Size& gridSize, int range, bool shatterZ);
+    
+        /** @deprecated Use getInstance() instead. */
+    CC_DEPRECATED_ATTRIBUTE static AnimationCache* sharedAnimationCache() { return AnimationCache::getInstance(); }
+    
+        /** Initializes an AtlasNode  with an Atlas file the width and height of each item and the quantity of items to render*/
+    bool initWithTileFile(const std::string& tile, int tileWidth, int tileHeight, int itemsToRender);
+    
+    /** Initializes an AtlasNode  with a texture the width and height of each item measured in points and the quantity of items to render*/
+    bool initWithTexture(Texture2D* texture, int tileWidth, int tileHeight, int itemsToRender);
+    
+    PolygonInfo::~PolygonInfo()
+{
+    releaseVertsAndIndices();
+}
