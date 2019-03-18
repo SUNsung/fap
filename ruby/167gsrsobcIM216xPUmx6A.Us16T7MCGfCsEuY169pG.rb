@@ -1,267 +1,173 @@
 
         
-          it 'no errors without a user' do
-    expect(-> { GivenDailyLike.increment_for(nil) }).not_to raise_error
-    expect(-> { GivenDailyLike.decrement_for(nil) }).not_to raise_error
-  end
+        module Gitlab
+  module Ci
+    module Pipeline
+      # Class for preloading data associated with pipelines such as commit
+      # authors.
+      class Preloader
+        def self.preload!(pipelines)
+          ##
+          # This preloads all commits at once, because `Ci::Pipeline#commit` is
+          # using a lazy batch loading, what results in only one batched Gitaly
+          # call.
+          #
+          pipelines.each(&:commit)
     
-      UserOption.where(user_id: smoke_user.id).update_all(
-    email_direct: false,
-    email_digests: false,
-    email_private_messages: false,
-  )
-    
-          if lounge.topic_id.nil?
-        creator = PostCreator.new(Discourse.system_user,
-          raw: I18n.t('vip_category_description'),
-          title: I18n.t('category.topic_prefix', category: lounge.name),
-          category: lounge.name,
-          archetype: Archetype.default,
-          skip_validations: true
-        )
-        post = creator.create
-    
-          # Sets a key to the given integer but only if the existing value is
-      # smaller than the given value.
-      #
-      # This method uses a Lua script to ensure the read and write are atomic.
-      #
-      # raw_key - The key to set.
-      # value - The new value for the key.
-      # timeout - The key timeout in seconds.
-      #
-      # Returns true when the key was overwritten, false otherwise.
-      def self.write_if_greater(raw_key, value, timeout: TIMEOUT)
-        key = cache_key_for(raw_key)
-        val = Redis::Cache.with do |redis|
-          redis
-            .eval(WRITE_IF_GREATER_SCRIPT, keys: [key], argv: [value, timeout])
+            def representation_class
+          Representation::LfsObject
         end
     
-              lfs_objects.each do |object|
-            yield object
-          end
-        rescue StandardError => e
-          Rails.logger.error('The Lfs import process failed. #{e.message}')
+            def collection_method
+          :issues_comments
         end
+    
+            # Builds a user from a GitHub API response.
+        #
+        # user - An instance of `Sawyer::Resource` containing the user details.
+        def self.from_api_response(user)
+          new(id: user.id, login: user.login)
+        end
+    
+          it 'deactivates an existing user' do
+        visit admin_users_path
+        expect(page).to have_no_text('inactive')
+        find(:css, 'a[href='/admin/users/#{users(:bob).id}/deactivate']').click
+        expect(page).to have_text('inactive')
+        users(:bob).reload
+        expect(users(:bob)).not_to be_active
       end
+    
+        let!(:bob_formatting_agent) {
+      agents(:bob_formatting_agent).tap { |agent|
+        # Make this valid
+        agent.options['instructions']['foo'] = 'bar'
+        agent.save!
+      }
+    }
+    
+        it 'shows the dry run pop up without previous events and selects the events tab when a event was created' do
+      open_dry_run_modal(agent)
+      click_on('Dry Run')
+      expect(page).to have_text('Biologists play reverse')
+      expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabEvents']')
+    end
+    
+      describe '#style_colors' do
+    it 'returns a css style-formated version of the scenario foreground and background colors' do
+      expect(style_colors(scenario)).to eq('color:#AAAAAA;background-color:#000000')
+    end
+    
+            it 'honors updates coming from the UI' do
+          scenario_import.merges = {
+            '0' => {
+              'name' => 'updated name',
+              'schedule' => '6pm',
+              'keep_events_for' => 2.days.to_i.to_s,
+              'disabled' => 'false',
+              'options' => weather_agent_options.merge('api_key' => 'foo').to_json
+            }
+          }
+    
+        it 'calls the specified method when the argument is present' do
+      argument = mock()
+      mock(argument).to_i { 1 }
+      expect(Utils.if_present(argument, :to_i)).to eq(1)
     end
   end
 end
 
     
-          def cache_key_iid
-        if object.respond_to?(:noteable_id)
-          object.noteable_id
-        elsif object.respond_to?(:iid)
-          object.iid
-        else
-          raise(
-            TypeError,
-            'Instances of #{object.class} are not supported'
-          )
-        end
-      end
+          @log.level = 5
+      expect(@log).not_to be_valid
+      expect(@log).to have(1).error_on(:level)
+    
+      before(:each) do
+    stub_request(:get, /events.json$/).to_return(
+      :body => File.read(Rails.root.join('spec/data_fixtures/basecamp.json')),
+      :status => 200,
+      :headers => {'Content-Type' => 'text/json'}
+    )
+    stub_request(:get, /projects.json$/).to_return(
+      :body => JSON.dump([{name: 'test', id: 1234},{name: 'test1', id: 1235}]),
+      :status => 200,
+      :headers => {'Content-Type' => 'text/json'}
+    )
+    stub_request(:get, /02:00$/).to_return(
+      :body => File.read(Rails.root.join('spec/data_fixtures/basecamp.json')),
+      :status => 200,
+      :headers => {'Content-Type' => 'text/json'}
+    )
+    @valid_params = { :project_id => 6789 }
+    
+        s = mock('seed')
+    s.should_receive(:to_int).and_return 0
+    srand(s)
+  end
+    
+      it 'returns true when passed ?e if the argument is a file' do
+    Kernel.test(?e, @file).should == true
+  end
+    
+      def up_down(change)
+    change.up do
+      Mention.update_all(mentions_container_type: 'Post')
+      change_column :mentions, :mentions_container_type, :string, null: false
+      Notification.where(type: 'Notifications::Mentioned').update_all(type: 'Notifications::MentionedInPost')
     end
-  end
-end
-
     
-          # The method that will be called for traversing through all the objects to
-      # import, yielding them to the supplied block.
-      def each_object_to_import
-        repo = project.import_source
-    
-      def sign_in_params
-    devise_parameter_sanitizer.sanitize(:sign_in)
-  end
-    
-      # Override prefixes to consider the scoped view.
-  # Notice we need to check for the request due to a bug in
-  # Action Controller tests that forces _prefixes to be
-  # loaded before even having a request object.
-  #
-  # This method should be public as it is in ActionPack
-  # itself. Changing its visibility may break other gems.
-  def _prefixes #:nodoc:
-    @_prefixes ||= if self.class.scoped_views? && request && devise_mapping
-      ['#{devise_mapping.scoped_path}/#{controller_name}'] + super
+    module NavigationHelpers
+  def path_to(page_name)
+    case page_name
+    when /^person_photos page$/
+      person_photos_path(@me.person)
+    when /^the home(?: )?page$/
+      stream_path
+    when /^the mobile path$/
+      force_mobile_path
+    when /^the user applications page$/
+      api_openid_connect_user_applications_path
+    when /^the tag page for '([^\']*)'$/
+      tag_path(Regexp.last_match(1))
+    when /^its ([\w ]+) page$/
+      send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', @it)
+    when /^the mobile ([\w ]+) page$/
+      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', format: 'mobile')
+    when /^the ([\w ]+) page$/
+      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path')
+    when /^my edit profile page$/
+      edit_profile_path
+    when /^my profile page$/
+      person_path(@me.person)
+    when /^my acceptance form page$/
+      invite_code_path(InvitationCode.first)
+    when /^the requestors profile$/
+      person_path(Request.where(recipient_id: @me.person.id).first.sender)
+    when /^'([^\']*)''s page$/
+      p = User.find_by_email(Regexp.last_match(1)).person
+      {path:         person_path(p),
+       # '#diaspora_handle' on desktop, '.description' on mobile
+       special_elem: {selector: '#diaspora_handle, .description', text: p.diaspora_handle}
+      }
+    when /^'([^\']*)''s photos page$/
+      p = User.find_by_email(Regexp.last_match(1)).person
+      person_photos_path p
+    when /^my account settings page$/
+      edit_user_path
+    when /^forgot password page$/
+      new_user_password_path
+    when %r{^'(/.*)'}
+      Regexp.last_match(1)
     else
-      super
+      raise 'Can't find mapping from \'#{page_name}\' to a path.'
     end
   end
     
-      def test_returns_success
-    Warden.test_mode!
+        it 'does not redirect when the registration is open' do
+      AppConfig.settings.enable_registrations = true
     
-          def extract_path_from_location(location)
-        uri = parse_uri(location)
-    
-              record = to_adapter.get(id)
-          record if record && record.remember_me?(token, generated_at)
+          context 'resharing another user\'s reshare' do
+        before do
+          @root = @post
+          @post = FactoryGirl.create(:reshare, :root => @root, :author => alice.person)
         end
-    
-      # Update version.rb file with BOOTSTRAP_SHA
-  def store_version
-    path    = 'lib/bootstrap-sass/version.rb'
-    content = File.read(path).sub(/BOOTSTRAP_SHA\s*=\s*[''][\w]+['']/, 'BOOTSTRAP_SHA = '#@branch_sha'')
-    File.open(path, 'w') { |f| f.write(content) }
-  end
-end
-
-    
-    ENV['GEM_HOME'] = ENV['GEM_PATH'] = LogStash::Environment.logstash_gem_home
-Gem.use_paths(LogStash::Environment.logstash_gem_home)
-    
-      def validate_target_file
-    if File.exist?(target_file)
-      if  delete_target_file?
-        File.delete(target_file)
-      else
-        signal_error('Package creation cancelled, a previously generated package exist at location: #{target_file}, move this file to safe place and run the command again')
-      end
-    end
-  end
-    
-        FileUtils.rm_rf(LogStash::Environment::CACHE_PATH)
-    validate_cache_location
-    archive_manager.extract(package_file, LogStash::Environment::CACHE_PATH)
-    puts('Unpacked at #{LogStash::Environment::CACHE_PATH}')
-    puts('The unpacked plugins can now be installed in local-only mode using bin/logstash-plugin install --local [plugin name]')
-  end
-    
-            expect(new_source).to eq(['#{prefix}#{open}#{a},',
-                                  '#{b}#{close}',
-                                  suffix].join($RS))
-      end
-    end
-  end
-end
-
-    
-          # Checks whether this case statement has an `else` branch.
-      #
-      # @return [Boolean] whether the `case` statement has an `else` branch
-      def else?
-        loc.else
-      end
-    end
-  end
-end
-
-    
-    module RuboCop
-  module AST
-    # A node extension for `hash` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `hash` nodes within RuboCop.
-    class HashNode < Node
-      # Returns an array of all the key value pairs in the `hash` literal.
-      #
-      # @return [Array<PairNode>] an array of `pair` nodes
-      def pairs
-        each_pair.to_a
-      end
-    
-          # Returns the delta between this element's delimiter and the argument's.
-      #
-      # @note Pairs with different delimiter styles return a delta of 0
-      #
-      # @return [Integer] the delta between the two delimiters
-      def delimiter_delta(other)
-        HashElementDelta.new(self, other).delimiter_delta
-      end
-    
-    #######################
-# Working with Jekyll #
-#######################
-    
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
-      end
-      super
-    end
-    
-        # Outputs a list of categories as comma-separated <a> links. This is used
-    # to output the category list for each post on a category page.
-    #
-    #  +categories+ is the list of categories to format.
-    #
-    # Returns string
-    #
-    def category_links(categories)
-      categories.sort.map { |c| category_link c }.join(', ')
-    end
-    
-      if options.respond_to? 'keys'
-    options.each do |k,v|
-      unless v.nil?
-        v = v.join ',' if v.respond_to? 'join'
-        v = v.to_json if v.respond_to? 'keys'
-        output += ' data-#{k.sub'_','-'}='#{v}''
-      end
-    end
-  elsif options.respond_to? 'join'
-    output += ' data-value='#{config[key].join(',')}''
-  else
-    output += ' data-value='#{config[key]}''
-  end
-  output += '></#{tag}>'
-end
-    
-    module Jekyll
-  class GistTag < Liquid::Tag
-    def initialize(tag_name, text, token)
-      super
-      @text           = text
-      @cache_disabled = false
-      @cache_folder   = File.expand_path '../.gist-cache', File.dirname(__FILE__)
-      FileUtils.mkdir_p @cache_folder
-    end
-    
-    module OctopressFilters
-  def self.pre_filter(page)
-    if page.ext.match('html|textile|markdown|md|haml|slim|xml')
-      input = BacktickCodeBlock::render_code_block(page.content)
-      page.content = input.gsub /(<figure.+?>.+?<\/figure>)/m do
-        TemplateWrapper::safe_wrap($1)
-      end
-    end
-  end
-  def self.post_filter(page)
-    if page.ext.match('html|textile|markdown|md|haml|slim|xml')
-      page.output = TemplateWrapper::unwrap(page.output)
-    end
-  end
-    
-    When /^(?:|I )go to (.+)$/ do |page_name|
-  visit path_to(page_name)
-end
-    
-            if args.length > 0
-          attachment.to_s(args.first)
-        else
-          attachment
-        end
-      end
-    end
-    
-        # Returns the pluralized form of the attachment name. e.g.
-    # 'avatars' for an attachment of :avatar
-    def attachment attachment, style_name
-      plural_cache.pluralize_symbol(attachment.name)
-    end
