@@ -1,132 +1,77 @@
 
         
-              GivenDailyLike.increment_for(user.id)
-      expect(value_for(user.id, dt)).to eq(2)
-      expect(limit_reached_for(user.id, dt)).to eq(true)
+                  def select_type
+            self.class.select_type
+          end
     
-            # Reset topic count because we don't count the description topic
-        DB.exec 'UPDATE categories SET topic_count = 0 WHERE id = #{lounge.id}'
+        class WithConditionalOverrideFlippedAndInheriting < WithConditionalOverride
+      layout nil, only: :non_overwritten
+    end
+    
+          # Sign out all active users or scopes. This helper is useful for signing out all roles
+      # in one click. This signs out ALL scopes in warden. Returns true if there was at least one logout
+      # and false if there was no user logged in on all scopes.
+      def sign_out_all_scopes(lock=true)
+        users = Devise.mappings.keys.map { |s| warden.user(scope: s, run_callbacks: false) }
+    
+          def devise_mapping
+        @devise_mapping ||= Devise.mappings[scope_name]
+      end
+    
+    require 'devise/strategies/rememberable'
+require 'devise/hooks/rememberable'
+require 'devise/hooks/forgetable'
+    
+          module ClassMethods
+        Devise::Models.config(self, :timeout_in)
       end
     end
   end
 end
 
     
-              relation.update_all(update)
-        end
-      end
-    end
-  end
-end
-
-    
-            # attributes - A Hash containing the raw note details. The keys of this
-        #              Hash must be Symbols.
-        def initialize(attributes)
-          @attributes = attributes
-        end
-    
-              user = Representation::User.from_api_response(note.user) if note.user
-          hash = {
-            noteable_type: noteable_type,
-            noteable_id: matches[:iid].to_i,
-            author: user,
-            note: note.body,
-            created_at: note.created_at,
-            updated_at: note.updated_at,
-            github_id: note.id
-          }
-    
-            # Builds a user from a GitHub API response.
-        #
-        # user - An instance of `Sawyer::Resource` containing the user details.
-        def self.from_api_response(user)
-          new(id: user.id, login: user.login)
-        end
-    
-              # Require that names be an array
-          names ||= []
-          names = [names] if !names.is_a?(Array)
-    
-            # This method is expected to return a class that is used for
-        # configuring the provisioner. This return value is expected to be
-        # a subclass of {Config}.
-        #
-        # @return [Config]
-        def self.config_class
-        end
-    
-      # Use a different logger for distributed setups.
-  # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
-    
-      def setup
-    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
-    success = Dir.chdir DUMMY_PATH do
-      silence_stdout_if !ENV['VERBOSE'] do
-        system 'node', 'manifest.js', tmp_dir
-      end
-    end
-    assert success, 'Node.js Mincer compilation failed'
-    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
-    css_name = manifest['assets']['application.css']
-    @css = File.read('#{tmp_dir}/#{css_name}')
-  end
-end
-
-    
-      # log-levels from the diaspora.yml for SQL and federation debug-logging
-  Logging.logger[ActionView::Base].level = Rails.env.development? ? :debug : :warn
-  Logging.logger[ActiveRecord::Base].level = AppConfig.environment.logging.debug.sql? ? :debug : :info
-  Logging.logger[DiasporaFederation::Salmon::MagicEnvelope].level =
-    AppConfig.environment.logging.debug.federation? ? :debug : :info
-    
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have path in #{expected.inspect} but was #{actual.current_path.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have path in #{expected.inspect} but it had'
-  end
-end
-    
-      class PostToService < Base
-    def perform(*_args)
-      # don't post to services in cucumber
-    end
+      it 'raises #{frozen_error_class} on an untainted, frozen object' do
+    o = Object.new.freeze
+    lambda { o.taint }.should raise_error(frozen_error_class)
   end
     
-        context 'with a public post' do
-      before do
-        sign_in(alice, scope: :user)
-        @post = alice.post(:status_message, text: 'hey', public: true)
+        $Kernel_trace_var_global = 'foo'
+    captured.should == 'foo'
+  end
+    
+    class Profile
+  def pod_bin
+    File.expand_path('../pod', __FILE__)
+  end
+    
+          # Returns the else branch of the `case` statement, if any.
+      #
+      # @return [Node] the else branch node of the `case` statement
+      # @return [nil] if the case statement does not have an else branch.
+      def else_branch
+        node_parts[-1]
       end
     
-    Given(/^(\d+) valid existing releases$/) do |num|
-  a_day = 86_400 # in seconds
-  offset = -(a_day * num.to_i)
-  num.to_i.times do
-    run_vagrant_command('mkdir -p #{TestApp.release_path(TestApp.timestamp(offset))}')
-    offset += a_day
-  end
-end
-    
-      def safely_remove_file(_path)
-    run_vagrant_command('rm #{test_file}')
-  rescue
-    VagrantHelpers::VagrantSSHCommandError
-  end
-end
-    
-          def response
-        return @response if defined? @response
-    
-            def call
-          @validator.call
-        end
+          # Returns the collection the `for` loop is iterating over.
+      #
+      # @return [Node] The collection the `for` loop is iterating over
+      def collection
+        node_parts[1]
       end
-    end
-  end
-end
-
     
-            self
+          # This is used for duck typing with `pair` nodes which also appear as
+      # `hash` elements.
+      #
+      # @return [false]
+      def colon?
+        false
+      end
+    
+          # Returns the value of this `hash` element.
+      #
+      # @note For keyword splats, this returns the whole node
+      #
+      # @return [Node] the value of the hash element
+      def value
+        node_parts[1]
       end
