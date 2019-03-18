@@ -1,163 +1,122 @@
 
         
-            for data_name, data_dict in datasets.items():
-      data_tuple = [('train', data_dict['train_data'],
-                     data_dict['train_ext_input']),
-                    ('valid', data_dict['valid_data'],
-                     data_dict['valid_ext_input'])]
-      for data_kind, data_extxd, ext_input_extxi in data_tuple:
-        if not output_fname:
-          fname = 'model_runs_' + data_name + '_' + data_kind + '_' + kind
-        else:
-          fname = output_fname + data_name + '_' + data_kind + '_' + kind
+          print(header)
     
-    # The controller will be more powerful if it can see the encoding of the entire
-# trial.  However, this allows the controller to create inferred inputs that are
-# acausal with respect to the actual data generation process.  E.g. the data
-# generator could have an input at time t, but the controller, after seeing the
-# entirety of the trial could infer that the input is coming a little before
-# time t, because there are no restrictions on the data the controller sees.
-# One can force the controller to be causal (with respect to perturbations in
-# the data generator) so that it only sees forward encodings of the data at time
-# t that originate at times before or at time t.  One can also control the data
-# the controller sees by using an input lag (forward encoding at time [t-tlag]
-# for controller input at time t.  The same can be done in the reverse direction
-# (controller input at time t from reverse encoding at time [t+tlag], in the
-# case of an acausal controller).  Setting this lag > 0 (even lag=1) can be a
-# powerful way of avoiding very spiky decodes. Finally, one can manually control
-# whether the factors at time t-1 are fed to the controller at time t.
-#
-# If you don't care about any of this, and just want to smooth your data, set
-#    do_causal_controller = False
-#    do_feed_factors_to_controller = True
-#    causal_input_lag = 0
-flags.DEFINE_boolean('do_causal_controller',
-                     DO_CAUSAL_CONTROLLER,
-                     'Restrict the controller create only causal inferred \
-                     inputs?')
-# Strictly speaking, feeding either the factors or the rates to the controller
-# violates causality, since the g0 gets to see all the data. This may or may not
-# be only a theoretical concern.
-flags.DEFINE_boolean('do_feed_factors_to_controller',
-                     DO_FEED_FACTORS_TO_CONTROLLER,
-                     'Should factors[t-1] be input to controller at time t?')
-flags.DEFINE_string('feedback_factors_or_rates', FEEDBACK_FACTORS_OR_RATES,
-                    'Feedback the factors or the rates to the controller? \
-                     Acceptable values: 'factors' or 'rates'.')
-flags.DEFINE_integer('controller_input_lag', CONTROLLER_INPUT_LAG,
-                     'Time lag on the encoding to controller t-lag for \
-                     forward, t+lag for reverse.')
+      Args:
+    in_size: The integer size of the non-batc input dimension. [(x),y]
+    out_size: The integer size of non-batch output dimension. [x,(y)]
+    do_bias (optional): Add a (learnable) bias vector to the operation,
+      if false, b will be None
+    mat_init_value (optional): numpy constant for matrix initialization, if None
+      , do random, with additional parameters.
+    alpha (optional): A multiplicative scaling for the weight initialization
+      of the matrix, in the form \alpha * 1/\sqrt{x.shape[1]}.
+    identity_if_possible (optional): just return identity,
+      if x.shape[1] == out_size.
+    normalized (optional): Option to divide out by the norms of the rows of W.
+    name (optional): The name prefix to add to variables.
+    collections (optional): List of additional collections. (Placed in
+      tf.GraphKeys.GLOBAL_VARIABLES already, so no need for that.)
     
-      if len(dataset_dict) == 0:
-    raise ValueError('Failed to load any datasets, are you sure that the '
-                     ''--data_dir' and '--data_filename_stem' flag values '
-                     'are correct?')
+      elif FLAGS.baseline_method is None:
+    num_missing = tf.reduce_sum(missing)
+    final_gen_objective += tf.reduce_sum(rewards) / (num_missing + eps)
+    baselines = tf.zeros_like(rewards)
+    critic_loss = None
+    maintain_averages_op = None
+    advantages = cumulative_rewards
     
-      mask1_end, mask2_end = [], []
-  while sent1[-1] == sent2[-1]:
-    if (len(sent1) == 1) or (len(sent2) == 1):
-      break
-    sent1 = sent1[:-1]
-    sent2 = sent2[:-1]
-    mask1_end = [0.] + mask1_end
-    mask2_end = [0.] + mask2_end
+      Returns:
+    variable_mapping:  Dictionary with Key: ckpt_name, Value: model_varself.
+  '''
+  assert (FLAGS.discriminator_model == 'bidirectional_zaremba' or
+          FLAGS.discriminator_model == 'bidirectional_vd')
+  assert hparams.dis_num_layers == 2
     
-      ## REINFORCE with different baselines.
-  # We create a separate critic functionality for the Discriminator.  This
-  # will need to operate unidirectionally and it may take in the past context.
-  if FLAGS.baseline_method == 'critic':
+    '''Simple bidirectional model definitions.'''
+    
+    for test in gettestcases():
+    if METHOD == 'EURISTIC':
+        try:
+            webpage = compat_urllib_request.urlopen(test['url'], timeout=10).read()
+        except Exception:
+            print('\nFail: {0}'.format(test['name']))
+            continue
     
     
-def make_setting_element(setting_data, app, fromdocname):
-    refnode = make_refnode(app.builder, fromdocname,
-                           todocname=setting_data['docname'],
-                           targetid=setting_data['refid'],
-                           child=nodes.Text(setting_data['setting_name']))
-    p = nodes.paragraph()
-    p += refnode
-    
-    # Check minimum required Python version
-import sys
-if sys.version_info < (2, 7):
-    print('Scrapy %s requires Python 2.7' % __version__)
-    sys.exit(1)
-    
-    def _iter_command_classes(module_name):
-    # TODO: add `name` attribute to commands and and merge this function with
-    # scrapy.utils.spider.iter_spider_classes
-    for module in walk_modules(module_name):
-        for obj in vars(module).values():
-            if inspect.isclass(obj) and \
-                    issubclass(obj, ScrapyCommand) and \
-                    obj.__module__ == module.__name__ and \
-                    not obj == ScrapyCommand:
-                yield obj
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-l', '--list', dest='list', action='store_true',
-                          help='only list contracts, without checking them')
-        parser.add_option('-v', '--verbose', dest='verbose', default=False, action='store_true',
-                          help='print contract tests for all spiders')
-    
-    
-class Command(ScrapyCommand):
-    
-            spidercls = DefaultSpider
-        spider_loader = self.crawler_process.spider_loader
-        if opts.spider:
-            spidercls = spider_loader.load(opts.spider)
-        else:
-            spidercls = spidercls_for_request(spider_loader, request, spidercls)
-        self.crawler_process.crawl(spidercls, start_requests=lambda: [request])
-        self.crawler_process.start()
+if __name__ == '__main__':
+    unittest.main()
 
     
-        def short_desc(self):
-        return 'Get settings values'
+        def _get_ip(self, protocol):
+        if self._SKIP_SOCKS_TEST:
+            return '127.0.0.1'
     
-            if not assertion:
-            if self.min_bound == self.max_bound:
-                expected = self.min_bound
-            else:
-                expected = '%s..%s' % (self.min_bound, self.max_bound)
-    
-    
-class BaseRegisteredClass(object):
-    __metaclass__ = RegistryHolder
+        :param id: id of post to get
+    :param check_author: require the current user to be the author
+    :return: the post with author information
+    :raise 404: if a post with the given id doesn't exist
+    :raise 403: if the current user isn't the author
     '''
-        Any class that will inherits from BaseRegisteredClass will be included
-        inside the dict RegistryHolder.REGISTRY, the key being the name of the
-        class and the associated value, the class itself.
+    post = get_db().execute(
+        'SELECT p.id, title, body, created, author_id, username'
+        ' FROM post p JOIN user u ON p.author_id = u.id'
+        ' WHERE p.id = ?',
+        (id,)
+    ).fetchone()
+    
+    
+def get_db():
+    '''Connect to the application's configured database. The connection
+    is unique for each request and will be reused if this is called
+    again.
     '''
-    pass
+    if 'db' not in g:
+        g.db = sqlite3.connect(
+            current_app.config['DATABASE'],
+            detect_types=sqlite3.PARSE_DECLTYPES
+        )
+        g.db.row_factory = sqlite3.Row
     
+            #: as blueprints can be registered multiple times with the
+        #: application and not everything wants to be registered
+        #: multiple times on it, this attribute can be used to figure
+        #: out if the blueprint was registered in the past already.
+        self.first_registration = first_registration
     
-OUTPUT = '''
-<Price: 100, price after discount: 100>
-<Price: 100, price after discount: 90.0>
-<Price: 1000, price after discount: 730.0>
-'''
+        Implements signals based on blinker if available, otherwise
+    falls silently back to a noop.
+    
+        :param source: the source code of the template to be
+                   rendered
+    :param context: the variables that should be available in the
+                    context of the template.
+    '''
+    ctx = _app_ctx_stack.top
+    ctx.app.update_template_context(context)
+    return _render(ctx.app.jinja_env.from_string(source),
+                   context, ctx.app)
 
     
-        def get_current_time_as_html_fragment(self):
-        current_time = self.time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
-'''
+            assert meth is not None, 'Unimplemented method %r' % request.method
+        return meth(*args, **kwargs)
+
     
-    '''
-*TL;DR80
-Separates presentation, application processing, and data management functions.
-'''
+    # Optional dataset entry keys
+_IM_PREFIX = 'image_prefix'
+_DEVKIT_DIR = 'devkit_directory'
+_RAW_DIR = 'raw_dir'
     
-        def test_publisher_shall_append_subscription_message_to_queue(cls):
-        ''' msg_queue ~ Provider.notify(msg) ~ Publisher.publish(msg) '''
-        expected_msg = 'expected msg'
-        pro = Provider()
-        pub = Publisher(pro)
-        Subscriber('sub name', pro)
-        cls.assertEqual(len(pro.msg_queue), 0)
-        pub.publish(expected_msg)
-        cls.assertEqual(len(pro.msg_queue), 1)
-        cls.assertEqual(pro.msg_queue[0], expected_msg)
+    
+# ---------------------------------------------------------------------------- #
+# RPN and Faster R-CNN outputs and losses
+# ---------------------------------------------------------------------------- #
+    
+    import numpy as np
+    
+    
+def _get_retinanet_blobs(
+        foas, all_anchors, gt_boxes, gt_classes, im_width, im_height):
+    total_anchors = all_anchors.shape[0]
+    logger.debug('Getting mad blobs: im_height {} im_width: {}'.format(
+        im_height, im_width))
