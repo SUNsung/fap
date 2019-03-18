@@ -1,109 +1,133 @@
 
         
-        ModelAnalyzer::ModelAnalyzer(const GrapplerItem& item) : item_(item) {}
+            for (int inputIdx = 0; inputIdx < def_.input_size() / 3; ++inputIdx) {
+      input_blob_names.push_back(I(inputIdx * 3));
+      input_blob_names.push_back(I(inputIdx * 3 + 2));
+      output_blob_names.push_back(GI(inputIdx * 3 + 1));
+    }
+    input_blob_names.push_back(GO(3));
     
-    #include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/op_kernel.h'
+              const TensorShape& X = in[0];
+          int N = 0, C = 0, H = 0, W = 0;
+          switch (order) {
+            case StorageOrder::NCHW:
+              N = X.dims(0);
+              C = X.dims(1);
+              H = X.dims(2);
+              W = X.dims(3);
+              break;
+            case StorageOrder::NHWC:
+              N = X.dims(0);
+              H = X.dims(1);
+              W = X.dims(2);
+              C = X.dims(3);
+              break;
+            default:
+              CAFFE_THROW('Unknown storage order: ', order);
+          }
     
-    bool TfPyInt_Check(PyObject* object) {
-  if (!PyLong_Check(object)) {
-    return 0;
+    // Max number of scripts in ICU + 'NULL' + Japanese and Korean + Fraktur
+const int kMaxNumberOfScripts = 116 + 1 + 2 + 1;
+    
+    #ifndef TESSERACT_CCMAIN_PAGEITERATOR_H_
+#define TESSERACT_CCMAIN_PAGEITERATOR_H_
+    
+    
+    {  for (std::map<int, ParamContent*>::iterator iter = vcMap.begin();
+                                          iter != vcMap.end();
+                                          ++iter) {
+    ParamContent* cur = iter->second;
+    if (!changes_only || cur->HasChanged()) {
+      fprintf(fp, '%-25s   %-12s   # %s\n',
+              cur->GetName(), cur->GetValue().string(), cur->GetDescription());
+    }
   }
-  int overflow = 0;
-  PyLong_AsLongAndOverflow(object, &overflow);
-  return (overflow == 0);
+  fclose(fp);
+}
+#endif // GRAPHICS_DISABLED
+
+    
+    #ifndef GRAPHICS_DISABLED
+    
+    #include <cstdio>    // for FILE
+#include 'strngs.h'  // for STRING
+    
+      const STRING& document_name() const {
+    SVAutoLock lock(&general_mutex_);
+    return document_name_;
+  }
+  int NumPages() const {
+    SVAutoLock lock(&general_mutex_);
+    return total_pages_;
+  }
+  int64_t memory_used() const {
+    SVAutoLock lock(&general_mutex_);
+    return memory_used_;
+  }
+  // If the given index is not currently loaded, loads it using a separate
+  // thread. Note: there are 4 cases:
+  // Document uncached: IsCached() returns false, total_pages_ < 0.
+  // Required page is available: IsPageAvailable returns true. In this case,
+  // total_pages_ > 0 and
+  // pages_offset_ <= index%total_pages_ <= pages_offset_+pages_.size()
+  // Pages are loaded, but the required one is not.
+  // The requested page is being loaded by LoadPageInBackground. In this case,
+  // index == pages_offset_. Once the loading starts, the pages lock is held
+  // until it completes, at which point IsPageAvailable will unblock and return
+  // true.
+  void LoadPageInBackground(int index);
+  // Returns a pointer to the page with the given index, modulo the total
+  // number of pages. Blocks until the background load is completed.
+  const ImageData* GetPage(int index);
+  // Returns true if the requested page is available, and provides a pointer,
+  // which may be nullptr if the document is empty. May block, even though it
+  // doesn't guarantee to return true.
+  bool IsPageAvailable(int index, ImageData** page);
+  // Takes ownership of the given page index. The page is made nullptr in *this.
+  ImageData* TakePage(int index) {
+    SVAutoLock lock(&pages_mutex_);
+    ImageData* page = pages_[index];
+    pages_[index] = nullptr;
+    return page;
+  }
+  // Returns true if the document is currently loaded or in the process of
+  // loading.
+  bool IsCached() const { return NumPages() >= 0; }
+  // Removes all pages from memory and frees the memory, but does not forget
+  // the document metadata. Returns the memory saved.
+  int64_t UnCache();
+  // Shuffles all the pages in the document.
+  void Shuffle();
+    
+    U_NAMESPACE_END
+    
+    ScientificNumberFormatter *ScientificNumberFormatter::createSuperscriptInstance(
+            DecimalFormat *fmtToAdopt, UErrorCode &status) {
+    return createInstance(fmtToAdopt, new SuperscriptStyle(), status);
 }
     
-        http://www.apache.org/licenses/LICENSE-2.0
+    U_NAMESPACE_BEGIN
     
-    // Returns the kernel class name required to execute <node_def> on the device
-// type of <node_def.device>, or an empty string if the kernel class is not
-// found or the device name is invalid.
-string TryFindKernelClass(const string& serialized_node_def);
+    class UnicodeSet;
     
-      // Computes real-to-complex FFT in forward direction.
-  virtual bool DoFft(Stream *stream, Plan *plan,
-                     const DeviceMemory<float> &input,
-                     DeviceMemory<std::complex<float>> *output) = 0;
-  virtual bool DoFft(Stream *stream, Plan *plan,
-                     const DeviceMemory<double> &input,
-                     DeviceMemory<std::complex<double>> *output) = 0;
+    #include 'unicode/uobject.h'
+#include 'unicode/utypes.h'
     
-    bool AuthPropertyIterator::operator!=(const AuthPropertyIterator& rhs) const {
-  return !operator==(rhs);
-}
+        /**
+     * Returns TRUE if this class can format positiveValue using
+     * the given range of digit counts.
+     *
+     * @param positiveValue the value to format
+     * @param range the acceptable range of digit counts.
+     */
+    static UBool canFormat(
+            int32_t positiveValue, const IntDigitCountRange &range);
     
-    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H
-#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H
+    U_NAMESPACE_BEGIN
     
-    // Serializes the outgoing stats context.  Field IDs are 1 byte followed by
-// field data. A 1 byte version ID is always encoded first. Tags are directly
-// serialized into the given grpc_slice.
-size_t StatsContextSerialize(size_t max_tags_len, grpc_slice* tags);
-    
-    #include 'opencensus/stats/stats.h'
-#include 'src/cpp/ext/filters/census/grpc_plugin.h'
-    
-      static void OnDoneRecvMessageCb(void* user_data, grpc_error* error);
-    
-    #include 'src/cpp/ext/proto_server_reflection.h'
-    
-    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
-    const grpc::string& name, const grpc::string& value) {
-  class StringOption final : public ServerBuilderOption {
-   public:
-    StringOption(const grpc::string& name, const grpc::string& value)
-        : name_(name), value_(value) {}
-    }
-    }
-    
-    // Reads the CPU stats (in a pair of busy and total numbers) from the system.
-// The units of the stats should be the same.
-std::pair<uint64_t, uint64_t> GetCpuStatsImpl();
-    
-    // Per-thread state for concurrent executions of the same benchmark.
-struct ThreadState {
-  uint32_t tid;
-  Random rnd;
-  SharedState* shared;
-    }
-    
-      // When flush happens, it determines whether to trigger compaction. If
-  // triggered_writes_stop is true, it will also set the retry flag of
-  // compaction-task to true.
-  void OnFlushCompleted(
-      DB* db, const FlushJobInfo& info) override {
-    CompactionTask* task = PickCompaction(db, info.cf_name);
-    if (task != nullptr) {
-      if (info.triggered_writes_stop) {
-        task->retry_on_fail = true;
-      }
-      // Schedule compaction in a different thread.
-      ScheduleCompaction(task);
-    }
-  }
-    
-      // In this example, we set the snapshot multiple times.  This is probably
-  // only necessary if you have very strict isolation requirements to
-  // implement.
-    
-    #include 'rocksdb/db.h'
-    
-    
-    { protected:
-  virtual ~Snapshot();
-};
-    
-    /*
- * ThreadPool is a component that will spawn N background threads that will
- * be used to execute scheduled work, The number of background threads could
- * be modified by calling SetBackgroundThreads().
- * */
-class ThreadPool {
- public:
-  virtual ~ThreadPool() {}
-    }
-    
-      static LDBCommandExecuteResult Failed(std::string msg) {
-    return LDBCommandExecuteResult(EXEC_FAILED, msg);
-  }
+                    // Insert any accumulated straight text.
+                if (buf.length() > 0) {
+                    text.handleReplaceBetween(destLimit, destLimit, buf);
+                    destLimit += buf.length();
+                    buf.truncate(0);
+                }
