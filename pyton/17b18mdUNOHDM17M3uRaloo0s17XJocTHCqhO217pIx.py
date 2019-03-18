@@ -1,119 +1,92 @@
 
         
         
-# Import youtube_dl
-ROOT_DIR = os.path.join(os.path.dirname(__file__), '..')
-sys.path.insert(0, ROOT_DIR)
-import youtube_dl
+@pytest.mark.parametrize('url', [
+    'username@example.org',
+    'username:@example.org',
+])
+def test_only_username_in_url(url):
+    '''
+    https://github.com/jakubroztocil/httpie/issues/242
     
-        return ret
-    
-    from ansible.module_utils.aws.core import AnsibleAWSModule
-from ansible.module_utils.ec2 import boto3_conn, camel_dict_to_snake_dict
-from ansible.module_utils.ec2 import ec2_argument_spec, get_aws_connection_info
-    
-    
-def get_spanner_configuration_name(config_name, project_name):
-    config_name = 'projects/%s/instanceConfigs/regional-%s' % (project_name,
-                                                               config_name)
-    return config_name
-    
-    
-def main():
-    module = AnsibleModule(
-        argument_spec=dict(
-            auth_token=dict(
-                type='str',
-                default=os.environ.get('ONEANDONE_AUTH_TOKEN')),
-            api_url=dict(
-                type='str',
-                default=os.environ.get('ONEANDONE_API_URL')),
-            name=dict(type='str'),
-            firewall_policy=dict(type='str'),
-            description=dict(type='str'),
-            rules=dict(type='list', default=[]),
-            add_server_ips=dict(type='list', default=[]),
-            remove_server_ips=dict(type='list', default=[]),
-            add_rules=dict(type='list', default=[]),
-            remove_rules=dict(type='list', default=[]),
-            wait=dict(type='bool', default=True),
-            wait_timeout=dict(type='int', default=600),
-            wait_interval=dict(type='int', default=5),
-            state=dict(type='str', default='present', choices=['present', 'absent', 'update']),
-        ),
-        supports_check_mode=True
-    )
+        def test_GET_explicit_JSON_explicit_headers(self, httpbin):
+        r = http('--json', 'GET', httpbin.url + '/headers',
+                 'Accept:application/xml',
+                 'Content-Type:application/xml')
+        assert HTTP_OK in r
+        assert ''Accept': 'application/xml'' in r
+        assert ''Content-Type': 'application/xml'' in r
     
     
-def get_configuration_facts(cursor, parameter_name=''):
-    facts = {}
-    cursor.execute('''
-        select c.parameter_name, c.current_value, c.default_value
-        from configuration_parameters c
-        where c.node_name = 'ALL'
-        and (? = '' or c.parameter_name ilike ?)
-    ''', parameter_name, parameter_name)
-    while True:
-        rows = cursor.fetchmany(100)
-        if not rows:
-            break
-        for row in rows:
-            facts[row.parameter_name.lower()] = {
-                'parameter_name': row.parameter_name,
-                'current_value': row.current_value,
-                'default_value': row.default_value}
-    return facts
+def test_unicode_basic_auth(httpbin):
+    # it doesn't really authenticate us because httpbin
+    # doesn't interpret the utf8-encoded auth
+    http('--verbose', '--auth', u'test:%s' % UNICODE,
+         httpbin.url + u'/basic-auth/test/' + UNICODE)
     
-    EXAMPLES = '''
-- name: creating a new vertica role
-  vertica_role: name=role_name db=db_name state=present
+        def _get_path(self):
+        return os.path.join(self.directory, self.name + '.json')
     
-    # Ensure role with certain details
-- ipa_role:
-    name: another-role
-    description: Just another role
-    group:
-    - editors
-    host:
-    - host01.example.com
-    hostgroup:
-    - hostgroup01
-    privilege:
-    - Group Administrators
-    - User Administrators
-    service:
-    - service01
+            self.output.write(SUMMARY.format(
+            downloaded=humanize_bytes(actually_downloaded),
+            total=(self.status.total_size
+                   and humanize_bytes(self.status.total_size)),
+            speed=humanize_bytes(speed),
+            time=time_taken,
+        ))
+        self.output.flush()
+
     
-    EXAMPLES = '''
-# Create groups based on the machine architecture
-- group_by:
-    key: machine_{{ ansible_machine }}
     
-        module = AnsibleModule(
-        argument_spec=dict(
-            token=dict(required=True, no_log=True),
-            environment=dict(required=True),
-            user=dict(required=False),
-            repo=dict(required=False),
-            revision=dict(required=False),
-            url=dict(required=False, default='https://api.honeybadger.io/v1/deploys'),
-            validate_certs=dict(default='yes', type='bool'),
-        ),
-        supports_check_mode=True
-    )
-    
-        def parse_current(parts):
-        if len(parts) > 2 and parts[2].lower() == 'process' and parts[0] == name:
-            return ''.join(parts[1]).lower()
+def to_native_string(string, encoding='ascii'):
+    '''Given a string object, regardless of type, returns a representation of
+    that string in the native string type, encoding and decoding where
+    necessary. This assumes ASCII unless told otherwise.
+    '''
+    if isinstance(string, builtin_str):
+        out = string
+    else:
+        if is_py2:
+            out = string.encode(encoding)
         else:
-            return ''
+            out = string.decode(encoding)
+    
+        @classmethod
+    def text_response_server(cls, text, request_timeout=0.5, **kwargs):
+        def text_response_handler(sock):
+            request_content = consume_socket_content(sock, timeout=request_timeout)
+            sock.send(text.encode('utf-8'))
+    
+            Punctuation:               'bold #000000',   # class: 'p'
+    
+        def add_header(self, key, val):
+        '''cookielib has no legitimate use for this method; add it back if you find one.'''
+        raise NotImplementedError('Cookie headers should be added with add_unredirected_header()')
     
     
-def cleanup_files(files):
-    for file in files:
-        os.remove(file)
+def test_idna_with_version_attribute(mocker):
+    '''Verify we're actually setting idna version when it should be available.'''
+    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
+    assert info()['idna'] == {'version': '2.6'}
+
     
-        url = list(set([
-        unicodize(str.replace(i, '\\/', '/'))
-        for i in re.findall(r'<meta property='og:video:secure_url' content='(.*?)'>', html)
-    ]))
+        def __init__(self):
+        self._content = False
+        self._content_consumed = False
+        self._next = None
+    
+    def get_marker(line):
+    matchlist = TAG_REGEX.findall(line)
+    if matchlist:
+        namematch = NAMED_A_TAG_REGEX.match(line)
+        if namematch:
+            return namematch.group(1) # group 0 is full match
+    
+        with tf.variable_scope(name or 'conv2d', reuse=reuse):
+        W, b = get_wb(kernel_shape)
+    
+        '''
+    max_sentence_len, max_word_len, char_vocab_size = get_shape(x)[1:]
+    
+    import tensorflow as tf
+import keras.backend as K
