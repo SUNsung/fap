@@ -1,6 +1,121 @@
 
         
-        OPERATOR_SCHEMA(EnforceFinite)
+        Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    #endif  // TENSORFLOW_PYTHON_LIB_CORE_PY_FUNC_H_
+
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    #include 'tensorflow/stream_executor/lib/status.h'
+#include 'tensorflow/stream_executor/lib/statusor.h'
+#include 'tensorflow/stream_executor/platform/mutex.h'
+#include 'tensorflow/stream_executor/stream_executor_pimpl.h'
+    
+      // Delegate implementations.
+  void OnError(const std::string& error) override;
+  void OnError(const std::string& message,
+               const int code,
+               const std::string& domain) override;
+  void OnCheckingForUpdate() override;
+  void OnUpdateAvailable() override;
+  void OnUpdateNotAvailable() override;
+  void OnUpdateDownloaded(const std::string& release_notes,
+                          const std::string& release_name,
+                          const base::Time& release_date,
+                          const std::string& update_url) override;
+    
+     private:
+  void OnMessageBoxCallback(DialogClosedCallback callback,
+                            const std::string& origin,
+                            int code,
+                            bool checkbox_checked);
+    
+    Delegate* AutoUpdater::GetDelegate() {
+  return delegate_;
+}
+    
+      // Post 'open' event.
+  static void EmitOpenEvent(const std::string& path);
+    
+    class ObjectManager;
+    
+    EventListener::EventListener(int id,
+  const base::WeakPtr<DispatcherHost>& dispatcher_host,
+  const base::DictionaryValue& option) : Base(id, dispatcher_host, option) {
+    }
+    
+      template<typename T> T* AddListener() {
+    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
+    if (i==listerners_.end()) {
+      T* listener_object = new T(this);
+      listerners_[T::id] = listener_object;
+      return listener_object;
+    }
+    return NULL;
+  }
+    
+    #include 'content/nw/src/api/menuitem/menuitem.h'
+    
+    #if defined(OS_WIN) || defined(OS_LINUX)
+bool MenuItem::AcceleratorPressed(const ui::Accelerator& accelerator) {
+#if defined(OS_WIN)
+  if (meta_down_flag_) {
+    if ((::GetKeyState(VK_APPS) & 0x8000) != 0x8000) {
+      return true;
+    }
+  }
+#endif
+  OnClick();
+  return true;
+}
+    
+    class NwClipboardReadAvailableTypesFunction : public NWSyncExtensionFunction {
+ public:
+  NwClipboardReadAvailableTypesFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    
+    {  nw::ObjectManager* manager = nw::ObjectManager::Get(browser_context());
+  manager->OnAllocateObject(id, type, *options, extension_id());
+  return true;
+}
+    
+      // Called when the |display|'s bound has changed.
+  void NwScreenDisplayObserver::OnDisplayMetricsChanged(const display::Display& display,
+    uint32_t changed_metrics) {
+    std::unique_ptr<base::ListValue> args = 
+      nwapi::nw__screen::OnDisplayBoundsChanged::Create(*ConvertGfxDisplay(display),
+                                                        changed_metrics);
+    DispatchEvent(
+      events::HistogramValue::UNKNOWN, 
+      nwapi::nw__screen::OnDisplayBoundsChanged::kEventName,
+      std::move(args));
+  }
+    
+      // Create template
+  std::vector<char> tmp(256);
+  auto len = snprintf(tmp.data(), tmp.size(), '%s/testXXXXXX', tmpdir);
+  tmp.resize(len);
+    
+    OPERATOR_SCHEMA(EnforceFinite)
     .NumInputs(1)
     .NumOutputs(0)
     .SetDoc(R'DOC(
@@ -8,187 +123,160 @@ Raise if there is NaN or Inf values in the input tensor.
 )DOC')
     .Input(0, 'input', 'Input tensor');
     
-    #endif // CAFFE2_OPERATORS_JSD_OP_H_
-
+    OPERATOR_SCHEMA(GatherRangesToDense)
+    .NumInputs(2, 3)
+    .NumOutputs(1, INT_MAX)
+    .SetDoc(R'DOC(
+Given DATA tensor of rank 1, and RANGES tensor of rank 3, gather values
+corresponding to each range into a separate output tensor. If the optional input
+KEY tensor is also given, the output will be sorted by KEY for each example.
     
+    #include 'caffe2/operators/glu_op.h'
     
-    {      dword(ds_formater.instruction);
-   }
+    template <typename T, class Context>
+class BernoulliJSDGradientOp final : public Operator<Context> {
+ public:
+  USE_SIMPLE_CTOR_DTOR(BernoulliJSDGradientOp);
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  bool RunOnDevice() override;
+};
     
-    #endif
-
+    REGISTER_CUDA_OPERATOR(LC1D, LocallyConnectedOp<float, CUDAContext>);
+REGISTER_CUDA_OPERATOR(
+    LC1DGradient,
+    LocallyConnectedGradientOp<float, CUDAContext>);
     
-    CONTAINER_CONFIG_BODY(std::vector<uint32_t>, UInt32Vector)
-CONTAINER_CONFIG_BODY(std::vector<std::string>, StrVector)
-namespace { using simap = std::unordered_map<std::string, int>; }
-CONTAINER_CONFIG_BODY(simap, IntMap)
-CONTAINER_CONFIG_BODY(ConfigMap, Map)
-CONTAINER_CONFIG_BODY(ConfigMapC, MapC)
-CONTAINER_CONFIG_BODY(ConfigSet, Set)
-CONTAINER_CONFIG_BODY(ConfigSetC, SetC)
-CONTAINER_CONFIG_BODY(ConfigFlatSet, FlatSet)
-CONTAINER_CONFIG_BODY(ConfigIMap, IMap)
+    template <$for j, [[typename Generator$j]]>
+internal::CartesianProductHolder$i<$for j, [[Generator$j]]> Combine(
+    $for j, [[const Generator$j& g$j]]) {
+  return internal::CartesianProductHolder$i<$for j, [[Generator$j]]>(
+      $for j, [[g$j]]);
+}
     
-    ///////////////////////////////////////////////////////////////////////////////
+    // DeathTest is a class that hides much of the complexity of the
+// GTEST_DEATH_TEST_ macro.  It is abstract; its static Create method
+// returns a concrete class that depends on the prevailing death test
+// style, as defined by the --gtest_death_test_style and/or
+// --gtest_internal_run_death_test flags.
     
-      bool valid() const { return !isClosed(); }
+      // Returns true if pathname describes a root directory. (Windows has one
+  // root directory per disk drive.)
+  bool IsRootDirectory() const;
     
-        UBool      test(UScriptCode script, UErrorCode &status) const;
-    ScriptSet &Union(const ScriptSet &other);
-    ScriptSet &set(UScriptCode script, UErrorCode &status);
-    ScriptSet &reset(UScriptCode script, UErrorCode &status);
-    ScriptSet &intersect(const ScriptSet &other);
-    ScriptSet &intersect(UScriptCode script, UErrorCode &status);
-    UBool      intersects(const ScriptSet &other) const;  // Sets contain at least one script in commmon.
-    UBool      contains(const ScriptSet &other) const;    // All set bits in other are also set in this.
+    template <GTEST_10_TYPENAMES_(T)>
+struct TupleElement<true, 1, GTEST_10_TUPLE_(T) > {
+  typedef T1 type;
+};
     
-    U_NAMESPACE_END
+      // Returns true iff n is a prime number.
+  virtual bool IsPrime(int n) const = 0;
     
-    #ifndef __SIGNIFICANTDIGITINTERVAL_H__
-#define __SIGNIFICANTDIGITINTERVAL_H__
+    // Tests the c'tor that accepts a C string.
+TEST(MyString, ConstructorFromCString) {
+  const MyString s(kHelloString);
+  EXPECT_EQ(0, strcmp(s.c_string(), kHelloString));
+  EXPECT_EQ(sizeof(kHelloString)/sizeof(kHelloString[0]) - 1,
+            s.Length());
+}
     
-    #endif  // __SMALLINTFORMATTER_H__
-
+      int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
     
-                // fall through to gotNumber check
-            U_FALLTHROUGH;
-        case UDAT_YEAR_FIELD:
-        case UDAT_YEAR_WOY_FIELD:
-        case UDAT_FRACTIONAL_SECOND_FIELD:
-            // these must be a number
-            if (! gotNumber) {
-                return -start;
-            }
+    using namespace ::apache::thrift;
+using namespace ::apache::thrift::protocol;
+using namespace ::apache::thrift::transport;
+using namespace ::apache::thrift::server;
     
+      std::vector<std::string> line_exports;
+  unsigned int readonly = 0;
+  int options_index = -1;
     
-class SimpleDateFormatStaticSets : public UMemory
+    #include <osquery/core.h>
+#include <osquery/database.h>
+#include <osquery/filesystem/filesystem.h>
+#include <osquery/logger.h>
+#include <osquery/tables.h>
+    
+    struct mei_response {
+  uint32_t maxlen;
+  uint8_t version;
+};
+    
+    void DHTRoutingTable::dropNode(const std::shared_ptr<DHTNode>& node)
 {
-public:
-    SimpleDateFormatStaticSets(UErrorCode &status);
-    ~SimpleDateFormatStaticSets();
+  getBucketFor(node)->dropNode(node);
+}
+/*
+  void DHTRoutingTable::moveBucketHead(const std::shared_ptr<DHTNode>& node)
+  {
+  getBucketFor(node)->moveToHead(node);
+  }
+*/
+void DHTRoutingTable::moveBucketTail(const std::shared_ptr<DHTNode>& node)
+{
+  getBucketFor(node)->moveToTail(node);
+}
     
-    static void    initSets(UErrorCode *status);
-    static UBool   cleanup();
+      Time getSerializedTime() const { return serializedTime_; }
     
-    static UnicodeSet *getIgnorables(UDateFormatField fieldIndex);
+    #include 'common.h'
     
+      void addTask(const std::shared_ptr<DHTTask>& task) { queue_.push_back(task); }
+    
+    public:
+  DHTTaskQueueImpl();
+    
+    class DHTTokenTracker {
 private:
-    UnicodeSet *fDateIgnorables;
-    UnicodeSet *fTimeIgnorables;
-    UnicodeSet *fOtherIgnorables;
-};
-    
-        // Handle a cursor preceding the output
-    if (hasCursor && cursor < 0) {
-        while (cursor++ < 0) {
-            ICU_Utility::appendToRule(rule, (UChar)0x0040 /*@*/, TRUE, escapeUnprintable, quoteBuf);
-        }
-        // Fall through and append '|' below
+  static const size_t SECRET_SIZE = 4;
     }
     
-            ListNode* dummyHead = new ListNode(0);
-        dummyHead->next = head;
+    void DHTTokenUpdateCommand::preProcess()
+{
+  if (getDownloadEngine()->getRequestGroupMan()->downloadFinished() ||
+      getDownloadEngine()->isHaltRequested()) {
+    enableExit();
+  }
+}
     
-    using namespace std;
+      virtual ~DHTUnknownMessage();
     
-    using namespace std;
+        Number::Number(int32_t sign, int32_t exp, vector<uint32_t> const& mantissa) noexcept :
+        m_sign{ sign },
+        m_exp{ exp },
+        m_mantissa{ mantissa }
+    {}
     
-    using namespace std;
+            *this = Rational{ lhsRat };
+        destroyrat(lhsRat);
     
-    private:
-    void __inorderTraversal(TreeNode* node, vector<int> &res){
+            case IDC_RSHF:
+        {
+            if (m_fIntegerMode && result >= m_dwWordBitWidth) // Lsh/Rsh >= than current word size is always 0
+            {
+                throw CALC_E_NORESULT;
+            }
     }
     
     
-    {            res[level].push_back(node->val);
-            if(node->left)
-                q.push(make_pair(node->left, level + 1 ));
-            if(node->right)
-                q.push(make_pair(node->right, level + 1 ));
-        }
-    
-    using namespace std;
-    
-    
-    {    return 0;
+    {    Rational Sinh(Rational const& rat);
+    Rational Cosh(Rational const& rat);
+    Rational Tanh(Rational const& rat);
+    Rational ASinh(Rational const& rat);
+    Rational ACosh(Rational const& rat);
+    Rational ATanh(Rational const& rat);
 }
 
     
+    #include 'pch.h'
+#include 'LiveRegionHost.h'
     
-    {
-    {
-    {            if(command.s == 'print')
-                res.push_back(command.node->val);
-            else{
-                assert(command.s == 'go');
-                stack.push(Command('print', command.node));
-                if(command.node->right)
-                    stack.push(Command('go',command.node->right));
-                if(command.node->left)
-                    stack.push(Command('go',command.node->left));
-            }
-        }
-        return res;
-    }
-};
+    INarratorAnnouncementHost^ NarratorAnnouncementHostFactory::s_hostProducer;
+vector<INarratorAnnouncementHost^> NarratorAnnouncementHostFactory::s_hosts;
     
-    
-    
-    struct IDirect3DDevice9;
-    
-        // Rendering
-    ImGui::Render();
-    ImGuiIO& io = ImGui::GetIO();
-    glViewport(0, 0, (GLsizei)io.DisplaySize.x, (GLsizei)io.DisplaySize.y);
-    glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-    glClear(GL_COLOR_BUFFER_BIT);
-    //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound, but prefer using the GL3+ code.
-    ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-    
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    
-    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            ImGui::End();
-        }
-    
-    void Speed::startWithTarget(Node* target)
-{
-    if (target && _innerAction)
-    {
-        Action::startWithTarget(target);
-        _innerAction->startWithTarget(target);
-    }
-    else
-        log('Speed::startWithTarget error: target(%p) or _innerAction(%p) is nullptr!', target, _innerAction);
-}
-    
-    /**
- * @addtogroup actions
- * @{
- */
-    }
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#ifndef __ACTION_CCPAGETURN3D_ACTION_H__
-#define __ACTION_CCPAGETURN3D_ACTION_H__
-    
-    /**
- * @addtogroup actions
- * @{
- */
-    }
+    using namespace CalculatorApp::Common::Automation;
+using namespace Windows::Foundation::Metadata;
+using namespace Windows::UI::Xaml::Automation;
+using namespace Windows::UI::Xaml::Automation::Peers;
+using namespace Windows::UI::Xaml::Controls;
