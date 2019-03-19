@@ -1,131 +1,84 @@
 
         
-                collection = with_rate_limit { octokit.public_send(method, *args) }
-        next_url = octokit.last_response.rels[:next]
+            class ClearHelpersTest < ActiveSupport::TestCase
+      def setup
+        @controller = HelperyTestController.new
+      end
     
-            def sidekiq_worker_class
-          ImportIssueWorker
+        context '(de)activating users' do
+      it 'does not show deactivation buttons for the current user' do
+        visit admin_users_path
+        expect(page).to have_no_css('a[href='/admin/users/#{users(:jane).id}/deactivate']')
+      end
+    
+      it 'imports a scenario that does not exist yet' do
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
+    click_on 'Start Import'
+    expect(page).to have_text('This scenario has a few agents to get you started. Feel free to change them or delete them as you see fit!')
+    expect(page).not_to have_text('This Scenario already exists in your system.')
+    check('I confirm that I want to import these Agents.')
+    click_on 'Finish Import'
+    expect(page).to have_text('Import successful!')
+  end
+    
+        it 'works for running jobs' do
+      job.locked_at = Time.now
+      job.locked_by = 'test'
+      expect(status(job)).to eq('<span class='label label-info'>running</span>')
+    end
+    
+        it 'can be turned off' do
+      stub(DefaultScenarioImporter).seed { fail 'seed should not have been called'}
+      stub.proxy(ENV).[](anything)
+      stub(ENV).[]('IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS') { 'false' }
+      DefaultScenarioImporter.import(user)
+    end
+    
+      it 'schould register the schedules with the rufus scheduler and run' do
+    mock(@rufus_scheduler).join
+    scheduler = HuginnScheduler.new
+    scheduler.setup!(@rufus_scheduler, Mutex.new)
+    scheduler.run
+  end
+    
+    module Vagrant
+  module Plugin
+    module V2
+      # This is the base class for a configuration key defined for
+      # V2. Any configuration key plugins for V2 should inherit from this
+      # class.
+      class Config
+        # This constant represents an unset value. This is useful so it is
+        # possible to know the difference between a configuration value that
+        # was never set, and a value that is nil (explicitly). Best practice
+        # is to initialize all variables to this value, then the {#merge}
+        # method below will 'just work' in many cases.
+        UNSET_VALUE = Object.new
+    
+            # This returns all registered providers.
+        #
+        # @return [Hash]
+        def providers
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.providers)
+            end
+          end
         end
     
-              issue.label_names.each do |label_name|
-            # Although unlikely it's technically possible for an issue to be
-            # given a label that was created and assigned after we imported all
-            # the project's labels.
-            next unless (label_id = label_finder.id_for(label_name))
+    # Helpers
+#-----------------------------------------------------------------------------#
     
-            def sidekiq_worker_class
-          ImportLfsObjectWorker
-        end
+    (import 'mDNSResponder.sb')
     
-    module Gitlab
-  module GithubImport
-    module Representation
-      class Note
-        include ToHash
-        include ExposeAttribute
+        %w[iOS macOS].each do |platform|
+        abstract_target '#{platform} Pods' do
+            project '#{platform} Modules.xcodeproj'
     
-            # attributes - A Hash containing the user details. The keys of this
-        #              Hash (and any nested hashes) must be symbols.
-        def initialize(attributes)
-          @attributes = attributes
-        end
+          def actual_path
+        $PROGRAM_NAME
       end
     end
   end
 end
-
-    
-        DATA_URL = 'data:'.freeze
-    
-        DOCUMENT_RGX = /\A(?:\s|(?:<!--.*?-->))*<(?:\!doctype|html)/i
-    
-        def format_path(path)
-      path.to_s.remove File.join(File.expand_path('.'), '')
-    end
-    
-            css('h2:not([id]) a[id]:not([href])').each do |node|
-          node.parent['id'] = node['id']
-          node.before(node.children).remove
-        end
-    
-        # The path used after resending confirmation instructions.
-    def after_resending_confirmation_instructions_path_for(resource_name)
-      is_navigational_format? ? new_session_path(resource_name) : '/'
-    end
-    
-      def clean_up_passwords(object)
-    object.clean_up_passwords if object.respond_to?(:clean_up_passwords)
-  end
-    
-            warden.logout(scope)
-        warden.clear_strategies_cache!(scope: scope)
-        instance_variable_set(:'@current_#{scope}', nil)
-    
-        proxy = Devise::Hooks::Proxy.new(warden)
-    
-        def default_path_names(options)
-      @path_names = Hash.new { |h,k| h[k] = k.to_s }
-      @path_names[:registration] = ''
-      @path_names.merge!(options[:path_names]) if options[:path_names]
-    end
-    
-          module ClassMethods
-        # Create the cookie key using the record id and remember_token
-        def serialize_into_cookie(record)
-          [record.to_key, record.rememberable_value, Time.now.utc.to_f.to_s]
-        end
-    
-          # @see Base#\_store
-      def _store(key, version, sha, contents)
-        compiled_filename = path_to(key)
-        FileUtils.mkdir_p(File.dirname(compiled_filename))
-        Sass::Util.atomic_create_and_write_file(compiled_filename) do |f|
-          f.puts(version)
-          f.puts(sha)
-          f.write(contents)
-        end
-      rescue Errno::EACCES
-        # pass
-      end
-    
-            line_num = e.sass_line + 1 - line_offset
-        min = [line_num - 6, 0].max
-        section = e.sass_template.rstrip.split('\n')[min...line_num + 5]
-        return e.sass_backtrace_str if section.nil? || section.empty?
-    
-          DOUBLE_SPLAT = '**'.freeze
-    
-        def non_comment_token_line_numbers
-      @non_comment_token_line_numbers ||= begin
-        non_comment_tokens = processed_source.tokens.reject(&:comment?)
-        non_comment_tokens.map(&:line).uniq
-      end
-    end
-    
-          def add(klass, *args)
-        remove(klass) if exists?(klass)
-        entries << Entry.new(klass, *args)
-      end
-    
-          indifferent_hash.merge! request.params
-      route_params.each {|k,v| indifferent_hash[k.to_s] = v }
-    
-    class PaperclipGenerator < ActiveRecord::Generators::Base
-  desc 'Create a migration to add paperclip-specific fields to your model. ' +
-       'The NAME argument is the name of your model, and the following ' +
-       'arguments are the name of the attachments'
-    
-        # Returns an extension based on the content type. e.g. 'jpeg' for
-    # 'image/jpeg'. If the style has a specified format, it will override the
-    # content-type detection.
-    #
-    # Each mime type generally has multiple extensions associated with it, so
-    # if the extension from the original filename is one of these extensions,
-    # that extension is used, otherwise, the first in the list is used.
-    def content_type_extension attachment, style_name
-      mime_type = MIME::Types[attachment.content_type]
-      extensions_for_mime_type = unless mime_type.empty?
-        mime_type.first.extensions
-      else
-        []
-      end
