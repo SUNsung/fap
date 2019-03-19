@@ -1,119 +1,199 @@
 
         
-            elif METHOD == 'LIST':
-        domain = compat_urllib_parse_urlparse(test['url']).netloc
-        if not domain:
-            print('\nFail: {0}'.format(test['name']))
-            continue
-        domain = '.'.join(domain.split('.')[-2:])
-    
-    sys.path.insert(0, dirn(dirn((os.path.abspath(__file__)))))
-import youtube_dl
-from youtube_dl.utils import shell_quote
-    
-    atom_template = atom_template.replace('@TIMESTAMP@', now_iso)
-    
-        fileopts = []
-    for opt in opts_file:
-        if opt._short_opts:
-            fileopts.extend(opt._short_opts)
-        if opt._long_opts:
-            fileopts.extend(opt._long_opts)
+            def exists(self, session_key):
+        return bool(session_key) and (self.cache_key_prefix + session_key) in self._cache
     
     
-from test.helper import FakeYDL
-from youtube_dl.cache import Cache
+class SessionManager(BaseSessionManager):
+    use_in_migrations = True
     
-         
-    def getUnexpectedType(self):
-        '''Return the token type or char of the unexpected input element'''
+    EXAMPLES = '''
+# Note: These examples do not set authentication details or the AWS region,
+# see the AWS Guide for details.
     
-            elif isinstance(e, EarlyExitException):
-            msg = 'required (...)+ loop did not match anything at input ' \
-                  + self.getTokenErrorDisplay(e.token)
-    
-            # Walk buffer, executing instructions and emitting tokens
-        i = start
-        while i <= end and i < len(self.tokens):
-            op = indexToOp.get(i)
-            # remove so any left have index size-1
-            try:
-                del indexToOp[i]
-            except KeyError:
-                pass
-    
-        print('After subclassing: ')
-    for k in RegistryHolder.REGISTRY:
-        print(k)
-    
-        def contribute(self):
-        self.blackboard.common_state['problems'] += random.randint(10, 20)
-        self.blackboard.common_state['suggestions'] += random.randint(10, 20)
-        self.blackboard.common_state['contributions'] += [self.__class__.__name__]
-        self.blackboard.common_state['progress'] += random.randint(10, 30)
-    
-    *Where is the pattern used practically?
-In graphics editors a shape can be basic or complex. An example of a
-simple shape is a line, where a complex shape is a rectangle which is
-made of four line objects. Since shapes have many operations in common
-such as rendering the shape to screen, and since shapes follow a
-part-whole hierarchy, composite pattern can be used to enable the
-program to deal with all shapes uniformly.
-    
-    '''
-*What is this pattern about?
-The Decorator pattern is used to dynamically add a new feature to an
-object without changing its implementation. It differs from
-inheritance because the new feature is added only to that particular
-object, not to the entire subclass.
+        if state == 'absent':
+        if not module.params.get('name'):
+            module.fail_json(
+                msg=''name' parameter is required to delete a firewall policy.')
+        try:
+            (changed, firewall_policy) = remove_firewall_policy(module, oneandone_conn)
+        except Exception as e:
+            module.fail_json(msg=str(e))
     
     
-# Complex Parts
-class TC1:
-    def run(self):
-        print(u'###### In Test 1 ######')
-        time.sleep(SLEEP)
-        print(u'Setting up')
-        time.sleep(SLEEP)
-        print(u'Running test')
-        time.sleep(SLEEP)
-        print(u'Tearing down')
-        time.sleep(SLEEP)
-        print(u'Test Finished\n')
+def ensure(module, client):
+    zone_name = module.params['zone_name']
+    state = module.params['state']
     
     
-if __name__ == '__main__':
-    p = Proxy()
-    p.talk()
-    p.busy = 'Yes'
-    p.talk()
-    p = NoTalkProxy()
-    p.talk()
-    p.busy = 'Yes'
-    p.talk()
+DOCUMENTATION = '''
+---
+module: bigpanda
+author: 'Hagai Kariti (@hkariti)'
+short_description: Notify BigPanda about deployments
+version_added: '1.8'
+description:
+   - Notify BigPanda when deployments start and end (successfully or not). Returns a deployment object containing all the parameters for future module calls.
+options:
+  component:
+    description:
+      - 'The name of the component being deployed. Ex: billing'
+    required: true
+    aliases: ['name']
+  version:
+    description:
+      - The deployment version.
+    required: true
+  token:
+    description:
+      - API token.
+    required: true
+  state:
+    description:
+      - State of the deployment.
+    required: true
+    choices: ['started', 'finished', 'failed']
+  hosts:
+    description:
+      - Name of affected host name. Can be a list.
+    required: false
+    default: machine's hostname
+    aliases: ['host']
+  env:
+    description:
+      - The environment name, typically 'production', 'staging', etc.
+    required: false
+  owner:
+    description:
+      - The person responsible for the deployment.
+    required: false
+  description:
+    description:
+      - Free text description of the deployment.
+    required: false
+  url:
+    description:
+      - Base URL of the API server.
+    required: False
+    default: https://api.bigpanda.io
+  validate_certs:
+    description:
+      - If C(no), SSL certificates for the target url will not be validated. This should only be used
+        on personally controlled sites using self-signed certificates.
+    required: false
+    default: 'yes'
+    type: bool
+    
+        model_address = model.find('./*[@id='0x12d7f']').text
+    
+            return new_key
+
+    
+        def insert_data(self, data):
+        key = self.hash_function(data)
+    
+    def sum32(a,b):
+	return (a + b) % 2**32
     
     
-class TestData(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.dec_obs = DecimalViewer()
-        cls.hex_obs = HexViewer()
-        cls.sub = Data('Data')
-        # inherited behavior already tested with TestSubject
-        cls.sub.attach(cls.dec_obs)
-        cls.sub.attach(cls.hex_obs)
+def b_expo(a, b):
+    res = 0
+    while b > 0:
+        if b&1:
+            res += a
     
-        def test_subscriber_shall_be_detachable_from_subscriptions(cls):
-        subscription = 'sub msg'
-        pro = Provider()
-        sub = Subscriber('sub name', pro)
-        sub.subscribe(subscription)
-        cls.assertEqual(len(pro.subscribers[subscription]), 1)
-        sub.unsubscribe(subscription)
-        cls.assertEqual(len(pro.subscribers[subscription]), 0)
     
-        def test_2nd_am_station_after_scan(self):
-        self.radio.scan()
-        station = self.radio.state.stations[self.radio.state.pos]
-        expected_station = '1380'
-        self.assertEqual(station, expected_station)
+    def download_by_id(self, vid = '', title = None, output_dir='.', merge=True, info_only=False,**kwargs):
+        '''self, str->None
+        
+        Keyword arguments:
+        self: self
+        vid: The video ID for BokeCC cloud, something like
+        FE3BB999594978049C33DC5901307461
+        
+        Calls the prepare() to download the video.
+        
+        If no title is provided, this method shall try to find a proper title
+        with the information providin within the
+        returned content of the API.'''
+    
+    __all__ = ['cbs_download']
+    
+    __all__ = ['cntv_download', 'cntv_download_by_id']
+    
+        for quality in ['1080','720','480','380','240','144','auto']:
+        try:
+            real_url = info[quality][1]['url']
+            if real_url:
+                break
+        except KeyError:
+            pass
+    
+    netease_embed_patterns = [ '(http://\w+\.163\.com/movie/[^\'']+)' ]
+    
+    #----------------------------------------------------------------------
+def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    '''wrapper'''
+    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
+    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
+    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
+    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
+    hostname = urlparse(url).hostname
+    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
+        return False
+    upid = match1(url, r'.+/content/(\w+)')
+    
+    def ifeng_download_by_id(id, title = None, output_dir = '.', merge = True, info_only = False):
+    assert r1(r'([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', id), id
+    url = 'http://vxml.ifengimg.com/video_info_new/%s/%s/%s.xml' % (id[-2], id[-2:], id)
+    xml = get_html(url, 'utf-8')
+    title = r1(r'Name='([^']+)'', xml)
+    title = unescape_html(title)
+    url = r1(r'VideoPlayUrl='([^']+)'', xml)
+    from random import randint
+    r = randint(10, 19)
+    url = url.replace('http://wideo.ifeng.com/', 'http://ips.ifeng.com/wideo.ifeng.com/')
+    type, ext, size = url_info(url)
+    
+        if not network_mode.startswith(source_type+':'):
+        return
+    
+                    if not volume_exists:
+                    log.info(
+                        'Creating volume '{0}' with {1} driver'.format(
+                            volume.full_name, volume.driver or 'default'
+                        )
+                    )
+                    volume.create()
+                else:
+                    check_remote_volume_config(volume.inspect(legacy=volume.legacy), volume)
+        except NotFound:
+            raise ConfigurationError(
+                'Volume %s specifies nonexistent driver %s' % (volume.name, volume.driver)
+            )
+    
+        return data
+    
+    
+def update_run_sh_version(version):
+    path = os.path.join(REPO_ROOT, 'script', 'run', 'run.sh')
+    with open(path, 'r') as f:
+        contents = f.read()
+    contents = re.sub(r'VERSION='[0-9a-z.-]+'', 'VERSION='{}''.format(version), contents)
+    with open(path, 'w') as f:
+        f.write(contents)
+    
+            container_info = client.inspect_container(container)
+        if 'Node' in container_info:
+            return container_info['Node']['Name']
+    finally:
+        client.remove_container(container, force=True)
+    
+            assert net.ensure() is None
+
+    
+        def test_generic_connection_error(self, mock_logging):
+        with pytest.raises(errors.ConnectionError):
+            with patch_find_executable(['/bin/docker', None]):
+                with handle_connection_errors(mock.Mock()):
+                    raise ConnectionError()
