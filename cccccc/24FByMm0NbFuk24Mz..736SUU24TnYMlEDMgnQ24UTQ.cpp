@@ -1,282 +1,258 @@
 
         
-          static void Call(content::Shell* shell,
-                   const std::string& method,
-                   const base::ListValue& arguments,
-                   base::ListValue* result,
-                   DispatcherHost* dispatcher_host);
+        // Generate destructors.
+#include 'ipc/struct_destructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
     
-    Base::Base(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-	   const std::string& extension_id)
-    : extension_id_(extension_id),
-      id_(id),
-      delay_destruction_(false),
-      pending_destruction_(false),
-      object_manager_(object_manager) {
+      virtual void Call(const std::string& method,
+                    const base::ListValue& arguments,
+                    content::RenderFrameHost* rvh = nullptr);
+  virtual void CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result);
+    
+    MenuDelegate::MenuDelegate(ObjectManager* object_manager)
+    : object_manager_(object_manager) {
 }
     
-    #include 'content/nw/src/api/clipboard/clipboard.h'
+      GtkRequisition menu_req;
+  gtk_widget_size_request(GTK_WIDGET(menu), &menu_req);
+  GdkScreen* screen;
+  gdk_display_get_pointer(gdk_display_get_default(), &screen, NULL, NULL, NULL);
+  gint monitor = gdk_screen_get_monitor_at_point(screen, *x, *y);
     
-    #endif  // CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
+    void Menu::Insert(MenuItem* menu_item, int pos) {
+  if (pos < 0 || pos > (int)menu_items_.size()) return;
+    }
+    
+    #include 'base/files/file_path.h'
+#include 'base/strings/string_util.h'
+#include 'base/strings/utf_string_conversions.h'
+#include 'base/threading/thread_restrictions.h'
+#include 'base/values.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menu/menu.h'
+#include 'content/nw/src/nw_base.h'
+#include 'content/nw/src/nw_content.h'
+#include 'content/nw/src/nw_package.h'
+#include 'ui/base/accelerators/accelerator.h'
+#include 'ui/gfx/image/image_skia_operations.h'
+#include 'ui/events/event_constants.h'//for modifier key code
+#include 'base/logging.h'
+    
+          std::string encoded_image_base64;
+      std::string encoded_image_str(encoded_image.data(), encoded_image.data() + encoded_image.size());
+      base::Base64Encode(encoded_image_str, &encoded_image_base64);
+    
+    namespace extensions {
+    }
+    
+      /**
+   * @brief Applies the transformation defined in the data layer's
+   * transform_param block to a vector of Datum.
+   *
+   * @param datum_vector
+   *    A vector of Datum containing the data to be transformed.
+   * @param transformed_blob
+   *    This is destination blob. It can be part of top blob's data if
+   *    set_cpu_data() is used. See memory_layer.cpp for an example.
+   */
+  void Transform(const vector<Datum> & datum_vector,
+                Blob<Dtype>* transformed_blob);
+    
+    
+    {  shared_ptr<boost::thread> thread_;
+};
+    
+    #include <vector>
+    
+      virtual inline const char* type() const { return 'Accuracy'; }
+  virtual inline int ExactNumBottomBlobs() const { return 2; }
+    
+      virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+      /**
+   * @brief Computes the error gradient w.r.t. the concatenate inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *        respect to the outputs
+   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
+   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length K), into which the top gradient
+   *        @f$ \frac{\partial E}{\partial y} @f$ is deconcatenated back to the
+   *        inputs @f$
+   *        \left[ \begin{array}{cccc}
+   *          \frac{\partial E}{\partial x_1} &
+   *          \frac{\partial E}{\partial x_2} &
+   *          ... &
+   *          \frac{\partial E}{\partial x_K}
+   *        \end{array} \right] =
+   *        \frac{\partial E}{\partial y}
+   *        @f$
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #endif
 
     
-    void MenuItem::CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) {
-  if (method == 'GetChecked') {
-    result->AppendBoolean(GetChecked());
-  } else {
-    NOTREACHED() << 'Invalid call to MenuItem method:' << method
-                 << ' arguments:' << arguments;
-  }
+    #endif  // TESSERACT_CCMAIN_OSDETECT_H_
+
+    
+    // Constructors for the various ParamTypes.
+ParamContent::ParamContent(tesseract::StringParam* it) {
+  my_id_ = nrParams;
+  nrParams++;
+  param_type_ = VT_STRING;
+  sIt = it;
+  vcMap[my_id_] = this;
+}
+// Constructors for the various ParamTypes.
+ParamContent::ParamContent(tesseract::IntParam* it) {
+  my_id_ = nrParams;
+  nrParams++;
+  param_type_ = VT_INTEGER;
+  iIt = it;
+  vcMap[my_id_] = this;
+}
+// Constructors for the various ParamTypes.
+ParamContent::ParamContent(tesseract::BoolParam* it) {
+  my_id_ = nrParams;
+  nrParams++;
+  param_type_ = VT_BOOLEAN;
+  bIt = it;
+  vcMap[my_id_] = this;
+}
+// Constructors for the various ParamTypes.
+ParamContent::ParamContent(tesseract::DoubleParam* it) {
+  my_id_ = nrParams;
+  nrParams++;
+  param_type_ = VT_DOUBLE;
+  dIt = it;
+  vcMap[my_id_] = this;
 }
     
-      if (type == 'separator') {
-    menu_item_ = gtk_separator_menu_item_new();
-  } else {
-    if (type == 'checkbox') {
-      menu_item_ = gtk_check_menu_item_new();
-      bool checked;
-      if (option.GetBoolean('checked', &checked))
-        SetChecked(checked);
-    } else {
-      menu_item_ = gtk_image_menu_item_new();
-      std::string icon;
-      if (option.GetString('icon', &icon))
-        SetIcon(icon);
-    }
-    }
-    
-    void MenuItem::SetChecked(bool checked) {
-  is_checked_ = checked;
-  if (menu_)
-    menu_->UpdateStates();
+    // Deletes the box with the given index, and shuffles up the rest.
+// Recomputes the bounding box.
+void BoxWord::DeleteBox(int index) {
+  ASSERT_HOST(0 <= index && index < length_);
+  boxes_.remove(index);
+  --length_;
+  ComputeBoundingBox();
 }
     
-    class NwClipboardClearSyncFunction : public NWSyncExtensionFunction {
+    // Class to hold a Pixa collection of debug images with captions and save them
+// to a PDF file.
+class DebugPixa {
  public:
-  NwClipboardClearSyncFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
+  // TODO(rays) add another constructor with size control.
+  DebugPixa() {
+    pixa_ = pixaCreate(0);
+    fonts_ = bmfCreate(nullptr, 14);
+  }
+  // If the filename_ has been set and there are any debug images, they are
+  // written to the set filename_.
+  ~DebugPixa() {
+    pixaDestroy(&pixa_);
+    bmfDestroy(&fonts_);
+  }
     }
     
-    // Finally, you can use INSTANTIATE_TEST_CASE_P to instantiate the test
-// case with any set of parameters you want. Google Test defines a number
-// of functions for generating test parameters. They return what we call
-// (surprise!) parameter generators. Here is a  summary of them, which
-// are all in the testing namespace:
-//
-//
-//  Range(begin, end [, step]) - Yields values {begin, begin+step,
-//                               begin+step+step, ...}. The values do not
-//                               include end. step defaults to 1.
-//  Values(v1, v2, ..., vN)    - Yields values {v1, v2, ..., vN}.
-//  ValuesIn(container)        - Yields values from a C-style array, an STL
-//  ValuesIn(begin,end)          container, or an iterator range [begin, end).
-//  Bool()                     - Yields sequence {false, true}.
-//  Combine(g1, g2, ..., gN)   - Yields all combinations (the Cartesian product
-//                               for the math savvy) of the values generated
-//                               by the N generators.
-//
-// For more details, see comments at the definitions of these functions below
-// in this file.
-//
-// The following statement will instantiate tests from the FooTest test case
-// each with parameter values 'meeny', 'miny', and 'moe'.
-    
-    # define TEST_P(test_case_name, test_name) \
-  class GTEST_TEST_CLASS_NAME_(test_case_name, test_name) \
-      : public test_case_name { \
-   public: \
-    GTEST_TEST_CLASS_NAME_(test_case_name, test_name)() {} \
-    virtual void TestBody(); \
-   private: \
-    static int AddToRegistry() { \
-      ::testing::UnitTest::GetInstance()->parameterized_test_registry(). \
-          GetTestCasePatternHolder<test_case_name>(\
-              #test_case_name, __FILE__, __LINE__)->AddTestPattern(\
-                  #test_case_name, \
-                  #test_name, \
-                  new ::testing::internal::TestMetaFactory< \
-                      GTEST_TEST_CLASS_NAME_(test_case_name, test_name)>()); \
-      return 0; \
-    } \
-    static int gtest_registering_dummy_; \
-    GTEST_DISALLOW_COPY_AND_ASSIGN_(\
-        GTEST_TEST_CLASS_NAME_(test_case_name, test_name)); \
-  }; \
-  int GTEST_TEST_CLASS_NAME_(test_case_name, \
-                             test_name)::gtest_registering_dummy_ = \
-      GTEST_TEST_CLASS_NAME_(test_case_name, test_name)::AddToRegistry(); \
-  void GTEST_TEST_CLASS_NAME_(test_case_name, test_name)::TestBody()
-    
-      // The c'tor sets this object as the test part result reporter used
-  // by Google Test.  The 'result' parameter specifies where to report the
-  // results. This reporter will only catch failures generated in the current
-  // thread. DEPRECATED
-  explicit ScopedFakeTestPartResultReporter(TestPartResultArray* result);
-    
-    
-    { private:
-  mutable linked_ptr_internal const* next_;
-};
-    
-    /**
- * Factory method
- */
-static Transliterator* RemoveTransliterator_create(const UnicodeString& /*ID*/,
-                                                   Transliterator::Token /*context*/) {
-    /* We don't need the ID or context. We just remove data */
-    return new RemoveTransliterator();
+    // Initialization funciton called by caffeOp & caffeLoss
+template<typename Dtype>
+void InitCaffeBlobs(std::vector< ::caffe::Blob<Dtype>*>* v, int n_num) {
+  for (index_t i=0; i < n_num; ++i)
+    v->push_back(new ::caffe::Blob<Dtype>());
 }
     
-    int32_t RegexPattern::groupNumberFromName(const char *groupName, int32_t nameLength, UErrorCode &status) const {
-    if (U_FAILURE(status)) {
-        return 0;
+    /*!
+ * Copyright (c) 2015 by Contributors
+ * \file caffe_data_iter.cc
+ * \brief register mnist iterator
+*/
+#include <sys/time.h>
+#include <caffe/proto/caffe.pb.h>
+#include <dmlc/parameter.h>
+#include <atomic>
+    
+    
+    {        return dict[versionKey].Value<size_t>();
     }
-    UnicodeString name(groupName, nameLength, US_INV);
-    return groupNumberFromName(name, status);
-}
     
-    U_NAMESPACE_END
+            for (size_t i = 0; i < numSequences; ++i)
+        {
+            MaskKind firstMaskEntry = maskBuffer[i * maxNumTimeSteps];
+            if (firstMaskEntry == MaskKind::SequenceBegin)
+                sequenceBeginIndices[i] = 0;
+            else if (firstMaskEntry == MaskKind::Valid)
+                sequenceBeginIndices[i] = Microsoft::MSR::CNTK::SentinelValueIndicatingUnspecifedSequenceBeginIdx;
+            else
+                LogicError('The first entry of a Value mask must be Valid or SequenceBegin');
+    }
     
-    UBool SearchIterator::operator==(const SearchIterator &that) const
+    
+    {                unpackedShape = unpackedShape.AppendShape({ packedDataLayout->GetNumSequences() });
+            }
+            else if (!sampleDynamicAxes.empty())
+                LogicError('A PackedValue object that does not have a layout cannot have any dynamic axes.');
+    
+            if (m_valueInitializer->Contains(RandomSeedAttributeName)) {
+            auto& seed = m_valueInitializer->operator[](RandomSeedAttributeName);
+            if ((unsigned long)seed.Value<size_t>() == SentinelValueForAutoSelectRandomSeed)
+                seed.Value<size_t>() = Internal::GenerateRandomSeed();
+        }
+    
+    
+    {        Matrix<ElemType>::VectorSum(sliceInputValue, sliceOutputValue, true);
+    }
+    
+        virtual bool OutputUsedInComputingInputNodesGradients() const override
+    {
+        return false;
+    }
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    #endif //__CCINSTANT_ACTION_H__
+
+    
+    #include '2d/CCActionInterval.h'
+    
+    AnimationFrame* AnimationFrame::clone() const
 {
-    if (this == &that) {
-        return TRUE;
-    }
-    return (m_breakiterator_            == that.m_breakiterator_ &&
-            m_search_->isCanonicalMatch == that.m_search_->isCanonicalMatch &&
-            m_search_->isOverlap        == that.m_search_->isOverlap &&
-            m_search_->elementComparisonType == that.m_search_->elementComparisonType &&
-            m_search_->matchedIndex     == that.m_search_->matchedIndex &&
-            m_search_->matchedLength    == that.m_search_->matchedLength &&
-            m_search_->textLength       == that.m_search_->textLength &&
-            getOffset() == that.getOffset() &&
-            (uprv_memcmp(m_search_->text, that.m_search_->text, 
-                              m_search_->textLength * sizeof(UChar)) == 0));
-}
-    
-    #define DOT               ((UChar)0x002E)
-#define SINGLE_QUOTE      ((UChar)0x0027)
-#define SLASH             ((UChar)0x002F)
-#define BACKSLASH         ((UChar)0x005C)
-#define SPACE             ((UChar)0x0020)
-#define TAB               ((UChar)0x0009)
-#define QUOTATION_MARK    ((UChar)0x0022)
-#define ASTERISK          ((UChar)0x002A)
-#define COMMA             ((UChar)0x002C)
-#define HYPHEN            ((UChar)0x002D)
-#define U_ZERO            ((UChar)0x0030)
-#define U_ONE             ((UChar)0x0031)
-#define U_TWO             ((UChar)0x0032)
-#define U_THREE           ((UChar)0x0033)
-#define U_FOUR            ((UChar)0x0034)
-#define U_FIVE            ((UChar)0x0035)
-#define U_SIX             ((UChar)0x0036)
-#define U_SEVEN           ((UChar)0x0037)
-#define U_EIGHT           ((UChar)0x0038)
-#define U_NINE            ((UChar)0x0039)
-#define COLON             ((UChar)0x003A)
-#define SEMI_COLON        ((UChar)0x003B)
-#define CAP_A             ((UChar)0x0041)
-#define CAP_B             ((UChar)0x0042)
-#define CAP_R             ((UChar)0x0052)
-#define CAP_Z             ((UChar)0x005A)
-#define LOWLINE           ((UChar)0x005F)
-#define LEFTBRACE         ((UChar)0x007B)
-#define RIGHTBRACE        ((UChar)0x007D)
-    
-    U_NAMESPACE_BEGIN
-    
-    class U_I18N_API SharedNumberFormat : public SharedObject {
-public:
-    SharedNumberFormat(NumberFormat *nfToAdopt) : ptr(nfToAdopt) { }
-    virtual ~SharedNumberFormat();
-    const NumberFormat *get() const { return ptr; }
-    const NumberFormat *operator->() const { return ptr; }
-    const NumberFormat &operator*() const { return *ptr; }
-private:
-    NumberFormat *ptr;
-    SharedNumberFormat(const SharedNumberFormat &);
-    SharedNumberFormat &operator=(const SharedNumberFormat &);
-};
-    
-    class U_I18N_API SharedPluralRules : public SharedObject {
-public:
-    SharedPluralRules(PluralRules *prToAdopt) : ptr(prToAdopt) { }
-    virtual ~SharedPluralRules();
-    const PluralRules *operator->() const { return ptr; }
-    const PluralRules &operator*() const { return *ptr; }
-private:
-    PluralRules *ptr;
-    SharedPluralRules(const SharedPluralRules &);
-    SharedPluralRules &operator=(const SharedPluralRules &);
-};
-    
-    static const int32_t gMaxFastInt = 4096;
-    
-    // set the key to an empty state
-CollationKey&
-CollationKey::reset()
-{
-    fFlagAndLength &= 0x80000000;
-    fHashCode = kEmptyHashCode;
+    // no copy constructor
+    auto frame = new (std::nothrow) AnimationFrame();
+    frame->initWithSpriteFrame(_spriteFrame->clone(),
+                               _delayUnits,
+                               _userInfo);
     }
     
-    namespace osquery {
-    }
-    
-    Status FeatureVectorsConfigParserPlugin::update(const std::string& source,
-                                                const ParserConfig& config) {
-  auto fv = config.find(kFeatureVectorsRootKey);
-  if (fv == config.end()) {
-    return Status();
-  }
-    }
-    
-    /**
- * @brief A simple ConfigParserPlugin for feature vector dictionary keys.
- */
-class FeatureVectorsConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override;
-    }
-    
-    /**
- * @brief A simple ConfigParserPlugin for an 'options' dictionary key.
- */
-class OptionsConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override {
-    return {'options'};
-  }
-    }
-    
-      Config::get().update(config_data_);
-  Config::get().files(([&categories, &values](
-      const std::string& category, const std::vector<std::string>& files) {
-    categories.push_back(category);
-    for (const auto& file : files) {
-      values.push_back(file);
-    }
-  }));
-    
-      QueryData r;
-  if (views.IsObject()) {
-    for (const auto& view : views.GetObject()) {
-      std::string name = view.name.GetString();
-      if (!view.value.IsString()) {
-        continue;
-      }
-      std::string query = view.value.GetString();
-      if (query.empty()) {
-        continue;
-      }
-    }
-    }
-    
-    
-    {      multi_pack.put_child(fs::path(path).stem().string(), single_pack);
+            for (auto& obj : frameArray)
+        {
+            ValueMap& entry = obj.asValueMap();
+            std::string spriteFrameName = entry['spriteframe'].asString();
+            SpriteFrame *spriteFrame = frameCache->getSpriteFrameByName(spriteFrameName);
     }
