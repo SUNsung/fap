@@ -1,333 +1,184 @@
 
         
-            StringRef Line = RawText.substr(0, Pos);
-    Lines.push_back(Line);
-    if (!IsFirstLine) {
-      size_t NonWhitespacePos = RawText.find_first_not_of(' ');
-      if (NonWhitespacePos != StringRef::npos)
-        WhitespaceToTrim =
-            std::min(WhitespaceToTrim,
-                     static_cast<unsigned>(NonWhitespacePos));
-    }
-    IsFirstLine = false;
-    
-    static int adapt(int delta, int numpoints, bool firsttime) {
-  if (firsttime)
-    delta = delta / damp;
-  else
-    delta = delta / 2;
-  
-  delta += delta / numpoints;
-  int k = 0;
-  while (delta > ((base - tmin) * tmax) / 2) {
-    delta /= base - tmin;
-    k += base;
-  }
-  return k + (((base - tmin + 1) * delta) / (delta + skew));
-}
-    
-    
-    {
-    {
-    {}  // namespace python
-}  // namespace protobuf
-}  // namespace google
-
-    
-    void OneofGenerator::GeneratePublicCasePropertyDeclaration(
-    io::Printer* printer) {
-  printer->Print(
-      variables_,
-      '$comments$'
-      '@property(nonatomic, readonly) $enum_name$ $name$OneOfCase;\n'
-      '\n');
-}
-    
-    TEST(ByteSourceTest, LimitByteSource) {
-  StringPiece data('Hello world!');
-  MockByteSource source(data, 3);
-  LimitByteSource limit_source(&source, 6);
-  EXPECT_EQ(6, limit_source.Available());
-  limit_source.Skip(1);
-  EXPECT_EQ(5, limit_source.Available());
+        namespace caffe {
     }
     
-    TEST(StatusOr, TestPointerAssignmentStatusOKConverting) {
-  Derived derived;
-  StatusOr<Derived*> source(&derived);
-  StatusOr<Base2*>   target;
-  target = source;
-  EXPECT_EQ(source.status(), target.status());
-  EXPECT_EQ(static_cast<const Base2*>(source.ValueOrDie()),
-            target.ValueOrDie());
-}
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
+    #include <vector>
     
-    {}  // namespace leveldb
-
-    
-    class DBImpl;
-    
-    // Return the name of the log file with the specified number
-// in the db named by 'dbname'.  The result will be prefixed with
-// 'dbname'.
-std::string LogFileName(const std::string& dbname, uint64_t number);
-    
-    int main(int argc, char** argv) {
-  leveldb::Env* env = leveldb::Env::Default();
-  bool ok = true;
-  if (argc < 2) {
-    Usage();
-    ok = false;
-  } else {
-    std::string command = argv[1];
-    if (command == 'dump') {
-      ok = leveldb::HandleDumpCommand(env, argv+2, argc-2);
-    } else {
-      Usage();
-      ok = false;
-    }
-  }
-  return (ok ? 0 : 1);
-}
-
-    
-    
-    {  ASSERT_EQ('correct', Read());
-  ASSERT_EQ('EOF', Read());
-  const size_t dropped = DroppedBytes();
-  ASSERT_LE(dropped, 2*kBlockSize + 100);
-  ASSERT_GE(dropped, 2*kBlockSize);
-}
-    
-    class MemTableIterator: public Iterator {
+    template <typename Dtype>
+class CropLayer : public Layer<Dtype> {
  public:
-  explicit MemTableIterator(MemTable::Table* table) : iter_(table) { }
+  explicit CropLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-      // Return an iterator for the specified file number (the corresponding
-  // file length must be exactly 'file_size' bytes).  If 'tableptr' is
-  // non-null, also sets '*tableptr' to point to the Table object
-  // underlying the returned iterator, or to nullptr if no Table object
-  // underlies the returned iterator.  The returned '*tableptr' object is owned
-  // by the cache and should not be deleted, and is valid for as long as the
-  // returned iterator is live.
-  Iterator* NewIterator(const ReadOptions& options,
-                        uint64_t file_number,
-                        uint64_t file_size,
-                        Table** tableptr = nullptr);
     
-    #include 'db/version_set.h'
-#include 'util/coding.h'
+    {}  // namespace caffe
     
-    #include 'db/dbformat.h'
-#include 'leveldb/write_batch.h'
+    // Reads all boxes from the string. Otherwise, as ReadAllBoxes.
+// continue_on_failure allows reading to continue even if an invalid box is
+// encountered and will return true if it succeeds in reading some boxes.
+// It otherwise gives up and returns false on encountering an invalid box.
+bool ReadMemBoxes(int target_page, bool skip_blanks, const char* box_data,
+                  bool continue_on_failure,
+                  GenericVector<TBOX>* boxes,
+                  GenericVector<STRING>* texts,
+                  GenericVector<STRING>* box_texts,
+                  GenericVector<int>* pages);
     
-     protected:
-  /*! \brief prefetcher parameters */
-  PrefetcherParam param_;
-  /*! \brief backend thread */
-  dmlc::ThreadedIter<DataBatch> iter;
-  /*! \brief internal batch loader */
-  std::unique_ptr<IIterator<TBlobBatch> > loader_;
+      // Clean up the bounding boxes from the polygonal approximation by
+  // expanding slightly, then clipping to the blobs from the original_word
+  // that overlap. If not null, the block provides the inverse rotation.
+  void ClipToOriginalWord(const BLOCK* block, WERD* original_word);
     
-    template<typename xpu>
-void Dequantize2BitKernelLaunch(mshadow::Stream<xpu> *s, const std::vector<mxnet::TBlob> &inputs,
-                                const float threshold) {
-  mxnet::op::mxnet_op::Kernel<dequantize_2bit, xpu>
-  ::Launch(s,
-          inputs[1].Size(),         // original size
-          inputs[1].dptr<float>(),  // out array
-          inputs[0].dptr<float>(),  // compressed array
-          -1 *threshold,            // negative threshold
-          threshold);               // positive threshold
+      // Accessors.
+  int total_cost() const {
+    return total_cost_;
+  }
+  int Pathlength() const {
+    return total_steps_;
+  }
+  const DPPoint* best_prev() const {
+    return best_prev_;
+  }
+  void AddLocalCost(int new_cost) {
+    local_cost_ += new_cost;
+  }
+    
+      // Writes to the given file. Returns false in case of error.
+  bool Serialize(FILE* fp) const;
+  // Reads from the given file. Returns false in case of error.
+  // If swap is true, assumes a big/little-endian swap is needed.
+  bool DeSerialize(bool swap, FILE* fp);
+    
+     private:
+  // Free allocated memory and clear pointers.
+  void Clear();
+  // Setup default values.
+  void Init();
+    
+    static const int kCbToGreenTable[256] = {
+  2919680,  2897126,  2874572,  2852018,  2829464,  2806910,  2784356,  2761802,
+  2739248,  2716694,  2694140,  2671586,  2649032,  2626478,  2603924,  2581370,
+  2558816,  2536262,  2513708,  2491154,  2468600,  2446046,  2423492,  2400938,
+  2378384,  2355830,  2333276,  2310722,  2288168,  2265614,  2243060,  2220506,
+  2197952,  2175398,  2152844,  2130290,  2107736,  2085182,  2062628,  2040074,
+  2017520,  1994966,  1972412,  1949858,  1927304,  1904750,  1882196,  1859642,
+  1837088,  1814534,  1791980,  1769426,  1746872,  1724318,  1701764,  1679210,
+  1656656,  1634102,  1611548,  1588994,  1566440,  1543886,  1521332,  1498778,
+  1476224,  1453670,  1431116,  1408562,  1386008,  1363454,  1340900,  1318346,
+  1295792,  1273238,  1250684,  1228130,  1205576,  1183022,  1160468,  1137914,
+  1115360,  1092806,  1070252,  1047698,  1025144,  1002590,   980036,   957482,
+   934928,   912374,   889820,   867266,   844712,   822158,   799604,   777050,
+   754496,   731942,   709388,   686834,   664280,   641726,   619172,   596618,
+   574064,   551510,   528956,   506402,   483848,   461294,   438740,   416186,
+   393632,   371078,   348524,   325970,   303416,   280862,   258308,   235754,
+   213200,   190646,   168092,   145538,   122984,   100430,    77876,    55322,
+    32768,    10214,   -12340,   -34894,   -57448,   -80002,  -102556,  -125110,
+  -147664,  -170218,  -192772,  -215326,  -237880,  -260434,  -282988,  -305542,
+  -328096,  -350650,  -373204,  -395758,  -418312,  -440866,  -463420,  -485974,
+  -508528,  -531082,  -553636,  -576190,  -598744,  -621298,  -643852,  -666406,
+  -688960,  -711514,  -734068,  -756622,  -779176,  -801730,  -824284,  -846838,
+  -869392,  -891946,  -914500,  -937054,  -959608,  -982162, -1004716, -1027270,
+ -1049824, -1072378, -1094932, -1117486, -1140040, -1162594, -1185148, -1207702,
+ -1230256, -1252810, -1275364, -1297918, -1320472, -1343026, -1365580, -1388134,
+ -1410688, -1433242, -1455796, -1478350, -1500904, -1523458, -1546012, -1568566,
+ -1591120, -1613674, -1636228, -1658782, -1681336, -1703890, -1726444, -1748998,
+ -1771552, -1794106, -1816660, -1839214, -1861768, -1884322, -1906876, -1929430,
+ -1951984, -1974538, -1997092, -2019646, -2042200, -2064754, -2087308, -2109862,
+ -2132416, -2154970, -2177524, -2200078, -2222632, -2245186, -2267740, -2290294,
+ -2312848, -2335402, -2357956, -2380510, -2403064, -2425618, -2448172, -2470726,
+ -2493280, -2515834, -2538388, -2560942, -2583496, -2606050, -2628604, -2651158,
+ -2673712, -2696266, -2718820, -2741374, -2763928, -2786482, -2809036, -2831590,
+};
+    
+    void DCT1d(const double* in, int stride, double* out) {
+  for (int x = 0; x < 8; ++x) {
+    out[x * stride] = 0.0;
+    for (int u = 0; u < 8; ++u) {
+      out[x * stride] += kDCTMatrix[8 * x + u] * in[u * stride];
+    }
+  }
 }
     
-    KVStore* KVStore::Create(const char *type_name) {
-  std::string tname = type_name;
-  std::transform(tname.begin(), tname.end(), tname.begin(), ::tolower);
-  KVStore* kv = nullptr;
-  bool use_device_comm = false;
-  auto has = [tname](const std::string& pattern) {
-    return tname.find(pattern) != std::string::npos;
+    #define GUETZLI_LOG(stats, ...)                                    \
+  do {                                                             \
+    char debug_string[1024];                                       \
+    int res = snprintf(debug_string, sizeof(debug_string),         \
+                       __VA_ARGS__);                               \
+    assert(res > 0 && 'expected successful printing');             \
+    (void)res;                                                     \
+    debug_string[sizeof(debug_string) - 1] = '\0';                 \
+    ::guetzli::PrintDebug(                      \
+         stats, std::string(debug_string));        \
+  } while (0)
+#define GUETZLI_LOG_QUANT(stats, q)                    \
+  for (int y = 0; y < 8; ++y) {                        \
+    for (int c = 0; c < 3; ++c) {                      \
+      for (int x = 0; x < 8; ++x)                      \
+        GUETZLI_LOG(stats, ' %2d', (q)[c][8 * y + x]); \
+      GUETZLI_LOG(stats, '   ');                       \
+    }                                                  \
+    GUETZLI_LOG(stats, '\n');                          \
+  }
+    
+    constexpr int kDefaultMemlimitMB = 6000; // in MB
+    
+    namespace guetzli {
+    }
+    
+    void AddApp0Data(JPEGData* jpg) {
+  const unsigned char kApp0Data[] = {
+      0xe0, 0x00, 0x10,              // APP0
+      0x4a, 0x46, 0x49, 0x46, 0x00,  // 'JFIF'
+      0x01, 0x01,                    // v1.01
+      0x00, 0x00, 0x01, 0x00, 0x01,  // aspect ratio = 1:1
+      0x00, 0x00                     // thumbnail width/height
   };
-  if (has('device')) {
-    use_device_comm = true;
-  }
-    }
-    
-    
-    {
-    {.add_argument('data', 'Symbol or Symbol[]', 'Tensor or List of Tensors, the second input '
-'will be used as crop_like shape reference')
-.add_arguments(CropParam::__FIELDS__())
-.set_key_var_num_args('num_args');
-}  // namespace op
-}  // namespace mxnet
-
-    
-    
-    {    Tensor<gpu, 4, DType> data = in_data[bs::kData].get<gpu, 4, DType>(s);
-    Tensor<gpu, 4, DType> grid = in_data[bs::kGrid].get<gpu, 4, DType>(s);
-    Tensor<gpu, 4, DType> grid_tmp = out_data[bs::kTmp].get<gpu, 4, DType>(s);
-    Tensor<gpu, 4, DType> out = out_data[bs::kOut].get<gpu, 4, DType>(s);
-    // grid_tmp : (batch, h, w, 2)
-    grid_tmp = transpose(grid, Shape4(0, 2, 3, 1));
-    if (!init_cudnn_) {
-     Init(s, in_data, out_data);
-    }
-    CHECK_EQ(data.CheckContiguous(), true);
-    CHECK_EQ(out.CheckContiguous(), true);
-    CHECK_EQ(grid_tmp.CheckContiguous(), true);
-    typename DataType<DType>::ScaleType alpha = 1.0f;
-    typename DataType<DType>::ScaleType beta = 0.0f;
-    CUDNN_CALL(cudnnSpatialTfSamplerForward(s->dnn_handle_,
-                                            st_desc_,
-                                            &alpha,
-                                            in_desc_,
-                                            data.dptr_,
-                                            grid_tmp.dptr_,
-                                            &beta,
-                                            out_desc_,
-                                            out.dptr_));
-  }
-    
-    Operator* NDArrayOpProp::CreateOperator(Context ctx) const {
-  DO_BIND_DISPATCH(CreateOp, param_);
+  jpg->app_data.push_back(
+      std::string(reinterpret_cast<const char*>(kApp0Data),
+                                 sizeof(kApp0Data)));
 }
     
-      /*!
-   * \brief generate predictions for given feature matrix
-   * \param dmat feature matrix
-   * \param out_preds output vector to hold the predictions
-   * \param ntree_limit limit the number of trees used in prediction, when it equals 0, this means
-   *    we do not limit number of trees, this parameter is only valid for gbtree, but not for gblinear
-   */
-  virtual void PredictBatch(DMatrix* dmat,
-                            HostDeviceVector<bst_float>* out_preds,
-                            unsigned ntree_limit = 0) = 0;
-  /*!
-   * \brief online prediction function, predict score for one instance at a time
-   *  NOTE: use the batch prediction interface if possible, batch prediction is usually
-   *        more efficient than online prediction
-   *        This function is NOT threadsafe, make sure you only call from one thread
-   *
-   * \param inst the instance you want to predict
-   * \param out_preds output vector to hold the predictions
-   * \param ntree_limit limit the number of trees used in prediction
-   * \param root_index the root index
-   * \sa Predict
-   */
-  virtual void PredictInstance(const SparsePage::Inst& inst,
-                       std::vector<bst_float>* out_preds,
-                       unsigned ntree_limit = 0,
-                       unsigned root_index = 0) = 0;
-  /*!
-   * \brief predict the leaf index of each tree, the output will be nsample * ntree vector
-   *        this is only valid in gbtree predictor
-   * \param dmat feature matrix
-   * \param out_preds output vector to hold the predictions
-   * \param ntree_limit limit the number of trees used in prediction, when it equals 0, this means
-   *    we do not limit number of trees, this parameter is only valid for gbtree, but not for gblinear
-   */
-  virtual void PredictLeaf(DMatrix* dmat,
-                           std::vector<bst_float>* out_preds,
-                           unsigned ntree_limit = 0) = 0;
-    
-    namespace xgboost {
-namespace obj {
-    }
+    namespace guetzli {
     }
     
-    template<typename DType>
-inline void CompressArray<DType>::InitCompressChunks(
-    const std::vector<bst_uint>& chunk_ptr) {
-  raw_chunks_ = chunk_ptr;
-  CHECK_GE(raw_chunks_.size(), 2);
-  out_buffer_.resize(raw_chunks_.size() - 1);
-  for (size_t i = 0; i < out_buffer_.size(); ++i) {
-    out_buffer_[i].resize(raw_chunks_[i + 1] - raw_chunks_[i]);
-  }
-}
     
-    
-    {      if (result.__isset.success) {
-        // _return pointer has now been filled
-        sentry.commit();
-        return;
-      }
-      // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, 'extensions failed: unknown result');
+    {  // Supplemental checks.
+  if (mode == JPEG_READ_ALL) {
+    if (pos < len) {
+      jpg->tail_data.assign(reinterpret_cast<const char*>(&data[pos]),
+                            len - pos);
     }
-    // seqid != rseqid
-    this->sync_.updatePending(fname, mtype, rseqid);
-    
-      uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-    
-    int main(int argc, char **argv) {
-  int port = 9090;
-  ::apache::thrift::stdcxx::shared_ptr<ExtensionHandler> handler(new ExtensionHandler());
-  ::apache::thrift::stdcxx::shared_ptr<TProcessor> processor(new ExtensionProcessor(handler));
-  ::apache::thrift::stdcxx::shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
-  ::apache::thrift::stdcxx::shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
-  ::apache::thrift::stdcxx::shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
-    }
-    
-      bool operator == (const InternalExtensionInfo & rhs) const
-  {
-    if (!(name == rhs.name))
+    if (!FixupIndexes(jpg)) {
       return false;
-    if (!(version == rhs.version))
+    }
+    if (jpg->huffman_code.size() == 0) {
+      // Section B.2.4.2: 'If a table has never been defined for a particular
+      // destination, then when this destination is specified in a scan header,
+      // the results are unpredictable.'
+      fprintf(stderr, 'Need at least one Huffman code table.\n');
+      jpg->error = JPEG_HUFFMAN_TABLE_ERROR;
       return false;
-    if (!(sdk_version == rhs.sdk_version))
+    }
+    if (jpg->huffman_code.size() >= kMaxDHTMarkers) {
+      fprintf(stderr, 'Too many Huffman tables.\n');
+      jpg->error = JPEG_HUFFMAN_TABLE_ERROR;
       return false;
-    if (!(min_sdk_version == rhs.min_sdk_version))
-      return false;
-    return true;
+    }
   }
-  bool operator != (const InternalExtensionInfo &rhs) const {
-    return !(*this == rhs);
-  }
-    
-    
-    {
-    {
-    {  for (const auto& share_line : osquery::split(content, '\n')) {
-    genNFSShare(share_line, results);
-  }
-  return results;
+  return true;
 }
-}
-}
-
     
-      // Join results..
-  for (auto& entry : hw_info) {
-    bool matched = false;
-    for (auto& row : results) {
-      auto serial = row.find('serial_number');
-      if (serial == row.end()) {
-        continue;
-      }
-    }
-    }
     
-    #pragma once
+    {}  // namespace
     
-    namespace osquery {
-    }
-    
-    #pragma once
-    
-    namespace rocksdb {
-    }
-    
-      // Restore rate limiter. Used to control transfer speed during restore. If
-  // this is not null, restore_rate_limit is ignored.
-  // Default: nullptr
-  std::shared_ptr<RateLimiter> restore_rate_limiter{nullptr};
-    
-      static LDBCommandExecuteResult Failed(std::string msg) {
-    return LDBCommandExecuteResult(EXEC_FAILED, msg);
-  }
+    #include 'guetzli/jpeg_data.h'
