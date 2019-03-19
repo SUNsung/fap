@@ -1,135 +1,201 @@
 
         
-            def __init__(self, user_id, name, pass_hash):
-        self.user_id = user_id
-        self.name = name
-        self.pass_hash = pass_hash
-        self.friends_by_id = {}  # key: friend id, value: User
-        self.friend_ids_to_private_chats = {}  # key: friend id, value: private chats
-        self.group_chats_by_id = {}  # key: chat id, value: GroupChat
-        self.received_friend_requests_by_friend_id = {}  # key: friend id, value: AddRequest
-        self.sent_friend_requests_by_friend_id = {}  # key: friend id, value: AddRequest
-    
-        def reducer(self, key, values):
-        '''Sum values for each key.
-    
-        def get(self, key):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                return item.value
-        raise KeyError('Key not found')
-    
-      Args:
-    values_t_bxn: The length T list of BxN numpy tensors.
-    
-          scorings.append(dict(
-          correctness=correctness,
-          sentence=sentence,
-          joint_prob=joint_prob,
-          word_probs=word_probs))
-    scoring_mode = 'full' if self.test_data_name == 'pdp60' else 'partial'
-    return utils.compare_substitutions(
-        self.question_ids, scorings, scoring_mode)
-    
-          for n in xrange(FLAGS.number_epochs):
-        print('Epoch number: %d' % n)
-        # print('Percent done: %.2f' % float(n) / float(FLAGS.number_epochs))
-        iterator = get_iterator(data)
-        for x, y, _ in iterator:
-          if FLAGS.eval_language_model:
-            is_present_rate = 0.
-          else:
-            is_present_rate = FLAGS.is_present_rate
-          tf.logging.info(
-              'Evaluating on is_present_rate=%.3f.' % is_present_rate)
-    
-      ## Load Generator weights from MaskGAN checkpoint.
-  if FLAGS.maskgan_ckpt:
-    gen_vars = [
-        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
-    ]
-    init_saver = tf.train.Saver(var_list=gen_vars)
-    init_savers['init_saver'] = init_saver
-    
-    try:
-    input = raw_input
-except NameError:
-    pass
-    
-    
-def main():
-    parser = optparse.OptionParser(usage='%prog OUTFILE.md')
-    options, args = parser.parse_args()
-    if len(args) != 1:
-        parser.error('Expected an output filename')
-    
-    
-if __name__ == '__main__':
-    unittest.main()
+            with app.app_context():
+        db = get_db()
+        post = db.execute('SELECT * FROM post WHERE id = 1').fetchone()
+        assert post is None
 
     
-        def test_youtube_extract(self):
-        assertExtractId = lambda url, id: self.assertEqual(YoutubeIE.extract_id(url), id)
-        assertExtractId('http://www.youtube.com/watch?&v=BaW_jenozKc', 'BaW_jenozKc')
-        assertExtractId('https://www.youtube.com/watch?&v=BaW_jenozKc', 'BaW_jenozKc')
-        assertExtractId('https://www.youtube.com/watch?feature=player_embedded&v=BaW_jenozKc', 'BaW_jenozKc')
-        assertExtractId('https://www.youtube.com/watch_popup?v=BaW_jenozKc', 'BaW_jenozKc')
-        assertExtractId('http://www.youtube.com/watch?v=BaW_jenozKcsharePLED17F32AD9753930', 'BaW_jenozKc')
-        assertExtractId('BaW_jenozKc', 'BaW_jenozKc')
+    
+def _find_app():
+    top = _app_ctx_stack.top
+    if top is None:
+        raise RuntimeError(_app_ctx_err_msg)
+    return top.app
+    
+            return self.tags[key].to_python(value[key])
+    
+            current = current.parent
+    
+        .. versionadded:: 1.0
+    '''
     
     
-try:
-    _DEV_NULL = subprocess.DEVNULL
-except AttributeError:
-    _DEV_NULL = open(os.devnull, 'wb')
+def get_git_tags():
+    return set(
+        Popen(['git', 'tag'], stdout=PIPE).communicate()[0].splitlines()
+    )
     
-            '''
-        r.headers['Authorization'] = type(self).make_header(
-            self.username, self.password).encode('latin1')
-        return r
+        if not HAS_BOTO3:
+        module.fail_json(msg='boto3 required for this module')
+    
+        i = None
+    if mod_params['instance_id']:
+        config_name = get_spanner_configuration_name(
+            mod_params['configuration'], params['project_id'])
+        i = spanner_client.instance(mod_params['instance_id'],
+                                    configuration_name=config_name)
+    d = None
+    if mod_params['database_name']:
+        # TODO(supertom): support DDL
+        ddl_statements = ''
+        d = i.database(mod_params['database_name'], ddl_statements)
+    
+    - heroku_collaborator:
+    api_key: YOUR_API_KEY
+    user: '{{ item.user }}'
+    apps: '{{ item.apps | default(apps) }}'
+    suppress_invitation: '{{ item.suppress_invitation | default(suppress_invitation) }}'
+    state: '{{ item.state | default('present') }}'
+  with_items:
+    - { user: 'a.b@example.com' }
+    - { state: 'absent', user: 'b.c@example.com', suppress_invitation: false }
+    - { user: 'x.y@example.com', apps: ['heroku-example-app'] }
+'''
+    
+            mutually_exclusive = [
+            ['cluster_id', 'cluster_name']
+        ]
     
     
-def test_follow_all_output_options_used_for_redirects(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 3
-    assert HTTP_OK not in r
+VALID_RULE_KEYS = ['rule_type', 'original_ip', 'original_port',
+                   'translated_ip', 'translated_port', 'protocol']
     
+        module = AnsibleModule(argument_spec=argument_spec,
+                           supports_check_mode=True,
+                           )
     
-def test_unicode_json_item_verbose(httpbin):
-    r = http('--verbose', '--json',
-             'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
-    assert HTTP_OK in r
-    assert UNICODE in r
-    
-    
-def _get_token(host, username, password):
-    '''Get authentication token for the given host+username+password.'''
-    url = 'http://{}/cgi-bin/luci/api/xqsystem/login'.format(host)
-    data = {'username': username, 'password': password}
-    try:
-        res = requests.post(url, data=data, timeout=5)
-    except requests.exceptions.Timeout:
-        _LOGGER.exception('Connection to the router timed out')
-        return
-    if res.status_code == 200:
-        try:
-            result = res.json()
-        except ValueError:
-            # If JSON decoder could not parse the response
-            _LOGGER.exception('Failed to parse response from mi router')
-            return
-        try:
-            return result['token']
-        except KeyError:
-            error_message = 'Xiaomi token cannot be refreshed, response from '\
-                            + 'url: [%s] \nwith parameter: [%s] \nwas: [%s]'
-            _LOGGER.exception(error_message, url, data, result)
-            return
+            request_url = url + '/data/events/deployments/start'
     else:
-        _LOGGER.error('Invalid response: [%s] at url: [%s] with data [%s]',
-                      res, url, data)
+        message = module.params['message']
+        if message is not None:
+            body['errorMessage'] = message
+    
+    
+DOCUMENTATION = '''
+---
+module: logentries
+author: 'Ivan Vanderbyl (@ivanvanderbyl)'
+short_description: Module for tracking logs via logentries.com
+description:
+    - Sends logs to LogEntries in realtime
+version_added: '1.6'
+options:
+    path:
+        description:
+            - path to a log file
+        required: true
+    state:
+        description:
+            - following state of the log
+        choices: [ 'present', 'absent' ]
+        required: false
+        default: present
+    name:
+        description:
+            - name of the log
+        required: false
+    logtype:
+        description:
+            - type of the log
+        required: false
+    
+        description = proj_info['description'],
+    keywords = proj_info['keywords'],
+    
+    import json
+import re
+    
+            for i in range(len(titles)):
+            title = titles[i]
+            datas = {
+                'sid': song_id[i],
+                'ssid': song_ssid[i]
+            }
+            post_params = urllib.parse.urlencode(datas).encode('utf-8')
+            try:
+                resp = urllib.request.urlopen(get_song_url, post_params)
+                resp_data = json.loads(resp.read().decode('utf-8'))
+                real_url = resp_data['r']
+                type, ext, size = url_info(real_url)
+                print_info(site_info, title, type, size)
+            except:
+                pass
+    
+    
+    {
+    {pattern_inline_title = r'<title>([^<]*)</title>'
+pattern_inline_api_key = r'api\.site_key\s*=\s*'([^']+)''
+pattern_inline_img_url = r''url':'([^']+)','key':'[^']+'}}'
+pattern_inline_NSID = r''nsid'\s*:\s*'([^']+)''
+pattern_inline_video_mark = r'('mediaType':'video')'
+    
+            if 'title' not in kwargs:
+            url = 'http://pv.funshion.com/v5/video/profile/?id={}&cl=mweb&uc=111'.format(self.vid)
+            meta = json.loads(get_content(url))
+            self.title = meta['name']
+        else:
+            self.title = kwargs['title']
+    
+        title = r1(r'<meta property='og:title' content='(.*?)'>', html)
+    
+            #Creating directory title page for current directory
+        with open('dir_title.html', 'w') as os_html:
+            os_html.write(header + dir_title)
+        
+        group.append(HTML('dir_title.html').render())
+    
+    
+def compute_bbox_regression_targets(entry):
+    '''Compute bounding-box regression targets for an image.'''
+    # Indices of ground-truth ROIs
+    rois = entry['boxes']
+    overlaps = entry['max_overlaps']
+    labels = entry['max_classes']
+    gt_inds = np.where((entry['gt_classes'] > 0) & (entry['is_crowd'] == 0))[0]
+    # Targets has format (class, tx, ty, tw, th)
+    targets = np.zeros((rois.shape[0], 5), dtype=np.float32)
+    if len(gt_inds) == 0:
+        # Bail if the image has no ground-truth ROIs
+        return targets
+    
+        # transformation blob
+    tr = globals()[cfg.RESNETS.TRANS_FUNC](
+        model,
+        blob_in,
+        dim_in,
+        dim_out,
+        stride,
+        prefix,
+        dim_inner,
+        group=cfg.RESNETS.NUM_GROUPS,
+        dilation=dilation
+    )
+    
+    When renaming functions, it's generally a good idea to codemod existing yaml
+config files. An easy way to batch edit, by example, is a shell command like
+    
+    from caffe2.python import muji
+    
+        def forward(self, inputs, outputs):
+        '''See modeling.detector.GenerateProposalLabels for inputs/outputs
+        documentation.
+        '''
+        # During training we reuse the data loader code. We populate roidb
+        # entries on the fly using the rois generated by RPN.
+        # im_info: [[im_height, im_width, im_scale], ...]
+        rois = inputs[0].data
+        roidb = blob_utils.deserialize(inputs[1].data)
+        im_info = inputs[2].data
+        im_scales = im_info[:, 2]
+        output_blob_names = fast_rcnn_roi_data.get_fast_rcnn_blob_names()
+        # For historical consistency with the original Faster R-CNN
+        # implementation we are *not* filtering crowd proposals.
+        # This choice should be investigated in the future (it likely does
+        # not matter).
+        json_dataset.add_proposals(roidb, rois, im_scales, crowd_thresh=0)
+        roidb_utils.add_bbox_regression_targets(roidb)
+        blobs = {k: [] for k in output_blob_names}
+        fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
+        for i, k in enumerate(output_blob_names):
+            blob_utils.py_op_copy_blob(blobs[k], outputs[i])
