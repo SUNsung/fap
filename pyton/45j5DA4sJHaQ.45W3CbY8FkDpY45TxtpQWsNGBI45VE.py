@@ -1,76 +1,105 @@
 
         
-            ```python
-         ..
-         # Not needed to change the device scope for model definition:
-         model = Xception(weights=None, ..)
+            scikit_results = []
+    glmnet_results = []
+    n = 20
+    step = 500
+    n_features = 1000
+    n_informative = n_features / 10
+    n_test_samples = 1000
+    for i in range(1, n + 1):
+        print('==================')
+        print('Iteration %s of %s' % (i, n))
+        print('==================')
     
-        # Arguments
-        filters: Integer, the dimensionality of the output space
-            (i.e. the number of output filters in the convolution).
-        kernel_size: An integer or tuple/list of n integers, specifying the
-            dimensions of the convolution window.
-        strides: An integer or tuple/list of n integers,
-            specifying the strides of the convolution.
-            Specifying any stride value != 1 is incompatible with specifying
-            any `dilation_rate` value != 1.
-        padding: One of `'valid'` or `'same'` (case-insensitive).
-        data_format: A string,
-            one of `'channels_last'` (default) or `'channels_first'`.
-            It defaults to the `image_data_format` value found in your
-            Keras config file at `~/.keras/keras.json`.
-            If you never set it, then it will be `'channels_last'`.
-        dilation_rate: An integer or tuple/list of n integers, specifying
-            the dilation rate to use for dilated convolution.
-            Currently, specifying any `dilation_rate` value != 1 is
-            incompatible with specifying any `strides` value != 1.
-        activation: Activation function to use
-            (see [activations](../activations.md)).
-            If you don't specify anything, no activation is applied
-            (ie. 'linear' activation: `a(x) = x`).
-        recurrent_activation: Activation function to use
-            for the recurrent step
-            (see [activations](../activations.md)).
-        use_bias: Boolean, whether the layer uses a bias vector.
-        kernel_initializer: Initializer for the `kernel` weights matrix,
-            used for the linear transformation of the inputs.
-            (see [initializers](../initializers.md)).
-        recurrent_initializer: Initializer for the `recurrent_kernel`
-            weights matrix,
-            used for the linear transformation of the recurrent state.
-            (see [initializers](../initializers.md)).
-        bias_initializer: Initializer for the bias vector
-            (see [initializers](../initializers.md)).
-        unit_forget_bias: Boolean.
-            If True, add 1 to the bias of the forget gate at initialization.
-            Use in combination with `bias_initializer='zeros'`.
-            This is recommended in [Jozefowicz et al. (2015)](
-            http://www.jmlr.org/proceedings/papers/v37/jozefowicz15.pdf).
-        kernel_regularizer: Regularizer function applied to
-            the `kernel` weights matrix
-            (see [regularizer](../regularizers.md)).
-        recurrent_regularizer: Regularizer function applied to
-            the `recurrent_kernel` weights matrix
-            (see [regularizer](../regularizers.md)).
-        bias_regularizer: Regularizer function applied to the bias vector
-            (see [regularizer](../regularizers.md)).
-        kernel_constraint: Constraint function applied to
-            the `kernel` weights matrix
-            (see [constraints](../constraints.md)).
-        recurrent_constraint: Constraint function applied to
-            the `recurrent_kernel` weights matrix
-            (see [constraints](../constraints.md)).
-        bias_constraint: Constraint function applied to the bias vector
-            (see [constraints](../constraints.md)).
-        dropout: Float between 0 and 1.
-            Fraction of the units to drop for
-            the linear transformation of the inputs.
-        recurrent_dropout: Float between 0 and 1.
-            Fraction of the units to drop for
-            the linear transformation of the recurrent state.
-    '''
     
-        oslist = []
-    allmd = []
-    group = []
-    ap = []
+def plot_batch_times(all_times, n_features, all_batch_sizes, data):
+    plt.figure()
+    plot_results(all_batch_sizes, all_times['pca'], label='PCA')
+    plot_results(all_batch_sizes, all_times['ipca'], label='IncrementalPCA')
+    plt.legend(loc='lower left')
+    plt.suptitle('Algorithm runtime vs. batch_size for n_components %i\n \
+                 LFW, size %i x %i' % (
+                 n_features, data.shape[0], data.shape[1]))
+    plt.xlabel('Batch size')
+    plt.ylabel('Time (seconds)')
+    
+    import matplotlib.pyplot as plt
+    
+    __version__ = '0.2.0'
+__author__ = 'Steven Loria'
+__license__ = 'MIT'
+    
+    plt.matshow(fit_data, cmap=plt.cm.Blues)
+plt.title('After biclustering; rearranged to show biclusters')
+    
+    Face, a 1024 x 768 size image of a raccoon face,
+is used here to illustrate how `k`-means is
+used for vector quantization.
+    
+    
+def make_data(random_state, n_samples_per_center, grid_size, scale):
+    random_state = check_random_state(random_state)
+    centers = np.array([[i, j]
+                        for i in range(grid_size)
+                        for j in range(grid_size)])
+    n_clusters_true, n_features = centers.shape
+    
+        def callback(response):
+        response.rethrow()
+        assert len(response.body) == (options.num_chunks * options.chunk_size)
+        logging.warning('fetch completed in %s seconds', response.request_time)
+        IOLoop.current().stop()
+    
+        def finish_tree(self, tree, filename):
+        if self.found_future_import:
+            return
+        if not isinstance(tree, pytree.Node):
+            # Empty files (usually __init__.py) show up as a single Leaf
+            # instead of a Node, so leave them alone
+            return
+        first_stmt = tree.children[0]
+        if is_docstring(first_stmt):
+            # Skip a line and add the import after the docstring
+            tree.insert_child(1, Newline())
+            pos = 2
+        elif first_stmt.prefix:
+            # No docstring, but an initial comment (perhaps a #! line).
+            # Transfer the initial comment to a new blank line.
+            newline = Newline()
+            newline.prefix = first_stmt.prefix
+            first_stmt.prefix = ''
+            tree.insert_child(0, newline)
+            pos = 1
+        else:
+            # No comments or docstring, just insert at the start
+            pos = 0
+        tree.insert_child(pos, self.new_future_import(None))
+        tree.insert_child(pos + 1, Newline())  # terminates the import stmt
+
+    
+        url = options.url + '/updateReports?agent=%s' % options.name
+    update_ws = yield websocket_connect(url, None)
+    msg = yield update_ws.read_message()
+    assert msg is None
+    IOLoop.instance().stop()
+    
+                def write_function(b: Union[bytes, bytearray]) -> int:
+                assert request.streaming_callback is not None
+                self.io_loop.add_callback(request.streaming_callback, b)
+                return len(b)
+    
+        def reverse(self, *args: Any) -> Optional[str]:
+        if self._path is None:
+            raise ValueError('Cannot reverse url regex ' + self.regex.pattern)
+        assert len(args) == self._group_count, (
+            'required number of arguments ' 'not found'
+        )
+        if not len(args):
+            return self._path
+        converted_args = []
+        for a in args:
+            if not isinstance(a, (unicode_type, bytes)):
+                a = str(a)
+            converted_args.append(url_escape(utf8(a), plus=False))
+        return self._path % tuple(converted_args)
