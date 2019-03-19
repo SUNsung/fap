@@ -1,115 +1,135 @@
 
         
-        with io.open('update/releases.atom', 'w', encoding='utf-8') as atom_file:
-    atom_file.write(atom_template)
+        
+class Message(object):
+    
+        def reducer(self, key, values):
+        total = sum(values)
+        if total == 1:
+            yield key, total
+    
+    
+@pytest.mark.functional
+def test_select_command_with_arrows(proc, TIMEOUT):
+    select_command_with_arrows(proc, TIMEOUT)
+    history_changed(proc, TIMEOUT, u'git help')
+    
+    
+@pytest.mark.parametrize('script, output', [
+    ('vim', invalid_operation('vim')),
+    ('apt-get', '')])
+def test_not_match(script, output):
+    assert not match(Command(script, output))
+    
+    no_match_output = '''
+Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
+Get:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease [89.2 kB]
+Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
+Get:4 http://security.ubuntu.com/ubuntu zesty-security InRelease [89.2 kB]
+Hit:5 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
+Hit:6 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
+Hit:7 https://download.docker.com/linux/ubuntu zesty InRelease
+Get:8 http://us.archive.ubuntu.com/ubuntu zesty-updates/main i386 Packages [232 kB]
+Get:9 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 Packages [235 kB]
+Get:10 http://us.archive.ubuntu.com/ubuntu zesty-updates/main amd64 DEP-11 Metadata [55.2 kB]
+Get:11 http://us.archive.ubuntu.com/ubuntu zesty-updates/main DEP-11 64x64 Icons [32.3 kB]
+Get:12 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 Packages [156 kB]
+Get:13 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe i386 Packages [156 kB]
+Get:14 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe amd64 DEP-11 Metadata [175 kB]
+Get:15 http://us.archive.ubuntu.com/ubuntu zesty-updates/universe DEP-11 64x64 Icons [253 kB]
+Get:16 http://us.archive.ubuntu.com/ubuntu zesty-updates/multiverse amd64 DEP-11 Metadata [5,840 B]
+Get:17 http://us.archive.ubuntu.com/ubuntu zesty-backports/universe amd64 DEP-11 Metadata [4,588 B]
+Get:18 http://security.ubuntu.com/ubuntu zesty-security/main amd64 DEP-11 Metadata [12.7 kB]
+Get:19 http://security.ubuntu.com/ubuntu zesty-security/main DEP-11 64x64 Icons [17.6 kB]
+Get:20 http://security.ubuntu.com/ubuntu zesty-security/universe amd64 DEP-11 Metadata [21.6 kB]
+Get:21 http://security.ubuntu.com/ubuntu zesty-security/universe DEP-11 64x64 Icons [47.7 kB]
+Get:22 http://security.ubuntu.com/ubuntu zesty-security/multiverse amd64 DEP-11 Metadata [208 B]
+Fetched 1,673 kB in 0s (1,716 kB/s)
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+All packages are up to date.
+'''
+    
+    
+@pytest.mark.parametrize('command', [
+    Command('apt list --upgradable', no_match_output),
+    Command('sudo apt list --upgradable', no_match_output)
+])
+def test_not_match(command):
+    assert not match(command)
+    
+    
+@pytest.mark.parametrize('command, result', [
+    (Command('aws dynamdb scan', misspelled_command),
+     ['aws dynamodb scan']),
+    (Command('aws dynamodb scn', misspelled_subcommand),
+     ['aws dynamodb scan']),
+    (Command('aws dynamodb t-item',
+             misspelled_subcommand_with_multiple_options),
+     ['aws dynamodb put-item', 'aws dynamodb get-item'])])
+def test_get_new_command(command, result):
+    assert get_new_command(command) == result
 
     
-        with open('supportedsites.html', 'w', encoding='utf-8') as sitesf:
-        sitesf.write(template)
+    
+@pytest.mark.skipif(_is_not_okay_to_test(),
+                    reason='No need to run if there\'s no formula')
+def test_match(brew_no_available_formula, brew_already_installed,
+               brew_install_no_argument):
+    assert match(Command('brew install elsticsearch',
+                         brew_no_available_formula))
+    assert not match(Command('brew install git',
+                             brew_already_installed))
+    assert not match(Command('brew install', brew_install_no_argument))
+    
+    \tDid you mean `build`?
+'''
     
     
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
+@parametrize_extensions
+@parametrize_filename
+@parametrize_script
+def test_match(ext, tar_error, filename, unquoted, quoted, script, fixed):
+    tar_error(unquoted.format(ext))
+    assert match(Command(script.format(filename.format(ext)), ''))
     
-        return ret
+        def get(self):
+        if len(self.config.GAE_APPIDS):
+            if len(self.working_appid_list) == 0:
+                time_to_reset = 600 - (time.time() - self.last_reset_time)
+                if time_to_reset > 0:
+                    self.logger.warn('all appid out of quota, wait %d seconds to reset', time_to_reset)
+                    time.sleep(time_to_reset)
+                    return None
+                else:
+                    self.logger.warn('reset appid')
+                    self.reset_appid()
     
-    import os
-from os.path import dirname as dirn
-import sys
+            def get_exist_ca_sha1():
+            args = ['security', 'find-certificate', '-Z', '-a', '-c', commonname]
+            output = subprocess.check_output(args)
+            for line in output.splitlines(True):
+                if len(line) == 53 and line.startswith('SHA-1 hash:'):
+                    sha1_hash = line[12:52]
+                    return sha1_hash
     
-            res_dict = None
+        return out
     
+                # Is there a bitwise operation to do this?
+            if v == 0xFFFF:
+                v = -1
     
-MOD_SSL_CONF_DEST = 'options-ssl-nginx.conf'
-'''Name of the mod_ssl config file as saved in `IConfig.config_dir`.'''
+            return link_list
     
-        def test_encode_override(self):
-        self.assertEqual('y', self.field.encode('y'))
+        urls = matchall(content, netease_embed_patterns)
+    for url in urls:
+        found = True
+        netease_download(url, output_dir=output_dir, merge=merge, info_only=info_only)
     
-        def test_nonce_decoder(self):
-        from acme.jws import Header
-        nonce_field = Header._fields['nonce']
+        type, ext, size = url_info(url[0], True)
+    size = urls_size(url)
     
-        '''
-    return_vars = {}
-    # Get list of words in the variable
-    a_opts = util.get_var_from_file(varname, filepath).split()
-    for i, v in enumerate(a_opts):
-        # Handle Define statements and make sure it has an argument
-        if v == '-D' and len(a_opts) >= i+2:
-            var_parts = a_opts[i+1].partition('=')
-            return_vars[var_parts[0]] = var_parts[2]
-        elif len(v) > 2 and v.startswith('-D'):
-            # Found var with no whitespace separator
-            var_parts = v[2:].partition('=')
-            return_vars[var_parts[0]] = var_parts[2]
-    return return_vars
+    __all__ = ['huomaotv_download']
     
-            Result: Apache config includes virtual servers for issued challs
-    
-        observe()
-    
-            _LOGGER.info('Request successful')
-        return True
-
-    
-        def _make_request(self):
-        # Weirdly enough, this doesn't seem to require authentication
-        data = [{
-            'request': {
-                'sinceRevision': 0
-            },
-            'action': 'http://linksys.com/jnap/devicelist/GetDevices'
-        }]
-        headers = {'X-JNAP-Action': 'http://linksys.com/jnap/core/Transaction'}
-        return requests.post('http://{}/JNAP/'.format(self.host),
-                             timeout=DEFAULT_TIMEOUT,
-                             headers=headers,
-                             json=data)
-
-    
-    
-Device = namedtuple('Device', ['mac', 'name', 'ip', 'last_update'])
-    
-        def get_device_name(self, device):
-        '''Return the name of the given device or None if we don't know.'''
-        if self.mac2name is None:
-            result = self._retrieve_list_with_retry()
-            if result:
-                hosts = [x for x in result
-                         if 'mac' in x and 'name' in x]
-                mac2name_list = [
-                    (x['mac'].upper(), x['name']) for x in hosts]
-                self.mac2name = dict(mac2name_list)
-            else:
-                # Error, handled in the _retrieve_list_with_retry
-                return
-        return self.mac2name.get(device.upper(), None)
-    
-    
-def image_files_in_folder(folder):
-    return [os.path.join(folder, f) for f in os.listdir(folder) if re.match(r'.*\.(jpg|jpeg|png)', f, flags=re.I)]
-    
-        # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
-    rgb_frame = frame[:, :, ::-1]
-    
-    for face_landmarks in face_landmarks_list:
-    
-    requirements = [
-    'face_recognition_models>=0.3.0',
-    'Click>=6.0',
-    'dlib>=19.7',
-    'numpy',
-    'Pillow'
-]
-    
-    
-@app.route('/', methods=['GET', 'POST'])
-def upload_image():
-    # 检测图片是否上传成功
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            return redirect(request.url)
+    from ..common import *
