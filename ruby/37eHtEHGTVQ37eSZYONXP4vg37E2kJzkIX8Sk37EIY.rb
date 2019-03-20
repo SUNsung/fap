@@ -1,87 +1,82 @@
 
         
-          it 'accepts a Bignum as a seed' do
-    srand(0x12345678901234567890)
-    srand.should == 0x12345678901234567890
-  end
-    
-      it 'raises #{frozen_error_class} on an untainted, frozen object' do
-    o = Object.new.freeze
-    lambda { o.taint }.should raise_error(frozen_error_class)
-  end
-    
-      it 'calls #to_path on second argument when passed ?f and a filename' do
-    p = mock('path')
-    p.should_receive(:to_path).and_return @file
-    Kernel.test(?f, p)
-  end
-    
-    RSpec::Matchers.define :have_path do |expected|
-  match do |actual|
-    await_condition { actual.current_path == expected }
-  end
-    
-      def post_path_by_content(text)
-    p = Post.find_by_text(text)
-    post_path(p)
-  end
-    
-    describe LikesController, type: :controller do
-  before do
-    @alices_aspect = alice.aspects.where(:name => 'generic').first
-    @bobs_aspect = bob.aspects.where(:name => 'generic').first
-    
-          it 'returns an empty array for a post visible to the user' do
-        sign_in(bob, scope: :user)
-        get :index, params: {post_id: @post.id}, format: :json
-        expect(JSON.parse(response.body)).to eq([])
-      end
-    end
-    
-        def server(name, properties={})
-      servers.add_host(name, properties)
-    end
-    
-            if callable_without_parameters?(value_to_evaluate)
-          super(key, assert_valid_later(key, value_to_evaluate), &nil)
-        else
-          assert_valid_now(key, value_to_evaluate)
-          super
+              # Sets multiple keys to a given value.
+      #
+      # mapping - A Hash mapping the cache keys to their values.
+      # timeout - The time after which the cache key should expire.
+      def self.write_multiple(mapping, timeout: TIMEOUT)
+        Redis::Cache.with do |redis|
+          redis.multi do |multi|
+            mapping.each do |raw_key, value|
+              multi.set(cache_key_for(raw_key), value, ex: timeout)
+            end
+          end
         end
       end
     
-        def execute
-      raise PluginManager::FileNotFoundError, 'Can't file local file #{local_file}' unless ::File.exist?(local_file)
-      raise PluginManager::InvalidPackError, 'Invalid format, the pack must be in zip format' unless valid_format?(local_file)
+              hash = {
+            iid: issue.number,
+            title: issue.title,
+            description: issue.body,
+            milestone_number: issue.milestone&.number,
+            state: issue.state == 'open' ? :opened : :closed,
+            assignees: issue.assignees.map do |u|
+              Representation::User.from_api_response(u)
+            end,
+            label_names: issue.labels.map(&:name),
+            author: user,
+            created_at: issue.created_at,
+            updated_at: issue.updated_at,
+            pull_request: issue.pull_request ? true : false
+          }
     
-        # remove 'system' local gems used by LS
-    local_gems = gemfile.locally_installed_gems.map(&:name) - NON_PLUGIN_LOCAL_GEMS
+      directory 'pkg/'
+  CLOBBER.include('pkg')
     
-        context 'update a specific plugin' do
-      it 'has executed successfully' do
-        cmd = logstash.run_command_in_path('bin/logstash-plugin update --no-verify #{plugin_name}')
-        expect(cmd.stdout).to match(/Updating #{plugin_name}/)
-        expect(logstash).not_to have_installed?(plugin_name, previous_version)
+      task :all => [:readmes, :index]
+end
+    
+          def redirect(env)
+        request = Request.new(env)
+        warn env, 'attack prevented by #{self.class}'
+        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
       end
-    end
     
-    class PaperclipGenerator < ActiveRecord::Generators::Base
-  desc 'Create a migration to add paperclip-specific fields to your model. ' +
-       'The NAME argument is the name of your model, and the following ' +
-       'arguments are the name of the attachments'
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   CSRF
+    # Supported browsers:: all
+    # More infos::         http://flask.pocoo.org/docs/0.10/security/#json-security
+    #                      http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx
+    #
+    # JSON GET APIs are vulnerable to being embedded as JavaScript when the
+    # Array prototype has been patched to track data. Checks the referrer
+    # even on GET requests if the content type is JSON.
+    #
+    # If request includes Origin HTTP header, defers to HttpOrigin to determine
+    # if the request is safe. Please refer to the documentation for more info.
+    #
+    # The `:allow_if` option can be set to a proc to use custom allow/deny logic.
+    class JsonCsrf < Base
+      default_options :allow_if => nil
     
-        # Returns the scaling and cropping geometries (in string-based ImageMagick format)
-    # neccessary to transform this Geometry into the Geometry given. If crop is true,
-    # then it is assumed the destination Geometry will be the exact final resolution.
-    # In this case, the source Geometry is scaled so that an image containing the
-    # destination Geometry would be completely filled by the source image, and any
-    # overhanging image would be cropped. Useful for square thumbnail images. The cropping
-    # is weighted at the center of the Geometry.
-    def transformation_to dst, crop = false
-      if crop
-        ratio = Geometry.new( dst.width / self.width, dst.height / self.height )
-        scale_geometry, scale = scaling(dst, ratio)
-        crop_geometry         = cropping(dst, ratio, scale)
-      else
-        scale_geometry        = dst.to_s
-      end
+    Vagrant.configure('2') do |config|
+  # All Vagrant configuration is done here. The most common configuration
+  # options are documented and commented below. For a complete reference,
+  # please see the online documentation at vagrantup.com.
+    
+      # This method removes excluded files from the staging_path. Subclasses can
+  # remove the files during the input phase rather than deleting them here
+  def exclude
+    return if attributes[:excludes].nil?
+    
+      # Where we keep metadata and post install scripts and such
+  def fpm_meta_path
+    @fpm_meta_path ||= begin
+                         path = File.join(staging_path, '.fpm')
+                         FileUtils.mkdir_p(path)
+                         path
+                       end
+  end
+end
