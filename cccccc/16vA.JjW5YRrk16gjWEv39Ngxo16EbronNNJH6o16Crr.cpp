@@ -1,304 +1,344 @@
 
         
-        int main(int argc, char** argv) {
-  if (argc != 4) {
-    printf('This script converts the MNIST dataset to the leveldb format used\n'
-           'by caffe to train a siamese network.\n'
-           'Usage:\n'
-           '    convert_mnist_data input_image_file input_label_file '
-           'output_db_file\n'
-           'The MNIST dataset could be downloaded at\n'
-           '    http://yann.lecun.com/exdb/mnist/\n'
-           'You should gunzip them after downloading.\n');
-  } else {
-    google::InitGoogleLogging(argv[0]);
-    convert_dataset(argv[1], argv[2], argv[3]);
+        #if !GTEST_OS_SYMBIAN
+# include <utility>
+#endif
+    
+    // Unary predicate assertion macros.
+#define EXPECT_PRED_FORMAT1(pred_format, v1) \
+  GTEST_PRED_FORMAT1_(pred_format, v1, GTEST_NONFATAL_FAILURE_)
+#define EXPECT_PRED1(pred, v1) \
+  GTEST_PRED1_(pred, v1, GTEST_NONFATAL_FAILURE_)
+#define ASSERT_PRED_FORMAT1(pred_format, v1) \
+  GTEST_PRED_FORMAT1_(pred_format, v1, GTEST_FATAL_FAILURE_)
+#define ASSERT_PRED1(pred, v1) \
+  GTEST_PRED1_(pred, v1, GTEST_FATAL_FAILURE_)
+    
+      ~InternalRunDeathTestFlag() {
+    if (write_fd_ >= 0)
+      posix::Close(write_fd_);
   }
-  return 0;
+    
+      // Returns a pathname for a file that does not currently exist. The pathname
+  // will be directory/base_name.extension or
+  // directory/base_name_<number>.extension if directory/base_name.extension
+  // already exists. The number will be incremented until a pathname is found
+  // that does not already exist.
+  // Examples: 'dir/foo_test.xml' or 'dir/foo_test_1.xml'.
+  // There could be a race condition if two or more processes are calling this
+  // function at the same time -- they could both pick the same filename.
+  static FilePath GenerateUniqueFileName(const FilePath& directory,
+                                         const FilePath& base_name,
+                                         const char* extension);
+    
+    #include 'gtest/internal/gtest-port.h'
+    
+      // Formats an int value as '%X'.
+  static std::string FormatHexInt(int value);
+    
+    // Template lists of length 1, 2, 3, and so on.
+    
+    
+    {  // n has no integer factor in the range (1, n), and thus is prime.
+  return true;
 }
-#else
-int main(int argc, char** argv) {
-  LOG(FATAL) << 'This example requires LevelDB; compile with USE_LEVELDB.';
-}
-#endif  // USE_LEVELDB
 
     
-    #define INSTANTIATE_LAYER_GPU_FORWARD(classname) \
-  template void classname<float>::Forward_gpu( \
-      const std::vector<Blob<float>*>& bottom, \
-      const std::vector<Blob<float>*>& top); \
-  template void classname<double>::Forward_gpu( \
-      const std::vector<Blob<double>*>& bottom, \
-      const std::vector<Blob<double>*>& top);
+    // Sets the 0-terminated C string this MyString object
+// represents.
+void MyString::Set(const char* a_c_string) {
+  // Makes sure this works when c_string == c_string_
+  const char* const temp = MyString::CloneCString(a_c_string);
+  delete[] c_string_;
+  c_string_ = temp;
+}
+
     
-      // Get a layer using a LayerParameter.
-  static shared_ptr<Layer<Dtype> > CreateLayer(const LayerParameter& param) {
-    if (Caffe::root_solver()) {
-      LOG(INFO) << 'Creating layer ' << param.name();
+        E* element = new E(old_head->element());
+    delete old_head;
+    
+    	struct RawImage
+	{
+		int uiExtendedWidth;
+		int uiExtendedHeight;
+		unsigned int uiEncodingBitsBytes;
+		std::shared_ptr<unsigned char> paucEncodingBits;
+	};
+    
+    			float fDX = a_frgbaDecodedColor.fR - a_frgbaSourcePixel.fR;
+			float fDY = a_frgbaDecodedColor.fG - a_frgbaSourcePixel.fG;
+			float fDZ = a_frgbaDecodedColor.fB - a_frgbaSourcePixel.fB;
+			float fDW = a_frgbaDecodedColor.fA - a_frgbaSourcePixel.fA;
+    
+    /* */
+    
+    
+    {
+    {    e = lm->RightBound;
+    if (e)
+    {
+      e->Curr = e->Bot;
+      e->Side = esRight;
+      e->OutIdx = Unassigned;
     }
-    const string& type = param.type();
-    CreatorRegistry& registry = Registry();
-    CHECK_EQ(registry.count(type), 1) << 'Unknown layer type: ' << type
-        << ' (known types: ' << LayerTypeListString() << ')';
-    return registry[type](param);
+  }
+  m_ActiveEdges = 0;
+  m_CurrentLM = m_MinimaList.begin();
+}
+//------------------------------------------------------------------------------
+    
+    void MinkowskiSum(const Path& pattern, const Path& path, Paths& solution, bool pathIsClosed);
+void MinkowskiSum(const Path& pattern, const Paths& paths, Paths& solution, bool pathIsClosed);
+void MinkowskiDiff(const Path& poly1, const Path& poly2, Paths& solution);
+    
+    /** 32x32 multiplication, followed by a 31-bit shift right. Results fits in 32 bits */
+#undef MULT32_32_Q31
+#define MULT32_32_Q31(a,b) (opus_val32)((((opus_int64)(a)) * ((opus_int64)(b)))>>31)
+    
+    /** 16x32 multiplication, followed by a 16-bit shift right. Results fits in 32 bits */
+#undef MULT16_32_Q16
+static OPUS_INLINE opus_val32 MULT16_32_Q16_armv5e(opus_val16 a, opus_val32 b)
+{
+  int res;
+  __asm__(
+      '#MULT16_32_Q16\n\t'
+      'smulwb %0, %1, %2\n\t'
+      : '=r'(res)
+      : 'r'(b),'r'(a)
+  );
+  return res;
+}
+#define MULT16_32_Q16(a, b) (MULT16_32_Q16_armv5e(a, b))
+    
+    /*The number of bits to output at a time.*/
+# define EC_SYM_BITS   (8)
+/*The total number of bits in each of the state registers.*/
+# define EC_CODE_BITS  (32)
+/*The maximum symbol value.*/
+# define EC_SYM_MAX    ((1U<<EC_SYM_BITS)-1)
+/*Bits to shift by to move a symbol into the high-order position.*/
+# define EC_CODE_SHIFT (EC_CODE_BITS-EC_SYM_BITS-1)
+/*Carry bit of the high-order range symbol.*/
+# define EC_CODE_TOP   (((opus_uint32)1U)<<(EC_CODE_BITS-1))
+/*Low-order bit of the high-order range symbol.*/
+# define EC_CODE_BOT   (EC_CODE_TOP>>EC_SYM_BITS)
+/*The number of bits available for the last, partial symbol in the code field.*/
+# define EC_CODE_EXTRA ((EC_CODE_BITS-2)%EC_SYM_BITS+1)
+#endif
+
+    
+      AutoCompactTest() {
+    dbname_ = test::TmpDir() + '/autocompact_test';
+    tiny_cache_ = NewLRUCache(100);
+    options_.block_cache = tiny_cache_;
+    DestroyDB(dbname_, options_);
+    options_.create_if_missing = true;
+    options_.compression = kNoCompression;
+    ASSERT_OK(DB::Open(options_, dbname_, &db_));
   }
     
     
-  /// @brief Not implemented -- AccuracyLayer cannot be used as a loss.
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
-    for (int i = 0; i < propagate_down.size(); ++i) {
-      if (propagate_down[i]) { NOT_IMPLEMENTED; }
-    }
+    {  fname = OldInfoLogFileName('foo');
+  ASSERT_EQ('foo/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(0, number);
+  ASSERT_EQ(kInfoLogFile, type);
+}
+    
+    // Tests of all the error paths in log_reader.cc follow:
+    
+    
+    {}  // namespace leveldb
+    
+        SnapshotImpl* snapshot = new SnapshotImpl(sequence_number);
+    
+    Status TableCache::Get(const ReadOptions& options,
+                       uint64_t file_number,
+                       uint64_t file_size,
+                       const Slice& k,
+                       void* arg,
+                       void (*saver)(void*, const Slice&, const Slice&)) {
+  Cache::Handle* handle = nullptr;
+  Status s = FindTable(file_number, file_size, &handle);
+  if (s.ok()) {
+    Table* t = reinterpret_cast<TableAndFile*>(cache_->Value(handle))->table;
+    s = t->InternalGet(options, k, arg, saver);
+    cache_->Release(handle);
   }
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  return s;
+}
+    
+    static void TestEncodeDecode(const VersionEdit& edit) {
+  std::string encoded, encoded2;
+  edit.EncodeTo(&encoded);
+  VersionEdit parsed;
+  Status s = parsed.DecodeFrom(encoded);
+  ASSERT_TRUE(s.ok()) << s.ToString();
+  parsed.EncodeTo(&encoded2);
+  ASSERT_EQ(encoded, encoded2);
+}
+    
+                // Start and End Capture stack frame variables are laid out out like this:
+            //  fp->fExtra[opValue]  - The start of a completed capture group
+            //             opValue+1 - The end   of a completed capture group
+            //             opValue+2 - the start of a capture group whose end
+            //                          has not yet been reached (and might not ever be).
+        case URX_START_CAPTURE:
+            U_ASSERT(opValue >= 0 && opValue < fFrameSize-3);
+            fp->fExtra[opValue+2] = fp->fInputIdx;
+            break;
+    
+    UnicodeString &ScriptSet::displayScripts(UnicodeString &dest) const {
+    UBool firstTime = TRUE;
+    for (int32_t i = nextSetBit(0); i >= 0; i = nextSetBit(i + 1)) {
+        if (!firstTime) {
+            dest.append((UChar)0x20);
+        }
+        firstTime = FALSE;
+        const char *scriptName = uscript_getShortName((UScriptCode(i)));
+        dest.append(UnicodeString(scriptName, -1, US_INV));
+    }
+    return dest;
+}
+    
+    #endif
     
     
-    {  /**
-   * @brief Computes the error gradient w.r.t. the BNLL inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x}
-   *      @f$ if propagate_down[0]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    {    /**
+     * Formats positiveValue using the given range of digit counts.
+     * Always uses standard digits '0' through '9'. Formatted value is
+     * left padded with '0' as necessary to achieve minimum digit count.
+     * Does not produce any grouping separators or trailing decimal point.
+     * Calling format to format a value with a particular digit count range
+     * when canFormat indicates that the same value and digit count range
+     * cannot be formatted results in undefined behavior.
+     *
+     * @param positiveValue the value to format
+     * @param range the acceptable range of digit counts.
+     */
+    static UnicodeString &format(
+            int32_t positiveValue,
+            const IntDigitCountRange &range,
+            UnicodeString &appendTo);
+    
 };
     
+        if (minLength > 0) {
+        int diff = uprv_memcmp(src, tgt, minLength);
+        if (diff > 0) {
+            return UCOL_GREATER;
+        }
+        else
+            if (diff < 0) {
+                return UCOL_LESS;
+            }
+    }
+    
+        /**
+     * @param keyword for example 'few' or 'other'
+     * @return the index of the plural form corresponding to the keyword, or OTHER
+     */
+    static int32_t indexOrOtherIndexFromString(const char *keyword) {
+        int32_t i = indexOrNegativeFromString(keyword);
+        return i >= 0 ? i : OTHER;
+    }
+    
     /**
- * @brief Convolves the input image with a bank of learned filters,
- *        and (optionally) adds biases.
- *
- *   Caffe convolves by reduction to matrix multiplication. This achieves
- *   high-throughput and generality of input and filter dimensions but comes at
- *   the cost of memory for matrices. This makes use of efficiency in BLAS.
- *
- *   The input is 'im2col' transformed to a channel K' x H x W data matrix
- *   for multiplication with the N x K' x H x W filter matrix to yield a
- *   N' x H x W output matrix that is then 'col2im' restored. K' is the
- *   input channel * kernel height * kernel width dimension of the unrolled
- *   inputs so that the im2col matrix has a column for each input region to
- *   be filtered. col2im restores the output spatial structure by rolling up
- *   the output channel N' columns of the output matrix.
+ * Implement UnicodeMatcher
  */
-template <typename Dtype>
-class ConvolutionLayer : public BaseConvolutionLayer<Dtype> {
- public:
-  /**
-   * @param param provides ConvolutionParameter convolution_param,
-   *    with ConvolutionLayer options:
-   *  - num_output. The number of filters.
-   *  - kernel_size / kernel_h / kernel_w. The filter dimensions, given by
-   *  kernel_size for square filters or kernel_h and kernel_w for rectangular
-   *  filters.
-   *  - stride / stride_h / stride_w (\b optional, default 1). The filter
-   *  stride, given by stride_size for equal dimensions or stride_h and stride_w
-   *  for different strides. By default the convolution is dense with stride 1.
-   *  - pad / pad_h / pad_w (\b optional, default 0). The zero-padding for
-   *  convolution, given by pad for equal dimensions or pad_h and pad_w for
-   *  different padding. Input padding is computed implicitly instead of
-   *  actually padding.
-   *  - dilation (\b optional, default 1). The filter
-   *  dilation, given by dilation_size for equal dimensions for different
-   *  dilation. By default the convolution has dilation 1.
-   *  - group (\b optional, default 1). The number of filter groups. Group
-   *  convolution is a method for reducing parameterization by selectively
-   *  connecting input and output channels. The input and output channel dimensions must be divisible
-   *  by the number of groups. For group @f$ \geq 1 @f$, the
-   *  convolutional filters' input and output channels are separated s.t. each
-   *  group takes 1 / group of the input channels and makes 1 / group of the
-   *  output channels. Concretely 4 input channels, 8 output channels, and
-   *  2 groups separate input channels 1-2 and output channels 1-4 into the
-   *  first group and input channels 3-4 and output channels 5-8 into the second
-   *  group.
-   *  - bias_term (\b optional, default true). Whether to have a bias.
-   *  - engine: convolution has CAFFE (matrix multiplication) and CUDNN (library
-   *    kernels + stream parallelism) engines.
-   */
-  explicit ConvolutionLayer(const LayerParameter& param)
-      : BaseConvolutionLayer<Dtype>(param) {}
-    }
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of ConvolutionLayer.
- *        Fallback to ConvolutionLayer for CPU mode.
- *
- * cuDNN accelerates convolution through forward kernels for filtering and bias
- * plus backward kernels for the gradient w.r.t. the filters, biases, and
- * inputs. Caffe + cuDNN further speeds up the computation through forward
- * parallelism across groups and backward parallelism across gradients.
- *
- * The CUDNN engine does not have memory overhead for matrix buffers. For many
- * input and filter regimes the CUDNN engine is faster than the CAFFE engine,
- * but for fully-convolutional models and large inputs the CAFFE engine can be
- * faster as long as it fits in memory.
-*/
-template <typename Dtype>
-class CuDNNConvolutionLayer : public ConvolutionLayer<Dtype> {
- public:
-  explicit CuDNNConvolutionLayer(const LayerParameter& param)
-      : ConvolutionLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNConvolutionLayer();
-    }
-    
-    namespace caffe {
-    }
-    
-      ~Fork() {
-    if (pid > 0) {
-      kill(pid, SIGKILL);
-      waitpid(pid, nullptr, 0);
-    }
-  }
-    
-    #include 'caffe2/core/context.h'
-    
-    RANGES dimensions description:
-1: represents list of examples within a batch
-2: represents list features
-3: two values which are start and length or a range (to be applied on DATA)
-    
-    void    ImFontAtlas::GetTexDataAsAlpha8(unsigned char** out_pixels, int* out_width, int* out_height, int* out_bytes_per_pixel)
-{
-    // Build atlas on demand
-    if (TexPixelsAlpha8 == NULL)
-    {
-        if (ConfigData.empty())
-            AddFontDefault();
-        Build();
+UMatchDegree StringMatcher::matches(const Replaceable& text,
+                                    int32_t& offset,
+                                    int32_t limit,
+                                    UBool incremental) {
+    int32_t i;
+    int32_t cursor = offset;
+    if (limit < cursor) {
+        // Match in the reverse direction
+        for (i=pattern.length()-1; i>=0; --i) {
+            UChar keyChar = pattern.charAt(i);
+            UnicodeMatcher* subm = data->lookupMatcher(keyChar);
+            if (subm == 0) {
+                if (cursor > limit &&
+                    keyChar == text.charAt(cursor)) {
+                    --cursor;
+                } else {
+                    return U_MISMATCH;
+                }
+            } else {
+                UMatchDegree m =
+                    subm->matches(text, cursor, limit, incremental);
+                if (m != U_MATCH) {
+                    return m;
+                }
+            }
+        }
+        // Record the match position, but adjust for a normal
+        // forward start, limit, and only if a prior match does not
+        // exist -- we want the rightmost match.
+        if (matchStart < 0) {
+            matchStart = cursor+1;
+            matchLimit = offset+1;
+        }
+    } else {
+        for (i=0; i<pattern.length(); ++i) {
+            if (incremental && cursor == limit) {
+                // We've reached the context limit without a mismatch and
+                // without completing our match.
+                return U_PARTIAL_MATCH;
+            }
+            UChar keyChar = pattern.charAt(i);
+            UnicodeMatcher* subm = data->lookupMatcher(keyChar);
+            if (subm == 0) {
+                // Don't need the cursor < limit check if
+                // incremental is TRUE (because it's done above); do need
+                // it otherwise.
+                if (cursor < limit &&
+                    keyChar == text.charAt(cursor)) {
+                    ++cursor;
+                } else {
+                    return U_MISMATCH;
+                }
+            } else {
+                UMatchDegree m =
+                    subm->matches(text, cursor, limit, incremental);
+                if (m != U_MATCH) {
+                    return m;
+                }
+            }
+        }
+        // Record the match position
+        matchStart = offset;
+        matchLimit = cursor;
     }
     }
     
-    IMGUI_IMPL_API bool     ImGui_ImplDX10_Init(ID3D10Device* device);
-IMGUI_IMPL_API void     ImGui_ImplDX10_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplDX10_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data);
+                    // Insert any accumulated straight text.
+                if (buf.length() > 0) {
+                    text.handleReplaceBetween(destLimit, destLimit, buf);
+                    destLimit += buf.length();
+                    buf.truncate(0);
+                }
     
-    
-    {    g_fence->SetEventOnCompletion(fenceValue, g_fenceEvent);
-    WaitForSingleObject(g_fenceEvent, INFINITE);
-}
-    
-    int main(int, char**)
-{
-    // Setup window
-    glfwSetErrorCallback(glfw_error_callback);
-    if (!glfwInit())
-        return 1;
-    GLFWwindow* window = glfwCreateWindow(1280, 720, 'Dear ImGui GLFW+OpenGL2 example', NULL, NULL);
-    if (window == NULL)
-        return 1;
-    glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // Enable vsync
+    /**
+ * @addtogroup actions
+ * @{
+ */
     }
     
-                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
-            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
+        // Overrides
+    virtual CardinalSplineTo *clone() const override;
+    virtual CardinalSplineTo* reverse() const override;
+    virtual void startWithTarget(Node *target) override;
     
-    // About OpenGL function loaders: modern OpenGL doesn't have a standard header file and requires individual function pointers to be loaded manually.
-// Helper libraries are often used for this purpose! Here we are supporting a few common ones: gl3w, glew, glad.
-// You may use another loader/header of your choice (glext, glLoadGen, etc.), or chose to manually implement your own.
-#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
-#include <GL/gl3w.h>    // Initialize with gl3wInit()
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
-#include <GL/glew.h>    // Initialize with glewInit()
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
-#include <glad/glad.h>  // Initialize with gladLoadGL()
-#else
-#include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
-#endif
+    /**
+     * @param time In seconds.
+     */
+    virtual void update(float time) override;
     
-      uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-    
-      _ExtensionStatus__isset __isset;
-    
-    
-    {
-    {    printf('Run Time: real %.3f user %f sys %f\n',
-           (iEnd - iBegin) * 0.001,
-           timeDiff(&sBegin.ru_utime, &sEnd.ru_utime),
-           timeDiff(&sBegin.ru_stime, &sEnd.ru_stime));
-  }
-}
-    
-    namespace osquery {
-namespace tables {
-    }
-    }
-    
-      struct WrappedMessage {
-    struct perf_event_header header;
-    std::uint32_t size;
-    MessageType msg;
-  };
-    
-    #ifndef __NR_perf_event_open
-#if defined(__PPC__)
-#define __NR_perf_event_open 319
-#elif defined(__i386__)
-#define __NR_perf_event_open 336
-#elif defined(__x86_64__)
-#define __NR_perf_event_open 298
-#else
-#error __NR_perf_event_open must be defined
-#endif
-#endif
-    
-    ExpectedSuccess<PosixError> setMemoryLockSystemLimit() {
-  struct rlimit limits = {RLIM_INFINITY, RLIM_INFINITY};
-  auto ret = setrlimit(RLIMIT_MEMLOCK, &limits);
-  if (ret < 0) {
-    return createError(to<PosixError>(errno), 'setrlimit() syscall failed: ')
-           << boost::io::quoted(strerror(errno));
-  }
-  return Success{};
-}
-    
-    static constexpr EnterExitJoiner::CounterType kCounterLimit = 256;
-    
-        redisReply * reply = static_cast<redisReply *>(r);
-    ExampleQt * ex = static_cast<ExampleQt *>(privdata);
-    if (reply == nullptr || ex == nullptr) return;
-    
-        struct timer_msg_t
-    {
-        Channel *chan;
-        enum opcode type;
-        Coroutine *co;
-        bool error;
-        swTimer_node *timer;
-    };
-    
-        inline void set(const std::string &key, const std::shared_ptr<void> &val, time_t expire = 0)
-    {
-        time_t expire_time;
-    }
-    
-        pid_t server_pid = create_server();
-    
-        zval *retval = NULL;
-    zval return_value;
-    ZVAL_BOOL(&return_value, success);
-    if (success == 1)
-    {
-        zend_update_property_null(swoole_postgresql_coro_ce_ptr, object->object, 'error', 5);
-    }
+        /* Creates an animation with an array of AnimationFrame, the delay per units in seconds and how many times it should be executed.
+     * @since v2.0
+     * @param arrayOfAnimationFrameNames An animation with an array of AnimationFrame.
+     * @param delayPerUnit The delay per units in seconds and how many times it should be executed.
+     * @param loops The times the animation is going to loop.
+     */
+    static Animation* create(const Vector<AnimationFrame*>& arrayOfAnimationFrameNames, float delayPerUnit, unsigned int loops = 1);
