@@ -1,343 +1,313 @@
 
         
-        
-    {}  // namespace
+        using namespace swift::sys;
+using llvm::StringRef;
     
-    class GenPythonOp {
- public:
-  GenPythonOp(const OpDef& op_def, const ApiDef& api_def,
-              const string& function_name);
-  virtual ~GenPythonOp();
-    }
+    #ifndef VERB
+#  define VERB(Word)
+#endif
     
-      for (const auto& node : item_.MainOpsFanin()) {
-    PrintNodeInfo(node, properties, debug, os);
-  }
-  for (const auto& node : item_.EnqueueOpsFanin()) {
-    PrintNodeInfo(node, properties, debug, os);
-  }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    #ifndef TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_H_
-    
-    // We define the PY_ARRAY_UNIQUE_SYMBOL in this .cc file and provide an
-// ImportNumpy function to populate it.
-#define TF_IMPORT_NUMPY
-    
-    namespace tensorflow {
-namespace detail {
-    }
-    }
-    
-      const tensorflow::OpRegistrationData* op_reg_data;
-  auto status =
-      tensorflow::OpRegistry::Global()->LookUp(node_def.op(), &op_reg_data);
-  if (!status.ok()) {
-    LOG(WARNING) << 'Op ' << node_def.op() << ' not found: ' << status;
-    return '';
-  }
-  AddDefaultsToNodeDef(op_reg_data->op_def, &node_def);
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    namespace stream_executor {
-    }
-    
-            size_t width;
-        size_t height;
-    
-    template <typename T>
-struct AbsDiff
-{
-    typedef T type;
-    }
-    
-        for (size_t i = 0; i < size.height; ++i)
-    {
-        const u8* src = internal::getRowPtr(srcBase, srcStride, i);
-        u8* dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t j = 0;
-    }
-    
-                    if(cn==2)
-                    t2 = vextq_u16(tcurr, tnext, 2);
-                else if(cn==3)
-                    t2 = vextq_u16(tcurr, tnext, 3);
-                else if(cn==4)
-                    t2 = vextq_u16(tcurr, tnext, 4);
-    
-    #define FILL_LINES2(macro,type) \
-            macro##_LINE(type,0) \
-            macro##_LINE(type,1)
-#define FILL_LINES3(macro,type) \
-            FILL_LINES2(macro,type) \
-            macro##_LINE(type,2)
-#define FILL_LINES4(macro,type) \
-            FILL_LINES3(macro,type) \
-            macro##_LINE(type,3)
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
-CVT_FUNC(f32, u8, 8,
-    register float32x4_t vmult asm ('q0') = vdupq_n_f32((float)(1 << 16));
-    register uint32x4_t  vmask asm ('q1') = vdupq_n_u32(1<<16);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.32 {d4-d5}, [%[src1]]                              \n\t'
-            'vld1.32 {d6-d7}, [%[src2]]                              \n\t'
-            'vmul.f32 q4, q2, q0                                     \n\t'
-            'vmul.f32 q5, q3, q0                                     \n\t'
-            'vcvt.u32.f32 q6, q4                                     \n\t'
-            'vcvt.u32.f32 q7, q5                                     \n\t'
-            'vbic q8, q1, q6                                         \n\t'
-            'vbic q9, q1, q7                                         \n\t'
-            'vshr.u32 q10, q8, #16                                   \n\t'
-            'vshr.u32 q11, q9, #16                                   \n\t'
-            'vqsub.u32 q12, q6, q10                                  \n\t'
-            'vqsub.u32 q13, q7, q11                                  \n\t'
-            'vqrshrn.u32 d28, q12, #16                               \n\t'
-            'vqrshrn.u32 d29, q13, #16                               \n\t'
-            'vqmovn.u16 d30, q14                                     \n\t'
-            'vst1.8 {d30}, [%[dst]]                                  \n\t'
-            : /*no output*/
-            : [src1] 'r' (_src + i + 0),
-              [src2] 'r' (_src + i + 4),
-              [dst] 'r' (_dst + i),
-              'w' (vmult), 'w' (vmask)
-            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26','d27','d28','d29','d30'
-        );
-     }
-})
+    #if __has_attribute(may_alias) || LLVM_GNUC_PREREQ(3, 0, 0)
+#define LLVM_MAY_ALIAS __attribute__((may_alias))
 #else
-CVT_FUNC(f32, u8, 8,
-    float32x4_t vmult = vdupq_n_f32((float)(1 << 16));
-    uint32x4_t  vmask = vdupq_n_u32(1<<16);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        float32x4_t vline1_f32 = vld1q_f32(_src + i);
-        float32x4_t vline2_f32 = vld1q_f32(_src + i + 4);
+#define LLVM_MAY_ALIAS
+#endif
+    
+      if (camel_case::getFirstWord(baseName) == 'set') {
+    StringRef newBaseName = ::omitNeedlessWords(
+                              baseName,
+                              contextType,
+                              NameRole::Property,
+                              allPropertyNames,
+                              scratch);
+    if (newBaseName != baseName) {
+      baseName = newBaseName;
+      anyChanges = true;
     }
-    }
-    
-    
-    {
-    {
-    {            for (; j < size.width; j++)
-            {
-                dst[j] = (u8)src[j];
-            }
-        }
-    }
-}
-    
-    f64 dotProduct(const Size2D &_size,
-               const u8 * src0Base, ptrdiff_t src0Stride,
-               const u8 * src1Base, ptrdiff_t src1Stride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    Size2D size(_size);
-    if (src0Stride == src1Stride &&
-        src0Stride == (ptrdiff_t)(size.width))
-    {
-        size.width *= size.height;
-        size.height = 1;
-    }
-    }
-    
-      /**
-   * Returns the baseline of the current object at the given level.
-   * The baseline is the line that passes through (x1, y1) and (x2, y2).
-   * WARNING: with vertical text, baselines may be vertical!
-   * Returns false if there is no baseline at the current position.
-   */
-  bool Baseline(PageIteratorLevel level,
-                int* x1, int* y1, int* x2, int* y2) const;
-    
-    // Compare two VC objects by their name.
-int ParamContent::Compare(const void* v1, const void* v2) {
-  const ParamContent* one = *static_cast<const ParamContent* const*>(v1);
-  const ParamContent* two = *static_cast<const ParamContent* const*>(v2);
-  return strcmp(one->GetName(), two->GetName());
-}
-    
-     private:
-  // The unique ID of this VC object.
-  int my_id_;
-  // Whether the parameter was changed_ and thus needs to be rewritten.
-  bool changed_;
-  // The actual ParamType of this VC object.
-  ParamType param_type_;
-    
-      WERD_RES *word2 = nullptr;
-  BlamerBundle *orig_bb = nullptr;
-  split_word(word, split_index, &word2, &orig_bb);
-    
-    
-    {  name += UNLV_EXT;              //add extension
-  if ((pdfp = fopen (name.string (), 'rb')) == nullptr) {
-    return false;                //didn't read one
-  } else {
-    while (tfscanf(pdfp, '%d %d %d %d %*s', &x, &y, &width, &height) >= 4) {
-                                 //make rect block
-      block = new BLOCK (name.string (), TRUE, 0, 0,
-                         (int16_t) x, (int16_t) (ysize - y - height),
-                         (int16_t) (x + width), (int16_t) (ysize - y));
-                                 //on end of list
-      block_it.add_to_end (block);
-    }
-    fclose(pdfp);
   }
-  return true;
+    
+      static CFPointeeInfo forTypedef(const clang::TypedefNameDecl *decl) {
+    assert(decl);
+    CFPointeeInfo info;
+    info.IsValid = true;
+    info.IsConst = false;
+    info.Decl = decl;
+    return info;
+  }
+    
+    namespace clang {
+class Sema;
+class NamedDecl;
+class TypeDecl;
+class FunctionDecl;
 }
     
-    // ReadNextBox factors out the code to interpret a line of a box
-// file so that applybox and unicharset_extractor interpret the same way.
-// This function returns the next valid box file utf8 string and coords
-// and returns true, or false on eof (and closes the file).
-// It ignores the utf8 file signature ByteOrderMark (U+FEFF=EF BB BF), checks
-// for valid utf-8 and allows space or tab between fields.
-// utf8_str is set with the unichar string, and bounding box with the box.
-// If there are page numbers in the file, it reads them all.
-bool ReadNextBox(int *line_number, FILE* box_file,
-                 STRING* utf8_str, TBOX* bounding_box);
-// As ReadNextBox above, but get a specific page number. (0-based)
-// Use -1 to read any page number. Files without page number all
-// read as if they are page 0.
-bool ReadNextBox(int target_page, int *line_number, FILE* box_file,
-                 STRING* utf8_str, TBOX* bounding_box);
+      // Returns the mode: running on CPU or GPU.
+  inline static Brew mode() { return Get().mode_; }
+  // The setters for the variables
+  // Sets the mode. It is recommended that you don't change the mode halfway
+  // into the program since that may cause allocation of pinned memory being
+  // freed in a non-pinned way, which may cause problems - I haven't verified
+  // it personally but better to note it here in the header file.
+  inline static void set_mode(Brew mode) { Get().mode_ = mode; }
+  // Sets the random seed of both boost and curand
+  static void set_random_seed(const unsigned int seed);
+  // Sets the device. Since we have cublas and curand stuff, set device also
+  // requires us to reset those values.
+  static void SetDevice(const int device_id);
+  // Prints the current GPU status.
+  static void DeviceQuery();
+  // Check if specified device is available
+  static bool CheckDevice(const int device_id);
+  // Search from start_id to the highest possible device ordinal,
+  // return the ordinal of the first available device.
+  static int FindDevice(const int start_id = 0);
+  // Parallel training
+  inline static int solver_count() { return Get().solver_count_; }
+  inline static void set_solver_count(int val) { Get().solver_count_ = val; }
+  inline static int solver_rank() { return Get().solver_rank_; }
+  inline static void set_solver_rank(int val) { Get().solver_rank_ = val; }
+  inline static bool multiprocess() { return Get().multiprocess_; }
+  inline static void set_multiprocess(bool val) { Get().multiprocess_ = val; }
+  inline static bool root_solver() { return Get().solver_rank_ == 0; }
     
-    // Clip output boxes to input blob boxes for bounds that are within this
-// tolerance. Otherwise, the blob may be chopped and we have to just use
-// the word bounding box.
-const int kBoxClipTolerance = 2;
+     protected:
+   /**
+   * @brief Generates a random integer from Uniform({0, 1, ..., n-1}).
+   *
+   * @param n
+   *    The upperbound (exclusive) value of the random number.
+   * @return
+   *    A uniformly random integer value from ({0, 1, ..., n-1}).
+   */
+  virtual int Rand(int n);
     
-      // Returns the direction of the fitted line as a unit vector, using the
-  // least mean squared perpendicular distance. The line runs through the
-  // mean_point, i.e. a point p on the line is given by:
-  // p = mean_point() + lambda * vector_fit() for some real number lambda.
-  // Note that the result (0<=x<=1, -1<=y<=-1) is directionally ambiguous
-  // and may be negated without changing its meaning, since a line is only
-  // unique to a range of pi radians.
-  // Modernists prefer to think of this as an Eigenvalue problem, but
-  // Pearson had the simple solution in 1901.
-  //
-  // Note that this is equivalent to returning the Principal Component in PCA,
-  // or the eigenvector corresponding to the largest eigenvalue in the
-  // covariance matrix.
-  FCOORD vector_fit() const;
     
-    class DLLSYM DIR128
-{
-  public:
-    DIR128() = default;
+    {  static string LayerTypeListString() {
+    vector<string> layer_types = LayerTypeList();
+    string layer_types_str;
+    for (vector<string>::iterator iter = layer_types.begin();
+         iter != layer_types.end(); ++iter) {
+      if (iter != layer_types.begin()) {
+        layer_types_str += ', ';
+      }
+      layer_types_str += *iter;
     }
-    
-      // Fills in the x-height range accepted by the given unichar_id in blob
-  // coordinates, given its bounding box in the usual baseline-normalized
-  // coordinates, with some initial crude x-height estimate (such as word
-  // size) and this denoting the transformation that was used.
-  // Also returns the amount the character must have shifted up or down.
-  void XHeightRange(int unichar_id, const UNICHARSET& unicharset,
-                    const TBOX& bbox,
-                    float* min_xht,
-                    float* max_xht,
-                    float* yshift) const;
-    
-    
-    {    return 0;
-}
-
-    
-        vector<int> vec1 = {2, 2, 2, 1, 1, 0};
-    Solution().sortColors(vec1);
-    printArr(vec1);
-    
-    #include <iostream>
-    
-            vector<int> res;
-        if( root == NULL )
-            return res;
-    
-    using namespace std;
-    
-      int64_t num_record_drop_hidden = 0;
-  int64_t num_record_drop_obsolete = 0;
-  int64_t num_record_drop_range_del = 0;
-  int64_t num_range_del_drop_obsolete = 0;
-  // Deletions obsoleted before bottom level due to file gap optimization.
-  int64_t num_optimized_del_drop_obsolete = 0;
-  uint64_t total_filter_time = 0;
-    
-    #include <string>
-    
-    using namespace rocksdb;
-    
-    Status GetStringFromCompressionType(std::string* compression_str,
-                                    CompressionType compression_type);
-    
-    
-    {};
-    
-    class DB;
-    
-    #include 'rocksdb/utilities/stackable_db.h'
-#include 'rocksdb/db.h'
-    
-    EaseBezierAction* EaseBezierAction::reverse() const
-{
-    EaseBezierAction* reverseAction = EaseBezierAction::create(_inner->reverse());
-    reverseAction->setBezierParamer(_p3,_p2,_p1,_p0);
-    return reverseAction;
-}
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#include '2d/CCActionPageTurn3D.h'
-#include '2d/CCGrid.h'
-#include '2d/CCNodeGrid.h'
+    return layer_types_str;
+  }
+};
     
     /**
- * @addtogroup actions
- * @{
+ * @brief Abstract base class that factors out the BLAS code common to
+ *        ConvolutionLayer and DeconvolutionLayer.
  */
+template <typename Dtype>
+class BaseConvolutionLayer : public Layer<Dtype> {
+ public:
+  explicit BaseConvolutionLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-    #include '2d/CCActionInterval.h'
+      virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
     
-    Animation::Animation()
-: _totalDelayUnits(0.0f)
-, _delayPerUnit(0.0f)
-, _duration(0.0f)
-, _restoreOriginalFrame(false)
-, _loops(0)
-{
+    
+    { private:
+  struct pair_sort_first {
+    bool operator()(const std::pair<int, int> &left,
+                    const std::pair<int, int> &right) {
+      return left.first < right.first;
+    }
+  };
+  void check_batch_reindex(int initial_num, int final_num,
+                           const Dtype* ridx_data);
+};
+    
+     protected:
+  /// @copydoc BNLLLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    #include 'caffe/layers/lrn_layer.hpp'
+    
+    
+    {}  // namespace caffe
+    
+    namespace caffe {
     }
     
-        _textureAtlas = new (std::nothrow) TextureAtlas();
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    bool AuthPropertyIterator::operator==(const AuthPropertyIterator& rhs) const {
+  if (property_ == nullptr || rhs.property_ == nullptr) {
+    return property_ == rhs.property_;
+  } else {
+    return index_ == rhs.index_;
+  }
+}
+    
+    
+    {}  // namespace grpc
+
+    
+    // Serializes the outgoing trace context. Field IDs are 1 byte followed by
+// field data. A 1 byte version ID is always encoded first.
+size_t TraceContextSerialize(const ::opencensus::trace::SpanContext& context,
+                             char* tracing_buf, size_t tracing_buf_size);
+    
+    namespace grpc {
+    }
+    
+    namespace grpc {
+    }
+    
+    #ifndef GRPC_INTERNAL_CPP_EXT_PROTO_SERVER_REFLECTION_H
+#define GRPC_INTERNAL_CPP_EXT_PROTO_SERVER_REFLECTION_H
+    
+    #include <grpcpp/impl/channel_argument_option.h>
+    
+    /**
+ * \brief The class sets caffe's mode before doing forward/backward
+ * \tparam xpu The device that the op will be executed on.
+ */
+class CaffeMode {
+ public:
+  template<typename xpu> static void SetMode();
+};
+    
+     protected:
+  /*! \brief prefetcher parameters */
+  PrefetcherParam param_;
+  /*! \brief backend thread */
+  dmlc::ThreadedIter<DataBatch> iter;
+  /*! \brief internal batch loader */
+  std::unique_ptr<IIterator<TBlobBatch> > loader_;
+    
+    namespace mxnet {
+namespace kvstore {
+    }
+    }
+    
+    /*!
+ * \brief Computes row-wise Kronecker product
+ *
+ * Given input matrices, this function computes the Kronecker product
+ * row-wise. E.g. if the input matrices  are of shape (3, 2), (3, 4),
+ * (3, 5), the result matrix will be of shape (3, 2 * 4 * 5), which is
+ * (3, 40).
+ *
+ * \param out result matrix
+ * \param ts_arr vector of input matrices
+ */
+template <typename DType>
+inline void row_wise_kronecker
+  (Tensor<cpu, 2, DType> out,
+  const std::vector<Tensor<cpu, 2, DType> > &ts_arr) {
+  CHECK_GE(ts_arr.size(), 1) << 'The input matrices must be non-empty.';
+    }
+    
+     private:
+  inline void Init(mshadow::Stream<gpu> *s,
+                   const std::vector<TBlob> &in_data,
+                   const std::vector<TBlob> &out_data) {
+    using namespace mshadow;
+    #if CUDNN_MAJOR >= 5
+    format_ = CUDNN_TENSOR_NCHW;
+    #endif
+    CHECK_EQ(in_data.size(), 2U);
+    CHECK_EQ(out_data.size(), 3U);
+    if (!init_cudnn_) {
+      init_cudnn_ = true;
+      Tensor<gpu, 4, DType> data = in_data[st::kData].get<gpu, 4, DType>(s);
+      Tensor<gpu, 4, DType> out = out_data[st::kOut].get<gpu, 4, DType>(s);
+      CUDNN_CALL(cudnnCreateSpatialTransformerDescriptor(&st_desc_));
+      CUDNN_CALL(cudnnCreateTensorDescriptor(&in_desc_));
+      CUDNN_CALL(cudnnCreateTensorDescriptor(&out_desc_));
+      CUDNN_CALL(cudnnSetTensor4dDescriptor(in_desc_,
+                                            format_,
+                                            dtype_,
+                                            data.size(0),
+                                            data.size(1),
+                                            data.size(2),
+                                            data.size(3)));
+      CUDNN_CALL(cudnnSetTensor4dDescriptor(out_desc_,
+                                            format_,
+                                            dtype_,
+                                            out.size(0),
+                                            out.size(1),
+                                            out.size(2),
+                                            out.size(3)));
+      if (param_.sampler_type == st::kBilinear) {
+        int dim[] = {static_cast<int>(out.size(0)), static_cast<int>(out.size(1)),
+                     static_cast<int>(out.size(2)), static_cast<int>(out.size(3))};
+        CUDNN_CALL(cudnnSetSpatialTransformerNdDescriptor(st_desc_,
+                                                          sampler_,
+                                                          dtype_,
+                                                          4,
+                                                          dim));
+      }
+    }
+  }
+    
+    /*!
+ * Copyright (c) 2015 by Contributors
+ * \file native_op.cc
+ * \brief
+ * \author Junyuan Xie
+*/
+#include './native_op-inl.h'
+    
+    void Assembler::unimplemented(){
+  //Emit a instruction with invalid opcode 0x0
+  EmitDForm(0, rn(0), rn(0), 0);
+}
+    
+         // GP Register cannot be greater than 31
+     assert(static_cast<uint32_t>(ra) < 32);
+     assert(static_cast<uint32_t>(rt) < 32);
+     assert(static_cast<uint16_t>(imm << 14) == 0);
+    
+      const char* data = filename.data();
+  int data_len = filename.length();
+  bool base64 = false;
+  if (strncmp(data, 'data:', sizeof('data:') - 1)) {
+    return nullptr;
+  }
+  data += sizeof('data:') - 1;
+  data_len -= sizeof('data:') - 1;
+    
+    #endif // incl_HPHP_OUTPUT_FILE_H_
+
+    
+    #include 'hphp/runtime/base/perf-warning.h'
+    
+    constexpr int64_t kDefaultPerfWarningRate = 100;
+    
+    
+    {  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+    
+    #pragma once
+    
+      auto enter_event = events::syscall::Event{};
+  enter_event.type = events::syscall::EventType::SetuidEnter;
+  enter_event.pid = 45;
+  enter_event.tgid = 146;
+  enter_event.body.setuid_enter.arg_uid = 48;
+  enter_event.body.setuid_enter.uid = 49;
+  enter_event.body.setuid_enter.gid = 50;
+  enter_event.return_value = -1;
