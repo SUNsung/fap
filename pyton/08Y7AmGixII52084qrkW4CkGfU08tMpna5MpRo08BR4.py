@@ -1,76 +1,59 @@
 
         
-        containers = (('thefuck/python3-fish',
-               u'''FROM python:3
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'),
-              ('thefuck/python2-fish',
-               u'''FROM python:2
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'))
+            def exists(self, session_key=None):
+        '''
+        This method makes sense when you're talking to a shared resource, but
+        it doesn't matter when you're storing the information in the client's
+        cookie.
+        '''
+        return False
     
-    # TODO: ensure that history changes.
-
+    from django.contrib.sites.shortcuts import get_current_site
+from django.core.paginator import EmptyPage, PageNotAnInteger
+from django.http import Http404
+from django.template.response import TemplateResponse
+from django.urls import reverse
+from django.utils.http import http_date
     
+    model.compile(loss=keras.losses.categorical_crossentropy,
+              optimizer=keras.optimizers.Adadelta(),
+              metrics=['accuracy'])
     
-@pytest.mark.parametrize('command, packages, which', [
-    (Command('a_bad_cmd', 'a_bad_cmd: command not found'),
-     [], None),
-    (Command('vim', ''), [], None),
-    (Command('', ''), [], None),
-    (Command('vim', 'vim: command not found'),
-     ['vim'], '/usr/bin/vim'),
-    (Command('sudo vim', 'vim: command not found'),
-     ['vim'], '/usr/bin/vim')])
-def test_not_match(mocker, command, packages, which):
-    mocker.patch('thefuck.rules.apt_get.which', return_value=which)
-    mocker.patch('thefuck.rules.apt_get._get_packages',
-                 create=True, return_value=packages)
-    
-     install - install packages
- remove  - remove packages
+        # Test single image
+    x = np.random.uniform(0, 255, (10, 10, 3))
+    inputs = Input(shape=x.shape)
+    outputs = Lambda(utils.preprocess_input, output_shape=x.shape)(inputs)
+    model = Model(inputs, outputs)
+    assert model.predict(x[np.newaxis])[0].shape == x.shape
     
     
-@pytest.mark.parametrize('command', [
-    Command('aws dynamdb scan', misspelled_command),
-    Command('aws dynamodb scn', misspelled_subcommand),
-    Command('aws dynamodb t-item',
-            misspelled_subcommand_with_multiple_options)])
-def test_match(command):
-    assert match(command)
+def test_cce_one_hot():
+    y_a = K.variable(np.random.randint(0, 7, (5, 6)))
+    y_b = K.variable(np.random.random((5, 6, 7)))
+    objective_output = losses.sparse_categorical_crossentropy(y_a, y_b)
+    assert K.eval(objective_output).shape == (5, 6)
     
+        # Arguments
+        y: class vector to be converted into a matrix
+            (integers from 0 to num_classes).
+        num_classes: total number of classes.
+        dtype: The data type expected by the input, as a string
+            (`float32`, `float64`, `int32`...)
     
-@pytest.mark.parametrize('command', [
-    Command('cargo buid', no_such_subcommand_old),
-    Command('cargo buils', no_such_subcommand)])
-def test_match(command):
-    assert match(command)
+        @property
+    def activation(self):
+        return self.cell.activation
     
-    # convert class vectors to binary class matrices
-y_train = keras.utils.to_categorical(y_train, num_classes)
-y_test = keras.utils.to_categorical(y_test, num_classes)
+    # Train the autoencoder
+autoencoder.fit(x_train_noisy,
+                x_train,
+                validation_data=(x_test_noisy, x_test),
+                epochs=30,
+                batch_size=batch_size)
     
-        num_train_samples = 50000
+    learning_rate = 1e-6
+clip_norm = 1.0
     
-    # we add a Convolution1D, which will learn filters
-# word group filters of size filter_length:
-model.add(Conv1D(filters,
-                 kernel_size,
-                 padding='valid',
-                 activation='relu',
-                 strides=1))
-# we use max pooling:
-model.add(GlobalMaxPooling1D())
-    
-    encoder_inputs = model.input[0]   # input_1
-encoder_outputs, state_h_enc, state_c_enc = model.layers[2].output   # lstm_1
-encoder_states = [state_h_enc, state_c_enc]
-encoder_model = Model(encoder_inputs, encoder_states)
+    batch_size = 128
+num_classes = 10
+epochs = 20
