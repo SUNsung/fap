@@ -1,212 +1,93 @@
 
         
-                unless post && post.id
-          puts post.errors.full_messages if post
-          puts creator.errors.inspect
-          raise 'Failed to create description for trust level 3 lounge!'
-        end
+        module NavigationHelpers
+  def path_to(page_name)
+    case page_name
+    when /^person_photos page$/
+      person_photos_path(@me.person)
+    when /^the home(?: )?page$/
+      stream_path
+    when /^the mobile path$/
+      force_mobile_path
+    when /^the user applications page$/
+      api_openid_connect_user_applications_path
+    when /^the tag page for '([^\']*)'$/
+      tag_path(Regexp.last_match(1))
+    when /^its ([\w ]+) page$/
+      send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', @it)
+    when /^the mobile ([\w ]+) page$/
+      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', format: 'mobile')
+    when /^the ([\w ]+) page$/
+      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path')
+    when /^my edit profile page$/
+      edit_profile_path
+    when /^my profile page$/
+      person_path(@me.person)
+    when /^my acceptance form page$/
+      invite_code_path(InvitationCode.first)
+    when /^the requestors profile$/
+      person_path(Request.where(recipient_id: @me.person.id).first.sender)
+    when /^'([^\']*)''s page$/
+      p = User.find_by_email(Regexp.last_match(1)).person
+      {path:         person_path(p),
+       # '#diaspora_handle' on desktop, '.description' on mobile
+       special_elem: {selector: '#diaspora_handle, .description', text: p.diaspora_handle}
+      }
+    when /^'([^\']*)''s photos page$/
+      p = User.find_by_email(Regexp.last_match(1)).person
+      person_photos_path p
+    when /^my account settings page$/
+      edit_user_path
+    when /^forgot password page$/
+      new_user_password_path
+    when %r{^'(/.*)'}
+      Regexp.last_match(1)
+    else
+      raise 'Can't find mapping from \'#{page_name}\' to a path.'
+    end
+  end
     
-        # Add permissions and a description to the Staff category.
+      class PostToService < Base
+    def perform(*_args)
+      # don't post to services in cucumber
+    end
+  end
     
-            @parallel = parallel
+          delete :destroy, params: {post_id: @message.id, id: like2.id}, format: :json
+      expect(response.status).to eq(404)
+      expect(response.body).to eq(I18n.t('likes.destroy.error'))
+      expect(Like.count).to eq(like_count)
+    end
+  end
+end
+
+    
+      desc <<END
+Run a profile of sass.
+  TIMES=n sets the number of runs. Defaults to 1000.
+  FILE=str sets the file to profile. Defaults to 'complex'.
+  OUTPUT=str sets the ruby-prof output format.
+    Can be Flat, CallInfo, or Graph. Defaults to Flat. Defaults to Flat.
+END
+  task :profile do
+    times  = (ENV['TIMES'] || '1000').to_i
+    file   = ENV['FILE']
+    
+          # @param cache_location [String] see \{#cache\_location}
+      def initialize(cache_location)
+        @cache_location = cache_location
       end
     
-            def collection_method
-          :lfs_objects
-        end
+          # @see Base#key
+      def key(name, options)
+        [self.class.name + ':' + File.dirname(File.expand_path(name)),
+         File.basename(name)]
+      end
     
-            def labels?
-          label_names && label_names.any?
-        end
-    
-          def action_for_grape(env)
-        endpoint = env[ENDPOINT_KEY]
-        route = endpoint.route rescue nil
-    
-              # Rex::Proto::Kerberos::Model::ApReq decoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def decode(input)
-            raise ::NotImplementedError, 'AP-REQ decoding not supported'
-          end
-    
-              # Encodes the type
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_type(type)
-            bn = OpenSSL::BN.new(type.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
-    
-              # Decodes the value from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [String]
-          def decode_value(input)
-            input.value[0].value
-          end
-    
-              # Decodes the e_data from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [String]
-          def decode_e_data(input)
-            input.value[0].value
-          end
-        end
+          it 'list the plugin with his version' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
+        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
       end
     end
   end
 end
-    
-              # Decodes a Rex::Proto::Kerberos::Model::LastRequest
-          #
-          # @param input [String, OpenSSL::ASN1::Sequence] the input to decode from
-          # @return [self] if decoding succeeds
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode(input)
-            case input
-            when String
-              decode_string(input)
-            when OpenSSL::ASN1::Sequence
-              decode_asn1(input)
-            else
-              raise ::RuntimeError, 'Failed to decode LastRequest, invalid input'
-            end
-    
-        system_command '#{staged_path}/AdobePatchInstaller.app/Contents/MacOS/AdobePatchInstaller',
-                   args: [
-                           '--mode=silent',
-                         ],
-                   sudo: true
-  end
-    
-      # Compile a Sass or SCSS string to CSS.
-  # Defaults to SCSS.
-  #
-  # @param contents [String] The contents of the Sass file.
-  # @param options [{Symbol => Object}] An options hash;
-  #   see {file:SASS_REFERENCE.md#Options the Sass options documentation}
-  # @raise [Sass::SyntaxError] if there's an error in the document
-  # @raise [Encoding::UndefinedConversionError] if the source encoding
-  #   cannot be converted to UTF-8
-  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
-  def self.compile(contents, options = {})
-    options[:syntax] ||= :scss
-    Engine.new(contents, options).to_css
-  end
-    
-        # Modify the top Sass backtrace entries
-    # (that is, the most deeply nested ones)
-    # to have the given attributes.
-    #
-    # Specifically, this goes through the backtrace entries
-    # from most deeply nested to least,
-    # setting the given attributes for each entry.
-    # If an entry already has one of the given attributes set,
-    # the pre-existing attribute takes precedence
-    # and is not used for less deeply-nested entries
-    # (even if they don't have that attribute set).
-    #
-    # @param attrs [{Symbol => Object}] The information to add to the backtrace entry.
-    #   See \{#sass\_backtrace}
-    def modify_backtrace(attrs)
-      attrs = attrs.reject {|_k, v| v.nil?}
-      # Move backwards through the backtrace
-      (0...sass_backtrace.size).to_a.reverse_each do |i|
-        entry = sass_backtrace[i]
-        sass_backtrace[i] = attrs.merge(entry)
-        attrs.reject! {|k, _v| entry.include?(k)}
-        break if attrs.empty?
-      end
-    end
-    
-        # Prints a status message about performing the given action,
-    # colored using the given color (via terminal escapes) if possible.
-    #
-    # @param name [#to_s] A short name for the action being performed.
-    #   Shouldn't be longer than 11 characters.
-    # @param color [Symbol] The name of the color to use for this action.
-    #   Can be `:red`, `:green`, or `:yellow`.
-    def puts_action(name, color, arg)
-      return if @options[:for_engine][:quiet]
-      printf color(color, '%11s %s\n'), name, arg
-      STDOUT.flush
-    end
-    
-          # Find a Sass file, if it exists.
-      #
-      # This is the primary entry point of the Importer.
-      # It corresponds directly to an `@import` statement in Sass.
-      # It should do three basic things:
-      #
-      # * Determine if the URI is in this importer's format.
-      #   If not, return nil.
-      # * Determine if the file indicated by the URI actually exists and is readable.
-      #   If not, return nil.
-      # * Read the file and place the contents in a {Sass::Engine}.
-      #   Return that engine.
-      #
-      # If this importer's format allows for file extensions,
-      # it should treat them the same way as the default {Filesystem} importer.
-      # If the URI explicitly has a `.sass` or `.scss` filename,
-      # the importer should look for that exact file
-      # and import it as the syntax indicated.
-      # If it doesn't exist, the importer should return nil.
-      #
-      # If the URI doesn't have either of these extensions,
-      # the importer should look for files with the extensions.
-      # If no such files exist, it should return nil.
-      #
-      # The {Sass::Engine} to be returned should be passed `options`,
-      # with a few modifications. `:syntax` should be set appropriately,
-      # `:filename` should be set to `uri`,
-      # and `:importer` should be set to this importer.
-      #
-      # @param uri [String] The URI to import.
-      # @param options [{Symbol => Object}] Options for the Sass file
-      #   containing the `@import` that's currently being resolved.
-      #   This is safe for subclasses to modify destructively.
-      #   Callers should only pass in a value they don't mind being destructively modified.
-      # @return [Sass::Engine, nil] An Engine containing the imported file,
-      #   or nil if it couldn't be found or was in the wrong format.
-      def find(uri, options)
-        Sass::Util.abstract(self)
-      end
-    
-      # Copy a path.
-  #
-  # Files will be hardlinked if possible, but copied otherwise.
-  # Symlinks should be copied as symlinks.
-  def copy(source, destination)
-    logger.debug('Copying path', :source => source, :destination => destination)
-    directory = File.dirname(destination)
-    # lstat to follow symlinks
-    dstat = File.stat(directory) rescue nil
-    if dstat.nil?
-      FileUtils.mkdir_p(directory, :mode => 0755)
-    elsif dstat.directory?
-      # do nothing, it's already a directory!
-    else
-      # It exists and is not a directory. This is probably a user error or a bug.
-      readable_path = directory.gsub(staging_path, '')
-      logger.error('You wanted to copy a file into a directory, but that's not a directory, it's a file!', :path => readable_path, :stat => dstat)
-      raise FPM::InvalidPackageConfiguration, 'Tried to treat #{readable_path} like a directory, but it's a file!'
-    end
-    
-      def output(output_path)
-    output_check(output_path)
-    
-      def install_script
-    path = build_path('installer.sh')
-    File.open(path, 'w') do |file|
-      file.write template('sh.erb').result(binding)
-    end
-    path
-  end
-    
-        if !success
-      raise ProcessFailed.new('#{program} failed (exit code #{exit_code})' \
-                              '. Full command was:#{args.inspect}')
-    end
-    return stdout_r_str
-  end # def safesystemout
