@@ -1,56 +1,59 @@
 
         
-        
-@bp.route('/login', methods=('GET', 'POST'))
-def login():
-    '''Log in a registered user by adding the user id to the session.'''
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        db = get_db()
-        error = None
-        user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)
-        ).fetchone()
+            def __str__(self):
+        defaults = dict(type(self).__dict__)
+        actual = dict(defaults)
+        actual.update(self.__dict__)
+        actual['config'] = self.config
+        return repr_dict_nice(dict(
+            (key, value)
+            for key, value in actual.items()
+            if not key.startswith('_'))
+        )
     
-        yield app
-    
-            #: a reference to the blueprint that created this setup state.
-        self.blueprint = blueprint
-    
-    This typically means that you attempted to use functionality that needed
-to interface with the current application object in some way. To solve
-this, set up an application context with app.app_context().  See the
-documentation for more information.\
-'''
-    
-        return EnvironBuilder(path, base_url, *args, **kwargs)
-    
-        def save(self, must_create=False):
-        if self.session_key is None:
-            return self.create()
-        if must_create:
-            func = self._cache.add
-        elif self._cache.get(self.cache_key) is not None:
-            func = self._cache.set
-        else:
-            raise UpdateError
-        result = func(self.cache_key,
-                      self._get_session(no_load=must_create),
-                      self.get_expiry_age())
-        if must_create and not result:
-            raise CreateError
-    
-            if data is None:
-            s = self._get_session_from_db()
-            if s:
-                data = self.decode(s.session_data)
-                self._cache.set(self.cache_key, data, self.get_expiry_age(expiry=s.expire_date))
-            else:
-                data = {}
-        return data
+        message = BINARY_SUPPRESSED_NOTICE
     
     
-@x_robots_tag
-def sitemap(request, sitemaps, section=None,
-            template_name='sitemap.xml', content_type='application/xml'):
+def test_basic_auth(httpbin_both):
+    r = http('--auth=user:password',
+             'GET', httpbin_both + '/basic-auth/user/password')
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
+    
+    
+def test_follow_all_output_options_used_for_redirects(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 3
+    assert HTTP_OK not in r
+    
+        @cookies.setter
+    def cookies(self, jar):
+        '''
+        :type jar: CookieJar
+        '''
+        # http://docs.python.org/2/library/cookielib.html#cookie-objects
+        stored_attrs = ['value', 'path', 'secure', 'expires']
+        self['cookies'] = {}
+        for cookie in jar:
+            self['cookies'][cookie.name] = {
+                attname: getattr(cookie, attname)
+                for attname in stored_attrs
+            }
+    
+        def __init__(self, l1=0., l2=0.):
+        '''
+        Args:
+            l1(float): L1 正则化的系数
+            l2(float): L2 正则化的系数
+        '''
+        self.l1 = np.asarray(l1, dtype=np.float32)
+        self.l2 = np.asarray(l2, dtype=np.float32)
+    
+    if word_vec.any():  #
+    word_vec = word_vec / max(1, ngrams_found)
+else:  # 如果一个 ngram 都没找到，gensim 会报错；个人认为把 0 向量传出来也可以
+    raise KeyError('all ngrams for word %s absent from model' % word_unk)
