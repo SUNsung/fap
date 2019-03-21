@@ -1,95 +1,89 @@
 
         
-        
-class CallCenter(object):
-    
-    
-class DefaultCategories(Enum):
-    
-    from mrjob.job import MRJob
-    
-    
-def test_categorical_hinge():
-    y_pred = K.variable(np.array([[0.3, 0.2, 0.1],
-                                  [0.1, 0.2, 0.7]]))
-    y_true = K.variable(np.array([[0, 1, 0],
-                                  [1, 0, 0]]))
-    expected_loss = ((0.3 - 0.2 + 1) + (0.7 - 0.1 + 1)) / 2.0
-    loss = K.eval(losses.categorical_hinge(y_true, y_pred))
-    assert np.isclose(expected_loss, np.mean(loss))
-    
-    
-def test_regularization_shared_layer():
-    dense_layer = Dense(num_classes,
-                        kernel_regularizer=regularizers.l1(),
-                        activity_regularizer=regularizers.l1())
-    
-    image_size = x_train.shape[1]
-x_train = np.reshape(x_train, [-1, image_size, image_size, 1])
-x_test = np.reshape(x_test, [-1, image_size, image_size, 1])
-x_train = x_train.astype('float32') / 255
-x_test = x_test.astype('float32') / 255
-    
-        def put(self, enabled=True):
-        '''Creates or updates the rule in AWS'''
-        request = {
-            'Name': self.name,
-            'State': 'ENABLED' if enabled else 'DISABLED',
-        }
-        if self.schedule_expression:
-            request['ScheduleExpression'] = self.schedule_expression
-        if self.event_pattern:
-            request['EventPattern'] = self.event_pattern
-        if self.description:
-            request['Description'] = self.description
-        if self.role_arn:
-            request['RoleArn'] = self.role_arn
+            def _get_session_from_db(self):
         try:
-            response = self.client.put_rule(**request)
-        except (botocore.exceptions.BotoCoreError, botocore.exceptions.ClientError) as e:
-            self.module.fail_json_aws(e, msg='Could not create/update rule %s' % self.name)
-        self.changed = True
-        return response
+            return self.model.objects.get(
+                session_key=self.session_key,
+                expire_date__gt=timezone.now()
+            )
+        except (self.model.DoesNotExist, SuspiciousOperation) as e:
+            if isinstance(e, SuspiciousOperation):
+                logger = logging.getLogger('django.security.%s' % e.__class__.__name__)
+                logger.warning(str(e))
+            self._session_key = None
     
-    HAS_ONEANDONE_SDK = True
-    
-        def allocate_host(self):
+        def cycle_key(self):
         '''
-        Creates a host entry in OpenNebula
-        Returns: True on success, fails otherwise.
+        Keep the same data but with a new key. Call save() and it will
+        automatically save a cookie with a new key at the end of the request.
+        '''
+        self.save()
+    
+        The Django sessions framework is entirely cookie-based. It does
+    not fall back to putting session IDs in URLs. This is an intentional
+    design decision. Not only does that behavior make URLs ugly, it makes
+    your site vulnerable to session-ID theft via the 'Referer' header.
+    
+        # Returns
+        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
+    '''
+    dirname = 'cifar-10-batches-py'
+    origin = 'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
+    path = get_file(dirname, origin=origin, untar=True)
+    
+        y_a = K.variable(np.random.randint(0, 7, (6,)))
+    y_b = K.variable(np.random.random((6, 7)))
+    assert K.eval(losses.sparse_categorical_crossentropy(y_a, y_b)).shape == (6,)
+    
+    print('Evaluate IRNN...')
+model = Sequential()
+model.add(SimpleRNN(hidden_units,
+                    kernel_initializer=initializers.RandomNormal(stddev=0.001),
+                    recurrent_initializer=initializers.Identity(gain=1.0),
+                    activation='relu',
+                    input_shape=x_train.shape[1:]))
+model.add(Dense(num_classes))
+model.add(Activation('softmax'))
+rmsprop = RMSprop(lr=learning_rate)
+model.compile(loss='categorical_crossentropy',
+              optimizer=rmsprop,
+              metrics=['accuracy'])
+    
+    print('Convert class vector to binary class matrix '
+      '(for use with categorical_crossentropy)')
+y_train = keras.utils.to_categorical(y_train, num_classes)
+y_test = keras.utils.to_categorical(y_test, num_classes)
+print('y_train shape:', y_train.shape)
+print('y_test shape:', y_test.shape)
+    
+        # Returns
+        A Keras model instance (compiled).
+    '''
+    model = Sequential()
+    model.add(Dense(dense_units, input_shape=(max_words,),
+                    kernel_initializer=kernel_initializer))
+    model.add(Activation(activation))
+    model.add(dropout(dropout_rate))
     
     
-def main():
-    argument_spec = ipa_argument_spec()
-    argument_spec.update(zone_name=dict(type='str', required=True),
-                         state=dict(type='str', default='present', choices=['present', 'absent']),
-                         )
+def kullback_leibler_divergence(y_true, y_pred):
+    y_true = K.clip(y_true, K.epsilon(), 1)
+    y_pred = K.clip(y_pred, K.epsilon(), 1)
+    return K.sum(y_true * K.log(y_true / y_pred), axis=-1)
+    
+            # Arguments
+            input_shape: Keras tensor (future input to layer)
+                or list/tuple of Keras tensors to reference
+                for weight shape computations.
+        '''
+        self.built = True
     
     
-def ensure(module, client):
-    state = module.params['state']
-    name = module.params['cn']
-    group = module.params['group']
-    host = module.params['host']
-    hostgroup = module.params['hostgroup']
-    privilege = module.params['privilege']
-    service = module.params['service']
-    user = module.params['user']
+def leaky_relu(x, alpha=0.1):
+    '''渗透 ReLU
+    `o = max(alpha * x, x)`
+    '''
+    return tf.nn.leaky_relu(x, alpha)
     
-    import traceback
-    
-    # (c) 2013, Ivan Vanderbyl <ivan@app.io>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-    
-    
-def get_device(device_ip):
-    '''Query OneClick for the device using the IP Address'''
-    resource = '/models'
-    landscape_min = '0x%x' % int(module.params.get('landscape'), 16)
-    landscape_max = '0x%x' % (int(module.params.get('landscape'), 16) + 0x100000)
-    
-        ##################################################################
-    # deploy requires revision_id
-    # annotation requires msg
-    # We verify these manually
-    ##################################################################
+        公式
+        `o = x * softmax(Wx + b)`
