@@ -1,151 +1,124 @@
 
         
-        # input image dimensions
-img_rows, img_cols = 28, 28
+        
+data = { 'train_truth': data_train_truth,
+         'valid_truth': data_valid_truth,
+         'train_data' : data_train_spiking,
+         'valid_data' : data_valid_spiking,
+         'train_percentage' : train_percentage,
+         'nreplications' : nreplications,
+         'dt' : FLAGS.dt,
+         'u_std' : FLAGS.u_std,
+         'max_firing_rate': FLAGS.max_firing_rate,
+         'train_inputs_u': train_inputs_u,
+         'valid_inputs_u': valid_inputs_u,
+         'train_outputs_u': train_outputs_u,
+         'valid_outputs_u': valid_outputs_u,
+         'conversion_factor' : FLAGS.max_firing_rate/(1.0/FLAGS.dt) }
     
-    from ..utils.data_utils import get_file
-import numpy as np
     
-    # Model creation using tensors from the get_next() graph node.
-inputs, targets = iterator.get_next()
-model_input = layers.Input(tensor=inputs)
-model_output = cnn_layers(model_input)
-train_model = keras.models.Model(inputs=model_input, outputs=model_output)
+def nparray_and_transpose(data_a_b_c):
+  '''Convert the list of items in data to a numpy array, and transpose it
+  Args:
+    data: data_asbsc: a nested, nested list of length a, with sublist length
+      b, with sublist length c.
+  Returns:
+    a numpy 3-tensor with dimensions a x c x b
+'''
+  data_axbxc = np.array([datum_b_c for datum_b_c in data_a_b_c])
+  data_axcxb = np.transpose(data_axbxc, axes=[0,2,1])
+  return data_axcxb
     
-    import keras
-from keras.datasets import mnist
-from keras.models import Sequential
-from keras.layers import Dense, Activation
-from keras.layers import SimpleRNN
-from keras import initializers
-from keras.optimizers import RMSprop
+      Returns:
+    log_sum_exp of the arguments.
+  '''
+  m = tf.reduce_max(x_k)
+  x1_k = x_k - m
+  u_k = tf.exp(x1_k)
+  z = tf.reduce_sum(u_k)
+  return tf.log(z) + m
     
-        if dataset_name == 'SA':
-        lb = LabelBinarizer()
-        x1 = lb.fit_transform(X[:, 1].astype(str))
-        x2 = lb.fit_transform(X[:, 2].astype(str))
-        x3 = lb.fit_transform(X[:, 3].astype(str))
-        X = np.c_[X[:, :1], x1, x2, x3, X[:, 4:]]
-        y = (y != b'normal.').astype(int)
+        if FLAGS.critic_update_dis_vars:
+      if FLAGS.discriminator_model == 'bidirectional_vd':
+        critic_vars = [
+            v for v in tf.trainable_variables()
+            if v.op.name.startswith('dis/rnn')
+        ]
+      elif FLAGS.discriminator_model == 'seq2seq_vd':
+        critic_vars = [
+            v for v in tf.trainable_variables()
+            if v.op.name.startswith('dis/decoder/rnn/multi_rnn_cell')
+        ]
+      critic_vars.extend(output_vars)
+    else:
+      critic_vars = output_vars
+    print('\nOptimizing Critic vars:')
+    for v in critic_vars:
+      print(v)
+    critic_grads = tf.gradients(critic_loss, critic_vars)
+    critic_grads_clipped, _ = tf.clip_by_global_norm(critic_grads,
+                                                     FLAGS.grad_clipping)
+    critic_train_op = critic_optimizer.apply_gradients(
+        zip(critic_grads_clipped, critic_vars), global_step=global_step)
+    return critic_train_op, critic_grads_clipped, critic_vars
+
     
-    n_samples = np.logspace(.5, 3, 9)
-n_features = np.logspace(1, 3.5, 7)
-N_samples, N_features = np.meshgrid(n_samples,
-                                    n_features)
-scikits_time = np.zeros(N_samples.shape)
-scipy_time = np.zeros(N_samples.shape)
+      def construct_fn(attention_query, attention_keys, attention_values):
+    with tf.variable_scope(name, reuse=reuse) as scope:
+      context = attention_score_fn(attention_query, attention_keys,
+                                   attention_values)
+      concat_input = tf.concat([attention_query, context], 1)
+      attention = tf.contrib.layers.linear(
+          concat_input, num_units, biases_initializer=None, scope=scope)
+      return attention
     
-        # start time
-    tstart = datetime.now()
-    clf = DecisionTreeRegressor()
-    clf.fit(X, Y).predict(X)
-    delta = (datetime.now() - tstart)
-    # stop time
     
-        # TASK: Build a grid search to find out whether unigrams or bigrams are
-    # more useful.
-    # Fit the pipeline on the training set using grid search for the parameters
+    {    # Options that need a file parameter
+    'download-archive': ['--require-parameter'],
+    'cookies': ['--require-parameter'],
+    'load-info': ['--require-parameter'],
+    'batch-file': ['--require-parameter'],
+}
     
-    # Author: Eustache Diemert <eustache@diemert.fr>
-# License: BSD 3 clause
+        with open(ZSH_COMPLETION_FILE, 'w') as f:
+        f.write(template)
     
-    # Learn a frontier for outlier detection with several classifiers
-xx1, yy1 = np.meshgrid(np.linspace(-8, 28, 500), np.linspace(3, 40, 500))
-xx2, yy2 = np.meshgrid(np.linspace(3, 10, 500), np.linspace(-5, 45, 500))
-for i, (clf_name, clf) in enumerate(classifiers.items()):
-    plt.figure(1)
-    clf.fit(X1)
-    Z1 = clf.decision_function(np.c_[xx1.ravel(), yy1.ravel()])
-    Z1 = Z1.reshape(xx1.shape)
-    legend1[clf_name] = plt.contour(
-        xx1, yy1, Z1, levels=[0], linewidths=2, colors=colors[i])
-    plt.figure(2)
-    clf.fit(X2)
-    Z2 = clf.decision_function(np.c_[xx2.ravel(), yy2.ravel()])
-    Z2 = Z2.reshape(xx2.shape)
-    legend2[clf_name] = plt.contour(
-        xx2, yy2, Z2, levels=[0], linewidths=2, colors=colors[i])
-    
-                plt.subplots_adjust(bottom=0, top=.89, wspace=0,
-                                left=0, right=1)
-            plt.suptitle('n_cluster=%i, connectivity=%r' %
-                         (n_clusters, connectivity is not None), size=17)
-    
-    # #############################################################################
-# Plot the results
-plt.figure(figsize=(4.2, 4))
-for i, patch in enumerate(kmeans.cluster_centers_):
-    plt.subplot(9, 9, i + 1)
-    plt.imshow(patch.reshape(patch_size), cmap=plt.cm.gray,
-               interpolation='nearest')
-    plt.xticks(())
-    plt.yticks(())
-    
-    # Ignore noisy twisted deprecation warnings
-import warnings
-warnings.filterwarnings('ignore', category=DeprecationWarning, module='twisted')
-del warnings
-    
-            if not aws_access_key_id:
-            aws_access_key_id = settings['AWS_ACCESS_KEY_ID']
-        if not aws_secret_access_key:
-            aws_secret_access_key = settings['AWS_SECRET_ACCESS_KEY']
-    
-        def __init__(self, request, timeout=180):
-        self._url = urldefrag(request.url)[0]
-        # converting to bytes to comply to Twisted interface
-        self.url = to_bytes(self._url, encoding='ascii')
-        self.method = to_bytes(request.method, encoding='ascii')
-        self.body = request.body or None
-        self.headers = Headers(request.headers)
-        self.response_headers = None
-        self.timeout = request.meta.get('download_timeout') or timeout
-        self.start_time = time()
-        self.deferred = defer.Deferred().addCallback(self._build_response, request)
-    
-            def _on_complete(_):
-            slot.nextcall.schedule()
-            return _
-    
-                # compare date_added
-            date_diff = None
-            dates = [release.date_added for release in releases]
-            if dates:
-                diff = (max(dates) - min(dates)).total_seconds()
-                if date_diff is None or diff > date_diff:
-                    date_diff = diff
-    
-            # Deleting model 'GroupCommitResolution'
-        db.delete_table('sentry_groupcommitresolution')
-    
-        def backwards(self, orm):
-        # Removing unique constraint on 'EnvironmentProject', fields ['project', 'environment']
-        db.delete_unique('sentry_environmentproject', ['project_id', 'environment_id'])
-    
-            # Changing field 'Environment.organization_id'
-        db.alter_column(
-            'sentry_environment',
-            'organization_id',
-            self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(null=True)
+        def test_cbc_decrypt(self):
+        data = bytes_to_intlist(
+            b'\x97\x92+\xe5\x0b\xc3\x18\x91ky9m&\xb3\xb5@\xe6'\xc2\x96.\xc8u\x88\xab9-[\x9e|\xf1\xcd'
         )
+        decrypted = intlist_to_bytes(aes_cbc_decrypt(data, self.key, self.iv))
+        self.assertEqual(decrypted.rstrip(b'\x08'), self.secret_msg)
     
-            # The following code is provided here to aid in writing a correct migration
-        # Changing field 'ReleaseEnvironment.project_id'
-        db.alter_column(
-            'sentry_environmentrelease', 'project_id',
-            self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')()
-        )
+    # A dictionary with options for the search language support, empty by default.
+# 'ja' uses this config value.
+# 'zh' user can custom change `jieba` dictionary path.
+#
+# html_search_options = {'type': 'default'}
     
-            # Adding field 'ApiKey.scope_list'
-        db.add_column(
-            'sentry_apikey',
-            'scope_list',
-            self.gf('sentry.db.models.fields.array.ArrayField')(
-                of=('django.db.models.fields.TextField', [], {})
-            ),
-            keep_default=False
-        )
     
-        def backwards(self, orm):
-        # Removing unique constraint on 'UserOption', fields ['user', 'organization', 'key']
-        db.delete_unique('sentry_useroption', ['user_id', 'organization_id', 'key'])
+class CommandLineNotificationService(BaseNotificationService):
+    '''Implement the notification service for the Command Line service.'''
+    
+                # at this point we get broadcast id
+            broadcast_body = {
+                'message_creative_id': resp.json().get('message_creative_id'),
+                'notification_type': 'REGULAR',
+            }
+    
+    import homeassistant.helpers.config_validation as cv
+from homeassistant.components.notify import (
+    ATTR_TARGET, PLATFORM_SCHEMA, BaseNotificationService)
+from homeassistant.const import CONF_API_KEY, CONF_SENDER
+    
+        def __init__(self, config):
+        '''Initialize the Simplepush notification service.'''
+        self._device_key = config.get(CONF_DEVICE_KEY)
+        self._event = config.get(CONF_EVENT)
+        self._password = config.get(CONF_PASSWORD)
+        self._salt = config.get(CONF_SALT)
+    
+    
+def get_service(hass, config, discovery_info=None):
+    '''Get the syslog notification service.'''
+    import syslog
