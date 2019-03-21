@@ -1,288 +1,131 @@
 
         
-        namespace grpc {
-    }
+        #ifndef SECP256K1_GROUP_IMPL_H
+#define SECP256K1_GROUP_IMPL_H
     
+            void format(std::ostream& out, const char* fmtBegin,
+                    const char* fmtEnd, int ntrunc) const
+        {
+            assert(m_value);
+            assert(m_formatImpl);
+            m_formatImpl(out, fmtBegin, fmtEnd, ntrunc, m_value);
+        }
     
-    { private:
-  CensusContext context_;
-  // server method
-  absl::string_view method_;
-  std::string qualified_method_;
-  grpc_slice path_;
-  // Pointer to the grpc_call element
-  grpc_call* gc_;
-  // Authorization context for the call.
-  grpc_auth_context* auth_context_;
-  // Metadata element for census stats.
-  grpc_linked_mdelem census_bin_;
-  // recv callback
-  grpc_metadata_batch* recv_initial_metadata_;
-  grpc_closure* initial_on_done_recv_initial_metadata_;
-  grpc_closure on_done_recv_initial_metadata_;
-  // recv message
-  grpc_closure* initial_on_done_recv_message_;
-  grpc_closure on_done_recv_message_;
-  absl::Time start_time_;
-  absl::Duration elapsed_time_;
-  grpc_core::OrphanablePtr<grpc_core::ByteStream>* recv_message_;
-  uint64_t recv_message_count_;
-  uint64_t sent_message_count_;
-  // Buffer needed for grpc_slice to reference it when adding metatdata to
-  // response.
-  char stats_buf_[kMaxServerStatsLen];
-};
+    // Bech32 is a string encoding format used in newer address types.
+// The output consists of a human-readable part (alphanumeric), a
+// separator character (1), and a base32 data section, the last
+// 6 characters of which are a checksum.
+//
+// For more information, see BIP 173.
     
-    void InitProtoReflectionServerBuilderPlugin() {
-  static bool already_here = false;
-  if (already_here) return;
-  already_here = true;
-  ::grpc::ServerBuilder::InternalAddPluginFactory(&CreateProtoReflection);
-}
-    
-        virtual void UpdateArguments(ChannelArguments* args) override {
-      args->SetString(name_, value_);
-    }
-    virtual void UpdatePlugins(
-        std::vector<std::unique_ptr<ServerBuilderPlugin>>* plugins) override {}
-    
-    
-    {  if ((pool_->shutdown_) && (pool_->nthreads_ == 0)) {
-    pool_->shutdown_cv_.notify_one();
-  }
-}
-    
-    static bool B2_POLYGON_REPORT_ERRORS = false;
-    
-    
-    {			mipWidth >>= 1;
-			mipHeight >>= 1;
-		}
-    
-    
-    {
-    {				uiPixel += 1;
-			}
-		}
-    
-    		TryDifferential(!m_boolMostLikelyFlip, 1, -2, 0);
-		TryDifferential(!m_boolMostLikelyFlip, 1, 2, 0);
-		TryDifferential(!m_boolMostLikelyFlip, 1, 0, 2);
-		TryDifferential(!m_boolMostLikelyFlip, 1, 0, -2);
-    
-    
-#define AF_LATIN_BLUE_ACTIVE      ( 1U << 0 ) /* zone height is <= 3/4px   */
-#define AF_LATIN_BLUE_TOP         ( 1U << 1 ) /* we have a top blue zone   */
-#define AF_LATIN_BLUE_SUB_TOP     ( 1U << 2 ) /* we have a subscript top   */
-                                              /* blue zone                 */
-#define AF_LATIN_BLUE_NEUTRAL     ( 1U << 3 ) /* we have neutral blue zone */
-#define AF_LATIN_BLUE_ADJUSTMENT  ( 1U << 4 ) /* used for scale adjustment */
-                                              /* optimization              */
-    
-    #endif  // VPX_DSP_TXFM_COMMON_H_
-
-    
-    enum ClipType { ctIntersection, ctUnion, ctDifference, ctXor };
-enum PolyType { ptSubject, ptClip };
-//By far the most widely used winding rules for polygon filling are
-//EvenOdd & NonZero (GDI, GDI+, XLib, OpenGL, Cairo, AGG, Quartz, SVG, Gr32)
-//Others rules include Positive, Negative and ABS_GTR_EQ_TWO (only in OpenGL)
-//see http://glprogramming.com/red/chapter11.html
-enum PolyFillType { pftEvenOdd, pftNonZero, pftPositive, pftNegative };
-    
-    #endif /* FASTLZ_H */
-
-    
-    
-/** 16x32 multiplication, followed by a 15-bit shift right. Results fits in 32 bits */
-#undef MULT16_32_Q15
-static OPUS_INLINE opus_val32 MULT16_32_Q15_armv5e(opus_val16 a, opus_val32 b)
+    void ChaCha20::Output(unsigned char* c, size_t bytes)
 {
-  int res;
-  __asm__(
-      '#MULT16_32_Q15\n\t'
-      'smulwb %0, %1, %2\n\t'
-      : '=r'(res)
-      : 'r'(b), 'r'(a)
-  );
-  return res<<1;
+    uint32_t x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15;
+    uint32_t j0, j1, j2, j3, j4, j5, j6, j7, j8, j9, j10, j11, j12, j13, j14, j15;
+    unsigned char *ctarget = nullptr;
+    unsigned char tmp[64];
+    unsigned int i;
+    }
+    
+    %define	MOVDQ movdqu ;; assume buffers not aligned 
+    
+    
+    {    Data() : initialized(false) {}
+  };
+    
+      virtual ~DHTReplaceNodeTask();
+    
+    void DHTRoutingTable::getClosestKNodes(
+    std::vector<std::shared_ptr<DHTNode>>& nodes,
+    const unsigned char* key) const
+{
+  dht::findClosestKNodes(nodes, root_.get(), key);
 }
-#define MULT16_32_Q15(a, b) (MULT16_32_Q15_armv5e(a, b))
     
-    DMLC_REGISTER_PARAMETER(CaffeDataParam);
+      void getClosestKNodes(std::vector<std::shared_ptr<DHTNode>>& nodes,
+                        const unsigned char* key) const;
     
+      std::vector<std::shared_ptr<DHTNode>> nodes_;
     
-    {    CHECK_EQ(net_param.layer_size(), 1) << 'Prototxt' << value <<' more than a layer';
-    caffe::LayerParameter *layer_param = new caffe::LayerParameter(net_param.layer(0));
-    this->Get(head) = (*layer_param);
-  }
-    
-    // relu
-MXNET_OPERATOR_REGISTER_UNARY(_contrib_div_sqrt_dim)
-.describe(R'code(Rescale the input by the square root of the channel dimension.
-    
-     private:
-  inline void Init(mshadow::Stream<gpu> *s,
-                   const std::vector<TBlob> &in_data,
-                   const std::vector<TBlob> &out_data) {
-    using namespace mshadow;
-    #if CUDNN_MAJOR >= 5
-    format_ = CUDNN_TENSOR_NCHW;
-    #endif
-    CHECK_EQ(in_data.size(), 2U);
-    CHECK_EQ(out_data.size(), 2U);
-    if (!init_cudnn_) {
-      init_cudnn_ = true;
-      Tensor<gpu, 4, DType> data = in_data[bs::kData].get<gpu, 4, DType>(s);
-      Tensor<gpu, 4, DType> out = out_data[bs::kOut].get<gpu, 4, DType>(s);
-      CUDNN_CALL(cudnnCreateSpatialTransformerDescriptor(&st_desc_));
-      CUDNN_CALL(cudnnCreateTensorDescriptor(&in_desc_));
-      CUDNN_CALL(cudnnCreateTensorDescriptor(&out_desc_));
-      CUDNN_CALL(cudnnSetTensor4dDescriptor(in_desc_,
-                                            format_,
-                                            dtype_,
-                                            data.size(0),
-                                            data.size(1),
-                                            data.size(2),
-                                            data.size(3)));
-      CUDNN_CALL(cudnnSetTensor4dDescriptor(out_desc_,
-                                            format_,
-                                            dtype_,
-                                            out.size(0),
-                                            out.size(1),
-                                            out.size(2),
-                                            out.size(3)));
-      int dim[] = {static_cast<int>(out.size(0)), static_cast<int>(out.size(1)),
-                   static_cast<int>(out.size(2)), static_cast<int>(out.size(3))};
-      CUDNN_CALL(cudnnSetSpatialTransformerNdDescriptor(st_desc_,
-                                                        sampler_,
-                                                        dtype_,
-                                                        4,
-                                                        dim));
-    }
-  }
-    
-    template<typename xpu>
-void NDArrayOp<xpu>::Forward(const OpContext &ctx,
-                   const std::vector<TBlob> &in_data,
-                   const std::vector<OpReqType> &req,
-                   const std::vector<TBlob> &out_data,
-                   const std::vector<TBlob> &aux_args) {
-  using namespace mshadow;
-  Context ndctx = get_ctx();
-  std::vector<void*> ptrs;
-  std::vector<Engine::VarHandle> ndvar;
-  std::vector<int> tags;
-  for (auto& i : req) CHECK_NE(i, kAddTo);
-    }
-    
-        private:
-        std::unordered_set<StreamInformation> m_streamInfos;
-        bool m_epochEndReached;
-        size_t m_numWorkers;
-        size_t m_workerRank;
-        size_t m_prevMinibatchSize;
-        size_t m_maxNumSamplesToRead;
-        size_t m_maxNumSweepsToRead;
-        size_t m_truncationLength;
-        size_t m_maxErrors;
-        std::unordered_map<StreamInformation, MinibatchData> m_minibatchData;
-    
-            if (bufferSizeInBytes < (viewShape.TotalSize() * sizeof(V1ElemType)))
-            InvalidArgument('Size (%d) of the specified buffer for creating the NDArrayView is smaller than the specified view shape '%S'.',
-                            (int)bufferSizeInBytes, viewShape.AsString().c_str());
-    
-        Parameter::Parameter(const NDShape& shape, DataType dataType, const ParameterInitializer& initializer, const DeviceDescriptor& device, const std::wstring& name)
-        : Variable(shape, VariableKind::Parameter, dataType, nullptr, true, {}, name, Internal::GenerateUid(VariableKind::Parameter))
-    {
-    }
-    
-                // Validate that each of the dynamic axes are unique
-            std::unordered_set<Axis> uniqueDynamicAxis;
-            for (auto& currentDynamicAxis : dynamicAxes)
-            {
-                auto retVal = uniqueDynamicAxis.insert(currentDynamicAxis);
-                if (!retVal.second)
-                    InvalidArgument('Dynamic axis named %S is specified more than once for Variable '%S'', currentDynamicAxis.Name().c_str(), AsString().c_str());
-            }
-    
-    #pragma once
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS // 'secure' CRT not available on all platforms  --add this at the top of all CPP files that give 'function or variable may be unsafe' warnings
-#endif
-#ifdef _WIN32
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif // NOMINMAX
-#pragma comment(lib, 'Dbghelp.lib')
-#else
-#include <execinfo.h>
-#include <cxxabi.h>
-#endif
-    
-        void Start();
-    void Stop();
-    void Restart();
-    
-    
-    {        // ensure none of the specified inputs reference back into the cloned set
-        // The function we extract must be separable.
-        for (let& input : inputNodes)
-            for (let& node : ComputationNodeBase::EnumerateNodes(vector<ComputationNodeBasePtr>{input})) // check all indirect inputs of each specified input
-            {
-                let iter = dependentSet.find(input);
-                if (iter != dependentSet.end() && *iter != input)
-                    InvalidArgument('CloneFunction: specified function input %ls recursively depends on %ls inside the function.', input->NodeDescription().c_str(), node->NodeDescription().c_str());
-            }
-    }
-    
-    DHTResponseMessage::~DHTResponseMessage() = default;
-    
-    class DHTResponseMessage : public DHTAbstractMessage {
-protected:
-  virtual std::string toStringOptional() const { return A2STR::NIL; }
-    }
-    
-        taskFactory->setLocalNode(localNode);
-    taskFactory->setRoutingTable(routingTable.get());
-    taskFactory->setMessageDispatcher(dispatcher.get());
-    taskFactory->setMessageFactory(factory.get());
-    taskFactory->setTaskQueue(taskQueue.get());
-    taskFactory->setTimeout(std::chrono::seconds(messageTimeout));
-    
-    class DHTTaskExecutor {
-private:
-  int numConcurrent_;
-  std::vector<std::shared_ptr<DHTTask>> execTasks_;
-  std::deque<std::shared_ptr<DHTTask>> queue_;
-    }
-    
-      std::chrono::seconds timeout_;
+      // localnode
+  // 8bytes reserved
+  WRITE_CHECK(fp, zero, 8);
+  // 20bytes localnode ID
+  WRITE_CHECK(fp, localNode_->getID(), DHT_ID_LENGTH);
+  // 4bytes reserved
+  WRITE_CHECK(fp, zero, 4);
     
     namespace aria2 {
     }
     
-      virtual void preProcess() CXX11_OVERRIDE;
     
-    
-    {protected:
-    /** Array of control points */
-    PointArray *_points;
-    float _deltaT;
-    float _tension;
-    Vec2 _previousPosition;
-    Vec2 _accumulatedDiff;
+    {  virtual bool finished() = 0;
 };
     
-    PageTurn3D* PageTurn3D::create(float duration, const Size& gridSize)
-{
-    PageTurn3D *action = new (std::nothrow) PageTurn3D();
+    
+    {  size_t getQueueSize() const { return queue_.size(); }
+};
+    
+    DHTTaskQueueImpl::~DHTTaskQueueImpl() = default;
+    
+    #include 'DHTTaskQueue.h'
+#include 'DHTTaskExecutor.h'
+    
+        // change element with key 'the bad'
+    object.at('the bad') = 'il cattivo';
+    
+        // out_of_range.402
+    try
+    {
+        // try to use the array index '-'
+        json::reference ref = j.at('/array/-'_json_pointer);
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
     }
     
-    NS_CC_BEGIN
+        // print values
+    std::cout << object << '\n';
+    std::cout << *res1.first << ' ' << std::boolalpha << res1.second << '\n';
     
-    /**
- * @addtogroup _2d
- * @{
- */
+    #include 'gtest/gtest.h'
+    
+    void ObjectQualityInfo60C::Parse(const std::uint8_t* bytes, int32_t length,
+                                 ContiRadar* conti_radar) const {
+  int obj_id = object_id(bytes, length);
+    }
+    
+    unsigned int BaseMapMatrix::CreateBinary(unsigned char* buf,
+                                         unsigned int buf_size) const {
+  return 0;
+}
+    
+    TEST_F(SpeedLimitTest, GetSpeedLimitByS) {
+  EXPECT_EQ(speed_limit_.speed_limit_points().size(), 100);
+  double s = 0.0;
+  const double ds = 0.01;
+  while (s < 99.0) {
+    double v_limit = speed_limit_.GetSpeedLimitByS(s);
+    }
+    }
+    
+    class Accelrpt68Test : public ::testing::Test {
+ public:
+  virtual void SetUp() {}
+};
+    
+      Byte t3(bytes + 7);
+  t = t3.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
+    
+    #include 'modules/drivers/canbus/common/byte.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
+    
+    namespace apollo {
+namespace canbus {
+namespace gem {
+    }
+    }
     }
