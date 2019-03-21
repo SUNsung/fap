@@ -1,336 +1,286 @@
 
         
-        void CacheImpl::releaseValue(void *Value) {
-  cache_release_value(static_cast<cache_t*>(Impl), Value);
+        namespace atom {
+    }
+    
+    
+    {}  // namespace atom
+
+    
+    class AutoUpdater : public mate::EventEmitter<AutoUpdater>,
+                    public auto_updater::Delegate,
+                    public WindowListObserver {
+ public:
+  static mate::Handle<AutoUpdater> Create(v8::Isolate* isolate);
+    }
+    
+    namespace atom {
+    }
+    
+      // There is a new update which has been downloaded.
+  virtual void OnUpdateDownloaded(const std::string& release_notes,
+                                  const std::string& release_name,
+                                  const base::Time& release_date,
+                                  const std::string& update_url) {}
+    
+    bool AboutProtocolHandler::IsSafeRedirectTarget(const GURL& location) const {
+  return false;
 }
     
-      struct IndentScope {
-    TreePrinter *Printer;
-    size_t OldLength;
-    IndentScope(TreePrinter *printer, StringRef indent)
-        : Printer(printer), OldLength(printer->Indent.size()) {
-      Printer->Indent += indent;
+    class URLRequestAboutJob : public net::URLRequestJob {
+ public:
+  URLRequestAboutJob(net::URLRequest*, net::NetworkDelegate*);
     }
-    ~IndentScope() { Printer->Indent.resize(OldLength); }
+    
+    // Identical to RelaunchApp, but uses |helper| as the path to the relauncher
+// process, and allows additional arguments to be supplied to the relauncher
+// process in relauncher_args. Unlike args[0], |helper| must be a pathname to
+// an executable file. The helper path given must be from the same version of
+// Chrome as the running parent browser process, as there are no guarantees
+// that the parent and relauncher processes from different versions will be
+// able to communicate with one another. This variant can be useful to
+// relaunch the same version of Chrome from another location, using that
+// location's helper.
+bool RelaunchAppWithHelper(const base::FilePath& helper,
+                           const StringVector& relauncher_args,
+                           const StringVector& args);
+    
+      std::wstring out;
+  out.push_back(L''');
+  for (size_t i = 0; i < arg.size(); ++i) {
+    if (arg[i] == '\\') {
+      // Find the extent of this run of backslashes.
+      size_t start = i, end = start + 1;
+      for (; end < arg.size() && arg[end] == '\\'; ++end) {
+      }
+      size_t backslash_count = end - start;
+    }
+    }
+    
+      // Returns the mode: running on CPU or GPU.
+  inline static Brew mode() { return Get().mode_; }
+  // The setters for the variables
+  // Sets the mode. It is recommended that you don't change the mode halfway
+  // into the program since that may cause allocation of pinned memory being
+  // freed in a non-pinned way, which may cause problems - I haven't verified
+  // it personally but better to note it here in the header file.
+  inline static void set_mode(Brew mode) { Get().mode_ = mode; }
+  // Sets the random seed of both boost and curand
+  static void set_random_seed(const unsigned int seed);
+  // Sets the device. Since we have cublas and curand stuff, set device also
+  // requires us to reset those values.
+  static void SetDevice(const int device_id);
+  // Prints the current GPU status.
+  static void DeviceQuery();
+  // Check if specified device is available
+  static bool CheckDevice(const int device_id);
+  // Search from start_id to the highest possible device ordinal,
+  // return the ordinal of the first available device.
+  static int FindDevice(const int start_id = 0);
+  // Parallel training
+  inline static int solver_count() { return Get().solver_count_; }
+  inline static void set_solver_count(int val) { Get().solver_count_ = val; }
+  inline static int solver_rank() { return Get().solver_rank_; }
+  inline static void set_solver_rank(int val) { Get().solver_rank_ = val; }
+  inline static bool multiprocess() { return Get().multiprocess_; }
+  inline static void set_multiprocess(bool val) { Get().multiprocess_ = val; }
+  inline static bool root_solver() { return Get().solver_rank_ == 0; }
+    
+    
+    {  /// Whether to ignore instances with a certain label.
+  bool has_ignore_label_;
+  /// The label indicating that an instance should be ignored.
+  int ignore_label_;
+  /// Keeps counts of the number of samples per class.
+  Blob<Dtype> nums_buffer_;
+};
+    
+    /**
+ * @brief Normalizes the input to have 0-mean and/or unit (1) variance across
+ *        the batch.
+ *
+ * This layer computes Batch Normalization as described in [1]. For each channel
+ * in the data (i.e. axis 1), it subtracts the mean and divides by the variance,
+ * where both statistics are computed across both spatial dimensions and across
+ * the different examples in the batch.
+ *
+ * By default, during training time, the network is computing global
+ * mean/variance statistics via a running average, which is then used at test
+ * time to allow deterministic outputs for each input. You can manually toggle
+ * whether the network is accumulating or using the statistics via the
+ * use_global_stats option. For reference, these statistics are kept in the
+ * layer's three blobs: (0) mean, (1) variance, and (2) moving average factor.
+ *
+ * Note that the original paper also included a per-channel learned bias and
+ * scaling factor. To implement this in Caffe, define a `ScaleLayer` configured
+ * with `bias_term: true` after each `BatchNormLayer` to handle both the bias
+ * and scaling factor.
+ *
+ * [1] S. Ioffe and C. Szegedy, 'Batch Normalization: Accelerating Deep Network
+ *     Training by Reducing Internal Covariate Shift.' arXiv preprint
+ *     arXiv:1502.03167 (2015).
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+template <typename Dtype>
+class BatchNormLayer : public Layer<Dtype> {
+ public:
+  explicit BatchNormLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+      /**
+   * @brief Computes the error gradient w.r.t. the reordered input.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient
+   *        with respect to the outputs
+   *   -# @f$ (M \times ...) @f$:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2):
+   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
+   *     required) back to the input x_1
+   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
+   *     false.
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+     protected:
+  /// @copydoc ContrastiveLossLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    namespace caffe {
+    }
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    enum ImGuiNavDirSourceFlags_
+{
+    ImGuiNavDirSourceFlags_None         = 0,
+    ImGuiNavDirSourceFlags_Keyboard     = 1 << 0,
+    ImGuiNavDirSourceFlags_PadDPad      = 1 << 1,
+    ImGuiNavDirSourceFlags_PadLStick    = 1 << 2
+};
+    
+    //---- Include imgui_user.h at the end of imgui.h as a convenience
+//#define IMGUI_INCLUDE_IMGUI_USER_H
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        // You can set those flags on a per font basis in ImFontConfig::RasterizerFlags.
+    // Use the 'extra_flags' parameter of BuildFontAtlas() to force a flag on all your fonts.
+    enum RasterizerFlags
+    {
+        // By default, hinting is enabled and the font's native hinter is preferred over the auto-hinter.
+        NoHinting       = 1 << 0,   // Disable hinting. This generally generates 'blurrier' bitmap glyphs when the glyph are rendered in any of the anti-aliased modes.
+        NoAutoHint      = 1 << 1,   // Disable auto-hinter.
+        ForceAutoHint   = 1 << 2,   // Indicates that the auto-hinter is preferred over the font's native hinter.
+        LightHinting    = 1 << 3,   // A lighter hinting algorithm for gray-level modes. Many generated glyphs are fuzzier but better resemble their original shape. This is achieved by snapping glyphs to the pixel grid only vertically (Y-axis), as is done by Microsoft's ClearType and Adobe's proprietary font renderer. This preserves inter-glyph spacing in horizontal text.
+        MonoHinting     = 1 << 4,   // Strong hinting algorithm that should only be used for monochrome output.
+        Bold            = 1 << 5,   // Styling: Should we artificially embolden the font?
+        Oblique         = 1 << 6    // Styling: Should we slant the font, emulating italic style?
+    };
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+    
+    
+    {    Data() : initialized(false) {}
   };
     
-    using namespace swift;
-using namespace importer;
+    #include 'DHTAbstractMessage.h'
+#include 'A2STR.h'
+#include 'ValueBase.h'
     
-      static CFPointeeInfo forTypedef(const clang::TypedefNameDecl *decl) {
-    assert(decl);
-    CFPointeeInfo info;
-    info.IsValid = true;
-    info.IsConst = false;
-    info.Decl = decl;
-    return info;
-  }
+      // number of nodes
+  uint32_t numNodes = htonl(nodes_.size());
+  WRITE_CHECK(fp, &numNodes, sizeof(uint32_t));
+  // 4bytes reserved
+  WRITE_CHECK(fp, zero, 4);
     
-      bool isStaticMember() const {
-    return isImportAsMember() && !selfIndex.hasValue();
-  }
-    
-    void GenerateDSYMJobAction::anchor() {}
+      void setNodes(const std::vector<std::shared_ptr<DHTNode>>& nodes);
     
     
-    {public:
-  Windows(const Driver &D, const llvm::Triple &Triple) : ToolChain(D, Triple) {}
-  ~Windows() = default;
-  std::string sanitizerRuntimeLibName(StringRef Sanitizer,
-                                      bool shared = true) const override;
+    {  // Returns two vector of Commands.  First one contains regular
+  // commands.  Secod one contains so called routine commands, which
+  // executed once per event poll returns.
+  std::pair<std::vector<std::unique_ptr<Command>>,
+            std::vector<std::unique_ptr<Command>>>
+  setup(DownloadEngine* e, int family);
 };
     
-        NDMaskPtr NDMask::DeepClone(const DeviceDescriptor& device) const
-    {
-        NDMaskPtr newMask = MakeSharedObject<NDMask>(this->Shape(), device);
-        newMask->CopyFrom(*this);
+    namespace aria2 {
     }
     
-        template <typename T>
-    inline void ValidateType(const Dictionary& dict, const std::wstring& typeValue, size_t currentVersion)
-    {
-        if (!dict.Contains(typeKey))
-        {
-            const auto& version = GetVersion(dict);
-            LogicError('Required key '%ls' is not found in the dictionary (%s).',
-                       typeKey.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
-        } 
-    }
+    #include 'DHTTask.h'
+#include 'Logger.h'
+#include 'LogFactory.h'
+#include 'a2functional.h'
+#include 'fmt.h'
     
-            CNTK_API void SetValueInitialization(const ParameterInitializer& initializationConfig, const DeviceDescriptor& device);
+    public:
+  DHTTaskExecutor(int numConcurrent);
     
-        assert(m_dataReaders.empty());
-    
-    
-    {    ~ScopeTimer()
-    {
-        if (m_verbosity > 2)
-        {
-            m_aggregateTimer.Stop();
-            double time = m_aggregateTimer.ElapsedSeconds();
-            fprintf(stderr, m_message.c_str(), time);
-        }
-    }
-};
-    
-        // computation functions don't do anything for parameter nodes
-    virtual void UpdateFunctionMBSize() override;
-    virtual void /*ComputationNode::*/ ForwardProp(const FrameRange&) override;
-    virtual void /*ComputationNode::*/ BackpropTo(const size_t /*inputIndex*/, const FrameRange&) override;
-    virtual void /*ComputationNodeBase::*/ Validate(bool isFinalValidationPass) override;
-    
-    GC_Extend:
-                // Combining characters are consumed here
-                for (;;) {
-                    if (fp->fInputIdx >= fActiveLimit) {
-                        break;
-                    }
-                    c = UTEXT_CURRENT32(fInputText);
-                    if (sets[URX_GC_EXTEND]->contains(c) == FALSE) {
-                        break;
-                    }
-                    (void)UTEXT_NEXT32(fInputText);
-                    fp->fInputIdx = UTEXT_GETNATIVEINDEX(fInputText);
-                }
-                goto GC_Done;
-    
-            status = U_ZERO_ERROR;
-        UChar *resultChars = result.getBuffer(len16);
-        utext_extract(fPattern, 0, nativeLen, resultChars, len16, &status); // unterminated warning
-        result.releaseBuffer(len16);
-    
-    UnicodeString &ScientificNumberFormatter::MarkupStyle::format(
-        const UnicodeString &original,
-        FieldPositionIterator &fpi,
-        const UnicodeString &preExponent,
-        const DecimalFormatStaticSets & /*unusedDecimalFormatSets*/,
-        UnicodeString &appendTo,
-        UErrorCode &status) const {
-    if (U_FAILURE(status)) {
-        return appendTo;
-    }
-    FieldPosition fp;
-    int32_t copyFromOffset = 0;
-    while (fpi.next(fp)) {
-        switch (fp.getField()) {
-        case UNUM_EXPONENT_SYMBOL_FIELD:
-            appendTo.append(
-                    original,
-                    copyFromOffset,
-                    fp.getBeginIndex() - copyFromOffset);
-            copyFromOffset = fp.getEndIndex();
-            appendTo.append(preExponent);
-            appendTo.append(fBeginMarkup);
-            break;
-        case UNUM_EXPONENT_FIELD:
-            appendTo.append(
-                    original,
-                    copyFromOffset,
-                    fp.getEndIndex() - copyFromOffset);
-            copyFromOffset = fp.getEndIndex();
-            appendTo.append(fEndMarkup);
-            break;
-        default:
-            break;
-        }
-    }
-    appendTo.append(
-            original, copyFromOffset, original.length() - copyFromOffset);
-    return appendTo;
-}
-    
-    #define DOT               ((UChar)0x002E)
-#define SINGLE_QUOTE      ((UChar)0x0027)
-#define SLASH             ((UChar)0x002F)
-#define BACKSLASH         ((UChar)0x005C)
-#define SPACE             ((UChar)0x0020)
-#define TAB               ((UChar)0x0009)
-#define QUOTATION_MARK    ((UChar)0x0022)
-#define ASTERISK          ((UChar)0x002A)
-#define COMMA             ((UChar)0x002C)
-#define HYPHEN            ((UChar)0x002D)
-#define U_ZERO            ((UChar)0x0030)
-#define U_ONE             ((UChar)0x0031)
-#define U_TWO             ((UChar)0x0032)
-#define U_THREE           ((UChar)0x0033)
-#define U_FOUR            ((UChar)0x0034)
-#define U_FIVE            ((UChar)0x0035)
-#define U_SIX             ((UChar)0x0036)
-#define U_SEVEN           ((UChar)0x0037)
-#define U_EIGHT           ((UChar)0x0038)
-#define U_NINE            ((UChar)0x0039)
-#define COLON             ((UChar)0x003A)
-#define SEMI_COLON        ((UChar)0x003B)
-#define CAP_A             ((UChar)0x0041)
-#define CAP_B             ((UChar)0x0042)
-#define CAP_R             ((UChar)0x0052)
-#define CAP_Z             ((UChar)0x005A)
-#define LOWLINE           ((UChar)0x005F)
-#define LEFTBRACE         ((UChar)0x007B)
-#define RIGHTBRACE        ((UChar)0x007D)
-    
-    U_NAMESPACE_END
-    
-        /**
-     * No limits on significant digits.
-     */
-    SignificantDigitInterval()
-            : fMax(INT32_MAX), fMin(0) { }
-    
-    #include 'unicode/unistr.h'
-    
-    /**
- * A representation an acceptable range of digit counts for integers.
- */
-class U_I18N_API IntDigitCountRange : public UMemory {
-public:
-    /**
-     * No constraints: 0 up to INT32_MAX
-     */
-    IntDigitCountRange() : fMin(0), fMax(INT32_MAX) { }
-    IntDigitCountRange(int32_t min, int32_t max);
-    int32_t pin(int32_t digitCount) const;
-    int32_t getMax() const { return fMax; }
-    int32_t getMin() const { return fMin; }
-private:
-    int32_t fMin;
-    int32_t fMax;
-};
-    
-    UnicodeString&
-SimpleDateFormat::format(Calendar& cal, UnicodeString& appendTo,
-                         FieldPositionIterator* posIter, UErrorCode& status) const
+    void DHTTaskFactoryImpl::setCommonProperty(
+    const std::shared_ptr<DHTAbstractTask>& task)
 {
-  FieldPositionIteratorHandler handler(posIter, status);
-  return _format(cal, appendTo, handler, status);
+  task->setRoutingTable(routingTable_);
+  task->setMessageDispatcher(dispatcher_);
+  task->setMessageFactory(factory_);
+  task->setTaskQueue(taskQueue_);
+  task->setLocalNode(localNode_);
 }
     
     
-class SimpleDateFormatStaticSets : public UMemory
+    {  virtual void addImmediateTask(const std::shared_ptr<DHTTask>& task) = 0;
+};
+    
+    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
+                                           const std::string& ipaddr,
+                                           uint16_t port,
+                                           const unsigned char* secret) const
 {
-public:
-    SimpleDateFormatStaticSets(UErrorCode &status);
-    ~SimpleDateFormatStaticSets();
-    
-    static void    initSets(UErrorCode *status);
-    static UBool   cleanup();
-    
-    static UnicodeSet *getIgnorables(UDateFormatField fieldIndex);
-    
-private:
-    UnicodeSet *fDateIgnorables;
-    UnicodeSet *fTimeIgnorables;
-    UnicodeSet *fOtherIgnorables;
-};
-    
-    
-    {        int32_t length = other.getLength();
-        if (length > getCapacity() && reallocate(length, 0) == NULL) {
-            return setToBogus();
-        }
-        if (length > 0) {
-            uprv_memcpy(getBytes(), other.getBytes(), length);
-        }
-        fFlagAndLength = (fFlagAndLength & 0x80000000) | length;
-        fHashCode = other.fHashCode;
-    }
-    
-      oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-    
-    
-    {};
-    
-      // Get the hash value for the kernel's .text memory segment
-  auto f2 = osquery::readFile(kKernelTextHashPath, content);
-  if (f2.ok()) {
-    boost::trim(content);
-    text_segment_hash = content;
-  } else {
-    VLOG(1) << 'Cannot read file: ' << kKernelTextHashPath;
-    return results;
+  unsigned char src[DHT_ID_LENGTH + COMPACT_LEN_IPV6 + SECRET_SIZE];
+  memset(src, 0, sizeof(src));
+  int compactlen = bittorrent::packcompact(src + DHT_ID_LENGTH, ipaddr, port);
+  if (compactlen == 0) {
+    throw DL_ABORT_EX(fmt('Token generation failed: ipaddr=%s, port=%u',
+                          ipaddr.c_str(), port));
   }
-    
-    Status logModulePath(IDebugSymbols3* symbols, Row& r) {
-  std::istringstream converter(r['exception_address']);
-  unsigned long long exAddr;
-  converter >> std::hex >> exAddr;
-  if (converter.fail()) {
-    return Status(1);
-  }
-    }
-    
-    Expected<int, PosixError> syscall(struct perf_event_attr* attr,
-                                  pid_t pid,
-                                  int cpu,
-                                  int group_fd,
-                                  unsigned long const flags);
-    
-    /**
- * @brief Intel HECI GUID for the update application.
- *
- * This GUID can be used on every OS over the HECI protocol to inspect the
- * FW version.
- */
-const std::vector<uint8_t> kMEIUpdateGUID{
-    232, 205, 157, 48, 177, 204, 98, 64, 143, 120, 96, 1, 21, 163, 67, 39,
-};
-    
-    
-    {  tracing::NativeEvent system_event_;
-  ebpf::Program program_;
-};
-    
-    TEST_F(PerfOutputTests, move_constructor) {
-  auto buf = std::array<char, 4>{};
-  auto from_obj = ebpf::PerfOutput<TestMessage>{};
-  from_obj.size_ = buf.size();
-  from_obj.fd_ = 42;
-  from_obj.data_ptr_ = static_cast<void*>(buf.data());
-    }
-    
-    #include <osquery/events/linux/probes/syscall_event.h>
-    
-    TEST_F(SyscallsTracepointTests, SyscallEvent_isTypeEnter) {
-  static_assert(
-      !events::syscall::isEventTypeEnter(events::syscall::EventType::KillExit),
-      '');
-  static_assert(!events::syscall::isEventTypeEnter(
-                    events::syscall::EventType::SetuidExit),
-                '');
-  static_assert(
-      !events::syscall::isEventTypeEnter(events::syscall::EventType::Unknown),
-      '');
-  static_assert(events::syscall::isEventTypeEnter(
-                    events::syscall::EventType::SetuidEnter),
-                '');
-  static_assert(events::syscall::isEventTypeEnter(
-                    events::syscall::EventType::SetuidEnter),
-                '');
+  memcpy(src, infoHash, DHT_ID_LENGTH);
+  memcpy(src + DHT_ID_LENGTH + COMPACT_LEN_IPV6, secret, SECRET_SIZE);
+  unsigned char md[20];
+  message_digest::digest(md, sizeof(md), MessageDigest::sha1().get(), src,
+                         sizeof(src));
+  return std::string(&md[0], &md[sizeof(md)]);
 }
     
-    TEST_F(iokitDevicetree, test_sanity) {
-  // 1. Query data
-  auto const data = execute_query('select * from iokit_devicetree');
-  // 2. Check size before validation
-  // ASSERT_GE(data.size(), 0ul);
-  // ASSERT_EQ(data.size(), 1ul);
-  // ASSERT_EQ(data.size(), 0ul);
-  // 3. Build validation map
-  // See helper.h for avaialbe flags
-  // Or use custom DataCheck object
-  // ValidatatioMap row_map = {
-  //      {'name', NormalType}
-  //      {'class', NormalType}
-  //      {'id', IntType}
-  //      {'parent', IntType}
-  //      {'device_path', NormalType}
-  //      {'service', IntType}
-  //      {'busy_state', IntType}
-  //      {'retain_count', IntType}
-  //      {'depth', IntType}
-  //}
-  // 4. Perform validation
-  // validate_rows(data, row_map);
-}
+      DHTTokenTracker(const unsigned char* initialSecret);
