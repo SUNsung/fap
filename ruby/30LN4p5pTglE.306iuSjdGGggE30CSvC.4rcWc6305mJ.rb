@@ -1,81 +1,72 @@
 
         
-                # Allows setting options from a hash. By default this simply calls
-        # the `#{key}=` method on the config class with the value, which is
-        # the expected behavior most of the time.
-        #
-        # This is expected to mutate itself.
-        #
-        # @param [Hash] options A hash of options to set on this configuration
-        #   key.
-        def set_options(options)
-          options.each do |key, value|
-            send('#{key}=', value)
-          end
-        end
+        WITH_JUST_LIQUID_VAR = <<-LIQUID.freeze
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce auctor libero at
+pharetra tempus. et metus fermentum, eu cursus lorem, ac dictum enim.
+mattis. Curabitur vel dui et lacus rutrum suscipit et {{ title }} neque.
     
-            # This returns all the registered guests.
-        #
-        # @return [Hash]
-        def guests
-          result = {}
+    Benchmark.ips do |x|
+  x.report('local-require') { local_require }
+  x.report('global-require') { global_require }
+  x.report('graceful-require') { graceful_require }
+  x.compare!
+end
+
     
-            # This unregisters a plugin so that its components will no longer
-        # be used. Note that this should only be used for testing purposes.
-        def unregister(plugin)
-          if @registered.include?(plugin)
-            @logger.info('Unregistered: #{plugin.name}')
-            @registered.delete(plugin)
-          end
-        end
+        def no_subcommand(args)
+      unless args.empty? ||
+          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
+        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
+                          Run `jekyll help` to find out more.'
+        abort
       end
+    end
+    
+        def entries_as_json
+      @entries.sort! { |a, b| sort_fn(a.name, b.name) }.map(&:as_json)
+    end
+    
+        attr_reader :filters
+    
+        def mime_type
+      headers['Content-Type'] || 'text/plain'
+    end
+    
+        def resource_params
+      params.require(:user).permit(
+        :unconfirmed_email
+      )
     end
   end
 end
 
     
-        # Iterate over the keyspace.
-    def each(&block)
-      @items.each do |key, _|
-        yield key, get(key)
+      def set_account
+    @account = Account.find(params[:id])
+  end
+    
+      def future_expires
+    Time.now.utc + lease_seconds_or_default
+  end
+    
+          if @user.persisted?
+        sign_in_and_redirect @user, event: :authentication
+        set_flash_message(:notice, :success, kind: provider_id.capitalize) if is_navigational_format?
+      else
+        session['devise.#{provider}_data'] = request.env['omniauth.auth']
+        redirect_to new_user_registration_url
       end
     end
+  end
     
-      context 'brew' do
-    subject { HOMEBREW_LIBRARY_PATH.parent.parent/'bin/brew' }
+    module Jekyll
     
-          its(:env) { is_expected.to use_userpaths }
-    end
     
-        set :run, Proc.new { File.expand_path($0) == File.expand_path(app_file) }
+  # Adds some extra filters used during the category creation process.
+  module Filters
     
-          def initialize(app, options = {})
-        @app, @options = app, default_options.merge(options)
-      end
-    
-          def cookie_paths(path)
-        path = '/' if path.to_s.empty?
-        paths = []
-        Pathname.new(path).descend { |p| paths << p.to_s }
-        paths
-      end
-    
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   XSS
-    # Supported browsers:: all
-    # More infos::         http://en.wikipedia.org/wiki/Cross-site_scripting
-    #
-    # Automatically escapes Rack::Request#params so they can be embedded in HTML
-    # or JavaScript without any further issues. Calls +html_safe+ on the escaped
-    # strings if defined, to avoid double-escaping in Rails.
-    #
-    # Options:
-    # escape:: What escaping modes to use, should be Symbol or Array of Symbols.
-    #          Available: :html (default), :javascript, :url
-    class EscapedParams < Base
-      extend Rack::Utils
-    
-            if has_vector?(request, headers)
-          warn env, 'attack prevented by #{self.class}'
+    def config_tag(config, key, tag=nil, classname=nil)
+  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
+  tag       ||= 'div'
+  classname ||= key.sub(/_/, '-').sub(/\./, '-')
+  output      = '<#{tag} class='#{classname}''
