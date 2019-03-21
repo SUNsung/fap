@@ -1,115 +1,56 @@
 
         
-        module ActionView
-  module Helpers
-    module Tags # :nodoc:
-      class DateSelect < Base # :nodoc:
-        def initialize(object_name, method_name, template_object, options, html_options)
-          @html_options = html_options
+        RSpec::Matchers.define :have_value do |expected|
+  match do |actual|
+    await_condition { actual.value && actual.value.include?(expected) }
+  end
     
-        # An empty argument will be skipped, so return empty quotes.
-    # https://github.com/ruby/ruby/blob/a6413848153e6c37f6b0fea64e3e871460732e34/lib/shellwords.rb#L142-L143
-    return ''''.dup if str.empty?
-    
-    # test shellescape Windows implementation directly
-describe 'WindowsShellwords#shellescape' do
-  os = 'windows'
-  shellescape_testcases.each do |testcase|
-    it testcase['it'] + ': ' + testcase['it_result'][os] do
-      str = testcase['str']
-      escaped = WindowsShellwords.shellescape(str)
-    
-    if git.modified_files.include?('snapshot/lib/assets/SnapshotHelper.swift')
-  warn('You modified `SnapshotHelper.swift`, make sure to update the version number at the bottom of the file to notify users about the new helper file.')
-end
-    
-      # POST /resource/confirmation
-  def create
-    self.resource = resource_class.send_confirmation_instructions(resource_params)
-    yield resource if block_given?
-    
-    if defined?(ActionMailer)
-  class Devise::Mailer < Devise.parent_mailer.constantize
-    include Devise::Mailers::Helpers
-    
-    class BugTest < ActionDispatch::IntegrationTest
-  include Rack::Test::Methods
-  include Warden::Test::Helpers
-    
-          def remember_key(resource, scope)
-        resource.rememberable_options.fetch(:key, 'remember_#{scope}_token')
+          def preference_field_for(form, field, options)
+        case options[:type]
+        when :integer
+          form.text_field(field, preference_field_options(options))
+        when :boolean
+          form.check_box(field, preference_field_options(options))
+        when :string
+          form.text_field(field, preference_field_options(options))
+        when :password
+          form.password_field(field, preference_field_options(options))
+        when :text
+          form.text_area(field, preference_field_options(options))
+        else
+          form.text_field(field, preference_field_options(options))
+        end
       end
+    
+          # Main menu tree menu
+      def main_menu_tree(text, icon: nil, sub_menu: nil, url: '#')
+        content_tag :li, class: 'sidebar-menu-item d-block w-100' do
+          main_menu_item(text, url: url, icon: icon) +
+            render(partial: 'spree/admin/shared/sub_menu/#{sub_menu}')
+        end
+      end
+    
+                expect(order.shipments.count).to eq(1)
+            expect(order.shipments.first.inventory_units_for(product.master).sum(&:quantity)).to eq(2)
+            expect(order.shipments.first.stock_location.id).to eq(stock_location.id)
+          end
+    
+      let!(:order) { create(:order_ready_to_ship, number: 'R100', state: 'complete', line_items_count: 5) }
+    
+          within('#sidebar') { click_link 'Variants' }
+      expect(page).to have_content('To add variants, you must first define')
     end
-  end
-end
-
     
-        def routes
-      @routes ||= ROUTES.values_at(*self.modules).compact.uniq
+              def serialize_order(order)
+            resource_serializer.new(order.reload, include: resource_includes, fields: sparse_fields).serializable_hash
+          end
+    
+        def self.names_for(klass)
+      instance.names_for(klass)
     end
     
-    module Devise
-  module Models
-    # Timeoutable takes care of verifying whether a user session has already
-    # expired or not. When a session expires after the configured time, the user
-    # will be asked for credentials again, it means, they will be redirected
-    # to the sign in page.
-    #
-    # == Options
-    #
-    # Timeoutable adds the following options to devise_for:
-    #
-    #   * +timeout_in+: the interval to timeout the user session without activity.
-    #
-    # == Examples
-    #
-    #   user.timedout?(30.minutes.ago)
-    #
-    module Timeoutable
-      extend ActiveSupport::Concern
-    
-        $Kernel_trace_var_global = 'foo'
-    captured.should == 'foo'
-  end
-    
-        it 'Returns nil when Referer header is invalid' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
-      expect(subject.referrer(env)).to be_nil
+        def initialize(klass, name, options)
+      @klass = klass
+      @name = name
+      @options = options
     end
-  end
-end
-
-    
-        files = []
-    Find.find('.') do |path|
-      stat = File.lstat(path)
-      next unless stat.symlink? or stat.file?
-      files << path
-    end
-    ::Dir.chdir(cwd)
-    
-      private
-  def input(command)
-    platforms = [
-      ::PleaseRun::Platform::Systemd.new('default'), # RHEL 7, Fedora 19+, Debian 8, Ubuntu 16.04
-      ::PleaseRun::Platform::Upstart.new('1.5'), # Recent Ubuntus
-      ::PleaseRun::Platform::Upstart.new('0.6.5'), # CentOS 6
-      ::PleaseRun::Platform::Launchd.new('10.9'), # OS X
-      ::PleaseRun::Platform::SYSV.new('lsb-3.1') # Ancient stuff
-    ]
-    pleaserun_attributes = [ 'chdir', 'user', 'group', 'umask', 'chroot', 'nice', 'limit_coredump',
-                             'limit_cputime', 'limit_data', 'limit_file_size', 'limit_locked_memory',
-                             'limit_open_files', 'limit_user_processes', 'limit_physical_memory', 'limit_stack_size',
-                             'log_directory', 'log_file_stderr', 'log_file_stdout']
-    
-        cleanup_staging
-    # Tell 'dir' to input '.' and chdir/prefix will help it figure out the
-    # rest.
-    dir.input('.')
-    @staging_path = dir.staging_path
-    dir.cleanup_build
-  end # def input
-    
-      def run_cli
-    require 'fpm'
-    require 'fpm/command'
