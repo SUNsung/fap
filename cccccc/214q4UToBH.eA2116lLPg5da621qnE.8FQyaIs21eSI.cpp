@@ -1,117 +1,112 @@
 
         
-            const QString &getAppName() const { return appName; }
-    const QIcon &getAppIcon() const { return appIcon; }
-    const QIcon &getTrayAndWindowIcon() const { return trayAndWindowIcon; }
-    const QString &getTitleAddText() const { return titleAddText; }
-    
-    Q_SIGNALS:
-    void valueChanged();
-    
-    
-    {    // These inputs are valid because PROTOCOLINFO accepts an OtherLine that is
-    // just an OptArguments, which enables multiple spaces to be present
-    // between the command and arguments.
-    CheckSplitTorReplyLine('COMMAND  ARGS', 'COMMAND', ' ARGS');
-    CheckSplitTorReplyLine('COMMAND   EVEN+more  ARGS', 'COMMAND', '  EVEN+more  ARGS');
-}
-    
-    
-    {bool ParseDouble(const std::string& str, double *out)
-{
-    if (!ParsePrechecks(str))
-        return false;
-    if (str.size() >= 2 && str[0] == '0' && str[1] == 'x') // No hexadecimal floats allowed
-        return false;
-    std::istringstream text(str);
-    text.imbue(std::locale::classic());
-    double result;
-    text >> result;
-    if(out) *out = result;
-    return text.eof() && !text.fail();
-}
-}
-    
-    
-    {  bool RunOnDevice() override {
-    for (Blob* output : OperatorBase::Outputs()) {
-      output->Reset();
-    }
-    return true;
-  }
-};
-    
-    Contrast Example 2 with Example 1. For each data point per feature, the values
-are sorted by the corresponding KEY.
-)DOC')
-    .Input(0, 'DATA', 'Tensor of rank 1.')
-    .Input(
-        1,
-        'RANGES',
-        'Tensor of int32/int64 ranges, of dims (N, M, 2). '
-        'Where N is number of examples and M is a size of each example. '
-        'Last dimention represents a range in the format (start, lengths)')
-    .Input(2, 'KEY', 'Tensor of rank 1 and type int64.')
-    .Output(0, 'OUTPUT', '1-D tensor of size sum of range lengths')
-    .Arg('lengths', 'Expected lengths for ranges')
-    .TensorInferenceFunction([](const OperatorDef& def,
-                                const vector<TensorShape>& in) {
-      ArgumentHelper helper(def);
-      auto lengths = helper.GetRepeatedArgument<int>('lengths');
-      CAFFE_ENFORCE_EQ(in[0].dims_size(), 1, 'DATA should be 1-D tensor.');
-      CAFFE_ENFORCE_EQ(in[1].dims_size(), 3, 'RANGES should be 3-D tensor.');
-      if (in.size() > 2) {
-        CAFFE_ENFORCE_EQ(in[2].dims_size(), 1, 'KEY should be 1-D tensor.');
-      }
-      CAFFE_ENFORCE_GT(lengths.size(), 0, 'lengths should be non-empty.');
-      std::vector<TensorShape> out(lengths.size());
-      for (int i = 0; i < lengths.size(); ++i) {
-        out[i].set_data_type(in[0].data_type());
-        out[i].add_dims(in[1].dims(0));
-        out[i].add_dims(lengths[i]);
-      }
-      return out;
-    });
-    
-    struct DataStreamWrapper final : Stream::Wrapper {
-  DataStreamWrapper() {
-    m_isLocal = true;
-  }
-    }
-    
-    struct GlobStreamWrapper final : Stream::Wrapper {
-  req::ptr<File> open(const String& filename, const String& mode, int options,
-                      const req::ptr<StreamContext>& context) override;
-  req::ptr<Directory> opendir(const String& path) override;
-};
-    
-    void logAHMSubMapWarning(folly::StringPiece mapName) {
-  StackTrace st;
-  logPerfWarning(
-    'AtomicHashMap overflow',
-    [&](StructuredLogEntry& cols) {
-      cols.setStr('map_name', mapName);
-      cols.setStackTrace('stack', st);
-    }
-  );
-}
-    
-    void logAHMSubMapWarning(folly::StringPiece mapName);
-    
-    // A note about memory_order_consume. Technically, this architecture allows to avoid
-// unnecessary memory barrier after consume load since it supports data dependency ordering.
-// However, some compiler optimizations may break a seemingly valid code relying on data
-// dependency tracking by injecting bogus branches to aid out of order execution.
-// This may happen not only in Boost.Atomic code but also in user's code, which we have no
-// control of. See this thread: http://lists.boost.org/Archives/boost/2014/06/213890.php.
-// For this reason we promote memory_order_consume to memory_order_acquire.
-    
-    template< typename T >
-struct storage_size_of
-{
-    enum _
+        
     {
-        size = sizeof(T),
-        value = (size == 3 ? 4 : (size >= 5 && size <= 7 ? 8 : (size >= 9 && size <= 15 ? 16 : size)))
-    };
+    {}  // namespace
+}  // namespace leveldb
+    
+    class SequentialFile;
+    
+     private:
+  WritableFile* dest_;
+  int block_offset_;       // Current offset in block
+    
+    #ifndef STORAGE_LEVELDB_DB_MEMTABLE_H_
+#define STORAGE_LEVELDB_DB_MEMTABLE_H_
+    
+          case kLogNumber:
+        if (GetVarint64(&input, &log_number_)) {
+          has_log_number_ = true;
+        } else {
+          msg = 'log number';
+        }
+        break;
+    
+      ASSERT_TRUE(! Overlaps('a', 'b'));
+  ASSERT_TRUE(! Overlaps('z1', 'z2'));
+  ASSERT_TRUE(Overlaps('a', 'p'));
+  ASSERT_TRUE(Overlaps('a', 'q'));
+  ASSERT_TRUE(Overlaps('a', 'z'));
+  ASSERT_TRUE(Overlaps('p', 'p1'));
+  ASSERT_TRUE(Overlaps('p', 'q'));
+  ASSERT_TRUE(Overlaps('p', 'z'));
+  ASSERT_TRUE(Overlaps('p1', 'p2'));
+  ASSERT_TRUE(Overlaps('p1', 'z'));
+  ASSERT_TRUE(Overlaps('q', 'q'));
+  ASSERT_TRUE(Overlaps('q', 'q1'));
+    
+    #include 'uelement.h'
+    
+    U_NAMESPACE_BEGIN
+    
+    #endif
+    
+    class NumberFormat;
+    
+    #include 'unicode/uobject.h'
+#include 'unicode/utypes.h'
+    
+    
+    {    // Always emit at least '0'
+    if (digits == 0) {
+        return appendTo.append((UChar) 0x30);
+    }
+    return appendTo.append(gDigits, ((smallPositiveValue  + 1) << 2) - digits, digits);
+}
+    
+    static const UChar gZero[] = { 0x7A, 0x65, 0x72, 0x6F };
+static const UChar gOne[] = { 0x6F, 0x6E, 0x65 };
+static const UChar gTwo[] = { 0x74, 0x77, 0x6F };
+static const UChar gFew[] = { 0x66, 0x65, 0x77 };
+static const UChar gMany[] = { 0x6D, 0x61, 0x6E, 0x79 };
+static const UChar gOther[] = { 0x6F, 0x74, 0x68, 0x65, 0x72 };
+    
+        /**
+     * @param keyword for example 'few' or 'other'
+     * @return the index of the plural form corresponding to the keyword, or OTHER
+     */
+    static int32_t indexOrOtherIndexFromString(const char *keyword) {
+        int32_t i = indexOrNegativeFromString(keyword);
+        return i >= 0 ? i : OTHER;
+    }
+    
+        int32_t cursor = cursorPos;
+    
+    class IUnaryCommand : public IOperatorCommand
+{
+public:
+    virtual const std::shared_ptr<CalculatorVector<int>> & GetCommands() const = 0;
+    virtual void SetCommands(int command1, int command2) = 0;
 };
+    
+            property CalculatorApp::ViewModel::StandardCalculatorViewModel^ Model
+        {
+            CalculatorApp::ViewModel::StandardCalculatorViewModel^ get() {
+                return static_cast<CalculatorApp::ViewModel::StandardCalculatorViewModel^>(this->DataContext);
+            }
+        }
+    
+        private:
+        void FromDate_DateChanged(_In_ Windows::UI::Xaml::Controls::CalendarDatePicker^ sender, _In_ Windows::UI::Xaml::Controls::CalendarDatePickerDateChangedEventArgs^ e);
+        void ToDate_DateChanged(_In_ Windows::UI::Xaml::Controls::CalendarDatePicker^ sender, _In_ Windows::UI::Xaml::Controls::CalendarDatePickerDateChangedEventArgs^ e);
+        void AddSubtract_DateChanged(_In_ Windows::UI::Xaml::Controls::CalendarDatePicker^ sender, _In_ Windows::UI::Xaml::Controls::CalendarDatePickerDateChangedEventArgs^ e);
+        void OffsetValue_Changed(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::Controls::SelectionChangedEventArgs^ e);
+        void OnCopyMenuItemClicked(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::RoutedEventArgs^ e);
+        void OnLoaded(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::RoutedEventArgs^ e);
+        void DateCalcOption_Changed(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::Controls::SelectionChangedEventArgs^ e);
+        void AddSubtractDateGrid_Loaded(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::RoutedEventArgs^ e);
+        void AddSubtractOption_Checked(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::RoutedEventArgs^ e);
+        void ReselectCalendarDate(_In_ Windows::UI::Xaml::Controls::CalendarDatePicker^ calendarDatePicker, Windows::Foundation::DateTime dateTime);
+        void OffsetDropDownClosed(_In_ Platform::Object^ sender, _In_ Platform::Object^ e);
+        void CalendarFlyoutClosed(_In_ Platform::Object^ sender, _In_ Platform::Object^ e);
+        void RaiseLiveRegionChangedAutomationEvent(_In_ bool isDateDiffMode);
+    
+        Config(void);
+    
+    void Config::setPointScaleFactor(float pixelsInPoint)
+{
+    YGConfigSetPointScaleFactor(m_config, pixelsInPoint);
+}
+    
+    #define FBCRASH(msg, ...) facebook::assertInternal('Fatal error (%s:%d): ' msg, __FILE__, __LINE__, ##__VA_ARGS__)
+#define FBUNREACHABLE() facebook::assertInternal('This code should be unreachable (%s:%d)', __FILE__, __LINE__)
