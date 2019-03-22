@@ -1,253 +1,307 @@
 
         
-        void read_image(std::ifstream* image_file, std::ifstream* label_file,
-        uint32_t index, uint32_t rows, uint32_t cols,
-        char* pixels, char* label) {
-  image_file->seekg(index * rows * cols + 16);
-  image_file->read(pixels, rows * cols);
-  label_file->seekg(index + 8);
-  label_file->read(label, 1);
-}
-    
-      /**
-   * @brief Applies the same transformation defined in the data layer's
-   * transform_param block to all the num images in a input_blob.
-   *
-   * @param input_blob
-   *    A Blob containing the data to be transformed. It applies the same
-   *    transformation to all the num images in the blob.
-   * @param transformed_blob
-   *    This is destination blob, it will contain as many images as the
-   *    input blob. It can be part of top blob's data.
-   */
-  void Transform(Blob<Dtype>* input_blob, Blob<Dtype>* transformed_blob);
-    
-    /// @brief Fills a Blob with Gaussian-distributed values @f$ x = a @f$.
-template <typename Dtype>
-class GaussianFiller : public Filler<Dtype> {
- public:
-  explicit GaussianFiller(const FillerParameter& param)
-      : Filler<Dtype>(param) {}
-  virtual void Fill(Blob<Dtype>* blob) {
-    Dtype* data = blob->mutable_cpu_data();
-    CHECK(blob->count());
-    caffe_rng_gaussian<Dtype>(blob->count(), Dtype(this->filler_param_.mean()),
-        Dtype(this->filler_param_.std()), blob->mutable_cpu_data());
-    int sparse = this->filler_param_.sparse();
-    CHECK_GE(sparse, -1);
-    if (sparse >= 0) {
-      // Sparse initialization is implemented for 'weight' blobs; i.e. matrices.
-      // These have num == channels == 1; width is number of inputs; height is
-      // number of outputs.  The 'sparse' variable specifies the mean number
-      // of non-zero input weights for a given output.
-      CHECK_GE(blob->num_axes(), 1);
-      const int num_outputs = blob->shape(0);
-      Dtype non_zero_probability = Dtype(sparse) / Dtype(num_outputs);
-      rand_vec_.reset(new SyncedMemory(blob->count() * sizeof(int)));
-      int* mask = reinterpret_cast<int*>(rand_vec_->mutable_cpu_data());
-      caffe_rng_bernoulli(blob->count(), non_zero_probability, mask);
-      for (int i = 0; i < blob->count(); ++i) {
-        data[i] *= mask[i];
+            // Ignore first non-switch arg if it's not a standalone package.
+    bool ignore_arg = !package->self_extract();
+    for (unsigned i = 1; i < argv.size(); ++i) {
+      if (ignore_arg && argv[i] == args[0]) {
+        ignore_arg = false;
+        continue;
       }
     }
-  }
-    }
     
-      /** Will not return until the internal thread has exited. */
-  void StopInternalThread();
+    // Tell browser to delete a object.
+// function DeallocateObject(id);
+v8::Handle<v8::Value> DeallocateObject(int routing_id,
+                                       int object_id);
     
-    /**
- * @brief Computes the classification accuracy for a one-of-many
- *        classification task.
- */
-template <typename Dtype>
-class AccuracyLayer : public Layer<Dtype> {
+    class Clipboard : public Base {
  public:
-  /**
-   * @param param provides AccuracyParameter accuracy_param,
-   *     with AccuracyLayer options:
-   *   - top_k (\b optional, default 1).
-   *     Sets the maximum rank @f$ k @f$ at which a prediction is considered
-   *     correct.  For example, if @f$ k = 5 @f$, a prediction is counted
-   *     correct if the correct label is among the top 5 predicted labels.
-   */
-  explicit AccuracyLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+  Clipboard(int id,
+            const base::WeakPtr<DispatcherHost>& dispatcher_host,
+            const base::DictionaryValue& option);
+  ~Clipboard() override;
     }
     
     
-    {}  // namespace caffe
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of PoolingLayer.
- *        Fallback to PoolingLayer for CPU mode.
-*/
-template <typename Dtype>
-class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
- public:
-  explicit CuDNNPoolingLayer(const LayerParameter& param)
-      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNPoolingLayer();
-  // Currently, cuDNN does not support the extra top blob.
-  virtual inline int MinTopBlobs() const { return -1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    }
-    
-    #include 'caffe/layers/neuron_layer.hpp'
-#include 'caffe/layers/sigmoid_layer.hpp'
-    
-    enum GARBAGE_LEVEL
-{
-  G_NEVER_CRUNCH,
-  G_OK,
-  G_DODGY,
-  G_TERRIBLE
-};
-    
-    int orientation_and_script_detection(STRING& filename,
-                                     OSResults*,
-                                     tesseract::Tesseract*);
-    
-    
-    {}  // namespace tesseract.
+    {} // namespace nwapi
 
     
-    #include 'rect.h'    // for TBOX
-#include 'strngs.h'  // for STRING
+    void Menu::Popup(int x, int y, content::Shell* shell) {
+  GdkEventButton* event = NULL; //FIXME: shell->web_contents()->GetRenderWidgetHostView()->GetLastMouseDown();
+  uint32_t triggering_event_time = event ? event->time : GDK_CURRENT_TIME;
+  gfx::Point point;
+  if (!event) {
+    // gfx::Rect bounds = shell->web_contents()->GetRenderWidgetHostView()->GetViewBounds();
+    // point = gfx::Point(x + bounds.x(), y + bounds.y());
+    DVLOG(1) << 'no last mouse down event';
+    point = gfx::Point(x, y);
+  }else
+    point = gfx::Point(event->x_root, event->y_root);
+    }
     
-      // Try to adjust the blamer bundle.
-  if (orig_bb != nullptr) {
-    // TODO(rays) Looks like a leak to me.
-    // orig_bb should take, rather than copy.
-    word->blamer_bundle = new BlamerBundle();
-    word2->blamer_bundle = new BlamerBundle();
-    orig_bb->SplitBundle(chopped->blobs.back()->bounding_box().right(),
-                         word2->chopped_word->blobs[0]->bounding_box().left(),
-                         wordrec_debug_blamer,
-                         word->blamer_bundle, word2->blamer_bundle);
+    void NwDesktopCaptureMonitor::OnSourceRemoved(DesktopMediaList* list, int index) {
+    std::unique_ptr<base::ListValue> args = nwapi::nw__screen::OnSourceRemoved::Create(index);
+    DispatchEvent(
+      events::HistogramValue::UNKNOWN, 
+      nwapi::nw__screen::OnSourceRemoved::kEventName,
+      std::move(args));
   }
     
     
-    { private:
-  // The collection of images to put in the PDF.
-  Pixa* pixa_;
-  // The fonts used to draw text captions.
-  L_Bmf* fonts_;
-};
+    {    private:
+      DISALLOW_COPY_AND_ASSIGN(NwScreenGetScreensFunction);      
+  };
     
-    
-    {  int delta = this - prev;
-  int32_t n = prev->n_ + 1;
-  int32_t sig_x = prev->sig_x_ + delta;
-  int64_t sig_xsq = prev->sig_xsq_ + delta * delta;
-  int64_t cost = (sig_xsq - sig_x * sig_x / n) / n;
-  cost += prev->total_cost_;
-  UpdateIfBetter(cost, prev->total_steps_ + 1, prev, n, sig_x, sig_xsq);
-  return cost;
-}
-    
-    
-    { private:
-  double total_weight;         // no of elements or sum of weights.
-  double sigx;                 // sum of x
-  double sigy;                 // sum of y
-  double sigxx;                // sum x squared
-  double sigxy;                // sum of xy
-  double sigyy;                // sum y squared
-};
-    
-    
-    {}  // namespace testing
-    
-    template <typename T>
-internal::ParamGenerator<T> Range(T start, T end) {
-  return Range(start, end, 1);
-}
-    
-    #ifndef GTEST_INCLUDE_GTEST_GTEST_SPI_H_
-#define GTEST_INCLUDE_GTEST_GTEST_SPI_H_
-    
-    // ADD_FAILURE unconditionally adds a failure to the current test.
-// SUCCEED generates a success - it doesn't automatically make the
-// current test successful, as a test is only successful when it has
-// no failure.
-//
-// EXPECT_* verifies that a certain condition is satisfied.  If not,
-// it behaves like ADD_FAILURE.  In particular:
-//
-//   EXPECT_TRUE  verifies that a Boolean condition is true.
-//   EXPECT_FALSE verifies that a Boolean condition is false.
-//
-// FAIL and ASSERT_* are similar to ADD_FAILURE and EXPECT_*, except
-// that they will also abort the current function on failure.  People
-// usually want the fail-fast behavior of FAIL and ASSERT_*, but those
-// writing data-driven tests often find themselves using ADD_FAILURE
-// and EXPECT_* more.
-    
-    // In describing the results of death tests, these terms are used with
-// the corresponding definitions:
-//
-// exit status:  The integer exit information in the format specified
-//               by wait(2)
-// exit code:    The integer code passed to exit(3), _exit(2), or
-//               returned from main()
-class GTEST_API_ DeathTest {
- public:
-  // Create returns false if there was an error determining the
-  // appropriate action to take for the current death test; for example,
-  // if the gtest_death_test_style flag is set to an invalid value.
-  // The LastMessage method will return a more detailed message in that
-  // case.  Otherwise, the DeathTest pointer pointed to by the 'test'
-  // argument is set.  If the death test should be skipped, the pointer
-  // is set to NULL; otherwise, it is set to the address of a new concrete
-  // DeathTest object that controls the execution of the current test.
-  static bool Create(const char* statement, const RE* regex,
-                     const char* file, int line, DeathTest** test);
-  DeathTest();
-  virtual ~DeathTest() { }
+    extern 'C' {
+  PyMODINIT_FUNC INITFUNC() {
+#if PY_MAJOR_VERSION >= 3
+    PyObject *module = PyModule_Create(&_module);
+#else
+    PyObject *module = Py_InitModule3(
+        const_cast<char*>(kModuleName),
+        NULL,
+        const_cast<char*>(kModuleDocstring));
+#endif
+    if (module == NULL) {
+      return INITFUNC_ERRORVAL;
+    }
+    }
     }
     
-    template <GTEST_5_TYPENAMES_(T)>
-inline GTEST_5_TUPLE_(T) make_tuple(const T0& f0, const T1& f1, const T2& f2,
-    const T3& f3, const T4& f4) {
-  return GTEST_5_TUPLE_(T)(f0, f1, f2, f3, f4);
+    
+    {
+    {
+    {}  // namespace python
+}  // namespace protobuf
+}  // namespace google
+
+    
+    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
+  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
+  // Identifiers can't start with digits
+  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
+  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
 }
     
-    // The template 'selector' struct TemplateSel<Tmpl> is used to
-// represent Tmpl, which must be a class template with one type
-// parameter, as a type.  TemplateSel<Tmpl>::Bind<T>::type is defined
-// as the type Tmpl<T>.  This allows us to actually instantiate the
-// template 'selected' by TemplateSel<Tmpl>.
-//
-// This trick is necessary for simulating typedef for class templates,
-// which C++ doesn't support directly.
-template <GTEST_TEMPLATE_ Tmpl>
-struct TemplateSel {
-  template <typename T>
-  struct Bind {
-    typedef Tmpl<T> type;
-  };
+    
+    {
+    {
+    {
+    {
+}  // namespace java
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
+    
+      EXPECT_EQ(5, decode_data.num_entries());
+    
+    string OneofGenerator::HasIndexAsString(void) const {
+  return variables_.find('index')->second;
+}
+    
+    TEST(StructurallyValidTest, ValidUTF8String) {
+  // On GCC, this string can be written as:
+  //   'abcd 1234 - \u2014\u2013\u2212'
+  // MSVC seems to interpret \u differently.
+  string valid_str('abcd 1234 - \342\200\224\342\200\223\342\210\222 - xyz789');
+  EXPECT_TRUE(IsStructurallyValidUTF8(valid_str.data(),
+                                      valid_str.size()));
+  // Additional check for pointer alignment
+  for (int i = 1; i < 8; ++i) {
+    EXPECT_TRUE(IsStructurallyValidUTF8(valid_str.data() + i,
+                                        valid_str.size() - i));
+  }
+}
+    
+    // or_ is a template || operator.
+// or_<A, B>::value evaluates 'A::value || B::value'.
+template<typename A, typename B>
+struct or_ : public integral_constant<bool, (A::value || B::value)> {
 };
     
-    // Type lists of length 1, 2, 3, and so on.
+     public:
+  // Constructs an empty Message.
+  Message();
     
-    // Tests positive input.
-TEST(IsPrimeTest, Positive) {
-  EXPECT_FALSE(IsPrime(4));
-  EXPECT_TRUE(IsPrime(5));
-  EXPECT_FALSE(IsPrime(6));
-  EXPECT_TRUE(IsPrime(23));
+    // To distinguish different instances of the pattern, (yes, you
+// can instantiate it more then once) the first argument to the
+// INSTANTIATE_TEST_CASE_P macro is a prefix that will be added to the
+// actual test case name. Remember to pick unique prefixes for different
+// instantiations. The tests from the instantiation above will have
+// these names:
+//
+//    * InstantiationName/FooTest.DoesBlah/0 for 'meeny'
+//    * InstantiationName/FooTest.DoesBlah/1 for 'miny'
+//    * InstantiationName/FooTest.DoesBlah/2 for 'moe'
+//    * InstantiationName/FooTest.HasBlahBlah/0 for 'meeny'
+//    * InstantiationName/FooTest.HasBlahBlah/1 for 'miny'
+//    * InstantiationName/FooTest.HasBlahBlah/2 for 'moe'
+//
+// You can use these names in --gtest_filter.
+//
+// This statement will instantiate all tests from FooTest again, each
+// with parameter values 'cat' and 'dog':
+    
+    // Implements printing a non-reference type T by letting the compiler
+// pick the right overload of PrintTo() for T.
+template <typename T>
+class UniversalPrinter {
+ public:
+  // MSVC warns about adding const to a function type, so we want to
+  // disable the warning.
+#ifdef _MSC_VER
+# pragma warning(push)          // Saves the current warning state.
+# pragma warning(disable:4180)  // Temporarily disables warning 4180.
+#endif  // _MSC_VER
+    }
+    
+      // The c'tor sets this object as the test part result reporter used
+  // by Google Test.  The 'result' parameter specifies where to report the
+  // results. This reporter will only catch failures generated in the current
+  // thread. DEPRECATED
+  explicit ScopedFakeTestPartResultReporter(TestPartResultArray* result);
+    
+      // Fired after a failed assertion or a SUCCEED() invocation.
+  virtual void OnTestPartResult(const TestPartResult& test_part_result) = 0;
+    
+      // Create the directory so that path exists. Returns true if successful or
+  // if the directory already exists; returns false if unable to create the
+  // directory for any reason, including if the parent directory does not
+  // exist. Not named 'CreateDirectory' because that's a macro on Windows.
+  bool CreateFolder() const;
+    
+      bool operator==(T* p) const { return value_ == p; }
+  bool operator!=(T* p) const { return value_ != p; }
+  template <typename U>
+  bool operator==(linked_ptr<U> const& ptr) const {
+    return value_ == ptr.get();
+  }
+  template <typename U>
+  bool operator!=(linked_ptr<U> const& ptr) const {
+    return value_ != ptr.get();
+  }
+    
+      // Compares two wide C strings, ignoring case.  Returns true iff they
+  // have the same content.
+  //
+  // Unlike wcscasecmp(), this function can handle NULL argument(s).
+  // A NULL C string is considered different to any non-NULL wide C string,
+  // including the empty string.
+  // NB: The implementations on different platforms slightly differ.
+  // On windows, this method uses _wcsicmp which compares according to LC_CTYPE
+  // environment variable. On GNU platform this method uses wcscasecmp
+  // which compares according to LC_CTYPE category of the current locale.
+  // On MacOS X, it uses towlower, which also uses LC_CTYPE category of the
+  // current locale.
+  static bool CaseInsensitiveWideCStringEquals(const wchar_t* lhs,
+                                               const wchar_t* rhs);
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29>
+struct Types29 {
+  typedef T1 Head;
+  typedef Types28<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
+      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+      T29> Tail;
+};
+    
+    // This provides interface PrimeTable that determines whether a number is a
+// prime and determines a next prime number. This interface is used
+// in Google Test samples demonstrating use of parameterized tests.
+    
+    
+    {  // n has no integer factor in the range (1, n), and thus is prime.
+  return true;
+}
+
+    
+    // Tests factorial of 0.
+TEST(FactorialTest, Zero) {
+  EXPECT_EQ(1, Factorial(0));
+}
+    
+      // Constructs a MyString by cloning a 0-terminated C string.
+  explicit MyString(const char* a_c_string) : c_string_(NULL) {
+    Set(a_c_string);
+  }
+    
+    const char kHelloString[] = 'Hello, world!';
+    
+    DEFINE_string(adapter_config_filename, 'modules/canbus/conf/adapter.conf',
+              'The adapter config file');
+    
+    void ClusterGeneralInfo701::Parse(const std::uint8_t* bytes, int32_t length,
+                                  ContiRadar* conti_radar) const {
+  auto obs = conti_radar->add_contiobs();
+  obs->set_clusterortrack(true);
+  obs->set_obstacle_id(obstacle_id(bytes, length));
+  obs->set_longitude_dist(longitude_dist(bytes, length));
+  obs->set_lateral_dist(lateral_dist(bytes, length));
+  obs->set_longitude_vel(longitude_vel(bytes, length));
+  obs->set_lateral_vel(lateral_vel(bytes, length));
+  obs->set_rcs(rcs(bytes, length));
+  obs->set_dynprop(dynprop(bytes, length));
+  double timestamp = apollo::common::time::Clock::NowInSeconds();
+  auto header = obs->mutable_header();
+  header->CopyFrom(conti_radar->header());
+  header->set_timestamp_sec(timestamp);
+}
+    
+    Eigen::MatrixXd SplineSegKernel::ThirdOrderDerivativeKernel(
+    const uint32_t num_params, const double accumulated_x) {
+  if (num_params > reserved_order_ + 1) {
+    CalculateThirdOrderDerivative(num_params);
+  }
+  Eigen::MatrixXd term_matrix;
+  IntegratedTermMatrix(num_params, accumulated_x, 'third_order', &term_matrix);
+  return (kernel_third_order_derivative_.block(0, 0, num_params, num_params))
+      .cwiseProduct(term_matrix);
+}
+    
+    
+    {
+    {
+    {}  // namespace gem
+}  // namespace canbus
+}  // namespace apollo
+
+    
+    class GemVehicleFactoryTest : public ::testing::Test {
+ public:
+  virtual void SetUp() {
+    VehicleParameter parameter;
+    parameter.set_brand(VehicleParameter::GEM);
+    gem_factory_.SetVehicleParameter(parameter);
+  }
+  virtual void TearDown() {}
+    }
+    
+    // config detail: {'name': 'output_value', 'offset': 0.0, 'precision': 0.001,
+// 'len': 16, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 39,
+// 'type': 'double', 'order': 'motorola', 'physical_unit': '%'}
+double Accelrpt68::output_value(const std::uint8_t* bytes,
+                                int32_t length) const {
+  Byte t0(bytes + 4);
+  int32_t x = t0.get_byte(0, 8);
+    }
+    
+    
+    {  double ret = x * 0.001000;
+  return ret;
 }
