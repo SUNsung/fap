@@ -1,320 +1,342 @@
 
         
-        void ModelAnalyzer::PrintNodeInfo(const NodeDef* node,
-                                  const GraphProperties& properties, bool debug,
-                                  std::ostream& os) const {
-  os << node->name() << ' [' << node->op() << ']' << std::endl;
-  if (properties.HasOutputProperties(node->name())) {
-    const std::vector<OpInfo::TensorProperties>& props =
-        properties.GetOutputProperties(node->name());
-    for (int i = 0; i < props.size(); ++i) {
-      const OpInfo::TensorProperties& prop = props[i];
-      os << '\t'
-         << 'output ' << i << ' (' << DataTypeString(prop.dtype())
-         << ') has shape ';
-      if (prop.shape().unknown_rank()) {
-        os << '?';
-      } else {
-        os << '[';
-        for (int i = 0; i < prop.shape().dim_size(); ++i) {
-          if (i > 0) {
-            os << ', ';
-          }
-          if (prop.shape().dim(i).size() >= 0) {
-            // Print the actual dimension.
-            os << prop.shape().dim(i).size();
-          } else if (prop.shape().dim(i).size() == -1) {
-            // We don't know anything about the dimension.
-            os << '?';
-          } else {
-            // Symbolic dimension.
-            os << 'x' << -prop.shape().dim(i).size();
-          }
-        }
-        os << ']';
-      }
-      os << std::endl;
-    }
+          static void ClearCache(content::RenderProcessHost* render_view_host);
+  static void SetProxyConfig(content::RenderProcessHost* render_process_host,
+                             const std::string& proxy_config);
+    
+    EventListener::~EventListener() {
+  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
+    delete i->second;
   }
-    }
-    
-    namespace tensorflow {
-    }
-    
-    #include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/op_kernel.h'
-    
-      // Support dtype(bfloat16)
-  if (PyDict_SetItemString(PyBfloat16_Type.tp_dict, 'dtype',
-                           reinterpret_cast<PyObject*>(&NPyBfloat16_Descr)) <
-      0) {
-    return false;
-  }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    PyObject* PyExceptionRegistry::Lookup(TF_Code code) {
-  DCHECK(singleton_ != nullptr) << 'Must call PyExceptionRegistry::Init() '
-                                   'before PyExceptionRegistry::Lookup()';
-  DCHECK_NE(code, TF_OK);
-  DCHECK(singleton_->exc_types_.find(code) != singleton_->exc_types_.end())
-      << 'Unknown error code passed to PyExceptionRegistry::Lookup: ' << code;
-  return singleton_->exc_types_[code];
 }
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+    namespace nw {
+    }
     
-    #endif  // TENSORFLOW_PYTHON_LIB_CORE_PY_SEQ_TENSOR_H_
+    void Menu::Remove(MenuItem* menu_item, int pos) {
+  std::vector<MenuItem*>::iterator begin = menu_items.begin();
+  menu_items.erase(begin+pos);
+  gtk_container_remove(GTK_CONTAINER(menu_), menu_item->menu_item_);
+}
+    
+    class NwClipboardReadAvailableTypesFunction : public NWSyncExtensionFunction {
+ public:
+  NwClipboardReadAvailableTypesFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
+ public:
+  NwMenuGetNSStringFWithFixupFunction() {}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    
+ protected:
+  ~NwMenuGetNSStringFWithFixupFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
+};
+    
+      NwDesktopCaptureMonitor::NwDesktopCaptureMonitor()
+      : started_(false) {
+  }
+    
+    // Version constant.
+// This is either 0 for python, 1 for CPP V1, 2 for CPP V2.
+//
+// 0 is default and is equivalent to
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+//
+// 1 is set with -DPYTHON_PROTO2_CPP_IMPL_V1 and is equivalent to
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
+// and
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=1
+//
+// 2 is set with -DPYTHON_PROTO2_CPP_IMPL_V2 and is equivalent to
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
+// and
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
+#ifdef PYTHON_PROTO2_CPP_IMPL_V1
+#error 'PYTHON_PROTO2_CPP_IMPL_V1 is no longer supported.'
+#else
+#ifdef PYTHON_PROTO2_CPP_IMPL_V2
+static int kImplVersion = 2;
+#else
+#ifdef PYTHON_PROTO2_PYTHON_IMPL
+static int kImplVersion = 0;
+#else
+    
+    
+    {
+    {
+    {}  // namespace python
+}  // namespace protobuf
+}  // namespace google
+#endif  // GOOGLE_PROTOBUF_PYTHON_CPP_SCOPED_PYOBJECT_PTR_H__
 
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+    #endif  // LANG_CXX11
     
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-        if (info.bytes > buf.size()) {
-      llvm::dbgs() << 'AST section too small.\n';
-      return false;
-    }
-    
-    class TreePrinter {
-  llvm::raw_ostream &Out;
-  void (&PrintNodeData)(llvm::raw_ostream &out, void *node);
-  SmallString<40> Indent;
-public:
-  TreePrinter(llvm::raw_ostream &out,
-              void (&printNodeData)(llvm::raw_ostream &out, void *node))
-    : Out(out), PrintNodeData(printNodeData) {}
-    }
-    
-    class LLVM_LIBRARY_VISIBILITY GenericUnix : public ToolChain {
-protected:
-  InvocationInfo constructInvocation(const InterpretJobAction &job,
-                                     const JobContext &context) const override;
-  InvocationInfo constructInvocation(const AutolinkExtractJobAction &job,
-                                     const JobContext &context) const override;
-    }
-    
-    extern 'C' {
-  PyMODINIT_FUNC INITFUNC() {
-#if PY_MAJOR_VERSION >= 3
-    PyObject *module = PyModule_Create(&_module);
-#else
-    PyObject *module = Py_InitModule3(
-        const_cast<char*>(kModuleName),
-        NULL,
-        const_cast<char*>(kModuleDocstring));
-#endif
-    if (module == NULL) {
-      return INITFUNC_ERRORVAL;
-    }
-    }
-    }
-    
-    bool ParseAnyTypeUrl(const string& type_url, string* url_prefix,
-                     string* full_type_name) {
-  size_t pos = type_url.find_last_of('/');
-  if (pos == string::npos || pos + 1 == type_url.size()) {
-    return false;
-  }
-  if (url_prefix) {
-    *url_prefix = type_url.substr(0, pos + 1);
-  }
-  *full_type_name = type_url.substr(pos + 1);
-  return true;
-}
-    
-    // Author: kenton@google.com (Kenton Varda)
-//  Based on original Protocol Buffers design by
-//  Sanjay Ghemawat, Jeff Dean, and others.
-    
-    #include <google/protobuf/compiler/command_line_interface.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/io/printer.h>
-    
-    void FileGenerator::GenerateHeader(io::Printer *printer) {
-  std::set<string> headers;
-  // Generated files bundled with the library get minimal imports, everything
-  // else gets the wrapper so everything is usable.
-  if (is_bundled_proto_) {
-    headers.insert('GPBRootObject.h');
-    headers.insert('GPBMessage.h');
-    headers.insert('GPBDescriptor.h');
-  } else {
-    headers.insert('GPBProtocolBuffers.h');
-  }
-  PrintFileRuntimePreamble(printer, headers);
-    }
-    
-    
-    {  input_for_decode =
-      'longFieldNameIsLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong1000';
-  desired_output_for_decode =
-      'long_field_name_is_looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong_1000';
-  expected = string('\x04\xA5\xA4\xA2\xBF\x1F\x0E\x84\x0', 9);
+      desired_output_for_decode = 'abcdefghIJ';
+  expected = string('\x0A\x0', 2);
   result = TextFormatDecodeData::DecodeDataForString(input_for_decode,
                                                      desired_output_for_decode);
   EXPECT_EQ(expected, result);
+    
+    TEST(ByteSourceTest, CopyToStringByteSink) {
+  StringPiece data('Hello world!');
+  MockByteSource source(data, 3);
+  string str;
+  StringByteSink sink(&str);
+  source.CopyTo(&sink, data.size());
+  EXPECT_EQ(data, str);
 }
     
-      char* temp_endptr;
-  double result = strtod(text, &temp_endptr);
-  if (original_endptr != NULL) *original_endptr = temp_endptr;
-  if (*temp_endptr != '.') return result;
+    #endif  // GOOGLE_PROTOBUF_TEMPLATE_UTIL_H_
+
     
-      static void clearData6();
-    
-      void onTimeout(const std::shared_ptr<DHTNode>& node);
-    
-    void DHTRoutingTable::setTaskFactory(DHTTaskFactory* taskFactory)
-{
-  taskFactory_ = taskFactory;
-}
-    
-      Time serializedTime_;
-    
-    namespace aria2 {
+    namespace c10d {
+namespace test {
+    }
     }
     
-    std::shared_ptr<DHTTask> DHTTaskFactoryImpl::createReplaceNodeTask(
-    const std::shared_ptr<DHTBucket>& bucket,
-    const std::shared_ptr<DHTNode>& newNode)
-{
-  auto task = std::make_shared<DHTReplaceNodeTask>(bucket, newNode);
-  task->setTimeout(timeout_);
-  setCommonProperty(task);
-  return task;
+    REGISTER_CPU_OPERATOR(
+    MergeMultiMapFeatureTensors,
+    MergeMultiMapFeatureTensorsOp<CPUContext>);
+OPERATOR_SCHEMA(MergeMultiMapFeatureTensors)
+    .SetDoc(
+        'Merge given multi-feature tensors with map features into one.' + doc)
+    .NumInputs([](int n) { return n >= 5 && n % 5 == 0; })
+    .NumOutputs(5)
+    .Input(0, 'in1_lengths', '.lengths')
+    .Input(1, 'in1_keys', '.keys')
+    .Input(2, 'in1_values_lengths', '.values.lengths')
+    .Input(3, 'in1_values_keys', '.values.keys')
+    .Input(4, 'in1_values_values', '.values.values')
+    .Output(0, 'out_lengths', '.lengths')
+    .Output(1, 'out_keys', '.keys')
+    .Output(2, 'out_values_lengths', '.values_lengths')
+    .Output(3, 'out_values_keys', '.values.keys')
+    .Output(4, 'out_values_values', '.values.values');
+    
+    Example 1:
+  DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
+  RANGES = [
+    [
+      [2, 4],
+      [0, 2],
+    ],
+    [
+      [0, 0],
+      [6, 2],
+    ]
+  ]
+  lengths = [4, 2]
+  OUTPUT[0] = [[3, 4, 5, 6], [0, 0, 0, 0]]
+  OUTPUT[1] = [[1, 2], [7, 8]]
+    
+    *Note: Do not set the shape argument and pass in an input at the same time.*
+    
+    
+    {REGISTER_CPU_OPERATOR(Glu, GluOp<float, CPUContext>);
+} // namespace caffe2
+
+    
+    template <typename T>
+internal::ParamGenerator<T> Range(T start, T end) {
+  return Range(start, end, 1);
 }
+    
+    #include <ostream>  // NOLINT
+#include <sstream>
+#include <string>
+#include <utility>
+#include <vector>
+#include 'gtest/internal/gtest-port.h'
+#include 'gtest/internal/gtest-internal.h'
+    
+    // This helper class is used by {ASSERT|EXPECT}_NO_FATAL_FAILURE to check if a
+// statement generates new fatal failures. To do so it registers itself as the
+// current test part result reporter. Besides checking if fatal failures were
+// reported, it only delegates the reporting to the former result reporter.
+// The original result reporter is restored in the destructor.
+// INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
+class GTEST_API_ HasNewFatalFailureHelper
+    : public TestPartResultReporterInterface {
+ public:
+  HasNewFatalFailureHelper();
+  virtual ~HasNewFatalFailureHelper();
+  virtual void ReportTestPartResult(const TestPartResult& result);
+  bool has_new_fatal_failure() const { return has_new_fatal_failure_; }
+ private:
+  bool has_new_fatal_failure_;
+  TestPartResultReporterInterface* original_reporter_;
+    }
+    
+    TYPED_TEST(FooTest, HasPropertyA) { ... }
+    
+    // Factory interface for death tests.  May be mocked out for testing.
+class DeathTestFactory {
+ public:
+  virtual ~DeathTestFactory() { }
+  virtual bool Create(const char* statement, const RE* regex,
+                      const char* file, int line, DeathTest** test) = 0;
+};
+    
+    #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_FILEPATH_H_
+
+    
+      CartesianProductGenerator9(const ParamGenerator<T1>& g1,
+      const ParamGenerator<T2>& g2, const ParamGenerator<T3>& g3,
+      const ParamGenerator<T4>& g4, const ParamGenerator<T5>& g5,
+      const ParamGenerator<T6>& g6, const ParamGenerator<T7>& g7,
+      const ParamGenerator<T8>& g8, const ParamGenerator<T9>& g9)
+      : g1_(g1), g2_(g2), g3_(g3), g4_(g4), g5_(g5), g6_(g6), g7_(g7), g8_(g8),
+          g9_(g9) {}
+  virtual ~CartesianProductGenerator9() {}
+    
+    // This event listener monitors how many Water objects are created and
+// destroyed by each test, and reports a failure if a test leaks some Water
+// objects. It does this by comparing the number of live Water objects at
+// the beginning of a test and at the end of a test.
+class LeakChecker : public EmptyTestEventListener {
+ private:
+  // Called before a test starts.
+  virtual void OnTestStart(const TestInfo& /* test_info */) {
+    initially_allocated_ = Water::allocated();
+  }
+    }
+    
+    // Step 3. Call RUN_ALL_TESTS() in main().
+//
+// We do this by linking in src/gtest_main.cc file, which consists of
+// a main() function which calls RUN_ALL_TESTS() for us.
+//
+// This runs all the tests you've defined, prints the result, and
+// returns 0 if successful, or 1 otherwise.
+//
+// Did you notice that we didn't register the tests?  The
+// RUN_ALL_TESTS() macro magically knows about all the tests we
+// defined.  Isn't this convenient?
+
+    
+      // The default c'tor constructs a NULL string.
+  MyString() : c_string_(NULL) {}
+    
+        // Make sure that the dictionary contains all required keys, and if it does, return version value
+    // from the dictionary.
+    template <typename T>
+    inline size_t ValidateDictionary(const Dictionary& dict, const std::vector<std::wstring>& requiredKeys, const std::wstring& typeValue, size_t currentVersion)
+    { 
+        const auto& version = GetVersion(dict);
+    }
+    
+            std::wstring AsString() const;
+        std::shared_ptr<VariableFields> Clone() const;
+        FunctionPtr Owner() const;
+    
+    #include 'CalculatorResource.h'
+    
+    using namespace CalculatorApp;
+using namespace CalculatorApp::Common;
+using namespace Platform;
+using namespace Platform::Collections;
+using namespace std;
+using namespace Windows::Foundation::Collections;
+    
+    DependencyObject^ SupplementaryItemsControl::GetContainerForItemOverride()
+{
+    return ref new SupplementaryContentPresenter();
+}
+    
+            DEPENDENCY_PROPERTY_OWNER(Calculator);
+        DEPENDENCY_PROPERTY_WITH_DEFAULT_AND_CALLBACK(bool, IsStandard, false);
+        DEPENDENCY_PROPERTY_WITH_DEFAULT_AND_CALLBACK(bool, IsScientific, false);
+        DEPENDENCY_PROPERTY_WITH_DEFAULT_AND_CALLBACK(bool, IsProgrammer, false);
+    
+        private:
+        void OnAngleButtonPressed(_In_ Platform::Object^ commandParameter);
+        void FToEButton_Toggled(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::RoutedEventArgs^ e);
+        void HypButton_Toggled(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::RoutedEventArgs^ e);
+    
+    
+    {
+    {    private:
+        bool m_isErrorVisualState;
+    };
+}
+
+    
+    
+    {    // exception out_of_range.401
+    try
+    {
+        // try to write beyond the array limit
+        array.at(5) = 'sixth';
+    }
+    catch (json::out_of_range& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+}
+
+    
+    
+    // out_of_range.106
+    try
+    {
+        // try to use an array index with leading '0'
+        json::reference ref = j.at('/array/01'_json_pointer);
+    }
+    catch (json::parse_error& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+    
+        // output element with JSON pointer '/number'
+    std::cout << j.at('/number'_json_pointer) << '\n';
+    // output element with JSON pointer '/string'
+    std::cout << j.at('/string'_json_pointer) << '\n';
+    // output element with JSON pointer '/array'
+    std::cout << j.at('/array'_json_pointer) << '\n';
+    // output element with JSON pointer '/array/1'
+    std::cout << j.at('/array/1'_json_pointer) << '\n';
+    
+    namespace apollo {
+namespace drivers {
+namespace canbus {
+    }
+    }
+    }
     
     
     {  int ret = x;
   return ret;
 }
     
-    int ObjectExtendedInfo60D::object_id(const std::uint8_t* bytes,
-                                     int32_t length) const {
-  Byte t0(bytes);
-  int32_t x = t0.get_byte(0, 8);
-    }
-    
-    class SpeedLimitTest : public ::testing::Test {
- public:
-  virtual void SetUp() {
-    speed_limit_.Clear();
-    for (int i = 0; i < 100; ++i) {
-      std::pair<double, double> sp;
-      sp.first = i * 1.0;
-      sp.second = (i % 2 == 0) ? 5.0 : 10.0;
-      speed_limit_.AppendSpeedLimit(sp.first, sp.second);
-    }
-  }
-    }
-    
-    // config detail: {'name': 'commanded_value', 'offset': 0.0, 'precision': 0.001,
-// 'len': 16, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 23,
-// 'type': 'double', 'order': 'motorola', 'physical_unit': '%'}
-double Accelrpt68::commanded_value(const std::uint8_t* bytes,
-                                   int32_t length) const {
-  Byte t0(bytes + 2);
-  int32_t x = t0.get_byte(0, 8);
-    }
-    
-    vector<detail::BenchmarkResult> resultsFromFile(const std::string& filename) {
-  string content;
-  readFile(filename.c_str(), content);
-  vector<detail::BenchmarkResult> ret;
-  benchmarkResultsFromDynamic(parseJson(content), ret);
-  return ret;
+    void RadarState201::Parse(const std::uint8_t* bytes, int32_t length,
+                          ContiRadar* conti_radar) const {
+  auto state = conti_radar->mutable_radar_state();
+  state->set_max_distance(max_dist(bytes, length));
+  state->set_output_type(output_type(bytes, length));
+  state->set_rcs_threshold(rcs_threshold(bytes, length));
+  state->set_radar_power(radar_power(bytes, length));
+  state->set_send_quality(send_quality(bytes, length));
+  state->set_send_ext_info(send_ext_info(bytes, length));
 }
     
-      /**
-   * Returns a random uint32_t in [0, max) given a specific RNG.
-   * If max == 0, returns 0.
-   */
-  template <class RNG = ThreadLocalPRNG, class /* EnableIf */ = ValidRNG<RNG>>
-  static uint32_t rand32(uint32_t max, RNG&& rng) {
-    return rand32(0, max, rng);
+    
+    {  EXPECT_EQ(bd, bd_golden);
+}
+    
+    Eigen::MatrixXd SplineSegKernel::SecondOrderDerivativeKernel(
+    const uint32_t num_params, const double accumulated_x) {
+  if (num_params > reserved_order_ + 1) {
+    CalculateSecondOrderDerivative(num_params);
   }
-    
-    #include <boost/regex/pending/unicode_iterator.hpp>
-    
-    /**
- * VirtualExecutor implements a light-weight view onto existing Executor.
- *
- * Multiple VirtualExecutors can be backed by a single Executor.
- *
- * VirtualExecutor's destructor blocks until all tasks scheduled through it are
- * complete. Executor's destructor also blocks until all VirtualExecutors
- * backed by it are released.
- */
-class VirtualExecutor : public DefaultKeepAliveExecutor {
-  auto wrapFunc(Func f) {
-    class FuncAndKeepAlive {
-     public:
-      FuncAndKeepAlive(Func&& f, VirtualExecutor* executor)
-          : keepAlive_(getKeepAliveToken(executor)), f_(std::move(f)) {}
-    }
-    }
-    }
-    
-    /**
- * This functions is an extension point when FOLLY_HAVE_WEAK_SYMBOLS is true.
- * There is a default no-op implementation provided which can be overrided by
- * linking in a library which provides its own definition.
- *
- * @param codecType   The type of the codec for this counter.
- * @param codecName   The name of the codec for this counter. If the codecName
- *                    is empty it should be defaulted using the codecType.
- * @param level       Optionally the level used to construct the codec.
- * @param key         The key of the counter.
- * @param counterType The type of the counter.
- * @returns           A function to increment the counter for the given key and
- *                    type. It may be an empty folly::Function.
- */
-folly::Function<void(double)> makeCompressionCounterHandler(
-    folly::io::CodecType codecType,
-    folly::StringPiece codecName,
-    folly::Optional<int> level,
-    CompressionCounterKey key,
-    CompressionCounterType counterType);
-    
-      std::sort(cpus.begin(), cpus.end(), [&](size_t lhs, size_t rhs) -> bool {
-    // sort first by equiv class of cache with highest index,
-    // direction doesn't matter.  If different cpus have
-    // different numbers of caches then this code might produce
-    // a sub-optimal ordering, but it won't crash
-    auto& lhsEquiv = equivClassesByCpu[lhs];
-    auto& rhsEquiv = equivClassesByCpu[rhs];
-    for (ssize_t i = ssize_t(std::min(lhsEquiv.size(), rhsEquiv.size())) - 1;
-         i >= 0;
-         --i) {
-      auto idx = size_t(i);
-      if (lhsEquiv[idx] != rhsEquiv[idx]) {
-        return lhsEquiv[idx] < rhsEquiv[idx];
-      }
-    }
-    }
-    
-    
-    {  T* get() const {
-    return p_;
-  }
-  T* operator->() const {
-    return p_;
-  }
-  explicit operator bool() const {
-    return p_ == nullptr ? false : true;
-  }
-  bool operator==(const counted_ptr<T, Atom>& p) const {
-    return get() == p.get();
-  }
-};
+  Eigen::MatrixXd term_matrix;
+  IntegratedTermMatrix(num_params, accumulated_x, 'second_order', &term_matrix);
+  return kernel_second_order_derivative_.block(0, 0, num_params, num_params)
+      .cwiseProduct(term_matrix);
+}
