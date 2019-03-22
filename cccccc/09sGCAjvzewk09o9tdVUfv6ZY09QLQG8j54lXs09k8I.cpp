@@ -1,112 +1,90 @@
 
         
-        #include <google/protobuf/stubs/common.h>
-#include <google/protobuf/stubs/logging.h>
-    
-    TEST(ByteSourceTest, LimitByteSource) {
-  StringPiece data('Hello world!');
-  MockByteSource source(data, 3);
-  LimitByteSource limit_source(&source, 6);
-  EXPECT_EQ(6, limit_source.Available());
-  limit_source.Skip(1);
-  EXPECT_EQ(5, limit_source.Available());
-    }
-    
-    
+        
     {
     {
     {
-}  // namespace internal
+    {
+}  // namespace java
+}  // namespace compiler
 }  // namespace protobuf
 }  // namespace google
+
     
-    // Author: brianolson@google.com (Brian Olson)
-//  Based on original Protocol Buffers design by
-//  Sanjay Ghemawat, Jeff Dean, and others.
-//
-// Test program to verify that GzipOutputStream is compatible with command line
-// gzip or java.util.zip.GzipOutputStream
-//
-// Reads data on standard input and writes compressed gzip stream to standard
-// output.
     
-    class GetSubGradient final : public GradientMakerBase {
-  using GradientMakerBase::GradientMakerBase;
+bool ZeroCopyOutputStream::WriteAliasedRaw(const void* /* data */,
+                                           int /* size */) {
+  GOOGLE_LOG(FATAL) << 'This ZeroCopyOutputStream doesn't support aliasing. '
+                'Reaching here usually means a ZeroCopyOutputStream '
+                'implementation bug.';
+  return false;
+}
+    
+    TEST(TemplateUtilTest, TestIdentity) {
+  EXPECT_TRUE(
+      (type_equals_<GOOGLE_NAMESPACE::identity_<int>::type, int>::value));
+  EXPECT_TRUE(
+      (type_equals_<GOOGLE_NAMESPACE::identity_<void>::type, void>::value));
+}
+    
+      void wait(int n = 1) {
+    std::unique_lock<std::mutex> lock(m_);
+    while (n_ < n) {
+      cv_.wait(lock);
     }
-    
-    OPERATOR_SCHEMA(EnforceFinite)
-    .NumInputs(1)
-    .NumOutputs(0)
-    .SetDoc(R'DOC(
-Raise if there is NaN or Inf values in the input tensor.
-)DOC')
-    .Input(0, 'input', 'Input tensor');
-    
-    workspace.RunOperatorOnce(op)
-print('Out:\n', workspace.FetchBlob('out'))
-    
-    class Env;
-    
-    namespace leveldb {
-    }
-    
-    
-    {      if (contents_.size() < n) {
-        n = contents_.size();
-        returned_partial_ = true;
-      }
-      *result = Slice(contents_.data(), n);
-      contents_.remove_prefix(n);
-      return Status::OK();
-    }
-    
-      ~Version();
-    
-    /*!
- * \brief Thread pool.
- */
-class ThreadPool {
- public:
-  /*! \brief Signal event upon destruction, even for exceptions (RAII) */
-  struct SetReadyOnDestroy {
-    explicit inline SetReadyOnDestroy(const std::shared_ptr<dmlc::ManualEvent>& event)
-      : event_(event) {
-    }
-    inline ~SetReadyOnDestroy() {
-      if (event_) {
-        event_->signal();
-      }
-    }
-    std::shared_ptr<dmlc::ManualEvent>  event_;
-  };
-    }
-    
-      /*!
-  * \brief Issues quantize operation to be scheduled by the engine
-  * Compresses `from` into `to` and accumulates the quantization error
-  * into 'residual', using the quantization of type `type_`
-  * \param from the ndarray containing original data to be quantized
-  * \param to the target ndarray which contains quantized data
-  * \param residual the ndarray which accumulates quantization error
-  * \param priority Priority of the action.
-  */
-  void Quantize(const mxnet::NDArray &from, mxnet::NDArray *to,
-                mxnet::NDArray *residual, const int priority);
-    
-    // relu
-MXNET_OPERATOR_REGISTER_UNARY(_contrib_div_sqrt_dim)
-.describe(R'code(Rescale the input by the square root of the channel dimension.
-    
-    namespace mxnet {
-namespace op {
-template<typename DType>
-class CuDNNLocalResponseNormOp : public Operator {
- public:
-  explicit CuDNNLocalResponseNormOp(LRNParam param) {
-    param_ = param;
-    init_cudnn_ = false;
-    dtype_ = mshadow::DataType<DType>::kCudnnFlag;
+    n_ -= n;
   }
+    
+    REGISTER_CPU_OPERATOR(EnforceFinite, EnforceFiniteOp<CPUContext>);
+    
+    namespace caffe2 {
+    }
+    
+    #endif // CAFFE2_OPERATORS_JSD_OP_H_
+
+    
+      const dmlc::RowBlock<IndexType>& Value() const override {
+    return out_;
+  }
+    
+      for (auto alphabet_size : test_cases) {
+    for (int i = 0; i < repetitions; i++) {
+      std::vector<int> input(num_elements);
+      std::generate(input.begin(), input.end(),
+        [=]() { return rand() % alphabet_size; });
+      CompressedBufferWriter cbw(alphabet_size);
     }
     }
-    }
+    
+    SEXP XGBoosterModelToRaw_R(SEXP handle) {
+  SEXP ret;
+  R_API_BEGIN();
+  bst_ulong olen;
+  const char *raw;
+  CHECK_CALL(XGBoosterGetModelRaw(R_ExternalPtrAddr(handle), &olen, &raw));
+  ret = PROTECT(allocVector(RAWSXP, olen));
+  if (olen != 0) {
+    memcpy(RAW(ret), raw, olen);
+  }
+  R_API_END();
+  UNPROTECT(1);
+  return ret;
+}
+    
+    struct LambdaRankParam : public dmlc::Parameter<LambdaRankParam> {
+  int num_pairsample;
+  float fix_list_weight;
+  // declare parameters
+  DMLC_DECLARE_PARAMETER(LambdaRankParam) {
+    DMLC_DECLARE_FIELD(num_pairsample).set_lower_bound(1).set_default(1)
+        .describe('Number of pair generated for each instance.');
+    DMLC_DECLARE_FIELD(fix_list_weight).set_lower_bound(0.0f).set_default(0.0f)
+        .describe('Normalize the weight of each list by this value,'
+                  ' if equals 0, no effect will happen');
+  }
+};
+    
+    
+    {
+    {}  // namespace data
+}  // namespace xgboost
