@@ -1,233 +1,145 @@
 
         
-            def to_json
-      JSON.generate(as_json)
-    end
+            resp.body =
+      '<html><head>' +
+      '<title>404 Not Found</title>' +
+      '</head><body>' +
+      '<h1>Not found</h1>' +
+      'The requested URL #{html_escape(request.resource)} was not found on this server.<p><hr>' +
+      '</body></html>'
     
-        def add(path, content)
-      @pages[path] = content
-    end
     
-        def url
-      @url ||= URL.parse request.base_url
-    end
+IAX_SUBTYPE_NEW     = 1
+IAX_SUBTYPE_PING    = 2
+IAX_SUBTYPE_PONG    = 3
+IAX_SUBTYPE_ANSWER  = 4
+IAX_SUBTYPE_ACK     = 4
+IAX_SUBTYPE_HANGUP  = 5
+IAX_SUBTYPE_REJECT  = 6
+IAX_SUBTYPE_ACCEPT  = 7
+IAX_SUBTYPE_AUTHREQ = 8
+IAX_SUBTYPE_AUTHREP = 9
+IAX_SUBTYPE_INVAL   = 10
+IAX_SUBTYPE_LAGRQ   = 11
+IAX_SUBTYPE_LAGRP   = 12
+IAX_SUBTYPE_REGREQ  = 13
+IAX_SUBTYPE_REGAUTH = 14
+IAX_SUBTYPE_REGACK  = 15
+IAX_SUBTYPE_REGREJ  = 16
+IAX_SUBTYPE_REGREL  = 17
+IAX_SUBTYPE_VNAK    = 18
     
-          max_length = if tag = str.slice!(/ \[.+\]\z/)
-        terminal_width - tag.length
-      else
-        terminal_width
-      end
-    
-            css('pre[name]').each do |node|
-          node.before(%(<div class='pre-title'>#{node['name']}</div>))
-        end
-    
-          def include_default_entry?
-        INDEX.add?([name, type].join(';')) ? true : false # ¯\_(ツ)_/¯
-      end
-    
-      if respond_to?(:helper)
-    helper DeviseHelper
-  end
-    
-          # Remembers the given resource by setting up a cookie
-      def remember_me(resource)
-        return if request.env['devise.skip_storage']
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.remember_me!
-        cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
-      end
-    
-            warden.logout(scope)
-        warden.clear_strategies_cache!(scope: scope)
-        instance_variable_set(:'@current_#{scope}', nil)
-    
-          # If the record is persisted, remove the remember token (but only if
-      # it exists), and save the record without validations.
-      def forget_me!
-        return unless persisted?
-        self.remember_token = nil if respond_to?(:remember_token)
-        self.remember_created_at = nil if self.class.expire_all_remember_me_on_sign_out
-        save(validate: false)
-      end
-    
-        describe '-' do
-      it 'left-justifies the result of conversion if width is specified' do
-        format('%-10b', 10).should == '1010      '
-        format('%-10B', 10).should == '1010      '
-        format('%-10d', 112).should == '112       '
-        format('%-10i', 112).should == '112       '
-        format('%-10o', 87).should == '127       '
-        format('%-10u', 112).should == '112       '
-        format('%-10x', 196).should == 'c4        '
-        format('%-10X', 196).should == 'C4        '
-    
-      # Compile a file on disk to CSS.
+      #
+  # Move these into an IPMI stack or mixin at some point
   #
-  # @raise [Sass::SyntaxError] if there's an error in the document
-  # @raise [Encoding::UndefinedConversionError] if the source encoding
-  #   cannot be converted to UTF-8
-  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
-  #
-  # @overload compile_file(filename, options = {})
-  #   Return the compiled CSS rather than writing it to a file.
-  #
-  #   @param filename [String] The path to the Sass, SCSS, or CSS file on disk.
-  #   @param options [{Symbol => Object}] An options hash;
-  #     see {file:SASS_REFERENCE.md#Options the Sass options documentation}
-  #   @return [String] The compiled CSS.
-  #
-  # @overload compile_file(filename, css_filename, options = {})
-  #   Write the compiled CSS to a file.
-  #
-  #   @param filename [String] The path to the Sass, SCSS, or CSS file on disk.
-  #   @param options [{Symbol => Object}] An options hash;
-  #     see {file:SASS_REFERENCE.md#Options the Sass options documentation}
-  #   @param css_filename [String] The location to which to write the compiled CSS.
-  def self.compile_file(filename, *args)
-    options = args.last.is_a?(Hash) ? args.pop : {}
-    css_filename = args.shift
-    result = Sass::Engine.for_file(filename, options).render
-    if css_filename
-      options[:css_filename] ||= css_filename
-      open(css_filename, 'w') {|css_file| css_file.write(result)}
-      nil
-    else
-      result
-    end
-  end
-end
     
-          # @see Base#\_retrieve
-      def _retrieve(key, version, sha)
-        return unless File.readable?(path_to(key))
-        begin
-          File.open(path_to(key), 'rb') do |f|
-            if f.readline('\n').strip == version && f.readline('\n').strip == sha
-              return f.read
-            end
+              # Decodes the enc_part
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Rex::Proto::Kerberos::Model::EncryptedData]
+          def decode_enc_part(input)
+            Rex::Proto::Kerberos::Model::EncryptedData.decode(input.value[0])
           end
-          File.unlink path_to(key)
-        rescue Errno::ENOENT
-          # Already deleted. Race condition?
         end
-        nil
-      rescue EOFError, TypeError, ArgumentError => e
-        Sass::Util.sass_warn 'Warning. Error encountered while reading cache #{path_to(key)}: #{e}'
       end
-    
-          opts.on('-?', '-h', '--help', 'Show this help message.') do
-        puts opts
-        exit
-      end
-    
-          @left_diff_line_number = nil
-    
-      test 'remove page extentions' do
-    view = Precious::Views::LatestChanges.new
-    assert_equal 'page', view.remove_page_extentions('page.wiki')
-    assert_equal 'page-wiki', view.remove_page_extentions('page-wiki.md')
-    assert_equal 'file.any_extention', view.remove_page_extentions('file.any_extention')
-  end
-    
-        # TODO: Remove to_url once write_page changes are merged.
-    @wiki.write_page('ééééé'.to_url, :markdown, '한글 text', commit_details)
-    page = @wiki.page('eeeee')
-    assert_equal '한글 text', utf8(page.raw_data)
-  end
-    
-        # make a backup of the option and sanitize it
-    base_path_original = base_path.dup
-    base_path = CGI.escape(base_path)
-    
-    # then let the user know if we changed the URL
-    unless base_path_original == base_path
-      puts <<MSG
-Warning: your base-path has been sanitized:
-  - original: '#{base_path_original}'
-  - sanitized: '#{base_path}'
-MSG
     end
-      
-    # and finally, let others enjoy our hard work:
-    wiki_options[:base_path] = base_path
   end
-  opts.on('--page-file-dir [PATH]', 'Specify the subdirectory for all pages. Default: repository root.', 
-    'Example: setting this to 'pages' will make Gollum serve only pages at '<git-repo>/pages/*'.') do |path|
-    wiki_options[:page_file_dir] = path
-  end
-  opts.on('--css', 'Inject custom CSS into each page. The '<git-repo>/custom.css' file is used (must be committed).') do
-    wiki_options[:css] = true
-  end
-  opts.on('--js', 'Inject custom JavaScript into each page. The '<git-repo>/custom.js' file is used (must be committed).') do
-    wiki_options[:js] = true
-  end
-  opts.on('--emoji', 'Parse and interpret emoji tags (e.g. :heart:).') do
-    wiki_options[:emoji] = true
-  end
-  opts.on('--no-edit', 'Disable the feature of editing pages.')  do
-    wiki_options[:allow_editing] = false
-  end
-  opts.on('--live-preview', 'Enable the live preview feature in page editor.') do
-    wiki_options[:live_preview] = true
-  end
-  opts.on('--no-live-preview', 'Disable the live preview feature in page editor.') do
-    wiki_options[:live_preview] = false
-  end
-  opts.on('--allow-uploads [MODE]', [:dir, :page], 'Enable file uploads.',
-    'If set to 'dir', Gollum will store all uploads in the '<git-repo>/uploads/' directory.',
-    'If set to 'page', Gollum will store each upload at the currently edited page.') do |mode|
-    wiki_options[:allow_uploads]    = true
-    wiki_options[:per_page_uploads] = true if mode == :page
-  end
-  opts.on('--mathjax', 'Enable MathJax (renders mathematical equations).',
-    'By default, uses the 'TeX-AMS-MML_HTMLorMML' config with the 'autoload-all' extension.') do
-    wiki_options[:mathjax] = true
-  end
-  opts.on('--irb', 'Launch Gollum in 'console mode', with a predefined API.') do
-    options[:irb] = true
-  end
-  
-  opts.separator ''
-  opts.separator '  Minor:'
-  
-  opts.on('--h1-title', 'Use the first '<h1>' as page title.') do
-    wiki_options[:h1_title] = true
-  end
-  opts.on('--show-all', 'Also show files in the file view. By default, only valid pages are shown.') do
-    wiki_options[:show_all] = true
-  end
-  opts.on('--collapse-tree', 'Collapse the tree, when file view is opened. By default, the tree is expanded.') do
-    wiki_options[:collapse_tree] = true
-  end
-  opts.on('--user-icons [MODE]', [:gravatar, :identicon, :none], 'Use specific user-icons for history view.',
-    'Can be set to 'gravatar', 'identicon' or 'none'. Default: 'none'.') do |mode|
-    wiki_options[:user_icons] = mode
-  end
-  opts.on('--mathjax-config [FILE]', 'Specify path to a custom MathJax configuration.',
-    'If not specified, uses the '<git-repo>/mathjax.config.js' file.') do |file|
-    wiki_options[:mathjax_config] = file || 'mathjax.config.js'
-  end
-  opts.on('--plantuml-url [URL]', 'Sets the PlantUML server endpoint.') do |url|
-    wiki_options[:plantuml_url] = url
-  end
-  opts.on('--template-dir [PATH]', 'Specify custom mustache template directory.') do |path|
-    wiki_options[:template_dir] = path
-  end
-  
-  opts.separator ''
-  opts.separator '  Common:'
-  
-  opts.on('--help', 'Display this message.') do
-    puts opts
-    exit 0
-  end
-  opts.on('--version', 'Display the current version of Gollum.') do
-    puts 'Gollum ' + Gollum::VERSION
-    exit 0
-  end
-  
-  opts.separator ''
 end
     
-      s.require_paths = %w[lib]
+              # Rex::Proto::Kerberos::Model::KrbError encoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def encode
+            raise ::NotImplementedError, 'KrbError encoding not supported'
+          end
+    
+        def dry_run
+      ['--dry-run', '-n',
+       'Do a dry run without executing actions',
+       lambda do |_value|
+         Configuration.env.set(:sshkit_backend, SSHKit::Backend::Printer)
+       end]
+    end
+    
+          # Checks whether this case statement has an `else` branch.
+      #
+      # @return [Boolean] whether the `case` statement has an `else` branch
+      def else?
+        loc.else
+      end
+    end
+  end
+end
+
+    
+          # Checks whether this node body is a void context.
+      #
+      # @return [Boolean] whether the `def` node body is a void context
+      def void_context?
+        method?(:initialize) || assignment_method?
+      end
+    
+          # Custom destructuring method. This is used to normalize the branches
+      # for `pair` and `kwsplat` nodes, to add duck typing to `hash` elements.
+      #
+      # @return [Array<KeywordSplatNode>] the different parts of the `kwsplat`
+      def node_parts
+        [self, self]
+      end
+    end
+  end
+end
+
+    
+          # Returns the value of this `hash` element.
+      #
+      # @note For keyword splats, this returns the whole node
+      #
+      # @return [Node] the value of the hash element
+      def value
+        node_parts[1]
+      end
+    
+    $redis = Redis.new
+    
+        # This reopens ALL logfiles in the process that have been rotated
+    # using logrotate(8) (without copytruncate) or similar tools.
+    # A +File+ object is considered for reopening if it is:
+    #   1) opened with the O_APPEND and O_WRONLY flags
+    #   2) the current open file handle does not match its original open path
+    #   3) unbuffered (as far as userspace buffering goes, not O_SYNC)
+    # Returns the number of files reopened
+    def self.reopen_logs
+      to_reopen = []
+      append_flags = File::WRONLY | File::APPEND
+    
+        def app
+      @app ||= build
+    end
+    
+            _render { content }
+      end
+    end
+    
+    # Use this to fill in an entire form with data from a table. Example:
+#
+#   When I fill in the following:
+#     | Account Number | 5002       |
+#     | Expiry date    | 2009-11-01 |
+#     | Note           | Nice guy   |
+#     | Wants Email?   |            |
+#
+# TODO: Add support for checkbox, select og option
+# based on naming conventions.
+#
+When /^(?:|I )fill in the following:$/ do |fields|
+  fields.rows_hash.each do |name, value|
+    When %{I fill in '#{name}' with '#{value}'}
+  end
+end
+    
+    Before do
+  gemfile = ENV['BUNDLE_GEMFILE'].to_s
+  ENV['BUNDLE_GEMFILE'] = File.join(Dir.pwd, gemfile) unless gemfile.start_with?(Dir.pwd)
+  @framework_version = nil
+end
