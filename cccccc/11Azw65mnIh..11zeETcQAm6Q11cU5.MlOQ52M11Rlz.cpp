@@ -1,302 +1,218 @@
 
         
-        
-    {
-    {}  // namespace swig
-}  // namespace tensorflow
+            const QString &getAppName() const { return appName; }
+    const QIcon &getAppIcon() const { return appIcon; }
+    const QIcon &getTrayAndWindowIcon() const { return trayAndWindowIcon; }
+    const QString &getTitleAddText() const { return titleAddText; }
     
-    // Whether the op should be prefixed with underscore.
-bool IsOpWithUnderscorePrefix(const string& s);
+        secp256k1_fe_sqr(&zz, &a->z);                       /* z = Z1^2 */
+    u1 = a->x; secp256k1_fe_normalize_weak(&u1);        /* u1 = U1 = X1*Z2^2 (1) */
+    secp256k1_fe_mul(&u2, &b->x, &zz);                  /* u2 = U2 = X2*Z1^2 (1) */
+    s1 = a->y; secp256k1_fe_normalize_weak(&s1);        /* s1 = S1 = Y1*Z2^3 (1) */
+    secp256k1_fe_mul(&s2, &b->y, &zz);                  /* s2 = Y2*Z1^2 (1) */
+    secp256k1_fe_mul(&s2, &s2, &a->z);                  /* s2 = S2 = Y2*Z1^3 (1) */
+    t = u1; secp256k1_fe_add(&t, &u2);                  /* t = T = U1+U2 (2) */
+    m = s1; secp256k1_fe_add(&m, &s2);                  /* m = M = S1+S2 (2) */
+    secp256k1_fe_sqr(&rr, &t);                          /* rr = T^2 (1) */
+    secp256k1_fe_negate(&m_alt, &u2, 1);                /* Malt = -X2*Z1^2 */
+    secp256k1_fe_mul(&tt, &u1, &m_alt);                 /* tt = -U1*U2 (2) */
+    secp256k1_fe_add(&rr, &tt);                         /* rr = R = T^2-U1*U2 (3) */
+    /** If lambda = R/M = 0/0 we have a problem (except in the 'trivial'
+     *  case that Z = z1z2 = 0, and this is special-cased later on). */
+    degenerate = secp256k1_fe_normalizes_to_zero(&m) &
+                 secp256k1_fe_normalizes_to_zero(&rr);
+    /* This only occurs when y1 == -y2 and x1^3 == x2^3, but x1 != x2.
+     * This means either x1 == beta*x2 or beta*x1 == x2, where beta is
+     * a nontrivial cube root of one. In either case, an alternate
+     * non-indeterminate expression for lambda is (y1 - y2)/(x1 - x2),
+     * so we set R/M equal to this. */
+    rr_alt = s1;
+    secp256k1_fe_mul_int(&rr_alt, 2);       /* rr = Y1*Z2^3 - Y2*Z1^3 (2) */
+    secp256k1_fe_add(&m_alt, &u1);          /* Malt = X1*Z2^2 - X2*Z1^2 */
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    // Destructor passed to TF_NewTensor when it reuses a numpy buffer. Stores a
-// pointer to the pyobj in a buffer to be dereferenced later when we're actually
-// holding the GIL. Data and len are ignored.
-void DelayedNumpyDecref(void* data, size_t len, void* obj);
-    
-    
-    {  // Maps error codes to the corresponding Python exception type.
-  std::map<TF_Code, PyObject*> exc_types_;
-};
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    #include 'tensorflow/c/c_api.h'
-#include 'tensorflow/c/eager/c_api.h'
-    
-    port::StatusOr<StreamExecutor*> ExecutorCache::GetOrCreate(
-    const StreamExecutorConfig& config,
-    const std::function<ExecutorFactory>& factory) {
-  // In the fast path case, the cache already has an entry and we can just
-  // return after Get() which only takes a shared lock and not a unique lock.
-  // If we need to create, we take a unique lock on cache_.
-  auto fast_result = Get(config);
-  if (fast_result.ok()) {
-    return fast_result;
-  }
-    }
-    
-    namespace stream_executor {
-    }
-    
-    // FFT plan class. Each FFT implementation should define a plan class that is
-// derived from this class. It does not provide any interface but serves
-// as a common type that is used to execute the plan.
-class Plan {
- public:
-  virtual ~Plan() {}
-};
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(UvTaskRunner);
-};
-    
-      void SetImage(v8::Isolate* isolate, mate::Handle<NativeImage> image);
-  void SetPressedImage(v8::Isolate* isolate, mate::Handle<NativeImage> image);
-  void SetToolTip(const std::string& tool_tip);
-  void SetTitle(const std::string& title);
-  void SetHighlightMode(TrayIcon::HighlightMode mode);
-  void SetIgnoreDoubleClickEvents(bool ignore);
-  bool GetIgnoreDoubleClickEvents();
-  void DisplayBalloon(mate::Arguments* args, const mate::Dictionary& options);
-  void PopUpContextMenu(mate::Arguments* args);
-  void SetContextMenu(v8::Isolate* isolate, mate::Handle<Menu> menu);
-  gfx::Rect GetBounds();
-    
-    void Event::RenderFrameHostChanged(content::RenderFrameHost* old_rfh,
-                                   content::RenderFrameHost* new_rfh) {
-  if (sender_ && sender_ == old_rfh)
-    sender_ = new_rfh;
+    static void secp256k1_sha256_initialize(secp256k1_sha256_t *hash) {
+    hash->s[0] = 0x6a09e667ul;
+    hash->s[1] = 0xbb67ae85ul;
+    hash->s[2] = 0x3c6ef372ul;
+    hash->s[3] = 0xa54ff53aul;
+    hash->s[4] = 0x510e527ful;
+    hash->s[5] = 0x9b05688cul;
+    hash->s[6] = 0x1f83d9abul;
+    hash->s[7] = 0x5be0cd19ul;
+    hash->bytes = 0;
 }
     
-      // content::JavaScriptDialogManager implementations.
-  void RunJavaScriptDialog(content::WebContents* web_contents,
-                           content::RenderFrameHost* rfh,
-                           content::JavaScriptDialogType dialog_type,
-                           const base::string16& message_text,
-                           const base::string16& default_prompt_text,
-                           DialogClosedCallback callback,
-                           bool* did_suppress_message) override;
-  void RunBeforeUnloadDialog(content::WebContents* web_contents,
-                             content::RenderFrameHost* rfh,
-                             bool is_reload,
-                             DialogClosedCallback callback) override;
-  void CancelDialogs(content::WebContents* web_contents,
-                     bool reset_state) override;
+        /* Check NULLs for conversion */
+    CHECK(secp256k1_ecdsa_sign(both, &normal_sig, message, privkey, NULL, NULL) == 1);
+    ecount = 0;
+    CHECK(secp256k1_ecdsa_recoverable_signature_convert(both, NULL, &recsig) == 0);
+    CHECK(ecount == 1);
+    CHECK(secp256k1_ecdsa_recoverable_signature_convert(both, &normal_sig, NULL) == 0);
+    CHECK(ecount == 2);
+    CHECK(secp256k1_ecdsa_recoverable_signature_convert(both, &normal_sig, &recsig) == 1);
     
-      // Pricing Information
-  double price = 0.0;
-  std::string formattedPrice;
-    
-    bool URLRequestAboutJob::GetMimeType(std::string* mime_type) const {
-  *mime_type = 'text/html';
-  return true;
-}
-    
-        UnicodeString &displayScripts(UnicodeString &dest) const; // append script names to dest string.
-    ScriptSet & parseScripts(const UnicodeString &scriptsString, UErrorCode &status);  // Replaces ScriptSet contents.
-    
-    U_NAMESPACE_BEGIN
-    
-    int32_t
-SimpleTimeZone::getRawOffset() const
+    BOOST_AUTO_TEST_CASE(bip173_testvectors_invalid)
 {
-    return rawOffset;
+    static const std::string CASES[] = {
+        ' 1nwldj5',
+        '\x7f''1axkwrx',
+        '\x80''1eym55h',
+        'an84characterslonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1569pvx',
+        'pzry9x0s0muk',
+        '1pzry9x0s0muk',
+        'x1b4n0q5v',
+        'li1dgmt3',
+        'de1lg7wt\xff',
+        'A1G7SGD8',
+        '10a06t8',
+        '1qzzfhee',
+        'a12UEL5L',
+        'A12uEL5L',
+    };
+    for (const std::string& str : CASES) {
+        auto ret = bech32::Decode(str);
+        BOOST_CHECK(ret.first.empty());
+    }
 }
     
+        // Escapes
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar\\ Baz\'', {
+            {'Foo', 'Bar Baz'},
+        });
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar\\Baz\'', {
+            {'Foo', 'BarBaz'},
+        });
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar\\@Baz\'', {
+            {'Foo', 'Bar@Baz'},
+        });
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar\\\'Baz\' Spam=\'\\\'Eggs\\\'\'', {
+            {'Foo', 'Bar\'Baz'},
+            {'Spam', '\'Eggs\''},
+        });
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar\\\\Baz\'', {
+            {'Foo', 'Bar\\Baz'},
+        });
     
-    {                UChar wsc = text.charAt(t);
-                if(PatternProps::isWhiteSpace(wsc)) {
-                    // Lenient mode and it's just whitespace we skip it
-                    ++t;
-                    continue;  // Do not update p.
-                }
-            }
-            // hack around oldleniency being a bit of a catch-all bucket and we're just adding support specifically for paritial matches
-            if(partialMatchLenient && oldLeniency) {
-                break;
-            }
+            template<typename T>
+        explicit FormatArg(const T& value)
+            : m_value(static_cast<const void*>(&value)),
+            m_formatImpl(&formatImpl<T>),
+            m_toIntImpl(&toIntImpl<T>)
+        { }
     
-    #endif  // !UCONFIG_NO_FORMATTING
-
+        sub	rsp,STACK_SIZE
+%ifndef LINUX
+    movdqa	[rsp + _XMM_SAVE + 0*16],xmm6	
+    movdqa	[rsp + _XMM_SAVE + 1*16],xmm7
+    movdqa	[rsp + _XMM_SAVE + 2*16],xmm8	
+    movdqa	[rsp + _XMM_SAVE + 3*16],xmm9	
+    movdqa	[rsp + _XMM_SAVE + 4*16],xmm10
+    movdqa	[rsp + _XMM_SAVE + 5*16],xmm11
+    movdqa	[rsp + _XMM_SAVE + 6*16],xmm12
+%endif
     
-    class TransliterationRuleData;
-    
-      // Iterate the queries (or schedule) and check platform/version/sanity.
-  for (const auto& q : obj['queries'].GetObject()) {
-    if (!q.value.IsObject()) {
-      VLOG(1) << 'The pack ' << name << ' must contain a dictionary of queries';
-      continue;
+    namespace caffe2 {
     }
+    
+    template <>
+void GluOp<float, CPUContext>::ComputeGlu(
+    const int M,
+    const int split_dim,
+    const int N,
+    const float* Xdata,
+    float* Ydata) {
+  const int xStride = 2 * split_dim * N;
+  const int yStride = split_dim * N;
+  for (int i = 0; i < M; ++i) {
+    const int idx = i * xStride;
+    const int idy = i * yStride;
+    for (int j = 0; j < split_dim; ++j) {
+      const int jN = j * N;
+      const int jdx1 = idx + jN;
+      const int jdx2 = idx + (j + split_dim) * N;
+      const int jdy = idy + jN;
+      for (int k = 0; k < N; ++k) {
+        const float x1 = Xdata[jdx1 + k];
+        const float x2 = Xdata[jdx2 + k];
+        Ydata[jdy + k] = x1 * sigmoid(x2);
+      }
     }
-    
-      ScheduledQuery(const std::string& pack_name,
-                 const std::string& name,
-                 const std::string& query)
-      : pack_name(pack_name), name(name), query(query) {}
-  ScheduledQuery() = default;
-  ScheduledQuery(ScheduledQuery&&) = default;
-  ScheduledQuery& operator=(ScheduledQuery&&) = default;
-    
-    Status deserializeQueryDataJSON(const std::string& json, QueryDataSet& qd) {
-  rj::Document doc;
-  if (doc.Parse(json.c_str()).HasParseError()) {
-    return Status(1, 'Error serializing JSON');
   }
-  return deserializeQueryData(doc, qd);
 }
     
-    /**
- * @brief Deserialize a RowTyped object from JSON object.
- *
- * @param obj the input JSON value (should be an object).
- * @param r [output] the output Row structure.
- *
- * @return Status indicating the success or failure of the operation.
+    /*
+ * If Trace::hhbbc_time >= 1, print some stats about the program to a
+ * temporary file.  If it's greater than or equal to 2, also dump it
+ * to stdout.
  */
-Status deserializeRow(const rapidjson::Value& obj, RowTyped& r);
+void print_stats(const Index&, const php::Program&);
     
-      _Extension_ping_result__isset __isset;
+      static void SetParsedIni(IniSettingMap &ini, const std::string confStr,
+                           const std::string &filename, bool constants_only,
+                           bool is_system);
+    
+    const StaticString
+  s_wrapper_type('wrapper_type'),
+  s_stream_type('stream_type'),
+  s_mode('mode'),
+  s_unread_bytes('unread_bytes'),
+  s_seekable('seekable'),
+  s_timed_out('timed_out'),
+  s_blocked('blocked'),
+  s_eof('eof'),
+  s_plainfile('plainfile'),
+  s_dir('dir'),
+  s_r('r');
+    
+    #include 'hphp/runtime/base/perf-warning.h'
+    
+      static void setInitialized(bool f) { data_.initialized = f; }
+    
+      // localnode
+  // 8bytes reserved
+  readBytes(fp, buf, buf.size(), 8);
+  // localnode ID
+  readBytes(fp, buf, buf.size(), DHT_ID_LENGTH);
+  auto localNode = std::make_shared<DHTNode>(buf);
+  // 4bytes reserved
+  readBytes(fp, buf, buf.size(), 4);
+    
+      std::vector<std::shared_ptr<DHTNode>> nodes_;
+    
+      void setLocalNode(const std::shared_ptr<DHTNode>& localNode);
+    
+      virtual std::shared_ptr<DHTTask>
+  createPingTask(const std::shared_ptr<DHTNode>& remoteNode,
+                 int numRetry = 0) = 0;
+    
+      DHTTaskQueue* taskQueue_;
+    
+      // returns 'unknown'
+  virtual const std::string& getMessageType() const CXX11_OVERRIDE;
     
     
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
+    // exception type_error.304
+    try
     {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_MAP) {
-          {
-            this->success.clear();
-            uint32_t _size48;
-            ::apache::thrift::protocol::TType _ktype49;
-            ::apache::thrift::protocol::TType _vtype50;
-            xfer += iprot->readMapBegin(_ktype49, _vtype50, _size48);
-            uint32_t _i52;
-            for (_i52 = 0; _i52 < _size48; ++_i52)
-            {
-              std::string _key53;
-              xfer += iprot->readString(_key53);
-              InternalOptionInfo& _val54 = this->success[_key53];
-              xfer += _val54.read(iprot);
-            }
-            xfer += iprot->readMapEnd();
-          }
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
+        // use at() on a non-object type
+        json str = 'I am a string';
+        str.at('the good') = 'Another string';
     }
-    xfer += iprot->readFieldEnd();
-  }
-    
-      void __set_success(const InternalOptionList& val);
-    
-    namespace osquery {
-    }
-    
-    #include <smartmontools/libsmartctl.h>
-    
-      for (const auto& iter : line) {
-    options_index++;
-    if (iter[0] == '/') {
-      line_exports.push_back(iter);
-    } else {
-      break;
-    }
-  }
-    
-    /// Definition for singly-linked list.
-struct ListNode {
-    int val;
-    ListNode *next;
-    ListNode(int x) : val(x), next(NULL) {}
-};
-    
-    
-/// Definition for a binary tree node.
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-    
-    
+    catch (json::type_error& e)
     {
-    {        return res;
-    }
-};
-    
-    /// Definition for a binary tree node.
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-    
-    
-/// Definition for a binary tree node.
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-    
-            stack<TreeNode*> stack, output;
-    
-        for (auto i = lists.begin(); i != lists.end(); i++)
-    {
-        int ret = swRbtree_delete(tree, *i);
-        ASSERT_EQ(ret, 0);
+        std::cout << e.what() << '\n';
     }
     
-    
-    {    //1
-    ret = p.read(&p, buf, sizeof(buf));
-    if (ret < 0)
-    {
-        swSysError('read() failed.');
-    }
-    ASSERT_GT(ret, 0);
-    ASSERT_EQ(strcmp('hello world1', buf), 0);
-    //2
-    ret = p.read(&p, buf, sizeof(buf));
-    ASSERT_GT(ret, 0);
-    ASSERT_EQ(strcmp('hello world2', buf), 0);
-    //3
-    ret = p.read(&p, buf, sizeof(buf));
-    ASSERT_GT(ret, 0);
-    ASSERT_EQ(strcmp('hello world3', buf), 0);
-}
-    
-    namespace swoole_test
-{
-static int my_onPacket(swServer *serv, swEventData *req);
-static int my_onReceive(swServer *serv, swEventData *req);
-static void my_onStart(swServer *serv);
-static void my_onShutdown(swServer *serv);
-static void my_onConnect(swServer *serv, swDataHead *info);
-static void my_onClose(swServer *serv, swDataHead *info);
-static void my_onWorkerStart(swServer *serv, int worker_id);
-static void my_onWorkerStop(swServer *serv, int worker_id);
-    }
-    
-    #include <atomic>
-    
-    TEST(coroutine_channel, push_yield)
-{
-    Channel chan(1);
-    }
+        // output element with JSON pointer '/number'
+    std::cout << j.at('/number'_json_pointer) << '\n';
+    // output element with JSON pointer '/string'
+    std::cout << j.at('/string'_json_pointer) << '\n';
+    // output element with JSON pointer '/array'
+    std::cout << j.at('/array'_json_pointer) << '\n';
+    // output element with JSON pointer '/array/1'
+    std::cout << j.at('/array/1'_json_pointer) << '\n';
