@@ -1,95 +1,89 @@
 
         
-            return np.mean(losses)
-    
-        if do_save_ckpt:
-      session = tf.get_default_session()
-      checkpoint_path = os.path.join(self.hps.lfads_save_dir,
-                                     self.hps.checkpoint_name + '.ckpt')
-      self.seso_saver.save(session, checkpoint_path,
-                           global_step=self.train_step)
-    
-    rng = np.random.RandomState(seed=FLAGS.synth_data_seed)
-rnn_rngs = [np.random.RandomState(seed=FLAGS.synth_data_seed+1),
-            np.random.RandomState(seed=FLAGS.synth_data_seed+2)]
-T = FLAGS.T
-C = FLAGS.C
-N = FLAGS.N
-nreplications = FLAGS.nreplications
-E = nreplications * C
-train_percentage = FLAGS.train_percentage
-ntimesteps = int(T / FLAGS.dt)
+        
+@pytest.mark.functional
+def test_select_command_with_arrows(proc, TIMEOUT):
+    select_command_with_arrows(proc, TIMEOUT)
     
     
-def generate_data(rnn, T, E, x0s=None, P_sxn=None, input_magnitude=0.0,
-                  input_times=None):
-  ''' Generates data from an randomly initialized RNN.
-  Args:
-    rnn: the rnn
-    T: Time in seconds to run (divided by rnn['dt'] to get steps, rounded down.
-    E: total number of examples
-    S: number of samples (subsampling N)
-  Returns:
-    A list of length E of NxT tensors of the network being run.
-  '''
-  N = rnn['N']
-  def run_rnn(rnn, x0, ntime_steps, input_time=None):
-    rs = np.zeros([N,ntime_steps])
-    x_tm1 = x0
-    r_tm1 = np.tanh(x0)
-    tau = rnn['tau']
-    dt = rnn['dt']
-    alpha = (1.0-dt/tau)
-    W = dt/tau*rnn['W']*rnn['g']
-    Bin = dt/tau*rnn['Bin']
-    Bin2 = dt/tau*rnn['Bin2']
-    b = dt/tau*rnn['b']
+@pytest.fixture(params=containers)
+def proc(request, spawnu, TIMEOUT):
+    proc = spawnu(*request.param)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(u'tcsh')
+    proc.sendline(u'setenv PYTHONIOENCODING utf8')
+    proc.sendline(u'eval `thefuck --alias`')
+    return proc
     
-    
-def wasserstein_discriminator_loss_intrabatch(values, is_real_input):
-  '''Wasserstein discriminator loss.  This is an odd variant where the value
-  difference is between the real tokens and the fake tokens within a single
-  batch.
-    
-      Args:
-    session:  Current tf.Session.
-    percent_real_update: tf.assign operation.
-    new_rate: tf.placeholder for the new rate.
-    current_rate: Percent of tokens that are currently real.  Fake tokens
-      are the ones being imputed by the Generator.
-  '''
-  session.run(percent_real_update, feed_dict={new_rate: current_rate})
-    
-    
-def _init_attention(encoder_state):
-  '''Initialize attention. Handling both LSTM and GRU.
-    
-    from django.db import connections
-from django.db.backends.base.base import NO_DB_ALIAS
-    
-        def __init__(self, session_key=None):
-        self._cache = caches[settings.SESSION_CACHE_ALIAS]
-        super().__init__(session_key)
-    
-    
-class Session(AbstractBaseSession):
-    '''
-    Django provides full support for anonymous sessions. The session
-    framework lets you store and retrieve arbitrary data on a
-    per-site-visitor basis. It stores data on the server side and
-    abstracts the sending and receiving of cookies. Cookies contain a
-    session ID -- not the data itself.
-    
-    The JWS implementation in josepy only implements the base JOSE standard. In
-order to support the new header fields defined in ACME, this module defines some
-ACME-specific classes that layer on top of josepy.
+    match_output = '''
+Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
+Hit:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease
+Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
+Hit:4 http://security.ubuntu.com/ubuntu zesty-security InRelease
+Hit:5 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
+Hit:6 https://download.docker.com/linux/ubuntu zesty InRelease
+Hit:7 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
+Fetched 89.2 kB in 0s (122 kB/s)
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+8 packages can be upgraded. Run 'apt list --upgradable' to see them.
 '''
-import josepy as jose
     
-            Reverts all modified files that have not been saved as a checkpoint
+    You can install with Homebrew-Cask:
+  brew cask install osxfuse
     
-            with mock.patch('certbot.util.get_os_info') as mock_info:
-            for distro in entrypoint.OVERRIDE_CLASSES.keys():
-                mock_info.return_value = (distro, 'whatever')
-                self.assertEqual(entrypoint.get_configurator(),
-                                 entrypoint.OVERRIDE_CLASSES[distro])
+            slots = int(self.slots)
+        if slots > 1:
+            urls = [url.replace('localhost', '127.0.0.%d' % (x + 1)) for x in range(slots)]
+        else:
+            urls = [url]
+    
+    
+class _BenchSpider(scrapy.Spider):
+    '''A spider that follows all links'''
+    name = 'follow'
+    total = 10000
+    show = 20
+    baseurl = 'http://localhost:8998'
+    link_extractor = LinkExtractor()
+    
+        def syntax(self):
+        return '[-v]'
+    
+                # backward-compatible SSL/TLS method:
+            #
+            # * this will respect `method` attribute in often recommended
+            #   `ScrapyClientContextFactory` subclass
+            #   (https://github.com/scrapy/scrapy/issues/1429#issuecomment-131782133)
+            #
+            # * getattr() for `_ssl_method` attribute for context factories
+            #   not calling super(..., self).__init__
+            return CertificateOptions(verify=False,
+                        method=getattr(self, 'method',
+                                       getattr(self, '_ssl_method', None)),
+                        fixBrokenPeers=True,
+                        acceptableCiphers=DEFAULT_CIPHERS)
+    
+        def __init__(self, start_requests, close_if_idle, nextcall, scheduler):
+        self.closing = False
+        self.inprogress = set() # requests in progress
+        self.start_requests = iter(start_requests)
+        self.close_if_idle = close_if_idle
+        self.nextcall = nextcall
+        self.scheduler = scheduler
+        self.heartbeat = task.LoopingCall(nextcall.schedule)
+    
+        def __init__(self, settings):
+        if not settings.getbool('AJAXCRAWL_ENABLED'):
+            raise NotConfigured
+    
+            self.http_client = simple_http_client.Client(self.proxy, timeout=10)
+    
+            TODO: move to a utility class or something; weird having lexer call
+        this
+        '''
+    
+            if start < 0:
+            start = 0
