@@ -1,298 +1,279 @@
 
         
-          static void ClearCache(content::RenderProcessHost* render_view_host);
-  static void SetProxyConfig(content::RenderProcessHost* render_process_host,
-                             const std::string& proxy_config);
+            typedef int8_t   s8;
+    typedef uint8_t  u8;
+    typedef int16_t  s16;
+    typedef uint16_t u16;
+    typedef int32_t  s32;
+    typedef uint32_t u32;
+    typedef float    f32;
+    typedef int64_t  s64;
+    typedef uint64_t u64;
+    typedef double   f64;
     
-    EventListener::~EventListener() {
-  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
-    delete i->second;
-  }
-}
-    
-    namespace nw {
-    }
-    
-    void Menu::Remove(MenuItem* menu_item, int pos) {
-  std::vector<MenuItem*>::iterator begin = menu_items.begin();
-  menu_items.erase(begin+pos);
-  gtk_container_remove(GTK_CONTAINER(menu_), menu_item->menu_item_);
-}
-    
-    class NwClipboardReadAvailableTypesFunction : public NWSyncExtensionFunction {
- public:
-  NwClipboardReadAvailableTypesFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
- public:
-  NwMenuGetNSStringFWithFixupFunction() {}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    
- protected:
-  ~NwMenuGetNSStringFWithFixupFunction() override {}
-    
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
-};
-    
-      NwDesktopCaptureMonitor::NwDesktopCaptureMonitor()
-      : started_(false) {
-  }
-    
-    // Version constant.
-// This is either 0 for python, 1 for CPP V1, 2 for CPP V2.
-//
-// 0 is default and is equivalent to
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
-//
-// 1 is set with -DPYTHON_PROTO2_CPP_IMPL_V1 and is equivalent to
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
-// and
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=1
-//
-// 2 is set with -DPYTHON_PROTO2_CPP_IMPL_V2 and is equivalent to
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
-// and
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
-#ifdef PYTHON_PROTO2_CPP_IMPL_V1
-#error 'PYTHON_PROTO2_CPP_IMPL_V1 is no longer supported.'
-#else
-#ifdef PYTHON_PROTO2_CPP_IMPL_V2
-static int kImplVersion = 2;
-#else
-#ifdef PYTHON_PROTO2_PYTHON_IMPL
-static int kImplVersion = 0;
-#else
-    
-    
+        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0, const typename internal::VecTraits<T>::vec64 & v_src1,
+              typename internal::VecTraits<T>::unsign::vec64 & v_dst) const
     {
-    {
-    {}  // namespace python
-}  // namespace protobuf
-}  // namespace google
-#endif  // GOOGLE_PROTOBUF_PYTHON_CPP_SCOPED_PYOBJECT_PTR_H__
-
-    
-    #endif  // LANG_CXX11
-    
-      desired_output_for_decode = 'abcdefghIJ';
-  expected = string('\x0A\x0', 2);
-  result = TextFormatDecodeData::DecodeDataForString(input_for_decode,
-                                                     desired_output_for_decode);
-  EXPECT_EQ(expected, result);
-    
-    TEST(ByteSourceTest, CopyToStringByteSink) {
-  StringPiece data('Hello world!');
-  MockByteSource source(data, 3);
-  string str;
-  StringByteSink sink(&str);
-  source.CopyTo(&sink, data.size());
-  EXPECT_EQ(data, str);
-}
-    
-    #endif  // GOOGLE_PROTOBUF_TEMPLATE_UTIL_H_
-
-    
-    namespace c10d {
-namespace test {
-    }
+        v_dst = internal::vceq(v_src0, v_src1);
     }
     
-    REGISTER_CPU_OPERATOR(
-    MergeMultiMapFeatureTensors,
-    MergeMultiMapFeatureTensorsOp<CPUContext>);
-OPERATOR_SCHEMA(MergeMultiMapFeatureTensors)
-    .SetDoc(
-        'Merge given multi-feature tensors with map features into one.' + doc)
-    .NumInputs([](int n) { return n >= 5 && n % 5 == 0; })
-    .NumOutputs(5)
-    .Input(0, 'in1_lengths', '.lengths')
-    .Input(1, 'in1_keys', '.keys')
-    .Input(2, 'in1_values_lengths', '.values.lengths')
-    .Input(3, 'in1_values_keys', '.values.keys')
-    .Input(4, 'in1_values_values', '.values.values')
-    .Output(0, 'out_lengths', '.lengths')
-    .Output(1, 'out_keys', '.keys')
-    .Output(2, 'out_values_lengths', '.values_lengths')
-    .Output(3, 'out_values_keys', '.values.keys')
-    .Output(4, 'out_values_values', '.values.values');
+    #ifndef CAROTENE_SRC_COMMON_HPP
+#define CAROTENE_SRC_COMMON_HPP
     
-    Example 1:
-  DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
-  RANGES = [
-    [
-      [2, 4],
-      [0, 2],
-    ],
-    [
-      [0, 0],
-      [6, 2],
-    ]
-  ]
-  lengths = [4, 2]
-  OUTPUT[0] = [[3, 4, 5, 6], [0, 0, 0, 0]]
-  OUTPUT[1] = [[1, 2], [7, 8]]
-    
-    *Note: Do not set the shape argument and pass in an input at the same time.*
-    
-    
-    {REGISTER_CPU_OPERATOR(Glu, GluOp<float, CPUContext>);
-} // namespace caffe2
-
-    
-    template <typename T>
-internal::ParamGenerator<T> Range(T start, T end) {
-  return Range(start, end, 1);
-}
-    
-    #include <ostream>  // NOLINT
-#include <sstream>
-#include <string>
-#include <utility>
-#include <vector>
-#include 'gtest/internal/gtest-port.h'
-#include 'gtest/internal/gtest-internal.h'
-    
-    // This helper class is used by {ASSERT|EXPECT}_NO_FATAL_FAILURE to check if a
-// statement generates new fatal failures. To do so it registers itself as the
-// current test part result reporter. Besides checking if fatal failures were
-// reported, it only delegates the reporting to the former result reporter.
-// The original result reporter is restored in the destructor.
-// INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-class GTEST_API_ HasNewFatalFailureHelper
-    : public TestPartResultReporterInterface {
- public:
-  HasNewFatalFailureHelper();
-  virtual ~HasNewFatalFailureHelper();
-  virtual void ReportTestPartResult(const TestPartResult& result);
-  bool has_new_fatal_failure() const { return has_new_fatal_failure_; }
- private:
-  bool has_new_fatal_failure_;
-  TestPartResultReporterInterface* original_reporter_;
-    }
-    
-    TYPED_TEST(FooTest, HasPropertyA) { ... }
-    
-    // Factory interface for death tests.  May be mocked out for testing.
-class DeathTestFactory {
- public:
-  virtual ~DeathTestFactory() { }
-  virtual bool Create(const char* statement, const RE* regex,
-                      const char* file, int line, DeathTest** test) = 0;
-};
-    
-    #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_FILEPATH_H_
-
-    
-      CartesianProductGenerator9(const ParamGenerator<T1>& g1,
-      const ParamGenerator<T2>& g2, const ParamGenerator<T3>& g3,
-      const ParamGenerator<T4>& g4, const ParamGenerator<T5>& g5,
-      const ParamGenerator<T6>& g6, const ParamGenerator<T7>& g7,
-      const ParamGenerator<T8>& g8, const ParamGenerator<T9>& g9)
-      : g1_(g1), g2_(g2), g3_(g3), g4_(g4), g5_(g5), g6_(g6), g7_(g7), g8_(g8),
-          g9_(g9) {}
-  virtual ~CartesianProductGenerator9() {}
-    
-    // This event listener monitors how many Water objects are created and
-// destroyed by each test, and reports a failure if a test leaks some Water
-// objects. It does this by comparing the number of live Water objects at
-// the beginning of a test and at the end of a test.
-class LeakChecker : public EmptyTestEventListener {
- private:
-  // Called before a test starts.
-  virtual void OnTestStart(const TestInfo& /* test_info */) {
-    initially_allocated_ = Water::allocated();
-  }
-    }
-    
-    // Step 3. Call RUN_ALL_TESTS() in main().
-//
-// We do this by linking in src/gtest_main.cc file, which consists of
-// a main() function which calls RUN_ALL_TESTS() for us.
-//
-// This runs all the tests you've defined, prints the result, and
-// returns 0 if successful, or 1 otherwise.
-//
-// Did you notice that we didn't register the tests?  The
-// RUN_ALL_TESTS() macro magically knows about all the tests we
-// defined.  Isn't this convenient?
-
-    
-      // The default c'tor constructs a NULL string.
-  MyString() : c_string_(NULL) {}
-    
-        // Make sure that the dictionary contains all required keys, and if it does, return version value
-    // from the dictionary.
-    template <typename T>
-    inline size_t ValidateDictionary(const Dictionary& dict, const std::vector<std::wstring>& requiredKeys, const std::wstring& typeValue, size_t currentVersion)
-    { 
-        const auto& version = GetVersion(dict);
-    }
-    
-            std::wstring AsString() const;
-        std::shared_ptr<VariableFields> Clone() const;
-        FunctionPtr Owner() const;
-    
-    #include 'CalculatorResource.h'
-    
-    using namespace CalculatorApp;
-using namespace CalculatorApp::Common;
-using namespace Platform;
-using namespace Platform::Collections;
-using namespace std;
-using namespace Windows::Foundation::Collections;
-    
-    DependencyObject^ SupplementaryItemsControl::GetContainerForItemOverride()
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
+CVTS_FUNC(u16, s8, 16,
+    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
+    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
 {
-    return ref new SupplementaryContentPresenter();
-}
-    
-            DEPENDENCY_PROPERTY_OWNER(Calculator);
-        DEPENDENCY_PROPERTY_WITH_DEFAULT_AND_CALLBACK(bool, IsStandard, false);
-        DEPENDENCY_PROPERTY_WITH_DEFAULT_AND_CALLBACK(bool, IsScientific, false);
-        DEPENDENCY_PROPERTY_WITH_DEFAULT_AND_CALLBACK(bool, IsProgrammer, false);
-    
-        private:
-        void OnAngleButtonPressed(_In_ Platform::Object^ commandParameter);
-        void FToEButton_Toggled(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::RoutedEventArgs^ e);
-        void HypButton_Toggled(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::RoutedEventArgs^ e);
-    
-    
+    for (size_t i = 0; i < w; i += 8)
     {
-    {    private:
-        bool m_isErrorVisualState;
-    };
+        internal::prefetch(_src + i);
+        __asm__ (
+            'vld1.8 {d4-d5}, [%[src1]]                             \n\t'
+            'vmovl.u16 q3, d4                                      \n\t'
+            'vmovl.u16 q4, d5                                      \n\t'
+            'vcvt.f32.u32 q5, q3                                   \n\t'
+            'vcvt.f32.u32 q6, q4                                   \n\t'
+            'vmul.f32 q7, q5, q0                                   \n\t'
+            'vmul.f32 q8, q6, q0                                   \n\t'
+            'vadd.f32 q9, q7, q1                                   \n\t'
+            'vadd.f32 q10, q8, q1                                  \n\t'
+            'vcvt.s32.f32 q11, q9                                  \n\t'
+            'vcvt.s32.f32 q12, q10                                 \n\t'
+            'vqmovn.s32 d26, q11                                   \n\t'
+            'vqmovn.s32 d27, q12                                   \n\t'
+            'vqmovn.s16 d28, q13                                   \n\t'
+            'vst1.8 {d28}, [%[dst]]                                \n\t'
+            : /*no output*/
+            : [src1] 'r' (_src + i),
+              [dst] 'r' (_dst + i + 0),
+               'w'  (vscale), 'w' (vshift)
+            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26','d27','d28'
+        );
+    }
+})
+#else
+CVTS_FUNC(u16, s8, 16,
+    float32x4_t vscale = vdupq_n_f32((f32)alpha);
+    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        uint16x8_t vline = vld1q_u16(_src + i);
+        uint32x4_t vline1_u32 = vmovl_u16(vget_low_u16 (vline));
+        uint32x4_t vline2_u32 = vmovl_u16(vget_high_u16(vline));
+        float32x4_t vline1_f32 = vcvtq_f32_u32(vline1_u32);
+        float32x4_t vline2_f32 = vcvtq_f32_u32(vline2_u32);
+        vline1_f32 = vmulq_f32(vline1_f32, vscale);
+        vline2_f32 = vmulq_f32(vline2_f32, vscale);
+        vline1_f32 = vaddq_f32(vline1_f32, vshift);
+        vline2_f32 = vaddq_f32(vline2_f32, vshift);
+        int32x4_t vline1_s32 = vcvtq_s32_f32(vline1_f32);
+        int32x4_t vline2_s32 = vcvtq_s32_f32(vline2_f32);
+        int16x4_t vRes1 = vqmovn_s32(vline1_s32);
+        int16x4_t vRes2 = vqmovn_s32(vline2_s32);
+        int8x8_t vRes = vqmovn_s16(vcombine_s16(vRes1, vRes2));
+        vst1_s8(_dst + i, vRes);
+    }
+})
+#endif
+    
+            #define COUNTNONZERO8U_BLOCK_SIZE (16*255)
+        uint8x16_t vc1 = vmovq_n_u8(1);
+        for (; i < roiw16;)
+        {
+            size_t lim = std::min(i + COUNTNONZERO8U_BLOCK_SIZE, size.width) - 16;
+            uint8x16_t vs = vmovq_n_u8(0);
+    }
+    
+                    d &= tab[ptr[pixel[2]]] | tab[ptr[pixel[10]]];
+                d &= tab[ptr[pixel[4]]] | tab[ptr[pixel[12]]];
+                d &= tab[ptr[pixel[6]]] | tab[ptr[pixel[14]]];
+    
+        if (elemSize == (u32)sizeof(u8))
+        func = &flip<u8>;
+    if (elemSize == (u32)sizeof(u16))
+        func = &flip<u16>;
+    if (elemSize == (u32)sizeof(u32))
+        func = &flip<u32>;
+    if (elemSize == (u32)sizeof(u8) * 3)
+        func = &flip3<u8>;
+    
+    namespace tesseract {
+class Tesseract;
 }
+    
+    // Given a MutableIterator to the start of a block, run DetectParagraphs on
+// that block and commit the results to the underlying ROW and BLOCK structs,
+// saving the ParagraphModels in models.  Caller owns the models.
+// We use unicharset during the function to answer questions such as 'is the
+// first letter of this word upper case?'
+void DetectParagraphs(int debug_level,
+                      bool after_text_recognition,
+                      const MutableIterator *block_start,
+                      GenericVector<ParagraphModel *> *models);
+    
+    #include 'blamer.h'
+#include 'errcode.h'
+#include 'ratngs.h'
+#include 'reject.h'
+#include 'tesseractclass.h'
+#include 'werd.h'
+    
+    #include <cstdio>    // for FILE
+#include 'strngs.h'  // for STRING
+    
+    
+    { private:
+  // The collection of images to put in the PDF.
+  Pixa* pixa_;
+  // The fonts used to draw text captions.
+  L_Bmf* fonts_;
+};
+    
+    // A simple class to provide a dynamic programming solution to a class of
+// 1st-order problems in which the cost is dependent only on the current
+// step and the best cost to that step, with a possible special case
+// of using the variance of the steps, and only the top choice is required.
+// Useful for problems such as finding the optimal cut points in a fixed-pitch
+// (vertical or horizontal) situation.
+// Skeletal Example:
+// DPPoint* array = new DPPoint[width];
+// for (int i = 0; i < width; i++) {
+//   array[i].AddLocalCost(cost_at_i)
+// }
+// DPPoint* best_end = DPPoint::Solve(..., array);
+// while (best_end != nullptr) {
+//   int cut_index = best_end - array;
+//   best_end = best_end->best_prev();
+// }
+// delete [] array;
+class DPPoint {
+ public:
+  // The cost function evaluates the total cost at this (excluding this's
+  // local_cost) and if it beats this's total_cost, then
+  // replace the appropriate values in this.
+  typedef int64_t (DPPoint::*CostFunc)(const DPPoint* prev);
+    }
+    
+    #ifndef B2_TRIANGLE_H
+#define B2_TRIANGLE_H
+    
+    		Image				*m_pimageSource;
+		unsigned int		m_uiSourceH;
+		unsigned int		m_uiSourceV;
+		ErrorMetric			m_errormetric;
+		ColorFloatRGBA		m_afrgbaSource[PIXELS];		// vertical scan
+    
+    		encodingTry.TryIndividualHalf(&trys.m_half1);
+		encodingTry.TryIndividualHalf(&trys.m_half2);
+    
+    
+#endif /* AFBLUE_H_ */
+    
+    #if defined(MIPSr1_ASM)
+#include 'mips/fixed_generic_mipsr1.h'
+#endif
+    
+      static void clear(Data& data);
+    
+      virtual bool isReply() const CXX11_OVERRIDE;
+    
+    class DHTRoutingTableDeserializer {
+private:
+  int family_;
+    }
+    
+    
+    {  const int clen = bittorrent::getCompactLength(family_);
+  // nodes
+  for (std::vector<std::shared_ptr<DHTNode>>::const_iterator i = nodes_.begin(),
+                                                             eoi = nodes_.end();
+       i != eoi; ++i) {
+    const std::shared_ptr<DHTNode>& node = *i;
+    // Write IP address + port in Compact IP-address/port info form.
+    unsigned char compactPeer[COMPACT_LEN_IPV6];
+    int compactlen = bittorrent::packcompact(compactPeer, node->getIPAddress(),
+                                             node->getPort());
+    if (compactlen != clen) {
+      memset(compactPeer, 0, clen);
+    }
+    uint8_t clen1 = clen;
+    // 1byte compact peer format length
+    WRITE_CHECK(fp, &clen1, sizeof(clen1));
+    // 7bytes reserved
+    WRITE_CHECK(fp, zero, 7);
+    // clen bytes compact peer
+    WRITE_CHECK(fp, compactPeer, static_cast<size_t>(clen));
+    // 24-clen bytes reserved
+    WRITE_CHECK(fp, zero, static_cast<size_t>(24 - clen));
+    // 20bytes: node ID
+    WRITE_CHECK(fp, node->getID(), DHT_ID_LENGTH);
+    // 4bytes reserved
+    WRITE_CHECK(fp, zero, 4);
+  }
+  if (fp.close() == EOF) {
+    throw DL_ABORT_EX(
+        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
+  }
+  if (!File(filenameTemp).renameTo(filename)) {
+    throw DL_ABORT_EX(
+        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
+  }
+  A2_LOG_INFO('DHT routing table was saved successfully');
+}
+    
+    #include 'LogFactory.h'
+#include 'Logger.h'
+#include 'util.h'
+#include 'DHTNode.h'
+#include 'DHTConnectionImpl.h'
+#include 'DHTRoutingTable.h'
+#include 'DHTMessageFactoryImpl.h'
+#include 'DHTMessageTracker.h'
+#include 'DHTMessageDispatcherImpl.h'
+#include 'DHTMessageReceiver.h'
+#include 'DHTTaskQueueImpl.h'
+#include 'DHTTaskFactoryImpl.h'
+#include 'DHTPeerAnnounceStorage.h'
+#include 'DHTTokenTracker.h'
+#include 'DHTInteractionCommand.h'
+#include 'DHTTokenUpdateCommand.h'
+#include 'DHTBucketRefreshCommand.h'
+#include 'DHTPeerAnnounceCommand.h'
+#include 'DHTEntryPointNameResolveCommand.h'
+#include 'DHTAutoSaveCommand.h'
+#include 'DHTTask.h'
+#include 'DHTRoutingTableDeserializer.h'
+#include 'DHTRegistry.h'
+#include 'DHTBucketRefreshTask.h'
+#include 'DHTMessageCallback.h'
+#include 'DHTMessageTrackerEntry.h'
+#include 'DHTMessageEntry.h'
+#include 'UDPTrackerClient.h'
+#include 'BtRegistry.h'
+#include 'prefs.h'
+#include 'Option.h'
+#include 'SocketCore.h'
+#include 'DlAbortEx.h'
+#include 'RecoverableException.h'
+#include 'a2functional.h'
+#include 'DownloadEngine.h'
+#include 'fmt.h'
+    
+    public:
+  DHTTaskExecutor(int numConcurrent);
+    
+    namespace aria2 {
+    }
+    
+    #endif // D_DHT_TASK_QUEUE_IMPL_H
 
     
+    class DHTTokenTracker;
     
-    {    // exception out_of_range.401
-    try
-    {
-        // try to write beyond the array limit
-        array.at(5) = 'sixth';
-    }
-    catch (json::out_of_range& e)
-    {
-        std::cout << e.what() << '\n';
-    }
-}
-
-    
-    
-    // out_of_range.106
-    try
-    {
-        // try to use an array index with leading '0'
-        json::reference ref = j.at('/array/01'_json_pointer);
-    }
-    catch (json::parse_error& e)
-    {
-        std::cout << e.what() << '\n';
-    }
+    #include 'DHTMessage.h'
     
         // output element with JSON pointer '/number'
     std::cout << j.at('/number'_json_pointer) << '\n';
@@ -303,40 +284,56 @@ using namespace Windows::Foundation::Collections;
     // output element with JSON pointer '/array/1'
     std::cout << j.at('/array/1'_json_pointer) << '\n';
     
-    namespace apollo {
-namespace drivers {
-namespace canbus {
+        // print values
+    std::cout << object << '\n';
+    std::cout << *res1.first << ' ' << std::boolalpha << res1.second << '\n';
+    
+    
+    {
+    {        if( (_topBoundary == _bottomBoundary) && (_leftBoundary == _rightBoundary) )
+        {
+            _boundaryFullyCovered = true;
+        }
+    }
+    
+    return true;
+}
+    
+    bool Waves::initWithDuration(float duration, const Size& gridSize, unsigned int waves, float amplitude, bool horizontal, bool vertical)
+{
+    if (Grid3DAction::initWithDuration(duration, gridSize))
+    {
+        _waves = waves;
+        _amplitude = amplitude;
+        _amplitudeRate = 1.0f;
+        _horizontal = horizontal;
+        _vertical = vertical;
     }
     }
+    
+        /** Gets the total Delay units of the Animation. 
+     *
+     * @return The total Delay units of the Animation.
+     */
+    float getTotalDelayUnits() const { return _totalDelayUnits; };
+    
+    /** Sets the delay in seconds of the 'delay unit'.
+     *
+     * @param delayPerUnit The delay in seconds of the 'delay unit'.
+     */
+    void setDelayPerUnit(float delayPerUnit) { _delayPerUnit = delayPerUnit; };
+    
+    /** Gets the delay in seconds of the 'delay unit'.
+     * 
+     * @return The delay in seconds of the 'delay unit'.
+     */
+    float getDelayPerUnit() const { return _delayPerUnit; };
+    
+    void AnimationCache::removeAnimation(const std::string& name)
+{
+    if (name.empty())
+        return;
     }
     
-    
-    {  int ret = x;
-  return ret;
-}
-    
-    void RadarState201::Parse(const std::uint8_t* bytes, int32_t length,
-                          ContiRadar* conti_radar) const {
-  auto state = conti_radar->mutable_radar_state();
-  state->set_max_distance(max_dist(bytes, length));
-  state->set_output_type(output_type(bytes, length));
-  state->set_rcs_threshold(rcs_threshold(bytes, length));
-  state->set_radar_power(radar_power(bytes, length));
-  state->set_send_quality(send_quality(bytes, length));
-  state->set_send_ext_info(send_ext_info(bytes, length));
-}
-    
-    
-    {  EXPECT_EQ(bd, bd_golden);
-}
-    
-    Eigen::MatrixXd SplineSegKernel::SecondOrderDerivativeKernel(
-    const uint32_t num_params, const double accumulated_x) {
-  if (num_params > reserved_order_ + 1) {
-    CalculateSecondOrderDerivative(num_params);
-  }
-  Eigen::MatrixXd term_matrix;
-  IntegratedTermMatrix(num_params, accumulated_x, 'second_order', &term_matrix);
-  return kernel_second_order_derivative_.block(0, 0, num_params, num_params)
-      .cwiseProduct(term_matrix);
-}
+    private:
+    CC_DISALLOW_COPY_AND_ASSIGN(AtlasNode);
