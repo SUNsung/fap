@@ -1,127 +1,123 @@
 
         
-            if self.hparams.hidden_layers == 1:
-      self.output = tf.matmul(tf.nn.tanh(h), self.weights2)
+        import youtube_dl
     
-        self.keep_prob = keep_prob = tf.placeholder(tf.float32, [], 'keep_prob')
-    self.batch_size = batch_size = int(hps.batch_size)
-    self.learning_rate = tf.Variable(float(hps.learning_rate_init),
-                                     trainable=False, name='learning_rate')
-    self.learning_rate_decay_op = self.learning_rate.assign(
-        self.learning_rate * hps.learning_rate_decay_factor)
-    
-      model.train_model(datasets)
-    
-      Args:
-    data_e: nexamples length list of NxT trials
-    dt: how often the data are sampled
-    max_firing_rate: the firing rate that is associated with a value of 1.0
-  Returns:
-    gauss_e: a list of length b of the data with noise.
-    '''
-    
-      return question_ids, sentences, labels
-    
-          x[i] = final_x
-      y[i] = final_y
-    
-    
-def convert_to_human_readable(id_to_word, arr, max_num_to_print):
-  '''Convert a np.array of indices into words using id_to_word dictionary.
-  Return max_num_to_print results.
-  '''
-  assert arr.ndim == 2
-    
-    
-def create_gen_train_op(hparams, learning_rate, gen_loss, global_step, mode):
-  '''Create Generator train op.'''
-  del hparams
-  with tf.name_scope('train_generator'):
-    if FLAGS.generator_optimizer == 'sgd':
-      gen_optimizer = tf.train.GradientDescentOptimizer(learning_rate)
-    elif FLAGS.generator_optimizer == 'adam':
-      gen_optimizer = tf.train.AdamOptimizer(learning_rate)
-    else:
-      raise NotImplementedError
-    gen_vars = [
-        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
-    ]
-    print('Optimizing Generator vars.')
-    for v in gen_vars:
-      print(v)
-    if mode == 'MINIMIZE':
-      gen_grads = tf.gradients(gen_loss, gen_vars)
-    elif mode == 'MAXIMIZE':
-      gen_grads = tf.gradients(-gen_loss, gen_vars)
-    else:
-      raise ValueError('Must be one of 'MINIMIZE' or 'MAXIMIZE'')
-    gen_grads_clipped, _ = tf.clip_by_global_norm(gen_grads,
-                                                  FLAGS.grad_clipping)
-    gen_train_op = gen_optimizer.apply_gradients(
-        zip(gen_grads_clipped, gen_vars), global_step=global_step)
-    return gen_train_op, gen_grads_clipped, gen_vars
-    
-        elif FLAGS.discriminator_model == 'cnn':
-      dis_variable_maps = variable_mapping.cnn()
-      dis_init_saver = tf.train.Saver(var_list=dis_variable_maps)
-      init_savers['dis_init_saver'] = dis_init_saver
-    
-      for t in ngrams_list:
-    key = hash_function(t)
-    if key in counts:
-      counts[key] += 1
-    else:
-      counts[key] = 1
-  return counts
-    
-      if FLAGS.dis_share_embedding:
-    assert hparams.dis_rnn_size == hparams.gen_rnn_size, (
-        'If you wish to share Discriminator/Generator embeddings, they must be'
-        ' same dimension.')
-    with tf.variable_scope('gen/rnn', reuse=True):
-      embedding = tf.get_variable('embedding',
-                                  [FLAGS.vocab_size, hparams.gen_rnn_size])
-    
-                _contents = _contents.replace(match.group(3), match.group(4))
-    else:
-        # We don't understand what the current line means!
-        print('Not Understood: ' + line)
+    with io.open(README_FILE, 'w', encoding='utf-8') as f:
+    f.write(header)
+    f.write(options)
+    f.write(footer)
 
     
-    # Check minimum required Python version
-import sys
-if sys.version_info < (2, 7):
-    print('Scrapy %s requires Python 2.7' % __version__)
-    sys.exit(1)
     
-        def long_desc(self):
-        return ('Edit a spider using the editor defined in the EDITOR environment'
-                ' variable or else the EDITOR setting')
+if __name__ == '__main__':
+    main()
+
     
-    
-class Command(ScrapyCommand):
-    
-        def post_process(self, output):
-        occurrences = 0
-        for x in output:
-            if isinstance(x, self.obj_type):
-                occurrences += 1
+        def test_cbc_decrypt(self):
+        data = bytes_to_intlist(
+            b'\x97\x92+\xe5\x0b\xc3\x18\x91ky9m&\xb3\xb5@\xe6'\xc2\x96.\xc8u\x88\xab9-[\x9e|\xf1\xcd'
+        )
+        decrypted = intlist_to_bytes(aes_cbc_decrypt(data, self.key, self.iv))
+        self.assertEqual(decrypted.rstrip(b'\x08'), self.secret_msg)
     
     
-class ScrapyHTTPClientFactory(HTTPClientFactory):
-    '''Scrapy implementation of the HTTPClientFactory overwriting the
-    serUrl method to make use of our Url object that cache the parse
-    result.
-    '''
+class TestCache(unittest.TestCase):
+    def setUp(self):
+        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
+        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
+        _mkdir(TESTDATA_DIR)
+        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
+        self.tearDown()
     
     
-class ShutdownRequest( BaseRequest ):
-  def __init__( self ):
-    super( ShutdownRequest, self ).__init__()
+@pytest.fixture
+def app():
+    '''Create and configure a new app instance for each test.'''
+    # create a temporary file to isolate the database for each test
+    db_fd, db_path = tempfile.mkstemp()
+    # create the app with common test config
+    app = create_app({
+        'TESTING': True,
+        'DATABASE': db_path,
+    })
     
-    import mock
-import requests
+        seems_fishy = False
+    if total_found == 0:
+        info.append('Error: the template could not be found.')
+        seems_fishy = True
+    elif total_found > 1:
+        info.append('Warning: multiple loaders returned a match for the template.')
+        seems_fishy = True
     
-    def load_url(url, timeout):
-    kwargs = {'timeout': timeout} if sys.version_info >= (2, 6) else {}
-    return urlopen(url, **kwargs).read()
+        @app.route('/')
+    def index():
+        raise Exception('dummy')
+    
+    
+def conv2d(x, kernel_size, out_channels,
+           act_fn=relu,
+           strides=1,
+           padding='SAME',
+           name=None,
+           reuse=None):
+    '''2-D 卷积层
+    Input shape:  [batch_size, in_h, in_w, in_channels]
+    Output shape: [batch_size, out_h, out_w, out_channels]
+    
+            self._built = False
+    
+    References:
+    https://github.com/fomorians/highway-fcn
+    https://github.com/fomorians/highway-cnn
+'''
+import tensorflow as tf
+    
+    import numpy as np
+import tensorflow as tf
+    
+    *What does this example do?
+To understand the implementation of this pattern in Python, it is
+important to know that, in Python, instance attributes are stored in a
+attribute dictionary called __dict__. Usually, each instance will have
+its own dictionary, but the Borg pattern modifies this so that all
+instances have the same dictionary.
+In this example, the __shared_state attribute will be the dictionary
+shared between all instances, and this is ensured by assigining
+__shared_state to the __dict__ variable when initializing a new
+instance (i.e., in the __init__ method). Other attributes are usually
+added to the instance's attribute dictionary, but, since the attribute
+dictionary itself is shared (which is __shared_state), all other
+attributes will also be shared.
+For this reason, when the attribute self.state is modified using
+instance rm2, the value of self.state in instance rm1 also changes. The
+same happens if self.state is modified using rm3, which is an
+instance from a subclass.
+Notice that even though they share attributes, the instances are not
+the same, as seen by their ids.
+    
+    
+class GreekGetter(object):
+    
+        def test_provider_shall_update_affected_subscribers_with_published_subscription(cls):
+        pro = Provider()
+        pub = Publisher(pro)
+        sub1 = Subscriber('sub 1 name', pro)
+        sub1.subscribe('sub 1 msg 1')
+        sub1.subscribe('sub 1 msg 2')
+        sub2 = Subscriber('sub 2 name', pro)
+        sub2.subscribe('sub 2 msg 1')
+        sub2.subscribe('sub 2 msg 2')
+        with patch.object(sub1, 'run') as mock_subscriber1_run, patch.object(sub2, 'run') as mock_subscriber2_run:
+            pro.update()
+            cls.assertEqual(mock_subscriber1_run.call_count, 0)
+            cls.assertEqual(mock_subscriber2_run.call_count, 0)
+        pub.publish('sub 1 msg 1')
+        pub.publish('sub 1 msg 2')
+        pub.publish('sub 2 msg 1')
+        pub.publish('sub 2 msg 2')
+        with patch.object(sub1, 'run') as mock_subscriber1_run, patch.object(sub2, 'run') as mock_subscriber2_run:
+            pro.update()
+            expected_sub1_calls = [call('sub 1 msg 1'), call('sub 1 msg 2')]
+            mock_subscriber1_run.assert_has_calls(expected_sub1_calls)
+            expected_sub2_calls = [call('sub 2 msg 1'), call('sub 2 msg 2')]
+            mock_subscriber2_run.assert_has_calls(expected_sub2_calls)
