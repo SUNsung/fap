@@ -1,209 +1,263 @@
 
         
-            def run(action_named: nil, action_class_ref: nil, parameter_map: nil)
-      action_return = runner.execute_action(action_named, action_class_ref, [parameter_map], custom_dir: '.')
-      return action_return
+        FORWARD_SLASH = '/'.freeze
+    
+    Benchmark.ips do |x|
+  x.report('local-require') { local_require }
+  x.report('global-require') { global_require }
+  x.report('graceful-require') { graceful_require }
+  x.compare!
+end
+
+    
+          #
+    
+    module Jekyll
+  module Commands
+    class NewTheme < Jekyll::Command
+      class << self
+        def init_with_program(prog)
+          prog.command(:'new-theme') do |c|
+            c.syntax 'new-theme NAME'
+            c.description 'Creates a new Jekyll theme scaffold'
+            c.option 'code_of_conduct', \
+                     '-c', '--code-of-conduct', \
+                     'Include a Code of Conduct. (defaults to false)'
+    
+        def types_as_json
+      @types.values.sort! { |a, b| sort_fn(a.name, b.name) }.map(&:as_json)
     end
     
-            is_swift = FastlaneCore::FastlaneFolder.swift?
-        fastlane_client_language = is_swift ? :swift : :ruby
-        action_launch_context = FastlaneCore::ActionLaunchContext.context_for_action_name(@program[:name], fastlane_client_language: fastlane_client_language, args: ARGV)
-        FastlaneCore.session.action_launched(launch_context: action_launch_context)
+        def initial_page?
+      root_page? || context[:initial_paths].include?(subpath)
+    end
     
-          it 'allows you to specify your own tag' do
-        tag = '2.0.0'
-    
-            describe '#keys' do
-          it 'returns all available keys' do
-            expect(@config.all_keys).to eq([:cert_name, :output, :wait_processing_interval])
-          end
-        end
-    
-        t.wakeup
-    t.value.should == 5
-  end
-end
-    
-    describe 'Kernel.throw' do
-  it 'transfers control to the end of the active catch block waiting for symbol' do
-    catch(:blah) do
-      :value
-      throw :blah
-      fail('throw didn't transfer the control')
-    end.should be_nil
-  end
-    
-      it 'raises ArgumentError if no block or proc is provided' do
-    lambda do
-      trace_var :$Kernel_trace_var_global
-    end.should raise_error(ArgumentError)
+        def effective_path
+      @effective_path ||= effective_url.path
+    end
   end
 end
 
     
-          ruby_bug '#14846', '2.5'...'2.6' do
-        it 'raises ArgumentError if passed -1' do
-          -> { warn '', uplevel: -1 }.should raise_error(ArgumentError)
-        end
+            css('.toc-close', '.naked-list').remove
       end
     
-        data =
-      [0x00, 0x00, 0x00, 0x00].pack('C*') +
-      bmc_session_id +
-      console_random_id +
-      [
-        0x14, 0x00, 0x00,
-        username.length
-      ].pack('C*') +
-      username
+      # GET /resource/sign_in
+  def new
+    self.resource = resource_class.new(sign_in_params)
+    clean_up_passwords(resource)
+    yield resource if block_given?
+    respond_with(resource, serialize_options(resource))
+  end
     
-              # Encodes the realm field
-          #
-          # @return [String]
-          def encode_realm
-            encoded = ''
-            encoded << [realm.length].pack('N')
-            encoded << realm
+        def email_changed(record, opts={})
+      devise_mail(record, :email_changed, opts)
+    end
     
-    module Rex
-  module Proto
-    module Kerberos
-      module CredentialCache
-        # This class provides a representation of credential times stored in the Kerberos Credential Cache.
-        class Time < Element
-          # @!attribute auth_time
-          #   @return [Integer]
-          attr_accessor :auth_time
-          # @!attribute start_time
-          #   @return [Integer]
-          attr_accessor :start_time
-          # @!attribute end_time
-          #   @return [Integer]
-          attr_accessor :end_time
-          # @!attribute renew_till
-          #   @return [Integer]
-          attr_accessor :renew_till
+    class BugTest < ActionDispatch::IntegrationTest
+  include Rack::Test::Methods
+  include Warden::Test::Helpers
     
-              # Rex::Proto::Kerberos::Model::ApReq decoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def decode(input)
-            raise ::NotImplementedError, 'AP-REQ decoding not supported'
-          end
+          # Sign in a user that already was authenticated. This helper is useful for logging
+      # users in after sign up. All options given to sign_in is passed forward
+      # to the set_user method in warden.
+      # If you are using a custom warden strategy and the timeoutable module, you have to
+      # set `env['devise.skip_timeout'] = true` in the request to use this method, like we do
+      # in the sessions controller: https://github.com/plataformatec/devise/blob/master/app/controllers/devise/sessions_controller.rb#L7
+      #
+      # Examples:
+      #
+      #   sign_in :user, @user                      # sign_in(scope, resource)
+      #   sign_in @user                             # sign_in(resource)
+      #   sign_in @user, event: :authentication     # sign_in(resource, options)
+      #   sign_in @user, store: false               # sign_in(resource, options)
+      #
+      def sign_in(resource_or_scope, *args)
+        options  = args.extract_options!
+        scope    = Devise::Mapping.find_scope!(resource_or_scope)
+        resource = args.last || resource_or_scope
     
-              # @!attribute type
-          #   @return [Integer] The algorithm used to generate the checksum
-          attr_accessor :type
-          # @!attribute checksum
-          #   @return [String] The checksum itself
-          attr_accessor :checksum
-    
-              # Decodes the Rex::Proto::Kerberos::Model::EncKdcResponse from an input
-          #
-          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [self] if decoding succeeds
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode(input)
-            case input
-            when String
-              decode_string(input)
-            when OpenSSL::ASN1::ASN1Data
-              decode_asn1(input)
-            else
-              raise ::RuntimeError, 'Failed to decode EncKdcResponse, invalid input'
-            end
-    
-              # Encodes the Rex::Proto::Kerberos::Model::KdcRequest into an ASN.1 String
-          #
-          # @return [String]
-          def encode
-            pvno_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_pvno], 1, :CONTEXT_SPECIFIC)
-            msg_type_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_msg_type], 2, :CONTEXT_SPECIFIC)
-            pa_data_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_pa_data], 3, :CONTEXT_SPECIFIC)
-            req_body_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_req_body], 4, :CONTEXT_SPECIFIC)
-            seq = OpenSSL::ASN1::Sequence.new([pvno_asn1, msg_type_asn1, pa_data_asn1, req_body_asn1])
-            seq_asn1 = OpenSSL::ASN1::ASN1Data.new([seq], msg_type, :APPLICATION)
-            seq_asn1.to_der
-          end
-    
-              # Decodes the enc_part
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Rex::Proto::Kerberos::Model::EncryptedData]
-          def decode_enc_part(input)
-            Rex::Proto::Kerberos::Model::EncryptedData.decode(input.value[0])
-          end
-        end
+          # Stores the provided location to redirect the user after signing in.
+      # Useful in combination with the `stored_location_for` helper.
+      #
+      # Example:
+      #
+      #   store_location_for(:user, dashboard_path)
+      #   redirect_to user_facebook_omniauth_authorize_path
+      #
+      def store_location_for(resource_or_scope, location)
+        session_key = stored_location_key_for(resource_or_scope)
+        
+        path = extract_path_from_location(location)
+        session[session_key] = path if path
       end
+    
+    # Each time a record is set we check whether its session has already timed out
+# or not, based on last request time. If so, the record is logged out and
+# redirected to the sign in page. Also, each time the request comes and the
+# record is set, we set the last request time inside its scoped session to
+# verify timeout in the following request.
+Warden::Manager.after_set_user do |record, warden, options|
+  scope = options[:scope]
+  env   = warden.request.env
+    
+        def default_path_names(options)
+      @path_names = Hash.new { |h,k| h[k] = k.to_s }
+      @path_names[:registration] = ''
+      @path_names.merge!(options[:path_names]) if options[:path_names]
+    end
+    
+        def str_to_byte_pos(pos)
+      @s.string.slice(0, pos).bytesize
     end
   end
 end
     
-    When /^(?:|I )click on '([^']*)' navbar title$/ do |title|
-  with_scope('.info-bar') do
-    find('h5', text: title).click
+      def test_font_helper_with_suffix_sharp
+    assert_match %r(url\(['']?/assets/.*svg#.+['']?\)), @css
   end
-end
+    
+    module VagrantHelpers
+  extend self
+    
+        # allows the `cap install` task to load without a capfile
+    def find_rakefile_location
+      if (location = super).nil?
+        [capfile, Dir.pwd]
+      else
+        location
+      end
+    end
+    
+        require 'capistrano/scm/#{scm_name}'
+    install_plugin #{built_in_scm_plugin_class_name}
+    
+      def send_sinatra_file(path, &missing_file_block)
+    file_path = File.join(File.dirname(__FILE__), 'public',  path)
+    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
+    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
+  end
+    
+        def render(context)
+      quote = paragraphize(super)
+      author = '<strong>#{@by.strip}</strong>' if @by
+      if @source
+        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
+        parts = []
+        url.each do |part|
+          if (parts + [part]).join('/').length < 32
+            parts << part
+          end
+        end
+        source = parts.join('/')
+        source << '/&hellip;' unless source == @source
+      end
+      if !@source.nil?
+        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
+      elsif !@title.nil?
+        cite = ' <cite>#{@title}</cite>'
+      end
+      blockquote = if @by.nil?
+        quote
+      elsif cite
+        '#{quote}<footer>#{author + cite}</footer>'
+      else
+        '#{quote}<footer>#{author}</footer>'
+      end
+      '<blockquote>#{blockquote}</blockquote>'
+    end
+    
+    
+===============================================
+ Error for category_generator.rb plugin
+-----------------------------------------------
+ No 'category_index.html' in source/_layouts/
+ Perhaps you haven't installed a theme yet.
+===============================================
+    
+    Liquid::Template.register_tag('config_tag', ConfigTag)
+    
+        def render(context)
+      if parts = @text.match(/([a-zA-Z\d]*) (.*)/)
+        gist, file = parts[1].strip, parts[2].strip
+      else
+        gist, file = @text.strip, ''
+      end
+      if gist.empty?
+        ''
+      else
+        script_url = script_url_for gist, file
+        code       = get_cached_gist(gist, file) || get_gist_from_web(gist, file)
+        html_output_for script_url, code
+      end
+    end
+    
+          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
+        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
+        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
+          @img['title']  = title
+          @img['alt']    = alt
+        else
+          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
+        end
+        @img['class'].gsub!(/'/, '') if @img['class']
+      end
+      super
+    end
+    
+    end
+    
+    end
+    
+      # Summary is used on the Archive pages to return the first block of content from a post.
+  def summary(input)
+    if input.index(/\n\n/)
+      input.split(/\n\n/)[0]
+    else
+      input
+    end
+  end
+    
+      def new
+    @credential = @server.credentials.build
+  end
+    
+      def new
+    @http_endpoint = @server.http_endpoints.build
+  end
+    
+      def create
+    @ip_pool = IPPool.new(safe_params)
+    if @ip_pool.save
+      redirect_to_with_json [:edit, @ip_pool], :notice => 'IP Pool has been added successfully. You can now add IP addresses to it.'
+    else
+      render_form_errors 'new', @ip_pool
+    end
+  end
+    
+    end
 
     
-    Given(/^all linked files exists in shared path$/) do
-  TestApp.linked_files.each do |linked_file|
-    step %Q{file '#{linked_file}' exists in shared path}
+      def create
+    @organization_user = organization.organization_users.build(params.require(:organization_user).permit(:email_address, :admin, :all_servers))
+    if @organization_user.save
+      AppMailer.user_invite(@organization_user.user, organization).deliver
+      redirect_to_with_json [organization, :users], :notice => 'An invitation will be sent to #{@organization_user.user.email_address} which will allow them to access your organization.'
+    else
+      render_form_errors 'new', @organization_user
+    end
   end
+    
+    After do
+  Capybara.reset_sessions!
 end
     
-        def hostfilter
-      ['--hosts HOSTS', '-z',
-       'Run SSH commands only on matching hosts',
-       lambda do |value|
-         Configuration.env.add_cmdline_filter(:host, value)
-       end]
-    end
-    
-          def gets
-        return unless $stdin.tty?
-    
-    set_if_empty :pty, false
-    
-      # set version
-  content.sub! /(s\.version.*=\s+).*/, '\\1\'#{Rack::Protection::VERSION}\''
-    
-          def bad_cookies
-        @bad_cookies ||= []
-      end
-    
-          def call(env)
-        request  = Request.new(env)
-        get_was  = handle(request.GET)
-        post_was = handle(request.POST) rescue nil
-        app.call env
-      ensure
-        request.GET.replace  get_was  if get_was
-        request.POST.replace post_was if post_was
-      end
-    
-          def react_and_close(env, body)
-        reaction = react(env)
-    
-        def self.transform_pattern_into_re(pattern)
-      Regexp.new('^#{pattern.gsub(WILDCARD, WILDCARD_INTO_RE)}$')
-    end
-  end
-    
-          PluginManager.ui.info('Install successful')
-    rescue ::Bundler::BundlerError => e
-      raise PluginManager::InstallError.new(e), 'An error occurred went installing plugins'
-    ensure
-      FileUtils.rm_rf(uncompressed_path) if uncompressed_path && Dir.exist?(uncompressed_path)
-    end
-    
-      # retrieve only the latest spec for all locally installed plugins
-  # @return [Hash] result hash {plugin_name.downcase => plugin_spec}
-  def find_latest_gem_specs
-    LogStash::PluginManager.all_installed_plugins_gem_specs(gemfile).inject({}) do |result, spec|
-      previous = result[spec.name.downcase]
-      result[spec.name.downcase] = previous ? [previous, spec].max_by{|s| s.version} : spec
-      result
-    end
-  end
-end
+                  <div id='footer'>
+                <p>c2010</p>
+                <p>Jonas Nicklas</p>
+                <input type='text' name='foo' value='bar'/>
+                <select name='animal'>
+                  <option>Monkey</option>
+                  <option selected='selected'>Capybara</option>
+                </select>
+              </div>
