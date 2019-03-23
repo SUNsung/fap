@@ -1,60 +1,47 @@
 
         
-                return a.casecmp(b) if a_length == 1 && b_length == 1
-        return 1 if a_length == 1
-        return -1 if b_length == 1
-    
-        def as_json
-      @pages
-    end
-    
-        def root_path?
-      root_path.present? && root_path != '/'
-    end
-    
-          def inherited(subclass)
-        super
-        subclass.params = params.deep_dup
-        subclass.headers = headers.deep_dup
-        subclass.force_gzip = force_gzip
-      end
-    end
-    
-            css('a.is-button > h3').each do |node|
-          node.parent.content = node.content
+                  super(object_name, method_name, template_object, options)
         end
     
-            if mod
-          if name == 'Index'
-            return slug.split('/')[1..-2].join('/')
-          elsif name == 'Angular'
-            return slug.split('/').last.split('-').first
+              def initialize(template_object, object_name, method_name, object, tag_value)
+            @template_object = template_object
+            @object_name = object_name
+            @method_name = method_name
+            @object = object
+            @tag_value = tag_value
           end
+    
+            def initialize(symbol)
+          @symbol = symbol.to_sym
         end
     
-    require 'bundler/cli'
-require 'bundler/friendly_errors'
-    
-      def validate_target_file
-    if File.exist?(target_file)
-      if  delete_target_file?
-        File.delete(target_file)
-      else
-        signal_error('Package creation cancelled, a previously generated package exist at location: #{target_file}, move this file to safe place and run the command again')
+          def rendering_to_string
+        self.response_body = render_to_string template: 'naked_render'
       end
     end
+    
+    class LogStash::PluginManager::Pack < LogStash::PluginManager::PackCommand
+  option '--tgz', :flag, 'compress package as a tar.gz file', :default => !LogStash::Environment.windows?
+  option '--zip', :flag, 'compress package as a zip file', :default => LogStash::Environment.windows?
+  option '--[no-]clean', :flag, 'clean up the generated dump of plugins', :default => true
+  option '--overwrite', :flag, 'Overwrite a previously generated package file', :default => false
+    
+        # remove any version constrain from the Gemfile so the plugin(s) can be updated to latest version
+    # calling update without requirements will remove any previous requirements
+    plugins = plugins_to_update(previous_gem_specs_map)
+    # Skipping the major version validation when using a local cache as we can have situations
+    # without internet connection.
+    filtered_plugins = plugins.map { |plugin| gemfile.find(plugin) }
+      .compact
+      .reject { |plugin| REJECTED_OPTIONS.any? { |key| plugin.options.has_key?(key) } }
+      .each   { |plugin| gemfile.update(plugin.name) }
+    
+        not_same_pipeline_id = described_class.new(source, :another_pipeline, unordered_config_parts, settings)
+    expect(subject).not_to eq(not_same_pipeline_id)
   end
     
-            return nil
-      end
-    end
-  end
-end end end
-
-    
-        before do
-      logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version #{previous_version} #{plugin_name}')
-      # Logstash won't update when we have a pinned version in the gemfile so we remove them
-      logstash.replace_in_gemfile(',[[:space:]]'0.1.0'', '')
-      expect(logstash).to have_installed?(plugin_name, previous_version)
-    end
+        desc 'Bootstrap all the VM's used for this tests'
+    task :setup, :platform do |t, args|
+      config   = PlatformConfig.new
+      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
+      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
