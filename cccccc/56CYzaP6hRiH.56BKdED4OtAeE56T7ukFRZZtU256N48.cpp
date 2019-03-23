@@ -1,128 +1,76 @@
 
         
-        OPERATOR_SCHEMA(FindDuplicateElements)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .SetDoc(R'DOC(
-The *FindDuplicateElements* op takes a single 1-D tensor *data* as input and returns a single 1-D output tensor *indices*. The output tensor contains the indices of the duplicate elements of the input, excluding the first occurrences. If all elements of *data* are unique, *indices* will be empty.
-    
-    namespace {
-float sigmoid(const float x) {
-  if (x >= 0) {
-    return 1. / (1. + exp(-x));
-  } else {
-    const float exp_x = exp(x);
-    return exp_x / (1 + exp_x);
+        Status RunCppShapeInferenceImpl(
+    int graph_def_version, const string& serialized_node_def,
+    const std::vector<string>& input_serialized_shapes,
+    const std::vector<PyObject*>& input_constant_tensor_values,
+    const std::vector<string>& input_constant_tensor_as_shape_values,
+    std::vector<string>* output_tensor_shape_protos,
+    string* input_tensors_needed_out) {
+  tensorflow::NodeDef node;
+  if (!node.ParseFromString(serialized_node_def)) {
+    return errors::InvalidArgument(
+        'Error parsing node_def during cpp shape inference');
   }
-}
-} // namespace
+  DCHECK_EQ(output_tensor_shape_protos->size(), 0);
+    }
     
+    #include 'tensorflow/python/grappler/model_analyzer.h'
     
-    {} // namespace caffe2
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    #endif  // TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_H_
 
     
+    // Safe containers for an owned TFE_TensorHandle. On destruction, the handle
+// will be deleted by TFE_DeleteTensorHandle.
+using Safe_TFE_TensorHandlePtr =
+    std::unique_ptr<TFE_TensorHandle, detail::TFETensorHandleDeleter>;
+Safe_TFE_TensorHandlePtr make_safe(TFE_TensorHandle* handle);
     
-    {  return AssertionFailure() << pred_text << '('
-                            << e1 << ', '
-                            << e2 << ', '
-                            << e3 << ') evaluates to false, where'
-                            << '\n' << e1 << ' evaluates to ' << v1
-                            << '\n' << e2 << ' evaluates to ' << v2
-                            << '\n' << e3 << ' evaluates to ' << v3;
-}
+      const tensorflow::OpRegistrationData* op_reg_data;
+  auto status =
+      tensorflow::OpRegistry::Global()->LookUp(node_def.op(), &op_reg_data);
+  if (!status.ok()) {
+    LOG(WARNING) << 'Op ' << node_def.op() << ' not found: ' << status;
+    return '';
+  }
+  AddDefaultsToNodeDef(op_reg_data->op_def, &node_def);
     
-    // Traps C++ exceptions escaping statement and reports them as test
-// failures. Note that trapping SEH exceptions is not implemented here.
-# if GTEST_HAS_EXCEPTIONS
-#  define GTEST_EXECUTE_DEATH_TEST_STATEMENT_(statement, death_test) \
-  try { \
-    GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
-  } catch (const ::std::exception& gtest_exception) { \
-    fprintf(\
-        stderr, \
-        '\n%s: Caught std::exception-derived exception escaping the ' \
-        'death test statement. Exception message: %s\n', \
-        ::testing::internal::FormatFileLocation(__FILE__, __LINE__).c_str(), \
-        gtest_exception.what()); \
-    fflush(stderr); \
-    death_test->Abort(::testing::internal::DeathTest::TEST_THREW_EXCEPTION); \
-  } catch (...) { \
-    death_test->Abort(::testing::internal::DeathTest::TEST_THREW_EXCEPTION); \
+      bool operator!=(const DeviceOptions& other) const {
+    return !(*this == other);
   }
     
-    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
-    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
-    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
-    GTEST_TEMPLATE_ T10>
-struct Templates10 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates9<T2, T3, T4, T5, T6, T7, T8, T9, T10> Tail;
-};
+    //////////////////////////////////////////////////////////////////////
     
+    CONTAINER_CONFIG_BODY(std::vector<uint32_t>, UInt32Vector)
+CONTAINER_CONFIG_BODY(std::vector<std::string>, StrVector)
+namespace { using simap = std::unordered_map<std::string, int>; }
+CONTAINER_CONFIG_BODY(simap, IntMap)
+CONTAINER_CONFIG_BODY(ConfigMap, Map)
+CONTAINER_CONFIG_BODY(ConfigMapC, MapC)
+CONTAINER_CONFIG_BODY(ConfigSet, Set)
+CONTAINER_CONFIG_BODY(ConfigSetC, SetC)
+CONTAINER_CONFIG_BODY(ConfigFlatSet, FlatSet)
+CONTAINER_CONFIG_BODY(ConfigIMap, IMap)
     
-    {# endif  // GTEST_HAS_RTTI
-}
+      CLASSNAME_IS('OutputFile');
+  // overriding ResourceData
+  const String& o_getClassNameHook() const override { return classnameof(); }
     
-    // This should fail when the --check_for_leaks command line flag is
-// specified.
-TEST(ListenersTest, LeaksWater) {
-  Water* water = new Water;
-  EXPECT_TRUE(water != NULL);
-}
-    
-    
-    {
-    {
-    {}  // namespace canbus
-}  // namespace drivers
-}  // namespace apollo
-
-    
-    // data file
-DEFINE_string(sensor_conf_file, '', 'Sensor conf file');
-    
-    
-    {  int ret = x;
-  return ret;
-}
-    
-    #include 'modules/drivers/canbus/common/byte.h'
-#include 'modules/drivers/canbus/common/canbus_consts.h'
-    
-        pq = swHeap_new(SIZE, SW_MAX_HEAP);
-    ASSERT_NE(pq, nullptr);
-    
-    TEST(rbtree, insert)
-{
-    swRbtree *tree = swRbtree_new();
-    int i;
-    std::set<uint32_t> lists;
+    template<typename AHM>
+void checkAHMSubMaps(const AHM& map, folly::StringPiece mapName,
+                     std::atomic<bool>& done) {
+  if (LIKELY(map.numSubMaps() == 1) ||
+      done.load(std::memory_order_relaxed) ||
+      done.exchange(true, std::memory_order_relaxed)) {
+    return;
+  }
     }
     
-    
-    {    ~lru_cache_test_class()
-    {
-        ++dtor_num;
-    }
-};
-    
-        http2_session(int _fd)
-    {
-        fd = _fd;
-        send_window = SW_HTTP2_DEFAULT_WINDOW_SIZE;
-        recv_window = SW_HTTP2_DEFAULT_WINDOW_SIZE;
-        max_concurrent_streams = SW_HTTP2_MAX_MAX_CONCURRENT_STREAMS;
-        max_frame_size = SW_HTTP2_MAX_MAX_FRAME_SIZE;
-        deflater = nullptr;
-        inflater = nullptr;
-    }
-    
-    TEST(coroutine_base, get_current)
-{
-    long _cid;
-    long cid = Coroutine::create([](void *arg)
-    {
-        auto co = Coroutine::get_current();
-        *(long *) arg = co->get_cid();
-    }, &_cid);
-    }
+    const StaticString s_php('PHP');
+const StaticString s_input('Input');
+const StaticString s_temp('TEMP');
+const StaticString s_memory('MEMORY');
