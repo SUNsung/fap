@@ -1,122 +1,126 @@
 
         
-            # Retrieve any AWS settings from the environment.
-    region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module, boto3=True)
-    if not region:
-        module.fail_json(msg=str('Either region or AWS_REGION or EC2_REGION environment variable or boto config aws_region or ec2_region must be set.'))
+        
+
     
-            heroku_app = client.apps()[app]
-    
-        for (index, rule) in enumerate(desired_rules):
-        try:
-            if rule != current_rules[index]:
-                updates.append((index, rule))
-        except IndexError:
-            additions.append(rule)
-    
-            cmd = [le_path, 'follow', log]
-        if name:
-            cmd.extend(['--name', name])
-        if logtype:
-            cmd.extend(['--type', logtype])
-        rc, out, err = module.run_command(' '.join(cmd))
-    
-        @property
-    def name(self):
-        '''Return the name of the device.'''
-        return 'flic_{}'.format(self.address.replace(':', ''))
+        Returns:
     
     
-class LinksysSmartWifiDeviceScanner(DeviceScanner):
-    '''This class queries a Linksys Access Point.'''
-    
-    EVENT_NOTIFY = 'notify'
-    
-    import homeassistant.util.dt as dt_util
-from homeassistant.components.notify import (
-    ATTR_TITLE, ATTR_TITLE_DEFAULT, PLATFORM_SCHEMA, BaseNotificationService)
-from homeassistant.const import CONF_FILENAME
-import homeassistant.helpers.config_validation as cv
-    
-    import homeassistant.helpers.config_validation as cv
-from homeassistant.components.notify import (
-    ATTR_TARGET, ATTR_DATA, PLATFORM_SCHEMA, BaseNotificationService)
-from homeassistant.const import CONF_TOKEN, CONF_HOST, CONF_ROOM
-    
-    # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
-    
-        # Apply some eyeliner
-    d.line(face_landmarks['left_eye'] + [face_landmarks['left_eye'][0]], fill=(0, 0, 0, 110), width=6)
-    d.line(face_landmarks['right_eye'] + [face_landmarks['right_eye'][0]], fill=(0, 0, 0, 110), width=6)
-    
-    # Find all the faces in the image using a pre-trained convolutional neural network.
-# This method is more accurate than the default HOG model, but it's slower
-# unless you have an nvidia GPU and dlib compiled with CUDA extensions. But if you do,
-# this will use GPU acceleration and perform well.
-# See also: find_faces_in_picture.py
-face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=0, model='cnn')
+def multi_highway_conv2d(x, kernel_size, n_layer,
+                         act_fn=relu,
+                         strides=1,
+                         padding='SAME',
+                         carry_bias=-1.0,
+                         name=None):
+    '''多层 highway_conv2d'''
+    if isinstance(kernel_size, int):
+        kernel_size = [kernel_size] * n_layer
     
     
-def _raw_face_landmarks(face_image, face_locations=None, model='large'):
-    if face_locations is None:
-        face_locations = _raw_face_locations(face_image)
-    else:
-        face_locations = [_css_to_rect(face_location) for face_location in face_locations]
-    
-        pool.starmap(test_image, function_parameters)
+def foo():
+    print('foo')
     
     
-def print_result(filename, name, distance, show_distance=False):
-    if show_distance:
-        print('{},{},{}'.format(filename, name, distance))
-    else:
-        print('{},{}'.format(filename, name))
+def cityscapes_to_coco(cityscapes_id):
+    lookup = {
+        0: 0,  # ... background
+        1: 2,  # bicycle
+        2: 3,  # car
+        3: 1,  # person
+        4: 7,  # train
+        5: 8,  # truck
+        6: 4,  # motorcycle
+        7: 6,  # bus
+        8: -1,  # rider (-1 means rand init)
+    }
+    return lookup[cityscapes_id]
     
-            face_encoding_a1 = api.face_encodings(img_a1)[0]
-        face_encoding_a2 = api.face_encodings(img_a2)[0]
-        face_encoding_a3 = api.face_encodings(img_a3)[0]
-        face_encoding_b1 = api.face_encodings(img_b1)[0]
+    import os
     
-    setup(
-    name='face_recognition',
-    version='1.2.3',
-    description='Recognize faces from Python or from the command line',
-    long_description=readme + '\n\n' + history,
-    author='Adam Geitgey',
-    author_email='ageitgey@gmail.com',
-    url='https://github.com/ageitgey/face_recognition',
-    packages=[
-        'face_recognition',
-    ],
-    package_dir={'face_recognition': 'face_recognition'},
-    package_data={
-        'face_recognition': ['models/*.dat']
-    },
-    entry_points={
-        'console_scripts': [
-            'face_recognition=face_recognition.face_recognition_cli:main',
-            'face_detection=face_recognition.face_detection_cli:main'
-        ]
-    },
-    install_requires=requirements,
-    license='MIT license',
-    zip_safe=False,
-    keywords='face_recognition',
-    classifiers=[
-        'Development Status :: 4 - Beta',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
-        'Natural Language :: English',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-    ],
-    test_suite='tests',
-    tests_require=test_requirements
-)
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+    
+    def add_keypoint_outputs(model, blob_in, dim):
+    '''Add Mask R-CNN keypoint specific outputs: keypoint heatmaps.'''
+    # NxKxHxW
+    upsample_heatmap = (cfg.KRCNN.UP_SCALE > 1)
+    
+    
+def add_fpn_retinanet_outputs(model, blobs_in, dim_in, spatial_scales):
+    '''RetinaNet head. For classification and box regression, we can chose to
+    have the same conv tower or a separate tower. 'bl_feat_list' stores the list
+    of feature blobs for bbox prediction. These blobs can be shared cls feature
+    blobs if we share the tower or else are independent blobs.
+    '''
+    dim_out = dim_in
+    k_max = cfg.FPN.RPN_MAX_LEVEL  # coarsest level of pyramid
+    k_min = cfg.FPN.RPN_MIN_LEVEL  # finest level of pyramid
+    A = len(cfg.RETINANET.ASPECT_RATIOS) * cfg.RETINANET.SCALES_PER_OCTAVE
+    
+    
+def collect(inputs, is_training):
+    cfg_key = 'TRAIN' if is_training else 'TEST'
+    post_nms_topN = cfg[cfg_key].RPN_POST_NMS_TOP_N
+    k_max = cfg.FPN.RPN_MAX_LEVEL
+    k_min = cfg.FPN.RPN_MIN_LEVEL
+    num_lvls = k_max - k_min + 1
+    roi_inputs = inputs[:num_lvls]
+    score_inputs = inputs[num_lvls:]
+    if is_training:
+        score_inputs = score_inputs[:-2]
+    
+        # Select foreground RoIs as those with >= FG_THRESH overlap
+    fg_inds = np.where(max_overlaps >= cfg.TRAIN.FG_THRESH)[0]
+    # Guard against the case when an image has fewer than fg_rois_per_image
+    # foreground RoIs
+    fg_rois_per_this_image = np.minimum(fg_rois_per_image, fg_inds.size)
+    # Sample foreground regions without replacement
+    if fg_inds.size > 0:
+        fg_inds = npr.choice(
+            fg_inds, size=fg_rois_per_this_image, replace=False
+        )
+    
+    from detectron.core.config import cfg
+import detectron.roi_data.fast_rcnn as fast_rcnn_roi_data
+import detectron.roi_data.retinanet as retinanet_roi_data
+import detectron.roi_data.rpn as rpn_roi_data
+import detectron.utils.blob as blob_utils
+    
+    
+def main(opts):
+    logger = logging.getLogger(__name__)
+    roidb = combined_roidb_for_training(
+        cfg.TRAIN.DATASETS, cfg.TRAIN.PROPOSAL_FILES)
+    logger.info('{:d} roidb entries'.format(len(roidb)))
+    roi_data_loader = RoIDataLoader(
+        roidb,
+        num_loaders=cfg.DATA_LOADER.NUM_THREADS,
+        minibatch_queue_size=cfg.DATA_LOADER.MINIBATCH_QUEUE_SIZE,
+        blobs_queue_capacity=cfg.DATA_LOADER.BLOBS_QUEUE_CAPACITY
+    )
+    blob_names = roi_data_loader.get_output_names()
+    
+        def __init__(self, parent):
+        logger.debug('Initializing %s', self.__class__.__name__)
+        ttk.Notebook.__init__(self, parent, width=780)
+        parent.add(self)
+        tk_vars = get_config().tk_vars
+        self.wrapper_var = tk_vars['display']
+        self.runningtask = tk_vars['runningtask']
+    
+        '''
+    
+        should_rotate = os.path.isfile(filename)
+    log_file = RotatingFileHandler(filename, backupCount=1)
+    if should_rotate:
+        log_file.doRollover()
+    log_file.setFormatter(log_format)
+    log_file.setLevel(loglevel)
+    return log_file
+    
+    
+from keras.initializers import RandomNormal
+from keras.layers import Conv2D, Input
+from keras.models import Model as KerasModel
