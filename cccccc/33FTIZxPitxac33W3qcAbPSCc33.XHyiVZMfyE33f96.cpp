@@ -1,223 +1,400 @@
 
         
-          inline int offset(const int n, const int c = 0, const int h = 0,
-      const int w = 0) const {
-    CHECK_GE(n, 0);
-    CHECK_LE(n, num());
-    CHECK_GE(channels(), 0);
-    CHECK_LE(c, channels());
-    CHECK_GE(height(), 0);
-    CHECK_LE(h, height());
-    CHECK_GE(width(), 0);
-    CHECK_LE(w, width());
-    return ((n * channels() + c) * height() + h) * width() + w;
-  }
-    
-      /// @brief The spatial dimensions of a filter kernel.
-  Blob<int> kernel_shape_;
-  /// @brief The spatial dimensions of the stride.
-  Blob<int> stride_;
-  /// @brief The spatial dimensions of the padding.
-  Blob<int> pad_;
-  /// @brief The spatial dimensions of the dilation.
-  Blob<int> dilation_;
-  /// @brief The spatial dimensions of the convolution input.
-  Blob<int> conv_input_shape_;
-  /// @brief The spatial dimensions of the col_buffer.
-  vector<int> col_buffer_shape_;
-  /// @brief The spatial dimensions of the output.
-  vector<int> output_shape_;
-  const vector<int>* bottom_shape_;
-    
-    
-    {}  // namespace caffe
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    
-    {}  // namespace caffe
-    
-    #include 'caffe/layers/conv_layer.hpp'
-    
-    
-    {}  // namespace caffe
-    
-    #include <vector>
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    namespace caffe {
-    }
-    
-    namespace caffe {
-    }
-    
-    enum GARBAGE_LEVEL
+        template <bool L2gradient, bool externalSobel>
+struct _normEstimator
 {
-  G_NEVER_CRUNCH,
-  G_OK,
-  G_DODGY,
-  G_TERRIBLE
-};
-    
-      WERD_RES *word2 = new WERD_RES(*word);
-    
-    /**********************************************************************
- * read_unlv_file
- *
- * Read a whole unlv zone file to make a list of blocks.
- **********************************************************************/
-    
-    class BLOCK;
-class WERD;
-    
-    
-    {    ICOORD pt;
-    int halfwidth;
-  };
-  // Type holds the distance of each point from the fitted line and the point
-  // itself. Use of double allows integer distances from ICOORDs to be stored
-  // exactly, and also the floating point results from ConstrainedFit.
-  using DistPointPair = KDPairInc<double, ICOORD>;
-    
-      // Writes to the given file. Returns false in case of error.
-  bool Serialize(FILE* fp) const;
-  // Reads from the given file. Returns false in case of error.
-  // If swap is true, assumes a big/little-endian swap is needed.
-  bool DeSerialize(bool swap, FILE* fp);
-    
-            auto newTensorShape = AsTensorViewShape(newShape);
-        void* tensorView = nullptr;
-        switch (m_dataType)
-        {
-        case DataType::Float:
-            tensorView = new TensorView<float>(*(GetTensorView<float>()), newTensorShape);
-            break;
-        case DataType::Double:
-            tensorView = new TensorView<double>(*(GetTensorView<double>()), newTensorShape);
-            break;
-        case DataType::Float16:
-            tensorView = new TensorView<half>(*(GetTensorView<half>()), newTensorShape);
-            break;
-        case DataType::Int8:
-            tensorView = new TensorView<char>(*(GetTensorView<char>()), newTensorShape);
-            break;
-        case DataType::Int16:
-            tensorView = new TensorView<short>(*(GetTensorView<short>()), newTensorShape);
-            break;
-        default:
-            LogicError('NDArrayView::AsShape: Unsupported DataType %s', DataTypeName(m_dataType));
-            break;
-        }
-    
-    
-    {        const auto& type = dict[typeKey].Value<std::wstring>();
-        if (type != typeValue) 
-        {
-            const auto& version = GetVersion(dict);
-            LogicError('Unexpected '%ls':'%ls' in place of '%ls':'%ls' (%s).',
-                       typeKey.c_str(), type.c_str(), typeKey.c_str(), typeValue.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
-        }
+    ptrdiff_t magstep;
+    ptrdiff_t dxOffset;
+    ptrdiff_t dyOffset;
+    ptrdiff_t shxOffset;
+    ptrdiff_t shyOffset;
+    std::vector<u8> buffer;
+    const ptrdiff_t offsetk;
+    ptrdiff_t borderyt, borderyb;
+    RowFilter3x3Canny sobelRow;
     }
     
-        // Releases the mutex
-    void Release()
+    
     {
-        assert(m_handle != NULL);
-        int rc = 0;
-        rc = ::ReleaseMutex(m_handle);
-        if ((rc == RELEASEMUTEX_ERROR) && !std::uncaught_exception())
-        {
-            RuntimeError('Mutex Release: Failed to release mutex %s: %d', m_name.c_str(), ::GetLastError());
-        }
-        rc = ::CloseHandle(m_handle);
-        if ((rc == CLOSEHANDLE_ERROR) && !std::uncaught_exception())
-        {
-            RuntimeError('Mutex Release: Failed to close handler %s: %d', m_name.c_str(), ::GetLastError());
-        }
-        m_handle = NULL;
-    }
-    
-        // this returns the map directly (read-only) and will lazily initialize it for a given seed
-    const std::vector<INDEXTYPE>& operator()(size_t seed) // throw()
-    {
-        // if wrong seed then lazily recache the sequence
-        if (seed != currentseed && randomizationrange != randomizeDisable)
-        {
-            // test for numeric overflow
-            if (map.size() - 1 != (INDEXTYPE)(map.size() - 1))
-                RuntimeError('RandomOrdering: INDEXTYPE has too few bits for this corpus');
-            // 0, 1, 2...
-            foreach_index (t, map)
-                map[t] = (INDEXTYPE) t;
-    }
-    }
-    
-      // construct column matrix from GHistIndexMatrix
-  inline void Init(const GHistIndexMatrix& gmat,
-                double  sparse_threshold) {
-    const auto nfeature = static_cast<bst_uint>(gmat.cut.row_ptr.size() - 1);
-    const size_t nrow = gmat.row_ptr.size() - 1;
-    }
-    
-    TEST(Expected, CoroutineSuccess) {
-  auto r0 = []() -> Expected<int, Err> {
-    auto x = co_await f1();
-    EXPECT_EQ(7, x);
-    auto y = co_await f2(x);
-    EXPECT_EQ(2.0 * 7, y);
-    auto z = co_await f3(x, y);
-    EXPECT_EQ(int(2.0 * 7 + 7), *z);
-    co_return* z;
-  }();
-  EXPECT_TRUE(r0.hasValue());
-  EXPECT_EQ(21, *r0);
-}
-    
-    
-    {} // namespace folly
-    
-    fbstring exceptionStr(exception_wrapper const& ew) {
-  return ew.what();
-}
-    
-      /**
-   * Returns true 1/n of the time. If n == 0, always returns false
-   */
-  static bool secureOneIn(uint32_t n) {
-    SecureRNG<uint32_t> srng;
-    return rand32(0, n, srng) == 0;
-  }
-    
-    namespace folly {
-    }
-    
-    
-    {    ts.tv_sec = 0;
-    ts.tv_nsec = std::numeric_limits<int64_t>::max();
-    EXPECT_EQ(std::numeric_limits<int64_t>::max(), to<nsec_i64>(ts).count());
-    ts.tv_sec = 1;
-    ts.tv_nsec = std::numeric_limits<int64_t>::max() - std::nano::den;
-    EXPECT_EQ(std::numeric_limits<int64_t>::max(), to<nsec_i64>(ts).count());
-    ts.tv_sec = 1;
-    ts.tv_nsec = std::numeric_limits<int64_t>::max() - std::nano::den + 1;
-    EXPECT_THROW(to<nsec_i64>(ts), std::range_error);
-  }
+    {} // namespace internal
+} // namespace CAROTENE_NS
+
     
     template <typename T>
-typename std::enable_if<std::is_arithmetic<T>::value, std::string>::type
-prefixToStringLE(T prefix, uint64_t n = sizeof(T)) {
-  DCHECK_GT(n, 0);
-  DCHECK_LE(n, sizeof(T));
-  prefix = Endian::little(prefix);
-  std::string result;
-  result.resize(n);
-  memcpy(&result[0], &prefix, n);
-  return result;
+inline T *getRowPtr(T *base, ptrdiff_t stride, size_t row)
+{
+    char *baseRaw = const_cast<char *>(reinterpret_cast<const char *>(base));
+    return reinterpret_cast<T *>(baseRaw + ptrdiff_t(row) * stride);
 }
+    
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
+CVTS_FUNC(s16, f32, 8,
+    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
+    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        __asm__ (
+            'vld1.16 {d4-d5}, [%[src]]                              \n\t'
+            'vmovl.s16 q3, d4                                       \n\t'
+            'vmovl.s16 q4, d5                                       \n\t'
+            'vcvt.f32.s32 q5, q3                                    \n\t'
+            'vcvt.f32.s32 q6, q4                                    \n\t'
+            'vmul.f32 q7, q5, q0                                    \n\t'
+            'vmul.f32 q8, q6, q0                                    \n\t'
+            'vadd.f32 q9, q7, q1                                     \n\t'
+            'vadd.f32 q10, q8, q1                                     \n\t'
+            'vst1.32 {d18-d19}, [%[dst1]]                             \n\t'
+            'vst1.32 {d20-d21}, [%[dst2]]                             \n\t'
+            : /*no output*/
+            : [src] 'r' (_src + i),
+              [dst1] 'r' (_dst + i + 0),
+              [dst2] 'r' (_dst + i + 4),
+              'w'  (vscale), 'w' (vshift)
+            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21'
+        );
+    }
+})
+#else
+CVTS_FUNC(s16, f32, 8,
+    float32x4_t vscale = vdupq_n_f32((f32)alpha);
+    float32x4_t vshift = vdupq_n_f32((f32)beta);,
+{
+    for (size_t i = 0; i < w; i += 8)
+    {
+        internal::prefetch(_src + i);
+        int16x8_t vline = vld1q_s16(_src + i);
+        int32x4_t vline1_s32 = vmovl_s16(vget_low_s16 (vline));
+        int32x4_t vline2_s32 = vmovl_s16(vget_high_s16(vline));
+        float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
+        float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
+        vline1_f32 = vmulq_f32(vline1_f32, vscale);
+        vline2_f32 = vmulq_f32(vline2_f32, vscale);
+        vline1_f32 = vaddq_f32(vline1_f32, vshift);
+        vline2_f32 = vaddq_f32(vline2_f32, vshift);
+        vst1q_f32(_dst + i + 0, vline1_f32);
+        vst1q_f32(_dst + i + 4, vline2_f32);
+    }
+})
+#endif
+    
+                    d &= tab[ptr[pixel[1]]] | tab[ptr[pixel[9]]];
+                d &= tab[ptr[pixel[3]]] | tab[ptr[pixel[11]]];
+                d &= tab[ptr[pixel[5]]] | tab[ptr[pixel[13]]];
+                d &= tab[ptr[pixel[7]]] | tab[ptr[pixel[15]]];
+    
+    #ifndef __ANDROID__
+        for (; j < roiw_base; j += step_base, js += step_base3, jd -= step_base3)
+        {
+            prefetch(src + js);
+    }
+    
+            vst1q_u32(sum + j, vsuml);
+        vst1q_u32(sum + j + 4, vsumh);
+    
+    
+    {
+    {        for( ; x < cols; x++ )
+        {
+            if (x == 0) {
+                // make border
+                if (border == BORDER_MODE_REPLICATE) {
+                    pprevx = v0[0] + 2*v1[0] + 2*v2[0] + 2*v3[0] + v4[0];
+                    prevx = 2*v0[0] - 4*v2[0] + 2*v4[0];
+                } else if (border == BORDER_MODE_REFLECT) {
+                    pprevx = v0[1] + 2*v1[1] + 2*v2[1] + 2*v3[1] + v4[1];
+                    prevx = 2*v0[0] - 4*v2[0] + 2*v4[0];
+                } else if (border == BORDER_MODE_REFLECT101) {
+                    pprevx = v0[2] + 2*v1[2] + 2*v2[2] + 2*v3[2] + v4[2];
+                    prevx = 2*v0[1] - 4*v2[1] + 2*v4[1];
+                } else if (border == BORDER_MODE_CONSTANT) {
+                    pprevx = 8 * borderValue;
+                    prevx = 0;
+                }
+            } else if (x == 1) {
+                // make border
+                if (border == BORDER_MODE_REPLICATE || border == BORDER_MODE_REFLECT) {
+                    pprevx = v0[0] + 2*v1[0] + 2*v2[0] + 2*v3[0] + v4[0];
+                } else if (border == BORDER_MODE_REFLECT101) {
+                    pprevx = v0[1] + 2*v1[1] + 2*v2[1] + 2*v3[1] + v4[1];
+                } else if (border == BORDER_MODE_CONSTANT) {
+                    pprevx = 8 * borderValue;
+                }
+                prevx = 2*v0[0] - 4*v2[0] + 2*v4[0];
+            } else {
+                pprevx = v0[x-2] + 2*v1[x-2] + 2*v2[x-2] + 2*v3[x-2] + v4[x-2];
+                prevx = 2*v0[x-1] - 4*v2[x-1] + 2*v4[x-1];
+            }
+            s16 currx = 2*v0[x] - 4*v1[x] - 12*v2[x] - 4*v3[x] + 2*v4[x];
+            if (x == cols-1) {
+                // make border
+                if (border == BORDER_MODE_REPLICATE) {
+                    nextx = 2*v0[x] - 4*v2[x] + 2*v4[x];
+                    nnextx = v0[x] + 2*v1[x] + 2*v2[x] + 2*v3[x] + v4[x];
+                } else if (border == BORDER_MODE_REFLECT) {
+                    nextx = 2*v0[x] - 4*v2[x] + 2*v4[x];
+                    nnextx = v0[x-1] + 2*v1[x-1] + 2*v2[x-1] + 2*v3[x-1] + v4[x-1];
+                } else if (border == BORDER_MODE_REFLECT101) {
+                    nextx = 2*v0[x-1] - 4*v2[x-1] + 2*v4[x-1];
+                    nnextx = v0[x-2] + 2*v1[x-2] + 2*v2[x-2] + 2*v3[x-2] + v4[x-2];
+                } else if (border == BORDER_MODE_CONSTANT) {
+                    nextx = 0;
+                    nnextx = 8 * borderValue;
+                }
+            } else if (x == cols-2) {
+                // make border
+                if (border == BORDER_MODE_REPLICATE || border == BORDER_MODE_REFLECT) {
+                    nnextx = v0[x+1] + 2*v1[x+1] + 2*v2[x+1] + 2*v3[x+1] + v4[x+1];
+                } else if (border == BORDER_MODE_REFLECT101) {
+                    nnextx = v0[x] + 2*v1[x] + 2*v2[x] + 2*v3[x] + v4[x];
+                } else if (border == BORDER_MODE_CONSTANT) {
+                    nnextx = 8 * borderValue;
+                }
+                nextx = 2*v0[x+1] - 4*v2[x+1] + 2*v4[x+1];
+            } else {
+                nextx = 2*v0[x+1] - 4*v2[x+1] + 2*v4[x+1];
+                nnextx = v0[x+2] + 2*v1[x+2] + 2*v2[x+2] + 2*v3[x+2] + v4[x+2];
+            }
+            s16 res = pprevx + prevx + currx + nextx + nnextx;
+            *(drow+x) = 2*res;
+        }
+    }
+#else
+    (void)size;
+    (void)srcBase;
+    (void)srcStride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)border;
+    (void)borderValue;
+#endif
+}
+    
+    
+    {} // namespace caffe2
+
+    
+    Example 1:
+  DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
+  RANGES = [
+    [
+      [2, 4],
+      [0, 2],
+    ],
+    [
+      [0, 0],
+      [6, 2],
+    ]
+  ]
+  lengths = [4, 2]
+  OUTPUT[0] = [[3, 4, 5, 6], [0, 0, 0, 0]]
+  OUTPUT[1] = [[1, 2], [7, 8]]
+    
+            for(int i = 0 ; i < nums.size() ; i ++)
+            for(int j = i + 1 ; j < nums.size() ; j ++)
+                if(nums[i] + nums[j] == target){
+                    int res[] = {i, j};
+                    return vector<int>(res, res + 2);
+                }
+    
+        ListNode* head = new ListNode(arr[0]);
+    ListNode* curNode = head;
+    for(int i = 1 ; i < n ; i ++){
+        curNode->next = new ListNode(arr[i]);
+        curNode = curNode->next;
+    }
+    
+    
+int main() {
+    }
+    
+        vector<int> vec2 = {2};
+    Solution().sortColors(vec2);
+    printArr(vec2);
+    
+    
+/// Recursive
+/// Time Complexity: O(n)
+/// Space Complexity: O(n)
+    
+    private:
+    struct Command{
+        string s;   // go, print
+        TreeNode* node;
+        Command(string s, TreeNode* node): s(s), node(node){}
+    };
+    
+            stack<TreeNode*> stack;
+        stack.push(root);
+        while(!stack.empty()){
+            TreeNode* curNode = stack.top();
+            stack.pop();
+            res.push_back(curNode->val);
+    }
+    
+            TreeNode* cur = root;
+        while(cur != NULL){
+            if(cur->left == NULL){
+                res.push_back(cur->val);
+                cur = cur->right;
+            }
+            else{
+                TreeNode* prev = cur->left;
+                while(prev->right != NULL && prev->right != cur)
+                    prev = prev->right;
+    }
+    }
+    
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_IMPL_API void     ImGui_ImplDX9_InvalidateDeviceObjects();
+IMGUI_IMPL_API bool     ImGui_ImplDX9_CreateDeviceObjects();
+
+    
+    int main(int, char**)
+{
+    // Setup Allegro
+    al_init();
+    al_install_keyboard();
+    al_install_mouse();
+    al_init_primitives_addon();
+    al_set_new_display_flags(ALLEGRO_RESIZABLE);
+    ALLEGRO_DISPLAY* display = al_create_display(1280, 720);
+    al_set_window_title(display, 'Dear ImGui Allegro 5 example');
+    ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
+    al_register_event_source(queue, al_get_display_event_source(display));
+    al_register_event_source(queue, al_get_keyboard_event_source());
+    al_register_event_source(queue, al_get_mouse_event_source());
+    }
+    
+    
+    {    stb__running_adler = stb_adler32(stb__running_adler, start, q - start);
+    return q - start;
+}
+    
+        // Check for WSI support
+    VkBool32 res;
+    vkGetPhysicalDeviceSurfaceSupportKHR(g_PhysicalDevice, g_QueueFamily, wd->Surface, &res);
+    if (res != VK_TRUE)
+    {
+        fprintf(stderr, 'Error no WSI support on physical device 0\n');
+        exit(-1);
+    }
+    
+    #include 'imgui.h'
+#include 'imgui_impl_opengl2.h'
+#if defined(_MSC_VER) && _MSC_VER <= 1500 // MSVC 2008 or earlier
+#include <stddef.h>     // intptr_t
+#else
+#include <stdint.h>     // intptr_t
+#endif
+    
+    // Implemented features:
+//  [X] Renderer: User texture binding. Use 'ALLEGRO_BITMAP*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+//  [X] Platform: Clipboard support (from Allegro 5.1.12)
+//  [X] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'.
+// Issues:
+//  [ ] Renderer: The renderer is suboptimal as we need to unindex our buffers and convert vertices manually.
+//  [ ] Platform: Missing gamepad support.
+    
+    
+    {    auto opndCmds = opndCmd.GetCommands();
+    unsigned int opndCmdSize;
+    opndCmds->GetSize(&opndCmdSize);
+    m_dataWriter->WriteUInt32(opndCmdSize);
+    for (unsigned int j = 0; j < opndCmdSize; ++j)
+    {
+        int eachOpndcmd;
+        opndCmds->GetAt(j, &eachOpndcmd);
+        m_dataWriter->WriteInt32(eachOpndcmd);
+    }
+}
+    
+    #pragma once
+    
+    #pragma once
+    
+            Windows::Foundation::Collections::IObservableVector<Platform::Object^>^ CreateUIElementsForCategories(_In_ Windows::Foundation::Collections::IObservableVector<CalculatorApp::Common::NavCategoryGroup^>^ categories);
+    
+    MemoryItemViewModel^ Memory::GetMemoryItemForCurrentFlyout()
+{
+    auto listViewItem = m_memoryItemFlyout->Target;
+    }
+    
+    
+    {
+    {      auto serial = resp.content.find('serial_number');
+      if (serial != resp.content.end()) {
+        hw_info[serial->second] = resp.content;
+      };
+    }
+  });
+    
+    namespace osquery {
+namespace perf_event_open {
+    }
+    }
+    
+      // Author: @guliashvili
+  // Creation Time: 4/09/2018
+  bool isTotalQueryCounterMonitorEnabled();
+    
+    
+    {
+    {struct mei_version {
+  uint32_t important_details[7];
+  uint16_t major;
+  uint16_t minor;
+  uint16_t hotfix;
+  uint16_t build;
+  uint16_t r_major;
+  uint16_t r_minor;
+  uint16_t r_hotfix;
+  uint16_t r_build;
+  uint16_t codes[6];
+};
+}
+}
+
+    
+    
+    {
+    {} // namespace events
+} // namespace osquery
+
+    
+      static const Data& getData6() { return data6_; }
+    
+      std::chrono::seconds timeout_;
+    
+    std::pair<std::vector<std::unique_ptr<Command>>,
+          std::vector<std::unique_ptr<Command>>>
+DHTSetup::setup(DownloadEngine* e, int family)
+{
+  std::vector<std::unique_ptr<Command>> tempCommands;
+  std::vector<std::unique_ptr<Command>> tempRoutineCommands;
+  if ((family != AF_INET && family != AF_INET6) ||
+      (family == AF_INET && DHTRegistry::isInitialized()) ||
+      (family == AF_INET6 && DHTRegistry::isInitialized6())) {
+    return {};
+  }
+  try {
+    // load routing table and localnode id here
+    std::shared_ptr<DHTNode> localNode;
+    }
+    }
+    
+    
+    {} // namespace aria2
+    
+      // TODO handle exception thrown by this function.
+  std::string generateToken(const unsigned char* infoHash,
+                            const std::string& ipaddr, uint16_t port) const;
+    
+    DHTTokenUpdateCommand::~DHTTokenUpdateCommand() = default;
+    
+    public:
+  // _remoteNode is always null
+  DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
+                    const unsigned char* data, size_t length,
+                    const std::string& ipaddr, uint16_t port);
