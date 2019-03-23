@@ -1,159 +1,192 @@
 
         
         
-def test_when_successfully_configured(usage_tracker_io, shell_pid,
-                                      shell, shell_config, logs):
-    shell.get_history.return_value = ['fuck']
-    shell_pid.return_value = 12
-    _change_tracker(usage_tracker_io, 12)
-    shell_config.read.return_value = ''
-    main()
-    shell_config.write.assert_any_call('eval $(thefuck --alias)')
-    logs.configured_successfully.assert_called_once()
+@click.command('init-db')
+@with_appcontext
+def init_db_command():
+    '''Clear existing data and create new tables.'''
+    init_db()
+    click.echo('Initialized the database.')
+    
+        # login request set the user_id in the session
+    # check that the user is loaded from the session
+    with client:
+        client.get('/')
+        assert session['user_id'] == 1
+        assert g.user['username'] == 'test'
+    
+            if triple is None:
+            detail = 'no match'
+        else:
+            detail = 'found (%r)' % (triple[1] or '<string>')
+            total_found += 1
+        info.append('       -> %s' % detail)
+    
+    
+def get_git_tags():
+    return set(
+        Popen(['git', 'tag'], stdout=PIPE).communicate()[0].splitlines()
+    )
+    
+        @app.teardown_request
+    def teardown_req(error=None):
+        called.append('request')
+    
+    
+@pytest.mark.functional
+def test_with_confirmation(proc, TIMEOUT):
+    with_confirmation(proc, TIMEOUT)
+    
+    
+@pytest.mark.parametrize('command', [
+    Command('cargo buid', no_such_subcommand_old),
+    Command('cargo buils', no_such_subcommand)])
+def test_match(command):
+    assert match(command)
+    
+        @staticmethod
+    def make_header(username, password):
+        credentials = u'%s:%s' % (username, password)
+        token = b64encode(credentials.encode('utf8')).strip().decode('latin1')
+        return 'Basic %s' % token
+    
+        def unregister(self, plugin):
+        self._plugins.remove(plugin)
+    
+    USERNAME = 'user'
+PASSWORD = 'password'
+# Basic auth encoded `USERNAME` and `PASSWORD`
+# noinspection SpellCheckingInspection
+BASIC_AUTH_HEADER_VALUE = 'Basic dXNlcjpwYXNzd29yZA=='
+BASIC_AUTH_URL = '/basic-auth/{0}/{1}'.format(USERNAME, PASSWORD)
+AUTH_OK = {'authenticated': True, 'user': USERNAME}
+    
+    
+def rst_filenames():
+    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
+        if '.tox' not in root:
+            for filename in fnmatch.filter(filenames, '*.rst'):
+                yield os.path.join(root, filename)
+    
+    
+def test_follow_all_redirects_shown(httpbin):
+    r = http('--follow', '--all', httpbin.url + '/redirect/2')
+    assert r.count('HTTP/1.1') == 3
+    assert r.count('HTTP/1.1 302 FOUND', 2)
+    assert HTTP_OK in r
+    
+    
+def test_unicode_basic_auth(httpbin):
+    # it doesn't really authenticate us because httpbin
+    # doesn't interpret the utf8-encoded auth
+    http('--verbose', '--auth', u'test:%s' % UNICODE,
+         httpbin.url + u'/basic-auth/test/' + UNICODE)
+    
+        def failed(self):
+        self._progress_reporter.stop()
+    
+        for i in range(1, 6):
+        fpath = os.path.join(path, 'data_batch_' + str(i))
+        (x_train[(i - 1) * 10000: i * 10000, :, :, :],
+         y_train[(i - 1) * 10000: i * 10000]) = load_batch(fpath)
+    
+        if K.image_data_format() == 'channels_last':
+        x_train = x_train.transpose(0, 2, 3, 1)
+        x_test = x_test.transpose(0, 2, 3, 1)
+    
+    
+def get(identifier):
+    if identifier is None:
+        return None
+    if isinstance(identifier, dict):
+        return deserialize(identifier)
+    elif isinstance(identifier, six.string_types):
+        config = {'class_name': str(identifier), 'config': {}}
+        return deserialize(config)
+    elif callable(identifier):
+        return identifier
+    else:
+        raise ValueError('Could not interpret regularizer identifier: ' +
+                         str(identifier))
 
     
-    
-@pytest.fixture(params=containers)
-def proc(request, spawnu, TIMEOUT):
-    proc = spawnu(*request.param)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(u'thefuck --alias > ~/.config/fish/config.fish')
-    proc.sendline(u'fish')
-    return proc
-    
-    
-python_3 = ('thefuck/python3-zsh',
-            u'''FROM python:3
-                RUN apt-get update
-                RUN apt-get install -yy zsh''',
-            u'sh')
-    
-    
-misspelled_subcommand_with_multiple_options = '''\
-usage: aws [options] <command> <subcommand> [<subcommand> ...] [parameters]
-To see help text, you can run:
-    
-    
-@pytest.mark.parametrize('script, output', [
-    ('brew link sshfs', output),
-    ('cat output', output),
-    ('brew install sshfs', '')])
-def test_not_match(script, output):
-    command = Command(script, output)
-    assert not match(command)
-    
-    no_such_subcommand = '''error: no such subcommand
-    
-            def reset(path):
-            os.mkdir('d')
-            with tarfile.TarFile(path, 'w') as archive:
-                for file in ('a', 'b', 'c', 'd/e'):
-                    with open(file, 'w') as f:
-                        f.write('*')
-    
-        with open('README.md') as readme:
-        readme_html = mistune.markdown(readme.read())
-        readme_soup = BeautifulSoup.BeautifulSoup(readme_html, 'html.parser')
-    
-            # User chose to not deal with backwards NULL issues for 'ReleaseEnvironment.project_id'
-        raise RuntimeError(
-            'Cannot reverse this migration. 'ReleaseEnvironment.project_id' and its values cannot be restored.'
-        )
-    
-        def backwards(self, orm):
-        # Removing unique constraint on 'DSymApp', fields ['project', 'platform', 'app_id']
-        db.delete_unique('sentry_dsymapp', ['project_id', 'platform', 'app_id'])
-    
-        def backwards(self, orm):
-        # Removing unique constraint on 'CommitAuthor', fields ['organization_id', 'external_id']
-        db.delete_unique('sentry_commitauthor', ['organization_id', 'external_id'])
-    
-        def backwards(self, orm):
-        # Removing unique constraint on 'UserOption', fields ['user', 'organization', 'key']
-        db.delete_unique('sentry_useroption', ['user_id', 'organization_id', 'key'])
-    
-        if cfg.MODEL.KEYPOINTS_ON and boxes.shape[0] > 0:
-        timers['im_detect_keypoints'].tic()
-        if cfg.TEST.KPS_AUG.ENABLED:
-            heatmaps = im_detect_keypoints_aug(model, im, boxes)
-        else:
-            heatmaps = im_detect_keypoints(model, im_scale, boxes)
-        timers['im_detect_keypoints'].toc()
-    
-        if isinstance(dataset_names, basestring):
-        dataset_names = (dataset_names, )
-    if isinstance(proposal_files, basestring):
-        proposal_files = (proposal_files, )
-    if len(proposal_files) == 0:
-        proposal_files = (None, ) * len(dataset_names)
-    assert len(dataset_names) == len(proposal_files)
-    roidbs = [get_roidb(*args) for args in zip(dataset_names, proposal_files)]
-    roidb = roidbs[0]
-    for r in roidbs[1:]:
-        roidb.extend(r)
-    roidb = filter_for_training(roidb)
-    
-    
-def get_func(func_name):
-    '''Helper to return a function object by name. func_name must identify a
-    function in this module or the path to a function relative to the base
-    'modeling' module.
+        ```python
+    # Consider an array of 5 labels out of a set of 3 classes {0, 1, 2}:
+    > labels
+    array([0, 2, 1, 2, 0])
+    # `to_categorical` converts this into a matrix with as many
+    # columns as there are classes. The number of rows
+    # stays the same.
+    > to_categorical(labels)
+    array([[ 1.,  0.,  0.],
+           [ 0.,  0.,  1.],
+           [ 0.,  1.,  0.],
+           [ 0.,  0.,  1.],
+           [ 1.,  0.,  0.]], dtype=float32)
+    ```
     '''
-    if func_name == '':
-        return None
-    new_func_name = name_compat.get_new_name(func_name)
-    if new_func_name != func_name:
-        logger.warn(
-            'Remapping old function name: {} -> {}'.
-            format(func_name, new_func_name)
-        )
-        func_name = new_func_name
-    try:
-        parts = func_name.split('.')
-        # Refers to a function in this module
-        if len(parts) == 1:
-            return globals()[parts[0]]
-        # Otherwise, assume we're referencing a module under modeling
-        module_name = 'detectron.modeling.' + '.'.join(parts[:-1])
-        module = importlib.import_module(module_name)
-        return getattr(module, parts[-1])
-    except Exception:
-        logger.error('Failed to find function: {}'.format(func_name))
-        raise
     
-        if cfg.MODEL.FASTER_RCNN:
-        if model.train:
-            # Add op that generates training labels for in-network RPN proposals
-            model.GenerateProposalLabels(['rpn_rois', 'roidb', 'im_info'])
+            if 0 < self.dropout < 1.:
+            inputs_i = inputs * dp_mask[0]
+            inputs_f = inputs * dp_mask[1]
+            inputs_c = inputs * dp_mask[2]
+            inputs_o = inputs * dp_mask[3]
         else:
-            # Alias rois to rpn_rois for inference
-            model.net.Alias('rpn_rois', 'rois')
+            inputs_i = inputs
+            inputs_f = inputs
+            inputs_c = inputs
+            inputs_o = inputs
     
-            # add fg targets
-        for i in range(rois_fg.shape[0]):
-            fg_polys_ind = fg_polys_inds[i]
-            poly_gt = polys_gt[fg_polys_ind]
-            roi_fg = rois_fg[i]
-            # Rasterize the portion of the polygon mask within the given fg roi
-            # to an M x M binary image
-            mask = segm_utils.polys_to_mask_wrt_box(poly_gt, roi_fg, M)
-            mask = np.array(mask > 0, dtype=np.int32)  # Ensure it's binary
-            masks[i, :] = np.reshape(mask, M**2)
-    else:  # If there are no fg masks (it does happen)
-        # The network cannot handle empty blobs, so we must provide a mask
-        # We simply take the first bg roi, given it an all -1's mask (ignore
-        # label), and label it with class zero (bg).
-        bg_inds = np.where(blobs['labels_int32'] == 0)[0]
-        # rois_fg is actually one background roi, but that's ok because ...
-        rois_fg = sampled_boxes[bg_inds[0]].reshape((1, -1))
-        # We give it an -1's blob (ignore label)
-        masks = -blob_utils.ones((1, M**2), int32=True)
-        # We label it with class = 0 (background)
-        mask_class_labels = blob_utils.zeros((1, ))
-        # Mark that the first roi has a mask
-        roi_has_mask[0] = 1
+    Denoising is one of the classic applications of autoencoders.
+The denoising process removes unwanted noise that corrupted the
+true signal.
     
-    from caffe2.python import core
-from caffe2.python import muji
-from caffe2.python import workspace
+    print('Convert class vector to binary class matrix '
+      '(for use with categorical_crossentropy)')
+y_train = keras.utils.to_categorical(y_train, num_classes)
+y_test = keras.utils.to_categorical(y_test, num_classes)
+print('y_train shape:', y_train.shape)
+print('y_test shape:', y_test.shape)
+    
+                    log.println('    platform: {}'.format(platform.platform()))
+                log.println('    python:   {}'.format(sys.version.split('\n')[0]))
+    
+    def get_orig_video_source(api_key, pid, secret):
+    parsed = json.loads(get_content_headered(tmpl_api_call_video_info % (api_key, pid, secret)))
+    for stream in parsed['streams']['stream']:
+        if stream['type'] == 'orig':
+            return stream['_content'].replace('\\', '')
+    return None
+    
+            for p in js_path:
+            if 'mtool' in p or 'mcore' in p:
+                js_text = get_content(p)
+                hit = re.search(r'\(\'(.+?)\',(\d+),(\d+),\'(.+?)\'\.split\(\'\|\'\),\d+,\{\}\)', js_text)
+    
+    def ifeng_download_by_id(id, title = None, output_dir = '.', merge = True, info_only = False):
+    assert r1(r'([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', id), id
+    url = 'http://vxml.ifengimg.com/video_info_new/%s/%s/%s.xml' % (id[-2], id[-2:], id)
+    xml = get_html(url, 'utf-8')
+    title = r1(r'Name='([^']+)'', xml)
+    title = unescape_html(title)
+    url = r1(r'VideoPlayUrl='([^']+)'', xml)
+    from random import randint
+    r = randint(10, 19)
+    url = url.replace('http://wideo.ifeng.com/', 'http://ips.ifeng.com/wideo.ifeng.com/')
+    type, ext, size = url_info(url)
+    
+    class Imgur(VideoExtractor):
+    name = 'Imgur'
+    
+        stream_types = [
+        {'id': 'video'},
+        {'id': 'audio'},
+        {'id': 'slides'}
+    ]
+    
+        Each code snipped should get additional C++ code around it to help compile the line in context, with
+    some heuristic guessing of what is needed around. The wrapping code should have a token in each line allowing
+    other tools to filter out these lines
+    
+            #Sorting all filenames in the directory, to maintain the order of the PDF
+        allmd.sort()
