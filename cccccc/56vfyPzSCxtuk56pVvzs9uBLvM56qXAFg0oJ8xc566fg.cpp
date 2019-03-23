@@ -1,211 +1,171 @@
 
         
-        std::string Clipboard::GetText() {
+        namespace nw {
+    }
+    
+    namespace content {
+class RenderFrameHost;
+}
+    
+    
+    {  RenderThread::Get()->Send(new ShellViewHostMsg_Allocate_Object(
+      routing_id,
+      object_id,
+      type,
+      *static_cast<base::DictionaryValue*>(value_option.get())));
+  return v8::Undefined(isolate);
+}
+    
+    std::string Clipboard::GetText() {
   ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
   base::string16 text;
   clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
   return base::UTF16ToUTF8(text);
 }
     
-    #include 'base/compiler_specific.h'
-#include 'content/nw/src/api/base/base.h'
+      static int getUID() {
+    static int id = 0;
+    return ++id;
+  }
     
-    #include 'base/values.h'
-#include 'components/zoom/zoom_controller.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/public/browser/web_contents.h'
-#include 'content/public/common/page_zoom.h'
-#include 'ui/views/controls/menu/menu_runner.h'
     
-      if (menu_item->submenu_)
-    menu_model_->InsertSubMenuAt(pos, menu_item->id(), menu_item->label_,
-                                 menu_item->submenu_->menu_model_.get());
-  else if (menu_item->type_ == 'normal')
-    menu_model_->InsertItemAt(pos, menu_item->id(), menu_item->label_);
-  else if (menu_item->type_ == 'checkbox')
-    menu_model_->InsertCheckItemAt(pos, menu_item->id(), menu_item->label_);
-  else if (menu_item->type_ == 'separator')
-    menu_model_->InsertSeparatorAt(pos, ui::NORMAL_SEPARATOR);
-    
-    MenuItem::MenuItem(int id,
-                   const base::WeakPtr<ObjectManager>& object_manager,
-                   const base::DictionaryValue& option,
-                   const std::string& extension_id)
-  : Base(id, object_manager, option, extension_id) {
-  Create(option);
+    {  gtk_widget_show(menu_);
+  g_object_ref_sink(G_OBJECT(menu_));
 }
     
-        int menu_id;
-    if (option.GetInteger('submenu', &menu_id))
-      SetSubmenu(dispatcher_host()->GetApiObject<Menu>(menu_id));
-    std::string key;
-    if (option.GetString('key',&key)){
-      enable_shortcut = true;
-      std::string modifiers = '';
-      option.GetString('modifiers',&modifiers);
-      modifiers_mask = GdkModifierType(0);
-      if (modifiers.size() != 0){
-        if (modifiers.find('ctrl') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_CONTROL_MASK);
-        }
-        if (modifiers.find('alt') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_MOD1_MASK);
-        }
-        if (modifiers.find('super') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_SUPER_MASK);
-        }
-        if (modifiers.find('meta') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_META_MASK);
-        }
-        
-        if (modifiers.find('shift') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_SHIFT_MASK);
-        }
-    }
-    }
-    
-      std::string icon;
-  if (option.GetString('icon', &icon) && !icon.empty())
-    SetIcon(icon);
-    
-    
-    {
-  DECLARE_EXTENSION_FUNCTION('nw.App.setProxyConfig', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwAppSetProxyConfigFunction);
-};
-    
-    class NwClipboardGetListSyncFunction : public NWSyncExtensionFunction {
- public:
-  NwClipboardGetListSyncFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    
-    {} // namespace extensions
-#endif
-
-    
-    NwObjAllocateIdFunction::NwObjAllocateIdFunction() {
-}
-    
-    
-    {  private:
-    DISALLOW_COPY_AND_ASSIGN(NwScreenIsMonitorStartedFunction);
-  };
-    
-      // Add all parameters to a list.
-  int v, i;
-  int num_iterations = (tess->params() == nullptr) ? 1 : 2;
-  for (v = 0; v < num_iterations; ++v) {
-    tesseract::ParamsVectors *vec = (v == 0) ? GlobalParams() : tess->params();
-    for (i = 0; i < vec->int_params.size(); ++i) {
-      vc_it.add_after_then_move(new ParamContent(vec->int_params[i]));
-    }
-    for (i = 0; i < vec->bool_params.size(); ++i) {
-      vc_it.add_after_then_move(new ParamContent(vec->bool_params[i]));
-    }
-    for (i = 0; i < vec->string_params.size(); ++i) {
-      vc_it.add_after_then_move(new ParamContent(vec->string_params[i]));
-    }
-    for (i = 0; i < vec->double_params.size(); ++i) {
-      vc_it.add_after_then_move(new ParamContent(vec->double_params[i]));
-    }
-  }
-    
-    // Reads all boxes from the string. Otherwise, as ReadAllBoxes.
-// continue_on_failure allows reading to continue even if an invalid box is
-// encountered and will return true if it succeeds in reading some boxes.
-// It otherwise gives up and returns false on encountering an invalid box.
-bool ReadMemBoxes(int target_page, bool skip_blanks, const char* box_data,
-                  bool continue_on_failure,
-                  GenericVector<TBOX>* boxes,
-                  GenericVector<STRING>* texts,
-                  GenericVector<STRING>* box_texts,
-                  GenericVector<int>* pages);
-    
-      // Changes the box at the given index to the new box.
-  // Recomputes the bounding box.
-  void ChangeBox(int index, const TBOX& box);
-    
-    // Class to hold a Pixa collection of debug images with captions and save them
-// to a PDF file.
-class DebugPixa {
- public:
-  // TODO(rays) add another constructor with size control.
-  DebugPixa() {
-    pixa_ = pixaCreate(0);
-    fonts_ = bmfCreate(nullptr, 14);
-  }
-  // If the filename_ has been set and there are any debug images, they are
-  // written to the set filename_.
-  ~DebugPixa() {
-    pixaDestroy(&pixa_);
-    bmfDestroy(&fonts_);
-  }
-    }
-    
-    
-    {  // Stores all the source points in the order they were given and their
-  // halfwidths, if any.
-  GenericVector<PointWidth> pts_;
-  // Stores the computed perpendicular distances of (some of) the pts_ from a
-  // given vector (assuming it goes through the origin, making it a line).
-  // Since the distances may be a subset of the input points, and get
-  // re-ordered by the nth_item function, the original point is stored
-  // along side the distance.
-  GenericVector<DistPointPair> distances_;  // Distances of points.
-  // The squared length of the vector used to compute distances_.
-  double square_length_;
-};
-    
-      // Builds and returns an ImageData from the basic data. Note that imagedata,
-  // truth_text, and box_text are all the actual file data, NOT filenames.
-  static ImageData* Build(const char* name, int page_number, const char* lang,
-                          const char* imagedata, int imagedatasize,
-                          const char* truth_text, const char* box_text);
-    
-    
-    {			mipWidth >>= 1;
-			mipHeight >>= 1;
-		}
-    
-    #define UNIT_QUANT_SHIFT 2
-#define UNIT_QUANT_FACTOR (1 << UNIT_QUANT_SHIFT)
-    
-      The input buffer and the output buffer can not overlap.
-*/
-    
-    
-    {
-    {void SparsePageWriter::Alloc(std::shared_ptr<SparsePage>* out_page) {
-  CHECK(*out_page == nullptr);
-  if (num_free_buffer_ != 0) {
-    out_page->reset(new SparsePage());
-    --num_free_buffer_;
+    void MenuItem::SetIcon(const std::string& icon) {
+  if (icon.empty()) {
+    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_), NULL); 
   } else {
-    CHECK(qrecycle_.Pop(out_page));
+    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_),
+                                  gtk_image_new_from_file(icon.c_str()));
+    gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(menu_item_),
+                                              TRUE);
   }
 }
-}  // namespace data
-}  // namespace xgboost
     
-    SEXP XGBoosterSetAttr_R(SEXP handle, SEXP name, SEXP val) {
-  R_API_BEGIN();
-  const char *v = isNull(val) ? nullptr : CHAR(asChar(val));
-  CHECK_CALL(XGBoosterSetAttr(R_ExternalPtrAddr(handle),
-                              CHAR(asChar(name)), v));
-  R_API_END();
-  return R_NilValue;
+    // Prints the given value using the << operator if it has one;
+// otherwise prints the bytes in it.  This is what
+// UniversalPrinter<T>::Print() does when PrintTo() is not specialized
+// or overloaded for type T.
+//
+// A user can override this behavior for a class type Foo by defining
+// an overload of PrintTo() in the namespace where Foo is defined.  We
+// give the user this option as sometimes defining a << operator for
+// Foo is not desirable (e.g. the coding style may prevent doing it,
+// or there is already a << operator but it doesn't do what the user
+// wants).
+template <typename T>
+void PrintTo(const T& value, ::std::ostream* os) {
+  // DefaultPrintTo() is overloaded.  The type of its first two
+  // arguments determine which version will be picked.  If T is an
+  // STL-style container, the version for container will be called; if
+  // T is a pointer, the pointer version will be called; otherwise the
+  // generic version will be called.
+  //
+  // Note that we check for container types here, prior to we check
+  // for protocol message types in our operator<<.  The rationale is:
+  //
+  // For protocol messages, we want to give people a chance to
+  // override Google Mock's format by defining a PrintTo() or
+  // operator<<.  For STL containers, other formats can be
+  // incompatible with Google Mock's format for the container
+  // elements; therefore we check for container types here to ensure
+  // that our format is used.
+  //
+  // The second argument of DefaultPrintTo() is needed to bypass a bug
+  // in Symbian's C++ compiler that prevents it from picking the right
+  // overload between:
+  //
+  //   PrintTo(const T& x, ...);
+  //   PrintTo(T* x, ...);
+  DefaultPrintTo(IsContainerTest<T>(0), is_pointer<T>(), value, os);
 }
     
+      // Gets the outcome of the test part.
+  Type type() const { return type_; }
     
-    {    data_vec.resize(offset_vec.back());
-    CHECK_EQ(index_.data.size(), value_.data.size());
-    CHECK_EQ(index_.data.size(), data_vec.size());
-    for (size_t i = 0; i < data_vec.size(); ++i) {
-      data_vec[i] = Entry(index_.data[i] + min_index_, value_.data[i]);
+    // First, define a fixture class template.  It should be parameterized
+// by a type.  Remember to derive it from testing::Test.
+template <typename T>
+class FooTest : public testing::Test {
+ public:
+  ...
+  typedef std::list<T> List;
+  static T shared_;
+  T value_;
+};
+    
+      template <typename T>
+  operator ParamGenerator<T>() const {
+    const T array[] = {static_cast<T>(v1_), static_cast<T>(v2_),
+        static_cast<T>(v3_), static_cast<T>(v4_), static_cast<T>(v5_),
+        static_cast<T>(v6_), static_cast<T>(v7_), static_cast<T>(v8_),
+        static_cast<T>(v9_), static_cast<T>(v10_), static_cast<T>(v11_),
+        static_cast<T>(v12_), static_cast<T>(v13_), static_cast<T>(v14_),
+        static_cast<T>(v15_), static_cast<T>(v16_), static_cast<T>(v17_),
+        static_cast<T>(v18_), static_cast<T>(v19_), static_cast<T>(v20_),
+        static_cast<T>(v21_), static_cast<T>(v22_), static_cast<T>(v23_),
+        static_cast<T>(v24_), static_cast<T>(v25_), static_cast<T>(v26_),
+        static_cast<T>(v27_), static_cast<T>(v28_)};
+    return ValuesIn(array);
+  }
+    
+      // Gets the 0-terminated C string this MyString object represents.
+  const char* c_string() const { return c_string_; }
+    
+      static bool isInitialized6() { return data6_.initialized; }
+    
+    #include <string>
+#include <vector>
+#include <memory>
+    
+    public:
+  DHTRoutingTableDeserializer(int family);
+    
+    #include 'LogFactory.h'
+#include 'Logger.h'
+#include 'util.h'
+#include 'DHTNode.h'
+#include 'DHTConnectionImpl.h'
+#include 'DHTRoutingTable.h'
+#include 'DHTMessageFactoryImpl.h'
+#include 'DHTMessageTracker.h'
+#include 'DHTMessageDispatcherImpl.h'
+#include 'DHTMessageReceiver.h'
+#include 'DHTTaskQueueImpl.h'
+#include 'DHTTaskFactoryImpl.h'
+#include 'DHTPeerAnnounceStorage.h'
+#include 'DHTTokenTracker.h'
+#include 'DHTInteractionCommand.h'
+#include 'DHTTokenUpdateCommand.h'
+#include 'DHTBucketRefreshCommand.h'
+#include 'DHTPeerAnnounceCommand.h'
+#include 'DHTEntryPointNameResolveCommand.h'
+#include 'DHTAutoSaveCommand.h'
+#include 'DHTTask.h'
+#include 'DHTRoutingTableDeserializer.h'
+#include 'DHTRegistry.h'
+#include 'DHTBucketRefreshTask.h'
+#include 'DHTMessageCallback.h'
+#include 'DHTMessageTrackerEntry.h'
+#include 'DHTMessageEntry.h'
+#include 'UDPTrackerClient.h'
+#include 'BtRegistry.h'
+#include 'prefs.h'
+#include 'Option.h'
+#include 'SocketCore.h'
+#include 'DlAbortEx.h'
+#include 'RecoverableException.h'
+#include 'a2functional.h'
+#include 'DownloadEngine.h'
+#include 'fmt.h'
+    
+    namespace aria2 {
     }
-    return true;
-  }
+    
+    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
+                                             std::chrono::seconds interval)
+    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
+{
+}
