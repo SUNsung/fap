@@ -1,308 +1,422 @@
 
         
-        private Q_SLOTS:
-    void on_selectFileButton_clicked();
-    
-    
-    {    /* Test r/s equal to zero */
-    {
-        /* (1,1) encoded in DER. */
-        unsigned char sigcder[8] = {0x30, 0x06, 0x02, 0x01, 0x01, 0x02, 0x01, 0x01};
-        unsigned char sigc64[64] = {
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01,
-        };
-        secp256k1_pubkey pubkeyc;
-        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigc64, 0) == 1);
-        CHECK(secp256k1_ecdsa_recover(ctx, &pubkeyc, &rsig, msg32) == 1);
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder, sizeof(sigcder)) == 1);
-        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyc) == 1);
-        sigcder[4] = 0;
-        sigc64[31] = 0;
-        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigc64, 0) == 1);
-        CHECK(secp256k1_ecdsa_recover(ctx, &pubkeyb, &rsig, msg32) == 0);
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder, sizeof(sigcder)) == 1);
-        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyc) == 0);
-        sigcder[4] = 1;
-        sigcder[7] = 0;
-        sigc64[31] = 1;
-        sigc64[63] = 0;
-        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sigc64, 0) == 1);
-        CHECK(secp256k1_ecdsa_recover(ctx, &pubkeyb, &rsig, msg32) == 0);
-        CHECK(secp256k1_ecdsa_signature_parse_der(ctx, &sig, sigcder, sizeof(sigcder)) == 1);
-        CHECK(secp256k1_ecdsa_verify(ctx, &sig, msg32, &pubkeyc) == 0);
+        // Structure which keeps a reference to a Tensor alive while numpy has a pointer
+// to it.
+struct TensorReleaser {
+  // Python macro to include standard members.
+  PyObject_HEAD
     }
+    
+    
+    {}  // namespace stream_executor
+
+    
+    void CacheImpl::setAndRetain(void *Key, void *Value, size_t Cost) {
+  DefaultCache &DCache = *static_cast<DefaultCache*>(Impl);
+  llvm::sys::ScopedLock L(DCache.Mux);
+    }
+    
+    bool CacheImpl::remove(const void *Key) {
+  int Ret = cache_remove(static_cast<cache_t*>(Impl), const_cast<void*>(Key));
+  return Ret == 0;
 }
     
-    namespace
-{
-static bool ParsePrechecks(const std::string& str)
-{
-    if (str.empty()) // No empty string allowed
-        return false;
-    if (str.size() >= 1 && (json_isspace(str[0]) || json_isspace(str[str.size()-1]))) // No padding allowed
-        return false;
-    if (str.size() != strlen(str.c_str())) // No embedded NUL characters allowed
-        return false;
-    return true;
-}
-    }
+      bool IsFirstLine = true;
     
-        for (size_t i = 0; i < size.height; ++i)
-    {
-        const u8* src = internal::getRowPtr(srcBase, srcStride, i);
-        s16* dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t j = 0;
-    }
-    
-        void operator() (const typename VecTraits<T>::vec64 & v_src0,
-                     const typename VecTraits<T>::vec64 & v_src1,
-                     typename VecTraits<T>::vec64 & v_dst) const
-    {
-        typename VecTraits<wtype>::vec128 vr;
-        wideAdd(vmovl(v_src0), vmovl(v_src1), vr);
-    }
-    
-    bool isBlur3x3Supported(const Size2D &size, BORDER_MODE border)
-{
-    return isSupportedConfiguration() && size.width >= 8 &&
-        (border == BORDER_MODE_CONSTANT ||
-            border == BORDER_MODE_REPLICATE);
-}
-    
-    #ifdef CAROTENE_NEON
-    
-                uint8x16x2_t v_y = vld2q_u8(srcy + syj);
-            uint8x16x4_t v_dst;
-            v_dst.val[0] = vld1q_u8(srcu + sj);
-            v_dst.val[1] = v_y.val[0];
-            v_dst.val[2] = vld1q_u8(srcv + sj);
-            v_dst.val[3] = v_y.val[1];
-            vst4q_u8(dst + dj, v_dst);
-    
-    inline void prefetch(const void *ptr, size_t offset = 32*10)
-{
-#if defined __GNUC__
-    __builtin_prefetch(reinterpret_cast<const char*>(ptr) + offset);
-#elif defined _MSC_VER && defined CAROTENE_NEON
-    __prefetch(reinterpret_cast<const char*>(ptr) + offset);
-#else
-    (void)ptr;
-    (void)offset;
-#endif
-}
-    
-    typedef void (* lshiftConstFunc)(const Size2D &size,
-                                const u8 * srcBase, ptrdiff_t srcStride,
-                                s16 * dstBase, ptrdiff_t dstStride);
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVTS_FUNC(f32, s16, 8,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.32 {d4-d5}, [%[src1]]                              \n\t'
-            'vld1.32 {d6-d7}, [%[src2]]                              \n\t'
-            'vmul.f32 q4, q2, q0                                     \n\t'
-            'vmul.f32 q5, q3, q0                                     \n\t'
-            'vadd.f32 q6, q4, q1                                     \n\t'
-            'vadd.f32 q7, q5, q1                                     \n\t'
-            'vcvt.s32.f32 q8, q6                                     \n\t'
-            'vcvt.s32.f32 q9, q7                                     \n\t'
-            'vqmovn.s32 d8, q8                                       \n\t'
-            'vqmovn.s32 d9, q9                                       \n\t'
-            'vst1.16 {d8-d9}, [%[dst]]                               \n\t'
-            : /*no output*/
-            : [src1] 'r' (_src + i + 0),
-              [src2] 'r' (_src + i + 4),
-              [dst] 'r' (_dst + i),
-              'w' (vscale), 'w' (vshift)
-            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19'
-        );
-    }
-})
-#else
-CVTS_FUNC(f32, s16, 8,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        float32x4_t vline1_f32 = vld1q_f32(_src + i + 0);
-        float32x4_t vline2_f32 = vld1q_f32(_src + i + 4);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        int32x4_t vline1_s32 = vcvtq_s32_f32(vline1_f32);
-        int32x4_t vline2_s32 = vcvtq_s32_f32(vline2_f32);
-        int16x4_t vRes1 = vqmovn_s32(vline1_s32);
-        int16x4_t vRes2 = vqmovn_s32(vline2_s32);
-        vst1q_s16(_dst + i, vcombine_s16(vRes1, vRes2));
-    }
-})
-#endif
-    
-    
-    {            if (mask)
-                process(src, j, j + 8, i,
-                        minVal, minLocPtr, minLocCount, minLocCapacity,
-                        maxVal, maxLocPtr, maxLocCount, maxLocCapacity);
-        }
-    
-                vec128 v_src = vld3q(src + js), v_dst;
-            v_src.val[0] = vrev64q(v_src.val[0]);
-            v_src.val[1] = vrev64q(v_src.val[1]);
-            v_src.val[2] = vrev64q(v_src.val[2]);
-    
-    inline void vnst(u8* dst, uint8x16_t v1, uint8x16_t v2) { vst1q_u8(dst, v1); vst1q_u8(dst+16, v2); }
-inline void vnst(u8* dst, uint16x8_t v1, uint16x8_t v2) { vst1q_u8(dst, vcombine_u8(vmovn_u16(v1), vmovn_u16(v2))); }
-inline void vnst(u8* dst, uint32x4_t v1, uint32x4_t v2) { vst1_u8(dst, vmovn_u16(vcombine_u16(vmovn_u32(v1), vmovn_u32(v2)))); }
-    
-            uint8x8_t el8shr0 = vld1_u8(src + j);
-        uint8x8_t el8shr1 = vreinterpret_u8_u64(vshl_n_u64(vreinterpret_u64_u8(el8shr0), 8));
-        uint8x8_t el8shr2 = vreinterpret_u8_u64(vshl_n_u64(vreinterpret_u64_u8(el8shr0), 16));
-        uint8x8_t el8shr3 = vreinterpret_u8_u64(vshl_n_u64(vreinterpret_u64_u8(el8shr0), 24));
-    
-    /////////////// Custom NEON intrinsics ///////////////////
-    
-    workspace.ResetWorkspace()
-    
-    // FreeOp frees the content of the output blob. We allow it to take in input
-// blobs purely for the reason that it can 'wait' on the input blobs to be
-// produced by some of the earlier operators before a free is called.
-template <class Context>
-class FreeOp : public Operator<Context> {
- public:
-  FreeOp(const OperatorDef& def, Workspace* ws) : Operator<Context>(def, ws) {}
-    }
-    
-    namespace {
-float sigmoid(const float x) {
-  if (x >= 0) {
-    return 1. / (1. + exp(-x));
-  } else {
-    const float exp_x = exp(x);
-    return exp_x / (1 + exp_x);
+      static CFPointeeInfo forTypedef(const clang::TypedefNameDecl *decl) {
+    assert(decl);
+    CFPointeeInfo info;
+    info.IsValid = true;
+    info.IsConst = false;
+    info.Decl = decl;
+    return info;
   }
-}
-} // namespace
-    
-    // Used to print an STL-style container when the user doesn't define
-// a PrintTo() for it.
-template <typename C>
-void DefaultPrintTo(IsContainer /* dummy */,
-                    false_type /* is not a pointer */,
-                    const C& container, ::std::ostream* os) {
-  const size_t kMaxCount = 32;  // The maximum number of elements to print.
-  *os << '{';
-  size_t count = 0;
-  for (typename C::const_iterator it = container.begin();
-       it != container.end(); ++it, ++count) {
-    if (count > 0) {
-      *os << ',';
-      if (count == kMaxCount) {  // Enough has been printed.
-        *os << ' ...';
-        break;
-      }
-    }
-    *os << ' ';
-    // We cannot call PrintTo(*it, os) here as PrintTo() doesn't
-    // handle *it being a native array.
-    internal::UniversalPrint(*it, os);
-  }
-    }
-    }
     
     
-    {  GTEST_DISALLOW_COPY_AND_ASSIGN_(HasNewFatalFailureHelper);
+    {public:
+  Windows(const Driver &D, const llvm::Triple &Triple) : ToolChain(D, Triple) {}
+  ~Windows() = default;
+  std::string sanitizerRuntimeLibName(StringRef Sanitizer,
+                                      bool shared = true) const override;
 };
     
-      // RemoveFileName returns the directory path with the filename removed.
-  // Example: FilePath('path/to/file').RemoveFileName() returns 'path/to/'.
-  // If the FilePath is 'a_file' or '/a_file', RemoveFileName returns
-  // FilePath('./') or, on Windows, FilePath('.\\'). If the filepath does
-  // not have a file, like 'just/a/dir/', it returns the FilePath unmodified.
-  // On Windows platform, '\' is the path separator, otherwise it is '/'.
-  FilePath RemoveFileName() const;
+    IPC_SYNC_MESSAGE_ROUTED0_1(ShellViewHostMsg_AllocateId, int)
     
-     public:
-  // Clones a 0-terminated C string, allocating memory using new.
-  static const char* CloneCString(const char* a_c_string);
-    
-    // Tests the copy c'tor.
-TEST(MyString, CopyConstructor) {
-  const MyString s1(kHelloString);
-  const MyString s2 = s1;
-  EXPECT_EQ(0, strcmp(s2.c_string(), kHelloString));
-}
-    
-    Status WriteBatchBase::SingleDelete(const SliceParts& key) {
-  std::string key_buf;
-  Slice key_slice(key, &key_buf);
-  return SingleDelete(key_slice);
-}
-    
-      // Will be called while on the write thread before the write executes.  If
-  // this function returns a non-OK status, the write will be aborted and this
-  // status will be returned to the caller of DB::Write().
-  virtual Status Callback(DB* db) = 0;
-    
-    uint64_t WriteController::NowMicrosMonotonic(Env* env) {
-  return env->NowNanos() / std::milli::den;
-}
-    
-    
-    {}  // namespace rocksdb
-    
-    class MyFilter : public rocksdb::CompactionFilter {
- public:
-  bool Filter(int level, const rocksdb::Slice& key,
-              const rocksdb::Slice& existing_value, std::string* new_value,
-              bool* value_changed) const override {
-    fprintf(stderr, 'Filter(%s)\n', key.ToString().c_str());
-    ++count_;
-    assert(*value_changed == false);
-    return false;
-  }
+    // static
+void App::EmitReopenEvent() {
+  std::set<RenderProcessHost*> rphs;
+  std::set<RenderProcessHost*>::iterator it;
     }
     
-      ////////////////////////////////////////////////////////
-  //
-  // 'Read Committed' (Monotonic Atomic Views) Example
-  //   --Using multiple Snapshots
-  //
-  ////////////////////////////////////////////////////////
+      // Try to close all windows (then will cause whole app to quit).
+  static void CloseAllWindows(bool force = false, bool quit = false);
     
-    std::string kDBPath = '/tmp/rocksdb_options_file_example';
+    #include <string>
     
-      // Attempt to read a key using the snapshot.  This will fail since
-  // the previous write outside this txn conflicts with this read.
-  read_options.snapshot = snapshot;
-  s = txn->GetForUpdate(read_options, 'abc', &value);
-  assert(s.IsBusy());
+        int menu_id;
+    if (option.GetInteger('submenu', &menu_id))
+      SetSubmenu(dispatcher_host()->GetApiObject<Menu>(menu_id));
+    std::string key;
+    if (option.GetString('key',&key)){
+      enable_shortcut = true;
+      std::string modifiers = '';
+      option.GetString('modifiers',&modifiers);
+      modifiers_mask = GdkModifierType(0);
+      if (modifiers.size() != 0){
+        if (modifiers.find('ctrl') != std::string::npos){
+          modifiers_mask = GdkModifierType(modifiers_mask|GDK_CONTROL_MASK);
+        }
+        if (modifiers.find('alt') != std::string::npos){
+          modifiers_mask = GdkModifierType(modifiers_mask|GDK_MOD1_MASK);
+        }
+        if (modifiers.find('super') != std::string::npos){
+          modifiers_mask = GdkModifierType(modifiers_mask|GDK_SUPER_MASK);
+        }
+        if (modifiers.find('meta') != std::string::npos){
+          modifiers_mask = GdkModifierType(modifiers_mask|GDK_META_MASK);
+        }
+        
+        if (modifiers.find('shift') != std::string::npos){
+          modifiers_mask = GdkModifierType(modifiers_mask|GDK_SHIFT_MASK);
+        }
+    }
+    }
     
-    // Move all L0 files to target_level skipping compaction.
-// This operation succeeds only if the files in L0 have disjoint ranges; this
-// is guaranteed to happen, for instance, if keys are inserted in sorted
-// order. Furthermore, all levels between 1 and target_level must be empty.
-// If any of the above condition is violated, InvalidArgument will be
-// returned.
-Status PromoteL0(DB* db, ColumnFamilyHandle* column_family,
-                 int target_level = 1);
+      option.GetString('type', &type_);
+  option.GetString('label', &label_);
+  option.GetString('tooltip', &tooltip_);
+  option.GetBoolean('checked', &is_checked_);
+  option.GetBoolean('enabled', &is_enabled_);
     
-      ~ManagedSnapshot();
+      remover->AddObserver(this);
+  remover->RemoveAndReply(base::Time(), base::Time::Max(),
+                          content::BrowsingDataRemover::DATA_TYPE_CACHE,
+                          content::BrowsingDataRemover::ORIGIN_TYPE_UNPROTECTED_WEB,
+                          this);
+  // BrowsingDataRemover deletes itself.
+  base::MessageLoopCurrent::ScopedNestableTaskAllower allow;
     
-      // -------------------
-  // Parameters that affect performance
+    bool NwObjCallObjectMethodFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  base::ListValue* arguments = nullptr;
+  int id = 0;
+  std::string type, method;
+  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(2, &method));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetList(3, &arguments));
+    }
+    
+        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0,
+                     const typename internal::VecTraits<T>::vec64 & v_src1,
+                     typename internal::VecTraits<T>::vec64 & v_dst) const
+    {
+        v_dst = internal::vabd(v_src0, v_src1);
+    }
+    
+    void add(const Size2D &size,
+         const s16 * src0Base, ptrdiff_t src0Stride,
+         const s16 * src1Base, ptrdiff_t src1Stride,
+         s16 *dstBase, ptrdiff_t dstStride,
+         CONVERT_POLICY policy)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+        if (policy == CONVERT_POLICY_SATURATE)
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddSaturate<s16, s32>());
+    }
+    else
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddWrap<s16, s32>());
+    }
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)policy;
+#endif
+}
+    
+    
+    {        v_dst = vcombine(vqmovn(vrl), vqmovn(vrh));
+    }
+    
+                // do vertical convolution
+            size_t x = 0;
+            const size_t bcols = y + 2 < size.height ? colsn : (colsn - 8);
+            for( ; x <= bcols; x += 8 )
+            {
+                internal::prefetch(srow0 + x);
+                internal::prefetch(srow1 + x);
+                internal::prefetch(srow2 + x);
+    }
+    
+    template <typename T>
+inline T *getRowPtr(T *base, ptrdiff_t stride, size_t row)
+{
+    char *baseRaw = const_cast<char *>(reinterpret_cast<const char *>(base));
+    return reinterpret_cast<T *>(baseRaw + ptrdiff_t(row) * stride);
+}
+    
+             uint16x4_t vline1_u16 = vqmovun_s32(vline1_s32);
+         uint16x4_t vline2_u16 = vqmovun_s32(vline2_s32);
+         uint8x8_t vline_u8 = vqmovn_u16(vcombine_u16(vline1_u16, vline2_u16));
+    
+        minLocCapacity <<= 1;
+    maxLocCapacity <<= 1;
+    
+                uint16x8_t el8 = vaddq_u16(el8shr12, el8shr03);
+            uint16x4_t el4h = vadd_u16(vget_low_u16(el8), vget_high_u16(el8));
+    
+    namespace caffe2 {
+    }
+    
+    data:
+ [8. 2. 1. 1. 7. 8. 1.]
+indices:
+ [3 5 6]
+    
+    op = core.CreateOperator(
+    'Floor',
+    ['X'],
+    ['X'],
+)
+    
+    Each feature has fixed lengths which are passed as lengths argument and a
+separate tensor will be produced for each feature.
+i.e. DATA.dim(1) = len(lengths) = NumOuptuts.
+    
+    class GetIm2ColGradient : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+  vector<OperatorDef> GetGradientDefs() override {
+    return SingleGradientDef(
+        'Col2Im',
+        '',
+        std::vector<string>{GO(0), I(0)},
+        std::vector<string>{GI(0)});
+  }
+};
+REGISTER_GRADIENT(Im2Col, GetIm2ColGradient);
+    
+    bool AuthPropertyIterator::operator==(const AuthPropertyIterator& rhs) const {
+  if (property_ == nullptr || rhs.property_ == nullptr) {
+    return property_ == rhs.property_;
+  } else {
+    return index_ == rhs.index_;
+  }
+}
+    
+    
+    {}  // namespace grpc
+
+    
+    void CensusClientCallData::OnDoneRecvMessageCb(void* user_data,
+                                               grpc_error* error) {
+  grpc_call_element* elem = reinterpret_cast<grpc_call_element*>(user_data);
+  CensusClientCallData* calld =
+      reinterpret_cast<CensusClientCallData*>(elem->call_data);
+  CensusChannelData* channeld =
+      reinterpret_cast<CensusChannelData*>(elem->channel_data);
+  GPR_ASSERT(calld != nullptr);
+  GPR_ASSERT(channeld != nullptr);
+  // Stream messages are no longer valid after receiving trailing metadata.
+  if ((*calld->recv_message_) != nullptr) {
+    calld->recv_message_count_++;
+  }
+  GRPC_CLOSURE_RUN(calld->initial_on_done_recv_message_, GRPC_ERROR_REF(error));
+}
+    
+    inline absl::string_view GetMethod(const grpc_slice* path) {
+  if (GRPC_SLICE_IS_EMPTY(*path)) {
+    return '';
+  }
+  // Check for leading '/' and trim it if present.
+  return absl::StripPrefix(absl::string_view(reinterpret_cast<const char*>(
+                                                 GRPC_SLICE_START_PTR(*path)),
+                                             GRPC_SLICE_LENGTH(*path)),
+                           '/');
+}
+    
+    namespace grpc {
+    }
+    
+      CensusServerCallData()
+      : gc_(nullptr),
+        auth_context_(nullptr),
+        recv_initial_metadata_(nullptr),
+        initial_on_done_recv_initial_metadata_(nullptr),
+        initial_on_done_recv_message_(nullptr),
+        recv_message_(nullptr),
+        recv_message_count_(0),
+        sent_message_count_(0) {
+    memset(&census_bin_, 0, sizeof(grpc_linked_mdelem));
+    memset(&path_, 0, sizeof(grpc_slice));
+    memset(&on_done_recv_initial_metadata_, 0, sizeof(grpc_closure));
+    memset(&on_done_recv_message_, 0, sizeof(grpc_closure));
+  }
+    
+    
+    {   private:
+    DynamicThreadPool* pool_;
+    grpc_core::Thread thd_;
+    void ThreadFunc();
+  };
+  std::mutex mu_;
+  std::condition_variable cv_;
+  std::condition_variable shutdown_cv_;
+  bool shutdown_;
+  std::queue<std::function<void()>> callbacks_;
+  int reserve_threads_;
+  int nthreads_;
+  int threads_waiting_;
+  std::list<DynamicThread*> dead_threads_;
+    
+    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
+  uint64_t busy = 0, total = 0;
+  host_cpu_load_info_data_t cpuinfo;
+  mach_msg_type_number_t count = HOST_CPU_LOAD_INFO_COUNT;
+  if (host_statistics(mach_host_self(), HOST_CPU_LOAD_INFO,
+                      (host_info_t)&cpuinfo, &count) == KERN_SUCCESS) {
+    for (int i = 0; i < CPU_STATE_MAX; i++) total += cpuinfo.cpu_ticks[i];
+    busy = total - cpuinfo.cpu_ticks[CPU_STATE_IDLE];
+  }
+  return std::make_pair(busy, total);
+}
+    
+    /*!
+ * \brief The result holder of storage type of each NodeEntry in the graph.
+ * \note Stored under graph.attrs['storage_type'], provided by Pass 'InferStorageType'
+ *
+ * \code
+ *  Graph g = ApplyPass(src_graph, 'InferStorageType');
+ *  const StorageVector& stypes = g.GetAttr<StorageTypeVector>('storage_type');
+ *  // get storage type by entry id
+ *  int entry_type = stypes[g.indexed_graph().entry_id(my_entry)];
+ * \endcode
+ *
+ * \sa FInferStorageType
+ */
+using StorageTypeVector = std::vector<int>;
+    
+    #if MXNET_USE_DIST_KVSTORE
+#include './kvstore_dist.h'
+std::atomic<int> mxnet::kvstore::KVStoreDist::customer_id_{0};
+#endif  // MXNET_USE_DIST_KVSTORE
+#if MXNET_USE_NCCL
+#include './kvstore_nccl.h'
+#endif  // MXNET_USE_NCCL
+    
+      void Init(const TVMArgs& args,
+            const std::vector<int>& const_loc,
+            std::vector<Engine::VarHandle>* const_vars,
+            std::vector<Engine::VarHandle>* mutate_vars) {
+    values_.clear();
+    type_codes_.clear();
+    values_.insert(values_.end(), args.values, args.values + args.size());
+    type_codes_.insert(
+        type_codes_.end(), args.type_codes, args.type_codes + args.size());
+    }
+    
+      void query(ExtensionResponse& _return, const std::string& sql) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->query(_return, sql);
+    }
+    ifaces_[i]->query(_return, sql);
+    return;
+  }
+    
+    
+    {};
+    
+    using namespace  ::osquery::extensions;
+    
+      void __set_uuid(const ExtensionRouteUUID val);
+    
+     public:
+  virtual ~Killswitch();
+    
+    #include <linux/perf_event.h>
+    
+      EXPECT_LE(from_obj.fd_, 0);
+  EXPECT_EQ(from_obj.data_ptr_, nullptr);
+    
+      EbpfTracepoint(EbpfTracepoint const&) = delete;
+  EbpfTracepoint& operator=(EbpfTracepoint const&) = delete;
+    
+    #include <osquery/utils/expected/expected.h>
+#include <osquery/utils/system/linux/ebpf/map.h>
+#include <osquery/utils/system/linux/ebpf/program.h>
+    
+    
+    {  return Status(0, 'OK');
+}
+    
+      void moveBucketHead(const std::shared_ptr<DHTNode>& node);
+    
+    
+    {  const int clen = bittorrent::getCompactLength(family_);
+  // nodes
+  for (std::vector<std::shared_ptr<DHTNode>>::const_iterator i = nodes_.begin(),
+                                                             eoi = nodes_.end();
+       i != eoi; ++i) {
+    const std::shared_ptr<DHTNode>& node = *i;
+    // Write IP address + port in Compact IP-address/port info form.
+    unsigned char compactPeer[COMPACT_LEN_IPV6];
+    int compactlen = bittorrent::packcompact(compactPeer, node->getIPAddress(),
+                                             node->getPort());
+    if (compactlen != clen) {
+      memset(compactPeer, 0, clen);
+    }
+    uint8_t clen1 = clen;
+    // 1byte compact peer format length
+    WRITE_CHECK(fp, &clen1, sizeof(clen1));
+    // 7bytes reserved
+    WRITE_CHECK(fp, zero, 7);
+    // clen bytes compact peer
+    WRITE_CHECK(fp, compactPeer, static_cast<size_t>(clen));
+    // 24-clen bytes reserved
+    WRITE_CHECK(fp, zero, static_cast<size_t>(24 - clen));
+    // 20bytes: node ID
+    WRITE_CHECK(fp, node->getID(), DHT_ID_LENGTH);
+    // 4bytes reserved
+    WRITE_CHECK(fp, zero, 4);
+  }
+  if (fp.close() == EOF) {
+    throw DL_ABORT_EX(
+        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
+  }
+  if (!File(filenameTemp).renameTo(filename)) {
+    throw DL_ABORT_EX(
+        fmt('Failed to save DHT routing table to %s.', filename.c_str()));
+  }
+  A2_LOG_INFO('DHT routing table was saved successfully');
+}
+    
+      void setNodes(const std::vector<std::shared_ptr<DHTNode>>& nodes);
+    
+      ~DHTSetup();
+    
+    #endif // D_DHT_TASK_EXECUTOR_H
+
+    
+      virtual ~DHTTaskQueueImpl();
+    
+    class DHTTokenTracker;
+    
+    
+    {    AddrEntry& operator=(const AddrEntry& c);
+  };
