@@ -1,83 +1,133 @@
 
         
-                  def render_component(builder)
-            builder.radio_button + builder.label
-          end
-      end
+        describe 'Dry running an Agent', js: true do
+  let(:agent)   { agents(:bob_website_agent) }
+  let(:formatting_agent) { agents(:bob_formatting_agent) }
+  let(:user)    { users(:bob) }
+  let(:emitter) { agents(:bob_weather_agent) }
+    
+        it 'creates a scenario label with the given text' do
+      expect(scenario_label(scenario, 'Other')).to eq(
+        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Other</span>'
+      )
     end
   end
-end
-
     
-              super(object_name, method_name, template_object, options)
+        it 'strips leading and trailing dashes' do
+      expect(AgentsExporter.new(:name => ',foo,').filename).to eq('foo.json')
+    end
+    
+        # See {CapabilityHost#capability}
+    def capability(*args)
+      super
+    rescue Errors::CapabilityNotFound => e
+      raise Errors::GuestCapabilityNotFound,
+        cap: e.extra_data[:cap],
+        guest: name
+    rescue Errors::CapabilityInvalid => e
+      raise Errors::GuestCapabilityInvalid,
+        cap: e.extra_data[:cap],
+        guest: name
+    end
+    
+            # Returns the instance variables as a hash of key-value pairs.
+        def instance_variables_hash
+          instance_variables.inject({}) do |acc, iv|
+            acc[iv.to_s[1..-1]] = instance_variable_get(iv)
+            acc
+          end
         end
     
-              def field_type
-            self.class.field_type
-          end
+            # This returns all the registered communicators.
+        #
+        # @return [Hash]
+        def communicators
+          result = {}
+    
+            # Sets a human-friendly description of the plugin.
+        #
+        # @param [String] value Description of the plugin.
+        # @return [String] Description of the plugin.
+        def self.description(value=UNSET_VALUE)
+          get_or_set(:description, value)
+        end
+    
+            # This is the method called to when the system is being destroyed
+        # and allows the provisioners to engage in any cleanup tasks necessary.
+        def cleanup
+        end
       end
     end
   end
 end
 
     
-          def to_str
-        ERB::Util.h(@string)
-      end
+            # This contains all the guests and their parents.
+        #
+        # @return [Registry<Symbol, Array<Class, Symbol>>]
+        attr_reader :guests
     
-    describe 'Kernel.srand' do
-  it 'is a private method' do
-    Kernel.should have_private_instance_method(:srand)
-  end
-    
-    describe 'Kernel#system' do
-  it 'is a private method' do
-    Kernel.should have_private_instance_method(:system)
-  end
-    
-        after :each do
-      @tmp_file.close
-      rm_r @tmp_file
-    end
-    
-      context 'collections' do
-    context 'without include param' do
-      before { get '/api/v2/storefront/products' }
-    
-          context 'without coupon code' do
-        context 'does not apply the coupon code' do
-          let!(:coupon_code) { '' }
-    
-          context 'with line_items and email' do
-        before { execute }
-    
-              def serialize_resource(resource)
-            resource_serializer.new(
-              resource,
-              include: resource_includes,
-              sparse_fields: sparse_fields
-            ).serializable_hash
+            # This returns all the registered guests.
+        #
+        # @return [Hash]
+        def guests
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.guests)
+            end
           end
+        end
     
-          resources :inventory_units, only: [:show, :update]
+            # This is called early, before a machine is instantiated, to check
+        # if this provider is usable. This should return true or false.
+        #
+        # If raise_error is true, then instead of returning false, this
+        # should raise an error with a helpful message about why this
+        # provider cannot be used.
+        #
+        # @param [Boolean] raise_error If true, raise exception if not usable.
+        # @return [Boolean]
+        def self.usable?(raise_error=false)
+          # Return true by default for backwards compat since this was
+          # introduced long after providers were being written.
+          true
+        end
     
-    # The project root directory
-$root = ::File.dirname(__FILE__)
-    
-      end
-    
-    class ConfigTag < Liquid::Tag
-  def initialize(tag_name, options, tokens)
-    super
-    options = options.split(' ').map {|i| i.strip }
-    @key = options.slice!(0)
-    @tag = nil
-    @classname = nil
-    options.each do |option|
-      @tag = $1 if option =~ /tag:(\S+)/ 
-      @classname = $1 if option =~ /classname:(\S+)/
+        if rbenv_prefix = prefix_from_bin('rbenv')
+      prefixes << rbenv_prefix
     end
-  end
+    
+    ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+
+    
+        def render(context)
+      quote = paragraphize(super)
+      author = '<strong>#{@by.strip}</strong>' if @by
+      if @source
+        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
+        parts = []
+        url.each do |part|
+          if (parts + [part]).join('/').length < 32
+            parts << part
+          end
+        end
+        source = parts.join('/')
+        source << '/&hellip;' unless source == @source
+      end
+      if !@source.nil?
+        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
+      elsif !@title.nil?
+        cite = ' <cite>#{@title}</cite>'
+      end
+      blockquote = if @by.nil?
+        quote
+      elsif cite
+        '#{quote}<footer>#{author + cite}</footer>'
+      else
+        '#{quote}<footer>#{author}</footer>'
+      end
+      '<blockquote>#{blockquote}</blockquote>'
+    end
     
         def render(context)
       if @img
@@ -89,42 +139,14 @@ $root = ::File.dirname(__FILE__)
   end
 end
     
-    __END__
-    
-          private
-    
-          def deliver(msg)
-        if msg.respond_to?(:deliver_now)
-          # Rails 4.2/5.0
-          msg.deliver_now
-        else
-          # Rails 3.2/4.0/4.1
-          msg.deliver
-        end
+      class RenderPartialTag < Liquid::Tag
+    include OctopressFilters
+    def initialize(tag_name, markup, tokens)
+      @file = nil
+      @raw = false
+      if markup =~ /^(\S+)\s?(\w+)?/
+        @file = $1.strip
+        @raw = $2 == 'raw'
       end
+      super
     end
-    
-          def initialize_copy(copy)
-        copy.instance_variable_set(:@entries, entries.dup)
-      end
-    
-        def erb(content, options = {})
-      if content.kind_of? Symbol
-        unless respond_to?(:'_erb_#{content}')
-          src = ERB.new(File.read('#{Web.settings.views}/#{content}.erb')).src
-          WebAction.class_eval('def _erb_#{content}\n#{src}\n end')
-        end
-      end
-    
-        def delete(path, &block)
-      route(DELETE, path, &block)
-    end
-    
-    # Create two output packages!
-output_packages = []
-output_packages << pleaserun.convert(FPM::Package::RPM)
-output_packages << pleaserun.convert(FPM::Package::Deb)
-    
-    # TODO(sissel): Add dependency checking support.
-# IIRC this has to be done as a 'checkinstall' step.
-class FPM::Package::Solaris < FPM::Package
