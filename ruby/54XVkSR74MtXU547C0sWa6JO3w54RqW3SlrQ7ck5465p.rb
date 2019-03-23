@@ -1,77 +1,47 @@
 
         
-                  def select_type
-            self.class.select_type
-          end
+            # [Boolean] Set if the variable is to be converted to a shell-escaped String when provided as a Hash or Array
+    # Allows items expected to be strings used in shell arguments to be alternatively provided as a Hash or Array for better readability and auto-escaped for us.
+    attr_accessor :allow_shell_conversion
     
-        class WithConditionalOverrideFlippedAndInheriting < WithConditionalOverride
-      layout nil, only: :non_overwritten
-    end
+              it 'asks if no other option' do
+            allow(FastlaneCore::Helper).to receive(:test?).and_return(false)
+            allow(FastlaneCore::UI).to receive(:interactive?).and_return(true)
+            allow(FastlaneCore::Helper).to receive(:ci?).and_return(false)
     
-          # Sign out all active users or scopes. This helper is useful for signing out all roles
-      # in one click. This signs out ALL scopes in warden. Returns true if there was at least one logout
-      # and false if there was no user logged in on all scopes.
-      def sign_out_all_scopes(lock=true)
-        users = Devise.mappings.keys.map { |s| warden.user(scope: s, run_callbacks: false) }
-    
-          def devise_mapping
-        @devise_mapping ||= Devise.mappings[scope_name]
+            self
       end
     
-    require 'devise/strategies/rememberable'
-require 'devise/hooks/rememberable'
-require 'devise/hooks/forgetable'
+          # Checks whether this node body is a void context.
+      # Always `true` for `for`.
+      #
+      # @return [true] whether the `for` node body is a void context
+      def void_context?
+        true
+      end
     
-          module ClassMethods
-        Devise::Models.config(self, :timeout_in)
+          # Custom destructuring method. This is used to normalize the branches
+      # for `pair` and `kwsplat` nodes, to add duck typing to `hash` elements.
+      #
+      # @return [Array<KeywordSplatNode>] the different parts of the `kwsplat`
+      def node_parts
+        [self, self]
       end
     end
   end
 end
 
     
-      it 'raises #{frozen_error_class} on an untainted, frozen object' do
-    o = Object.new.freeze
-    lambda { o.taint }.should raise_error(frozen_error_class)
-  end
-    
-        $Kernel_trace_var_global = 'foo'
-    captured.should == 'foo'
-  end
-    
-    class Profile
-  def pod_bin
-    File.expand_path('../pod', __FILE__)
-  end
-    
-          # Returns the else branch of the `case` statement, if any.
+          # Calls the given block for each condition node in the `when` branch.
+      # If no block is given, an `Enumerator` is returned.
       #
-      # @return [Node] the else branch node of the `case` statement
-      # @return [nil] if the case statement does not have an else branch.
-      def else_branch
-        node_parts[-1]
-      end
+      # @return [self] if a block is given
+      # @return [Enumerator] if no block is given
+      def each_condition
+        return conditions.to_enum(__method__) unless block_given?
     
-          # Returns the collection the `for` loop is iterating over.
-      #
-      # @return [Node] The collection the `for` loop is iterating over
-      def collection
-        node_parts[1]
-      end
-    
-          # This is used for duck typing with `pair` nodes which also appear as
-      # `hash` elements.
-      #
-      # @return [false]
-      def colon?
-        false
-      end
-    
-          # Returns the value of this `hash` element.
-      #
-      # @note For keyword splats, this returns the whole node
-      #
-      # @return [Node] the value of the hash element
-      def value
-        node_parts[1]
-      end
+        def options_config=(options_config)
+      loaded_config = ConfigLoader.load_file(options_config)
+      @options_config = ConfigLoader.merge_with_default(loaded_config,
+                                                        options_config)
+    end
