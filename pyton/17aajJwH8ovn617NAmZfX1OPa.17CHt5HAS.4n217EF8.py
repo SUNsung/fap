@@ -1,122 +1,204 @@
 
         
-        import codecs
-import subprocess
-    
-    versions_info = json.load(open('update/versions.json'))
-if 'signature' in versions_info:
-    del versions_info['signature']
-    
-    import rsa
-import json
-from binascii import hexlify
-    
-    
-def main():
-    parser = optparse.OptionParser(usage='%prog OUTFILE.md')
-    options, args = parser.parse_args()
-    if len(args) != 1:
-        parser.error('Expected an output filename')
+        match_output = '''
+Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
+Hit:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease
+Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
+Hit:4 http://security.ubuntu.com/ubuntu zesty-security InRelease
+Hit:5 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
+Hit:6 https://download.docker.com/linux/ubuntu zesty InRelease
+Hit:7 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
+Fetched 89.2 kB in 0s (122 kB/s)
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+8 packages can be upgraded. Run 'apt list --upgradable' to see them.
+'''
     
     
-def format_size(bytes):
-    return '%s (%d bytes)' % (format_bytes(bytes), bytes)
+@pytest.mark.parametrize('script, output', [
+    ('brew link sshfs', output),
+    ('cat output', output),
+    ('brew install sshfs', '')])
+def test_not_match(script, output):
+    command = Command(script, output)
+    assert not match(command)
     
-    # List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-exclude_patterns = ['_build']
+        @classmethod
+    def get_session_store_class(cls):
+        raise NotImplementedError
+    
+        if section is not None:
+        if section not in sitemaps:
+            raise Http404('No sitemap available for section: %r' % section)
+        maps = [sitemaps[section]]
+    else:
+        maps = sitemaps.values()
+    page = request.GET.get('p', 1)
+    
+        y_train = np.reshape(y_train, (len(y_train), 1))
+    y_test = np.reshape(y_test, (len(y_test), 1))
+    
+        # Test single image
+    x = np.random.uniform(0, 255, (10, 10, 3))
+    inputs = Input(shape=x.shape)
+    outputs = Lambda(utils.preprocess_input, output_shape=x.shape)(inputs)
+    model = Model(inputs, outputs)
+    assert model.predict(x[np.newaxis])[0].shape == x.shape
+    
+        with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
+        loss = MSE_MAE_loss(0.3)
+        inputs = keras.layers.Input((2,))
+        outputs = keras.layers.Dense(1, name='model_output')(inputs)
+        model = keras.models.Model(inputs, outputs)
+        model.compile(optimizer='sgd', loss={'model_output': loss})
+        model.fit(np.random.rand(256, 2), np.random.rand(256, 1))
+        model.save(model_filename)
+    
+        target_devices = ['/cpu:0'] + ['/gpu:%d' % i for i in target_gpu_ids]
+    for device in target_devices:
+        if device not in available_devices:
+            raise ValueError(
+                'To call `multi_gpu_model` with `gpus=%s`, '
+                'we expect the following devices to be available: %s. '
+                'However this machine only has: %s. '
+                'Try reducing `gpus`.' % (gpus,
+                                          target_devices,
+                                          available_devices))
+    
+    outputs = Activation('sigmoid', name='decoder_output')(x)
+    
+    arxiv:1504.00941v2 [cs.NE] 7 Apr 2015
+http://arxiv.org/pdf/1504.00941v2.pdf
+    
+    # the data, split between train and test sets
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
     
     
-class TestCache(unittest.TestCase):
-    def setUp(self):
-        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
-        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
-        _mkdir(TESTDATA_DIR)
-        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
-        self.tearDown()
+def poisson(y_true, y_pred):
+    return K.mean(y_pred - y_true * K.log(y_pred + K.epsilon()), axis=-1)
     
-        def debug(self, msg):
-        pass
+            self.last_check_time = time_now
+        threading.Thread(target=self._simple_check_worker).start()
     
-                gc.collect()
-            print('max_iter', max_iter)
-            print('- benchmarking A-SGD')
-            clf = SGDRegressor(alpha=alpha / n_train, fit_intercept=False,
-                               max_iter=max_iter, learning_rate='invscaling',
-                               eta0=.002, power_t=0.05, tol=1e-3,
-                               average=(max_iter * n_train // 2))
+        for qualified, server, _, _ in server_list:
+        if qualified:
+            best_server = server[0]
+            break
+    log = Log()
+    if best_server:
+        log.write('best server is: %s.' % best_server)
+    else:
+        xlog.warning('no server detected, return default: teredo.remlab.net.')
+        log.write('no server detected, return default: teredo.remlab.net.')
+        best_server = 'teredo.remlab.net'
+    log.close()
+    return best_server
+    
+        try:
+        if cookie:
+            if 'rc4' not in options:
+                metadata = zlib.decompress(base64.b64decode(cookie), -zlib.MAX_WBITS)
+                payload = input_data or ''
+            else:
+                metadata = zlib.decompress(rc4crypt(base64.b64decode(cookie), __password__), -zlib.MAX_WBITS)
+                payload = rc4crypt(input_data, __password__) if input_data else ''
+        else:
+            if 'rc4' in options:
+                input_data = rc4crypt(input_data, __password__)
+            metadata_length = struct.unpack('!h', input_data[:2])
+            metadata = zlib.decompress(input_data[2:2+metadata_length], -zlib.MAX_WBITS)
+            payload = input_data[2+metadata_length:]
+        headers = dict(x.split(':', 1) for x in metadata.splitlines() if x)
+        method = headers.pop('G-Method')
+        url = headers.pop('G-Url')
+    except (zlib.error, KeyError, ValueError):
+        import traceback
+        start_response('500 Internal Server Error', [('Content-Type', 'text/html')])
+        yield message_html('500 Internal Server Error', 'Bad Request (metadata) - Possible Wrong Password', '<pre>%s</pre>' % traceback.format_exc())
+        raise StopIteration
+    
+    	# The current Token when an error occurred.  Since not all streams
+	# can retrieve the ith Token, we have to track the Token object.
+	# For parsers.  Even when it's a tree parser, token might be set.
+        self.token = None
     
     
-def issue_role(name, rawtext, text, lineno,
-               inliner, options=None, content=None):
-    '''Sphinx role for linking to an issue. Must have
-    `issues_uri` or `issues_github_path` configured in ``conf.py``.
+    def execute(self, buf):
+        if self.text is not None:
+            buf.write(self.text)
     
-        output_file.close()
+        def getTokenIndex(self):
+        '''@brief Get the index in the input stream.
+    
+    min_primitive_root = 3
+    
+    if __name__ == '__main__':
+    num = generateLargePrime()
+    print(('Prime number:', num))
+    print(('isPrime:', isPrime(num)))
 
     
-    import numpy as np
-from matplotlib import pyplot as plt
+        def __hash_double_function(self, key, data, increment):
+        return (increment * self.__hash_function_2(key, data)) % self.size_table
     
-    An example showing how the scikit-learn can be used to recognize images of
-hand-written digits.
+        return score
+
     
-    Second, when using a connectivity matrix, single, average and complete
-linkage are unstable and tend to create a few clusters that grow very
-quickly. Indeed, average and complete linkage fight this percolation behavior
-by considering all the distances between two clusters when merging them (
-while single linkage exaggerates the behaviour by considering only the
-shortest distance between clusters). The connectivity graph breaks this
-mechanism for average and complete linkage, making them resemble the more
-brittle single linkage. This effect is more pronounced for very sparse graphs
-(try decreasing the number of neighbors in kneighbors_graph) and with
-complete linkage. In particular, having a very small number of neighbors in
-the graph, imposes a geometry that is close to that of single linkage,
-which is well known to have this percolation instability. '''
-# Authors: Gael Varoquaux, Nelle Varoquaux
-# License: BSD 3 clause
+    # The name of an image file (relative to this directory) to use as a favicon of
+# the docs.
+# This file should be a Windows icon file (.ico) being 16x16 or 32x32
+# pixels large.
+#
+html_favicon = '_static/favicon.ico'
     
-    Demonstrates the effect of different metrics on the hierarchical clustering.
+        # If the temperature is not a number this can cause issues
+    # with Polymer components, so bail early there.
+    if not isinstance(temperature, Number):
+        raise TypeError(
+            'Temperature is not a number: {}'.format(temperature))
     
-            colors = np.array(list(islice(cycle(['#377eb8', '#ff7f00', '#4daf4a',
-                                             '#f781bf', '#a65628', '#984ea3',
-                                             '#999999', '#e41a1c', '#dede00']),
-                                      int(max(y_pred) + 1))))
-        plt.scatter(X[:, 0], X[:, 1], s=10, color=colors[y_pred])
+        meters = value
     
-    # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+            if version.is_devrelease:
+            to_change['dev'] = None
+            to_change['pre'] = ('b', 0)
     
-    # Load a test image and get encondings for it
-image_to_test = face_recognition.load_image_file('obama2.jpg')
-image_to_test_encoding = face_recognition.face_encodings(image_to_test)[0]
+        output_directory = 'pdfs' if results.directory is None else results.directory
     
+        # Gloss the lips
+    d.polygon(face_landmarks['top_lip'], fill=(150, 0, 0, 128))
+    d.polygon(face_landmarks['bottom_lip'], fill=(150, 0, 0, 128))
+    d.line(face_landmarks['top_lip'], fill=(150, 0, 0, 64), width=8)
+    d.line(face_landmarks['bottom_lip'], fill=(150, 0, 0, 64), width=8)
     
-def test_image(image_to_check, model):
-    unknown_image = face_recognition.load_image_file(image_to_check)
-    face_locations = face_recognition.face_locations(unknown_image, number_of_times_to_upsample=0, model=model)
+    known_encodings = [
+    obama_face_encoding,
+    biden_face_encoding
+]
     
-        # Display the resulting image
-    cv2.imshow('Video', frame)
+        # Draw a label with a name below the face
+    text_width, text_height = draw.textsize(name)
+    draw.rectangle(((left, bottom - text_height - 10), (right, bottom)), fill=(0, 0, 255), outline=(0, 0, 255))
+    draw.text((left + 6, bottom - text_height - 5), name, fill=(255, 255, 255, 255))
     
-            # Draw a label with a name below the face
-        cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
-        font = cv2.FONT_HERSHEY_DUPLEX
-        cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+    '''
+*What is this pattern about?
+Define a family of algorithms, encapsulate each one, and make them interchangeable.
+Strategy lets the algorithm vary independently from clients that use it.
     
-                for face_location in face_locations:
-                # Print the location of each face in this frame
-                top, right, bottom, left = face_location
-                print(' - A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+        '''Simply echoes the msg ids'''
     
-        logging.warning('Starting fetch with curl client')
-    curl_client = CurlAsyncHTTPClient()
-    curl_client.fetch('http://localhost:%d/' % options.port,
-                      callback=callback)
-    IOLoop.current().start()
+        data = Data()
     
-            With this definition, options in the file specified by ``--config`` will
-        override options set earlier on the command line, but can be overridden
-        by later flags.
+        graphic1.add(ellipse1)
+    graphic1.add(ellipse2)
+    graphic1.add(ellipse3)
+    graphic2.add(ellipse4)
     
-    Basic usage looks like::
+        def item_not_found(self, item_type, item_name):
+        print('That %s '%s' does not exist in the records' % (item_type, item_name))
+    
+        def test_extended_properties_retrieving(self):
+        self.assertEqual(self.dispatcher.get_objects()['A'].ext_value, 'E')
+        self.assertTrue(self.dispatcher.get_objects()['B'].diff)
