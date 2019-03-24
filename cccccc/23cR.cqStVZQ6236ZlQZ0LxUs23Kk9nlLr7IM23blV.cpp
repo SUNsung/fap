@@ -1,150 +1,263 @@
 
         
-        string DataTypeToPython(DataType dtype, const string& dtype_module);
+        // TaskRunner implementation that posts tasks into libuv's default loop.
+class UvTaskRunner : public base::SingleThreadTaskRunner {
+ public:
+  explicit UvTaskRunner(uv_loop_t* loop);
+    }
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+    #include 'atom/browser/api/atom_api_browser_window.h'
     
-    REGISTER_OP('Ackermann')
-    .Output('ackermann: string')
-    .Doc(R'doc(
-Output a fact about the ackermann function.
-)doc');
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+      static void BuildPrototype(v8::Isolate* isolate,
+                             v8::Local<v8::FunctionTemplate> prototype);
     
     
-    {}  // namespace tensorflow
+    {  DISALLOW_COPY_AND_ASSIGN(RenderProcessPreferences);
+};
     
-    // Safe container for an owned PyObject. On destruction, the reference count of
-// the contained object will be decremented.
-using Safe_PyObjectPtr = std::unique_ptr<PyObject, detail::PyDecrefDeleter>;
-Safe_PyObjectPtr make_safe(PyObject* o);
-    
-      // Attempt to get the next record at 'current_offset()'. Populates status
-  // with OK on success, OUT_OF_RANGE for end of file, DATA_LOSS for some
-  // kinds of truncated reads, or another code for other errors
-  // (e.g., filesystem errors).
-  void GetNext(TF_Status* status);
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-      // Creates a 3d FFT plan.
-  virtual std::unique_ptr<Plan> Create3dPlan(Stream *stream, uint64 num_x,
-                                             uint64 num_y, uint64 num_z,
-                                             Type type, bool in_place_fft) = 0;
-    
-      /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
-   *
-   * @param datum
-   *    Datum containing the data to be transformed.
-   */
-  vector<int> InferBlobShape(const Datum& datum);
-  /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
-   *    It uses the first element to infer the shape of the blob.
-   *
-   * @param datum_vector
-   *    A vector of Datum containing the data to be transformed.
-   */
-  vector<int> InferBlobShape(const vector<Datum> & datum_vector);
-  /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
-   *    It uses the first element to infer the shape of the blob.
-   *
-   * @param mat_vector
-   *    A vector of Mat containing the data to be transformed.
-   */
-#ifdef USE_OPENCV
-  vector<int> InferBlobShape(const vector<cv::Mat> & mat_vector);
-  /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
-   *
-   * @param cv_img
-   *    cv::Mat containing the data to be transformed.
-   */
-  vector<int> InferBlobShape(const cv::Mat& cv_img);
-#endif  // USE_OPENCV
-    
-    // Serialize LayerParameter to protocol buffer
-template <typename Dtype>
-void Layer<Dtype>::ToProto(LayerParameter* param, bool write_diff) {
-  param->Clear();
-  param->CopyFrom(layer_param_);
-  param->clear_blobs();
-  for (int i = 0; i < blobs_.size(); ++i) {
-    blobs_[i]->ToProto(param->add_blobs(), write_diff);
-  }
+    void AutoUpdater::SetDelegate(Delegate* delegate) {
+  delegate_ = delegate;
 }
     
-      int label_axis_, outer_num_, inner_num_;
     
-    #endif  // CAFFE_ARGMAX_LAYER_HPP_
-
+    {}  // namespace atom
+    
+    net::URLRequestJob* AboutProtocolHandler::MaybeCreateJob(
+    net::URLRequest* request,
+    net::NetworkDelegate* network_delegate) const {
+  return new URLRequestAboutJob(request, network_delegate);
+}
+    
+      // net::URLRequestJobFactory::ProtocolHandler:
+  net::URLRequestJob* MaybeCreateJob(
+      net::URLRequest* request,
+      net::NetworkDelegate* network_delegate) const override;
+  bool IsSafeRedirectTarget(const GURL& location) const override;
     
     
-    {}  // namespace caffe
+bool ZeroCopyOutputStream::WriteAliasedRaw(const void* /* data */,
+                                           int /* size */) {
+  GOOGLE_LOG(FATAL) << 'This ZeroCopyOutputStream doesn't support aliasing. '
+                'Reaching here usually means a ZeroCopyOutputStream '
+                'implementation bug.';
+  return false;
+}
     
+    void MapLiteTestUtil::ExpectClear(const unittest::TestMapLite& message) {
+  MapTestUtilImpl::ExpectClear(message);
+}
     
-    {}  // namespace caffe
+    TEST(ByteSourceTest, CopyToStringByteSink) {
+  StringPiece data('Hello world!');
+  MockByteSource source(data, 3);
+  string str;
+  StringByteSink sink(&str);
+  source.CopyTo(&sink, data.size());
+  EXPECT_EQ(data, str);
+}
     
-      bool handles_setup_;
-  cudnnHandle_t* handle_;
-  cudaStream_t*  stream_;
-    
-    #endif  // CAFFE_CUDNN_LRN_LAYER_HPP_
-
-    
-    int os_detect_blobs(const GenericVector<int>* allowed_scripts,
-                    BLOBNBOX_CLIST* blob_list,
-                    OSResults* osr,
-                    tesseract::Tesseract* tess);
-    
-      /**
-   * Moves the iterator to the beginning of the text line.
-   * This class implements this functionality by moving it to the zero indexed
-   * blob of the first (leftmost) word of the row.
-   */
-  virtual void RestartRow();
-    
-      // blow away the copied chopped_word, as we want to work with
-  // the blobs from the input chopped_word so seam_arrays can be merged.
-  TWERD *chopped = word->chopped_word;
-  TWERD *chopped2 = new TWERD;
-  chopped2->blobs.reserve(chopped->NumBlobs() - split_pt);
-  for (int i = split_pt; i < chopped->NumBlobs(); ++i) {
-    chopped2->blobs.push_back(chopped->blobs[i]);
+      while (true) {
+    const void* inptr;
+    int inlen;
+    bool ok;
+    ok = in.Next(&inptr, &inlen);
+    if (!ok) {
+      break;
+    }
+    if (inlen > 0) {
+      int err = write(STDOUT_FILENO, inptr, inlen);
+      if (err != inlen) {
+        fprintf(stderr, 'write unexpectedly returned %d.\n', err);
+        return 1;
+      }
+    }
   }
-  chopped->blobs.truncate(split_pt);
-  word->chopped_word = nullptr;
-  delete word2->chopped_word;
-  word2->chopped_word = nullptr;
     
-    // Reads all boxes from the given filename.
-// Reads a specific target_page number if >= 0, or all pages otherwise.
-// Skips blanks if skip_blanks is true.
-// The UTF-8 label of the box is put in texts, and the full box definition as
-// a string is put in box_texts, with the corresponding page number in pages.
-// Each of the output vectors is optional (may be nullptr).
-// Returns false if no boxes are found.
-bool ReadAllBoxes(int target_page, bool skip_blanks, const STRING& filename,
-                  GenericVector<TBOX>* boxes,
-                  GenericVector<STRING>* texts,
-                  GenericVector<STRING>* box_texts,
-                  GenericVector<int>* pages);
+      while (true) {
+    void* outptr;
+    int outlen;
+    bool ok;
+    do {
+      ok = out.Next(&outptr, &outlen);
+      if (!ok) {
+        break;
+      }
+    } while (outlen <= 0);
+    readlen = read(STDIN_FILENO, outptr, outlen);
+    if (readlen <= 0) {
+      out.BackUp(outlen);
+      break;
+    }
+    if (readlen < outlen) {
+      out.BackUp(outlen - readlen);
+    }
+  }
+    
+      EXPECT_EQ(
+      1, TimeUtil::TimestampToNanoseconds(TimeUtil::NanosecondsToTimestamp(1)));
+  EXPECT_EQ(-1, TimeUtil::TimestampToNanoseconds(
+                    TimeUtil::NanosecondsToTimestamp(-1)));
+  EXPECT_EQ(1, TimeUtil::TimestampToMicroseconds(
+                   TimeUtil::MicrosecondsToTimestamp(1)));
+  EXPECT_EQ(-1, TimeUtil::TimestampToMicroseconds(
+                    TimeUtil::MicrosecondsToTimestamp(-1)));
+  EXPECT_EQ(1, TimeUtil::TimestampToMilliseconds(
+                   TimeUtil::MillisecondsToTimestamp(1)));
+  EXPECT_EQ(-1, TimeUtil::TimestampToMilliseconds(
+                    TimeUtil::MillisecondsToTimestamp(-1)));
+  EXPECT_EQ(1, TimeUtil::TimestampToSeconds(TimeUtil::SecondsToTimestamp(1)));
+  EXPECT_EQ(-1, TimeUtil::TimestampToSeconds(TimeUtil::SecondsToTimestamp(-1)));
+    
+    template <typename T1, typename T2, typename T3, typename T4>
+internal::ValueArray4<T1, T2, T3, T4> Values(T1 v1, T2 v2, T3 v3, T4 v4) {
+  return internal::ValueArray4<T1, T2, T3, T4>(v1, v2, v3, v4);
+}
     
     
-    {}  // namespace tesseract
+    {  GTEST_DISALLOW_COPY_AND_ASSIGN_(HasNewFatalFailureHelper);
+};
+    
+      // These fields are immutable properties of the test.
+  const std::string test_case_name_;     // Test case name
+  const std::string name_;               // Test name
+  // Name of the parameter type, or NULL if this is not a typed or a
+  // type-parameterized test.
+  const internal::scoped_ptr<const ::std::string> type_param_;
+  // Text representation of the value parameter, or NULL if this is not a
+  // value-parameterized test.
+  const internal::scoped_ptr<const ::std::string> value_param_;
+  const internal::TypeId fixture_class_id_;   // ID of the test fixture class
+  bool should_run_;                 // True iff this test should run
+  bool is_disabled_;                // True iff this test is disabled
+  bool matches_filter_;             // True if this test matches the
+                                    // user-specified filter.
+  internal::TestFactoryBase* const factory_;  // The factory that creates
+                                              // the test object
+    
+    template <typename T>
+class linked_ptr {
+ public:
+  typedef T element_type;
+    }
+    
+    
+    {	LRESULT lr = SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM)'Environment', SMTO_ABORTIFHUNG | SMTO_NOTIMEOUTIFNOTHUNG, 5000, NULL);
+	lr = SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM)L'Environment', SMTO_ABORTIFHUNG | SMTO_NOTIMEOUTIFNOTHUNG, 5000, NULL); // For Windows >= 8
+}
+    
+            // Inner state of the underlying reader.
+        // Is set in the RestoreFromCheckpoint call and used in the next GetNextMinibatch
+        // when the reader state is restored after the first StartEpoch call.
+        Internal::Optional<Dictionary> m_state;
+    
+        static void* AllocateTensorView(CNTK::DataType dataType,
+                                    const NDShape& viewShape,
+                                    const DeviceDescriptor& device,
+                                    void* dataBuffer,
+                                    size_t bufferSizeInBytes)
+    {
+        switch (dataType)
+        {
+        case DataType::Float:
+            return AllocateTensorView<float>(viewShape, device, dataBuffer, bufferSizeInBytes);
+        case DataType::Double:
+            return AllocateTensorView<double>(viewShape, device, dataBuffer, bufferSizeInBytes);
+        case DataType::Float16:
+            return AllocateTensorView<half>(viewShape, device, dataBuffer, bufferSizeInBytes);
+        case DataType::Int8:
+            return AllocateTensorView<char>(viewShape, device, dataBuffer, bufferSizeInBytes);
+        case DataType::Int16:
+            return AllocateTensorView<short>(viewShape, device, dataBuffer, bufferSizeInBytes);
+        default:
+            LogicError('Unsupported DataType %s', DataTypeName(dataType));
+            break;
+        }
+    }
+    
+        void ProgressWriter::WriteTestSummary(const ValuePtr& accumulatedMetric)
+    {
+        m_test->WriteSummary(
+            nullptr, accumulatedMetric,
+            [this](size_t samples, size_t updates, size_t summaries, double /*aggregateLoss*/, double aggregateMetric,
+                uint64_t elapsedMs)
+            {
+                OnWriteTestSummary(samples, updates, summaries, aggregateMetric, elapsedMs);
+            });
+    }
+    
+            ValuePtr DeepClone(bool readOnly) const override
+        {
+            if (m_isPacked)
+            {
+                std::shared_ptr<Microsoft::MSR::CNTK::MBLayout> packedLayoutCopy;
+                if (m_packedDataLayout)
+                {
+                    packedLayoutCopy = std::make_shared<Microsoft::MSR::CNTK::MBLayout>();
+                    packedLayoutCopy->CopyFrom(m_packedDataLayout);
+                }
+                return MakeSharedObject<PackedValue>(m_sampleShape, m_sampleDynamicAxes, m_packedData->DeepClone(readOnly), packedLayoutCopy, readOnly);
+            }
+            else
+                return Value::DeepClone(readOnly);
+        }
+    
+                if ((oldOutputRank != SentinelValueForInferParamInitRank) && (oldOutputRank != outputRank))
+                InvalidArgument('Output rank of a non-uniform random initialier cannot be overridden if it has been already specified!');
+    
+    bool DataReaderBase::GetMinibatch(StreamMinibatchInputs& minibatch)
+{
+    if (TryGetMinibatch(minibatch))
+    {
+        SetMinibatchLayout(minibatch);
+        return true;
+    }
+    }
+    
+    #pragma once
+    
+            // create a vector with the correct number of timesteps(shapeXT[2]) containing the sequence count (shapeXT[1])
+        numSequencesForFrame = vector<size_t>(shapeXT[2], shapeXT[1]);
+        m_transposedOutput->RNNForward(*m_transposedInput, paramW, shapeXT[0], shapeYT[0], numSequencesForFrame, m_rnnAttributes, *m_reserve, *m_workspace);
+    
+    // Canbus gflags
+DEFINE_double(sensor_freq, 100,
+              'Sensor feedback timer frequency -- 0 means event trigger.');
+    
+      MatrixXd mat_golden(20, 10);
+  // clang-format off
+  mat_golden <<
+    -1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+     1,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+     1, -1,  0,  0,  0,  0,  0,  0,  0,  0,
+    -1,  1,  0,  0,  0,  0,  0,  0,  0,  0,
+     0,  1, -1,  0,  0,  0,  0,  0,  0,  0,
+     0, -1,  1,  0,  0,  0,  0,  0,  0,  0,
+     0,  0,  1, -1,  0,  0,  0,  0,  0,  0,
+     0,  0, -1,  1,  0,  0,  0,  0,  0,  0,
+     0,  0,  0,  1, -1,  0,  0,  0,  0,  0,
+     0,  0,  0, -1,  1,  0,  0,  0,  0,  0,
+     0,  0,  0,  0,  1, -1,  0,  0,  0,  0,
+     0,  0,  0,  0, -1,  1,  0,  0,  0,  0,
+     0,  0,  0,  0,  0,  1, -1,  0,  0,  0,
+     0,  0,  0,  0,  0, -1,  1,  0,  0,  0,
+     0,  0,  0,  0,  0,  0,  1, -1,  0,  0,
+     0,  0,  0,  0,  0,  0, -1,  1,  0,  0,
+     0,  0,  0,  0,  0,  0,  0,  1, -1,  0,
+     0,  0,  0,  0,  0,  0,  0, -1,  1,  0,
+     0,  0,  0,  0,  0,  0,  0,  0,  1, -1,
+     0,  0,  0,  0,  0,  0,  0,  0, -1,  1;
+  // clang-format on
+  EXPECT_EQ(mat, mat_golden);
+    
+    
+    {  double length_2 = 50.0;
+  const LaneGraph &lane_graph_2 =
+      ObstacleClusters::GetLaneGraph(start_s, length_2, lane);
+  EXPECT_EQ(1, lane_graph_2.lane_sequence_size());
+  EXPECT_EQ(3, lane_graph_2.lane_sequence(0).lane_segment_size());
+  EXPECT_EQ('l9', lane_graph_2.lane_sequence(0).lane_segment(0).lane_id());
+  EXPECT_EQ('l18', lane_graph_2.lane_sequence(0).lane_segment(1).lane_id());
+  EXPECT_EQ('l21', lane_graph_2.lane_sequence(0).lane_segment(2).lane_id());
+}
+    
+    #include 'gtest/gtest.h'
