@@ -1,133 +1,153 @@
-    @value.setter
-    def value(self, new_value):
-        if 1 <= new_value <= 13:
-            self._value = new_value
-        else:
-            raise ValueError('Invalid card value: {}'.format(new_value))
+
+        
+            return render_template('blog/update.html', post=post)
+    
+        yield app
+    
+        assert 'closed' in str(e)
     
     
-class LinkedList(object):
+#: Log messages to :func:`~flask.logging.wsgi_errors_stream` with the format
+#: ``[%(asctime)s] %(levelname)s in %(module)s: %(message)s``.
+default_handler = logging.StreamHandler(wsgi_errors_stream)
+default_handler.setFormatter(logging.Formatter(
+    '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
+))
+    
+            # We attach the view class to the view function for two reasons:
+        # first of all it allows us to easily figure out what class-based
+        # view this thing came from, secondly it's also used for instantiating
+        # the view class so you can actually replace it with something else
+        # for testing purposes and debugging.
+        view.view_class = cls
+        view.__name__ = name
+        view.__doc__ = cls.__doc__
+        view.__module__ = cls.__module__
+        view.methods = cls.methods
+        view.provide_automatic_options = cls.provide_automatic_options
+        return view
+    
+            import subprocess
+        subprocess.check_call(
+            [sys.executable, 'setup.py', 'bdist_egg'],
+            cwd=str(modules_tmpdir)
+        )
+        egg_path, = modules_tmpdir.join('dist/').listdir()
+        monkeypatch.syspath_prepend(str(egg_path))
+        return egg_path
+    
+        By default, it represents the actual environment.
+    All of the attributes can be overwritten though, which
+    is used by the test suite to simulate various scenarios.
     
     
-class RemoveDuplicateUrls(MRJob):
-    
-    ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-    
-        name = module.params.get('name')
-    state = module.params.get('state')
-    replication_id = module.params.get('replication_id')
-    cluster_id = module.params.get('cluster_id')
-    target = module.params.get('target')
-    bucket = module.params.get('bucket')
-    
-        try:
-        changed = False
-        exists = False
+def write_stream(stream, outfile, flush):
+    '''Write the output stream.'''
+    try:
+        # Writing bytes so we use the buffer interface (Python 3).
+        buf = outfile.buffer
+    except AttributeError:
+        buf = outfile
     
     
-class DNSZoneIPAClient(IPAClient):
-    def __init__(self, module, host, port, protocol):
-        super(DNSZoneIPAClient, self).__init__(module, host, port, protocol)
+with codecs.open(JSON_FILE_PATH, encoding='utf8') as f:
+    JSON_FILE_CONTENT = f.read()
     
-        elif not running and state == 'started':
-        if module.check_mode:
-            module.exit_json(changed=True)
-        status = run_command('start')
-        if status in ['initializing', 'running'] or 'start pending' in status:
-            module.exit_json(changed=True, name=name, state=state)
-        module.fail_json(msg='%s process not started' % name, status=status)
+        def cut(self, sentence, HMM=True):
+        for w in self.__cut_internal(sentence, HMM=HMM):
+            yield w
     
-        response, info = fetch_url(module, url, data=xml, method=method, headers=headers, timeout=45)
+            for y in obs_states:
+            prob, state = max((V[t - 1][y0] + trans_p[y0].get(y, MIN_INF) +
+                               emit_p[y].get(obs[t], MIN_FLOAT), y0) for y0 in prev_states)
+            V[t][y] = prob
+            mem_path[t][y] = state
     
-        ##################################################################
-    # deploy requires revision_id
-    # annotation requires msg
-    # We verify these manually
-    ##################################################################
+    while True:
+    line = sys.stdin.readline()
+    if line=='':
+        break
+    line = line.strip()
+    for word in jieba.cut(line):
+        print(word)
     
-        def process_options(self, args, opts):
-        try:
-            self.settings.setdict(arglist_to_dict(opts.set),
-                                  priority='cmdline')
-        except ValueError:
-            raise UsageError('Invalid -s value, use -s NAME=VALUE', print_help=False)
+    print('speed %s bytes/second' % (len(content)/tm_cost))
     
-        def process_options(self, args, opts):
-        ScrapyCommand.process_options(self, args, opts)
-        try:
-            opts.spargs = arglist_to_dict(opts.spargs)
-        except ValueError:
-            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
-        if opts.output:
-            if opts.output == '-':
-                self.settings.set('FEED_URI', 'stdout:', priority='cmdline')
-            else:
-                self.settings.set('FEED_URI', opts.output, priority='cmdline')
-            feed_exporters = without_none_values(
-                self.settings.getwithbase('FEED_EXPORTERS'))
-            valid_output_formats = feed_exporters.keys()
-            if not opts.output_format:
-                opts.output_format = os.path.splitext(opts.output)[1].replace('.', '')
-            if opts.output_format not in valid_output_formats:
-                raise UsageError('Unrecognized output format '%s', set one'
-                                 ' using the '-t' switch or as a file extension'
-                                 ' from the supported list %s' % (opts.output_format,
-                                                                  tuple(valid_output_formats)))
-            self.settings.set('FEED_FORMAT', opts.output_format, priority='cmdline')
+    JIS_TYPICAL_DISTRIBUTION_RATIO = 3.0
     
-                    except ValueError as e:
-                    logger.warning(
-                        'Ignoring error while verifying certificate '
-                        'from host '{}' (exception: {})'.format(
-                            self._hostnameASCII, repr(e)))
+    # 0 : illegal
+# 1 : very unlikely
+# 2 : normal
+# 3 : very likely
+Latin1ClassModel = (
+# UDF OTH ASC ASS ACV ACO ASV ASO
+    0,  0,  0,  0,  0,  0,  0,  0,  # UDF
+    0,  3,  3,  3,  3,  3,  3,  3,  # OTH
+    0,  3,  3,  3,  3,  3,  3,  3,  # ASC
+    0,  3,  3,  3,  1,  1,  3,  3,  # ASS
+    0,  3,  3,  3,  1,  2,  1,  2,  # ACV
+    0,  3,  3,  3,  3,  3,  3,  3,  # ACO
+    0,  3,  1,  3,  1,  1,  1,  3,  # ASV
+    0,  3,  1,  3,  1,  1,  3,  3,  # ASO
+)
     
+        def feed(self, byte_str):
+        for i in range(len(byte_str)):
+            coding_state = self.coding_sm.next_state(byte_str[i])
+            if coding_state == MachineState.ERROR:
+                self.logger.debug('%s %s prober hit error at byte %s',
+                                  self.charset_name, self.language, i)
+                self._state = ProbingState.NOT_ME
+                break
+            elif coding_state == MachineState.ITS_ME:
+                self._state = ProbingState.FOUND_IT
+                break
+            elif coding_state == MachineState.START:
+                char_len = self.coding_sm.get_current_charlen()
+                if i == 0:
+                    self._last_char[1] = byte_str[0]
+                    self.distribution_analyzer.feed(self._last_char, char_len)
+                else:
+                    self.distribution_analyzer.feed(byte_str[i - 1:i + 1],
+                                                    char_len)
     
-class BaseRegisteredClass(object):
-    __metaclass__ = RegistryHolder
-    '''
-        Any class that will inherits from BaseRegisteredClass will be included
-        inside the dict RegistryHolder.REGISTRY, the key being the name of the
-        class and the associated value, the class itself.
-    '''
-    pass
+    EUCTW_SM_MODEL = {'class_table': EUCTW_CLS,
+                'class_factor': 7,
+                'state_table': EUCTW_ST,
+                'char_len_table': EUCTW_CHAR_LEN_TABLE,
+                'name': 'x-euc-tw'}
     
-        # Using an external constructor function:
-    complex_house = construct_building(ComplexHouse)
-    print(complex_house)
+        @property
+    def language(self):
+        return ''
     
-        d = prototype.clone()
-    a = prototype.clone(value='a-value', category='a')
-    b = prototype.clone(value='b-value', is_checked=True)
-    dispatcher.register_object('objecta', a)
-    dispatcher.register_object('objectb', b)
-    dispatcher.register_object('default', d)
-    print([{n: p.value} for n, p in dispatcher.get_objects().items()])
+        def _get_page(self, topic, request_options=None):
+        if topic.endswith('/:list') or topic.lstrip('/') == ':list':
+            return self._get_list_answer(topic)
     
-    ### OUTPUT ###
-# ['A', 'B', 'C', 'D']
-# [['A', 'B', 'C', 'D'], ['A', 'B', 'D'], ['A', 'C', 'D']]
-# ['A', 'B', 'D']
+        def __init__(self):
+        Adapter.__init__(self)
+        self._rosetta_code_name = self._load_rosetta_code_names()
 
     
+        answer_data = {
+        'query': query,
+        'keyword': keyword,
+        'answers': answers,
+        }
     
-# ConcreteImplementor 1/2
-class DrawingAPI1(object):
-    def draw_circle(self, x, y, radius):
-        print('API1.circle at {}:{} radius {}'.format(x, y, radius))
+    import re
+import ansiwrap
+import colored
     
-        def test_subscriber_shall_be_detachable_from_subscriptions(cls):
-        subscription = 'sub msg'
-        pro = Provider()
-        sub = Subscriber('sub name', pro)
-        sub.subscribe(subscription)
-        cls.assertEqual(len(pro.subscribers[subscription]), 1)
-        sub.unsubscribe(subscription)
-        cls.assertEqual(len(pro.subscribers[subscription]), 0)
+        if _REDIS_PREFIX:
+        key = _REDIS_PREFIX + key
     
-        def test_am_station_overflow_after_scan(self):
-        self.radio.scan()
-        station = self.radio.state.stations[self.radio.state.pos]
-        expected_station = '1250'
-        self.assertEqual(station, expected_station)
+            if search_mode and topic != 'LIMITED':
+            if not highlight:
+                result += '\n[%s]\n' % topic
+            else:
+                result += '\n%s%s %s %s%s\n' % (
+                    colored.bg('dark_gray'), colored.attr('res_underlined'),
+                    topic,
+                    colored.attr('res_underlined'), colored.attr('reset'))
