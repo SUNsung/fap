@@ -1,74 +1,91 @@
 
         
-              def after_features(features)
-        @io.puts
-        print_worst_offenders
-        print_summary(features)
-      end
-    
-          # Returns true if the given value is present in the set.
-      #
-      # raw_key - The key of the set to check.
-      # value - The value to check for.
-      def self.set_includes?(raw_key, value)
-        key = cache_key_for(raw_key)
-    
-            def importer_class
-          DiffNoteImporter
+              def select?(options)
+        options.each do |k, v|
+          callable = v.respond_to?(:call) ? v : ->(server) { server.fetch(v) }
+          result = \
+            case k
+            when :filter, :select
+              callable.call(self)
+            when :exclude
+              !callable.call(self)
+            else
+              fetch(k) == v
+            end
+          return false unless result
         end
     
-            # Returns a Hash that can be used to populate `notes.st_diff`, removing
-        # the need for requesting Git data for every diff note.
-        def diff_hash
-          {
-            diff: diff_hunk,
-            new_path: file_path,
-            old_path: file_path,
-    }
+    module Sinatra
+  class Application < Base
     
-            attr_reader :attributes
-    
-          def action_name(env)
-        if env[CONTROLLER_KEY]
-          action_for_rails(env)
-        elsif env[ENDPOINT_KEY]
-          action_for_grape(env)
-        end
-      end
-    
-    LogStash::Bundler.setup!
-    
-    if $0 == __FILE__
-  begin
-    LogStash::PluginManager::Main.run('bin/logstash-plugin', ARGV)
-  rescue LogStash::PluginManager::Error => e
-    $stderr.puts(e.message)
-    exit(1)
+      task :index do
+    doc = File.read('README.md')
+    file = 'doc/rack-protection-readme.md'
+    Dir.mkdir 'doc' unless File.directory? 'doc'
+    puts 'writing #{file}'
+    File.open(file, 'w') { |f| f << doc }
   end
-end
-
     
-    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
-  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.windows?
-  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.windows?
-    
-        if local_gems.size > 0
-      if update_all?
-        plugins_with_path = local_gems
-      else
-        plugins_with_path = plugins_arg & local_gems
+          def compare_with_real_token(token, session)
+        secure_compare(token, real_token(session))
       end
     
-        context 'without a specific plugin' do
-      it 'display a list of plugins' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list')
-        expect(result.stdout.split('\n').size).to be > 1
+          def encrypt(value)
+        options[:encryptor].hexdigest value.to_s
       end
     
-        context 'update a specific plugin' do
-      it 'has executed successfully' do
-        cmd = logstash.run_command_in_path('bin/logstash-plugin update --no-verify #{plugin_name}')
-        expect(cmd.stdout).to match(/Updating #{plugin_name}/)
-        expect(logstash).not_to have_installed?(plugin_name, previous_version)
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   XSS and others
+    # Supported browsers:: Firefox 23+, Safari 7+, Chrome 25+, Opera 15+
+    #
+    # Description:: Content Security Policy, a mechanism web applications
+    #               can use to mitigate a broad class of content injection
+    #               vulnerabilities, such as cross-site scripting (XSS).
+    #               Content Security Policy is a declarative policy that lets
+    #               the authors (or server administrators) of a web application
+    #               inform the client about the sources from which the
+    #               application expects to load resources.
+    #
+    # More info::   W3C CSP Level 1 : https://www.w3.org/TR/CSP1/ (deprecated)
+    #               W3C CSP Level 2 : https://www.w3.org/TR/CSP2/ (current)
+    #               W3C CSP Level 3 : https://www.w3.org/TR/CSP3/ (draft)
+    #               https://developer.mozilla.org/en-US/docs/Web/Security/CSP
+    #               http://caniuse.com/#search=ContentSecurityPolicy
+    #               http://content-security-policy.com/
+    #               https://securityheaders.io
+    #               https://scotthelme.co.uk/csp-cheat-sheet/
+    #               http://www.html5rocks.com/en/tutorials/security/content-security-policy/
+    #
+    # Sets the 'Content-Security-Policy[-Report-Only]' header.
+    #
+    # Options: ContentSecurityPolicy configuration is a complex topic with
+    #          several levels of support that has evolved over time.
+    #          See the W3C documentation and the links in the more info
+    #          section for CSP usage examples and best practices. The
+    #          CSP3 directives in the 'NO_ARG_DIRECTIVES' constant need to be
+    #          presented in the options hash with a boolean 'true' in order
+    #          to be used in a policy.
+    #
+    class ContentSecurityPolicy < Base
+      default_options default_src: :none, script_src: ''self'',
+                      img_src: ''self'', style_src: ''self'',
+                      connect_src: ''self'', report_only: false
+    
+          def redirect(env)
+        request = Request.new(env)
+        warn env, 'attack prevented by #{self.class}'
+        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
       end
-    end
+    
+            modes       = Array options[:escape]
+        @escaper    = options[:escaper]
+        @html       = modes.include? :html
+        @javascript = modes.include? :javascript
+        @url        = modes.include? :url
+    
+        headers = get('/', {}, 'wants' => 'text/html').headers
+    expect(headers['Content-Security-Policy']).to be_nil
+    expect(headers['Content-Security-Policy-Report-Only']).to eq('connect-src 'self'; default-src none; img-src 'self'; report-uri /my_amazing_csp_report_parser; script-src 'self'; style-src 'self'')
+  end
