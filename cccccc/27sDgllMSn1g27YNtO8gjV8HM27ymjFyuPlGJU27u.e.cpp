@@ -1,196 +1,83 @@
 
         
-        namespace atom {
+        namespace caffe2 {
     }
     
-     private:
-  v8::Global<v8::Object> menu_;
-  std::unique_ptr<TrayIcon> tray_icon_;
+    		m_pafrgbaSource = nullptr;
     
-    URLRequestAboutJob::URLRequestAboutJob(net::URLRequest* request,
-                                       net::NetworkDelegate* network_delegate)
-    : net::URLRequestJob(request, network_delegate), weak_ptr_factory_(this) {}
+    std::ostream& operator <<(std::ostream &s, const IntPoint &p);
+std::ostream& operator <<(std::ostream &s, const Path &p);
+std::ostream& operator <<(std::ostream &s, const Paths &p);
     
-    namespace atom {
+       - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+    
+        // create values of different floating-point types
+    json::number_float_t v_ok = 3.141592653589793;
+    json::number_float_t v_nan = NAN;
+    json::number_float_t v_infinity = INFINITY;
+    
+        // add values
+    auto res1 = object.emplace('three', 3);
+    null.emplace('A', 'a');
+    null.emplace('B', 'b');
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    /**
+ * @addtogroup actions
+ * @{
+ */
     }
     
-    namespace atom {
+        //
+    // Overrides
+    //
+    /**
+     * @param time In seconds.
+     */
+    virtual void update(float time) override;
+    virtual ActionInstant* reverse() const override;
+    virtual Show* clone() const override;
+    
+    // FIXME: Passing 'const O *' instead of 'const O&' because HASH_FIND_IT requires the address of a pointer
+// and, it is not possible to get the address of a reference
+ssize_t ActionManager::getNumberOfRunningActionsInTarget(const Node *target) const
+{
+    tHashElement *element = nullptr;
+    HASH_FIND_PTR(_targets, &target, element);
+    if (element)
+    {
+        return element->actions ? element->actions->num : 0;
+    }
     }
     
-    static const int kValueSize = 200 * 1024;
-static const int kTotalSize = 100 * 1024 * 1024;
-static const int kCount = kTotalSize / kValueSize;
+    NS_CC_END
     
-    // Print contents of a log file. (*func)() is called on every record.
-Status PrintLogContents(Env* env, const std::string& fname,
-                        void (*func)(uint64_t, Slice, WritableFile*),
-                        WritableFile* dst) {
-  SequentialFile* file;
-  Status s = env->NewSequentialFile(fname, &file);
-  if (!s.ok()) {
-    return s;
-  }
-  CorruptionReporter reporter;
-  reporter.dst_ = dst;
-  log::Reader reader(file, &reporter, true, 0);
-  Slice record;
-  std::string scratch;
-  while (reader.ReadRecord(&record, &scratch)) {
-    (*func)(reader.LastRecordOffset(), record, dst);
-  }
-  delete file;
-  return Status::OK();
+    
+    {    for (auto& animFrame : _frames)
+    {
+        _totalDelayUnits += animFrame->getDelayUnits();
+    }
+    return true;
 }
     
-    std::string TempFileName(const std::string& dbname, uint64_t number) {
-  assert(number > 0);
-  return MakeFileName(dbname, number, 'dbtmp');
+    #endif // __CCATLAS_NODE_H__
+    
+    
+    {    auto end = &verts[count];
+    for(auto i = verts; i != end; ++i)
+    {
+        // for every point, offset with the center point
+        float u = (i->vertices.x*_scaleFactor + rect.origin.x) / texWidth;
+        float v = (rect.origin.y+rect.size.height - i->vertices.y*_scaleFactor) / texHeight;
+        i->texCoords.u = u;
+        i->texCoords.v = v;
+    }
 }
-    
-    static const int kBlockSize = 32768;
-    
-    
-    {
-    {
-    {      default: {
-        char buf[40];
-        snprintf(buf, sizeof(buf), 'unknown record type %u', record_type);
-        ReportCorruption(
-            (fragment.size() + (in_fragmented_record ? scratch->size() : 0)),
-            buf);
-        in_fragmented_record = false;
-        scratch->clear();
-        break;
-      }
-    }
-  }
-  return false;
-}
-    
-    
-    {
-    {      // Install new manifest
-      status = env_->RenameFile(tmp, DescriptorFileName(dbname_, 1));
-      if (status.ok()) {
-        status = SetCurrentFile(env_, dbname_, 1);
-      } else {
-        env_->DeleteFile(tmp);
-      }
-    }
-    return status;
-  }
-    
-    Iterator* TableCache::NewIterator(const ReadOptions& options,
-                                  uint64_t file_number,
-                                  uint64_t file_size,
-                                  Table** tableptr) {
-  if (tableptr != nullptr) {
-    *tableptr = nullptr;
-  }
-    }
-    
-    struct FileMetaData {
-  int refs;
-  int allowed_seeks;          // Seeks allowed until compaction
-  uint64_t number;
-  uint64_t file_size;         // File size in bytes
-  InternalKey smallest;       // Smallest internal key served by table
-  InternalKey largest;        // Largest internal key served by table
-    }
-    
-    static void TestEncodeDecode(const VersionEdit& edit) {
-  std::string encoded, encoded2;
-  edit.EncodeTo(&encoded);
-  VersionEdit parsed;
-  Status s = parsed.DecodeFrom(encoded);
-  ASSERT_TRUE(s.ok()) << s.ToString();
-  parsed.EncodeTo(&encoded2);
-  ASSERT_EQ(encoded, encoded2);
-}
-    
-    #endif  // PLUGIN_CAFFE_CAFFE_COMMON_H_
-
-    
-    Graph DetectInplaceAddTo(Graph g) {
-  nnvm::StorageVector storage_id =
-      g.MoveCopyAttr<nnvm::StorageVector>('storage_id');
-  std::vector<int> storage_inplace_index =
-      g.MoveCopyAttr<std::vector<int> >('storage_inplace_index');
-  static const Op* ewise_plus_op = Op::Get('_grad_add');
-  auto& idx = g.indexed_graph();
-  // reference cont.
-  std::vector<int> ref_count(idx.num_node_entries(), 0);
-  std::vector<int> addto_entry(idx.num_node_entries(), 0);
-  std::vector<int> skip_plus_node(idx.num_nodes(), 0);
-    }
-    
-    template<typename xpu>
-void Dequantize2BitKernelLaunch(mshadow::Stream<xpu> *s, const std::vector<mxnet::TBlob> &inputs,
-                                const float threshold) {
-  mxnet::op::mxnet_op::Kernel<dequantize_2bit, xpu>
-  ::Launch(s,
-          inputs[1].Size(),         // original size
-          inputs[1].dptr<float>(),  // out array
-          inputs[0].dptr<float>(),  // compressed array
-          -1 *threshold,            // negative threshold
-          threshold);               // positive threshold
-}
-    
-    // relu
-MXNET_OPERATOR_REGISTER_UNARY(_contrib_div_sqrt_dim)
-.describe(R'code(Rescale the input by the square root of the channel dimension.
-    
-    MXNET_REGISTER_OP_PROPERTY(Crop, CropProp)
-.describe(R'code(
-    
-    
-    {
-    {
-    {  bool init_cudnn_;
-  cudnnDataType_t dtype_;
-  cudnnSpatialTransformerDescriptor_t st_desc_;
-  cudnnTensorDescriptor_t in_desc_;
-  cudnnTensorDescriptor_t out_desc_;
-  cudnnSamplerType_t sampler_;
-  #if CUDNN_MAJOR >= 5
-  cudnnTensorFormat_t format_;
-  #endif
-  BilinearSamplerParam param_;
-};
-#endif  // __CUDACC__ && CUDNN
-}  // namespace op
-}  // namespace mxnet
-    
-        void NDMask::MarkSectionAs(const std::vector<size_t>& sectionOffset, const NDShape& sectionShape, MaskKind maskKind)
-    {
-        // TODO: Implement batching of masking operation for masks residing on GPUs to avoid making
-        // GPU invocations for each MaskSection call.
-    }
-    
-        std::pair<size_t, size_t> Value::GetSequenceAndBatchLength(const Variable& outputVariable, NDShape* inferredVarShape)
-    {
-        Utils::VerifyVariableValueCompatibility(outputVariable, shared_from_this(), inferredVarShape);
-    }
-    
-        deque<ComputationNodeBasePtr> workList;
-    
-    
-    // out_of_range.106
-    try
-    {
-        // try to use an array index with leading '0'
-        json::reference ref = j.at('/array/01'_json_pointer);
-    }
-    catch (json::parse_error& e)
-    {
-        std::cout << e.what() << '\n';
-    }
-    
-    
-    // ===========
-    // array types
-    // ===========
-    
-        // print values
-    std::cout << object << '\n';
-    std::cout << *res1.first << ' ' << std::boolalpha << res1.second << '\n';
