@@ -1,248 +1,160 @@
 
         
-            if state == 'present':
-        if not all((replication_id, cluster_id)):
-            module.fail_json(msg='The state 'present' requires options: 'replication_id' and 'cluster_id'')
-        response, changed = create(module, connection, replication_id, cluster_id, name)
-    elif state == 'absent':
-        response, changed = delete(module, connection, name)
-    elif state == 'copy':
-        if not all((target, bucket)):
-            module.fail_json(msg='The state 'copy' requires options: 'target' and 'bucket'.')
-        response, changed = copy(module, connection, name, target, bucket)
-    
-            # If feature is already in good state, just exit
-        if (re.search('Disabled features:.* %s[ \n]' % self.feature_name, out) and self.state == 'absent') or \
-                (re.search('Enabled features:.* %s[ \n]' % self.feature_name, out) and self.state == 'present'):
-            self.module.exit_json(changed=False)
+          * glmnet-python
+  * scikit-learn (of course)
     
     
-DOCUMENTATION = '''
----
-module: monit
-short_description: Manage the state of a program monitored via Monit
-description:
-     - Manage the state of a program monitored via I(Monit)
-version_added: '1.2'
-options:
-  name:
-    description:
-      - The name of the I(monit) program/process to manage
-    required: true
-  state:
-    description:
-      - The state of service
-    required: true
-    choices: [ 'present', 'started', 'stopped', 'restarted', 'monitored', 'unmonitored', 'reloaded' ]
-  timeout:
-    description:
-      - If there are pending actions for the service monitored by monit, then Ansible will check
-        for up to this many seconds to verify the requested action has been performed.
-        Ansible will sleep for five seconds between each check.
-    default: 300
-    version_added: '2.1'
-author: 'Darryl Stoflet (@dstoflet)'
-'''
+def compute_bench(alpha, n_samples, n_features, precompute):
+    lasso_results = []
+    lars_lasso_results = []
     
-        def add_options(self, parser):
-        '''
-        Populate option parse with options available for this command
-        '''
-        group = OptionGroup(parser, 'Global Options')
-        group.add_option('--logfile', metavar='FILE',
-            help='log file. if omitted stderr will be used')
-        group.add_option('-L', '--loglevel', metavar='LEVEL', default=None,
-            help='log level (default: %s)' % self.settings['LOG_LEVEL'])
-        group.add_option('--nolog', action='store_true',
-            help='disable logging completely')
-        group.add_option('--profile', metavar='FILE', default=None,
-            help='write python cProfile stats to FILE')
-        group.add_option('--pidfile', metavar='FILE',
-            help='write process ID to FILE')
-        group.add_option('-s', '--set', action='append', default=[], metavar='NAME=VALUE',
-            help='set/override setting (may be repeated)')
-        group.add_option('--pdb', action='store_true', help='enable pdb on failure')
+        fn = os.path.relpath(fn,
+                         start=os.path.dirname(__import__(package).__file__))
+    try:
+        lineno = inspect.getsourcelines(obj)[1]
+    except Exception:
+        lineno = ''
+    return url_fmt.format(revision=revision, package=package,
+                          path=fn, lineno=lineno)
     
-        def run(self, args, opts):
-        if len(args) != 1:
-            raise UsageError()
+        link = nodes.reference(text=text, refuri=ref, **options)
+    return [link], []
     
-        def process_spider_arguments(self, opts):
+    plt.matshow(fit_data, cmap=plt.cm.Blues)
+plt.title('After biclustering; rearranged to show biclusters')
     
-        def run(self, args, opts):
-        if len(args) != 1:
-            raise UsageError()
-        filename = args[0]
-        if not os.path.exists(filename):
-            raise UsageError('File not found: %s\n' % filename)
-        try:
-            module = _import_file(filename)
-        except (ImportError, ValueError) as e:
-            raise UsageError('Unable to load %r: %s\n' % (filename, e))
-        spclasses = list(iter_spider_classes(module))
-        if not spclasses:
-            raise UsageError('No spider found in file: %s\n' % filename)
-        spidercls = spclasses.pop()
+    - single linkage is fast, and can perform well on
+  non-globular data, but it performs poorly in the
+  presence of noise.
+- average and complete linkage perform well on
+  cleanly separated globular clusters, but have mixed
+  results otherwise.
+- Ward is the most effective method for noisy data.
     
-    
-def test_array32():
-    check_array(5, (1 << 16))
-    
-    
-def check(src, should, use_list=0):
-    assert unpackb(src, use_list=use_list) == should
-    
-        MARGIN_RATIOS = UNIT_RATIOS.copy()
-    MARGIN_RATIOS.update({
-        'none': ('pt', 0),
-    })
-    
-    from pandas.io.msgpack.exceptions import *  # noqa
-from pandas.io.msgpack._version import version  # noqa
-    
-        result = s[lambda x: [True, False, True, True]]
-    tm.assert_series_equal(result, s.iloc[[0, 2, 3]])
-    
-    
-def dedent(content):
+        :param filepath: Optional filepath the the blns.txt file
+    :returns: The list of naughty strings
     '''
-    Remove leading indent from a block of text.
-    Used when generating descriptions from docstrings.
     
-    from django.http.multipartparser import parse_header
-from django.utils.encoding import python_2_unicode_compatible
+        def test_include_single_quotes(self):
+        self.verify_fnmatch(''' + self.config_path + ''')
     
-            assert serializer['text'].value == 'x' * 1000
-        assert serializer['text'].errors == ['Ensure this field has no more than 100 characters.']
-        assert serializer['text'].name == 'text'
-        assert serializer['amount'].value is 123
-        assert serializer['amount'].errors is None
-        assert serializer['amount'].name == 'amount'
+            self.vhost1 = VirtualHost(
+            'filep', 'vh_path', set([self.addr1]), False, False, 'localhost')
     
-            parser.add_argument(
-            '-r',
-            '--reset',
-            action='store_true',
-            dest='reset_token',
-            default=False,
-            help='Reset existing User token and create a new one',
-        )
+    # Language to be used for generating the HTML full-text search index.
+# Sphinx supports the following languages:
+#   'da', 'de', 'en', 'es', 'fi', 'fr', 'hu', 'it', 'ja'
+#   'nl', 'no', 'pt', 'ro', 'ru', 'sv', 'tr'
+#html_search_language = 'en'
     
+            del c1, c2, C, D
+        gc.collect()
     
-def get_docs_view(
-        title=None, description=None, schema_url=None, public=True,
-        patterns=None, generator_class=SchemaGenerator,
-        authentication_classes=api_settings.DEFAULT_AUTHENTICATION_CLASSES,
-        permission_classes=api_settings.DEFAULT_PERMISSION_CLASSES,
-        renderer_classes=None):
+    def makeSuite(testCaseClass, prefix='test', sortUsing=util.three_way_cmp,
+              suiteClass=suite.TestSuite):
+    return _makeLoader(prefix, sortUsing, suiteClass).loadTestsFromTestCase(
+        testCaseClass)
     
-            Eg. {'name': [{'message': 'This field is required.', 'code': 'required'}]}
+    IMPORT_MAPPING.update({
+    'cPickle': 'pickle',
+    '_elementtree': 'xml.etree.ElementTree',
+    'FileDialog': 'tkinter.filedialog',
+    'SimpleDialog': 'tkinter.simpledialog',
+    'DocXMLRPCServer': 'xmlrpc.server',
+    'SimpleHTTPServer': 'http.server',
+    'CGIHTTPServer': 'http.server',
+    # For compatibility with broken pickles saved in old Python 3 versions
+    'UserDict': 'collections',
+    'UserList': 'collections',
+    'UserString': 'collections',
+    'whichdb': 'dbm',
+    'StringIO':  'io',
+    'cStringIO': 'io',
+})
+    
+            Initialize the instance with the from and to addresses and subject
+        line of the email. To specify a non-standard SMTP port, use the
+        (host, port) tuple format for the mailhost argument. To specify
+        authentication credentials, supply a (username, password) tuple
+        for the credentials argument. To specify the use of a secure
+        protocol (TLS), pass in a tuple for the secure argument. This will
+        only be used when authentication credentials are supplied. The tuple
+        will be either an empty tuple, or a single-value tuple with the name
+        of a keyfile, or a 2-value tuple with the names of the keyfile and
+        certificate file. (This tuple is passed to the `starttls` method).
+        A timeout in seconds can be specified for the SMTP connection (the
+        default is one second).
         '''
-        return _get_full_details(self.detail)
+        logging.Handler.__init__(self)
+        if isinstance(mailhost, (list, tuple)):
+            self.mailhost, self.mailport = mailhost
+        else:
+            self.mailhost, self.mailport = mailhost, None
+        if isinstance(credentials, (list, tuple)):
+            self.username, self.password = credentials
+        else:
+            self.username = None
+        self.fromaddr = fromaddr
+        if isinstance(toaddrs, str):
+            toaddrs = [toaddrs]
+        self.toaddrs = toaddrs
+        self.subject = subject
+        self.secure = secure
+        self.timeout = timeout
+    
+        def _generate_symbols(self, grammar_file, target_symbol_py_file):
+        proc = subprocess.Popen([sys.executable,
+                                 GEN_SYMBOL_FILE,
+                                 grammar_file,
+                                 target_symbol_py_file], stderr=subprocess.PIPE)
+        stderr = proc.communicate()[1]
+        return proc.returncode, stderr
+    
+        def testSeekPostEndTwice(self):
+        self.createTempFile()
+        with BZ2File(self.filename) as bz2f:
+            bz2f.seek(150000)
+            bz2f.seek(150000)
+            self.assertEqual(bz2f.tell(), len(self.TEXT))
+            self.assertEqual(bz2f.read(), b'')
     
     
-class GenericAPIView(views.APIView):
+def main():
+    import io
+    import pprint
+    
+    
+def main():
+    parser = ArgumentParser(description='''\
+Unpack a MIME message into a directory of files.
+''')
+    parser.add_argument('-d', '--directory', required=True,
+                        help='''Unpack the MIME message into the named
+                        directory, which will be created if it doesn't already
+                        exist.''')
+    parser.add_argument('msgfile')
+    args = parser.parse_args()
+    
+    # Find all the faces in the image using a pre-trained convolutional neural network.
+# This method is more accurate than the default HOG model, but it's slower
+# unless you have an nvidia GPU and dlib compiled with CUDA extensions. But if you do,
+# this will use GPU acceleration and perform well.
+# See also: find_faces_in_picture.py
+face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=0, model='cnn')
+    
+        :param css:  plain tuple representation of the rect in (top, right, bottom, left) order
+    :return: a dlib `rect` object
     '''
-    Base class for all other generic views.
-    '''
-    # You'll need to either set these attributes,
-    # or override `get_queryset()`/`get_serializer_class()`.
-    # If you are overriding a view method, it is important that you call
-    # `get_queryset()` instead of accessing the `queryset` property directly,
-    # as `queryset` will get evaluated only once, and those results are cached
-    # for all subsequent requests.
-    queryset = None
-    serializer_class = None
+    return dlib.rectangle(css[3], css[0], css[1], css[2])
     
-    		:param str cfg_type:
-			Type of the loaded configuration files (e.g. ``colorscheme``, 
-			``theme``).
-		:param list levels:
-			Configuration names resembling levels in hierarchy, sorted by 
-			priority. Configuration file names with higher priority should go 
-			last.
-		:param set ignore_levels:
-			If only files listed in this variable are present then configuration 
-			file is considered not loaded: at least one file on the level not 
-			listed in this variable must be present.
-		'''
-		config = {}
-		loaded = 0
-		exceptions = []
-		for i, cfg_path in enumerate(levels):
-			try:
-				lvl_config = self.load_config(cfg_path, cfg_type)
-			except IOError as e:
-				if sys.version_info < (3,):
-					tb = sys.exc_info()[2]
-					exceptions.append((e, tb))
-				else:
-					exceptions.append(e)
-			else:
-				if i not in ignore_levels:
-					loaded += 1
-				mergedicts(config, lvl_config)
-		if not loaded:
-			for exception in exceptions:
-				if type(exception) is tuple:
-					e = exception[0]
-				else:
-					e = exception
-				self.exception('Failed to load %s: {0}' % cfg_type, e, exception=exception)
-			raise e
-		return config
+        # macOS will crash due to a bug in libdispatch if you don't use 'forkserver'
+    context = multiprocessing
+    if 'forkserver' in multiprocessing.get_all_start_methods():
+        context = multiprocessing.get_context('forkserver')
     
-    
-def uses(pl, args):
-	component = args.component
-	if not component:
-		raise ValueError('Must specify component')
-	shell = args.shell
-	template = 'POWERLINE_NO_{shell}_{component}'
-	for sh in (shell, 'shell') if shell else ('shell'):
-		varname = template.format(shell=sh.upper(), component=component.upper())
-		if os.environ.get(varname):
-			sys.exit(1)
-	config = get_main_config(args)
-	if component in config.get('ext', {}).get('shell', {}).get('components', ('tmux', 'prompt')):
-		sys.exit(0)
-	else:
-		sys.exit(1)
-
-    
-    
-class PowerlinePromptOut(PowerlinePrompt):
-	powerline_prompt_type = 'out'
-	powerline_is_prompt = False
-    
-    
-def get_tmux_version(pl):
-	version_string = get_tmux_output(pl, '-V')
-	_, version_string = version_string.split(' ')
-	version_string = version_string.strip()
-	if version_string == 'master':
-		return TmuxVersionInfo(float('inf'), 0, version_string)
-	major, minor = version_string.split('.')
-	suffix = DIGITS.subn('', minor)[0] or None
-	minor = NON_DIGITS.subn('', minor)[0]
-	return TmuxVersionInfo(int(major), int(minor), suffix)
-
-    
-    	:param conn:
-		Connection returned by :py:func:`get_i3_connection`.
-	:param str event:
-		Event to subscribe to, e.g. ``'workspace'``.
-	:param func callback:
-		Function to run on event.
-	'''
-	try:
-		import i3ipc
-	except ImportError:
-		import i3
-		conn.Subscription(callback, event)
-		return
-	else:
-		pass
-    
-    	def get_local_themes(self, local_themes):
-		return dict(((type, {'config': self.load_theme_config(name)}) for type, name in local_themes.items()))
+        def test_command_line_interface_options(self):
+        target_string = 'Show this message and exit.'
+        runner = CliRunner()
+        help_result = runner.invoke(face_recognition_cli.main, ['--help'])
+        self.assertEqual(help_result.exit_code, 0)
+        self.assertTrue(target_string in help_result.output)
