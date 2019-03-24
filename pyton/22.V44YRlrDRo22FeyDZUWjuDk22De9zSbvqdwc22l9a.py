@@ -1,278 +1,207 @@
 
         
-        containers = (('thefuck/python3-tcsh',
-               u'''FROM python:3
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'),
-              ('thefuck/python2-tcsh',
-               u'''FROM python:2
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'))
+        
+@bp.route('/<int:id>/update', methods=('GET', 'POST'))
+@login_required
+def update(id):
+    '''Update a post if the current user is the author.'''
+    post = get_post(id)
     
-    
-@pytest.mark.parametrize('command, new_command, packages', [
-    (Command('vim', ''), 'sudo apt-get install vim && vim',
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('convert', ''), 'sudo apt-get install imagemagick && convert',
-     [('imagemagick', 'main'),
-      ('graphicsmagick-imagemagick-compat', 'universe')]),
-    (Command('sudo vim', ''), 'sudo apt-get install vim && sudo vim',
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('sudo convert', ''), 'sudo apt-get install imagemagick && sudo convert',
-     [('imagemagick', 'main'),
-      ('graphicsmagick-imagemagick-compat', 'universe')])])
-def test_get_new_command(mocker, command, new_command, packages):
-    mocker.patch('thefuck.rules.apt_get._get_packages',
-                 create=True, return_value=packages)
-    
-    apt_get_help = b'''apt 1.0.10.2ubuntu1 for amd64 compiled on Oct  5 2015 15:55:05
-Usage: apt-get [options] command
-       apt-get [options] install|remove pkg1 [pkg2 ...]
-       apt-get [options] source pkg1 [pkg2 ...]
-    
-    
-def test_get_new_command():
-    new_command = get_new_command(Command('sudo apt update', match_output))
-    assert new_command == 'sudo apt list --upgradable'
-    
-    describe-table                           | get-item
-list-tables                              | put-item
-    
-                if desired_template_changes is None:
-                desired_template_changes = dict()
-    
-    
-def protocol_to_tuple(protocol):
-    return (protocol.get_Tcp(),
-            protocol.get_Udp(),
-            protocol.get_Icmp(),
-            protocol.get_Other(),
-            protocol.get_Any())
-    
-        result['current_rules'] = current_rules
-    result['desired_rules'] = desired_rules
-    
-        def dnszone_find(self, zone_name):
-        return self._post_json(
-            method='dnszone_find',
-            name=zone_name,
-            item={'idnsname': zone_name}
-        )
-    
-    
-DOCUMENTATION = '''
----
-module: ipa_role
-author: Thomas Krahn (@Nosmoht)
-short_description: Manage FreeIPA role
-description:
-- Add, modify and delete a role within FreeIPA server using FreeIPA API
-options:
-  cn:
-    description:
-    - Role name.
-    - Can not be changed as it is the unique identifier.
-    required: true
-    aliases: ['name']
-  description:
-    description:
-    - A description of this role-group.
-  group:
-    description:
-    - List of group names assign to this role.
-    - If an empty list is passed all assigned groups will be unassigned from the role.
-    - If option is omitted groups will not be checked or changed.
-    - If option is passed all assigned groups that are not passed will be unassigned from the role.
-  host:
-    description:
-    - List of host names to assign.
-    - If an empty list is passed all assigned hosts will be unassigned from the role.
-    - If option is omitted hosts will not be checked or changed.
-    - If option is passed all assigned hosts that are not passed will be unassigned from the role.
-  hostgroup:
-    description:
-    - List of host group names to assign.
-    - If an empty list is passed all assigned host groups will be removed from the role.
-    - If option is omitted host groups will not be checked or changed.
-    - If option is passed all assigned hostgroups that are not passed will be unassigned from the role.
-  privilege:
-    description:
-    - List of privileges granted to the role.
-    - If an empty list is passed all assigned privileges will be removed.
-    - If option is omitted privileges will not be checked or changed.
-    - If option is passed all assigned privileges that are not passed will be removed.
-    version_added: '2.4'
-  service:
-    description:
-    - List of service names to assign.
-    - If an empty list is passed all assigned services will be removed from the role.
-    - If option is omitted services will not be checked or changed.
-    - If option is passed all assigned services that are not passed will be removed from the role.
-  state:
-    description: State to ensure
-    default: 'present'
-    choices: ['present', 'absent']
-  user:
-    description:
-    - List of user names to assign.
-    - If an empty list is passed all assigned users will be removed from the role.
-    - If option is omitted users will not be checked or changed.
-extends_documentation_fragment: ipa.documentation
-version_added: '2.3'
-'''
-    
-        # Send the data to bigpanda
-    data = json.dumps(body)
-    headers = {'Authorization': 'Bearer %s' % token, 'Content-Type': 'application/json'}
-    try:
-        response, info = fetch_url(module, request_url, data=data, headers=headers)
-        if info['status'] == 200:
-            module.exit_json(changed=True, **deployment)
-        else:
-            module.fail_json(msg=json.dumps(info))
-    except Exception as e:
-        module.fail_json(msg=to_native(e), exception=traceback.format_exc())
-    
-        module.exit_json(changed=False, msg='logs(s) already followed')
-    
-        # derive the landscape handler from the model handler of the device
-    model_landscape = '0x%x' % int(int(model_handle, 16) // 0x100000 * 0x100000)
-    
-        def __new__(cls, *args):
-        '''Construct a PurePath from one or several strings and or existing
-        PurePath objects.  The strings and path objects are combined so as
-        to yield a canonicalized path, which is incorporated into the
-        new PurePath object.
-        '''
-        if cls is PurePath:
-            cls = PureWindowsPath if os.name == 'nt' else PurePosixPath
-        return cls._from_parts(args)
-    
-    
-if __name__ == '__main__':
-    unittest.main()
+        monkeypatch.setattr('flaskr.db.init_db', fake_init_db)
+    result = runner.invoke(args=['init-db'])
+    assert 'Initialized' in result.output
+    assert Recorder.called
 
     
-            testfrexp('frexp(-1)', math.frexp(-1), (-0.5, 1))
-        testfrexp('frexp(0)', math.frexp(0), (0, 0))
-        testfrexp('frexp(1)', math.frexp(1), (0.5, 1))
-        testfrexp('frexp(2)', math.frexp(2), (0.5, 2))
+        def url_value_preprocessor(self, f):
+        '''Registers a function as URL value preprocessor for this
+        blueprint.  It's called before the view functions are called and
+        can modify the url values provided.
+        '''
+        self.record_once(lambda s: s.app.url_value_preprocessors
+            .setdefault(self.name, []).append(f))
+        return f
     
-            self.assertEqual(a.t(0), 'int')
-        self.assertEqual(a.t(''), 'str')
-        self.assertEqual(a.t(0.0), 'base')
     
-        # Initialize and populate our database.
-    conn = sqlite3.connect(':memory:')
-    cursor = conn.cursor()
-    cursor.execute('CREATE TABLE memos(key INTEGER PRIMARY KEY, task TEXT)')
-    tasks = (
-        'give food to fish',
-        'prepare group meeting',
-        'fight with a zebra',
-        )
-    for task in tasks:
-        cursor.execute('INSERT INTO memos VALUES(NULL, ?)', (task,))
+#: Log messages to :func:`~flask.logging.wsgi_errors_stream` with the format
+#: ``[%(asctime)s] %(levelname)s in %(module)s: %(message)s``.
+default_handler = logging.StreamHandler(wsgi_errors_stream)
+default_handler.setFormatter(logging.Formatter(
+    '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
+))
     
-    from argparse import ArgumentParser
     
-            print('Unordered results using pool.imap_unordered():')
-        for x in imap_unordered_it:
-            print('\t', x)
-        print()
+# Core signals.  For usage examples grep the source code or consult
+# the API documentation in docs/api.rst as well as docs/signals.rst
+template_rendered = _signals.signal('template-rendered')
+before_render_template = _signals.signal('before-render-template')
+request_started = _signals.signal('request-started')
+request_finished = _signals.signal('request-finished')
+request_tearing_down = _signals.signal('request-tearing-down')
+got_request_exception = _signals.signal('got-request-exception')
+appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
+appcontext_pushed = _signals.signal('appcontext-pushed')
+appcontext_popped = _signals.signal('appcontext-popped')
+message_flashed = _signals.signal('message-flashed')
+
     
-                elif opt in ('-l', '--playlist', '--playlists'):
-                # Download playlist whenever possible.
-                conf['playlist'] = True
     
-        html = get_content(rebuilt_url(url))
-    info = json.loads(match1(html, r'qualities':({.+?}),''))
-    title = match1(html, r''video_title'\s*:\s*'([^']+)'') or \
-            match1(html, r''title'\s*:\s*'([^']+)'')
-    title = unicodize(title)
+def make_git_commit(message, *args):
+    message = message % args
+    Popen(['git', 'commit', '-am', message]).wait()
     
-        # Try harder, check all iframes
-    if 'recur_lv' not in kwargs or kwargs['recur_lv'] < recur_limit:
-        r = kwargs.get('recur_lv')
-        if r is None:
-            r = 1
+            X, Y, coef_ = make_regression(
+            n_samples=(i * step) + n_test_samples, n_features=n_features,
+            noise=0.1, n_informative=n_informative, coef=True)
+    
+    input data sparsity: 0.050000
+true coef sparsity: 0.000100
+test data sparsity: 0.027400
+model sparsity: 0.000024
+r^2 on test data (dense model) : 0.233651
+r^2 on test data (sparse model) : 0.233651
+Wrote profile results to sparsity_benchmark.py.lprof
+Timer unit: 1e-06 s
+    
+    In the second benchmark, we increase the number of dimensions of the
+training set, classify a sample and plot the time taken as a function
+of the number of dimensions.
+'''
+import numpy as np
+import matplotlib.pyplot as plt
+import gc
+from datetime import datetime
+    
+    
+def _linkcode_resolve(domain, info, package, url_fmt, revision):
+    '''Determine a link to online source for a class/method/function
+    
+        input_file = open(os.path.join(exercise_dir, f))
+    output_file = open(os.path.join(skeleton_dir, f), 'w')
+    
+    # Author: Kemal Eren <kemal@kemaleren.com>
+# License: BSD 3 clause
+    
+    This example is commented in the
+:ref:`tutorial section of the user manual <introduction>`.
+    
+    n_clusters = 3
+    
+    for name, label in [('Setosa', 0),
+                    ('Versicolour', 1),
+                    ('Virginica', 2)]:
+    ax.text3D(X[y == label, 3].mean(),
+              X[y == label, 0].mean(),
+              X[y == label, 2].mean() + 2, name,
+              horizontalalignment='center',
+              bbox=dict(alpha=.2, edgecolor='w', facecolor='w'))
+# Reorder the labels to have colors matching the cluster results
+y = np.choose(y, [1, 2, 0]).astype(np.float)
+ax.scatter(X[:, 3], X[:, 0], X[:, 2], c=y, edgecolor='k')
+    
+    plt.subplot(3, 4, 10)
+plt.imshow(np.reshape(agglo.labels_, images[0].shape),
+           interpolation='nearest', cmap=plt.cm.nipy_spectral)
+plt.xticks(())
+plt.yticks(())
+plt.title('Labels')
+plt.show()
+
+    
+    
+plt.show()
+
+    
+    # equal bins face
+regular_values = np.linspace(0, 256, n_clusters + 1)
+regular_labels = np.searchsorted(regular_values, face) - 1
+regular_values = .5 * (regular_values[1:] + regular_values[:-1])  # mean
+regular_face = np.choose(regular_labels.ravel(), regular_values, mode='clip')
+regular_face.shape = face.shape
+plt.figure(3, figsize=(3, 2.2))
+plt.imshow(regular_face, cmap=plt.cm.gray, vmin=vmin, vmax=vmax)
+    
+    # Incorrect number of clusters
+y_pred = KMeans(n_clusters=2, random_state=random_state).fit_predict(X)
+    
+    colors = cycle('bgrcmykbgrcmykbgrcmykbgrcmyk')
+for k, col in zip(range(n_clusters_), colors):
+    my_members = labels == k
+    cluster_center = cluster_centers[k]
+    plt.plot(X[my_members, 0], X[my_members, 1], col + '.')
+    plt.plot(cluster_center[0], cluster_center[1], 'o', markerfacecolor=col,
+             markeredgecolor='k', markersize=14)
+plt.title('Estimated number of clusters: %d' % n_clusters_)
+plt.show()
+
+    
+    # For every line, fix the respective file
+for line in output_lines:
+    match = re.match(line_re, line)
+    
+    from scrapy.commands import ScrapyCommand
+from scrapy.exceptions import UsageError
+    
+        def run(self, args, opts):
+        if opts.verbose:
+            versions = scrapy_components_versions()
+            width = max(len(n) for (n, _) in versions)
+            patt = '%-{}s : %s'.format(width)
+            for name, version in versions:
+                print(patt % (name, version))
         else:
-            r += 1
-        iframes = matchall(content, [r'<iframe.+?src=(?:\'|\')(.+?)(?:\'|\')'])
-        for iframe in iframes:
-            if not iframe.startswith('http'):
-                src = urllib.parse.urljoin(url, iframe)
-            else:
-                src = iframe
-            found = embed_download(src, output_dir=output_dir, merge=merge, info_only=info_only, recur_lv=r, **kwargs)
-            if found:
-                return True
+            print('Scrapy %s' % scrapy.__version__)
     
-    #----------------------------------------------------------------------
-def fc2video_download_by_upid(upid, output_dir = '.', merge = True, info_only = False, **kwargs):
-    ''''''
-    fake_headers = {
-        'DNT': '1',
-        'Accept-Encoding': 'gzip, deflate, sdch',
-        'Accept-Language': 'en-CA,en;q=0.8,en-US;q=0.6,zh-CN;q=0.4,zh;q=0.2',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.58 Safari/537.36',
-        'Accept': '*/*',
-        'X-Requested-With': 'ShockwaveFlash/19.0.0.245',
-        'Connection': 'keep-alive',
-    }
-    api_base = 'http://video.fc2.com/ginfo.php?upid={upid}&mimi={mimi}'.format(upid = upid, mimi = makeMimi(upid))
-    html = get_content(api_base, headers=fake_headers)
+        class _v19_S3Connection(S3Connection):
+        '''A dummy S3Connection wrapper that doesn't do any synchronous download'''
+        def _mexe(self, method, bucket, key, headers, *args, **kwargs):
+            return headers
     
-        print('After subclassing: ')
-    for k in RegistryHolder.REGISTRY:
-        print(k)
-    
-    '''
-*What is this pattern about?
-The Borg pattern (also known as the Monostate pattern) is a way to
-implement singleton behavior, but instead of having only one instance
-of a class, there are multiple instances that share the same state. In
-other words, the focus is on sharing state instead of sharing instance
-identity.
-    
-        def __get__(self, obj, type_):
-        if obj is None:
-            return self
-        val = self.function(obj)
-        obj.__dict__[self.function.__name__] = val
-        return val
-    
-    '''
-*What is this pattern about?
-This patterns aims to reduce the number of classes required by an
-application. Instead of relying on subclasses it creates objects by
-copying a prototypical instance at run-time.
+    # One entry per manual page. List of tuples
+# (source start file, name, description, authors, manual section).
+man_pages = [
+    ('index', 'face_recognition',
+     u'Face Recognition Documentation',
+     [u'Adam Geitgey'], 1)
+]
     
     
-class MidnightTimeProvider(object):
-    '''
-    Class implemented as hard-coded stub (in contrast to configurable stub).
-    '''
+def run_test(setup, test, iterations_per_test=5, tests_to_run=10):
+    fastest_execution = min(timeit.Timer(test, setup=setup).repeat(tests_to_run, iterations_per_test))
+    execution_time = fastest_execution / iterations_per_test
+    fps = 1.0 / execution_time
+    return execution_time, fps
+    
+        # Make the eyebrows into a nightmare
+    d.polygon(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 128))
+    d.polygon(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 128))
+    d.line(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 150), width=5)
+    d.line(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 150), width=5)
+    
+        if os.path.isdir(image_to_check):
+        if cpus == 1:
+            [test_image(image_file, model) for image_file in image_files_in_folder(image_to_check)]
+        else:
+            process_images_in_process_pool(image_files_in_folder(image_to_check), cpus, model)
+    else:
+        test_image(image_to_check, model)
+    
+            # If a match was found in known_face_encodings, just use the first one.
+        if True in matches:
+            first_match_index = matches.index(True)
+            name = known_face_names[first_match_index]
     
     
-class TC3:
-    def run(self):
-        print(u'###### In Test 3 ######')
-        time.sleep(SLEEP)
-        print(u'Setting up')
-        time.sleep(SLEEP)
-        print(u'Running test')
-        time.sleep(SLEEP)
-        print(u'Tearing down')
-        time.sleep(SLEEP)
-        print(u'Test Finished\n')
+def process_images_in_process_pool(images_to_check, known_names, known_face_encodings, number_of_cpus, tolerance, show_distance):
+    if number_of_cpus == -1:
+        processes = None
+    else:
+        processes = number_of_cpus
     
-        def test_subscriber_shall_be_attachable_to_subscriptions(cls):
-        subscription = 'sub msg'
-        pro = Provider()
-        cls.assertEqual(len(pro.subscribers), 0)
-        sub = Subscriber('sub name', pro)
-        sub.subscribe(subscription)
-        cls.assertEqual(len(pro.subscribers[subscription]), 1)
+    
+@app.route('/', methods=['GET', 'POST'])
+def upload_image():
+    # 检测图片是否上传成功
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return redirect(request.url)
