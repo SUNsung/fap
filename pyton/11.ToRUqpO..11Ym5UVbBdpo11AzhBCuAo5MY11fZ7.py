@@ -1,239 +1,127 @@
 
         
-            # Replacing the non-sorted libraries by the sorted ones and gathering all at the final_README file
-    blocks[0] = inner_blocks
-    final_README = table_of_contents + '- - -' + ''.join(blocks)
+            def __str__(self):
+        '''Identify each test with the `add_ie` attribute, if available.'''
     
-        def reducer(self, key, values):
-        '''Sum values for each key.
-    
-            The shuffle/sort step of MapReduce will then do a
-        distributed sort on the keys, resulting in:
-    
-        def remove(self, key):
-        hash_index = self._hash_function(key)
-        for index, item in enumerate(self.table[hash_index]):
-            if item.key == key:
-                del self.table[hash_index][index]
-                return
-        raise KeyError('Key not found')
+        return app
 
+    
+        assert 'closed' in str(e)
+    
+        def add_app_template_test(self, f, name=None):
+        '''Register a custom template test, available application wide.  Like
+        :meth:`Flask.add_template_test` but for a blueprint.  Works exactly
+        like the :meth:`app_template_test` decorator.
+    
+    
+#: Log messages to :func:`~flask.logging.wsgi_errors_stream` with the format
+#: ``[%(asctime)s] %(levelname)s in %(module)s: %(message)s``.
+default_handler = logging.StreamHandler(wsgi_errors_stream)
+default_handler.setFormatter(logging.Formatter(
+    '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
+))
+    
+            The arguments passed to :meth:`as_view` are forwarded to the
+        constructor of the class.
+        '''
+        def view(*args, **kwargs):
+            self = view.view_class(*class_args, **class_kwargs)
+            return self.dispatch_request(*args, **kwargs)
     
     
 @pytest.mark.functional
-def test_how_to_configure_alias(proc, TIMEOUT):
-    proc.sendline('unset -f fuck')
-    how_to_configure(proc, TIMEOUT)
+def test_without_confirmation(proc, TIMEOUT):
+    without_confirmation(proc, TIMEOUT)
+    
+    describe-table                           | get-item
+list-tables                              | put-item
+    
+    if K.image_data_format() == 'channels_first':
+    x_train = x_train.reshape(x_train.shape[0], 1, img_rows, img_cols)
+    x_test = x_test.reshape(x_test.shape[0], 1, img_rows, img_cols)
+    input_shape = (1, img_rows, img_cols)
+else:
+    x_train = x_train.reshape(x_train.shape[0], img_rows, img_cols, 1)
+    x_test = x_test.reshape(x_test.shape[0], img_rows, img_cols, 1)
+    input_shape = (img_rows, img_cols, 1)
+    
+    
+def cnn_layers(inputs):
+    x = layers.Conv2D(32, (3, 3),
+                      activation='relu', padding='valid')(inputs)
+    x = layers.MaxPooling2D(pool_size=(2, 2))(x)
+    x = layers.Conv2D(64, (3, 3), activation='relu')(x)
+    x = layers.MaxPooling2D(pool_size=(2, 2))(x)
+    x = layers.Flatten()(x)
+    x = layers.Dense(512, activation='relu')(x)
+    x = layers.Dropout(0.5)(x)
+    predictions = layers.Dense(num_classes,
+                               activation='softmax',
+                               name='x_train_out')(x)
+    return predictions
+    
+    model.summary()
+    
+        # Arguments
+        n_dense: int > 0. Number of dense layers.
+        dense_units: int > 0. Number of dense units per layer.
+        dropout: keras.layers.Layer. A dropout layer to apply.
+        dropout_rate: 0 <= float <= 1. The rate of dropout.
+        kernel_initializer: str. The initializer for the weights.
+        optimizer: str/keras.optimizers.Optimizer. The optimizer to use.
+        num_classes: int > 0. The number of classes to predict.
+        max_words: int > 0. The maximum number of words per data point.
+    
+    
+if __name__ == '__main__':
+    main()
+    
+    *References:
+bottle
+https://github.com/bottlepy/bottle/blob/cafc15419cbb4a6cb748e6ecdccf92893bb25ce5/bottle.py#L270
+django
+https://github.com/django/django/blob/ffd18732f3ee9e6f0374aff9ccf350d85187fac2/django/utils/functional.py#L19
+pip
+https://github.com/pypa/pip/blob/cb75cca785629e15efb46c35903827b3eae13481/pip/utils/__init__.py#L821
+pyramimd
+https://github.com/Pylons/pyramid/blob/7909e9503cdfc6f6e84d2c7ace1d3c03ca1d8b73/pyramid/decorator.py#L4
+werkzeug
+https://github.com/pallets/werkzeug/blob/5a2bf35441006d832ab1ed5a31963cbc366c99ac/werkzeug/utils.py#L35
+    
+        def _send_diagnostics_failure_report(self):
+        return 'send diagnostics failure report'
+    
+    '''
+*References:
+http://en.wikibooks.org/wiki/Computer_Science_Design_Patterns/Bridge_Pattern#Python
+    
+    
+class Ellipse(Graphic):
+    def __init__(self, name):
+        self.name = name
+    
+    *TL;DR80
+Adds behaviour to object without affecting its class.
+'''
+    
+    
+### OUTPUT ###
+# PRODUCT LIST:
+# cheese
+# eggs
+# milk
+#
+# PRODUCT INFORMATION:
+# Name: Cheese, Price: 2.00, Quantity: 10
+#
+# PRODUCT INFORMATION:
+# Name: Eggs, Price: 0.20, Quantity: 100
+#
+# PRODUCT INFORMATION:
+# Name: Milk, Price: 1.50, Quantity: 10
+#
+# That product 'arepas' does not exist in the records
 
     
-    
-@pytest.fixture(params=containers)
-def proc(request, spawnu, TIMEOUT):
-    proc = spawnu(*request.param)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(u'thefuck --alias > ~/.config/fish/config.fish')
-    proc.sendline(u'fish')
-    return proc
-    
-    
-@pytest.mark.skipif(_is_not_okay_to_test(),
-                    reason='No need to run if there\'s no formula')
-def test_get_new_command(brew_no_available_formula):
-    assert get_new_command(Command('brew install elsticsearch',
-                                   brew_no_available_formula))\
-        == 'brew install elasticsearch'
-    
-    
-@pytest.mark.parametrize('command, new_command', [
-    (Command('cargo buid', no_such_subcommand_old), 'cargo build'),
-    (Command('cargo buils', no_such_subcommand), 'cargo build')])
-def test_get_new_command(command, new_command):
-    assert get_new_command(command) == new_command
-
-    
-            def reset(path):
-            os.mkdir('d')
-            with tarfile.TarFile(path, 'w') as archive:
-                for file in ('a', 'b', 'c', 'd/e'):
-                    with open(file, 'w') as f:
-                        f.write('*')
-    
-    # This is a copy of lib2to3.fixes.fix_imports.MAPPING.  We cannot import
-# lib2to3 and use the mapping defined there, because lib2to3 uses pickle.
-# Thus, this could cause the module to be imported recursively.
-IMPORT_MAPPING = {
-    '__builtin__' : 'builtins',
-    'copy_reg': 'copyreg',
-    'Queue': 'queue',
-    'SocketServer': 'socketserver',
-    'ConfigParser': 'configparser',
-    'repr': 'reprlib',
-    'tkFileDialog': 'tkinter.filedialog',
-    'tkSimpleDialog': 'tkinter.simpledialog',
-    'tkColorChooser': 'tkinter.colorchooser',
-    'tkCommonDialog': 'tkinter.commondialog',
-    'Dialog': 'tkinter.dialog',
-    'Tkdnd': 'tkinter.dnd',
-    'tkFont': 'tkinter.font',
-    'tkMessageBox': 'tkinter.messagebox',
-    'ScrolledText': 'tkinter.scrolledtext',
-    'Tkconstants': 'tkinter.constants',
-    'Tix': 'tkinter.tix',
-    'ttk': 'tkinter.ttk',
-    'Tkinter': 'tkinter',
-    'markupbase': '_markupbase',
-    '_winreg': 'winreg',
-    'thread': '_thread',
-    'dummy_thread': '_dummy_thread',
-    'dbhash': 'dbm.bsd',
-    'dumbdbm': 'dbm.dumb',
-    'dbm': 'dbm.ndbm',
-    'gdbm': 'dbm.gnu',
-    'xmlrpclib': 'xmlrpc.client',
-    'SimpleXMLRPCServer': 'xmlrpc.server',
-    'httplib': 'http.client',
-    'htmlentitydefs' : 'html.entities',
-    'HTMLParser' : 'html.parser',
-    'Cookie': 'http.cookies',
-    'cookielib': 'http.cookiejar',
-    'BaseHTTPServer': 'http.server',
-    'test.test_support': 'test.support',
-    'commands': 'subprocess',
-    'urlparse' : 'urllib.parse',
-    'robotparser' : 'urllib.robotparser',
-    'urllib2': 'urllib.request',
-    'anydbm': 'dbm',
-    '_abcoll' : 'collections.abc',
-}
-    
-    # Are two stat buffers (obtained from stat, fstat or lstat)
-# describing the same file?
-def samestat(s1, s2):
-    '''Test whether two stat buffers reference the same file'''
-    return (s1.st_ino == s2.st_ino and
-            s1.st_dev == s2.st_dev)
-    
-        def persistent_load(self, pid):
-        # This method is invoked whenever a persistent ID is encountered.
-        # Here, pid is the tuple returned by DBPickler.
-        cursor = self.connection.cursor()
-        type_tag, key_id = pid
-        if type_tag == 'MemoRecord':
-            # Fetch the referenced record from the database and return it.
-            cursor.execute('SELECT * FROM memos WHERE key=?', (str(key_id),))
-            key, task = cursor.fetchone()
-            return MemoRecord(key, task)
-        else:
-            # Always raises an error if you cannot return the correct object.
-            # Otherwise, the unpickler will think None is the object referenced
-            # by the persistent ID.
-            raise pickle.UnpicklingError('unsupported persistent object')
-    
-    
-def main():
-    parser = ArgumentParser(description='''\
-Unpack a MIME message into a directory of files.
-''')
-    parser.add_argument('-d', '--directory', required=True,
-                        help='''Unpack the MIME message into the named
-                        directory, which will be created if it doesn't already
-                        exist.''')
-    parser.add_argument('msgfile')
-    args = parser.parse_args()
-    
-        # Get options and arguments.
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], _short_options, _options)
-    except getopt.GetoptError as e:
-        log.wtf('''
-    [Fatal] {}.
-    Try '{} --help' for more options.'''.format(e, script_name))
-    
-    __all__ = ['baomihua_download', 'baomihua_download_by_id']
-    
-    
-def cleanup_files(files):
-    for file in files:
-        os.remove(file)
-    
-    #----------------------------------------------------------------------
-def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    '''wrapper'''
-    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
-    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
-    hostname = urlparse(url).hostname
-    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
-        return False
-    upid = match1(url, r'.+/content/(\w+)')
-    
-                post_url = r1(r''(https://plus.google.com/[^/]+/posts/[^']*)'', html)
-            post_author = r1(r'/\+([^/]+)/posts', post_url)
-            if post_author:
-                post_url = 'https://plus.google.com/+%s/posts/%s' % (parse.quote(post_author), r1(r'posts/(.+)', post_url))
-            post_html = get_html(post_url, faker=True)
-            title = r1(r'<title[^>]*>([^<\n]+)', post_html)
-    
-        def get_device_name(self, device):
-        '''Return the name of the given device or None if we don't know.'''
-        if not self.last_results:
-            return None
-        for client in self.last_results:
-            if client.mac == device:
-                return client.ip
-        return None
-    
-        def scan_devices(self):
-        '''Scan for new devices and return a list with device IDs (MACs).'''
-        self._update_info()
-    
-        def get_device_name(self, device):
-        '''Return the name of the given device or None if we don't know.'''
-        if self.mac2name is None:
-            result = self._retrieve_list_with_retry()
-            if result:
-                hosts = [x for x in result
-                         if 'mac' in x and 'name' in x]
-                mac2name_list = [
-                    (x['mac'].upper(), x['name']) for x in hosts]
-                self.mac2name = dict(mac2name_list)
-            else:
-                # Error, handled in the _retrieve_list_with_retry
-                return
-        return self.mac2name.get(device.upper(), None)
-    
-            if payload_dict:
-            payload = '{%s}' % ','.join('{}:{}'.format(key, val)
-                                        for key, val in
-                                        payload_dict.items())
-    
-        url = config[DOMAIN].get(CONF_PORT)
-    
-        def logentries_event_listener(event):
-        '''Listen for new messages on the bus and sends them to Logentries.'''
-        state = event.data.get('new_state')
-        if state is None:
-            return
-        try:
-            _state = state_helper.state_as_number(state)
-        except ValueError:
-            _state = state.state
-        json_body = [
-            {
-                'domain': state.domain,
-                'entity_id': state.object_id,
-                'attributes': dict(state.attributes),
-                'time': str(event.time_fired),
-                'value': _state,
-            }
-        ]
-        try:
-            payload = {
-                'host': le_wh,
-                'event': json_body
-            }
-            requests.post(le_wh, data=json.dumps(payload), timeout=10)
-        except requests.exceptions.RequestException as error:
-            _LOGGER.exception('Error sending to Logentries: %s', error)
+        def test_dog_greek_localization(self):
+        self.assertEqual(self.g.get('dog'), 'σκύλος')
