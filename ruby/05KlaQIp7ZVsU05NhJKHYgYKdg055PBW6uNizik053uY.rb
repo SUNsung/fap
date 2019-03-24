@@ -1,101 +1,132 @@
 
         
-                  def hidden_field
-            hidden_name = @html_options[:name] || hidden_field_name
-            @template_object.hidden_field_tag(hidden_name, '', id: nil)
-          end
+          gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
+  gem.executables   = %w(cap capify)
+  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.require_paths = ['lib']
     
-            10.times do |x|
-          controller = WithString.new
-          controller.define_singleton_method :index do
-            render template: ActionView::Template::Text.new('Hello string!'), locals: { :'x#{x}' => :omg }
-          end
-          controller.process(:index)
-        end
+    Given(/^a test app without any configuration$/) do
+  TestApp.create_test_app
+end
     
-        def replace(index, name)
-      @filters[assert_index(index)] = filter_const(name)
+      def symlinked?(symlink_path, target_path)
+    '[ #{symlink_path} -ef #{target_path} ]'
+  end
+    
+          def properties
+        @properties ||= Properties.new
+      end
+    
+    module Capistrano
+  class Configuration
+    # Holds the variables assigned at Capistrano runtime via `set` and retrieved
+    # with `fetch`. Does internal bookkeeping to help identify user mistakes
+    # like spelling errors or unused variables that may lead to unexpected
+    # behavior.
+    class Variables
+      CAPISTRANO_LOCATION = File.expand_path('../..', __FILE__).freeze
+      IGNORED_LOCATIONS = [
+        '#{CAPISTRANO_LOCATION}/configuration/variables.rb:',
+        '#{CAPISTRANO_LOCATION}/configuration.rb:',
+        '#{CAPISTRANO_LOCATION}/dsl/env.rb:',
+        '/dsl.rb:',
+        '/forwardable.rb:'
+      ].freeze
+      private_constant :CAPISTRANO_LOCATION, :IGNORED_LOCATIONS
+    
+    require 'bundler/cli'
+require 'bundler/friendly_errors'
+    
+          !File.exists?(File.join(LogStash::Environment::LOGSTASH_HOME, 'x-pack'))
     end
     
-          unless root?
-        raise Invalid, 'missing name' if !name || name.empty?
-        raise Invalid, 'missing path' if !path || path.empty?
-        raise Invalid, 'missing type' if !type || type.empty?
+    module LogStash
+  module PluginManager
+  end
+end
+    
+      class OfflinePluginPackager
+    LOGSTASH_DIR = 'logstash'
+    DEPENDENCIES_DIR = ::File.join(LOGSTASH_DIR, 'dependencies')
+    
+        def user_feedback_string_for(action, platform, machines, options={})
+      experimental_string = options['experimental'] ? 'experimental' : 'non experimental'
+      message  = '#{action} all #{experimental_string} VM's defined in acceptance/Vagrantfile'
+      '#{message} for #{platform}: #{machines}' if !platform.nil?
+    end
+    
+              it 'allow to install a specific version' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version 0.1.0 logstash-filter-qatest')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-qatest', '0.1.0')
+          end
+        end
+      end
+    
+    module URI
+  ;
+  class << self
+# Does the char code correspond to an alpha-numeric char.
+# isAlphaNumeric('a'.ord) => true
+# isAlphaNumeric(''.ord) => false
+    def isAlphaNumeric(cc)
+      # a - z
+      if (97 <= cc && cc <= 122);
+        return true
+      end
+      # A - Z
+      if (65 <= cc && cc <= 90);
+        return true
+      end
+      # 0 - 9
+      if (48 <= cc && cc <= 57);
+        return true
+      end
+    
+          def header
+        if @header.nil?
+          if page = @page.header
+            @header = page.text_data
+          else
+            @header = false
+          end
+        end
+        @header
+      end
+    
+        end
+  end
+end
+
+    
+      test 'extracting paths from URLs' do
+    assert_nil extract_path('Eye-Of-Sauron')
+    assert_equal 'Mordor', extract_path('Mordor/Sauron')
+    assert_equal 'Mordor/Sauron', extract_path('Mordor/Sauron/Evil')
+  end
+    
+        @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+    @view.instance_variable_set :@content, page.formatted_data
+    @view.instance_variable_set :@h1_title, true
+    
+    desc 'Update version number and gemspec'
+task :bump do
+  puts 'Updated version to #{bump_version}'
+  # Execute does not invoke dependencies.
+  # Manually invoke gemspec then validate.
+  Rake::Task[:gemspec].execute
+  Rake::Task[:validate].execute
+end
+    
+        def emoji(name)
+      if emoji = Gemojione.index.find_by_name(name)
+        IO.read(EMOJI_PATHNAME.join('#{emoji['unicode']}.png'))
+      else
+        fail ArgumentError, 'emoji `#{name}' not found'
       end
     end
     
-        def log(msg)
-      puts '\r' + justify(msg)
-    end
-    
-            css('th h3').each do |node|
-          node.name = 'span'
-        end
-    
-            css('p > code:first-child:last-child', 'td > code:first-child:last-child').each do |node|
-          next if node.previous.try(:content).present? || node.next.try(:content).present?
-          node.inner_html = node.inner_html.squish.gsub(/<br(\ \/)?>\s*/, '\n')
-          node.content = node.content.strip
-          node.name = 'pre' if node.content =~ /\s/
-          node.parent.before(node.parent.children).remove if node.parent.name == 'p'
-        end
-    
-      # Sets the resource creating an instance variable
-  def resource=(new_resource)
-    instance_variable_set(:'@#{resource_name}', new_resource)
-  end
-    
-    class BugTest < ActionDispatch::IntegrationTest
-  include Rack::Test::Methods
-  include Warden::Test::Helpers
-    
-          # Sign out all active users or scopes. This helper is useful for signing out all roles
-      # in one click. This signs out ALL scopes in warden. Returns true if there was at least one logout
-      # and false if there was no user logged in on all scopes.
-      def sign_out_all_scopes(lock=true)
-        users = Devise.mappings.keys.map { |s| warden.user(scope: s, run_callbacks: false) }
-    
-            # Returns the instance variables as a hash of key-value pairs.
-        def instance_variables_hash
-          instance_variables.inject({}) do |acc, iv|
-            acc[iv.to_s[1..-1]] = instance_variable_get(iv)
-            acc
-          end
-        end
-    
-            # This method is expected to return a class that is used for
-        # configuring the provisioner. This return value is expected to be
-        # a subclass of {Config}.
-        #
-        # @return [Config]
-        def self.config_class
-        end
-    
-            # Parses the options given an OptionParser instance.
-        #
-        # This is a convenience method that properly handles duping the
-        # originally argv array so that it is not destroyed.
-        #
-        # This method will also automatically detect '-h' and '--help'
-        # and print help. And if any invalid options are detected, the help
-        # will be printed, as well.
-        #
-        # If this method returns `nil`, then you should assume that help
-        # was printed and parsing failed.
-        def parse_options(opts=nil)
-          # make sure optparse doesn't use POSIXLY_CORRECT parsing
-          ENV['POSIXLY_CORRECT'] = nil
-    
-      # Specifies the header that your server uses for sending files.
-  # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for apache
-  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
-    
-      # The test environment is used exclusively to run your application's
-  # test suite. You never need to work with it otherwise. Remember that
-  # your test database is 'scratch space' for the test suite and is wiped
-  # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
-    
-      def test_font_helper_with_suffix_sharp
-    assert_match %r(url\(['']?/assets/.*svg#.+['']?\)), @css
-  end
+      s.authors  = ['Tom Preston-Werner', 'Rick Olson']
+  s.email    = 'tom@github.com'
+  s.homepage = 'http://github.com/gollum/gollum'
