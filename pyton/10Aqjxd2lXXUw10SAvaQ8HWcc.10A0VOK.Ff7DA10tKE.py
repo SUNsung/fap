@@ -1,124 +1,113 @@
 
         
-        
-data = { 'train_truth': data_train_truth,
-         'valid_truth': data_valid_truth,
-         'train_data' : data_train_spiking,
-         'valid_data' : data_valid_spiking,
-         'train_percentage' : train_percentage,
-         'nreplications' : nreplications,
-         'dt' : FLAGS.dt,
-         'u_std' : FLAGS.u_std,
-         'max_firing_rate': FLAGS.max_firing_rate,
-         'train_inputs_u': train_inputs_u,
-         'valid_inputs_u': valid_inputs_u,
-         'train_outputs_u': train_outputs_u,
-         'valid_outputs_u': valid_outputs_u,
-         'conversion_factor' : FLAGS.max_firing_rate/(1.0/FLAGS.dt) }
+        def os_constant(key):
+    # XXX TODO: In the future, this could return different constants
+    #           based on what OS we are running under.  To see an
+    #           approach to how to handle different OSes, see the
+    #           apache version of this file.  Currently, we do not
+    #           actually have any OS-specific constants on Nginx.
+    '''
+    Get a constant value for operating system
     
+    # If true, show page references after internal links.
+#latex_show_pagerefs = False
     
-def nparray_and_transpose(data_a_b_c):
-  '''Convert the list of items in data to a numpy array, and transpose it
-  Args:
-    data: data_asbsc: a nested, nested list of length a, with sublist length
-      b, with sublist length c.
-  Returns:
-    a numpy 3-tensor with dimensions a x c x b
-'''
-  data_axbxc = np.array([datum_b_c for datum_b_c in data_a_b_c])
-  data_axcxb = np.transpose(data_axbxc, axes=[0,2,1])
-  return data_axcxb
+            try:
+            subprocess.check_call('service nginx reload'.split())
+        except errors.Error:
+            raise errors.Error(
+                'Nginx failed to load {0} before tests started'.format(
+                    config))
     
-      Returns:
-    log_sum_exp of the arguments.
-  '''
-  m = tf.reduce_max(x_k)
-  x1_k = x_k - m
-  u_k = tf.exp(x1_k)
-  z = tf.reduce_sum(u_k)
-  return tf.log(z) + m
+        for prime in lowPrimes:
+        if (num % prime) == 0:
+            return False
     
-        if FLAGS.critic_update_dis_vars:
-      if FLAGS.discriminator_model == 'bidirectional_vd':
-        critic_vars = [
-            v for v in tf.trainable_variables()
-            if v.op.name.startswith('dis/rnn')
-        ]
-      elif FLAGS.discriminator_model == 'seq2seq_vd':
-        critic_vars = [
-            v for v in tf.trainable_variables()
-            if v.op.name.startswith('dis/decoder/rnn/multi_rnn_cell')
-        ]
-      critic_vars.extend(output_vars)
-    else:
-      critic_vars = output_vars
-    print('\nOptimizing Critic vars:')
-    for v in critic_vars:
-      print(v)
-    critic_grads = tf.gradients(critic_loss, critic_vars)
-    critic_grads_clipped, _ = tf.clip_by_global_norm(critic_grads,
-                                                     FLAGS.grad_clipping)
-    critic_train_op = critic_optimizer.apply_gradients(
-        zip(critic_grads_clipped, critic_vars), global_step=global_step)
-    return critic_train_op, critic_grads_clipped, critic_vars
+    def generateKey(keySize):
+    print('Generating prime p...')
+    p = rabinMiller.generateLargePrime(keySize)
+    print('Generating prime q...')
+    q = rabinMiller.generateLargePrime(keySize)
+    n = p * q
+    
+            while self.values[new_key] is not None and self.values[new_key] != key:
+            new_key = self.__hash_double_function(key, data, i) if \
+                self.balanced_factor() >= self.lim_charge else None
+            if new_key is None: break 
+            else: i += 1
+    
+    	Arguments:
+		testString {[string]} -- [message]
+	'''
+    
+    # Mock test below
+if False: # change to true to run this test case.
+    import sklearn.datasets as ds
+    dataset = ds.load_iris()
+    k = 3
+    heterogeneity = []
+    initial_centroids = get_initial_centroids(dataset['data'], k, seed=0)
+    centroids, cluster_assignment = kmeans(dataset['data'], k, initial_centroids, maxiter=400,
+                                        record_heterogeneity=heterogeneity, verbose=True)
+    plot_heterogeneity(heterogeneity, k)
 
     
-      def construct_fn(attention_query, attention_keys, attention_values):
-    with tf.variable_scope(name, reuse=reuse) as scope:
-      context = attention_score_fn(attention_query, attention_keys,
-                                   attention_values)
-      concat_input = tf.concat([attention_query, context], 1)
-      attention = tf.contrib.layers.linear(
-          concat_input, num_units, biases_initializer=None, scope=scope)
-      return attention
     
+def random_number(ctbi, i):
+  pass  # Put your code here...
     
-    {    # Options that need a file parameter
-    'download-archive': ['--require-parameter'],
-    'cookies': ['--require-parameter'],
-    'load-info': ['--require-parameter'],
-    'batch-file': ['--require-parameter'],
-}
+    # Theme options are theme-specific and customize the look and feel of a
+# theme further.  For a list of options available for each theme, see the
+# documentation.
+#html_theme_options = {}
     
-        with open(ZSH_COMPLETION_FILE, 'w') as f:
-        f.write(template)
+        # Display the resulting image
+    cv2.imshow('Video', frame)
     
-        def test_cbc_decrypt(self):
-        data = bytes_to_intlist(
-            b'\x97\x92+\xe5\x0b\xc3\x18\x91ky9m&\xb3\xb5@\xe6'\xc2\x96.\xc8u\x88\xab9-[\x9e|\xf1\xcd'
-        )
-        decrypted = intlist_to_bytes(aes_cbc_decrypt(data, self.key, self.iv))
-        self.assertEqual(decrypted.rstrip(b'\x08'), self.secret_msg)
+    known_encodings = [
+    obama_face_encoding,
+    biden_face_encoding
+]
     
-    # A dictionary with options for the search language support, empty by default.
-# 'ja' uses this config value.
-# 'zh' user can custom change `jieba` dictionary path.
-#
-# html_search_options = {'type': 'default'}
+        # Print the location of each face in this image
+    top, right, bottom, left = face_location
+    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
     
+        # If no valid image file was uploaded, show the file upload form:
+    return '''
+    <!doctype html>
+    <title>Is this a picture of Obama?</title>
+    <h1>Upload a picture and see if it's a picture of Obama!</h1>
+    <form method='POST' enctype='multipart/form-data'>
+      <input type='file' name='file'>
+      <input type='submit' value='Upload'>
+    </form>
+    '''
     
-class CommandLineNotificationService(BaseNotificationService):
-    '''Implement the notification service for the Command Line service.'''
+        if os.path.isdir(image_to_check):
+        if cpus == 1:
+            [test_image(image_file, model) for image_file in image_files_in_folder(image_to_check)]
+        else:
+            process_images_in_process_pool(image_files_in_folder(image_to_check), cpus, model)
+    else:
+        test_image(image_to_check, model)
     
-                # at this point we get broadcast id
-            broadcast_body = {
-                'message_creative_id': resp.json().get('message_creative_id'),
-                'notification_type': 'REGULAR',
-            }
+            face_names.append(name)
     
-    import homeassistant.helpers.config_validation as cv
-from homeassistant.components.notify import (
-    ATTR_TARGET, PLATFORM_SCHEMA, BaseNotificationService)
-from homeassistant.const import CONF_API_KEY, CONF_SENDER
+        # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
+    frame = frame[:, :, ::-1]
     
-        def __init__(self, config):
-        '''Initialize the Simplepush notification service.'''
-        self._device_key = config.get(CONF_DEVICE_KEY)
-        self._event = config.get(CONF_EVENT)
-        self._password = config.get(CONF_PASSWORD)
-        self._salt = config.get(CONF_SALT)
+        for unknown_encoding in unknown_encodings:
+        distances = face_recognition.face_distance(known_face_encodings, unknown_encoding)
+        result = list(distances <= tolerance)
     
+        rm3 = YourBorg()
     
-def get_service(hass, config, discovery_info=None):
-    '''Get the syslog notification service.'''
-    import syslog
+    '''*What is this pattern about?
+The Factory Method pattern can be used to create an interface for a
+method, leaving the implementation to the class that gets
+instantiated.
+    
+    *TL;DR80
+Stores a set of initialized objects kept ready to use.
+'''
