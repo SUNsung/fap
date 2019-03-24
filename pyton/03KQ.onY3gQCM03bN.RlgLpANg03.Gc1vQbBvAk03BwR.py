@@ -1,131 +1,151 @@
 
         
-            def __init__(self, handler=None, host='localhost', port=0, requests_to_handle=1, wait_to_close_event=None):
-        super(Server, self).__init__()
+            def deal_card(self):
+        try:
+            card = self.cards[self.deal_index]
+            card.is_available = False
+            self.deal_index += 1
+        except IndexError:
+            return None
+        return card
     
-        @pytest.mark.parametrize(
-        'value, expected_type', (
-            (b'value', compat.bytes),
-            (b'value'.decode('utf-8'), compat.str)
-        ))
-    def test_guess_filename_valid(self, value, expected_type):
-        obj = type('Fake', (object,), {'name': value})()
-        result = guess_filename(obj)
-        assert result == value
-        assert isinstance(result, expected_type)
+        def get(self, key):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                return item.value
+        raise KeyError('Key not found')
     
-            # .netrc might have more auth for us on our new host.
-        new_auth = get_netrc_auth(url) if self.trust_env else None
-        if new_auth is not None:
-            prepared_request.prepare_auth(new_auth)
+        # Arguments
+        label_mode: one of 'fine', 'coarse'.
     
-            pemfile = '/etc/ssl/certs/CA.pem'
-        new_certfile = '/usr/local/share/ca-certificates/CA.crt'
-        if not os.path.exists(pemfile) or not CertUtil.file_is_same(certfile, new_certfile):
-            if os.system('cp '%s' '%s' && update-ca-certificates' % (certfile, new_certfile)) != 0:
-                xlog.warning('install root certificate failed, Please run as administrator/root/sudo')
+    # Model creation using tensors from the get_next() graph node.
+inputs, targets = iterator.get_next()
+model_input = layers.Input(tensor=inputs)
+model_output = cnn_layers(model_input)
+train_model = keras.models.Model(inputs=model_input, outputs=model_output)
     
-            if network_ok:
-            self.last_check_time = time.time()
-            self.report_ok()
-            xlog.debug('network %s is ok, cost:%d ms', self.type, 1000 * (time.time() - time_now))
-        else:
-            xlog.warn('network %s fail', self.type)
-            self.network_stat = 'Fail'
-            self.last_check_time = time.time()
+    Get to 99.8% test accuracy after 5 epochs
+for the first five digits classifier
+and 99.2% for the last five digits after transfer + fine-tuning.
+'''
     
-    	# Track the line at which the error occurred in case this is
-	# generated from a lexer.  We need to track this since the
-        # unexpected char doesn't carry the line info.
-        self.line = None
-    
-        Note text is not an actual property of the return value, it is computed
-    from start and stop using the input stream's toString() method.  I
-    could add a ctor to this so that we can pass in and store the input
-    stream, but I'm not sure we want to do that.  It would seem to be undefined
-    to get the .text property anyway if the rule matches tokens from multiple
-    input streams.
-    
-            return new_key
+        # Raises
+        ValueError if unknown identifier.
+    '''
+    if identifier is None:
+        return None
+    if isinstance(identifier, six.string_types):
+        identifier = str(identifier)
+        return deserialize(identifier)
+    if isinstance(identifier, dict):
+        return deserialize(identifier)
+    elif callable(identifier):
+        return identifier
+    else:
+        raise ValueError('Could not interpret '
+                         'loss function identifier:', identifier)
 
     
-    This is a pure Python implementation of Dynamic Programming solution to the longest increasing subsequence of a given sequence.
+        scikit_results = []
+    glmnet_results = []
+    n = 20
+    step = 500
+    n_features = 1000
+    n_informative = n_features / 10
+    n_test_samples = 1000
+    for i in range(1, n + 1):
+        print('==================')
+        print('Iteration %s of %s' % (i, n))
+        print('==================')
     
-        score = float(numerator) / denumerator * 100
     
-    * @author chinmoy159
-* @version 1.0 dated 10/08/2017
+# Initialize random generator
+np.random.seed(0)
+    
+    for name, label in [('Setosa', 0),
+                    ('Versicolour', 1),
+                    ('Virginica', 2)]:
+    ax.text3D(X[y == label, 3].mean(),
+              X[y == label, 0].mean(),
+              X[y == label, 2].mean() + 2, name,
+              horizontalalignment='center',
+              bbox=dict(alpha=.2, edgecolor='w', facecolor='w'))
+# Reorder the labels to have colors matching the cluster results
+y = np.choose(y, [1, 2, 0]).astype(np.float)
+ax.scatter(X[:, 3], X[:, 0], X[:, 2], c=y, edgecolor='k')
+    
+    for center_1, center_2 in zip(regular_values[:-1], regular_values[1:]):
+    plt.axvline(.5 * (center_1 + center_2), color='b', linestyle='--')
+    
+        # ============
+    # Create cluster objects
+    # ============
+    ward = cluster.AgglomerativeClustering(
+        n_clusters=params['n_clusters'], linkage='ward')
+    complete = cluster.AgglomerativeClustering(
+        n_clusters=params['n_clusters'], linkage='complete')
+    average = cluster.AgglomerativeClustering(
+        n_clusters=params['n_clusters'], linkage='average')
+    single = cluster.AgglomerativeClustering(
+        n_clusters=params['n_clusters'], linkage='single')
+    
+    Reference:
+    
+    
+def leaky_relu(x, alpha=0.1):
+    '''渗透 ReLU
+    `o = max(alpha * x, x)`
+    '''
+    return tf.nn.leaky_relu(x, alpha)
+    
+    References:
+    https://github.com/fomorians/highway-fcn
+    https://github.com/fomorians/highway-cnn
 '''
+import tensorflow as tf
     
-        # Sparkle the eyes
-    d.polygon(face_landmarks['left_eye'], fill=(255, 255, 255, 30))
-    d.polygon(face_landmarks['right_eye'], fill=(255, 255, 255, 30))
-    
-        # Print the location of each face in this image
-    top, right, bottom, left = face_location
-    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
-    
-    # Find all the faces in the image using a pre-trained convolutional neural network.
-# This method is more accurate than the default HOG model, but it's slower
-# unless you have an nvidia GPU and dlib compiled with CUDA extensions. But if you do,
-# this will use GPU acceleration and perform well.
-# See also: find_faces_in_picture.py
-face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=0, model='cnn')
-    
-    try:
-    import face_recognition_models
-except Exception:
-    print('Please install `face_recognition_models` with this command before using `face_recognition`:\n')
-    print('pip install git+https://github.com/ageitgey/face_recognition_models')
-    quit()
-    
-    while True:
-    # Grab a single frame of video
-    ret, frame = video_capture.read()
-    
-        def test_fd_command_line_interface_hog_model(self):
-        target_string = 'obama.jpg'
-        runner = CliRunner()
-        image_file = os.path.join(os.path.dirname(__file__), 'test_images', 'obama.jpg')
-    
-    # Find all facial features in all the faces in the image
-face_landmarks_list = face_recognition.face_landmarks(image)
+            # u_tilde(u~): context to question attended query vectors
+        u_tilde = tf.matmul(softmax(S), u)  # [N, T, d]
     
     
-@app.route('/', methods=['GET', 'POST'])
-def upload_image():
-    # 检测图片是否上传成功
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            return redirect(request.url)
-    
-    '''*What is this pattern about?
-The Factory Method pattern can be used to create an interface for a
-method, leaving the implementation to the class that gets
-instantiated.
-    
-        def get_current_time_as_html_fragment(self):
-        current_time = self.time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
-'''
+class OutOfData(UnpackException):
+    pass
     
     
-# Refined Abstraction
-class CircleShape(object):
-    def __init__(self, x, y, radius, drawing_api):
-        self._x = x
-        self._y = y
-        self._radius = radius
-        self._drawing_api = drawing_api
+# List of frequently used SAS date and datetime formats
+# http://support.sas.com/documentation/cdl/en/etsug/60372/HTML/default/viewer.htm#etsug_intervals_sect009.htm
+# https://github.com/epam/parso/blob/master/src/main/java/com/epam/parso/impl/SasFileConstants.java
+sas_date_formats = ('DATE', 'DAY', 'DDMMYY', 'DOWNAME', 'JULDAY', 'JULIAN',
+                    'MMDDYY', 'MMYY', 'MMYYC', 'MMYYD', 'MMYYP', 'MMYYS',
+                    'MMYYN', 'MONNAME', 'MONTH', 'MONYY', 'QTR', 'QTRR',
+                    'NENGO', 'WEEKDATE', 'WEEKDATX', 'WEEKDAY', 'WEEKV',
+                    'WORDDATE', 'WORDDATX', 'YEAR', 'YYMM', 'YYMMC', 'YYMMD',
+                    'YYMMP', 'YYMMS', 'YYMMN', 'YYMON', 'YYMMDD', 'YYQ',
+                    'YYQC', 'YYQD', 'YYQP', 'YYQS', 'YYQN', 'YYQR', 'YYQRC',
+                    'YYQRD', 'YYQRP', 'YYQRS', 'YYQRN',
+                    'YYMMDDP', 'YYMMDDC', 'E8601DA', 'YYMMDDN', 'MMDDYYC',
+                    'MMDDYYS', 'MMDDYYD', 'YYMMDDS', 'B8601DA', 'DDMMYYN',
+                    'YYMMDDD', 'DDMMYYB', 'DDMMYYP', 'MMDDYYP', 'YYMMDDB',
+                    'MMDDYYN', 'DDMMYYC', 'DDMMYYD', 'DDMMYYS',
+                    'MINGUO')
     
     
-class TestData(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.dec_obs = DecimalViewer()
-        cls.hex_obs = HexViewer()
-        cls.sub = Data('Data')
-        # inherited behavior already tested with TestSubject
-        cls.sub.attach(cls.dec_obs)
-        cls.sub.attach(cls.hex_obs)
+def check_array(overhead, num):
+    check(num + overhead, (None, ) * num)
+    
+        dest = pathlib.Path('dist')
+    dest.mkdir(exist_ok=True)
+    
+        copy, paste = clipboard_types[clipboard]()
+    
+            exp3 = ('0   1 days\n'
+                '1   2 days\n'
+                'dtype: timedelta64[ns]')
+    
+    
+def test_getitem_callable():
+    # GH 12533
+    s = pd.Series(4, index=list('ABCD'))
+    result = s[lambda x: 'A']
+    assert result == s.loc['A']
