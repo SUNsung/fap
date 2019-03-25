@@ -1,228 +1,290 @@
 
         
-        # add train_ext_input and valid_ext input
-data = {'train_truth': rates_train,
-        'valid_truth': rates_valid,
-        'train_data' : spikes_train,
-        'valid_data' : spikes_valid,
-        'train_ext_input' : np.array(ext_input_train),
-        'valid_ext_input': np.array(ext_input_valid),
-        'train_percentage' : train_percentage,
-        'nreplications' : nreplications,
-        'dt' : FLAGS.dt,
-        'P_sxn' : P_nxn,
-        'condition_labels_train' : condition_labels_train,
-        'condition_labels_valid' : condition_labels_valid,
-        'conversion_factor': 1.0 / rnn_a['conversion_factor']}
+            if RESULT and ('info_dict' not in test or 'age_limit' not in test['info_dict'] or
+                   test['info_dict']['age_limit'] != 18):
+        print('\nPotential missing age_limit check: {0}'.format(test['name']))
+    
+    
+    {    # Options that need a file parameter
+    'download-archive': ['--require-parameter'],
+    'cookies': ['--require-parameter'],
+    'load-info': ['--require-parameter'],
+    'batch-file': ['--require-parameter'],
+}
+    
+    from youtube_dl.utils import intlist_to_bytes
+from youtube_dl.aes import aes_encrypt, key_expansion
+    
+        def gen_ies_md(ies):
+        for ie in ies:
+            ie_md = '**{0}**'.format(ie.IE_NAME)
+            ie_desc = getattr(ie, 'IE_DESC', None)
+            if ie_desc is False:
+                continue
+            if ie_desc is not None:
+                ie_md += ': {0}'.format(ie.IE_DESC)
+            if not ie.working():
+                ie_md += ' (Currently broken)'
+            yield ie_md
+    
+    # Add any paths that contain templates here, relative to this directory.
+templates_path = ['_templates']
+    
+            if 'skip' in test_case:
+            print_skipping(test_case['skip'])
+            return
+        for other_ie in other_ies:
+            if not other_ie.working():
+                print_skipping('test depends on %sIE, marked as not WORKING' % other_ie.ie_key())
+                return
+    
+            jsi = JSInterpreter('var x5 = function(){return 42;}')
+        self.assertEqual(jsi.call_function('x5'), 42)
+    
+        def test_allsubtitles(self):
+        self.DL.params['writesubtitles'] = True
+        self.DL.params['allsubtitles'] = True
+        subtitles = self.getSubtitles()
+        self.assertEqual(set(subtitles.keys()), set(['en']))
+        self.assertEqual(md5(subtitles['en']), 'c5593c193eacd353596c11c2d4f9ecc4')
+    
+        def save(self, must_create=False):
+        super().save(must_create)
+        self._cache.set(self.cache_key, self._session, self.get_expiry_age())
+    
+        def __getitem__(self, idx):
+        # Prevent unnecessary reevaluation when accessing BoundField's attrs
+        # from templates.
+        if not isinstance(idx, (int, slice)):
+            raise TypeError
+        return self.subwidgets[idx]
+    
+        @staticmethod
+    def get_linux_firefox_path():
+        home_path = os.path.expanduser('~')
+        firefox_path = os.path.join(home_path, '.mozilla/firefox')
+        if not os.path.isdir(firefox_path):
+            return
+    
+            if network_ok:
+            self.last_check_time = time.time()
+            self.report_ok()
+            xlog.debug('network %s is ok, cost:%d ms', self.type, 1000 * (time.time() - time_now))
+        else:
+            xlog.warn('network %s fail', self.type)
+            self.network_stat = 'Fail'
+            self.last_check_time = time.time()
+    
+        deadline = URLFETCH_TIMEOUT
+    validate_certificate = bool(int(kwargs.get('validate', 0)))
+    accept_encoding = headers.get('Accept-Encoding', '')
+    errors = []
+    for i in xrange(int(kwargs.get('fetchmax', URLFETCH_MAX))):
+        try:
+            response = urlfetch.fetch(url, payload, fetchmethod, headers, allow_truncated=False, follow_redirects=False, deadline=deadline, validate_certificate=validate_certificate)
+            break
+        except apiproxy_errors.OverQuotaError as e:
+            time.sleep(5)
+        except urlfetch.DeadlineExceededError as e:
+            errors.append('%r, deadline=%s' % (e, deadline))
+            logging.error('DeadlineExceededError(deadline=%s, url=%r)', deadline, url)
+            time.sleep(1)
+            deadline = URLFETCH_TIMEOUT * 2
+        except urlfetch.DownloadError as e:
+            errors.append('%r, deadline=%s' % (e, deadline))
+            logging.error('DownloadError(deadline=%s, url=%r)', deadline, url)
+            time.sleep(1)
+            deadline = URLFETCH_TIMEOUT * 2
+        except urlfetch.ResponseTooLargeError as e:
+            errors.append('%r, deadline=%s' % (e, deadline))
+            response = e.response
+            logging.error('ResponseTooLargeError(deadline=%s, url=%r) response(%r)', deadline, url, response)
+            m = re.search(r'=\s*(\d+)-', headers.get('Range') or headers.get('range') or '')
+            if m is None:
+                headers['Range'] = 'bytes=0-%d' % int(kwargs.get('fetchmaxsize', URLFETCH_MAXSIZE))
+            else:
+                headers.pop('Range', '')
+                headers.pop('range', '')
+                start = int(m.group(1))
+                headers['Range'] = 'bytes=%s-%d' % (start, start+int(kwargs.get('fetchmaxsize', URLFETCH_MAXSIZE)))
+            deadline = URLFETCH_TIMEOUT * 2
+        except urlfetch.SSLCertificateError as e:
+            errors.append('%r, should validate=0 ?' % e)
+            logging.error('%r, deadline=%s', e, deadline)
+        except Exception as e:
+            errors.append(str(e))
+            if i == 0 and method == 'GET':
+                deadline = URLFETCH_TIMEOUT * 2
+    else:
+        start_response('500 Internal Server Error', [('Content-Type', 'text/html')])
+        error_string = '<br />\n'.join(errors)
+        if not error_string:
+            logurl = 'https://appengine.google.com/logs?&app_id=%s' % os.environ['APPLICATION_ID']
+            error_string = 'Internal Server Error. <p/>try <a href='javascript:window.location.reload(true);'>refresh</a> or goto <a href='%s' target='_blank'>appengine.google.com</a> for details' % logurl
+        yield message_html('502 Urlfetch Error', 'Python Urlfetch Error: %r' % method,  error_string)
+        raise StopIteration
+    
+    
+    def __str__(self):
+        if self.inserted is not None and self.token is not None:
+            return 'MissingTokenException(inserted %r at %r)' % (
+                self.inserted, self.token.text)
+    
+    
+    def setTokenTypeChannel(self, ttype, channel):
+        '''
+        A simple filter mechanism whereby you can tell this token stream
+        to force all tokens of type ttype to be on channel.  For example,
+        when interpreting, we cannot exec actions so we need to tell
+        the stream to force all WS and NEWLINE to be a different, ignored
+        channel.
+	'''
+        
+        self.channelOverrideMap[ttype] = channel
+    
+            txt = self.text
+        if txt is not None:
+            txt = txt.replace('\n','\\\\n')
+            txt = txt.replace('\r','\\\\r')
+            txt = txt.replace('\t','\\\\t')
+        else:
+            txt = '<no text>'
+    
+        def test_del___main__(self):
+        # Issue #15001: PyRun_SimpleFileExFlags() did crash because it kept a
+        # borrowed reference to the dict of __main__ module and later modify
+        # the dict whereas the module was destroyed
+        filename = support.TESTFN
+        self.addCleanup(support.unlink, filename)
+        with open(filename, 'w') as script:
+            print('import sys', file=script)
+            print('del sys.modules['__main__']', file=script)
+        assert_python_ok(filename)
+    
+        def testSeekable(self):
+        bz2f = BZ2File(BytesIO(self.DATA))
+        try:
+            self.assertTrue(bz2f.seekable())
+            bz2f.read()
+            self.assertTrue(bz2f.seekable())
+        finally:
+            bz2f.close()
+        self.assertRaises(ValueError, bz2f.seekable)
+    
+        print('-' * 20)
+    
+    #
+# Function used to calculate result
+#
     
       Args:
-    data_fname: The filename of teh file in which to write the data.
-    data_dict:  The dictionary of data to write. The keys are strings
-      and the values are numpy arrays.
-    use_json (optional): human readable format for simple items
-    compression (optional): The compression to use for h5py (disabled by
-      default because the library borks on scalars, otherwise try 'gzip').
+    filename: The name of the current file.
+    clean_lines: A CleansedLines instance containing the file.
+    linenum: The number of the line to check.
+    error: The function to call with any errors found.
   '''
-    
-      # Add necessary end of sentence token.
-  if tokenized[-1] not in ['.', '!', '?']:
-    tokenized += ['.']
-  return tokenized
-    
-      Returns:
-    wasserstein_loss:  Scalar tf.float32 loss.
+  line = clean_lines.elided[linenum]
     
     
-def create_gen_pretrain_op(hparams, cross_entropy_loss, global_step):
-  '''Create a train op for pretraining.'''
-  with tf.name_scope('pretrain_generator'):
-    optimizer = tf.train.AdamOptimizer(hparams.gen_pretrain_learning_rate)
-    gen_vars = [
-        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
-    ]
-    gen_grads = tf.gradients(cross_entropy_loss, gen_vars)
-    gen_grads_clipped, _ = tf.clip_by_global_norm(gen_grads,
-                                                  FLAGS.grad_clipping)
-    gen_pretrain_op = optimizer.apply_gradients(
-        zip(gen_grads_clipped, gen_vars), global_step=global_step)
-    return gen_pretrain_op
+class PackException(Exception):
+    pass
     
-        '''
-    with tf.name_scope(
-        name, 'attention_decoder_fn_inference',
-        [time, cell_state, cell_input, cell_output, context_state]):
-      if cell_input is not None:
-        raise ValueError(
-            'Expected cell_input to be None, but saw: %s' % cell_input)
-      if cell_output is None:
-        # invariant that this is time == 0
-        next_input_id = tf.ones(
-            [
-                batch_size,
-            ], dtype=dtype) * (
-                start_of_sequence_id)
-        done = tf.zeros(
-            [
-                batch_size,
-            ], dtype=tf.bool)
-        cell_state = encoder_state
-        cell_output = tf.zeros([num_decoder_symbols], dtype=tf.float32)
-        cell_input = tf.gather(embeddings, next_input_id)
-    
-                elif opt in ('-g', '--gui'):
-                # Run using GUI.
-                conf['gui'] = True
-    
-            for i in html_json['sources']:
-            if 'src' in i:  #to avoid KeyError
-                if i['src'].startswith('https'):
-                    link_list.append((str(i['height']), i['src']))
-    
-            self.prepare(vid = vid, title = title, **kwargs)
-    
-        theplatform_download_by_pid(pid, title, output_dir=output_dir, merge=merge, info_only=info_only)
-    
-        title = match1(html, r'<title>([^<]{1,9999})</title>')
-    
-    # Release handle to the webcam
-video_capture.release()
-cv2.destroyAllWindows()
-
-    
-    for face_landmarks in face_landmarks_list:
-    pil_image = Image.fromarray(image)
-    d = ImageDraw.Draw(pil_image, 'RGBA')
-    
-    # You can change this to any folder on your system
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-    
-    
-def _rect_to_css(rect):
-    '''
-    Convert a dlib 'rect' object to a plain tuple in (top, right, bottom, left) order
-    
-    known_faces = [
-    lmm_face_encoding,
-    al_face_encoding
-]
-    
-            batched_detected_faces = api.batch_face_locations(images, number_of_times_to_upsample=0)
-    
-    
-def multi_highway_dense(x, n_layer, act_fn=relu, carry_bias=-1.0, name=None):
-    '''多层 highway_dense
-    Input shape:  [batch_size, n_input]
-    Output shape: [batch_size, n_input]
-    '''
-    name = name or 'highway_dense'
-    for i in range(n_layer):
-        x = highway_dense(x, act_fn=act_fn, carry_bias=carry_bias, name='{}-{}'.format(name, i))
-    
-    
-def get_shape(x):
-    '''
-    References:
-        tflearn.utils.get_incoming_shape
-    '''
-    if isinstance(x, (tf.Tensor, tf.SparseTensor)):
-        return x.get_shape().as_list()
-    elif type(x) in [np.array, np.ndarray, list, tuple]:
-        return list(np.shape(x))
-    else:
-        raise Exception('Invalid `x`.')
-    
-    print(model.wv.vocab.keys())
-'''
-['Hello', 'World', '!', 'I', 'am', 'huay', '.']
-'''
-print()
-    
-    parser = ArgumentParser(usage='%s -m jieba [options] filename' % sys.executable, description='Jieba command line interface.', epilog='If no filename specified, use STDIN instead.')
-parser.add_argument('-d', '--delimiter', metavar='DELIM', default=' / ',
-                    nargs='?', const=' ',
-                    help='use DELIM instead of ' / ' for word delimiter; or a space if it is used without DELIM')
-parser.add_argument('-p', '--pos', metavar='DELIM', nargs='?', const='_',
-                    help='enable POS tagging; if DELIM is specified, use DELIM instead of '_' for POS delimiter')
-parser.add_argument('-D', '--dict', help='use DICT as dictionary')
-parser.add_argument('-u', '--user-dict',
-                    help='use USER_DICT together with the default dictionary or DICT (if specified)')
-parser.add_argument('-a', '--cut-all',
-                    action='store_true', dest='cutall', default=False,
-                    help='full pattern cutting (ignored with POS tagging)')
-parser.add_argument('-n', '--no-hmm', dest='hmm', action='store_false',
-                    default=True, help='don't use the Hidden Markov Model')
-parser.add_argument('-q', '--quiet', action='store_true', default=False,
-                    help='don't print loading messages to stderr')
-parser.add_argument('-V', '--version', action='version',
-                    version='Jieba ' + jieba.__version__)
-parser.add_argument('filename', nargs='?', help='input file')
-    
-    def cut(sentence):
-    sentence = strdecode(sentence)
-    blocks = re_han.split(sentence)
-    for blk in blocks:
-        if re_han.match(blk):
-            for word in __cut(blk):
-                if word not in Force_Split_Words:
-                    yield word
-                else:
-                    for c in word:
-                        yield c
-        else:
-            tmp = re_skip.split(blk)
-            for x in tmp:
-                if x:
-                    yield x
-
-    
-    import jieba
-import jieba.analyse
-from optparse import OptionParser
-    
-    import jieba
-import time
-import glob
-import sys
-import os
-import random
-    
-    t2 = time.time()
-tm_cost = t2-t1
+    align_1_checker_value = b'3'
+align_1_offset = 32
+align_1_length = 1
+align_1_value = 4
+u64_byte_checker_value = b'3'
+align_2_offset = 35
+align_2_length = 1
+align_2_value = 4
+endianness_offset = 37
+endianness_length = 1
+platform_offset = 39
+platform_length = 1
+encoding_offset = 70
+encoding_length = 1
+dataset_offset = 92
+dataset_length = 64
+file_type_offset = 156
+file_type_length = 8
+date_created_offset = 164
+date_created_length = 8
+date_modified_offset = 172
+date_modified_length = 8
+header_size_offset = 196
+header_size_length = 4
+page_size_offset = 200
+page_size_length = 4
+page_count_offset = 204
+page_count_length = 4
+sas_release_offset = 216
+sas_release_length = 8
+sas_server_type_offset = 224
+sas_server_type_length = 16
+os_version_number_offset = 240
+os_version_number_length = 16
+os_maker_offset = 256
+os_maker_length = 16
+os_name_offset = 272
+os_name_length = 16
+page_bit_offset_x86 = 16
+page_bit_offset_x64 = 32
+subheader_pointer_length_x86 = 12
+subheader_pointer_length_x64 = 24
+page_type_offset = 0
+page_type_length = 2
+block_count_offset = 2
+block_count_length = 2
+subheader_count_offset = 4
+subheader_count_length = 2
+page_meta_type = 0
+page_data_type = 256
+page_amd_type = 1024
+page_metc_type = 16384
+page_comp_type = -28672
+page_mix_types = [512, 640]
+subheader_pointers_offset = 8
+truncated_subheader_id = 1
+compressed_subheader_id = 4
+compressed_subheader_type = 1
+text_block_size_length = 2
+row_length_offset_multiplier = 5
+row_count_offset_multiplier = 6
+col_count_p1_multiplier = 9
+col_count_p2_multiplier = 10
+row_count_on_mix_page_offset_multiplier = 15
+column_name_pointer_length = 8
+column_name_text_subheader_offset = 0
+column_name_text_subheader_length = 2
+column_name_offset_offset = 2
+column_name_offset_length = 2
+column_name_length_offset = 4
+column_name_length_length = 2
+column_data_offset_offset = 8
+column_data_length_offset = 8
+column_data_length_length = 4
+column_type_offset = 14
+column_type_length = 1
+column_format_text_subheader_index_offset = 22
+column_format_text_subheader_index_length = 2
+column_format_offset_offset = 24
+column_format_offset_length = 2
+column_format_length_offset = 26
+column_format_length_length = 2
+column_label_text_subheader_index_offset = 28
+column_label_text_subheader_index_length = 2
+column_label_offset_offset = 30
+column_label_offset_length = 2
+column_label_length_offset = 32
+column_label_length_length = 2
+rle_compression = b'SASYZCRL'
+rdc_compression = b'SASYZCR2'
     
     
-def main():
-    parse_command_line()
-    t = Timer(e1)
-    results = t.timeit(options.num) / options.num
-    print('engine: %0.3f ms per iteration' % (results * 1000))
-    t = Timer(c1)
-    results = t.timeit(options.num) / options.num
-    print('coroutine: %0.3f ms per iteration' % (results * 1000))
+def test_1():
+    for o in [None, True, False, 0, 1, (1 << 6), (1 << 7) - 1, -1,
+              -((1 << 5) - 1), -(1 << 5)]:
+        check(1, o)
     
-        if mode == 'module':
-        # runpy did a fake import of the module as __main__, but now it's
-        # no longer in sys.modules.  Figure out where it is and watch it.
-        loader = pkgutil.get_loader(module)
-        if loader is not None:
-            watch(loader.get_filename())  # type: ignore
-    
-    from tornado import httputil
-from tornado import ioloop
-    
-            if self.regex.groups != pattern.count('('):
-            # The pattern is too complicated for our simplistic matching,
-            # so we can't support reversing it.
-            return None, None
-    
-                bounding_box = [dlib.rectangle(  # pylint: disable=c-extension-no-member
-                int(face[0]), int(face[1]), int(face[2]), int(face[3]))]
-            item['detected_faces'] = bounding_box
-            self.finalize(item)
-    
-        def add_face(self, frame, alignment):
-        ''' Add a new face for a frame and return it's index '''
-        logger.debug('Adding face to frame: '%s'', frame)
-        self.data[frame].append(alignment)
-        retval = self.count_faces_in_frame(frame) - 1
-        logger.debug('Returning new face index: %s', retval)
-        return retval
+        pick_hash = run_cmd('git rev-parse %s' % pick_branch_name)[:8]
+    clean_up()
