@@ -1,137 +1,108 @@
 
         
-          it 'requires a URL or file uplaod' do
-    visit new_scenario_imports_path
-    click_on 'Start Import'
-    expect(page).to have_text('Please provide either a Scenario JSON File or a Public Scenario URL.')
-  end
+          context 'with a user' do
+    let(:user) { Fabricate(:user) }
     
-            # Fix the order of receivers
-        @agents.each do |agent|
-          stub.proxy(agent).receivers { |orig| orig.order(:id) }
-        end
-      end
+      def up
+    Photo.joins('INNER JOIN posts ON posts.guid = photos.status_message_guid')
+         .where(posts: {type: 'StatusMessage', public: true}).update_all(public: true)
     
-              expect(weather_agent_diff.name.current).to eq(agents(:bob_weather_agent).name)
-          expect(weather_agent_diff.name.incoming).to eq(valid_parsed_weather_agent_data[:name])
-          expect(weather_agent_diff.name.updated).to eq('a new name')
+    When /^I try to sign in manually$/ do
+  manual_login
+end
     
-        it 'outputs control links to agents within the incoming set, but not outside it' do
-      agents(:jane_rain_notifier_agent).control_targets = [agents(:jane_weather_agent), agents(:jane_basecamp_agent)]
-      agents(:jane_rain_notifier_agent).save!
-    
-        it 'should generate the correct last checkpoint url' do
-      @checker.options['path'] = 'last_checkpoint/usps/9361289878905919630610'
-      expect(@checker.send(:event_url)).to eq('https://api.aftership.com/v4/last_checkpoint/usps/9361289878905919630610')
+      class SendPrivate < Base
+    def perform(*_args)
+      # don't federate in cucumber
     end
   end
     
-      #
-  # Flushes all header pairs.
-  #
-  def reset
-    self.cmd_string = ''
-    self.clear
-    self.dcase_hash.clear
-  end
+    require 'clamp'
+require 'pluginmanager/util'
+require 'pluginmanager/gemfile'
+require 'pluginmanager/install'
+require 'pluginmanager/remove'
+require 'pluginmanager/list'
+require 'pluginmanager/update'
+require 'pluginmanager/pack'
+require 'pluginmanager/unpack'
+require 'pluginmanager/generate'
+require 'pluginmanager/prepare_offline_pack'
+require 'pluginmanager/proxy_support'
+configure_proxy
     
-              # Rex::Proto::Kerberos::Model::ApReq decoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def decode(input)
-            raise ::NotImplementedError, 'AP-REQ decoding not supported'
+      def target_file
+    target_file = File.join(LogStash::Environment::LOGSTASH_HOME, 'plugins_package')
+    '#{target_file}#{file_extension}'
+  end
+end
+
+    
+          # Install the gems to make them available locally when bundler does his local resolution
+      post_install_messages = []
+      pack.gems.each do |packed_gem|
+        PluginManager.ui.debug('Installing, #{packed_gem.name}, version: #{packed_gem.version} file: #{packed_gem.file}')
+        post_install_messages << LogStash::PluginManager::GemInstaller::install(packed_gem.file, packed_gem.plugin?)
+      end
+    
+      def execute
+    signal_deprecation_warning_for_pack
+    
+          it 'display a list of installed plugins' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list --installed')
+        expect(result.stdout.split('\n').size).to be > 1
+      end
+    
+          within_row(1) { click_icon :split }
+      wait_for_ajax
+      targetted_select2 'LA', from: '#s2id_item_stock_location'
+      click_icon :'save-split'
+      wait_for_ajax
+      expect(page.find('#shipment_#{order.shipments.first.id}')).to be_present
+    
+              def render_order(result)
+            if result.success?
+              render_serialized_payload { serialized_current_order }
+            else
+              render_error_payload(result.error)
+            end
           end
     
-              # Encodes the type field
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_type
-            bn = OpenSSL::BN.new(type.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
+            def product_params
+          params.require(:product).permit(permitted_product_attributes)
+        end
     
-                int
+              if params[:page] || params[:per_page]
+            @states = @states.page(params[:page]).per(params[:per_page])
           end
     
-        it 'generates a jasmine fixture', fixture: true do
-      session[:mobile_view] = true
-      get :new, format: :mobile
-      save_fixture(html_for('body'), 'conversations_new_mobile')
+        # Build the packaging metadata files.
+    checksums = {}
+    self.files.each do |f|
+      path = staging_path(f)
+      if File.symlink?(path)
+        checksums[f] = '-'
+      elsif File.file?(path)
+        checksums[f] = Digest::SHA256.file(path).hexdigest
+      end
     end
+    
+        self.name = [attributes[:npm_package_name_prefix], name].join('-')
+    self.version = info.fetch('version', '0.0.0')
+    
+      def output(output_path)
+    
+    # Fixup the category to an acceptable solaris category
+    case @category
+    when nil, 'default'
+      @category = 'Applications/System Utilities'
+    end
+    
+        # Add the tar compression flag if necessary
+    tar_compression_flag(input_path).tap do |flag|
+      args << flag unless flag.nil?
+    end
+    
+        abort 'FPM failed!' unless FPM::Command.new('fpm').run(args) == 0
   end
 end
-
-    
-      describe '#new' do
-    before do
-      sign_in alice, scope: :user
-    end
-    
-      describe '#index' do
-    context 'with a private post' do
-      before do
-        @alices_aspect = alice.aspects.where(name: 'generic').first
-        @post = alice.post(:status_message, text: 'hey', to: @alices_aspect.id)
-      end
-    
-    if $0 == __FILE__
-  begin
-    LogStash::PluginManager::Main.run('bin/logstash-plugin', ARGV)
-  rescue LogStash::PluginManager::Error => e
-    $stderr.puts(e.message)
-    exit(1)
-  end
-end
-
-    
-    module LogStash module PluginManager module PackFetchStrategy
-  class Repository
-    DEFAULT_PACK_URL = 'https://artifacts.elastic.co/downloads/logstash-plugins'
-    PACK_EXTENSION = 'zip'
-    
-        private
-    def uncompress(source)
-      temporary_directory = Stud::Temporary.pathname
-      LogStash::Util::Zip.extract(source, temporary_directory, LOGSTASH_PATTERN_RE)
-      temporary_directory
-    rescue Zip::Error => e
-      # OK Zip's handling of file is bit weird, if the file exist but is not a valid zip, it will raise
-      # a `Zip::Error` exception with a file not found message...
-      raise InvalidPackError, 'Cannot uncompress the zip: #{source}'
-    end
-    
-        desc 'Generate a valid ssh-config'
-    task :ssh_config do
-      require 'json'
-      # Loop until the Vagrant box finishes SSH bootstrap
-      raw_ssh_config = Stud.try(50.times, LogStash::CommandExecutor::CommandError) do
-          LogStash::VagrantHelpers.fetch_config.stdout.split('\n');
-      end
-      parsed_ssh_config = LogStash::VagrantHelpers.parse(raw_ssh_config)
-      File.write('.vm_ssh_config', parsed_ssh_config.to_json)
-    end
-    
-          it 'list the plugins with their versions' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose')
-        result.stdout.split('\n').each do |plugin|
-          expect(plugin).to match(/^logstash-\w+-\w+\s\(\d+\.\d+.\d+(.\w+)?\)/)
-        end
-      end
-    end
-    
-        context 'update all the plugins' do
-      it 'has executed successfully' do
-        logstash.run_command_in_path('bin/logstash-plugin update --no-verify')
-        expect(logstash).to have_installed?(plugin_name, '0.1.1')
-      end
-    end
-  end
-end
-
-    
-    
-  # Adds some extra filters used during the category creation process.
-  module Filters
-    
-          if File.symlink?(includes_dir)
-        return 'Includes directory '#{includes_dir}' cannot be a symlink'
-      end
