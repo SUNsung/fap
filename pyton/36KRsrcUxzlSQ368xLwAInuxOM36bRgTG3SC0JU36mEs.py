@@ -1,87 +1,51 @@
 
         
-            if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
-    else:
-        # load the test config if passed in
-        app.config.update(test_config)
+            def test_generator(self):
+        def f():
+            for i in range(2):
+                yield i
+        def g(p):
+            for i in f():
+                pass
+        f_ident = ident(f)
+        g_ident = ident(g)
+        self.check_events(g, [(1, 'call', g_ident),
+                              # call the iterator twice to generate values
+                              (2, 'call', f_ident),
+                              (2, 'return', f_ident),
+                              (2, 'call', f_ident),
+                              (2, 'return', f_ident),
+                              # once more; returns end-of-iteration with
+                              # actually raising an exception
+                              (2, 'call', f_ident),
+                              (2, 'return', f_ident),
+                              (1, 'return', g_ident),
+                              ])
     
-        Checks that the id exists and optionally that the current user is
-    the author.
-    
-    
-def close_db(e=None):
-    '''If this request connected to the database, close the
-    connection.
+        Directories are *not* resources.
     '''
-    db = g.pop('db', None)
+    package = _get_package(package)
+    _normalize_path(name)
+    reader = _get_resource_reader(package)
+    if reader is not None:
+        return reader.is_resource(name)
+    try:
+        package_contents = set(contents(package))
+    except (NotADirectoryError, FileNotFoundError):
+        return False
+    if name not in package_contents:
+        return False
+    # Just because the given file_name lives as an entry in the package's
+    # contents doesn't necessarily mean it's a resource.  Directories are not
+    # resources, so let's try to find out if it's a directory or not.
+    path = Path(package.__spec__.origin).parent / name
+    return path.is_file()
     
-        monkeypatch.setattr('flaskr.db.init_db', fake_init_db)
-    result = runner.invoke(args=['init-db'])
-    assert 'Initialized' in result.output
-    assert Recorder.called
-
-    
-            app.add_url_rule('/counter', view_func=CounterAPI.as_view('counter'))
-    '''
-    
-    
-def set_init_version(version):
-    info('Setting __init__.py version to %s', version)
-    set_filename_version('flask/__init__.py', version, '__version__')
-    
-    '''
-requests._internal_utils
-~~~~~~~~~~~~~~
-    
-        def __getitem__(self, key):
-        return self._store[key.lower()][1]
-    
-        def cert_verify(self, conn, url, verify, cert):
-        '''Verify a SSL certificate. This method should not be called from user
-        code, and is only exposed for use when subclassing the
-        :class:`HTTPAdapter <requests.adapters.HTTPAdapter>`.
-    
-            with Server(handler) as (host, port):
-            sock = socket.socket()
-            sock.connect((host, port))
-            sock.sendall(question)
-            text = sock.recv(1000)
-            assert text == answer
-            sock.close()
-    
-        @pytest.mark.parametrize(
-        'stream, value', (
-            (StringIO.StringIO, 'Test'),
-            (BytesIO, b'Test'),
-            pytest.mark.skipif('cStringIO is None')((cStringIO, 'Test')),
-        ))
-    def test_io_streams(self, stream, value):
-        '''Ensures that we properly deal with different kinds of IO streams.'''
-        assert super_len(stream()) == 0
-        assert super_len(stream(value)) == 4
-    
-            :param url: URL for the new :class:`Request` object.
-        :param data: (optional) Dictionary, list of tuples, bytes, or file-like
-            object to send in the body of the :class:`Request`.
-        :param \*\*kwargs: Optional arguments that ``request`` takes.
-        :rtype: requests.Response
-        '''
-    
-            Will successfully encode parameters when passed as a dict or a list of
-        2-tuples. Order is retained if data is a list of 2-tuples but arbitrary
-        if parameters are supplied as a dict.
-        '''
-    
-            # put all lines in the file into a Python list
-        strings = f.readlines()
-        
-        # above line leaves trailing newline characters; strip them out
-        strings = [x.strip(u'\n') for x in strings]
-        
-        # remove empty-lines and comments
-        strings = [x for x in strings if x and not x.startswith(u'#')]
-        
-        # insert empty string since all are being removed
-        strings.insert(0, u'')
+        def testClosedIteratorDeadlock(self):
+        # Issue #3309: Iteration on a closed BZ2File should release the lock.
+        self.createTempFile()
+        bz2f = BZ2File(self.filename)
+        bz2f.close()
+        self.assertRaises(ValueError, next, bz2f)
+        # This call will deadlock if the above call failed to release the lock.
+        self.assertRaises(ValueError, bz2f.readlines)
