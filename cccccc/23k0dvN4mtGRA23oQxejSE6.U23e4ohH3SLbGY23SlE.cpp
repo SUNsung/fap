@@ -1,142 +1,229 @@
 
         
-        	b2Vec2 origDir(1.0f,0.0f);
-	b2Vec2* resultVecs = new b2Vec2[4*nNodes];// nodes may be visited more than once, unfortunately - change to growable array!
-	int32 nResultVecs = 0;
-	b2PolyNode* currentNode = &nodes[minYIndex];
-	b2PolyNode* startNode = currentNode;
-	b2Assert(currentNode->nConnected > 0);
-	b2PolyNode* nextNode = currentNode->GetRightestConnection(origDir);
-	if (!nextNode) goto CleanUp; // Borked, clean up our mess and return
-	resultVecs[0] = startNode->position;
-	++nResultVecs;
-	while (nextNode != startNode){
-		if (nResultVecs > 4*nNodes){
-			/*
-			printf('%d, %d, %d\n',(int)startNode,(int)currentNode,(int)nextNode);
-			printf('%f, %f -> %f, %f\n',currentNode->position.x,currentNode->position.y, nextNode->position.x, nextNode->position.y);
-				p->printFormatted();
-				printf('Dumping connection graph: \n');
-				for (int32 i=0; i<nNodes; ++i) {
-					printf('nodex[%d] = %f; nodey[%d] = %f;\n',i,nodes[i].position.x,i,nodes[i].position.y);
-					printf('//connected to\n');
-					for (int32 j=0; j<nodes[i].nConnected; ++j) {
-						printf('connx[%d][%d] = %f; conny[%d][%d] = %f;\n',i,j,nodes[i].connected[j]->position.x, i,j,nodes[i].connected[j]->position.y);
-					}
-				}
-				printf('Dumping results thus far: \n');
-				for (int32 i=0; i<nResultVecs; ++i) {
-					printf('x[%d]=map(%f,-3,3,0,width); y[%d] = map(%f,-3,3,height,0);\n',i,resultVecs[i].x,i,resultVecs[i].y);
-				}
-			//*/
-			b2Assert(false); //nodes should never be visited four times apiece (proof?), so we've probably hit a loop...crap
-		}
-		resultVecs[nResultVecs++] = nextNode->position;
-		b2PolyNode* oldNode = currentNode;
-		currentNode = nextNode;
-		//printf('Old node connections = %d; address %d\n',oldNode->nConnected, (int)oldNode);
-		//printf('Current node connections = %d; address %d\n',currentNode->nConnected, (int)currentNode);
-		nextNode = currentNode->GetRightestConnection(oldNode);
-		if (!nextNode) goto CleanUp; // There was a problem, so jump out of the loop and use whatever garbage we've generated so far
-		//printf('nextNode address: %d\n',(int)nextNode);
-	}
-    
-    		inline SourceAlphaMix GetSourceAlphaMix(void)
-		{
-			return m_sourcealphamix;
-		}
-    
-    		typedef struct
-		{
-			unsigned red2 : 4;
-			unsigned red1 : 4;
-			//
-			unsigned green2 : 4;
-			unsigned green1 : 4;
-			//
-			unsigned blue2 : 4;
-			unsigned blue1 : 4;
-			//
-			unsigned flip : 1;
-			unsigned diff : 1;
-			unsigned cw2 : 3;
-			unsigned cw1 : 3;
-			//
-			unsigned int selectors;
-		} Individual;
-    
-    #if !defined(OPUS_HAVE_RTCD)
-#define OVERRIDE_OPUS_FFT (1)
-    
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
-    
-       - Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer.
-    
-      CodeAddress base() const {
-    return codeBlock.base();
-  }
-    
-    #endif // HPHP_DATA_STREAM_WRAPPER_H
-
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    
-    int execute_program(int argc, char **argv);
-    
-    #include 'hphp/runtime/base/stream-wrapper.h'
-#include 'hphp/runtime/base/runtime-error.h'
-    
-      virtual ~ExtensionManager_query_args() throw();
-  std::string sql;
-    
-    void ExtensionStatus::__set_uuid(const ExtensionRouteUUID val) {
-  this->uuid = val;
-}
-std::ostream& operator<<(std::ostream& out, const ExtensionStatus& obj)
-{
-  obj.printTo(out);
-  return out;
-}
-    
-    
-    {
-    {
-    {  return results;
-}
-}
-}
-
-    
-    namespace osquery {
+        namespace atom {
     }
     
-    struct mei_response {
-  uint32_t maxlen;
-  uint8_t version;
-};
+    #include 'base/callback.h'
+#include 'base/location.h'
+#include 'base/single_thread_task_runner.h'
+#include 'uv.h'  // NOLINT(build/include)
     
-    template <typename MessageType>
-PerfOutput<MessageType>::PerfOutput(PerfOutput&& other)
-    : size_(other.size_), fd_(other.fd_), data_ptr_(other.data_ptr_) {
-  other.fd_ = -1;
-  other.data_ptr_ = nullptr;
+    #include 'atom/browser/api/event_emitter.h'
+#include 'atom/browser/auto_updater.h'
+#include 'atom/browser/window_list_observer.h'
+#include 'native_mate/arguments.h'
+#include 'native_mate/handle.h'
+    
+    Event::Event(v8::Isolate* isolate) {
+  Init(isolate);
 }
     
-    #include <osquery/utils/expected/expected.h>
-#include <osquery/utils/map_take.h>
-#include <osquery/utils/system/linux/cpu.h>
-#include <osquery/utils/system/linux/perf_event/perf_event.h>
-#include <osquery/utils/system/posix/errno.h>
+    class Event : public Wrappable<Event>, public content::WebContentsObserver {
+ public:
+  static Handle<Event> Create(v8::Isolate* isolate);
+    }
     
-      auto it = table_.find(inv_key);
-  if (it == table_.end()) {
-    auto const key = createKey(in_event.type, in_event.pid, in_event.tgid);
-    // As far as `return_value` is not used while the event is in the table_
-    // we can use it to preserve the counter value as the age of the event.
-    in_event.return_value = counter_;
-    table_.emplace(key, std::move(in_event));
-    return boost::none;
+    
+    {}  // namespace atom
+    
+    
+    {  DISALLOW_COPY_AND_ASSIGN(AsarProtocolHandler);
+};
+    
+    bool URLRequestAboutJob::GetMimeType(std::string* mime_type) const {
+  *mime_type = 'text/html';
+  return true;
+}
+    
+      // Notify the parent process that it can quit now.
+  StringType name = internal::GetWaitEventName(process.Pid());
+  base::win::ScopedHandle wait_event(
+      ::CreateEventW(NULL, TRUE, FALSE, name.c_str()));
+  ::SetEvent(wait_event.Get());
+    
+    static HMODULE node_dll = NULL;
+static HMODULE nw_dll = NULL;
+    
+    // Create a Shell and returns its routing id.
+IPC_SYNC_MESSAGE_ROUTED2_1(ShellViewHostMsg_CreateShell,
+                           std::string /* url */,
+                           base::DictionaryValue /* manifest */,
+                           int /* result */)
+    
+    MenuDelegate::MenuDelegate(ObjectManager* object_manager)
+    : object_manager_(object_manager) {
+}
+    
+    void Menu::Create(const base::DictionaryValue& option) {
+  gtk_accel_group = NULL;
+  std::string type;
+  if (option.GetString('type', &type) && type == 'menubar')
+    menu_ = gtk_menu_bar_new();
+  else
+    menu_ = gtk_menu_new();
+    }
+    
+    void Menu::UpdateKeys(views::FocusManager *focus_manager){
+  if (focus_manager == NULL){
+    return ;
+  } else {
+    focus_manager_ = focus_manager;
+    for(auto* item : menu_items_) {
+      item->UpdateKeys(focus_manager);
+    }
   }
+}
+    
+    ui::KeyboardCode GetKeycodeFromText(std::string text){
+  ui::KeyboardCode retval = ui::VKEY_UNKNOWN;
+  if (text.size() != 0){
+    std::string upperText = base::ToUpperASCII(text);
+    std::string keyName = text;
+    bool found = false;
+    if (upperText.size() == 1){
+      char key = upperText[0];
+      if (key>='0' && key<='9'){//handle digital
+        keyName = 'Digit' + upperText;
+        found = true;
+      } else if (key>='A'&&key<='Z'){//handle alphabet
+        keyName = 'Key' + upperText;
+        found = true;
+      }
+    }
+    }
+    }
+    
+    
+    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.setListSync', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwClipboardSetListSyncFunction);
+};
+    
+    
+    {  // Verify that the size of the key space not touched by the reads
+  // is pretty much unchanged.
+  const int64_t final_other_size = Size(Key(n), Key(kCount));
+  ASSERT_LE(final_other_size, initial_other_size + 1048576);
+  ASSERT_GE(final_other_size, initial_other_size/5 - 1048576);
+}
+    
+    // Value types encoded as the last component of internal keys.
+// DO NOT CHANGE THESE ENUM VALUES: they are embedded in the on-disk
+// data structures.
+enum ValueType {
+  kTypeDeletion = 0x0,
+  kTypeValue = 0x1
+};
+// kValueTypeForSeek defines the ValueType that should be passed when
+// constructing a ParsedInternalKey object for seeking to a particular
+// sequence number (since we sort sequence numbers in decreasing order
+// and the value type is embedded as the low 8 bits in the sequence
+// number in internal keys, we need to use the highest-numbered
+// ValueType, not the lowest).
+static const ValueType kValueTypeForSeek = kTypeValue;
+    
+    std::string CurrentFileName(const std::string& dbname) {
+  return dbname + '/CURRENT';
+}
+    
+      class StringSource : public SequentialFile {
+   public:
+    Slice contents_;
+    bool force_error_;
+    bool returned_partial_;
+    StringSource() : force_error_(false), returned_partial_(false) { }
+    }
+    
+    #ifndef STORAGE_LEVELDB_DB_LOG_WRITER_H_
+#define STORAGE_LEVELDB_DB_LOG_WRITER_H_
+    
+        // Create the log reader.
+    LogReporter reporter;
+    reporter.env = env_;
+    reporter.info_log = options_.info_log;
+    reporter.lognum = log;
+    // We intentionally make log::Reader do checksumming so that
+    // corruptions cause entire commits to be skipped instead of
+    // propagating bad information (like overly large sequence
+    // numbers).
+    log::Reader reader(lfile, &reporter, false/*do not checksum*/,
+                       0/*initial_offset*/);
+    
+    // Snapshots are kept in a doubly-linked list in the DB.
+// Each SnapshotImpl corresponds to a particular sequence number.
+class SnapshotImpl : public Snapshot {
+ public:
+  SnapshotImpl(SequenceNumber sequence_number)
+      : sequence_number_(sequence_number) {}
+    }
+    
+          case kLastSequence:
+        if (GetVarint64(&input, &last_sequence_)) {
+          has_last_sequence_ = true;
+        } else {
+          msg = 'last sequence number';
+        }
+        break;
+    
+      friend class Compaction;
+  friend class Version;
+    
+    
+    {
+    {        Windows::UI::Xaml::Controls::PivotItem^ m_pivotItem;
+        bool m_IsDigit = false;
+        Memory^ m_memory;
+        void HistoryFlyout_Opened(_In_ Platform::Object ^sender, _In_ Platform::Object ^args);
+        void HistoryFlyout_Closing(_In_ Windows::UI::Xaml::Controls::Primitives::FlyoutBase^ sender, _In_ Windows::UI::Xaml::Controls::Primitives::FlyoutBaseClosingEventArgs^ args);
+        void HistoryFlyout_Closed(_In_ Platform::Object ^sender, _In_ Platform::Object ^args);
+        void OnHideHistoryClicked();
+        void OnHideMemoryClicked();
+        void OnHistoryItemClicked(_In_ CalculatorApp::ViewModel::HistoryItemViewModel^ e);
+        void ToggleHistoryFlyout(Platform::Object^ parameter);
+        void ToggleMemoryFlyout();
+        CalculatorApp::HistoryList^ m_historyList;
+        bool m_fIsHistoryFlyoutOpen;
+        bool m_fIsMemoryFlyoutOpen;
+        void OnMemoryFlyoutOpened(_In_ Platform::Object ^sender, _In_ Platform::Object ^args);
+        void OnMemoryFlyoutClosing(_In_ Windows::UI::Xaml::Controls::Primitives::FlyoutBase^ sender, _In_ Windows::UI::Xaml::Controls::Primitives::FlyoutBaseClosingEventArgs^ args);
+        void OnMemoryFlyoutClosed(_In_ Platform::Object ^sender, _In_ Platform::Object ^args);
+        void SetChildAsMemory();
+        void SetChildAsHistory();
+        Memory^ GetMemory();
+        void EnableControls(bool enable);
+        void EnableMemoryControls(bool enable);
+        void OnMemoryFlyOutTapped(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::Input::TappedRoutedEventArgs^ e);
+        void OnHistoryFlyOutTapped(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::Input::TappedRoutedEventArgs^ e);
+        void expressionContainer_LayoutUpdated(_In_ Platform::Object^ sender, _In_ Platform::Object^ e);
+        bool IsValidRegularExpression(std::wstring str);
+        void DockPanelTapped(_In_ Windows::UI::Xaml::Input::TappedRoutedEventArgs^ e);
+        void OnResultsLayoutChanged(_In_ Platform::Object^ sender, _In_ Platform::Object^ e);
+        void SetResultStyles();
+        void OnErrorLayoutCompleted(_In_ Platform::Object^ sender, _In_ Platform::Object^ e);
+        void OnHistoryAccessKeyInvoked(_In_ Windows::UI::Xaml::UIElement^ sender, _In_ Windows::UI::Xaml::Input::AccessKeyInvokedEventArgs^ args);
+        void OnMemoryAccessKeyInvoked(_In_ Windows::UI::Xaml::UIElement^ sender, _In_ Windows::UI::Xaml::Input::AccessKeyInvokedEventArgs^ args);
+        void DockPivot_SelectionChanged(Platform::Object^ sender, Windows::UI::Xaml::Controls::SelectionChangedEventArgs^ e);
+};
+}
+
+    
+    void HistoryList::OnDeleteSwipeInvoked(_In_ MUXC::SwipeItem^ sender, _In_ MUXC::SwipeItemInvokedEventArgs^ e)
+{
+    auto swipedItem = safe_cast<HistoryItemViewModel^>(e->SwipeControl->DataContext);
+    }
+    
+    namespace CalculatorApp
+{
+    [Windows::Foundation::Metadata::WebHostHidden]
+    public ref class HistoryList sealed
+    {
+    public:
+        HistoryList();
+        property CalculatorApp::ViewModel::HistoryViewModel^ Model
+        {
+            CalculatorApp::ViewModel::HistoryViewModel^ get() {
+                return static_cast<CalculatorApp::ViewModel::HistoryViewModel^>(this->DataContext);
+            }
+        }
+    }
+    }
