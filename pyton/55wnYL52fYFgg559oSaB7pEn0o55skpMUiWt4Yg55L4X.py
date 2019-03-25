@@ -1,71 +1,157 @@
 
         
-        # read in SQL for populating test data
-with open(os.path.join(os.path.dirname(__file__), 'data.sql'), 'rb') as f:
-    _data_sql = f.read().decode('utf8')
-    
-    
-def _find_app():
-    top = _app_ctx_stack.top
-    if top is None:
-        raise RuntimeError(_app_ctx_err_msg)
-    return top.app
-    
-    
-def _load_arg_defaults(kwargs):
-    '''Inject default arguments for load functions.'''
-    if current_app:
-        bp = current_app.blueprints.get(request.blueprint) if request else None
-        kwargs.setdefault(
-            'cls',
-            bp.json_decoder if bp and bp.json_decoder
-                else current_app.json_decoder
-        )
-    else:
-        kwargs.setdefault('cls', JSONDecoder)
-    
-    
-# Core signals.  For usage examples grep the source code or consult
-# the API documentation in docs/api.rst as well as docs/signals.rst
-template_rendered = _signals.signal('template-rendered')
-before_render_template = _signals.signal('before-render-template')
-request_started = _signals.signal('request-started')
-request_finished = _signals.signal('request-finished')
-request_tearing_down = _signals.signal('request-tearing-down')
-got_request_exception = _signals.signal('got-request-exception')
-appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
-appcontext_pushed = _signals.signal('appcontext-pushed')
-appcontext_popped = _signals.signal('appcontext-popped')
-message_flashed = _signals.signal('message-flashed')
+        versions_info['signature'] = signature
+with open('update/versions.json', 'w') as versionsf:
+    json.dump(versions_info, versionsf, indent=4, sort_keys=True)
 
     
-                # If we have no method at all in there we don't want to add a
-            # method list. This is for instance the case for the base class
-            # or another subclass of a base method view that does not introduce
-            # new methods.
-            if methods:
-                cls.methods = methods
+        def test_cache(self):
+        ydl = FakeYDL({
+            'cachedir': self.test_dir,
+        })
+        c = Cache(ydl)
+        obj = {'x': 1, 'y': ['ä', '\\a', True]}
+        self.assertEqual(c.load('test_cache', 'k.'), None)
+        c.store('test_cache', 'k.', obj)
+        self.assertEqual(c.load('test_cache', 'k2'), None)
+        self.assertFalse(_is_empty(self.test_dir))
+        self.assertEqual(c.load('test_cache', 'k.'), obj)
+        self.assertEqual(c.load('test_cache', 'y'), None)
+        self.assertEqual(c.load('test_cache2', 'k.'), None)
+        c.remove()
+        self.assertFalse(os.path.exists(self.test_dir))
+        self.assertEqual(c.load('test_cache', 'k.'), None)
+    
+    from scrapy.spiders import Spider
+from scrapy.http import Request
+    
+            editor = self.settings['EDITOR']
+        try:
+            spidercls = self.crawler_process.spider_loader.load(args[0])
+        except KeyError:
+            return self._err('Spider not found: %s' % args[0])
+    
+            spidercls = DefaultSpider
+        spider_loader = self.crawler_process.spider_loader
+        if opts.spider:
+            spidercls = spider_loader.load(opts.spider)
+        else:
+            spidercls = spidercls_for_request(spider_loader, request, spidercls)
+        self.crawler_process.crawl(spidercls, start_requests=lambda: [request])
+        self.crawler_process.start()
+
+    
+        from twisted.internet.ssl import AcceptableCiphers
+    from twisted.internet._sslverify import (ClientTLSOptions,
+                                             verifyHostname,
+                                             VerificationError)
+    try:
+        # XXX: this import would fail on Debian jessie with system installed
+        # service_identity library, due to lack of cryptography.x509 dependency
+        # See https://github.com/pyca/service_identity/issues/21
+        from service_identity.exceptions import CertificateError
+        verification_errors = (CertificateError, VerificationError)
+    except ImportError:
+        verification_errors = VerificationError
+    
+        def __init__(self, settings):
+        if not settings.getbool('AJAXCRAWL_ENABLED'):
+            raise NotConfigured
+    
+        def _debug_set_cookie(self, response, spider):
+        if self.debug:
+            cl = [to_native_str(c, errors='replace')
+                  for c in response.headers.getlist('Set-Cookie')]
+            if cl:
+                cookies = '\n'.join('Set-Cookie: {}\n'.format(c) for c in cl)
+                msg = 'Received cookies from: {}\n{}'.format(response, cookies)
+                logger.debug(msg, extra={'spider': spider})
+    
+            for i in self.tree.iterfind('video/quality'):
+            quality = i.attrib ['value']
+            url = i[0].attrib['playurl']
+            self.stream_types.append({'id': quality,
+                                      'video_profile': i.attrib ['desp']})
+            self.streams[quality] = {'url': url,
+                                     'video_profile': i.attrib ['desp']}
+            self.streams_sorted = [dict([('id', stream_type['id'])] + list(self.streams[stream_type['id']].items())) for stream_type in self.__class__.stream_types if stream_type['id'] in self.streams]
+    
+    site_info = 'Douban.com'
+download = douban_download
+download_playlist = playlist_not_supported('douban')
+
+    
+    #----------------------------------------------------------------------
+def makeMimi(upid):
+    '''From http://cdn37.atwikiimg.com/sitescript/pub/dksitescript/FC2.site.js
+    Also com.hps.util.fc2.FC2EncrptUtil.makeMimiLocal
+    L110'''
+    strSeed = 'gGddgPfeaf_gzyr'
+    prehash = upid + '_' + strSeed
+    return md5(prehash.encode('utf-8')).hexdigest()
+    
+            magic_list = []
     
     
-@functools.lru_cache()
-def get_citext_oids(connection_alias):
-    '''Return citext array OIDs.'''
-    with connections[connection_alias].cursor() as cursor:
-        cursor.execute('SELECT typarray FROM pg_type WHERE typname = 'citext'')
-        return tuple(row[0] for row in cursor)
+def huomaotv_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    room_id_pattern = r'huomao.com/(\d+)'
+    room_id = match1(url, room_id_pattern)
+    html = get_content(get_mobile_room_url(room_id))
     
-        def __init__(self, get_response=None):
-        if not apps.is_installed('django.contrib.sites'):
-            raise ImproperlyConfigured(
-                'You cannot use RedirectFallbackMiddleware when '
-                'django.contrib.sites is not installed.'
-            )
-        super().__init__(get_response)
+            if os.path.exists(temp_filepath):
+            tempfile_size = os.path.getsize(temp_filepath)
+            received += tempfile_size
+            bar.update_received(tempfile_size)
+    else:
+        open_mode = 'wb'
     
-        def delete(self, session_key=None):
-        super().delete(session_key)
-        if session_key is None:
-            if self.session_key is None:
-                return
-            session_key = self.session_key
-        self._cache.delete(self.cache_key_prefix + session_key)
+    
+def ChineseAnalyzer(stoplist=STOP_WORDS, minsize=1, stemfn=stem, cachesize=50000):
+    return (ChineseTokenizer() | LowercaseFilter() |
+            StopFilter(stoplist=stoplist, minsize=minsize) |
+            StemFilter(stemfn=stemfn, ignore=None, cachesize=cachesize))
+
+    
+    def cut(sentence):
+    sentence = strdecode(sentence)
+    blocks = re_han.split(sentence)
+    for blk in blocks:
+        if re_han.match(blk):
+            for word in __cut(blk):
+                if word not in Force_Split_Words:
+                    yield word
+                else:
+                    for c in word:
+                        yield c
+        else:
+            tmp = re_skip.split(blk)
+            for x in tmp:
+                if x:
+                    yield x
+
+    
+    
+def get_top_states(t_state_v, K=4):
+    return sorted(t_state_v, key=t_state_v.__getitem__, reverse=True)[:K]
+    
+    
+if len(args) < 1:
+    print(USAGE)
+    sys.exit(1)
+    
+    import jieba
+import jieba.analyse
+from optparse import OptionParser
+    
+        def testCutForSearch_NOHMM(self):
+        for content in test_contents:
+            result = jieba.cut_for_search(content,HMM=False)
+            assert isinstance(result, types.GeneratorType), 'Test CutForSearch Generator error'
+            result = list(result)
+            assert isinstance(result, list), 'Test CutForSearch error on content: %s' % content
+            print(' , '.join(result), file=sys.stderr)
+        print('testCutForSearch_NOHMM', file=sys.stderr)
+    
+    cat abc.txt | python jiebacmd.py | sort | uniq -c | sort -nr -k1 | head -100
+    
+    USAGE ='usage:    python extract_tags.py [file name] -k [top k]'
