@@ -1,32 +1,117 @@
 
         
-        match_output = '''
-Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
-Hit:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease
-Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
-Hit:4 http://security.ubuntu.com/ubuntu zesty-security InRelease
-Hit:5 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
-Hit:6 https://download.docker.com/linux/ubuntu zesty InRelease
-Hit:7 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
-Fetched 89.2 kB in 0s (122 kB/s)
-Reading package lists... Done
-Building dependency tree
-Reading state information... Done
-8 packages can be upgraded. Run 'apt list --upgradable' to see them.
-'''
+        
+@pytest.fixture
+def runner(app):
+    '''A test runner for the app's Click commands.'''
+    return app.test_cli_runner()
+    
+        with app.app_context():
+        db = get_db()
+        post = db.execute('SELECT * FROM post WHERE id = 1').fetchone()
+        assert post['title'] == 'updated'
     
     
-@pytest.mark.parametrize('script, output', [
-    ('brew link sshfs', output),
-    ('cat output', output),
-    ('brew install sshfs', '')])
-def test_not_match(script, output):
-    command = Command(script, output)
-    assert not match(command)
+def test_get_close_db(app):
+    with app.app_context():
+        db = get_db()
+        assert db is get_db()
     
-        @classmethod
-    def get_session_store_class(cls):
-        raise NotImplementedError
+    
+# Core signals.  For usage examples grep the source code or consult
+# the API documentation in docs/api.rst as well as docs/signals.rst
+template_rendered = _signals.signal('template-rendered')
+before_render_template = _signals.signal('before-render-template')
+request_started = _signals.signal('request-started')
+request_finished = _signals.signal('request-finished')
+request_tearing_down = _signals.signal('request-tearing-down')
+got_request_exception = _signals.signal('got-request-exception')
+appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
+appcontext_pushed = _signals.signal('appcontext-pushed')
+appcontext_popped = _signals.signal('appcontext-popped')
+message_flashed = _signals.signal('message-flashed')
+
+    
+        def get_source(self, environment, template):
+        if self.app.config['EXPLAIN_TEMPLATE_LOADING']:
+            return self._get_source_explained(environment, template)
+        return self._get_source_fast(environment, template)
+    
+            url = url_parse(path)
+        base_url = '{scheme}://{netloc}/{path}'.format(
+            scheme=url.scheme or url_scheme,
+            netloc=url.netloc or http_host,
+            path=app_root.lstrip('/')
+        )
+        path = url.path
+    
+        @property
+    def config(self):
+        if not hasattr(self, '_config'):
+            self._config = Config(directory=self.config_dir)
+            if self._config.is_new():
+                self._config.save()
+            else:
+                self._config.load()
+        return self._config
+    
+            return '\r\n'.join(headers)
+    
+        def __init__(self, chunk_size=CHUNK_SIZE, **kwargs):
+        super(RawStream, self).__init__(**kwargs)
+        self.chunk_size = chunk_size
+    
+            '''
+        return headers
+    
+    
+def test_default_options_overwrite(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http('--json', httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['json'] == {'foo': 'bar'}
+    
+        def test_request_body_from_file_by_path(self, httpbin):
+        r = http('--verbose',
+                 'POST', httpbin.url + '/post', '@' + FILE_PATH_ARG)
+        assert HTTP_OK in r
+        assert FILE_CONTENT in r, r
+        assert ''Content-Type': 'text/plain'' in r
+    
+        msg = Message('Content-Disposition: %s' % content_disposition)
+    filename = msg.get_filename()
+    if filename:
+        # Basic sanitation.
+        filename = os.path.basename(filename).lstrip('.').strip()
+        if filename:
+            return filename
+    
+        def save(self, must_create=False):
+        if self.session_key is None:
+            return self.create()
+        if must_create:
+            func = self._cache.add
+        elif self._cache.get(self.cache_key) is not None:
+            func = self._cache.set
+        else:
+            raise UpdateError
+        result = func(self.cache_key,
+                      self._get_session(no_load=must_create),
+                      self.get_expiry_age())
+        if must_create and not result:
+            raise CreateError
+    
+        def exists(self, session_key):
+        return self.model.objects.filter(session_key=session_key).exists()
+    
+        def save(self, session_key, session_dict, expire_date):
+        s = self.model(session_key, self.encode(session_dict), expire_date)
+        if session_dict:
+            s.save()
+        else:
+            s.delete()  # Clear sessions with no data.
+        return s
     
         if section is not None:
         if section not in sitemaps:
@@ -36,169 +121,151 @@ def test_not_match(script, output):
         maps = sitemaps.values()
     page = request.GET.get('p', 1)
     
-        y_train = np.reshape(y_train, (len(y_train), 1))
-    y_test = np.reshape(y_test, (len(y_test), 1))
-    
-        # Test single image
-    x = np.random.uniform(0, 255, (10, 10, 3))
-    inputs = Input(shape=x.shape)
-    outputs = Lambda(utils.preprocess_input, output_shape=x.shape)(inputs)
-    model = Model(inputs, outputs)
-    assert model.predict(x[np.newaxis])[0].shape == x.shape
-    
-        with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
-        loss = MSE_MAE_loss(0.3)
-        inputs = keras.layers.Input((2,))
-        outputs = keras.layers.Dense(1, name='model_output')(inputs)
-        model = keras.models.Model(inputs, outputs)
-        model.compile(optimizer='sgd', loss={'model_output': loss})
-        model.fit(np.random.rand(256, 2), np.random.rand(256, 1))
-        model.save(model_filename)
-    
-        target_devices = ['/cpu:0'] + ['/gpu:%d' % i for i in target_gpu_ids]
-    for device in target_devices:
-        if device not in available_devices:
-            raise ValueError(
-                'To call `multi_gpu_model` with `gpus=%s`, '
-                'we expect the following devices to be available: %s. '
-                'However this machine only has: %s. '
-                'Try reducing `gpus`.' % (gpus,
-                                          target_devices,
-                                          available_devices))
-    
-    outputs = Activation('sigmoid', name='decoder_output')(x)
-    
-    arxiv:1504.00941v2 [cs.NE] 7 Apr 2015
-http://arxiv.org/pdf/1504.00941v2.pdf
-    
-    # the data, split between train and test sets
-(x_train, y_train), (x_test, y_test) = mnist.load_data()
-    
-    
-def poisson(y_true, y_pred):
-    return K.mean(y_pred - y_true * K.log(y_pred + K.epsilon()), axis=-1)
-    
-            self.last_check_time = time_now
-        threading.Thread(target=self._simple_check_worker).start()
-    
-        for qualified, server, _, _ in server_list:
-        if qualified:
-            best_server = server[0]
-            break
-    log = Log()
-    if best_server:
-        log.write('best server is: %s.' % best_server)
-    else:
-        xlog.warning('no server detected, return default: teredo.remlab.net.')
-        log.write('no server detected, return default: teredo.remlab.net.')
-        best_server = 'teredo.remlab.net'
-    log.close()
-    return best_server
-    
-        try:
-        if cookie:
-            if 'rc4' not in options:
-                metadata = zlib.decompress(base64.b64decode(cookie), -zlib.MAX_WBITS)
-                payload = input_data or ''
-            else:
-                metadata = zlib.decompress(rc4crypt(base64.b64decode(cookie), __password__), -zlib.MAX_WBITS)
-                payload = rc4crypt(input_data, __password__) if input_data else ''
+            is_not_importable = False
+        is_namespace = False
+        tests = []
+        if os.path.isdir(os.path.abspath(start_dir)):
+            start_dir = os.path.abspath(start_dir)
+            if start_dir != top_level_dir:
+                is_not_importable = not os.path.isfile(os.path.join(start_dir, '__init__.py'))
         else:
-            if 'rc4' in options:
-                input_data = rc4crypt(input_data, __password__)
-            metadata_length = struct.unpack('!h', input_data[:2])
-            metadata = zlib.decompress(input_data[2:2+metadata_length], -zlib.MAX_WBITS)
-            payload = input_data[2+metadata_length:]
-        headers = dict(x.split(':', 1) for x in metadata.splitlines() if x)
-        method = headers.pop('G-Method')
-        url = headers.pop('G-Url')
-    except (zlib.error, KeyError, ValueError):
-        import traceback
-        start_response('500 Internal Server Error', [('Content-Type', 'text/html')])
-        yield message_html('500 Internal Server Error', 'Bad Request (metadata) - Possible Wrong Password', '<pre>%s</pre>' % traceback.format_exc())
-        raise StopIteration
+            # support for discovery from dotted module names
+            try:
+                __import__(start_dir)
+            except ImportError:
+                is_not_importable = True
+            else:
+                the_module = sys.modules[start_dir]
+                top_part = start_dir.split('.')[0]
+                try:
+                    start_dir = os.path.abspath(
+                       os.path.dirname((the_module.__file__)))
+                except AttributeError:
+                    # look for namespace packages
+                    try:
+                        spec = the_module.__spec__
+                    except AttributeError:
+                        spec = None
     
-    	# The current Token when an error occurred.  Since not all streams
-	# can retrieve the ith Token, we have to track the Token object.
-	# For parsers.  Even when it's a tree parser, token might be set.
-        self.token = None
+        # It is implicit in the documentation for TestLoader.suiteClass that
+    # all TestLoader.loadTestsFrom* methods respect it. Let's make sure
+    def test_suiteClass__loadTestsFromModule(self):
+        m = types.ModuleType('m')
+        class Foo(unittest.TestCase):
+            def test_1(self): pass
+            def test_2(self): pass
+            def foo_bar(self): pass
+        m.Foo = Foo
+    
+    REVERSE_NAME_MAPPING.update({
+    ('_functools', 'reduce'): ('__builtin__', 'reduce'),
+    ('tkinter.filedialog', 'FileDialog'): ('FileDialog', 'FileDialog'),
+    ('tkinter.filedialog', 'LoadFileDialog'): ('FileDialog', 'LoadFileDialog'),
+    ('tkinter.filedialog', 'SaveFileDialog'): ('FileDialog', 'SaveFileDialog'),
+    ('tkinter.simpledialog', 'SimpleDialog'): ('SimpleDialog', 'SimpleDialog'),
+    ('xmlrpc.server', 'ServerHTMLDoc'): ('DocXMLRPCServer', 'ServerHTMLDoc'),
+    ('xmlrpc.server', 'XMLRPCDocGenerator'):
+        ('DocXMLRPCServer', 'XMLRPCDocGenerator'),
+    ('xmlrpc.server', 'DocXMLRPCRequestHandler'):
+        ('DocXMLRPCServer', 'DocXMLRPCRequestHandler'),
+    ('xmlrpc.server', 'DocXMLRPCServer'):
+        ('DocXMLRPCServer', 'DocXMLRPCServer'),
+    ('xmlrpc.server', 'DocCGIXMLRPCRequestHandler'):
+        ('DocXMLRPCServer', 'DocCGIXMLRPCRequestHandler'),
+    ('http.server', 'SimpleHTTPRequestHandler'):
+        ('SimpleHTTPServer', 'SimpleHTTPRequestHandler'),
+    ('http.server', 'CGIHTTPRequestHandler'):
+        ('CGIHTTPServer', 'CGIHTTPRequestHandler'),
+    ('_socket', 'socket'): ('socket', '_socketobject'),
+})
+    
+            self.check_tokenize('async\n...\nawait', '''\
+    NAME       'async'       (1, 0) (1, 5)
+    NEWLINE    '\\n'          (1, 5) (1, 6)
+    OP         '...'         (2, 0) (2, 3)
+    NEWLINE    '\\n'          (2, 3) (2, 4)
+    NAME       'await'       (3, 0) (3, 5)
+    ''')
+    
+        def test_distant_exception(self):
+        def f():
+            1/0
+        def g():
+            f()
+        def h():
+            g()
+        def i():
+            h()
+        def j(p):
+            i()
+        f_ident = ident(f)
+        g_ident = ident(g)
+        h_ident = ident(h)
+        i_ident = ident(i)
+        j_ident = ident(j)
+        self.check_events(j, [(1, 'call', j_ident),
+                              (2, 'call', i_ident),
+                              (3, 'call', h_ident),
+                              (4, 'call', g_ident),
+                              (5, 'call', f_ident),
+                              (5, 'return', f_ident),
+                              (4, 'return', g_ident),
+                              (3, 'return', h_ident),
+                              (2, 'return', i_ident),
+                              (1, 'return', j_ident),
+                              ])
+    
+        def test_bad_params(self):
+        # Test invalid parameter combinations.
+        self.assertRaises(ValueError,
+                          self.open, self.filename, 'wbt')
+        self.assertRaises(ValueError,
+                          self.open, self.filename, 'xbt')
+        self.assertRaises(ValueError,
+                          self.open, self.filename, 'rb', encoding='utf-8')
+        self.assertRaises(ValueError,
+                          self.open, self.filename, 'rb', errors='ignore')
+        self.assertRaises(ValueError,
+                          self.open, self.filename, 'rb', newline='\n')
+    
+    # An imaginary module that would make this work and be safe.
+from imaginary import magic_html_parser
+    
+    def test():
+    NUMBER_OF_PROCESSES = 4
+    TASKS1 = [(mul, (i, 7)) for i in range(20)]
+    TASKS2 = [(plus, (i, 8)) for i in range(10)]
+    
+        rm2.state = 'Zombie'
     
     
-    def execute(self, buf):
-        if self.text is not None:
-            buf.write(self.text)
-    
-        def getTokenIndex(self):
-        '''@brief Get the index in the input stream.
-    
-    min_primitive_root = 3
-    
-    if __name__ == '__main__':
-    num = generateLargePrime()
-    print(('Prime number:', num))
-    print(('isPrime:', isPrime(num)))
-
-    
-        def __hash_double_function(self, key, data, increment):
-        return (increment * self.__hash_function_2(key, data)) % self.size_table
-    
-        return score
-
-    
-    # The name of an image file (relative to this directory) to use as a favicon of
-# the docs.
-# This file should be a Windows icon file (.ico) being 16x16 or 32x32
-# pixels large.
-#
-html_favicon = '_static/favicon.ico'
-    
-        # If the temperature is not a number this can cause issues
-    # with Polymer components, so bail early there.
-    if not isinstance(temperature, Number):
-        raise TypeError(
-            'Temperature is not a number: {}'.format(temperature))
-    
-        meters = value
-    
-            if version.is_devrelease:
-            to_change['dev'] = None
-            to_change['pre'] = ('b', 0)
-    
-        output_directory = 'pdfs' if results.directory is None else results.directory
-    
-        # Gloss the lips
-    d.polygon(face_landmarks['top_lip'], fill=(150, 0, 0, 128))
-    d.polygon(face_landmarks['bottom_lip'], fill=(150, 0, 0, 128))
-    d.line(face_landmarks['top_lip'], fill=(150, 0, 0, 64), width=8)
-    d.line(face_landmarks['bottom_lip'], fill=(150, 0, 0, 64), width=8)
-    
-    known_encodings = [
-    obama_face_encoding,
-    biden_face_encoding
-]
-    
-        # Draw a label with a name below the face
-    text_width, text_height = draw.textsize(name)
-    draw.rectangle(((left, bottom - text_height - 10), (right, bottom)), fill=(0, 0, 255), outline=(0, 0, 255))
-    draw.text((left + 6, bottom - text_height - 5), name, fill=(255, 255, 255, 255))
+# In some very complex cases, it might be desirable to pull out the building
+# logic into another function (or a method on another class), rather than being
+# in the base class '__init__'. (This leaves you in the strange situation where
+# a concrete class does not have a useful constructor)
     
     '''
 *What is this pattern about?
-Define a family of algorithms, encapsulate each one, and make them interchangeable.
-Strategy lets the algorithm vary independently from clients that use it.
+This patterns aims to reduce the number of classes required by an
+application. Instead of relying on subclasses it creates objects by
+copying a prototypical instance at run-time.
     
-        '''Simply echoes the msg ids'''
     
-        data = Data()
+class NoTalkProxy(Proxy):
+    def talk(self):
+        print('Proxy checking for Sales Manager availability')
+        time.sleep(0.1)
+        print('This Sales Manager will not talk to you', 'whether he/she is busy or not')
     
-        graphic1.add(ellipse1)
-    graphic1.add(ellipse2)
-    graphic1.add(ellipse3)
-    graphic2.add(ellipse4)
+        def test_subscriber_shall_be_attachable_to_subscriptions(cls):
+        subscription = 'sub msg'
+        pro = Provider()
+        cls.assertEqual(len(pro.subscribers), 0)
+        sub = Subscriber('sub name', pro)
+        sub.subscribe(subscription)
+        cls.assertEqual(len(pro.subscribers[subscription]), 1)
     
-        def item_not_found(self, item_type, item_name):
-        print('That %s '%s' does not exist in the records' % (item_type, item_name))
-    
-        def test_extended_properties_retrieving(self):
-        self.assertEqual(self.dispatcher.get_objects()['A'].ext_value, 'E')
-        self.assertTrue(self.dispatcher.get_objects()['B'].diff)
+        def test_initial_state(self):
+        state = self.radio.state.name
+        expected_state_name = 'AM'
+        self.assertEqual(state, expected_state_name)
