@@ -1,99 +1,144 @@
 
         
-        namespace swift {
-namespace importer {
+        #endif  // TENSORFLOW_PYTHON_FRAMEWORK_CPP_SHAPE_INFERENCE_H_
+
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    namespace tensorflow {
+    }
+    
+    // Creates a numpy array with shapes specified by dim_size and dims and content
+// in data. The array does not own the memory, and destructor will be called to
+// release it. If the status is not ok the caller is responsible for releasing
+// the memory.
+Status ArrayFromMemory(int dim_size, npy_intp* dims, void* data, DataType dtype,
+                       std::function<void()> destructor, PyObject** result);
+    
+    // Must be included first
+#include 'tensorflow/python/lib/core/numpy.h'
+    
+    #ifndef TENSORFLOW_PYTHON_LIB_CORE_SAFE_PTR_H_
+#define TENSORFLOW_PYTHON_LIB_CORE_SAFE_PTR_H_
+    
+    #include 'tensorflow/stream_executor/cuda/cuda_platform_id.h'
+    
+    // Version constant.
+// This is either 0 for python, 1 for CPP V1, 2 for CPP V2.
+//
+// 0 is default and is equivalent to
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+//
+// 1 is set with -DPYTHON_PROTO2_CPP_IMPL_V1 and is equivalent to
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
+// and
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=1
+//
+// 2 is set with -DPYTHON_PROTO2_CPP_IMPL_V2 and is equivalent to
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
+// and
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
+#ifdef PYTHON_PROTO2_CPP_IMPL_V1
+#error 'PYTHON_PROTO2_CPP_IMPL_V1 is no longer supported.'
+#else
+#ifdef PYTHON_PROTO2_CPP_IMPL_V2
+static int kImplVersion = 2;
+#else
+#ifdef PYTHON_PROTO2_PYTHON_IMPL
+static int kImplVersion = 0;
+#else
+    
+    TEST(MovableMessageTest, MoveFromArena) {
+  Arena arena;
+    }
+    
+    #include <google/protobuf/testing/googletest.h>
+#include <gtest/gtest.h>
+#include <google/protobuf/testing/file.h>
+    
+    ServiceGenerator* ImmutableGeneratorFactory::NewServiceGenerator(
+    const ServiceDescriptor* descriptor) const {
+  return new ImmutableServiceGenerator(descriptor, context_);
+}
+    
+    namespace google {
+namespace protobuf {
     }
     }
     
-    static void printNode(DemanglerPrinter &Out, const Node *node, unsigned depth) {
-  // Indent two spaces per depth.
-  for (unsigned i = 0; i < depth * 2; ++i) {
-    Out << ' ';
-  }
-  if (!node) {
-    Out << '<<NULL>>';
-    return;
-  }
-  Out << 'kind=' << getNodeKindString(node->getKind());
-  if (node->hasText()) {
-    Out << ', text=\'' << node->getText() << '\'';
-  }
-  if (node->hasIndex()) {
-    Out << ', index=' << node->getIndex();
-  }
-  Out << '\n';
-  for (auto &child : *node) {
-    printNode(Out, child, depth + 1);
+    string Status::ToString() const {
+  if (error_code_ == error::OK) {
+    return 'OK';
+  } else {
+    if (error_message_.empty()) {
+      return error::CodeEnumToString(error_code_);
+    } else {
+      return error::CodeEnumToString(error_code_) + ':' +
+          error_message_;
+    }
   }
 }
     
-    static const char delimiter = '_';
+    TEST(StatusOr, TestPointerAssignmentStatusOKConverting) {
+  Derived derived;
+  StatusOr<Derived*> source(&derived);
+  StatusOr<Base2*>   target;
+  target = source;
+  EXPECT_EQ(source.status(), target.status());
+  EXPECT_EQ(static_cast<const Base2*>(source.ValueOrDie()),
+            target.ValueOrDie());
+}
     
       /**
-   * @brief Returns the scalar loss associated with a top blob at a given index.
+   * @brief Applies the transformation defined in the data layer's
+   * transform_param block to a vector of Datum.
+   *
+   * @param datum_vector
+   *    A vector of Datum containing the data to be transformed.
+   * @param transformed_blob
+   *    This is destination blob. It can be part of top blob's data if
+   *    set_cpu_data() is used. See memory_layer.cpp for an example.
    */
-  inline Dtype loss(const int top_index) const {
-    return (loss_.size() > top_index) ? loss_[top_index] : Dtype(0);
+  void Transform(const vector<Datum> & datum_vector,
+                Blob<Dtype>* transformed_blob);
+    
+      /** Will not return until the internal thread has exited. */
+  void StopInternalThread();
+    
+    #include <vector>
+    
+    
+    {}  // namespace caffe
+    
+    #include <vector>
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    template <typename T> class GenericVector;
+template <typename T> class GenericVector;
+    
+      // This and other putatively are the same, so call the (permanent) callback
+  // for each blob index where the bounding boxes match.
+  // The callback is deleted on completion.
+  void ProcessMatchedBlobs(const TWERD& other, TessCallback1<int>* cb) const;
+    
+      DPPoint()
+    : local_cost_(0), total_cost_(INT32_MAX), total_steps_(1), best_prev_(nullptr),
+      n_(0), sig_x_(0), sig_xsq_(0) {
   }
     
-      // Adds a creator.
-  static void AddCreator(const string& type, Creator creator) {
-    CreatorRegistry& registry = Registry();
-    CHECK_EQ(registry.count(type), 0)
-        << 'Layer type ' << type << ' already registered.';
-    registry[type] = creator;
-  }
+    std::string Widget::GetStringValue() const {
+  return name_;
+}
     
-      virtual inline int MinBottomBlobs() const { return 1; }
-  virtual inline int MinTopBlobs() const { return 1; }
-  virtual inline bool EqualNumBottomTopBlobs() const { return true; }
+      // Now, we have that n is odd and n >= 3.
     
-    namespace caffe {
+    #include <limits.h>
+#include 'sample1.h'
+#include 'gtest/gtest.h'
+namespace {
     }
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #endif  // CAFFE_CONCAT_LAYER_HPP_
-
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    
-    {  int size_;
-  Dtype alpha_, beta_, k_;
-};
-#endif
-    
-    #endif  // CAFFE_CUDNN_RELU_LAYER_HPP_
-
-    
-    public:
-  static const Data& getData() { return data_; }
-    
-    const std::string& DHTResponseMessage::getType() const { return R; }
-    
-      DHTTaskQueue* taskQueue_;
-    
-        taskFactory->setLocalNode(localNode);
-    taskFactory->setRoutingTable(routingTable.get());
-    taskFactory->setMessageDispatcher(dispatcher.get());
-    taskFactory->setMessageFactory(factory.get());
-    taskFactory->setTaskQueue(taskQueue.get());
-    taskFactory->setTimeout(std::chrono::seconds(messageTimeout));
-    
-    #endif // D_DHT_SETUP_H
-
-    
-      virtual std::shared_ptr<DHTTask>
-  createPingTask(const std::shared_ptr<DHTNode>& remoteNode,
-                 int numRetry = 0) CXX11_OVERRIDE;
-    
-    
-    {} // namespace aria2
-
-    
-    using json = nlohmann::json;
