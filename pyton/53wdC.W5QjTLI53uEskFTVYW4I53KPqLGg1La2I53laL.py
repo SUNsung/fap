@@ -1,105 +1,95 @@
 
         
-        
-class SessionStore(SessionBase):
+        RETURN = '''
+rule:
+    description: CloudWatch Event rule data
+    returned: success
+    type: dict
+    sample:
+      arn: 'arn:aws:events:us-east-1:123456789012:rule/MyCronTask'
+      description: 'Run my scheduled task'
+      name: 'MyCronTask'
+      schedule_expression: 'cron(0 20 * * ? *)'
+      state: 'ENABLED'
+targets:
+    description: CloudWatch Event target(s) assigned to the rule
+    returned: success
+    type: list
+    sample: '[{ 'arn': 'arn:aws:lambda:us-east-1:123456789012:function:MyFunction', 'id': 'MyTargetId' }]'
+'''
+    
+        Basic Usage:
+        >>> import boto3
+        >>> iam = boto3.client('iam')
+        >>> name = 'server-cert-name'
+        >>> results = get_server_certs(iam, name)
+        {
+            'upload_date': '2015-04-25T00:36:40+00:00',
+            'server_certificate_id': 'ADWAJXWTZAXIPIMQHMJPO',
+            'certificate_body': '-----BEGIN CERTIFICATE-----\nbunch of random data\n-----END CERTIFICATE-----',
+            'server_certificate_name': 'server-cert-name',
+            'expiration': '2017-06-15T12:00:00+00:00',
+            'path': '/',
+            'arn': 'arn:aws:iam::911277865346:server-certificate/server-cert-name'
+        }
     '''
-    Implement database session store.
-    '''
-    def __init__(self, session_key=None):
-        super().__init__(session_key)
-    
-    from django.contrib.sites.shortcuts import get_current_site
-from django.core.paginator import EmptyPage, PageNotAnInteger
-from django.http import Http404
-from django.template.response import TemplateResponse
-from django.urls import reverse
-from django.utils.http import http_date
-    
-            This property is cached so that only one database query occurs when
-        rendering ModelChoiceFields.
-        '''
-        id_ = self.field.widget.attrs.get('id') or self.auto_id
-        attrs = {'id': id_} if id_ else {}
-        attrs = self.build_widget_attrs(attrs)
-        return [
-            BoundWidget(self.field.widget, widget, self.form.renderer)
-            for widget in self.field.widget.subwidgets(self.html_name, self.value(), attrs=attrs)
-        ]
-    
-            if state == 'absent':
-            if exists:
-                conn.delete_cache_subnet_group(group_name)
-                changed = True
+    results = dict()
+    try:
+        if name:
+            server_certs = [iam.get_server_certificate(ServerCertificateName=name)['ServerCertificate']]
         else:
-            if not exists:
-                new_group = conn.create_cache_subnet_group(group_name, cache_subnet_group_description=group_description, subnet_ids=group_subnets)
-                changed = True
-            else:
-                changed_group = conn.modify_cache_subnet_group(group_name, cache_subnet_group_description=group_description, subnet_ids=group_subnets)
-                changed = True
+            server_certs = iam.list_server_certificates()['ServerCertificateMetadataList']
     
-    from __future__ import absolute_import, division, print_function
-__metaclass__ = type
+            firewall_policy_obj = oneandone.client.FirewallPolicy(
+            name=name,
+            description=description
+        )
     
+    - bigpanda:
+    component: '{{ deployment.component }}'
+    version: '{{ deployment.version }}'
+    token: '{{ deployment.token }}'
+    state: finished
+  delegate_to: localhost
+'''
     
-def validate_fw_rules(fw_rules):
-    for rule in fw_rules:
-        for k in rule.keys():
-            if k not in VALID_RULE_KEYS:
-                raise VcaError('%s is not a valid key in fw rules, please '
-                               'check above..' % k, valid_keys=VALID_RULE_KEYS)
+        le_path = module.get_bin_path('le', True, ['/usr/local/bin'])
     
-        gateway = vca.get_gateway(vdc_name, gateway_name)
-    if not gateway:
-        module.fail_json(msg='Not able to find the gateway %s, please check '
-                             'the gateway_name param' % gateway_name)
-    
-    from __future__ import absolute_import, division, print_function
-__metaclass__ = type
-    
-        module_hbacrule = get_hbacrule_dict(description=module.params['description'],
-                                        hostcategory=hostcategory,
-                                        ipaenabledflag=ipaenabledflag,
-                                        servicecategory=servicecategory,
-                                        sourcehostcategory=sourcehostcategory,
-                                        usercategory=usercategory)
-    ipa_hbacrule = client.hbacrule_find(name=name)
-    
-        context['show_on_github_url'] = show_url
-    context['edit_on_github_url'] = edit_url
-    
-    # Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title,
-#  author, documentclass [howto, manual, or own class]).
-latex_documents = [
-    (master_doc, 'home-assistant.tex', 'Home Assistant Documentation',
-     'Home Assistant Team', 'manual'),
-]
-    
-        # Gloss the lips
-    d.polygon(face_landmarks['top_lip'], fill=(150, 0, 0, 128))
-    d.polygon(face_landmarks['bottom_lip'], fill=(150, 0, 0, 128))
-    d.line(face_landmarks['top_lip'], fill=(150, 0, 0, 64), width=8)
-    d.line(face_landmarks['bottom_lip'], fill=(150, 0, 0, 64), width=8)
-    
-        :param img_path: path to image to be recognized
-    :param predictions: results of the predict function
-    :return:
-    '''
-    pil_image = Image.open(img_path).convert('RGB')
-    draw = ImageDraw.Draw(pil_image)
+    def makeKeyFiles(name, keySize):
+    if os.path.exists('%s_pubkey.txt' % (name)) or os.path.exists('%s_privkey.txt' % (name)):
+        print('\nWARNING:')
+        print(''%s_pubkey.txt' or '%s_privkey.txt' already exists. \nUse a different name or delete these files and re-run this program.' % (name, name))
+        sys.exit()
     
     
-def batch_face_locations(images, number_of_times_to_upsample=1, batch_size=128):
-    '''
-    Returns an 2d array of bounding boxes of human faces in a image using the cnn face detector
-    If you are using a GPU, this can give you much faster results since the GPU
-    can process batches of images at once. If you aren't using a GPU, you don't need this function.
+def b_expo_mod(a, b, c):
+    res = 1
+    while b > 0:
+        if b&1:
+            res = ((res%c) * (a%c)) % c
     
-    # You can also save a copy of the new image to disk if you want by uncommenting this line
-# pil_image.save('image_with_boxes.jpg')
+        complete_apps = ['sentry']
+    symmetrical = True
 
     
-            self.assertEqual(len(detected_faces), 1)
-        self.assertAlmostEqual(detected_faces[0].rect.top(), 144, delta=25)
-        self.assertAlmostEqual(detected_faces[0].rect.bottom(), 389, delta=25)
+        complete_apps = ['sentry']
+    symmetrical = True
+
+    
+                try:
+                with transaction.atomic():
+                    orm.EnvironmentProject.objects.filter(
+                        environment__in=from_envs,
+                    ).update(environment=to_env)
+            except IntegrityError:
+                for ep in orm.EnvironmentProject.objects.filter(environment__in=from_envs):
+                    try:
+                        with transaction.atomic():
+                            orm.EnvironmentProject.objects.filter(
+                                id=ep.id,
+                            ).update(environment=to_env)
+                    except IntegrityError:
+                        ep.delete()
+    
+        def _forwards(self, orm):
+        'Write your forwards methods here.'
