@@ -1,57 +1,79 @@
 
         
-              alias :expire_data_after_sign_out! :expire_data_after_sign_in!
+            alias_method :blank?, :empty?
+    
+        def version
+      context[:version]
     end
+    
+    module Docs
+  class Subscriber < ActiveSupport::Subscriber
+    cattr_accessor :namespace
+    
+            name = name.split(':').first
+    
+        def show
+      authorize @user, :change_email?
+    end
+    
+      def hub_secret
+    params['hub.secret']
   end
-end
-
     
-        # Creates configuration values for Devise and for the given module.
-    #
-    #   Devise::Models.config(Devise::Models::DatabaseAuthenticatable, :stretches)
-    #
-    # The line above creates:
-    #
-    #   1) An accessor called Devise.stretches, which value is used by default;
-    #
-    #   2) Some class methods for your model Model.stretches and Model.stretches=
-    #      which have higher priority than Devise.stretches;
-    #
-    #   3) And an instance method stretches.
-    #
-    # To add the class methods you need to have a module ClassMethods defined
-    # inside the given class.
-    #
-    def self.config(mod, *accessors) #:nodoc:
-      class << mod; attr_accessor :available_configs; end
-      mod.available_configs = accessors
+        head 200
+  end
     
-              # Encodes the checksum field
-          #
-          # @return [OpenSSL::ASN1::OctetString]
-          def encode_checksum
-            OpenSSL::ASN1::OctetString.new(checksum)
-          end
+      before_action :require_user!
+    
+        def puts(*args)
+      STDERR.puts *args unless @silence
+    end
+    
+      # Raise exceptions instead of rendering exception templates.
+  config.action_dispatch.show_exceptions = false
+    
+    class NodeMincerTest < Minitest::Test
+  DUMMY_PATH = 'test/dummy_node_mincer'
+    
+      def test_symlink_exists(path)
+    exists?('L', path)
+  end
+    
+          def question
+        if default.nil?
+          I18n.t(:question, key: key, scope: :capistrano)
+        else
+          I18n.t(:question_default, key: key, default_value: default, scope: :capistrano)
         end
       end
-    end
-  end
-end
     
-    When /^(?:|I )click on '([^']*)' navbar title$/ do |title|
-  with_scope('.info-bar') do
-    find('h5', text: title).click
-  end
-end
-
+          def add_host(host, properties={})
+        new_host = Server[host]
+        new_host.port = properties[:port] if properties.key?(:port)
+        # This matching logic must stay in sync with `Server#matches?`.
+        key = ServerKey.new(new_host.hostname, new_host.port)
+        existing = servers_by_key[key]
+        if existing
+          existing.user = new_host.user if new_host.user
+          existing.with(properties)
+        else
+          servers_by_key[key] = new_host.with(properties)
+        end
+      end
     
-    describe StatusMessagesController, :type => :controller do
-  describe '#bookmarklet' do
-    before do
-      sign_in bob, scope: :user
-    end
-    
-                case platform
-            when 'iOS' then self.platform :ios, '10.0'
-            when 'macOS' then self.platform :macos, '10.10'
-            end
+    module Capistrano
+  class Configuration
+    # Holds the variables assigned at Capistrano runtime via `set` and retrieved
+    # with `fetch`. Does internal bookkeeping to help identify user mistakes
+    # like spelling errors or unused variables that may lead to unexpected
+    # behavior.
+    class Variables
+      CAPISTRANO_LOCATION = File.expand_path('../..', __FILE__).freeze
+      IGNORED_LOCATIONS = [
+        '#{CAPISTRANO_LOCATION}/configuration/variables.rb:',
+        '#{CAPISTRANO_LOCATION}/configuration.rb:',
+        '#{CAPISTRANO_LOCATION}/dsl/env.rb:',
+        '/dsl.rb:',
+        '/forwardable.rb:'
+      ].freeze
+      private_constant :CAPISTRANO_LOCATION, :IGNORED_LOCATIONS
