@@ -1,105 +1,119 @@
 
         
-        # Mimic how Jekyll's LiquidRenderer would process a non-static file, with
-# some dummy payload
-def always_liquid(content)
-  Liquid::Template.error_mode = :warn
-  Liquid::Template.parse(content, :line_numbers => true).render(
-    'author' => 'John Doe',
-    'title'  => 'FooBar'
-  )
-end
+                # Parses the options given an OptionParser instance.
+        #
+        # This is a convenience method that properly handles duping the
+        # originally argv array so that it is not destroyed.
+        #
+        # This method will also automatically detect '-h' and '--help'
+        # and print help. And if any invalid options are detected, the help
+        # will be printed, as well.
+        #
+        # If this method returns `nil`, then you should assume that help
+        # was printed and parsing failed.
+        def parse_options(opts=nil)
+          # Creating a shallow copy of the arguments so the OptionParser
+          # doesn't destroy the originals.
+          argv = @argv.dup
     
-    def local_require
-  require 'json'
-  JSON.pretty_generate(DATA)
-end
-    
-            def log_error(error)
-          Jekyll.logger.error 'LiveReload experienced an error. ' \
-            'Run with --trace for more information.'
-          raise error
+            # This is the method called to 'prepare' the provisioner. This is called
+        # before any actions are run by the action runner (see {Vagrant::Actions::Runner}).
+        # This can be used to setup shared folders, forward ports, etc. Whatever is
+        # necessary on a 'meta' level.
+        #
+        # No return value is expected.
+        def prepare
         end
+    
+              nil
+        end
+    
+    class FormulaPin
+  def initialize(f)
+    @f = f
+  end
+    
+          def accepts?(env)
+        raise NotImplementedError, '#{self.class} implementation pending'
       end
-    end
+    
+          DIRECTIVES = %i(base_uri child_src connect_src default_src
+                      font_src form_action frame_ancestors frame_src
+                      img_src manifest_src media_src object_src
+                      plugin_types referrer reflected_xss report_to
+                      report_uri require_sri_for sandbox script_src
+                      style_src worker_src).freeze
+    
+          def call(env)
+        status, headers, body = super
+        response = Rack::Response.new(body, status, headers)
+        request = Rack::Request.new(env)
+        remove_bad_cookies(request, response)
+        response.finish
+      end
+    
+      it 'should not override the header if already set' do
+    mock_app with_headers('Content-Security-Policy' => 'default-src: none')
+    expect(get('/', {}, 'wants' => 'text/html').headers['Content-Security-Policy']).to eq('default-src: none')
   end
 end
 
     
-          click_on 'Save'
+          validate_plugins!
+    end
     
-      it 'imports a scenario that does not exist yet' do
-    visit new_scenario_imports_path
-    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
-    click_on 'Start Import'
-    expect(page).to have_text('This scenario has a few agents to get you started. Feel free to change them or delete them as you see fit!')
-    expect(page).not_to have_text('This Scenario already exists in your system.')
-    check('I confirm that I want to import these Agents.')
-    click_on 'Finish Import'
-    expect(page).to have_text('Import successful!')
+            return nil
+      end
+    end
   end
+end end end
+
     
         before do
-      stub(Agents::DotFoo).valid_type?('Agents::DotFoo') { true }
-      stub(Agents::DotBar).valid_type?('Agents::DotBar') { true }
+      logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version #{previous_version} #{plugin_name}')
+      # Logstash won't update when we have a pinned version in the gemfile so we remove them
+      logstash.replace_in_gemfile(',[[:space:]]'0.1.0'', '')
+      expect(logstash).to have_installed?(plugin_name, previous_version)
     end
     
-        it 'does not output links to other agents outside of the incoming set' do
-      Link.create!(:source_id => agents(:jane_weather_agent).id, :receiver_id => agents(:jane_website_agent).id)
-      Link.create!(:source_id => agents(:jane_website_agent).id, :receiver_id => agents(:jane_rain_notifier_agent).id)
+    # Example for adding special attributes
+package.attributes[:deb_group] = 'super-useful'
+package.attributes[:rpm_group] = 'super-useful'
     
-          Utils.sort_tuples!(tuples)
-      expect(tuples).to eq expected
-    end
+              # directories have a magic string inserted into their name
+          full_record_path = extension_header[TAR_NAME_OFFSET_START..TAR_NAME_OFFSET_END].delete('\0')
+          full_record_path = add_paxstring(full_record_path)
     
-        it 'should generate the correct last checkpoint url' do
-      @checker.options['path'] = 'last_checkpoint/usps/9361289878905919630610'
-      expect(@checker.send(:event_url)).to eq('https://api.aftership.com/v4/last_checkpoint/usps/9361289878905919630610')
-    end
-  end
-    
-    Gem::Specification.new do |gem|
-  gem.name          = 'capistrano'
-  gem.version       = Capistrano::VERSION
-  gem.authors       = ['Tom Clements', 'Lee Hambley']
-  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
-  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
-  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
-  gem.homepage      = 'http://capistranorb.com/'
-    
-        (stdout + stderr).each_line { |line| puts '[vagrant] #{line}' }
-    
-          # rubocop:disable Style/GuardClause
-      def register_legacy_scm_hooks
-        if Rake::Task.task_defined?('deploy:new_release_path')
-          after 'deploy:new_release_path', '#{scm_name}:create_release'
+      def add_path(tar, tar_path, path)
+    stat = File.lstat(path)
+    if stat.directory?
+      tar.mkdir(tar_path, stat.mode)
+    elsif stat.symlink?
+      tar.add_symlink(tar_path, File.readlink(path), stat.mode)
+    else
+      tar.add_file_simple(tar_path, stat.mode, stat.size) do |io|
+        File.open(path) do |fd|
+          chunk = nil
+          size = 0
+          while chunk = fd.read(16384) do
+            size += io.write(chunk)
+          end
+          if size != stat.size
+            raise 'Failed to add #{path} to the archive; expected to ' +
+                  'write #{stat.size} bytes, only wrote #{size}'
+          end
         end
+      end # tar.tar.add_file_simple
+    end
+  end # def add_path
     
-            true
-      end
+        self.name = control['pkgname'][0]
     
-          ServerKey = Struct.new(:hostname, :port)
+        File.write(build_path('description'), self.description + '\n')
     
-          def preference_field_for(form, field, options)
-        case options[:type]
-        when :integer
-          form.text_field(field, preference_field_options(options))
-        when :boolean
-          form.check_box(field, preference_field_options(options))
-        when :string
-          form.text_field(field, preference_field_options(options))
-        when :password
-          form.password_field(field, preference_field_options(options))
-        when :text
-          form.text_area(field, preference_field_options(options))
-        else
-          form.text_field(field, preference_field_options(options))
+          if !attributes[:python_setup_py_arguments].nil? and !attributes[:python_setup_py_arguments].empty?
+        # Add optional setup.py arguments
+        attributes[:python_setup_py_arguments].each do |a|
+          flags += [ a ]
         end
       end
-    
-      s.add_dependency 'bootstrap',       '~> 4.1.3'
-  s.add_dependency 'glyphicons',      '~> 1.0.2'
-  s.add_dependency 'jquery-rails',    '~> 4.3'
-  s.add_dependency 'jquery-ui-rails', '~> 6.0.1'
-  s.add_dependency 'select2-rails',   '3.5.9.1' # 3.5.9.2 breaks several specs
-end
