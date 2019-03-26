@@ -1,71 +1,129 @@
 
-def to_native_string(string, encoding='ascii'):
-    '''Given a string object, regardless of type, returns a representation of
-    that string in the native string type, encoding and decoding where
-    necessary. This assumes ASCII unless told otherwise.
-    '''
-    if isinstance(string, builtin_str):
-        out = string
-    else:
-        if is_py2:
-            out = string.encode(encoding)
-        else:
-            out = string.decode(encoding)
+        
+        
+def plot_batch_times(all_times, n_features, all_batch_sizes, data):
+    plt.figure()
+    plot_results(all_batch_sizes, all_times['pca'], label='PCA')
+    plot_results(all_batch_sizes, all_times['ipca'], label='IncrementalPCA')
+    plt.legend(loc='lower left')
+    plt.suptitle('Algorithm runtime vs. batch_size for n_components %i\n \
+                 LFW, size %i x %i' % (
+                 n_features, data.shape[0], data.shape[1]))
+    plt.xlabel('Batch size')
+    plt.ylabel('Time (seconds)')
     
-        def test_repr(self):
-        assert repr(self.lookup_dict) == '<lookup 'test'>'
+        # start time
+    tstart = datetime.now()
+    clf = DecisionTreeClassifier()
+    clf.fit(X, Y).predict(X)
+    delta = (datetime.now() - tstart)
+    # stop time
     
-        # Check chardet for compatibility.
-    major, minor, patch = chardet_version.split('.')[:3]
-    major, minor, patch = int(major), int(minor), int(patch)
-    # chardet >= 3.0.2, < 3.1.0
-    assert major == 3
-    assert minor < 1
-    assert patch >= 2
+        if revision is None:
+        return
+    if domain not in ('py', 'pyx'):
+        return
+    if not info.get('module') or not info.get('fullname'):
+        return
     
+    # Generate waveform data
+n_features = 2000
+t = np.pi * np.linspace(0, 1, n_features)
     
-def dispatch_hook(key, hooks, hook_data, **kwargs):
-    '''Dispatches a hook dictionary on a given piece of data.'''
-    hooks = hooks or {}
-    hooks = hooks.get(key)
-    if hooks:
-        if hasattr(hooks, '__call__'):
-            hooks = [hooks]
-        for hook in hooks:
-            _hook_data = hook(hook_data, **kwargs)
-            if _hook_data is not None:
-                hook_data = _hook_data
-    return hook_data
+    # equal bins face
+regular_values = np.linspace(0, 256, n_clusters + 1)
+regular_labels = np.searchsorted(regular_values, face) - 1
+regular_values = .5 * (regular_values[1:] + regular_values[:-1])  # mean
+regular_face = np.choose(regular_labels.ravel(), regular_values, mode='clip')
+regular_face.shape = face.shape
+plt.figure(3, figsize=(3, 2.2))
+plt.imshow(regular_face, cmap=plt.cm.gray, vmin=vmin, vmax=vmax)
+    
+        def _reset_stats(self):
+        self.tail.clear()
+        self.start = self.lastmark = self.lasttime = time()
+    
+        # Max concurrency is limited by global CONCURRENT_REQUESTS setting
+    max_concurrent_requests = 8
+    # Requests per second goal
+    qps = None # same as: 1 / download_delay
+    download_delay = None
+    # time in seconds to delay server responses
+    latency = None
+    # number of slots to create
+    slots = 1
+    
+            spider_loader = self.crawler_process.spider_loader
+    
+        def run(self, args, opts):
+        if len(args) < 1:
+            raise UsageError()
+        elif len(args) > 1:
+            raise UsageError('running 'scrapy crawl' with more than one spider is no longer supported')
+        spname = args[0]
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('--spider', dest='spider', default=None,
+            help='use this spider without looking for one')
+        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
+            help='set spider argument (may be repeated)')
+        parser.add_option('--pipelines', action='store_true',
+            help='process items through pipelines')
+        parser.add_option('--nolinks', dest='nolinks', action='store_true',
+            help='don't show links to follow (extracted requests)')
+        parser.add_option('--noitems', dest='noitems', action='store_true',
+            help='don't show scraped items')
+        parser.add_option('--nocolour', dest='nocolour', action='store_true',
+            help='avoid using pygments to colorize the output')
+        parser.add_option('-r', '--rules', dest='rules', action='store_true',
+            help='use CrawlSpider rules to discover the callback')
+        parser.add_option('-c', '--callback', dest='callback',
+            help='use this callback for parsing, instead looking for a callback')
+        parser.add_option('-m', '--meta', dest='meta',
+            help='inject extra meta into the Request, it must be a valid raw json string')
+        parser.add_option('-d', '--depth', dest='depth', type='int', default=1,
+            help='maximum depth for parsing requests [default: %default]')
+        parser.add_option('-v', '--verbose', dest='verbose', action='store_true',
+            help='print each depth level one by one')
+    
+        def run(self, args, opts):
+        settings = self.crawler_process.settings
+        if opts.get:
+            s = settings.get(opts.get)
+            if isinstance(s, BaseSettings):
+                print(json.dumps(s.copy_to_dict()))
+            else:
+                print(s)
+        elif opts.getbool:
+            print(settings.getbool(opts.getbool))
+        elif opts.getint:
+            print(settings.getint(opts.getint))
+        elif opts.getfloat:
+            print(settings.getfloat(opts.getfloat))
+        elif opts.getlist:
+            print(settings.getlist(opts.getlist))
 
     
-    from requests.help import info
+        try:
+        import boto.auth
+    except ImportError:
+        _S3Connection = _v19_S3Connection
+    else:
+        _S3Connection = _v20_S3Connection
     
-        monkeypatch.setenv('http_proxy', '')
-    monkeypatch.setenv('https_proxy', '')
-    monkeypatch.setenv('ftp_proxy', '')
-    monkeypatch.setenv('no_proxy', '')
-    monkeypatch.setenv('NO_PROXY', '')
-    monkeypatch.setattr(winreg, 'OpenKey', OpenKey)
-    monkeypatch.setattr(winreg, 'QueryValueEx', QueryValueEx)
-    assert should_bypass_proxies(url, None) == expected
+            def log_failure(msg):
+            def errback(failure):
+                logger.error(
+                    msg,
+                    exc_info=failure_to_exc_info(failure),
+                    extra={'spider': spider}
+                )
+            return errback
     
-            # Send the request.
-        send_kwargs = {
-            'timeout': timeout,
-            'allow_redirects': allow_redirects,
-        }
-        send_kwargs.update(settings)
-        resp = self.send(prep, **send_kwargs)
-    
-        def test_headers_on_session_with_None_are_not_sent(self, httpbin):
-        '''Do not send headers in Session.headers with None values.'''
-        ses = requests.Session()
-        ses.headers['Accept-Encoding'] = None
-        req = requests.Request('GET', httpbin('get'))
-        prep = ses.prepare_request(req)
-        assert 'Accept-Encoding' not in prep.headers
-    
-      if ShouldCheckNamespaceIndentation(nesting_state, is_namespace_indent_item,
-                                     clean_lines.elided, line):
-    CheckItemIndentationInNamespace(filename, clean_lines.elided,
-                                    line, error)
+        def _get_request_cookies(self, jar, request):
+        if isinstance(request.cookies, dict):
+            cookie_list = [{'name': k, 'value': v} for k, v in \
+                    six.iteritems(request.cookies)]
+        else:
+            cookie_list = request.cookies
