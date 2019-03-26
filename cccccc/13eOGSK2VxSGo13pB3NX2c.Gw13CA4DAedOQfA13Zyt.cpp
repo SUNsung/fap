@@ -1,207 +1,68 @@
 
         
-        #if defined(__linux)
-static Slice TrimSpace(Slice s) {
-  size_t start = 0;
-  while (start < s.size() && isspace(s[start])) {
-    start++;
-  }
-  size_t limit = s.size();
-  while (limit > start && isspace(s[limit-1])) {
-    limit--;
-  }
-  return Slice(s.data() + start, limit - start);
-}
-#endif
-    
-      // Set of table files to protect from deletion because they are
-  // part of ongoing compactions.
-  std::set<uint64_t> pending_outputs_ GUARDED_BY(mutex_);
-    
-    static std::string IKey(const std::string& user_key,
-                        uint64_t seq,
-                        ValueType vt) {
-  std::string encoded;
-  AppendInternalKey(&encoded, ParsedInternalKey(user_key, seq, vt));
-  return encoded;
-}
-    
-    // If filename is a leveldb file, store the type of the file in *type.
-// The number encoded in the filename is stored in *number.  If the
-// filename was successfully parsed, returns true.  Else return false.
-bool ParseFileName(const std::string& filename,
-                   uint64_t* number,
-                   FileType* type);
-    
-    class FileNameTest { };
-    
-    bool MemTable::Get(const LookupKey& key, std::string* value, Status* s) {
-  Slice memkey = key.memtable_key();
-  Table::Iterator iter(&table_);
-  iter.Seek(memkey.data());
-  if (iter.Valid()) {
-    // entry format is:
-    //    klength  varint32
-    //    userkey  char[klength]
-    //    tag      uint64
-    //    vlength  varint32
-    //    value    char[vlength]
-    // Check that it belongs to same user key.  We do not check the
-    // sequence number since the Seek() call above should have skipped
-    // all entries with overly large sequence numbers.
-    const char* entry = iter.key();
-    uint32_t key_length;
-    const char* key_ptr = GetVarint32Ptr(entry, entry+5, &key_length);
-    if (comparator_.comparator.user_comparator()->Compare(
-            Slice(key_ptr, key_length - 8),
-            key.user_key()) == 0) {
-      // Correct user key
-      const uint64_t tag = DecodeFixed64(key_ptr + key_length - 8);
-      switch (static_cast<ValueType>(tag & 0xff)) {
-        case kTypeValue: {
-          Slice v = GetLengthPrefixedSlice(key_ptr + key_length);
-          value->assign(v.data(), v.size());
-          return true;
-        }
-        case kTypeDeletion:
-          *s = Status::NotFound(Slice());
-          return true;
-      }
-    }
-  }
-  return false;
-}
-    
-    
-    {
-    {    std::string accelerate_checkins_expire_str = '-1';
-    Status status = getDatabaseValue(kPersistentSettings,
-                                     'distributed_accelerate_checkins_expire',
-                                     accelerate_checkins_expire_str);
-    if (!status.ok() || getUnixTime() > tryTo<unsigned long int>(
-                                            accelerate_checkins_expire_str, 10)
-                                            .takeOr(0ul)) {
-      pause(std::chrono::seconds(FLAGS_distributed_interval));
-    } else {
-      pause(std::chrono::seconds(kDistributedAccelerationInterval));
-    }
-  }
-}
-    
-    
-    {  // If the splayed interval was not restored from the database.
-  auto splay = splayValue(interval, FLAGS_schedule_splay_percent);
-  content = std::to_string(interval) + ':' + std::to_string(splay);
-  setDatabaseValue(kPersistentSettings, 'interval.' + name, content);
-  return splay;
-}
-    
-    #include 'Extension.h'
-#include <thrift/protocol/TBinaryProtocol.h>
-#include <thrift/server/TSimpleServer.h>
-#include <thrift/transport/TServerSocket.h>
-#include <thrift/transport/TBufferTransports.h>
-    
-        // eg.
-    // p..p..p..p..p..p..p
-    // 1..2..3..4..5..6..7
-    // want p to be 1, 2, 3, 4, 5, 6
-    if (time == 1)
-    {
-        p = _points->count() - 1;
-        lt = 1;
-    }
-    else 
-    {
-        p = time / _deltaT;
-        lt = (time - _deltaT * (float)p) / _deltaT;
+            ~reverse_lock() {
+        templock.lock();
+        templock.swap(lock);
     }
     
-    // Interpolate
-    Vec2 pp0 = _points->getControlPointAtIndex(p-1);
-    Vec2 pp1 = _points->getControlPointAtIndex(p+0);
-    Vec2 pp2 = _points->getControlPointAtIndex(p+1);
-    Vec2 pp3 = _points->getControlPointAtIndex(p+2);
+        Round(a, b, c, d, e, f, g, h, 0x27b70a85, w0 += sigma1(w14) + w9 + sigma0(w1));
+    Round(h, a, b, c, d, e, f, g, 0x2e1b2138, w1 += sigma1(w15) + w10 + sigma0(w2));
+    Round(g, h, a, b, c, d, e, f, 0x4d2c6dfc, w2 += sigma1(w0) + w11 + sigma0(w3));
+    Round(f, g, h, a, b, c, d, e, 0x53380d13, w3 += sigma1(w1) + w12 + sigma0(w4));
+    Round(e, f, g, h, a, b, c, d, 0x650a7354, w4 += sigma1(w2) + w13 + sigma0(w5));
+    Round(d, e, f, g, h, a, b, c, 0x766a0abb, w5 += sigma1(w3) + w14 + sigma0(w6));
+    Round(c, d, e, f, g, h, a, b, 0x81c2c92e, w6 += sigma1(w4) + w15 + sigma0(w7));
+    Round(b, c, d, e, f, g, h, a, 0x92722c85, w7 += sigma1(w5) + w0 + sigma0(w8));
+    Round(a, b, c, d, e, f, g, h, 0xa2bfe8a1, w8 += sigma1(w6) + w1 + sigma0(w9));
+    Round(h, a, b, c, d, e, f, g, 0xa81a664b, w9 += sigma1(w7) + w2 + sigma0(w10));
+    Round(g, h, a, b, c, d, e, f, 0xc24b8b70, w10 += sigma1(w8) + w3 + sigma0(w11));
+    Round(f, g, h, a, b, c, d, e, 0xc76c51a3, w11 += sigma1(w9) + w4 + sigma0(w12));
+    Round(e, f, g, h, a, b, c, d, 0xd192e819, w12 += sigma1(w10) + w5 + sigma0(w13));
+    Round(d, e, f, g, h, a, b, c, 0xd6990624, w13 += sigma1(w11) + w6 + sigma0(w14));
+    Round(c, d, e, f, g, h, a, b, 0xf40e3585, w14 += sigma1(w12) + w7 + sigma0(w15));
+    Round(b, c, d, e, f, g, h, a, 0x106aa070, w15 += sigma1(w13) + w8 + sigma0(w0));
     
-    bool DeccelAmplitude::initWithAction(Action *action, float duration)
-{
-    if (ActionInterval::initWithDuration(duration))
-    {
-        _rate = 1.0f;
-        _other = (ActionInterval*)(action);
-        action->retain();
-    }
-    }
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-#ifndef __ACTION_CCGRID3D_ACTION_H__
-#define __ACTION_CCGRID3D_ACTION_H__
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    SplitCols* SplitCols::create(float duration, unsigned int cols)
-{
-    SplitCols *action = new (std::nothrow) SplitCols();
+        s_one[31] = 1;
+    /* Check against pubkey creation when the basepoint is the generator */
+    for (i = 0; i < 100; ++i) {
+        secp256k1_sha256_t sha;
+        unsigned char s_b32[32];
+        unsigned char output_ecdh[32];
+        unsigned char output_ser[32];
+        unsigned char point_ser[33];
+        size_t point_ser_len = sizeof(point_ser);
+        secp256k1_scalar s;
     }
     
-    struct Tile;
-/**
-@brief ShuffleTiles action.
-@details This action make the target node shuffle with many tiles in random order.
-        You can create the action by these parameters:
-        duration, grid size, the random seed.
-*/
-class CC_DLL ShuffleTiles : public TiledGrid3DAction
-{
-public:
-    /** 
-    * @brief Create the action with grid size, random seed and duration.
-    * @param duration Specify the duration of the ShuffleTiles action. It's a value in seconds.
-    * @param gridSize Specify the size of the grid.
-    * @param seed Specify the random seed.
-    * @return If the creation success, return a pointer of ShuffleTiles action; otherwise, return nil.
-    */
-    static ShuffleTiles* create(float duration, const Size& gridSize, unsigned int seed);
-    }
+    /** Encode a Bech32 string. Returns the empty string in case of failure. */
+std::string Encode(const std::string& hrp, const std::vector<uint8_t>& values);
     
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+    #ifndef BITCOIN_CRYPTO_RIPEMD160_H
+#define BITCOIN_CRYPTO_RIPEMD160_H
     
-        // Overrides
-    void startWithTarget(Node *target) override;
-    void update(float dt) override;
-    ActionTween* reverse() const override;
-    ActionTween *clone() const override;
+        sub	rsp,STACK_SIZE
+%ifndef LINUX
+    movdqa	[rsp + _XMM_SAVE + 0*16],xmm6	
+    movdqa	[rsp + _XMM_SAVE + 1*16],xmm7
+    movdqa	[rsp + _XMM_SAVE + 2*16],xmm8	
+    movdqa	[rsp + _XMM_SAVE + 3*16],xmm9	
+    movdqa	[rsp + _XMM_SAVE + 4*16],xmm10
+    movdqa	[rsp + _XMM_SAVE + 5*16],xmm11
+    movdqa	[rsp + _XMM_SAVE + 6*16],xmm12
+%endif
     
-CC_CONSTRUCTOR_ACCESS:
-    /** 
-     * @brief Initializes the action with the property name (key), and the from and to parameters.
-     * @param duration The duration of the ActionTween. It's a value in seconds.
-     * @param key The key of property which should be updated.
-     * @param from The value of the specified property when the action begin.
-     * @param to The value of the specified property when the action end.
-     * @return If the initialization success, return true; otherwise, return false.
-     */
-    bool initWithDuration(float duration, const std::string& key, float from, float to);
+      // Extra data, can't transform.
     
-    PolygonInfo AutoPolygon::generatePolygon(const std::string& filename, const Rect& rect, float epsilon, float threshold)
-{
-    AutoPolygon ap(filename);
-    return ap.generateTriangles(rect, epsilon, threshold);
-}
+    struct big_ {
+  char dummy[2];
+};
+    
+    // Author: brianolson@google.com (Brian Olson)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+//
+// Test program to verify that GzipInputStream is compatible with command line
+// gunzip or java.util.zip.GzipInputStream
+//
+// Reads gzip stream on standard input and writes decompressed data to standard
+// output.
