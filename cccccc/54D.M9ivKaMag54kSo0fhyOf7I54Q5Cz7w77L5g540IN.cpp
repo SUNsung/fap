@@ -1,304 +1,247 @@
 
         
-                const f32* ln0 = idx_rm1 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rm1) : tmp;
-        const f32* ln1 = internal::getRowPtr(srcBase, srcStride, i);
-        const f32* ln2 = idx_rp1 >= -(ptrdiff_t)borderMargin.top ? internal::getRowPtr(srcBase, srcStride, idx_rp1) : tmp;
+            /** Colorize an icon (given filename) with the icon color */
+    QIcon SingleColorIcon(const QString& filename) const;
     
     
-    {            v_y = vld2q_u8(srcy + syj + 32);
-            v_dst.val[0] = vld1q_u8(srcu + sj + 16);
-            v_dst.val[1] = v_y.val[0];
-            v_dst.val[2] = vld1q_u8(srcv + sj + 16);
-            v_dst.val[3] = v_y.val[1];
-            vst4q_u8(dst + dj + 64, v_dst);
-        }
-#endif
-    
-    
-    {    void operator() (const T * src0, const T * src1, u8 * dst) const
-    {
-        dst[0] = src0[0] == src1[0] ? 255 : 0;
-    }
+    {    Lock& lock;
+    Lock templock;
 };
     
-        /**
-     * Implements {@link Transliterator#handleTransliterate}.
-     * @param text          the buffer holding transliterated and
-     *                      untransliterated text
-     * @param offset        the start and limit of the text, the position
-     *                      of the cursor, and the start and limit of transliteration.
-     * @param incremental   if true, assume more text may be coming after
-     *                      pos.contextLimit. Otherwise, assume the text is complete.
-     */
-    virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
-                                     UBool isIncremental) const;
     
-        if (other.fPatternString == NULL) {
-        fPatternString = NULL;
-        fPattern = utext_clone(fPattern, other.fPattern, FALSE, TRUE, &fDeferredStatus);
-    } else {
-        fPatternString = new UnicodeString(*(other.fPatternString));
-        if (fPatternString == NULL) {
-            fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
+    {    secp256k1_fe_sqr(&z12, &a->z);
+    u1 = a->x; secp256k1_fe_normalize_weak(&u1);
+    secp256k1_fe_mul(&u2, &b->x, &z12);
+    s1 = a->y; secp256k1_fe_normalize_weak(&s1);
+    secp256k1_fe_mul(&s2, &b->y, &z12); secp256k1_fe_mul(&s2, &s2, &a->z);
+    secp256k1_fe_negate(&h, &u1, 1); secp256k1_fe_add(&h, &u2);
+    secp256k1_fe_negate(&i, &s1, 1); secp256k1_fe_add(&i, &s2);
+    if (secp256k1_fe_normalizes_to_zero_var(&h)) {
+        if (secp256k1_fe_normalizes_to_zero_var(&i)) {
+            secp256k1_gej_double_var(r, a, rzr);
         } else {
-            fPattern = utext_openConstUnicodeString(NULL, fPatternString, &fDeferredStatus);
-        }
-    }
-    if (U_FAILURE(fDeferredStatus)) {
-        return *this;
-    }
-    
-    CollationKey &
-RuleBasedCollator::getCollationKey(const UChar *s, int32_t length, CollationKey& key,
-                                   UErrorCode &errorCode) const {
-    if(U_FAILURE(errorCode)) {
-        return key.setToBogus();
-    }
-    if(s == NULL && length != 0) {
-        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return key.setToBogus();
-    }
-    key.reset();  // resets the 'bogus' state
-    CollationKeyByteSink sink(key);
-    writeSortKey(s, length, sink, errorCode);
-    if(U_FAILURE(errorCode)) {
-        key.setToBogus();
-    } else if(key.isBogus()) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-    } else {
-        key.setLength(sink.NumberOfBytesAppended());
-    }
-    return key;
-}
-    
-    UnicodeString &ScientificNumberFormatter::SuperscriptStyle::format(
-        const UnicodeString &original,
-        FieldPositionIterator &fpi,
-        const UnicodeString &preExponent,
-        const DecimalFormatStaticSets &staticSets,
-        UnicodeString &appendTo,
-        UErrorCode &status) const {
-    if (U_FAILURE(status)) {
-        return appendTo;
-    }
-    FieldPosition fp;
-    int32_t copyFromOffset = 0;
-    while (fpi.next(fp)) {
-        switch (fp.getField()) {
-        case UNUM_EXPONENT_SYMBOL_FIELD:
-            appendTo.append(
-                    original,
-                    copyFromOffset,
-                    fp.getBeginIndex() - copyFromOffset);
-            copyFromOffset = fp.getEndIndex();
-            appendTo.append(preExponent);
-            break;
-        case UNUM_EXPONENT_SIGN_FIELD:
-            {
-                int32_t beginIndex = fp.getBeginIndex();
-                int32_t endIndex = fp.getEndIndex();
-                UChar32 aChar = original.char32At(beginIndex);
-                if (staticSets.fMinusSigns->contains(aChar)) {
-                    appendTo.append(
-                            original,
-                            copyFromOffset,
-                            beginIndex - copyFromOffset);
-                    appendTo.append(kSuperscriptMinusSign);
-                } else if (staticSets.fPlusSigns->contains(aChar)) {
-                    appendTo.append(
-                           original,
-                           copyFromOffset,
-                           beginIndex - copyFromOffset);
-                    appendTo.append(kSuperscriptPlusSign);
-                } else {
-                    status = U_INVALID_CHAR_FOUND;
-                    return appendTo;
-                }
-                copyFromOffset = endIndex;
+            if (rzr != NULL) {
+                secp256k1_fe_set_int(rzr, 0);
             }
-            break;
-        case UNUM_EXPONENT_FIELD:
-            appendTo.append(
-                    original,
-                    copyFromOffset,
-                    fp.getBeginIndex() - copyFromOffset);
-            if (!copyAsSuperscript(
-                    original,
-                    fp.getBeginIndex(),
-                    fp.getEndIndex(),
-                    appendTo,
-                    status)) {
-              return appendTo;
-            }
-            copyFromOffset = fp.getEndIndex();
-            break;
-        default:
-            break;
+            r->infinity = 1;
         }
+        return;
     }
-    appendTo.append(
-            original, copyFromOffset, original.length() - copyFromOffset);
-    return appendTo;
-}
-    
-    
-ScriptSet &ScriptSet::resetAll() {
-    for (uint32_t i=0; i<UPRV_LENGTHOF(bits); i++) {
-        bits[i] = 0;
+    secp256k1_fe_sqr(&i2, &i);
+    secp256k1_fe_sqr(&h2, &h);
+    secp256k1_fe_mul(&h3, &h, &h2);
+    if (rzr != NULL) {
+        *rzr = h;
     }
-    return *this;
+    secp256k1_fe_mul(&r->z, &a->z, &h);
+    secp256k1_fe_mul(&t, &u1, &h2);
+    r->x = t; secp256k1_fe_mul_int(&r->x, 2); secp256k1_fe_add(&r->x, &h3); secp256k1_fe_negate(&r->x, &r->x, 3); secp256k1_fe_add(&r->x, &i2);
+    secp256k1_fe_negate(&r->y, &r->x, 5); secp256k1_fe_add(&r->y, &t); secp256k1_fe_mul(&r->y, &r->y, &i);
+    secp256k1_fe_mul(&h3, &h3, &s1); secp256k1_fe_negate(&h3, &h3, 1);
+    secp256k1_fe_add(&r->y, &h3);
 }
     
-    SharedBreakIterator::~SharedBreakIterator() {
-  delete ptr;
-}
-    
-    #ifndef __SHARED_DATEFORMATSYMBOLS_H__
-#define __SHARED_DATEFORMATSYMBOLS_H__
-    
-    #include 'unicode/utypes.h'
-#include 'sharedobject.h'
-    
-    U_NAMESPACE_BEGIN
-    
-    UnicodeSet *SimpleDateFormatStaticSets::getIgnorables(UDateFormatField fieldIndex)
-{
-    UErrorCode status = U_ZERO_ERROR;
-    umtx_initOnce(gSimpleDateFormatStaticSetsInitOnce, &smpdtfmt_initSets, status);
-    if (U_FAILURE(status)) {
-        return NULL;
+    void test_ecdh_generator_basepoint(void) {
+    unsigned char s_one[32] = { 0 };
+    secp256k1_pubkey point[2];
+    int i;
     }
     
-    switch (fieldIndex) {
-        case UDAT_YEAR_FIELD:
-        case UDAT_MONTH_FIELD:
-        case UDAT_DATE_FIELD:
-        case UDAT_STANDALONE_DAY_FIELD:
-        case UDAT_STANDALONE_MONTH_FIELD:
-            return gStaticSets->fDateIgnorables;
-            
-        case UDAT_HOUR_OF_DAY1_FIELD:
-        case UDAT_HOUR_OF_DAY0_FIELD:
-        case UDAT_MINUTE_FIELD:
-        case UDAT_SECOND_FIELD:
-        case UDAT_HOUR1_FIELD:
-        case UDAT_HOUR0_FIELD:
-            return gStaticSets->fTimeIgnorables;
-            
-        default:
-            return gStaticSets->fOtherIgnorables;
+        if (!bytes) return;
+    
+    // Deserialize incoming server stats. Returns the number of bytes deserialized.
+size_t ServerStatsDeserialize(const char* buf, size_t buf_size,
+                              uint64_t* server_elapsed_time);
+    
+      void StartTransportStreamOpBatch(grpc_call_element* elem,
+                                   TransportStreamOpBatch* op) override;
+    
+      void Add(const std::function<void()>& callback) override;
+    
+    #include <grpc/support/port_platform.h>
+    
+    #include <dmlc/registry.h>
+#include <xgboost/base.h>
+#include <xgboost/data.h>
+#include <functional>
+#include <string>
+#include <utility>
+#include <vector>
+#include '../../src/gbm/gblinear_model.h'
+#include '../../src/common/host_device_vector.h'
+    
+    
+    {    for (size_t i = 0; i < batch.size; ++i) {
+      offset_[i + 1] = (i + 1) * num_col_;
+      Row<IndexType> row = batch[i];
+      for (uint32_t j = 0; j < num_col_; ++j) {
+        dense_index_[i * num_col_ + j] = j;
+      }
+      for (unsigned k = 0; k < row.length; ++k) {
+        uint32_t index = row.get_index(k);
+        CHECK_LT(index, num_col_)
+            << 'Featuere index larger than num_col';
+        dense_value_[i * num_col_ + index]  = row.get_value(k);
+      }
     }
-}
-    
-    
-U_NAMESPACE_END
-    
-    StringMatcher::StringMatcher(const StringMatcher& o) :
-    UnicodeFunctor(o),
-    UnicodeMatcher(o),
-    UnicodeReplacer(o),
-    pattern(o.pattern),
-    data(o.data),
-    segmentNumber(o.segmentNumber),
-    matchStart(o.matchStart),
-    matchLimit(o.matchLimit)
-{
-}
+    out_ = batch;
+    out_.index = dmlc::BeginPtr(dense_index_);
+    out_.value = dmlc::BeginPtr(dense_value_);
+    out_.offset = dmlc::BeginPtr(offset_);
+    return true;
+  }
     
     namespace xgboost {
 namespace common {
-TEST(CompressedIterator, Test) {
-  ASSERT_TRUE(detail::SymbolBits(256) == 8);
-  ASSERT_TRUE(detail::SymbolBits(150) == 8);
-  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
-  int num_elements = 1000;
-  int repetitions = 1000;
-  srand(9);
-    }
-    }
-    }
-    
-    
-    {  /*!
-   * \brief transform prediction values, this is only called when Eval is called,
-   *  usually it redirect to PredTransform
-   * \param io_preds prediction values, saves to this vector as well
-   */
-  virtual void EvalTransform(HostDeviceVector<bst_float> *io_preds) {
-    this->PredTransform(io_preds);
+/*! \brief buffer reader of the stream that allows you to get */
+class StreamBufferReader {
+ public:
+  explicit StreamBufferReader(size_t buffer_size)
+      :stream_(NULL),
+       read_len_(1), read_ptr_(1) {
+    buffer_.resize(buffer_size);
   }
   /*!
-   * \brief transform probability value back to margin
-   * this is used to transform user-set base_score back to margin
-   * used by gradient boosting
-   * \return transformed value
+   * \brief set input stream
    */
-  virtual bst_float ProbToMargin(bst_float base_score) const {
-    return base_score;
+  inline void set_stream(dmlc::Stream *stream) {
+    stream_ = stream;
+    read_len_ = read_ptr_ = 1;
   }
   /*!
-   * \brief Create an objective function according to name.
-   * \param name Name of the objective.
+   * \brief allows quick read using get char
    */
-  static ObjFunction* Create(const std::string& name);
-};
-    
-      pid_t const pid = -1;
-  int const group_fd = -1;
-  unsigned long const flags = 0;
-  auto exp_fd = perf_event_open::syscall(
-      &attr, pid, static_cast<int>(cpu), group_fd, flags);
-  if (exp_fd.isError()) {
-    return createError(PerfOutputError::SystemError,
-                       'Fail to create perf_event output point',
-                       exp_fd.takeError());
-  }
-  instance.fd_ = exp_fd.take();
-    
-    
-    {        // in a bad state, don't commit
-        using ::apache::thrift::protocol::TProtocolException;
-        throw TProtocolException(TProtocolException::INVALID_DATA);
+  inline char GetChar(void) {
+    while (true) {
+      if (read_ptr_ < read_len_) {
+        return buffer_[read_ptr_++];
+      } else {
+        read_len_ = stream_->Read(&buffer_[0], buffer_.length());
+        if (read_len_ == 0) return EOF;
+        read_ptr_ = 0;
       }
-      Extension_call_presult result;
-      result.success = &_return;
-      result.read(iprot_);
-      iprot_->readMessageEnd();
-      iprot_->getTransport()->readEnd();
-    
-    
-    {  if (result.__isset.success) {
-    // _return pointer has now been filled
-    return;
+    }
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, 'query failed: unknown result');
+  /*! \brief whether we are reaching the end of file */
+  inline bool AtEnd(void) const {
+    return read_len_ == 0;
+  }
+    }
+    }
+    }
+    
+    /*! \brief collection of rowset */
+class RowSetCollection {
+ public:
+  /*! \brief data structure to store an instance set, a subset of
+   *  rows (instances) associated with a particular node in a decision
+   *  tree. */
+  struct Elem {
+    const size_t* begin{nullptr};
+    const size_t* end{nullptr};
+    int node_id{-1};
+      // id of node associated with this instance set; -1 means uninitialized
+    Elem()
+         = default;
+    Elem(const size_t* begin,
+         const size_t* end,
+         int node_id)
+        : begin(begin), end(end), node_id(node_id) {}
+    }
+    }
+    
+    BatchSet SimpleDMatrix::GetColumnBatches() {
+  // column page doesn't exist, generate it
+  if (!column_page_) {
+    auto page = dynamic_cast<SimpleCSRSource*>(source_.get())->page_;
+    column_page_.reset(
+        new SparsePage(page.GetTranspose(source_->info.num_col_)));
+  }
+  auto begin_iter =
+      BatchIterator(new SimpleBatchIteratorImpl(column_page_.get()));
+  return BatchSet(begin_iter);
 }
     
-      void registerExtension(ExtensionStatus& _return, const InternalExtensionInfo& info, const ExtensionRegistry& registry) {
-    // Your implementation goes here
-    printf('registerExtension\n');
+      bool operator < (const Extension_call_args & ) const;
+    
+    
+  virtual ~ExtensionManager_getQueryColumns_pargs() throw();
+  const std::string* sql;
+    
+    #include <osquery/tables.h>
+    
+    /// Define short-hand shell switches.
+SHELL_FLAG(bool, L, false, 'List all table names');
+SHELL_FLAG(string, A, '', 'Select all from a table');
+    
+    #include <osquery/logger.h>
+#include <osquery/sql.h>
+#include <osquery/tables.h>
+#include <osquery/tables/smart/smart_drives.h>
+    
+    #pragma once
+    
+    EnterExitJoiner::KeyType createKey(EventType const type,
+                                   __s32 const pid,
+                                   __s32 const tgid) {
+  auto key = EnterExitJoiner::KeyType(static_cast<std::uint32_t>(pid));
+  key <<= 32;
+  key |= static_cast<std::uint32_t>(tgid);
+  key <<= 32;
+  key |= static_cast<std::uint32_t>(type);
+  return key;
+}
+    
+      // header
+  readBytes(fp, buf, buf.size(), 8);
+  if (memcmp(header, buf, 8) == 0) {
+    version = 3;
+  }
+  else if (memcmp(headerCompat, buf, 8) == 0) {
+    version = 2;
+  }
+  else {
+    throw DL_ABORT_EX(fmt('Failed to load DHT routing table from %s. cause:%s',
+                          filename.c_str(), 'bad header'));
   }
     
-    std::ostream& operator<<(std::ostream& out, const ExtensionStatus& obj);
+    class DHTTaskExecutor {
+private:
+  int numConcurrent_;
+  std::vector<std::shared_ptr<DHTTask>> execTasks_;
+  std::deque<std::shared_ptr<DHTTask>> queue_;
+    }
     
-    /**
- * @brief Represents a hardware driver type that SMART api can you use to query
- * device information.
- *
- * @param driver name of SMART controller driver
- * @param maxID max ID number of which disks on the controller is monitored
- */
-struct hardwareDriver {
-  std::string driver;
-  size_t maxID;
-};
-    
-    
-    { private:
-  std::vector<PerfOutput<MessageType>> outputs_;
-  std::vector<struct pollfd> fds_;
-};
-    
-    ExpectedSuccess<LinuxProbesControl::Error> LinuxProbesControl::traceSetuid() {
-  return traceEnterAndExit(syscall::EventType::SetuidEnter);
+    std::shared_ptr<DHTTask> DHTTaskFactoryImpl::createPeerLookupTask(
+    const std::shared_ptr<DownloadContext>& ctx, uint16_t tcpPort,
+    const std::shared_ptr<PeerStorage>& peerStorage)
+{
+  auto task = std::make_shared<DHTPeerLookupTask>(ctx, tcpPort);
+  // TODO this may be not freed by RequestGroup::releaseRuntimeResource()
+  task->setPeerStorage(peerStorage);
+  setCommonProperty(task);
+  return task;
 }
+    
+      virtual void
+  addPeriodicTask2(const std::shared_ptr<DHTTask>& task) CXX11_OVERRIDE;
+    
+    const std::string DHTUnknownMessage::E('e');
+    
+        // out_of_range.109
+    try
+    {
+        // try to use an array index that is not a number
+        json::const_reference ref = j.at('/array/one'_json_pointer);
+    }
+    catch (json::parse_error& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+    
+        // create an object from std::multimap
+    std::multimap<std::string, bool> c_mmap
+    {
+        {'one', true}, {'two', true}, {'three', false}, {'three', true}
+    };
+    json j_mmap(c_mmap); // only one entry for key 'three' is used
