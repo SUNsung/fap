@@ -1,193 +1,205 @@
 
         
-            int32_t     op;                    // Operation from the compiled pattern, split into
-    int32_t     opType;                //    the opcode
-    int32_t     opValue;               //    and the operand value.
+        // This flag controls the style of death tests.  Valid values are 'threadsafe',
+// meaning that the death test child process will re-execute the test binary
+// from the start, running only a single death test, or 'fast',
+// meaning that the child process will execute the test logic immediately
+// after forking.
+GTEST_DECLARE_string_(death_test_style);
     
-    
-//--------------------------------------------------------------------------
-//
-//   Copy Constructor        Note:  This is a rather inefficient implementation,
-//                                  but it probably doesn't matter.
-//
-//--------------------------------------------------------------------------
-RegexPattern::RegexPattern(const RegexPattern &other) :  UObject(other) {
-    init();
-    *this = other;
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10>
+internal::ValueArray10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Values(T1 v1,
+    T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9, T10 v10) {
+  return internal::ValueArray10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(v1,
+      v2, v3, v4, v5, v6, v7, v8, v9, v10);
 }
     
-    ScientificNumberFormatter *ScientificNumberFormatter::createSuperscriptInstance(
-            DecimalFormat *fmtToAdopt, UErrorCode &status) {
-    return createInstance(fmtToAdopt, new SuperscriptStyle(), status);
-}
+    #endif  // GTEST_INCLUDE_GTEST_GTEST_PRINTERS_H_
+
     
-    ScriptSet &ScriptSet::parseScripts(const UnicodeString &scriptString, UErrorCode &status) {
-    resetAll();
-    if (U_FAILURE(status)) {
-        return *this;
-    }
-    UnicodeString oneScriptName;
-    for (int32_t i=0; i<scriptString.length();) {
-        UChar32 c = scriptString.char32At(i);
-        i = scriptString.moveIndex32(i, 1);
-        if (!u_isUWhiteSpace(c)) {
-            oneScriptName.append(c);
-            if (i < scriptString.length()) {
-                continue;
-            }
-        }
-        if (oneScriptName.length() > 0) {
-            char buf[40];
-            oneScriptName.extract(0, oneScriptName.length(), buf, sizeof(buf)-1, US_INV);
-            buf[sizeof(buf)-1] = 0;
-            int32_t sc = u_getPropertyValueEnum(UCHAR_SCRIPT, buf);
-            if (sc == UCHAR_INVALID_CODE) {
-                status = U_ILLEGAL_ARGUMENT_ERROR;
-            } else {
-                this->set((UScriptCode)sc, status);
-            }
-            if (U_FAILURE(status)) {
-                return *this;
-            }
-            oneScriptName.remove();
-        }
+      // Reinterprets a bit pattern as a floating-point number.
+  //
+  // This function is needed to test the AlmostEquals() method.
+  static RawType ReinterpretBits(const Bits bits) {
+    FloatingPoint fp(0);
+    fp.u_.bits_ = bits;
+    return fp.u_.value_;
+  }
+    
+      linked_ptr& operator=(linked_ptr const& ptr) {
+    if (&ptr != this) {
+      depart();
+      copy(&ptr);
     }
     return *this;
+  }
+    
+    #ifndef GTEST_SAMPLES_PRIME_TABLES_H_
+#define GTEST_SAMPLES_PRIME_TABLES_H_
+    
+    #include <string.h>
+    
+      // Clears the queue.
+  void Clear() {
+    if (size_ > 0) {
+      // 1. Deletes every node.
+      QueueNode<E>* node = head_;
+      QueueNode<E>* next = node->next();
+      for (; ;) {
+        delete node;
+        node = next;
+        if (node == NULL) break;
+        next = node->next();
+      }
+    }
+    }
+    
+            if (sequences.size() < numOfSequences)
+            RuntimeError('The size of output buffer (%zu) is smaller than the number (%zu) of sequences.', sequences.size(), numOfSequences);
+    
+        auto& pMBLayout = minibatch.begin()->second.pMBLayout;
+    // This is only allowed for old readers, which support a single layout for all inputs.
+    for (const auto& iter : minibatch)
+    {
+        assert(iter.second.pMBLayout == pMBLayout);
+        // TODO: This should be a runtime check, not an assert() that only runs in Debug.
+        UNUSED(iter);
+    }
+    
+        void OptimizedMemoryAllocation()
+    {
+        // MatrixPool is not templated, so we call both float and double versions here 
+        OptimizedMemoryAllocationFunc<float>(); 
+        OptimizedMemoryAllocationFunc<double>();
+        OptimizedMemoryAllocationFunc<half>();
+        return; 
+    }
+    
+    //--------------------------------------------------------------------------------
+//
+//  groupCount()
+//
+//--------------------------------------------------------------------------------
+int32_t RegexMatcher::groupCount() const {
+    return fPattern->fGroupMap->size();
+}
+    
+    UnicodeString &ScientificNumberFormatter::SuperscriptStyle::format(
+        const UnicodeString &original,
+        FieldPositionIterator &fpi,
+        const UnicodeString &preExponent,
+        const DecimalFormatStaticSets &staticSets,
+        UnicodeString &appendTo,
+        UErrorCode &status) const {
+    if (U_FAILURE(status)) {
+        return appendTo;
+    }
+    FieldPosition fp;
+    int32_t copyFromOffset = 0;
+    while (fpi.next(fp)) {
+        switch (fp.getField()) {
+        case UNUM_EXPONENT_SYMBOL_FIELD:
+            appendTo.append(
+                    original,
+                    copyFromOffset,
+                    fp.getBeginIndex() - copyFromOffset);
+            copyFromOffset = fp.getEndIndex();
+            appendTo.append(preExponent);
+            break;
+        case UNUM_EXPONENT_SIGN_FIELD:
+            {
+                int32_t beginIndex = fp.getBeginIndex();
+                int32_t endIndex = fp.getEndIndex();
+                UChar32 aChar = original.char32At(beginIndex);
+                if (staticSets.fMinusSigns->contains(aChar)) {
+                    appendTo.append(
+                            original,
+                            copyFromOffset,
+                            beginIndex - copyFromOffset);
+                    appendTo.append(kSuperscriptMinusSign);
+                } else if (staticSets.fPlusSigns->contains(aChar)) {
+                    appendTo.append(
+                           original,
+                           copyFromOffset,
+                           beginIndex - copyFromOffset);
+                    appendTo.append(kSuperscriptPlusSign);
+                } else {
+                    status = U_INVALID_CHAR_FOUND;
+                    return appendTo;
+                }
+                copyFromOffset = endIndex;
+            }
+            break;
+        case UNUM_EXPONENT_FIELD:
+            appendTo.append(
+                    original,
+                    copyFromOffset,
+                    fp.getBeginIndex() - copyFromOffset);
+            if (!copyAsSuperscript(
+                    original,
+                    fp.getBeginIndex(),
+                    fp.getEndIndex(),
+                    appendTo,
+                    status)) {
+              return appendTo;
+            }
+            copyFromOffset = fp.getEndIndex();
+            break;
+        default:
+            break;
+        }
+    }
+    appendTo.append(
+            original, copyFromOffset, original.length() - copyFromOffset);
+    return appendTo;
 }
     
     U_NAMESPACE_BEGIN
     
-    class U_I18N_API SharedCalendar : public SharedObject {
-public:
-    SharedCalendar(Calendar *calToAdopt) : ptr(calToAdopt) { }
-    virtual ~SharedCalendar();
-    const Calendar *get() const { return ptr; }
-    const Calendar *operator->() const { return ptr; }
-    const Calendar &operator*() const { return *ptr; }
-private:
-    Calendar *ptr;
-    SharedCalendar(const SharedCalendar &);
-    SharedCalendar &operator=(const SharedCalendar &);
-};
+    class BreakIterator;
     
-    #endif
-
+    #include 'unicode/utypes.h'
+#include 'sharedobject.h'
+#include 'unicode/dtfmtsym.h'
     
+        /**
+     * Returns TRUE if this object is equal to rhs.
+     */
+    UBool equals(const SignificantDigitInterval &rhs) const {
+        return ((fMax == rhs.fMax) && (fMin == rhs.fMin));
+    }
     
-SimpleDateFormatStaticSets::~SimpleDateFormatStaticSets() {
-    delete fDateIgnorables;  fDateIgnorables = NULL;
-    delete fTimeIgnorables;  fTimeIgnorables = NULL;
-    delete fOtherIgnorables; fOtherIgnorables = NULL;
-}
+        // Adjust the ruleDay to the monthLen, for non-leap year February 29 rule days.
+    if (ruleDay > monthLen) {
+        ruleDay = monthLen;
+    }
     
     
 U_NAMESPACE_END
     
+    #endif  // !UCONFIG_NO_FORMATTING
+
+    
         /**
-     * Replace characters in 'text' from 'start' to 'limit' with the
-     * output text of this object.  Update the 'cursor' parameter to
-     * give the cursor position and return the length of the
-     * replacement text.
-     *
-     * @param text the text to be matched
-     * @param start inclusive start index of text to be replaced
-     * @param limit exclusive end index of text to be replaced;
-     * must be greater than or equal to start
-     * @param cursor output parameter for the cursor position.
-     * Not all replacer objects will update this, but in a complete
-     * tree of replacer objects, representing the entire output side
-     * of a transliteration rule, at least one must update it.
-     * @return the number of 16-bit code units in the text replacing
-     * the characters at offsets start..(limit-1) in text
+     * @param keyword for example 'few' or 'other'
+     * @return the index of the plural form corresponding to the keyword, or OTHER
      */
-    virtual int32_t replace(Replaceable& text,
-                            int32_t start,
-                            int32_t limit,
-                            int32_t& cursor);
-    
-    #if !UCONFIG_NO_TRANSLITERATION
-    
-    
-    {    for (size_t i = 0; i < batch.size; ++i) {
-      offset_[i + 1] = (i + 1) * num_col_;
-      Row<IndexType> row = batch[i];
-      for (uint32_t j = 0; j < num_col_; ++j) {
-        dense_index_[i * num_col_ + j] = j;
-      }
-      for (unsigned k = 0; k < row.length; ++k) {
-        uint32_t index = row.get_index(k);
-        CHECK_LT(index, num_col_)
-            << 'Featuere index larger than num_col';
-        dense_value_[i * num_col_ + index]  = row.get_value(k);
-      }
+    static int32_t indexOrOtherIndexFromString(const char *keyword) {
+        int32_t i = indexOrNegativeFromString(keyword);
+        return i >= 0 ? i : OTHER;
     }
-    out_ = batch;
-    out_.index = dmlc::BeginPtr(dense_index_);
-    out_.value = dmlc::BeginPtr(dense_value_);
-    out_.offset = dmlc::BeginPtr(offset_);
-    return true;
-  }
     
-          cbw.Write(buffer.data(), input.begin(), input.end());
+    #include 'gtest/gtest.h'
     
-    SEXP XGDMatrixNumRow_R(SEXP handle) {
-  bst_ulong nrow;
-  R_API_BEGIN();
-  CHECK_CALL(XGDMatrixNumRow(R_ExternalPtrAddr(handle), &nrow));
-  R_API_END();
-  return ScalarInteger(static_cast<int>(nrow));
+    double ObjectGeneralInfo60B::lateral_vel(const std::uint8_t* bytes,
+                                         int32_t length) const {
+  Byte t0(bytes + 5);
+  int32_t x = t0.get_byte(0, 6);
+    }
+    
+    unsigned int BaseMapMatrix::GetBinarySize() const { return 0; }
+    
+    
+    {  EXPECT_EQ(bd, bd_golden);
 }
-    
-      // Computes the score (negative loss) resulting from performing this split
-  virtual bst_float ComputeSplitScore(bst_uint nodeid,
-                                      bst_uint featureid,
-                                      const GradStats& left_stats,
-                                      const GradStats& right_stats,
-                                      bst_float left_weight,
-                                      bst_float right_weight) const = 0;
-    
-    #ifndef __CCCAMERA_ACTION_H__
-#define __CCCAMERA_ACTION_H__
-    
-    bool CardinalSplineTo::initWithDuration(float duration, PointArray *points, float tension)
-{
-    CCASSERT(points->count() > 0, 'Invalid configuration. It must at least have one control point');
-    }
-    
-    /** Returns the Cardinal Spline position for a given set of control points, tension and time */
-extern CC_DLL Vec2 ccCardinalSplineAt(const Vec2 &p0, const Vec2 &p1, const Vec2 &p2, const Vec2 &p3, float tension, float t);
-    
-                if ( ((i+j) % 2) == 0 )
-            {
-                coords.bl.z += sinz;
-                coords.br.z += sinz;
-                coords.tl.z += sinz;
-                coords.tr.z += sinz;
-            }
-            else
-            {
-                coords.bl.z += sinz2;
-                coords.br.z += sinz2;
-                coords.tl.z += sinz2;
-                coords.tr.z += sinz2;
-            }
-    
-        /** 
-    @brief Initializes the action with a range, shatter Z vertices, grid size and duration.
-    @param duration Specify the duration of the ShatteredTiles3D action. It's a value in seconds.
-    @param gridSize Specify the size of the grid.
-    @param range Specify the range of the shatter effect.
-    @param shatterZ Specify whether shake on the z axis.
-    @return If the Initialization success, return true; otherwise, return false.
-    */
-    bool initWithDuration(float duration, const Size& gridSize, int range, bool shatterZ);
-    
-     @code
-     // scaleA and scaleB are equivalents
-     auto scaleA = ScaleTo::create(2, 3);                 // (duration, to)
-     auto scaleB = ActionTween::create(2, 'scale', 1, 3); // (duration, key, from, to)
- @endcode
-    
-    
-    {                continue;
-            }
