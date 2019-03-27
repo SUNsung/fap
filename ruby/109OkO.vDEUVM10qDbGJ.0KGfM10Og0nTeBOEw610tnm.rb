@@ -1,62 +1,95 @@
 
         
-          def remove_duplicates
-    where = 'WHERE s1.user_id = s2.user_id AND s1.shareable_id = s2.shareable_id AND '\
-      's1.shareable_type = s2.shareable_type AND s1.id > s2.id'
-    if AppConfig.postgres?
-      execute('DELETE FROM share_visibilities AS s1 USING share_visibilities AS s2 #{where}')
-    else
-      execute('DELETE s1 FROM share_visibilities s1, share_visibilities s2 #{where}')
+              def self.symbols
+        type_klass::SET.symbols
+      end
     end
   end
 end
 
     
-          it 'should remove participation' do
-        delete :destroy, params: {post_id: post.id}
-        expect(alice.participations.where(:target_id => post.id)).not_to exist
-        expect(response.code).to eq('200')
-      end
+    if pathutil_relative == native_relative
+  Benchmark.ips do |x|
+    x.report('pathutil') { pathutil_relative }
+    x.report('native')   { native_relative }
+    x.compare!
+  end
+else
+  print 'PATHUTIL: '
+  puts pathutil_relative
+  print 'NATIVE:   '
+  puts native_relative
+end
+
+    
+    # No trailing slash
+Benchmark.ips do |x|
+  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
+  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
+  x.compare!
+end
+
+    
+        def defaults_deprecate_type(old, current)
+      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
+      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
+                        'type: #{current}'.'
     end
+  end
+end
+
     
-            expect {
-          get :create, params: invalid_params.merge(invite: {token: code.token})
-        }.not_to change { code.reload.count }
-      end
+        change.down do
+      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
+      Mention.where(mentions_container_type: 'Comment').destroy_all
+      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
+    end
+  end
+end
+
     
-            it 'reshares the absolute root' do
-          post_request!
-          expect(@post.reshares.count).to eq(0)
-          expect(@root.reshares.count).to eq(2)
-        end
-      end
+    When /^I put in my password in '([^']*)'$/ do |field|
+ step %(I fill in '#{field}' with '#{@me.password}')
+end
+    
+      class SendPrivate < Base
+    def perform(*_args)
+      # don't federate in cucumber
     end
   end
     
-    post '/msg' do
-  SinatraWorker.perform_async params[:msg]
-  redirect to('/')
-end
-    
-            begin
-          File.open(fp.path, 'a') { |tmpfp| fp.reopen(tmpfp) }
-          fp.sync = true
-          nr += 1
-        rescue IOError, Errno::EBADF
-          # not much we can do...
-        end
-      end
-      nr
-    rescue RuntimeError => ex
-      # RuntimeError: ObjectSpace is disabled; each_object will only work with Class, pass -X+O to enable
-      puts 'Unable to reopen logs: #{ex.message}'
+        it 'generates a jasmine fixture', :fixture => true do
+      get :bookmarklet
+      save_fixture(html_for('body'), 'bookmarklet')
     end
     
-          def prepend(klass, *args)
-        remove(klass) if exists?(klass)
-        entries.insert(0, Entry.new(klass, *args))
+        it 'returns an empty array for a post with no likes' do
+      get :index, params: {post_id: @message.id}
+      expect(JSON.parse(response.body)).to eq([])
+    end
+    
+            it 'doesn\'t allow the user to reshare the post again' do
+          post_request!
+          expect(response.code).to eq('422')
+          expect(response.body).to eq(I18n.t('reshares.create.error'))
+        end
       end
     
-          def fake?
-        self.__test_mode == :fake
+          def remove(klass)
+        entries.delete_if { |entry| entry.klass == klass }
       end
+    
+          arr = Sidekiq.options[:lifecycle_events][event]
+      arr.reverse! if reverse
+      arr.each do |block|
+        begin
+          block.call
+        rescue => ex
+          handle_exception(ex, { context: 'Exception during Sidekiq lifecycle event.', event: event })
+          raise ex if reraise
+        end
+      end
+      arr.clear
+    end
+  end
+end
