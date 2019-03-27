@@ -1,144 +1,117 @@
 
         
-            def filter_const(name)
-      if name.is_a? Array
-        name.map &method(:filter_const)
-      else
-        Docs.const_get '#{name}_filter'.camelize
-      end
+            def require_local_account!
+      redirect_to admin_account_path(@account.id) unless @account.local? && @account.user.present?
     end
     
-        def initialize(name = nil, path = nil, type = nil)
-      self.name = name
-      self.path = path
-      self.type = type
+      def hub_callback
+    params['hub.callback']
+  end
     
-            css('pre.prettyprint').each do |node|
-          node.content = node.content.strip
-          node['data-language'] = 'dart' if node['class'].include?('dart')
-          node['data-language'] = 'html' if node.content.start_with?('<')
-          node.remove_attribute('class')
-        end
-    
-        if resource.errors.empty?
-      set_flash_message!(:notice, :confirmed)
-      respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
-    else
-      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+      def update
+    if subscription.verify(body, request.headers['HTTP_X_HUB_SIGNATURE'])
+      ProcessingWorker.perform_async(@account.id, body.force_encoding('UTF-8'))
     end
+    
+        render json: web_subscription, serializer: REST::WebPushSubscriptionSerializer
   end
     
-      def failure_message
-    exception = request.respond_to?(:get_header) ? request.get_header('omniauth.error') : request.env['omniauth.error']
-    error   = exception.error_reason if exception.respond_to?(:error_reason)
-    error ||= exception.error        if exception.respond_to?(:error)
-    error ||= (request.respond_to?(:get_header) ? request.get_header('omniauth.error.type') : request.env['omniauth.error.type']).to_s
-    error.to_s.humanize if error
-  end
+    class Auth::OmniauthCallbacksController < Devise::OmniauthCallbacksController
+  skip_before_action :verify_authenticity_token
     
-      protected
-    
-          # If the record is persisted, remove the remember token (but only if
-      # it exists), and save the record without validations.
-      def forget_me!
-        return unless persisted?
-        self.remember_token = nil if respond_to?(:remember_token)
-        self.remember_created_at = nil if self.class.expire_all_remember_me_on_sign_out
-        save(validate: false)
+        self.each_key { |k|
+      if (k.downcase == key.downcase)
+        self.store(k, value)
+        stored = true
       end
-    
-        # Register callbacks
-    self.listener.on_client_connect_proc = Proc.new { |cli|
-      on_client_connect(cli)
-    }
-    self.listener.on_client_data_proc = Proc.new { |cli|
-      on_client_data(cli)
     }
     
-        data =
-    [   # Maximum access
-      0x00, 0x00,
-      # Reserved
-      0x00, 0x00
-    ].pack('C*') +
-    console_session_id +
-    [
-      0x00, 0x00, 0x00, 0x08,
-      # Cipher 0
+    
+  def dprint(msg)
+    self.client.dprint(msg)
+  end
+    
+    =begin
+   +-------------+---------------+-------------------------------------+
+   | VALUE       | Name          | Description                         |
+   +-------------+---------------+-------------------------------------+
+   | 0x01        | Hangup        | The call has been hungup at the     |
+   |             |               | remote end                          |
+   |             |               |                                     |
+   | 0x02        | Reserved      | Reserved for future use             |
+   |             |               |                                     |
+   | 0x03        | Ringing       | Remote end is ringing (ring-back)   |
+   |             |               |                                     |
+   | 0x04        | Answer        | Remote end has answered             |
+   |             |               |                                     |
+   | 0x05        | Busy          | Remote end is busy                  |
+   |             |               |                                     |
+   | 0x06        | Reserved      | Reserved for future use             |
+   |             |               |                                     |
+   | 0x07        | Reserved      | Reserved for future use             |
+   |             |               |                                     |
+   | 0x08        | Congestion    | The call is congested               |
+   |             |               |                                     |
+   | 0x09        | Flash Hook    | Flash hook                          |
+   |             |               |                                     |
+   | 0x0a        | Reserved      | Reserved for future use             |
+   |             |               |                                     |
+   | 0x0b        | Option        | Device-specific options are being   |
+   |             |               | transmitted                         |
+   |             |               |                                     |
+   | 0x0c        | Key Radio     | Key Radio                           |
+   |             |               |                                     |
+   | 0x0d        | Unkey Radio   | Unkey Radio                         |
+   |             |               |                                     |
+   | 0x0e        | Call Progress | Call is in progress                 |
+   |             |               |                                     |
+   | 0x0f        | Call          | Call is proceeding                  |
+   |             | Proceeding    |                                     |
+   |             |               |                                     |
+   | 0x10        | Hold          | Call is placed on hold              |
+   |             |               |                                     |
+   | 0x11        | Unhold        | Call is taken off hold              |
+   +-------------+---------------+-------------------------------------+
+=end
+    
+      def self.create_ipmi_rakp_1(bmc_session_id, console_random_id, username)
+    head = [
+      0x06, 0x00, 0xff, 0x07,  # RMCP Header
+      0x06,                    # RMCP+ Authentication Type
+      PAYLOAD_RAKP1,           # Payload Type
       0x00, 0x00, 0x00, 0x00,
-      0x01, 0x00, 0x00, 0x08,
-      # Cipher 0
       0x00, 0x00, 0x00, 0x00,
-      0x02, 0x00, 0x00, 0x08,
-      # No Encryption
-      0x00, 0x00, 0x00, 0x00
     ].pack('C*')
     
-              # Decodes the value from an OpenSSL::ASN1::ASN1Data
+              # Decodes a Rex::Proto::Kerberos::Model::EncryptedData from an
+          # OpenSSL::ASN1::Sequence
           #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [String]
-          def decode_value(input)
-            input.value[0].value
-          end
+          # @param input [OpenSSL::ASN1::Sequence] the input to decode from
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode_asn1(input)
+            seq_values = input.value
     
-                self
-          end
-    
-    Given(/config stage file has line '(.*?)'/) do |line|
-  TestApp.append_to_deploy_file(line)
-end
-    
-      def test_file_exists(path)
-    exists?('f', path)
-  end
-    
-          sshkit.use_format(*format_args)
-    end
-  end
-end
-
-    
-            def lvalue(key)
-          key.to_s.chomp('=').to_sym
-        end
-      end
-    end
-  end
-end
-
-    
-          def add_host(host, properties={})
-        new_host = Server[host]
-        new_host.port = properties[:port] if properties.key?(:port)
-        # This matching logic must stay in sync with `Server#matches?`.
-        key = ServerKey.new(new_host.hostname, new_host.port)
-        existing = servers_by_key[key]
-        if existing
-          existing.user = new_host.user if new_host.user
-          existing.with(properties)
-        else
-          servers_by_key[key] = new_host.with(properties)
-        end
-      end
-    
-        headers = get('/', {}, 'wants' => 'text/html').headers
-    expect(headers['Content-Security-Policy']).to eq('connect-src 'self'; default-src none; img-src 'self'; script-src 'self'; style-src 'self'')
-  end
-    
-          # Returns an array of all the when branches in the `case` statement.
+          # Calls the given block for each `when` node in the `case` statement.
+      # If no block is given, an `Enumerator` is returned.
       #
-      # @return [Array<WhenNode>] an array of `when` nodes
-      def when_branches
-        node_parts[1...-1]
+      # @return [self] if a block is given
+      # @return [Enumerator] if no block is given
+      def each_when
+        return when_branches.to_enum(__method__) unless block_given?
+    
+          # Checks whether this node body is a void context.
+      #
+      # @return [Boolean] whether the `def` node body is a void context
+      def void_context?
+        method?(:initialize) || assignment_method?
       end
     
-          # This is used for duck typing with `pair` nodes which also appear as
-      # `hash` elements.
+          # Checks whether this node body is a void context.
+      # Always `true` for `for`.
       #
-      # @return [false]
-      def colon?
-        false
+      # @return [true] whether the `for` node body is a void context
+      def void_context?
+        true
       end
     
         def handle_switch(cop_names, names, disabled, extras, comment)
