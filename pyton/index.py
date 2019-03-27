@@ -1,178 +1,258 @@
 
         
-        
-@pytest.mark.functional
-def test_with_confirmation(proc, TIMEOUT):
-    with_confirmation(proc, TIMEOUT)
+        flags = tf.app.flags
+flags.DEFINE_string('save_dir', '/tmp/' + DATA_DIR + '/',
+                    'Directory for saving data.')
+flags.DEFINE_string('datafile_name', 'thits_data',
+                    'Name of data file for input case.')
+flags.DEFINE_string('noise_type', 'poisson', 'Noise type for data.')
+flags.DEFINE_integer('synth_data_seed', 5, 'Random seed for RNN generation.')
+flags.DEFINE_float('T', 1.0, 'Time in seconds to generate.')
+flags.DEFINE_integer('C', 100, 'Number of conditions')
+flags.DEFINE_integer('N', 50, 'Number of units for the RNN')
+flags.DEFINE_integer('S', 50, 'Number of sampled units from RNN')
+flags.DEFINE_integer('npcs', 10, 'Number of PCS for multi-session case.')
+flags.DEFINE_float('train_percentage', 4.0/5.0,
+                   'Percentage of train vs validation trials')
+flags.DEFINE_integer('nreplications', 40,
+                     'Number of noise replications of the same underlying rates.')
+flags.DEFINE_float('g', 1.5, 'Complexity of dynamics')
+flags.DEFINE_float('x0_std', 1.0,
+                   'Volume from which to pull initial conditions (affects diversity of dynamics.')
+flags.DEFINE_float('tau', 0.025, 'Time constant of RNN')
+flags.DEFINE_float('dt', 0.010, 'Time bin')
+flags.DEFINE_float('input_magnitude', 20.0,
+                   'For the input case, what is the value of the input?')
+flags.DEFINE_float('max_firing_rate', 30.0, 'Map 1.0 of RNN to a spikes per second')
+FLAGS = flags.FLAGS
+    
+        states_t_bxn, outputs_t_bxn = sess.run([states_t, outputs_t],
+                                           feed_dict=feed_dict)
+    states_nxt = np.transpose(np.squeeze(np.asarray(states_t_bxn)))
+    outputs_t_bxn = np.squeeze(np.asarray(outputs_t_bxn))
+    r_sxt = np.dot(P_nxn, states_nxt)
     
     
-@pytest.mark.functional
-def test_with_confirmation(proc, TIMEOUT):
-    with_confirmation(proc, TIMEOUT)
-    history_changed(proc, TIMEOUT, u'echo test')
-    
-      * dynamodb
-'''
-    
-    
-class BtreeGinExtension(CreateExtension):
-    
-        def __call__(self, value):
-        keys = set(value)
-        missing_keys = self.keys - keys
-        if missing_keys:
-            raise ValidationError(
-                self.messages['missing_keys'],
-                code='missing_keys',
-                params={'keys': ', '.join(missing_keys)},
-            )
-        if self.strict:
-            extra_keys = keys - self.keys
-            if extra_keys:
-                raise ValidationError(
-                    self.messages['extra_keys'],
-                    code='extra_keys',
-                    params={'keys': ', '.join(extra_keys)},
-                )
-    
-                try:
-                res = self.check_ip.check_ip(ip)
-            except Exception as e:
-                xlog.warn('check except:%r', e)
-                continue
-    
-    
-class MismatchedNotSetException(MismatchedSetException):
-    '''@brief Used for remote debugger deserialization'''
-    
-    def __str__(self):
-        return 'MismatchedNotSetException(%r!=%r)' % (
-            self.getUnexpectedType(), self.expecting
-            )
-    __repr__ = __str__
-    
-            raise NotImplementedError
-    
-        publicKey, privateKey = generateKey(keySize)
-    print('\nWriting public key to file %s_pubkey.txt...' % name)
-    with open('%s_pubkey.txt' % name, 'w') as fo:
-        fo.write('%d,%d,%d,%d' % (publicKey[0], publicKey[1], publicKey[2], publicKey[3]))
-    
+def spikify_data(data_e, rng, dt=1.0, max_firing_rate=100):
+  ''' Apply spikes to a continuous dataset whose values are between 0.0 and 1.0
+  Args:
+    data_e: nexamples length list of NxT trials
+    dt: how often the data are sampled
+    max_firing_rate: the firing rate that is associated with a value of 1.0
+  Returns:
+    spikified_e: a list of length b of the data represented as spikes,
+    sampled from the underlying poisson process.
     '''
-The number of partitions of a number n into at least k parts equals the number of partitions into exactly k parts
-plus the number of partitions into at least k-1 parts. Subtracting 1 from each part of a partition of n into k parts
-gives a partition of n-k into k parts. These two facts together are used for this algorithm.
-'''
-def partition(m):
-	memo = [[0 for _ in xrange(m)] for _ in xrange(m+1)]
-	for i in xrange(m+1):
-		memo[i][0] = 1
     
-        dp = [[False for x in range(s+1)]for y in range(n+1)]
+      Returns:
+    TensorFlow session and tensors dict.
+  '''
+  with tf.Graph().as_default():
+    sys.stderr.write('Recovering graph.\n')
+    with tf.gfile.FastGFile(gd_file, 'r') as f:
+      s = f.read().decode()
+      gd = tf.GraphDef()
+      text_format.Merge(s, gd)
     
-    	currPos = 0
-	while currPos < len(bitString):
-		currPart = bitString[currPos:currPos+512]
-		mySplits = []
-		for i in range(16):
-			mySplits.append(int(rearrange(currPart[32*i:32*i+32]),2))
-		yield mySplits
-		currPos += 512
+      return [
+      final_gen_objective, log_probs, rewards, advantages, baselines,
+      maintain_averages_op, critic_loss, cumulative_rewards
+  ]
     
-    def get_initial_centroids(data, k, seed=None):
-    '''Randomly choose k data points as initial centroids'''
-    if seed is not None: # useful for obtaining consistent results
-        np.random.seed(seed)
-    n = data.shape[0] # number of data points
-        
-    # Pick K indices from range [0, N).
-    rand_indices = np.random.randint(0, n, k)
+          # if time > maxlen, return all true vector
+      done = tf.cond(
+          tf.greater(time, maximum_length),
+          lambda: tf.ones([
+              batch_size,], dtype=tf.bool), lambda: done)
+      return (done, cell_state, next_input, cell_output, context_state)
     
-    # Keep centroids as dense format, as many entries will be nonzero due to averaging.
-    # As long as at least one document in a cluster contains a word,
-    # it will carry a nonzero weight in the TF-IDF vector of the centroid.
-    centroids = data[rand_indices,:]
+    # List all EIP addresses for a VM.
+- ec2_eip_facts:
+    filters:
+       instance-id: i-123456789
+  register: my_vm_eips
     
-    return centroids
+        '''Get an elasticache connection'''
+    try:
+        conn = connect_to_region(region_name=region, **aws_connect_kwargs)
+    except boto.exception.NoAuthHandlerFound as e:
+        module.fail_json(msg=e.message)
     
-    '''
-* Wondering how this method works !
-* It's pretty simple.
-* Let's say you need to calculate a ^ b
-* RULE 1 : a ^ b = (a*a) ^ (b/2) ---- example : 4 ^ 4 = (4*4) ^ (4/2) = 16 ^ 2
-* RULE 2 : IF b is ODD, then ---- a ^ b = a * (a ^ (b - 1)) :: where (b - 1) is even.
-* Once b is even, repeat the process to get a ^ b
-* Repeat the process till b = 1 OR b = 0, because a^1 = a AND a^0 = 1
-*
-* As far as the modulo is concerned,
-* the fact : (a*b) % c = ((a%c) * (b%c)) % c
-* Now apply RULE 1 OR 2 whichever is required.
-'''
+    options:
+    name:
+        description:
+            - Hostname of the machine to manage.
+        required: true
+    state:
+        description:
+            - Takes the host to the desired lifecycle state.
+            - If C(absent) the host will be deleted from the cluster.
+            - If C(present) the host will be created in the cluster (includes C(enabled), C(disabled) and C(offline) states).
+            - If C(enabled) the host is fully operational.
+            - C(disabled), e.g. to perform maintenance operations.
+            - C(offline), host is totally offline.
+        choices:
+            - absent
+            - present
+            - enabled
+            - disabled
+            - offline
+        default: present
+    im_mad_name:
+        description:
+            - The name of the information manager, this values are taken from the oned.conf with the tag name IM_MAD (name)
+        default: kvm
+    vmm_mad_name:
+        description:
+            - The name of the virtual machine manager mad name, this values are taken from the oned.conf with the tag name VM_MAD (name)
+        default: kvm
+    cluster_id:
+        description:
+            - The cluster ID.
+        default: 0
+    cluster_name:
+        description:
+            - The cluster specified by name.
+    labels:
+        description:
+            - The labels for this host.
+    template:
+        description:
+            - The template or attribute changes to merge into the host template.
+        aliases:
+            - attributes
+    
+    
+if __name__ == '__main__':
+    main()
 
     
-    letters = [letter for letter in string.ascii_letters]
-digits = [digit for digit in string.digits]
-symbols = [symbol for symbol in string.punctuation]
-chars = letters + digits + symbols
-random.shuffle(chars)
     
-    # Theme options are theme-specific and customize the look and feel of a
-# theme further.  For a list of options available for each theme, see the
-# documentation.
-#html_theme_options = {}
+DOCUMENTATION = '''
+---
+module: ipa_dnszone
+author: Fran Fitzpatrick (@fxfitz)
+short_description: Manage FreeIPA DNS Zones
+description:
+- Add and delete an IPA DNS Zones using IPA API
+options:
+  zone_name:
+    description:
+    - The DNS zone name to which needs to be managed.
+    required: true
+  state:
+    description: State to ensure
+    required: false
+    default: present
+    choices: ['present', 'absent']
+extends_documentation_fragment: ipa.documentation
+version_added: '2.5'
+'''
     
-            # Put the blurred face region back into the frame image
-        frame[top:bottom, left:right] = face_image
+        module = AnsibleModule(
+        argument_spec=dict(
+            token=dict(required=True, no_log=True),
+            environment=dict(required=True),
+            user=dict(required=False),
+            repo=dict(required=False),
+            revision=dict(required=False),
+            url=dict(required=False, default='https://api.airbrake.io/deploys.txt'),
+            validate_certs=dict(default='yes', type='bool'),
+        ),
+        supports_check_mode=True
+    )
     
-        :param face_image: The image that contains one or more faces
-    :param known_face_locations: Optional - the bounding boxes of each face if you already know them.
-    :param num_jitters: How many times to re-sample the face when calculating encoding. Higher is more accurate, but slower (i.e. 100 is 100x slower)
-    :return: A list of 128-dimensional face encodings (one for each face in the image)
+    RETURN = '''# '''
+    
+    from __future__ import absolute_import, division, print_function
+__metaclass__ = type
+    
+        params = {}
+    params['message'] = msg
+    if annotated_by:
+        params['annotated_by'] = annotated_by
+    if level:
+        params['level'] = level
+    if instance_id:
+        params['instance_id'] = instance_id
+    if event_epoch:
+        params['event_epoch'] = event_epoch
+    
+    
+def plot_batch_times(all_times, n_features, all_batch_sizes, data):
+    plt.figure()
+    plot_results(all_batch_sizes, all_times['pca'], label='PCA')
+    plot_results(all_batch_sizes, all_times['ipca'], label='IncrementalPCA')
+    plt.legend(loc='lower left')
+    plt.suptitle('Algorithm runtime vs. batch_size for n_components %i\n \
+                 LFW, size %i x %i' % (
+                 n_features, data.shape[0], data.shape[1]))
+    plt.xlabel('Batch size')
+    plt.ylabel('Time (seconds)')
+    
+    n_samples = np.logspace(.5, 3, 9)
+n_features = np.logspace(1, 3.5, 7)
+N_samples, N_features = np.meshgrid(n_samples,
+                                    n_features)
+scikits_time = np.zeros(N_samples.shape)
+scipy_time = np.zeros(N_samples.shape)
+    
     '''
-    raw_landmarks = _raw_face_landmarks(face_image, known_face_locations, model='small')
-    return [np.array(face_encoder.compute_face_descriptor(face_image, raw_landmark_set, num_jitters)) for raw_landmark_set in raw_landmarks]
-    
-    # Get a reference to the Raspberry Pi camera.
-# If this fails, make sure you have a camera connected to the RPi and that you
-# enabled your camera in raspi-config and rebooted first.
-camera = picamera.PiCamera()
-camera.resolution = (320, 240)
-output = np.empty((240, 320, 3), dtype=np.uint8)
-    
-            if True in result:
-            [print_result(image_to_check, name, distance, show_distance) for is_match, name, distance in zip(result, known_names, distances) if is_match]
-        else:
-            print_result(image_to_check, 'unknown_person', None, show_distance)
-    
-            self.assertEqual(len(detected_faces), 1)
-        self.assertEqual(detected_faces[0], (142, 551, 409, 349))
+# Author: Olivier Grisel <olivier.grisel@ensta.org>
+# License: Simplified BSD
     
     
-def detect_faces_in_image(file_stream):
-    # 用face_recognition.face_encodings(img)接口提前把奥巴马人脸的编码录入
-    known_face_encoding = [-0.09634063,  0.12095481, -0.00436332, -0.07643753,  0.0080383,
-                            0.01902981, -0.07184699, -0.09383309,  0.18518871, -0.09588896,
-                            0.23951106,  0.0986533 , -0.22114635, -0.1363683 ,  0.04405268,
-                            0.11574756, -0.19899382, -0.09597053, -0.11969153, -0.12277931,
-                            0.03416885, -0.00267565,  0.09203379,  0.04713435, -0.12731361,
-                           -0.35371891, -0.0503444 , -0.17841317, -0.00310897, -0.09844551,
-                           -0.06910533, -0.00503746, -0.18466514, -0.09851682,  0.02903969,
-                           -0.02174894,  0.02261871,  0.0032102 ,  0.20312519,  0.02999607,
-                           -0.11646006,  0.09432904,  0.02774341,  0.22102901,  0.26725179,
-                            0.06896867, -0.00490024, -0.09441824,  0.11115381, -0.22592428,
-                            0.06230862,  0.16559327,  0.06232892,  0.03458837,  0.09459756,
-                           -0.18777156,  0.00654241,  0.08582542, -0.13578284,  0.0150229 ,
-                            0.00670836, -0.08195844, -0.04346499,  0.03347827,  0.20310158,
-                            0.09987706, -0.12370517, -0.06683611,  0.12704916, -0.02160804,
-                            0.00984683,  0.00766284, -0.18980607, -0.19641446, -0.22800779,
-                            0.09010898,  0.39178532,  0.18818057, -0.20875394,  0.03097027,
-                           -0.21300618,  0.02532415,  0.07938635,  0.01000703, -0.07719778,
-                           -0.12651891, -0.04318593,  0.06219772,  0.09163868,  0.05039065,
-                           -0.04922386,  0.21839413, -0.02394437,  0.06173781,  0.0292527 ,
-                            0.06160797, -0.15553983, -0.02440624, -0.17509389, -0.0630486 ,
-                            0.01428208, -0.03637431,  0.03971229,  0.13983178, -0.23006812,
-                            0.04999552,  0.0108454 , -0.03970895,  0.02501768,  0.08157793,
-                           -0.03224047, -0.04502571,  0.0556995 , -0.24374914,  0.25514284,
-                            0.24795187,  0.04060191,  0.17597422,  0.07966681,  0.01920104,
-                           -0.01194376, -0.02300822, -0.17204897, -0.0596558 ,  0.05307484,
-                            0.07417042,  0.07126575,  0.00209804]
+def plot_influence(conf, mse_values, prediction_times, complexities):
+    '''
+    Plot influence of model complexity on both accuracy and latency.
+    '''
+    plt.figure(figsize=(12, 6))
+    host = host_subplot(111, axes_class=Axes)
+    plt.subplots_adjust(right=0.75)
+    par1 = host.twinx()
+    host.set_xlabel('Model Complexity (%s)' % conf['complexity_label'])
+    y1_label = conf['prediction_performance_label']
+    y2_label = 'Time (s)'
+    host.set_ylabel(y1_label)
+    par1.set_ylabel(y2_label)
+    p1, = host.plot(complexities, mse_values, 'b-', label='prediction error')
+    p2, = par1.plot(complexities, prediction_times, 'r-',
+                    label='latency')
+    host.legend(loc='upper right')
+    host.axis['left'].label.set_color(p1.get_color())
+    par1.axis['right'].label.set_color(p2.get_color())
+    plt.title('Influence of Model Complexity - %s' % conf['estimator'].__name__)
+    plt.show()
+    
+    The data is generated with the ``make_checkerboard`` function, then
+shuffled and passed to the Spectral Biclustering algorithm. The rows
+and columns of the shuffled matrix are rearranged to show the
+biclusters found by the algorithm.
+    
+    import numpy as np
+from matplotlib import pyplot as plt
+    
+    # The data that we are interested in is made of 8x8 images of digits, let's
+# have a look at the first 4 images, stored in the `images` attribute of the
+# dataset.  If we were working from image files, we could load them using
+# matplotlib.pyplot.imread.  Note that each image must have the same size. For these
+# images, we know which digit they represent: it is given in the 'target' of
+# the dataset.
+images_and_labels = list(zip(digits.images, digits.target))
+for index, (image, label) in enumerate(images_and_labels[:4]):
+    plt.subplot(2, 4, index + 1)
+    plt.axis('off')
+    plt.imshow(image, cmap=plt.cm.gray_r, interpolation='nearest')
+    plt.title('Training: %i' % label)
+    
+                plt.subplots_adjust(bottom=0, top=.89, wspace=0,
+                                left=0, right=1)
+            plt.suptitle('n_cluster=%i, connectivity=%r' %
+                         (n_clusters, connectivity is not None), size=17)
+    
+        ax.scatter(X[:, 3], X[:, 0], X[:, 2],
+               c=labels.astype(np.float), edgecolor='k')
+    
+    plt.subplot(224)
+plt.scatter(X_filtered[:, 0], X_filtered[:, 1], c=y_pred)
+plt.title('Unevenly Sized Blobs')
