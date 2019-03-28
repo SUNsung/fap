@@ -1,127 +1,119 @@
 
         
+            def __init__(self):
+        self.name = 'btree_gist'
+    
+            # No redirect was found. Return the response.
+        return response
+
+    
+        def delete(self, session_key=None):
+        if session_key is None:
+            if self.session_key is None:
+                return
+            session_key = self.session_key
+        self._cache.delete(self.cache_key_prefix + session_key)
+    
+        def cycle_key(self):
         '''
-requests.exceptions
-~~~~~~~~~~~~~~~~~~~
-    
-        def __getitem__(self, key):
-        # We allow fall-through here, so values default to None
-    
-        @pytest.fixture(autouse=True)
-    def setup(self):
-        '''LookupDict instance with 'bad_gateway' attribute.'''
-        self.lookup_dict = LookupDict('test')
-        self.lookup_dict.bad_gateway = 502
-    
-            # because special names such as Name.Class, Name.Function, etc.
-        # are not recognized as such later in the parsing, we choose them
-        # to look the same as ordinary variables.
-        Name:                      '#000000',        # class: 'n'
-        Name.Attribute:            '#c4a000',        # class: 'na' - to be revised
-        Name.Builtin:              '#004461',        # class: 'nb'
-        Name.Builtin.Pseudo:       '#3465a4',        # class: 'bp'
-        Name.Class:                '#000000',        # class: 'nc' - to be revised
-        Name.Constant:             '#000000',        # class: 'no' - to be revised
-        Name.Decorator:            '#888',           # class: 'nd' - to be revised
-        Name.Entity:               '#ce5c00',        # class: 'ni'
-        Name.Exception:            'bold #cc0000',   # class: 'ne'
-        Name.Function:             '#000000',        # class: 'nf'
-        Name.Property:             '#000000',        # class: 'py'
-        Name.Label:                '#f57900',        # class: 'nl'
-        Name.Namespace:            '#000000',        # class: 'nn' - to be revised
-        Name.Other:                '#000000',        # class: 'nx'
-        Name.Tag:                  'bold #004461',   # class: 'nt' - like a keyword
-        Name.Variable:             '#000000',        # class: 'nv' - to be revised
-        Name.Variable.Class:       '#000000',        # class: 'vc' - to be revised
-        Name.Variable.Global:      '#000000',        # class: 'vg' - to be revised
-        Name.Variable.Instance:    '#000000',        # class: 'vi' - to be revised
+        Keep the same data but with a new key. Call save() and it will
+        automatically save a cookie with a new key at the end of the request.
+        '''
+        self.save()
     
     
-def _check_cryptography(cryptography_version):
-    # cryptography < 1.3.4
+@html_safe
+class BoundField:
+    'A Field plus data'
+    def __init__(self, form, field, name):
+        self.form = form
+        self.field = field
+        self.name = name
+        self.html_name = form.add_prefix(name)
+        self.html_initial_name = form.add_initial_prefix(name)
+        self.html_initial_id = form.add_initial_prefix(self.auto_id)
+        if self.field.label is None:
+            self.label = pretty_name(name)
+        else:
+            self.label = self.field.label
+        self.help_text = field.help_text or ''
+    
+        def test_lower_items(self):
+        assert list(self.case_insensitive_dict.lower_items()) == [('accept', 'application/json')]
+    
+    # ---------
+# Specifics
+# ---------
+    
+    
+class MockResponse(object):
+    '''Wraps a `httplib.HTTPMessage` to mimic a `urllib.addinfourl`.
+    
+            :rtype: dict
+        '''
+        proxies = proxies if proxies is not None else {}
+        headers = prepared_request.headers
+        url = prepared_request.url
+        scheme = urlparse(url).scheme
+        new_proxies = proxies.copy()
+        no_proxy = proxies.get('no_proxy')
+    
+        :param url: URL for the new :class:`Request` object.
+    :param data: (optional) Dictionary, list of tuples, bytes, or file-like
+        object to send in the body of the :class:`Request`.
+    :param json: (optional) json data to send in the body of the :class:`Request`.
+    :param \*\*kwargs: Optional arguments that ``request`` takes.
+    :return: :class:`Response <Response>` object
+    :rtype: requests.Response
+    '''
+    
+        return table
+    
+        if num in lowPrimes:
+        return True
+    
+    def makeKeyFiles(name, keySize):
+    if os.path.exists('%s_pubkey.txt' % (name)) or os.path.exists('%s_privkey.txt' % (name)):
+        print('\nWARNING:')
+        print(''%s_pubkey.txt' or '%s_privkey.txt' already exists. \nUse a different name or delete these files and re-run this program.' % (name, name))
+        sys.exit()
+    
+        def __init__(self, size_table, charge_factor=None, lim_charge=None):
+        self.size_table = size_table
+        self.values = [None] * self.size_table
+        self.lim_charge = 0.75 if lim_charge is None else lim_charge
+        self.charge_factor = 1 if charge_factor is None else charge_factor
+        self.__aux_list = []
+        self._keys = {}
+    
+            while self.values[new_key] is not None \
+                and self.values[new_key] != key:
+            i += 1
+            new_key = self.hash_function(key + i*i) if not \
+                self.balanced_factor() >= self.lim_charge else None
+    
     try:
-        cryptography_version = list(map(int, cryptography_version.split('.')))
-    except ValueError:
-        return
+	xrange		#Python 2
+except NameError:
+	xrange = range	#Python 3
     
-            if cert:
-            if not isinstance(cert, basestring):
-                conn.cert_file = cert[0]
-                conn.key_file = cert[1]
-            else:
-                conn.cert_file = cert
-                conn.key_file = None
-            if conn.cert_file and not os.path.exists(conn.cert_file):
-                raise IOError('Could not find the TLS certificate file, '
-                              'invalid path: {}'.format(conn.cert_file))
-            if conn.key_file and not os.path.exists(conn.key_file):
-                raise IOError('Could not find the TLS key file, '
-                              'invalid path: {}'.format(conn.key_file))
+        context['show_on_github_url'] = show_url
+    context['edit_on_github_url'] = edit_url
     
-        if cookie_dict is not None:
-        names_from_jar = [cookie.name for cookie in cookiejar]
-        for name in cookie_dict:
-            if overwrite or (name not in names_from_jar):
-                cookiejar.set_cookie(create_cookie(name, cookie_dict[name]))
+        if unit_2 == LENGTH_MILES:
+        result = __meters_to_miles(meters)
+    elif unit_2 == LENGTH_FEET:
+        result = __meters_to_feet(meters)
+    elif unit_2 == LENGTH_KILOMETERS:
+        result = __meters_to_kilometers(meters)
     
-    from requests.help import info
+        assert bump_version(Version('0.56.3'), 'patch') == \
+        Version('0.56.4')
+    assert bump_version(Version('0.56.3.b3'), 'patch') == \
+        Version('0.56.3')
+    assert bump_version(Version('0.56.0.dev0'), 'patch') == \
+        Version('0.56.0')
     
-                assert r.status_code == 200
-            assert r.text == u'roflol'
-            assert r.headers['Content-Length'] == '6'
-    
-    
-    {    # Server Error.
-    500: ('internal_server_error', 'server_error', '/o\\', '✗'),
-    501: ('not_implemented',),
-    502: ('bad_gateway',),
-    503: ('service_unavailable', 'unavailable'),
-    504: ('gateway_timeout',),
-    505: ('http_version_not_supported', 'http_version'),
-    506: ('variant_also_negotiates',),
-    507: ('insufficient_storage',),
-    509: ('bandwidth_limit_exceeded', 'bandwidth'),
-    510: ('not_extended',),
-    511: ('network_authentication_required', 'network_auth', 'network_authentication'),
-}
-    
-            # Start time (approximately) of the request
-        start = preferred_clock()
-    
-        Used to prepare a :class:`PreparedRequest <PreparedRequest>`, which is sent to the server.
-    
-        ca_certs = os.path.join(current_path, 'cacert.pem')
-    openssl_context = SSLContext(
-        logger, ca_certs=ca_certs,
-        cipher_suites=['ALL', '!RC4-SHA', '!ECDHE-RSA-RC4-SHA', '!ECDHE-RSA-AES128-GCM-SHA256',
-                       '!AES128-GCM-SHA256', '!ECDHE-RSA-AES128-SHA', '!AES128-SHA']
-    )
-    host_manager = HostManagerBase()
-    connect_creator = ConnectCreator(logger, config, openssl_context, host_manager,
-                                     debug=True)
-    check_ip = CheckIp(logger, config, connect_creator)
-    
-    
-def test_teredo(probe_nat=True, probe_server=True):
-    if pteredor_is_running:
-        return 'Script is running, please retry later.'
-    
-    ## Anything on different channel than DEFAULT_CHANNEL is not parsed
-# by parser.
-HIDDEN_CHANNEL = 99
-    
-                # report after consuming so AW sees the token in the exception
-            self.reportError(e)
-    
-        def setUp(self):
-        from acme.errors import MissingNonce
-        self.response = mock.MagicMock(headers={})
-        self.response.request.method = 'FOO'
-        self.error = MissingNonce(self.response)
-    
-    
-class AddrTest(unittest.TestCase):
-    '''Test obj.Addr.'''
-    def setUp(self):
-        from certbot_apache.obj import Addr
-        self.addr = Addr.fromstring('*:443')
+        with patch.object(hass.loop, 'stop'):
+        yield from hass.async_stop()
+    assert len(calls) == 1
