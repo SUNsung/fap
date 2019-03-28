@@ -1,191 +1,248 @@
 
         
-        SECP256K1_INLINE static void secp256k1_fe_sqr_inner(uint64_t *r, const uint64_t *a) {
-/**
- * Registers: rdx:rax = multiplication accumulator
- *            r9:r8   = c
- *            rcx:rbx = d
- *            r10-r14 = a0-a4
- *            r15     = M (0xfffffffffffff)
- *            rdi     = r
- *            rsi     = a / t?
- */
-  uint64_t tmp1, tmp2, tmp3;
-__asm__ __volatile__(
-    'movq 0(%%rsi),%%r10\n'
-    'movq 8(%%rsi),%%r11\n'
-    'movq 16(%%rsi),%%r12\n'
-    'movq 24(%%rsi),%%r13\n'
-    'movq 32(%%rsi),%%r14\n'
-    'movq $0xfffffffffffff,%%r15\n'
+        bool IsUrlArg(const base::CommandLine::CharType* arg) {
+  // the first character must be a letter for this to be a URL
+  auto c = *arg;
+  if (('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z')) {
+    for (auto* p = arg + 1; *p; ++p) {
+      c = *p;
+    }
+    }
     }
     
-    static void secp256k1_gej_neg(secp256k1_gej *r, const secp256k1_gej *a) {
-    r->infinity = a->infinity;
-    r->x = a->x;
-    r->y = a->y;
-    r->z = a->z;
-    secp256k1_fe_normalize_weak(&r->y);
-    secp256k1_fe_negate(&r->y, &r->y, 1);
+    #ifndef ATOM_APP_UV_TASK_RUNNER_H_
+#define ATOM_APP_UV_TASK_RUNNER_H_
+    
+     protected:
+  RenderProcessPreferences(
+      v8::Isolate* isolate,
+      const atom::RenderProcessPreferences::Predicate& predicate);
+  ~RenderProcessPreferences() override;
+    
+    Event::Event(v8::Isolate* isolate) {
+  Init(isolate);
 }
     
-        /* Check all NULLs are detected */
-    CHECK(secp256k1_ecdh(tctx, res, &point, s_one) == 1);
-    CHECK(ecount == 0);
-    CHECK(secp256k1_ecdh(tctx, NULL, &point, s_one) == 0);
-    CHECK(ecount == 1);
-    CHECK(secp256k1_ecdh(tctx, res, NULL, s_one) == 0);
-    CHECK(ecount == 2);
-    CHECK(secp256k1_ecdh(tctx, res, &point, NULL) == 0);
-    CHECK(ecount == 3);
-    CHECK(secp256k1_ecdh(tctx, res, &point, s_one) == 1);
-    CHECK(ecount == 3);
+    void AtomQuotaPermissionContext::RequestQuotaPermission(
+    const content::StorageQuotaParams& params,
+    int render_process_id,
+    const PermissionCallback& callback) {
+  callback.Run(response::QUOTA_PERMISSION_RESPONSE_ALLOW);
+}
     
-        /* Check bad contexts and NULLs for signing */
-    ecount = 0;
-    CHECK(secp256k1_ecdsa_sign_recoverable(none, &recsig, message, privkey, NULL, NULL) == 0);
-    CHECK(ecount == 1);
-    CHECK(secp256k1_ecdsa_sign_recoverable(sign, &recsig, message, privkey, NULL, NULL) == 1);
-    CHECK(ecount == 1);
-    CHECK(secp256k1_ecdsa_sign_recoverable(vrfy, &recsig, message, privkey, NULL, NULL) == 0);
-    CHECK(ecount == 2);
-    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, privkey, NULL, NULL) == 1);
-    CHECK(ecount == 2);
-    CHECK(secp256k1_ecdsa_sign_recoverable(both, NULL, message, privkey, NULL, NULL) == 0);
-    CHECK(ecount == 3);
-    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, NULL, privkey, NULL, NULL) == 0);
-    CHECK(ecount == 4);
-    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, NULL, NULL, NULL) == 0);
-    CHECK(ecount == 5);
-    /* This will fail or succeed randomly, and in either case will not ARG_CHECK failure */
-    secp256k1_ecdsa_sign_recoverable(both, &recsig, message, privkey, recovery_test_nonce_function, NULL);
-    CHECK(ecount == 5);
-    /* These will all fail, but not in ARG_CHECK way */
-    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, zero_privkey, NULL, NULL) == 0);
-    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, over_privkey, NULL, NULL) == 0);
-    /* This one will succeed. */
-    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, privkey, NULL, NULL) == 1);
-    CHECK(ecount == 5);
+    #ifndef ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
+#define ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
     
-    BOOST_AUTO_TEST_CASE(bip173_testvectors_valid)
-{
-    static const std::string CASES[] = {
-        'A12UEL5L',
-        'a12uel5l',
-        'an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1tt5tgs',
-        'abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw',
-        '11qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqc8247j',
-        'split1checkupstagehandshakeupstreamerranterredcaperred2y9e3w',
-        '?1ezyfcl',
-    };
-    for (const std::string& str : CASES) {
-        auto ret = bech32::Decode(str);
-        BOOST_CHECK(!ret.first.empty());
-        std::string recode = bech32::Encode(ret.first, ret.second);
-        BOOST_CHECK(!recode.empty());
-        BOOST_CHECK(CaseInsensitiveEqual(str, recode));
+    namespace asar {
     }
-}
     
-        BOOST_CHECK_EQUAL(arr[0].getValStr(), '1023');
-    BOOST_CHECK_EQUAL(arr[1].getValStr(), 'zippy');
-    BOOST_CHECK_EQUAL(arr[2].getValStr(), 'pippy');
-    BOOST_CHECK_EQUAL(arr[3].getValStr(), 'boing');
-    BOOST_CHECK_EQUAL(arr[4].getValStr(), 'going');
-    BOOST_CHECK_EQUAL(arr[5].getValStr(), '400');
-    BOOST_CHECK_EQUAL(arr[6].getValStr(), '-400');
-    BOOST_CHECK_EQUAL(arr[7].getValStr(), '-401');
-    BOOST_CHECK_EQUAL(arr[8].getValStr(), '-40.1');
     
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    {}  // namespace relauncher
     
-      bool click_completed_ = true;
+      std::wstring out;
+  out.push_back(L''');
+  for (size_t i = 0; i < arg.size(); ++i) {
+    if (arg[i] == '\\') {
+      // Find the extent of this run of backslashes.
+      size_t start = i, end = start + 1;
+      for (; end < arg.size() && arg[end] == '\\'; ++end) {
+      }
+      size_t backslash_count = end - start;
+    }
+    }
     
-    #endif  // CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
+    #define TINYFORMAT_PASSARGS_1 v1
+#define TINYFORMAT_PASSARGS_2 v1, v2
+#define TINYFORMAT_PASSARGS_3 v1, v2, v3
+#define TINYFORMAT_PASSARGS_4 v1, v2, v3, v4
+#define TINYFORMAT_PASSARGS_5 v1, v2, v3, v4, v5
+#define TINYFORMAT_PASSARGS_6 v1, v2, v3, v4, v5, v6
+#define TINYFORMAT_PASSARGS_7 v1, v2, v3, v4, v5, v6, v7
+#define TINYFORMAT_PASSARGS_8 v1, v2, v3, v4, v5, v6, v7, v8
+#define TINYFORMAT_PASSARGS_9 v1, v2, v3, v4, v5, v6, v7, v8, v9
+#define TINYFORMAT_PASSARGS_10 v1, v2, v3, v4, v5, v6, v7, v8, v9, v10
+#define TINYFORMAT_PASSARGS_11 v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11
+#define TINYFORMAT_PASSARGS_12 v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12
+#define TINYFORMAT_PASSARGS_13 v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13
+#define TINYFORMAT_PASSARGS_14 v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14
+#define TINYFORMAT_PASSARGS_15 v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15
+#define TINYFORMAT_PASSARGS_16 v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16
+    
+    #endif // BITCOIN_BECH32_H
 
     
-    
-#include 'content/nw/src/api/event/event.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/dispatcher_host.h'
-#include 'ui/gfx/screen.h'
-    
-    bool MenuDelegate::GetIconForCommandId(int command_id,
-                                       gfx::Image* icon) const {
-  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-  if (item->icon_.IsEmpty())
-    return false;
-    }
-    
-    namespace nw {
-    }
-    
-        if (!found) {
-      KeyMap::iterator it = keymap.find(upperText);
-      if (it != keymap.end()) {
-        keyName = it->second;
-        found = true;
-      }
-    }
-    
-    #include 'extensions/browser/extension_function.h'
-    
-    // Implemented features:
-//  [X] Platform: Clipboard support.
-//  [X] Platform: Gamepad support. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
-//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
-//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).
-    
-    HRESULT CreateDeviceD3D(HWND hWnd)
+    /** A hasher class for RIPEMD-160. */
+class CRIPEMD160
 {
-    // Setup swap chain
-    DXGI_SWAP_CHAIN_DESC sd;
-    ZeroMemory(&sd, sizeof(sd));
-    sd.BufferCount = 2;
-    sd.BufferDesc.Width = 0;
-    sd.BufferDesc.Height = 0;
-    sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    sd.BufferDesc.RefreshRate.Numerator = 60;
-    sd.BufferDesc.RefreshRate.Denominator = 1;
-    sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-    sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    sd.OutputWindow = hWnd;
-    sd.SampleDesc.Count = 1;
-    sd.SampleDesc.Quality = 0;
-    sd.Windowed = TRUE;
-    sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+private:
+    uint32_t s[5];
+    unsigned char buf[64];
+    uint64_t bytes;
     }
     
-    void ImGui_ImplFreeGLUT_SpecialFunc(int key, int x, int y)
+    #include 'leveldb/db.h'
+#include 'db/db_impl.h'
+#include 'leveldb/cache.h'
+#include 'util/testharness.h'
+#include 'util/testutil.h'
+    
+    namespace leveldb {
+    }
+    
+    class DBImpl;
+    
+      void Write(const std::string& msg) {
+    ASSERT_TRUE(!reading_) << 'Write() after starting to read';
+    writer_->AddRecord(Slice(msg));
+  }
+    
+      struct KeyComparator {
+    const InternalKeyComparator comparator;
+    explicit KeyComparator(const InternalKeyComparator& c) : comparator(c) { }
+    int operator()(const char* a, const char* b) const;
+  };
+  friend class MemTableIterator;
+  friend class MemTableBackwardIterator;
+    
+            bool IsInfinite() override;
+    
+            for (const auto& key : requiredKeys)
+        {
+            if (!dict.Contains(key))
+            {
+                 LogicError('Required key '%ls' is not found in the dictionary (%s).',
+                            key.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
+            }
+        }
+    
+            dict[versionKey] = CurrentVersion();
+        dict[typeKey] = s_variableTypeValue;
+        dict[uidKey] = Uid();
+        dict[kindKey] = static_cast<size_t>(Kind());
+        dict[dataTypeKey] = static_cast<size_t>(GetDataType());
+        const auto& dynamicAxes = DynamicAxes();
+        vector<DictionaryValue> dictionaryValueVector; 
+        dictionaryValueVector.reserve(dynamicAxes.size());
+        for (const auto& axis : dynamicAxes)
+            dictionaryValueVector.push_back(axis);
+    
+        // Releases the mutex
+    void Release()
+    {
+        assert(m_fd != -1);
+        // removing file
+        unlink(m_fileName.c_str());
+        // Note: file is intentionally removed *before* releasing the lock
+        // to ensure that locked file isn't deleted by the non-owner of the lock
+        m_lock.l_type = F_UNLCK;
+        // Now removing the lock and closing the file descriptor
+        // waiting processes will be notified
+        int rc = fcntl(m_fd, F_SETLKW, &m_lock);
+        if (rc == FCNTL_ERROR)
+        {
+            RuntimeError('Mutex Release: Failed to release mutex %s', m_fileName.c_str());
+        }
+        close(m_fd);
+        m_fd = -1;
+    }
+    
+    
+    {        fstream << m_learningRateMultiplier;
+    }
+    
+    template <class ElemType>
+TensorView<ElemType> EpochAccumulatorNode<ElemType>::EnsureAccumlator()
 {
-    //printf('key_down_func %d\n', key);
-    ImGuiIO& io = ImGui::GetIO();
-    if (key + 256 < IM_ARRAYSIZE(io.KeysDown))
-        io.KeysDown[key + 256] = true;
-    ImGui_ImplFreeGLUT_UpdateKeyboardMods();
-    (void)x; (void)y; // Unused
+    if (m_accumulator->HasNoElements())
+    {
+        // Accumulator has not been resized yet, allocate with necessary size.
+        const size_t sampleSize = GetSampleLayout().GetNumElements();
+        m_accumulator->Resize(sampleSize, 1);
+        Reset();
+    }
+    size_t rank = DetermineElementwiseTensorRank();
+    return DataTensorFor(m_accumulator, rank, FrameRange());
 }
     
-    // Set default OpenGL loader to be gl3w
-#if !defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)     \
- && !defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)     \
- && !defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)     \
- && !defined(IMGUI_IMPL_OPENGL_LOADER_CUSTOM)
-#define IMGUI_IMPL_OPENGL_LOADER_GL3W
-#endif
+            TransposeHelper(InputRef(1).ValuePtr(), InputRef(1).GetTensorSliceFor(SIZE_MAX, fr), m_transposedInput, shapeXT);
     
-        void FreeTypeFont::SetPixelHeight(int pixel_height)
-    {
-        // Vuhdo: I'm not sure how to deal with font sizes properly. As far as I understand, currently ImGui assumes that the 'pixel_height'
-        // is a maximum height of an any given glyph, i.e. it's the sum of font's ascender and descender. Seems strange to me.
-        // NB: FT_Set_Pixel_Sizes() doesn't seem to get us the same result.
-        FT_Size_RequestRec req;
-        req.type = FT_SIZE_REQUEST_TYPE_REAL_DIM;
-        req.width = 0;
-        req.height = (uint32_t)pixel_height * 64;
-        req.horiResolution = 0;
-        req.vertResolution = 0;
-        FT_Request_Size(Face, &req);
-    }
+        std::unique_ptr<DHTMessageReceiver> messageReceiver;
+    
+    std::string DHTResponseMessage::toString() const
+{
+  return fmt('dht response %s TransactionID=%s Remote:%s(%u), id=%s, v=%s, %s',
+             getMessageType().c_str(), util::toHex(getTransactionID()).c_str(),
+             getRemoteNode()->getIPAddress().c_str(),
+             getRemoteNode()->getPort(),
+             util::toHex(getRemoteNode()->getID(), DHT_ID_LENGTH).c_str(),
+             util::torrentPercentEncode(getVersion()).c_str(),
+             toStringOptional().c_str());
+}
+    
+    std::shared_ptr<DHTBucket>
+DHTRoutingTable::getBucketFor(const unsigned char* nodeID) const
+{
+  return dht::findBucketFor(root_.get(), nodeID);
+}
+    
+    #include 'DHTNode.h'
+#include 'DlAbortEx.h'
+#include 'DHTConstants.h'
+#include 'bittorrent_helper.h'
+#include 'Logger.h'
+#include 'a2netcompat.h'
+#include 'util.h'
+#include 'TimeA2.h'
+#include 'fmt.h'
+#include 'File.h'
+#include 'LogFactory.h'
+#include 'BufferedFile.h'
+    
+    #include 'LogFactory.h'
+#include 'Logger.h'
+#include 'util.h'
+#include 'DHTNode.h'
+#include 'DHTConnectionImpl.h'
+#include 'DHTRoutingTable.h'
+#include 'DHTMessageFactoryImpl.h'
+#include 'DHTMessageTracker.h'
+#include 'DHTMessageDispatcherImpl.h'
+#include 'DHTMessageReceiver.h'
+#include 'DHTTaskQueueImpl.h'
+#include 'DHTTaskFactoryImpl.h'
+#include 'DHTPeerAnnounceStorage.h'
+#include 'DHTTokenTracker.h'
+#include 'DHTInteractionCommand.h'
+#include 'DHTTokenUpdateCommand.h'
+#include 'DHTBucketRefreshCommand.h'
+#include 'DHTPeerAnnounceCommand.h'
+#include 'DHTEntryPointNameResolveCommand.h'
+#include 'DHTAutoSaveCommand.h'
+#include 'DHTTask.h'
+#include 'DHTRoutingTableDeserializer.h'
+#include 'DHTRegistry.h'
+#include 'DHTBucketRefreshTask.h'
+#include 'DHTMessageCallback.h'
+#include 'DHTMessageTrackerEntry.h'
+#include 'DHTMessageEntry.h'
+#include 'UDPTrackerClient.h'
+#include 'BtRegistry.h'
+#include 'prefs.h'
+#include 'Option.h'
+#include 'SocketCore.h'
+#include 'DlAbortEx.h'
+#include 'RecoverableException.h'
+#include 'a2functional.h'
+#include 'DownloadEngine.h'
+#include 'fmt.h'
+    
+    #include <vector>
+#include <memory>
+    
+    #include <memory>
+    
+    DHTUnknownMessage::~DHTUnknownMessage() { delete[] data_; }
+    
+    DNSCache::~DNSCache() = default;
+    
+        void markBad(const std::string& addr);
