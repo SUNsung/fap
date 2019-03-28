@@ -1,198 +1,187 @@
 
         
-        #  define ASSERT_DEBUG_DEATH(statement, regex) \
-  ASSERT_DEATH(statement, regex)
+        REGISTER_OP('Ackermann')
+    .Output('ackermann: string')
+    .Doc(R'doc(
+Output a fact about the ackermann function.
+)doc');
     
-    // Streams a Message to an ostream.
-inline std::ostream& operator <<(std::ostream& os, const Message& sb) {
-  return os << sb.GetString();
+    REGISTER_OP('Invalid')
+    .Attr('invalid attr: int32')  // invalid since the name has a space.
+    .Doc(R'doc(
+An op to test that invalid ops do not successfully generate invalid python code.
+)doc');
+    
+    // NumPy casts
+    
+    void ImportNumpy() {
+  import_array1();
 }
     
-    // Range() returns generators providing sequences of values in a range.
-//
-// Synopsis:
-// Range(start, end)
-//   - returns a generator producing a sequence of values {start, start+1,
-//     start+2, ..., }.
-// Range(start, end, step)
-//   - returns a generator producing a sequence of values {start, start+step,
-//     start+step+step, ..., }.
-// Notes:
-//   * The generated sequences never include end. For example, Range(1, 5)
-//     returns a generator producing a sequence {1, 2, 3, 4}. Range(1, 9, 2)
-//     returns a generator producing {1, 3, 5, 7}.
-//   * start and end must have the same type. That type may be any integral or
-//     floating-point type or a user defined type satisfying these conditions:
-//     * It must be assignable (have operator=() defined).
-//     * It must have operator+() (operator+(int-compatible type) for
-//       two-operand version).
-//     * It must have operator<() defined.
-//     Elements in the resulting sequences will also have that type.
-//   * Condition start < end must be satisfied in order for resulting sequences
-//     to contain any elements.
-//
-template <typename T, typename IncrementT>
-internal::ParamGenerator<T> Range(T start, T end, IncrementT step) {
-  return internal::ParamGenerator<T>(
-      new internal::RangeGenerator<T, IncrementT>(start, end, step));
-}
     
-    // This overload prints a (const) wchar_t array compactly.
-GTEST_API_ void UniversalPrintArray(
-    const wchar_t* begin, size_t len, ::std::ostream* os);
-    
-      // Same as above, but you can choose the interception scope of this object.
-  ScopedFakeTestPartResultReporter(InterceptMode intercept_mode,
-                                   TestPartResultArray* result);
-    
-    // Now the tricky part: you need to register all test patterns before
-// you can instantiate them.  The first argument of the macro is the
-// test case name; the rest are the names of the tests in this test
-// case.
-REGISTER_TYPED_TEST_CASE_P(FooTest,
-                           DoesBlah, HasPropertyA);
-    
-      // Leave whatever circle we're part of.  Returns true if we were the
-  // last member of the circle.  Once this is done, you can join() another.
-  bool depart()
-      GTEST_LOCK_EXCLUDED_(g_linked_ptr_mutex) {
-    MutexLock lock(&g_linked_ptr_mutex);
-    }
-    
-    #include <string.h>
-#include <string>
-    
-    
-    {    // Now, we have i <= n/i < n.
-    // If n is divisible by i, n is not prime.
-    if (n % i == 0) return false;
+    {  DCHECK(PyDict_Check(code_to_exc_type_map));
+  PyObject* key;
+  PyObject* value;
+  Py_ssize_t pos = 0;
+  while (PyDict_Next(code_to_exc_type_map, &pos, &key, &value)) {
+    TF_Code code = static_cast<TF_Code>(PyLong_AsLong(key));
+    singleton_->exc_types_[code] = value;
+    // The exception classes should also have the lifetime of the process, but
+    // incref just in case.
+    Py_INCREF(value);
   }
-    
-    
-    {  // <TechnicalDetails>
-  //
-  // EXPECT_EQ(expected, actual) is the same as
-  //
-  //   EXPECT_TRUE((expected) == (actual))
-  //
-  // except that it will print both the expected value and the actual
-  // value when the assertion fails.  This is very helpful for
-  // debugging.  Therefore in this case EXPECT_EQ is preferred.
-  //
-  // On the other hand, EXPECT_TRUE accepts any Boolean expression,
-  // and is thus more general.
-  //
-  // </TechnicalDetails>
 }
     
     
-// A simple string class.
-class MyString {
- private:
-  const char* c_string_;
-  const MyString& operator=(const MyString& rhs);
-    }
+    {}  // namespace tensorflow
+
     
     
-// This sample shows how to write a more complex unit test for a class
-// that has multiple member functions.
-//
-// Usually, it's a good idea to have one test for each method in your
-// class.  You don't have to do that exactly, but it helps to keep
-// your tests organized.  You may also throw in additional tests as
-// needed.
-    
-        float32* x; //vertex arrays
-    float32* y;
-    int32 nVertices;
-	
-	float32 area;
-	bool areaIsSet;
-	
-    b2Polygon(float32* _x, float32* _y, int32 nVert);
-    b2Polygon(b2Vec2* v, int32 nVert);
-	b2Polygon();
-    ~b2Polygon();
-	
-	float32 GetArea();
-	
-	void MergeParallelEdges(float32 tolerance);
-    b2Vec2* GetVertexVecs();
-    b2Polygon(b2Triangle& t);
-    void Set(const b2Polygon& p);
-    bool IsConvex();
-	bool IsCCW();
-	bool IsUsable(bool printError);
-	bool IsUsable();
-    bool IsSimple();
-   // void AddTo(b2FixtureDef& pd);
-	
-    b2Polygon* Add(b2Triangle& t);
-    
-    #include <string.h>
-    
-    	class Block4x4EncodingBits
-	{
-	public:
-    }
-    
-    	// ----------------------------------------------------------------------------------------------------
-	// find best initial encoding to ensure block has a valid encoding
-	//
-	void Block4x4Encoding_ETC1::PerformFirstIteration(void)
-	{
-		CalculateMostLikelyFlip();
-    }
-    
-    bool PointIsVertex(const IntPoint &Pt, OutPt *pp)
-{
-  OutPt *pp2 = pp;
-  do
-  {
-    if (pp2->Pt == Pt) return true;
-    pp2 = pp2->Next;
-  }
-  while (pp2 != pp);
-  return false;
-}
-//------------------------------------------------------------------------------
-    
-    #pragma once
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS // 'secure' CRT not available on all platforms  --add this at the top of all CPP files that give 'function or variable may be unsafe' warnings
-#endif
-#ifdef _WIN32
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif // NOMINMAX
-#pragma comment(lib, 'Dbghelp.lib')
-#else
-#include <execinfo.h>
-#include <cxxabi.h>
-#endif
-    
-        // return the randomized feature bounds for a time range
-    std::pair<size_t, size_t> Bounds(size_t ts, size_t te) const
     {
-        size_t tbegin = max(ts, randomizationrange / 2) - randomizationrange / 2;
-        size_t tend = min(te + randomizationrange / 2, map.size());
-        return std::make_pair<size_t, size_t>(std::move(tbegin), move(tend));
+    {}  // namespace swig
+}  // namespace tensorflow
+
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    #include 'tensorflow/stream_executor/platform.h'
+    
+      // Computes complex-to-real FFT in inverse direction.
+  virtual bool DoFft(Stream *stream, Plan *plan,
+                     const DeviceMemory<std::complex<float>> &input,
+                     DeviceMemory<float> *output) = 0;
+  virtual bool DoFft(Stream *stream, Plan *plan,
+                     const DeviceMemory<std::complex<double>> &input,
+                     DeviceMemory<double> *output) = 0;
+    
+    
+    {  DISALLOW_COPY_AND_ASSIGN(UvTaskRunner);
+};
+    
+    void Event::PreventDefault(v8::Isolate* isolate) {
+  GetWrapper()->Set(StringToV8(isolate, 'defaultPrevented'), v8::True(isolate));
+}
+    
+    void AutoUpdater::QuitAndInstall() {}
+#endif
+    
+      // There is a new update which has been downloaded.
+  virtual void OnUpdateDownloaded(const std::string& release_notes,
+                                  const std::string& release_name,
+                                  const base::Time& release_date,
+                                  const std::string& update_url) {}
+    
+    class AsarProtocolHandler : public net::URLRequestJobFactory::ProtocolHandler {
+ public:
+  explicit AsarProtocolHandler(
+      const scoped_refptr<base::TaskRunner>& file_task_runner);
+  ~AsarProtocolHandler() override;
     }
     
-    template <class ElemType>
-void EpochAccumulatorNode<ElemType>::OnEpochStart()
-{
-    Reset();
-}
+    URLRequestAboutJob::URLRequestAboutJob(net::URLRequest* request,
+                                       net::NetworkDelegate* network_delegate)
+    : net::URLRequestJob(request, network_delegate), weak_ptr_factory_(this) {}
     
-            if (aliasInfo.releaseCount >= aliasInfo.totalCount)
-            LogicError('number of alias instances exceeded expectation');
+     private:
+  ~URLRequestAboutJob() override;
+  void StartAsync();
     
-    template<class ElemType>
-void OptimizedRNNStackNode<ElemType>::Load(File& fstream, size_t modelVersion)
-{
-    Base::Load(fstream, modelVersion);
-    bool isLegacyVersion = modelVersion < CNTK_MODEL_VERSION_14; // (to support an internal legacy version)
-    m_legacySwapInputsPending = isLegacyVersion;
-    m_rnnAttributes.Read(fstream, /*readAxis=*/ !isLegacyVersion);
-}
+    
+    {}  // namespace
+    
+    /**
+ * Virtual class encapsulate boost::thread for use in base class
+ * The child class will acquire the ability to run a single thread,
+ * by reimplementing the virtual function InternalThreadEntry.
+ */
+class InternalThread {
+ public:
+  InternalThread() : thread_() {}
+  virtual ~InternalThread();
+    }
+    
+      /**
+   * Called by the parent Layer's SetUp to check that the number of bottom
+   * and top Blobs provided as input match the expected numbers specified by
+   * the {ExactNum,Min,Max}{Bottom,Top}Blobs() functions.
+   */
+  virtual void CheckBlobCounts(const vector<Blob<Dtype>*>& bottom,
+                               const vector<Blob<Dtype>*>& top) {
+    if (ExactNumBottomBlobs() >= 0) {
+      CHECK_EQ(ExactNumBottomBlobs(), bottom.size())
+          << type() << ' Layer takes ' << ExactNumBottomBlobs()
+          << ' bottom blob(s) as input.';
+    }
+    if (MinBottomBlobs() >= 0) {
+      CHECK_LE(MinBottomBlobs(), bottom.size())
+          << type() << ' Layer takes at least ' << MinBottomBlobs()
+          << ' bottom blob(s) as input.';
+    }
+    if (MaxBottomBlobs() >= 0) {
+      CHECK_GE(MaxBottomBlobs(), bottom.size())
+          << type() << ' Layer takes at most ' << MaxBottomBlobs()
+          << ' bottom blob(s) as input.';
+    }
+    if (ExactNumTopBlobs() >= 0) {
+      CHECK_EQ(ExactNumTopBlobs(), top.size())
+          << type() << ' Layer produces ' << ExactNumTopBlobs()
+          << ' top blob(s) as output.';
+    }
+    if (MinTopBlobs() >= 0) {
+      CHECK_LE(MinTopBlobs(), top.size())
+          << type() << ' Layer produces at least ' << MinTopBlobs()
+          << ' top blob(s) as output.';
+    }
+    if (MaxTopBlobs() >= 0) {
+      CHECK_GE(MaxTopBlobs(), top.size())
+          << type() << ' Layer produces at most ' << MaxTopBlobs()
+          << ' top blob(s) as output.';
+    }
+    if (EqualNumBottomTopBlobs()) {
+      CHECK_EQ(bottom.size(), top.size())
+          << type() << ' Layer produces one top blob as output for each '
+          << 'bottom blob input.';
+    }
+  }
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #include <vector>
+    
+    /**
+ * @brief Computes a sum of two input Blobs, with the shape of the latter Blob
+ *        'broadcast' to match the shape of the former. Equivalent to tiling
+ *        the latter Blob, then computing the elementwise sum.
+ *
+ * The second input may be omitted, in which case it's learned as a parameter
+ * of the layer. Note: in case bias and scaling are desired, both operations can
+ * be handled by `ScaleLayer` configured with `bias_term: true`.
+ */
+template <typename Dtype>
+class BiasLayer : public Layer<Dtype> {
+ public:
+  explicit BiasLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    
+    {}  // namespace caffe
+    
+    #endif  // CAFFE_CONTRASTIVE_LOSS_LAYER_HPP_
+
+    
+    #include <vector>
+    
+    namespace caffe {
+    }
