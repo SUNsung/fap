@@ -1,134 +1,145 @@
 
         
-        
-def main():
-    argument_spec = HerokuHelper.heroku_argument_spec()
-    argument_spec.update(
-        user=dict(required=True, type='str'),
-        apps=dict(required=True, type='list'),
-        suppress_invitation=dict(default=False, type='bool'),
-        state=dict(default='present', type='str', choices=['present', 'absent']),
-    )
-    module = AnsibleModule(
-        argument_spec=argument_spec,
+            def describe(self):
+        '''Returns the existing details of the rule in AWS'''
+        try:
+            rule_info = self.client.describe_rule(Name=self.name)
+        except botocore.exceptions.ClientError as e:
+            error_code = e.response.get('Error', {}).get('Code')
+            if error_code == 'ResourceNotFoundException':
+                return {}
+            self.module.fail_json_aws(e, msg='Could not describe rule %s' % self.name)
+        except botocore.exceptions.BotoCoreError as e:
+            self.module.fail_json_aws(e, msg='Could not describe rule %s' % self.name)
+        return self._snakify(rule_info)
+    
+    from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.ec2 import boto3_conn, get_aws_connection_info, ec2_argument_spec, camel_dict_to_snake_dict
+    
+        :returns True on success, raises ValueError on type error.
+    :rtype ``bool``
+    '''
+    errmsg = ''
+    if not isinstance(instance.node_count, int):
+        errmsg = 'node_count must be an integer %s (%s)' % (
+            instance.node_count, type(instance.node_count))
+    if instance.display_name and not isinstance(instance.display_name,
+                                                string_types):
+        errmsg = 'instance_display_name must be an string %s (%s)' % (
+            instance.display_name, type(instance.display_name))
+    if errmsg:
+        raise ValueError(errmsg)
+    
+        def dnszone_find(self, zone_name):
+        return self._post_json(
+            method='dnszone_find',
+            name=zone_name,
+            item={'idnsname': zone_name}
+        )
+    
+    # Ensure rule is absent
+- ipa_hbacrule:
+    name: rule_to_be_deleted
+    state: absent
+    ipa_host: ipa.example.com
+    ipa_user: admin
+    ipa_pass: topsecret
+'''
+    
+        module = AnsibleModule(
+        argument_spec=dict(
+            token=dict(required=True, no_log=True),
+            environment=dict(required=True),
+            user=dict(required=False),
+            repo=dict(required=False),
+            revision=dict(required=False),
+            url=dict(required=False, default='https://api.airbrake.io/deploys.txt'),
+            validate_certs=dict(default='yes', type='bool'),
+        ),
         supports_check_mode=True
     )
     
-                if self.requires_template_update(host.TEMPLATE, desired_template_changes):
-                # setup the root element so that pyone will generate XML instead of attribute vector
-                desired_template_changes = {'TEMPLATE': desired_template_changes}
-                if one.host.update(host.ID, desired_template_changes, 1):  # merge the template
-                    result['changed'] = True
-                else:
-                    self.fail(msg='failed to update the host template')
-    
-    import traceback
-    
-                time.sleep(sleep_time)
-            running_status = get_status()
-    
-        namespace = dict(ca='http://www.ca.com/spectrum/restful/schema/response')
-    error = root.find('ca:error', namespace).text
-    
-        def _generate_next_value_(name, start, count, last_values):
-        '''
-        Generate the next value when not given.
-    
-    def _check_arg_types(funcname, *args):
-    hasstr = hasbytes = False
-    for s in args:
-        if isinstance(s, str):
-            hasstr = True
-        elif isinstance(s, bytes):
-            hasbytes = True
+                if re.search('already enabled', out) is None:
+                change_applied = True
         else:
-            raise TypeError('%s() argument must be str or bytes, not %r' %
-                            (funcname, s.__class__.__name__)) from None
-    if hasstr and hasbytes:
-        raise TypeError('Can't mix strings and bytes in path components') from None
+            if rc == 0:
+                change_applied = True
+            # RC is not 0 for this already disabled feature, handle it as no change applied
+            elif re.search('Cannot disable feature '%s'. Target file .* does not exist' % self.feature_name, out):
+                change_applied = False
+            else:
+                self.module.fail_json(msg='Failed to disable feature. Command returns %s' % out)
+    
+        def get_ip(self):
+        with self.lock:
+            while True:
+                line = self.in_fd.readline()
+                if not line:
+                    raise Exception()
+    
+        def get_stat(self):
+        return self.network_stat
+    
+            raise NotImplementedError
+    
+    
+    def getLine(self):
+        '''@brief Get the line number on which this token was matched
+    
+            if not version.is_prerelease or version.release[2] != 0:
+            to_change['release'] = _bump_release(version.release, 'minor')
+    
+    
+@asyncio.coroutine
+def test_if_fires_on_hass_start(hass):
+    '''Test the firing when HASS starts.'''
+    calls = async_mock_service(hass, 'test', 'automation')
+    hass.state = CoreState.not_running
+    config = {
+        automation.DOMAIN: {
+            'alias': 'hello',
+            'trigger': {
+                'platform': 'homeassistant',
+                'event': 'start',
+            },
+            'action': {
+                'service': 'test.automation',
+            }
+        }
+    }
+    
+        rm1.state = 'Idle'
+    rm2.state = 'Running'
+    
+    ### OUTPUT ###
+# Name: Jhon    Occupation: Coder
+# Before we access `relatives`:
+# {'call_count2': 0, 'name': 'Jhon', 'occupation': 'Coder'}
+# Jhon's relatives: Many relatives.
+# After we've accessed `relatives`:
+# {'relatives': 'Many relatives.', 'call_count2': 0, 'name': 'Jhon', 'occupation': 'Coder'}
+# Father and mother
+# {'_lazy__parents': 'Father and mother', 'relatives': 'Many relatives.', 'call_count2': 1, 'name': 'Jhon', 'occupation': 'Coder'}  # noqa flake8
+# Father and mother
+# 1
 
     
-        def __init__(self, file, connection):
-        super().__init__(file)
-        self.connection = connection
     
-    # We can extract the richest alternative in order to display it:
-richest = msg.get_body()
-partfiles = {}
-if richest['content-type'].maintype == 'text':
-    if richest['content-type'].subtype == 'plain':
-        for line in richest.get_content().splitlines():
-            print(line)
-        sys.exit()
-    elif richest['content-type'].subtype == 'html':
-        body = richest
-    else:
-        print('Don't know how to display {}'.format(richest.get_content_type()))
-        sys.exit()
-elif richest['content-type'].content_type == 'multipart/related':
-    body = richest.get_body(preferencelist=('html'))
-    for part in richest.iter_attachments():
-        fn = part.get_filename()
-        if fn:
-            extension = os.path.splitext(part.get_filename())[1]
-        else:
-            extension = mimetypes.guess_extension(part.get_content_type())
-        with tempfile.NamedTemporaryFile(suffix=extension, delete=False) as f:
-            f.write(part.get_content())
-            # again strip the <> to go from email form of cid to html form.
-            partfiles[part['content-id'][1:-1]] = f.name
-else:
-    print('Don't know how to display {}'.format(richest.get_content_type()))
-    sys.exit()
-with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
-    # The magic_html_parser has to rewrite the href='cid:....' attributes to
-    # point to the filenames in partfiles.  It also has to do a safety-sanitize
-    # of the html.  It could be written using html.parser.
-    f.write(magic_html_parser(body.get_content(), partfiles))
-webbrowser.open(f.name)
-os.remove(f.name)
-for fn in partfiles.values():
-    os.remove(fn)
+class SalesManager:
+    def talk(self):
+        print('Sales Manager ready to talk')
     
-    # register get_operator_module(); make public functions accessible via proxy
-MyManager.register('operator', get_operator_module)
+        def test_data_name_shall_be_changeable(cls):
+        cls.sub.name = 'New Data Name'
+        cls.assertEqual(cls.sub.name, 'New Data Name')
+
     
-    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url)
-    title = r1(r'<title>(.*)</title>', html)
-    assert title
-    id = r1(r'flvid\s*=\s*(\d+)', html)
-    assert id
-    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
-    
-        stream_types = [  #this is just a sample. Will make it in prepare()
-        # {'id': '1080'},
-        # {'id': '720'},
-        # {'id': '360'},
-        # {'id': '288'},
-        # {'id': '190'},
-        # {'id': '180'},
-        
-    ]
-    
-    netease_embed_patterns = [ '(http://\w+\.163\.com/movie/[^\'']+)' ]
-    
-    __all__ = ['flickr_download_main']
-    
-        @classmethod
-    def funshion_decrypt(cls, a_bytes, coeff):
-        res_list = []
-        pos = 0
-        while pos < len(a_bytes):
-            a = a_bytes[pos]
-            if pos == len(a_bytes) - 1:
-                res_list.append(a)
-                pos += 1
-            else:
-                b = a_bytes[pos + 1]
-                m = a * coeff[0] + b * coeff[2]
-                n = a * coeff[1] + b * coeff[3]
-                res_list.append(m & 0xff)
-                res_list.append(n & 0xff)
-                pos += 2
-        return bytes(res_list).decode('utf8')
+        def test_pool_behavior_with_single_object_inside(self):
+        sample_queue = queue.Queue()
+        sample_queue.put('yam')
+        with ObjectPool(sample_queue) as obj:
+            # print('Inside with: {}'.format(obj))
+            self.assertEqual(obj, 'yam')
+        self.assertFalse(sample_queue.empty())
+        self.assertTrue(sample_queue.get() == 'yam')
+        self.assertTrue(sample_queue.empty())
