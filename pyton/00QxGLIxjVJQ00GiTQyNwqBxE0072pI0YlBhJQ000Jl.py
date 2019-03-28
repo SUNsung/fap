@@ -1,143 +1,167 @@
 
         
-        
-@pytest.mark.functional
-def test_select_command_with_arrows(proc, TIMEOUT):
-    select_command_with_arrows(proc, TIMEOUT)
-    history_changed(proc, TIMEOUT, u'git help')
+        # Check to make sure the RNN is the one we used in the paper.
+if N == 50:
+  assert abs(rnn['W'][0,0] - 0.06239899) < 1e-8, 'Error in random seed?'
+  rem_check = nreplications * train_percentage
+  assert  abs(rem_check - int(rem_check)) < 1e-8, \
+    'Train percentage  * nreplications should be integral number.'
+    
+      Yields:
+    Pairs of the batched data, each a matrix of shape [batch_size, num_steps].
+    The second element of the tuple is the same data time-shifted to the
+    right by one. The third is a set of weights with 1 indicating a word was
+    present and 0 not.
+    
+    import tensorflow as tf
     
     
-@pytest.mark.parametrize('command, new_command, packages', [
-    (Command('vim', ''), 'sudo apt-get install vim && vim',
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('convert', ''), 'sudo apt-get install imagemagick && convert',
-     [('imagemagick', 'main'),
-      ('graphicsmagick-imagemagick-compat', 'universe')]),
-    (Command('sudo vim', ''), 'sudo apt-get install vim && sudo vim',
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('sudo convert', ''), 'sudo apt-get install imagemagick && sudo convert',
-     [('imagemagick', 'main'),
-      ('graphicsmagick-imagemagick-compat', 'universe')])])
-def test_get_new_command(mocker, command, new_command, packages):
-    mocker.patch('thefuck.rules.apt_get._get_packages',
-                 create=True, return_value=packages)
+# TODO(adai): IMDB labels placeholder to model.
+def create_generator(hparams,
+                     inputs,
+                     targets,
+                     present,
+                     is_training,
+                     is_validating,
+                     reuse=None):
+  '''Create the Generator model specified by the FLAGS and hparams.
     
-    no_match_output = '''
-Listing... Done
-'''
+      Returns:
+    gen_train_op: Generator training op.
+  '''
+  del hparams
+  with tf.name_scope('train_generator'):
+    if FLAGS.generator_optimizer == 'sgd':
+      gen_optimizer = tf.train.GradientDescentOptimizer(learning_rate)
+    elif FLAGS.generator_optimizer == 'adam':
+      gen_optimizer = tf.train.AdamOptimizer(learning_rate)
+    else:
+      raise NotImplementedError
+    gen_vars = [
+        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
+    ]
+    print('\nOptimizing Generator vars:')
+    for v in gen_vars:
+      print(v)
     
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
     
-def test_match():
-    command = Command('brew install sshfs', output)
-    assert match(command)
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
     
-        # Histogram of ground-truth objects
-    gt_hist = np.zeros((len(classes)), dtype=np.int)
-    for entry in roidb:
-        gt_inds = np.where(
-            (entry['gt_classes'] > 0) & (entry['is_crowd'] == 0))[0]
-        gt_classes = entry['gt_classes'][gt_inds]
-        gt_hist += np.histogram(gt_classes, bins=hist_bins)[0]
-    logger.debug('Ground-truth class histogram:')
-    for i, v in enumerate(gt_hist):
-        logger.debug(
-            '{:d}{:s}: {:d}'.format(
-                i, classes[i].rjust(char_len), v))
-    logger.debug('-' * char_len)
-    logger.debug(
-        '{:s}: {:d}'.format(
-            'total'.rjust(char_len), np.sum(gt_hist)))
+      return variable_mapping
 
     
-    '''Handle mapping from old network building function names to new names.
+          done: `None`, which is used by the `dynamic_rnn_decoder` to indicate
+      that `sequence_lengths` in `dynamic_rnn_decoder` should be used.
+    
+      if FLAGS.dis_share_embedding:
+    assert hparams.dis_rnn_size == hparams.gen_rnn_size, (
+        'If you wish to share Discriminator/Generator embeddings, they must be'
+        ' same dimension.')
+    with tf.variable_scope('gen/rnn', reuse=True):
+      embedding = tf.get_variable('embedding',
+                                  [FLAGS.vocab_size, hparams.gen_rnn_size])
+    
+    plt.xlim([-0.05, 1.05])
+plt.ylim([-0.05, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver operating characteristic')
+plt.legend(loc='lower right')
+plt.show()
+
+    
+                gc.collect()
+            print('- benchmarking ElasticNet')
+            clf = ElasticNet(alpha=alpha, l1_ratio=0.5, fit_intercept=False)
+            tstart = time()
+            clf.fit(X_train, y_train)
+            elnet_results[i, j, 0] = mean_squared_error(clf.predict(X_test),
+                                                        y_test)
+            elnet_results[i, j, 1] = time() - tstart
+    
+    First, we fix a training set, increase the number of
+samples to classify and plot number of classified samples as a
+function of time.
+    
+            if not in_exercise_region or linestrip.startswith('#'):
+            output_file.write(line)
+    
+    plt.figure(2)  # 'banana' shape
+plt.title('Outlier detection on a real data set (boston housing)')
+plt.scatter(X2[:, 0], X2[:, 1], color='black')
+plt.xlim((xx2.min(), xx2.max()))
+plt.ylim((yy2.min(), yy2.max()))
+plt.legend((legend2_values_list[0].collections[0],
+            legend2_values_list[1].collections[0],
+            legend2_values_list[2].collections[0]),
+           (legend2_keys_list[0], legend2_keys_list[1], legend2_keys_list[2]),
+           loc='upper center',
+           prop=matplotlib.font_manager.FontProperties(size=12))
+plt.ylabel('% lower status of the population')
+plt.xlabel('average number of rooms per dwelling')
     
     
-def build_data_parallel_model(model, single_gpu_build_func):
-    '''Build a data parallel model given a function that builds the model on a
-    single GPU.
-    '''
-    if model.only_build_forward_pass:
-        single_gpu_build_func(model)
-    elif model.train:
-        all_loss_gradients = _build_forward_graph(model, single_gpu_build_func)
-        # Add backward pass on all GPUs
-        model.AddGradientOperators(all_loss_gradients)
-        if cfg.NUM_GPUS > 1:
-            _add_allreduce_graph(model)
-        for gpu_id in range(cfg.NUM_GPUS):
-            # After allreduce, all GPUs perform SGD updates on their identical
-            # params and gradients in parallel
-            with c2_utils.NamedCudaScope(gpu_id):
-                add_single_gpu_param_update_ops(model, gpu_id)
-    else:
-        # Test-time network operates on single GPU
-        # Test-time parallelism is implemented through multiprocessing
-        with c2_utils.NamedCudaScope(model.target_gpu_id):
-            single_gpu_build_func(model)
+try:  # SciPy >= 0.16 have face in misc
+    from scipy.misc import face
+    face = face(gray=True)
+except ImportError:
+    face = sp.face(gray=True)
     
-        def forward(self, inputs, outputs):
-        '''See modeling.detector.CollectAndDistributeFpnRpnProposals for
-        inputs/outputs documentation.
-        '''
-        # inputs is
-        # [rpn_rois_fpn2, ..., rpn_rois_fpn6,
-        #  rpn_roi_probs_fpn2, ..., rpn_roi_probs_fpn6]
-        # If training with Faster R-CNN, then inputs will additionally include
-        #  + [roidb, im_info]
-        rois = collect(inputs, self._train)
-        if self._train:
-            # During training we reuse the data loader code. We populate roidb
-            # entries on the fly using the rois generated by RPN.
-            # im_info: [[im_height, im_width, im_scale], ...]
-            im_info = inputs[-1].data
-            im_scales = im_info[:, 2]
-            roidb = blob_utils.deserialize(inputs[-2].data)
-            # For historical consistency with the original Faster R-CNN
-            # implementation we are *not* filtering crowd proposals.
-            # This choice should be investigated in the future (it likely does
-            # not matter).
-            json_dataset.add_proposals(roidb, rois, im_scales, crowd_thresh=0)
-            roidb_utils.add_bbox_regression_targets(roidb)
-            # Compute training labels for the RPN proposals; also handles
-            # distributing the proposals over FPN levels
-            output_blob_names = fast_rcnn_roi_data.get_fast_rcnn_blob_names()
-            blobs = {k: [] for k in output_blob_names}
-            fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
-            for i, k in enumerate(output_blob_names):
-                blob_utils.py_op_copy_blob(blobs[k], outputs[i])
+    ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
+ms.fit(X)
+labels = ms.labels_
+cluster_centers = ms.cluster_centers_
+    
+        def process_appid_not_exist(self, appid, ip):
+        ret = self.check_api(ip, 'xxnet-1')
+        if ret and ret.ok:
+            self.set_appid_not_exist(appid)
         else:
-            # For inference we have a special code path that avoids some data
-            # loader overhead
-            distribute(rois, None, outputs, self._train)
+            self.logger.warn('process_appid_not_exist, remove ip:%s', ip)
     
-        if len(data.shape) == 1:
-        ret = np.empty((count, ), dtype=data.dtype)
-        ret.fill(fill)
-        ret[inds] = data
+        if len(sys.argv) > 1:
+        ip = sys.argv[1]
     else:
-        ret = np.empty((count, ) + data.shape[1:], dtype=data.dtype)
-        ret.fill(fill)
-        ret[inds, :] = data
-    return ret
+        ip = '46.134.208.94'
+        ip = '2001:ee0:3203:a::12'
+        print('Usage: check_ip.py [ip] [top_domain] [wait_time=0]')
+    print('test ip:%s' % ip)
     
-    logger = logging.getLogger(__name__)
+        if not opts and not args:
+        # Display help.
+        print(_help)
+        # Enter GUI mode.
+        #from .gui import gui_main
+        #gui_main()
+    else:
+        conf = {}
+        for opt, arg in opts:
+            if opt in ('-h', '--help'):
+                # Display help.
+                print(_help)
     
+    def rebuilt_url(url):
+    path = urllib.parse.urlparse(url).path
+    aid = path.split('/')[-1].split('_')[0]
+    return 'http://www.dailymotion.com/embed/video/{}?autoplay=1'.format(aid)
     
-if __name__ == '__main__':
-    sys.exit(main())
-
+        title = match1(html, r'&title=([^&]+)')
     
-        # The string 'Closes #%s' string is required for GitHub to correctly close
-    # the PR
-    merge_message_flags += [
-        '-m',
-        'Closes #%s from %s and squashes the following commits:'
-        % (pr_num, pr_repo_desc)]
-    for c in commits:
-        merge_message_flags += ['-m', c]
+    import json
     
-        def size_to_pt(self, in_val, em_pt=None, conversions=UNIT_RATIOS):
-        def _error():
-            warnings.warn('Unhandled size: {val!r}'.format(val=in_val),
-                          CSSWarning)
-            return self.size_to_pt('1!!default', conversions=conversions)
+            elif re.search(r'i\.imgur\.com/', self.url):
+            # direct image
+            _, container, size = url_info(self.url)
+            self.streams = {
+                'original': {
+                    'src': [self.url],
+                    'size': size,
+                    'container': container
+                }
+            }
+            self.title = r1(r'i\.imgur\.com/([^./]*)', self.url)
