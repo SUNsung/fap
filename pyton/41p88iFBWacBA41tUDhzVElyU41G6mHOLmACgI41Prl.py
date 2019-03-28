@@ -1,325 +1,294 @@
 
         
-            y_train = np.reshape(y_train, (len(y_train), 1))
-    y_test = np.reshape(y_test, (len(y_test), 1))
+        
+@pytest.fixture
+def app():
+    '''Create and configure a new app instance for each test.'''
+    # create a temporary file to isolate the database for each test
+    db_fd, db_path = tempfile.mkstemp()
+    # create the app with common test config
+    app = create_app({
+        'TESTING': True,
+        'DATABASE': db_path,
+    })
     
     
-def test_preprocess_input_symbolic():
-    # Test image batch
-    x = np.random.uniform(0, 255, (2, 10, 10, 3))
-    inputs = Input(shape=x.shape[1:])
-    outputs = Lambda(utils.preprocess_input, output_shape=x.shape[1:])(inputs)
-    model = Model(inputs, outputs)
-    assert model.predict(x).shape == x.shape
+def dump_request(kwargs):
+    sys.stderr.write('\n>>> requests.request(**%s)\n\n'
+                     % repr_dict_nice(kwargs))
     
-    
-def create_model(kernel_regularizer=None, activity_regularizer=None):
-    model = Sequential()
-    model.add(Dense(num_classes,
-                    kernel_regularizer=kernel_regularizer,
-                    activity_regularizer=activity_regularizer,
-                    input_shape=(data_dim,)))
-    return model
-    
-    
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-    
-    
-if __name__ == '__main__':
-    main()
+        # Adapters
+    def get_transport_plugins(self):
+        return [plugin for plugin in self
+                if issubclass(plugin, TransportPlugin)]
 
     
-    author: 'Will Thames (@willthames)'
-extends_documentation_fragment:
-    - aws
-    - ec2
-'''
-    
-    EXAMPLES = '''
-# Add or change a subnet group
-- elasticache_subnet_group:
-    state: present
-    name: norwegian-blue
-    description: My Fancy Ex Parrot Subnet Group
-    subnets:
-      - subnet-aaaaaaaa
-      - subnet-bbbbbbbb
+        '''
+    return path.replace('\\', '\\\\\\')
     
     
-def get_server_certs(iam, name=None):
-    '''Retrieve the attributes of a server certificate if it exists or all certs.
-    Args:
-        iam (botocore.client.IAM): The boto3 iam instance.
-    
-            cmd = [le_path, 'follow', log]
-        if name:
-            cmd.extend(['--name', name])
-        if logtype:
-            cmd.extend(['--type', logtype])
-        rc, out, err = module.run_command(' '.join(cmd))
-    
-            running_status = get_status()
-        while running_status == '' or 'pending' in running_status or 'initializing' in running_status:
-            if time.time() >= timeout_time:
-                module.fail_json(
-                    msg='waited too long for 'pending', or 'initiating' status to go away ({0})'.format(
-                        running_status
-                    ),
-                    state=state
-                )
-    
-        xml = '''<?xml version='1.0' encoding='UTF-8'?>
-        <rs:model-request throttlesize='5'
-        xmlns:rs='http://www.ca.com/spectrum/restful/schema/request'
-        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-        xsi:schemaLocation='http://www.ca.com/spectrum/restful/schema/request ../../../xsd/Request.xsd'>
-            <rs:target-models>
-            <rs:models-search>
-                <rs:search-criteria xmlns='http://www.ca.com/spectrum/restful/schema/filter'>
-                    <action-models>
-                        <filtered-models>
-                            <and>
-                                <equals>
-                                    <model-type>SearchManager</model-type>
-                                </equals>
-                                <greater-than>
-                                    <attribute id='0x129fa'>
-                                        <value>{mh_min}</value>
-                                    </attribute>
-                                </greater-than>
-                                <less-than>
-                                    <attribute id='0x129fa'>
-                                        <value>{mh_max}</value>
-                                    </attribute>
-                                </less-than>
-                            </and>
-                        </filtered-models>
-                        <action>FIND_DEV_MODELS_BY_IP</action>
-                        <attribute id='AttributeID.NETWORK_ADDRESS'>
-                            <value>{search_ip}</value>
-                        </attribute>
-                    </action-models>
-                </rs:search-criteria>
-            </rs:models-search>
-            </rs:target-models>
-            <rs:requested-attribute id='0x12d7f' /> <!--Network Address-->
-        </rs:model-request>
-        '''.format(search_ip=device_ip, mh_min=landscape_min, mh_max=landscape_max)
-    
-    - stackdriver:
-    key: AAAAAA
-    event: annotation
-    msg: Greetings from Ansible
-    annotated_by: leeroyjenkins
-    level: WARN
-    instance_id: i-abcd1234
-'''
-    
-        def _Assert(self, t):
-        self.fill('assert ')
-        self.dispatch(t.test)
-        if t.msg:
-            self.write(', ')
-            self.dispatch(t.msg)
-    
-            When used for the functional API:
-    
-        def test_unbuffered_output(self):
-        # Test expected operation of the '-u' switch
-        for stream in ('stdout', 'stderr'):
-            # Binary is unbuffered
-            code = ('import os, sys; sys.%s.buffer.write(b'x'); os._exit(0)'
-                % stream)
-            rc, out, err = assert_python_ok('-u', '-c', code)
-            data = err if stream == 'stderr' else out
-            self.assertEqual(data, b'x', 'binary %s not unbuffered' % stream)
-            # Text is unbuffered
-            code = ('import os, sys; sys.%s.write('x'); os._exit(0)'
-                % stream)
-            rc, out, err = assert_python_ok('-u', '-c', code)
-            data = err if stream == 'stderr' else out
-            self.assertEqual(data, b'x', 'text %s not unbuffered' % stream)
-    
-    # Simple class representing a record in our database.
-MemoRecord = namedtuple('MemoRecord', 'key, task')
-    
-    '''Send the contents of a directory as a MIME message.'''
-    
-    from argparse import ArgumentParser
-    
-    def handlePoints(points):
-    print('<ul>')
-    for point in points:
-        handlePoint(point)
-    print('</ul>')
-    
-        f2 = manager.Foo2()
-    f2.g()
-    f2._h()
-    assert not hasattr(f2, 'f')
-    assert sorted(f2._exposed_) == sorted(['g', '_h'])
-    
-            for i in html_json['sources']:
-            if 'src' in i:  #to avoid KeyError
-                if i['src'].startswith('https'):
-                    link_list.append((str(i['height']), i['src']))
-    
-    import json
-import re
+def rst_filenames():
+    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
+        if '.tox' not in root:
+            for filename in fnmatch.filter(filenames, '*.rst'):
+                yield os.path.join(root, filename)
     
     
-site_info = 'coub.com'
-download = coub_download
-download_playlist = playlist_not_supported('coub')
+def test_max_redirects(httpbin):
+    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
+             error_exit_ok=True)
+    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
 
     
-            #type_, ext, size = url_info(url)
-        #print_info(site_info, title, type_, size)
-        #if not info_only:
-            #download_urls([url], title, ext, total_size=None, output_dir=output_dir, merge=merge)
+        def test_request_body_from_file_by_path_no_field_name_allowed(
+            self, httpbin):
+        env = MockEnvironment(stdin_isatty=True)
+        r = http('POST', httpbin.url + '/post', 'field-name@' + FILE_PATH_ARG,
+                 env=env, error_exit_ok=True)
+        assert 'perhaps you meant --form?' in r.stderr
     
-    dailymotion_embed_patterns = [ 'www\.dailymotion\.com/embed/video/(\w+)' ]
     
-            for p in js_path:
-            if 'mtool' in p or 'mcore' in p:
-                js_text = get_content(p)
-                hit = re.search(r'\(\'(.+?)\',(\d+),(\d+),\'(.+?)\'\.split\(\'\|\'\),\d+,\{\}\)', js_text)
+class BaseConfigDict(dict):
     
-            try:
-            url = 'https://plus.google.com/' + r1(r'(photos/\d+/albums/\d+/\d+)\?authkey', html)
-            html = get_html(url, faker=True)
-            temp = re.findall(r'\[(\d+),\d+,\d+,'([^']+)'\]', html)
-            temp = sorted(temp, key = lambda x : fmt_level[x[0]])
-            urls = [unicodize(i[1]) for i in temp if i[0] == temp[0][0]]
-            assert urls
-            real_urls = urls # Look ma, there's really a video!
+            '''
+        # Ask the server not to encode the content so that we can resume, etc.
+        request_headers['Accept-Encoding'] = 'identity'
+        if self._resume:
+            bytes_have = os.path.getsize(self._output_file.name)
+            if bytes_have:
+                # Set ``Range`` header to resume the download
+                # TODO: Use 'If-Range: mtime' to make sure it's fresh?
+                request_headers['Range'] = 'bytes=%d-' % bytes_have
+                self._resumed_from = bytes_have
     
-        print(' - Face locations: {:.4f}s ({:.2f} fps)'.format(*run_test(setup_locate_faces.format(image), test_locate_faces)))
-    print(' - Face landmarks: {:.4f}s ({:.2f} fps)'.format(*run_test(setup_face_landmarks.format(image), test_face_landmarks)))
-    print(' - Encode face (inc. landmarks): {:.4f}s ({:.2f} fps)'.format(*run_test(setup_encode_face.format(image), test_encode_face)))
-    print(' - End-to-end: {:.4f}s ({:.2f} fps)'.format(*run_test(setup_end_to_end.format(image), test_end_to_end)))
-    print()
+    
+@pytest.fixture
+def httpbin_secure(httpbin_secure):
+    return prepare_url(httpbin_secure)
 
     
-        # Make the eyebrows into a nightmare
-    d.polygon(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 128))
-    d.polygon(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 128))
-    d.line(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 150), width=5)
-    d.line(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 150), width=5)
+        def test_lower_items(self):
+        assert list(self.case_insensitive_dict.lower_items()) == [('accept', 'application/json')]
     
-    known_encodings = [
-    obama_face_encoding,
-    biden_face_encoding
-]
+    # Check imported dependencies for compatibility.
+try:
+    check_compatibility(urllib3.__version__, chardet.__version__)
+except (AssertionError, ValueError):
+    warnings.warn('urllib3 ({}) or chardet ({}) doesn't match a supported '
+                  'version!'.format(urllib3.__version__, chardet.__version__),
+                  RequestsDependencyWarning)
     
-        :param css:  plain tuple representation of the rect in (top, right, bottom, left) order
-    :param image_shape: numpy shape of the image array
-    :return: a trimmed plain tuple representation of the rect in (top, right, bottom, left) order
+        def items(self):
+        '''Dict-like items() that returns a list of name-value tuples from the
+        jar. Allows client-code to call ``dict(RequestsCookieJar)`` and get a
+        vanilla python dict of key value pairs.
+    
     '''
-    return max(css[0], 0), min(css[1], image_shape[1]), min(css[2], image_shape[0]), max(css[3], 0)
-    
-        # Limit to max_per_image detections **over all classes**
-    if cfg.TEST.DETECTIONS_PER_IM > 0:
-        image_scores = np.hstack(
-            [cls_boxes[j][:, -1] for j in range(1, num_classes)]
-        )
-        if len(image_scores) > cfg.TEST.DETECTIONS_PER_IM:
-            image_thresh = np.sort(image_scores)[-cfg.TEST.DETECTIONS_PER_IM]
-            for j in range(1, num_classes):
-                keep = np.where(cls_boxes[j][:, -1] >= image_thresh)[0]
-                cls_boxes[j] = cls_boxes[j][keep, :]
-    
-        if P2only:
-        # use only the finest level
-        return blobs_fpn[-1], dim_fpn, spatial_scales_fpn[-1]
-    else:
-        # use all levels
-        return blobs_fpn, dim_fpn, spatial_scales_fpn
+requests.hooks
+~~~~~~~~~~~~~~
     
     
-def _scale_enum(anchor, scales):
-    '''Enumerate a set of anchors for each scale wrt an anchor.'''
-    w, h, x_ctr, y_ctr = _whctrs(anchor)
-    ws = w * scales
-    hs = h * scales
-    anchors = _mkanchors(ws, hs, x_ctr, y_ctr)
-    return anchors
-
+def test_system_ssl():
+    '''Verify we're actually setting system_ssl when it should be available.'''
+    assert info()['system_ssl']['version'] != ''
     
-    def add_keypoint_outputs(model, blob_in, dim):
-    '''Add Mask R-CNN keypoint specific outputs: keypoint heatmaps.'''
-    # NxKxHxW
-    upsample_heatmap = (cfg.KRCNN.UP_SCALE > 1)
+        close_server = threading.Event()
+    server = Server(response_handler, wait_to_close_event=close_server)
+    
+        def test_server_finishes_on_error(self):
+        '''the server thread exits even if an exception exits the context manager'''
+        server = Server.basic_response_server()
+        with pytest.raises(Exception):
+            with server:
+                raise Exception()
+    
+            :param url: URL for the new :class:`Request` object.
+        :param data: (optional) Dictionary, list of tuples, bytes, or file-like
+            object to send in the body of the :class:`Request`.
+        :param \*\*kwargs: Optional arguments that ``request`` takes.
+        :rtype: requests.Response
+        '''
+    
+        if hasattr(o, '__len__'):
+        total_length = len(o)
+    
+            if is_stream:
+            body = data
+    
+        if dataset_name == 'SA':
+        lb = LabelBinarizer()
+        x1 = lb.fit_transform(X[:, 1].astype(str))
+        x2 = lb.fit_transform(X[:, 2].astype(str))
+        x3 = lb.fit_transform(X[:, 3].astype(str))
+        X = np.c_[X[:, :1], x1, x2, x3, X[:, 4:]]
+        y = (y != b'normal.').astype(int)
+    
+        for n_samples in sample_sizes:
+        X = random_state.rand(n_samples, 300)
+    
+    exercise_dir = os.path.dirname(__file__)
+if exercise_dir == '':
+    exercise_dir = '.'
     
     
-def _build_forward_graph(model, single_gpu_build_func):
-    '''Construct the forward graph on each GPU.'''
-    all_loss_gradients = {}  # Will include loss gradients from all GPUs
-    # Build the model on each GPU with correct name and device scoping
-    for gpu_id in range(cfg.NUM_GPUS):
-        with c2_utils.NamedCudaScope(gpu_id):
-            all_loss_gradients.update(single_gpu_build_func(model))
-    return all_loss_gradients
+def plot_influence(conf, mse_values, prediction_times, complexities):
+    '''
+    Plot influence of model complexity on both accuracy and latency.
+    '''
+    plt.figure(figsize=(12, 6))
+    host = host_subplot(111, axes_class=Axes)
+    plt.subplots_adjust(right=0.75)
+    par1 = host.twinx()
+    host.set_xlabel('Model Complexity (%s)' % conf['complexity_label'])
+    y1_label = conf['prediction_performance_label']
+    y2_label = 'Time (s)'
+    host.set_ylabel(y1_label)
+    par1.set_ylabel(y2_label)
+    p1, = host.plot(complexities, mse_values, 'b-', label='prediction error')
+    p2, = par1.plot(complexities, prediction_times, 'r-',
+                    label='latency')
+    host.legend(loc='upper right')
+    host.axis['left'].label.set_color(p1.get_color())
+    par1.axis['right'].label.set_color(p2.get_color())
+    plt.title('Influence of Model Complexity - %s' % conf['estimator'].__name__)
+    plt.show()
+    
+    model = SpectralBiclustering(n_clusters=n_clusters, method='log',
+                             random_state=0)
+model.fit(data)
+score = consensus_score(model.biclusters_,
+                        (rows[:, row_idx], columns[:, col_idx]))
+    
+    data, rows, columns = make_biclusters(
+    shape=(300, 300), n_clusters=5, noise=5,
+    shuffle=False, random_state=0)
+    
+    # To apply a classifier on this data, we need to flatten the image, to
+# turn the data in a (samples, feature) matrix:
+n_samples = len(digits.images)
+data = digits.images.reshape((n_samples, -1))
     
     
-def add_fpn_retinanet_losses(model):
-    loss_gradients = {}
-    gradients, losses = [], []
+# Plot clustering results
+for index, metric in enumerate(['cosine', 'euclidean', 'cityblock']):
+    model = AgglomerativeClustering(n_clusters=n_clusters,
+                                    linkage='average', affinity=metric)
+    model.fit(X)
+    plt.figure()
+    plt.axes([0, 0, 1, 1])
+    for l, c in zip(np.arange(model.n_clusters), 'rgbk'):
+        plt.plot(X[model.labels_ == l].T, c=c, alpha=.5)
+    plt.axis('tight')
+    plt.axis('off')
+    plt.suptitle('AgglomerativeClustering(affinity=%s)' % metric, size=20)
     
-        if cfg.MODEL.FASTER_RCNN:
-        if model.train:
-            # Add op that generates training labels for in-network RPN proposals
-            model.GenerateProposalLabels(['rpn_rois', 'roidb', 'im_info'])
+    X_restored = agglo.inverse_transform(X_reduced)
+images_restored = np.reshape(X_restored, images.shape)
+plt.figure(1, figsize=(4, 3.5))
+plt.clf()
+plt.subplots_adjust(left=.01, right=.99, bottom=.01, top=.91)
+for i in range(4):
+    plt.subplot(3, 4, i + 1)
+    plt.imshow(images[i], cmap=plt.cm.gray, vmax=16, interpolation='nearest')
+    plt.xticks(())
+    plt.yticks(())
+    if i == 1:
+        plt.title('Original data')
+    plt.subplot(3, 4, 4 + i + 1)
+    plt.imshow(images_restored[i], cmap=plt.cm.gray, vmax=16,
+               interpolation='nearest')
+    if i == 1:
+        plt.title('Agglomerated data')
+    plt.xticks(())
+    plt.yticks(())
+    
+    # equal bins face
+regular_values = np.linspace(0, 256, n_clusters + 1)
+regular_labels = np.searchsorted(regular_values, face) - 1
+regular_values = .5 * (regular_values[1:] + regular_values[:-1])  # mean
+regular_face = np.choose(regular_labels.ravel(), regular_values, mode='clip')
+regular_face.shape = face.shape
+plt.figure(3, figsize=(3, 2.2))
+plt.imshow(regular_face, cmap=plt.cm.gray, vmin=vmin, vmax=vmax)
+    
+    n_samples = 1500
+noisy_circles = datasets.make_circles(n_samples=n_samples, factor=.5,
+                                      noise=.05)
+noisy_moons = datasets.make_moons(n_samples=n_samples, noise=.05)
+blobs = datasets.make_blobs(n_samples=n_samples, random_state=8)
+no_structure = np.random.rand(n_samples, 2), None
+    
+    def os_constant(key):
+    # XXX TODO: In the future, this could return different constants
+    #           based on what OS we are running under.  To see an
+    #           approach to how to handle different OSes, see the
+    #           apache version of this file.  Currently, we do not
+    #           actually have any OS-specific constants on Nginx.
+    '''
+    Get a constant value for operating system
+    
+    # A list of ignored prefixes for module index sorting.
+#modindex_common_prefix = []
+    
+    AUTOHSTS_FREQ = 172800
+'''Minimum time since last increase to perform a new one: 48h'''
+    
+        def test_include_fullpath(self):
+        self.verify_fnmatch(os.path.join(self.config_path,
+                                         'test_fnmatch.conf'))
+    
+        def test_repr(self):
+        self.assertEqual(repr(self.addr2), 'certbot_apache.obj.Addr(('127.0.0.1', '443'))')
+    
+    # General information about the project.
+project = u'certbot-apache'
+copyright = u'2014-2015, Let\'s Encrypt Project'
+author = u'Certbot Project'
+    
+            # XXX: Deleting all of this is kind of scary unless the test
+        #      instances really each have a complete configuration!
+        shutil.rmtree('/etc/nginx')
+        shutil.copytree(server_root, '/etc/nginx', symlinks=True)
+    
+            self.events.append((frameno, event, ident(frame)))
+    
+    class BokeCC(VideoExtractor):
+    name = 'BokeCC'
+    
+        def __init__(self):
+        super().__init__()
+        self.api_data = None
+    
+        @classmethod
+    def dec_playinfo(cls, info, coeff):
+        res = None
+        clear = cls.funshion_decrypt_str(info['infohash'], coeff)
+        if cls.checksum(clear):
+            res = dict(hashid=clear[:40], token=cls.funshion_decrypt_str(info['token'], coeff))
         else:
-            # Alias rois to rpn_rois for inference
-            model.net.Alias('rpn_rois', 'rois')
+            clear = cls.funshion_decrypt_str(info['infohash_prev'], coeff)
+            if cls.checksum(clear):
+                res = dict(hashid=clear[:40], token=cls.funshion_decrypt_str(info['token_prev'], coeff))
+        return res
     
-        shape = (sampled_fg_rois.shape[0] * cfg.KRCNN.NUM_KEYPOINTS, 1)
-    heats = heats.reshape(shape)
-    weights = weights.reshape(shape)
-    
-    
-def add_mask_rcnn_blobs(blobs, sampled_boxes, roidb, im_scale, batch_idx):
-    '''Add Mask R-CNN specific blobs to the input blob dictionary.'''
-    # Prepare the mask targets by associating one gt mask to each training roi
-    # that has a fg (non-bg) class label.
-    M = cfg.MRCNN.RESOLUTION
-    polys_gt_inds = np.where(
-        (roidb['gt_classes'] > 0) & (roidb['is_crowd'] == 0)
-    )[0]
-    polys_gt = [roidb['segms'][i] for i in polys_gt_inds]
-    boxes_from_polys = segm_utils.polys_to_boxes(polys_gt)
-    fg_inds = np.where(blobs['labels_int32'] > 0)[0]
-    roi_has_mask = blobs['labels_int32'].copy()
-    roi_has_mask[roi_has_mask > 0] = 1
-    
-    
-def parse_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '--num-batches', dest='num_batches',
-        help='Number of minibatches to run',
-        default=200, type=int)
-    parser.add_argument(
-        '--sleep', dest='sleep_time',
-        help='Seconds sleep to emulate a network running',
-        default=0.1, type=float)
-    parser.add_argument(
-        '--cfg', dest='cfg_file', help='optional config file', default=None,
-        type=str)
-    parser.add_argument(
-        '--x-factor', dest='x_factor', help='simulates x-factor more GPUs',
-        default=1, type=int)
-    parser.add_argument(
-        '--profiler', dest='profiler', help='profile minibatch load time',
-        action='store_true')
-    parser.add_argument(
-        'opts', help='See detectron/core/config.py for all options', default=None,
-        nargs=argparse.REMAINDER)
-    if len(sys.argv) == 1:
-        parser.print_help()
-        sys.exit(1)
-    args = parser.parse_args()
-    return args
+        with open(temp_filepath, open_mode) as output:
+        before_this_uri = received
+# received - before_this_uri is size of the buf we get from one uri
+        while True:
+            update_bs = 256 * 1024
+            left_bytes = total_size - received
+            to_read = left_bytes if left_bytes <= update_bs else update_bs
+# calc the block size to read -- The server can fail to send an EOF
+            buffer = response.read(to_read)
+            if not buffer:
+                logging.debug('Got EOF from server')
+                break
+            output.write(buffer)
+            received += len(buffer)
+            bar.update_received(len(buffer))
+            if received >= total_size:
+                break
+            if max_size and (received - before_this_uri) >= max_size:
+                url = dyn_update_url(received)
+                before_this_uri = received
+                response = urlopen_with_retry(request.Request(url, headers=headers))
