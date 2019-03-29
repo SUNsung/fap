@@ -1,150 +1,282 @@
 
         
-          #
-  # More advanced [] that does downcase comparison.
-  #
-  def [](key)
-    begin
-      rv = self.fetch(key)
-    rescue IndexError
-      rv = nil
-    end
-    if (rv == nil)
-      begin
-        rv = self.dcase_hash[key.downcase]
-      rescue IndexError
-        rv = nil
-      end
-    end
-    
-        data =
-    [   # Maximum access
-      0x00, 0x00,
-      # Reserved
-      0x00, 0x00
-    ].pack('C*') +
-    console_session_id +
-    [
-      0x00, 0x00, 0x00, 0x08,
-      0x01, 0x00, 0x00, 0x00,
-      0x01, 0x00, 0x00, 0x08,
-      # HMAC-SHA1
-      0x01, 0x00, 0x00, 0x00,
-      0x02, 0x00, 0x00, 0x08,
-      # AES Encryption
-      0x01, 0x00, 0x00, 0x00
-    ].pack('C*')
-    
-              # Decodes the error_code field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_error_code(input)
-            input.value[0].value.to_i
-          end
-    
-    # The module that contains everything Sass-related:
-#
-# * {Sass::Engine} is the class used to render Sass/SCSS within Ruby code.
-# * {Sass::Plugin} is interfaces with web frameworks (Rails and Merb in particular).
-# * {Sass::SyntaxError} is raised when Sass encounters an error.
-# * {Sass::CSS} handles conversion of CSS to Sass.
-#
-# Also see the {file:SASS_REFERENCE.md full Sass reference}.
-module Sass
-  class << self
-    # @private
-    attr_accessor :tests_running
-  end
-    
-        # The name of the mixin in which the error occurred.
-    # This could be `nil` if the error occurred outside a mixin.
-    #
-    # @return [String]
-    def sass_mixin
-      sass_backtrace.first[:mixin]
-    end
-    
-          if output_path
-        @options[:to] ||=
-          case output_path
-          when /\.scss$/; :scss
-          when /\.sass$/; :sass
-          end
-      end
-    
-          Sass::Plugin.on_template_modified do |template|
-        puts '>>> Change detected to: #{template}'
-        STDOUT.flush
-      end
-      Sass::Plugin.on_template_created do |template|
-        puts '>>> New template detected: #{template}'
-        STDOUT.flush
-      end
-      Sass::Plugin.on_template_deleted do |template|
-        puts '>>> Deleted template detected: #{template}'
-        STDOUT.flush
-      end
-    
-    
-    
-              compare_with_real_token token, session
-    
-          def csp_policy
-        directives = []
-    
-        it 'Returns nil when Referer header is invalid' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
-      expect(subject.referrer(env)).to be_nil
-    end
-  end
+          ActiveSupport.run_load_hooks(:devise_controller, self)
 end
 
     
-              it 'does not allow a shipment to split stock to itself' do
-            within_row(1) { click_icon 'split' }
-            targetted_select2 order.shipments.first.number, from: '#s2id_item_stock_location'
-            fill_in 'item_quantity', with: 1
+    if defined?(ActionMailer)
+  class Devise::Mailer < Devise.parent_mailer.constantize
+    include Devise::Mailers::Helpers
     
-        it 'can still be displayed' do
-      expect { visit spree.edit_admin_order_path(order) }.not_to raise_error
-    end
-  end
-    
-      context 'editing variant option types' do
-    it 'allows an admin to create option types for a variant' do
-      within_row(1) { click_icon :edit }
-    
-          link_to text.html_safe, spree.cart_path, class: 'cart-info nav-link #{css_class}'
-    end
-    
-            private
-    
-              @line_item = Spree::Dependencies.cart_add_item_service.constantize.call(order: order,
-                                                                                  variant: variant,
-                                                                                  quantity: params[:line_item][:quantity],
-                                                                                  options: line_item_params[:options]).value
-          if @line_item.errors.empty?
-            respond_with(@line_item, status: 201, default_template: :show)
-          else
-            invalid_resource!(@line_item)
-          end
+            # Configures the given list of networks on the virtual machine.
+        #
+        # The networks parameter will be an array of hashes where the hashes
+        # represent the configuration of a network interface. The structure
+        # of the hash will be roughly the following:
+        #
+        # {
+        #   type:      :static,
+        #   ip:        '192.168.33.10',
+        #   netmask:   '255.255.255.0',
+        #   interface: 1
+        # }
+        #
+        def configure_networks(networks)
+          raise BaseError, _key: :unsupported_configure_networks
         end
     
-      <h3>Messages</h3>
-  <% @messages.each do |msg| %>
-    <p><%= msg %></p>
-  <% end %>
-
+            # This is the method called to 'prepare' the provisioner. This is called
+        # before any actions are run by the action runner (see {Vagrant::Actions::Runner}).
+        # This can be used to setup shared folders, forward ports, etc. Whatever is
+        # necessary on a 'meta' level.
+        #
+        # No return value is expected.
+        def prepare
+        end
     
+                    if provider_to_use && provider_to_use != active_provider
+                  # We found an active machine with a provider that doesn't
+                  # match the requested provider. Show an error.
+                  raise Errors::ActiveMachineWithDifferentProvider,
+                    name: active_name.to_s,
+                    active_provider: active_provider.to_s,
+                    requested_provider: provider_to_use.to_s
+                else
+                  # Use this provider and exit out of the loop. One of the
+                  # invariants [for now] is that there shouldn't be machines
+                  # with multiple providers.
+                  @logger.info('Active machine found with name #{active_name}. ' +
+                               'Using provider: #{active_provider}')
+                  provider_to_use = active_provider
+                  break
+                end
+              end
+            end
     
+        # Register a key with a lazy-loaded value.
+    #
+    # If a key with the given name already exists, it is overwritten.
+    def register(key, &block)
+      raise ArgumentError, 'block required' if !block_given?
+      @items[key] = block
+    end
     
+            it 'does not use two's complement form for negative numbers for formats bBoxX' do
+          format('%+b', -10).should == '-1010'
+          format('%+B', -10).should == '-1010'
+          format('%+o', -87).should == '-127'
+          format('%+x', -196).should == '-c4'
+          format('%+X', -196).should == '-C4'
+        end
       end
+    end
+    
+      if config.log_to.include? 'file'
+    # Configure an appender that will write log events to a file.
+    if AppConfig.environment.logging.logrotate.enable?
+      # The file will be rolled on a daily basis, and the rolled files will be kept
+      # the configured number of days. Older files will be deleted. The default pattern
+      # layout is used when formatting log events into strings.
+      Logging.appenders.rolling_file('file',
+                                     filename:      config.paths['log'].first,
+                                     keep:          AppConfig.environment.logging.logrotate.days.to_i,
+                                     age:           'daily',
+                                     truncate:      false,
+                                     auto_flushing: true,
+                                     layout:        layout
+                                    )
+    else
+      # No file rolling, use logrotate to roll the logfile.
+      Logging.appenders.file('file',
+                             filename:      config.paths['log'].first,
+                             truncate:      false,
+                             auto_flushing: true,
+                             layout:        layout
+                            )
+    end
+  end
+    
+        change.down do
+      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
+      Mention.where(mentions_container_type: 'Comment').destroy_all
+      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
+    end
+  end
 end
 
     
-        def using?(middleware)
-      middlewares.any? do |(m,_)|
-        m.kind_of?(Array) && (m[0] == middleware || m[0].kind_of?(middleware))
+        context 'on a post from a contact' do
+      before do
+        aspect_to_post = bob.aspects.where(:name => 'generic').first
+        @post = bob.post :status_message, :text => 'something', :to => aspect_to_post
       end
+    
+      describe '#index' do
+    context 'with a private post' do
+      before do
+        @alices_aspect = alice.aspects.where(name: 'generic').first
+        @post = alice.post(:status_message, text: 'hey', to: @alices_aspect.id)
+      end
+    
+      desc <<END
+Run a profile of sass.
+  TIMES=n sets the number of runs. Defaults to 1000.
+  FILE=str sets the file to profile. Defaults to 'complex'.
+  OUTPUT=str sets the ruby-prof output format.
+    Can be Flat, CallInfo, or Graph. Defaults to Flat. Defaults to Flat.
+END
+  task :profile do
+    times  = (ENV['TIMES'] || '1000').to_i
+    file   = ENV['FILE']
+    
+      # Compile a file on disk to CSS.
+  #
+  # @raise [Sass::SyntaxError] if there's an error in the document
+  # @raise [Encoding::UndefinedConversionError] if the source encoding
+  #   cannot be converted to UTF-8
+  # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
+  #
+  # @overload compile_file(filename, options = {})
+  #   Return the compiled CSS rather than writing it to a file.
+  #
+  #   @param filename [String] The path to the Sass, SCSS, or CSS file on disk.
+  #   @param options [{Symbol => Object}] An options hash;
+  #     see {file:SASS_REFERENCE.md#Options the Sass options documentation}
+  #   @return [String] The compiled CSS.
+  #
+  # @overload compile_file(filename, css_filename, options = {})
+  #   Write the compiled CSS to a file.
+  #
+  #   @param filename [String] The path to the Sass, SCSS, or CSS file on disk.
+  #   @param options [{Symbol => Object}] An options hash;
+  #     see {file:SASS_REFERENCE.md#Options the Sass options documentation}
+  #   @param css_filename [String] The location to which to write the compiled CSS.
+  def self.compile_file(filename, *args)
+    options = args.last.is_a?(Hash) ? args.pop : {}
+    css_filename = args.shift
+    result = Sass::Engine.for_file(filename, options).render
+    if css_filename
+      options[:css_filename] ||= css_filename
+      open(css_filename, 'w') {|css_file| css_file.write(result)}
+      nil
+    else
+      result
     end
+  end
+end
+    
+    module Sass
+  module CacheStores
+    # A backend for the Sass cache using the filesystem.
+    class Filesystem < Base
+      # The directory where the cached files will be stored.
+      #
+      # @return [String]
+      attr_accessor :cache_location
+    
+    Backtrace:\n#{e.backtrace.join('\n').gsub('*/', '*\\/')}
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: '#{header.gsub(''', '\'').gsub('\n', '\\A ')}'; }
+END
+      end
+    
+        # Processes the options set by the command-line arguments. In particular,
+    # sets `@options[:input]` and `@options[:output]` to appropriate IO streams.
+    #
+    # This is meant to be overridden by subclasses
+    # so they can run their respective programs.
+    def process_result
+      input, output = @options[:input], @options[:output]
+      args = @args.dup
+      input ||=
+        begin
+          filename = args.shift
+          @options[:filename] = filename
+          open_file(filename) || $stdin
+        end
+      @options[:output_filename] = args.shift
+      output ||= @options[:output_filename] || $stdout
+      @options[:input], @options[:output] = input, output
+    end
+    
+        # @param args [Array<String>] The command-line arguments
+    def initialize(args, default_syntax)
+      super(args)
+      @options[:sourcemap] = :auto
+      @options[:for_engine] = {
+        :load_paths => default_sass_path
+      }
+      @default_syntax = default_syntax
+    end
+    
+          # If a full uri is passed, this removes the root from it
+      # otherwise returns the name unchanged
+      def remove_root(name)
+        if name.index(@root + '/') == 0
+          name[(@root.length + 1)..-1]
+        else
+          name
+        end
+      end
+    
+    # The project root directory
+$root = ::File.dirname(__FILE__)
+    
+      class ImageTag < Liquid::Tag
+    @img = nil
+    
+            Dir.chdir(includes_dir) do
+          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
+          if choices.include?(file)
+            source = File.read(file)
+            partial = Liquid::Template.parse(source)
+            context.stack do
+              rtn = rtn + partial.render(context)
+            end
+          else
+            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
+          end
+        end
+      end
+      rtn
+    end
+  end
+    
+      # Improved version of Liquid's truncate:
+  # - Doesn't cut in the middle of a word.
+  # - Uses typographically correct ellipsis (…) insted of '...'
+  def truncate(input, length)
+    if input.length > length && input[0..(length-1)] =~ /(.+)\b.+$/im
+      $1.strip + ' &hellip;'
+    else
+      input
+    end
+  end
+    
+      def output(output_path)
+    # See https://github.com/jordansissel/fpm/issues/1090
+    # require xz later, because this triggers a load of liblzma.so.5 that is
+    # unavailable on older CentOS/RH distros.
+    require 'xz'
+    output_check(output_path)
+    
+        # do channel-update if requested
+    if attributes[:pear_channel_update?]
+      channel = attributes[:pear_channel] || 'pear'
+      logger.info('Updating the channel', :channel => channel)
+      safesystem('pear', '-c', config, 'channel-update', channel)
+    end
+    
+      def create_scripts
+    if script?(:after_install)
+      File.write(File.join(fpm_meta_path, 'after_install'), script(:after_install))
+    end
+  end
+    
+          # TODO(sissel): preinstall/postinstall
+      # strip @prefix, since BASEDIR will set prefix via the pkginfo file
+      IO.popen('pkgproto #{staging_path}/#{@prefix}=').each_line do |line|
+        type, klass, path, mode, user, group = line.split
