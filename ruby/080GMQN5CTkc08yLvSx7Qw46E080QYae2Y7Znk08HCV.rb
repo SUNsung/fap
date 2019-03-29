@@ -1,148 +1,124 @@
 
         
-                def preload_commit_authors
-          # This also preloads the author of every commit. We're using 'lazy_author'
-          # here since 'author' immediately loads the data on the first call.
-          @pipeline.commit.try(:lazy_author)
-        end
+                  def render_collection
+            @collection.map do |item|
+              value = value_for_collection(item, @value_method)
+              text  = value_for_collection(item, @text_method)
+              default_html_options = default_html_options_for_collection(item, value)
+              additional_html_options = option_html_attributes(item)
     
-          # Sets multiple keys to a given value.
-      #
-      # mapping - A Hash mapping the cache keys to their values.
-      # timeout - The time after which the cache key should expire.
-      def self.write_multiple(mapping, timeout: TIMEOUT)
-        Redis::Cache.with do |redis|
-          redis.multi do |multi|
-            mapping.each do |raw_key, value|
-              multi.set(cache_key_for(raw_key), value, ex: timeout)
+                  Time.utc(
+                default[:year], default[:month], default[:day],
+                default[:hour], default[:min], default[:sec]
+              )
             end
           end
-        end
-      end
-    
-          def verify_ssl
-        github_omniauth_provider.fetch('verify_ssl', true)
-      end
-    
-            def find_target_id
-          GithubImport::IssuableFinder.new(project, issue).database_id
-        end
       end
     end
   end
 end
 
     
-            # Builds a new note using a Hash that was built from a JSON payload.
-        def self.from_json_hash(raw_hash)
-          hash = Representation.symbolize_hash(raw_hash)
-          hash[:author] &&= Representation::User.from_json_hash(hash[:author])
+        module HelperyTest
+      def included_method
+        'Included'
+      end
+    end
     
-          private
+          GivenDailyLike.decrement_for(user.id)
+      expect(value_for(user.id, dt)).to eq(1)
+      expect(limit_reached_for(user.id, dt)).to eq(false)
     
-            # Initializes the communicator with the machine that we will be
-        # communicating with. This base method does nothing (it doesn't
-        # even store the machine in an instance variable for you), so you're
-        # expected to override this and do something with the machine if
-        # you care about it.
-        #
-        # @param [Machine] machine The machine this instance is expected to
-        #   communicate with.
-        def initialize(machine)
+              # Register a new communicator class only if a name was given.
+          data[:communicator].register(name.to_sym, &block) if name != UNSET_VALUE
+    
+            # This is the method called to provision the system. This method
+        # is expected to do whatever necessary to provision the system (create files,
+        # SSH, etc.)
+        def provision!
         end
     
-            # This returns all the registered configuration classes.
+            # This contains all the push implementations by name.
         #
-        # @return [Hash]
-        def config
-          result = {}
+        # @return [Registry<Symbol, Array<Class, Hash>>]
+        attr_reader :pushes
     
-              # Return the dummy object so that anything else works
-          ::Vagrant::Config::V2::DummyConfig.new
-        end
+        # Checks if the given key is registered with the registry.
+    #
+    # @return [Boolean]
+    def key?(key)
+      @items.key?(key)
+    end
+    alias_method :has_key?, :key?
     
-    module Vagrant
-  module Plugin
-    module V2
-      # This is the base class for a provider for the V2 API. A provider
-      # is responsible for creating compute resources to match the needs
-      # of a Vagrant-configured system.
-      class Provider
-        include CapabilityHost
-    
-        def str_to_byte_pos(pos)
-      @s.string.slice(0, pos).bytesize
+            expect(path).to have_valid_bash_syntax
+      end
     end
   end
-end
     
-        def log_status(status)
-      puts bold status
+        def log_transform(*args, from: caller[1][/`.*'/][1..-2].sub(/^block in /, ''))
+      puts '    #{cyan from}#{cyan ': #{args * ', '}' unless args.empty?}'
     end
     
-      def validate_cache_location
-    cache_location = LogStash::Environment::CACHE_PATH
-    if File.exist?(cache_location)
-      puts('Directory #{cache_location} is going to be overwritten, do you want to continue? (Y/N)')
-      override = ( 'y' == STDIN.gets.strip.downcase ? true : false)
-      if override
-        FileUtils.rm_rf(cache_location)
+      # Do not eager load code on boot. This avoids loading your whole application
+  # just for the purpose of running a single test. If you are using a tool that
+  # preloads Rails for running tests, you may have to set it to true.
+  config.eager_load = false
+    
+    Then(/^the invalid (.+) release is ignored$/) do |filename|
+  test = 'ls -g #{TestApp.releases_path} | grep #{filename}'
+  _, _, status = vagrant_cli_command('ssh -c #{test.shellescape}')
+  expect(status).to be_success
+end
+    
+            true
+      end
+    
+    # This file provides the following methods:
+#   encodeURIComponent(componentString)
+#   string.charCodeAt(k)
+    
+          def extract_renamed_path_destination(file)
+        return file.gsub(/{.* => (.*)}/, '\1').gsub(/.* => (.*)/, '\1')
+      end
+    
+      test 'extract destination file name in case of path renaming' do
+    view = Precious::Views::LatestChanges.new
+    assert_equal 'newname.md', view.extract_renamed_path_destination('oldname.md => newname.md')
+    assert_equal 'newDirectoryName/fileName.md', view.extract_renamed_path_destination('{oldDirectoryName => newDirectoryName}/fileName.md')
+  end
+    
+    desc 'Build and install'
+task :install => :build do
+  sh 'gem install --local --no-ri --no-rdoc pkg/#{name}-#{version}.gem'
+end
+    
+        # Remove all slashes from the start of string.
+    # Remove all double slashes
+    def clean_url url
+      return url if url.nil?
+      url.gsub('%2F', '/').gsub(/^\/+/, '').gsub('//', '/')
+    end
+    
+        # True if the dimensions represent a horizontal rectangle
+    def horizontal?
+      height < width
+    end
+    
+        def add_active_record_callbacks
+      name = @name
+      @klass.send(:after_save) { send(name).send(:save) }
+      @klass.send(:before_destroy) { send(name).send(:queue_all_for_delete) }
+      if @klass.respond_to?(:after_commit)
+        @klass.send(:after_commit, on: :destroy) do
+          send(name).send(:flush_deletes)
+        end
       else
-        puts('Unpack cancelled: file #{cache_location} already exists, please delete or move it')
-        exit
+        @klass.send(:after_destroy) { send(name).send(:flush_deletes) }
       end
     end
-  end
-end
-
     
-              it 'successfully install the plugin when verification is disabled' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify logstash-filter-qatest')
-            expect(command).to install_successfully
-            expect(logstash).to have_installed?('logstash-filter-qatest')
-          end
-    
-    module RuboCop
-  module AST
-    # A node extension for `when` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `when` nodes within RuboCop.
-    class WhenNode < Node
-      # Returns an array of all the conditions in the `when` branch.
-      #
-      # @return [Array<Node>] an array of condition nodes
-      def conditions
-        node_parts[0...-1]
-      end
-    
-        template '/engineyard/bin/sidekiq' do
-      owner 'root'
-      group 'root' 
-      mode 0755
-      source 'sidekiq.erb' 
+        # Returns the Rails.root constant.
+    def rails_root attachment, style_name
+      Rails.root
     end
-    
-    @@ index
-  <h1>Sinatra + Sidekiq Example</h1>
-  <h2>Failed: <%= @failed %></h2>
-  <h2>Processed: <%= @processed %></h2>
-    
-          def create_worker_spec
-        template_file = File.join(
-            'spec/workers',
-            class_path,
-            '#{file_name}_worker_spec.rb'
-        )
-        template 'worker_spec.rb.erb', template_file
-      end
-    
-        def redis(&block)
-      Sidekiq.redis(&block)
-    end
-    
-          indifferent_hash.merge! request.params
-      route_params.each {|k,v| indifferent_hash[k.to_s] = v }
-    
-              return WebAction.new(env, route.block)
-        end
-      end
