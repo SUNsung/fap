@@ -1,344 +1,286 @@
 
         
-            package_name = '(builtin)'
+        
+def check_entry(line_num, segments):
+    # START Title
+    raw_title = segments[index_title]
+    title_re_match = link_re.match(raw_title)
+    # url should be wrapped in '[TITLE](LINK)' Markdown syntax
+    if not title_re_match:
+        add_error(line_num, 'Title syntax should be '[TITLE](LINK)'')
+    else:
+        # do not allow '... API' in the entry title
+        title = title_re_match.group(1)
+        if title.upper().endswith(' API'):
+            add_error(line_num, 'Title should not end with '... API'. Every entry is an API here!')
+        # do not allow duplicate links
+        link = title_re_match.group(2)
+        if link in previous_links:
+            add_error(line_num, 'Duplicate link - entries should only be included in one section')
+        else:
+            previous_links.append(link)
+    # END Title
+    # START Description
+    # first character should be capitalized
+    char = segments[index_desc][0]
+    if char.upper() != char:
+        add_error(line_num, 'first character of description is not capitalized')
+    # last character should not punctuation
+    char = segments[index_desc][-1]
+    if char in punctuation:
+        add_error(line_num, 'description should not end with {}'.format(char))
+    desc_length = len(segments[index_desc])
+    if desc_length > 100:
+        add_error(line_num, 'description should not exceed 100 characters (currently {})'.format(desc_length))
+    # END Description
+    # START Auth
+    # values should conform to valid options only
+    auth = segments[index_auth]
+    if auth != 'No' and (not auth.startswith('`') or not auth.endswith('`')):
+        add_error(line_num, 'auth value is not enclosed with `backticks`')
+    if auth.replace('`', '') not in auth_keys:
+        add_error(line_num, '{} is not a valid Auth option'.format(auth))
+    # END Auth
+    # START HTTPS
+    # values should conform to valid options only
+    https = segments[index_https]
+    if https not in https_keys:
+        add_error(line_num, '{} is not a valid HTTPS option'.format(https))
+    # END HTTPS
+    # START CORS
+    # values should conform to valid options only
+    cors = segments[index_cors]
+    if cors not in cors_keys:
+        add_error(line_num, '{} is not a valid CORS option'.format(cors))
+    # END CORS
     
-        >>> humanize_bytes(1)
-    '1 B'
-    >>> humanize_bytes(1024, precision=1)
-    '1.0 kB'
-    >>> humanize_bytes(1024 * 123, precision=1)
-    '123.0 kB'
-    >>> humanize_bytes(1024 * 12342, precision=1)
-    '12.1 MB'
-    >>> humanize_bytes(1024 * 12342, precision=2)
-    '12.05 MB'
-    >>> humanize_bytes(1024 * 1234, precision=2)
-    '1.21 MB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
-    '1.31 GB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
-    '1.3 GB'
+    # Check imported dependencies for compatibility.
+try:
+    check_compatibility(urllib3.__version__, chardet.__version__)
+except (AssertionError, ValueError):
+    warnings.warn('urllib3 ({}) or chardet ({}) doesn't match a supported '
+                  'version!'.format(urllib3.__version__, chardet.__version__),
+                  RequestsDependencyWarning)
+    
+    from urllib3.poolmanager import PoolManager, proxy_from_url
+from urllib3.response import HTTPResponse
+from urllib3.util import parse_url
+from urllib3.util import Timeout as TimeoutSauce
+from urllib3.util.retry import Retry
+from urllib3.exceptions import ClosedPoolError
+from urllib3.exceptions import ConnectTimeoutError
+from urllib3.exceptions import HTTPError as _HTTPError
+from urllib3.exceptions import MaxRetryError
+from urllib3.exceptions import NewConnectionError
+from urllib3.exceptions import ProxyError as _ProxyError
+from urllib3.exceptions import ProtocolError
+from urllib3.exceptions import ReadTimeoutError
+from urllib3.exceptions import SSLError as _SSLError
+from urllib3.exceptions import ResponseError
+from urllib3.exceptions import LocationValueError
+    
+    if is_py2:
+    from urllib import (
+        quote, unquote, quote_plus, unquote_plus, urlencode, getproxies,
+        proxy_bypass, proxy_bypass_environment, getproxies_environment)
+    from urlparse import urlparse, urlunparse, urljoin, urlsplit, urldefrag
+    from urllib2 import parse_http_list
+    import cookielib
+    from Cookie import Morsel
+    from StringIO import StringIO
+    from collections import Callable, Mapping, MutableMapping, OrderedDict
+    
+        def update(self, other):
+        '''Updates this jar with cookies from another CookieJar or dict-like'''
+        if isinstance(other, cookielib.CookieJar):
+            for cookie in other:
+                self.set_cookie(copy.copy(cookie))
+        else:
+            super(RequestsCookieJar, self).update(other)
+    
+        def doc(code):
+        names = ', '.join('``%s``' % n for n in _codes[code])
+        return '* %d: %s' % (code, names)
     
     
-def test_credentials_in_url_auth_flag_has_priority(httpbin_both):
-    '''When credentials are passed in URL and via -a at the same time,
-     then the ones from -a are used.'''
-    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
-                   auth='user:wrong')
-    r = http('--auth=user:password', 'GET', url)
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
-    
-        def inner(r):
-        r.headers['Authorization'] = header
-        return r
-    
-        exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR
-    assert error_msg == (
-        'ConnectionError: '
-        'Connection aborted while doing GET request to URL: '
-        'http://www.google.com')
-    
-    
-class TestMultipartFormDataFileUpload:
-    
-    RETURN = '''
-rule:
-    description: CloudWatch Event rule data
-    returned: success
-    type: dict
-    sample:
-      arn: 'arn:aws:events:us-east-1:123456789012:rule/MyCronTask'
-      description: 'Run my scheduled task'
-      name: 'MyCronTask'
-      schedule_expression: 'cron(0 20 * * ? *)'
-      state: 'ENABLED'
-targets:
-    description: CloudWatch Event target(s) assigned to the rule
-    returned: success
-    type: list
-    sample: '[{ 'arn': 'arn:aws:lambda:us-east-1:123456789012:function:MyFunction', 'id': 'MyTargetId' }]'
-'''
-    
-        module.exit_json(changed=changed,
-                     snapshot_id=snapshot.id,
-                     volume_id=snapshot.volume_id,
-                     volume_size=snapshot.volume_size,
-                     tags=snapshot.tags.copy())
-    
+def get_eips_details(module):
+    connection = module.client('ec2')
+    filters = module.params.get('filters')
     try:
-    from pyvcloud.schema.vcd.v1_5.schemas.vcloud.networkType import FirewallRuleType
-    from pyvcloud.schema.vcd.v1_5.schemas.vcloud.networkType import ProtocolsType
-except ImportError:
-    # normally set a flag here but it will be caught when testing for
-    # the existence of pyvcloud (see module_utils/vca.py).  This just
-    # protects against generating an exception at runtime
-    pass
-    
-    
-def validate_nat_rules(nat_rules):
-    for rule in nat_rules:
-        if not isinstance(rule, dict):
-            raise VcaError('nat rules must be a list of dictionaries, '
-                           'Please check', valid_keys=VALID_RULE_KEYS)
-    
-        return changed, client.dnszone_find(zone_name)
-    
-    
-DOCUMENTATION = '''
----
-module: ipa_hbacrule
-author: Thomas Krahn (@Nosmoht)
-short_description: Manage FreeIPA HBAC rule
-description:
-- Add, modify or delete an IPA HBAC rule using IPA API.
-options:
-  cn:
-    description:
-    - Canonical name.
-    - Can not be changed as it is the unique identifier.
-    required: true
-    aliases: ['name']
-  description:
-    description: Description
-  host:
-    description:
-    - List of host names to assign.
-    - If an empty list is passed all hosts will be removed from the rule.
-    - If option is omitted hosts will not be checked or changed.
-    required: false
-  hostcategory:
-    description: Host category
-    choices: ['all']
-  hostgroup:
-    description:
-    - List of hostgroup names to assign.
-    - If an empty list is passed all hostgroups will be removed. from the rule
-    - If option is omitted hostgroups will not be checked or changed.
-  service:
-    description:
-    - List of service names to assign.
-    - If an empty list is passed all services will be removed from the rule.
-    - If option is omitted services will not be checked or changed.
-  servicecategory:
-    description: Service category
-    choices: ['all']
-  servicegroup:
-    description:
-    - List of service group names to assign.
-    - If an empty list is passed all assigned service groups will be removed from the rule.
-    - If option is omitted service groups will not be checked or changed.
-  sourcehost:
-    description:
-    - List of source host names to assign.
-    - If an empty list if passed all assigned source hosts will be removed from the rule.
-    - If option is omitted source hosts will not be checked or changed.
-  sourcehostcategory:
-    description: Source host category
-    choices: ['all']
-  sourcehostgroup:
-    description:
-    - List of source host group names to assign.
-    - If an empty list if passed all assigned source host groups will be removed from the rule.
-    - If option is omitted source host groups will not be checked or changed.
-  state:
-    description: State to ensure
-    default: 'present'
-    choices: ['present', 'absent', 'enabled', 'disabled']
-  user:
-    description:
-    - List of user names to assign.
-    - If an empty list if passed all assigned users will be removed from the rule.
-    - If option is omitted users will not be checked or changed.
-  usercategory:
-    description: User category
-    choices: ['all']
-  usergroup:
-    description:
-    - List of user group names to assign.
-    - If an empty list if passed all assigned user groups will be removed from the rule.
-    - If option is omitted user groups will not be checked or changed.
-extends_documentation_fragment: ipa.documentation
-version_added: '2.3'
-'''
-    
-        if module.params['revision']:
-        params['deploy[scm_revision]'] = module.params['revision']
-    
-        # Build the deployment object we return
-    deployment = dict(token=token, url=url)
-    deployment.update(body)
-    if 'errorMessage' in deployment:
-        message = deployment.pop('errorMessage')
-        deployment['message'] = message
-    
-        # derive the landscape handler from the model handler of the device
-    model_landscape = '0x%x' % int(int(model_handle, 16) // 0x100000 * 0x100000)
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
-                          help='set spider argument (may be repeated)')
-        parser.add_option('-o', '--output', metavar='FILE',
-                          help='dump scraped items into FILE (use - for stdout)')
-        parser.add_option('-t', '--output-format', metavar='FORMAT',
-                          help='format to use for dumping items with -o')
-    
-    
-class Command(ScrapyCommand):
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('--get', dest='get', metavar='SETTING',
-            help='print raw setting value')
-        parser.add_option('--getbool', dest='getbool', metavar='SETTING',
-            help='print setting value, interpreted as a boolean')
-        parser.add_option('--getint', dest='getint', metavar='SETTING',
-            help='print setting value, interpreted as an integer')
-        parser.add_option('--getfloat', dest='getfloat', metavar='SETTING',
-            help='print setting value, interpreted as a float')
-        parser.add_option('--getlist', dest='getlist', metavar='SETTING',
-            help='print setting value, interpreted as a list')
-    
-            # kept for old-style HTTP/1.0 downloader context twisted calls,
-        # e.g. connectSSL()
-        def getContext(self, hostname=None, port=None):
-            return self.getCertificateOptions().getContext()
-    
-            self._download_http = httpdownloadhandler(settings).download_request
-    
-        try:
-        # XXX: this try-except is not needed in Twisted 17.0.0+ because
-        # it requires pyOpenSSL 0.16+.
-        from OpenSSL.SSL import SSL_CB_HANDSHAKE_DONE, SSL_CB_HANDSHAKE_START
-    except ImportError:
-        SSL_CB_HANDSHAKE_START = 0x10
-        SSL_CB_HANDSHAKE_DONE = 0x20
-    
-        def _has_ajax_crawlable_variant(self, response):
-        '''
-        Return True if a page without hash fragment could be 'AJAX crawlable'
-        according to https://developers.google.com/webmasters/ajax-crawling/docs/getting-started.
-        '''
-        body = response.text[:self.lookup_bytes]
-        return _has_ajaxcrawlable_meta(body)
-    
-    
-class ResourceTest(unittest.TestCase):
-    '''Tests for acme.fields.Resource.'''
-    
-    The JWS implementation in josepy only implements the base JOSE standard. In
-order to support the new header fields defined in ACME, this module defines some
-ACME-specific classes that layer on top of josepy.
-'''
-import josepy as jose
-    
-        def setup_variables(self):
-        '''Set up variables for parser.'''
-        self.parser.variables.update(
-            {
-                'COMPLEX': '',
-                'tls_port': '1234',
-                'fnmatch_filename': 'test_fnmatch.conf',
-                'tls_port_str': '1234'
-            }
+        response = connection.describe_addresses(
+            Filters=ansible_dict_to_boto3_filter_list(filters)
         )
+    except (BotoCoreError, ClientError) as e:
+        module.fail_json_aws(
+            e,
+            msg='Error retrieving EIPs')
     
-    from certbot import errors
+        invocations = dict(
+        aliases='alias_details',
+        all='all_details',
+        config='config_details',
+        mappings='mapping_details',
+        policy='policy_details',
+        versions='version_details',
+    )
     
-            try:
-            subprocess.check_call('service nginx reload'.split())
-        except errors.Error:
-            raise errors.Error(
-                'Nginx failed to load {0} before tests started'.format(
-                    config))
+            if add_server_ips:
+            if module.check_mode:
+                _check_mode(module, _add_server_ips(module,
+                                                    oneandone_conn,
+                                                    firewall_policy['id'],
+                                                    add_server_ips))
     
-    def makeKeyFiles(name, keySize):
-    if os.path.exists('%s_pubkey.txt' % (name)) or os.path.exists('%s_privkey.txt' % (name)):
-        print('\nWARNING:')
-        print(''%s_pubkey.txt' or '%s_privkey.txt' already exists. \nUse a different name or delete these files and re-run this program.' % (name, name))
-        sys.exit()
+    # Make coding more python3-ish
+from __future__ import (absolute_import, division, print_function)
+__metaclass__ = type
     
-    def rearrange(bitString32):
-	'''[summary]
-	Regroups the given binary string.
-	
-	Arguments:
-		bitString32 {[string]} -- [32 bit binary]
-	
-	Raises:
-		ValueError -- [if the given string not are 32 bit binary string]
-	
-	Returns:
-		[string] -- [32 bit binary string]
-	'''
+    ANSIBLE_METADATA = {'metadata_version': '1.1',
+                    'status': ['preview'],
+                    'supported_by': 'community'}
     
-            if self.depth == 1:
-            self.prediction = np.mean(y)
-            return
+        # build list of params
+    params = {}
     
-    # Mock test below
-if False: # change to true to run this test case.
-    import sklearn.datasets as ds
-    dataset = ds.load_iris()
-    k = 3
-    heterogeneity = []
-    initial_centroids = get_initial_centroids(dataset['data'], k, seed=0)
-    centroids, cluster_assignment = kmeans(dataset['data'], k, initial_centroids, maxiter=400,
-                                        record_heterogeneity=heterogeneity, verbose=True)
-    plot_heterogeneity(heterogeneity, k)
+        module = AnsibleModule(
+        argument_spec=dict(
+            component=dict(required=True, aliases=['name']),
+            version=dict(required=True),
+            token=dict(required=True, no_log=True),
+            state=dict(required=True, choices=['started', 'finished', 'failed']),
+            hosts=dict(required=False, default=[socket.gethostname()], aliases=['host']),
+            env=dict(required=False),
+            owner=dict(required=False),
+            description=dict(required=False),
+            message=dict(required=False),
+            source_system=dict(required=False, default='ansible'),
+            validate_certs=dict(default='yes', type='bool'),
+            url=dict(required=False, default='https://api.bigpanda.io'),
+        ),
+        supports_check_mode=True,
+    )
+    
+        name = module.params['name']
+    state = module.params['state']
+    timeout = module.params['timeout']
+    
+        if root.get('error') != 'Success':
+        module.fail_json(msg=root.get('error-message'))
+    
+    Sentiment analysis can be casted as a binary text classification problem,
+that is fitting a linear classifier on features extracted from the text
+of the user messages so as to guess wether the opinion of the author is
+positive or negative.
+    
+    plt.show()
 
     
-        difference = log_predict - log_actual
-    square_diff = np.square(difference)
-    mean_square_diff = square_diff.mean()
+    # Standard scientific Python imports
+import matplotlib.pyplot as plt
     
-            # Adding unique constraint on 'GroupCommitResolution', fields ['group_id', 'commit_id']
-        db.create_unique('sentry_groupcommitresolution', ['group_id', 'commit_id'])
+    import numpy as np
+import matplotlib.pyplot as plt
+# Though the following import is not directly being used, it is required
+# for 3D projection to work
+from mpl_toolkits.mplot3d import Axes3D
     
-            # User chose to not deal with backwards NULL issues for 'Environment.project_id'
-        raise RuntimeError(
-            'Cannot reverse this migration. 'Environment.project_id' and its values cannot be restored.'
+    '''
+=========================================================
+Vector Quantization Example
+=========================================================
+    
+    for factory, init, params in cases:
+    print('Evaluation of %s with %s init' % (factory.__name__, init))
+    inertia = np.empty((len(n_init_range), n_runs))
+    
+            t1 = time.time()
+        if hasattr(algorithm, 'labels_'):
+            y_pred = algorithm.labels_.astype(np.int)
+        else:
+            y_pred = algorithm.predict(X)
+    
+    # #############################################################################
+# Compute clustering with MeanShift
+    
+        def _DictComp(self, t):
+        self.write('{')
+        self.dispatch(t.key)
+        self.write(': ')
+        self.dispatch(t.value)
+        for gen in t.generators:
+            self.dispatch(gen)
+        self.write('}')
+    
+    
+# This follows symbolic links, so both islink() and isdir() can be true
+# for the same path on systems that support symlinks
+def isfile(path):
+    '''Test whether a path is a regular file'''
+    try:
+        st = os.stat(path)
+    except (OSError, ValueError):
+        return False
+    return stat.S_ISREG(st.st_mode)
+    
+        def run_xdev(self, *args, check_exitcode=True, xdev=True):
+        env = dict(os.environ)
+        env.pop('PYTHONWARNINGS', None)
+        env.pop('PYTHONDEVMODE', None)
+        env.pop('PYTHONMALLOC', None)
+    
+    [1] http://www.yummly.com/recipe/Roasted-Asparagus-Epicurious-203718
+    
+    # register the generator function baz; use `GeneratorProxy` to make proxies
+MyManager.register('baz', baz, proxytype=GeneratorProxy)
+    
+    def calculate(func, args):
+    result = func(*args)
+    return '%s says that %s%s = %s' % \
+        (current_process().name, func.__name__, args, result)
+    
+    import sqlite3
+    
+        if cfg.KRCNN.USE_DECONV:
+        # Apply ConvTranspose to the feature representation; results in 2x
+        # upsampling
+        blob_in = model.ConvTranspose(
+            blob_in,
+            'kps_deconv',
+            dim,
+            cfg.KRCNN.DECONV_DIM,
+            kernel=cfg.KRCNN.DECONV_KERNEL,
+            pad=int(cfg.KRCNN.DECONV_KERNEL / 2 - 1),
+            stride=2,
+            weight_init=gauss_fill(0.01),
+            bias_init=const_fill(0.0)
         )
-    
-            # Adding field 'ApiToken.expires_at'
-        db.add_column(
-            'sentry_apitoken',
-            'expires_at',
-            self.gf('django.db.models.fields.DateTimeField')(null=True),
-            keep_default=False
-        )
-    
-            # Adding unique constraint on 'CommitAuthor', fields ['organization_id', 'external_id']
-        db.create_unique('sentry_commitauthor', ['organization_id', 'external_id'])
+        model.Relu('kps_deconv', 'kps_deconv')
+        dim = cfg.KRCNN.DECONV_DIM
     
     
-class Migration(SchemaMigration):
-    def forwards(self, orm):
-        # Adding model 'Distribution'
-        db.create_table(
-            'sentry_distribution', (
-                (
-                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
-                        primary_key=True
-                    )
-                ), (
-                    'organization_id',
-                    self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(
-                        db_index=True
-                    )
-                ), (
-                    'release', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
-                        to=orm['sentry.Release']
-                    )
-                ), ('name', self.gf('django.db.models.fields.CharField')(max_length=64)), (
-                    'date_added',
-                    self.gf('django.db.models.fields.DateTimeField')()
-                ),
-            )
-        )
-        db.send_create_signal('sentry', ['Distribution'])
+def _narrow_to_fpn_roi_levels(blobs, spatial_scales):
+    '''Return only the blobs and spatial scales that will be used for RoI heads.
+    Inputs `blobs` and `spatial_scales` may include extra blobs and scales that
+    are used for RPN proposals, but not for RoI heads.
+    '''
+    # Code only supports case when RPN and ROI min levels are the same
+    assert cfg.FPN.RPN_MIN_LEVEL == cfg.FPN.ROI_MIN_LEVEL
+    # RPN max level can be >= to ROI max level
+    assert cfg.FPN.RPN_MAX_LEVEL >= cfg.FPN.ROI_MAX_LEVEL
+    # FPN RPN max level might be > FPN ROI max level in which case we
+    # need to discard some leading conv blobs (blobs are ordered from
+    # max/coarsest level to min/finest level)
+    num_roi_levels = cfg.FPN.ROI_MAX_LEVEL - cfg.FPN.ROI_MIN_LEVEL + 1
+    return blobs[-num_roi_levels:], spatial_scales[-num_roi_levels:]
+    
+    
+def add_fpn_retinanet_losses(model):
+    loss_gradients = {}
+    gradients, losses = [], []
+    
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+    
+    '''Compute minibatch blobs for training a RetinaNet network.'''
