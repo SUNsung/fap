@@ -1,46 +1,17 @@
 
         
-            def unlock_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :unlock_instructions, opts)
-    end
+          context 'every shim script' do
+    it 'has valid bash syntax' do
+      # These have no file extension, but can be identified by their shebang.
+      (HOMEBREW_LIBRARY_PATH/'shims').find do |path|
+        next if path.directory?
+        next if path.symlink?
+        next unless path.executable?
+        next unless path.read(12) == '#!/bin/bash\n'
     
-      private
-    
-    module Devise
-  module Controllers
-    # A module that may be optionally included in a controller in order
-    # to provide remember me behavior. Useful when signing in is done
-    # through a callback, like in OmniAuth.
-    module Rememberable
-      # Return default cookie values retrieved from session options.
-      def self.cookie_values
-        Rails.configuration.session_options.slice(:path, :domain, :secure)
-      end
-    
-            routes.each do |module_name, actions|
-          [:path, :url].each do |path_or_url|
-            actions.each do |action|
-              action = action ? '#{action}_' : ''
-              method = :'#{action}#{module_name}_#{path_or_url}'
-    
-            if Devise.activerecord51?
-          def clear_reset_password_token?
-            encrypted_password_changed = respond_to?(:will_save_change_to_encrypted_password?) && will_save_change_to_encrypted_password?
-            authentication_keys_changed = self.class.authentication_keys.any? do |attribute|
-              respond_to?('will_save_change_to_#{attribute}?') && send('will_save_change_to_#{attribute}?')
-            end
-    
-          def self.required_fields(klass)
-        []
-      end
-    
-      #
-  # HTTP POST request class wrapper.
-  #
-  class Post < Request
-    def initialize(uri = '/', proto = DefaultProtocol)
-      super('POST', uri, proto)
+      describe '#merge' do
+    it 'returns itself' do
+      expect(env.merge([])).to be env
     end
   end
     
@@ -51,40 +22,149 @@
         self.client.send_ack(self)
         self.state = :hangup
     
-    IAX_IE_CALLED_NUMBER  = 1
-IAX_IE_CALLING_NUMBER = 2
-IAX_IE_AUTH_METHODS   = 3
-IAX_IE_CALLING_NAME   = 4
-IAX_IE_USERNAME       = 6
-IAX_IE_DESIRED_CODEC  = 9
-IAX_IE_ORIGINAL_DID   = 10
-IAX_IE_ACTUAL_CODECS  = 8
-IAX_IE_PROTO_VERSION  = 11
-IAX_IE_REG_REFRESH    = 19
-IAX_IE_CHALLENGE_DATA = 15
-IAX_IE_CHALLENGE_RESP = 16
-IAX_IE_APPARENT_ADDR  = 18
-IAX_IE_REGREJ_CAUSE   = 22
-IAX_IE_HANGUP_CAUSE   = 42
     
+IAX2_DEFAULT_PORT = 4569
     
-  # open rmcpplus_request with cipherzero
-  def self.create_ipmi_session_open_cipher_zero_request(console_session_id)
-    head = [
-      0x06, 0x00, 0xff, 0x07,   # RMCP Header
-      0x06,                     # RMCP+ Authentication Type
-      PAYLOAD_RMCPPLUSOPEN_REQ, # Payload Type
-      0x00, 0x00, 0x00, 0x00,   # Session ID
-      0x00, 0x00, 0x00, 0x00    # Sequence Number
-    ].pack('C*')
+    require 'rex/proto/ipmi/utils'
     
-              # Decodes the req_body from an OpenSSL::ASN1::ASN1Data
+              sent = 0
+          case protocol
+          when 'tcp'
+            sent = send_request_tcp(req)
+          when 'udp'
+            sent = send_request_udp(req)
+          else
+            raise ::RuntimeError, 'Kerberos Client: unknown transport protocol'
+          end
+    
+                encoded
+          end
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module CredentialCache
+        # This class provides a representation of credential times stored in the Kerberos Credential Cache.
+        class Time < Element
+          # @!attribute auth_time
+          #   @return [Integer]
+          attr_accessor :auth_time
+          # @!attribute start_time
+          #   @return [Integer]
+          attr_accessor :start_time
+          # @!attribute end_time
+          #   @return [Integer]
+          attr_accessor :end_time
+          # @!attribute renew_till
+          #   @return [Integer]
+          attr_accessor :renew_till
+    
+              # Decodes the options field
           #
           # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Rex::Proto::Kerberos::Model::KdcRequestBody]
-          def decode_asn1_req_body(input)
-            Rex::Proto::Kerberos::Model::KdcRequestBody.decode(input.value[0])
+          # @return [Integer]
+          def decode_options(input)
+            input.value[0].value.unpack('N')[0]
           end
+    
+              # Decodes the Rex::Proto::Kerberos::Model::KdcResponse from an input
+          #
+          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::ASN1Data
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode KdcResponse, invalid input'
+            end
+    
+          it 'left-justifies the result if width is negative' do
+        format('%*b', -10, 10).should == '1010      '
+        format('%*B', -10, 10).should == '1010      '
+        format('%*d', -10, 112).should == '112       '
+        format('%*i', -10, 112).should == '112       '
+        format('%*o', -10, 87).should == '127       '
+        format('%*u', -10, 112).should == '112       '
+        format('%*x', -10, 196).should == 'c4        '
+        format('%*X', -10, 196).should == 'C4        '
+    
+    describe 'Kernel#srand' do
+  it 'needs to be reviewed for spec completeness'
+end
+
+    
+      it 'no raises a RuntimeError on symbols' do
+    v = :sym
+    lambda { v.taint }.should_not raise_error(RuntimeError)
+    v.tainted?.should == false
+  end
+    
+      def symlinked?(symlink_path, target_path)
+    '[ #{symlink_path} -ef #{target_path} ]'
+  end
+    
+          def add_host(host, properties={})
+        new_host = Server[host]
+        new_host.port = properties[:port] if properties.key?(:port)
+        # This matching logic must stay in sync with `Server#matches?`.
+        key = ServerKey.new(new_host.hostname, new_host.port)
+        existing = servers_by_key[key]
+        if existing
+          existing.user = new_host.user if new_host.user
+          existing.with(properties)
+        else
+          servers_by_key[key] = new_host.with(properties)
+        end
+      end
+    
+          private
+    
+          # Custom destructuring method. This is used to normalize the branches
+      # for `pair` and `kwsplat` nodes, to add duck typing to `hash` elements.
+      #
+      # @return [Array<KeywordSplatNode>] the different parts of the `kwsplat`
+      def node_parts
+        [self, self]
+      end
+    end
+  end
+end
+
+    
+    module RuboCop
+  module AST
+    # Common functionality for nodes that are parameterized:
+    # `send`, `super`, `zsuper`, `def`, `defs`
+    module ParameterizedNode
+      # Checks whether this node's arguments are wrapped in parentheses.
+      #
+      # @return [Boolean] whether this node's arguments are
+      #                   wrapped in parentheses
+      def parenthesized?
+        loc.end && loc.end.is?(')')
+      end
+    
+          # Calls the given block for each condition node in the `when` branch.
+      # If no block is given, an `Enumerator` is returned.
+      #
+      # @return [self] if a block is given
+      # @return [Enumerator] if no block is given
+      def each_condition
+        return conditions.to_enum(__method__) unless block_given?
+    
+        def handle_switch(cop_names, names, disabled, extras, comment)
+      cop_names.each do |name|
+        names[name] ||= 0
+        if disabled
+          names[name] += 1
+        elsif names[name] > 0
+          names[name] -= 1
+        else
+          extras << [comment, name]
         end
       end
     end
@@ -92,86 +172,13 @@ IAX_IE_HANGUP_CAUSE   = 42
 end
 
     
-                elems << OpenSSL::ASN1::ASN1Data.new([encode_options], 0, :CONTEXT_SPECIFIC) if options
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_cname], 1, :CONTEXT_SPECIFIC) if cname
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_realm], 2, :CONTEXT_SPECIFIC) if realm
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_sname], 3, :CONTEXT_SPECIFIC) if sname
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_from], 4, :CONTEXT_SPECIFIC) if from
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_till], 5, :CONTEXT_SPECIFIC) if till
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_rtime], 6, :CONTEXT_SPECIFIC) if rtime
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_nonce], 7, :CONTEXT_SPECIFIC) if nonce
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_etype], 8, :CONTEXT_SPECIFIC) if etype
-            elems << OpenSSL::ASN1::ASN1Data.new([encode_enc_auth_data], 10, :CONTEXT_SPECIFIC) if enc_auth_data
+        it 'is able to search orders using only completed at input' do
+      fill_in 'q_created_at_gt', with: Date.current
+      click_on 'Filter Results'
     
-          def preference_field_options(options)
-        field_options = case options[:type]
-                        when :integer
-                          {
-                            size: 10,
-                            class: 'input_integer form-control'
-                          }
-                        when :boolean
-                          {}
-                        when :string
-                          {
-                            size: 10,
-                            class: 'input_string form-control'
-                          }
-                        when :password
-                          {
-                            size: 10,
-                            class: 'password_string form-control'
-                          }
-                        when :text
-                          {
-                            rows: 15,
-                            cols: 85,
-                            class: 'form-control'
-                          }
-                        else
-                          {
-                            size: 10,
-                            class: 'input_string form-control'
-                          }
-                        end
+              if @order.update_from_params(params, permitted_checkout_attributes, request.headers.env)
+            if current_api_user.has_spree_role?('admin') && user_id.present?
+              @order.associate_user!(Spree.user_class.find(user_id))
+            end
     
-        context 'when pagination is really short' do
-      before do
-        @old_per_page = Spree::Config[:admin_orders_per_page]
-        Spree::Config[:admin_orders_per_page] = 1
-      end
-    
-          def requires_authentication?
-        Spree::Api::Config[:requires_authentication]
-      end
-    
-              unless inventory_unit.respond_to?(can_event) &&
-              inventory_unit.send(can_event)
-            render plain: { exception: 'cannot transition to #{@event}' }.to_json,
-                   status: 200
-            false
-          end
-        end
-    
-    When /^(?:|I )uncheck '([^']*)'$/ do |field|
-  uncheck(field)
-end
-    
-        def geometry_string
-      begin
-        orientation = Paperclip.options[:use_exif_orientation] ?
-          '%[exif:orientation]' : '1'
-        Paperclip.run(
-          Paperclip.options[:is_windows] ? 'magick identify' : 'identify',
-          '-format '%wx%h,#{orientation}' :file', {
-            :file => '#{path}[0]'
-          }, {
-            :swallow_stderr => true
-          }
-        )
-      rescue Terrapin::ExitStatusError
-        ''
-      rescue Terrapin::CommandNotFoundError => e
-        raise_because_imagemagick_missing
-      end
-    end
+            private
