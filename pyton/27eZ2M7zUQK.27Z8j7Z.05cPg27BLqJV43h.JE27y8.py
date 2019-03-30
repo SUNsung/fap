@@ -1,124 +1,107 @@
 
         
-        # 128  --> 0.77094
-# 256  --> 0.85710
-# 512  --> 0.92635
-# 1024 --> 0.97130
-# 2048 --> 0.99431
-#
-# Ideal Distribution Ratio = 0.92635 / (1-0.92635) = 12.58
-# Random Distribution Ration = 512 / (2965+62+83+86-512) = 0.191
-#
-# Typical Distribution Ratio, 25% of IDR
-    
-    
-class Latin1Prober(CharSetProber):
-    def __init__(self):
-        super(Latin1Prober, self).__init__()
-        self._last_char_class = None
-        self._freq_counter = None
-        self.reset()
-    
-        def get_confidence(self):
-        unlike = 0.99
-        if self._num_mb_chars < 6:
-            unlike *= self.ONE_CHAR_PROB ** self._num_mb_chars
-            return 1.0 - unlike
-        else:
-            return unlike
+            def override_category_budget(self, category, amount):
+        self.categories_to_budget_map[category] = amount
 
     
-        else:
-        print('ParamError: Unknown model type, model should be [ip, plus, ipx, se]')
+        def mapper(self, _, line):
+        yield line, 1
     
-    try:
-    from common import debug, config, screenshot, UnicodeStreamFilter
-    from common.auto_adb import auto_adb
-except Exception as ex:
-    print(ex)
-    print('请将脚本放在项目根目录中运行')
-    print('请检查项目根目录中的 common 文件夹是否存在')
-    exit(1)
-adb = auto_adb()
-VERSION = '1.1.4'
+        def __init__(self, size):
+        self.size = size
+        self.table = [[] for _ in range(self.size)]
     
     
-fig.canvas.mpl_connect('button_press_event', on_click)
-ani = animation.FuncAnimation(fig, updatefig, interval=50, blit=True)
-plt.show()
+def load_all_labels(records):
+  '''Reads TensorFlow examples from a RecordReader and returns only the labels.
+    
+    # Check to make sure the RNN is the one we used in the paper.
+if N == 50:
+  assert abs(rnn['W'][0,0] - 0.06239899) < 1e-8, 'Error in random seed?'
+  rem_check = nreplications * train_percentage
+  assert  abs(rem_check - int(rem_check)) < 1e-8, \
+    'Train percentage  * nreplications should be integral number.'
+    
+      E = len(data_e)
+  spikes_e = []
+  for e in range(E):
+    data = data_e[e]
+    N,T = data.shape
+    data_s = np.zeros([N,T]).astype(np.int)
+    for n in range(N):
+      f = data[n,:]
+      s = rng.poisson(f*max_firing_rate*dt, size=T)
+      data_s[n,:] = s
+    spikes_e.append(data_s)
+    
+    
+def flatten(list_of_lists):
+  '''Takes a list of lists and returns a list of the elements.
+    
+    
+def variable_summaries(var, name):
+  '''Attach a lot of summaries to a Tensor.'''
+  mean = tf.reduce_mean(var)
+  tf.summary.scalar('mean/' + name, mean)
+  with tf.name_scope('stddev'):
+    stddev = tf.sqrt(tf.reduce_sum(tf.square(var - mean)))
+  tf.summary.scalar('sttdev/' + name, stddev)
+  tf.summary.scalar('max/' + name, tf.reduce_max(var))
+  tf.summary.scalar('min/' + name, tf.reduce_min(var))
+  tf.summary.histogram(name, var)
+    
+        def decode(self, value):
+        if value != self.resource_type:
+            raise jose.DeserializationError(
+                'Wrong resource type: {0} instead of {1}'.format(
+                    value, self.resource_type))
+        return value
 
     
-    This demonstrates the simplest possible way to turn a module into a command line
-interface with Python Fire. It exemplifies the power and shortcomings of relying
-on Python Fire's simplicity.
-    
-    from examples.widget import widget
-    
-      def whack(self, n=1):
-    '''Prints 'whack!' n times.'''
-    return ' '.join('whack!' for _ in range(n))
-    
-    '''Tests for the widget module.'''
-    
-    '''Tests for the test_components module.'''
-    
-        Args:
-      code: The status code that the FireExit should contain.
-      regexp: stdout must match this regex.
-    Yields:
-      Yields to the wrapped context.
-    '''
-    with self.assertOutputMatches(stderr=regexp):
-      with self.assertRaises(core.FireExit):
-        try:
-          yield
-        except core.FireExit as exc:
-          if exc.code != code:
-            raise AssertionError('Incorrect exit code: %r != %r' % (exc.code,
-                                                                    code))
-          self.assertIsInstance(exc.trace, trace.FireTrace)
-          raise
-    
-    import inspect
+        @mock.patch('certbot_apache.display_ops.display_util')
+    @certbot_util.patch_get_utility()
+    @mock.patch('certbot_apache.display_ops.logger')
+    def test_small_display(self, mock_logger, mock_util, mock_display_util):
+        mock_display_util.WIDTH = 20
+        mock_util().menu.return_value = (display_util.OK, 0)
+        self._call(self.vhosts)
     
     
-def GetTermSize():
-  '''Gets the terminal x and y dimensions in characters.
+# http://docs.readthedocs.org/en/latest/faq.html#i-get-import-errors-on-libraries-that-depend-on-c-modules
+# c.f. #262
+sys.modules.update(
+    (mod_name, mock.MagicMock()) for mod_name in ['augeas'])
     
-        Returns:
-      The pager command char.
-    '''
-    self._Write(c)
-    buf = ''
-    while True:
-      p = self._attr.GetRawKey()
-      if p in (None, '\n', '\r') or len(p) != 1:
-        break
-      self._Write(p)
-      buf += p
-    self._Write('\r' + ' ' * len(buf) + '\r')
-    if buf:
-      try:
-        self._search_pattern = re.compile(buf)
-      except re.error:
-        # Silently ignore pattern errors.
-        self._search_pattern = None
-        return ''
-    self._search_direction = 'n' if c == '/' else 'N'
-    return 'n'
+        def initialize(self, *args, **kwargs):
+        ''' Create the mtcnn detector '''
+        super().initialize(*args, **kwargs)
+        logger.info('Initializing Manual Detector...')
+        self.init.set()
+        logger.info('Initialized Manual Detector.')
     
-    '''Testing support code.'''
-    
-        def predict(self, doc1, doc2):
-        x1 = self.get_features([doc1], max_length=self.max_length)
-        x2 = self.get_features([doc2], max_length=self.max_length)
-        scores = self.model.predict([x1, x2])
+    This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+'''
     
     
-if __name__ == '__main__':
-    plac.call(main)
+class RollingBuffer(collections.deque):
+    '''File-like that keeps a certain number of lines of text in memory.'''
+    def write(self, buffer):
+        ''' Write line to buffer '''
+        for line in buffer.rstrip().splitlines():
+            self.append(line + '\n')
     
-            # Register attributes on Doc and Span via a getter that checks if one of
-        # the contained tokens is set to is_country == True.
-        Doc.set_extension('has_country', getter=self.has_country)
-        Span.set_extension('has_country', getter=self.has_country)
+        def debug_queue_sizes(self, update_secs):
+        ''' Output the queue sizes
+            logged to INFO so it also displays in console
+        '''
+        while True:
+            for name in sorted(self.queues.keys()):
+                logger.info('%s: %s', name, self.queues[name].qsize())
+            sleep(update_secs)
+    
+            print('Success: test_merge_sort')
+    
+    		return True 
