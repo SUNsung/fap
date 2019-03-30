@@ -1,223 +1,232 @@
 
         
-        // Must be included first
-#include 'tensorflow/python/lib/core/numpy.h'
+        // Generate constructors.
+#include 'ipc/struct_constructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
     
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    // Global registry mapping C API error codes to the corresponding custom Python
-// exception type. This is used to expose the exception types to C extension
-// code (i.e. so we can raise custom exceptions via SWIG).
-//
-// Init() must be called exactly once at the beginning of the process before
-// Lookup() can be used.
-//
-// Example usage:
-//   TF_Status* status = TF_NewStatus();
-//   TF_Foo(..., status);
-//
-//   if (TF_GetCode(status) != TF_OK) {
-//     PyObject* exc_type = PyExceptionRegistry::Lookup(TF_GetCode(status));
-//     // Arguments to OpError base class. Set `node_def` and `op` to None.
-//     PyObject* args =
-//       Py_BuildValue('sss', nullptr, nullptr, TF_Message(status));
-//     PyErr_SetObject(exc_type, args);
-//     Py_DECREF(args);
-//     TF_DeleteStatus(status);
-//     return NULL;
-//   }
-class PyExceptionRegistry {
- public:
-  // Initializes the process-wide registry. Should be called exactly once near
-  // the beginning of the process. The arguments are the various Python
-  // exception types (e.g. `cancelled_exc` corresponds to
-  // errors.CancelledError).
-  static void Init(PyObject* code_to_exc_type_map);
-    }
-    
-    #include <Python.h>
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-#include 'tensorflow/python/util/kernel_registry.h'
-    
-    void CensusClientCallData::Destroy(grpc_call_element* elem,
-                                   const grpc_call_final_info* final_info,
-                                   grpc_closure* then_call_closure) {
-  const uint64_t request_size = GetOutgoingDataSize(final_info);
-  const uint64_t response_size = GetIncomingDataSize(final_info);
-  double latency_ms = absl::ToDoubleMilliseconds(absl::Now() - start_time_);
-  ::opencensus::stats::Record(
-      {{RpcClientSentBytesPerRpc(), static_cast<double>(request_size)},
-       {RpcClientReceivedBytesPerRpc(), static_cast<double>(response_size)},
-       {RpcClientRoundtripLatency(), latency_ms},
-       {RpcClientServerLatency(),
-        ToDoubleMilliseconds(absl::Nanoseconds(elapsed_time_))},
-       {RpcClientSentMessagesPerRpc(), sent_message_count_},
-       {RpcClientReceivedMessagesPerRpc(), recv_message_count_}},
-      {{ClientMethodTagKey(), method_},
-       {ClientStatusTagKey(), StatusCodeToString(final_info->final_status)}});
-  grpc_slice_unref_internal(path_);
-  context_.EndSpan();
+    EventListener::~EventListener() {
+  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
+    delete i->second;
+  }
 }
     
-    constexpr size_t TraceContextEncoding::kGrpcTraceContextSize;
-constexpr size_t TraceContextEncoding::kEncodeDecodeFailure;
-constexpr size_t TraceContextEncoding::kVersionIdSize;
-constexpr size_t TraceContextEncoding::kFieldIdSize;
-constexpr size_t TraceContextEncoding::kVersionIdOffset;
-constexpr size_t TraceContextEncoding::kVersionId;
-    
-     private:
-  Status ListService(ServerContext* context,
-                     reflection::v1alpha::ListServiceResponse* response);
-    
-    namespace grpc {
+    void MenuDelegate::ExecuteCommand(int command_id, int event_flags) {
+  if (command_id < 0)
+    return;
     }
     
-    #if !defined(GPR_LINUX) && !defined(GPR_WINDOWS) && !defined(GPR_APPLE)
+    void MenuItem::Destroy() {
+  gtk_widget_destroy(menu_item_);
+  g_object_unref(G_OBJECT(menu_item_));
+}
     
-      // Delete everything
-  for (int i = 0; i < kCount; i++) {
-    ASSERT_OK(db_->Delete(WriteOptions(), Key(i)));
-  }
-  ASSERT_OK(dbi->TEST_CompactMemTable());
+    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
+ public:
+  NwMenuGetNSStringFWithFixupFunction() {}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
     
-    TEST(CorruptionTest, CompactionInputErrorParanoid) {
-  options_.paranoid_checks = true;
-  options_.write_buffer_size = 512 << 10;
-  Reopen();
-  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
-    }
+ protected:
+  ~NwMenuGetNSStringFWithFixupFunction() override {}
     
-      uint64_t total_bytes;
-    
-    enum FileType {
-  kLogFile,
-  kDBLockFile,
-  kTableFile,
-  kDescriptorFile,
-  kCurrentFile,
-  kTempFile,
-  kInfoLogFile  // Either the current one, or an old one
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
 };
     
-    TEST(LogTest, AlignedEof) {
-  const int n = kBlockSize - 2*kHeaderSize + 4;
-  Write(BigString('foo', n));
-  ASSERT_EQ(kBlockSize - kHeaderSize + 4, WrittenBytes());
-  ASSERT_EQ(BigString('foo', n), Read());
-  ASSERT_EQ('EOF', Read());
+    #include 'chrome/browser/devtools/devtools_window.h'
+#include 'chrome/browser/extensions/devtools_util.h'
+#include 'chrome/browser/extensions/extension_service.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/public/browser/render_view_host.h'
+#include 'content/public/browser/web_contents.h'
+#include 'extensions/browser/extension_system.h'
+#include 'extensions/common/error_utils.h'
+    
+     protected:
+  ResponseAction Run() override;
+  ~NwObjCallObjectMethodAsyncFunction() override;
+    
+    #endif //NW_SRC_API_NW_SCREEN_API_H_
+
+    
+    #include 'glog/logging.h'
+#include 'google/protobuf/text_format.h'
+#include 'stdint.h'
+    
+      /**
+   * @brief Applies the same transformation defined in the data layer's
+   * transform_param block to all the num images in a input_blob.
+   *
+   * @param input_blob
+   *    A Blob containing the data to be transformed. It applies the same
+   *    transformation to all the num images in the blob.
+   * @param transformed_blob
+   *    This is destination blob, it will contain as many images as the
+   *    input blob. It can be part of top blob's data.
+   */
+  void Transform(Blob<Dtype>* input_blob, Blob<Dtype>* transformed_blob);
+    
+    /// @brief Fills a Blob with constant or randomly-generated data.
+template <typename Dtype>
+class Filler {
+ public:
+  explicit Filler(const FillerParameter& param) : filler_param_(param) {}
+  virtual ~Filler() {}
+  virtual void Fill(Blob<Dtype>* blob) = 0;
+ protected:
+  FillerParameter filler_param_;
+};  // class Filler
+    
+      /**
+   * @brief Return whether 'anonymous' top blobs are created automatically
+   *        by the layer.
+   *
+   * If this method returns true, Net::Init will create enough 'anonymous' top
+   * blobs to fulfill the requirement specified by ExactNumTopBlobs() or
+   * MinTopBlobs().
+   */
+  virtual inline bool AutoTopBlobs() const { return false; }
+    
+    namespace caffe {
+    }
+    
+    
+    {  Blob<Dtype> col_buffer_;
+  Blob<Dtype> bias_multiplier_;
+};
+    
+    /**
+ * @brief Normalizes the input to have 0-mean and/or unit (1) variance across
+ *        the batch.
+ *
+ * This layer computes Batch Normalization as described in [1]. For each channel
+ * in the data (i.e. axis 1), it subtracts the mean and divides by the variance,
+ * where both statistics are computed across both spatial dimensions and across
+ * the different examples in the batch.
+ *
+ * By default, during training time, the network is computing global
+ * mean/variance statistics via a running average, which is then used at test
+ * time to allow deterministic outputs for each input. You can manually toggle
+ * whether the network is accumulating or using the statistics via the
+ * use_global_stats option. For reference, these statistics are kept in the
+ * layer's three blobs: (0) mean, (1) variance, and (2) moving average factor.
+ *
+ * Note that the original paper also included a per-channel learned bias and
+ * scaling factor. To implement this in Caffe, define a `ScaleLayer` configured
+ * with `bias_term: true` after each `BatchNormLayer` to handle both the bias
+ * and scaling factor.
+ *
+ * [1] S. Ioffe and C. Szegedy, 'Batch Normalization: Accelerating Deep Network
+ *     Training by Reducing Internal Covariate Shift.' arXiv preprint
+ *     arXiv:1502.03167 (2015).
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+template <typename Dtype>
+class BatchNormLayer : public Layer<Dtype> {
+ public:
+  explicit BatchNormLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    #include <vector>
+    
+    /**
+ * @brief Takes a Blob and crop it, to the shape specified by the second input
+ *  Blob, across all dimensions after the specified axis.
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+    
+    
+    {}  // namespace caffe
+    
+    // For now, there are two type of announcement hosts.
+// We'd prefer to use Notification if it's available and fall back to LiveRegion
+// if not.  The availability of the host depends on the version of the OS the app is running on.
+// When the app switches to min version RS3, the LiveRegionHost can be removed and we will always
+// use NotificationHost.
+// TODO - MSFT 12735088
+void NarratorAnnouncementHostFactory::RegisterHosts()
+{
+    // The host that will be used is the first available host,
+    // therefore, order of hosts is important here.
+    NarratorAnnouncementHostFactory::s_hosts = {
+        ref new NotificationHost(),
+        ref new LiveRegionHost()
+    };
 }
     
+        private:
+        static void OnAnnouncementChanged(
+            _In_ Windows::UI::Xaml::DependencyObject^ dependencyObject,
+            _In_ Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ eventArgs);
     
-    {
-    {    s = EmitPhysicalRecord(type, ptr, fragment_length);
-    ptr += fragment_length;
-    left -= fragment_length;
-    begin = false;
-  } while (s.ok() && left > 0);
-  return s;
+    using namespace CalculatorApp::Common;
+using namespace Windows::Storage::Streams;
+    
+    #pragma once
+    
+    
+    {  // Single-Delete diagnostics for exceptional situations
+  uint64_t num_single_del_fallthru = 0;
+  uint64_t num_single_del_mismatch = 0;
+};
+
+    
+      ////////////////////////////////////////////////////////
+  //
+  // 'Read Committed' (Monotonic Atomic Views) Example
+  //   --Using multiple Snapshots
+  //
+  ////////////////////////////////////////////////////////
+    
+    // Supported only for Leveled compaction
+Status SuggestCompactRange(DB* db, ColumnFamilyHandle* column_family,
+                           const Slice* begin, const Slice* end);
+Status SuggestCompactRange(DB* db, const Slice* begin, const Slice* end);
+    
+    // Simple RAII wrapper class for Snapshot.
+// Constructing this object will create a snapshot.  Destructing will
+// release the snapshot.
+class ManagedSnapshot {
+ public:
+  explicit ManagedSnapshot(DB* db);
+    }
+    
+    namespace rocksdb {
+namespace lua {
+class LuaStateWrapper {
+ public:
+  explicit LuaStateWrapper(const std::string& lua_script) {
+    lua_state_ = luaL_newstate();
+    Init(lua_script, {});
+  }
+  LuaStateWrapper(
+      const std::string& lua_script,
+      const std::vector<std::shared_ptr<RocksLuaCustomLibrary>>& libraries) {
+    lua_state_ = luaL_newstate();
+    Init(lua_script, libraries);
+  }
+  lua_State* GetLuaState() const { return lua_state_; }
+  ~LuaStateWrapper() { lua_close(lua_state_); }
+    }
+    }
+    }
+    
+    /*
+ * Class:     org_rocksdb_BackupableDBOptions
+ * Method:    restoreRateLimit
+ * Signature: (J)J
+ */
+jlong Java_org_rocksdb_BackupableDBOptions_restoreRateLimit(JNIEnv* /*env*/,
+                                                            jobject /*jobj*/,
+                                                            jlong jhandle) {
+  auto* bopt = reinterpret_cast<rocksdb::BackupableDBOptions*>(jhandle);
+  return bopt->restore_rate_limit;
 }
-    
-    void MemTable::Add(SequenceNumber s, ValueType type,
-                   const Slice& key,
-                   const Slice& value) {
-  // Format of an entry is concatenation of:
-  //  key_size     : varint32 of internal_key.size()
-  //  key bytes    : char[internal_key.size()]
-  //  value_size   : varint32 of value.size()
-  //  value bytes  : char[value.size()]
-  size_t key_size = key.size();
-  size_t val_size = value.size();
-  size_t internal_key_size = key_size + 8;
-  const size_t encoded_len =
-      VarintLength(internal_key_size) + internal_key_size +
-      VarintLength(val_size) + val_size;
-  char* buf = arena_.Allocate(encoded_len);
-  char* p = EncodeVarint32(buf, internal_key_size);
-  memcpy(p, key.data(), key_size);
-  p += key_size;
-  EncodeFixed64(p, (s << 8) | type);
-  p += 8;
-  p = EncodeVarint32(p, val_size);
-  memcpy(p, value.data(), val_size);
-  assert(p + val_size == buf + encoded_len);
-  table_.Insert(buf);
-}
-    
-    void ExampleQt::run() {
-    }
-    
-        if (unlikely(!swReactor_handle_isset(reactor, SW_FD_ARES)))
-    {
-        reactor->setHandle(reactor, SW_FD_ARES | SW_EVENT_READ, ares_event_read);
-        reactor->setHandle(reactor, SW_FD_ARES | SW_EVENT_WRITE, ares_event_write);
-        reactor->setHandle(reactor, SW_FD_ARES | SW_EVENT_ERROR, ares_event_error);
-    }
-    
-    
-    {
-    {
-    {                _error: while (true)
-                {
-                    SwooleAIO.lock.lock(&SwooleAIO.lock);
-                    int ret = write(_pipe_write, &event, sizeof(event));
-                    SwooleAIO.lock.unlock(&SwooleAIO.lock);
-                    if (ret < 0)
-                    {
-                        if (errno == EAGAIN)
-                        {
-                            swSocket_wait(_pipe_write, 1000, SW_EVENT_WRITE);
-                            continue;
-                        }
-                        else if (errno == EINTR)
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            swSysError('sendto swoole_aio_pipe_write failed.');
-                        }
-                    }
-                    break;
-                }
-                //exit
-                if (_flag)
-                {
-                    return;
-                }
-            }
-            else
-            {
-                unique_lock<mutex> lock(_mutex);
-                if (running)
-                {
-                    ++n_waiting;
-                    _cv.wait(lock);
-                    --n_waiting;
-                }
-            }
-            if (running)
-            {
-                goto _accept;
-            }
-        });
-        threads[i] = unique_ptr<thread>(_thread);
-    }
-    
-        int ret2 = (int) (long) swHashMap_find(hm, (char *) SW_STRL('hello2'));
-    ASSERT_GT(ret2, 0);
-    
-        for (const auto &arg : args)
-    {
-        coro_test_create(arg, nullptr, &complete_num);
-    }
