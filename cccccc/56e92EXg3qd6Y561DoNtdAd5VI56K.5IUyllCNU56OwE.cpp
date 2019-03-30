@@ -1,247 +1,173 @@
 
         
         
-    {}  // namespace remote
-    
-    #ifndef CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
-#define CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
+    {}  // namespace atom
     
     
-    {}  // namespace nwapi
-
+    {}  // namespace api
     
-    void Menu::UpdateKeys(GtkAccelGroup *gtk_accel_group){
-  this->gtk_accel_group = gtk_accel_group;
-  if (!GTK_IS_ACCEL_GROUP(gtk_accel_group)){
-    return ;
-  } else {
-    std::vector<MenuItem*>::iterator menu_item_iterator = menu_items.begin();
-    std::vector<MenuItem*>::iterator menu_item_end = menu_items.end();
-    while (menu_item_iterator != menu_item_end){
-      MenuItem *menu_item = *menu_item_iterator;
-      if (menu_item!=NULL && GTK_IS_MENU_ITEM(menu_item->menu_item_)){
-        menu_item->UpdateKeys(gtk_accel_group);
-      }
-      ++menu_item_iterator;
+      void InitWith(v8::Isolate* isolate, v8::Local<v8::Object> wrapper) override {
+    WrappableBase::InitWith(isolate, wrapper);
+    if (!weak_map_) {
+      weak_map_ = new atom::KeyWeakMap<int32_t>;
     }
+    weak_map_->Set(isolate, weak_map_id_, wrapper);
   }
+    
+    AtomQuotaPermissionContext::AtomQuotaPermissionContext() {}
+    
+    class AtomQuotaPermissionContext : public content::QuotaPermissionContext {
+ public:
+  typedef content::QuotaPermissionContext::QuotaPermissionResponse response;
+    }
+    
+      // Gets/Sets the delegate.
+  static Delegate* GetDelegate();
+  static void SetDelegate(Delegate* delegate);
+    
+    #include 'base/macros.h'
+    
+    URLRequestAboutJob::URLRequestAboutJob(net::URLRequest* request,
+                                       net::NetworkDelegate* network_delegate)
+    : net::URLRequestJob(request, network_delegate), weak_ptr_factory_(this) {}
+    
+    const SkBitmap* OffscreenViewProxy::GetBitmap() const {
+  return view_bitmap_.get();
 }
     
-    void Menu::Create(const base::DictionaryValue& option) {
-  is_menu_modified_ = true;
-  menu_delegate_.reset(new MenuDelegate(object_manager()));
-  menu_model_.reset(new ui::NwMenuModel(menu_delegate_.get()));
-    }
-    
-    bool MenuItem::CanHandleAccelerators() const {
-  return enable_shortcut_ && is_enabled_;
-}
-    
-    class NwAppQuitFunction : public UIThreadExtensionFunction {
- public:
-  NwAppQuitFunction();
-    }
-    
-    class NwClipboardReadAvailableTypesFunction : public NWSyncExtensionFunction {
- public:
-  NwClipboardReadAvailableTypesFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    
-    {} // namespace caffe2
+    #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_PARAM_UTIL_GENERATED_H_
 
     
-              const TensorShape& X = in[0];
-          int N = 0, C = 0, H = 0, W = 0;
-          switch (order) {
-            case StorageOrder::NCHW:
-              N = X.dims(0);
-              C = X.dims(1);
-              H = X.dims(2);
-              W = X.dims(3);
-              break;
-            case StorageOrder::NHWC:
-              N = X.dims(0);
-              H = X.dims(1);
-              W = X.dims(2);
-              C = X.dims(3);
-              break;
-            default:
-              CAFFE_THROW('Unknown storage order: ', order);
-          }
+      // Now, we have that n is odd and n >= 3.
     
-      ~AutoCompactTest() {
-    delete db_;
-    DestroyDB(dbname_, Options());
-    delete tiny_cache_;
+    
+    {    return element;
   }
     
-        // Finish and check for builder errors
-    s = builder->Finish();
-    if (s.ok()) {
-      meta->file_size = builder->FileSize();
-      assert(meta->file_size > 0);
-    }
-    delete builder;
     
-    #include <stdio.h>
-#include 'leveldb/comparator.h'
-#include 'leveldb/db.h'
-#include 'leveldb/filter_policy.h'
-#include 'leveldb/slice.h'
-#include 'leveldb/table_builder.h'
-#include 'util/coding.h'
-#include 'util/logging.h'
-    
-    
-    {}  // namespace
-    
-    #include <ctype.h>
-#include <stdio.h>
-#include 'db/filename.h'
-#include 'db/dbformat.h'
-#include 'leveldb/env.h'
-#include 'util/logging.h'
-    
-    namespace leveldb {
-namespace {
-    }
-    }
-    
-      // Extend record types with the following special values
-  enum {
-    kEof = kMaxRecordType + 1,
-    // Returned whenever we find an invalid physical record.
-    // Currently there are three situations in which this happens:
-    // * The record has an invalid CRC (ReadPhysicalRecord reports a drop)
-    // * The record is a 0-length record (No drop is reported)
-    // * The record is below constructor's initial_offset (No drop is reported)
-    kBadRecord = kMaxRecordType + 2
-  };
-    
-    Status Writer::AddRecord(const Slice& slice) {
-  const char* ptr = slice.data();
-  size_t left = slice.size();
-    }
-    
-    class MemTable {
- public:
-  // MemTables are reference counted.  The initial reference count
-  // is zero and the caller must call Ref() at least once.
-  explicit MemTable(const InternalKeyComparator& comparator);
-    }
-    
-        // Extract metadata by scanning through table.
-    int counter = 0;
-    Iterator* iter = NewTableIterator(t.meta);
-    bool empty = true;
-    ParsedInternalKey parsed;
-    t.max_sequence = 0;
-    for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
-      Slice key = iter->key();
-      if (!ParseInternalKey(key, &parsed)) {
-        Log(options_.info_log, 'Table #%llu: unparsable key %s',
-            (unsigned long long) t.meta.number,
-            EscapeString(key).c_str());
-        continue;
-      }
-    }
-    
-    Iterator* TableCache::NewIterator(const ReadOptions& options,
-                                  uint64_t file_number,
-                                  uint64_t file_size,
-                                  Table** tableptr) {
-  if (tableptr != nullptr) {
-    *tableptr = nullptr;
-  }
-    }
-    
-          case kDeletedFile:
-        if (GetLevel(&input, &level) &&
-            GetVarint64(&input, &number)) {
-          deleted_files_.insert(std::make_pair(level, number));
-        } else {
-          msg = 'deleted file';
+    {        const auto& type = dict[typeKey].Value<std::wstring>();
+        if (type != typeValue) 
+        {
+            const auto& version = GetVersion(dict);
+            LogicError('Unexpected '%ls':'%ls' in place of '%ls':'%ls' (%s).',
+                       typeKey.c_str(), type.c_str(), typeKey.c_str(), typeValue.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
         }
-        break;
+    }
     
-    
-    {    // exception out_of_range.401
-    try
+        void Trainer::AddProgressWriters(const std::vector<ProgressWriterPtr>& progressWriters)
     {
-        // try to write beyond the array limit
-        array.at(5) = 'sixth';
+        for (auto& learner : m_parameterLearners->ParameterLearners()) 
+        {
+            learner->AddProgressWriters(progressWriters);
+        }
+        m_progressWriters.insert(progressWriters.begin(), progressWriters.end());
     }
-    catch (json::out_of_range& e)
+    
+        static ParameterInitializer CreateInitializer(const std::wstring& initializerTypeName, double scale, unsigned long seed) 
     {
-        std::cout << e.what() << '\n';
+        if (scale <= 0) 
+            InvalidArgument('CreateInitializer: scale value for initializer '%S' cannot be 0.', 
+                initializerTypeName.c_str());
     }
-}
-
     
+            // clone everything in the dependent set
+        //  - specified inputs get mapped to actual parameters
+        //  - all others get duplicated
+        // Note that at this point, the 'shared' option has already been considered,
+        // and is reflected in whether parameters are included or not in 'dependentSet'.
+        map<ComputationNodeBasePtr, ComputationNodeBasePtr> clonedNodes;
+        size_t numCloned = 0;
+        for (size_t i = 0; i < inputNodes.size(); i++)
+            clonedNodes[inputNodes[i]] = inputs[i];
+        for (let& node : dependentSet)
+        {
+            // if already there then it's an input that we just mapped above
+            if (clonedNodes.find(node) != clonedNodes.end())
+                continue;
+            // clone
+            ComputationNodeBasePtr newNode;
+            let newName = exprName + L'.' + node->GetName();
+            newNode = node->Duplicate(newName, CopyNodeFlags::copyNodeAll);
+            // make it read-only if desired
+            if (parameterTreatment == ParameterTreatment::constant && newNode->Is<IFreezable>())
+                newNode->As<IFreezable>()->FreezeParameters();
+            // and that's our cloned node
+            clonedNodes[node] = newNode;
+            numCloned++;
+        }
+#if 0
+        for (let& nodeKV : clonedNodes)
+            fprintf(stderr, 'CloneFunction: cloning %ls -> %ls (%d -> %d)\n', nodeKV.first->NodeDescription().c_str(), nodeKV.second->NodeDescription().c_str(), (int)nodeKV.first->m_uniqueNumericId, (int)nodeKV.second->m_uniqueNumericId);
+#endif
     
-    {    Vec3 _center;
-    Vec3 _eye;
-    Vec3 _up;
-};
+    #endif
     
-    AccelAmplitude* AccelAmplitude::create(Action *action, float duration)
+    template <class ElemType>
+class EnvironmentInputNode : public ComputationNodeNonLooping<ElemType>, public NumInputs<0>
 {
-    AccelAmplitude *ret = new (std::nothrow) AccelAmplitude();
-    if (ret && ret->initWithAction(action, duration))
+    typedef ComputationNodeNonLooping<ElemType> Base; UsingComputationNodeMembersBoilerplate;
+    static const std::wstring TypeName() { return L'EnvironmentInput'; }
+    }
+    
+            VkSubmitInfo end_info = {};
+        end_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+        end_info.commandBufferCount = 1;
+        end_info.pCommandBuffers = &command_buffer;
+        err = vkEndCommandBuffer(command_buffer);
+        check_vk_result(err);
+        err = vkQueueSubmit(g_Queue, 1, &end_info, VK_NULL_HANDLE);
+        check_vk_result(err);
+    
+    
     {
-        ret->autorelease();
-        return ret;
+    {
+    {
+    {                    // Bind texture, Draw
+                    glBindTexture(GL_TEXTURE_2D, (GLuint)(intptr_t)pcmd->TextureId);
+                    glDrawElements(GL_TRIANGLES, (GLsizei)pcmd->ElemCount, sizeof(ImDrawIdx) == 2 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT, idx_buffer);
+                }
+            }
+            idx_buffer += pcmd->ElemCount;
+        }
+    }
+    
+            // Start the Dear ImGui frame
+        ImGui_ImplDX12_NewFrame();
+        ImGui_ImplWin32_NewFrame();
+        ImGui::NewFrame();
+    
+    TEST(CanSenderTest, OneRunCase) {
+  CanSender<::apollo::canbus::ChassisDetail> sender;
+  can::FakeCanClient can_client;
+  sender.Init(&can_client, true);
+    }
+    
+    double ClusterGeneralInfo701::lateral_vel(const std::uint8_t* bytes,
+                                          int32_t length) const {
+  Byte t0(bytes + 5);
+  uint32_t x = t0.get_byte(0, 6);
+    }
+    
+    int ObjectQualityInfo60C::longitude_accel_rms(const std::uint8_t* bytes,
+                                              int32_t length) const {
+  Byte t0(bytes + 3);
+  int32_t x = t0.get_byte(0, 4);
+    }
+    
+    #include 'modules/drivers/radar/conti_radar/protocol/radar_state_201.h'
+    
+    const PolynomialXd& Spline1dSeg::spline_func() const { return spline_func_; }
+    
+    namespace apollo {
+namespace canbus {
     }
     }
     
-        /** @deprecated Use getNumberOfRunningActionsInTarget() instead.
-     */
-    CC_DEPRECATED_ATTRIBUTE ssize_t numberOfRunningActionsInTarget(Node *target) const { return getNumberOfRunningActionsInTarget(target); }
-    
-    /**
-@brief Progress to percentage.
-@details This action show the target node from current percentage to the specified percentage.
-        You should specify the destination percentage when creating the action.
-@since v0.99.1
-*/
-class CC_DLL ProgressTo : public ActionInterval
-{
-public:
-    /** 
-     * @brief Create and initializes with a duration and a destination percentage.
-     * @param duration Specify the duration of the ProgressTo action. It's a value in seconds.
-     * @param percent Specify the destination percentage.
-     * @return If the creation success, return a pointer of ProgressTo action; otherwise, return nil.
-     */
-    static ProgressTo* create(float duration, float percent);
+    // config detail: {'name': 'manual_input', 'offset': 0.0, 'precision': 0.001,
+// 'len': 16, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 7,
+// 'type': 'double', 'order': 'motorola', 'physical_unit': '%'}
+double Brakerpt6c::manual_input(const std::uint8_t* bytes,
+                                int32_t length) const {
+  Byte t0(bytes + 0);
+  int32_t x = t0.get_byte(0, 8);
     }
-    
-    
-    {    return TiledGrid3DAction::initWithDuration(duration, Size(1, rows));
-}
-    
-        /** 
-    @brief Initializes the action with a range, shatter Z vertices, grid size and duration.
-    @param duration Specify the duration of the ShatteredTiles3D action. It's a value in seconds.
-    @param gridSize Specify the size of the grid.
-    @param range Specify the range of the shatter effect.
-    @param shatterZ Specify whether shake on the z axis.
-    @return If the Initialization success, return true; otherwise, return false.
-    */
-    bool initWithDuration(float duration, const Size& gridSize, int range, bool shatterZ);
-    
-        /** @deprecated Use getInstance() instead. */
-    CC_DEPRECATED_ATTRIBUTE static AnimationCache* sharedAnimationCache() { return AnimationCache::getInstance(); }
-    
-        /** Initializes an AtlasNode  with an Atlas file the width and height of each item and the quantity of items to render*/
-    bool initWithTileFile(const std::string& tile, int tileWidth, int tileHeight, int itemsToRender);
-    
-    /** Initializes an AtlasNode  with a texture the width and height of each item measured in points and the quantity of items to render*/
-    bool initWithTexture(Texture2D* texture, int tileWidth, int tileHeight, int itemsToRender);
-    
-    PolygonInfo::~PolygonInfo()
-{
-    releaseVertsAndIndices();
-}
