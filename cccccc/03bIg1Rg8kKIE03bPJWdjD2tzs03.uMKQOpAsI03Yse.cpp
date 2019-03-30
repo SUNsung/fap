@@ -1,205 +1,134 @@
 
         
-        // This flag controls the style of death tests.  Valid values are 'threadsafe',
-// meaning that the death test child process will re-execute the test binary
-// from the start, running only a single death test, or 'fast',
-// meaning that the child process will execute the test logic immediately
-// after forking.
-GTEST_DECLARE_string_(death_test_style);
+        IPC_SYNC_MESSAGE_ROUTED1_1(ShellViewHostMsg_SetForceClose, bool, int)
     
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10>
-internal::ValueArray10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Values(T1 v1,
-    T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9, T10 v10) {
-  return internal::ValueArray10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(v1,
-      v2, v3, v4, v5, v6, v7, v8, v9, v10);
+      bool delay_destruction() { return delay_destruction_; }
+  void set_delay_destruction(bool val) { delay_destruction_ = val; }
+  bool pending_destruction() { return pending_destruction_; }
+  void set_pending_destruction (bool val) { pending_destruction_ = val; }
+ protected:
+  int id_;
+  bool delay_destruction_;
+  bool pending_destruction_;
+  base::WeakPtr<ObjectManager> object_manager_;
+    
+       bool IsItemForCommandIdDynamic(int command_id) const override;
+   base::string16 GetLabelForCommandId(int command_id) const override;
+   bool GetIconForCommandId(int command_id,
+                                   gfx::Image* icon) const override;
+    
+      // implement nw.Screen.startMonitor()
+  class NwScreenStartMonitorFunction : public NWSyncExtensionFunction {
+  public:
+    NwScreenStartMonitorFunction();
+    bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    #include <Python.h>
+    
+    
+    {  // Check if the optional_nested_message was actually moved (and not just
+  // copied).
+  EXPECT_EQ(nested, &message2.optional_nested_message());
+  EXPECT_NE(nested, &message1.optional_nested_message());
 }
     
-    #endif  // GTEST_INCLUDE_GTEST_GTEST_PRINTERS_H_
+    
+    {
+    {
+    {
+    {
+}  // namespace java
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
 
     
-      // Reinterprets a bit pattern as a floating-point number.
-  //
-  // This function is needed to test the AlmostEquals() method.
-  static RawType ReinterpretBits(const Bits bits) {
-    FloatingPoint fp(0);
-    fp.u_.bits_ = bits;
-    return fp.u_.value_;
-  }
+    // Copyright 2008 Google Inc. All Rights Reserved.
+// Author: xpeng@google.com (Peter Peng)
     
-      linked_ptr& operator=(linked_ptr const& ptr) {
-    if (&ptr != this) {
-      depart();
-      copy(&ptr);
-    }
-    return *this;
-  }
     
-    #ifndef GTEST_SAMPLES_PRIME_TABLES_H_
-#define GTEST_SAMPLES_PRIME_TABLES_H_
-    
-    #include <string.h>
-    
-      // Clears the queue.
-  void Clear() {
-    if (size_ > 0) {
-      // 1. Deletes every node.
-      QueueNode<E>* node = head_;
-      QueueNode<E>* next = node->next();
-      for (; ;) {
-        delete node;
-        node = next;
-        if (node == NULL) break;
-        next = node->next();
-      }
-    }
-    }
-    
-            if (sequences.size() < numOfSequences)
-            RuntimeError('The size of output buffer (%zu) is smaller than the number (%zu) of sequences.', sequences.size(), numOfSequences);
-    
-        auto& pMBLayout = minibatch.begin()->second.pMBLayout;
-    // This is only allowed for old readers, which support a single layout for all inputs.
-    for (const auto& iter : minibatch)
-    {
-        assert(iter.second.pMBLayout == pMBLayout);
-        // TODO: This should be a runtime check, not an assert() that only runs in Debug.
-        UNUSED(iter);
-    }
-    
-        void OptimizedMemoryAllocation()
-    {
-        // MatrixPool is not templated, so we call both float and double versions here 
-        OptimizedMemoryAllocationFunc<float>(); 
-        OptimizedMemoryAllocationFunc<double>();
-        OptimizedMemoryAllocationFunc<half>();
-        return; 
-    }
-    
-    //--------------------------------------------------------------------------------
-//
-//  groupCount()
-//
-//--------------------------------------------------------------------------------
-int32_t RegexMatcher::groupCount() const {
-    return fPattern->fGroupMap->size();
+    {  return 0;
 }
+
     
-    UnicodeString &ScientificNumberFormatter::SuperscriptStyle::format(
-        const UnicodeString &original,
-        FieldPositionIterator &fpi,
-        const UnicodeString &preExponent,
-        const DecimalFormatStaticSets &staticSets,
-        UnicodeString &appendTo,
-        UErrorCode &status) const {
-    if (U_FAILURE(status)) {
-        return appendTo;
-    }
-    FieldPosition fp;
-    int32_t copyFromOffset = 0;
-    while (fpi.next(fp)) {
-        switch (fp.getField()) {
-        case UNUM_EXPONENT_SYMBOL_FIELD:
-            appendTo.append(
-                    original,
-                    copyFromOffset,
-                    fp.getBeginIndex() - copyFromOffset);
-            copyFromOffset = fp.getEndIndex();
-            appendTo.append(preExponent);
-            break;
-        case UNUM_EXPONENT_SIGN_FIELD:
-            {
-                int32_t beginIndex = fp.getBeginIndex();
-                int32_t endIndex = fp.getEndIndex();
-                UChar32 aChar = original.char32At(beginIndex);
-                if (staticSets.fMinusSigns->contains(aChar)) {
-                    appendTo.append(
-                            original,
-                            copyFromOffset,
-                            beginIndex - copyFromOffset);
-                    appendTo.append(kSuperscriptMinusSign);
-                } else if (staticSets.fPlusSigns->contains(aChar)) {
-                    appendTo.append(
-                           original,
-                           copyFromOffset,
-                           beginIndex - copyFromOffset);
-                    appendTo.append(kSuperscriptPlusSign);
-                } else {
-                    status = U_INVALID_CHAR_FOUND;
-                    return appendTo;
-                }
-                copyFromOffset = endIndex;
-            }
-            break;
-        case UNUM_EXPONENT_FIELD:
-            appendTo.append(
-                    original,
-                    copyFromOffset,
-                    fp.getBeginIndex() - copyFromOffset);
-            if (!copyAsSuperscript(
-                    original,
-                    fp.getBeginIndex(),
-                    fp.getEndIndex(),
-                    appendTo,
-                    status)) {
-              return appendTo;
-            }
-            copyFromOffset = fp.getEndIndex();
-            break;
-        default:
-            break;
+        if (targetGrid && targetGrid->getReuseGrid() > 0)
+    {
+        if (targetGrid->isActive() && targetGrid->getGridSize().width == _gridSize.width
+            && targetGrid->getGridSize().height == _gridSize.height)
+        {
+            targetGrid->reuse();
+        }
+        else
+        {
+            CCASSERT(0, 'Invalid grid parameters!');
         }
     }
-    appendTo.append(
-            original, copyFromOffset, original.length() - copyFromOffset);
-    return appendTo;
-}
+    else
+    {
+        if (targetGrid && targetGrid->isActive())
+        {
+            targetGrid->setActive(false);
+        }
+    }
     
-    U_NAMESPACE_BEGIN
+        if (action)
+    {
+        if (action->initWithDuration(duration, gridSize, position, radius))
+        {
+            action->autorelease();
+        }
+        else
+        {
+            CC_SAFE_RELEASE_NULL(action);
+        }
+    }
     
-    class BreakIterator;
+     THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
     
-    #include 'unicode/utypes.h'
-#include 'sharedobject.h'
-#include 'unicode/dtfmtsym.h'
     
-        /**
-     * Returns TRUE if this object is equal to rhs.
+    {private:
+    CC_DISALLOW_COPY_AND_ASSIGN(CallFunc);
+};
+    
+        /** Resumes the target. All queued actions will be resumed.
+     *
+     * @param target    A certain target.
      */
-    UBool equals(const SignificantDigitInterval &rhs) const {
-        return ((fMax == rhs.fMax) && (fMin == rhs.fMin));
-    }
+    virtual void resumeTarget(Node *target);
     
-        // Adjust the ruleDay to the monthLen, for non-leap year February 29 rule days.
-    if (ruleDay > monthLen) {
-        ruleDay = monthLen;
-    }
-    
-    
-U_NAMESPACE_END
-    
-    #endif  // !UCONFIG_NO_FORMATTING
-
-    
-        /**
-     * @param keyword for example 'few' or 'other'
-     * @return the index of the plural form corresponding to the keyword, or OTHER
+    /** Pauses all running actions, returning a list of targets whose actions were paused.
+     *
+     * @return  A list of targets whose actions were paused.
      */
-    static int32_t indexOrOtherIndexFromString(const char *keyword) {
-        int32_t i = indexOrNegativeFromString(keyword);
-        return i >= 0 ? i : OTHER;
+    virtual Vector<Node*> pauseAllRunningActions();
+    
+    /** Resume a set of targets (convenience function to reverse a pauseAllRunningActions call).
+     *
+     * @param targetsToResume   A set of targets need to be resumed.
+     */
+    virtual void resumeTargets(const Vector<Node*>& targetsToResume);
+    
+    /** Main loop of ActionManager.
+     * @param dt    In seconds.
+     */
+    virtual void update(float dt);
+    
+protected:
+    // declared in ActionManager.m
+    
+    
+    {// end of actions group
+/// @}
+    
+    FadeOutUpTiles* FadeOutUpTiles::create(float duration, const Size& gridSize)
+{
+    FadeOutUpTiles *action = new (std::nothrow) FadeOutUpTiles();
     }
-    
-    #include 'gtest/gtest.h'
-    
-    double ObjectGeneralInfo60B::lateral_vel(const std::uint8_t* bytes,
-                                         int32_t length) const {
-  Byte t0(bytes + 5);
-  int32_t x = t0.get_byte(0, 6);
-    }
-    
-    unsigned int BaseMapMatrix::GetBinarySize() const { return 0; }
-    
-    
-    {  EXPECT_EQ(bd, bd_golden);
-}
