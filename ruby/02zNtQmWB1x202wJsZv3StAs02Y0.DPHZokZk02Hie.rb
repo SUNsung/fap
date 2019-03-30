@@ -1,92 +1,133 @@
 
         
-        module NavigationHelpers
-  def path_to(page_name)
-    case page_name
-    when /^person_photos page$/
-      person_photos_path(@me.person)
-    when /^the home(?: )?page$/
-      stream_path
-    when /^the mobile path$/
-      force_mobile_path
-    when /^the user applications page$/
-      api_openid_connect_user_applications_path
-    when /^the tag page for '([^\']*)'$/
-      tag_path(Regexp.last_match(1))
-    when /^its ([\w ]+) page$/
-      send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', @it)
-    when /^the mobile ([\w ]+) page$/
-      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', format: 'mobile')
-    when /^the ([\w ]+) page$/
-      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path')
-    when /^my edit profile page$/
-      edit_profile_path
-    when /^my profile page$/
-      person_path(@me.person)
-    when /^my acceptance form page$/
-      invite_code_path(InvitationCode.first)
-    when /^the requestors profile$/
-      person_path(Request.where(recipient_id: @me.person.id).first.sender)
-    when /^'([^\']*)''s page$/
-      p = User.find_by_email(Regexp.last_match(1)).person
-      {path:         person_path(p),
-       # '#diaspora_handle' on desktop, '.description' on mobile
-       special_elem: {selector: '#diaspora_handle, .description', text: p.diaspora_handle}
-      }
-    when /^'([^\']*)''s photos page$/
-      p = User.find_by_email(Regexp.last_match(1)).person
-      person_photos_path p
-    when /^my account settings page$/
-      edit_user_path
-    when /^forgot password page$/
-      new_user_password_path
-    when %r{^'(/.*)'}
-      Regexp.last_match(1)
-    else
-      raise 'Can't find mapping from \'#{page_name}\' to a path.'
-    end
-  end
-    
-      class PostToService < Base
-    def perform(*_args)
-      # don't post to services in cucumber
-    end
-  end
-    
-          delete :destroy, params: {post_id: @message.id, id: like2.id}, format: :json
-      expect(response.status).to eq(404)
-      expect(response.body).to eq(I18n.t('likes.destroy.error'))
-      expect(Like.count).to eq(like_count)
-    end
+              def typecast(paths)
+        paths.map do |path|
+          case path
+          when Pathname, String
+            OptimizedFileSystemResolver.new path.to_s
+          else
+            path
+          end
+        end
+      end
   end
 end
 
     
-      desc <<END
-Run a profile of sass.
-  TIMES=n sets the number of runs. Defaults to 1000.
-  FILE=str sets the file to profile. Defaults to 'complex'.
-  OUTPUT=str sets the ruby-prof output format.
-    Can be Flat, CallInfo, or Graph. Defaults to Flat. Defaults to Flat.
-END
-  task :profile do
-    times  = (ENV['TIMES'] || '1000').to_i
-    file   = ENV['FILE']
-    
-          # @param cache_location [String] see \{#cache\_location}
-      def initialize(cache_location)
-        @cache_location = cache_location
+          test 'when specify an :only option which does not match current action name and is opposite from parent controller' do
+        controller = WithOnlyConditionalFlipped.new
+        controller.process(:index)
+        assert_equal 'With Override Hello index!', controller.response_body
       end
     
-          # @see Base#key
-      def key(name, options)
-        [self.class.name + ':' + File.dirname(File.expand_path(name)),
-         File.basename(name)]
-      end
+    class ActivityPub::OutboxesController < Api::BaseController
+  LIMIT = 20
     
-          it 'list the plugin with his version' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
+            log_action :change_email, @user
+    
+      def maxheight_or_default
+    params[:maxheight].present? ? params[:maxheight].to_i : nil
+  end
+end
+
+    
+      def hub_topic_params
+    @_hub_topic_params ||= Rails.application.routes.recognize_path(hub_topic_uri.path)
+  end
+    
+              # Encodes the Rex::Proto::Kerberos::CredentialCache::Principal into an String
+          #
+          # @return [String] encoded principal
+          def encode
+            encoded = ''
+            encoded << encode_name_type
+            encoded << [components.length].pack('N')
+            encoded << encode_realm
+            encoded << encode_components
+    
+                res = checksum + encrypted
+            res
+          end
+        end
+      end
+    end
+  end
+end
+    
+              # Encodes a Rex::Proto::Kerberos::Model::EncryptedData into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            elems = []
+            etype_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_etype], 0, :CONTEXT_SPECIFIC)
+            elems << etype_asn1
+    
+              # @!attribute key
+          #   @return [Integer] The type of encryption key
+          attr_accessor :type
+          # @!attribute value
+          #   @return [String] the key itself
+          attr_accessor :value
+    
+              # Decodes the error_code field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_error_code(input)
+            input.value[0].value.to_i
+          end
+    
+              # @!attribute type
+          #   @return [Integer] The type of value
+          attr_accessor :type
+          # @!attribute value
+          #   @return [Time] the time of the last request
+          attr_accessor :value
+    
+    desc 'Watch the site and regenerate when it changes'
+task :watch do
+  raise '### You haven't set anything up yet. First run `rake install` to set up an Octopress theme.' unless File.directory?(source_dir)
+  puts 'Starting to watch source with Jekyll and Compass.'
+  system 'compass compile --css-dir #{source_dir}/stylesheets' unless File.exist?('#{source_dir}/stylesheets/screen.css')
+  jekyllPid = Process.spawn({'OCTOPRESS_ENV'=>'preview'}, 'jekyll build --watch')
+  compassPid = Process.spawn('compass watch')
+    
+    
+  # Adds some extra filters used during the category creation process.
+  module Filters
+    
+        def get_cached_gist(gist, file)
+      return nil if @cache_disabled
+      cache_file = get_cache_file_for gist, file
+      File.read cache_file if File.exist? cache_file
+    end
+    
+          Dir.chdir(code_path) do
+        code = file.read
+        @filetype = file.extname.sub('.','') if @filetype.nil?
+        title = @title ? '#{@title} (#{file.basename})' : file.basename
+        url = '/#{code_dir}/#{@file}'
+        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
+        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
+        TemplateWrapper::safe_wrap(source)
+      end
+    end
+  end
+    
+          Dir.chdir(file_path) do
+        contents = file.read
+        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
+          contents = $1.lstrip
+        end
+        contents = pre_filter(contents)
+        if @raw
+          contents
+        else
+          partial = Liquid::Template.parse(contents)
+          context.stack do
+            partial.render(context)
+          end
+        end
       end
     end
   end
