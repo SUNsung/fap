@@ -1,200 +1,77 @@
 
         
-            it 'is OK with no hl' do
-      stub(params).[](:hl) { nil }
-      expect((1..10).select { |i| highlighted?(i) }).to be_empty
+            def as_json
+      @pages
+    end
+    
+        def terminal_width
+      return @terminal_width if defined? @terminal_width
+    
+            css('code code').each do |node|
+          node.before(node.children).remove
+        end
+    
+            css('p > code:first-child:last-child', 'td > code:first-child:last-child').each do |node|
+          next if node.previous.try(:content).present? || node.next.try(:content).present?
+          node.inner_html = node.inner_html.squish.gsub(/<br(\ \/)?>\s*/, '\n')
+          node.content = node.content.strip
+          node.name = 'pre' if node.content =~ /\s/
+          node.parent.before(node.parent.children).remove if node.parent.name == 'p'
+        end
+    
+        it 'returns false if the given string is not a switch' do
+      %w[b ns bar --bar -n a bad arg].each do |s|
+        expect(subject.switch?(s)).to be false
+      end
     end
   end
-end
+    
+    ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
     
-              @bar1 = Agents::DotBar.new(name: 'bar1').tap { |agent|
-            agent.user = users(:bob)
-            agent.sources << @foo
-            agent.save!
-          },
+    # SPECS ===============================================================
     
-        it 'does not output links to other agents outside of the incoming set' do
-      Link.create!(:source_id => agents(:jane_weather_agent).id, :receiver_id => agents(:jane_website_agent).id)
-      Link.create!(:source_id => agents(:jane_website_agent).id, :receiver_id => agents(:jane_rain_notifier_agent).id)
-    
-      describe 'migrating the 'make_message' format' do
-    it 'should work' do
-      expect(LiquidMigrator.convert_make_message('<message>')).to eq('{{message}}')
-      expect(LiquidMigrator.convert_make_message('<new.message>')).to eq('{{new.message}}')
-      expect(LiquidMigrator.convert_make_message('Hello <world>. How is <nested.life>')).to eq('Hello {{world}}. How is {{nested.life}}')
+        if run? && ARGV.any?
+      require 'optparse'
+      OptionParser.new { |op|
+        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
+        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
+        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
+        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
+        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
+        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
+      }.parse!(ARGV.dup)
     end
   end
     
-          expect(Utils.unindent('Hello\n  I am indented')).to eq('Hello\n  I am indented')
+          # Essentially the inverse of +mask_token+.
+      def unmask_token(masked_token)
+        # Split the token into the one-time pad and the encrypted
+        # value and decrypt it
+        token_length = masked_token.length / 2
+        one_time_pad = masked_token[0...token_length]
+        encrypted_token = masked_token[token_length..-1]
+        xor_byte_strings(one_time_pad, encrypted_token)
+      end
     
-        stub_request(:get, /trackings/).to_return(
-      :body => File.read(Rails.root.join('spec/data_fixtures/aftership.json')),
-      :status => 200,
-      :headers => {'Content-Type' => 'text/json'}
-    )
-    
-            if mod
-          if name == 'Index'
-            return slug.split('/')[1..-2].join('/')
-          elsif name == 'Angular'
-            return slug.split('/').last.split('-').first
+          def accepts?(env)
+        cookie_header = env['HTTP_COOKIE']
+        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
+        cookies.each do |k, v|
+          if k == session_key && Array(v).size > 1
+            bad_cookies << k
+          elsif k != session_key && Rack::Utils.unescape(k) == session_key
+            bad_cookies << k
           end
         end
-    
-        self.listener.start
-  end
-    
-            # Creates a TCP connection using Rex::Socket::Tcp
-        #
-        # @return [Rex::Socket::Tcp]
-        def create_tcp_connection
-          self.connection = Rex::Socket::Tcp.create(
-            'PeerHost'   => host,
-            'PeerPort'   => port.to_i,
-            'Context'    => context,
-            'Timeout'    => timeout
-          )
-        end
-    
-    module Rex
-  module Proto
-    module Kerberos
-      module CredentialCache
-        # This class provides a representation of credential times stored in the Kerberos Credential Cache.
-        class Time < Element
-          # @!attribute auth_time
-          #   @return [Integer]
-          attr_accessor :auth_time
-          # @!attribute start_time
-          #   @return [Integer]
-          attr_accessor :start_time
-          # @!attribute end_time
-          #   @return [Integer]
-          attr_accessor :end_time
-          # @!attribute renew_till
-          #   @return [Integer]
-          attr_accessor :renew_till
-    
-              # Encodes the data
-          #
-          # @return [OpenSSL::ASN1::OctetString]
-          def encode_data(data)
-            OpenSSL::ASN1::OctetString.new(data)
-          end
-        end
+        bad_cookies.empty?
       end
-    end
-  end
-end
     
-              # Encodes the checksum field
-          #
-          # @return [OpenSSL::ASN1::OctetString]
-          def encode_checksum
-            OpenSSL::ASN1::OctetString.new(checksum)
-          end
-        end
-      end
-    end
-  end
-end
+            if has_vector?(request, headers)
+          warn env, 'attack prevented by #{self.class}'
     
-              # Decodes the ticket field
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Rex::Proto::Kerberos::Type::Ticket]
-          def decode_ticket(input)
-            Rex::Proto::Kerberos::Model::Ticket.decode(input.value[0])
-          end
-    
-              # Decodes a Rex::Proto::Kerberos::Model::LastRequest
-          #
-          # @param input [String, OpenSSL::ASN1::Sequence] the input to decode from
-          # @return [self] if decoding succeeds
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode(input)
-            case input
-            when String
-              decode_string(input)
-            when OpenSSL::ASN1::Sequence
-              decode_asn1(input)
-            else
-              raise ::RuntimeError, 'Failed to decode LastRequest, invalid input'
-            end
-    
-      def remove_duplicates
-    where = 'WHERE s1.user_id = s2.user_id AND s1.shareable_id = s2.shareable_id AND '\
-      's1.shareable_type = s2.shareable_type AND s1.id > s2.id'
-    if AppConfig.postgres?
-      execute('DELETE FROM share_visibilities AS s1 USING share_visibilities AS s2 #{where}')
-    else
-      execute('DELETE s1 FROM share_visibilities s1, share_visibilities s2 #{where}')
-    end
-  end
-end
-
-    
-    When /^I (?:sign|log) in as '([^']*)'( on the mobile website)?$/ do |email, mobile|
-  @me = User.find_by_email(email)
-  @me.password ||= 'password'
-  automatic_login
-  confirm_login mobile
-end
-    
-    Then /^I should have (\d+) nsfw posts$/ do |num_posts|
-  page.should have_css('.nsfw-shield', count: num_posts.to_i)
-end
-    
-        it 'returns a 401 for a private post when logged out' do
-      bob.like!(@message)
-      sign_out :user
-      get :index, params: {post_id: @message.id}, format: :json
-      expect(response.status).to eq(401)
-    end
-  end
-    
-          it 'should remove participation' do
-        delete :destroy, params: {post_id: post.id}
-        expect(alice.participations.where(:target_id => post.id)).not_to exist
-        expect(response.code).to eq('200')
-      end
-    end
-    
-      def render(context)
-    config_tag(context.registers[:site].config, @key, @tag, @classname)
-  end
-end
-    
-        def get_web_content(url)
-      raw_uri           = URI.parse url
-      proxy             = ENV['http_proxy']
-      if proxy
-        proxy_uri       = URI.parse(proxy)
-        https           = Net::HTTP::Proxy(proxy_uri.host, proxy_uri.port).new raw_uri.host, raw_uri.port
-      else
-        https           = Net::HTTP.new raw_uri.host, raw_uri.port
-      end
-      https.use_ssl     = true
-      https.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      request           = Net::HTTP::Get.new raw_uri.request_uri
-      data              = https.request request
-    end
-  end
-    
-        def render(context)
-      if @img
-        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
-      else
-        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
-      end
-    end
-  end
-end
-    
-        def initialize(tag_name, markup, tokens)
-      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
-      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
-      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
-      super
+      it 'allows for a custom authenticity token param' do
+    mock_app do
+      use Rack::Protection::AuthenticityToken, :authenticity_param => 'csrf_param'
+      run proc { |e| [200, {'Content-Type' => 'text/plain'}, ['hi']] }
     end
