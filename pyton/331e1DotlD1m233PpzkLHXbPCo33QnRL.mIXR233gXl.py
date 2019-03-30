@@ -1,69 +1,118 @@
 
         
         try:
-    input = raw_input
-except NameError:
+    # https://urllib3.readthedocs.io/en/latest/security.html
+    # noinspection PyPackageRequirements
+    import urllib3
+    urllib3.disable_warnings()
+except (ImportError, AttributeError):
+    # In some rare cases, the user may have an old version of the requests
+    # or urllib3, and there is no method called 'disable_warnings.' In these
+    # cases, we don't need to call the method.
+    # They may get some noisy output but execution shouldn't die. Move on.
     pass
     
-        ie_htmls = []
-    for ie in youtube_dl.list_extractors(age_limit=None):
-        ie_html = '<b>{}</b>'.format(ie.IE_NAME)
-        ie_desc = getattr(ie, 'IE_DESC', None)
-        if ie_desc is False:
-            continue
-        elif ie_desc is not None:
-            ie_html += ': {}'.format(ie.IE_DESC)
-        if not ie.working():
-            ie_html += ' (Currently broken)'
-        ie_htmls.append('<li>{}</li>'.format(ie_html))
-    
-    # The suffix of source filenames.
-source_suffix = '.rst'
-    
-            If `sign` is incorrect, /validate call throws an HTTP 556 error
         '''
-        logger = WarningLogger()
-        ie = IqiyiIEWithCredentials(FakeYDL({'logger': logger}))
-        ie._login()
-        self.assertTrue('unable to log in:' in logger.messages[0])
+    req_h = OUT_REQ_HEAD in output_options
+    req_b = OUT_REQ_BODY in output_options
+    resp_h = OUT_RESP_HEAD in output_options
+    resp_b = OUT_RESP_BODY in output_options
+    req = req_h or req_b
+    resp = resp_h or resp_b
     
-            jsi = JSInterpreter('function x3(){return 42;}')
-        self.assertEqual(jsi.call_function('x3'), 42)
+    
+def test_current_version():
+    version = Environment().config['__meta__']['httpie']
+    assert version == __version__
+
+    
+        def test_print_overridable_when_stdout_redirected(self, httpbin):
+        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
+        r = http('--print=h', 'GET', httpbin.url + '/get', env=env)
+        assert HTTP_OK in r
+
+    
+    error_msg = None
+    
+    
+def test_follow_all_redirects_shown(httpbin):
+    r = http('--follow', '--all', httpbin.url + '/redirect/2')
+    assert r.count('HTTP/1.1') == 3
+    assert r.count('HTTP/1.1 302 FOUND', 2)
+    assert HTTP_OK in r
     
         try:
-        fn = inspect.getsourcefile(obj)
+        response = requests_session.request(**kwargs)
     except Exception:
-        fn = None
-    if not fn:
+        raise
+    else:
+        # Existing sessions with `read_only=True` don't get updated.
+        if session.is_new() or not read_only:
+            session.cookies = requests_session.cookies
+            session.save()
+        return response
+    
+        '''
+    if content_range is None:
+        raise ContentRangeError('Missing Content-Range')
+    
+            r = None
         try:
-            fn = inspect.getsourcefile(sys.modules[obj.__module__])
-        except Exception:
-            fn = None
-    if not fn:
-        return
+            r = Redirect.objects.get(site=current_site, old_path=full_path)
+        except Redirect.DoesNotExist:
+            pass
+        if r is None and settings.APPEND_SLASH and not request.path.endswith('/'):
+            try:
+                r = Redirect.objects.get(
+                    site=current_site,
+                    old_path=request.get_full_path(force_append_slash=True),
+                )
+            except Redirect.DoesNotExist:
+                pass
+        if r is not None:
+            if r.new_path == '':
+                return self.response_gone_class()
+            return self.response_redirect_class(r.new_path)
     
-    import sys
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.svm import LinearSVC
-from sklearn.pipeline import Pipeline
-from sklearn.model_selection import GridSearchCV
-from sklearn.datasets import load_files
-from sklearn.model_selection import train_test_split
-from sklearn import metrics
+        def delete(self, session_key=None):
+        if session_key is None:
+            if self.session_key is None:
+                return
+            session_key = self.session_key
+        self._cache.delete(self.cache_key_prefix + session_key)
     
-    plt.figure(2)  # 'banana' shape
-plt.title('Outlier detection on a real data set (boston housing)')
-plt.scatter(X2[:, 0], X2[:, 1], color='black')
-plt.xlim((xx2.min(), xx2.max()))
-plt.ylim((yy2.min(), yy2.max()))
-plt.legend((legend2_values_list[0].collections[0],
-            legend2_values_list[1].collections[0],
-            legend2_values_list[2].collections[0]),
-           (legend2_keys_list[0], legend2_keys_list[1], legend2_keys_list[2]),
-           loc='upper center',
-           prop=matplotlib.font_manager.FontProperties(size=12))
-plt.ylabel('% lower status of the population')
-plt.xlabel('average number of rooms per dwelling')
+        For complete documentation on using Sessions in your code, consult
+    the sessions documentation that is shipped with Django (also available
+    on the Django Web site).
+    '''
+    objects = SessionManager()
     
-    plt.matshow(data, cmap=plt.cm.Blues)
-plt.title('Original dataset')
+                tested_methods = conman.tested_methods_from_spidercls(spidercls)
+            if opts.list:
+                for method in tested_methods:
+                    contract_reqs[spidercls.name].append(method)
+            elif tested_methods:
+                self.crawler_process.crawl(spidercls)
+    
+        def short_desc(self):
+        return 'Edit spider'
+    
+        class _v19_S3Connection(S3Connection):
+        '''A dummy S3Connection wrapper that doesn't do any synchronous download'''
+        def _mexe(self, method, bucket, key, headers, *args, **kwargs):
+            return headers
+    
+    openssl_methods = {
+    METHOD_TLS:    SSL.SSLv23_METHOD,                   # protocol negotiation (recommended)
+    METHOD_SSLv3:  SSL.SSLv3_METHOD,                    # SSL 3 (NOT recommended)
+    METHOD_TLSv10: SSL.TLSv1_METHOD,                    # TLS 1.0 only
+    METHOD_TLSv11: getattr(SSL, 'TLSv1_1_METHOD', 5),   # TLS 1.1 only
+    METHOD_TLSv12: getattr(SSL, 'TLSv1_2_METHOD', 6),   # TLS 1.2 only
+}
+    
+    
+def leaky_relu(x, alpha=0.1):
+    '''渗透 ReLU
+    `o = max(alpha * x, x)`
+    '''
+    return tf.nn.leaky_relu(x, alpha)
