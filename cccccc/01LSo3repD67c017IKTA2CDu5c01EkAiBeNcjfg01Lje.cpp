@@ -1,180 +1,228 @@
 
         
-            private:
-        static Microsoft::MSR::CNTK::InputStreamDescription GetInputStreamDescription(const StreamInformation& s, const DeviceDescriptor& device)
-        {
-            assert(s.m_storageFormat == StorageFormat::Dense || s.m_storageFormat == StorageFormat::SparseCSC);
-            auto CNTKdeviceId = AsCNTKImplDeviceId(device);
-            auto CNTKMatrixType = s.m_storageFormat == StorageFormat::Dense ? Microsoft::MSR::CNTK::MatrixType::DENSE : Microsoft::MSR::CNTK::MatrixType::SPARSE;
-            auto CNTKMatrixFormat = AsCNTKImplMatrixFormat(s.m_storageFormat);
-            return Microsoft::MSR::CNTK::InputStreamDescription(s.m_name, CNTKdeviceId, CNTKMatrixType, CNTKMatrixFormat);
-        }
+        bool swift::parseASTSection(SerializedModuleLoader *SML, StringRef buf,
+                            SmallVectorImpl<std::string> &foundModules) {
+  if (!serialization::isSerializedAST(buf))
+    return false;
+    }
     
-    namespace CNTK
-{
-    Trainer::Trainer(const FunctionPtr& model, const FunctionPtr& lossFunction,
-                     const std::vector<LearnerPtr>& parameterLearners,
-                     const std::vector<ProgressWriterPtr>& progressWriters)
-        : Trainer(model, lossFunction, nullptr, parameterLearners, progressWriters)
+    CacheImpl::ImplTy CacheImpl::create(StringRef Name, const CallBacks &CBs) {
+  llvm::SmallString<32> NameBuf(Name);
+  cache_attributes_t Attrs = {
+    CACHE_ATTRIBUTES_VERSION_2,
+    CBs.keyHashCB,
+    CBs.keyIsEqualCB,
+    nullptr,
+    CBs.keyDestroyCB,
+    CBs.valueReleaseCB,
+    nullptr,
+    nullptr,
+    CBs.UserData,
+    CBs.valueRetainCB,
+  };
+    }
+    
+    
+    {  return forInvalid();
+}
+    
+      using SourceManagerRef = llvm::IntrusiveRefCntPtr<const clang::SourceManager>;
+  auto iter = std::lower_bound(sourceManagersWithDiagnostics.begin(),
+                               sourceManagersWithDiagnostics.end(),
+                               &clangSrcMgr,
+                               [](const SourceManagerRef &inArray,
+                                  const clang::SourceManager *toInsert) {
+    return std::less<const clang::SourceManager *>()(inArray.get(), toInsert);
+  });
+  if (iter == sourceManagersWithDiagnostics.end() ||
+      iter->get() != &clangSrcMgr) {
+    sourceManagersWithDiagnostics.insert(iter, &clangSrcMgr);
+  }
+    
+      IAMResult(DeclName declName, IAMAccessorKind kind, unsigned selfIdx,
+            EffectiveClangContext dc)
+      : name(declName), accessorKind(kind), selfIndex(selfIdx),
+        effectiveDC(dc) {}
+    
+      bool shouldStoreInvocationInDebugInfo() const override;
+    
+    b2Triangle::~b2Triangle(){
+	delete[] x;
+	delete[] y;
+}
+    
+    
+	// ----------------------------------------------------------------------------------------------------
+	//
+    
+    
     {}
-    }
-    
-    // -----------------------------------------------------------------------
-// EpochAccumulatorNode calculates mean values of all samples used in forward pass.
-// -----------------------------------------------------------------------
-    
-      // the read mutex gets dropped and reacquired as part of waitForWork()
-  // The destructor of this sentry wakes up other clients
-  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
-    
-    
-    {
-    {}} // namespace
-    
-      fprintf(p->out,
-          '%13.13s: %s\n',
-          'Distributed',
-          osquery::FLAGS_distributed_plugin.c_str());
-    
-    
-    {
-    {    // If we don't find a serial_number match, we assume this drive information
-    // can only be retrieved by explicitly passing driver information.
-    if (!matched) {
-      results.push_back(std::move(entry.second));
-    }
-  }
-}
-    
-    #include <linux/hw_breakpoint.h>
-#include <linux/perf_event.h>
-    
-    #include <linux/perf_event.h>
-    
-        receiver->setMessageFactory(factory.get());
-    receiver->setRoutingTable(routingTable.get());
-    
-    
-    {} // namespace aria2
-    
-      virtual std::shared_ptr<DHTTask>
-  createPeerAnnounceTask(const unsigned char* infoHash) = 0;
-    
-      void setMessageDispatcher(DHTMessageDispatcher* dispatcher);
-    
-    bool DNSCache::CacheEntry::add(const std::string& addr)
-{
-  for (std::vector<AddrEntry>::const_iterator i = addrEntries_.begin(),
-                                              eoi = addrEntries_.end();
-       i != eoi; ++i) {
-    if ((*i).addr_ == addr) {
-      return false;
-    }
-  }
-  addrEntries_.push_back(AddrEntry(addr));
-  return true;
-}
-    
-    #endif // D_DNS_CACHE_H
 
     
-    Shaky3D* Shaky3D::clone() const
+    		inline SourceAlphaMix GetSourceAlphaMix(void)
+		{
+			return m_sourcealphamix;
+		}
+    
+    static OPUS_INLINE int SATURATE(int a, int b)
 {
-    // no copy constructor
-    auto a = new (std::nothrow) Shaky3D();
-    a->initWithDuration(_duration, _gridSize, _randrange, _shakeZ);
-    a->autorelease();
-    return a;
+   if (a>b)
+      a=b;
+   if (a<-b)
+      a = -b;
+   celt_mips+=3;
+   return a;
 }
     
-        /** Returns the numbers of actions that are running in a certain target. 
-     * Composable actions are counted as 1 action. Example:
-     * - If you are running 1 Sequence of 7 actions, it will return 1.
-     * - If you are running 7 Sequences of 2 actions, it will return 7.
-     *
-     * @param target    A certain target.
-     * @return  The numbers of actions that are running in a certain target.
-     * @js NA
-     */
-    virtual ssize_t getNumberOfRunningActionsInTarget(const Node *target) const;
+    /* (opus_val32)(opus_val16) gives TI compiler a hint that it's 16x16->32 multiply */
+/** 16x16 multiplication where the result fits in 32 bits */
+#define MULT16_16(a,b)     (((opus_val32)(opus_val16)(a))*((opus_val32)(opus_val16)(b)))
     
-    /** Returns the numbers of actions that are running in all targets.
-     * @return  The numbers of actions that are running in all target.
-     * @js NA
-     */
-    virtual ssize_t getNumberOfRunningActions() const;
-    
-            Then once you running ActionTween on the node, the method updateTweenAction will be invoked.
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-class CC_DLL ActionTweenDelegate
-{
+    
+    
+    {
+    {        throw invalid_argument('the input has no solution');
+    }
+};
+    
+    int main() {
+    }
+    
+        vector<int> nums1 = {1, 1, 2};
+    cout << Solution().removeDuplicates(nums1) << endl;
+    
+    using namespace std;
+    
+    // Recursive
+// Time Complexity: O(n), n is the node number in the tree
+// Space Complexity: O(h), h is the height of the tree
+class Solution {
 public:
-    /**
-     * @js NA
-     * @lua NA
-     */
-    virtual ~ActionTweenDelegate() {}
+    vector<int> inorderTraversal(TreeNode* root) {
+    }
     }
     
-        /** Returns a Animation that was previously added.
-     * If the name is not found it will return nil.
-     * You should retain the returned copy if you are going to use it.
-     *
-     * @return A Animation that was previously added. If the name is not found it will return nil.
-     */
-    Animation* getAnimation(const std::string& name);
-    /**
-     * @deprecated. Use getAnimation() instead
-     * @js NA
-     * @lua NA
-     */
-    CC_DEPRECATED_ATTRIBUTE Animation* animationByName(const std::string& name){ return getAnimation(name); }
+                cur = stack.top();
+            stack.pop();
+            res.push_back(cur->val);
+            cur = cur->right;
     
-    std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const cocos2d::Rect &rect, float epsilon)
+    
+    {            res[level].push_back(node->val);
+            if(node->left)
+                q.push(make_pair(node->left, level + 1 ));
+            if(node->right)
+                q.push(make_pair(node->right, level + 1 ));
+        }
+    
+    //--------------------------------------------------------------------------
+//
+//    Assignment Operator
+//
+//--------------------------------------------------------------------------
+RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
+    if (this == &other) {
+        // Source and destination are the same.  Don't do anything.
+        return *this;
+    }
+    }
+    
+    
+    {        if(equalPrefixLength > 0) {
+            if((leftUnit >= 0 && data->isUnsafeBackward(leftUnit, numeric)) ||
+                    (rightUnit >= 0 && data->isUnsafeBackward(rightUnit, numeric))) {
+                // Identical prefix: Back up to the start of a contraction or reordering sequence.
+                do {
+                    --equalPrefixLength;
+                    leftUnit = left.previous(&left);
+                    right.previous(&right);
+                } while(equalPrefixLength > 0 && data->isUnsafeBackward(leftUnit, numeric));
+            }
+            // See the notes in the UTF-16 version.
+        }
+    }
+    
+    int32_t SearchIterator::next(UErrorCode &status)
 {
-    auto size = points.size();
-    // if there are less than 3 points, then we have nothing
-    if(size<3)
-    {
-        log('AUTOPOLYGON: cannot expand points for %s with less than 3 points, e: %f', _filename.c_str(), epsilon);
-        return std::vector<Vec2>();
+    if (U_SUCCESS(status)) {
+        int32_t offset = getOffset();
+        int32_t matchindex  = m_search_->matchedIndex;
+        int32_t     matchlength = m_search_->matchedLength;
+        m_search_->reset = FALSE;
+        if (m_search_->isForwardSearching == TRUE) {
+            int32_t textlength = m_search_->textLength;
+            if (offset == textlength || matchindex == textlength || 
+                (matchindex != USEARCH_DONE && 
+                matchindex + matchlength >= textlength)) {
+                // not enough characters to match
+                setMatchNotFound();
+                return USEARCH_DONE; 
+            }
+        }
+        else {
+            // switching direction. 
+            // if matchedIndex == USEARCH_DONE, it means that either a 
+            // setOffset has been called or that previous ran off the text
+            // string. the iterator would have been set to offset 0 if a 
+            // match is not found.
+            m_search_->isForwardSearching = TRUE;
+            if (m_search_->matchedIndex != USEARCH_DONE) {
+                // there's no need to set the collation element iterator
+                // the next call to next will set the offset.
+                return matchindex;
+            }
+        }
     }
-    ClipperLib::Path subj;
-    ClipperLib::PolyTree solution;
-    ClipperLib::PolyTree out;
-    for(const auto& pt : points)
-    {
-        subj << ClipperLib::IntPoint(pt.x* PRECISION, pt.y * PRECISION);
     }
-    ClipperLib::ClipperOffset co;
-    co.AddPath(subj, ClipperLib::jtMiter, ClipperLib::etClosedPolygon);
-    co.Execute(solution, epsilon * PRECISION);
     
-    ClipperLib::PolyNode* p = solution.GetFirst();
-    if(!p)
-    {
-        log('AUTOPOLYGON: Clipper failed to expand the points');
-        return points;
-    }
-    while(p->IsHole()){
-        p = p->GetNext();
-    }
+    #endif
+
+    
+    
+    {        int32_t length = other.getLength();
+        if (length > getCapacity() && reallocate(length, 0) == NULL) {
+            return setToBogus();
+        }
+        if (length > 0) {
+            uprv_memcpy(getBytes(), other.getBytes(), length);
+        }
+        fFlagAndLength = (fFlagAndLength & 0x80000000) | length;
+        fHashCode = other.fHashCode;
     }
     
     /**
- * PolygonInfo is an object holding the required data to display Sprites.
- * It can be a simple as a triangle, or as complex as a whole 3D mesh
+ * Implement UnicodeReplacer
  */
-class CC_DLL PolygonInfo
-{
-public:
-    /// @name Creators
-    /// @{
-    /**
-     * Creates an empty Polygon info
-     * @memberof PolygonInfo
-     * @return PolygonInfo object
-     */
-    PolygonInfo();
+void StringReplacer::addReplacementSetTo(UnicodeSet& toUnionTo) const {
+    UChar32 ch;
+    for (int32_t i=0; i<output.length(); i+=U16_LENGTH(ch)) {
+    ch = output.char32At(i);
+    UnicodeReplacer* r = data->lookupReplacer(ch);
+    if (r == NULL) {
+        toUnionTo.add(ch);
+    } else {
+        r->addReplacementSetTo(toUnionTo);
     }
     }
+}
+    
+      void __set_request(const ExtensionPluginRequest& val);
+    
+    /// Static map of supported controller types.
+static const std::map<std::string, hardwareDriver>
+    kSmartExplicitDriverToDevice = {
+        {'megaraid_sas', hardwareDriver{'megaraid,', 127}},
+        {'hpsa', hardwareDriver{'cciss,', 14}},
+};
