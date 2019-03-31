@@ -1,226 +1,144 @@
 
         
-        bool CacheImpl::remove(const void *Key) {
-  int Ret = cache_remove(static_cast<cache_t*>(Impl), const_cast<void*>(Key));
-  return Ret == 0;
-}
-    
-    const char *Demangle::getNodeKindString(swift::Demangle::Node::Kind k) {
-  switch (k) {
-#define NODE(ID)                                                               \
-  case Node::Kind::ID:                                                         \
-    return #ID;
-#include 'swift/Demangling/DemangleNodes.def'
-  }
-  return 'Demangle::Node::Kind::???';
-}
-    
-    namespace nw {
-    }
-    
-    // Call method of an object in browser.
-// function CallObjectMethod(id, type, method, args);
-v8::Handle<v8::Value> CallObjectMethod(int routing_id,
-                                       int object_id,
-                                       const std::string& type,
-                                       const std::string& method,
-                                       v8::Handle<v8::Value> args);
-    
-        int menu_id;
-    if (option.GetInteger('submenu', &menu_id))
-      SetSubmenu(dispatcher_host()->GetApiObject<Menu>(menu_id));
-    std::string key;
-    if (option.GetString('key',&key)){
-      enable_shortcut = true;
-      std::string modifiers = '';
-      option.GetString('modifiers',&modifiers);
-      modifiers_mask = GdkModifierType(0);
-      if (modifiers.size() != 0){
-        if (modifiers.find('ctrl') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_CONTROL_MASK);
-        }
-        if (modifiers.find('alt') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_MOD1_MASK);
-        }
-        if (modifiers.find('super') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_SUPER_MASK);
-        }
-        if (modifiers.find('meta') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_META_MASK);
-        }
         
-        if (modifiers.find('shift') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_SHIFT_MASK);
-        }
-    }
-    }
+    {  DISALLOW_COPY_AND_ASSIGN(AutoUpdater);
+};
     
-    bool NwClipboardGetListSyncFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  std::unique_ptr<GetListSync::Params> params(GetListSync::Params::Create(*args_));
-  EXTENSION_FUNCTION_VALIDATE(params.get());
-  std::unique_ptr<ClipboardReader> reader(new ClipboardReader());
-    }
-    
-    namespace extensions {
+    void Event::SetSenderAndMessage(content::RenderFrameHost* sender,
+                                IPC::Message* message) {
+  DCHECK(!sender_);
+  DCHECK(!message_);
+  sender_ = sender;
+  message_ = message;
     }
     
-     protected:
-  ~NwObjCallObjectMethodSyncFunction() override;
+    Delegate* AutoUpdater::GetDelegate() {
+  return delegate_;
+}
     
+    bool AboutProtocolHandler::IsSafeRedirectTarget(const GURL& location) const {
+  return false;
+}
     
-    {    private:
-      DISALLOW_COPY_AND_ASSIGN(NwScreenGetScreensFunction);      
-  };
+    void URLRequestAboutJob::Kill() {
+  weak_ptr_factory_.InvalidateWeakPtrs();
+  URLRequestJob::Kill();
+}
     
-    // A singleton class to hold common caffe stuff, such as the handler that
-// caffe is going to use for cublas, curand, etc.
-class Caffe {
- public:
-  ~Caffe();
-    }
+    #ifndef ATOM_BROWSER_NET_URL_REQUEST_ABOUT_JOB_H_
+#define ATOM_BROWSER_NET_URL_REQUEST_ABOUT_JOB_H_
     
-      /// @brief The spatial dimensions of the input.
-  inline int input_shape(int i) {
-    return (*bottom_shape_)[channel_axis_ + i];
+    void OffscreenViewProxy::OnEvent(ui::Event* event) {
+  if (view_) {
+    view_->OnEvent(event);
   }
-  // reverse_dimensions should return true iff we are implementing deconv, so
-  // that conv helpers know which dimensions are which.
-  virtual bool reverse_dimensions() = 0;
-  // Compute height_out_ and width_out_ from other parameters.
-  virtual void compute_output_shape() = 0;
+}
     
+    namespace internal {
+    }
     
-    {  /**
-   * @brief Computes the error gradient w.r.t. the BNLL inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x}
-   *      @f$ if propagate_down[0]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    DelayedNativeViewHost::~DelayedNativeViewHost() {}
+    
+    #include 'unicode/utypes.h'
+    
+    U_NAMESPACE_BEGIN
+    
+    SharedBreakIterator::~SharedBreakIterator() {
+  delete ptr;
+}
+    
+    U_NAMESPACE_END
+    
+    class U_I18N_API SharedCalendar : public SharedObject {
+public:
+    SharedCalendar(Calendar *calToAdopt) : ptr(calToAdopt) { }
+    virtual ~SharedCalendar();
+    const Calendar *get() const { return ptr; }
+    const Calendar *operator->() const { return ptr; }
+    const Calendar &operator*() const { return *ptr; }
+private:
+    Calendar *ptr;
+    SharedCalendar(const SharedCalendar &);
+    SharedCalendar &operator=(const SharedCalendar &);
 };
     
+    U_NAMESPACE_END
     
-    {}  // namespace caffe
+                OrderedUnit(int id, std::wstring name, std::wstring abbreviation, int order, bool isConversionSource = false, bool isConversionTarget = false, bool isWhimsical = false)
+                : UnitConversionManager::Unit(id, name, abbreviation, isConversionSource, isConversionTarget, isWhimsical), order(order)
+            {
+            }
     
-    
+    void TitleBarHelper::RegisterForLayoutChanged()
+{
+    m_layoutChangedToken =
+        m_coreTitleBar->LayoutMetricsChanged += ref new TypedEventHandler<CoreApplicationViewTitleBar^, Object^>(
+        [this](CoreApplicationViewTitleBar^ cTitleBar, Object^)
     {
-    {  // Recursive copy function: this is similar to crop_copy() but loops over all
-  // but the last two dimensions to allow for ND cropping while still relying on
-  // a CUDA kernel for the innermost two dimensions for performance reasons.  An
-  // alterantive implementation could rely on the kernel more by passing
-  // offsets, but this is problematic because of its variable length.
-  // Since in the standard (N,C,W,H) case N,C are usually not cropped a speedup
-  // could be achieved by not looping the application of the copy_kernel around
-  // these dimensions.
-  void crop_copy_gpu(const vector<Blob<Dtype>*>& bottom,
-                const vector<Blob<Dtype>*>& top,
-                const vector<int>& offsets,
-                vector<int> indices,
-                int cur_dim,
-                const Dtype* src_data,
-                Dtype* dest_data,
-                bool is_forward);
-};
-}  // namespace caffe
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include 'caffe/layers/softmax_layer.hpp'
-    
-    #endif
-
-    
-    /* using override */ using HPHP::jit::Reg64;
-/* using override */ using HPHP::jit::RegXMM;
-/* using override */ using HPHP::jit::RegSF;
-/* using override */ using HPHP::jit::MemoryRef;
-/* using override */ using HPHP::jit::Immed;
-/* using override */ using HPHP::CodeAddress;
-/* using override */ using HPHP::jit::ConditionCode;
-    
-    private:
-  APCCollection();
-  ~APCCollection();
-  static APCHandle::Pair WrapArray(APCHandle::Pair, CollectionType);
-    
-    namespace HPHP {
-///////////////////////////////////////////////////////////////////////////////
-    }
-    
-    void logAHMSubMapWarning(folly::StringPiece mapName) {
-  StackTrace st;
-  logPerfWarning(
-    'AtomicHashMap overflow',
-    [&](StructuredLogEntry& cols) {
-      cols.setStr('map_name', mapName);
-      cols.setStackTrace('stack', st);
-    }
-  );
+        // Update title bar control size as needed to account for system size changes
+        SetTitleBarHeight(cTitleBar->Height);
+    });
 }
     
-    #include 'hphp/runtime/base/perf-warning-inl.h'
+        private:
+        Windows::UI::Xaml::Controls::ListView^ m_tokenList;
+        Windows::UI::Xaml::Controls::MenuFlyout^ m_displayFlyout;
+        bool m_doAnimate;
+        bool m_resultAnimate;
+        bool m_isLastAnimatedInScientific;
+        bool m_isLastAnimatedInProgrammer;
+        bool m_IsLastFlyoutMemory = false;
+        bool m_IsLastFlyoutHistory = false;
     
-    //////////////////////////////////////////////////////////////////////
+    #include 'Views/Memory.g.h'
+#include 'Common/TitleBarHelper.h'
+#include 'Converters/BooleanNegationConverter.h'
+#include 'Converters/VisibilityNegationConverter.h'
+#include 'CalcViewModel/StandardCalculatorViewModel.h'
+    
+        // out_of_range.109
+    try
+    {
+        // try to use an array index that is not a number
+        json::reference ref = j.at('/array/one'_json_pointer);
+    }
+    catch (json::parse_error& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+    
+        // read-only access
     
     
-    {    return 0;
+    {    std::cout << null << '\n';
+    std::cout << *res2.first << ' ' << std::boolalpha << res2.second << '\n';
 }
 
     
-    
-/// Definition for a binary tree node.
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-    
-            vector<int> res;
-        if(root == NULL)
-            return res;
-    
-    // Another Classic Non-Recursive algorithm for preorder traversal
-// Time Complexity: O(n), n is the node number in the tree
-// Space Complexity: O(h), h is the height of the tree
-class Solution {
+    class WriteCallback {
+ public:
+  virtual ~WriteCallback() {}
     }
     
-    /// Definition for a binary tree node.
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
+      // Attempt to read a key using the snapshot.  This will fail since
+  // the previous write outside this txn conflicts with this read.
+  read_options.snapshot = snapshot;
+  s = txn->GetForUpdate(read_options, 'abc', &value);
+  assert(s.IsBusy());
     
-    using namespace std;
+    // Supported only for Leveled compaction
+Status SuggestCompactRange(DB* db, ColumnFamilyHandle* column_family,
+                           const Slice* begin, const Slice* end);
+Status SuggestCompactRange(DB* db, const Slice* begin, const Slice* end);
+    
+      // Number of keys between restart points for delta encoding of keys.
+  // This parameter can be changed dynamically.  Most clients should
+  // leave this parameter alone.
+  //
+  // Default: 16
+  int block_restart_interval;
+    
+    #include <map>
+#include <string>
+#include <unordered_set>
+#include <vector>
