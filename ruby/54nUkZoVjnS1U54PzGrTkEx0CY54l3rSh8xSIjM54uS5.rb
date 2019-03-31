@@ -1,83 +1,110 @@
 
         
-          it 'accepts a Fixnum' do
-    sleep(0).should be_close(0, 2)
-  end
-    
-      it 'has no effect on immediate values' do
-    [nil, true, false].each do |v|
-      v.taint
-      v.tainted?.should == false
-    end
-  end
-    
-        it 'doesn't call the processor if the condition method returns false' do
-      uploader_class.process :resize => [200, 300], :if => :false?
-      uploader_class.process :fancy, :if => :false?
-      expect(uploader).to receive(:false?).with('test.jpg').twice.and_return(false)
-      expect(uploader).not_to receive(:resize)
-      expect(uploader).not_to receive(:fancy)
-      uploader.process!('test.jpg')
+              File.write(new_path, '1')
+      false
     end
     
-    Given /^that the uploader class has a version named '([^\']+)'$/ do |name|
-  @klass.version(name)
-end
+          it 'adds verbose flag to command if verbose is set to true' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            carthage(
+              verbose: true
+            )
+          end').runner.execute(:test)
     
-          private
-      def interpolate_paperclip_path(path)
-        mappings.each_pair.inject(path) do |agg, pair|
-          agg.gsub(':#{pair[0]}') { pair[1].call(self, self.paperclip_style).to_s }
-        end
+          it 'handles the extensions parameter with multiple elements correctly' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', extensions: ['m', 'h'])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}' --include=\\*.{m,h}')
       end
-    end # Paperclip
-  end # Compatibility
-end # CarrierWave
-
     
-          # both 'before' and 'after' can be string when 'mount_on' option is set
-      before = before.reject(&:blank?).map do |value|
-        if value.is_a?(String)
-          uploader = blank_uploader
-          uploader.retrieve_from_store!(value)
-          uploader
-        else
-          value
-        end
-      end
-      after_paths = after.reject(&:blank?).map do |value|
-        if value.is_a?(String)
-          uploader = blank_uploader
-          uploader.retrieve_from_store!(value)
-          uploader
-        else
-          value
-        end.path
-      end
-      before.each do |uploader|
-        if uploader.remove_previously_stored_files_after_update and not after_paths.include?(uploader.path)
-          uploader.remove!
-        end
-      end
+          it 'works with select regex' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            oclint(
+              compile_commands: './fastlane/spec/fixtures/oclint/compile_commands.json',
+              select_regex: /AppDelegate/
+            )
+          end').runner.execute(:test)
+    
+        it 'shell-escapes environment variable values' do
+      message = 'A message'
+      path = '/usr/my local/bin'
+      command = command_from_args({ 'PATH' => path }, 'git', 'commit', '-m', message)
+      expect(command).to eq('PATH=#{path.shellescape} git commit -m #{message.shellescape}')
     end
     
-          class HavePermissions # :nodoc:
-        def initialize(expected)
-          @expected = expected
-        end
-    
-            if options[:bootstrap]
-          template 'config/initializers/simple_form_bootstrap.rb'
-        elsif options[:foundation]
-          template 'config/initializers/simple_form_foundation.rb'
-        end
-    
-        def translate_error_notification
-      lookups = []
-      lookups << :'#{object_name}'
-      lookups << :default_message
-      lookups << 'Please review the problems below:'
-      I18n.t(lookups.shift, scope: :'simple_form.error_notification', default: lookups)
-    end
+    class Array
+  def shelljoin
+    CrossplatformShellwords.shelljoin(self)
   end
 end
+    
+            keychain = 'keychain with spaces.keychain'
+        cmd = %r{curl -f -o (([A-Z]\:)?\/.+) https://developer\.apple\.com/certificationauthority/AppleWWDRCA.cer && security import \1 -k #{Regexp.escape(keychain.shellescape)}}
+        require 'open3'
+    
+    puts('[WARNING] You are calling #{tool_name} directly. Usage of the tool name without the `fastlane` prefix is deprecated in fastlane 2.0'.yellow)
+puts('Please update your scripts to use `fastlane #{tool_name} #{full_params}` instead.'.yellow)
+    
+            def create_labels
+          time = Time.zone.now
+          rows = []
+          target_id = find_target_id
+    
+          # project - An instance of `Project`.
+      # object - The object to look up or set a database ID for.
+      def initialize(project, object)
+        @project = project
+        @object = object
+      end
+    
+          def action_name(env)
+        if env[CONTROLLER_KEY]
+          action_for_rails(env)
+        elsif env[ENDPOINT_KEY]
+          action_for_grape(env)
+        end
+      end
+    
+      it 'seeds the RNG correctly and repeatably' do
+    srand(10)
+    x = rand
+    srand(10)
+    rand.should == x
+  end
+    
+        $?.should be_an_instance_of Process::Status
+    $?.success?.should == true
+    $?.exitstatus.should == 0
+  end
+    
+          def create_worker_file
+        template 'worker.rb.erb', File.join('app/workers', class_path, '#{file_name}_worker.rb')
+      end
+    
+        # Creating the Redis#brpop command takes into account any
+    # configured queue weights. By default Redis#brpop returns
+    # data from the first queue that has pending elements. We
+    # recreate the queue command each time we invoke Redis#brpop
+    # to honor weights and avoid queue starvation.
+    def queues_cmd
+      if @strictly_ordered_queues
+        @queues
+      else
+        queues = @queues.shuffle.uniq
+        queues << TIMEOUT
+        queues
+      end
+    end
+    
+        def self.job_hash_context(job_hash)
+      # If we're using a wrapper class, like ActiveJob, use the 'wrapped'
+      # attribute to expose the underlying thing.
+      klass = job_hash['wrapped'] || job_hash['class']
+      bid = job_hash['bid']
+      '#{klass} JID-#{job_hash['jid']}#{' BID-#{bid}' if bid}'
+    end
+    
+        def call(env)
+      app.call(env)
+    end
