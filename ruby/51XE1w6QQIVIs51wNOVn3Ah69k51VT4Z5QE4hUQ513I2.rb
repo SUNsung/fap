@@ -1,96 +1,132 @@
 
         
-                result = Fastlane::FastFile.new.parse('lane :test do
-          add_git_tag ({
-            tag: '#{tag}',
-            message: '#{message}',
-            force: true
-          })
-        end').runner.execute(:test)
+                # Download a file from the remote machine to the local machine.
+        #
+        # @param [String] from Path of the file on the remote machine.
+        # @param [String] to Path of where to save the file locally.
+        def download(from, to)
+        end
     
-          it 'Does not use pattern matching for tag name if so requested' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          changelog_from_git_commits()
-        end').runner.execute(:test)
+            # Initializes the system. Any subclasses MUST make sure this
+        # method is called on the parent. Therefore, if a subclass overrides
+        # `initialize`, then you must call `super`.
+        def initialize(vm)
+          @vm = vm
+        end
     
-    # Here be monkey patches
-    
-      if FastlaneCore::CommandExecutor.which('grep')
-    if FastlaneCore::Helper.windows?
-      compare_string = simulate_windows_shell_unwrapping(compare_string)
-    else
-      compare_string = simulate_normal_shell_unwrapping(compare_string)
-    end
-    compare_command = 'grep 'foo' #{escaped}'
-    expected_compare_error = 'grep: ' + compare_string + ': No such file or directory'
-  elsif FastlaneCore::CommandExecutor.which('find')
-    compare_string = simulate_normal_shell_unwrapping(compare_string)
-    compare_string = compare_string.upcase
-    compare_command = 'find \'foo\' #{escaped}'
-    expected_compare_error = 'File not found - ' + compare_string
-  end
-    
-    Then(/^file symlinks are created in the new release$/) do
-  TestApp.linked_files.each do |file|
-    run_vagrant_command(test_symlink_exists(TestApp.current_path.join(file)))
-  end
-end
-    
-    Given(/^file '(.*?)' does not exist in shared path$/) do |file|
-  file_shared_path = TestApp.shared_path.join(file)
-  run_vagrant_command('mkdir -p #{TestApp.shared_path}')
-  run_vagrant_command('touch #{file_shared_path} && rm #{file_shared_path}')
-end
-    
-    module VagrantHelpers
-  extend self
-    
-          attr_reader :validators
-    
-    %i(git_strategy hg_strategy svn_strategy).each do |strategy|
-  validate(strategy) do |key, _value|
-    warn(
-      '[Deprecation Warning] #{key} is deprecated and will be removed in '\
-      'Capistrano 3.7.0.\n'\
-      'https://github.com/capistrano/capistrano/blob/master/UPGRADING-3.7.md'
-    )
-  end
-end
-    
-              inventory_unit.transaction do
-            if inventory_unit.update_attributes(inventory_unit_params)
-              fire
-              render :show, status: 200
-            else
-              invalid_resource!(inventory_unit)
-            end
+            # This registers a plugin. This should _NEVER_ be called by the public
+        # and should only be called from within Vagrant. Vagrant will
+        # automatically register V1 plugins when a name is set on the
+        # plugin.
+        def register(plugin)
+          if !@registered.include?(plugin)
+            @logger.info('Registered plugin: #{plugin.name}')
+            @registered << plugin
           end
         end
     
-            def show
-          authorize! :admin, ReturnAuthorization
-          @return_authorization = order.return_authorizations.accessible_by(current_ability, :read).find(params[:id])
-          respond_with(@return_authorization)
-        end
-    
-              state = @states.last
-          respond_with(@states) if stale?(state)
-        end
-    
-            def destroy
-          authorize! :destroy, stock_location
-          stock_location.destroy
-          respond_with(stock_location, status: 204)
-        end
-    
-            def taxonomy_params
-          if params[:taxonomy] && !params[:taxonomy].empty?
-            params.require(:taxonomy).permit(permitted_taxonomy_attributes)
+                    raise Errors::VMNoMatchError if machines.empty?
+              else
+                # String name, just look for a specific VM
+                @logger.debug('Finding machine that match name: #{name}')
+                machines << get_machine.call(name.to_sym)
+                raise Errors::VMNotFoundError, name: name if !machines[0]
+              end
+            end
           else
-            {}
+            # No name was given, so we return every VM in the order
+            # configured.
+            @logger.debug('Loading all machines...')
+            machines = @env.machine_names.map do |machine_name|
+              get_machine.call(machine_name)
+            end
+          end
+    
+            # This contains all the registered host capabilities.
+        #
+        # @return [Hash<Symbol, Registry>]
+        attr_reader :host_capabilities
+    
+            # Converts this configuration object to JSON.
+        def to_json(*a)
+          instance_variables_hash.to_json(*a)
+        end
+    
+    module Vagrant
+  module Plugin
+    module V2
+      # This class maintains a list of all the registered plugins as well
+      # as provides methods that allow querying all registered components of
+      # those plugins as a single unit.
+      class Manager
+        attr_reader :registered
+    
+          if res[2][IAX_IE_CHALLENGE_DATA]
+        self.dcall = res[0][0]
+        chall = res[2][IAX_IE_CHALLENGE_DATA]
+      end
+    
+        data =
+    [   # Maximum access
+      0x00, 0x00,
+      # Reserved
+      0x00, 0x00
+    ].pack('C*') +
+    console_session_id +
+    [
+      0x00, 0x00, 0x00, 0x08,
+      # Cipher 0
+      0x00, 0x00, 0x00, 0x00,
+      0x01, 0x00, 0x00, 0x08,
+      # Cipher 0
+      0x00, 0x00, 0x00, 0x00,
+      0x02, 0x00, 0x00, 0x08,
+      # No Encryption
+      0x00, 0x00, 0x00, 0x00
+    ].pack('C*')
+    
+              # Encodes the checksum field
+          #
+          # @return [OpenSSL::ASN1::OctetString]
+          def encode_checksum
+            OpenSSL::ASN1::OctetString.new(checksum)
           end
         end
       end
     end
   end
 end
+    
+        def log_http_get_files(files, from, cached = false)
+      return if files.empty?
+      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
+      if cached
+        puts dark green s
+      else
+        puts dark cyan s
+      end
+    end
+    
+      # The test environment is used exclusively to run your application's
+  # test suite. You never need to work with it otherwise. Remember that
+  # your test database is 'scratch space' for the test suite and is wiped
+  # and recreated between test runs. Don't rely on the data there!
+  config.cache_classes = true
+    
+    LogStash::Bundler.setup!
+    
+          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
+      def left_shift int, shift
+        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
+        # 1>>31, 2**32
+        (r & 2147483648) == 0 ? r : r - 4294967296
+      end
+    
+          def has_header
+        if @header
+          @header.formatted_data.strip.empty? ? false : true
+        else
+          @header = (@page.header || false)
+          !!@header
+        end
+      end
