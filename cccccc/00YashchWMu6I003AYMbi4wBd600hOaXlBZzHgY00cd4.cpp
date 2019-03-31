@@ -1,138 +1,115 @@
 
         
-        namespace atom {
-    }
+        // Convert an AttrValue with type `type` to the Python representation for
+// that value.
+string AttrValueToPython(const string& type, const AttrValue& value,
+                         const string& dtype_module = 'tf.');
     
-      // Wrap TrackableObject into a class that SupportsUserData.
-  void AttachAsUserData(base::SupportsUserData* wrapped);
+    REGISTER_OP('Invalid')
+    .Attr('invalid attr: int32')  // invalid since the name has a space.
+    .Doc(R'doc(
+An op to test that invalid ops do not successfully generate invalid python code.
+)doc');
     
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    {}  // namespace auto_updater
+    // Creates a numpy array with shapes specified by dim_size and dims and content
+// in data. The array does not own the memory, and destructor will be called to
+// release it. If the status is not ok the caller is responsible for releasing
+// the memory.
+Status ArrayFromMemory(int dim_size, npy_intp* dims, void* data, DataType dtype,
+                       std::function<void()> destructor, PyObject** result);
+    
+    #endif  // TENSORFLOW_PYTHON_LIB_CORE_PY_FUNC_H_
 
     
-    namespace atom {
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+      bool operator==(const DeviceOptions& other) const {
+    return flags_ == other.flags_;
+  }
+    
+    namespace swift {
     }
     
-        // Create new font
-    if (!font_cfg->MergeMode)
-        Fonts.push_back(IM_NEW(ImFont));
-    else
-        IM_ASSERT(!Fonts.empty() && 'Cannot use MergeMode for the first font'); // When using MergeMode make sure that a font has already been added before. You can use ImGui::GetIO().Fonts->AddFontDefault() to add the default imgui font.
+    #if defined(__APPLE__)
+#include 'Darwin/Cache-Mac.cpp'
+#else
     
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_IMPL_API void     ImGui_Marmalade_InvalidateDeviceObjects();
-IMGUI_IMPL_API bool     ImGui_Marmalade_CreateDeviceObjects();
+    void DiverseStackBase::pushNewStorageSlow(std::size_t needed) {
+  bool wasInline = isAllocatedInline();
+    }
     
-        // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
     
-            // Start the Dear ImGui frame
-        ImGui_ImplOpenGL2_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
+    {    // Must be 'const' or nothing.
+    clang::Qualifiers quals = pointee.getQualifiers();
+    bool isConst = quals.hasConst();
+    quals.removeConst();
+    if (quals.empty()) {
+      if (auto record = pointee->getAs<clang::RecordType>()) {
+        auto recordDecl = record->getDecl();
+        if (recordDecl->hasAttr<clang::ObjCBridgeAttr>() ||
+            recordDecl->hasAttr<clang::ObjCBridgeMutableAttr>() ||
+            recordDecl->hasAttr<clang::ObjCBridgeRelatedAttr>() ||
+            isKnownCFTypeName(typedefDecl->getName())) {
+          return forRecord(isConst, record->getDecl());
+        }
+      } else if (pointee->isVoidType()) {
+        if (typedefDecl->hasAttr<clang::ObjCBridgeAttr>() ||
+            isKnownCFTypeName(typedefDecl->getName())) {
+          return isConst ? forConstVoid() : forVoid();
+        }
+      }
+    }
+  }
     
-        // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
     
-        // Will project scissor/clipping rectangles into framebuffer space
-    ImVec2 clip_off = draw_data->DisplayPos;         // (0,0) unless using multi-viewports
-    ImVec2 clip_scale = draw_data->FramebufferScale; // (1,1) unless using retina display which are often (2,2)
-    
-      virtual void addPeriodicTask1(const std::shared_ptr<DHTTask>& task) = 0;
-    
-    void DHTTaskQueueImpl::executeTask()
-{
-  A2_LOG_DEBUG('Updating periodicTaskQueue1');
-  periodicTaskQueue1_.update();
-  A2_LOG_DEBUG('Updating periodicTaskQueue2');
-  periodicTaskQueue2_.update();
-  A2_LOG_DEBUG('Updating immediateTaskQueue');
-  immediateTaskQueue_.update();
+bool Mangle::isNonAscii(StringRef str) {
+  for (unsigned char c : str) {
+    if (c >= 0x80)
+      return true;
+  }
+  return false;
 }
     
-      virtual ~DHTTokenUpdateCommand();
-    
-        PrintEnv();
-    SharedState shared(this);
-    std::vector<ThreadState*> threads(num_threads_);
-    for (uint32_t i = 0; i < num_threads_; i++) {
-      threads[i] = new ThreadState(i, &shared);
-      env->StartThread(ThreadBody, threads[i]);
+    string Status::ToString() const {
+  if (error_code_ == error::OK) {
+    return 'OK';
+  } else {
+    if (error_message_.empty()) {
+      return error::CodeEnumToString(error_code_);
+    } else {
+      return error::CodeEnumToString(error_code_) + ':' +
+          error_message_;
     }
-    {
-      MutexLock l(shared.GetMutex());
-      while (!shared.AllInitialized()) {
-        shared.GetCondVar()->Wait();
-      }
-      // Record start time
-      uint64_t start_time = env->NowMicros();
-    }
+  }
+}
     
-      // Doesn't include records skipped because of
-  // CompactionFilter::Decision::kRemoveAndSkipUntil.
-  int64_t num_record_drop_user = 0;
+    // integral_constant, defined in tr1, is a wrapper for an integer
+// value. We don't really need this generality; we could get away
+// with hardcoding the integer type to bool. We use the fully
+// general integer_constant for compatibility with tr1.
     
-      // open DB with two column families
-  std::vector<ColumnFamilyDescriptor> column_families;
-  // have to open default column family
-  column_families.push_back(ColumnFamilyDescriptor(
-      kDefaultColumnFamilyName, ColumnFamilyOptions()));
-  // open the new one, too
-  column_families.push_back(ColumnFamilyDescriptor(
-      'new_cf', ColumnFamilyOptions()));
-  std::vector<ColumnFamilyHandle*> handles;
-  s = DB::Open(DBOptions(), kDBPath, column_families, &handles, &db);
-  assert(s.ok());
+    using google::protobuf::io::FileInputStream;
+using google::protobuf::io::GzipInputStream;
     
-    // Example structure that describes a compaction task.
-struct CompactionTask {
-  CompactionTask(
-      DB* _db, Compactor* _compactor,
-      const std::string& _column_family_name,
-      const std::vector<std::string>& _input_file_names,
-      const int _output_level,
-      const CompactionOptions& _compact_options,
-      bool _retry_on_fail)
-          : db(_db),
-            compactor(_compactor),
-            column_family_name(_column_family_name),
-            input_file_names(_input_file_names),
-            output_level(_output_level),
-            compact_options(_compact_options),
-            retry_on_fail(_retry_on_fail) {}
-  DB* db;
-  Compactor* compactor;
-  const std::string& column_family_name;
-  std::vector<std::string> input_file_names;
-  int output_level;
-  CompactionOptions compact_options;
-  bool retry_on_fail;
+    #ifdef _WIN32
+#ifndef STDIN_FILENO
+#define STDIN_FILENO 0
+#endif
+#ifndef STDOUT_FILENO
+#define STDOUT_FILENO 1
+#endif
+#endif
+    
+    class GogoDataStripper : public DataStripper {
+ private:
+  virtual bool ShouldBeClear(const FieldDescriptor *field) {
+    return field->type() == FieldDescriptor::TYPE_GROUP;
+  }
 };
-    
-      // destroy and open DB
-  DB* db;
-  Status s = DestroyDB(kDBPath, Options(db_opt, cf_descs[0].options));
-  assert(s.ok());
-  s = DB::Open(Options(db_opt, cf_descs[0].options), kDBPath, &db);
-  assert(s.ok());
-    
-      // Set the number of background threads that will be executing the
-  // scheduled jobs.
-  virtual void SetBackgroundThreads(int num) = 0;
-  virtual int GetBackgroundThreads() = 0;
-    
-    // Options to control the behavior of a database (passed to
-// DB::Open). A LevelDBOptions object can be initialized as though
-// it were a LevelDB Options object, and then it can be converted into
-// a RocksDB Options object.
-struct LevelDBOptions {
-  // -------------------
-  // Parameters that affect behavior
-    }
