@@ -1,255 +1,381 @@
 
         
-        #include <google/protobuf/compiler/command_line_interface.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/io/printer.h>
-    
-    ImmutableGeneratorFactory::ImmutableGeneratorFactory(
-    Context* context) : context_(context) {
-}
-ImmutableGeneratorFactory::~ImmutableGeneratorFactory() {}
-    
-    
-    {  string comments;
-  SourceLocation location;
-  if (descriptor_->GetSourceLocation(&location)) {
-    comments = BuildCommentsString(location, true);
-  } else {
-    comments = '';
-  }
-  variables_['comments'] = comments;
-}
-    
-    // Verify that ByteSink is subclassable and Flush() overridable.
-class FlushingByteSink : public StringByteSink {
- public:
-  explicit FlushingByteSink(string* dest) : StringByteSink(dest) {}
-  virtual void Flush() { Append('z', 1); }
- private:
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(FlushingByteSink);
-};
-    
-    Status& Status::operator=(const Status& other) {
-  error_code_ = other.error_code_;
-  error_message_ = other.error_message_;
-  return *this;
-}
-    
-    class CopyNoAssign {
- public:
-  explicit CopyNoAssign(int value) : foo(value) {}
-  CopyNoAssign(const CopyNoAssign& other) : foo(other.foo) {}
-  int foo;
- private:
-  const CopyNoAssign& operator=(const CopyNoAssign&);
-};
-    
-    TEST(StructurallyValidTest, ValidUTF8String) {
-  // On GCC, this string can be written as:
-  //   'abcd 1234 - \u2014\u2013\u2212'
-  // MSVC seems to interpret \u differently.
-  string valid_str('abcd 1234 - \342\200\224\342\200\223\342\210\222 - xyz789');
-  EXPECT_TRUE(IsStructurallyValidUTF8(valid_str.data(),
-                                      valid_str.size()));
-  // Additional check for pointer alignment
-  for (int i = 1; i < 8; ++i) {
-    EXPECT_TRUE(IsStructurallyValidUTF8(valid_str.data() + i,
-                                        valid_str.size() - i));
-  }
-}
-    
-    // or_ is a template || operator.
-// or_<A, B>::value evaluates 'A::value || B::value'.
-template<typename A, typename B>
-struct or_ : public integral_constant<bool, (A::value || B::value)> {
-};
-    
-    #include <google/protobuf/io/gzip_stream.h>
-#include <google/protobuf/io/zero_copy_stream_impl.h>
-    
-    #ifndef STORAGE_LEVELDB_DB_BUILDER_H_
-#define STORAGE_LEVELDB_DB_BUILDER_H_
-    
-    Status DumpTable(Env* env, const std::string& fname, WritableFile* dst) {
-  uint64_t file_size;
-  RandomAccessFile* file = nullptr;
-  Table* table = nullptr;
-  Status s = env->GetFileSize(fname, &file_size);
-  if (s.ok()) {
-    s = env->NewRandomAccessFile(fname, &file);
-  }
-  if (s.ok()) {
-    // We use the default comparator, which may or may not match the
-    // comparator used in this database. However this should not cause
-    // problems since we only use Table operations that do not require
-    // any comparisons.  In particular, we do not call Seek or Prev.
-    s = Table::Open(Options(), file, file_size, &table);
-  }
-  if (!s.ok()) {
-    delete table;
-    delete file;
-    return s;
+        void ModelAnalyzer::PrintNodeInfo(const NodeDef* node,
+                                  const GraphProperties& properties, bool debug,
+                                  std::ostream& os) const {
+  os << node->name() << ' [' << node->op() << ']' << std::endl;
+  if (properties.HasOutputProperties(node->name())) {
+    const std::vector<OpInfo::TensorProperties>& props =
+        properties.GetOutputProperties(node->name());
+    for (int i = 0; i < props.size(); ++i) {
+      const OpInfo::TensorProperties& prop = props[i];
+      os << '\t'
+         << 'output ' << i << ' (' << DataTypeString(prop.dtype())
+         << ') has shape ';
+      if (prop.shape().unknown_rank()) {
+        os << '?';
+      } else {
+        os << '[';
+        for (int i = 0; i < prop.shape().dim_size(); ++i) {
+          if (i > 0) {
+            os << ', ';
+          }
+          if (prop.shape().dim(i).size() >= 0) {
+            // Print the actual dimension.
+            os << prop.shape().dim(i).size();
+          } else if (prop.shape().dim(i).size() == -1) {
+            // We don't know anything about the dimension.
+            os << '?';
+          } else {
+            // Symbolic dimension.
+            os << 'x' << -prop.shape().dim(i).size();
+          }
+        }
+        os << ']';
+      }
+      os << std::endl;
+    }
   }
     }
     
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+#ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
+#define TENSORFLOW_PYTHON_LIB_CORE_PY_EXCEPTION_REGISTRY_H_
     
-    {
-    {}  // namespace log
-}  // namespace leveldb
-    
-      // Create a writer that will append data to '*dest'.
-  // '*dest' must have initial length 'dest_length'.
-  // '*dest' must remain live while this Writer is in use.
-  Writer(WritableFile* dest, uint64_t dest_length);
-    
-      virtual Status status() const { return Status::OK(); }
-    
-    namespace leveldb {
+    namespace tensorflow {
     }
     
+      TemporaryFile() {
+    path = tmppath();
+  }
     
-    {  ASSERT_TRUE(! Overlaps(nullptr, 'j'));
-  ASSERT_TRUE(! Overlaps('r', nullptr));
-  ASSERT_TRUE(Overlaps(nullptr, 'p'));
-  ASSERT_TRUE(Overlaps(nullptr, 'p1'));
-  ASSERT_TRUE(Overlaps('q', nullptr));
-  ASSERT_TRUE(Overlaps(nullptr, nullptr));
-}
-    
-    void
-FixedSortKeyByteSink::AppendBeyondCapacity(const char *bytes, int32_t /*n*/, int32_t length) {
-    // buffer_ != NULL && bytes != NULL && n > 0 && appended_ > capacity_
-    // Fill the buffer completely.
-    int32_t available = capacity_ - length;
-    if (available > 0) {
-        uprv_memcpy(buffer_ + length, bytes, available);
-    }
-}
-    
-    
-    {    return USEARCH_DONE;
-}
-    
-    SharedBreakIterator::~SharedBreakIterator() {
-  delete ptr;
-}
-    
-    U_NAMESPACE_BEGIN
-    
-        /**
-     * Returns TRUE if this class can format positiveValue using
-     * the given range of digit counts.
-     *
-     * @param positiveValue the value to format
-     * @param range the acceptable range of digit counts.
-     */
-    static UBool canFormat(
-            int32_t positiveValue, const IntDigitCountRange &range);
-    
-    CollationKey::CollationKey(const CollationKey& other)
-    : UObject(other), fFlagAndLength(other.getLength()),
-      fHashCode(other.fHashCode)
-{
-    if (other.isBogus())
-    {
-        setToBogus();
-        return;
+    class GetMergeSingleListFeatureTensorsGradient : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+  vector<OperatorDef> GetGradientDefs() override {
+    vector<string> input_blob_names{};
+    vector<string> output_blob_names{};
     }
     }
     
-    static const char *gKeywords[StandardPlural::COUNT] = {
-    'zero', 'one', 'two', 'few', 'many', 'other'
-};
-    
-    IMGUI_IMPL_API bool     ImGui_ImplDX10_Init(ID3D10Device* device);
-IMGUI_IMPL_API void     ImGui_ImplDX10_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplDX10_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data);
-    
-        // Initialize OpenGL loader
-#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
-    bool err = gl3wInit() != 0;
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
-    bool err = glewInit() != GLEW_OK;
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
-    bool err = gladLoadGL() == 0;
-#else
-    bool err = false; // If you use IMGUI_IMPL_OPENGL_LOADER_CUSTOM, your loader is likely to requires some form of initialization.
-#endif
-    if (err)
-    {
-        fprintf(stderr, 'Failed to initialize OpenGL loader!\n');
-        return 1;
+    namespace caffe2 {
+namespace {
+    }
     }
     
-    // Called by Init/NewFrame/Shutdown
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateFontsTexture();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyFontsTexture();
-IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_CreateDeviceObjects();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_DestroyDeviceObjects();
+    #include <cstdio>    // for FILE
+#include 'strngs.h'  // for STRING
+    
+      // Adds an element with a weight of 1.
+  void add(double x, double y);
+  // Adds an element with a specified weight.
+  void add(double x, double y, double weight);
+  // Adds a whole LLSQ.
+  void add(const LLSQ& other);
+  // Deletes an element with a weight of 1.
+  void remove(double x, double y);
+  int32_t count() const {  // no of elements
+    return static_cast<int>(total_weight + 0.5);
+  }
+    
+    #endif
 
     
-        // Create Window Surface
-    VkSurfaceKHR surface;
-    VkResult err;
-    if (SDL_Vulkan_CreateSurface(window, g_Instance, &surface) == 0)
-    {
-        printf('Failed to create Vulkan surface.\n');
-        return 1;
+      // Return whether this model is likely to agree with the other model on most
+  // paragraphs they are marked.
+  bool Comparable(const ParagraphModel &other) const;
+    
+      public:
+    REJ() = default;
+    
+    // Trivial class to encapsulate a fixed-length array of bits, with
+// Serialize/DeSerialize. Replaces the old macros.
+class BitVector {
+ public:
+  // Fast lookup table to get the first least significant set bit in a byte.
+  // For zero, the table has 255, but since it is a special case, most code
+  // that uses this table will check for zero before looking up lsb_index_.
+  static const uint8_t lsb_index_[256];
+  // Fast lookup table to get the residual bits after zeroing the least
+  // significant set bit in a byte.
+  static const uint8_t lsb_eroded_[256];
+  // Fast lookup table to give the number of set bits in a byte.
+  static const int hamming_table_[256];
     }
     
-        // Setup orthographic projection matrix
-    // Our visible imgui space lies from draw_data->DisplayPos (top left) to draw_data->DisplayPos+data_data->DisplaySize (bottom right).
-    // Being agnostic of whether <d3dx9.h> or <DirectXMath.h> can be used, we aren't relying on D3DXMatrixIdentity()/D3DXMatrixOrthoOffCenterLH() or DirectX::XMMatrixIdentity()/DirectX::XMMatrixOrthographicOffCenterLH()
-    {
-        float L = draw_data->DisplayPos.x + 0.5f;
-        float R = draw_data->DisplayPos.x + draw_data->DisplaySize.x + 0.5f;
-        float T = draw_data->DisplayPos.y + 0.5f;
-        float B = draw_data->DisplayPos.y + draw_data->DisplaySize.y + 0.5f;
-        D3DMATRIX mat_identity = { { { 1.0f, 0.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, 0.0f,  0.0f, 0.0f, 0.0f, 1.0f } } };
-        D3DMATRIX mat_projection =
-        { { {
-            2.0f/(R-L),   0.0f,         0.0f,  0.0f,
-            0.0f,         2.0f/(T-B),   0.0f,  0.0f,
-            0.0f,         0.0f,         0.5f,  0.0f,
-            (L+R)/(L-R),  (T+B)/(B-T),  0.5f,  1.0f
-        } } };
-        g_pd3dDevice->SetTransform(D3DTS_WORLD, &mat_identity);
-        g_pd3dDevice->SetTransform(D3DTS_VIEW, &mat_identity);
-        g_pd3dDevice->SetTransform(D3DTS_PROJECTION, &mat_projection);
-    }
-    
-        unsigned int nTokens;
-    HRESULT hr = spTokens->GetSize(&nTokens);
-    if (SUCCEEDED(hr))
-    {
-        pair<wstring, int> tokenItem;
-        for (unsigned int i = 0; i < nTokens; i++)
-        {
-            hr = spTokens->GetAt(i, &tokenItem);
-            if (FAILED(hr))
-            {
-                break;
-            }
-    }
-    }
-    
-    
-    {    auto supplementaryResult = dynamic_cast<SupplementaryResult^>(item);
-    if (supplementaryResult)
-    {
-        AutomationProperties::SetName(element, supplementaryResult->GetLocalizedAutomationName());
-    }
+    TEST_P(FooTest, DoesBlah) {
+  // Inside a test, access the test parameter with the GetParam() method
+  // of the TestWithParam<T> class:
+  EXPECT_TRUE(foo.Blah(GetParam()));
+  ...
 }
     
-            void AnimateCalculator(bool resultAnimate);
-        void InitializeHistoryView(CalculatorApp::ViewModel::HistoryViewModel^ historyVM);
-        void UpdatePanelViewState();
-        void UnregisterEventHandlers();
+    // A set of macros for testing Google Test assertions or code that's expected
+// to generate Google Test fatal failures.  It verifies that the given
+// statement will cause exactly one fatal Google Test failure with 'substr'
+// being part of the failure message.
+//
+// There are two different versions of this macro. EXPECT_FATAL_FAILURE only
+// affects and considers failures generated in the current thread and
+// EXPECT_FATAL_FAILURE_ON_ALL_THREADS does the same but for all threads.
+//
+// The verification of the assertion is done correctly even when the statement
+// throws an exception or aborts the current function.
+//
+// Known restrictions:
+//   - 'statement' cannot reference local non-static variables or
+//     non-static members of the current object.
+//   - 'statement' cannot return a value.
+//   - You cannot stream a failure message to this macro.
+//
+// Note that even though the implementations of the following two
+// macros are much alike, we cannot refactor them to use a common
+// helper macro, due to some peculiarity in how the preprocessor
+// works.  The AcceptsMacroThatExpandsToUnprotectedComma test in
+// gtest_unittest.cc will fail to compile if we do that.
+#define EXPECT_FATAL_FAILURE(statement, substr) \
+  do { \
+    class GTestExpectFatalFailureHelper {\
+     public:\
+      static void Execute() { statement; }\
+    };\
+    ::testing::TestPartResultArray gtest_failures;\
+    ::testing::internal::SingleFailureChecker gtest_checker(\
+        &gtest_failures, ::testing::TestPartResult::kFatalFailure, (substr));\
+    {\
+      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
+          ::testing::ScopedFakeTestPartResultReporter:: \
+          INTERCEPT_ONLY_CURRENT_THREAD, &gtest_failures);\
+      GTestExpectFatalFailureHelper::Execute();\
+    }\
+  } while (::testing::internal::AlwaysFalse())
     
-    #include 'Views/HistoryList.g.h'
-#include 'Common/TitleBarHelper.h'
-#include 'Converters/ItemSizeToVisibilityConverter.h'
-#include 'Converters/VisibilityNegationConverter.h'
-#include 'CalcViewModel/HistoryViewModel.h'
+      // Protects mutable state in *impl_.  This is mutable as some const
+  // methods need to lock it too.
+  mutable internal::Mutex mutex_;
+    
+      // Called after a test ends.
+  virtual void OnTestEnd(const TestInfo& /* test_info */) {
+    int difference = Water::allocated() - initially_allocated_;
+    }
+    
+      // Gets the next node in the queue.
+  QueueNode* next() { return next_; }
+  const QueueNode* next() const { return next_; }
+    
+    
+    { private:
+  CensusContext context_;
+  // Metadata elements for tracing and census stats data.
+  grpc_linked_mdelem stats_bin_;
+  grpc_linked_mdelem tracing_bin_;
+  // Client method.
+  absl::string_view method_;
+  std::string qualified_method_;
+  grpc_slice path_;
+  // The recv trailing metadata callbacks.
+  grpc_metadata_batch* recv_trailing_metadata_;
+  grpc_closure* initial_on_done_recv_trailing_metadata_;
+  grpc_closure on_done_recv_trailing_metadata_;
+  // recv message
+  grpc_closure* initial_on_done_recv_message_;
+  grpc_closure on_done_recv_message_;
+  // Start time (for measuring latency).
+  absl::Time start_time_;
+  // Server elapsed time in nanoseconds.
+  uint64_t elapsed_time_;
+  // The received message--may be null.
+  grpc_core::OrphanablePtr<grpc_core::ByteStream>* recv_message_;
+  // Number of messages in this RPC.
+  uint64_t recv_message_count_;
+  uint64_t sent_message_count_;
+  // Buffer needed for grpc_slice to reference when adding trace context
+  // metatdata to outgoing message.
+  char tracing_buf_[kMaxTraceContextLen];
+};
+    
+    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H */
+
+    
+    
+    {    uint8_t version = buf[kVersionIdOffset];
+    uint32_t fieldID = buf[kServerElapsedTimeOffset];
+    if (version != kVersionId || fieldID != kServerElapsedTimeField) {
+      *time = 0;
+      return kEncodeDecodeFailure;
+    }
+    *time = absl::little_endian::Load64(
+        &buf[kServerElapsedTimeOffset + kFieldIdSize]);
+    return kRpcServerStatsSize;
+  }
+    
+    #endif  // !GRPC_CUSTOM_DEFAULT_THREAD_POOL
+
+    
+    DynamicThreadPool::DynamicThreadPool(int reserve_threads)
+    : shutdown_(false),
+      reserve_threads_(reserve_threads),
+      nthreads_(0),
+      threads_waiting_(0) {
+  for (int i = 0; i < reserve_threads_; i++) {
+    std::lock_guard<std::mutex> lock(mu_);
+    nthreads_++;
+    new DynamicThread(this);
+  }
+}
+    
+    // Reads the CPU stats (in a pair of busy and total numbers) from the system.
+// The units of the stats should be the same.
+std::pair<uint64_t, uint64_t> GetCpuStatsImpl();
+    
+     public:
+  /*! \brief cuda kernel argument descriptor */
+  struct ArgType {
+    /*! \brief whether argument is NDArray */
+    bool is_ndarray;
+    /*! \brief whether argument is constant (input) */
+    bool is_const;
+    /*! \brief data type of argument */
+    mshadow::TypeFlag dtype;
+  };
+  /*! \brief Cuda kernel */
+  class Kernel {
+   public:
+    /*! \brief Launch the kernel */
+    void Launch(const Context& ctx, const std::vector<dmlc::any>& args,
+                uint32_t grid_dim_x, uint32_t grid_dim_y, uint32_t grid_dim_z,
+                uint32_t block_dim_x, uint32_t block_dim_y, uint32_t block_dim_z,
+                uint32_t shared_mem);
+    /*! \brief kernel interface signature */
+    const std::vector<ArgType>& signature() { return signature_; }
+    }
+    
+    class CaffeDataIterWrapper : public PrefetcherIter {
+ public:
+  CaffeDataIterWrapper() : PrefetcherIter(NULL), next_time_(0) {}
+  virtual ~CaffeDataIterWrapper() {
+    IF_CHECK_TIMING(
+      if (next_time_.load() > 0) {
+        LOG(WARNING) << 'Caffe data loader was blocked for '
+                     << next_time_.load()
+                     << ' ms waiting for incoming data';
+      }
+    )
+  }
+  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) {
+    // We need to init prefetcher args in order to get dtype
+    this->param_.InitAllowUnknown(kwargs);
+    if (!this->param_.dtype) this->param_.dtype = mshadow::kFloat32;
+    switch (this->param_.dtype.value()) {
+      case mshadow::kFloat32:
+        this->loader_.reset(new CaffeDataIter<float>(this->param_.dtype.value()));
+        break;
+      case mshadow::kFloat64:
+        this->loader_.reset(new CaffeDataIter<double>(this->param_.dtype.value()));
+        break;
+      case mshadow::kFloat16:
+        LOG(FATAL) << 'float16 layer is not supported by caffe';
+        return;
+      default:
+        LOG(FATAL) << 'Unsupported type ' << this->param_.dtype.value();
+        return;
+    }
+    PrefetcherIter::Init(kwargs);
+    this->param_.prefetch_buffer = 1;
+  }
+  virtual void BeforeFirst(void) {
+    return PrefetcherIter::BeforeFirst();
+  }
+  virtual bool Next(void) {
+    IF_CHECK_TIMING(
+      const uint64_t start_time = GetTickCountMS();
+    )
+    const bool rc = PrefetcherIter::Next();
+    IF_CHECK_TIMING(
+      const uint64_t diff_time  = GetTickCountMS() - start_time;
+      next_time_.fetch_add(diff_time);
+    )
+    return rc;
+  }
+    }
+    
+    
+    {    // one-liner channel-wise normalization
+    switch (data.shape_[0]) {
+      case 4:
+        if (meanfile_ready_ && flip) {
+          outimg_[3] = mirror((data[3] - meanimg_[3]) * contrast + illumination)
+            * param_.scale / param_.std_a;
+        } else if (meanfile_ready_ && (!flip)) {
+          outimg_[3] = ((data[3] - meanimg_[3]) * contrast + illumination)
+            * param_.scale / param_.std_a;
+        } else if (!meanfile_ready_ && flip) {
+          outimg_[3] = mirror((data[3] - param_.mean_a) * contrast + illumination)
+            * param_.scale / param_.std_a;
+        } else {
+          outimg_[3] = ((data[3] - param_.mean_a) * contrast + illumination)
+            * param_.scale / param_.std_a;
+        }
+      case 3:
+        if (meanfile_ready_ && flip) {
+          outimg_[2] = mirror((data[2] - meanimg_[2]) * contrast + illumination)
+            * param_.scale / param_.std_b;
+        } else if (meanfile_ready_ && (!flip)) {
+          outimg_[2] = ((data[2] - meanimg_[2]) * contrast + illumination)
+            * param_.scale / param_.std_b;
+        } else if (!meanfile_ready_ && flip) {
+          outimg_[2] = mirror((data[2] - param_.mean_b) * contrast + illumination)
+            * param_.scale / param_.std_b;
+        } else {
+          outimg_[2] = ((data[2] - param_.mean_b) * contrast + illumination)
+            * param_.scale / param_.std_b;
+        }
+      case 2:
+        if (meanfile_ready_ && flip) {
+          outimg_[1] = mirror((data[1] - meanimg_[1]) * contrast + illumination)
+            * param_.scale / param_.std_g;
+        } else if (meanfile_ready_ && (!flip)) {
+          outimg_[1] = ((data[1] - meanimg_[1]) * contrast + illumination)
+            * param_.scale / param_.std_g;
+        } else if (!meanfile_ready_ && flip) {
+          outimg_[1] = mirror((data[1] - param_.mean_g) * contrast + illumination)
+            * param_.scale / param_.std_g;
+        } else {
+          outimg_[1] = ((data[1] - param_.mean_g) * contrast + illumination)
+            * param_.scale / param_.std_g;
+        }
+      case 1:
+        if (meanfile_ready_ && flip) {
+          outimg_[0] = mirror((data[0] - meanimg_[0]) * contrast + illumination)
+            * param_.scale / param_.std_r;
+        } else if (meanfile_ready_ && (!flip)) {
+          outimg_[0] = ((data[0] - meanimg_[0]) * contrast + illumination)
+            * param_.scale / param_.std_r;
+        } else if (!meanfile_ready_ && flip) {
+          outimg_[0] = mirror((data[0] - param_.mean_r) * contrast + illumination)
+            * param_.scale / param_.std_r;
+        } else {
+          outimg_[0] = ((data[0] - param_.mean_r) * contrast + illumination)
+            * param_.scale / param_.std_r;
+        }
+        break;
+      default:
+        LOG(FATAL) << 'Expected image channels range 1-4, got ' << data.shape_[0];
+    }
+  }
+    
+      std::vector<Tensor<cpu, 2, DType> > ts_t_arr;
+  for (int i = 0; i < static_cast<int>(ts_arr.size()); ++i) {
+    ts_t_arr.emplace_back(Shape2(ts_arr[i].size(1), ts_arr[i].size(0)));
+    AllocSpace(&ts_t_arr[i]);
+    flip<cpu, DType>(ts_arr[i].size(0), ts_arr[i].size(1), ts_t_arr[i].dptr_,
+      ts_t_arr[i].stride_, ts_arr[i].dptr_, ts_arr[i].stride_);
+  }
+    
+    // relu
+MXNET_OPERATOR_REGISTER_UNARY(_contrib_div_sqrt_dim)
+.describe(R'code(Rescale the input by the square root of the channel dimension.
