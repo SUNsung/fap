@@ -1,136 +1,107 @@
 
         
-            # The path used after resending confirmation instructions.
-    def after_resending_confirmation_instructions_path_for(resource_name)
-      is_navigational_format? ? new_session_path(resource_name) : '/'
-    end
+        require 'action_view/helpers/tags/collection_helpers'
     
-          # Stores the provided location to redirect the user after signing in.
-      # Useful in combination with the `stored_location_for` helper.
-      #
-      # Example:
-      #
-      #   store_location_for(:user, dashboard_path)
-      #   redirect_to user_facebook_omniauth_authorize_path
-      #
-      def store_location_for(resource_or_scope, location)
-        session_key = stored_location_key_for(resource_or_scope)
-        
-        path = extract_path_from_location(location)
-        session[session_key] = path if path
-      end
-    
-      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
-     options[:store] != false && !env['devise.skip_timeoutable']
-    last_request_at = warden.session(scope)['last_request_at']
-    
-          # If the record is persisted, remove the remember token (but only if
-      # it exists), and save the record without validations.
-      def forget_me!
-        return unless persisted?
-        self.remember_token = nil if respond_to?(:remember_token)
-        self.remember_created_at = nil if self.class.expire_all_remember_me_on_sign_out
-        save(validate: false)
-      end
-    
-    module Devise
-  module Models
-    # Timeoutable takes care of verifying whether a user session has already
-    # expired or not. When a session expires after the configured time, the user
-    # will be asked for credentials again, it means, they will be redirected
-    # to the sign in page.
-    #
-    # == Options
-    #
-    # Timeoutable adds the following options to devise_for:
-    #
-    #   * +timeout_in+: the interval to timeout the user session without activity.
-    #
-    # == Examples
-    #
-    #   user.timedout?(30.minutes.ago)
-    #
-    module Timeoutable
-      extend ActiveSupport::Concern
-    
-          entry
-    end
-    
-            # This method will split the argv given into three parts: the
-        # flags to this command, the subcommand, and the flags to the
-        # subcommand. For example:
-        #
-        #     -v status -h -v
-        #
-        # The above would yield 3 parts:
-        #
-        #     ['-v']
-        #     'status'
-        #     ['-h', '-v']
-        #
-        # These parts are useful because the first is a list of arguments
-        # given to the current command, the second is a subcommand, and the
-        # third are the commands given to the subcommand.
-        #
-        # @return [Array] The three parts.
-        def split_main_and_subcommand(argv)
-          # Initialize return variables
-          main_args   = nil
-          sub_command = nil
-          sub_args    = []
-    
-            # Configures the given list of networks on the virtual machine.
-        #
-        # The networks parameter will be an array of hashes where the hashes
-        # represent the configuration of a network interface. The structure
-        # of the hash will be roughly the following:
-        #
-        # {
-        #   type:      :static,
-        #   ip:        '192.168.33.10',
-        #   netmask:   '255.255.255.0',
-        #   interface: 1
-        # }
-        #
-        def configure_networks(networks)
-          raise BaseError, _key: :unsupported_configure_networks
-        end
-    
-              result
-        end
-    
-        # Checks if this registry has any items.
-    #
-    # @return [Boolean]
-    def empty?
-      @items.keys.empty?
-    end
-    
-      # Send deprecation notices to registered listeners.
-  config.active_support.deprecation = :notify
-    
-      # Show full error reports and disable caching.
-  config.consider_all_requests_local       = true
-  config.action_controller.perform_caching = false
-    
-          def unmasked_token?(token)
-        token.length == TOKEN_LENGTH
-      end
-    
-          def call(env)
-        status, headers, body = @app.call(env)
-        header = options[:report_only] ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'
-        headers[header] ||= csp_policy if html? headers
-        [status, headers, body]
+              def field_type
+            self.class.field_type
+          end
       end
     end
   end
 end
 
     
-          def has_vector?(request, headers)
-        return false if request.xhr?
-        return false if options[:allow_if] && options[:allow_if].call(request.env)
-        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
-        origin(request.env).nil? and referrer(request.env) != request.host
+          def typecast(paths)
+        paths.map do |path|
+          case path
+          when Pathname, String
+            OptimizedFileSystemResolver.new path.to_s
+          else
+            path
+          end
+        end
       end
+  end
+end
+
+    
+        class TestHelpers < ActiveSupport::TestCase
+      def setup
+        @controller = AbstractHelpers.new
+      end
+    
+        # Some actions have special handling in fast_file.rb, that means we can't directly call the action
+    # but we have to use the same logic that is in fast_file.rb instead.
+    # That's where this switch statement comes into play
+    def run_action_requiring_special_handling(command: nil, parameter_map: nil, action_return_type: nil)
+      action_return = nil
+      closure_argument_value = nil # only used if the action uses it
+    
+          def self.description
+        'This will add an annotated git tag to the current branch'
+      end
+    
+          it 'adds create_html param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            create_html: true
+          )
+        end').runner.execute(:test)
+    
+          it 'handles the exclude_dirs parameter with no elements correctly' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          ensure_no_debug_code(text: 'pry', path: '.', exclude_dirs: [])
+        end').runner.execute(:test)
+        expect(result).to eq('grep -RE 'pry' '#{File.absolute_path('./')}'')
+      end
+    
+            expect(Open3).to receive(:capture3).with(cmd).and_return('')
+        expect(FastlaneCore::CertChecker).to receive(:wwdr_keychain).and_return(keychain_name)
+    
+    # To avoid 'PR & Runs' for which tests don't pass, we want to make spec errors more visible
+# The code below will run on Circle, parses the results in JSON and posts them to the PR as comment
+containing_dir = ENV['CIRCLE_TEST_REPORTS'] || '.' # for local testing
+file_path = File.join(containing_dir, 'rspec', 'fastlane-junit-results.xml')
+    
+    module Docs
+  class Entry
+    class Invalid < StandardError; end
+    
+        def initialize
+      @pages = {}
+    end
+    
+          def call(*)
+        if @minute != Time.now.min
+          @minute = Time.now.min
+          @counter = 0
+        end
+    
+              node.remove_attribute('path')
+          node.remove_attribute('region')
+          node.remove_attribute('linenums')
+          node.remove_attribute('title')
+          node.remove_attribute('language')
+          node.remove_attribute('hidecopy')
+          node.remove_attribute('class')
+        end
+    
+            css('.c10', '.showcase', '.showcase-content', '.l-main-section', 'div.div', 'div[flex]', 'code-tabs', 'md-card', 'md-card-content', 'div:not([class])', 'footer', '.card-row', '.card-row-container', 'figure', 'blockquote', 'exported', 'defined', 'div.ng-scope', '.code-example header', 'section.desc', '.row', '.dart-api-entry-main', '.main-content', 'section.summary', 'span.signature').each do |node|
+          node.before(node.children).remove
+        end
+    
+          def after
+        @versions[1][0..6]
+      end
+    
+        @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+    @view.instance_variable_set :@content, page.formatted_data
+    @view.instance_variable_set :@h1_title, false
+    
+      teardown do
+    FileUtils.rm_rf(@path)
+  end
