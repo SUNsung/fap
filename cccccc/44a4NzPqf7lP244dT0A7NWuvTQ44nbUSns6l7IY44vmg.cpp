@@ -1,105 +1,66 @@
 
         
-            QString getURI();
+          std::vector<string> output;
+  string input_tensors_needed_out;
+  tensorflow::Status status = RunCppShapeInferenceImpl(
+      graph_def_version, serialized_node_def, input_serialized_shapes,
+      input_constant_tensor_values_v, input_constant_tensor_as_shape_values,
+      &output, &input_tensors_needed_out);
     
-    
-    {    r->infinity = 0;
-    secp256k1_fe_sqr(&z22, &b->z);
-    secp256k1_fe_sqr(&z12, &a->z);
-    secp256k1_fe_mul(&u1, &a->x, &z22);
-    secp256k1_fe_mul(&u2, &b->x, &z12);
-    secp256k1_fe_mul(&s1, &a->y, &z22); secp256k1_fe_mul(&s1, &s1, &b->z);
-    secp256k1_fe_mul(&s2, &b->y, &z12); secp256k1_fe_mul(&s2, &s2, &a->z);
-    secp256k1_fe_negate(&h, &u1, 1); secp256k1_fe_add(&h, &u2);
-    secp256k1_fe_negate(&i, &s1, 1); secp256k1_fe_add(&i, &s2);
-    if (secp256k1_fe_normalizes_to_zero_var(&h)) {
-        if (secp256k1_fe_normalizes_to_zero_var(&i)) {
-            secp256k1_gej_double_var(r, a, rzr);
-        } else {
-            if (rzr != NULL) {
-                secp256k1_fe_set_int(rzr, 0);
-            }
-            r->infinity = 1;
-        }
-        return;
+    namespace tensorflow {
+namespace python_op_gen_internal {
     }
-    secp256k1_fe_sqr(&i2, &i);
-    secp256k1_fe_sqr(&h2, &h);
-    secp256k1_fe_mul(&h3, &h, &h2);
-    secp256k1_fe_mul(&h, &h, &b->z);
-    if (rzr != NULL) {
-        *rzr = h;
     }
-    secp256k1_fe_mul(&r->z, &a->z, &h);
-    secp256k1_fe_mul(&t, &u1, &h2);
-    r->x = t; secp256k1_fe_mul_int(&r->x, 2); secp256k1_fe_add(&r->x, &h3); secp256k1_fe_negate(&r->x, &r->x, 3); secp256k1_fe_add(&r->x, &i2);
-    secp256k1_fe_negate(&r->y, &r->x, 5); secp256k1_fe_add(&r->y, &t); secp256k1_fe_mul(&r->y, &r->y, &i);
-    secp256k1_fe_mul(&h3, &h3, &s1); secp256k1_fe_negate(&h3, &h3, 1);
-    secp256k1_fe_add(&r->y, &h3);
-}
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    #endif  // TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
+
+    
+    struct PyDecrefDeleter {
+  void operator()(PyObject* p) const { Py_DECREF(p); }
+};
+    
+    #ifndef TENSORFLOW_PYTHON_LIB_IO_PY_RECORD_READER_H_
+#define TENSORFLOW_PYTHON_LIB_IO_PY_RECORD_READER_H_
     
     
-    {    // These inputs are valid because PROTOCOLINFO accepts an OtherLine that is
-    // just an OptArguments, which enables multiple spaces to be present
-    // between the command and arguments.
-    CheckSplitTorReplyLine('COMMAND  ARGS', 'COMMAND', ' ARGS');
-    CheckSplitTorReplyLine('COMMAND   EVEN+more  ARGS', 'COMMAND', '  EVEN+more  ARGS');
-}
+    {
+    {}  // namespace swig
+}  // namespace tensorflow
+
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    namespace atom {
+    }
+    
+      // content::WebContentsObserver implementations:
+  void RenderFrameDeleted(content::RenderFrameHost* rfh) override;
+  void RenderFrameHostChanged(content::RenderFrameHost* old_rfh,
+                              content::RenderFrameHost* new_rfh) override;
+  void FrameDeleted(content::RenderFrameHost* rfh) override;
     
     
-    {bool ParseDouble(const std::string& str, double *out)
-{
-    if (!ParsePrechecks(str))
-        return false;
-    if (str.size() >= 2 && str[0] == '0' && str[1] == 'x') // No hexadecimal floats allowed
-        return false;
-    std::istringstream text(str);
-    text.imbue(std::locale::classic());
-    double result;
-    text >> result;
-    if(out) *out = result;
-    return text.eof() && !text.fail();
-}
-}
+    {  DISALLOW_COPY_AND_ASSIGN(AtomQuotaPermissionContext);
+};
     
-    ROTATE_ARGS
-	movdqa	XTMP3, XTMP2	; XTMP3 = W[-2] {DDCC}
-    mov	y0, e		; y0 = e
-    ror	y0, (25-11)	; y0 = e >> (25-11)
-    mov	y1, a		; y1 = a
-	movdqa	X0,    XTMP2	; X0    = W[-2] {DDCC}
-    ror	y1, (22-13)	; y1 = a >> (22-13)
-    xor	y0, e		; y0 = e ^ (e >> (25-11))
-    mov	y2, f		; y2 = f
-    ror	y0, (11-6)	; y0 = (e >> (11-6)) ^ (e >> (25-6))
-	psrlq	XTMP2, 17	; XTMP2 = W[-2] ror 17 {xDxC}
-    xor	y1, a		; y1 = a ^ (a >> (22-13)
-    xor	y2, g		; y2 = f^g
-	psrlq	XTMP3, 19	; XTMP3 = W[-2] ror 19 {xDxC}
-    xor	y0, e		; y0 = e ^ (e >> (11-6)) ^ (e >> (25-6))
-    and	y2, e		; y2 = (f^g)&e
-    ror	y1, (13-2)	; y1 = (a >> (13-2)) ^ (a >> (22-2))
-	psrld	X0,    10	; X0 = W[-2] >> 10 {DDCC}
-    xor	y1, a		; y1 = a ^ (a >> (13-2)) ^ (a >> (22-2))
-    ror	y0, 6		; y0 = S1 = (e>>6) & (e>>11) ^ (e>>25)
-    xor	y2, g		; y2 = CH = ((f^g)&e)^g
-	pxor	XTMP2, XTMP3
-    ror	y1, 2		; y1 = S0 = (a>>2) ^ (a>>13) ^ (a>>22)
-    add	y2, y0		; y2 = S1 + CH
-    add	y2, [rsp + _XFER + 3*4]	; y2 = k + w + S1 + CH
-	pxor	X0, XTMP2	; X0 = s1 {xDxC}
-    mov	y0, a		; y0 = a
-    add	h, y2		; h = h + S1 + CH + k + w
-    mov	y2, a		; y2 = a
-	pshufb	X0, SHUF_DC00	; X0 = s1 {DC00}
-    or	y0, c		; y0 = a|c
-    add	d, h		; d = d + h + S1 + CH + k + w
-    and	y2, c		; y2 = a&c
-	paddd	X0, XTMP0	; X0 = {W[3], W[2], W[1], W[0]}
-    and	y0, b		; y0 = (a|c)&b
-    add	h, y1		; h = h + S1 + CH + k + w + S0
-    or	y0, y2		; y0 = MAJ = (a|c)&b)|(a&c)
-    add	h, y0		; h = h + S1 + CH + k + w + S0 + MAJ
+    void OffScreenOutputDevice::Resize(const gfx::Size& pixel_size,
+                                   float scale_factor) {
+  if (viewport_pixel_size_ == pixel_size)
+    return;
+  viewport_pixel_size_ = pixel_size;
+    }
+    
+    #ifndef ATOM_BROWSER_RELAUNCHER_H_
+#define ATOM_BROWSER_RELAUNCHER_H_
+    
+    #include 'atom/browser/relauncher.h'
     
     
     {
@@ -107,146 +68,184 @@
     {}  // namespace python
 }  // namespace protobuf
 }  // namespace google
-#endif  // GOOGLE_PROTOBUF_PYTHON_CPP_SCOPED_PYOBJECT_PTR_H__
 
     
-    #include <google/protobuf/compiler/command_line_interface.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/io/printer.h>
+    GeneratorFactory::GeneratorFactory() {}
+GeneratorFactory::~GeneratorFactory() {}
     
-        // If any indirect dependency provided extensions, it needs to be directly
-    // imported so it can get merged into the root's extensions registry.
-    // See the Note by CollectMinimalFileDepsContainingExtensions before
-    // changing this.
-    for (std::vector<const FileDescriptor *>::iterator iter =
-             deps_with_extensions.begin();
-         iter != deps_with_extensions.end(); ++iter) {
-      if (!IsDirectDependency(*iter, file_)) {
-        import_writer.AddFile(*iter, header_extension);
+      if (extension_generators_.size() > 0) {
+    // The dynamic methods block is only needed if there are extensions.
+    printer->Print(
+        '@interface $root_class_name$ (DynamicMethods)\n',
+        'root_class_name', root_class_name_);
+    }
+    
+      {
+    string str;
+    StringByteSink sink(&str);
+    limit_source.CopyTo(&sink, limit_source.Available());
+    EXPECT_EQ('ello ', str);
+    EXPECT_EQ(0, limit_source.Available());
+    EXPECT_EQ(6, source.Available());
+  }
+    
+    TEST(StatusOr, TestStatus) {
+  StatusOr<int> good(4);
+  EXPECT_TRUE(good.ok());
+  StatusOr<int> bad(Status::CANCELLED);
+  EXPECT_FALSE(bad.ok());
+  EXPECT_EQ(Status::CANCELLED, bad.status());
+}
+    
+    Missing features (represented by empty ranges) filled with default_value.
+    
+    )DOC')
+    .Arg(
+        'values',
+        '*(type depends on dtype, Required=True)* The value of the elements to go in the *output* tensor.',
+        true /* required */)
+    .Arg(
+        'dtype',
+        'The data type for the elements of the output tensor. Strictly must be one of the types from DataType enum in TensorProto.')
+    .Arg(
+        'shape',
+        '*(type: [int])* Desired shape of the *output* tensor.')
+    .Arg(
+        'extra_shape',
+        '*(type: [int])* The additional dimensions appended at the end of the *shape* indicated by the input blob. Cannot set the *extra_shape* argument when there is no input blob.')
+    .Arg(
+        'input_as_shape',
+        '*(type: bool; default: False)* set to *True* to use the *input* as shape. First, input must be in CPU context.')
+    .Input(
+        0,
+        'input',
+        '(Optional) 1D tensor specifying the shape of the output. Must be used with *input_as_shape=True*')
+    .Output(
+        0,
+        'output',
+        'Output tensor with desired dimension filled with specified data. If the shape argument is set, this is the shape specified, and if the *input* exists and *input_as_shape=True*, it is the shape specified by the *input* tensor.')
+    .TensorInferenceFunction(FillerTensorInference<>);
+    
+    template <>
+void GluOp<float, CPUContext>::ComputeGlu(
+    const int M,
+    const int split_dim,
+    const int N,
+    const float* Xdata,
+    float* Ydata) {
+  const int xStride = 2 * split_dim * N;
+  const int yStride = split_dim * N;
+  for (int i = 0; i < M; ++i) {
+    const int idx = i * xStride;
+    const int idy = i * yStride;
+    for (int j = 0; j < split_dim; ++j) {
+      const int jN = j * N;
+      const int jdx1 = idx + jN;
+      const int jdx2 = idx + (j + split_dim) * N;
+      const int jdy = idy + jN;
+      for (int k = 0; k < N; ++k) {
+        const float x1 = Xdata[jdx1 + k];
+        const float x2 = Xdata[jdx2 + k];
+        Ydata[jdy + k] = x1 * sigmoid(x2);
       }
     }
-    
-    static const int kDefaultBufferSize = 65536;
-    
-    #include <stdio.h>
-#include <string.h>
-#include <algorithm>
-    
-    #include <google/protobuf/io/gzip_stream.h>
-#include <google/protobuf/io/zero_copy_stream_impl.h>
-    
-    
-    {  // Test truncation behavior.
-  EXPECT_EQ(1, TimeUtil::TimestampToMicroseconds(
-                   TimeUtil::NanosecondsToTimestamp(1999)));
-  // For negative values, Timestamp will be rounded down.
-  // For example, '1969-12-31T23:59:59.5Z' (i.e., -0.5s) rounded to seconds
-  // will be '1969-12-31T23:59:59Z' (i.e., -1s) rather than
-  // '1970-01-01T00:00:00Z' (i.e., 0s).
-  EXPECT_EQ(-2, TimeUtil::TimestampToMicroseconds(
-                    TimeUtil::NanosecondsToTimestamp(-1999)));
+  }
 }
     
-    		b2Vec2 d;
-		d.x = b2Dot(n1, v) - toiSlop;
-		d.y = b2Dot(n2, v) - toiSlop;
+    // A macro for testing Google Test assertions or code that's expected to
+// generate Google Test non-fatal failures.  It asserts that the given
+// statement will cause exactly one non-fatal Google Test failure with 'substr'
+// being part of the failure message.
+//
+// There are two different versions of this macro. EXPECT_NONFATAL_FAILURE only
+// affects and considers failures generated in the current thread and
+// EXPECT_NONFATAL_FAILURE_ON_ALL_THREADS does the same but for all threads.
+//
+// 'statement' is allowed to reference local variables and members of
+// the current object.
+//
+// The verification of the assertion is done correctly even when the statement
+// throws an exception or aborts the current function.
+//
+// Known restrictions:
+//   - You cannot stream a failure message to this macro.
+//
+// Note that even though the implementations of the following two
+// macros are much alike, we cannot refactor them to use a common
+// helper macro, due to some peculiarity in how the preprocessor
+// works.  If we do that, the code won't compile when the user gives
+// EXPECT_NONFATAL_FAILURE() a statement that contains a macro that
+// expands to code containing an unprotected comma.  The
+// AcceptsMacroThatExpandsToUnprotectedComma test in gtest_unittest.cc
+// catches that.
+//
+// For the same reason, we have to write
+//   if (::testing::internal::AlwaysTrue()) { statement; }
+// instead of
+//   GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement)
+// to avoid an MSVC warning on unreachable code.
+#define EXPECT_NONFATAL_FAILURE(statement, substr) \
+  do {\
+    ::testing::TestPartResultArray gtest_failures;\
+    ::testing::internal::SingleFailureChecker gtest_checker(\
+        &gtest_failures, ::testing::TestPartResult::kNonFatalFailure, \
+        (substr));\
+    {\
+      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
+          ::testing::ScopedFakeTestPartResultReporter:: \
+          INTERCEPT_ONLY_CURRENT_THREAD, &gtest_failures);\
+      if (::testing::internal::AlwaysTrue()) { statement; }\
+    }\
+  } while (::testing::internal::AlwaysFalse())
     
+      // Returns true iff the test part failed.
+  bool failed() const { return type_ != kSuccess; }
     
-    {	b2PolyNode(b2Vec2& pos);
-	b2PolyNode();
-	void AddConnection(b2PolyNode& toMe);
-	void RemoveConnection(b2PolyNode& fromMe);
-	void RemoveConnectionByIndex(int32 index);
-	bool IsConnectedTo(b2PolyNode& me);
-	b2PolyNode* GetRightestConnection(b2PolyNode* incoming);
-	b2PolyNode* GetRightestConnection(b2Vec2& incomingDir);
-};
+    # define TYPED_TEST(CaseName, TestName) \
+  template <typename gtest_TypeParam_> \
+  class GTEST_TEST_CLASS_NAME_(CaseName, TestName) \
+      : public CaseName<gtest_TypeParam_> { \
+   private: \
+    typedef CaseName<gtest_TypeParam_> TestFixture; \
+    typedef gtest_TypeParam_ TypeParam; \
+    virtual void TestBody(); \
+  }; \
+  bool gtest_##CaseName##_##TestName##_registered_ GTEST_ATTRIBUTE_UNUSED_ = \
+      ::testing::internal::TypeParameterizedTest< \
+          CaseName, \
+          ::testing::internal::TemplateSel< \
+              GTEST_TEST_CLASS_NAME_(CaseName, TestName)>, \
+          GTEST_TYPE_PARAMS_(CaseName)>::Register(\
+              '', #CaseName, #TestName, 0); \
+  template <typename gtest_TypeParam_> \
+  void GTEST_TEST_CLASS_NAME_(CaseName, TestName)<gtest_TypeParam_>::TestBody()
     
-    bool b2Triangle::IsInside(float32 _x, float32 _y){
-	if (_x < x[0] && _x < x[1] && _x < x[2]) return false;
-	if (_x > x[0] && _x > x[1] && _x > x[2]) return false;
-	if (_y < y[0] && _y < y[1] && _y < y[2]) return false;
-	if (_y > y[0] && _y > y[1] && _y > y[2]) return false;
-		
-		float32 vx2 = _x-x[0]; float32 vy2 = _y-y[0];
-		float32 vx1 = x[1]-x[0]; float32 vy1 = y[1]-y[0];
-		float32 vx0 = x[2]-x[0]; float32 vy0 = y[2]-y[0];
-		
-		float32 dot00 = vx0*vx0+vy0*vy0;
-		float32 dot01 = vx0*vx1+vy0*vy1;
-		float32 dot02 = vx0*vx2+vy0*vy2;
-		float32 dot11 = vx1*vx1+vy1*vy1;
-		float32 dot12 = vx1*vx2+vy1*vy2;
-		float32 invDenom = 1.0f / (dot00*dot11 - dot01*dot01);
-		float32 u = (dot11*dot02 - dot01*dot12)*invDenom;
-		float32 v = (dot00*dot12 - dot01*dot02)*invDenom;
-		
-		return ((u>=0)&&(v>=0)&&(u+v<=1));    
-}
+    // FilePath - a class for file and directory pathname manipulation which
+// handles platform-specific conventions (like the pathname separator).
+// Used for helper functions for naming files in a directory for xml output.
+// Except for Set methods, all methods are const or static, which provides an
+// 'immutable value object' -- useful for peace of mind.
+// A FilePath with a value ending in a path separator ('like/this/') represents
+// a directory, otherwise it is assumed to represent a file. In either case,
+// it may or may not represent an actual file or directory in the file system.
+// Names are NOT checked for syntax correctness -- no checking for illegal
+// characters, malformed paths, etc.
     
-    			float fDeltaW = a_frgbaDecodedColor.fA - a_frgbaSourcePixel.fA;
-			float fErrorW = fDeltaW * fDeltaW;
+    // A sample program demonstrating using Google C++ testing framework.
+//
+// Author: wan@google.com (Zhanyong Wan)
     
-    	// abstract base class for specific encodings
-	class Block4x4Encoding
-	{
-	public:
+      // Clears the queue.
+  void Clear() {
+    if (size_ > 0) {
+      // 1. Deletes every node.
+      QueueNode<E>* node = head_;
+      QueueNode<E>* next = node->next();
+      for (; ;) {
+        delete node;
+        node = next;
+        if (node == NULL) break;
+        next = node->next();
+      }
     }
-    
-    static OPUS_INLINE opus_val16 SIG2WORD16_generic(celt_sig x)
-{
-   x = PSHR32(x, SIG_SHIFT);
-   x = MAX32(x, -32768);
-   x = MIN32(x, 32767);
-   return EXTRACT16(x);
-}
-#define SIG2WORD16(x) (SIG2WORD16_generic(x))
-    
-    namespace aria2 {
     }
-    
-    const std::string DHTResponseMessage::R('r');
-    
-      void setTaskQueue(DHTTaskQueue* taskQueue);
-    
-      const std::shared_ptr<DHTNode>& getLocalNode() const { return localNode_; }
-    
-      void setLocalNode(const std::shared_ptr<DHTNode>& localNode);
-    
-    namespace aria2 {
-    }
-    
-      void setTaskQueue(DHTTaskQueue* taskQueue);
-    
-      virtual ~DHTTaskQueueImpl();
-    
-      bool validateToken(const std::string& token, const unsigned char* infoHash,
-                     const std::string& ipaddr, uint16_t port) const;
-    
-    const std::string DHTUnknownMessage::E('e');
-    
-    // System gflags
-DEFINE_string(node_name, 'chassis', 'The chassis module name in proto');
-DEFINE_string(canbus_driver_name, 'canbus', 'Driver name.');
-    
-    unsigned int BaseMapMatrix::GetBinarySize() const { return 0; }
-    
-    namespace apollo {
-namespace canbus {
-    }
-    }
-    
-    // config detail: {'name': 'manual_input', 'offset': 0.0, 'precision': 0.001,
-// 'len': 16, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 7,
-// 'type': 'double', 'order': 'motorola', 'physical_unit': '%'}
-double Accelrpt68::manual_input(const std::uint8_t* bytes,
-                                int32_t length) const {
-  Byte t0(bytes + 0);
-  int32_t x = t0.get_byte(0, 8);
-    }
-    
-      Byte t1(bytes + 3);
-  int32_t t = t1.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
