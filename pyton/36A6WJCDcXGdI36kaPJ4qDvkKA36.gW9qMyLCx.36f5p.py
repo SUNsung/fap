@@ -1,93 +1,177 @@
 
         
-                if not title:
-            error = 'Title is required.'
+        
+FORM_CONTENT_TYPE = 'application/x-www-form-urlencoded; charset=utf-8'
+JSON_CONTENT_TYPE = 'application/json'
+JSON_ACCEPT = '{0}, */*'.format(JSON_CONTENT_TYPE)
+DEFAULT_UA = 'HTTPie/%s' % __version__
     
-        #: Tag classes to bind when creating the serializer. Other tags can be
-    #: added later using :meth:`~register`.
-    default_tags = [
-        TagDict, PassDict, TagTuple, PassList, TagBytes, TagMarkup, TagUUID,
-        TagDateTime,
-    ]
+        def __init__(self, env=Environment(), **kwargs):
     
-            def __init__(self, name, doc=None):
-            self.name = name
-            self.__doc__ = doc
-        def _fail(self, *args, **kwargs):
-            raise RuntimeError('signalling support is unavailable '
-                               'because the blinker library is '
-                               'not installed.')
-        send = lambda *a, **kw: None
-        connect = disconnect = has_receivers_for = receivers_for = \
-            temporarily_connected_to = connected_to = _fail
-        del _fail
+        package_name = '(builtin)'
     
-            Internally this is implemented by going through a temporary test
-        request context and since session handling could depend on
-        request variables this function accepts the same arguments as
-        :meth:`~flask.Flask.test_request_context` which are directly
-        passed through.
+    
+class PluginManager(object):
+    
         '''
-        if self.cookie_jar is None:
-            raise RuntimeError('Session transactions only make sense '
-                               'with cookies enabled.')
-        app = self.application
-        environ_overrides = kwargs.setdefault('environ_overrides', {})
-        self.cookie_jar.inject_wsgi(environ_overrides)
-        outer_reqctx = _request_ctx_stack.top
-        with app.test_request_context(*args, **kwargs) as c:
-            session_interface = app.session_interface
-            sess = session_interface.open_session(app, c.request)
-            if sess is None:
-                raise RuntimeError('Session backend did not open a session. '
-                                   'Check the configuration')
+    args = httpie.cli.parser.parse_args(args=[url], env=MockEnvironment())
+    assert args.auth
+    assert args.auth.username == 'username'
+    assert args.auth.password == ''
     
-            # In debug mode we're replacing the files multidict with an ad-hoc
-        # subclass that raises a different error for key errors.
-        if (
-            current_app
-            and current_app.debug
-            and self.mimetype != 'multipart/form-data'
-            and not self.files
-        ):
-            from .debughelpers import attach_enctype_error_multidict
-            attach_enctype_error_multidict(self)
+        class Plugin(AuthPlugin):
+        auth_type = 'test-require-false-yet-provided'
+        auth_require = False
     
-             try:
-             parallel_model = multi_gpu_model(model, cpu_relocation=True)
-             print('Training using multiple GPUs..')
-         except ValueError:
-             parallel_model = model
-             print('Training using single GPU or CPU..')
-         parallel_model.compile(..)
-         ..
-    ```
-    
-                additional_specs += self.state_spec
-        if constants is not None:
-            kwargs['constants'] = constants
-            additional_inputs += constants
-            self.constants_spec = [InputSpec(shape=K.int_shape(constant))
-                                   for constant in constants]
-            self._num_constants = len(constants)
-            additional_specs += self.constants_spec
-        # at this point additional_inputs cannot be empty
-        for tensor in additional_inputs:
-            if K.is_keras_tensor(tensor) != K.is_keras_tensor(additional_inputs[0]):
-                raise ValueError('The initial state or constants of an RNN'
-                                 ' layer cannot be specified with a mix of'
-                                 ' Keras tensors and non-Keras tensors')
+        def test_GET_explicit_JSON_explicit_headers(self, httpbin):
+        r = http('--json', 'GET', httpbin.url + '/headers',
+                 'Accept:application/xml',
+                 'Content-Type:application/xml')
+        assert HTTP_OK in r
+        assert ''Accept': 'application/xml'' in r
+        assert ''Content-Type': 'application/xml'' in r
     
     
-if K.backend() != 'tensorflow':
-    raise RuntimeError('This example can only run with the TensorFlow backend,'
-                       ' because it requires the Datset API, which is not'
-                       ' supported on other platforms.')
+def test_follow_all_redirects_shown(httpbin):
+    r = http('--follow', '--all', httpbin.url + '/redirect/2')
+    assert r.count('HTTP/1.1') == 3
+    assert r.count('HTTP/1.1 302 FOUND', 2)
+    assert HTTP_OK in r
     
-    import keras
-from keras.datasets import mnist
-from keras.models import Sequential
-from keras.layers import Dense, Dropout
-from keras.optimizers import RMSprop
     
-    now = datetime.datetime.now
+# ConcreteImplementor 1/2
+class DrawingAPI1(object):
+    def draw_circle(self, x, y, radius):
+        print('API1.circle at {}:{} radius {}'.format(x, y, radius))
+    
+    
+class Graphic:
+    def render(self):
+        raise NotImplementedError('You should implement this.')
+    
+        def dispatch(self, request):
+        if request.type == Request.mobile_type:
+            self.mobile_view.show_index_page()
+        elif request.type == Request.tablet_type:
+            self.tablet_view.show_index_page()
+        else:
+            print('cant dispatch the request')
+    
+    
+class TestSubject(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.s = Subject()
+        cls.dec_obs = DecimalViewer()
+        cls.hex_obs = HexViewer()
+    
+        def test_subscriber_shall_be_attachable_to_subscriptions(cls):
+        subscription = 'sub msg'
+        pro = Provider()
+        cls.assertEqual(len(pro.subscribers), 0)
+        sub = Subscriber('sub name', pro)
+        sub.subscribe(subscription)
+        cls.assertEqual(len(pro.subscribers[subscription]), 1)
+    
+        def test_bear_eng_localization(self):
+        self.assertEqual(self.e.get('bear'), 'bear')
+    
+        def test_cat_adapter_shall_make_noise(self):
+        cat = Cat()
+        cat_adapter = Adapter(cat, make_noise=cat.meow)
+        noise = cat_adapter.make_noise()
+        expected_noise = 'meow!'
+        self.assertEqual(noise, expected_noise)
+    
+        def __cut_DAG_NO_HMM(self, sentence):
+        DAG = self.tokenizer.get_DAG(sentence)
+        route = {}
+        self.tokenizer.calc(sentence, DAG, route)
+        x = 0
+        N = len(sentence)
+        buf = ''
+        while x < N:
+            y = route[x][1] + 1
+            l_word = sentence[x:y]
+            if re_eng1.match(l_word):
+                buf += l_word
+                x = y
+            else:
+                if buf:
+                    yield pair(buf, 'eng')
+                    buf = ''
+                yield pair(l_word, self.word_tag_tab.get(l_word, 'x'))
+                x = y
+        if buf:
+            yield pair(buf, 'eng')
+            buf = ''
+    
+    
+def viterbi(obs, states, start_p, trans_p, emit_p):
+    V = [{}]  # tabular
+    mem_path = [{}]
+    all_states = trans_p.keys()
+    for y in states.get(obs[0], all_states):  # init
+        V[0][y] = start_p[y] + emit_p[y].get(obs[0], MIN_FLOAT)
+        mem_path[0][y] = ''
+    for t in xrange(1, len(obs)):
+        V.append({})
+        mem_path.append({})
+        #prev_states = get_top_states(V[t-1])
+        prev_states = [
+            x for x in mem_path[t - 1].keys() if len(trans_p[x]) > 0]
+    
+    if len(sys.argv)>2:
+    n_topic = int(sys.argv[2])
+    
+        def testCutAll(self):
+        for content in test_contents:
+            result = jieba.cut(content, cut_all=True)
+            assert isinstance(result, types.GeneratorType), 'Test CutAll Generator error'
+            result = list(result)
+            assert isinstance(result, list), 'Test CutAll error on content: %s' % content
+            print(' , '.join(result), file=sys.stderr)
+        print('testCutAll', file=sys.stderr)
+    
+    
+def backup_file(directory, filename):
+    ''' Backup a given file by appending .bk to the end '''
+    logger.trace('Backing up: '%s'', filename)
+    origfile = os.path.join(directory, filename)
+    backupfile = origfile + '.bk'
+    if os.path.exists(backupfile):
+        logger.trace('Removing existing file: '%s'', backup_file)
+        os.remove(backupfile)
+    if os.path.exists(origfile):
+        logger.trace('Renaming: '%s' to '%s'', origfile, backup_file)
+        os.rename(origfile, backupfile)
+    
+    
+class Model(OriginalModel):
+    ''' Improved Autoeencoder Model '''
+    def __init__(self, *args, **kwargs):
+        logger.debug('Initializing %s: (args: %s, kwargs: %s',
+                     self.__class__.__name__, args, kwargs)
+        kwargs['input_shape'] = (64, 64, 3)
+        kwargs['encoder_dim'] = 1024
+        self.kernel_initializer = RandomNormal(0, 0.02)
+        super().__init__(*args, **kwargs)
+        logger.debug('Initialized %s', self.__class__.__name__)
+    
+            print('Test: Two or more element stack (general case)')
+        num_items = 10
+        numbers = [randint(0, 10) for x in range(num_items)]
+        sorted_stack = self.get_sorted_stack(stack, numbers)
+        sorted_numbers = []
+        for _ in range(num_items):
+            sorted_numbers.append(sorted_stack.pop())
+        assert_equal(sorted_numbers, sorted(numbers, reverse=True))
+    
+    def main():
+    testing = TestBinaryTree()
+    testing.test_insert_traversals()
+    testing.test_max_min_nodes()
+    testing.test_delete()
+    
+if __name__=='__main__':
+    main()
