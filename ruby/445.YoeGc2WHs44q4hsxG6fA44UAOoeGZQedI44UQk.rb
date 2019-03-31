@@ -1,142 +1,111 @@
 
         
-        # Just a slash
-Benchmark.ips do |x|
-  path = '/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
+                  pipelines.each do |pipeline|
+            self.new(pipeline).tap do |preloader|
+              preloader.preload_commit_authors
+              preloader.preload_pipeline_warnings
+              preloader.preload_stages_warnings
+            end
+          end
+        end
     
-    #
+          # Reads an integer from the cache, or returns nil if no value was found.
+      #
+      # See Caching.read for more information.
+      def self.read_integer(raw_key, timeout: TIMEOUT)
+        value = read(raw_key, timeout: timeout)
     
-              # WebSockets requests will have a Connection: Upgrade header
-          if parser.http_method != 'GET' || parser.upgrade?
-            super
-          elsif parser.request_url =~ %r!^\/livereload.js!
-            headers = [
-              'HTTP/1.1 200 OK',
-              'Content-Type: application/javascript',
-              'Content-Length: #{reload_size}',
-              '',
-              '',
-            ].join('\r\n')
-            send_data(headers)
-    
-        def arg_is_present?(args, deprecated_argument, message)
-      deprecation_message(message) if args.include?(deprecated_argument)
-    end
-    
-        it 'respects an environment variable that specifies a path or URL to a different scenario' do
-      stub.proxy(ENV).[](anything)
-      stub(ENV).[]('DEFAULT_SCENARIO_FILE') { File.join(Rails.root, 'spec', 'fixtures', 'test_default_scenario.json') }
-      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(3)
-    end
-    
-          it 'loads only the workers specified in the :only option' do
-        agent_runner = AgentRunner.new(only: HuginnScheduler)
-        workers = agent_runner.send(:load_workers)
-        expect(workers.keys).to eq(['HuginnScheduler'])
-        agent_runner.stop
+          # Returns the details of a GitHub repository.
+      #
+      # name - The path (in the form `owner/repository`) of the repository.
+      def repository(name)
+        with_rate_limit { octokit.repo(name) }
       end
     
-        it 'should generate the correct last checkpoint url' do
-      @checker.options['path'] = 'last_checkpoint/usps/9361289878905919630610'
-      expect(@checker.send(:event_url)).to eq('https://api.aftership.com/v4/last_checkpoint/usps/9361289878905919630610')
-    end
-  end
-    
-      def status_finder
-    StatusFinder.new(params[:url])
-  end
-    
-          weeks << {
-        week: week.to_time.to_i.to_s,
-        statuses: Redis.current.get('activity:statuses:local:#{week_id}') || '0',
-        logins: Redis.current.pfcount('activity:logins:#{week_id}').to_s,
-        registrations: Redis.current.get('activity:accounts:local:#{week_id}') || '0',
-      }
-    end
-    
-    module RateLimitHeaders
-  extend ActiveSupport::Concern
-    
-      url 'http://swupdl.adobe.com/updates/oobe/aam20/mac/AdobeLightroom-#{version.major}.0/#{version}/setup.dmg'
-  name 'Adobe Photoshop Lightroom'
-  homepage 'https://www.adobe.com/products/photoshop-lightroom.html'
-    
-        def str_to_byte_pos(pos)
-      @s.string.slice(0, pos).bytesize
-    end
-  end
-end
-    
-        def full_line_range(line)
-      Sass::Source::Range.new(
-        Sass::Source::Position.new(@line, to_parser_offset(line.offset)),
-        Sass::Source::Position.new(@line, to_parser_offset(line.offset) + line.text.length),
-        @options[:filename], @options[:importer])
-    end
-    
-        # function
-    # Sass::Callable
-    inherited_hash_writer :function
-  end
-    
-            <<END
-/*
-#{header.gsub('*/', '*\\/')}
-    
-          opts.on('--unix-newlines', 'Use Unix-style newlines in written files.',
-                                 ('Always true on Unix.' unless Sass::Util.windows?)) do
-        @options[:unix_newlines] = true if Sass::Util.windows?
+            def find_target_id
+          GithubImport::IssuableFinder.new(project, issue).database_id
+        end
       end
     end
-    
-    desc 'Generate jekyll site'
-task :generate do
-  raise '### You haven't set anything up yet. First run `rake install` to set up an Octopress theme.' unless File.directory?(source_dir)
-  puts '## Generating Site with Jekyll'
-  system 'compass compile --css-dir #{source_dir}/stylesheets'
-  system 'jekyll build'
+  end
 end
-    
-    run SinatraStaticServer
 
     
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
-      end
-      super
-    end
+            def collection_method
+          :issues_comments
+        end
     
-    class ConfigTag < Liquid::Tag
-  def initialize(tag_name, options, tokens)
-    super
-    options = options.split(' ').map {|i| i.strip }
-    @key = options.slice!(0)
-    @tag = nil
-    @classname = nil
-    options.each do |option|
-      @tag = $1 if option =~ /tag:(\S+)/ 
-      @classname = $1 if option =~ /classname:(\S+)/
-    end
+          # Imports all the objects in sequence in the current thread.
+      def sequential_import
+        each_object_to_import do |object|
+          repr = representation_class.from_api_response(object)
+    
+            expose_attribute :noteable_type, :noteable_id, :commit_id, :file_path,
+                         :diff_hunk, :author, :note, :created_at, :updated_at,
+                         :github_id
+    
+    module Gitlab
+  module QueryLimiting
+    # Middleware for reporting (or raising) when a request performs more than a
+    # certain amount of database queries.
+    class Middleware
+      CONTROLLER_KEY = 'action_controller.instance'.freeze
+      ENDPOINT_KEY = 'api.endpoint'.freeze
+    
+      def update
+    raise ActiveRecord::RecordNotFound if @web_subscription.nil?
+    
+      included do
+    before_action :set_locale
   end
     
-      class ImageTag < Liquid::Tag
-    @img = nil
+      # Under Phusion Passenger smart spawning, we need to reopen all IO streams
+  # after workers have forked.
+  #
+  # The rolling file appender uses shared file locks to ensure that only one
+  # process will roll the log file. Each process writing to the file must have
+  # its own open file descriptor for `flock` to function properly. Reopening
+  # the file descriptors after forking ensures that each worker has a unique
+  # file descriptor.
+  if defined? PhusionPassenger
+    PhusionPassenger.on_event(:starting_worker_process) do |forked|
+      Logging.reopen if forked
+    end
+  end
+end
+    
+      def confirm_on_page(page_name)
+    if page_name == 'my profile page'
+      expect(page).to have_path_in([person_path(@me.person), user_profile_path(@me.username)])
+    else
+      expect(page).to have_path(path_to(page_name))
+    end
+  end
+end
+    
+          # Returns the collection the `for` loop is iterating over.
+      #
+      # @return [Node] The collection the `for` loop is iterating over
+      def collection
+        node_parts[1]
+      end
+    
+    module RailsCommandHelpers
+  def framework_version?(version_string)
+    framework_version =~ /^#{version_string}/
+  end
+    
+    class PaperclipGenerator < ActiveRecord::Generators::Base
+  desc 'Create a migration to add paperclip-specific fields to your model. ' +
+       'The NAME argument is the name of your model, and the following ' +
+       'arguments are the name of the attachments'
+    
+        private
+    
+        # Returns the dot+extension of the file. e.g. '.jpg' for 'file.jpg'
+    # If the style has a format defined, it will return the format instead
+    # of the actual extension. If the extension is empty, no dot is added.
+    def dotextension attachment, style_name
+      ext = extension(attachment, style_name)
+      ext.empty? ? ext : '.#{ext}'
+    end
