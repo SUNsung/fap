@@ -1,170 +1,164 @@
 
         
-            class RespondToActionController < AbstractController::Base
-      def index() self.response_body = 'success' end
-    
-        def to_json
-      JSON.generate(as_json)
+            def suggest_ruby_reinstall(e)
+      ui = FastlaneCore::UI
+      ui.error('-----------------------------------------------------------------------')
+      ui.error(e.to_s)
+      ui.error('')
+      ui.error('SSL errors can be caused by various components on your local machine.')
+      if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.1')
+        ui.error('Apple has recently changed their servers to require TLS 1.2, which may')
+        ui.error('not be available to your system installed Ruby (#{RUBY_VERSION})')
+      end
+      ui.error('')
+      ui.error('The best solution is to use the self-contained fastlane version.')
+      ui.error('Which ships with a bundled OpenSSL,ruby and all gems - so you don't depend on system libraries')
+      ui.error(' - Use Homebrew')
+      ui.error('    - update brew with `brew update`')
+      ui.error('    - install fastlane using:')
+      ui.error('      - `brew cask install fastlane`')
+      ui.error(' - Use One-Click-Installer:')
+      ui.error('    - download fastlane at https://download.fastlane.tools')
+      ui.error('    - extract the archive and double click the `install`')
+      ui.error('-----------------------------------------------------------')
+      ui.error('for more details on ways to install fastlane please refer the documentation:')
+      ui.error('-----------------------------------------------------------')
+      ui.error('        🚀       https://docs.fastlane.tools          🚀   ')
+      ui.error('-----------------------------------------------------------')
+      ui.error('')
+      ui.error('You can also install a new version of Ruby')
+      ui.error('')
+      ui.error('- Make sure OpenSSL is installed with Homebrew: `brew update && brew upgrade openssl`')
+      ui.error('- If you use system Ruby:')
+      ui.error('  - Run `brew update && brew install ruby`')
+      ui.error('- If you use rbenv with ruby-build:')
+      ui.error('  - Run `brew update && brew upgrade ruby-build && rbenv install 2.3.1`')
+      ui.error('  - Run `rbenv global 2.3.1` to make it the new global default Ruby version')
+      ui.error('- If you use rvm:')
+      ui.error('  - First run `rvm osx-ssl-certs update all`')
+      ui.error('  - Then run `rvm reinstall ruby-2.3.1 --with-openssl-dir=/usr/local`')
+      ui.error('')
+      ui.error('If that doesn't fix your issue, please google for the following error message:')
+      ui.error('  '#{e}'')
+      ui.error('-----------------------------------------------------------------------')
     end
     
-        def replace(index, name)
-      @filters[assert_index(index)] = filter_const(name)
-    end
-    
-        def blank?
-      body.blank?
-    end
-    
-    module Docs
-  class Subscriber < ActiveSupport::Subscriber
-    cattr_accessor :namespace
-    
-        def destroy
-      authorize @email_domain_block, :destroy?
-      @email_domain_block.destroy!
-      log_action :destroy, @email_domain_block
-      redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.destroyed_msg')
-    end
-    
-        def resource_params
-      params.require(:report_note).permit(
-        :content,
-        :report_id
-      )
-    end
-    
-      def lease_seconds_or_default
-    (params['hub.lease_seconds'] || 1.day).to_i.seconds
-  end
-    
-    class Api::Web::SettingsController < Api::Web::BaseController
-  respond_to :json
-    
-      def send_export_file
-    respond_to do |format|
-      format.csv { send_data export_data, filename: export_filename }
-    end
-  end
-    
-      def preferred_locale
-    http_accept_language.preferred_language_from(available_locales)
-  end
-    
-      def existing
-    existing_path = select(&File.method(:directory?))
-    # return nil instead of empty PATH, to unset environment variables
-    existing_path unless existing_path.empty?
-  end
-    
-          @actual = [file, stderr]
-    
-    def prev_version
-  return prev_feature + '.0' if source_version.end_with? '.0'
-  source_version.gsub(/\d+$/) { |s| s.to_i - 1 }
-end
-    
-        if run? && ARGV.any?
-      require 'optparse'
-      OptionParser.new { |op|
-        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
-        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
-        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
-        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
-        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
-        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
-      }.parse!(ARGV.dup)
-    end
-  end
-    
-        <div id='cookies'>
-      <h3 id='cookie-info'>COOKIES</h3>
-      <% unless req.cookies.empty? %>
-        <table class='req'>
-          <tr>
-            <th>Variable</th>
-            <th>Value</th>
-          </tr>
-          <% req.cookies.each { |key, val| %>
-            <tr>
-              <td><%=h key %></td>
-              <td class='code'><div><%=h val.inspect %></div></td>
-            </tr>
-          <% } %>
-        </table>
-      <% else %>
-        <p class='no-data'>No cookie data.</p>
-      <% end %>
-      <div class='clear'></div>
-    </div> <!-- /COOKIES -->
-    
-            DIRECTIVES.each do |d|
-          if options.key?(d)
-            directives << '#{d.to_s.sub(/_/, '-')} #{options[d]}'
-          end
-        end
-    
-          def has_vector?(request, headers)
-        return false if request.xhr?
-        return false if options[:allow_if] && options[:allow_if].call(request.env)
-        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
-        origin(request.env).nil? and referrer(request.env) != request.host
+            message = 'builds/test/#{build_number}#{postfix} (fastlane)'
+        tag = 'builds/test/#{build_number}#{postfix}'
+        expect(result).to eq('git tag -am #{message.shellescape} #{tag.shellescape}')
       end
     
-    desc 'copy dot files for deployment'
-task :copydot, :source, :dest do |t, args|
-  FileList['#{args.source}/**/.*'].exclude('**/.', '**/..', '**/.DS_Store', '**/._*').each do |file|
-    cp_r file, file.gsub(/#{args.source}/, '#{args.dest}') unless File.directory?(file)
-  end
-end
+        def doc_default_value
+      return '[*](#parameters-legend-dynamic)' if self.default_value_dynamic
+      return '' if self.default_value.nil?
+      return '`''`' if self.default_value.instance_of?(String) && self.default_value.empty?
+      return '`:#{self.default_value}`' if self.default_value.instance_of?(Symbol)
     
-      get(/.+/) do
-    send_sinatra_file(request.path) {404}
-  end
-    
-    Liquid::Template.register_tag('blockquote', Jekyll::Blockquote)
-
-    
-    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
-
-    
-      # Extracts raw content DIV from template, used for page description as {{ content }}
-  # contains complete sub-template code on main page level
-  def raw_content(input)
-    /<div class='entry-content'>(?<content>[\s\S]*?)<\/div>\s*<(footer|\/article)>/ =~ input
-    return (content.nil?) ? input : content
+      it 'asks to accept conflicts when the scenario was modified' do
+    DefaultScenarioImporter.seed(user)
+    agent = user.agents.where(name: 'Rain Notifier').first
+    agent.options['expected_receive_period_in_days'] = 9001
+    agent.save!
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
+    click_on 'Start Import'
+    expect(page).to have_text('This Scenario already exists in your system.')
+    expect(page).to have_text('9001')
+    check('I confirm that I want to import these Agents.')
+    click_on 'Finish Import'
+    expect(page).to have_text('Import successful!')
   end
     
-      class RenderPartialTag < Liquid::Tag
-    include OctopressFilters
-    def initialize(tag_name, markup, tokens)
-      @file = nil
-      @raw = false
-      if markup =~ /^(\S+)\s?(\w+)?/
-        @file = $1.strip
-        @raw = $2 == 'raw'
-      end
-      super
+      describe '#dangerous?' do
+    it 'returns false on most Agents' do
+      expect(ScenarioImport.new(:data => valid_data)).not_to be_dangerous
     end
     
-        # npm installs dependencies in the module itself, so if you do
-    # 'npm install express' it installs dependencies (like 'connect')
-    # to: node_modules/express/node_modules/connect/...
-    #
-    # To that end, I don't think we necessarily need to include
-    # any automatic dependency information since every 'npm install'
-    # is fully self-contained. That's why you don't see any bother, yet,
-    # to include the package's dependencies in here.
-    #
-    # It's possible someone will want to decouple that in the future,
-    # but I will wait for that feature request.
+        it 'outputs a structure containing name, description, the date, all agents & their links' do
+      data = exporter.as_json
+      expect(data[:name]).to eq(name)
+      expect(data[:description]).to eq(description)
+      expect(data[:source_url]).to eq(source_url)
+      expect(data[:guid]).to eq(guid)
+      expect(data[:schema_version]).to eq(1)
+      expect(data[:tag_fg_color]).to eq(tag_fg_color)
+      expect(data[:tag_bg_color]).to eq(tag_bg_color)
+      expect(data[:icon]).to eq(icon)
+      expect(Time.parse(data[:exported_at])).to be_within(2).of(Time.now.utc)
+      expect(data[:links]).to eq([{ :source => guid_order(agent_list, :jane_weather_agent), :receiver => guid_order(agent_list, :jane_rain_notifier_agent)}])
+      expect(data[:control_links]).to eq([])
+      expect(data[:agents]).to eq(agent_list.sort_by{|a| a.guid}.map { |agent| exporter.agent_as_json(agent) })
+      expect(data[:agents].all? { |agent_json| agent_json[:guid].present? && agent_json[:type].present? && agent_json[:name].present? }).to be_truthy
+    
+      describe '#log_length' do
+    it 'defaults to 200' do
+      expect(AgentLog.log_length).to eq(200)
+    end
   end
+end
+
     
-    require 'pleaserun/cli'
+          # Returns the path to a file for the given key.
+      #
+      # @param key [String]
+      # @return [String] The path to the cache file.
+      def path_to(key)
+        key = key.gsub(/[<>:\\|?*%]/) {|c| '%%%03d' % c.ord}
+        File.join(cache_location, key)
+      end
+    end
+  end
+end
+
     
-        cleanup_staging
-    # Tell 'dir' to input '.' and chdir/prefix will help it figure out the
-    # rest.
-    dir.input('.')
-    @staging_path = dir.staging_path
-    dir.cleanup_build
-  end # def input
+          # Almost any real Unix terminal will support color,
+      # so we just filter for Windows terms (which don't set TERM)
+      # and not-real terminals, which aren't ttys.
+      return str if ENV['TERM'].nil? || ENV['TERM'].empty? || !STDOUT.tty?
+      '\e[#{COLORS[color]}m#{str}\e[0m'
+    end
+    
+          files.map! do |from, to|
+        to ||= from.gsub(/\.[^.]*?$/, '.css')
+        sourcemap = Sass::Util.sourcemap_name(to) if @options[:sourcemap]
+        [from, to, sourcemap]
+      end
+      dirs.map! {|from, to| [from, to || from]}
+      Sass::Plugin.options[:template_location] = dirs
+    
+          # Creates a new filesystem importer that imports files relative to a given path.
+      #
+      # @param root [String] The root path.
+      #   This importer will import files relative to this path.
+      def initialize(root)
+        @root = File.expand_path(root)
+        @real_root = Sass::Util.realpath(@root).to_s
+        @same_name_warnings = Set.new
+      end
+    
+          it 'detects closing brace on same line as last element' do
+        src = construct(true, false)
+        inspect_source(src)
+    
+          # Returns the collection the `for` loop is iterating over.
+      #
+      # @return [Node] The collection the `for` loop is iterating over
+      def collection
+        node_parts[1]
+      end
+    
+          # Checks whether any of the key value pairs in the `hash` literal are on
+      # the same line.
+      #
+      # @note A multiline `pair` is considered to be on the same line if it
+      #       shares any of its lines with another `pair`
+      #
+      # @return [Boolean] whether any `pair` nodes are on the same line
+      def pairs_on_same_line?
+        pairs.each_cons(2).any? { |first, second| first.same_line?(second) }
+      end
+    
+        def each_mentioned_cop
+      each_directive do |comment, cop_names, disabled|
+        comment_line_number = comment.loc.expression.line
+        single_line = !comment_only_line?(comment_line_number)
