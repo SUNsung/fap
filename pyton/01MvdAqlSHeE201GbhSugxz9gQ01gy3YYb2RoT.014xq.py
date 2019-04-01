@@ -1,46 +1,44 @@
 
         
         
-def run():
-    io_loop = IOLoop(make_current=True)
-    app = Application([('/', RootHandler)])
-    port = random.randrange(options.min_port, options.max_port)
-    app.listen(port, address='127.0.0.1')
-    signal.signal(signal.SIGCHLD, handle_sigchld)
-    args = ['ab']
-    args.extend(['-n', str(options.n)])
-    args.extend(['-c', str(options.c)])
-    if options.keepalive:
-        args.append('-k')
-    if options.quiet:
-        # just stops the progress messages printed to stderr
-        args.append('-q')
-    args.append('http://127.0.0.1:%d/' % port)
-    subprocess.Popen(args)
-    io_loop.start()
-    io_loop.close()
-    io_loop.clear_current()
+def __feet_to_meters(feet: float) -> float:
+    '''Convert feet to meters.'''
+    return feet * 0.3048
     
-    # These benchmarks are delicate.  They hit various fast-paths in the gen
-# machinery in order to stay synchronous so we don't need an IOLoop.
-# This removes noise from the results, but it's easy to change things
-# in a way that completely invalidates the results.
-    
-    
-class TwitterClientShowUserHandler(TwitterClientHandler):
-    @gen.coroutine
-    def get(self):
-        # TODO: would be nice to go through the login flow instead of
-        # cheating with a hard-coded access token.
-        try:
-            response = yield self.twitter_request(
-                '/users/show/%s' % self.get_argument('name'),
-                access_token=dict(key='hjkl', secret='vbnm'),
-            )
-        except HTTPClientError:
-            # TODO(bdarnell): Should we catch HTTP errors and
-            # transform some of them (like 403s) into AuthError?
-            self.set_status(500)
-            self.finish('error from twitter request')
+        elif bump_type == 'dev':
+        # Convert 0.67.3 to 0.67.4.dev0
+        # Convert 0.67.3.b5 to 0.67.4.dev0
+        # Convert 0.67.3.dev0 to 0.67.3.dev1
+        if version.is_devrelease:
+            to_change['dev'] = ('dev', version.dev + 1)
         else:
-            self.finish(response)
+            to_change['pre'] = ('dev', 0)
+            to_change['release'] = _bump_release(version.release, 'minor')
+    
+    def get_extension(link):
+    extension = os.path.splitext(link)[1][1:]
+    if extension in ['pdf', 'html']:
+        return extension
+    if 'pdf' in extension:
+        return 'pdf'    
+    return 'pdf'    
+    
+        def __call__(self, text, **kargs):
+        words = jieba.tokenize(text, mode='search')
+        token = Token()
+        for (w, start_pos, stop_pos) in words:
+            if not accepted_chars.match(w) and len(w) <= 1:
+                continue
+            token.original = token.text = w
+            token.pos = start_pos
+            token.startchar = start_pos
+            token.endchar = stop_pos
+            yield token
+    
+            for y in obs_states:
+            prob, state = max((V[t - 1][y0] + trans_p[y0].get(y, MIN_INF) +
+                               emit_p[y].get(obs[t], MIN_FLOAT), y0) for y0 in prev_states)
+            V[t][y] = prob
+            mem_path[t][y] = state
+    
+    file_name = args[0]
