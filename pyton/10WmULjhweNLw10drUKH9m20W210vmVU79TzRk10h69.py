@@ -1,87 +1,167 @@
-      if on_epoch_completed:
-        should_stop = on_epoch_completed(self, session, epoch, epoch_loss,
-                                         val_instances, val_labels, save_path)
-        if should_stop:
-          print('Stopping training after %d epochs.' % epoch)
-          return
+
+        
+            def __repr__(self):
+        return '<lookup \'%s\'>' % (self.name)
     
-    # Sometimes the task can be sufficiently hard to learn that the
-# optimizer takes the 'easy route', and simply minimizes the KL
-# divergence, setting it to near zero, and the optimization gets
-# stuck.  These two parameters will help avoid that by by getting the
-# optimization to 'latch' on to the main optimization, and only
-# turning in the regularizers later.
-flags.DEFINE_integer('kl_start_step', KL_START_STEP,
-                     'Start increasing weight after this many steps.')
-# training passes, not epochs, increase by 0.5 every kl_increase_steps
-flags.DEFINE_integer('kl_increase_steps', KL_INCREASE_STEPS,
-                     'Increase weight of kl cost to avoid local minimum.')
-# Same story for l2 regularizer.  One wants a simple generator, for scientific
-# reasons, but not at the expense of hosing the optimization.
-flags.DEFINE_integer('l2_start_step', L2_START_STEP,
-                     'Start increasing l2 weight after this many steps.')
-flags.DEFINE_integer('l2_increase_steps', L2_INCREASE_STEPS,
-                     'Increase weight of l2 cost to avoid local minimum.')
+        @possible_keys
+    def test_delitem(self, key):
+        del self.case_insensitive_dict[key]
+        assert key not in self.case_insensitive_dict
     
-      inputs = np.zeros([batch_size, num_steps], np.int32)
-  char_inputs = np.zeros([batch_size, num_steps, max_word_length], np.int32)
-  global_word_ids = np.zeros([batch_size, num_steps], np.int32)
-  targets = np.zeros([batch_size, num_steps], np.int32)
-  weights = np.ones([batch_size, num_steps], np.float32)
+                if self.wait_to_close_event:
+                self.wait_to_close_event.wait(self.WAIT_EVENT_TIMEOUT)
+        finally:
+            self.ready_event.set() # just in case of exception
+            self._close_server_sock_ignore_errors()
+            self.stop_event.set()
     
-      prefix = [vocab.word_to_id(w) for w in prefix_words.split()]
-  prefix_char_ids = [vocab.word_to_char_ids(w) for w in prefix_words.split()]
-  for _ in xrange(FLAGS.num_samples):
-    inputs = np.zeros([BATCH_SIZE, NUM_TIMESTEPS], np.int32)
-    char_ids_inputs = np.zeros(
-        [BATCH_SIZE, NUM_TIMESTEPS, vocab.max_word_length], np.int32)
-    samples = prefix[:]
-    char_ids_samples = prefix_char_ids[:]
-    sent = ''
-    while True:
-      inputs[0, 0] = samples[0]
-      char_ids_inputs[0, 0, :] = char_ids_samples[0]
-      samples = samples[1:]
-      char_ids_samples = char_ids_samples[1:]
     
-      counter = collections.Counter(data)
-  count_pairs = sorted(counter.items(), key=lambda x: (-x[1], x[0]))
+def get_cookie_header(jar, request):
+    '''
+    Produce an appropriate Cookie header string to be sent with `request`, or None.
     
-              [gen_initial_state_eval, fake_gen_initial_state_eval, _] = sess.run(
-              [
-                  model.eval_final_state, model.fake_gen_final_state,
-                  model.global_step
-              ],
-              feed_dict=eval_feed)
+        :param cj: CookieJar to insert cookies into.
+    :param cookie_dict: Dict of key/values to insert into CookieJar.
+    :rtype: CookieJar
+    '''
     
-      Returns:
-    loss: Scalar tf.float32 total loss.
-  '''
-  cross_entropy_loss = tf.nn.sparse_softmax_cross_entropy_with_logits(
-      labels=gen_labels, logits=gen_logits)
-  gan_loss = -tf.log(dis_predictions)
-  loss_matrix = tf.where(is_real_input, cross_entropy_loss, gan_loss)
-  return tf.reduce_mean(loss_matrix)
+                try:
+                self.working_appid_list.remove(appid)
+            except:
+                pass
     
-      Args;
-    hparams:  Hyperparameters for the MaskGAN.
-    inputs:  tf.int32 Tensor of the sequence input of shape [batch_size,
-      sequence_length].
-    present:  tf.bool Tensor indicating the presence or absence of the token
-      of shape [batch_size, sequence_length].
-    is_training:  Whether the model is training.
-    is_validating:  Whether the model is being run in validation mode for
-      calculating the perplexity.
-    reuse (Optional):  Whether to reuse the model.
+    current_path = os.path.dirname(os.path.abspath(__file__))
     
-            print('Two or more elements')
-        data = [5, 1, 7, 2, 6, -3, 5, 7, -1]
-        assert_equal(insertion_sort.sort(data), sorted(data))
     
-            print('Empty input')
-        assert_equal(merge_sort.sort([]), [])
+def new_pteredor(probe_nat=True):
+    if os.path.isfile(log_file):
+        try:
+            os.remove(log_file)
+        except Exception as e:
+            xlog.warn('remove %s fail:%r', log_file, e)
     
-            print('Test: set on a key that already exists')
-        hash_table.set(10, 'foo3')
-        assert_equal(hash_table.get(0), 'foo')
-        assert_equal(hash_table.get(10), 'foo3')
+    ## All tokens go to the parser (unless skip() is called in that rule)
+# on a particular 'channel'.  The parser tunes to a particular channel
+# so that whitespace etc... can go to the parser on a 'hidden' channel.
+DEFAULT_CHANNEL = 0
+    
+            Python does not have any size restrictions, but the compilation of
+        such large source files seems to be pretty memory hungry. The memory
+        consumption of the python process grew to >1.5GB when importing a
+        15MB lexer, eating all my swap space and I was to impacient to see,
+        if it could finish at all. With packed initializers that are unpacked
+        at import time of the lexer module, everything works like a charm.
+        
+        '''
+        
+        ret = []
+        for i in range(len(string) / 2):
+            (n, v) = ord(string[i*2]), ord(string[i*2+1])
+    
+        def __init__(
+        self, grammarDecisionDescription, decisionNumber, stateNumber, input
+        ):
+        RecognitionException.__init__(self, input)
+    
+    
+    def getSourceName(self):
+        '''
+        Where are you getting symbols from?  Normally, implementations will
+        pass the buck all the way to the lexer who can ask its input stream
+        for the file name or whatever.
+        '''
+    
+    
+# Path to data dir
+_DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
+    
+    
+def bottleneck_transformation(
+    model,
+    blob_in,
+    dim_in,
+    dim_out,
+    stride,
+    prefix,
+    dim_inner,
+    dilation=1,
+    group=1
+):
+    '''Add a bottleneck transformation to the model.'''
+    # In original resnet, stride=2 is on 1x1.
+    # In fb.torch resnet, stride=2 is on 3x3.
+    (str1x1, str3x3) = (stride, 1) if cfg.RESNETS.STRIDE_1X1 else (1, stride)
+    
+        assert len(blobs_in) == k_max - k_min + 1
+    bbox_feat_list = []
+    cls_pred_dim = (
+        model.num_classes if cfg.RETINANET.SOFTMAX else (model.num_classes - 1)
+    )
+    # unpacked bbox feature and add prediction layers
+    bbox_regr_dim = (
+        4 * (model.num_classes - 1) if cfg.RETINANET.CLASS_SPECIFIC_BBOX else 4
+    )
+    
+        # Create new roi blobs for each FPN level
+    # (See: modeling.FPN.add_multilevel_roi_blobs which is similar but annoying
+    # to generalize to support this particular case.)
+    rois_idx_order = np.empty((0, ))
+    for output_idx, lvl in enumerate(range(lvl_min, lvl_max + 1)):
+        idx_lvl = np.where(lvls == lvl)[0]
+        blob_roi_level = rois[idx_lvl, :]
+        outputs[output_idx + 1].reshape(blob_roi_level.shape)
+        outputs[output_idx + 1].data[...] = blob_roi_level
+        rois_idx_order = np.concatenate((rois_idx_order, idx_lvl))
+    rois_idx_restore = np.argsort(rois_idx_order)
+    blob_utils.py_op_copy_blob(rois_idx_restore.astype(np.int32), outputs[-1])
+
+    
+        def forward(self, inputs, outputs):
+        '''See modeling.detector.GenerateProposalLabels for inputs/outputs
+        documentation.
+        '''
+        # During training we reuse the data loader code. We populate roidb
+        # entries on the fly using the rois generated by RPN.
+        # im_info: [[im_height, im_width, im_scale], ...]
+        rois = inputs[0].data
+        roidb = blob_utils.deserialize(inputs[1].data)
+        im_info = inputs[2].data
+        im_scales = im_info[:, 2]
+        output_blob_names = fast_rcnn_roi_data.get_fast_rcnn_blob_names()
+        # For historical consistency with the original Faster R-CNN
+        # implementation we are *not* filtering crowd proposals.
+        # This choice should be investigated in the future (it likely does
+        # not matter).
+        json_dataset.add_proposals(roidb, rois, im_scales, crowd_thresh=0)
+        roidb_utils.add_bbox_regression_targets(roidb)
+        blobs = {k: [] for k in output_blob_names}
+        fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
+        for i, k in enumerate(output_blob_names):
+            blob_utils.py_op_copy_blob(blobs[k], outputs[i])
+
+    
+        points: Nx2xK
+    boxes: Nx4
+    output: NxK
+    '''
+    x_within = np.logical_and(
+        points[:, 0, :] >= np.expand_dims(boxes[:, 0], axis=1),
+        points[:, 0, :] <= np.expand_dims(boxes[:, 2], axis=1)
+    )
+    y_within = np.logical_and(
+        points[:, 1, :] >= np.expand_dims(boxes[:, 1], axis=1),
+        points[:, 1, :] <= np.expand_dims(boxes[:, 3], axis=1)
+    )
+    return np.logical_and(x_within, y_within)
+
+    
+            # Find overlap between all foreground rois and the bounding boxes
+        # enclosing each segmentation
+        rois_fg = sampled_boxes[fg_inds]
+        overlaps_bbfg_bbpolys = box_utils.bbox_overlaps(
+            rois_fg.astype(np.float32, copy=False),
+            boxes_from_polys.astype(np.float32, copy=False)
+        )
+        # Map from each fg rois to the index of the mask with highest overlap
+        # (measured by bbox overlap)
+        fg_polys_inds = np.argmax(overlaps_bbfg_bbpolys, axis=1)
