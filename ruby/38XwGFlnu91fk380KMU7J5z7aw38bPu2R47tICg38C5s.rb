@@ -1,112 +1,91 @@
 
         
-        #############################################################################
-#
-# Standard tasks
-#
-#############################################################################
+          it 'no errors without a user' do
+    expect(-> { GivenDailyLike.increment_for(nil) }).not_to raise_error
+    expect(-> { GivenDailyLike.decrement_for(nil) }).not_to raise_error
+  end
     
-    def graceful_require
-  Jekyll::External.require_with_graceful_fail('json')
-  JSON.pretty_generate(DATA)
-end
+        group.remove(moderator)
+    group.save
     
-            # For a description of the protocol see
-        # http://feedback.livereload.com/knowledgebase/articles/86174-livereload-protocol
-        def reload(pages)
-          pages.each do |p|
-            json_message = JSON.dump(
-              :command => 'reload',
-              :path    => p.url,
-              :liveCSS => true
+            it 'supports autocorrect mode option' do
+          result = Fastlane::FastFile.new.parse('lane :test do
+            swiftlint(
+              mode: :autocorrect
             )
+          end').runner.execute(:test)
     
-        def email_changed(record, opts={})
-      devise_mail(record, :email_changed, opts)
-    end
+        describe 'shell escaping' do
+      let(:keychain_name) { 'keychain with spaces.keychain' }
+      let(:shell_escaped_name) { keychain_name.shellescape }
+      let(:name_regex) { Regexp.new(Regexp.escape(shell_escaped_name)) }
     
-          # Set up a subject doing an I18n lookup. At first, it attempts to set a subject
-      # based on the current mapping:
-      #
-      #   en:
-      #     devise:
-      #       mailer:
-      #         confirmation_instructions:
-      #           user_subject: '...'
-      #
-      # If one does not exist, it fallbacks to ActionMailer default:
-      #
-      #   en:
-      #     devise:
-      #       mailer:
-      #         confirmation_instructions:
-      #           subject: '...'
-      #
-      def subject_for(key)
-        I18n.t(:'#{devise_mapping.name}_subject', scope: [:devise, :mailer, key],
-          default: [:subject, key.to_s.humanize])
-      end
-    end
-  end
-end
-
+    shelljoin_testcases = [
+  {
+    'it' => '(#1) on array with entry with space',
+    'it_result' => {
+      'windows' => 'wraps this entry in double quotes',
+      'other'   => 'escapes the space in this entry'
+    },
+    'input' => ['a', 'b c', 'd'],
+    'expect' => {
+      'windows' => 'a 'b c' d',
+      'other'   => 'a b\ c d'
+    }
+  },
+  {
+    'it' => '(#2) on array with entry with string wrapped in double quotes and space',
+    'it_result' => {
+      'windows' => 'wraps the entry with space in quote, and doubles the double quotes',
+      'other'   => 'escapes the double quotes and escapes the space'
+    },
+    'input' => ['a', ''b' c', 'd'],
+    'expect' => {
+      'windows' => 'a '''b'' c' d',
+      'other'   => 'a \'b\'\ c d'
+    }
+  },
+  {
+    'it' => '(#3) on array with entry with string wrapped in single quotes and space',
+    'it_result' => {
+      'windows' => 'no changes',
+      'other'   => 'escapes the single quotes and space'
+    },
+    'input' => ['a', ''b' c', 'd'],
+    'expect' => {
+      'windows' => 'a \''b' c\' d',
+      'other'   => 'a \\'b\\'\\ c d'
+    }
+  },
+  # https://github.com/ruby/ruby/blob/ac543abe91d7325ace7254f635f34e71e1faaf2e/test/test_shellwords.rb#L67-L68
+  {
+    'it' => '(#4) on array with entry that is `$$`',
+    'it_result' => {
+      'windows' => 'the result includes the process id',
+      'other'   => 'the result includes the process id'
+    },
+    'input' => ['ps', '-p', $$],
+    'expect' => {
+      'windows' => 'ps -p #{$$}',
+      'other'   => 'ps -p #{$$}'
+    }
+  }
+]
     
-    require 'devise/models/authenticatable'
-
+                k1 = OpenSSL::HMAC.digest('MD5', key, [msg_type].pack('V'))
+            k3 = OpenSSL::HMAC.digest('MD5', k1, checksum)
     
-            within('.table-active-filters') do
-          expect(page).to have_content('Start: 2018/01/01')
-          expect(page).to have_content('Stop: 2018/06/30')
-          expect(page).to have_content('Order: R100')
-          expect(page).to have_content('Status: cart')
-          expect(page).to have_content('Payment State: paid')
-          expect(page).to have_content('Shipment State: pending')
-          expect(page).to have_content('First Name Begins With: John')
-          expect(page).to have_content('Last Name Begins With: Smith')
-          expect(page).to have_content('Email: john_smith@example.com')
-          expect(page).to have_content('SKU: BAG-00001')
-          expect(page).to have_content('Promotion: Promo')
-          expect(page).to have_content('Store: Spree Test Store')
-          expect(page).to have_content('Channel: spree')
+    
+          private
+    
+              # @!attribute type
+          #   @return [Integer] The type of value
+          attr_accessor :type
+          # @!attribute value
+          #   @return [Time] the time of the last request
+          attr_accessor :value
+    
+          def header_string(e, line_offset)
+        unless e.is_a?(Sass::SyntaxError) && e.sass_line && e.sass_template
+          return '#{e.class}: #{e.message}'
         end
-      end
-    end
-  end
-end
-
-    
-                  expect(order.shipments.count).to eq(1)
-              expect(order.shipments.first.inventory_units_for(product.master).sum(&:quantity)).to eq(2)
-              expect(order.shipments.first.stock_location.id).to eq(stock_location.id)
-            end
-          end
-    
-        def flash_messages(opts = {})
-      ignore_types = ['order_completed'].concat(Array(opts[:ignore_types]).map(&:to_s) || [])
-    
-      def for_each_gem
-    SPREE_GEMS.each do |gem_name|
-      yield 'pkg/spree_#{gem_name}-#{version}.gem'
-    end
-    yield 'pkg/spree-#{version}.gem'
-  end
-    
-          rescue_from ActionController::ParameterMissing, with: :error_during_processing
-      rescue_from ActiveRecord::RecordInvalid, with: :error_during_processing
-      rescue_from ActiveRecord::RecordNotFound, with: :not_found
-      rescue_from CanCan::AccessDenied, with: :unauthorized
-      rescue_from Spree::Core::GatewayError, with: :gateway_error
-    
-              state = @states.last
-          respond_with(@states) if stale?(state)
-        end
-    
-    When /^(?:|I )choose '([^']*)'$/ do |field|
-  choose(field)
-end
-    
-        def raise_because_imagemagick_missing
-      raise Errors::CommandNotFoundError.new('Could not run the `identify` command. Please install ImageMagick.')
-    end
-  end
-end
