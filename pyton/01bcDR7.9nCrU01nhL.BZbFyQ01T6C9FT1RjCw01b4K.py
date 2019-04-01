@@ -1,78 +1,170 @@
 
         
-            def __call__(self, x):
-        ''''''
-        n_input = int(x.get_shape()[-1])
-        if not self._built:
-            self._build(n_input)
-            self._built = True
+        
+class Cache(object):
     
-        这里实际上没有用到 J 和 d 这个参数，保留是为了与 `attention_flow()` 的参数兼容
+      model.train_model(datasets)
     
-    import tensorflow as tf
-import keras.backend as K
+        # Loop through the 2D matrix of word_patches and score each.
+    for i, row in enumerate(word_patches):
+      print('Reset RNN states.')
+      self.reset()  # reset states before processing each row.
+      row_probs = np.zeros([batch_size, 0])
+      for j, word_patch in enumerate(row):
+        print('Processing patch '
+              '({}, {}) / ({}, {})'.format(i+1, j+1, nrow, ncol))
+        patch_probs = (self._score(word_patch) if word_patch else
+                       np.zeros([batch_size, num_timesteps]))
+        row_probs = np.concatenate([row_probs, patch_probs], 1)
+      probs = np.concatenate([probs, row_probs], 0)
+    return probs
     
-    *What does this example do?
-The code shows a way to localize words in two languages: English and
-Greek. 'getLocalizer' is the factory method that constructs a
-localizer depending on the language chosen. The localizer object will
-be an instance from a different class according to the language
-localized. However, the main code does not have to worry about which
-localizer will be instantiated, since the method 'get' will be called
-in the same way independently of the language.
+      train_data = _read_words(train_path)
+  valid_data = _read_words(valid_path)
+  return train_data, valid_data
     
-        @lazy_property2
-    def parents(self):
-        self.call_count2 += 1
-        return 'Father and mother'
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+    
+      # The unique ngrams in the training set.
+  unique_ngrams_in_train = 0.
+    
+      # Dictionary mapping.
+  if model == 'gen':
+    variable_mapping = {
+        'Model/embedding': embedding,
+        'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel': lstm_w_0,
+        'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias': lstm_b_0,
+        'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/kernel': lstm_w_1,
+        'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/bias': lstm_b_1,
+        'Model/softmax_w': softmax_w,
+        'Model/softmax_b': softmax_b
+    }
+  else:
+    if FLAGS.dis_share_embedding:
+      variable_mapping = {
+          'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel': lstm_w_0,
+          'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias': lstm_b_0,
+          'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/kernel': lstm_w_1,
+          'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/bias': lstm_b_1
+      }
+    else:
+      variable_mapping = {
+          'Model/embedding': embedding,
+          'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel': lstm_w_0,
+          'Model/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias': lstm_b_0,
+          'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/kernel': lstm_w_1,
+          'Model/RNN/multi_rnn_cell/cell_1/basic_lstm_cell/bias': lstm_b_1
+      }
+    
+            # The rule matches AWS only if all rule data fields are equal
+        # to their corresponding local value defined in the task
+        return all([
+            getattr(self.rule, field) == aws_rule_data.get(field, None)
+            for field in self.RULE_FIELDS
+        ])
+    
+    # Create a snapshot only if the most recent one is older than 1 hour
+- local_action:
+    module: ec2_snapshot
+    volume_id: vol-abcdef12
+    last_snapshot_min_age: 60
+'''
+    
+    - heroku_collaborator:
+    api_key: YOUR_API_KEY
+    user: '{{ item.user }}'
+    apps: '{{ item.apps | default(apps) }}'
+    suppress_invitation: '{{ item.suppress_invitation | default(suppress_invitation) }}'
+    state: '{{ item.state | default('present') }}'
+  with_items:
+    - { user: 'a.b@example.com' }
+    - { state: 'absent', user: 'b.c@example.com', suppress_invitation: false }
+    - { user: 'x.y@example.com', apps: ['heroku-example-app'] }
+'''
+    
+        def role_remove_group(self, name, item):
+        return self.role_remove_member(name=name, item={'group': item})
+    
+        if module.params['user']:
+        params['deploy[local_username]'] = module.params['user']
+    
+    from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils._text import to_native
+from ansible.module_utils.urls import fetch_url
+    
+        # Deploy params
+    revision_id = module.params['revision_id']
+    deployed_by = module.params['deployed_by']
+    deployed_to = module.params['deployed_to']
+    repository = module.params['repository']
+    
+    # Used for remembering the file (and its contents)
+# so we don't have to open the same file again.
+_filename = None
+_contents = None
+    
+        def syntax(self):
+        return '[options] <spider>'
+    
+        def _print_response(self, response, opts):
+        if opts.headers:
+            self._print_headers(response.request.headers, b'>')
+            print('>')
+            self._print_headers(response.headers, b'<')
+        else:
+            self._print_bytes(response.body)
+    
+        def _find_template(self, template):
+        template_file = join(self.templates_dir, '%s.tmpl' % template)
+        if exists(template_file):
+            return template_file
+        print('Unable to find template: %s\n' % template)
+        print('Use 'scrapy genspider --list' to see all available templates.')
+    
+    class Command(ScrapyCommand):
+    
+        def short_desc(self):
+        return 'Print Scrapy version'
+    
+            def __init__(self, method=SSL.SSLv23_METHOD, *args, **kwargs):
+            super(ScrapyClientContextFactory, self).__init__(*args, **kwargs)
+            self._ssl_method = method
+    
+        if twisted_version < (17, 0, 0):
+        from twisted.internet._sslverify import _maybeSetHostNameIndication
+        set_tlsext_host_name = _maybeSetHostNameIndication
+    else:
+        def set_tlsext_host_name(connection, hostNameBytes):
+            connection.set_tlsext_host_name(hostNameBytes)
     
     
-def main():
-    ui = Ui()
-    ui.get_product_list()
-    ui.get_product_information('cheese')
-    ui.get_product_information('eggs')
-    ui.get_product_information('milk')
-    ui.get_product_information('arepas')
+def _parsed_url_args(parsed):
+    # Assume parsed is urlparse-d from Request.url,
+    # which was passed via safe_url_string and is ascii-only.
+    b = lambda s: to_bytes(s, encoding='ascii')
+    path = urlunparse(('', '', parsed.path or '/', parsed.params, parsed.query, ''))
+    path = b(path)
+    host = b(parsed.hostname)
+    port = parsed.port
+    scheme = b(parsed.scheme)
+    netloc = b(parsed.netloc)
+    if port is None:
+        port = 443 if scheme == b'https' else 80
+    return scheme, netloc, host, port, path
+    
+        def _debug_set_cookie(self, response, spider):
+        if self.debug:
+            cl = [to_native_str(c, errors='replace')
+                  for c in response.headers.getlist('Set-Cookie')]
+            if cl:
+                cookies = '\n'.join('Set-Cookie: {}\n'.format(c) for c in cl)
+                msg = 'Received cookies from: {}\n{}'.format(response, cookies)
+                logger.debug(msg, extra={'spider': spider})
     
     
-class Dispatcher(object):
-    def __init__(self):
-        self.mobile_view = MobileView()
-        self.tablet_view = TabletView()
-    
-        def __str__(self):
-        return 'unpack(b) received extra data.'
-    
-    
-def test_1():
-    for o in [None, True, False, 0, 1, (1 << 6), (1 << 7) - 1, -1,
-              -((1 << 5) - 1), -(1 << 5)]:
-        check(1, o)
-    
-    
-def testMap():
-    check(b'\x96'
-          b'\xde\x00\x00'
-          b'\xde\x00\x01\xc0\xc2'
-          b'\xde\x00\x02\xc0\xc2\xc3\xc2'
-          b'\xdf\x00\x00\x00\x00'
-          b'\xdf\x00\x00\x00\x01\xc0\xc2'
-          b'\xdf\x00\x00\x00\x02\xc0\xc2\xc3\xc2', ({}, {None: False},
-                                                    {True: False,
-                                                     None: False}, {},
-                                                    {None: False},
-                                                    {True: False,
-                                                     None: False}))
-
-    
-    
-fig = plt.figure(figsize=(6, 1.25))
-    
-            # object
-        exp = pd.Index([pd.Timestamp('2011-01-01 09:00'), 'x',
-                        pd.Timestamp('2011-01-01 11:00')], dtype=object)
-        tm.assert_index_equal(idx.fillna('x'), exp)
-    
-            exp4 = ('TimedeltaIndex(['1 days', '2 days', '3 days'], '
-                'dtype='timedelta64[ns]', freq='D')')
+def highway_dense(x, act_fn=relu, carry_bias=-1.0, name=None):
+    '''用于全连接层的 highway
+    Input shape:  [batch_size, n_input]
+    Output shape: [batch_size, n_input]
