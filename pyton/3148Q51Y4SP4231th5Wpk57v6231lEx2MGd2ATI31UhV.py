@@ -1,118 +1,65 @@
 
         
-            cwe_rule = CloudWatchEventRule(module,
-                                   client=get_cloudwatchevents_client(module),
-                                   **rule_data)
-    cwe_rule_manager = CloudWatchEventRuleManager(cwe_rule, targets)
-    
-        module.exit_json(changed=changed,
-                     snapshot_id=snapshot.id,
-                     volume_id=snapshot.volume_id,
-                     volume_size=snapshot.volume_size,
-                     tags=snapshot.tags.copy())
+                        _remove_firewall_server(module,
+                                        oneandone_conn,
+                                        firewall_policy['id'],
+                                        server_ip_id)
+            _check_mode(module, chk_changed)
+            firewall_policy = get_firewall_policy(oneandone_conn, firewall_policy['id'], True)
+            changed = True
     
     
-DOCUMENTATION = '''
----
-module: elasticache_subnet_group
-version_added: '2.0'
-short_description: manage Elasticache subnet groups
-description:
-     - Creates, modifies, and deletes Elasticache subnet groups. This module has a dependency on python-boto >= 2.5.
-options:
-  state:
-    description:
-      - Specifies whether the subnet should be present or absent.
-    required: true
-    default: present
-    choices: [ 'present' , 'absent' ]
-  name:
-    description:
-      - Database subnet group identifier.
-    required: true
-  description:
-    description:
-      - Elasticache subnet group description. Only set when a new group is added.
-  subnets:
-    description:
-      - List of subnet IDs that make up the Elasticache subnet group.
-author: 'Tim Mahoney (@timmahoney)'
-extends_documentation_fragment:
-    - aws
-    - ec2
-'''
+class HBACRuleIPAClient(IPAClient):
+    def __init__(self, module, host, port, protocol):
+        super(HBACRuleIPAClient, self).__init__(module, host, port, protocol)
     
-            try:
-            lambda_facts.update(versions=client.list_versions_by_function(FunctionName=function_name, **params)['Versions'])
-        except ClientError as e:
-            if e.response['Error']['Code'] == 'ResourceNotFoundException':
-                lambda_facts.update(versions=[])
-            else:
-                module.fail_json_aws(e, msg='Trying to get {0} versions'.format(function_name))
-    else:
-        module.fail_json(msg='Parameter function_name required for query=versions.')
+    from __future__ import absolute_import, division, print_function
+__metaclass__ = type
     
-        json_output = {}
-    if mod_params['view'] == 'topics':
-        json_output['topics'] = list_func(pubsub_client.list_topics())
-    elif mod_params['view'] == 'subscriptions':
-        if mod_params['topic']:
-            t = pubsub_client.topic(mod_params['topic'])
-            json_output['subscriptions'] = list_func(t.list_subscriptions())
-        else:
-            json_output['subscriptions'] = list_func(pubsub_client.list_subscriptions())
+        xml = '''<?xml version='1.0' encoding='UTF-8'?>
+        <rs:model-request throttlesize='5'
+        xmlns:rs='http://www.ca.com/spectrum/restful/schema/request'
+        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xsi:schemaLocation='http://www.ca.com/spectrum/restful/schema/request ../../../xsd/Request.xsd'>
+            <rs:target-models>
+            <rs:models-search>
+                <rs:search-criteria xmlns='http://www.ca.com/spectrum/restful/schema/filter'>
+                    <action-models>
+                        <filtered-models>
+                            <and>
+                                <equals>
+                                    <model-type>SearchManager</model-type>
+                                </equals>
+                                <greater-than>
+                                    <attribute id='0x129fa'>
+                                        <value>{mh_min}</value>
+                                    </attribute>
+                                </greater-than>
+                                <less-than>
+                                    <attribute id='0x129fa'>
+                                        <value>{mh_max}</value>
+                                    </attribute>
+                                </less-than>
+                            </and>
+                        </filtered-models>
+                        <action>FIND_DEV_MODELS_BY_IP</action>
+                        <attribute id='AttributeID.NETWORK_ADDRESS'>
+                            <value>{search_ip}</value>
+                        </attribute>
+                    </action-models>
+                </rs:search-criteria>
+            </rs:models-search>
+            </rs:target-models>
+            <rs:requested-attribute id='0x12d7f' /> <!--Network Address-->
+        </rs:model-request>
+        '''.format(search_ip=device_ip, mh_min=landscape_min, mh_max=landscape_max)
     
-        for app in module.params['apps']:
-        if app not in client.apps():
-            module.fail_json(msg='App {0} does not exist'.format(app))
-    
-    # Remove server from a firewall policy.
-    
-            monitoring_policy = oneandone_conn.delete_monitoring_policy_port(
-            monitoring_policy_id=monitoring_policy_id,
-            port_id=port_id)
-        return monitoring_policy
-    except Exception as ex:
-        module.fail_json(msg=str(ex))
-    
-    
-def get_role_facts(cursor, role=''):
-    facts = {}
-    cursor.execute('''
-        select r.name, r.assigned_roles
-        from roles r
-        where (? = '' or r.name ilike ?)
-    ''', role, role)
-    while True:
-        rows = cursor.fetchmany(100)
-        if not rows:
-            break
-        for row in rows:
-            role_key = row.name.lower()
-            facts[role_key] = {
-                'name': row.name,
-                'assigned_roles': []}
-            if row.assigned_roles:
-                facts[role_key]['assigned_roles'] = row.assigned_roles.replace(' ', '').split(',')
-    return facts
-    
-    # Create nested groups
-- group_by:
-    key: el{{ ansible_distribution_major_version }}-{{ ansible_architecture }}
-    parents:
-      - el{{ ansible_distribution_major_version }}
-    
-    
-# ===========================================
-# Module execution.
-#
-    
-        # Build the deployment object we return
-    deployment = dict(token=token, url=url)
-    deployment.update(body)
-    if 'errorMessage' in deployment:
-        message = deployment.pop('errorMessage')
-        deployment['message'] = message
+        for i in range(1, n + 1):
+        print('==================')
+        print('Iteration %02d of %02d' % (i, n))
+        print('==================')
+        n_features = i * step
+        n_informative = n_features / 10
     
                 gc.collect()
             print('- benchmarking Lasso')
@@ -122,44 +69,31 @@ def get_role_facts(cursor, role=''):
             clf.fit(X, Y)
             lasso_results.append(time() - tstart)
     
-        if dataset_name == 'forestcover':
-        dataset = fetch_covtype()
-        X = dataset.data
-        y = dataset.target
-        # normal data are those with attribute 2
-        # abnormal those with attribute 4
-        s = (y == 2) + (y == 4)
-        X = X[s, :]
-        y = y[s]
-        y = (y != 2).astype(int)
+    import numpy as np
+from scipy.cluster import hierarchy
+import matplotlib.pyplot as plt
     
                 gc.collect()
-            print('benchmarking lars_path (with Gram):', end='')
-            sys.stdout.flush()
+            print('- benchmarking RidgeRegression')
+            clf = Ridge(alpha=alpha, fit_intercept=False)
             tstart = time()
-            G = np.dot(X.T, X)  # precomputed Gram matrix
-            Xy = np.dot(X.T, y)
-            lars_path(X, y, Xy=Xy, Gram=G, method='lasso')
-            delta = time() - tstart
-            print('%0.3fs' % delta)
-            results['lars_path (with Gram)'].append(delta)
+            clf.fit(X_train, y_train)
+            ridge_results[i, j, 0] = mean_squared_error(clf.predict(X_test),
+                                                        y_test)
+            ridge_results[i, j, 1] = time() - tstart
     
-        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
-    plt.plot(sample_sizes, one_core, label='one core')
-    plt.plot(sample_sizes, multi_core, label='multi core')
-    plt.xlabel('n_samples')
-    plt.ylabel('Time (s)')
-    plt.title('Parallel %s' % func.__name__)
-    plt.legend()
-    
-    Line #      Hits         Time  Per Hit   % Time  Line Contents
-==============================================================
-    56                                           @profile
-    57                                           def benchmark_sparse_predict():
-    58         1        10854  10854.0      2.8      X_test_sparse = csr_matrix(X_test)
-    59       301          477      1.6      0.1      for _ in range(300):
-    60       300       381409   1271.4     97.1          clf.predict(X_test_sparse)
-'''
+    n_samples, n_features = 5000, 300
+X = np.random.randn(n_samples, n_features)
+inds = np.arange(n_samples)
+np.random.shuffle(inds)
+X[inds[int(n_features / 1.2):]] = 0  # sparsify input
+print('input data sparsity: %f' % sparsity_ratio(X))
+coef = 3 * np.random.randn(n_features)
+inds = np.arange(n_features)
+np.random.shuffle(inds)
+coef[inds[n_features // 2:]] = 0  # sparsify coef
+print('true coef sparsity: %f' % sparsity_ratio(coef))
+y = np.dot(X, coef)
     
         try:
         fn = inspect.getsourcefile(obj)
@@ -173,146 +107,10 @@ def get_role_facts(cursor, role=''):
     if not fn:
         return
     
-    ARCHIVE_NAME = URL.rsplit('/', 1)[1]
-TRAIN_FOLDER = '20news-bydate-train'
-TEST_FOLDER = '20news-bydate-test'
-    
-    # #############################################################################
-# Main code
-regression_data = generate_data('regression')
-classification_data = generate_data('classification', sparse=True)
-configurations = [
-    {'estimator': SGDClassifier,
-     'tuned_params': {'penalty': 'elasticnet', 'alpha': 0.001, 'loss':
-                      'modified_huber', 'fit_intercept': True, 'tol': 1e-3},
-     'changing_param': 'l1_ratio',
-     'changing_param_values': [0.25, 0.5, 0.75, 0.9],
-     'complexity_label': 'non_zero coefficients',
-     'complexity_computer': _count_nonzero_coefficients,
-     'prediction_performance_computer': hamming_loss,
-     'prediction_performance_label': 'Hamming Loss (Misclassification Ratio)',
-     'postfit_hook': lambda x: x.sparsify(),
-     'data': classification_data,
-     'n_samples': 30},
-    {'estimator': NuSVR,
-     'tuned_params': {'C': 1e3, 'gamma': 2 ** -15},
-     'changing_param': 'nu',
-     'changing_param_values': [0.1, 0.25, 0.5, 0.75, 0.9],
-     'complexity_label': 'n_support_vectors',
-     'complexity_computer': lambda x: len(x.support_vectors_),
-     'data': regression_data,
-     'postfit_hook': lambda x: x,
-     'prediction_performance_computer': mean_squared_error,
-     'prediction_performance_label': 'MSE',
-     'n_samples': 30},
-    {'estimator': GradientBoostingRegressor,
-     'tuned_params': {'loss': 'ls'},
-     'changing_param': 'n_estimators',
-     'changing_param_values': [10, 50, 100, 200, 500],
-     'complexity_label': 'n_trees',
-     'complexity_computer': lambda x: x.n_estimators,
-     'data': regression_data,
-     'postfit_hook': lambda x: x,
-     'prediction_performance_computer': mean_squared_error,
-     'prediction_performance_label': 'MSE',
-     'n_samples': 30},
-]
-for conf in configurations:
-    prediction_performances, prediction_times, complexities = \
-        benchmark_influence(conf)
-    plot_influence(conf, prediction_performances, prediction_times,
-                   complexities)
-
-    
-        @staticmethod
-    def get_linux_firefox_path():
-        home_path = os.path.expanduser('~')
-        firefox_path = os.path.join(home_path, '.mozilla/firefox')
-        if not os.path.isdir(firefox_path):
-            return
-    
-        # case 1: only ip
-    # case 2: ip + domain
-    #    connect use domain
-    
-    - tree.CommonTreeNodeStream: A basic and most commonly used tree.TreeNodeStream
-  implementation.
-  
-    
-            Python does not have any size restrictions, but the compilation of
-        such large source files seems to be pretty memory hungry. The memory
-        consumption of the python process grew to >1.5GB when importing a
-        15MB lexer, eating all my swap space and I was to impacient to see,
-        if it could finish at all. With packed initializers that are unpacked
-        at import time of the lexer module, everything works like a charm.
-        
-        '''
-        
-        ret = []
-        for i in range(len(string) / 2):
-            (n, v) = ord(string[i*2]), ord(string[i*2+1])
-    
-        pass
-    
-        def LA(self, i):
-        '''Get int at current input pointer + i ahead where i=1 is next int.
-    
-        
-    def getLine(self):
-        return self.line
-    
-    def setLine(self, line):
-        self.line = line
-    
-    from homeassistant.const import __version__, __short_version__
-    
-            if self.home_interval:
-            boundary = dt_util.now() - self.home_interval
-            last_results = [device for device in self.last_results
-                            if device.last_update > boundary]
-            if last_results:
-                exclude_hosts = self.exclude + [device.ip for device
-                                                in last_results]
-            else:
-                exclude_hosts = self.exclude
-        else:
-            last_results = []
-            exclude_hosts = self.exclude
-        if exclude_hosts:
-            options += ' --exclude {}'.format(','.join(exclude_hosts))
-    
-    _DEVICES_REGEX = re.compile(
-    r'(?P<mac>(([0-9a-f]{2}[:-]){5}([0-9a-f]{2})))\s'
-    r'(?P<ip>([0-9]{1,3}[\.]){3}[0-9]{1,3})\s+'
-    r'(?P<status>([^\s]+))\s+'
-    r'(?P<type>([^\s]+))\s+'
-    r'(?P<intf>([^\s]+))\s+'
-    r'(?P<hwintf>([^\s]+))\s+'
-    r'(?P<host>([^\s]+))')
-    
-            return web.Response(text=resp_text, content_type='text/xml')
-    
-        def run(self):
-        '''Run the loop of the LIRC interface thread.'''
-        import lirc
-        _LOGGER.debug('LIRC interface thread started')
-        while not self.stopped.isSet():
-            try:
-                code = lirc.nextcode()  # list; empty if no buttons pressed
-            except lirc.NextCodeError:
-                _LOGGER.warning('Error reading next code from LIRC')
-                code = None
-            # interpret result from python-lirc
-            if code:
-                code = code[0]
-                _LOGGER.info('Got new LIRC code %s', code)
-                self.hass.bus.fire(
-                    EVENT_IR_COMMAND_RECEIVED, {BUTTON_NAME: code})
-            else:
-                time.sleep(0.2)
-        lirc.deinit()
-        _LOGGER.debug('LIRC interface thread stopped')
-
+    estimators = [('k_means_iris_8', KMeans(n_clusters=8)),
+              ('k_means_iris_3', KMeans(n_clusters=3)),
+              ('k_means_iris_bad_init', KMeans(n_clusters=3, n_init=1,
+                                               init='random'))]
     
     # Available datasets
 _DATASETS = {
@@ -483,183 +281,181 @@ _DATASETS = {
     }
 }
     
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+    
+# ------------------------------------------------------------------------------
+# various stems (may expand and may consider a new helper)
+# ------------------------------------------------------------------------------
+    
+    # ---------------------------------------------------------------------------- #
+# Hardcoded functions to create various types of common models
+#
+#            *** This type of model definition is deprecated ***
+#            *** Use the generic composable versions instead ***
+#
+# ---------------------------------------------------------------------------- #
+    
+    Flexible network configuration is achieved by specifying the function name that
+builds a network module (e.g., the name of the conv backbone or the mask roi
+head). However we may wish to change names over time without breaking previous
+config files. This module provides backwards naming compatibility by providing
+a mapping from the old name to the new name.
     
     
-def fpn_level_info_ResNet50_conv5():
-    return FpnLevelInfo(
-        blobs=('res5_2_sum', 'res4_5_sum', 'res3_3_sum', 'res2_2_sum'),
-        dims=(2048, 1024, 512, 256),
-        spatial_scales=(1. / 32., 1. / 16., 1. / 8., 1. / 4.)
-    )
+def _add_multilevel_rois(blobs):
+    '''By default training RoIs are added for a single feature map level only.
+    When using FPN, the RoIs must be distributed over different FPN levels
+    according the level assignment heuristic (see: modeling.FPN.
+    map_rois_to_fpn_levels).
+    '''
+    lvl_min = cfg.FPN.ROI_MIN_LEVEL
+    lvl_max = cfg.FPN.ROI_MAX_LEVEL
     
-    
-def add_single_gpu_param_update_ops(model, gpu_id):
-    # Learning rate of 0 is a dummy value to be set properly at the
-    # start of training
-    lr = model.param_init_net.ConstantFill(
-        [], 'lr', shape=[1], value=0.0
+        points: Nx2xK
+    boxes: Nx4
+    output: NxK
+    '''
+    x_within = np.logical_and(
+        points[:, 0, :] >= np.expand_dims(boxes[:, 0], axis=1),
+        points[:, 0, :] <= np.expand_dims(boxes[:, 2], axis=1)
     )
-    one = model.param_init_net.ConstantFill(
-        [], 'one', shape=[1], value=1.0
+    y_within = np.logical_and(
+        points[:, 1, :] >= np.expand_dims(boxes[:, 1], axis=1),
+        points[:, 1, :] <= np.expand_dims(boxes[:, 3], axis=1)
     )
-    wd = model.param_init_net.ConstantFill(
-        [], 'wd', shape=[1], value=cfg.SOLVER.WEIGHT_DECAY
-    )
-    # weight decay of GroupNorm's parameters
-    wd_gn = model.param_init_net.ConstantFill(
-        [], 'wd_gn', shape=[1], value=cfg.SOLVER.WEIGHT_DECAY_GN
-    )
-    for param in model.TrainableParams(gpu_id=gpu_id):
-        logger.debug('param ' + str(param) + ' will be updated')
-        param_grad = model.param_to_grad[param]
-        # Initialize momentum vector
-        param_momentum = model.param_init_net.ConstantFill(
-            [param], param + '_momentum', value=0.0
-        )
-        if param in model.biases:
-            # Special treatment for biases (mainly to match historical impl.
-            # details):
-            # (1) Do not apply weight decay
-            # (2) Use a 2x higher learning rate
-            model.Scale(param_grad, param_grad, scale=2.0)
-        elif param in model.gn_params:
-            # Special treatment for GroupNorm's parameters
-            model.WeightedSum([param_grad, one, param, wd_gn], param_grad)
-        elif cfg.SOLVER.WEIGHT_DECAY > 0:
-            # Apply weight decay to non-bias weights
-            model.WeightedSum([param_grad, one, param, wd], param_grad)
-        # Update param_grad and param_momentum in place
-        model.net.MomentumSGDUpdate(
-            [param_grad, param_momentum, lr, param],
-            [param_grad, param_momentum, param],
-            momentum=cfg.SOLVER.MOMENTUM
-        )
+    return np.logical_and(x_within, y_within)
 
     
-        # ==========================================================================
-    # classification tower with logits and prob prediction
-    # ==========================================================================
-    for lvl in range(k_min, k_max + 1):
-        bl_in = blobs_in[k_max - lvl]  # blobs_in is in reversed order
-        # classification tower stack convolution starts
-        for nconv in range(cfg.RETINANET.NUM_CONVS):
-            suffix = 'n{}_fpn{}'.format(nconv, lvl)
-            dim_in, dim_out = dim_in, dim_in
-            if lvl == k_min:
-                bl_out = model.Conv(
-                    bl_in,
-                    'retnet_cls_conv_' + suffix,
-                    dim_in,
-                    dim_out,
-                    3,
-                    stride=1,
-                    pad=1,
-                    weight_init=('GaussianFill', {
-                        'std': 0.01
-                    }),
-                    bias_init=('ConstantFill', {
-                        'value': 0.
-                    })
-                )
-            else:
-                bl_out = model.ConvShared(
-                    bl_in,
-                    'retnet_cls_conv_' + suffix,
-                    dim_in,
-                    dim_out,
-                    3,
-                    stride=1,
-                    pad=1,
-                    weight='retnet_cls_conv_n{}_fpn{}_w'.format(nconv, k_min),
-                    bias='retnet_cls_conv_n{}_fpn{}_b'.format(nconv, k_min)
-                )
-            bl_in = model.Relu(bl_out, bl_out)
-            bl_feat = bl_in
-        # cls tower stack convolution ends. Add the logits layer now
-        if lvl == k_min:
-            retnet_cls_pred = model.Conv(
-                bl_feat,
-                'retnet_cls_pred_fpn{}'.format(lvl),
-                dim_in,
-                cls_pred_dim * A,
-                3,
-                pad=1,
-                stride=1,
-                weight_init=('GaussianFill', {
-                    'std': 0.01
-                }),
-                bias_init=bias_init
-            )
+    
+def get_minibatch(roidb):
+    '''Given a roidb, construct a minibatch sampled from it.'''
+    # We collect blobs from each image onto a list and then concat them into a
+    # single tensor, hence we initialize each blob to an empty list
+    blobs = {k: [] for k in get_minibatch_blob_names()}
+    # Get the input image blob, formatted for caffe2
+    im_blob, im_scales = _get_image_blob(roidb)
+    blobs['data'] = im_blob
+    if cfg.RPN.RPN_ON:
+        # RPN-only or end-to-end Faster/Mask R-CNN
+        valid = rpn_roi_data.add_rpn_blobs(blobs, im_scales, roidb)
+    elif cfg.RETINANET.RETINANET_ON:
+        im_width, im_height = im_blob.shape[3], im_blob.shape[2]
+        # im_width, im_height corresponds to the network input: padded image
+        # (if needed) width and height. We pass it as input and slice the data
+        # accordingly so that we don't need to use SampleAsOp
+        valid = retinanet_roi_data.add_retinanet_blobs(
+            blobs, im_scales, roidb, im_width, im_height
+        )
+    else:
+        # Fast R-CNN like models trained on precomputed proposals
+        valid = fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
+    return blobs, valid
+    
+    
+def add_retinanet_blobs(blobs, im_scales, roidb, image_width, image_height):
+    '''Add RetinaNet blobs.'''
+    # RetinaNet is applied to many feature levels, as in the FPN paper
+    k_max, k_min = cfg.FPN.RPN_MAX_LEVEL, cfg.FPN.RPN_MIN_LEVEL
+    scales_per_octave = cfg.RETINANET.SCALES_PER_OCTAVE
+    num_aspect_ratios = len(cfg.RETINANET.ASPECT_RATIOS)
+    aspect_ratios = cfg.RETINANET.ASPECT_RATIOS
+    anchor_scale = cfg.RETINANET.ANCHOR_SCALE
+    
+        def test_weak_etag_match(self):
+        computed_etag = ''xyzzy1''
+        etags = 'W/'xyzzy1''
+        self.check_url(
+            '/cache/' + computed_etag, method='GET',
+            headers=[('If-None-Match', etags)],
+            expected_status=304)
+    
+    import logging
+from tornado.curl_httpclient import CurlAsyncHTTPClient
+from tornado.simple_httpclient import SimpleAsyncHTTPClient
+from tornado.ioloop import IOLoop
+from tornado.options import define, options, parse_command_line
+from tornado.web import RequestHandler, Application
+    
+    # These benchmarks are delicate.  They hit various fast-paths in the gen
+# machinery in order to stay synchronous so we don't need an IOLoop.
+# This removes noise from the results, but it's easy to change things
+# in a way that completely invalidates the results.
+    
+    
+if __name__ == '__main__':
+    main()
+
+    
+                runpy.run_module(module, run_name='__main__', alter_sys=True)
+        elif mode == 'script':
+            with open(script) as f:
+                # Execute the script in our namespace instead of creating
+                # a new one so that something that tries to import __main__
+                # (e.g. the unittest module) will see names defined in the
+                # script instead of just those defined in this module.
+                global __file__
+                __file__ = script
+                # If __package__ is defined, imports may be incorrectly
+                # interpreted as relative to this module.
+                global __package__
+                del __package__
+                exec_in(f.read(), globals(), globals())
+    except SystemExit as e:
+        logging.basicConfig()
+        gen_log.info('Script exited with status %s', e.code)
+    except Exception as e:
+        logging.basicConfig()
+        gen_log.warning('Script exited with uncaught exception', exc_info=True)
+        # If an exception occurred at import time, the file with the error
+        # never made it into sys.modules and so we won't know to watch it.
+        # Just to make sure we've covered everything, walk the stack trace
+        # from the exception and watch every file.
+        for (filename, lineno, name, line) in traceback.extract_tb(sys.exc_info()[2]):
+            watch(filename)
+        if isinstance(e, SyntaxError):
+            # SyntaxErrors are special:  their innermost stack frame is fake
+            # so extract_tb won't see it and we have to get the filename
+            # from the exception object.
+            watch(e.filename)
+    else:
+        logging.basicConfig()
+        gen_log.info('Script exited normally')
+    # restore sys.argv so subsequent executions will include autoreload
+    sys.argv = original_argv
+    
+        @gen.coroutine
+    def resolve(
+        self, host: str, port: int, family: int = 0
+    ) -> 'Generator[Any, Any, List[Tuple[int, Any]]]':
+        if is_valid_ip(host):
+            addresses = [host]
         else:
-            retnet_cls_pred = model.ConvShared(
-                bl_feat,
-                'retnet_cls_pred_fpn{}'.format(lvl),
-                dim_in,
-                cls_pred_dim * A,
-                3,
-                pad=1,
-                stride=1,
-                weight='retnet_cls_pred_fpn{}_w'.format(k_min),
-                bias='retnet_cls_pred_fpn{}_b'.format(k_min)
+            # gethostbyname doesn't take callback as a kwarg
+            fut = Future()  # type: Future[Tuple[Any, Any]]
+            self.channel.gethostbyname(
+                host, family, lambda result, error: fut.set_result((result, error))
             )
-        if not model.train:
-            if cfg.RETINANET.SOFTMAX:
-                model.net.GroupSpatialSoftmax(
-                    retnet_cls_pred,
-                    'retnet_cls_prob_fpn{}'.format(lvl),
-                    num_classes=cls_pred_dim
+            result, error = yield fut
+            if error:
+                raise IOError(
+                    'C-Ares returned error %s: %s while resolving %s'
+                    % (error, pycares.errno.strerror(error), host)
                 )
+            addresses = result.addresses
+        addrinfo = []
+        for address in addresses:
+            if '.' in address:
+                address_family = socket.AF_INET
+            elif ':' in address:
+                address_family = socket.AF_INET6
             else:
-                model.net.Sigmoid(
-                    retnet_cls_pred, 'retnet_cls_prob_fpn{}'.format(lvl)
+                address_family = socket.AF_UNSPEC
+            if family != socket.AF_UNSPEC and family != address_family:
+                raise IOError(
+                    'Requested socket family %d but got %d' % (family, address_family)
                 )
-        if cfg.RETINANET.SHARE_CLS_BBOX_TOWER:
-            bbox_feat_list.append(bl_feat)
-    
-        # Create new roi blobs for each FPN level
-    # (See: modeling.FPN.add_multilevel_roi_blobs which is similar but annoying
-    # to generalize to support this particular case.)
-    rois_idx_order = np.empty((0, ))
-    for output_idx, lvl in enumerate(range(lvl_min, lvl_max + 1)):
-        idx_lvl = np.where(lvls == lvl)[0]
-        blob_roi_level = rois[idx_lvl, :]
-        outputs[output_idx + 1].reshape(blob_roi_level.shape)
-        outputs[output_idx + 1].data[...] = blob_roi_level
-        rois_idx_order = np.concatenate((rois_idx_order, idx_lvl))
-    rois_idx_restore = np.argsort(rois_idx_order)
-    blob_utils.py_op_copy_blob(rois_idx_restore.astype(np.int32), outputs[-1])
+            addrinfo.append((typing.cast(int, address_family), (address, port)))
+        return addrinfo
 
     
-        def forward(self, inputs, outputs):
-        '''See modeling.detector.GenerateProposalLabels for inputs/outputs
-        documentation.
-        '''
-        # During training we reuse the data loader code. We populate roidb
-        # entries on the fly using the rois generated by RPN.
-        # im_info: [[im_height, im_width, im_scale], ...]
-        rois = inputs[0].data
-        roidb = blob_utils.deserialize(inputs[1].data)
-        im_info = inputs[2].data
-        im_scales = im_info[:, 2]
-        output_blob_names = fast_rcnn_roi_data.get_fast_rcnn_blob_names()
-        # For historical consistency with the original Faster R-CNN
-        # implementation we are *not* filtering crowd proposals.
-        # This choice should be investigated in the future (it likely does
-        # not matter).
-        json_dataset.add_proposals(roidb, rois, im_scales, crowd_thresh=0)
-        roidb_utils.add_bbox_regression_targets(roidb)
-        blobs = {k: [] for k in output_blob_names}
-        fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
-        for i, k in enumerate(output_blob_names):
-            blob_utils.py_op_copy_blob(blobs[k], outputs[i])
-
-    
-        # Perform any final work and validity checks after the collating blobs for
-    # all minibatch images
-    valid = True
-    if cfg.MODEL.KEYPOINTS_ON:
-        valid = keypoint_rcnn_roi_data.finalize_keypoint_minibatch(blobs, valid)
+        def raise_parse_error(self, msg: str) -> None:
+        raise ParseError(msg, self.name, self.line)
