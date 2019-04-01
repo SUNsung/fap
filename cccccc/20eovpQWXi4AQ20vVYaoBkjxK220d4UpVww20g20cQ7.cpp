@@ -1,136 +1,219 @@
 
         
-        // Get the python wrappers for a list of ops in a OpList.
-// `op_list_buf` should be a pointer to a buffer containing
-// the binary encoded OpList proto, and `op_list_len` should be the
-// length of that buffer.
-string GetPythonWrappers(const char* op_list_buf, size_t op_list_len);
+        // Call method of an object in browser.
+// function CallObjectMethod(id, type, method, args);
+v8::Handle<v8::Value> CallObjectMethod(int routing_id,
+                                       int object_id,
+                                       const std::string& type,
+                                       const std::string& method,
+                                       v8::Handle<v8::Value> args);
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
     
-        http://www.apache.org/licenses/LICENSE-2.0
+    {  *accelerator = item->accelerator_;
+  return true;
+}
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    bool MenuItem::CanHandleAccelerators() const {
+  return enable_shortcut_ && is_enabled_;
+}
     
-        http://www.apache.org/licenses/LICENSE-2.0
+      remover->AddObserver(this);
+  remover->RemoveAndReply(base::Time(), base::Time::Max(),
+                          content::BrowsingDataRemover::DATA_TYPE_CACHE,
+                          content::BrowsingDataRemover::ORIGIN_TYPE_UNPROTECTED_WEB,
+                          this);
+  // BrowsingDataRemover deletes itself.
+  base::MessageLoopCurrent::ScopedNestableTaskAllower allow;
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    namespace tensorflow {
+        bool ReadHTML(ClipboardData& data) {
+      DCHECK(data.type == TYPE_HTML);
+      base::string16 text;
+      std::string src_url;
+      uint32_t fragment_start, fragment_end;
+      clipboard_->ReadHTML(ui::CLIPBOARD_TYPE_COPY_PASTE, &text, &src_url, &fragment_start, &fragment_end);
+      data.data.reset(new std::string(base::UTF16ToUTF8(text)));
+      return true;
     }
     
-    // Converts Python object `obj` representing a rectangular array of
-// Python values (a scalar, a sequence of scalars, a sequence of
-// sequences, etc.) into a C++ TensorFlow Tensor and stores it in
-// *ret.  If dtype is not None it should by a Python integer
-// representing the desired dtype of the resulting Tensor.
-// This is used only as a hint, *ret may not have that dtype on
-// success and may require a cast.
-Status PySeqToTensor(PyObject* obj, PyObject* dtype, Tensor* ret);
+    namespace CAROTENE_NS {
+    }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+            // do vertical convolution
+        size_t x = 0;
+        const size_t bcols = y + 3 < size.height ? colsn : (colsn - 8);
+        for( ; x <= bcols; x += 8 )
+        {
+            internal::prefetch(srow0 + x);
+            internal::prefetch(srow1 + x);
+            internal::prefetch(srow2 + x);
+            internal::prefetch(srow3 + x);
+            internal::prefetch(srow4 + x);
+    }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    #define MERGE_QUAD(sgn, bits, n) { \
+                                     FILL_LINES##n(PREF, sgn##bits) \
+                                     MERGE_ASM##n(sgn, bits) \
+                                 }
     
-    #endif  // TENSORFLOW_STREAM_EXECUTOR_CUDA_CUDA_PLATFORM_ID_H_
+    
+    {
+    {} // namespace internal
+} // namespace CAROTENE_NS
 
     
-      static const unsigned kMask = 0xf;  // Mask of all available flags.
+        ptrdiff_t width = (ptrdiff_t)size.width, height = (ptrdiff_t)size.height;
+    static const vshrq_s32_func vshrq_s32_a[33] =
+    {
+        vshrq_s32<0>,
+        vshrq_s32<1>,
+        vshrq_s32<2>,
+        vshrq_s32<3>,
+        vshrq_s32<4>,
+        vshrq_s32<5>,
+        vshrq_s32<6>,
+        vshrq_s32<7>,
+        vshrq_s32<8>,
+        vshrq_s32<9>,
+        vshrq_s32<10>,
+        vshrq_s32<11>,
+        vshrq_s32<12>,
+        vshrq_s32<13>,
+        vshrq_s32<14>,
+        vshrq_s32<15>,
+        vshrq_s32<16>,
+        vshrq_s32<17>,
+        vshrq_s32<18>,
+        vshrq_s32<19>,
+        vshrq_s32<20>,
+        vshrq_s32<21>,
+        vshrq_s32<22>,
+        vshrq_s32<23>,
+        vshrq_s32<24>,
+        vshrq_s32<25>,
+        vshrq_s32<26>,
+        vshrq_s32<27>,
+        vshrq_s32<28>,
+        vshrq_s32<29>,
+        vshrq_s32<30>,
+        vshrq_s32<31>,
+        vshrq_s32<32>
+    };
+    vshrq_s32_func vshrq_s32_p = vshrq_s32_a[scale];
     
-      // Creates a 2d FFT plan.
-  virtual std::unique_ptr<Plan> Create2dPlan(Stream *stream, uint64 num_x,
-                                             uint64 num_y, Type type,
-                                             bool in_place_fft) = 0;
     
-    #include <algorithm>
-#include <string>
-#include <vector>
+    {        process(src, j, size.width, i,
+                minVal, minLocPtr, minLocCount, minLocCapacity,
+                maxVal, maxLocPtr, maxLocCount, maxLocCapacity);
+    }
     
-    #define INSTANTIATE_LAYER_GPU_FORWARD(classname) \
-  template void classname<float>::Forward_gpu( \
-      const std::vector<Blob<float>*>& bottom, \
-      const std::vector<Blob<float>*>& top); \
-  template void classname<double>::Forward_gpu( \
-      const std::vector<Blob<double>*>& bottom, \
-      const std::vector<Blob<double>*>& top);
+    
+    {
+    {
+    {             vec128  vs = internal::vld1q( src + i);
+             vec128 vr1 = internal::vld1q(rng1 + i);
+             vec128 vr2 = internal::vld1q(rng2 + i);
+            uvec128 vd1 = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
+                     vs = internal::vld1q( src + i + 16/sizeof(T));
+                    vr1 = internal::vld1q(rng1 + i + 16/sizeof(T));
+                    vr2 = internal::vld1q(rng2 + i + 16/sizeof(T));
+            uvec128 vd2 = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
+            vnst(dst + i, vd1, vd2);
+        }
+        vtail<T, sizeof(T)>::inRange(src, rng1, rng2, dst, i, size.width);
+        for( ; i < size.width; i++ )
+            dst[i] = (u8)(-(rng1[i] <= src[i] && src[i] <= rng2[i]));
+    }
+}
+    
+            int16x8_t tcurr1 = vmovq_n_s16(0x0);
+        int16x8_t tnext1 = vmovq_n_s16(0x0);
+        int16x8_t tprev1 = vmovq_n_s16(0x0);
+        int16x8_t tpprev1 = vmovq_n_s16(0x0);
+        int16x8_t tppprev1 = vmovq_n_s16(0x0);
+    
+    #include 'caffe/proto/caffe.pb.h'
+#include 'caffe/util/format.hpp'
+#include 'caffe/util/math_functions.hpp'
     
       /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to a cv::Mat
+   * @brief Compute the volume of a slice; i.e., the product of dimensions
+   *        among a range of axes.
    *
-   * @param cv_img
-   *    cv::Mat containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See image_data_layer.cpp for an example.
+   * @param start_axis The first axis to include in the slice.
+   *
+   * @param end_axis The first axis to exclude from the slice.
    */
-  void Transform(const cv::Mat& cv_img, Blob<Dtype>* transformed_blob);
-#endif  // USE_OPENCV
+  inline int count(int start_axis, int end_axis) const {
+    CHECK_LE(start_axis, end_axis);
+    CHECK_GE(start_axis, 0);
+    CHECK_GE(end_axis, 0);
+    CHECK_LE(start_axis, num_axes());
+    CHECK_LE(end_axis, num_axes());
+    int count = 1;
+    for (int i = start_axis; i < end_axis; ++i) {
+      count *= shape(i);
+    }
+    return count;
+  }
+  /**
+   * @brief Compute the volume of a slice spanning from a particular first
+   *        axis to the final axis.
+   *
+   * @param start_axis The first axis to include in the slice.
+   */
+  inline int count(int start_axis) const {
+    return count(start_axis, num_axes());
+  }
     
-    /// @brief Fills a Blob with Gaussian-distributed values @f$ x = a @f$.
+    /** @brief Fills a Blob with values @f$ x \in [0, 1] @f$
+ *         such that @f$ \forall i \sum_j x_{ij} = 1 @f$.
+ */
 template <typename Dtype>
-class GaussianFiller : public Filler<Dtype> {
+class PositiveUnitballFiller : public Filler<Dtype> {
  public:
-  explicit GaussianFiller(const FillerParameter& param)
+  explicit PositiveUnitballFiller(const FillerParameter& param)
       : Filler<Dtype>(param) {}
   virtual void Fill(Blob<Dtype>* blob) {
     Dtype* data = blob->mutable_cpu_data();
-    CHECK(blob->count());
-    caffe_rng_gaussian<Dtype>(blob->count(), Dtype(this->filler_param_.mean()),
-        Dtype(this->filler_param_.std()), blob->mutable_cpu_data());
-    int sparse = this->filler_param_.sparse();
-    CHECK_GE(sparse, -1);
-    if (sparse >= 0) {
-      // Sparse initialization is implemented for 'weight' blobs; i.e. matrices.
-      // These have num == channels == 1; width is number of inputs; height is
-      // number of outputs.  The 'sparse' variable specifies the mean number
-      // of non-zero input weights for a given output.
-      CHECK_GE(blob->num_axes(), 1);
-      const int num_outputs = blob->shape(0);
-      Dtype non_zero_probability = Dtype(sparse) / Dtype(num_outputs);
-      rand_vec_.reset(new SyncedMemory(blob->count() * sizeof(int)));
-      int* mask = reinterpret_cast<int*>(rand_vec_->mutable_cpu_data());
-      caffe_rng_bernoulli(blob->count(), non_zero_probability, mask);
-      for (int i = 0; i < blob->count(); ++i) {
-        data[i] *= mask[i];
+    DCHECK(blob->count());
+    caffe_rng_uniform<Dtype>(blob->count(), 0, 1, blob->mutable_cpu_data());
+    // We expect the filler to not be called very frequently, so we will
+    // just use a simple implementation
+    int dim = blob->count() / blob->shape(0);
+    CHECK(dim);
+    for (int i = 0; i < blob->shape(0); ++i) {
+      Dtype sum = 0;
+      for (int j = 0; j < dim; ++j) {
+        sum += data[i * dim + j];
+      }
+      for (int j = 0; j < dim; ++j) {
+        data[i * dim + j] /= sum;
       }
     }
+    CHECK_EQ(this->filler_param_.sparse(), -1)
+         << 'Sparsity not supported by this Filler.';
   }
+};
+    
+      virtual inline const char* type() const { return 'Accuracy'; }
+  virtual inline int ExactNumBottomBlobs() const { return 2; }
+    
+      virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    namespace caffe {
     }
     
     /**
- * @brief Abstract base class that factors out the BLAS code common to
- *        ConvolutionLayer and DeconvolutionLayer.
+ * @brief Takes at least two Blob%s and concatenates them along either the num
+ *        or channel dimension, outputting the result.
  */
 template <typename Dtype>
-class BaseConvolutionLayer : public Layer<Dtype> {
+class ConcatLayer : public Layer<Dtype> {
  public:
-  explicit BaseConvolutionLayer(const LayerParameter& param)
+  explicit ConcatLayer(const LayerParameter& param)
       : Layer<Dtype>(param) {}
   virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
@@ -138,214 +221,60 @@ class BaseConvolutionLayer : public Layer<Dtype> {
       const vector<Blob<Dtype>*>& top);
     }
     
-    template <typename Dtype>
-class BasePrefetchingDataLayer :
-    public BaseDataLayer<Dtype>, public InternalThread {
- public:
-  explicit BasePrefetchingDataLayer(const LayerParameter& param);
-  // LayerSetUp: implements common data layer setup functionality, and calls
-  // DataLayerSetUp to do special data layer setup for individual layer types.
-  // This method may not be overridden.
-  void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
     
-      virtual inline const char* type() const { return 'BatchReindex'; }
-  virtual inline int ExactNumBottomBlobs() const { return 2; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
+    {}  // namespace caffe
     
-      virtual inline const char* type() const { return 'Bias'; }
-  virtual inline int MinBottomBlobs() const { return 1; }
-  virtual inline int MaxBottomBlobs() const { return 2; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    
-    #include <vector>
+      bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnLRNDescriptor_t norm_desc_;
+  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
     
     namespace caffe {
     }
     
-    #endif  // CAFFE_CUDNN_DECONV_LAYER_HPP_
-
     
-    #include <vector>
+/// Recursive
+/// Time Complexity: O(n)
+/// Space Complexity: O(n)
     
-        void Trainer::Save(const std::wstring& modelFilePath, const std::vector<DictionaryValue>& learnerState, const Dictionary& externalState, const Dictionary& distributedState)
-    {
-        std::wstring tempModelFile = modelFilePath + L'.tmp';
-        Dictionary state;
-        state[versionPropertyName] = trainerCheckpointVersion;
-        state[learnersPropertyName] = learnerState;
-        state[externalStatePropertyName] = externalState;
-        state[distributedStatePropertyName] = distributedState;
+    private:
+    void __inorderTraversal(TreeNode* node, vector<int> &res){
     }
     
-        /*virtual*/ ValuePtr Value::DeepClone(bool readOnly/* = false*/) const
-    {
-        // TODO: Check if this is a derived type and throw an exception in that case
-        return MakeSharedObject<Value>(Data()->DeepClone(readOnly), (Mask() != nullptr) ? Mask()->DeepClone() : nullptr);
-    }
-    
-    #else // --- Linux version
-    
-            // take the chance to validate inputNodes
-        let allInputsSet = set<ComputationNodeBasePtr>(allInputs.begin(), allInputs.end());
-        for (let& input : inputNodes)
-            if (allInputsSet.find(input) == allInputsSet.end())
-                InvalidArgument('CloneFunction: No specified output depends on the specified input %ls.', input->NodeDescription().c_str());
-        // TODO: Is this really always an error? Are there valid cases where one would over-specify possible input nodes, even if they are not used/needed?
+                while(cur != NULL){
+                stack.push(cur);
+                cur = cur->left;
+            }
     
     int main() {
     }
     
     
-    {
-    {                if(prev->right == NULL){
-                    prev->right = cur;
-                    cur = cur->left;
-                }
-                else{
-                    prev->right = NULL;
-                    res.push_back(cur->val);
-                    cur = cur->right;
-                }
-            }
-        }
-    
-            while(!q.empty()){
+    {        vector<int> res;
+        __postorderTraversal(root, res);
+        return res;
     }
     
-            queue<TreeNode*> q;
-        q.push(root);
-        int level_num = 1;
+            vector<int> res;
+        if(root == NULL)
+            return res;
     
-    #include <iostream>
-#include <vector>
-#include <stack>
-#include <cassert>
+    #endif // D_DHT_ROUTING_TABLE_H
+
     
-    private:
-    struct Command{
-        string s;   // go, print
-        TreeNode* node;
-        Command(string s, TreeNode* node): s(s), node(node){}
-    };
+    namespace aria2 {
+    }
     
-    class DHTMessageCallback;
+    class DHTRoutingTableSerializer {
+private:
+  int family_;
+    }
+    
+    #include 'common.h'
+    
+    #endif // D_DHT_TASK_FACTORY_IMPL_H
+
     
     
-    {  virtual bool finished() = 0;
+    {  void updateTokenSecret();
 };
-    
-    std::shared_ptr<DHTTask> DHTTaskFactoryImpl::createPeerLookupTask(
-    const std::shared_ptr<DownloadContext>& ctx, uint16_t tcpPort,
-    const std::shared_ptr<PeerStorage>& peerStorage)
-{
-  auto task = std::make_shared<DHTPeerLookupTask>(ctx, tcpPort);
-  // TODO this may be not freed by RequestGroup::releaseRuntimeResource()
-  task->setPeerStorage(peerStorage);
-  setCommonProperty(task);
-  return task;
-}
-    
-      DHTMessageDispatcher* dispatcher_;
-    
-    
-    {} // namespace aria2
-    
-    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
-                                           const std::string& ipaddr,
-                                           uint16_t port,
-                                           const unsigned char* secret) const
-{
-  unsigned char src[DHT_ID_LENGTH + COMPACT_LEN_IPV6 + SECRET_SIZE];
-  memset(src, 0, sizeof(src));
-  int compactlen = bittorrent::packcompact(src + DHT_ID_LENGTH, ipaddr, port);
-  if (compactlen == 0) {
-    throw DL_ABORT_EX(fmt('Token generation failed: ipaddr=%s, port=%u',
-                          ipaddr.c_str(), port));
-  }
-  memcpy(src, infoHash, DHT_ID_LENGTH);
-  memcpy(src + DHT_ID_LENGTH + COMPACT_LEN_IPV6, secret, SECRET_SIZE);
-  unsigned char md[20];
-  message_digest::digest(md, sizeof(md), MessageDigest::sha1().get(), src,
-                         sizeof(src));
-  return std::string(&md[0], &md[sizeof(md)]);
-}
-    
-    AccelDeccelAmplitude* AccelDeccelAmplitude::create(Action *action, float duration)
-{
-    AccelDeccelAmplitude *ret = new (std::nothrow) AccelDeccelAmplitude();
-    if (ret && ret->initWithAction(action, duration))
-    {
-        ret->autorelease();
-        return ret;
-    }
-    }
-    
-        /**
-    @brief Initializes the action with center position, radius, number of waves, amplitude, a grid size and duration.
-    @param duration Specify the duration of the Ripple3D action. It's a value in seconds.
-    @param gridSize Specify the size of the grid.
-    @param position Specify the center position of the ripple effect.
-    @param radius Specify the radius of the ripple effect.
-    @param waves Specify the waves count of the ripple effect.
-    @param amplitude Specify the amplitude of the ripple effect.
-    @return If the initialization success, return true; otherwise, return false.
-     */
-    bool initWithDuration(float duration, const Size& gridSize, const Vec2& position, float radius, unsigned int waves, float amplitude);
-    
-    PageTurn3D* PageTurn3D::create(float duration, const Size& gridSize)
-{
-    PageTurn3D *action = new (std::nothrow) PageTurn3D();
-    }
-    
-    bool ActionTween::initWithDuration(float duration, const std::string& key, float from, float to)
-{
-    if (ActionInterval::initWithDuration(duration))
-    {
-        _key    = key;
-        _to       = to;
-        _from     = from;
-        return true;
-    }
-    }
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    /**
- * @addtogroup _2d
- * @{
- */
-    }
-    
-    void ExampleQt::run() {
-    }
-    
-        ret = p.write(&p, (void*) SW_STRS('hello world1'));
-    ASSERT_GT(ret, 0);
-    ret = p.write(&p, (void*) SW_STRS('hello world2'));
-    ASSERT_GT(ret, 0);
-    ret = p.write(&p, (void*) SW_STRS('hello world3'));
-    ASSERT_GT(ret, 0);
-    
-        cache.set('test2', val2);
-    ASSERT_EQ(cache.get('test2').get(), val2.get());
-    val2.reset();
-    ASSERT_EQ(dtor_num, 1);
-    ASSERT_EQ(cache.get('test'), nullptr);
-    
-        inline void set(const std::string &key, const std::shared_ptr<void> &val, time_t expire = 0)
-    {
-        time_t expire_time;
-    }
-    
-        void copy(void *_data, size_t _length)
-    {
-        alloc(_length);
-        memcpy(buffer, _data, _length);
-    }
