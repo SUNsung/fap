@@ -1,228 +1,339 @@
 
         
-          // If the requirement itself is non-generic, the synthetic signature
-  // is that of the conformance context.
-  if (!covariantSelf &&
-      reqSig->getGenericParams().size() == 1 &&
-      reqSig->getRequirements().size() == 1) {
-    syntheticSignature = conformanceDC->getGenericSignatureOfContext();
-    if (syntheticSignature) {
-      syntheticSignature = syntheticSignature->getCanonicalSignature();
-      syntheticEnvironment =
-        syntheticSignature->createGenericEnvironment();
-    }
+        // static
+void UvTaskRunner::OnTimeout(uv_timer_t* timer) {
+  UvTaskRunner* self = static_cast<UvTaskRunner*>(timer->data);
+  if (!ContainsKey(self->tasks_, timer))
+    return;
     }
     
-    void absDiff(const Size2D &size,
-             const f32 * src0Base, ptrdiff_t src0Stride,
-             const f32 * src1Base, ptrdiff_t src1Stride,
-             f32 * dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, AbsDiff<f32>());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
+    #include <string>
+    
+    Event::Event(v8::Isolate* isolate) {
+  Init(isolate);
 }
     
-        f32 alpha, beta, gamma;
-    float32x4_t valpha, vbeta, vgamma;
-    wAdd(f32 _alpha, f32 _beta, f32 _gamma):
-        alpha(_alpha), beta(_beta), gamma(_gamma)
-    {
-        valpha = vdupq_n_f32(_alpha);
-        vbeta = vdupq_n_f32(_beta);
-        vgamma = vdupq_n_f32(_gamma + 0.5);
-    }
-    
-                if(!x) {
-                tcurr = tnext;
-    }
-    
-        for (size_t i = 0u; i < size.height; ++i)
-    {
-        const u8 * srcy = internal::getRowPtr(srcyBase, srcyStride, i);
-        const u8 * srcu = internal::getRowPtr(srcuBase, srcuStride, i);
-        const u8 * srcv = internal::getRowPtr(srcvBase, srcvStride, i);
-        u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t syj = 0u, sj = 0u, dj = 0u;
-    }
-    
-    #include <cstddef>
-#include <cstdlib>
-#include <algorithm>
-    
-    template <>
-void rshiftConst<0>(const Size2D &size,
-                    const s16 * srcBase, ptrdiff_t srcStride,
-                    u8 * dstBase, ptrdiff_t dstStride,
-                    CONVERT_POLICY cpolicy)
-{
-    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
-    }
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && defined(__arm__)
-CVTS_FUNC1(u8, 16,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 16)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.8 {d4-d5}, [%[src]]                              \n\t'
-            'vmovl.u8 q3, d4                                       \n\t'
-            'vmovl.u8 q4, d5                                       \n\t'
-            'vmovl.u16 q5, d6                                      \n\t'
-            'vmovl.u16 q6, d7                                      \n\t'
-            'vmovl.u16 q7, d8                                      \n\t'
-            'vmovl.u16 q8, d9                                      \n\t'
-            'vcvt.f32.u32 q9, q5                                   \n\t'
-            'vcvt.f32.u32 q10, q6                                  \n\t'
-            'vcvt.f32.u32 q11, q7                                  \n\t'
-            'vcvt.f32.u32 q12, q8                                  \n\t'
-            'vmul.f32 q13, q9, q0                                  \n\t'
-            'vmul.f32 q14, q10, q0                                 \n\t'
-            'vmul.f32 q15, q11, q0                                 \n\t'
-            'vmul.f32 q2, q12, q0                                  \n\t'
-            'vadd.f32 q3, q13, q1                                  \n\t'
-            'vadd.f32 q4, q14, q1                                  \n\t'
-            'vadd.f32 q5, q15, q1                                  \n\t'
-            'vadd.f32 q6, q2, q1                                   \n\t'
-            'vcvt.s32.f32 q7, q3                                   \n\t'
-            'vcvt.s32.f32 q8, q4                                   \n\t'
-            'vcvt.s32.f32 q9, q5                                   \n\t'
-            'vcvt.s32.f32 q10, q6                                  \n\t'
-            'vqmovun.s32 d22, q7                                   \n\t'
-            'vqmovun.s32 d23, q8                                   \n\t'
-            'vqmovun.s32 d24, q9                                   \n\t'
-            'vqmovun.s32 d25, q10                                  \n\t'
-            'vqmovn.u16 d26, q11                                   \n\t'
-            'vqmovn.u16 d27, q12                                   \n\t'
-            'vst1.8 {d26-d27}, [%[dst1]]                           \n\t'
-            : /*no output*/
-            : [src] 'r' (_src + i),
-              [dst1] 'r' (_dst + i + 0),
-              'w'  (vscale), 'w' (vshift)
-            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26','d27','d28','d29','d30','d31'
-        );
-    }
-})
+    #if defined(OS_LINUX)
+#include 'atom/browser/lib/power_observer_linux.h'
 #else
-CVTS_FUNC1(u8, 16,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 16)
-    {
-        internal::prefetch(_src + i);
-        uint8x16_t vline = vld1q_u8(_src + i);
-        uint16x8_t vline1_u16 = vmovl_u8(vget_low_u8 (vline));
-        uint16x8_t vline2_u16 = vmovl_u8(vget_high_u8(vline));
-        uint32x4_t vline1_u32 = vmovl_u16(vget_low_u16 (vline1_u16));
-        uint32x4_t vline2_u32 = vmovl_u16(vget_high_u16(vline1_u16));
-        uint32x4_t vline3_u32 = vmovl_u16(vget_low_u16 (vline2_u16));
-        uint32x4_t vline4_u32 = vmovl_u16(vget_high_u16(vline2_u16));
-        float32x4_t vline1_f32 = vcvtq_f32_u32(vline1_u32);
-        float32x4_t vline2_f32 = vcvtq_f32_u32(vline2_u32);
-        float32x4_t vline3_f32 = vcvtq_f32_u32(vline3_u32);
-        float32x4_t vline4_f32 = vcvtq_f32_u32(vline4_u32);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline3_f32 = vmulq_f32(vline3_f32, vscale);
-        vline4_f32 = vmulq_f32(vline4_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        vline3_f32 = vaddq_f32(vline3_f32, vshift);
-        vline4_f32 = vaddq_f32(vline4_f32, vshift);
-        int32x4_t vline1_s32 = vcvtq_s32_f32(vline1_f32);
-        int32x4_t vline2_s32 = vcvtq_s32_f32(vline2_f32);
-        int32x4_t vline3_s32 = vcvtq_s32_f32(vline3_f32);
-        int32x4_t vline4_s32 = vcvtq_s32_f32(vline4_f32);
-        uint16x8_t vRes1_u16 = vcombine_u16(vqmovun_s32(vline1_s32), vqmovun_s32(vline2_s32));
-        uint16x8_t vRes2_u16 = vcombine_u16(vqmovun_s32(vline3_s32), vqmovun_s32(vline4_s32));
-        vst1q_u8(_dst + i, vcombine_u8(vqmovn_u16(vRes1_u16), vqmovn_u16(vRes2_u16)));
+#include 'base/power_monitor/power_observer.h'
+#endif  // defined(OS_LINUX)
+    
+    namespace asar {
     }
-})
-#endif
     
-            if (s[0] < 0 || s[1] < 0)//saturate in case of overflow ~ 8GB of non-zeros...
-        {
-            return 0x7fFFffFF;
-        }
-        result += (s[0] += s[1]);
-        if (s[0] < 0 || result < 0)
-        {
-            return 0x7fFFffFF;
-        }
+      // Up until now, the parent process was blocked in a read waiting for the
+  // write above to complete. The parent process is now free to exit. Wait for
+  // that to happen.
+  struct kevent event;
+  int events = kevent(kq.get(), nullptr, 0, &event, 1, nullptr);
+  if (events != 1) {
+    if (events < 0) {
+      PLOG(ERROR) << 'kevent (monitor)';
+    } else {
+      LOG(ERROR) << 'kevent (monitor): unexpected result ' << events;
+    }
+    return;
+  }
     
-        ptrdiff_t idx_l1 = internal::borderInterpolate(-1, size.width, borderType, borderMargin.left, borderMargin.right) * cn;
-    ptrdiff_t idx_l2 = internal::borderInterpolate(-2, size.width, borderType, borderMargin.left, borderMargin.right) * cn;
-    ptrdiff_t idx_r1 = internal::borderInterpolate(size.width + 0, size.width, borderType, borderMargin.left, borderMargin.right) * cn;
-    ptrdiff_t idx_r2 = internal::borderInterpolate(size.width + 1, size.width, borderType, borderMargin.left, borderMargin.right) * cn;
+    StringType AddQuoteForArg(const StringType& arg) {
+  // We follow the quoting rules of CommandLineToArgvW.
+  // http://msdn.microsoft.com/en-us/library/17w5ykft.aspx
+  std::wstring quotable_chars(L' \\\'');
+  if (arg.find_first_of(quotable_chars) == std::wstring::npos) {
+    // No quoting necessary.
+    return arg;
+  }
+    }
     
+    class PAGE_RES_IT;
+class ROW;
+class WERD_RES;
     
-    {
-    {} // namespace test
-} // namespace c10d
-
+    namespace tesseract {
+class Tesseract;
+}
     
-    Example 2 (with KEY):
-DATA  = [1, 2, 3, 4, 5, 6, 7, 8]
-KEY   = [0, 1, 3, 2, 1, 0, 1, 0]
-RANGES = [
-  [
-    [2, 4],
-    [0, 2],
-  ],
-  [
-    [0, 0],
-    [6, 2],
-  ]
-]
-lengths = [4, 2]
-OUTPUT[0] = [[6, 5, 4, 3], [0, 0, 0, 0]]
-OUTPUT[1] = [[1, 2], [8, 7]]
+    // Class to hold an array of bounding boxes for an output word and
+// the bounding box of the whole word.
+class BoxWord {
+ public:
+  BoxWord();
+  explicit BoxWord(const BoxWord& src);
+  ~BoxWord() = default;
+    }
     
-    Github Links:
-- https://github.com/caffe2/caffe2/blob/master/caffe2/operators/given_tensor_fill_op.h
-- https://github.com/caffe2/caffe2/blob/master/caffe2/operators/given_tensor_fill_op.cc
+      // Sets the destination filename and enables images to be written to a PDF
+  // on destruction.
+  void WritePDF(const char* filename) {
+    if (pixaGetCount(pixa_) > 0) {
+      pixaConvertToPdf(pixa_, 300, 1.0f, 0, 0, 'AllDebugImages', filename);
+      pixaClear(pixa_);
+    }
+  }
     
-    class IOperatorCommand : public IExpressionCommand
-{
-public:
-    virtual void SetCommand(int command) = 0;
+    namespace mxnet {
+namespace op {
+namespace caffe {
+    }
+    }
+    }
+    
+    #include '../common/utils.h'
+    
+    struct quantize_2bit {
+  MSHADOW_XINLINE static void Map(int out_block_id,
+                                  int original_size,
+                                  float *out,
+                                  float *grad,
+                                  float *residual,
+                                  const float neg_threshold,
+                                  const float pos_threshold) {
+    // this block contains the compressed representation of
+    // upto 16 values starting from out_block_id*16
+    float *compr_block = out + out_block_id;
+    // init to 0
+    *compr_block = 0;
+    // start and end are indices in original grad array
+    const int start = out_block_id << 4;
+    const int end = (start + 16 <= original_size) ? start + 16 : original_size;
+    // cast as char* to manipulate bits of float addresses
+    char *block_ptr = reinterpret_cast < char * > (compr_block);
+    // masks to set bits when value meets pos_threshold
+    // 0xc0 is mask when value is to be represented by the first two bits in a char*
+    // 0xc0 means first two bits are set to 11
+    const uint8_t posbits[] = {0xc0, 0x30, 0x0c, 0x03};
+    // masks to set bits when value meets neg_threshold
+    const uint8_t negbits[] = {0x80, 0x20, 0x08, 0x02};
+    for (int i = start; i < end; i++) {
+      // adds offset to reach appropriate byte
+      char *curr_byte = block_ptr + ((i - start) >> 2);
+      // adds gradient to existing residual to get updated grad
+      residual[i] += grad[i];
+      if (residual[i] >= pos_threshold) {
+        // set data to 11
+        *curr_byte |= posbits[(i & 3)];
+        // reduce residual by pos_threshold
+        residual[i] -= pos_threshold;
+      } else if (residual[i] <= neg_threshold) {
+        // set data to 10
+        *curr_byte |= negbits[(i & 3)];
+        residual[i] -= neg_threshold;
+      }
+    }
+  }
 };
     
-    #include 'Views/CalculatorProgrammerOperators.g.h'
-#include 'Controls/RadixButton.h'
-#include 'CalcViewModel/StandardCalculatorViewModel.h'
+    )code' ADD_FILELINE)
+.set_attr<FCompute>('FCompute<cpu>', DivSqrtDimForward_<cpu>)
+.set_attr<nnvm::FGradient>('FGradient', ElemwiseGradUseNone{'_contrib_div_sqrt_dim'});
     
-        private:
-        void FromDate_DateChanged(_In_ Windows::UI::Xaml::Controls::CalendarDatePicker^ sender, _In_ Windows::UI::Xaml::Controls::CalendarDatePickerDateChangedEventArgs^ e);
-        void ToDate_DateChanged(_In_ Windows::UI::Xaml::Controls::CalendarDatePicker^ sender, _In_ Windows::UI::Xaml::Controls::CalendarDatePickerDateChangedEventArgs^ e);
-        void AddSubtract_DateChanged(_In_ Windows::UI::Xaml::Controls::CalendarDatePicker^ sender, _In_ Windows::UI::Xaml::Controls::CalendarDatePickerDateChangedEventArgs^ e);
-        void OffsetValue_Changed(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::Controls::SelectionChangedEventArgs^ e);
-        void OnCopyMenuItemClicked(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::RoutedEventArgs^ e);
-        void OnLoaded(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::RoutedEventArgs^ e);
-        void DateCalcOption_Changed(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::Controls::SelectionChangedEventArgs^ e);
-        void AddSubtractDateGrid_Loaded(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::RoutedEventArgs^ e);
-        void AddSubtractOption_Checked(_In_ Platform::Object^ sender, _In_ Windows::UI::Xaml::RoutedEventArgs^ e);
-        void ReselectCalendarDate(_In_ Windows::UI::Xaml::Controls::CalendarDatePicker^ calendarDatePicker, Windows::Foundation::DateTime dateTime);
-        void OffsetDropDownClosed(_In_ Platform::Object^ sender, _In_ Platform::Object^ e);
-        void CalendarFlyoutClosed(_In_ Platform::Object^ sender, _In_ Platform::Object^ e);
-        void RaiseLiveRegionChangedAutomationEvent(_In_ bool isDateDiffMode);
+    /*!
+ * Copyright (c) 2016 by Contributors
+ * \file cudnn_bilinear_sampler-inl.h
+ * \brief
+ * \author Xu Dong
+*/
+#ifndef MXNET_OPERATOR_CUDNN_BILINEAR_SAMPLER_INL_H_
+#define MXNET_OPERATOR_CUDNN_BILINEAR_SAMPLER_INL_H_
     
-            void HistoryList_Loaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
-        void HistoryList_Unloaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
+    
+    {
+    {
+    { private:
+  inline void Init(mshadow::Stream<gpu> *s,
+                   const std::vector<TBlob> &in_data,
+                   const std::vector<TBlob> &out_data) {
+    using namespace mshadow;
+    CHECK_EQ(in_data.size(), 1U);
+    CHECK_EQ(out_data.size(), 2U);
+    if (!init_cudnn_) {
+      init_cudnn_ = true;
+      Tensor<gpu, 4, DType> data = in_data[lrn_enum::kData].get<gpu, 4, DType>(s);
+      Tensor<gpu, 4, DType> out = out_data[lrn_enum::kOut].get<gpu, 4, DType>(s);
+      unsigned lrn_n = param_.nsize;
+      double alpha = param_.alpha;
+      double beta = param_.beta;
+      double lrn_k = param_.knorm;
+      CHECK_EQ(data.shape_, out.shape_);
+      CUDNN_CALL(cudnnCreateLRNDescriptor(&lrn_desc_));
+      CUDNN_CALL(cudnnSetLRNDescriptor(lrn_desc_,
+                                       lrn_n,
+                                       alpha,
+                                       beta,
+                                       lrn_k));
+      CUDNN_CALL(cudnnCreateTensorDescriptor(&shape_desc_));
+      CUDNN_CALL(cudnnSetTensor4dDescriptor(shape_desc_,
+                                            CUDNN_TENSOR_NCHW,
+                                            dtype_,
+                                            data.shape_[0],
+                                            data.shape_[1],
+                                            data.shape_[2],
+                                            data.shape_[3]));
+    }
+  }
+  bool init_cudnn_;
+  LRNParam param_;
+  cudnnDataType_t dtype_;
+  cudnnLRNDescriptor_t lrn_desc_;
+  cudnnTensorDescriptor_t shape_desc_;
+};  // class CuDNNLocalResponseNormOp
+}  // namespace op
+}  // namespace mxnet
+#endif  // MXNET_OPERATOR_CUDNN_LRN_INL_H_
+
+    
+    void Assembler::stbx(const Reg64& rt, MemoryRef m) {
+  assertx(!m.r.disp);  // doesn't support immediate displacement
+  EmitXForm(31, rn(rt), rn(m.r.base), rn(m.r.index), 215);
+}
+    
+    
+    {}
+    
+    #ifndef incl_HPHP_PIPE_H_
+#define incl_HPHP_PIPE_H_
+    
+    
+    {    return iter != s_categoryManifest.end();
+}
+    
+    void TitleBarHelper::SetTitleBarHeight(double height)
+{
+    m_customTitleBar->Height = height;
+}
+    
+    #pragma once
+    
+    
+    {
+    {        bool m_isErrorVisualState;
+	};
+}
+
+    
+    #include 'Views/CalculatorStandardOperators.g.h'
+#include 'Views/NumberPad.xaml.h'
+    
+    #include 'Converters/BooleanNegationConverter.h'
+#include 'Converters/VisibilityNegationConverter.h'
+#include 'Views/DateCalculator.g.h'
+    
+    
+    {    VisualStateManager::GoToState(this, 'MemoryButtonsHidden', true);
+}
+    
+    using namespace std;
+    
+    class Node;
+    
+    Shaky3D* Shaky3D::clone() const
+{
+    // no copy constructor
+    auto a = new (std::nothrow) Shaky3D();
+    a->initWithDuration(_duration, _gridSize, _randrange, _shakeZ);
+    a->autorelease();
+    return a;
+}
+    
+    /** @class RotateBy
+ * @brief Rotates a Node object clockwise a number of degrees by modifying it's rotation attribute.
+*/
+class CC_DLL RotateBy : public ActionInterval
+{
+public:
+    /** 
+     * Creates the action.
+     *
+     * @param duration Duration time, in seconds.
+     * @param deltaAngle In degreesCW.
+     * @return An autoreleased RotateBy object.
+     */
+    static RotateBy* create(float duration, float deltaAngle);
+    /**
+     * Creates the action with separate rotation angles.
+     *
+     * @param duration Duration time, in seconds.
+     * @param deltaAngleZ_X In degreesCW.
+     * @param deltaAngleZ_Y In degreesCW.
+     * @return An autoreleased RotateBy object.
+     * @warning The physics body contained in Node doesn't support rotate with different x and y angle.
+     */
+    static RotateBy* create(float duration, float deltaAngleZ_X, float deltaAngleZ_Y);
+    /** Creates the action with 3D rotation angles.
+     *
+     * @param duration Duration time, in seconds.
+     * @param deltaAngle3D A Vec3 angle.
+     * @return An autoreleased RotateBy object.
+     */
+    static RotateBy* create(float duration, const Vec3& deltaAngle3D);
+    }
+    
+    void Animation::addSpriteFrameWithFile(const std::string& filename)
+{
+    Texture2D *texture = Director::getInstance()->getTextureCache()->addImage(filename);
+    Rect rect = Rect::ZERO;
+    rect.size = texture->getContentSize();
+    SpriteFrame *frame = SpriteFrame::createWithTexture(texture, rect);
+    addSpriteFrame(frame);
+}
+    
+        /** Gets the units of time the frame takes.
+     *
+     * @return The units of time the frame takes.
+     */
+    float getDelayUnits() const { return _delayUnits; };
+    
+    /** Sets the units of time the frame takes.
+     *
+     * @param delayUnits The units of time the frame takes.
+     */
+    void setDelayUnits(float delayUnits) { _delayUnits = delayUnits; };
+    
+    /** @brief Gets user information
+     * A AnimationFrameDisplayedNotification notification will be broadcast when the frame is displayed with this dictionary as UserInfo. 
+     * If UserInfo is nil, then no notification will be broadcast.
+     *
+     * @return A dictionary as UserInfo
+     */
+    const ValueMap& getUserInfo() const { return _userInfo; };
+    ValueMap& getUserInfo() { return _userInfo; };
+    
+    /** Sets user information.
+     * @param userInfo A dictionary as UserInfo.
+     */
+    void setUserInfo(const ValueMap& userInfo)
+    {
+        _userInfo = userInfo;
+    }
+    
+    // Overrides
+    virtual AnimationFrame *clone() const override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    /**
+     * @js ctor
+     */
+    AnimationFrame();
+    /**
+     * @js NA
+     * @lua NA
+     */
+    virtual ~AnimationFrame();
+    
+    /** initializes the animation frame with a spriteframe, number of delay units and a notification user info */
+    bool initWithSpriteFrame(SpriteFrame* spriteFrame, float delayUnits, const ValueMap& userInfo);
+    
+        /** Returns a Animation that was previously added.
+     * If the name is not found it will return nil.
+     * You should retain the returned copy if you are going to use it.
+     *
+     * @return A Animation that was previously added. If the name is not found it will return nil.
+     */
+    Animation* getAnimation(const std::string& name);
+    /**
+     * @deprecated. Use getAnimation() instead
+     * @js NA
+     * @lua NA
+     */
+    CC_DEPRECATED_ATTRIBUTE Animation* animationByName(const std::string& name){ return getAnimation(name); }
