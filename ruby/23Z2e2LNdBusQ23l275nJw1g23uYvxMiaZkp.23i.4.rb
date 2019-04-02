@@ -1,229 +1,140 @@
 
         
-        # Sample contents
-WITHOUT_LIQUID = <<-TEXT.freeze
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce auctor libero at
-pharetra tempus. Etiam bibendum magna et metus fermentum, eu cursus lorem
-mattis. Curabitur vel dui et lacus rutrum suscipit et eget neque.
+          def pinned?
+    path.symlink?
+  end
     
-    # No trailing slash
-Benchmark.ips do |x|
-  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
-  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
-  x.compare!
-end
-
+        data =
+    [   # Maximum access
+      0x00, 0x00,
+      # Reserved
+      0x00, 0x00
+    ].pack('C*') +
+    console_session_id +
+    [
+      0x00, 0x00, 0x00, 0x08,
+      # Cipher 0
+      0x00, 0x00, 0x00, 0x00,
+      0x01, 0x00, 0x00, 0x08,
+      # Cipher 0
+      0x00, 0x00, 0x00, 0x00,
+      0x02, 0x00, 0x00, 0x08,
+      # No Encryption
+      0x00, 0x00, 0x00, 0x00
+    ].pack('C*')
     
-      Jekyll::Command.subclasses.each { |c| c.init_with_program(p) }
+              # Encodes a Rex::Proto::Kerberos::Model::Checksum into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            elems = []
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_type], 0, :CONTEXT_SPECIFIC)
+            elems << OpenSSL::ASN1::ASN1Data.new([encode_checksum], 1, :CONTEXT_SPECIFIC)
     
-    module Jekyll
-  module Commands
-    class NewTheme < Jekyll::Command
-      class << self
-        def init_with_program(prog)
-          prog.command(:'new-theme') do |c|
-            c.syntax 'new-theme NAME'
-            c.description 'Creates a new Jekyll theme scaffold'
-            c.option 'code_of_conduct', \
-                     '-c', '--code-of-conduct', \
-                     'Include a Code of Conduct. (defaults to false)'
+              # Encodes the etype
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_etype
+            bn = OpenSSL::BN.new(etype.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
     
-          @launch_event_sent = true
-      builder = AnalyticsEventBuilder.new(
-        p_hash: launch_context.p_hash,
-        session_id: session_id,
-        action_name: nil,
-        fastlane_client_language: launch_context.fastlane_client_language
-      )
+      def raw_require_paths # :nodoc:
+    raise NotImplementedError
+  end
     
-            show_github_issues(error_info) if should_show_github_issues
+        tuples = tuples.sort_by { |x| x[0] }
     
-          context 'when specify log_path' do
-        context 'when command is archive' do
-          let(:command) { 'archive' }
-          it '--log-path option is not present' do
-            expect do
-              Fastlane::FastFile.new.parse('lane :test do
-                carthage(command: '#{command}', log_path: 'bla.log')
-              end').runner.execute(:test)
-            end.to raise_error('Log path option is available only for 'build', 'bootstrap', and 'update' command.')
+        EXPECTED
+    
+      def test_execute_with_otp_failure
+    response = 'You have enabled multifactor authentication but your request doesn\'t have the correct OTP code. Please check it and retry.'
+    yank_uri = 'http://example/api/v1/gems/yank'
+    @fetcher.data[yank_uri] = [response, 401, 'Unauthorized']
+    
+        @d2_0_b = util_spec 'd', '2.0.b'
+    util_build_gem @d2_0_b
+    
+          @installer = Gem::Installer.at path, :post_install_message => false
+      @installer.install
+    end
+    
+    DEPENDENCIES
+  jwt (= 1.1)!
+    LOCKFILE
+    
+        r = Gem::Resolver.new([ad, bd], s)
+    
+    $stderr.puts <<DEPRECATION
+WARNING: Ruby Sass's Git repository is moving, and the old repository will be
+deled on 26 March 2019! Please update your Git URLs to point to the new
+repository at https://github.com/sass/ruby-sass.
+    
+              def is_#{name}_global?(name)
+            return !@parent if @#{name}s && @#{name}s.has_key?(name)
+            @parent && @parent.is_#{name}_global?(name)
           end
-        end
+        RUBY
+      end
     
-          it 'Does not accept string if it does not contain comma' do
-        expect do
-          result = Fastlane::FastFile.new.parse('lane :test do
-            changelog_from_git_commits(between: 'abcd1234')
-          end').runner.execute(:test)
-        end.to raise_error(':between must contain comma')
+            expect(new_source)
+          .to eq('#{prefix}#{open}#{a}, # a\n#{b}\n#{close} # b\n#{suffix}')
       end
     end
-  end
-end
-
     
-          context 'without parameters' do
-        it 'executes the correct git command' do
-          allow(Fastlane::Actions).to receive(:sh).with('git add .', anything).and_return('')
-          result = Fastlane::FastFile.new.parse('lane :test do
-            git_add
-          end').runner.execute(:test)
-        end
-      end
-    
-          it 'uses the correct command to import it' do
-        # We have to execute *something* using ` since otherwise we set expectations to `nil`, which is not healthy
-        `ls`
-    
-          def perform(start_id, stop_id)
-        update = '
-          latest_merge_request_diff_id = (
-            SELECT MAX(id)
-            FROM merge_request_diffs
-            WHERE merge_requests.id = merge_request_diffs.merge_request_id
-          )'.squish
-    
-            # issue - An instance of `Gitlab::GithubImport::Representation::Issue`
-        # project - An instance of `Project`
-        # client - An instance of `Gitlab::GithubImport::Client`
-        def initialize(issue, project, client)
-          @issue = issue
-          @project = project
-          @client = client
-          @label_finder = LabelFinder.new(project)
-        end
-    
-          # Associates the given database ID with the current object.
+          # Returns the else branch of the `case` statement, if any.
       #
-      # database_id - The ID of the corresponding database row.
-      def cache_database_id(database_id)
-        Caching.write(cache_key, database_id)
+      # @return [Node] the else branch node of the `case` statement
+      # @return [nil] if the case statement does not have an else branch.
+      def else_branch
+        node_parts[-1]
       end
     
-    module Gitlab
-  module GithubImport
-    module Representation
-      class DiffNote
-        include ToHash
-        include ExposeAttribute
-    
-              user = Representation::User.from_api_response(note.user) if note.user
-          hash = {
-            noteable_type: noteable_type,
-            noteable_id: matches[:iid].to_i,
-            author: user,
-            note: note.body,
-            created_at: note.created_at,
-            updated_at: note.updated_at,
-            github_id: note.id
-          }
-    
-            # Builds a user from a GitHub API response.
-        #
-        # user - An instance of `Sawyer::Resource` containing the user details.
-        def self.from_api_response(user)
-          new(id: user.id, login: user.login)
-        end
-    
-            it 'does not leave a space at the start of negative numbers' do
-          format('% b', -10).should == '-1010'
-          format('% B', -10).should == '-1010'
-          format('% d', -112).should == '-112'
-          format('% i', -112).should == '-112'
-          format('% o', -87).should == '-127'
-          format('% u', -112).should == '-112'
-          format('% x', -196).should == '-c4'
-          format('% X', -196).should == '-C4'
-    
-      # String arguments should be evaluated in the context of the caller.
-  it 'accepts a String argument instead of a Proc or block' do
-    trace_var :$Kernel_trace_var_global, '$Kernel_trace_var_extra = true'
-    
-      # Do not eager load code on boot. This avoids loading your whole application
-  # just for the purpose of running a single test. If you are using a tool that
-  # preloads Rails for running tests, you may have to set it to true.
-  config.eager_load = false
-    
-      #-- Rubocop ----------------------------------------------------------------#
-    
-    PROFILE_ERB_TEMPLATE = <<-EOS
-(version 1)
-(debug allow)
-    
-            private
-    
-    #{stack}
-#{executable_path}
-### Plugins
-    
-    Then(/^file symlinks are created in the new release$/) do
-  TestApp.linked_files.each do |file|
-    run_vagrant_command(test_symlink_exists(TestApp.current_path.join(file)))
-  end
-end
-    
-    World(RemoteCommandHelpers)
-
-    
-          def add_property(key, value)
-        if respond_to?('#{key}=')
-          send('#{key}=', value)
-        else
-          set(key, value)
-        end
+          # The body of the method definition.
+      #
+      # @note this can be either a `begin` node, if the method body contains
+      #       multiple expressions, or any other node, if it contains a single
+      #       expression.
+      #
+      # @return [Node] the body of the method definition
+      def body
+        node_parts[0]
       end
     
-          # Runs all validation rules registered for the given key against the
-      # user-supplied value for that variable. If no validator raises an
-      # exception, the value is assumed to be valid.
-      def assert_valid_now(key, value)
-        validators[key].each do |validator|
-          validator.call(key, value)
-        end
+        # If --inputs was specified, read it as a file.
+    if !inputs.nil?
+      if !File.exists?(inputs)
+        logger.fatal('File given for --inputs does not exist (#{inputs})')
+        return 1
       end
     
-    module Capistrano
-  class Configuration
-    # Holds the variables assigned at Capistrano runtime via `set` and retrieved
-    # with `fetch`. Does internal bookkeeping to help identify user mistakes
-    # like spelling errors or unused variables that may lead to unexpected
-    # behavior.
-    class Variables
-      CAPISTRANO_LOCATION = File.expand_path('../..', __FILE__).freeze
-      IGNORED_LOCATIONS = [
-        '#{CAPISTRANO_LOCATION}/configuration/variables.rb:',
-        '#{CAPISTRANO_LOCATION}/configuration.rb:',
-        '#{CAPISTRANO_LOCATION}/dsl/env.rb:',
-        '/dsl.rb:',
-        '/forwardable.rb:'
-      ].freeze
-      private_constant :CAPISTRANO_LOCATION, :IGNORED_LOCATIONS
+        # Follow similar rules to these used in ``to_s_fullversion`` method.
+    # FIXME: maybe epoch should also be introduced somehow ('#{version},#{epoch})?
+    #        should it go to pkgdata['version'] or to another place?
+    # https://www.freebsd.org/doc/en/books/porters-handbook/makefile-naming.html
+    pkg_version = (iteration and (iteration.to_i > 0)) ?  '#{version}-#{iteration}' : '#{version}'
     
-    desc 'Default: run unit tests.'
-task :default => [:clean, :all]
+        # Final format of manifest
+    safesystem('pkgfmt', manifest_fn)
     
-        private
+      option '--downcase-name', :flag, 'Should the target package name be in ' \
+    'lowercase?', :default => true
+  option '--downcase-dependencies', :flag, 'Should the package dependencies ' \
+    'be in lowercase?', :default => true
     
-        # Returns the underscored, pluralized version of the class name.
-    # e.g. 'users' for the User class.
-    # NOTE: The arguments need to be optional, because some tools fetch
-    # all class names. Calling #class will return the expected class.
-    def class attachment = nil, style_name = nil
-      return super() if attachment.nil? && style_name.nil?
-      plural_cache.underscore_and_pluralize_class(attachment.instance.class)
+    # Support for self extracting sh files (.sh files)
+#
+# This class only supports output of packages.
+#
+# The sh package is a single sh file with a tar payload concatenated to the end.
+# The script can unpack the tarball to install it and call optional post install scripts.
+class FPM::Package::Sh < FPM::Package
+    
+        # Add the tar compression flag if necessary
+    tar_compression_flag(input_path).tap do |flag|
+      args << flag unless flag.nil?
     end
     
-          # add entries to arguments.
-      entries.each do |entry|
-        unless(entry == '..' || entry == '.')
-          args = args << entry
-        end
-      end
-    
-        if File.exists?(params[:output])
-      # TODO(sissel): Allow folks to choose output?
-      logger.error('Puppet module directory '#{params[:output]}' already ' \
-                    'exists. Delete it or choose another output (-p flag)')
-    end
-    
-      private
+      # Input a zipfile.
+  def input(input_path)
+    # use part of the filename as the package name
+    self.name = File.extname(input_path)[1..-1]
