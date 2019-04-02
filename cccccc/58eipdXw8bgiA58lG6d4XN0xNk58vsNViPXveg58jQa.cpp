@@ -1,330 +1,292 @@
 
         
-          static void BuildPrototype(v8::Isolate* isolate,
-                             v8::Local<v8::FunctionTemplate> prototype);
+        // Finally, you can use INSTANTIATE_TEST_CASE_P to instantiate the test
+// case with any set of parameters you want. Google Test defines a number
+// of functions for generating test parameters. They return what we call
+// (surprise!) parameter generators. Here is a  summary of them, which
+// are all in the testing namespace:
+//
+//
+//  Range(begin, end [, step]) - Yields values {begin, begin+step,
+//                               begin+step+step, ...}. The values do not
+//                               include end. step defaults to 1.
+//  Values(v1, v2, ..., vN)    - Yields values {v1, v2, ..., vN}.
+//  ValuesIn(container)        - Yields values from a C-style array, an STL
+//  ValuesIn(begin,end)          container, or an iterator range [begin, end).
+//  Bool()                     - Yields sequence {false, true}.
+//  Combine(g1, g2, ..., gN)   - Yields all combinations (the Cartesian product
+//                               for the math savvy) of the values generated
+//                               by the N generators.
+//
+// For more details, see comments at the definitions of these functions below
+// in this file.
+//
+// The following statement will instantiate tests from the FooTest test case
+// each with parameter values 'meeny', 'miny', and 'moe'.
     
     
-    {}  // namespace api
+    {}  // namespace testing
     
-    #endif  // ATOM_BROWSER_API_ATOM_API_RENDER_PROCESS_PREFERENCES_H_
-
+      void depart() {
+    if (link_.depart()) delete value_;
+  }
     
-    #ifndef ATOM_BROWSER_API_EVENT_H_
-#define ATOM_BROWSER_API_EVENT_H_
+    template <GTEST_1_TYPENAMES_(T)>
+inline GTEST_1_TUPLE_(T) make_tuple(const T0& f0) {
+  return GTEST_1_TUPLE_(T)(f0);
+}
     
+      void operator delete(void* block, size_t /* allocation_size */) {
+    allocated_--;
+    free(block);
+  }
     
-    {  DISALLOW_COPY_AND_ASSIGN(TrackableObject);
-};
-    
-    class AtomJavaScriptDialogManager : public content::JavaScriptDialogManager {
- public:
-  explicit AtomJavaScriptDialogManager(api::WebContents* api_web_contents);
-  ~AtomJavaScriptDialogManager() override;
+    // Tests negative input.
+TEST(IsPrimeTest, Negative) {
+  // This test belongs to the IsPrimeTest test case.
     }
     
     
-    {  DISALLOW_COPY_AND_ASSIGN(AtomQuotaPermissionContext);
+    { private:
+  RowBlock<IndexType> out_;
+  std::unique_ptr<Parser<IndexType> > parser_;
+  uint32_t num_col_;
+  std::vector<size_t> offset_;
+  std::vector<IndexType> dense_index_;
+  std::vector<xgboost::bst_float> dense_value_;
 };
     
-    #if defined(OS_LINUX)
-typedef PowerObserverLinux PowerObserver;
-#else
-typedef base::PowerObserver PowerObserver;
-#endif  // defined(OS_LINUX)
+    SparsePageWriter::SparsePageWriter(
+    const std::vector<std::string>& name_shards,
+    const std::vector<std::string>& format_shards,
+    size_t extra_buffer_capacity)
+    : num_free_buffer_(extra_buffer_capacity + name_shards.size()),
+      clock_ptr_(0),
+      workers_(name_shards.size()),
+      qworkers_(name_shards.size()) {
+  CHECK_EQ(name_shards.size(), format_shards.size());
+  // start writer threads
+  for (size_t i = 0; i < name_shards.size(); ++i) {
+    std::string name_shard = name_shards[i];
+    std::string format_shard = format_shards[i];
+    auto* wqueue = &qworkers_[i];
+    workers_[i].reset(new std::thread(
+        [this, name_shard, format_shard, wqueue] () {
+          std::unique_ptr<dmlc::Stream> fo(
+              dmlc::Stream::Create(name_shard.c_str(), 'w'));
+          std::unique_ptr<SparsePageFormat> fmt(
+              SparsePageFormat::Create(format_shard));
+          fo->Write(format_shard);
+          std::shared_ptr<SparsePage> page;
+          while (wqueue->Pop(&page)) {
+            if (page == nullptr) break;
+            fmt->Write(*page, fo.get());
+            qrecycle_.Push(std::move(page));
+          }
+          fo.reset(nullptr);
+          LOG(CONSOLE) << 'SparsePage::Writer Finished writing to ' << name_shard;
+        }));
+  }
+}
     
-    #endif  // ATOM_BROWSER_NET_ABOUT_PROTOCOL_HANDLER_H_
-
+          // Test write entire array
+      std::vector<unsigned char> buffer(
+        CompressedBufferWriter::CalculateBufferSize(input.size(),
+          alphabet_size));
     
-    #endif  // ATOM_BROWSER_NET_URL_REQUEST_ABOUT_JOB_H_
-
+    SEXP XGDMatrixSliceDMatrix_R(SEXP handle, SEXP idxset) {
+  SEXP ret;
+  R_API_BEGIN();
+  int len = length(idxset);
+  std::vector<int> idxvec(len);
+  for (int i = 0; i < len; ++i) {
+    idxvec[i] = INTEGER(idxset)[i] - 1;
+  }
+  DMatrixHandle res;
+  CHECK_CALL(XGDMatrixSliceDMatrix(R_ExternalPtrAddr(handle),
+                                   BeginPtr(idxvec), len,
+                                   &res));
+  ret = PROTECT(R_MakeExternalPtr(res, R_NilValue, R_NilValue));
+  R_RegisterCFinalizerEx(ret, _DMatrixFinalizer, TRUE);
+  R_API_END();
+  UNPROTECT(1);
+  return ret;
+}
     
-    #include 'third_party/skia/include/core/SkColor.h'
-#include 'third_party/skia/include/core/SkRect.h'
-#include 'third_party/skia/src/core/SkDevice.h'
-#include 'ui/gfx/skia_util.h'
     
-        /* RFC6979 3.2.d. */
-    secp256k1_hmac_sha256_initialize(&hmac, rng->k, 32);
-    secp256k1_hmac_sha256_write(&hmac, rng->v, 32);
-    secp256k1_hmac_sha256_write(&hmac, zero, 1);
-    secp256k1_hmac_sha256_write(&hmac, key, keylen);
-    secp256k1_hmac_sha256_finalize(&hmac, rng->k);
-    secp256k1_hmac_sha256_initialize(&hmac, rng->k, 32);
-    secp256k1_hmac_sha256_write(&hmac, rng->v, 32);
-    secp256k1_hmac_sha256_finalize(&hmac, rng->v);
-    
-        secp256k1_pubkey_load(ctx, &pt, point);
-    secp256k1_scalar_set_b32(&s, scalar, &overflow);
-    if (overflow || secp256k1_scalar_is_zero(&s)) {
-        ret = 0;
+    {  /*! \brief push up temp */
+  inline void PushTemp() {
+    temp.Reserve(limit_size * 2);
+    for (size_t l = 1; true; ++l) {
+      this->InitLevel(l + 1);
+      // check if level l is empty
+      if (level[l].size == 0) {
+        level[l].SetPrune(temp, limit_size);
+        break;
+      } else {
+        // level 0 is actually temp space
+        level[0].SetPrune(temp, limit_size);
+        temp.SetCombine(level[0], level[l]);
+        if (temp.size > limit_size) {
+          // try next level
+          level[l].size = 0;
+        } else {
+          // if merged record is still smaller, no need to send to next level
+          level[l].CopyFrom(temp); break;
+        }
+      }
+    }
+  }
+  /*! \brief get the summary after finalize */
+  inline void GetSummary(SummaryContainer *out) {
+    if (level.size() != 0) {
+      out->Reserve(limit_size * 2);
     } else {
-        unsigned char x[32];
-        unsigned char y[1];
-        secp256k1_sha256_t sha;
+      out->Reserve(inqueue.queue.size());
     }
-    
-    
-    {    /* Try to multiply it by bad values */
-    CHECK(secp256k1_ecdh(ctx, output, &point, s_zero) == 0);
-    CHECK(secp256k1_ecdh(ctx, output, &point, s_overflow) == 0);
-    /* ...and a good one */
-    s_overflow[31] -= 1;
-    CHECK(secp256k1_ecdh(ctx, output, &point, s_overflow) == 1);
-}
-    
-        if (secp256k1_scalar_is_zero(sigr) || secp256k1_scalar_is_zero(sigs)) {
-        return 0;
+    inqueue.MakeSummary(out);
+    if (level.size() != 0) {
+      level[0].SetPrune(*out, limit_size);
+      for (size_t l = 1; l < level.size(); ++l) {
+        if (level[l].size == 0) continue;
+        if (level[0].size == 0) {
+          level[0].CopyFrom(level[l]);
+        } else {
+          out->SetCombine(level[0], level[l]);
+          level[0].SetPrune(*out, limit_size);
+        }
+      }
+      out->CopyFrom(level[0]);
+    } else {
+      if (out->size > limit_size) {
+        temp.Reserve(limit_size);
+        temp.SetPrune(*out, limit_size);
+        out->CopyFrom(temp);
+      }
     }
-    
-    void test_ecdsa_recovery_end_to_end(void) {
-    unsigned char extra[32] = {0x00};
-    unsigned char privkey[32];
-    unsigned char message[32];
-    secp256k1_ecdsa_signature signature[5];
-    secp256k1_ecdsa_recoverable_signature rsignature[5];
-    unsigned char sig[74];
-    secp256k1_pubkey pubkey;
-    secp256k1_pubkey recpubkey;
-    int recid = 0;
+  }
+  // used for debug, check if the sketch is valid
+  inline void CheckValid(RType eps) const {
+    for (size_t l = 1; l < level.size(); ++l) {
+      level[l].CheckValid(eps);
     }
-    
-    
-    {    // Inputs that are effectively invalid under the target grammar.
-    // PROTOCOLINFO accepts an OtherLine that is just an OptArguments, which
-    // would make these inputs valid. However,
-    // - This parser is never used in that situation, because the
-    //   SplitTorReplyLine parser enables OtherLine to be skipped.
-    // - Even if these were valid, an OptArguments contains no semantic data,
-    //   so there is no point in parsing it.
-    CheckParseTorReplyMapping('ARGS', {});
-    CheckParseTorReplyMapping('MORE ARGS', {});
-    CheckParseTorReplyMapping('MORE  ARGS', {});
-    CheckParseTorReplyMapping('EVEN more=ARGS', {});
-    CheckParseTorReplyMapping('EVEN+more ARGS', {});
-}
-    
-    
-//------------------------------------------------------------------------------
-// Primary API functions
-    
-    
-    {    CRIPEMD160();
-    CRIPEMD160& Write(const unsigned char* data, size_t len);
-    void Finalize(unsigned char hash[OUTPUT_SIZE]);
-    CRIPEMD160& Reset();
+  }
+  // initialize level space to at least nlevel
+  inline void InitLevel(size_t nlevel) {
+    if (level.size() >= nlevel) return;
+    data.resize(limit_size * nlevel);
+    level.resize(nlevel, Summary(nullptr, 0));
+    for (size_t l = 0; l < level.size(); ++l) {
+      level[l].data = dmlc::BeginPtr(data) + l * limit_size;
+    }
+  }
+  // input data queue
+  typename Summary::Queue inqueue;
+  // number of levels
+  size_t nlevel;
+  // size of summary in each level
+  size_t limit_size;
+  // the level of each summaries
+  std::vector<Summary> level;
+  // content of the summary
+  std::vector<Entry> data;
+  // temporal summary, used for temp-merge
+  SummaryContainer temp;
 };
     
     
-    {        inline size_t total() const
-        {
-            return width * height;
-        }
-    };
-    
-        void operator() (const typename VecTraits<T>::vec128 & v_src0,
-                     const typename VecTraits<T>::vec128 & v_src1,
-                     typename VecTraits<T>::vec128 & v_dst) const
     {
-        typename VecTraits<wtype>::vec128 vrl, vrh;
-        wideAdd(vmovl( vget_low(v_src0)), vmovl( vget_low(v_src1)), vrl);
-        wideAdd(vmovl(vget_high(v_src0)), vmovl(vget_high(v_src1)), vrh);
-    }
-    
-    #define MERGE_ASM2(sgn, bits) __asm__ ( \
-                                          'vld1.' #bits ' {d0-d1}, [%[in0]]             \n\t' \
-                                          'vld1.' #bits ' {d2-d3}, [%[in1]]             \n\t' \
-                                          'vst2.' #bits ' {d0, d2}, [%[out0]]           \n\t' \
-                                          'vst2.' #bits ' {d1, d3}, [%[out1]]           \n\t' \
-                                          : \
-                                          : [in0] 'r' (src0 + sj), [in1] 'r' (src1 + sj), \
-                                            [out0]  'r' (dst + dj), [out1]  'r' (dst + dj + MUL2(8)/sizeof(sgn##bits)) \
-                                          : 'd0','d1','d2','d3' \
-                                      );
-#define MERGE_ASM3(sgn, bits) __asm__ ( \
-                                          'vld1.' #bits ' {d0-d1}, [%[in0]]             \n\t' \
-                                          'vld1.' #bits ' {d2-d3}, [%[in1]]             \n\t' \
-                                          'vld1.' #bits ' {d4-d5}, [%[in2]]             \n\t' \
-                                          'vst3.' #bits ' {d0, d2, d4}, [%[out0]]       \n\t' \
-                                          'vst3.' #bits ' {d1, d3, d5}, [%[out1]]       \n\t' \
-                                          : \
-                                          : [in0] 'r' (src0 + sj), [in1] 'r' (src1 + sj), [in2] 'r' (src2 + sj), \
-                                            [out0]  'r' (dst + dj), [out1]  'r' (dst + dj + MUL3(8)/sizeof(sgn##bits)) \
-                                          : 'd0','d1','d2','d3','d4','d5' \
-                                      );
-#define MERGE_ASM4(sgn, bits) __asm__ ( \
-                                          'vld1.' #bits ' {d0-d1}, [%[in0]]             \n\t' \
-                                          'vld1.' #bits ' {d2-d3}, [%[in1]]             \n\t' \
-                                          'vld1.' #bits ' {d4-d5}, [%[in2]]             \n\t' \
-                                          'vld1.' #bits ' {d6-d7}, [%[in3]]             \n\t' \
-                                          'vst4.' #bits ' {d0, d2, d4, d6}, [%[out0]]   \n\t' \
-                                          'vst4.' #bits ' {d1, d3, d5, d7}, [%[out1]]   \n\t' \
-                                          : \
-                                          : [in0] 'r' (src0 + sj), [in1] 'r' (src1 + sj), [in2] 'r' (src2 + sj), [in3] 'r' (src3 + sj), \
-                                            [out0]  'r' (dst + dj), [out1]  'r' (dst + dj + MUL4(8)/sizeof(sgn##bits)) \
-                                          : 'd0','d1','d2','d3','d4','d5','d6','d7' \
-                                      );
-    
-                v_src0 = internal::vld1q(src0 + x);
-            v_src1 = internal::vld1q(src1 + x);
-            op(v_src0, v_src1, v_dst);
-            internal::vst1q(dst + x, v_dst);
-            x+=16;
+    {      std::vector<LambdaPair> pairs;
+      std::vector<ListEntry>  lst;
+      std::vector< std::pair<bst_float, unsigned> > rec;
+      bst_float sum_weights = 0;
+      for (bst_omp_uint k = 0; k < ngroup; ++k) {
+        sum_weights += info.GetWeight(k);
+      }
+      bst_float weight_normalization_factor = ngroup/sum_weights;
+      const auto& labels = info.labels_.HostVector();
+      #pragma omp for schedule(static)
+      for (bst_omp_uint k = 0; k < ngroup; ++k) {
+        lst.clear(); pairs.clear();
+        for (unsigned j = gptr[k]; j < gptr[k+1]; ++j) {
+          lst.emplace_back(preds_h[j], labels[j], j);
+          gpair[j] = GradientPair(0.0f, 0.0f);
         }
-        if( x + 8 < width)
-        {
-            vec64  v_src0, v_src1;
-            uvec64 v_dst;
-    
-    #include <carotene/functions.hpp>
-#include 'saturate_cast.hpp'
-    
-    
-    {    return 0;
-#endif
-}
-    
-                v_dst.val[0] = vcombine(vget_high(v_src.val[0]), vget_low(v_src.val[0]));
-            v_dst.val[1] = vcombine(vget_high(v_src.val[1]), vget_low(v_src.val[1]));
-            v_dst.val[2] = vcombine(vget_high(v_src.val[2]), vget_low(v_src.val[2]));
-    
-            //left&right borders
-        if (borderType != BORDER_MODE_CONSTANT)
-            for (s32 k = 0; k < cn; ++k)
-            {
-                lane[-cn+k] = lane[idx_l1 + k];
-                lane[-cn-cn+k] = lane[idx_l2 + k];
+        std::sort(lst.begin(), lst.end(), ListEntry::CmpPred);
+        rec.resize(lst.size());
+        for (unsigned i = 0; i < lst.size(); ++i) {
+          rec[i] = std::make_pair(lst[i].label, i);
+        }
+        std::sort(rec.begin(), rec.end(), common::CmpFirst);
+        // enumerate buckets with same label, for each item in the lst, grab another sample randomly
+        for (unsigned i = 0; i < rec.size(); ) {
+          unsigned j = i + 1;
+          while (j < rec.size() && rec[j].first == rec[i].first) ++j;
+          // bucket in [i,j), get a sample outside bucket
+          unsigned nleft = i, nright = static_cast<unsigned>(rec.size() - j);
+          if (nleft + nright != 0) {
+            int nsample = param_.num_pairsample;
+            while (nsample --) {
+              for (unsigned pid = i; pid < j; ++pid) {
+                unsigned ridx = std::uniform_int_distribution<unsigned>(0, nleft + nright - 1)(rnd);
+                if (ridx < nleft) {
+                  pairs.emplace_back(rec[ridx].second, rec[pid].second,
+                      info.GetWeight(k) * weight_normalization_factor);
+                } else {
+                  pairs.emplace_back(rec[pid].second, rec[ridx+j-i].second,
+                      info.GetWeight(k) * weight_normalization_factor);
+                }
+              }
+            }
+          }
+          i = j;
+        }
+        // get lambda weight for the pairs
+        this->GetLambdaWeight(lst, &pairs);
+        // rescale each gradient and hessian so that the lst have constant weighted
+        float scale = 1.0f / param_.num_pairsample;
+        if (param_.fix_list_weight != 0.0f) {
+          scale *= param_.fix_list_weight / (gptr[k + 1] - gptr[k]);
+        }
+        for (auto & pair : pairs) {
+          const ListEntry &pos = lst[pair.pos_index];
+          const ListEntry &neg = lst[pair.neg_index];
+          const bst_float w = pair.weight * scale;
+          const float eps = 1e-16f;
+          bst_float p = common::Sigmoid(pos.pred - neg.pred);
+          bst_float g = p - 1.0f;
+          bst_float h = std::max(p * (1.0f - p), eps);
+          // accumulate gradient and hessian in both pid, and nid
+          gpair[pos.rindex] += GradientPair(g * w, 2.0f*w*h);
+          gpair[neg.rindex] += GradientPair(-g * w, 2.0f*w*h);
+        }
+      }
     }
+  }
+  const char* DefaultEvalMetric() const override {
+    return 'map';
+  }
     
     
+    // exception type_error.304
+    try
     {
-    {        for (; j < size.width; ++j)
-            sqsum[j] = (prev += src[j]*src[j]) + prevSqSum[j];
+        // use at() on a non-object type
+        json str = 'I am a string';
+        str.at('the good') = 'Another string';
     }
-#else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)sqsumBase;
-    (void)sqsumStride;
-#endif
-}
+    catch (json::type_error& e)
+    {
+        std::cout << e.what() << '\n';
+    }
     
-            // Inner state of the underlying reader.
-        // Is set in the RestoreFromCheckpoint call and used in the next GetNextMinibatch
-        // when the reader state is restored after the first StartEpoch call.
-        Internal::Optional<Dictionary> m_state;
-    
-            // we should always reshape for rank-0, so that batch and sequence axis goes to columns
-        if (tensorShape.GetRank() <= 1 && rowColSplitPoint != 0)
-            return tensorView->AsMatrix();
-    
-            VariableKind kind = VariableKind(dict[kindKey].Value<std::size_t>());
-        if (kind != VariableKind::Constant &&
-            kind != VariableKind::Input &&
-            kind != VariableKind::Parameter &&
-            kind != VariableKind::Placeholder)
-        {
-            LogicError('Unexpected variable kind '%ls':'%u' (%s).',
-                       kindKey.c_str(),
-                       static_cast<std::underlying_type<VariableKind>::type>(kind),
-                       GetVersionsString<Variable>(s_serializationVersion, version).c_str());
-        }
-        
-        DataType dataType = DataType(dict[dataTypeKey].Value<std::size_t>());
-        if (dataType != DataType::Unknown &&
-            dataType != DataType::Float &&
-            dataType != DataType::Double &&
-            dataType != DataType::Float16 &&
-            dataType != DataType::Int8 &&
-            dataType != DataType::Int16)
-        {
-            LogicError('Unexpected variable datatype '%ls':'%u' (%s).', 
-                       dataTypeKey.c_str(), 
-                       static_cast<std::underlying_type<DataType>::type>(dataType),
-                       GetVersionsString<Variable>(s_serializationVersion, version).c_str());
-        }
-        
-        const vector<DictionaryValue>& dictionaryValueVector = dict[dynamicAxisKey].Value<vector<DictionaryValue>>();
-        vector<Axis> dynamicAxis;
-        dynamicAxis.reserve(dictionaryValueVector.size());
-        for (const auto& dictionaryValue : dictionaryValueVector)
-        {
-            dynamicAxis.push_back(dictionaryValue.Value<Axis>());
-        }
-    
-    bool DataReader::SetNetOutput(
-    const std::vector<std::vector<std::pair<wstring, size_t>>>& uttInfo,
-    const MatrixBase& outputs,
-    const MBLayoutPtr pMBLayout)
+    int main()
 {
-    bool ans = false;
-    for (size_t i = 0; i < m_ioNames.size(); i++)
-        ans = (m_dataReaders[m_ioNames[i]]->SetNetOutput(uttInfo, outputs, pMBLayout) || ans);
-    return ans;
-}
-    
-    namespace Microsoft { namespace MSR { namespace CNTK {
-    }
-    }
+    // create JSON array
+    json array = {'first', '2nd', 'third', 'fourth'};
     }
     
-        virtual void /*ComputationNode::*/ ForwardProp(const FrameRange& fr) override
-    {
-        Matrix<ElemType> sliceInput1Value = Input(1)->ValueFor(fr);
-        Matrix<ElemType> sliceOutputValue = ValueFor(fr);
-    }
-    
-    DEFINE_bool(use_clock_cache, false, '');
-    
-      // When an actor (column family) requests a stop token, all writes will be
-  // stopped until the stop token is released (deleted)
-  std::unique_ptr<WriteControllerToken> GetStopToken();
-  // When an actor (column family) requests a delay token, total delay for all
-  // writes to the DB will be controlled under the delayed write rate. Every
-  // write needs to call GetDelay() with number of bytes writing to the DB,
-  // which returns number of microseconds to sleep.
-  std::unique_ptr<WriteControllerToken> GetDelayToken(
-      uint64_t delayed_write_rate);
-  // When an actor (column family) requests a moderate token, compaction
-  // threads will be increased
-  std::unique_ptr<WriteControllerToken> GetCompactionPressureToken();
-    
-    
-    {  rocksdb::WriteOptions wopts;
-  db->Merge(wopts, '0', 'bad');  // This is filtered out
-  db->Merge(wopts, '1', 'data1');
-  db->Merge(wopts, '1', 'bad');
-  db->Merge(wopts, '1', 'data2');
-  db->Merge(wopts, '1', 'bad');
-  db->Merge(wopts, '3', 'data3');
-  db->CompactRange(rocksdb::CompactRangeOptions(), nullptr, nullptr);
-  fprintf(stderr, 'filter.count_ = %d\n', filter.count_);
-  assert(filter.count_ == 0);
-  fprintf(stderr, 'filter.merge_count_ = %d\n', filter.merge_count_);
-  assert(filter.merge_count_ == 6);
-}
-
-    
-      // Returns info about backups in backup_info
-  // You can GetBackupInfo safely, even with other BackupEngine performing
-  // backups on the same directory
-  virtual void GetBackupInfo(std::vector<BackupInfo>* backup_info) = 0;
-    
-      // Builds an openable snapshot of RocksDB on the same disk, which
-  // accepts an output directory on the same disk, and under the directory
-  // (1) hard-linked SST files pointing to existing live SST files
-  // SST files will be copied if output directory is on a different filesystem
-  // (2) a copied manifest files and other files
-  // The directory should not already exist and will be created by this API.
-  // The directory will be an absolute path
-  // log_size_for_flush: if the total log file size is equal or larger than
-  // this value, then a flush is triggered for all the column families. The
-  // default value is 0, which means flush is always triggered. If you move
-  // away from the default, the checkpoint may not contain up-to-date data
-  // if WAL writing is not always enabled.
-  // Flush will always trigger if it is 2PC.
-  virtual Status CreateCheckpoint(const std::string& checkpoint_dir,
-                                  uint64_t log_size_for_flush = 0);
-    
-    // Converts a LevelDBOptions object into a RocksDB Options object.
-Options ConvertOptions(const LevelDBOptions& leveldb_options);
+        // create values of different floating-point types
+    json::number_float_t v_ok = 3.141592653589793;
+    json::number_float_t v_nan = NAN;
+    json::number_float_t v_infinity = INFINITY;
