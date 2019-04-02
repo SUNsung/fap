@@ -1,111 +1,115 @@
 
         
-                  pipelines.each do |pipeline|
-            self.new(pipeline).tap do |preloader|
-              preloader.preload_commit_authors
-              preloader.preload_pipeline_warnings
-              preloader.preload_stages_warnings
-            end
-          end
-        end
-    
-          # Reads an integer from the cache, or returns nil if no value was found.
-      #
-      # See Caching.read for more information.
-      def self.read_integer(raw_key, timeout: TIMEOUT)
-        value = read(raw_key, timeout: timeout)
-    
-          # Returns the details of a GitHub repository.
-      #
-      # name - The path (in the form `owner/repository`) of the repository.
-      def repository(name)
-        with_rate_limit { octokit.repo(name) }
-      end
-    
-            def find_target_id
-          GithubImport::IssuableFinder.new(project, issue).database_id
-        end
-      end
+          def migration_version
+    if Rails.version.start_with? '5'
+      '[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]'
     end
   end
 end
 
     
-            def collection_method
-          :issues_comments
-        end
-    
-          # Imports all the objects in sequence in the current thread.
-      def sequential_import
-        each_object_to_import do |object|
-          repr = representation_class.from_api_response(object)
-    
-            expose_attribute :noteable_type, :noteable_id, :commit_id, :file_path,
-                         :diff_hunk, :author, :note, :created_at, :updated_at,
-                         :github_id
-    
-    module Gitlab
-  module QueryLimiting
-    # Middleware for reporting (or raising) when a request performs more than a
-    # certain amount of database queries.
-    class Middleware
-      CONTROLLER_KEY = 'action_controller.instance'.freeze
-      ENDPOINT_KEY = 'api.endpoint'.freeze
-    
-      def update
-    raise ActiveRecord::RecordNotFound if @web_subscription.nil?
-    
-      included do
-    before_action :set_locale
-  end
-    
-      # Under Phusion Passenger smart spawning, we need to reopen all IO streams
-  # after workers have forked.
-  #
-  # The rolling file appender uses shared file locks to ensure that only one
-  # process will roll the log file. Each process writing to the file must have
-  # its own open file descriptor for `flock` to function properly. Reopening
-  # the file descriptors after forking ensures that each worker has a unique
-  # file descriptor.
-  if defined? PhusionPassenger
-    PhusionPassenger.on_event(:starting_worker_process) do |forked|
-      Logging.reopen if forked
+      module ClassMethods
+    # +has_attached_file+ gives the class it is called on an attribute that maps to a file. This
+    # is typically a file stored somewhere on the filesystem and has been uploaded by a user.
+    # The attribute returns a Paperclip::Attachment object which handles the management of
+    # that file. The intent is to make the attachment as much like a normal attribute. The
+    # thumbnails will be created when the new file is assigned, but they will *not* be saved
+    # until +save+ is called on the record. Likewise, if the attribute is set to +nil+ is
+    # called on it, the attachment will *not* be deleted until +save+ is called. See the
+    # Paperclip::Attachment documentation for more specifics. There are a number of options
+    # you can set to change the behavior of a Paperclip attachment:
+    # * +url+: The full URL of where the attachment is publicly accessible. This can just
+    #   as easily point to a directory served directly through Apache as it can to an action
+    #   that can control permissions. You can specify the full domain and path, but usually
+    #   just an absolute path is sufficient. The leading slash *must* be included manually for
+    #   absolute paths. The default value is
+    #   '/system/:class/:attachment/:id_partition/:style/:filename'. See
+    #   Paperclip::Attachment#interpolate for more information on variable interpolaton.
+    #     :url => '/:class/:attachment/:id/:style_:filename'
+    #     :url => 'http://some.other.host/stuff/:class/:id_:extension'
+    #   Note: When using the +s3+ storage option, the +url+ option expects
+    #   particular values. See the Paperclip::Storage::S3#url documentation for
+    #   specifics.
+    # * +default_url+: The URL that will be returned if there is no attachment assigned.
+    #   This field is interpolated just as the url is. The default value is
+    #   '/:attachment/:style/missing.png'
+    #     has_attached_file :avatar, :default_url => '/images/default_:style_avatar.png'
+    #     User.new.avatar_url(:small) # => '/images/default_small_avatar.png'
+    # * +styles+: A hash of thumbnail styles and their geometries. You can find more about
+    #   geometry strings at the ImageMagick website
+    #   (http://www.imagemagick.org/script/command-line-options.php#resize). Paperclip
+    #   also adds the '#' option (e.g. '50x50#'), which will resize the image to fit maximally
+    #   inside the dimensions and then crop the rest off (weighted at the center). The
+    #   default value is to generate no thumbnails.
+    # * +default_style+: The thumbnail style that will be used by default URLs.
+    #   Defaults to +original+.
+    #     has_attached_file :avatar, :styles => { :normal => '100x100#' },
+    #                       :default_style => :normal
+    #     user.avatar.url # => '/avatars/23/normal_me.png'
+    # * +keep_old_files+: Keep the existing attachment files (original + resized) from
+    #   being automatically deleted when an attachment is cleared or updated. Defaults to +false+.
+    # * +preserve_files+: Keep the existing attachment files in all cases, even if the parent
+    #   record is destroyed. Defaults to +false+.
+    # * +whiny+: Will raise an error if Paperclip cannot post_process an uploaded file due
+    #   to a command line error. This will override the global setting for this attachment.
+    #   Defaults to true.
+    # * +convert_options+: When creating thumbnails, use this free-form options
+    #   array to pass in various convert command options.  Typical options are '-strip' to
+    #   remove all Exif data from the image (save space for thumbnails and avatars) or
+    #   '-depth 8' to specify the bit depth of the resulting conversion.  See ImageMagick
+    #   convert documentation for more options: (http://www.imagemagick.org/script/convert.php)
+    #   Note that this option takes a hash of options, each of which correspond to the style
+    #   of thumbnail being generated. You can also specify :all as a key, which will apply
+    #   to all of the thumbnails being generated. If you specify options for the :original,
+    #   it would be best if you did not specify destructive options, as the intent of keeping
+    #   the original around is to regenerate all the thumbnails when requirements change.
+    #     has_attached_file :avatar, :styles => { :large => '300x300', :negative => '100x100' }
+    #                                :convert_options => {
+    #                                  :all => '-strip',
+    #                                  :negative => '-negate'
+    #                                }
+    #   NOTE: While not deprecated yet, it is not recommended to specify options this way.
+    #   It is recommended that :convert_options option be included in the hash passed to each
+    #   :styles for compatibility with future versions.
+    #   NOTE: Strings supplied to :convert_options are split on space in order to undergo
+    #   shell quoting for safety. If your options require a space, please pre-split them
+    #   and pass an array to :convert_options instead.
+    # * +storage+: Chooses the storage backend where the files will be stored. The current
+    #   choices are :filesystem, :fog and :s3. The default is :filesystem. Make sure you read the
+    #   documentation for Paperclip::Storage::Filesystem, Paperclip::Storage::Fog and Paperclip::Storage::S3
+    #   for backend-specific options.
+    #
+    # It's also possible for you to dynamically define your interpolation string for :url,
+    # :default_url, and :path in your model by passing a method name as a symbol as a argument
+    # for your has_attached_file definition:
+    #
+    #   class Person
+    #     has_attached_file :avatar, :default_url => :default_url_by_gender
+    #
+    #     private
+    #
+    #     def default_url_by_gender
+    #       '/assets/avatars/default_#{gender}.png'
+    #     end
+    #   end
+    def has_attached_file(name, options = {})
+      HasAttachedFile.define_on(self, name, options)
     end
   end
 end
     
-      def confirm_on_page(page_name)
-    if page_name == 'my profile page'
-      expect(page).to have_path_in([person_path(@me.person), user_profile_path(@me.username)])
-    else
-      expect(page).to have_path(path_to(page_name))
+        def type_from_file_contents
+      type_from_mime_magic || type_from_file_command
+    rescue Errno::ENOENT => e
+      Paperclip.log('Error while determining content type: #{e}')
+      SENSIBLE_DEFAULT
     end
-  end
-end
     
-          # Returns the collection the `for` loop is iterating over.
-      #
-      # @return [Node] The collection the `for` loop is iterating over
-      def collection
-        node_parts[1]
+        def add_required_validations
+      options = Paperclip::Attachment.default_options.deep_merge(@options)
+      if options[:validate_media_type] != false
+        name = @name
+        @klass.validates_media_type_spoof_detection name,
+          :if => ->(instance){ instance.send(name).dirty? }
       end
-    
-    module RailsCommandHelpers
-  def framework_version?(version_string)
-    framework_version =~ /^#{version_string}/
-  end
-    
-    class PaperclipGenerator < ActiveRecord::Generators::Base
-  desc 'Create a migration to add paperclip-specific fields to your model. ' +
-       'The NAME argument is the name of your model, and the following ' +
-       'arguments are the name of the attachments'
-    
-        private
-    
-        # Returns the dot+extension of the file. e.g. '.jpg' for 'file.jpg'
-    # If the style has a format defined, it will return the format instead
-    # of the actual extension. If the extension is empty, no dot is added.
-    def dotextension attachment, style_name
-      ext = extension(attachment, style_name)
-      ext.empty? ? ext : '.#{ext}'
     end
