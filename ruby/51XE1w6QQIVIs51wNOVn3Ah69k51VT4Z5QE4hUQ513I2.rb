@@ -1,132 +1,68 @@
 
         
-                # Download a file from the remote machine to the local machine.
-        #
-        # @param [String] from Path of the file on the remote machine.
-        # @param [String] to Path of where to save the file locally.
-        def download(from, to)
-        end
+          it 'imports a scenario that does not exist yet' do
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
+    click_on 'Start Import'
+    expect(page).to have_text('This scenario has a few agents to get you started. Feel free to change them or delete them as you see fit!')
+    expect(page).not_to have_text('This Scenario already exists in your system.')
+    check('I confirm that I want to import these Agents.')
+    click_on 'Finish Import'
+    expect(page).to have_text('Import successful!')
+  end
     
-            # Initializes the system. Any subclasses MUST make sure this
-        # method is called on the parent. Therefore, if a subclass overrides
-        # `initialize`, then you must call `super`.
-        def initialize(vm)
-          @vm = vm
-        end
+      describe '.seed' do
+    it 'imports a set of agents to get the user going when they are first created' do
+      expect { DefaultScenarioImporter.seed(user) }.to change(user.agents, :count).by(7)
+    end
     
-            # This registers a plugin. This should _NEVER_ be called by the public
-        # and should only be called from within Vagrant. Vagrant will
-        # automatically register V1 plugins when a name is set on the
-        # plugin.
-        def register(plugin)
-          if !@registered.include?(plugin)
-            @logger.info('Registered plugin: #{plugin.name}')
-            @registered << plugin
-          end
-        end
-    
-                    raise Errors::VMNoMatchError if machines.empty?
-              else
-                # String name, just look for a specific VM
-                @logger.debug('Finding machine that match name: #{name}')
-                machines << get_machine.call(name.to_sym)
-                raise Errors::VMNotFoundError, name: name if !machines[0]
-              end
-            end
-          else
-            # No name was given, so we return every VM in the order
-            # configured.
-            @logger.debug('Loading all machines...')
-            machines = @env.machine_names.map do |machine_name|
-              get_machine.call(machine_name)
-            end
+                expect(trigger_agent.sources).to eq([weather_agent])
+            expect(weather_agent.controllers.to_a).to eq([trigger_agent])
+            expect(trigger_agent.control_targets.to_a).to eq([weather_agent])
           end
     
-            # This contains all the registered host capabilities.
-        #
-        # @return [Hash<Symbol, Registry>]
-        attr_reader :host_capabilities
+          expect(data[:agents][guid_order(agent_list, :jane_weather_agent)]).not_to have_key(:propagate_immediately) # can't receive events
+      expect(data[:agents][guid_order(agent_list, :jane_rain_notifier_agent)]).not_to have_key(:schedule) # can't be scheduled
+    end
     
-            # Converts this configuration object to JSON.
-        def to_json(*a)
-          instance_variables_hash.to_json(*a)
-        end
+          Utils.sort_tuples!(tuples, orders)
+      expect(tuples).to eq expected
+    end
     
-    module Vagrant
-  module Plugin
-    module V2
-      # This class maintains a list of all the registered plugins as well
-      # as provides methods that allow querying all registered components of
-      # those plugins as a single unit.
-      class Manager
-        attr_reader :registered
+        it 'requires an agent' do
+      @log.agent = nil
+      expect(@log).not_to be_valid
+      expect(@log).to have(1).error_on(:agent)
+    end
     
-          if res[2][IAX_IE_CHALLENGE_DATA]
-        self.dcall = res[0][0]
-        chall = res[2][IAX_IE_CHALLENGE_DATA]
-      end
+          stdout.empty? && status.success?
+    end
     
-        data =
-    [   # Maximum access
-      0x00, 0x00,
-      # Reserved
-      0x00, 0x00
-    ].pack('C*') +
-    console_session_id +
-    [
-      0x00, 0x00, 0x00, 0x08,
-      # Cipher 0
-      0x00, 0x00, 0x00, 0x00,
-      0x01, 0x00, 0x00, 0x08,
-      # Cipher 0
-      0x00, 0x00, 0x00, 0x00,
-      0x02, 0x00, 0x00, 0x08,
-      # No Encryption
-      0x00, 0x00, 0x00, 0x00
-    ].pack('C*')
-    
-              # Encodes the checksum field
-          #
-          # @return [OpenSSL::ASN1::OctetString]
-          def encode_checksum
-            OpenSSL::ASN1::OctetString.new(checksum)
-          end
-        end
-      end
+      describe '#merge' do
+    it 'returns itself' do
+      expect(env.merge([])).to be env
     end
   end
-end
     
-        def log_http_get_files(files, from, cached = false)
-      return if files.empty?
-      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
-      end
+      url 'http://swupdl.adobe.com/updates/oobe/aam20/mac/AdobeLightroom-#{version.major}.0/#{version}/setup.dmg'
+  name 'Adobe Photoshop Lightroom'
+  homepage 'https://www.adobe.com/products/photoshop-lightroom.html'
+    
+    # This is basically a copy of the original bundler 'bundle' shim
+# with the addition of the loading of our Bundler patches that
+# modify Bundler's caching behaviour.
+    
+          def get_installer_for(plugin_name)
+        uri = pack_uri(plugin_name)
+    
+        desc 'Bootstrap all the VM's used for this tests'
+    task :setup, :platform do |t, args|
+      config   = PlatformConfig.new
+      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
+      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
+    
+    shared_examples 'logstash update' do |logstash|
+  describe 'logstash-plugin update on #{logstash.hostname}' do
+    before :each do
+      logstash.install({:version => LOGSTASH_VERSION})
     end
-    
-      # The test environment is used exclusively to run your application's
-  # test suite. You never need to work with it otherwise. Remember that
-  # your test database is 'scratch space' for the test suite and is wiped
-  # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
-    
-    LogStash::Bundler.setup!
-    
-          # http://stackoverflow.com/questions/9445760/bit-shifting-in-ruby
-      def left_shift int, shift
-        r = ((int & 0xFF) << (shift & 0x1F)) & 0xFFFFFFFF
-        # 1>>31, 2**32
-        (r & 2147483648) == 0 ? r : r - 4294967296
-      end
-    
-          def has_header
-        if @header
-          @header.formatted_data.strip.empty? ? false : true
-        else
-          @header = (@page.header || false)
-          !!@header
-        end
-      end
