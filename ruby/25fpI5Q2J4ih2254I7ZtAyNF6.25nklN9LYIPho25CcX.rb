@@ -1,150 +1,75 @@
 
         
-        # Just a slash
-Benchmark.ips do |x|
-  path = '/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
+        
+def pathutil_relative
+  Pathutil.new(DOC_PATH).relative_path_from(COL_PATH).to_s
 end
     
-    Benchmark.ips do |x|
-  x.report('no body include?') { CONTENT_NOT_CONTAINING.include?('<body') }
-  x.report('no body regexp')   { CONTENT_NOT_CONTAINING =~ /<\s*body/ }
-  x.compare!
-end
-    
-    module Jekyll
-  module Commands
-    class NewTheme < Jekyll::Command
-      class << self
-        def init_with_program(prog)
-          prog.command(:'new-theme') do |c|
-            c.syntax 'new-theme NAME'
-            c.description 'Creates a new Jekyll theme scaffold'
-            c.option 'code_of_conduct', \
-                     '-c', '--code-of-conduct', \
-                     'Include a Code of Conduct. (defaults to false)'
-    
-            def connect(websocket, handshake)
-          @connections_count += 1
-          if @connections_count == 1
-            message = 'Browser connected'
-            message += ' over SSL/TLS' if handshake.secure?
-            Jekyll.logger.info 'LiveReload:', message
-          end
-          websocket.send(
-            JSON.dump(
-              :command    => 'hello',
-              :protocols  => ['http://livereload.com/protocols/official-7'],
-              :serverName => 'jekyll'
-            )
-          )
-    
-          def milestones(*args)
-        each_object(:milestones, *args)
+          def before_step(step)
+        @current_step = step
       end
     
-    module Gitlab
-  module GithubImport
-    module Importer
-      class DiffNotesImporter
-        include ParallelScheduling
-    
-            # issue - An instance of `Gitlab::GithubImport::Representation::Issue`
-        # project - An instance of `Project`
-        # client - An instance of `Gitlab::GithubImport::Client`
-        def initialize(issue, project, client)
-          @issue = issue
-          @project = project
-          @client = client
-          @label_finder = LabelFinder.new(project)
-        end
-    
-              lfs_objects.each do |object|
-            yield object
+                Jekyll.logger.debug 'LiveReload:', 'Reloading #{p.url}'
+            Jekyll.logger.debug '', json_message
+            @websockets.each { |ws| ws.send(json_message) }
           end
-        rescue StandardError => e
-          Rails.logger.error('The Lfs import process failed. #{e.message}')
-        end
-      end
-    end
-  end
-end
-
-    
-            def sidekiq_worker_class
-          ImportNoteWorker
         end
     
-              hash = {
-            iid: issue.number,
-            title: issue.title,
-            description: issue.body,
-            milestone_number: issue.milestone&.number,
-            state: issue.state == 'open' ? :opened : :closed,
-            assignees: issue.assignees.map do |u|
-              Representation::User.from_api_response(u)
-            end,
-            label_names: issue.labels.map(&:name),
-            author: user,
-            created_at: issue.created_at,
-            updated_at: issue.updated_at,
-            pull_request: issue.pull_request ? true : false
-          }
+        stub.any_instance_of(Agents::SchedulerAgent).second_precision_enabled { true }
     
-      describe 'integer formats' do
-    it 'converts argument into Integer with to_int' do
-      obj = Object.new
-      def obj.to_i; 10; end
-      def obj.to_int; 10; end
-    
-      it 'pauses execution indefinitely if not given a duration' do
-    running = false
-    t = Thread.new do
-      running = true
-      sleep
-      5
+      describe 'down' do
+    let :valid_options do
+      super().merge('extract' => new_extract,
+                    'template' => new_template)
     end
     
-        $Kernel_trace_var_global = 'foo'
+      desc 'update main and version in bower.json'
+  task :generate do
+    require 'bootstrap-sass'
+    Dir.chdir Bootstrap.gem_path do
+      spec       = JSON.parse(File.read 'bower.json')
     
-      find_files = ->(path) {
-    Find.find(Pathname.new(path).relative_path_from(Pathname.new Dir.pwd).to_s).map do |path|
-      path if File.file?(path)
-    end.compact
-  }
+      # Configure static asset server for tests with Cache-Control for performance.
+  if config.respond_to?(:serve_static_files)
+    # rails >= 4.2
+    config.serve_static_files = true
+  elsif config.respond_to?(:serve_static_assets)
+    # rails < 4.2
+    config.serve_static_assets = true
+  end
+  config.static_cache_control = 'public, max-age=3600'
     
-        alias log puts
+      it 'allows for a custom authenticity token param' do
+    mock_app do
+      use Rack::Protection::AuthenticityToken, :authenticity_param => 'csrf_param'
+      run proc { |e| [200, {'Content-Type' => 'text/plain'}, ['hi']] }
+    end
     
-    Gem::Specification.new do |gem|
-  gem.name          = 'capistrano'
-  gem.version       = Capistrano::VERSION
-  gem.authors       = ['Tom Clements', 'Lee Hambley']
-  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
-  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
-  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
-  gem.homepage      = 'http://capistranorb.com/'
+        it 'Reads referrer from Host header when Referer header is relative' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => '/valid'}
+      expect(subject.referrer(env)).to eq('foo.com')
+    end
     
-    Then(/^git wrapper permissions are 0700$/) do
-  permissions_test = %Q([ $(stat -c '%a' #{TestApp.git_wrapper_path.shellescape}) == '700' ])
-  _stdout, _stderr, status = vagrant_cli_command('ssh -c #{permissions_test.shellescape}')
+    # This will be configured for you when you run config_deploy
+deploy_branch  = 'gh-pages'
     
-        [stdout, stderr, status]
+        # Loops through the list of category pages and processes each one.
+    def write_category_indexes
+      if self.layouts.key? 'category_index'
+        dir = self.config['category_dir'] || 'categories'
+        self.categories.keys.each do |category|
+          self.write_category_index(File.join(dir, category.to_url), category)
+        end
+    
+      # Removes trailing forward slash from a string for easily appending url segments
+  def strip_slash(input)
+    if input =~ /(.+)\/$|^\/$/
+      input = $1
+    end
+    input
   end
     
-        def print_config_variables
-      ['--print-config-variables', '-p',
-       'Display the defined config variables before starting the deployment tasks.',
-       lambda do |_value|
-         Configuration.env.set(:print_config_variables, true)
-       end]
-    end
-  end
-end
-
-    
-        def timestamp
-      @timestamp ||= Time.now.utc
-    end
+        def render(context)
+      file_dir = (context.registers[:site].source || 'source')
+      file_path = Pathname.new(file_dir).expand_path
+      file = file_path + @file
