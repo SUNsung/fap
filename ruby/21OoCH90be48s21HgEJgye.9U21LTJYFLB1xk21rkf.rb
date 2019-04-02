@@ -1,122 +1,127 @@
 
         
-                private
-    
-          private
-        def self.layout(formats)
-          find_template(name.underscore, { formats: formats }, { _prefixes: ['layouts'] })
-        rescue ActionView::MissingTemplate
-          begin
-            find_template('application', { formats: formats }, { _prefixes: ['layouts'] })
-          rescue ActionView::MissingTemplate
-          end
-        end
-    
-    module Devise
-  module Controllers
-    # A module that may be optionally included in a controller in order
-    # to provide remember me behavior. Useful when signing in is done
-    # through a callback, like in OmniAuth.
-    module Rememberable
-      # Return default cookie values retrieved from session options.
-      def self.cookie_values
-        Rails.configuration.session_options.slice(:path, :domain, :secure)
-      end
-    
-            if uri 
-          path = remove_domain_from_uri(uri)
-          path = add_fragment_back_to_path(uri, path)
-    
-    module Devise
-  module Controllers
-    # Create url helpers to be used with resource/scope configuration. Acts as
-    # proxies to the generated routes created by devise.
-    # Resource param can be a string or symbol, a class, or an instance object.
-    # Example using a :user resource:
-    #
-    #   new_session_path(:user)      => new_user_session_path
-    #   session_path(:user)          => user_session_path
-    #   destroy_session_path(:user)  => destroy_user_session_path
-    #
-    #   new_password_path(:user)     => new_user_password_path
-    #   password_path(:user)         => user_password_path
-    #   edit_password_path(:user)    => edit_user_password_path
-    #
-    #   new_confirmation_path(:user) => new_user_confirmation_path
-    #   confirmation_path(:user)     => user_confirmation_path
-    #
-    # Those helpers are included by default to ActionController::Base.
-    #
-    # In case you want to add such helpers to another class, you can do
-    # that as long as this new class includes both url_helpers and
-    # mounted_helpers. Example:
-    #
-    #     include Rails.application.routes.url_helpers
-    #     include Rails.application.routes.mounted_helpers
-    #
-    module UrlHelpers
-      def self.remove_helpers!
-        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
-          remove_method method
-        end
-      end
-    
-          protected
-    
-        # Include the chosen devise modules in your model:
-    #
-    #   devise :database_authenticatable, :confirmable, :recoverable
-    #
-    # You can also give any of the devise configuration values in form of a hash,
-    # with specific values for this model. Please check your Devise initializer
-    # for a complete description on those values.
-    #
-    def devise(*modules)
-      options = modules.extract_options!.dup
-    
-    require 'devise/strategies/rememberable'
-require 'devise/hooks/rememberable'
-require 'devise/hooks/forgetable'
-    
-      it 'accepts a negative seed' do
-    srand(-17)
-    srand.should == -17
-  end
-    
-        worker_count.times do |count|
-      template '/data/#{app}/shared/config/sidekiq_#{count}.yml' do
-        owner node[:owner_name]
-        group node[:owner_name]
-        mode 0644
-        source 'sidekiq.yml.erb'
-        variables({
-          :require => '/data/#{app}/current'
-        })
-      end
+            def to_json
+      JSON.generate(as_json)
     end
     
+        def release
+      context[:release]
+    end
     
-    # By leaving this as a class method, it can be pluggable and used by the Manager actor. Making it
-    # an instance method will make it async to the Fetcher actor
-    def self.bulk_requeue(inprogress, options)
-      return if inprogress.empty?
+        attr_accessor :name, :type, :path
     
-          def initialize(klass, *args)
-        @klass = klass
-        @args  = args
-      end
-    
-          arr = Sidekiq.options[:lifecycle_events][event]
-      arr.reverse! if reverse
-      arr.each do |block|
-        begin
-          block.call
-        rescue => ex
-          handle_exception(ex, { context: 'Exception during Sidekiq lifecycle event.', event: event })
-          raise ex if reraise
+            def with_redirections
+          @redirections = new.fetch_redirections
+          yield
+        ensure
+          @redirections = nil
         end
       end
-      arr.clear
+    
+            css('.api-profile-header-structure > li').each do |node|
+          node.inner_html = node.inner_html.remove('- ')
+        end
+    
+        change.down do
+      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
+      Mention.where(mentions_container_type: 'Comment').destroy_all
+      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
     end
   end
 end
+
+    
+      failure_message_for_should do |actual|
+    'expected #{actual.inspect} to have path in #{expected.inspect} but was #{actual.current_path.inspect}'
+  end
+  failure_message_for_should_not do |actual|
+    'expected #{actual.inspect} to not have path in #{expected.inspect} but it had'
+  end
+end
+    
+        it 'generates a jasmine fixture', fixture: true do
+      session[:mobile_view] = true
+      get :new, format: :mobile
+      save_fixture(html_for('body'), 'conversations_new_mobile')
+    end
+  end
+end
+
+    
+        # The name of the file in which the exception was raised.
+    # This could be `nil` if no filename is available.
+    #
+    # @return [String, nil]
+    def sass_filename
+      sass_backtrace.first[:filename]
+    end
+    
+          opts.on('-T', '--to FORMAT',
+        'The format to convert to. Can be scss or sass.',
+        'By default, this is inferred from the output filename.',
+        'If there is none, defaults to sass.') do |name|
+        @options[:to] = name.downcase.to_sym
+        unless [:scss, :sass].include?(@options[:to])
+          raise 'Unknown format for sass-convert --to: #{name}'
+        end
+      end
+    
+          # Essentially the inverse of +mask_token+.
+      def unmask_token(masked_token)
+        # Split the token into the one-time pad and the encrypted
+        # value and decrypt it
+        token_length = masked_token.length / 2
+        one_time_pad = masked_token[0...token_length]
+        encrypted_token = masked_token[token_length..-1]
+        xor_byte_strings(one_time_pad, encrypted_token)
+      end
+    
+          def react(env)
+        result = send(options[:reaction], env)
+        result if Array === result and result.size == 3
+      end
+    
+          def accepts?(env)
+        cookie_header = env['HTTP_COOKIE']
+        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
+        cookies.each do |k, v|
+          if k == session_key && Array(v).size > 1
+            bad_cookies << k
+          elsif k != session_key && Rack::Utils.unescape(k) == session_key
+            bad_cookies << k
+          end
+        end
+        bad_cookies.empty?
+      end
+    
+        assert_no_match /Edit Page/,             last_response.body, ''Edit Page' link not blocked in compare template'
+    assert_no_match /Revert Changes/,        last_response.body, ''Revert Changes' link not blocked in compare template'
+  end
+    
+        @view = Precious::Views::Page.new
+    @view.instance_variable_set :@page, page
+    @view.instance_variable_set :@content, page.formatted_data
+    @view.instance_variable_set :@h1_title, false
+    
+    module Sidekiq
+  module Generators # :nodoc:
+    class WorkerGenerator < ::Rails::Generators::NamedBase # :nodoc:
+      desc 'This generator creates a Sidekiq Worker in app/workers and a corresponding test'
+    
+            names.inject(Object) do |constant, name|
+          constant.const_defined?(name) ? constant.const_get(name) : constant.const_missing(name)
+        end
+      rescue NameError
+        super
+      end
+    end
+  end
+end
+    
+          def inline!(&block)
+        __set_test_mode(:inline, &block)
+      end
+    
+          nil
+    end
+  end
