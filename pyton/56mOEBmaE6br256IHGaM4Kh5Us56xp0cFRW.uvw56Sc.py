@@ -1,72 +1,43 @@
 
         
-        
-class MissingNonceTest(unittest.TestCase):
-    '''Tests for acme.errors.MissingNonce.'''
+            # Returns
+        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
+    '''
+    dirname = 'cifar-10-batches-py'
+    origin = 'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
+    path = get_file(dirname, origin=origin, untar=True)
     
-        :returns: filename of vhost
-    :rtype: str
+        return (x_train, y_train), (x_test, y_test)
+
     
-            :returns: `set` of unsaved files
-        '''
-        save_state = self.aug.get('/augeas/save')
-        self.aug.set('/augeas/save', 'noop')
-        # Existing Errors
-        ex_errs = self.aug.match('/augeas//error')
-        try:
-            # This is a noop save
-            self.aug.save()
-        except (RuntimeError, IOError):
-            self._log_save_errors(ex_errs)
-            # Erase Save Notes
-            self.save_notes = ''
-            raise errors.PluginError(
-                'Error saving files, check logs for more info.')
-    
-    AUTOHSTS_PERMANENT = 31536000
-'''Value for the last max-age of HSTS'''
-    
-            with mock.patch('certbot.util.get_os_info') as mock_info:
-            for distro in entrypoint.OVERRIDE_CLASSES.keys():
-                mock_info.return_value = (distro, 'whatever')
-                self.assertEqual(entrypoint.get_configurator(),
-                                 entrypoint.OVERRIDE_CLASSES[distro])
-    
-            self.sni._mod_config()  # pylint: disable=protected-access
-        self.sni.configurator.save()
+    import six
+from . import backend as K
+from .utils.generic_utils import serialize_keras_object
+from .utils.generic_utils import deserialize_keras_object
     
     
-  def Start( self ):
-    request_data = BuildRequestData()
-    request_data.update( { 'filetypes': self.filetypes } )
-    self._response = self.PostDataToHandler( request_data,
-                                             'semantic_completion_available' )
+def test_preprocess_input():
+    # Test image batch with float and int image input
+    x = np.random.uniform(0, 255, (2, 10, 10, 3))
+    xint = x.astype('int32')
+    assert utils.preprocess_input(x).shape == x.shape
+    assert utils.preprocess_input(xint).shape == xint.shape
     
+    if K.image_data_format() == 'channels_first':
+    x_train = x_train.reshape(x_train.shape[0], 1, img_rows, img_cols)
+    x_test = x_test.reshape(x_test.shape[0], 1, img_rows, img_cols)
+    input_shape = (1, img_rows, img_cols)
+else:
+    x_train = x_train.reshape(x_train.shape[0], img_rows, img_cols, 1)
+    x_test = x_test.reshape(x_test.shape[0], img_rows, img_cols, 1)
+    input_shape = (img_rows, img_cols, 1)
     
-  def Start( self ):
-    request_data = BuildRequestData()
-    if self._extra_data:
-      request_data.update( self._extra_data )
-    self._response = self.PostDataToHandler( request_data,
-                                             'debug_info',
-                                             display_message = False )
+    # Generate corrupted MNIST images by adding noise with normal dist
+# centered at 0.5 and std=0.5
+noise = np.random.normal(loc=0.5, scale=0.5, size=x_train.shape)
+x_train_noisy = x_train + noise
+noise = np.random.normal(loc=0.5, scale=0.5, size=x_test.shape)
+x_test_noisy = x_test + noise
     
-    def main():
-    for name, fn in [('sequential',
-                      functools.partial(download_urls_sequential, URLS)),
-                     ('processes',
-                      functools.partial(download_urls_with_executor,
-                                        URLS,
-                                        ProcessPoolExecutor(10))),
-                     ('threads',
-                      functools.partial(download_urls_with_executor,
-                                        URLS,
-                                        ThreadPoolExecutor(10)))]:
-        sys.stdout.write('%s: ' % name.ljust(12))
-        start = time.time()
-        url_map = fn()
-        sys.stdout.write('%.2f seconds (%d of %d downloaded)\n' %
-                         (time.time() - start, len(url_map), len(URLS)))
-    
-    # Add any paths that contain custom themes here, relative to this directory.
-#html_theme_path = []
+    num_classes = np.max(y_train) + 1
+print(num_classes, 'classes')
