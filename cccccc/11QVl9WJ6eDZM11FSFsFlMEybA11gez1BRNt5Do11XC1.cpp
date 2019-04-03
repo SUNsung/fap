@@ -1,546 +1,929 @@
 
         
-        bool CacheImpl::remove(const void *Key) {
-  DefaultCache &DCache = *static_cast<DefaultCache*>(Impl);
-  llvm::sys::ScopedLock L(DCache.Mux);
-    }
+            assert(info.name.size() < (2 << 10) && 'name failed sanity check');
     
-    bool CacheImpl::getAndRetain(const void *Key, void **Value_out) {
-  int Ret = cache_get_and_retain(static_cast<cache_t*>(Impl),
-                                 const_cast<void*>(Key), Value_out);
-  return Ret == 0;
+    #include 'swift/Basic/Cache.h'
+#include 'llvm/ADT/DenseMap.h'
+#include 'llvm/Support/Mutex.h'
+    
+    VERB(abbreviate)
+VERB(accept)
+VERB(activate)
+VERB(add)
+VERB(adjust)
+VERB(admire)
+VERB(admit)
+VERB(advise)
+VERB(afford)
+VERB(agree)
+VERB(alert)
+VERB(allow)
+VERB(alter)
+VERB(amuse)
+VERB(analyse)
+VERB(analyze)
+VERB(animate)
+VERB(announce)
+VERB(annoy)
+VERB(answer)
+VERB(apologise)
+VERB(appear)
+VERB(append)
+VERB(applaud)
+VERB(apply)
+VERB(apportion)
+VERB(appreciate)
+VERB(approve)
+VERB(argue)
+VERB(arrange)
+VERB(arrest)
+VERB(arrive)
+VERB(ask)
+VERB(assign)
+VERB(attach)
+VERB(attack)
+VERB(attempt)
+VERB(attend)
+VERB(attract)
+VERB(avoid)
+VERB(awake)
+VERB(back)
+VERB(bake)
+VERB(balance)
+VERB(ban)
+VERB(bang)
+VERB(bare)
+VERB(bat)
+VERB(bathe)
+VERB(battle)
+VERB(be)
+VERB(beat)
+VERB(become)
+VERB(beg)
+VERB(begin)
+VERB(behave)
+VERB(belong)
+VERB(bend)
+VERB(bet)
+VERB(bid)
+VERB(bite)
+VERB(bleach)
+VERB(bless)
+VERB(blind)
+VERB(blink)
+VERB(blot)
+VERB(blow)
+VERB(blush)
+VERB(boast)
+VERB(boil)
+VERB(bolt)
+VERB(bomb)
+VERB(book)
+VERB(bore)
+VERB(borrow)
+VERB(bounce)
+VERB(bow)
+VERB(box)
+VERB(brake)
+VERB(branch)
+VERB(break)
+VERB(breathe)
+VERB(bring)
+VERB(broadcast)
+VERB(bruise)
+VERB(brush)
+VERB(bubble)
+VERB(build)
+VERB(bump)
+VERB(burn)
+VERB(bury)
+VERB(buy)
+VERB(buzz)
+VERB(calculate)
+VERB(call)
+VERB(camp)
+VERB(cancel)
+VERB(capture)
+VERB(care)
+VERB(carry)
+VERB(carve)
+VERB(cast)
+VERB(catch)
+VERB(cause)
+VERB(center)
+VERB(challenge)
+VERB(change)
+VERB(charge)
+VERB(chase)
+VERB(cheat)
+VERB(check)
+VERB(cheer)
+VERB(chew)
+VERB(choke)
+VERB(choose)
+VERB(chop)
+VERB(claim)
+VERB(clap)
+VERB(clean)
+VERB(clear)
+VERB(click)
+VERB(close)
+VERB(coach)
+VERB(coil)
+VERB(collect)
+VERB(collapse)
+VERB(colour)
+VERB(comb)
+VERB(come)
+VERB(command)
+VERB(commit)
+VERB(communicate)
+VERB(compare)
+VERB(compete)
+VERB(complain)
+VERB(complete)
+VERB(concentrate)
+VERB(concern)
+VERB(confess)
+VERB(confuse)
+VERB(connect)
+VERB(consider)
+VERB(consist)
+VERB(contain)
+VERB(contains)
+VERB(continue)
+VERB(convert)
+VERB(copy)
+VERB(correct)
+VERB(cough)
+VERB(cost)
+VERB(count)
+VERB(cover)
+VERB(crack)
+VERB(crash)
+VERB(crawl)
+VERB(cross)
+VERB(crush)
+VERB(cry)
+VERB(cure)
+VERB(curl)
+VERB(curve)
+VERB(customize)
+VERB(cut)
+VERB(cycle)
+VERB(dam)
+VERB(damage)
+VERB(dance)
+VERB(dare)
+VERB(decay)
+VERB(deceive)
+VERB(decide)
+VERB(decode)
+VERB(decorate)
+VERB(defer)
+VERB(define)
+VERB(delay)
+VERB(delete)
+VERB(delight)
+VERB(deliver)
+VERB(depend)
+VERB(describe)
+VERB(deselect)
+VERB(desert)
+VERB(deserve)
+VERB(destroy)
+VERB(detach)
+VERB(detect)
+VERB(develop)
+VERB(dig)
+VERB(dim)
+VERB(disagree)
+VERB(disappear)
+VERB(disapprove)
+VERB(disarm)
+VERB(discover)
+VERB(dislike)
+VERB(dismiss)
+VERB(display)
+VERB(divide)
+VERB(do)
+VERB(double)
+VERB(doubt)
+VERB(drag)
+VERB(drain)
+VERB(draw)
+VERB(dream)
+VERB(dress)
+VERB(drink)
+VERB(drip)
+VERB(drive)
+VERB(drop)
+VERB(drown)
+VERB(drum)
+VERB(dry)
+VERB(duplicate)
+VERB(dust)
+VERB(earn)
+VERB(eat)
+VERB(echo)
+VERB(edit)
+VERB(educate)
+VERB(embarrass)
+VERB(employ)
+VERB(empty)
+VERB(enable)
+VERB(encode)
+VERB(encourage)
+VERB(end)
+VERB(enjoy)
+VERB(enter)
+VERB(entertain)
+VERB(enumerate)
+VERB(enqueue)
+VERB(escape)
+VERB(examine)
+VERB(excite)
+VERB(excuse)
+VERB(execute)
+VERB(exercise)
+VERB(exist)
+VERB(expand)
+VERB(expect)
+VERB(explain)
+VERB(explode)
+VERB(export)
+VERB(extend)
+VERB(face)
+VERB(fade)
+VERB(fail)
+VERB(fancy)
+VERB(fasten)
+VERB(fax)
+VERB(fear)
+VERB(feel)
+VERB(fence)
+VERB(fetch)
+VERB(fight)
+VERB(fill)
+VERB(film)
+VERB(find)
+VERB(finish)
+VERB(fire)
+VERB(fit)
+VERB(fix)
+VERB(flap)
+VERB(flash)
+VERB(flatten)
+VERB(flip)
+VERB(float)
+VERB(flood)
+VERB(flow)
+VERB(flower)
+VERB(fly)
+VERB(focus)
+VERB(fold)
+VERB(follow)
+VERB(fool)
+VERB(force)
+VERB(forget)
+VERB(forgive)
+VERB(form)
+VERB(found)
+VERB(freeze)
+VERB(frighten)
+VERB(fry)
+VERB(gain)
+VERB(gather)
+VERB(gaze)
+VERB(generate)
+VERB(get)
+VERB(give)
+VERB(glow)
+VERB(glue)
+VERB(go)
+VERB(grab)
+VERB(grate)
+VERB(grease)
+VERB(greet)
+VERB(grin)
+VERB(grip)
+VERB(groan)
+VERB(grow)
+VERB(guarantee)
+VERB(guard)
+VERB(guess)
+VERB(guide)
+VERB(hammer)
+VERB(hand)
+VERB(handle)
+VERB(hang)
+VERB(happen)
+VERB(harass)
+VERB(harm)
+VERB(hate)
+VERB(haunt)
+VERB(head)
+VERB(heal)
+VERB(heap)
+VERB(hear)
+VERB(heat)
+VERB(help)
+VERB(hide)
+VERB(highlight)
+VERB(hit)
+VERB(hold)
+VERB(hook)
+VERB(hop)
+VERB(hope)
+VERB(hover)
+VERB(hug)
+VERB(hum)
+VERB(hunt)
+VERB(hurry)
+VERB(hurt)
+VERB(identify)
+VERB(ignore)
+VERB(imagine)
+VERB(import)
+VERB(impress)
+VERB(improve)
+VERB(include)
+VERB(increase)
+VERB(influence)
+VERB(inform)
+VERB(inject)
+VERB(injure)
+VERB(insert)
+VERB(instruct)
+VERB(intend)
+VERB(interest)
+VERB(interfere)
+VERB(interrupt)
+VERB(intersect)
+VERB(intersects)
+VERB(introduce)
+VERB(invent)
+VERB(invite)
+VERB(irritate)
+VERB(itch)
+VERB(jail)
+VERB(jam)
+VERB(jog)
+VERB(join)
+VERB(joke)
+VERB(judge)
+VERB(juggle)
+VERB(jump)
+VERB(keep)
+VERB(kick)
+VERB(kill)
+VERB(kiss)
+VERB(kneel)
+VERB(knit)
+VERB(knock)
+VERB(knot)
+VERB(know)
+VERB(label)
+VERB(land)
+VERB(last)
+VERB(laugh)
+VERB(launch)
+VERB(lay)
+VERB(lead)
+VERB(learn)
+VERB(leave)
+VERB(lend)
+VERB(let)
+VERB(level)
+VERB(license)
+VERB(lick)
+VERB(lie)
+VERB(lighten)
+VERB(like)
+VERB(listen)
+VERB(live)
+VERB(load)
+VERB(localize)
+VERB(lock)
+VERB(long)
+VERB(look)
+VERB(lose)
+VERB(love)
+VERB(maintain)
+VERB(make)
+VERB(man)
+VERB(manage)
+VERB(march)
+VERB(mark)
+VERB(marry)
+VERB(match)
+VERB(mate)
+VERB(matter)
+VERB(mean)
+VERB(measure)
+VERB(meddle)
+VERB(meet)
+VERB(melt)
+VERB(memorise)
+VERB(mend)
+VERB(merge)
+VERB(mess)
+VERB(milk)
+VERB(mine)
+VERB(miss)
+VERB(minus)
+VERB(mix)
+VERB(moan)
+VERB(moor)
+VERB(mourn)
+VERB(move)
+VERB(muddle)
+VERB(mug)
+VERB(multiply)
+VERB(murder)
+VERB(nail)
+VERB(nest)
+VERB(nod)
+VERB(normalize)
+VERB(note)
+VERB(notice)
+VERB(notify)
+VERB(number)
+VERB(obey)
+VERB(observe)
+VERB(obtain)
+VERB(occur)
+VERB(offend)
+VERB(offer)
+VERB(open)
+VERB(order)
+VERB(overflow)
+VERB(owe)
+VERB(own)
+VERB(pack)
+VERB(paddle)
+VERB(paint)
+VERB(park)
+VERB(part)
+VERB(pass)
+VERB(paste)
+VERB(pat)
+VERB(pause)
+VERB(pay)
+VERB(peck)
+VERB(pedal)
+VERB(peel)
+VERB(peep)
+VERB(perform)
+VERB(permit)
+VERB(phone)
+VERB(pick)
+VERB(pinch)
+VERB(pine)
+VERB(place)
+VERB(plan)
+VERB(plant)
+VERB(play)
+VERB(please)
+VERB(plug)
+VERB(poke)
+VERB(polish)
+VERB(pop)
+VERB(possess)
+VERB(post)
+VERB(pour)
+VERB(practice)
+VERB(practise)
+VERB(pray)
+VERB(preach)
+VERB(precede)
+VERB(prefer)
+VERB(preload)
+VERB(prepare)
+VERB(prepend)
+VERB(present)
+VERB(preserve)
+VERB(press)
+VERB(pretend)
+VERB(prevent)
+VERB(prick)
+VERB(print)
+VERB(produce)
+VERB(program)
+VERB(promise)
+VERB(protect)
+VERB(provide)
+VERB(pull)
+VERB(pump)
+VERB(punch)
+VERB(puncture)
+VERB(punish)
+VERB(push)
+VERB(put)
+VERB(question)
+VERB(queue)
+VERB(race)
+VERB(radiate)
+VERB(rain)
+VERB(raise)
+VERB(reach)
+VERB(read)
+VERB(realise)
+VERB(receive)
+VERB(recognise)
+VERB(record)
+VERB(reduce)
+VERB(reflect)
+VERB(refuse)
+VERB(register)
+VERB(regret)
+VERB(reign)
+VERB(reject)
+VERB(rejoice)
+VERB(relax)
+VERB(release)
+VERB(rely)
+VERB(remain)
+VERB(remember)
+VERB(remind)
+VERB(remove)
+VERB(repair)
+VERB(repeat)
+VERB(replace)
+VERB(reply)
+VERB(report)
+VERB(request)
+VERB(require)
+VERB(resize)
+VERB(rescue)
+VERB(resolve)
+VERB(retain)
+VERB(retire)
+VERB(return)
+VERB(reverse)
+VERB(review)
+VERB(rhyme)
+VERB(ride)
+VERB(ring)
+VERB(rinse)
+VERB(rise)
+VERB(risk)
+VERB(rob)
+VERB(rock)
+VERB(roll)
+VERB(rot)
+VERB(rub)
+VERB(ruin)
+VERB(rule)
+VERB(run)
+VERB(rush)
+VERB(sack)
+VERB(sail)
+VERB(satisfy)
+VERB(save)
+VERB(saw)
+VERB(say)
+VERB(scale)
+VERB(scare)
+VERB(scatter)
+VERB(scold)
+VERB(scorch)
+VERB(scrape)
+VERB(scratch)
+VERB(scream)
+VERB(screw)
+VERB(scribble)
+VERB(scroll)
+VERB(scrub)
+VERB(seal)
+VERB(search)
+VERB(see)
+VERB(select)
+VERB(sell)
+VERB(send)
+VERB(separate)
+VERB(serve)
+VERB(settle)
+VERB(shade)
+VERB(share)
+VERB(shave)
+VERB(shelter)
+VERB(shiver)
+VERB(shock)
+VERB(shop)
+VERB(show)
+VERB(shrug)
+VERB(shut)
+VERB(sigh)
+VERB(sign)
+VERB(signal)
+VERB(sin)
+VERB(sing)
+VERB(sip)
+VERB(sit)
+VERB(ski)
+VERB(skip)
+VERB(slap)
+VERB(sleep)
+VERB(slip)
+VERB(slow)
+VERB(smash)
+VERB(smell)
+VERB(smile)
+VERB(smoke)
+VERB(snatch)
+VERB(sneeze)
+VERB(sniff)
+VERB(snore)
+VERB(snow)
+VERB(soak)
+VERB(soothe)
+VERB(sound)
+VERB(spare)
+VERB(spark)
+VERB(sparkle)
+VERB(speak)
+VERB(spell)
+VERB(spend)
+VERB(spill)
+VERB(spoil)
+VERB(spot)
+VERB(spray)
+VERB(sprout)
+VERB(squash)
+VERB(squeak)
+VERB(squeal)
+VERB(squeeze)
+VERB(stain)
+VERB(stamp)
+VERB(stand)
+VERB(standardise)
+VERB(standardize)
+VERB(stare)
+VERB(start)
+VERB(stay)
+VERB(steer)
+VERB(step)
+VERB(stir)
+VERB(stitch)
+VERB(stop)
+VERB(store)
+VERB(strap)
+VERB(strengthen)
+VERB(stretch)
+VERB(strip)
+VERB(stroke)
+VERB(stuff)
+VERB(subtract)
+VERB(succeed)
+VERB(suck)
+VERB(suffer)
+VERB(suggest)
+VERB(suit)
+VERB(supply)
+VERB(support)
+VERB(suppose)
+VERB(suppress)
+VERB(surprise)
+VERB(surround)
+VERB(suspect)
+VERB(suspend)
+VERB(swim)
+VERB(switch)
+VERB(take)
+VERB(talk)
+VERB(tame)
+VERB(tap)
+VERB(taste)
+VERB(teach)
+VERB(tear)
+VERB(tease)
+VERB(telephone)
+VERB(tell)
+VERB(tempt)
+VERB(terrify)
+VERB(test)
+VERB(thank)
+VERB(thaw)
+VERB(think)
+VERB(throw)
+VERB(tick)
+VERB(tickle)
+VERB(tie)
+VERB(time)
+VERB(tip)
+VERB(tire)
+VERB(toggle)
+VERB(touch)
+VERB(tour)
+VERB(tow)
+VERB(trace)
+VERB(trade)
+VERB(train)
+VERB(translate)
+VERB(transform)
+VERB(transport)
+VERB(trap)
+VERB(travel)
+VERB(traverse)
+VERB(treat)
+VERB(tremble)
+VERB(trick)
+VERB(trip)
+VERB(trot)
+VERB(trouble)
+VERB(truncate)
+VERB(trust)
+VERB(try)
+VERB(tug)
+VERB(tumble)
+VERB(turn)
+VERB(twist)
+VERB(understand)
+VERB(undress)
+VERB(unfasten)
+VERB(union)
+VERB(unite)
+VERB(unload)
+VERB(unlock)
+VERB(unpack)
+VERB(untidy)
+VERB(up)
+VERB(update)
+VERB(use)
+VERB(validate)
+VERB(vanish)
+VERB(visit)
+VERB(wail)
+VERB(wait)
+VERB(wake)
+VERB(walk)
+VERB(wander)
+VERB(want)
+VERB(warm)
+VERB(warn)
+VERB(wash)
+VERB(waste)
+VERB(watch)
+VERB(water)
+VERB(wave)
+VERB(wear)
+VERB(weigh)
+VERB(welcome)
+VERB(whine)
+VERB(whip)
+VERB(whirl)
+VERB(whisper)
+VERB(whistle)
+VERB(win)
+VERB(wink)
+VERB(wipe)
+VERB(wish)
+VERB(wobble)
+VERB(wonder)
+VERB(work)
+VERB(worry)
+VERB(wrap)
+VERB(wreck)
+VERB(wrestle)
+VERB(wriggle)
+VERB(write)
+VERB(yawn)
+VERB(yell)
+VERB(zip)
+VERB(zoom)
+    
+    
+    {} // end anonymous namespace
+    
+    
+    {  OutLines.append(Lines.begin(), Lines.end());
 }
-    
-      Begin -= needed;
-    
-      // FIXME: Map over source ranges in the diagnostic.
-  auto emitDiag = [&ctx, this](clang::FullSourceLoc clangNoteLoc,
-                      clang::DiagnosticsEngine::Level clangDiagLevel,
-                      StringRef message) {
-    decltype(diag::error_from_clang) diagKind;
-    switch (clangDiagLevel) {
-    case clang::DiagnosticsEngine::Ignored:
-      return;
-    case clang::DiagnosticsEngine::Note:
-      diagKind = diag::note_from_clang;
-      break;
-    case clang::DiagnosticsEngine::Remark:
-      // FIXME: We don't handle remarks yet.
-      return;
-    case clang::DiagnosticsEngine::Warning:
-      diagKind = diag::warning_from_clang;
-      break;
-    case clang::DiagnosticsEngine::Error:
-    case clang::DiagnosticsEngine::Fatal:
-      // FIXME: What happens after a fatal error in the importer?
-      diagKind = diag::error_from_clang;
-      break;
-    }
-    }
-    
-    #include 'swift/AST/Identifier.h'
-    
-    void JobAction::anchor() {}
-    
-    /* Coin network-specific GUI style information */
-class NetworkStyle
-{
-public:
-    /** Get style associated with provided BIP70 network id, or 0 if not known */
-    static const NetworkStyle *instantiate(const QString &networkId);
-    }
-    
-    #include <QDialog>
-    
-    #endif // BITCOIN_REVERSELOCK_H
 
     
-    #ifndef SECP256K1_MODULE_ECDH_MAIN_H
-#define SECP256K1_MODULE_ECDH_MAIN_H
+      static IAMResult infer(ASTContext &, clang::Sema &, const clang::NamedDecl *,
+                         IAMOptions = IAMOptions::getDefault());
     
-    #define TINYFORMAT_ARGTYPES(n) TINYFORMAT_ARGTYPES_ ## n
-#define TINYFORMAT_VARARGS(n) TINYFORMAT_VARARGS_ ## n
-#define TINYFORMAT_PASSARGS(n) TINYFORMAT_PASSARGS_ ## n
-#define TINYFORMAT_PASSARGS_TAIL(n) TINYFORMAT_PASSARGS_TAIL_ ## n
-    
-    double UniValue::get_real() const
-{
-    if (typ != VNUM)
-        throw std::runtime_error('JSON value is not a number as expected');
-    double retval;
-    if (!ParseDouble(getValStr(), &retval))
-        throw std::runtime_error('JSON double out of range');
-    return retval;
-}
-    
-    #undef cv_hal_cmp8u
-#define cv_hal_cmp8u TEGRA_CMP
-#undef cv_hal_cmp8s
-#define cv_hal_cmp8s TEGRA_CMP
-#undef cv_hal_cmp16u
-#define cv_hal_cmp16u TEGRA_CMP
-#undef cv_hal_cmp16s
-#define cv_hal_cmp16s TEGRA_CMP
-#undef cv_hal_cmp32s
-#define cv_hal_cmp32s TEGRA_CMP
-#undef cv_hal_cmp32f
-#define cv_hal_cmp32f TEGRA_CMP
-//#undef cv_hal_cmp64f
-//#define cv_hal_cmp64f TEGRA_CMP
-    
-    template <typename T> struct TypeTraits;
-template <> struct TypeTraits< u8> { typedef u16 wide;                     typedef  u8 unsign; typedef  uint8x16_t vec128; };
-template <> struct TypeTraits< s8> { typedef s16 wide;                     typedef  u8 unsign; typedef   int8x16_t vec128; };
-template <> struct TypeTraits<u16> { typedef u32 wide; typedef  u8 narrow; typedef u16 unsign; typedef  uint16x8_t vec128; };
-template <> struct TypeTraits<s16> { typedef s32 wide; typedef  s8 narrow; typedef u16 unsign; typedef   int16x8_t vec128; };
-template <> struct TypeTraits<u32> { typedef u64 wide; typedef u16 narrow; typedef u32 unsign; typedef  uint32x4_t vec128; };
-template <> struct TypeTraits<s32> { typedef s64 wide; typedef s16 narrow; typedef u32 unsign; typedef   int32x4_t vec128; };
-template <> struct TypeTraits<f32> { typedef f64 wide;                                         typedef float32x4_t vec128; };
-    
-        size_t i = 0;
-    f32* dsta = internal::getRowPtr(dstBase, dstStride, 0);
-    for (; i < size.height-1; i+=2)
-    {
-        //vertical convolution
-        ptrdiff_t idx_rm1 = internal::borderInterpolate(i - 1, size.height, borderType, borderMargin.top, borderMargin.bottom);
-        ptrdiff_t idx_rp2 = internal::borderInterpolate(i + 2, size.height, borderType, borderMargin.top, borderMargin.bottom);
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace java {
+namespace {
     }
-    
-    ptrdiff_t borderInterpolate(ptrdiff_t _p, size_t _len, BORDER_MODE borderType, size_t startMargin, size_t endMargin)
-{
-    ptrdiff_t p = _p + (ptrdiff_t)startMargin;
-    size_t len = _len + startMargin + endMargin;
-    if( (size_t)p < len )
-        return _p;
-    else if( borderType == BORDER_MODE_REPLICATE )
-        p = p < 0 ? 0 : (ptrdiff_t)len - 1;
-    else if( borderType == BORDER_MODE_REFLECT || borderType == BORDER_MODE_REFLECT101 )
-    {
-        s32 delta = borderType == BORDER_MODE_REFLECT101;
-        if( len == 1 )
-            return 0;
-        do
-        {
-            if( p < 0 )
-                p = -p - 1 + delta;
-            else
-                p = (ptrdiff_t)len - 1 - (p - (ptrdiff_t)len) - delta;
-        }
-        while( (size_t)p >= len );
     }
-    else if( borderType == BORDER_MODE_WRAP )
-    {
-        if( p < 0 )
-            p -= ((p-(ptrdiff_t)len+1)/(ptrdiff_t)len)*(ptrdiff_t)len;
-        if( p >= (ptrdiff_t)len )
-            p %= (ptrdiff_t)len;
     }
-    else if( borderType == BORDER_MODE_CONSTANT )
-        p = -1;
-    else
-        internal::assertSupportedConfiguration(false);
-    return p - (ptrdiff_t)startMargin;
-}
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
-CVT_FUNC(s8, s16, 16,
-,
-{
-     for (size_t i = 0; i < w; i += 16)
-     {
-         internal::prefetch(_src + i);
-         __asm__ (
-             'vld1.8 {d0-d1}, [%[src]]                              \n\t'
-             'vmovl.s8 q1, d0                                       \n\t'
-             'vmovl.s8 q2, d1                                       \n\t'
-             'vst1.16 {d2-d3}, [%[dst1]]                            \n\t'
-             'vst1.16 {d4-d5}, [%[dst2]]                            \n\t'
-             : /*no output*/
-             : [src] 'r' (_src + i),
-               [dst1] 'r' (_dst + i + 0),
-               [dst2] 'r' (_dst + i + 8)
-             : 'd0','d1','d2','d3','d4','d5'
-         );
-     }
-})
-#else
-CVT_FUNC(s8, s16, 16,
-,
-{
-     for (size_t i = 0; i < w; i += 16)
-     {
-         internal::prefetch(_src + i);
-         int8x16_t vline_s8 = vld1q_s8(_src + i);
     }
     }
     
-    template <>
-void lshiftConst<0>(const Size2D &size,
-                    const u8 * srcBase, ptrdiff_t srcStride,
-                    s16 * dstBase, ptrdiff_t dstStride)
-{
-    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
-    }
-    
-    // It is possible to accumulate up to 66051 uchar multiplication results in uint32 without overflow
-// We process 16 elements and accumulate two new elements per step. So we could handle 66051/2*16 elements
-#define DOT_UINT_BLOCKSIZE 66050*8
-    f64 result = 0.0;
-    for (size_t row = 0; row < size.height; ++row)
-    {
-        const u8 * src0 = internal::getRowPtr(src0Base, src0Stride, row);
-        const u8 * src1 = internal::getRowPtr(src1Base, src1Stride, row);
-    }
-    
-    void fillMinMaxLocs(const Size2D & size,
-                    const u32 * srcBase, ptrdiff_t srcStride,
-                    u32 minVal, size_t * minLocPtr, s32 & minLocCount, s32 minLocCapacity,
-                    u32 maxVal, size_t * maxLocPtr, s32 & maxLocCount, s32 maxLocCapacity)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
-    }
-    
-        for( ptrdiff_t y = 0; y < rows; y++ )
-    {
-        const u8* v0 = 0;
-        const u8* v1 = 0;
-        const u8* v2 = internal::getRowPtr(srcBase, srcStride, y);
-        const u8* v3 = 0;
-        const u8* v4 = 0;
-        // make border
-        if (border == BORDER_MODE_REPLICATE) {
-            v0 = internal::getRowPtr(srcBase, srcStride, y > 1 ? y-2 : 0);
-            v1 = internal::getRowPtr(srcBase, srcStride, y > 0 ? y-1 : 0);
-            v3 = internal::getRowPtr(srcBase, srcStride, y < rows-1 ? y+1 : rows > 0 ? rows-1 : 0);
-            v4 = internal::getRowPtr(srcBase, srcStride, y < rows-2 ? y+2 : rows > 0 ? rows-1 : 0);
-        } else if (border == BORDER_MODE_REFLECT) {
-            v0 = internal::getRowPtr(srcBase, srcStride, y > 1 ? y-2 : rows > 1 ? 1-y : 0);
-            v1 = internal::getRowPtr(srcBase, srcStride, y > 0 ? y-1 : 0);
-            v3 = internal::getRowPtr(srcBase, srcStride, y < rows-1 ? y+1 : rows > 0 ? rows-1 : 0);
-            v4 = internal::getRowPtr(srcBase, srcStride, y < rows-2 ? y+2 : rows > 1 ? 2*rows-(y+3) : 0);
-        } else if (border == BORDER_MODE_REFLECT101) {
-            v0 = internal::getRowPtr(srcBase, srcStride, y > 1 ? y-2 : rows > 2-y ? 2-y : 0); ///check
-            v1 = internal::getRowPtr(srcBase, srcStride, y > 0 ? y-1 : rows > 1 ? 1 : 0);
-            v3 = internal::getRowPtr(srcBase, srcStride, y < rows-1 ? y+1 : rows > 1 ? rows-2 : 0);
-            v4 = internal::getRowPtr(srcBase, srcStride, y < rows-2 ? y+2 : rows > 2 ? 2*rows-(y+4) : 0);///bad if rows=2 y=1   rows - 4 + (2,1)
-        } else if (border == BORDER_MODE_CONSTANT) {
-            v0 = y > 1 ? internal::getRowPtr(srcBase, srcStride, y-2) : tmp;
-            v1 = y > 0 ? internal::getRowPtr(srcBase, srcStride, y-1) : tmp;
-            v3 = y < rows-1 ? internal::getRowPtr(srcBase, srcStride, y+1) : tmp;
-            v4 = y < rows-2 ? internal::getRowPtr(srcBase, srcStride, y+2) : tmp;
-        }
-        s16* drow = internal::getRowPtr(dstBase, dstStride, y);
-    }
-    
-    // Given a MutableIterator to the start of a block, run DetectParagraphs on
-// that block and commit the results to the underlying ROW and BLOCK structs,
-// saving the ParagraphModels in models.  Caller owns the models.
-// We use unicharset during the function to answer questions such as 'is the
-// first letter of this word upper case?'
-void DetectParagraphs(int debug_level,
-                      bool after_text_recognition,
-                      const MutableIterator *block_start,
-                      GenericVector<ParagraphModel *> *models);
-    
-    static STRING ParagraphJustificationToString(
-    tesseract::ParagraphJustification justification) {
-  switch (justification) {
-    case JUSTIFICATION_LEFT:
-      return 'LEFT';
-    case JUSTIFICATION_RIGHT:
-      return 'RIGHT';
-    case JUSTIFICATION_CENTER:
-      return 'CENTER';
-    default:
-      return 'UNKNOWN';
+      {
+    string str;
+    StringByteSink sink(&str);
+    limit_source.CopyTo(&sink, limit_source.Available());
+    EXPECT_EQ('ello ', str);
+    EXPECT_EQ(0, limit_source.Available());
+    EXPECT_EQ(6, source.Available());
   }
-}
     
-      // The first paragraph on a page often lacks a first line indent, but should
-  // still be modeled by the same model as other body text paragraphs on the
-  // page.
-  bool is_very_first_or_continuation;
+      // Streams a pointer value to this object.
+  //
+  // This function is an overload of the previous one.  When you
+  // stream a pointer to a Message, this definition will be used as it
+  // is more specialized.  (The C++ Standard, section
+  // [temp.func.order].)  If you stream a non-pointer, then the
+  // previous definition will be used.
+  //
+  // The reason for this overload is that streaming a NULL pointer to
+  // ostream is undefined behavior.  Depending on the compiler, you
+  // may get '0', '(nil)', '(null)', or an access violation.  To
+  // ensure consistent result across compilers, we always treat NULL
+  // as '(null)'.
+  template <typename T>
+  inline Message& operator <<(T* const& pointer) {  // NOLINT
+    if (pointer == NULL) {
+      *ss_ << '(null)';
+    } else {
+      *ss_ << pointer;
+    }
+    return *this;
+  }
+#endif  // GTEST_OS_SYMBIAN
     
-    // An array of TestPartResult objects.
-//
-// Don't inherit from TestPartResultArray as its destructor is not
-// virtual.
-class GTEST_API_ TestPartResultArray {
+    // This helper class is used by {ASSERT|EXPECT}_NO_FATAL_FAILURE to check if a
+// statement generates new fatal failures. To do so it registers itself as the
+// current test part result reporter. Besides checking if fatal failures were
+// reported, it only delegates the reporting to the former result reporter.
+// The original result reporter is restored in the destructor.
+// INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
+class GTEST_API_ HasNewFatalFailureHelper
+    : public TestPartResultReporterInterface {
  public:
-  TestPartResultArray() {}
+  HasNewFatalFailureHelper();
+  virtual ~HasNewFatalFailureHelper();
+  virtual void ReportTestPartResult(const TestPartResult& result);
+  bool has_new_fatal_failure() const { return has_new_fatal_failure_; }
+ private:
+  bool has_new_fatal_failure_;
+  TestPartResultReporterInterface* original_reporter_;
     }
     
-    // If the type list contains only one type, you can write that type
-// directly without Types<...>:
-//   TYPED_TEST_CASE(FooTest, int);
+      bool operator==(T* p) const { return value_ == p; }
+  bool operator!=(T* p) const { return value_ != p; }
+  template <typename U>
+  bool operator==(linked_ptr<U> const& ptr) const {
+    return value_ == ptr.get();
+  }
+  template <typename U>
+  bool operator!=(linked_ptr<U> const& ptr) const {
+    return value_ != ptr.get();
+  }
     
-    #define GTEST_ASSERT_(expression, on_failure) \
-  GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
-  if (const ::testing::AssertionResult gtest_ar = (expression)) \
-    ; \
-  else \
-    on_failure(gtest_ar.failure_message())
+    // Gets the content of the stringstream's buffer as an std::string.  Each '\0'
+// character in the buffer is replaced with '\\0'.
+GTEST_API_ std::string StringStreamToString(::std::stringstream* stream);
     
-    // Protects copying of all linked_ptr objects.
-GTEST_API_ GTEST_DECLARE_STATIC_MUTEX_(g_linked_ptr_mutex);
     
-    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
-    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
-    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
-    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11>
-struct Templates11 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates10<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> Tail;
+    {  template <class Tuple>
+  static GTEST_BY_REF_(GTEST_TUPLE_ELEMENT_(4, Tuple))
+  ConstField(const Tuple& t) { return t.f4_; }
 };
     
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
     
-    {
-    {      // Marks all multiples of i (except i itself) as non-prime.
-      for (int j = 2*i; j <= max; j += i) {
-        is_prime_[j] = false;
-      }
-    }
-  }
+    IMGUI_IMPL_API bool     ImGui_Marmalade_Init(bool install_callbacks);
+IMGUI_IMPL_API void     ImGui_Marmalade_Shutdown();
+IMGUI_IMPL_API void     ImGui_Marmalade_NewFrame();
+IMGUI_IMPL_API void     ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data);
     
-      // Called after a test ends.
-  virtual void OnTestEnd(const TestInfo& /* test_info */) {
-    int difference = Water::allocated() - initially_allocated_;
-    }
-    
-    // Tests the Set method.
-TEST(MyString, Set) {
-  MyString s;
-    }
-    
-      // Adds an element to the end of the queue.  A copy of the element is
-  // created using the copy constructor, and then stored in the queue.
-  // Changes made to the element in the queue doesn't affect the source
-  // object, and vice versa.
-  void Enqueue(const E& element) {
-    QueueNode<E>* new_node = new QueueNode<E>(element);
-    }
-    
-    const int32 MAX_CONNECTED = 32;
-const float32 COLLAPSE_DIST_SQR = CMP_EPSILON*CMP_EPSILON;//0.1f;//1000*CMP_EPSILON*1000*CMP_EPSILON;
-	
-class b2PolyNode{
-public:
-	b2Vec2 position;
-	b2PolyNode* connected[MAX_CONNECTED];
-	int32 nConnected;
-	bool visited;
-    }
-    
-    namespace Etc
-{
-	// ----------------------------------------------------------------------------------------------------
-	// C-style inteface to the encoder
-	//
-	void Encode(float *a_pafSourceRGBA,
-				unsigned int a_uiSourceWidth, 
-				unsigned int a_uiSourceHeight,
-				Image::Format a_format,
-				ErrorMetric a_eErrMetric,
-				float a_fEffort,
-				unsigned int a_uiJobs,
-				unsigned int a_uiMaxJobs,
-				unsigned char **a_ppaucEncodingBits,
-				unsigned int *a_puiEncodingBitsBytes,
-				unsigned int *a_puiExtendedWidth,
-				unsigned int *a_puiExtendedHeight, 
-				int *a_piEncodingTime_ms, bool a_bVerboseOutput)
-	{
+        blocklen = buflen % 5552;
+    while (buflen) {
+        for (i=0; i + 7 < blocklen; i += 8) {
+            s1 += buffer[0], s2 += s1;
+            s1 += buffer[1], s2 += s1;
+            s1 += buffer[2], s2 += s1;
+            s1 += buffer[3], s2 += s1;
+            s1 += buffer[4], s2 += s1;
+            s1 += buffer[5], s2 += s1;
+            s1 += buffer[6], s2 += s1;
+            s1 += buffer[7], s2 += s1;
     }
     }
     
-    		if (encodingTry.m_fError < m_fError)
-		{
-			m_mode = MODE_ETC1;
-			m_boolDiff = true;
-			m_boolFlip = encodingTry.m_boolFlip;
-			m_frgbaColor1 = ColorFloatRGBA::ConvertFromRGB5((unsigned char)ptryBest1->m_iRed, (unsigned char)ptryBest1->m_iGreen, (unsigned char)ptryBest1->m_iBlue);
-			m_frgbaColor2 = ColorFloatRGBA::ConvertFromRGB5((unsigned char)ptryBest2->m_iRed, (unsigned char)ptryBest2->m_iGreen, (unsigned char)ptryBest2->m_iBlue);
-			m_uiCW1 = ptryBest1->m_uiCW;
-			m_uiCW2 = ptryBest2->m_uiCW;
-    }
+    // Called by Init/NewFrame/Shutdown
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateFontsTexture();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyFontsTexture();
+IMGUI_IMPL_API bool     ImGui_ImplOpenGL3_CreateDeviceObjects();
+IMGUI_IMPL_API void     ImGui_ImplOpenGL3_DestroyDeviceObjects();
+
     
-    #define AF_LATIN_HINTS_HORZ_SNAP    ( 1U << 0 ) /* stem width snapping  */
-#define AF_LATIN_HINTS_VERT_SNAP    ( 1U << 1 ) /* stem height snapping */
-#define AF_LATIN_HINTS_STEM_ADJUST  ( 1U << 2 ) /* stem width/height    */
-                                                /* adjustment           */
-#define AF_LATIN_HINTS_MONO         ( 1U << 3 ) /* monochrome rendering */
     
-    //  16384 * sqrt(2) * sin(kPi/9) * 2 / 3
-static const tran_high_t sinpi_1_9 = 5283;
-static const tran_high_t sinpi_2_9 = 9929;
-static const tran_high_t sinpi_3_9 = 13377;
-static const tran_high_t sinpi_4_9 = 15212;
-    
-    #ifndef FIXED_ARMv4_H
-#define FIXED_ARMv4_H
-    
-    void CensusClientCallData::Destroy(grpc_call_element* elem,
-                                   const grpc_call_final_info* final_info,
-                                   grpc_closure* then_call_closure) {
-  const uint64_t request_size = GetOutgoingDataSize(final_info);
-  const uint64_t response_size = GetIncomingDataSize(final_info);
-  double latency_ms = absl::ToDoubleMilliseconds(absl::Now() - start_time_);
-  ::opencensus::stats::Record(
-      {{RpcClientSentBytesPerRpc(), static_cast<double>(request_size)},
-       {RpcClientReceivedBytesPerRpc(), static_cast<double>(response_size)},
-       {RpcClientRoundtripLatency(), latency_ms},
-       {RpcClientServerLatency(),
-        ToDoubleMilliseconds(absl::Nanoseconds(elapsed_time_))},
-       {RpcClientSentMessagesPerRpc(), sent_message_count_},
-       {RpcClientReceivedMessagesPerRpc(), recv_message_count_}},
-      {{ClientMethodTagKey(), method_},
-       {ClientStatusTagKey(), StatusCodeToString(final_info->final_status)}});
-  grpc_slice_unref_internal(path_);
-  context_.EndSpan();
+    {    InputTextCallback_UserData cb_user_data;
+    cb_user_data.Str = str;
+    cb_user_data.ChainCallback = callback;
+    cb_user_data.ChainCallbackUserData = user_data;
+    return InputText(label, (char*)str->c_str(), str->capacity() + 1, flags, InputTextCallback, &cb_user_data);
 }
     
-    ::opencensus::stats::MeasureInt64 RpcClientSentMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientSentBytesPerRpc();
-::opencensus::stats::MeasureInt64 RpcClientReceivedMessagesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientReceivedBytesPerRpc();
-::opencensus::stats::MeasureDouble RpcClientRoundtripLatency();
-::opencensus::stats::MeasureDouble RpcClientServerLatency();
-::opencensus::stats::MeasureInt64 RpcClientCompletedRpcs();
-    
-    void DynamicThreadPool::ReapThreads(std::list<DynamicThread*>* tlist) {
-  for (auto t = tlist->begin(); t != tlist->end(); t = tlist->erase(t)) {
-    delete *t;
-  }
-}
-    
-    
-    {}  // namespace
-    
-    namespace mxnet {
-    }
-    
-      /*!
-   * \brief Constructor takes function to run.
-   * \param size size of the thread pool.
-   * \param func the function to run on the thread pool.
-   */
-  explicit ThreadPool(size_t size, std::function<void()> func)
-      : worker_threads_(size) {
-    CHECK_GT(size, 0);
-    for (auto& i : worker_threads_) {
-      i = std::thread(func);
-    }
-  }
-  explicit ThreadPool(size_t size,
-                      std::function<void(std::shared_ptr<dmlc::ManualEvent> ready)> func,
-                      const bool wait)
-      : worker_threads_(size) {
-    CHECK_GT(size, 0);
-    for (auto& i : worker_threads_) {
-      std::shared_ptr<dmlc::ManualEvent> ptr = std::make_shared<dmlc::ManualEvent>();
-      ready_events_.emplace_back(ptr);
-      i = std::thread(func, ptr);
-    }
-    if (wait) {
-      WaitForReady();
-    }
-  }
-  ~ThreadPool() noexcept(false) {
-    for (auto&& i : worker_threads_) {
-      i.join();
-    }
-  }
-    
-    
-    {
-    {inline void Dequantize2BitImpl(mshadow::Stream<mshadow::cpu> *s,
-                               const std::vector<mxnet::TBlob> &inputs,
-                               const float threshold) {
-  Dequantize2BitKernelLaunch(s, inputs, threshold);
-}
-}  // namespace kvstore
-}  // namespace mxnet
-    
-      virtual void Backward(const OpContext &ctx,
-                        const std::vector<TBlob> &out_grad,
-                        const std::vector<TBlob> &in_data,
-                        const std::vector<TBlob> &out_data,
-                        const std::vector<OpReqType> &req,
-                        const std::vector<TBlob> &in_grad,
-                        const std::vector<TBlob> &aux_args) {
-    using namespace mshadow;
-    CHECK_EQ(in_data.size(), 2U);
-    CHECK_EQ(out_data.size(), 3U);
-    CHECK_EQ(out_grad.size(), 1U);
-    Stream<gpu> *s = ctx.get_stream<gpu>();
-    Tensor<gpu, 4, DType> data = in_data[st::kData].get<gpu, 4, DType>(s);
-    Tensor<gpu, 4, DType> grad = out_grad[st::kOut].get<gpu, 4, DType>(s);
-    Tensor<gpu, 4, DType> ddata = in_grad[st::kData].get<gpu, 4, DType>(s);
-    Shape<3> loc_shape = Shape3(data.size(0), 2, 3);
-    Shape<4> grid_shape = Shape4(grad.size(0), grad.size(2), grad.size(3), 2);
-    Tensor<gpu, 3, DType> dloc = in_grad[st::kLoc].get_with_shape<gpu, 3, DType>(loc_shape, s);
-    Tensor<gpu, 4, DType> grid = out_data[st::kGridSrc]
-                    .get_with_shape<gpu, 4, DType>(grid_shape, s);
-    // do not use out_grad[st::kGridSrc], because dgrid is a intermediate tensor, and not include in
-    // DeclareBackwardDependency, another, we can we reuse grid for inplace operator
-    typename DataType<DType>::ScaleType alpha = 1.0f;
-    typename DataType<DType>::ScaleType beta = 0.0f;
-    typename DataType<DType>::ScaleType alpha_dgrid = 1.0f;
-    typename DataType<DType>::ScaleType beta_dgrid = 0.0f;
-    CUDNN_CALL(cudnnSpatialTfSamplerBackward(s->dnn_handle_,
-                                             st_desc_,
-                                             &alpha,
-                                             in_desc_,
-                                             data.dptr_,
-                                             &beta,
-                                             in_desc_/*reuse in_desc_*/,
-                                             ddata.dptr_/*output*/,
-                                             &alpha_dgrid,
-                                             out_desc_/*reuse out_desc_*/,
-                                             grad.dptr_,
-                                             grid.dptr_,
-                                             &beta_dgrid,
-                                             grid.dptr_));
-    if (param_.transform_type == st::kAffine) {
-      CUDNN_CALL(cudnnSpatialTfGridGeneratorBackward(s->dnn_handle_,
-                                                     st_desc_,
-                                                     grid.dptr_,
-                                                     dloc.dptr_/*out*/));
-    }
-  }
-    
-    MXNET_REGISTER_OP_PROPERTY(_Native, NativeOpProp)
-.describe('Stub for implementing an operator implemented in native frontend language.')
-.add_argument('data', 'NDArray-or-Symbol[]', 'Input data for the custom operator.')
-.add_arguments(NativeOpParam::__FIELDS__());
-    
-    namespace xgboost {
-/*!
- * \brief interface of linear updater
- */
-class LinearUpdater {
- public:
-  /*! \brief virtual destructor */
-  virtual ~LinearUpdater() = default;
-  /*!
-   * \brief Initialize the updater with given arguments.
-   * \param args arguments to the objective function.
-   */
-  virtual void Init(
-      const std::vector<std::pair<std::string, std::string> >& args) = 0;
-    }
-    }
-    
-      void Write(const SparsePage& page, dmlc::Stream* fo) override {
-    const auto& offset_vec = page.offset.HostVector();
-    const auto& data_vec = page.data.HostVector();
-    CHECK(page.offset.Size() != 0 && offset_vec[0] == 0);
-    CHECK_EQ(offset_vec.back(), page.data.Size());
-    fo->Write(offset_vec);
-    if (page.data.Size() != 0) {
-      fo->Write(dmlc::BeginPtr(data_vec), page.data.Size() * sizeof(Entry));
-    }
-  }
+        if (g_pd3dDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&g_fence)) != S_OK)
+        return false;
