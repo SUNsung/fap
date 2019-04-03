@@ -1,217 +1,250 @@
 
         
         
-    {		*a_piEncodingTime_ms = totalEncodingTime;
+    {		*a_ppaucEncodingBits = image.GetEncodingBits();
+		*a_puiEncodingBitsBytes = image.GetEncodingBitsBytes();
+		*a_puiExtendedWidth = image.GetExtendedWidth();
+		*a_puiExtendedHeight = image.GetExtendedHeight();
+		*a_piEncodingTime_ms = image.GetEncodingTimeMs();
 	}
     
-    		static unsigned int GetBytesPerBlock(Format a_format)
+    		inline Block4x4EncodingBits_RGB8(void)
 		{
-			switch (a_format)
-			{
-			case Format::RGB8:
-			case Format::R11:
-			case Format::RGB8A1:
-				return 8;
-				break;
-    }
+			assert(sizeof(Block4x4EncodingBits_RGB8) == BYTES_PER_BLOCK);
     }
     
     
-    {  } AF_Blue_StringRec;
+  /*************************************************************************/
+  /*************************************************************************/
+  /*****                                                               *****/
+  /*****                    B L U E   S T R I N G S                    *****/
+  /*****                                                               *****/
+  /*************************************************************************/
+  /*************************************************************************/
     
-      THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS'
-  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
-  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-  POSSIBILITY OF SUCH DAMAGE.*/
+    #define AF_LATIN_HINTS_DO_VERT_SNAP( h )             \
+  AF_HINTS_TEST_OTHER( h, AF_LATIN_HINTS_VERT_SNAP )
     
-    #define SCALEIN(a)      (a)
-#define SCALEOUT(a)     (a)
+    //use_int32: When enabled 32bit ints are used instead of 64bit ints. This
+//improve performance but coordinate values are limited to the range +/- 46340
+//#define use_int32
     
+    #   define S_MUL(a,b) ( (a)*(b) )
+#define C_MUL(m,a,b) \
+    do{ (m).r = (a).r*(b).r - (a).i*(b).i;\
+        (m).i = (a).r*(b).i + (a).i*(b).r; }while(0)
+#define C_MULC(m,a,b) \
+    do{ (m).r = (a).r*(b).r + (a).i*(b).i;\
+        (m).i = (a).i*(b).r - (a).r*(b).i; }while(0)
     
+       - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+    
+    /** 16x16 multiply-add where the result fits in 32 bits */
+#define MAC16_16(c,a,b) (ADD32((c),MULT16_16((a),(b))))
 /** 16x32 multiply, followed by a 15-bit shift right and 32-bit add.
     b must fit in 31 bits.
     Result fits in 32 bits. */
-#undef MAC16_32_Q15
-static OPUS_INLINE opus_val32 MAC16_32_Q15_armv5e(opus_val32 c, opus_val16 a,
- opus_val32 b)
-{
-  int res;
-  __asm__(
-      '#MAC16_32_Q15\n\t'
-      'smlawb %0, %1, %2, %3;\n'
-      : '=r'(res)
-      : 'r'(b<<1), 'r'(a), 'r'(c)
-  );
-  return res;
+#define MAC16_32_Q15(c,a,b) ADD32((c),ADD32(MULT16_16((a),SHR((b),15)), SHR(MULT16_16((a),((b)&0x00007fff)),15)))
+    
+    template<typename IndexType>
+class DensifyParser : public dmlc::Parser<IndexType> {
+ public:
+  DensifyParser(dmlc::Parser<IndexType>* parser, uint32_t num_col)
+      : parser_(parser), num_col_(num_col) {
+  }
+    }
+    
+     private:
+  StreamBufferReader reader_;
+  int tmp_ch;
+  int num_prev;
+  unsigned char buf_prev[2];
+  // whether we need to do strict check
+  static const bool kStrictCheck = false;
+};
+/*! \brief the stream that write to base64, note we take from file pointers */
+class Base64OutStream: public dmlc::Stream {
+ public:
+  explicit Base64OutStream(dmlc::Stream *fp) : fp(fp) {
+    buf_top = 0;
+  }
+  virtual void Write(const void *ptr, size_t size) {
+    using base64::EncodeTable;
+    size_t tlen = size;
+    const unsigned char *cptr = static_cast<const unsigned char*>(ptr);
+    while (tlen) {
+      while (buf_top < 3  && tlen != 0) {
+        buf[++buf_top] = *cptr++; --tlen;
+      }
+      if (buf_top == 3) {
+        // flush 4 bytes out
+        PutChar(EncodeTable[buf[1] >> 2]);
+        PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
+        PutChar(EncodeTable[((buf[2] << 2) | (buf[3] >> 6)) & 0x3F]);
+        PutChar(EncodeTable[buf[3] & 0x3F]);
+        buf_top = 0;
+      }
+    }
+  }
+  virtual size_t Read(void *ptr, size_t size) {
+    LOG(FATAL) << 'Base64OutStream do not support read';
+    return 0;
+  }
+  /*!
+   * \brief finish writing of all current base64 stream, do some post processing
+   * \param endch character to put to end of stream, if it is EOF, then nothing will be done
+   */
+  inline void Finish(char endch = EOF) {
+    using base64::EncodeTable;
+    if (buf_top == 1) {
+      PutChar(EncodeTable[buf[1] >> 2]);
+      PutChar(EncodeTable[(buf[1] << 4) & 0x3F]);
+      PutChar('=');
+      PutChar('=');
+    }
+    if (buf_top == 2) {
+      PutChar(EncodeTable[buf[1] >> 2]);
+      PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
+      PutChar(EncodeTable[(buf[2] << 2) & 0x3F]);
+      PutChar('=');
+    }
+    buf_top = 0;
+    if (endch != EOF) PutChar(endch);
+    this->Flush();
+  }
+    
+    
+    {
+    {void SparsePageWriter::Alloc(std::shared_ptr<SparsePage>* out_page) {
+  CHECK(*out_page == nullptr);
+  if (num_free_buffer_ != 0) {
+    out_page->reset(new SparsePage());
+    --num_free_buffer_;
+  } else {
+    CHECK(qrecycle_.Pop(out_page));
+  }
 }
-#define MAC16_32_Q15(c, a, b) (MAC16_32_Q15_armv5e(c, a, b))
+}  // namespace data
+}  // namespace xgboost
     
-    namespace HPHP { namespace HHBBC {
+      for (auto alphabet_size : test_cases) {
+    for (int i = 0; i < repetitions; i++) {
+      std::vector<int> input(num_elements);
+      std::generate(input.begin(), input.end(),
+        [=]() { return rand() % alphabet_size; });
+      CompressedBufferWriter cbw(alphabet_size);
     }
     }
     
-    #endif
-
+    XGBOOST_REGISTER_OBJECTIVE(LambdaRankNDCG, 'rank:ndcg')
+.describe('LambdaRank with NDCG as objective.')
+.set_body([]() { return new LambdaRankObjNDCG(); });
+    
+    void SimpleCSRSource::CopyFrom(dmlc::Parser<uint32_t>* parser) {
+  // use qid to get group info
+  const uint64_t default_max = std::numeric_limits<uint64_t>::max();
+  uint64_t last_group_id = default_max;
+  bst_uint group_size = 0;
+  this->Clear();
+  while (parser->Next()) {
+    const dmlc::RowBlock<uint32_t>& batch = parser->Value();
+    if (batch.label != nullptr) {
+      auto& labels = info.labels_.HostVector();
+      labels.insert(labels.end(), batch.label, batch.label + batch.size);
+    }
+    if (batch.weight != nullptr) {
+      auto& weights = info.weights_.HostVector();
+      weights.insert(weights.end(), batch.weight, batch.weight + batch.size);
+    }
+    if (batch.qid != nullptr) {
+      info.qids_.insert(info.qids_.end(), batch.qid, batch.qid + batch.size);
+      // get group
+      for (size_t i = 0; i < batch.size; ++i) {
+        const uint64_t cur_group_id = batch.qid[i];
+        if (last_group_id == default_max || last_group_id != cur_group_id) {
+          info.group_ptr_.push_back(group_size);
+        }
+        last_group_id = cur_group_id;
+        ++group_size;
+      }
+    }
+    }
+    }
     
     
-    {  static void
-  StringInsert(std::vector<std::string>& values, const std::string& /*key*/,
-               const std::string& value) {
-    values.push_back(value);
+    {    return initializers;
+}
+    
+            DEPENDENCY_PROPERTY_OWNER(CalculatorStandardOperators);
+    
+    #pragma once
+    
+    
+    {  rocksdb::CacheBench bench;
+  if (FLAGS_populate_cache) {
+    bench.PopulateCache();
   }
-  static void
-  StringInsert(boost::container::flat_set<std::string>& values,
-               const std::string& /*key*/, const std::string& value) {
-    values.insert(value);
+  if (bench.Run()) {
+    return 0;
+  } else {
+    return 1;
   }
-  static void
-  StringInsert(std::set<std::string, stdltistr>& values,
-               const std::string& /*key*/, const std::string& value) {
-    values.insert(value);
-  }
-  static void
-  StringInsert(std::set<std::string>& values, const std::string& /*key*/,
-               const std::string& value) {
-    values.insert(value);
-  }
-  static void StringInsert(std::map<std::string, std::string> &values,
-                           const std::string &key,
-                           const std::string &value) {
-    values[key] = value;
-  }
-  static void StringInsert(std::map<std::string, std::string,
-                           stdltistr> &values,
-                           const std::string &key,
-                           const std::string &value) {
-    values[key] = value;
-  }
-  static void StringInsert(hphp_string_imap<std::string> &values,
-                           const std::string &key,
-                           const std::string &value) {
-    values[key] = value;
-  }
-  static void ReplaceIncludesWithIni(const std::string& original_ini_filename,
-                                     const std::string& iniStr,
-                                     std::string& with_includes);
+}
+    
+     private:
+  uint64_t NowMicrosMonotonic(Env* env);
+    
+    using namespace rocksdb;
+    
+    struct DumpOptions {
+  // Database that will be dumped
+  std::string db_path;
+  // File location that will contain dump output
+  std::string dump_location;
+  // Don't include db information header in the dump
+  bool anonymous = false;
 };
     
-    #define ERROR_RAISE_WARNING(exp)        \
-  int ret = (exp);                      \
-  if (ret != 0) {                       \
-    raise_warning(                      \
-      '%s(): %s',                       \
-      __FUNCTION__,                     \
-      folly::errnoStr(errno).c_str()    \
-    );                                  \
-  }                                     \
-    
-    template<typename F>
-void logPerfWarning(folly::StringPiece event, F fillCols) {
-  logPerfWarningImpl(event, 1, kDefaultPerfWarningRate, fillCols);
-}
-template<typename F>
-void logPerfWarning(folly::StringPiece event, int64_t rate, F fillCols) {
-  logPerfWarningImpl(event, 1, rate, fillCols);
-}
-    
-    /*
- * If the given AtomicHashMap has more than one submap allocated, log a perf
- * warning with its name.
- *
- * A single unique done flag should exist for each map being checked, to avoid
- * logging more than once (process, map) pair.
- */
-template<typename AHM>
-void checkAHMSubMaps(const AHM& map, folly::StringPiece mapName,
-                     std::atomic<bool>& done);
+    // PersistentCache
+//
+// Persistent cache interface for caching IO pages on a persistent medium. The
+// cache interface is specifically designed for persistent read cache.
+class PersistentCache {
+ public:
+  typedef std::vector<std::map<std::string, double>> StatsType;
+    }
     
     
-void printVec(const vector<int>& vec){
-    for(int e: vec)
-        cout << e << ' ';
-    cout << endl;
-}
-    
-    #include <iostream>
-#include <vector>
-#include <cassert>
-    
-    
-    {            res[level].push_back(node->val);
-            if(node->left)
-                q.push(make_pair(node->left, level + 1 ));
-            if(node->right)
-                q.push(make_pair(node->right, level + 1 ));
-        }
-    
-    
-    {    return 0;
-}
+    {}  // namespace rocksdb
+#endif  // !ROCKSDB_LITE
 
     
-    void LiveRegionHost::Announce(NarratorAnnouncement^ announcement)
-{
-    if (m_host == nullptr)
-    {
-        m_host = ref new TextBlock();
-        AutomationProperties::SetLiveSetting(m_host, AutomationLiveSetting::Assertive);
-    }
-    }
-    
-        private:
-        NarratorAnnouncementHostFactory() {}
-    
-            static Windows::UI::Xaml::DependencyProperty^ s_announcementProperty;
-    
-      x <<= 4;
-  x |= t;
-    
-    #include 'modules/canbus/vehicle/gem/protocol/accel_cmd_67.h'
-#include 'modules/canbus/vehicle/gem/protocol/brake_cmd_6b.h'
-#include 'modules/canbus/vehicle/gem/protocol/global_cmd_69.h'
-#include 'modules/canbus/vehicle/gem/protocol/headlight_cmd_76.h'
-#include 'modules/canbus/vehicle/gem/protocol/horn_cmd_78.h'
-#include 'modules/canbus/vehicle/gem/protocol/shift_cmd_65.h'
-#include 'modules/canbus/vehicle/gem/protocol/steering_cmd_6d.h'
-#include 'modules/canbus/vehicle/gem/protocol/turn_cmd_63.h'
-#include 'modules/canbus/vehicle/gem/protocol/wiper_cmd_90.h'
-    
-      Byte t1(bytes + 1);
-  int32_t t = t1.get_byte(0, 8);
-  x <<= 8;
-  x |= t;
-    
     
     {
-    {
-    {
-    {  double ret = x * 0.001000;
-  return ret;
-}
-}  // namespace gem
-}  // namespace canbus
-}  // namespace apollo
+    {  // Returns the approximate memory usage of different types in the input
+  // list of DBs and Cache set.  For instance, in the output map
+  // usage_by_type, usage_by_type[kMemTableTotal] will store the memory
+  // usage of all the mem-tables from all the input rocksdb instances.
+  //
+  // Note that for memory usage inside Cache class, we will
+  // only report the usage of the input 'cache_set' without
+  // including those Cache usage inside the input list 'dbs'
+  // of DBs.
+  static Status GetApproximateMemoryUsageByType(
+      const std::vector<DB*>& dbs,
+      const std::unordered_set<const Cache*> cache_set,
+      std::map<MemoryUtil::UsageType, uint64_t>* usage_by_type);
+};
+}  // namespace rocksdb
+#endif  // !ROCKSDB_LITE
 
     
-    // config detail: {'name': 'motor_temperature', 'offset': -40.0,
-// 'precision': 1.0, 'len': 16, 'is_signed_var': True, 'physical_range':
-// '[-32808|32727]', 'bit': 23, 'type': 'int', 'order': 'motorola',
-// 'physical_unit': 'deg C'}
-int Brakemotorrpt271::motor_temperature(const std::uint8_t* bytes,
-                                        int32_t length) const {
-  Byte t0(bytes + 2);
-  int32_t x = t0.get_byte(0, 8);
-    }
-    
-    TEST(Brake61Test, General) {
-  int32_t length = 8;
-  ChassisDetail chassis_detail;
-  uint8_t bytes[8] = {0x01, 0x02, 0x03, 0x04, 0x11, 0x12, 0x13, 0x14};
-    }
+      // Attempt to acquire lock.  If timeout is non-negative, operation may be
+  // failed after this many microseconds.
+  // Returns OK on success,
+  //         TimedOut if timed out,
+  //         or other Status on failure.
+  // If returned status is OK, TransactionDB will eventually call UnLock().
+  virtual Status TryLockFor(int64_t timeout_time) = 0;
