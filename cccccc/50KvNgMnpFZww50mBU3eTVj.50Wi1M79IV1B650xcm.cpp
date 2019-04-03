@@ -1,345 +1,168 @@
 
         
-        namespace mate {
-    }
+          std::vector<string> output;
+  string input_tensors_needed_out;
+  tensorflow::Status status = RunCppShapeInferenceImpl(
+      graph_def_version, serialized_node_def, input_serialized_shapes,
+      input_constant_tensor_values_v, input_constant_tensor_as_shape_values,
+      &output, &input_tensors_needed_out);
     
-     private:
-  void OnMessageBoxCallback(DialogClosedCallback callback,
-                            const std::string& origin,
-                            int code,
-                            bool checkbox_checked);
+    #include <vector>
+#include 'tensorflow/c/tf_status_helper.h'
+#include 'tensorflow/core/platform/types.h'
     
-    #if !defined(OS_MACOSX) || defined(MAS_BUILD)
-std::string AutoUpdater::GetFeedURL() {
-  return '';
-}
+    #include <string>
+#include <vector>
+#include 'tensorflow/core/framework/op_def.pb.h'
+#include 'tensorflow/core/framework/op_gen_lib.h'
+#include 'tensorflow/core/platform/types.h'
     
-    
-    {  if (!active_ && !pending_damage_rect_.IsEmpty() && paint)
-    OnPaint(gfx::Rect(viewport_pixel_size_));
-}
-    
-      // Up until now, the parent process was blocked in a read waiting for the
-  // write above to complete. The parent process is now free to exit. Wait for
-  // that to happen.
-  struct kevent event;
-  int events = kevent(kq.get(), nullptr, 0, &event, 1, nullptr);
-  if (events != 1) {
-    if (events < 0) {
-      PLOG(ERROR) << 'kevent (monitor)';
-    } else {
-      LOG(ERROR) << 'kevent (monitor): unexpected result ' << events;
-    }
-    return;
-  }
-    
-    void App::SetProxyConfig(content::RenderProcessHost* render_process_host,
-                         const std::string& proxy_config) {
-  net::ProxyConfig config;
-  config.proxy_rules().ParseFromString(proxy_config);
-  net::URLRequestContextGetter* context_getter =
-    render_process_host->GetBrowserContext()->
-    GetRequestContextForRenderProcess(render_process_host->GetID());
-    }
+    #ifndef TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_H_
+#define TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_H_
     
     
-    {}  // namespace nw
-
-    
-    #endif  // CONTENT_NW_SRC_API_BASE_BASE_H_
-
-    
-    EventListener::EventListener(int id,
-  const base::WeakPtr<DispatcherHost>& dispatcher_host,
-  const base::DictionaryValue& option) : Base(id, dispatcher_host, option) {
-    }
-    
-      static int getUID() {
-    static int id = 0;
-    return ++id;
-  }
-    
-      GtkRequisition menu_req;
-  gtk_widget_size_request(GTK_WIDGET(menu), &menu_req);
-  GdkScreen* screen;
-  gdk_display_get_pointer(gdk_display_get_default(), &screen, NULL, NULL, NULL);
-  gint monitor = gdk_screen_get_monitor_at_point(screen, *x, *y);
-    
-    static KeyMap keymap = {
-  {'`'    , 'Backquote'},
-  {'\\'   , 'Backslash'},
-  {'['    , 'BracketLeft'},
-  {']'    , 'BracketRight'},
-  {','    , 'Comma'},
-  {'='    , 'Equal'},
-  {'-'    , 'Minus'},
-  {'.'    , 'Period'},
-  {'''    , 'Quote'},
-  {';'    , 'Semicolon'},
-  {'/'    , 'Slash'},
-  {'\n'   , 'Enter'},
-  {'\t'   , 'Tab'},
-  {'UP'   , 'ArrowUp'},
-  {'DOWN' , 'ArrowDown'},
-  {'LEFT' , 'ArrowLeft'},
-  {'RIGHT', 'ArrowRight'},
-  {'ESC'  , 'Escape'},
-  {'MEDIANEXTTRACK', 'MediaTrackNext'},
-  {'MEDIAPREVTRACK', 'MediaTrackPrevious'}
+    {  // Maps error codes to the corresponding Python exception type.
+  std::map<TF_Code, PyObject*> exc_types_;
 };
     
-    #if defined(OS_WIN) || defined(OS_LINUX)
-bool MenuItem::AcceleratorPressed(const ui::Accelerator& accelerator) {
-#if defined(OS_WIN)
-  if (meta_down_flag_) {
-    if ((::GetKeyState(VK_APPS) & 0x8000) != 0x8000) {
-      return true;
-    }
-  }
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+      static const unsigned kMask = 0xf;  // Mask of all available flags.
+    
+    	// ################################################################################
+	// Block4x4EncodingBits_A8
+	// Encoding bits for the A portion of RGBA8
+	// ################################################################################
+    
+    		// use the best of each half
+		IndividualTrys::Try *ptryBest1 = trys.m_half1.m_ptryBest;
+		IndividualTrys::Try *ptryBest2 = trys.m_half2.m_ptryBest;
+		encodingTry.m_fError = trys.m_half1.m_ptryBest->m_fError + trys.m_half2.m_ptryBest->m_fError;
+    
+    
+    {#if defined (__cplusplus)
+}
 #endif
-  OnClick();
-  return true;
-}
     
-    #include 'extensions/browser/extension_function.h'
-    
-      // Returns the covariance.
-  double covariance() const {
-    if (total_weight > 0.0)
-      return (sigxy - sigx * sigy / total_weight) / total_weight;
-    else
-      return 0.0;
-  }
-  double x_variance() const {
-    if (total_weight > 0.0)
-      return (sigxx - sigx * sigx / total_weight) / total_weight;
-    else
-      return 0.0;
-  }
-  double y_variance() const {
-    if (total_weight > 0.0)
-      return (sigyy - sigy * sigy / total_weight) / total_weight;
-    else
-      return 0.0;
-  }
-    
-    bool ParagraphModel::ValidFirstLine(int lmargin, int lindent,
-                                    int rindent, int rmargin) const {
-  switch (justification_) {
-    case JUSTIFICATION_LEFT:
-      return NearlyEqual(lmargin + lindent, margin_ + first_indent_,
-                         tolerance_);
-    case JUSTIFICATION_RIGHT:
-      return NearlyEqual(rmargin + rindent, margin_ + first_indent_,
-                         tolerance_);
-    case JUSTIFICATION_CENTER:
-      return NearlyEqual(lindent, rindent, tolerance_ * 2);
-    default:
-      // shouldn't happen
-      return false;
-  }
-}
-    
-      // ValidFirstLine() and ValidBodyLine() take arguments describing a text line
-  // in a block of text which we are trying to model:
-  //   lmargin, lindent:  these add up to the distance from the leftmost ink
-  //                      in the text line to the surrounding text block's left
-  //                      edge.
-  //   rmargin, rindent:  these add up to the distance from the rightmost ink
-  //                      in the text line to the surrounding text block's right
-  //                      edge.
-  // The caller determines the division between 'margin' and 'indent', which
-  // only actually affect whether we think the line may be centered.
-  //
-  // If the amount of whitespace matches the amount of whitespace expected on
-  // the relevant side of the line (within tolerance_) we say it matches.
-    
-    
-    {  /* Accept modes which occur between the above rejection groups */
-  R_NN_ACCEPT,          // NN acceptance
-  R_HYPHEN_ACCEPT,      // Hyphen acceptance
-  R_MM_ACCEPT,          // Matrix match acceptance
-  R_QUALITY_ACCEPT,     // Accept word in good quality doc
-  R_MINIMAL_REJ_ACCEPT  // Accept EVERYTHING except tess failures
-};
-    
-    // AMBIG_TABLE[i] stores a set of ambiguities whose
-// wrong ngram starts with unichar id i.
-using UnicharAmbigsVector = GenericVector<AmbigSpec_LIST *>;
-    
-    namespace tesseract {
-    }
-    
-    b2Triangle::~b2Triangle(){
-	delete[] x;
-	delete[] y;
-}
-    
-    						// add up all pixel errors
-						float fCWError = 0.0f;
-						for (unsigned int uiPixel = 0; uiPixel < 8; uiPixel++)
-						{
-							fCWError += afPixelErrors[uiPixel];
-						}
-    
-        if (node.m_endtype == etClosedPolygon)
-    {
-      int k = len - 1;
-      for (int j = 0; j < len; ++j)
-        OffsetPoint(j, k, node.m_jointype);
-      m_destPolys.push_back(m_destPoly);
-    }
-    else if (node.m_endtype == etClosedLine)
-    {
-      int k = len - 1;
-      for (int j = 0; j < len; ++j)
-        OffsetPoint(j, k, node.m_jointype);
-      m_destPolys.push_back(m_destPoly);
-      m_destPoly.clear();
-      //re-build m_normals ...
-      DoublePoint n = m_normals[len -1];
-      for (int j = len - 1; j > 0; j--)
-        m_normals[j] = DoublePoint(-m_normals[j - 1].X, -m_normals[j - 1].Y);
-      m_normals[0] = DoublePoint(-n.X, -n.Y);
-      k = 0;
-      for (int j = len - 1; j >= 0; j--)
-        OffsetPoint(j, k, node.m_jointype);
-      m_destPolys.push_back(m_destPoly);
-    }
-    else
-    {
-      int k = 0;
-      for (int j = 1; j < len - 1; ++j)
-        OffsetPoint(j, k, node.m_jointype);
-    }
-    
-    #define ADD16(a,b) ((a)+(b))
-#define SUB16(a,b) ((a)-(b))
-#define ADD32(a,b) ((a)+(b))
-#define SUB32(a,b) ((a)-(b))
-#define MULT16_16_16(a,b)     ((a)*(b))
-#define MULT16_16(a,b)     ((opus_val32)(a)*(opus_val32)(b))
-#define MAC16_16(c,a,b)     ((c)+(opus_val32)(a)*(opus_val32)(b))
+    #if defined(OPUS_ARM_INLINE_ASM)
+#include 'arm/kiss_fft_armv4.h'
+#endif
     
        - Redistributions in binary form must reproduce the above copyright
    notice, this list of conditions and the following disclaimer in the
    documentation and/or other materials provided with the distribution.
     
-        // return the randomized feature bounds for a time range
-    std::pair<size_t, size_t> Bounds(size_t ts, size_t te) const
-    {
-        size_t tbegin = max(ts, randomizationrange / 2) - randomizationrange / 2;
-        size_t tend = min(te + randomizationrange / 2, map.size());
-        return std::make_pair<size_t, size_t>(std::move(tbegin), move(tend));
+    /*!
+ * Initialize/reset the resampler state for a given pair of input/output sampling rates
+*/
+opus_int silk_resampler_init(
+    silk_resampler_state_struct *S,                 /* I/O  Resampler state                                             */
+    opus_int32                  Fs_Hz_in,           /* I    Input sampling rate (Hz)                                    */
+    opus_int32                  Fs_Hz_out,          /* I    Output sampling rate (Hz)                                   */
+    opus_int                    forEnc              /* I    If 1: encoder; if 0: decoder                                */
+);
+    
+    #include 'opencensus/stats/stats.h'
+#include 'src/cpp/ext/filters/census/grpc_plugin.h'
+    
+    namespace grpc {
     }
     
-    class IOpndCommand : public IExpressionCommand
-{
-public:
-    virtual const std::shared_ptr<CalculatorVector<int>> & GetCommands() const= 0;
-    virtual void AppendCommand(int command) = 0;
-    virtual void ToggleSign() = 0;
-    virtual void RemoveFromEnd() = 0;
-    virtual bool IsNegative() const = 0;
-    virtual bool IsSciFmt() const = 0;
-    virtual bool IsDecimalPresent() const = 0;
-    virtual const std::wstring & GetToken(wchar_t decimalSymbol) = 0;
-    virtual void SetCommands(std::shared_ptr<CalculatorVector<int>> const& commands) = 0;
-};
-    
-    
-    {  static void setInitialized6(bool f) { data6_.initialized = f; }
-};
-    
-    
-    {  void serialize(const std::string& filename);
-};
-    
-    #include 'LogFactory.h'
-#include 'Logger.h'
-#include 'util.h'
-#include 'DHTNode.h'
-#include 'DHTConnectionImpl.h'
-#include 'DHTRoutingTable.h'
-#include 'DHTMessageFactoryImpl.h'
-#include 'DHTMessageTracker.h'
-#include 'DHTMessageDispatcherImpl.h'
-#include 'DHTMessageReceiver.h'
-#include 'DHTTaskQueueImpl.h'
-#include 'DHTTaskFactoryImpl.h'
-#include 'DHTPeerAnnounceStorage.h'
-#include 'DHTTokenTracker.h'
-#include 'DHTInteractionCommand.h'
-#include 'DHTTokenUpdateCommand.h'
-#include 'DHTBucketRefreshCommand.h'
-#include 'DHTPeerAnnounceCommand.h'
-#include 'DHTEntryPointNameResolveCommand.h'
-#include 'DHTAutoSaveCommand.h'
-#include 'DHTTask.h'
-#include 'DHTRoutingTableDeserializer.h'
-#include 'DHTRegistry.h'
-#include 'DHTBucketRefreshTask.h'
-#include 'DHTMessageCallback.h'
-#include 'DHTMessageTrackerEntry.h'
-#include 'DHTMessageEntry.h'
-#include 'UDPTrackerClient.h'
-#include 'BtRegistry.h'
-#include 'prefs.h'
-#include 'Option.h'
-#include 'SocketCore.h'
-#include 'DlAbortEx.h'
-#include 'RecoverableException.h'
-#include 'a2functional.h'
-#include 'DownloadEngine.h'
-#include 'fmt.h'
-    
-    void DHTTaskExecutor::update()
-{
-  execTasks_.erase(std::remove_if(execTasks_.begin(), execTasks_.end(),
-                                  std::mem_fn(&DHTTask::finished)),
-                   execTasks_.end());
-  int r;
-  if (static_cast<size_t>(numConcurrent_) > execTasks_.size()) {
-    r = numConcurrent_ - execTasks_.size();
+    Status ProtoServerReflection::GetAllExtensionNumbers(
+    ServerContext* context, const grpc::string& type,
+    ExtensionNumberResponse* response) {
+  if (descriptor_pool_ == nullptr) {
+    return Status::CANCELLED;
   }
-  else {
-    r = 0;
-  }
-  while (r && !queue_.empty()) {
-    std::shared_ptr<DHTTask> task = queue_.front();
-    queue_.pop_front();
-    task->startup();
-    if (!task->finished()) {
-      execTasks_.push_back(task);
-      --r;
     }
-  }
-  A2_LOG_DEBUG(fmt('Executing %u Task(s). Queue has %u task(s).',
-                   static_cast<unsigned int>(getExecutingTaskSize()),
-                   static_cast<unsigned int>(getQueueSize())));
+    
+      void FillErrorResponse(const Status& status,
+                         reflection::v1alpha::ErrorResponse* error_response);
+    
+    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
+    const grpc::string& name, int value) {
+  class IntOption final : public ServerBuilderOption {
+   public:
+    IntOption(const grpc::string& name, int value)
+        : name_(name), value_(value) {}
+    }
+    }
+    
+    
+    {}  // namespace grpc
+    
+    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
+  uint64_t busy = 0, total = 0;
+  gpr_log(GPR_ERROR,
+          'Platforms other than Linux, Windows, and MacOS are not supported.');
+  return std::make_pair(busy, total);
 }
     
-    namespace aria2 {
+    grpc::string LoadRecordKey::GetClientIpBytes() const {
+  if (client_ip_hex_.empty()) {
+    return '';
+  } else if (client_ip_hex_.size() == kIpv4AddressLength) {
+    uint32_t ip_bytes;
+    if (sscanf(client_ip_hex_.c_str(), '%x', &ip_bytes) != 1) {
+      gpr_log(GPR_ERROR,
+              'Can't parse client IP (%s) from a hex string to an integer.',
+              client_ip_hex_.c_str());
+      return '';
+    }
+    ip_bytes = grpc_htonl(ip_bytes);
+    return grpc::string(reinterpret_cast<const char*>(&ip_bytes),
+                        sizeof(ip_bytes));
+  } else if (client_ip_hex_.size() == kIpv6AddressLength) {
+    uint32_t ip_bytes[4];
+    for (size_t i = 0; i < 4; ++i) {
+      if (sscanf(client_ip_hex_.substr(i * 8, (i + 1) * 8).c_str(), '%x',
+                 ip_bytes + i) != 1) {
+        gpr_log(
+            GPR_ERROR,
+            'Can't parse client IP part (%s) from a hex string to an integer.',
+            client_ip_hex_.substr(i * 8, (i + 1) * 8).c_str());
+        return '';
+      }
+      ip_bytes[i] = grpc_htonl(ip_bytes[i]);
+    }
+    return grpc::string(reinterpret_cast<const char*>(ip_bytes),
+                        sizeof(ip_bytes));
+  } else {
+    GPR_UNREACHABLE_CODE(return '');
+  }
+}
+    
+    class MyFilter : public rocksdb::CompactionFilter {
+ public:
+  bool Filter(int level, const rocksdb::Slice& key,
+              const rocksdb::Slice& existing_value, std::string* new_value,
+              bool* value_changed) const override {
+    fprintf(stderr, 'Filter(%s)\n', key.ToString().c_str());
+    ++count_;
+    assert(*value_changed == false);
+    return false;
+  }
     }
     
-      virtual ~DHTTaskQueueImpl();
     
-      // do nothing; we don't use this message as outgoing message.
-  virtual bool send() CXX11_OVERRIDE;
-    
-    
-    {}  //  namespace rocksdb
+    {class DbUndumpTool {
+ public:
+  bool Run(const UndumpOptions& undump_options,
+           rocksdb::Options options = rocksdb::Options());
+};
+}  // namespace rocksdb
+#endif  // ROCKSDB_LITE
 
     
-    std::unique_ptr<WriteControllerToken> WriteController::GetStopToken() {
-  ++total_stopped_;
-  return std::unique_ptr<WriteControllerToken>(new StopWriteToken(this));
-}
+    namespace rocksdb {
+    }
     
-      // Attempt to acquire lock.  If timeout is non-negative, operation may be
-  // failed after this many microseconds.
-  // Returns OK on success,
-  //         TimedOut if timed out,
-  //         or other Status on failure.
-  // If returned status is OK, TransactionDB will eventually call UnLock().
-  virtual Status TryLockFor(int64_t timeout_time) = 0;
+      // Comparator used to define the order of keys in the table.
+  // Default: a comparator that uses lexicographic byte-wise ordering
+  //
+  // REQUIRES: The client must ensure that the comparator supplied
+  // here has the same name and orders keys *exactly* the same as the
+  // comparator provided to previous open calls on the same DB.
+  const Comparator* comparator;
