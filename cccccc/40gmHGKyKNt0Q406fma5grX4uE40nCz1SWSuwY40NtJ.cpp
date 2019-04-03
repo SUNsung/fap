@@ -1,230 +1,166 @@
 
         
-        #endif // BITCOIN_QT_NETWORKSTYLE_H
-
+        #include 'atom/browser/api/event_emitter.h'
     
-    static void secp256k1_hmac_sha256_finalize(secp256k1_hmac_sha256_t *hash, unsigned char *out32) {
-    unsigned char temp[32];
-    secp256k1_sha256_finalize(&hash->inner, temp);
-    secp256k1_sha256_write(&hash->outer, temp, 32);
-    memset(temp, 0, 32);
-    secp256k1_sha256_finalize(&hash->outer, out32);
+    namespace base {
+class TaskRunner;
 }
     
-    #ifndef BITCOIN_BECH32_H
-#define BITCOIN_BECH32_H
-    
-      /**
-   * @brief Applies the same transformation defined in the data layer's
-   * transform_param block to all the num images in a input_blob.
-   *
-   * @param input_blob
-   *    A Blob containing the data to be transformed. It applies the same
-   *    transformation to all the num images in the blob.
-   * @param transformed_blob
-   *    This is destination blob, it will contain as many images as the
-   *    input blob. It can be part of top blob's data.
-   */
-  void Transform(Blob<Dtype>* input_blob, Blob<Dtype>* transformed_blob);
-    
-    
-    {  static string LayerTypeListString() {
-    vector<string> layer_types = LayerTypeList();
-    string layer_types_str;
-    for (vector<string>::iterator iter = layer_types.begin();
-         iter != layer_types.end(); ++iter) {
-      if (iter != layer_types.begin()) {
-        layer_types_str += ', ';
-      }
-      layer_types_str += *iter;
+      // Now, add all generic parameters from the conforming type.
+  if (conformanceSig) {
+    for (auto param : conformanceSig->getGenericParams()) {
+      auto substParam = Type(param).subst(conformanceToSyntheticTypeFn,
+                                          conformanceToSyntheticConformanceFn);
+      builder.addGenericParameter(substParam->castTo<GenericTypeParamType>());
     }
-    return layer_types_str;
   }
-};
     
-    
-    {  /**
-   * @brief Computes the error gradient w.r.t. the absolute value inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x} =
-   *            \mathrm{sign}(x) \frac{\partial E}{\partial y}
-   *      @f$ if propagate_down[0]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-};
-    
-    namespace caffe {
+        if (info.status == serialization::Status::Valid) {
+      assert(info.bytes != 0);
+      if (!info.name.empty()) {
+        StringRef moduleData = buf.substr(0, info.bytes);
+        std::unique_ptr<llvm::MemoryBuffer> bitstream(
+          llvm::MemoryBuffer::getMemBuffer(moduleData, info.name, false));
+    }
     }
     
-    #ifdef USE_CUDNN
-template <typename Dtype>
-class CuDNNLCNLayer : public LRNLayer<Dtype> {
- public:
-  explicit CuDNNLCNLayer(const LayerParameter& param)
-      : LRNLayer<Dtype>(param), handles_setup_(false), tempDataSize(0),
-        tempData1(NULL), tempData2(NULL) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNLCNLayer();
-    }
+    #include 'swift/Basic/Cache.h'
+#include 'llvm/ADT/DenseMap.h'
+#include 'llvm/Support/Mutex.h'
     
-    namespace caffe {
-    }
+      std::size_t capacity = EndOfAllocation - Begin;
+  std::size_t requiredCapacity = capacity + needed;
+  do {
+    capacity = 2 * capacity + 16;
+  } while (capacity < requiredCapacity);
     
-    
-        case URX_BACKSLASH_X:
-            //  Match a Grapheme, as defined by Unicode TR 29.
-            //  Differs slightly from Perl, which consumes combining marks independently
-            //    of context.
-            {
-    }
-    
-    Locale
-RuleBasedCollator::getLocale(ULocDataLocaleType type, UErrorCode& errorCode) const {
-    if(U_FAILURE(errorCode)) {
-        return Locale::getRoot();
-    }
-    switch(type) {
-    case ULOC_ACTUAL_LOCALE:
-        return actualLocaleIsSameAsValid ? validLocale : tailoring->actualLocale;
-    case ULOC_VALID_LOCALE:
-        return validLocale;
-    case ULOC_REQUESTED_LOCALE:
-    default:
-        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return Locale::getRoot();
-    }
-}
-    
-    U_NAMESPACE_BEGIN
-    
-        /**
-     * Get maximum significant digits. 0 means no minimum.
-     */
-    int32_t getMin() const {
-        return fMin;
-    }
-    
-    
-/**
- * A formatter for small, positive integers.
- */
-class U_I18N_API SmallIntFormatter : public UMemory {
-public:
-    /**
-     * Estimates the actual digit count needed to format positiveValue
-     * using the given range of digit counts.
-     * Returns a value that is at least the actual digit count needed.
-     *
-     * @param positiveValue the value to format
-     * @param range the acceptable range of digit counts.
-     */
-    static int32_t estimateDigitCount(
-            int32_t positiveValue, const IntDigitCountRange &range);
-    }
-    
-    
-//------------------------------------------------------------------------------
-//
-//   smpdtfmt_cleanup     Memory cleanup function, free/delete all
-//                      cached memory.  Called by ICU's u_cleanup() function.
-//
-//------------------------------------------------------------------------------
-UBool
-SimpleDateFormatStaticSets::cleanup(void)
-{
-    delete gStaticSets;
-    gStaticSets = NULL;
-    gSimpleDateFormatStaticSetsInitOnce.reset();
-    return TRUE;
-}
-    
-        /**
-     * Sets U_ILLEGAL_ARGUMENT_ERROR if the keyword is not a plural form.
-     *
-     * @param keyword for example 'few' or 'other'
-     * @return the index of the plural form corresponding to the keyword
-     */
-    static int32_t indexFromString(const char *keyword, UErrorCode &errorCode);
-    
-    /**
- * UnicodeFunctor API.  Cast 'this' to a UnicodeMatcher* pointer
- * and return the pointer.
- */
-UnicodeMatcher* StringMatcher::toMatcher() const {
-  StringMatcher  *nonconst_this = const_cast<StringMatcher *>(this);
-  UnicodeMatcher *nonconst_base = static_cast<UnicodeMatcher *>(nonconst_this);
-  
-  return nonconst_base;
-}
-    
-          CompressedIterator<int> ci(buffer.data(), alphabet_size);
-      std::vector<int> output(input.size());
-      for (int i = 0; i < input.size(); i++) {
-        output[i] = ci[i];
+        // We can match a prefix so long as everything following the match is
+    // a number.
+    if (typeWord.startswith_lower(nameWord)) {
+      for (unsigned i = nameWord.size(), n = typeWord.size(); i != n; ++i) {
+        if (!clang::isDigit(typeWord[i])) return false;
       }
+    }
     
-    /*!
- * \brief Registry entry for tree updater.
- */
-struct GradientBoosterReg
-    : public dmlc::FunctionRegEntryBase<
-  GradientBoosterReg,
-  std::function<GradientBooster* (const std::vector<std::shared_ptr<DMatrix> > &cached_mats,
-                                  bst_float base_margin)> > {
-};
+    break_table = GraphemeClusterBreakPropertyTable(unicodeGraphemeBreakPropertyFile)
     
-        // Remove the assertion on batch.index, which can be null in the case that the data in this
-    // batch is entirely sparse. Although it's true that this indicates a likely issue with the
-    // user's data workflows, passing XGBoost entirely sparse data should not cause it to fail.
-    // See https://github.com/dmlc/xgboost/issues/1827 for complete detail.
-    // CHECK(batch.index != nullptr);
+      bool isImportAsMember() const { return bool(effectiveDC); }
     
-    class IExpressionCommand
+    using namespace swift;
+using namespace Mangle;
+    
+    class LLVM_LIBRARY_VISIBILITY Cygwin : public GenericUnix {
+protected:
+  std::string getDefaultLinker() const override;
+    }
+    
+    #include 'common.h'
+    
+      virtual void fillMessage(Dict* msgDict) CXX11_OVERRIDE;
+    
+    void DHTRoutingTableSerializer::setLocalNode(
+    const std::shared_ptr<DHTNode>& localNode)
 {
-public:
-    virtual CalculationManager::CommandType GetCommandType() const = 0;
-    virtual void Accept(_In_ ISerializeCommandVisitor &commandVisitor) = 0;
+  localNode_ = localNode;
+}
+    
+    
+    {  // Returns two vector of Commands.  First one contains regular
+  // commands.  Secod one contains so called routine commands, which
+  // executed once per event poll returns.
+  std::pair<std::vector<std::unique_ptr<Command>>,
+            std::vector<std::unique_ptr<Command>>>
+  setup(DownloadEngine* e, int family);
 };
     
-        String^ navCategoryItemAutomationNameFormat = resProvider.GetResourceString(L'NavCategoryItem_AutomationNameFormat');
+    class DHTTaskQueueImpl : public DHTTaskQueue {
+private:
+  DHTTaskExecutor periodicTaskQueue1_;
+    }
     
-            private:
-            // IConverterDataLoader
-            void LoadData() override;
-            std::vector<UnitConversionManager::Category> LoadOrderedCategories() override;
-            std::vector<UnitConversionManager::Unit> LoadOrderedUnits(const UnitConversionManager::Category& c) override;
-            std::unordered_map<UnitConversionManager::Unit, UnitConversionManager::ConversionData, UnitConversionManager::UnitHash> LoadOrderedRatios(const UnitConversionManager::Unit& unit) override;
-            bool SupportsCategory(const UnitConversionManager::Category& target) override;
-            // IConverterDataLoader
+      DHTTokenTracker(const unsigned char* initialSecret);
     
-    #include 'Views/CalculatorProgrammerBitFlipPanel.g.h'
-#include 'Controls/FlipButtons.h'
-#include 'Converters/BitFlipAutomationNameConverter.h'
-#include 'Converters/BooleanNegationConverter.h'
-#include 'Converters/VisibilityNegationConverter.h'
-#include 'CalcViewModel/StandardCalculatorViewModel.h'
+    namespace aria2 {
+    }
     
-            property CalculatorApp::ViewModel::StandardCalculatorViewModel^ Model
-        {
-            CalculatorApp::ViewModel::StandardCalculatorViewModel^ get() {
-                return static_cast<CalculatorApp::ViewModel::StandardCalculatorViewModel^>(this->DataContext);
-            }
-        }
+    #include 'modules/drivers/canbus/proto/can_card_parameter.pb.h'
     
-    #pragma once
+    TEST(ByteTest, SetValue) {
+  unsigned char byte_value = 0x1A;
+  Byte value(&byte_value);
+  value.set_value(0x06, 3, 3);
+  EXPECT_EQ(0x32, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x06, 0, 8);
+  EXPECT_EQ(0x06, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x06, 0, 10);
+  EXPECT_EQ(0x06, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x06, 1, 7);
+  EXPECT_EQ(0x0C, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x07, 1, 1);
+  EXPECT_EQ(0x1A, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x07, -1, 1);
+  EXPECT_EQ(0x1A, value.get_byte());
+}
+    
+    #include 'modules/drivers/canbus/sensor_gflags.h'
+    
+    int ObjectGeneralInfo60B::object_id(const std::uint8_t* bytes,
+                                    int32_t length) const {
+  Byte t0(bytes);
+  int32_t x = t0.get_byte(0, 8);
+    }
+    
+    void SplineSegKernel::CalculateDerivative(const uint32_t num_params) {
+  kernel_derivative_ = Eigen::MatrixXd::Zero(num_params, num_params);
+  for (int r = 1; r < kernel_derivative_.rows(); ++r) {
+    for (int c = 1; c < kernel_derivative_.cols(); ++c) {
+      kernel_derivative_(r, c) = r * c / (r + c - 1.0);
+    }
+  }
+}
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    #include 'modules/canbus/vehicle/gem/protocol/accel_cmd_67.h'
+#include 'modules/canbus/vehicle/gem/protocol/accel_rpt_68.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_cmd_6b.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_1_70.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_2_71.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_motor_rpt_3_72.h'
+#include 'modules/canbus/vehicle/gem/protocol/brake_rpt_6c.h'
+#include 'modules/canbus/vehicle/gem/protocol/date_time_rpt_83.h'
+#include 'modules/canbus/vehicle/gem/protocol/global_cmd_69.h'
+#include 'modules/canbus/vehicle/gem/protocol/global_rpt_6a.h'
+#include 'modules/canbus/vehicle/gem/protocol/headlight_cmd_76.h'
+#include 'modules/canbus/vehicle/gem/protocol/headlight_rpt_77.h'
+#include 'modules/canbus/vehicle/gem/protocol/horn_cmd_78.h'
+#include 'modules/canbus/vehicle/gem/protocol/horn_rpt_79.h'
+#include 'modules/canbus/vehicle/gem/protocol/lat_lon_heading_rpt_82.h'
+#include 'modules/canbus/vehicle/gem/protocol/parking_brake_status_rpt_80.h'
+#include 'modules/canbus/vehicle/gem/protocol/shift_cmd_65.h'
+#include 'modules/canbus/vehicle/gem/protocol/shift_rpt_66.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_cmd_6d.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_1_73.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_2_74.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_motor_rpt_3_75.h'
+#include 'modules/canbus/vehicle/gem/protocol/steering_rpt_1_6e.h'
+#include 'modules/canbus/vehicle/gem/protocol/turn_cmd_63.h'
+#include 'modules/canbus/vehicle/gem/protocol/turn_rpt_64.h'
+#include 'modules/canbus/vehicle/gem/protocol/vehicle_speed_rpt_6f.h'
+#include 'modules/canbus/vehicle/gem/protocol/wheel_speed_rpt_7a.h'
+#include 'modules/canbus/vehicle/gem/protocol/wiper_cmd_90.h'
+#include 'modules/canbus/vehicle/gem/protocol/wiper_rpt_91.h'
+#include 'modules/canbus/vehicle/gem/protocol/yaw_rate_rpt_81.h'
+    
+    
+    {  acc.Parse(bytes, length, &chassis_detail);
+  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().manual_input(), 0.258);
+  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().commanded_value(),
+                   0.772);
+  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().output_value(), 4.37);
+}
