@@ -1,231 +1,196 @@
 
         
-          def summarize_all(self, datasets, summary_values):
-    '''Plot and summarize stuff in tensorboard.
+            # Distributional noun compound
+    if self.hparams.input in ['dist-nc', 'integrated-nc']:
+      network_input += self.relata_dim
+    
+      def __create_computation_graph__(self):
+    '''Initialize the model and define the graph.'''
+    self.lstm_input_dim = sum([self.hparams.lemma_dim, self.hparams.pos_dim,
+                               self.hparams.dep_dim, self.hparams.dir_dim])
+    self.lstm_output_dim = self.lstm_input_dim
+    
+      @property
+  def unk(self):
+    return self._unk
+    
+      # *Total* number of n-grams produced by the generator.
+  total_ngrams_produced = 0
+    
+        scikit_results = []
+    glmnet_results = []
+    n = 20
+    step = 500
+    n_features = 1000
+    n_informative = n_features / 10
+    n_test_samples = 1000
+    for i in range(1, n + 1):
+        print('==================')
+        print('Iteration %s of %s' % (i, n))
+        print('==================')
+    
+        from sklearn.tree import DecisionTreeRegressor
     
     
-# OPTIMIZATION
-flags.DEFINE_integer('batch_size', BATCH_SIZE,
-                     'Batch size to use during training.')
-flags.DEFINE_float('learning_rate_init', LEARNING_RATE_INIT,
-                   'Learning rate initial value')
-flags.DEFINE_float('learning_rate_decay_factor', LEARNING_RATE_DECAY_FACTOR,
-                   'Learning rate decay, decay by this fraction every so \
-                   often.')
-flags.DEFINE_float('learning_rate_stop', LEARNING_RATE_STOP,
-                   'The lr is adaptively reduced, stop training at this value.')
-# Rather put the learning rate on an exponentially decreasiong schedule,
-# the current algorithm pays attention to the learning rate, and if it
-# isn't regularly decreasing, it will decrease the learning rate.  So far,
-# it works fine, though it is not perfect.
-flags.DEFINE_integer('learning_rate_n_to_compare', LEARNING_RATE_N_TO_COMPARE,
-                     'Number of previous costs current cost has to be worse \
-                     than, to lower learning rate.')
+if __name__ == '__main__':
+    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
+    # block to be able to use a multi-core grid search that also works under
+    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
+    # The multiprocessing module is used as the backend of joblib.Parallel
+    # that is used when n_jobs != 1 in GridSearchCV
     
-    rates_train = nparray_and_transpose(rates_train)
-rates_valid = nparray_and_transpose(rates_valid)
-spikes_train = nparray_and_transpose(spikes_train)
-spikes_valid = nparray_and_transpose(spikes_valid)
+    n_clusters = (4, 3)
+data, rows, columns = make_checkerboard(
+    shape=(300, 300), n_clusters=n_clusters, noise=10,
+    shuffle=False, random_state=0)
     
-    import json
-import sys
-import hashlib
-import os.path
+    import numpy as np
+from matplotlib import pyplot as plt
     
-    signature = hexlify(rsa.pkcs1.sign(json.dumps(versions_info, sort_keys=True).encode('utf-8'), privkey, 'SHA-256')).decode()
-print('signature: ' + signature)
+    estimators = [('k_means_iris_8', KMeans(n_clusters=8)),
+              ('k_means_iris_3', KMeans(n_clusters=3)),
+              ('k_means_iris_bad_init', KMeans(n_clusters=3, n_init=1,
+                                               init='random'))]
     
+    X_restored = agglo.inverse_transform(X_reduced)
+images_restored = np.reshape(X_restored, images.shape)
+plt.figure(1, figsize=(4, 3.5))
+plt.clf()
+plt.subplots_adjust(left=.01, right=.99, bottom=.01, top=.91)
+for i in range(4):
+    plt.subplot(3, 4, i + 1)
+    plt.imshow(images[i], cmap=plt.cm.gray, vmax=16, interpolation='nearest')
+    plt.xticks(())
+    plt.yticks(())
+    if i == 1:
+        plt.title('Original data')
+    plt.subplot(3, 4, 4 + i + 1)
+    plt.imshow(images_restored[i], cmap=plt.cm.gray, vmax=16,
+               interpolation='nearest')
+    if i == 1:
+        plt.title('Agglomerated data')
+    plt.xticks(())
+    plt.yticks(())
     
-# find the correct sorting and add the required base classes so that sublcasses
-# can be correctly created
-classes = _ALL_CLASSES[:-1]
-ordered_cls = []
-while classes:
-    for c in classes[:]:
-        bases = set(c.__bases__) - set((object, InfoExtractor, SearchInfoExtractor))
-        stop = False
-        for b in bases:
-            if b not in classes and b not in ordered_cls:
-                if b.__name__ == 'GenericIE':
-                    exit()
-                classes.insert(0, b)
-                stop = True
-        if stop:
-            break
-        if all(b in ordered_cls for b in bases):
-            ordered_cls.append(c)
-            classes.remove(c)
-            break
-ordered_cls.append(_ALL_CLASSES[-1])
+    # histogram
+plt.figure(4, figsize=(3, 2.2))
+plt.clf()
+plt.axes([.01, .01, .98, .98])
+plt.hist(X, bins=256, color='.5', edgecolor='.5')
+plt.yticks(())
+plt.xticks(regular_values)
+values = np.sort(values)
+for center_1, center_2 in zip(values[:-1], values[1:]):
+    plt.axvline(.5 * (center_1 + center_2), color='b')
     
-    from test.helper import try_rm
+    plt.subplot(224)
+plt.scatter(X_filtered[:, 0], X_filtered[:, 1], c=y_pred)
+plt.title('Unevenly Sized Blobs')
     
-    from httpie.utils import repr_dict_nice
+    # The following bandwidth can be automatically detected using
+bandwidth = estimate_bandwidth(X, quantile=0.2, n_samples=500)
     
-        @staticmethod
-    def make_header(username, password):
-        credentials = u'%s:%s' % (username, password)
-        token = b64encode(credentials.encode('utf8')).strip().decode('latin1')
-        return 'Basic %s' % token
+    # Scrapy version
+import pkgutil
+__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
+version_info = tuple(int(v) if v.isdigit() else v
+                     for v in __version__.split('.'))
+del pkgutil
     
-        def get_auth_plugin(self, auth_type):
-        return self.get_auth_plugin_mapping()[auth_type]
+        def short_desc(self):
+        return 'Run a spider'
     
-    
-with codecs.open(FILE_PATH, encoding='utf8') as f:
-    # Strip because we don't want new lines in the data so that we can
-    # easily count occurrences also when embedded in JSON (where the new
-    # line would be escaped).
-    FILE_CONTENT = f.read().strip()
-    
-        def test_POST_form_Content_Type_override(self, httpbin):
-        r = http('--form', 'POST', httpbin.url + '/post',
-                 'Content-Type:application/xml')
-        assert HTTP_OK in r
-        assert ''Content-Type': 'application/xml'' in r
-    
-        exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR
-    assert error_msg == (
-        'ConnectionError: '
-        'Connection aborted while doing GET request to URL: '
-        'http://www.google.com')
-    
-        name = None
-    helpurl = None
-    about = None
-    
-            if now - self._prev_time >= self._update_interval:
-            downloaded = self.status.downloaded
-            try:
-                speed = ((downloaded - self._prev_bytes)
-                         / (now - self._prev_time))
-            except ZeroDivisionError:
-                speed = 0
-    
-    
-class HStoreExtension(CreateExtension):
-    
-    
-@functools.lru_cache()
-def get_hstore_oids(connection_alias):
-    '''Return hstore and hstore array OIDs.'''
-    with connections[connection_alias].cursor() as cursor:
-        cursor.execute(
-            'SELECT t.oid, typarray '
-            'FROM pg_type t '
-            'JOIN pg_namespace ns ON typnamespace = ns.oid '
-            'WHERE typname = 'hstore''
-        )
-        oids = []
-        array_oids = []
-        for row in cursor:
-            oids.append(row[0])
-            array_oids.append(row[1])
-        return tuple(oids), tuple(array_oids)
-    
-        def save(self, must_create=False):
-        '''
-        To save, get the session key as a securely signed string and then set
-        the modified flag so that the cookie is set on the client for the
-        current request.
-        '''
-        self._session_key = self._get_session_key()
-        self.modified = True
-    
-        def save(self, session_key, session_dict, expire_date):
-        s = self.model(session_key, self.encode(session_dict), expire_date)
-        if session_dict:
-            s.save()
+            spidercls = DefaultSpider
+        spider_loader = self.crawler_process.spider_loader
+        if opts.spider:
+            spidercls = spider_loader.load(opts.spider)
         else:
-            s.delete()  # Clear sessions with no data.
-        return s
-    
-    # Note: This isn't exactly the same as a 'percent match'. The scale isn't linear. But you can assume that images with a
-# smaller distance are more similar to each other than ones with a larger distance.
-    
-    # Find all the faces in the image using a pre-trained convolutional neural network.
-# This method is more accurate than the default HOG model, but it's slower
-# unless you have an nvidia GPU and dlib compiled with CUDA extensions. But if you do,
-# this will use GPU acceleration and perform well.
-# See also: find_faces_in_picture.py
-face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=0, model='cnn')
-    
-    
-@click.command()
-@click.argument('image_to_check')
-@click.option('--cpus', default=1, help='number of CPU cores to use in parallel. -1 means 'use all in system'')
-@click.option('--model', default='hog', help='Which face detection model to use. Options are 'hog' or 'cnn'.')
-def main(image_to_check, cpus, model):
-    # Multi-core processing only supported on Python 3.4 or greater
-    if (sys.version_info < (3, 4)) and cpus != 1:
-        click.echo('WARNING: Multi-processing support requires Python 3.4 or greater. Falling back to single-threaded processing!')
-        cpus = 1
-    
-        # Loop through each face in this frame of video
-    for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
-        # See if the face is a match for the known face(s)
-        matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
-    
-            if match[0]:
-            name = 'Barack Obama'
-    
-    '''
-Lazily-evaluated property pattern in Python.
-    
-    ### OUTPUT ###
-# PRODUCT LIST:
-# (Fetching from Data Store)
-# cheese
-# eggs
-# milk
-#
-# (Fetching from Data Store)
-# PRODUCT INFORMATION:
-# Name: Cheese, Price: 2.00, Quantity: 10
-# (Fetching from Data Store)
-# PRODUCT INFORMATION:
-# Name: Eggs, Price: 0.20, Quantity: 100
-# (Fetching from Data Store)
-# PRODUCT INFORMATION:
-# Name: Milk, Price: 1.50, Quantity: 10
-# (Fetching from Data Store)
-# That product 'arepas' does not exist in the records
+            spidercls = spidercls_for_request(spider_loader, request, spidercls)
+        self.crawler_process.crawl(spidercls, start_requests=lambda: [request])
+        self.crawler_process.start()
 
     
-        def __init__(self, request):
-        self.type = None
-        request = request.lower()
-        if request == self.mobile_type:
-            self.type = self.mobile_type
-        elif request == self.tablet_type:
-            self.type = self.tablet_type
+        def syntax(self):
+        return '[options] <spider_file>'
     
-        def test_data_change_shall_notify_all_observers_once(cls):
-        with patch.object(cls.dec_obs, 'update') as mock_dec_obs_update, patch.object(
-            cls.hex_obs, 'update'
-        ) as mock_hex_obs_update:
-            cls.sub.data = 10
-            cls.assertEqual(mock_dec_obs_update.call_count, 1)
-            cls.assertEqual(mock_hex_obs_update.call_count, 1)
     
-        def test_subscriber_shall_be_attachable_to_subscriptions(cls):
-        subscription = 'sub msg'
-        pro = Provider()
-        cls.assertEqual(len(pro.subscribers), 0)
-        sub = Subscriber('sub name', pro)
-        sub.subscribe(subscription)
-        cls.assertEqual(len(pro.subscribers[subscription]), 1)
+    class ScrapyClientTLSOptions(ClientTLSOptions):
+        '''
+        SSL Client connection creator ignoring certificate verification errors
+        (for genuinely invalid certificates or bugs in verification code).
     
-        def test_shall_toggle_from_fm_to_am(self):
-        self.radio.toggle_amfm()
-        state = self.radio.state.name
-        expected_state_name = 'AM'
-        self.assertEqual(state, expected_state_name)
+    def clean_pdf_link(link):
+    if 'arxiv' in link:
+        link = link.replace('abs', 'pdf')   
+        if not(link.endswith('.pdf')):
+            link = '.'.join((link, 'pdf'))
+    
+    def cut(sentence):
+    sentence = strdecode(sentence)
+    blocks = re_han.split(sentence)
+    for blk in blocks:
+        if re_han.match(blk):
+            for word in __cut(blk):
+                if word not in Force_Split_Words:
+                    yield word
+                else:
+                    for c in word:
+                        yield c
+        else:
+            tmp = re_skip.split(blk)
+            for x in tmp:
+                if x:
+                    yield x
 
     
-        def test_parrot_eng_localization(self):
-        self.assertEqual(self.e.get('parrot'), 'parrot')
+    
+def get_top_states(t_state_v, K=4):
+    return sorted(t_state_v, key=t_state_v.__getitem__, reverse=True)[:K]
+    
+    print(','.join(tags))
+
+    
+    t2 = time.time()
+tm_cost = t2-t1
+    
+        def test_merge_sort(self):
+        merge_sort = MergeSort()
+    
+    
+def main():
+    test = TestSelectionSort()
+    selection_sort = SelectionSort()
+    test.test_selection_sort(selection_sort.sort)
+    try:
+        test.test_selection_sort(selection_sort.sort_recursive)
+        test.test_selection_sort(selection_sort.sor_iterative_alt)
+    except NameError:
+        # Alternate solutions are only defined
+        # in the solutions file
+        pass
+    
+        def get_sorted_stack(self, stack, numbers):
+        for x in numbers:
+            stack.push(x)
+        sorted_stack = stack.sort()
+        return sorted_stack
+    
+            print('Test: More than one element')
+        stack = Stack()
+        stack.push(1)
+        stack.push(2)
+        stack.push(3)
+        assert_equal(stack.pop(), 3)
+        assert_equal(stack.peek(), 2)
+        assert_equal(stack.pop(), 2)
+        assert_equal(stack.peek(), 1)
+        assert_equal(stack.is_empty(), False)
+        assert_equal(stack.pop(), 1)
+        assert_equal(stack.peek(), None)
+        assert_equal(stack.is_empty(), True)
+    
+    		print('Test: insert checking with in order traversal')
+		expectVal = [7, 10, 25, 30, 38, 40, 50, 60, 70, 80]
+		assert_equal(myTree.printInOrder(), expectVal)
+		expectVal = [1, 11, 21, 31, 41, 51, 61, 71, 81, 91]
+		assert_equal(myTree2.printInOrder(), expectVal)
