@@ -1,53 +1,87 @@
 
         
-              expect(value_for(user.id, dt)).to eq(0)
-      expect(limit_reached_for(user.id, dt)).to eq(false)
+            def did_show_message?
+      file_name = '.did_show_opt_info'
     
-        alias log puts
-    
-    Rake::TestTask.new(:test) do |t|
-  t.test_files = FileList['test/*_test.rb']
-  t.ruby_opts = ['-r rubygems'] if defined? Gem
-  t.ruby_opts << '-I.'
-  t.warning = true
-end
-    
-    module Rack
-  module Protection
-    class Base
-      DEFAULT_OPTIONS = {
-        :reaction    => :default_reaction, :logging   => true,
-        :message     => 'Forbidden',       :encryptor => Digest::SHA1,
-        :session_key => 'rack.session',    :status    => 403,
-        :allow_empty_referrer => true,
-        :report_key           => 'protection.failed',
-        :html_types           => %w[text/html application/xhtml text/xml application/xml]
-      }
-    
-            modes       = Array options[:escape]
-        @escaper    = options[:escaper]
-        @html       = modes.include? :html
-        @javascript = modes.include? :javascript
-        @url        = modes.include? :url
-    
-        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
-      env = {'HTTP_HOST' => 'foo.com'}
-      subject.options[:allow_empty_referrer] = false
-      expect(subject.referrer(env)).to be_nil
-    end
-    
-    require 'bootstrap/environment'
-    
-          # Install the gems to make them available locally when bundler does his local resolution
-      post_install_messages = []
-      pack.gems.each do |packed_gem|
-        PluginManager.ui.debug('Installing, #{packed_gem.name}, version: #{packed_gem.version} file: #{packed_gem.file}')
-        post_install_messages << LogStash::PluginManager::GemInstaller::install(packed_gem.file, packed_gem.plugin?)
+        def run!
+      require_program(:version, :description)
+      trap('INT') { abort(program(:int_message)) } if program(:int_message)
+      trap('INT') { program(:int_block).call } if program(:int_block)
+      global_option('-h', '--help', 'Display help documentation') do
+        args = @args - %w(-h --help)
+        command(:help).run(*args)
+        return
       end
+      global_option('-v', '--version', 'Display version information') do
+        say(version)
+        return
+      end
+      parse_global_options
+      remove_global_options(options, @args)
     
-        before do
-      logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version #{previous_version} #{plugin_name}')
-      # Logstash won't update when we have a pinned version in the gemfile so we remove them
-      logstash.replace_in_gemfile(',[[:space:]]'0.1.0'', '')
-      expect(logstash).to have_installed?(plugin_name, previous_version)
+          it 'adds html_anchors param to command' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          appledoc(
+            project_name: 'Project Name',
+            project_company: 'Company',
+            input: 'input/dir',
+            html_anchors: 'some anchors'
+          )
+        end').runner.execute(:test)
+    
+        it 'adds an environment Hash at the beginning' do
+      message = 'A message'
+      command = command_from_args({ 'PATH' => '/usr/local/bin' }, 'git', 'commit', '-m', message)
+      expect(command).to eq('PATH=/usr/local/bin git commit -m #{message.shellescape}')
     end
+    
+    # Windows implementation
+module WindowsShellwords
+  def shellescape(str)
+    str = str.to_s
+    
+    module Jekyll
+    
+          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
+        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
+        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
+          @img['title']  = title
+          @img['alt']    = alt
+        else
+          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
+        end
+        @img['class'].gsub!(/'/, '') if @img['class']
+      end
+      super
+    end
+    
+      class PageFilters < Octopress::Hooks::Page
+    def pre_render(page)
+      OctopressFilters::pre_filter(page)
+    end
+    
+        # Evaluate dependencies.
+    if !attributes[:no_auto_depends?]
+	    pkgdepend_gen = safesystemout('pkgdepend', 'generate',  '-md', '#{staging_path}',  manifest_fn)
+      File.write(build_path('#{name}.p5m.3'), pkgdepend_gen)
+    
+      # Helper for group lookup
+  def gid2group(gid)
+    begin
+      grent = Etc.getgrgid(gid)
+      return grent.name
+    rescue ArgumentError => e
+      # Invalid user id? No user? Return the uid.
+      logger.warn('Failed to find group for gid #{gid}')
+      return gid.to_s
+    end
+  end # def uid2user
+end # class FPM::Target::Puppet
+    
+        cleanup_staging
+    # Tell 'dir' to input '.' and chdir/prefix will help it figure out the
+    # rest.
+    dir.input('.')
+    @staging_path = dir.staging_path
+    dir.cleanup_build
+  end # def input
