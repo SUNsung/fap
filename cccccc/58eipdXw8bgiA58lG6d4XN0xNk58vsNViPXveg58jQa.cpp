@@ -1,292 +1,997 @@
 
         
-        // Finally, you can use INSTANTIATE_TEST_CASE_P to instantiate the test
-// case with any set of parameters you want. Google Test defines a number
-// of functions for generating test parameters. They return what we call
-// (surprise!) parameter generators. Here is a  summary of them, which
-// are all in the testing namespace:
-//
-//
-//  Range(begin, end [, step]) - Yields values {begin, begin+step,
-//                               begin+step+step, ...}. The values do not
-//                               include end. step defaults to 1.
-//  Values(v1, v2, ..., vN)    - Yields values {v1, v2, ..., vN}.
-//  ValuesIn(container)        - Yields values from a C-style array, an STL
-//  ValuesIn(begin,end)          container, or an iterator range [begin, end).
-//  Bool()                     - Yields sequence {false, true}.
-//  Combine(g1, g2, ..., gN)   - Yields all combinations (the Cartesian product
-//                               for the math savvy) of the values generated
-//                               by the N generators.
-//
-// For more details, see comments at the definitions of these functions below
-// in this file.
-//
-// The following statement will instantiate tests from the FooTest test case
-// each with parameter values 'meeny', 'miny', and 'moe'.
-    
-    
-    {}  // namespace testing
-    
-      void depart() {
-    if (link_.depart()) delete value_;
-  }
-    
-    template <GTEST_1_TYPENAMES_(T)>
-inline GTEST_1_TUPLE_(T) make_tuple(const T0& f0) {
-  return GTEST_1_TUPLE_(T)(f0);
-}
-    
-      void operator delete(void* block, size_t /* allocation_size */) {
-    allocated_--;
-    free(block);
-  }
-    
-    // Tests negative input.
-TEST(IsPrimeTest, Negative) {
-  // This test belongs to the IsPrimeTest test case.
+        class GetSubGradient final : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
     }
     
+    **Code**
     
-    { private:
-  RowBlock<IndexType> out_;
-  std::unique_ptr<Parser<IndexType> > parser_;
-  uint32_t num_col_;
-  std::vector<size_t> offset_;
-  std::vector<IndexType> dense_index_;
-  std::vector<xgboost::bst_float> dense_value_;
+              const int dkernel_h = dilation_h * (kernel_h - 1) + 1;
+          const int dkernel_w = dilation_w * (kernel_w - 1) + 1;
+          CAFFE_ENFORCE(H >= dkernel_h);
+          CAFFE_ENFORCE(W >= dkernel_w);
+          const int out_h = (H + 2 * pad - dkernel_h) / stride_h + 1;
+          const int out_w = (W + 2 * pad - dkernel_w) / stride_w + 1;
+    
+    template <typename T, class Context>
+class BernoulliJSDGradientOp final : public Operator<Context> {
+ public:
+  USE_SIMPLE_CTOR_DTOR(BernoulliJSDGradientOp);
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  bool RunOnDevice() override;
 };
     
-    SparsePageWriter::SparsePageWriter(
-    const std::vector<std::string>& name_shards,
-    const std::vector<std::string>& format_shards,
-    size_t extra_buffer_capacity)
-    : num_free_buffer_(extra_buffer_capacity + name_shards.size()),
-      clock_ptr_(0),
-      workers_(name_shards.size()),
-      qworkers_(name_shards.size()) {
-  CHECK_EQ(name_shards.size(), format_shards.size());
-  // start writer threads
-  for (size_t i = 0; i < name_shards.size(); ++i) {
-    std::string name_shard = name_shards[i];
-    std::string format_shard = format_shards[i];
-    auto* wqueue = &qworkers_[i];
-    workers_[i].reset(new std::thread(
-        [this, name_shard, format_shard, wqueue] () {
-          std::unique_ptr<dmlc::Stream> fo(
-              dmlc::Stream::Create(name_shard.c_str(), 'w'));
-          std::unique_ptr<SparsePageFormat> fmt(
-              SparsePageFormat::Create(format_shard));
-          fo->Write(format_shard);
-          std::shared_ptr<SparsePage> page;
-          while (wqueue->Pop(&page)) {
-            if (page == nullptr) break;
-            fmt->Write(*page, fo.get());
-            qrecycle_.Push(std::move(page));
-          }
-          fo.reset(nullptr);
-          LOG(CONSOLE) << 'SparsePage::Writer Finished writing to ' << name_shard;
-        }));
+      // Constructs a Message from a C-string.
+  explicit Message(const char* str) : ss_(new ::std::stringstream) {
+    *ss_ << str;
   }
-}
     
-          // Test write entire array
-      std::vector<unsigned char> buffer(
-        CompressedBufferWriter::CalculateBufferSize(input.size(),
-          alphabet_size));
+    #ifndef GTEST_INCLUDE_GTEST_INTERNAL_GTEST_FILEPATH_H_
+#define GTEST_INCLUDE_GTEST_INTERNAL_GTEST_FILEPATH_H_
     
-    SEXP XGDMatrixSliceDMatrix_R(SEXP handle, SEXP idxset) {
-  SEXP ret;
-  R_API_BEGIN();
-  int len = length(idxset);
-  std::vector<int> idxvec(len);
-  for (int i = 0; i < len; ++i) {
-    idxvec[i] = INTEGER(idxset)[i] - 1;
-  }
-  DMatrixHandle res;
-  CHECK_CALL(XGDMatrixSliceDMatrix(R_ExternalPtrAddr(handle),
-                                   BeginPtr(idxvec), len,
-                                   &res));
-  ret = PROTECT(R_MakeExternalPtr(res, R_NilValue, R_NilValue));
-  R_RegisterCFinalizerEx(ret, _DMatrixFinalizer, TRUE);
-  R_API_END();
-  UNPROTECT(1);
-  return ret;
-}
-    
-    
-    {  /*! \brief push up temp */
-  inline void PushTemp() {
-    temp.Reserve(limit_size * 2);
-    for (size_t l = 1; true; ++l) {
-      this->InitLevel(l + 1);
-      // check if level l is empty
-      if (level[l].size == 0) {
-        level[l].SetPrune(temp, limit_size);
-        break;
-      } else {
-        // level 0 is actually temp space
-        level[0].SetPrune(temp, limit_size);
-        temp.SetCombine(level[0], level[l]);
-        if (temp.size > limit_size) {
-          // try next level
-          level[l].size = 0;
-        } else {
-          // if merged record is still smaller, no need to send to next level
-          level[l].CopyFrom(temp); break;
-        }
-      }
-    }
-  }
-  /*! \brief get the summary after finalize */
-  inline void GetSummary(SummaryContainer *out) {
-    if (level.size() != 0) {
-      out->Reserve(limit_size * 2);
-    } else {
-      out->Reserve(inqueue.queue.size());
-    }
-    inqueue.MakeSummary(out);
-    if (level.size() != 0) {
-      level[0].SetPrune(*out, limit_size);
-      for (size_t l = 1; l < level.size(); ++l) {
-        if (level[l].size == 0) continue;
-        if (level[0].size == 0) {
-          level[0].CopyFrom(level[l]);
-        } else {
-          out->SetCombine(level[0], level[l]);
-          level[0].SetPrune(*out, limit_size);
-        }
-      }
-      out->CopyFrom(level[0]);
-    } else {
-      if (out->size > limit_size) {
-        temp.Reserve(limit_size);
-        temp.SetPrune(*out, limit_size);
-        out->CopyFrom(temp);
-      }
-    }
-  }
-  // used for debug, check if the sketch is valid
-  inline void CheckValid(RType eps) const {
-    for (size_t l = 1; l < level.size(); ++l) {
-      level[l].CheckValid(eps);
-    }
-  }
-  // initialize level space to at least nlevel
-  inline void InitLevel(size_t nlevel) {
-    if (level.size() >= nlevel) return;
-    data.resize(limit_size * nlevel);
-    level.resize(nlevel, Summary(nullptr, 0));
-    for (size_t l = 0; l < level.size(); ++l) {
-      level[l].data = dmlc::BeginPtr(data) + l * limit_size;
-    }
-  }
-  // input data queue
-  typename Summary::Queue inqueue;
-  // number of levels
-  size_t nlevel;
-  // size of summary in each level
-  size_t limit_size;
-  // the level of each summaries
-  std::vector<Summary> level;
-  // content of the summary
-  std::vector<Entry> data;
-  // temporal summary, used for temp-merge
-  SummaryContainer temp;
-};
+    // Helper macro for defining tests.
+#define GTEST_TEST_(test_case_name, test_name, parent_class, parent_id)\
+class GTEST_TEST_CLASS_NAME_(test_case_name, test_name) : public parent_class {\
+ public:\
+  GTEST_TEST_CLASS_NAME_(test_case_name, test_name)() {}\
+ private:\
+  virtual void TestBody();\
+  static ::testing::TestInfo* const test_info_ GTEST_ATTRIBUTE_UNUSED_;\
+  GTEST_DISALLOW_COPY_AND_ASSIGN_(\
+      GTEST_TEST_CLASS_NAME_(test_case_name, test_name));\
+};\
+\
+::testing::TestInfo* const GTEST_TEST_CLASS_NAME_(test_case_name, test_name)\
+  ::test_info_ =\
+    ::testing::internal::MakeAndRegisterTestInfo(\
+        #test_case_name, #test_name, NULL, NULL, \
+        (parent_id), \
+        parent_class::SetUpTestCase, \
+        parent_class::TearDownTestCase, \
+        new ::testing::internal::TestFactoryImpl<\
+            GTEST_TEST_CLASS_NAME_(test_case_name, test_name)>);\
+void GTEST_TEST_CLASS_NAME_(test_case_name, test_name)::TestBody()
     
     
     {
-    {      std::vector<LambdaPair> pairs;
-      std::vector<ListEntry>  lst;
-      std::vector< std::pair<bst_float, unsigned> > rec;
-      bst_float sum_weights = 0;
-      for (bst_omp_uint k = 0; k < ngroup; ++k) {
-        sum_weights += info.GetWeight(k);
+    {}  // namespace internal
+}  // namespace testing
+    
+    
+    {  const T1 v1_;
+  const T2 v2_;
+  const T3 v3_;
+  const T4 v4_;
+  const T5 v5_;
+  const T6 v6_;
+  const T7 v7_;
+  const T8 v8_;
+  const T9 v9_;
+  const T10 v10_;
+  const T11 v11_;
+  const T12 v12_;
+  const T13 v13_;
+  const T14 v14_;
+  const T15 v15_;
+  const T16 v16_;
+  const T17 v17_;
+  const T18 v18_;
+  const T19 v19_;
+  const T20 v20_;
+  const T21 v21_;
+  const T22 v22_;
+  const T23 v23_;
+  const T24 v24_;
+  const T25 v25_;
+  const T26 v26_;
+  const T27 v27_;
+  const T28 v28_;
+  const T29 v29_;
+  const T30 v30_;
+  const T31 v31_;
+  const T32 v32_;
+  const T33 v33_;
+  const T34 v34_;
+  const T35 v35_;
+  const T36 v36_;
+  const T37 v37_;
+  const T38 v38_;
+  const T39 v39_;
+  const T40 v40_;
+  const T41 v41_;
+  const T42 v42_;
+  const T43 v43_;
+  const T44 v44_;
+  const T45 v45_;
+  const T46 v46_;
+  const T47 v47_;
+  const T48 v48_;
+  const T49 v49_;
+  const T50 v50_;
+};
+    
+      // Trivial case 2: even numbers
+  if (n % 2 == 0) return n == 2;
+    
+    using ::testing::EmptyTestEventListener;
+using ::testing::InitGoogleTest;
+using ::testing::Test;
+using ::testing::TestCase;
+using ::testing::TestEventListeners;
+using ::testing::TestInfo;
+using ::testing::TestPartResult;
+using ::testing::UnitTest;
+    
+    // Tests positive input.
+TEST(IsPrimeTest, Positive) {
+  EXPECT_FALSE(IsPrime(4));
+  EXPECT_TRUE(IsPrime(5));
+  EXPECT_FALSE(IsPrime(6));
+  EXPECT_TRUE(IsPrime(23));
+}
+    
+      AutoCompactTest() {
+    dbname_ = test::TmpDir() + '/autocompact_test';
+    tiny_cache_ = NewLRUCache(100);
+    options_.block_cache = tiny_cache_;
+    DestroyDB(dbname_, options_);
+    options_.create_if_missing = true;
+    options_.compression = kNoCompression;
+    ASSERT_OK(DB::Open(options_, dbname_, &db_));
+  }
+    
+    
+    {  // No copying allowed
+  Reader(const Reader&);
+  void operator=(const Reader&);
+};
+    
+      void ScanTable(uint64_t number) {
+    TableInfo t;
+    t.meta.number = number;
+    std::string fname = TableFileName(dbname_, number);
+    Status status = env_->GetFileSize(fname, &t.meta.file_size);
+    if (!status.ok()) {
+      // Try alternate file name.
+      fname = SSTTableFileName(dbname_, number);
+      Status s2 = env_->GetFileSize(fname, &t.meta.file_size);
+      if (s2.ok()) {
+        status = Status::OK();
       }
-      bst_float weight_normalization_factor = ngroup/sum_weights;
-      const auto& labels = info.labels_.HostVector();
-      #pragma omp for schedule(static)
-      for (bst_omp_uint k = 0; k < ngroup; ++k) {
-        lst.clear(); pairs.clear();
-        for (unsigned j = gptr[k]; j < gptr[k+1]; ++j) {
-          lst.emplace_back(preds_h[j], labels[j], j);
-          gpair[j] = GradientPair(0.0f, 0.0f);
-        }
-        std::sort(lst.begin(), lst.end(), ListEntry::CmpPred);
-        rec.resize(lst.size());
-        for (unsigned i = 0; i < lst.size(); ++i) {
-          rec[i] = std::make_pair(lst[i].label, i);
-        }
-        std::sort(rec.begin(), rec.end(), common::CmpFirst);
-        // enumerate buckets with same label, for each item in the lst, grab another sample randomly
-        for (unsigned i = 0; i < rec.size(); ) {
-          unsigned j = i + 1;
-          while (j < rec.size() && rec[j].first == rec[i].first) ++j;
-          // bucket in [i,j), get a sample outside bucket
-          unsigned nleft = i, nright = static_cast<unsigned>(rec.size() - j);
-          if (nleft + nright != 0) {
-            int nsample = param_.num_pairsample;
-            while (nsample --) {
-              for (unsigned pid = i; pid < j; ++pid) {
-                unsigned ridx = std::uniform_int_distribution<unsigned>(0, nleft + nright - 1)(rnd);
-                if (ridx < nleft) {
-                  pairs.emplace_back(rec[ridx].second, rec[pid].second,
-                      info.GetWeight(k) * weight_normalization_factor);
+    }
+    if (!status.ok()) {
+      ArchiveFile(TableFileName(dbname_, number));
+      ArchiveFile(SSTTableFileName(dbname_, number));
+      Log(options_.info_log, 'Table #%llu: dropped: %s',
+          (unsigned long long) t.meta.number,
+          status.ToString().c_str());
+      return;
+    }
+    }
+    
+    #include 'db/dbformat.h'
+#include 'leveldb/db.h'
+    
+    class Env;
+    
+    
+    {
+    {        return result;
+    }
+}
+    
+    CollationKey &
+RuleBasedCollator::getCollationKey(const UChar *s, int32_t length, CollationKey& key,
+                                   UErrorCode &errorCode) const {
+    if(U_FAILURE(errorCode)) {
+        return key.setToBogus();
+    }
+    if(s == NULL && length != 0) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return key.setToBogus();
+    }
+    key.reset();  // resets the 'bogus' state
+    CollationKeyByteSink sink(key);
+    writeSortKey(s, length, sink, errorCode);
+    if(U_FAILURE(errorCode)) {
+        key.setToBogus();
+    } else if(key.isBogus()) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+    } else {
+        key.setLength(sink.NumberOfBytesAppended());
+    }
+    return key;
+}
+    
+    UnicodeString &ScientificNumberFormatter::SuperscriptStyle::format(
+        const UnicodeString &original,
+        FieldPositionIterator &fpi,
+        const UnicodeString &preExponent,
+        const DecimalFormatStaticSets &staticSets,
+        UnicodeString &appendTo,
+        UErrorCode &status) const {
+    if (U_FAILURE(status)) {
+        return appendTo;
+    }
+    FieldPosition fp;
+    int32_t copyFromOffset = 0;
+    while (fpi.next(fp)) {
+        switch (fp.getField()) {
+        case UNUM_EXPONENT_SYMBOL_FIELD:
+            appendTo.append(
+                    original,
+                    copyFromOffset,
+                    fp.getBeginIndex() - copyFromOffset);
+            copyFromOffset = fp.getEndIndex();
+            appendTo.append(preExponent);
+            break;
+        case UNUM_EXPONENT_SIGN_FIELD:
+            {
+                int32_t beginIndex = fp.getBeginIndex();
+                int32_t endIndex = fp.getEndIndex();
+                UChar32 aChar = original.char32At(beginIndex);
+                if (staticSets.fMinusSigns->contains(aChar)) {
+                    appendTo.append(
+                            original,
+                            copyFromOffset,
+                            beginIndex - copyFromOffset);
+                    appendTo.append(kSuperscriptMinusSign);
+                } else if (staticSets.fPlusSigns->contains(aChar)) {
+                    appendTo.append(
+                           original,
+                           copyFromOffset,
+                           beginIndex - copyFromOffset);
+                    appendTo.append(kSuperscriptPlusSign);
                 } else {
-                  pairs.emplace_back(rec[pid].second, rec[ridx+j-i].second,
-                      info.GetWeight(k) * weight_normalization_factor);
+                    status = U_INVALID_CHAR_FOUND;
+                    return appendTo;
                 }
-              }
+                copyFromOffset = endIndex;
             }
-          }
-          i = j;
+            break;
+        case UNUM_EXPONENT_FIELD:
+            appendTo.append(
+                    original,
+                    copyFromOffset,
+                    fp.getBeginIndex() - copyFromOffset);
+            if (!copyAsSuperscript(
+                    original,
+                    fp.getBeginIndex(),
+                    fp.getEndIndex(),
+                    appendTo,
+                    status)) {
+              return appendTo;
+            }
+            copyFromOffset = fp.getEndIndex();
+            break;
+        default:
+            break;
         }
-        // get lambda weight for the pairs
-        this->GetLambdaWeight(lst, &pairs);
-        // rescale each gradient and hessian so that the lst have constant weighted
-        float scale = 1.0f / param_.num_pairsample;
-        if (param_.fix_list_weight != 0.0f) {
-          scale *= param_.fix_list_weight / (gptr[k + 1] - gptr[k]);
-        }
-        for (auto & pair : pairs) {
-          const ListEntry &pos = lst[pair.pos_index];
-          const ListEntry &neg = lst[pair.neg_index];
-          const bst_float w = pair.weight * scale;
-          const float eps = 1e-16f;
-          bst_float p = common::Sigmoid(pos.pred - neg.pred);
-          bst_float g = p - 1.0f;
-          bst_float h = std::max(p * (1.0f - p), eps);
-          // accumulate gradient and hessian in both pid, and nid
-          gpair[pos.rindex] += GradientPair(g * w, 2.0f*w*h);
-          gpair[neg.rindex] += GradientPair(-g * w, 2.0f*w*h);
-        }
-      }
     }
-  }
-  const char* DefaultEvalMetric() const override {
-    return 'map';
-  }
+    appendTo.append(
+            original, copyFromOffset, original.length() - copyFromOffset);
+    return appendTo;
+}
+    
+    U_NAMESPACE_END
+    
+    class U_I18N_API SharedNumberFormat : public SharedObject {
+public:
+    SharedNumberFormat(NumberFormat *nfToAdopt) : ptr(nfToAdopt) { }
+    virtual ~SharedNumberFormat();
+    const NumberFormat *get() const { return ptr; }
+    const NumberFormat *operator->() const { return ptr; }
+    const NumberFormat &operator*() const { return *ptr; }
+private:
+    NumberFormat *ptr;
+    SharedNumberFormat(const SharedNumberFormat &);
+    SharedNumberFormat &operator=(const SharedNumberFormat &);
+};
     
     
-    // exception type_error.304
-    try
+    {        // Create a TimeZoneRule for initial time
+        if (firstStdStart < firstDstStart) {
+            initialRule = new InitialTimeZoneRule(tzid+UnicodeString(DST_STR), getRawOffset(), dstRule->getDSTSavings());
+            firstTransition = new TimeZoneTransition(firstStdStart, *initialRule, *stdRule);
+        } else {
+            initialRule = new InitialTimeZoneRule(tzid+UnicodeString(STD_STR), getRawOffset(), 0);
+            firstTransition = new TimeZoneTransition(firstDstStart, *initialRule, *dstRule);
+        }
+        // Check for null pointers.
+        if (initialRule == NULL || firstTransition == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            deleteTransitionRules();
+            return;
+        }
+        
+    } else {
+        // Create a TimeZoneRule for initial time
+        initialRule = new InitialTimeZoneRule(tzid, getRawOffset(), 0);
+        // Check for null pointer.
+        if (initialRule == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            deleteTransitionRules();
+            return;
+        }
+    }
+    
+        static const int32_t gDigitCount[] = {
+        1,1,1,1,1,1,1,1,
+        1,1,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,2,2,2,2,
+        2,2,2,2,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        3,3,3,3,3,3,3,3,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4,
+        4,4,4,4,4,4,4,4};
+    
+        /**
+     * Returns TRUE if this class can format positiveValue using
+     * the given range of digit counts.
+     *
+     * @param positiveValue the value to format
+     * @param range the acceptable range of digit counts.
+     */
+    static UBool canFormat(
+            int32_t positiveValue, const IntDigitCountRange &range);
+    
+        if (minLength > 0) {
+        int diff = uprv_memcmp(src, tgt, minLength);
+        if (diff > 0) {
+            return UCOL_GREATER;
+        }
+        else
+            if (diff < 0) {
+                return UCOL_LESS;
+            }
+    }
+    
+    UOBJECT_DEFINE_RTTI_IMPLEMENTATION(StringMatcher)
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+            // 3. Show another simple window.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
+    
+        SDL_GL_DeleteContext(gl_context);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+    
+    #include 'imgui_freetype.h'
+#include 'imgui_internal.h'     // ImMin,ImMax,ImFontAtlasBuild*,
+#include <stdint.h>
+#include <ft2build.h>
+#include FT_FREETYPE_H          // <freetype/freetype.h>
+#include FT_MODULE_H            // <freetype/ftmodapi.h>
+#include FT_GLYPH_H             // <freetype/ftglyph.h>
+#include FT_SYNTHESIS_H         // <freetype/ftsynth.h>
+    
+    /*
+ * Elastic, Back and Bounce actions based on code from:
+ * http://github.com/NikhilK/silverlightfx/
+ *
+ * by http://github.com/NikhilK
+ */
+    
+    CallFunc * CallFunc::clone() const
     {
-        // use at() on a non-object type
-        json str = 'I am a string';
-        str.at('the good') = 'Another string';
-    }
-    catch (json::type_error& e)
+    // no copy constructor
+    auto a = new (std::nothrow) CallFunc();
+    if( _selectorTarget)
     {
-        std::cout << e.what() << '\n';
+        a->initWithTarget(_selectorTarget);
+        a->_callFunc = _callFunc;
+    }
+    else if( _function )
+    {
+        a->initWithFunction(_function);
+    }
     }
     
-    int main()
+    
+    {    return animation;
+} 
+    
+    
+    {    /**  A AnimationFrameDisplayedNotification notification will be broadcast when the frame is displayed with this dictionary as UserInfo. If UserInfo is nil, then no notification will be broadcast. */
+    ValueMap _userInfo;
+    
+private:
+    CC_DISALLOW_COPY_AND_ASSIGN(AnimationFrame);
+};
+    
+                if( ! spriteFrame ) {
+                CCLOG('cocos2d: AnimationCache: Animation '%s' refers to frame '%s' which is not currently in the SpriteFrameCache. This frame will not be added to the animation.', name.c_str(), spriteFrameName.c_str());
+    }
+    
+        /** Adds an animation from a plist file.
+     * Make sure that the frames were previously loaded in the SpriteFrameCache.
+     * @since v1.1
+     * @js addAnimations
+     * @lua addAnimations
+     * @param plist An animation from a plist file.
+     */
+    void addAnimationsWithFile(const std::string& plist);
+    
+    void AutoPolygon::calculateUV(const Rect& rect, V3F_C4B_T2F* verts, ssize_t count)
 {
-    // create JSON array
-    json array = {'first', '2nd', 'third', 'fourth'};
+    /*
+     whole texture UV coordination
+     0,0                  1,0
+     +---------------------+
+     |                     |0.1
+     |                     |0.2
+     |     +--------+      |0.3
+     |     |texRect |      |0.4
+     |     |        |      |0.5
+     |     |        |      |0.6
+     |     +--------+      |0.7
+     |                     |0.8
+     |                     |0.9
+     +---------------------+
+     0,1                  1,1
+     */
+    
+    CCASSERT(_width && _height, 'please specify width and height for this AutoPolygon instance');
+    float texWidth  = _width;
+    float texHeight = _height;
     }
     
-        // create values of different floating-point types
-    json::number_float_t v_ok = 3.141592653589793;
-    json::number_float_t v_nan = NAN;
-    json::number_float_t v_infinity = INFINITY;
+    TEST(ByteTest, SetBit) {
+  unsigned char byte_value = 0xFF;
+  Byte value(&byte_value);
+  value.set_bit_0(1);
+  EXPECT_EQ(0xFD, value.get_byte());
+  value.set_bit_0(7);
+  EXPECT_EQ(0x7D, value.get_byte());
+  value.set_bit_1(7);
+  EXPECT_EQ(0xFD, value.get_byte());
+  value.set_value(0x77);
+  value.set_bit_1(0);
+  EXPECT_EQ(0x77, value.get_byte());
+    }
+    
+    #include 'modules/common/time/time.h'
+#include 'modules/drivers/canbus/common/byte.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
+#include 'modules/drivers/radar/conti_radar/protocol/const_vars.h'
+    
+    
+    {
+    {    EXPECT_DOUBLE_EQ(v_limit, it_lower->second);
+    s += ds;
+  }
+}
+    
+    void Brakemotorrpt372::Parse(const std::uint8_t* bytes, int32_t length,
+                             ChassisDetail* chassis) const {
+  chassis->mutable_gem()->mutable_brake_motor_rpt_3_72()->set_torque_output(
+      torque_output(bytes, length));
+  chassis->mutable_gem()->mutable_brake_motor_rpt_3_72()->set_torque_input(
+      torque_input(bytes, length));
+}
+    
+    void Brakerpt6c::Parse(const std::uint8_t* bytes, int32_t length,
+                       ChassisDetail* chassis) const {
+  chassis->mutable_gem()->mutable_brake_rpt_6c()->set_manual_input(
+      manual_input(bytes, length));
+  chassis->mutable_gem()->mutable_brake_rpt_6c()->set_commanded_value(
+      commanded_value(bytes, length));
+  chassis->mutable_gem()->mutable_brake_rpt_6c()->set_output_value(
+      output_value(bytes, length));
+  chassis->mutable_gem()->mutable_brake_rpt_6c()->set_brake_on_off(
+      brake_on_off(bytes, length));
+}
