@@ -1,108 +1,160 @@
 
         
-          context 'with a user' do
-    let(:user) { Fabricate(:user) }
-    
-      def up
-    Photo.joins('INNER JOIN posts ON posts.guid = photos.status_message_guid')
-         .where(posts: {type: 'StatusMessage', public: true}).update_all(public: true)
-    
-    When /^I try to sign in manually$/ do
-  manual_login
+        def native_relative
+  DOC_PATH.sub('#{COL_PATH}/', '')
 end
     
-      class SendPrivate < Base
-    def perform(*_args)
-      # don't federate in cucumber
+            def connect(websocket, handshake)
+          @connections_count += 1
+          if @connections_count == 1
+            message = 'Browser connected'
+            message += ' over SSL/TLS' if handshake.secure?
+            Jekyll.logger.info 'LiveReload:', message
+          end
+          websocket.send(
+            JSON.dump(
+              :command    => 'hello',
+              :protocols  => ['http://livereload.com/protocols/official-7'],
+              :serverName => 'jekyll'
+            )
+          )
+    
+          attr_accessor :page, :layout, :content, :paginator
+      attr_accessor :highlighter_prefix, :highlighter_suffix
+    
+            # Execute a command on the remote machine. The exact semantics
+        # of this method are up to the implementor, but in general the
+        # users of this class will expect this to be a shell.
+        #
+        # This method gives you no way to write data back to the remote
+        # machine, so only execute commands that don't expect input.
+        #
+        # @param [String] command Command to execute.
+        # @yield [type, data] Realtime output of the command being executed.
+        # @yieldparam [String] type Type of the output. This can be
+        #   `:stdout`, `:stderr`, etc. The exact types are up to the
+        #   implementor.
+        # @yieldparam [String] data Data for the given output.
+        # @return [Integer] Exit code of the command.
+        def execute(command, opts=nil)
+        end
+    
+            # Initializes the system. Any subclasses MUST make sure this
+        # method is called on the parent. Therefore, if a subclass overrides
+        # `initialize`, then you must call `super`.
+        def initialize(vm)
+          @vm = vm
+        end
+    
+            # This contains all the synced folder implementations by name.
+        #
+        # @return [Registry<Symbol, Array<Class, Integer>>]
+        attr_reader :synced_folders
+    
+              # Persist through the set of invalid methods
+          this_invalid  = @__invalid_methods || Set.new
+          other_invalid = other.instance_variable_get(:'@__invalid_methods') || Set.new
+          result.instance_variable_set(:'@__invalid_methods', this_invalid + other_invalid)
+    
+            # This is called early, before a machine is instantiated, to check
+        # if this provider is installed. This should return true or false.
+        #
+        # If the provider is not installed and Vagrant determines it is
+        # able to install this provider, then it will do so. Installation
+        # is done by calling Environment.install_provider.
+        #
+        # If Environment.can_install_provider? returns false, then an error
+        # will be shown to the user.
+        def self.installed?
+          # By default return true for backwards compat so all providers
+          # continue to work.
+          true
+        end
+    
+    # Get the version string. If this is being installed from Git,
+# this includes the proper prerelease version.
+def get_version
+  File.read(scope('VERSION').strip)
+end
+    
+    require 'sass/logger'
+require 'sass/util'
+    
+        def parse_if_directive(parent, line, root, value, offset)
+      raise SyntaxError.new('Invalid if directive '@if': expected expression.') unless value
+      Tree::IfNode.new(parse_script(value, :offset => offset))
     end
-  end
     
-    require 'clamp'
-require 'pluginmanager/util'
-require 'pluginmanager/gemfile'
-require 'pluginmanager/install'
-require 'pluginmanager/remove'
-require 'pluginmanager/list'
-require 'pluginmanager/update'
-require 'pluginmanager/pack'
-require 'pluginmanager/unpack'
-require 'pluginmanager/generate'
-require 'pluginmanager/prepare_offline_pack'
-require 'pluginmanager/proxy_support'
-configure_proxy
+        # Returns a string representation of the Sass backtrace.
+    #
+    # @param default_filename [String] The filename to use for unknown files
+    # @see #sass_backtrace
+    # @return [String]
+    def sass_backtrace_str(default_filename = 'an unknown file')
+      lines = message.split('\n')
+      msg = lines[0] + lines[1..-1].
+        map {|l| '\n' + (' ' * 'Error: '.size) + l}.join
+      'Error: #{msg}' +
+        sass_backtrace.each_with_index.map do |entry, i|
+          '\n        #{i == 0 ? 'on' : 'from'} line #{entry[:line]}' +
+            ' of #{entry[:filename] || default_filename}' +
+            (entry[:mixin] ? ', in `#{entry[:mixin]}'' : '')
+        end.join
+    end
     
-      def target_file
-    target_file = File.join(LogStash::Environment::LOGSTASH_HOME, 'plugins_package')
-    '#{target_file}#{file_extension}'
+          # If the importer is based on files on the local filesystem
+      # this method should return folders which should be watched
+      # for changes.
+      #
+      # @return [Array<String>] List of absolute paths of directories to watch
+      def directories_to_watch
+        []
+      end
+    
+    module Sass
+  module Importers
+    # The default importer, used for any strings found in the load path.
+    # Simply loads Sass files from the filesystem using the default logic.
+    class Filesystem < Base
+      attr_accessor :root
+    
+        worker_count.times do |count|
+      template '/data/#{app}/shared/config/sidekiq_#{count}.yml' do
+        owner node[:owner_name]
+        group node[:owner_name]
+        mode 0644
+        source 'sidekiq.yml.erb'
+        variables({
+          :require => '/data/#{app}/current'
+        })
+      end
+    end
+    
+    
+    end
   end
 end
 
     
-          # Install the gems to make them available locally when bundler does his local resolution
-      post_install_messages = []
-      pack.gems.each do |packed_gem|
-        PluginManager.ui.debug('Installing, #{packed_gem.name}, version: #{packed_gem.version} file: #{packed_gem.file}')
-        post_install_messages << LogStash::PluginManager::GemInstaller::install(packed_gem.file, packed_gem.plugin?)
-      end
-    
-      def execute
-    signal_deprecation_warning_for_pack
-    
-          it 'display a list of installed plugins' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --installed')
-        expect(result.stdout.split('\n').size).to be > 1
-      end
-    
-          within_row(1) { click_icon :split }
-      wait_for_ajax
-      targetted_select2 'LA', from: '#s2id_item_stock_location'
-      click_icon :'save-split'
-      wait_for_ajax
-      expect(page.find('#shipment_#{order.shipments.first.id}')).to be_present
-    
-              def render_order(result)
-            if result.success?
-              render_serialized_payload { serialized_current_order }
-            else
-              render_error_payload(result.error)
-            end
+          Sidekiq.redis do |conn|
+        conn.pipelined do
+          jobs_to_requeue.each do |queue, jobs|
+            conn.rpush('queue:#{queue}', jobs)
           end
-    
-            def product_params
-          params.require(:product).permit(permitted_product_attributes)
         end
-    
-              if params[:page] || params[:per_page]
-            @states = @states.page(params[:page]).per(params[:per_page])
-          end
-    
-        # Build the packaging metadata files.
-    checksums = {}
-    self.files.each do |f|
-      path = staging_path(f)
-      if File.symlink?(path)
-        checksums[f] = '-'
-      elsif File.file?(path)
-        checksums[f] = Digest::SHA256.file(path).hexdigest
       end
+      Sidekiq.logger.info('Pushed #{inprogress.size} jobs back to Redis')
+    rescue => ex
+      Sidekiq.logger.warn('Failed to requeue #{inprogress.size} jobs: #{ex.message}')
     end
     
-        self.name = [attributes[:npm_package_name_prefix], name].join('-')
-    self.version = info.fetch('version', '0.0.0')
-    
-      def output(output_path)
-    
-    # Fixup the category to an acceptable solaris category
-    case @category
-    when nil, 'default'
-      @category = 'Applications/System Utilities'
+        def self.logger
+      defined?(@logger) ? @logger : initialize_logger
     end
     
-        # Add the tar compression flag if necessary
-    tar_compression_flag(input_path).tap do |flag|
-      args << flag unless flag.nil?
-    end
-    
-        abort 'FPM failed!' unless FPM::Command.new('fpm').run(args) == 0
-  end
-end
+          def insert_before(oldklass, newklass, *args)
+        i = entries.index { |entry| entry.klass == newklass }
+        new_entry = i.nil? ? Entry.new(newklass, *args) : entries.delete_at(i)
+        i = entries.index { |entry| entry.klass == oldklass } || 0
+        entries.insert(i, new_entry)
+      end
