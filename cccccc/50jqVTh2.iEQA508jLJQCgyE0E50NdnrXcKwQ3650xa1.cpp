@@ -1,327 +1,245 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    
-    {
-    {}  // namespace swig
-}  // namespace tensorflow
-    
-    namespace stream_executor {
-namespace cuda {
-    }
-    }
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    #include <functional>
-#include <map>
-    
-    void BrowserWindow::UpdateDraggableRegions(
-    content::RenderFrameHost* rfh,
-    const std::vector<DraggableRegion>& regions) {
-  if (window_->has_frame())
-    return;
-  static_cast<NativeWindowViews*>(window_.get())
-      ->UpdateDraggableRegions(DraggableRegionsToSkRegion(regions));
-}
-    
-     private:
-  display::Screen* screen_;
-    
-    #endif  // ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
-
-    
-    namespace base {
-class TaskRunner;
-}
-    
-      base::WeakPtrFactory<URLRequestAboutJob> weak_ptr_factory_;
-    
-    
-    {
-    {
-    {
-    {          std::transform(
-            begin(inputs) + start, begin(inputs) + stop,
-            retMem + start,
-            func
-          );
-        }
-      } catch (const std::runtime_error& e) {
-        std::fprintf(stderr,
-          'worker thread exited with exception: %s\n', e.what());
-        failed = true;
-      }
-    }));
+        SILLayout::SILLayout(CanGenericSignature Sig,
+                     ArrayRef<SILField> Fields)
+  : GenericSigAndFlags(Sig, getFlagsValue(anyMutable(Fields))),
+    NumFields(Fields.size())
+{
+#ifndef NDEBUG
+  verifyFields(Sig, Fields);
+#endif
+  auto FieldsMem = getTrailingObjects<SILField>();
+  for (unsigned i : indices(Fields)) {
+    new (FieldsMem + i) SILField(Fields[i]);
   }
+}
     
-      /**
-   * Master Get Methods to get values associated with an ini or hdf setting.
-   * These methods just get the value. They do not bind to a variable for
-   * enabling ini_get()
-   */
-  static bool GetBool(const IniSettingMap &ini, const Hdf& config,
-                      const std::string& name = '',
-                      const bool defValue = false,
-                      const bool prepend_hhvm = true);
-  static const char *Get(const IniSettingMap &ini, const Hdf& config,
-                         const std::string& name = '',
-                         const char *defValue = nullptr,
-                         const bool prepend_hhvm = true);
-  static std::string GetString(const IniSettingMap &ini, const Hdf& config,
-                               const std::string& name = '',
-                               const std::string defValue = '',
-                               const bool prepend_hhvm = true);
-  static char GetByte(const IniSettingMap &ini, const Hdf& config,
-                      const std::string& name = '', const char defValue = 0,
-                      const bool prepend_hhvm = true);
-  static unsigned char GetUByte(const IniSettingMap &ini, const Hdf& config,
-                                const std::string& name = '',
-                                const unsigned char defValue = 0,
-                                const bool prepend_hhvm = true);
-  static int16_t GetInt16(const IniSettingMap &ini, const Hdf& config,
-                          const std::string& name = '',
-                          const int16_t defValue = 0,
-                          const bool prepend_hhvm = true);
-  static uint16_t GetUInt16(const IniSettingMap &ini, const Hdf& config,
-                            const std::string& name = '',
-                            const uint16_t defValue = 0,
-                            const bool prepend_hhvm = true);
-  static int32_t GetInt32(const IniSettingMap &ini, const Hdf& config,
-                          const std::string& name = '',
-                          const int32_t defValue = 0,
-                          const bool prepend_hhvm = true);
-  static uint32_t GetUInt32(const IniSettingMap &ini, const Hdf& config,
-                            const std::string& name = '',
-                            const uint32_t defValue = 0,
-                            const bool prepend_hhvm = true);
-  static int64_t GetInt64(const IniSettingMap &ini, const Hdf& config,
-                          const std::string& name = '',
-                          const int64_t defValue = 0,
-                          const bool prepend_hhvm = true);
-  static uint64_t GetUInt64(const IniSettingMap &ini, const Hdf& config,
-                            const std::string& name = '',
-                            const uint64_t defValue = 0,
-                            const bool prepend_hhvm = true);
-  static double GetDouble(const IniSettingMap &ini, const Hdf& config,
-                          const std::string& name = '',
-                          const double defValue = 0,
-                          const bool prepend_hhvm = true);
-  static std::vector<uint32_t>
-  GetUInt32Vector(const IniSettingMap& ini, const Hdf& config,
-                  const std::string& name = '',
-                  const std::vector<uint32_t>& def = std::vector<uint32_t>{},
-                  const bool prepend_hhvm = true);
-  static std::vector<std::string>
-  GetStrVector(const IniSettingMap& ini, const Hdf& config,
-               const std::string& name = '',
-               const std::vector<std::string>& def = std::vector<std::string>{},
-               const bool prepend_hhvm = true);
-  static std::unordered_map<std::string, int>
-  GetIntMap(const IniSettingMap& ini, const Hdf& config,
-            const std::string& name = '',
-            const std::unordered_map<std::string, int>& defValue =
-              std::unordered_map<std::string, int>{},
-            const bool prepend_hhvm = true);
-  static ConfigMap GetMap(const IniSettingMap& ini, const Hdf& config,
-                          const std::string& name = '',
-                          const ConfigMap& defValue = ConfigMap(),
-                          const bool prepend_hhvm = true);
-  static ConfigMapC GetMapC(const IniSettingMap& ini, const Hdf& config,
-                          const std::string& name = '',
-                          const ConfigMapC& defValue = ConfigMapC(),
-                          const bool prepend_hhvm = true);
-  static ConfigSet GetSet(const IniSettingMap& ini, const Hdf& config,
-                          const std::string& name = '',
-                          const ConfigSet& defValue = ConfigSet(),
-                          const bool prepend_hhvm = true);
-  static ConfigSetC GetSetC(const IniSettingMap& ini, const Hdf& config,
-                            const std::string& name = '',
-                            const ConfigSetC& defValue = ConfigSetC(),
-                            const bool prepend_hhvm = true);
-  static ConfigIMap GetIMap(const IniSettingMap& ini, const Hdf& config,
-                            const std::string& name = '',
-                            const ConfigIMap& defValue = ConfigIMap(),
-                            const bool prepend_hhvm = true);
-  static ConfigFlatSet GetFlatSet(const IniSettingMap& ini, const Hdf& config,
-                                  const std::string& name = '',
-                                  const ConfigFlatSet& defValue
-                                    = ConfigFlatSet(),
-                                  const bool prepend_hhvm = true);
+        if (node->Further || node->Right) {
+      IndentScope ms(this, (childKind == ChildKind::Right ||
+                            childKind == ChildKind::Further ||
+                            childKind == ChildKind::Root) ? '  ' : '| ');
+    }
     
-      typedef std::pair<const char*, std::string> InfoEntry;
-  typedef std::vector<InfoEntry> InfoVec;
+      while (!RawText.empty()) {
+    size_t Pos = RawText.find_first_of('\n\r');
+    if (Pos == StringRef::npos)
+      Pos = RawText.size();
+    }
     
-    struct GlobStreamWrapper final : Stream::Wrapper {
-  req::ptr<File> open(const String& filename, const String& mode, int options,
-                      const req::ptr<StreamContext>& context) override;
-  req::ptr<Directory> opendir(const String& path) override;
+    std::string Mangle::translateOperator(StringRef Op) {
+  std::string Encoded;
+  for (char ch : Op) {
+    Encoded.push_back(translateOperatorChar(ch));
+  }
+  return Encoded;
+}
+    
+    
+    {  // -- Build the decoded string as UTF32 first because we need random access.
+  uint32_t n = initial_n;
+  int i = 0;
+  int bias = initial_bias;
+  /// let output = an empty string indexed from 0
+  // consume all code points before the last delimiter (if there is one)
+  //  and copy them to output,
+  size_t lastDelimiter = InputPunycode.find_last_of(delimiter);
+  if (lastDelimiter != StringRef::npos) {
+    for (char c : InputPunycode.slice(0, lastDelimiter)) {
+      // fail on any non-basic code point
+      if (static_cast<unsigned char>(c) > 0x7f)
+        return true;
+      OutCodePoints.push_back(c);
+    }
+    // if more than zero code points were consumed then consume one more
+    //  (which will be the last delimiter)
+    InputPunycode =
+        InputPunycode.slice(lastDelimiter + 1, InputPunycode.size());
+  }
+  
+  while (!InputPunycode.empty()) {
+    int oldi = i;
+    int w = 1;
+    for (int k = base; ; k += base) {
+      // consume a code point, or fail if there was none to consume
+      if (InputPunycode.empty())
+        return true;
+      char codePoint = InputPunycode.front();
+      InputPunycode = InputPunycode.slice(1, InputPunycode.size());
+      // let digit = the code point's digit-value, fail if it has none
+      int digit = digit_index(codePoint);
+      if (digit < 0)
+        return true;
+      
+      i = i + digit * w;
+      int t = k <= bias ? tmin
+            : k >= bias + tmax ? tmax
+            : k - bias;
+      if (digit < t)
+        break;
+      w = w * (base - t);
+    }
+    bias = adapt(i - oldi, OutCodePoints.size() + 1, oldi == 0);
+    n = n + i / (OutCodePoints.size() + 1);
+    i = i % (OutCodePoints.size() + 1);
+    // if n is a basic code point then fail
+    if (n < 0x80)
+      return true;
+    // insert n into output at position i
+    OutCodePoints.insert(OutCodePoints.begin() + i, n);
+    i++;
+  }
+  
+  return true;
+}
+    
+            for(int i = 0 ; i < nums.size() ; i ++)
+            for(int j = i + 1 ; j < nums.size() ; j ++)
+                if(nums[i] + nums[j] == target){
+                    int res[] = {i, j};
+                    return vector<int>(res, res + 2);
+                }
+    
+    
+    {private:
+    int nextDifferentCharacterIndex(const vector<int> &nums, int p){
+        for( ; p < nums.size() ; p ++ )
+            if( nums[p] != nums[p - 1] )
+                break;
+        return p;
+    }
 };
     
-      explicit OutputFile(const String& filename);
-  virtual ~OutputFile();
-    
-    
-    {}
-
-    
-    void logAHMSubMapWarning(folly::StringPiece mapName);
-    
-      // Input statistics
-  // TODO(noetzli): The stats are incomplete. They are lacking everything
-  // consumed by MergeHelper.
-  uint64_t num_input_records = 0;
-  uint64_t num_input_deletion_records = 0;
-  uint64_t num_input_corrupt_records = 0;
-  uint64_t total_input_raw_key_bytes = 0;
-  uint64_t total_input_raw_value_bytes = 0;
-    
-      MyFilter filter;
-    
-      ////////////////////////////////////////////////////////
-  //
-  // 'Repeatable Read' (Snapshot Isolation) Example
-  //   -- Using a single Snapshot
-  //
-  ////////////////////////////////////////////////////////
-    
-    #pragma once
-    
-      // Starts a new Transaction.
-  //
-  // Caller is responsible for deleting the returned transaction when no
-  // longer needed.
-  //
-  // If old_txn is not null, BeginTransaction will reuse this Transaction
-  // handle instead of allocating a new one.  This is an optimization to avoid
-  // extra allocations when repeatedly creating transactions.
-  virtual Transaction* BeginTransaction(
-      const WriteOptions& write_options,
-      const OptimisticTransactionOptions& txn_options =
-          OptimisticTransactionOptions(),
-      Transaction* old_txn = nullptr) = 0;
-    
-    bool Speed::initWithAction(ActionInterval *action, float speed)
-{
-    CCASSERT(action != nullptr, 'action must not be NULL');
-    if (action == nullptr)
-    {
-        log('Speed::initWithAction error: action is nullptr!');
-        return false;
+    // Recursive
+// Time Complexity: O(n), n is the node number in the tree
+// Space Complexity: O(h), h is the height of the tree
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+    }
     }
     
-    action->retain();
-    _innerAction = action;
-    _speed = speed;
-    return true;
-}
+    using namespace std;
     
-        /** Called every frame with it's delta time, dt in seconds. DON'T override unless you know what you are doing. 
-     *
-     * @param dt In seconds.
-     */
-    virtual void step(float dt);
-    
-        // convert to 'diffs' to 'reverse absolute'
-    
-    Waves3D* Waves3D::clone() const
-{
-    // no copy constructor
-    return Waves3D::create(_duration, _gridSize, _waves, _amplitude);
-}
-    
-    void Hide::update(float time)
-{
-    ActionInstant::update(time);
-    _target->setVisible(false);
-}
-    
-        //
-    // Overrides
-    //
-    /**
-     * @param time In seconds.
-     */
-    virtual void update(float time) override;
-    virtual FlipY* reverse() const override;
-    virtual FlipY* clone() const override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    FlipY() :_flipY(false) {}
-    virtual ~FlipY() {}
-    
-        /** Removes all actions matching at least one bit in flags and the target.
-     *
-     * @param flags     The flag field to match the actions' flags based on bitwise AND.
-     * @param target    A certain target.
-     * @js NA
-     */
-    virtual void removeActionsByFlags(unsigned int flags, Node *target);
-    
-    PageTurn3D *PageTurn3D::clone() const
-{
-    // no copy constructor
-    return PageTurn3D::create(_duration, _gridSize);
-}
-    
-    /**
- @brief This action simulates a page turn from the bottom right hand corner of the screen.
- 
- @details It's not much use by itself but is used by the PageTurnTransition.
-         Based on an original paper by L Hong et al.
-         http://www.parc.com/publication/1638/turning-pages-of-3d-electronic-books.html
-  
- @since v0.8.2
- */
-class CC_DLL PageTurn3D : public Grid3DAction
+    class IExpressionCommand
 {
 public:
-    /**
-     * @js NA 
-     */
-    virtual GridBase* getGrid() override;
+    virtual CalculationManager::CommandType GetCommandType() const = 0;
+    virtual void Accept(_In_ ISerializeCommandVisitor &commandVisitor) = 0;
+};
+    
+    // vvv THESE CONSTANTS SHOULD NEVER CHANGE vvv
+static constexpr int STANDARD_ID    = 0;
+static constexpr int SCIENTIFIC_ID  = 1;
+static constexpr int PROGRAMMER_ID  = 2;
+static constexpr int DATE_ID        = 3;
+static constexpr int VOLUME_ID      = 4;
+static constexpr int LENGTH_ID      = 5;
+static constexpr int WEIGHT_ID      = 6;
+static constexpr int TEMPERATURE_ID = 7;
+static constexpr int ENERGY_ID      = 8;
+static constexpr int AREA_ID        = 9;
+static constexpr int SPEED_ID       = 10;
+static constexpr int TIME_ID        = 11;
+static constexpr int POWER_ID       = 12;
+static constexpr int DATA_ID        = 13;
+static constexpr int PRESSURE_ID    = 14;
+static constexpr int ANGLE_ID       = 15;
+static constexpr int CURRENCY_ID    = 16;
+// ^^^ THESE CONSTANTS SHOULD NEVER CHANGE ^^^
+    
+        const auto& localizationSettings = LocalizationSettings::GetInstance();
+    wchar_t ch0 = localizationSettings.GetDigitSymbolFromEnUsDigit('0');
+    wchar_t ch1 = localizationSettings.GetDigitSymbolFromEnUsDigit('1');
+    
+    #include 'Views/CalculatorProgrammerOperators.g.h'
+#include 'Controls/RadixButton.h'
+#include 'CalcViewModel/StandardCalculatorViewModel.h'
+    
+    #include 'Converters/BooleanNegationConverter.h'
+#include 'Converters/VisibilityNegationConverter.h'
+#include 'Views/DateCalculator.g.h'
+    
+    namespace CalculatorApp
+{
+    [Windows::Foundation::Metadata::WebHostHidden]
+    public ref class Memory sealed
+    {
+    public:
+        Memory();
+        property CalculatorApp::ViewModel::StandardCalculatorViewModel^ Model
+        {
+            CalculatorApp::ViewModel::StandardCalculatorViewModel^ get() {
+                return static_cast<CalculatorApp::ViewModel::StandardCalculatorViewModel^>(this->DataContext);
+            }
+        }
+    }
     }
     
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+    #endif //__CCCAMERA_ACTION_H__
+
+    
+        /**
+    @brief Initializes the action with center position, radius, number of waves, amplitude, a grid size and duration.
+    @param duration Specify the duration of the Ripple3D action. It's a value in seconds.
+    @param gridSize Specify the size of the grid.
+    @param position Specify the center position of the ripple effect.
+    @param radius Specify the radius of the ripple effect.
+    @param waves Specify the waves count of the ripple effect.
+    @param amplitude Specify the amplitude of the ripple effect.
+    @return If the initialization success, return true; otherwise, return false.
+     */
+    bool initWithDuration(float duration, const Size& gridSize, const Vec2& position, float radius, unsigned int waves, float amplitude);
+    
+    void CallFunc::update(float time)
+{
+    ActionInstant::update(time);
+    this->execute();
+}
     
     
     {
     {
-    {            if (_shakeZ)
+    {            if (action->getTag() == (int)tag && action->getOriginalTarget() == target)
             {
-                coords.bl.z += ( rand() % (_randrange*2) ) - _randrange;
-                coords.br.z += ( rand() % (_randrange*2) ) - _randrange;
-                coords.tl.z += ( rand() % (_randrange*2) ) - _randrange;
-                coords.tr.z += ( rand() % (_randrange*2) ) - _randrange;
+                removeActionAtIndex(i, element);
+                break;
             }
-                        
-            setTile(Vec2(i, j), coords);
         }
     }
 }
     
-    Animation::~Animation(void)
-{
-    CCLOGINFO('deallocing Animation: %p', this);
-}
+        /**
+    @brief Create an action with duration, grid size.
+    @param duration Specify the duration of the PageTurn3D action. It's a value in seconds.
+    @param gridSize Specify the size of the grid.
+    @return If the creation success, return a pointer of PageTurn3D action; otherwise, return nil.
+    */
+    static PageTurn3D* create(float duration, const Size& gridSize);
+    
+        // Override
+    virtual ShatteredTiles3D* clone() const override;
+    virtual void update(float time) override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    ShatteredTiles3D() {}
+    virtual ~ShatteredTiles3D() {}
+    
+        // Overrides
+    void startWithTarget(Node *target) override;
+    void update(float dt) override;
+    ActionTween* reverse() const override;
+    ActionTween *clone() const override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    /** 
+     * @brief Initializes the action with the property name (key), and the from and to parameters.
+     * @param duration The duration of the ActionTween. It's a value in seconds.
+     * @param key The key of property which should be updated.
+     * @param from The value of the specified property when the action begin.
+     * @param to The value of the specified property when the action end.
+     * @return If the initialization success, return true; otherwise, return false.
+     */
+    bool initWithDuration(float duration, const std::string& key, float from, float to);
     
     THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -333,28 +251,3 @@ THE SOFTWARE.
 ****************************************************************************/
 #ifndef __CC_ANIMATION_CACHE_H__
 #define __CC_ANIMATION_CACHE_H__
-    
-    
-    {    /**
-     * Create an polygoninfo from the data of another Polygoninfo
-     * @param other     another PolygonInfo to be copied
-     * @return duplicate of the other PolygonInfo
-     */
-    PolygonInfo(const PolygonInfo& other);
-    //  end of creators group
-    /// @}
-    
-    /**
-     * Copy the member of the other PolygonInfo
-     * @param other     another PolygonInfo to be copied
-     */
-    PolygonInfo& operator= (const PolygonInfo &other);
-    ~PolygonInfo();
-    
-    /**
-     * set the data to be a pointer to a quad
-     * the member verts will not be released when this PolygonInfo destructs
-     * as the verts memory are managed by other objects
-     * @param quad  a pointer to the V3F_C4B_T2F_Quad object
-     */
-    void setQuad(V3F_C4B_T2F_Quad *quad);
