@@ -1,270 +1,345 @@
 
         
-        				
-					// for RGB8A1, set source alpha to 0.0 or 1.0
-					// set punch through flag
-					if (imageformat == Image::Format::RGB8A1 ||
-						imageformat == Image::Format::SRGB8A1)
-					{
-						if (m_afrgbaSource[uiPixel].fA >= 0.5f)
-						{
-							m_afrgbaSource[uiPixel].fA = 1.0f;
-						}
-						else
-						{
-							m_afrgbaSource[uiPixel].fA = 0.0f;
-							m_boolPunchThroughPixels = true;
-						}
-					}
-    
-    		inline bool GetFlip(void)
-		{
-			return m_pencoding->GetFlip();
-		}
-    
-    #include 'EtcBlock4x4EncodingBits.h'
-#include 'EtcBlock4x4.h'
+            if (info.bytes > buf.size()) {
+      llvm::dbgs() << 'AST section too small.\n';
+      return false;
+    }
     
     
-    {					}
-    
-    #endif  // VPX_DSP_TXFM_COMMON_H_
-
-    
-    inline bool EdgesAdjacent(const IntersectNode &inode)
-{
-  return (inode.Edge1->NextInSEL == inode.Edge2) ||
-    (inode.Edge1->PrevInSEL == inode.Edge2);
-}
-//------------------------------------------------------------------------------
-    
-    /** 16x32 multiplication, followed by a 16-bit shift right. Results fits in 32 bits */
-#undef MULT16_32_Q16
-static OPUS_INLINE opus_val32 MULT16_32_Q16_armv5e(opus_val16 a, opus_val32 b)
-{
-  int res;
-  __asm__(
-      '#MULT16_32_Q16\n\t'
-      'smulwb %0, %1, %2\n\t'
-      : '=r'(res)
-      : 'r'(b),'r'(a)
-  );
-  return res;
-}
-#define MULT16_32_Q16(a, b) (MULT16_32_Q16_armv5e(a, b))
-    
-    #define MULT16_16SU(a,b) ((opus_val32)(opus_val16)(a)*(opus_val32)(opus_uint16)(b))
-#define MULT32_32_Q31(a,b) ADD32(ADD32(SHL32(MULT16_16(SHR32((a),16),SHR((b),16)),1), SHR32(MULT16_16SU(SHR32((a),16),((b)&0x0000ffff)),15)), SHR32(MULT16_16SU(SHR32((b),16),((a)&0x0000ffff)),15))
-    
-      void Compact(ThreadState* thread) {
-    db_->CompactRange(nullptr, nullptr);
+    {  DefaultCacheKey CKey(const_cast<void*>(Key), &DCache.CBs);
+  auto Entry = DCache.Entries.find(CKey);
+  if (Entry != DCache.Entries.end()) {
+    DCache.CBs.keyDestroyCB(Entry->first.Key, nullptr);
+    DCache.CBs.valueReleaseCB(Entry->second, nullptr);
+    DCache.Entries.erase(Entry);
+    return true;
   }
+  return false;
+}
     
-        Iterator* iterator2 = db_->NewIterator(read_options);
-    iterator2->SeekToFirst();
-    ASSERT_TRUE(!iterator2->Valid());
-    delete iterator2;
+      std::size_t capacity = EndOfAllocation - Begin;
+  std::size_t requiredCapacity = capacity + needed;
+  do {
+    capacity = 2 * capacity + 16;
+  } while (capacity < requiredCapacity);
     
-    int InternalKeyComparator::Compare(const Slice& akey, const Slice& bkey) const {
-  // Order by:
-  //    increasing user key (according to user-supplied comparator)
-  //    decreasing sequence number
-  //    decreasing type (though sequence# should be enough to disambiguate)
-  int r = user_comparator_->Compare(ExtractUserKey(akey), ExtractUserKey(bkey));
-  if (r == 0) {
-    const uint64_t anum = DecodeFixed64(akey.data() + akey.size() - 8);
-    const uint64_t bnum = DecodeFixed64(bkey.data() + bkey.size() - 8);
-    if (anum > bnum) {
-      r = -1;
-    } else if (anum < bnum) {
-      r = +1;
+    unsigned swift::measureNewline(const char *BufferPtr, const char *BufferEnd) {
+  if (BufferPtr == BufferEnd)
+    return 0;
+    }
+    
+      InvocationInfo constructInvocation(const LinkJobAction &job,
+                                     const JobContext &context) const override;
+    
+    static const char* kImplVersionName = 'api_version';
+    
+    // Checks if the file contains any enum definitions (at the root or
+// nested under a message).
+bool FileContainsEnums(const FileDescriptor* file) {
+  if (file->enum_type_count() > 0) {
+    return true;
+  }
+  for (int i = 0; i < file->message_type_count(); i++) {
+    if (MessageContainsEnums(file->message_type(i))) {
+      return true;
     }
   }
-  return r;
+  return false;
 }
     
-      fname = LockFileName('foo');
-  ASSERT_EQ('foo/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(0, number);
-  ASSERT_EQ(kDBLockFile, type);
+    TEST(TemplateUtilTest, TestIdentity) {
+  EXPECT_TRUE(
+      (type_equals_<GOOGLE_NAMESPACE::identity_<int>::type, int>::value));
+  EXPECT_TRUE(
+      (type_equals_<GOOGLE_NAMESPACE::identity_<void>::type, void>::value));
+}
     
-    #endif  // STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-
-    
-        switch (record_type) {
-      case kFullType:
-        if (in_fragmented_record) {
-          // Handle bug in earlier versions of log::Writer where
-          // it could emit an empty kFirstType record at the tail end
-          // of a block followed by a kFullType or kFirstType record
-          // at the beginning of the next block.
-          if (!scratch->empty()) {
-            ReportCorruption(scratch->size(), 'partial record without end(1)');
-          }
-        }
-        prospective_record_offset = physical_record_offset;
-        scratch->clear();
-        *record = fragment;
-        last_record_offset_ = prospective_record_offset;
-        return true;
-    }
+    #include <caffe/layer.hpp>
+#include <caffe/blob.hpp>
+#include <caffe/layer_factory.hpp>
     
     
     {}  // namespace mxnet
+
     
-    template<typename Dtype>
-void SetOpBlobs(::caffe::Layer<Dtype> *caffeOp,
-                const std::vector< ::caffe::Blob<Dtype>*>& weights) {
-  CHECK_EQ(caffeOp->blobs().size(), weights.size());
-  for (int i = 0; i < weights.size(); ++i)
-    caffeOp->blobs()[i].reset(weights[i]);
+    
+template<typename xpu, typename DType>
+inline void KhatriRaoCompute_(const nnvm::NodeAttrs &attrs,
+                              const OpContext &ctx,
+                              const std::vector<TBlob> &in_data,
+                              const std::vector<OpReqType> &req,
+                              const std::vector<TBlob> &out_data) {
+  using namespace mxnet_op;
+  if (req[0] == kNullOp) return;
+    }
+    
+    
+    {    typename DataType<DType>::ScaleType alpha = (req[bs::kData] == kNullOp) ? 0.0f : 1.0f;
+    typename DataType<DType>::ScaleType beta = (req[bs::kData] == kAddTo) ? 1.0f : 0.0f;
+    typename DataType<DType>::ScaleType alpha_dgrid = 1.0f;
+    typename DataType<DType>::ScaleType beta_dgrid = 0.0f;
+    CUDNN_CALL(cudnnSpatialTfSamplerBackward(s->dnn_handle_,
+                                             st_desc_,
+                                             &alpha,
+                                             in_desc_,
+                                             data.dptr_,
+                                             &beta,
+                                             in_desc_/*reuse in_desc_*/,
+                                             gdata.dptr_/*output*/,
+                                             &alpha_dgrid,
+                                             out_desc_/*reuse out_desc_*/,
+                                             grad.dptr_,
+                                             grid_tmp.dptr_,
+                                             &beta_dgrid,
+                                             grid_tmp.dptr_));
+    Assign(ggrid, req[bs::kGrid], transpose(grid_tmp, Shape4(0, 3, 1, 2)));
+  }
+    
+        // Make sure that the dictionary contains all required keys, and if it does, return version value
+    // from the dictionary.
+    template <typename T>
+    inline size_t ValidateDictionary(const Dictionary& dict, const std::vector<std::wstring>& requiredKeys, const std::wstring& typeValue, size_t currentVersion)
+    { 
+        const auto& version = GetVersion(dict);
+    }
+    
+    
+    {            sequenceLengths[i] = currentSequenceDataShape.SubShape(fullyDefinedSampleShape.Rank()).TotalSize();
+            maxSequenceLength = std::max(maxSequenceLength, sequenceLengths[i]);
+        }
+    
+    
+    {
+    {    private:
+        // Disallow copy and move construction and assignment
+        VariableFields(const VariableFields&) = delete; VariableFields& operator=(const VariableFields& other) = delete; VariableFields(VariableFields&&) = delete; VariableFields& operator=(VariableFields&&) = delete;
+    };
+}
+
+    
+    namespace Microsoft { namespace MSR { namespace CNTK {
+    }
+    }
+    }
+    
+            // all cloned nodes' inputs must be redirected if they reference a node that has been cloned as well
+        size_t numRelinks = 0; // (statistics: how many inputs have we relinked?)
+        for (let& clonedNodesKV : clonedNodes)
+        {
+            let& node = clonedNodesKV.second;
+            let& inputs2 = node->GetInputs();
+            for (size_t i = 0; i < inputs2.size(); i++)
+            {
+                fprintf(stderr, '%ls.inputs[%d] = %ls (%d)', node->NodeName().c_str(), (int)i, inputs2[i]->NodeName().c_str(), (int)inputs2[i]->m_uniqueNumericId);
+                let iter = clonedNodes.find(inputs2[i]);
+                if (iter == clonedNodes.end())
+                    continue;
+                // input is also a cloned node: relink
+                node->SetInput(i, iter->second);
+                fprintf(stderr, ' ==>  %ls (%d)\n', inputs2[i]->NodeName().c_str(), (int)inputs2[i]->m_uniqueNumericId);
+                numRelinks++;
+            }
+        }
+    
+        virtual void BackpropToNonLooping(size_t inputIndex) override
+    {
+        LogicError('The node \'%ls\' can be used in training, but it does not participate in gradient propagation.', OperationName().c_str());
+    }
+    
+            // For windowed LSTM, CNTK is providing data with the second dimension being time-like and the third dimension
+        // being minibatch index. CuDnn expects the second dimension to be minibatch index, and the third dimension
+        // to be time-like. This sequence of operations creates a transposed copy of the data in m_transposedInput
+        // and shapeXT
+    
+        const int nums[] = {0,4,3,0};
+    vector<int> nums_vec( nums, nums + sizeof(nums)/sizeof(int) );
+    int target = 0;
+    printVec(Solution().twoSum(nums_vec, target));
+    
+    
+    {        return res;
+    }
+    
+    
+    {
+    {                if(prev->right == NULL){
+                    prev->right = cur;
+                    cur = cur->left;
+                }
+                else{
+                    prev->right = NULL;
+                    res.push_back(cur->val);
+                    cur = cur->right;
+                }
+            }
+        }
+    
+    int main() {
+    }
+    
+    /// Definition for a binary tree node.
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+    
+            stack.push(root);
+        while(!stack.empty()){
+    }
+    
+    void
+RuleBasedCollator::setAttribute(UColAttribute attr, UColAttributeValue value,
+                                UErrorCode &errorCode) {
+    UColAttributeValue oldValue = getAttribute(attr, errorCode);
+    if(U_FAILURE(errorCode)) { return; }
+    if(value == oldValue) {
+        setAttributeExplicitly(attr);
+        return;
+    }
+    const CollationSettings &defaultSettings = getDefaultSettings();
+    if(settings == &defaultSettings) {
+        if(value == UCOL_DEFAULT) {
+            setAttributeDefault(attr);
+            return;
+        }
+    }
+    CollationSettings *ownedSettings = SharedObject::copyOnWrite(settings);
+    if(ownedSettings == NULL) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    }
+    
+    ScriptSet &ScriptSet::parseScripts(const UnicodeString &scriptString, UErrorCode &status) {
+    resetAll();
+    if (U_FAILURE(status)) {
+        return *this;
+    }
+    UnicodeString oneScriptName;
+    for (int32_t i=0; i<scriptString.length();) {
+        UChar32 c = scriptString.char32At(i);
+        i = scriptString.moveIndex32(i, 1);
+        if (!u_isUWhiteSpace(c)) {
+            oneScriptName.append(c);
+            if (i < scriptString.length()) {
+                continue;
+            }
+        }
+        if (oneScriptName.length() > 0) {
+            char buf[40];
+            oneScriptName.extract(0, oneScriptName.length(), buf, sizeof(buf)-1, US_INV);
+            buf[sizeof(buf)-1] = 0;
+            int32_t sc = u_getPropertyValueEnum(UCHAR_SCRIPT, buf);
+            if (sc == UCHAR_INVALID_CODE) {
+                status = U_ILLEGAL_ARGUMENT_ERROR;
+            } else {
+                this->set((UScriptCode)sc, status);
+            }
+            if (U_FAILURE(status)) {
+                return *this;
+            }
+            oneScriptName.remove();
+        }
+    }
+    return *this;
 }
     
-    template<typename Dtype>
-void DelCaffeBlobs(std::vector< ::caffe::Blob<Dtype>*>* v, int n_num) {
-  for (index_t i=0; i < n_num; ++i)
-    delete v->at(i);
-}
     
-    /*!
- * Copyright (c) 2015 by Contributors
- * \file caffe_data_iter.cc
- * \brief register mnist iterator
-*/
-#include <sys/time.h>
-#include <caffe/proto/caffe.pb.h>
-#include <dmlc/parameter.h>
-#include <atomic>
+class U_I18N_API SharedDateFormatSymbols : public SharedObject {
+public:
+    SharedDateFormatSymbols(
+            const Locale &loc, const char *type, UErrorCode &status)
+            : dfs(loc, type, status) { }
+    virtual ~SharedDateFormatSymbols();
+    const DateFormatSymbols &get() const { return dfs; }
+private:
+    DateFormatSymbols dfs;
+    SharedDateFormatSymbols(const SharedDateFormatSymbols &);
+    SharedDateFormatSymbols &operator=(const SharedDateFormatSymbols &);
+};
     
-    /*!
- * Copyright (c) 2016 by Contributors
- * \file caffe_loss.cc
- * \brief caffe loss
- * \author Haoran Wang
-*/
-#include './caffe_loss-inl.h'
-    
-      virtual void Forward(const OpContext &ctx,
-                       const std::vector<TBlob> &in_data,
-                       const std::vector<OpReqType> &req,
-                       const std::vector<TBlob> &out_data,
-                       const std::vector<TBlob> &aux_args) {
-    // Set mode before forward
-    caffe::CaffeMode::SetMode<xpu>();
-    using ::caffe::Blob;
-    using std::vector;
-    using namespace mshadow;
-    using namespace mshadow::expr;
-    for (uint32_t i = 0; i < req.size(); ++i)
-      CHECK_EQ(req[i], kWriteTo);
-    int expected_num_data = param_.num_weight + param_.num_data;
-    CHECK_EQ(in_data.size(), expected_num_data);
-    CHECK_EQ(out_data.size(), param_.num_out);
-    }
-    
-      virtual bool Next(void) {
-    out_.num_batch_padd = 0;
-    out_.batch_size = param_.batch_size;
-    this->head_ = 0;
-    }
-    
-     protected:
-  /*! \brief prefetcher parameters */
-  PrefetcherParam param_;
-  /*! \brief backend thread */
-  dmlc::ThreadedIter<DataBatch> iter;
-  /*! \brief internal batch loader */
-  std::unique_ptr<IIterator<TBlobBatch> > loader_;
-    
-    /*
- * Call a function on each element of `inputs', in parallel.
- *
- * If `func' throws an exception, some of the work will not be
- * attempted.
- */
-template<class Func, class Item>
-void for_each(const std::vector<Item>& inputs, Func func) {
-  std::atomic<bool> failed{false};
-  std::atomic<size_t> index{0};
-    }
+    class U_I18N_API SharedNumberFormat : public SharedObject {
+public:
+    SharedNumberFormat(NumberFormat *nfToAdopt) : ptr(nfToAdopt) { }
+    virtual ~SharedNumberFormat();
+    const NumberFormat *get() const { return ptr; }
+    const NumberFormat *operator->() const { return ptr; }
+    const NumberFormat &operator*() const { return *ptr; }
+private:
+    NumberFormat *ptr;
+    SharedNumberFormat(const SharedNumberFormat &);
+    SharedNumberFormat &operator=(const SharedNumberFormat &);
+};
     
     #endif
 
     
-    CONFIG_BODY(bool, Bool)
-CONFIG_BODY(char, Byte)
-CONFIG_BODY(unsigned char, UByte)
-CONFIG_BODY(int16_t, Int16)
-CONFIG_BODY(uint16_t, UInt16)
-CONFIG_BODY(int32_t, Int32)
-CONFIG_BODY(uint32_t, UInt32)
-CONFIG_BODY(int64_t, Int64)
-CONFIG_BODY(uint64_t, UInt64)
-CONFIG_BODY(double, Double)
-CONFIG_BODY(std::string, String)
+    // -------------------------------------
     
-      /**
-   * Fill up vector with summary information.
-   */
-  virtual void debuggerInfo(InfoVec& /*info*/) {}
+    static const int32_t gMaxFastInt = 4096;
     
-    PlainDirectory::~PlainDirectory() {
-  close();
+    #include 'unicode/udat.h'
+    
+    #if !UCONFIG_NO_FORMATTING
+    
+    /**
+ * Construct a StringReplacer that sets the emits the given output
+ * text and sets the cursor to the given position.
+ * @param theOutput text that will replace input text when the
+ * replace() method is called.  May contain stand-in characters
+ * that represent nested replacers.
+ * @param theCursorPos cursor position that will be returned by
+ * the replace() method
+ * @param theData transliterator context object that translates
+ * stand-in characters to UnicodeReplacer objects
+ */
+StringReplacer::StringReplacer(const UnicodeString& theOutput,
+                               int32_t theCursorPos,
+                               const TransliterationRuleData* theData) {
+    output = theOutput;
+    cursorPos = theCursorPos;
+    hasCursor = TRUE;
+    data = theData;
+    isComplex = TRUE;
 }
     
-      auto ret = execute_program(newargv.size(), newargv_array);
-    
-    struct Directory;
-    
-    #ifndef HPHP_GLOB_STREAM_WRAPPER_H
-#define HPHP_GLOB_STREAM_WRAPPER_H
-    
-        private:
-        static Microsoft::MSR::CNTK::InputStreamDescription GetInputStreamDescription(const StreamInformation& s, const DeviceDescriptor& device)
-        {
-            assert(s.m_storageFormat == StorageFormat::Dense || s.m_storageFormat == StorageFormat::SparseCSC);
-            auto CNTKdeviceId = AsCNTKImplDeviceId(device);
-            auto CNTKMatrixType = s.m_storageFormat == StorageFormat::Dense ? Microsoft::MSR::CNTK::MatrixType::DENSE : Microsoft::MSR::CNTK::MatrixType::SPARSE;
-            auto CNTKMatrixFormat = AsCNTKImplMatrixFormat(s.m_storageFormat);
-            return Microsoft::MSR::CNTK::InputStreamDescription(s.m_name, CNTKdeviceId, CNTKMatrixType, CNTKMatrixFormat);
-        }
-    
-    
-    {        return newMask;
-    }
-    
-        void ProgressWriter::UpdateDistributedSync(size_t samples, const ValuePtr& accumulatedMetric)
+        // out_of_range.401
+    try
     {
-        m_distributedSync->Update(samples, nullptr, accumulatedMetric,
-            [this](const std::pair<size_t, size_t> samples, std::pair<size_t, size_t> updates,
-                   const std::pair<double, double> /*aggregateLoss*/, std::pair<double, double> aggregateMetric)
-        {
-            OnWriteDistributedSyncUpdate(samples, updates, aggregateMetric);
-        });
+        // try to use a an invalid array index
+        json::reference ref = j.at('/array/4'_json_pointer);
     }
-    
-    void ProgressWriter::WriteTrainingSummary(const ValuePtr& accumulatedLoss, const ValuePtr& accumulatedMetric)
+    catch (json::out_of_range& e)
     {
-        m_training->WriteSummary(
-            accumulatedLoss, accumulatedMetric,
-            [this](size_t samples, size_t updates, size_t summaries, double aggregateLoss, double aggregateMetric,
-                   uint64_t elapsedMs)
-            {
-                OnWriteTrainingSummary(samples, updates, summaries, aggregateLoss, aggregateMetric, elapsedMs);
-            });
+        std::cout << e.what() << '\n';
     }
     
-        std::shared_ptr<DHTNode> localNode;
+        // the following call will not add an object, because there is already
+    // a value stored at key 'B'
+    auto res2 = null.emplace('B', 'c');
     
-    #define READ_CHECK(fp, ptr, count)                                             \
-  if (fp.read((ptr), (count)) != (count)) {                                    \
-    throw DL_ABORT_EX('Failed to load DHT routing table.');                    \
-  }
     
-    DHTRoutingTableSerializer::~DHTRoutingTableSerializer() = default;
+    {  int ret = x;
+  return ret;
+}
     
-    #include <cstring>
-#include <cstdlib>
+      x <<= 4;
+  x |= t;
     
-      DNSCache& operator=(const DNSCache& c);
+    void Spline1dSeg::SetSplineFunc(const PolynomialXd& spline_func) {
+  spline_func_ = spline_func;
+  derivative_ = PolynomialXd::DerivedFrom(spline_func_);
+  second_order_derivative_ = PolynomialXd::DerivedFrom(derivative_);
+  third_order_derivative_ = PolynomialXd::DerivedFrom(second_order_derivative_);
+}
+    
+    TEST_F(GemVehicleFactoryTest, InitVehicleController) {
+  EXPECT_TRUE(gem_factory_.CreateVehicleController() != nullptr);
+}
+    
+      Byte t1(bytes + 5);
+  int32_t t = t1.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
