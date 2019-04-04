@@ -1,252 +1,237 @@
 
         
-        // Generate param traits read methods.
-#include 'ipc/param_traits_read_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
+        
+    {        return true;
+      }
     
+    #include 'atom/browser/native_window_views.h'
     
-    {  DISALLOW_COPY_AND_ASSIGN(Clipboard);
-};
-    
-    
-    {} // namespace nwapi
-
-    
-    void Menu::Popup(int x, int y, content::RenderFrameHost* rfh) {
-  // Rebuild();
-    }
-    
-    static KeyMap keymap = {
-  {'`'    , 'Backquote'},
-  {'\\'   , 'Backslash'},
-  {'['    , 'BracketLeft'},
-  {']'    , 'BracketRight'},
-  {','    , 'Comma'},
-  {'='    , 'Equal'},
-  {'-'    , 'Minus'},
-  {'.'    , 'Period'},
-  {'''    , 'Quote'},
-  {';'    , 'Semicolon'},
-  {'/'    , 'Slash'},
-  {'\n'   , 'Enter'},
-  {'\t'   , 'Tab'},
-  {'UP'   , 'ArrowUp'},
-  {'DOWN' , 'ArrowDown'},
-  {'LEFT' , 'ArrowLeft'},
-  {'RIGHT', 'ArrowRight'},
-  {'ESC'  , 'Escape'},
-  {'MEDIANEXTTRACK', 'MediaTrackNext'},
-  {'MEDIAPREVTRACK', 'MediaTrackPrevious'}
-};
-    
-    
-    {}
-    
-    #include 'extensions/browser/extension_function.h'
-    
-    namespace extensions {
-    }
-    
-    
-    {} // extensions
-
-    
-    class BLOBNBOX;
-class BLOBNBOX_CLIST;
-class BLOB_CHOICE_LIST;
-class STRING;
-class TO_BLOCK_LIST;
-class UNICHARSET;
-template <typename T> class GenericVector;
-    
-      // Count the # of entries starting with a specific prefix.
-  for (vc_it.mark_cycle_pt(); !vc_it.cycled_list(); vc_it.forward()) {
-    ParamContent* vc = vc_it.data();
-    STRING tag;
-    STRING tag2;
-    STRING tag3;
-    }
-    
-      // Gets a VC object identified by its ID.
-  static ParamContent* GetParamContentById(int id);
-    
-    // ReadNextBox factors out the code to interpret a line of a box
-// file so that applybox and unicharset_extractor interpret the same way.
-// This function returns the next valid box file utf8 string and coords
-// and returns true, or false on eof (and closes the file).
-// It ignores the utf8 file signature ByteOrderMark (U+FEFF=EF BB BF), checks
-// for valid utf-8 and allows space or tab between fields.
-// utf8_str is set with the unichar string, and bounding box with the box.
-// If there are page numbers in the file, it reads them all.
-bool ReadNextBox(int *line_number, FILE* box_file,
-                 STRING* utf8_str, TBOX* bounding_box);
-// As ReadNextBox above, but get a specific page number. (0-based)
-// Use -1 to read any page number. Files without page number all
-// read as if they are page 0.
-bool ReadNextBox(int target_page, int *line_number, FILE* box_file,
-                 STRING* utf8_str, TBOX* bounding_box);
-    
-      // Clean up the bounding boxes from the polygonal approximation by
-  // expanding slightly, then clipping to the blobs from the original_word
-  // that overlap. If not null, the block provides the inverse rotation.
-  void ClipToOriginalWord(const BLOCK* block, WERD* original_word);
-    
-      // Adds the given pix to the set of pages in the PDF file, with the given
-  // caption added to the top.
-  void AddPix(const Pix* pix, const char* caption) {
-    int depth = pixGetDepth(const_cast<Pix*>(pix));
-    int color = depth < 8 ? 1 : (depth > 8 ? 0x00ff0000 : 0x80);
-    Pix* pix_debug = pixAddSingleTextblock(
-        const_cast<Pix*>(pix), fonts_, caption, color, L_ADD_BELOW, nullptr);
-    pixaAddPix(pixa_, pix_debug, L_INSERT);
-  }
-    
-    #ifndef TESSERACT_CCSTRUCT_DETLINEFIT_H_
-#define TESSERACT_CCSTRUCT_DETLINEFIT_H_
+      v8::Local<v8::Value> URLRequest(v8::Isolate* isolate);
     
      private:
-  // Code common to different cost functions.
+  atom::RenderProcessPreferences preferences_;
     
-    template <typename T> class GenericVector;
+    #include 'atom/browser/api/event_emitter.h'
+#include 'native_mate/handle.h'
+#include 'ui/display/display_observer.h'
+#include 'ui/display/screen.h'
     
-    // Called on every item found in a WriteBatch.
-class WriteBatchItemPrinter : public WriteBatch::Handler {
- public:
-  WritableFile* dst_;
-  virtual void Put(const Slice& key, const Slice& value) {
-    std::string r = '  put '';
-    AppendEscapedStringTo(&r, key);
-    r += '' '';
-    AppendEscapedStringTo(&r, value);
-    r += ''\n';
-    dst_->Append(r);
+    #include 'base/macros.h'
+#include 'build/build_config.h'
+#include 'native_mate/arguments.h'
+    
+    
+    {}  // namespace atom
+
+    
+    void URLRequestAboutJob::StartAsync() {
+  NotifyHeadersComplete();
+}
+    
+    void OffscreenViewProxy::OnEvent(ui::Event* event) {
+  if (view_) {
+    view_->OnEvent(event);
   }
-  virtual void Delete(const Slice& key) {
-    std::string r = '  del '';
-    AppendEscapedStringTo(&r, key);
-    r += ''\n';
-    dst_->Append(r);
+}
+    
+      PROCESS_BASIC_INFORMATION pbi;
+  LONG status =
+      NtQueryInformationProcess(handle, ProcessBasicInformation, &pbi,
+                                sizeof(PROCESS_BASIC_INFORMATION), NULL);
+  if (!NT_SUCCESS(status)) {
+    LOG(ERROR) << 'NtQueryInformationProcess failed';
+    return NULL;
   }
-};
     
-    #ifndef STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-#define STORAGE_LEVELDB_DB_LOG_FORMAT_H_
+      Begin = new char[capacity];
+  EndOfAllocation = Begin + capacity;
+  End = Begin + oldSize + needed;
+  std::memcpy(Begin, oldBegin, oldSize);
     
-    
-    {
-    {}  // namespace log
-}  // namespace leveldb
-    
-      typedef SkipList<const char*, KeyComparator> Table;
-    
-    class Repairer {
- public:
-  Repairer(const std::string& dbname, const Options& options)
-      : dbname_(dbname),
-        env_(options.env),
-        icmp_(options.comparator),
-        ipolicy_(options.filter_policy),
-        options_(SanitizeOptions(dbname, &icmp_, &ipolicy_, options)),
-        owns_info_log_(options_.info_log != options.info_log),
-        owns_cache_(options_.block_cache != options.block_cache),
-        next_file_number_(1) {
-    // TableCache can be small since we expect each table to be opened once.
-    table_cache_ = new TableCache(dbname_, options_, 10);
+      static CFPointeeInfo forRecord(bool isConst, const clang::RecordDecl *decl) {
+    assert(decl);
+    CFPointeeInfo info;
+    info.IsValid = true;
+    info.IsConst = isConst;
+    info.Decl = decl;
+    return info;
   }
-    }
     
-          case kDeletedFile:
-        if (GetLevel(&input, &level) &&
-            GetVarint64(&input, &number)) {
-          deleted_files_.insert(std::make_pair(level, number));
-        } else {
-          msg = 'deleted file';
+    enum class IAMAccessorKind : uint8_t { None, Getter, Setter };
+    
+    void BackendJobAction::anchor() {}
+    
+    int32_t SearchIterator::next(UErrorCode &status)
+{
+    if (U_SUCCESS(status)) {
+        int32_t offset = getOffset();
+        int32_t matchindex  = m_search_->matchedIndex;
+        int32_t     matchlength = m_search_->matchedLength;
+        m_search_->reset = FALSE;
+        if (m_search_->isForwardSearching == TRUE) {
+            int32_t textlength = m_search_->textLength;
+            if (offset == textlength || matchindex == textlength || 
+                (matchindex != USEARCH_DONE && 
+                matchindex + matchlength >= textlength)) {
+                // not enough characters to match
+                setMatchNotFound();
+                return USEARCH_DONE; 
+            }
         }
-        break;
-    
-        public:
-        CompositeMinibatchSource(const MinibatchSourceConfig& configuration);
-    
-        size_t CurrentSeed() const
-    {
-        return currentseed;
+        else {
+            // switching direction. 
+            // if matchedIndex == USEARCH_DONE, it means that either a 
+            // setOffset has been called or that previous ran off the text
+            // string. the iterator would have been set to offset 0 if a 
+            // match is not found.
+            m_search_->isForwardSearching = TRUE;
+            if (m_search_->matchedIndex != USEARCH_DONE) {
+                // there's no need to set the collation element iterator
+                // the next call to next will set the offset.
+                return matchindex;
+            }
+        }
+    }
     }
     
-        virtual void /*ComputationNodeBase::*/ Validate(bool isFinalValidationPass) override
-    {
-        Base::Validate(isFinalValidationPass);
-        InferMBLayoutFromInputsForStandardCase(isFinalValidationPass);
+    #ifndef __SHARED_CALENDAR_H__
+#define __SHARED_CALENDAR_H__
+    
+    
+    {        // Use subFormat() to format a repeated pattern character
+        // when a different pattern or non-pattern character is seen
+        if (ch != prevCh && count > 0) {
+            subFormat(appendTo, prevCh, count, capitalizationContext, fieldNum++, handler, *workCal, mutableNFs, status);
+            count = 0;
+        }
+        if (ch == QUOTE) {
+            // Consecutive single quotes are a single quote literal,
+            // either outside of quotes or between quotes
+            if ((i+1) < fPattern.length() && fPattern[i+1] == QUOTE) {
+                appendTo += (UChar)QUOTE;
+                ++i;
+            } else {
+                inQuote = ! inQuote;
+            }
+        }
+        else if (!inQuote && isSyntaxChar(ch)) {
+            // ch is a date-time pattern character to be interpreted
+            // by subFormat(); count the number of times it is repeated
+            prevCh = ch;
+            ++count;
+        }
+        else {
+            // Append quoted characters and unquoted non-pattern characters
+            appendTo += ch;
+        }
     }
     
-    // MatrixPool -- class to support memory sharing
-// Despite the gather general name of this class, it is specifically designed to support the memory sharing of ComputationNodes.
-// Note: see #define SUPRESS_MEMSHARING below as for how to temporarily disable memory sharing altogether, for debugging
-class MatrixPool
+    #ifndef SMPDTFST_H
+#define SMPDTFST_H
+    
+        /**
+     * @param keyword for example 'few' or 'other'
+     * @return the index of the plural form corresponding to the keyword, or a negative value
+     */
+    static int32_t indexOrNegativeFromString(const char *keyword);
+    
+    // NOTE: the original code used the same class for the `reverse()` method
+EASERATE_TEMPLATE_IMPL(EaseIn, tweenfunc::easeIn);
+EASERATE_TEMPLATE_IMPL(EaseOut, tweenfunc::easeOut);
+EASERATE_TEMPLATE_IMPL(EaseInOut, tweenfunc::easeInOut);
+    
+    bool CallFuncN::initWithTarget(Ref* selectorTarget, SEL_CallFuncN selector)
+{
+    if (CallFunc::initWithTarget(selectorTarget))
+    {
+        _callFuncN = selector;
+        return true;
+    }
+    }
+    
+    /** @class FlipY
+* @brief Flips the sprite vertically.
+* @since v0.99.0
+*/
+class CC_DLL FlipY : public ActionInstant
 {
 public:
-    typedef const void* AliasNodePtr; // use as an identifier in place of ComputationNodeBasePtr to avoid include order issue
+    /** Create the action.
+     *
+     * @param y Flips the sprite vertically if true.
+     * @return An autoreleased FlipY object.
+     */
+    static FlipY * create(bool y);
     }
     
-            // output dims
-        dimsC[0] = (m_rnnAttributes.m_bidirectional ? 2 : 1) * m_rnnAttributes.m_hiddenSize;
     
-      int numBucket_;
+    /** Returns the numbers of actions that are running in a
+     *  certain target with a specific tag.
+     * Like getNumberOfRunningActionsInTarget Composable actions
+     * are counted as 1 action. Example:
+     * - If you are running 1 Sequence of 7 actions, it will return 1.
+     * - If you are running 7 Sequences of 2 actions, it will return 7.
+     *
+     * @param target    A certain target.
+     * @param tag       Tag that will be searched.
+     * @return  The numbers of actions that are running in a certain target
+     *          with a specific tag.
+     * @see getNumberOfRunningActionsInTarget
+     * @js NA
+     */
+    virtual size_t getNumberOfRunningActionsInTargetByTag(const Node *target, int tag);
     
-      // header
-  readBytes(fp, buf, buf.size(), 8);
-  if (memcmp(header, buf, 8) == 0) {
-    version = 3;
+        /**
+    @brief Create an action with duration, grid size.
+    @param duration Specify the duration of the PageTurn3D action. It's a value in seconds.
+    @param gridSize Specify the size of the grid.
+    @return If the creation success, return a pointer of PageTurn3D action; otherwise, return nil.
+    */
+    static PageTurn3D* create(float duration, const Size& gridSize);
+    
+    using apollo::common::ErrorCode;
+    
+    using apollo::common::ErrorCode;
+    
+    double ClusterGeneralInfo701::lateral_vel(const std::uint8_t* bytes,
+                                          int32_t length) const {
+  Byte t0(bytes + 5);
+  uint32_t x = t0.get_byte(0, 6);
+    }
+    
+    int ObjectExtendedInfo60D::obstacle_class(const std::uint8_t* bytes,
+                                          int32_t length) const {
+  Byte t0(bytes + 3);
+  int32_t x = t0.get_byte(0, 3);
+    }
+    
+    
+    {  for (int i = 0; i < conti_radar->contiobs_size(); ++i) {
+    if (conti_radar->contiobs(i).obstacle_id() == obj_id) {
+      auto obs = conti_radar->mutable_contiobs(i);
+      obs->set_longitude_dist_rms(
+          LINEAR_RMS[longitude_dist_rms(bytes, length)]);
+      obs->set_lateral_dist_rms(LINEAR_RMS[lateral_dist_rms(bytes, length)]);
+      obs->set_longitude_vel_rms(LINEAR_RMS[longitude_vel_rms(bytes, length)]);
+      obs->set_lateral_vel_rms(LINEAR_RMS[lateral_vel_rms(bytes, length)]);
+      obs->set_longitude_accel_rms(
+          LINEAR_RMS[longitude_accel_rms(bytes, length)]);
+      obs->set_lateral_accel_rms(LINEAR_RMS[lateral_accel_rms(bytes, length)]);
+      obs->set_oritation_angle_rms(
+          ANGLE_RMS[oritation_angle_rms(bytes, length)]);
+      obs->set_probexist(PROBOFEXIST[probexist(bytes, length)]);
+      obs->set_meas_state(meas_state(bytes, length));
+      break;
+    }
   }
-  else if (memcmp(headerCompat, buf, 8) == 0) {
-    version = 2;
-  }
-  else {
-    throw DL_ABORT_EX(fmt('Failed to load DHT routing table from %s. cause:%s',
-                          filename.c_str(), 'bad header'));
-  }
-    
-    
-    {} // namespace aria2
-    
-    
-    {  virtual bool finished() = 0;
-};
-    
-    DHTTokenTracker::DHTTokenTracker(const unsigned char* initialSecret)
-{
-  memcpy(secret_[0], initialSecret, SECRET_SIZE);
-  memcpy(secret_[1], initialSecret, SECRET_SIZE);
 }
     
-    TEST(ByteTest, ByteToString) {
-  unsigned char value = 0x34;
-  EXPECT_EQ('34', Byte::byte_to_hex(value));
-  EXPECT_EQ('00110100', Byte::byte_to_binary(value));
-  uint32_t int_value = 0xE13A;
-  EXPECT_EQ('E13A', Byte::byte_to_hex(int_value));
+    
+    {  acc.Parse(bytes, length, &chassis_detail);
+  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().manual_input(), 0.258);
+  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().commanded_value(),
+                   0.772);
+  EXPECT_DOUBLE_EQ(chassis_detail.gem().accel_rpt_68().output_value(), 4.37);
 }
     
-    // data file
-DEFINE_string(sensor_conf_file, '', 'Sensor conf file');
-    
-    Spline1dSeg::Spline1dSeg(const uint32_t order) {
-  SetSplineFunc(PolynomialXd(order));
-}
-    
-    Eigen::MatrixXd SplineSegKernel::Kernel(const uint32_t num_params,
-                                        const double accumulated_x) {
-  if (num_params > reserved_order_ + 1) {
-    CalculateFx(num_params);
-  }
-  Eigen::MatrixXd term_matrix;
-  IntegratedTermMatrix(num_params, accumulated_x, 'fx', &term_matrix);
-  return kernel_fx_.block(0, 0, num_params, num_params)
-      .cwiseProduct(term_matrix);
-}
-    
-    #include 'modules/drivers/canbus/common/byte.h'
-#include 'modules/drivers/canbus/common/canbus_consts.h'
-    
-    #include 'modules/canbus/vehicle/gem/protocol/brake_rpt_6c.h'
+    using ::apollo::drivers::canbus::Byte;
