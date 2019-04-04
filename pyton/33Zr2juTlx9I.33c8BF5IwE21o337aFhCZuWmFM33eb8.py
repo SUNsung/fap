@@ -1,205 +1,213 @@
 
         
-        flags.DEFINE_integer('ci_enc_dim', CI_ENC_DIM,
-                     'Cell hidden size, encoder of control inputs')
-flags.DEFINE_integer('con_dim', CON_DIM,
-                     'Cell hidden size, controller')
+        from __future__ import absolute_import, division, print_function
+__metaclass__ = type
     
-    import numpy as np
-import tensorflow as tf
+    try:
+    from google.cloud import spanner
+    from google.gax.errors import GaxError
+    HAS_GOOGLE_CLOUD_SPANNER = True
+except ImportError as e:
+    HAS_GOOGLE_CLOUD_SPANNER = False
     
-    import os
-import pickle as pkl
-import numpy as np
-import tensorflow as tf
-import utils
-    
-      Returns:
-    Tuple of the (sequence, logits, log_probs) of the Generator.   Sequence
-      and logits have shape [batch_size, sequence_length, vocab_size].  The
-      log_probs will have shape [batch_size, sequence_length].  Log_probs
-      corresponds to the log probability of selecting the words.
-  '''
-  if FLAGS.generator_model == 'rnn':
-    (sequence, logits, log_probs, initial_state, final_state) = rnn.generator(
-        hparams,
-        inputs,
-        targets,
-        present,
-        is_training=is_training,
-        is_validating=is_validating,
-        reuse=reuse)
-  elif FLAGS.generator_model == 'rnn_zaremba':
-    (sequence, logits, log_probs, initial_state,
-     final_state) = rnn_zaremba.generator(
-         hparams,
-         inputs,
-         targets,
-         present,
-         is_training=is_training,
-         is_validating=is_validating,
-         reuse=reuse)
-  elif FLAGS.generator_model == 'seq2seq':
-    (sequence, logits, log_probs, initial_state,
-     final_state) = seq2seq.generator(
-         hparams,
-         inputs,
-         targets,
-         present,
-         is_training=is_training,
-         is_validating=is_validating,
-         reuse=reuse)
-  elif FLAGS.generator_model == 'seq2seq_zaremba':
-    (sequence, logits, log_probs, initial_state,
-     final_state) = seq2seq_zaremba.generator(
-         hparams,
-         inputs,
-         targets,
-         present,
-         is_training=is_training,
-         is_validating=is_validating,
-         reuse=reuse)
-  elif FLAGS.generator_model == 'rnn_nas':
-    (sequence, logits, log_probs, initial_state,
-     final_state) = rnn_nas.generator(
-         hparams,
-         inputs,
-         targets,
-         present,
-         is_training=is_training,
-         is_validating=is_validating,
-         reuse=reuse)
-  elif FLAGS.generator_model == 'seq2seq_nas':
-    (sequence, logits, log_probs, initial_state,
-     final_state) = seq2seq_nas.generator(
-         hparams,
-         inputs,
-         targets,
-         present,
-         is_training=is_training,
-         is_validating=is_validating,
-         reuse=reuse)
-  elif FLAGS.generator_model == 'seq2seq_vd':
-    (sequence, logits, log_probs, initial_state, final_state,
-     encoder_states) = seq2seq_vd.generator(
-         hparams,
-         inputs,
-         targets,
-         present,
-         is_training=is_training,
-         is_validating=is_validating,
-         reuse=reuse)
-  else:
-    raise NotImplementedError
-  return (sequence, logits, log_probs, initial_state, final_state,
-          encoder_states)
-    
-          for s in xrange(t, FLAGS.sequence_length):
-        cum_advantage += missing_list[s] * np.power(gamma,
-                                                    (s - t)) * rewards_list[s]
-      cum_advantage -= baselines[t]
-      # Clip advantages.
-      cum_advantage = tf.clip_by_value(cum_advantage, -FLAGS.advantage_clipping,
-                                       FLAGS.advantage_clipping)
-      advantages.append(missing_list[t] * cum_advantage)
-      final_gen_objective += tf.multiply(
-          log_probability, missing_list[t] * tf.stop_gradient(cum_advantage))
-    
-    
-def gen_encoder_seq2seq(hparams):
-  '''Returns the PTB Variable name to MaskGAN Variable
-  dictionary mapping.  This is a highly restrictive function just for testing.
-  This is foe the *unidirecitional* seq2seq_zaremba encoder.
-    
-        if check_author and post['author_id'] != g.user['id']:
-        abort(403)
-    
-    
-@pytest.fixture
-def app():
-    '''Create and configure a new app instance for each test.'''
-    # create a temporary file to isolate the database for each test
-    db_fd, db_path = tempfile.mkstemp()
-    # create the app with common test config
-    app = create_app({
-        'TESTING': True,
-        'DATABASE': db_path,
-    })
-    
-        # test that successful registration redirects to the login page
-    response = client.post(
-        '/auth/register', data={'username': 'a', 'password': 'a'}
-    )
-    assert 'http://localhost/auth/login' == response.headers['Location']
-    
-        :copyright: © 2010 by the Pallets team.
-    :license: BSD, see LICENSE for more details.
+    - heroku_collaborator:
+    api_key: YOUR_API_KEY
+    user: '{{ item.user }}'
+    apps: '{{ item.apps | default(apps) }}'
+    suppress_invitation: '{{ item.suppress_invitation | default(suppress_invitation) }}'
+    state: '{{ item.state | default('present') }}'
+  with_items:
+    - { user: 'a.b@example.com' }
+    - { state: 'absent', user: 'b.c@example.com', suppress_invitation: false }
+    - { user: 'x.y@example.com', apps: ['heroku-example-app'] }
 '''
     
-            from .debughelpers import explain_template_loading_attempts
-        explain_template_loading_attempts(self.app, template, attempts)
+            firewall_rules = []
     
+    - oneandone_moitoring_policy:
+    auth_token: oneandone_private_api_key
+    monitoring_policy: ansible monitoring policy updated
+    add_ports:
+     -
+       protocol: TCP
+       port: 33
+       alert_if: RESPONDING
+       email_notification: false
+    wait: true
+    state: update
     
-def build():
-    cmd = [sys.executable, 'setup.py', 'sdist', 'bdist_wheel']
-    Popen(cmd).wait()
-    
-    
-@pytest.fixture(scope='session', autouse=True)
-def _standard_os_environ():
-    '''Set up ``os.environ`` at the start of the test session to have
-    standard values. Returns a list of operations that is used by
-    :func:`._reset_os_environ` after each test.
-    '''
-    mp = monkeypatch.MonkeyPatch()
-    out = (
-        (os.environ, 'FLASK_APP', monkeypatch.notset),
-        (os.environ, 'FLASK_ENV', monkeypatch.notset),
-        (os.environ, 'FLASK_DEBUG', monkeypatch.notset),
-        (os.environ, 'FLASK_RUN_FROM_CLI', monkeypatch.notset),
-        (os.environ, 'WERKZEUG_RUN_MAIN', monkeypatch.notset),
-    )
+    ANSIBLE_METADATA = {'metadata_version': '1.1',
+                    'status': ['preview'],
+                    'supported_by': 'community'}
     
         try:
-        region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module, boto3=True)
-        iam = boto3_conn(module, conn_type='client', resource='iam', region=region, endpoint=ec2_url, **aws_connect_kwargs)
-    except botocore.exceptions.ClientError as e:
-        module.fail_json(msg='Boto3 Client Error - ' + str(e.msg))
+        client.login(
+            username=module.params['ipa_user'],
+            password=module.params['ipa_pass']
+        )
+        changed, zone = ensure(module, client)
+        module.exit_json(changed=changed, zone=zone)
+    except Exception as e:
+        module.fail_json(msg=to_native(e))
     
-            heroku_app = client.apps()[app]
+    short_description: Manage Icinga2 feature
+description:
+    - This module can be used to enable or disable an Icinga2 feature.
+version_added: '2.3'
+author: 'Loic Blot (@nerzhul)'
+options:
+    name:
+      description:
+      - This is the feature name to enable or disable.
+      required: True
+    state:
+      description:
+      - If set to C(present) and feature is disabled, then feature is enabled.
+      - If set to C(present) and feature is already enabled, then nothing is changed.
+      - If set to C(absent) and feature is enabled, then feature is disabled.
+      - If set to C(absent) and feature is already disabled, then nothing is changed.
+      choices: [ 'present', 'absent' ]
+      default: present
+'''
     
-        for (index, rule) in enumerate(desired_rules):
-        try:
-            if rule != current_rules[index]:
-                updates.append((index, rule))
-        except IndexError:
-            additions.append(rule)
+        # get the first device
+    model = root.find('ca:model-responses', namespace).find('ca:model', namespace)
+    
+    - stackdriver:
+    key: AAAAAA
+    event: annotation
+    msg: Greetings from Ansible
+    annotated_by: leeroyjenkins
+    level: WARN
+    instance_id: i-abcd1234
+'''
+    
+            # Force reload if files were modified
+        # This is needed to recalculate augeas directive span
+        if save_files:
+            for sf in save_files:
+                self.aug.remove('/files/'+sf)
+            self.aug.load()
+        if title and not temporary:
+            self.finalize_checkpoint(title)
+    
+    HSTS_ARGS = ['always', 'set', 'Strict-Transport-Security',
+             '\'max-age=31536000\'']
+'''Apache header arguments for HSTS'''
+    
+        def conflicts(self, addrs):
+        '''See if vhost conflicts with any of the addrs.
+    
+        def setUp(self):
+        self.base_dir = '/example_path'
+        self.vhosts = util.get_vh_truth(
+            self.base_dir, 'debian_apache_2_4/multiple_vhosts')
     
     
-if __name__ == '__main__':
-    main()
-
+# -- Options for manual page output ---------------------------------------
     
-    ### OUTPUT ###
-# Floor: One | Size: Big
-# Floor: More than One | Size: Small
-# Floor: One | Size: Big and fancy
-
+    def baomihua_download_by_id(id, title=None, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html('http://play.baomihua.com/getvideourl.aspx?flvid=%s&devicetype=phone_app' % id)
+    host = r1(r'host=([^&]*)', html)
+    assert host
+    type = r1(r'videofiletype=([^&]*)', html)
+    assert type
+    vid = r1(r'&stream_name=([^&]*)', html)
+    assert vid
+    dir_str = r1(r'&dir=([^&]*)', html).strip()
+    url = 'http://%s/%s/%s.%s' % (host, dir_str, vid, type)
+    _, ext, size = url_info(url)
+    print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir, merge = merge)
     
-    production code which is untestable:
+            video_id = match1(html, r'data-brightcove-id='(\d+)'')
+        
+        assert account_number, video_id
+    
+        if '_text' in dictified['video'][0]['file'][0]:  #link exist
+        video_dict['links'] = [i['file'][0]['_text'].strip() for i in dictified['video']]
     
     
-class Inservice(Unit):
-    def __init__(self, HierachicalStateMachine):
-        self._hsm = HierachicalStateMachine
+class CNTV(VideoExtractor):
+    name = 'CNTV.com'
+    stream_types = [
+        {'id': '1', 'video_profile': '1280x720_2000kb/s', 'map_to': 'chapters4'},
+        {'id': '2', 'video_profile': '1280x720_1200kb/s', 'map_to': 'chapters3'},
+        {'id': '3', 'video_profile': '640x360_850kb/s', 'map_to': 'chapters2'},
+        {'id': '4', 'video_profile': '480x270_450kb/s', 'map_to': 'chapters'},
+        {'id': '5', 'video_profile': '320x180_200kb/s', 'map_to': 'lowChapters'},
+    ]
     
-        def show_items(self):
-        items = list(self.model)
-        item_type = self.model.item_type
-        self.view.show_item_list(item_type, items)
+    # looks that flickr won't return urls for all sizes
+# we required in 'extras field without a acceptable header
+dummy_header = {
+    'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0'
+}
+def get_content_headered(url):
+    return get_content(url, dummy_header)
     
-        def test_am_station_overflow_after_scan(self):
-        self.radio.scan()
-        station = self.radio.state.stations[self.radio.state.pos]
-        expected_station = '1250'
-        self.assertEqual(station, expected_station)
+        html = get_content(url)
+    uuid_pattern = r''([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})''
+    id = r1(r'var vid='([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})'', html)
+    if id is None:
+        video_pattern = r''vid'\s*:\s*' + uuid_pattern
+        id = match1(html, video_pattern)
+    assert id, 'can't find video info'
+    return ifeng_download_by_id(id, None, output_dir = output_dir, merge = merge, info_only = info_only)
+    
+    
+def im_detect_keypoints_aspect_ratio(
+    model, im, aspect_ratio, boxes, hflip=False
+):
+    '''Detects keypoints at the given width-relative aspect ratio.'''
+    
+    
+def add_stage(
+    model,
+    prefix,
+    blob_in,
+    n,
+    dim_in,
+    dim_out,
+    dim_inner,
+    dilation,
+    stride_init=2
+):
+    '''Add a ResNet stage to the model by stacking n residual blocks.'''
+    # e.g., prefix = res2
+    for i in range(n):
+        blob_in = add_residual_block(
+            model,
+            '{}_{}'.format(prefix, i),
+            blob_in,
+            dim_in,
+            dim_out,
+            dim_inner,
+            dilation,
+            stride_init,
+            # Not using inplace for the last block;
+            # it may be fetched externally or used by FPN
+            inplace_sum=i < n - 1
+        )
+        dim_in = dim_out
+    return blob_in, dim_in
+    
+    
+_RENAME = {
+    # Removed 'ResNet_' from the name because it wasn't relevent
+    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v1up4convs':
+        'mask_rcnn_heads.mask_rcnn_fcn_head_v1up4convs',
+    # Removed 'ResNet_' from the name because it wasn't relevent
+    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v1up':
+        'mask_rcnn_heads.mask_rcnn_fcn_head_v1up',
+    # Removed 'ResNet_' from the name because it wasn't relevent
+    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v0upshare':
+        'mask_rcnn_heads.mask_rcnn_fcn_head_v0upshare',
+    # Removed 'ResNet_' from the name because it wasn't relevent
+    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v0up':
+        'mask_rcnn_heads.mask_rcnn_fcn_head_v0up',
+    # Removed head_builder module in favor of the more specific fast_rcnn name
+    'head_builder.add_roi_2mlp_head':
+        'fast_rcnn_heads.add_roi_2mlp_head',
+}
