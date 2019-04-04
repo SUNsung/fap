@@ -1,90 +1,139 @@
 
         
-            def __init__(self, **kwargs):
-        '''
-        Use keyword arguments to overwrite
-        any of the class attributes for this instance.
+        
+def finalize_headers(headers):
+    final_headers = {}
+    for name, value in headers.items():
+        if value is not None:
     
-        def format_body(self, content, mime):
-        if is_valid_mime(mime):
-            for p in self.enabled_plugins:
-                content = p.format_body(content, mime)
-        return content
+    
+def test_default_options_overwrite(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http('--json', httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['json'] == {'foo': 'bar'}
+    
+    
+def test_unicode_headers_verbose(httpbin):
+    # httpbin doesn't interpret utf8 headers
+    r = http('--verbose', httpbin.url + '/headers', u'Test:%s' % UNICODE)
+    assert HTTP_OK in r
+    assert UNICODE in r
+    
+        @property
+    def cookies(self):
+        jar = RequestsCookieJar()
+        for name, cookie_dict in self['cookies'].items():
+            jar.set_cookie(create_cookie(
+                name, cookie_dict.pop('value'), **cookie_dict))
+        jar.clear_expired_cookies()
+        return jar
+    
+        with gzip.open(paths[3], 'rb') as imgpath:
+        x_test = np.frombuffer(imgpath.read(), np.uint8,
+                               offset=16).reshape(len(y_test), 28, 28)
+    
+    
+def l1_l2(l1=0.01, l2=0.01):
+    return L1L2(l1=l1, l2=l2)
+    
+            # Instantiate the base model (or 'template' model).
+        # We recommend doing this with under a CPU device scope,
+        # so that the model's weights are hosted on CPU memory.
+        # Otherwise they may end up hosted on a GPU, which would
+        # complicate weight sharing.
+        with tf.device('/cpu:0'):
+            model = Xception(weights=None,
+                             input_shape=(height, width, 3),
+                             classes=num_classes)
+    
+    # Stack of Transposed Conv2D blocks
+# Notes:
+# 1) Use Batch Normalization before ReLU on deep networks
+# 2) Use UpSampling2D as alternative to strides>1
+# - faster but not as good as strides>1
+for filters in layer_filters[::-1]:
+    x = Conv2DTranspose(filters=filters,
+                        kernel_size=kernel_size,
+                        strides=2,
+                        activation='relu',
+                        padding='same')(x)
+    
+    # create complete model
+model = Sequential(feature_layers + classification_layers)
+    
+    num_classes = np.max(y_train) + 1
+print(num_classes, 'classes')
+    
+    mse = MSE = mean_squared_error
+mae = MAE = mean_absolute_error
+mape = MAPE = mean_absolute_percentage_error
+msle = MSLE = mean_squared_logarithmic_error
+kld = KLD = kullback_leibler_divergence
+cosine = cosine_proximity
+    
+    plt.figure('scikit-learn Ward's method benchmark results')
+plt.imshow(np.log(ratio), aspect='auto', origin='lower')
+plt.colorbar()
+plt.contour(ratio, levels=[1, ], colors='k')
+plt.yticks(range(len(n_features)), n_features.astype(np.int))
+plt.ylabel('N features')
+plt.xticks(range(len(n_samples)), n_samples.astype(np.int))
+plt.xlabel('N samples')
+plt.title('Scikit's time, in units of scipy time (log)')
+plt.show()
 
     
+        # Print and plot the confusion matrix
+    cm = metrics.confusion_matrix(y_test, y_predicted)
+    print(cm)
     
-def write_stream(stream, outfile, flush):
-    '''Write the output stream.'''
-    try:
-        # Writing bytes so we use the buffer interface (Python 3).
-        buf = outfile.buffer
-    except AttributeError:
-        buf = outfile
+    from sklearn import datasets
+from sklearn.utils import shuffle
+from sklearn.metrics import mean_squared_error
+from sklearn.svm.classes import NuSVR
+from sklearn.ensemble.gradient_boosting import GradientBoostingRegressor
+from sklearn.linear_model.stochastic_gradient import SGDClassifier
+from sklearn.metrics import hamming_loss
     
-        def register(self, *plugins):
-        for plugin in plugins:
-            self._plugins.append(plugin)
+    # Create a graph capturing local connectivity. Larger number of neighbors
+# will give more homogeneous clusters to the cost of computation
+# time. A very large number of neighbors gives more evenly distributed
+# cluster sizes, but may not impose the local manifold structure of
+# the data
+knn_graph = kneighbors_graph(X, 30, include_self=False)
     
-    from utils import http, add_auth, HTTP_OK, MockEnvironment
-import httpie.input
-import httpie.cli
+    These images how similar features are merged together using
+feature agglomeration.
+'''
+print(__doc__)
     
-        plugin_manager.register(Plugin)
-    try:
-        r = http(
-            httpbin + BASIC_AUTH_URL,
-            '--auth-type',
-            Plugin.auth_type,
-        )
-        assert HTTP_OK in r
-        assert r.json == AUTH_OK
-    finally:
-        plugin_manager.unregister(Plugin)
+    digits = datasets.load_digits(n_class=10)
+X = digits.data
+y = digits.target
+n_samples, n_features = X.shape
     
+    '''
+Dependency Injection (DI) is a technique whereby one object supplies the dependencies (services)
+to another object (client).
+It allows to decouple objects: no need to change client code simply because an object it depends on
+needs to be changed to a different one. (Open/Closed principle)
     
-def test_migrate_implicit_content_type():
-    config = MockEnvironment().config
+        @property
+    def _lazy_property(self):
+        if not hasattr(self, attr):
+            setattr(self, attr, fn(self))
+        return getattr(self, attr)
     
+        def test_object(queue):
+        pool = ObjectPool(queue, True)
+        print('Inside func: {}'.format(pool.item))
     
-def rst_filenames():
-    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
-        if '.tox' not in root:
-            for filename in fnmatch.filter(filenames, '*.rst'):
-                yield os.path.join(root, filename)
+    ''
     
+    from __future__ import print_function
+import time
     
-def test_max_redirects(httpbin):
-    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
-             error_exit_ok=True)
-    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
-
-    
-    
-def test_unicode_digest_auth(httpbin):
-    # it doesn't really authenticate us because httpbin
-    # doesn't interpret the utf8-encoded auth
-    http('--auth-type=digest',
-         '--auth', u'test:%s' % UNICODE,
-         httpbin.url + u'/digest-auth/auth/test/' + UNICODE)
-
-    
-            '''
-        for name, value in request_headers.items():
-    
-        def sum_up(self):
-        actually_downloaded = (
-            self.status.downloaded - self.status.resumed_from)
-        time_taken = self.status.time_finished - self.status.time_started
-    
-    HEADER_ARGS = {'Strict-Transport-Security': HSTS_ARGS}
-
-    
-        def test_default_decoder(self):
-        from acme.fields import RFC3339Field
-        self.assertEqual(
-            self.decoded, RFC3339Field.default_decoder(self.encoded))
-    
-        # TODO: decoder should check that nonce is in the protected header
-    
-    # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+        def test_parrot_eng_localization(self):
+        self.assertEqual(self.e.get('parrot'), 'parrot')
