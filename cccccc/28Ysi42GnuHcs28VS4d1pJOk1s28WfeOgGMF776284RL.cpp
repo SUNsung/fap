@@ -1,217 +1,192 @@
-void add(const Size2D &size,
-         const u8 * src0Base, ptrdiff_t src0Stride,
-         const u8 * src1Base, ptrdiff_t src1Stride,
-         u8 *dstBase, ptrdiff_t dstStride,
-         CONVERT_POLICY policy)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    if (policy == CONVERT_POLICY_SATURATE)
-    {
-        internal::vtransform(size,
-                             src0Base, src0Stride,
-                             src1Base, src1Stride,
-                             dstBase, dstStride,
-                             AddSaturate<u8, u16>());
-    }
-    else
-    {
-        internal::vtransform(size,
-                             src0Base, src0Stride,
-                             src1Base, src1Stride,
-                             dstBase, dstStride,
-                             AddWrap<u8, u16>());
-    }
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)policy;
-#endif
-}
+
+        
+        // Instantiate a class with float and double specifications.
+#define INSTANTIATE_CLASS(classname) \
+  char gInstantiationGuard##classname; \
+  template class classname<float>; \
+  template class classname<double>
     
-    void bitwiseAnd(const Size2D &size,
-                const u8 *src0Base, ptrdiff_t src0Stride,
-                const u8 *src1Base, ptrdiff_t src1Stride,
-                u8 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, BitwiseAnd());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
+      /**
+   * @brief Does layer-specific setup: your layer should implement this function
+   *        as well as Reshape.
+   *
+   * @param bottom
+   *     the preshaped input blobs, whose data fields store the input data for
+   *     this layer
+   * @param top
+   *     the allocated but unshaped output blobs
+   *
+   * This method should do one-time layer specific setup. This includes reading
+   * and processing relevent parameters from the <code>layer_param_</code>.
+   * Setting up the shapes of top blobs and internal buffers should be done in
+   * <code>Reshape</code>, which will be called before the forward pass to
+   * adjust the top blob sizes.
+   */
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) {}
     
-            1   2   3
-         *  *  *
-          * * *
-        0*******0
-          * * *
-         *  *  *
-        3   2   1
-    */
+      // Adds a creator.
+  static void AddCreator(const string& type, Creator creator) {
+    CreatorRegistry& registry = Registry();
+    CHECK_EQ(registry.count(type), 0)
+        << 'Layer type ' << type << ' already registered.';
+    registry[type] = creator;
+  }
     
-                    if (border == BORDER_MODE_CONSTANT && x4 < 0)
-                    prevx[0] = prevx[1] = prevx[2] = borderValue;
-                else
-                {
-                    prevx[0] = srow0 ? srow0[x4] : borderValue;
-                    prevx[1] =         srow1[x4]              ;
-                    prevx[2] = srow2 ? srow2[x4] : borderValue;
-                }
+      virtual inline const char* type() const { return 'BatchReindex'; }
+  virtual inline int ExactNumBottomBlobs() const { return 2; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
     
-                // calculate values for plain CPU part below if needed
-            if (x + 8 >= bwidth)
-            {
-                ptrdiff_t x3 = x == width ? width - 1 : x;
-                ptrdiff_t x4 = border == BORDER_MODE_CONSTANT ? x3 - 1 : std::max<ptrdiff_t>(x3 - 1, 0);
-    }
+      /**
+   * @brief Computes the Contrastive error gradient w.r.t. the inputs.
+   *
+   * Computes the gradients with respect to the two input vectors (bottom[0] and
+   * bottom[1]), but not the similarity label (bottom[2]).
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
+   *      This Blob's diff will simply contain the loss_weight* @f$ \lambda @f$,
+   *      as @f$ \lambda @f$ is the coefficient of this layer's output
+   *      @f$\ell_i@f$ in the overall Net loss
+   *      @f$ E = \lambda_i \ell_i + \mbox{other loss terms}@f$; hence
+   *      @f$ \frac{\partial E}{\partial \ell_i} = \lambda_i @f$.
+   *      (*Assuming that this top Blob is not used as a bottom (input) by any
+   *      other layer of the Net.)
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times 1 \times 1) @f$
+   *      the features @f$a@f$; Backward fills their diff with
+   *      gradients if propagate_down[0]
+   *   -# @f$ (N \times C \times 1 \times 1) @f$
+   *      the features @f$b@f$; Backward fills their diff with gradients if
+   *      propagate_down[1]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    void Laplacian3OpenCV(const Size2D &size,
-                      const u8 * srcBase, ptrdiff_t srcStride,
-                      s16 * dstBase, ptrdiff_t dstStride,
-                      BORDER_MODE border, u8 borderValue)
-{
-    internal::assertSupportedConfiguration(isLaplacianOpenCVSupported(size, border));
-#ifdef CAROTENE_NEON
-    ptrdiff_t rows = size.height, cols = size.width;
-    }
+     protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    REGISTER_CPU_OPERATOR(
-    MergeMultiMapFeatureTensors,
-    MergeMultiMapFeatureTensorsOp<CPUContext>);
-OPERATOR_SCHEMA(MergeMultiMapFeatureTensors)
-    .SetDoc(
-        'Merge given multi-feature tensors with map features into one.' + doc)
-    .NumInputs([](int n) { return n >= 5 && n % 5 == 0; })
-    .NumOutputs(5)
-    .Input(0, 'in1_lengths', '.lengths')
-    .Input(1, 'in1_keys', '.keys')
-    .Input(2, 'in1_values_lengths', '.values.lengths')
-    .Input(3, 'in1_values_keys', '.values.keys')
-    .Input(4, 'in1_values_values', '.values.values')
-    .Output(0, 'out_lengths', '.lengths')
-    .Output(1, 'out_keys', '.keys')
-    .Output(2, 'out_values_lengths', '.values_lengths')
-    .Output(3, 'out_values_keys', '.values.keys')
-    .Output(4, 'out_values_values', '.values.values');
     
-    template <typename T, class Context>
-class FlexibleTopKGradientOp : public Operator<Context> {
+    {}  // namespace caffe
+    
+    #ifdef USE_CUDNN
+/**
+ * @brief cuDNN implementation of SoftmaxLayer.
+ *        Fallback to SoftmaxLayer for CPU mode.
+ */
+template <typename Dtype>
+class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
  public:
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
+      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNSoftmaxLayer();
     }
     
-    struct BlobData {
-  BlobData() : blob(nullptr), choices(nullptr) {}
-  BlobData(int index, Tesseract* tess, const WERD_RES& word)
-    : blob(word.chopped_word->blobs[index]),
-      tesseract(tess),
-      choices(&(*word.ratings)(index, index)) {}
-    }
-    
-      /// Common initialization shared between SetImage methods.
-  virtual void Init();
-    
-    #include 'blread.h'
-#include <cstdio>       // for fclose, fopen, FILE
-#include 'host.h'       // for TRUE
-#include 'ocrblock.h'   // for BLOCK_IT, BLOCK, BLOCK_LIST (ptr only)
-#include 'scanutils.h'  // for tfscanf
-    
-    // Creates a box file string from a unichar string, TBOX and page number.
-void MakeBoxFileStr(const char* unichar_str, const TBOX& box, int page_num,
-                    STRING* box_str);
-    
-    // Then, use the TEST_P macro to define as many parameterized tests
-// for this fixture as you want. The _P suffix is for 'parameterized'
-// or 'pattern', whichever you prefer to think.
-    
-    // Implements printing a non-reference type T by letting the compiler
-// pick the right overload of PrintTo() for T.
-template <typename T>
-class UniversalPrinter {
+    template<typename IndexType>
+class DensifyParser : public dmlc::Parser<IndexType> {
  public:
-  // MSVC warns about adding const to a function type, so we want to
-  // disable the warning.
-#ifdef _MSC_VER
-# pragma warning(push)          // Saves the current warning state.
-# pragma warning(disable:4180)  // Temporarily disables warning 4180.
-#endif  // _MSC_VER
-    }
-    
-    // This helper class is used by {ASSERT|EXPECT}_NO_FATAL_FAILURE to check if a
-// statement generates new fatal failures. To do so it registers itself as the
-// current test part result reporter. Besides checking if fatal failures were
-// reported, it only delegates the reporting to the former result reporter.
-// The original result reporter is restored in the destructor.
-// INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-class GTEST_API_ HasNewFatalFailureHelper
-    : public TestPartResultReporterInterface {
- public:
-  HasNewFatalFailureHelper();
-  virtual ~HasNewFatalFailureHelper();
-  virtual void ReportTestPartResult(const TestPartResult& result);
-  bool has_new_fatal_failure() const { return has_new_fatal_failure_; }
- private:
-  bool has_new_fatal_failure_;
-  TestPartResultReporterInterface* original_reporter_;
-    }
-    
-      // An enumeration of possible roles that may be taken when a death
-  // test is encountered.  EXECUTE means that the death test logic should
-  // be executed immediately.  OVERSEE means that the program should prepare
-  // the appropriate environment for a child process to execute the death
-  // test, then wait for it to complete.
-  enum TestRole { OVERSEE_TEST, EXECUTE_TEST };
-    
-    template <GTEST_5_TYPENAMES_(T)>
-class GTEST_5_TUPLE_(T) {
- public:
-  template <int k> friend class gtest_internal::Get;
-    }
-    
-    // This event listener monitors how many Water objects are created and
-// destroyed by each test, and reports a failure if a test leaks some Water
-// objects. It does this by comparing the number of live Water objects at
-// the beginning of a test and at the end of a test.
-class LeakChecker : public EmptyTestEventListener {
- private:
-  // Called before a test starts.
-  virtual void OnTestStart(const TestInfo& /* test_info */) {
-    initially_allocated_ = Water::allocated();
+  DensifyParser(dmlc::Parser<IndexType>* parser, uint32_t num_col)
+      : parser_(parser), num_col_(num_col) {
   }
     }
     
-      // Gets the first element of the queue, or NULL if the queue is empty.
-  QueueNode<E>* Head() { return head_; }
-  const QueueNode<E>* Head() const { return head_; }
-    
-    double ObjectGeneralInfo60B::lateral_dist(const std::uint8_t* bytes,
-                                          int32_t length) const {
-  Byte t0(bytes + 2);
-  int32_t x = t0.get_byte(0, 3);
+    namespace xgboost {
+namespace common {
+/*! \brief buffer reader of the stream that allows you to get */
+class StreamBufferReader {
+ public:
+  explicit StreamBufferReader(size_t buffer_size)
+      :stream_(NULL),
+       read_len_(1), read_ptr_(1) {
+    buffer_.resize(buffer_size);
+  }
+  /*!
+   * \brief set input stream
+   */
+  inline void set_stream(dmlc::Stream *stream) {
+    stream_ = stream;
+    read_len_ = read_ptr_ = 1;
+  }
+  /*!
+   * \brief allows quick read using get char
+   */
+  inline char GetChar(void) {
+    while (true) {
+      if (read_ptr_ < read_len_) {
+        return buffer_[read_ptr_++];
+      } else {
+        read_len_ = stream_->Read(&buffer_[0], buffer_.length());
+        if (read_len_ == 0) return EOF;
+        read_ptr_ = 0;
+      }
+    }
+  }
+  /*! \brief whether we are reaching the end of file */
+  inline bool AtEnd(void) const {
+    return read_len_ == 0;
+  }
+    }
+    }
     }
     
-    namespace apollo {
-namespace drivers {
-namespace conti_radar {
-    }
-    }
-    }
+    #endif  // DMLC_ENABLE_STD_THREAD
+
     
-    BaseMapMatrix::BaseMapMatrix(const BaseMapMatrix& cells) {}
+    // logistic loss, but predict un-transformed margin
+struct LogisticRaw : public LogisticRegression {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    predt = common::Sigmoid(predt);
+    return predt - label;
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    const float eps = 1e-16f;
+    predt = common::Sigmoid(predt);
+    return fmaxf(predt * (1.0f - predt), eps);
+  }
+  template <typename T>
+    static T PredTransform(T x) { return x; }
+  template <typename T>
+    static T FirstOrderGradient(T predt, T label) {
+    predt = common::Sigmoid(predt);
+    return predt - label;
+  }
+  template <typename T>
+    static T SecondOrderGradient(T predt, T label) {
+    const T eps = T(1e-16f);
+    predt = common::Sigmoid(predt);
+    return std::max(predt * (T(1.0f) - predt), eps);
+  }
+  static const char* DefaultEvalMetric() { return 'auc'; }
+};
+    
+    void SimpleCSRSource::BeforeFirst() {
+  at_first_ = true;
+}
+    
+    BatchSet SimpleDMatrix::GetRowBatches() {
+  auto cast = dynamic_cast<SimpleCSRSource*>(source_.get());
+  auto begin_iter = BatchIterator(new SimpleBatchIteratorImpl(&(cast->page_)));
+  return BatchSet(begin_iter);
+}
+    
+        // print values
+    std::cout << object << '\n';
+    std::cout << null << '\n';
