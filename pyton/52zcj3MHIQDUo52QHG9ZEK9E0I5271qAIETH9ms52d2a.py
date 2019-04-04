@@ -1,112 +1,76 @@
 
         
-            @classmethod
-    def get_model_class(cls):
-        # Avoids a circular import and allows importing SessionStore when
-        # django.contrib.sessions is not in INSTALLED_APPS.
-        from django.contrib.sessions.models import Session
-        return Session
+            # Adapters
+    def get_transport_plugins(self):
+        return [plugin for plugin in self
+                if issubclass(plugin, TransportPlugin)]
+
     
-        def make_uri(self, path):
-        # Under Windows, file URIs use the UTF-8 encoding.
-        drive = path.drive
-        if len(drive) == 2 and drive[1] == ':':
-            # It's a path on a local drive => 'file:///c:/a/b'
-            rest = path.as_posix()[2:].lstrip('/')
-            return 'file:///%s/%s' % (
-                drive, urlquote_from_bytes(rest.encode('utf-8')))
-        else:
-            # It's a path on a network drive => 'file://host/share/a/b'
-            return 'file:' + urlquote_from_bytes(path.as_posix().encode('utf-8'))
     
-        # Modify function metadata to help with introspection and debugging
-    for method in (__new__, _make.__func__, _replace,
-                   __repr__, _asdict, __getnewargs__):
-        method.__qualname__ = f'{typename}.{method.__name__}'
+@mock.patch('httpie.input.AuthCredentials._getpass',
+            new=lambda self, prompt: 'password')
+def test_password_prompt(httpbin):
+    r = http('--auth', 'user',
+             'GET', httpbin.url + '/basic-auth/user/password')
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
     
-            is_not_importable = False
-        is_namespace = False
-        tests = []
-        if os.path.isdir(os.path.abspath(start_dir)):
-            start_dir = os.path.abspath(start_dir)
-            if start_dir != top_level_dir:
-                is_not_importable = not os.path.isfile(os.path.join(start_dir, '__init__.py'))
-        else:
-            # support for discovery from dotted module names
-            try:
-                __import__(start_dir)
-            except ImportError:
-                is_not_importable = True
-            else:
-                the_module = sys.modules[start_dir]
-                top_part = start_dir.split('.')[0]
-                try:
-                    start_dir = os.path.abspath(
-                       os.path.dirname((the_module.__file__)))
-                except AttributeError:
-                    # look for namespace packages
-                    try:
-                        spec = the_module.__spec__
-                    except AttributeError:
-                        spec = None
     
-            self.check_tokenize('''\
-async def f():
+def test_default_options_overwrite(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http('--json', httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['json'] == {'foo': 'bar'}
     
-        @unittest.skipIf(interpreter_requires_environment(),
-                     'Cannot run -E tests when PYTHON env vars are required.')
-    def test_xoptions(self):
-        def get_xoptions(*args):
-            # use subprocess module directly because test.support.script_helper adds
-            # '-X faulthandler' to the command line
-            args = (sys.executable, '-E') + args
-            args += ('-c', 'import sys; print(sys._xoptions)')
-            out = subprocess.check_output(args)
-            opts = eval(out.splitlines()[0])
-            return opts
-    
-    from email.message import EmailMessage
-from email.headerregistry import Address
-from email.utils import make_msgid
-    
-        for filename in os.listdir(directory):
-        path = os.path.join(directory, filename)
-        if not os.path.isfile(path):
-            continue
-        # Guess the content type based on the file's extension.  Encoding
-        # will be ignored, although we should check for simple things like
-        # gzip'd or compressed files.
-        ctype, encoding = mimetypes.guess_type(path)
-        if ctype is None or encoding is not None:
-            # No guess could be made, or the file is encoded (compressed), so
-            # use a generic bag-of-bits type.
-            ctype = 'application/octet-stream'
-        maintype, subtype = ctype.split('/', 1)
-        with open(path, 'rb') as fp:
-            msg.add_attachment(fp.read(),
-                               maintype=maintype,
-                               subtype=subtype,
-                               filename=filename)
-    # Now send or store the message
-    if args.output:
-        with open(args.output, 'wb') as fp:
-            fp.write(msg.as_bytes(policy=SMTP))
+        '''
+    from .client import get_requests_kwargs, dump_request
+    if os.path.sep in session_name:
+        path = os.path.expanduser(session_name)
     else:
-        with smtplib.SMTP('localhost') as s:
-            s.send_message(msg)
+        hostname = (args.headers.get('Host', None)
+                    or urlsplit(args.url).netloc.split('@')[-1])
+        if not hostname:
+            # HACK/FIXME: httpie-unixsocket's URLs have no hostname.
+            hostname = 'localhost'
     
-    $ pip3 install scikit-learn
     
-    try:
-    import face_recognition_models
-except Exception:
-    print('Please install `face_recognition_models` with this command before using `face_recognition`:\n')
-    print('pip install git+https://github.com/ageitgey/face_recognition_models')
-    quit()
+# I have written my code naively same as definition of primitive root
+# however every time I run this program, memory exceeded...
+# so I used 4.80 Algorithm in Handbook of Applied Cryptography(CRC Press, ISBN : 0-8493-8523-7, October 1996)
+# and it seems to run nicely!
+def primitiveRoot(p_val):
+    print('Generating primitive root of p')
+    while True:
+        g = random.randrange(3,p_val)
+        if pow(g, 2, p_val) == 1:
+            continue
+        if pow(g, p_val, p_val) == 1:
+            continue
+        return g
     
-    # PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
-# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
-# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
+        return clean
     
-            if file.filename == '':
-            return redirect(request.url)
+            return new_key
+
+    
+    The problem is  :
+Given an ARRAY, to find the longest and increasing sub ARRAY in that given ARRAY and return it.
+Example: [10, 22, 9, 33, 21, 50, 41, 60, 80] as input will return [10, 22, 33, 41, 60, 80] as output
+'''
+from __future__ import print_function
+    
+        def solve_sub_array(self):
+        rear = [int(self.array[0])]*len(self.array)
+        sum_value = [int(self.array[0])]*len(self.array)
+        for i in range(1, len(self.array)):
+            sum_value[i] = max(int(self.array[i]) + sum_value[i-1], int(self.array[i]))
+            rear[i] = max(sum_value[i], rear[i-1])
+        return rear[len(self.array)-1]
+    
+    Inputs:
+  - X , a 2D numpy array of features.
+  - k , number of clusters to create.
+  - initial_centroids , initial centroid values generated by utility function(mentioned in usage).
+  - maxiter , maximum number of iterations to process.
+  - heterogeneity , empty list that will be filled with hetrogeneity values if passed to kmeans func.
