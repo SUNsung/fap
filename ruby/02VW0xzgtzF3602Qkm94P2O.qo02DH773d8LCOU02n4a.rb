@@ -1,37 +1,52 @@
 
         
-                # Download a file from the remote machine to the local machine.
-        #
-        # @param [String] from Path of the file on the remote machine.
-        # @param [String] to Path of where to save the file locally.
-        def download(from, to)
-        end
+            def write(header)
+      @cookies.select { |key, _value| @send_cookies[key] == true }.each do |name, value|
+        cookie_value = value.is_a?(Hash) ? value : { value: value }
+        Rack::Utils.set_cookie_header! header, name, cookie_value
+      end
+    end
     
-            # This returns any automatically detected errors.
-        #
-        # @return [Array<String>]
-        def _detected_errors
-          return [] if !@__invalid_methods || @__invalid_methods.empty?
-          return [I18n.t('vagrant.config.common.bad_field',
-                         fields: @__invalid_methods.to_a.sort.join(', '))]
-        end
+    module Grape
+  module DSL
+    # Keeps track of settings (implemented as key-value pairs, grouped by
+    # types), in two contexts: top-level settings which apply globally no
+    # matter where they're defined, and inheritable settings which apply only
+    # in the current scope and scopes nested under it.
+    module Settings
+      extend ActiveSupport::Concern
     
-    Given(/config stage file has line '(.*?)'/) do |line|
-  TestApp.append_to_deploy_file(line)
+        it 'is thread specific threadsafe true' do
+      Capybara.threadsafe = true
+      Capybara.current_driver = :selenium
+      thread = Thread.new do
+        Capybara.current_driver = :random
+      end
+      thread.join
+      expect(Capybara.current_driver).to eq :selenium
+    end
+  end
+    
+      it 'should not accept the prompt if the message doesn't match' do
+    expect do
+      @session.accept_prompt 'Incorrect Text', with: 'not matched' do
+        @session.click_link('Open prompt')
+      end
+    end.to raise_error(Capybara::ModalNotFound)
+  end
+    
+      context 'with xpath selectors' do
+    it 'should find the first element using the given locator' do
+      el = @session.find(:css, '#first_image')
+      expect(el.ancestor(:xpath, '//p')).to have_text('Lorem ipsum dolor')
+      expect(el.ancestor(:xpath, '//a')[:'aria-label']).to eq('Go to simple')
+    end
+  end
+    
+        it 'doesn't find invisible elements when `true`' do
+      expect do
+        @session.find_by_id('hidden_via_ancestor', visible: true)
+      end.to raise_error(Capybara::ElementNotFound)
+    end
+  end
 end
-    
-          def assert_value_or_block_not_both(value, block)
-        return if value.nil? || block.nil?
-        raise Capistrano::ValidationError,
-              'Value and block both passed to Configuration#set'
-      end
-    
-    def config_tag(config, key, tag=nil, classname=nil)
-  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
-  tag       ||= 'div'
-  classname ||= key.sub(/_/, '-').sub(/\./, '-')
-  output      = '<#{tag} class='#{classname}''
-    
-          unless file.file?
-        return 'File #{file} could not be found'
-      end
