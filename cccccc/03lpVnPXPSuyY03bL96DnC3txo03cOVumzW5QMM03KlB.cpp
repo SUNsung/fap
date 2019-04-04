@@ -1,370 +1,324 @@
 
         
-        // Get the python wrappers for a list of ops in a OpList.
-// `op_list_buf` should be a pointer to a buffer containing
-// the binary encoded OpList proto, and `op_list_len` should be the
-// length of that buffer.
-string GetPythonWrappers(const char* op_list_buf, size_t op_list_len);
+          // This random number generator facade hides boost and CUDA rng
+  // implementation from one another (for cross-platform compatibility).
+  class RNG {
+   public:
+    RNG();
+    explicit RNG(unsigned int seed);
+    explicit RNG(const RNG&);
+    RNG& operator=(const RNG&);
+    void* generator();
+   private:
+    class Generator;
+    shared_ptr<Generator> generator_;
+  };
     
-    namespace tensorflow {
-    }
+      /**
+   * @brief Applies the transformation defined in the data layer's
+   * transform_param block to a vector of Datum.
+   *
+   * @param datum_vector
+   *    A vector of Datum containing the data to be transformed.
+   * @param transformed_blob
+   *    This is destination blob. It can be part of top blob's data if
+   *    set_cpu_data() is used. See memory_layer.cpp for an example.
+   */
+  void Transform(const vector<Datum> & datum_vector,
+                Blob<Dtype>* transformed_blob);
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // Creates a numpy array with shapes specified by dim_size and dims and content
-// in data. The array does not own the memory, and destructor will be called to
-// release it. If the status is not ok the caller is responsible for releasing
-// the memory.
-Status ArrayFromMemory(int dim_size, npy_intp* dims, void* data, DataType dtype,
-                       std::function<void()> destructor, PyObject** result);
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-      // Inserts the event at the current position into the specified stream.
-  port::Status Record(CUDAStream* stream);
-    
-      // This is for complex to real or real to complex FFT, when the direction
-  // is implied.
-  template <typename FuncT, typename InputT, typename OutputT>
-  bool DoFftInternal(Stream *stream, fft::Plan *plan, FuncT cufft_exec,
-                     const DeviceMemory<InputT> &input,
-                     DeviceMemory<OutputT> *output);
-    
-    void CacheImpl::setAndRetain(void *Key, void *Value, size_t Cost) {
-  cache_set_and_retain(static_cast<cache_t*>(Impl), Key, Value, Cost);
-}
-    
-    void PrefixMapKeyPrinter<char>::print(raw_ostream &out, ArrayRef<char> key) {
-  out << QuotedString(StringRef(key.data(), key.size()));
-};
-    
-    swift::unicode::GraphemeClusterBreakProperty
-swift::unicode::getGraphemeClusterBreakProperty(uint32_t C) {
-  // FIXME: replace linear search with a trie lookup.
-    }
-    
-    
-    {    return name;
-  }
-    
-      static CFPointeeInfo forTypedef(const clang::TypedefNameDecl *decl) {
-    assert(decl);
-    CFPointeeInfo info;
-    info.IsValid = true;
-    info.IsConst = false;
-    info.Decl = decl;
-    return info;
-  }
-    
-    namespace {
-  class ClangDiagRenderer final : public clang::DiagnosticNoteRenderer {
-    const llvm::function_ref<void(clang::FullSourceLoc,
-                                  clang::DiagnosticsEngine::Level,
-                                  StringRef)> callback;
-    }
-    }
-    
-    bool ParseAnyTypeUrl(const string& type_url, string* url_prefix,
-                     string* full_type_name) {
-  size_t pos = type_url.find_last_of('/');
-  if (pos == string::npos || pos + 1 == type_url.size()) {
-    return false;
-  }
-  if (url_prefix) {
-    *url_prefix = type_url.substr(0, pos + 1);
-  }
-  *full_type_name = type_url.substr(pos + 1);
-  return true;
-}
-    
-    const GeneratedCodeInfo::Annotation* FindAnnotationOnPath(
-    const GeneratedCodeInfo& info, const string& source_file,
-    const std::vector<int>& path) {
-  std::vector<const GeneratedCodeInfo::Annotation*> annotations;
-  FindAnnotationsOnPath(info, source_file, path, &annotations);
-  if (annotations.empty()) {
-    return NULL;
-  }
-  return annotations[0];
-}
-    
-    #include <sstream>
-    
-    
-    {
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
+    #endif  // CAFFE_ARGMAX_LAYER_HPP_
 
     
-      char prev = '*';
+    #include <vector>
     
-    // Get the Java Class style full name of a message.
-string ClassNameResolver::GetJavaClassFullName(
-    const string& name_without_package,
-    const FileDescriptor* file,
-    bool immutable) {
-  string result;
-  if (MultipleJavaFiles(file, immutable)) {
-    result = FileJavaPackage(file, immutable);
-    if (!result.empty()) result += '.';
-  } else {
-    result = GetClassName(file, immutable);
-    if (!result.empty()) result += '$';
-  }
-  result += StringReplace(name_without_package, '.', '$', true);
-  return result;
-}
-    
-      // Add some verification that the generated code matches the source the
-  // code is being compiled with.
-  // NOTE: This captures the raw numeric values at the time the generator was
-  // compiled, since that will be the versions for the ObjC runtime at that
-  // time.  The constants in the generated code will then get their values at
-  // at compile time (so checking against the headers being used to compile).
-  printer->Print(
-      '#if GOOGLE_PROTOBUF_OBJC_VERSION < $google_protobuf_objc_version$\n'
-      '#error This file was generated by a newer version of protoc which is incompatible with your Protocol Buffer library sources.\n'
-      '#endif\n'
-      '#if $google_protobuf_objc_version$ < GOOGLE_PROTOBUF_OBJC_MIN_SUPPORTED_VERSION\n'
-      '#error This file was generated by an older version of protoc which is incompatible with your Protocol Buffer library sources.\n'
-      '#endif\n'
-      '\n',
-      'google_protobuf_objc_version', SimpleItoa(GOOGLE_PROTOBUF_OBJC_VERSION));
-    
-    // implements ZeroCopyInputStream ----------------------------------
-bool GzipInputStream::Next(const void** data, int* size) {
-  bool ok = (zerror_ == Z_OK) || (zerror_ == Z_STREAM_END)
-      || (zerror_ == Z_BUF_ERROR);
-  if ((!ok) || (zcontext_.next_out == NULL)) {
-    return false;
-  }
-  if (zcontext_.next_out != output_position_) {
-    DoNextOutput(data, size);
-    return true;
-  }
-  if (zerror_ == Z_STREAM_END) {
-    if (zcontext_.next_out != NULL) {
-      // sub_stream_ may have concatenated streams to follow
-      zerror_ = inflateEnd(&zcontext_);
-      byte_count_ += zcontext_.total_out;
-      if (zerror_ != Z_OK) {
-        return false;
-      }
-      zerror_ = internalInflateInit2(&zcontext_, format_);
-      if (zerror_ != Z_OK) {
-        return false;
-      }
-    } else {
-      *data = NULL;
-      *size = 0;
-      return false;
-    }
-  }
-  zerror_ = Inflate(Z_NO_FLUSH);
-  if ((zerror_ == Z_STREAM_END) && (zcontext_.next_out == NULL)) {
-    // The underlying stream's Next returned false inside Inflate.
-    return false;
-  }
-  ok = (zerror_ == Z_OK) || (zerror_ == Z_STREAM_END)
-      || (zerror_ == Z_BUF_ERROR);
-  if (!ok) {
-    return false;
-  }
-  DoNextOutput(data, size);
-  return true;
-}
-void GzipInputStream::BackUp(int count) {
-  output_position_ = reinterpret_cast<void*>(
-      reinterpret_cast<uintptr_t>(output_position_) - count);
-}
-bool GzipInputStream::Skip(int count) {
-  const void* data;
-  int size = 0;
-  bool ok = Next(&data, &size);
-  while (ok && (size < count)) {
-    count -= size;
-    ok = Next(&data, &size);
-  }
-  if (size > count) {
-    BackUp(size - count);
-  }
-  return ok;
-}
-int64 GzipInputStream::ByteCount() const {
-  int64 ret = byte_count_ + zcontext_.total_out;
-  if (zcontext_.next_out != NULL && output_position_ != NULL) {
-    ret += reinterpret_cast<uintptr_t>(zcontext_.next_out) -
-           reinterpret_cast<uintptr_t>(output_position_);
-  }
-  return ret;
-}
-    
-    // Returns a string identical to *input except that the character pointed to
-// by radix_pos (which should be '.') is replaced with the locale-specific
-// radix character.
-string LocalizeRadix(const char* input, const char* radix_pos) {
-  // Determine the locale-specific radix character by calling sprintf() to
-  // print the number 1.5, then stripping off the digits.  As far as I can
-  // tell, this is the only portable, thread-safe way to get the C library
-  // to divuldge the locale's radix character.  No, localeconv() is NOT
-  // thread-safe.
-  char temp[16];
-  int size = sprintf(temp, '%.1f', 1.5);
-  GOOGLE_CHECK_EQ(temp[0], '1');
-  GOOGLE_CHECK_EQ(temp[size-1], '5');
-  GOOGLE_CHECK_LE(size, 6);
+    /**
+ * @brief Takes at least two Blob%s and concatenates them along either the num
+ *        or channel dimension, outputting the result.
+ */
+template <typename Dtype>
+class ConcatLayer : public Layer<Dtype> {
+ public:
+  explicit ConcatLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-    // This test causes gcc 3.3.5 (and earlier?) to give the cryptic error:
-//   'sorry, unimplemented: `method_call_expr' not supported by dump_expr'
-#if !defined(__GNUC__) || __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ > 3)
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-    Contrast Example 2 with Example 1. For each data point per feature, the values
-are sorted by the corresponding KEY.
-)DOC')
-    .Input(0, 'DATA', 'Tensor of rank 1.')
-    .Input(
-        1,
-        'RANGES',
-        'Tensor of int32/int64 ranges, of dims (N, M, 2). '
-        'Where N is number of examples and M is a size of each example. '
-        'Last dimention represents a range in the format (start, lengths)')
-    .Input(2, 'KEY', 'Tensor of rank 1 and type int64.')
-    .Output(0, 'OUTPUT', '1-D tensor of size sum of range lengths')
-    .Arg('lengths', 'Expected lengths for ranges')
-    .TensorInferenceFunction([](const OperatorDef& def,
-                                const vector<TensorShape>& in) {
-      ArgumentHelper helper(def);
-      auto lengths = helper.GetRepeatedArgument<int>('lengths');
-      CAFFE_ENFORCE_EQ(in[0].dims_size(), 1, 'DATA should be 1-D tensor.');
-      CAFFE_ENFORCE_EQ(in[1].dims_size(), 3, 'RANGES should be 3-D tensor.');
-      if (in.size() > 2) {
-        CAFFE_ENFORCE_EQ(in[2].dims_size(), 1, 'KEY should be 1-D tensor.');
-      }
-      CAFFE_ENFORCE_GT(lengths.size(), 0, 'lengths should be non-empty.');
-      std::vector<TensorShape> out(lengths.size());
-      for (int i = 0; i < lengths.size(); ++i) {
-        out[i].set_data_type(in[0].data_type());
-        out[i].add_dims(in[1].dims(0));
-        out[i].add_dims(lengths[i]);
-      }
-      return out;
-    });
-    
-    OPERATOR_SCHEMA(Glu)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .SetDoc(R'DOC(
-Applies gated linear unit to the input Tensor X. The output Y is half the size
-of the input X, so if the shape of X is [d1, d2, ..., N] shape of Y will be
-[d1, d2, ..., dn/2] and Y(:dn-1, i) = GLU(X(:dn-1, i), X(:dn-1, i+N/2)) =
-X(dn-1, i) * sigmoid(X(dn-1, i+N/2))
-)DOC')
-    .Input(0, 'X', '1D input tensor')
-    .Output(0, 'Y', '1D output tensor');
-    
-    struct Options;
-struct FileMetaData;
-    
-    #include 'leveldb/db.h'
-    
-      // Implementations of the DB interface
-  virtual Status Put(const WriteOptions&, const Slice& key, const Slice& value);
-  virtual Status Delete(const WriteOptions&, const Slice& key);
-  virtual Status Write(const WriteOptions& options, WriteBatch* updates);
-  virtual Status Get(const ReadOptions& options,
-                     const Slice& key,
-                     std::string* value);
-  virtual Iterator* NewIterator(const ReadOptions&);
-  virtual const Snapshot* GetSnapshot();
-  virtual void ReleaseSnapshot(const Snapshot* snapshot);
-  virtual bool GetProperty(const Slice& property, std::string* value);
-  virtual void GetApproximateSizes(const Range* range, int n, uint64_t* sizes);
-  virtual void CompactRange(const Slice* begin, const Slice* end);
-    
-    // Return the name of a temporary file owned by the db named 'dbname'.
-// The result will be prefixed with 'dbname'.
-std::string TempFileName(const std::string& dbname, uint64_t number);
-    
-    namespace leveldb {
+    #ifdef USE_CUDNN
+/*
+ * @brief cuDNN implementation of ConvolutionLayer.
+ *        Fallback to ConvolutionLayer for CPU mode.
+ *
+ * cuDNN accelerates convolution through forward kernels for filtering and bias
+ * plus backward kernels for the gradient w.r.t. the filters, biases, and
+ * inputs. Caffe + cuDNN further speeds up the computation through forward
+ * parallelism across groups and backward parallelism across gradients.
+ *
+ * The CUDNN engine does not have memory overhead for matrix buffers. For many
+ * input and filter regimes the CUDNN engine is faster than the CAFFE engine,
+ * but for fully-convolutional models and large inputs the CAFFE engine can be
+ * faster as long as it fits in memory.
+*/
+template <typename Dtype>
+class CuDNNConvolutionLayer : public ConvolutionLayer<Dtype> {
+ public:
+  explicit CuDNNConvolutionLayer(const LayerParameter& param)
+      : ConvolutionLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNConvolutionLayer();
     }
     
-      KeyComparator comparator_;
-  int refs_;
-  Arena arena_;
-  Table table_;
+    namespace caffe {
+    }
     
-    static void RunConcurrent(int run) {
-  const int seed = test::RandomSeed() + (run * 100);
-  Random rnd(seed);
-  const int N = 1000;
-  const int kSize = 1000;
-  for (int i = 0; i < N; i++) {
-    if ((i % 100) == 0) {
-      fprintf(stderr, 'Run %d of %d\n', i, N);
-    }
-    TestState state(seed + 1);
-    Env::Default()->Schedule(ConcurrentReader, &state);
-    state.Wait(TestState::RUNNING);
-    for (int i = 0; i < kSize; i++) {
-      state.t_.WriteStep(&rnd);
-    }
-    state.quit_flag_.Release_Store(&state);  // Any non-null arg will do
-    state.Wait(TestState::DONE);
-  }
+    
+    {}  // namespace caffe
+    
+    void Assembler::and(const Reg64& ra, const Reg64& rs, const Reg64& rb,
+                     bool rc) {
+  EmitXForm(31, rn(rs), rn(ra), rn(rb), 28, rc);
 }
     
-        private:
-        static Microsoft::MSR::CNTK::InputStreamDescription GetInputStreamDescription(const StreamInformation& s, const DeviceDescriptor& device)
+      static const APCCollection* fromHandle(const APCHandle* handle) {
+    assertx(handle->checkInvariants());
+    assertx(handle->kind() == APCKind::SharedCollection);
+    static_assert(offsetof(APCCollection, m_handle) == 0, '');
+    return reinterpret_cast<const APCCollection*>(handle);
+  }
+    
+    void Config::Bind(HackStrictOption& loc, const IniSettingMap& ini,
+                  const Hdf& config, const std::string& name /* = '' */,
+                  HackStrictOption def) {
+  // Currently this doens't bind to ini_get since it is hard to thread through
+  // an enum
+  loc = GetHackStrictOption(ini, config, name, def);
+}
+    
+    #include 'hphp/runtime/base/file.h'
+#include 'hphp/runtime/base/stream-wrapper.h'
+#include 'hphp/runtime/base/stream-wrapper-registry.h'
+    
+    #include 'hphp/runtime/base/file.h'
+#include 'hphp/runtime/base/mem-file.h'
+#include 'hphp/runtime/base/stream-wrapper.h'
+#include <folly/String.h>
+#include <folly/portability/SysStat.h>
+#include <folly/portability/Unistd.h>
+    
+      // implementing File
+  bool open(const String& filename, const String& mode) override;
+  bool close() override;
+  int64_t readImpl(char *buffer, int64_t length) override;
+  int getc() override;
+  int64_t writeImpl(const char *buffer, int64_t length) override;
+  bool seek(int64_t offset, int whence = SEEK_SET) override;
+  int64_t tell() override;
+  bool eof() override;
+  bool rewind() override;
+  bool flush() override;
+  bool truncate(int64_t size) override;
+    
+    #include 'hphp/runtime/base/perf-warning-inl.h'
+    
+    IMGUI_IMPL_API bool     ImGui_Marmalade_Init(bool install_callbacks);
+IMGUI_IMPL_API void     ImGui_Marmalade_Shutdown();
+IMGUI_IMPL_API void     ImGui_Marmalade_NewFrame();
+IMGUI_IMPL_API void     ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data);
+    
+        // Main loop
+    bool running = true;
+    while (running)
+    {
+        // Poll and handle events (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        ALLEGRO_EVENT ev;
+        while (al_get_next_event(queue, &ev))
         {
-            assert(s.m_storageFormat == StorageFormat::Dense || s.m_storageFormat == StorageFormat::SparseCSC);
-            auto CNTKdeviceId = AsCNTKImplDeviceId(device);
-            auto CNTKMatrixType = s.m_storageFormat == StorageFormat::Dense ? Microsoft::MSR::CNTK::MatrixType::DENSE : Microsoft::MSR::CNTK::MatrixType::SPARSE;
-            auto CNTKMatrixFormat = AsCNTKImplMatrixFormat(s.m_storageFormat);
-            return Microsoft::MSR::CNTK::InputStreamDescription(s.m_name, CNTKdeviceId, CNTKMatrixType, CNTKMatrixFormat);
+            ImGui_ImplAllegro5_ProcessEvent(&ev);
+            if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+                running = false;
+            if (ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE)
+            {
+                ImGui_ImplAllegro5_InvalidateDeviceObjects();
+                al_acknowledge_resize(display);
+                ImGui_ImplAllegro5_CreateDeviceObjects();
+            }
         }
-    
-    // Destroy - cleanup and remove this class
-// NOTE: this destroys the object, and it can't be used past this point
-void DataReader::Destroy()
-{
-    // newer code that explicitly place multiple streams for inputs
-    foreach_index (i, m_ioNames) // inputNames should map to node names
-    {
-        m_dataReaders[m_ioNames[i]]->Destroy();
     }
+    
+        // Create window with graphics context
+    GLFWwindow* window = glfwCreateWindow(1280, 720, 'Dear ImGui GLFW+OpenGL3 example', NULL, NULL);
+    if (window == NULL)
+        return 1;
+    glfwMakeContextCurrent(window);
+    glfwSwapInterval(1); // Enable vsync
+    
+        blocklen = buflen % 5552;
+    while (buflen) {
+        for (i=0; i + 7 < blocklen; i += 8) {
+            s1 += buffer[0], s2 += s1;
+            s1 += buffer[1], s2 += s1;
+            s1 += buffer[2], s2 += s1;
+            s1 += buffer[3], s2 += s1;
+            s1 += buffer[4], s2 += s1;
+            s1 += buffer[5], s2 += s1;
+            s1 += buffer[6], s2 += s1;
+            s1 += buffer[7], s2 += s1;
+    }
+    }
+    
+            // Start the Dear ImGui frame
+        ImGui_ImplOpenGL2_NewFrame();
+        ImGui_ImplSDL2_NewFrame(window);
+        ImGui::NewFrame();
+    
+        // Backup DX state that will be modified to restore it afterwards (unfortunately this is very ugly looking and verbose. Close your eyes!)
+    struct BACKUP_DX10_STATE
+    {
+        UINT                        ScissorRectsCount, ViewportsCount;
+        D3D10_RECT                  ScissorRects[D3D10_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE];
+        D3D10_VIEWPORT              Viewports[D3D10_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE];
+        ID3D10RasterizerState*      RS;
+        ID3D10BlendState*           BlendState;
+        FLOAT                       BlendFactor[4];
+        UINT                        SampleMask;
+        UINT                        StencilRef;
+        ID3D10DepthStencilState*    DepthStencilState;
+        ID3D10ShaderResourceView*   PSShaderResource;
+        ID3D10SamplerState*         PSSampler;
+        ID3D10PixelShader*          PS;
+        ID3D10VertexShader*         VS;
+        D3D10_PRIMITIVE_TOPOLOGY    PrimitiveTopology;
+        ID3D10Buffer*               IndexBuffer, *VertexBuffer, *VSConstantBuffer;
+        UINT                        IndexBufferOffset, VertexBufferStride, VertexBufferOffset;
+        DXGI_FORMAT                 IndexBufferFormat;
+        ID3D10InputLayout*          InputLayout;
+    };
+    BACKUP_DX10_STATE old;
+    old.ScissorRectsCount = old.ViewportsCount = D3D10_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE;
+    ctx->RSGetScissorRects(&old.ScissorRectsCount, old.ScissorRects);
+    ctx->RSGetViewports(&old.ViewportsCount, old.Viewports);
+    ctx->RSGetState(&old.RS);
+    ctx->OMGetBlendState(&old.BlendState, old.BlendFactor, &old.SampleMask);
+    ctx->OMGetDepthStencilState(&old.DepthStencilState, &old.StencilRef);
+    ctx->PSGetShaderResources(0, 1, &old.PSShaderResource);
+    ctx->PSGetSamplers(0, 1, &old.PSSampler);
+    ctx->PSGetShader(&old.PS);
+    ctx->VSGetShader(&old.VS);
+    ctx->VSGetConstantBuffers(0, 1, &old.VSConstantBuffer);
+    ctx->IAGetPrimitiveTopology(&old.PrimitiveTopology);
+    ctx->IAGetIndexBuffer(&old.IndexBuffer, &old.IndexBufferFormat, &old.IndexBufferOffset);
+    ctx->IAGetVertexBuffers(0, 1, &old.VertexBuffer, &old.VertexBufferStride, &old.VertexBufferOffset);
+    ctx->IAGetInputLayout(&old.InputLayout);
+    
+    
+    {        for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
+        {
+            const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
+            if (pcmd->UserCallback)
+            {
+                pcmd->UserCallback(cmd_list, pcmd);
+            }
+            else
+            {
+                // FIXME: Not honoring ClipRect fields.
+                CIwMaterial* pCurrentMaterial = IW_GX_ALLOC_MATERIAL();
+                pCurrentMaterial->SetShadeMode(CIwMaterial::SHADE_FLAT);
+                pCurrentMaterial->SetCullMode(CIwMaterial::CULL_NONE);
+                pCurrentMaterial->SetFiltering(false);
+                pCurrentMaterial->SetAlphaMode(CIwMaterial::ALPHA_BLEND);
+                pCurrentMaterial->SetDepthWriteMode(CIwMaterial::DEPTH_WRITE_NORMAL);
+                pCurrentMaterial->SetAlphaTestMode(CIwMaterial::ALPHATEST_DISABLED);
+                pCurrentMaterial->SetTexture((CIwTexture*)pcmd->TextureId);
+                IwGxSetMaterial(pCurrentMaterial);
+                IwGxDrawPrims(IW_GX_TRI_LIST, (uint16*)idx_buffer, pcmd->ElemCount);
+            }
+            idx_buffer += pcmd->ElemCount;
+        }
+        IwGxFlush();
+    }
+    
+    
+    {        return true;
+    }
+    
+        if (DX12_ENABLE_DEBUG_LAYER)
+    {
+        ID3D12Debug* dx12Debug = NULL;
+        if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&dx12Debug))))
+        {
+            dx12Debug->EnableDebugLayer();
+            dx12Debug->Release();
+        }
+    }
+    
+    // Main code
+int main(int, char**)
+{
+    // Create application window
+    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
+    ::RegisterClassEx(&wc);
+    HWND hwnd = ::CreateWindow(wc.lpszClassName, _T('Dear ImGui DirectX9 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
+    }
+    
+    
+    {  if (result.__isset.success) {
+    // _return pointer has now been filled
+    return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, 'call failed: unknown result');
 }
     
-    template <typename TVector>
-inline void RandomShuffleMT(TVector& v, std::mt19937_64& rng)
-{
-    foreach_index(currentLocation, v)
-    {
-        // Pick a random location and swap with current one
-        const size_t randomLocation = RandMT(0, v.size(), rng);
-        std::swap(v[currentLocation], v[randomLocation]);
-    }
+    
+InternalOptionInfo::~InternalOptionInfo() throw() {
 }
     
-    #if 0
-        for (let& node : dependentSet)
-            fprintf(stderr, 'CloneFunction: cloning %ls\n', node->NodeDescription().c_str());
-#endif
     
-    int main()
-{
-    // create JSON values
-    json object = {{'one', 1}, {'two', 2}};
-    json null;
+    {
+    {}} // namespace
+    
+    /**
+ * @brief Represents a hardware driver type that SMART api can you use to query
+ * device information.
+ *
+ * @param driver name of SMART controller driver
+ * @param maxID max ID number of which disks on the controller is monitored
+ */
+struct hardwareDriver {
+  std::string driver;
+  size_t maxID;
+};
+    
+      enum class IsEnabledError {
+    CallFailed = 1,
+    IncorrectResponseFormat = 2,
+    IncorrectValue = 3
+  };
+  Expected<bool, Killswitch::IsEnabledError> isEnabled(const std::string& key);
+    
+    #include <vector>
+    
+        // We should have a property tree of pack content mimicking embedded
+    // configuration packs, ready to parse as a string.
+    std::ostringstream output;
+    pt::write_json(output, multi_pack, false);
+    pack = output.str();
+    if (pack.empty()) {
+      return Status(1, 'Multi-pack content empty');
     }
+    
+    /// Prefix used for posix tar archive.
+const std::string kTestCarveNamePrefix = 'carve_';
