@@ -1,140 +1,226 @@
-#include 'swift/Basic/Cache.h'
-#include 'llvm/ADT/SmallString.h'
-#include <cache.h>
-    
-      Begin = new char[capacity];
-  EndOfAllocation = Begin + capacity;
-  End = Begin + oldSize + needed;
-  std::memcpy(Begin, oldBegin, oldSize);
-    
-        if (node->Further || node->Right) {
-      IndentScope ms(this, (childKind == ChildKind::Right ||
-                            childKind == ChildKind::Further ||
-                            childKind == ChildKind::Root) ? '  ' : '| ');
+
+        
+            const auto* shapes_and_types = c.output_handle_shapes_and_types(i);
+    if (shapes_and_types != nullptr) {
+      auto* out_handle_data = out.mutable_handle_data();
+      out_handle_data->set_is_set(true);
+      for (const auto& p : *shapes_and_types) {
+        auto* out_shape_and_type = out_handle_data->add_shape_and_type();
+        ProtoFromShapeHandle(p.shape, &c, out_shape_and_type->mutable_shape());
+        out_shape_and_type->set_dtype(p.dtype);
+      }
     }
     
-    
-    {  bool isTypedef() const {
-    assert(isValid());
-    return !Decl.isNull() && Decl.is<const clang::TypedefNameDecl *>();
-  }
-  const clang::TypedefNameDecl *getTypedef() const {
-    assert(isTypedef());
-    return Decl.get<const clang::TypedefNameDecl *>();
-  }
-};
-    
-      if (clangDiag.getLocation().isInvalid()) {
-    // Diagnostic about the compiler arguments.
-    emitDiag(clang::FullSourceLoc(), clangDiagLevel, message);
-    }
-    
-    void ReversePolygon(b2Polygon& p){
-	ReversePolygon(p.x,p.y,p.nVertices);
-}
-	
-void ReversePolygon(float* x, float* y, int n) {
-        if (n == 1)
-            return;
-        int32 low = 0;
-        int32 high = n - 1;
-        while (low < high) {
-            float32 buffer = x[low];
-            x[low] = x[high];
-            x[high] = buffer;
-            buffer = y[low];
-            y[low] = y[high];
-            y[high] = buffer;
-            ++low;
-            --high;
-        }
-}
-    
-    
-    {}
-#endif
+    #endif  // TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
 
     
-    // Constants:
-//  for (int i = 1; i< 32; ++i)
-//    printf('static const int cospi_%d_64 = %.0f;\n', i,
-//           round(16384 * cos(i*M_PI/64)));
-// Note: sin(k*Pi/64) = cos((32-k)*Pi/64)
-static const tran_high_t cospi_1_64  = 16364;
-static const tran_high_t cospi_2_64  = 16305;
-static const tran_high_t cospi_3_64  = 16207;
-static const tran_high_t cospi_4_64  = 16069;
-static const tran_high_t cospi_5_64  = 15893;
-static const tran_high_t cospi_6_64  = 15679;
-static const tran_high_t cospi_7_64  = 15426;
-static const tran_high_t cospi_8_64  = 15137;
-static const tran_high_t cospi_9_64  = 14811;
-static const tran_high_t cospi_10_64 = 14449;
-static const tran_high_t cospi_11_64 = 14053;
-static const tran_high_t cospi_12_64 = 13623;
-static const tran_high_t cospi_13_64 = 13160;
-static const tran_high_t cospi_14_64 = 12665;
-static const tran_high_t cospi_15_64 = 12140;
-static const tran_high_t cospi_16_64 = 11585;
-static const tran_high_t cospi_17_64 = 11003;
-static const tran_high_t cospi_18_64 = 10394;
-static const tran_high_t cospi_19_64 = 9760;
-static const tran_high_t cospi_20_64 = 9102;
-static const tran_high_t cospi_21_64 = 8423;
-static const tran_high_t cospi_22_64 = 7723;
-static const tran_high_t cospi_23_64 = 7005;
-static const tran_high_t cospi_24_64 = 6270;
-static const tran_high_t cospi_25_64 = 5520;
-static const tran_high_t cospi_26_64 = 4756;
-static const tran_high_t cospi_27_64 = 3981;
-static const tran_high_t cospi_28_64 = 3196;
-static const tran_high_t cospi_29_64 = 2404;
-static const tran_high_t cospi_30_64 = 1606;
-static const tran_high_t cospi_31_64 = 804;
     
-    void CleanPolygon(const Path& in_poly, Path& out_poly, double distance = 1.415);
-void CleanPolygon(Path& poly, double distance = 1.415);
-void CleanPolygons(const Paths& in_polys, Paths& out_polys, double distance = 1.415);
-void CleanPolygons(Paths& polys, double distance = 1.415);
+    {}  // namespace tensorflow
+
     
     
-/** 16x32 multiplication, followed by a 15-bit shift right. Results fits in 32 bits */
-#undef MULT16_32_Q15
-static OPUS_INLINE opus_val32 MULT16_32_Q15_armv4(opus_val16 a, opus_val32 b)
-{
-  unsigned rd_lo;
-  int rd_hi;
-  __asm__(
-      '#MULT16_32_Q15\n\t'
-      'smull %0, %1, %2, %3\n\t'
-      : '=&r'(rd_lo), '=&r'(rd_hi)
-      : '%r'(b), 'r'(a<<16)
-  );
-  /*We intentionally don't OR in the high bit of rd_lo for speed.*/
-  return rd_hi<<1;
-}
-#define MULT16_32_Q15(a, b) (MULT16_32_Q15_armv4(a, b))
+    {}  // namespace tensorflow
+
     
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
+      // Return the current record contents.  Only valid after the preceding call
+  // to GetNext() returned true
+  string record() const { return record_; }
+  // Return the current offset in the file.
+  uint64 offset() const { return offset_; }
     
-    void DHTRoutingTable::getBuckets(
-    std::vector<std::shared_ptr<DHTBucket>>& buckets) const
-{
-  dht::enumerateBucket(buckets, root_.get());
+      Entry* entry = nullptr;
+  {
+    mutex_lock lock{mutex_};
+    entry = &cache_[config.ordinal];
+    // Release the map lock; the address of 'entry' is stable because
+    // std::map guarantees reference stability.
+  }
+    
+        void split2(const Size2D &size,
+                const s64 * srcBase, ptrdiff_t srcStride,
+                s64 * dst0Base, ptrdiff_t dst0Stride,
+                s64 * dst1Base, ptrdiff_t dst1Stride);
+    
+    
+    {
+    {        for (; j < size.width; j++)
+            dst[j] = (u16)src0[j] + (u16)src1[j];
+    }
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+#endif
 }
     
-      void getClosestKNodes(std::vector<std::shared_ptr<DHTNode>>& nodes,
-                        const unsigned char* key) const;
+    void bitwiseOr(const Size2D &size,
+               const u8 *src0Base, ptrdiff_t src0Stride,
+               const u8 *src1Base, ptrdiff_t src1Stride,
+               u8 *dstBase, ptrdiff_t dstStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    internal::vtransform(size,
+                         src0Base, src0Stride,
+                         src1Base, src1Stride,
+                         dstBase, dstStride, BitwiseOr());
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+#endif
+}
     
-    namespace {
-const size_t NUM_CONCURRENT_TASK = 15;
-} // namespace
+                    int16x8_t t0_16s = vreinterpretq_s16_u16(vmovl_u8(t0));
+                int16x8_t t1_16s = vreinterpretq_s16_u16(vmovl_u8(t1));
+                int16x8_t t2_16s = vreinterpretq_s16_u16(vmovl_u8(t2));
+    
+            result += (double)vget_lane_s64(vadd_s64(vget_low_s64(ws), vget_high_s64(ws)), 0);
+    
+                    uint8x16_t c0 = vmovq_n_u8(0);
+                uint8x16_t c1 = vmovq_n_u8(0);
+                uint8x16_t max0 = vmovq_n_u8(0);
+                uint8x16_t max1 = vmovq_n_u8(0);
+                for( k = 0; k < N; k++ )
+                {
+                    int8x16_t x = vreinterpretq_s8_u8(veorq_u8(vld1q_u8(ptr + pixel[k]), delta));
+                    m0 = vcgtq_s8(x, v2);
+                    m1 = vcgtq_s8(v1, x);
+    }
+    
+    template <typename T, int elsize> struct vtail
+{
+    static inline void inRange(const T *, const T *, const T *,
+                               u8 *, size_t &, size_t)
+    {
+        //do nothing since there couldn't be enough data
+    }
+};
+template <typename T> struct vtail<T, 2>
+{
+    static inline void inRange(const T * src, const T * rng1, const T * rng2,
+                               u8 * dst, size_t &x, size_t width)
+    {
+        typedef typename internal::VecTraits<T>::vec128 vec128;
+        typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
+        //There no more than 15 elements in the tail, so we could handle 8 element vector only once
+        if( x + 8 < width)
+        {
+             vec128  vs = internal::vld1q( src + x);
+             vec128 vr1 = internal::vld1q(rng1 + x);
+             vec128 vr2 = internal::vld1q(rng2 + x);
+            uvec128  vd = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
+            internal::vst1(dst + x, internal::vmovn(vd));
+            x+=8;
+        }
+    }
+};
+template <typename T> struct vtail<T, 1>
+{
+    static inline void inRange(const T * src, const T * rng1, const T * rng2,
+                               u8 * dst, size_t &x, size_t width)
+    {
+        typedef typename internal::VecTraits<T>::vec128 vec128;
+        typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
+        typedef typename internal::VecTraits<T>::vec64 vec64;
+        typedef typename internal::VecTraits<T>::unsign::vec64 uvec64;
+        //There no more than 31 elements in the tail, so we could handle once 16+8 or 16 or 8 elements
+        if( x + 16 < width)
+        {
+             vec128  vs = internal::vld1q( src + x);
+             vec128 vr1 = internal::vld1q(rng1 + x);
+             vec128 vr2 = internal::vld1q(rng2 + x);
+            uvec128  vd = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
+            internal::vst1q(dst + x, vd);
+            x+=16;
+        }
+        if( x + 8 < width)
+        {
+             vec64  vs = internal::vld1( src + x);
+             vec64 vr1 = internal::vld1(rng1 + x);
+             vec64 vr2 = internal::vld1(rng2 + x);
+            uvec64  vd = internal::vand(internal::vcge(vs, vr1), internal::vcge(vr2, vs));
+            internal::vst1(dst + x, vd);
+            x+=8;
+        }
+    }
+};
+    
+    /////////////// Custom NEON intrinsics ///////////////////
+    
+    	if (cmderOptions.registerApp == true)
+	{
+		RegisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_BACKGROUND, cmderOptions.cmderCfgRoot, cmderOptions.cmderSingle);
+		RegisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_LISTITEM, cmderOptions.cmderCfgRoot, cmderOptions.cmderSingle);
+		RegisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_DRIVE_PATH_BACKGROUND, cmderOptions.cmderCfgRoot, cmderOptions.cmderSingle);
+		RegisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_DRIVE_PATH_LISTITEM, cmderOptions.cmderCfgRoot, cmderOptions.cmderSingle);
+	}
+	else if (cmderOptions.unRegisterApp == true)
+	{
+		UnregisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_BACKGROUND);
+		UnregisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_LISTITEM);
+		UnregisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_DRIVE_PATH_BACKGROUND);
+		UnregisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_DRIVE_PATH_LISTITEM);
+	}
+	else if (cmderOptions.error == true)
+	{
+		return 1;
+	}
+	else
+	{
+		StartCmder(cmderOptions.cmderStart, cmderOptions.cmderSingle, cmderOptions.cmderTask, cmderOptions.cmderCfgRoot, cmderOptions.cmderUserCfg);
+	}
     
     
-    {} // namespace aria2
+    {
+    {        // For now reusing the shim to allow prefetch.
+        // Please only use a subset of the shim interface that includes
+        // Init()/StartEpoch()/GetMinibatch()/IsEndOfEpoch()
+        // Shim will be deleted in the future versions.
+        std::shared_ptr<ReaderShim<float>> m_shim;
+        Microsoft::MSR::CNTK::StreamMinibatchInputs m_matrices;
+    };
+}
+
     
-    #include 'DHTNode.h'
-#include 'util.h'
-#include 'a2functional.h'
+            ValidateType<T>(dict, typeValue, currentVersion);
+    
+    using namespace std;
+    
+    
+    {    ~ScopeTimer()
+    {
+        if (m_verbosity > 2)
+        {
+            m_aggregateTimer.Stop();
+            double time = m_aggregateTimer.ElapsedSeconds();
+            fprintf(stderr, m_message.c_str(), time);
+        }
+    }
+};
+    
+    
+    {            for (size_t i = 0; i < 2; i++)
+                Input(i)->Gradient().TransferToDeviceIfNotThere(m_deviceId, true);
+        }
+        catch (...)
+        {
+            fprintf(stderr, 'LookupTableNode unit test is not passed!');
+            return false;
+        }
+    
+        template <class ElemType>
+    void RequestAliasedRelease(AliasNodePtr node)
+    {
+        const auto iter = m_aliasLookup.find(node);
+        if (iter == m_aliasLookup.end())
+            LogicError('node not aliased');
+    }
