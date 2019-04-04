@@ -1,111 +1,133 @@
 
         
-            def insert(index, *names)
-      @filters.insert assert_index(index), *filter_const(names)
+          end
+    
+            # Builds a new note using a Hash that was built from a JSON payload.
+        def self.from_json_hash(raw_hash)
+          hash = Representation.symbolize_hash(raw_hash)
+          hash[:author] &&= Representation::User.from_json_hash(hash[:author])
+    
+            # Builds a user from a GitHub API response.
+        #
+        # user - An instance of `Sawyer::Resource` containing the user details.
+        def self.from_api_response(user)
+          new(id: user.id, login: user.login)
+        end
+    
+        it 'returns a label 'No' if any falsy value is given' do
+      [false, nil].each { |value|
+        label = yes_no(value)
+        expect(label).to be_html_safe
+        expect(Nokogiri(label).text).to eq 'No'
+      }
     end
+  end
     
-    module Docs
-  class Entry
-    class Invalid < StandardError; end
-    
-        def to_json
-      JSON.generate(as_json)
+      describe 'DotHelper::DotDrawer' do
+    describe '#id' do
+      it 'properly escapes double quotaion and backslash' do
+        expect(DotHelper::DotDrawer.draw(foo: '') {
+          id('hello\\'')
+        }).to eq(''hello\\\\\\''')
+      end
     end
   end
 end
 
     
-        def load_capybara_selenium
-      require 'capybara/dsl'
-      require 'selenium/webdriver'
-      Capybara.register_driver :chrome do |app|
-        options = Selenium::WebDriver::Chrome::Options.new(args: %w[headless disable-gpu])
-        Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
-      end
-      Capybara.javascript_driver = :chrome
-      Capybara.current_driver = :chrome
-      Capybara.run_server = false
-      Capybara
+          @agent1.update!(disabled: true)
+    
     end
     
-            css('.l-sub-section', '.alert', '.banner').each do |node|
-          node.name = 'blockquote'
-        end
     
-            subtitle = at_css('.hero-subtitle').try(:content)
-        breadcrumbs = css('.breadcrumbs li').map(&:content)[2..-2]
+IAX_SUBTYPE_NEW     = 1
+IAX_SUBTYPE_PING    = 2
+IAX_SUBTYPE_PONG    = 3
+IAX_SUBTYPE_ANSWER  = 4
+IAX_SUBTYPE_ACK     = 4
+IAX_SUBTYPE_HANGUP  = 5
+IAX_SUBTYPE_REJECT  = 6
+IAX_SUBTYPE_ACCEPT  = 7
+IAX_SUBTYPE_AUTHREQ = 8
+IAX_SUBTYPE_AUTHREP = 9
+IAX_SUBTYPE_INVAL   = 10
+IAX_SUBTYPE_LAGRQ   = 11
+IAX_SUBTYPE_LAGRP   = 12
+IAX_SUBTYPE_REGREQ  = 13
+IAX_SUBTYPE_REGAUTH = 14
+IAX_SUBTYPE_REGACK  = 15
+IAX_SUBTYPE_REGREJ  = 16
+IAX_SUBTYPE_REGREL  = 17
+IAX_SUBTYPE_VNAK    = 18
     
-        desc 'Release all gems as packages'
-    task :all => [:test, :commit_version] + GEMS_AND_ROOT_DIRECTORIES.keys
+      #
+  # Payload types were identified from xCAT-server source code (IPMI.pm)
+  #
+  PAYLOAD_IPMI = 0
+  PAYLOAD_SOL  = 1
+  PAYLOAD_RMCPPLUSOPEN_REQ = 0x10
+  PAYLOAD_RMCPPLUSOPEN_REP = 0x11
+  PAYLOAD_RAKP1 = 0x12
+  PAYLOAD_RAKP2 = 0x13
+  PAYLOAD_RAKP3 = 0x14
+  PAYLOAD_RAKP4 = 0x15
+    
+                encoded
+          end
+    
+              # Encrypts the cipher using RC4-HMAC schema
+          #
+          # @param data [String] the data to encrypt
+          # @param key [String] the key to encrypt
+          # @param msg_type [Integer] the message type
+          # @return [String] the encrypted data
+          def encrypt_rc4_hmac(data, key, msg_type)
+            k1 = OpenSSL::HMAC.digest('MD5', key, [msg_type].pack('V'))
+    
+              # @!attribute type
+          #   @return [Integer] The algorithm used to generate the checksum
+          attr_accessor :type
+          # @!attribute checksum
+          #   @return [String] The checksum itself
+          attr_accessor :checksum
+    
+              # Decodes the Rex::Proto::Kerberos::Model::KrbError from an input
+          #
+          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [self] if decoding succeeds
+          # @raise [RuntimeError] if decoding doesn't succeed
+          def decode(input)
+            case input
+            when String
+              decode_string(input)
+            when OpenSSL::ASN1::ASN1Data
+              decode_asn1(input)
+            else
+              raise ::RuntimeError, 'Failed to decode KrbError, invalid input'
+            end
+    
+      # body
+  xml.tag!('body') do
+    xml.tag!('outline', text: TITLE, title: TITLE) do
+      blogs.each do |blog|
+        xml.tag!('outline', type: 'rss', text: blog.name, title: blog.name,
+          xmlUrl: blog.rss_url, htmlUrl: blog.web_url)
+      end
+    end
   end
 end
-
     
-      at_exit { Application.run! if $!.nil? && Application.run? }
-end
+      uninstall_preflight do
+    system_command '#{HOMEBREW_PREFIX}/bin/brew', args: ['cask', 'uninstall', 'adobe-photoshop-lightroom600']
+  end
     
-          def masked_token?(token)
-        token.length == TOKEN_LENGTH * 2
-      end
-    
-          DIRECTIVES = %i(base_uri child_src connect_src default_src
-                      font_src form_action frame_ancestors frame_src
-                      img_src manifest_src media_src object_src
-                      plugin_types referrer reflected_xss report_to
-                      report_uri require_sri_for sandbox script_src
-                      style_src worker_src).freeze
-    
-          def escape(object)
-        case object
-        when Hash   then escape_hash(object)
-        when Array  then object.map { |o| escape(o) }
-        when String then escape_string(object)
-        when Tempfile then object
-        else nil
+          def deliver(msg)
+        if msg.respond_to?(:deliver_now)
+          # Rails 4.2/5.0
+          msg.deliver_now
+        else
+          # Rails 3.2/4.0/4.1
+          msg.deliver
         end
       end
-    
-        EMPTY_TYPE = 'inode/x-empty'
-    SENSIBLE_DEFAULT = 'application/octet-stream'
-    
-        def geometry_string
-      begin
-        orientation = Paperclip.options[:use_exif_orientation] ?
-          '%[exif:orientation]' : '1'
-        Paperclip.run(
-          Paperclip.options[:is_windows] ? 'magick identify' : 'identify',
-          '-format '%wx%h,#{orientation}' :file', {
-            :file => '#{path}[0]'
-          }, {
-            :swallow_stderr => true
-          }
-        )
-      rescue Terrapin::ExitStatusError
-        ''
-      rescue Terrapin::CommandNotFoundError => e
-        raise_because_imagemagick_missing
-      end
-    end
-    
-        # Returns a the attachment hash.  See Paperclip::Attachment#hash_key for
-    # more details.
-    def hash attachment=nil, style_name=nil
-      if attachment && style_name
-        attachment.hash_key(style_name)
-      else
-        super()
-      end
-    end
-    
-        bin_dir = attributes[:pear_bin_dir] || 'usr/bin'
-    logger.info('Setting bin_dir', :bin_dir => bin_dir)
-    safesystem('pear', '-c', config, 'config-set', 'bin_dir', bin_dir)
-    
-        if i < args.size
-      if args[i].kind_of?(Hash)
-        opts = Hash[args[i].map {|k,v| [k.to_sym, v]} ]
-        i += 1
-      end
-    else
-      opts = Hash[]
     end
