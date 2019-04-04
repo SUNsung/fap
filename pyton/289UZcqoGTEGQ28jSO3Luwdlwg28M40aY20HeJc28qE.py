@@ -1,95 +1,90 @@
 
         
-        rnn = generate_rnn(rng, N, FLAGS.g, FLAGS.tau, FLAGS.dt, FLAGS.max_firing_rate)
+            def __init__(self, **kwargs):
+        '''
+        Use keyword arguments to overwrite
+        any of the class attributes for this instance.
     
-    # save down the network outputs (may be useful later)
-train_outputs_u, valid_outputs_u = split_list_by_inds(outs_e,
-                                                      train_inds,
-                                                      valid_inds)
-train_outputs_u = np.array(train_outputs_u)
-valid_outputs_u = np.array(valid_outputs_u)
-    
-    
-def parse_commonsense_reasoning_test(test_data_name):
-  '''Read JSON test data.'''
-  with tf.gfile.Open(os.path.join(
-      FLAGS.data_dir, 'commonsense_test',
-      '{}.json'.format(test_data_name)), 'r') as f:
-    data = json.load(f)
-    
-      for batch in range(num_batches):
-    x = np.zeros([batch_size, num_steps], dtype=np.int32)
-    y = np.zeros([batch_size, num_steps], dtype=np.int32)
-    w = np.zeros([batch_size, num_steps], dtype=np.float)
-    
-      Yields:
-    Pairs of the batched data, each a matrix of shape [batch_size, num_steps].
-    The second element of the tuple is the same data time-shifted to the
-    right by one.
+        def format_body(self, content, mime):
+        if is_valid_mime(mime):
+            for p in self.enabled_plugins:
+                content = p.format_body(content, mime)
+        return content
+
     
     
-def wasserstein_generator_loss(gen_logits, gen_labels, dis_values,
-                               is_real_input):
-  '''Computes the masked-loss for G.  This will be a blend of cross-entropy
-  loss where the true label is known and GAN loss where the true label is
-  missing.
+def write_stream(stream, outfile, flush):
+    '''Write the output stream.'''
+    try:
+        # Writing bytes so we use the buffer interface (Python 3).
+        buf = outfile.buffer
+    except AttributeError:
+        buf = outfile
     
-      # Extract properties of the indices.
-  num_batches = len(indices)
-  shape = list(indices.shape)
-  shape.append(vocab_size)
+        def register(self, *plugins):
+        for plugin in plugins:
+            self._plugins.append(plugin)
     
-      Args;
-    hparams:  Hyperparameters for the MaskGAN.
-    inputs:  tf.int32 Tensor of the sequence input of shape [batch_size,
-      sequence_length].
-    present:  tf.bool Tensor indicating the presence or absence of the token
-      of shape [batch_size, sequence_length].
-    is_training:  Whether the model is training.
-    is_validating:  Whether the model is being run in validation mode for
-      calculating the perplexity.
-    reuse (Optional):  Whether to reuse the model.
+    from utils import http, add_auth, HTTP_OK, MockEnvironment
+import httpie.input
+import httpie.cli
     
-      Returns:
-    avg_log_perplexity:  Scalar indicating the average log perplexity per
-      missing token in the batch.
-  '''
-  # logits = tf.Print(logits, [logits], message='logits:', summarize=50)
-  # targets = tf.Print(targets, [targets], message='targets:', summarize=50)
-  eps = 1e-12
-  logits = tf.reshape(logits, [-1, FLAGS.vocab_size])
-    
-        assert proc.expect([TIMEOUT, u'test'])
+        plugin_manager.register(Plugin)
+    try:
+        r = http(
+            httpbin + BASIC_AUTH_URL,
+            '--auth-type',
+            Plugin.auth_type,
+        )
+        assert HTTP_OK in r
+        assert r.json == AUTH_OK
+    finally:
+        plugin_manager.unregister(Plugin)
     
     
-@pytest.mark.parametrize('command', [
-    Command('apt-cache search foo', ''),
-    Command('aptitude search foo', ''),
-    Command('apt search foo', ''),
-    Command('apt-get install foo', ''),
-    Command('apt-get source foo', ''),
-    Command('apt-get clean', ''),
-    Command('apt-get remove', ''),
-    Command('apt-get update', ''),
-    Command('sudo apt update', no_match_output)
-])
-def test_not_match(command):
-    assert not match(command)
+def test_migrate_implicit_content_type():
+    config = MockEnvironment().config
     
     
-def test_not_match():
-    assert not match(Command('aws dynamodb invalid', no_suggestions))
+def rst_filenames():
+    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
+        if '.tox' not in root:
+            for filename in fnmatch.filter(filenames, '*.rst'):
+                yield os.path.join(root, filename)
     
-                with open('htmlout.html', 'w') as out:
-                out.write(header)
     
-        Args:
-        x(tf.Tensor):
-        n_unit(int):
-        name(str):
-        reuse(bool)
-    '''
-    return dense(x, n_unit, act_fn=linear, name=(name or 'linear_dense'), reuse=reuse)
+def test_max_redirects(httpbin):
+    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
+             error_exit_ok=True)
+    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
+
     
-        with tf.variable_scope(name, reuse=reuse):
-        char_embed_mat = get_w([char_vocab_size, c_embed_size], name='char_embed_matrix')
+    
+def test_unicode_digest_auth(httpbin):
+    # it doesn't really authenticate us because httpbin
+    # doesn't interpret the utf8-encoded auth
+    http('--auth-type=digest',
+         '--auth', u'test:%s' % UNICODE,
+         httpbin.url + u'/digest-auth/auth/test/' + UNICODE)
+
+    
+            '''
+        for name, value in request_headers.items():
+    
+        def sum_up(self):
+        actually_downloaded = (
+            self.status.downloaded - self.status.resumed_from)
+        time_taken = self.status.time_finished - self.status.time_started
+    
+    HEADER_ARGS = {'Strict-Transport-Security': HSTS_ARGS}
+
+    
+        def test_default_decoder(self):
+        from acme.fields import RFC3339Field
+        self.assertEqual(
+            self.decoded, RFC3339Field.default_decoder(self.encoded))
+    
+        # TODO: decoder should check that nonce is in the protected header
+    
+    # Add any paths that contain templates here, relative to this directory.
+templates_path = ['_templates']
