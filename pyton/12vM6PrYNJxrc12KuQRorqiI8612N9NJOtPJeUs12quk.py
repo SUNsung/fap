@@ -1,348 +1,308 @@
 
         
-        
-def main():
-    if len(sys.argv) < 2:
-        print('No file passed (file should contain Markdown table syntax)')
-        sys.exit(1)
-    check_format(sys.argv[1])
-    if len(errors) > 0:
-        for err in errors:
-            print(err)
-        sys.exit(1)
+            ```python
+    # Consider an array of 5 labels out of a set of 3 classes {0, 1, 2}:
+    > labels
+    array([0, 2, 1, 2, 0])
+    # `to_categorical` converts this into a matrix with as many
+    # columns as there are classes. The number of rows
+    # stays the same.
+    > to_categorical(labels)
+    array([[ 1.,  0.,  0.],
+           [ 0.,  0.,  1.],
+           [ 0.,  1.,  0.],
+           [ 0.,  0.,  1.],
+           [ 1.,  0.,  0.]], dtype=float32)
+    ```
+    '''
     
-      Returns:
-    The last relevant LSTM output cell for each batch instance.
-  '''
-  max_length = int(output.get_shape()[1])
-  path_lengths = tf.clip_by_value(seq_lengths - 1, 0, max_length)
-  relevant = tf.reduce_sum(tf.multiply(output, tf.expand_dims(
-      tf.one_hot(path_lengths, max_length), -1)), 1)
-  return relevant
+    x_train = x_train.reshape(x_train.shape[0], -1, 1)
+x_test = x_test.reshape(x_test.shape[0], -1, 1)
+x_train = x_train.astype('float32')
+x_test = x_test.astype('float32')
+x_train /= 255
+x_test /= 255
+print('x_train shape:', x_train.shape)
+print(x_train.shape[0], 'train samples')
+print(x_test.shape[0], 'test samples')
     
-    if S < N:
-  # Note that this isn't necessary for this synthetic example, but
-  # it's useful to see how the input factor matrices were initialized
-  # for actual neurophysiology data.
-  datasets = add_alignment_projections(datasets, npcs=FLAGS.npcs)
+    # input image dimensions
+img_rows, img_cols = 28, 28
+# number of convolutional filters to use
+filters = 32
+# size of pooling area for max pooling
+pool_size = 2
+# convolution kernel size
+kernel_size = 3
     
+    print('Building model...')
+model = Sequential()
+model.add(Dense(512, input_shape=(max_words,)))
+model.add(Activation('relu'))
+model.add(Dropout(0.5))
+model.add(Dense(num_classes))
+model.add(Activation('softmax'))
     
-def nparray_and_transpose(data_a_b_c):
-  '''Convert the list of items in data to a numpy array, and transpose it
-  Args:
-    data: data_asbsc: a nested, nested list of length a, with sublist length
-      b, with sublist length c.
-  Returns:
-    a numpy 3-tensor with dimensions a x c x b
-'''
-  data_axbxc = np.array([datum_b_c for datum_b_c in data_a_b_c])
-  data_axcxb = np.transpose(data_axbxc, axes=[0,2,1])
-  return data_axcxb
-    
-      def add_single_model(self, model_name='lm1'):
-    '''Add a single model into the current ensemble.'''
-    # Create single LM
-    single_lm = SingleRecurrentLanguageModel(self.vocab, model_name)
-    
-      Raises:
-    ValueError: if batch_size or num_steps are too high.
-  '''
-  del epoch_size_override
-  data_len = len(raw_data)
-  num_batches = data_len // batch_size - 1
+        # Arguments
+        y_true: tensor of true targets.
+        y_pred: tensor of predicted targets.
     
     
-def _file_to_word_ids(filename, word_to_id):
-  data = _read_words(filename)
-  return [word_to_id[word] for word in data if word in word_to_id]
+if __name__ == '__main__':
+    main()
+
     
-      ## REINFORCE with different baselines.
-  # We create a separate critic functionality for the Discriminator.  This
-  # will need to operate unidirectionally and it may take in the past context.
-  if FLAGS.baseline_method == 'critic':
+        result = dict(changed=False, rules_purged=0)
     
+        ipa_dnszone = client.dnszone_find(zone_name)
     
-def create_dis_pretrain_op(hparams, dis_loss, global_step):
-  '''Create a train op for pretraining.'''
-  with tf.name_scope('pretrain_generator'):
-    optimizer = tf.train.AdamOptimizer(hparams.dis_pretrain_learning_rate)
-    dis_vars = [
-        v for v in tf.trainable_variables() if v.op.name.startswith('dis')
-    ]
-    if FLAGS.dis_update_share_embedding and FLAGS.dis_share_embedding:
-      shared_embedding = [
-          v for v in tf.trainable_variables()
-          if v.op.name == 'gen/decoder/rnn/embedding'
-      ][0]
-      dis_vars.append(shared_embedding)
-    dis_grads = tf.gradients(dis_loss, dis_vars)
-    dis_grads_clipped, _ = tf.clip_by_global_norm(dis_grads,
-                                                  FLAGS.grad_clipping)
-    dis_pretrain_op = optimizer.apply_gradients(
-        zip(dis_grads_clipped, dis_vars), global_step=global_step)
-    return dis_pretrain_op
-    
-      if not FLAGS.seq2seq_share_embedding:
-    encoder_embedding = [
-        v for v in tf.trainable_variables()
-        if v.op.name == 'gen/encoder/rnn/embedding'
-    ][0]
-  encoder_lstm_w_0 = [
-      v for v in tf.trainable_variables()
-      if v.op.name ==
-      'gen/encoder/rnn/GenericMultiRNNCell/Cell0/Alien/rnn_builder/big_h_mat'
-  ][0]
-  encoder_lstm_b_0 = [
-      v for v in tf.trainable_variables()
-      if v.op.name ==
-      'gen/encoder/rnn/GenericMultiRNNCell/Cell0/Alien/rnn_builder/big_inputs_mat'
-  ][0]
-  encoder_lstm_w_1 = [
-      v for v in tf.trainable_variables()
-      if v.op.name ==
-      'gen/encoder/rnn/GenericMultiRNNCell/Cell1/Alien/rnn_builder/big_h_mat'
-  ][0]
-  encoder_lstm_b_1 = [
-      v for v in tf.trainable_variables()
-      if v.op.name ==
-      'gen/encoder/rnn/GenericMultiRNNCell/Cell1/Alien/rnn_builder/big_inputs_mat'
-  ][0]
-    
-    FISH_COMPLETION_FILE = 'youtube-dl.fish'
-FISH_COMPLETION_TEMPLATE = 'devscripts/fish-completion.in'
-    
-    print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
-    try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
-    
-    
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
-    
-    
-def main():
-    parser = optparse.OptionParser(usage='%prog OUTFILE.md')
-    options, args = parser.parse_args()
-    if len(args) != 1:
-        parser.error('Expected an output filename')
-    
-    
-from youtube_dl import YoutubeDL
-    
-        def test_allsubtitles(self):
-        self.DL.params['writesubtitles'] = True
-        self.DL.params['allsubtitles'] = True
-        subtitles = self.getSubtitles()
-        self.assertEqual(set(subtitles.keys()), set(['en']))
-        self.assertEqual(md5(subtitles['en']), '53cb083a5914b2d84ef1ab67b880d18a')
-    
-    
-@bp.before_app_request
-def load_logged_in_user():
-    '''If a user id is stored in the session, load the user object from
-    the database into ``g.user``.'''
-    user_id = session.get('user_id')
-    
-        def context_processor(self, f):
-        '''Like :meth:`Flask.context_processor` but for a blueprint.  This
-        function is only executed for requests handled by a blueprint.
-        '''
-        self.record_once(lambda s: s.app.template_context_processors
-            .setdefault(self.name, []).append(f))
-        return f
-    
-    
-def explain_template_loading_attempts(app, template, attempts):
-    '''This should help developers understand what failed'''
-    info = ['Locating template '%s':' % template]
-    total_found = 0
-    blueprint = None
-    reqctx = _request_ctx_stack.top
-    if reqctx is not None and reqctx.request.blueprint is not None:
-        blueprint = reqctx.request.blueprint
-    
-        Defines all the global objects that are proxies to the current
-    active context.
-    
-    from .globals import request
-    
-        def _get_source_fast(self, environment, template):
-        for srcobj, loader in self._iter_loaders(template):
-            try:
-                return loader.get_source(environment, template)
-            except TemplateNotFound:
-                continue
-        raise TemplateNotFound(template)
-    
-        def get_json(self, force=False, silent=False, cache=True):
-        '''Parse and return the data as JSON. If the mimetype does not
-        indicate JSON (:mimetype:`application/json`, see
-        :meth:`is_json`), this returns ``None`` unless ``force`` is
-        true. If parsing fails, :meth:`on_json_loading_failed` is called
-        and its return value is used as the return value.
-    
-        @app.route('/')
-    def index():
-        raise Exception('dummy')
-    
-        def save(self, must_create=False):
-        super().save(must_create)
-        self._cache.set(self.cache_key, self._session, self.get_expiry_age())
-    
-        def create(self):
-        while True:
-            self._session_key = self._get_new_session_key()
-            try:
-                # Save immediately to ensure we have a unique entry in the
-                # database.
-                self.save(must_create=True)
-            except CreateError:
-                # Key wasn't unique. Try again.
-                continue
-            self.modified = True
-            return
-    
-        def save(self, session_key, session_dict, expire_date):
-        s = self.model(session_key, self.encode(session_dict), expire_date)
-        if session_dict:
-            s.save()
+                if re.search('already enabled', out) is None:
+                change_applied = True
         else:
-            s.delete()  # Clear sessions with no data.
-        return s
+            if rc == 0:
+                change_applied = True
+            # RC is not 0 for this already disabled feature, handle it as no change applied
+            elif re.search('Cannot disable feature '%s'. Target file .* does not exist' % self.feature_name, out):
+                change_applied = False
+            else:
+                self.module.fail_json(msg='Failed to disable feature. Command returns %s' % out)
     
-        The Django sessions framework is entirely cookie-based. It does
-    not fall back to putting session IDs in URLs. This is an intentional
-    design decision. Not only does that behavior make URLs ugly, it makes
-    your site vulnerable to session-ID theft via the 'Referer' header.
+        MONIT = module.get_bin_path('monit', True)
     
-        lastmod = None
-    all_sites_lastmod = True
-    urls = []
-    for site in maps:
+    
+FILEPATH = os.path.join(
+    os.path.abspath(os.path.dirname(os.path.dirname(__file__))), 'blns.txt')
+'''Path to the file'''
+    
+                self.ip_manager.report_connect_fail(ip, force_remove=True)
+    
+    import simple_http_client
+from xlog import getLogger
+xlog = getLogger('gae_proxy')
+    
+    # [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+    
+            LA(1) is not what we are looking for.  If LA(2) has the right token,
+        however, then assume LA(1) is some extra spurious token.  Delete it
+        and LA(2) as if we were doing a normal match(), which advances the
+        input.
+    
+    The problem is  :
+Given an ARRAY, to find the longest and increasing sub ARRAY in that given ARRAY and return it.
+Example: [10, 22, 9, 33, 21, 50, 41, 60, 80] as input will return [10, 22, 33, 41, 60, 80] as output
+'''
+from __future__ import print_function
+    
+    
+class SubArray:
+    
+        def _AugAssign(self, t):
+        self.fill()
+        self.dispatch(t.target)
+        self.write(' '+self.binop[t.op.__class__.__name__]+'= ')
+        self.dispatch(t.value)
+    
+        # Test an invalid call (bpo-34125)
+    def test_unbound_method_invalid_args(self):
+        kwargs = {}
+        def f(p):
+            dict.get(print, 42, **kwargs)
+        f_ident = ident(f)
+        self.check_events(f, [(1, 'call', f_ident),
+                              (1, 'return', f_ident)])
+    
+    
+# Are two filenames really pointing to the same file?
+def samefile(f1, f2):
+    '''Test whether two pathnames reference the same actual file'''
+    s1 = os.stat(f1)
+    s2 = os.stat(f2)
+    return samestat(s1, s2)
+    
+        @unittest.skipUnless((sys.platform == 'darwin' or
+                support.is_android), 'test specific to Mac OS X and Android')
+    def test_osx_android_utf8(self):
+        def check_output(text):
+            decoded = text.decode('utf-8', 'surrogateescape')
+            expected = ascii(decoded).encode('ascii') + b'\n'
+    
+    # Create the base text message.
+msg = EmailMessage()
+msg['Subject'] = 'Ayons asperges pour le déjeuner'
+msg['From'] = Address('Pepé Le Pew', 'pepe', 'example.com')
+msg['To'] = (Address('Penelope Pussycat', 'penelope', 'example.com'),
+             Address('Fabrette Pussycat', 'fabrette', 'example.com'))
+msg.set_content('''\
+Salut!
+    
+        f1 = manager.Foo1()
+    f1.f()
+    f1.g()
+    assert not hasattr(f1, '_h')
+    assert sorted(f1._exposed_) == sorted(['f', 'g'])
+    
+        ep = 'http://vdn.apps.cntv.cn/api/getHttpVideoInfo.do?pid={}'
+    
+        for quality in ['1080','720','480','380','240','144','auto']:
         try:
-            if callable(site):
-                site = site()
-            urls.extend(site.get_urls(page=page, site=req_site,
-                                      protocol=req_protocol))
-            if all_sites_lastmod:
-                site_lastmod = getattr(site, 'latest_lastmod', None)
-                if site_lastmod is not None:
-                    site_lastmod = (
-                        site_lastmod.utctimetuple() if isinstance(site_lastmod, datetime.datetime)
-                        else site_lastmod.timetuple()
-                    )
-                    lastmod = site_lastmod if lastmod is None else max(lastmod, site_lastmod)
-                else:
-                    all_sites_lastmod = False
-        except EmptyPage:
-            raise Http404('Page %s empty' % page)
-        except PageNotAnInteger:
-            raise Http404('No page '%s'' % page)
-    response = TemplateResponse(request, template_name, {'urlset': urls},
-                                content_type=content_type)
-    if all_sites_lastmod and lastmod is not None:
-        # if lastmod is defined for all sites, set header so as
-        # ConditionalGetMiddleware is able to send 304 NOT MODIFIED
-        response['Last-Modified'] = http_date(timegm(lastmod))
-    return response
+            real_url = info[quality][1]['url']
+            if real_url:
+                break
+        except KeyError:
+            pass
+    
+        elif 'subject' in url:
+        titles = re.findall(r'data-title='([^']*)'>', html)
+        song_id = re.findall(r'<li class='song-item' id='([^']*)'', html)
+        song_ssid = re.findall(r'data-ssid='([^']*)'', html)
+        get_song_url = 'http://music.douban.com/j/songlist/get_song_url'
+    
+        fc2video_download_by_upid(upid, output_dir, merge, info_only)
+    
+    import json
+import urllib.parse
+import base64
+import binascii
+import re
+    
+        def basic_extract(self):
+        self.get_title()
+        self.get_flashvars()
+        api_req_url = '{}?{}'.format(self.flashvars['IService'], parse.urlencode(self.flashvars))
+        self.api_req(api_req_url)
+    
+    from ..common import *
+    
+    
+def _test():
+    ''''''
+    file_path = r'./data.txt'
+    
+            W, b = get_wb([n_step, n_step])
+        a = softmax(tf.matmul(a, W) + b)
+        a = tf.reshape(a, [-1, n_input, n_step])  # [batch_size, n_input, n_step]
+    
+            with tf.variable_scope('transform'):
+            W_T, b_T = get_wb([n_input, n_input], b_initializer=tf.initializers.constant(carry_bias))
+    
+    import tensorflow as tf
+import keras.backend as K
+    
+    # 构建 FastText 模型
+sentences = [['Hello', 'World', '!'], ['I', 'am', 'huay', '.']]
+min_ngrams, max_ngrams = 2, 4  # ngrams 范围
+model = FastText(sentences, size=5, min_count=1, min_n=min_ngrams, max_n=max_ngrams)
+    
+    
+def filter_for_training(roidb):
+    '''Remove roidb entries that have no usable RoIs based on config settings.
+    '''
+    def is_valid(entry):
+        # Valid images have:
+        #   (1) At least one foreground RoI OR
+        #   (2) At least one background RoI
+        overlaps = entry['max_overlaps']
+        # find boxes with sufficient overlap
+        fg_inds = np.where(overlaps >= cfg.TRAIN.FG_THRESH)[0]
+        # Select background RoIs as those within [BG_THRESH_LO, BG_THRESH_HI)
+        bg_inds = np.where((overlaps < cfg.TRAIN.BG_THRESH_HI) &
+                           (overlaps >= cfg.TRAIN.BG_THRESH_LO))[0]
+        # image is only valid if such boxes exist
+        valid = len(fg_inds) > 0 or len(bg_inds) > 0
+        if cfg.MODEL.KEYPOINTS_ON:
+            # If we're training for keypoints, exclude images with no keypoints
+            valid = valid and entry['has_visible_keypoints']
+        return valid
+    
+        # Check if we need the P6 feature map
+    if not cfg.FPN.EXTRA_CONV_LEVELS and max_level == HIGHEST_BACKBONE_LVL + 1:
+        # Original FPN P6 level implementation from our CVPR'17 FPN paper
+        P6_blob_in = blobs_fpn[0]
+        P6_name = P6_blob_in + '_subsampled_2x'
+        # Use max pooling to simulate stride 2 subsampling
+        P6_blob = model.MaxPool(P6_blob_in, P6_name, kernel=1, pad=0, stride=2)
+        blobs_fpn.insert(0, P6_blob)
+        spatial_scales.insert(0, spatial_scales[0] * 0.5)
+    
+    ... -> RoI ----\                               /-> box cls output -> cls loss
+                -> RoIFeatureXform -> box head
+... -> Feature /                               \-> box reg output -> reg loss
+       Map
+    
+    from caffe2.python import muji
+    
+    
+def add_fpn_retinanet_outputs(model, blobs_in, dim_in, spatial_scales):
+    '''RetinaNet head. For classification and box regression, we can chose to
+    have the same conv tower or a separate tower. 'bl_feat_list' stores the list
+    of feature blobs for bbox prediction. These blobs can be shared cls feature
+    blobs if we share the tower or else are independent blobs.
+    '''
+    dim_out = dim_in
+    k_max = cfg.FPN.RPN_MAX_LEVEL  # coarsest level of pyramid
+    k_min = cfg.FPN.RPN_MIN_LEVEL  # finest level of pyramid
+    A = len(cfg.RETINANET.ASPECT_RATIOS) * cfg.RETINANET.SCALES_PER_OCTAVE
+    
+    
+def collect(inputs, is_training):
+    cfg_key = 'TRAIN' if is_training else 'TEST'
+    post_nms_topN = cfg[cfg_key].RPN_POST_NMS_TOP_N
+    k_max = cfg.FPN.RPN_MAX_LEVEL
+    k_min = cfg.FPN.RPN_MIN_LEVEL
+    num_lvls = k_max - k_min + 1
+    roi_inputs = inputs[:num_lvls]
+    score_inputs = inputs[num_lvls:]
+    if is_training:
+        score_inputs = score_inputs[:-2]
+    
+    
+def compute_targets(ex_rois, gt_rois, weights=(1.0, 1.0, 1.0, 1.0)):
+    '''Compute bounding-box regression targets for an image.'''
+    return box_utils.bbox_transform_inv(ex_rois, gt_rois, weights).astype(
+        np.float32, copy=False
+    )
 
     
-    # Scrapy version
-import pkgutil
-__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
-version_info = tuple(int(v) if v.isdigit() else v
-                     for v in __version__.split('.'))
-del pkgutil
+        def _distribute_rois_over_fpn_levels(rois_blob_name):
+        '''Distribute rois over the different FPN levels.'''
+        # Get target level for each roi
+        # Recall blob rois are in (batch_idx, x1, y1, x2, y2) format, hence take
+        # the box coordinates from columns 1:5
+        target_lvls = fpn.map_rois_to_fpn_levels(
+            blobs[rois_blob_name][:, 1:5], lvl_min, lvl_max
+        )
+        # Add per FPN level roi blobs named like: <rois_blob_name>_fpn<lvl>
+        fpn.add_multilevel_roi_blobs(
+            blobs, rois_blob_name, blobs[rois_blob_name], target_lvls, lvl_min,
+            lvl_max
+        )
     
-    class Command(ScrapyCommand):
-    
-    from twisted.web.client import HTTPClientFactory
-from twisted.web.http import HTTPClient
-from twisted.internet import defer
-    
-        def test_method(self):
-        # Methods
-        self.check_tokenize('@staticmethod\ndef foo(x,y): pass', '''\
-    OP         '@'           (1, 0) (1, 1)
-    NAME       'staticmethod' (1, 1) (1, 13)
-    NEWLINE    '\\n'          (1, 13) (1, 14)
-    NAME       'def'         (2, 0) (2, 3)
-    NAME       'foo'         (2, 4) (2, 7)
-    OP         '('           (2, 7) (2, 8)
-    NAME       'x'           (2, 8) (2, 9)
-    OP         ','           (2, 9) (2, 10)
-    NAME       'y'           (2, 10) (2, 11)
-    OP         ')'           (2, 11) (2, 12)
-    OP         ':'           (2, 12) (2, 13)
-    NAME       'pass'        (2, 14) (2, 18)
-    ''')
-    
-    
-__all__ = [
-    'Package',
-    'Resource',
-    'contents',
-    'is_resource',
-    'open_binary',
-    'open_text',
-    'path',
-    'read_binary',
-    'read_text',
-    ]
-    
-        def testSeekPostEndTwice(self):
-        self.createTempFile()
-        with BZ2File(self.filename) as bz2f:
-            bz2f.seek(150000)
-            bz2f.seek(150000)
-            self.assertEqual(bz2f.tell(), len(self.TEXT))
-            self.assertEqual(bz2f.read(), b'')
-    
-        for filename in os.listdir(directory):
-        path = os.path.join(directory, filename)
-        if not os.path.isfile(path):
-            continue
-        # Guess the content type based on the file's extension.  Encoding
-        # will be ignored, although we should check for simple things like
-        # gzip'd or compressed files.
-        ctype, encoding = mimetypes.guess_type(path)
-        if ctype is None or encoding is not None:
-            # No guess could be made, or the file is encoded (compressed), so
-            # use a generic bag-of-bits type.
-            ctype = 'application/octet-stream'
-        maintype, subtype = ctype.split('/', 1)
-        with open(path, 'rb') as fp:
-            msg.add_attachment(fp.read(),
-                               maintype=maintype,
-                               subtype=subtype,
-                               filename=filename)
-    # Now send or store the message
-    if args.output:
-        with open(args.output, 'wb') as fp:
-            fp.write(msg.as_bytes(policy=SMTP))
-    else:
-        with smtplib.SMTP('localhost') as s:
-            s.send_message(msg)
-    
-    # Of course, there are lots of email messages that could break this simple
-# minded program, but it will handle the most common ones.
-
-    
-    ##
-    
-    def plus(a, b):
-    time.sleep(0.5*random.random())
-    return a + b
-    
-      2. NUL bytes.  These are problematic for some tools.
+        filenames = []
+    for (dirpath, dnames, fnames) in os.walk(path):
+        for fname in fnames:
+            if fname.endswith('.md'):
+                filenames.append(os.sep.join([dirpath, fname]))
