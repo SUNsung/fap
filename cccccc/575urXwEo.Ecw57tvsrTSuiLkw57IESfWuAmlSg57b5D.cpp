@@ -1,293 +1,422 @@
 
         
-        
-    {    if (tmp.handle_data().is_set()) {
-      input_handle_shapes_and_types[i].reset(
-          new std::vector<std::pair<TensorShapeProto, DataType>>);
-      auto& v = *input_handle_shapes_and_types[i];
-      for (const auto& x : tmp.handle_data().shape_and_type()) {
-        v.emplace_back(x.shape(), x.dtype());
-      }
-    }
-  }
+          assert(capacity % 16 == 0 && 'not allocating multiple of alignment');
     
-      for (const auto& node : item_.MainOpsFanin()) {
-    PrintNodeInfo(node, properties, debug, os);
-  }
-  for (const auto& node : item_.EnqueueOpsFanin()) {
-    PrintNodeInfo(node, properties, debug, os);
-  }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // Destructor passed to TF_NewTensor when it reuses a numpy buffer. Stores a
-// pointer to the pyobj in a buffer to be dereferenced later when we're actually
-// holding the GIL.
-void DelayedNumpyDecref(void* data, size_t len, void* obj) {
-  mutex_lock ml(*DelayedDecrefLock());
-  DecrefCache()->push_back(obj);
+    namespace clang {
+class Sema;
+class NamedDecl;
+class TypeDecl;
+class FunctionDecl;
 }
     
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    class RecordReader;
-    
-    
-    {  tensorflow::DeviceNameUtils::ParsedName parsed_name;
-  if (!tensorflow::DeviceNameUtils::ParseFullName(node_def.device(),
-                                                  &parsed_name)) {
-    LOG(WARNING) << 'Failed to parse device from node_def: '
-                 << node_def.ShortDebugString();
-    return '';
+    static void printNode(DemanglerPrinter &Out, const Node *node, unsigned depth) {
+  // Indent two spaces per depth.
+  for (unsigned i = 0; i < depth * 2; ++i) {
+    Out << ' ';
   }
-  string class_name = '';
-  tensorflow::FindKernelDef(tensorflow::DeviceType(parsed_name.type.c_str()),
-                            node_def, nullptr /* kernel_def */, &class_name)
-      .IgnoreError();
-  return class_name;
+  if (!node) {
+    Out << '<<NULL>>';
+    return;
+  }
+  Out << 'kind=' << getNodeKindString(node->getKind());
+  if (node->hasText()) {
+    Out << ', text=\'' << node->getText() << '\'';
+  }
+  if (node->hasIndex()) {
+    Out << ', index=' << node->getIndex();
+  }
+  Out << '\n';
+  for (auto &child : *node) {
+    printNode(Out, child, depth + 1);
+  }
 }
     
-      Entry* entry = nullptr;
-  {
-    mutex_lock lock{mutex_};
-    entry = &cache_[config.ordinal];
-    // Release the map lock; the address of 'entry' is stable because
-    // std::map guarantees reference stability.
-  }
+    #ifndef BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
+#define BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
     
-    template <typename Generator1, typename Generator2, typename Generator3,
-    typename Generator4, typename Generator5, typename Generator6,
-    typename Generator7, typename Generator8, typename Generator9,
-    typename Generator10>
-internal::CartesianProductHolder10<Generator1, Generator2, Generator3,
-    Generator4, Generator5, Generator6, Generator7, Generator8, Generator9,
-    Generator10> Combine(
-    const Generator1& g1, const Generator2& g2, const Generator3& g3,
-        const Generator4& g4, const Generator5& g5, const Generator6& g6,
-        const Generator7& g7, const Generator8& g8, const Generator9& g9,
-        const Generator10& g10) {
-  return internal::CartesianProductHolder10<Generator1, Generator2, Generator3,
-      Generator4, Generator5, Generator6, Generator7, Generator8, Generator9,
-      Generator10>(
-      g1, g2, g3, g4, g5, g6, g7, g8, g9, g10);
-}
-# endif  // GTEST_HAS_COMBINE
-    
-    template <typename T>
-class UniversalTersePrinter {
- public:
-  static void Print(const T& value, ::std::ostream* os) {
-    UniversalPrint(value, os);
-  }
-};
-template <typename T>
-class UniversalTersePrinter<T&> {
- public:
-  static void Print(const T& value, ::std::ostream* os) {
-    UniversalPrint(value, os);
-  }
-};
-template <typename T, size_t N>
-class UniversalTersePrinter<T[N]> {
- public:
-  static void Print(const T (&value)[N], ::std::ostream* os) {
-    UniversalPrinter<T[N]>::Print(value, os);
-  }
-};
-template <>
-class UniversalTersePrinter<const char*> {
- public:
-  static void Print(const char* str, ::std::ostream* os) {
-    if (str == NULL) {
-      *os << 'NULL';
-    } else {
-      UniversalPrint(string(str), os);
-    }
-  }
-};
-template <>
-class UniversalTersePrinter<char*> {
- public:
-  static void Print(char* str, ::std::ostream* os) {
-    UniversalTersePrinter<const char*>::Print(str, os);
-  }
-};
-    
-      // Returns true iff the test part passed.
-  bool passed() const { return type_ == kSuccess; }
-    
-      template <typename T>
-  operator ParamGenerator<T>() const {
-    const T array[] = {static_cast<T>(v1_), static_cast<T>(v2_),
-        static_cast<T>(v3_), static_cast<T>(v4_), static_cast<T>(v5_),
-        static_cast<T>(v6_), static_cast<T>(v7_), static_cast<T>(v8_),
-        static_cast<T>(v9_), static_cast<T>(v10_), static_cast<T>(v11_),
-        static_cast<T>(v12_), static_cast<T>(v13_), static_cast<T>(v14_),
-        static_cast<T>(v15_), static_cast<T>(v16_), static_cast<T>(v17_),
-        static_cast<T>(v18_), static_cast<T>(v19_), static_cast<T>(v20_),
-        static_cast<T>(v21_), static_cast<T>(v22_), static_cast<T>(v23_),
-        static_cast<T>(v24_), static_cast<T>(v25_), static_cast<T>(v26_),
-        static_cast<T>(v27_), static_cast<T>(v28_), static_cast<T>(v29_),
-        static_cast<T>(v30_), static_cast<T>(v31_), static_cast<T>(v32_)};
-    return ValuesIn(array);
-  }
-    
-      // Returns true iff the given string ends with the given suffix, ignoring
-  // case. Any string is considered to end with an empty suffix.
-  static bool EndsWithCaseInsensitive(
-      const std::string& str, const std::string& suffix);
-    
-    $range i 2..n
-    
-      // Gets the 0-terminated C string this MyString object represents.
-  const char* c_string() const { return c_string_; }
-    
-    /*!
- * \brief Registry entry for linear updater.
- */
-struct LinearUpdaterReg
-    : public dmlc::FunctionRegEntryBase<LinearUpdaterReg,
-                                        std::function<LinearUpdater*()> > {};
-    
-    
-    { private:
-  // vector: node_id -> elements
-  std::vector<Elem> elem_of_each_node_;
-};
-    
-    namespace xgboost {
-namespace common {
-TEST(CompressedIterator, Test) {
-  ASSERT_TRUE(detail::SymbolBits(256) == 8);
-  ASSERT_TRUE(detail::SymbolBits(150) == 8);
-  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
-  int num_elements = 1000;
-  int repetitions = 1000;
-  srand(9);
-    }
-    }
-    }
-    
-    // Define a customized logistic regression objective in C++.
-// Implement the interface.
-class MyLogistic : public ObjFunction {
- public:
-  void Configure(const std::vector<std::pair<std::string, std::string> >& args) override {
-    param_.InitAllowUnknown(args);
-  }
-  void GetGradient(const HostDeviceVector<bst_float> &preds,
-                   const MetaInfo &info,
-                   int iter,
-                   HostDeviceVector<GradientPair> *out_gpair) override {
-    out_gpair->Resize(preds.Size());
-    const std::vector<bst_float>& preds_h = preds.HostVector();
-    std::vector<GradientPair>& out_gpair_h = out_gpair->HostVector();
-    const std::vector<bst_float>& labels_h = info.labels_.HostVector();
-    for (size_t i = 0; i < preds_h.size(); ++i) {
-      bst_float w = info.GetWeight(i);
-      // scale the negative examples!
-      if (labels_h[i] == 0.0f) w *= param_.scale_neg_weight;
-      // logistic transformation
-      bst_float p = 1.0f / (1.0f + std::exp(-preds_h[i]));
-      // this is the gradient
-      bst_float grad = (p - labels_h[i]) * w;
-      // this is the second order gradient
-      bst_float hess = p * (1.0f - p) * w;
-      out_gpair_h.at(i) = GradientPair(grad, hess);
-    }
-  }
-  const char* DefaultEvalMetric() const override {
-    return 'error';
-  }
-  void PredTransform(HostDeviceVector<bst_float> *io_preds) override {
-    // transform margin value to probability.
-    std::vector<bst_float> &preds = io_preds->HostVector();
-    for (size_t i = 0; i < preds.size(); ++i) {
-      preds[i] = 1.0f / (1.0f + std::exp(-preds[i]));
-    }
-  }
-  bst_float ProbToMargin(bst_float base_score) const override {
-    // transform probability to margin value
-    return -std::log(1.0f / base_score - 1.0f);
-  }
-    }
-    
-    void SimpleCSRSource::LoadBinary(dmlc::Stream* fi) {
-  int tmagic;
-  CHECK(fi->Read(&tmagic, sizeof(tmagic)) == sizeof(tmagic)) << 'invalid input file format';
-  CHECK_EQ(tmagic, kMagic) << 'invalid format, magic number mismatch';
-  info.LoadBinary(fi);
-  fi->Read(&page_.offset.HostVector());
-  fi->Read(&page_.data.HostVector());
+    static int secp256k1_gej_eq_x_var(const secp256k1_fe *x, const secp256k1_gej *a) {
+    secp256k1_fe r, r2;
+    VERIFY_CHECK(!a->infinity);
+    secp256k1_fe_sqr(&r, &a->z); secp256k1_fe_mul(&r, &r, x);
+    r2 = a->x; secp256k1_fe_normalize_weak(&r2);
+    return secp256k1_fe_equal_var(&r, &r2);
 }
     
-      ~SharedState() {}
     
-      // Do some reads and writes to key 'x'
-  read_options.snapshot = db->GetSnapshot();
-  s = txn->Get(read_options, 'x', &value);
-  txn->Put('x', 'x');
+    {    secp256k1_ecdsa_recoverable_signature_load(ctx, &r, &s, recid, sig);
+    secp256k1_scalar_get_b32(&output64[0], &r);
+    secp256k1_scalar_get_b32(&output64[32], &s);
+    return 1;
+}
     
-      // initialize BlockBasedTableOptions
-  auto cache = NewLRUCache(1 * 1024 * 1024 * 1024);
-  BlockBasedTableOptions bbt_opts;
-  bbt_opts.block_size = 32 * 1024;
-  bbt_opts.block_cache = cache;
     
-    // Abstract handle to particular state of a DB.
-// A Snapshot is an immutable object and can therefore be safely
-// accessed from multiple threads without any external synchronization.
-//
-// To Create a Snapshot, call DB::GetSnapshot().
-// To Destroy a Snapshot, call DB::ReleaseSnapshot(snapshot).
-class Snapshot {
- public:
-  // returns Snapshot's sequence number
-  virtual SequenceNumber GetSequenceNumber() const = 0;
+    {    // Inputs that are effectively invalid under the target grammar.
+    // PROTOCOLINFO accepts an OtherLine that is just an OptArguments, which
+    // would make these inputs valid. However,
+    // - This parser is never used in that situation, because the
+    //   SplitTorReplyLine parser enables OtherLine to be skipped.
+    // - Even if these were valid, an OptArguments contains no semantic data,
+    //   so there is no point in parsing it.
+    CheckParseTorReplyMapping('ARGS', {});
+    CheckParseTorReplyMapping('MORE ARGS', {});
+    CheckParseTorReplyMapping('MORE  ARGS', {});
+    CheckParseTorReplyMapping('EVEN more=ARGS', {});
+    CheckParseTorReplyMapping('EVEN+more ARGS', {});
+}
+    
+    %define f r9d
+%define g r10d
+%define h r11d
+    
+    SHOULD_NOT_DO_GRADIENT(EnforceFinite);
+    
+    REGISTER_CPU_OPERATOR(Floor, FloorOp<float, CPUContext>);
+    
+    OPERATOR_SCHEMA(GatherRangesToDense)
+    .NumInputs(2, 3)
+    .NumOutputs(1, INT_MAX)
+    .SetDoc(R'DOC(
+Given DATA tensor of rank 1, and RANGES tensor of rank 3, gather values
+corresponding to each range into a separate output tensor. If the optional input
+KEY tensor is also given, the output will be sorted by KEY for each example.
+    
+            static Windows::UI::Xaml::Automation::Peers::AutomationNotificationProcessing GetWindowsNotificationProcessing(
+            CalculatorApp::Common::Automation::AutomationNotificationProcessing customProcessingType);
+    
+            static std::unordered_map<std::wstring, std::wstring> GetTokenToReadableNameMap();
+    
+      virtual void fillMessage(Dict* msgDict) CXX11_OVERRIDE;
+    
+    std::pair<std::vector<std::unique_ptr<Command>>,
+          std::vector<std::unique_ptr<Command>>>
+DHTSetup::setup(DownloadEngine* e, int family)
+{
+  std::vector<std::unique_ptr<Command>> tempCommands;
+  std::vector<std::unique_ptr<Command>> tempRoutineCommands;
+  if ((family != AF_INET && family != AF_INET6) ||
+      (family == AF_INET && DHTRegistry::isInitialized()) ||
+      (family == AF_INET6 && DHTRegistry::isInitialized6())) {
+    return {};
+  }
+  try {
+    // load routing table and localnode id here
+    std::shared_ptr<DHTNode> localNode;
+    }
     }
     
+    namespace aria2 {
+    }
     
-    {}  // namespace rocksdb
-#endif  // !ROCKSDB_LITE
+      virtual std::shared_ptr<DHTTask>
+  createPeerAnnounceTask(const unsigned char* infoHash) = 0;
+    
+    void DHTTaskFactoryImpl::setLocalNode(const std::shared_ptr<DHTNode>& localNode)
+{
+  localNode_ = localNode;
+}
+    
+      virtual void
+  addPeriodicTask2(const std::shared_ptr<DHTTask>& task) CXX11_OVERRIDE;
+    
+    void DHTTokenUpdateCommand::preProcess()
+{
+  if (getDownloadEngine()->getRequestGroupMan()->downloadFinished() ||
+      getDownloadEngine()->isHaltRequested()) {
+    enableExit();
+  }
+}
+    
+    DNSCache::DNSCache() {}
+    
+    
+    {    bool operator==(const CacheEntry& e) const;
+  };
+    
+      RateLimiter* low_pri_rate_limiter() { return low_pri_rate_limiter_.get(); }
+    
+      // Set a snapshot at start of transaction by setting set_snapshot=true
+  txn_options.set_snapshot = true;
+  txn = txn_db->BeginTransaction(write_options, txn_options);
+    
+    #include <memory>
+    
+            if(_rightBoundary < _leftBoundary)
+        {
+            // screen width is larger than world's boundary width
+            //set both in the middle of the world
+            _rightBoundary = _leftBoundary = (_leftBoundary + _rightBoundary) / 2;
+        }
+        if(_topBoundary < _bottomBoundary)
+        {
+            // screen width is larger than world's boundary width
+            //set both in the middle of the world
+            _topBoundary = _bottomBoundary = (_topBoundary + _bottomBoundary) / 2;
+        }
+    
+    void FlipY3D::update(float time)
+{
+    float angle = (float)M_PI * time; // 180 degrees
+    float mz = sinf( angle );
+    angle = angle / 2.0f;     // x calculates degrees from 0 to 90
+    float my = cosf(angle);
+    
+    Vec3    v0, v1, v, diff;
+    
+    v0 = getOriginalVertex(Vec2(1.0f, 1.0f));
+    v1 = getOriginalVertex(Vec2());
+    
+    float    y0 = v0.y;
+    float    y1 = v1.y;
+    float y;
+    Vec2    a, b, c, d;
+    
+    if (y0 > y1)
+    {
+        // Normal Grid
+        a.setZero();
+        b.set(0.0f, 1.0f);
+        c.set(1.0f, 0.0f);
+        d.set(1.0f, 1.0f);
+        y = y0;
+    }
+    else
+    {
+        // Reversed Grid
+        b.setZero();
+        a.set(0.0f, 1.0f);
+        d.set(1.0f, 0.0f);
+        c.set(1.0f, 1.0f);
+        y = y1;
+    }
+    
+    diff.y = y - y * my;
+    diff.z = fabsf(floorf((y * mz) / 4.0f));
+    
+    // bottom-left
+    v = getOriginalVertex(a);
+    v.y = diff.y;
+    v.z += diff.z;
+    setVertex(a, v);
+    
+    // upper-left
+    v = getOriginalVertex(b);
+    v.y -= diff.y;
+    v.z -= diff.z;
+    setVertex(b, v);
+    
+    // bottom-right
+    v = getOriginalVertex(c);
+    v.y = diff.y;
+    v.z += diff.z;
+    setVertex(c, v);
+    
+    // upper-right
+    v = getOriginalVertex(d);
+    v.y -= diff.y;
+    v.z -= diff.z;
+    setVertex(d, v);
+}
+    
+        //
+    // Overrides
+    //
+    virtual Repeat* clone() const override;
+    virtual Repeat* reverse() const override;
+    virtual void startWithTarget(Node *target) override;
+    virtual void stop(void) override;
+    /**
+     * @param dt In seconds.
+     */
+    virtual void update(float dt) override;
+    virtual bool isDone(void) const override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    Repeat() {}
+    virtual ~Repeat();
+    
+    #endif // __ACTION_CCACTION_MANAGER_H__
 
     
-    namespace rocksdb {
-namespace lua {
-class LuaStateWrapper {
- public:
-  explicit LuaStateWrapper(const std::string& lua_script) {
-    lua_state_ = luaL_newstate();
-    Init(lua_script, {});
-  }
-  LuaStateWrapper(
-      const std::string& lua_script,
-      const std::vector<std::shared_ptr<RocksLuaCustomLibrary>>& libraries) {
-    lua_state_ = luaL_newstate();
-    Init(lua_script, libraries);
-  }
-  lua_State* GetLuaState() const { return lua_state_; }
-  ~LuaStateWrapper() { lua_close(lua_state_); }
-    }
-    }
-    }
     
-    #pragma once
+    {
+    {
+    {            p.z = (r * ( 1 - cosBeta ) * cosTheta);// '100' didn't work for
+            p.x = p.z * sinf(rotateByYAxis) + p.x * cosf(rotateByYAxis);
+            p.z = p.z * cosf(rotateByYAxis) - p.x * sinf(rotateByYAxis);
+            p.z/=7;
+            //    Stop z coord from dropping beneath underlying page in a transition
+            // issue #751
+            if( p.z < 0.5f )
+            {
+                p.z = 0.5f;
+            }
+            
+            // Set new coords
+            p.x += getGridRect().origin.x;
+            setVertex(Vec2(i, j), p);
+            
+        }
+    }
+}
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __ACTION_CCPAGETURN3D_ACTION_H__
+#define __ACTION_CCPAGETURN3D_ACTION_H__
+    
+        /**
+     * @brief Initializes the action with a duration, a 'from' percentage and a 'to' percentage.
+     * @param duration Specify the duration of the ProgressFromTo action. It's a value in seconds.
+     * @param fromPercentage Specify the source percentage.
+     * @param toPercentage Specify the destination percentage.
+     * @return If the creation success, return true; otherwise, return false.
+     */
+    bool initWithDuration(float duration, float fromPercentage, float toPercentage);
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    Animation* Animation::create(const Vector<AnimationFrame*>& arrayOfAnimationFrameNames, float delayPerUnit, unsigned int loops /* = 1 */)
+{
+    Animation *animation = new (std::nothrow) Animation();
+    animation->initWithAnimationFrames(arrayOfAnimationFrameNames, delayPerUnit, loops);
+    animation->autorelease();
+    return animation;
+}
+    
+    
+/**
+ * AutoPolygon is a helper Object
+ * AutoPolygon's purpose is to process an image into 2d polygon mesh in runtime
+ * It has functions for each step in the process, from tracing all the points, to triangulation
+ * the result can be then passed to Sprite::create() to create a Polygon Sprite
+ */
+class CC_DLL AutoPolygon
+{
+public:
+    /**
+     * create an AutoPolygon and initialize it with an image file
+     * the image must be a 32bit PNG for current version 3.7
+     * @param   filename    a path to image file, e.g., 'scene1/monster.png'.
+     * @return  an AutoPolygon object;
+     */
+    AutoPolygon(const std::string &filename);
+    
+    /**
+     * Destructor of AutoPolygon.
+     */
+    ~AutoPolygon();
+    
+    /**
+     * trace all the points along the outline of the image, 
+     * @warning must create AutoPolygon with filename to use this function
+     * @param   rect    a texture rect for specify an area of the image
+     * @param   threshold   the value when alpha is greater than this value will be counted as opaque, default to 0.0
+     * @return  a vector of vec2 of all the points found in clockwise order
+     * @code
+     * auto ap = AutoPolygon('grossini.png');
+     * auto rect = Rect(100, 100, 200, 200);
+     * std::vector<Vec2> points = ap.trace(rect);//default threshold is 0.0
+     * @endcode
+     */
+     std::vector<Vec2> trace(const cocos2d::Rect& rect, float threshold = 0.0f);
+    
+    /**
+     * reduce the amount of points so its faster for GPU to process and draw
+     * based on Ramer-Douglas-Peucker algorithm
+     * @param   points  a vector of Vec2 points as input
+     * @param   rect    a texture rect for specify an area of the image to avoid over reduction
+     * @param   epsilon the perpendicular distance where points smaller than this value will be discarded
+     * @return  a vector of Vec2 of the remaining points in clockwise order
+     * @code
+     * auto ap = AutoPolygon();
+     * std::vector<Vec2> reduced = ap.reduce(inputPoints, rect);//default epsilon is 2
+     * @endcode
+     */
+    std::vector<Vec2> reduce(const std::vector<Vec2>& points, const Rect& rect, float epsilon = 2.0f);
+    
+    /**
+     * expand the points along their edge, useful after you reduce the points that cuts into the sprite
+     * using ClipperLib
+     * @param   points  a vector of Vec2 points as input
+     * @param   rect    a texture rect for specify an area of the image, the expanded points will be clamped in this rect, ultimately resulting in a quad if the expansion is too great
+     * @param   epsilon the distance which the edges will expand
+     * @return  a vector of Vec2 as the result of the expansion
+     * @code
+     * auto ap = AutoPolygon();
+     * std::vector<Vec2> expanded = ap.expand(inputPoints, rect, 2.0);
+     * @endcode
+     */
+    std::vector<Vec2> expand(const std::vector<Vec2>& points, const Rect& rect, float epsilon);
+    
+    /**
+     * Triangulate the input points into triangles for rendering
+     * using poly2tri
+     * @warning points must be closed loop, cannot have 2 points sharing the same position and cannot intersect itself
+     * @param   points  a vector of vec2 points as input
+     * @return  a Triangles object with points and indices
+     * @code
+     * auto ap = AutoPolygon();
+     * TrianglesCommand::Triangles myPolygons = ap.triangulate(myPoints);
+     * @endcode
+     */
+    TrianglesCommand::Triangles triangulate(const std::vector<Vec2>& points);
+    
+    /**
+     * calculate the UV coordinates for each points based on a texture rect
+     * @warning This method requires the AutoPolygon object to know the texture file dimension
+     * @param   rect    a texture rect to specify where to map the UV
+     * @param   verts   a pointer to the verts array, served both as input and output verts
+     * @param   count   the count for the verts array
+     * @code
+     * auto ap = AutoPolygon('grossini.png');
+     * TrianglesCommand::Triangles myPolygons = ap.triangulate(myPoints);
+     * ap.calculateUV(rect, myPolygons.verts, 20);
+     * @endcode
+     */
+    void calculateUV(const Rect& rect, V3F_C4B_T2F* verts, ssize_t count);
+    
+    /**
+     * a helper function, packing trace, reduce, expand, triangulate and calculate uv in one function
+     * @param   rect    texture rect, use Rect::ZERO for the size of the texture, default is Rect::ZERO
+     * @param   epsilon the value used to reduce and expand, default to 2.0
+     * @param   threshold   the value where bigger than the threshold will be counted as opaque, used in trace
+     * @return  a PolygonInfo, to use with sprite
+     * @code
+     * auto ap = AutoPolygon('grossini.png');
+     * PolygonInfo myInfo = ap.generateTriangles();//use all default values
+     * auto sp1 = Sprite::create(myInfo);
+     * polygonInfo myInfo2 = ap.generateTriangles(Rect::ZERO, 5.0, 0.1);//ap can be reused to generate another set of PolygonInfo with different settings
+     * auto sp2 = Sprite::create(myInfo2);
+     * @endcode
+     */
+    PolygonInfo generateTriangles(const Rect& rect = Rect::ZERO, float epsilon = 2.0f, float threshold = 0.05f);
+    
+    /**
+     * a helper function, packing autoPolygon creation, trace, reduce, expand, triangulate and calculate uv in one function
+     * @warning if you want to repetitively generate polygons, consider create an AutoPolygon object, and use generateTriangles function, as it only reads the file once
+     * @param   filename     A path to image file, e.g., 'scene1/monster.png'.
+     * @param   rect    texture rect, use Rect::ZERO for the size of the texture, default is Rect::ZERO
+     * @param   epsilon the value used to reduce and expand, default to 2.0
+     * @param   threshold   the value where bigger than the threshold will be counted as opaque, used in trace
+     * @return  a PolygonInfo, to use with sprite
+     * @code
+     * auto sp = Sprite::create(AutoPolygon::generatePolygon('grossini.png'));
+     * @endcode
+     */
+    static PolygonInfo generatePolygon(const std::string& filename, const Rect& rect = Rect::ZERO, float epsilon = 2.0f, float threshold = 0.05f);
+protected:
+    Vec2 findFirstNoneTransparentPixel(const Rect& rect, float threshold);
+    std::vector<cocos2d::Vec2> marchSquare(const Rect& rect, const Vec2& first, float threshold);
+    unsigned int getSquareValue(unsigned int x, unsigned int y, const Rect& rect, float threshold);
+    }
