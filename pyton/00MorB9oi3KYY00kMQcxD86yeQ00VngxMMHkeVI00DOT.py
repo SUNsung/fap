@@ -1,179 +1,127 @@
 
         
-          Args:
-    records: a record list with TensorFlow examples.
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-    
-      if epoch_size == 0:
-    raise ValueError('epoch_size == 0, decrease batch_size or num_steps')
-    
-        Args:
-      hparams:  Hyperparameters for the MaskGAN.
-      data: Data to evaluate.
-      id_to_word: Dictionary of indices to words.
-      log_dir: Log directory.
-      output_file:  Output file for the samples.
-  '''
-  # Boolean indicating operational mode.
-  is_training = False
-    
-      Args:
-    gen_logits: Generator logits.
-    gen_labels:  Labels for the correct token.
-    dis_predictions:  Discriminator predictions.
-    is_real_input:  Tensor indicating whether the label is present.
-    
-      for sequence in sequences:
-    indices = []
-    for embedding in sequence:
-      indices.append(np.argmax(embedding))
-    batch_of_indices.append(indices)
-  return batch_of_indices
-    
-      with tf.variable_scope('dis', reuse=reuse):
-    cell_fwd = tf.contrib.rnn.LayerNormBasicLSTMCell(
-        hparams.dis_rnn_size, forget_bias=1.0, reuse=reuse)
-    cell_bwd = tf.contrib.rnn.LayerNormBasicLSTMCell(
-        hparams.dis_rnn_size, forget_bias=1.0, reuse=reuse)
-    if FLAGS.zoneout_drop_prob > 0.0:
-      cell_fwd = zoneout.ZoneoutWrapper(
-          cell_fwd,
-          zoneout_drop_prob=FLAGS.zoneout_drop_prob,
-          is_training=is_training)
-      cell_bwd = zoneout.ZoneoutWrapper(
-          cell_bwd,
-          zoneout_drop_prob=FLAGS.zoneout_drop_prob,
-          is_training=is_training)
-    
-        def process_response(self, request, response):
-        # No need to check for a redirect for non-404 responses.
-        if response.status_code != 404:
-            return response
-    
-        def delete(self, session_key=None):
-        if session_key is None:
-            if self.session_key is None:
-                return
-            session_key = self.session_key
-        self._cache.delete(self.cache_key_prefix + session_key)
-    
-        def save(self, must_create=False):
-        super().save(must_create)
-        self._cache.set(self.cache_key, self._session, self.get_expiry_age())
-    
-        def create(self):
-        while True:
-            self._session_key = self._get_new_session_key()
-            try:
-                # Save immediately to ensure we have a unique entry in the
-                # database.
-                self.save(must_create=True)
-            except CreateError:
-                # Key wasn't unique. Try again.
-                continue
-            self.modified = True
-            return
-    
-            label_suffix overrides the form's label_suffix.
-        '''
-        contents = contents or self.label
-        if label_suffix is None:
-            label_suffix = (self.field.label_suffix if self.field.label_suffix is not None
-                            else self.form.label_suffix)
-        # Only add the suffix if the label does not end in punctuation.
-        # Translators: If found as last label character, these punctuation
-        # characters will prevent the default label_suffix to be appended to the label
-        if label_suffix and contents and contents[-1] not in _(':?.!'):
-            contents = format_html('{}{}', contents, label_suffix)
-        widget = self.field.widget
-        id_ = widget.attrs.get('id') or self.auto_id
-        if id_:
-            id_for_label = widget.id_for_label(id_)
-            if id_for_label:
-                attrs = {**(attrs or {}), 'for': id_for_label}
-            if self.field.required and hasattr(self.form, 'required_css_class'):
-                attrs = attrs or {}
-                if 'class' in attrs:
-                    attrs['class'] += ' ' + self.form.required_css_class
-                else:
-                    attrs['class'] = self.form.required_css_class
-            attrs = flatatt(attrs) if attrs else ''
-            contents = format_html('<label{}>{}</label>', attrs, contents)
-        else:
-            contents = conditional_escape(contents)
-        return mark_safe(contents)
-    
-        def __repr__(self):
-        return '<{0} {1}>'.format(type(self).__name__, str(self))
+        
+def test_when_successfully_configured(usage_tracker_io, shell_pid,
+                                      shell, shell_config, logs):
+    shell.get_history.return_value = ['fuck']
+    shell_pid.return_value = 12
+    _change_tracker(usage_tracker_io, 12)
+    shell_config.read.return_value = ''
+    main()
+    shell_config.write.assert_any_call('eval $(thefuck --alias)')
+    logs.configured_successfully.assert_called_once()
 
     
-        def iter_body(self, chunk_size=1):
-        return self._orig.iter_content(chunk_size=chunk_size)
     
-        # Will be set to the raw value of `-a` (if provided) before
-    # `get_auth()` gets called.
-    raw_auth = None
+@pytest.mark.parametrize('command', [
+    Command('apt-cache search foo', ''),
+    Command('aptitude search foo', ''),
+    Command('apt search foo', ''),
+    Command('apt-get install foo', ''),
+    Command('apt-get source foo', ''),
+    Command('apt-get clean', ''),
+    Command('apt-get remove', ''),
+    Command('apt-get update', ''),
+    Command('sudo apt update', no_match_output)
+])
+def test_not_match(command):
+    assert not match(command)
     
+      aws help
+  aws <command> help
+  aws <command> <subcommand> help
+aws: error: argument operation: Invalid choice, valid choices are:
     
-def humanize_bytes(n, precision=2):
-    # Author: Doug Latornell
-    # Licence: MIT
-    # URL: http://code.activestate.com/recipes/577081/
-    '''Return a humanized string representation of a number of bytes.
-    
-            def get_auth(self, username=None, password=None):
-            assert self.raw_auth is None
-            assert username is None
-            assert password is None
-            return basic_auth()
-    
-    
-def test_default_options_overwrite(httpbin):
-    env = MockEnvironment()
-    env.config['default_options'] = ['--form']
-    env.config.save()
-    r = http('--json', httpbin.url + '/post', 'foo=bar', env=env)
-    assert r.json['json'] == {'foo': 'bar'}
-    
-        good_nonce = jose.encode_b64jose(b'foo')
-    wrong_nonce = u'F'
-    # Following just makes sure wrong_nonce is wrong
-    try:
-        jose.b64decode(wrong_nonce)
-    except (ValueError, TypeError):
-        assert True
-    else:
-        assert False  # pragma: no cover
-    
-    # Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named 'default.css' will overwrite the builtin 'default.css'.
-html_static_path = ['_static']
+        @classmethod
+    def get_session_store_class(cls):
+        raise NotImplementedError
     
     
-def get_file_path(vhost_path):
-    '''Get file path from augeas_vhost_path.
+class Session(AbstractBaseSession):
+    '''
+    Django provides full support for anonymous sessions. The session
+    framework lets you store and retrieve arbitrary data on a
+    per-site-visitor basis. It stores data on the server side and
+    abstracts the sending and receiving of cookies. Cookies contain a
+    session ID -- not the data itself.
     
-    from certbot_apache.tests import util
+    HOST_ABSENT = -99  # the host is absent (special case defined by this module)
     
-    注意 x 经过 Highway 之后维度应该保持不变
+        rules = gateway.get_fw_rules()
+    current_rules = fw_rules_to_dict(rules)
+    
+    EXAMPLES = '''
+# Ensure rule to allow all users to access any host from any host
+- ipa_hbacrule:
+    name: allow_all
+    description: Allow all users to access any host from any host
+    hostcategory: all
+    servicecategory: all
+    usercategory: all
+    state: present
+    ipa_host: ipa.example.com
+    ipa_user: admin
+    ipa_pass: topsecret
+    
+        def role_add_host(self, name, item):
+        return self.role_add_member(name=name, item={'host': item})
+    
+    from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.six.moves.urllib.parse import urlencode
+from ansible.module_utils._text import to_native
+from ansible.module_utils.urls import fetch_url
+    
+            feature_enable_str = 'enable' if self.state == 'present' else 'disable'
     
     
-class L1L2Regularizer(object):
-    '''L1 L2 正则化
+def send_deploy_event(module, key, revision_id, deployed_by='Ansible', deployed_to=None, repository=None):
+    '''Send a deploy event to Stackdriver'''
+    deploy_api = 'https://event-gateway.stackdriver.com/v1/deployevent'
+    
+            raise NotImplementedError
     
     
-def get_w(shape,
-          w_initializer=truncated_normal,
-          w_regularizer=l2_regularizer,
-          name=None):
-    name = name or 'W'
-    W = tf.get_variable(name, shape, dtype=tf_float, initializer=w_initializer,
-                        regularizer=w_regularizer)
-    return W
+        @classmethod
+    def unmarshal(cls, input_string):
+        return yaml.load(input_string)
     
-    import tensorflow as tf
-import keras.backend as K
+        def initialize(self, *args, **kwargs):
+        ''' Create the mtcnn detector '''
+        super().initialize(*args, **kwargs)
+        logger.info('Initializing Manual Detector...')
+        self.init.set()
+        logger.info('Initialized Manual Detector.')
+    
+        def draw_bounding_box(self, color_id=1, thickness=1):
+        ''' Draw the bounding box around faces '''
+        color = self.colors[color_id]
+        for alignment in self.alignments:
+            top_left = (alignment['x'], alignment['y'])
+            bottom_right = (alignment['x'] + alignment['w'], alignment['y'] + alignment['h'])
+            logger.trace('Drawing bounding box: (top_left: %s, bottom_right: %s, color: %s, '
+                         'thickness: %s)', top_left, bottom_right, color, thickness)
+            cv2.rectangle(self.image,  # pylint: disable=no-member
+                          top_left,
+                          bottom_right,
+                          color,
+                          thickness)
+    
+        def set_yscale_type(self, scale):
+        ''' switch the y-scale and redraw '''
+        logger.debug('Updating scale type: '%s'', scale)
+        self.scale = scale
+        self.update_plot(initiate=True)
+        self.axes_set_yscale(self.scale)
+        self.plotcanvas.draw()
+        logger.debug('Updated scale type')
+
+    
+        def update_page(self, waittime):
+        ''' Update the latest preview item '''
+        if not self.runningtask.get():
+            return
+        if self.vars['enabled'].get():
+            logger.trace('Updating page')
+            self.display_item_set()
+            self.load_display()
+        self.after(waittime, lambda t=waittime: self.update_page(t))
