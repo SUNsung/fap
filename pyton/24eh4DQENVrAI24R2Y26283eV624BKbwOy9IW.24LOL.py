@@ -1,111 +1,96 @@
 
         
-            return out
+                if data is None:
+            s = self._get_session_from_db()
+            if s:
+                data = self.decode(s.session_data)
+                self._cache.set(self.cache_key, data, self.get_expiry_age(expiry=s.expire_date))
+            else:
+                data = {}
+        return data
     
-    '''
-requests.exceptions
-~~~~~~~~~~~~~~~~~~~
+        @classmethod
+    def get_session_store_class(cls):
+        raise NotImplementedError
     
-    import pytest
-from requests.compat import urljoin
+        The Django sessions framework is entirely cookie-based. It does
+    not fall back to putting session IDs in URLs. This is an intentional
+    design decision. Not only does that behavior make URLs ugly, it makes
+    your site vulnerable to session-ID theft via the 'Referer' header.
     
-    from . import utils
-from . import packages
-from .models import Request, Response, PreparedRequest
-from .api import request, get, head, post, patch, put, delete, options
-from .sessions import session, Session
-from .status_codes import codes
-from .exceptions import (
-    RequestException, Timeout, URLRequired,
-    TooManyRedirects, HTTPError, ConnectionError,
-    FileModeWarning, ConnectTimeout, ReadTimeout
-)
-    
-    
-def test_idna_with_version_attribute(mocker):
-    '''Verify we're actually setting idna version when it should be available.'''
-    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
-    assert info()['idna'] == {'version': '2.6'}
+        lastmod = None
+    all_sites_lastmod = True
+    urls = []
+    for site in maps:
+        try:
+            if callable(site):
+                site = site()
+            urls.extend(site.get_urls(page=page, site=req_site,
+                                      protocol=req_protocol))
+            if all_sites_lastmod:
+                site_lastmod = getattr(site, 'latest_lastmod', None)
+                if site_lastmod is not None:
+                    site_lastmod = (
+                        site_lastmod.utctimetuple() if isinstance(site_lastmod, datetime.datetime)
+                        else site_lastmod.timetuple()
+                    )
+                    lastmod = site_lastmod if lastmod is None else max(lastmod, site_lastmod)
+                else:
+                    all_sites_lastmod = False
+        except EmptyPage:
+            raise Http404('Page %s empty' % page)
+        except PageNotAnInteger:
+            raise Http404('No page '%s'' % page)
+    response = TemplateResponse(request, template_name, {'urlset': urls},
+                                content_type=content_type)
+    if all_sites_lastmod and lastmod is not None:
+        # if lastmod is defined for all sites, set header so as
+        # ConditionalGetMiddleware is able to send 304 NOT MODIFIED
+        response['Last-Modified'] = http_date(timegm(lastmod))
+    return response
 
     
-        # Client Error.
-    400: ('bad_request', 'bad'),
-    401: ('unauthorized',),
-    402: ('payment_required', 'payment'),
-    403: ('forbidden',),
-    404: ('not_found', '-o-'),
-    405: ('method_not_allowed', 'not_allowed'),
-    406: ('not_acceptable',),
-    407: ('proxy_authentication_required', 'proxy_auth', 'proxy_authentication'),
-    408: ('request_timeout', 'timeout'),
-    409: ('conflict',),
-    410: ('gone',),
-    411: ('length_required',),
-    412: ('precondition_failed', 'precondition'),
-    413: ('request_entity_too_large',),
-    414: ('request_uri_too_large',),
-    415: ('unsupported_media_type', 'unsupported_media', 'media_type'),
-    416: ('requested_range_not_satisfiable', 'requested_range', 'range_not_satisfiable'),
-    417: ('expectation_failed',),
-    418: ('im_a_teapot', 'teapot', 'i_am_a_teapot'),
-    421: ('misdirected_request',),
-    422: ('unprocessable_entity', 'unprocessable'),
-    423: ('locked',),
-    424: ('failed_dependency', 'dependency'),
-    425: ('unordered_collection', 'unordered'),
-    426: ('upgrade_required', 'upgrade'),
-    428: ('precondition_required', 'precondition'),
-    429: ('too_many_requests', 'too_many'),
-    431: ('header_fields_too_large', 'fields_too_large'),
-    444: ('no_response', 'none'),
-    449: ('retry_with', 'retry'),
-    450: ('blocked_by_windows_parental_controls', 'parental_controls'),
-    451: ('unavailable_for_legal_reasons', 'legal_reasons'),
-    499: ('client_closed_request',),
-    
-    def check_live_url(url):
+        fpath = os.path.join(path, 'test_batch')
+    x_test, y_test = load_batch(fpath)
     
     
-class BufferFull(UnpackException):
-    pass
+def test_sparse_categorical_crossentropy_4d():
+    y_pred = K.variable(np.array([[[[0.7, 0.1, 0.2],
+                                    [0.0, 0.3, 0.7],
+                                    [0.1, 0.1, 0.8]],
+                                   [[0.3, 0.7, 0.0],
+                                    [0.3, 0.4, 0.3],
+                                    [0.2, 0.5, 0.3]],
+                                   [[0.8, 0.1, 0.1],
+                                    [1.0, 0.0, 0.0],
+                                    [0.4, 0.3, 0.3]]]]))
+    y_true = K.variable(np.array([[[0, 1, 0],
+                                   [2, 1, 0],
+                                   [2, 2, 1]]]))
+    expected_loss = - (np.log(0.7) + np.log(0.3) + np.log(0.1) +
+                       np.log(K.epsilon()) + np.log(0.4) + np.log(0.2) +
+                       np.log(0.1) + np.log(K.epsilon()) + np.log(0.3)) / 9
+    loss = K.eval(losses.sparse_categorical_crossentropy(y_true, y_pred))
+    assert np.isclose(expected_loss, np.mean(loss))
     
     
-def match(obj, buf):
-    assert packb(obj) == buf
-    assert unpackb(buf, use_list=0) == obj
+if __name__ == '__main__':
+    pytest.main([__file__])
+
     
-            try:
-            # qtpy is a small abstraction layer that lets you write
-            # applications using a single api call to either PyQt or PySide
-            # https://pypi.org/project/QtPy
-            import qtpy  # noqa
-        except ImportError:
-            # If qtpy isn't installed, fall back on importing PyQt5, or PyQt5
-            try:
-                import PyQt5  # noqa
-            except ImportError:
-                try:
-                    import PyQt4  # noqa
-                except ImportError:
-                    pass  # fail fast for all non-ImportError exceptions.
-                else:
-                    return init_qt_clipboard()
-            else:
-                return init_qt_clipboard()
-            pass
-        else:
-            return init_qt_clipboard()
+        model.compile(loss='categorical_crossentropy',
+                  optimizer='adadelta',
+                  metrics=['accuracy'])
     
-        result = s[lambda x: [True, False, True, True]]
-    tm.assert_series_equal(result, s.iloc[[0, 2, 3]])
-    
-    import random
-import signal
-import subprocess
-    
-    
-class _IncludeBlock(_Node):
-    def __init__(self, name: str, reader: '_TemplateReader', line: int) -> None:
-        self.name = name
-        self.template_name = reader.name
-        self.line = line
+        result = False
+    try:
+        ret = urlopen(url, timeout=2)
+        result = (ret.code == 200)
+    except HTTPError as e:
+        print(e, file=sys.stderr)
+    except URLError as e:
+        print(e, file=sys.stderr)
+    except timeout as e:
+        print(e, file=sys.stderr)
+    except Exception as e:
+        print(e, file=sys.stderr)
