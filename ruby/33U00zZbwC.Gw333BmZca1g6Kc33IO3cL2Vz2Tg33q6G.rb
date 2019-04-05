@@ -1,77 +1,42 @@
 
         
-        def custom_release_header_anchors(markdown)
-  header_regexp = %r!^(\d{1,2})\.(\d{1,2})\.(\d{1,2}) \/ \d{4}-\d{2}-\d{2}!
-  section_regexp = %r!^### \w+ \w+$!
-  markdown.split(%r!^##\s!).map do |release_notes|
-    _, major, minor, patch = *release_notes.match(header_regexp)
-    release_notes
-      .gsub(header_regexp, '\\0\n{: #v\\1-\\2-\\3}')
-      .gsub(section_regexp) { |section| '#{section}\n{: ##{slugify(section)}-v#{major}-#{minor}-#{patch}}' }
-  end.join('\n## ')
-end
+        require 'clamp'
+require 'pluginmanager/util'
+require 'pluginmanager/gemfile'
+require 'pluginmanager/install'
+require 'pluginmanager/remove'
+require 'pluginmanager/list'
+require 'pluginmanager/update'
+require 'pluginmanager/pack'
+require 'pluginmanager/unpack'
+require 'pluginmanager/generate'
+require 'pluginmanager/prepare_offline_pack'
+require 'pluginmanager/proxy_support'
+configure_proxy
     
-    STDOUT.sync = true
-    
-        def defaults_deprecate_type(old, current)
-      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
-      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
-                        'type: #{current}'.'
+        def valid_format?(local_file)
+      ::File.extname(local_file).downcase == PACK_EXTENSION
     end
   end
-end
+end end end
 
     
-          it 'increases total_unread_notifications' do
-        expect { Fabricate(:notification, user: user); user.reload }.to change(user, :total_unread_notifications)
-      end
+      private
     
-        def resource_params
-      params.require(:user).permit(
-        :unconfirmed_email
-      )
-    end
-  end
-end
-
-    
-    class Api::Web::SettingsController < Api::Web::BaseController
-  respond_to :json
-    
-            if e.is_a?(Sass::SyntaxError)
-          $stderr.puts e.sass_backtrace_str('standard input')
-        else
-          $stderr.print '#{e.class}: ' unless e.class == RuntimeError
-          $stderr.puts e.message.to_s
-        end
-        $stderr.puts '  Use --trace for backtrace.'
-    
-          # @see Base#watched_file?
-      def watched_file?(filename)
-        # Check against the root with symlinks resolved, since Listen
-        # returns fully-resolved paths.
-        filename =~ /\.s[ac]ss$/ && filename.start_with?(@real_root + File::SEPARATOR)
-      end
-    
-    Given /^I run a migration$/ do
-  step %[I successfully run `rake db:migrate --trace`]
-end
-    
-      def migration_class_name
-    migration_name.camelize
+        # any errors will be logged to $stderr by invoke!
+    # Bundler cannot update and clean gems in one operation so we have to call the CLI twice.
+    options = {:update => plugins, :rubygems_source => gemfile.gemset.sources}
+    options[:local] = true if local?
+    output = LogStash::Bundler.invoke!(options)
+    # We currently dont removed unused gems from the logstash installation
+    # see: https://github.com/elastic/logstash/issues/6339
+    # output = LogStash::Bundler.invoke!(:clean => true)
+    display_updated_plugins(previous_gem_specs_map)
+  rescue => exception
+    gemfile.restore!
+    report_exception('Updated Aborted', exception)
+  ensure
+    display_bundler_output(output)
   end
     
-    begin
-  # Use mime/types/columnar if available, for reduced memory usage
-  require 'mime/types/columnar'
-rescue LoadError
-  require 'mime/types'
-end
-    
-        private
-    
-        # Returns the pluralized form of the attachment name. e.g.
-    # 'avatars' for an attachment of :avatar
-    def attachment attachment, style_name
-      plural_cache.pluralize_symbol(attachment.name)
-    end
+            context 'when fetching a gem from rubygems' do
