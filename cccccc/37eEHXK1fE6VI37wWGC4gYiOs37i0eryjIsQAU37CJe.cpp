@@ -1,220 +1,257 @@
-namespace caffe2 {
+
+        
+        protected Q_SLOTS:
+    void accept();
+    
+        explicit reverse_lock(Lock& _lock) : lock(_lock) {
+        _lock.unlock();
+        _lock.swap(templock);
     }
     
-    template <>
-void GluOp<float, CPUContext>::ComputeGlu(
-    const int M,
-    const int split_dim,
-    const int N,
-    const float* Xdata,
-    float* Ydata) {
-  const int xStride = 2 * split_dim * N;
-  const int yStride = split_dim * N;
-  for (int i = 0; i < M; ++i) {
-    const int idx = i * xStride;
-    const int idy = i * yStride;
-    for (int j = 0; j < split_dim; ++j) {
-      const int jN = j * N;
-      const int jdx1 = idx + jN;
-      const int jdx2 = idx + (j + split_dim) * N;
-      const int jdy = idy + jN;
-      for (int k = 0; k < N; ++k) {
-        const float x1 = Xdata[jdx1 + k];
-        const float x2 = Xdata[jdx2 + k];
-        Ydata[jdy + k] = x1 * sigmoid(x2);
-      }
-    }
-  }
-}
-    
-              vector<TensorShape> out(1);
-          switch (order) {
-            case StorageOrder::NCHW:
-              out[0] = CreateTensorShape(
-                  vector<int>{N, C * kernel_h * kernel_w, out_h, out_w},
-                  TensorProto::FLOAT);
-              break;
-            case StorageOrder::NHWC:
-              out[0] = CreateTensorShape(
-                  vector<int>{N, out_h, out_w, kernel_h * kernel_w * C},
-                  TensorProto::FLOAT);
-              break;
-            default:
-              CAFFE_THROW('Unknown storage order: ', order);
-          }
-    
-      void ReadHot(ThreadState* thread) {
-    ReadOptions options;
-    std::string value;
-    const int range = (FLAGS_num + 99) / 100;
-    for (int i = 0; i < reads_; i++) {
-      char key[100];
-      const int k = thread->rand.Next() % range;
-      snprintf(key, sizeof(key), '%016d', k);
-      db_->Get(options, key, &value);
-      thread->stats.FinishedSingleOp();
-    }
-  }
-    
-    
-Status DBImpl::InstallCompactionResults(CompactionState* compact) {
-  mutex_.AssertHeld();
-  Log(options_.info_log,  'Compacted %d@%d + %d@%d files => %lld bytes',
-      compact->compaction->num_input_files(0),
-      compact->compaction->level(),
-      compact->compaction->num_input_files(1),
-      compact->compaction->level() + 1,
-      static_cast<long long>(compact->total_bytes));
+    SECP256K1_INLINE static void secp256k1_fe_sqr_inner(uint64_t *r, const uint64_t *a) {
+/**
+ * Registers: rdx:rax = multiplication accumulator
+ *            r9:r8   = c
+ *            rcx:rbx = d
+ *            r10-r14 = a0-a4
+ *            r15     = M (0xfffffffffffff)
+ *            rdi     = r
+ *            rsi     = a / t?
+ */
+  uint64_t tmp1, tmp2, tmp3;
+__asm__ __volatile__(
+    'movq 0(%%rsi),%%r10\n'
+    'movq 8(%%rsi),%%r11\n'
+    'movq 16(%%rsi),%%r12\n'
+    'movq 24(%%rsi),%%r13\n'
+    'movq 32(%%rsi),%%r14\n'
+    'movq $0xfffffffffffff,%%r15\n'
     }
     
-    void InternalKeyComparator::FindShortSuccessor(std::string* key) const {
-  Slice user_key = ExtractUserKey(*key);
-  std::string tmp(user_key.data(), user_key.size());
-  user_comparator_->FindShortSuccessor(&tmp);
-  if (tmp.size() < user_key.size() &&
-      user_comparator_->Compare(user_key, tmp) < 0) {
-    // User key has become shorter physically, but larger logically.
-    // Tack on the earliest possible number to the shortened user key.
-    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
-    assert(this->Compare(*key, tmp) < 0);
-    key->swap(tmp);
-  }
-}
+        while (outlen > 0) {
+        secp256k1_hmac_sha256_t hmac;
+        int now = outlen;
+        secp256k1_hmac_sha256_initialize(&hmac, rng->k, 32);
+        secp256k1_hmac_sha256_write(&hmac, rng->v, 32);
+        secp256k1_hmac_sha256_finalize(&hmac, rng->v);
+        if (now > 32) {
+            now = 32;
+        }
+        memcpy(out, rng->v, now);
+        out += now;
+        outlen -= now;
+    }
+    
+    void test_ecdh_api(void) {
+    /* Setup context that just counts errors */
+    secp256k1_context *tctx = secp256k1_context_create(SECP256K1_CONTEXT_SIGN);
+    secp256k1_pubkey point;
+    unsigned char res[32];
+    unsigned char s_one[32] = { 0 };
+    int32_t ecount = 0;
+    s_one[31] = 1;
+    }
     
     
-    {  ASSERT_TRUE(!ParseInternalKey(Slice('bar'), &decoded));
-}
-    
-    
-// Called on every log record (each one of which is a WriteBatch)
-// found in a kLogFile.
-static void WriteBatchPrinter(uint64_t pos, Slice record, WritableFile* dst) {
-  std::string r = '--- offset ';
-  AppendNumberTo(&r, pos);
-  r += '; ';
-  if (record.size() < 12) {
-    r += 'log record length ';
-    AppendNumberTo(&r, record.size());
-    r += ' is too small\n';
-    dst->Append(r);
-    return;
-  }
-  WriteBatch batch;
-  WriteBatchInternal::SetContents(&batch, record);
-  r += 'sequence ';
-  AppendNumberTo(&r, WriteBatchInternal::Sequence(&batch));
-  r.push_back('\n');
-  dst->Append(r);
-  WriteBatchItemPrinter batch_item_printer;
-  batch_item_printer.dst_ = dst;
-  Status s = batch.Iterate(&batch_item_printer);
-  if (!s.ok()) {
-    dst->Append('  error: ' + s.ToString() + '\n');
-  }
-}
-    
-    #ifndef STORAGE_LEVELDB_DB_MEMTABLE_H_
-#define STORAGE_LEVELDB_DB_MEMTABLE_H_
-    
-        if (!status.ok()) {
-      env_->DeleteFile(tmp);
+    {    secp256k1_scalar_set_b32(&sec, seckey, &overflow);
+    /* Fail if the secret key is invalid. */
+    if (!overflow && !secp256k1_scalar_is_zero(&sec)) {
+        unsigned char nonce32[32];
+        unsigned int count = 0;
+        secp256k1_scalar_set_b32(&msg, msg32, NULL);
+        while (1) {
+            ret = noncefp(nonce32, msg32, seckey, NULL, (void*)noncedata, count);
+            if (!ret) {
+                break;
+            }
+            secp256k1_scalar_set_b32(&non, nonce32, &overflow);
+            if (!secp256k1_scalar_is_zero(&non) && !overflow) {
+                if (secp256k1_ecdsa_sig_sign(&ctx->ecmult_gen_ctx, &r, &s, &sec, &msg, &non, &recid)) {
+                    break;
+                }
+            }
+            count++;
+        }
+        memset(nonce32, 0, 32);
+        secp256k1_scalar_clear(&msg);
+        secp256k1_scalar_clear(&non);
+        secp256k1_scalar_clear(&sec);
+    }
+    if (ret) {
+        secp256k1_ecdsa_recoverable_signature_save(signature, &r, &s, recid);
     } else {
-      // Discard older manifests
-      for (size_t i = 0; i < manifests_.size(); i++) {
-        ArchiveFile(dbname_ + '/' + manifests_[i]);
-      }
+        memset(signature, 0, sizeof(*signature));
     }
-    
-      // REQUIRES: External synchronization
-  void WriteStep(Random* rnd) {
-    const uint32_t k = rnd->Next() % K;
-    const intptr_t g = current_.Get(k) + 1;
-    const Key key = MakeKey(k, g);
-    list_.Insert(key);
-    current_.Set(k, g);
-  }
-    
-    
-    {
-    {    if (!s.ok()) {
-      assert(table == nullptr);
-      delete file;
-      // We do not cache error results so that if the error is transient,
-      // or somebody repairs the file, we recover automatically.
-    } else {
-      TableAndFile* tf = new TableAndFile;
-      tf->file = file;
-      tf->table = table;
-      *handle = cache_->Insert(key, tf, 1, &DeleteEntry);
-    }
-  }
-  return s;
-}
-    
-    namespace rocksdb {
-    }
-    
-      RateLimiter* low_pri_rate_limiter() { return low_pri_rate_limiter_.get(); }
-    
-      int ret = system('rm -rf /tmp/rocksmergetest');
-  if (ret != 0) {
-    fprintf(stderr, 'Error deleting /tmp/rocksmergetest, code: %d\n', ret);
     return ret;
-  }
-  rocksdb::Options options;
-  options.create_if_missing = true;
-  options.merge_operator.reset(new MyMerge);
-  options.compaction_filter = &filter;
-  status = rocksdb::DB::Open(options, '/tmp/rocksmergetest', &raw_db);
-  assert(status.ok());
-  std::unique_ptr<rocksdb::DB> db(raw_db);
-    
-    
-    {  // close DB
-  for (auto* handle : handles) {
-    delete handle;
-  }
-  delete db;
 }
-
+    
+    /** Encode a Bech32 string. Returns the empty string in case of failure. */
+std::string Encode(const std::string& hrp, const std::vector<uint8_t>& values);
+    
+    //
+//   init()   common initialization for use by all constructors.
+//            Initialize all fields, get the object into a consistent state.
+//            This must be done even when the initial status shows an error,
+//            so that the object is initialized sufficiently well for the destructor
+//            to run safely.
+//
+void RegexMatcher::init(UErrorCode &status) {
+    fPattern           = NULL;
+    fPatternOwned      = NULL;
+    fFrameSize         = 0;
+    fRegionStart       = 0;
+    fRegionLimit       = 0;
+    fAnchorStart       = 0;
+    fAnchorLimit       = 0;
+    fLookStart         = 0;
+    fLookLimit         = 0;
+    fActiveStart       = 0;
+    fActiveLimit       = 0;
+    fTransparentBounds = FALSE;
+    fAnchoringBounds   = TRUE;
+    fMatch             = FALSE;
+    fMatchStart        = 0;
+    fMatchEnd          = 0;
+    fLastMatchEnd      = -1;
+    fAppendPosition    = 0;
+    fHitEnd            = FALSE;
+    fRequireEnd        = FALSE;
+    fStack             = NULL;
+    fFrame             = NULL;
+    fTimeLimit         = 0;
+    fTime              = 0;
+    fTickCounter       = 0;
+    fStackLimit        = DEFAULT_BACKTRACK_STACK_CAPACITY;
+    fCallbackFn        = NULL;
+    fCallbackContext   = NULL;
+    fFindProgressCallbackFn      = NULL;
+    fFindProgressCallbackContext = NULL;
+    fTraceDebug        = FALSE;
+    fDeferredStatus    = status;
+    fData              = fSmallData;
+    fWordBreakItr      = NULL;
+    }
     
     
-    {  return 0;
-}
-
     
-      ////////////////////////////////////////////////////////
-  //
-  // 'Read Committed' (Monotonic Atomic Views) Example
-  //   --Using multiple Snapshots
-  //
-  ////////////////////////////////////////////////////////
+    #if !UCONFIG_NO_BREAK_ITERATION
     
-    struct UndumpOptions {
-  // Database that we will load the dumped file into
-  std::string db_path;
-  // File location of the dumped file that will be loaded
-  std::string dump_location;
-  // Compact the db after loading the dumped file
-  bool compact_db = false;
+    #if !UCONFIG_NO_BREAK_ITERATION
+    
+    class U_I18N_API SharedCalendar : public SharedObject {
+public:
+    SharedCalendar(Calendar *calToAdopt) : ptr(calToAdopt) { }
+    virtual ~SharedCalendar();
+    const Calendar *get() const { return ptr; }
+    const Calendar *operator->() const { return ptr; }
+    const Calendar &operator*() const { return *ptr; }
+private:
+    Calendar *ptr;
+    SharedCalendar(const SharedCalendar &);
+    SharedCalendar &operator=(const SharedCalendar &);
 };
     
-    namespace rocksdb {
-namespace experimental {
-    }
-    }
-    
-    
-    {}  // rocksdb
-
-    
-    namespace rocksdb {
+        /**
+     * Make this instance have no limit on significant digits.
+     */
+    void clear() {
+        fMin = 0;
+        fMax = INT32_MAX;
     }
     
+    void
+SimpleTimeZone::initTransitionRules(UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    if (transitionRulesInitialized) {
+        return;
+    }
+    deleteTransitionRules();
+    UnicodeString tzid;
+    getID(tzid);
+    }
     
-    { private:
-  uint32_t number_success_backup;
-  uint32_t number_fail_backup;
+        // if we see pattern character for UDAT_TIME_SEPARATOR_FIELD (none currently defined),
+    // write out the time separator string. Leave support in for future definition.
+    case UDAT_TIME_SEPARATOR_FIELD:
+        {
+            UnicodeString separator;
+            appendTo += fSymbols->getTimeSeparatorString(separator);
+        }
+        break;
+    
+    U_NAMESPACE_BEGIN
+    
+    U_NAMESPACE_END
+    
+        /**
+     * @param keyword for example 'few' or 'other'
+     * @return the index of the plural form corresponding to the keyword, or a negative value
+     */
+    static int32_t indexOrNegativeFromString(const char *keyword);
+    
+    // Build with, e.g:
+//   # cl.exe binary_to_compressed_c.cpp
+//   # gcc binary_to_compressed_c.cpp
+// You can also find a precompiled Windows binary in the binary/demo package available from https://github.com/ocornut/imgui
+    
+                // Blit rasterized pixels to our temporary buffer and keep a pointer to it.
+            src_glyph.BitmapData = buf_bitmap_buffers.back() + buf_bitmap_current_used_bytes;
+            buf_bitmap_current_used_bytes += bitmap_size_in_bytes;
+            src_tmp.Font.BlitGlyph(ft_bitmap, src_glyph.BitmapData, src_glyph.Info.Width * 1, multiply_enabled ? multiply_table : NULL);
+    
+        // Setup display size (every frame to accommodate for window resizing)
+    int w, h;
+    int display_w, display_h;
+    SDL_GetWindowSize(window, &w, &h);
+    SDL_GL_GetDrawableSize(window, &display_w, &display_h);
+    io.DisplaySize = ImVec2((float)w, (float)h);
+    if (w > 0 && h > 0)
+        io.DisplayFramebufferScale = ImVec2((float)display_w / w, (float)display_h / h);
+    
+            // Rendering
+        ImGui::Render();
+        g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
+        g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, (float*)&clear_color);
+        ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+    
+    #include 'gtest/gtest.h'
+    
+    class MockMessageManager
+    : public MessageManager<::apollo::canbus::ChassisDetail> {
+ public:
+  MockMessageManager() {
+    AddRecvProtocolData<MockProtocolData, true>();
+    AddSendProtocolData<MockProtocolData, true>();
+  }
 };
     
-    class DB;
+    TEST(ByteTest, CopyConstructor) {
+  unsigned char byte_value = 0xFF;
+  Byte value(&byte_value);
+  Byte another_value(value);
+  EXPECT_EQ(another_value.to_hex_string(), value.to_hex_string());
+  EXPECT_EQ(another_value.to_binary_string(), value.to_binary_string());
+}
+    
+    #include 'modules/drivers/radar/conti_radar/protocol/radar_state_201.h'
+    
+    TEST_F(GemMessageManagerTest, GetSendProtocols) {
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Accelcmd67::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakecmd6b::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Globalcmd69::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Headlightcmd76::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Horncmd78::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Shiftcmd65::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringcmd6d::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Turncmd63::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Wipercmd90::ID) != nullptr);
+}
+    
+      Byte t1(bytes + 7);
+  int32_t t = t1.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
