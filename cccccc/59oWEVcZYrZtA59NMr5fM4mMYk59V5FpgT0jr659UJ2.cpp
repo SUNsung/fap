@@ -1,245 +1,99 @@
 
         
-        using namespace swift;
+        #include <map>
     
+     private:
+  static int32_t next_id_;
+  static atom::KeyWeakMap<int32_t>* weak_map_;  // leaked on purpose
     
-    {
-    {  } else {
-    assert(clangDiag.hasSourceManager());
-    auto clangCI = ImporterImpl.getClangInstance();
-    ClangDiagRenderer renderer(clangCI->getLangOpts(),
-                               &clangCI->getDiagnosticOpts(), emitDiag);
-    clang::FullSourceLoc clangDiagLoc(clangDiag.getLocation(),
-                                      clangDiag.getSourceManager());
-    renderer.emitDiagnostic(clangDiagLoc, clangDiagLevel, message,
-                            clangDiag.getRanges(), clangDiag.getFixItHints(),
-                            &clangDiag);
-  }
-}
+    namespace atom {
+    }
+    
+    #endif  // ATOM_BROWSER_LIB_POWER_OBSERVER_H_
 
     
-      // Static members
-  IAMResult(DeclName declName, EffectiveClangContext dc)
-      : name(declName), effectiveDC(dc) {}
+    net::URLRequestJob* AboutProtocolHandler::MaybeCreateJob(
+    net::URLRequest* request,
+    net::NetworkDelegate* network_delegate) const {
+  return new URLRequestAboutJob(request, network_delegate);
+}
     
-    #include 'swift/Demangling/ManglingUtils.h'
+    #include 'net/url_request/url_request_job_factory.h'
     
-    using namespace swift;
-using namespace Demangle;
     
-    void ModuleWrapJobAction::anchor() {}
+    {			default:
+				assert(0);
+				break;
+			}
+			break;
     
-    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
-    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
-    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
-    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
-    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
-    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
-    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
-    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
-    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27,
-    GTEST_TEMPLATE_ T28, GTEST_TEMPLATE_ T29, GTEST_TEMPLATE_ T30,
-    GTEST_TEMPLATE_ T31>
-struct Templates31 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates30<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
-      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-      T29, T30, T31> Tail;
+    			int iRed2 = m_frgbaColor2.IntRed(31.0f);
+			int iGreen2 = m_frgbaColor2.IntGreen(31.0f);
+			int iBlue2 = m_frgbaColor2.IntBlue(31.0f);
+    
+    #endif /* HAVE_ARM_NE10 */
+    
+    /*Constants used by the entropy encoder/decoder.*/
+    
+    /* saturates before shifting */
+#define silk_LSHIFT_SAT32(a, shift)         (silk_LSHIFT32( silk_LIMIT( (a), silk_RSHIFT32( silk_int32_MIN, (shift) ), \
+                                                    silk_RSHIFT32( silk_int32_MAX, (shift) ) ), (shift) ))
+    
+    class IUnaryCommand : public IOperatorCommand
+{
+public:
+    virtual const std::shared_ptr<CalculatorVector<int>> & GetCommands() const = 0;
+    virtual void SetCommands(int command1, int command2) = 0;
 };
     
-    // Tests the Set method.
-TEST(MyString, Set) {
-  MyString s;
-    }
+    using namespace CalculatorApp::Common;
+using namespace CalculatorApp::Converters;
+using namespace Platform;
+using namespace std;
+using namespace Windows::ApplicationModel::Core;
+using namespace Windows::Foundation;
+using namespace Windows::UI::Xaml;
     
-    #include <grpcpp/impl/grpc_library.h>
-#include <grpcpp/security/credentials.h>
-    
-    #include <grpcpp/support/channel_arguments.h>
-    
-    
-    {  if (op->send_message() != nullptr) {
-    ++sent_message_count_;
-  }
-  if (op->recv_message() != nullptr) {
-    recv_message_ = op->op()->payload->recv_message.recv_message;
-    initial_on_done_recv_message_ =
-        op->op()->payload->recv_message.recv_message_ready;
-    op->op()->payload->recv_message.recv_message_ready = &on_done_recv_message_;
-  }
-  if (op->recv_trailing_metadata() != nullptr) {
-    recv_trailing_metadata_ = op->recv_trailing_metadata()->batch();
-    initial_on_done_recv_trailing_metadata_ =
-        op->op()->payload->recv_trailing_metadata.recv_trailing_metadata_ready;
-    op->op()->payload->recv_trailing_metadata.recv_trailing_metadata_ready =
-        &on_done_recv_trailing_metadata_;
-  }
-  // Call next op.
-  grpc_call_next_op(elem, op->op());
-}
-    
-    
-    {}  // namespace grpc
-    
-    constexpr size_t TraceContextEncoding::kGrpcTraceContextSize;
-constexpr size_t TraceContextEncoding::kEncodeDecodeFailure;
-constexpr size_t TraceContextEncoding::kVersionIdSize;
-constexpr size_t TraceContextEncoding::kFieldIdSize;
-constexpr size_t TraceContextEncoding::kVersionIdOffset;
-constexpr size_t TraceContextEncoding::kVersionId;
-    
-    namespace grpc {
-    }
-    
-    #ifndef GRPC_INTERNAL_CPP_DYNAMIC_THREAD_POOL_H
-#define GRPC_INTERNAL_CPP_DYNAMIC_THREAD_POOL_H
-    
-    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
-  uint64_t busy = 0, total = 0;
-  gpr_log(GPR_ERROR,
-          'Platforms other than Linux, Windows, and MacOS are not supported.');
-  return std::make_pair(busy, total);
-}
-    
-    
-    {}  // namespace leveldb
-    
-    
-    {  if (status.ok()) {
-    status = InstallCompactionResults(compact);
-  }
-  if (!status.ok()) {
-    RecordBackgroundError(status);
-  }
-  VersionSet::LevelSummaryStorage tmp;
-  Log(options_.info_log,
-      'compacted to: %s', versions_->LevelSummary(&tmp));
-  return status;
-}
-    
-        // Compact away the placeholder files we created initially
-    dbfull()->TEST_CompactRange(1, nullptr, nullptr);
-    dbfull()->TEST_CompactRange(2, nullptr, nullptr);
-    ASSERT_EQ('2', FilesPerLevel());
-    
-    TEST(FormatTest, InternalKeyShortestSuccessor) {
-  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
-            ShortSuccessor(IKey('foo', 100, kTypeValue)));
-  ASSERT_EQ(IKey('\xff\xff', 100, kTypeValue),
-            ShortSuccessor(IKey('\xff\xff', 100, kTypeValue)));
-}
-    
-    // Return the name of the lock file for the db named by
-// 'dbname'.  The result will be prefixed with 'dbname'.
-std::string LockFileName(const std::string& dbname);
-    
-    
-    {  // Errors
-  static const char* errors[] = {
-    '',
-    'foo',
-    'foo-dx-100.log',
-    '.log',
-    '',
-    'manifest',
-    'CURREN',
-    'CURRENTX',
-    'MANIFES',
-    'MANIFEST',
-    'MANIFEST-',
-    'XMANIFEST-3',
-    'MANIFEST-3x',
-    'LOC',
-    'LOCKx',
-    'LO',
-    'LOGx',
-    '18446744073709551616.log',
-    '184467440737095516150.log',
-    '100',
-    '100.',
-    '100.lop'
-  };
-  for (int i = 0; i < sizeof(errors) / sizeof(errors[0]); i++) {
-    std::string f = errors[i];
-    ASSERT_TRUE(!ParseFileName(f, &number, &type)) << f;
-  }
-}
-    
-        // Skip physical record that started before initial_offset_
-    if (end_of_buffer_offset_ - buffer_.size() - kHeaderSize - length <
-        initial_offset_) {
-      result->clear();
-      return kBadRecord;
-    }
-    
-    namespace leveldb {
-    }
-    
-    
-    {    if (counter > 0 && s.ok()) {
-      std::string orig = TableFileName(dbname_, t.meta.number);
-      s = env_->RenameFile(copy, orig);
-      if (s.ok()) {
-        Log(options_.info_log, 'Table #%llu: %d entries repaired',
-            (unsigned long long) t.meta.number, counter);
-        tables_.push_back(t);
-      }
-    }
-    if (!s.ok()) {
-      env_->DeleteFile(copy);
-    }
-  }
-    
-    #endif  // STORAGE_LEVELDB_DB_SKIPLIST_H_
-
-    
-      void IncDone() {
-    num_done_++;
-  }
-    
-    Status WriteBatchBase::Delete(const SliceParts& key) {
+    Status WriteBatchBase::SingleDelete(ColumnFamilyHandle* column_family,
+                                    const SliceParts& key) {
   std::string key_buf;
   Slice key_slice(key, &key_buf);
-  return Delete(key_slice);
+  return SingleDelete(column_family, key_slice);
 }
     
-    std::unique_ptr<WriteControllerToken>
-WriteController::GetCompactionPressureToken() {
-  ++total_compaction_pressure_;
-  return std::unique_ptr<WriteControllerToken>(
-      new CompactionPressureToken(this));
-}
+      std::atomic<int> total_stopped_;
+  std::atomic<int> total_delayed_;
+  std::atomic<int> total_compaction_pressure_;
+  uint64_t bytes_left_;
+  uint64_t last_refill_time_;
+  // write rate set when initialization or by `DBImpl::SetDBOptions`
+  uint64_t max_delayed_write_rate_;
+  // current write rate
+  uint64_t delayed_write_rate_;
     
-      // When an actor (column family) requests a stop token, all writes will be
-  // stopped until the stop token is released (deleted)
-  std::unique_ptr<WriteControllerToken> GetStopToken();
-  // When an actor (column family) requests a delay token, total delay for all
-  // writes to the DB will be controlled under the delayed write rate. Every
-  // write needs to call GetDelay() with number of bytes writing to the DB,
-  // which returns number of microseconds to sleep.
-  std::unique_ptr<WriteControllerToken> GetDelayToken(
-      uint64_t delayed_write_rate);
-  // When an actor (column family) requests a moderate token, compaction
-  // threads will be increased
-  std::unique_ptr<WriteControllerToken> GetCompactionPressureToken();
-    
-      // put and get from non-default column family
-  s = db->Put(WriteOptions(), handles[1], Slice('key'), Slice('value'));
+    int main() {
+  // open DB
+  Options options;
+  options.create_if_missing = true;
+  DB* db;
+  Status s = DB::Open(options, kDBPath, &db);
   assert(s.ok());
-  std::string value;
-  s = db->Get(ReadOptions(), handles[1], Slice('key'), &value);
-  assert(s.ok());
+    }
     
-    #include <mutex>
-#include <string>
-#include 'rocksdb/db.h'
-#include 'rocksdb/env.h'
-#include 'rocksdb/options.h'
+    class MyFilter : public rocksdb::CompactionFilter {
+ public:
+  bool Filter(int level, const rocksdb::Slice& key,
+              const rocksdb::Slice& existing_value, std::string* new_value,
+              bool* value_changed) const override {
+    fprintf(stderr, 'Filter(%s)\n', key.ToString().c_str());
+    ++count_;
+    assert(*value_changed == false);
+    return false;
+  }
+    }
     
-      // Set a new snapshot in the transaction
-  txn->SetSnapshot();
-  txn->SetSavePoint();
-  read_options.snapshot = txn_db->GetSnapshot();
+    #include 'rocksdb/db.h'
+#include 'rocksdb/status.h'
     
     // Abstract handle to particular state of a DB.
 // A Snapshot is an immutable object and can therefore be safely
@@ -253,17 +107,175 @@ class Snapshot {
   virtual SequenceNumber GetSequenceNumber() const = 0;
     }
     
-      enum OperationStage : int {
-    STAGE_UNKNOWN = 0,
-    STAGE_FLUSH_RUN,
-    STAGE_FLUSH_WRITE_L0,
-    STAGE_COMPACTION_PREPARE,
-    STAGE_COMPACTION_RUN,
-    STAGE_COMPACTION_PROCESS_KV,
-    STAGE_COMPACTION_INSTALL,
-    STAGE_COMPACTION_SYNC_FILE,
-    STAGE_PICK_MEMTABLES_TO_FLUSH,
-    STAGE_MEMTABLE_ROLLBACK,
-    STAGE_MEMTABLE_INSTALL_FLUSH_RESULTS,
-    NUM_OP_STAGES
-  };
+      // Builds an openable snapshot of RocksDB on the same disk, which
+  // accepts an output directory on the same disk, and under the directory
+  // (1) hard-linked SST files pointing to existing live SST files
+  // SST files will be copied if output directory is on a different filesystem
+  // (2) a copied manifest files and other files
+  // The directory should not already exist and will be created by this API.
+  // The directory will be an absolute path
+  // log_size_for_flush: if the total log file size is equal or larger than
+  // this value, then a flush is triggered for all the column families. The
+  // default value is 0, which means flush is always triggered. If you move
+  // away from the default, the checkpoint may not contain up-to-date data
+  // if WAL writing is not always enabled.
+  // Flush will always trigger if it is 2PC.
+  virtual Status CreateCheckpoint(const std::string& checkpoint_dir,
+                                  uint64_t log_size_for_flush = 0);
+    
+    
+    {}  // namespace rocksdb
+
+    
+    /*
+ * Class:     org_rocksdb_BackupableDBOptions
+ * Method:    sync
+ * Signature: (J)Z
+ */
+jboolean Java_org_rocksdb_BackupableDBOptions_sync(JNIEnv* /*env*/,
+                                                   jobject /*jobj*/,
+                                                   jlong jhandle) {
+  auto* bopt = reinterpret_cast<rocksdb::BackupableDBOptions*>(jhandle);
+  return bopt->sync;
+}
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+    
+    #include '2d/CCActionGrid.h'
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    ActionTween* ActionTween::create(float duration, const std::string& key, float from, float to)
+{
+    ActionTween* ret = new (std::nothrow) ActionTween();
+    if (ret && ret->initWithDuration(duration, key, from, to))
+    {
+        ret->autorelease();
+        return ret;
+    }
+    
+    delete ret;
+    return nullptr;
+}
+    
+    AnimationCache* AnimationCache::s_sharedAnimationCache = nullptr;
+    
+    PolygonInfo AutoPolygon::generatePolygon(const std::string& filename, const Rect& rect, float epsilon, float threshold)
+{
+    AutoPolygon ap(filename);
+    return ap.generateTriangles(rect, epsilon, threshold);
+}
+
+    
+    namespace apollo {
+namespace drivers {
+namespace canbus {
+namespace can {
+    }
+    }
+    }
+    }
+    
+    int ClusterGeneralInfo701::dynprop(const std::uint8_t* bytes,
+                                   int32_t length) const {
+  Byte t0(bytes + 6);
+  uint32_t x = t0.get_byte(0, 3);
+  int ret = x;
+  return ret;
+}
+    
+    #include 'modules/canbus/vehicle/gem/gem_message_manager.h'
+    
+    TEST_F(GemMessageManagerTest, GetRecvProtocols) {
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Accelrpt68::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt170::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt271::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakemotorrpt372::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Brakerpt6c::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Datetimerpt83::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Globalrpt6a::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Headlightrpt77::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Hornrpt79::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Latlonheadingrpt82::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(
+                  Parkingbrakestatusrpt80::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Shiftrpt66::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt173::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt274::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringmotorrpt375::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Steeringrpt16e::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Turnrpt64::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Vehiclespeedrpt6f::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Wheelspeedrpt7a::ID) !=
+              nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Wiperrpt91::ID) != nullptr);
+  EXPECT_TRUE(manager_.GetMutableProtocolDataById(Yawraterpt81::ID) != nullptr);
+}
+    
+    namespace apollo {
+namespace canbus {
+    }
+    }
+    
+    // config detail: {'name': 'manual_input', 'offset': 0.0, 'precision': 0.001,
+// 'len': 16, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 7,
+// 'type': 'double', 'order': 'motorola', 'physical_unit': '%'}
+double Accelrpt68::manual_input(const std::uint8_t* bytes,
+                                int32_t length) const {
+  Byte t0(bytes + 0);
+  int32_t x = t0.get_byte(0, 8);
+    }
+    
+    TEST(Expected, CoroutineFailure) {
+  auto r1 = []() -> Expected<int, Err> {
+    auto x = co_await f1();
+    auto y = co_await f2(x);
+    auto z = co_await f4(x, y, Err::badder());
+    ADD_FAILURE();
+    co_return z;
+  }();
+  EXPECT_TRUE(r1.hasError());
+  EXPECT_EQ(Err::badder(), r1.error());
+}
+    
+    namespace folly {
+    }
+    
+    
+    {  static constexpr result_type min() {
+    return std::numeric_limits<result_type>::min();
+  }
+  static constexpr result_type max() {
+    return std::numeric_limits<result_type>::max();
+  }
+};
+    
+      SharedPtr exchange(
+      SharedPtr n,
+      std::memory_order order = std::memory_order_seq_cst) /* noexcept */ {
+    auto newptr = get_newptr(std::move(n));
+    auto old = ptr_.exchange(newptr, order);
+    }
