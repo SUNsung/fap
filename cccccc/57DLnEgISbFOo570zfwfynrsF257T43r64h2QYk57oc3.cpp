@@ -1,307 +1,407 @@
 
         
-            // Ignore first non-switch arg if it's not a standalone package.
-    bool ignore_arg = !package->self_extract();
-    for (unsigned i = 1; i < argv.size(); ++i) {
-      if (ignore_arg && argv[i] == args[0]) {
-        ignore_arg = false;
-        continue;
-      }
-    }
-    
-    // Tell browser to delete a object.
-// function DeallocateObject(id);
-v8::Handle<v8::Value> DeallocateObject(int routing_id,
-                                       int object_id);
-    
-    class Clipboard : public Base {
- public:
-  Clipboard(int id,
-            const base::WeakPtr<DispatcherHost>& dispatcher_host,
-            const base::DictionaryValue& option);
-  ~Clipboard() override;
-    }
-    
-    
-    {} // namespace nwapi
-
-    
-    void Menu::Popup(int x, int y, content::Shell* shell) {
-  GdkEventButton* event = NULL; //FIXME: shell->web_contents()->GetRenderWidgetHostView()->GetLastMouseDown();
-  uint32_t triggering_event_time = event ? event->time : GDK_CURRENT_TIME;
-  gfx::Point point;
-  if (!event) {
-    // gfx::Rect bounds = shell->web_contents()->GetRenderWidgetHostView()->GetViewBounds();
-    // point = gfx::Point(x + bounds.x(), y + bounds.y());
-    DVLOG(1) << 'no last mouse down event';
-    point = gfx::Point(x, y);
-  }else
-    point = gfx::Point(event->x_root, event->y_root);
-    }
-    
-    void NwDesktopCaptureMonitor::OnSourceRemoved(DesktopMediaList* list, int index) {
-    std::unique_ptr<base::ListValue> args = nwapi::nw__screen::OnSourceRemoved::Create(index);
-    DispatchEvent(
-      events::HistogramValue::UNKNOWN, 
-      nwapi::nw__screen::OnSourceRemoved::kEventName,
-      std::move(args));
+        
+    {  if (!base::JSONWriter::Write(top_dictionary, &json))
+    return false;
+  int written = base::WriteFile(path, json.data(), (int)json.size());
+  if (static_cast<unsigned>(written) != json.size()) {
+    LOG(ERROR) << 'Error writing ' << path.AsUTF8Unsafe()
+               << ' ; write result:' << written << ' expected:' << json.size();
+    return false;
   }
-    
-    
-    {    private:
-      DISALLOW_COPY_AND_ASSIGN(NwScreenGetScreensFunction);      
-  };
-    
-    extern 'C' {
-  PyMODINIT_FUNC INITFUNC() {
-#if PY_MAJOR_VERSION >= 3
-    PyObject *module = PyModule_Create(&_module);
-#else
-    PyObject *module = Py_InitModule3(
-        const_cast<char*>(kModuleName),
-        NULL,
-        const_cast<char*>(kModuleDocstring));
-#endif
-    if (module == NULL) {
-      return INITFUNC_ERRORVAL;
-    }
-    }
-    }
-    
-    
-    {
-    {
-    {}  // namespace python
-}  // namespace protobuf
-}  // namespace google
-
-    
-    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
-  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
-  // Identifiers can't start with digits
-  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
-  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
-}
-    
-    
-    {
-    {
-    {
-    {
-}  // namespace java
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-
-    
-      EXPECT_EQ(5, decode_data.num_entries());
-    
-    string OneofGenerator::HasIndexAsString(void) const {
-  return variables_.find('index')->second;
-}
-    
-    TEST(StructurallyValidTest, ValidUTF8String) {
-  // On GCC, this string can be written as:
-  //   'abcd 1234 - \u2014\u2013\u2212'
-  // MSVC seems to interpret \u differently.
-  string valid_str('abcd 1234 - \342\200\224\342\200\223\342\210\222 - xyz789');
-  EXPECT_TRUE(IsStructurallyValidUTF8(valid_str.data(),
-                                      valid_str.size()));
-  // Additional check for pointer alignment
-  for (int i = 1; i < 8; ++i) {
-    EXPECT_TRUE(IsStructurallyValidUTF8(valid_str.data() + i,
-                                        valid_str.size() - i));
-  }
-}
-    
-    // or_ is a template || operator.
-// or_<A, B>::value evaluates 'A::value || B::value'.
-template<typename A, typename B>
-struct or_ : public integral_constant<bool, (A::value || B::value)> {
-};
-    
-     public:
-  // Constructs an empty Message.
-  Message();
-    
-    // To distinguish different instances of the pattern, (yes, you
-// can instantiate it more then once) the first argument to the
-// INSTANTIATE_TEST_CASE_P macro is a prefix that will be added to the
-// actual test case name. Remember to pick unique prefixes for different
-// instantiations. The tests from the instantiation above will have
-// these names:
-//
-//    * InstantiationName/FooTest.DoesBlah/0 for 'meeny'
-//    * InstantiationName/FooTest.DoesBlah/1 for 'miny'
-//    * InstantiationName/FooTest.DoesBlah/2 for 'moe'
-//    * InstantiationName/FooTest.HasBlahBlah/0 for 'meeny'
-//    * InstantiationName/FooTest.HasBlahBlah/1 for 'miny'
-//    * InstantiationName/FooTest.HasBlahBlah/2 for 'moe'
-//
-// You can use these names in --gtest_filter.
-//
-// This statement will instantiate all tests from FooTest again, each
-// with parameter values 'cat' and 'dog':
-    
-    // Implements printing a non-reference type T by letting the compiler
-// pick the right overload of PrintTo() for T.
-template <typename T>
-class UniversalPrinter {
- public:
-  // MSVC warns about adding const to a function type, so we want to
-  // disable the warning.
-#ifdef _MSC_VER
-# pragma warning(push)          // Saves the current warning state.
-# pragma warning(disable:4180)  // Temporarily disables warning 4180.
-#endif  // _MSC_VER
-    }
-    
-      // The c'tor sets this object as the test part result reporter used
-  // by Google Test.  The 'result' parameter specifies where to report the
-  // results. This reporter will only catch failures generated in the current
-  // thread. DEPRECATED
-  explicit ScopedFakeTestPartResultReporter(TestPartResultArray* result);
-    
-      // Fired after a failed assertion or a SUCCEED() invocation.
-  virtual void OnTestPartResult(const TestPartResult& test_part_result) = 0;
-    
-      // Create the directory so that path exists. Returns true if successful or
-  // if the directory already exists; returns false if unable to create the
-  // directory for any reason, including if the parent directory does not
-  // exist. Not named 'CreateDirectory' because that's a macro on Windows.
-  bool CreateFolder() const;
-    
-      bool operator==(T* p) const { return value_ == p; }
-  bool operator!=(T* p) const { return value_ != p; }
-  template <typename U>
-  bool operator==(linked_ptr<U> const& ptr) const {
-    return value_ == ptr.get();
-  }
-  template <typename U>
-  bool operator!=(linked_ptr<U> const& ptr) const {
-    return value_ != ptr.get();
-  }
-    
-      // Compares two wide C strings, ignoring case.  Returns true iff they
-  // have the same content.
-  //
-  // Unlike wcscasecmp(), this function can handle NULL argument(s).
-  // A NULL C string is considered different to any non-NULL wide C string,
-  // including the empty string.
-  // NB: The implementations on different platforms slightly differ.
-  // On windows, this method uses _wcsicmp which compares according to LC_CTYPE
-  // environment variable. On GNU platform this method uses wcscasecmp
-  // which compares according to LC_CTYPE category of the current locale.
-  // On MacOS X, it uses towlower, which also uses LC_CTYPE category of the
-  // current locale.
-  static bool CaseInsensitiveWideCStringEquals(const wchar_t* lhs,
-                                               const wchar_t* rhs);
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29>
-struct Types29 {
-  typedef T1 Head;
-  typedef Types28<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
-      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-      T29> Tail;
-};
-    
-    // This provides interface PrimeTable that determines whether a number is a
-// prime and determines a next prime number. This interface is used
-// in Google Test samples demonstrating use of parameterized tests.
-    
-    
-    {  // n has no integer factor in the range (1, n), and thus is prime.
   return true;
 }
-
     
-    // Tests factorial of 0.
-TEST(FactorialTest, Zero) {
-  EXPECT_EQ(1, Factorial(0));
-}
+      // Post 'reopen' event.
+  // (This event is received when the user clicked the icon in the Dock).
+  static void EmitReopenEvent();
     
-      // Constructs a MyString by cloning a 0-terminated C string.
-  explicit MyString(const char* a_c_string) : c_string_(NULL) {
-    Set(a_c_string);
+    EventListener::EventListener(int id,
+  const base::WeakPtr<DispatcherHost>& dispatcher_host,
+  const base::DictionaryValue& option) : Base(id, dispatcher_host, option) {
+    }
+    
+    void Menu::UpdateKeys(GtkAccelGroup *gtk_accel_group){
+  this->gtk_accel_group = gtk_accel_group;
+  if (!GTK_IS_ACCEL_GROUP(gtk_accel_group)){
+    return ;
+  } else {
+    std::vector<MenuItem*>::iterator menu_item_iterator = menu_items.begin();
+    std::vector<MenuItem*>::iterator menu_item_end = menu_items.end();
+    while (menu_item_iterator != menu_item_end){
+      MenuItem *menu_item = *menu_item_iterator;
+      if (menu_item!=NULL && GTK_IS_MENU_ITEM(menu_item->menu_item_)){
+        menu_item->UpdateKeys(gtk_accel_group);
+      }
+      ++menu_item_iterator;
+    }
   }
-    
-    const char kHelloString[] = 'Hello, world!';
-    
-    DEFINE_string(adapter_config_filename, 'modules/canbus/conf/adapter.conf',
-              'The adapter config file');
-    
-    void ClusterGeneralInfo701::Parse(const std::uint8_t* bytes, int32_t length,
-                                  ContiRadar* conti_radar) const {
-  auto obs = conti_radar->add_contiobs();
-  obs->set_clusterortrack(true);
-  obs->set_obstacle_id(obstacle_id(bytes, length));
-  obs->set_longitude_dist(longitude_dist(bytes, length));
-  obs->set_lateral_dist(lateral_dist(bytes, length));
-  obs->set_longitude_vel(longitude_vel(bytes, length));
-  obs->set_lateral_vel(lateral_vel(bytes, length));
-  obs->set_rcs(rcs(bytes, length));
-  obs->set_dynprop(dynprop(bytes, length));
-  double timestamp = apollo::common::time::Clock::NowInSeconds();
-  auto header = obs->mutable_header();
-  header->CopyFrom(conti_radar->header());
-  header->set_timestamp_sec(timestamp);
 }
     
-    Eigen::MatrixXd SplineSegKernel::ThirdOrderDerivativeKernel(
-    const uint32_t num_params, const double accumulated_x) {
-  if (num_params > reserved_order_ + 1) {
-    CalculateThirdOrderDerivative(num_params);
-  }
-  Eigen::MatrixXd term_matrix;
-  IntegratedTermMatrix(num_params, accumulated_x, 'third_order', &term_matrix);
-  return (kernel_third_order_derivative_.block(0, 0, num_params, num_params))
-      .cwiseProduct(term_matrix);
+        std::string label;
+    if (option.GetString('label', &label))
+      SetLabel(label);
+    
+      private:
+    bool ReadText(ClipboardData& data) {
+      DCHECK(data.type == TYPE_TEXT);
+      base::string16 text;
+      clipboard_->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
+      data.data.reset(new std::string(base::UTF16ToUTF8(text)));
+      return true;
+    }
+    
+    
+    {  nw::ObjectManager* manager = nw::ObjectManager::Get(browser_context());
+  manager->OnCallObjectMethod(render_frame_host(), id, type, method, *arguments);
+  return true;
 }
+    
+    TegraBinaryOp_Invoker(subf, sub)
+    
+    
+    {        // these are measured in elements
+        size_t left, right, top, bottom;
+    };
+    
+    void absDiff(const Size2D &size,
+             const u16 *src0Base, ptrdiff_t src0Stride,
+             const u16 *src1Base, ptrdiff_t src1Stride,
+             u16 *dstBase, ptrdiff_t dstStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    internal::vtransform(size,
+                         src0Base, src0Stride,
+                         src1Base, src1Stride,
+                         dstBase, dstStride, AbsDiff<u16>());
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+#endif
+}
+    
+    void add(const Size2D &size,
+         const s16 * src0Base, ptrdiff_t src0Stride,
+         const s16 * src1Base, ptrdiff_t src1Stride,
+         s16 *dstBase, ptrdiff_t dstStride,
+         CONVERT_POLICY policy)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+        if (policy == CONVERT_POLICY_SATURATE)
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddSaturate<s16, s32>());
+    }
+    else
+    {
+        internal::vtransform(size,
+                             src0Base, src0Stride,
+                             src1Base, src1Stride,
+                             dstBase, dstStride,
+                             AddWrap<s16, s32>());
+    }
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)policy;
+#endif
+}
+    
+    
+    {    void operator() (const u8 * src0, const u8 * src1, u8 * dst) const
+    {
+        dst[0] = src0[0] | src1[0];
+    }
+};
     
     
     {
-    {
-    {}  // namespace gem
-}  // namespace canbus
-}  // namespace apollo
+    {         vst1_u16(_dst + i + 4, vline_u16);
+     }
+})
+#endif
+    
+        if (elemSize == (u32)sizeof(u8))
+        func = &flip<u8>;
+    if (elemSize == (u32)sizeof(u16))
+        func = &flip<u16>;
+    if (elemSize == (u32)sizeof(u32))
+        func = &flip<u32>;
+    if (elemSize == (u32)sizeof(u8) * 3)
+        func = &flip3<u8>;
+    
+    
+    {} // namespace CAROTENE_NS
 
     
-    class GemVehicleFactoryTest : public ::testing::Test {
+    
+    {} // namespace CAROTENE_NS
+
+    
+        for (; j < size.width; ++j)
+        sqsum[j] = (prev += src[j]*src[j]);
+    
+      /// @brief Deprecated; use <code>Reshape(const vector<int>& shape)</code>.
+  void Reshape(const int num, const int channels, const int height,
+      const int width);
+  /**
+   * @brief Change the dimensions of the blob, allocating new memory if
+   *        necessary.
+   *
+   * This function can be called both to create an initial allocation
+   * of memory, and to adjust the dimensions of a top blob during Layer::Reshape
+   * or Layer::Forward. When changing the size of blob, memory will only be
+   * reallocated if sufficient memory does not already exist, and excess memory
+   * will never be freed.
+   *
+   * Note that reshaping an input blob and immediately calling Net::Backward is
+   * an error; either Net::Forward or Net::Reshape need to be called to
+   * propagate the new input shape to higher layers.
+   */
+  void Reshape(const vector<int>& shape);
+  void Reshape(const BlobShape& shape);
+  void ReshapeLike(const Blob& other);
+  inline string shape_string() const {
+    ostringstream stream;
+    for (int i = 0; i < shape_.size(); ++i) {
+      stream << shape_[i] << ' ';
+    }
+    stream << '(' << count_ << ')';
+    return stream.str();
+  }
+  inline const vector<int>& shape() const { return shape_; }
+  /**
+   * @brief Returns the dimension of the index-th axis (or the negative index-th
+   *        axis from the end, if index is negative).
+   *
+   * @param index the axis index, which may be negative as it will be
+   *        'canonicalized' using CanonicalAxisIndex.
+   *        Dies on out of range index.
+   */
+  inline int shape(int index) const {
+    return shape_[CanonicalAxisIndex(index)];
+  }
+  inline int num_axes() const { return shape_.size(); }
+  inline int count() const { return count_; }
+    
+      /**
+   * @brief Does layer-specific setup: your layer should implement this function
+   *        as well as Reshape.
+   *
+   * @param bottom
+   *     the preshaped input blobs, whose data fields store the input data for
+   *     this layer
+   * @param top
+   *     the allocated but unshaped output blobs
+   *
+   * This method should do one-time layer specific setup. This includes reading
+   * and processing relevent parameters from the <code>layer_param_</code>.
+   * Setting up the shapes of top blobs and internal buffers should be done in
+   * <code>Reshape</code>, which will be called before the forward pass to
+   * adjust the top blob sizes.
+   */
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) {}
+    
+      int top_k_;
+    
+    namespace caffe {
+    }
+    
+      virtual inline const char* type() const { return 'Bias'; }
+  virtual inline int MinBottomBlobs() const { return 1; }
+  virtual inline int MaxBottomBlobs() const { return 2; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
+    
+        float32* x; //vertex arrays
+    float32* y;
+    int32 nVertices;
+	
+	float32 area;
+	bool areaIsSet;
+	
+    b2Polygon(float32* _x, float32* _y, int32 nVert);
+    b2Polygon(b2Vec2* v, int32 nVert);
+	b2Polygon();
+    ~b2Polygon();
+	
+	float32 GetArea();
+	
+	void MergeParallelEdges(float32 tolerance);
+    b2Vec2* GetVertexVecs();
+    b2Polygon(b2Triangle& t);
+    void Set(const b2Polygon& p);
+    bool IsConvex();
+	bool IsCCW();
+	bool IsUsable(bool printError);
+	bool IsUsable();
+    bool IsSimple();
+   // void AddTo(b2FixtureDef& pd);
+	
+    b2Polygon* Add(b2Triangle& t);
+    
+    namespace Etc
+{
+	class Block4x4EncodingBits;
+    }
+    
+    #include <stdio.h>
+#include <string.h>
+#include <assert.h>
+    
+    		Data data;
+    
+      /* The AF_Blue_String enumeration values are offsets into the */
+  /* `af_blue_strings' array.                                   */
+    
+    #define AF_LATIN_HINTS_DO_MONO( h )             \
+  AF_HINTS_TEST_OTHER( h, AF_LATIN_HINTS_MONO )
+    
+    #endif  // VPX_DSP_TXFM_COMMON_H_
+
+    
+    
+/** 16x32 multiply, followed by a 15-bit shift right and 32-bit add.
+    b must fit in 31 bits.
+    Result fits in 32 bits. */
+#undef MAC16_32_Q15
+static OPUS_INLINE opus_val32 MAC16_32_Q15_armv5e(opus_val32 c, opus_val16 a,
+ opus_val32 b)
+{
+  int res;
+  __asm__(
+      '#MAC16_32_Q15\n\t'
+      'smlawb %0, %1, %2, %3;\n'
+      : '=r'(res)
+      : 'r'(b<<1), 'r'(a), 'r'(c)
+  );
+  return res;
+}
+#define MAC16_32_Q15(c, a, b) (MAC16_32_Q15_armv5e(c, a, b))
+    
+    /** 32-bit arithmetic shift right with rounding-to-nearest instead of rounding down */
+#define PSHR32(a,shift) (SHR32((a)+((EXTEND32(1)<<((shift))>>1)),shift))
+/** 32-bit arithmetic shift right where the argument can be negative */
+#define VSHR32(a, shift) (((shift)>0) ? SHR32(a, shift) : SHL32(a, -(shift)))
+    
+      bool operator!=(SrcLoc o) const { return !(*this == o); }
+    
+    APCHandle::Pair APCCollection::Make(const ObjectData* obj,
+                                    APCHandleLevel level,
+                                    bool unserializeObj) {
+  auto bail = [&] {
+    return APCString::MakeSerializedObject(
+      apc_serialize(Variant(const_cast<ObjectData*>(obj)))
+    );
+  };
+    }
+    
+    void Config::ParseIniFile(const std::string &filename, IniSettingMap &ini,
+                          const bool constants_only /* = false */,
+                          const bool is_system /* = true */ ) {
+    std::ifstream ifs(filename);
+    std::string str((std::istreambuf_iterator<char>(ifs)),
+                    std::istreambuf_iterator<char>());
+    std::string with_includes;
+    Config::ReplaceIncludesWithIni(filename, str, with_includes);
+    Config::SetParsedIni(ini, with_includes, filename, constants_only,
+                         is_system);
+}
+    
+    
+struct Config {
+  /*
+   * Normalizes hdf string names to their ini counterparts
+   *
+   * We have special handling for a few hdf strings such as those containing
+   * MySQL, Eval, IPv[4|6] and EnableHipHopSyntax
+   */
+  static std::string IniName(const Hdf& config,
+                             const bool prepend_hhvm = true);
+  static std::string IniName(const std::string& config,
+                             const bool prepend_hhvm = true);
+    }
+    
+    CachedDirectory::CachedDirectory(const String& path) {
+  assertx(File::IsVirtualDirectory(path));
+  m_files = StaticContentCache::TheFileCache->readDirectory(path.c_str());
+}
+    
+    
+    {  StructuredLogEntry cols;
+  fillCols(cols);
+  cols.setStr('event_name', event);
+  cols.setInt('priority', priority);
+  StructuredLog::log('hhvm_perf_warning', cols);
+}
+    
+    
+    {};
+    
+    
+class ExtensionManager_extensions_args {
  public:
-  virtual void SetUp() {
-    VehicleParameter parameter;
-    parameter.set_brand(VehicleParameter::GEM);
-    gem_factory_.SetVehicleParameter(parameter);
+    }
+    
+    class ExtensionResponse;
+    
+    
+    {
+    {
+    {  for (const auto& share_line : osquery::split(content, '\n')) {
+    genNFSShare(share_line, results);
   }
-  virtual void TearDown() {}
+  return results;
+}
+}
+}
+
+    
+    
+    {
+    {
+    {  return results;
+}
+}
+}
+
+    
+    struct mei_response {
+  uint32_t maxlen;
+  uint8_t version;
+};
+    
+    TEST_F(PerfOutputTests,
+       impl_consumeWrappedMessagesFromCircularBuffer_splited_record_wrapping) {
+  using WrappedMessage = ebpf::PerfOutput<TestMessage>::WrappedMessage;
+  auto const test_size = std::size_t{3};
+  auto buf = std::vector<ebpf::impl::ByteType>(
+      sizeof(WrappedMessage) * test_size + 154, 0);
+  auto const first_part_size = 8;
+  auto const tail = buf.size() - sizeof(WrappedMessage) - first_part_size;
+  auto const head = tail + sizeof(WrappedMessage) * test_size;
     }
     
-    // config detail: {'name': 'output_value', 'offset': 0.0, 'precision': 0.001,
-// 'len': 16, 'is_signed_var': False, 'physical_range': '[0|1]', 'bit': 39,
-// 'type': 'double', 'order': 'motorola', 'physical_unit': '%'}
-double Accelrpt68::output_value(const std::uint8_t* bytes,
-                                int32_t length) const {
-  Byte t0(bytes + 4);
-  int32_t x = t0.get_byte(0, 8);
-    }
-    
-    
-    {  double ret = x * 0.001000;
-  return ret;
+    fs::path getConfDirPathImpl() {
+  char const* kEnvVarName = 'TEST_CONF_FILES_DIR';
+  auto const value_opt = osquery::getEnvVar(kEnvVarName);
+  EXPECT_TRUE(static_cast<bool>(value_opt))
+      << 'Env var ' << boost::io::quoted(kEnvVarName) << ' was not found, '
+      << ' looks like cxx_test argument 'env' is not set up.';
+  return fs::path(value_opt.get());
 }
