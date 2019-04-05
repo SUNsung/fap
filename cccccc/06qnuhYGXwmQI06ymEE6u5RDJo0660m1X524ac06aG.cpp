@@ -1,232 +1,261 @@
 
         
-        // Generate constructors.
-#include 'ipc/struct_constructor_macros.h'
+        Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    #include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/op_kernel.h'
+    
+    
+    {}  // namespace tensorflow
+
+    
+    #include 'tensorflow/c/c_api.h'
+#include 'tensorflow/c/tf_status_helper.h'
+#include 'tensorflow/core/framework/tensor.h'
+#include 'tensorflow/python/lib/core/safe_ptr.h'
+    
+    #endif  // TENSORFLOW_PYTHON_LIB_CORE_NDARRAY_TENSOR_BRIDGE_H_
+
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    namespace stream_executor {
+    }
+    
+    port::StatusOr<StreamExecutor*> ExecutorCache::Get(
+    const StreamExecutorConfig& config) {
+  Entry* entry = nullptr;
+  {
+    tf_shared_lock lock{mutex_};
+    auto it = cache_.find(config.ordinal);
+    if (it != cache_.end()) {
+      entry = &it->second;
+    } else {
+      return port::Status(port::error::NOT_FOUND,
+                          port::Printf('No executors registered for ordinal %d',
+                                       config.ordinal));
+    }
+  }
+  tf_shared_lock lock{entry->configurations_mutex};
+  if (entry->configurations.empty()) {
+    return port::Status(
+        port::error::NOT_FOUND,
+        port::Printf('No executors registered for ordinal %d', config.ordinal));
+  }
+  for (const auto& iter : entry->configurations) {
+    if (iter.first.plugin_config == config.plugin_config &&
+        iter.first.device_options == config.device_options) {
+      VLOG(2) << 'hit in cache for device ordinal ' << config.ordinal;
+      return iter.second.get();
+    }
+  }
+  return port::Status(port::error::NOT_FOUND,
+                      'No executor found with a matching config.');
+}
+    
+    
+    {    // Vector of cached {config, executor} pairs.
+    std::vector<
+        std::pair<StreamExecutorConfig, std::unique_ptr<StreamExecutor>>>
+        configurations GUARDED_BY(configurations_mutex);
+  };
+    
+    // Generate param traits log methods.
+#include 'ipc/param_traits_log_macros.h'
+namespace IPC {
 #include 'content/nw/src/common/common_message_generator.h'
-    
-    EventListener::~EventListener() {
-  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
-    delete i->second;
-  }
-}
-    
-    void MenuDelegate::ExecuteCommand(int command_id, int event_flags) {
-  if (command_id < 0)
-    return;
-    }
-    
-    void MenuItem::Destroy() {
-  gtk_widget_destroy(menu_item_);
-  g_object_unref(G_OBJECT(menu_item_));
-}
-    
-    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
- public:
-  NwMenuGetNSStringFWithFixupFunction() {}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    
- protected:
-  ~NwMenuGetNSStringFWithFixupFunction() override {}
-    
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
-};
-    
-    #include 'chrome/browser/devtools/devtools_window.h'
-#include 'chrome/browser/extensions/devtools_util.h'
-#include 'chrome/browser/extensions/extension_service.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/public/browser/render_view_host.h'
-#include 'content/public/browser/web_contents.h'
-#include 'extensions/browser/extension_system.h'
-#include 'extensions/common/error_utils.h'
-    
-     protected:
-  ResponseAction Run() override;
-  ~NwObjCallObjectMethodAsyncFunction() override;
-    
-    #endif //NW_SRC_API_NW_SCREEN_API_H_
+}  // namespace IPC
 
     
-    #include 'glog/logging.h'
-#include 'google/protobuf/text_format.h'
-#include 'stdint.h'
-    
-      /**
-   * @brief Applies the same transformation defined in the data layer's
-   * transform_param block to all the num images in a input_blob.
-   *
-   * @param input_blob
-   *    A Blob containing the data to be transformed. It applies the same
-   *    transformation to all the num images in the blob.
-   * @param transformed_blob
-   *    This is destination blob, it will contain as many images as the
-   *    input blob. It can be part of top blob's data.
-   */
-  void Transform(Blob<Dtype>* input_blob, Blob<Dtype>* transformed_blob);
-    
-    /// @brief Fills a Blob with constant or randomly-generated data.
-template <typename Dtype>
-class Filler {
+    class Clipboard : public Base {
  public:
-  explicit Filler(const FillerParameter& param) : filler_param_(param) {}
-  virtual ~Filler() {}
-  virtual void Fill(Blob<Dtype>* blob) = 0;
- protected:
-  FillerParameter filler_param_;
-};  // class Filler
+  Clipboard(int id,
+            const base::WeakPtr<DispatcherHost>& dispatcher_host,
+            const base::DictionaryValue& option);
+  ~Clipboard() override;
+    }
     
-      /**
-   * @brief Return whether 'anonymous' top blobs are created automatically
-   *        by the layer.
-   *
-   * If this method returns true, Net::Init will create enough 'anonymous' top
-   * blobs to fulfill the requirement specified by ExactNumTopBlobs() or
-   * MinTopBlobs().
-   */
-  virtual inline bool AutoTopBlobs() const { return false; }
-    
-    namespace caffe {
+    void Menu::Call(const std::string& method,
+                const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  if (method == 'Append') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    Append(object_manager()->GetApiObject<MenuItem>(object_id));
+  } else if (method == 'Insert') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Remove') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Popup') {
+    int x = 0;
+    arguments.GetInteger(0, &x);
+    int y = 0;
+    arguments.GetInteger(1, &y);
+    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
+    DCHECK(web_contents);
+    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
+    }
     }
     
     
-    {  Blob<Dtype> col_buffer_;
-  Blob<Dtype> bias_multiplier_;
-};
-    
-    /**
- * @brief Normalizes the input to have 0-mean and/or unit (1) variance across
- *        the batch.
- *
- * This layer computes Batch Normalization as described in [1]. For each channel
- * in the data (i.e. axis 1), it subtracts the mean and divides by the variance,
- * where both statistics are computed across both spatial dimensions and across
- * the different examples in the batch.
- *
- * By default, during training time, the network is computing global
- * mean/variance statistics via a running average, which is then used at test
- * time to allow deterministic outputs for each input. You can manually toggle
- * whether the network is accumulating or using the statistics via the
- * use_global_stats option. For reference, these statistics are kept in the
- * layer's three blobs: (0) mean, (1) variance, and (2) moving average factor.
- *
- * Note that the original paper also included a per-channel learned bias and
- * scaling factor. To implement this in Caffe, define a `ScaleLayer` configured
- * with `bias_term: true` after each `BatchNormLayer` to handle both the bias
- * and scaling factor.
- *
- * [1] S. Ioffe and C. Szegedy, 'Batch Normalization: Accelerating Deep Network
- *     Training by Reducing Internal Covariate Shift.' arXiv preprint
- *     arXiv:1502.03167 (2015).
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-template <typename Dtype>
-class BatchNormLayer : public Layer<Dtype> {
- public:
-  explicit BatchNormLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    #include <vector>
-    
-    /**
- * @brief Takes a Blob and crop it, to the shape specified by the second input
- *  Blob, across all dimensions after the specified axis.
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-    
-    
-    {}  // namespace caffe
-    
-    // For now, there are two type of announcement hosts.
-// We'd prefer to use Notification if it's available and fall back to LiveRegion
-// if not.  The availability of the host depends on the version of the OS the app is running on.
-// When the app switches to min version RS3, the LiveRegionHost can be removed and we will always
-// use NotificationHost.
-// TODO - MSFT 12735088
-void NarratorAnnouncementHostFactory::RegisterHosts()
-{
-    // The host that will be used is the first available host,
-    // therefore, order of hosts is important here.
-    NarratorAnnouncementHostFactory::s_hosts = {
-        ref new NotificationHost(),
-        ref new LiveRegionHost()
-    };
+    {  *icon = item->icon_;
+  return true;
 }
     
-        private:
-        static void OnAnnouncementChanged(
-            _In_ Windows::UI::Xaml::DependencyObject^ dependencyObject,
-            _In_ Windows::UI::Xaml::DependencyPropertyChangedEventArgs^ eventArgs);
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12>
+internal::ValueArray12<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+    T12> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
+    T10 v10, T11 v11, T12 v12) {
+  return internal::ValueArray12<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+      T12>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12);
+}
     
-    using namespace CalculatorApp::Common;
-using namespace Windows::Storage::Streams;
+    # define TYPED_TEST_P(CaseName, TestName) \
+  namespace GTEST_CASE_NAMESPACE_(CaseName) { \
+  template <typename gtest_TypeParam_> \
+  class TestName : public CaseName<gtest_TypeParam_> { \
+   private: \
+    typedef CaseName<gtest_TypeParam_> TestFixture; \
+    typedef gtest_TypeParam_ TypeParam; \
+    virtual void TestBody(); \
+  }; \
+  static bool gtest_##TestName##_defined_ GTEST_ATTRIBUTE_UNUSED_ = \
+      GTEST_TYPED_TEST_CASE_P_STATE_(CaseName).AddTestName(\
+          __FILE__, __LINE__, #CaseName, #TestName); \
+  } \
+  template <typename gtest_TypeParam_> \
+  void GTEST_CASE_NAMESPACE_(CaseName)::TestName<gtest_TypeParam_>::TestBody()
     
-    #pragma once
+      // An enumeration of the three reasons that a test might be aborted.
+  enum AbortReason {
+    TEST_ENCOUNTERED_RETURN_STATEMENT,
+    TEST_THREW_EXCEPTION,
+    TEST_DID_NOT_DIE
+  };
     
+    // This overload is used when k >= 1.
+template <typename T, typename U, size_t N>
+inline bool ArrayEq(const T(&lhs)[N], const U(&rhs)[N]) {
+  return internal::ArrayEq(lhs, N, rhs);
+}
     
-    {  // Single-Delete diagnostics for exceptional situations
-  uint64_t num_single_del_fallthru = 0;
-  uint64_t num_single_del_mismatch = 0;
-};
-
+      bool operator==(T* p) const { return value_ == p; }
+  bool operator!=(T* p) const { return value_ != p; }
+  template <typename U>
+  bool operator==(linked_ptr<U> const& ptr) const {
+    return value_ == ptr.get();
+  }
+  template <typename U>
+  bool operator!=(linked_ptr<U> const& ptr) const {
+    return value_ != ptr.get();
+  }
     
-      ////////////////////////////////////////////////////////
-  //
-  // 'Read Committed' (Monotonic Atomic Views) Example
-  //   --Using multiple Snapshots
-  //
-  ////////////////////////////////////////////////////////
+     private:
+  // No implementation - assignment is unsupported.
+  void operator=(const ValueArray47& other);
     
-    // Supported only for Leveled compaction
-Status SuggestCompactRange(DB* db, ColumnFamilyHandle* column_family,
-                           const Slice* begin, const Slice* end);
-Status SuggestCompactRange(DB* db, const Slice* begin, const Slice* end);
+    template <GTEST_6_TYPENAMES_(T)>
+inline GTEST_6_TUPLE_(T) make_tuple(const T0& f0, const T1& f1, const T2& f2,
+    const T3& f3, const T4& f4, const T5& f5) {
+  return GTEST_6_TUPLE_(T)(f0, f1, f2, f3, f4, f5);
+}
     
-    // Simple RAII wrapper class for Snapshot.
-// Constructing this object will create a snapshot.  Destructing will
-// release the snapshot.
-class ManagedSnapshot {
+      void operator delete(void* block, size_t /* allocation_size */) {
+    allocated_--;
+    free(block);
+  }
+    
+    // Tests the c'tor that accepts a C string.
+TEST(MyString, ConstructorFromCString) {
+  const MyString s(kHelloString);
+  EXPECT_EQ(0, strcmp(s.c_string(), kHelloString));
+  EXPECT_EQ(sizeof(kHelloString)/sizeof(kHelloString[0]) - 1,
+            s.Length());
+}
+    
+    class StopWriteToken : public WriteControllerToken {
  public:
-  explicit ManagedSnapshot(DB* db);
+  explicit StopWriteToken(WriteController* controller)
+      : WriteControllerToken(controller) {}
+  virtual ~StopWriteToken();
+};
+    
+      // Always pick a compaction which includes all files whenever possible.
+  CompactionTask* PickCompaction(
+      DB* db, const std::string& cf_name) override {
+    ColumnFamilyMetaData cf_meta;
+    db->GetColumnFamilyMetaData(&cf_meta);
     }
     
-    namespace rocksdb {
-namespace lua {
-class LuaStateWrapper {
- public:
-  explicit LuaStateWrapper(const std::string& lua_script) {
-    lua_state_ = luaL_newstate();
-    Init(lua_script, {});
+      int ret = system('rm -rf /tmp/rocksmergetest');
+  if (ret != 0) {
+    fprintf(stderr, 'Error deleting /tmp/rocksmergetest, code: %d\n', ret);
+    return ret;
   }
-  LuaStateWrapper(
+  rocksdb::Options options;
+  options.create_if_missing = true;
+  options.merge_operator.reset(new MyMerge);
+  options.compaction_filter = &filter;
+  status = rocksdb::DB::Open(options, '/tmp/rocksmergetest', &raw_db);
+  assert(status.ok());
+  std::unique_ptr<rocksdb::DB> db(raw_db);
+    
+    namespace {
+// A dummy compaction filter
+class DummyCompactionFilter : public CompactionFilter {
+ public:
+  virtual ~DummyCompactionFilter() {}
+  virtual bool Filter(int level, const Slice& key, const Slice& existing_value,
+                      std::string* new_value, bool* value_changed) const {
+    return false;
+  }
+  virtual const char* Name() const { return 'DummyCompactionFilter'; }
+};
+    }
+    
+     private:
+  void Init(
       const std::string& lua_script,
       const std::vector<std::shared_ptr<RocksLuaCustomLibrary>>& libraries) {
-    lua_state_ = luaL_newstate();
-    Init(lua_script, libraries);
+    if (lua_state_) {
+      luaL_openlibs(lua_state_);
+      for (const auto& library : libraries) {
+        luaL_openlib(lua_state_, library->Name(), library->Lib(), 0);
+        library->CustomSetup(lua_state_);
+      }
+      luaL_dostring(lua_state_, lua_script.c_str());
+    }
   }
-  lua_State* GetLuaState() const { return lua_state_; }
-  ~LuaStateWrapper() { lua_close(lua_state_); }
-    }
-    }
-    }
+    
+    #include 'rocksdb/cache.h'
+#include 'rocksdb/db.h'
     
     /*
  * Class:     org_rocksdb_BackupableDBOptions
- * Method:    restoreRateLimit
- * Signature: (J)J
+ * Method:    shareTableFiles
+ * Signature: (J)Z
  */
-jlong Java_org_rocksdb_BackupableDBOptions_restoreRateLimit(JNIEnv* /*env*/,
-                                                            jobject /*jobj*/,
-                                                            jlong jhandle) {
+jboolean Java_org_rocksdb_BackupableDBOptions_shareTableFiles(JNIEnv* /*env*/,
+                                                              jobject /*jobj*/,
+                                                              jlong jhandle) {
   auto* bopt = reinterpret_cast<rocksdb::BackupableDBOptions*>(jhandle);
-  return bopt->restore_rate_limit;
+  return bopt->share_table_files;
 }
