@@ -1,167 +1,87 @@
 
         
-            def __repr__(self):
-        return '<lookup \'%s\'>' % (self.name)
-    
-        @possible_keys
-    def test_delitem(self, key):
-        del self.case_insensitive_dict[key]
-        assert key not in self.case_insensitive_dict
-    
-                if self.wait_to_close_event:
-                self.wait_to_close_event.wait(self.WAIT_EVENT_TIMEOUT)
-        finally:
-            self.ready_event.set() # just in case of exception
-            self._close_server_sock_ignore_errors()
-            self.stop_event.set()
-    
-    
-def get_cookie_header(jar, request):
-    '''
-    Produce an appropriate Cookie header string to be sent with `request`, or None.
-    
-        :param cj: CookieJar to insert cookies into.
-    :param cookie_dict: Dict of key/values to insert into CookieJar.
-    :rtype: CookieJar
-    '''
-    
-                try:
-                self.working_appid_list.remove(appid)
-            except:
-                pass
-    
-    current_path = os.path.dirname(os.path.abspath(__file__))
-    
-    
-def new_pteredor(probe_nat=True):
-    if os.path.isfile(log_file):
-        try:
-            os.remove(log_file)
-        except Exception as e:
-            xlog.warn('remove %s fail:%r', log_file, e)
-    
-    ## All tokens go to the parser (unless skip() is called in that rule)
-# on a particular 'channel'.  The parser tunes to a particular channel
-# so that whitespace etc... can go to the parser on a 'hidden' channel.
-DEFAULT_CHANNEL = 0
-    
-            Python does not have any size restrictions, but the compilation of
-        such large source files seems to be pretty memory hungry. The memory
-        consumption of the python process grew to >1.5GB when importing a
-        15MB lexer, eating all my swap space and I was to impacient to see,
-        if it could finish at all. With packed initializers that are unpacked
-        at import time of the lexer module, everything works like a charm.
         
+ALL_SSL_OPTIONS_HASHES = [
+    '0f81093a1465e3d4eaa8b0c14e77b2a2e93568b0fc1351c2b87893a95f0de87c',
+    '9a7b32c49001fed4cff8ad24353329472a50e86ade1ef9b2b9e43566a619612e',
+    'a6d9f1c7d6b36749b52ba061fff1421f9a0a3d2cfdafbd63c05d06f65b990937',
+    '7f95624dd95cf5afc708b9f967ee83a24b8025dc7c8d9df2b556bbc64256b3ff',
+    '394732f2bbe3e5e637c3fb5c6e980a1f1b90b01e2e8d6b7cff41dde16e2a756d',
+    '4b16fec2bcbcd8a2f3296d886f17f9953ffdcc0af54582452ca1e52f5f776f16',
+]
+'''SHA256 hashes of the contents of all versions of MOD_SSL_CONF_SRC'''
+    
+    
+class FixedTest(unittest.TestCase):
+    '''Tests for acme.fields.Fixed.'''
+    
+    The JWS implementation in josepy only implements the base JOSE standard. In
+order to support the new header fields defined in ACME, this module defines some
+ACME-specific classes that layer on top of josepy.
+'''
+import josepy as jose
+    
+        :param str vhost_path: Augeas virtual host path
+    
+            self.assertEqual(self.vhosts[5], self._call(self.vhosts))
+    
         '''
-        
-        ret = []
-        for i in range(len(string) / 2):
-            (n, v) = ord(string[i*2]), ord(string[i*2+1])
+    if isinstance(kernel_size, int):
+        kernel_size = [kernel_size] * 2
+    if isinstance(strides, int):
+        strides = [strides] * 4
     
-        def __init__(
-        self, grammarDecisionDescription, decisionNumber, stateNumber, input
-        ):
-        RecognitionException.__init__(self, input)
+        max_n_word: 句子的最大长度
+    max_n_char: 单词的最大长度
     
     
-    def getSourceName(self):
-        '''
-        Where are you getting symbols from?  Normally, implementations will
-        pass the buck all the way to the lexer who can ask its input stream
-        for the file name or whatever.
-        '''
+def get_params_dict():
+    '''以字典形式获取所有 trainable 参数'''
+    param_dict = dict()
+    for var in tf.trainable_variables():
+        param_dict[var.name] = {'shape': list(map(int, var.shape)),
+                                'number': int(reduce(mul, var.shape, 1))}
+    return param_dict
     
     
-# Path to data dir
-_DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
-    
-    
-def bottleneck_transformation(
-    model,
-    blob_in,
-    dim_in,
-    dim_out,
-    stride,
-    prefix,
-    dim_inner,
-    dilation=1,
-    group=1
+def generate_anchors(
+    stride=16, sizes=(32, 64, 128, 256, 512), aspect_ratios=(0.5, 1, 2)
 ):
-    '''Add a bottleneck transformation to the model.'''
-    # In original resnet, stride=2 is on 1x1.
-    # In fb.torch resnet, stride=2 is on 3x3.
-    (str1x1, str3x3) = (stride, 1) if cfg.RESNETS.STRIDE_1X1 else (1, stride)
-    
-        assert len(blobs_in) == k_max - k_min + 1
-    bbox_feat_list = []
-    cls_pred_dim = (
-        model.num_classes if cfg.RETINANET.SOFTMAX else (model.num_classes - 1)
-    )
-    # unpacked bbox feature and add prediction layers
-    bbox_regr_dim = (
-        4 * (model.num_classes - 1) if cfg.RETINANET.CLASS_SPECIFIC_BBOX else 4
-    )
-    
-        # Create new roi blobs for each FPN level
-    # (See: modeling.FPN.add_multilevel_roi_blobs which is similar but annoying
-    # to generalize to support this particular case.)
-    rois_idx_order = np.empty((0, ))
-    for output_idx, lvl in enumerate(range(lvl_min, lvl_max + 1)):
-        idx_lvl = np.where(lvls == lvl)[0]
-        blob_roi_level = rois[idx_lvl, :]
-        outputs[output_idx + 1].reshape(blob_roi_level.shape)
-        outputs[output_idx + 1].data[...] = blob_roi_level
-        rois_idx_order = np.concatenate((rois_idx_order, idx_lvl))
-    rois_idx_restore = np.argsort(rois_idx_order)
-    blob_utils.py_op_copy_blob(rois_idx_restore.astype(np.int32), outputs[-1])
-
-    
-        def forward(self, inputs, outputs):
-        '''See modeling.detector.GenerateProposalLabels for inputs/outputs
-        documentation.
-        '''
-        # During training we reuse the data loader code. We populate roidb
-        # entries on the fly using the rois generated by RPN.
-        # im_info: [[im_height, im_width, im_scale], ...]
-        rois = inputs[0].data
-        roidb = blob_utils.deserialize(inputs[1].data)
-        im_info = inputs[2].data
-        im_scales = im_info[:, 2]
-        output_blob_names = fast_rcnn_roi_data.get_fast_rcnn_blob_names()
-        # For historical consistency with the original Faster R-CNN
-        # implementation we are *not* filtering crowd proposals.
-        # This choice should be investigated in the future (it likely does
-        # not matter).
-        json_dataset.add_proposals(roidb, rois, im_scales, crowd_thresh=0)
-        roidb_utils.add_bbox_regression_targets(roidb)
-        blobs = {k: [] for k in output_blob_names}
-        fast_rcnn_roi_data.add_fast_rcnn_blobs(blobs, im_scales, roidb)
-        for i, k in enumerate(output_blob_names):
-            blob_utils.py_op_copy_blob(blobs[k], outputs[i])
-
-    
-        points: Nx2xK
-    boxes: Nx4
-    output: NxK
+    '''Generates a matrix of anchor boxes in (x1, y1, x2, y2) format. Anchors
+    are centered on stride / 2, have (approximate) sqrt areas of the specified
+    sizes, and aspect ratios as given.
     '''
-    x_within = np.logical_and(
-        points[:, 0, :] >= np.expand_dims(boxes[:, 0], axis=1),
-        points[:, 0, :] <= np.expand_dims(boxes[:, 2], axis=1)
+    return _generate_anchors(
+        stride,
+        np.array(sizes, dtype=np.float) / stride,
+        np.array(aspect_ratios, dtype=np.float)
     )
-    y_within = np.logical_and(
-        points[:, 1, :] >= np.expand_dims(boxes[:, 1], axis=1),
-        points[:, 1, :] <= np.expand_dims(boxes[:, 3], axis=1)
-    )
-    return np.logical_and(x_within, y_within)
-
     
-            # Find overlap between all foreground rois and the bounding boxes
-        # enclosing each segmentation
-        rois_fg = sampled_boxes[fg_inds]
-        overlaps_bbfg_bbpolys = box_utils.bbox_overlaps(
-            rois_fg.astype(np.float32, copy=False),
-            boxes_from_polys.astype(np.float32, copy=False)
-        )
-        # Map from each fg rois to the index of the mask with highest overlap
-        # (measured by bbox overlap)
-        fg_polys_inds = np.argmax(overlaps_bbfg_bbpolys, axis=1)
+    # ---------------------------------------------------------------------------- #
+# Hardcoded functions to create various types of common models
+#
+#            *** This type of model definition is deprecated ***
+#            *** Use the generic composable versions instead ***
+#
+# ---------------------------------------------------------------------------- #
+    
+    
+def _add_multilevel_rois(blobs):
+    '''By default training RoIs are added for a single feature map level only.
+    When using FPN, the RoIs must be distributed over different FPN levels
+    according the level assignment heuristic (see: modeling.FPN.
+    map_rois_to_fpn_levels).
+    '''
+    lvl_min = cfg.FPN.ROI_MIN_LEVEL
+    lvl_max = cfg.FPN.ROI_MAX_LEVEL
+    
+    
+def loader_loop(roi_data_loader):
+    load_timer = Timer()
+    iters = 100
+    for i in range(iters):
+        load_timer.tic()
+        roi_data_loader.get_next_minibatch()
+        load_timer.toc()
+        print('{:d}/{:d}: Average get_next_minibatch time: {:.3f}s'.format(
+              i + 1, iters, load_timer.average_time))
