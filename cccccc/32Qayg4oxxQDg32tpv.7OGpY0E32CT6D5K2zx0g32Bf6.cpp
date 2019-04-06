@@ -1,98 +1,211 @@
 
         
-        std::unique_ptr<WriteControllerToken>
-WriteController::GetCompactionPressureToken() {
-  ++total_compaction_pressure_;
-  return std::unique_ptr<WriteControllerToken>(
-      new CompactionPressureToken(this));
-}
+            /*
+        Calculation of Sobel operator
+        NOTE: the function cannot operate inplace
+    */
+    bool isSobel3x3Supported(const Size2D &size, BORDER_MODE border, s32 dx, s32 dy, Margin borderMargin = Margin());
+    void Sobel3x3(const Size2D &size,
+                  const u8 * srcBase, ptrdiff_t srcStride,
+                  s16 * dstBase, ptrdiff_t dstStride,
+                  s32 dx, s32 dy,
+                  BORDER_MODE border, u8 borderValue, Margin borderMargin = Margin());
     
-    namespace rocksdb {
-static std::string IOErrorMsg(const std::string& context,
-                              const std::string& file_name) {
-  if (file_name.empty()) {
-    return context;
-  }
-  return context + ': ' + file_name;
-}
+        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0,
+                     const typename internal::VecTraits<T>::vec64 & v_src1,
+                     typename internal::VecTraits<T>::vec64 & v_dst) const
+    {
+        typename internal::VecTraits<T>::vec64 v_min = internal::vmin(v_src0, v_src1);
+        typename internal::VecTraits<T>::vec64 v_max = internal::vmax(v_src0, v_src1);
+        v_dst = internal::vqsub(v_max, v_min);
     }
     
     
-    {    std::vector<std::string> input_file_names;
-    for (auto level : cf_meta.levels) {
-      for (auto file : level.files) {
-        if (file.being_compacted) {
-          return nullptr;
+    {            vst1q_s16(dst + j, v_dst0);
+            vst1q_s16(dst + j + 8, v_dst1);
         }
-        input_file_names.push_back(file.name);
-      }
+        for (; j < roiw8; j += 8)
+        {
+            int16x8_t v_src = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(src + j)));
+            int16x8_t v_dst = vld1q_s16(dst + j);
+            int16x4_t v_srclo = vget_low_s16(v_src), v_srchi = vget_high_s16(v_src);
+            v_dst = vcombine_s16(vqmovn_s32(vaddw_s16(vmull_s16(v_srclo, v_srclo), vget_low_s16(v_dst))),
+                                 vqmovn_s32(vaddw_s16(vmull_s16(v_srchi, v_srchi), vget_high_s16(v_dst))));
+            vst1q_s16(dst + j, v_dst);
+        }
+    
+    
+    {
+    {
+    {            for (; j < size.width; j++)
+                dst[j] = (s16)((s32)src0[j] + (s32)src1[j]);
+        }
     }
-    return new CompactionTask(
-        db, this, cf_name, input_file_names,
-        options_.num_levels - 1, compact_options_, false);
-  }
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)policy;
+#endif
+}
     
-    #ifndef ROCKSDB_LITE
-// The following set of functions provide a way to construct RocksDB Options
-// from a string or a string-to-string map.  Here're the general rule of
-// setting option values from strings by type.  Some RocksDB types are also
-// supported in these APIs.  Please refer to the comment of the function itself
-// to find more information about how to config those RocksDB types.
-//
-// * Strings:
-//   Strings will be used as values directly without any truncating or
-//   trimming.
-//
-// * Booleans:
-//   - 'true' or '1' => true
-//   - 'false' or '0' => false.
-//   [Example]:
-//   - {'optimize_filters_for_hits', '1'} in GetColumnFamilyOptionsFromMap, or
-//   - 'optimize_filters_for_hits=true' in GetColumnFamilyOptionsFromString.
-//
-// * Integers:
-//   Integers are converted directly from string, in addition to the following
-//   units that we support:
-//   - 'k' or 'K' => 2^10
-//   - 'm' or 'M' => 2^20
-//   - 'g' or 'G' => 2^30
-//   - 't' or 'T' => 2^40  // only for unsigned int with sufficient bits.
-//   [Example]:
-//   - {'arena_block_size', '19G'} in GetColumnFamilyOptionsFromMap, or
-//   - 'arena_block_size=19G' in GetColumnFamilyOptionsFromString.
-//
-// * Doubles / Floating Points:
-//   Doubles / Floating Points are converted directly from string.  Note that
-//   currently we do not support units.
-//   [Example]:
-//   - {'hard_rate_limit', '2.1'} in GetColumnFamilyOptionsFromMap, or
-//   - 'hard_rate_limit=2.1' in GetColumnFamilyOptionsFromString.
-// * Array / Vectors:
-//   An array is specified by a list of values, where ':' is used as
-//   the delimiter to separate each value.
-//   [Example]:
-//   - {'compression_per_level', 'kNoCompression:kSnappyCompression'}
-//     in GetColumnFamilyOptionsFromMap, or
-//   - 'compression_per_level=kNoCompression:kSnappyCompression' in
-//     GetColumnFamilyOptionsFromMapString
-// * Enums:
-//   The valid values of each enum are identical to the names of its constants.
-//   [Example]:
-//   - CompressionType: valid values are 'kNoCompression',
-//     'kSnappyCompression', 'kZlibCompression', 'kBZip2Compression', ...
-//   - CompactionStyle: valid values are 'kCompactionStyleLevel',
-//     'kCompactionStyleUniversal', 'kCompactionStyleFIFO', and
-//     'kCompactionStyleNone'.
-//
+                int16x8_t tail02 = vreinterpretq_s16_u16(vaddl_u8(tail2, tail0));
+            int16x8_t tail1x2 = vreinterpretq_s16_u16(vshll_n_u8(tail1, 1));
+            int16x8_t taildx = vreinterpretq_s16_u16(vsubl_u8(tail2, tail0));
+            int16x8_t taildy = vqaddq_s16(tail02, tail1x2);
     
+             float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
+         float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
+         float32x4_t vline3_f32 = vcvtq_f32_s32(vline3_s32);
+         float32x4_t vline4_f32 = vcvtq_f32_s32(vline4_s32);
     
-    {class DbUndumpTool {
- public:
-  bool Run(const UndumpOptions& undump_options,
-           rocksdb::Options options = rocksdb::Options());
-};
-}  // namespace rocksdb
-#endif  // ROCKSDB_LITE
+                vec128 v_src = vld3q(src + js), v_dst;
+            v_src.val[0] = vrev64q(v_src.val[0]);
+            v_src.val[1] = vrev64q(v_src.val[1]);
+            v_src.val[2] = vrev64q(v_src.val[2]);
+    
+    #endif  // TESSERACT_CCSTRUCT_DEBUGPIXA_H_
 
     
-        // read-only access
+      // Adds a new point. Takes a copy - the pt doesn't need to stay in scope.
+  // Add must be called on points in sequence along the line.
+  void Add(const ICOORD& pt);
+  // Associates a half-width with the given point if a point overlaps the
+  // previous point by more than half the width, and its distance is further
+  // than the previous point, then the more distant point is ignored in the
+  // distance calculation. Useful for ignoring i dots and other diacritics.
+  void Add(const ICOORD& pt, int halfwidth);
+    
+    class DLLSYM DIR128
+{
+  public:
+    DIR128() = default;
+    }
+    
+    #ifndef TESSERACT_CCMAIN_OTSUTHR_H_
+#define TESSERACT_CCMAIN_OTSUTHR_H_
+    
+      void set_flag(REJ_FLAGS rej_flag) {
+    if (rej_flag < 16)
+      flags1.turn_on_bit (rej_flag);
+    else
+      flags2.turn_on_bit (rej_flag - 16);
+  }
+    
+    /*!
+ * Copyright (c) 2016 by Contributors
+ * \file caffe_common.h
+ * \brief Common functions for caffeOp and caffeLoss symbols
+ * \author Haoran Wang
+*/
+    
+    
+    
+        info = MXNET_LAPACK_posv<DType>(MXNET_LAPACK_ROW_MAJOR, 'U',
+      k, out.size(1), hadamard_prod.dptr_, hadamard_prod.stride_,
+      out.dptr_, out.stride_);
+  } else {
+    Tensor<cpu, 2, DType> kr(Shape2(out.size(1), out.size(0)));
+    AllocSpace(&kr);
+    khatri_rao(kr, ts_arr);
+    
+    /*!
+ * Copyright (c) 2016 by Contributors
+ * \file cudnn_spatial_transformer-inl.h
+ * \brief
+ * \author Wei Wu
+*/
+#ifndef MXNET_OPERATOR_CUDNN_SPATIAL_TRANSFORMER_INL_H_
+#define MXNET_OPERATOR_CUDNN_SPATIAL_TRANSFORMER_INL_H_
+    
+        ListNode* curNode = head;
+    while(curNode != NULL){
+        cout << curNode->val;
+        if(curNode->next != NULL)
+            cout << ' -> ';
+        curNode = curNode->next;
+    }
+    
+            int count[3] = {0};
+        for(int i = 0 ; i < nums.size() ; i ++){
+            assert(nums[i] >= 0 && nums[i] <= 2);
+            count[nums[i]] ++;
+        }
+    
+                cur = stack.top();
+            stack.pop();
+            res.push_back(cur->val);
+            cur = cur->right;
+    
+    using namespace std;
+    
+                int new_level_num = 0;
+            vector<int> level;
+            for(int i = 0; i < level_num; i ++){
+                TreeNode* node = q.front();
+                q.pop();
+                level.push_back(node->val);
+    }
+    
+    // Classic Non-Recursive algorithm for preorder traversal
+// Time Complexity: O(n), n is the node number in the tree
+// Space Complexity: O(h), h is the height of the tree
+class Solution {
+    }
+    
+            TreeNode* cur = root;
+        while(cur != NULL){
+            if(cur->left == NULL){
+                res.push_back(cur->val);
+                cur = cur->right;
+            }
+            else{
+                TreeNode* prev = cur->left;
+                while(prev->right != NULL && prev->right != cur)
+                    prev = prev->right;
+    }
+    }
+    
+    
+    
+    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
+
+    
+    int main(int, char**)
+{
+    // Setup Allegro
+    al_init();
+    al_install_keyboard();
+    al_install_mouse();
+    al_init_primitives_addon();
+    al_set_new_display_flags(ALLEGRO_RESIZABLE);
+    ALLEGRO_DISPLAY* display = al_create_display(1280, 720);
+    al_set_window_title(display, 'Dear ImGui Allegro 5 example');
+    ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
+    al_register_event_source(queue, al_get_display_event_source(display));
+    al_register_event_source(queue, al_get_keyboard_event_source());
+    al_register_event_source(queue, al_get_mouse_event_source());
+    }
+    
+    
+    {    return 0;
+}
+
+    
+    // The data is first compressed with stb_compress() to reduce source code size,
+// then encoded in Base85 to fit in a string so we can fit roughly 4 bytes of compressed data into 5 bytes of source code (suggested by @mmalex)
+// (If we used 32-bits constants it would require take 11 bytes of source code to encode 4 bytes, and be endianness dependent)
+// Note that even with compression, the output array is likely to be bigger than the binary file..
+// Load compressed TTF fonts with ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF()
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
