@@ -1,144 +1,212 @@
 
         
-        #endif  // TENSORFLOW_PYTHON_FRAMEWORK_CPP_SHAPE_INFERENCE_H_
+          size_t numTrailingObjects(OverloadToken<ProtocolConformanceRef>) const {
+    return numConformanceRequirements;
+  }
+    
+    void GeneratePCHJobAction::anchor() {}
 
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
     
-    namespace tensorflow {
-    }
+    {  void DoReads(int n);
+};
     
-    // Creates a numpy array with shapes specified by dim_size and dims and content
-// in data. The array does not own the memory, and destructor will be called to
-// release it. If the status is not ok the caller is responsible for releasing
-// the memory.
-Status ArrayFromMemory(int dim_size, npy_intp* dims, void* data, DataType dtype,
-                       std::function<void()> destructor, PyObject** result);
+     private:
+  // We construct a char array of the form:
+  //    klength  varint32               <-- start_
+  //    userkey  char[klength]          <-- kstart_
+  //    tag      uint64
+  //                                    <-- end_
+  // The array is a suitable MemTable key.
+  // The suffix starting with 'userkey' can be used as an InternalKey.
+  const char* start_;
+  const char* kstart_;
+  const char* end_;
+  char space_[200];      // Avoid allocation for short keys
     
-    // Must be included first
-#include 'tensorflow/python/lib/core/numpy.h'
+    #include <stdio.h>
+#include 'leveldb/dumpfile.h'
+#include 'leveldb/env.h'
+#include 'leveldb/status.h'
     
-    #ifndef TENSORFLOW_PYTHON_LIB_CORE_SAFE_PTR_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_SAFE_PTR_H_
-    
-    #include 'tensorflow/stream_executor/cuda/cuda_platform_id.h'
-    
-    // Version constant.
-// This is either 0 for python, 1 for CPP V1, 2 for CPP V2.
-//
-// 0 is default and is equivalent to
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
-//
-// 1 is set with -DPYTHON_PROTO2_CPP_IMPL_V1 and is equivalent to
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
-// and
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=1
-//
-// 2 is set with -DPYTHON_PROTO2_CPP_IMPL_V2 and is equivalent to
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
-// and
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
-#ifdef PYTHON_PROTO2_CPP_IMPL_V1
-#error 'PYTHON_PROTO2_CPP_IMPL_V1 is no longer supported.'
-#else
-#ifdef PYTHON_PROTO2_CPP_IMPL_V2
-static int kImplVersion = 2;
-#else
-#ifdef PYTHON_PROTO2_PYTHON_IMPL
-static int kImplVersion = 0;
-#else
-    
-    TEST(MovableMessageTest, MoveFromArena) {
-  Arena arena;
-    }
-    
-    #include <google/protobuf/testing/googletest.h>
-#include <gtest/gtest.h>
-#include <google/protobuf/testing/file.h>
-    
-    ServiceGenerator* ImmutableGeneratorFactory::NewServiceGenerator(
-    const ServiceDescriptor* descriptor) const {
-  return new ImmutableServiceGenerator(descriptor, context_);
+    TEST(LogTest, MarginalTrailer) {
+  // Make a trailer that is exactly the same length as an empty record.
+  const int n = kBlockSize - 2*kHeaderSize;
+  Write(BigString('foo', n));
+  ASSERT_EQ(kBlockSize - kHeaderSize, WrittenBytes());
+  Write('');
+  Write('bar');
+  ASSERT_EQ(BigString('foo', n), Read());
+  ASSERT_EQ('', Read());
+  ASSERT_EQ('bar', Read());
+  ASSERT_EQ('EOF', Read());
 }
     
-    namespace google {
-namespace protobuf {
+    namespace leveldb {
+namespace log {
     }
     }
     
-    string Status::ToString() const {
-  if (error_code_ == error::OK) {
-    return 'OK';
-  } else {
-    if (error_message_.empty()) {
-      return error::CodeEnumToString(error_code_);
-    } else {
-      return error::CodeEnumToString(error_code_) + ':' +
-          error_message_;
-    }
-  }
+    static Slice GetLengthPrefixedSlice(const char* data) {
+  uint32_t len;
+  const char* p = data;
+  p = GetVarint32Ptr(p, p + 5, &len);  // +5: we assume 'p' is not corrupted
+  return Slice(p, len);
 }
     
-    TEST(StatusOr, TestPointerAssignmentStatusOKConverting) {
-  Derived derived;
-  StatusOr<Derived*> source(&derived);
-  StatusOr<Base2*>   target;
-  target = source;
-  EXPECT_EQ(source.status(), target.status());
-  EXPECT_EQ(static_cast<const Base2*>(source.ValueOrDie()),
-            target.ValueOrDie());
-}
     
-      /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to a vector of Datum.
-   *
-   * @param datum_vector
-   *    A vector of Datum containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See memory_layer.cpp for an example.
+    { private:
+  // Dummy head of doubly-linked list of snapshots
+  SnapshotImpl head_;
+};
+    
+    
+    {
+    {
+    {  /*!
+   * \brief Worker threads.
    */
-  void Transform(const vector<Datum> & datum_vector,
-                Blob<Dtype>* transformed_blob);
+  std::vector<std::thread> worker_threads_;
+  /*!
+   * \brief Startup synchronization objects
+   */
+  std::list<std::shared_ptr<dmlc::ManualEvent>> ready_events_;
+  /*!
+   * \brief Disallow default construction.
+   */
+  ThreadPool() = delete;
+  /*!
+   * \brief Disallow copy construction and assignment.
+   */
+  DISALLOW_COPY_AND_ASSIGN(ThreadPool);
+};
+}  // namespace engine
+}  // namespace mxnet
+#endif  // MXNET_ENGINE_THREAD_POOL_H_
+
     
-      /** Will not return until the internal thread has exited. */
-  void StopInternalThread();
     
-    #include <vector>
-    
-    
-    {}  // namespace caffe
-    
-    #include <vector>
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    template <typename T> class GenericVector;
-template <typename T> class GenericVector;
-    
-      // This and other putatively are the same, so call the (permanent) callback
-  // for each blob index where the bounding boxes match.
-  // The callback is deleted on completion.
-  void ProcessMatchedBlobs(const TWERD& other, TessCallback1<int>* cb) const;
-    
-      DPPoint()
-    : local_cost_(0), total_cost_(INT32_MAX), total_steps_(1), best_prev_(nullptr),
-      n_(0), sig_x_(0), sig_xsq_(0) {
+    {    // std
+    if (param_.std_r > 0.0f) {
+      data[0] /= param_.std_r;
+    }
+    if (data.shape_[0] >= 3 && param_.std_g > 0.0f) {
+      data[1] /= param_.std_g;
+    }
+    if (data.shape_[0] >= 3 && param_.std_b > 0.0f) {
+      data[2] /= param_.std_b;
+    }
+    if (data.shape_[0] == 4 && param_.std_a > 0.0f) {
+      data[3] /= param_.std_a;
+    }
+    outimg_ = data * param_.scale;
   }
     
-    std::string Widget::GetStringValue() const {
-  return name_;
+    #include <mxnet/io.h>
+#include <mxnet/base.h>
+#include <mxnet/ndarray.h>
+#include <dmlc/logging.h>
+#include <dmlc/threadediter.h>
+#include <dmlc/optional.h>
+#include <mshadow/tensor.h>
+#include <climits>
+#include <utility>
+#include <string>
+#include <vector>
+#include <queue>
+#include <algorithm>
+#include './inst_vector.h'
+#include './image_iter_common.h'
+    
+    
+    { private:
+  /*! \brief The function */
+  PackedFunc func_;
+  /*! \brief Set stream */
+  PackedFunc fset_stream_;
+  /*! \brief Values field */
+  std::vector<TVMValue> values_;
+  /*! \brief type code field */
+  std::vector<int> type_codes_;
+  /*! \brief arrays field */
+  std::vector<NDArray> array_data_;
+  /*! \brief position of array in arguments */
+  std::vector<int> array_loc_;
+};
+    
+      // Change the layout of matrices to column-major
+  Tensor<cpu, 2, DType> out_t(Shape2(out.size(1), out.size(0)));
+  AllocSpace(&out_t);
+  flip<cpu, DType>(out.size(0), out.size(1), out_t.dptr_, out_t.stride_,
+    out.dptr_, out.stride_);
+    
+    MXNET_REGISTER_OP_PROPERTY(_Native, NativeOpProp)
+.describe('Stub for implementing an operator implemented in native frontend language.')
+.add_argument('data', 'NDArray-or-Symbol[]', 'Input data for the custom operator.')
+.add_arguments(NativeOpParam::__FIELDS__());
+    
+        // output changed array
+    std::cout << object << '\n';
+    
+    
+    // exception type_error.304
+    try
+    {
+        // use at() on a non-array type
+        json str = 'I am a string';
+        str.at(0) = 'Another string';
+    }
+    catch (json::type_error& e)
+    {
+        std::cout << e.what() << '\n';
+    }
+    
+    #include 'modules/canbus/proto/chassis_detail.pb.h'
+#include 'modules/drivers/canbus/can_comm/protocol_data.h'
+    
+    #include 'modules/drivers/canbus/common/byte.h'
+#include 'modules/drivers/canbus/common/canbus_consts.h'
+    
+    unsigned int BaseMapMatrix::LoadBinary(unsigned char* buf) { return 0; }
+    
+    /**
+ * @file
+ **/
+#include 'modules/planning/math/smoothing_spline/piecewise_linear_kernel.h'
+    
+    
+    {  // Report Messages
+  AddRecvProtocolData<Accelrpt68, true>();
+  AddRecvProtocolData<Brakemotorrpt170, true>();
+  AddRecvProtocolData<Brakemotorrpt271, true>();
+  AddRecvProtocolData<Brakemotorrpt372, true>();
+  AddRecvProtocolData<Brakerpt6c, true>();
+  AddRecvProtocolData<Datetimerpt83, true>();
+  AddRecvProtocolData<Globalrpt6a, true>();
+  AddRecvProtocolData<Headlightrpt77, true>();
+  AddRecvProtocolData<Hornrpt79, true>();
+  AddRecvProtocolData<Latlonheadingrpt82, true>();
+  AddRecvProtocolData<Parkingbrakestatusrpt80, true>();
+  AddRecvProtocolData<Shiftrpt66, true>();
+  AddRecvProtocolData<Steeringmotorrpt173, true>();
+  AddRecvProtocolData<Steeringmotorrpt274, true>();
+  AddRecvProtocolData<Steeringmotorrpt375, true>();
+  AddRecvProtocolData<Steeringrpt16e, true>();
+  AddRecvProtocolData<Turnrpt64, true>();
+  AddRecvProtocolData<Vehiclespeedrpt6f, true>();
+  AddRecvProtocolData<Wheelspeedrpt7a, true>();
+  AddRecvProtocolData<Wiperrpt91, true>();
+  AddRecvProtocolData<Yawraterpt81, true>();
 }
     
-      // Now, we have that n is odd and n >= 3.
+      Byte t1(bytes + 5);
+  int32_t t = t1.get_byte(0, 8);
+  x <<= 8;
+  x |= t;
     
-    #include <limits.h>
-#include 'sample1.h'
-#include 'gtest/gtest.h'
-namespace {
-    }
+    
+    {
+    {
+    {}  // namespace gem
+}  // namespace canbus
+}  // namespace apollo
