@@ -1,307 +1,257 @@
 
         
-        #ifndef NDEBUG
-/// Verify that the types of fields are valid within a given generic signature.
-static void verifyFields(CanGenericSignature Sig, ArrayRef<SILField> Fields) {
-  for (auto &field : Fields) {
-    auto ty = field.getLoweredType();
-    // Layouts should never refer to archetypes, since they represent an
-    // abstract generic type layout.
-    assert(!ty->hasArchetype()
-           && 'SILLayout field cannot have an archetype type');
-    assert(!ty->hasTypeVariable()
-           && 'SILLayout cannot contain constraint system type variables');
-    if (!ty->hasTypeParameter())
-      continue;
-    field.getLoweredType().findIf([Sig](Type t) -> bool {
-      if (auto gpt = t->getAs<GenericTypeParamType>()) {
-        // Check that the generic param exists in the generic signature.
-        assert(Sig && 'generic param in nongeneric layout?');
-        assert(std::find(Sig.getGenericParams().begin(),
-                         Sig.getGenericParams().end(),
-                         gpt->getCanonicalType()) != Sig.getGenericParams().end()
-               && 'generic param not declared in generic signature?!');
-      }
-      return false;
-    });
-  }
-}
-#endif
-    
-    bool CacheImpl::remove(const void *Key) {
-  DefaultCache &DCache = *static_cast<DefaultCache*>(Impl);
-  llvm::sys::ScopedLock L(DCache.Mux);
-    }
+        
+    {}  // namespace atom
+
     
     
+    {  DISALLOW_COPY_AND_ASSIGN(Screen);
+};
     
-      if (clangDiag.getID() == clang::diag::err_module_not_built &&
-      CurrentImport && clangDiag.getArgStdStr(0) == CurrentImport->getName()) {
-    SourceLoc loc = DiagLoc;
-    if (clangDiag.getLocation().isValid())
-      loc = resolveSourceLocation(clangDiag.getSourceManager(),
-                                  clangDiag.getLocation());
-    }
     
-    void Demangler::dump() {
-  for (unsigned Idx = 0; Idx < NodeStack.size(); ++Idx) {
-    fprintf(stderr, 'NodeStack[%u]:\n', Idx);
-    NodeStack[Idx]->dump();
-    fprintf(stderr, '\n');
-  }
-  fprintf(stderr, 'Position = %zd:\n%.*s\n%*s\n', Pos,
-          (int)Text.size(), Text.data(), (int)Pos + 1, '^');
-}
+    {  DISALLOW_COPY_AND_ASSIGN(AsarProtocolHandler);
+};
     
-    #define TEGRA_CVT2PYUVTOBGR(src_data, src_step, dst_data, dst_step, dst_width, dst_height, dcn, swapBlue, uIdx) \
-( \
-    CAROTENE_NS::isSupportedConfiguration() ? \
-        dcn == 3 ? \
-            uIdx == 0 ? \
-                (swapBlue ? \
-                    CAROTENE_NS::yuv420i2rgb(CAROTENE_NS::Size2D(dst_width, dst_height), \
-                                             src_data, src_step, \
-                                             src_data + src_step * dst_height, src_step, \
-                                             dst_data, dst_step) : \
-                    CAROTENE_NS::yuv420i2bgr(CAROTENE_NS::Size2D(dst_width, dst_height), \
-                                             src_data, src_step, \
-                                             src_data + src_step * dst_height, src_step, \
-                                             dst_data, dst_step)), \
-                CV_HAL_ERROR_OK : \
-            uIdx == 1 ? \
-                (swapBlue ? \
-                    CAROTENE_NS::yuv420sp2rgb(CAROTENE_NS::Size2D(dst_width, dst_height), \
-                                              src_data, src_step, \
-                                              src_data + src_step * dst_height, src_step, \
-                                              dst_data, dst_step) : \
-                    CAROTENE_NS::yuv420sp2bgr(CAROTENE_NS::Size2D(dst_width, dst_height), \
-                                              src_data, src_step, \
-                                              src_data + src_step * dst_height, src_step, \
-                                              dst_data, dst_step)), \
-                CV_HAL_ERROR_OK : \
-            CV_HAL_ERROR_NOT_IMPLEMENTED : \
-        dcn == 4 ? \
-            uIdx == 0 ? \
-                (swapBlue ? \
-                    CAROTENE_NS::yuv420i2rgbx(CAROTENE_NS::Size2D(dst_width, dst_height), \
-                                              src_data, src_step, \
-                                              src_data + src_step * dst_height, src_step, \
-                                              dst_data, dst_step) : \
-                    CAROTENE_NS::yuv420i2bgrx(CAROTENE_NS::Size2D(dst_width, dst_height), \
-                                              src_data, src_step, \
-                                              src_data + src_step * dst_height, src_step, \
-                                              dst_data, dst_step)), \
-                CV_HAL_ERROR_OK : \
-            uIdx == 1 ? \
-                (swapBlue ? \
-                    CAROTENE_NS::yuv420sp2rgbx(CAROTENE_NS::Size2D(dst_width, dst_height), \
-                                               src_data, src_step, \
-                                               src_data + src_step * dst_height, src_step, \
-                                               dst_data, dst_step) : \
-                    CAROTENE_NS::yuv420sp2bgrx(CAROTENE_NS::Size2D(dst_width, dst_height), \
-                                               src_data, src_step, \
-                                               src_data + src_step * dst_height, src_step, \
-                                               dst_data, dst_step)), \
-                CV_HAL_ERROR_OK : \
-            CV_HAL_ERROR_NOT_IMPLEMENTED : \
-        CV_HAL_ERROR_NOT_IMPLEMENTED \
-    : CV_HAL_ERROR_NOT_IMPLEMENTED \
-)
+    int LaunchProgram(const StringVector& relauncher_args,
+                  const StringVector& argv);
     
-        void operator() (const uint8x16_t & v_src0, const uint8x16_t & v_src1,
-                     uint8x16_t & v_dst) const
-    {
-        uint16x8_t v_src0_p = vmovl_u8(vget_low_u8(v_src0));
-        uint16x8_t v_src1_p = vmovl_u8(vget_low_u8(v_src1));
-        float32x4_t v_dst0f = vmlaq_f32(vmulq_f32(vcvtq_f32_u32(vmovl_u16(vget_low_u16(v_src1_p))), v_beta),
-                                        v_alpha, vcvtq_f32_u32(vmovl_u16(vget_low_u16(v_src0_p))));
-        float32x4_t v_dst1f = vmlaq_f32(vmulq_f32(vcvtq_f32_u32(vmovl_u16(vget_high_u16(v_src1_p))), v_beta),
-                                        v_alpha, vcvtq_f32_u32(vmovl_u16(vget_high_u16(v_src0_p))));
-        uint16x8_t v_dst0 = vcombine_u16(vmovn_u32(vcvtq_u32_f32(v_dst0f)),
-                                         vmovn_u32(vcvtq_u32_f32(v_dst1f)));
-    }
+        strKey = 'time';
+    BOOST_CHECK(obj.pushKV(strKey, (uint64_t) 3600));
     
-    void add(const Size2D &size,
-         const u8 * src0Base, ptrdiff_t src0Stride,
-         const s16 * src1Base, ptrdiff_t src1Stride,
-         s16 *dstBase, ptrdiff_t dstStride,
-         CONVERT_POLICY policy)
+    namespace bech32
 {
-    internal::assertSupportedConfiguration();
+    }
+    
+    ChaCha20::ChaCha20(const unsigned char* k, size_t keylen)
+{
+    SetKey(k, keylen);
+}
+    
+            wr = src_width / dst_width
+        hr = src_height / dst_height
+    */
+    bool isResizeLinearOpenCVSupported(const Size2D &ssize, const Size2D &dsize, u32 channels);
+    bool isResizeLinearSupported(const Size2D &ssize, const Size2D &dsize,
+                                 f32 wr, f32 hr, u32 channels);
+    void resizeLinearOpenCV(const Size2D &ssize, const Size2D &dsize,
+                            const u8 * srcBase, ptrdiff_t srcStride,
+                            u8 * dstBase, ptrdiff_t dstStride,
+                            f32 wr, f32 hr, u32 channels);
+    void resizeLinear(const Size2D &ssize, const Size2D &dsize,
+                      const u8 * srcBase, ptrdiff_t srcStride,
+                      u8 * dstBase, ptrdiff_t dstStride,
+                      f32 wr, f32 hr, u32 channels);
+    
+                v_srclo = vget_low_s16(v_src1);
+            v_srchi = vget_high_s16(v_src1);
+            v_dst1 = vcombine_s16(vqmovn_s32(vaddw_s16(vmull_s16(v_srclo, v_srclo), vget_low_s16(v_dst1))),
+                                  vqmovn_s32(vaddw_s16(vmull_s16(v_srchi, v_srchi), vget_high_s16(v_dst1))));
+    
+    void blur3x3(const Size2D &size, s32 cn,
+             const f32 * srcBase, ptrdiff_t srcStride,
+             f32 * dstBase, ptrdiff_t dstStride,
+             BORDER_MODE borderType, f32 borderValue, Margin borderMargin)
+{
+    internal::assertSupportedConfiguration(isBlurF32Supported(size, cn, borderType));
 #ifdef CAROTENE_NEON
-    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
+    size_t colsn = size.width * cn;
     }
     
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
-CVT_FUNC(s16, s8, 16,
-,
-{
-     for (size_t i = 0; i < w; i += 16)
-     {
-         internal::prefetch(_src + i);
-         __asm__ (
-             'vld1.8 {d0-d1}, [%[src1]]                             \n\t'
-             'vld1.8 {d2-d3}, [%[src2]]                             \n\t'
-             'vqmovn.s16 d4, q0                                     \n\t'
-             'vqmovn.s16 d5, q1                                     \n\t'
-             'vst1.8 {d4-d5}, [%[dst]]                              \n\t'
-             : /*no output*/
-             : [src1] 'r' (_src + i),
-               [src2] 'r' (_src + i + 8),
-               [dst] 'r' (_dst + i + 0)
-             : 'd0','d1','d2','d3','d4','d5'
-         );
-     }
-})
+        for (size_t i = 0u; i < size.height; ++i)
+    {
+        const u8 * src = internal::getRowPtr(srcBase, srcStride, i);
+        u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
+        size_t sj = 0u, dj = 0u;
+    }
+    
+    
+    {                v_dst1 = vmlal_n_s16(v_dst1, vget_high_s16(t0_16s), kernelBase[2]);
+                v_dst1 = vmlal_n_s16(v_dst1, vget_high_s16(t1_16s), kernelBase[1]);
+                v_dst1 = vmlal_n_s16(v_dst1, vget_high_s16(t2_16s), kernelBase[0]);
+            }
+    
+    
+    {
+    {        for( k = 0; k < ncorners; k++ )
+        {
+            j = cornerpos[k];
+            s32 score = prev[j];
+            if( !nonmax_suppression ||
+                    (score > prev[j+1] && score > prev[j-1] &&
+                     score > pprev[j-1] && score > pprev[j] && score > pprev[j+1] &&
+                     score > curr[j-1] && score > curr[j] && score > curr[j+1]) )
+            {
+                keypoints->push((f32)j, (f32)(i-1), 7.f, -1, (f32)score);
+            }
+        }
+    }
 #else
-CVT_FUNC(s16, s8, 16,
-,
-{
-     for (size_t i = 0; i < w; i += 16)
-     {
-         internal::prefetch(_src + i);
-         int16x8_t vline1_s16 = vld1q_s16(_src + i);
-         int16x8_t vline2_s16 = vld1q_s16(_src + i + 8);
-    }
+    (void)size;
+    (void)srcBase;
+    (void)srcStride;
+    (void)keypoints;
+    (void)threshold;
+    (void)nonmax_suppression;
+#endif
+}
+    
+    namespace CAROTENE_NS {
     }
     
-            for ( ; j < roiw16; j += 16)
-        {
-            internal::prefetch(src + j);
-            int16x8_t v_src0 = vld1q_s16(src + j), v_src1 = vld1q_s16(src + j + 8);
-    }
-    
-    void flip(const Size2D &size,
-          const u8 * srcBase, ptrdiff_t srcStride,
-          u8 * dstBase, ptrdiff_t dstStride,
-          FLIP_MODE flipMode, u32 elemSize)
-{
-    internal::assertSupportedConfiguration(isFlipSupported(flipMode, elemSize));
-#ifdef CAROTENE_NEON
-    }
-    
-    template <typename T, int elsize> struct vtail
-{
-    static inline void inRange(const T *, const T *, const T *,
-                               u8 *, size_t &, size_t)
+        for (ptrdiff_t y = 0; y < height; ++y)
     {
-        //do nothing since there couldn't be enough data
+        const u8 * srow0 = y == 0 && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::max<ptrdiff_t>(y - 1, 0));
+        const u8 * srow1 = internal::getRowPtr(srcBase, srcStride, y);
+        const u8 * srow2 = y + 1 == height && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::min(y + 1, height - 1));
+        u8 * drow = internal::getRowPtr(dstBase, dstStride, y);
     }
-};
-template <typename T> struct vtail<T, 2>
-{
-    static inline void inRange(const T * src, const T * rng1, const T * rng2,
-                               u8 * dst, size_t &x, size_t width)
-    {
-        typedef typename internal::VecTraits<T>::vec128 vec128;
-        typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
-        //There no more than 15 elements in the tail, so we could handle 8 element vector only once
-        if( x + 8 < width)
-        {
-             vec128  vs = internal::vld1q( src + x);
-             vec128 vr1 = internal::vld1q(rng1 + x);
-             vec128 vr2 = internal::vld1q(rng2 + x);
-            uvec128  vd = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
-            internal::vst1(dst + x, internal::vmovn(vd));
-            x+=8;
-        }
-    }
-};
-template <typename T> struct vtail<T, 1>
-{
-    static inline void inRange(const T * src, const T * rng1, const T * rng2,
-                               u8 * dst, size_t &x, size_t width)
-    {
-        typedef typename internal::VecTraits<T>::vec128 vec128;
-        typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
-        typedef typename internal::VecTraits<T>::vec64 vec64;
-        typedef typename internal::VecTraits<T>::unsign::vec64 uvec64;
-        //There no more than 31 elements in the tail, so we could handle once 16+8 or 16 or 8 elements
-        if( x + 16 < width)
-        {
-             vec128  vs = internal::vld1q( src + x);
-             vec128 vr1 = internal::vld1q(rng1 + x);
-             vec128 vr2 = internal::vld1q(rng2 + x);
-            uvec128  vd = internal::vandq(internal::vcgeq(vs, vr1), internal::vcgeq(vr2, vs));
-            internal::vst1q(dst + x, vd);
-            x+=16;
-        }
-        if( x + 8 < width)
-        {
-             vec64  vs = internal::vld1( src + x);
-             vec64 vr1 = internal::vld1(rng1 + x);
-             vec64 vr2 = internal::vld1(rng2 + x);
-            uvec64  vd = internal::vand(internal::vcge(vs, vr1), internal::vcge(vr2, vs));
-            internal::vst1(dst + x, vd);
-            x+=8;
-        }
-    }
-};
     
-      InternalKey begin_storage, end_storage;
+    inline float32x4_t vsqrtq_f32(float32x4_t val)
+{
+    return vrecpq_f32(vrsqrtq_f32(val));
+}
     
-    TEST(FormatTest, InternalKey_EncodeDecode) {
-  const char* keys[] = { '', 'k', 'hello', 'longggggggggggggggggggggg' };
-  const uint64_t seq[] = {
-    1, 2, 3,
-    (1ull << 8) - 1, 1ull << 8, (1ull << 8) + 1,
-    (1ull << 16) - 1, 1ull << 16, (1ull << 16) + 1,
-    (1ull << 32) - 1, 1ull << 32, (1ull << 32) + 1
-  };
-  for (int k = 0; k < sizeof(keys) / sizeof(keys[0]); k++) {
-    for (int s = 0; s < sizeof(seq) / sizeof(seq[0]); s++) {
-      TestKey(keys[k], seq[s], kTypeValue);
-      TestKey('hello', 1, kTypeDeletion);
-    }
+    TEST(AutoCompactTest, ReadAll) {
+  DoReads(kCount);
+}
+    
+    #ifndef STORAGE_LEVELDB_DB_DB_ITER_H_
+#define STORAGE_LEVELDB_DB_DB_ITER_H_
+    
+    void InternalKeyComparator::FindShortSuccessor(std::string* key) const {
+  Slice user_key = ExtractUserKey(*key);
+  std::string tmp(user_key.data(), user_key.size());
+  user_comparator_->FindShortSuccessor(&tmp);
+  if (tmp.size() < user_key.size() &&
+      user_comparator_->Compare(user_key, tmp) < 0) {
+    // User key has become shorter physically, but larger logically.
+    // Tack on the earliest possible number to the shortened user key.
+    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
+    assert(this->Compare(*key, tmp) < 0);
+    key->swap(tmp);
   }
 }
     
-    std::string InfoLogFileName(const std::string& dbname) {
-  return dbname + '/LOG';
+    // Level-0 compaction is started when we hit this many files.
+static const int kL0_CompactionTrigger = 4;
+    
+    #endif  // STORAGE_LEVELDB_DB_FILENAME_H_
+
+    
+    int MemTable::KeyComparator::operator()(const char* aptr, const char* bptr)
+    const {
+  // Internal keys are encoded as length-prefixed strings.
+  Slice a = GetLengthPrefixedSlice(aptr);
+  Slice b = GetLengthPrefixedSlice(bptr);
+  return comparator.Compare(a, b);
 }
     
-    // Return the name of a temporary file owned by the db named 'dbname'.
-// The result will be prefixed with 'dbname'.
-std::string TempFileName(const std::string& dbname, uint64_t number);
     
-    bool HandleDumpCommand(Env* env, char** files, int num) {
-  StdoutPrinter printer;
-  bool ok = true;
-  for (int i = 0; i < num; i++) {
-    Status s = DumpFile(env, files[i], &printer);
-    if (!s.ok()) {
-      fprintf(stderr, '%s\n', s.ToString().c_str());
-      ok = false;
+    {    // Do not record a version edit for this conversion to a Table
+    // since ExtractMetaData() will also generate edits.
+    FileMetaData meta;
+    meta.number = next_file_number_++;
+    Iterator* iter = mem->NewIterator();
+    status = BuildTable(dbname_, env_, options_, table_cache_, iter, &meta);
+    delete iter;
+    mem->Unref();
+    mem = nullptr;
+    if (status.ok()) {
+      if (meta.file_size > 0) {
+        table_numbers_.push_back(meta.number);
+      }
     }
+    Log(options_.info_log, 'Log #%llu: %d ops saved to Table #%llu %s',
+        (unsigned long long) log,
+        counter,
+        (unsigned long long) meta.number,
+        status.ToString().c_str());
+    return status;
   }
-  return ok;
+    
+      typedef std::set< std::pair<int, uint64_t> > DeletedFileSet;
+    
+    static void TestEncodeDecode(const VersionEdit& edit) {
+  std::string encoded, encoded2;
+  edit.EncodeTo(&encoded);
+  VersionEdit parsed;
+  Status s = parsed.DecodeFrom(encoded);
+  ASSERT_TRUE(s.ok()) << s.ToString();
+  parsed.EncodeTo(&encoded2);
+  ASSERT_EQ(encoded, encoded2);
 }
     
-          case kFirstType:
-        if (in_fragmented_record) {
-          // Handle bug in earlier versions of log::Writer where
-          // it could emit an empty kFirstType record at the tail end
-          // of a block followed by a kFullType or kFirstType record
-          // at the beginning of the next block.
-          if (!scratch->empty()) {
-            ReportCorruption(scratch->size(), 'partial record without end(2)');
-          }
-        }
-        prospective_record_offset = physical_record_offset;
-        scratch->assign(fragment.data(), fragment.size());
-        in_fragmented_record = true;
-        break;
+    #include '2d/CCActionEase.h'
+#include '2d/CCTweenFunction.h'
     
-    #ifndef STORAGE_LEVELDB_DB_MEMTABLE_H_
-#define STORAGE_LEVELDB_DB_MEMTABLE_H_
+        // Overrides
+    virtual Waves* clone() const override;
+    virtual void update(float time) override;
     
-      ~Repairer() {
-    delete table_cache_;
-    if (owns_info_log_) {
-      delete options_.info_log;
-    }
-    if (owns_cache_) {
-      delete options_.block_cache;
-    }
-  }
+CC_CONSTRUCTOR_ACCESS:
+    Waves() {}
+    virtual ~Waves() {}
+    
+    /**
+    @brief Initializes the action with amplitude, horizontal sin, vertical sin, grid size, waves count and duration.
+    @param duration Specify the duration of the Waves action. It's a value in seconds.
+    @param gridSize Specify the size of the grid.
+    @param waves Specify the waves count of the Waves action.
+    @param amplitude Specify the amplitude of the Waves action.
+    @param horizontal Specify whether waves on horizontal.
+    @param vertical Specify whether waves on vertical.
+    @return If the initialization success, return true; otherwise, return false.
+    */
+    bool initWithDuration(float duration, const Size& gridSize, unsigned int waves, float amplitude, bool horizontal, bool vertical);
+    
+        /** Creates the action with the callback
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __ACTION_CCPROGRESS_TIMER_H__
+#define __ACTION_CCPROGRESS_TIMER_H__
+    
+        /** Adds a SpriteFrame to a Animation.
+     *
+     * @param frame The frame will be added with one 'delay unit'.
+     */
+    void addSpriteFrame(SpriteFrame *frame);
+    
+    unsigned int AutoPolygon::getSquareValue(unsigned int x, unsigned int y, const Rect& rect, float threshold)
+{
+    /*
+     checking the 2x2 pixel grid, assigning these values to each pixel, if not transparent
+     +---+---+
+     | 1 | 2 |
+     +---+---+
+     | 4 | 8 | <- current pixel (curx,cury)
+     +---+---+
+     */
+    unsigned int sv = 0;
+    //NOTE: due to the way we pick points from texture, rect needs to be smaller, otherwise it goes outside 1 pixel
+    auto fixedRect = Rect(rect.origin, rect.size-Size(2,2));
+    
+    Vec2 tl = Vec2(x-1, y-1);
+    sv += (fixedRect.containsPoint(tl) && getAlphaByPos(tl) > threshold)? 1 : 0;
+    Vec2 tr = Vec2(x, y-1);
+    sv += (fixedRect.containsPoint(tr) && getAlphaByPos(tr) > threshold)? 2 : 0;
+    Vec2 bl = Vec2(x-1, y);
+    sv += (fixedRect.containsPoint(bl) && getAlphaByPos(bl) > threshold)? 4 : 0;
+    Vec2 br = Vec2(x, y);
+    sv += (fixedRect.containsPoint(br) && getAlphaByPos(br) > threshold)? 8 : 0;
+    CCASSERT(sv != 0 && sv != 15, 'square value should not be 0, or 15');
+    return sv;
+}
