@@ -1,174 +1,204 @@
 
         
-            def remaining_cards(self):
-        return len(self.cards) - self.deal_index
-    
-            (category1, 1), product4
-        (category1, 2), product1
-        (category1, 3), product2
-        (category2, 3), product1
-        (category2, 7), product3
-        '''
-        category, product_id = key
-        quantity = value
-        yield (category, quantity), product_id
-    
-        def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer)
-        ]
-    
-        def crawl_page(self, page):
-        for url in page.child_urls:
-            self.data_store.add_link_to_crawl(url)
-        self.reverse_index_queue.generate(page)
-        self.doc_index_queue.generate(page)
-        self.data_store.remove_link_to_crawl(page.url)
-        self.data_store.insert_crawled_link(page.url, page.signature)
+        
+python_3 = (u'thefuck/python3-bash',
+            u'FROM python:3',
+            u'sh')
     
     
-def cntv_download(url, **kwargs):
-    if re.match(r'http://tv\.cntv\.cn/video/(\w+)/(\w+)', url):
-        rid = match1(url, r'http://tv\.cntv\.cn/video/\w+/(\w+)')
-    elif re.match(r'http://tv\.cctv\.com/\d+/\d+/\d+/\w+.shtml', url):
-        rid = r1(r'var guid = '(\w+)'', get_content(url))
-    elif re.match(r'http://\w+\.cntv\.cn/(\w+/\w+/(classpage/video/)?)?\d+/\d+\.shtml', url) or \
-         re.match(r'http://\w+.cntv.cn/(\w+/)*VIDE\d+.shtml', url) or \
-         re.match(r'http://(\w+).cntv.cn/(\w+)/classpage/video/(\d+)/(\d+).shtml', url) or \
-         re.match(r'http://\w+.cctv.com/\d+/\d+/\d+/\w+.shtml', url) or \
-         re.match(r'http://\w+.cntv.cn/\d+/\d+/\d+/\w+.shtml', url): 
-        page = get_content(url)
-        rid = r1(r'videoCenterId','(\w+)'', page)
-        if rid is None:
-            guid = re.search(r'guid\s*=\s*'([0-9a-z]+)'', page).group(1)
-            rid = guid
-    elif re.match(r'http://xiyou.cntv.cn/v-[\w-]+\.html', url):
-        rid = r1(r'http://xiyou.cntv.cn/v-([\w-]+)\.html', url)
-    else:
-        raise NotImplementedError(url)
-    
-    def douban_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    html = get_html(url)
-    
-    def get_NSID(url, page):
-    return match1(page, pattern_inline_NSID)
+@pytest.mark.functional
+def test_select_command_with_arrows(proc, TIMEOUT):
+    select_command_with_arrows(proc, TIMEOUT)
     
     
-def get_github_url(app, view, path):
-    github_fmt = 'https://github.com/{}/{}/{}/{}{}'
-    return (
-        github_fmt.format(app.config.edit_on_github_project, view,
-                          app.config.edit_on_github_branch,
-                          app.config.edit_on_github_src_path, path))
+init_zshrc = u'''echo '
+export SHELL=/usr/bin/zsh
+export HISTFILE=~/.zsh_history
+echo > $HISTFILE
+export SAVEHIST=100
+export HISTSIZE=100
+eval $(thefuck --alias {})
+setopt INC_APPEND_HISTORY
+echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
+' > ~/.zshrc'''
     
-    DEFAULT_HOST = 'localhost'
-DEFAULT_PORT = 5551
-    
-        def __init__(self, config):
-        '''Initialize the scanner.'''
-        self.host = config[CONF_HOST]
-        self.username = config[CONF_USERNAME]
-        self.password = config[CONF_PASSWORD]
-        self.last_results = []
-        data = self.get_actiontec_data()
-        self.success_init = data is not None
-        _LOGGER.info('canner initialized')
-    
-        def _update_info(self):
-        '''Check for connected devices.'''
-        _LOGGER.info('Checking Linksys Smart Wifi')
-    
-                if response.status != 200 or 'error' in result:
-                _LOGGER.error(
-                    'Flock service returned HTTP status %d, response %s',
-                    response.status, result)
-        except asyncio.TimeoutError:
-            _LOGGER.error('Timeout accessing Flock at %s', self._url)
+        assert get_new_command(Command('brew install aa',
+                                   brew_no_available_formula))\
+        != 'brew install aha'
 
     
     
-_LOGGER = logging.getLogger(__name__)
-    
-            exp = pd.Index([pd.Timestamp('2011-01-01 09:00', tz=tz),
-                        pd.Timestamp('2011-01-01 10:00'),
-                        pd.Timestamp('2011-01-01 11:00', tz=tz)],
-                       dtype=object)
-        tm.assert_index_equal(
-            idx.fillna(pd.Timestamp('2011-01-01 10:00')), exp)
-    
-            exp3 = ('0   1 days\n'
-                '1   2 days\n'
-                'dtype: timedelta64[ns]')
-    
-    def strdecode(sentence):
-    if not isinstance(sentence, text_type):
-        try:
-            sentence = sentence.decode('utf-8')
-        except UnicodeDecodeError:
-            sentence = sentence.decode('gbk', 'ignore')
-    return sentence
-    
-        def __cut(self, sentence):
-        prob, pos_list = viterbi(
-            sentence, char_state_tab_P, start_P, trans_P, emit_P)
-        begin, nexti = 0, 0
-    
-    content = open(file_name, 'rb').read()
-    
-    parser = OptionParser(USAGE)
-parser.add_option('-k', dest='topK')
-parser.add_option('-w', dest='withWeight')
-opt, args = parser.parse_args()
-    
-    for f_name in glob.glob(pattern):
-    with open(f_name) as f:
-        print('read file:', f_name)
-        for line in f: #one line as a document
-            words = ' '.join(jieba.cut(line))
-            docs.append(words)
-    
-        def testDefaultCut(self):
-        for content in test_contents:
-            result = jieba.cut(content)
-            assert isinstance(result, types.GeneratorType), 'Test DefaultCut Generator error'
-            result = list(result)
-            assert isinstance(result, list), 'Test DefaultCut error on content: %s' % content
-            print(' , '.join(result), file=sys.stderr)
-        print('testDefaultCut', file=sys.stderr)
-    
-    jieba.enable_parallel()
-    
-        def callback(response):
-        response.rethrow()
-        assert len(response.body) == (options.num_chunks * options.chunk_size)
-        logging.warning('fetch completed in %s seconds', response.request_time)
-        IOLoop.current().stop()
-    
-    
-if __name__ == '__main__':
-    main()
+@pytest.mark.parametrize('command, new_command', [
+    (Command('cargo buid', no_such_subcommand_old), 'cargo build'),
+    (Command('cargo buils', no_such_subcommand), 'cargo build')])
+def test_get_new_command(command, new_command):
+    assert get_new_command(command) == new_command
 
     
-        .. versionchanged:: 5.0
-       The ``io_loop`` argument (deprecated since version 4.1) has been removed.
+    Provides utility functions that are consumed internally by Requests
+which depend on extremely few external helpers (such as compat)
+'''
+    
+        @pytest.mark.parametrize(
+        'other, result', (
+            ({'AccePT': 'application/json'}, True),
+            ({}, False),
+            (None, False)
+        )
+    )
+    def test_instance_equality(self, other, result):
+        assert (self.case_insensitive_dict == other) is result
+    
     '''
-    io_loop = ioloop.IOLoop.current()
-    if io_loop in _io_loops:
-        return
-    _io_loops[io_loop] = True
-    if len(_io_loops) > 1:
-        gen_log.warning('tornado.autoreload started more than once in the same process')
-    modify_times = {}  # type: Dict[str, float]
-    callback = functools.partial(_reload_on_update, modify_times)
-    scheduler = ioloop.PeriodicCallback(callback, check_time)
-    scheduler.start()
+Requests HTTP Library
+~~~~~~~~~~~~~~~~~~~~~
     
-        def __init__(self, rules: _RuleList = None) -> None:
-        '''Constructs a router from an ordered list of rules::
+    import chardet
+    
+        def test_server_finishes_when_no_connections(self):
+        '''the server thread exits even if there are no connections'''
+        server = Server.basic_response_server()
+        with server:
+            pass
+    
+        @pytest.mark.parametrize(
+        'url', (
+            'http://192.168.0.1:5000/',
+            'http://192.168.0.1/',
+            'http://172.16.1.1/',
+            'http://172.16.1.1:5000/',
+            'http://localhost.localdomain:5000/v1.0/',
+        ))
+    def test_not_bypass_no_proxy_keyword(self, url, monkeypatch):
+        # This is testing that the 'no_proxy' argument overrides the
+        # environment variable 'no_proxy'
+        monkeypatch.setenv('http_proxy', 'http://proxy.example.com:3128/')
+        no_proxy = '192.168.1.1,requests.com'
+        assert get_environ_proxies(url, no_proxy=no_proxy) != {}
+    
+        def send(self, request, **kwargs):
+        '''Send a given PreparedRequest.
+    
+        create_snapshot(
+        module=module,
+        state=state,
+        description=description,
+        wait=wait,
+        wait_timeout=wait_timeout,
+        ec2=ec2,
+        volume_id=volume_id,
+        instance_id=instance_id,
+        snapshot_id=snapshot_id,
+        device_name=device_name,
+        snapshot_tags=snapshot_tags,
+        last_snapshot_min_age=last_snapshot_min_age
+    )
+    
+    RETURN = '''
+subscriptions:
+    description: List of subscriptions.
+    returned: When view is set to subscriptions.
+    type: list
+    sample: ['mysubscription', 'mysubscription2']
+topic:
+    description: Name of topic. Used to filter subscriptions.
+    returned: Always
+    type: str
+    sample: 'mytopic'
+topics:
+    description: List of topics.
+    returned: When view is set to topics.
+    type: list
+    sample: ['mytopic', 'mytopic2']
+'''
+    
+        creds, params = get_google_cloud_credentials(module)
+    spanner_client = spanner.Client(project=params['project_id'],
+                                    credentials=creds,
+                                    user_agent=CLOUD_CLIENT_USER_AGENT)
+    changed = False
+    json_output = {}
     
     
-class OAuth2ClientLoginHandler(RequestHandler, OAuth2Mixin):
-    def initialize(self, test):
-        self._OAUTH_AUTHORIZE_URL = test.get_url('/oauth2/server/authorize')
+def main():
+    argument_spec = HerokuHelper.heroku_argument_spec()
+    argument_spec.update(
+        user=dict(required=True, type='str'),
+        apps=dict(required=True, type='list'),
+        suppress_invitation=dict(default=False, type='bool'),
+        state=dict(default='present', type='str', choices=['present', 'absent']),
+    )
+    module = AnsibleModule(
+        argument_spec=argument_spec,
+        supports_check_mode=True
+    )
+    
+        client = DNSZoneIPAClient(
+        module=module,
+        host=module.params['ipa_host'],
+        port=module.params['ipa_port'],
+        protocol=module.params['ipa_prot']
+    )
+    
+            if hostgroup is not None:
+            changed = client.modify_if_diff(name, ipa_hbacrule.get('memberhost_hostgroup', []), hostgroup,
+                                            client.hbacrule_add_host,
+                                            client.hbacrule_remove_host, 'hostgroup') or changed
+    
+        module = AnsibleModule(
+        argument_spec=dict(
+            token=dict(required=True, no_log=True),
+            environment=dict(required=True),
+            user=dict(required=False),
+            repo=dict(required=False),
+            revision=dict(required=False),
+            url=dict(required=False, default='https://api.airbrake.io/deploys.txt'),
+            validate_certs=dict(default='yes', type='bool'),
+        ),
+        supports_check_mode=True
+    )
+    
+    
+DOCUMENTATION = '''
+---
+module: monit
+short_description: Manage the state of a program monitored via Monit
+description:
+     - Manage the state of a program monitored via I(Monit)
+version_added: '1.2'
+options:
+  name:
+    description:
+      - The name of the I(monit) program/process to manage
+    required: true
+  state:
+    description:
+      - The state of service
+    required: true
+    choices: [ 'present', 'started', 'stopped', 'restarted', 'monitored', 'unmonitored', 'reloaded' ]
+  timeout:
+    description:
+      - If there are pending actions for the service monitored by monit, then Ansible will check
+        for up to this many seconds to verify the requested action has been performed.
+        Ansible will sleep for five seconds between each check.
+    default: 300
+    version_added: '2.1'
+author: 'Darryl Stoflet (@dstoflet)'
+'''
+    
+        root = ET.fromstring(result)
+    
+        def __init__(self, size_table, charge_factor=None, lim_charge=None):
+        self.size_table = size_table
+        self.values = [None] * self.size_table
+        self.lim_charge = 0.75 if lim_charge is None else lim_charge
+        self.charge_factor = 1 if charge_factor is None else charge_factor
+        self.__aux_list = []
+        self._keys = {}
+    
+    This is a pure Python implementation of Dynamic Programming solution to the edit distance problem.
+    
+    
+class SubArray:
+    
+        return score
