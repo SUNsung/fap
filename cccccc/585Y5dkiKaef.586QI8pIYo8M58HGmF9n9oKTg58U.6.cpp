@@ -1,224 +1,288 @@
 
         
-          // Deserializes rpc server stats from the incoming 'buf' into *time.  Returns
-  // number of bytes decoded. If the buffer is of insufficient size (it must be
-  // at least kRpcServerStatsSize bytes) or the encoding version or field ID are
-  // unrecognized, *time will be set to 0 and it will return
-  // kEncodeDecodeFailure. Inlined for performance reasons.
-  static size_t Decode(absl::string_view buf, uint64_t* time) {
-    if (buf.size() < kRpcServerStatsSize) {
-      *time = 0;
-      return kEncodeDecodeFailure;
-    }
+        namespace {
     }
     
-      // implementation of ServerReflectionInfo(stream ServerReflectionRequest) rpc
-  // in ServerReflection service
-  Status ServerReflectionInfo(
-      ServerContext* context,
-      ServerReaderWriter<reflection::v1alpha::ServerReflectionResponse,
-                         reflection::v1alpha::ServerReflectionRequest>* stream)
-      override;
+      // display::DisplayObserver:
+  void OnDisplayAdded(const display::Display& new_display) override;
+  void OnDisplayRemoved(const display::Display& old_display) override;
+  void OnDisplayMetricsChanged(const display::Display& display,
+                               uint32_t changed_metrics) override;
     
-    DynamicThreadPool::DynamicThread::DynamicThread(DynamicThreadPool* pool)
-    : pool_(pool),
-      thd_('grpcpp_dynamic_pool',
-           [](void* th) {
-             static_cast<DynamicThreadPool::DynamicThread*>(th)->ThreadFunc();
-           },
-           this) {
-  thd_.Start();
+      // The ID in weak map.
+  int32_t weak_map_id() const { return weak_map_id_; }
+    
+    #endif  // ATOM_BROWSER_LIB_POWER_OBSERVER_H_
+
+    
+    namespace atom {
+    }
+    
+     private:
+  const scoped_refptr<base::TaskRunner> file_task_runner_;
+    
+    namespace {
+    }
+    
+    #include 'ui/views/view.h'
+    
+    namespace atom {
+    }
+    
+    
+    {}  // namespace atom
+    
+    private:
+    NetworkStyle(const QString &appName, const int iconColorHueShift, const int iconColorSaturationReduction, const char *titleAddText);
+    
+    
+    {    secp256k1_scalar_clear(&s);
+    return ret;
 }
-DynamicThreadPool::DynamicThread::~DynamicThread() { thd_.Join(); }
     
-    #ifndef GRPC_SRC_CPP_SERVER_LOAD_REPORTER_GET_CPU_STATS_H
-#define GRPC_SRC_CPP_SERVER_LOAD_REPORTER_GET_CPU_STATS_H
+        s_one[31] = 1;
+    /* Check against pubkey creation when the basepoint is the generator */
+    for (i = 0; i < 100; ++i) {
+        secp256k1_sha256_t sha;
+        unsigned char s_b32[32];
+        unsigned char output_ecdh[32];
+        unsigned char output_ser[32];
+        unsigned char point_ser[33];
+        size_t point_ser_len = sizeof(point_ser);
+        secp256k1_scalar s;
+    }
     
-    std::pair<uint64_t, uint64_t> GetCpuStatsImpl() {
-  uint64_t busy = 0, total = 0;
-  host_cpu_load_info_data_t cpuinfo;
-  mach_msg_type_number_t count = HOST_CPU_LOAD_INFO_COUNT;
-  if (host_statistics(mach_host_self(), HOST_CPU_LOAD_INFO,
-                      (host_info_t)&cpuinfo, &count) == KERN_SUCCESS) {
-    for (int i = 0; i < CPU_STATE_MAX; i++) total += cpuinfo.cpu_ticks[i];
-    busy = total - cpuinfo.cpu_ticks[CPU_STATE_IDLE];
+        /* Check bad contexts and NULLs for signing */
+    ecount = 0;
+    CHECK(secp256k1_ecdsa_sign_recoverable(none, &recsig, message, privkey, NULL, NULL) == 0);
+    CHECK(ecount == 1);
+    CHECK(secp256k1_ecdsa_sign_recoverable(sign, &recsig, message, privkey, NULL, NULL) == 1);
+    CHECK(ecount == 1);
+    CHECK(secp256k1_ecdsa_sign_recoverable(vrfy, &recsig, message, privkey, NULL, NULL) == 0);
+    CHECK(ecount == 2);
+    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, privkey, NULL, NULL) == 1);
+    CHECK(ecount == 2);
+    CHECK(secp256k1_ecdsa_sign_recoverable(both, NULL, message, privkey, NULL, NULL) == 0);
+    CHECK(ecount == 3);
+    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, NULL, privkey, NULL, NULL) == 0);
+    CHECK(ecount == 4);
+    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, NULL, NULL, NULL) == 0);
+    CHECK(ecount == 5);
+    /* This will fail or succeed randomly, and in either case will not ARG_CHECK failure */
+    secp256k1_ecdsa_sign_recoverable(both, &recsig, message, privkey, recovery_test_nonce_function, NULL);
+    CHECK(ecount == 5);
+    /* These will all fail, but not in ARG_CHECK way */
+    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, zero_privkey, NULL, NULL) == 0);
+    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, over_privkey, NULL, NULL) == 0);
+    /* This one will succeed. */
+    CHECK(secp256k1_ecdsa_sign_recoverable(both, &recsig, message, privkey, NULL, NULL) == 1);
+    CHECK(ecount == 5);
+    
+      // Appends the TestPartResult object to the TestPartResultArray
+  // received in the constructor.
+  //
+  // This method is from the TestPartResultReporterInterface
+  // interface.
+  virtual void ReportTestPartResult(const TestPartResult& result);
+ private:
+  void Init();
+    
+    
+    {}  // namespace internal
+    
+        void ComputeCurrentValue() {
+      if (!AtEnd())
+        current_value_ = ParamType(*current1_, *current2_, *current3_,
+            *current4_, *current5_, *current6_, *current7_);
+    }
+    bool AtEnd() const {
+      // We must report iterator past the end of the range when either of the
+      // component iterators has reached the end of its range.
+      return
+          current1_ == end1_ ||
+          current2_ == end2_ ||
+          current3_ == end3_ ||
+          current4_ == end4_ ||
+          current5_ == end5_ ||
+          current6_ == end6_ ||
+          current7_ == end7_;
+    }
+    
+    class CensusChannelData : public ChannelData {
+ public:
+  grpc_error* Init(grpc_channel_element* elem,
+                   grpc_channel_element_args* args) override;
+};
+    
+    void CensusClientCallData::OnDoneRecvMessageCb(void* user_data,
+                                               grpc_error* error) {
+  grpc_call_element* elem = reinterpret_cast<grpc_call_element*>(user_data);
+  CensusClientCallData* calld =
+      reinterpret_cast<CensusClientCallData*>(elem->call_data);
+  CensusChannelData* channeld =
+      reinterpret_cast<CensusChannelData*>(elem->channel_data);
+  GPR_ASSERT(calld != nullptr);
+  GPR_ASSERT(channeld != nullptr);
+  // Stream messages are no longer valid after receiving trailing metadata.
+  if ((*calld->recv_message_) != nullptr) {
+    calld->recv_message_count_++;
   }
-  return std::make_pair(busy, total);
+  GRPC_CLOSURE_RUN(calld->initial_on_done_recv_message_, GRPC_ERROR_REF(error));
+}
+    
+    #include 'opencensus/stats/stats.h'
+#include 'src/cpp/ext/filters/census/grpc_plugin.h'
+    
+    #include 'opencensus/stats/stats.h'
+#include 'src/cpp/ext/filters/census/grpc_plugin.h'
+    
+    std::unique_ptr<ServerBuilderOption> MakeChannelArgumentOption(
+    const grpc::string& name, int value) {
+  class IntOption final : public ServerBuilderOption {
+   public:
+    IntOption(const grpc::string& name, int value)
+        : name_(name), value_(value) {}
+    }
+    }
+    
+    void DynamicThreadPool::ReapThreads(std::list<DynamicThread*>* tlist) {
+  for (auto t = tlist->begin(); t != tlist->end(); t = tlist->erase(t)) {
+    delete *t;
+  }
 }
     
     
-    { private:
-  /*! \brief the underlying stream */
-  dmlc::Stream *stream_;
-  /*! \brief buffer to hold data */
-  std::string buffer_;
-  /*! \brief length of valid data in buffer */
-  size_t read_len_;
-  /*! \brief pointer in the buffer */
-  size_t read_ptr_;
+    {    if (s.ok()) {
+      // Verify that the table is usable
+      Iterator* it = table_cache->NewIterator(ReadOptions(),
+                                              meta->number,
+                                              meta->file_size);
+      s = it->status();
+      delete it;
+    }
+  }
+    
+    std::string InternalKey::DebugString() const {
+  std::string result;
+  ParsedInternalKey parsed;
+  if (ParseInternalKey(rep_, &parsed)) {
+    result = parsed.DebugString();
+  } else {
+    result = '(bad)';
+    result.append(EscapeString(rep_));
+  }
+  return result;
+}
+    
+    MemTable::MemTable(const InternalKeyComparator& cmp)
+    : comparator_(cmp),
+      refs_(0),
+      table_(comparator_, &arena_) {
+}
+    
+        // Create builder.
+    std::string copy = TableFileName(dbname_, next_file_number_++);
+    WritableFile* file;
+    Status s = env_->NewWritableFile(copy, &file);
+    if (!s.ok()) {
+      return;
+    }
+    TableBuilder* builder = new TableBuilder(options_, file);
+    
+      // Return an iterator for the specified file number (the corresponding
+  // file length must be exactly 'file_size' bytes).  If 'tableptr' is
+  // non-null, also sets '*tableptr' to point to the Table object
+  // underlying the returned iterator, or to nullptr if no Table object
+  // underlies the returned iterator.  The returned '*tableptr' object is owned
+  // by the cache and should not be deleted, and is valid for as long as the
+  // returned iterator is live.
+  Iterator* NewIterator(const ReadOptions& options,
+                        uint64_t file_number,
+                        uint64_t file_size,
+                        Table** tableptr = nullptr);
+    
+      static Status InsertInto(const WriteBatch* batch, MemTable* memtable);
+    
+    
+    {    return 0;
+}
+
+    
+    /// Definition for a binary tree node.
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
     
     
-    {  inline void SetPrune(const WQSummary &src, size_t maxsize) {
-    if (src.size <= maxsize) {
-      this->CopyFrom(src); return;
-    }
-    const RType begin = src.data[0].rmax;
-    const RType range = src.data[src.size - 1].rmin - src.data[0].rmax;
-    const size_t n = maxsize - 1;
-    data[0] = src.data[0];
-    this->size = 1;
-    // lastidx is used to avoid duplicated records
-    size_t i = 1, lastidx = 0;
-    for (size_t k = 1; k < n; ++k) {
-      RType dx2 =  2 * ((k * range) / n + begin);
-      // find first i such that  d < (rmax[i+1] + rmin[i+1]) / 2
-      while (i < src.size - 1
-             && dx2 >= src.data[i + 1].rmax + src.data[i + 1].rmin) ++i;
-      CHECK(i != src.size - 1);
-      if (dx2 < src.data[i].RMinNext() + src.data[i + 1].RMaxPrev()) {
-        if (i != lastidx) {
-          data[size++] = src.data[i]; lastidx = i;
-        }
-      } else {
-        if (i + 1 != lastidx) {
-          data[size++] = src.data[i + 1]; lastidx = i + 1;
-        }
-      }
-    }
-    if (lastidx != src.size - 1) {
-      data[size++] = src.data[src.size - 1];
-    }
-  }
-  /*!
-   * \brief set current summary to be merged summary of sa and sb
-   * \param sa first input summary to be merged
-   * \param sb second input summary to be merged
+    {                if(node->left){
+                    q.push(node->left);
+                    new_level_num ++;
+                }
+                if(node->right){
+                    q.push(node->right);
+                    new_level_num ++;
+                }
+            }
+    
+    
+void print_vec(const vector<int>& vec){
+    for(int e: vec)
+        cout << e << ' ';
+    cout << endl;
+}
+    
+    
+    {    return 0;
+}
+    
+      /*!
+   * \brief generate predictions for given feature matrix
+   * \param dmat feature matrix
+   * \param out_preds output vector to hold the predictions
+   * \param ntree_limit limit the number of trees used in prediction, when it equals 0, this means
+   *    we do not limit number of trees, this parameter is only valid for gbtree, but not for gblinear
    */
-  inline void SetCombine(const WQSummary &sa,
-                         const WQSummary &sb) {
-    if (sa.size == 0) {
-      this->CopyFrom(sb); return;
-    }
-    if (sb.size == 0) {
-      this->CopyFrom(sa); return;
-    }
-    CHECK(sa.size > 0 && sb.size > 0);
-    const Entry *a = sa.data, *a_end = sa.data + sa.size;
-    const Entry *b = sb.data, *b_end = sb.data + sb.size;
-    // extended rmin value
-    RType aprev_rmin = 0, bprev_rmin = 0;
-    Entry *dst = this->data;
-    while (a != a_end && b != b_end) {
-      // duplicated value entry
-      if (a->value == b->value) {
-        *dst = Entry(a->rmin + b->rmin,
-                     a->rmax + b->rmax,
-                     a->wmin + b->wmin, a->value);
-        aprev_rmin = a->RMinNext();
-        bprev_rmin = b->RMinNext();
-        ++dst; ++a; ++b;
-      } else if (a->value < b->value) {
-        *dst = Entry(a->rmin + bprev_rmin,
-                     a->rmax + b->RMaxPrev(),
-                     a->wmin, a->value);
-        aprev_rmin = a->RMinNext();
-        ++dst; ++a;
-      } else {
-        *dst = Entry(b->rmin + aprev_rmin,
-                     b->rmax + a->RMaxPrev(),
-                     b->wmin, b->value);
-        bprev_rmin = b->RMinNext();
-        ++dst; ++b;
-      }
-    }
-    if (a != a_end) {
-      RType brmax = (b_end - 1)->rmax;
-      do {
-        *dst = Entry(a->rmin + bprev_rmin, a->rmax + brmax, a->wmin, a->value);
-        ++dst; ++a;
-      } while (a != a_end);
-    }
-    if (b != b_end) {
-      RType armax = (a_end - 1)->rmax;
-      do {
-        *dst = Entry(b->rmin + aprev_rmin, b->rmax + armax, b->wmin, b->value);
-        ++dst; ++b;
-      } while (b != b_end);
-    }
-    this->size = dst - data;
-    const RType tol = 10;
-    RType err_mingap, err_maxgap, err_wgap;
-    this->FixError(&err_mingap, &err_maxgap, &err_wgap);
-    if (err_mingap > tol || err_maxgap > tol || err_wgap > tol) {
-      LOG(INFO) << 'mingap=' << err_mingap
-                << ', maxgap=' << err_maxgap
-                << ', wgap=' << err_wgap;
-    }
-    CHECK(size <= sa.size + sb.size) << 'bug in combine';
-  }
-  // helper function to print the current content of sketch
-  inline void Print() const {
-    for (size_t i = 0; i < this->size; ++i) {
-      LOG(CONSOLE) << '[' << i << '] rmin=' << data[i].rmin
-                   << ', rmax=' << data[i].rmax
-                   << ', wmin=' << data[i].wmin
-                   << ', v=' << data[i].value;
-    }
-  }
-  // try to fix rounding error
-  // and re-establish invariance
-  inline void FixError(RType *err_mingap,
-                       RType *err_maxgap,
-                       RType *err_wgap) const {
-    *err_mingap = 0;
-    *err_maxgap = 0;
-    *err_wgap = 0;
-    RType prev_rmin = 0, prev_rmax = 0;
-    for (size_t i = 0; i < this->size; ++i) {
-      if (data[i].rmin < prev_rmin) {
-        data[i].rmin = prev_rmin;
-        *err_mingap = std::max(*err_mingap, prev_rmin - data[i].rmin);
-      } else {
-        prev_rmin = data[i].rmin;
-      }
-      if (data[i].rmax < prev_rmax) {
-        data[i].rmax = prev_rmax;
-        *err_maxgap = std::max(*err_maxgap, prev_rmax - data[i].rmax);
-      }
-      RType rmin_next = data[i].RMinNext();
-      if (data[i].rmax < rmin_next) {
-        data[i].rmax = rmin_next;
-        *err_wgap = std::max(*err_wgap, data[i].rmax - rmin_next);
-      }
-      prev_rmax = data[i].rmax;
-    }
-  }
-  // check consistency of the summary
-  inline bool Check(const char *msg) const {
-    const float tol = 10.0f;
-    for (size_t i = 0; i < this->size; ++i) {
-      if (data[i].rmin + data[i].wmin > data[i].rmax + tol ||
-          data[i].rmin < -1e-6f || data[i].rmax < -1e-6f) {
-        LOG(INFO) << '---------- WQSummary::Check did not pass ----------';
-        this->Print();
-        return false;
-      }
-    }
-    return true;
-  }
-};
+  virtual void PredictBatch(DMatrix* dmat,
+                            HostDeviceVector<bst_float>* out_preds,
+                            unsigned ntree_limit = 0) = 0;
+  /*!
+   * \brief online prediction function, predict score for one instance at a time
+   *  NOTE: use the batch prediction interface if possible, batch prediction is usually
+   *        more efficient than online prediction
+   *        This function is NOT threadsafe, make sure you only call from one thread
+   *
+   * \param inst the instance you want to predict
+   * \param out_preds output vector to hold the predictions
+   * \param ntree_limit limit the number of trees used in prediction
+   * \param root_index the root index
+   * \sa Predict
+   */
+  virtual void PredictInstance(const SparsePage::Inst& inst,
+                       std::vector<bst_float>* out_preds,
+                       unsigned ntree_limit = 0,
+                       unsigned root_index = 0) = 0;
+  /*!
+   * \brief predict the leaf index of each tree, the output will be nsample * ntree vector
+   *        this is only valid in gbtree predictor
+   * \param dmat feature matrix
+   * \param out_preds output vector to hold the predictions
+   * \param ntree_limit limit the number of trees used in prediction, when it equals 0, this means
+   *    we do not limit number of trees, this parameter is only valid for gbtree, but not for gblinear
+   */
+  virtual void PredictLeaf(DMatrix* dmat,
+                           std::vector<bst_float>* out_preds,
+                           unsigned ntree_limit = 0) = 0;
     
     #include <dmlc/registry.h>
 #include <vector>
 #include <utility>
 #include <string>
 #include <functional>
-#include <memory>
-#include './base.h'
 #include './data.h'
-#include './objective.h'
-#include './feature_map.h'
+#include './base.h'
 #include '../../src/common/host_device_vector.h'
     
     // Define a customized logistic regression objective in C++.
@@ -265,6 +329,31 @@ class MyLogistic : public ObjFunction {
   }
     }
     
-        // the following call will not add an object, because there is already
-    // a value stored at key 'B'
-    auto res2 = null.emplace('B', 'c');
+    
+    {
+    {    // update information
+    this->info.num_row_ += batch.size;
+    // copy the data over
+    auto& data_vec = page_.data.HostVector();
+    auto& offset_vec = page_.offset.HostVector();
+    for (size_t i = batch.offset[0]; i < batch.offset[batch.size]; ++i) {
+      uint32_t index = batch.index[i];
+      bst_float fvalue = batch.value == nullptr ? 1.0f : batch.value[i];
+      data_vec.emplace_back(index, fvalue);
+      this->info.num_col_ = std::max(this->info.num_col_,
+                                    static_cast<uint64_t>(index + 1));
+    }
+    size_t top = page_.offset.Size();
+    for (size_t i = 0; i < batch.size; ++i) {
+      offset_vec.push_back(offset_vec[top - 1] + batch.offset[i + 1] - batch.offset[0]);
+    }
+  }
+  if (last_group_id != default_max) {
+    if (group_size > info.group_ptr_.back()) {
+      info.group_ptr_.push_back(group_size);
+    }
+  }
+  this->info.num_nonzero_ = static_cast<uint64_t>(page_.data.Size());
+  // Either every row has query ID or none at all
+  CHECK(info.qids_.empty() || info.qids_.size() == info.num_row_);
+}
