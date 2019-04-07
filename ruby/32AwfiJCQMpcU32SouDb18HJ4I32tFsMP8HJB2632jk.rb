@@ -1,186 +1,234 @@
 
         
-          def pinned?
-    path.symlink?
-  end
+        # -------------------------------------------------------------------
+# Benchmarking changes in https://github.com/jekyll/jekyll/pull/6767
+# -------------------------------------------------------------------
     
-        it 'returns nil if there is no matching argument' do
-      expect(subject.value('baz')).to be nil
+                  Jekyll.logger.info 'LiveReload address:',
+                                 'http://#{opts['host']}:#{opts['livereload_port']}'
+            end
+          end
+          @thread.abort_on_exception = true
+        end
+    
+          attr_accessor :page, :layout, :content, :paginator
+      attr_accessor :highlighter_prefix, :highlighter_suffix
+    
+        it 'creates an agent with a controller' do
+      visit '/'
+      page.find('a', text: 'Agents').trigger(:mouseover)
+      click_on('New Agent')
+    
+      describe '#style_colors' do
+    it 'returns a css style-formated version of the scenario foreground and background colors' do
+      expect(style_colors(scenario)).to eq('color:#AAAAAA;background-color:#000000')
     end
-  end
     
-      it 'does not raise an error on a tainted, frozen object' do
-    o = Object.new.taint.freeze
-    o.taint.should equal(o)
-  end
-    
-      context 'time commands' do
-    before :each do
-      @tmp_file = File.new(tmp('file.kernel.test'), 'w')
+        it 'cleans up old logs when there are more than log_length' do
+      stub(AgentLog).log_length { 4 }
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 1')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 2')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 3')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 4')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 4')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 1')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 5')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 5')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 2')
+      AgentLog.log_for_agent(agents(:jane_website_agent), 'message 6')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').first.message).to eq('message 6')
+      expect(agents(:jane_website_agent).logs.order('agent_logs.id desc').last.message).to eq('message 3')
     end
     
-      it 'returns the method name as symbol' do
-    eval(@code, TOPLEVEL_BINDING).should equal :boom
+      describe '#receive' do
+    it 'sends a message' do
+      stub(HTTParty).post { {'id' => 1, 'message' => 'blah', 'title' => 'blah','source_name' => 'Custom Notification'} }
+      @checker.receive([@event])
+    end
+    
+        private
+    
+            css('.example-title + pre').each do |node|
+          node['name'] = node.previous_element.content.strip
+          node.previous_element.remove
+        end
+    
+      protected
+    
+      config.middleware.use Warden::Manager do |config|
+    Devise.warden_config = config
   end
+    
+          def remember_cookie_values(resource)
+        options = { httponly: true }
+        options.merge!(forget_cookie_values(resource))
+        options.merge!(
+          value: resource.class.serialize_into_cookie(resource),
+          expires: resource.remember_expires_at
+        )
+      end
+    
+          # Sign in a user that already was authenticated. This helper is useful for logging
+      # users in after sign up. All options given to sign_in is passed forward
+      # to the set_user method in warden.
+      # If you are using a custom warden strategy and the timeoutable module, you have to
+      # set `env['devise.skip_timeout'] = true` in the request to use this method, like we do
+      # in the sessions controller: https://github.com/plataformatec/devise/blob/master/app/controllers/devise/sessions_controller.rb#L7
+      #
+      # Examples:
+      #
+      #   sign_in :user, @user                      # sign_in(scope, resource)
+      #   sign_in @user                             # sign_in(resource)
+      #   sign_in @user, event: :authentication     # sign_in(resource, options)
+      #   sign_in @user, store: false               # sign_in(resource, options)
+      #
+      def sign_in(resource_or_scope, *args)
+        options  = args.extract_options!
+        scope    = Devise::Mapping.find_scope!(resource_or_scope)
+        resource = args.last || resource_or_scope
+    
+    module Devise
+  module Controllers
+    # Provide the ability to store a location.
+    # Used to redirect back to a desired path after sign in.
+    # Included by default in all controllers.
+    module StoreLocation
+      # Returns and delete (if it's navigational format) the url stored in the session for
+      # the given scope. Useful for giving redirect backs after sign up:
+      #
+      # Example:
+      #
+      #   redirect_to stored_location_for(:user) || root_path
+      #
+      def stored_location_for(resource_or_scope)
+        session_key = stored_location_key_for(resource_or_scope)
+    
+    module Devise
+  module Controllers
+    # Create url helpers to be used with resource/scope configuration. Acts as
+    # proxies to the generated routes created by devise.
+    # Resource param can be a string or symbol, a class, or an instance object.
+    # Example using a :user resource:
+    #
+    #   new_session_path(:user)      => new_user_session_path
+    #   session_path(:user)          => user_session_path
+    #   destroy_session_path(:user)  => destroy_user_session_path
+    #
+    #   new_password_path(:user)     => new_user_password_path
+    #   password_path(:user)         => user_password_path
+    #   edit_password_path(:user)    => edit_user_password_path
+    #
+    #   new_confirmation_path(:user) => new_user_confirmation_path
+    #   confirmation_path(:user)     => user_confirmation_path
+    #
+    # Those helpers are included by default to ActionController::Base.
+    #
+    # In case you want to add such helpers to another class, you can do
+    # that as long as this new class includes both url_helpers and
+    # mounted_helpers. Example:
+    #
+    #     include Rails.application.routes.url_helpers
+    #     include Rails.application.routes.mounted_helpers
+    #
+    module UrlHelpers
+      def self.remove_helpers!
+        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
+          remove_method method
+        end
+      end
+    
+              if recoverable.persisted?
+            if recoverable.reset_password_period_valid?
+              recoverable.reset_password(attributes[:password], attributes[:password_confirmation])
+            else
+              recoverable.errors.add(:reset_password_token, :expired)
+            end
+          end
+    
+          private
+    
+    ::Bundler.with_friendly_errors do
+  ::Bundler::CLI.start(ARGV, :debug => true)
 end
 
     
-      #
-  # More advanced [] that does downcase comparison.
-  #
-  def [](key)
-    begin
-      rv = self.fetch(key)
-    rescue IndexError
-      rv = nil
+    require 'clamp'
+require 'pluginmanager/util'
+require 'pluginmanager/gemfile'
+require 'pluginmanager/install'
+require 'pluginmanager/remove'
+require 'pluginmanager/list'
+require 'pluginmanager/update'
+require 'pluginmanager/pack'
+require 'pluginmanager/unpack'
+require 'pluginmanager/generate'
+require 'pluginmanager/prepare_offline_pack'
+require 'pluginmanager/proxy_support'
+configure_proxy
+    
+          prepare_package(explicit_plugins_specs, temp_path)
+      LogStash::Util::Zip.compress(temp_path, @target)
+    ensure
+      FileUtils.rm_rf(temp_path)
     end
-    if (rv == nil)
-      begin
-        rv = self.dcase_hash[key.downcase]
-      rescue IndexError
-        rv = nil
-      end
-    end
     
-    protected
+      private
     
-    =begin
- +------+----------------+-------------------------------------------+
-   | HEX  | NAME           | DESCRIPTION                               |
-   +------+----------------+-------------------------------------------+
-   | HEX  | NAME           | DESCRIPTION                               |
-   | 0x01 | CALLED NUMBER  | Number/extension being called             |
-   | 0x02 | CALLING NUMBER | Calling number                            |
-   | 0x03 | CALLING ANI    | Calling number ANI for billing            |
-   | 0x04 | CALLING NAME   | Name of caller                            |
-   | 0x05 | CALLED CONTEXT | Context for number                        |
-   | 0x06 | USERNAME       | Username (peer or user) for               |
-   |      |                | authentication                            |
-   | 0x07 | PASSWORD       | Password for authentication               |
-   | 0x08 | CAPABILITY     | Actual CODEC capability                   |
-   | 0x09 | FORMAT         | Desired CODEC format                      |
-   | 0x0a | LANGUAGE       | Desired language                          |
-   | 0x0b | VERSION        | Protocol version                          |
-   | 0x0c | ADSICPE        | CPE ADSI capability                       |
-   | 0x0d | DNID           | Originally dialed DNID                    |
-   | 0x0e | AUTHMETHODS    | Authentication method(s)                  |
-   | 0x0f | CHALLENGE      | Challenge data for MD5/RSA                |
-   | 0x10 | MD5 RESULT     | MD5 challenge result                      |
-   | 0x11 | RSA RESULT     | RSA challenge result                      |
-   | 0x12 | APPARENT ADDR  | Apparent address of peer                  |
-   | 0x13 | REFRESH        | When to refresh registration              |
-   | 0x14 | DPSTATUS       | Dialplan status                           |
-   | 0x15 | CALLNO         | Call number of peer                       |
-   | 0x16 | CAUSE          | Cause                                     |
-   | 0x17 | IAX UNKNOWN    | Unknown IAX command                       |
-   | 0x18 | MSGCOUNT       | How many messages waiting                 |
-   | 0x19 | AUTOANSWER     | Request auto-answering                    |
-   | 0x1a | MUSICONHOLD    | Request musiconhold with QUELCH           |
-   | 0x1b | TRANSFERID     | Transfer Request Identifier               |
-   | 0x1c | RDNIS          | Referring DNIS                            |
-   | 0x1d | Reserved       | Reserved for future use                   |
-   | 0x1e | Reserved       | Reserved for future use                   |
-   | 0x1f | DATETIME       | Date/Time                                 |
-   | 0x20 | Reserved       | Reserved for future use                   |
-   | 0x21 | Reserved       | Reserved for future use                   |
-   | 0x22 | Reserved       | Reserved for future use                   |
-   | 0x23 | Reserved       | Reserved for future use                   |
-   | 0x24 | Reserved       | Reserved for future use                   |
-   | 0x25 | Reserved       | Reserved for future use                   |
-   | 0x26 | CALLINGPRES    | Calling presentation                      |
-   | 0x27 | CALLINGTON     | Calling type of number                    |
-   | 0x28 | CALLINGTNS     | Calling transit network select            |
-   | 0x29 | SAMPLINGRATE   | Supported sampling rates                  |
-   | 0x2a | CAUSECODE      | Hangup cause                              |
-   | 0x2b | ENCRYPTION     | Encryption format                         |
-   | 0x2c | ENCKEY         | Reserved for future Use                   |
-   | 0x2d | CODEC PREFS    | CODEC Negotiation                         |
-   | 0x2e | RR JITTER      | Received jitter, as in RFC 3550           |
-   | 0x2f | RR LOSS        | Received loss, as in RFC 3550             |
-   | 0x30 | RR PKTS        | Received frames                           |
-   | 0x31 | RR DELAY       | Max playout delay for received frames in  |
-   |      |                | ms                                        |
-   | 0x32 | RR DROPPED     | Dropped frames (presumably by jitter      |
-   |      |                | buffer)                                   |
-   | 0x33 | RR OOO         | Frames received Out of Order              |
-   | 0x34 | OSPTOKEN       | OSP Token Block                           |
-   +------+----------------+-------------------------------------------+
-=end
-    
-                int
+              it 'successfully install the plugin' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install #{gem_path_on_vagrant}')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-dns')
           end
-    
-              # Rex::Proto::Kerberos::Model::AuthorizationData decoding isn't supported
-          #
-          # @raise [NotImplementedError]
-          def decode(input)
-            raise ::NotImplementedError, 'Authorization Data decoding not supported'
-          end
-    
-              # Decodes the Rex::Proto::Kerberos::Model::EncKdcResponse from an input
-          #
-          # @param input [String, OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [self] if decoding succeeds
-          # @raise [RuntimeError] if decoding doesn't succeed
-          def decode(input)
-            case input
-            when String
-              decode_string(input)
-            when OpenSSL::ASN1::ASN1Data
-              decode_asn1(input)
-            else
-              raise ::RuntimeError, 'Failed to decode EncKdcResponse, invalid input'
-            end
-    
-              # Encodes a Rex::Proto::Kerberos::Model::EncryptedData into an ASN.1 String
-          #
-          # @return [String]
-          def encode
-            elems = []
-            etype_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_etype], 0, :CONTEXT_SPECIFIC)
-            elems << etype_asn1
-    
-        def URIEncodeSingle(cc, result, index)
-      x = (cc >> 12) & 0xF;
-      y = (cc >> 6) & 63;
-      z = cc & 63;
-      octets = Array.new(3);
-      if (cc <= 0x007F)
-        octets[0] = cc;
-      elsif (cc <= 0x07FF)
-        octets[0] = y + 192;
-        octets[1] = z + 128;
-      else
-        octets[0] = x + 224;
-        octets[1] = y + 128;
-        octets[2] = z + 128;
-      end
-      return URIEncodeOctets(octets, result, index);
-    end
-    
-          def previous_link
-        label = '&laquo; Previous'
-        if @page_num == 1
-          %(<span class='disabled'>#{label}</span>)
-        else
-          link = url('/history/#{@page.name}?page=#{@page_num-1}')
-          %(<a href='#{link}' hotkey='h'>#{label}</a>)
         end
-      end
     
-        class MapGollum
-      def initialize(base_path)
-        @mg = Rack::Builder.new do
-          
-          map '/#{base_path}' do
-            run Precious::App
-          end
-          map '/' do
-            run Proc.new { [302, { 'Location' => '/#{base_path}' }, []] }
-          end
-          map '/*' do
-            run Proc.new { [302, { 'Location' => '/#{base_path}' }, []] }
-          end
-          
-        end
+          attr_reader :page, :diff, :versions, :message, :allow_editing
+    
+          attr_reader :page, :name
+    
       end
+end
+
+    
+    desc 'Move sass to sass.old, install sass theme updates, replace sass/custom with sass.old/custom'
+task :update_style, :theme do |t, args|
+  theme = args.theme || 'classic'
+  if File.directory?('sass.old')
+    puts 'removed existing sass.old directory'
+    rm_r 'sass.old', :secure=>true
+  end
+  mv 'sass', 'sass.old'
+  puts '## Moved styles into sass.old/'
+  cp_r '#{themes_dir}/'+theme+'/sass/', 'sass', :remove_destination=>true
+  cp_r 'sass.old/custom/.', 'sass/custom/', :remove_destination=>true
+  puts '## Updated Sass ##'
+end
+    
+    end
+
+    
+      def new
+    @credential = @server.credentials.build
+  end
+    
+    end
+
+    
+      def new
+    @ip_address = @ip_pool.ip_addresses.build
+  end
+    
+      def create
+    @server = organization.servers.build(safe_params(:permalink))
+    if @server.save
+      redirect_to_with_json organization_server_path(organization, @server)
+    else
+      render_form_errors 'new', @server
+    end
+  end
+    
+      def new
+    @user_invite = UserInvite.active.find_by!(:uuid => params[:invite_token])
+    @user = User.new
+    @user.email_address = @user_invite.email_address
+    render :layout => 'sub'
+  end
