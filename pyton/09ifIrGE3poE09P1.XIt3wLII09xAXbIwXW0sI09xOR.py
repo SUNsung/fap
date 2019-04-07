@@ -1,166 +1,232 @@
 
         
-        anchor = '###'
-min_entries_per_section = 3
-auth_keys = ['apiKey', 'OAuth', 'X-Mashape-Key', 'No']
-punctuation = ['.', '?', '!']
-https_keys = ['Yes', 'No']
-cors_keys = ['Yes', 'No', 'Unknown']
-    
-    try:
-    # https://urllib3.readthedocs.io/en/latest/security.html
-    # noinspection PyPackageRequirements
-    import urllib3
-    urllib3.disable_warnings()
-except (ImportError, AttributeError):
-    # In some rare cases, the user may have an old version of the requests
-    # or urllib3, and there is no method called 'disable_warnings.' In these
-    # cases, we don't need to call the method.
-    # They may get some noisy output but execution shouldn't die. Move on.
-    pass
-    
-        def iter_body(self):
-        first_chunk = True
-        iter_lines = self.msg.iter_lines(self.CHUNK_SIZE)
-        for line, lf in iter_lines:
-            if b'\0' in line:
-                if first_chunk:
-                    converter = self.conversion.get_converter(self.mime)
-                    if converter:
-                        body = bytearray()
-                        # noinspection PyAssignmentToLoopOrWithParameter
-                        for line, lf in chain([(line, lf)], iter_lines):
-                            body.extend(line)
-                            body.extend(lf)
-                        self.mime, body = converter.convert(body)
-                        assert isinstance(body, str)
-                        yield self.process_body(body)
-                        return
-                raise BinarySuppressedError()
-            yield self.process_body(line) + lf
-            first_chunk = False
+            def __init__(self, employee_id, name):
+        super(Operator, self).__init__(employee_id, name, Rank.OPERATOR)
     
     
-def test_auth_plugin_parse_auth_false(httpbin):
+class Deck(object):
+    
+        def __init__(self, seller_category_map, seller_category_overrides_map):
+        self.seller_category_map = seller_category_map
+        self.seller_category_overrides_map = seller_category_overrides_map
     
     
-@mock.patch('httpie.core.get_response')
-def test_error_traceback(get_response):
-    exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    with raises(ConnectionError):
-        main(['--ignore-stdin', '--traceback', 'www.google.com'])
+class SalesRanker(MRJob):
     
-    # def test_unicode_url_verbose(self):
-#     r = http(httpbin.url + '--verbose', u'/get?test=' + UNICODE)
-#     assert HTTP_OK in r
+        def __init__(self, key, value):
+        self.key = key
+        self.value = value
     
+        def process_query(self, query):
+        query = self.parse_query(query)
+        results = self.memory_cache.get(query)
+        if results is None:
+            results = self.reverse_index_cluster.process_search(query)
+            self.memory_cache.set(query, results)
+        return results
     
-DEFAULT_CONFIG_DIR = str(os.environ.get(
-    'HTTPIE_CONFIG_DIR',
-    os.path.expanduser('~/.httpie') if not is_windows else
-    os.path.expandvars(r'%APPDATA%\\httpie')
-))
+        try:
+        oids, array_oids = get_hstore_oids(connection.alias)
+        register_hstore(connection.connection, globally=True, oid=oids, array_oid=array_oids)
+    except ProgrammingError:
+        # Hstore is not available on the database.
+        #
+        # If someone tries to create an hstore field it will error there.
+        # This is necessary as someone may be using PSQL without extensions
+        # installed but be using other features of contrib.postgres.
+        #
+        # This is also needed in order to create the connection in order to
+        # install the hstore extension.
+        pass
     
-        def inner(*suffix):
-        return urljoin(httpbin_url, '/'.join(suffix))
-    
-        @get_item_parameters
-    def test_get(self, key, value):
-        assert self.lookup_dict.get(key) == value
-
-    
-            Operator:                  '#582800',   # class: 'o'
-        Operator.Word:             'bold #004461',   # class: 'ow' - like keywords
-    
-            for attr, value in state.items():
-            setattr(self, attr, value)
-    
-    # Syntax sugar.
-_ver = sys.version_info
-    
-    
-def test_idna_without_version_attribute(mocker):
-    '''Older versions of IDNA don't provide a __version__ attribute, verify
-    that if we have such a package, we don't blow up.
-    '''
-    mocker.patch('requests.help.idna', new=None)
-    assert info()['idna'] == {'version': ''}
-    
-        def test_text_response(self):
-        '''the text_response_server sends the given text'''
-        server = Server.text_response_server(
-            'HTTP/1.1 200 OK\r\n' +
-            'Content-Length: 6\r\n' +
-            '\r\nroflol'
+        def create_model_instance(self, data):
+        '''
+        Return a new instance of the session model object, which represents the
+        current session state. Intended to be used for saving the session data
+        to the database.
+        '''
+        return self.model(
+            session_key=self._get_or_create_session_key(),
+            session_data=self.encode(data),
+            expire_date=self.get_expiry_date(),
         )
     
-    def generate_table(key):
+                appid = random.choice(self.working_appid_list)
+            return str(appid)
+        else:
+            for _ in xrange(0, 10):
+                appid = self.public_appid.get()
+                if appid in self.out_of_quota_appids or appid in self.not_exist_appids:
+                    continue
+                else:
+                    return appid
+            return None
     
-            print('****************** Testing Edit Distance DP Algorithm ******************')
-        print()
+        @staticmethod
+    def create_ca():
+        key = OpenSSL.crypto.PKey()
+        key.generate_key(OpenSSL.crypto.TYPE_RSA, 2048)
+        ca = OpenSSL.crypto.X509()
+        ca.set_version(2)
+        ca.set_serial_number(0)
+        subj = ca.get_subject()
+        subj.countryName = 'CN'
+        subj.stateOrProvinceName = 'Internet'
+        subj.localityName = 'Cernet'
+        subj.organizationName = CertUtil.ca_vendor
+        # Log generated time.
+        subj.organizationalUnitName = '%s Root - %d' % (CertUtil.ca_vendor, int(time.time()))
+        subj.commonName = '%s XX-Net' % CertUtil.ca_vendor
+        ca.gmtime_adj_notBefore(- 3600 * 24)
+        ca.gmtime_adj_notAfter(CertUtil.ca_validity - 3600 * 24)
+        ca.set_issuer(subj)
+        ca.set_subject(subj)
+        ca.set_pubkey(key)
+        ca.add_extensions([
+            OpenSSL.crypto.X509Extension(
+                'basicConstraints', False, 'CA:TRUE', subject=ca, issuer=ca)
+            ])
+        ca.sign(key, CertUtil.ca_digest)
+        #xlog.debug('CA key:%s', key)
+        xlog.info('create CA')
+        return key, ca
     
-    The problem is  :
-Given an ARRAY, to find the longest and increasing sub ARRAY in that given ARRAY and return it.
-Example: [10, 22, 9, 33, 21, 50, 41, 60, 80] as input will return [10, 22, 33, 41, 60, 80] as output
-'''
-from __future__ import print_function
+            network_ok = False
+        for url in self.urls:
+            if self._test_host(url):
+                network_ok = True
+                break
+            else:
+                if __name__ == '__main__':
+                    xlog.warn('test %s fail', url)
+                time.sleep(1)
     
-        for i in range(1, n+1):
-        dp[i][0] = True
     
-        Using log and roots can be perceived as tools for penalizing big
-    erors. However, using appropriate metrics depends on the situations,
-    and types of data
-'''
+class RC4FileObject(object):
+    '''fileobj for rc4'''
+    def __init__(self, stream, key):
+        self.__stream = stream
+        self.__cipher = _Crypto_Cipher_ARC4_new(key) if key else lambda x:x
+    def __getattr__(self, attr):
+        if attr not in ('__stream', '__cipher'):
+            return getattr(self.__stream, attr)
+    def read(self, size=-1):
+        return self.__cipher.encrypt(self.__stream.read(size))
     
-    '''
-* Wondering how this method works !
-* It's pretty simple.
-* Let's say you need to calculate a ^ b
-* RULE 1 : a ^ b = (a*a) ^ (b/2) ---- example : 4 ^ 4 = (4*4) ^ (4/2) = 16 ^ 2
-* RULE 2 : IF b is ODD, then ---- a ^ b = a * (a ^ (b - 1)) :: where (b - 1) is even.
-* Once b is even, repeat the process to get a ^ b
-* Repeat the process till b = 1 OR b = 0, because a^1 = a AND a^0 = 1
-*
-* As far as the modulo is concerned,
-* the fact : (a*b) % c = ((a%c) * (b%c)) % c
-* Now apply RULE 1 OR 2 whichever is required.
-'''
+        return (major, minor, patch, beta)
+    
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licence]
+    
+            return repr(s)
+    
+    
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licence]
+    
+        def group(self):
+        raise NotImplementedError('Path.group() is unsupported on this system')
+    
+    def ndarray_from_structure(items, fmt, t, flags=0):
+    '''Return ndarray from the tuple returned by rand_structure()'''
+    memlen, itemsize, ndim, shape, strides, offset = t
+    return ndarray(items, shape=shape, strides=strides, format=fmt,
+                   offset=offset, flags=ND_WRITABLE|flags)
+    
+    [1] http://www.yummly.com/recipe/Roasted-Asparagus-Epicurious-203718
+    
+    # Of course, there are lots of email messages that could break this simple
+# minded program, but it will handle the most common ones.
 
     
-        platforms = 'any',
-    zip_safe = True,
-    include_package_data = True,
+        counter = 1
+    for part in msg.walk():
+        # multipart/* are just containers
+        if part.get_content_maintype() == 'multipart':
+            continue
+        # Applications should really sanitize the given filename so that an
+        # email message can't be used to overwrite important files
+        filename = part.get_filename()
+        if not filename:
+            ext = mimetypes.guess_extension(part.get_content_type())
+            if not ext:
+                # Use a generic bag-of-bits extension
+                ext = '.bin'
+            filename = 'part-%03d%s' % (counter, ext)
+        counter += 1
+        with open(os.path.join(args.directory, filename), 'wb') as fp:
+            fp.write(part.get_payload(decode=True))
     
+    def handleSlideshowTitle(title):
+    print('<title>%s</title>' % getText(title.childNodes))
     
-def cntv_download_by_id(rid, **kwargs):
-    CNTV().download_by_vid(rid, **kwargs)
+            try:
+            print(list(pool.imap(f, list(range(10)))))
+        except ZeroDivisionError:
+            print('\tGot ZeroDivisionError as expected from list(pool.imap())')
+        else:
+            raise AssertionError('expected ZeroDivisionError')
     
-        if title is None:
-      title = url
+    #
+# Function used to calculate result
+#
     
-    def fetch_photo_url_list_impl(url, size, method, id_field, id_parse_func, collection_name):
-    page = get_html(url)
-    api_key = get_api_key(page)
-    ext_field = ''
-    if id_parse_func:
-        ext_field = '&%s=%s' % (id_field, id_parse_func(url, page))
-    page_number = 1
-    urls = []
-    while True:
-        call_url = tmpl_api_call % (api_key, method, ext_field, page_number)
-        photoset = json.loads(get_content_headered(call_url))[collection_name]
-        pagen = photoset['page']
-        pages = photoset['pages']
-        for info in photoset['photo']:
-            url = get_url_of_largest(info, api_key, size)
-            urls.append(url)
-        page_number = page_number + 1
-        # the typeof 'page' and 'pages' may change in different methods
-        if str(pagen) == str(pages):
-            break
-    return urls, match1(page, pattern_inline_title)
-    
-        title = match1(html, r'<title>([^<]{1,9999})</title>')
+                if buffer.lstrip().upper().startswith('SELECT'):
+                print(cur.fetchall())
+        except sqlite3.Error as e:
+            print('An error occurred:', e.args[0])
+        buffer = ''
