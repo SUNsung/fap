@@ -1,189 +1,129 @@
 
         
-            out = bug_text + dev_text
-    
-        infile, outfile = args
-    
-    for page in itertools.count(1):
-    releases = json.loads(compat_urllib_request.urlopen(
-        'https://api.github.com/repos/rg3/youtube-dl/releases?page=%s' % page
-    ).read().decode('utf-8'))
-    
-        fileopts = []
-    for opt in opts_file:
-        if opt._short_opts:
-            fileopts.extend(opt._short_opts)
-        if opt._long_opts:
-            fileopts.extend(opt._long_opts)
+            with gzip.open(paths[1], 'rb') as imgpath:
+        x_train = np.frombuffer(imgpath.read(), np.uint8,
+                                offset=16).reshape(len(y_train), 28, 28)
     
     
-def _is_empty(d):
-    return not bool(os.listdir(d))
+def l2(l=0.01):
+    return L1L2(l2=l)
     
-    def dailymotion_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    '''Downloads Dailymotion videos by URL.
+    
+def test_imdb():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = imdb.load_data()
+        (x_train, y_train), (x_test, y_test) = imdb.load_data(maxlen=40)
+        assert len(x_train) == len(y_train)
+        assert len(x_test) == len(y_test)
+        word_index = imdb.get_word_index()
+        assert isinstance(word_index, dict)
+    
+        with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
+        deserialized = losses.deserialize(serialized)
+    assert isinstance(deserialized, MSE_MAE_loss)
+    assert deserialized.mse_fraction == 0.3
+    
+        ```python
+    # Consider an array of 5 labels out of a set of 3 classes {0, 1, 2}:
+    > labels
+    array([0, 2, 1, 2, 0])
+    # `to_categorical` converts this into a matrix with as many
+    # columns as there are classes. The number of rows
+    # stays the same.
+    > to_categorical(labels)
+    array([[ 1.,  0.,  0.],
+           [ 0.,  0.,  1.],
+           [ 0.,  1.,  0.],
+           [ 0.,  0.,  1.],
+           [ 1.,  0.,  0.]], dtype=float32)
+    ```
     '''
     
-    from .bilibili import bilibili_download
-from .dailymotion import dailymotion_download
-from .iqiyi import iqiyi_download_by_vid
-from .le import letvcloud_download_by_vu
-from .netease import netease_download
-from .qq import qq_download_by_vid
-from .sina import sina_download_by_vid
-from .tudou import tudou_download_by_id
-from .vimeo import vimeo_download_by_id
-from .yinyuetai import yinyuetai_download_by_id
-from .youku import youku_download_by_vid
-from . import iqiyi
-from . import bokecc
+    model = Sequential()
+model.add(Conv2D(32, kernel_size=(3, 3),
+                 activation='relu',
+                 input_shape=input_shape))
+model.add(Conv2D(64, (3, 3), activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
+model.add(Flatten())
+model.add(Dense(128, activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(num_classes, activation='softmax'))
     
-        print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls(urls, title, ext, size, output_dir, merge=False)
+        netloc = urlparse.urlparse(url).netloc
     
-    def fetch_photo_url_list_impl(url, size, method, id_field, id_parse_func, collection_name):
-    page = get_html(url)
-    api_key = get_api_key(page)
-    ext_field = ''
-    if id_parse_func:
-        ext_field = '&%s=%s' % (id_field, id_parse_func(url, page))
-    page_number = 1
-    urls = []
-    while True:
-        call_url = tmpl_api_call % (api_key, method, ext_field, page_number)
-        photoset = json.loads(get_content_headered(call_url))[collection_name]
-        pagen = photoset['page']
-        pages = photoset['pages']
-        for info in photoset['photo']:
-            url = get_url_of_largest(info, api_key, size)
-            urls.append(url)
-        page_number = page_number + 1
-        # the typeof 'page' and 'pages' may change in different methods
-        if str(pagen) == str(pages):
-            break
-    return urls, match1(page, pattern_inline_title)
+    ## All tokens go to the parser (unless skip() is called in that rule)
+# on a particular 'channel'.  The parser tunes to a particular channel
+# so that whitespace etc... can go to the parser on a 'hidden' channel.
+DEFAULT_CHANNEL = 0
     
-        def scan_devices(self):
-        '''Scan for new devices and return a list with found device IDs.'''
-        self._update_info()
-        return [client.mac for client in self.last_results]
+    def prepare_input(dirty):
+    '''
+    Prepare the plaintext by up-casing it
+    and separating repeated letters with X's
+    '''
     
-        def random_see(dev_id, name):
-        '''Randomize a sighting.'''
-        see(
-            dev_id=dev_id,
-            host_name=name,
-            gps=(hass.config.latitude + offset(),
-                 hass.config.longitude + offset()),
-            gps_accuracy=random.randrange(50, 150),
-            battery=random.randrange(10, 90)
-        )
+    dirty = ''.join([c.upper() for c in dirty if c in string.ascii_letters])
+    clean = ''
     
-        def _get_room(self, room):
-        '''Get Room object, creating it if necessary.'''
-        from hipnotify import Room
-        if room not in self._rooms:
-            self._rooms[room] = Room(
-                token=self._token, room_id=room, endpoint_url=self._host)
-        return self._rooms[room]
+    if len(dirty) < 2:
+        return dirty
     
-        # Gloss the lips
-    d.polygon(face_landmarks['top_lip'], fill=(150, 0, 0, 128))
-    d.polygon(face_landmarks['bottom_lip'], fill=(150, 0, 0, 128))
-    d.line(face_landmarks['top_lip'], fill=(150, 0, 0, 64), width=8)
-    d.line(face_landmarks['bottom_lip'], fill=(150, 0, 0, 64), width=8)
+    def generateKey(keySize):
+    print('Generating prime p...')
+    p = rabinMiller.generateLargePrime(keySize)
+    print('Generating prime q...')
+    q = rabinMiller.generateLargePrime(keySize)
+    n = p * q
     
-    # Load a test image and get encondings for it
-image_to_test = face_recognition.load_image_file('obama2.jpg')
-image_to_test_encoding = face_recognition.face_encodings(image_to_test)[0]
+            next_prime_gt = next_prime(value % self.size_table) \
+            if not check_prime(value % self.size_table) else value % self.size_table  #gt = bigger than
+        return next_prime_gt - (data % next_prime_gt)
     
-        # You can access the actual face itself like this:
-    face_image = image[top:bottom, left:right]
-    pil_image = Image.fromarray(face_image)
-    pil_image.show()
-
-    
-    # Load the jpg file into a numpy array
-image = face_recognition.load_image_file('biden.jpg')
-    
-            # Draw a label with a name below the face
-        cv2.rectangle(frame, (left, bottom - 25), (right, bottom), (0, 0, 255), cv2.FILLED)
-        font = cv2.FONT_HERSHEY_DUPLEX
-        cv2.putText(frame, name, (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
-    
-            face_names = []
-        for face_encoding in face_encodings:
-            # See if the face is a match for the known face(s)
-            matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
-            name = 'Unknown'
-    
-    # This code finds all faces in a list of images using the CNN model.
-#
-# This demo is for the _special case_ when you need to find faces in LOTS of images very quickly and all the images
-# are the exact same size. This is common in video processing applications where you have lots of video frames
-# to process.
-#
-# If you are processing a lot of images and using a GPU with CUDA, batch processing can be ~3x faster then processing
-# single images at a time. But if you aren't using a GPU, then batch processing isn't going to be very helpful.
-#
-# PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read the video file.
-# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
-# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
-    
-        def test_raw_face_locations_32bit_image(self):
-        img = api.load_image_file(os.path.join(os.path.dirname(__file__), 'test_images', '32bit.png'))
-        detected_faces = api._raw_face_locations(img)
-    
-        #Required strings to create intermediate HTML files
-    header = '<html><head><link rel=stylesheet type=text/css href=' + colorscheme + '.css></head><body>\n'
-    footer = '</body></html>'
-    title_content = '<h1 class=titlemain>tldr pages</h1><h4 class=titlesub>Simplified and community driven man pages</h4></body></html>'
-    
-    
-def test_9():
-    for o in [1 << 32, (1 << 64) - 1, -((1 << 31) + 1), -(1 << 63), 1.0, 0.1,
-              -0.1, -1.0]:
-        check(9, o)
-    
-    On Windows, no additional modules are needed.
-On Mac, the module uses pbcopy and pbpaste, which should come with the os.
-On Linux, install xclip or xsel via package manager. For example, in Debian:
-sudo apt-get install xclip
-    
-            exp = pd.Index([pd.Timestamp('2011-01-01 09:00', tz=tz),
-                        pd.Timestamp('2011-01-01 10:00'),
-                        pd.Timestamp('2011-01-01 11:00', tz=tz)],
-                       dtype=object)
-        tm.assert_index_equal(
-            idx.fillna(pd.Timestamp('2011-01-01 10:00')), exp)
-    
-    def strdecode(sentence):
-    if not isinstance(sentence, text_type):
+    if __name__ == '__main__':
         try:
-            sentence = sentence.decode('utf-8')
-        except UnicodeDecodeError:
-            sentence = sentence.decode('gbk', 'ignore')
-    return sentence
+            raw_input          # Python 2
+        except NameError:
+            raw_input = input  # Python 3
     
-            if withWeight:
-            tags = sorted(freq.items(), key=itemgetter(1), reverse=True)
-        else:
-            tags = sorted(freq, key=freq.__getitem__, reverse=True)
-        if topK:
-            return tags[:topK]
-        else:
-            return tags
-
+    try:
+	raw_input		#Python 2
+except NameError:
+	raw_input = input	#Python 3
     
-    jieba.analyse.set_stop_words('../extra_dict/stop_words.txt')
-jieba.analyse.set_idf_path('../extra_dict/idf.txt.big');
+    #Some examples
     
-    content = open(file_name, 'rb').read()
+    def pad(bitString):
+	'''[summary]
+	Fills up the binary string to a 512 bit binary string
+    
+        difference = predict - actual
+    square_diff = np.square(difference)
+    
+        def _parse_timedelta(self, value: str) -> datetime.timedelta:
+        try:
+            sum = datetime.timedelta()
+            start = 0
+            while start < len(value):
+                m = self._TIMEDELTA_PATTERN.match(value, start)
+                if not m:
+                    raise Exception()
+                num = float(m.group(1))
+                units = m.group(2) or 'seconds'
+                units = self._TIMEDELTA_ABBREV_DICT.get(units, units)
+                sum += datetime.timedelta(**{units: num})
+                start = m.end()
+            return sum
+        except Exception:
+            raise
+    
+    For each function or class described in `tornado.platform.interface`,
+the appropriate platform-specific implementation exists in this module.
+Most code that needs access to this functionality should do e.g.::
     
     
-if len(args) <1:
-    print(USAGE)
-    sys.exit(1)
-    
-    jieba.enable_parallel(4)
+_UNSET = _UnsetMarker()
