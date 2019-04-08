@@ -1,74 +1,164 @@
 
         
-        describe 'Kernel#system' do
-  it 'is a private method' do
-    Kernel.should have_private_instance_method(:system)
-  end
+              # Forcing colored to be included on String before Term::ANSIColor, so that Inch will work correctly.
+      require 'colored2'
+      ENV['GENERATE_COVERAGE'] = 'true'
+      puts '\033[0;32mUsing #{`ruby --version`}\033[0m'
     
-      it 'returns true when passed ?R if the argument is readable by the real uid' do
-    Kernel.test(?R, @file).should be_true
-  end
-    
-    describe 'Kernel#trace_var' do
-  before :each do
-    $Kernel_trace_var_global = nil
-  end
-    
-          def pack_uri(plugin_name)
-        url = '#{elastic_pack_base_uri}/#{plugin_name}/#{plugin_name}-#{LOGSTASH_VERSION}.#{PACK_EXTENSION}'
-        URI.parse(url)
+          def actual_path
+        $PROGRAM_NAME
       end
-    
-          def upload_dest
-        @upload_dest
-      end
-    
-          def previous_link
-        label = '&laquo; Previous'
-        if @page_num == 1
-          %(<span class='disabled'>#{label}</span>)
-        else
-          link = url('/history/#{@page.name}?page=#{@page_num-1}')
-          %(<a href='#{link}' hotkey='h'>#{label}</a>)
-        end
-      end
-    
-    context 'Precious::Views::Editing' do
-  include Rack::Test::Methods
-  setup do
-    examples = testpath 'examples'
-    @path    = File.join(examples, 'test.git')
-    Precious::App.set(:gollum_path, @path)
-    FileUtils.cp_r File.join(examples, 'revert.git'), @path, :remove_destination => true
-    @wiki = Gollum::Wiki.new(@path)
-  end
-    
-      test 'extract destination file name in case of path renaming' do
-    view = Precious::Views::LatestChanges.new
-    assert_equal 'newname.md', view.extract_renamed_path_destination('oldname.md => newname.md')
-    assert_equal 'newDirectoryName/fileName.md', view.extract_renamed_path_destination('{oldDirectoryName => newDirectoryName}/fileName.md')
-  end
-    
-    end
-    
-    class ConfigTag < Liquid::Tag
-  def initialize(tag_name, options, tokens)
-    super
-    options = options.split(' ').map {|i| i.strip }
-    @key = options.slice!(0)
-    @tag = nil
-    @classname = nil
-    options.each do |option|
-      @tag = $1 if option =~ /tag:(\S+)/ 
-      @classname = $1 if option =~ /classname:(\S+)/
     end
   end
+end
+
     
-      class IncludeArrayTag < Liquid::Tag
-    Syntax = /(#{Liquid::QuotedFragment}+)/
-    def initialize(tag_name, markup, tokens)
-      if markup =~ Syntax
-        @array_name = $1
+        module ActionMailer
+      def sidekiq_delay(options={})
+        Proxy.new(DelayedMailer, self, options)
+      end
+      def sidekiq_delay_for(interval, options={})
+        Proxy.new(DelayedMailer, self, options.merge('at' => Time.now.to_f + interval.to_f))
+      end
+      def sidekiq_delay_until(timestamp, options={})
+        Proxy.new(DelayedMailer, self, options.merge('at' => timestamp.to_f))
+      end
+      alias_method :delay, :sidekiq_delay
+      alias_method :delay_for, :sidekiq_delay_for
+      alias_method :delay_until, :sidekiq_delay_until
+    end
+    
+        # Publish the package.
+    repo_path = build_path('#{name}_repo')
+    safesystem('pkgrepo', 'create', repo_path)
+    safesystem('pkgrepo', 'set', '-s', repo_path, 'publisher/prefix=#{attributes[:p5p_publisher]}')
+    safesystem('pkgsend', '-s', repo_path,
+      'publish', '-d', '#{staging_path}', '#{build_path}/#{name}.p5m')
+    safesystem('pkgrecv', '-s', repo_path, '-a',
+      '-d', build_path('#{name}.p5p'), name)
+    
+      def compression_option
+    case self.attributes[:pacman_compression]
+      when nil, 'xz'
+        return '--xz'
+      when 'none'
+        return ''
+      when 'gz'
+        return '-z'
+      when 'bzip2'
+        return '-j'
       else
-        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
+        return '--xz'
       end
+  end
+    
+        args = [ '-B', build_path('build-info'), '-c', build_path('comment'), '-d', build_path('description'), '-f', build_path('packlist'), '-I', '/opt/local', '-p', staging_path,  '-U', '#{cwd}/#{name}-#{self.version}-#{iteration}.tgz' ]
+    safesystem('pkg_create', *args)
+    
+          def self.has_issues_with_add_symlink?
+        return !::Gem::Package::TarWriter.public_instance_methods.include?(:add_symlink)
+      end
+    end # module TarWriter
+  end # module Issues
+end # module FPM
+    
+    desc 'Clean up files.'
+task :clean do |t|
+  FileUtils.rm_rf 'doc'
+  FileUtils.rm_rf 'tmp'
+  FileUtils.rm_rf 'pkg'
+  FileUtils.rm_rf 'public'
+  FileUtils.rm 'test/debug.log' rescue nil
+  FileUtils.rm 'test/paperclip.db' rescue nil
+  Dir.glob('paperclip-*.gem').each{|f| FileUtils.rm f }
+end
+
+    
+    When /^I reset Bundler environment variable$/ do
+  BUNDLE_ENV_VARS.each do |key|
+    ENV[key] = nil
+  end
+end
+    
+        def geometry_string
+      begin
+        orientation = Paperclip.options[:use_exif_orientation] ?
+          '%[exif:orientation]' : '1'
+        Paperclip.run(
+          Paperclip.options[:is_windows] ? 'magick identify' : 'identify',
+          '-format '%wx%h,#{orientation}' :file', {
+            :file => '#{path}[0]'
+          }, {
+            :swallow_stderr => true
+          }
+        )
+      rescue Terrapin::ExitStatusError
+        ''
+      rescue Terrapin::CommandNotFoundError => e
+        raise_because_imagemagick_missing
+      end
+    end
+    
+      describe '#hook_on_project_start' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_start' }
+    end
+  end
+  describe '#hook_on_project_first_start' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_first_start' }
+    end
+  end
+  describe '#hook_on_project_restart' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_restart' }
+    end
+  end
+  describe '#hook_on_project_exit' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_exit' }
+    end
+  end
+  describe '#hook_on_project_stop' do
+    it_should_behave_like 'a project hook' do
+      let(:hook_name) { 'on_project_stop' }
+    end
+  end
+end
+
+    
+    describe Tmuxinator::Pane do
+  let(:klass) { described_class }
+  let(:instance) { klass.new(index, project, window, *commands) }
+  # let(:index) { 'vim' }
+  # let(:project) { 0 }
+  # let(:tab) { nil }
+  # let(:commands) { nil }
+  let(:index) { 0 }
+  let(:project) { double }
+  let(:window) { double }
+  let(:commands) { ['vim', 'bash'] }
+    
+          # Pathname of given project searching only global directories
+      def global_project(name)
+        project_in(environment, name) ||
+          project_in(xdg, name) ||
+          project_in(home, name)
+      end
+    
+        context 'command is empty' do
+      before do
+        yaml['editor'] = ''
+      end
+    
+      context 'called with arguments (2, $value: 4em 6em)' do
+    it 'outputs sextuple the second value from the default scale' do
+      expect('.two-double-value').to have_rule('font-size: 3.125em')
+    end
+  end
+end
+
+    
+      def new
+    @broadcast = Broadcast.new
+  end
