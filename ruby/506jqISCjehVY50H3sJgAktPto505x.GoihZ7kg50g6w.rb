@@ -1,67 +1,118 @@
 
         
-          protected
+              def perform(start_id, stop_id)
+        update = '
+          latest_merge_request_diff_id = (
+            SELECT MAX(id)
+            FROM merge_request_diffs
+            WHERE merge_requests.id = merge_request_diffs.merge_request_id
+          )'.squish
     
-    if defined?(ActionMailer)
-  class Devise::Mailer < Devise.parent_mailer.constantize
-    include Devise::Mailers::Helpers
+            def collection_method
+          :issues_comments
+        end
     
-        # The hook which is called inside devise.
-    # So your ORM can include devise compatibility stuff.
-    def devise_modules_hook!
-      yield
-    end
-  end
-end
+          # Imports all the objects in sequence in the current thread.
+      def sequential_import
+        each_object_to_import do |object|
+          repr = representation_class.from_api_response(object)
     
-      def up
-    Photo.joins('INNER JOIN posts ON posts.guid = photos.status_message_guid')
-         .where(posts: {type: 'StatusMessage', public: true}).update_all(public: true)
+            attr_reader :attributes
     
-    RSpec::Matchers.define :have_path do |expected|
-  match do |actual|
-    await_condition { actual.current_path == expected }
-  end
-    
-        context 'on my own post' do
-      it 'succeeds' do
-        @target = alice.post :status_message, text: 'AWESOME', to: @alices_aspect.id
-        post :create, params: like_hash, format: :json
-        expect(response.code).to eq('201')
-      end
-    end
-    
-        it 'succeeds' do
-      get :index
-      expect(response).to be_success
-      expect(assigns[:notifications].count).to eq(1)
-    end
-    
-        context 'on a post you do not partecipate to' do
-      it 'says it is an unprocessable request' do
-        delete :destroy, params: {post_id: post.id}
-        expect(response.code).to eq('422')
+            # attributes - A Hash containing the user details. The keys of this
+        #              Hash (and any nested hashes) must be symbols.
+        def initialize(attributes)
+          @attributes = attributes
+        end
       end
     end
   end
 end
 
     
-          it 'does not create a user' do
-        expect { get :create, params: invalid_params }.not_to change(User, :count)
+          if @email_domain_block.save
+        log_action :create, @email_domain_block
+        redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.created_msg')
+      else
+        render :new
       end
+    end
     
-          it 'federates' do
-        allow_any_instance_of(Participation::Generator).to receive(:create!)
-        expect(Diaspora::Federation::Dispatcher).to receive(:defer_dispatch)
-        post_request!
+      def hub_callback
+    params['hub.callback']
+  end
+    
+      private
+    
+            expect(path).to have_valid_bash_syntax
       end
+    end
+  end
+end
+
     
-          def author
-        first = page.last_version
-        return DEFAULT_AUTHOR unless first
-        first.author.name.respond_to?(:force_encoding) ? first.author.name.force_encoding('UTF-8') : first.author.name
+      describe '#userpaths?' do
+    it 'returns true if the environment contains :userpaths' do
+      env << :userpaths
+      expect(env).to use_userpaths
+    end
+    
+        def initialize(tag_name, markup, tokens)
+      @by = nil
+      @source = nil
+      @title = nil
+      if markup =~ FullCiteWithTitle
+        @by = $1
+        @source = $2 + $3
+        @title = $4.titlecase.strip
+      elsif markup =~ FullCite
+        @by = $1
+        @source = $2 + $3
+      elsif markup =~ AuthorTitle
+        @by = $1
+        @title = $2.titlecase.strip
+      elsif markup =~ Author
+        @by = $1
       end
+      super
+    end
     
-      s.summary     = 'A simple, Git-powered wiki.'
-  s.description = 'A simple, Git-powered wiki with a sweet API and local frontend.'
+    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
+
+    
+      class VideoTag < Liquid::Tag
+    @video = nil
+    @poster = ''
+    @height = ''
+    @width = ''
+    
+      def organization
+    @organization ||= current_user.organizations_scope.find_by_permalink!(params[:org_permalink])
+  end
+    
+      before_action { @server = organization.servers.present.find_by_permalink!(params[:server_id]) }
+  before_action { params[:id] && @http_endpoint = @server.http_endpoints.find_by_uuid!(params[:id]) }
+    
+      def destroy
+    @ip_pool_rule.destroy
+    redirect_to_with_json [organization, @server, :ip_pool_rules]
+  end
+    
+      def update
+    if @smtp_endpoint.update(safe_params)
+      redirect_to_with_json [organization, @server, :smtp_endpoints]
+    else
+      render_form_errors 'edit', @smtp_endpoint
+    end
+  end
+    
+      def verify
+    if request.post?
+      if params[:code].to_s.strip == current_user.email_verification_token.to_s || (Rails.env.development? && params[:code].to_s.strip == '123456')
+        current_user.verify!
+        redirect_to_with_json [:return_to, root_path], :notice => 'Thanks - your e-mail address has been verified successfully.'
+      else
+        flash_now :alert, 'The code you've entered isn't correct. Please check and try again.'
+      end
+    end
+  end
