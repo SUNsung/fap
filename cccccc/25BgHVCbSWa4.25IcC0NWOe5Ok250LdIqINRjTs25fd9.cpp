@@ -1,238 +1,313 @@
 
         
-        using namespace internal;
+        #ifndef ATOM_APP_COMMAND_LINE_ARGS_H_
+#define ATOM_APP_COMMAND_LINE_ARGS_H_
     
-    void bitwiseOr(const Size2D &size,
-               const u8 *src0Base, ptrdiff_t src0Stride,
-               const u8 *src1Base, ptrdiff_t src1Stride,
-               u8 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, BitwiseOr());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
+      static void BuildPrototype(v8::Isolate* isolate,
+                             v8::Local<v8::FunctionTemplate> prototype);
+    
+    
+    {}  // namespace atom
+    
+    #include 'atom/browser/api/event_emitter.h'
+#include 'native_mate/handle.h'
+#include 'ui/display/display_observer.h'
+#include 'ui/display/screen.h'
+    
+    #ifndef ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
+#define ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
+    
+    #include 'base/macros.h'
+    
+    void URLRequestAboutJob::Start() {
+  base::ThreadTaskRunnerHandle::Get()->PostTask(
+      FROM_HERE, base::BindOnce(&URLRequestAboutJob::StartAsync,
+                                weak_ptr_factory_.GetWeakPtr()));
 }
     
-    #ifndef __ANDROID__
-        for (; dj < roiw32; sj += 96, dj += 32)
-        {
-            internal::prefetch(src + sj);
-    }
-    
-        for (size_t i = 0u; i < size.height; ++i)
-    {
-        const u8 * srcy = internal::getRowPtr(srcyBase, srcyStride, i);
-        const u8 * srcu = internal::getRowPtr(srcuBase, srcuStride, i);
-        const u8 * srcv = internal::getRowPtr(srcvBase, srcvStride, i);
-        u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t syj = 0u, sj = 0u, dj = 0u;
-    }
-    
-    ptrdiff_t borderInterpolate(ptrdiff_t _p, size_t _len, BORDER_MODE borderType, size_t startMargin, size_t endMargin)
-{
-    ptrdiff_t p = _p + (ptrdiff_t)startMargin;
-    size_t len = _len + startMargin + endMargin;
-    if( (size_t)p < len )
-        return _p;
-    else if( borderType == BORDER_MODE_REPLICATE )
-        p = p < 0 ? 0 : (ptrdiff_t)len - 1;
-    else if( borderType == BORDER_MODE_REFLECT || borderType == BORDER_MODE_REFLECT101 )
-    {
-        s32 delta = borderType == BORDER_MODE_REFLECT101;
-        if( len == 1 )
-            return 0;
-        do
-        {
-            if( p < 0 )
-                p = -p - 1 + delta;
-            else
-                p = (ptrdiff_t)len - 1 - (p - (ptrdiff_t)len) - delta;
-        }
-        while( (size_t)p >= len );
-    }
-    else if( borderType == BORDER_MODE_WRAP )
-    {
-        if( p < 0 )
-            p -= ((p-(ptrdiff_t)len+1)/(ptrdiff_t)len)*(ptrdiff_t)len;
-        if( p >= (ptrdiff_t)len )
-            p %= (ptrdiff_t)len;
-    }
-    else if( borderType == BORDER_MODE_CONSTANT )
-        p = -1;
-    else
-        internal::assertSupportedConfiguration(false);
-    return p - (ptrdiff_t)startMargin;
-}
-    
-        for (size_t i = 0; i < size.height; ++i)
-    {
-        const s16 * src = internal::getRowPtr(srcBase, srcStride, i);
-        u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t j = 0;
-    }
+    #include <sys/event.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <unistd.h>
     
     
-    {            float32x2_t vres = vpadd_f32(vget_low_f32(v_sum),vget_high_f32(v_sum));
-            result += vget_lane_f32(vres, 0) + vget_lane_f32(vres, 1);
-        }
-    
-            uint16x8_t el8shr0 = vmull_u8(vsrc, vsrc);
-        uint16x8_t el8shr1 = vextq_u16(v_zero8, el8shr0, 7);
-    
-    inline float32x2_t vrecp_f32(float32x2_t val)
-{
-    float32x2_t reciprocal = vrecpe_f32(val);
-    reciprocal = vmul_f32(vrecps_f32(val, reciprocal), reciprocal);
-    reciprocal = vmul_f32(vrecps_f32(val, reciprocal), reciprocal);
-    return reciprocal;
-}
-    
-                    if (border == BORDER_MODE_CONSTANT && x4 < 0)
-                    prevx = borderValue;
-                else
-                    prevx = (srow2 ? srow2[x4] : borderValue) + srow1[x4] + (srow0 ? srow0[x4] : borderValue);
-    
-    
-    {  TBLOB* blob;
-  Tesseract* tesseract;
-  BLOB_CHOICE_LIST** choices;
+    { private:
+  DISALLOW_COPY_AND_ASSIGN(ViewsDelegateMac);
 };
     
-    #endif  // TESSERACT_CCMAIN_PARAGRAPHS_H_
-
-    
-    // ReadNextBox factors out the code to interpret a line of a box
-// file so that applybox and unicharset_extractor interpret the same way.
-// This function returns the next valid box file utf8 string and coords
-// and returns true, or false on eof (and closes the file).
-// It ignores the utf8 file signature ByteOrderMark (U+FEFF=EF BB BF), checks
-// for valid utf-8 and allows space or tab between fields.
-// utf8_str is set with the unichar string, and bounding box with the box.
-// If there are page numbers in the file, it reads them all.
-bool ReadNextBox(int *line_number, FILE* box_file,
-                 STRING* utf8_str, TBOX* bounding_box);
-// As ReadNextBox above, but get a specific page number. (0-based)
-// Use -1 to read any page number. Files without page number all
-// read as if they are page 0.
-bool ReadNextBox(int target_page, int *line_number, FILE* box_file,
-                 STRING* utf8_str, TBOX* bounding_box);
-    
-      // Sets the destination filename and enables images to be written to a PDF
-  // on destruction.
-  void WritePDF(const char* filename) {
-    if (pixaGetCount(pixa_) > 0) {
-      pixaConvertToPdf(pixa_, 300, 1.0f, 0, 0, 'AllDebugImages', filename);
-      pixaClear(pixa_);
+      if (conformanceSig) {
+    for (auto &rawReq : conformanceSig->getRequirements()) {
+      if (auto req = rawReq.subst(conformanceToSyntheticTypeFn,
+                                  conformanceToSyntheticConformanceFn))
+        builder.addRequirement(*req, source, nullptr);
     }
   }
     
     
-    {  int delta = this - prev;
-  int32_t n = prev->n_ + 1;
-  int32_t sig_x = prev->sig_x_ + delta;
-  int64_t sig_xsq = prev->sig_xsq_ + delta * delta;
-  int64_t cost = (sig_xsq - sig_x * sig_x / n) / n;
-  cost += prev->total_cost_;
-  UpdateIfBetter(cost, prev->total_steps_ + 1, prev, n, sig_x, sig_xsq);
-  return cost;
+    {  cache_t *cache_out = nullptr;
+  cache_create(NameBuf.c_str(), &Attrs, &cache_out);
+  assert(cache_out);
+  return cache_out;
 }
     
-      // Returns the direction of the fitted line as a unit vector, using the
-  // least mean squared perpendicular distance. The line runs through the
-  // mean_point, i.e. a point p on the line is given by:
-  // p = mean_point() + lambda * vector_fit() for some real number lambda.
-  // Note that the result (0<=x<=1, -1<=y<=-1) is directionally ambiguous
-  // and may be negated without changing its meaning, since a line is only
-  // unique to a range of pi radians.
-  // Modernists prefer to think of this as an Eigenvalue problem, but
-  // Pearson had the simple solution in 1901.
-  //
-  // Note that this is equivalent to returning the Principal Component in PCA,
-  // or the eigenvector corresponding to the largest eigenvalue in the
-  // covariance matrix.
-  FCOORD vector_fit() const;
     
-    namespace dmlc {
-namespace data {
+    {    // Must be 'const' or nothing.
+    clang::Qualifiers quals = pointee.getQualifiers();
+    bool isConst = quals.hasConst();
+    quals.removeConst();
+    if (quals.empty()) {
+      if (auto record = pointee->getAs<clang::RecordType>()) {
+        auto recordDecl = record->getDecl();
+        if (recordDecl->hasAttr<clang::ObjCBridgeAttr>() ||
+            recordDecl->hasAttr<clang::ObjCBridgeMutableAttr>() ||
+            recordDecl->hasAttr<clang::ObjCBridgeRelatedAttr>() ||
+            isKnownCFTypeName(typedefDecl->getName())) {
+          return forRecord(isConst, record->getDecl());
+        }
+      } else if (pointee->isVoidType()) {
+        if (typedefDecl->hasAttr<clang::ObjCBridgeAttr>() ||
+            isKnownCFTypeName(typedefDecl->getName())) {
+          return isConst ? forConstVoid() : forVoid();
+        }
+      }
     }
-    }
+  }
     
-    // implementing configure.
-template<typename PairIter>
-inline void ObjFunction::Configure(PairIter begin, PairIter end) {
-  std::vector<std::pair<std::string, std::string> > vec(begin, end);
-  this->Configure(vec);
-}
+    void BackendJobAction::anchor() {}
     
-      void Write(const SparsePage& page, dmlc::Stream* fo) override {
-    const auto& offset_vec = page.offset.HostVector();
-    const auto& data_vec = page.data.HostVector();
-    CHECK(offset_vec.size() != 0 && offset_vec[0] == 0);
-    CHECK_EQ(offset_vec.back(), data_vec.size());
-    fo->Write(offset_vec);
-    min_index_ = page.base_rowid;
-    fo->Write(&min_index_, sizeof(min_index_));
-    index_.data.resize(data_vec.size());
-    value_.data.resize(data_vec.size());
+        ~reverse_lock() {
+        templock.lock();
+        templock.swap(lock);
     }
     
-    XGBOOST_REGISTER_OBJECTIVE(LambdaRankObjMAP, 'rank:map')
-.describe('LambdaRank with MAP as objective.')
-.set_body([]() { return new LambdaRankObjMAP(); });
+    SECP256K1_INLINE static void secp256k1_fe_sqr_inner(uint64_t *r, const uint64_t *a) {
+/**
+ * Registers: rdx:rax = multiplication accumulator
+ *            r9:r8   = c
+ *            rcx:rbx = d
+ *            r10-r14 = a0-a4
+ *            r15     = M (0xfffffffffffff)
+ *            rdi     = r
+ *            rsi     = a / t?
+ */
+  uint64_t tmp1, tmp2, tmp3;
+__asm__ __volatile__(
+    'movq 0(%%rsi),%%r10\n'
+    'movq 8(%%rsi),%%r11\n'
+    'movq 16(%%rsi),%%r12\n'
+    'movq 24(%%rsi),%%r13\n'
+    'movq 32(%%rsi),%%r14\n'
+    'movq $0xfffffffffffff,%%r15\n'
+    }
     
-        // Remove the assertion on batch.index, which can be null in the case that the data in this
-    // batch is entirely sparse. Although it's true that this indicates a likely issue with the
-    // user's data workflows, passing XGBoost entirely sparse data should not cause it to fail.
-    // See https://github.com/dmlc/xgboost/issues/1827 for complete detail.
-    // CHECK(batch.index != nullptr);
+        // Other valid inputs
+    CheckParseTorReplyMapping(
+        'Foo=Bar=Baz Spam=Eggs', {
+            {'Foo', 'Bar=Baz'},
+            {'Spam', 'Eggs'},
+        });
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar=Baz\'', {
+            {'Foo', 'Bar=Baz'},
+        });
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar Baz\'', {
+            {'Foo', 'Bar Baz'},
+        });
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
     
-                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    {} // namespace tinyformat
     
-    IMGUI_IMPL_API bool     ImGui_ImplOpenGL2_Init();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_Shutdown();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_NewFrame();
-IMGUI_IMPL_API void     ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data);
-    
-                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
-            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
-    
-        // Setup viewport
-    D3DVIEWPORT9 vp;
-    vp.X = vp.Y = 0;
-    vp.Width = (DWORD)draw_data->DisplaySize.x;
-    vp.Height = (DWORD)draw_data->DisplaySize.y;
-    vp.MinZ = 0.0f;
-    vp.MaxZ = 1.0f;
-    g_pd3dDevice->SetViewport(&vp);
-    
-    namespace CalculatorApp
+    struct FilterCtx
 {
-    [Windows::Foundation::Metadata::WebHostHidden]
-    public ref class CalculatorProgrammerDisplayPanel sealed
-    {
-    public:
-        CalculatorProgrammerDisplayPanel();
-    }
+    CAROTENE_NS::Size2D ksize;
+    CAROTENE_NS::s16* kernel_data;
+    CAROTENE_NS::BORDER_MODE border;
+};
+inline int TEGRA_FILTERINIT(cvhalFilter2D **context, uchar *kernel_data, size_t kernel_step, int kernel_type, int kernel_width, int kernel_height,
+                            int max_width, int max_height, int src_type, int dst_type, int borderType, double delta, int anchor_x, int anchor_y, bool allowSubmatrix, bool allowInplace)
+{
+    if(!context || !kernel_data || allowSubmatrix || allowInplace ||
+       src_type != CV_8UC1 || dst_type != CV_8UC1 ||
+       delta != 0 || anchor_x != kernel_width / 2 || anchor_y != kernel_height / 2 )
+        return CV_HAL_ERROR_NOT_IMPLEMENTED;
     }
     
-    //
-// CalculatorScientificAngleButtons.xaml.h
-// Declaration of the CalculatorScientificAngleButtons class
+    
+    {        vs1 = vmlaq_f32(vgamma, vs1, valpha);
+        vs1 = vmlaq_f32(vs1, vs2, vbeta);
+        v_dst = vcvtq_s32_f32(vs1);
+    }
+    
+        for (size_t i = 0; i < size.height; ++i)
+    {
+        const u8* src = internal::getRowPtr(srcBase, srcStride, i);
+        u8* dst = internal::getRowPtr(dstBase, dstStride, i);
+        size_t j = 0;
+    }
+    
+    
+    {            vst1q_s32(lanea + x, w);
+        }
+        if(x < colsn)
+        {
+            x = colsn-4;
+            goto box3x3s32_vert_ll;
+        }
+    
+        size_t maxsize = std::max<size_t>( 1u << 10, size.width * size.height / 10 );
+    std::vector<u8*> stack( maxsize );
+    u8 **stack_top = &stack[0];
+    u8 **stack_bottom = &stack[0];
+    
+    #ifndef __ANDROID__
+        for (; sj < roiw32; sj += 32, syj += 64, dj += 128)
+        {
+            internal::prefetch(srcy + syj);
+            internal::prefetch(srcu + sj);
+            internal::prefetch(srcv + sj);
+    }
+    
+                s32 val = 0;
+            for (s32 _y = 0; _y < 3; ++_y)
+                val += prevx[_y] * kernelBase[(2 - _y) * 3 + 2] +
+                       currx[_y] * kernelBase[(2 - _y) * 3 + 1] +
+                       nextx[_y] * kernelBase[(2 - _y) * 3 + 0];
+    
+                s32 val = (prevx + currx + nextx) - 9 * srow1[x];
+            drow[x] = internal::saturate_cast<u8>((s32)val);
+    
+    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT3.
+// Don't use this in your code.
+#define GTEST_PRED_FORMAT3_(pred_format, v1, v2, v3, on_failure)\
+  GTEST_ASSERT_(pred_format(#v1, #v2, #v3, v1, v2, v3), \
+                on_failure)
+    
+      // Returns a copy of the FilePath with the case-insensitive extension removed.
+  // Example: FilePath('dir/file.exe').RemoveExtension('EXE') returns
+  // FilePath('dir/file'). If a case-insensitive extension is not
+  // found, returns a copy of the original FilePath.
+  FilePath RemoveExtension(const char* extension) const;
+    
+    // Creates a new TestInfo object and registers it with Google Test;
+// returns the created object.
 //
+// Arguments:
+//
+//   test_case_name:   name of the test case
+//   name:             name of the test
+//   type_param        the name of the test's type parameter, or NULL if
+//                     this is not a typed or a type-parameterized test.
+//   value_param       text representation of the test's value parameter,
+//                     or NULL if this is not a type-parameterized test.
+//   fixture_class_id: ID of the test fixture class
+//   set_up_tc:        pointer to the function that sets up the test case
+//   tear_down_tc:     pointer to the function that tears down the test case
+//   factory:          pointer to the factory that creates a test object.
+//                     The newly created TestInfo instance will assume
+//                     ownership of the factory object.
+GTEST_API_ TestInfo* MakeAndRegisterTestInfo(
+    const char* test_case_name,
+    const char* name,
+    const char* type_param,
+    const char* value_param,
+    TypeId fixture_class_id,
+    SetUpTestCaseFunc set_up_tc,
+    TearDownTestCaseFunc tear_down_tc,
+    TestFactoryBase* factory);
+    
+      // Leave whatever circle we're part of.  Returns true if we were the
+  // last member of the circle.  Once this is done, you can join() another.
+  bool depart()
+      GTEST_LOCK_EXCLUDED_(g_linked_ptr_mutex) {
+    MutexLock lock(&g_linked_ptr_mutex);
+    }
+    
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
+    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
+    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
+    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
+    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
+    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
+    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
+    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26>
+struct Templates26 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates25<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
+      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26> Tail;
+};
+    
+    namespace {
+    }
+    
+      s.Set(kHelloString);
+  EXPECT_EQ(0, strcmp(s.c_string(), kHelloString));
+    
+      // Gets the first element of the queue, or NULL if the queue is empty.
+  QueueNode<E>* Head() { return head_; }
+  const QueueNode<E>* Head() const { return head_; }
+    
+    #include <grpc/grpc_security.h>
+    
+    #include 'src/cpp/ext/filters/census/context.h'
+    
+    #include <grpc/status.h>
+#include 'absl/memory/memory.h'
+#include 'absl/strings/string_view.h'
+#include 'absl/strings/strip.h'
+#include 'opencensus/trace/span.h'
+#include 'opencensus/trace/span_context.h'
+#include 'opencensus/trace/trace_params.h'
+#include 'src/core/lib/slice/slice_internal.h'
+#include 'src/cpp/common/channel_filter.h'
+#include 'src/cpp/ext/filters/census/rpc_encoding.h'
+    
+    class DynamicThreadPool final : public ThreadPoolInterface {
+ public:
+  explicit DynamicThreadPool(int reserve_threads);
+  ~DynamicThreadPool();
+    }
+    
+    // Given a map from type K to a set of value type V, removes the given key and
+// the associated set, and returns the set. Returns an empty set if the key is
+// not found.
+template <typename K, typename V>
+std::set<V> UnorderedMapOfSetExtract(std::unordered_map<K, std::set<V>>& map,
+                                     const K& key) {
+  auto it = map.find(key);
+  if (it != map.end()) {
+    auto set = std::move(it->second);
+    map.erase(it);
+    return set;
+  }
+  return {};
+};
+    
+    #ifndef GRPC_INTERNAL_CPP_THREAD_POOL_INTERFACE_H
+#define GRPC_INTERNAL_CPP_THREAD_POOL_INTERFACE_H
+    
+    #include 'utypeinfo.h'  // for 'typeid' to work
+    
+    class Calendar;
+    
+    class U_I18N_API SharedPluralRules : public SharedObject {
+public:
+    SharedPluralRules(PluralRules *prToAdopt) : ptr(prToAdopt) { }
+    virtual ~SharedPluralRules();
+    const PluralRules *operator->() const { return ptr; }
+    const PluralRules &operator*() const { return *ptr; }
+private:
+    PluralRules *ptr;
+    SharedPluralRules(const SharedPluralRules &);
+    SharedPluralRules &operator=(const SharedPluralRules &);
+};
+    
+    
+    {    return *this;
+}
+    
+    #endif /* #if !UCONFIG_NO_TRANSLITERATION */
+    
+        // change element at index 1 (second element) to 'second'
+    array.at(1) = 'second';
